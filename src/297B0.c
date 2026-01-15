@@ -644,7 +644,7 @@ void updateStoryMapNpcTalk(Func297D8Arg *arg0) {
                 arg0->unk5E = 2;
                 arg0->unk50 = arg0->unk50 + 1;
                 if (arg0->unk5C == 5) {
-                    func_800585C8_591C8(0xD6);
+                    playSoundEffect(0xD6);
                 }
             }
             break;
@@ -774,16 +774,16 @@ void playStoryMapNpcIdleSound(Func297D8Arg *arg0) {
 
     switch (arg0->unk5D) {
         case 0xB:
-            func_800585C8_591C8(0xB2);
+            playSoundEffect(0xB2);
             break;
         case 0xC:
-            func_800585C8_591C8(0x112);
+            playSoundEffect(0x112);
             break;
         case 0xD:
-            func_800585C8_591C8(D_8008E568_8F168[arg0->unk5C]);
+            playSoundEffect(D_8008E568_8F168[arg0->unk5C]);
             break;
         case 0xE:
-            func_800585C8_591C8(D_8008E57C_8F17C[arg0->unk5C]);
+            playSoundEffect(D_8008E57C_8F17C[arg0->unk5C]);
             break;
     }
 }
@@ -791,7 +791,7 @@ void playStoryMapNpcIdleSound(Func297D8Arg *arg0) {
 extern u16 D_8008E590_8F190[];
 
 void playStoryMapNpcTalkSound(Func297D8Arg *arg0) {
-    func_800585C8_591C8(D_8008E590_8F190[arg0->unk5C]);
+    playSoundEffect(D_8008E590_8F190[arg0->unk5C]);
 }
 
 void initStoryMapNpcStill(Func297D8Arg *arg0) {

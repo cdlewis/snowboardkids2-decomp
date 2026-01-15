@@ -2,6 +2,7 @@
 #include "36B80.h"
 #include "56910.h"
 #include "common.h"
+#include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
@@ -126,7 +127,7 @@ void func_800BB320_B5C00(func_800BB5CC_state *arg0) {
         default:
         do_action:
             state->unk78 = 1;
-            func_800585C8_591C8(0x2C);
+            playSoundEffect(0x2C);
             arg0->unk10 = 1;
             arg0->unk12 = 1;
             arg0->unk14 = 0xF0;
@@ -252,11 +253,11 @@ void func_800BB724_B6004(func_800BB5CC_state *arg0) {
         table_ptr = D_800BCB94_B7474[arg0->unkC];
         temp_v1_3 = table_ptr[temp_v0];
         if (temp_v1_3 == -1) {
-            func_800585C8_591C8(0x2D);
+            playSoundEffect(0x2D);
             arg0->unkC = arg0->unkC + 1;
             setCallback(func_800BB87C_B615C);
         } else {
-            func_800585C8_591C8(0x2B);
+            playSoundEffect(0x2B);
             setCallback(func_800BB5CC_B5EAC);
         }
     }

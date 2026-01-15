@@ -785,7 +785,7 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
                 temp--;
                 arg0->unkCC[0] = temp;
                 if ((temp & 0xFFFF) == 0) {
-                    func_800585C8_591C8(0xF5);
+                    playSoundEffect(0xF5);
                 }
             }
         }
@@ -796,7 +796,7 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
                 temp--;
                 arg0->unkCC[1] = temp;
                 if ((temp & 0xFFFF) == 0) {
-                    func_800585C8_591C8(0x10E);
+                    playSoundEffect(0x10E);
                 }
             }
         }

@@ -302,7 +302,7 @@ void handleLevelSelectInput(void) {
             }
 
             if (oldB46 != (allocation->selectedIndex)) {
-                func_800585C8_591C8(0x2B);
+                playSoundEffect(0x2B);
                 allocation->menuState = MENU_STATE_SCROLL;
                 allocation->transitionCounter = 0;
                 allocation->newLevelId = allocation->levelIdList[oldB46];
@@ -334,7 +334,7 @@ void handleLevelSelectInput(void) {
                                 allocation->menuState = 2;
                             }
                         } else if (gControllerInputs[i] & B_BUTTON) {
-                            func_800585C8_591C8(0x2E);
+                            playSoundEffect(0x2E);
                             allocation->exitMode = 2;
                         }
                     }
@@ -347,7 +347,7 @@ void handleLevelSelectInput(void) {
             for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
                 if (allocation->menuState == MENU_STATE_CONFIRM && allocation->exitMode != 1) {
                     if (gControllerInputs[i] & B_BUTTON) {
-                        func_800585C8_591C8(0x2E);
+                        playSoundEffect(0x2E);
                         allocation->menuState = 0;
                     } else if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
                         allocation->exitMode = 1;
@@ -365,11 +365,11 @@ void handleLevelSelectInput(void) {
         case MENU_STATE_PROMPT:
             loadLevelPreview();
             if (gControllerInputs[0] & (A_BUTTON | START_BUTTON)) {
-                func_800585C8_591C8(0x2C);
+                playSoundEffect(0x2C);
                 setViewportFadeValue(&allocation->previewNode, 0xFF, 8);
                 allocation->menuState = 6;
             } else if (gControllerInputs[0] & B_BUTTON) {
-                func_800585C8_591C8(0x2E);
+                playSoundEffect(0x2E);
                 allocation->exitMode = 2;
             }
             break;
@@ -409,14 +409,14 @@ void handleLevelSelectInput(void) {
 
         case MENU_STATE_DETAIL:
             if (gControllerInputs[0] & B_BUTTON) {
-                func_800585C8_591C8(0x2E);
+                playSoundEffect(0x2E);
                 setViewportFadeValue(&allocation->detailNode, 0xFF, 8);
                 allocation->menuState = 9;
                 allocation->previewLoadCounter = 0;
             } else if (gControllerInputs[0] & (A_BUTTON | START_BUTTON)) {
                 allocation->exitMode = 1;
                 D_800AFE8C_A71FC->unk9[0xC] = D_8008D9C0_8E5C0[D_800AFE8C_A71FC->saveSlotIndex];
-                func_800585C8_591C8(0x2D);
+                playSoundEffect(0x2D);
             }
             break;
 
@@ -439,14 +439,14 @@ void handleLevelSelectInput(void) {
                 }
             }
             if (oldB46 != allocation->selectedNumber) {
-                func_800585C8_591C8(0x2B);
+                playSoundEffect(0x2B);
             } else {
                 for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
                     if (allocation->menuState == MENU_STATE_NUMBER_SELECT) {
                         if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
                             allocation->menuState = 2;
                         } else if (gControllerInputs[i] & B_BUTTON) {
-                            func_800585C8_591C8(0x2E);
+                            playSoundEffect(0x2E);
                             allocation->menuState = 0;
                         }
                     }

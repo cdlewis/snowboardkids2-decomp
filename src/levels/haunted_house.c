@@ -752,7 +752,7 @@ void func_800BC750_B0440(s16 *targetLap) {
         if (player->currentLap == lapValue) {
             if ((u32)(player->sectorIndex - 7) < 4) {
                 *targetLap = lapValue + 1;
-                func_80058530_59130(0xC, 6);
+                playSoundEffectWithPriorityDefaultVolume(0xC, 6);
             }
         }
     }

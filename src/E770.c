@@ -279,7 +279,7 @@ check_max:
     sound = 0x2B;
 
 play_sound:
-    func_800585C8_591C8(sound);
+    playSoundEffect(sound);
 }
 
 typedef struct FD98_struct {
@@ -326,7 +326,7 @@ void waitForGalleryViewerExit(E770_struct *arg0) {
 }
 
 void beginGalleryMenuExit(E770_struct *arg0) {
-    func_800585C8_591C8(0xDB);
+    playSoundEffect(0xDB);
     setViewportFadeValue(NULL, 0xFF, 10);
     setMenuAnimation(arg0, 0x15A, 0x15B, 1, -1);
     arg0->fadeTimer = 10;
@@ -357,7 +357,7 @@ void initGalleryMenu(void) {
     allocateTaskMemory(0xCC0);
     gCurrentBgmId = 5;
     setupTaskSchedulerNodes(0x40, 4, 0, 0, 0, 0, 0, 0);
-    func_800585C8_591C8(0xD0);
+    playSoundEffect(0xD0);
     setGameStateHandler(func_8000E6E0_F2E0);
 }
 
@@ -547,7 +547,7 @@ void handleViewerGridNavigation_TwoPage(FD98_struct *arg0) {
         } else {
             arg0->cursorIndex = arg0->cursorIndex - 1;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -557,7 +557,7 @@ void handleViewerGridNavigation_TwoPage(FD98_struct *arg0) {
         } else {
             arg0->cursorIndex = arg0->cursorIndex + 1;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -575,7 +575,7 @@ void handleViewerGridNavigation_TwoPage(FD98_struct *arg0) {
             }
             arg0->navigationMode = 1;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -590,7 +590,7 @@ void handleViewerGridNavigation_TwoPage(FD98_struct *arg0) {
             arg0->navigationMode = 1;
             arg0->pageDownCursorDest = arg0->cursorIndex - 7;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
     }
 }
 
@@ -611,7 +611,7 @@ void handleViewerGridNavigation_TwoColumn(FD98_struct *arg0) {
             newVal = temp - 1;
         }
         arg0->cursorIndex = newVal;
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -624,7 +624,7 @@ void handleViewerGridNavigation_TwoColumn(FD98_struct *arg0) {
         } else {
             arg0->cursorIndex = temp + 1;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -638,7 +638,7 @@ void handleViewerGridNavigation_TwoColumn(FD98_struct *arg0) {
             arg0->navigationMode = 1;
             arg0->pageDownCursorDest = arg0->cursorIndex;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -651,7 +651,7 @@ void handleViewerGridNavigation_TwoColumn(FD98_struct *arg0) {
             arg0->navigationMode = 1;
             arg0->pageDownCursorDest = arg0->cursorIndex - 9;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
     }
 }
 
@@ -666,7 +666,7 @@ void handleViewerGridNavigation_SingleRow(FD98_struct *arg0) {
         } else {
             arg0->cursorIndex = arg0->cursorIndex - 1;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -676,7 +676,7 @@ void handleViewerGridNavigation_SingleRow(FD98_struct *arg0) {
         } else {
             arg0->cursorIndex = arg0->cursorIndex + 1;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -688,7 +688,7 @@ void handleViewerGridNavigation_SingleRow(FD98_struct *arg0) {
         arg0->pageUpCursorDest = arg0->cursorIndex;
         arg0->pageDownCursorDest = arg0->cursorIndex;
         arg0->navigationMode = 1;
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
     }
 }
 
@@ -724,7 +724,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
             setMenuAnimation(alloc, 0x92, 0x92, -1, 0);
             return;
         }
-        func_800585C8_591C8(9);
+        playSoundEffect(9);
         return;
     }
 
@@ -736,7 +736,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         } else {
             arg0->cursorIndex = temp_v1 - 1;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -747,7 +747,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         } else {
             arg0->cursorIndex = temp + 1;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -761,7 +761,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
             arg0->navigationMode = 1;
             arg0->pageDownCursorDest = arg0->cursorIndex;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -774,7 +774,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
             arg0->navigationMode = 1;
             arg0->pageDownCursorDest = arg0->cursorIndex - 0x12;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
     }
 }
 
@@ -791,7 +791,7 @@ void handleViewerGridNavigation_Prize(FD98_struct *arg0) {
         } else {
             arg0->cursorIndex = arg0->cursorIndex - 1;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -801,7 +801,7 @@ void handleViewerGridNavigation_Prize(FD98_struct *arg0) {
         } else {
             arg0->cursorIndex = arg0->cursorIndex + 1;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -819,7 +819,7 @@ void handleViewerGridNavigation_Prize(FD98_struct *arg0) {
             }
             arg0->navigationMode = 1;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
         return;
     }
 
@@ -834,7 +834,7 @@ void handleViewerGridNavigation_Prize(FD98_struct *arg0) {
             arg0->navigationMode = 1;
             arg0->pageDownCursorDest = arg0->cursorIndex - 7;
         }
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
     }
 }
 
@@ -904,7 +904,7 @@ button_check:
         arg0->navigationMode = 0;
         arg0->cursorIndex = newVal;
     play_sound:
-        func_800585C8_591C8(sound);
+        playSoundEffect(sound);
     }
 }
 

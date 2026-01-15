@@ -908,7 +908,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
                 soundId = 0x121;
             }
 
-            func_80058530_59130(soundId, 6);
+            playSoundEffectWithPriorityDefaultVolume(soundId, 6);
         }
     }
 
@@ -937,7 +937,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
                 soundId = 0x121;
             }
 
-            func_80058530_59130(soundId, 6);
+            playSoundEffectWithPriorityDefaultVolume(soundId, 6);
         }
     }
 

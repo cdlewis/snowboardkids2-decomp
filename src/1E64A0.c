@@ -4,6 +4,7 @@
 #include "B040.h"
 #include "common.h"
 #include "cutscene/cutscene_sys2.h"
+#include "graphics.h"
 #include "race_session.h"
 #include "task_scheduler.h"
 
@@ -65,7 +66,7 @@ s32 func_800B9680_1E6730(cutsceneSys2Wait_exec_asset *arg0) {
     arg0->unk80 = 0x6600;
     arg0->unk7C = 0x8000;
     func_800B9440_1E64F0(arg0);
-    func_800585C8_591C8(0x2C);
+    playSoundEffect(0x2C);
     return 2;
 }
 
@@ -173,7 +174,7 @@ void *func_800B97C8_1E6878(cutsceneSys2Wait_exec_asset *arg0) {
                     *(s8 *)((u8 *)arg0->unk0 + 0xFF7) = 0;
                     arg0->unk84 = 6;
                 } else {
-                    func_800585C8_591C8(0x2B);
+                    playSoundEffect(0x2B);
                     arg0->unk9D = 0;
                     arg0->unk84 = 4;
                 }

@@ -63,7 +63,7 @@ void *handleMenuSelection(DC90TaskStruct *arg0) {
         arg0->unk18 = temp_v0;
     }
     if (gControllerInputs & A_BUTTON) {
-        func_800585C8_591C8(45);
+        playSoundEffect(45);
         arg0->state = 4;
     }
     return temp_v0;
@@ -103,7 +103,7 @@ void initCutsceneWaitMenu(DC90TaskStruct *arg0) {
     arg0->animFrameY = 1;
     arg0->unk3C = 0xFF;
     arg0->unk3E = 0xC0;
-    func_800585C8_591C8(0x2C);
+    playSoundEffect(0x2C);
     setCleanupCallback(&cleanupCutsceneWaitMenu);
     setCallback(&updateCutsceneWaitMenu);
 }

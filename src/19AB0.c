@@ -80,7 +80,7 @@ void handleGameStateComplete(void) {
     } else {
         createTaskQueue(initStoryMapLocation, 100);
         if (storyMapLocationIndex == 7) {
-            func_800585C8_591C8(0x22);
+            playSoundEffect(0x22);
         }
     }
 

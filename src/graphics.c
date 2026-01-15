@@ -883,84 +883,84 @@ void playSoundEffectWithPriorityAndPan(s32 soundId, s32 volume, s32 pan, s32 pri
     playSoundEffectWithPriorityPanAndVoice(soundId, volume, pan, priority, 0xC);
 }
 
-void func_80058380_58F80(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void playSoundEffectWithVolumePanAndVoice(s32 soundId, s32 volume, s32 pan, s32 voiceIndex) {
     s32 *new_var;
     void *message;
     s32 new_var2;
-    gGraphicsCommand.soundId = arg0;
-    gGraphicsCommand.volume = arg1;
-    gGraphicsCommand.pan = arg2;
+    gGraphicsCommand.soundId = soundId;
+    gGraphicsCommand.volume = volume;
+    gGraphicsCommand.pan = pan;
     new_var = &gGraphicsManager->soundSequence;
     new_var2 = *new_var;
-    gGraphicsCommand.voiceIndex = arg3;
+    gGraphicsCommand.voiceIndex = voiceIndex;
     gGraphicsCommand.soundSequence = new_var2;
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
-void func_800583F8_58FF8(s32 arg0, s32 arg1, s32 arg2) {
-    func_80058380_58F80(arg0, arg1, arg2, 0xC);
+void playSoundEffectWithVolumeAndPan(s32 soundId, s32 volume, s32 pan) {
+    playSoundEffectWithVolumePanAndVoice(soundId, volume, pan, 0xC);
 }
 
-void func_80058414_59014(s32 arg0, s32 arg1, s32 arg2) {
+void playSoundEffectWithVolumeAndVoice(s32 soundId, s32 volume, s32 voiceIndex) {
     void *sp10;
     s32 *new_var;
     s32 new_var2;
-    gGraphicsCommand.soundId = arg0;
-    gGraphicsCommand.volume = arg1;
+    gGraphicsCommand.soundId = soundId;
+    gGraphicsCommand.volume = volume;
     gGraphicsCommand.pan = 0x80;
     new_var = &gGraphicsManager->soundSequence;
     new_var2 = *new_var;
-    gGraphicsCommand.voiceIndex = arg2;
+    gGraphicsCommand.voiceIndex = voiceIndex;
     gGraphicsCommand.soundSequence = new_var2;
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, (OSMesg *)(&sp10), OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
-void func_80058490_59090(s32 arg0, s32 arg1) {
-    func_80058414_59014(arg0, arg1, 0xC);
+void playSoundEffectWithVolume(s32 soundId, s32 volume) {
+    playSoundEffectWithVolumeAndVoice(soundId, volume, 0xC);
 }
 
-void func_800584AC_590AC(s32 arg0, s32 arg1, s32 arg2) {
+void playSoundEffectWithPriorityAndVoiceDefaultVolume(s32 soundId, s32 priority, s32 voiceIndex) {
     s32 v0;
     s32 mesg;
 
-    gGraphicsCommand.soundId = arg0;
+    gGraphicsCommand.soundId = soundId;
     gGraphicsCommand.volume = 0x80;
     gGraphicsCommand.pan = 0x80;
     v0 = *(s32 *)((s32)gGraphicsManager + 0x20);
-    gGraphicsCommand.voiceIndex = arg2;
-    gGraphicsCommand.soundSequence = v0 + (arg1 << 24);
+    gGraphicsCommand.voiceIndex = voiceIndex;
+    gGraphicsCommand.soundSequence = v0 + (priority << 24);
 
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, (OSMesg *)&mesg, OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
-void func_80058530_59130(s32 arg0, s32 arg1) {
-    func_800584AC_590AC(arg0, arg1, 0xC);
+void playSoundEffectWithPriorityDefaultVolume(s32 soundId, s32 priority) {
+    playSoundEffectWithPriorityAndVoiceDefaultVolume(soundId, priority, 0xC);
 }
 
-void func_8005854C_5914C(s32 arg0, s32 arg1) {
+void playSoundEffectWithVoice(s32 soundId, s32 voiceIndex) {
     s32 new_var2;
     s32 *new_var;
     void *sp10;
 
-    gGraphicsCommand.soundId = arg0;
+    gGraphicsCommand.soundId = soundId;
     gGraphicsCommand.volume = 0x80;
     gGraphicsCommand.pan = 0x80;
     new_var2 = *(new_var = &gGraphicsManager->soundSequence);
-    gGraphicsCommand.voiceIndex = arg1;
+    gGraphicsCommand.voiceIndex = voiceIndex;
     gGraphicsCommand.soundSequence = new_var2;
     osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
     osRecvMesg(&gfxResultQueue, (OSMesg *)(&sp10), OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
-void func_800585C8_591C8(s32 arg0) {
-    func_8005854C_5914C(arg0, 0xC);
+void playSoundEffect(s32 soundId) {
+    playSoundEffectWithVoice(soundId, 0xC);
 }
 
 void *getActiveAudioChannelCount(void) {

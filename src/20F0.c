@@ -368,7 +368,7 @@ void initializeGameEntity(
             ent->unk08 = loadCompressedData(assetEntry->asset3Start, assetEntry->asset3End, assetEntry->asset3Size);
             ent->unk04 = allocateNodeMemory(0x980);
         } else {
-            func_800585C8_591C8(0);
+            playSoundEffect(0);
         }
     } else {
         if (assetEntry->anotherAssetIndex != -1) {

@@ -118,7 +118,7 @@ void handlePlayerCountSelectInput(void) {
         case 0:
             inputs = gControllerInputs;
             if (inputs & B_BUTTON) {
-                func_800585C8_591C8(0x2E);
+                playSoundEffect(0x2E);
                 state->menuState = 0xA;
             } else {
                 if (inputs & 0x40100) {
@@ -162,7 +162,7 @@ void handlePlayerCountSelectInput(void) {
             inputs = gControllerInputs;
             if (inputs & B_BUTTON) {
             common_exit:
-                func_800585C8_591C8(0x2E);
+                playSoundEffect(0x2E);
                 state->menuState = 0;
             } else if (inputs & A_BUTTON) {
                 state->menuResult = 0x63;

@@ -963,7 +963,7 @@ void func_8003F368_3FF68(void) {
                     } else {
                         gs->pauseMenuSelection = 0;
                     }
-                    func_800585C8_591C8(0x2B);
+                    playSoundEffect(0x2B);
                 }
                 if (inputMask & 0x10800) {
                     if (gs->pauseMenuSelection == 0) {
@@ -971,7 +971,7 @@ void func_8003F368_3FF68(void) {
                     } else {
                         gs->pauseMenuSelection--;
                     }
-                    func_800585C8_591C8(0x2B);
+                    playSoundEffect(0x2B);
                 }
                 aPressed = inputMask & 0x1000;
                 if (aPressed) {
@@ -985,7 +985,7 @@ void func_8003F368_3FF68(void) {
                             setViewportFadeValue(NULL, 0xFF, 0x10);
                             setMusicFadeOut(0x3C);
                             setGameStateHandler(cleanupGameSession);
-                            func_800585C8_591C8(0x2E);
+                            playSoundEffect(0x2E);
                             return;
                         case 3:
                             gs->gamePaused = 3;
@@ -1133,7 +1133,7 @@ void func_8003F368_3FF68(void) {
         if (aPressed) {
             gs->pauseMenuSelection = 0;
             gs->gamePaused = (gs->gamePaused == 0);
-            func_800585C8_591C8(0x2B);
+            playSoundEffect(0x2B);
             resumeMotorStates();
         }
         if (gs->unk78 == 1) {

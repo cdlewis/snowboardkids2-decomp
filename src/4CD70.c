@@ -862,7 +862,7 @@ void cleanupRaceProgressIndicatorTask(RaceProgressIndicatorCleanupState *state) 
 void initGoalBannerTask(GoalBannerState *state) {
     state->spriteAsset = loadAsset_34CB50();
     state->spriteFrame = 0xD;
-    func_80058530_59130(0x11B, 6);
+    playSoundEffectWithPriorityDefaultVolume(0x11B, 6);
     state->holdFrames = 0x2D;
     state->animAngle = 0;
     state->yOffset = -8;
@@ -950,16 +950,16 @@ void showPlacementAnnouncement(u32 playerIndex, s32 placement) {
 
         switch (placement) {
             case 0:
-                func_80058530_59130(0x118, 6);
+                playSoundEffectWithPriorityDefaultVolume(0x118, 6);
                 break;
             case 1:
-                func_80058530_59130(0x119, 6);
+                playSoundEffectWithPriorityDefaultVolume(0x119, 6);
                 break;
             case 2:
-                func_80058530_59130(0x11A, 6);
+                playSoundEffectWithPriorityDefaultVolume(0x11A, 6);
                 break;
             case 3:
-                func_80058530_59130(0x134, 6);
+                playSoundEffectWithPriorityDefaultVolume(0x134, 6);
                 break;
         }
     }
@@ -2155,7 +2155,7 @@ void updateRaceTimerDisplay(RaceTimerState *arg0) {
         goto check_time_flag;
     }
     alloc->timerExpired = 1;
-    func_80058530_59130(0x46, 6);
+    playSoundEffectWithPriorityDefaultVolume(0x46, 6);
 
 check_time_flag:
     if (!(alloc->timeRemaining->unkB84 & 0x80000)) {

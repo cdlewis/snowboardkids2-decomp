@@ -2169,11 +2169,11 @@ void updatePlayerHaloAnimating(PlayerHaloState *state) {
         }
         tableIdx = (s16)state->animationIndex * 2;
         if (D_80090C95_91895[tableIdx] == 7) {
-            func_80058530_59130(0x116, 6);
+            playSoundEffectWithPriorityDefaultVolume(0x116, 6);
         }
         tableIdx = (s16)state->animationIndex * 2;
         if (D_80090C95_91895[tableIdx] == 0xB) {
-            func_80058530_59130(0x117, 6);
+            playSoundEffectWithPriorityDefaultVolume(0x117, 6);
         }
         i = 0;
         goto position_loop;

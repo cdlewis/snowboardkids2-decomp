@@ -114,9 +114,9 @@ void writeSaveDataToEeprom(void) {
     } while (result == -1);
 
     if (result == 0) {
-        func_800585C8_591C8(0x2C);
+        playSoundEffect(0x2C);
     } else {
-        func_800585C8_591C8(0x2B);
+        playSoundEffect(0x2B);
     }
 
     setGameStateHandler(handleTitleMenuInput);
@@ -238,7 +238,7 @@ case1_done_nav:
     temp = gControllerInputs;
 
     if ((temp & B_BUTTON) != 0) {
-        func_800585C8_591C8(0x2E);
+        playSoundEffect(0x2E);
         state->menuSelection = 0;
         state->menuMode = 0;
         goto end;
@@ -401,8 +401,8 @@ void checkPartialUnlockCheatCode(void) {
             if (buttons != STICK_UP && buttons != 0) {
                 if (buttons == START_BUTTON) {
                     unlockPartialContent();
-                    func_800585C8_591C8(0xDC);
-                    func_800585C8_591C8(0xDC);
+                    playSoundEffect(0xDC);
+                    playSoundEffect(0xDC);
                     state->partialUnlockCheatProgress = 0xF0;
                 } else {
                     state->partialUnlockCheatProgress = 0xFF;
@@ -523,10 +523,10 @@ void checkUnlockAllCheatCode(void) {
                 if ((buttons != Z_TRIG) && (buttons != 0)) {
                     if (buttons == A_BUTTON) {
                         unlockAllContent();
-                        func_800585C8_591C8(0x110);
-                        func_800585C8_591C8(0x110);
-                        func_800585C8_591C8(0x110);
-                        func_800585C8_591C8(0x110);
+                        playSoundEffect(0x110);
+                        playSoundEffect(0x110);
+                        playSoundEffect(0x110);
+                        playSoundEffect(0x110);
                         state->unlockAllCheatProgress = 0xF0;
                     } else {
                         state->unlockAllCheatProgress = 0xFF;
