@@ -24,6 +24,7 @@ oscillateGhostFade = 0x800BB620; // rom:0xAF310
 fadeOutGhost = 0x800BB6F4; // rom:0xAF3E4
 initGhostManager = 0x800BC13C; // rom:0xAFE2C
 initGhostTransformations = 0x800BC184; // rom:0xAFE74
+cleanupGhostManager = 0x800BC340; // rom:0xB0030
 initIceLandBoss = 0x800BB66C; // rom:0xB0B5C
 dispatchIceLandBossChasePhase = 0x800BB8E0; // rom:0xB0DD0
 updateGhostSlotStates = 0x800BC220; // rom:0xAFF10
