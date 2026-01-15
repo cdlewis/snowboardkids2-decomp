@@ -16,11 +16,6 @@ USE_ASSET(_422C60);
 USE_ASSET(_1DC0D0);
 
 typedef struct {
-    u8 _pad0[0x2C];
-    s32 textureData;
-} func_800B0DD0_arg;
-
-typedef struct {
     SceneModel *model;
     Transform3D matrix;
     u16 characterIndex;
@@ -125,7 +120,7 @@ extern void *renderTextPalette;
 
 void func_800B00C0_1DA660(void);
 void positionCharacterSelectSprite(CharacterSelectSprite *, u8);
-void func_800B0DF8_1DB398(void *);
+void enqueueCharacterSelectTextureRender(void *);
 void awaitCharacterPreviewReady(CharacterPreviewState *);
 void updateCharacterPreviewAnimation(CharacterPreviewState *);
 void cleanupCharacterPreview(CharacterPreviewState *);
@@ -138,7 +133,7 @@ void func_800B0E94_1DB434(void *);
 void func_800B0EEC_1DB48C(func_800B0FE0_arg *);
 void func_800B0F88_1DB528(void *);
 void func_800B0FE0_1DB580(func_800B0FE0_arg *);
-void func_800B0DD0_1DB370(func_800B0DD0_arg *);
+void initCharacterSelectTextureRenderState(TextureDataTaskState *);
 void func_800B10D4_1DB674(void *);
 void func_800B1104_1DB6A4(func_800B1104_arg *);
 void updateCoordinateDisplayTask(CoordinateDisplayTaskState *);
@@ -531,15 +526,15 @@ void cleanupCharacterSelectTextureData(TextureDataTaskState *arg0) {
 void initCharacterSelectTextureDataLoad(TextureDataTaskState *arg0) {
     arg0->textureData = loadCompressedData(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
     setCleanupCallback(cleanupCharacterSelectTextureData);
-    setCallback(func_800B0DD0_1DB370);
+    setCallback(initCharacterSelectTextureRenderState);
 }
 
-void func_800B0DD0_1DB370(func_800B0DD0_arg *arg0) {
-    func_800394BC_3A0BC(arg0, arg0->textureData);
-    setCallback(&func_800B0DF8_1DB398);
+void initCharacterSelectTextureRenderState(TextureDataTaskState *arg0) {
+    func_800394BC_3A0BC(arg0, (s32)arg0->textureData);
+    setCallback(&enqueueCharacterSelectTextureRender);
 }
 
-void func_800B0DF8_1DB398(void *arg0) {
+void enqueueCharacterSelectTextureRender(void *arg0) {
     debugEnqueueCallback(9, 0, func_80038420_39020, arg0);
 }
 
