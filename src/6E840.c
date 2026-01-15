@@ -663,28 +663,26 @@ void enqueueViewportCallback(Node_70B00 *viewport, u8 poolIndex, void *callback,
     }
 }
 
-void func_80070094_70C94(u16 id, u8 listIndex, void *data1, void *data2) {
-    Node_70B00 *mgr;
-    Node *newNode;
-    u8 *listPtr;
-    Node *oldHead;
+void enqueueViewportCallbackById(u16 viewportId, u8 poolIndex, void *callback, void *callbackData) {
+    Node_70B00 *viewport;
+    PoolEntry *newEntry;
+    PoolEntry *oldHead;
 
-    mgr = &D_800A3370_A3F70;
+    viewport = &D_800A3370_A3F70;
 
-    while (mgr != NULL) {
-        if (mgr->id == id) {
-            newNode = (Node *)linearAlloc(0x10);
-            if (newNode != NULL) {
-                listPtr = (u8 *)mgr + (listIndex << 4);
-                oldHead = *(Node **)(listPtr + 0x18);
-                newNode->callback = data1;
-                newNode->callbackData = data2;
-                newNode->poolIndex = listIndex;
-                newNode->next = oldHead;
-                *(Node **)(listPtr + 0x18) = newNode;
+    while (viewport != NULL) {
+        if (viewport->id == viewportId) {
+            newEntry = (PoolEntry *)linearAlloc(sizeof(PoolEntry));
+            if (newEntry != NULL) {
+                oldHead = viewport->pool[poolIndex].next;
+                newEntry->callback = callback;
+                newEntry->callbackData = callbackData;
+                newEntry->poolIndex = poolIndex;
+                newEntry->next = oldHead;
+                viewport->pool[poolIndex].next = newEntry;
             }
         }
-        mgr = mgr->list3_next;
+        viewport = viewport->list3_next;
     }
 }
 
