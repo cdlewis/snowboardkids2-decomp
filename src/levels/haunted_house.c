@@ -136,7 +136,7 @@ void updateGhostSlotStates(u8 *ghostSlots);
 void cleanupGhostManager(GhostManager *);
 void func_800BC750_B0440(s16 *);
 void updateGhostAnimation(AnimatedGhostEntity *);
-void func_800BC378_B0068(GhostRenderState *);
+void renderGhosts(GhostRenderState *);
 extern void cleanupFloatingSpriteEntity(void **);
 
 void updateGhostAnimation(AnimatedGhostEntity *ghost) {
@@ -669,7 +669,7 @@ void updateGhostSlotStates(u8 *ghostSlots) {
     }
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 4, func_800BC378_B0068, ghostSlots);
+        debugEnqueueCallback((u16)i, 4, renderGhosts, ghostSlots);
     }
 }
 
@@ -678,31 +678,31 @@ void cleanupGhostManager(GhostManager *ghostManager) {
     ghostManager->ghostSpriteAsset = freeNodeMemory(ghostManager->ghostSpriteAsset);
 }
 
-void func_800BC378_B0068(GhostRenderState *state) {
-    OutputStruct_19E80 tableEntry;
-    s32 prevTextureIndex;
+void renderGhosts(GhostRenderState *state) {
+    OutputStruct_19E80 textureTableEntry;
+    s32 currentTextureIndex;
     s32 i;
 
-    prevTextureIndex = -1;
+    currentTextureIndex = -1;
     gGraphicsMode = -1;
     gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
 
     for (i = 0; i < 8; i++) {
         if (isObjectCulled(&g_GhostSpawnPositions[i]) == 0) {
-            u8 textureIndex = state->textureIndices[i];
+            u8 textureIdx = state->textureIndices[i];
 
-            if (textureIndex != prevTextureIndex) {
-                prevTextureIndex = textureIndex;
-                getTableEntryByU16Index(state->textureTable, (u16)prevTextureIndex, &tableEntry);
+            if (textureIdx != currentTextureIndex) {
+                currentTextureIndex = textureIdx;
+                getTableEntryByU16Index(state->textureTable, (u16)currentTextureIndex, &textureTableEntry);
 
                 gDPLoadMultiBlock_4b(
                     gRegionAllocPtr++,
-                    tableEntry.data_ptr,
+                    textureTableEntry.data_ptr,
                     0,
                     G_TX_RENDERTILE,
                     G_IM_FMT_CI,
-                    tableEntry.field1,
-                    tableEntry.field2,
+                    textureTableEntry.field1,
+                    textureTableEntry.field2,
                     0,
                     G_TX_CLAMP,
                     G_TX_CLAMP,
@@ -712,7 +712,7 @@ void func_800BC378_B0068(GhostRenderState *state) {
                     G_TX_NOLOD
                 );
 
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, textureTableEntry.index_ptr);
             }
 
             gSPMatrix(
