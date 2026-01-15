@@ -309,20 +309,20 @@ s32 executeValidateCommand(
     s32 arg4,
     s8 frameIndex
 ) {
-    s32 check;
+    s32 shouldRun;
     CommandEntry *commandEntry;
-    CommandData *dataPtr;
+    CommandData *slotData;
 
-    check = 1;
+    shouldRun = TRUE;
     commandEntry = getCommandEntry(currentCommand->commandCategory, currentCommand->commandIndex);
 
     if (commandEntry->validate) {
-        dataPtr = &commandData[frameIndex];
-        if (dataPtr->isActive == 0) {
-            check = commandCategories[currentCommand->commandCategory].requiresModel != 1;
+        slotData = &commandData[frameIndex];
+        if (slotData->isActive == 0) {
+            shouldRun = commandCategories[currentCommand->commandCategory].requiresModel != 1;
         }
 
-        if (check) {
+        if (shouldRun) {
             return commandEntry->validate(currentCommand, commandData, arg2, arg3, arg4, frameIndex);
         }
     }
