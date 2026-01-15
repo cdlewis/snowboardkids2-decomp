@@ -95,7 +95,7 @@ extern s8 D_800AB04B;
 extern s8 gAnalogStickY;
 extern u8 gAnalogStickX;
 
-void func_800B5CFC_1E2DAC(func_800B5E64_1E2F14_arg0 *arg0) {
+void handleAnimationLoopDebugInput(func_800B5E64_1E2F14_arg0 *arg0) {
     s8 mode = arg0->inputMode;
     s32 temp;
     s32 buttonCheck;

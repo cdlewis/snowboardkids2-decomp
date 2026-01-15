@@ -990,6 +990,7 @@ getAnimationFrameCount = 0x80001638; // rom:0x2238
 applyTransformToModel = 0x8000153C; // rom:0x213C
 setupSlotTransform = 0x800B6760; // rom:0x1E3810
 finalizeAnimationLoop = 0x800B5C18; // rom:0x1E2CC8
+handleAnimationLoopDebugInput = 0x800B5CFC; // rom:0x1E2DAC
 spawnFanEffect = 0x800B4F60; // rom:0x1E2010
 initSlotData = 0x800B66B4; // rom:0x1E3764
 calcAngleDiff = 0x800B6618; // rom:0x1E36C8
