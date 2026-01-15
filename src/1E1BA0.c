@@ -63,19 +63,19 @@ void updateFanEffectFade(FanEffectFadeState *arg0);
 extern Transform3D D_8009A8B0_9B4B0;
 extern StateEntry D_80088650;
 extern StateEntry D_80088660;
-extern s16 D_800BAD0E_1E7DBE;
-extern s16 D_800BAA60_1E7B10[];
+extern s16 gFanSoundCount;
+extern s16 gFanSoundIds[];
 
-s16 func_800B4AF0_1E1BA0(void) {
-    return D_800BAD0E_1E7DBE;
+s16 getFanSoundCount(void) {
+    return gFanSoundCount;
 }
 
-s16 func_800B4AFC_1E1BAC(s16 arg0) {
+s16 getFanSoundId(s16 arg0) {
     s16 temp_v1;
     s16 temp_v0;
     s16 index;
 
-    temp_v1 = D_800BAD0E_1E7DBE;
+    temp_v1 = gFanSoundCount;
     temp_v0 = arg0;
 
     if (temp_v0 < temp_v1) {
@@ -84,17 +84,17 @@ s16 func_800B4AFC_1E1BAC(s16 arg0) {
         index = 0;
     }
 
-    return D_800BAA60_1E7B10[index];
+    return gFanSoundIds[index];
 }
 
 void func_800B4B30_1E1BE0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
     s16 temp;
 
     if (arg3 <= 0) {
-        temp = func_800B4AFC_1E1BAC(arg0);
+        temp = getFanSoundId(arg0);
         playSoundEffectWithPriorityAndPan(temp, arg1, arg2 + 0x80, 0);
     } else {
-        temp = func_800B4AFC_1E1BAC(arg0);
+        temp = getFanSoundId(arg0);
         playSoundEffectOnChannel(temp, arg1, arg2 + 0x80, 0, arg3);
     }
 }
@@ -114,19 +114,19 @@ void func_800B4BDC_1E1C8C(s16 arg0, s16 arg1, s16 arg2, CutsceneSlotData *arg3) 
 
     duration = arg2;
     if (duration <= 0) {
-        soundId = func_800B4AFC_1E1BAC(arg0);
+        soundId = getFanSoundId(arg0);
         queueSoundAtPosition(&position, soundId);
         return;
     }
 
-    soundId = func_800B4AFC_1E1BAC(arg0);
+    soundId = getFanSoundId(arg0);
     queueSoundAtPositionWithPriority(&position, soundId, 0, duration);
 }
 
 void func_800B4C80_1E1D30(s16 arg0) {
     s16 temp;
 
-    temp = func_800B4AFC_1E1BAC(arg0);
+    temp = getFanSoundId(arg0);
     playSoundEffectOnChannelNoPriority(temp, 0);
 }
 
