@@ -6,6 +6,7 @@ addPlayerRaceGold = 0x80059A48; // rom:0x5A648
 addPlayerSkillPoints = 0x80059A88; // rom:0x5A688
 getPlayerRaceGold = 0x80059AC4; // rom:0x5A6C4
 playAttackHitVoice = 0x80059C24; // rom:0x5A824
+playRaceWinVoice = 0x80059CE0; // rom:0x5A8E0
 playFinishBoostVoice = 0x80059C90; // rom:0x5A890
 gFinishBoostVoiceSounds = 0x80093FF4; // rom:0x94BF4
 getOrUpdatePlayerSectorIndex = 0x80059E90; // rom:0x5AA90

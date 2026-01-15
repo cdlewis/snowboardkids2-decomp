@@ -1498,7 +1498,7 @@ s32 updateRaceFinishWinStep(Player *player) {
         case 0:
             if (func_8005D308_5DF08(player, 0x1B) != 0) {
                 player->behaviorCounter = player->behaviorCounter + 1;
-                func_80059CE0_5A8E0(player);
+                playRaceWinVoice(player);
             }
             break;
         case 1:

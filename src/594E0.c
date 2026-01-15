@@ -298,11 +298,11 @@ void playFinishBoostVoice(Player *player) {
     }
 }
 
-void func_80059CE0_5A8E0(Player *arg0) {
-    u8 index = arg0->characterId;
+void playRaceWinVoice(Player *player) {
+    u8 index = player->characterId;
     if (index < 9) {
-        if (arg0->unkB88 == 0) {
-            queueSoundAtPositionWithPriority(&arg0->worldPos, D_80094008_94C08[index], 5, arg0->playerIndex + 4);
+        if (player->unkB88 == 0) {
+            queueSoundAtPositionWithPriority(&player->worldPos, D_80094008_94C08[index], 5, player->playerIndex + 4);
         }
     }
 }
