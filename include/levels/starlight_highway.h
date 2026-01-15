@@ -51,6 +51,7 @@ void spawnDebugDisplayListTask(s16 arg0);
 void spawnStarlightItems(void);
 void func_800BC9BC(void);
 void initFireworkShowTimer(FireworkShowTimerState *arg0);
+void updateFireworkShowTimer(FireworkShowTimerState *arg0);
 void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0);
 void initStarlightItemTask(StarlightItemTaskState *);
 void cleanupStarlightItemTask(DualSegmentCleanupState *);

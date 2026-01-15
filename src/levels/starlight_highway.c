@@ -152,7 +152,7 @@ void updateStarlightFireworkSimple(StarlightFireworkTaskState *);
 void updateStarlightFireworkComplex(StarlightFireworkTaskState *);
 void updateStarlightFirework(StarlightFireworkTaskState *);
 void cleanupStarlightFireworkTask(StarlightFireworkCleanupState *);
-void updateFireworkShowTimer(s16 *arg0);
+void updateFireworkShowTimer(FireworkShowTimerState *arg0);
 void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0);
 
 void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0) {
@@ -809,45 +809,43 @@ void initFireworkShowTimer(FireworkShowTimerState *arg0) {
     setCallback(&updateFireworkShowTimer);
 }
 
-void updateFireworkShowTimer(s16 *arg0) {
+void updateFireworkShowTimer(FireworkShowTimerState *arg0) {
     TaskAllocationState *allocation;
     StarlightFireworkTaskState *task;
-    s32 new_var;
-    s32 new_var2;
-    u32 s2;
+    s32 fireworkTypeBase;
+    s32 firstFireworkType;
+    u32 timerValue;
 
     allocation = getCurrentAllocation();
     if (allocation->paused != 0) {
         return;
     }
 
-    *arg0 -= 1;
-    if ((s16)*arg0 == 0x78) {
+    arg0->timer -= 1;
+    if (arg0->timer == 0x78) {
         task = scheduleTask(initStarlightFireworkTask, 0, 0, 0xC8);
         if (task != NULL) {
             task->type = (u32)(randA() & 0xFF) % 3U;
         }
     }
 
-    if ((s16)(s2 = *arg0) == 0) {
+    if ((timerValue = arg0->timer) == 0) {
         if (getFreeNodeCount(0) >= 2) {
-            s2 = 2;
-            s2 = (u8)((u32)(randA() & 0xFF) % 3U) * s2;
-            new_var2 = s2 + 3;
+            fireworkTypeBase = 2;
+            fireworkTypeBase = (u8)((u32)(randA() & 0xFF) % 3U) * fireworkTypeBase;
+            firstFireworkType = fireworkTypeBase + 3;
             task = scheduleTask(initStarlightFireworkTask, 0, 0, 0xC8);
             if (task != NULL) {
-                do {
-                    task->type = (new_var = new_var2);
-                } while (0);
+                task->type = firstFireworkType;
             }
 
             task = scheduleTask(initStarlightFireworkTask, 0, 0, 0xC8);
             if (task != NULL) {
-                task->type = s2 + 4;
+                task->type = fireworkTypeBase + 4;
             }
         }
 
-        *arg0 = (randA() & 0x1F) + 0xF0;
+        arg0->timer = (randA() & 0x1F) + 0xF0;
     }
 }
 
