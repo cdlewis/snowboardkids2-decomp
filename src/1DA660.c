@@ -17,7 +17,7 @@ USE_ASSET(_1DC0D0);
 
 typedef struct {
     u8 _pad0[0x2C];
-    s32 unk2C;
+    s32 textureData;
 } func_800B0DD0_arg;
 
 typedef struct {
@@ -37,8 +37,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x2C];
-    void *unk2C;
-} func_800B0D4C_arg;
+    void *textureData;
+} TextureDataTaskState;
 
 typedef struct {
     s16 unk0;
@@ -524,18 +524,18 @@ void updateCoordinateDisplayTask(CoordinateDisplayTaskState *arg0) {
     debugEnqueueCallback(0, 7, &renderTextPalette, &arg0->secondDisplayX);
 }
 
-void func_800B0D4C_1DB2EC(func_800B0D4C_arg *arg0) {
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void cleanupCharacterSelectTextureData(TextureDataTaskState *arg0) {
+    arg0->textureData = freeNodeMemory(arg0->textureData);
 }
 
-void func_800B0D78_1DB318(func_800B0D4C_arg *arg0) {
-    arg0->unk2C = loadCompressedData(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
-    setCleanupCallback(func_800B0D4C_1DB2EC);
+void func_800B0D78_1DB318(TextureDataTaskState *arg0) {
+    arg0->textureData = loadCompressedData(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
+    setCleanupCallback(cleanupCharacterSelectTextureData);
     setCallback(func_800B0DD0_1DB370);
 }
 
 void func_800B0DD0_1DB370(func_800B0DD0_arg *arg0) {
-    func_800394BC_3A0BC(arg0, arg0->unk2C);
+    func_800394BC_3A0BC(arg0, arg0->textureData);
     setCallback(&func_800B0DF8_1DB398);
 }
 
