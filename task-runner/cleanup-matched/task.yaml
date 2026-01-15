@@ -2,3 +2,4 @@ candidate_source: python3 tools/list_matched_functions.py
 template: template.md
 accept_best_effort: true
 claude_flags: --model opus
+claude_command: glaude
