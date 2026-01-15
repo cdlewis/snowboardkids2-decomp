@@ -305,6 +305,7 @@ updatePlayerCountHeaderSprite = 0x800B070C; // rom:0x1DBDEC
 interpolateScaleX = 0x800B7760; // rom:0x1E4810
 interpolateScaleY = 0x800B77C4; // rom:0x1E4874
 interpolateScaleZ = 0x800B7828; // rom:0x1E48D8
+setupSlotProjectile = 0x800B788C; // rom:0x1E493C
 initPlayerFinishPositionTask = 0x8004C170; // rom:0x4CD70
 updatePlayerFinishPositionDisplay = 0x8004C254; // rom:0x4CE54
 cleanupPlayerFinishPositionTask = 0x8004C294; // rom:0x4CE94
