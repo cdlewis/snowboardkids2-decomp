@@ -49,7 +49,7 @@ typedef struct {
 s32 func_800BB504(Vec3i *arg0, s32 arg1);
 void spawnDebugDisplayListTask(s16 arg0);
 void spawnStarlightItems(void);
-void func_800BC9BC(void);
+void spawnStarlightBarriers(void);
 void initFireworkShowTimer(FireworkShowTimerState *arg0);
 void updateFireworkShowTimer(FireworkShowTimerState *arg0);
 void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0);

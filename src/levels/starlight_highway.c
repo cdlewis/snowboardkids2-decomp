@@ -26,26 +26,24 @@ typedef struct {
     DisplayListObject node2;
 } StarlightBuildingRenderData;
 
-// Starlight Highway Barrier Task State
+// Starlight Highway Barrier Task
 // Each barrier has two gates (left/right) that open when players enter the trigger sector
-// unk78: gate opening distance (0 = closed, 0x600000 = fully open)
-// unk7C: barrier index (0 or 1) to select which configuration to use
 typedef struct {
-    /* 0x00 */ Transform3D node1;        // Left gate transform
-    /* 0x20 */ void *unk20;               // Left gate display list offset
-    /* 0x24 */ void *unk24;               // Display list memory pointer 1
-    /* 0x28 */ void *unk28;               // Display list memory pointer 2
-    /* 0x2C */ s32 unk2C;                 // Unknown
+    /* 0x00 */ Transform3D leftGateNode;     // Left gate transform
+    /* 0x20 */ void *leftGateDisplayListOffset;  // Left gate display list offset
+    /* 0x24 */ void *displayListMemory1;     // Display list memory pointer 1
+    /* 0x28 */ void *displayListMemory2;     // Display list memory pointer 2
+    /* 0x2C */ s32 unk2C;                    // Unknown
     /* 0x30 */ u8 pad30[0xC];
-    /* 0x3C */ Transform3D node2;        // Right gate transform
-    /* 0x5C */ void *unk5C;               // Right gate display list offset
-    /* 0x60 */ void *unk60;               // Unknown
-    /* 0x64 */ void *unk64;               // Unknown
-    /* 0x68 */ s32 unk68;                // Unknown
+    /* 0x3C */ Transform3D rightGateNode;    // Right gate transform
+    /* 0x5C */ void *rightGateDisplayListOffset; // Right gate display list offset
+    /* 0x60 */ void *unk60;                   // Unknown
+    /* 0x64 */ void *unk64;                   // Unknown
+    /* 0x68 */ s32 unk68;                    // Unknown
     /* 0x6C */ u8 pad6C[0xC];
-    /* 0x78 */ s32 unk78;                 // Gate open amount (0x0 = closed, 0x600000 = open)
-    /* 0x7C */ u8 unk7C;                 // Barrier index (0 or 1)
-} func_800BC6C4_AEA84_arg;
+    /* 0x78 */ s32 gateOpenAmount;            // Gate opening distance (0 = closed, 0x600000 = fully open)
+    /* 0x7C */ u8 barrierIndex;              // Barrier index (0 or 1) to select which configuration to use
+} StarlightBarrierTask;
 
 typedef struct {
     u8 _pad[0x24];
@@ -140,13 +138,13 @@ extern s16 gStarlightFireworkXRotations[];
 extern s32 gStarlightFireworkDirections[][3];
 extern s16 gStarlightFireworkRotXSpeeds[];
 extern s16 gStarlightFireworkRotYSpeeds[];
-extern s32 D_800BCB98_AEF58[][3];
-extern s32 D_800BCB9C_AEF5C[][3];
-extern s32 D_800BCBA0_AEF60[][3];
-extern s16 D_800BCBB0_AEF70[];
+extern s32 gStarlightBarrierPositionsX[][3];
+extern s32 gStarlightBarrierPositionsY[][3];
+extern s32 gStarlightBarrierPositionsZ[][3];
+extern s16 gStarlightBarrierTriggerSectors[];
 extern void *gDebugDisplayConfig;
 
-void func_800BC984_AED44(DualSegmentCleanupState *);
+void cleanupStarlightBarrierTask(DualSegmentCleanupState *);
 void cleanupDebugDisplayListTask(DebugDisplayListCleanupState *);
 void updateDebugDisplayListGrowth(DebugDisplayListRenderState *);
 void renderStarlightHighwayBuildings(StarlightBuildingRenderData *);
@@ -157,7 +155,7 @@ void updateStarlightFireworkComplex(StarlightFireworkTaskState *);
 void updateStarlightFirework(StarlightFireworkTaskState *);
 void cleanupStarlightFireworkTask(StarlightFireworkCleanupState *);
 void updateFireworkShowTimer(FireworkShowTimerState *arg0);
-void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0);
+void updateStarlightBarrier(StarlightBarrierTask *arg0);
 
 void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0) {
     arg0->unk24 = func_80055DC4_569C4(8);
@@ -858,28 +856,28 @@ void updateFireworkShowTimer(FireworkShowTimerState *arg0) {
 // and close when no players are nearby. Each barrier has two nodes (left/right)
 // that move apart when opening.
 
-void func_800BC6C4_AEA84(func_800BC6C4_AEA84_arg *arg0) {
+void initStarlightBarrierTask(StarlightBarrierTask *arg0) {
     void *temp;
 
-    arg0->unk24 = func_80055DC4_569C4(8);
-    arg0->unk28 = func_80055DF8_569F8(8);
+    arg0->displayListMemory1 = func_80055DC4_569C4(8);
+    arg0->displayListMemory2 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
     temp = func_80055E68_56A68(8);
-    arg0->unk20 = (void *)((u32)temp + 0xA0);
+    arg0->leftGateDisplayListOffset = (void *)((u32)temp + 0xA0);
     arg0->unk68 = 0;
-    arg0->unk60 = arg0->unk24;
-    arg0->unk64 = arg0->unk28;
+    arg0->unk60 = arg0->displayListMemory1;
+    arg0->unk64 = arg0->displayListMemory2;
     temp = func_80055E68_56A68(8);
-    arg0->unk5C = (void *)((u32)temp + 0xB0);
-    createYRotationMatrix(&arg0->node1, 0x1BEC);
-    createYRotationMatrix(&arg0->node2, 0x1BEC);
-    arg0->unk78 = 0;
-    setCleanupCallback(&func_800BC984_AED44);
-    setCallback(&func_800BC768_AEB28);
+    arg0->rightGateDisplayListOffset = (void *)((u32)temp + 0xB0);
+    createYRotationMatrix(&arg0->leftGateNode, 0x1BEC);
+    createYRotationMatrix(&arg0->rightGateNode, 0x1BEC);
+    arg0->gateOpenAmount = 0;
+    setCleanupCallback(&cleanupStarlightBarrierTask);
+    setCallback(&updateStarlightBarrier);
 }
 
 // Update barrier animation: open/close based on player proximity to trigger sector
-void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
+void updateStarlightBarrier(StarlightBarrierTask *arg0) {
     Vec3i vec;
     s32 pad[2];
     s32 found;                 // 1 if any player is in the trigger sector
@@ -888,7 +886,7 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
     s32 numPlayers;
     GameState *allocation;
     Player *player;
-    s32 unk78Val;              // Copy of gate open amount
+    s32 gateOpenAmount;        // Copy of gate open amount
     s32 tempS;
 
     allocation = getCurrentAllocation();
@@ -902,7 +900,7 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
         numPlayers = tempS;
         player = allocation->players;
         do {
-            if (player->sectorIndex == D_800BCBB0_AEF70[arg0->unk7C]) {
+            if (player->sectorIndex == gStarlightBarrierTriggerSectors[arg0->barrierIndex]) {
                 found = 1;
             }
             i++;
@@ -913,60 +911,60 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
     // Open the gate if player is near, close if not
     if (found != 0) {
         if (allocation->gamePaused == 0) {
-            if (arg0->unk78 != 0x600000) {
-                arg0->unk78 = arg0->unk78 + 0x100000;
+            if (arg0->gateOpenAmount != 0x600000) {
+                arg0->gateOpenAmount = arg0->gateOpenAmount + 0x100000;
             }
         }
     } else if (allocation->gamePaused == 0) {
-        if (arg0->unk78 != 0) {
-            arg0->unk78 = arg0->unk78 - 0x100000;
+        if (arg0->gateOpenAmount != 0) {
+            arg0->gateOpenAmount = arg0->gateOpenAmount - 0x100000;
         }
     }
 
     // Apply the open amount to both gate positions
-    unk78Val = arg0->unk78;
+    gateOpenAmount = arg0->gateOpenAmount;
     vec.y = 0;
     vec.z = 0;
-    vec.x = -unk78Val;
-    rotateVectorY(&vec, 0x1BEC, &arg0->node1.translation);
-    vec.x = arg0->unk78;
-    rotateVectorY(&vec, 0x1BEC, &arg0->node2.translation);
+    vec.x = -gateOpenAmount;
+    rotateVectorY(&vec, 0x1BEC, &arg0->leftGateNode.translation);
+    vec.x = arg0->gateOpenAmount;
+    rotateVectorY(&vec, 0x1BEC, &arg0->rightGateNode.translation);
 
     // Add base position offset for the barrier
-    arg0->node1.translation.x = arg0->node1.translation.x + D_800BCB98_AEF58[arg0->unk7C][0];
-    arg0->node1.translation.y = arg0->node1.translation.y + D_800BCB9C_AEF5C[arg0->unk7C][0];
-    arg0->node1.translation.z = arg0->node1.translation.z + D_800BCBA0_AEF60[arg0->unk7C][0];
-    arg0->node2.translation.x = arg0->node2.translation.x + D_800BCB98_AEF58[arg0->unk7C][0];
-    arg0->node2.translation.y = arg0->node2.translation.y + D_800BCB9C_AEF5C[arg0->unk7C][0];
+    arg0->leftGateNode.translation.x = arg0->leftGateNode.translation.x + gStarlightBarrierPositionsX[arg0->barrierIndex][0];
+    arg0->leftGateNode.translation.y = arg0->leftGateNode.translation.y + gStarlightBarrierPositionsY[arg0->barrierIndex][0];
+    arg0->leftGateNode.translation.z = arg0->leftGateNode.translation.z + gStarlightBarrierPositionsZ[arg0->barrierIndex][0];
+    arg0->rightGateNode.translation.x = arg0->rightGateNode.translation.x + gStarlightBarrierPositionsX[arg0->barrierIndex][0];
+    arg0->rightGateNode.translation.y = arg0->rightGateNode.translation.y + gStarlightBarrierPositionsY[arg0->barrierIndex][0];
     i = 0;
-    arg0->node2.translation.z = arg0->node2.translation.z + D_800BCBA0_AEF60[arg0->unk7C][0];
+    arg0->rightGateNode.translation.z = arg0->rightGateNode.translation.z + gStarlightBarrierPositionsZ[arg0->barrierIndex][0];
 
     do {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->node1);
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->node2);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->leftGateNode);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->rightGateNode);
         i++;
     } while (i < 4);
 
     (void)pad;
 }
 
-void func_800BC984_AED44(DualSegmentCleanupState *arg0) {
+void cleanupStarlightBarrierTask(DualSegmentCleanupState *arg0) {
     arg0->segment1 = freeNodeMemory(arg0->segment1);
     arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
 // Spawn the two Starlight Highway barriers
 // Creates two barrier tasks with indices 0 and 1
-void func_800BC9BC(void) {
-    func_800BC6C4_AEA84_arg *task;
+void spawnStarlightBarriers(void) {
+    StarlightBarrierTask *task;
 
-    task = (func_800BC6C4_AEA84_arg *)scheduleTask(func_800BC6C4_AEA84, 0, 0, 0xC8);
+    task = (StarlightBarrierTask *)scheduleTask(initStarlightBarrierTask, 0, 0, 0xC8);
     if (task != NULL) {
-        task->unk7C = 0;
+        task->barrierIndex = 0;
     }
 
-    task = (func_800BC6C4_AEA84_arg *)scheduleTask(func_800BC6C4_AEA84, 0, 0, 0xC8);
+    task = (StarlightBarrierTask *)scheduleTask(initStarlightBarrierTask, 0, 0, 0xC8);
     if (task != NULL) {
-        task->unk7C = 1;
+        task->barrierIndex = 1;
     }
 }

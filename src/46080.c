@@ -2957,7 +2957,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
             spawnStarlightItems();
             scheduleTask(&initFireworkShowTimer, 0, 0, 0xC7);
-            func_800BC9BC();
+            spawnStarlightBarriers();
             schedulePlayerSparkleTask();
             break;
 
