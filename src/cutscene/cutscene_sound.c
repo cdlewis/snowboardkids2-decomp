@@ -29,7 +29,7 @@ void cutsceneSePlay_exec(cutsceneSePlay_exec_arg *arg0) {
 
     temp_a3 = arg0->unk4;
     if (temp_a3 == 1) {
-        func_800B4B30_1E1BE0(arg0->unk0, arg0->unk2, arg0->unkA, arg0->unk8);
+        playFanSoundEffect(arg0->unk0, arg0->unk2, arg0->unkA, arg0->unk8);
         return;
     }
 

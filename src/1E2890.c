@@ -71,7 +71,7 @@ void func_800B58D0_1E2980(func_800B58D0_1E2980_arg *arg0) {
     }
 
     if ((arg0->unkC % arg0->unkA) == 0) {
-        func_800B4B30_1E1BE0(arg0->unk0, arg0->unk2, arg0->unk4, arg0->unk8);
+        playFanSoundEffect(arg0->unk0, arg0->unk2, arg0->unk4, arg0->unk8);
         arg0->unk6--;
     }
 

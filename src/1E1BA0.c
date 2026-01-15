@@ -83,15 +83,15 @@ s16 getFanSoundId(s16 fanIndex) {
     return gFanSoundIds[index];
 }
 
-void func_800B4B30_1E1BE0(s16 fanIndex, s16 arg1, s16 arg2, s16 arg3) {
+void playFanSoundEffect(s16 fanIndex, s16 volume, s16 pan, s16 channel) {
     s16 soundId;
 
-    if (arg3 <= 0) {
+    if (channel <= 0) {
         soundId = getFanSoundId(fanIndex);
-        playSoundEffectWithPriorityAndPan(soundId, arg1, arg2 + 0x80, 0);
+        playSoundEffectWithPriorityAndPan(soundId, volume, pan + 0x80, 0);
     } else {
         soundId = getFanSoundId(fanIndex);
-        playSoundEffectOnChannel(soundId, arg1, arg2 + 0x80, 0, arg3);
+        playSoundEffectOnChannel(soundId, volume, pan + 0x80, 0, channel);
     }
 }
 
