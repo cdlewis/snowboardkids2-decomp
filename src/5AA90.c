@@ -352,8 +352,18 @@ void handleCollisionWithTargetPlayer(Player *player) {
     }
 }
 
-void *func_8005B24C_5BE4C(Vec3i *arg0, s32 arg1, s32 arg2) {
-    Vec3i pos;
+/**
+ * Finds a player within a given radius of a position.
+ * Iterates through all player collision nodes and checks if any player's
+ * collision sphere intersects with the search sphere.
+ *
+ * @param position Center position to search from
+ * @param excludePlayerIndex Player index to skip (-1 to include all players)
+ * @param searchRadius Radius to search within (added to player's collision radius)
+ * @return Player pointer if found, NULL otherwise
+ */
+Player *findPlayerNearPosition(Vec3i *position, s32 excludePlayerIndex, s32 searchRadius) {
+    Vec3i deltaPos;
     s32 combinedRadius;
     Allocation5AA90 *allocation;
     ListNode_5AA90 *node;
@@ -362,31 +372,31 @@ void *func_8005B24C_5BE4C(Vec3i *arg0, s32 arg1, s32 arg2) {
     node = allocation->list;
 
     for (; node != NULL; node = node->next) {
-        if (arg1 == node->id) {
+        if (excludePlayerIndex == node->id) {
             continue;
         }
 
-        memcpy(&pos, &node->localPos, 0xC);
+        memcpy(&deltaPos, &node->localPos, 0xC);
 
-        pos.x += node->posPtr->x;
-        pos.y += node->posPtr->y;
-        pos.z += node->posPtr->z;
+        deltaPos.x += node->posPtr->x;
+        deltaPos.y += node->posPtr->y;
+        deltaPos.z += node->posPtr->z;
 
-        pos.x -= arg0->x;
-        pos.y -= arg0->y;
-        pos.z -= arg0->z;
+        deltaPos.x -= position->x;
+        deltaPos.y -= position->y;
+        deltaPos.z -= position->z;
 
-        combinedRadius = node->radius + arg2;
+        combinedRadius = node->radius + searchRadius;
 
-        if (-combinedRadius < pos.x && pos.x < combinedRadius && -combinedRadius < pos.y && pos.y < combinedRadius &&
-            -combinedRadius < pos.z && pos.z < combinedRadius) {
+        if (-combinedRadius < deltaPos.x && deltaPos.x < combinedRadius && -combinedRadius < deltaPos.y &&
+            deltaPos.y < combinedRadius && -combinedRadius < deltaPos.z && deltaPos.z < combinedRadius) {
             s32 dist;
 
-            dist = isqrt64((s64)pos.x * pos.x + (s64)pos.y * pos.y + (s64)pos.z * pos.z);
+            dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z);
 
             if (dist < combinedRadius) {
-                u8 index = node->id;
-                return (u8 *)allocation->dataArray + ((index * 3 * 128) - (index * 3)) * 8;
+                u8 playerIndex = node->id;
+                return (Player *)((u8 *)allocation->dataArray + ((playerIndex * 3 * 128) - (playerIndex * 3)) * 8);
             }
         }
     }

@@ -2260,7 +2260,7 @@ void func_80044EC4_45AC4(Func44D1CArg *arg0) {
         do {
             entry = (ItemTriggerEntry *)(offset + (s32)arg0->items);
             if (entry->active != 0) {
-                player = (Player *)func_8005B24C_5BE4C(&entry->position, -1, 0x100000);
+                player = findPlayerNearPosition(&entry->position, -1, 0x100000);
                 if (player != NULL && player->unkBD9 == 0) {
                     entryForItem = (ItemTriggerEntry *)(offset + (s32)arg0->items);
                     if (entryForItem->type == 0) {

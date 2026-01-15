@@ -1719,7 +1719,7 @@ void updateGoldCoinsTask(GoldCoinUpdateState *arg0) {
                 arg0->entries[i].visible = 1;
             }
         } else {
-            player = (Player *)func_8005B24C_5BE4C(&arg0->entries[i].position, -1, 0x100000);
+            player = findPlayerNearPosition(&arg0->entries[i].position, -1, 0x100000);
             if (player != NULL) {
                 queueSoundAtPosition(&arg0->entries[i].position, 7);
                 arg0->entries[i].visible = 0;
@@ -2357,7 +2357,7 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
                 collisionPosPtr = &collisionPos;
                 memcpy(collisionPosPtr, &itemBox->displayList.transform.translation, 0xC);
                 collisionPos.y += 0x100000;
-                player = (Player *)func_8005B24C_5BE4C(collisionPosPtr, -1, 0x100000);
+                player = findPlayerNearPosition(collisionPosPtr, -1, 0x100000);
                 if (player != NULL) {
                     itemBox->state = itemBox->state + 1;
                     spawnItemBoxBurstEffect(&itemBox->displayList, itemBox->isSecondaryItemBox);
@@ -3164,7 +3164,7 @@ void updateHomingProjectileImpact(HomingProjectileImpactArg *arg0) {
     }
 
     s2 = (void *)((s32)arg0 + 8);
-    s0 = func_8005B24C_5BE4C(s2, -1, 0x100000);
+    s0 = findPlayerNearPosition(s2, -1, 0x100000);
 
     if (s0 != NULL) {
         queueSoundAtPosition(s2, 7);
@@ -3281,7 +3281,7 @@ void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0) {
         arg0->position.x = arg0->position.x + sp.x;
         arg0->position.z = arg0->position.z + sp.z;
         sp.y = func_80061A64_62664(temp_s0, arg0->sectorIndex, s2);
-        temp_v0_3 = func_8005B24C_5BE4C(s2, arg0->playerIndex, 0xA0000);
+        temp_v0_3 = findPlayerNearPosition(s2, arg0->playerIndex, 0xA0000);
         if (temp_v0_3 != NULL) {
             spawnImpactStar(s2);
             queueSoundAtPosition(s2, 0xD);
@@ -3327,7 +3327,7 @@ void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0) {
         func_80069CF8_6A8F8();
     }
 
-    s3 = func_8005B24C_5BE4C(s2, -1, 0xA0000);
+    s3 = findPlayerNearPosition(s2, -1, 0xA0000);
     s0 = &sp10;
 
     if (s3 != NULL) {
@@ -3468,7 +3468,7 @@ void updateItemHomingProjectileImpact(ItemHomingProjectileImpactArg *arg0) {
         return;
     }
 
-    player = (Player *)func_8005B24C_5BE4C((void *)&arg0->metadataPtr + 4, -1, 0x100000);
+    player = findPlayerNearPosition((void *)&arg0->metadataPtr + 4, -1, 0x100000);
 
     if (player != NULL) {
         if (arg0->targetVariant == 0) {
@@ -3606,7 +3606,7 @@ void updateBossHomingProjectile(BossHomingProjectile *projectile) {
 
     groundOffset.y = func_80061A64_62664(&gameState->unk30, projectile->sectorIndex, position);
 
-    hitPlayer = func_8005B24C_5BE4C(position, projectile->playerIndex, 0xA0000);
+    hitPlayer = findPlayerNearPosition(position, projectile->playerIndex, 0xA0000);
 
     if (hitPlayer != NULL) {
         spawnImpactStar(position);
@@ -3647,7 +3647,7 @@ void bounceBossHomingProjectile(BossHomingProjectileBounceArg *arg0) {
         func_80069CF8_6A8F8();
     }
 
-    hitPlayer = func_8005B24C_5BE4C(position, -1, 0xA0000);
+    hitPlayer = findPlayerNearPosition(position, -1, 0xA0000);
     copyPtr = &bouncePosition;
 
     if (hitPlayer != NULL) {
@@ -3766,7 +3766,7 @@ void updateBossHomingProjectileVariant1(BossHomingProjectileVariant1UpdateArg *a
 
         sp.y = func_80061A64_62664(s0, arg0->displayListState.unk30, s2);
 
-        temp_s0 = func_8005B24C_5BE4C(s2, arg0->playerIndex, 0xA0000);
+        temp_s0 = findPlayerNearPosition(s2, arg0->playerIndex, 0xA0000);
 
         if (temp_s0 != NULL) {
             spawnImpactStar(s2);
@@ -3806,7 +3806,7 @@ void bounceBossHomingProjectileVariant1(BossHomingProjectileVariant1BounceArg *a
     }
 
     s2 = &arg0->displayListState.position;
-    s3 = func_8005B24C_5BE4C(s2, arg0->playerIndex, 0xA0000);
+    s3 = findPlayerNearPosition(s2, arg0->playerIndex, 0xA0000);
     s0 = &sp10;
 
     if (s3 != NULL) {
@@ -3909,7 +3909,7 @@ void updateBossHomingProjectileVariant2(BossHomingProjectileVariant2UpdateArg *a
 
     sp.y = func_80061A64_62664(s0->unk30, arg0->sectorIndex, s2);
 
-    temp_s0 = func_8005B24C_5BE4C(s2, arg0->playerIndex, 0xA0000);
+    temp_s0 = findPlayerNearPosition(s2, arg0->playerIndex, 0xA0000);
 
     if (temp_s0 != NULL) {
         spawnImpactStar(s2);
@@ -3950,7 +3950,7 @@ void bounceBossHomingProjectileVariant2(BossHomingProjectileVariant2BounceArg *a
     }
 
     s2 = &arg0->unk8;
-    s3 = func_8005B24C_5BE4C(s2, arg0->unk38, 0xA0000);
+    s3 = findPlayerNearPosition(s2, arg0->unk38, 0xA0000);
     s0 = &sp10;
 
     if (s3 != NULL) {
