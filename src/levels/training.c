@@ -10,53 +10,53 @@ USE_ASSET(_40E1C0);
 
 extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 extern s32 gControllerInputs;
-extern s8 *D_800BCB94_B7474[];
+extern s8 *s_trainingPanelMessageTables[];
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    s16 unkC;
-} func_800BB2B0_B5B90_state;
+    void *uiAsset;
+    void *textRenderContext;
+    void *messageData;
+    s16 panelIndex;
+} TrainingInstructionState;
 
 typedef struct {
-    s32 unk0;
-    void *unk4;
-    s32 *unk8;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    u8 unk16;
-    u8 unk17;
-} func_800BB5CC_state;
+    s32 uiAsset;
+    void *textRenderContext;
+    s32 *messageData;
+    s16 panelIndex;
+    s16 messageIndex;
+    s16 panelWidth;
+    s16 panelHeight;
+    s16 alphaColor;
+    u8 scale;
+    u8 colorIndex;
+} TrainingInstructionRuntimeState;
 
-#define GET_UNK15(arg0) (((u8 *)&(arg0)->unk14)[1])
+#define GET_ALPHA_COLOR_HIGH_BYTE(arg0) (((u8 *)&(arg0)->alphaColor)[1])
 
-void func_800BB928_B6208(func_800BB5CC_state *arg0);
+void func_800BB928_B6208(TrainingInstructionRuntimeState *arg0);
 
-void func_800BB9E0_B62C0(func_800BB2B0_B5B90_state *arg0);
+void func_800BB9E0_B62C0(TrainingInstructionState *arg0);
 
-void func_800BB320_B5C00(func_800BB5CC_state *arg0);
+void func_800BB320_B5C00(TrainingInstructionRuntimeState *arg0);
 
-void func_800BB2B0_B5B90(func_800BB2B0_B5B90_state *arg0) {
+void initTrainingInstructionTask(TrainingInstructionState *arg0) {
     getCurrentAllocation();
-    arg0->unk4 = loadTextRenderAsset(1);
-    arg0->unk0 = loadAsset_34F7E0();
-    arg0->unk8 = loadCompressedData(&_40E1C0_ROM_START, &_40E1C0_ROM_END, 0x1130);
-    arg0->unkC = 0;
+    arg0->textRenderContext = loadTextRenderAsset(1);
+    arg0->uiAsset = loadAsset_34F7E0();
+    arg0->messageData = loadCompressedData(&_40E1C0_ROM_START, &_40E1C0_ROM_END, 0x1130);
+    arg0->panelIndex = 0;
     setCleanupCallback(func_800BB9E0_B62C0);
     setCallback(func_800BB320_B5C00);
 }
 
-void func_800BB51C_B5DFC(func_800BB5CC_state *arg0);
+void func_800BB51C_B5DFC(TrainingInstructionRuntimeState *arg0);
 
-void func_800BB320_B5C00(func_800BB5CC_state *arg0) {
+void func_800BB320_B5C00(TrainingInstructionRuntimeState *arg0) {
     GameState *state = getCurrentAllocation();
 
     if (state->gamePaused == 0) {
-        switch (arg0->unkC) {
+        switch (arg0->panelIndex) {
         case 0:
             if (state->unk79 != 0) {
                 break;
@@ -128,112 +128,112 @@ void func_800BB320_B5C00(func_800BB5CC_state *arg0) {
         do_action:
             state->unk78 = 1;
             playSoundEffect(0x2C);
-            arg0->unk10 = 1;
-            arg0->unk12 = 1;
-            arg0->unk14 = 0xF0;
-            arg0->unkE = 0;
-            *(s16 *)&arg0->unk16 = 0xC0;
+            arg0->panelWidth = 1;
+            arg0->panelHeight = 1;
+            arg0->alphaColor = 0xF0;
+            arg0->messageIndex = 0;
+            *(s16 *)&arg0->scale = 0xC0;
             setCallback(func_800BB51C_B5DFC);
             break;
         }
     }
 }
 
-void func_800BB670_B5F50(func_800BB5CC_state *arg0);
-void func_800BB724_B6004(func_800BB5CC_state *arg0);
-void func_800BB87C_B615C(func_800BB5CC_state *arg0);
+void func_800BB670_B5F50(TrainingInstructionRuntimeState *arg0);
+void func_800BB724_B6004(TrainingInstructionRuntimeState *arg0);
+void func_800BB87C_B615C(TrainingInstructionRuntimeState *arg0);
 
-void func_800BB51C_B5DFC(func_800BB5CC_state *arg0) {
+void func_800BB51C_B5DFC(TrainingInstructionRuntimeState *arg0) {
     s16 temp_a7;
     s16 temp_a6;
 
-    arg0->unk10 += 2;
+    arg0->panelWidth += 2;
 
-    if (arg0->unk14 != 0x40) {
-        arg0->unk14 -= 0x10;
+    if (arg0->alphaColor != 0x40) {
+        arg0->alphaColor -= 0x10;
     }
 
-    if (arg0->unk10 == 0xD) {
+    if (arg0->panelWidth == 0xD) {
         setCallback(func_800BB670_B5F50);
     }
 
-    temp_a7 = arg0->unk10;
-    temp_a6 = arg0->unk12;
+    temp_a7 = arg0->panelWidth;
+    temp_a6 = arg0->panelHeight;
 
     func_8006D7B0_6E3B0(
-        (s32)arg0->unk0,
+        (s32)arg0->uiAsset,
         ((-temp_a7) << 19) >> 16,
         ((-temp_a6) << 19) >> 16,
         temp_a7,
         temp_a6,
         0,
-        GET_UNK15(arg0),
-        arg0->unk17,
+        GET_ALPHA_COLOR_HIGH_BYTE(arg0),
+        arg0->colorIndex,
         0xC,
         0x6
     );
 }
 
-void func_800BB5CC_B5EAC(func_800BB5CC_state *arg0) {
+void func_800BB5CC_B5EAC(TrainingInstructionRuntimeState *arg0) {
     s16 temp_a7;
     s16 temp_a6;
 
-    arg0->unk12--;
-    arg0->unk14 += 0x10;
+    arg0->panelHeight--;
+    arg0->alphaColor += 0x10;
 
-    if (arg0->unk12 == 1) {
+    if (arg0->panelHeight == 1) {
         setCallback(func_800BB670_B5F50);
     }
 
-    temp_a7 = arg0->unk10;
-    temp_a6 = arg0->unk12;
+    temp_a7 = arg0->panelWidth;
+    temp_a6 = arg0->panelHeight;
 
     func_8006D7B0_6E3B0(
-        (s32)arg0->unk0,
+        (s32)arg0->uiAsset,
         ((-temp_a7) << 19) >> 16,
         ((-temp_a6) << 19) >> 16,
         temp_a7,
         temp_a6,
         0,
-        (u8)arg0->unk14,
-        arg0->unk17,
+        (u8)arg0->alphaColor,
+        arg0->colorIndex,
         0xC,
         0x6
     );
 }
 
-void func_800BB670_B5F50(func_800BB5CC_state *arg0) {
+void func_800BB670_B5F50(TrainingInstructionRuntimeState *arg0) {
     s16 temp_a7;
     s16 temp_a6;
 
-    arg0->unk12++;
+    arg0->panelHeight++;
 
-    if (arg0->unk14 != 0x40) {
-        arg0->unk14 -= 0x10;
+    if (arg0->alphaColor != 0x40) {
+        arg0->alphaColor -= 0x10;
     }
 
-    if (arg0->unk12 == 6) {
+    if (arg0->panelHeight == 6) {
         setCallback(func_800BB724_B6004);
     }
 
-    temp_a7 = arg0->unk10;
-    temp_a6 = arg0->unk12;
+    temp_a7 = arg0->panelWidth;
+    temp_a6 = arg0->panelHeight;
 
     func_8006D7B0_6E3B0(
-        (s32)arg0->unk0,
+        (s32)arg0->uiAsset,
         ((-temp_a7) << 19) >> 16,
         ((-temp_a6) << 19) >> 16,
         temp_a7,
         temp_a6,
         0,
-        GET_UNK15(arg0),
-        arg0->unk17,
+        GET_ALPHA_COLOR_HIGH_BYTE(arg0),
+        arg0->colorIndex,
         0xC,
         0x6
     );
 }
 
-void func_800BB724_B6004(func_800BB5CC_state *arg0) {
+void func_800BB724_B6004(TrainingInstructionRuntimeState *arg0) {
     s8 *table_ptr;
     s32 temp_v1_2;
     s16 temp_v0;
@@ -241,20 +241,20 @@ void func_800BB724_B6004(func_800BB5CC_state *arg0) {
     s32 s0_var = 6;
     s32 s1_var = 0xC;
 
-    table_ptr = D_800BCB94_B7474[arg0->unkC];
-    temp_v1_2 = arg0->unk8[table_ptr[arg0->unkE]];
-    func_80035260_35E60(arg0->unk4, (void *)arg0->unk8 + temp_v1_2, -0x68, -0x30, 0xFF, 0xFF, 0, s1_var, s0_var);
+    table_ptr = s_trainingPanelMessageTables[arg0->panelIndex];
+    temp_v1_2 = arg0->messageData[table_ptr[arg0->messageIndex]];
+    func_80035260_35E60(arg0->textRenderContext, (void *)arg0->messageData + temp_v1_2, -0x68, -0x30, 0xFF, 0xFF, 0, s1_var, s0_var);
 
-    func_8006D7B0_6E3B0(arg0->unk0, -0x68, -0x30, 0xD, s0_var, 1, GET_UNK15(arg0), arg0->unk17, s1_var, s0_var);
+    func_8006D7B0_6E3B0(arg0->uiAsset, -0x68, -0x30, 0xD, s0_var, 1, GET_ALPHA_COLOR_HIGH_BYTE(arg0), arg0->colorIndex, s1_var, s0_var);
 
     if (gControllerInputs & A_BUTTON) {
-        temp_v0 = arg0->unkE + 1;
-        arg0->unkE = temp_v0;
-        table_ptr = D_800BCB94_B7474[arg0->unkC];
+        temp_v0 = arg0->messageIndex + 1;
+        arg0->messageIndex = temp_v0;
+        table_ptr = s_trainingPanelMessageTables[arg0->panelIndex];
         temp_v1_3 = table_ptr[temp_v0];
         if (temp_v1_3 == -1) {
             playSoundEffect(0x2D);
-            arg0->unkC = arg0->unkC + 1;
+            arg0->panelIndex = arg0->panelIndex + 1;
             setCallback(func_800BB87C_B615C);
         } else {
             playSoundEffect(0x2B);
@@ -263,80 +263,80 @@ void func_800BB724_B6004(func_800BB5CC_state *arg0) {
     }
 }
 
-#define GET_UNK16_AS_S16(arg0) (*(s16 *)&(arg0)->unk16)
-#define SET_UNK16_AS_S16(arg0, val) (*(s16 *)&(arg0)->unk16 = (val))
+#define GET_SCALE_AS_S16(arg0) (*(s16 *)&(arg0)->scale)
+#define SET_SCALE_AS_S16(arg0, val) (*(s16 *)&(arg0)->scale = (val))
 
-void func_800BB87C_B615C(func_800BB5CC_state *arg0) {
+void func_800BB87C_B615C(TrainingInstructionRuntimeState *arg0) {
     s16 temp_v1;
     s16 temp_a7;
     s16 temp_a6;
 
-    arg0->unk12--;
+    arg0->panelHeight--;
 
-    temp_v1 = GET_UNK16_AS_S16(arg0);
+    temp_v1 = GET_SCALE_AS_S16(arg0);
     if (temp_v1 != 0) {
-        SET_UNK16_AS_S16(arg0, temp_v1 - 0x10);
+        SET_SCALE_AS_S16(arg0, temp_v1 - 0x10);
     }
 
-    if (arg0->unk12 == 1) {
+    if (arg0->panelHeight == 1) {
         setCallback(func_800BB928_B6208);
     }
 
-    temp_a7 = arg0->unk10;
-    temp_a6 = arg0->unk12;
+    temp_a7 = arg0->panelWidth;
+    temp_a6 = arg0->panelHeight;
 
     func_8006D7B0_6E3B0(
-        (s32)arg0->unk0,
+        (s32)arg0->uiAsset,
         ((-temp_a7) << 19) >> 16,
         ((-temp_a6) << 19) >> 16,
         temp_a7,
         temp_a6,
         0,
-        (u8)arg0->unk14,
-        arg0->unk17,
+        (u8)arg0->alphaColor,
+        arg0->colorIndex,
         0xC,
         0x6
     );
 }
 
-void func_800BB928_B6208(func_800BB5CC_state *arg0) {
+void func_800BB928_B6208(TrainingInstructionRuntimeState *arg0) {
     s16 temp_v1;
     s16 temp_a7;
     s16 temp_a6;
     s8 *alloc;
 
     alloc = getCurrentAllocation();
-    arg0->unk10--;
+    arg0->panelWidth--;
 
-    temp_v1 = GET_UNK16_AS_S16(arg0);
+    temp_v1 = GET_SCALE_AS_S16(arg0);
     if (temp_v1 != 0) {
-        SET_UNK16_AS_S16(arg0, temp_v1 - 0x10);
+        SET_SCALE_AS_S16(arg0, temp_v1 - 0x10);
     }
 
-    if (arg0->unk10 == 1) {
+    if (arg0->panelWidth == 1) {
         alloc[0x78] = -1;
         setCallback(func_800BB320_B5C00);
     }
 
-    temp_a7 = arg0->unk10;
-    temp_a6 = arg0->unk12;
+    temp_a7 = arg0->panelWidth;
+    temp_a6 = arg0->panelHeight;
 
     func_8006D7B0_6E3B0(
-        arg0->unk0,
+        arg0->uiAsset,
         ((-temp_a7) << 19) >> 16,
         ((-temp_a6) << 19) >> 16,
         temp_a7,
         temp_a6,
         0,
-        GET_UNK15(arg0),
-        arg0->unk17,
+        GET_ALPHA_COLOR_HIGH_BYTE(arg0),
+        arg0->colorIndex,
         0xC,
         0x6
     );
 }
 
-void func_800BB9E0_B62C0(func_800BB2B0_B5B90_state *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
+void func_800BB9E0_B62C0(TrainingInstructionState *arg0) {
+    arg0->uiAsset = freeNodeMemory(arg0->uiAsset);
+    arg0->textRenderContext = freeNodeMemory(arg0->textRenderContext);
+    arg0->messageData = freeNodeMemory(arg0->messageData);
 }
