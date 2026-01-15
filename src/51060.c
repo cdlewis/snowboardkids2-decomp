@@ -228,8 +228,8 @@ extern loadAssetMetadata_arg D_80090F00_91B00;
 extern void *D_80090F40_91B40;
 extern void *D_80090F4C_91B4C;
 extern u8 D_80090E70_91A70[];
-extern s16 D_80090E80_91A80[];
-extern s16 D_80090E98_91A98[];
+extern s16 gSkiTrailOffsetTransformsForward[];
+extern s16 gSkiTrailOffsetTransformsBackward[];
 extern s16 D_80090EB0_91AB0[];
 extern u16 D_8009ADE0_9B9E0;
 
@@ -667,10 +667,10 @@ void spawnDualSnowSprayEffect_SingleSlot(Vec3i *pos1, Vec3i *pos2, Vec3i *veloci
     }
 }
 
-void func_8005152C_5212C(SkiTrailTask *arg0);
-void func_80051688_52288(func_80051688_52288_arg *arg0);
+void updateSkiTrailTask(SkiTrailTask *arg0);
+void cleanupSkiTrailTask(func_80051688_52288_arg *arg0);
 
-void func_80051348_51F48(SkiTrailTask *task) {
+void initSkiTrailTask(SkiTrailTask *task) {
     GameState *gs;
     s32 i;
     s16 *transformSource;
@@ -691,7 +691,7 @@ void func_80051348_51F48(SkiTrailTask *task) {
     if (task->player->unkB84 & 2) {
         outputPtr = task;
         outputOffset = 0x48;
-        transformSource = D_80090E80_91A80;
+        transformSource = gSkiTrailOffsetTransformsForward;
         do {
             transformVector(transformSource, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + outputOffset));
             outputPtr->skiOffsets[0].x -= task->player->worldPos.x;
@@ -705,7 +705,7 @@ void func_80051348_51F48(SkiTrailTask *task) {
     } else {
         outputPtr = task;
         outputOffset = 0x48;
-        transformSource = D_80090E98_91A98;
+        transformSource = gSkiTrailOffsetTransformsBackward;
         do {
             transformVector(transformSource, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + outputOffset));
             outputPtr->skiOffsets[0].x -= task->player->worldPos.x;
@@ -730,11 +730,11 @@ void func_80051348_51F48(SkiTrailTask *task) {
     } while (i < 8);
 
     task->particleIndex += 0x15;
-    setCleanupCallback(func_80051688_52288);
-    setCallbackWithContinue(func_8005152C_5212C);
+    setCleanupCallback(cleanupSkiTrailTask);
+    setCallbackWithContinue(updateSkiTrailTask);
 }
 
-void func_8005152C_5212C(SkiTrailTask *task) {
+void updateSkiTrailTask(SkiTrailTask *task) {
     GameState *gs;
     s32 i;
 
@@ -773,12 +773,12 @@ void func_8005152C_5212C(SkiTrailTask *task) {
     }
 }
 
-void func_80051688_52288(func_80051688_52288_arg *arg0) {
+void cleanupSkiTrailTask(func_80051688_52288_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_800516B4_522B4(Player *player) {
-    SkiTrailTask *task = (SkiTrailTask *)scheduleTask(&func_80051348_51F48, 2, 0, 0xDD);
+void spawnSkiTrailTask(Player *player) {
+    SkiTrailTask *task = (SkiTrailTask *)scheduleTask(&initSkiTrailTask, 2, 0, 0xDD);
     if (task != NULL) {
         task->player = player;
     }

@@ -849,7 +849,7 @@ void updateTrickFacingAngle(Player *player) {
         return;
     }
     if (playerFlags & 0x4000) {
-        func_800516B4_522B4(player);
+        spawnSkiTrailTask(player);
     }
 }
 

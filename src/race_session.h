@@ -76,7 +76,7 @@ void processRaceUnlocks(s16 raceResult);
 s16 func_80069810_6A410(void);
 void loadOverlay_1BBA0(void);
 void spawnFloatingItemSprite(s32 x, s32 y, s32 itemType, s32 renderPriority, s32 halfSizeRender);
-void func_800516B4_522B4(Player *player);
+void spawnSkiTrailTask(Player *player);
 void drawNumericString(char *text, s16 x, s16 y, s16 z, void *texture, s16 priority, s16 layer);
 void func_800585C8_591C8(s32 arg0);
 void setPlayerBouncedBackState(Player *player);
