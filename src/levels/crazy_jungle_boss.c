@@ -17,8 +17,8 @@
 
 typedef void (*FuncPtr)(void *);
 
-extern FuncPtr D_800BC454_ACC84[];
-extern FuncPtr D_800BC460_ACC90[];
+extern FuncPtr gCrazyJungleBossChasePhaseHandlers[];
+extern FuncPtr gCrazyJungleBossHoverPhaseHandlers[];
 extern s32 D_800BC44C_ACC7C[];
 extern s16 identityMatrix[];
 typedef struct {
@@ -391,11 +391,11 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     return 1;
 }
 
-void func_800BB9E8_AC218(Arg0Struct *arg0) {
-    D_800BC454_ACC84[arg0->behaviorPhase](arg0);
+void dispatchCrazyJungleBossChasePhase(Arg0Struct *arg0) {
+    gCrazyJungleBossChasePhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
-s32 func_800BBA18_AC248(Arg0Struct *arg0) {
+s32 crazyJungleBossChaseIntroPhase(Arg0Struct *arg0) {
     s32 pad[3];
     GameState *gameState = getCurrentAllocation();
 
@@ -413,7 +413,7 @@ s32 func_800BBA18_AC248(Arg0Struct *arg0) {
     return 0;
 }
 
-s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
+s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
     Transform3D sp10;
     Vec3i sp30;
     GameState *gameState;
@@ -507,7 +507,7 @@ s32 func_800BBAB8_AC2E8(Arg0Struct *arg0) {
     return 0;
 }
 
-s32 func_800BBD98_AC5C8(Arg0Struct *arg0) {
+s32 crazyJungleBossChaseExitPhase(Arg0Struct *arg0) {
     s32 pad[3];
     getCurrentAllocation();
 
@@ -520,11 +520,11 @@ s32 func_800BBD98_AC5C8(Arg0Struct *arg0) {
     return 0;
 }
 
-void func_800BBE1C_AC64C(Arg0Struct *arg0) {
-    D_800BC460_ACC90[arg0->behaviorPhase](arg0);
+void dispatchCrazyJungleBossHoverPhase(Arg0Struct *arg0) {
+    gCrazyJungleBossHoverPhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
-s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
+s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0) {
     if (arg0->behaviorStep == 0) {
         s32 temp = arg0->velocity.y;
         arg0->behaviorStep++;
@@ -559,7 +559,7 @@ s32 func_800BBE4C_AC67C(Arg0Struct *arg0) {
     return 0;
 }
 
-s32 func_800BBF3C_AC76C(Arg0Struct *arg0) {
+s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0) {
     if (arg0->behaviorStep == 0) {
         arg0->unkA8C = 0xFFFF;
         arg0->velocity.y = 0x80000;
