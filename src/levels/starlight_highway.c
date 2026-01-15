@@ -26,21 +26,25 @@ typedef struct {
     DisplayListObject node2;
 } StarlightBuildingRenderData;
 
+// Starlight Highway Barrier Task State
+// Each barrier has two gates (left/right) that open when players enter the trigger sector
+// unk78: gate opening distance (0 = closed, 0x600000 = fully open)
+// unk7C: barrier index (0 or 1) to select which configuration to use
 typedef struct {
-    /* 0x00 */ Transform3D node1;
-    /* 0x20 */ void *unk20;
-    /* 0x24 */ void *unk24;
-    /* 0x28 */ void *unk28;
-    /* 0x2C */ s32 unk2C;
+    /* 0x00 */ Transform3D node1;        // Left gate transform
+    /* 0x20 */ void *unk20;               // Left gate display list offset
+    /* 0x24 */ void *unk24;               // Display list memory pointer 1
+    /* 0x28 */ void *unk28;               // Display list memory pointer 2
+    /* 0x2C */ s32 unk2C;                 // Unknown
     /* 0x30 */ u8 pad30[0xC];
-    /* 0x3C */ Transform3D node2;
-    /* 0x5C */ void *unk5C;
-    /* 0x60 */ void *unk60;
-    /* 0x64 */ void *unk64;
-    /* 0x68 */ s32 unk68;
+    /* 0x3C */ Transform3D node2;        // Right gate transform
+    /* 0x5C */ void *unk5C;               // Right gate display list offset
+    /* 0x60 */ void *unk60;               // Unknown
+    /* 0x64 */ void *unk64;               // Unknown
+    /* 0x68 */ s32 unk68;                // Unknown
     /* 0x6C */ u8 pad6C[0xC];
-    /* 0x78 */ s32 unk78;
-    /* 0x7C */ u8 unk7C;
+    /* 0x78 */ s32 unk78;                 // Gate open amount (0x0 = closed, 0x600000 = open)
+    /* 0x7C */ u8 unk7C;                 // Barrier index (0 or 1)
 } func_800BC6C4_AEA84_arg;
 
 typedef struct {
@@ -849,6 +853,11 @@ void updateFireworkShowTimer(FireworkShowTimerState *arg0) {
     }
 }
 
+// Starlight Highway Barrier System
+// Creates two gates that open when players are in the trigger sector
+// and close when no players are nearby. Each barrier has two nodes (left/right)
+// that move apart when opening.
+
 void func_800BC6C4_AEA84(func_800BC6C4_AEA84_arg *arg0) {
     void *temp;
 
@@ -869,16 +878,17 @@ void func_800BC6C4_AEA84(func_800BC6C4_AEA84_arg *arg0) {
     setCallback(&func_800BC768_AEB28);
 }
 
+// Update barrier animation: open/close based on player proximity to trigger sector
 void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
     Vec3i vec;
     s32 pad[2];
-    s32 found;
+    s32 found;                 // 1 if any player is in the trigger sector
     s32 i;
     u8 temp;
     s32 numPlayers;
     GameState *allocation;
     Player *player;
-    s32 unk78Val;
+    s32 unk78Val;              // Copy of gate open amount
     s32 tempS;
 
     allocation = getCurrentAllocation();
@@ -887,6 +897,7 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
     i = 0;
     tempS = temp;
 
+    // Check if any player is in the trigger sector for this barrier
     if (tempS > 0) {
         numPlayers = tempS;
         player = allocation->players;
@@ -899,6 +910,7 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
         } while (i < numPlayers);
     }
 
+    // Open the gate if player is near, close if not
     if (found != 0) {
         if (allocation->gamePaused == 0) {
             if (arg0->unk78 != 0x600000) {
@@ -911,6 +923,7 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
         }
     }
 
+    // Apply the open amount to both gate positions
     unk78Val = arg0->unk78;
     vec.y = 0;
     vec.z = 0;
@@ -919,6 +932,7 @@ void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0) {
     vec.x = arg0->unk78;
     rotateVectorY(&vec, 0x1BEC, &arg0->node2.translation);
 
+    // Add base position offset for the barrier
     arg0->node1.translation.x = arg0->node1.translation.x + D_800BCB98_AEF58[arg0->unk7C][0];
     arg0->node1.translation.y = arg0->node1.translation.y + D_800BCB9C_AEF5C[arg0->unk7C][0];
     arg0->node1.translation.z = arg0->node1.translation.z + D_800BCBA0_AEF60[arg0->unk7C][0];
@@ -941,6 +955,8 @@ void func_800BC984_AED44(DualSegmentCleanupState *arg0) {
     arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
+// Spawn the two Starlight Highway barriers
+// Creates two barrier tasks with indices 0 and 1
 void func_800BC9BC(void) {
     func_800BC6C4_AEA84_arg *task;
 
