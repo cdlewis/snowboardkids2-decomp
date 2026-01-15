@@ -65,12 +65,12 @@ typedef struct {
 
 extern s32 D_8009A8A4_9B4A4;
 
-void renderFallingRockHazard(FallingRockHazard *arg0);
-void updateFallingRockHazard(FallingRockHazard *arg0);
-void func_800BB658_B7898(FallingRockHazard *arg0);
+void renderFallingRockHazard(FallingRockHazard *rock);
+void updateFallingRockHazard(FallingRockHazard *rock);
+void fallingRockImpactCallback(FallingRockHazard *rock);
+void fallingRockRespawnCallback(FallingRockHazard *rock);
 void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0);
 void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *);
-void func_800BB71C_B795C(FallingRockHazard *);
 void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0);
 
 void initFallingRockHazard(FallingRockHazard *rock) {
@@ -123,108 +123,108 @@ void renderFallingRockHazard(FallingRockHazard *rock) {
     }
 }
 
-void updateFallingRockHazard(FallingRockHazard *arg0) {
+void updateFallingRockHazard(FallingRockHazard *rock) {
     GameState *gs;
-    s32 sp20;
-    s32 sp28;
-    s32 flag;
+    s32 xDiff;
+    s32 zDiff;
+    s32 playerInRange;
     s32 i;
 
     gs = (GameState *)getCurrentAllocation();
-    flag = 0;
+    playerInRange = 0;
 
     for (i = 0; i < gs->numPlayers; i++) {
-        sp20 = gs->players[i].worldPos.x - arg0->posX;
-        sp28 = gs->players[i].worldPos.z - arg0->posY;
-        if (((0x27FFFFE >= ((u32)sp20) + 0x13FFFFF) & (0x13FFFFF >= sp28)) == 0) {
+        xDiff = gs->players[i].worldPos.x - rock->posX;
+        zDiff = gs->players[i].worldPos.z - rock->posY;
+        if (((0x27FFFFE >= ((u32)xDiff) + 0x13FFFFF) & (0x13FFFFF >= zDiff)) == 0) {
             continue;
         }
 
-        if ((s32)0xFF600000 < sp28) {
-            flag = 1;
+        if ((s32)0xFF600000 < zDiff) {
+            playerInRange = 1;
             break;
         }
     }
 
-    if (flag) {
+    if (playerInRange) {
         if (gs->gamePaused == 0) {
-            if (arg0->animTimer != 0x60000) {
-                arg0->animTimer += 0x20000;
+            if (rock->animTimer != 0x60000) {
+                rock->animTimer += 0x20000;
             }
 
-            if (arg0->xRotation != (-0x600)) {
-                arg0->xRotation -= 0x100;
+            if (rock->xRotation != (-0x600)) {
+                rock->xRotation -= 0x100;
             }
         }
 
-        renderFallingRockHazard(arg0);
+        renderFallingRockHazard(rock);
 
         if (gs->gamePaused == 0) {
             for (i = 0; i < gs->numPlayers; i++) {
-                if (isPlayerInRangeAndPull(&arg0->node2.transform.translation, 0x12A000, &gs->players[i]) != 0) {
-                    if (isPlayerInRangeAndPull(&arg0->node2.transform.translation, 0x1E3000, &gs->players[i]) != 0) {
+                if (isPlayerInRangeAndPull(&rock->node2.transform.translation, 0x12A000, &gs->players[i]) != 0) {
+                    if (isPlayerInRangeAndPull(&rock->node2.transform.translation, 0x1E3000, &gs->players[i]) != 0) {
                         setPlayerState50(&gs->players[i]);
-                        queueSoundAtPosition(&arg0->node2.transform.translation, 0x2A);
-                        setCallback(func_800BB658_B7898);
+                        queueSoundAtPosition(&rock->node2.transform.translation, 0x2A);
+                        setCallback(fallingRockImpactCallback);
                     }
                 }
             }
         }
     } else {
         if (!gs->gamePaused) {
-            if (arg0->animTimer > 0) {
-                arg0->animTimer += 0xFFFE0000;
+            if (rock->animTimer > 0) {
+                rock->animTimer += 0xFFFE0000;
             }
 
-            if (arg0->animTimer < 0) {
-                arg0->animTimer += 0x20000;
+            if (rock->animTimer < 0) {
+                rock->animTimer += 0x20000;
             }
 
-            if (arg0->xRotation != 0) {
-                arg0->xRotation += 0x100;
+            if (rock->xRotation != 0) {
+                rock->xRotation += 0x100;
             }
         }
 
-        renderFallingRockHazard(arg0);
+        renderFallingRockHazard(rock);
     }
 }
 
-void func_800BB658_B7898(FallingRockHazard *arg0) {
+void fallingRockImpactCallback(FallingRockHazard *rock) {
     GameState *gs;
     s32 i;
 
     gs = (GameState *)getCurrentAllocation();
-    if (arg0->animTimer != 0xFFF00000) {
+    if (rock->animTimer != 0xFFF00000) {
         if (gs->gamePaused == FALSE) {
-            arg0->animTimer = arg0->animTimer - 0x8000;
+            rock->animTimer = rock->animTimer - 0x8000;
         }
     } else {
-        arg0->respawnTimer = 0x12C;
-        setCallback(&func_800BB71C_B795C);
+        rock->respawnTimer = 0x12C;
+        setCallback(&fallingRockRespawnCallback);
     }
-    arg0->xRotation = 0;
-    renderFallingRockHazard(arg0);
+    rock->xRotation = 0;
+    renderFallingRockHazard(rock);
 
     for (i = 0; i < gs->numPlayers; i++) {
-        isPlayerInRangeAndPull(&arg0->node2.transform.translation, 0x12A000, &gs->players[i]);
+        isPlayerInRangeAndPull(&rock->node2.transform.translation, 0x12A000, &gs->players[i]);
     }
 }
 
-void func_800BB71C_B795C(FallingRockHazard *arg0) {
-    u8 temp;
+void fallingRockRespawnCallback(FallingRockHazard *rock) {
+    u8 positionOffset;
 
     if (((GameState *)getCurrentAllocation())->gamePaused == FALSE) {
-        arg0->respawnTimer--;
+        rock->respawnTimer--;
     }
 
-    if (!arg0->respawnTimer) {
-        temp = randA() & 1;
-        arg0->positionIndex = temp + (arg0->positionIndex & 0xFE);
-        memcpy(&arg0->posX, &crazyJungleRockPositions[arg0->positionIndex].position, 0xC);
+    if (!rock->respawnTimer) {
+        positionOffset = randA() & 1;
+        rock->positionIndex = positionOffset + (rock->positionIndex & 0xFE);
+        memcpy(&rock->posX, &crazyJungleRockPositions[rock->positionIndex].position, 0xC);
         createCombinedRotationMatrix(
-            &arg0->rotationMatrix,
-            crazyJungleRockPositions[arg0->positionIndex].rotX,
-            crazyJungleRockPositions[arg0->positionIndex].rotY
+            &rock->rotationMatrix,
+            crazyJungleRockPositions[rock->positionIndex].rotX,
+            crazyJungleRockPositions[rock->positionIndex].rotY
         );
         setCallback(&updateFallingRockHazard);
     }
