@@ -105,7 +105,7 @@ typedef struct {
     s16 unkA8E;
     s16 unkA90;
     s16 unkA92;
-    s16 unkA94;
+    s16 rotY;
     s16 unkA96;
     s16 unkA98;
     s16 unkA9A;

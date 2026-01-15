@@ -129,7 +129,7 @@ typedef struct {
     s16 unkA8E;
     s16 unkA90;
     s16 unkA92;
-    s16 unkA94;
+    s16 rotY;
     s16 unkA96;
     s16 unkA98;
     s16 unkA9A;
@@ -257,7 +257,7 @@ typedef struct {
     u16 unkA8E;
     u16 unkA90;
     u16 unkA92;
-    u16 unkA94;
+    u16 rotY;
     u8 padA96[0xAA4 - 0xA96];
     s32 targetSpeed;
     s32 currentSpeed;
@@ -369,7 +369,7 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
 
     createZRotationMatrix(&arg0->zRotationMatrix, arg0->unkA92);
     createCombinedRotationMatrix(&arg0->combinedRotationMatrix, arg0->unkA8E, arg0->unkA90);
-    createYRotationMatrix(&arg0->yRotationMatrix, arg0->unkA94);
+    createYRotationMatrix(&arg0->yRotationMatrix, arg0->rotY);
 
     func_8006B084_6BC84(&arg0->zRotationMatrix, &arg0->combinedRotationMatrix, &sp10);
     func_8006B084_6BC84(&sp10, &arg0->yRotationMatrix, &sp30);
@@ -417,7 +417,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
 
     state = getCurrentAllocation();
     memcpy(&arg0->unk970, identityMatrix, sizeof(Transform3D));
-    createYRotationMatrix(&arg0->unk970, arg0->unkA94);
+    createYRotationMatrix(&arg0->unk970, arg0->rotY);
     memcpy(&arg0->unk990, identityMatrix, sizeof(Transform3D));
     memcpy(&arg0->unk9B0, identityMatrix, sizeof(Transform3D));
 
@@ -431,7 +431,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     arg0->velocity.x = 0;
     arg0->velocity.y = 0;
     arg0->velocity.z = 0;
-    arg0->unkA94 = 0x1000;
+    arg0->rotY = 0x1000;
 
     for (i = 0; i < 12; i++) {
         Unk0x3CElemExtra *extra = (Unk0x3CElemExtra *)((u8 *)&arg0->unk0_3C[i] + 0x38);
@@ -556,7 +556,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
     arg0->unkB84 = arg0->unkB84 | 0x40000;
     func_800B9B90_A9A40(arg0);
 
-    angleDiff = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z) - arg0->unkA94;
+    angleDiff = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z) - arg0->rotY;
     angleDiff = angleDiff & 0x1FFF;
 
     if (angleDiff >= 0x1001) {
@@ -571,10 +571,10 @@ s32 func_800BBA54_B0F44(Player *arg0) {
         angleDiff = -0x38;
     }
 
-    arg0->unkA94 = arg0->unkA94 + angleDiff;
+    arg0->rotY = arg0->rotY + angleDiff;
 
     if (!(arg0->unkB84 & 0x1)) {
-        createYRotationMatrix(&arg0->unk970, arg0->unkA94);
+        createYRotationMatrix(&arg0->unk970, arg0->rotY);
         func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->unk990, &arg0->unk970, &sp10);
         transformVector3(&arg0->velocity, &sp10, &sp30);
         sp30.x = 0;
@@ -796,7 +796,7 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
     func_800B9B90_A9A40(arg0);
 
     angleDiff =
-        (func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z) - arg0->unkA94) & 0x1FFF;
+        (func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z) - arg0->rotY) & 0x1FFF;
 
     if (angleDiff >= 0x1001) {
         angleDiff = angleDiff | 0xE000;
@@ -810,11 +810,11 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
         angleDiff = -0x38;
     }
 
-    arg0->unkA94 = arg0->unkA94 + angleDiff;
+    arg0->rotY = arg0->rotY + angleDiff;
 
     if (!(arg0->unkB84 & 1)) {
         temp_s0 = &arg0->unk970;
-        createYRotationMatrix(temp_s0, arg0->unkA94);
+        createYRotationMatrix(temp_s0, arg0->rotY);
         func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->unk990, temp_s0, &sp10);
         temp_s1 = &arg0->velocity;
         transformVector3(temp_s1, &sp10, &sp30);
