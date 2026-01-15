@@ -205,7 +205,7 @@ void __MusIntProcessContinuousPitchBend(channel_t *cp);
 u8 *Fstop(channel_t *cp, u8 *ptr);
 void processChannelEnvelope(channel_t *cp);
 void processPanSweep(channel_t *cp);
-f32 func_80073DC4_749C4(channel_t *cp);
+f32 calculateVibratoModulation(channel_t *cp);
 f32 calculateWobbleModulation(channel_t *cp);
 void __MusIntSetPitch(channel_t *cp, s32 x, f32 offset);
 void __MusIntSetVolumeAndPan(channel_t *cp, s32 x);
@@ -1367,7 +1367,7 @@ ALMicroTime __MusIntMain(void *node) {
             total = cp->freqoffset;
 
             if (cp->vib_speed != 0) {
-                total += func_80073DC4_749C4(cp);
+                total += calculateVibratoModulation(cp);
             }
 
             if (cp->wobble_on_speed != 0) {
@@ -1595,13 +1595,13 @@ f32 calculateWobbleModulation(channel_t *cp) {
     return (f32)cp->wobble_current;
 }
 
-f32 func_80073DC4_749C4(channel_t *cp) {
-    s32 temp;
+f32 calculateVibratoModulation(channel_t *cp) {
+    s32 vib_time_elapsed;
 
-    temp = cp->count - cp->vib_delay;
+    vib_time_elapsed = cp->count - cp->vib_delay;
 
-    if (temp > 0) {
-        cp->vibrato = sinf((f32)temp * cp->vib_precalc) * cp->vib_amount;
+    if (vib_time_elapsed > 0) {
+        cp->vibrato = sinf((f32)vib_time_elapsed * cp->vib_precalc) * cp->vib_amount;
     }
 
     return cp->vibrato;
