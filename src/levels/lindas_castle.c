@@ -24,7 +24,7 @@ extern D_800BBBC0_ABA70_struct D_800BBBC0_ABA70[];
 extern s32 D_800BBC1C_ABACC[3];
 
 void func_800BB5BC_AB46C(func_800BB2B0_arg *task);
-void func_800BB320_AB1D0(func_800BB2B0_arg *arg0);
+void pullPlayersInRange(func_800BB2B0_arg *arg0);
 void func_800BB7D4_AB684(func_800BB2B0_arg *task);
 
 typedef struct {
@@ -72,10 +72,10 @@ void func_800BB2B0(func_800BB2B0_arg *arg0) {
     }
 }
 
-void func_800BB320_AB1D0(func_800BB2B0_arg *arg0) {
+void pullPlayersInRange(func_800BB2B0_arg *arg0) {
     GameState *gs;
     Vec3i pos;
-    s32 target[3];
+    s32 pullTarget[3];
     s32 i;
     Player *player;
 
@@ -86,10 +86,10 @@ void func_800BB320_AB1D0(func_800BB2B0_arg *arg0) {
     for (i = 0; i < gs->numPlayers; i++) {
         player = &gs->players[i];
         if (isPlayerInRangeAndPull(&pos, 0x1C0000, player) != 0) {
-            target[0] = ((player->worldPos.x + player->collisionOffset.x - pos.x) / 2) + pos.x;
-            target[1] = ((player->worldPos.y + player->collisionOffset.y - pos.x) / 2) + pos.y;
-            target[2] = ((player->worldPos.z + player->collisionOffset.z - pos.x) / 2) + pos.z;
-            setPlayerPullState(&gs->players[i], &target[0]);
+            pullTarget[0] = ((player->worldPos.x + player->collisionOffset.x - pos.x) / 2) + pos.x;
+            pullTarget[1] = ((player->worldPos.y + player->collisionOffset.y - pos.x) / 2) + pos.y;
+            pullTarget[2] = ((player->worldPos.z + player->collisionOffset.z - pos.x) / 2) + pos.z;
+            setPlayerPullState(&gs->players[i], &pullTarget[0]);
         }
     }
 }
@@ -202,7 +202,7 @@ void func_800BB5BC_AB46C(func_800BB2B0_arg *task) {
             func_80069CF8_6A8F8();
         }
 
-        func_800BB320_AB1D0(task);
+        pullPlayersInRange(task);
     }
 
     func_800BB2B0(task);
@@ -262,7 +262,7 @@ void func_800BB7D4_AB684(func_800BB2B0_arg *task) {
             func_80069CF8_6A8F8();
         }
 
-        func_800BB320_AB1D0(task);
+        pullPlayersInRange(task);
     }
 
     func_800BB2B0(task);

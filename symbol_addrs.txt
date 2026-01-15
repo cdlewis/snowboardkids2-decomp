@@ -920,6 +920,7 @@ setPlayerState100 = 0x80058B94; // rom:0x59794
 gMusicTrackVoiceMap = 0x80093B84; // rom:0x94784
 gBoardStatsTable = 0x80093BB0;
 D_800BBBC0_ABA70 = 0x800BBBC0; // size:0x70 rom:0xABA70
+pullPlayersInRange = 0x800BB320; // type:func rom:0xAB1D0
 updateCrazyJungleBoss = 0x800BB2B0; // rom:0xABAE0
 initCrazyJungleBoss = 0x800BB754; // rom:0xABF84
 dispatchCrazyJungleBossChasePhase = 0x800BB9E8; // rom:0xAC218
