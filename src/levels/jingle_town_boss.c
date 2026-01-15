@@ -666,13 +666,13 @@ s32 jingleTownBossHoverAttackIntroPhase(Arg0Struct *arg0) {
     return 0;
 }
 
-s32 func_800BC094_B3654(Arg0Struct *arg0) {
+s32 jingleTownBossHoverAttackMainPhase(Arg0Struct *arg0) {
     if (arg0->behaviorStep == 0) {
-        s32 temp_v1 = arg0->unkB84;
+        s32 bossFlags = arg0->unkB84;
         arg0->behaviorStep++;
         arg0->unk468 = 0x80000;
         arg0->unkB8C = 4;
-        if ((temp_v1 & 0x80000) == 0) {
+        if ((bossFlags & 0x80000) == 0) {
             if (arg0->unkBDB != 0) {
                 arg0->unkBDB--;
             }

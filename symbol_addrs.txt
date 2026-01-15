@@ -3348,6 +3348,7 @@ resetBoneAnimation = 0x8005F2FC; // rom:0x5FEFC
 jingleTownBossChaseAttackExitPhase = 0x800BBEBC; // rom:0xB347C
 dispatchHoverAttackPhase = 0x800BBF40; // rom:0xB3500
 jingleTownBossHoverAttackIntroPhase = 0x800BBF70; // rom:0xB3530
+jingleTownBossHoverAttackMainPhase = 0x800BC094; // rom:0xB3654
 gHoverIntroAnimTimers = 0x800BCB7C; // rom:0xB413C
 gHoverIntroAnimFrames = 0x800BCB7E; // rom:0xB413E
 spinRampUpStep = 0x800B756C; // rom:0xA741C
