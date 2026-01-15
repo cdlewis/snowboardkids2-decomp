@@ -515,14 +515,13 @@ s32 iceLandBossChaseIntroPhase(func_800BC4AC_arg *arg0) {
     return 0;
 }
 
-s32 func_800BBA54_B0F44(Player *arg0) {
+s32 iceLandBossChaseAttackPhase(Player *arg0) {
     Transform3D sp10;
     Vec3i sp30;
     Vec3i sp40;
     GameState *gameState;
     s16 angleDiff;
     Player *player;
-    s32 v1, v0;
 
     gameState = (GameState *)getCurrentAllocation();
 
