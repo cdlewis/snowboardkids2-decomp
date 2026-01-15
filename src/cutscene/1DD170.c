@@ -76,7 +76,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ s8 identifier[0x7];
-    /* 0x07 */ s8 unk7;
+    /* 0x07 */ s8 enabled;
     /* 0x08 */ s8 description[0x10];
     /* 0x18 */ void (*init)(CurrentCommand *, CommandData *, s8);
     /* 0x1C */ s32 (*validate)(CurrentCommand *, CommandData *, s32, s32 arg3, s32 arg4, s8 arg5);
@@ -182,8 +182,8 @@ CommandEntry *getCommandEntryMasked(u8 arg0, u8 arg1) {
     return temp;
 }
 
-u8 getCommandUnk7Field(s32 arg0, s32 arg1) {
-    return getCommandEntry(arg0 & 0xFF, arg1 & 0xFF)->unk7;
+u8 getCommandEnabled(s32 arg0, s32 arg1) {
+    return getCommandEntry(arg0 & 0xFF, arg1 & 0xFF)->enabled;
 }
 
 void *getCommandDescription(u8 a0, u8 a1) {
