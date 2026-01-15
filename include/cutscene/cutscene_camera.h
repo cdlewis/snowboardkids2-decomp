@@ -1,36 +1,36 @@
 #include "common.h"
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
+    s16 step;
+    s16 duration;
 } cutsceneCameraRotate_exec_arg0;
 typedef struct {
     u8 padding[0xC];
-    s32 unkC;
+    s32 cameraState;
 } cutsceneCameraRotate_exec_arg1;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
+    s16 rotX;
+    s16 rotY;
+    s32 posY;
+    s32 posZ;
+    s32 posX;
 } cutsceneCameraReset_exec_arg0;
 typedef struct {
     u8 padding[0xC];
-    s32 unkC;
+    s32 cameraState;
 } cutsceneCameraReset_exec_arg1;
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s32 unk4;
-    s32 unk8;
-    s16 unkC;
-    s32 unk10;
+    s16 targetRotX;
+    s16 targetRotY;
+    s32 targetY;
+    s32 targetZ;
+    s16 duration;
+    s32 targetX;
 } cutsceneCameraMove_exec_arg0;
 typedef struct {
     u8 padding[0xC];
-    s32 unkC;
+    s32 cameraState;
 } cutsceneCameraMove_exec_arg1;
 
 void cutsceneCameraReset_init(void);
