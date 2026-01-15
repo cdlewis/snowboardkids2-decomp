@@ -154,7 +154,7 @@ extern s32 D_800BBA84_AC2B4[][3];
 typedef s32 (*StateFunc)(void *);
 extern StateFunc D_800BC440_ACC70[];
 
-void func_800BB2B0_ABAE0(Arg0Struct *arg0) {
+void updateCrazyJungleBoss(Arg0Struct *arg0) {
     Transform3D sp10;
     Transform3D sp30;
     volatile u8 pad[8];
