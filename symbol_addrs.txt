@@ -1409,6 +1409,7 @@ __MusIntMain = 0x800730EC;
 __MusIntRandom = 0x80074324;
 __MusIntProcessContinuousPitchBend = 0x80073EE4;
 __MusIntSetPitch = 0x80073928;
+__MusIntInitEnvelope = 0x80073A3C; // rom:0x7463C
 __MusIntPowerOf2 = 0x80073FF8;
 mus_channels = 0x800A64F0;
 mus_voices = 0x800A64EC;

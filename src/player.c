@@ -1468,24 +1468,20 @@ void __MusIntSetPitch(channel_t *cp, s32 x, f32 offset) {
     alSynSetPitch(&__libmus_alglobals.drvr, mus_voices + x, frequency);
 }
 
-void func_80073A3C_7463C(channel_t *arg0) {
-    channel_t *chan = arg0;
-    u16 temp;
-
-    if (chan->length != 0x7FFF) {
-        temp = chan->cutoff;
-        if (temp != 0) {
-            chan->release_frame = chan->note_start_frame + (temp << 8);
+void __MusIntInitEnvelope(channel_t *cp) {
+    if (cp->length != 0x7FFF) {
+        if (cp->cutoff != 0) {
+            cp->release_frame = cp->note_start_frame + (cp->cutoff << 8);
         } else {
-            chan->release_frame = chan->note_end_frame - (chan->endit << 8);
+            cp->release_frame = cp->note_end_frame - (cp->endit << 8);
         }
     } else {
-        chan->release_frame = 0x7FFFFFFF;
+        cp->release_frame = 0x7FFFFFFF;
     }
 
-    chan->env_phase = 1;
-    chan->env_current = chan->env_init_vol;
-    chan->env_count = chan->env_speed;
+    cp->env_phase = 1;
+    cp->env_current = cp->env_init_vol;
+    cp->env_count = cp->env_speed;
 }
 
 void func_80073AA4_746A4(channel_t *cp) {
