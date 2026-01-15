@@ -3257,21 +3257,21 @@ s32 handleFallFromUfoStep(Player *player) {
     return 0;
 }
 
-s32 func_800B74E4_A7394(Player *arg0) {
-    arg0->velocity.x = 0;
-    arg0->velocity.z = 0;
-    arg0->velocity.y = arg0->velocity.y - 0x6000;
-    applyClampedVelocityToPosition(arg0);
-    decayPlayerSteeringAngles(arg0);
-    func_8005D180_5DD80(arg0, 0);
+s32 dropAfterUfoReleaseStep(Player *player) {
+    player->velocity.x = 0;
+    player->velocity.z = 0;
+    player->velocity.y = player->velocity.y - 0x6000;
+    applyClampedVelocityToPosition(player);
+    decayPlayerSteeringAngles(player);
+    func_8005D180_5DD80(player, 0);
 
-    arg0->unkB8C = arg0->unkB8C - 1;
-    if (arg0->unkB8C == 0) {
-        arg0->behaviorCounter = 0;
-        arg0->unkB8C = 0;
-        arg0->behaviorStep = arg0->behaviorStep + 1;
+    player->unkB8C = player->unkB8C - 1;
+    if (player->unkB8C == 0) {
+        player->behaviorCounter = 0;
+        player->unkB8C = 0;
+        player->behaviorStep = player->behaviorStep + 1;
         spawnDebugDisplayListTask(0);
-        queueSoundAtPosition(&arg0->worldPos, 0x26);
+        queueSoundAtPosition(&player->worldPos, 0x26);
     }
 
     return 0;
