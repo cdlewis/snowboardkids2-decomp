@@ -227,17 +227,21 @@ s32 clampCommandIndex(s32 categoryIndex, u8 commandIndex) {
 }
 
 s32 getNextCategorySkipping(u8 categoryIndex, s16 skipValue) {
-    u16 limit = *(u16 *)&gFirstCutsceneCategoryIndex;
+    // Load categoryCount as u16 by reading from gFirstCutsceneCategoryIndex address.
+    // Since gFirstCutsceneCategoryIndex (0) and gCutsceneCategoryCount (9) are adjacent,
+    // reading u16 from the first address gives us gCutsceneCategoryCount in big-endian.
+    u16 categoryCount = *(u16 *)&gFirstCutsceneCategoryIndex;
 
     categoryIndex++;
-    if (categoryIndex >= limit) {
+    if (categoryIndex >= categoryCount) {
         categoryIndex = 0;
     }
 
     if (skipValue != -1) {
+        // Skip all consecutive categories with matching requiresModel value
         while (commandCategories[categoryIndex].requiresModel == skipValue) {
             categoryIndex++;
-            if (categoryIndex >= limit) {
+            if (categoryIndex >= categoryCount) {
                 categoryIndex = 0;
             }
         }
