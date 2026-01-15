@@ -392,17 +392,17 @@ s32 updateSlotData(CutsceneManager *cutsceneManager, s8 index) {
 }
 
 s16 executeIsDoneCommand(CurrentCommand *currentCommand, CommandData *commandData, s8 frameIndex) {
-    s32 shouldRun = 1;
+    s32 shouldRun = TRUE;
     s16 (*isDoneFunc)(CurrentCommand *, CommandData *, s8) =
         getCommandEntry(currentCommand->commandCategory, currentCommand->commandIndex)->isDone;
 
-    if (isDoneFunc != 0) {
-        CommandData *data = &commandData[frameIndex];
-        if (data->isActive == 0) {
+    if (isDoneFunc != NULL) {
+        CommandData *slotData = &commandData[frameIndex];
+        if (slotData->isActive == FALSE) {
             shouldRun = (commandCategories[currentCommand->commandCategory].requiresModel != 1);
         }
 
-        if (shouldRun != 0) {
+        if (shouldRun) {
             return isDoneFunc(currentCommand, commandData, frameIndex);
         }
     }
