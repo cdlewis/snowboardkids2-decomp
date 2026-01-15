@@ -210,7 +210,7 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
             }
             targetIdx = arg0->targetPlayerIdx;
             if (targetIdx >= 0) {
-                func_80059C24_5A824(&gameState->players[targetIdx]);
+                playAttackHitVoice(&gameState->players[targetIdx]);
             }
             arg0->hitCount = arg0->hitCount + 1;
         } else {
@@ -431,7 +431,7 @@ void checkParachuteProjectileHit(Struct_52880 *arg0) {
         arg0->hitCount++;
         unk4C = arg0->targetPlayerIdx;
         if (unk4C >= 0) {
-            func_80059C24_5A824(&alloc->players[unk4C]);
+            playAttackHitVoice(&alloc->players[unk4C]);
         }
     } else {
         v28 = arg0->vel.y;
@@ -647,7 +647,7 @@ void checkFryingPanProjectileHit(Struct_52880 *arg0) {
         arg0->hitCount++;
         unk4C = arg0->targetPlayerIdx;
         if (unk4C >= 0) {
-            func_80059C24_5A824(&alloc->players[unk4C]);
+            playAttackHitVoice(&alloc->players[unk4C]);
         }
     } else {
         v28 = arg0->vel.y;
@@ -870,7 +870,7 @@ void checkSnowmanProjectileHit(Struct_52880 *arg0) {
         arg0->hitCount++;
         unk4C = arg0->targetPlayerIdx;
         if (unk4C >= 0) {
-            func_80059C24_5A824(&alloc->players[unk4C]);
+            playAttackHitVoice(&alloc->players[unk4C]);
         }
     } else {
         v28 = arg0->vel.y;
@@ -1096,7 +1096,7 @@ void checkStarProjectileHit(Struct_52880 *arg0) {
             setPlayerStarHitState(player, &localVec);
             arg0->hitCount++;
             if (arg0->targetPlayerIdx >= 0) {
-                func_80059C24_5A824(&allocation->players[arg0->targetPlayerIdx]);
+                playAttackHitVoice(&allocation->players[arg0->targetPlayerIdx]);
             }
         } else {
             arg0->ownerPlayerIdx = player->playerIndex;
@@ -1316,7 +1316,7 @@ void checkHomingPanelProjectileHit(Struct_52880 *arg0) {
         arg0->hitCount++;
         unk4C = arg0->targetPlayerIdx;
         if (unk4C >= 0) {
-            func_80059C24_5A824(&alloc->players[unk4C]);
+            playAttackHitVoice(&alloc->players[unk4C]);
         }
     } else {
         v28 = arg0->vel.y;
@@ -1763,7 +1763,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
                 arg0->hitCount = arg0->hitCount + 1;
                 unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {
-                    func_80059C24_5A824(&alloc->players[unk4C]);
+                    playAttackHitVoice(&alloc->players[unk4C]);
                 }
             }
             break;
@@ -1774,7 +1774,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
                 arg0->hitCount = arg0->hitCount + 1;
                 unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {
-                    func_80059C24_5A824(&alloc->players[unk4C]);
+                    playAttackHitVoice(&alloc->players[unk4C]);
                 }
             }
             break;
@@ -1785,7 +1785,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
                 arg0->hitCount = arg0->hitCount + 1;
                 unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {
-                    func_80059C24_5A824(&alloc->players[unk4C]);
+                    playAttackHitVoice(&alloc->players[unk4C]);
                 }
             }
             break;
@@ -1796,7 +1796,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
                 arg0->hitCount = arg0->hitCount + 1;
                 unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {
-                    func_80059C24_5A824(&alloc->players[unk4C]);
+                    playAttackHitVoice(&alloc->players[unk4C]);
                 }
             }
             break;
@@ -1807,7 +1807,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
                 arg0->hitCount = arg0->hitCount + 1;
                 unk4C = arg0->targetPlayerIdx;
                 if (unk4C >= 0) {
-                    func_80059C24_5A824(&alloc->players[unk4C]);
+                    playAttackHitVoice(&alloc->players[unk4C]);
                 }
             }
             break;

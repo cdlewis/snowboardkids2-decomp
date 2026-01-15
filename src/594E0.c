@@ -274,12 +274,12 @@ void playTrickSuccessVoice(Player *player) {
     }
 }
 
-void func_80059C24_5A824(Player *arg0) {
-    u8 index = arg0->characterId;
+void playAttackHitVoice(Player *player) {
+    u8 index = player->characterId;
     if (index < 9) {
-        if (arg0->unkB88 == 0) {
-            queueSoundAtPositionWithPriority(&arg0->worldPos, D_80093FE0_94BE0[index], 5, arg0->playerIndex + 4);
-            func_8005D804_5E404(arg0, 1, 0xF);
+        if (player->unkB88 == 0) {
+            queueSoundAtPositionWithPriority(&player->worldPos, D_80093FE0_94BE0[index], 5, player->playerIndex + 4);
+            func_8005D804_5E404(player, 1, 0xF);
         }
     }
 }
