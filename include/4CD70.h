@@ -156,7 +156,7 @@ void initBonusGoldDisplayTask(BonusGoldDisplayState *arg0);
 void updateBonusGoldDisplay(BonusGoldDisplayState *arg0);
 void cleanupBonusGoldDisplayTask(BonusGoldDisplayState *arg0);
 void spawnSuccessMessageDisplayTask(s16 delayFrames);
-void func_8004F820_50420(ShotCrossCountdownTimerState *arg0);
+void initSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0);
 void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);
 void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0);
 void cleanupShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);

@@ -1298,7 +1298,7 @@ void handleSkillGameResult(void) {
             spawnSuccessMessageDisplayTask(0x78);
             spawnVictorySnowflakes(0, 0);
             state->unk7B = 1;
-            scheduleTask(&func_8004F820_50420, 1, 0, 0xE6);
+            scheduleTask(&initSkillGameResultTimerDisplay, 1, 0, 0xE6);
             addPlayerGold(0x1388);
             setGameStateHandler(&awaitSkillWinAndPromptContinue);
         } else {

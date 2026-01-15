@@ -2233,63 +2233,63 @@ void cleanupSecondaryItemDisplayTask(SecondaryItemDisplayState *state) {
     state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
 
-void func_8004F898_50498(ShotCrossCountdownTimerState *);
-void func_8004F9E8_505E8(ShotCrossCountdownTimerState *);
+void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *);
+void cleanupSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *);
 
 extern char D_8009E904_9F504[];
 extern char D_8009E914_9F514[];
 
 typedef struct {
     u8 pad[0x54];
-    s32 unk54;
-} AllocationStruct_8004F898;
+    s32 elapsedTicks;
+} SkillGameTimerAllocation;
 
-void func_8004F820_50420(ShotCrossCountdownTimerState *arg0) {
+void initSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
     arg0->spriteAsset = loadAsset_34CB50();
     arg0->spriteIndex = 0x23;
     arg0->x = -0x4C;
     arg0->y = -0x30;
     arg0->timeRemaining = 0;
-    setCleanupCallback(func_8004F9E8_505E8);
-    setCallback(func_8004F898_50498);
+    setCleanupCallback(cleanupSkillGameResultTimerDisplay);
+    setCallback(updateSkillGameResultTimerDisplay);
 }
 
-void func_8004F898_50498(ShotCrossCountdownTimerState *arg0) {
-    char buf[16];
-    AllocationStruct_8004F898 *allocation;
+void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
+    char timeString[16];
+    SkillGameTimerAllocation *allocation;
     s32 time;
     s32 minutes;
     s32 seconds;
     s32 frames;
-    s16 temp;
-    char *formatStr;
+    s16 blinkCounter;
+    char *timeFormat;
 
-    allocation = (AllocationStruct_8004F898 *)getCurrentAllocation();
-    time = allocation->unk54;
+    allocation = (SkillGameTimerAllocation *)getCurrentAllocation();
+    time = allocation->elapsedTicks;
     minutes = time / 32400;
     seconds = (time % 32400) / 540;
     frames = ((time % 32400) % 540) / 9;
 
-    temp = (u16)arg0->timeRemaining + 1;
-    arg0->timeRemaining = temp;
-    if (temp == 0x28) {
+    blinkCounter = (u16)arg0->timeRemaining + 1;
+    arg0->timeRemaining = blinkCounter;
+    if (blinkCounter == 0x28) {
         arg0->timeRemaining = 0;
     }
 
     if (arg0->timeRemaining < 0x14) {
-        formatStr = D_8009E904_9F504;
-        sprintf(buf, formatStr, minutes, seconds, frames);
+        timeFormat = D_8009E904_9F504;
+        sprintf(timeString, timeFormat, minutes, seconds, frames);
     } else {
-        formatStr = D_8009E914_9F514;
-        sprintf(buf, formatStr, minutes, seconds, frames);
+        timeFormat = D_8009E914_9F514;
+        sprintf(timeString, timeFormat, minutes, seconds, frames);
     }
 
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
-    drawNumericString(buf, -0x54, -0x28, 0xFF, arg0->digitAsset, 8, 0);
+    drawNumericString(timeString, -0x54, -0x28, 0xFF, arg0->digitAsset, 8, 0);
 }
 
-void func_8004F9E8_505E8(ShotCrossCountdownTimerState *arg0) {
+void cleanupSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
