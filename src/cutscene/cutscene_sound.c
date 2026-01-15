@@ -51,7 +51,7 @@ void cutsceneSe3dPlay_exec(cutsceneSePlay_exec_arg *arg0, cutsceneSe3dPlay_exec_
     slotData = *slotPtr;
 
     if (arg0->unk4 == 1) {
-        func_800B4BDC_1E1C8C(arg0->unk0, arg0->unk2, arg0->unk8, slotData);
+        playFanSoundAtPosition(arg0->unk0, arg0->unk2, arg0->unk8, slotData);
         return;
     }
 

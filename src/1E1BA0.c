@@ -95,12 +95,12 @@ void playFanSoundEffect(s16 fanIndex, s16 volume, s16 pan, s16 channel) {
     }
 }
 
-void func_800B4BDC_1E1C8C(s16 fanIndex, s16 arg1, s16 duration, CutsceneSlotData *arg3) {
+void playFanSoundAtPosition(s16 fanIndex, s16 arg1, s16 duration, CutsceneSlotData *cutsceneSlotData) {
     Vec3i position;
     s16 soundId;
 
-    if (arg3 != NULL) {
-        memcpy(&position, &arg3->unk2C, sizeof(Vec3i));
+    if (cutsceneSlotData != NULL) {
+        memcpy(&position, &cutsceneSlotData->unk2C, sizeof(Vec3i));
     } else {
         position.x = 0;
         position.y = 0;

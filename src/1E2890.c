@@ -116,7 +116,7 @@ void func_800B5A6C_1E2B1C(func_800B5A6C_1E2B1C_arg *arg0) {
     }
 
     if ((arg0->unkA % arg0->unk8) == 0) {
-        func_800B4BDC_1E1C8C(arg0->unk0, arg0->unk2, arg0->unk6, arg0->unkC);
+        playFanSoundAtPosition(arg0->unk0, arg0->unk2, arg0->unk6, arg0->unkC);
         arg0->unk4--;
     }
 
