@@ -265,7 +265,7 @@ end:
 
 void onTitleFadeInComplete(void) {
     if (getViewportFadeMode(0) == 0) {
-        func_8006FE28_70A28(0, 0, 0, 0);
+        setViewportEnvColor(0, 0, 0, 0);
         playSoundEffectOnChannelNoPriority(0x135, 0);
         setGameStateHandler(handleTitleMenuInput);
     }

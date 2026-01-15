@@ -116,7 +116,7 @@ void initCutsceneRenderer(void) {
 
     func_8006FEF8_70AF8(nodePtr, 1);
     setModelCameraTransform(nodePtr, 0, 0, -160, -120, 159, 119);
-    func_8006FE28_70A28(nodePtr, 0, 0, 0);
+    setViewportEnvColor(nodePtr, 0, 0, 0);
     setViewportFadeValue(nodePtr, 0xFF, 0);
     setViewportFadeValue(nodePtr, 0, 8);
 
@@ -125,7 +125,7 @@ void initCutsceneRenderer(void) {
     setViewportScale(uiNodePtr, scale, scale);
     func_8006FEF8_70AF8(uiNodePtr, 1);
     setModelCameraTransform(uiNodePtr, 0, 0, -160, -120, 159, 119);
-    func_8006FE28_70A28(uiNodePtr, 0, 0, 0);
+    setViewportEnvColor(uiNodePtr, 0, 0, 0);
     setViewportFadeValue(uiNodePtr, 0xFF, 0);
     setViewportFadeValue(uiNodePtr, 0, 8);
     setGameStateHandler(runCutsceneFrame);

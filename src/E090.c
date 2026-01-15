@@ -68,12 +68,12 @@ void updateTitleFinalFadeIn(E090_struct *arg0);
 void cleanupLogoScreen(E090_struct *arg0);
 
 void initLogoNodeFadeIn(E090_struct *arg0) {
-    func_8006FE28_70A28(&arg0->unk8, 0, 0, 0);
+    setViewportEnvColor(&arg0->unk8, 0, 0, 0);
     setViewportFadeValue(&arg0->unk8, 0xFF, 0xF);
 }
 
 void initLogoNodeFadeOut(E090_struct *arg0) {
-    func_8006FE28_70A28(&arg0->unk8, 0, 0, 0);
+    setViewportEnvColor(&arg0->unk8, 0, 0, 0);
     setViewportFadeValue(&arg0->unk8, 0, 0xF);
 }
 
@@ -197,7 +197,7 @@ void loadLogoScreenAssets(void) {
     func_8006FEF8_70AF8(node, 1);
     func_8006BEDC_6CADC(&nodeParams, 0, 0, 0x01000000, 0, 0, 0);
     setViewportTransformById(logoScreen->unk8.id, &nodeParams);
-    func_8006FE28_70A28(node, 0, 0, 0);
+    setViewportEnvColor(node, 0, 0, 0);
     setViewportFadeValue(node, 0xFF, 0);
     setGameStateHandler(updateLogoScreen);
 }

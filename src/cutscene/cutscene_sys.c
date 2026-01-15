@@ -38,7 +38,7 @@ s32 cutsceneSysFadeIn_validate(void) {
 
 void cutsceneSysFadeIn_exec(cutsceneSysFadeIn_exec_arg *arg0, Node_70B00 *arg1) {
     u8 brightness = gCutsceneFadeBrightnessTable[arg0->brightnessIndex];
-    func_8006FE28_70A28(arg1->unk0.next, brightness, brightness, brightness);
+    setViewportEnvColor(arg1->unk0.next, brightness, brightness, brightness);
     setViewportFadeValue(arg1->unk0.next, 0, arg0->fadeMode);
 }
 
@@ -55,7 +55,7 @@ s32 cutsceneSysFadeOut_validate(void) {
 
 void cutsceneSysFadeOut_exec(cutsceneSysFadeOut_exec_arg *fadeArgs, Node_70B00 *node) {
     u8 brightness = gCutsceneFadeBrightnessTable[fadeArgs->brightnessIndex];
-    func_8006FE28_70A28(node->unk0.next, brightness, brightness, brightness);
+    setViewportEnvColor(node->unk0.next, brightness, brightness, brightness);
     setViewportFadeValue(node->unk0.next, 0xFF, fadeArgs->fadeMode);
 }
 
@@ -92,7 +92,7 @@ void cutsceneSysFlash_update(CutsceneManager *cutsceneManager, s8 slotIndex) {
     if (slot->unk0.FlashPayload.frameCounter > 0) {
         // Toggle between the two colors each frame
         currentColorIndex = slot->unk0.FlashPayload.colorToggle & 1;
-        func_8006FE28_70A28(
+        setViewportEnvColor(
             cutsceneManager->uiResource,
             slot->unk0.FlashPayload.colors[currentColorIndex].unk0,
             slot->unk0.FlashPayload.colors[currentColorIndex].unk1,
@@ -231,7 +231,7 @@ s32 cutsceneSysFilter_validate(void) {
 }
 
 void cutsceneSysFilter_exec(cutsceneSysFilter_exec_arg *filterArgs, Node_70B00 *sceneNode) {
-    func_8006FE28_70A28(
+    setViewportEnvColor(
         sceneNode->unk0.next,
         filterArgs->envColorRed,
         filterArgs->envColorGreen,

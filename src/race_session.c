@@ -1191,7 +1191,7 @@ handleB:
         case 0:
             if (gs->unk50 >= 0x39E) {
                 D_800A24A0_A30A0 = 2;
-                func_8006FE28_70A28(NULL, 0xFF, 0xFF, 0xFF);
+                setViewportEnvColor(NULL, 0xFF, 0xFF, 0xFF);
                 setViewportFadeValue(NULL, 0xFF, 0x10);
                 setMusicFadeOut(0x20);
                 setGameStateHandler(cleanupGameSession);
@@ -1199,7 +1199,7 @@ handleB:
             }
             if (gControllerInputs[0] & 0x1000) {
                 D_800A24A0_A30A0 = 2;
-                func_8006FE28_70A28(NULL, 0, 0, 0);
+                setViewportEnvColor(NULL, 0, 0, 0);
                 setViewportFadeValue(NULL, 0xFF, 0x10);
                 setMusicFadeOut(0x20);
                 gs->unk61++;

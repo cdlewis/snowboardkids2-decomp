@@ -280,7 +280,7 @@ void func_80003EE0_4AE0(void) {
     func_8006FA0C_7060C(&taskMemory->unk768, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     func_8006BEDC_6CADC(buffer, 0, 0, 0x01400000, 0, 0, 0);
     setViewportTransformById(taskMemory->unk768.id, buffer);
-    func_8006FE28_70A28(&taskMemory->unk8, 0, 0, 0);
+    setViewportEnvColor(&taskMemory->unk8, 0, 0, 0);
     setViewportFadeValue(&taskMemory->unk8, 0, 0);
     setViewportFadeValue(&taskMemory->unk1E0, 0, 0);
     setViewportFadeValue(&taskMemory->unk3B8, 0, 0);

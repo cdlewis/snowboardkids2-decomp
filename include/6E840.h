@@ -59,9 +59,9 @@ typedef struct Node_70B00 {
     /* 0xB4 */ s16 unkB4;
     /* 0xB6 */ s16 unkB6;
     u8 padding2b[0x4];
-    /* 0xBC */ u8 unkBC;
-    u8 unkBD;
-    u8 unkBE;
+    /* 0xBC */ u8 envR;
+    u8 envG;
+    u8 envB;
     u8 prevFadeValue;
     u8 fadeValue;
     u8 fadeMode;
@@ -109,7 +109,7 @@ void processDisplayFrameUpdate(void);
 
 void handleFrameBufferComplete(s32 bufferIndex);
 
-void func_8006FE28_70A28(Node_70B00 *arg0, u8 arg1, u8 arg2, u8 arg3);
+void setViewportEnvColor(Node_70B00 *node, u8 r, u8 g, u8 b);
 
 void func_8006FE48_70A48(u16 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5);
 

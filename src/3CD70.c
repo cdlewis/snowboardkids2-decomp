@@ -152,7 +152,7 @@ void updateOrbitCamera(OrbitCameraState *camera) {
     newAngle = camera->rotationAngle + 0x58;
     camera->rotationAngle = newAngle;
     if (newAngle == 0x12E8) {
-        func_8006FE28_70A28(allocation->sceneNode, 0xFF, 0xFF, 0xFF);
+        setViewportEnvColor(allocation->sceneNode, 0xFF, 0xFF, 0xFF);
         setViewportFadeValue(allocation->sceneNode, 0xFF, 0x20);
     }
     currentAngle = camera->rotationAngle;

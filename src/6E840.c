@@ -441,9 +441,9 @@ void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s3
     arg0->unk1CD = 0;
     arg0->unk1CC = 0;
     arg0->unk1CA = 0x3E6;
-    arg0->unkBC = 0;
-    arg0->unkBD = 0;
-    arg0->unkBE = 0;
+    arg0->envR = 0;
+    arg0->envG = 0;
+    arg0->envB = 0;
     arg0->prevFadeValue = 0;
     arg0->fadeMode = 0;
     arg0->scaleY = 1.0f;
@@ -536,16 +536,13 @@ s32 getViewportFadeMode(Node_70B00 *arg0) {
     return arg0->fadeMode;
 }
 
-void func_8006FE28_70A28(Node_70B00 *arg0, u8 arg1, u8 arg2, u8 arg3) {
-    Node_70B00 *var_a0;
-
-    var_a0 = arg0;
-    if (var_a0 == NULL) {
-        var_a0 = &D_800A3370_A3F70;
+void setViewportEnvColor(Node_70B00 *node, u8 r, u8 g, u8 b) {
+    if (node == NULL) {
+        node = &D_800A3370_A3F70;
     }
-    var_a0->unkBC = arg1;
-    var_a0->unkBD = arg2;
-    var_a0->unkBE = arg3;
+    node->envR = r;
+    node->envG = g;
+    node->envB = b;
 }
 
 void func_8006FE48_70A48(u16 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5) {
