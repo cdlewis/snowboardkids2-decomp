@@ -629,7 +629,7 @@ s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 tar
 
 s32 setupSlotRotateWithSpeed(
     CutsceneSlotData *slot,
-    SceneModel *model,
+    SceneModel *unused,
     s16 targetRotY,
     s32 speedMult,
     s32 duration,

@@ -34,7 +34,7 @@ s32 setupSlotMoveToWithRotation(CutsceneSlotData *slot, SceneModel *unused, s32 
 void setupSlotWalkTo(CutsceneSlotData *slot, SceneModel *model, s32 targetX, s32 targetY, s32 targetZ, s16 duration, s16 finalRotY, s16 walkAnim, s8 turnAnimFlag, s8 decelMode);
 s32 setupSlotRotateTo(CutsceneSlotData *slot, SceneModel *unused, s16 targetRotY);
 s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 targetRotY, s16 direction, s16 duration);
-s32 setupSlotRotateWithSpeed(CutsceneSlotData *slot, SceneModel *model, s16 targetRotY, s32 speedMult, s32 duration, s32 direction);
+s32 setupSlotRotateWithSpeed(CutsceneSlotData *slot, SceneModel *unused, s16 targetRotY, s32 speedMult, s32 duration, s32 direction);
 void setupSlotOrbit(CutsceneSlotData *slot, s32 orbitDir, s16 duration, s16 orbitSpeed);
 void interpolateSlotScaleX(CutsceneSlotData *slot, s32 targetScaleX, s16 duration);
 void interpolateSlotScaleY(CutsceneSlotData *slot, s32 targetScaleY, s16 duration);
