@@ -181,7 +181,7 @@ extern StateFunc D_800BCB20_B40E0[];
 extern s16 D_800BCB30_B40F0[];
 extern s16 D_800BCB3C_B40FC[];
 extern s32 gButtonsPressed[];
-extern FuncPtr D_800BCB5C_B411C[];
+extern FuncPtr gChaseAttackPhaseHandlers[];
 extern FuncPtr D_800BCB74_B4134[];
 extern s16 D_800BCB7C_B413C[];
 extern u16 D_800BCB7E_B413E[];
@@ -362,8 +362,8 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     return 1;
 }
 
-void func_800BB86C_B2E2C(Arg0Struct *arg0) {
-    D_800BCB5C_B411C[arg0->behaviorPhase](arg0);
+void dispatchChaseAttackPhase(Arg0Struct *arg0) {
+    gChaseAttackPhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
 s32 func_800BB89C_B2E5C(Arg0Struct *arg0) {
