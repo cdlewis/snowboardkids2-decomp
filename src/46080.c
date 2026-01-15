@@ -3040,7 +3040,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
-                func_800BBA50(courseId);
+                scheduleShootCrossTargetsTask(courseId);
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);

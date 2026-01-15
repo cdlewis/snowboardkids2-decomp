@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "geometry.h"
 
 typedef struct {
     u8 _pad[0x14];
@@ -14,3 +15,5 @@ typedef struct {
 } AD510Arg;
 
 void func_800BBA90_AD510(AD510Arg *arg0);
+s32 checkProjectileTargetHit(Vec3i *arg0, s32 arg1);
+void scheduleShootCrossTargetsTask(s32 courseId);

@@ -16,27 +16,27 @@
 USE_ASSET(_4060A0);
 
 typedef struct {
-    s8 unk0;
+    s8 textureIndex;
     u8 pad1[3];
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-} BB504Entry;
+    s32 x;
+    s32 y;
+    s32 z;
+} ShootCrossTargetEntry;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    BB504Entry *unk8;
-    void *unkC;
-    s32 *unk10;
+    void *transformMatrices;  // Transform3D array
+    void *vertexData;         // Vtx[4] for rendering quad
+    ShootCrossTargetEntry *targets;
+    void *spriteAsset;        // Texture data for targets
+    s32 *targetPositionData;  // Compressed position data
     u8 _pad14[0x2];
-    s16 unk16;
-} ACD30Struct;
+    s16 targetCount;
+} ShootCrossTargets;
 
 typedef struct {
     u8 _pad[0x24];
-    ACD30Struct *unk24;
-} ACD30AllocationStruct;
+    ShootCrossTargets *shootCrossTargets;
+} ShootCrossAllocationStruct;
 
 typedef struct {
     void *unk0;
@@ -46,10 +46,10 @@ typedef struct {
     Player *unk10;
     void *unk14;
     u8 pad18[0xC];
-    ACD30Struct *unk24;
+    ShootCrossTargets *shootCrossTargets;
     u8 pad28[0x32];
-    u8 unk5A;
-} BB504Allocation;
+    u8 hitCount;
+} ProjectileAllocation;
 
 typedef struct {
     u8 _pad[0x5C];
@@ -58,8 +58,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x14];
-    s16 unk14;
-} ACD30Task;
+    s16 courseId;
+} ShootCrossTask;
 
 typedef struct {
     /* 0x00 */ Transform3D matrix;
@@ -67,12 +67,12 @@ typedef struct {
     /* 0x3C */ u16 unk3C;
 } AD594Arg;
 
-void func_800BB690_AD110(ACD30Struct *arg0);
+void renderShootCrossTargets(ShootCrossTargets *arg0);
 void func_800BBB14_AD594(AD594Arg *arg0);
 void func_800BBB70_AD5F0(AD510Arg *arg0);
-void func_800BB4B8_ACF38(ACD30Struct *arg0);
-void func_800BB310_ACD90(ACD30Struct *arg0);
-void func_800BB428_ACEA8(ACD30Struct *arg0);
+void cleanupShootCrossTargets(ShootCrossTargets *arg0);
+void initShootCrossTargetsCallback(ShootCrossTargets *arg0);
+void activateShootCrossTargets(ShootCrossTargets *arg0);
 
 extern Gfx D_8009A780_9B380[];
 extern Gfx *gRegionAllocPtr;
@@ -81,79 +81,79 @@ extern s32 D_800A8B14_9FE84;
 extern s32 D_8009A8A4_9B4A4;
 extern void *D_800BBBB0_AD630;
 
-void func_800BB2B0_ACD30(ACD30Struct *arg0) {
-    arg0->unkC = loadAsset_34F9A0();
-    arg0->unk10 = loadCompressedData(&_4060A0_ROM_START, &_4060A0_ROM_END, 0x160);
-    arg0->unk0 = NULL;
-    setCleanupCallback(func_800BB4B8_ACF38);
-    setCallback(func_800BB310_ACD90);
+void initShootCrossTargets(ShootCrossTargets *arg0) {
+    arg0->spriteAsset = loadAsset_34F9A0();
+    arg0->targetPositionData = loadCompressedData(&_4060A0_ROM_START, &_4060A0_ROM_END, 0x160);
+    arg0->transformMatrices = NULL;
+    setCleanupCallback(cleanupShootCrossTargets);
+    setCallback(initShootCrossTargetsCallback);
 }
 
-void func_800BB310_ACD90(ACD30Struct *arg0) {
+void initShootCrossTargetsCallback(ShootCrossTargets *arg0) {
     s32 i;
     s32 *ptr;
-    BB504Entry *entries;
+    ShootCrossTargetEntry *targets;
     s32 pad[2];
     s32 offset;
-    ACD30AllocationStruct *allocation;
-    BB504Entry *temp;
+    ShootCrossAllocationStruct *allocation;
+    ShootCrossTargetEntry *temp;
 
-    allocation = (ACD30AllocationStruct *)getCurrentAllocation();
-    arg0->unk4 = &D_800BBBB0_AD630;
-    arg0->unk8 = (BB504Entry *)((s8 *)arg0->unk10 + *arg0->unk10);
-    entries = *(BB504Entry *volatile *)&arg0->unk8;
-    arg0->unk16 = 0;
+    allocation = (ShootCrossAllocationStruct *)getCurrentAllocation();
+    arg0->vertexData = &D_800BBBB0_AD630;
+    arg0->targets = (ShootCrossTargetEntry *)((s8 *)arg0->targetPositionData + *arg0->targetPositionData);
+    targets = *(ShootCrossTargetEntry *volatile *)&arg0->targets;
+    arg0->targetCount = 0;
 
-    if (entries->unk0 >= 0) {
-        temp = entries;
+    if (targets->textureIndex >= 0) {
+        temp = targets;
         do {
-            arg0->unk16++;
-        } while (temp[arg0->unk16].unk0 >= 0);
+            arg0->targetCount++;
+        } while (temp[arg0->targetCount].textureIndex >= 0);
     }
 
     i = 0;
-    arg0->unk0 = allocateNodeMemory(arg0->unk16 << 6);
+    arg0->transformMatrices = allocateNodeMemory(arg0->targetCount << 6);
 
-    if (arg0->unk16 > 0) {
+    if (arg0->targetCount > 0) {
         ptr = &D_8009A8A4_9B4A4;
         do {
             offset = i << 4;
-            *((s8 *)(offset + (s32)arg0->unk8)) = 0;
-            memcpy(ptr, (s8 *)(offset + (s32)arg0->unk8 + 4), 0xC);
-            func_8006BFB8_6CBB8(ptr - 5, (u8 *)arg0->unk0 + (i << 6));
+            *((s8 *)(offset + (s32)arg0->targets)) = 0;
+            memcpy(ptr, (s8 *)(offset + (s32)arg0->targets + 4), 0xC);
+            func_8006BFB8_6CBB8(ptr - 5, (u8 *)arg0->transformMatrices + (i << 6));
             i++;
-        } while (i < arg0->unk16);
+        } while (i < arg0->targetCount);
     }
 
-    allocation->unk24 = arg0;
-    setCallback(func_800BB428_ACEA8);
+    allocation->shootCrossTargets = arg0;
+    setCallback(activateShootCrossTargets);
 }
 
-void func_800BB428_ACEA8(ACD30Struct *arg0) {
+void activateShootCrossTargets(ShootCrossTargets *arg0) {
     s32 i;
 
-    for (i = 0; i < arg0->unk16; i++) {
-        func_8005BCB8_5C8B8(&arg0->unk8[i].unk4, 0x180000, 0x300000);
+    for (i = 0; i < arg0->targetCount; i++) {
+        func_8005BCB8_5C8B8(&arg0->targets[i].x, 0x180000, 0x300000);
     }
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 4, func_800BB690_AD110, arg0);
+        debugEnqueueCallback((u16)i, 4, renderShootCrossTargets, arg0);
     }
 }
 
-void func_800BB4B8_ACF38(ACD30Struct *arg0) {
-    ACD30AllocationStruct *allocation = (ACD30AllocationStruct *)getCurrentAllocation();
-    allocation->unk24 = NULL;
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
-    arg0->unk10 = freeNodeMemory(arg0->unk10);
+void cleanupShootCrossTargets(ShootCrossTargets *arg0) {
+    ShootCrossAllocationStruct *allocation = (ShootCrossAllocationStruct *)getCurrentAllocation();
+    allocation->shootCrossTargets = NULL;
+    arg0->transformMatrices = freeNodeMemory(arg0->transformMatrices);
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->targetPositionData = freeNodeMemory(arg0->targetPositionData);
 }
 
-s32 func_800BB504(Vec3i *arg0, s32 arg1) {
+s32 checkProjectileTargetHit(Vec3i *arg0, s32 arg1) {
     s32 pos[3];
     s32 unused[2];
-    BB504Allocation *allocation;
-    ACD30Struct *s1;
+    ProjectileAllocation *allocation;
+    ShootCrossTargets *targets;
     s32 range;
     s32 negRange;
     s32 i = 0;
@@ -162,10 +162,10 @@ s32 func_800BB504(Vec3i *arg0, s32 arg1) {
     s32 yOffset;
     s32 idx;
 
-    allocation = (BB504Allocation *)getCurrentAllocation();
-    s1 = allocation->unk24;
+    allocation = (ProjectileAllocation *)getCurrentAllocation();
+    targets = allocation->shootCrossTargets;
 
-    if (s1) {
+    if (targets) {
         goto check_count;
     }
 
@@ -173,14 +173,14 @@ s32 func_800BB504(Vec3i *arg0, s32 arg1) {
 
 found:
     *entry = 1;
-    allocation->unk5A = allocation->unk5A + 1;
+    allocation->hitCount = allocation->hitCount + 1;
     playTrickSuccessVoice(allocation->unk10);
     return 1;
 
 check_count:
     range = arg1 + 0x140000;
 
-    if (s1->unk16 <= 0) {
+    if (targets->targetCount <= 0) {
         return 0;
     }
 
@@ -190,11 +190,11 @@ check_count:
     do {
         memcpy(pos, arg0, sizeof(Vec3i));
         idx = i << 4;
-        x = pos[0] - s1->unk8[i].unk4;
+        x = pos[0] - targets->targets[i].x;
         pos[0] = x;
-        y = (pos[1] + yOffset) - s1->unk8[i].unk8;
+        y = (pos[1] + yOffset) - targets->targets[i].y;
         pos[1] = y;
-        z = pos[2] - s1->unk8[i].unkC;
+        z = pos[2] - targets->targets[i].z;
         pos[2] = z;
 
         if (negRange < x) {
@@ -204,7 +204,7 @@ check_count:
                         if (negRange < z) {
                             if (z < range) {
                                 if (distance_3d(x, y, z) < range) {
-                                    entry = (s8 *)(idx + (s32)s1->unk8);
+                                    entry = (s8 *)(idx + (s32)targets->targets);
                                     if (*entry == 0) {
                                         goto found;
                                     }
@@ -218,12 +218,12 @@ check_count:
         }
 
         i++;
-    } while (i < s1->unk16);
+    } while (i < targets->targetCount);
 
     return 0;
 }
 
-void func_800BB690_AD110(ACD30Struct *arg0) {
+void renderShootCrossTargets(ShootCrossTargets *arg0) {
     OutputStruct_19E80 tableEntry;
     s32 prevTextureIndex;
     s32 i;
@@ -233,15 +233,15 @@ void func_800BB690_AD110(ACD30Struct *arg0) {
     gGraphicsMode = -1;
     gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
 
-    for (i = 0; i < arg0->unk16; i++) {
+    for (i = 0; i < arg0->targetCount; i++) {
         offset = i << 4;
 
-        if (isObjectCulled((Vec3i *)((u8 *)arg0->unk8 + offset + 4)) == 0) {
-            s8 textureIndex = *(s8 *)(offset + (s32)arg0->unk8);
+        if (isObjectCulled((Vec3i *)((u8 *)arg0->targets + offset + 4)) == 0) {
+            s8 textureIndex = *(s8 *)(offset + (s32)arg0->targets);
 
             if (prevTextureIndex != textureIndex) {
                 prevTextureIndex = textureIndex;
-                getTableEntryByU16Index(arg0->unkC, (u16)prevTextureIndex, &tableEntry);
+                getTableEntryByU16Index(arg0->spriteAsset, (u16)prevTextureIndex, &tableEntry);
 
                 gDPLoadMultiBlock_4b(
                     gRegionAllocPtr++,
@@ -263,23 +263,23 @@ void func_800BB690_AD110(ACD30Struct *arg0) {
                 gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
             }
 
-            gSPMatrix(gRegionAllocPtr++, (u8 *)arg0->unk0 + (i << 6), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(gRegionAllocPtr++, (u8 *)arg0->transformMatrices + (i << 6), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-            gSPVertex(gRegionAllocPtr++, arg0->unk4, 4, 0);
+            gSPVertex(gRegionAllocPtr++, arg0->vertexData, 4, 0);
 
             gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
         }
     }
 }
 
-void func_800BBA50(s32 arg0) {
-    ACD30Task *task;
+void scheduleShootCrossTargetsTask(s32 courseId) {
+    ShootCrossTask *task;
 
-    task = (ACD30Task *)scheduleTask(func_800BB2B0_ACD30, 0, 0, 0x32);
+    task = (ShootCrossTask *)scheduleTask(initShootCrossTargets, 0, 0, 0x32);
     if (task != NULL) {
-        task->unk14 = arg0;
+        task->courseId = courseId;
     }
 }
 

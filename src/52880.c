@@ -9,6 +9,7 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "levels/snowboard_street_shoot_cross.h"
 #include "levels/starlight_highway.h"
 #include "race_session.h"
 #include "rand.h"
@@ -1993,7 +1994,7 @@ void loadGhostTargetProjectileAsset(Struct_52880 *arg0) {
 }
 
 void checkGhostTargetProjectileHit(Struct_52880 *arg0) {
-    if (func_800BB504(&arg0->pos, 0x80000)) {
+    if (checkProjectileTargetHit(&arg0->pos, 0x80000)) {
         arg0->hitCount++;
     }
 }
