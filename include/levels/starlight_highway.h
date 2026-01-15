@@ -5,8 +5,8 @@
 #include "geometry.h"
 
 typedef struct {
-    s16 unk0;
-} func_800BC528_AE8E8_arg;
+    s16 timer;
+} FireworkShowTimerState;
 
 typedef struct {
     /* 0x00 */ Transform3D node1;
@@ -50,7 +50,7 @@ s32 func_800BB504(Vec3i *arg0, s32 arg1);
 void spawnDebugDisplayListTask(s16 arg0);
 void spawnStarlightItems(void);
 void func_800BC9BC(void);
-void func_800BC528_AE8E8(func_800BC528_AE8E8_arg *arg0);
+void initFireworkShowTimer(FireworkShowTimerState *arg0);
 void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0);
 void initStarlightItemTask(StarlightItemTaskState *);
 void cleanupStarlightItemTask(DualSegmentCleanupState *);

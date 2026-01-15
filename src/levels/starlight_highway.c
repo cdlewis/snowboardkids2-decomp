@@ -152,7 +152,7 @@ void updateStarlightFireworkSimple(StarlightFireworkTaskState *);
 void updateStarlightFireworkComplex(StarlightFireworkTaskState *);
 void updateStarlightFirework(StarlightFireworkTaskState *);
 void cleanupStarlightFireworkTask(StarlightFireworkCleanupState *);
-void func_800BC550_AE910(s16 *arg0);
+void updateFireworkShowTimer(s16 *arg0);
 void func_800BC768_AEB28(func_800BC6C4_AEA84_arg *arg0);
 
 void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0) {
@@ -804,12 +804,12 @@ void cleanupStarlightFireworkTask(StarlightFireworkCleanupState *arg0) {
     arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
-void func_800BC528_AE8E8(func_800BC528_AE8E8_arg *arg0) {
-    arg0->unk0 = 0xF0;
-    setCallback(&func_800BC550_AE910);
+void initFireworkShowTimer(FireworkShowTimerState *arg0) {
+    arg0->timer = 0xF0;
+    setCallback(&updateFireworkShowTimer);
 }
 
-void func_800BC550_AE910(s16 *arg0) {
+void updateFireworkShowTimer(s16 *arg0) {
     TaskAllocationState *allocation;
     StarlightFireworkTaskState *task;
     s32 new_var;
