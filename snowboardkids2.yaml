@@ -738,6 +738,128 @@ segments:
       - [0xB7E70, data]
       - [0xB9C40, data]
 
+  - name: _16D920
+    type: bin
+    vram: 0
+    start: 0x16D920
+
+  - name: _170780
+    type: bin
+    vram: 0
+    start: 0x170780
+
+  - name: _1734B0
+    type: bin
+    vram: 0
+    start: 0x1734B0
+
+  - name: _1768E0
+    type: bin
+    vram: 0
+    start: 0x1768E0
+
+  - name: _1793A0
+    type: bin
+    vram: 0
+    start: 0x1793A0
+
+  - name: _17BE20
+    type: bin
+    vram: 0
+    start: 0x17BE20
+
+  - name: _17EA60
+    type: bin
+    vram: 0
+    start: 0x17EA60
+
+  - name: _1817F0
+    type: bin
+    vram: 0
+    start: 0x1817F0
+
+  - name: _184050
+    type: bin
+    vram: 0
+    start: 0x184050
+
+  - name: _186B10
+    type: bin
+    vram: 0
+    start: 0x186B10
+
+  - name: _189C20
+    type: bin
+    vram: 0
+    start: 0x189C20
+
+  - name: _18C490
+    type: bin
+    vram: 0
+    start: 0x18C490
+
+  - name: _18F2B0
+    type: bin
+    vram: 0
+    start: 0x18F2B0
+
+  - name: _191EA0
+    type: bin
+    vram: 0
+    start: 0x191EA0
+
+  - name: _194840
+    type: bin
+    vram: 0
+    start: 0x194840
+
+  - name: _197300
+    type: bin
+    vram: 0
+    start: 0x197300
+
+  - name: _199A90
+    type: bin
+    vram: 0
+    start: 0x199A90
+
+  - name: _19CCF0
+    type: bin
+    vram: 0
+    start: 0x19CCF0
+
+  - name: _1A0190
+    type: bin
+    vram: 0
+    start: 0x1A0190
+
+  - name: _1A35C0
+    type: bin
+    vram: 0
+    start: 0x1A35C0
+
+  - name: _1A6B00
+    type: bin
+    vram: 0
+    start: 0x1A6B00
+
+  - name: _1A9B70
+    type: bin
+    vram: 0
+    start: 0x1A9B70
+
+  - name: _1ACCA0
+    type: bin
+    vram: 0
+    start: 0x1ACCA0
+
+  - name: _1AFBA0
+    type: bin
+    vram: 0
+    start: 0x1AFBA0
+
+  - [0x1B26E0, bin]
+
   - name: _1DA660
     type: code
     vram: 0x800B00C0

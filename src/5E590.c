@@ -96,8 +96,9 @@ AssetPair D_8009A3A0_9AFA0[];
 AssetPair D_8009A3D0_9AFD0[];
 AssetPair D_8009A550_9B150[];
 
+USE_ASSET(_16D920);
 AssetPair D_80094210_94E10[] = {
-    { (void *)0x0016D920, (void *)0x00170780 },
+    { &_16D920_ROM_START, &_16D920_ROM_END   },
     { (void *)0x00170780, (void *)0x001734B0 },
     { (void *)0x001734B0, (void *)0x001768E0 },
     { (void *)0x001768E0, (void *)0x001793A0 },
