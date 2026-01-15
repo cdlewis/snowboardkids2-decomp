@@ -71,8 +71,8 @@ void func_8005D61C_5E21C(Player *player) {
             partIndex = 0;
             partPtr = (u8 *)player;
             do {
-                *(s32 *)(partPtr + 0x58) =
-                    (s32)loadAssetByIndex_95380(player->unkBB9, player->unkBBA) + D_800941BC_94DBC[partIndex] * 0x10;
+                *(s32 *)(partPtr + 0x58) = (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) +
+                                           D_800941BC_94DBC[partIndex] * 0x10;
                 partIndex += 1;
                 partPtr += 0x3C;
             } while (partIndex < 0x10);
@@ -82,7 +82,7 @@ void func_8005D61C_5E21C(Player *player) {
             partPtr = (u8 *)player;
             do {
                 *(s32 *)(partPtr + 0x58) =
-                    (s32)loadAssetByIndex_95380(player->unkBB9, player->unkBBA) + partIndex * 0x10;
+                    (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) + partIndex * 0x10;
                 partPtr += 0x3C;
             } while (++partIndex < 0x10);
         }
@@ -93,8 +93,8 @@ void func_8005D61C_5E21C(Player *player) {
             partIndex2 = 0;
             partPtr2 = (u8 *)player;
             do {
-                *(s32 *)(partPtr2 + 0x58) =
-                    loadAssetByIndex_953B0(player->unkBB9, player->unkBBA) + D_800941BC_94DBC[partIndex2] * 0x10;
+                *(s32 *)(partPtr2 + 0x58) = loadAssetByIndex_953B0(player->characterId, player->boardIndex) +
+                                            D_800941BC_94DBC[partIndex2] * 0x10;
                 partIndex2 += 1;
                 partPtr2 += 0x3C;
             } while (partIndex2 < 0x10);
@@ -103,13 +103,14 @@ void func_8005D61C_5E21C(Player *player) {
             partIndex2 = 0;
             partPtr2 = (u8 *)player;
             do {
-                *(s32 *)(partPtr2 + 0x58) = loadAssetByIndex_953B0(player->unkBB9, player->unkBBA) + partIndex2 * 0x10;
+                *(s32 *)(partPtr2 + 0x58) =
+                    loadAssetByIndex_953B0(player->characterId, player->boardIndex) + partIndex2 * 0x10;
                 partPtr2 += 0x3C;
             } while (++partIndex2 < 0x10);
         }
     }
 
-    lookupTable = D_80094180_94D80 + player->unkBB9 * 5;
+    lookupTable = D_80094180_94D80 + player->characterId * 5;
     tableValue = lookupTable[player->unkBE6];
     if (tableValue == 0) {
         goto copy_basic;
@@ -123,7 +124,7 @@ void func_8005D61C_5E21C(Player *player) {
     }
     player->unk23C = flags;
     player->unk240 = (s32)player->unk24;
-    player->unk238 = (s32)func_8005DDD8_5E9D8(player->unkBB9, player->unkBBA) + tableValue * 0x10 - 0x10;
+    player->unk238 = (s32)func_8005DDD8_5E9D8(player->characterId, player->boardIndex) + tableValue * 0x10 - 0x10;
 }
 
 void func_8005D804_5E404(Player *arg0, u8 arg1, u8 arg2) {

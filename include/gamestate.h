@@ -174,8 +174,8 @@ typedef struct {
     u8 spinsPerformedMask;
     u8 unkBB7;
     u8 playerIndex;
-    u8 unkBB9;
-    u8 unkBBA;
+    u8 characterId;
+    u8 boardIndex;
     u8 unkBBB;
     u8 unkBBC;
     u8 behaviorMode;

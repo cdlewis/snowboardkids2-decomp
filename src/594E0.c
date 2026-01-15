@@ -234,31 +234,31 @@ s32 getPlayerRaceGold(Player *player) {
     return 0;
 }
 
-void func_80059ADC_5A6DC(Player *arg0) {
-    if (arg0->unkBB9 < 9) {
+void playTrickLandingVoice(Player *player) {
+    if (player->characterId < 9) {
         switch (randA() % 3) {
             case 0:
                 queueSoundAtPositionWithPriority(
-                    &arg0->worldPos,
-                    D_80093F90_94B90[arg0->unkBB9],
+                    &player->worldPos,
+                    D_80093F90_94B90[player->characterId],
                     5,
-                    arg0->playerIndex + 4
+                    player->playerIndex + 4
                 );
                 break;
             case 1:
                 queueSoundAtPositionWithPriority(
-                    &arg0->worldPos,
-                    D_80093FA4_94BA4[arg0->unkBB9],
+                    &player->worldPos,
+                    D_80093FA4_94BA4[player->characterId],
                     5,
-                    arg0->playerIndex + 4
+                    player->playerIndex + 4
                 );
                 break;
             case 2:
                 queueSoundAtPositionWithPriority(
-                    &arg0->worldPos,
-                    D_80093FB8_94BB8[arg0->unkBB9],
+                    &player->worldPos,
+                    D_80093FB8_94BB8[player->characterId],
                     5,
-                    arg0->playerIndex + 4
+                    player->playerIndex + 4
                 );
                 break;
         }
@@ -266,7 +266,7 @@ void func_80059ADC_5A6DC(Player *arg0) {
 }
 
 void func_80059BD4_5A7D4(Player *arg0) {
-    u8 index = arg0->unkBB9;
+    u8 index = arg0->characterId;
     if (index < 9) {
         if (arg0->unkB88 == 0) {
             queueSoundAtPositionWithPriority(&arg0->worldPos, D_80093FCC_94BCC[index], 5, arg0->playerIndex + 4);
@@ -275,7 +275,7 @@ void func_80059BD4_5A7D4(Player *arg0) {
 }
 
 void func_80059C24_5A824(Player *arg0) {
-    u8 index = arg0->unkBB9;
+    u8 index = arg0->characterId;
     if (index < 9) {
         if (arg0->unkB88 == 0) {
             queueSoundAtPositionWithPriority(&arg0->worldPos, D_80093FE0_94BE0[index], 5, arg0->playerIndex + 4);
@@ -285,7 +285,7 @@ void func_80059C24_5A824(Player *arg0) {
 }
 
 void func_80059C90_5A890(Player *arg0) {
-    u8 index = arg0->unkBB9;
+    u8 index = arg0->characterId;
     if (index < 9) {
         if (arg0->unkB88 == 0) {
             queueSoundAtPositionWithPriority(&arg0->worldPos, D_80093FF4_94BF4[index], 5, arg0->playerIndex + 4);
@@ -294,7 +294,7 @@ void func_80059C90_5A890(Player *arg0) {
 }
 
 void func_80059CE0_5A8E0(Player *arg0) {
-    u8 index = arg0->unkBB9;
+    u8 index = arg0->characterId;
     if (index < 9) {
         if (arg0->unkB88 == 0) {
             queueSoundAtPositionWithPriority(&arg0->worldPos, D_80094008_94C08[index], 5, arg0->playerIndex + 4);
@@ -303,24 +303,34 @@ void func_80059CE0_5A8E0(Player *arg0) {
 }
 
 void func_80059D30_5A930(Player *arg0) {
-    if (arg0->unkBB9 < 9) {
+    if (arg0->characterId < 9) {
         if (randA() & 1) {
-            queueSoundAtPositionWithPriority(&arg0->worldPos, D_8009401C_94C1C[arg0->unkBB9], 5, arg0->playerIndex + 4);
+            queueSoundAtPositionWithPriority(
+                &arg0->worldPos,
+                D_8009401C_94C1C[arg0->characterId],
+                5,
+                arg0->playerIndex + 4
+            );
         } else {
-            queueSoundAtPositionWithPriority(&arg0->worldPos, D_80094030_94C30[arg0->unkBB9], 5, arg0->playerIndex + 4);
+            queueSoundAtPositionWithPriority(
+                &arg0->worldPos,
+                D_80094030_94C30[arg0->characterId],
+                5,
+                arg0->playerIndex + 4
+            );
         }
     }
 }
 
 void func_80059DB8_5A9B8(Player *arg0) {
-    u8 index = arg0->unkBB9;
+    u8 index = arg0->characterId;
     if (index < 9) {
         queueSoundAtPositionWithPriority(&arg0->worldPos, D_80094044_94C44[index], 5, arg0->playerIndex + 4);
     }
 }
 
 void func_80059DFC_5A9FC(Player *arg0) {
-    u8 index = arg0->unkBB9;
+    u8 index = arg0->characterId;
     if (index < 9) {
         queueSoundAtPositionWithPriority(&arg0->worldPos, D_80094058_94C58[index], 5, arg0->playerIndex + 4);
     }
@@ -329,7 +339,7 @@ void func_80059DFC_5A9FC(Player *arg0) {
 extern u16 D_8009406C_94C6C[];
 
 void func_80059E40_5AA40(Player *arg0) {
-    u8 index = arg0->unkBB9;
+    u8 index = arg0->characterId;
     if (index < 9) {
         queueSoundAtPositionWithPriority(&arg0->worldPos, D_8009406C_94C6C[index], 5, arg0->playerIndex + 4);
     }

@@ -257,7 +257,7 @@ void applyCharacterBoardStats(Player *player) {
         charId = 0;
     } else {
         boardStats = gBoardStatsTable[player->unkBBB];
-        charId = player->unkBB9;
+        charId = player->characterId;
     }
 
     player->unkAA0 = boardStats[charId].param0 * 353894 / 100 + 0xEB333;

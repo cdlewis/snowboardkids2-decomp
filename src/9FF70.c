@@ -798,7 +798,7 @@ s32 updatePostTrickDescentStep(Player *player) {
             } else {
                 player->behaviorStep = player->unkBCD + 6;
                 player->behaviorCounter = 0;
-                func_80059ADC_5A6DC(player);
+                playTrickLandingVoice(player);
                 return 1;
             }
         } else {
@@ -3574,14 +3574,14 @@ void func_800B99E0(void *varg0) {
     u8 v1;
 
     alloc = getCurrentAllocation();
-    arg0->unk4 = loadAssetByIndex_94F90(arg0->unkBB9, arg0->unkBBA);
-    arg0->unk8 = loadAssetByIndex_95200(arg0->unkBB9, arg0->unkBBA);
-    arg0->unk0 = loadAssetByIndex_953E0(arg0->unkBB9);
+    arg0->unk4 = loadAssetByIndex_94F90(arg0->characterId, arg0->boardIndex);
+    arg0->unk8 = loadAssetByIndex_95200(arg0->characterId, arg0->boardIndex);
+    arg0->unk0 = loadAssetByIndex_953E0(arg0->characterId);
 
-    v0 = arg0->unkBB9;
+    v0 = arg0->characterId;
     if (v0 < 6) {
-        arg0->unk20 = func_8005DE04_5EA04(arg0->unkBB9, arg0->unkBBA);
-        arg0->unk24 = func_8005DE30_5EA30(arg0->unkBB9, arg0->unkBBA);
+        arg0->unk20 = func_8005DE04_5EA04(arg0->characterId, arg0->boardIndex);
+        arg0->unk24 = func_8005DE30_5EA30(arg0->characterId, arg0->boardIndex);
     }
 
     arg0->unkC = loadAssetByIndex_95500(arg0->unkBBB);

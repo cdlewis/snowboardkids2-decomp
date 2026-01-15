@@ -219,7 +219,7 @@ s8 func_800BA694_AA544(Player *player) {
                 player->unkBE5 = 1;
                 return 8;
             }
-            if (player->unkBB9 >= 6) {
+            if (player->characterId >= 6) {
                 player->unkBE5 = 1;
                 return 8;
             }

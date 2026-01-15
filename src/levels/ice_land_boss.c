@@ -57,8 +57,8 @@ typedef struct {
     u8 _padBB5[0xBB7 - 0xBB5];
     u8 unkBB7;
     u8 _padBB8[0xBB9 - 0xBB8];
-    u8 unkBB9;
-    u8 unkBBA;
+    u8 characterId;
+    u8 boardIndex;
     u8 _padBBB[0xBBD - 0xBBB];
     u8 behaviorMode;
     u8 behaviorPhase;
@@ -208,8 +208,8 @@ typedef struct {
     u8 spinsPerformedMask;
     u8 unkBB7;
     u8 unkBB8;
-    u8 unkBB9;
-    u8 unkBBA;
+    u8 characterId;
+    u8 boardIndex;
     u8 unkBBB;
     u8 unkBBC;
     u8 behaviorMode;
@@ -440,7 +440,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
         extra->unk60 = (s32)arg0->unk0_3C[0].unk8;
         temp = i * 0x10;
         extra->unk64 = 0;
-        extra->unk58 = (void *)(loadAssetByIndex_953B0(arg0->unkBB9, arg0->unkBBA) + temp);
+        extra->unk58 = (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + temp);
     }
 
     arg0->unkA8C = 0;
@@ -483,7 +483,7 @@ void func_800BB910_B0E00(Player *arg0) {
 
     for (i = 0; i < 12; i++) {
         *(void **)((u8 *)elements + i * 0x3C + 0x58) =
-            (void *)(loadAssetByIndex_953B0(arg0->unkBB9, arg0->unkBBA) + i * 16 + 0xC0);
+            (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + i * 16 + 0xC0);
     }
 
     arg0->unkAE0 = 0x100000;
