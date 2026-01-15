@@ -731,7 +731,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800BC008_B14F8(func_800BC4AC_arg *arg0) {
+s32 iceLandBossChaseExitPhase(func_800BC4AC_arg *arg0) {
     s32 pad[3];
 
     getCurrentAllocation();
