@@ -24,7 +24,7 @@ extern Transform3D D_8009A890_9B490;
 extern s32 D_8009A8A4_9B4A4;
 extern s32 D_8009A8A8_9B4A8;
 extern s32 D_8009A8AC_9B4AC;
-extern s32 D_800BCB54_B4114[];
+extern s32 gJingleTownBossSpawnPos[];
 
 typedef struct {
     s32 unk0;
@@ -187,7 +187,7 @@ extern s16 D_800BCB7C_B413C[];
 extern u16 D_800BCB7E_B413E[];
 extern s32 D_800BCBA0_B4160[][3];
 extern Vec3i D_800BCB68_B4128;
-extern s32 D_800BCB54_B4114[];
+extern s32 gJingleTownBossSpawnPos[];
 void func_800BC474_B3A34(Arg0Struct *);
 extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
@@ -306,26 +306,26 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     void *alloc;
 
     alloc = getCurrentAllocation();
-    memcpy((u8 *)arg0 + 0x970, identityMatrix, sizeof(Transform3D));
-    createYRotationMatrix((Transform3D *)((u8 *)arg0 + 0x970), *(u16 *)((u8 *)arg0 + 0xA94));
-    memcpy((u8 *)arg0 + 0x990, identityMatrix, sizeof(Transform3D));
-    memcpy((u8 *)arg0 + 0x9B0, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk970, identityMatrix, sizeof(Transform3D));
+    createYRotationMatrix(&arg0->unk970, arg0->unkA94);
+    memcpy(&arg0->unk990, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk9B0, identityMatrix, sizeof(Transform3D));
 
-    *(s32 *)((u8 *)arg0 + 0x434) = D_800BCB54_B4114[*(u8 *)((u8 *)arg0 + 0xBB8)];
+    arg0->unk434.x = gJingleTownBossSpawnPos[arg0->unkBB8];
     getTrackSegmentWaypoints((u8 *)alloc + 0x30, 0, &sp10, &sp20);
-    *(s32 *)((u8 *)arg0 + 0x43C) = *(s32 *)((u8 *)&sp10 + 8) + 0x200000;
-    *(u16 *)((u8 *)arg0 + 0xB94) = func_80059E90_5AA90(arg0, (u8 *)alloc + 0x30, 0, (Vec3i *)((u8 *)arg0 + 0x434));
-    *(s32 *)((u8 *)arg0 + 0x438) = func_8005CFC0_5DBC0(
+    arg0->unk434.z = sp10.z + 0x200000;
+    arg0->sectorIndex = func_80059E90_5AA90(arg0, (u8 *)alloc + 0x30, 0, &arg0->unk434);
+    arg0->unk434.y = func_8005CFC0_5DBC0(
         (u8 *)alloc + 0x30,
-        *(u16 *)((u8 *)arg0 + 0xB94) & 0xFFFF,
-        (Vec3i *)((u8 *)arg0 + 0x434),
+        arg0->sectorIndex,
+        &arg0->unk434,
         0x100000
     );
-    memcpy((u8 *)arg0 + 0x440, (u8 *)arg0 + 0x434, 0xC);
-    *(s32 *)((u8 *)arg0 + 0x44C) = 0;
-    *(s32 *)((u8 *)arg0 + 0x450) = 0;
-    *(s32 *)((u8 *)arg0 + 0x454) = 0;
-    *(u16 *)((u8 *)arg0 + 0xA94) = 0x1000;
+    memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+    arg0->velocity = 0;
+    arg0->unk450 = 0;
+    arg0->unk454 = 0;
+    arg0->unkA94 = 0x1000;
 
     {
         s32 i;
@@ -342,22 +342,22 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
         }
     }
 
-    *(u8 *)((u8 *)arg0 + 0xBBD) = 1;
+    arg0->behaviorMode = 1;
     *(s32 *)((u8 *)arg0 + 0xB30) = 0x180000;
     *(u8 *)((u8 *)arg0 + 0xBB4) = 2;
-    *(u8 *)((u8 *)arg0 + 0xBBE) = 0;
+    arg0->behaviorPhase = 0;
     *(s32 *)((u8 *)arg0 + 0xB2C) = 0x1EC000;
     *(s32 *)((u8 *)arg0 + 0xAE0) = 0x1EC000;
-    *(s32 *)((u8 *)arg0 + 0xB54) = (s32)((u8 *)arg0 + 0x434);
+    *(s32 *)((u8 *)arg0 + 0xB54) = (s32)&arg0->unk434;
     *(s32 *)((u8 *)arg0 + 0xB64) = 0x1EC000;
-    *(u8 *)((u8 *)arg0 + 0xB68) = *(u8 *)((u8 *)arg0 + 0xBB8);
-    if (*(u8 *)((u8 *)arg0 + 0xBC7) == 0) {
-        spawnChaseCameraTask(*(u8 *)((u8 *)arg0 + 0xBB8));
+    *(u8 *)((u8 *)arg0 + 0xB68) = arg0->unkBB8;
+    if (arg0->unkBC7 == 0) {
+        spawnChaseCameraTask(arg0->unkBB8);
     }
-    *(u8 *)((u8 *)arg0 + 0xBDB) = 0xA;
+    arg0->unkBDB = 0xA;
     if (*(s32 *)((u8 *)arg0 + 0x1C) != 0) {
         *(s32 *)((u8 *)arg0 + 0x28) =
-            *(s32 *)((u8 *)arg0 + 0x1C) + ((s32 *)*(s32 *)((u8 *)arg0 + 0x1C))[*(u8 *)((u8 *)arg0 + 0xBB8)];
+            *(s32 *)((u8 *)arg0 + 0x1C) + ((s32 *)*(s32 *)((u8 *)arg0 + 0x1C))[arg0->unkBB8];
     }
     return 1;
 }
