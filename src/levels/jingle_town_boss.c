@@ -183,8 +183,8 @@ extern s16 D_800BCB3C_B40FC[];
 extern s32 gButtonsPressed[];
 extern FuncPtr gChaseAttackPhaseHandlers[];
 extern FuncPtr gHoverAttackPhaseHandlers[];
-extern s16 D_800BCB7C_B413C[];
-extern u16 D_800BCB7E_B413E[];
+extern s16 gHoverIntroAnimTimers[];
+extern u16 gHoverIntroAnimFrames[];
 extern s32 D_800BCBA0_B4160[][3];
 extern Vec3i D_800BCB68_B4128;
 extern s32 gJingleTownBossSpawnPos[];
@@ -620,28 +620,28 @@ void dispatchHoverAttackPhase(Arg0Struct *arg0) {
     gHoverAttackPhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
-s32 func_800BBF70_B3530(Arg0Struct *arg0) {
-    u8 temp_v1;
+s32 jingleTownBossHoverAttackIntroPhase(Arg0Struct *arg0) {
+    u8 step;
 
-    temp_v1 = arg0->behaviorStep;
-    if (temp_v1 == 0) {
-        arg0->behaviorStep = temp_v1 + 1;
+    step = arg0->behaviorStep;
+    if (step == 0) {
+        arg0->behaviorStep = step + 1;
         arg0->unkB8C = 1;
         if (arg0->verticalVelocity > 0) {
             arg0->verticalVelocity = 0;
         }
         if (!(arg0->unkB84 & 0x80000)) {
-            u8 temp_v0 = arg0->unkBDB;
-            if (temp_v0 != 0) {
-                arg0->unkBDB = temp_v0 - 1;
+            u8 hoverCount = arg0->unkBDB;
+            if (hoverCount != 0) {
+                arg0->unkBDB = hoverCount - 1;
             }
         }
     }
 
     arg0->unkB8C--;
     if (arg0->unkB8C == 0) {
-        arg0->unkB8C = D_800BCB7C_B413C[arg0->behaviorCounter * 2];
-        arg0->unkB9E = D_800BCB7E_B413E[arg0->behaviorCounter * 2];
+        arg0->unkB8C = gHoverIntroAnimTimers[arg0->behaviorCounter * 2];
+        arg0->unkB9E = gHoverIntroAnimFrames[arg0->behaviorCounter * 2];
         arg0->behaviorCounter++;
     }
 
