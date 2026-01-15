@@ -914,7 +914,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
 
     if (state->unk7A == 6) {
         if (player->trickPoints != 0) {
-            func_8004FCF0_508F0(player->trickPoints);
+            showTrickPointsDisplay(player->trickPoints);
             addPlayerSkillPoints(player, player->trickPoints);
 
             scoreValue = player->trickPoints;

@@ -160,7 +160,7 @@ void initSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0);
 void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);
 void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0);
 void cleanupShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);
-void func_8004FCF0_508F0(s32 arg0);
+void showTrickPointsDisplay(s32 arg0);
 void spawnShotCrossSkillMeterDisplayTask(s16 arg0);
 void func_8005011C_50D1C(void);
 void initSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0);
