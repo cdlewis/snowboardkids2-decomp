@@ -583,7 +583,7 @@ void func_8006FE94_70A94(ViewportNodeWithOverlay *arg0, s8 arg1, s8 arg2, s8 arg
 void func_8006FEBC_70ABC(ViewportNode *arg0) __attribute__((alias("disableViewportOverlay")));
 
 void enableViewportDisplayList(void *arg0) {
-    ((ViewportNode *)arg0)->viewportDisplayFlags = (u8)(((ViewportNode *)arg0)->viewportDisplayFlags | 0x2);
+    ((ViewportNode *)arg0)->viewportDisplayFlags |= 0x2;
 }
 
 void func_8006FED8_70AD8(void *arg0) __attribute__((alias("enableViewportDisplayList")));
