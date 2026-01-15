@@ -529,7 +529,7 @@ void setViewportFadeValueBySlotIndex(u16 slotIndex, u8 fadeValue, u8 fadeMode) {
     }
 }
 
-s32 func_8006FE10_70A10(Node_70B00 *arg0) {
+s32 getViewportFadeMode(Node_70B00 *arg0) {
     if (arg0 == NULL) {
         arg0 = &D_800A3370_A3F70;
     }

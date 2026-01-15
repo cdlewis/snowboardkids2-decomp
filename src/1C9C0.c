@@ -58,7 +58,7 @@ void waitForUnlocksAssetsReady(void) {
 void unlockScreenAwaitFadeIn(void) {
     UnlockScreenState *state = (UnlockScreenState *)getCurrentAllocation();
 
-    if (func_8006FE10_70A10(NULL) != 0) {
+    if (getViewportFadeMode(NULL) != 0) {
         return;
     }
 
@@ -127,7 +127,7 @@ void unlockScreenCountdownToExit(void) {
 void unlockScreenCleanupAndExit(void) {
     UnlockScreenState *state = (UnlockScreenState *)getCurrentAllocation();
 
-    if (func_8006FE10_70A10(NULL) != 0) {
+    if (getViewportFadeMode(NULL) != 0) {
         return;
     }
 

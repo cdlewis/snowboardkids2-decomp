@@ -265,7 +265,7 @@ void initLevelSelectTransition(void) {
 }
 
 void waitForFadeToLevelSelect(void) {
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         setGameStateHandler(handleLevelSelectInput);
     }
 }
@@ -375,7 +375,7 @@ void handleLevelSelectInput(void) {
             break;
 
         case MENU_STATE_DETAIL_OPEN:
-            if (func_8006FE10_70A10(&allocation->previewNode) == 0) {
+            if (getViewportFadeMode(&allocation->previewNode) == 0) {
                 Node_70B00 *node760;
 
                 terminateTasksByType(0);
@@ -392,7 +392,7 @@ void handleLevelSelectInput(void) {
             break;
 
         case MENU_STATE_DETAIL_WAIT:
-            if (func_8006FE10_70A10(&allocation->detailNode) == 0) {
+            if (getViewportFadeMode(&allocation->detailNode) == 0) {
                 allocation->menuState = 8;
                 allocation->detailViewMode = 1;
             }
@@ -400,7 +400,7 @@ void handleLevelSelectInput(void) {
 
         case MENU_STATE_DETAIL_CLOSE: {
             Node_70B00 *node760 = &allocation->detailNode;
-            if (func_8006FE10_70A10(node760) == 0) {
+            if (getViewportFadeMode(node760) == 0) {
                 unlinkNode(node760);
                 allocation->menuState = 5;
                 allocation->detailViewMode = 2;
@@ -478,7 +478,7 @@ void handleLevelSelectInput(void) {
 void cleanupLevelSelect(void) {
     LevelSelectState_Base *allocation = (LevelSelectState_Base *)getCurrentAllocation();
 
-    if (func_8006FE10_70A10(NULL) != 0) {
+    if (getViewportFadeMode(NULL) != 0) {
         return;
     }
 

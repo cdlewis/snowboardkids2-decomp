@@ -56,7 +56,7 @@ void initOptionsMenu(void) {
 }
 
 void onOptionsMenuFadeInComplete(void) {
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         setGameStateHandler(func_800373E0_37FE0);
     }
 }
@@ -66,7 +66,7 @@ INCLUDE_ASM("asm/nonmatchings/37E70", func_800373E0_37FE0);
 void onOptionsMenuFadeOutComplete(void) {
     MenuAllocation *allocation = (MenuAllocation *)getCurrentAllocation();
 
-    if (func_8006FE10_70A10(NULL) != 0) {
+    if (getViewportFadeMode(NULL) != 0) {
         return;
     }
 

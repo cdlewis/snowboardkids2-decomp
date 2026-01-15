@@ -38,7 +38,7 @@ void storyMapInitFadeIn(void) {
 }
 
 void storyMapAwaitFadeIn(void) {
-    if (!func_8006FE10_70A10(0)) {
+    if (!getViewportFadeMode(0)) {
         setGameStateHandler(&func_8001B3E8_1BFE8);
     }
 }
@@ -49,7 +49,7 @@ void storyMapAwaitFadeOutAndCleanup(void) {
     void *exitCallback;
     Node_70B00 *state = (Node_70B00 *)getCurrentAllocation();
 
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         unlinkNode(&state[0]);
         unlinkNode(&state[1]);
         unlinkNode(&state[2]);

@@ -89,7 +89,7 @@ void func_80022304_22F04(void) {
     u16 temp;
 
     state = (PlayerCountSelectState *)getCurrentAllocation();
-    result = func_8006FE10_70A10(&state->node);
+    result = getViewportFadeMode(&state->node);
 
     if (result == 0) {
         state->frameCounter = 0;
@@ -186,7 +186,7 @@ void exitPlayerCountSelect(void) {
     s32 i;
 
     state = (PlayerCountSelectState *)getCurrentAllocation();
-    if (func_8006FE10_70A10(&state->node) == 0) {
+    if (getViewportFadeMode(&state->node) == 0) {
         terminateAllTasks();
         unlinkNode(&state->node);
         state->assetData1 = freeNodeMemory(state->assetData1);

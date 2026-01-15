@@ -63,7 +63,7 @@ void cleanupSaveSlotSelectionAndExit(void) {
 
     allocation = (allocation_1D520 *)getCurrentAllocation();
 
-    if (func_8006FE10_70A10(0) != 0) {
+    if (getViewportFadeMode(0) != 0) {
         return;
     }
 

@@ -231,7 +231,7 @@ void updateStoryMapCameraTravel(StoryMapCameraState *camera) {
     state->unk3EC = camera->cameraX;
     state->unk3F0 = camera->cameraZ;
 
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         storyMapLocationIndex = state->discoveredLocationId;
         state->unk427 = state->discoveredLocationId + 1;
         setCallback(&storyMapCameraTravelComplete);
@@ -241,7 +241,7 @@ void updateStoryMapCameraTravel(StoryMapCameraState *camera) {
 void finalizeStoryMapCameraTravel(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         storyMapLocationIndex = state->discoveredLocationId;
         state->unk427 = state->discoveredLocationId + 1;
         setCallback(&storyMapCameraTravelComplete);
@@ -391,7 +391,7 @@ void storyMapExitComplete(void);
 void finalizeStoryMapExit(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         state->unk427 = 0xFF;
         setCallbackWithContinue(&storyMapExitComplete);
     }

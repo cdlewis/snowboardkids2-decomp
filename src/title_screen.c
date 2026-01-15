@@ -59,7 +59,7 @@ void cleanupTitleAndTransition(void) {
 
     state = getCurrentAllocation();
 
-    if (func_8006FE10_70A10(0) != 0) {
+    if (getViewportFadeMode(0) != 0) {
         return;
     }
 
@@ -264,7 +264,7 @@ end:
 }
 
 void onTitleFadeInComplete(void) {
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         func_8006FE28_70A28(0, 0, 0, 0);
         playSoundEffectOnChannelNoPriority(0x135, 0);
         setGameStateHandler(handleTitleMenuInput);

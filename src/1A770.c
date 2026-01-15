@@ -114,7 +114,7 @@ void initStoryModeRace(void) {
 }
 
 void awaitFadeLoadStoryMap(void) {
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         createTaskQueue(&initLevelSelectWithDetail, 100);
         setGameStateHandler(&awaitStoryModeRaceLevelSelect);
     }
@@ -134,7 +134,7 @@ void awaitStoryModeRaceLevelSelect(void) {
 }
 
 void awaitFadeLoadCharacterSelect(void) {
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         playMusicTrack(2);
         createTaskQueue(&func_800226F0_232F0, 100);
         setGameStateHandler(&awaitStoryModeCharacterSelect);
@@ -153,7 +153,7 @@ void awaitStoryModeCharacterSelect(void) {
 }
 
 void awaitFadeLoadPreRaceCutscene(void) {
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 0);
         createTaskQueue(&loadCutsceneOverlay, 150);
         setGameStateHandler(&awaitStoryModePreRaceCutscene);
@@ -247,7 +247,7 @@ void awaitBoardShopDmaComplete(void) {
 }
 
 void awaitFadeLoadBoardShop(void) {
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         scheduleTask(&initBoardShopGoldDisplay, 0, 0, 0x5A);
         setGameStateHandler(&func_8001A478_1B078);
     }
@@ -282,7 +282,7 @@ void startBoardShopFadeOut(void) {
 
 void awaitFadeCleanupBoardShop(void) {
     allocation_1B8C8 *temp_s0 = (allocation_1B8C8 *)getCurrentAllocation();
-    if (func_8006FE10_70A10(0) == 0) {
+    if (getViewportFadeMode(0) == 0) {
         unlinkNode(&temp_s0->unk0);
         unlinkNode(&temp_s0->unk1D8);
         unlinkNode(&temp_s0->unk3B0);

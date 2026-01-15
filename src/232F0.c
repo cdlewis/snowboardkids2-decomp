@@ -50,7 +50,7 @@ void scheduleCharacterSelectTasks(void) {
     s32 i;
     CharacterSelectTask *task;
 
-    if (func_8006FE10_70A10(0) != 0) {
+    if (getViewportFadeMode(0) != 0) {
         return;
     }
 
@@ -70,7 +70,7 @@ void cleanupCharacterSelect(void) {
     CharacterSelectState *state = getCurrentAllocation();
     s32 i;
 
-    if (func_8006FE10_70A10(0) != 0) {
+    if (getViewportFadeMode(0) != 0) {
         return;
     }
 

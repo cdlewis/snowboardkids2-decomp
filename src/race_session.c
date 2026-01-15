@@ -1206,7 +1206,7 @@ handleB:
             }
             break;
         case 1:
-            if (func_8006FE10_70A10(NULL) == 0) {
+            if (getViewportFadeMode(NULL) == 0) {
                 setGameStateHandler(cleanupGameSession);
             }
             break;
@@ -1660,7 +1660,7 @@ void cleanupGameSession(void) {
 
     gameState = getCurrentAllocation();
 
-    if (func_8006FE10_70A10(0) != 0) {
+    if (getViewportFadeMode(0) != 0) {
         return;
     }
 
