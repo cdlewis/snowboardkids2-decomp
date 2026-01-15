@@ -477,7 +477,7 @@ void dispatchIceLandBossChasePhase(func_800BC4AC_arg *arg0) {
     D_800BCA44_B1F34[arg0->behaviorPhase](arg0);
 }
 
-void func_800BB910_B0E00(Player *arg0) {
+void setIceBossFlyingMode(Player *arg0) {
     s32 i;
     Element0x3C *elements = (Element0x3C *)arg0;
 
@@ -537,7 +537,7 @@ s32 func_800BBA54_B0F44(Player *arg0) {
     }
 
     if (gControllerInputs[1] & L_TRIG) {
-        func_800BB910_B0E00(arg0);
+        setIceBossFlyingMode(arg0);
     }
 
     if (arg0->behaviorStep == 0) {
@@ -855,7 +855,7 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
             memcpy(&sp30, &arg0->worldPos, sizeof(Vec3i));
             sp30.y += 0x300000;
             spawnSparkleEffectWithPlayer(&sp30, arg0->playerIndex);
-            func_800BB910_B0E00(arg0);
+            setIceBossFlyingMode(arg0);
             arg0->unkBDB = 3;
             func_8005D180_5DD80(arg0, 2);
         }
