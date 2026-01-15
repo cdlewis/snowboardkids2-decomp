@@ -103,23 +103,23 @@ void initFallingRockHazard(FallingRockHazard *rock) {
     setCallback(updateFallingRockHazard);
 }
 
-void renderFallingRockHazard(FallingRockHazard *arg0) {
-    s32 matrix[8]; // this should be matrix[9] but it causes stack issues
+void renderFallingRockHazard(FallingRockHazard *rock) {
+    s32 matrix[8];
     s32 i;
 
-    memcpy(&D_8009A8A4_9B4A4, &arg0->posZ, 0xC);
-    func_8006B084_6BC84(&D_8009A8A4_9B4A4 - 5, &arg0->rotationMatrix, arg0);
-    createXRotationMatrix((s16(*)[3])matrix, arg0->xRotation);
+    memcpy(&D_8009A8A4_9B4A4, &rock->posZ, 0xC);
+    func_8006B084_6BC84(&D_8009A8A4_9B4A4 - 5, &rock->rotationMatrix, rock);
+    createXRotationMatrix((s16(*)[3])matrix, rock->xRotation);
 
     matrix[6] = 0x3b333;
     matrix[5] = 0;
     matrix[7] = 0x170000;
 
-    func_8006B084_6BC84(&matrix[0], arg0, &arg0->node2);
+    func_8006B084_6BC84(&matrix[0], rock, &rock->node2);
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, &arg0->node1);
-        enqueueDisplayListWithFrustumCull(i, &arg0->node2);
+        enqueueDisplayListWithFrustumCull(i, &rock->node1);
+        enqueueDisplayListWithFrustumCull(i, &rock->node2);
     }
 }
 
