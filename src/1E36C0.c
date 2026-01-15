@@ -582,7 +582,6 @@ s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 tar
     s32 rotVel;
     s32 absRotVel;
     s32 absDiff;
-    s16 durationS16;
 
     turnDir = 0;
     slot->unk0.Two = 4;
@@ -600,11 +599,10 @@ s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 tar
         }
     }
     angleDiff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
-    durationS16 = duration;
     slot->unk84 = duration;
     slot->unk86 = duration;
-    if (durationS16 != 0) {
-        rotVel = angleDiff / durationS16;
+    if (duration != 0) {
+        rotVel = angleDiff / duration;
         slot->unk7C = rotVel;
         absRotVel = (s16)rotVel >= 0 ? (s16)rotVel : -(s16)rotVel;
         if (absRotVel >= 0x101) {
