@@ -94,7 +94,7 @@ void func_80022304_22F04(void) {
     if (result == 0) {
         state->frameCounter = 0;
         setGameStateHandler(&handlePlayerCountSelectInput);
-        scheduleTask(&func_800B0690_1DBD70, 0, 0, 0x5A);
+        scheduleTask(&initPlayerCountHeaderSprite, 0, 0, 0x5A);
         scheduleTask(&func_800B07A0_1DBE80, 0, 0, 0x5A);
     } else {
         temp = state->frameCounter;

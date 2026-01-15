@@ -21,6 +21,7 @@ void func_800B0920_1DC000(void *);
 void func_800B0968_1DC048(PlayerSelectSpriteTask *);
 void func_800B0804_1DBEE4(PlayerSelectSpriteTask *);
 void func_800B0774_1DBE54(PlayerSelectSpriteTask *);
+void updatePlayerCountHeaderSprite(PlayerSelectSpriteTask *);
 void updatePlayerSelectAnim(PlayerSelectState *);
 void cleanupPlayerSelectTask(PlayerSelectSpriteTask *);
 
@@ -119,20 +120,20 @@ void cleanupPlayerCountSelectSprites(PlayerSelectSpriteTask *arg0) {
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void func_800B0690_1DBD70(PlayerSelectSpriteTask *arg0) {
-    void *temp;
+void initPlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
+    void *spriteData;
 
     getCurrentAllocation();
-    temp = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
+    spriteData = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
     setCleanupCallback(func_800B0774_1DBE54);
     arg0->x = -96;
     arg0->y = -80;
     arg0->frameIndex = 6;
-    arg0->spriteData = temp;
-    setCallback(func_800B070C_1DBDEC);
+    arg0->spriteData = spriteData;
+    setCallback(updatePlayerCountHeaderSprite);
 }
 
-void func_800B070C_1DBDEC(PlayerSelectSpriteTask *arg0) {
+void updatePlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
     GameState *allocation = getCurrentAllocation();
 
     if (allocation->unk1E6 == 10) {
