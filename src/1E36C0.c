@@ -204,7 +204,7 @@ void setSlotScale(CutsceneSlotScaleData *slot, s32 scaleX, s32 scaleY, s32 scale
     slot->scaleCurrentZ = scaleZ;
 }
 
-void handleSlotDebugInput(CutsceneSlotData *slot, func_800B5E64_1E2F14_arg0 *camera) {
+void handleSlotDebugInput(CutsceneSlotData *slot, CutsceneCameraState *camera) {
     s32 sinVal;
     s32 cosVal;
     s32 inputX;
@@ -241,8 +241,8 @@ void handleSlotDebugInput(CutsceneSlotData *slot, func_800B5E64_1E2F14_arg0 *cam
         return;
     }
 
-    sinVal = approximateSin(camera->unk22) * 4;
-    cosVal = (approximateCos(camera->unk22) * 4) >> 8;
+    sinVal = approximateSin(camera->rotYCurrent) * 4;
+    cosVal = (approximateCos(camera->rotYCurrent) * 4) >> 8;
     inputX = gAnalogStickX * 16;
     inputZ = -gAnalogStickY * 16;
     sinVal = sinVal >> 8;

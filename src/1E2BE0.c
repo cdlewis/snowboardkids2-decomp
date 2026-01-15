@@ -6,49 +6,49 @@
 
 extern Transform3D D_8009A890_9B490;
 
-void setAnimationLoopMode(func_800B5E64_1E2F14_arg0 *arg0, s8 mode) {
+void setAnimationLoopMode(CutsceneCameraState *arg0, s8 mode) {
     arg0->inputMode = mode;
 }
 
-void initAnimationLoopState(func_800B5E64_1E2F14_arg0 *, u16);
+void initAnimationLoopState(CutsceneCameraState *, u16);
 
 void *func_800B5B38_1E2BE8(u16 arg0) {
-    func_800B5E64_1E2F14_arg0 *temp = allocateNodeMemory(0x74);
+    CutsceneCameraState *temp = allocateNodeMemory(0x74);
     initAnimationLoopState(temp, arg0);
     return temp;
 }
 
-void initAnimationLoopState(func_800B5E64_1E2F14_arg0 *arg0, u16 arg1) {
-    arg0->unk20 = 0;
-    arg0->unk22 = 0;
-    arg0->unk24 = 0;
-    arg0->unk26 = 0;
-    arg0->unk28 = 0;
-    arg0->unk2A = 0;
-    arg0->unk2C = 0;
-    arg0->unk2E = 0;
-    arg0->unk30 = 0;
-    arg0->unk32 = 0;
-    arg0->unk34 = 0;
-    arg0->unk38 = 0;
-    arg0->unk3C = 0;
-    arg0->unk40 = 0;
-    arg0->unk44 = 0;
-    arg0->unk48 = 0;
-    arg0->unk4C = 0;
-    arg0->unk50 = 0;
-    arg0->unk54 = 0;
-    arg0->unk58 = 0;
-    arg0->unk5A = 0;
-    arg0->unk5C = 0;
-    arg0->unk5E = 0;
-    arg0->unk60 = 0;
-    arg0->unk62 = 0;
-    arg0->unk64 = 0;
-    arg0->unk68 = 0;
-    arg0->unk6C = 0;
+void initAnimationLoopState(CutsceneCameraState *arg0, u16 arg1) {
+    arg0->rotXCurrent = 0;
+    arg0->rotYCurrent = 0;
+    arg0->rotXTarget = 0;
+    arg0->rotYTarget = 0;
+    arg0->rotXStep = 0;
+    arg0->rotYStep = 0;
+    arg0->rotXDuration = 0;
+    arg0->rotYDuration = 0;
+    arg0->rotXDurationCopy = 0;
+    arg0->rotYDurationCopy = 0;
+    arg0->posXCurrent = 0;
+    arg0->posYCurrent = 0;
+    arg0->posZCurrent = 0;
+    arg0->posXTarget = 0;
+    arg0->posYTarget = 0;
+    arg0->posZTarget = 0;
+    arg0->posXStep = 0;
+    arg0->posYStep = 0;
+    arg0->posZStep = 0;
+    arg0->posXDuration = 0;
+    arg0->posYDuration = 0;
+    arg0->posZDuration = 0;
+    arg0->posXDurationCopy = 0;
+    arg0->posYDurationCopy = 0;
+    arg0->posZDurationCopy = 0;
+    arg0->posYOffset = 0;
+    arg0->shakeAmplitude = 0;
+    arg0->shakeDuration = 0;
     arg0->nodeId = arg1;
-    arg0->unk70 = 0;
+    arg0->animMode = 0;
     arg0->inputMode = 0;
 }
 
@@ -63,11 +63,11 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
     Transform3D sp70;
     Transform3D *temp_s0;
 
-    D_8009A890_9B490.translation.x = arg0->unk34;
-    D_8009A890_9B490.translation.y = arg0->unk38 + arg0->unk64;
-    D_8009A890_9B490.translation.z = arg0->unk3C;
+    D_8009A890_9B490.translation.x = arg0->posXCurrent;
+    D_8009A890_9B490.translation.y = arg0->posYCurrent + arg0->posYOffset;
+    D_8009A890_9B490.translation.z = arg0->posZCurrent;
 
-    createYRotationMatrix(&sp70, arg0->unk22);
+    createYRotationMatrix(&sp70, arg0->rotYCurrent);
 
     sp70.translation.x = 0;
     sp70.translation.y = 0;
@@ -75,7 +75,7 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
 
     func_8006B084_6BC84(&D_8009A890_9B490, &sp70, &sp30);
 
-    createXRotationMatrix(sp50.m, arg0->unk20);
+    createXRotationMatrix(sp50.m, arg0->rotXCurrent);
 
     sp50.translation.x = 0;
     sp50.translation.y = 0;
@@ -95,7 +95,7 @@ extern s8 D_800AB04B;
 extern s8 gAnalogStickY;
 extern u8 gAnalogStickX;
 
-void handleAnimationLoopDebugInput(func_800B5E64_1E2F14_arg0 *arg0) {
+void handleAnimationLoopDebugInput(CutsceneCameraState *arg0) {
     s8 mode = arg0->inputMode;
     s32 temp;
     s32 buttonCheck;
@@ -103,116 +103,116 @@ void handleAnimationLoopDebugInput(func_800B5E64_1E2F14_arg0 *arg0) {
     switch (mode) {
         case 0:
             if (gControllerInputs[3] & Z_TRIG) {
-                arg0->unk34 = 0;
+                arg0->posXCurrent = 0;
             } else {
-                temp = arg0->unk34;
+                temp = arg0->posXCurrent;
                 temp += D_800AB04B << 12;
-                arg0->unk34 = temp;
+                arg0->posXCurrent = temp;
             }
 
             buttonCheck = gButtonsPressed[0];
 
             if (buttonCheck & R_TRIG) {
-                temp = arg0->unk38;
+                temp = arg0->posYCurrent;
                 temp += gAnalogStickY << 12;
-                arg0->unk38 = temp;
+                arg0->posYCurrent = temp;
             } else if (buttonCheck & Z_TRIG) {
-                temp = arg0->unk3C;
+                temp = arg0->posZCurrent;
                 temp -= gAnalogStickY << 12;
-                arg0->unk3C = temp;
+                arg0->posZCurrent = temp;
             } else if (buttonCheck & L_TRIG) {
-                u16 temp_angle = arg0->unk20;
+                u16 temp_angle = arg0->rotXCurrent;
                 temp_angle -= gAnalogStickY;
-                arg0->unk20 = temp_angle & 0x1FFF;
+                arg0->rotXCurrent = temp_angle & 0x1FFF;
             } else {
-                u16 temp_angle = arg0->unk22;
+                u16 temp_angle = arg0->rotYCurrent;
                 temp_angle -= (s8)gAnalogStickX;
-                arg0->unk22 = temp_angle & 0x1FFF;
+                arg0->rotYCurrent = temp_angle & 0x1FFF;
             }
             break;
 
         case 1:
             if (gControllerInputs[3] & Z_TRIG) {
-                arg0->unk34 = 0;
+                arg0->posXCurrent = 0;
             } else if (gButtonsPressed[3] & R_TRIG) {
-                temp = arg0->unk34;
+                temp = arg0->posXCurrent;
                 temp += D_800AB04B << 16;
-                arg0->unk34 = temp;
+                arg0->posXCurrent = temp;
             } else {
-                temp = arg0->unk34;
+                temp = arg0->posXCurrent;
                 temp += D_800AB04B << 12;
-                arg0->unk34 = temp;
+                arg0->posXCurrent = temp;
             }
 
             if (gButtonsPressed[0] & R_TRIG) {
-                temp = arg0->unk38;
+                temp = arg0->posYCurrent;
                 temp += gAnalogStickY << 12;
-                arg0->unk38 = temp;
+                arg0->posYCurrent = temp;
             }
             break;
     }
 }
 
-void func_800B5E64_1E2F14(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4) {
-    arg0->unk20 = arg1;
-    arg0->unk22 = arg2;
-    arg0->unk24 = arg1;
-    arg0->unk26 = arg2;
-    arg0->unk28 = 0;
-    arg0->unk2A = 0;
-    arg0->unk2C = 0;
-    arg0->unk2E = 0;
-    arg0->unk30 = 0;
-    arg0->unk32 = 0;
-    arg0->unk38 = arg3;
-    arg0->unk44 = arg3;
-    arg0->unk4C = 0;
-    arg0->unk50 = 0;
-    arg0->unk54 = 0;
-    arg0->unk5A = 0;
-    arg0->unk5C = 0;
-    arg0->unk60 = 0;
-    arg0->unk62 = 0;
-    arg0->unk70 = 0;
-    arg0->unk3C = arg4;
-    arg0->unk48 = arg4;
+void initCutsceneCameraRotationAndPos(CutsceneCameraState *arg0, s16 rotX, s16 rotY, s32 posY, s32 posZ) {
+    arg0->rotXCurrent = rotX;
+    arg0->rotYCurrent = rotY;
+    arg0->rotXTarget = rotX;
+    arg0->rotYTarget = rotY;
+    arg0->rotXStep = 0;
+    arg0->rotYStep = 0;
+    arg0->rotXDuration = 0;
+    arg0->rotYDuration = 0;
+    arg0->rotXDurationCopy = 0;
+    arg0->rotYDurationCopy = 0;
+    arg0->posYCurrent = posY;
+    arg0->posYTarget = posY;
+    arg0->posXStep = 0;
+    arg0->posYStep = 0;
+    arg0->posZStep = 0;
+    arg0->posYDuration = 0;
+    arg0->posZDuration = 0;
+    arg0->posYDurationCopy = 0;
+    arg0->posZDurationCopy = 0;
+    arg0->animMode = 0;
+    arg0->posZCurrent = posZ;
+    arg0->posZTarget = posZ;
 }
 
-void func_800B5EC4_1E2F74(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4, s32 arg5) {
-    func_800B5E64_1E2F14(arg0, arg1, arg2, arg3, arg4);
-    arg0->unk34 = arg5;
-    arg0->unk40 = arg5;
-    arg0->unk4C = 0;
-    arg0->unk58 = 0;
-    arg0->unk5E = 0;
+void initCutsceneCameraWithX(CutsceneCameraState *arg0, s16 rotX, s16 rotY, s32 posY, s32 posZ, s32 posX) {
+    initCutsceneCameraRotationAndPos(arg0, rotX, rotY, posY, posZ);
+    arg0->posXCurrent = posX;
+    arg0->posXTarget = posX;
+    arg0->posXStep = 0;
+    arg0->posXDuration = 0;
+    arg0->posXDurationCopy = 0;
 }
 
 typedef struct {
     u8 padding[0x34];
-    s32 unk34;
+    s32 posXCurrent;
 } func_800B5F20_1E2FD0_arg0;
 typedef struct {
     u8 padding[0x2C];
-    s32 unk2C;
+    s32 posXTarget;
 } func_800B5F20_1E2FD0_arg1;
 void func_800B5F20_1E2FD0(func_800B5F20_1E2FD0_arg0 *arg0, func_800B5F20_1E2FD0_arg1 *arg1) {
-    arg0->unk34 = arg1->unk2C;
+    arg0->posXCurrent = arg1->posXTarget;
 }
 
-void func_800B5F2C_1E2FDC(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2) {
+void animateCameraRotationX(CutsceneCameraState *arg0, s16 targetRotX, s16 duration) {
     s16 temp_a3;
     s16 temp_a1;
     int new_var;
     s32 var_v1;
     s32 var_v0;
 
-    *(volatile u16 *)&arg0->unk20 = *(u16 *)&arg0->unk20 & 0x1FFF;
-    temp_a3 = arg0->unk20;
-    temp_a1 = arg1 & 0x1FFF;
+    *(volatile u16 *)&arg0->rotXCurrent = *(u16 *)&arg0->rotXCurrent & 0x1FFF;
+    temp_a3 = arg0->rotXCurrent;
+    temp_a1 = targetRotX & 0x1FFF;
     new_var = temp_a1 - temp_a3;
-    arg0->unk70 = 0;
+    arg0->animMode = 0;
     var_v1 = new_var;
-    arg0->unk24 = temp_a1;
+    arg0->rotXTarget = temp_a1;
     if (var_v1 >= 0x1001) {
         var_v0 = temp_a3 + 0x2000;
         var_v1 = temp_a1 - var_v0;
@@ -220,25 +220,25 @@ void func_800B5F2C_1E2FDC(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2) {
         var_v0 = temp_a3 - 0x2000;
         var_v1 = temp_a1 - var_v0;
     }
-    arg0->unk2C = arg2;
-    arg0->unk30 = arg2;
-    arg0->unk28 = var_v1 / arg2;
+    arg0->rotXDuration = duration;
+    arg0->rotXDurationCopy = duration;
+    arg0->rotXStep = var_v1 / duration;
 }
 
-void func_800B5FB0_1E3060(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2) {
+void animateCameraRotationY(CutsceneCameraState *arg0, s16 targetRotY, s16 duration) {
     s16 temp_a3;
     s16 temp_a1;
     int new_var;
     s32 var_v1;
     s32 var_v0;
 
-    *(volatile u16 *)&arg0->unk22 = *(u16 *)&arg0->unk22 & 0x1FFF;
-    temp_a3 = arg0->unk22;
-    temp_a1 = arg1 & 0x1FFF;
+    *(volatile u16 *)&arg0->rotYCurrent = *(u16 *)&arg0->rotYCurrent & 0x1FFF;
+    temp_a3 = arg0->rotYCurrent;
+    temp_a1 = targetRotY & 0x1FFF;
     new_var = temp_a1 - temp_a3;
-    arg0->unk70 = 0;
+    arg0->animMode = 0;
     var_v1 = new_var;
-    arg0->unk26 = temp_a1;
+    arg0->rotYTarget = temp_a1;
     if (var_v1 >= 0x1001) {
         var_v0 = temp_a3 + 0x2000;
         var_v1 = temp_a1 - var_v0;
@@ -246,93 +246,93 @@ void func_800B5FB0_1E3060(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2) {
         var_v0 = temp_a3 - 0x2000;
         var_v1 = temp_a1 - var_v0;
     }
-    arg0->unk2E = arg2;
-    arg0->unk32 = arg2;
-    arg0->unk2A = var_v1 / arg2;
+    arg0->rotYDuration = duration;
+    arg0->rotYDurationCopy = duration;
+    arg0->rotYStep = var_v1 / duration;
 }
 
-void func_800B6034_1E30E4(func_800B5E64_1E2F14_arg0 *arg0, s32 arg1, s16 arg2) {
+void animateCameraPositionX(CutsceneCameraState *arg0, s32 targetX, s16 duration) {
     s32 quotient;
 
-    quotient = (arg1 - arg0->unk34) / arg2;
+    quotient = (targetX - arg0->posXCurrent) / duration;
 
-    arg0->unk70 = 0;
-    arg0->unk40 = arg1;
-    arg0->unk58 = arg2;
-    arg0->unk5E = arg2;
-    arg0->unk4C = quotient;
+    arg0->animMode = 0;
+    arg0->posXTarget = targetX;
+    arg0->posXDuration = duration;
+    arg0->posXDurationCopy = duration;
+    arg0->posXStep = quotient;
 }
 
-void func_800B6088_1E3138(func_800B5E64_1E2F14_arg0 *arg0, s32 arg1, s16 arg2) {
+void animateCameraPositionY(CutsceneCameraState *arg0, s32 targetY, s16 duration) {
     s32 quotient;
 
-    quotient = (arg1 - arg0->unk38) / arg2;
+    quotient = (targetY - arg0->posYCurrent) / duration;
 
-    arg0->unk70 = 0;
-    arg0->unk44 = arg1;
-    arg0->unk5A = arg2;
-    arg0->unk60 = arg2;
-    arg0->unk50 = quotient;
+    arg0->animMode = 0;
+    arg0->posYTarget = targetY;
+    arg0->posYDuration = duration;
+    arg0->posYDurationCopy = duration;
+    arg0->posYStep = quotient;
 }
 
-void func_800B60DC_1E318C(func_800B5E64_1E2F14_arg0 *arg0, s32 arg1, s16 arg2) {
+void animateCameraPositionZ(CutsceneCameraState *arg0, s32 targetZ, s16 duration) {
     s32 quotient;
 
-    quotient = (arg1 - arg0->unk3C) / arg2;
+    quotient = (targetZ - arg0->posZCurrent) / duration;
 
-    arg0->unk70 = 0;
-    arg0->unk48 = arg1;
-    arg0->unk5C = arg2;
-    arg0->unk62 = arg2;
-    arg0->unk54 = quotient;
+    arg0->animMode = 0;
+    arg0->posZTarget = targetZ;
+    arg0->posZDuration = duration;
+    arg0->posZDurationCopy = duration;
+    arg0->posZStep = quotient;
 }
 
-void func_800B6130_1E31E0(func_800B5E64_1E2F14_arg0 *arg0, s16 arg1, s16 arg2) {
-    if ((arg1 == 0) || (arg2 == 0)) {
-        arg0->unk70 = 0;
-        arg0->unk2A = 0;
-        arg0->unk2E = 0;
-        arg0->unk32 = 0;
+void animateCameraRotationYContinuous(CutsceneCameraState *arg0, s16 step, s16 duration) {
+    if ((step == 0) || (duration == 0)) {
+        arg0->animMode = 0;
+        arg0->rotYStep = 0;
+        arg0->rotYDuration = 0;
+        arg0->rotYDurationCopy = 0;
     } else {
-        arg0->unk70 = 1;
-        arg0->unk2A = arg1;
-        arg0->unk2E = arg2;
-        arg0->unk32 = arg2;
+        arg0->animMode = 1;
+        arg0->rotYStep = step;
+        arg0->rotYDuration = duration;
+        arg0->rotYDurationCopy = duration;
     }
 }
 
-void func_800B6180_1E3230(func_800B6180_1E3230_arg0 *arg0, s32 arg1, s16 arg2) {
-    arg0->unk70 = 0;
-    arg0->unk68 = arg1;
-    arg0->unk6C = arg2;
+void initCameraShake(CutsceneCameraShakeState *arg0, s32 amplitude, s16 duration) {
+    arg0->animMode = 0;
+    arg0->shakeAmplitude = amplitude;
+    arg0->shakeDuration = duration;
 }
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6190_1E3240);
 
-s16 func_800B6544_1E35F4(func_800B5E64_1E2F14_arg0 *arg0) {
-    if (arg0->unk32 != 0) {
-        arg0->unk22 += arg0->unk2A;
-        if (arg0->unk32 > 0) {
-            arg0->unk32--;
+s16 func_800B6544_1E35F4(CutsceneCameraState *arg0) {
+    if (arg0->rotYDurationCopy != 0) {
+        arg0->rotYCurrent += arg0->rotYStep;
+        if (arg0->rotYDurationCopy > 0) {
+            arg0->rotYDurationCopy--;
         }
     } else {
-        arg0->unk70 = 2;
+        arg0->animMode = 2;
     }
     return 0;
 }
 
-extern s16 func_800B6190_1E3240(func_800B5E64_1E2F14_arg0 *);
+extern s16 func_800B6190_1E3240(CutsceneCameraState *);
 
-s16 advanceSceneManager(func_800B5E64_1E2F14_arg0 *arg0) {
+s16 advanceSceneManager(CutsceneCameraState *arg0) {
     s16 result = 0;
     s8 temp;
 
     if (arg0->inputMode == 1) {
-        arg0->unk44 = 0x166666;
-        arg0->unk38 = 0x166666;
+        arg0->posYTarget = 0x166666;
+        arg0->posYCurrent = 0x166666;
     }
 
-    temp = arg0->unk70;
+    temp = arg0->animMode;
 
     if (temp != 1) {
         if (temp >= 2) {

@@ -21,7 +21,7 @@ void initSlotData(CutsceneSlotData *slot);
 s32 setupSlotTransform(CutsceneSlotData *slot);
 s32 syncModelFromSlot(void *, void *);
 void setSlotScale(CutsceneSlotScaleData *slot, s32 scaleX, s32 scaleY, s32 scaleZ);
-void handleSlotDebugInput(CutsceneSlotData *slot, func_800B5E64_1E2F14_arg0 *camera);
+void handleSlotDebugInput(CutsceneSlotData *slot, CutsceneCameraState *camera);
 void updateSlotRotVelocity(CutsceneSlotData *slot, s16 speedMode);
 void updateSlotRotVelocityFixed(CutsceneSlotData *slot);
 void initSlotPosition(CutsceneSlotData *slot, s32 x, s32 y, s32 z, s16 rotY);
