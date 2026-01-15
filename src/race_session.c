@@ -656,7 +656,7 @@ void initRaceViewports(void) {
         }
 
         if (gs->memoryPoolId != 0xB) {
-            func_8006FE48_70A48(
+            setViewportFogById(
                 i + 0x64,
                 0x3E3,
                 0x3E7,
@@ -665,7 +665,7 @@ void initRaceViewports(void) {
                 levelConfig->unk20.b2
             );
         } else {
-            func_8006FE48_70A48(
+            setViewportFogById(
                 i + 0x64,
                 0x384,
                 0x3E7,

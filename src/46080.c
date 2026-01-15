@@ -940,11 +940,11 @@ void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *arg0) {
             levelData = func_80055D10_56910(state->memoryPoolId);
             fogR = levelData->unk20.r2;
             fogNodeId = nodeId;
-            func_8006FE48_70A48(fogNodeId, 0x3E3, 0x3E7, fogR, levelData->unk20.g2, levelData->unk20.b2);
+            setViewportFogById(fogNodeId, 0x3E3, 0x3E7, fogR, levelData->unk20.g2, levelData->unk20.b2);
         } else {
             enqueueCameraRelativeDisplayList(viewportId, (DisplayListObject *)&arg0->unk78);
             fogNodeId = nodeId;
-            func_8006FE48_70A48(fogNodeId, 0x3E3, 0x3E7, 0x10, fogG, fogB);
+            setViewportFogById(fogNodeId, 0x3E3, 0x3E7, 0x10, fogG, fogB);
         }
         nodeId++;
         viewportId++;

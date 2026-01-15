@@ -82,11 +82,11 @@ typedef struct Node_70B00 {
     u8 padding140[6];
     Node_70B00_ColorData unk148[1];
     u8 padding158[0x70];
-    s16 unk1C8;
-    s16 unk1CA;
-    u8 unk1CC;
-    u8 unk1CD;
-    u8 unk1CE;
+    s16 fogMin;
+    s16 fogMax;
+    u8 fogR;
+    u8 fogG;
+    u8 fogB;
     u8 padding1CF;
     f32 scaleY;
     u8 padding5[0x2];
@@ -111,7 +111,7 @@ void handleFrameBufferComplete(s32 bufferIndex);
 
 void setViewportEnvColor(Node_70B00 *node, u8 r, u8 g, u8 b);
 
-void func_8006FE48_70A48(u16 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5);
+void setViewportFogById(u16 viewportId, s16 fogMin, s16 fogMax, u8 fogR, u8 fogG, u8 fogB);
 
 void setViewportScale(Node_70B00 *arg0, f32 scaleX, f32 scaleY);
 

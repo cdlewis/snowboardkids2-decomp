@@ -436,11 +436,11 @@ void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s3
     memcpy(arg0->modelingMatrix, identityMatrix, 0x20);
     guPerspective(&arg0->perspectiveMatrix, &arg0->perspNorm, 30.0f, 1.3333334f, 20.0f, 2000.0f, 1.0f);
     arg0->padding1CF = 0xFF;
-    arg0->unk1C8 = 0x3DE;
-    arg0->unk1CE = 0;
-    arg0->unk1CD = 0;
-    arg0->unk1CC = 0;
-    arg0->unk1CA = 0x3E6;
+    arg0->fogMin = 0x3DE;
+    arg0->fogB = 0;
+    arg0->fogG = 0;
+    arg0->fogR = 0;
+    arg0->fogMax = 0x3E6;
     arg0->envR = 0;
     arg0->envG = 0;
     arg0->envB = 0;
@@ -545,18 +545,18 @@ void setViewportEnvColor(Node_70B00 *node, u8 r, u8 g, u8 b) {
     node->envB = b;
 }
 
-void func_8006FE48_70A48(u16 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5) {
+void setViewportFogById(u16 viewportId, s16 fogMin, s16 fogMax, u8 fogR, u8 fogG, u8 fogB) {
     Node_70B00 *node;
 
     node = D_800A3370_A3F70.unk8.list2_next;
 
     while (node != NULL) {
-        if (node->id == arg0) {
-            node->unk1C8 = arg1;
-            node->unk1CA = arg2;
-            node->unk1CC = arg3;
-            node->unk1CD = arg4;
-            node->unk1CE = arg5;
+        if (node->id == viewportId) {
+            node->fogMin = fogMin;
+            node->fogMax = fogMax;
+            node->fogR = fogR;
+            node->fogG = fogG;
+            node->fogB = fogB;
         }
         node = node->unk8.list2_next;
     }

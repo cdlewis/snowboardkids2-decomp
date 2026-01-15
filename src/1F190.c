@@ -569,11 +569,11 @@ void loadLevelPreview(void) {
         if (poolId == 11) {
             node = &allocation->previewNode;
             func_8006FA0C_7060C(node, 50.0f, ASPECT_RATIO, 10.0f, 1000.0f);
-            func_8006FE48_70A48(100, 900, 999, item->unk20.r2, item->unk20.g2, item->unk20.b2);
+            setViewportFogById(100, 900, 999, item->unk20.r2, item->unk20.g2, item->unk20.b2);
             spawnConfettiEffect(node);
         } else {
             func_8006FA0C_7060C(&allocation->previewNode, 50.0f, ASPECT_RATIO, 10.0f, 4000.0f);
-            func_8006FE48_70A48(100, 995, 999, item->unk20.r2, item->unk20.g2, item->unk20.b2);
+            setViewportFogById(100, 995, 999, item->unk20.r2, item->unk20.g2, item->unk20.b2);
         }
 
         scheduleTask(&initLevelPreviewCharacter, 0, 0, 0x5B);
