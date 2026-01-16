@@ -12,7 +12,7 @@ extern TextClipAndOffsetData gTextClipAndOffsetData;
 
 void func_80013EA0_14AA0(s32, u16, u16, u16, s32);
 
-void func_8000FED0_10AD0(SpriteRenderArg *arg0) {
+void renderSpriteFrame(SpriteRenderArg *arg0) {
     s32 left;
     s32 top;
     s32 right;
@@ -23,7 +23,7 @@ void func_8000FED0_10AD0(SpriteRenderArg *arg0) {
     s32 paletteCacheAddr;
     u16 paletteMode;
     u16 format;
-    u16 unk4;
+    u16 framePaletteIndex;
     SpriteSheetData *spriteData;
     SpriteFrameEntry *frameEntry;
 
@@ -35,7 +35,7 @@ void func_8000FED0_10AD0(SpriteRenderArg *arg0) {
     paletteBase = (s32)frameEntry + (spriteData->numFrames * 0x10);
     top = arg0->y + gTextClipAndOffsetData.offsetY;
     frameEntry = &frameEntry[arg0->frameIndex];
-    unk4 = frameEntry->unk4;
+    framePaletteIndex = frameEntry->paletteIndex;
     paletteMode = D_8008D3B0_8DFB0[frameEntry->paletteTableIndex];
     format = D_8008D3B8_8DFB8[frameEntry->formatIndex];
     right = left + frameEntry->width;
@@ -72,7 +72,7 @@ void func_8000FED0_10AD0(SpriteRenderArg *arg0) {
             );
         }
 
-        paletteCacheAddr = paletteBase + (unk4 << 5);
+        paletteCacheAddr = paletteBase + (framePaletteIndex << 5);
         if (paletteCacheAddr != D_800A8A80_9FDF0) {
             D_800A8A80_9FDF0 = paletteCacheAddr;
             if ((paletteMode & 0xFFFF) == 2) {
@@ -195,7 +195,7 @@ void func_800105B0_111B0(SpriteRenderArg *arg0) {
     s32 paletteCacheAddr;
     u16 paletteMode;
     u16 format;
-    u16 unk4;
+    u16 framePaletteIndex;
     SpriteSheetData *spriteData;
     SpriteFrameEntry *frameEntry;
     s32 paletteBase;
@@ -207,7 +207,7 @@ void func_800105B0_111B0(SpriteRenderArg *arg0) {
     left = arg0->x + gTextClipAndOffsetData.offsetX;
     paletteBase = (s32)frameEntry + (spriteData->numFrames * 16);
     frameEntry = frameEntry + arg0->frameIndex;
-    unk4 = frameEntry->unk4;
+    framePaletteIndex = frameEntry->paletteIndex;
     top = arg0->y + gTextClipAndOffsetData.offsetY;
     paletteMode = D_8008D3B0_8DFB0[frameEntry->paletteTableIndex];
     format = D_8008D3B8_8DFB8[frameEntry->formatIndex];
@@ -246,7 +246,7 @@ void func_800105B0_111B0(SpriteRenderArg *arg0) {
             );
         }
 
-        paletteCacheAddr = paletteBase + (unk4 << 5);
+        paletteCacheAddr = paletteBase + (framePaletteIndex << 5);
         if (paletteCacheAddr != D_800A8A80_9FDF0) {
             D_800A8A80_9FDF0 = paletteCacheAddr;
             if ((paletteMode & 0xFFFF) == 2) {

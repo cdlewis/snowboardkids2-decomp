@@ -102,8 +102,8 @@ void updateControllerSlotHighlights(ControllerSlotDisplay *arg0) {
         }
     }
 
-    debugEnqueueCallback(8, 1, func_8000FED0_10AD0, &arg0->elements[6]);
-    debugEnqueueCallback(8, 1, func_8000FED0_10AD0, &arg0->elements[6].unkC);
+    debugEnqueueCallback(8, 1, renderSpriteFrame, &arg0->elements[6]);
+    debugEnqueueCallback(8, 1, renderSpriteFrame, &arg0->elements[6].unkC);
 }
 
 void cleanupControllerSlotDisplay(void **arg0) {
@@ -143,7 +143,7 @@ void func_800167B0_173B0(Struct16728 *arg0) {
     } else {
         arg0->unkC--;
     }
-    debugEnqueueCallback(8, 1, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(8, 1, renderSpriteFrame, arg0);
 }
 
 void cleanupPressStartPrompt(void **arg0) {

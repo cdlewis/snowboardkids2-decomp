@@ -553,7 +553,7 @@ void initPlayer3CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
 void updatePlayer3CharacterSelectIndicator(void *arg0) {
     GameState *state = getCurrentAllocation();
     if (state->playerSlotState[0] == 3) {
-        debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+        debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
     } else {
         func_80069CF8_6A8F8();
     }
@@ -578,7 +578,7 @@ void initPlayer2CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
 void updatePlayer2CharacterSelectIndicator(void *arg0) {
     GameState *state = getCurrentAllocation();
     if (state->playerSlotState[0] == 2) {
-        debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+        debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
     } else {
         func_80069CF8_6A8F8();
     }

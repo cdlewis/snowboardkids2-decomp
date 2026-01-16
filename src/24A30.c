@@ -1390,7 +1390,7 @@ void updateCharSelectPlayerLabels(PlayerLabelSpritesState *arg0) {
             index = i + 8;
             ptr = arg0->entries;
             do {
-                debugEnqueueCallback(index, 7, &func_8000FED0_10AD0, ptr);
+                debugEnqueueCallback(index, 7, &renderSpriteFrame, ptr);
                 j++;
                 ptr++;
             } while (j < 3);
@@ -1698,7 +1698,7 @@ void updateCharSelectPlayerNumbers(u8 *arg0) {
         i = 0;
         ptr = arg0;
         do {
-            debugEnqueueCallback((u16)(i + 0xC), 0, func_8000FED0_10AD0, ptr);
+            debugEnqueueCallback((u16)(i + 0xC), 0, renderSpriteFrame, ptr);
             i++;
             ptr += 0xC;
         } while (i < D_800AFE8C_A71FC->numPlayers);
@@ -1730,7 +1730,7 @@ void updateCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
 
     if (state->unk1898[0] == 3) {
         arg0->spriteIndex = state->unk18A8[0] + 0x16;
-        debugEnqueueCallback(0xC, 0, func_8000FED0_10AD0, arg0);
+        debugEnqueueCallback(0xC, 0, renderSpriteFrame, arg0);
     }
 }
 

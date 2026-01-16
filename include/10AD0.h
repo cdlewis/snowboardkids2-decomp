@@ -13,7 +13,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ s32 textureOffset;
-    /* 0x04 */ u16 unk4;
+    /* 0x04 */ u16 paletteIndex;
     /* 0x06 */ u16 width;
     /* 0x08 */ u16 height;
     /* 0x0A */ u16 paletteTableIndex;
@@ -35,12 +35,12 @@ typedef struct {
     /* 0x0A */ u8 paletteIndex;
 } SpriteRenderArg;
 
+void renderSpriteFrame(SpriteRenderArg *arg0);
 void func_80010240_10E40(SpriteRenderArg *arg0);
 void func_800105B0_111B0(SpriteRenderArg *arg0);
 void func_80010C98_11898(void *arg0);
 void func_80012FA8_13BA8(void);
 void initDefaultFontPalette(void);
-void func_8000FED0_10AD0(SpriteRenderArg *arg0);
 void func_80013EA0_14AA0(s32, u16, u16, u16, s32);
 void func_80012518_13118(void);
 void func_800136E0_142E0(void);

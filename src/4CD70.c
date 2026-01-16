@@ -295,7 +295,7 @@ dma_and_callbacks:
 
 void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state) {
     state->spriteIndex = state->player->finishPosition;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, state);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
 }
 
 void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state) {
@@ -368,10 +368,10 @@ void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state) {
     tempValue = player->unkBD3;
     if (tempValue != 0) {
         state->itemCountValue = tempValue;
-        debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, func_8000FED0_10AD0, &state->itemCountX);
+        debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, renderSpriteFrame, &state->itemCountX);
     }
 
-    callback = func_8000FED0_10AD0;
+    callback = renderSpriteFrame;
     tempValue = state->player->unkBD2;
     state->primaryItemIndex = tempValue;
     debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
@@ -422,7 +422,7 @@ void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state) {
         debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, renderTextPalette, &state->charDisplayX);
     }
 
-    callback = func_8000FED0_10AD0;
+    callback = renderSpriteFrame;
     tempValue = state->player->unkBD2;
     state->primaryItemIndex = tempValue;
     debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
@@ -525,15 +525,15 @@ void initPlayerLapCounterTask(LapCounterState *state) {
 }
 
 void updatePlayerLapCounterSinglePlayer(LapCounterSinglePlayerState *state) {
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, state);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
     state->currentLap = state->player->currentLap + 1;
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010240_10E40, &state->digitX1);
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, &state->digitX2);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, &state->digitX2);
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010240_10E40, &state->digitX3);
 }
 
 void updatePlayerLapCounterMultiplayer(LapCounterMultiplayerState *state) {
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, state);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
     state->unk3C = state->player->currentLap + 0x31;
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->unk30);
 }
@@ -683,7 +683,7 @@ void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
 
     state->animFrame = (s16)state->animCounter >> 1;
 
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, &state->iconX);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, &state->iconX);
 }
 
 void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
@@ -835,7 +835,7 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
         } while (i < playerCount);
     }
 
-    debugEnqueueCallback(0xC, 0, func_8000FED0_10AD0, state);
+    debugEnqueueCallback(0xC, 0, renderSpriteFrame, state);
 }
 
 typedef struct {
@@ -881,7 +881,7 @@ void updateGoalBannerSlideIn(GoalBannerState *state) {
     if (state->animAngle == 0x800) {
         setCallback(updateGoalBannerHold);
     }
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, func_8000FED0_10AD0, state);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
 }
 
 void updateGoalBannerHold(GoalBannerState *state) {
@@ -889,7 +889,7 @@ void updateGoalBannerHold(GoalBannerState *state) {
     if (state->holdFrames == 0) {
         setCallback(updateGoalBannerSlideOut);
     }
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, func_8000FED0_10AD0, state);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
 }
 
 void updateGoalBannerSlideOut(GoalBannerState *state) {
@@ -903,7 +903,7 @@ void updateGoalBannerSlideOut(GoalBannerState *state) {
     if (state->animAngle == 0x1000) {
         func_80069CF8_6A8F8();
     }
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, func_8000FED0_10AD0, state);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
 }
 
 void cleanupGoalBannerTask(GoalBannerState *state) {
@@ -931,7 +931,7 @@ void updateCenteredSpritePopup(CenteredSpritePopupState *state) {
     getTableEntryByU16Index(state->spriteAsset, state->spriteIndex, &output);
     state->xPos = -output.field1 / 2;
     state->yPos = -output.field2 / 2;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, func_8000FED0_10AD0, state);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
 }
 
 void cleanupCenteredSpritePopupTask(CenteredSpritePopupState *state) {
@@ -1001,7 +1001,7 @@ void initTrickScoreDisplayTask(TrickScoreDisplayState *state) {
 }
 
 void renderTrickScoreDisplay(TrickScoreDisplayState *state) {
-    debugEnqueueCallback(state->playerIndex + 8, 6, func_8000FED0_10AD0, state);
+    debugEnqueueCallback(state->playerIndex + 8, 6, renderSpriteFrame, state);
 
     if (state->useGoldFormat == 0) {
         drawNumericString(
@@ -1090,7 +1090,7 @@ void initSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0) {
 
 void updateSpeedCrossFinishPositionDisplay(FinishPositionDisplayState *arg0) {
     arg0->spriteIndex = arg0->player->finishPosition;
-    debugEnqueueCallback(8, 6, &func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(8, 6, &renderSpriteFrame, arg0);
 }
 
 void cleanupSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0) {
@@ -1791,7 +1791,7 @@ void updateShotScoreDisplay(ShotScoreDisplayState *arg0) {
         arg0->elements[i].x = xPos;
         xPos -= 0x10;
 
-        debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->elements[i]);
+        debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->elements[i]);
     }
 }
 
@@ -1822,8 +1822,8 @@ void updateShotCrossScoreDisplay(ShotCrossScoreDisplayState *arg0) {
 
     sprintf(buf, D_8009E8A8_9F4A8, arg0->player->unkBD3);
     drawNumericString(buf, -0x70, -0x54, 0xFF, arg0->digitAsset, arg0->player->playerIndex + 8, 0);
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->hudX);
+    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
+    debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->hudX);
 }
 
 void cleanupShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
@@ -1867,7 +1867,7 @@ void updateShotCrossItemCountDisplay(ShotCrossItemCountDisplayState *arg0) {
     GameState *allocation;
 
     allocation = getCurrentAllocation();
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->x);
+    debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->x);
 
     if (arg0->cachedItemCount != allocation->unk5A) {
         arg0->flashCounter = 9;
@@ -1960,7 +1960,7 @@ void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0) {
         sprintf(buffer, sTimerFormatNormal, minutes, seconds, remainingTicks);
     }
 
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
 
     drawNumericString(buffer, 0x48, 0x50, 0xFF, arg0->digitAsset, 8, 0);
 }
@@ -2005,7 +2005,7 @@ void updateSuccessMessageDisplay(SuccessMessageDisplayState *state) {
     } else {
         state->flashState = state->flashState - 1;
     }
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, state);
+    debugEnqueueCallback(8, 0, renderSpriteFrame, state);
 }
 
 void cleanupSuccessMessageDisplayTask(ShotCrossCountdownTimerState *arg0) {
@@ -2192,7 +2192,7 @@ after_7E:
         }
     }
 
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
     drawNumericString(sp20, 0x68, 0x50, 0xFF, arg0->digitAsset, 8, 0);
 }
 
@@ -2221,7 +2221,7 @@ void initSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0) {
 
 void updateSecondaryItemDisplay(SecondaryItemDisplayState *state) {
     state->itemIndex = state->player->unkBD4 + 7;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_8000FED0_10AD0, state);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
 
     if (state->player->unkBD8 & 2) {
         spawnFloatingItemSprite(state->itemX - 8, state->itemY - 8, 1, state->playerIndex + 8, 0);
@@ -2285,7 +2285,7 @@ void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
         sprintf(timeString, timeFormat, minutes, seconds, frames);
     }
 
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
     drawNumericString(timeString, -0x54, -0x28, 0xFF, arg0->digitAsset, 8, 0);
 }
 
@@ -2411,7 +2411,7 @@ void updateShotCrossSkillMeterDisplay(ShotCrossItemCountDisplayState *arg0) {
     s32 x;
 
     allocation = (GameState *)getCurrentAllocation();
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->x);
+    debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->x);
 
     if (arg0->cachedItemCount != allocation->players->skillPoints) {
         arg0->flashCounter = 9;
@@ -2503,8 +2503,8 @@ void initCrossRaceBadgeTask(CrossRaceBadgeState *arg0) {
 }
 
 void updateCrossRaceBadgeDisplay(CrossRaceBadgeState *arg0) {
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->bgX);
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->bgX);
+    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
 }
 
 void cleanupCrossRaceBadgeTask(void *arg0) {

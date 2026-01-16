@@ -138,7 +138,7 @@ void updatePlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
         arg0->x = -96;
         arg0->frameIndex = 6;
     }
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
 }
 
 void cleanupPlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
@@ -163,7 +163,7 @@ void updatePlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
     arg0->y = D_800B09BA_1DC09A[allocation->unk1E2 * 2];
     arg0->frameIndex = allocation->unk1E2 + 2;
 
-    debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
+    debugEnqueueCallback(8, 7, renderSpriteFrame, arg0);
 }
 
 void cleanupPlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
@@ -186,7 +186,7 @@ void updateCharacterReadyIndicator(void *arg0) {
     GameState *allocation = getCurrentAllocation();
 
     if (allocation->unk1E6 == 2) {
-        debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
+        debugEnqueueCallback(8, 7, renderSpriteFrame, arg0);
     }
 }
 

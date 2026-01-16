@@ -439,7 +439,7 @@ void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *portraitEntries) {
         setCallbackWithContinue(&func_80020924_21524);
     } else {
         for (i = 0; i < 2; i++) {
-            debugEnqueueCallback(8, 7, func_8000FED0_10AD0, &portraitEntries[i]);
+            debugEnqueueCallback(8, 7, renderSpriteFrame, &portraitEntries[i]);
         }
     }
 }
@@ -503,7 +503,7 @@ void renderConfirmationIndicator(void *arg0) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->menuState == 2) {
-        debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
+        debugEnqueueCallback(8, 7, renderSpriteFrame, arg0);
     }
 }
 
@@ -547,7 +547,7 @@ void renderUnlockNotification(UnlockNotificationState *state) {
                     state->frameIndex = 0x13;
                 }
             }
-            debugEnqueueCallback(8, 7, func_8000FED0_10AD0, &state->x);
+            debugEnqueueCallback(8, 7, renderSpriteFrame, &state->x);
         }
     }
 }

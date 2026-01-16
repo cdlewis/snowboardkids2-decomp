@@ -373,7 +373,7 @@ void updateSaveSlotIconGrid(SaveSlotGridState *arg0) {
         }
     }
 
-    debugEnqueueCallback(8U, 1U, func_8000FED0_10AD0, &arg0->unk4);
+    debugEnqueueCallback(8U, 1U, renderSpriteFrame, &arg0->unk4);
 }
 
 void cleanupSaveSlotIconGrid(Func34574Arg *arg0) {
@@ -671,7 +671,7 @@ void renderSaveSlotConfirmationIndicator(void *arg0) {
     val = allocation->unkAC6;
 
     if (val == 3 || val == 0x3C || val == 0x17) {
-        debugEnqueueCallback(8, 7, func_8000FED0_10AD0, arg0);
+        debugEnqueueCallback(8, 7, renderSpriteFrame, arg0);
     }
 }
 

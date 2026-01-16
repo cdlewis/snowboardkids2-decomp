@@ -512,7 +512,7 @@ void animateBoardShopSnowParticles(SnowParticleState *arg0) {
             }
         }
 
-        debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->particles[i]);
+        debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->particles[i]);
     };
 
     if ((s16)state->unk780 == 0) {
@@ -1153,7 +1153,7 @@ void updateBoardShopExitOverlay(void *arg0) {
 
     allocation = getCurrentAllocation();
     if (allocation->unk788[0x13] == 0x19) {
-        debugEnqueueCallback(8, 7, &func_8000FED0_10AD0, arg0);
+        debugEnqueueCallback(8, 7, &renderSpriteFrame, arg0);
     }
 }
 

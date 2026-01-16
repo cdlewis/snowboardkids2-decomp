@@ -822,7 +822,7 @@ void updateStoryMapShopExitOverlay(void *arg0) {
     GameState *state = getCurrentAllocation();
 
     if (state->unk5C5 == 4) {
-        debugEnqueueCallback(8, 7, &func_8000FED0_10AD0, arg0);
+        debugEnqueueCallback(8, 7, &renderSpriteFrame, arg0);
     }
 }
 
@@ -1034,7 +1034,7 @@ void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
         currentItem = state->unk5CA[state->unk5C8];
         isValidItem = (u32)currentItem < 0x80U;
         if (isValidItem != 0) {
-            debugEnqueueCallback(8U, 1U, &func_8000FED0_10AD0, &arg0->priceLabelX);
+            debugEnqueueCallback(8U, 1U, &renderSpriteFrame, &arg0->priceLabelX);
         }
         if (state->unk5C5 != 2) {
             if (isValidItem != 0) {
@@ -1079,7 +1079,7 @@ void updateStoryMapShopSoldOutLabel(void *arg0) {
     s8 index = state->unk5C8;
 
     if (state->unk5CA[index] >= 0x80 || state->unk5C9 == 0) {
-        debugEnqueueCallback(8, 1, func_8000FED0_10AD0, arg0);
+        debugEnqueueCallback(8, 1, renderSpriteFrame, arg0);
     }
 }
 
@@ -1123,7 +1123,7 @@ void drawUnlockScreenItemIcons(void *untypedArg0) {
 
     if (alloc->unk5D8 != 0) {
         for (i = 0; i < 4; i++) {
-            debugEnqueueCallback(8, 0, &func_8000FED0_10AD0, &arg0->items[i]);
+            debugEnqueueCallback(8, 0, &renderSpriteFrame, &arg0->items[i]);
             debugEnqueueCallback(8, 1, &func_80035408_36008, &arg0->titleX);
         }
     }
