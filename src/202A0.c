@@ -187,7 +187,7 @@ void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     temp = allocation->unkB2C;
     charIndex = allocation->unkB33[temp];
 
-    *(void **)arg0->gameData = func_80055D34_56934(charIndex);
+    *(void **)arg0->gameData = loadCourseDataByIndex(charIndex);
 
     setCleanupCallback(&cleanupLevelPreviewCharacter);
     setCallback(&setupLevelPreviewCamera);

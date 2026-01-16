@@ -773,7 +773,7 @@ void loadRaceGameData(void) {
     GameState *gameState;
 
     gameState = (GameState *)getCurrentAllocation();
-    gameState->gameData.dataStart = func_80055D34_56934(gameState->memoryPoolId);
+    gameState->gameData.dataStart = loadCourseDataByIndex(gameState->memoryPoolId);
     gameState->unk28 = loadCompressedData(&_3FF010_ROM_START, &_3FF010_ROM_END, 0x16E0);
     func_8006983C_6A43C(&parseRaceAssetData);
 }

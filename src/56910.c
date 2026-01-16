@@ -14,7 +14,7 @@ extern s32 D_B7E70;
 extern s32 D_B9C40;
 extern s32 D_80091550_92150[];
 extern s32 D_80091510_92110[];
-extern Asset_56910 D_80091250_91E50[];
+extern Asset_56910 gCourseDataAssets[];
 extern Asset_56910 D_80091310_91F10[];
 extern Asset_56910 D_80091450_92050[];
 extern AssetWithoutSize D_800913D0_91FD0[];
@@ -25,8 +25,12 @@ LevelConfig *getLevelConfig(s32 index) {
     return &gLevelConfigs[index];
 }
 
-void *func_80055D34_56934(s32 index) {
-    return loadCompressedData(D_80091250_91E50[index].start, D_80091250_91E50[index].end, D_80091250_91E50[index].size);
+void *loadCourseDataByIndex(s32 index) {
+    return loadCompressedData(
+        gCourseDataAssets[index].start,
+        gCourseDataAssets[index].end,
+        gCourseDataAssets[index].size
+    );
 }
 
 void *func_80055D7C_5697C(s32 index) {
