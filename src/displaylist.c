@@ -412,7 +412,7 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
         if (obj->transformMatrix == NULL) {
             return;
         }
-        func_8006BFB8_6CBB8(obj, obj->transformMatrix);
+        transform3DToMtx(obj, obj->transformMatrix);
     }
 
     if (obj->displayLists->flags & 1) {
@@ -1488,7 +1488,7 @@ void renderCameraRelativeDisplayList(DisplayListObject *arg0) {
     }
 
     memcpy(&D_8009A8A4_9B4A4, &D_800AB068_A23D8->cameraX, 0xC);
-    func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, arg0->transformMatrix);
+    transform3DToMtx(&D_8009A8A4_9B4A4 - 5, arg0->transformMatrix);
 
     if (arg0->displayLists->flags & 1) {
         temp_v0 = arenaAlloc16(0x20);
@@ -1582,7 +1582,7 @@ void renderTexturedBillboardSprite(TexturedSpriteState *state) {
             return;
         }
         memcpy(&D_8009A8A4_9B4A4, &state->posX, 0xC);
-        func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, state->matrix);
+        transform3DToMtx(&D_8009A8A4_9B4A4 - 5, state->matrix);
     }
 
     if (gGraphicsMode != 6) {
@@ -1663,7 +1663,7 @@ void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
         if (state->matrix == NULL) {
             return;
         }
-        func_8006BFB8_6CBB8(&state->rotation, state->matrix);
+        transform3DToMtx(&state->rotation, state->matrix);
     }
 
     if (gGraphicsMode != 6) {
@@ -1745,7 +1745,7 @@ void renderTexturedBillboardSpriteTile(TexturedSpriteState *state) {
             return;
         }
         memcpy(&D_8009A8A4_9B4A4, &state->posX, 0xC);
-        func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, state->matrix);
+        transform3DToMtx(&D_8009A8A4_9B4A4 - 5, state->matrix);
     }
 
     if (gGraphicsMode != 6) {
@@ -1835,7 +1835,7 @@ void renderAlphaBillboardSprite(AlphaSpriteState *state) {
             return;
         }
         memcpy(&D_8009A8A4_9B4A4, &state->posX, 0xC);
-        func_8006BFB8_6CBB8(&D_8009A8A4_9B4A4 - 5, state->matrix);
+        transform3DToMtx(&D_8009A8A4_9B4A4 - 5, state->matrix);
     }
 
     if (gGraphicsMode != 7) {

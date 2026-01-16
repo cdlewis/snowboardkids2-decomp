@@ -1077,7 +1077,7 @@ void setupSceneAnimationTask(SceneAnimationTask *arg0) {
         offset = 0;
         do {
             memcpy(ptr, (u8 *)(offset + (s32)arg0->entries) + 8, 0xC);
-            func_8006BFB8_6CBB8(ptr - 5, (u8 *)arg0->transformBuffer + (i << 6));
+            transform3DToMtx(ptr - 5, (u8 *)arg0->transformBuffer + (i << 6));
             i++;
             offset += 0x14;
         } while (i < arg0->entryCount);
@@ -1687,7 +1687,7 @@ void setupGoldCoinEntries(GoldCoinSetupState *arg0) {
             offset = i * 16;
             *(s8 *)(offset + (s32)arg0->entries) = one;
             memcpy(globalBuf, (u8 *)(offset + (s32)arg0->entries) + 4, 0xC);
-            func_8006BFB8_6CBB8(globalBuf - 5, (u8 *)arg0->matrixBuffer + (i << 6));
+            transform3DToMtx(globalBuf - 5, (u8 *)arg0->matrixBuffer + (i << 6));
             i++;
         } while (i < arg0->coinCount);
     }

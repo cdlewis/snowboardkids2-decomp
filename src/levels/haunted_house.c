@@ -601,7 +601,7 @@ void initGhostTransformations(GhostManager *ghostManager) {
 
     while (slotIndex < 8) {
         memcpy(transformSrc, spawnPos, 0xC);
-        func_8006BFB8_6CBB8(transformSrc - 5, (void *)((u8 *)ghostManager->ghostSlotData + (slotIndex << 6)));
+        transform3DToMtx(transformSrc - 5, (void *)((u8 *)ghostManager->ghostSlotData + (slotIndex << 6)));
         spawnPos++;
         slotIndex++;
     }

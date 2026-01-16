@@ -2220,7 +2220,7 @@ void func_80044DB0_459B0(Func44D1CArg *arg0) {
             offset = i << 4;
             *((s8 *)(offset + (s32)arg0->items)) = one;
             memcpy(ptr, (s8 *)(offset + (s32)arg0->items + 4), 0xC);
-            func_8006BFB8_6CBB8(ptr - 5, (u8 *)arg0->unk0 + (i << 6));
+            transform3DToMtx(ptr - 5, (u8 *)arg0->unk0 + (i << 6));
             i++;
         } while (i < arg0->numItems);
     }

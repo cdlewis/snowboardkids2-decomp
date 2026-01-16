@@ -120,7 +120,7 @@ void initShootCrossTargetsCallback(ShootCrossTargets *arg0) {
             offset = i << 4;
             *((s8 *)(offset + (s32)arg0->targets)) = 0;
             memcpy(ptr, (s8 *)(offset + (s32)arg0->targets + 4), 0xC);
-            func_8006BFB8_6CBB8(ptr - 5, (u8 *)arg0->transformMatrices + (i << 6));
+            transform3DToMtx(ptr - 5, (u8 *)arg0->transformMatrices + (i << 6));
             i++;
         } while (i < arg0->targetCount);
     }
