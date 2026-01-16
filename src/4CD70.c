@@ -134,7 +134,7 @@ typedef struct {
     s16 bgX;
     s16 bgY;
     void *bgSpriteAsset;
-    s16 spriteIndex;
+    s16 bgSpriteFrame;
 } CrossRaceBadgeState;
 
 typedef struct {
@@ -2480,17 +2480,17 @@ void initCrossRaceBadgeTask(CrossRaceBadgeState *arg0) {
         case 4: // SPEED_CROSS
             arg0->mainSpriteAsset = loadAsset_350140();
             arg0->mainSpriteFrame = 0;
-            arg0->spriteIndex = 1;
+            arg0->bgSpriteFrame = 1;
             break;
         case 5: // SHOT_CROSS
             arg0->mainSpriteAsset = loadAsset_34F9A0();
             arg0->mainSpriteFrame = 4;
-            arg0->spriteIndex = 5;
+            arg0->bgSpriteFrame = 5;
             break;
         case 6: // X_CROSS
             arg0->mainSpriteAsset = loadAsset_3505F0();
             arg0->mainSpriteFrame = 0;
-            arg0->spriteIndex = 1;
+            arg0->bgSpriteFrame = 1;
             break;
     }
     arg0->bgSpriteAsset = arg0->mainSpriteAsset;
