@@ -8,9 +8,9 @@
 #include "geometry.h"
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
+    s32 x;    /* 0x00 - X position */
+    s32 y;    /* 0x04 - Y position (height) */
+    s32 z;    /* 0x08 - Z position */
 } JointPosition;
 
 typedef struct {

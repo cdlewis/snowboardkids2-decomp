@@ -27,12 +27,6 @@ extern s32 D_8009A8AC_9B4AC;
 extern s32 gJingleTownBossSpawnPos[];
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} UnkA10Entry;
-
-typedef struct {
     u8 primaryR;
     u8 primaryG;
     u8 primaryB;
@@ -85,7 +79,7 @@ typedef struct {
     Transform3D unk9B0; /* 0x9B0 - 0x9CF */
     u8 pad9D0[0x9F0 - 0x9D0];
     u8 unk9F0[0x20];       /* 0x9F0 - 0xA0F */
-    UnkA10Entry unkA10[9]; /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
+    JointPosition jointPositions[9]; /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
     s32 unkA7C;            /* 0xA7C */
     u8 padA80[4];
     s32 unkA84; /* 0xA84 */
@@ -944,7 +938,13 @@ void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
     }
 }
 
-void func_800BCA10_B3FD0(Arg0Struct *arg0) {
+/**
+ * Updates joint positions for the jingle town boss.
+ * For each of the 9 joints, computes the X/Z position from the boss's position
+ * plus joint-specific offsets, then calculates the track height at that position.
+ * Finally enqueues debug callbacks to render the joint positions.
+ */
+void updateJingleTownBossJointPositions(Arg0Struct *arg0) {
     s32 i;
     GameDataLayout *temp_s5;
     GameState *alloc;
@@ -957,11 +957,11 @@ void func_800BCA10_B3FD0(Arg0Struct *arg0) {
         s32 *posPtr;
         u16 temp;
 
-        arg0->unkA10[i].unk0 = arg0->unk970.translation.x + gJingleTownBossHoverExitOffsets[6 + i][0];
-        arg0->unkA10[i].unk8 = arg0->unk970.translation.z + gJingleTownBossHoverExitOffsets[6 + i][2];
-        posPtr = &arg0->unkA10[i].unk0;
+        arg0->jointPositions[i].x = arg0->unk970.translation.x + gJingleTownBossHoverExitOffsets[6 + i][0];
+        arg0->jointPositions[i].z = arg0->unk970.translation.z + gJingleTownBossHoverExitOffsets[6 + i][2];
+        posPtr = &arg0->jointPositions[i].x;
         temp = func_80059E90_5AA90(arg0, temp_s5, arg0->sectorIndex, posPtr);
-        arg0->unkA10[i].unk4 = getTrackHeightInSector(temp_s5, temp, posPtr, 0x100000);
+        arg0->jointPositions[i].y = getTrackHeightInSector(temp_s5, temp, posPtr, 0x100000);
         i++;
     } while (i < 9);
 
