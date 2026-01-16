@@ -30,19 +30,19 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x38];
-    void *displayList; /* 0x38: Main display list (offset 0x90 from result) */
-    void *unk3C;       /* 0x3C: Shared pointer for all display objects */
-    void *unk40;       /* 0x40: Shared pointer for all display objects */
-    s32 unk44;         /* 0x44: Always set to 0 */
+    void *displayList;     /* 0x38: Main display list (offset 0x90 from result) */
+    void *assetData;       /* 0x3C: Shared asset data pointer for all display objects */
+    void *unk40;           /* 0x40: Shared pointer for all display objects */
+    s32 unk44;             /* 0x44: Always set to 0 */
     u8 _pad2[0xC];
-    u8 *displayObjects; /* 0x54: Array of 4 DisplayListObjects (0xF0 bytes) */
+    u8 *displayObjects;    /* 0x54: Array of 4 DisplayListObjects (0xF0 bytes) */
     u8 _pad3[0x80];
-    s16 unkD8; /* 0xD8: Always set to 0 */
+    s16 unkD8;             /* 0xD8: Always set to 0 */
 } SunnyMountainTaskState;
 
 extern void func_800BB488_B4D88(void);
-void func_800BB7D0_B50D0(func_800BB7D0_arg *arg0);
-void func_800BB3D8_B4CD8(s32 *arg0);
+void cleanupSunnyMountainDisplayObjectsTask(func_800BB7D0_arg *arg0);
+void updateSunnyMountainDisplayObjectsTask(s32 *arg0);
 
 /**
  * Initializes the Sunny Mountain level task state.
@@ -62,7 +62,7 @@ void func_800BB3D8_B4CD8(s32 *arg0);
  *    - Copies 12 bytes of position data from the allocation
  * 5. Registers cleanup and update callbacks
  */
-void func_800BB2B0_B4BB0(SunnyMountainTaskState *taskState) {
+void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
     s32 loopCounter;
     s32 srcPositionOffset;
     SunnyMountainTaskState *destPositionPtr;
@@ -78,7 +78,7 @@ void func_800BB2B0_B4BB0(SunnyMountainTaskState *taskState) {
     taskState->displayList = (void *)((u32)displayListResult + 0x90);
 
     srcPositionOffset = 0;
-    taskState->unk3C = loadUncompressedAssetByIndex(allocation->memoryPoolId);
+    taskState->assetData = loadUncompressedAssetByIndex(allocation->memoryPoolId);
 
     destPositionPtr = taskState;
     displayObjectOffset = 0;
@@ -99,7 +99,7 @@ void func_800BB2B0_B4BB0(SunnyMountainTaskState *taskState) {
         destPositionAddr = (u8 *)destPositionPtr;
         destPositionAddr = destPositionAddr + 0x6C;
 
-        *(void **)(displayObjectOffset + (s32)taskState->displayObjects + 0x24) = taskState->unk3C;
+        *(void **)(displayObjectOffset + (s32)taskState->displayObjects + 0x24) = taskState->assetData;
 
         *(void **)(displayObjectOffset + (s32)taskState->displayObjects + 0x28) = taskState->unk40;
 
@@ -112,11 +112,11 @@ void func_800BB2B0_B4BB0(SunnyMountainTaskState *taskState) {
         srcPositionOffset += 0xC;
     } while (loopCounter < 4);
 
-    setCleanupCallback(func_800BB7D0_B50D0);
-    setCallback(func_800BB3D8_B4CD8);
+    setCleanupCallback(cleanupSunnyMountainDisplayObjectsTask);
+    setCallback(updateSunnyMountainDisplayObjectsTask);
 }
 
-void func_800BB3D8_B4CD8(s32 *arg0) {
+void updateSunnyMountainDisplayObjectsTask(s32 *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
     s32 i;
 
@@ -136,7 +136,7 @@ void func_800BB3D8_B4CD8(s32 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/sunny_mountain", func_800BB488_B4D88);
 
-void func_800BB7D0_B50D0(func_800BB7D0_arg *arg0) {
+void cleanupSunnyMountainDisplayObjectsTask(func_800BB7D0_arg *arg0) {
     arg0->unk3C = freeNodeMemory(arg0->unk3C);
     arg0->unk40 = freeNodeMemory(arg0->unk40);
     arg0->unk54 = freeNodeMemory(arg0->unk54);
