@@ -14,6 +14,7 @@ gWipeOffsetY = 0x800BADF2; // rom:0x1E7EA2 type:s16 size:8
 playFanSoundEffect = 0x800B4B30; // rom:0x1E1BE0
 playFanSoundOnChannel0 = 0x800B4C80; // rom:0x1E1D30
 stopFanSoundOnChannel0 = 0x800B4CB0; // rom:0x1E1D60
+renderCutsceneSlotMenu = 0x800B3F64; // rom:0x1E1014
 D_800BBB50_B5450 = 0x800BBB50; // rom:0xB5450 size:0x18
 D_800BBB68_B5468 = 0x800BBB68; // rom:0xB5468
 D_800BBB6C_B546C = 0x800BBB6C; // rom:0xB546C

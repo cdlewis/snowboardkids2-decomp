@@ -927,7 +927,13 @@ StateEntry *getStateEntry(u16 arg0) {
 
 extern void func_800BB2F4(s32, s32, s32);
 
-void func_800B3F64_1E1014(s32 arg0, s16 arg1) {
+/**
+ * Renders a vertical menu of cutscene slots with one item highlighted.
+ *
+ * @param arg0 UI resource identifier
+ * @param arg1 Index of the slot to highlight (0-15)
+ */
+void renderCutsceneSlotMenu(s32 arg0, s16 arg1) {
     s32 count;
     s32 i;
     s32 yPos;
