@@ -1000,7 +1000,7 @@ s32 isPlayerInRangeAndPull(Vec3i *arg0, s32 arg1, Player *arg2) {
     return 0;
 }
 
-void func_8005C838_5D438(ListNode_5AA90 *arg0) {
+void addCollisionSectorNodeToList(ListNode_5AA90 *arg0) {
     Allocation5AA90 *alloc = (Allocation5AA90 *)getCurrentAllocation();
     arg0->next = alloc->list;
     alloc->list = arg0;

@@ -16,7 +16,7 @@ void func_8005A930_5B530(Player *player);
 s32 isPlayerNearShortcut(Player *player);
 void handlePlayerToPlayerCollision(Player *player);
 void handleCollisionWithTargetPlayer(Player *player);
-void func_8005C838_5D438(ListNode_5AA90 *arg0);
+void addCollisionSectorNodeToList(ListNode_5AA90 *arg0);
 Player *findPlayerNearPosition(Vec3i *position, s32 excludePlayerIndex, s32 searchRadius);
 Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex, s32 searchRadius);
 s32 func_8005A9A8_5B5A8(Player *player);

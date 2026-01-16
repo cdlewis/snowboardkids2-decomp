@@ -286,7 +286,7 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
 
     transformVector(D_800BCB30_B40F0, (s16 *)&sp30, &arg0->unkAD4);
     memcpy(&arg0->unkB58, &arg0->unkAD4, 0xC);
-    func_8005C838_5D438((ListNode_5AA90 *)&arg0->unkB50);
+    addCollisionSectorNodeToList((ListNode_5AA90 *)&arg0->unkB50);
     func_800BC474_B3A34(arg0);
 
     transformVector(D_800BCB3C_B40FC, arg0->unk38, &arg0->unkAE4);

@@ -263,7 +263,7 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
 
     transformVector((s16 *)(alloc->unk48 + 0xF0), (s16 *)&sp30, &arg0->unkAD4);
     memcpy(&arg0->unkB50.localPos, &arg0->unkAD4, sizeof(Vec3i));
-    func_8005C838_5D438(&arg0->unkB50);
+    addCollisionSectorNodeToList(&arg0->unkB50);
     func_800BC0E8_AC918(arg0);
 
     transformVector((s16 *)(alloc->unk48 + 0xFC), arg0->unk38, &arg0->unkAE4);

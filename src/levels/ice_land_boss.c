@@ -384,7 +384,7 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
         transformVector(D_800BCA24_B1F14, (s16 *)&sp30, &arg0->transformedPos);
     }
     memcpy(&arg0->sectorListNode.localPos, &arg0->transformedPos, 0xC);
-    func_8005C838_5D438(&arg0->sectorListNode);
+    addCollisionSectorNodeToList(&arg0->sectorListNode);
     func_800BC61C_B1B0C((Player *)arg0);
 
     if (arg0->bossFlags & 0x400000) {
