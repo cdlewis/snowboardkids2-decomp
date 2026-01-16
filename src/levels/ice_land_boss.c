@@ -754,48 +754,46 @@ void dispatchIceLandBossAttackPhase(IceLandBossAttackArg *arg0) {
     gIceLandBossAttackPhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
-s32 func_800BC0D8_B15C8(Player *arg0) {
-    Transform3D sp10;
-    Vec3i sp30;
-    s32 sp3C[4];
-    Transform3D *temp_s0;
-    Vec3i *temp_s1;
+s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
+    Transform3D rotMatrix;
+    Vec3i tempVec;
+    s32 pad[4];
     s16 angleDiff;
     s32 i;
 
     getCurrentAllocation();
 
-    if (arg0->behaviorStep == 0) {
-        arg0->unkA8C = 0xFFFF;
-        arg0->unkB8C = 0;
-        arg0->behaviorStep += 1;
+    if (boss->behaviorStep == 0) {
+        boss->unkA8C = 0xFFFF;
+        boss->unkB8C = 0;
+        boss->behaviorStep += 1;
 
-        if (!(arg0->unkB84 & 0x80000)) {
-            if (arg0->unkBDB == 0) {
-                queueSoundAtPosition(&arg0->worldPos, 0x4C);
+        if (!(boss->unkB84 & 0x80000)) {
+            if (boss->unkBDB == 0) {
+                queueSoundAtPosition(&boss->worldPos, 0x4C);
             } else {
-                arg0->unkBDB -= 1;
-                if (arg0->unkBDB == 0) {
-                    queueSoundAtPosition(&arg0->worldPos, 0x4C);
+                boss->unkBDB -= 1;
+                if (boss->unkBDB == 0) {
+                    queueSoundAtPosition(&boss->worldPos, 0x4C);
                 }
             }
         }
     }
 
-    arg0->unkB8C += 1;
+    boss->unkB8C += 1;
 
-    if ((arg0->unkB8C == 5) || (arg0->unkB8C == 0xF)) {
-        spawnBossHomingProjectileVariant1Task(arg0);
-        spawnBossHomingProjectileVariant1Task(arg0);
-        spawnBossHomingProjectileVariant1Task(arg0);
-        spawnBossHomingProjectileVariant1Task(arg0);
+    if ((boss->unkB8C == 5) || (boss->unkB8C == 0xF)) {
+        spawnBossHomingProjectileVariant1Task(boss);
+        spawnBossHomingProjectileVariant1Task(boss);
+        spawnBossHomingProjectileVariant1Task(boss);
+        spawnBossHomingProjectileVariant1Task(boss);
     }
 
-    arg0->unkB88 = 0x200;
-    func_800B9B90_A9A40(arg0);
+    boss->unkB88 = 0x200;
+    func_800B9B90_A9A40(boss);
 
     angleDiff =
-        (func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z) - arg0->rotY) & 0x1FFF;
+        (func_8006D21C_6DE1C(boss->unkA7C, boss->unkA84, boss->worldPos.x, boss->worldPos.z) - boss->rotY) & 0x1FFF;
 
     if (angleDiff >= 0x1001) {
         angleDiff = angleDiff | 0xE000;
@@ -809,54 +807,52 @@ s32 func_800BC0D8_B15C8(Player *arg0) {
         angleDiff = -0x38;
     }
 
-    arg0->rotY = arg0->rotY + angleDiff;
+    boss->rotY = boss->rotY + angleDiff;
 
-    if (!(arg0->unkB84 & 1)) {
-        temp_s0 = &arg0->unk970;
-        createYRotationMatrix(temp_s0, arg0->rotY);
-        func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->unk990, temp_s0, &sp10);
-        temp_s1 = &arg0->velocity;
-        transformVector3(temp_s1, &sp10, &sp30);
-        sp30.x = 0;
-        transformVector2(&sp30, &sp10, temp_s1);
-        transformVector2(&D_800BCA50_B1F40, &sp10, &sp30);
+    if (!(boss->unkB84 & 1)) {
+        createYRotationMatrix(&boss->unk970, boss->rotY);
+        func_8006BDBC_6C9BC((BoneAnimationState *)&boss->unk990, &boss->unk970, &rotMatrix);
+        transformVector3(&boss->velocity, &rotMatrix, &tempVec);
+        tempVec.x = 0;
+        transformVector2(&tempVec, &rotMatrix, &boss->velocity);
+        transformVector2(&D_800BCA50_B1F40, &rotMatrix, &tempVec);
 
-        if (sp30.y > 0) {
-            sp30.y = 0;
+        if (tempVec.y > 0) {
+            tempVec.y = 0;
         }
 
-        arg0->velocity.x += sp30.x;
-        arg0->velocity.y += sp30.y;
-        arg0->velocity.z += sp30.z;
+        boss->velocity.x += tempVec.x;
+        boss->velocity.y += tempVec.y;
+        boss->velocity.z += tempVec.z;
     } else {
-        arg0->velocity.x -= arg0->velocity.x / 16;
-        arg0->velocity.z -= arg0->velocity.z / 16;
+        boss->velocity.x -= boss->velocity.x / 16;
+        boss->velocity.z -= boss->velocity.z / 16;
     }
 
-    if (arg0->velocity.y > 0) {
-        arg0->velocity.y = 0;
+    if (boss->velocity.y > 0) {
+        boss->velocity.y = 0;
     }
 
-    arg0->velocity.y += -0x10000;
-    applyClampedVelocityToPosition(arg0);
+    boss->velocity.y += -0x10000;
+    applyClampedVelocityToPosition(boss);
 
-    if (func_8005D308_5DF08(arg0, 4) != 0) {
-        arg0->unkB88 = 0;
-        arg0->behaviorMode = 1;
-        arg0->behaviorPhase = 1;
-        arg0->behaviorStep = 0;
-        arg0->behaviorCounter = 0;
+    if (func_8005D308_5DF08(boss, 4) != 0) {
+        boss->unkB88 = 0;
+        boss->behaviorMode = 1;
+        boss->behaviorPhase = 1;
+        boss->behaviorStep = 0;
+        boss->behaviorCounter = 0;
 
-        if (arg0->unkBDB == 0) {
+        if (boss->unkBDB == 0) {
             for (i = 0; i < 0x1E; i++) {
-                spawnBossHomingProjectileVariant1Task(arg0);
+                spawnBossHomingProjectileVariant1Task(boss);
             }
-            memcpy(&sp30, &arg0->worldPos, sizeof(Vec3i));
-            sp30.y += 0x300000;
-            spawnSparkleEffectWithPlayer(&sp30, arg0->playerIndex);
-            setIceBossFlyingMode(arg0);
-            arg0->unkBDB = 3;
-            func_8005D180_5DD80(arg0, 2);
+            memcpy(&tempVec, &boss->worldPos, sizeof(Vec3i));
+            tempVec.y += 0x300000;
+            spawnSparkleEffectWithPlayer(&tempVec, boss->playerIndex);
+            setIceBossFlyingMode(boss);
+            boss->unkBDB = 3;
+            func_8005D180_5DD80(boss, 2);
         }
     }
 

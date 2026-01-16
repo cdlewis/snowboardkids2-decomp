@@ -61,6 +61,7 @@ iceLandBossChaseIntroPhase = 0x800BB998; // rom:0xB0E88
 iceLandBossChaseAttackPhase = 0x800BBA54; // rom:0xB0F44
 iceLandBossChaseExitPhase = 0x800BC008; // rom:0xB14F8
 dispatchIceLandBossAttackPhase = 0x800BC0A8; // rom:0xB1598
+iceLandBossGroundProjectileAttackPhase = 0x800BC0D8; // rom:0xB15C8
 gIceLandBossAttackPhaseHandlers = 0x800BCA5C; // rom:0xB1F4C
 updateGhostSlotStates = 0x800BC220; // rom:0xAFF10
 dispatchChaseAttackPhase = 0x800BB86C; // rom:0xB2E2C
