@@ -19,8 +19,8 @@ void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg
     findTrackFaceAtPosition(arg0, arg1, arg2, arg3, arg4);
 }
 
-s32 func_8005D020_5DC20(void *arg0, u16 arg1, void *arg2, s32 arg3) {
-    return func_80062274_62E74(arg0, arg1);
+s32 getSectorTrackHeight(void *gameData, u16 sectorIndex, void *pos, s32 defaultHeight) {
+    return func_80062274_62E74(gameData, sectorIndex);
 }
 
 void func_8005D03C_5DC3C(Player *arg0) {

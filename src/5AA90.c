@@ -59,7 +59,7 @@ void func_8005A930_5B530(Player *player) {
     playerPos = &player->worldPos;
     newSectorIndex = getOrUpdatePlayerSectorIndex(player, gameData, player->sectorIndex, playerPos);
     player->sectorIndex = newSectorIndex;
-    trackHeight = func_8005D020_5DC20(gameData, newSectorIndex, playerPos, 0x200000);
+    trackHeight = getSectorTrackHeight(gameData, newSectorIndex, playerPos, 0x200000);
     if (trackHeight < player->worldPos.y) {
         player->worldPos.y = trackHeight;
     }
