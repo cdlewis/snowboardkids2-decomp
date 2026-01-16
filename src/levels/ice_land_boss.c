@@ -555,7 +555,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     arg0->unkB84 = arg0->unkB84 | 0x40000;
     func_800B9B90_A9A40(arg0);
 
-    angleDiff = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z) - arg0->rotY;
+    angleDiff = computeAngleToPosition(arg0->unkA7C, arg0->unkA84, arg0->worldPos.x, arg0->worldPos.z) - arg0->rotY;
     angleDiff = angleDiff & 0x1FFF;
 
     if (angleDiff >= 0x1001) {
@@ -793,7 +793,7 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
     func_800B9B90_A9A40(boss);
 
     angleDiff =
-        (func_8006D21C_6DE1C(boss->unkA7C, boss->unkA84, boss->worldPos.x, boss->worldPos.z) - boss->rotY) & 0x1FFF;
+        (computeAngleToPosition(boss->unkA7C, boss->unkA84, boss->worldPos.x, boss->worldPos.z) - boss->rotY) & 0x1FFF;
 
     if (angleDiff >= 0x1001) {
         angleDiff = angleDiff | 0xE000;

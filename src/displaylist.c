@@ -280,7 +280,7 @@ u16 getTrackEndInfo(void *arg0, void *arg1) {
     vert0 = (Vertex6 *)((s32)idx0 * sizeof(Vertex6) + (s32)verts);
     vert1 = (Vertex6 *)((s32)idx1 * sizeof(Vertex6) + (s32)verts);
 
-    return (func_8006D21C_6DE1C(vert0->x, vert0->z, vert1->x, vert1->z) - 0x1000) & 0xFFFF;
+    return (computeAngleToPosition(vert0->x, vert0->z, vert1->x, vert1->z) - 0x1000) & 0xFFFF;
 }
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_800626C4_632C4);
@@ -370,7 +370,7 @@ u16 getTrackSegmentWaypoints(void *arg0_void, u16 waypointIdx, void *waypointSta
     startVert = (Vertex6 *)((s32)startVertexIdx * sizeof(Vertex6) + (s32)verts);
     endVert = (Vertex6 *)((s32)endVertexIdx * sizeof(Vertex6) + (s32)verts);
 
-    return (func_8006D21C_6DE1C(startVert->x, startVert->z, endVert->x, endVert->z) - 0x1000) & 0xFFFF;
+    return (computeAngleToPosition(startVert->x, startVert->z, endVert->x, endVert->z) - 0x1000) & 0xFFFF;
 }
 
 s32 resolveTrackSegmentIndex(TrackSegmentEntry **arg0, u16 index) {

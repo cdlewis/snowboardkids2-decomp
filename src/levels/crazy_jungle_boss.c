@@ -444,7 +444,7 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
         arg0->behaviorStep++;
     }
 
-    clampedAngle = (s16)func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->unk434.x, arg0->unk434.z);
+    clampedAngle = (s16)computeAngleToPosition(arg0->unkA7C, arg0->unkA84, arg0->unk434.x, arg0->unk434.z);
     currentAngle = arg0->unkA94;
     clampedAngle = (clampedAngle - currentAngle) & 0x1FFF;
     if (clampedAngle >= 0x1001) {

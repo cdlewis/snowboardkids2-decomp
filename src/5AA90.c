@@ -333,7 +333,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
                         if (dist > 0x30000) {
                             setPlayerCollisionKnockbackState(
                                 player,
-                                func_8006D21C_6DE1C(
+                                computeAngleToPosition(
                                     targetPlayer->worldPos.x,
                                     targetPlayer->worldPos.z,
                                     player->worldPos.x,
@@ -714,7 +714,7 @@ s32 checkPositionPlayerCollisionWithKnockback(Vec3i *pos, s32 extraRadius, s32 m
         if (dist > 0x30000) {
             setPlayerCollisionKnockbackState(
                 targetPlayer,
-                func_8006D21C_6DE1C(pos->x, pos->z, targetPlayer->worldPos.x, targetPlayer->worldPos.z),
+                computeAngleToPosition(pos->x, pos->z, targetPlayer->worldPos.x, targetPlayer->worldPos.z),
                 dist
             );
             return 1;
@@ -1022,10 +1022,10 @@ s16 getPlayerTargetTrackAngle(Player *player) {
             Section1Element *waypoint1 = (Section1Element *)(sectorEntry->unk1C * 6 + (u32)waypointData);
             Section1Element *waypoint2 = (Section1Element *)(sectorEntry->unk16 * 6 + (u32)waypointData);
             targetAngle =
-                func_8006D21C_6DE1C(waypoint1->unk0, waypoint1->unk4, waypoint2->unk0, waypoint2->unk4) + 0x800;
+                computeAngleToPosition(waypoint1->unk0, waypoint1->unk4, waypoint2->unk0, waypoint2->unk4) + 0x800;
         } else {
             LevelConfig *levelConfig = getLevelConfig(gameState->memoryPoolId);
-            targetAngle = func_8006D21C_6DE1C(
+            targetAngle = computeAngleToPosition(
                 levelConfig->shortcutPosX,
                 levelConfig->shortcutPosZ,
                 player->worldPos.x,
@@ -1039,7 +1039,7 @@ s16 getPlayerTargetTrackAngle(Player *player) {
         Section1Element *waypointData = (Section1Element *)gameState->gameData.section1Data;
         Section1Element *waypoint1 = (Section1Element *)(sectorEntry->unk16 * 6 + (u32)waypointData);
         Section1Element *waypoint2 = (Section1Element *)(sectorEntry->unk1C * 6 + (u32)waypointData);
-        targetAngle = func_8006D21C_6DE1C(waypoint1->unk0, waypoint1->unk4, waypoint2->unk0, waypoint2->unk4);
+        targetAngle = computeAngleToPosition(waypoint1->unk0, waypoint1->unk4, waypoint2->unk0, waypoint2->unk4);
         if (player->unkB84 & 2) {
             targetAngle += 0x1000;
         }

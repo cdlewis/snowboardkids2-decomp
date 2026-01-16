@@ -160,7 +160,7 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
     targetX <<= 16;
     targetZ <<= 16;
 
-    result = func_8006D21C_6DE1C(camera->cameraX, camera->cameraZ, targetX, targetZ);
+    result = computeAngleToPosition(camera->cameraX, camera->cameraZ, targetX, targetZ);
     camera->targetAngle = result;
     camera->viewAngle = result;
 

@@ -412,7 +412,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         arg0->behaviorStep++;
     }
 
-    angleDiff = func_8006D21C_6DE1C(arg0->unkA7C, arg0->unkA84, arg0->unk434.x, arg0->unk434.z) - arg0->unkA94;
+    angleDiff = computeAngleToPosition(arg0->unkA7C, arg0->unkA84, arg0->unk434.x, arg0->unk434.z) - arg0->unkA94;
     angleDiff = angleDiff & 0x1FFF;
 
     if (angleDiff >= 0x1001) {

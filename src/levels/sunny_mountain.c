@@ -197,7 +197,7 @@ void func_800BB890_B5190(func_800BBA34_B5334_arg *arg0) {
     startY = *(s32 *)(D_800BBB6C_B546C + offset);
     arg0->unk44 = (endY - startY) / 60;
 
-    arg0->unk4E = func_8006D21C_6DE1C(
+    arg0->unk4E = computeAngleToPosition(
         *(s32 *)(D_800BBB88_B5488 + offset),
         *(s32 *)(D_800BBB8C_B548C + offset),
         *(s32 *)(D_800BBB68_B5468 + offset),

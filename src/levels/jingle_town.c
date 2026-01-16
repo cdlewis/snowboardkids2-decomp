@@ -111,7 +111,7 @@ void initJingleTownTrain(JingleTownTrain *arg0) {
 
     temp4 = arg0->trainIndex;
     arg0->rotation =
-        func_8006D21C_6DE1C(gJingleTownTrainWaypointsX2[temp4 * 5], gJingleTownTrainWaypointsZ2[temp4 * 5], arg0->posX, arg0->posZ);
+        computeAngleToPosition(gJingleTownTrainWaypointsX2[temp4 * 5], gJingleTownTrainWaypointsZ2[temp4 * 5], arg0->posX, arg0->posZ);
 
     arg0->yOffset = 0;
     arg0->yVelocity = 0;
@@ -166,7 +166,7 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
     if (alloc->unk76 == 0) {
         temp = (arg0->waypointIndex << 3) + (arg0->trainIndex * 5 << 2);
         angleDiff =
-            func_8006D21C_6DE1C(gJingleTownTrainWaypointsX[temp >> 2], gJingleTownTrainWaypointsZ[temp >> 2], arg0->posX, arg0->posZ);
+            computeAngleToPosition(gJingleTownTrainWaypointsX[temp >> 2], gJingleTownTrainWaypointsZ[temp >> 2], arg0->posX, arg0->posZ);
         angleDiff = (angleDiff - arg0->rotation) & 0x1FFF;
         if (angleDiff >= 0x1001) {
             angleDiff = angleDiff | 0xE000;
@@ -220,7 +220,7 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
     alloc = getCurrentAllocation();
     if (alloc->unk76 == 0) {
         waypointOffset = (arg0->waypointIndex * 8) + (arg0->trainIndex * 0x14);
-        angleDiff = (func_8006D21C_6DE1C(
+        angleDiff = (computeAngleToPosition(
                      *(s32 *)((u8 *)gJingleTownTrainWaypointsX + waypointOffset),
                      *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + waypointOffset),
                      arg0->posX,

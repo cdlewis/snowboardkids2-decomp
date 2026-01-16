@@ -95,7 +95,7 @@ s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle) {
     s16 angleToNpc;
 
     state = getCurrentAllocation();
-    angleToNpc = func_8006D21C_6DE1C(state->unk3EC, state->unk3F0, npcX, npcZ);
+    angleToNpc = computeAngleToPosition(state->unk3EC, state->unk3F0, npcX, npcZ);
 
     if (npcFacingAngle - 0x238 < angleToNpc && angleToNpc < npcFacingAngle + 0x238) {
         if (distance_2d(state->unk3EC - npcX, state->unk3F0 - npcZ) <= 0x280000) {

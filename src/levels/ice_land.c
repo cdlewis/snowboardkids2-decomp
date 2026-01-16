@@ -105,7 +105,7 @@ void func_800BB2B0_B2030(B2030Payload *arg0) {
     arg0->index++;
     waypoints = arg0->unk5C;
     arg0->angleX = 0;
-    angle = func_8006D21C_6DE1C(
+    angle = computeAngleToPosition(
         waypoints[arg0->index].unk4,
         waypoints[arg0->index].unkC,
         arg0->position50[0],

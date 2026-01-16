@@ -586,6 +586,6 @@ INCLUDE_ASM("asm/nonmatchings/geometry", matrixToEulerAngles);
 
 INCLUDE_ASM("asm/nonmatchings/geometry", atan2Fixed);
 
-s16 func_8006D21C_6DE1C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    return atan2Fixed(arg2 - arg0, arg3 - arg1);
+s16 computeAngleToPosition(s32 fromX, s32 fromZ, s32 toX, s32 toZ) {
+    return atan2Fixed(toX - fromX, toZ - fromZ);
 }

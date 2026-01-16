@@ -54,7 +54,7 @@ void func_800B9B90_A9A40(Player *player) {
     targetPos.x = player->worldPos.x - waypointPos.x;
     targetPos.z = player->worldPos.z - waypointPos.z;
 
-    angle = func_8006D21C_6DE1C(nextWaypointPos.x, nextWaypointPos.z, waypointPos.x, waypointPos.z);
+    angle = computeAngleToPosition(nextWaypointPos.x, nextWaypointPos.z, waypointPos.x, waypointPos.z);
     rotateVectorY(&targetPos, -angle, &tempVec);
     tempVec.x = 0;
     rotateVectorY(&tempVec, angle, &targetPos);
@@ -105,7 +105,7 @@ void func_800B9B90_A9A40(Player *player) {
     dir.x -= waypointPos.x;
     dir.z -= waypointPos.z;
 
-    angle = func_8006D21C_6DE1C(nextWaypointPos.x, nextWaypointPos.z, waypointPos.x, waypointPos.z);
+    angle = computeAngleToPosition(nextWaypointPos.x, nextWaypointPos.z, waypointPos.x, waypointPos.z);
     rotateVectorY(&dir, -angle, &tempVec);
     tempVec.x = 0;
     rotateVectorY(&tempVec, angle, &dir);

@@ -225,7 +225,8 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     applyTransformToModel(state->sceneModel, &state->transform);
     setModelAnimation(state->sceneModel, 0x90);
 
-    angle = (func_8006D21C_6DE1C(waypointStart[0], waypointStart[2], waypointEnd[0], waypointEnd[2]) - 0x1000) & 0x1FFF;
+    angle =
+        (computeAngleToPosition(waypointStart[0], waypointStart[2], waypointEnd[0], waypointEnd[2]) - 0x1000) & 0x1FFF;
     state->currentRotation = angle;
     state->targetRotation = angle;
     state->turnDirection = 0;
@@ -294,7 +295,7 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
     getTrackSegmentWaypoints(gameData, waypoint, waypointStart, waypointEnd);
 
     state->targetRotation =
-        (func_8006D21C_6DE1C(waypointEnd[0], waypointEnd[2], state->posX, state->posZ) - 0x1000) & 0x1FFF;
+        (computeAngleToPosition(waypointEnd[0], waypointEnd[2], state->posX, state->posZ) - 0x1000) & 0x1FFF;
 
     rotation = (state->currentRotation + 0x1000) & 0x1FFF;
     state->currentRotation = rotation;
@@ -341,7 +342,7 @@ void resumeLevelPreviewAfterHold(Func80020418Arg *arg0) {
 
         getTrackSegmentWaypoints(unk18, temp, pos1, pos2);
 
-        arg0->unk5A = (func_8006D21C_6DE1C(pos1[0], pos1[2], arg0->unk0, arg0->unk8) - 0x1000) & 0x1FFF;
+        arg0->unk5A = (computeAngleToPosition(pos1[0], pos1[2], arg0->unk0, arg0->unk8) - 0x1000) & 0x1FFF;
 
         arg0->unk56 = (arg0->unk56 + 0x1000) & 0x1FFF;
 

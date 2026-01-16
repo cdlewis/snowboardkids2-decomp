@@ -99,7 +99,7 @@ void resolveTownLamppostCollision(TownPosition *position, s16 collisionRadius, s
     pos = position;
     sinComponent = pos->x;
     base = &lamppost->x;
-    angle = func_8006D21C_6DE1C(*base << 16, *lamppostY << 16, sinComponent, position->z);
+    angle = computeAngleToPosition(*base << 16, *lamppostY << 16, sinComponent, position->z);
     radiusPtr = &(g_TownLampposts + lamppostIndex)->radius;
     combinedRadius = *radiusPtr + collisionRadius;
     combinedRadius <<= 16;
@@ -169,7 +169,8 @@ void resolveTownNPCCollision(TownController *controller, TownPosition *position,
 
     state = (GameState *)getCurrentAllocation();
     characterIndex = characterIndex - 1;
-    angle = func_8006D21C_6DE1C(state->unk408[characterIndex], state->unk410[characterIndex], position->x, position->z);
+    angle =
+        computeAngleToPosition(state->unk408[characterIndex], state->unk410[characterIndex], position->x, position->z);
     combinedRadius = state->unk418[characterIndex] + state->unk3FE;
     combinedRadius <<= 16;
     sinComponent = approximateSin(angle);

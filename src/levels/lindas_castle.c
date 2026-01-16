@@ -124,7 +124,7 @@ void initFlyingEnemyTask(FlyingEnemyTask *task) {
 
     index = task->waypointIndex;
 
-    task->rotationAngle = func_8006D21C_6DE1C(
+    task->rotationAngle = computeAngleToPosition(
         g_FlyingEnemyWaypoints[index].unk4[1].x,
         g_FlyingEnemyWaypoints[index].unk4[1].z,
         task->waypointX,
@@ -158,7 +158,7 @@ void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task) {
     gs = (GameState *)getCurrentAllocation();
 
     if (gs->gamePaused == 0) {
-        angleDelta = func_8006D21C_6DE1C(
+        angleDelta = computeAngleToPosition(
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x,
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z,
             task->targetPosition[0],
@@ -217,7 +217,7 @@ void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
     gs = (GameState *)getCurrentAllocation();
 
     if (gs->gamePaused == 0) {
-        angleDelta = func_8006D21C_6DE1C(
+        angleDelta = computeAngleToPosition(
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x,
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z,
             task->targetPosition[0],
