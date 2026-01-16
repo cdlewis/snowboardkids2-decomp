@@ -85,17 +85,17 @@ s32 accelerateWipeZoomIn(cutsceneSys2Wait_exec_asset *arg0) {
     return result;
 }
 
-s32 func_800B9708_1E67B8(cutsceneSys2Wait_exec_asset *arg0) {
-    s32 temp_a1;
-    s32 temp_v0;
+s32 decelerateWipeZoomOut(cutsceneSys2Wait_exec_asset *arg0) {
+    s32 currentZoom;
+    s32 zoomDelta;
     s32 result;
 
-    temp_a1 = arg0->zoomLevelX;
-    temp_v0 = ((0x10000 - temp_a1) >> 8) * (arg0->zoomDecelRate >> 8);
+    currentZoom = arg0->zoomLevelX;
+    zoomDelta = ((0x10000 - currentZoom) >> 8) * (arg0->zoomDecelRate >> 8);
     result = 3;
 
-    if (temp_v0 != 0) {
-        arg0->zoomLevelX = temp_a1 + temp_v0;
+    if (zoomDelta != 0) {
+        arg0->zoomLevelX = currentZoom + zoomDelta;
     } else {
         arg0->zoomLevelX = 0x10000;
         result = 4;

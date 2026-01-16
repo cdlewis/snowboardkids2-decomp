@@ -4,6 +4,7 @@ calculateZoomScaleFactor = 0x800B93F0; // rom:0x1E64A0
 updateWipeTransitionSlots = 0x800B9440; // rom:0x1E64F0
 initWipeZoomAccel = 0x800B9680; // rom:0x1E6730
 accelerateWipeZoomIn = 0x800B96B4; // rom:0x1E6764
+decelerateWipeZoomOut = 0x800B9708; // rom:0x1E67B8
 gWipeOffsetX = 0x800BADF0; // rom:0x1E7EA0 type:s16 size:8
 gWipeOffsetY = 0x800BADF2; // rom:0x1E7EA2 type:s16 size:8
 playFanSoundEffect = 0x800B4B30; // rom:0x1E1BE0
