@@ -3461,6 +3461,7 @@ dispatchHoverAttackPhase = 0x800BBF40; // rom:0xB3500
 jingleTownBossHoverAttackIntroPhase = 0x800BBF70; // rom:0xB3530
 jingleTownBossHoverAttackMainPhase = 0x800BC094; // rom:0xB3654
 updateJingleTownBossPositionAndTrackCollision = 0x800BC378; // rom:0xB3938
+updateJingleTownBossModelTransforms = 0x800BC474; // rom:0xB3A34
 gHoverIntroAnimTimers = 0x800BCB7C; // rom:0xB413C
 gHoverIntroAnimFrames = 0x800BCB7E; // rom:0xB413E
 spinRampUpStep = 0x800B756C; // rom:0xA741C

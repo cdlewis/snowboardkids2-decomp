@@ -159,9 +159,9 @@ typedef struct {
 typedef struct {
     s16 m[3][3];
     s16 pad;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
+    s32 translationX;
+    s32 translationY;
+    s32 translationZ;
 } LocalMat;
 
 typedef struct {
@@ -188,7 +188,7 @@ extern u16 gHoverIntroAnimFrames[];
 extern s32 gJingleTownBossHoverExitOffsets[][3];
 extern Vec3i D_800BCB68_B4128;
 extern s32 gJingleTownBossSpawnPos[];
-void func_800BC474_B3A34(Arg0Struct *);
+void updateJingleTownBossModelTransforms(Arg0Struct *);
 extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 
 void updateJingleTownBoss(Arg0Struct *arg0) {
@@ -287,7 +287,7 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
     transformVector(D_800BCB30_B40F0, (s16 *)&sp30, &arg0->unkAD4);
     memcpy(&arg0->unkB58, &arg0->unkAD4, 0xC);
     addCollisionSectorNodeToList((ListNode_5AA90 *)&arg0->unkB50);
-    func_800BC474_B3A34(arg0);
+    updateJingleTownBossModelTransforms(arg0);
 
     transformVector(D_800BCB3C_B40FC, arg0->unk38, &arg0->unkAE4);
     arg0->unkAE4 -= arg0->unk970.translation.x;
@@ -460,7 +460,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
 
     switch (arg0->behaviorCounter) {
         case 0:
-            func_800BC474_B3A34(arg0);
+            updateJingleTownBossModelTransforms(arg0);
             transformVectorRelative(&gameState->players->worldPos.x, arg0->unk74, &sp30);
 
             angleDiff = atan2Fixed(-sp30.x, -sp30.z) & 0x1FFF;
@@ -786,48 +786,48 @@ void updateJingleTownBossPositionAndTrackCollision(Arg0Struct *arg0) {
     }
 }
 
-void func_800BC474_B3A34(Arg0Struct *arg0) {
+void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     s32 pad1[8];
-    LocalMat sp30;
-    LocalMat sp50;
+    LocalMat scaledMatrix;
+    LocalMat pitchYawMatrix;
     s32 sp70[4];
-    LocalMat *temp_s0;
-    void *temp_s2;
-    s32 *ptr;
+    LocalMat *scaledMatrixPtr;
+    void *combinedTransform;
+    s32 *globalTransformPtr;
 
     func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, arg0->unk9F0);
-    temp_s2 = arg0->unk950;
-    func_8006B084_6BC84(&arg0->unk9B0, arg0->unk9F0, temp_s2);
+    combinedTransform = arg0->unk950;
+    func_8006B084_6BC84(&arg0->unk9B0, arg0->unk9F0, combinedTransform);
 
     if (arg0->unkB88 & 0x10) {
-        temp_s0 = &sp30;
-        memcpy(temp_s0, identityMatrix, 0x20);
-        temp_s0->m[1][1] = arg0->unkB9E;
-        func_8006B084_6BC84(temp_s0, temp_s2, arg0->unk38);
+        scaledMatrixPtr = &scaledMatrix;
+        memcpy(scaledMatrixPtr, identityMatrix, 0x20);
+        scaledMatrixPtr->m[1][1] = arg0->unkB9E;
+        func_8006B084_6BC84(scaledMatrixPtr, combinedTransform, arg0->unk38);
     } else {
-        memcpy(arg0->unk38, temp_s2, 0x20);
+        memcpy(arg0->unk38, combinedTransform, 0x20);
     }
 
-    createCombinedRotationMatrix(&sp50, arg0->pitchAngle, arg0->yawAngle);
-    sp50.unk14 = 0;
-    sp50.unk1C = 0;
+    createCombinedRotationMatrix(&pitchYawMatrix, arg0->pitchAngle, arg0->yawAngle);
+    pitchYawMatrix.translationX = 0;
+    pitchYawMatrix.translationZ = 0;
 
     if (arg0->unkB84 & 0x200000) {
-        sp50.unk18 = 0x140000;
+        pitchYawMatrix.translationY = 0x140000;
     } else {
-        sp50.unk18 = 0x3A0000;
+        pitchYawMatrix.translationY = 0x3A0000;
     }
 
-    func_8006B084_6BC84(&sp50, arg0->unk38, arg0->unk74);
+    func_8006B084_6BC84(&pitchYawMatrix, arg0->unk38, arg0->unk74);
 
-    ptr = &D_8009A8A4_9B4A4;
+    globalTransformPtr = &D_8009A8A4_9B4A4;
     *(s32 *)&arg0->unk74[0x18] = *(s32 *)&arg0->unk74[0x18] + arg0->unk474;
 
-    *ptr = 0;
+    *globalTransformPtr = 0;
     D_8009A8A8_9B4A8 = 0x140000;
     D_8009A8AC_9B4AC = 0;
 
-    func_8006B084_6BC84(ptr - 5, arg0->unk74, arg0->unkB0);
+    func_8006B084_6BC84(globalTransformPtr - 5, arg0->unk74, arg0->unkB0);
 }
 
 void func_800BC5A8_B3B68(Arg0Struct *arg0) {
@@ -849,7 +849,7 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
     (void)pad10;
 
     alloc = getCurrentAllocation();
-    func_800BC474_B3A34(arg0);
+    updateJingleTownBossModelTransforms(arg0);
 
     index = arg0->unkBCC >> 4;
 
