@@ -2163,35 +2163,36 @@ typedef struct {
 } ItemTriggerEntry; /* size: 0x10 */
 
 typedef struct {
-    void *unk0;              /* 0x00 */
-    void *unk4;              /* 0x04 */
-    ItemTriggerEntry *items; /* 0x08 - array of item trigger entries */
-    DataTable_19E80 *unkC;   /* 0x0C */
-    s32 *unk10;              /* 0x10 */
-    s16 unk14;               /* 0x14 */
-    s16 numItems;            /* 0x16 - number of item trigger entries */
-} Func44D1CArg;
+    void *matrices;                /* 0x00 - allocated matrix memory for each item */
+    void *vertices;                /* 0x04 - vertex data pointer */
+    ItemTriggerEntry *items;       /* 0x08 - array of item trigger entries */
+    DataTable_19E80 *textureTable; /* 0x0C - texture table for rendering items */
+    s32 *itemData;                 /* 0x10 - loaded item trigger data */
+    s16 courseIndex;               /* 0x14 - course/level index */
+    s16 numItems;                  /* 0x16 - number of item trigger entries */
+} ItemTriggerTaskState;
 
-void func_80044DB0_459B0(Func44D1CArg *);
-void func_80044EC4_45AC4(Func44D1CArg *);
+void setupItemTriggerEntries(ItemTriggerTaskState *);
+void processItemTriggers(ItemTriggerTaskState *);
 
 typedef struct Func45010Arg Func45010Arg;
-void func_80045010_45C10(Func45010Arg *);
+void cleanupItemTriggerTask(Func45010Arg *);
 
-void func_80044D1C_4591C(Func44D1CArg *arg0) {
+void initItemTriggerTask(ItemTriggerTaskState *arg0) {
     s16 idx;
 
-    arg0->unkC = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
-    idx = arg0->unk14;
-    arg0->unk10 = loadCompressedData(D_80090AB8_916B8[idx * 3], D_80090ABC_916BC[idx * 3], D_80090AC0_916C0[idx * 3]);
-    arg0->unk0 = NULL;
-    setCleanupCallback(func_80045010_45C10);
-    setCallback(func_80044DB0_459B0);
+    arg0->textureTable = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    idx = arg0->courseIndex;
+    arg0->itemData =
+        loadCompressedData(D_80090AB8_916B8[idx * 3], D_80090ABC_916BC[idx * 3], D_80090AC0_916C0[idx * 3]);
+    arg0->matrices = NULL;
+    setCleanupCallback(cleanupItemTriggerTask);
+    setCallback(setupItemTriggerEntries);
 }
 
-void func_80045054_45C54(Func44D1CArg *);
+void renderItemTriggers(ItemTriggerTaskState *);
 
-void func_80044DB0_459B0(Func44D1CArg *arg0) {
+void setupItemTriggerEntries(ItemTriggerTaskState *arg0) {
     s32 i;
     s32 *ptr;
     ItemTriggerEntry *entries;
@@ -2199,8 +2200,8 @@ void func_80044DB0_459B0(Func44D1CArg *arg0) {
     s32 one;
     s32 offset;
 
-    arg0->unk4 = (void *)((u8 *)((GameState *)getCurrentAllocation())->unk44 + 0xF80);
-    arg0->items = (ItemTriggerEntry *)((s8 *)arg0->unk10 + *arg0->unk10);
+    arg0->vertices = (void *)((u8 *)((GameState *)getCurrentAllocation())->unk44 + 0xF80);
+    arg0->items = (ItemTriggerEntry *)((s8 *)arg0->itemData + *arg0->itemData);
     entries = *(ItemTriggerEntry *volatile *)&arg0->items;
     arg0->numItems = 0;
 
@@ -2211,7 +2212,7 @@ void func_80044DB0_459B0(Func44D1CArg *arg0) {
     }
 
     i = 0;
-    arg0->unk0 = allocateNodeMemory(arg0->numItems << 6);
+    arg0->matrices = allocateNodeMemory(arg0->numItems << 6);
 
     if (arg0->numItems > 0) {
         one = 1;
@@ -2220,12 +2221,12 @@ void func_80044DB0_459B0(Func44D1CArg *arg0) {
             offset = i << 4;
             *((s8 *)(offset + (s32)arg0->items)) = one;
             memcpy(ptr, (s8 *)(offset + (s32)arg0->items + 4), 0xC);
-            transform3DToMtx(ptr - 5, (u8 *)arg0->unk0 + (i << 6));
+            transform3DToMtx(ptr - 5, (u8 *)arg0->matrices + (i << 6));
             i++;
         } while (i < arg0->numItems);
     }
 
-    setCallback(func_80044EC4_45AC4);
+    setCallback(processItemTriggers);
 }
 
 /**
@@ -2238,7 +2239,7 @@ void func_80044DB0_459B0(Func44D1CArg *arg0) {
  *   - Type 1 (secondary): Sets unkBD4 to itemId
  * - Marks entry as inactive and plays pickup sound
  */
-void func_80044EC4_45AC4(Func44D1CArg *arg0) {
+void processItemTriggers(ItemTriggerTaskState *arg0) {
     s32 i;
     GameState *gameState;
     ItemTriggerEntry *entry;
@@ -2286,22 +2287,22 @@ void func_80044EC4_45AC4(Func44D1CArg *arg0) {
         i = 0;
     }
     do {
-        debugEnqueueCallback((u16)i, 4, &func_80045054_45C54, arg0);
+        debugEnqueueCallback((u16)i, 4, &renderItemTriggers, arg0);
         i++;
     } while (i < 4);
 }
 
 struct Func45010Arg {
-    void *unk0;   /* 0x00 */
-    u8 pad4[0x8]; /* 0x04 */
-    void *unkC;   /* 0x0C */
-    void *unk10;  /* 0x10 */
+    void *matrices;     /* 0x00 */
+    u8 pad4[0x8];       /* 0x04 */
+    void *textureTable; /* 0x0C */
+    void *itemData;     /* 0x10 */
 };
 
-void func_80045010_45C10(Func45010Arg *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
-    arg0->unk10 = freeNodeMemory(arg0->unk10);
+void cleanupItemTriggerTask(Func45010Arg *arg0) {
+    arg0->matrices = freeNodeMemory(arg0->matrices);
+    arg0->textureTable = freeNodeMemory(arg0->textureTable);
+    arg0->itemData = freeNodeMemory(arg0->itemData);
 }
 
 extern Gfx D_8009A780_9B380[];
@@ -2309,7 +2310,7 @@ extern s32 D_800A8B14_9FE84;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 
-void func_80045054_45C54(Func44D1CArg *arg0) {
+void renderItemTriggers(ItemTriggerTaskState *arg0) {
     OutputStruct_19E80 tableEntry;
     s32 prevTextureIndex;
     s32 i;
@@ -2343,7 +2344,7 @@ void func_80045054_45C54(Func44D1CArg *arg0) {
                 }
 
                 if (textureIndex != prevTextureIndex) {
-                    getTableEntryByU16Index(arg0->unkC, textureIndex & 0xFFFF, &tableEntry);
+                    getTableEntryByU16Index(arg0->textureTable, textureIndex & 0xFFFF, &tableEntry);
 
                     gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
 
@@ -2445,11 +2446,15 @@ void func_80045054_45C54(Func44D1CArg *arg0) {
                     prevTextureIndex = textureIndex;
                 }
 
-                gSPMatrix(gRegionAllocPtr++, (u8 *)arg0->unk0 + (i << 6), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPMatrix(
+                    gRegionAllocPtr++,
+                    (u8 *)arg0->matrices + (i << 6),
+                    G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
+                );
 
                 gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-                gSPVertex(gRegionAllocPtr++, arg0->unk4, 4, 0);
+                gSPVertex(gRegionAllocPtr++, arg0->vertices, 4, 0);
 
                 gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
             }
@@ -2459,14 +2464,14 @@ void func_80045054_45C54(Func44D1CArg *arg0) {
 
 typedef struct {
     u8 _pad0[0x14];
-    s16 unk14;
-} Func45434TaskMem;
+    s16 courseIndex;
+} ItemTriggerTaskMem;
 
-void func_80045434_46034(s16 arg0) {
-    Func45434TaskMem *task;
+void spawnItemTriggerTask(s16 arg0) {
+    ItemTriggerTaskMem *task;
 
-    task = (Func45434TaskMem *)scheduleTask(func_80044D1C_4591C, 0, 0, 0xD3);
+    task = (ItemTriggerTaskMem *)scheduleTask(initItemTriggerTask, 0, 0, 0xD3);
     if (task != NULL) {
-        task->unk14 = arg0;
+        task->courseIndex = arg0;
     }
 }

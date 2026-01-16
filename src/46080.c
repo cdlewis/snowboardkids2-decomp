@@ -2885,7 +2885,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
-                func_80045434_46034(1);
+                spawnItemTriggerTask(1);
             }
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
@@ -2937,7 +2937,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             spawnPushZone(2);
             spawnPushZone(3);
             if (gs->unk7A != 8) {
-                func_80045434_46034(0);
+                spawnItemTriggerTask(0);
             } else {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
@@ -3007,7 +3007,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
-                func_80045434_46034(2);
+                spawnItemTriggerTask(2);
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
@@ -3024,7 +3024,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
-                func_80045434_46034(3);
+                spawnItemTriggerTask(3);
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
