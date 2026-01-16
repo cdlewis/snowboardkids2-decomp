@@ -14,27 +14,44 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 
 
-def parse_match_log(log_path: Path) -> Optional[float]:
+def parse_match_log(log_path: Path, root_dir: Path) -> Optional[float]:
     """
     Parse a match_log.txt file to find the best match percentage.
 
+    Only includes percentages for files that actually exist in the same directory,
+    and only if the function still exists in asm/nonmatchings (i.e., hasn't been matched yet).
+
     Args:
         log_path: Path to the match_log.txt file
+        root_dir: Root directory of the project (to check asm/nonmatchings)
 
     Returns:
         The best match percentage as a float, or None if no valid percentages found
     """
     best_match = None
+    log_dir = log_path.parent
+    asm_nonmatchings = root_dir / "asm" / "nonmatchings"
+
+    # Extract function name from directory (e.g., "func_8001234-2" -> "func_8001234")
+    func_dir_name = log_dir.name
+    func_name = func_dir_name.split('-')[0]
+
+    # Check if function still exists in asm/nonmatchings (search recursively)
+    func_exists = any(asm_nonmatchings.rglob(f"{func_name}.s"))
 
     try:
         with open(log_path, 'r') as f:
             for line in f:
                 # Match lines like "base_1.c 41.265%"
-                match = re.search(r'(\d+(?:\.\d+)?)\s*%', line)
+                match = re.search(r'([a-zA-Z0-9_/]+\.c)\s+(\d+(?:\.\d+)?)\s*%', line)
                 if match:
-                    percentage = float(match.group(1))
-                    if best_match is None or percentage > best_match:
-                        best_match = percentage
+                    filename = match.group(1)
+                    percentage = float(match.group(2))
+
+                    # Only consider this percentage if the file exists AND function is still in nonmatchings
+                    if func_exists and (log_dir / filename).exists():
+                        if best_match is None or percentage > best_match:
+                            best_match = percentage
     except (IOError, ValueError):
         pass
 
@@ -117,7 +134,7 @@ def find_promising_functions(repo_root: Path) -> List[Tuple[str, float]]:
             continue
 
         # Parse the match log
-        best_match = parse_match_log(match_log)
+        best_match = parse_match_log(match_log, repo_root)
 
         if best_match is not None:
             base_name = get_base_function_name(function_name)
