@@ -59,6 +59,8 @@ echo "Comparison with target file: ${1//.c/_diff}"
 SCORE_OUTPUT=$(python3 dist.py target.o $OBJECT_OUTPUT --stack-diffs)
 echo "$SCORE_OUTPUT"
 
-# Extract match percentage and log it
+# Extract match percentage and log it (only for base_* files)
 MATCH_PERCENT=$(echo "$SCORE_OUTPUT" | grep -oP 'Score: \K[0-9.]+')
-echo "$1 ${MATCH_PERCENT}%" >> match_log.txt
+if [[ $1 =~ base_[0-9]+ ]]; then
+    echo "$1 ${MATCH_PERCENT}%" >> match_log.txt
+fi
