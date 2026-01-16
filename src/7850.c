@@ -56,12 +56,13 @@ typedef struct {
 } StretchingModelTaskState;
 
 void cleanupStretchingModelTask(StretchingModelTaskState *);
-
 void updatePulsingSpriteIndicator(PulsingSpriteState *);
 void cleanupPulsingSpriteIndicator(PulsingSpriteState *);
 void initStretchingModelTask(StretchingModelTaskState *);
 void updateStretchingModelTask(StretchingModelTaskState *);
-extern void *D_80088720_89320;
+
+s32 D_80088720_89320[] = { 0, 0x01000508, 0x01000518, 0 };
+
 extern u8 identityMatrix[];
 
 void initPulsingSpriteIndicator(PulsingSpriteState *arg0) {

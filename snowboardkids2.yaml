@@ -333,7 +333,7 @@ segments:
       - [0x89240, data, 69B0]
       - [0x89270, data, C570]
       - [0x892B0, data]
-      - [0x89320, data, 7850]
+      - [0x89320, .data, 7850]
       - [0x89330, data]
       - [0x89B00, data, main]
       - [0x8A110, data]
