@@ -1882,6 +1882,10 @@ void spawnPushZone(s16 zoneIndex) {
     }
 }
 
+// Note: I have been unable to trigger this codepath. It does not appear
+// to be a regular item, cutscene action, or the ufo chairlift from starlight
+// highway.
+
 void renderUfoEffectWithWings(UfoEffectState *arg0) {
     Transform3D matrix;
     s32 sinVal;
