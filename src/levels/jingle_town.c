@@ -96,7 +96,7 @@ void initJingleTownTrain(JingleTownTrain *arg0) {
     alloc = getCurrentAllocation();
     temp = func_80055E68_56A68(alloc->unk5C);
     arg0->node.displayLists = &temp->unk90;
-    arg0->node.segment1 = func_80055DC4_569C4(alloc->unk5C);
+    arg0->node.segment1 = loadUncompressedAssetByIndex(alloc->unk5C);
     arg0->node.segment2 = func_80055DF8_569F8(alloc->unk5C);
     arg0->node.segment3 = 0;
     arg0->waypointIndex = 1;

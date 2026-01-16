@@ -96,7 +96,7 @@ void func_800BB2B0_B2030(B2030Payload *arg0) {
     unsigned int angle;
     allocation = getCurrentAllocation();
     arg0->unk20 = &func_80055E68_56A68(allocation->memoryPoolId)->unk90;
-    arg0->unk24 = func_80055DC4_569C4(allocation->memoryPoolId);
+    arg0->unk24 = loadUncompressedAssetByIndex(allocation->memoryPoolId);
     arg0->unk28 = func_80055DF8_569F8(allocation->memoryPoolId);
     arg0->index = 0;
     arg0->unk2C = 0;

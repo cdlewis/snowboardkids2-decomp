@@ -17,7 +17,7 @@ extern s32 D_80091510_92110[];
 extern Asset_56910 gCourseDataAssets[];
 extern Asset_56910 gSpriteAssets[];
 extern Asset_56910 D_80091450_92050[];
-extern AssetWithoutSize D_800913D0_91FD0[];
+extern AssetWithoutSize gUncompressedAssets[];
 extern func_80055E68_56A68_result *D_80091590_92190[];
 extern LevelConfig gLevelConfigs[];
 
@@ -37,8 +37,8 @@ void *loadSpriteAssetByIndex(s32 index) {
     return loadCompressedData(gSpriteAssets[index].start, gSpriteAssets[index].end, gSpriteAssets[index].size);
 }
 
-void *func_80055DC4_569C4(s32 index) {
-    return loadUncompressedData(D_800913D0_91FD0[index].start, D_800913D0_91FD0[index].end);
+void *loadUncompressedAssetByIndex(s32 index) {
+    return loadUncompressedData(gUncompressedAssets[index].start, gUncompressedAssets[index].end);
 }
 
 void *func_80055DF8_569F8(s32 index) {

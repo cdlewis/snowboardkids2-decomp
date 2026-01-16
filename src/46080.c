@@ -855,7 +855,7 @@ void initSkyRenderTask(SkyRenderTaskState *state) {
     memcpy(state, identity, 0x20);
 
     state->unk20 = func_80055E40_56A40(state->skyType);
-    state->unk24 = func_80055DC4_569C4(state->skyType);
+    state->unk24 = loadUncompressedAssetByIndex(state->skyType);
     state->unk28 = func_80055DF8_569F8(state->skyType);
     state->unk2C = 0;
 
@@ -976,7 +976,7 @@ void initPlayerRenderTask(PlayerRenderTaskState *state) {
     rotation = getTrackEndInfo(&allocation->unk30, &state->position);
     createYRotationMatrix((Transform3D *)state, rotation);
     state->unk20 = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x30);
-    state->unk24 = func_80055DC4_569C4(allocation->unk5C);
+    state->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
     state->unk28 = func_80055DF8_569F8(allocation->unk5C);
     state->unk2C = NULL;
     state->unk40 = 1;
@@ -1240,7 +1240,7 @@ void cleanupPlayerSparkleTask(PlayerSparkleTask *task) {
 }
 
 void initScrollingSceneryTask(ScrollingSceneryCleanupState *arg0) {
-    arg0->unk24 = func_80055DC4_569C4(arg0->assetPoolIndex);
+    arg0->unk24 = loadUncompressedAssetByIndex(arg0->assetPoolIndex);
     arg0->unk28 = func_80055DF8_569F8(arg0->assetPoolIndex);
     arg0->unk2C = NULL;
     memcpy(arg0, identityMatrix, 0x20);
@@ -1328,7 +1328,7 @@ void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
     levelData = getLevelConfig(allocation->unk5C);
 
     arg0->unk20 = func_80055E68_56A68(allocation->unk5C);
-    arg0->unk24 = func_80055DC4_569C4(allocation->unk5C);
+    arg0->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
     arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
     arg0->unk2C = NULL;
 
@@ -1400,7 +1400,7 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
     levelData = getLevelConfig(allocation->unk5C);
 
     arg0->displayListObject.displayLists = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x10);
-    arg0->displayListObject.segment1 = func_80055DC4_569C4(allocation->unk5C);
+    arg0->displayListObject.segment1 = loadUncompressedAssetByIndex(allocation->unk5C);
     arg0->displayListObject.segment2 = func_80055DF8_569F8(allocation->unk5C);
     arg0->displayListObject.segment3 = 0;
 

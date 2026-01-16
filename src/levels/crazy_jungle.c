@@ -86,7 +86,7 @@ void initFallingRockHazard(FallingRockHazard *rock) {
     rock->node1.displayLists = &result->unk90;
     result = func_80055E68_56A68(gameState->memoryPoolId);
     rock->node2.displayLists = &result->unkA0;
-    rock->node1.segment1 = func_80055DC4_569C4(gameState->memoryPoolId);
+    rock->node1.segment1 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     rock->node1.segment2 = func_80055DF8_569F8(gameState->memoryPoolId);
     rock->node1.segment3 = 0;
     rock->posZ = 0;
@@ -237,7 +237,7 @@ void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *arg0) {
 
 void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
     GameState *gs = (GameState *)getCurrentAllocation();
-    arg0->unk24 = func_80055DC4_569C4(gs->memoryPoolId);
+    arg0->unk24 = loadUncompressedAssetByIndex(gs->memoryPoolId);
     arg0->unk28 = func_80055DF8_569F8(gs->memoryPoolId);
     arg0->unk2C = 0;
     createYRotationMatrix(&arg0->matrix, 0x6C0);

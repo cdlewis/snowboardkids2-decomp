@@ -158,7 +158,7 @@ void updateFireworkShowTimer(FireworkShowTimerState *arg0);
 void updateStarlightBarrier(StarlightBarrierTask *arg0);
 
 void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0) {
-    arg0->unk24 = func_80055DC4_569C4(8);
+    arg0->unk24 = loadUncompressedAssetByIndex(8);
     arg0->unk28 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
     createYRotationMatrix(&arg0->node1, 0x98A);
@@ -219,7 +219,7 @@ void cleanupStarlightHighwayBuildingTask(DualSegmentCleanupState *arg0) {
 }
 
 void initDebugDisplayListTask(DebugDisplayListTaskState *arg0) {
-    arg0->displayListMemory1 = func_80055DC4_569C4(8);
+    arg0->displayListMemory1 = loadUncompressedAssetByIndex(8);
     arg0->displayListMemory2 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
     arg0->displayListMemory3 = loadSpriteAssetByIndex(8);
@@ -513,7 +513,7 @@ void spawnDebugDisplayListTask(s16 arg0) {
 void func_800BBB90(s16 arg0) __attribute__((alias("spawnDebugDisplayListTask")));
 
 void initStarlightItemTask(StarlightItemTaskState *arg0) {
-    arg0->segment1 = func_80055DC4_569C4(8);
+    arg0->segment1 = loadUncompressedAssetByIndex(8);
     arg0->segment2 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
     memcpy(&arg0->mat1.translation, &D_800BCA30_AEDF0[arg0->positionIndex], sizeof(Vec3i));
@@ -644,7 +644,7 @@ void initStarlightFireworkTask(StarlightFireworkTaskState *arg0) {
 
     (void)pad;
 
-    arg0->segment1 = func_80055DC4_569C4(8);
+    arg0->segment1 = loadUncompressedAssetByIndex(8);
     arg0->segment2 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
     arg0->displayList = (void *)((u32)func_80055E68_56A68(8) + 0x90);
@@ -859,7 +859,7 @@ void updateFireworkShowTimer(FireworkShowTimerState *arg0) {
 void initStarlightBarrierTask(StarlightBarrierTask *arg0) {
     void *temp;
 
-    arg0->displayListMemory1 = func_80055DC4_569C4(8);
+    arg0->displayListMemory1 = loadUncompressedAssetByIndex(8);
     arg0->displayListMemory2 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
     temp = func_80055E68_56A68(8);

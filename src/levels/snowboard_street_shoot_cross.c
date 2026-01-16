@@ -290,7 +290,7 @@ void func_800BBA90_AD510(AD510Arg *arg0) {
     allocation = (AD510Allocation *)getCurrentAllocation();
     result = func_80055E68_56A68(allocation->unk5C);
     arg0->unk20 = (void *)((u32)result + 0x90);
-    arg0->unk24 = func_80055DC4_569C4(0xD);
+    arg0->unk24 = loadUncompressedAssetByIndex(0xD);
     arg0->unk28 = func_80055DF8_569F8(0xD);
     arg0->unk14 = 0x25990000;
     arg0->unk18 = 0x1A2B0000;

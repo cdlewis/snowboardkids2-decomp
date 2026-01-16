@@ -41,7 +41,7 @@ func_80055E68_56A68_result *func_80055E68_56A68(s32);
 void *loadCourseDataByIndex(s32 index);
 void *loadSpriteAssetByIndex(s32 index);
 void *func_80055DF8_569F8(s32 index);
-void *func_80055DC4_569C4(s32 index);
+void *loadUncompressedAssetByIndex(s32 index);
 LevelConfig *getLevelConfig(s32 index);
 s32 func_80055E40_56A40(s32 arg0);
 s32 func_80055E54_56A54(s32 arg0);

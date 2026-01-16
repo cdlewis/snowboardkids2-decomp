@@ -106,7 +106,7 @@ void initFlyingEnemyTask(FlyingEnemyTask *task) {
     temp = func_80055E68_56A68(gamestate->memoryPoolId);
     task->displayList1 = (void *)((u32)temp + 0x90);
 
-    task->displayList2 = func_80055DC4_569C4(gamestate->memoryPoolId);
+    task->displayList2 = loadUncompressedAssetByIndex(gamestate->memoryPoolId);
     task->displayList3 = func_80055DF8_569F8(gamestate->memoryPoolId);
 
     index = task->waypointIndex;

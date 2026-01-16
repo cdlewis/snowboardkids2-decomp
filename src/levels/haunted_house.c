@@ -326,7 +326,7 @@ void initSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
     func_80055E68_56A68_result *temp_v0_3;
     u16 temp_a1;
 
-    arg0->uncompressedAsset = func_80055DC4_569C4(9);
+    arg0->uncompressedAsset = loadUncompressedAssetByIndex(9);
     arg0->compressedAsset = func_80055DF8_569F8(9);
     arg0->animationFrame = 0;
 

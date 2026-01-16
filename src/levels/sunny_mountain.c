@@ -78,7 +78,7 @@ void func_800BB2B0_B4BB0(SunnyMountainTaskState *taskState) {
     taskState->displayList = (void *)((u32)displayListResult + 0x90);
 
     srcPositionOffset = 0;
-    taskState->unk3C = func_80055DC4_569C4(allocation->memoryPoolId);
+    taskState->unk3C = loadUncompressedAssetByIndex(allocation->memoryPoolId);
 
     destPositionPtr = taskState;
     displayObjectOffset = 0;
@@ -162,7 +162,7 @@ void func_800BB814_B5114(func_800BB814_B5114_arg *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     arg0->unk20 = (void *)((u32)func_80055E68_56A68(state->memoryPoolId) + 0xB0);
-    arg0->unk24 = func_80055DC4_569C4(state->memoryPoolId);
+    arg0->unk24 = loadUncompressedAssetByIndex(state->memoryPoolId);
     arg0->unk28 = func_80055DF8_569F8(state->memoryPoolId);
     arg0->unk2C = 0;
     arg0->unk4C = 0x3C;
