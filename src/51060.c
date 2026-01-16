@@ -110,8 +110,8 @@ typedef struct {
 
 typedef struct {
     u8 padding[0xC0];
-    MemoryAllocatorNode *unkC0;
-} func_8005186C_5246C_arg;
+    MemoryAllocatorNode *assetTable;
+} CharacterAttackEffectTask;
 
 typedef struct {
     Node n;
@@ -131,12 +131,12 @@ typedef struct {
 
 typedef struct {
     u8 padding[0xC4];
-    void *unkC4;
+    void *sourcePlayer;
     u8 padding2[0xC];
-    u8 unkD4;
+    u8 particleType;
     u8 padding3;
-    u8 unkD6;
-} func_80051BB8_527B8_task;
+    u8 isVariant;
+} CharacterAttackEffectSpawnTask;
 
 typedef struct {
     u8 padding[0x12C0];
@@ -184,19 +184,19 @@ typedef struct {
 } func_80050DB0_519B0_arg;
 
 typedef struct {
-    loadAssetMetadata_arg unk0;
+    loadAssetMetadata_arg particle;
     u8 _pad2[0x4];
-} func_800518AC_524AC_element;
+} CharacterAttackEffectParticle;
 
 typedef struct {
-    func_800518AC_524AC_element elements[6];
-    void *unkC0;
-    u8 _padC4[0x4];
-    u8 unkC8[0xC];
-    s8 unkD4;
-    u8 unkD5;
-    u8 unkD6;
-} func_800518AC_524AC_arg;
+    CharacterAttackEffectParticle particles[6];
+    MemoryAllocatorNode *assetTable;
+    void *unkC4;
+    Vec3i positionOffsets;
+    s8 particleType;
+    u8 frameCounter;
+    u8 isVariant; // 0 = variant A, 1 = variant B (different alpha and offsets)
+} CharacterAttackEffectState;
 
 void loadFirstSprayParticle(SprayEffectTask *);
 void cleanupSprayEffect(void **);
@@ -220,8 +220,8 @@ void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *);
 void cleanupDualSnowSprayTask(DualSnowSprayTask *);
 void updateGlintEffect(GlintEffectTask *);
 void cleanupGlintEffect(GlintEffectTask *);
-void func_800518AC_524AC(func_800518AC_524AC_arg *);
-void func_80051B8C_5278C(func_8005186C_5246C_arg *);
+void loadCharacterAttackEffectAssets(CharacterAttackEffectState *);
+void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *);
 
 extern loadAssetMetadata_arg D_80090EC0_91AC0;
 extern loadAssetMetadata_arg D_80090F00_91B00;
@@ -824,60 +824,61 @@ void spawnGlintEffect(void *arg0) {
     }
 }
 
-void func_8005186C_5246C(func_8005186C_5246C_arg *arg0) {
-    arg0->unkC0 = load_3ECE40();
-    setCleanupCallback(&func_80051B8C_5278C);
-    setCallbackWithContinue(&func_800518AC_524AC);
+void initCharacterAttackEffectTask(CharacterAttackEffectTask *arg0) {
+    arg0->assetTable = load_3ECE40();
+    setCleanupCallback(&cleanupCharacterAttackEffectTask);
+    setCallbackWithContinue(&loadCharacterAttackEffectAssets);
 }
 
-void func_800518AC_524AC(func_800518AC_524AC_arg *arg0) {
+void loadCharacterAttackEffectAssets(CharacterAttackEffectState *arg0) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        loadAssetMetadata(&arg0->elements[i].unk0, arg0->unkC0, arg0->unkD4);
-        arg0->elements[i].unk0.unk0 = &D_80090F00_91B00;
+        loadAssetMetadata(&arg0->particles[i].particle, arg0->assetTable, arg0->particleType);
+        arg0->particles[i].particle.unk0 = &D_80090F00_91B00;
 
-        if (arg0->unkD6 == 0) {
-            memcpy(&arg0->unkC8, &D_80090F40_91B40, 0xC);
-            arg0->elements[i].unk0.unk1A = 0x90;
+        if (arg0->isVariant == 0) {
+            memcpy(&arg0->positionOffsets, &D_80090F40_91B40, 0xC);
+            arg0->particles[i].particle.unk1A = 0x90;
         } else {
-            memcpy(&arg0->unkC8, &D_80090F4C_91B4C, 0xC);
-            arg0->elements[i].unk0.unk1A = 0xF0;
+            memcpy(&arg0->positionOffsets, &D_80090F4C_91B4C, 0xC);
+            arg0->particles[i].particle.unk1A = 0xF0;
         }
     }
 
-    arg0->unkD5 = 0;
+    arg0->frameCounter = 0;
     setCallbackWithContinue(&func_80051978_52578);
 }
 
 INCLUDE_ASM("asm/nonmatchings/51060", func_80051978_52578);
 
-void func_80051B8C_5278C(func_8005186C_5246C_arg *arg0) {
-    arg0->unkC0 = freeNodeMemory(arg0->unkC0);
+void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *arg0) {
+    arg0->assetTable = freeNodeMemory(arg0->assetTable);
 }
 
-void func_80051BB8_527B8(void *arg0) {
-    func_80051BB8_527B8_task *task = (func_80051BB8_527B8_task *)scheduleTask(&func_8005186C_5246C, 2, 0, 0xE7);
+void spawnCharacterAttackEffect(void *arg0) {
+    CharacterAttackEffectSpawnTask *task =
+        (CharacterAttackEffectSpawnTask *)scheduleTask(&initCharacterAttackEffectTask, 2, 0, 0xE7);
     if (task != NULL) {
-        task->unkC4 = arg0;
-        task->unkD4 = 0x12;
-        task->unkD6 = 0;
+        task->sourcePlayer = arg0;
+        task->particleType = 0x12;
+        task->isVariant = 0;
     }
 }
 
-void func_80051C08_52808(void *arg0, s32 arg1) {
-    s32 temp_s0;
-    func_80051BB8_527B8_task *task;
+void spawnCharacterAttackEffectByType(void *arg0, s32 characterId) {
+    s32 particleType;
+    CharacterAttackEffectSpawnTask *task;
 
-    temp_s0 = D_80090E70_91A70[arg1];
-    if (temp_s0 == 0xFF) {
-        temp_s0 = 0xD;
+    particleType = D_80090E70_91A70[characterId];
+    if (particleType == 0xFF) {
+        particleType = 0xD;
     }
 
-    task = (func_80051BB8_527B8_task *)scheduleTask(&func_8005186C_5246C, 2, 0, 0xE7);
+    task = (CharacterAttackEffectSpawnTask *)scheduleTask(&initCharacterAttackEffectTask, 2, 0, 0xE7);
     if (task != NULL) {
-        task->unkC4 = arg0;
-        task->unkD4 = temp_s0;
-        task->unkD6 = 1;
+        task->sourcePlayer = arg0;
+        task->particleType = particleType;
+        task->isVariant = 1;
     }
 }

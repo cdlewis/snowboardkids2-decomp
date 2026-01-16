@@ -540,7 +540,7 @@ s32 initPostTrickLandingStep(Player *player) {
             queueSoundAtPosition(&player->worldPos, 0x29);
         }
         if ((player->unkBCC & 0xF) == 3) {
-            func_80051BB8_527B8(player);
+            spawnCharacterAttackEffect(player);
             queueSoundAtPosition(&player->worldPos, 0xF);
         } else {
             queueSoundAtPosition(&player->worldPos, 0x25);
@@ -2022,7 +2022,7 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
             player->behaviorCounter++;
             func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
             queueSoundAtPosition(&player->worldPos, 0x25);
-            func_80051C08_52808(player, player->unkBCC & 0xF);
+            spawnCharacterAttackEffectByType(player, player->unkBCC & 0xF);
         }
         applyVelocityDeadzone(player, 0x8000, 0x8000, 0x8000);
     }
@@ -2284,7 +2284,7 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
             arg0->behaviorCounter++;
             func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
             queueSoundAtPosition(&arg0->worldPos, 0x25);
-            func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
+            spawnCharacterAttackEffectByType(arg0, arg0->unkBCC & 0xF);
         }
         applyVelocityDeadzone(arg0, 0x8000, 0x8000, 0x8000);
     }
@@ -2343,7 +2343,7 @@ s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
         arg0->behaviorStep = arg0->behaviorStep + 1;
         if ((arg0->unkB84 & 1) == 0) {
             queueSoundAtPosition(&arg0->worldPos, 0x25);
-            func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
+            spawnCharacterAttackEffectByType(arg0, arg0->unkBCC & 0xF);
         }
     }
 
@@ -2835,7 +2835,7 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
         func_8005D308_5DF08(arg0, 0xB);
         queueSoundAtPosition(&arg0->worldPos, 0x34);
         if (!(arg0->unkB84 & 1)) {
-            func_80051C08_52808(arg0, arg0->unkBCC & 0xF);
+            spawnCharacterAttackEffectByType(arg0, arg0->unkBCC & 0xF);
         }
     }
 
