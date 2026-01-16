@@ -417,8 +417,8 @@ void updateSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
 
             if (i < allocation->memoryPoolId) {
                 pos = &arg0->position;
-                func_80055C80_56880(0, (s16)(arg0->swingAngle + 0x2A0), pos);
-                func_80055C80_56880(1, (s16)(arg0->swingAngle + 0x2A0), pos);
+                spawnShrinkProjectileTask(0, (s16)(arg0->swingAngle + 0x2A0), pos);
+                spawnShrinkProjectileTask(1, (s16)(arg0->swingAngle + 0x2A0), pos);
             }
         }
     }

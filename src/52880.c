@@ -118,9 +118,9 @@ void loadGhostTargetProjectileAsset(Struct_52880 *arg0);
 void checkGhostTargetProjectileHit(Struct_52880 *arg0);
 void launchGhostTargetProjectile(Struct_52880 *arg0);
 void updateGhostTargetProjectile(Struct_52880 *arg0);
-void func_800558A4_564A4(Struct_52880 *arg0);
-void func_80055964_56564(Struct_52880 *arg0);
-void func_80055A84_56684(Struct_52880 *);
+void loadShrinkProjectileAsset(Struct_52880 *arg0);
+void launchShrinkProjectile(Struct_52880 *arg0);
+void updateShrinkProjectile(Struct_52880 *);
 s32 spawnParachuteProjectileTask(s32, s32);
 s32 spawnFryingPanProjectileTask(s32, s32);
 s32 spawnSnowmanProjectileTask(s32, s32);
@@ -2111,13 +2111,13 @@ s32 spawnGhostTargetProjectileTask(s32 arg0, s32 arg1) {
     return (s32)task;
 }
 
-void func_80055864_56464(ShrinkProjectileTask *arg0) {
+void initShrinkProjectileTask(Struct_52880 *arg0) {
     arg0->assetData = load_3ECE40();
     setCleanupCallback(cleanupSlapstickProjectileTask);
-    setCallbackWithContinue(func_800558A4_564A4);
+    setCallbackWithContinue(loadShrinkProjectileAsset);
 }
 
-void func_800558A4_564A4(Struct_52880 *arg0) {
+void loadShrinkProjectileAsset(Struct_52880 *arg0) {
     Alloc_52880 *alloc = getCurrentAllocation();
     void *ptr;
     loadAssetMetadata((loadAssetMetadata_arg *)arg0, arg0->assetData, 4);
@@ -2125,10 +2125,10 @@ void func_800558A4_564A4(Struct_52880 *arg0) {
     arg0->hitCount = 0;
     arg0->turnRate = 0;
     arg0->unk0 = ptr;
-    setCallbackWithContinue(func_80055964_56564);
+    setCallbackWithContinue(launchShrinkProjectile);
 }
 
-void func_80055900_56500(Struct_52880 *arg0) {
+void checkShrinkProjectileHit(Struct_52880 *arg0) {
     Player *result;
 
     getCurrentAllocation();
@@ -2141,7 +2141,7 @@ void func_80055900_56500(Struct_52880 *arg0) {
     }
 }
 
-void func_80055964_56564(Struct_52880 *arg0) {
+void launchShrinkProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     Vec3i localVec;
     s32 i;
@@ -2165,8 +2165,8 @@ void func_80055964_56564(Struct_52880 *arg0) {
     arg0->lifetime = 45;
 
     queueSoundAtPosition(s0, 16);
-    setCallback(func_80055A84_56684);
-    func_80055900_56500(arg0);
+    setCallback(updateShrinkProjectile);
+    checkShrinkProjectileHit(arg0);
 
     if (arg0->hitCount != 0) {
         spawnImpactStar(s0);
@@ -2181,7 +2181,7 @@ void func_80055964_56564(Struct_52880 *arg0) {
     } while (i < 4);
 }
 
-void func_80055A84_56684(Struct_52880 *arg0) {
+void updateShrinkProjectile(Struct_52880 *arg0) {
     Vec3i offset;
     Vec3i prevPos;
     s32 padding1[12];
@@ -2228,7 +2228,7 @@ void func_80055A84_56684(Struct_52880 *arg0) {
         arg0->vel.x = arg0->pos.x - prevPos.x;
         arg0->vel.y = arg0->pos.y - prevPos.y;
         arg0->vel.z = arg0->pos.z - prevPos.z;
-        func_80055900_56500(arg0);
+        checkShrinkProjectileHit(arg0);
     }
 
     if (arg0->hitCount != 0) {
@@ -2244,10 +2244,10 @@ void func_80055A84_56684(Struct_52880 *arg0) {
     } while (i < 4);
 }
 
-Struct_52880 *func_80055C80_56880(s32 arg0, s16 arg1, void *arg2) {
+Struct_52880 *spawnShrinkProjectileTask(s32 arg0, s16 arg1, void *arg2) {
     Struct_52880 *task;
 
-    task = scheduleTask(func_80055864_56464, 0, 0, 0x6F);
+    task = scheduleTask(initShrinkProjectileTask, 0, 0, 0x6F);
     if (task != NULL) {
         task->ownerPlayerIdx = -1;
         task->unk4A = arg0;
