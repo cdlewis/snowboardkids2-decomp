@@ -126,16 +126,16 @@ typedef struct {
 } CenteredSpritePopupState;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
+    s16 mainX;
+    s16 mainY;
+    void *mainSpriteAsset;
+    s16 mainSpriteFrame;
     u8 padA[0x2];
-    s16 unkC;
-    s16 unkE;
-    void *unk10;
-    s16 unk14;
-} Struct_func_8004FFB8;
+    s16 bgX;
+    s16 bgY;
+    void *bgSpriteAsset;
+    s16 spriteIndex;
+} CrossRaceBadgeState;
 
 typedef struct {
     s16 xPos;
@@ -2468,45 +2468,48 @@ void spawnShotCrossSkillMeterDisplayTask(s16 arg0) {
     }
 }
 
-void func_80050098_50C98(Struct_func_8004FFB8 *);
-void func_800500F0_50CF0(ShotCrossCountdownTimerState *);
+void updateCrossRaceBadgeDisplay(CrossRaceBadgeState *);
+void cleanupCrossRaceBadgeTask(void *);
 
-void func_8004FFB8_50BB8(Struct_func_8004FFB8 *arg0) {
+void initCrossRaceBadgeTask(CrossRaceBadgeState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
+    // unk7A contains the race type:
+    // 4 = SPEED_CROSS, 5 = SHOT_CROSS, 6 = X_CROSS
     switch (allocation->unk7A) {
-        case 4:
-            arg0->unk4 = loadAsset_350140();
-            arg0->unk8 = 0;
-            arg0->unk14 = 1;
+        case 4: // SPEED_CROSS
+            arg0->mainSpriteAsset = loadAsset_350140();
+            arg0->mainSpriteFrame = 0;
+            arg0->spriteIndex = 1;
             break;
-        case 5:
-            arg0->unk4 = loadAsset_34F9A0();
-            arg0->unk8 = 4;
-            arg0->unk14 = 5;
+        case 5: // SHOT_CROSS
+            arg0->mainSpriteAsset = loadAsset_34F9A0();
+            arg0->mainSpriteFrame = 4;
+            arg0->spriteIndex = 5;
             break;
-        case 6:
-            arg0->unk4 = loadAsset_3505F0();
-            arg0->unk8 = 0;
-            arg0->unk14 = 1;
+        case 6: // X_CROSS
+            arg0->mainSpriteAsset = loadAsset_3505F0();
+            arg0->mainSpriteFrame = 0;
+            arg0->spriteIndex = 1;
             break;
     }
-    arg0->unk10 = arg0->unk4;
-    arg0->unk0 = -0x88;
-    arg0->unk2 = 0x40;
-    arg0->unkC = -0x88;
-    arg0->unkE = 0x40;
-    setCallbackWithContinue(func_80050098_50C98);
-    setCleanupCallback(func_800500F0_50CF0);
+    arg0->bgSpriteAsset = arg0->mainSpriteAsset;
+    arg0->mainX = -0x88;
+    arg0->mainY = 0x40;
+    arg0->bgX = -0x88;
+    arg0->bgY = 0x40;
+    setCallbackWithContinue(updateCrossRaceBadgeDisplay);
+    setCleanupCallback(cleanupCrossRaceBadgeTask);
 }
 
-void func_80050098_50C98(Struct_func_8004FFB8 *arg0) {
-    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->unkC);
+void updateCrossRaceBadgeDisplay(CrossRaceBadgeState *arg0) {
+    debugEnqueueCallback(8, 0, func_8000FED0_10AD0, &arg0->bgX);
     debugEnqueueCallback(8, 0, func_8000FED0_10AD0, arg0);
 }
 
-void func_800500F0_50CF0(ShotCrossCountdownTimerState *arg0) {
-    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+void cleanupCrossRaceBadgeTask(void *arg0) {
+    CrossRaceBadgeState *state = (CrossRaceBadgeState *)arg0;
+    state->mainSpriteAsset = freeNodeMemory(state->mainSpriteAsset);
 }
 
 INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E894_9F494);
@@ -2588,19 +2591,19 @@ void func_8005011C_50D1C(void) {
             case 4:
                 scheduleTask(initRaceTimerDisplay, 0, 1, 0xF0);
                 SCHEDULE_AND_SET(initSecondaryItemDisplayTask, 4, i);
-                scheduleTask(func_8004FFB8_50BB8, 0, 1, 0xF0);
+                scheduleTask(initCrossRaceBadgeTask, 0, 1, 0xF0);
                 break;
 
             case 5:
                 spawnShotCrossScoreDisplayTask(allocation->unk10);
                 spawnShotCrossItemCountDisplayTask(0);
                 scheduleTask(initShotCrossCountdownTimerTask, 0, 1, 0xF0);
-                scheduleTask(func_8004FFB8_50BB8, 0, 1, 0xF0);
+                scheduleTask(initCrossRaceBadgeTask, 0, 1, 0xF0);
                 break;
 
             case 6:
                 spawnShotCrossSkillMeterDisplayTask(0);
-                scheduleTask(func_8004FFB8_50BB8, 0, 1, 0xF0);
+                scheduleTask(initCrossRaceBadgeTask, 0, 1, 0xF0);
                 scheduleTask(initShotCrossCountdownTimerTask, 0, 1, 0xF0);
                 break;
         }
