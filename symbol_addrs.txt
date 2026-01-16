@@ -1212,7 +1212,7 @@ cutsceneEffectTrick_isDone = 0x800B20A8;
 
 cutsceneSePlay_validate = 0x800B2120;
 cutsceneSe3dPlay_validate = 0x800B2194;
-cutsceneSeStop_validate = 0x800B2228;
+cutsceneSeStop_validate = 0x800B2228; // rom:0x1DF2D8
 
 cutsceneCameraReset_validate = 0x800B08C8;
 cutsceneCameraMove_validate = 0x800B0918;
