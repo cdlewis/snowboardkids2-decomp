@@ -8,8 +8,8 @@ s32 cutsceneBgmPlay_validate(void) {
     return 0;
 }
 
-void cutsceneBgmPlay_exec(cutsceneBgmPlay_exec_arg0 *arg0) {
-    playMusicTrackWithFadeIn(arg0->unk0, arg0->unk4, arg0->unk2);
+void cutsceneBgmPlay_exec(CutsceneBgmPlayArgs *arg0) {
+    playMusicTrackWithFadeIn(arg0->musicTrackId, arg0->fadeDuration, arg0->targetVolume);
 }
 
 void cutsceneBgmFadeOut_init(void) {
@@ -34,6 +34,6 @@ s32 cutsceneBgmVolume_validate(void) {
     return 0;
 }
 
-void cutsceneBgmVolume_exec(cutsceneBgmPlay_exec_arg0 *arg0) {
-    setMusicVolumeFade(arg0->unk2, arg0->unk0);
+void cutsceneBgmVolume_exec(CutsceneBgmVolumeArgs *arg0) {
+    setMusicVolumeFade(arg0->targetVolume, arg0->musicTrackId); // musicTrackId reused as fadeDuration
 }
