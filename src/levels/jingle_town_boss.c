@@ -21,9 +21,7 @@ typedef void (*FuncPtr)(void *);
 
 extern s16 identityMatrix[];
 extern Transform3D D_8009A890_9B490;
-extern s32 D_8009A8A4_9B4A4;
-extern s32 D_8009A8A8_9B4A8;
-extern s32 D_8009A8AC_9B4AC;
+extern Vec3i D_8009A8A4_9B4A4;
 extern s32 gJingleTownBossSpawnPos[];
 
 typedef struct {
@@ -787,7 +785,6 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     s32 sp70[4];
     LocalMat *scaledMatrixPtr;
     void *combinedTransform;
-    s32 *globalTransformPtr;
 
     func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, arg0->unk9F0);
     combinedTransform = arg0->unk950;
@@ -814,14 +811,13 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
 
     func_8006B084_6BC84(&pitchYawMatrix, arg0->unk38, arg0->unk74);
 
-    globalTransformPtr = &D_8009A8A4_9B4A4;
     *(s32 *)&arg0->unk74[0x18] = *(s32 *)&arg0->unk74[0x18] + arg0->unk474;
 
-    *globalTransformPtr = 0;
-    D_8009A8A8_9B4A8 = 0x140000;
-    D_8009A8AC_9B4AC = 0;
+    D_8009A8A4_9B4A4.x = 0;
+    D_8009A8A4_9B4A4.y = 0x140000;
+    D_8009A8A4_9B4A4.z = 0;
 
-    func_8006B084_6BC84(globalTransformPtr - 5, arg0->unk74, arg0->unkB0);
+    func_8006B084_6BC84((s32 *)&D_8009A8A4_9B4A4 - 5, arg0->unk74, arg0->unkB0);
 }
 
 void renderJingleTownBossWithEffects(Arg0Struct *arg0) {

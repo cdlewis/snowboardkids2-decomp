@@ -25,9 +25,7 @@ extern void *D_8009A710_9B310;
 extern void *D_8009A720_9B320;
 extern void *D_8009A760_9B360;
 extern void *D_8009A770_9B370;
-extern s32 D_8009A8A4_9B4A4;
-extern s32 D_8009A8A8_9B4A8;
-extern s32 D_8009A8AC_9B4AC;
+extern Vec3i D_8009A8A4_9B4A4;
 extern Transform3D D_8009A8B0_9B4B0;
 extern s32 gFrameCounter;
 
@@ -511,9 +509,7 @@ typedef struct {
 } BurstEffectState;
 
 extern loadAssetMetadata_arg D_800908A0_914A0;
-extern s32 D_800908E0_914E0;
-extern s32 D_800908E4_914E4;
-extern s32 D_800908E8_914E8;
+extern Vec3i D_800908E0_914E0[];
 
 void updateBurstParticles(BurstEffectState *);
 void setupBurstParticles(BurstEffectState *);
@@ -527,32 +523,17 @@ void initBurstEffect(BurstEffectState *state) {
 
 void setupBurstParticles(BurstEffectState *state) {
     s32 i;
-    loadAssetMetadata_arg *assetA0;
-    volatile BurstParticle *particle;
-    s32 *yPtr;
-    s32 offset;
 
-    i = 0;
-    assetA0 = &D_800908A0_914A0;
-    particle = (volatile BurstParticle *)state;
-    yPtr = &D_800908E4_914E4;
-    offset = 0;
-
-    do {
+    for (i = 0; i < 6; i++) {
         s32 temp;
-        loadAssetMetadata((loadAssetMetadata_arg *)particle, state->assetTable, state->particleType);
-        particle->unk20 = *yPtr;
-        particle->position.x += *(s32 *)((u8 *)&D_800908E0_914E0 + offset);
-        i++;
-        particle->position.y += *yPtr;
-        temp = particle->position.z;
-        temp += *(s32 *)((u8 *)&D_800908E8_914E8 + offset);
-        yPtr = (s32 *)((u8 *)yPtr + 0xC);
-        offset += 0xC;
-        particle->unk0 = assetA0;
-        particle->position.z = temp;
-        particle++;
-    } while (i < 6);
+
+        loadAssetMetadata((loadAssetMetadata_arg *)&state->particles[i], state->assetTable, state->particleType);
+        state->particles[i].unk20 = D_800908E0_914E0[i].y;
+        state->particles[i].position.x += D_800908E0_914E0[i].x;
+        state->particles[i].position.y += D_800908E0_914E0[i].y;
+        state->particles[i].position.z += D_800908E0_914E0[i].z;
+        state->particles[i].unk0 = &D_800908A0_914A0;
+    }
 
     if (state->particleType != 0x2F) {
         u8 *ptr;
@@ -1387,11 +1368,10 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
     scale = state->scale;
     scaleMatrix((Transform3D *)state, scale, scale, scale);
 
-    ptr = &D_8009A8A4_9B4A4;
-    *ptr = 0;
-    D_8009A8A8_9B4A8 = 0x9CCCC;
-    D_8009A8AC_9B4AC = 0xFFE44CCD;
-
+    D_8009A8A4_9B4A4.x = 0;
+    D_8009A8A4_9B4A4.y = 0x9CCCC;
+    D_8009A8A4_9B4A4.z = 0xFFE44CCD;
+    ptr = (s32 *)&D_8009A8A4_9B4A4;
     func_8006B084_6BC84(ptr - 5, state, state->secondaryObj);
 
     if (gFrameCounter & 1) {
@@ -2220,7 +2200,7 @@ void setupItemTriggerEntries(ItemTriggerTaskState *arg0) {
 
     if (arg0->numItems > 0) {
         one = 1;
-        ptr = &D_8009A8A4_9B4A4;
+        ptr = (s32 *)&D_8009A8A4_9B4A4;
         do {
             offset = i << 4;
             *((s8 *)(offset + (s32)arg0->items)) = one;

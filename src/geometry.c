@@ -412,9 +412,7 @@ void func_mulMatrix3x3T(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2)
     }
 }
 
-extern s32 D_8009A8A4_9B4A4;
-extern s32 D_8009A8A8_9B4A8;
-extern s32 D_8009A8AC_9B4AC;
+extern Vec3i D_8009A8A4_9B4A4;
 
 typedef void (*CreateXRotS16)(s16 matrix[3][3], s16 angle);
 
@@ -433,10 +431,10 @@ void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPos
     xRotation.translation.y = 0;
     xRotation.translation.x = 0;
     func_8006B084_6BC84(&xRotation, &yRotation, &combined);
-    tempTransformPtr = &D_8009A8A4_9B4A4;
-    *tempTransformPtr = 0;
-    D_8009A8A8_9B4A8 = 0;
-    D_8009A8AC_9B4AC = tempPosZ;
+    D_8009A8A4_9B4A4.x = 0;
+    D_8009A8A4_9B4A4.y = 0;
+    D_8009A8A4_9B4A4.z = tempPosZ;
+    tempTransformPtr = (s32 *)&D_8009A8A4_9B4A4;
     func_8006B084_6BC84(tempTransformPtr - 5, &combined, output);
 }
 

@@ -181,7 +181,7 @@ void func_800288D4_294D4(StoryMapItemTask *arg0) {
     arg0->matrix.translation.x = arg0->itemData[arg0->unk3A * 2 + 1] << 16;
     arg0->matrix.translation.z = arg0->itemData[arg0->unk3A * 2 + 2] << 16;
 
-    angle = func_8006D21C_6DE1C(
+    angle = computeAngleToPosition(
         arg0->itemData[(index & 0xFF) * 2 + 1] << 16,
         arg0->itemData[(index & 0xFF) * 2 + 2] << 16,
         arg0->matrix.translation.x,

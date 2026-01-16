@@ -4,10 +4,10 @@
 #include "common.h"
 #include "race_session.h"
 
-extern s32 func_800B0DC0_1DCF60(s32);
-extern s16 func_800B0DD0_1DCF70(s32, s32);
-extern u8 *func_800B0E24_1DCFC4(s32, s16);
-extern s16 func_800B0E80_1DD020(s32, s16);
+extern s32 getOffsetTableEntryCount(s32);
+extern s16 getOffsetTableEntryValue0(s32, s32);
+extern u8 *getOffsetTableEntryData(s32, s16);
+extern s16 getOffsetTableEntryValue2(s32, s16);
 
 typedef union {
     s16 halfword;
@@ -150,13 +150,13 @@ void func_800B0388_1DC528(Struct_800B0388 *arg0) {
         arg0->unk9B4 = 0;
         arg0->unk9A6++;
 
-        if (func_800B0E24_1DCFC4(arg0->unk95C, arg0->unk9A6) != 0) {
+        if (getOffsetTableEntryData(arg0->unk95C, arg0->unk9A6) != 0) {
             arg0->unk9A0 = arg0->unk9A0 + 1;
         }
 
         temp_s0 = arg0->unk9A6;
-        if (temp_s0 < (func_800B0DC0_1DCF60(arg0->unk95C) - 1)) {
-            arg0->unk9AC = func_800B0DD0_1DCF70(arg0->unk95C, (s16)arg0->unk9A6 + 1);
+        if (temp_s0 < (getOffsetTableEntryCount(arg0->unk95C) - 1)) {
+            arg0->unk9AC = getOffsetTableEntryValue0(arg0->unk95C, (s16)arg0->unk9A6 + 1);
         } else {
             arg0->unk9AC = 0x7530;
         }
@@ -172,7 +172,7 @@ void func_800B0388_1DC528(Struct_800B0388 *arg0) {
         }
     }
 
-    if (func_800B0E24_1DCFC4(arg0->unk95C, arg0->unk9A6) != 0) {
+    if (getOffsetTableEntryData(arg0->unk95C, arg0->unk9A6) != 0) {
         temp_v1 = arg0->unk9B4;
         if (temp_v1 == 0) {
             if (arg0->unk9AE == 0) {
@@ -190,10 +190,10 @@ void func_800B0388_1DC528(Struct_800B0388 *arg0) {
 
         if (arg0->unk9AE == 0) {
         loop_start:
-            while (arg0->unk9B0 < func_800B0E80_1DD020(arg0->unk95C, arg0->unk9A6)) {
+            while (arg0->unk9B0 < getOffsetTableEntryValue2(arg0->unk95C, arg0->unk9A6)) {
                 u8 *ptr;
 
-                ptr = func_800B0E24_1DCFC4(arg0->unk95C, arg0->unk9A6);
+                ptr = getOffsetTableEntryData(arg0->unk95C, arg0->unk9A6);
                 arg0->unk9AE = ptr[arg0->unk9B0];
                 arg0->unk99C.word = arg0->unk9B2 << 20;
 
