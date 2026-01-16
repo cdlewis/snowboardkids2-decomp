@@ -1144,7 +1144,7 @@ void loadPlayerSparkleData(PlayerSparkleTask *task) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     loadAssetMetadata(&task->metadata, task->assetData, 0);
-    task->metadata.unk0 = (loadAssetMetadata_arg *)((u8 *)state->unk44 + 0x40);
+    task->metadata.assetTemplate = (loadAssetMetadata_arg *)((u8 *)state->unk44 + 0x40);
 
     switch (state->memoryPoolId) {
         case 0:
@@ -1895,9 +1895,9 @@ void loadPlayerAuraData(PlayerAuraState *state) {
     loadAssetMetadata(&state->element1.asset, state->assetData, 3);
     loadAssetMetadata(&state->element2.asset, state->assetData, 4);
 
-    state->element0.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0xC0);
-    state->element1.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0x100);
-    state->element2.asset.unk0 = (loadAssetMetadata_arg *)(alloc->unk44 + 0x140);
+    state->element0.asset.assetTemplate = (loadAssetMetadata_arg *)(alloc->unk44 + 0xC0);
+    state->element1.asset.assetTemplate = (loadAssetMetadata_arg *)(alloc->unk44 + 0x100);
+    state->element2.asset.assetTemplate = (loadAssetMetadata_arg *)(alloc->unk44 + 0x140);
     state->animationAngle = 0;
     setCallbackWithContinue(&updatePlayerAuraRising);
 }
@@ -2079,7 +2079,7 @@ void loadPlayerHaloData(PlayerHaloState *state) {
     i = 0;
     offset = 0x180;
     for (; i < 5; i++) {
-        state->elements[i].asset.unk0 = (loadAssetMetadata_arg *)(allocation->unk44 + offset);
+        state->elements[i].asset.assetTemplate = (loadAssetMetadata_arg *)(allocation->unk44 + offset);
         offset += 0x40;
     }
 
@@ -3224,7 +3224,7 @@ void initPanelProjectileMovement(PanelProjectileInitArg *arg0) {
     s32 pad[4];
 
     gs = (GameState *)getCurrentAllocation();
-    arg0->metadata.unk0 = (loadAssetMetadata_arg *)((u8 *)gs->unk44 + 0xEC0);
+    arg0->metadata.assetTemplate = (loadAssetMetadata_arg *)((u8 *)gs->unk44 + 0xEC0);
     loadAssetMetadata(&arg0->metadata, arg0->assetTable, 0x3F);
     player = arg0->player;
     temp_s1 = &arg0->metadata.position;

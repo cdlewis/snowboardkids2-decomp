@@ -1905,7 +1905,7 @@ void renderAlphaBillboardSprite(AlphaSpriteState *state) {
 }
 
 void enqueueAlphaBillboardSprite(s32 arg0, loadAssetMetadata_arg *arg1) {
-    (arg1 + 1)->unk0 = 0;
+    (arg1 + 1)->assetTemplate = 0;
     debugEnqueueCallback(arg0 & 0xFFFF, 6, &renderAlphaBillboardSprite, arg1);
 }
 
@@ -1996,7 +1996,7 @@ void renderAlphaSprite(AlphaSpriteState *state) {
 }
 
 void enqueueAlphaSprite(s32 arg0, loadAssetMetadata_arg *arg1) {
-    (arg1 + 1)->unk0 = 0;
+    (arg1 + 1)->assetTemplate = 0;
     debugEnqueueCallback(arg0, 6, &renderAlphaSprite, arg1);
 }
 

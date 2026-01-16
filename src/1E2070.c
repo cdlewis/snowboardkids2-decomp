@@ -165,7 +165,7 @@ void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *state) {
     enqueueAlphaSprite(0, (loadAssetMetadata_arg *)&state->assetMetadata);
     enqueueAlphaSprite(0, (loadAssetMetadata_arg *)&state->sprite2);
 
-    state->assetMetadata.unk1A -= 0x14;
+    state->assetMetadata.alpha -= 0x14;
     state->alphaDecay -= 0x14;
 
     if (++state->frameIndex == 8) {

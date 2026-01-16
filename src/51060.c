@@ -223,14 +223,14 @@ void cleanupGlintEffect(GlintEffectTask *);
 void loadCharacterAttackEffectAssets(CharacterAttackEffectState *);
 void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *);
 
-extern loadAssetMetadata_arg D_80090EC0_91AC0;
-extern loadAssetMetadata_arg D_80090F00_91B00;
-extern void *D_80090F40_91B40;
-extern void *D_80090F4C_91B4C;
+extern loadAssetMetadata_arg gGlintEffectAssetTemplate;
+extern loadAssetMetadata_arg gCharacterAttackEffectAssetTemplate;
+extern Vec3i gCharacterAttackEffectPositionOffsetsA;
+extern Vec3i gCharacterAttackEffectPositionOffsetsB;
 extern u8 D_80090E70_91A70[];
 extern s16 gSkiTrailOffsetTransformsForward[];
 extern s16 gSkiTrailOffsetTransformsBackward[];
-extern s16 D_80090EB0_91AB0[];
+extern s16 gGlintEffectTransform[];
 extern u16 D_8009ADE0_9B9E0;
 
 void initSprayEffectTask(void **node) {
@@ -242,8 +242,8 @@ void initSprayEffectTask(void **node) {
 void loadFirstSprayParticle(SprayEffectTask *arg0) {
     GameState *gs = (GameState *)getCurrentAllocation();
     loadAssetMetadata(&arg0->particle, arg0->assetTable, arg0->particleType);
-    arg0->particle.unk1A = 0xE0;
-    arg0->particle.unk0 = &gs->unk44->unkFC0->asset;
+    arg0->particle.alpha = 0xE0;
+    arg0->particle.assetTemplate = &gs->unk44->unkFC0->asset;
     arg0->iteration = 0;
     setCallbackWithContinue(&updateSprayEffect);
 }
@@ -258,14 +258,14 @@ void updateSprayEffect(SprayEffectUpdateTask *arg0) {
         GameStateUnk44 *base;
 
         base = gs->unk44;
-        arg0->particle.unk0 = &base->unkFC0[arg0->iteration].asset;
+        arg0->particle.assetTemplate = &base->unkFC0[arg0->iteration].asset;
 
         arg0->iteration = arg0->iteration + 1;
         if (arg0->iteration == 4) {
             func_80069CF8_6A8F8();
             return;
         }
-        arg0->particle.unk1A = arg0->particle.unk1A - 0x30;
+        arg0->particle.alpha = arg0->particle.alpha - 0x30;
         arg0->particle.position.x += arg0->velX;
         arg0->particle.position.y += arg0->velY;
         arg0->particle.position.z += arg0->velZ;
@@ -440,7 +440,7 @@ void updateCharacterTrailParticle(CharacterTrailParticleTask *arg0) {
     }
 
     i = 0;
-    if (arg0->particle.unk1A == 0xFF) {
+    if (arg0->particle.alpha == 0xFF) {
         do {
             enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->particle);
             i++;
@@ -466,12 +466,12 @@ void spawnCharacterTrailParticle(void *arg0) {
     if (task != NULL) {
         task->particleType = 0x35;
         task->sourceObj = arg0;
-        task->particle.unk1A = 0xFF;
+        task->particle.alpha = 0xFF;
         task->velX = 0;
         task->velY = 0;
         task->velZ = 0;
         task->positionSelector = 0;
-        task->particle.unk0 = (loadAssetMetadata_arg *)&allocation->unk44->unkFC0;
+        task->particle.assetTemplate = (loadAssetMetadata_arg *)&allocation->unk44->unkFC0;
     }
 }
 
@@ -497,13 +497,13 @@ void spawnPlayerCharacterTrailParticle(Player *arg0, s32 arg1) {
         u8 temp2;
         task->sourceObj = (func_80050C00_51800_Task_unk34 *)arg0;
         temp2 = D_80090E70_91A70[arg1];
-        task->particle.unk1A = 0x80;
+        task->particle.alpha = 0x80;
         task->particleType = temp2;
         task->velX = arg0->velocity.x / 2;
         task->velY = arg0->velocity.y / 2;
         task->velZ = arg0->velocity.z / 2;
         task->positionSelector = -1;
-        task->particle.unk0 = (void *)((u32)allocation->unk44 + 0x1440);
+        task->particle.assetTemplate = (void *)((u32)allocation->unk44 + 0x1440);
     }
 }
 
@@ -681,10 +681,10 @@ void initSkiTrailTask(SkiTrailTask *task) {
     gs = (GameState *)getCurrentAllocation();
     task->assetTable = load_3ECE40();
     particleAsset = (void *)((u8 *)gs->unk44 + 0x13C0);
-    task->particleLeft.unk1A = 0xFF;
-    task->particleLeft.unk0 = particleAsset;
-    task->particleRight.unk1A = task->particleLeft.unk1A;
-    task->particleRight.unk0 = task->particleLeft.unk0;
+    task->particleLeft.alpha = 0xFF;
+    task->particleLeft.assetTemplate = particleAsset;
+    task->particleRight.alpha = task->particleLeft.alpha;
+    task->particleRight.assetTemplate = task->particleLeft.assetTemplate;
 
     i = 0;
 
@@ -764,8 +764,8 @@ void updateSkiTrailTask(SkiTrailTask *task) {
     }
 
     if (gs->gamePaused == 0) {
-        task->particleLeft.unk1A -= 0x14;
-        task->particleRight.unk1A -= 0x14;
+        task->particleLeft.alpha -= 0x14;
+        task->particleRight.alpha -= 0x14;
         task->frameCounter++;
         if (task->frameCounter == 8) {
             func_80069CF8_6A8F8();
@@ -787,8 +787,8 @@ void spawnSkiTrailTask(Player *player) {
 void initGlintEffect(GlintEffectTask *arg0) {
     getCurrentAllocation();
     arg0->assetTable = load_3ECE40();
-    arg0->particle.unk0 = &D_80090EC0_91AC0;
-    arg0->particle.unk1A = 0xFF;
+    arg0->particle.assetTemplate = &gGlintEffectAssetTemplate;
+    arg0->particle.alpha = 0xFF;
     loadAssetMetadata(&arg0->particle, arg0->assetTable, 0x6A);
     setCleanupCallback(&cleanupGlintEffect);
     setCallbackWithContinue(&updateGlintEffect);
@@ -799,15 +799,15 @@ void updateGlintEffect(GlintEffectTask *arg0) {
     GameState *gs;
 
     gs = (GameState *)getCurrentAllocation();
-    transformVector((s16 *)&D_80090EB0_91AB0, arg0->source->rotation, &arg0->particle.position);
+    transformVector((s16 *)&gGlintEffectTransform, arg0->source->rotation, &arg0->particle.position);
 
     for (i = 0; i < 4; i++) {
         enqueueAlphaSprite(i, &arg0->particle);
     }
 
     if (gs->gamePaused == 0) {
-        arg0->particle.unk1A -= 0x10;
-        if (arg0->particle.unk1A < 0x40) {
+        arg0->particle.alpha -= 0x10;
+        if (arg0->particle.alpha < 0x40) {
             func_80069CF8_6A8F8();
         }
     }
@@ -835,22 +835,22 @@ void loadCharacterAttackEffectAssets(CharacterAttackEffectState *arg0) {
 
     for (i = 0; i < 6; i++) {
         loadAssetMetadata(&arg0->particles[i].particle, arg0->assetTable, arg0->particleType);
-        arg0->particles[i].particle.unk0 = &D_80090F00_91B00;
+        arg0->particles[i].particle.assetTemplate = &gCharacterAttackEffectAssetTemplate;
 
         if (arg0->isVariant == 0) {
-            memcpy(&arg0->positionOffsets, &D_80090F40_91B40, 0xC);
-            arg0->particles[i].particle.unk1A = 0x90;
+            memcpy(&arg0->positionOffsets, &gCharacterAttackEffectPositionOffsetsA, 0xC);
+            arg0->particles[i].particle.alpha = 0x90;
         } else {
-            memcpy(&arg0->positionOffsets, &D_80090F4C_91B4C, 0xC);
-            arg0->particles[i].particle.unk1A = 0xF0;
+            memcpy(&arg0->positionOffsets, &gCharacterAttackEffectPositionOffsetsB, 0xC);
+            arg0->particles[i].particle.alpha = 0xF0;
         }
     }
 
     arg0->frameCounter = 0;
-    setCallbackWithContinue(&func_80051978_52578);
+    setCallbackWithContinue(&updateCharacterAttackEffect);
 }
 
-INCLUDE_ASM("asm/nonmatchings/51060", func_80051978_52578);
+INCLUDE_ASM("asm/nonmatchings/51060", updateCharacterAttackEffect);
 
 void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *arg0) {
     arg0->assetTable = freeNodeMemory(arg0->assetTable);

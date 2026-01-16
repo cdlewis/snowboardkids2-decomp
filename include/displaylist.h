@@ -62,7 +62,7 @@ void initializeOverlaySystem(void);
 
 /* Base struct without trailing fields - 0x18 bytes */
 typedef struct loadAssetMetadata_arg_base {
-    struct loadAssetMetadata_arg *unk0;
+    struct loadAssetMetadata_arg *assetTemplate;
     /* 0x4 */ Vec3i position;
     /* 0x10 */ u8 *data_ptr;
     /* 0x14 */ TableEntry_19E80 *index_ptr;
@@ -70,13 +70,13 @@ typedef struct loadAssetMetadata_arg_base {
 
 /* Full struct with alpha/animation fields - 0x1C bytes */
 typedef struct loadAssetMetadata_arg {
-    struct loadAssetMetadata_arg *unk0;
+    struct loadAssetMetadata_arg *assetTemplate;
     /* 0x4 */ Vec3i position;
     /* 0x10 */ u8 *data_ptr;
     /* 0x14 */ TableEntry_19E80 *index_ptr;
     u8 unk18;
     u8 unk19;
-    u8 unk1A;
+    u8 alpha;
 } loadAssetMetadata_arg;
 
 void loadAssetMetadata(loadAssetMetadata_arg *, void *, s32);
@@ -134,7 +134,7 @@ typedef struct {
     /* 0x14 */ TableEntry_19E80 *index_ptr;
     s8 unk18;
     u8 unk19;
-    u8 unk1A;
+    u8 alpha;
 } loadAssetMetadataByIndex_arg;
 
 void loadAssetMetadataByIndex(

@@ -1036,13 +1036,13 @@ void updateStarEffectAnimation(StarEffectState *arg0) {
         }
     }
     if (arg0->alphaPulseDir != 0) {
-        arg0->sprite.unk1A -= 0x10;
-        if (arg0->sprite.unk1A == 0x40) {
+        arg0->sprite.alpha -= 0x10;
+        if (arg0->sprite.alpha == 0x40) {
             arg0->alphaPulseDir++;
         }
     } else {
-        arg0->sprite.unk1A += 0x10;
-        if (arg0->sprite.unk1A == 0xE0) {
+        arg0->sprite.alpha += 0x10;
+        if (arg0->sprite.alpha == 0xE0) {
             arg0->alphaPulseDir--;
         }
     }
@@ -1065,14 +1065,14 @@ void updateStarEffect(StarEffectState *arg0) {
     if (startDelay == 0) {
         arg0->frameTimer = 1;
         arg0->alphaPulseDir = 0;
-        arg0->sprite.unk1A = 0;
+        arg0->sprite.alpha = 0;
         spriteBuffer = gameState->unk44;
         arg0->unk30 = 0x200000;
         arg0->unk2C = 0;
         arg0->unk34 = 0;
         arg0->animFrameIndex = 0;
         arg0->playSoundFlag = 1;
-        arg0->sprite.unk0 = (void *)((u8 *)spriteBuffer + 0xF00);
+        arg0->sprite.assetTemplate = (void *)((u8 *)spriteBuffer + 0xF00);
         updateStarEffectAnimation(arg0);
 
         if (arg0->immediateMode != 0) {
@@ -1132,7 +1132,7 @@ void contractStarEffect(StarEffectState *state) {
         updateStarEffectAnimation(state);
         transformVector((s16 *)&state->unk2C, state->unk24->unk9F0, &state->sprite.position);
 
-        if (state->sprite.unk1A == 0x40) {
+        if (state->sprite.alpha == 0x40) {
             if (state->player->unkBD9 != 0) {
                 state->unk2C = 0x300000;
                 state->unk30 = 0x300000;
