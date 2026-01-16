@@ -1008,35 +1008,41 @@ void addCollisionSectorNodeToList(ListNode_5AA90 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005C868_5D468);
 
-s16 func_8005CE98_5DA98(Player *arg0) {
-    GameState *allocation;
-    Section3Element *elem;
-    s16 result;
+s16 getPlayerTargetTrackAngle(Player *player) {
+    GameState *gameState;
+    Section3Element *sectorEntry;
+    s16 targetAngle;
 
-    allocation = (GameState *)getCurrentAllocation();
-    elem = (Section3Element *)(arg0->sectorIndex * 0x24 + (u32)allocation->gameData.section3Data);
+    gameState = (GameState *)getCurrentAllocation();
+    sectorEntry = (Section3Element *)(player->sectorIndex * 0x24 + (u32)gameState->gameData.section3Data);
 
-    if (elem->unk0 < 0) {
-        if (allocation->finalLapNumber == arg0->currentLap) {
-            Section1Element *section1Data = (Section1Element *)allocation->gameData.section1Data;
-            Section1Element *v1 = (Section1Element *)(elem->unk1C * 6 + (u32)section1Data);
-            Section1Element *v2 = (Section1Element *)(elem->unk16 * 6 + (u32)section1Data);
-            result = func_8006D21C_6DE1C(v1->unk0, v1->unk4, v2->unk0, v2->unk4) + 0x800;
+    if (sectorEntry->unk0 < 0) {
+        if (gameState->finalLapNumber == player->currentLap) {
+            Section1Element *waypointData = (Section1Element *)gameState->gameData.section1Data;
+            Section1Element *waypoint1 = (Section1Element *)(sectorEntry->unk1C * 6 + (u32)waypointData);
+            Section1Element *waypoint2 = (Section1Element *)(sectorEntry->unk16 * 6 + (u32)waypointData);
+            targetAngle =
+                func_8006D21C_6DE1C(waypoint1->unk0, waypoint1->unk4, waypoint2->unk0, waypoint2->unk4) + 0x800;
         } else {
-            LevelConfig *item = getLevelConfig(allocation->memoryPoolId);
-            result = func_8006D21C_6DE1C(item->shortcutPosX, item->shortcutPosZ, arg0->worldPos.x, arg0->worldPos.z);
-            if (arg0->unkB84 & 2) {
-                result += 0x1000;
+            LevelConfig *levelConfig = getLevelConfig(gameState->memoryPoolId);
+            targetAngle = func_8006D21C_6DE1C(
+                levelConfig->shortcutPosX,
+                levelConfig->shortcutPosZ,
+                player->worldPos.x,
+                player->worldPos.z
+            );
+            if (player->unkB84 & 2) {
+                targetAngle += 0x1000;
             }
         }
     } else {
-        Section1Element *section1Data = (Section1Element *)allocation->gameData.section1Data;
-        Section1Element *v1 = (Section1Element *)(elem->unk16 * 6 + (u32)section1Data);
-        Section1Element *v2 = (Section1Element *)(elem->unk1C * 6 + (u32)section1Data);
-        result = func_8006D21C_6DE1C(v1->unk0, v1->unk4, v2->unk0, v2->unk4);
-        if (arg0->unkB84 & 2) {
-            result += 0x1000;
+        Section1Element *waypointData = (Section1Element *)gameState->gameData.section1Data;
+        Section1Element *waypoint1 = (Section1Element *)(sectorEntry->unk16 * 6 + (u32)waypointData);
+        Section1Element *waypoint2 = (Section1Element *)(sectorEntry->unk1C * 6 + (u32)waypointData);
+        targetAngle = func_8006D21C_6DE1C(waypoint1->unk0, waypoint1->unk4, waypoint2->unk0, waypoint2->unk4);
+        if (player->unkB84 & 2) {
+            targetAngle += 0x1000;
         }
     }
-    return result;
+    return targetAngle;
 }

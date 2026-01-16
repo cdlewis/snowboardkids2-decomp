@@ -124,7 +124,7 @@ void playAttackHitVoice(Player *player);
 void playFinishBoostVoice(Player *player);
 void playStunnedVoice(Player *arg0);
 Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex, s32 searchRadius);
-s16 func_8005CE98_5DA98(Player *arg0);
+s16 getPlayerTargetTrackAngle(Player *player);
 void spawnHomingProjectile(void *arg0, s32 arg1, void *arg2);
 void setPlayerStarHitState(Player *player, Vec3i *hitPosition);
 void setPlayerPanelHitState(Player *arg0);

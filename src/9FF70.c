@@ -1898,7 +1898,7 @@ s32 updateStunnedAirbornePhase(Player *player) {
         spawnImpactStar(&effectPos);
     }
 
-    angleDiff = (func_8005CE98_5DA98(player) - player->rotY) & 0x1FFF;
+    angleDiff = (getPlayerTargetTrackAngle(player) - player->rotY) & 0x1FFF;
     clampedDelta = angleDiff;
     if (angleDiff >= 0x1001) {
         clampedDelta = angleDiff | 0xE000;
@@ -1951,7 +1951,7 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
         spawnImpactStar(&effectPos);
     }
 
-    angleDiff = (func_8005CE98_5DA98(player) - player->rotY) & 0x1FFF;
+    angleDiff = (getPlayerTargetTrackAngle(player) - player->rotY) & 0x1FFF;
     clampedDelta = angleDiff;
     if (angleDiff >= 0x1001) {
         clampedDelta = angleDiff | 0xE000;
@@ -2069,7 +2069,7 @@ s32 updateStunnedRecoveryFallingPhase(Player *player) {
         player->unkB84 |= 0x40;
     }
 
-    targetAngle = func_8005CE98_5DA98(player);
+    targetAngle = getPlayerTargetTrackAngle(player);
     angleDiff = targetAngle - player->rotY;
     clampedDelta = angleDiff & 0x1FFF;
 
@@ -2414,7 +2414,7 @@ s32 updateStunnedRecoveryStandUpPhase(Player *arg0) {
         arg0->unkB84 |= 0x40;
     }
 
-    angle = func_8005CE98_5DA98(arg0);
+    angle = getPlayerTargetTrackAngle(arg0);
     angleDelta = (angle - arg0->rotY) & 0x1FFF;
 
     if (angleDelta >= 0x1001) {
