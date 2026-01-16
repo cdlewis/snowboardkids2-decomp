@@ -41,20 +41,20 @@ typedef struct {
 typedef struct {
     s16 matrix[6];
     u8 _pad[0x8];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    void *unk20;
+    s32 posX;
+    s32 posY;
+    s32 posZ;
+    void *displayLists;
     void *unk24;
     void *unk28;
     s32 unk2C;
     u8 _pad2[0xC];
-    s16 unk3C;
+    s16 oscillationAngle;
     u8 _pad3[0x2];
-    s32 unk40;
-    s32 unk44;
+    s32 localOffsetX;
+    s32 localOffsetZ;
     s32 unk48;
-} func_800BB2B0_arg;
+} RotatingPlatformTaskState;
 
 typedef struct {
     u8 pad[0x4C];
@@ -65,43 +65,43 @@ void func_800BB828_B5A38(func_800BB7F0_B5A00_arg *);
 void func_800BB5B0_B57C0(func_800BB458_B5668_arg *arg0);
 void func_800BB458_B5668(func_800BB458_B5668_arg *arg0);
 void func_800BB7B8_B59C8(func_800BB420_B5630_arg *arg0);
-void func_800BB420_B5630(func_800BB420_B5630_arg *arg0);
-void func_800BB350_B5560(func_800BB2B0_arg *arg0);
+void cleanupRotatingPlatformTask(func_800BB420_B5630_arg *arg0);
+void updateRotatingPlatformTask(RotatingPlatformTaskState *arg0);
 
-void func_800BB2B0_B54C0(func_800BB2B0_arg *arg0) {
+void initRotatingPlatformTask(RotatingPlatformTaskState *arg0) {
     s32 pad[3];
     GameState *gameState = getCurrentAllocation();
 
-    arg0->unk20 = (void *)((u32)func_80055E68_56A68(gameState->memoryPoolId) + 0xA0);
+    arg0->displayLists = (void *)((u32)func_80055E68_56A68(gameState->memoryPoolId) + 0xA0);
     arg0->unk24 = func_80055DC4_569C4(gameState->memoryPoolId);
     arg0->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
-    arg0->unk14 = 0x03E90000;
-    arg0->unk18 = 0x1D500000;
-    arg0->unk1C = 0xF8460000;
+    arg0->posX = 0x03E90000;
+    arg0->posY = 0x1D500000;
+    arg0->posZ = 0xF8460000;
     arg0->unk2C = 0;
-    arg0->unk3C = 0;
+    arg0->oscillationAngle = 0;
     arg0->unk48 = 0;
-    arg0->unk40 = 0;
-    arg0->unk44 = 0xFE6A0000;
-    setCleanupCallback(func_800BB420_B5630);
-    setCallback(func_800BB350_B5560);
+    arg0->localOffsetX = 0;
+    arg0->localOffsetZ = 0xFE6A0000;
+    setCleanupCallback(cleanupRotatingPlatformTask);
+    setCallback(updateRotatingPlatformTask);
 }
 
-void func_800BB350_B5560(func_800BB2B0_arg *arg0) {
+void updateRotatingPlatformTask(RotatingPlatformTaskState *arg0) {
     s32 i;
     Vec3i temp;
     GameState *gameState = getCurrentAllocation();
 
     if (gameState->gamePaused == 0) {
-        arg0->unk3C += 0x40;
+        arg0->oscillationAngle += 0x40;
     }
 
-    createRotationMatrixYZ(arg0->matrix, (u16)(approximateSin(arg0->unk3C) >> 4), 0xF800);
-    transformVector((s16 *)&arg0->unk40, arg0->matrix, &temp);
+    createRotationMatrixYZ(arg0->matrix, (u16)(approximateSin(arg0->oscillationAngle) >> 4), 0xF800);
+    transformVector((s16 *)&arg0->localOffsetX, arg0->matrix, &temp);
     handleOrientedAreaCollision(&temp, 0x500000, 0x100000, -0x800);
 
     if (gameState->gamePaused == 0) {
-        if ((arg0->unk3C & 0xFFF) == 0) {
+        if ((arg0->oscillationAngle & 0xFFF) == 0) {
             queueSoundAtPosition(&temp, 0x27);
         }
     }
@@ -111,7 +111,7 @@ void func_800BB350_B5560(func_800BB2B0_arg *arg0) {
     }
 }
 
-void func_800BB420_B5630(func_800BB420_B5630_arg *arg0) {
+void cleanupRotatingPlatformTask(func_800BB420_B5630_arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
