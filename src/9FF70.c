@@ -494,35 +494,28 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
     return 0;
 }
 
-typedef struct {
-    u8 _pad0[0xBDF];
-    u8 unkBDF;
-    u8 unkBE0;
-    u8 unkBE1;
-} func_800B7B64_arg;
-
-extern void func_800B7B44_A79F4(func_800B7B64_arg *, s32);
+extern void startRumbleEffect(Player *player, s32 effectType);
 
 s32 initPostTrickLandingStep(Player *player) {
     u8 behaviorStep;
 
     if (player->unkB84 & 0x20000) {
         setPlayerBehaviorPhase(player, 6);
-        func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
+        startRumbleEffect(player, 0);
         queueSoundAtPosition(&player->worldPos, 0x25);
         return 1;
     }
 
     if (func_8005A9A8_5B5A8(player) != 0) {
         initKnockbackBehavior((BehaviorState *)player);
-        func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
+        startRumbleEffect(player, 0);
         queueSoundAtPosition(&player->worldPos, 0x25);
         return 1;
     }
 
     if (player->unkB84 & 1) {
         setPlayerBehaviorPhase(player, 1);
-        func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
+        startRumbleEffect(player, 0);
         queueSoundAtPosition(&player->worldPos, 0x25);
         return 1;
     }
@@ -535,7 +528,7 @@ s32 initPostTrickLandingStep(Player *player) {
     behaviorStep = player->behaviorStep;
     if (behaviorStep == 0) {
         player->behaviorStep = ++behaviorStep;
-        func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
+        startRumbleEffect(player, 0);
         if ((player->unkBCC & 0xF) == 7) {
             queueSoundAtPosition(&player->worldPos, 0x29);
         }
@@ -2020,7 +2013,7 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
     } else {
         if (player->behaviorCounter == 0) {
             player->behaviorCounter++;
-            func_800B7B44_A79F4((func_800B7B64_arg *)player, 0);
+            startRumbleEffect(player, 0);
             queueSoundAtPosition(&player->worldPos, 0x25);
             spawnCharacterAttackEffectByType(player, player->unkBCC & 0xF);
         }
@@ -2282,7 +2275,7 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
     } else {
         if (arg0->behaviorCounter == 0) {
             arg0->behaviorCounter++;
-            func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 0);
+            startRumbleEffect(arg0, 0);
             queueSoundAtPosition(&arg0->worldPos, 0x25);
             spawnCharacterAttackEffectByType(arg0, arg0->unkBCC & 0xF);
         }
@@ -2530,7 +2523,7 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
         arg0->unkB8C = 0;
     }
     if (arg0->unkB8C == 0) {
-        func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 4);
+        startRumbleEffect(arg0, 4);
         setPlayerBehaviorPhase(arg0, 0x10);
     } else {
         newTimer = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
@@ -2590,7 +2583,7 @@ s32 updateStunnedBounceFallRecoverPhase(Player *arg0) {
 
     if (arg0->unkB8C == 0) {
         arg0->unkB88 = 0;
-        func_800B7B44_A79F4((func_800B7B64_arg *)arg0, 4);
+        startRumbleEffect(arg0, 4);
         resetPlayerBehaviorToDefault(arg0);
         return 0;
     } else {
@@ -3506,18 +3499,18 @@ s32 shortcutLaunchStep(Player *player) {
     return 0;
 }
 
-extern u8 D_800BACBC_AAB6C[];
+extern u8 gRumbleDurations[];
 
-void func_800B7B44_A79F4(func_800B7B64_arg *arg0, s32 arg1) {
-    arg0->unkBDF = arg1;
-    *(s8 *)&arg0->unkBE0 = -1;
-    arg0->unkBE1 = D_800BACBC_AAB6C[arg1];
+void startRumbleEffect(Player *player, s32 effectType) {
+    player->rumbleEffectType = effectType;
+    player->rumbleCounter = -1;
+    player->rumbleDuration = gRumbleDurations[effectType];
 }
 
-u8 func_800B7B64_A7A14(func_800B7B64_arg *arg0, s32 arg1) {
-    arg0->unkBDF = arg1;
-    arg0->unkBE1 = D_800BACBC_AAB6C[arg1];
-    return arg0->unkBE1;
+u8 getRumbleDuration(Player *player, s32 effectType) {
+    player->rumbleEffectType = effectType;
+    player->rumbleDuration = gRumbleDurations[effectType];
+    return player->rumbleDuration;
 }
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B7B7C_A7A2C);

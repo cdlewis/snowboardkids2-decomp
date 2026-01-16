@@ -212,10 +212,10 @@ typedef struct {
     u8 unkBDC;
     u8 unkBDD;
     u8 unkBDE;
-    u8 unkBDF;
-    u8 unkBE0;
-    u8 unkBE1;
-    u8 unkBE2;
+    u8 rumbleEffectType;
+    s8 rumbleCounter;
+    u8 rumbleDuration;
+    u8 rumbleFrame;
     u8 unkBE3;
     u8 unkBE4;
     u8 unkBE5;
