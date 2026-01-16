@@ -1223,25 +1223,25 @@ ret0:
 typedef struct {
     s32 baseOffset;
     s32 offsetTable[0];
-} func_80060950_61550_arg;
+} IndexedAnimationDataLayout;
 
 typedef struct {
     u16 padding;
     u16 index;
-} func_80060950_61550_target;
+} IndexedAnimationDataEntry;
 
-s32 func_80060950_61550(func_80060950_61550_arg *data, s16 index) {
+s32 getIndexedAnimationDataPtr(IndexedAnimationDataLayout *data, s16 index) {
     s32 baseOffset;
     s32 targetOffset;
-    func_80060950_61550_target *target;
+    IndexedAnimationDataEntry *target;
     s32 indexValue;
-    func_80060950_61550_arg *baseData;
+    IndexedAnimationDataLayout *baseData;
 
     targetOffset = data->offsetTable[index + 1];
-    target = (func_80060950_61550_target *)(((s8 *)data) + targetOffset);
+    target = (IndexedAnimationDataEntry *)(((s8 *)data) + targetOffset);
     baseOffset = data->baseOffset;
     indexValue = target->index;
-    baseData = (func_80060950_61550_arg *)(((s8 *)data) + baseOffset);
+    baseData = (IndexedAnimationDataLayout *)(((s8 *)data) + baseOffset);
     return (s32)(((s8 *)baseData) + (indexValue << 1));
 }
 
