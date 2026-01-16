@@ -62,7 +62,7 @@ void updateWipeTransitionSlots(cutsceneSys2Wait_exec_asset *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B956C_1E661C);
 
-s32 func_800B9680_1E6730(cutsceneSys2Wait_exec_asset *arg0) {
+s32 initWipeZoomAccel(cutsceneSys2Wait_exec_asset *arg0) {
     arg0->zoomSpeed = 0x6600;
     arg0->zoomDecelRate = 0x8000;
     updateWipeTransitionSlots(arg0);
