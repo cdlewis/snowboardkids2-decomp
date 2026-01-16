@@ -219,8 +219,8 @@ typedef struct {
     u8 unkBE3;
     u8 unkBE4;
     u8 unkBE5;
-    u8 unkBE6;
-    u8 unkBE7;
+    u8 bodyPartAnimIndex;
+    u8 bodyPartAnimFlags;
 } Player;
 
 typedef struct {

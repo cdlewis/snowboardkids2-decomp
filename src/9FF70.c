@@ -261,7 +261,7 @@ s32 updatePlayerSlidingConstrained(Player *player) {
         func_8005D180_5DD80(player, 0x22);
     }
 
-    func_8005D804_5E404(player, 1, 0);
+    setPlayerBodyPartAnimState(player, 1, 0);
 
     return 0;
 }
@@ -944,7 +944,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
 skip_to_end:
     if (player->tricksPerformedMask != 0) {
         playTrickSuccessVoice(player);
-        func_8005D804_5E404(player, 1, 0xF);
+        setPlayerBodyPartAnimState(player, 1, 0xF);
     }
 
     setPlayerBehaviorPhase(player, 3);
@@ -1529,7 +1529,7 @@ s32 updateRaceFinishWinStep(Player *player) {
     }
 
 end:
-    func_8005D804_5E404(player, 1, 0);
+    setPlayerBodyPartAnimState(player, 1, 0);
     return 0;
 }
 
@@ -1609,7 +1609,7 @@ s32 updateRaceFinishLoseStep(Player *player) {
             break;
     }
 
-    func_8005D804_5E404(player, 4, 0);
+    setPlayerBodyPartAnimState(player, 4, 0);
 
     return 0;
 }
@@ -1921,7 +1921,7 @@ s32 updateStunnedAirbornePhase(Player *player) {
         player->unkAA8 = player->unkAA8 / 2;
         resetPlayerBehaviorToDefault(player);
     }
-    func_8005D804_5E404(player, 3, 0);
+    setPlayerBodyPartAnimState(player, 3, 0);
     return 0;
 }
 
@@ -1974,7 +1974,7 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
         player->unkAA8 = player->unkAA8 / 2;
         resetPlayerBehaviorToDefault(player);
     }
-    func_8005D804_5E404(player, 3, 0);
+    setPlayerBodyPartAnimState(player, 3, 0);
     return 0;
 }
 
@@ -1994,7 +1994,7 @@ s32 updateStunnedFallingPhase(Player *player) {
     }
 
     player->unkB84 |= 0x10000;
-    func_8005D804_5E404(player, 3, 0);
+    setPlayerBodyPartAnimState(player, 3, 0);
     return 0;
 }
 
@@ -2046,7 +2046,7 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
         }
     }
 
-    func_8005D804_5E404(player, 3, 0);
+    setPlayerBodyPartAnimState(player, 3, 0);
     return 0;
 }
 
@@ -2151,7 +2151,7 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
         }
     }
 
-    func_8005D804_5E404(player, 3, 0);
+    setPlayerBodyPartAnimState(player, 3, 0);
 
     return 0;
 }
@@ -2204,7 +2204,7 @@ s32 updateEdgeFallRecoveryGetUpPhase(Player *arg0) {
         arg0->unkB8C = 0;
     }
 skip:
-    func_8005D804_5E404(arg0, 3, 0);
+    setPlayerBodyPartAnimState(arg0, 3, 0);
     return 0;
 }
 
@@ -2257,7 +2257,7 @@ s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
     }
 
     arg0->unkB84 |= 0x10000;
-    func_8005D804_5E404(arg0, 3, 0);
+    setPlayerBodyPartAnimState(arg0, 3, 0);
 
     return 0;
 }
@@ -2303,7 +2303,7 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
         }
     }
 
-    func_8005D804_5E404(arg0, 3, 0);
+    setPlayerBodyPartAnimState(arg0, 3, 0);
     return 0;
 }
 
@@ -2332,7 +2332,7 @@ s32 updateStunnedRecoverySlidePhase(Player *arg0) {
         setPlayerBehaviorPhase(arg0, 0xA);
     }
 
-    func_8005D804_5E404(arg0, 3, 0);
+    setPlayerBodyPartAnimState(arg0, 3, 0);
     return 0;
 }
 
@@ -2372,7 +2372,7 @@ s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
         }
     }
 
-    func_8005D804_5E404(arg0, 3, 0);
+    setPlayerBodyPartAnimState(arg0, 3, 0);
     return 0;
 }
 
@@ -2391,7 +2391,7 @@ s32 updateStunnedRecoveryEndPhase(Player *arg0) {
     arg0->worldPos.y = arg0->worldPos.y + 0xFFFF0000;
     decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
-    func_8005D804_5E404(arg0, 3, 0);
+    setPlayerBodyPartAnimState(arg0, 3, 0);
     return 0;
 }
 
@@ -2495,7 +2495,7 @@ s32 updateKnockbackAirborneLaunchPhase(Player *player) {
     }
 
 skip:
-    func_8005D804_5E404(player, 3, 0);
+    setPlayerBodyPartAnimState(player, 3, 0);
 
     return 0;
 }
@@ -2539,7 +2539,7 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
             arg0->unkB8C = 0;
         }
     }
-    func_8005D804_5E404(arg0, 3, 0);
+    setPlayerBodyPartAnimState(arg0, 3, 0);
     return 0;
 }
 
@@ -2558,7 +2558,7 @@ s32 updateStunnedBounceFallPhase(Player *arg0) {
         }
     }
 
-    func_8005D804_5E404(arg0, 3, 0);
+    setPlayerBodyPartAnimState(arg0, 3, 0);
     return 0;
 }
 
@@ -2642,7 +2642,7 @@ s32 updateStunnedBounceLaunchPhase(Player *arg0) {
         }
     }
 
-    func_8005D804_5E404(arg0, 3, 0);
+    setPlayerBodyPartAnimState(arg0, 3, 0);
     return 0;
 }
 
@@ -2685,7 +2685,7 @@ s32 updateKnockbackAirbornePhase(Player *arg0) {
         spawnCharacterTrailParticle(arg0);
     }
 
-    func_8005D804_5E404(arg0, 3, 0);
+    setPlayerBodyPartAnimState(arg0, 3, 0);
     return 0;
 }
 
@@ -2732,7 +2732,7 @@ s32 updateKnockbackBounceLaunchPhase(Player *player) {
         spawnCharacterTrailParticle(player);
     }
 
-    func_8005D804_5E404(player, 3, 0);
+    setPlayerBodyPartAnimState(player, 3, 0);
     return 0;
 }
 
@@ -2816,7 +2816,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
     spawn_done:
         setPlayerBehaviorPhase(player, 0x10);
     }
-    func_8005D804_5E404(player, 3, 0);
+    setPlayerBodyPartAnimState(player, 3, 0);
     return 0;
 }
 
@@ -2865,7 +2865,7 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
         setPlayerBehaviorPhase(arg0, 4);
     }
 
-    func_8005D804_5E404(arg0, 3, 0);
+    setPlayerBodyPartAnimState(arg0, 3, 0);
 
     return 0;
 }

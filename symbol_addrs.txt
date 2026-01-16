@@ -1420,6 +1420,7 @@ gUncompressedAssets = 0x800913D0; // size:0x80 type:AssetWithoutSize
 gCharacterBodyPartAnimTable = 0x80094180; // rom:0x94D80 size:0x3C
 gBodyPartRemapTable = 0x800941BC; // rom:0x94DBC size:0x8
 loadCharacterBodyParts = 0x8005D61C; // rom:0x5E21C
+setPlayerBodyPartAnimState = 0x8005D804; // rom:0x5E404
 
 gSchedulerListSentinel = 0x800A3270;
 gFreeSchedulerList = 0x800A32C0;

@@ -279,7 +279,7 @@ void playAttackHitVoice(Player *player) {
     if (index < 9) {
         if (player->unkB88 == 0) {
             queueSoundAtPositionWithPriority(&player->worldPos, D_80093FE0_94BE0[index], 5, player->playerIndex + 4);
-            func_8005D804_5E404(player, 1, 0xF);
+            setPlayerBodyPartAnimState(player, 1, 0xF);
         }
     }
 }

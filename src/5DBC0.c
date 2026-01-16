@@ -111,7 +111,7 @@ void loadCharacterBodyParts(Player *player) {
     }
 
     lookupTable = gCharacterBodyPartAnimTable + player->characterId * 5;
-    tableValue = lookupTable[player->unkBE6];
+    tableValue = lookupTable[player->bodyPartAnimIndex];
     if (tableValue == 0) {
         goto copy_basic;
     }
@@ -127,9 +127,9 @@ void loadCharacterBodyParts(Player *player) {
     player->unk238 = (s32)func_8005DDD8_5E9D8(player->characterId, player->boardIndex) + tableValue * 0x10 - 0x10;
 }
 
-void func_8005D804_5E404(Player *arg0, u8 arg1, u8 arg2) {
-    arg0->unkBE6 = arg1;
-    arg0->unkBE7 = arg2;
+void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags) {
+    player->bodyPartAnimIndex = animIndex;
+    player->bodyPartAnimFlags = animFlags;
 }
 
 s16 func_8005D810_5E410(Player *arg0) {
