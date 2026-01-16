@@ -33,7 +33,7 @@ void cutsceneSePlay_exec(cutsceneSePlay_exec_arg *arg0) {
         return;
     }
 
-    func_800B57F0_1E28A0(arg0->unk0, arg0->unk2, arg0->unkA, temp_a3, (s32)arg0->unk8, (s32)arg0->unk6);
+    scheduleRepeatingFanSoundEffect(arg0->unk0, arg0->unk2, arg0->unkA, temp_a3, (s32)arg0->unk8, (s32)arg0->unk6);
 }
 
 void cutsceneSe3dPlay_init(void) {
@@ -55,7 +55,7 @@ void cutsceneSe3dPlay_exec(cutsceneSePlay_exec_arg *arg0, cutsceneSe3dPlay_exec_
         return;
     }
 
-    func_800B598C_1E2A3C(arg0->unk0, arg0->unk2, arg0->unk4, arg0->unk8, arg0->unk6, slotData);
+    scheduleRepeatingFanSoundAtPosition(arg0->unk0, arg0->unk2, arg0->unk4, arg0->unk8, arg0->unk6, slotData);
 }
 
 void cutsceneSeStop_init(void) {

@@ -7,121 +7,135 @@
 extern s8 gStopFanSoundTasks;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-} func_800B58D0_1E2980_arg;
+    s16 fanIndex;
+    s16 volume;
+    s16 pan;
+    s16 remainingCount;
+    s16 channel;
+    s16 interval;
+    s16 currentFrame;
+} RepeatingFanSoundEffectState;
 
-void func_800B5984_1E2A34(void);
-void func_800B5A34_1E2AE4(void);
-void func_800B5B20_1E2BD0(void);
-void func_800B5898_1E2948(void);
-void func_800B58D0_1E2980(func_800B58D0_1E2980_arg *arg0);
+void cleanupRepeatingFanSoundEffectTask(void);
+void initRepeatingFanSound3DTask(void);
+void cleanupRepeatingFanSound3DTask(void);
+void initRepeatingFanSoundEffectTask(void);
+void updateRepeatingFanSoundEffect(RepeatingFanSoundEffectState *arg0);
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    CutsceneSlotData *unkC;
-} func_800B5A6C_1E2B1C_arg;
+    s16 fanIndex;
+    s16 volume;
+    s16 remainingCount;
+    s16 pan;
+    s16 interval;
+    s16 currentFrame;
+    CutsceneSlotData *cutsceneSlotData;
+} RepeatingFanSound3DState;
 
-void func_800B5A6C_1E2B1C(func_800B5A6C_1E2B1C_arg *arg0);
+void updateRepeatingFanSound3D(RepeatingFanSound3DState *arg0);
 
 void stopFanSoundTasks(void) {
     gStopFanSoundTasks = 1;
 }
 
-void func_800B57F0_1E28A0(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
+void scheduleRepeatingFanSoundEffect(
+    s16 fanIndex,
+    s16 volume,
+    s16 pan,
+    s16 repeatCount,
+    s16 interval,
+    s16 minInterval
+) {
     s16 *result;
 
-    if (arg5 <= 0) {
-        arg5 = 1;
+    if (minInterval <= 0) {
+        minInterval = 1;
     }
 
-    result = scheduleTask(func_800B5898_1E2948, 0, 0, 0);
+    result = scheduleTask(initRepeatingFanSoundEffectTask, 0, 0, 0);
 
     if (result != NULL) {
-        result[0] = arg0;
-        result[1] = arg1;
-        result[2] = arg2;
-        result[3] = arg3;
-        result[4] = arg4;
-        result[5] = arg5;
+        result[0] = fanIndex;
+        result[1] = volume;
+        result[2] = pan;
+        result[3] = repeatCount;
+        result[4] = interval;
+        result[5] = minInterval;
         result[6] = 0;
     }
 }
 
-void func_800B5898_1E2948(void) {
-    setCleanupCallback(func_800B5984_1E2A34);
+void initRepeatingFanSoundEffectTask(void) {
+    setCleanupCallback(cleanupRepeatingFanSoundEffectTask);
     gStopFanSoundTasks = 0;
-    setCallback(func_800B58D0_1E2980);
+    setCallback(updateRepeatingFanSoundEffect);
 }
 
-void func_800B58D0_1E2980(func_800B58D0_1E2980_arg *arg0) {
-    if (arg0->unk6 == 0 || gStopFanSoundTasks != 0) {
+void updateRepeatingFanSoundEffect(RepeatingFanSoundEffectState *arg0) {
+    if (arg0->remainingCount == 0 || gStopFanSoundTasks != 0) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    if ((arg0->unkC % arg0->unkA) == 0) {
-        playFanSoundEffect(arg0->unk0, arg0->unk2, arg0->unk4, arg0->unk8);
-        arg0->unk6--;
+    if ((arg0->currentFrame % arg0->interval) == 0) {
+        playFanSoundEffect(arg0->fanIndex, arg0->volume, arg0->pan, arg0->channel);
+        arg0->remainingCount--;
     }
 
-    arg0->unkC++;
+    arg0->currentFrame++;
 }
 
-void func_800B5984_1E2A34(void) {
+void cleanupRepeatingFanSoundEffectTask(void) {
 }
 
-void func_800B598C_1E2A3C(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, CutsceneSlotData *arg5) {
+void scheduleRepeatingFanSoundAtPosition(
+    s16 fanIndex,
+    s16 volume,
+    s16 repeatCount,
+    s16 pan,
+    s16 interval,
+    CutsceneSlotData *cutsceneSlotData
+) {
     s16 *result;
     s16 temp_arg4;
 
-    temp_arg4 = arg4;
-    if (arg4 <= 0) {
+    temp_arg4 = interval;
+    if (interval <= 0) {
         temp_arg4 = 1;
     }
 
-    result = scheduleTask(func_800B5A34_1E2AE4, 0, 0, 0);
+    result = scheduleTask(initRepeatingFanSound3DTask, 0, 0, 0);
 
     if (result != NULL) {
-        result[0] = arg0;
-        result[1] = arg1;
-        result[2] = arg2;
-        result[3] = arg3;
+        result[0] = fanIndex;
+        result[1] = volume;
+        result[2] = repeatCount;
+        result[3] = pan;
         result[4] = temp_arg4;
         result[5] = 0;
-        *(CutsceneSlotData **)&result[6] = arg5;
+        *(CutsceneSlotData **)&result[6] = cutsceneSlotData;
     }
 }
 
-void func_800B5A34_1E2AE4(void) {
-    setCleanupCallback(func_800B5B20_1E2BD0);
+void initRepeatingFanSound3DTask(void) {
+    setCleanupCallback(cleanupRepeatingFanSound3DTask);
     gStopFanSoundTasks = 0;
-    setCallback(func_800B5A6C_1E2B1C);
+    setCallback(updateRepeatingFanSound3D);
 }
 
-void func_800B5A6C_1E2B1C(func_800B5A6C_1E2B1C_arg *arg0) {
-    if (arg0->unk4 == 0 || gStopFanSoundTasks != 0) {
+void updateRepeatingFanSound3D(RepeatingFanSound3DState *arg0) {
+    if (arg0->remainingCount == 0 || gStopFanSoundTasks != 0) {
         func_80069CF8_6A8F8();
         return;
     }
 
-    if ((arg0->unkA % arg0->unk8) == 0) {
-        playFanSoundAtPosition(arg0->unk0, arg0->unk2, arg0->unk6, arg0->unkC);
-        arg0->unk4--;
+    if ((arg0->currentFrame % arg0->interval) == 0) {
+        playFanSoundAtPosition(arg0->fanIndex, arg0->volume, arg0->pan, arg0->cutsceneSlotData);
+        arg0->remainingCount--;
     }
 
-    arg0->unkA++;
+    arg0->currentFrame++;
 }
 
-void func_800B5B20_1E2BD0(void) {
+void cleanupRepeatingFanSound3DTask(void) {
 }
