@@ -6,14 +6,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-typedef struct {
-    u8 _pad[0x3C];
-    void *unk3C;
-    void *unk40;
-    u8 _pad2[0x10];
-    void *unk54;
-} func_800BB7D0_arg;
-
 extern u8 D_800BBB68_B5468[];
 extern u8 D_800BBB6C_B546C[];
 extern u8 D_800BBB88_B5488[];
@@ -41,7 +33,7 @@ typedef struct {
 } SunnyMountainTaskState;
 
 extern void func_800BB488_B4D88(void);
-void cleanupSunnyMountainDisplayObjectsTask(func_800BB7D0_arg *arg0);
+void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0);
 void updateSunnyMountainDisplayObjectsTask(s32 *arg0);
 
 /**
@@ -58,7 +50,7 @@ void updateSunnyMountainDisplayObjectsTask(s32 *arg0);
  * 3. Allocates 0xF0 bytes for 4 DisplayListObject entries (0x3C bytes each)
  * 4. For each of the 4 objects:
  *    - Sets display list pointer (offset 0xA0)
- *    - Sets shared unk3C and unk40 pointers
+ *    - Sets shared assetData and unk40 pointers
  *    - Copies 12 bytes of position data from the allocation
  * 5. Registers cleanup and update callbacks
  */
@@ -136,10 +128,10 @@ void updateSunnyMountainDisplayObjectsTask(s32 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/sunny_mountain", func_800BB488_B4D88);
 
-void cleanupSunnyMountainDisplayObjectsTask(func_800BB7D0_arg *arg0) {
-    arg0->unk3C = freeNodeMemory(arg0->unk3C);
+void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0) {
+    arg0->assetData = freeNodeMemory(arg0->assetData);
     arg0->unk40 = freeNodeMemory(arg0->unk40);
-    arg0->unk54 = freeNodeMemory(arg0->unk54);
+    arg0->displayObjects = freeNodeMemory(arg0->displayObjects);
 }
 
 extern u16 D_800BBBA8_B54A8[];
