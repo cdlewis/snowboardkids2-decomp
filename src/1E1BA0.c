@@ -57,7 +57,7 @@ typedef struct {
 } FanEffectTask;
 
 void updateFanEffectGrow(FanEffectGrowState *);
-void cleanupFanEffectTask(SceneModel_unk98 *);
+void cleanupFanEffectTask(FanEffectTaskState *taskState);
 void updateFanEffectFade(FanEffectFadeState *fadeState);
 
 extern Transform3D D_8009A8B0_9B4B0;
@@ -128,21 +128,21 @@ void stopFanSoundOnChannel0(void) {
     stopSoundEffectChannel(0, 0);
 }
 
-void initFanEffectTask(FanEffectTaskState *arg0) {
-    StateEntry **temp_a1;
+void initFanEffectTask(FanEffectTaskState *taskState) {
+    StateEntry **uncompressedAssetPtr;
 
-    arg0->unk20 = &D_80088650;
-    arg0->unk24 = loadUncompressedData(&_1FB4E0_ROM_START, &_1FB4E0_ROM_END);
+    taskState->unk20 = &D_80088650;
+    taskState->unk24 = loadUncompressedData(&_1FB4E0_ROM_START, &_1FB4E0_ROM_END);
 
-    arg0->unk28 = loadCompressedData(&_4C9E70_ROM_START, &_4C9E70_ROM_END, 0xA10);
-    temp_a1 = &arg0->unk24;
+    taskState->unk28 = loadCompressedData(&_4C9E70_ROM_START, &_4C9E70_ROM_END, 0xA10);
+    uncompressedAssetPtr = &taskState->unk24;
 
-    arg0->unk5C = &D_80088660;
-    arg0->unk2C = 0;
-    arg0->unk68 = 0;
-    arg0->unk84 = 0x200;
-    arg0->unk60 = *temp_a1;
-    arg0->unk64 = arg0->unk28;
+    taskState->unk5C = &D_80088660;
+    taskState->unk2C = 0;
+    taskState->unk68 = 0;
+    taskState->unk84 = 0x200;
+    taskState->unk60 = *uncompressedAssetPtr;
+    taskState->unk64 = taskState->unk28;
 
     setCleanupCallback(&cleanupFanEffectTask);
     setCallbackWithContinue(&updateFanEffectGrow);
@@ -211,9 +211,9 @@ void updateFanEffectFade(FanEffectFadeState *fadeState) {
     enqueueDisplayListObject(0, (DisplayListObject *)&fadeState->transform);
 }
 
-void cleanupFanEffectTask(SceneModel_unk98 *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupFanEffectTask(FanEffectTaskState *taskState) {
+    taskState->unk24 = freeNodeMemory(taskState->unk24);
+    taskState->unk28 = freeNodeMemory(taskState->unk28);
 }
 
 void spawnFanEffect(s32 displayList, s16 frames) {
