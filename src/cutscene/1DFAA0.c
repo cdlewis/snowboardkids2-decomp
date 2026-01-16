@@ -925,7 +925,33 @@ StateEntry *getStateEntry(u16 arg0) {
     return &gCutsceneStateTable[arg0 + 3];
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3F64_1E1014);
+extern void func_800BB2F4(s32, s32, s32);
+
+void func_800B3F64_1E1014(s32 arg0, s16 arg1) {
+    s32 count;
+    s32 i;
+    s32 yPos;
+    s32 target;
+    volatile s32 pad;
+
+    count = gCutsceneStateTable->unk13;
+    i = 0;
+    if (count > 0) {
+        target = arg1;
+        yPos = 0x30000;
+    loop:
+        if (i == target) {
+            func_800BB2F4(arg0, yPos >> 16, 7);
+        } else {
+            func_800BB2F4(arg0, yPos >> 16, 3);
+        }
+        yPos += 0x10000;
+        i++;
+        if (i < gCutsceneStateTable->unk13) {
+            goto loop;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3FFC_1E10AC);
 
