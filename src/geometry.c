@@ -3,13 +3,6 @@
 #include "common.h"
 
 typedef struct {
-    u8 padding[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-} func_8006AFDC_6BBDC_arg;
-
-typedef struct {
     s16 unk0;
     u16 unk2;
     s16 unk4;
@@ -325,10 +318,10 @@ INCLUDE_ASM("asm/nonmatchings/geometry", createRotationMatrixXYZ);
 
 INCLUDE_ASM("asm/nonmatchings/geometry", createRotationMatrixZYX);
 
-void func_8006AFDC_6BBDC(func_8006AFDC_6BBDC_arg *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    arg0->unk14 = arg1;
-    arg0->unk18 = arg2;
-    arg0->unk1C = arg3;
+void setBonePosition(BoneAnimationState *arg0, s32 arg1, s32 arg2, s32 arg3) {
+    arg0->position[0] = arg1;
+    arg0->position[1] = arg2;
+    arg0->position[2] = arg3;
 }
 
 void scaleMatrix(Transform3D *matrix, s16 scaleX, s16 scaleY, s16 scaleZ) {

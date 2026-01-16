@@ -41,6 +41,8 @@ void createXRotationMatrix(s16 matrix[3][3], u16 angle);
 
 void func_8006BDBC_6C9BC(BoneAnimationState *, void *, void *);
 
+void setBonePosition(BoneAnimationState *, s32, s32, s32);
+
 void func_8006B084_6BC84(void *, void *, void *);
 
 void createCombinedRotationMatrix(void *, u16, u16);
