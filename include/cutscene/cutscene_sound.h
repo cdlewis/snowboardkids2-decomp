@@ -4,12 +4,12 @@
 void debugHandleFanSoundInput(void);
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
+    s16 soundEffectId; // Used as stoppingSpeed in cutsceneSeStop_exec
+    s16 volume;        // Used as channelIndex in cutsceneSeStop_exec
+    s16 repeatCount;
+    s16 minInterval;
+    s16 channelOrInterval; // channel when repeatCount==1, interval when repeatCount>1
+    s16 pan;
 } cutsceneSePlay_exec_arg;
 
 typedef struct {

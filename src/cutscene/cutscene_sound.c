@@ -25,15 +25,22 @@ s32 cutsceneSePlay_validate(void) {
 }
 
 void cutsceneSePlay_exec(cutsceneSePlay_exec_arg *arg0) {
-    s16 temp_a3;
+    s16 repeatCount;
 
-    temp_a3 = arg0->unk4;
-    if (temp_a3 == 1) {
-        playFanSoundEffect(arg0->unk0, arg0->unk2, arg0->unkA, arg0->unk8);
+    repeatCount = arg0->repeatCount;
+    if (repeatCount == 1) {
+        playFanSoundEffect(arg0->soundEffectId, arg0->volume, arg0->pan, arg0->channelOrInterval);
         return;
     }
 
-    scheduleRepeatingFanSoundEffect(arg0->unk0, arg0->unk2, arg0->unkA, temp_a3, (s32)arg0->unk8, (s32)arg0->unk6);
+    scheduleRepeatingFanSoundEffect(
+        arg0->soundEffectId,
+        arg0->volume,
+        arg0->pan,
+        repeatCount,
+        (s32)arg0->channelOrInterval,
+        (s32)arg0->minInterval
+    );
 }
 
 void cutsceneSe3dPlay_init(void) {
@@ -50,12 +57,19 @@ void cutsceneSe3dPlay_exec(cutsceneSePlay_exec_arg *arg0, cutsceneSe3dPlay_exec_
     slotPtr = &arg1[arg2].unkF0;
     slotData = *slotPtr;
 
-    if (arg0->unk4 == 1) {
-        playFanSoundAtPosition(arg0->unk0, arg0->unk2, arg0->unk8, slotData);
+    if (arg0->repeatCount == 1) {
+        playFanSoundAtPosition(arg0->soundEffectId, arg0->volume, arg0->channelOrInterval, slotData);
         return;
     }
 
-    scheduleRepeatingFanSoundAtPosition(arg0->unk0, arg0->unk2, arg0->unk4, arg0->unk8, arg0->unk6, slotData);
+    scheduleRepeatingFanSoundAtPosition(
+        arg0->soundEffectId,
+        arg0->volume,
+        arg0->repeatCount,
+        arg0->channelOrInterval,
+        arg0->minInterval,
+        slotData
+    );
 }
 
 void cutsceneSeStop_init(void) {
@@ -66,5 +80,5 @@ s32 cutsceneSeStop_validate(void) {
 }
 
 void cutsceneSeStop_exec(cutsceneSePlay_exec_arg *arg0) {
-    stopSoundEffectChannel(arg0->unk2, arg0->unk0);
+    stopSoundEffectChannel(arg0->volume, arg0->soundEffectId);
 }
