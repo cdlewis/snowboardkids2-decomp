@@ -58,7 +58,7 @@ typedef struct {
 
 void updateFanEffectGrow(FanEffectGrowState *);
 void cleanupFanEffectTask(SceneModel_unk98 *);
-void updateFanEffectFade(FanEffectFadeState *arg0);
+void updateFanEffectFade(FanEffectFadeState *fadeState);
 
 extern Transform3D D_8009A8B0_9B4B0;
 extern StateEntry D_80088650;
@@ -188,27 +188,27 @@ void updateFanEffectGrow(FanEffectGrowState *arg0) {
     }
 }
 
-void updateFanEffectFade(FanEffectFadeState *arg0) {
-    Transform3D matrix;
+void updateFanEffectFade(FanEffectFadeState *fadeState) {
+    Transform3D rotationMatrix;
     s32 fadeDelta;
 
-    fadeDelta = arg0->fadeDelta - 0x8000;
-    arg0->fadeDelta = fadeDelta;
+    fadeDelta = fadeState->fadeDelta - 0x8000;
+    fadeState->fadeDelta = fadeDelta;
 
     if ((s32)0xFFF80000 >= fadeDelta) {
         func_80069CF8_6A8F8();
     }
 
-    arg0->yPosOffset += arg0->fadeDelta;
-    createZRotationMatrix(&matrix, arg0->zRotation);
+    fadeState->yPosOffset += fadeState->fadeDelta;
+    createZRotationMatrix(&rotationMatrix, fadeState->zRotation);
 
-    matrix.translation.y = 0xBB333;
-    matrix.translation.x = 0;
-    matrix.translation.z = 0xFFEA0000;
+    rotationMatrix.translation.y = 0xBB333;
+    rotationMatrix.translation.x = 0;
+    rotationMatrix.translation.z = 0xFFEA0000;
 
-    func_8006B084_6BC84(&matrix, (DisplayListObject *)arg0, (DisplayListObject *)&arg0->transform);
-    enqueueDisplayListObject(0, (DisplayListObject *)arg0);
-    enqueueDisplayListObject(0, (DisplayListObject *)&arg0->transform);
+    func_8006B084_6BC84(&rotationMatrix, fadeState, &fadeState->transform);
+    enqueueDisplayListObject(0, (DisplayListObject *)fadeState);
+    enqueueDisplayListObject(0, (DisplayListObject *)&fadeState->transform);
 }
 
 void cleanupFanEffectTask(SceneModel_unk98 *arg0) {
