@@ -108,7 +108,7 @@ void renderShadow(ShadowEntity *entity) {
         }
 
         matrix.translation.y = 0;
-        func_8006C130_6CD30(&matrix, entity->shadowMatrix);
+        transform3DToN64Mtx(&matrix, entity->shadowMatrix);
     }
 
     if (entity->shadowVertices == NULL || entity->shadowMatrix == NULL) {

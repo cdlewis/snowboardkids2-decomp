@@ -2688,7 +2688,7 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
         if (state->transformMatrix == NULL) {
             return;
         }
-        func_8006C130_6CD30(&state->transform, state->transformMatrix);
+        transform3DToN64Mtx(&state->transform, state->transformMatrix);
     }
 
     gDPPipeSync(gRegionAllocPtr++);

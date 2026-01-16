@@ -3509,3 +3509,4 @@ checkShrinkProjectileHit = 0x80055900; // rom:0x56500
 launchShrinkProjectile = 0x80055964; // rom:0x56564
 updateShrinkProjectile = 0x80055A84; // rom:0x56684
 spawnShrinkProjectileTask = 0x80055C80; // rom:0x56880
+transform3DToN64Mtx = 0x8006C130; // rom:0x6CD30

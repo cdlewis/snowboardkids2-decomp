@@ -438,7 +438,7 @@ void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPos
 /**
  * Converts a Transform3D (3x3 rotation matrix + translation) to an N64 RSP Mtx.
  *
- * Similar to func_8006C130_6CD30 but uses different scaling for rotation values.
+ * Similar to transform3DToN64Mtx but uses different scaling for rotation values.
  * This function scales rotation values by 8 instead of 2.
  *
  * Matrix layout (each word packs two 16-bit values):
@@ -475,13 +475,16 @@ void transform3DToMtx(void *srcPtr, void *dstPtr) {
  * The Transform3D uses s2.13 fixed-point for rotation values.
  * The Mtx uses s15.16 fixed-point split into integer and fractional halves.
  *
+ * Similar to transform3DToMtx but uses different scaling (2x instead of 8x)
+ * for the rotation matrix conversion.
+ *
  * Matrix layout (each word packs two 16-bit values):
- *   dst[0-5]:   Integer parts of 3x3 rotation matrix (rows 0-2)
- *   dst[6-7]:   Integer parts of translation vector + w=1
- *   dst[8-13]:  Fractional parts of 3x3 rotation matrix
- *   dst[14-15]: Fractional parts of translation vector
+ *   mtx[0-5]:   Integer parts of 3x3 rotation matrix (rows 0-2)
+ *   mtx[6-7]:   Integer parts of translation vector + w=1
+ *   mtx[8-13]:  Fractional parts of 3x3 rotation matrix
+ *   mtx[14-15]: Fractional parts of translation vector
  */
-void func_8006C130_6CD30(Transform3D *transform, Mtx *mtx) {
+void transform3DToN64Mtx(Transform3D *transform, Mtx *mtx) {
     s32 *mtxWords;
     s16 m01;
 

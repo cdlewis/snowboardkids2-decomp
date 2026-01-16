@@ -83,4 +83,4 @@ void computeLookAtMatrix(void *arg0, void *arg1, void *arg2);
 
 void transformVectorRelative(void *arg0, void *arg1, void *arg2);
 
-void func_8006C130_6CD30(Transform3D *arg0, Mtx *arg1);
+void transform3DToN64Mtx(Transform3D *transform, Mtx *mtx);

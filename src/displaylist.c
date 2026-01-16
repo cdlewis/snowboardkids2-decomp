@@ -519,7 +519,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
         if (arg0->transformMatrix == NULL) {
             return;
         }
-        func_8006C130_6CD30((Transform3D *)arg0, arg0->transformMatrix);
+        transform3DToN64Mtx((Transform3D *)arg0, arg0->transformMatrix);
     }
 
     if (arg0->displayLists->flags & 1) {
@@ -897,7 +897,7 @@ void initializeMultiPartDisplayListObjects(DisplayListObject *arg0) {
             currentObject = arg0;
             do {
                 currentObject->transformMatrix = arg0->transformMatrix + matrixIndex;
-                func_8006C130_6CD30((Transform3D *)currentObject, currentObject->transformMatrix);
+                transform3DToN64Mtx((Transform3D *)currentObject, currentObject->transformMatrix);
                 matrixIndex += 1;
                 currentObject++;
             } while (matrixIndex < arg0->numParts);
@@ -1136,7 +1136,7 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *arg0) {
         if (arg0->transformMatrix == NULL) {
             return;
         }
-        func_8006C130_6CD30((Transform3D *)arg0, arg0->transformMatrix);
+        transform3DToN64Mtx((Transform3D *)arg0, arg0->transformMatrix);
     }
 
     if (arg0->displayLists->flags & 1) {
@@ -1926,7 +1926,7 @@ void renderAlphaSprite(AlphaSpriteState *state) {
             return;
         }
         memcpy(&D_8009A8A4_9B4A4, &state->posX, 0xC);
-        func_8006C130_6CD30((Transform3D *)((s32 *)&D_8009A8A4_9B4A4 - 5), state->matrix);
+        transform3DToN64Mtx((Transform3D *)((s32 *)&D_8009A8A4_9B4A4 - 5), state->matrix);
     }
 
     if (gGraphicsMode != 7) {
