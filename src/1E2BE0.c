@@ -301,14 +301,14 @@ void initCameraShake(CutsceneCameraShakeState *cameraShake, s32 amplitude, s16 d
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6190_1E3240);
 
-s16 func_800B6544_1E35F4(CutsceneCameraState *arg0) {
-    if (arg0->rotYDurationCopy != 0) {
-        arg0->rotYCurrent += arg0->rotYStep;
-        if (arg0->rotYDurationCopy > 0) {
-            arg0->rotYDurationCopy--;
+s16 advanceCameraRotationYContinuous(CutsceneCameraState *camera) {
+    if (camera->rotYDurationCopy != 0) {
+        camera->rotYCurrent += camera->rotYStep;
+        if (camera->rotYDurationCopy > 0) {
+            camera->rotYDurationCopy--;
         }
     } else {
-        arg0->animMode = 2;
+        camera->animMode = 2;
     }
     return 0;
 }
@@ -332,7 +332,7 @@ s16 advanceSceneManager(CutsceneCameraState *arg0) {
             result = func_800B6190_1E3240(arg0);
         }
     } else {
-        result = func_800B6544_1E35F4(arg0);
+        result = advanceCameraRotationYContinuous(arg0);
     }
 
     return result;
