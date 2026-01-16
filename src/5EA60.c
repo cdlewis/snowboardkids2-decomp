@@ -1245,10 +1245,10 @@ s32 getIndexedAnimationDataPtr(IndexedAnimationDataLayout *data, s16 index) {
     return (s32)(((s8 *)baseData) + (indexValue << 1));
 }
 
-s32 func_8006097C_6157C(func_8006097C_6157C_arg *table, s32 index) {
+s32 getAnimationBoneCount(AnimationBoneCountTable *table, s32 index) {
     s32 entryOffset = (index << 16) >> 14;
-    func_8006097C_6157C_arg_item *entry = (func_8006097C_6157C_arg_item *)((s8 *)table + entryOffset);
-    u16 *countPtr = (u16 *)((s8 *)table + entry->countOffset);
+    AnimationBoneCountEntry *entry = (AnimationBoneCountEntry *)((s8 *)table + entryOffset);
+    u16 *countPtr = (u16 *)((s8 *)table + entry->boneCountOffset);
 
     return *countPtr;
 }

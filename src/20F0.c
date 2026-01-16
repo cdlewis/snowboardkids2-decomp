@@ -593,7 +593,7 @@ void setModelAnimationEx(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short ar
 
             {
                 s32 i;
-                s32 count = func_8006097C_6157C(arg0->unk8, var_a1);
+                s32 count = getAnimationBoneCount(arg0->unk8, var_a1);
                 for (i = 0; i < count; i++) {
                     initBoneAnimationState(arg0->unk8, var_a1, (s16)i, arg0->unk4 + i);
                 }
@@ -637,7 +637,7 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
     arg0->unk8C++;
     if (arg0->unk3E != 0) {
         temp = (arg0->unk3A != -1) ? arg0->unk3A : arg0->unk16;
-        s3 = func_8006097C_6157C(arg0->unk8, temp);
+        s3 = getAnimationBoneCount(arg0->unk8, temp);
         if (s3 >= 32) {
             s3 = 31;
         }
@@ -659,7 +659,7 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
         arg0->unk3E = -1;
         arg0->unk38 = -1;
 
-        s3 = func_8006097C_6157C(arg0->unk8, arg0->unk16);
+        s3 = getAnimationBoneCount(arg0->unk8, arg0->unk16);
         for (i = 0; i < s3; i++) {
             initBoneAnimationState(arg0->unk8, arg0->unk16, (s16)i, &arg0->unk4[i]);
         }

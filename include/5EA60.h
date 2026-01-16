@@ -8,12 +8,12 @@ void createBoneRotMatrix(s16 angleX, s16 angleY, s16 angleZ, s16 *matrix);
 
 typedef struct {
     u8 padding[0x8];
-    u32 countOffset;
-} func_8006097C_6157C_arg_item;
+    u32 boneCountOffset;
+} AnimationBoneCountEntry;
 
 typedef struct {
-    func_8006097C_6157C_arg_item data[0];
-} func_8006097C_6157C_arg;
+    AnimationBoneCountEntry entries[0];
+} AnimationBoneCountTable;
 
 typedef struct {
     /* 0x00 */ s16 values[10];
@@ -26,7 +26,7 @@ typedef struct {
     /* 0x46 */ u16 pad;
 } BoneAnimationStateIndexed;
 
-s32 func_8006097C_6157C(func_8006097C_6157C_arg *, s32);
+s32 getAnimationBoneCount(AnimationBoneCountTable *, s32);
 
 void initBoneAnimationState(void *animData, s32 tableIndex, s32 boneIndex, BoneAnimationState *state);
 

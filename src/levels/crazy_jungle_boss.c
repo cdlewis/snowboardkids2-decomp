@@ -350,7 +350,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     *(u16 *)(arg0_bytes + 0xA8C) = 0;
 
     // Get number of bones and reset animations
-    *(u8 *)(arg0_bytes + 0xBB7) = func_8006097C_6157C(*(void **)(arg0_bytes + 0x0), 0);
+    *(u8 *)(arg0_bytes + 0xBB7) = getAnimationBoneCount(*(void **)(arg0_bytes + 0x0), 0);
 
     for (i = 0; i < *(u8 *)(arg0_bytes + 0xBB7); i++) {
         resetBoneAnimation(

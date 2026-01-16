@@ -1422,6 +1422,7 @@ interpolateIndexedBoneAnimation = 0x8005FAA0; // rom:0x606A0
 interpolateIndexedBoneAnimationMirrored = 0x8005FDAC; // rom:0x609AC
 advanceIndexedBoneAnimationAuto = 0x800600E4; // rom:0x60CE4
 advanceIndexedBoneAnimationAutoMirrored = 0x80060504; // rom:0x61104
+getAnimationBoneCount = 0x8006097C; // rom:0x6157C
 
 gCompressedSegment2Assets = 0x80091450; // size:0xC0 type:Asset_56910
 gSkyDisplayLists1 = 0x80091510; // rom:0x92110 size:0x40

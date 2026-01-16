@@ -444,7 +444,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     }
 
     arg0->unkA8C = 0;
-    arg0->unkBB7 = func_8006097C_6157C(arg0->unk0_3C[0].unk0, 0);
+    arg0->unkBB7 = getAnimationBoneCount(arg0->unk0_3C[0].unk0, 0);
     for (i = 0; i < arg0->unkBB7; i++) {
         resetBoneAnimation(arg0->unk0_3C[0].unk0, arg0->unkA8C, i, &arg0->unk488[i]);
     }
