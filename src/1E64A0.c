@@ -70,7 +70,7 @@ s32 initWipeZoomAccel(cutsceneSys2Wait_exec_asset *arg0) {
     return 2;
 }
 
-s32 func_800B96B4_1E6764(cutsceneSys2Wait_exec_asset *arg0) {
+s32 accelerateWipeZoomIn(cutsceneSys2Wait_exec_asset *arg0) {
     s32 result = 2;
 
     arg0->zoomLevelX += arg0->zoomSpeed;
