@@ -12,9 +12,9 @@
 
 typedef struct {
     u8 padding[0x24];
-    void *unk24;
-    void *unk28;
-} func_800BBA60_B7CA0_arg;
+    void *segment1;
+    void *segment2;
+} DisplayListObjectSegments;
 
 typedef struct {
     Transform3D matrix;
@@ -69,8 +69,8 @@ void renderFallingRockHazard(FallingRockHazard *rock);
 void updateFallingRockHazard(FallingRockHazard *rock);
 void fallingRockImpactCallback(FallingRockHazard *rock);
 void fallingRockRespawnCallback(FallingRockHazard *rock);
-void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0);
-void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *);
+void func_800BBA60_B7CA0(DisplayListObjectSegments *arg0);
+void freeDisplayListSegments(DisplayListObjectSegments *);
 void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0);
 
 void initFallingRockHazard(FallingRockHazard *rock) {
@@ -99,7 +99,7 @@ void initFallingRockHazard(FallingRockHazard *rock) {
     createCombinedRotationMatrix(&rock->rotationMatrix, crazyJungleRockPositions[rock->positionIndex].rotX, crazyJungleRockPositions[rock->positionIndex].rotY);
     rock->xRotation = 0;
 
-    setCleanupCallback(func_800BB7D0_B7A10);
+    setCleanupCallback(freeDisplayListSegments);
     setCallback(updateFallingRockHazard);
 }
 
@@ -230,9 +230,9 @@ void fallingRockRespawnCallback(FallingRockHazard *rock) {
     }
 }
 
-void func_800BB7D0_B7A10(func_800BBA60_B7CA0_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void freeDisplayListSegments(DisplayListObjectSegments *arg0) {
+    arg0->segment1 = freeNodeMemory(arg0->segment1);
+    arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
 void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
@@ -308,9 +308,9 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
     }
 }
 
-void func_800BBA60_B7CA0(func_800BBA60_B7CA0_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void func_800BBA60_B7CA0(DisplayListObjectSegments *arg0) {
+    arg0->segment1 = freeNodeMemory(arg0->segment1);
+    arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
 void func_800BBA98(void) {
