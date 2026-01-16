@@ -52,10 +52,10 @@ INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D308_5DF08);
 
 INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D48C_5E08C);
 
-extern u8 D_80094180_94D80[];
-extern u8 D_800941BC_94DBC[];
+extern u8 gCharacterBodyPartAnimTable[];
+extern u8 gBodyPartRemapTable[];
 
-void func_8005D61C_5E21C(Player *player) {
+void loadCharacterBodyParts(Player *player) {
     s32 flags;
     s32 partIndex;
     s32 partIndex2;
@@ -72,7 +72,7 @@ void func_8005D61C_5E21C(Player *player) {
             partPtr = (u8 *)player;
             do {
                 *(s32 *)(partPtr + 0x58) = (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) +
-                                           D_800941BC_94DBC[partIndex] * 0x10;
+                                           gBodyPartRemapTable[partIndex] * 0x10;
                 partIndex += 1;
                 partPtr += 0x3C;
             } while (partIndex < 0x10);
@@ -94,7 +94,7 @@ void func_8005D61C_5E21C(Player *player) {
             partPtr2 = (u8 *)player;
             do {
                 *(s32 *)(partPtr2 + 0x58) = loadAssetByIndex_953B0(player->characterId, player->boardIndex) +
-                                            D_800941BC_94DBC[partIndex2] * 0x10;
+                                            gBodyPartRemapTable[partIndex2] * 0x10;
                 partIndex2 += 1;
                 partPtr2 += 0x3C;
             } while (partIndex2 < 0x10);
@@ -110,7 +110,7 @@ void func_8005D61C_5E21C(Player *player) {
         }
     }
 
-    lookupTable = D_80094180_94D80 + player->characterId * 5;
+    lookupTable = gCharacterBodyPartAnimTable + player->characterId * 5;
     tableValue = lookupTable[player->unkBE6];
     if (tableValue == 0) {
         goto copy_basic;

@@ -1397,6 +1397,9 @@ advanceIndexedBoneAnimationAutoMirrored = 0x80060504; // rom:0x61104
 D_80091450_92050 = 0x80091450; // size:0xC0
 gSpriteAssets = 0x80091310; // rom:0x91F10 size:0xC0 type:Asset_56910
 gUncompressedAssets = 0x800913D0; // size:0x80 type:AssetWithoutSize
+gCharacterBodyPartAnimTable = 0x80094180; // rom:0x94D80 size:0x3C
+gBodyPartRemapTable = 0x800941BC; // rom:0x94DBC size:0x8
+loadCharacterBodyParts = 0x8005D61C; // rom:0x5E21C
 
 gSchedulerListSentinel = 0x800A3270;
 gFreeSchedulerList = 0x800A32C0;

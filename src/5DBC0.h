@@ -11,6 +11,7 @@ void clampPlayerVelocityToMaxSpeed(Player *player);
 s32 func_8005D180_5DD80(void *arg0, s32 arg1);
 s32 func_8005D308_5DF08(void *arg0, s32 arg1);
 void func_8005D48C_5E08C(Player *, s32, s32);
+void loadCharacterBodyParts(Player *player);
 void func_8005D804_5E404(Player *arg0, u8 arg1, u8 arg2);
 s16 func_8005D810_5E410(Player *);
 s16 func_8005D818_5E418(Player *);
