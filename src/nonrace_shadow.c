@@ -7,60 +7,60 @@ extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
 extern u8 identityMatrix[];
 
-u32 D_8008BE08_8CA08[];
+u32 g_NonRaceShadowTex[];
 
-Gfx D_8008BD80_8C980[] = { gsSPClearGeometryMode(
-                               G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN |
-                               G_TEXTURE_GEN_LINEAR | G_SHADING_SMOOTH
-                           ),
-                           gsSPSetGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
-                           gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
-                           gsDPPipeSync(),
-                           gsDPSetTextureLUT(G_TT_NONE),
-                           gsDPSetTextureImage(G_IM_FMT_I, G_IM_SIZ_16b, 1, D_8008BE08_8CA08),
-                           gsDPSetTile(
-                               G_IM_FMT_I,
-                               G_IM_SIZ_16b,
-                               0,
-                               0x0000,
-                               G_TX_LOADTILE,
-                               0,
-                               G_TX_NOMIRROR | G_TX_CLAMP,
-                               4,
-                               G_TX_NOLOD,
-                               G_TX_NOMIRROR | G_TX_CLAMP,
-                               4,
-                               G_TX_NOLOD
-                           ),
-                           gsDPLoadSync(),
-                           gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 63, 2048),
-                           gsDPPipeSync(),
-                           gsDPSetTile(
-                               G_IM_FMT_I,
-                               G_IM_SIZ_4b,
-                               1,
-                               0x0000,
-                               G_TX_RENDERTILE,
-                               0,
-                               G_TX_NOMIRROR | G_TX_CLAMP,
-                               4,
-                               G_TX_NOLOD,
-                               G_TX_NOMIRROR | G_TX_CLAMP,
-                               4,
-                               G_TX_NOLOD
-                           ),
-                           gsDPSetTileSize(G_TX_RENDERTILE, 0, 0, 60, 60),
-                           gsDPSetTextureFilter(G_TF_AVERAGE),
-                           gsDPSetCycleType(G_CYC_1CYCLE),
-                           gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
-                           gsDPSetRenderMode(G_RM_AA_ZB_XLU_DECAL, G_RM_AA_ZB_XLU_DECAL2),
-                           gsSPEndDisplayList() };
+Gfx g_NonRaceShadowDL[] = { gsSPClearGeometryMode(
+                                G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN |
+                                G_TEXTURE_GEN_LINEAR | G_SHADING_SMOOTH
+                            ),
+                            gsSPSetGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
+                            gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
+                            gsDPPipeSync(),
+                            gsDPSetTextureLUT(G_TT_NONE),
+                            gsDPSetTextureImage(G_IM_FMT_I, G_IM_SIZ_16b, 1, g_NonRaceShadowTex),
+                            gsDPSetTile(
+                                G_IM_FMT_I,
+                                G_IM_SIZ_16b,
+                                0,
+                                0x0000,
+                                G_TX_LOADTILE,
+                                0,
+                                G_TX_NOMIRROR | G_TX_CLAMP,
+                                4,
+                                G_TX_NOLOD,
+                                G_TX_NOMIRROR | G_TX_CLAMP,
+                                4,
+                                G_TX_NOLOD
+                            ),
+                            gsDPLoadSync(),
+                            gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 63, 2048),
+                            gsDPPipeSync(),
+                            gsDPSetTile(
+                                G_IM_FMT_I,
+                                G_IM_SIZ_4b,
+                                1,
+                                0x0000,
+                                G_TX_RENDERTILE,
+                                0,
+                                G_TX_NOMIRROR | G_TX_CLAMP,
+                                4,
+                                G_TX_NOLOD,
+                                G_TX_NOMIRROR | G_TX_CLAMP,
+                                4,
+                                G_TX_NOLOD
+                            ),
+                            gsDPSetTileSize(G_TX_RENDERTILE, 0, 0, 60, 60),
+                            gsDPSetTextureFilter(G_TF_AVERAGE),
+                            gsDPSetCycleType(G_CYC_1CYCLE),
+                            gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
+                            gsDPSetRenderMode(G_RM_AA_ZB_XLU_DECAL, G_RM_AA_ZB_XLU_DECAL2),
+                            gsSPEndDisplayList() };
 
-u32 D_8008BE08_8CA08[] = { 0x00000FFF, 0xFFF00000, 0x000FFFFF, 0xFFFFF000, 0x00FFFFFF, 0xFFFFFF00, 0x0FFFFFFF,
-                           0xFFFFFFF0, 0x0FFFFFFF, 0xFFFFFFF0, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
-                           0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
-                           0xFFFFFFFF, 0x0FFFFFFF, 0xFFFFFFF0, 0x0FFFFFFF, 0xFFFFFFF0, 0x00FFFFFF, 0xFFFFFF00,
-                           0x000FFFFF, 0xFFFFF000, 0x00000FFF, 0xFFF00000, 0x00000000, 0x00000000 };
+u32 g_NonRaceShadowTex[] = { 0x00000FFF, 0xFFF00000, 0x000FFFFF, 0xFFFFF000, 0x00FFFFFF, 0xFFFFFF00, 0x0FFFFFFF,
+                             0xFFFFFFF0, 0x0FFFFFFF, 0xFFFFFFF0, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+                             0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+                             0xFFFFFFFF, 0x0FFFFFFF, 0xFFFFFFF0, 0x0FFFFFFF, 0xFFFFFFF0, 0x00FFFFFF, 0xFFFFFF00,
+                             0x000FFFFF, 0xFFFFF000, 0x00000FFF, 0xFFF00000, 0x00000000, 0x00000000 };
 typedef struct {
     u8 pad0[0x14];
     s32 position[3];
@@ -81,7 +81,7 @@ typedef struct {
     u8 alpha;
 } ShadowEntity;
 
-void renderShadow(ShadowEntity *entity) {
+void renderNonRaceShadow(ShadowEntity *entity) {
     Transform3D matrix;
     s32 shadowAlpha;
     s32 heightOffset;
@@ -173,7 +173,7 @@ void renderShadow(ShadowEntity *entity) {
 
     if (gGraphicsMode != 0x200) {
         gGraphicsMode = 0x200;
-        gSPDisplayList(gRegionAllocPtr++, &D_8008BD80_8C980);
+        gSPDisplayList(gRegionAllocPtr++, &g_NonRaceShadowDL);
     }
 
     gSPVertex(gRegionAllocPtr++, entity->shadowVertices, 4, 0);
