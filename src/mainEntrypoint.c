@@ -39,8 +39,8 @@ void mainThreadEntrypoint(void *arg) {
     osCreateMesgQueue(&mainMessageQueue, mainMessageQueueBuffer, 0x20);
 
     addViConfig(&D_800A32D0_A3ED0, &mainMessageQueue, 2);
-    func_800693C4_69FC4(&initializeOverlaySystem, 0x64);
-    func_800693C4_69FC4(&allocateAudioResources, 0xFA);
+    createRootTaskScheduler(&initializeOverlaySystem, 0x64);
+    createRootTaskScheduler(&allocateAudioResources, 0xFA);
 
     while (TRUE) {
         osRecvMesg(&mainMessageQueue, (OSMesg *)&message, 1);

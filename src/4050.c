@@ -221,5 +221,5 @@ void awaitCutsceneTaskComplete(void) {
 }
 
 void returnToMainGame(void) {
-    func_800693C4_69FC4(&initGameSession, 200);
+    createRootTaskScheduler(&initGameSession, 200);
 }

@@ -286,7 +286,7 @@ void awaitPostCreditsSaveScreen(void) {
 }
 
 void returnToMainMenu(void) {
-    func_800693C4_69FC4(func_8001452C_1512C, 0xC8);
+    createRootTaskScheduler(func_8001452C_1512C, 0xC8);
 }
 
 extern u8 D_8009F200_9FE00;

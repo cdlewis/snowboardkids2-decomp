@@ -166,11 +166,11 @@ void startSelectedGameMode(void) {
     u8 val = D_800AFE8C_A71FC->unk4;
 
     if (val == 0xFF) {
-        func_800693C4_69FC4(__udiv_w_sdiv(), 0xC8);
+        createRootTaskScheduler(__udiv_w_sdiv(), 0xC8);
     } else if (val == 0) {
-        func_800693C4_69FC4(initStoryMode, 0xC8);
+        createRootTaskScheduler(initStoryMode, 0xC8);
     } else {
-        func_800693C4_69FC4(initVersusMode, 0xC8);
+        createRootTaskScheduler(initVersusMode, 0xC8);
     }
 }
 

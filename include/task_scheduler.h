@@ -64,7 +64,7 @@ void terminateSchedulerWithCallback(void (*arg0)(void));
 
 void createTaskQueue(void (*arg0)(void), s32 arg1);
 
-void func_800693C4_69FC4(void (*arg0)(void), s32 arg1);
+void createRootTaskScheduler(void (*gamestateHandler)(void), s32 priority);
 
 void func_800697F4_6A3F4(s32 arg0);
 

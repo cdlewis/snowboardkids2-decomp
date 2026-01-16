@@ -18,7 +18,7 @@ typedef struct {
 
 typedef struct TaskNode {
     /* 0x00 */ s8 padding_00[8];
-    /* 0x08 */ void *unk08;
+    /* 0x08 */ void *next;
     /* 0x0C */ s8 padding_0C[0x18];
     /* 0x24 */ s32 unk24;
     /* 0x28 */ s32 unk28;
@@ -33,15 +33,15 @@ typedef struct TaskNode {
 typedef struct gActiveScheduler_type {
     /* 0x0 */ struct gActiveScheduler_type *prev;
     /* 0x4 */ struct gActiveScheduler_type *next;
-    TaskNode *unk8;
-    struct gActiveScheduler_type *unkC;
-    void (*unk10)(void);
-    void (*unk14)(void);
+    TaskNode *freeNext;
+    struct gActiveScheduler_type *parentScheduler;
+    void (*gamestateHandler)(void);
+    void (*schedulerCleanupCallback)(void);
     u8 schedulerState;
-    u8 unk19;
+    u8 priority;
     u8 unk1A;
     u8 unk1B;
-    s32 unk1C;
+    s32 cleanupFrameCounter;
     /* 0x20 */ void *latestDmaSequenceNumber;
     /* 0x24 */ void *latestDmaNode;
     /* 0x28 */ void *allocatedState;
@@ -50,8 +50,8 @@ typedef struct gActiveScheduler_type {
     /* 0x34 */ Node *freeList;
     /* 0x38 */ s16 counters[8];
     /* 0x48 */ s16 total;
-    s16 unk4A;
-    s16 unk4C;
+    s16 returnValue;
+    s16 childSchedulerCount;
 } gActiveScheduler_type;
 extern gActiveScheduler_type *gActiveScheduler;
 
@@ -86,25 +86,27 @@ void initTaskScheduler(void) {
         }
 
         prevHead = gFreeSchedulerList;
-        gSchedulerPool[i].unk08 = prevHead;
+        gSchedulerPool[i].next = prevHead;
         gFreeSchedulerList = &gSchedulerPool[i];
     }
 }
 
-void func_800693C4_69FC4(void (*arg0)(void), s32 arg1) {
-    gActiveScheduler_type *temp_a2;
-    gActiveScheduler_type *temp_v1;
-    gActiveScheduler_type *var_a3;
-    temp_a2 = (gActiveScheduler_type *)gFreeSchedulerList;
-    var_a3 = &gSchedulerListSentinel;
-    gFreeSchedulerList = temp_a2->unk8;
+void createRootTaskScheduler(void (*gamestateHandler)(void), s32 priority) {
+    gActiveScheduler_type *newScheduler;
+    gActiveScheduler_type *current;
+    gActiveScheduler_type *insertPos;
 
+    newScheduler = (gActiveScheduler_type *)gFreeSchedulerList;
+    insertPos = &gSchedulerListSentinel;
+    gFreeSchedulerList = newScheduler->freeNext;
+
+    // Insert the scheduler into the active list sorted by priority
     if (gActiveSchedulerList != 0) {
         while (TRUE) {
-            temp_v1 = var_a3->next;
-            if ((u8)arg1 >= temp_v1->unk19) {
-                var_a3 = temp_v1;
-                if (temp_v1->next != NULL) {
+            current = insertPos->next;
+            if ((u8)priority >= current->priority) {
+                insertPos = current;
+                if (current->next != NULL) {
                     continue;
                 }
             }
@@ -113,28 +115,30 @@ void func_800693C4_69FC4(void (*arg0)(void), s32 arg1) {
         }
     }
 
-    temp_a2->prev = var_a3;
-    temp_a2->next = var_a3->next;
-    var_a3->next = temp_a2;
+    // Link the new scheduler into the list
+    newScheduler->prev = insertPos;
+    newScheduler->next = insertPos->next;
+    insertPos->next = newScheduler;
 
-    if (temp_a2->next != NULL) {
-        temp_a2->next->prev = temp_a2;
+    if (newScheduler->next != NULL) {
+        newScheduler->next->prev = newScheduler;
     }
 
-    temp_a2->unk1A = 0;
-    temp_a2->unk10 = arg0;
-    temp_a2->schedulerState = SCHEDULER_STATE_INACTIVE;
-    temp_a2->unk19 = arg1;
-    temp_a2->allocatedState = 0;
-    temp_a2->activeList = 0;
-    temp_a2->freeList = 0;
-    temp_a2->nodes = 0;
-    temp_a2->total = 0;
-    temp_a2->unk1C = -1;
-    temp_a2->latestDmaSequenceNumber = 0;
-    temp_a2->unkC = 0;
-    temp_a2->unk4C = 0;
-    temp_a2->unk4A = 0;
+    // Initialize the scheduler fields
+    newScheduler->unk1A = 0;
+    newScheduler->gamestateHandler = gamestateHandler;
+    newScheduler->schedulerState = SCHEDULER_STATE_INACTIVE;
+    newScheduler->priority = priority;
+    newScheduler->allocatedState = 0;
+    newScheduler->activeList = 0;
+    newScheduler->freeList = 0;
+    newScheduler->nodes = 0;
+    newScheduler->total = 0;
+    newScheduler->cleanupFrameCounter = -1;
+    newScheduler->latestDmaSequenceNumber = 0;
+    newScheduler->parentScheduler = 0; // No parent - this is a root scheduler
+    newScheduler->childSchedulerCount = 0;
+    newScheduler->returnValue = 0;
 }
 
 void createTaskQueue(void (*arg0)(void), s32 arg1) {
@@ -145,12 +149,12 @@ void createTaskQueue(void (*arg0)(void), s32 arg1) {
 
     temp_a2 = (gActiveScheduler_type *)gFreeSchedulerList;
     var_a3 = &gSchedulerListSentinel;
-    gFreeSchedulerList = temp_a2->unk8;
+    gFreeSchedulerList = temp_a2->freeNext;
 
     if (gActiveSchedulerList != NULL) {
         while (TRUE) {
             temp_v1 = (gActiveScheduler_type *)var_a3->next;
-            if ((u8)arg1 < temp_v1->unk19) {
+            if ((u8)arg1 < temp_v1->priority) {
                 break;
             }
             var_a3 = temp_v1;
@@ -171,19 +175,19 @@ void createTaskQueue(void (*arg0)(void), s32 arg1) {
 
     temp_a2->unk1A = 0;
     temp_a2->schedulerState = SCHEDULER_STATE_INACTIVE;
-    temp_a2->unk19 = arg1;
-    temp_a2->unk10 = arg0;
+    temp_a2->priority = arg1;
+    temp_a2->gamestateHandler = arg0;
     temp_a2->allocatedState = 0;
     temp_a2->activeList = 0;
     temp_a2->freeList = 0;
     temp_a2->nodes = 0;
     temp_a2->total = 0;
-    temp_a2->unk1C = -1;
+    temp_a2->cleanupFrameCounter = -1;
     temp_a2->latestDmaSequenceNumber = 0;
-    temp_a2->unk4C = 0;
-    temp_a2->unk4A = 0;
-    temp_a2->unkC = gActiveScheduler;
-    gActiveScheduler->unk4C++;
+    temp_a2->childSchedulerCount = 0;
+    temp_a2->returnValue = 0;
+    temp_a2->parentScheduler = gActiveScheduler;
+    gActiveScheduler->childSchedulerCount++;
 }
 
 void runTaskSchedulers(void) {
@@ -213,7 +217,7 @@ void runTaskSchedulers(void) {
                 loop_9:
                     gActiveScheduler->unk1B = 0;
 
-                    gActiveScheduler->unk10();
+                    gActiveScheduler->gamestateHandler();
 
                     if (gActiveScheduler->unk1B != 0) {
                         if (gActiveScheduler->schedulerState == SCHEDULER_STATE_RUNNING) {
@@ -228,7 +232,7 @@ void runTaskSchedulers(void) {
                     break;
 
                 case SCHEDULER_STATE_TERMINATING:
-                    if (gActiveScheduler->unk4C == 0) {
+                    if (gActiveScheduler->childSchedulerCount == 0) {
                         terminateAllTasks();
                         processActiveTasks();
 
@@ -237,28 +241,29 @@ void runTaskSchedulers(void) {
                                 (NodeWithPayload *)decrementNodeRefCount((s32 *)gActiveScheduler->nodes);
                             gActiveScheduler->allocatedState =
                                 decrementNodeRefCount((s32 *)gActiveScheduler->allocatedState);
-                            gActiveScheduler->unk1C = gFrameCounter;
+                            gActiveScheduler->cleanupFrameCounter = gFrameCounter;
                             gActiveScheduler->schedulerState = SCHEDULER_STATE_CLEANUP;
                         }
                     }
                     break;
 
                 case SCHEDULER_STATE_CLEANUP:
-                    if (gActiveScheduler->unk1C > 0) {
-                        if (((gBufferedFrameCounter - gActiveScheduler->unk1C) & 0x0FFFFFFF) <= 0x07FFFFFF) {
-                            gActiveScheduler->unk1C = -1;
+                    if (gActiveScheduler->cleanupFrameCounter > 0) {
+                        if (((gBufferedFrameCounter - gActiveScheduler->cleanupFrameCounter) & 0x0FFFFFFF) <=
+                            0x07FFFFFF) {
+                            gActiveScheduler->cleanupFrameCounter = -1;
                         }
-                        if (gActiveScheduler->unk1C <= 0) {
+                        if (gActiveScheduler->cleanupFrameCounter <= 0) {
                             goto block_20;
                         }
                     } else {
                     block_20:
-                        if (gActiveScheduler->unk14 != NULL) {
-                            gActiveScheduler->unk14();
+                        if (gActiveScheduler->schedulerCleanupCallback != NULL) {
+                            gActiveScheduler->schedulerCleanupCallback();
                         }
 
-                        if (gActiveScheduler->unkC != 0) {
-                            gActiveScheduler->unkC->unk4C--;
+                        if (gActiveScheduler->parentScheduler != 0) {
+                            gActiveScheduler->parentScheduler->childSchedulerCount--;
                         }
 
                         if (gActiveScheduler->next != NULL) {
@@ -268,7 +273,7 @@ void runTaskSchedulers(void) {
                         gActiveScheduler->prev->next = gActiveScheduler->next;
                         temp_a0 = gFreeSchedulerList;
                         gFreeSchedulerList = (TaskNode *)gActiveScheduler;
-                        gActiveScheduler->unk8 = temp_a0;
+                        gActiveScheduler->freeNext = temp_a0;
                     }
                     break;
 
@@ -287,34 +292,34 @@ void runTaskSchedulers(void) {
 void terminateSchedulerWithCallback(void (*arg0)(void)) {
     if (gActiveScheduler != NULL) {
         gActiveScheduler->schedulerState = SCHEDULER_STATE_TERMINATING;
-        gActiveScheduler->unk14 = arg0;
+        gActiveScheduler->schedulerCleanupCallback = arg0;
     }
 }
 
 void func_800697F4_6A3F4(s32 arg0) {
     gActiveScheduler_type *temp_v0;
 
-    temp_v0 = gActiveScheduler->unkC;
+    temp_v0 = gActiveScheduler->parentScheduler;
     if (temp_v0 != NULL) {
-        temp_v0->unk4A = arg0;
+        temp_v0->returnValue = arg0;
     }
 }
 
 s16 func_80069810_6A410(void) {
     s16 temp_v0;
 
-    temp_v0 = gActiveScheduler->unk4A;
-    gActiveScheduler->unk4A = 0;
+    temp_v0 = gActiveScheduler->returnValue;
+    gActiveScheduler->returnValue = 0;
 
     return temp_v0;
 }
 
 void setGameStateHandler(void *arg0) {
-    gActiveScheduler->unk10 = arg0;
+    gActiveScheduler->gamestateHandler = arg0;
 }
 
 void func_8006983C_6A43C(void (*arg0)(void)) {
-    gActiveScheduler->unk10 = arg0;
+    gActiveScheduler->gamestateHandler = arg0;
     gActiveScheduler->unk1B = 1;
 }
 

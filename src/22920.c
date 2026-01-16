@@ -162,5 +162,5 @@ void func_800220AC_22CAC(void) {
 }
 
 void exitVersusMode(void) {
-    func_800693C4_69FC4(func_8001452C_1512C, 0xC8);
+    createRootTaskScheduler(func_8001452C_1512C, 0xC8);
 }
