@@ -824,8 +824,8 @@ void spawnGlintEffect(void *arg0) {
     }
 }
 
-void initCharacterAttackEffectTask(CharacterAttackEffectTask *arg0) {
-    arg0->assetTable = load_3ECE40();
+void initCharacterAttackEffectTask(CharacterAttackEffectTask *task) {
+    task->assetTable = load_3ECE40();
     setCleanupCallback(&cleanupCharacterAttackEffectTask);
     setCallbackWithContinue(&loadCharacterAttackEffectAssets);
 }
@@ -852,8 +852,8 @@ void loadCharacterAttackEffectAssets(CharacterAttackEffectState *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/51060", updateCharacterAttackEffect);
 
-void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *arg0) {
-    arg0->assetTable = freeNodeMemory(arg0->assetTable);
+void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *task) {
+    task->assetTable = freeNodeMemory(task->assetTable);
 }
 
 void spawnCharacterAttackEffect(void *arg0) {
