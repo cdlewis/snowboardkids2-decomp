@@ -40,5 +40,5 @@ void postUnlockLocationWaitForDismiss(void) {
 }
 
 void onPostUnlockLocationIntroComplete(void) {
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }

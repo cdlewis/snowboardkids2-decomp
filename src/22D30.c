@@ -203,9 +203,9 @@ void exitPlayerCountSelect(void) {
 }
 
 void onPlayerCountProceed(void) {
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }
 
 void onPlayerCountCancel(void) {
-    func_800697F4_6A3F4(0xFF);
+    returnToParentScheduler(0xFF);
 }

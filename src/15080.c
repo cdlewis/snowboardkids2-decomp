@@ -67,7 +67,7 @@ void startLogoScreen(void) {
 }
 
 void waitForLogoScreen(void) {
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         setGameStateHandler(startDemoRace);
     }
 }
@@ -79,7 +79,7 @@ void startDemoRace(void) {
 }
 
 void waitForDemoRace(void) {
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         D_800AFE8C_A71FC->unk4 = 0;
         setGameStateHandler(func_80014660_15260);
     }
@@ -91,7 +91,7 @@ void func_80014660_15260(void) {
 }
 
 void func_80014690_15290(void) {
-    s16 result = func_80069810_6A410();
+    s16 result = getSchedulerReturnValue();
 
     if (result == 0) {
         return;
@@ -123,7 +123,7 @@ void startAttractRace(void) {
 }
 
 void waitForAttractRace(void) {
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         D_800AFE8C_A71FC->unk5 = (D_800AFE8C_A71FC->unk5 + 1) % 3;
         D_800AFE8C_A71FC->unk5 |= 0xF0;
         setGameStateHandler(func_80014660_15260);
@@ -138,7 +138,7 @@ void startBattleRace(void) {
 }
 
 void waitForBattleRace(void) {
-    s16 result = func_80069810_6A410();
+    s16 result = getSchedulerReturnValue();
 
     if (result == 0) {
         return;
@@ -157,7 +157,7 @@ void startOptionsMenu(void) {
 }
 
 void waitForOptionsMenu(void) {
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         setGameStateHandler(func_80014660_15260);
     }
 }

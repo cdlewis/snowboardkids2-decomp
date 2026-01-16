@@ -32,7 +32,7 @@ void awaitStoryMapLocation(void) {
     s16 result;
 
     getCurrentAllocation();
-    result = func_80069810_6A410();
+    result = getSchedulerReturnValue();
     if (result != 0) {
         setMusicFadeOut(0xA);
         storyMapExitCode = result;
@@ -41,5 +41,5 @@ void awaitStoryMapLocation(void) {
 }
 
 void onStoryMapLocationComplete(void) {
-    func_800697F4_6A3F4(storyMapExitCode);
+    returnToParentScheduler(storyMapExitCode);
 }

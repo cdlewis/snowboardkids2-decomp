@@ -296,7 +296,7 @@ void terminateSchedulerWithCallback(void (*arg0)(void)) {
     }
 }
 
-void func_800697F4_6A3F4(s32 arg0) {
+void returnToParentScheduler(s32 arg0) {
     gActiveScheduler_type *temp_v0;
 
     temp_v0 = gActiveScheduler->parentScheduler;
@@ -305,7 +305,7 @@ void func_800697F4_6A3F4(s32 arg0) {
     }
 }
 
-s16 func_80069810_6A410(void) {
+s16 getSchedulerReturnValue(void) {
     s16 temp_v0;
 
     temp_v0 = gActiveScheduler->returnValue;

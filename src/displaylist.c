@@ -2045,7 +2045,7 @@ void initializeFontSystemAndTransitionToMainMenu(void) {
 }
 
 void checkSchedulerFlagAndTransitionToGameInit(void) {
-    if (func_80069810_6A410() << 0x10 != 0) {
+    if (getSchedulerReturnValue() << 0x10 != 0) {
         terminateSchedulerWithCallback(&scheduleGameInitialization);
     }
 }

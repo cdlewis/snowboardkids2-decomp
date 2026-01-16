@@ -24,5 +24,5 @@ void initControllerMotors(void) {
 INCLUDE_ASM("asm/nonmatchings/33E00", updateControllerMotorInit);
 
 void onMotorInitComplete(void) {
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }

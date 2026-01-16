@@ -395,7 +395,7 @@ void updateGalleryMenu(void) {
             }
             break;
         case 7:
-            if (func_80069810_6A410()) {
+            if (getSchedulerReturnValue()) {
                 setGameStateHandler(func_8000E6E0_F2E0);
             }
             return;
@@ -405,7 +405,7 @@ void updateGalleryMenu(void) {
 
 void onGalleryMenuExit(void) {
     gCurrentBgmId = 5;
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }
 
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEB0_9EAB0);

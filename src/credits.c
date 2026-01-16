@@ -352,7 +352,7 @@ void fadeOutCreditsSequence(void) {
 
 void onCreditsComplete(void) {
     getCurrentAllocation();
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }
 
 void spawnCreditsCharacter(CreditsState *arg0) {

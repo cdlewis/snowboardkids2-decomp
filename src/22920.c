@@ -36,7 +36,7 @@ void awaitPlayerCountSelect(void) {
     s16 result;
 
     getCurrentAllocation();
-    result = func_80069810_6A410();
+    result = getSchedulerReturnValue();
 
     if (result == 1) {
         setGameStateHandler(func_80021DE8_229E8);
@@ -55,7 +55,7 @@ void loadVersusSaveData(void);
 void func_80021E18_22A18(void) {
     s16 result;
 
-    result = func_80069810_6A410();
+    result = getSchedulerReturnValue();
 
     if (result != 0) {
         if (result == 0xFE) {
@@ -76,7 +76,7 @@ void loadVersusMapScreen(void) {
 void awaitVersusMapScreen(void) {
     s16 result;
 
-    result = func_80069810_6A410();
+    result = getSchedulerReturnValue();
 
     if (result == 0xFF) {
         setMusicFadeOut(0x14);
@@ -97,7 +97,7 @@ void func_80021EFC_22AFC(void) {
 void awaitVersusLevelSelect(void) {
     s16 result;
 
-    result = func_80069810_6A410();
+    result = getSchedulerReturnValue();
 
     if (result == 0xFF) {
         setGameStateHandler(loadVersusMapScreen);
@@ -115,7 +115,7 @@ void loadVersusCharacterSelect(void) {
 void awaitVersusCharacterSelect(void) {
     s16 result;
 
-    result = func_80069810_6A410();
+    result = getSchedulerReturnValue();
 
     if (result != 0) {
         if (result == 1) {
@@ -136,7 +136,7 @@ void loadVersusSaveData(void) {
 }
 
 void awaitVersusSaveDataLoad(void) {
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         setGameStateHandler(loadVersusMapScreen);
     }
 }
@@ -149,7 +149,7 @@ void loadVersusRace(void) {
 void func_800220AC_22CAC(void) {
     s16 result;
 
-    result = func_80069810_6A410();
+    result = getSchedulerReturnValue();
 
     if (result != 0) {
         setViewportFadeValue(0, 0, 0);

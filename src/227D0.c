@@ -16,7 +16,7 @@ void loadCharacterSelect(void);
 void onLevelSelectCancel(void);
 
 void awaitLevelSelectBasic(void) {
-    s16 result = func_80069810_6A410();
+    s16 result = getSchedulerReturnValue();
 
     if (result == 0xFF) {
         terminateSchedulerWithCallback(&onLevelSelectCancel);
@@ -32,7 +32,7 @@ void loadCharacterSelect(void) {
 }
 
 void awaitCharacterSelect(void) {
-    s16 result = func_80069810_6A410();
+    s16 result = getSchedulerReturnValue();
 
     if (result == 0) {
         return;
@@ -46,9 +46,9 @@ void awaitCharacterSelect(void) {
 }
 
 void onLevelSelectProceed(void) {
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }
 
 void onLevelSelectCancel(void) {
-    func_800697F4_6A3F4(0xFF);
+    returnToParentScheduler(0xFF);
 }

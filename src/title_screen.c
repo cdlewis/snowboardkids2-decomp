@@ -49,7 +49,7 @@ extern u8 gTitleCameraSettings;
 extern s8 gTitleInitialized;
 
 void exitTitleToNextMode(void) {
-    func_800697F4_6A3F4(gTitleExitMode);
+    returnToParentScheduler(gTitleExitMode);
 }
 
 void cleanupTitleAndTransition(void) {

@@ -97,11 +97,11 @@ void cleanupSaveSlotSelectionAndExit(void) {
 }
 
 void onSaveSlotSelectionConfirm(void) {
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }
 
 void onSaveSlotSelectionCancel(void) {
-    func_800697F4_6A3F4(0xFE);
+    returnToParentScheduler(0xFE);
 }
 
 void updateSelectionWiggle(void) {

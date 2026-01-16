@@ -94,12 +94,12 @@ void cleanupCharacterSelect(void) {
 
 void onCharacterSelectProceed(void) {
     setViewportFadeValue(NULL, 0, 0);
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }
 
 void onCharacterSelectCancel(void) {
     setViewportFadeValue(NULL, 0, 0);
-    func_800697F4_6A3F4(0xFF);
+    returnToParentScheduler(0xFF);
 }
 
 s32 countUnlockedSlotsInCategory(u8 category) {

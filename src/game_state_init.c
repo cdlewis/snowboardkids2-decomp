@@ -154,11 +154,11 @@ void gameStateCleanupHandler(void) {
 }
 
 void transitionToNextGameMode(void) {
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }
 
 void transitionToMainMenu(void) {
-    func_800697F4_6A3F4(0xFF);
+    returnToParentScheduler(0xFF);
 }
 
 void setupGameStateTransition(ModelEntity *arg0) {

@@ -42,7 +42,7 @@ void loadSaveSlotScreen(void) {
 void loadSaveData(void);
 
 void func_80014B1C_1571C(void) {
-    s16 result = func_80069810_6A410();
+    s16 result = getSchedulerReturnValue();
 
     if (result != 0) {
         if (result == 0xFE) {
@@ -66,7 +66,7 @@ void awaitStoryMapSelection(void) {
     s16 result;
 
     getCurrentAllocation();
-    result = func_80069810_6A410();
+    result = getSchedulerReturnValue();
 
     if (result != 0) {
         if (result == 0x44 || result == 0xFF) {
@@ -86,7 +86,7 @@ void loadLevelSelectScreen(void) {
 }
 
 void func_80014C3C_1583C(void) {
-    s16 result = func_80069810_6A410();
+    s16 result = getSchedulerReturnValue();
 
     if (result != 0) {
         if (result == 0xFF) {
@@ -103,7 +103,7 @@ void loadSaveData(void) {
 }
 
 void awaitSaveDataLoad(void) {
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         setGameStateHandler(loadStoryMapScreen);
     }
 }
@@ -118,7 +118,7 @@ void loadPreRaceCutscene(void) {
 }
 
 void awaitPreRaceCutscene(void) {
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         setStoryMapCameraMode(3);
         setGameStateHandler(loadRace);
     }
@@ -145,7 +145,7 @@ void awaitRaceResult(void) {
     u8 saveSlotIndex;
     s32 slotIndexInt;
 
-    result = func_80069810_6A410();
+    result = getSchedulerReturnValue();
     if (result != 0) {
         gStoryCompleted = 0;
 
@@ -210,7 +210,7 @@ void loadPostRaceCutscene(void) {
 void awaitPostRaceCutscene(void) {
     void *handler;
 
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         if (gStoryCompleted != 0) {
             handler = loadStoryCompleteCutscene;
         } else if (D_800AFE8C_A71FC->saveSlotIndex == 0xB) {
@@ -234,7 +234,7 @@ void loadStoryCompleteCutscene(void) {
 }
 
 void awaitStoryCompleteCutscene(void) {
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         setGameStateHandler(loadStoryMapScreen);
     }
 }
@@ -246,7 +246,7 @@ void loadUnlockCutscene(void) {
 }
 
 void awaitUnlockCutscene(void) {
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
         setGameStateHandler(loadStoryMapScreen);
     }
@@ -262,7 +262,7 @@ void loadCreditsSequence(void) {
 void loadPostCreditsSaveScreen(void);
 
 void awaitCreditsSequence(void) {
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         if (D_800AFE8C_A71FC->pendingUnlockCutscene == 8) {
             D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
             EepromSaveData->unk51 = 1;
@@ -280,7 +280,7 @@ void loadPostCreditsSaveScreen(void) {
 }
 
 void awaitPostCreditsSaveScreen(void) {
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         terminateSchedulerWithCallback(returnToMainMenu);
     }
 }

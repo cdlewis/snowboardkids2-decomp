@@ -76,11 +76,11 @@ void onStoryMapNormalExit(void) {
     if ((D_800AFE8C_A71FC->unk4 == 0) && (EepromSaveData->save_slot_status[0] == 5)) {
         exitCode = 0x44;
     }
-    func_800697F4_6A3F4(exitCode);
+    returnToParentScheduler(exitCode);
 }
 
 void onStoryMapExitToMainMenu(void) {
-    func_800697F4_6A3F4(0xFF);
+    returnToParentScheduler(0xFF);
 }
 
 void storyMapClearLocationArrivalsIfNoActivePlayers(void) {

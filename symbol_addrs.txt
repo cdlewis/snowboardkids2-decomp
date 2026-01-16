@@ -1436,6 +1436,8 @@ gSchedulerListSentinel = 0x800A3270;
 gFreeSchedulerList = 0x800A32C0;
 gActiveSchedulerList = 0x800A3274;
 terminateSchedulerWithCallback = 0x800697CC;
+returnToParentScheduler = 0x800697F4; // rom:0x6A3F4
+getSchedulerReturnValue = 0x80069810; // rom:0x6A410
 initGraphicsSystem = 0x8006F718; // rom:0x70318
 
 gConnectedControllerMask = 0x800A9018;

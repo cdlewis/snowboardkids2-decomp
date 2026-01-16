@@ -505,11 +505,11 @@ void cleanupLevelSelect(void) {
 }
 
 void proceedFromLevelSelect(void) {
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }
 
 void cancelLevelSelect(void) {
-    func_800697F4_6A3F4(0xFF);
+    returnToParentScheduler(0xFF);
 }
 
 void applyLevelSelection(void) {

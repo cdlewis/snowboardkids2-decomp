@@ -53,7 +53,7 @@ void handleGameStateComplete(void) {
     u8 locationIndex;
 
     state = (StoryMapStateData *)getCurrentAllocation();
-    result = func_80069810_6A410();
+    result = getSchedulerReturnValue();
 
     if (result == 0) {
         return;
@@ -92,7 +92,7 @@ void handleStoryMapLocationComplete(void) {
     s16 result;
 
     state = (StoryMapStateData *)getCurrentAllocation();
-    result = func_80069810_6A410();
+    result = getSchedulerReturnValue();
 
     if (result != 0) {
         setMusicFadeOut(0xA);
@@ -126,7 +126,7 @@ void handleStoryMapLocationComplete(void) {
 void awaitIntroCutsceneComplete(void) {
     StoryMapStateData *state = (StoryMapStateData *)getCurrentAllocation();
 
-    if (func_80069810_6A410() != 0) {
+    if (getSchedulerReturnValue() != 0) {
         EepromSaveData->unk51 = 0;
         state->fromGameState = 1;
         gTitleInitialized = 1;
@@ -136,13 +136,13 @@ void awaitIntroCutsceneComplete(void) {
 }
 
 void onStoryMapExitToMenu(void) {
-    func_800697F4_6A3F4(0xFF);
+    returnToParentScheduler(0xFF);
 }
 
 void onStoryMapExitBack(void) {
-    func_800697F4_6A3F4(0xFE);
+    returnToParentScheduler(0xFE);
 }
 
 void onStoryMapExitToLevelSelect(void) {
-    func_800697F4_6A3F4(0x44);
+    returnToParentScheduler(0x44);
 }

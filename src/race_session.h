@@ -73,7 +73,7 @@ u8 isBoardUnlocked(u8 boardIndex);
 u8 getCharacterPaletteId(u8 characterIndex);
 s32 isCreditsUnlocked(void);
 void processRaceUnlocks(s16 raceResult);
-s16 func_80069810_6A410(void);
+s16 getSchedulerReturnValue(void);
 void loadOverlay_1BBA0(void);
 void spawnFloatingItemSprite(s32 x, s32 y, s32 itemType, s32 renderPriority, s32 halfSizeRender);
 void spawnSkiTrailTask(Player *player);

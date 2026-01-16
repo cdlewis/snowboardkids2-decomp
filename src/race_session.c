@@ -1705,5 +1705,5 @@ void cleanupGameSession(void) {
 }
 
 void onGameSessionTerminated(void) {
-    func_800697F4_6A3F4(D_800A24A0_A30A0);
+    returnToParentScheduler(D_800A24A0_A30A0);
 }

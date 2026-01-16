@@ -174,7 +174,7 @@ void awaitCutsceneTransitionComplete(void) {
 }
 
 void signalCutsceneComplete(void) {
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }
 
 void beginCutsceneSequence(void) {
@@ -194,7 +194,7 @@ void awaitCutsceneTaskComplete(void) {
     s32 typeSelection;
     CutsceneState *state;
 
-    if ((func_80069810_6A410() << 16) != 0) {
+    if ((getSchedulerReturnValue() << 16) != 0) {
         if (gButtonsPressed & B_BUTTON) {
             terminateSchedulerWithCallback(returnToMainGame);
             return;

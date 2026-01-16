@@ -121,7 +121,7 @@ void awaitFadeLoadStoryMap(void) {
 }
 
 void awaitStoryModeRaceLevelSelect(void) {
-    s16 selectionResult = func_80069810_6A410();
+    s16 selectionResult = getSchedulerReturnValue();
 
     if (selectionResult != 0) {
         if (selectionResult == 0xFF) {
@@ -142,7 +142,7 @@ void awaitFadeLoadCharacterSelect(void) {
 }
 
 void awaitStoryModeCharacterSelect(void) {
-    s16 selectionResult = func_80069810_6A410();
+    s16 selectionResult = getSchedulerReturnValue();
     if (selectionResult != 0) {
         void *nextHandler = &awaitFadeLoadPreRaceCutscene;
         if (selectionResult == 0xFF) {
@@ -161,7 +161,7 @@ void awaitFadeLoadPreRaceCutscene(void) {
 }
 
 void awaitStoryModePreRaceCutscene(void) {
-    if ((func_80069810_6A410() << 0x10) != 0) {
+    if ((getSchedulerReturnValue() << 0x10) != 0) {
         setGameStateHandler(&loadStoryModeRace);
     }
 }
@@ -176,7 +176,7 @@ void awaitStoryModeRaceResult(void) {
     D_800AFE8C_A71FC_type *gameState;
     u8 saveSlotIndex;
 
-    raceResult = func_80069810_6A410();
+    raceResult = getSchedulerReturnValue();
 
     if (raceResult == 0) {
         return;
@@ -220,14 +220,14 @@ void loadStoryModeUnlockCutscene(void) {
 }
 
 void awaitStoryModeUnlockCutscene(void) {
-    if ((func_80069810_6A410() << 0x10) != 0) {
+    if ((getSchedulerReturnValue() << 0x10) != 0) {
         D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
         terminateSchedulerWithCallback(&onStoryModeRaceCancelled);
     }
 }
 
 void onStoryModeRaceCancelled(void) {
-    func_800697F4_6A3F4(0xFF);
+    returnToParentScheduler(0xFF);
 }
 
 INCLUDE_ASM("asm/nonmatchings/1A770", func_8001A110_1AD10);
@@ -299,7 +299,7 @@ void awaitFadeCleanupBoardShop(void) {
 }
 
 void onBoardShopCleanupComplete(void) {
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }
 
 u8 countOwnedBoardsInCategory(void) {
@@ -367,5 +367,5 @@ void awaitStoryMapLocationIntro(void) {
 }
 
 void onStoryMapLocationIntroComplete(void) {
-    func_800697F4_6A3F4(1);
+    returnToParentScheduler(1);
 }
