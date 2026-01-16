@@ -14,7 +14,7 @@ USE_ASSET(_6637B0);
 USE_ASSET(_663BE0);
 
 typedef struct {
-    s32 unk0;
+    s32 reserved;
     void *modelData;
 } TrickSpriteEffectCleanupState;
 
@@ -173,8 +173,8 @@ void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *state) {
     }
 }
 
-void cleanupTrickSpriteEffectTask(TrickSpriteEffectCleanupState *arg0) {
-    arg0->modelData = freeNodeMemory(arg0->modelData);
+void cleanupTrickSpriteEffectTask(TrickSpriteEffectCleanupState *state) {
+    state->modelData = freeNodeMemory(state->modelData);
 }
 
 typedef struct {
