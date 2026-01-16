@@ -49,7 +49,7 @@ void func_8006B084_6BC84(void *, void *, void *);
 
 void createCombinedRotationMatrix(void *, u16, u16);
 
-void func_8006BEDC_6CADC(void *, s32, s32, s32, s32, s32, s32);
+void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPosZ, s32 pitchAngle, s32 yawAngle);
 
 void func_8006BFB8_6CBB8(void *src, void *dst);
 

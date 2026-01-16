@@ -413,26 +413,26 @@ extern s32 D_8009A8AC_9B4AC;
 
 typedef void (*CreateXRotS16)(s16 matrix[3][3], s16 angle);
 
-void func_8006BEDC_6CADC(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
-    Transform3D sp10;
-    Transform3D sp30;
-    Transform3D sp50;
-    s32 *ptr;
+void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPosZ, s32 pitchAngle, s32 yawAngle) {
+    Transform3D yRotation;
+    Transform3D xRotation;
+    Transform3D combined;
+    s32 *tempTransformPtr;
 
-    createYRotationMatrix(&sp10, (u16)arg6);
-    sp10.translation.x = arg1;
-    sp10.translation.y = arg2;
-    sp10.translation.z = arg3;
-    ((CreateXRotS16)createXRotationMatrix)(sp30.m, (s16)arg5);
-    sp30.translation.z = 0;
-    sp30.translation.y = 0;
-    sp30.translation.x = 0;
-    func_8006B084_6BC84(&sp30, &sp10, &sp50);
-    ptr = &D_8009A8A4_9B4A4;
-    *ptr = 0;
+    createYRotationMatrix(&yRotation, (u16)yawAngle);
+    yRotation.translation.x = posX;
+    yRotation.translation.y = posY;
+    yRotation.translation.z = posZ;
+    ((CreateXRotS16)createXRotationMatrix)(xRotation.m, (s16)pitchAngle);
+    xRotation.translation.z = 0;
+    xRotation.translation.y = 0;
+    xRotation.translation.x = 0;
+    func_8006B084_6BC84(&xRotation, &yRotation, &combined);
+    tempTransformPtr = &D_8009A8A4_9B4A4;
+    *tempTransformPtr = 0;
     D_8009A8A8_9B4A8 = 0;
-    D_8009A8AC_9B4AC = arg4;
-    func_8006B084_6BC84(ptr - 5, &sp50, arg0);
+    D_8009A8AC_9B4AC = tempPosZ;
+    func_8006B084_6BC84(tempTransformPtr - 5, &combined, output);
 }
 
 void func_8006BFB8_6CBB8(void *srcPtr, void *dstPtr) {
