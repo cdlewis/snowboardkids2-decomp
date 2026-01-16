@@ -15,8 +15,8 @@ extern u16 gFinishBoostVoiceSounds[];
 extern u16 D_80094008_94C08[];
 extern u16 gStunnedVoiceSounds1[];
 extern u16 gStunnedVoiceSounds2[];
-extern u16 D_80094044_94C44[];
-extern u16 D_80094058_94C58[];
+extern u16 gCharacterVoiceSounds1[];
+extern u16 gCharacterVoiceSounds2[];
 
 void setPlayerHitStunState(Player *player, s16 hitState, void *knockbackData) {
     if (player->unkAC2 != 0) {
@@ -327,25 +327,25 @@ void playStunnedVoice(Player *arg0) {
     }
 }
 
-void func_80059DB8_5A9B8(Player *arg0) {
+void playCharacterVoice1(Player *arg0) {
     u8 index = arg0->characterId;
     if (index < 9) {
-        queueSoundAtPositionWithPriority(&arg0->worldPos, D_80094044_94C44[index], 5, arg0->playerIndex + 4);
+        queueSoundAtPositionWithPriority(&arg0->worldPos, gCharacterVoiceSounds1[index], 5, arg0->playerIndex + 4);
     }
 }
 
-void func_80059DFC_5A9FC(Player *arg0) {
+void playCharacterVoice2(Player *arg0) {
     u8 index = arg0->characterId;
     if (index < 9) {
-        queueSoundAtPositionWithPriority(&arg0->worldPos, D_80094058_94C58[index], 5, arg0->playerIndex + 4);
+        queueSoundAtPositionWithPriority(&arg0->worldPos, gCharacterVoiceSounds2[index], 5, arg0->playerIndex + 4);
     }
 }
 
-extern u16 D_8009406C_94C6C[];
+extern u16 gCharacterVoiceSounds3[];
 
-void func_80059E40_5AA40(Player *arg0) {
+void playCharacterVoice3(Player *arg0) {
     u8 index = arg0->characterId;
     if (index < 9) {
-        queueSoundAtPositionWithPriority(&arg0->worldPos, D_8009406C_94C6C[index], 5, arg0->playerIndex + 4);
+        queueSoundAtPositionWithPriority(&arg0->worldPos, gCharacterVoiceSounds3[index], 5, arg0->playerIndex + 4);
     }
 }

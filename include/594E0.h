@@ -13,3 +13,6 @@ void addPlayerRaceGold(Player *player, s32 amount);
 void playTrickLandingVoice(Player *player);
 void playTrickSuccessVoice(Player *player);
 void playRaceWinVoice(Player *player);
+void playCharacterVoice1(Player *player);
+void playCharacterVoice2(Player *player);
+void playCharacterVoice3(Player *player);
