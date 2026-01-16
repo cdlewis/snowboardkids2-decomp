@@ -11,7 +11,7 @@ extern u8 D_800BBB6C_B546C[];
 extern u8 D_800BBB88_B5488[];
 extern u8 D_800BBB8C_B548C[];
 
-void func_800BBB18_B5418(func_800BB814_B5114_arg *arg0);
+void cleanupSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0);
 
 typedef struct {
     u8 _pad[0x48];
@@ -137,43 +137,33 @@ void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0) {
 extern u16 D_800BBBA8_B54A8[];
 extern s16 identityMatrix[];
 
-typedef struct {
-    DisplayListObject unk0;
-    s32 unk3C;
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    s16 unk4C;
-    u16 unk4E;
-} func_800BBA34_B5334_arg;
+void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0);
+void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0);
 
-void func_800BB890_B5190(func_800BBA34_B5334_arg *arg0);
-void func_800BBA34_B5334(func_800BBA34_B5334_arg *arg0);
-
-void func_800BB814_B5114(func_800BB814_B5114_arg *arg0) {
+void initSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    arg0->unk20 = (void *)((u32)func_80055E68_56A68(state->memoryPoolId) + 0xB0);
-    arg0->unk24 = loadUncompressedAssetByIndex(state->memoryPoolId);
-    arg0->unk28 = loadCompressedSegment2AssetByIndex(state->memoryPoolId);
-    arg0->unk2C = 0;
-    arg0->unk4C = 0x3C;
-    setCleanupCallback(func_800BBB18_B5418);
-    setCallback(func_800BB890_B5190);
+    arg0->displayLists = (void *)((u32)func_80055E68_56A68(state->memoryPoolId) + 0xB0);
+    arg0->uncompressedAssetData = loadUncompressedAssetByIndex(state->memoryPoolId);
+    arg0->compressedAssetData = loadCompressedSegment2AssetByIndex(state->memoryPoolId);
+    arg0->segment3Ptr = 0;
+    arg0->delayTimer = 0x3C;
+    setCleanupCallback(cleanupSunnyMountainFlyingBirdTask);
+    setCallback(resetSunnyMountainFlyingBirdPath);
 }
 
-void func_800BB890_B5190(func_800BBA34_B5334_arg *arg0) {
+void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0) {
     s32 offset;
     s32 dx;
     s32 dy;
     s32 endX;
-    s32 endY;
+    s32 endZ;
     s32 startX;
-    s32 startY;
+    s32 startZ;
     s32 temp;
 
-    if (arg0->unk4C != 0) {
-        arg0->unk4C = arg0->unk4C - 1;
+    if (arg0->delayTimer != 0) {
+        arg0->delayTimer = arg0->delayTimer - 1;
         return;
     }
 
@@ -183,33 +173,33 @@ void func_800BB890_B5190(func_800BBA34_B5334_arg *arg0) {
 
     endX = *(s32 *)(D_800BBB88_B5488 + offset);
     startX = *(s32 *)(D_800BBB68_B5468 + offset);
-    arg0->unk40 = (endX - startX) / 60;
+    arg0->xVelocity = (endX - startX) / 60;
 
-    endY = *(s32 *)(D_800BBB8C_B548C + offset);
-    startY = *(s32 *)(D_800BBB6C_B546C + offset);
-    arg0->unk44 = (endY - startY) / 60;
+    endZ = *(s32 *)(D_800BBB8C_B548C + offset);
+    startZ = *(s32 *)(D_800BBB6C_B546C + offset);
+    arg0->zVelocity = (endZ - startZ) / 60;
 
-    arg0->unk4E = computeAngleToPosition(
+    arg0->rotationAngle = computeAngleToPosition(
         *(s32 *)(D_800BBB88_B5488 + offset),
         *(s32 *)(D_800BBB8C_B548C + offset),
         *(s32 *)(D_800BBB68_B5468 + offset),
         *(s32 *)(D_800BBB6C_B546C + offset)
     );
 
-    dx = arg0->unk40;
-    dy = arg0->unk44;
+    dx = arg0->xVelocity;
+    dy = arg0->zVelocity;
 
     temp = *(s32 *)(D_800BBB68_B5468 + offset);
-    arg0->unk0.transform.translation.y = 0x243D1AC3;
-    arg0->unk0.transform.translation.x = temp;
-    arg0->unk0.transform.translation.z = *(s32 *)(D_800BBB6C_B546C + offset);
+    arg0->transform.translation.y = 0x243D1AC3;
+    arg0->transform.translation.x = temp;
+    arg0->transform.translation.z = *(s32 *)(D_800BBB6C_B546C + offset);
 
-    arg0->unk48 = isqrt64((s64)dx * (s64)dx + (s64)dy * (s64)dy);
-    arg0->unk3C = 0x300000;
-    setCallbackWithContinue(func_800BBA34_B5334);
+    arg0->distance = isqrt64((s64)dx * (s64)dx + (s64)dy * (s64)dy);
+    arg0->yVelocity = 0x300000;
+    setCallbackWithContinue(updateSunnyMountainFlyingBird);
 }
 
-void func_800BBA34_B5334(func_800BBA34_B5334_arg *arg0) {
+void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0) {
     int new_var;
     s16 angle;
     s32 temp_a2;
@@ -220,32 +210,32 @@ void func_800BBA34_B5334(func_800BBA34_B5334_arg *arg0) {
     s32 temp_a1;
     s32 temp_v0;
 
-    angle = atan2Fixed(arg0->unk3C, -arg0->unk48);
+    angle = atan2Fixed(arg0->yVelocity, -arg0->distance);
 
-    createCombinedRotationMatrix(arg0, angle, arg0->unk4E);
+    createCombinedRotationMatrix(arg0, angle, arg0->rotationAngle);
 
-    temp_v0 = arg0->unk0.transform.translation.x;
-    temp_a2 = arg0->unk40;
-    temp_a0 = arg0->unk0.transform.translation.z;
-    temp_a3 = arg0->unk44;
-    temp_a1 = arg0->unk0.transform.translation.y;
+    temp_v0 = arg0->transform.translation.x;
+    temp_a2 = arg0->xVelocity;
+    temp_a0 = arg0->transform.translation.z;
+    temp_a3 = arg0->zVelocity;
+    temp_a1 = arg0->transform.translation.y;
 
-    arg0->unk0.transform.translation.x = temp_v0 + temp_a2;
-    arg0->unk0.transform.translation.z = temp_a0 + temp_a3;
-    arg0->unk0.transform.translation.y = temp_a1 + arg0->unk3C;
+    arg0->transform.translation.x = temp_v0 + temp_a2;
+    arg0->transform.translation.z = temp_a0 + temp_a3;
+    arg0->transform.translation.y = temp_a1 + arg0->yVelocity;
 
-    if ((arg0->unk3C = arg0->unk3C + 0xFFFE6667) < ((s32)0xFFD00000)) {
+    if ((arg0->yVelocity = arg0->yVelocity + 0xFFFE6667) < ((s32)0xFFD00000)) {
         new_var = randA() & 7;
-        arg0->unk4C = D_800BBBA8_B54A8[new_var];
-        setCallbackWithContinue(func_800BB890_B5190);
+        arg0->delayTimer = D_800BBBA8_B54A8[new_var];
+        setCallbackWithContinue(resetSunnyMountainFlyingBirdPath);
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, &arg0->unk0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
     }
 }
 
-void func_800BBB18_B5418(func_800BB814_B5114_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0) {
+    arg0->uncompressedAssetData = freeNodeMemory(arg0->uncompressedAssetData);
+    arg0->compressedAssetData = freeNodeMemory(arg0->compressedAssetData);
 }

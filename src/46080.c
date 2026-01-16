@@ -2839,7 +2839,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             }
             schedulePlayerSparkleTask();
             scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
-            scheduleTask(&func_800BB814_B5114, 0, 0, 0xD3);
+            scheduleTask(&initSunnyMountainFlyingBirdTask, 0, 0, 0xD3);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             scheduleGoldCoinsIfEnabled(courseId);
