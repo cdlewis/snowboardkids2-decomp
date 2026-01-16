@@ -19,10 +19,10 @@ extern Asset_56910 D_80091310_91F10[];
 extern Asset_56910 D_80091450_92050[];
 extern AssetWithoutSize D_800913D0_91FD0[];
 extern func_80055E68_56A68_result *D_80091590_92190[];
-extern D_80090F90_91B90_item D_80090F90_91B90[];
+extern LevelConfig gLevelConfigs[];
 
-D_80090F90_91B90_item *func_80055D10_56910(s32 index) {
-    return &D_80090F90_91B90[index];
+LevelConfig *getLevelConfig(s32 index) {
+    return &gLevelConfigs[index];
 }
 
 void *func_80055D34_56934(s32 index) {

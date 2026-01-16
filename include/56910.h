@@ -17,14 +17,14 @@ typedef struct {
 typedef struct {
     s32 shortcutPosX;
     s32 shortcutPosZ;
-    u16 unk8;
+    u16 yawOffset;
     u8 padding[2];
-    Vec3i unkC;      /* 0x0C */
-    ColorData unk18; /* 0x18 */
-    ColorData unk20; /* 0x20 */
-    s16 unk28;       /* 0x28 */
+    Vec3i spawnPos;     /* 0x0C - Shortcut spawn/warp position */
+    ColorData lightColors; /* 0x18 - Viewport light colors */
+    ColorData fogColors;   /* 0x20 - Fog colors */
+    s16 musicTrack;     /* 0x28 - Music track for this level */
     u8 padding2[0x2];
-} D_80090F90_91B90_item;
+} LevelConfig;
 
 typedef struct {
     u8 padding[0x40];
@@ -42,7 +42,7 @@ void *func_80055D34_56934(s32 index);
 void *func_80055D7C_5697C(s32 index);
 void *func_80055DF8_569F8(s32 index);
 void *func_80055DC4_569C4(s32 index);
-D_80090F90_91B90_item *func_80055D10_56910(s32 index);
+LevelConfig *getLevelConfig(s32 index);
 s32 func_80055E40_56A40(s32 arg0);
 s32 func_80055E54_56A54(s32 arg0);
 

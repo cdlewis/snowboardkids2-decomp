@@ -188,18 +188,18 @@ void initStartGate(StartGate *gate) {
     s32 worldPos[4];
     s32 *transformMatrix;
     GameState *gameState;
-    D_80090F90_91B90_item *spawnData;
+    LevelConfig *spawnData;
     u16 trackAngle;
 
     gameState = (GameState *)getCurrentAllocation();
-    spawnData = func_80055D10_56910(gameState->memoryPoolId);
+    spawnData = getLevelConfig(gameState->memoryPoolId);
     gate->unk20 = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x50);
     gate->unk24 = func_80055DC4_569C4(gameState->memoryPoolId);
     gate->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
     gate->unk2C = 0;
     trackAngle = getTrackEndInfo((u8 *)gameState + 0x30, worldPos);
-    createYRotationMatrix(&gate->rotationMatrix, (trackAngle + spawnData->unk8) & 0xFFFF);
-    rotateVectorY(&D_800907EC_913EC, trackAngle + spawnData->unk8, &gate->rotationMatrix.translation);
+    createYRotationMatrix(&gate->rotationMatrix, (trackAngle + spawnData->yawOffset) & 0xFFFF);
+    rotateVectorY(&D_800907EC_913EC, trackAngle + spawnData->yawOffset, &gate->rotationMatrix.translation);
     gate->rotationMatrix.translation.x = gate->rotationMatrix.translation.x + spawnData->shortcutPosX;
     gate->rotationMatrix.translation.z = gate->rotationMatrix.translation.z + spawnData->shortcutPosZ;
     gate->rotationMatrix.translation.y = worldPos[1];

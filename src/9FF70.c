@@ -2901,7 +2901,7 @@ s32 beginKnockbackRecoveryStep(Player *player) {
 s32 updateKnockbackRecoveryStep(Player *player) {
     s32 trackInfoBuffer[4];
     GameState *gameState;
-    D_80090F90_91B90_item *levelData;
+    LevelConfig *levelData;
     s16 angleDelta;
     s16 clampedAngleDelta;
     s16 currentYaw;
@@ -2911,8 +2911,8 @@ s32 updateKnockbackRecoveryStep(Player *player) {
     s16 targetYaw;
 
     gameState = getCurrentAllocation();
-    levelData = func_80055D10_56910(gameState->memoryPoolId);
-    targetYaw = levelData->unk8 + getTrackEndInfo(&gameState->gameData, trackInfoBuffer) + 0x1000;
+    levelData = getLevelConfig(gameState->memoryPoolId);
+    targetYaw = levelData->yawOffset + getTrackEndInfo(&gameState->gameData, trackInfoBuffer) + 0x1000;
     currentYaw = player->rotY;
     angleDelta = (targetYaw - currentYaw) & 0x1FFF;
     clampedAngleDelta = angleDelta;
@@ -2948,10 +2948,10 @@ s32 updateKnockbackRecoveryStep(Player *player) {
 }
 
 s32 fallToTrackCenterStep(Player *player) {
-    D_80090F90_91B90_item *levelData;
+    LevelConfig *levelData;
     GameState *gameState = (GameState *)getCurrentAllocation();
 
-    levelData = func_80055D10_56910(gameState->memoryPoolId);
+    levelData = getLevelConfig(gameState->memoryPoolId);
 
     player->velocity.x = 0;
     player->velocity.z = 0;
@@ -2976,7 +2976,7 @@ extern Vec3i g_KnockbackRecoveryForwardVelocity;
 s32 slideDuringKnockbackRecoveryStep(Player *player) {
     GameState *gameState = getCurrentAllocation();
 
-    func_80055D10_56910(gameState->memoryPoolId);
+    getLevelConfig(gameState->memoryPoolId);
     decayPlayerSteeringAngles(player);
 
     if (player->unkB8C != 0) {
@@ -3004,7 +3004,7 @@ s32 slideDiagonallyDuringKnockbackRecoveryStep(Player *player) {
     s32 pad[12];
     GameState *gameState = getCurrentAllocation();
 
-    func_80055D10_56910(gameState->memoryPoolId);
+    getLevelConfig(gameState->memoryPoolId);
     decayPlayerSteeringAngles(player);
     transformVector2(&g_KnockbackDiagonalSlideVelocity, &player->unk970, &player->velocity);
     applyClampedVelocityToPosition(player);
@@ -3027,10 +3027,10 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
     Vec3i sp10;
     s32 pad[8];
     GameState *gameState;
-    D_80090F90_91B90_item *levelData;
+    LevelConfig *levelData;
 
     gameState = getCurrentAllocation();
-    levelData = func_80055D10_56910(gameState->memoryPoolId);
+    levelData = getLevelConfig(gameState->memoryPoolId);
 
     if (player->behaviorCounter == 0) {
         player->rotY = 0x1000;
@@ -3043,9 +3043,9 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
         createYRotationMatrix(&player->unk970, 0x1000);
         transformVector2(&g_FinishLineRespawnOffset, &player->unk970, &sp10);
 
-        player->worldPos.x = levelData->unkC.x + sp10.x;
-        player->worldPos.y = levelData->unkC.y + sp10.y;
-        player->worldPos.z = levelData->unkC.z + sp10.z;
+        player->worldPos.x = levelData->spawnPos.x + sp10.x;
+        player->worldPos.y = levelData->spawnPos.y + sp10.y;
+        player->worldPos.z = levelData->spawnPos.z + sp10.z;
 
         memcpy(&player->unk440, &player->worldPos, sizeof(Vec3i));
 
@@ -3079,7 +3079,7 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
 s32 slideForwardAndResetStep(Player *player) {
     GameState *gameState = getCurrentAllocation();
 
-    func_80055D10_56910(gameState->memoryPoolId);
+    getLevelConfig(gameState->memoryPoolId);
     transformVector2(&g_KnockbackRecoveryForwardVelocity, &player->unk970, &player->velocity);
     applyClampedVelocityToPosition(player);
     decayPlayerSteeringAngles(player);
@@ -3396,11 +3396,11 @@ s32 spinFadeInWaitStep(Player *player) {
 
 s32 warpToShortcutSpinUpStep(Player *player) {
     GameState *gameState;
-    D_80090F90_91B90_item *shortcutConfig;
+    LevelConfig *shortcutConfig;
     s32 pad[12];
 
     gameState = getCurrentAllocation();
-    shortcutConfig = func_80055D10_56910(gameState->memoryPoolId);
+    shortcutConfig = getLevelConfig(gameState->memoryPoolId);
 
     if (player->behaviorCounter == 0) {
         player->rotY = 0xE00;
@@ -3412,9 +3412,9 @@ s32 warpToShortcutSpinUpStep(Player *player) {
 
         createYRotationMatrix(&player->unk970, 0xE00);
 
-        player->worldPos.x = shortcutConfig->unkC.x;
-        player->worldPos.y = shortcutConfig->unkC.y;
-        player->worldPos.z = shortcutConfig->unkC.z;
+        player->worldPos.x = shortcutConfig->spawnPos.x;
+        player->worldPos.y = shortcutConfig->spawnPos.y;
+        player->worldPos.z = shortcutConfig->spawnPos.z;
 
         memcpy(&player->unk440, &player->worldPos.x, 0xC);
 

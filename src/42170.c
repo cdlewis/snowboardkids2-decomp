@@ -1916,12 +1916,12 @@ void initUfoEffect(UfoEffectState *arg0) {
     Vec3i transformOutput;
     Func43CA4GameState *allocation;
     u16 rotation;
-    D_80090F90_91B90_item *item;
+    LevelConfig *item;
     s32 temp_unk18;
 
     allocation = (Func43CA4GameState *)getCurrentAllocation();
     rotation = getTrackEndInfo(&allocation->unk30, &posOutput) + 0x800;
-    item = func_80055D10_56910(allocation->unk5C);
+    item = getLevelConfig(allocation->unk5C);
 
     arg0->unk20 = (u8 *)func_80055E68_56A68(allocation->unk5C) + 0x10;
 
@@ -1939,7 +1939,7 @@ void initUfoEffect(UfoEffectState *arg0) {
     arg0->rightWing.segment1 = arg0->unk24;
     arg0->rightWing.segment2 = arg0->unk28;
 
-    arg0->baseRotation = rotation + item->unk8;
+    arg0->baseRotation = rotation + item->yawOffset;
     createYRotationMatrix((Transform3D *)arg0, arg0->baseRotation);
 
     arg0->yRotation = 0;
@@ -2021,23 +2021,23 @@ end:
 }
 
 void setupUfoFlyAway(UfoEffectState *arg0) {
-    D_80090F90_91B90_item *temp_v0;
+    LevelConfig *temp_v0;
     UfoAbductionPlayerState *temp_a1;
     Vec3i output;
     Vec3i input;
     s32 i;
     s32 temp_unk14;
 
-    temp_v0 = func_80055D10_56910(((Func43CA4GameState *)getCurrentAllocation())->unk5C);
+    temp_v0 = getLevelConfig(((Func43CA4GameState *)getCurrentAllocation())->unk5C);
     temp_a1 = arg0->target;
     temp_a1->flags |= 2;
     arg0->yRotation = -0x300;
     arg0->phaseTimer = 0x5A;
     arg0->baseRotation = 0x1000;
     createCombinedRotationMatrix(arg0, (u16)arg0->yRotation, 0x1000);
-    arg0->unk14.x = temp_v0->unkC.x + 0xFFD00000;
-    arg0->unk14.y = temp_v0->unkC.y;
-    temp_unk14 = temp_v0->unkC.z;
+    arg0->unk14.x = temp_v0->spawnPos.x + 0xFFD00000;
+    arg0->unk14.y = temp_v0->spawnPos.y;
+    temp_unk14 = temp_v0->spawnPos.z;
     i = 0;
     arg0->flyAwayDistance = 0;
     arg0->fallVelocity = 0;

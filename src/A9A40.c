@@ -31,7 +31,7 @@ void func_800B9B90_A9A40(Player *player) {
     Vec3i targetPos;
     CourseData *courseData;
     Waypoint *waypoint;
-    D_80090F90_91B90_item *defaultPos;
+    LevelConfig *defaultPos;
     s32 *pathFlags;
     s32 sectorIndex;
     s16 angle;
@@ -42,7 +42,7 @@ void func_800B9B90_A9A40(Player *player) {
     sectorIndex = player->sectorIndex;
 
     if (courseData->waypoints[sectorIndex].next < 0) {
-        defaultPos = func_80055D10_56910(courseData->defaultPosIndex);
+        defaultPos = getLevelConfig(courseData->defaultPosIndex);
         player->unkA7C = defaultPos->shortcutPosX;
         player->unkA84 = defaultPos->shortcutPosZ;
         return;

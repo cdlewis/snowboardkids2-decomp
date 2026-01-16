@@ -907,7 +907,7 @@ void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *arg0) {
     GameState *state;
     s32 playerOffset;
     s32 i;
-    D_80090F90_91B90_item *levelData;
+    LevelConfig *levelData;
     u8 fogR;
     u16 fogNodeId;
     s32 fogG;
@@ -937,10 +937,10 @@ void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *arg0) {
         player = (Player *)(playerOffset + (s32)state->players);
         if (player->sectorIndex < 0x39) {
             enqueueCameraRelativeDisplayList(viewportId, (DisplayListObject *)&arg0->unk3C);
-            levelData = func_80055D10_56910(state->memoryPoolId);
-            fogR = levelData->unk20.r2;
+            levelData = getLevelConfig(state->memoryPoolId);
+            fogR = levelData->fogColors.r2;
             fogNodeId = nodeId;
-            setViewportFogById(fogNodeId, 0x3E3, 0x3E7, fogR, levelData->unk20.g2, levelData->unk20.b2);
+            setViewportFogById(fogNodeId, 0x3E3, 0x3E7, fogR, levelData->fogColors.g2, levelData->fogColors.b2);
         } else {
             enqueueCameraRelativeDisplayList(viewportId, (DisplayListObject *)&arg0->unk78);
             fogNodeId = nodeId;
@@ -1319,20 +1319,20 @@ void scheduleScrollingSceneryTask(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 
 void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
     Vec3i sp10;
     GameState_46080 *allocation;
-    D_80090F90_91B90_item *levelData;
+    LevelConfig *levelData;
     u16 rotation;
     func_80055E68_56A68_result *displayLists;
 
     allocation = (GameState_46080 *)getCurrentAllocation();
     rotation = getTrackEndInfo(&allocation->unk30, &sp10) + 0x800;
-    levelData = func_80055D10_56910(allocation->unk5C);
+    levelData = getLevelConfig(allocation->unk5C);
 
     arg0->unk20 = func_80055E68_56A68(allocation->unk5C);
     arg0->unk24 = func_80055DC4_569C4(allocation->unk5C);
     arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
     arg0->unk2C = NULL;
 
-    createYRotationMatrix((Transform3D *)arg0, (u16)(rotation + levelData->unk8));
+    createYRotationMatrix((Transform3D *)arg0, (u16)(rotation + levelData->yawOffset));
 
     arg0->unk18 = sp10.y;
     transformVector2(&gCourseSceneryOffset, arg0, &sp10);
@@ -1346,9 +1346,9 @@ void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
     arg0->unk5C = (void *)((u32)displayLists + 0x20);
     createYRotationMatrix((Transform3D *)arg0->unk3C, 0x1000);
 
-    arg0->unk50 = levelData->unkC.x;
-    arg0->unk54 = levelData->unkC.y;
-    arg0->unk58 = levelData->unkC.z;
+    arg0->unk50 = levelData->spawnPos.x;
+    arg0->unk54 = levelData->spawnPos.y;
+    arg0->unk58 = levelData->spawnPos.z;
 
     if (allocation->unk5C == 4) {
         memcpy(arg0->unk78, arg0, 0x3C);
@@ -1393,18 +1393,18 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
     Vec3i position;
     GameState_46080 *allocation;
     u16 rotation;
-    D_80090F90_91B90_item *levelData;
+    LevelConfig *levelData;
 
     allocation = (GameState_46080 *)getCurrentAllocation();
     rotation = getTrackEndInfo(&allocation->unk30, &position) + 0x800;
-    levelData = func_80055D10_56910(allocation->unk5C);
+    levelData = getLevelConfig(allocation->unk5C);
 
     arg0->displayListObject.displayLists = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x10);
     arg0->displayListObject.segment1 = func_80055DC4_569C4(allocation->unk5C);
     arg0->displayListObject.segment2 = func_80055DF8_569F8(allocation->unk5C);
     arg0->displayListObject.segment3 = 0;
 
-    createYRotationMatrix((Transform3D *)arg0, rotation + levelData->unk8);
+    createYRotationMatrix((Transform3D *)arg0, rotation + levelData->yawOffset);
     arg0->displayListObject.transform.translation.y = position.y;
 
     transformVector2(&gFlyingSceneryInitOffset, arg0, &position);
@@ -1472,16 +1472,16 @@ void updateFlyingSceneryVerticalStep(FlyingSceneryState *state) {
 void resetFlyingSceneryPosition(FlyingSceneryState *state) {
     Vec3i vec;
     AllocationStruct *alloc;
-    D_80090F90_91B90_item *matrix;
+    LevelConfig *matrix;
 
     alloc = (AllocationStruct *)getCurrentAllocation();
     createYRotationMatrix(&state->displayListObject.transform, 0x1000);
-    matrix = func_80055D10_56910(alloc->unk5C);
+    matrix = getLevelConfig(alloc->unk5C);
     transformVector2(D_80090BC8_917C8, &state->displayListObject.transform, &vec);
 
-    state->displayListObject.transform.translation.x = matrix->unkC.x + vec.x;
-    state->displayListObject.transform.translation.y = matrix->unkC.y + vec.y;
-    state->displayListObject.transform.translation.z = matrix->unkC.z + vec.z;
+    state->displayListObject.transform.translation.x = matrix->spawnPos.x + vec.x;
+    state->displayListObject.transform.translation.y = matrix->spawnPos.y + vec.y;
+    state->displayListObject.transform.translation.z = matrix->spawnPos.z + vec.z;
     state->frameCounter = 0x32;
 
     setCallbackWithContinue(updateFlyingSceneryAscendingStep);

@@ -78,7 +78,7 @@ void func_8005A930_5B530(Player *player) {
  */
 s32 func_8005A9A8_5B5A8(Player *player) {
     GameState *gameState;
-    D_80090F90_91B90_item *levelItem;
+    LevelConfig *levelItem;
     s32 deltaX, deltaZ;
     s64 distSq;
 
@@ -100,7 +100,7 @@ s32 func_8005A9A8_5B5A8(Player *player) {
     }
 
     // Get level item containing shortcut position
-    levelItem = func_80055D10_56910(gameState->memoryPoolId);
+    levelItem = getLevelConfig(gameState->memoryPoolId);
 
     // Calculate 2D distance to shortcut position
     deltaX = player->worldPos.x - levelItem->shortcutPosX;
@@ -130,14 +130,14 @@ s32 func_8005A9A8_5B5A8(Player *player) {
  */
 s32 isPlayerNearShortcut(Player *player) {
     GameState *gameState;
-    D_80090F90_91B90_item *levelItem;
+    LevelConfig *levelItem;
     s32 deltaX, deltaZ;
     s64 distSq;
 
     gameState = (GameState *)getCurrentAllocation();
 
     if (getTrackSegmentFinishZoneFlag(&gameState->gameData, player->sectorIndex) == 0) {
-        levelItem = func_80055D10_56910(gameState->memoryPoolId);
+        levelItem = getLevelConfig(gameState->memoryPoolId);
 
         deltaX = player->worldPos.x - levelItem->shortcutPosX;
         deltaZ = player->worldPos.z - levelItem->shortcutPosZ;
@@ -1000,7 +1000,7 @@ s16 func_8005CE98_5DA98(Player *arg0) {
             Section1Element *v2 = (Section1Element *)(elem->unk16 * 6 + (u32)section1Data);
             result = func_8006D21C_6DE1C(v1->unk0, v1->unk4, v2->unk0, v2->unk4) + 0x800;
         } else {
-            D_80090F90_91B90_item *item = func_80055D10_56910(allocation->memoryPoolId);
+            LevelConfig *item = getLevelConfig(allocation->memoryPoolId);
             result = func_8006D21C_6DE1C(item->shortcutPosX, item->shortcutPosZ, arg0->worldPos.x, arg0->worldPos.z);
             if (arg0->unkB84 & 2) {
                 result += 0x1000;

@@ -626,7 +626,7 @@ void initRace(void) {
 
 void initRaceViewports(void) {
     GameState_temp *gs;
-    VarData *levelConfig;
+    LevelConfig *levelConfig;
     s32 i;
     f32 new_var;
     s32 j;
@@ -637,7 +637,7 @@ void initRaceViewports(void) {
     f32 far;
 
     gs = (GameState_temp *)getCurrentAllocation();
-    levelConfig = (VarData *)func_80055D10_56910(gs->memoryPoolId);
+    levelConfig = getLevelConfig(gs->memoryPoolId);
     setAudioDistanceLimits(0x60, 0x1400);
     initViewportNode(gs->audioPlayer0, 0, 0xC, 0x1E, 0);
     setModelCameraTransform(gs->audioPlayer0, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
@@ -652,7 +652,7 @@ void initRaceViewports(void) {
         if (gs->unk7A == 0xB) {
             setViewportLightColors(i + 0x64, 1, &D_80090774_91374, &D_8009077C_9137C);
         } else {
-            setViewportLightColors(i + 0x64, 1, &levelConfig->unk18, &levelConfig->unk20);
+            setViewportLightColors(i + 0x64, 1, &levelConfig->lightColors, &levelConfig->fogColors);
         }
 
         if (gs->memoryPoolId != 0xB) {
@@ -660,18 +660,18 @@ void initRaceViewports(void) {
                 i + 0x64,
                 0x3E3,
                 0x3E7,
-                levelConfig->unk20.r2,
-                levelConfig->unk20.g2,
-                levelConfig->unk20.b2
+                levelConfig->fogColors.r2,
+                levelConfig->fogColors.g2,
+                levelConfig->fogColors.b2
             );
         } else {
             setViewportFogById(
                 i + 0x64,
                 0x384,
                 0x3E7,
-                levelConfig->unk20.r2,
-                levelConfig->unk20.g2,
-                levelConfig->unk20.b2
+                levelConfig->fogColors.r2,
+                levelConfig->fogColors.g2,
+                levelConfig->fogColors.b2
             );
         }
     }
@@ -902,12 +902,12 @@ void awaitPlayersAndPlayRaceMusic(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     if ((state->unk79 == 0) || (state->unk7A == 0xB)) {
-        D_80090F90_91B90_item *levelConfig = func_80055D10_56910(state->memoryPoolId);
+        LevelConfig *levelConfig = getLevelConfig(state->memoryPoolId);
 
         if (state->unk7A == 0xB) {
             playMusicTrack(0x20);
         } else {
-            playMusicTrack(levelConfig->unk28);
+            playMusicTrack(levelConfig->musicTrack);
         }
 
         setGameStateHandler(func_8003F368_3FF68);

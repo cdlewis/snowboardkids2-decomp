@@ -541,7 +541,7 @@ void applyLevelSelection(void) {
 
 void loadLevelPreview(void) {
     LevelSelectState_Base *allocation;
-    D_80090F90_91B90_item *item;
+    LevelConfig *item;
     u8 counter;
     u8 poolIdRaw;
     u8 poolId;
@@ -562,18 +562,18 @@ void loadLevelPreview(void) {
 
         poolIdRaw = allocation->levelIdList[allocation->selectedIndex];
         poolId = poolIdRaw;
-        item = func_80055D10_56910(poolId);
+        item = getLevelConfig(poolId);
 
-        setViewportLightColors(100, 1, &item->unk18, &item->unk20);
+        setViewportLightColors(100, 1, &item->lightColors, &item->fogColors);
 
         if (poolId == 11) {
             node = &allocation->previewNode;
             func_8006FA0C_7060C(node, 50.0f, ASPECT_RATIO, 10.0f, 1000.0f);
-            setViewportFogById(100, 900, 999, item->unk20.r2, item->unk20.g2, item->unk20.b2);
+            setViewportFogById(100, 900, 999, item->fogColors.r2, item->fogColors.g2, item->fogColors.b2);
             spawnConfettiEffect(node);
         } else {
             func_8006FA0C_7060C(&allocation->previewNode, 50.0f, ASPECT_RATIO, 10.0f, 4000.0f);
-            setViewportFogById(100, 995, 999, item->unk20.r2, item->unk20.g2, item->unk20.b2);
+            setViewportFogById(100, 995, 999, item->fogColors.r2, item->fogColors.g2, item->fogColors.b2);
         }
 
         scheduleTask(&initLevelPreviewCharacter, 0, 0, 0x5B);
