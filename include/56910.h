@@ -40,7 +40,7 @@ func_80055E68_56A68_result *func_80055E68_56A68(s32);
 
 void *loadCourseDataByIndex(s32 index);
 void *loadSpriteAssetByIndex(s32 index);
-void *func_80055DF8_569F8(s32 index);
+void *loadCompressedSegment2AssetByIndex(s32 index);
 void *loadUncompressedAssetByIndex(s32 index);
 LevelConfig *getLevelConfig(s32 index);
 s32 func_80055E40_56A40(s32 arg0);

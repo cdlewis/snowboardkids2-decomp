@@ -82,7 +82,7 @@ void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
 
     destPositionPtr = taskState;
     displayObjectOffset = 0;
-    taskState->unk40 = func_80055DF8_569F8(allocation->memoryPoolId);
+    taskState->unk40 = loadCompressedSegment2AssetByIndex(allocation->memoryPoolId);
 
     taskState->unk44 = 0;
     taskState->unkD8 = 0;
@@ -163,7 +163,7 @@ void func_800BB814_B5114(func_800BB814_B5114_arg *arg0) {
 
     arg0->unk20 = (void *)((u32)func_80055E68_56A68(state->memoryPoolId) + 0xB0);
     arg0->unk24 = loadUncompressedAssetByIndex(state->memoryPoolId);
-    arg0->unk28 = func_80055DF8_569F8(state->memoryPoolId);
+    arg0->unk28 = loadCompressedSegment2AssetByIndex(state->memoryPoolId);
     arg0->unk2C = 0;
     arg0->unk4C = 0x3C;
     setCleanupCallback(func_800BBB18_B5418);

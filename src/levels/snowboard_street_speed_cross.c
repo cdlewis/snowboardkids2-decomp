@@ -32,7 +32,7 @@ void func_800BB2B0_B2750(func_800BB2B0_B2750_arg *arg0) {
     result = func_80055E68_56A68(allocation->memoryPoolId);
     arg0->unk20 = (void *)((u32)result + 0x90);
     arg0->unk24 = loadUncompressedAssetByIndex(0xC);
-    arg0->unk28 = func_80055DF8_569F8(0xC);
+    arg0->unk28 = loadCompressedSegment2AssetByIndex(0xC);
     arg0->unk14 = 0x25990000;
     arg0->unk18 = 0x1A2B0000;
     arg0->unk2C = 0;

@@ -16,7 +16,7 @@ extern s32 D_80091550_92150[];
 extern s32 D_80091510_92110[];
 extern Asset_56910 gCourseDataAssets[];
 extern Asset_56910 gSpriteAssets[];
-extern Asset_56910 D_80091450_92050[];
+extern Asset_56910 gCompressedSegment2Assets[];
 extern AssetWithoutSize gUncompressedAssets[];
 extern func_80055E68_56A68_result *D_80091590_92190[];
 extern LevelConfig gLevelConfigs[];
@@ -41,8 +41,12 @@ void *loadUncompressedAssetByIndex(s32 index) {
     return loadUncompressedData(gUncompressedAssets[index].start, gUncompressedAssets[index].end);
 }
 
-void *func_80055DF8_569F8(s32 index) {
-    return loadCompressedData(D_80091450_92050[index].start, D_80091450_92050[index].end, D_80091450_92050[index].size);
+void *loadCompressedSegment2AssetByIndex(s32 index) {
+    return loadCompressedData(
+        gCompressedSegment2Assets[index].start,
+        gCompressedSegment2Assets[index].end,
+        gCompressedSegment2Assets[index].size
+    );
 }
 
 s32 func_80055E40_56A40(s32 arg0) {

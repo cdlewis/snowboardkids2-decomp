@@ -1862,7 +1862,7 @@ void initPushZone(PushZoneState *arg0) {
     memcpy(&arg0->unk14, &D_80090988_91588[arg0->zoneIndex * 9], 0xC);
     arg0->unk20 = (void *)(D_80090980_91580[arg0->zoneIndex * 9] + (D_80090984_91584[arg0->zoneIndex * 9] << 4));
     arg0->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
-    arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
+    arg0->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     arg0->unk2C = 0;
     setCleanupCallback(cleanupPushZone);
     setCallbackWithContinue(func_800441A4_44DA4);
@@ -1926,7 +1926,7 @@ void initUfoEffect(UfoEffectState *arg0) {
     arg0->unk20 = (u8 *)func_80055E68_56A68(allocation->unk5C) + 0x10;
 
     arg0->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
-    arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
+    arg0->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     arg0->unk2C = 0;
 
     arg0->leftWing.displayLists = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0x90);

@@ -159,7 +159,7 @@ void updateStarlightBarrier(StarlightBarrierTask *arg0);
 
 void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0) {
     arg0->unk24 = loadUncompressedAssetByIndex(8);
-    arg0->unk28 = func_80055DF8_569F8(8);
+    arg0->unk28 = loadCompressedSegment2AssetByIndex(8);
     arg0->unk2C = 0;
     createYRotationMatrix(&arg0->node1, 0x98A);
     arg0->node1.translation.x = 0x130F588E;
@@ -220,7 +220,7 @@ void cleanupStarlightHighwayBuildingTask(DualSegmentCleanupState *arg0) {
 
 void initDebugDisplayListTask(DebugDisplayListTaskState *arg0) {
     arg0->displayListMemory1 = loadUncompressedAssetByIndex(8);
-    arg0->displayListMemory2 = func_80055DF8_569F8(8);
+    arg0->displayListMemory2 = loadCompressedSegment2AssetByIndex(8);
     arg0->unk2C = 0;
     arg0->displayListMemory3 = loadSpriteAssetByIndex(8);
     arg0->config = &gDebugDisplayConfig;
@@ -514,7 +514,7 @@ void func_800BBB90(s16 arg0) __attribute__((alias("spawnDebugDisplayListTask")))
 
 void initStarlightItemTask(StarlightItemTaskState *arg0) {
     arg0->segment1 = loadUncompressedAssetByIndex(8);
-    arg0->segment2 = func_80055DF8_569F8(8);
+    arg0->segment2 = loadCompressedSegment2AssetByIndex(8);
     arg0->unk2C = 0;
     memcpy(&arg0->mat1.translation, &D_800BCA30_AEDF0[arg0->positionIndex], sizeof(Vec3i));
     arg0->unk68 = 0;
@@ -645,7 +645,7 @@ void initStarlightFireworkTask(StarlightFireworkTaskState *arg0) {
     (void)pad;
 
     arg0->segment1 = loadUncompressedAssetByIndex(8);
-    arg0->segment2 = func_80055DF8_569F8(8);
+    arg0->segment2 = loadCompressedSegment2AssetByIndex(8);
     arg0->unk2C = 0;
     arg0->displayList = (void *)((u32)func_80055E68_56A68(8) + 0x90);
     memcpy(&arg0->pos, gStarlightFireworkPositions[arg0->type], 0xC);
@@ -860,7 +860,7 @@ void initStarlightBarrierTask(StarlightBarrierTask *arg0) {
     void *temp;
 
     arg0->displayListMemory1 = loadUncompressedAssetByIndex(8);
-    arg0->displayListMemory2 = func_80055DF8_569F8(8);
+    arg0->displayListMemory2 = loadCompressedSegment2AssetByIndex(8);
     arg0->unk2C = 0;
     temp = func_80055E68_56A68(8);
     arg0->leftGateDisplayListOffset = (void *)((u32)temp + 0xA0);

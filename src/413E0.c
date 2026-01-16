@@ -195,7 +195,7 @@ void initStartGate(StartGate *gate) {
     spawnData = getLevelConfig(gameState->memoryPoolId);
     gate->unk20 = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x50);
     gate->unk24 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
-    gate->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
+    gate->unk28 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     gate->unk2C = 0;
     trackAngle = getTrackEndInfo((u8 *)gameState + 0x30, worldPos);
     createYRotationMatrix(&gate->rotationMatrix, (trackAngle + spawnData->yawOffset) & 0xFFFF);

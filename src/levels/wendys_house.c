@@ -74,7 +74,7 @@ void initRotatingPlatformTask(RotatingPlatformTaskState *arg0) {
 
     arg0->displayLists = (void *)((u32)func_80055E68_56A68(gameState->memoryPoolId) + 0xA0);
     arg0->unk24 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
-    arg0->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
+    arg0->unk28 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     arg0->posX = 0x03E90000;
     arg0->posY = 0x1D500000;
     arg0->posZ = 0xF8460000;
@@ -123,7 +123,7 @@ void func_800BB458_B5668(func_800BB458_B5668_arg *arg0) {
     s32 diff;
     gameState = (AllocB5668 *)getCurrentAllocation();
     arg0->unk24 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
-    arg0->unk28 = func_80055DF8_569F8(gameState->memoryPoolId);
+    arg0->unk28 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     arg0->unk2C = 0;
     temp = func_80055E68_56A68(gameState->memoryPoolId);
     randVal = (randA() & 1) << 4;

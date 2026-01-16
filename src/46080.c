@@ -856,7 +856,7 @@ void initSkyRenderTask(SkyRenderTaskState *state) {
 
     state->unk20 = func_80055E40_56A40(state->skyType);
     state->unk24 = loadUncompressedAssetByIndex(state->skyType);
-    state->unk28 = func_80055DF8_569F8(state->skyType);
+    state->unk28 = loadCompressedSegment2AssetByIndex(state->skyType);
     state->unk2C = 0;
 
     memcpy(state->unk3C, identity, 0x20);
@@ -977,7 +977,7 @@ void initPlayerRenderTask(PlayerRenderTaskState *state) {
     createYRotationMatrix((Transform3D *)state, rotation);
     state->unk20 = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x30);
     state->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
-    state->unk28 = func_80055DF8_569F8(allocation->unk5C);
+    state->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     state->unk2C = NULL;
     state->unk40 = 1;
     setCleanupCallback(cleanupPlayerRenderTask);
@@ -1241,7 +1241,7 @@ void cleanupPlayerSparkleTask(PlayerSparkleTask *task) {
 
 void initScrollingSceneryTask(ScrollingSceneryCleanupState *arg0) {
     arg0->unk24 = loadUncompressedAssetByIndex(arg0->assetPoolIndex);
-    arg0->unk28 = func_80055DF8_569F8(arg0->assetPoolIndex);
+    arg0->unk28 = loadCompressedSegment2AssetByIndex(arg0->assetPoolIndex);
     arg0->unk2C = NULL;
     memcpy(arg0, identityMatrix, 0x20);
     arg0->unk3C = loadSpriteAssetByIndex(arg0->assetPoolIndex);
@@ -1329,7 +1329,7 @@ void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
 
     arg0->unk20 = func_80055E68_56A68(allocation->unk5C);
     arg0->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
-    arg0->unk28 = func_80055DF8_569F8(allocation->unk5C);
+    arg0->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     arg0->unk2C = NULL;
 
     createYRotationMatrix((Transform3D *)arg0, (u16)(rotation + levelData->yawOffset));
@@ -1401,7 +1401,7 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
 
     arg0->displayListObject.displayLists = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x10);
     arg0->displayListObject.segment1 = loadUncompressedAssetByIndex(allocation->unk5C);
-    arg0->displayListObject.segment2 = func_80055DF8_569F8(allocation->unk5C);
+    arg0->displayListObject.segment2 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     arg0->displayListObject.segment3 = 0;
 
     createYRotationMatrix((Transform3D *)arg0, rotation + levelData->yawOffset);
