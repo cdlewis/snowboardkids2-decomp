@@ -21,8 +21,8 @@ typedef struct {
     u8 _pad0[0x14];
     Vec3i unk14;
     void *unk20;
-    void *unk24;
-    void *unk28;
+    void *uncompressedAsset;
+    void *compressedAsset;
     s32 unk2C;
     u8 _pad1[0xC];
     Vec3i unk3C;
@@ -30,13 +30,13 @@ typedef struct {
     u16 unk4A;
     s16 unk4C;
     s16 unk4E;
-} func_800BB458_B5668_arg;
+} WendysHouseProjectileTaskState;
 
 typedef struct {
     u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_800BB420_B5630_arg;
+    void *uncompressedAsset;
+    void *compressedAsset;
+} TaskAssetState;
 
 typedef struct {
     s16 matrix[6];
@@ -45,8 +45,8 @@ typedef struct {
     s32 posY;
     s32 posZ;
     void *displayLists;
-    void *unk24;
-    void *unk28;
+    void *uncompressedAsset;
+    void *compressedAsset;
     s32 unk2C;
     u8 _pad2[0xC];
     s16 oscillationAngle;
@@ -62,10 +62,10 @@ typedef struct {
 } Task;
 
 void func_800BB828_B5A38(func_800BB7F0_B5A00_arg *);
-void func_800BB5B0_B57C0(func_800BB458_B5668_arg *arg0);
-void func_800BB458_B5668(func_800BB458_B5668_arg *arg0);
-void func_800BB7B8_B59C8(func_800BB420_B5630_arg *arg0);
-void cleanupRotatingPlatformTask(func_800BB420_B5630_arg *arg0);
+void func_800BB5B0_B57C0(WendysHouseProjectileTaskState *arg0);
+void func_800BB458_B5668(WendysHouseProjectileTaskState *arg0);
+void cleanupWendysHouseProjectileTask(TaskAssetState *arg0);
+void cleanupRotatingPlatformTask(TaskAssetState *arg0);
 void updateRotatingPlatformTask(RotatingPlatformTaskState *arg0);
 
 void initRotatingPlatformTask(RotatingPlatformTaskState *arg0) {
@@ -73,8 +73,8 @@ void initRotatingPlatformTask(RotatingPlatformTaskState *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     arg0->displayLists = (void *)((u32)func_80055E68_56A68(gameState->memoryPoolId) + 0xA0);
-    arg0->unk24 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
-    arg0->unk28 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
+    arg0->uncompressedAsset = loadUncompressedAssetByIndex(gameState->memoryPoolId);
+    arg0->compressedAsset = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     arg0->posX = 0x03E90000;
     arg0->posY = 0x1D500000;
     arg0->posZ = 0xF8460000;
@@ -111,19 +111,19 @@ void updateRotatingPlatformTask(RotatingPlatformTaskState *arg0) {
     }
 }
 
-void cleanupRotatingPlatformTask(func_800BB420_B5630_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupRotatingPlatformTask(TaskAssetState *arg0) {
+    arg0->uncompressedAsset = freeNodeMemory(arg0->uncompressedAsset);
+    arg0->compressedAsset = freeNodeMemory(arg0->compressedAsset);
 }
 
-void func_800BB458_B5668(func_800BB458_B5668_arg *arg0) {
+void func_800BB458_B5668(WendysHouseProjectileTaskState *arg0) {
     AllocB5668 *gameState;
     void *temp;
     s32 randVal;
     s32 diff;
     gameState = (AllocB5668 *)getCurrentAllocation();
-    arg0->unk24 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
-    arg0->unk28 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
+    arg0->uncompressedAsset = loadUncompressedAssetByIndex(gameState->memoryPoolId);
+    arg0->compressedAsset = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     arg0->unk2C = 0;
     temp = func_80055E68_56A68(gameState->memoryPoolId);
     randVal = (randA() & 1) << 4;
@@ -145,11 +145,11 @@ void func_800BB458_B5668(func_800BB458_B5668_arg *arg0) {
     arg0->unk3C.y = 0x180000;
     arg0->unk48 = atan2Fixed(-arg0->unk3C.x, -arg0->unk3C.z);
     arg0->unk4E = 0;
-    setCleanupCallback(func_800BB7B8_B59C8);
+    setCleanupCallback(cleanupWendysHouseProjectileTask);
     setCallback(func_800BB5B0_B57C0);
 }
 
-void func_800BB5B0_B57C0(func_800BB458_B5668_arg *arg0) {
+void func_800BB5B0_B57C0(WendysHouseProjectileTaskState *arg0) {
     GameState *gameState;
     s32 i;
 
@@ -199,9 +199,9 @@ end:
     }
 }
 
-void func_800BB7B8_B59C8(func_800BB420_B5630_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupWendysHouseProjectileTask(TaskAssetState *arg0) {
+    arg0->uncompressedAsset = freeNodeMemory(arg0->uncompressedAsset);
+    arg0->compressedAsset = freeNodeMemory(arg0->compressedAsset);
 }
 
 void func_800BB7F0_B5A00(func_800BB7F0_B5A00_arg *arg0) {
