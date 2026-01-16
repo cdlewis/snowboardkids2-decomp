@@ -854,14 +854,14 @@ void initSkyRenderTask(SkyRenderTaskState *state) {
 
     memcpy(state, identity, 0x20);
 
-    state->unk20 = func_80055E40_56A40(state->skyType);
+    state->unk20 = getSkyDisplayLists1ByIndex(state->skyType);
     state->unk24 = loadUncompressedAssetByIndex(state->skyType);
     state->unk28 = loadCompressedSegment2AssetByIndex(state->skyType);
     state->unk2C = 0;
 
     memcpy(state->unk3C, identity, 0x20);
 
-    state->unk5C = func_80055E54_56A54(state->skyType);
+    state->unk5C = getSkyDisplayLists2ByIndex(state->skyType);
     state->unk68 = 0;
     state->unk60 = state->unk24;
     state->unk64 = state->unk28;

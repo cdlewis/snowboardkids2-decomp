@@ -12,13 +12,13 @@ USE_ASSET(_3505F0);
 
 extern s32 D_B7E70;
 extern s32 D_B9C40;
-extern s32 D_80091550_92150[];
-extern s32 D_80091510_92110[];
+extern s32 gSkyDisplayLists2[];
+extern s32 gSkyDisplayLists1[];
 extern Asset_56910 gCourseDataAssets[];
 extern Asset_56910 gSpriteAssets[];
 extern Asset_56910 gCompressedSegment2Assets[];
 extern AssetWithoutSize gUncompressedAssets[];
-extern func_80055E68_56A68_result *D_80091590_92190[];
+extern func_80055E68_56A68_result *gSkyDisplayLists3[];
 extern LevelConfig gLevelConfigs[];
 
 LevelConfig *getLevelConfig(s32 index) {
@@ -49,16 +49,16 @@ void *loadCompressedSegment2AssetByIndex(s32 index) {
     );
 }
 
-s32 func_80055E40_56A40(s32 arg0) {
-    return D_80091510_92110[arg0];
+s32 getSkyDisplayLists1ByIndex(s32 arg0) {
+    return gSkyDisplayLists1[arg0];
 }
 
-s32 func_80055E54_56A54(s32 arg0) {
-    return D_80091550_92150[arg0];
+s32 getSkyDisplayLists2ByIndex(s32 arg0) {
+    return gSkyDisplayLists2[arg0];
 }
 
 func_80055E68_56A68_result *func_80055E68_56A68(s32 index) {
-    return D_80091590_92190[index];
+    return gSkyDisplayLists3[index];
 }
 
 void *loadAsset_B7E70(void) {

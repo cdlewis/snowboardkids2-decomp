@@ -43,8 +43,8 @@ void *loadSpriteAssetByIndex(s32 index);
 void *loadCompressedSegment2AssetByIndex(s32 index);
 void *loadUncompressedAssetByIndex(s32 index);
 LevelConfig *getLevelConfig(s32 index);
-s32 func_80055E40_56A40(s32 arg0);
-s32 func_80055E54_56A54(s32 arg0);
+s32 getSkyDisplayLists1ByIndex(s32 arg0);
+s32 getSkyDisplayLists2ByIndex(s32 arg0);
 
 void *loadAsset_B7E70(void);
 void *loadAsset_216290(void);
