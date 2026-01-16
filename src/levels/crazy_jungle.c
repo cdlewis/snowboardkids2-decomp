@@ -18,14 +18,14 @@ typedef struct {
 
 typedef struct {
     Transform3D matrix;
-    DisplayLists *unk20;
-    void *unk24;
-    void *unk28;
+    DisplayLists *displayLists;
+    void *segment1;
+    void *segment2;
     s32 unk2C;
     u8 PAD[0xC];
-    s16 unk3C;
-    s16 unk3E;
-} func_800BB808_B7A48_arg;
+    s16 timer;
+    s16 state;
+} StarLauncherTask;
 
 typedef struct {
     u16 rotX;
@@ -59,9 +59,9 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ DisplayListObject node;
-    u16 unk3C;
-    s16 unk3E;
-} func_800BB8B8_B7AF8_arg;
+    u16 timer;
+    s16 state;
+} StarLauncherTaskUpdate;
 
 extern s32 D_8009A8A4_9B4A4;
 
@@ -69,9 +69,9 @@ void renderFallingRockHazard(FallingRockHazard *rock);
 void updateFallingRockHazard(FallingRockHazard *rock);
 void fallingRockImpactCallback(FallingRockHazard *rock);
 void fallingRockRespawnCallback(FallingRockHazard *rock);
-void func_800BBA60_B7CA0(DisplayListObjectSegments *arg0);
+void cleanupStarLauncherTask(DisplayListObjectSegments *arg0);
 void freeDisplayListSegments(DisplayListObjectSegments *);
-void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0);
+void updateStarLauncherTask(StarLauncherTaskUpdate *arg0);
 
 void initFallingRockHazard(FallingRockHazard *rock) {
     GameState *gameState;
@@ -235,23 +235,23 @@ void freeDisplayListSegments(DisplayListObjectSegments *arg0) {
     arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
-void func_800BB808_B7A48(func_800BB808_B7A48_arg *arg0) {
+void initStarLauncherTask(StarLauncherTask *arg0) {
     GameState *gs = (GameState *)getCurrentAllocation();
-    arg0->unk24 = loadUncompressedAssetByIndex(gs->memoryPoolId);
-    arg0->unk28 = loadCompressedSegment2AssetByIndex(gs->memoryPoolId);
+    arg0->segment1 = loadUncompressedAssetByIndex(gs->memoryPoolId);
+    arg0->segment2 = loadCompressedSegment2AssetByIndex(gs->memoryPoolId);
     arg0->unk2C = 0;
     createYRotationMatrix(&arg0->matrix, 0x6C0);
     arg0->matrix.translation.x = 0xDD196FEA;
     arg0->matrix.translation.y = 0x0ABD4CA3;
     arg0->matrix.translation.z = 0xE270649E;
-    arg0->unk3C = 0x12C;
-    arg0->unk3E = 0;
-    arg0->unk20 = &func_80055E68_56A68(gs->memoryPoolId)->unkB0;
-    setCleanupCallback(&func_800BBA60_B7CA0);
-    setCallback(&func_800BB8B8_B7AF8);
+    arg0->timer = 0x12C;
+    arg0->state = 0;
+    arg0->displayLists = &func_80055E68_56A68(gs->memoryPoolId)->unkB0;
+    setCleanupCallback(&cleanupStarLauncherTask);
+    setCallback(&updateStarLauncherTask);
 }
 
-void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
+void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
     GameState *gameState;
     s16 state;
     s32 i;
@@ -259,14 +259,14 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
     s32 randVal;
 
     gameState = getCurrentAllocation();
-    state = arg0->unk3E;
+    state = arg0->state;
 
     switch (state) {
         case 0:
             if (!gameState->gamePaused) {
-                arg0->unk3C--;
-                if ((arg0->unk3C << 16) == 0) {
-                    arg0->unk3E++;
+                arg0->timer--;
+                if ((arg0->timer << 16) == 0) {
+                    arg0->state++;
                 }
             }
             break;
@@ -284,8 +284,8 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
                         i = i + 0x6C0;
                         spawnFallingStarProjectile(i, (((u8)randA()) << 12) | 0x100000);
                         queueSoundAtPosition(&arg0->node.transform.translation, 0x23);
-                        arg0->unk3C = 0x18;
-                        arg0->unk3E++;
+                        arg0->timer = 0x18;
+                        arg0->state++;
                         break;
                     }
                 }
@@ -293,11 +293,11 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
             break;
         case 2:
             if (gameState->gamePaused == 0) {
-                arg0->unk3C--;
-                if ((arg0->unk3C << 16) == 0) {
-                    arg0->unk3E = 0;
+                arg0->timer--;
+                if ((arg0->timer << 16) == 0) {
+                    arg0->state = 0;
                     arg0->node.displayLists = &func_80055E68_56A68(gameState->memoryPoolId)->unkB0;
-                    arg0->unk3C = 0x14;
+                    arg0->timer = 0x14;
                 }
             }
             break;
@@ -308,7 +308,7 @@ void func_800BB8B8_B7AF8(func_800BB8B8_B7AF8_arg *arg0) {
     }
 }
 
-void func_800BBA60_B7CA0(DisplayListObjectSegments *arg0) {
+void cleanupStarLauncherTask(DisplayListObjectSegments *arg0) {
     arg0->segment1 = freeNodeMemory(arg0->segment1);
     arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
@@ -342,5 +342,5 @@ void func_800BBA98(void) {
         temp->positionIndex = 8;
     }
 
-    scheduleTask(&func_800BB808_B7A48, 0, 0, 0xC8);
+    scheduleTask(&initStarLauncherTask, 0, 0, 0xC8);
 }
