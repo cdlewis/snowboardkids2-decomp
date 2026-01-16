@@ -28,23 +28,23 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x18];
-    s32 unk18;
+    s32 yPosOffset;
     u8 _pad1C[0x20];
-    u8 unk3C[0x40];
-    s32 unk7C;
+    u8 transform[0x40];
+    s32 fadeDelta;
     u8 _pad80[0x2];
-    u16 unk82;
+    u16 zRotation;
 } FanEffectFadeState;
 
 typedef struct {
     u8 _pad0[0x3C];
-    u8 unk3C[0x3C];
-    void **unk78;
-    s32 unk7C;
-    u16 unk80;
-    u16 unk82;
-    s16 unk84;
-    s16 unk86;
+    u8 transform[0x3C];
+    void **displayList;
+    s32 fadeDelta;
+    u16 yRotation;
+    u16 zRotation;
+    s16 scale;
+    s16 remainingFrames;
 } FanEffectGrowState;
 
 typedef struct {
@@ -150,65 +150,65 @@ void initFanEffectTask(FanEffectTaskState *arg0) {
 
 void updateFanEffectGrow(FanEffectGrowState *arg0) {
     Transform3D sp10;
-    void *temp_v0;
-    s16 temp_v0_2;
-    s16 temp_a0;
+    void *displayListData;
+    s16 newZRotation;
+    s16 currentScale;
 
-    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->unk80);
+    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->yRotation);
 
-    temp_v0 = (void *)((u8 *)(*arg0->unk78) + 0x3C0);
+    displayListData = (void *)((u8 *)(*arg0->displayList) + 0x3C0);
 
-    func_8006B084_6BC84(&D_8009A8B0_9B4B0, temp_v0, arg0);
+    func_8006B084_6BC84(&D_8009A8B0_9B4B0, displayListData, arg0);
 
-    scaleMatrix((Transform3D *)arg0, arg0->unk84, arg0->unk84, arg0->unk84);
+    scaleMatrix((Transform3D *)arg0, arg0->scale, arg0->scale, arg0->scale);
 
-    temp_v0_2 = arg0->unk82 + 0x300;
-    arg0->unk82 = temp_v0_2;
+    newZRotation = arg0->zRotation + 0x300;
+    arg0->zRotation = newZRotation;
 
-    createZRotationMatrix(&sp10, temp_v0_2);
+    createZRotationMatrix(&sp10, newZRotation);
 
     sp10.translation.y = 0xBB333;
     sp10.translation.x = 0;
     sp10.translation.z = 0xFFEA0000;
 
-    func_8006B084_6BC84(&sp10, arg0, &arg0->unk3C);
+    func_8006B084_6BC84(&sp10, arg0, &arg0->transform);
 
     enqueueDisplayListObject(0, (DisplayListObject *)arg0);
-    enqueueDisplayListObject(0, (DisplayListObject *)&arg0->unk3C);
+    enqueueDisplayListObject(0, (DisplayListObject *)&arg0->transform);
 
-    if (arg0->unk86 != 0) {
-        arg0->unk86--;
-        temp_a0 = arg0->unk84;
-        if (temp_a0 != 0x2000) {
-            arg0->unk84 = temp_a0 + 0x200;
+    if (arg0->remainingFrames != 0) {
+        arg0->remainingFrames--;
+        currentScale = arg0->scale;
+        if (currentScale != 0x2000) {
+            arg0->scale = currentScale + 0x200;
         }
     } else {
-        arg0->unk7C = 0x40000;
+        arg0->fadeDelta = 0x40000;
         setCallback(&updateFanEffectFade);
     }
 }
 
 void updateFanEffectFade(FanEffectFadeState *arg0) {
     Transform3D matrix;
-    s32 temp_v0;
+    s32 fadeDelta;
 
-    temp_v0 = arg0->unk7C - 0x8000;
-    arg0->unk7C = temp_v0;
+    fadeDelta = arg0->fadeDelta - 0x8000;
+    arg0->fadeDelta = fadeDelta;
 
-    if ((s32)0xFFF80000 >= temp_v0) {
+    if ((s32)0xFFF80000 >= fadeDelta) {
         func_80069CF8_6A8F8();
     }
 
-    arg0->unk18 += arg0->unk7C;
-    createZRotationMatrix(&matrix, arg0->unk82);
+    arg0->yPosOffset += arg0->fadeDelta;
+    createZRotationMatrix(&matrix, arg0->zRotation);
 
     matrix.translation.y = 0xBB333;
     matrix.translation.x = 0;
     matrix.translation.z = 0xFFEA0000;
 
-    func_8006B084_6BC84(&matrix, (DisplayListObject *)arg0, (DisplayListObject *)&arg0->unk3C);
+    func_8006B084_6BC84(&matrix, (DisplayListObject *)arg0, (DisplayListObject *)&arg0->transform);
     enqueueDisplayListObject(0, (DisplayListObject *)arg0);
-    enqueueDisplayListObject(0, (DisplayListObject *)&arg0->unk3C);
+    enqueueDisplayListObject(0, (DisplayListObject *)&arg0->transform);
 }
 
 void cleanupFanEffectTask(SceneModel_unk98 *arg0) {
