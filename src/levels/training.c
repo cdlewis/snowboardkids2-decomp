@@ -139,9 +139,9 @@ void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0) {
     }
 }
 
-void func_800BB670_B5F50(TrainingInstructionRuntimeState *arg0);
-void func_800BB724_B6004(TrainingInstructionRuntimeState *arg0);
-void func_800BB87C_B615C(TrainingInstructionRuntimeState *arg0);
+void expandTrainingInstructionPanelHeight(TrainingInstructionRuntimeState *arg0);
+void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *arg0);
+void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionRuntimeState *arg0);
 
 void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) {
     s16 width;
@@ -154,7 +154,7 @@ void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) 
     }
 
     if (arg0->panelWidth == 0xD) {
-        setCallback(func_800BB670_B5F50);
+        setCallback(expandTrainingInstructionPanelHeight);
     }
 
     width = arg0->panelWidth;
@@ -174,26 +174,26 @@ void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) 
     );
 }
 
-void func_800BB5CC_B5EAC(TrainingInstructionRuntimeState *arg0) {
-    s16 temp_a7;
-    s16 temp_a6;
+void shrinkTrainingInstructionPanelForNextMessage(TrainingInstructionRuntimeState *arg0) {
+    s16 width;
+    s16 height;
 
     arg0->panelHeight--;
     arg0->alphaColor += 0x10;
 
     if (arg0->panelHeight == 1) {
-        setCallback(func_800BB670_B5F50);
+        setCallback(expandTrainingInstructionPanelHeight);
     }
 
-    temp_a7 = arg0->panelWidth;
-    temp_a6 = arg0->panelHeight;
+    width = arg0->panelWidth;
+    height = arg0->panelHeight;
 
     func_8006D7B0_6E3B0(
         (s32)arg0->uiAsset,
-        ((-temp_a7) << 19) >> 16,
-        ((-temp_a6) << 19) >> 16,
-        temp_a7,
-        temp_a6,
+        ((-width) << 19) >> 16,
+        ((-height) << 19) >> 16,
+        width,
+        height,
         0,
         (u8)arg0->alphaColor,
         arg0->colorIndex,
@@ -202,9 +202,9 @@ void func_800BB5CC_B5EAC(TrainingInstructionRuntimeState *arg0) {
     );
 }
 
-void func_800BB670_B5F50(TrainingInstructionRuntimeState *arg0) {
-    s16 temp_a7;
-    s16 temp_a6;
+void expandTrainingInstructionPanelHeight(TrainingInstructionRuntimeState *arg0) {
+    s16 width;
+    s16 height;
 
     arg0->panelHeight++;
 
@@ -213,18 +213,18 @@ void func_800BB670_B5F50(TrainingInstructionRuntimeState *arg0) {
     }
 
     if (arg0->panelHeight == 6) {
-        setCallback(func_800BB724_B6004);
+        setCallback(displayTrainingInstructionAndWaitForInput);
     }
 
-    temp_a7 = arg0->panelWidth;
-    temp_a6 = arg0->panelHeight;
+    width = arg0->panelWidth;
+    height = arg0->panelHeight;
 
     func_8006D7B0_6E3B0(
         (s32)arg0->uiAsset,
-        ((-temp_a7) << 19) >> 16,
-        ((-temp_a6) << 19) >> 16,
-        temp_a7,
-        temp_a6,
+        ((-width) << 19) >> 16,
+        ((-height) << 19) >> 16,
+        width,
+        height,
         0,
         GET_ALPHA_COLOR_HIGH_BYTE(arg0),
         arg0->colorIndex,
@@ -233,7 +233,7 @@ void func_800BB670_B5F50(TrainingInstructionRuntimeState *arg0) {
     );
 }
 
-void func_800BB724_B6004(TrainingInstructionRuntimeState *arg0) {
+void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *arg0) {
     s8 *table_ptr;
     s32 temp_v1_2;
     s16 temp_v0;
@@ -255,10 +255,10 @@ void func_800BB724_B6004(TrainingInstructionRuntimeState *arg0) {
         if (temp_v1_3 == -1) {
             playSoundEffect(0x2D);
             arg0->panelIndex = arg0->panelIndex + 1;
-            setCallback(func_800BB87C_B615C);
+            setCallback(shrinkTrainingInstructionPanelForNextInstruction);
         } else {
             playSoundEffect(0x2B);
-            setCallback(func_800BB5CC_B5EAC);
+            setCallback(shrinkTrainingInstructionPanelForNextMessage);
         }
     }
 }
@@ -266,31 +266,31 @@ void func_800BB724_B6004(TrainingInstructionRuntimeState *arg0) {
 #define GET_SCALE_AS_S16(arg0) (*(s16 *)&(arg0)->scale)
 #define SET_SCALE_AS_S16(arg0, val) (*(s16 *)&(arg0)->scale = (val))
 
-void func_800BB87C_B615C(TrainingInstructionRuntimeState *arg0) {
-    s16 temp_v1;
-    s16 temp_a7;
-    s16 temp_a6;
+void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionRuntimeState *arg0) {
+    s16 scale;
+    s16 width;
+    s16 height;
 
     arg0->panelHeight--;
 
-    temp_v1 = GET_SCALE_AS_S16(arg0);
-    if (temp_v1 != 0) {
-        SET_SCALE_AS_S16(arg0, temp_v1 - 0x10);
+    scale = GET_SCALE_AS_S16(arg0);
+    if (scale != 0) {
+        SET_SCALE_AS_S16(arg0, scale - 0x10);
     }
 
     if (arg0->panelHeight == 1) {
         setCallback(shrinkTrainingInstructionPanelWidth);
     }
 
-    temp_a7 = arg0->panelWidth;
-    temp_a6 = arg0->panelHeight;
+    width = arg0->panelWidth;
+    height = arg0->panelHeight;
 
     func_8006D7B0_6E3B0(
         (s32)arg0->uiAsset,
-        ((-temp_a7) << 19) >> 16,
-        ((-temp_a6) << 19) >> 16,
-        temp_a7,
-        temp_a6,
+        ((-width) << 19) >> 16,
+        ((-height) << 19) >> 16,
+        width,
+        height,
         0,
         (u8)arg0->alphaColor,
         arg0->colorIndex,
@@ -300,17 +300,17 @@ void func_800BB87C_B615C(TrainingInstructionRuntimeState *arg0) {
 }
 
 void shrinkTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) {
-    s16 temp_v1;
-    s16 temp_a7;
-    s16 temp_a6;
+    s16 scale;
+    s16 width;
+    s16 height;
     GameState *state;
 
     state = getCurrentAllocation();
     arg0->panelWidth--;
 
-    temp_v1 = GET_SCALE_AS_S16(arg0);
-    if (temp_v1 != 0) {
-        SET_SCALE_AS_S16(arg0, temp_v1 - 0x10);
+    scale = GET_SCALE_AS_S16(arg0);
+    if (scale != 0) {
+        SET_SCALE_AS_S16(arg0, scale - 0x10);
     }
 
     if (arg0->panelWidth == 1) {
@@ -318,15 +318,15 @@ void shrinkTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) 
         setCallback(checkTrainingInstructionCheckpoint);
     }
 
-    temp_a7 = arg0->panelWidth;
-    temp_a6 = arg0->panelHeight;
+    width = arg0->panelWidth;
+    height = arg0->panelHeight;
 
     func_8006D7B0_6E3B0(
         arg0->uiAsset,
-        ((-temp_a7) << 19) >> 16,
-        ((-temp_a6) << 19) >> 16,
-        temp_a7,
-        temp_a6,
+        ((-width) << 19) >> 16,
+        ((-height) << 19) >> 16,
+        width,
+        height,
         0,
         GET_ALPHA_COLOR_HIGH_BYTE(arg0),
         arg0->colorIndex,
