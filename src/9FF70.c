@@ -590,7 +590,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
         player->behaviorCounter = 1;
     }
 
-    func_8005D818_5E418(player);
+    getTrickType(player);
     func_8005D308_5DF08(player, 3);
 
     player->unkB8C -= 1;
@@ -635,10 +635,10 @@ s32 updatePostTrickChargingStep(Player *player) {
         }
         player->behaviorCounter = 1;
         if (player->unkB8C > 0xFFFF) {
-            player->unkBCD = func_8005D818_5E418(player);
+            player->unkBCD = getTrickType(player);
         }
     } else {
-        func_8005D818_5E418(player);
+        getTrickType(player);
         if (player->unkB8C <= 0xFFFF) {
             player->unkB8C += 0x4000;
         }
@@ -987,9 +987,9 @@ void updateSpinTrickState(Player *player, s8 trickType) {
             break;
         case 2:
             if (player->unkBDA != 0 || (!(player->unkB7C & 0x8000) && player->unkB8C == 0x200)) {
-                player->unkBCD = func_8005D818_5E418(player);
+                player->unkBCD = getTrickType(player);
             } else if (player->unkB7C & 0x8000) {
-                func_8005D818_5E418(player);
+                getTrickType(player);
             }
             break;
     }

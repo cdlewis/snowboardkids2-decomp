@@ -136,53 +136,53 @@ s16 onTrickCompletedHook(Player *player) {
     (void)player;
 }
 
-extern s8 D_800941C4_94DC4[];
+extern s8 gSpecialTrickTypeTable[];
 
-s16 func_8005D818_5E418(Player *arg0) {
-    s16 var_a1;
-    s8 temp_v0;
-    s8 temp_v1;
-    u16 temp_a0;
-    s8 *ptr;
-    s8 off;
+s16 getTrickType(Player *player) {
+    s16 trickType;
+    s8 stickX;
+    s8 stickY;
+    u16 stickCombo;
+    s8 *tablePtr;
+    s8 trickCount;
 
-    var_a1 = -1;
-    if (arg0->unkBDA != 0) {
-        temp_v1 = arg0->unkBDC & 7;
-        if (temp_v1 != 0) {
-            ptr = D_800941C4_94DC4;
-            off = arg0->trickCount;
-            return *(ptr + ((s32)temp_v1 << 3) + off);
+    trickType = -1;
+    if (player->unkBDA != 0) {
+        stickY = player->unkBDC & 7;
+        if (stickY != 0) {
+            tablePtr = gSpecialTrickTypeTable;
+            trickCount = player->trickCount;
+            return *(tablePtr + ((s32)stickY << 3) + trickCount);
         }
-        goto block_17;
+        goto return_trick;
     }
-    temp_v1 = arg0->unkB7B;
-    var_a1 = -(temp_v1 != 7);
-    if (temp_v1 == -7) {
-        var_a1 = 1;
+    stickY = player->unkB7B;
+    trickType = -(stickY != 7);
+    if (stickY == -7) {
+        trickType = 1;
     }
-    temp_v0 = arg0->unkB7A;
-    if (temp_v0 == 7) {
-        var_a1 = 2;
+    stickX = player->unkB7A;
+    if (stickX == 7) {
+        trickType = 2;
     }
-    if (temp_v0 == -7) {
-        var_a1 = 3;
+    if (stickX == -7) {
+        trickType = 3;
     }
-    temp_a0 = *(u16 *)&arg0->unkB7A;
-    if (temp_a0 == 0x707) {
-        var_a1 = 4;
+    stickCombo = *(u16 *)&player->unkB7A;
+    if (stickCombo == 0x707) {
+        trickType = 4;
     }
-    if (temp_a0 == 0xF907) {
-        var_a1 = 5;
+    if (stickCombo == 0xF907) {
+        trickType = 5;
     }
-    if (temp_a0 == 0x7F9) {
-        var_a1 = 6;
+    if (stickCombo == 0x7F9) {
+        trickType = 6;
     }
-    if (temp_a0 == 0xF9F9) {
-        var_a1 = 7;
+    if (stickCombo == 0xF9F9) {
+        trickType = 7;
     }
-block_17:
-    return var_a1;
+return_trick:
+    return trickType;
 }
 
 s32 func_8005D8C8_5E4C8(Player *arg0) {
