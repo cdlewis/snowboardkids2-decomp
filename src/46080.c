@@ -2867,7 +2867,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             if (gs->unk7A != 0xB) {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
-                func_800BBB34();
+                spawnJingleTownTrains();
                 schedulePlayerSparkleTask();
             }
             scheduleSceneAnimationTask(courseId, 3);
