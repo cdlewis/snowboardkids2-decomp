@@ -43,6 +43,8 @@ void func_8006BDBC_6C9BC(BoneAnimationState *, void *, void *);
 
 void setBonePosition(BoneAnimationState *, s32, s32, s32);
 
+void func_mulMatrix3x3T(Transform3D *, Transform3D *, Transform3D *);
+
 void func_8006B084_6BC84(void *, void *, void *);
 
 void createCombinedRotationMatrix(void *, u16, u16);

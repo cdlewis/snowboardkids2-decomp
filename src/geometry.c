@@ -387,7 +387,7 @@ void func_8006BDBC_6C9BC(BoneAnimationState *arg0, void *arg1, void *arg2) {
     }
 }
 
-void func_8006BE4C_6CA4C(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2) {
+void func_mulMatrix3x3T(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2) {
     s32 row;
     s16 *rowPtr;
     s32 i;
