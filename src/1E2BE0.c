@@ -293,10 +293,10 @@ void animateCameraRotationYContinuous(CutsceneCameraState *camera, s16 step, s16
     }
 }
 
-void initCameraShake(CutsceneCameraShakeState *arg0, s32 amplitude, s16 duration) {
-    arg0->animMode = 0;
-    arg0->shakeAmplitude = amplitude;
-    arg0->shakeDuration = duration;
+void initCameraShake(CutsceneCameraShakeState *cameraShake, s32 amplitude, s16 duration) {
+    cameraShake->animMode = 0;
+    cameraShake->shakeAmplitude = amplitude;
+    cameraShake->shakeDuration = duration;
 }
 
 INCLUDE_ASM("asm/nonmatchings/1E2BE0", func_800B6190_1E3240);
