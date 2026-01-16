@@ -1608,18 +1608,16 @@ s32 updateRaceFinishLoseStep(Player *player) {
 }
 
 extern Transform3D D_8009A890_9B490;
-extern s32 D_8009A8A4_9B4A4;
-extern s32 D_8009A8A8_9B4A8;
-extern s32 D_8009A8AC_9B4AC;
+extern Vec3i D_8009A8A4_9B4A4;
 
 void updateTrickRotationTransform(Player *player) {
     Transform3D rotationMatrix;
     s16 *flipAngle;
     s16 *spinAngle;
 
-    D_8009A8A4_9B4A4 = 0;
-    D_8009A8A8_9B4A8 = 0xFFF00000;
-    D_8009A8AC_9B4AC = 0;
+    D_8009A8A4_9B4A4.x = 0;
+    D_8009A8A4_9B4A4.y = 0xFFF00000;
+    D_8009A8A4_9B4A4.z = 0;
     flipAngle = &player->unkA98;
     spinAngle = &player->unkA96;
     createRotationMatrixYX(&rotationMatrix, *flipAngle, *spinAngle);
