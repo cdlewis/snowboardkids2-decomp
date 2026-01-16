@@ -821,24 +821,33 @@ s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeig
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005BF50_5CB50);
 
-s32 func_8005C250_5CE50(Vec3i *arg0, s32 arg1, s32 arg2) {
-    Vec3i pos;
+/**
+ * Checks collision between a position and vulnerable players (non-invincible, collision-enabled).
+ * When a collision is detected, applies the star hit state to that player.
+ *
+ * @param pos Position to check collision against
+ * @param excludePlayerIdx Player index to skip (-1 to include all players)
+ * @param extraRadius Radius to add to player's collision radius
+ * @return 1 if a collision was found and star hit state was set, 0 otherwise
+ */
+s32 checkStarHitCollisionWithVulnerablePlayers(Vec3i *pos, s32 excludePlayerIdx, s32 extraRadius) {
+    Vec3i deltaPos;
     s32 combinedRadius;
     Allocation5AA90 *allocation;
     ListNode_5AA90 *node;
     Player *playerData;
     void *dataArray;
     s32 result;
-    Vec3i *posPtr;
+    Vec3i *deltaPosPtr;
 
     allocation = getCurrentAllocation();
     node = allocation->list;
     result = 0;
     if (node != NULL) {
-        posPtr = &pos;
+        deltaPosPtr = &deltaPos;
         do {
             u8 id = node->id;
-            if (arg1 == id) {
+            if (excludePlayerIdx == id) {
                 ;
             } else {
                 dataArray = allocation->dataArray;
@@ -849,30 +858,32 @@ s32 func_8005C250_5CE50(Vec3i *arg0, s32 arg1, s32 arg2) {
                 } else if (playerData->invincibilityTimer != 0) {
                     ;
                 } else {
-                    memcpy(posPtr, &node->localPos, 0xC);
+                    memcpy(deltaPosPtr, &node->localPos, 0xC);
 
-                    pos.x += node->posPtr->x;
-                    pos.y += node->posPtr->y;
-                    pos.z += node->posPtr->z;
+                    deltaPos.x += node->posPtr->x;
+                    deltaPos.y += node->posPtr->y;
+                    deltaPos.z += node->posPtr->z;
 
-                    pos.x -= arg0->x;
-                    pos.y -= arg0->y;
-                    pos.z -= arg0->z;
+                    deltaPos.x -= pos->x;
+                    deltaPos.y -= pos->y;
+                    deltaPos.z -= pos->z;
 
-                    combinedRadius = node->radius + arg2;
+                    combinedRadius = node->radius + extraRadius;
 
-                    if (-combinedRadius < pos.x && pos.x < combinedRadius && -combinedRadius < pos.y &&
-                        pos.y < combinedRadius && -combinedRadius < pos.z && pos.z < combinedRadius) {
+                    if (-combinedRadius < deltaPos.x && deltaPos.x < combinedRadius && -combinedRadius < deltaPos.y &&
+                        deltaPos.y < combinedRadius && -combinedRadius < deltaPos.z && deltaPos.z < combinedRadius) {
                         s32 dist;
 
-                        dist = isqrt64((s64)pos.x * pos.x + (s64)pos.y * pos.y + (s64)pos.z * pos.z);
+                        dist = isqrt64(
+                            (s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z
+                        );
 
                         if (dist < combinedRadius) {
                             u8 index = node->id;
                             result = 1;
                             setPlayerStarHitState(
                                 (Player *)((u8 *)allocation->dataArray + ((index * 3 * 128) - (index * 3)) * 8),
-                                posPtr
+                                deltaPosPtr
                             );
                         }
                     }

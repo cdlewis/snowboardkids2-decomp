@@ -685,7 +685,7 @@ void updateStarlightFireworkSimple(StarlightFireworkTaskState *arg0) {
         }
 
         posPtr = &arg0->pos;
-        if (func_8005C250_5CE50(posPtr, -1, 0x300000) != 0) {
+        if (checkStarHitCollisionWithVulnerablePlayers(posPtr, -1, 0x300000) != 0) {
             spawnSparkleEffect(posPtr);
             func_80069CF8_6A8F8();
         }
@@ -754,7 +754,7 @@ void updateStarlightFireworkComplex(StarlightFireworkTaskState *firework) {
                     break;
             }
         }
-        func_8005C250_5CE50(&firework->pos, -1, 0x300000);
+        checkStarHitCollisionWithVulnerablePlayers(&firework->pos, -1, 0x300000);
         firework->rotX += gStarlightFireworkRotXSpeeds[firework->type];
         firework->rotY += gStarlightFireworkRotYSpeeds[firework->type];
     }
@@ -784,7 +784,7 @@ void updateStarlightFirework(StarlightFireworkTaskState *arg0) {
             func_80069CF8_6A8F8();
         } else {
             posPtr = &arg0->pos;
-            if (func_8005C250_5CE50(posPtr, -1, 0x300000)) {
+            if (checkStarHitCollisionWithVulnerablePlayers(posPtr, -1, 0x300000)) {
                 spawnSparkleEffect(posPtr);
                 func_80069CF8_6A8F8();
             }

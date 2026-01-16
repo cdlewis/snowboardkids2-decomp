@@ -713,7 +713,7 @@ void updateSparkleEffect(SparkleEffectState *arg0) {
     temp = arg0->scale;
     scaleMatrix((Transform3D *)arg0, temp, temp, temp);
 
-    func_8005C250_5CE50((Vec3i *)&arg0->position, arg0->playerIndex, arg0->scale * 0xF0);
+    checkStarHitCollisionWithVulnerablePlayers((Vec3i *)&arg0->position, arg0->playerIndex, arg0->scale * 0xF0);
 
     arg0->alpha = (u8)arg0->opacity;
 

@@ -1513,7 +1513,7 @@ s32 spawnAttackProjectile(s32 projectileType, s32 playerIdx, s32 arg2) {
 
 void checkInvincibleStarProjectileCollision(Struct_52880 *projectile) {
     getCurrentAllocation();
-    if (func_8005C250_5CE50(&projectile->pos, projectile->ownerPlayerIdx, 0xC0000)) {
+    if (checkStarHitCollisionWithVulnerablePlayers(&projectile->pos, projectile->ownerPlayerIdx, 0xC0000)) {
         projectile->hitCount++;
     }
 }
