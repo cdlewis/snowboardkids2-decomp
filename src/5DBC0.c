@@ -64,7 +64,7 @@ void loadCharacterBodyParts(Player *player) {
     u8 *partPtr2;
     u8 *lookupTable;
 
-    if (((GameState *)getCurrentAllocation())->unk7A == 0xB) {
+    if (((GameState *)getCurrentAllocation())->raceType == 0xB) {
         flags = player->unkB84;
         if (flags & 4) {
             player->unkB84 = flags | 8;

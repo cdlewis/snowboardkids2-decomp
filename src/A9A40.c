@@ -213,7 +213,7 @@ s8 func_800BA694_AA544(Player *player) {
         return 0;
     }
 
-    if (gs->unk7A != 9) {
+    if (gs->raceType != 9) {
         if (player->unkBE5 == 0 && (player->unkBDE & 8)) {
             if ((randA() & 0xFF) < D_800BADD0_AAC80[gs->memoryPoolId]) {
                 player->unkBE5 = 1;

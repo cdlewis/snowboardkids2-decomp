@@ -53,7 +53,7 @@ typedef struct {
     u8 memoryPoolId;
     u8 numPlayers;
     u8 padding2[0x7A - 0x5E];
-    u8 unk7A;
+    u8 raceType;
 } GameState_temp;
 
 typedef struct {
@@ -649,7 +649,7 @@ void initRaceViewports(void) {
         setViewportId(&gs->unk8[i], (u16)(i + 0x64));
         setViewportId(&gs->unkC[i], (u16)(i + 0x64));
 
-        if (gs->unk7A == 0xB) {
+        if (gs->raceType == 0xB) {
             setViewportLightColors(i + 0x64, 1, &D_80090774_91374, &D_8009077C_9137C);
         } else {
             setViewportLightColors(i + 0x64, 1, &levelConfig->lightColors, &levelConfig->fogColors);
@@ -827,11 +827,11 @@ void scheduleRaceTasks(void) {
     scheduleCourseTasks(gameState->memoryPoolId, gameState->unk5F);
     func_8005011C_50D1C();
 
-    if (gameState->unk7A == 9) {
+    if (gameState->raceType == 9) {
         scheduleTask(&initStarlightHighwayBuildingTask, 0, 0, 0xC8);
     }
 
-    if (gameState->unk7A >= 0xA) {
+    if (gameState->raceType >= 0xA) {
         spawnPushStartPrompt(0, 0x28, 0, 0, 0xC, 6);
     }
 
@@ -844,11 +844,11 @@ void awaitRaceAssetsLoaded(void) {
     state = getCurrentAllocation();
 
     if (getPendingDmaCount() == 0) {
-        if (state->unk7A < 9) {
+        if (state->raceType < 9) {
             gControllerPollingEnabled = 0;
         }
 
-        if ((state->unk5F == 1) && (state->unk7A < 10)) {
+        if ((state->unk5F == 1) && (state->raceType < 10)) {
             spawnOrbitCameraTask();
             state->raceIntroState = 2;
             playMusicTrack(7);
@@ -858,7 +858,7 @@ void awaitRaceAssetsLoaded(void) {
 
         state->unk4C = 0x10;
 
-        if (state->unk7A != 0xB) {
+        if (state->raceType != 0xB) {
             setViewportFadeValue(0, 0, 0x10);
         } else {
             state->unk4C = 0;
@@ -880,14 +880,14 @@ void waitForFadeAndInitPlayers(void) {
         if (state->raceIntroState == 1) {
             state->raceIntroState = 0;
 
-            if (state->unk7A < 0xA) {
+            if (state->raceType < 0xA) {
                 for (i = 0; i < state->unk5F; i++) {
                     schedulePlayerHaloTask(&state->players[i]);
                     state->raceIntroState++;
                 }
             }
 
-            if (state->unk7A == 0xB) {
+            if (state->raceType == 0xB) {
                 state->raceIntroState = 1;
             }
 
@@ -901,10 +901,10 @@ void waitForFadeAndInitPlayers(void) {
 void awaitPlayersAndPlayRaceMusic(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    if ((state->raceIntroState == 0) || (state->unk7A == 0xB)) {
+    if ((state->raceIntroState == 0) || (state->raceType == 0xB)) {
         LevelConfig *levelConfig = getLevelConfig(state->memoryPoolId);
 
-        if (state->unk7A == 0xB) {
+        if (state->raceType == 0xB) {
             playMusicTrack(0x20);
         } else {
             playMusicTrack(levelConfig->musicTrack);
@@ -944,9 +944,9 @@ void func_8003F368_3FF68(void) {
 
     gs = (GameState *)getCurrentAllocation();
 
-    if (gs->unk7A == 0xA)
+    if (gs->raceType == 0xA)
         goto handleA;
-    if (gs->unk7A == 0xB)
+    if (gs->raceType == 0xB)
         goto handleB;
 
     inputMask = 0;
@@ -1031,7 +1031,7 @@ void func_8003F368_3FF68(void) {
         }
     } else {
         gs->unk50++;
-        switch (gs->unk7A) {
+        switch (gs->raceType) {
             case 0:
                 count = 0;
                 for (i = 0; i < gs->unk5F; i++) {

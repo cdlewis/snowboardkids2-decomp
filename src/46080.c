@@ -2796,7 +2796,7 @@ void scheduleLevelEnvironmentTasks(s32 poolId) {
 
 void schedulePlayerSparkleTask(void) {
     GameState *allocation = (GameState *)getCurrentAllocation();
-    if (allocation->unk7A == 0) {
+    if (allocation->raceType == 0) {
         scheduleTask(&initPlayerSparkleTask, 0, 0, 0xD3);
     }
 }
@@ -2864,7 +2864,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(i);
             }
-            if (gs->unk7A != 0xB) {
+            if (gs->raceType != 0xB) {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
                 spawnJingleTownTrains();
@@ -2881,7 +2881,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 schedulePlayerRenderTask(i);
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
-            if (gs->unk7A == 8) {
+            if (gs->raceType == 8) {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
@@ -2936,7 +2936,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
         case CRAZY_JUNGLE_BOSS:
             spawnPushZone(2);
             spawnPushZone(3);
-            if (gs->unk7A != 8) {
+            if (gs->raceType != 8) {
                 spawnItemTriggerTask(0);
             } else {
                 scheduleGoldCoinsIfEnabled(courseId);
@@ -3003,7 +3003,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(i);
             }
-            if (gs->unk7A == 8) {
+            if (gs->raceType == 8) {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
@@ -3020,7 +3020,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(i);
             }
-            if (gs->unk7A == 8) {
+            if (gs->raceType == 8) {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
@@ -3036,7 +3036,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(i);
             }
-            if (gs->unk7A == 8) {
+            if (gs->raceType == 8) {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
             } else {
@@ -3052,7 +3052,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(i);
             }
-            if (gs->unk7A == 8) {
+            if (gs->raceType == 8) {
                 scheduleGoldCoinsIfEnabled(courseId);
                 scheduleItemBoxSystemTaskIfEnabled(courseId);
             }

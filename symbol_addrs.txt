@@ -1417,11 +1417,12 @@ loadAssetByIndex_95380 = 0x8005DA84;
 loadAssetByIndex_953B0 = 0x8005DAAC;
 loadAssetByIndex_953E0 = 0x8005DA20;
 loadAssetByIndex_95590 = 0x8005DB80;
-loadAssetByIndex_95770 = 0x8005DD20;
+getBossHudAssetSize = 0x8005DD20; // rom:0x5E820
 loadAssetByIndex_95470 = 0x8005DB00;
 loadAssetByIndex_95500 = 0x8005DB48;
 loadAssetByIndex_95668 = 0x8005DBD0;
 loadAssetByIndex_95728 = 0x8005DC48;
+loadBossHudAssetByRaceType = 0x8005DC60; // rom:0x5E860
 
 initBoneAnimationState = 0x8005DE98; // rom:0x5EA98
 updateBoneAnimation = 0x8005E22C; // rom:0x5EE2C
@@ -1541,7 +1542,7 @@ D_80094870_95470 = 0x80094870; // type:s32 size:0x90
 D_80094900_95500 = 0x80094900; // type:s32 size:0x90
 D_80094990_95590 = 0x80094990; // type:s32 size:0x90
 D_80094A68_95668 = 0x80094A68; // type:s32 size:0xC0
-D_80094B70_95770 = 0x80094B70; // type:s32 size:0xC0
+gBossHudAssetTable = 0x80094B70; // rom:0x95770 type:CompressedAssetMeta size:0xC0
 D_80094C30_95830 = 0x80094C30; // type:s32 size:0x90
 
 initializeGameEntity = 0x80001A6C;

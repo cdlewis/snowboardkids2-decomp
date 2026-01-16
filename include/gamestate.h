@@ -263,7 +263,7 @@ typedef struct {
     u8 pauseMenuSelection;
     s8 trainingPanelState;
     u8 raceIntroState;
-    u8 unk7A;
+    u8 raceType;
     s8 unk7B;
     s8 unk7C;
     u8 unk7D;

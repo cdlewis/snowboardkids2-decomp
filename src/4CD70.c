@@ -51,7 +51,7 @@ typedef struct {
     u8 padding2[0x4B];
     u8 unk5F;
     u8 padding3[0x1A];
-    u8 unk7A;
+    u8 raceType;
 } func_8005011C_50D1C_alloc;
 
 typedef struct {
@@ -1115,7 +1115,7 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
     arg0->spriteIndex = 0x14;
     arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6BB0_ROM_START, 0x508);
 
-    switch (gameState->unk7A) {
+    switch (gameState->raceType) {
         case 5:
             shotCrossScore = gameState->unk5A;
             arg0->x = 0x10;
@@ -1179,7 +1179,7 @@ void updateGoldAwardDisplay(GoldAwardDisplayState *arg0) {
         alphaVal = arg0->alpha = alphaVal + 0x10;
         if (alphaVal >= 0x100) {
             arg0->alpha = 0xFF;
-            gameMode = gameState->unk7A;
+            gameMode = gameState->raceType;
             if (gameMode < 7) {
                 if (gameMode < 5) {
                     scheduleTask(initTotalGoldDisplayTask, 1, 0, 0xE6);
@@ -1248,7 +1248,7 @@ void initTotalGoldDisplayTask(TotalGoldDisplayState *arg0) {
     arg0->spriteIndex = 0x15;
     arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
 
-    switch (allocation->unk7A) {
+    switch (allocation->raceType) {
         case 5:
             arg0->x = 0x10;
             arg0->y = 8;
@@ -1898,7 +1898,7 @@ void cleanupShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);
 void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
-    if (allocation->unk7A == 6) {
+    if (allocation->raceType == 6) {
         arg0->timeRemaining = 0xA8C;
     } else {
         arg0->timeRemaining = 0x1194;
@@ -2024,7 +2024,7 @@ void initBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
     initHudElementState((HudElementState *)arg0);
     arg0->spriteFrame = 0x24;
     arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
-    if (allocation->unk7A == 4) {
+    if (allocation->raceType == 4) {
         arg0->x = 0xC;
         arg0->y = -0x3C;
     } else {
@@ -2063,9 +2063,9 @@ void updateBonusGoldDisplay(BonusGoldDisplayState *arg0) {
     debugEnqueueCallback(8, 6, func_80012518_13118, arg0);
 
     var = 0;
-    if (allocation->unk7A == 4) {
+    if (allocation->raceType == 4) {
         var = 0x1388;
-    } else if (allocation->unk7A == 6) {
+    } else if (allocation->raceType == 6) {
         if (allocation->players->skillPoints >= 0x12C) {
             var = 0x1388;
         }
@@ -2461,7 +2461,7 @@ void initCrossRaceBadgeTask(CrossRaceBadgeState *arg0) {
 
     // unk7A contains the race type:
     // 4 = SPEED_CROSS, 5 = SHOT_CROSS, 6 = X_CROSS
-    switch (allocation->unk7A) {
+    switch (allocation->raceType) {
         case 4: // SPEED_CROSS
             arg0->mainSpriteAsset = loadAsset_350140();
             arg0->mainSpriteFrame = 0;
@@ -2540,7 +2540,7 @@ void func_8005011C_50D1C(void) {
 
     i = 0;
     do {
-        switch (allocation->unk7A) {
+        switch (allocation->raceType) {
             case 0:
             case 8:
             case 9:

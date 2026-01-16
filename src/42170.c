@@ -2306,7 +2306,7 @@ void processItemTriggers(ItemTriggerTaskState *arg0) {
                         itemId = entryForItem->itemId;
                         player->unkBD3 = three;
                         player->unkBD2 = (u8)itemId;
-                        if (gameState->unk7A == three) {
+                        if (gameState->raceType == three) {
                             player->unkBD3 = nine;
                         }
                         itemFlags = player->unkBD8 | 1;

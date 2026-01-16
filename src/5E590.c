@@ -1,5 +1,6 @@
 #include "20F0.h"
 #include "common.h"
+#include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
@@ -713,7 +714,7 @@ AssetMeta *D_80094B28_95728[] = {
     &D_8009A550_9B150[30], &D_8009A550_9B150[32], &D_8009A550_9B150[34],
 };
 
-CompressedAssetMeta D_80094B70_95770[] = {
+CompressedAssetMeta gBossHudAssetTable[] = {
     { &_406F00_ROM_START, &_406F00_ROM_END, 0x3D0 },
     { &_407160_ROM_START, &_407160_ROM_END, 0x5D0 },
     { &_407490_ROM_START, &_407490_ROM_END, 0x6E0 },
@@ -2320,44 +2321,40 @@ void *loadAssetByIndex_95728(s16 index) {
     return D_80094B28_95728[index];
 }
 
-void *func_8005DC60_5E860(s32 index) {
-    void *start;
-    void *end;
-    s32 uncompressedSize;
-    u8 val = ((GameState *)getCurrentAllocation())->unk7A;
+void *loadBossHudAssetByRaceType(s32 index) {
+    GameState *state = (GameState *)getCurrentAllocation();
 
-    if (val == 1) {
+    if (state->raceType == RACE_TYPE_BOSS_JUNGLE) {
         return loadCompressedData(&_40A450_ROM_START, &_40A450_ROM_END, 0x250);
-    } else if (val == 2) {
+    } else if (state->raceType == RACE_TYPE_BOSS_JINGLE) {
         return loadCompressedData(&_40A590_ROM_START, &_40A590_ROM_END, 0x260);
-    } else if (val == 3) {
+    } else if (state->raceType == RACE_TYPE_BOSS_ICE) {
         return loadCompressedData(&_40A760_ROM_START, &_40A760_ROM_END, 0x270);
     } else {
         return loadCompressedData(
-            D_80094B70_95770[index].start,
-            D_80094B70_95770[index].end,
-            D_80094B70_95770[index].uncompressedSize
+            gBossHudAssetTable[index].start,
+            gBossHudAssetTable[index].end,
+            gBossHudAssetTable[index].uncompressedSize
         );
     }
 }
 
-s32 loadAssetByIndex_95770(s32 index) {
+s32 getBossHudAssetSize(s32 index) {
     GameState *state = (GameState *)getCurrentAllocation();
-    u8 val = state->unk7A;
 
-    if (val == 1) {
+    if (state->raceType == RACE_TYPE_BOSS_JUNGLE) {
         return 0x250;
     }
 
-    if (val == 2) {
+    if (state->raceType == RACE_TYPE_BOSS_JINGLE) {
         return 0x260;
     }
 
-    if (val == 3) {
+    if (state->raceType == RACE_TYPE_BOSS_ICE) {
         return 0x270;
     }
 
-    return D_80094B70_95770[index].uncompressedSize;
+    return gBossHudAssetTable[index].uncompressedSize;
 }
 
 void *loadAssetByIndex_5E990(s32 index) {

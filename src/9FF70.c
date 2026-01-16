@@ -192,7 +192,7 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
         return 1;
     }
 
-    if (gameState->unk7A < 10) {
+    if (gameState->raceType < 10) {
         if (arg0->behaviorStep == 0) {
             if (arg0->unkB7E & 0x4000) {
                 arg0->unkB8C = 0;
@@ -869,7 +869,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
         goto skip_to_end;
     }
 
-    gameMode = state->unk7A;
+    gameMode = state->raceType;
     if (gameMode != 0 && gameMode != 8) {
         if (!(gameMode == 9 || gameMode == 10)) {
             player->trickScore = 0;
@@ -905,7 +905,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
         }
     }
 
-    if (state->unk7A == 6) {
+    if (state->raceType == 6) {
         if (player->trickPoints != 0) {
             showTrickPointsDisplay(player->trickPoints);
             addPlayerSkillPoints(player, player->trickPoints);
@@ -1417,7 +1417,7 @@ typedef struct {
     u8 unk59;
     u8 unk5A;
     u8 pad3[0x1F];
-    u8 unk7A;
+    u8 raceType;
     u8 unk7B;
     u8 unk7C;
     u8 unk7D;
@@ -1435,7 +1435,7 @@ s32 updateRaceFinishWaitingStep(Player *player) {
     applyClampedVelocityToPosition(player);
     func_8005D180_5DD80(player, 0);
     if (gameState->unk7B != 0) {
-        switch (gameState->unk7A) {
+        switch (gameState->raceType) {
             case 0:
             case 1:
             case 8:
@@ -3588,7 +3588,7 @@ void func_800B99E0(void *varg0) {
     arg0->unk18 = load_3ECE40();
 
     if (arg0->isBossRacer != 0) {
-        arg0->unk1C = func_8005DC60_5E860(alloc->unk5C);
+        arg0->unk1C = loadBossHudAssetByRaceType(alloc->unk5C);
     }
 
     if (arg0->unkBE3 != 0) {
