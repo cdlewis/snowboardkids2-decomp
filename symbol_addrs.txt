@@ -1671,6 +1671,7 @@ func_800B0930 = 0x800B0930; // type:func rom:0x1DCAD0
 getCutsceneFrameCount = 0x800B3360; // type:func rom:0x1E0410
 initScreenTransition = 0x800B9020; // type:func rom:0x1E60D0
 loadTransitionAsset = 0x800B9074; // type:func rom:0x1E6124
+freeTransitionData = 0x800B90B0; // type:func rom:0x1E6160
 getCutsceneInitModelIndex = 0x800B3490; // type:func rom:0x1DFAA0
 setCutsceneInitModelIndex = 0x800B34A0; // type:func rom:0x1DFAA0
 getCutsceneDefaultEndFrame = 0x800B34D0; // type:func rom:0x1DFAA0
