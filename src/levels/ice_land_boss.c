@@ -71,7 +71,7 @@ typedef struct {
     u8 unkBCC;
     u8 _padBCD[0xBDB - 0xBCD];
     u8 unkBDB;
-} func_800BC4AC_arg;
+} IceLandBossAttackArg;
 
 typedef struct {
     void *unk0;
@@ -290,7 +290,7 @@ extern s16 D_800BC9F0_B1EE0[];
 extern s16 D_800BCA24_B1F14[];
 extern s16 D_800BCA30_B1F20[];
 extern FuncPtr D_800BCA44_B1F34[];
-extern FuncPtr D_800BCA5C_B1F4C[];
+extern FuncPtr gIceLandBossAttackPhaseHandlers[];
 extern u16 D_8009ADE0_9B9E0;
 extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
 extern s32 identityMatrix[];
@@ -473,7 +473,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     return 1;
 }
 
-void dispatchIceLandBossChasePhase(func_800BC4AC_arg *arg0) {
+void dispatchIceLandBossChasePhase(IceLandBossAttackArg *arg0) {
     D_800BCA44_B1F34[arg0->behaviorPhase](arg0);
 }
 
@@ -492,7 +492,7 @@ void setIceBossFlyingMode(Player *arg0) {
     arg0->unkB84 = arg0->unkB84 | 0x400000;
 }
 
-s32 iceLandBossChaseIntroPhase(func_800BC4AC_arg *arg0) {
+s32 iceLandBossChaseIntroPhase(IceLandBossAttackArg *arg0) {
     s32 pad[3];
     GameState *gameState = getCurrentAllocation();
 
@@ -731,7 +731,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     return 0;
 }
 
-s32 iceLandBossChaseExitPhase(func_800BC4AC_arg *arg0) {
+s32 iceLandBossChaseExitPhase(IceLandBossAttackArg *arg0) {
     s32 pad[3];
 
     getCurrentAllocation();
@@ -750,8 +750,8 @@ s32 iceLandBossChaseExitPhase(func_800BC4AC_arg *arg0) {
     return 0;
 }
 
-void func_800BC0A8_B1598(func_800BC4AC_arg *arg0) {
-    D_800BCA5C_B1F4C[arg0->behaviorPhase](arg0);
+void dispatchIceLandBossAttackPhase(IceLandBossAttackArg *arg0) {
+    gIceLandBossAttackPhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
 s32 func_800BC0D8_B15C8(Player *arg0) {
@@ -909,7 +909,7 @@ s32 func_800BC3B8_B18A8(Player *arg0) {
     return 0;
 }
 
-s32 func_800BC4AC_B199C(func_800BC4AC_arg *arg0) {
+s32 func_800BC4AC_B199C(IceLandBossAttackArg *arg0) {
     s32 pad[3];
 
     getCurrentAllocation();
@@ -929,7 +929,7 @@ s32 func_800BC4AC_B199C(func_800BC4AC_arg *arg0) {
     return 0;
 }
 
-void func_800BC520_B1A10(func_800BC4AC_arg *arg0) {
+void func_800BC520_B1A10(IceLandBossAttackArg *arg0) {
     s32 pad[8];
     Vec3i sp38;
     s32 pad2[8];
@@ -1013,9 +1013,9 @@ void func_800BC89C_B1D8C(Player *boss) {
         if (boss->unkB84 & isFlying) {
             // Flying mode: use flying joint offsets
             *(volatile s32 *)(jointWritePtr + 0xA10) =
-                boss->unk970.translation.x + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x18 + jointOffset);
+                boss->unk970.translation.x + *(s32 *)((u8 *)dispatchIceLandBossAttackPhase + 0x18 + jointOffset);
             *(volatile s32 *)(jointWritePtr + 0xA18) =
-                boss->unk970.translation.z + *(s32 *)((u8 *)func_800BC0A8_B1598 + 0x20 + jointOffset);
+                boss->unk970.translation.z + *(s32 *)((u8 *)dispatchIceLandBossAttackPhase + 0x20 + jointOffset);
         } else {
             // Ground mode: use ground joint offsets
             *(volatile s32 *)(jointWritePtr + 0xA10) =
