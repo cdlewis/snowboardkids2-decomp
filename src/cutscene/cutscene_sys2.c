@@ -53,11 +53,11 @@ void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, CutsceneManager *ar
 
     temp_v0 = (cutsceneSys2Wait_exec_asset *)scheduleTask(&func_800B993C_1E69EC, 1, 0, 0x64);
     if (temp_v0) {
-        temp_v0->unk0 = arg1;
-        temp_v0->unk4 = ptr[0x48 / 4];
+        temp_v0->cutsceneManager = arg1;
+        temp_v0->model = ptr[0x48 / 4];
         temp_v0->basePosX = arg0->unk2;
         temp_v0->basePosY = arg0->unk4;
-        temp_v0->unk86 = arg0->unk0;
+        temp_v0->tableRowIndex = arg0->unk0;
     } else {
         arg1->skipAnimation = FALSE;
     }

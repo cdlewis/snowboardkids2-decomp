@@ -8,7 +8,7 @@ extern s32 gButtonsPressed;
 extern s32 gControllerInputs;
 
 s16 getSlotMoveDuration(cutsceneSys2Wait_exec_asset *arg0) {
-    return arg0->unk86;
+    return arg0->tableRowIndex;
 }
 
 s16 calcAngleDiff(CutsceneSlotData *unused, s16 direction, s16 targetAngle, s16 currentAngle) {

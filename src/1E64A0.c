@@ -106,93 +106,93 @@ s32 decelerateWipeZoomOut(cutsceneSys2Wait_exec_asset *arg0) {
     return result;
 }
 
-void *func_800B9774_1E6824(cutsceneSys2Wait_exec_asset *arg0) {
+void *getCutsceneCommandEntry(cutsceneSys2Wait_exec_asset *ctx) {
     void *tableEntry;
 
-    tableEntry = getTable2DEntry(arg0->unkC, arg0->unk86, arg0->unk88);
+    tableEntry = getTable2DEntry(ctx->commandTable, ctx->tableRowIndex, ctx->tableColumnIndex);
 
     if (tableEntry == NULL) {
-        arg0->unk84 = 6;
+        ctx->state = 6;
     }
 
-    arg0->unk90 = tableEntry;
-    arg0->unk84 = 5;
+    ctx->currentCommandEntry = tableEntry;
+    ctx->state = 5;
 
     return tableEntry;
 }
 
 extern s32 gControllerInputs;
 
-void *func_800B97C8_1E6878(cutsceneSys2Wait_exec_asset *arg0) {
-    void *var_s1;
-    u8 temp_a0;
-    u16 temp_v1_2;
-    u16 *temp_a3;
+void *processCutsceneCommandSequence(cutsceneSys2Wait_exec_asset *ctx) {
+    void *commandEntry;
+    u8 commandOffset;
+    u16 commandCode;
+    u16 *commandPtr;
 
-    var_s1 = getTable2DEntry(arg0->unkC, arg0->unk86, arg0->unk88);
-    temp_a0 = arg0->unk9D;
-    arg0->unk90 = var_s1;
+    commandEntry = getTable2DEntry(ctx->commandTable, ctx->tableRowIndex, ctx->tableColumnIndex);
+    commandOffset = ctx->commandOffset;
+    ctx->currentCommandEntry = commandEntry;
 
-    if ((temp_a0 & 0xFF) != 0x64) {
-        temp_a3 = (u16 *)((temp_a0 & 0xFF) * 2 + (s32)var_s1);
-        temp_v1_2 = *temp_a3;
+    if (commandOffset != 0x64) {
+        commandPtr = (u16 *)(commandOffset * 2 + (s32)commandEntry);
+        commandCode = *commandPtr;
 
-        if (temp_v1_2 != 0xFFFF) {
-            switch (temp_v1_2) {
+        if (commandCode != 0xFFFF) {
+            switch (commandCode) {
                 case 0xFFF1:
                 case 0xFFFD:
-                    arg0->unk9D = arg0->unk9D + 1;
+                    ctx->commandOffset = ctx->commandOffset + 1;
                     break;
                 case 0xFFF0:
                     setModelAnimationLooped(
-                        (SceneModel *)arg0->unk4,
-                        *(s16 *)((u8 *)temp_a3 + 2),
-                        *(s16 *)((u8 *)temp_a3 + 6),
-                        *(s8 *)((u8 *)temp_a3 + 5)
+                        (SceneModel *)ctx->model,
+                        *(s16 *)((u8 *)commandPtr + 2),
+                        *(s16 *)((u8 *)commandPtr + 6),
+                        *(s8 *)((u8 *)commandPtr + 5)
                     );
-                    arg0->unk9D = arg0->unk9D + 4;
+                    ctx->commandOffset = ctx->commandOffset + 4;
                     break;
                 case 0xFFFC:
-                    arg0->unk9D = temp_a0 + 2;
+                    ctx->commandOffset = commandOffset + 2;
                     break;
             }
-            arg0->unk9D = arg0->unk9D + 1;
+            ctx->commandOffset = ctx->commandOffset + 1;
         } else {
-            arg0->unk9D = 0x64;
+            ctx->commandOffset = 0x64;
         }
     }
 
-    if (*(s8 *)((u8 *)arg0->unk0 + 0xFF7) != 0) {
+    if (*(s8 *)((u8 *)ctx->cutsceneManager + 0xFF7) != 0) {
         if (gControllerInputs & A_BUTTON) {
-            if (arg0->unk9D != 0x64) {
-                arg0->unk9D = 0x64;
+            if (ctx->commandOffset != 0x64) {
+                ctx->commandOffset = 0x64;
             } else {
-                s16 temp_v0 = arg0->unk88 + 1;
-                arg0->unk88 = temp_v0;
-                var_s1 = getTable2DEntry(arg0->unkC, arg0->unk86, temp_v0);
-                if (var_s1 == NULL) {
-                    *(s8 *)((u8 *)arg0->unk0 + 0xFF7) = 0;
-                    arg0->unk84 = 6;
+                s16 nextColumn = ctx->tableColumnIndex + 1;
+                ctx->tableColumnIndex = nextColumn;
+                commandEntry = getTable2DEntry(ctx->commandTable, ctx->tableRowIndex, nextColumn);
+                if (commandEntry == NULL) {
+                    *(s8 *)((u8 *)ctx->cutsceneManager + 0xFF7) = 0;
+                    ctx->state = 6;
                 } else {
                     playSoundEffect(0x2B);
-                    arg0->unk9D = 0;
-                    arg0->unk84 = 4;
+                    ctx->commandOffset = 0;
+                    ctx->state = 4;
                 }
             }
         }
     } else {
-        arg0->unk84 = 6;
+        ctx->state = 6;
     }
 
-    return var_s1;
+    return commandEntry;
 }
 
 void func_800B993C_1E69EC(cutsceneSys2Wait_exec_asset *arg0) {
-    arg0->unk84 = 0;
-    arg0->unk88 = 0;
-    arg0->unk8 = loadSpriteAssetData(0);
+    arg0->state = 0;
+    arg0->tableColumnIndex = 0;
+    arg0->sprites = loadSpriteAssetData(0);
     arg0->unkA0 = loadTextRenderAsset(1);
-    arg0->unkC = loadDmaAsset(0);
+    arg0->commandTable = loadDmaAsset(0);
     setCleanupCallback(&func_800B9C20_1E6CD0);
     setCallback(&func_800B99A0_1E6A50);
 }
@@ -201,6 +201,6 @@ INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B99A0_1E6A50);
 
 void func_800B9C20_1E6CD0(cutsceneSys2Wait_exec_asset *arg0) {
     arg0->unkA0 = freeNodeMemory(arg0->unkA0);
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
+    arg0->sprites = freeNodeMemory(arg0->sprites);
+    arg0->commandTable = freeNodeMemory(arg0->commandTable);
 }

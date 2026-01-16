@@ -54,10 +54,10 @@ typedef struct {
 } cutsceneSys2WaitSlot;
 
 typedef struct {
-    void *unk0;
-    s32 unk4;
-    void *unk8;
-    void *unkC;
+    void *cutsceneManager;
+    s32 model;
+    void *sprites;
+    void *commandTable;
     u16 basePosX;
     u16 basePosY;
     cutsceneSys2WaitSlot slots[4];
@@ -65,18 +65,18 @@ typedef struct {
     s32 zoomLevelY;
     s32 zoomDecelRate;
     s32 zoomSpeed;
-    s16 unk84;
-    s16 unk86;
-    s16 unk88;
+    s16 state;
+    s16 tableRowIndex;
+    s16 tableColumnIndex;
     s16 unk8A;
     s16 unk8C;
     s16 unk8E;
-    void *unk90;
+    void *currentCommandEntry;
     void *unk94;
     s16 unk98;
     s16 unk9A;
     u8 unk9C;
-    u8 unk9D;
+    u8 commandOffset;
     u8 padding3[0x2];
     void *unkA0;
     s16 unkA4;
