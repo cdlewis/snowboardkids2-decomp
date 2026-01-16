@@ -61,26 +61,26 @@ typedef struct {
 } StarEffectState;
 
 typedef struct {
-    u8 _pad0[0x1F0];   /* 0x00 */
-    s32 pos1F0;        /* 0x1F0 */
-    s32 pos1F4;        /* 0x1F4 */
-    s32 pos1F8;        /* 0x1F8 */
-    u8 _pad1FC[0x98C]; /* 0x1FC */
-    s32 unkB88;        /* 0xB88 */
+    /* 0x00  */ u8 _pad0[0x1F0];
+    /* 0x1F0 */ s32 pos1F0;
+    /* 0x1F4 */ s32 pos1F4;
+    /* 0x1F8 */ s32 pos1F8;
+    /* 0x1FC */ u8 _pad1FC[0x98C];
+    /* 0xB88 */ s32 unkB88;
 } FallingEffectPlayer;
 
 typedef struct {
-    s16 matrix[3][3];            /* 0x00 (0x12 bytes: 9 * 2), offset 0x0E is matrix[2][1] */
-    u8 pad12[0x2];               /* 0x12 */
-    Vec3i position;              /* 0x14 */
-    void *displayData;           /* 0x20 */
-    void *asset1;                /* 0x24 */
-    void *asset2;                /* 0x28 */
-    s32 unk2C;                   /* 0x2C */
-    u8 pad30[0xC];               /* 0x30 */
-    FallingEffectPlayer *player; /* 0x3C */
-    s32 height;                  /* 0x40 */
-    s32 playSound;               /* 0x44 */
+    /* 0x00 */ s16 matrix[3][3];
+    /* 0x12 */ u8 pad12[0x2];
+    /* 0x14 */ Vec3i position;
+    /* 0x20 */ void *displayData;
+    /* 0x24 */ void *asset1;
+    /* 0x28 */ void *asset2;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 pad30[0xC];
+    /* 0x3C */ FallingEffectPlayer *player;
+    /* 0x40 */ s32 height;
+    /* 0x44 */ s32 playSound;
 } FallingEffectState;
 
 typedef struct {
@@ -128,6 +128,11 @@ struct Func42D54Arg {
     u8 unk42;
 };
 
+typedef struct {
+    u8 padding[0x76];
+    u8 unk76;
+} updateBurstParticles_alloc;
+
 void cleanupShieldEffect(ShieldEffectState *);
 void renderShieldLayer1(ShieldEffectRenderState *);
 void renderShieldLayer2(ShieldEffectRenderState *);
@@ -148,49 +153,49 @@ typedef struct {
 } ExpandStarEffectState;
 
 typedef struct {
-    u8 pad0[0x14];     /* 0x00 */
-    Vec3i position;    /* 0x14 */
-    void *displayData; /* 0x20 */
-    void *asset1;      /* 0x24 */
-    void *asset2;      /* 0x28 */
-    s32 unk2C;         /* 0x2C */
-    u8 pad30[0xC];     /* 0x30 */
-    Player *player;    /* 0x3C */
-    s32 velocityY;     /* 0x40 */
-    s16 rotation;      /* 0x44 */
-    s16 scale;         /* 0x46 */
+    /* 0x00 */ u8 pad0[0x14];
+    /* 0x14 */ Vec3i position;
+    /* 0x20 */ void *displayData;
+    /* 0x24 */ void *asset1;
+    /* 0x28 */ void *asset2;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 pad30[0xC];
+    /* 0x3C */ Player *player;
+    /* 0x40 */ s32 velocityY;
+    /* 0x44 */ s16 rotation;
+    /* 0x46 */ s16 scale;
 } GhostEffectState;
 
 typedef struct {
-    u8 pad0[0x14];            /* 0x00 */
-    Vec3i position;           /* 0x14 */
-    void *displayData;        /* 0x20 */
-    void *asset1;             /* 0x24 */
-    void *asset2;             /* 0x28 */
-    s32 unk2C;                /* 0x2C */
-    u8 pad30[0x0C];           /* 0x30 */
-    Player *player;           /* 0x3C */
-    s16 rotationMatrix[3][3]; /* 0x40 - 3x3 rotation matrix (0x12 bytes) */
-    u8 pad52[2];              /* 0x52 - padding to 0x54 */
-    s32 unk54;                /* 0x54 */
-    s32 unk58;                /* 0x58 */
-    s32 unk5C;                /* 0x5C */
-    s32 playSound;            /* 0x60 */
+    /* 0x00 */ u8 pad0[0x14];
+    /* 0x14 */ Vec3i position;
+    /* 0x20 */ void *displayData;
+    /* 0x24 */ void *asset1;
+    /* 0x28 */ void *asset2;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 pad30[0x0C];
+    /* 0x3C */ Player *player;
+    /* 0x40 */ s16 rotationMatrix[3][3];
+    /* 0x52 */ u8 pad52[2];
+    /* 0x54 */ s32 unk54;
+    /* 0x58 */ s32 unk58;
+    /* 0x5C */ s32 unk5C;
+    /* 0x60 */ s32 playSound;
 } CrashEffectState;
 
 typedef struct {
-    u8 pad0[0x14];     /* 0x00 */
-    Vec3i position;    /* 0x14 */
-    void *displayData; /* 0x20 */
-    void *asset1;      /* 0x24 */
-    void *asset2;      /* 0x28 */
-    s32 unk2C;         /* 0x2C */
-    u8 pad30[0xC];     /* 0x30 */
-    Player *player;    /* 0x3C */
-    s16 unk40;         /* 0x40 */
-    s16 scaleFactor;   /* 0x42 */
-    u16 rotationAngle; /* 0x44 */
-    s16 playSound;     /* 0x46 */
+    /* 0x00 */ u8 pad0[0x14];
+    /* 0x14 */ Vec3i position;
+    /* 0x20 */ void *displayData;
+    /* 0x24 */ void *asset1;
+    /* 0x28 */ void *asset2;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 pad30[0xC];
+    /* 0x3C */ Player *player;
+    /* 0x40 */ s16 unk40;
+    /* 0x42 */ s16 scaleFactor;
+    /* 0x44 */ u16 rotationAngle;
+    /* 0x46 */ s16 playSound;
 } LiftEffectState;
 
 void cleanupFallingEffect(FallingEffectState *);
@@ -207,64 +212,64 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0xB44];
-    u8 storedPos[0xC]; /* 0xB44 - stored player position during abduction */
-    u8 _padB50[0x24];  /* 0xB50 */
-    s16 storedRotY;    /* 0xB74 - stored player Y rotation during abduction */
-    u8 _padB76[0x58];  /* 0xB76 to 0xBCE */
-    u8 flags;          /* 0xBCE - abduction state flags */
+    /* 0xB44 */ u8 storedPos[0xC];
+    /* 0xB50 */ u8 _padB50[0x24];
+    /* 0xB74 */ s16 storedRotY;
+    /* 0xB76 */ u8 _padB76[0x58];
+    /* 0xBCE */ u8 flags;
 } UfoAbductionPlayerState;
 
 typedef struct {
-    u8 _pad0[0x14];                  /* 0x00 */
-    Vec3i unk14;                     /* 0x14 - UFO world position */
-    void *unk20;                     /* 0x20 - main body display lists */
-    void *unk24;                     /* 0x24 - wing segment 1 asset */
-    void *unk28;                     /* 0x28 - wing segment 2 asset */
-    s32 unk2C;                       /* 0x2C */
-    u8 _pad30[0xC];                  /* 0x30 */
-    DisplayListObject leftWing;      /* 0x3C */
-    DisplayListObject rightWing;     /* 0x78 */
-    UfoAbductionPlayerState *target; /* 0xB4 - player being abducted */
-    s32 movementOffset;              /* 0xB8 - movement vector component */
-    s32 fallVelocity;                /* 0xBC - vertical velocity for fade out */
-    s32 flyAwayDistance;             /* 0xC0 - accumulated fly-away distance */
-    s16 phaseTimer;                  /* 0xC4 - countdown timer for phase transitions */
-    s16 yRotation;                   /* 0xC6 - current Y rotation */
-    u16 baseRotation;                /* 0xC8 - base rotation angle */
-    u16 wingOscillationAngle;        /* 0xCA */
+    /* 0x00 */ u8 _pad0[0x14];
+    /* 0x14 */ Vec3i unk14;
+    /* 0x20 */ void *unk20;
+    /* 0x24 */ void *unk24;
+    /* 0x28 */ void *unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 _pad30[0xC];
+    /* 0x3C */ DisplayListObject leftWing;
+    /* 0x78 */ DisplayListObject rightWing;
+    /* 0xB4 */ UfoAbductionPlayerState *target;
+    /* 0xB8 */ s32 movementOffset;
+    /* 0xBC */ s32 fallVelocity;
+    /* 0xC0 */ s32 flyAwayDistance;
+    /* 0xC4 */ s16 phaseTimer;
+    /* 0xC6 */ s16 yRotation;
+    /* 0xC8 */ u16 baseRotation;
+    /* 0xCA */ u16 wingOscillationAngle;
 } UfoEffectState;
 
 typedef struct {
     s32 unk0;
     s32 unk4;
-    Vec3i unk8;            /* 0x08 */
-    u8 _pad14[0x14];       /* 0x14 */
-    Func43CA4Unk28 *unk28; /* 0x28 */
-    s16 unk2C[3];          /* 0x2C */
-    u8 _pad32[0xE];        /* 0x32 */
-    s16 animFrameIndex;    /* 0x40 */
-    s16 frameTimer;        /* 0x42 */
+    /* 0x08 */ Vec3i unk8;
+    /* 0x14 */ u8 _pad14[0x14];
+    /* 0x28 */ Func43CA4Unk28 *unk28;
+    /* 0x2C */ s16 unk2C[3];
+    /* 0x32 */ u8 _pad32[0xE];
+    /* 0x40 */ s16 animFrameIndex;
+    /* 0x42 */ s16 frameTimer;
 } Func43CA4Arg;
 
 typedef struct {
-    s32 unk0;                        /* 0x00 */
-    void *unk4;                      /* 0x04 */
-    Vec3i position;                  /* 0x08 */
-    u8 _pad14[0x10];                 /* 0x14 */
-    Func43CA4Unk28 *recipientPlayer; /* 0x24 */
-    Func43CA4Unk28 *victimPlayer;    /* 0x28 */
-    s32 unk2C;                       /* 0x2C */
-    s32 unk30;                       /* 0x30 */
-    s32 unk34;                       /* 0x34 */
-    s32 unk38;                       /* 0x38 */
-    s32 stolenGold;                  /* 0x3C */
-    s16 animFrameIndex;              /* 0x40 */
-    s16 frameTimer;                  /* 0x42 */
-    u8 _pad44[0x2];                  /* 0x44 */
-    s16 unk46;                       /* 0x46 */
-    s16 swingAngle;                  /* 0x48 */
-    u8 _pad4A[0x2];                  /* 0x4A */
-    s32 unk4C;                       /* 0x4C */
+    /* 0x00 */ s32 unk0;
+    /* 0x04 */ void *unk4;
+    /* 0x08 */ Vec3i position;
+    /* 0x14 */ u8 _pad14[0x10];
+    /* 0x24 */ Func43CA4Unk28 *recipientPlayer;
+    /* 0x28 */ Func43CA4Unk28 *victimPlayer;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ s32 unk30;
+    /* 0x34 */ s32 unk34;
+    /* 0x38 */ s32 unk38;
+    /* 0x3C */ s32 stolenGold;
+    /* 0x40 */ s16 animFrameIndex;
+    /* 0x42 */ s16 frameTimer;
+    /* 0x44 */ u8 _pad44[0x2];
+    /* 0x46 */ s16 unk46;
+    /* 0x48 */ s16 swingAngle;
+    /* 0x4A */ u8 _pad4A[0x2];
+    /* 0x4C */ s32 unk4C;
 } GoldStealEffectState;
 
 typedef struct {
@@ -552,7 +557,56 @@ void setupBurstParticles(BurstEffectState *state) {
     setCallbackWithContinue(updateBurstParticles);
 }
 
-INCLUDE_ASM("asm/nonmatchings/42170", updateBurstParticles);
+void updateBurstParticles(BurstEffectState *arg0) {
+    s32 i;
+    s32 j;
+    updateBurstParticles_alloc *alloc;
+
+    alloc = getCurrentAllocation();
+
+    if (alloc->unk76 == 0) {
+        for (i = 0; i < 6; i++) {
+            arg0->particles[i].position.x += D_800908E0_914E0[i].x;
+            arg0->particles[i].position.y += arg0->particles[i].unk20;
+            arg0->particles[i].position.z += D_800908E0_914E0[i].z;
+            arg0->particles[i].unk20 += 0xFFFF0000;
+        }
+
+        if ((arg0->unkDD & 3) == 0) {
+            loadAssetMetadata(
+                (loadAssetMetadata_arg *)arg0,
+                arg0->assetTable,
+                arg0->particleType + ((s8)arg0->unkDD >> 2)
+            );
+
+            for (i = 1; i < 6; i++) {
+                arg0->particles[i].data_ptr = arg0->particles[0].data_ptr;
+                arg0->particles[i].index_ptr = arg0->particles[0].index_ptr;
+                arg0->particles[i].unk18 = arg0->particles[0].unk18;
+                arg0->particles[i].unk19 = arg0->particles[0].unk19;
+            }
+        }
+
+        arg0->unkDD++;
+        if ((s8)arg0->unkDD == 0x10) {
+            func_80069CF8_6A8F8();
+        }
+    }
+
+    if (arg0->particleType != 0x2F) {
+        for (i = 0; i < 4; i++) {
+            for (j = 0; j < 6; j++) {
+                enqueueAlphaBillboardSprite(i, (loadAssetMetadata_arg *)&arg0->particles[j]);
+            }
+        }
+    } else {
+        for (i = 0; i < 4; i++) {
+            for (j = 0; j < 6; j++) {
+                enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->particles[j]);
+            }
+        }
+    }
+}
 
 void cleanupBurstEffect(BurstEffectState *state) {
     state->assetTable = freeNodeMemory(state->assetTable);
