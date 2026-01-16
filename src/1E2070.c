@@ -32,7 +32,7 @@ typedef struct {
         s32 posX;
         s32 posY;
         s32 posZ;
-    } *unk0;
+    } *positionData;
     DataTable_19E80 *modelData;
     loadAssetMetadataByIndex_arg assetMetadata;
     s32 offsetX;
@@ -62,12 +62,12 @@ typedef struct {
         struct {
             u8 padding[0x3C0];
             s16 rotationY;
-        } *unk0;
+        } *modelPtr;
         u8 padding[0x28];
         s32 posX;
         s32 posY;
         s32 posZ;
-    } *unk0;
+    } *positionData;
     void *modelData;
     s32 *vertexData;
     char pad[0x16];
@@ -134,12 +134,12 @@ void initTrickSpriteEffectTask(TrickSpriteEffectInitState *arg0) {
         // the data segment to match.
         transformVector(
             (s16 *)gTrickSpriteEffectTransformData[i],
-            &arg0->unk0->unk0->rotationY,
+            &arg0->positionData->modelPtr->rotationY,
             &arg0->spritePositions[i]
         );
-        arg0->spritePositions[i].x -= arg0->unk0->posX;
-        arg0->spritePositions[i].y -= arg0->unk0->posY;
-        arg0->spritePositions[i].z -= arg0->unk0->posZ;
+        arg0->spritePositions[i].x -= arg0->positionData->posX;
+        arg0->spritePositions[i].y -= arg0->positionData->posY;
+        arg0->spritePositions[i].z -= arg0->positionData->posZ;
     }
 
     arg0->frameIndex = 0;
@@ -155,12 +155,12 @@ void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *state) {
     state->indexPtr = state->assetMetadata.index_ptr;
     state->alpha = state->assetMetadata.unk18;
     state->animFrame = state->assetMetadata.unk19;
-    state->assetMetadata.unk4 = state->sprite1OffsetX + state->unk0->posX;
-    state->assetMetadata.unk8 = state->sprite1OffsetY + state->unk0->posY;
-    state->assetMetadata.unkC = state->sprite1OffsetZ + state->unk0->posZ;
-    state->spriteOffsetX = state->sprite2OffsetX + state->unk0->posX;
-    state->spriteOffsetY = state->sprite2OffsetY + state->unk0->posY;
-    state->spriteOffsetZ = state->sprite2OffsetZ + state->unk0->posZ;
+    state->assetMetadata.unk4 = state->sprite1OffsetX + state->positionData->posX;
+    state->assetMetadata.unk8 = state->sprite1OffsetY + state->positionData->posY;
+    state->assetMetadata.unkC = state->sprite1OffsetZ + state->positionData->posZ;
+    state->spriteOffsetX = state->sprite2OffsetX + state->positionData->posX;
+    state->spriteOffsetY = state->sprite2OffsetY + state->positionData->posY;
+    state->spriteOffsetZ = state->sprite2OffsetZ + state->positionData->posZ;
 
     enqueueAlphaSprite(0, (loadAssetMetadata_arg *)&state->assetMetadata);
     enqueueAlphaSprite(0, (loadAssetMetadata_arg *)&state->sprite2);
@@ -182,11 +182,11 @@ typedef struct {
     u8 padding[0x36];
     s16 effectParam;
 } TrickSpriteEffectTask;
-void spawnTrickSpriteEffect(void *arg0, s16 arg1) {
+void spawnTrickSpriteEffect(void *model, s16 effectParam) {
     TrickSpriteEffectTask *task = (TrickSpriteEffectTask *)scheduleTask(&initTrickSpriteEffectTask, 1, 0, 0x64);
     if (task != NULL) {
-        task->n.prev = arg0;
-        task->effectParam = arg1;
+        task->n.prev = model;
+        task->effectParam = effectParam;
     }
 }
 
