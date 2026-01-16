@@ -2388,7 +2388,7 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
                     } else {
                         queueSoundAtPosition(&itemBox->displayList.transform.translation, 9);
                     }
-                } else if (gameState->unk79 == 0) {
+                } else if (gameState->raceIntroState == 0) {
                     randB();
                 }
             }

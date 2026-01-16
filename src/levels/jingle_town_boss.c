@@ -370,7 +370,7 @@ s32 jingleTownBossChaseAttackIntroPhase(Arg0Struct *arg0) {
     s32 pad[3];
     GameState *gameState = getCurrentAllocation();
 
-    if (gameState->unk79 == 0) {
+    if (gameState->raceIntroState == 0) {
         setPlayerBehaviorPhase((Player *)arg0, 1);
         return 1;
     }

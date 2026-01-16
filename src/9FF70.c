@@ -181,7 +181,7 @@ void dispatchDefaultBehaviorPhase(BehaviorState *arg0) {
 s32 updatePlayerFinishWaiting(Player *arg0) {
     GameState *gameState = getCurrentAllocation();
 
-    if (gameState->unk79 == 0) {
+    if (gameState->raceIntroState == 0) {
         arg0->unkAAC = 0;
         if (arg0->behaviorStep != 0) {
             if (arg0->unkB8C < 9) {

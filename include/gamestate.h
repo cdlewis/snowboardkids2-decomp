@@ -261,8 +261,8 @@ typedef struct {
     u8 PAD_6B[0x1];
     u8 gamePaused;
     u8 pauseMenuSelection;
-    s8 unk78;
-    u8 unk79;
+    s8 trainingPanelState;
+    u8 raceIntroState;
     u8 unk7A;
     s8 unk7B;
     s8 unk7C;

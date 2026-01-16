@@ -850,10 +850,10 @@ void awaitRaceAssetsLoaded(void) {
 
         if ((state->unk5F == 1) && (state->unk7A < 10)) {
             spawnOrbitCameraTask();
-            state->unk79 = 2;
+            state->raceIntroState = 2;
             playMusicTrack(7);
         } else {
-            state->unk79 = 1;
+            state->raceIntroState = 1;
         }
 
         state->unk4C = 0x10;
@@ -877,18 +877,18 @@ void waitForFadeAndInitPlayers(void) {
     state = (GameState *)getCurrentAllocation();
     fadeDelay = state->unk4C;
     if (state->unk4C == 0) {
-        if (state->unk79 == 1) {
-            state->unk79 = 0;
+        if (state->raceIntroState == 1) {
+            state->raceIntroState = 0;
 
             if (state->unk7A < 0xA) {
                 for (i = 0; i < state->unk5F; i++) {
                     schedulePlayerHaloTask(&state->players[i]);
-                    state->unk79++;
+                    state->raceIntroState++;
                 }
             }
 
             if (state->unk7A == 0xB) {
-                state->unk79 = 1;
+                state->raceIntroState = 1;
             }
 
             setGameStateHandler(&awaitPlayersAndPlayRaceMusic);
@@ -901,7 +901,7 @@ void waitForFadeAndInitPlayers(void) {
 void awaitPlayersAndPlayRaceMusic(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    if ((state->unk79 == 0) || (state->unk7A == 0xB)) {
+    if ((state->raceIntroState == 0) || (state->unk7A == 0xB)) {
         LevelConfig *levelConfig = getLevelConfig(state->memoryPoolId);
 
         if (state->unk7A == 0xB) {
@@ -1023,9 +1023,9 @@ void func_8003F368_3FF68(void) {
                 }
                 break;
             case 12:
-                if (gs->unk78 == -1) {
+                if (gs->trainingPanelState == -1) {
                     gs->gamePaused = 0;
-                    gs->unk78 = 0;
+                    gs->trainingPanelState = 0;
                 }
                 break;
         }
@@ -1136,7 +1136,7 @@ void func_8003F368_3FF68(void) {
             playSoundEffect(0x2B);
             resumeMotorStates();
         }
-        if (gs->unk78 == 1) {
+        if (gs->trainingPanelState == 1) {
             gs->gamePaused = 0xC;
             gs->pauseMenuSelection = 0;
         }
@@ -1168,7 +1168,7 @@ handleB:
         gs->unk50++;
     }
     unk7FTemp = gs->unk7F;
-    gs->unk79 = 0;
+    gs->raceIntroState = 0;
     if (unk7FTemp < 0) {
         return;
     }

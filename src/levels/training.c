@@ -34,11 +34,11 @@ typedef struct {
 
 #define GET_ALPHA_COLOR_HIGH_BYTE(arg0) (((u8 *)&(arg0)->alphaColor)[1])
 
-void func_800BB928_B6208(TrainingInstructionRuntimeState *arg0);
+void shrinkTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0);
 
-void func_800BB9E0_B62C0(TrainingInstructionState *arg0);
+void cleanupTrainingInstructionTask(TrainingInstructionState *arg0);
 
-void func_800BB320_B5C00(TrainingInstructionRuntimeState *arg0);
+void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0);
 
 void initTrainingInstructionTask(TrainingInstructionState *arg0) {
     getCurrentAllocation();
@@ -46,19 +46,19 @@ void initTrainingInstructionTask(TrainingInstructionState *arg0) {
     arg0->uiAsset = loadAsset_34F7E0();
     arg0->messageData = loadCompressedData(&_40E1C0_ROM_START, &_40E1C0_ROM_END, 0x1130);
     arg0->panelIndex = 0;
-    setCleanupCallback(func_800BB9E0_B62C0);
-    setCallback(func_800BB320_B5C00);
+    setCleanupCallback(cleanupTrainingInstructionTask);
+    setCallback(checkTrainingInstructionCheckpoint);
 }
 
 void func_800BB51C_B5DFC(TrainingInstructionRuntimeState *arg0);
 
-void func_800BB320_B5C00(TrainingInstructionRuntimeState *arg0) {
+void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0) {
     GameState *state = getCurrentAllocation();
 
     if (state->gamePaused == 0) {
         switch (arg0->panelIndex) {
         case 0:
-            if (state->unk79 != 0) {
+            if (state->raceIntroState != 0) {
                 break;
             }
             goto do_action;
@@ -126,7 +126,7 @@ void func_800BB320_B5C00(TrainingInstructionRuntimeState *arg0) {
             break;
         default:
         do_action:
-            state->unk78 = 1;
+            state->trainingPanelState = 1;
             playSoundEffect(0x2C);
             arg0->panelWidth = 1;
             arg0->panelHeight = 1;
@@ -279,7 +279,7 @@ void func_800BB87C_B615C(TrainingInstructionRuntimeState *arg0) {
     }
 
     if (arg0->panelHeight == 1) {
-        setCallback(func_800BB928_B6208);
+        setCallback(shrinkTrainingInstructionPanelWidth);
     }
 
     temp_a7 = arg0->panelWidth;
@@ -299,13 +299,13 @@ void func_800BB87C_B615C(TrainingInstructionRuntimeState *arg0) {
     );
 }
 
-void func_800BB928_B6208(TrainingInstructionRuntimeState *arg0) {
+void shrinkTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) {
     s16 temp_v1;
     s16 temp_a7;
     s16 temp_a6;
-    s8 *alloc;
+    GameState *state;
 
-    alloc = getCurrentAllocation();
+    state = getCurrentAllocation();
     arg0->panelWidth--;
 
     temp_v1 = GET_SCALE_AS_S16(arg0);
@@ -314,8 +314,8 @@ void func_800BB928_B6208(TrainingInstructionRuntimeState *arg0) {
     }
 
     if (arg0->panelWidth == 1) {
-        alloc[0x78] = -1;
-        setCallback(func_800BB320_B5C00);
+        state->trainingPanelState = -1;
+        setCallback(checkTrainingInstructionCheckpoint);
     }
 
     temp_a7 = arg0->panelWidth;
@@ -335,7 +335,7 @@ void func_800BB928_B6208(TrainingInstructionRuntimeState *arg0) {
     );
 }
 
-void func_800BB9E0_B62C0(TrainingInstructionState *arg0) {
+void cleanupTrainingInstructionTask(TrainingInstructionState *arg0) {
     arg0->uiAsset = freeNodeMemory(arg0->uiAsset);
     arg0->textRenderContext = freeNodeMemory(arg0->textRenderContext);
     arg0->messageData = freeNodeMemory(arg0->messageData);
