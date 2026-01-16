@@ -111,15 +111,15 @@ void renderOverlayTiledTexture(s32 arg0) {
     buildOverlayDisplayListSegment((DisplayListObject *)arg0);
 }
 
-void enqueueTiledTextureRender(s32 arg0, func_800B5500_Task *arg1) {
+void enqueueTiledTextureRender(s32 arg0, TrickBurstEffectTask *arg1) {
     arg1->unk30 = 0;
-    if (arg1->unk20->unk4 != 0) {
+    if (arg1->displayLists->unk4 != 0) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &renderOpaqueTiledTexture, arg1);
     }
-    if (arg1->unk20->unk8 != 0) {
+    if (arg1->displayLists->unk8 != 0) {
         debugEnqueueCallback(arg0 & 0xFFFF, 3, &renderTransparentTiledTexture, arg1);
     }
-    if (arg1->unk20->unkC != 0) {
+    if (arg1->displayLists->unkC != 0) {
         debugEnqueueCallback(arg0 & 0xFFFF, 5, &renderOverlayTiledTexture, arg1);
     }
 }

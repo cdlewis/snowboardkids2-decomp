@@ -129,7 +129,7 @@ void cutsceneEffectMLight_exec(cutsceneEffectMLight_exec_arg *arg0, CutsceneMana
             sp50.u.vec.y = sp70[1];
             sp50.u.vec.z = sp70[2];
             resource = *(UIResource **)((u8 *)slot->model + 0x10);
-            func_800B5500_1E25B0(resource->unk16, &sp50, arg0->colorIndex, 0x4000);
+            spawnTrickBurstEffect(resource->unk16, &sp50, arg0->colorIndex, 0x4000);
             break;
     }
 }

@@ -3573,3 +3573,7 @@ getOffsetTableEntryCount = 0x800B0DC0; // rom:0x1DCF60
 getOffsetTableEntryValue0 = 0x800B0DD0; // rom:0x1DCF70
 getOffsetTableEntryData = 0x800B0E24; // rom:0x1DCFC4
 getOffsetTableEntryValue2 = 0x800B0E80; // rom:0x1DD020
+spawnTrickBurstEffect = 0x800B5500; // rom:0x1E25B0
+initTrickBurstEffect = 0x800B5590; // rom:0x1E2640
+updateTrickBurstEffect = 0x800B5660; // rom:0x1E2710
+cleanupTrickBurstEffect = 0x800B5794; // rom:0x1E2844
