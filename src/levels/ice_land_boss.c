@@ -906,7 +906,7 @@ s32 iceLandBossHoverAttackPhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800BC4AC_B199C(IceLandBossAttackArg *arg0) {
+s32 iceLandBossDefeatedBehavior(IceLandBossAttackArg *arg0) {
     s32 pad[3];
 
     getCurrentAllocation();
