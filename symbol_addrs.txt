@@ -285,6 +285,7 @@ beginPostTrickSlidingStep = 0x800B23DC; // rom:0xA228C
 updatePostTrickSlidingStep = 0x800B243C; // rom:0xA22EC
 updatePostTrickChargingStep = 0x800B255C; // rom:0xA240C
 beginPostTrickLaunchStep = 0x800B26D0; // rom:0xA2580
+onTrickCompletedHook = 0x8005D810; // rom:0x5E410
 resetTrickScore = 0x800B27FC; // rom:0xA26AC
 addTrickScore = 0x800B2818; // rom:0xA26C8
 addSpinTrickScore = 0x800B2950; // rom:0xA2800

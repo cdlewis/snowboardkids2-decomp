@@ -132,8 +132,8 @@ void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags) {
     player->bodyPartAnimFlags = animFlags;
 }
 
-s16 func_8005D810_5E410(Player *arg0) {
-    (void)arg0;
+s16 onTrickCompletedHook(Player *player) {
+    (void)player;
 }
 
 extern s8 D_800941C4_94DC4[];

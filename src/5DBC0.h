@@ -13,6 +13,6 @@ s32 func_8005D308_5DF08(void *arg0, s32 arg1);
 void func_8005D48C_5E08C(Player *, s32, s32);
 void loadCharacterBodyParts(Player *player);
 void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags);
-s16 func_8005D810_5E410(Player *);
+s16 onTrickCompletedHook(Player *player);
 s16 func_8005D818_5E418(Player *);
 s32 func_8005D8C8_5E4C8(Player *arg0);

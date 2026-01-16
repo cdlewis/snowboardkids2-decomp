@@ -564,7 +564,7 @@ s32 beginPostTrickSlidingStep(Player *player) {
     player->behaviorStep += 1;
     player->rotY += player->unkA90;
     player->unkA90 = 0;
-    func_8005D810_5E410(player);
+    onTrickCompletedHook(player);
     player->trickCount = 0;
     player->unkBCD = -1;
     return 1;
@@ -977,7 +977,7 @@ void beginSpinTrick(Player *player) {
     player->unkBCD = -1;
     player->behaviorCounter++;
     player->unkB84 |= 0x4000;
-    func_8005D810_5E410(player);
+    onTrickCompletedHook(player);
     queueSoundAtPosition(&player->worldPos, 0xB);
 }
 
