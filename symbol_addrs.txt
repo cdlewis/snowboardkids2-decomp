@@ -3567,3 +3567,9 @@ getRumbleDuration = 0x800B7B64; // rom:0xA7A14
 gRumbleDurations = 0x800BACBC; // rom:0xAAB6C type:u8
 gRumblePatterns = 0x800BACA4; // rom:0xAAB54 type:u16
 updateJingleTownBossJointPositions = 0x800BCA10; // rom:0xB3FD0
+
+// 1DCF60 overlay - offset-based table accessor functions
+getOffsetTableEntryCount = 0x800B0DC0; // rom:0x1DCF60
+getOffsetTableEntryValue0 = 0x800B0DD0; // rom:0x1DCF70
+getOffsetTableEntryData = 0x800B0E24; // rom:0x1DCFC4
+getOffsetTableEntryValue2 = 0x800B0E80; // rom:0x1DD020
