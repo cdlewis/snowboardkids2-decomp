@@ -859,12 +859,13 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
     return 0;
 }
 
-s32 func_800BC3B8_B18A8(Player *arg0) {
-    u8 temp;
+s32 iceLandBossHoverAttackPhase(Player *arg0) {
+    u8 savedStep;
+    u8 hoverCount;
 
-    temp = arg0->behaviorStep;
-    if (temp == 0) {
-        arg0->behaviorStep = temp + 1;
+    savedStep = arg0->behaviorStep;
+    if (savedStep == 0) {
+        arg0->behaviorStep = savedStep + 1;
         arg0->velocity.y = 0x80000;
         if (!(arg0->unkB84 & 0x80000)) {
             if (arg0->unkBDB != 0) {
@@ -887,14 +888,14 @@ s32 func_800BC3B8_B18A8(Player *arg0) {
 
     if (arg0->velocity.y < 0) {
         if (!(arg0->unkB84 & 0x1)) {
-            temp = arg0->unkBDB;
+            hoverCount = arg0->unkBDB;
             arg0->unkB88 = 0;
             arg0->behaviorMode = 1;
             arg0->behaviorPhase = 1;
             arg0->behaviorStep = 0;
             arg0->behaviorCounter = 0;
 
-            if (temp == 0) {
+            if (hoverCount == 0) {
                 arg0->unkB84 = arg0->unkB84 | 0x100000;
             }
 
