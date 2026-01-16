@@ -136,7 +136,7 @@ typedef struct {
     u8 padding9E[0x2];
     s16 unkA9E;
     s32 unkAA0;
-    s32 unkAA4;
+    s32 maxSpeedCap;
     s32 unkAA8;
     s32 unkAAC;
     s32 unkAB0;

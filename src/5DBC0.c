@@ -23,7 +23,7 @@ s32 getSectorTrackHeight(void *gameData, u16 sectorIndex, void *pos, s32 default
     return func_80062274_62E74(gameData, sectorIndex);
 }
 
-void func_8005D03C_5DC3C(Player *arg0) {
+void clampPlayerVelocityToMaxSpeed(Player *player) {
     s32 velX;
     s32 velY;
     s32 velZ;
@@ -31,18 +31,18 @@ void func_8005D03C_5DC3C(Player *arg0) {
     s32 magnitude;
     s32 maxMagnitude;
 
-    velX = arg0->velocity.x;
-    velY = arg0->velocity.y;
-    velZ = arg0->velocity.z;
+    velX = player->velocity.x;
+    velY = player->velocity.y;
+    velZ = player->velocity.z;
 
     sum = (s64)velX * velX + (s64)velY * velY + (s64)velZ * velZ;
     magnitude = isqrt64(sum);
 
-    maxMagnitude = arg0->unkAA4;
+    maxMagnitude = player->maxSpeedCap;
     if (maxMagnitude < magnitude) {
-        arg0->velocity.x = (s32)(((s64)arg0->velocity.x * arg0->unkAA4) / magnitude);
-        arg0->velocity.y = (s32)(((s64)arg0->velocity.y * arg0->unkAA4) / magnitude);
-        arg0->velocity.z = (s32)(((s64)arg0->velocity.z * arg0->unkAA4) / magnitude);
+        player->velocity.x = (s32)(((s64)player->velocity.x * player->maxSpeedCap) / magnitude);
+        player->velocity.y = (s32)(((s64)player->velocity.y * player->maxSpeedCap) / magnitude);
+        player->velocity.z = (s32)(((s64)player->velocity.z * player->maxSpeedCap) / magnitude);
     }
 }
 

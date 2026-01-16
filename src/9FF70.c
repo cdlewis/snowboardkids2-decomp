@@ -141,7 +141,7 @@ void applyBoostVelocity(Player *player) {
         }
     }
 
-    func_8005D03C_5DC3C(player);
+    clampPlayerVelocityToMaxSpeed(player);
     player->worldPos.x += player->velocity.x;
     player->worldPos.y += player->velocity.y;
     player->worldPos.z += player->velocity.z;
@@ -156,7 +156,7 @@ typedef struct {
 } func_800B0300_arg;
 
 void applyClampedVelocityToPosition(Player *player) {
-    func_8005D03C_5DC3C(player);
+    clampPlayerVelocityToMaxSpeed(player);
     player->worldPos.x = player->worldPos.x + player->velocity.x;
     player->worldPos.y = player->worldPos.y + player->velocity.y;
     player->worldPos.z = player->worldPos.z + player->velocity.z;

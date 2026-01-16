@@ -89,7 +89,7 @@ typedef struct {
     u16 unkA9C;
     u16 unkA9E;
     u8 padAA0[4];
-    s32 unkAA4;
+    s32 maxSpeedCap;
     s32 unkAA8;
     u8 padAAC[0xAC2 - 0xAAC];
     s16 unkAC2;
@@ -180,7 +180,7 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     memcpy(&arg0->unk440, &arg0->unk434, 0xC);
 
     if (arg0->sectorIndex < 0x16) {
-        arg0->unkAA4 = 0x180000;
+        arg0->maxSpeedCap = 0x180000;
     } else {
         player = (Arg0Struct *)alloc->players;
         dist = distance_3d(
@@ -191,21 +191,21 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
 
         if (alloc->unk86 != 0) {
             if ((arg0->finishPosition == 0) & (dist > 0xE00000)) {
-                arg0->unkAA4 = getCharacterBoardStatParam0(0, 8) + 0x40000;
+                arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 8) + 0x40000;
             } else {
-                arg0->unkAA4 = 0x180000;
+                arg0->maxSpeedCap = 0x180000;
             }
         } else {
             if ((arg0->finishPosition == 0) & (dist > 0xE00000)) {
-                arg0->unkAA4 = getCharacterBoardStatParam0(0, 6) + -0x8000;
+                arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 6) + -0x8000;
             } else {
-                arg0->unkAA4 = getCharacterBoardStatParam0(0, 6) + 0x18000;
+                arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 6) + 0x18000;
             }
         }
     }
 
-    if (arg0->unkAA4 > 0x180000) {
-        arg0->unkAA4 = 0x180000;
+    if (arg0->maxSpeedCap > 0x180000) {
+        arg0->maxSpeedCap = 0x180000;
     }
 
     count = arg0->unkBCF;
@@ -213,12 +213,12 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     if (count > 0) {
         loopBound = count;
         do {
-            arg0->unkAA4 = arg0->unkAA4 - (arg0->unkAA4 >> 2);
+            arg0->maxSpeedCap = arg0->maxSpeedCap - (arg0->maxSpeedCap >> 2);
             i++;
         } while (i < loopBound);
     }
 
-    diff = arg0->unkAA4 - arg0->unkAA8;
+    diff = arg0->maxSpeedCap - arg0->unkAA8;
     if (diff >= 0x101) {
         diff = 0x100;
     }

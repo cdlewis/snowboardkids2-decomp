@@ -99,7 +99,7 @@ typedef struct {
     u16 pitchAngle; /* 0xA9C */
     u16 yawAngle;   /* 0xA9E */
     u8 padAA0[0x4];
-    s32 unkAA4; /* 0xAA4 */
+    s32 maxSpeedCap; /* 0xAA4 */
     s32 unkAA8; /* 0xAA8 */
     u8 padAAC[0xAC2 - 0xAAC];
     s16 unkAC2; /* 0xAC2 */
@@ -224,20 +224,20 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
     );
 
     if ((arg0->finishPosition == 0) && (temp > 0x1000000)) {
-        arg0->unkAA4 = getCharacterBoardStatParam0(0, 0) - 0x40000;
+        arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 0) - 0x40000;
     } else {
-        arg0->unkAA4 = getCharacterBoardStatParam0(0, 0) + 0x180000;
+        arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 0) + 0x180000;
     }
 
-    if (arg0->unkAA4 > 0x180000) {
-        arg0->unkAA4 = 0x180000;
+    if (arg0->maxSpeedCap > 0x180000) {
+        arg0->maxSpeedCap = 0x180000;
     }
 
     for (i = 0; i < arg0->unkBCF; i++) {
-        arg0->unkAA4 = arg0->unkAA4 - (arg0->unkAA4 >> 2);
+        arg0->maxSpeedCap = arg0->maxSpeedCap - (arg0->maxSpeedCap >> 2);
     }
 
-    diff = arg0->unkAA4 - arg0->unkAA8;
+    diff = arg0->maxSpeedCap - arg0->unkAA8;
     if (diff >= 0x101) {
         diff = 0x100;
     }
