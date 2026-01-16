@@ -30,7 +30,7 @@ s32 calculateZoomScaleFactor(s32 arg0) {
     return result;
 }
 
-void func_800B9440_1E64F0(cutsceneSys2Wait_exec_asset *arg0) {
+void updateWipeTransitionSlots(cutsceneSys2Wait_exec_asset *arg0) {
     s32 i;
     s32 offset;
     s32 one;
@@ -40,18 +40,20 @@ void func_800B9440_1E64F0(cutsceneSys2Wait_exec_asset *arg0) {
     offset = 0;
 
     do {
-        arg0->slots[i].unkA = calculateZoomScaleFactor(arg0->unk74);
-        arg0->slots[i].unkC = calculateZoomScaleFactor(arg0->unk78);
+        arg0->slots[i].zoomScaleX = calculateZoomScaleFactor(arg0->zoomLevelX);
+        arg0->slots[i].zoomScaleY = calculateZoomScaleFactor(arg0->zoomLevelY);
 
-        if (arg0->slots[i].unkA == 0) {
-            arg0->slots[i].unkA = one;
+        if (arg0->slots[i].zoomScaleX == 0) {
+            arg0->slots[i].zoomScaleX = one;
         }
-        if (arg0->slots[i].unkC == 0) {
-            arg0->slots[i].unkC = one;
+        if (arg0->slots[i].zoomScaleY == 0) {
+            arg0->slots[i].zoomScaleY = one;
         }
 
-        arg0->slots[i].unk0 = arg0->unk10 + ((((s16 *)((u8 *)gWipeOffsetX + offset))[0]) << 10) / arg0->slots[i].unkA;
-        arg0->slots[i].unk2 = arg0->unk12 + ((((s16 *)((u8 *)gWipeOffsetY + offset))[0]) << 10) / arg0->slots[i].unkC;
+        arg0->slots[i].posX =
+            arg0->basePosX + ((((s16 *)((u8 *)gWipeOffsetX + offset))[0]) << 10) / arg0->slots[i].zoomScaleX;
+        arg0->slots[i].posY =
+            arg0->basePosY + ((((s16 *)((u8 *)gWipeOffsetY + offset))[0]) << 10) / arg0->slots[i].zoomScaleY;
 
         i++;
         offset += 4;
@@ -61,9 +63,9 @@ void func_800B9440_1E64F0(cutsceneSys2Wait_exec_asset *arg0) {
 INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B956C_1E661C);
 
 s32 func_800B9680_1E6730(cutsceneSys2Wait_exec_asset *arg0) {
-    arg0->unk80 = 0x6600;
-    arg0->unk7C = 0x8000;
-    func_800B9440_1E64F0(arg0);
+    arg0->zoomSpeed = 0x6600;
+    arg0->zoomDecelRate = 0x8000;
+    updateWipeTransitionSlots(arg0);
     playSoundEffect(0x2C);
     return 2;
 }
@@ -71,14 +73,14 @@ s32 func_800B9680_1E6730(cutsceneSys2Wait_exec_asset *arg0) {
 s32 func_800B96B4_1E6764(cutsceneSys2Wait_exec_asset *arg0) {
     s32 result = 2;
 
-    arg0->unk74 += arg0->unk80;
+    arg0->zoomLevelX += arg0->zoomSpeed;
 
-    if (arg0->unk74 > 0x18000) {
-        arg0->unk74 = 0x18000;
+    if (arg0->zoomLevelX > 0x18000) {
+        arg0->zoomLevelX = 0x18000;
         result = 3;
     }
 
-    func_800B9440_1E64F0(arg0);
+    updateWipeTransitionSlots(arg0);
 
     return result;
 }
@@ -88,18 +90,18 @@ s32 func_800B9708_1E67B8(cutsceneSys2Wait_exec_asset *arg0) {
     s32 temp_v0;
     s32 result;
 
-    temp_a1 = arg0->unk74;
-    temp_v0 = ((0x10000 - temp_a1) >> 8) * (arg0->unk7C >> 8);
+    temp_a1 = arg0->zoomLevelX;
+    temp_v0 = ((0x10000 - temp_a1) >> 8) * (arg0->zoomDecelRate >> 8);
     result = 3;
 
     if (temp_v0 != 0) {
-        arg0->unk74 = temp_a1 + temp_v0;
+        arg0->zoomLevelX = temp_a1 + temp_v0;
     } else {
-        arg0->unk74 = 0x10000;
+        arg0->zoomLevelX = 0x10000;
         result = 4;
     }
 
-    func_800B9440_1E64F0(arg0);
+    updateWipeTransitionSlots(arg0);
 
     return result;
 }

@@ -57,8 +57,8 @@ void cutsceneSys2Wait_exec(cutsceneSys2Wait_exec_arg0 *arg0, CutsceneManager *ar
     if (temp_v0) {
         temp_v0->unk0 = arg1;
         temp_v0->unk4 = ptr[0x48 / 4];
-        temp_v0->unk10 = arg0->unk2;
-        temp_v0->unk12 = arg0->unk4;
+        temp_v0->basePosX = arg0->unk2;
+        temp_v0->basePosY = arg0->unk4;
         temp_v0->unk86 = arg0->unk0;
     } else {
         arg1->skipAnimation = FALSE;
