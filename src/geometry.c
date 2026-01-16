@@ -3,46 +3,47 @@
 #include "common.h"
 
 typedef struct {
-    s16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
-    u16 unk8;
-    s16 unkA;
-    s16 unkC;
-    u16 unkE;
-    s16 unk10;
-    s32 unk14;
-    u16 unk18;
-    u16 unk1A;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
-    s32 unk3C;
-} func_8006C2A8_6CEA8_arg0;
+    s16 m00_int;
+    u16 m00_frac;
+    s16 m10_int;
+    s16 m20_int;
+    u16 m20_frac;
+    s16 m01_int;
+    s16 m11_int;
+    u16 m11_frac;
+    s16 m21_int;
+    s32 posX;
+    u16 posY_frac;
+    u16 posZ_frac;
+    s32 scale;
+    s32 _pad0;
+    s32 _pad1;
+    s32 _pad2;
+    s32 _pad3;
+    s32 _pad4;
+    s32 _pad5;
+    s32 _pad6;
+    s32 _pad7;
+} PackedBoneTransform;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
-    s32 unk3C;
-} func_8006C2A8_6CEA8_arg1;
+    s32 m00_int;
+    s32 m10_int;
+    s32 m20_int;
+    s32 m01_int;
+    s32 m11_int;
+    s32 m21_int;
+    s32 posX_int;
+    s32 scale_int;
+    s32 m00_frac;
+    s32 m10_frac;
+    s32 m20_frac;
+    s32 m01_frac;
+    s32 m11_frac;
+    s32 m21_frac;
+    s32 posX_frac;
+    s32 scale_frac;
+} N64MatrixParts;
 
 s32 approximateSin(s16 inputAngle) {
     u16 temp_a0;
@@ -526,23 +527,23 @@ void transform3DToN64Mtx(Transform3D *transform, Mtx *mtx) {
     mtxWords[15] = transform->translation.z << 16;
 }
 
-void func_8006C2A8_6CEA8(func_8006C2A8_6CEA8_arg0 *arg0, func_8006C2A8_6CEA8_arg1 *arg1) {
-    arg1->unk0 = (s32)((arg0->unk0 & 0xFFFF0000) + (((s32)(arg0->unk2 << 0x10) >> 0x1F) & 0xFFFF));
-    arg1->unk4 = (s32)(arg0->unk4 & 0xFFFF0000);
-    arg1->unk8 = (s32)((arg0->unk6 & 0xFFFF0000) + (((s32)(arg0->unk8 << 0x10) >> 0x1F) & 0xFFFF));
-    arg1->unkC = (s32)(arg0->unkA & 0xFFFF0000);
-    arg1->unk10 = (s32)((arg0->unkC & 0xFFFF0000) + (((s32)(arg0->unkE << 0x10) >> 0x1F) & 0xFFFF));
-    arg1->unk14 = (s32)(arg0->unk10 & 0xFFFF0000);
-    arg1->unk18 = (s32)((arg0->unk14 & 0xFFFF0000) + arg0->unk18);
-    arg1->unk1C = (s32)((arg0->unk1C & 0xFFFF0000) + 1);
-    arg1->unk20 = (s32)(((arg0->unk0 << 0x10) & 0xFFFF0000) + arg0->unk2);
-    arg1->unk24 = (s32)((arg0->unk4 << 0x10) & 0xFFFF0000);
-    arg1->unk28 = (s32)(((arg0->unk6 << 0x10) & 0xFFFF0000) + arg0->unk8);
-    arg1->unk2C = (s32)((arg0->unkA << 0x10) & 0xFFFF0000);
-    arg1->unk30 = (s32)(((arg0->unkC << 0x10) & 0xFFFF0000) + arg0->unkE);
-    arg1->unk34 = (s32)((arg0->unk10 << 0x10) & 0xFFFF0000);
-    arg1->unk38 = (s32)((arg0->unk14 << 0x10) + arg0->unk1A);
-    arg1->unk3C = (s32)(arg0->unk1C << 0x10);
+void convertPackedBoneTransformToN64Matrix(PackedBoneTransform *src, N64MatrixParts *dst) {
+    dst->m00_int = (s32)((src->m00_int & 0xFFFF0000) + (((s32)(src->m00_frac << 0x10) >> 0x1F) & 0xFFFF));
+    dst->m10_int = (s32)(src->m10_int & 0xFFFF0000);
+    dst->m20_int = (s32)((src->m20_int & 0xFFFF0000) + (((s32)(src->m20_frac << 0x10) >> 0x1F) & 0xFFFF));
+    dst->m01_int = (s32)(src->m01_int & 0xFFFF0000);
+    dst->m11_int = (s32)((src->m11_int & 0xFFFF0000) + (((s32)(src->m11_frac << 0x10) >> 0x1F) & 0xFFFF));
+    dst->m21_int = (s32)(src->m21_int & 0xFFFF0000);
+    dst->posX_int = (s32)((src->posX & 0xFFFF0000) + src->posY_frac);
+    dst->scale_int = (s32)((src->scale & 0xFFFF0000) + 1);
+    dst->m00_frac = (s32)(((src->m00_int << 0x10) & 0xFFFF0000) + src->m00_frac);
+    dst->m10_frac = (s32)((src->m10_int << 0x10) & 0xFFFF0000);
+    dst->m20_frac = (s32)(((src->m20_int << 0x10) & 0xFFFF0000) + src->m20_frac);
+    dst->m01_frac = (s32)((src->m01_int << 0x10) & 0xFFFF0000);
+    dst->m11_frac = (s32)(((src->m11_int << 0x10) & 0xFFFF0000) + src->m11_frac);
+    dst->m21_frac = (s32)((src->m21_int << 0x10) & 0xFFFF0000);
+    dst->posX_frac = (s32)((src->posX << 0x10) + src->posZ_frac);
+    dst->scale_frac = (s32)(src->scale << 0x10);
 }
 
 s32 approximate_sqrt(u32 input) {
