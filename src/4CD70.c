@@ -126,18 +126,6 @@ typedef struct {
 } CenteredSpritePopupState;
 
 typedef struct {
-    s16 mainX;
-    s16 mainY;
-    void *mainSpriteAsset;
-    s16 mainSpriteFrame;
-    u8 padA[0x2];
-    s16 bgX;
-    s16 bgY;
-    void *bgSpriteAsset;
-    s16 bgSpriteFrame;
-} CrossRaceBadgeState;
-
-typedef struct {
     s16 xPos;
     s16 yPos;
     void *spriteAsset;
@@ -2467,9 +2455,6 @@ void spawnShotCrossSkillMeterDisplayTask(s16 arg0) {
         task->displayMode = arg0;
     }
 }
-
-void updateCrossRaceBadgeDisplay(CrossRaceBadgeState *);
-void cleanupCrossRaceBadgeTask(void *);
 
 void initCrossRaceBadgeTask(CrossRaceBadgeState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
