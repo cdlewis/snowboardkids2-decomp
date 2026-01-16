@@ -1003,6 +1003,7 @@ cutsceneBgmPlay_exec = 0x800B0820; // rom:0x1DD8D0
 cutsceneSeStop_exec = 0x800B2230; // rom:0x1DF2E0
 cutsceneSe3dPlay_exec = 0x800B219C; // rom:0x1DF24C
 cutsceneSePlay_exec = 0x800B2128; // rom:0x1DF1D8
+debugHandleFanSoundInput = 0x800B20D0; // rom:0x1DF180
 cutsceneCameraRotate_exec = 0x800B0A04; // rom:0x1DDAB4
 cutsceneCameraShake_exec = 0x800B09B4; // rom:0x1DDA64
 cutsceneCameraMove_exec = 0x800B0920; // rom:0x1DD9D0

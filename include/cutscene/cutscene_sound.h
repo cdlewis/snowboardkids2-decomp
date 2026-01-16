@@ -1,6 +1,8 @@
 #include "common.h"
 #include "1DFAA0.h"
 
+void debugHandleFanSoundInput(void);
+
 typedef struct {
     s16 unk0;
     s16 unk2;

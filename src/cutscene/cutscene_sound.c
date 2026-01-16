@@ -5,7 +5,7 @@
 
 extern s32 gControllerInputs[4];
 
-void func_800B20D0_1DF180(void) {
+void debugHandleFanSoundInput(void) {
     s32 input = gControllerInputs[0x3];
     if (input & A_BUTTON) {
         playFanSoundOnChannel0();
