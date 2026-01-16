@@ -21,10 +21,10 @@ typedef struct {
 typedef struct {
     Node n;
     u8 padding[0x28];
-    u16 unk54;
-    s16 unk56;
-    s16 unk58;
-} func_800B5290_1E2340_task;
+    u16 renderLayer;
+    s16 colorIndex;
+    s16 effectMode;
+} ScrollingTextureEffectTask;
 
 typedef struct {
     struct {
@@ -83,25 +83,25 @@ typedef struct {
 } TrickSpriteEffectInitState;
 
 typedef struct {
-    DisplayListObject unk0;
+    DisplayListObject displayListObj;
     void *unk3C;
     s32 unk40;
-    s16 unk44;
-    s16 unk46;
-    s16 unk48;
-    s16 unk4A;
+    s16 scrollOffsetX;
+    s16 scrollOffsetY;
+    s16 scrollSpeedX;
+    s16 scrollSpeedY;
     s16 unk4C;
     s16 unk4E;
     s16 unk50;
     s16 unk52;
-    s16 unk54;
-    s16 unk56;
-    s16 unk58;
-} func_800B5438_1E24E8_arg0;
+    u16 renderLayer;
+    s16 framesRemaining;
+    s16 effectMode;
+} ScrollingTextureEffectUpdateState;
 
-void func_800B5438_1E24E8(func_800B5438_1E24E8_arg0 *);
-void func_800B54B4_1E2564(ScrollingTextureState *);
-void func_800B5318_1E23C8(ScrollingTextureState *);
+void updateScrollingTextureEffect(ScrollingTextureEffectUpdateState *);
+void cleanupScrollingTextureEffectTask(ScrollingTextureState *);
+void initScrollingTextureEffectTask(ScrollingTextureState *);
 void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *);
 void cleanupTrickSpriteEffectTask(TrickSpriteEffectCleanupState *);
 void initTrickSpriteEffectTask(TrickSpriteEffectInitState *);
@@ -190,18 +190,19 @@ void spawnTrickSpriteEffect(void *model, s16 effectParam) {
     }
 }
 
-void func_800B5290_1E2340(u16 arg0, void *arg1, s16 arg2, s16 arg3) {
-    func_800B5290_1E2340_task *task = (func_800B5290_1E2340_task *)scheduleTask(&func_800B5318_1E23C8, 1, 0, 0);
+void spawnScrollingTextureEffect(u16 renderLayer, void *transformMatrix, s16 colorIndex, s16 effectMode) {
+    ScrollingTextureEffectTask *task =
+        (ScrollingTextureEffectTask *)scheduleTask(&initScrollingTextureEffectTask, 1, 0, 0);
     if (task != NULL) {
-        task->unk54 = arg0;
-        memcpy(task, arg1, 0x20);
-        task->unk56 = arg2;
-        task->unk58 = arg3;
+        task->renderLayer = renderLayer;
+        memcpy(task, transformMatrix, 0x20);
+        task->colorIndex = colorIndex;
+        task->effectMode = effectMode;
     }
 }
 
-void func_800B5318_1E23C8(ScrollingTextureState *arg0) {
-    setCleanupCallback(&func_800B54B4_1E2564);
+void initScrollingTextureEffectTask(ScrollingTextureState *arg0) {
+    setCleanupCallback(&cleanupScrollingTextureEffectTask);
 
     if (arg0->unk58 == 0) {
         arg0->unk24 = loadUncompressedData(&_215120_ROM_START, &_215120_ROM_END);
@@ -231,27 +232,27 @@ void func_800B5318_1E23C8(ScrollingTextureState *arg0) {
     arg0->unk4C = 0;
     arg0->unk4E = 0;
 
-    setCallback(&func_800B5438_1E24E8);
+    setCallback(&updateScrollingTextureEffect);
 }
 
-void func_800B5438_1E24E8(func_800B5438_1E24E8_arg0 *arg0) {
-    if (arg0->unk56 == 0) {
+void updateScrollingTextureEffect(ScrollingTextureEffectUpdateState *arg0) {
+    if (arg0->framesRemaining == 0) {
         func_80069CF8_6A8F8();
     }
 
-    arg0->unk44 += arg0->unk48;
-    arg0->unk46 += arg0->unk4A;
+    arg0->scrollOffsetX += arg0->scrollSpeedX;
+    arg0->scrollOffsetY += arg0->scrollSpeedY;
 
     // mask off the first 8 bits to stop overflow?
-    arg0->unk44 = 0xFF & arg0->unk44;
-    arg0->unk46 = 0xFF & arg0->unk46;
+    arg0->scrollOffsetX = 0xFF & arg0->scrollOffsetX;
+    arg0->scrollOffsetY = 0xFF & arg0->scrollOffsetY;
 
-    enqueueScrollingTextureRender(arg0->unk54, &arg0->unk0);
+    enqueueScrollingTextureRender(arg0->renderLayer, &arg0->displayListObj);
 
-    arg0->unk56--;
+    arg0->framesRemaining--;
 }
 
-void func_800B54B4_1E2564(ScrollingTextureState *arg0) {
+void cleanupScrollingTextureEffectTask(ScrollingTextureState *arg0) {
     arg0->unk3C = freeNodeMemory(arg0->unk3C);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk24 = freeNodeMemory(arg0->unk24);

@@ -3428,3 +3428,8 @@ warpToShortcutSpinUpStep = 0x800B781C; // rom:0xA76CC
 shortcutSpinDownStep = 0x800B7998; // rom:0xA7848
 shortcutPostSpinWaitStep = 0x800B7A30; // rom:0xA78E0
 shortcutLaunchStep = 0x800B7A94; // rom:0xA7944
+
+spawnScrollingTextureEffect = 0x800B5290; // rom:0x1E2340
+initScrollingTextureEffectTask = 0x800B5318; // rom:0x1E23C8
+updateScrollingTextureEffect = 0x800B5438; // rom:0x1E24E8
+cleanupScrollingTextureEffectTask = 0x800B54B4; // rom:0x1E2564

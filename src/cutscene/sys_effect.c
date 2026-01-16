@@ -120,7 +120,7 @@ void cutsceneEffectMLight_exec(cutsceneEffectMLight_exec_arg *arg0, CutsceneMana
             sp50.u.vec.y = sp70[1];
             sp50.u.vec.z = sp70[2];
             resource = *(UIResource **)((u8 *)slot->model + 0x10);
-            func_800B5290_1E2340(resource->unk16, &sp50, arg0->colorIndex, arg0->effectMode);
+            spawnScrollingTextureEffect(resource->unk16, &sp50, arg0->colorIndex, arg0->effectMode);
             break;
         case 1:
             createZRotationMatrix(rotMatrix, 0x1000);
