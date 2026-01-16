@@ -1698,6 +1698,7 @@ g_FloatingBillboardTargetZ = 0x800BC91C; // rom:0xB060C
 g_GhostSpawnPositions = 0x800BCA00; // rom:0xB06F0 size:0x60
 func_800BBA98 = 0x800BBA98; // type:func rom:0xB7AF0
 renderFallingRockHazard = 0x800BB3B8; // type:func rom:0xB75F8
+updateSunnyMountainDisplayObjectsTask = 0x800BB3D8; // rom:0xB4CD8
 updateFallingRockHazard = 0x800BB468; // type:func rom:0xB76A8
 fallingRockImpactCallback = 0x800BB658; // type:func rom:0xB7898
 fallingRockRespawnCallback = 0x800BB71C; // type:func rom:0xB795C
