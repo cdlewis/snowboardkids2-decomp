@@ -107,18 +107,18 @@ s32 decelerateWipeZoomOut(cutsceneSys2Wait_exec_asset *arg0) {
 }
 
 void *func_800B9774_1E6824(cutsceneSys2Wait_exec_asset *arg0) {
-    void *result;
+    void *tableEntry;
 
-    result = getTable2DEntry(arg0->unkC, arg0->unk86, arg0->unk88);
+    tableEntry = getTable2DEntry(arg0->unkC, arg0->unk86, arg0->unk88);
 
-    if (result == NULL) {
+    if (tableEntry == NULL) {
         arg0->unk84 = 6;
     }
 
-    arg0->unk90 = result;
+    arg0->unk90 = tableEntry;
     arg0->unk84 = 5;
 
-    return result;
+    return tableEntry;
 }
 
 extern s32 gControllerInputs;
