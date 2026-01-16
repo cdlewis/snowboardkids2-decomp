@@ -2,6 +2,7 @@
 
 #include "1DFAA0.h"
 #include "common.h"
+#include "displaylist.h"
 #include "geometry.h"
 
 typedef struct {
@@ -40,7 +41,10 @@ typedef struct {
 } UnlockNotificationState;
 
 typedef struct {
-    u8 _pad0[0xF8];
+    u8 _pad0[0x18];
+    MatrixEntry_202A0 matrices[4];
+    u8 _padE8[8];
+    u16 rotations[4];
     void *portraitAsset;
 } LevelPreviewPortraitState;
 
@@ -131,7 +135,7 @@ void cleanupLevelPreviewPortraits(LevelPreviewPortraitState *state);
 void initMenuCharacterModel(MenuCharacterModelState *state);
 void setupLevelPreviewCamera(LevelPreviewCharacterState *arg0);
 void updateLevelPreviewCamera(LevelPreviewCharacterState *state);
-void func_80020924_21524(void);
+void func_80020924_21524(LevelPreviewPortraitState *arg0);
 void renderConfirmationIndicator(void *arg0);
 void cleanupConfirmationIndicator(ConfirmationIndicatorState *state);
 void updatePrizeDisplay(PrizeDisplayState *state);

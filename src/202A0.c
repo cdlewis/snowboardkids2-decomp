@@ -1,5 +1,6 @@
 #include "202A0.h"
 #include "10AD0.h"
+#include "19E80.h"
 #include "20F0.h"
 #include "33FE0.h"
 #include "36B80.h"
@@ -19,6 +20,8 @@ extern u8 identityMatrix[];
 extern void func_8001FFE4_20BE4(void);
 extern void func_8001FA00_20600(void);
 extern void func_8006D7B0_6E3B0(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32);
+struct LevelPreviewPortraitState_202A0_s;
+extern void func_80020A00_21600(struct LevelPreviewPortraitState_202A0_s *arg0);
 
 USE_ASSET(_458E30);
 USE_ASSET(_43A000);
@@ -83,7 +86,7 @@ typedef struct {
     u8 _padA[2];
 } LevelPreviewPortraitEntry_202A0;
 
-typedef struct {
+typedef struct LevelPreviewPortraitState_202A0_s {
     u8 _pad0[0x18];
     MatrixEntry_202A0 matrices[4];
     u8 _padE8[8];
@@ -94,7 +97,7 @@ typedef struct {
     u8 _pad0[0xB2F];
     u8 unkB2F;
     u8 unkB30;
-    u8 _padB31;
+    u8 unkB31;
     u8 unkB32;
 } Allocation_func_80020A00;
 
@@ -444,7 +447,28 @@ void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *portraitEntries) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80020924_21524);
+void func_80020924_21524(LevelPreviewPortraitState *arg0) {
+    OutputStruct_19E80 sp10;
+    Allocation_func_80020A00 *allocation;
+    s32 i;
+    u16 frameIndexBase_B30;
+    u16 frameIndexBase_B31;
+
+    allocation = (Allocation_func_80020A00 *)getCurrentAllocation();
+    frameIndexBase_B30 = D_8008DAA8_8E6A8[allocation->unkB30];
+    frameIndexBase_B31 = D_8008DAA8_8E6A8[allocation->unkB31];
+
+    for (i = 0; i < 4; i++) {
+        if (arg0->rotations[i] == 0) {
+            getTableEntryByU16Index(arg0->portraitAsset, (frameIndexBase_B31 + (i & 1)) & 0xFFFF, &sp10);
+        } else {
+            getTableEntryByU16Index(arg0->portraitAsset, (frameIndexBase_B30 + (i & 1)) & 0xFFFF, &sp10);
+        }
+        arg0->matrices[i].data_ptr = sp10.data_ptr;
+        arg0->matrices[i].index_ptr = (void *)sp10.index_ptr;
+    }
+    setCallbackWithContinue(func_80020A00_21600);
+}
 
 void func_80020A00_21600(LevelPreviewPortraitState_202A0 *arg0) {
     Allocation_func_80020A00 *allocation;
