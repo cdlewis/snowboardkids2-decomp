@@ -279,17 +279,17 @@ void animateCameraPositionZ(CutsceneCameraState *arg0, s32 targetZ, s16 duration
     arg0->posZStep = quotient;
 }
 
-void animateCameraRotationYContinuous(CutsceneCameraState *arg0, s16 step, s16 duration) {
+void animateCameraRotationYContinuous(CutsceneCameraState *camera, s16 step, s16 duration) {
     if ((step == 0) || (duration == 0)) {
-        arg0->animMode = 0;
-        arg0->rotYStep = 0;
-        arg0->rotYDuration = 0;
-        arg0->rotYDurationCopy = 0;
+        camera->animMode = 0;
+        camera->rotYStep = 0;
+        camera->rotYDuration = 0;
+        camera->rotYDurationCopy = 0;
     } else {
-        arg0->animMode = 1;
-        arg0->rotYStep = step;
-        arg0->rotYDuration = duration;
-        arg0->rotYDurationCopy = duration;
+        camera->animMode = 1;
+        camera->rotYStep = step;
+        camera->rotYDuration = duration;
+        camera->rotYDurationCopy = duration;
     }
 }
 

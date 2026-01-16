@@ -57,7 +57,7 @@ void animateCameraRotationY(CutsceneCameraState *arg0, s16 targetRotY, s16 durat
 void animateCameraPositionX(CutsceneCameraState *arg0, s32 targetX, s16 duration);
 void animateCameraPositionY(CutsceneCameraState *arg0, s32 targetY, s16 duration);
 void animateCameraPositionZ(CutsceneCameraState *arg0, s32 targetZ, s16 duration);
-void animateCameraRotationYContinuous(CutsceneCameraState *arg0, s16 step, s16 duration);
+void animateCameraRotationYContinuous(CutsceneCameraState *camera, s16 step, s16 duration);
 void initCameraShake(CutsceneCameraShakeState *arg0, s32 amplitude, s16 duration);
 void finalizeAnimationLoop(AnimationLoopArg *arg0);
 s16 advanceSceneManager(CutsceneCameraState *arg0);
