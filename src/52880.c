@@ -1091,7 +1091,7 @@ void checkStarProjectileHit(Struct_52880 *arg0) {
 
     allocation = (GameState *)getCurrentAllocation();
     s1 = &arg0->pos;
-    player = func_8005C454_5D054(s1, arg0->ownerPlayerIdx, 0xC0000, &localVec);
+    player = findVulnerablePlayerNearPositionWithDelta(s1, arg0->ownerPlayerIdx, 0xC0000, &localVec);
     if (player != NULL) {
         if ((player->unkB84 & 0x1000) == 0) {
             setPlayerStarHitState(player, &localVec);

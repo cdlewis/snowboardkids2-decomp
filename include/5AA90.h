@@ -29,5 +29,5 @@ s32 isPlayerInRangeAndPull(Vec3i *arg0, s32 arg1, Player *arg2);
 void handleOrientedAreaCollision(Vec3i *origin, s32 radialThreshold, s32 depthExtent, s16 rotationAngle);
 s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSectorIndex, void *position);
 #define func_80059E90_5AA90 getOrUpdatePlayerSectorIndex  // Compatibility alias
-void *func_8005C454_5D054(Vec3i *arg0, s32 arg1, s32 arg2, Vec3i *arg3);
+Player *findVulnerablePlayerNearPositionWithDelta(Vec3i *position, s32 excludePlayerIdx, s32 searchRadius, Vec3i *outDelta);
 s16 func_8005BF50_5CB50(Vec3i *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4);

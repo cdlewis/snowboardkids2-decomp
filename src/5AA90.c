@@ -898,52 +898,64 @@ s32 checkStarHitCollisionWithVulnerablePlayers(Vec3i *pos, s32 excludePlayerIdx,
 
 typedef struct {
     u8 padding[0xB88];
-    s32 unkB88;
-    u8 padding3[0x18];
+    s32 collisionFlags;
+    u8 padding2[0x18];
     u16 invincibilityTimer;
-} PlayerData;
+} PlayerCollisionData;
 
-void *func_8005C454_5D054(Vec3i *arg0, s32 arg1, s32 arg2, Vec3i *arg3) {
+/**
+ * Finds a vulnerable player (non-invincible, collision-enabled) near a position.
+ * Similar to findVulnerablePlayerNearPosition, but also returns the delta vector.
+ *
+ * @param position Position to search from
+ * @param excludePlayerIdx Player index to skip
+ * @param searchRadius Radius to add to player's collision radius
+ * @param outDelta Output parameter for the delta vector (from position to player's collision sphere)
+ * @return Player pointer if found, NULL otherwise
+ */
+Player *
+findVulnerablePlayerNearPositionWithDelta(Vec3i *position, s32 excludePlayerIdx, s32 searchRadius, Vec3i *outDelta) {
     s32 combinedRadius;
     s32 negRadius;
     Allocation5AA90 *allocation;
     ListNode_5AA90 *node;
-    PlayerData *playerData;
     u8 index;
     int new_var;
+
     allocation = (Allocation5AA90 *)getCurrentAllocation();
+
     for (node = allocation->list; node != 0; node = node->next) {
         index = node->id;
-        if (arg1 == index) {
+        if (excludePlayerIdx == index) {
             continue;
         };
-        if (((PlayerData *)(((u8 *)allocation->dataArray) + (index * 0xBE8)))->unkB88 & 0x10) {
+        if (((PlayerCollisionData *)(((u8 *)allocation->dataArray) + (index * 0xBE8)))->collisionFlags & 0x10) {
             continue;
         }
         new_var = 0xC;
-        if (((PlayerData *)(((u8 *)allocation->dataArray) + (index * 0xBE8)))->invincibilityTimer != 0) {
+        if (((PlayerCollisionData *)(((u8 *)allocation->dataArray) + (index * 0xBE8)))->invincibilityTimer != 0) {
             continue;
         }
-        memcpy(arg3, &node->localPos, new_var);
-        arg3->x += node->posPtr->x;
-        arg3->y += node->posPtr->y;
-        arg3->z += node->posPtr->z;
-        arg3->x -= arg0->x;
-        arg3->y -= arg0->y;
-        arg3->z -= arg0->z;
-        combinedRadius = node->radius + arg2;
+        memcpy(outDelta, &node->localPos, new_var);
+        outDelta->x += node->posPtr->x;
+        outDelta->y += node->posPtr->y;
+        outDelta->z += node->posPtr->z;
+        outDelta->x -= position->x;
+        outDelta->y -= position->y;
+        outDelta->z -= position->z;
+        combinedRadius = node->radius + searchRadius;
         negRadius = -combinedRadius;
-        if ((((((negRadius < arg3->x) && (arg3->x < combinedRadius)) && (negRadius < arg3->y)) &&
-              (arg3->y < combinedRadius)) &&
-             (negRadius < arg3->z)) &&
-            (arg3->z < combinedRadius)) {
-            if (distance_3d(arg3->x, arg3->y, arg3->z) < combinedRadius) {
-                return ((u8 *)allocation->dataArray) + (node->id * 0xBE8);
+        if ((((((negRadius < outDelta->x) && (outDelta->x < combinedRadius)) && (negRadius < outDelta->y)) &&
+              (outDelta->y < combinedRadius)) &&
+             (negRadius < outDelta->z)) &&
+            (outDelta->z < combinedRadius)) {
+            if (distance_3d(outDelta->x, outDelta->y, outDelta->z) < combinedRadius) {
+                return (Player *)(((u8 *)allocation->dataArray) + (node->id * 0xBE8));
             }
         }
     }
 
-    return 0;
+    return NULL;
 }
 
 s32 isPlayerInRangeAndPull(Vec3i *arg0, s32 arg1, Player *arg2) {

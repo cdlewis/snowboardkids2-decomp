@@ -3452,3 +3452,4 @@ spawnScrollingTextureEffect = 0x800B5290; // rom:0x1E2340
 initScrollingTextureEffectTask = 0x800B5318; // rom:0x1E23C8
 updateScrollingTextureEffect = 0x800B5438; // rom:0x1E24E8
 cleanupScrollingTextureEffectTask = 0x800B54B4; // rom:0x1E2564
+findVulnerablePlayerNearPositionWithDelta = 0x8005C454; // rom:0x5D054
