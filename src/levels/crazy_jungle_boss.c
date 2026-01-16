@@ -22,16 +22,16 @@ extern FuncPtr gCrazyJungleBossHoverPhaseHandlers[];
 extern s32 D_800BC44C_ACC7C[];
 extern s16 identityMatrix[];
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
-    u8 unk5;
-    u8 unk6;
-    u8 unk7;
-} D_800BACC8_AAB78_type;
-extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
+    u8 primaryR;
+    u8 primaryG;
+    u8 primaryB;
+    u8 pad1;
+    u8 secondaryR;
+    u8 secondaryG;
+    u8 secondaryB;
+    u8 pad2;
+} BossSurfaceColor;
+extern BossSurfaceColor gBossSurfaceColors[];
 
 typedef struct {
     s32 unk0;
@@ -629,12 +629,12 @@ void func_800BC23C_ACA6C(Arg0Struct *arg0) {
             enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);
         }
     } else {
-        arg0->unk6C = D_800BACC8_AAB78[index].unk0;
-        arg0->unk6D = D_800BACC8_AAB78[index].unk1;
-        arg0->unk6E = D_800BACC8_AAB78[index].unk2;
-        arg0->unk70 = D_800BACC8_AAB78[index].unk4;
-        arg0->unk71 = D_800BACC8_AAB78[index].unk5;
-        arg0->unk72 = D_800BACC8_AAB78[index].unk6;
+        arg0->unk6C = gBossSurfaceColors[index].primaryR;
+        arg0->unk6D = gBossSurfaceColors[index].primaryG;
+        arg0->unk6E = gBossSurfaceColors[index].primaryB;
+        arg0->unk70 = gBossSurfaceColors[index].secondaryR;
+        arg0->unk71 = gBossSurfaceColors[index].secondaryG;
+        arg0->unk72 = gBossSurfaceColors[index].secondaryB;
 
         for (i = 0; i < 4; i++) {
             enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);

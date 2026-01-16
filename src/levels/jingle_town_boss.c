@@ -33,37 +33,37 @@ typedef struct {
 } UnkA10Entry;
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
-    u8 unk5;
-    u8 unk6;
-    u8 unk7;
-} D_800BACC8_AAB78_type;
+    u8 primaryR;
+    u8 primaryG;
+    u8 primaryB;
+    u8 pad1;
+    u8 secondaryR;
+    u8 secondaryG;
+    u8 secondaryB;
+    u8 pad2;
+} BossSurfaceColor;
 
 typedef struct {
     u8 pad[0x38];
     s16 unk38[0x10]; /* 0x38 - 0x57 */
     u8 pad58[0x6C - 0x58];
-    u8 unk6C; /* 0x6C */
-    u8 unk6D; /* 0x6D */
-    u8 unk6E; /* 0x6E */
+    u8 groundPrimaryR; /* 0x6C */
+    u8 groundPrimaryG; /* 0x6D */
+    u8 groundPrimaryB; /* 0x6E */
     u8 pad6F;
-    u8 unk70; /* 0x70 */
-    u8 unk71; /* 0x71 */
-    u8 unk72; /* 0x72 */
+    u8 groundSecondaryR; /* 0x70 */
+    u8 groundSecondaryG; /* 0x71 */
+    u8 groundSecondaryB; /* 0x72 */
     u8 pad73;
     u8 unk74[0x20]; /* 0x74 - 0x93 */
     u8 pad94[0xA8 - 0x94];
-    u8 unkA8; /* 0xA8 */
-    u8 unkA9; /* 0xA9 */
-    u8 unkAA; /* 0xAA */
+    u8 flyingPrimaryR; /* 0xA8 */
+    u8 flyingPrimaryG; /* 0xA9 */
+    u8 flyingPrimaryB; /* 0xAA */
     u8 padAB;
-    u8 unkAC; /* 0xAC */
-    u8 unkAD; /* 0xAD */
-    u8 unkAE; /* 0xAE */
+    u8 flyingSecondaryR; /* 0xAC */
+    u8 flyingSecondaryG; /* 0xAD */
+    u8 flyingSecondaryB; /* 0xAE */
     u8 padAF;
     u8 unkB0[0x20]; /* 0xB0 - 0xCF */
     u8 padD0[0x434 - 0xD0];
@@ -189,7 +189,7 @@ extern s32 gJingleTownBossHoverExitOffsets[][3];
 extern Vec3i D_800BCB68_B4128;
 extern s32 gJingleTownBossSpawnPos[];
 void updateJingleTownBossModelTransforms(Arg0Struct *);
-extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
+extern BossSurfaceColor gBossSurfaceColors[];
 
 void updateJingleTownBoss(Arg0Struct *arg0) {
     Transform3D sp10;
@@ -830,7 +830,7 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     func_8006B084_6BC84(globalTransformPtr - 5, arg0->unk74, arg0->unkB0);
 }
 
-void func_800BC5A8_B3B68(Arg0Struct *arg0) {
+void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
     s32 pad10[16];
     Vec3i sp58;
     Vec3i sp68;
@@ -865,23 +865,23 @@ void func_800BC5A8_B3B68(Arg0Struct *arg0) {
         }
     } else {
         if (arg0->unkB84 & 0x200000) {
-            arg0->unkA8 = D_800BACC8_AAB78[index].unk0;
-            arg0->unkA9 = D_800BACC8_AAB78[index].unk1;
-            arg0->unkAA = D_800BACC8_AAB78[index].unk2;
-            arg0->unkAC = D_800BACC8_AAB78[index].unk4;
-            arg0->unkAD = D_800BACC8_AAB78[index].unk5;
-            arg0->unkAE = D_800BACC8_AAB78[index].unk6;
+            arg0->flyingPrimaryR = gBossSurfaceColors[index].primaryR;
+            arg0->flyingPrimaryG = gBossSurfaceColors[index].primaryG;
+            arg0->flyingPrimaryB = gBossSurfaceColors[index].primaryB;
+            arg0->flyingSecondaryR = gBossSurfaceColors[index].secondaryR;
+            arg0->flyingSecondaryG = gBossSurfaceColors[index].secondaryG;
+            arg0->flyingSecondaryB = gBossSurfaceColors[index].secondaryB;
 
             for (i = 0; i < 4; i++) {
                 enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk74, 2);
             }
         } else {
-            arg0->unk6C = D_800BACC8_AAB78[index].unk0;
-            arg0->unk6D = D_800BACC8_AAB78[index].unk1;
-            arg0->unk6E = D_800BACC8_AAB78[index].unk2;
-            arg0->unk70 = D_800BACC8_AAB78[index].unk4;
-            arg0->unk71 = D_800BACC8_AAB78[index].unk5;
-            arg0->unk72 = D_800BACC8_AAB78[index].unk6;
+            arg0->groundPrimaryR = gBossSurfaceColors[index].primaryR;
+            arg0->groundPrimaryG = gBossSurfaceColors[index].primaryG;
+            arg0->groundPrimaryB = gBossSurfaceColors[index].primaryB;
+            arg0->groundSecondaryR = gBossSurfaceColors[index].secondaryR;
+            arg0->groundSecondaryG = gBossSurfaceColors[index].secondaryG;
+            arg0->groundSecondaryB = gBossSurfaceColors[index].secondaryB;
 
             for (i = 0; i < 4; i++) {
                 enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk38, 3);

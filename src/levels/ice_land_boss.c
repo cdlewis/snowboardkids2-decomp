@@ -228,15 +228,15 @@ typedef struct {
 } IceLandBossArg;
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
-    u8 unk5;
-    u8 unk6;
-    u8 unk7;
-} D_800BACC8_AAB78_type;
+    u8 primaryR;
+    u8 primaryG;
+    u8 primaryB;
+    u8 pad1;
+    u8 secondaryR;
+    u8 secondaryG;
+    u8 secondaryB;
+    u8 pad2;
+} BossSurfaceColor;
 
 typedef struct {
     u8 pad[0x38];
@@ -292,7 +292,7 @@ extern s16 D_800BCA30_B1F20[];
 extern FuncPtr D_800BCA44_B1F34[];
 extern FuncPtr gIceLandBossAttackPhaseHandlers[];
 extern u16 D_8009ADE0_9B9E0;
-extern D_800BACC8_AAB78_type D_800BACC8_AAB78[];
+extern BossSurfaceColor gBossSurfaceColors[];
 extern s32 identityMatrix[];
 extern s32 D_800BCA50_B1F40;
 extern s32 gControllerInputs[];
@@ -970,12 +970,12 @@ void func_800BC7A8_B1C98(Player *arg0) {
             enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);
         }
     } else {
-        arg0->unk6C = D_800BACC8_AAB78[index].unk0;
-        arg0->unk6D = D_800BACC8_AAB78[index].unk1;
-        arg0->unk6E = D_800BACC8_AAB78[index].unk2;
-        arg0->unk70 = D_800BACC8_AAB78[index].unk4;
-        arg0->unk71 = D_800BACC8_AAB78[index].unk5;
-        arg0->unk72 = D_800BACC8_AAB78[index].unk6;
+        arg0->unk6C = gBossSurfaceColors[index].primaryR;
+        arg0->unk6D = gBossSurfaceColors[index].primaryG;
+        arg0->unk6E = gBossSurfaceColors[index].primaryB;
+        arg0->unk70 = gBossSurfaceColors[index].secondaryR;
+        arg0->unk71 = gBossSurfaceColors[index].secondaryG;
+        arg0->unk72 = gBossSurfaceColors[index].secondaryB;
 
         for (i = 0; i < 4; i++) {
             enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);
