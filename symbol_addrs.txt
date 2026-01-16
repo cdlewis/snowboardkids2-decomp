@@ -1205,7 +1205,7 @@ commandTable = 0x800B9C70; // type:s32 size:0x900 rom:0x1E6D20
 
 cutsceneSys2Wipe_validate = 0x800B2808;
 cutsceneSys2Wipe_isDone = 0x800B292C;
-cutsceneSys2Wait_validate = 0x800B293C;
+cutsceneSys2Wait_validate = 0x800B293C; // rom:0x1DF9EC
 
 cutsceneBgmPlay_validate = 0x800B0818; // rom:0x1DD8C8
 cutsceneBgmFadeOut_validate = 0x800B0850; // rom:0x1DD900
