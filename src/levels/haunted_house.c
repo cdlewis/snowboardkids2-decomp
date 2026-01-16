@@ -439,7 +439,7 @@ void freeSwingingPendulumTrapAssets(SwingingPendulumTrap *trap) {
 void initFloatingBillboard(FloatingBillboard *billboard) {
     s32 initialY;
 
-    billboard->spriteAsset = func_80055D7C_5697C(9);
+    billboard->spriteAsset = loadSpriteAssetByIndex(9);
     billboard->spriteMetadata = &D_800BC8C8_B05B8;
     billboard->alpha = 0xFF;
     memcpy(&billboard->currentX, &g_FloatingBillboardInitialPos, 12);
@@ -523,7 +523,7 @@ void updateFloatingBillboardSpawner(s16 *spawnTimer) {
 void initFloatingSpriteEntity(FloatingSpriteEntity *arg0) {
     s16 index;
 
-    arg0->spriteAsset = func_80055D7C_5697C(9);
+    arg0->spriteAsset = loadSpriteAssetByIndex(9);
     arg0->spriteMetadata = &D_800BC920_B0610;
 
     index = arg0->variantIndex;
@@ -582,7 +582,7 @@ void scheduleFloatingSpriteEntity(s16 variantIndex) {
 }
 
 void initGhostManager(GhostManager *ghostManager) {
-    ghostManager->ghostSpriteAsset = func_80055D7C_5697C(9);
+    ghostManager->ghostSpriteAsset = loadSpriteAssetByIndex(9);
     ghostManager->ghostSlotData = 0;
     setCleanupCallback(cleanupGhostManager);
     setCallback(initGhostTransformations);

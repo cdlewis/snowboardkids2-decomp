@@ -416,7 +416,7 @@ void func_8004119C_41D9C(ConfettiEffectTask *task);
 void initConfettiEffect(ConfettiEffectTask *task) {
     s16 count;
 
-    task->particleAsset = func_80055D7C_5697C(0xB);
+    task->particleAsset = loadSpriteAssetByIndex(0xB);
     count = task->particleCount;
     task->particles = allocateNodeMemory((count * 7) * 8);
     setCleanupCallback(&cleanupConfettiEffect);

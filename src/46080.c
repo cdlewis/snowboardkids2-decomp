@@ -1034,7 +1034,7 @@ void schedulePlayerRenderTask(s32 playerIndex) {
 void initSceneAnimationTask(SceneAnimationTask *arg0) {
     s16 courseID;
 
-    arg0->assetData = func_80055D7C_5697C(arg0->assetIndex);
+    arg0->assetData = loadSpriteAssetByIndex(arg0->assetIndex);
     courseID = arg0->dataIndex;
     arg0->loadedData = loadCompressedData(
         D_80090AF0_916F0[courseID].romStart,
@@ -1244,7 +1244,7 @@ void initScrollingSceneryTask(ScrollingSceneryCleanupState *arg0) {
     arg0->unk28 = func_80055DF8_569F8(arg0->assetPoolIndex);
     arg0->unk2C = NULL;
     memcpy(arg0, identityMatrix, 0x20);
-    arg0->unk3C = func_80055D7C_5697C(arg0->assetPoolIndex);
+    arg0->unk3C = loadSpriteAssetByIndex(arg0->assetPoolIndex);
     arg0->scrollX.halfword = 0;
     arg0->scrollY.halfword = 0;
     setCleanupCallback(&cleanupScrollingSceneryTask);

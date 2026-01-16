@@ -222,7 +222,7 @@ void initDebugDisplayListTask(DebugDisplayListTaskState *arg0) {
     arg0->displayListMemory1 = func_80055DC4_569C4(8);
     arg0->displayListMemory2 = func_80055DF8_569F8(8);
     arg0->unk2C = 0;
-    arg0->displayListMemory3 = func_80055D7C_5697C(8);
+    arg0->displayListMemory3 = loadSpriteAssetByIndex(8);
     arg0->config = &gDebugDisplayConfig;
     arg0->unk4C = 0;
     arg0->uSpeed = 8;
