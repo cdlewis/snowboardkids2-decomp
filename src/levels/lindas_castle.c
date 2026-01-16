@@ -11,56 +11,56 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-} D_800BBBC0_ABA70_substruct;
+    s32 x;
+    s32 z;
+} Waypoint;
 
 typedef struct {
     s32 unk0;
-    D_800BBBC0_ABA70_substruct unk4[2];
-} D_800BBBC0_ABA70_struct;
+    Waypoint unk4[2];
+} WaypointGroup;
 
-extern D_800BBBC0_ABA70_struct D_800BBBC0_ABA70[];
-extern s32 D_800BBC1C_ABACC[3];
+extern WaypointGroup g_FlyingEnemyWaypoints[];
+extern Vec3i *g_FlyingEnemyDirection;
 
-void func_800BB5BC_AB46C(func_800BB2B0_arg *task);
-void pullPlayersInRange(func_800BB2B0_arg *arg0);
-void func_800BB7D4_AB684(func_800BB2B0_arg *task);
+void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task);
+void pullPlayersInRange(FlyingEnemyTaskArg *arg0);
+void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task);
 
 typedef struct {
     u8 pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_800BB9F0_AB8A0_arg;
+    void *displayList2;
+    void *displayList3;
+} FlyingEnemyCleanupArg;
 
-void func_800BB9F0_AB8A0(func_800BB9F0_AB8A0_arg *arg0);
+void cleanupFlyingEnemyTask(FlyingEnemyCleanupArg *arg0);
 
 typedef struct {
     u8 pad0[0x30];
-    void *unk30;
+    void *gameData;
     u8 pad34[0x28];
-    u8 unk5C;
-} Allocation_AB304;
+    u8 memoryPoolId;
+} GameState_AB304;
 
 typedef struct {
     u8 pad0[0x20];
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    s32 unk2C;
+    void *displayList1;
+    void *displayList2;
+    void *displayList3;
+    s32 initialY;
     u8 pad30[0xC];
-    s32 unk3C;
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    s16 unk50;
-    s16 unk52;
-    u16 unk54;
-    s16 unk56;
-} TaskArg_AB304;
+    s32 waypointX;
+    s32 posY;
+    s32 waypointZ;
+    s32 velocityY;
+    s32 gravity;
+    s16 waypointIndex;
+    s16 targetWaypointIndex;
+    u16 rotationAngle;
+    s16 surfaceType;
+} FlyingEnemyTask;
 
-void func_800BB2B0(func_800BB2B0_arg *arg0) {
+void func_800BB2B0(FlyingEnemyTaskArg *arg0) {
     s32 i;
 
     createYRotationMatrix(&arg0->matrix, arg0->rotationAngle);
@@ -72,7 +72,7 @@ void func_800BB2B0(func_800BB2B0_arg *arg0) {
     }
 }
 
-void pullPlayersInRange(func_800BB2B0_arg *arg0) {
+void pullPlayersInRange(FlyingEnemyTaskArg *arg0) {
     GameState *gs;
     Vec3i pos;
     s32 pullTarget[3];
@@ -94,109 +94,109 @@ void pullPlayersInRange(func_800BB2B0_arg *arg0) {
     }
 }
 
-void func_800BB454_AB304(TaskArg_AB304 *task) {
-    Allocation_AB304 *allocation;
+void initFlyingEnemyTask(FlyingEnemyTask *task) {
+    GameState_AB304 *gamestate;
     void *temp;
     s16 index;
-    s32 temp_value;
-    void (*temp_callback)(void);
+    s32 initialVelocity;
+    void (*updateCallback)(void);
 
-    allocation = (Allocation_AB304 *)getCurrentAllocation();
+    gamestate = (GameState_AB304 *)getCurrentAllocation();
 
-    temp = func_80055E68_56A68(allocation->unk5C);
-    task->unk20 = (void *)((u32)temp + 0x90);
+    temp = func_80055E68_56A68(gamestate->memoryPoolId);
+    task->displayList1 = (void *)((u32)temp + 0x90);
 
-    task->unk24 = func_80055DC4_569C4(allocation->unk5C);
-    task->unk28 = func_80055DF8_569F8(allocation->unk5C);
+    task->displayList2 = func_80055DC4_569C4(gamestate->memoryPoolId);
+    task->displayList3 = func_80055DF8_569F8(gamestate->memoryPoolId);
 
-    index = task->unk50;
+    index = task->waypointIndex;
 
-    task->unk2C = 0;
-    task->unk52 = 1;
+    task->initialY = 0;
+    task->targetWaypointIndex = 1;
 
-    task->unk56 = D_800BBBC0_ABA70[task->unk50].unk0;
+    task->surfaceType = g_FlyingEnemyWaypoints[task->waypointIndex].unk0;
 
-    task->unk3C = D_800BBBC0_ABA70[task->unk50].unk4[0].unk0;
+    task->waypointX = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[0].x;
 
-    task->unk44 = D_800BBBC0_ABA70[task->unk50].unk4[0].unk4;
+    task->waypointZ = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[0].z;
 
-    task->unk40 = func_80061A64_62664(&allocation->unk30, task->unk56, &task->unk3C);
+    task->posY = func_80061A64_62664(&gamestate->gameData, task->surfaceType, &task->waypointX);
 
-    index = task->unk50;
+    index = task->waypointIndex;
 
-    task->unk54 = func_8006D21C_6DE1C(
-        D_800BBBC0_ABA70[index].unk4[1].unk0,
-        D_800BBBC0_ABA70[index].unk4[1].unk4,
-        task->unk3C,
-        task->unk44
+    task->rotationAngle = func_8006D21C_6DE1C(
+        g_FlyingEnemyWaypoints[index].unk4[1].x,
+        g_FlyingEnemyWaypoints[index].unk4[1].z,
+        task->waypointX,
+        task->waypointZ
     );
 
-    task->unk48 = 0;
-    task->unk4C = 0;
+    task->velocityY = 0;
+    task->gravity = 0;
 
-    setCleanupCallback(func_800BB9F0_AB8A0);
+    setCleanupCallback(cleanupFlyingEnemyTask);
 
     if ((randA() & 0xFF) < 0xB3) {
-        temp_callback = (void (*)(void))func_800BB5BC_AB46C;
-        task->unk48 = 0;
-        temp_value = 0x40000;
+        updateCallback = (void (*)(void))updateFlyingEnemyHighJump;
+        task->velocityY = 0;
+        initialVelocity = 0x40000;
     } else {
-        temp_value = 0x18000;
-        temp_callback = (void (*)(void))func_800BB7D4_AB684;
-        task->unk48 = 0;
+        initialVelocity = 0x18000;
+        updateCallback = (void (*)(void))updateFlyingEnemyLowJump;
+        task->velocityY = 0;
     }
 
-    task->unk4C = temp_value;
-    setCallback(temp_callback);
+    task->gravity = initialVelocity;
+    setCallback(updateCallback);
 }
 
-void func_800BB5BC_AB46C(func_800BB2B0_arg *task) {
+void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task) {
     GameState *gs;
     Vec3i rotatedVec;
-    s16 var_v1;
+    s16 angleDelta;
 
     gs = (GameState *)getCurrentAllocation();
 
     if (gs->gamePaused == 0) {
-        var_v1 = func_8006D21C_6DE1C(
-            D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk0,
-            D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk4,
+        angleDelta = func_8006D21C_6DE1C(
+            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x,
+            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z,
             task->targetPosition[0],
             task->targetPosition[2]
         );
-        var_v1 = (var_v1 - task->rotationAngle) & 0x1FFF;
+        angleDelta = (angleDelta - task->rotationAngle) & 0x1FFF;
 
-        if (var_v1 >= 0x1001) {
-            var_v1 = var_v1 | 0xE000;
+        if (angleDelta >= 0x1001) {
+            angleDelta = angleDelta | 0xE000;
         }
 
-        if (var_v1 >= 0x81) {
-            var_v1 = 0x80;
+        if (angleDelta >= 0x81) {
+            angleDelta = 0x80;
         }
 
-        if (var_v1 < -0x80) {
-            var_v1 = -0x80;
+        if (angleDelta < -0x80) {
+            angleDelta = -0x80;
         }
 
-        task->rotationAngle = task->rotationAngle + var_v1;
+        task->rotationAngle = task->rotationAngle + angleDelta;
 
-        rotateVectorY(&D_800BBBC0_ABA70[4], task->rotationAngle, &rotatedVec);
+        rotateVectorY(&g_FlyingEnemyWaypoints[4], task->rotationAngle, &rotatedVec);
 
         task->targetPosition[0] += rotatedVec.x;
         task->targetPosition[2] += rotatedVec.z;
 
-        task->unk56 = func_80060A3C_6163C(&gs->gameData, task->unk56, &task->targetPosition[0]);
-        task->targetPosition[1] = func_80061A64_62664(&gs->gameData, task->unk56, &task->targetPosition[0]);
+        task->surfaceType = func_80060A3C_6163C(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
+        task->targetPosition[1] = func_80061A64_62664(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
 
-        task->velocityY += task->unk4C;
-        task->unk4C = task->unk4C - 0x8000;
+        task->velocityY += task->gravity;
+        task->gravity = task->gravity - 0x8000;
 
         if (task->velocityY == 0) {
-            task->unk4C = 0x40000;
+            task->gravity = 0x40000;
         }
 
-        rotatedVec.x = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk0 - task->targetPosition[0];
-        rotatedVec.y = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk4 - task->targetPosition[2];
+        rotatedVec.x = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x - task->targetPosition[0];
+        rotatedVec.y = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
 
         if ((u32)(rotatedVec.x + 0xFFFFF) <= 0x1FFFFEU && (u32)(rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
             func_80069CF8_6A8F8();
@@ -208,55 +208,55 @@ void func_800BB5BC_AB46C(func_800BB2B0_arg *task) {
     func_800BB2B0(task);
 }
 
-void func_800BB7D4_AB684(func_800BB2B0_arg *task) {
+void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
     GameState *gs;
     Vec3i rotatedVec;
-    s16 var_v1;
+    s16 angleDelta;
     GameDataLayout *gameData;
 
     gs = (GameState *)getCurrentAllocation();
 
     if (gs->gamePaused == 0) {
-        var_v1 = func_8006D21C_6DE1C(
-            D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk0,
-            D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk4,
+        angleDelta = func_8006D21C_6DE1C(
+            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x,
+            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z,
             task->targetPosition[0],
             task->targetPosition[2]
         );
-        var_v1 = var_v1 - task->rotationAngle & 0x1FFF;
+        angleDelta = angleDelta - task->rotationAngle & 0x1FFF;
 
-        if (var_v1 >= 0x1001) {
-            var_v1 = var_v1 | 0xE000;
+        if (angleDelta >= 0x1001) {
+            angleDelta = angleDelta | 0xE000;
         }
 
-        if (var_v1 >= 0x81) {
-            var_v1 = 0x80;
+        if (angleDelta >= 0x81) {
+            angleDelta = 0x80;
         }
 
-        if (var_v1 < -0x80) {
-            var_v1 = -0x80;
+        if (angleDelta < -0x80) {
+            angleDelta = -0x80;
         }
 
-        task->rotationAngle = task->rotationAngle + var_v1;
+        task->rotationAngle = task->rotationAngle + angleDelta;
 
-        rotateVectorY(&D_800BBBC0_ABA70[4].unk4[1].unk0, task->rotationAngle, &rotatedVec);
+        rotateVectorY(&g_FlyingEnemyWaypoints[4].unk4[1].x, task->rotationAngle, &rotatedVec);
 
         gameData = &gs->gameData;
         task->targetPosition[0] += rotatedVec.x;
         task->targetPosition[2] += rotatedVec.z;
 
-        task->unk56 = func_80060A3C_6163C(gameData, task->unk56, &task->targetPosition[0]);
-        task->targetPosition[1] = func_80061A64_62664(gameData, task->unk56, &task->targetPosition[0]);
+        task->surfaceType = func_80060A3C_6163C(gameData, task->surfaceType, &task->targetPosition[0]);
+        task->targetPosition[1] = func_80061A64_62664(gameData, task->surfaceType, &task->targetPosition[0]);
 
-        task->velocityY += task->unk4C;
-        task->unk4C = task->unk4C - 0x8000;
+        task->velocityY += task->gravity;
+        task->gravity = task->gravity - 0x8000;
 
         if (task->velocityY == 0) {
-            task->unk4C = 0x18000;
+            task->gravity = 0x18000;
         }
 
-        rotatedVec.x = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk0 - task->targetPosition[0];
-        rotatedVec.y = D_800BBBC0_ABA70[task->unk50].unk4[task->unk52].unk4 - task->targetPosition[2];
+        rotatedVec.x = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x - task->targetPosition[0];
+        rotatedVec.y = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
 
         if (rotatedVec.x + 0xFFFFF <= 0x1FFFFEU && (rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
             func_80069CF8_6A8F8();
@@ -268,9 +268,9 @@ void func_800BB7D4_AB684(func_800BB2B0_arg *task) {
     func_800BB2B0(task);
 }
 
-void func_800BB9F0_AB8A0(func_800BB9F0_AB8A0_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupFlyingEnemyTask(FlyingEnemyCleanupArg *arg0) {
+    arg0->displayList2 = freeNodeMemory(arg0->displayList2);
+    arg0->displayList3 = freeNodeMemory(arg0->displayList3);
 }
 
 typedef struct {
@@ -298,7 +298,7 @@ void func_800BBA54_AB904(func_800BBA28_AB8D8_arg *arg0) {
 
     counter = arg0->unk2;
     if (counter == 0) {
-        task = (ScheduledTaskWith50 *)scheduleTask(func_800BB454_AB304, 0, 0, 0x32);
+        task = (ScheduledTaskWith50 *)scheduleTask(initFlyingEnemyTask, 0, 0, 0x32);
         if (task != NULL) {
             task->unk50 = arg0->unk0;
         }
