@@ -22,17 +22,17 @@ typedef struct {
     void *assetData;
     s32 alpha;
     s16 layerIndex;
-    s16 unkE;
-    s16 unk10;
-    s16 unk12;
-    void *unk14;
-    s16 unk18;
-    s16 unk1A;
-    s16 unk1C;
-    s16 unk1E;
-    s16 unk20;
-    s8 unk22;
-    s8 unk23;
+    s16 padE;
+    s16 horizontalOffset;
+    s16 fadeFlag;
+    void *assetDataCopy;
+    s16 initialY;
+    s16 xPosition;
+    s16 targetX;
+    s16 yVelocity;
+    s16 maxAlpha;
+    s8 pad0;
+    s8 pad1;
     s8 alphaValue;
 } TransitionLayerState;
 
@@ -73,7 +73,7 @@ typedef struct {
     s16 layerIndex;
 } TransitionLayerTask;
 
-extern s8 D_800BADE0_1E7E90[];
+extern s8 s_TransitionLayerInitialY[];
 
 void freeTransitionData(TransitionCleanupData **);
 void updateTransitionFadeIn(TransitionSpawnerState *);
@@ -106,27 +106,25 @@ void freeTransitionData(TransitionCleanupData **data) {
 
 void initTransitionLayer(TransitionLayerState *layer) {
     s8 initialY;
-    s32 temp;
 
     setCleanupCallback(&cleanupTransitionLayer);
     loadTransitionAsset(&layer->assetData);
 
-    layer->unk12 = 0;
-    temp = layer->layerIndex - 1;
-    layer->unk10 = temp << 5;
-    layer->unk14 = layer->assetData;
+    layer->fadeFlag = 0;
+    layer->horizontalOffset = (layer->layerIndex - 1) * 32;
+    layer->assetDataCopy = layer->assetData;
 
-    initialY = D_800BADE0_1E7E90[layer->layerIndex];
+    initialY = s_TransitionLayerInitialY[layer->layerIndex];
 
-    layer->unk1C = 0x400;
-    layer->unk1A = 0x400;
-    layer->unk1E = 0;
-    layer->unk20 = 0xFF;
-    layer->unk22 = 0;
-    layer->unk23 = 0;
+    layer->targetX = 0x400;
+    layer->xPosition = 0x400;
+    layer->yVelocity = 0;
+    layer->maxAlpha = 0xFF;
+    layer->pad0 = 0;
+    layer->pad1 = 0;
     layer->alphaValue = 0;
     layer->alpha = 0;
-    layer->unk18 = initialY;
+    layer->initialY = initialY;
 
     setCallback(&updateTransitionFadeIn);
 }
