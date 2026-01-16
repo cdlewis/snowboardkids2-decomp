@@ -388,7 +388,11 @@ void func_8006BDBC_6C9BC(BoneAnimationState *arg0, void *arg1, void *arg2) {
     }
 }
 
+// Multiplies a 3x3 rotation matrix by the transpose of another 3x3 rotation matrix.
+// Result = arg0 * transpose(arg1), where * is matrix multiplication.
 void func_mulMatrix3x3T(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2) {
+    Transform3D *mat1 = arg1;
+    Transform3D *mat2 = arg2;
     s32 row;
     s16 *rowPtr;
     s32 i;
@@ -399,11 +403,11 @@ void func_mulMatrix3x3T(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2)
         row = i;
         rowPtr = arg0->m[row];
         for (j = 0; j < 3; j++) {
-            sum = rowPtr[0] * arg1->m[j][0] + arg0->m[row][1] * arg1->m[j][1] + arg0->m[row][2] * arg1->m[j][2];
+            sum = rowPtr[0] * mat1->m[j][0] + arg0->m[row][1] * mat1->m[j][1] + arg0->m[row][2] * mat1->m[j][2];
             if (sum < 0) {
                 sum += 0x1FFF;
             }
-            arg2->m[i][j] = sum >> 13;
+            mat2->m[i][j] = sum >> 13;
         }
     }
 }
