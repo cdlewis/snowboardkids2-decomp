@@ -323,15 +323,15 @@ void initGhostSpawnerTask(GhostSpawnerTask *arg0) {
 INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BB778_AF468);
 
 void initSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
-    func_80055E68_56A68_result *temp_v0_3;
+    LevelDisplayLists *temp_v0_3;
     u16 temp_a1;
 
     arg0->uncompressedAsset = loadUncompressedAssetByIndex(9);
     arg0->compressedAsset = loadCompressedSegment2AssetByIndex(9);
     arg0->animationFrame = 0;
 
-    temp_v0_3 = func_80055E68_56A68(9);
-    arg0->displayListState = &temp_v0_3->unk90;
+    temp_v0_3 = getSkyDisplayLists3ByIndex(9);
+    arg0->displayListState = &temp_v0_3->sceneryDisplayLists1;
 
     arg0->phaseTimer = 0xF;
     arg0->pivotX = 0xFD71ABE1;

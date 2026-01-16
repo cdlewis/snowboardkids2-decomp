@@ -179,32 +179,32 @@ void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0) {
 void renderStarlightHighwayBuildings(StarlightBuildingRenderData *arg0) {
     StarlightBuildingAllocation *allocation;
     s32 i;
-    func_80055E68_56A68_result *displayListResult;
+    LevelDisplayLists *displayListResult;
 
     allocation = (StarlightBuildingAllocation *)getCurrentAllocation();
 
     if (allocation->animateNode1 != 0) {
         if (gFrameCounter & 1) {
-            displayListResult = func_80055E68_56A68(8);
+            displayListResult = getSkyDisplayLists3ByIndex(8);
             arg0->node1.displayLists = (DisplayLists *)((u32)displayListResult + 0x10);
         } else {
-            displayListResult = func_80055E68_56A68(8);
+            displayListResult = getSkyDisplayLists3ByIndex(8);
             arg0->node1.displayLists = (DisplayLists *)((u32)displayListResult + 0x20);
         }
     } else {
-        arg0->node1.displayLists = (DisplayLists *)func_80055E68_56A68(8);
+        arg0->node1.displayLists = (DisplayLists *)getSkyDisplayLists3ByIndex(8);
     }
 
     if (allocation->animateNode2 != 0) {
         if (gFrameCounter & 1) {
-            displayListResult = func_80055E68_56A68(8);
+            displayListResult = getSkyDisplayLists3ByIndex(8);
             arg0->node2.displayLists = (DisplayLists *)((u32)displayListResult + 0x10);
         } else {
-            displayListResult = func_80055E68_56A68(8);
+            displayListResult = getSkyDisplayLists3ByIndex(8);
             arg0->node2.displayLists = (DisplayLists *)((u32)displayListResult + 0x20);
         }
     } else {
-        arg0->node2.displayLists = (DisplayLists *)func_80055E68_56A68(8);
+        arg0->node2.displayLists = (DisplayLists *)getSkyDisplayLists3ByIndex(8);
     }
 
     for (i = 0; i < 4; i++) {
@@ -602,14 +602,14 @@ void updateStarlightItemTask(StarlightItemTaskState *arg0) {
         }
     }
     // Full-size display lists (normal state)
-    arg0->displayLists2 = (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xD0)),
-                                   (s32)func_80055E68_56A68(8) + 0xE0);
+    arg0->displayLists2 = (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)getSkyDisplayLists3ByIndex(8) + 0xD0)),
+                                   (s32)getSkyDisplayLists3ByIndex(8) + 0xE0);
     goto render;
 
 shrinking_animation:
     // Shrinking display lists (collected state)
-    arg0->displayLists2 = (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)func_80055E68_56A68(8) + 0xC0)),
-                                   (s32)func_80055E68_56A68(8) + 0xF0);
+    arg0->displayLists2 = (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)getSkyDisplayLists3ByIndex(8) + 0xC0)),
+                                   (s32)getSkyDisplayLists3ByIndex(8) + 0xF0);
 
 render:
     var_s0 = 0;
@@ -647,7 +647,7 @@ void initStarlightFireworkTask(StarlightFireworkTaskState *arg0) {
     arg0->segment1 = loadUncompressedAssetByIndex(8);
     arg0->segment2 = loadCompressedSegment2AssetByIndex(8);
     arg0->unk2C = 0;
-    arg0->displayList = (void *)((u32)func_80055E68_56A68(8) + 0x90);
+    arg0->displayList = (void *)((u32)getSkyDisplayLists3ByIndex(8) + 0x90);
     memcpy(&arg0->pos, gStarlightFireworkPositions[arg0->type], 0xC);
     rotPtr = stack.rotation;
     createXRotationMatrix(rotPtr, gStarlightFireworkXRotations[arg0->type]);
@@ -862,12 +862,12 @@ void initStarlightBarrierTask(StarlightBarrierTask *arg0) {
     arg0->displayListMemory1 = loadUncompressedAssetByIndex(8);
     arg0->displayListMemory2 = loadCompressedSegment2AssetByIndex(8);
     arg0->unk2C = 0;
-    temp = func_80055E68_56A68(8);
+    temp = getSkyDisplayLists3ByIndex(8);
     arg0->leftGateDisplayListOffset = (void *)((u32)temp + 0xA0);
     arg0->unk68 = 0;
     arg0->unk60 = arg0->displayListMemory1;
     arg0->unk64 = arg0->displayListMemory2;
-    temp = func_80055E68_56A68(8);
+    temp = getSkyDisplayLists3ByIndex(8);
     arg0->rightGateDisplayListOffset = (void *)((u32)temp + 0xB0);
     createYRotationMatrix(&arg0->leftGateNode, 0x1BEC);
     createYRotationMatrix(&arg0->rightGateNode, 0x1BEC);

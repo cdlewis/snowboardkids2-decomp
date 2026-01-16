@@ -193,7 +193,7 @@ void initStartGate(StartGate *gate) {
 
     gameState = (GameState *)getCurrentAllocation();
     spawnData = getLevelConfig(gameState->memoryPoolId);
-    gate->unk20 = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x50);
+    gate->unk20 = (void *)((u8 *)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x50);
     gate->unk24 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     gate->unk28 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     gate->unk2C = 0;
@@ -203,7 +203,7 @@ void initStartGate(StartGate *gate) {
     gate->rotationMatrix.translation.x = gate->rotationMatrix.translation.x + spawnData->shortcutPosX;
     gate->rotationMatrix.translation.z = gate->rotationMatrix.translation.z + spawnData->shortcutPosZ;
     gate->rotationMatrix.translation.y = worldPos[1];
-    gate->unk5C = (void *)((u8 *)func_80055E68_56A68(gameState->memoryPoolId) + 0x60);
+    gate->unk5C = (void *)((u8 *)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x60);
     transformMatrix = tempMatrix;
     gate->unk60 = gate->unk24;
     gate->unk64 = gate->unk28;
@@ -284,10 +284,10 @@ void updateStartGate(StartGate *gate) {
     }
 
     if (gameState->shortcutGateState == 3) {
-        gate->unk98 = (s32)func_80055E68_56A68(gameState->memoryPoolId) + 0x70;
+        gate->unk98 = (s32)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x70;
     } else {
     block_else:
-        gate->unk98 = (s32)func_80055E68_56A68(gameState->memoryPoolId) + 0x80;
+        gate->unk98 = (s32)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x80;
     }
 
     for (i = 0; i < 4; i++) {

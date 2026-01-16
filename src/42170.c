@@ -1923,18 +1923,18 @@ void initUfoEffect(UfoEffectState *arg0) {
     rotation = getTrackEndInfo(&allocation->unk30, &posOutput) + 0x800;
     item = getLevelConfig(allocation->unk5C);
 
-    arg0->unk20 = (u8 *)func_80055E68_56A68(allocation->unk5C) + 0x10;
+    arg0->unk20 = (u8 *)getSkyDisplayLists3ByIndex(allocation->unk5C) + 0x10;
 
     arg0->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
     arg0->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     arg0->unk2C = 0;
 
-    arg0->leftWing.displayLists = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0x90);
+    arg0->leftWing.displayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(allocation->unk5C) + 0x90);
     arg0->leftWing.segment3 = 0;
     arg0->leftWing.segment1 = arg0->unk24;
     arg0->leftWing.segment2 = arg0->unk28;
 
-    arg0->rightWing.displayLists = (DisplayLists *)((u8 *)func_80055E68_56A68(allocation->unk5C) + 0xA0);
+    arg0->rightWing.displayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(allocation->unk5C) + 0xA0);
     arg0->rightWing.segment3 = 0;
     arg0->rightWing.segment1 = arg0->unk24;
     arg0->rightWing.segment2 = arg0->unk28;

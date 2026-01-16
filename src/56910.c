@@ -18,7 +18,7 @@ extern Asset_56910 gCourseDataAssets[];
 extern Asset_56910 gSpriteAssets[];
 extern Asset_56910 gCompressedSegment2Assets[];
 extern AssetWithoutSize gUncompressedAssets[];
-extern func_80055E68_56A68_result *gSkyDisplayLists3[];
+extern LevelDisplayLists *gSkyDisplayLists3[];
 extern LevelConfig gLevelConfigs[];
 
 LevelConfig *getLevelConfig(s32 index) {
@@ -57,7 +57,7 @@ s32 getSkyDisplayLists2ByIndex(s32 arg0) {
     return gSkyDisplayLists2[arg0];
 }
 
-func_80055E68_56A68_result *func_80055E68_56A68(s32 index) {
+LevelDisplayLists *getSkyDisplayLists3ByIndex(s32 index) {
     return gSkyDisplayLists3[index];
 }
 

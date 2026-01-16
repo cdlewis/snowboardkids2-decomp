@@ -28,15 +28,15 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x40];
-    DisplayLists unk40;
+    DisplayLists finalLapDisplayLists;
     u8 padding2[0x50 - 0x10];
-    DisplayLists unk90;
-    DisplayLists unkA0;
-    DisplayLists unkB0;
-    DisplayLists unkC0;
-} func_80055E68_56A68_result;
+    DisplayLists sceneryDisplayLists1;
+    DisplayLists sceneryDisplayLists2;
+    DisplayLists sceneryDisplayLists3;
+    DisplayLists sceneryDisplayLists4;
+} LevelDisplayLists;
 
-func_80055E68_56A68_result *func_80055E68_56A68(s32);
+LevelDisplayLists *getSkyDisplayLists3ByIndex(s32);
 
 void *loadCourseDataByIndex(s32 index);
 void *loadSpriteAssetByIndex(s32 index);

@@ -285,10 +285,10 @@ void scheduleShootCrossTargetsTask(s32 courseId) {
 
 void func_800BBA90_AD510(AD510Arg *arg0) {
     AD510Allocation *allocation;
-    func_80055E68_56A68_result *result;
+    LevelDisplayLists *result;
 
     allocation = (AD510Allocation *)getCurrentAllocation();
-    result = func_80055E68_56A68(allocation->unk5C);
+    result = getSkyDisplayLists3ByIndex(allocation->unk5C);
     arg0->unk20 = (void *)((u32)result + 0x90);
     arg0->unk24 = loadUncompressedAssetByIndex(0xD);
     arg0->unk28 = loadCompressedSegment2AssetByIndex(0xD);

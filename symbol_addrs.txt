@@ -258,6 +258,7 @@ spawnGhostTargetProjectileTask = 0x80055820; // rom:0x56420
 getLevelConfig = 0x80055D10; // rom:0x56910
 getSkyDisplayLists1ByIndex = 0x80055E40; // rom:0x56A40
 getSkyDisplayLists2ByIndex = 0x80055E54; // rom:0x56A54
+getSkyDisplayLists3ByIndex = 0x80055E68; // rom:0x56A68
 loadUncompressedAssetByIndex = 0x80055DC4; // rom:0x569C4
 gPlayerGuidedStarTransform = 0x80090F60; // rom:0x91B60
 gPlayerGuidedStarBaseVelocity = 0x80090F68; // rom:0x91B68

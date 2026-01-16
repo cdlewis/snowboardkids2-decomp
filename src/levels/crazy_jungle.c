@@ -76,16 +76,16 @@ void updateStarLauncherTask(StarLauncherTaskUpdate *arg0);
 void initFallingRockHazard(FallingRockHazard *rock) {
     GameState *gameState;
     s32 randVal;
-    func_80055E68_56A68_result *result;
+    LevelDisplayLists *result;
 
     gameState = (GameState *)getCurrentAllocation();
     randVal = randA();
 
     rock->positionIndex += (randVal & 1);
-    result = func_80055E68_56A68(gameState->memoryPoolId);
-    rock->node1.displayLists = &result->unk90;
-    result = func_80055E68_56A68(gameState->memoryPoolId);
-    rock->node2.displayLists = &result->unkA0;
+    result = getSkyDisplayLists3ByIndex(gameState->memoryPoolId);
+    rock->node1.displayLists = &result->sceneryDisplayLists1;
+    result = getSkyDisplayLists3ByIndex(gameState->memoryPoolId);
+    rock->node2.displayLists = &result->sceneryDisplayLists2;
     rock->node1.segment1 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     rock->node1.segment2 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     rock->node1.segment3 = 0;
@@ -246,7 +246,7 @@ void initStarLauncherTask(StarLauncherTask *arg0) {
     arg0->matrix.translation.z = 0xE270649E;
     arg0->timer = 0x12C;
     arg0->state = 0;
-    arg0->displayLists = &func_80055E68_56A68(gs->memoryPoolId)->unkB0;
+    arg0->displayLists = &getSkyDisplayLists3ByIndex(gs->memoryPoolId)->sceneryDisplayLists3;
     setCleanupCallback(&cleanupStarLauncherTask);
     setCallback(&updateStarLauncherTask);
 }
@@ -276,7 +276,7 @@ void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
 
                 for (i = 0; i < numPlayers; i++) {
                     if ((u32)gameState->players[i].sectorIndex - 0x60 < 6) {
-                        arg0->node.displayLists = &func_80055E68_56A68(gameState->memoryPoolId)->unkC0;
+                        arg0->node.displayLists = &getSkyDisplayLists3ByIndex(gameState->memoryPoolId)->sceneryDisplayLists4;
                         randVal = (u8)randA();
                         randVal = randVal - 0x60;
                         i = randVal << 1;
@@ -296,7 +296,7 @@ void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
                 arg0->timer--;
                 if ((arg0->timer << 16) == 0) {
                     arg0->state = 0;
-                    arg0->node.displayLists = &func_80055E68_56A68(gameState->memoryPoolId)->unkB0;
+                    arg0->node.displayLists = &getSkyDisplayLists3ByIndex(gameState->memoryPoolId)->sceneryDisplayLists3;
                     arg0->timer = 0x14;
                 }
             }

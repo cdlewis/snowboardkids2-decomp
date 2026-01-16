@@ -72,7 +72,7 @@ void initRotatingPlatformTask(RotatingPlatformTaskState *arg0) {
     s32 pad[3];
     GameState *gameState = getCurrentAllocation();
 
-    arg0->displayLists = (void *)((u32)func_80055E68_56A68(gameState->memoryPoolId) + 0xA0);
+    arg0->displayLists = (void *)((u32)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0xA0);
     arg0->uncompressedAsset = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     arg0->compressedAsset = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     arg0->posX = 0x03E90000;
@@ -125,7 +125,7 @@ void func_800BB458_B5668(WendysHouseProjectileTaskState *arg0) {
     arg0->uncompressedAsset = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     arg0->compressedAsset = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     arg0->unk2C = 0;
-    temp = func_80055E68_56A68(gameState->memoryPoolId);
+    temp = getSkyDisplayLists3ByIndex(gameState->memoryPoolId);
     randVal = (randA() & 1) << 4;
     arg0->unk20 = temp + ((randVal) + 0xB0);
     arg0->unk14.x = 0x225BCB0C;

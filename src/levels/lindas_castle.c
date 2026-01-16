@@ -103,7 +103,7 @@ void initFlyingEnemyTask(FlyingEnemyTask *task) {
 
     gamestate = (GameState_AB304 *)getCurrentAllocation();
 
-    temp = func_80055E68_56A68(gamestate->memoryPoolId);
+    temp = getSkyDisplayLists3ByIndex(gamestate->memoryPoolId);
     task->displayList1 = (void *)((u32)temp + 0x90);
 
     task->displayList2 = loadUncompressedAssetByIndex(gamestate->memoryPoolId);

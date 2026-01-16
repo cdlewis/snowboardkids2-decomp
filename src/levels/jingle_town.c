@@ -88,14 +88,14 @@ void pullPlayersToTrain(JingleTownTrain *arg0) {
 
 void initJingleTownTrain(JingleTownTrain *arg0) {
     B4240AllocationStruct *alloc;
-    func_80055E68_56A68_result *temp;
+    LevelDisplayLists *temp;
     s32 temp2;
     s32 temp3;
     s16 temp4;
 
     alloc = getCurrentAllocation();
-    temp = func_80055E68_56A68(alloc->unk5C);
-    arg0->node.displayLists = &temp->unk90;
+    temp = getSkyDisplayLists3ByIndex(alloc->unk5C);
+    arg0->node.displayLists = &temp->sceneryDisplayLists1;
     arg0->node.segment1 = loadUncompressedAssetByIndex(alloc->unk5C);
     arg0->node.segment2 = loadCompressedSegment2AssetByIndex(alloc->unk5C);
     arg0->node.segment3 = 0;

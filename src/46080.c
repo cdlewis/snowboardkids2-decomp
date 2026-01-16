@@ -975,7 +975,7 @@ void initPlayerRenderTask(PlayerRenderTaskState *state) {
     allocation = (GameState_46080 *)getCurrentAllocation();
     rotation = getTrackEndInfo(&allocation->unk30, &state->position);
     createYRotationMatrix((Transform3D *)state, rotation);
-    state->unk20 = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x30);
+    state->unk20 = (void *)((u32)getSkyDisplayLists3ByIndex(allocation->unk5C) + 0x30);
     state->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
     state->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     state->unk2C = NULL;
@@ -997,7 +997,7 @@ void enqueuePlayerDisplayList(PlayerDisplayListState *state) {
     Player *players;
     u8 playerSyncValue;
     u8 expectedSyncValue;
-    func_80055E68_56A68_result *result;
+    LevelDisplayLists *result;
 
     gameState = (GameState *)getCurrentAllocation();
     pendingFrames = state->pendingSyncFrames;
@@ -1011,8 +1011,8 @@ void enqueuePlayerDisplayList(PlayerDisplayListState *state) {
 
         if (playerSyncValue == expectedSyncValue) {
             state->pendingSyncFrames = pendingFrames - 1;
-            result = func_80055E68_56A68(gameState->memoryPoolId);
-            state->displayLists = &result->unk40;
+            result = getSkyDisplayLists3ByIndex(gameState->memoryPoolId);
+            state->displayLists = &result->finalLapDisplayLists;
         }
     }
 
@@ -1321,13 +1321,13 @@ void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
     GameState_46080 *allocation;
     LevelConfig *levelData;
     u16 rotation;
-    func_80055E68_56A68_result *displayLists;
+    LevelDisplayLists *displayLists;
 
     allocation = (GameState_46080 *)getCurrentAllocation();
     rotation = getTrackEndInfo(&allocation->unk30, &sp10) + 0x800;
     levelData = getLevelConfig(allocation->unk5C);
 
-    arg0->unk20 = func_80055E68_56A68(allocation->unk5C);
+    arg0->unk20 = getSkyDisplayLists3ByIndex(allocation->unk5C);
     arg0->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
     arg0->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     arg0->unk2C = NULL;
@@ -1342,7 +1342,7 @@ void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
 
     memcpy(arg0->unk3C, arg0, 0x3C);
 
-    displayLists = func_80055E68_56A68(allocation->unk5C);
+    displayLists = getSkyDisplayLists3ByIndex(allocation->unk5C);
     arg0->unk5C = (void *)((u32)displayLists + 0x20);
     createYRotationMatrix((Transform3D *)arg0->unk3C, 0x1000);
 
@@ -1352,7 +1352,7 @@ void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
 
     if (allocation->unk5C == 4) {
         memcpy(arg0->unk78, arg0, 0x3C);
-        displayLists = func_80055E68_56A68(allocation->unk5C);
+        displayLists = getSkyDisplayLists3ByIndex(allocation->unk5C);
         arg0->unk98 = (void *)((u32)displayLists + 0x90);
         arg0->unk90 = arg0->unk90 + 0xAB0000;
     }
@@ -1399,7 +1399,7 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
     rotation = getTrackEndInfo(&allocation->unk30, &position) + 0x800;
     levelData = getLevelConfig(allocation->unk5C);
 
-    arg0->displayListObject.displayLists = (void *)((u32)func_80055E68_56A68(allocation->unk5C) + 0x10);
+    arg0->displayListObject.displayLists = (void *)((u32)getSkyDisplayLists3ByIndex(allocation->unk5C) + 0x10);
     arg0->displayListObject.segment1 = loadUncompressedAssetByIndex(allocation->unk5C);
     arg0->displayListObject.segment2 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     arg0->displayListObject.segment3 = 0;

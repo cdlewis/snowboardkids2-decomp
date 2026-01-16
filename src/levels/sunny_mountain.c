@@ -60,13 +60,13 @@ void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
     SunnyMountainTaskState *destPositionPtr;
     u8 *destPositionAddr;
     s32 displayObjectOffset;
-    func_80055E68_56A68_result *displayListResult;
+    LevelDisplayLists *displayListResult;
     SunnyMountainAllocation *allocation;
 
     allocation = (SunnyMountainAllocation *)getCurrentAllocation();
 
     loopCounter = 0;
-    displayListResult = func_80055E68_56A68(allocation->memoryPoolId);
+    displayListResult = getSkyDisplayLists3ByIndex(allocation->memoryPoolId);
     taskState->displayList = (void *)((u32)displayListResult + 0x90);
 
     srcPositionOffset = 0;
@@ -84,7 +84,7 @@ void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
         s32 objectBaseAddr;
         loopCounter++;
 
-        displayListResult = func_80055E68_56A68(allocation->memoryPoolId);
+        displayListResult = getSkyDisplayLists3ByIndex(allocation->memoryPoolId);
         objectBaseAddr = displayObjectOffset + (s32)taskState->displayObjects;
         *(void **)(objectBaseAddr + 0x20) = (void *)((u32)displayListResult + 0xA0);
 
@@ -143,7 +143,7 @@ void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0);
 void initSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    arg0->displayLists = (void *)((u32)func_80055E68_56A68(state->memoryPoolId) + 0xB0);
+    arg0->displayLists = (void *)((u32)getSkyDisplayLists3ByIndex(state->memoryPoolId) + 0xB0);
     arg0->uncompressedAssetData = loadUncompressedAssetByIndex(state->memoryPoolId);
     arg0->compressedAssetData = loadCompressedSegment2AssetByIndex(state->memoryPoolId);
     arg0->segment3Ptr = 0;
