@@ -13,8 +13,6 @@ s32 cutsceneSys2Wipe_validate(void) {
 void cutsceneSys2Wipe_exec(cutsceneSys2Wipe_exec_arg0 *params, cutsceneSys2Wipe_exec_arg1 *state, s8 slot_index) {
     cutsceneSys2Wipe_exec_arg1_slot *slot;
     Vec3 world_pos;
-    s32 grid_offset;
-    s16 rotation;
     s32 temp_rotation;
 
     slot = &state->slots[slot_index];
