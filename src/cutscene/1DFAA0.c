@@ -174,25 +174,16 @@ void resetAllSlotModels(CutsceneSlot *slots) {
 
 void resetAllSlotTransforms(CutsceneManager *manager) {
     s32 i;
-    CutsceneManager *iterPtr;
-    s32 byteOffset;
     SceneModel *model;
-    s32 slotOffset;
-    CutsceneSlot *slot;
-    CutsceneSlotData *slotData;
 
     i = 0;
-    iterPtr = manager;
-    byteOffset = 0;
 
-    while (i < (getCutsceneSlotCount() & 0xFF)) {
+    while (i < getCutsceneSlotCount()) {
         getCurrentStateEntryItem(i);
-        model = ((CutsceneSlot *)((u8 *)iterPtr + 0xA8))->model;
+        model = manager->slots[i].model;
 
         if (model != NULL) {
-            slotOffset = byteOffset + 0xA8;
-            slot = (CutsceneSlot *)((u8 *)manager + slotOffset);
-            slotData = &slot->slotData;
+            CutsceneSlotData *slotData = &manager->slots[i].slotData;
 
             interpolateSlotScaleX(slotData, 0x10000, 0);
             interpolateSlotScaleY(slotData, 0x10000, 0);
@@ -201,8 +192,6 @@ void resetAllSlotTransforms(CutsceneManager *manager) {
             applyTransformToModel(model, &slotData->unk04);
         }
 
-        iterPtr = (CutsceneManager *)((u8 *)iterPtr + 0xF4);
-        byteOffset += 0xF4;
         i++;
     }
 }
