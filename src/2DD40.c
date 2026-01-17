@@ -662,27 +662,27 @@ void updateStoryMapRareEventCheering(Func2E024Arg *arg0) {
     } while (0);
 }
 
-void func_8002E680_2F280(Func2E024Arg *arg0) {
+void initStoryMapRareEventSkating(Func2E024Arg *arg0) {
     Transform3D localMatrix;
     Transform3D worldMatrix;
-    GameState *allocation;
+    GameState *gameState;
     Transform3D *localMatrixPtr;
     s32 i;
     s32 radius;
     s32 negRadius;
     s32 result;
     s16 angle;
-    Transform3D *new_var;
+    Transform3D *worldMatrixPtr;
 
-    allocation = (GameState *)getCurrentAllocation();
+    gameState = getCurrentAllocation();
     angle = 0xB98;
 
     for (i = 0; i < arg0->unkD5; i++) {
-        new_var = &worldMatrix;
+        worldMatrixPtr = &worldMatrix;
         localMatrixPtr = &localMatrix;
 
         memcpy(&worldMatrix, identityMatrix, sizeof(Transform3D));
-        memcpy(&localMatrix, new_var, sizeof(Transform3D));
+        memcpy(&localMatrix, worldMatrixPtr, sizeof(Transform3D));
         memcpy(&arg0->elements[i].matrix, localMatrixPtr, sizeof(Transform3D));
 
         radius = 0x4400;
@@ -718,11 +718,11 @@ void func_8002E680_2F280(Func2E024Arg *arg0) {
         createYRotationMatrix(&localMatrix, arg0->elements[i].rotation);
         angle = atan2Fixed(worldMatrix.translation.x, worldMatrix.translation.z);
         createYRotationMatrix(&worldMatrix, angle & 0xFFFF);
-        func_8006B084_6BC84(&localMatrix, new_var, &arg0->elements[i].matrix);
+        func_8006B084_6BC84(&localMatrix, worldMatrixPtr, &arg0->elements[i].matrix);
         setupStoryMapNpcModel(&arg0->elements[i]);
-        allocation->npcPosX[i] = arg0->elements[i].matrix.translation.x;
-        allocation->npcPosZ[i] = arg0->elements[i].matrix.translation.z;
-        allocation->npcCollisionRadius[i] = gNpcCollisionRadii[arg0->elements[i].unk5C];
+        gameState->npcPosX[i] = arg0->elements[i].matrix.translation.x;
+        gameState->npcPosZ[i] = arg0->elements[i].matrix.translation.z;
+        gameState->npcCollisionRadius[i] = gNpcCollisionRadii[arg0->elements[i].unk5C];
     }
 
     setCallback(updateStoryMapRareEventSkating);

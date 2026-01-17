@@ -3048,6 +3048,7 @@ initStoryMapRareEventSnowman = 0x8002DE44; // rom:0x2EA44
 updateStoryMapRareEventSnowman = 0x8002E024; // rom:0x2EC24
 initStoryMapRareEventCheering = 0x8002E170; // rom:0x2ED70
 updateStoryMapRareEventCheering = 0x8002E314; // rom:0x2EF14
+initStoryMapRareEventSkating = 0x8002E680; // rom:0x2F280
 updateStoryMapRareEventSkating = 0x8002E8B4; // rom:0x2F4B4
 prepareStoryMapNpcDialogue = 0x8002EBB0; // rom:0x2F7B0
 getPlayerGold = 0x8002ED30; // rom:0x2F930
