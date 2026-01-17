@@ -15,4 +15,4 @@ void loadCharacterBodyParts(Player *player);
 void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags);
 s16 onTrickCompletedHook(Player *player);
 s16 getTrickType(Player *player);
-s32 func_8005D8C8_5E4C8(Player *arg0);
+s32 getTrickRecoveryTimerReduction(Player *player);

@@ -185,7 +185,7 @@ return_trick:
     return trickType;
 }
 
-s32 func_8005D8C8_5E4C8(Player *arg0) {
+s32 getTrickRecoveryTimerReduction(Player *player) {
     s16 count;
     u32 temp;
     s8 temp_b7a;
@@ -194,7 +194,7 @@ s32 func_8005D8C8_5E4C8(Player *arg0) {
 
     count = 1;
 
-    if (arg0->unkBDA != 0) {
+    if (player->unkBDA != 0) {
         temp = randA();
         temp = temp & 3;
         temp = temp < 1;
@@ -202,37 +202,37 @@ s32 func_8005D8C8_5E4C8(Player *arg0) {
         goto end;
     }
 
-    temp_b7a = arg0->unkB7A;
+    temp_b7a = player->unkB7A;
     if (temp_b7a == 7) {
-        temp = arg0->unkB80;
+        temp = player->unkB80;
         temp = temp ^ 7;
         temp = temp != 0;
         count = temp + 1;
     }
 
     if (temp_b7a == -7) {
-        temp = arg0->unkB80;
+        temp = player->unkB80;
         temp = temp ^ temp_b7a;
         temp = temp != 0;
         count += temp;
     }
 
-    temp_b7b = arg0->unkB7B;
+    temp_b7b = player->unkB7B;
     if (temp_b7b == 7) {
-        temp = arg0->unkB81;
+        temp = player->unkB81;
         temp = temp ^ 7;
         temp = temp != 0;
         count += temp;
     }
 
     if (temp_b7b == -7) {
-        temp = arg0->unkB81;
+        temp = player->unkB81;
         temp = temp ^ temp_b7b;
         temp = temp != 0;
         count += temp;
     }
 
-    temp_b7e = arg0->unkB7E;
+    temp_b7e = player->unkB7E;
     temp = temp_b7e & 0xC000;
     temp = temp != 0;
     count += temp;

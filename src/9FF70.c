@@ -2135,7 +2135,7 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
     if (player->unkB8C == 0) {
         setPlayerBehaviorPhase(player, 2);
     } else {
-        timerDelta = func_8005D8C8_5E4C8(player);
+        timerDelta = getTrickRecoveryTimerReduction(player);
         player->unkB8C -= timerDelta;
         if (player->unkB8C < 0) {
             player->unkB8C = 0;
@@ -2459,7 +2459,7 @@ s32 updateKnockbackAirborneLaunchPhase(Player *player) {
 
         player->velocity.y -= 0x800;
 
-        if (func_8005D8C8_5E4C8(player) != 1) {
+        if (getTrickRecoveryTimerReduction(player) != 1) {
             player->velocity.y += 0x100;
         }
     }
@@ -2524,7 +2524,7 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
         startRumbleEffect(arg0, 4);
         setPlayerBehaviorPhase(arg0, 0x10);
     } else {
-        newTimer = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
+        newTimer = arg0->unkB8C - getTrickRecoveryTimerReduction(arg0);
         arg0->unkB8C = newTimer;
         if (newTimer < 0) {
             arg0->unkB8C = 0;
@@ -2585,7 +2585,7 @@ s32 updateStunnedBounceFallRecoverPhase(Player *arg0) {
         resetPlayerBehaviorToDefault(arg0);
         return 0;
     } else {
-        arg0->unkB8C = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
+        arg0->unkB8C = arg0->unkB8C - getTrickRecoveryTimerReduction(arg0);
         if (arg0->unkB8C < 0) {
             arg0->unkB8C = 0;
         }
@@ -2627,7 +2627,7 @@ s32 updateStunnedBounceLaunchPhase(Player *arg0) {
     if (arg0->unkB8C == 0) {
         setPlayerBehaviorPhase(arg0, 2);
     } else {
-        arg0->unkB8C = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
+        arg0->unkB8C = arg0->unkB8C - getTrickRecoveryTimerReduction(arg0);
         if (arg0->unkB8C < 0) {
             arg0->unkB8C = 0;
         }
@@ -2713,7 +2713,7 @@ s32 updateKnockbackBounceLaunchPhase(Player *player) {
     if (player->unkB8C == 0) {
         setPlayerBehaviorPhase(player, 2);
     } else {
-        player->unkB8C = player->unkB8C - func_8005D8C8_5E4C8(player);
+        player->unkB8C = player->unkB8C - getTrickRecoveryTimerReduction(player);
         if (player->unkB8C < 0) {
             player->unkB8C = 0;
         }
@@ -2836,7 +2836,7 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
         arg0->behaviorCounter += 1;
     } else {
         s32 temp_v1;
-        temp_v1 = arg0->unkB8C - func_8005D8C8_5E4C8(arg0);
+        temp_v1 = arg0->unkB8C - getTrickRecoveryTimerReduction(arg0);
         arg0->unkB8C = temp_v1;
         if (temp_v1 < 0) {
             arg0->unkB8C = 0;
