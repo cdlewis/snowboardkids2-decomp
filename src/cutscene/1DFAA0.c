@@ -807,19 +807,18 @@ s32 findEventAtFrame(u8 a0, u16 a1) {
 }
 
 s32 insertCutsceneEvent(u8 slotIndex, u16 frameNumber) {
-    StateEntry *eventTable;
     u16 insertAfterIndex;
     u16 entryIndex;
     u16 allocatedIndex;
-    u16 originalNextIndex;
+    u16 nextIndex;
     StateEntry *entry;
-    StateEntry *entryPtr;
+    StateEntry *newEntry;
 
     if (gCutsceneStateTable->allocatedEventCount >= 0x1E0) {
-        goto ret_ffff;
+        goto return_error;
     }
 
-    insertAfterIndex = findStateEntryIndex(slotIndex & 0xFF, frameNumber, 1);
+    insertAfterIndex = findStateEntryIndex(slotIndex, frameNumber, 1);
     entryIndex = insertAfterIndex;
 
     if (entryIndex == 0xFFFF) {
@@ -828,33 +827,33 @@ s32 insertCutsceneEvent(u8 slotIndex, u16 frameNumber) {
 
     entry = getStateEntry(entryIndex);
     if ((u16)entry->frameNumber != frameNumber) {
-        goto do_work;
+        goto insert_entry;
     }
 
-ret_ffff:
+return_error:
     return 0xFFFF;
 
-do_work:
+insert_entry:
     allocatedIndex = allocateStateEntry();
-    eventTable = gCutsceneStateTable;
+    entry = gCutsceneStateTable;
 
-    /* Read next_index from entry at entryIndex */
-    originalNextIndex = *(u16 *)((u8 *)eventTable + (u32)(entryIndex << 6) + 0xF8);
-    /* Set next_index of entry at entryIndex to newly allocated entry */
-    *(u16 *)((u8 *)eventTable + (u32)(entryIndex << 6) + 0xF8) = allocatedIndex;
+    // Get the next_index from the entry we're inserting after
+    nextIndex = *(u16 *)((u8 *)entry + (u32)(entryIndex << 6) + 0xF8);
+    // Update the entry's next_index to point to the new entry
+    *(u16 *)((u8 *)entry + (u32)(entryIndex << 6) + 0xF8) = allocatedIndex;
 
-    if (originalNextIndex != 0xFFFF) {
-        /* Set prev_index of original next entry to point to newly allocated entry */
-        *(u16 *)((u8 *)eventTable + (u32)(originalNextIndex << 6) + 0xFA) = allocatedIndex;
+    if (nextIndex != 0xFFFF) {
+        // Update the original next entry's prev_index to point to the new entry
+        *(u16 *)((u8 *)entry + (u32)(nextIndex << 6) + 0xFA) = allocatedIndex;
     }
 
-    entryPtr = gCutsceneStateTable;
+    newEntry = gCutsceneStateTable;
     entryIndex = allocatedIndex;
-    entryPtr = (StateEntry *)((u8 *)entryPtr + (u32)(entryIndex << 6));
-    /* Set prev_index of new entry to point to insert-after entry */
-    *(u16 *)((u8 *)entryPtr + 0xFA) = insertAfterIndex;
-    /* Set next_index of new entry to point to original next entry */
-    *(u16 *)((u8 *)entryPtr + 0xF8) = originalNextIndex;
+    newEntry = (StateEntry *)((u8 *)newEntry + (u32)(entryIndex << 6));
+    // Set the new entry's prev_index to point to the entry we inserted after
+    *(u16 *)((u8 *)newEntry + 0xFA) = insertAfterIndex;
+    // Set the new entry's next_index to point to the original next entry
+    *(u16 *)((u8 *)newEntry + 0xF8) = nextIndex;
 
     initializeStateEntry(entryIndex);
 
