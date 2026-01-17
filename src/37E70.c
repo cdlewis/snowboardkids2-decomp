@@ -20,7 +20,7 @@ typedef struct {
     /* 0x1DC */ void *graphicsData;
     /* 0x1E0 */ s16 frameCounter;
     /* 0x1E2 */ s16 menuState;
-    /* 0x1E4 */ u8 pad1E4[4]; // itemTimers - zeroed via offset trick
+    /* 0x1E4 */ u8 itemTimers[4];
     /* 0x1E8 */ u8 itemValues[4];
     /* 0x1EC */ u8 selectedIndex;
 } MenuAllocation;
@@ -43,7 +43,7 @@ void initOptionsMenu(void) {
     i = 3;
     ptr = (MenuAllocation *)((u8 *)allocation + 3);
     do {
-        ptr->pad1E4[0] = 0;
+        ptr->itemTimers[0] = 0;
         i--;
         ptr = (MenuAllocation *)((u8 *)ptr - 1);
     } while (i >= 0);
