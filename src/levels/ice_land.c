@@ -131,34 +131,34 @@ void initIceLandMovingPlatformScheduler(IceLandMovingPlatformSchedulerTask *arg0
     setCallback(scheduleIceLandMovingPlatform);
 }
 
-void scheduleIceLandMovingPlatform(IceLandMovingPlatformSchedulerTask *arg0) {
-    GameState *allocation;
-    ScheduledTask *task;
+void scheduleIceLandMovingPlatform(IceLandMovingPlatformSchedulerTask *schedulerTask) {
+    GameState *gameState;
+    ScheduledTask *platformTask;
 
-    allocation = (GameState *)getCurrentAllocation();
-    if (allocation->gamePaused == 0) {
-        if (arg0->timer == 0) {
-            task = (ScheduledTask *)scheduleTask(initIceLandMovingPlatform, 0, 0, 0xD3);
-            if (task != NULL) {
-                switch (arg0->pathIndex) {
+    gameState = (GameState *)getCurrentAllocation();
+    if (gameState->gamePaused == 0) {
+        if (schedulerTask->timer == 0) {
+            platformTask = (ScheduledTask *)scheduleTask(initIceLandMovingPlatform, 0, 0, 0xD3);
+            if (platformTask != NULL) {
+                switch (schedulerTask->pathIndex) {
                     case 0:
-                        task->waypoints = iceLandWaypoints1;
+                        platformTask->waypoints = iceLandWaypoints1;
                         break;
                     case 1:
-                        task->waypoints = iceLandWaypoints2;
+                        platformTask->waypoints = iceLandWaypoints2;
                         break;
                     case 2:
-                        task->waypoints = iceLandWaypoints3;
+                        platformTask->waypoints = iceLandWaypoints3;
                         break;
                 }
-                arg0->pathIndex++;
-                if (arg0->pathIndex >= 3) {
-                    arg0->pathIndex = 0;
+                schedulerTask->pathIndex++;
+                if (schedulerTask->pathIndex >= 3) {
+                    schedulerTask->pathIndex = 0;
                 }
             }
-            arg0->timer = 0x78;
+            schedulerTask->timer = 0x78;
         } else {
-            arg0->timer--;
+            schedulerTask->timer--;
         }
     }
 }

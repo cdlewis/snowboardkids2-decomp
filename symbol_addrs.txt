@@ -79,6 +79,7 @@ cleanupGhostManager = 0x800BC340; // rom:0xB0030
 renderGhosts = 0x800BC378; // rom:0xB0068
 initIceLandBoss = 0x800BB66C; // rom:0xB0B5C
 initIceLandMovingPlatformScheduler = 0x800BB688; // rom:0xB2408
+scheduleIceLandMovingPlatform = 0x800BB6B4; // rom:0xB2434
 dispatchIceLandBossChasePhase = 0x800BB8E0; // rom:0xB0DD0
 iceLandBossChaseIntroPhase = 0x800BB998; // rom:0xB0E88
 iceLandBossChaseAttackPhase = 0x800BBA54; // rom:0xB0F44
