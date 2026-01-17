@@ -455,6 +455,17 @@ void setupConfettiParticles(ConfettiEffectTask *task) {
     setCallbackWithContinue(&updateConfettiParticles);
 }
 
+typedef struct {
+    /* 0x00 */ loadAssetMetadata_arg sprite;
+    /* 0x1C */ s32 pad1C;
+    /* 0x20 */ s32 worldX; /* World-space X position (for physics) */
+    /* 0x24 */ s32 worldY; /* World-space Y position (for physics) */
+    /* 0x28 */ s32 worldZ; /* World-space Z position (for physics) */
+    /* 0x2C */ s32 velX;   /* X velocity */
+    /* 0x30 */ s32 velY;   /* Y velocity (includes gravity) */
+    /* 0x34 */ s32 velZ;   /* Z velocity */
+} ConfettiParticle;        /* 0x38 bytes */
+
 void updateConfettiParticles(ConfettiEffectTask *task) {
     s32 pad[2];
     s32 i;
@@ -471,28 +482,31 @@ void updateConfettiParticles(ConfettiEffectTask *task) {
         cameraOffset = 0xFF000000;
         offset = 0;
         do {
+            /* particle[8] = worldX, particle[9] = worldY, particle[0xA] = worldZ */
+            /* particle[0xB] = velX, particle[0xC] = velY, particle[0xD] = velZ */
             if (task->pauseWhenPaused != 0) {
-                running &= -(*(u8 *)((u8 *)getCurrentAllocation() + 0x76) == 0);
+                GameState *gameState = (GameState *)getCurrentAllocation();
+                running &= -(gameState->gamePaused == 0);
             }
             if (running != 0) {
                 {
                     s32 *particle = (s32 *)(offset + (s32)task->particles);
-                    particle[8] += particle[0xB];
+                    particle[8] += particle[0xB]; /* worldX += velX */
                 }
                 {
                     s32 *particle = (s32 *)(offset + (s32)task->particles);
-                    particle[9] += particle[0xC];
+                    particle[9] += particle[0xC]; /* worldY += velY */
                 }
-                if (*(s32 *)(offset + (s32)task->particles + 0x24) < 0) {
-                    *(s32 *)(offset + (s32)task->particles + 0x20) = (randA() & 0xFF) << 17;
-                    *(s32 *)(offset + (s32)task->particles + 0x24) = 0x02000000;
-                    *(s32 *)(offset + (s32)task->particles + 0x28) = (randA() & 0xFF) << 17;
-                    *(s32 *)(offset + (s32)task->particles + 0x30) = 0xFFFC0000 - ((randA() & 0xFF) << 8);
+                if (*(s32 *)(offset + (s32)task->particles + 0x24) < 0) {                    /* worldY < 0 */
+                    *(s32 *)(offset + (s32)task->particles + 0x20) = (randA() & 0xFF) << 17; /* worldX */
+                    *(s32 *)(offset + (s32)task->particles + 0x24) = 0x02000000;             /* worldY */
+                    *(s32 *)(offset + (s32)task->particles + 0x28) = (randA() & 0xFF) << 17; /* worldZ */
+                    *(s32 *)(offset + (s32)task->particles + 0x30) = 0xFFFC0000 - ((randA() & 0xFF) << 8); /* velY */
                 }
             }
             {
                 s32 *particle = (s32 *)(offset + (s32)task->particles);
-                particle[8] -= *(s32 *)((u8 *)task->cameraNode + 0x134) - task->lastCameraX;
+                particle[8] -= *(s32 *)((u8 *)task->cameraNode + 0x134) - task->lastCameraX; /* worldX */
             }
             {
                 s32 *particle = (s32 *)(offset + (s32)task->particles);
@@ -500,7 +514,7 @@ void updateConfettiParticles(ConfettiEffectTask *task) {
             }
             {
                 s32 *particle = (s32 *)(offset + (s32)task->particles);
-                particle[0xA] -= *(s32 *)((u8 *)task->cameraNode + 0x13C) - task->lastCameraZ;
+                particle[0xA] -= *(s32 *)((u8 *)task->cameraNode + 0x13C) - task->lastCameraZ; /* worldZ */
             }
             {
                 s32 *particle = (s32 *)(offset + (s32)task->particles);
@@ -509,21 +523,21 @@ void updateConfettiParticles(ConfettiEffectTask *task) {
             {
                 s32 *particle = (s32 *)(offset + (s32)task->particles);
                 s32 camX = *(s32 *)((u8 *)task->cameraNode + 0x134) + cameraOffset;
-                particle[1] = particle[8] + camX;
+                particle[1] = particle[8] + camX; /* sprite.position.x = worldX + camX */
             }
             {
                 s32 *particle = (s32 *)(offset + (s32)task->particles);
                 s32 camY = *(s32 *)((u8 *)task->cameraNode + 0x138) + cameraOffset;
-                particle[2] = particle[9] + camY;
+                particle[2] = particle[9] + camY; /* sprite.position.y = worldY + camY */
             }
             {
                 s32 *particle = (s32 *)(offset + (s32)task->particles);
                 s32 camZ = *(s32 *)((u8 *)task->cameraNode + 0x13C) + cameraOffset;
-                particle[3] = particle[0xA] + camZ;
+                particle[3] = particle[0xA] + camZ; /* sprite.position.z = worldZ + camZ */
             }
             enqueueTexturedBillboardSprite(task->frameCounter, (void *)((s32)task->particles + offset));
             i++;
-            offset += 0x38;
+            offset += sizeof(ConfettiParticle);
         } while (i < task->particleCount);
     }
     memcpy(&task->lastCameraX, (u8 *)task->cameraNode + 0x134, 0xC);
