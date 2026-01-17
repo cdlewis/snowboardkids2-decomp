@@ -130,7 +130,7 @@ struct Func42D54Arg {
 
 typedef struct {
     u8 padding[0x76];
-    u8 unk76;
+    u8 paused;
 } updateBurstParticles_alloc;
 
 void cleanupShieldEffect(ShieldEffectState *);
@@ -202,13 +202,13 @@ void cleanupFallingEffect(FallingEffectState *);
 
 typedef struct {
     u8 _pad0[0x30];
-    u8 unk30[0x14]; /* 0x30 */
-    void *unk44;    /* 0x44 */
+    u8 unk30[0x14];   /* 0x30 */
+    void *spriteData; /* 0x44 - sprite/asset data buffer */
     u8 _pad48[0x14];
-    u8 unk5C; /* 0x5C */
+    u8 unk5C; /* 0x5C - course/level index */
     u8 _pad5D[0x19];
-    u8 unk76; /* 0x76 */
-} Func43CA4GameState;
+    u8 paused; /* 0x76 - non-zero when paused */
+} EffectTaskState;
 
 typedef struct {
     u8 _pad0[0xB44];
@@ -357,11 +357,11 @@ void updateFallingEffect(FallingEffectState *arg0) {
 }
 
 void animateFallingEffectDescent(FallingEffectState *arg0) {
-    Func43CA4GameState *allocation;
+    EffectTaskState *allocation;
     s32 i;
 
-    allocation = (Func43CA4GameState *)getCurrentAllocation();
-    if (allocation->unk76 == 0) {
+    allocation = (EffectTaskState *)getCurrentAllocation();
+    if (allocation->paused == 0) {
         arg0->height -= 0x200;
     }
 
@@ -557,7 +557,7 @@ void updateBurstParticles(BurstEffectState *arg0) {
 
     alloc = getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->paused == 0) {
         for (i = 0; i < 6; i++) {
             arg0->particles[i].position.x += D_800908E0_914E0[i].x;
             arg0->particles[i].position.y += arg0->particles[i].unk20;
@@ -715,14 +715,14 @@ void initSparkleEffect(SparkleEffectState *arg0) {
 }
 
 void updateSparkleEffect(SparkleEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 temp;
     s32 diff;
     s32 i;
     s32 pad[5];
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         temp = arg0->scale;
         diff = 0x4000 - temp;
         if (diff < 0) {
@@ -757,12 +757,12 @@ void updateSparkleEffect(SparkleEffectState *arg0) {
 }
 
 void fadeOutSparkleEffect(SparkleEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 i;
     s32 pad[3];
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         arg0->opacity -= 0x18;
     }
 
@@ -825,13 +825,13 @@ void initLiftEffect(LiftEffectState *state) {
 }
 
 void updateLiftEffect(LiftEffectState *state) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     Player *player;
     Vec3i *pos;
     s32 i;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         if (*(s32 *)&state->unk40 != 0x2000) {
             *(s32 *)&state->unk40 += 0x200;
         }
@@ -862,11 +862,11 @@ void updateLiftEffect(LiftEffectState *state) {
 }
 
 void fadeOutLiftEffect(LiftEffectState *state) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 i;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         *(s32 *)&state->unk40 -= 0x200;
     }
 
@@ -1083,54 +1083,57 @@ void initStarEffect(void **arg0) {
 }
 
 void updateStarEffect(StarEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *taskState;
     s16 startDelay;
-    void *spriteBuffer;
+    void *assetTemplatePtr;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    taskState = (EffectTaskState *)getCurrentAllocation();
     startDelay = arg0->frameTimer;
 
     if (startDelay == 0) {
+        /* Initialize star effect animation state */
         arg0->frameTimer = 1;
         arg0->alphaPulseDir = 0;
         arg0->sprite.alpha = 0;
-        spriteBuffer = gameState->unk44;
-        arg0->unk30 = 0x200000;
-        arg0->unk2C = 0;
-        arg0->unk34 = 0;
+        assetTemplatePtr = taskState->spriteData;
+        arg0->unk30 = 0x200000; /* Y offset above player */
+        arg0->unk2C = 0;        /* X offset */
+        arg0->unk34 = 0;        /* Z offset */
         arg0->animFrameIndex = 0;
         arg0->playSoundFlag = 1;
-        arg0->sprite.assetTemplate = (void *)((u8 *)spriteBuffer + 0xF00);
+        arg0->sprite.assetTemplate = (void *)((u8 *)assetTemplatePtr + 0xF00);
         updateStarEffectAnimation(arg0);
 
         if (arg0->immediateMode != 0) {
+            /* Immediate orbit mode - skip expand animation */
             arg0->player->unkBCF++;
 
             if (arg0->player->unkBBB == 0xC) {
-                arg0->displayTimer = 0x1E;
+                arg0->displayTimer = 0x1E; /* Shorter display time for boss */
             } else {
-                arg0->displayTimer = 0x12C;
+                arg0->displayTimer = 0x12C; /* Normal display time */
             }
 
-            arg0->unk2C = 0x140000;
-            arg0->unk30 = 0x190000;
+            arg0->unk2C = 0x140000; /* X offset for orbit */
+            arg0->unk30 = 0x190000; /* Y offset for orbit */
             setCallbackWithContinue(orbitStarEffect);
         } else {
             setCallbackWithContinue(expandStarEffect);
         }
     } else {
-        if (gameState->unk76 == 0) {
+        /* Wait for start delay to expire */
+        if (taskState->paused == 0) {
             arg0->frameTimer = startDelay - 1;
         }
     }
 }
 
 void expandStarEffect(ExpandStarEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 i;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         arg0->scale += 0x10000;
         if (arg0->scale > 0x2FFFFF) {
             setCallback(contractStarEffect);
@@ -1152,11 +1155,11 @@ void expandStarEffect(ExpandStarEffectState *arg0) {
 }
 
 void contractStarEffect(StarEffectState *state) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 i;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         updateStarEffectAnimation(state);
         transformVector((s16 *)&state->unk2C, state->unk24->unk9F0, &state->sprite.position);
 
@@ -1187,13 +1190,13 @@ void contractStarEffect(StarEffectState *state) {
 }
 
 void orbitStarEffect(OrbitStarEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 i;
     s32 pad;
     Vec3i rotated;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         updateStarEffectAnimation((StarEffectState *)arg0);
         arg0->rotationAngle += 0x100;
         rotateVectorY(arg0->orbitOffset, arg0->rotationAngle, &rotated);
@@ -1289,11 +1292,11 @@ void initPlayerAuraEffect(PlayerAuraEffectState *state) {
 }
 
 void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 i;
     Transform3D matrix;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    gameState = (EffectTaskState *)getCurrentAllocation();
     createYRotationMatrix(&D_8009A8B0_9B4B0, state->yRotation);
     func_8006B084_6BC84(&D_8009A8B0_9B4B0, &state->player->unk3F8, state);
     scaleMatrix((Transform3D *)state, state->scale, state->scale, state->scale);
@@ -1317,7 +1320,7 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
     }
 
     if (state->player->boostTimer != 0) {
-        if (gameState->unk76 == 0) {
+        if (gameState->paused == 0) {
             state->player->boostTimer--;
             if (state->player->boostTimer == 0) {
                 if (state->player->unkBBB == 0x10) {
@@ -1336,12 +1339,12 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
 }
 
 void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 i;
     Transform3D matrix;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         state->fallVelocity -= 0x8000;
         if (state->fallVelocity <= (s32)0xFFF80000) {
             terminateCurrentTask();
@@ -1569,17 +1572,17 @@ void initGoldStealEffect(void **arg0) {
 }
 
 void prepareGoldStealEffect(GoldStealEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s16 temp;
     void *ptr;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
+    gameState = (EffectTaskState *)getCurrentAllocation();
     temp = arg0->frameTimer;
 
     if (temp == 0) {
         arg0->frameTimer = 1;
         arg0->unk46 = 0;
-        ptr = (void *)((u8 *)gameState->unk44 + 0xF40);
+        ptr = (void *)((u8 *)gameState->spriteData + 0xF40);
         arg0->unk30 = 0x300000;
         arg0->unk2C = 0;
         arg0->unk34 = 0;
@@ -1589,18 +1592,18 @@ void prepareGoldStealEffect(GoldStealEffectState *arg0) {
         advanceAnimationFrame(arg0, &D_8009093C_9153C);
         setCallbackWithContinue(animateGoldStealApproach);
     } else {
-        if (gameState->unk76 == 0) {
+        if (gameState->paused == 0) {
             arg0->frameTimer = temp - 1;
         }
     }
 }
 
 void animateGoldStealApproach(GoldStealEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 i;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         if (advanceAnimationFrame(arg0, &D_8009093C_9153C) != 0) {
             arg0->unk38 = 0;
             arg0->animFrameIndex = 0;
@@ -1622,11 +1625,11 @@ void animateGoldStealApproach(GoldStealEffectState *arg0) {
 }
 
 void animateGoldStealLoop(GoldStealEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 i;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         advanceAnimationFrameLooping(arg0, &D_80090950_91550);
         arg0->unk38 = arg0->unk38 + 0x8000;
         arg0->unk30 = arg0->unk30 + arg0->unk38;
@@ -1648,12 +1651,12 @@ void animateGoldStealLoop(GoldStealEffectState *arg0) {
 void animateGoldStealRetreat(GoldStealEffectState *);
 
 void animateGoldStealTransfer(GoldStealEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 sinVal;
     s32 i;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 != 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused != 0) {
         goto transform_and_loop;
     }
 
@@ -1693,11 +1696,11 @@ transform_and_loop:
 }
 
 void animateGoldStealRetreat(GoldStealEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 i;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         if (advanceAnimationFrame(arg0, &D_80090964_91564) != 0) {
             arg0->animFrameIndex = 0;
             arg0->frameTimer = 1;
@@ -1714,11 +1717,11 @@ void animateGoldStealRetreat(GoldStealEffectState *arg0) {
 }
 
 void animateGoldStealFinish(GoldStealEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     s32 i;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused == 0) {
         if (advanceAnimationFrame(arg0, &D_80090974_91574) != 0) {
             terminateCurrentTask();
         }
@@ -1758,14 +1761,14 @@ void initGhostEffect(GhostEffectState *arg0) {
 }
 
 void updateGhostEffect(GhostEffectState *arg0) {
-    Func43CA4GameState *allocation;
+    EffectTaskState *allocation;
     Player *player;
     Player *temp_player;
     u16 count;
     u16 new_count;
     s32 i;
 
-    allocation = (Func43CA4GameState *)getCurrentAllocation();
+    allocation = (EffectTaskState *)getCurrentAllocation();
     createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->rotation);
     func_8006B084_6BC84(&D_8009A8B0_9B4B0, (u8 *)arg0->player + 0x3F8, arg0);
 
@@ -1799,7 +1802,7 @@ void updateGhostEffect(GhostEffectState *arg0) {
     temp_player = arg0->player;
     count = temp_player->ghostEffectTimer;
     if (count != 0) {
-        if (allocation->unk76 == 0) {
+        if (allocation->paused == 0) {
             temp_player->ghostEffectTimer = count - 1;
             player = arg0->player;
             new_count = player->ghostEffectTimer;
@@ -1945,12 +1948,12 @@ void renderUfoEffectWithWings(UfoEffectState *arg0) {
 void initUfoEffect(UfoEffectState *arg0) {
     Vec3i posOutput;
     Vec3i transformOutput;
-    Func43CA4GameState *allocation;
+    EffectTaskState *allocation;
     u16 rotation;
     LevelConfig *item;
     s32 temp_unk18;
 
-    allocation = (Func43CA4GameState *)getCurrentAllocation();
+    allocation = (EffectTaskState *)getCurrentAllocation();
     rotation = getTrackEndInfo(&allocation->unk30, &posOutput) + 0x800;
     item = getLevelConfig(allocation->unk5C);
 
@@ -1987,11 +1990,11 @@ void initUfoEffect(UfoEffectState *arg0) {
 }
 
 void flyInUfoEffect(UfoEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     Vec3i output;
 
     gameState = getCurrentAllocation();
-    if (gameState->unk76 == 0) {
+    if (gameState->paused == 0) {
         transformVector2(&D_80090AAC_916AC, arg0, &output);
         arg0->unk14.x = arg0->unk14.x + output.x;
         arg0->unk14.z = arg0->unk14.z + output.z;
@@ -2009,11 +2012,11 @@ void flyInUfoEffect(UfoEffectState *arg0) {
 }
 
 void descendUfoEffect(UfoEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     Vec3i output;
 
-    gameState = (Func43CA4GameState *)getCurrentAllocation();
-    if (gameState->unk76 != 0) {
+    gameState = (EffectTaskState *)getCurrentAllocation();
+    if (gameState->paused != 0) {
         goto end;
     }
 
@@ -2059,7 +2062,7 @@ void setupUfoFlyAway(UfoEffectState *arg0) {
     s32 i;
     s32 temp_unk14;
 
-    temp_v0 = getLevelConfig(((Func43CA4GameState *)getCurrentAllocation())->unk5C);
+    temp_v0 = getLevelConfig(((EffectTaskState *)getCurrentAllocation())->unk5C);
     temp_a1 = arg0->target;
     temp_a1->flags |= 2;
     arg0->yRotation = -0x300;
@@ -2090,11 +2093,11 @@ void setupUfoFlyAway(UfoEffectState *arg0) {
 }
 
 void flyAwayUfoEffect(UfoEffectState *arg0) {
-    Func43CA4GameState *gameState;
+    EffectTaskState *gameState;
     Vec3i output;
 
     gameState = getCurrentAllocation();
-    if (gameState->unk76 != 0) {
+    if (gameState->paused != 0) {
         goto end;
     }
 
@@ -2132,10 +2135,10 @@ end:
 }
 
 void holdUfoEffect(UfoEffectState *arg0) {
-    Func43CA4GameState *gameState = (Func43CA4GameState *)getCurrentAllocation();
+    EffectTaskState *gameState = (EffectTaskState *)getCurrentAllocation();
     s32 pad[4];
 
-    if (gameState->unk76 == 0) {
+    if (gameState->paused == 0) {
         arg0->phaseTimer--;
         if (arg0->phaseTimer == 0) {
             setCallback(fadeOutUfoEffect);
@@ -2148,10 +2151,10 @@ void holdUfoEffect(UfoEffectState *arg0) {
 }
 
 void fadeOutUfoEffect(UfoEffectState *arg0) {
-    Func43CA4GameState *gameState = (Func43CA4GameState *)getCurrentAllocation();
+    EffectTaskState *gameState = (EffectTaskState *)getCurrentAllocation();
     s32 pad[4];
 
-    if (gameState->unk76 == 0) {
+    if (gameState->paused == 0) {
         arg0->fallVelocity -= 0x8000;
         if (arg0->fallVelocity < (s32)0xFFF00000) {
             terminateCurrentTask();
