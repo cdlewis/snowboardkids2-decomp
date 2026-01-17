@@ -24,31 +24,32 @@ typedef struct {
     /* 0x08 */ u8 red;
     /* 0x09 */ u8 green;
     /* 0x0A */ u8 blue;
-} RectColorArg;
-void func_8006D820_6E420(RectColorArg *arg0);
+} ColorRect;
 
-void func_8006D250_6DE50(RectColorArg *arg0) {
+void drawColorRectFill(ColorRect *rect);
+
+void drawColorRect(ColorRect *rect) {
     s16 left, top, right, bottom;
     s32 tempTop, tempBottom;
-    u16 temp_a3;
-    u16 temp_a2;
-    s32 new_var2;
+    s32 rectRight;
+    u16 offsetX;
+    u16 offsetY;
 
     if (gTextureEnabled == FALSE) {
-        func_8006D820_6E420(arg0);
+        drawColorRectFill(rect);
         return;
     }
 
-    new_var2 = arg0->x + arg0->width;
+    rectRight = rect->x + rect->width;
 
-    temp_a3 = gTextClipAndOffsetData.offsetX;
-    temp_a2 = gTextClipAndOffsetData.offsetY;
+    offsetX = gTextClipAndOffsetData.offsetX;
+    offsetY = gTextClipAndOffsetData.offsetY;
 
-    left = arg0->x + temp_a3;
-    tempTop = arg0->y + temp_a2;
+    left = rect->x + offsetX;
+    tempTop = rect->y + offsetY;
     top = tempTop;
-    right = temp_a3 + new_var2;
-    tempBottom = temp_a2 + (arg0->y + arg0->height);
+    right = offsetX + rectRight;
+    tempBottom = offsetY + (rect->y + rect->height);
     bottom = tempBottom;
 
     if (left < gTextClipAndOffsetData.clipLeft) {
@@ -81,7 +82,7 @@ void func_8006D250_6DE50(RectColorArg *arg0) {
         gGraphicsMode = 0;
         gDPPipeSync(gRegionAllocPtr++);
         gDPSetCycleType(gRegionAllocPtr++, G_CYC_1CYCLE);
-        gDPSetEnvColor(gRegionAllocPtr++, arg0->red, arg0->green, arg0->blue, 0xFF);
+        gDPSetEnvColor(gRegionAllocPtr++, rect->red, rect->green, rect->blue, 0xFF);
         gDPSetCombineLERP(
             gRegionAllocPtr++,
             1,
@@ -124,26 +125,27 @@ void func_8006D7B0_6E3B0(
     func_8006D4B8_6E0B8(arg0, arg1, arg2, arg3, (s32)arg4, arg5, arg6, 0, 0xFF, 0, arg7, arg8, arg9);
 }
 
-void func_8006D820_6E420(RectColorArg *arg0) {
+void drawColorRectFill(ColorRect *rect) {
     s16 left, top, right, bottom;
-    u16 temp_a3;
-    u16 temp_a2;
-    u16 temp_x, temp_y;
+    u16 offsetX;
+    u16 offsetY;
+    u16 rectX;
+    u16 rectY;
     Gfx *gfx;
-    Gfx *temp_gfx;
+    Gfx *tempGfx;
     s32 color;
-    s32 result;
+    s32 packedColor;
     u8 r, g, b;
 
-    temp_x = arg0->x;
-    temp_a2 = gTextClipAndOffsetData.offsetX;
-    temp_y = arg0->y;
-    temp_a3 = gTextClipAndOffsetData.offsetY;
+    rectX = rect->x;
+    offsetX = gTextClipAndOffsetData.offsetX;
+    rectY = rect->y;
+    offsetY = gTextClipAndOffsetData.offsetY;
 
-    left = temp_x + temp_a2;
-    top = temp_y + temp_a3;
-    right = temp_a2 + (temp_x + arg0->width);
-    bottom = temp_a3 + (temp_y + arg0->height);
+    left = rectX + offsetX;
+    top = rectY + offsetY;
+    right = offsetX + (rectX + rect->width);
+    bottom = offsetY + (rectY + rect->height);
 
     if (left < gTextClipAndOffsetData.clipLeft) {
         left = gTextClipAndOffsetData.clipLeft;
@@ -172,29 +174,29 @@ void func_8006D820_6E420(RectColorArg *arg0) {
     gDPPipeSync(gRegionAllocPtr++);
 
     if (gGraphicsMode != 0) {
-        temp_gfx = gRegionAllocPtr;
-        gRegionAllocPtr = temp_gfx + 1;
-        temp_gfx[0].words.w1 = G_CYC_FILL;
+        tempGfx = gRegionAllocPtr;
+        gRegionAllocPtr = tempGfx + 1;
+        tempGfx[0].words.w1 = G_CYC_FILL;
         gGraphicsMode = 0;
-        temp_gfx[0].words.w0 = 0xE3000A01;
-        gRegionAllocPtr = temp_gfx + 2;
-        temp_gfx[1].words.w0 = 0xE200001C;
-        temp_gfx[1].words.w1 = 0;
+        tempGfx[0].words.w0 = 0xE3000A01;
+        gRegionAllocPtr = tempGfx + 2;
+        tempGfx[1].words.w0 = 0xE200001C;
+        tempGfx[1].words.w1 = 0;
     }
 
     gfx = gRegionAllocPtr;
     gRegionAllocPtr = gfx + 1;
     gfx->words.w0 = 0xF7000000;
-    r = arg0->red;
-    g = arg0->green;
-    b = arg0->blue;
+    r = rect->red;
+    g = rect->green;
+    b = rect->blue;
     gRegionAllocPtr = gfx + 2;
     gfx[1].words.w0 = (0xF6000000 | ((right & 0x3FF) << 14) | ((bottom & 0x3FF) << 2));
     gfx[1].words.w1 = ((left & 0x3FF) << 14) | ((top & 0x3FF) << 2);
 
     color = ((r << 8) & 0xF800) | ((g << 3) & 0x7C0) | ((b >> 2) & 0x3E);
-    result = (color | 1) << 16;
-    result |= 1;
-    result |= color;
-    gfx->words.w1 = result;
+    packedColor = (color | 1) << 16;
+    packedColor |= 1;
+    packedColor |= color;
+    gfx->words.w1 = packedColor;
 }
