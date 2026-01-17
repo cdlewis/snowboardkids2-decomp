@@ -825,7 +825,7 @@ void scheduleRaceTasks(void) {
 
     scheduleLevelEnvironmentTasks(gameState->memoryPoolId);
     scheduleCourseTasks(gameState->memoryPoolId, gameState->unk5F);
-    func_8005011C_50D1C();
+    initRaceHudTasks();
 
     if (gameState->raceType == 9) {
         scheduleTask(&initStarlightHighwayBuildingTask, 0, 0, 0xC8);

@@ -47,12 +47,12 @@ USE_ASSET(_3F65C0);
 
 typedef struct {
     u8 padding[0x10];
-    void *unk10;
+    void *players;
     u8 padding2[0x4B];
-    u8 unk5F;
+    u8 humanPlayerCount;
     u8 padding3[0x1A];
     u8 raceType;
-} func_8005011C_50D1C_alloc;
+} RaceHudInitState;
 
 typedef struct {
     s32 unk0;
@@ -2525,22 +2525,22 @@ INCLUDE_RODATA("asm/nonmatchings/4CD70", sTrickPointsFormat);
 
 INCLUDE_RODATA("asm/nonmatchings/4CD70", D_8009E928_9F528);
 
-void func_8005011C_50D1C(void) {
-    func_8005011C_50D1C_alloc *allocation;
+void initRaceHudTasks(void) {
+    RaceHudInitState *hudState;
     s32 i;
     s32 pad[2];
-    s32 temp;
+    s32 humanPlayerCount;
 
-    allocation = (func_8005011C_50D1C_alloc *)getCurrentAllocation();
+    hudState = (RaceHudInitState *)getCurrentAllocation();
 
-    temp = allocation->unk5F;
-    if (temp <= 0) {
+    humanPlayerCount = hudState->humanPlayerCount;
+    if (humanPlayerCount <= 0) {
         return;
     }
 
     i = 0;
     do {
-        switch (allocation->raceType) {
+        switch (hudState->raceType) {
             case 0:
             case 8:
             case 9:
@@ -2580,7 +2580,7 @@ void func_8005011C_50D1C(void) {
                 break;
 
             case 5:
-                spawnShotCrossScoreDisplayTask(allocation->unk10);
+                spawnShotCrossScoreDisplayTask(hudState->players);
                 spawnShotCrossItemCountDisplayTask(0);
                 scheduleTask(initShotCrossCountdownTimerTask, 0, 1, 0xF0);
                 scheduleTask(initCrossRaceBadgeTask, 0, 1, 0xF0);
@@ -2594,5 +2594,5 @@ void func_8005011C_50D1C(void) {
         }
 
         i++;
-    } while (i < allocation->unk5F);
+    } while (i < hudState->humanPlayerCount);
 }

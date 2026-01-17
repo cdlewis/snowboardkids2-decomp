@@ -177,7 +177,7 @@ void spawnShotCrossSkillMeterDisplayTask(s16 arg0);
 void initCrossRaceBadgeTask(CrossRaceBadgeState *arg0);
 void updateCrossRaceBadgeDisplay(CrossRaceBadgeState *arg0);
 void cleanupCrossRaceBadgeTask(void *arg0);
-void func_8005011C_50D1C(void);
+void initRaceHudTasks(void);
 void initSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0);
 void updateSecondaryItemDisplay(SecondaryItemDisplayState *arg0);
 void cleanupSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0);
