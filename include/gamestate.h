@@ -314,9 +314,9 @@ typedef struct {
     u8 PAD_E[0x2];
     u8 unk403;
     u8 PAD_0A_1[0x4];
-    s32 unk408[2];
-    s32 unk410[2];
-    s16 unk418[2];
+    s32 npcPosX[2];
+    s32 npcPosZ[2];
+    s16 npcCollisionRadius[2];
     s32 unk41C;
     u8 unk420;
     u8 unk421;

@@ -200,10 +200,10 @@ void initStoryMapItemMovement(StoryMapItemTask *arg0) {
     arg0->animValue2 = temp;
     arg0->animValue3 = arg0->animValue;
 
-    alloc->unk408[0] = arg0->matrix.translation.x;
+    alloc->npcPosX[0] = arg0->matrix.translation.x;
     posZ = arg0->matrix.translation.z;
     alloc->unk422 = 0;
-    alloc->unk410[0] = posZ;
+    alloc->npcPosZ[0] = posZ;
 
     setCallback(gStoryMapItemUpdateCallbacks[arg0->itemType]);
 }

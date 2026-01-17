@@ -65,12 +65,12 @@ struct Func8002CD3CArg {
 };
 
 extern u8 identityMatrix[];
-extern u16 D_8008EF70_8FB70[];
+extern u16 gNpcCollisionRadii[];
 
 void updateStoryMapRareEventIdle(RareEventIdleState *);
 void updateStoryMapRareEventWave(RareEventIdleState *);
 
-void func_8002C8C0_2D4C0(Func2E024Arg *arg0) {
+void initStoryMapRareEventWave(Func2E024Arg *arg0) {
     GameState *allocation;
     s32 vec3[3];
     s32 i;
@@ -114,9 +114,9 @@ void func_8002C8C0_2D4C0(Func2E024Arg *arg0) {
 
         spawnSpriteEffectEx(elements[i].model, 0, 0x29, -1, &elements[i].unk40, 0x10000, 0, 2, 0, 0);
         setupStoryMapNpcModel(&elements[i]);
-        allocation->unk408[i] = elements[i].matrix.translation.x;
-        allocation->unk410[i] = elements[i].matrix.translation.z;
-        allocation->unk418[i] = D_8008EF70_8FB70[elements[i].unk5C];
+        allocation->npcPosX[i] = elements[i].matrix.translation.x;
+        allocation->npcPosZ[i] = elements[i].matrix.translation.z;
+        allocation->npcCollisionRadius[i] = gNpcCollisionRadii[elements[i].unk5C];
     }
 
     setCallback(updateStoryMapRareEventWave);
@@ -143,8 +143,8 @@ void updateStoryMapRareEventWave(RareEventIdleState *arg0) {
         }
 
         updateStoryMapNpcModel((Func297D8Arg *)ptr);
-        allocation->unk408[i] = ptr->unk4.translation.x;
-        allocation->unk410[i] = ptr->unk4.translation.z;
+        allocation->npcPosX[i] = ptr->unk4.translation.x;
+        allocation->npcPosZ[i] = ptr->unk4.translation.z;
     }
 
     if (allocation->unk42A == 0x11) {
@@ -194,9 +194,9 @@ void initStoryMapRareEventIdle(RareEventIdleState *arg0) {
         }
 
         setupStoryMapNpcModel((Func297D8Arg *)&arg0->elements[i]);
-        allocation->unk408[i] = arg0->elements[i].unk4.translation.x;
-        allocation->unk410[i] = arg0->elements[i].unk4.translation.z;
-        allocation->unk418[i] = D_8008EF70_8FB70[arg0->elements[i].unk5C];
+        allocation->npcPosX[i] = arg0->elements[i].unk4.translation.x;
+        allocation->npcPosZ[i] = arg0->elements[i].unk4.translation.z;
+        allocation->npcCollisionRadius[i] = gNpcCollisionRadii[arg0->elements[i].unk5C];
     }
 
     arg0->effectDelay[0] = (randB() & 0x1F) + 0x28;
@@ -226,8 +226,8 @@ void updateStoryMapRareEventIdle(RareEventIdleState *arg0) {
         }
 
         updateStoryMapNpcModel((Func297D8Arg *)ptr);
-        allocation->unk408[i] = ptr->unk4.translation.x;
-        allocation->unk410[i] = ptr->unk4.translation.z;
+        allocation->npcPosX[i] = ptr->unk4.translation.x;
+        allocation->npcPosZ[i] = ptr->unk4.translation.z;
     }
 
     if (arg0->effectDelay[0] != 0) {
@@ -331,9 +331,9 @@ void initStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
         arg0->elements[i].unk52 = arg0->elements[i].unk50;
         createYRotationMatrix(&arg0->elements[i].matrix, arg0->elements[i].rotation);
         setupStoryMapNpcModel(&arg0->elements[i]);
-        gameState->unk408[i] = arg0->elements[i].matrix.translation.x;
-        gameState->unk410[i] = arg0->elements[i].matrix.translation.z;
-        gameState->unk418[i] = D_8008EF70_8FB70[arg0->elements[i].unk5C];
+        gameState->npcPosX[i] = arg0->elements[i].matrix.translation.x;
+        gameState->npcPosZ[i] = arg0->elements[i].matrix.translation.z;
+        gameState->npcCollisionRadius[i] = gNpcCollisionRadii[arg0->elements[i].unk5C];
     }
 
     setCallback(updateStoryMapRareEventMagicShow);

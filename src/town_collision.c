@@ -135,10 +135,10 @@ s32 checkTownNPCCollision(s32 posX, s32 posY, s32 characterIndex) {
     s32 threshold;
 
     state = (GameState *)getCurrentAllocation();
-    dx = posX - state->unk408[characterIndex];
-    dy = posY - state->unk410[characterIndex];
+    dx = posX - state->npcPosX[characterIndex];
+    dy = posY - state->npcPosZ[characterIndex];
     dist = distance_2d(dx, dy);
-    threshold = state->unk3FE + state->unk418[characterIndex];
+    threshold = state->unk3FE + state->npcCollisionRadius[characterIndex];
     if (dist < (threshold << 16)) {
         return characterIndex + 1;
     }
@@ -169,9 +169,13 @@ void resolveTownNPCCollision(TownController *controller, TownPosition *position,
 
     state = (GameState *)getCurrentAllocation();
     characterIndex = characterIndex - 1;
-    angle =
-        computeAngleToPosition(state->unk408[characterIndex], state->unk410[characterIndex], position->x, position->z);
-    combinedRadius = state->unk418[characterIndex] + state->unk3FE;
+    angle = computeAngleToPosition(
+        state->npcPosX[characterIndex],
+        state->npcPosZ[characterIndex],
+        position->x,
+        position->z
+    );
+    combinedRadius = state->npcCollisionRadius[characterIndex] + state->unk3FE;
     combinedRadius <<= 16;
     sinComponent = approximateSin(angle);
     pushScale = -(combinedRadius >> 8);
@@ -185,8 +189,8 @@ void resolveTownNPCCollision(TownController *controller, TownPosition *position,
     if (cosComponent < 0) {
         cosComponent += 0x1FFF;
     }
-    characterX = state->unk408[characterIndex];
-    characterZ = state->unk410[characterIndex];
+    characterX = state->npcPosX[characterIndex];
+    characterZ = state->npcPosZ[characterIndex];
     offsetX += characterX;
     position->x = offsetX;
     offsetZ = ((cosComponent >> 13) << 8) + characterZ;
@@ -209,6 +213,6 @@ s32 checkTownPlayerCollision(s32 posX, s32 posZ, u8 characterIndex) {
     dx = posX - state->unk3EC;
     dz = posZ - state->unk3F0;
     dist = distance_2d(dx, dz);
-    threshold = state->unk3FE + state->unk418[characterIndex];
+    threshold = state->unk3FE + state->npcCollisionRadius[characterIndex];
     return dist < (threshold << 16);
 }

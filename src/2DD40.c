@@ -10,7 +10,7 @@
 
 extern void spawnSpriteEffectEx(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
 extern u8 identityMatrix[];
-extern u16 D_8008EF70_8FB70[];
+extern u16 gNpcCollisionRadii[];
 
 void updateStoryMapRareEventJuggling(Func2E024Arg *arg0);
 void updateStoryMapRareEventSledding(void);
@@ -123,8 +123,8 @@ void updateStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
     ptr = arg0->elements;
     for (i = 0; i < 2; i++) {
         updateStoryMapNpcModel(&ptr[i]);
-        allocation->unk408[i] = ptr[i].matrix.translation.x;
-        allocation->unk410[i] = ptr[i].matrix.translation.z;
+        allocation->npcPosX[i] = ptr[i].matrix.translation.x;
+        allocation->npcPosZ[i] = ptr[i].matrix.translation.z;
     }
 
     if (allocation->unk42A == 0x11) {
@@ -201,9 +201,9 @@ void initStoryMapRareEventJuggling(Func2E024Arg *container) {
         characters[i].unk52 = characters[i].unk50;
         createYRotationMatrix(&characters[i].matrix, characters[i].rotation);
         setupStoryMapNpcModel(&characters[i]);
-        gameState->unk408[i] = characters[i].matrix.translation.x;
-        gameState->unk410[i] = characters[i].matrix.translation.z;
-        gameState->unk418[i] = D_8008EF70_8FB70[characters[i].unk5C];
+        gameState->npcPosX[i] = characters[i].matrix.translation.x;
+        gameState->npcPosZ[i] = characters[i].matrix.translation.z;
+        gameState->npcCollisionRadius[i] = gNpcCollisionRadii[characters[i].unk5C];
     }
 
     setCallback(updateStoryMapRareEventJuggling);
@@ -253,8 +253,8 @@ void updateStoryMapRareEventJuggling(Func2E024Arg *arg0) {
 
     cont:
         updateStoryMapNpcModel(&elements[i]);
-        gameState->unk408[i] = elements[i].matrix.translation.x;
-        gameState->unk410[i] = elements[i].matrix.translation.z;
+        gameState->npcPosX[i] = elements[i].matrix.translation.x;
+        gameState->npcPosZ[i] = elements[i].matrix.translation.z;
     }
 
     if (gameState->unk42A == 0x11) {
@@ -336,9 +336,9 @@ void initStoryMapRareEventSledding(Func2E024Arg *arg0) {
         );
         func_8006B084_6BC84(&localMatrix, new_var, &arg0->elements[i].matrix);
         setupStoryMapNpcModel(&arg0->elements[i]);
-        allocation->unk408[i] = arg0->elements[i].matrix.translation.x;
-        allocation->unk410[i] = arg0->elements[i].matrix.translation.z;
-        allocation->unk418[i] = D_8008EF70_8FB70[arg0->elements[i].unk5C];
+        allocation->npcPosX[i] = arg0->elements[i].matrix.translation.x;
+        allocation->npcPosZ[i] = arg0->elements[i].matrix.translation.z;
+        allocation->npcCollisionRadius[i] = gNpcCollisionRadii[arg0->elements[i].unk5C];
     }
 
     setCallback(&updateStoryMapRareEventSledding);
@@ -411,9 +411,9 @@ void initStoryMapRareEventSnowman(Func2E024Arg *container) {
         element->unk52 = element->unk50;
         createYRotationMatrix(&elements[i].matrix, element->rotation);
         setupStoryMapNpcModel(element);
-        gameState->unk408[i] = elements[i].matrix.translation.x;
-        gameState->unk410[i] = elements[i].matrix.translation.z;
-        gameState->unk418[i] = D_8008EF70_8FB70[element->unk5C];
+        gameState->npcPosX[i] = elements[i].matrix.translation.x;
+        gameState->npcPosZ[i] = elements[i].matrix.translation.z;
+        gameState->npcCollisionRadius[i] = gNpcCollisionRadii[element->unk5C];
     }
 
     setCallback(updateStoryMapRareEventSnowman);
@@ -450,8 +450,8 @@ void updateStoryMapRareEventSnowman(Func2E024Arg *arg0) {
     elements = arg0->elements;
     for (i = 0; i < arg0->unkD5; i++) {
         updateStoryMapNpcModel(&elements[i]);
-        gameState->unk408[i] = elements[i].matrix.translation.x;
-        gameState->unk410[i] = elements[i].matrix.translation.z;
+        gameState->npcPosX[i] = elements[i].matrix.translation.x;
+        gameState->npcPosZ[i] = elements[i].matrix.translation.z;
     }
 
     if (gameState->unk42A == 0x11) {
@@ -504,9 +504,9 @@ void initStoryMapRareEventCheering(Func2E024Arg *arg0) {
         arg0->elements[i].unk52 = arg0->elements[i].unk50;
         createYRotationMatrix(&arg0->elements[i].matrix, arg0->elements[i].rotation);
         setupStoryMapNpcModel(&arg0->elements[i]);
-        allocation->unk408[i] = arg0->elements[i].matrix.translation.x;
-        allocation->unk410[i] = arg0->elements[i].matrix.translation.z;
-        allocation->unk418[i] = D_8008EF70_8FB70[arg0->elements[i].unk5C];
+        allocation->npcPosX[i] = arg0->elements[i].matrix.translation.x;
+        allocation->npcPosZ[i] = arg0->elements[i].matrix.translation.z;
+        allocation->npcCollisionRadius[i] = gNpcCollisionRadii[arg0->elements[i].unk5C];
     }
 
     arg0->unkCC[0] = (randB() & 0x1F) + 0x28;
@@ -603,8 +603,8 @@ void updateStoryMapRareEventCheering(Func2E024Arg *arg0) {
         }
 
         updateStoryMapNpcModel(ptr);
-        allocation->unk408[i] = ptr->matrix.translation.x;
-        allocation->unk410[i] = ptr->matrix.translation.z;
+        allocation->npcPosX[i] = ptr->matrix.translation.x;
+        allocation->npcPosZ[i] = ptr->matrix.translation.z;
     }
 
     if (arg0->unkCC[0] != 0) {
@@ -720,9 +720,9 @@ void func_8002E680_2F280(Func2E024Arg *arg0) {
         createYRotationMatrix(&worldMatrix, angle & 0xFFFF);
         func_8006B084_6BC84(&localMatrix, new_var, &arg0->elements[i].matrix);
         setupStoryMapNpcModel(&arg0->elements[i]);
-        allocation->unk408[i] = arg0->elements[i].matrix.translation.x;
-        allocation->unk410[i] = arg0->elements[i].matrix.translation.z;
-        allocation->unk418[i] = D_8008EF70_8FB70[arg0->elements[i].unk5C];
+        allocation->npcPosX[i] = arg0->elements[i].matrix.translation.x;
+        allocation->npcPosZ[i] = arg0->elements[i].matrix.translation.z;
+        allocation->npcCollisionRadius[i] = gNpcCollisionRadii[arg0->elements[i].unk5C];
     }
 
     setCallback(updateStoryMapRareEventSkating);
@@ -808,8 +808,8 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
             memcpy(&worldMatrix.translation, &element->matrix.translation, 0xC);
             func_8006B084_6BC84(&localMatrix, &worldMatrix, &element->matrix);
             updateStoryMapNpcModel(element);
-            gameState->unk408[i] = element->matrix.translation.x;
-            gameState->unk410[i] = element->matrix.translation.z;
+            gameState->npcPosX[i] = element->matrix.translation.x;
+            gameState->npcPosZ[i] = element->matrix.translation.z;
             if (((u32)((facingAngle - 0x1001) & 0xFFFF) < 0x468)) {
                 element->unk5E = 2;
             }

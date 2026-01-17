@@ -18,6 +18,7 @@ struct Func2E024Arg {
 };
 
 void updateStoryMapRareEventMagicShow(Func2E024Arg *);
+void initStoryMapRareEventWave(Func2E024Arg *);
 void prepareStoryMapNpcDialogue(void *);
 s32 getPlayerGold(void);
 void addPlayerGold(s32 amount);
