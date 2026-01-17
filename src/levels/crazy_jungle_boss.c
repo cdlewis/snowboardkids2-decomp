@@ -298,94 +298,93 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
 }
 
 s32 initCrazyJungleBoss(Arg0Struct *arg0) {
-    void *gameState;
-    s32 waypoint1[3];
-    s32 waypoint2[3];
+    Vec3i waypoint1;
+    Vec3i waypoint2;
+    GameState *gameState;
     s32 i;
     u16 trackIdx;
     s32 assetOffset;
-    u8 *arg0_bytes;
-
-    arg0_bytes = (u8 *)arg0;
+    u8 *elem;
 
     gameState = getCurrentAllocation();
 
     // Initialize rotation matrices
-    memcpy(arg0_bytes + 0x970, identityMatrix, 0x20);
-    createYRotationMatrix((Transform3D *)(arg0_bytes + 0x970), *(u16 *)(arg0_bytes + 0xA94));
-    memcpy(arg0_bytes + 0x990, identityMatrix, 0x20);
-    memcpy(arg0_bytes + 0x9B0, identityMatrix, 0x20);
+    memcpy(&arg0->unk970, identityMatrix, sizeof(Transform3D));
+    createYRotationMatrix(&arg0->unk970, arg0->unkA94);
+    memcpy(&arg0->unk990, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk9B0, identityMatrix, sizeof(Transform3D));
 
     // Set initial position based on boss index
-    *(s32 *)(arg0_bytes + 0x434) = D_800BC44C_ACC7C[*(u8 *)(arg0_bytes + 0xBB8)];
-    getTrackSegmentWaypoints((u8 *)gameState + 0x30, 0, waypoint1, waypoint2);
+    arg0->unk434.x = D_800BC44C_ACC7C[arg0->unkBB8];
+    getTrackSegmentWaypoints(&gameState->gameData, 0, &waypoint1, &waypoint2);
 
-    *(s32 *)(arg0_bytes + 0x43C) = waypoint1[2] + 0x200000;
+    arg0->unk434.z = waypoint1.z + 0x200000;
 
     // Initialize track/sector info
-    trackIdx = getOrUpdatePlayerSectorIndex(arg0, (u8 *)gameState + 0x30, 0, arg0_bytes + 0x434);
-    *(u16 *)(arg0_bytes + 0xB94) = trackIdx;
-    *(s32 *)(arg0_bytes + 0x438) = getTrackHeightInSector((u8 *)gameState + 0x30, trackIdx, arg0_bytes + 0x434, 0x100000);
+    trackIdx = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->unk434);
+    arg0->sectorIndex = trackIdx;
+    arg0->unk434.y = getTrackHeightInSector(&gameState->gameData, trackIdx, &arg0->unk434, 0x100000);
 
-    memcpy(arg0_bytes + 0x440, arg0_bytes + 0x434, 0xC);
+    memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
 
     // Zero out velocity
-    *(s32 *)(arg0_bytes + 0x44C) = 0;
-    *(s32 *)(arg0_bytes + 0x450) = 0;
-    *(s32 *)(arg0_bytes + 0x454) = 0;
+    arg0->velocity.x = 0;
+    arg0->velocity.y = 0;
+    arg0->velocity.z = 0;
 
-    *(u16 *)(arg0_bytes + 0xA94) = 0x1000;
+    arg0->unkA94 = 0x1000;
 
     // Initialize bone matrices (17 bones)
     for (i = 0; i < 17; i++) {
-        memcpy(arg0_bytes + i * 0x3C + 0x38, identityMatrix, 0x20);
-        *(s32 *)(arg0_bytes + i * 0x3C + 0x5C) = *(s32 *)(arg0_bytes + 0x4);
-        *(s32 *)(arg0_bytes + i * 0x3C + 0x60) = *(s32 *)(arg0_bytes + 0x8);
-        *(s32 *)(arg0_bytes + i * 0x3C + 0x64) = 0;
+        elem = (u8 *)arg0 + i * 0x3C;
+        memcpy(elem + 0x38, identityMatrix, sizeof(Transform3D));
+        *(s32 *)(elem + 0x5C) = *(s32 *)((u8 *)arg0 + 4);
+        *(s32 *)(elem + 0x60) = *(s32 *)((u8 *)arg0 + 8);
+        *(s32 *)(elem + 0x64) = 0;
         assetOffset = i * 0x10;
-        *(void **)(arg0_bytes + i * 0x3C + 0x58) =
-            (void *)(loadAssetByIndex_953B0(*(u8 *)(arg0_bytes + 0xBB9), *(u8 *)(arg0_bytes + 0xBBA)) + assetOffset);
+        *(void **)(elem + 0x58) =
+            (void *)(loadAssetByIndex_953B0(*(u8 *)((u8 *)arg0 + 0xBB9), *(u8 *)((u8 *)arg0 + 0xBBA)) + assetOffset);
     }
 
-    *(u16 *)(arg0_bytes + 0xA8C) = 0;
+    arg0->unkA8C = 0;
 
     // Get number of bones and reset animations
-    *(u8 *)(arg0_bytes + 0xBB7) = getAnimationBoneCount(*(void **)(arg0_bytes + 0x0), 0);
+    arg0->boneCount = getAnimationBoneCount(*(void **)((u8 *)arg0 + 0), 0);
 
-    for (i = 0; i < *(u8 *)(arg0_bytes + 0xBB7); i++) {
+    for (i = 0; i < arg0->boneCount; i++) {
         resetBoneAnimation(
-            *(void **)(arg0_bytes + 0x0),
-            *(u16 *)(arg0_bytes + 0xA8C),
+            *(void **)((u8 *)arg0 + 0),
+            arg0->unkA8C,
             i,
-            (BoneAnimationStateIndexed *)(arg0_bytes + 0x488 + i * 0x48)
+            (BoneAnimationStateIndexed *)((u8 *)arg0 + 0x488 + i * 0x48)
         );
     }
 
     // Initialize behavior state
-    *(u8 *)(arg0_bytes + 0xBBD) = 1;
-    *(s32 *)(arg0_bytes + 0xAE0) = 0xA0000;
-    *(s32 *)(arg0_bytes + 0xB2C) = 0x240000;
-    *(u8 *)(arg0_bytes + 0xBB4) = 6;
-    *(u8 *)(arg0_bytes + 0xBBE) = 0;
-    *(s32 *)(arg0_bytes + 0xB30) = 0x174000;
-    *(s32 *)(arg0_bytes + 0xB34) = 0xDC000;
-    *(s32 *)(arg0_bytes + 0xB38) = 0xDC000;
-    *(s32 *)(arg0_bytes + 0xB3C) = 0x148000;
-    *(s32 *)(arg0_bytes + 0xB40) = 0x148000;
-    *(s32 *)(arg0_bytes + 0xB54) = (s32)(arg0_bytes + 0x434);
-    *(s32 *)(arg0_bytes + 0xB64) = 0x15E000;
-    *(u8 *)(arg0_bytes + 0xB68) = *(u8 *)(arg0_bytes + 0xBB8);
+    arg0->behaviorMode = 1;
+    *(s32 *)((u8 *)arg0 + 0xAE0) = 0xA0000;
+    *(s32 *)((u8 *)arg0 + 0xB2C) = 0x240000;
+    *(u8 *)((u8 *)arg0 + 0xBB4) = 6;
+    *(u8 *)((u8 *)arg0 + 0xBBE) = 0;
+    *(s32 *)((u8 *)arg0 + 0xB30) = 0x174000;
+    *(s32 *)((u8 *)arg0 + 0xB34) = 0xDC000;
+    *(s32 *)((u8 *)arg0 + 0xB38) = 0xDC000;
+    *(s32 *)((u8 *)arg0 + 0xB3C) = 0x148000;
+    *(s32 *)((u8 *)arg0 + 0xB40) = 0x148000;
+    *(s32 *)((u8 *)arg0 + 0xB54) = (s32)&arg0->unk434;
+    *(s32 *)((u8 *)arg0 + 0xB64) = 0x15E000;
+    *(u8 *)((u8 *)arg0 + 0xB68) = arg0->unkBB8;
 
     // Spawn chase camera if needed
-    if (*(u8 *)(arg0_bytes + 0xBC7) == 0) {
-        spawnChaseCameraTask(*(u8 *)(arg0_bytes + 0xBB8));
+    if (*(u8 *)((u8 *)arg0 + 0xBC7) == 0) {
+        spawnChaseCameraTask(arg0->unkBB8);
     }
 
-    *(s32 *)(arg0_bytes + 0xAA0) = *(s32 *)(*(s32 *)((u8 *)gameState + 0x10) + 0xAA0) - 0x10000;
+    *(s32 *)((u8 *)arg0 + 0xAA0) = ((s32 *)gameState->players)[0xAA0 / 4] - 0x10000;
 
-    if (*(void **)(arg0_bytes + 0x1C) != 0) {
-        *(s32 *)(arg0_bytes + 0x28) = (s32)(*(void **)(arg0_bytes + 0x1C)) +
-                                      ((s32 *)(*(void **)(arg0_bytes + 0x1C)))[*(u8 *)(arg0_bytes + 0xBB8)];
+    if (*(void **)((u8 *)arg0 + 0x1C) != 0) {
+        *(s32 *)((u8 *)arg0 + 0x28) = (s32)(*(void **)((u8 *)arg0 + 0x1C)) +
+                                      ((s32 *)(*(void **)((u8 *)arg0 + 0x1C)))[arg0->unkBB8];
     }
 
     return 1;
