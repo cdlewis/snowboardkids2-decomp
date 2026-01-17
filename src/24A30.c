@@ -286,7 +286,7 @@ void animateCharSelectP2NameHide(P2NameHideState *);
 void func_800269C8_275C8(void *);
 void func_80026BAC_277AC(SimpleSpriteEntry *);
 void initCharSelectIconHideSprites(CharSelectIconHideState *);
-void func_80025904_26504(CharSelectIconHideState *);
+void updateCharSelectIconsLockedState(CharSelectIconHideState *);
 void showCharSelectIcons(CharSelectIconHideState *);
 void updateCharSelectSecondarySlide(CharSelectSecondarySlot *);
 void cleanupCharSelectSecondaryAssets(func_8002494C_arg *);
@@ -1080,21 +1080,21 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
             i++;
         } while (i < 3);
 
-        setCallback(func_80025904_26504);
+        setCallback(updateCharSelectIconsLockedState);
     }
 }
 
-void func_80025904_26504(CharSelectIconHideState *arg0) {
+void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
     GameState *state;
     s32 i;
     func_80027348_entry *entry;
-    u16 stateVal;
+    u16 charSelectState;
     s32 iconBaseIndex;
     u8 charIndex;
     u8 paletteIndex;
-    s32 tableOffset;
-    u8 *tableBase;
-    u8 *tablePtr;
+    s32 iconMappingOffset;
+    u8 *iconMappingTable;
+    u8 *iconMappingPtr;
 
     state = (GameState *)getCurrentAllocation();
 
@@ -1106,14 +1106,14 @@ void func_80025904_26504(CharSelectIconHideState *arg0) {
         i++;
     } while (i < 3);
 
-    stateVal = state->unk1898[arg0->playerIndex];
+    charSelectState = state->unk1898[arg0->playerIndex];
 
-    if (stateVal == 0xA) {
+    if (charSelectState == 0xA) {
         setCallback(showCharSelectIcons);
         return;
     }
 
-    if (stateVal < 3) {
+    if (charSelectState < 3) {
         iconBaseIndex = 0xC;
         if (D_800AFE8C_A71FC->numPlayers == 1) {
             iconBaseIndex = 0x11;
@@ -1121,15 +1121,15 @@ void func_80025904_26504(CharSelectIconHideState *arg0) {
 
         charIndex = state->unk18A8[arg0->playerIndex];
         i = 0;
-        tableBase = D_8008DD8C_8E98C;
+        iconMappingTable = D_8008DD8C_8E98C;
         paletteIndex = state->unk18B0[arg0->playerIndex];
         entry = (func_80027348_entry *)arg0;
-        tableOffset = ((u8)(paletteIndex + charIndex * 3)) * 3;
+        iconMappingOffset = ((u8)(paletteIndex + charIndex * 3)) * 3;
 
         do {
-            tablePtr = (u8 *)((tableOffset + i) + (u32)tableBase);
-            ((func_80027348_entry *)arg0)[i].spriteIndex = iconBaseIndex + (*tablePtr - 1) / 2;
-            ((func_80027348_entry *)arg0)[i].paletteIndex = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
+            iconMappingPtr = (u8 *)((iconMappingOffset + i) + (u32)iconMappingTable);
+            ((func_80027348_entry *)arg0)[i].spriteIndex = iconBaseIndex + (*iconMappingPtr - 1) / 2;
+            ((func_80027348_entry *)arg0)[i].paletteIndex = (u8)(((*iconMappingPtr - 1) / 2 + 7) & 0xFF) % 11;
             i++;
         } while (i < 3);
 
@@ -1190,7 +1190,7 @@ loop:
             i++;
         } while (i < 3);
 
-        setCallback(func_80025904_26504);
+        setCallback(updateCharSelectIconsLockedState);
     }
 }
 

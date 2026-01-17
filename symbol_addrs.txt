@@ -3647,3 +3647,4 @@ cleanupTrickBurstEffect = 0x800B5794; // rom:0x1E2844
 gSpecialTrickTypeTable = 0x800941C4; // rom:0x94DC4
 setRenderContext = 0x800698CC; // rom:0x6A4CC
 getRenderContext = 0x800698DC; // rom:0x6A4DC
+updateCharSelectIconsLockedState = 0x80025904; // rom:0x26504
