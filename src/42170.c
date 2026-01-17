@@ -541,16 +541,9 @@ void setupBurstParticles(BurstEffectState *state) {
     }
 
     if (state->particleType != 0x2F) {
-        u8 *ptr;
-        u8 val;
-        val = 0xC0;
-        i = 5;
-        ptr = (u8 *)state + 0xB4;
-        do {
-            *(ptr + 0x1A) = val;
-            i--;
-            ptr -= 0x24;
-        } while (i >= 0);
+        for (i = 0; i < 6; i++) {
+            state->particles[i].unk1A = 0xC0;
+        }
     }
 
     state->unkDD = 0;
