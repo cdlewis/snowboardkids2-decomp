@@ -313,33 +313,32 @@ void cleanupStarLauncherTask(DisplayListObjectSegments *arg0) {
     arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
-void func_800BBA98(void) {
-    s32 i;
-    NodeWithPayload *temp;
+void initCrazyJungleHazards(void) {
+    NodeWithPayload *taskNode;
 
-    temp = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
-    if (temp != NULL) {
-        temp->positionIndex = 0;
+    taskNode = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
+    if (taskNode != NULL) {
+        taskNode->positionIndex = 0;
     }
 
-    temp = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
-    if (temp != NULL) {
-        temp->positionIndex = 2;
+    taskNode = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
+    if (taskNode != NULL) {
+        taskNode->positionIndex = 2;
     }
 
-    temp = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
-    if (temp != NULL) {
-        temp->positionIndex = 4;
+    taskNode = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
+    if (taskNode != NULL) {
+        taskNode->positionIndex = 4;
     }
 
-    temp = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
-    if (temp != NULL) {
-        temp->positionIndex = 6;
+    taskNode = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
+    if (taskNode != NULL) {
+        taskNode->positionIndex = 6;
     }
 
-    temp = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
-    if (temp != NULL) {
-        temp->positionIndex = 8;
+    taskNode = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
+    if (taskNode != NULL) {
+        taskNode->positionIndex = 8;
     }
 
     scheduleTask(&initStarLauncherTask, 0, 0, 0xC8);

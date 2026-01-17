@@ -22,7 +22,7 @@ typedef struct {
 
 void func_800BB2B0(FlyingEnemyTaskArg *arg0);
 void func_800BBA50(s32 arg0);
-void func_800BBA98(void);
+void initCrazyJungleHazards(void);
 void initFlyingEnemySpawner(FlyingEnemySpawnerState *arg0);
 void updateFlyingEnemySpawner(FlyingEnemySpawnerState *arg0);
 void func_800BBAF8_AB9A8(s16 *arg0);

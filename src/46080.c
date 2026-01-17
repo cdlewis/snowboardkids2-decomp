@@ -2928,7 +2928,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             scheduleGoldCoinsIfEnabled(courseId);
             scheduleItemBoxSystemTaskIfEnabled(courseId);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
-            func_800BBA98();
+            initCrazyJungleHazards();
             schedulePlayerSparkleTask();
             scheduleTask(&initStartGate, 0, 0, 0xD3);
             break;
