@@ -36,7 +36,17 @@ typedef struct {
 } BossSurfaceColor;
 
 typedef struct {
-    u8 pad[0x38];
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+    void *unk10;
+    void *unk14;
+    void *unk18;
+    void *unk1C;
+    void *unk20;
+    void *unk24;
+    u8 pad28[0x38 - 0x28];
     s16 unk38[0x10]; /* 0x38 - 0x57 */
     u8 pad58[0x6C - 0x58];
     u8 groundPrimaryR; /* 0x6C */
@@ -99,19 +109,31 @@ typedef struct {
     s32 unkAD4; /* 0xAD4 */
     s32 unkAD8; /* 0xAD8 */
     s32 unkADC; /* 0xADC */
-    u8 padAE0[0x4];
+    s32 unkAE0; /* 0xAE0 */
     s32 unkAE4; /* 0xAE4 */
     s32 unkAE8; /* 0xAE8 */
     s32 unkAEC; /* 0xAEC */
     s32 unkAF0; /* 0xAF0 */
     s32 unkAF4; /* 0xAF4 */
     s32 unkAF8; /* 0xAF8 */
-    u8 padAFC[0xB50 - 0xAFC];
+    u8 padAFC[0xB2C - 0xAFC];
+    s32 unkB2C; /* 0xB2C */
+    s32 unkB30; /* 0xB30 */
+    s32 unkB34; /* 0xB34 */
+    s32 unkB38; /* 0xB38 */
+    s32 unkB3C; /* 0xB3C */
+    s32 unkB40; /* 0xB40 */
+    s32 unkB44; /* 0xB44 */
+    s32 unkB48; /* 0xB48 */
+    s32 unkB4C; /* 0xB4C */
     s32 unkB50; /* 0xB50 */
     s32 unkB54; /* 0xB54 */
     s32 unkB58; /* 0xB58 */
     s32 unkB5C; /* 0xB5C */
-    u8 padB60[0xB7A - 0xB60];
+    s32 unkB60; /* 0xB60 */
+    s32 unkB64; /* 0xB64 */
+    u8 unkB68; /* 0xB68 */
+    u8 padB69[0xB7A - 0xB69];
     s8 unkB7A;  /* 0xB7A */
     s8 unkB7B;  /* 0xB7B */
     u16 unkB7C; /* 0xB7C */
@@ -125,9 +147,13 @@ typedef struct {
     u16 sectorIndex; /* 0xB94 */
     u8 padB96[0xB9E - 0xB96];
     u16 unkB9E; /* 0xB9E */
-    u8 padBA0[0xBB8 - 0xBA0];
+    u8 padBA0[0xBB4 - 0xBA0];
+    u8 unkBB4; /* 0xBB4 */
+    u8 padBB5[0xBB8 - 0xBB5];
     u8 unkBB8; /* 0xBB8 */
-    u8 padBB9[0xBBD - 0xBB9];
+    u8 characterId; /* 0xBB9 */
+    u8 boardIndex; /* 0xBBA */
+    u8 padBBB[0xBBD - 0xBBB];
     u8 behaviorMode;    /* 0xBBD */
     u8 behaviorPhase;   /* 0xBBE */
     u8 behaviorStep;    /* 0xBBF */
@@ -295,61 +321,56 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
 s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     Vec3i sp10;
     Vec3i sp20;
-    void *alloc;
+    GameState *gameState;
+    s32 i;
 
-    alloc = getCurrentAllocation();
+    gameState = getCurrentAllocation();
     memcpy(&arg0->unk970, identityMatrix, sizeof(Transform3D));
     createYRotationMatrix(&arg0->unk970, arg0->unkA94);
     memcpy(&arg0->unk990, identityMatrix, sizeof(Transform3D));
     memcpy(&arg0->unk9B0, identityMatrix, sizeof(Transform3D));
 
     arg0->unk434.x = gJingleTownBossSpawnPos[arg0->unkBB8];
-    getTrackSegmentWaypoints((u8 *)alloc + 0x30, 0, &sp10, &sp20);
+    getTrackSegmentWaypoints(&gameState->gameData, 0, &sp10, &sp20);
     arg0->unk434.z = sp10.z + 0x200000;
-    arg0->sectorIndex = func_80059E90_5AA90(arg0, (u8 *)alloc + 0x30, 0, &arg0->unk434);
+    arg0->sectorIndex = func_80059E90_5AA90(arg0, &gameState->gameData, 0, &arg0->unk434);
     arg0->unk434.y = getTrackHeightInSector(
-        (u8 *)alloc + 0x30,
+        &gameState->gameData,
         arg0->sectorIndex,
         &arg0->unk434,
         0x100000
     );
-    memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+    memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
     arg0->sideVelocity = 0;
     arg0->verticalVelocity = 0;
     arg0->forwardVelocity = 0;
     arg0->unkA94 = 0x1000;
 
-    {
-        s32 i;
-        u8 *elem;
-
-        for (i = 0; i < 3; i++) {
-            elem = (u8 *)arg0 + i * 0x3C;
-            memcpy(elem + 0x38, identityMatrix, sizeof(Transform3D));
-            *(s32 *)(elem + 0x5C) = *(s32 *)((u8 *)arg0 + 4);
-            *(s32 *)(elem + 0x60) = *(s32 *)((u8 *)arg0 + 8);
-            *(s32 *)(elem + 0x64) = 0;
-            *(void **)(elem + 0x58) =
-                (void *)(loadAssetByIndex_953B0(*(u8 *)((u8 *)arg0 + 0xBB9), *(u8 *)((u8 *)arg0 + 0xBBA)) + i * 0x10);
-        }
+    for (i = 0; i < 3; i++) {
+        u8 *elem = (u8 *)arg0 + i * 0x3C;
+        memcpy(elem + 0x38, identityMatrix, sizeof(Transform3D));
+        *(s32 *)(elem + 0x5C) = (s32)arg0->unk4;
+        *(s32 *)(elem + 0x60) = (s32)arg0->unk8;
+        *(s32 *)(elem + 0x64) = 0;
+        *(void **)(elem + 0x58) =
+            (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + i * 0x10);
     }
 
     arg0->behaviorMode = 1;
-    *(s32 *)((u8 *)arg0 + 0xB30) = 0x180000;
-    *(u8 *)((u8 *)arg0 + 0xBB4) = 2;
+    arg0->unkB30 = 0x180000;
+    arg0->unkBB4 = 2;
     arg0->behaviorPhase = 0;
-    *(s32 *)((u8 *)arg0 + 0xB2C) = 0x1EC000;
-    *(s32 *)((u8 *)arg0 + 0xAE0) = 0x1EC000;
-    *(s32 *)((u8 *)arg0 + 0xB54) = (s32)&arg0->unk434;
-    *(s32 *)((u8 *)arg0 + 0xB64) = 0x1EC000;
-    *(u8 *)((u8 *)arg0 + 0xB68) = arg0->unkBB8;
+    arg0->unkB2C = 0x1EC000;
+    arg0->unkAE0 = 0x1EC000;
+    arg0->unkB54 = (s32)&arg0->unk434;
+    arg0->unkB64 = 0x1EC000;
+    arg0->unkB68 = arg0->unkBB8;
     if (arg0->unkBC7 == 0) {
         spawnChaseCameraTask(arg0->unkBB8);
     }
     arg0->unkBDB = 0xA;
-    if (*(s32 *)((u8 *)arg0 + 0x1C) != 0) {
-        *(s32 *)((u8 *)arg0 + 0x28) =
-            *(s32 *)((u8 *)arg0 + 0x1C) + ((s32 *)*(s32 *)((u8 *)arg0 + 0x1C))[arg0->unkBB8];
+    if ((s32)arg0->unk1C != 0) {
+        *(s32 *)arg0->pad28 = (s32)arg0->unk1C + ((s32 *)arg0->unk1C)[arg0->unkBB8];
     }
     return 1;
 }
