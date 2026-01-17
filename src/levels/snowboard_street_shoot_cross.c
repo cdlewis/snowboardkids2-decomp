@@ -69,7 +69,7 @@ typedef struct {
 
 void renderShootCrossTargets(ShootCrossTargets *arg0);
 void updateRotatingSky(RotatingSkyRenderArg *arg0);
-void cleanupRotatingSky(RotatingSkyArg *arg0);
+void cleanupRotatingSky(RotatingSkyArg *rotatingSky);
 void cleanupShootCrossTargets(ShootCrossTargets *arg0);
 void initShootCrossTargetsCallback(ShootCrossTargets *arg0);
 void activateShootCrossTargets(ShootCrossTargets *arg0);
@@ -149,7 +149,7 @@ void cleanupShootCrossTargets(ShootCrossTargets *arg0) {
     arg0->targetPositionData = freeNodeMemory(arg0->targetPositionData);
 }
 
-s32 checkProjectileTargetHit(Vec3i *arg0, s32 arg1) {
+s32 checkProjectileTargetHit(Vec3i *projectilePos, s32 hitRange) {
     s32 pos[3];
     s32 unused[2];
     ProjectileAllocation *allocation;
@@ -178,7 +178,7 @@ found:
     return 1;
 
 check_count:
-    range = arg1 + 0x140000;
+    range = hitRange + 0x140000;
 
     if (targets->targetCount <= 0) {
         return 0;
@@ -188,7 +188,7 @@ check_count:
     negRange = -range;
 
     do {
-        memcpy(pos, arg0, sizeof(Vec3i));
+        memcpy(pos, projectilePos, sizeof(Vec3i));
         idx = i << 4;
         x = pos[0] - targets->targets[i].x;
         pos[0] = x;
@@ -283,19 +283,19 @@ void scheduleShootCrossTargetsTask(s32 courseId) {
     }
 }
 
-void initRotatingSky(RotatingSkyArg *arg0) {
+void initRotatingSky(RotatingSkyArg *rotatingSky) {
     RotatingSkyAllocation *allocation;
     LevelDisplayLists *result;
 
     allocation = (RotatingSkyAllocation *)getCurrentAllocation();
     result = getSkyDisplayLists3ByIndex(allocation->skyDisplayListIndex);
-    arg0->displayLists = (void *)((u32)result + 0x90);
-    arg0->uncompressedAsset = loadUncompressedAssetByIndex(0xD);
-    arg0->compressedAsset = loadCompressedSegment2AssetByIndex(0xD);
-    arg0->posX = 0x25990000;
-    arg0->posY = 0x1A2B0000;
-    arg0->unk2C = 0;
-    arg0->posZ = 0xF7A30000;
+    rotatingSky->displayLists = (void *)((u32)result + 0x90);
+    rotatingSky->uncompressedAsset = loadUncompressedAssetByIndex(0xD);
+    rotatingSky->compressedAsset = loadCompressedSegment2AssetByIndex(0xD);
+    rotatingSky->posX = 0x25990000;
+    rotatingSky->posY = 0x1A2B0000;
+    rotatingSky->unk2C = 0;
+    rotatingSky->posZ = 0xF7A30000;
     setCleanupCallback(cleanupRotatingSky);
     setCallback(updateRotatingSky);
 }
@@ -311,7 +311,7 @@ void updateRotatingSky(RotatingSkyRenderArg *arg0) {
     }
 }
 
-void cleanupRotatingSky(RotatingSkyArg *arg0) {
-    arg0->uncompressedAsset = freeNodeMemory(arg0->uncompressedAsset);
-    arg0->compressedAsset = freeNodeMemory(arg0->compressedAsset);
+void cleanupRotatingSky(RotatingSkyArg *rotatingSky) {
+    rotatingSky->uncompressedAsset = freeNodeMemory(rotatingSky->uncompressedAsset);
+    rotatingSky->compressedAsset = freeNodeMemory(rotatingSky->compressedAsset);
 }

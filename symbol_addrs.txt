@@ -22,6 +22,7 @@ D_800BBB6C_B546C = 0x800BBB6C; // rom:0xB546C
 D_800BBB88_B5488 = 0x800BBB88; // rom:0xB5488
 D_800BBB8C_B548C = 0x800BBB8C; // rom:0xB548C
 D_800BBBA8_B54A8 = 0x800BBBA8; // rom:0xB54A8 type:u16
+cleanupRotatingSky = 0x800BBB70; // rom:0xAD5F0
 initSunnyMountainFlyingBirdTask = 0x800BB814; // rom:0xB5114
 resetSunnyMountainFlyingBirdPath = 0x800BB890; // rom:0xB5190
 updateSunnyMountainFlyingBird = 0x800BBA34; // rom:0xB5334

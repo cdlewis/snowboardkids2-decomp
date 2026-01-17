@@ -14,6 +14,6 @@ typedef struct {
     s32 unk2C;
 } RotatingSkyArg;
 
-void initRotatingSky(RotatingSkyArg *arg0);
-s32 checkProjectileTargetHit(Vec3i *arg0, s32 arg1);
+void initRotatingSky(RotatingSkyArg *rotatingSky);
+s32 checkProjectileTargetHit(Vec3i *projectilePos, s32 hitRange);
 void scheduleShootCrossTargetsTask(s32 courseId);
