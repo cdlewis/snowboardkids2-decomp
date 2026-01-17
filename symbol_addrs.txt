@@ -1726,7 +1726,7 @@ gDebugDisplayConfig = 0x800955B0; // rom:0x1DB740
 
 cleanupCutsceneSystem = 0x800B3B40; // type:func rom:0x1E0BF0
 findStateEntryIndex = 0x800B3B68; // type:func rom:0x1E0C18
-func_800B02E0 = 0x800B02E0; // type:func rom:0x1DC480
+initCreditsSubtitles = 0x800B02E0; // type:func rom:0x1DC480
 initCreditsCornerDecorationSprites = 0x800B00C0; // type:func rom:0x1DC260
 spawnStarlightItems = 0x800BBED8; // type:func rom:0xAE298
 spawnDebugDisplayListTask = 0x800BBB90; // type:func rom:0xADF50

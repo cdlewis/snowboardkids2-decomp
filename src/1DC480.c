@@ -102,36 +102,36 @@ typedef struct {
     s16 unk9AE;
     s16 unk9B0;
     s16 unk9B2;
-} func_800B02E0_arg;
+} CreditsSubtitlesState;
 
-void func_800B02E0(void *arg0) {
-    func_800B02E0_arg *typedArg = (func_800B02E0_arg *)arg0;
+void initCreditsSubtitles(void *arg0) {
+    CreditsSubtitlesState *state = (CreditsSubtitlesState *)arg0;
     void *temp;
 
-    typedArg->unk9A0 = -1;
-    temp = typedArg->unk960;
-    typedArg->unk96C = 0;
-    typedArg->unk96E = 0;
-    typedArg->unk978 = 0xFF;
-    typedArg->unk97A = 0xFF;
-    typedArg->unk97C = 0;
-    typedArg->unk980 = 0;
-    typedArg->unk982 = 0;
-    typedArg->unk974 = temp;
-    typedArg->unk988 = typedArg->unk960;
-    typedArg->unk984 = getTable2DEntry(typedArg->unk964, typedArg->unk9A0, 0);
-    typedArg->unk98C = 0xFF;
-    typedArg->unk98E = 0xFF;
-    typedArg->unk990 = 2;
-    typedArg->unk9A4 = 0;
-    typedArg->unk9A6 = 0;
-    typedArg->unk9AC = 0;
-    typedArg->unk99C = NULL;
-    typedArg->unk998 = NULL;
-    typedArg->unk9B0 = 0;
-    typedArg->unk9B2 = 0;
-    typedArg->unk9AE = 0;
-    typedArg->unk994 = NULL;
+    state->unk9A0 = -1;
+    temp = state->unk960;
+    state->unk96C = 0;
+    state->unk96E = 0;
+    state->unk978 = 0xFF;
+    state->unk97A = 0xFF;
+    state->unk97C = 0;
+    state->unk980 = 0;
+    state->unk982 = 0;
+    state->unk974 = temp;
+    state->unk988 = state->unk960;
+    state->unk984 = getTable2DEntry(state->unk964, state->unk9A0, 0);
+    state->unk98C = 0xFF;
+    state->unk98E = 0xFF;
+    state->unk990 = 2;
+    state->unk9A4 = 0;
+    state->unk9A6 = 0;
+    state->unk9AC = 0;
+    state->unk99C = NULL;
+    state->unk998 = NULL;
+    state->unk9B0 = 0;
+    state->unk9B2 = 0;
+    state->unk9AE = 0;
+    state->unk994 = NULL;
 }
 
 void func_800B0388_1DC528(Struct_800B0388 *arg0) {

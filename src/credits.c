@@ -308,7 +308,7 @@ void updateCreditsSequence(void) {
     }
 
     if (state->unk0 == 0) {
-        func_800B02E0(state);
+        initCreditsSubtitles(state);
         func_800B0760(state);
         initCreditsCornerDecorationSprites(state);
         state->unk0 = 1;
