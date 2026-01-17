@@ -2907,6 +2907,7 @@ onCharacterSelectCancel = 0x80023DA0; // rom:0x249A0
 countUnlockedSlotsInCategory = 0x80023DCC; // rom:0x249CC
 initCharSelectPreviewModel = 0x80023E30; // rom:0x24A30
 updateCharSelectPreviewModel = 0x80024048; // rom:0x24C48
+reloadCharSelectPreviewAssets = 0x80024220; // rom:0x24E20
 initCharSelectSlidePosition = 0x80024298; // rom:0x24E98
 updateCharSelectSlide = 0x80024414; // rom:0x25014
 updateCharSelectPostSlide = 0x80024518; // rom:0x25118
