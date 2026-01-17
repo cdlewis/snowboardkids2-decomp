@@ -1537,6 +1537,7 @@ setupTaskSchedulerNodes = 0x800698EC;
 allocateTaskMemory = 0x80069854;
 getTableEntryByU16Index = 0x80019280;
 getTableEntryByIndex = 0x800192CC;
+loadFontAssetsFromDataTable = 0x800680F0; // rom:0x68CF0
 renderTextPalette = 0x80068128;
 renderTextColored = 0x800689C0;
 enqueueTextRender = 0x800688D4;
