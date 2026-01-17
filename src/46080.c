@@ -2913,7 +2913,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleSceneAnimationTask(courseId, 6);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
-            scheduleTask(&func_800BBA28_AB8D8, 0, 0, 0x31);
+            scheduleTask(&initFlyingEnemySpawner, 0, 0, 0x31);
             scheduleTask(&func_800BBAF8_AB9A8, 0, 0, 0xF0);
             schedulePlayerSparkleTask();
             break;

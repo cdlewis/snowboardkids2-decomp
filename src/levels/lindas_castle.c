@@ -275,20 +275,18 @@ void cleanupFlyingEnemyTask(FlyingEnemyCleanupArg *arg0) {
 
 typedef struct {
     u8 pad[0x50];
-    u16 unk50;
-} ScheduledTaskWith50;
+    u16 waypointIndex;
+} FlyingEnemyTaskArg_WaypointIndex;
 
-void func_800BBA54_AB904(func_800BBA28_AB8D8_arg *arg0);
-
-void func_800BBA28_AB8D8(func_800BBA28_AB8D8_arg *arg0) {
-    arg0->unk0 = 0;
-    arg0->unk2 = 0x14;
-    setCallback(func_800BBA54_AB904);
+void initFlyingEnemySpawner(FlyingEnemySpawnerState *arg0) {
+    arg0->waypointIndex = 0;
+    arg0->spawnTimer = 0x14;
+    setCallback(updateFlyingEnemySpawner);
 }
 
-void func_800BBA54_AB904(func_800BBA28_AB8D8_arg *arg0) {
+void updateFlyingEnemySpawner(FlyingEnemySpawnerState *arg0) {
     GameState *gameState = getCurrentAllocation();
-    ScheduledTaskWith50 *task;
+    FlyingEnemyTaskArg_WaypointIndex *task;
     s16 counter;
     s16 newValue;
 
@@ -296,23 +294,23 @@ void func_800BBA54_AB904(func_800BBA28_AB8D8_arg *arg0) {
         return;
     }
 
-    counter = arg0->unk2;
+    counter = arg0->spawnTimer;
     if (counter == 0) {
-        task = (ScheduledTaskWith50 *)scheduleTask(initFlyingEnemyTask, 0, 0, 0x32);
+        task = (FlyingEnemyTaskArg_WaypointIndex *)scheduleTask(initFlyingEnemyTask, 0, 0, 0x32);
         if (task != NULL) {
-            task->unk50 = arg0->unk0;
+            task->waypointIndex = arg0->waypointIndex;
         }
 
-        arg0->unk0++;
-        if ((s16)arg0->unk0 == 4) {
-            arg0->unk0 = 0;
+        arg0->waypointIndex++;
+        if ((s16)arg0->waypointIndex == 4) {
+            arg0->waypointIndex = 0;
         }
 
         newValue = (randA() & 0xF) + 0x14;
     } else {
         newValue = counter - 1;
     }
-    arg0->unk2 = newValue;
+    arg0->spawnTimer = newValue;
 }
 void func_800BBB1C_AB9CC(s16 *arg0);
 

@@ -16,12 +16,13 @@ typedef struct {
 } FlyingEnemyTaskArg;
 
 typedef struct {
-    u16 unk0;
-    s16 unk2;
-} func_800BBA28_AB8D8_arg;
+    u16 waypointIndex;
+    s16 spawnTimer;
+} FlyingEnemySpawnerState;
 
 void func_800BB2B0(FlyingEnemyTaskArg *arg0);
 void func_800BBA50(s32 arg0);
 void func_800BBA98(void);
-void func_800BBA28_AB8D8(func_800BBA28_AB8D8_arg *arg0);
+void initFlyingEnemySpawner(FlyingEnemySpawnerState *arg0);
+void updateFlyingEnemySpawner(FlyingEnemySpawnerState *arg0);
 void func_800BBAF8_AB9A8(s16 *arg0);
