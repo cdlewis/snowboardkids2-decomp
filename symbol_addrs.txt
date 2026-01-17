@@ -3669,3 +3669,4 @@ gSpecialTrickTypeTable = 0x800941C4; // rom:0x94DC4
 setRenderContext = 0x800698CC; // rom:0x6A4CC
 getRenderContext = 0x800698DC; // rom:0x6A4DC
 updateCharSelectIconsLockedState = 0x80025904; // rom:0x26504
+updateBossProximityCheckpoints = 0x800BC330; // rom:0xACB60

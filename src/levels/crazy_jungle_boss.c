@@ -34,10 +34,10 @@ typedef struct {
 extern BossSurfaceColor gBossSurfaceColors[];
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} UnkA10Entry;
+    s32 posX;
+    s32 height;
+    s32 posZ;
+} BossCheckpoint;
 
 typedef struct {
     u8 pad[0x38];
@@ -75,7 +75,7 @@ typedef struct {
     Transform3D unk990;
     Transform3D unk9B0;
     u8 pad9D0[0xA10 - 0x9D0];
-    UnkA10Entry unkA10[9];
+    BossCheckpoint checkpoints[9];
     s32 aiTargetX;
     u8 padA80[4];
     s32 aiTargetZ;
@@ -642,35 +642,33 @@ void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
     }
 }
 
-#define DATA_OFFSET_ROW 214
-#define DATA_OFFSET_COL_0 2
-#define DATA_OFFSET_COL_2 0
+#define CHECKPOINT_DATA_ROW 214
 
-void func_800BC330_ACB60(Arg0Struct *arg0) {
-    s32 i;
-    u8 *temp_s5;
-    GameState *alloc;
+void updateBossProximityCheckpoints(Arg0Struct *arg0) {
+    s32 checkpointIndex;
+    GameDataLayout *gameData;
+    GameState *gameState;
 
-    alloc = getCurrentAllocation();
-    i = 0;
-    temp_s5 = (u8 *)&alloc->gameData;
+    gameState = getCurrentAllocation();
+    checkpointIndex = 0;
+    gameData = &gameState->gameData;
 
     do {
-        s32 *posPtr;
-        u16 temp;
+        s32 *checkpointPos;
+        u16 sectorIndex;
 
-        arg0->unkA10[i].unk0 = arg0->unk970.translation.x + D_800BBA7C_AC2AC[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_0];
-        arg0->unkA10[i].unk8 =
-            arg0->unk970.translation.z + D_800BBA84_AC2B4[DATA_OFFSET_ROW + i][DATA_OFFSET_COL_2 + 2];
-        posPtr = &arg0->unkA10[i].unk0;
-        temp = func_80059E90_5AA90(arg0, temp_s5, arg0->sectorIndex, posPtr);
-        arg0->unkA10[i].unk4 = getTrackHeightInSector(temp_s5, temp, posPtr, 0x100000);
-        i++;
-    } while (i < 9);
+        arg0->checkpoints[checkpointIndex].posX = arg0->unk970.translation.x + D_800BBA7C_AC2AC[CHECKPOINT_DATA_ROW + checkpointIndex][2];
+        arg0->checkpoints[checkpointIndex].posZ =
+            arg0->unk970.translation.z + D_800BBA84_AC2B4[CHECKPOINT_DATA_ROW + checkpointIndex][2];
+        checkpointPos = &arg0->checkpoints[checkpointIndex].posX;
+        sectorIndex = getOrUpdatePlayerSectorIndex(arg0, (u8 *)gameData, arg0->sectorIndex, checkpointPos);
+        arg0->checkpoints[checkpointIndex].height = getTrackHeightInSector((u8 *)gameData, sectorIndex, checkpointPos, 0x100000);
+        checkpointIndex++;
+    } while (checkpointIndex < 9);
 
     arg0->unkBC1 = 1;
 
-    for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 1, func_800B9500_A93B0, arg0);
+    for (checkpointIndex = 0; checkpointIndex < 4; checkpointIndex++) {
+        debugEnqueueCallback((u16)checkpointIndex, 1, func_800B9500_A93B0, arg0);
     }
 }
