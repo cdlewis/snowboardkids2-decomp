@@ -292,10 +292,10 @@ void initRotatingSky(RotatingSkyArg *arg0) {
     arg0->displayLists = (void *)((u32)result + 0x90);
     arg0->uncompressedAsset = loadUncompressedAssetByIndex(0xD);
     arg0->compressedAsset = loadCompressedSegment2AssetByIndex(0xD);
-    arg0->unk14 = 0x25990000;
-    arg0->unk18 = 0x1A2B0000;
+    arg0->posX = 0x25990000;
+    arg0->posY = 0x1A2B0000;
     arg0->unk2C = 0;
-    arg0->unk1C = 0xF7A30000;
+    arg0->posZ = 0xF7A30000;
     setCleanupCallback(cleanupRotatingSky);
     setCallback(updateRotatingSky);
 }

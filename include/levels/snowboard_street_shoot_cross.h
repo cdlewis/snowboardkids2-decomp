@@ -5,9 +5,9 @@
 
 typedef struct {
     u8 _pad[0x14];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
+    s32 posX;
+    s32 posY;
+    s32 posZ;
     void *displayLists;
     void *uncompressedAsset;
     void *compressedAsset;
