@@ -233,14 +233,14 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
             clampedAngle = 0xE000;
             clampedAngle = angleDiff | clampedAngle;
         }
-        if ((s16)clampedAngle >= 0x81) {
+        if (clampedAngle >= 0x81) {
             clampedAngle = 0x80;
         }
-        if ((s16)clampedAngle < -0x80) {
+        if (clampedAngle < -0x80) {
             clampedAngle = -0x80;
         }
         arg0->rotation = arg0->rotation + clampedAngle;
-        rotateVectorY(&gJingleTownTrainForwardVector2, (s16)arg0->rotation, &rotatedVec);
+        rotateVectorY(&gJingleTownTrainForwardVector2, arg0->rotation, &rotatedVec);
 
         terrainPtr = &alloc->unk30;
         arg0->posX += rotatedVec.x;
@@ -248,13 +248,13 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
         arg0->posZ += rotatedVec.z;
 
         arg0->unk56 = func_80060A3C_6163C(terrainPtr, arg0->unk56, posPtr);
-        arg0->height = func_80061A64_62664(terrainPtr, (u16)arg0->unk56, posPtr);
+        arg0->height = func_80061A64_62664(terrainPtr, arg0->unk56, posPtr);
 
         arg0->yOffset += arg0->yVelocity;
-        arg0->yVelocity += -0x8000;
+        arg0->yVelocity -= 0x8000;
 
         if (arg0->yOffset == 0) {
-            arg0->loopCount -= 1;
+            arg0->loopCount--;
             if (arg0->loopCount == 0) {
                 arg0->waitTimer = ((randA() & 0xFF) >> 1) + 0xA;
                 setCallback(handleTrainIdleState);
@@ -266,7 +266,7 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
         rotatedVec.x = *(s32 *)((u8 *)gJingleTownTrainWaypointsX + (arg0->waypointIndex * 8) + (arg0->trainIndex * 0x14)) - arg0->posX;
         rotatedVec.y = *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + (arg0->waypointIndex * 8) + (arg0->trainIndex * 0x14)) - arg0->posZ;
 
-        if ((u32)(rotatedVec.x + 0xFFFFF) <= 0x1FFFFEU && (u32)(rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
+        if ((u32)(rotatedVec.x + 0xFFFFF) <= 0x1FFFFE && (u32)(rotatedVec.z + 0xFFFFF) <= 0x1FFFFE) {
             arg0->waypointIndex = (arg0->waypointIndex + 1) & 1;
         }
 
