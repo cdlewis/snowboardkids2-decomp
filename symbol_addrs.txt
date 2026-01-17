@@ -1,3 +1,4 @@
+D_8008CD98_8D998 = 0x8008CD98; // rom:0x8D998 size:0x38
 D_8009A8A4_9B4A4 = 0x8009A8A4; // rom:0x9B4A4 size:0xC
 D_800908E0_914E0 = 0x800908E0; // rom:0x914E0 size:0x48
 gFanSoundCount = 0x800BAD0E; // rom:0x1E7DBE type:s16
