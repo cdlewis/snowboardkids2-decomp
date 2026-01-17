@@ -19,43 +19,43 @@ USE_ASSET(_459310);
 USE_ASSET(_4488E0);
 
 typedef struct {
-    Node_70B00 unk0;        // 0x000
-    Node_70B00 unk1D8;      // 0x1D8
-    Node_70B00 previewNode; // 0x3B0
-    Node_70B00 unk588;      // 0x588
-    Node_70B00 detailNode;  // 0x760
-    Node_70B00 unk938;      // 0x938
-    void *unkB10;           // 0xB10
-    void *unkB14;           // 0xB14
-    void *unkB18;           // 0xB18
-    void *unkB1C;           // 0xB1C
-    void *unkB20;           // 0xB20
-    u8 padB24[0x4];         // 0xB24
-    u16 transitionCounter;  // 0xB28
-    u8 padB2A[0x2];         // 0xB2A
-    s8 selectedIndex;       // 0xB2C
-    u8 exitMode;            // 0xB2D
-    u8 previewLoadCounter;  // 0xB2E
-    u8 padB2F[0x4];         // 0xB2F
-    u8 levelIdList[12];     // 0xB33
-    u8 padB3F[0x5];         // 0xB3F
-    u8 isLoadingPreview;    // 0xB44
-    u8 showDetailView;      // 0xB45
-    u8 selectedNumber;      // 0xB46
+    Node_70B00 cameraNode;          // 0x000
+    Node_70B00 secondaryCameraNode; // 0x1D8
+    Node_70B00 previewNode;         // 0x3B0
+    Node_70B00 viewportParentNode;  // 0x588
+    Node_70B00 detailNode;          // 0x760
+    Node_70B00 tertiaryCameraNode;  // 0x938
+    void *portraitAsset;            // 0xB10
+    void *imageAsset;               // 0xB14
+    void *effectAsset;              // 0xB18
+    void *textRenderAsset;          // 0xB1C
+    void *uiAsset;                  // 0xB20
+    u8 padB24[0x4];                 // 0xB24
+    u16 transitionCounter;          // 0xB28
+    u8 padB2A[0x2];                 // 0xB2A
+    s8 selectedIndex;               // 0xB2C
+    u8 exitMode;                    // 0xB2D
+    u8 previewLoadCounter;          // 0xB2E
+    u8 padB2F[0x4];                 // 0xB2F
+    u8 levelIdList[12];             // 0xB33
+    u8 padB3F[0x5];                 // 0xB3F
+    u8 isLoadingPreview;            // 0xB44
+    u8 showDetailView;              // 0xB45
+    u8 selectedNumber;              // 0xB46
 } LevelSelectState_Base;
 
 // typedef struct {
-//     Node_70B00 unk0;
-//     Node_70B00 unk1D8;
+//     Node_70B00 cameraNode;
+//     Node_70B00 secondaryCameraNode;
 //     Node_70B00 previewNode;
-//     Node_70B00 unk588;
+//     Node_70B00 viewportParentNode;
 //     Node_70B00 detailNode;
-//     Node_70B00 unk938;
-//     void *unkB10;
-//     void *unkB14;
-//     void *unkB18;
-//     void *unkB1C;
-//     void *unkB20;
+//     Node_70B00 tertiaryCameraNode;
+//     void *portraitAsset;
+//     void *imageAsset;
+//     void *effectAsset;
+//     void *textRenderAsset;
+//     void *uiAsset;
 //     s32 loadStartFrame;
 //     u16 transitionCounter;
 //     u8 padB2A[0x2];
@@ -75,17 +75,17 @@ typedef struct {
 // } LevelSelectState;
 
 typedef struct {
-    /* 0x000 */ Node_70B00 unk0;
-    /* 0x1D8 */ Node_70B00 unk1D8;
+    /* 0x000 */ Node_70B00 cameraNode;
+    /* 0x1D8 */ Node_70B00 secondaryCameraNode;
     /* 0x3B0 */ Node_70B00 previewNode;
-    /* 0x588 */ Node_70B00 unk588;
+    /* 0x588 */ Node_70B00 viewportParentNode;
     /* 0x760 */ Node_70B00 detailNode;
-    /* 0x938 */ Node_70B00 unk938;
-    /* 0xB10 */ void *unkB10;
-    /* 0xB14 */ void *unkB14;
-    /* 0xB18 */ void *unkB18;
-    /* 0xB1C */ void *unkB1C;
-    /* 0xB20 */ void *unkB20;
+    /* 0x938 */ Node_70B00 tertiaryCameraNode;
+    /* 0xB10 */ void *portraitAsset;
+    /* 0xB14 */ void *imageAsset;
+    /* 0xB18 */ void *effectAsset;
+    /* 0xB1C */ void *textRenderAsset;
+    /* 0xB20 */ void *uiAsset;
     /* 0xB24 */ s32 loadStartFrame;
     /* 0xB28 */ u16 transitionCounter;
     /* 0xB2A */ u16 padB2A;
@@ -93,7 +93,7 @@ typedef struct {
     /* 0xB2D */ u8 exitMode;
     /* 0xB2E */ u8 previewLoadCounter;
     /* 0xB2F */ u8 menuState;
-    /* 0xB30 */ u8 unkB30;
+    /* 0xB30 */ u8 selectedLevelId;
     /* 0xB31 */ u8 newLevelId;
     /* 0xB32 */ u8 oldLevelId;
     /* 0xB33 */ u8 levelIdList[12];
@@ -119,7 +119,7 @@ typedef enum {
     MENU_STATE_DETAIL_CLOSE = 9, // Closing detail view animation
 } MenuState;
 
-void func_8001E5EC_1F1EC(void);
+void initLevelSelectState(void);
 void handleLevelSelectInput(void);
 void waitForFadeToLevelSelect(void);
 void proceedFromLevelSelect(void);
@@ -138,74 +138,74 @@ extern u8 identityMatrix[];
 void initLevelSelectWithDetail(void) {
     LevelSelectState_Base *allocation = allocateTaskMemory(0xB48);
     allocation->showDetailView = 1;
-    setGameStateHandler(func_8001E5EC_1F1EC);
+    setGameStateHandler(initLevelSelectState);
 }
 
 void initLevelSelectBasic(void) {
     LevelSelectState_Base *allocation = allocateTaskMemory(0xB48);
     allocation->showDetailView = 0;
-    setGameStateHandler(func_8001E5EC_1F1EC);
+    setGameStateHandler(initLevelSelectState);
 }
 
-void func_8001E5EC_1F1EC(void) {
+void initLevelSelectState(void) {
     Transform3D sp20;
-    Transform3D *sp20Ptr;
+    Transform3D *transformPtr;
     s32 i;
-    LevelSelectState *alloc;
+    LevelSelectState *state;
     u8 unlockedLevelCount;
     s8 saveSlot;
 
-    alloc = getCurrentAllocation();
-    sp20Ptr = &sp20;
+    state = getCurrentAllocation();
+    transformPtr = &sp20;
 
     playMusicTrack(3);
     setupTaskSchedulerNodes(0x44, 0x14, 0, 0, 0, 0, 0, 0);
-    memcpy(sp20Ptr, identityMatrix, sizeof(Transform3D));
+    memcpy(transformPtr, identityMatrix, sizeof(Transform3D));
 
-    alloc->transitionCounter = 0;
-    alloc->exitMode = 0;
-    alloc->selectedIndex = 0;
-    alloc->previewLoadCounter = 0;
-    alloc->oldLevelId = 0;
-    alloc->padB2A = 0;
+    state->transitionCounter = 0;
+    state->exitMode = 0;
+    state->selectedIndex = 0;
+    state->previewLoadCounter = 0;
+    state->oldLevelId = 0;
+    state->padB2A = 0;
 
-    alloc->menuState = 0;
-    alloc->newLevelId = 0;
-    alloc->unkB30 = 0;
-    alloc->isLoadingPreview = 0;
-    alloc->loadStartFrame = 0;
+    state->menuState = 0;
+    state->newLevelId = 0;
+    state->selectedLevelId = 0;
+    state->isLoadingPreview = 0;
+    state->loadStartFrame = 0;
 
-    alloc->unkB10 = loadCompressedData(&_43A000_ROM_START, &_43A000_ROM_END, 0xB198);
-    alloc->unkB14 = loadCompressedData(&_43F050_ROM_START, &_43F050_ROM_END, 0x14010);
-    alloc->unkB18 = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
-    alloc->unkB1C = loadTextRenderAsset(1);
-    alloc->unkB20 = loadAsset_34F7E0();
+    state->portraitAsset = loadCompressedData(&_43A000_ROM_START, &_43A000_ROM_END, 0xB198);
+    state->imageAsset = loadCompressedData(&_43F050_ROM_START, &_43F050_ROM_END, 0x14010);
+    state->effectAsset = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
+    state->textRenderAsset = loadTextRenderAsset(1);
+    state->uiAsset = loadAsset_34F7E0();
 
-    initMenuCameraNode(&alloc->unk0, 9, 0x14, 0);
-    setModelCameraTransform(&alloc->unk0, 0, -8, -0x98, -0x70, 0x97, 0x6F);
-    func_8006BEDC_6CADC(sp20Ptr, 0, 0, 0x800000, 0, 0, 0);
-    setViewportTransformById(alloc->unk0.id, sp20Ptr);
+    initMenuCameraNode(&state->cameraNode, 9, 0x14, 0);
+    setModelCameraTransform(&state->cameraNode, 0, -8, -0x98, -0x70, 0x97, 0x6F);
+    func_8006BEDC_6CADC(transformPtr, 0, 0, 0x800000, 0, 0, 0);
+    setViewportTransformById(state->cameraNode.id, transformPtr);
 
-    initMenuCameraNode(&alloc->unk1D8, 8, 0xF, 1);
-    setModelCameraTransform(&alloc->unk1D8, 0, -8, -0x98, -0x70, 0x97, 0x6F);
+    initMenuCameraNode(&state->secondaryCameraNode, 8, 0xF, 1);
+    setModelCameraTransform(&state->secondaryCameraNode, 0, -8, -0x98, -0x70, 0x97, 0x6F);
 
-    initMenuCameraNode(&alloc->unk938, 0xA, 3, 1);
+    initMenuCameraNode(&state->tertiaryCameraNode, 0xA, 3, 1);
 
-    initViewportNode(&alloc->unk588, &alloc->unk0, 4, 5, 1);
+    initViewportNode(&state->viewportParentNode, &state->cameraNode, 4, 5, 1);
 
-    initViewportNode(&alloc->previewNode, &alloc->unk588, 0, 0xA, 1);
-    setViewportId(&alloc->unk588, 0x65);
-    setViewportId(&alloc->previewNode, 0x64);
+    initViewportNode(&state->previewNode, &state->viewportParentNode, 0, 0xA, 1);
+    setViewportId(&state->viewportParentNode, 0x65);
+    setViewportId(&state->previewNode, 0x64);
 
-    setModelCameraTransform(&alloc->previewNode, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
-    setModelCameraTransform(&alloc->unk588, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
+    setModelCameraTransform(&state->previewNode, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
+    setModelCameraTransform(&state->viewportParentNode, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
 
-    func_8006FA0C_7060C(&alloc->previewNode, 70.0f, 1.4375f, 20.0f, 4000.0f);
-    func_8006FA0C_7060C(&alloc->unk588, 70.0f, 1.4375f, 20.0f, 10000.0f);
+    func_8006FA0C_7060C(&state->previewNode, 70.0f, 1.4375f, 20.0f, 4000.0f);
+    func_8006FA0C_7060C(&state->viewportParentNode, 70.0f, 1.4375f, 20.0f, 10000.0f);
 
     setViewportFadeValue(0, 0xFF, 0);
-    setViewportFadeValue(&alloc->unk588, 0, 0);
-    setViewportFadeValue(&alloc->previewNode, 0xFF, 0);
+    setViewportFadeValue(&state->viewportParentNode, 0, 0);
+    setViewportFadeValue(&state->previewNode, 0xFF, 0);
 
     scheduleTask(func_80020B44_21744, 1, 0, 0x5A);
     scheduleTask(initUnlockNotification, 1, 0, 0x5A);
@@ -217,28 +217,28 @@ void func_8001E5EC_1F1EC(void) {
         scheduleTask(initPrizeDisplay, 1, 0, 0x5A);
     }
 
-    unlockedLevelCount = buildUnlockedLevelList(alloc->levelIdList);
-    alloc->maxLevelCount = unlockedLevelCount;
+    unlockedLevelCount = buildUnlockedLevelList(state->levelIdList);
+    state->maxLevelCount = unlockedLevelCount;
 
     for (i = 0; i < unlockedLevelCount & 0xFF; i++) {
-        if (D_800AFE8C_A71FC->saveSlotIndex == alloc->levelIdList[i]) {
+        if (D_800AFE8C_A71FC->saveSlotIndex == state->levelIdList[i]) {
             break;
             do { } while (0); }
     }
-    alloc->selectedIndex = i;
+    state->selectedIndex = i;
 
     saveSlot = D_800AFE8C_A71FC->saveSlotIndex;
-    alloc->unkB30 = saveSlot;
-    alloc->newLevelId = saveSlot;
+    state->selectedLevelId = saveSlot;
+    state->newLevelId = saveSlot;
 
-    alloc->selectedNumber = D_800AFE8C_A71FC->unk9[0x10];
+    state->selectedNumber = D_800AFE8C_A71FC->unk9[0x10];
 
-    if (alloc->showDetailView != 0) {
-        alloc->detailViewMode = 0;
-        alloc->menuState = 5;
+    if (state->showDetailView != 0) {
+        state->detailViewMode = 0;
+        state->menuState = 5;
         saveSlot = D_800AFE8C_A71FC->saveSlotIndex;
-        alloc->selectedIndex = saveSlot;
-        alloc->levelIdList[saveSlot] = D_800AFE8C_A71FC->saveSlotIndex;
+        state->selectedIndex = saveSlot;
+        state->levelIdList[saveSlot] = D_800AFE8C_A71FC->saveSlotIndex;
         scheduleTask(initMenuBackgroundEffect, 1, 0, 0x64);
         scheduleTask(initCharacterDescriptionText, 1, 0, 0x64);
     }
@@ -306,13 +306,13 @@ void handleLevelSelectInput(void) {
                 allocation->menuState = MENU_STATE_SCROLL;
                 allocation->transitionCounter = 0;
                 allocation->newLevelId = allocation->levelIdList[oldB46];
-                allocation->unkB30 = allocation->levelIdList[allocation->selectedIndex];
+                allocation->selectedLevelId = allocation->levelIdList[allocation->selectedIndex];
                 if (allocation->previewLoadCounter >= 3) {
                     allocation->previewLoadCounter = 0;
                     terminateTasksByType(0);
                     allocation->isLoadingPreview = 1;
                     allocation->loadStartFrame = gFrameCounter;
-                    setViewportFadeValue(&allocation->unk588, 0xFF, 0);
+                    setViewportFadeValue(&allocation->viewportParentNode, 0xFF, 0);
                     setViewportFadeValue(&allocation->previewNode, 0xFF, 0);
                 } else {
                     allocation->previewLoadCounter = 0;
@@ -383,7 +383,7 @@ void handleLevelSelectInput(void) {
                 allocation->isLoadingPreview = 1;
                 allocation->loadStartFrame = gFrameCounter;
                 allocation->menuState = 7;
-                initViewportNode(node760, &allocation->unk0, 0xB, 0x12, 0);
+                initViewportNode(node760, &allocation->cameraNode, 0xB, 0x12, 0);
                 setViewportId(node760, 0xC);
                 setModelCameraTransform(node760, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
                 setViewportFadeValue(node760, 0xFF, 0);
@@ -482,17 +482,17 @@ void cleanupLevelSelect(void) {
         return;
     }
 
-    unlinkNode(&allocation->unk0);
+    unlinkNode(&allocation->cameraNode);
     unlinkNode(&allocation->previewNode);
-    unlinkNode(&allocation->unk588);
-    unlinkNode(&allocation->unk1D8);
-    unlinkNode(&allocation->unk938);
+    unlinkNode(&allocation->viewportParentNode);
+    unlinkNode(&allocation->secondaryCameraNode);
+    unlinkNode(&allocation->tertiaryCameraNode);
 
-    allocation->unkB10 = freeNodeMemory(allocation->unkB10);
-    allocation->unkB14 = freeNodeMemory(allocation->unkB14);
-    allocation->unkB18 = freeNodeMemory(allocation->unkB18);
-    allocation->unkB1C = freeNodeMemory(allocation->unkB1C);
-    allocation->unkB20 = freeNodeMemory(allocation->unkB20);
+    allocation->portraitAsset = freeNodeMemory(allocation->portraitAsset);
+    allocation->imageAsset = freeNodeMemory(allocation->imageAsset);
+    allocation->effectAsset = freeNodeMemory(allocation->effectAsset);
+    allocation->textRenderAsset = freeNodeMemory(allocation->textRenderAsset);
+    allocation->uiAsset = freeNodeMemory(allocation->uiAsset);
 
     if (allocation->exitMode == 1) {
         terminateSchedulerWithCallback(proceedFromLevelSelect);
@@ -583,7 +583,7 @@ void loadLevelPreview(void) {
         allocation->previewLoadCounter = counter + 1;
     } else {
         if (getPendingDmaCount() == 0) {
-            setViewportFadeValue(&allocation->unk588, 0, 0);
+            setViewportFadeValue(&allocation->viewportParentNode, 0, 0);
             setViewportFadeValue(&allocation->previewNode, 0, 0x14);
         }
     }
