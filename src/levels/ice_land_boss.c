@@ -955,7 +955,7 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC61C_B1B0C);
 
-void func_800BC7A8_B1C98(Player *arg0) {
+void renderIceLandBossWithSurfaceColors(Player *arg0) {
     s32 pad[36];
     s32 i;
     s32 index;
