@@ -1820,7 +1820,7 @@ loadPlayerCharacterAssets = 0x800B99E0; // type:func rom:0xA9890
 initCutsceneManager = 0x800B2AA0; // type:func rom:0x1DF850
 hideAllSlotModels = 0x800B2D04; // type:func rom:0x1DFDB4
 resetAllSlotModels = 0x800B2DCC; // rom:0x1DFE7C
-func_800B0760 = 0x800B0760; // type:func rom:0x1DC900
+initCreditsScrollingTextEffects = 0x800B0760; // type:func rom:0x1DC900
 cleanupCutsceneManager = 0x800B2C78; // type:func rom:0x1DFD28
 verifyAndLoadCutsceneState = 0x800B36C0; // type:func rom:0x1E0770
 

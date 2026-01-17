@@ -309,7 +309,7 @@ void updateCreditsSequence(void) {
 
     if (state->unk0 == 0) {
         initCreditsSubtitles(state);
-        func_800B0760(state);
+        initCreditsScrollingTextEffects(state);
         initCreditsCornerDecorationSprites(state);
         state->unk0 = 1;
     }

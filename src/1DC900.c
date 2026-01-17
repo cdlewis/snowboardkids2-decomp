@@ -5,115 +5,100 @@
 
 typedef struct {
     s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
+    s16 y;
+    void *dataTable;
+    s16 index;
+    s16 width;
+    s16 height;
     s16 unkE;
-    s16 unk10;
+    s16 alpha;
     u8 unk12;
-    u8 unk13;
+    u8 flags;
     u8 unk14;
     u8 pad15[3];
-} SubStruct9D0;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    u8 unk12;
-    u8 unk13;
-    u8 unk14;
-    u8 pad15[3];
-} SubStructB80;
+} CreditsTextEntry;
 
 typedef struct {
     u8 pad0[0x968];
-    Table_B934 *unk968;
+    Table_B934 *textTable;
     u8 pad96C[0x9B8 - 0x96C];
-    DataTable_19E80 *unk9B8[6];
-    SubStruct9D0 unk9D0[18];
-    SubStructB80 unkB80[18];
-    s32 unkD30;
+    DataTable_19E80 *paletteDataTable[6];
+    CreditsTextEntry textEntriesA[18];
+    CreditsTextEntry textEntriesB[18];
+    s32 currentPaletteIndex;
     u8 padD34[0xD38 - 0xD34];
     s16 unkD38;
-    s16 unkD3A;
+    s16 currentDataIndex;
     PaletteContext paletteContexts[6];
     s32 unkD84;
     s32 unkD88;
     s16 unkD8C;
     u8 unkD8E;
     u8 unkD8F;
-    void *unkD90[8];
-    s16 unkDB0[8];
-    s16 unkDC0[8];
-    s16 unkDD0[8];
-    s16 unkDE0;
+    void *textData[8];
+    s16 textXOffset[8];
+    s16 textYOffset[8];
+    s16 textScrollOffset[8];
+    s16 textRowIndex;
     u8 padDE2[2];
     s32 unkDE4;
     s32 unkDE8;
-} func_800B0760_arg;
+} CreditsScrollerState;
 
-void func_800B0760(func_800B0760_arg *arg0) {
+void initCreditsScrollingTextEffects(CreditsScrollerState *state) {
     s32 i;
-    void *temp_v0;
+    void *textData;
     s16 yOffset;
 
-    arg0->unkD3A = 0;
-    arg0->unkD8C = 0;
-    arg0->unkD30 = 0;
-    arg0->unkD38 = 0;
-    arg0->unkD8E = 0;
+    state->currentDataIndex = 0;
+    state->unkD8C = 0;
+    state->currentPaletteIndex = 0;
+    state->unkD38 = 0;
+    state->unkD8E = 0;
 
     for (i = 0; i < 0x12; i++) {
-        arg0->unk9D0[i].unk0 = 0;
-        arg0->unk9D0[i].unk2 = -0x60 + i * 8;
-        arg0->unk9D0[i].unk4 = arg0->unk9B8[arg0->unkD3A];
-        arg0->unk9D0[i].unk8 = i;
-        arg0->unk9D0[i].unkC = 0x400;
-        arg0->unk9D0[i].unkA = 0x400;
-        arg0->unk9D0[i].unkE = 0;
-        arg0->unk9D0[i].unk10 = 0xFF;
-        arg0->unk9D0[i].unk12 = 0;
-        arg0->unk9D0[i].unk13 = 0;
-        arg0->unk9D0[i].unk14 = 0;
-        arg0->unkB80[i].unk0 = 0;
-        arg0->unkB80[i].unk2 = -0x60 + i * 8;
-        arg0->unkB80[i].unk4 = arg0->unk9B8[arg0->unkD3A];
-        arg0->unkB80[i].unk8 = i;
-        arg0->unkB80[i].unkC = 0x400;
-        arg0->unkB80[i].unkA = 0x400;
-        arg0->unkB80[i].unkE = 0;
-        arg0->unkB80[i].unk10 = 0x64;
-        arg0->unkB80[i].unk12 = 0;
-        arg0->unkB80[i].unk13 = 0x11;
-        arg0->unkB80[i].unk14 = 0;
+        state->textEntriesA[i].unk0 = 0;
+        state->textEntriesA[i].y = -0x60 + i * 8;
+        state->textEntriesA[i].dataTable = state->paletteDataTable[state->currentDataIndex];
+        state->textEntriesA[i].index = i;
+        state->textEntriesA[i].height = 0x400;
+        state->textEntriesA[i].width = 0x400;
+        state->textEntriesA[i].unkE = 0;
+        state->textEntriesA[i].alpha = 0xFF;
+        state->textEntriesA[i].unk12 = 0;
+        state->textEntriesA[i].flags = 0;
+        state->textEntriesA[i].unk14 = 0;
+        state->textEntriesB[i].unk0 = 0;
+        state->textEntriesB[i].y = -0x60 + i * 8;
+        state->textEntriesB[i].dataTable = state->paletteDataTable[state->currentDataIndex];
+        state->textEntriesB[i].index = i;
+        state->textEntriesB[i].height = 0x400;
+        state->textEntriesB[i].width = 0x400;
+        state->textEntriesB[i].unkE = 0;
+        state->textEntriesB[i].alpha = 0x64;
+        state->textEntriesB[i].unk12 = 0;
+        state->textEntriesB[i].flags = 0x11;
+        state->textEntriesB[i].unk14 = 0;
     }
 
     for (i = 0; i < 6; i++) {
-        initPaletteContext(&arg0->paletteContexts[i], arg0->unk9B8[i]);
-        applyPaletteShift(&arg0->paletteContexts[i], 0xF00000, 0xB80000, 0x800000, 0x640000);
+        initPaletteContext(&state->paletteContexts[i], state->paletteDataTable[i]);
+        applyPaletteShift(&state->paletteContexts[i], 0xF00000, 0xB80000, 0x800000, 0x640000);
     }
 
-    arg0->unkD84 = 0;
-    arg0->unkD88 = 0;
-    arg0->unkDE0 = 0;
-    arg0->unkDE4 = 0;
-    arg0->unkDE8 = 0;
-    arg0->unkD8F = 0;
+    state->unkD84 = 0;
+    state->unkD88 = 0;
+    state->textRowIndex = 0;
+    state->unkDE4 = 0;
+    state->unkDE8 = 0;
+    state->unkD8F = 0;
 
     for (i = 0; i < 8; i++) {
-        temp_v0 = getTable2DEntry(arg0->unk968, arg0->unkDE0, 0);
-        arg0->unkD90[i] = temp_v0;
-        arg0->unkDB0[i] = -(getMaxLinePixelWidth(temp_v0) / 2);
-        arg0->unkDC0[i] = -0x18;
-        arg0->unkDD0[i] = 0;
+        textData = getTable2DEntry(state->textTable, state->textRowIndex, 0);
+        state->textData[i] = textData;
+        state->textXOffset[i] = -(getMaxLinePixelWidth(textData) / 2);
+        state->textYOffset[i] = -0x18;
+        state->textScrollOffset[i] = 0;
     }
 }
 
