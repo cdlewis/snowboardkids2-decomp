@@ -27,19 +27,23 @@ void checkPhoneLocationDiscovery(LocationDiscoveryTrigger *trigger) {
     s32 maxAngle;
 
     state = (GameState *)getCurrentAllocation();
+    // Only check if player is above certain Y threshold
     if (state->unk3F8 > 0x760000) {
         rawAngle = state->unk3F4;
+        // Normalize angle to range -0x1000 to 0x1000
         playerAngle = rawAngle;
         if (rawAngle >= 0x1001) {
             playerAngle -= 0x2000;
         }
         locationId = trigger->locationId;
+        // Get min/max angle bounds for this location from the angle bounds table
         minAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2];
         if (playerAngle < minAngle) {
             maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(locationId * 2) + 1];
             if (playerAngle > maxAngle) {
-                u32 temp = state->unk3FC - 0xC01;
-                if (temp < 0x7FF) {
+                // Check if player's X position is within discovery range
+                u32 xDist = state->unk3FC - 0xC01;
+                if (xDist < 0x7FF) {
                     state->locationDiscovered = 1;
                     state->discoveredLocationId = trigger->locationId;
                 }
