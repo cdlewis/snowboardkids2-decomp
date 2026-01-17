@@ -16,4 +16,4 @@ typedef struct {
 
 void initStoryMapRareEvent(void *arg0);
 
-void updateStoryMapNpcDialogue(StoryMapDialogueState *arg0);
+void updateStoryMapNpcDialogue(StoryMapDialogueState *dialogue);

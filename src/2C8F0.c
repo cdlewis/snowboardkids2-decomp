@@ -101,34 +101,34 @@ typedef struct {
     /* 0xD3 */ u8 dialogueState;
 } StoryMapDialogueState;
 
-void updateStoryMapNpcDialogue(StoryMapDialogueState *arg0) {
+void updateStoryMapNpcDialogue(StoryMapDialogueState *dialogue) {
     GameState *gameState;
     s32 i;
-    StoryMapDialogueState *npc;
+    StoryMapDialogueState *currentNpc;
 
     gameState = (GameState *)getCurrentAllocation();
 
-    switch (arg0->dialogueState) {
+    switch (dialogue->dialogueState) {
         case 0:
-            func_8002BFEC_2CBEC(arg0);
+            func_8002BFEC_2CBEC(dialogue);
             for (i = 0; i < gameState->unk41C; i++) {
-                npc = (StoryMapDialogueState *)((u8 *)arg0 + i * 0x64);
-                createYRotationMatrix(&npc->matrix, npc->targetRotation);
-                updateStoryMapNpcModel((Func297D8Arg *)npc);
+                currentNpc = (StoryMapDialogueState *)((u8 *)dialogue + i * 0x64);
+                createYRotationMatrix(&currentNpc->matrix, currentNpc->targetRotation);
+                updateStoryMapNpcModel((Func297D8Arg *)currentNpc);
             }
             break;
         case 1:
-            func_8002C570_2D170(arg0);
+            func_8002C570_2D170(dialogue);
             for (i = 0; i < gameState->unk41C; i++) {
-                npc = (StoryMapDialogueState *)((u8 *)arg0 + i * 0x64);
-                createYRotationMatrix(&npc->matrix, npc->targetRotation);
-                updateStoryMapNpcModel((Func297D8Arg *)npc);
+                currentNpc = (StoryMapDialogueState *)((u8 *)dialogue + i * 0x64);
+                createYRotationMatrix(&currentNpc->matrix, currentNpc->targetRotation);
+                updateStoryMapNpcModel((Func297D8Arg *)currentNpc);
             }
             break;
     }
 
     if (gameState->unk42A == 0) {
-        setCallback(arg0->returnCallback);
+        setCallback(dialogue->returnCallback);
     }
 }
 

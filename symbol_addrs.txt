@@ -601,6 +601,7 @@ isNpcFacingPlayer = 0x8002ACFC; // rom:0x2B8FC
 stepAngleTowardsTarget = 0x8002ADB4; // rom:0x2B9B4
 signedAngleDifference = 0x8002B4B8; // rom:0x2C0B8
 initStoryMapNpcSpecialDialogue = 0x8002B4E4; // rom:0x2C0E4
+updateStoryMapNpcDialogue = 0x8002BEF4; // rom:0x2CAF4
 gMenuLightColor = 0x8008DEF0; // rom:0x8EAF0
 gMenuAmbientColor = 0x8008DEF8; // rom:0x8EAF8
 gStoryMapItemTypeTables = 0x8008E030; // rom:0x8EC30
