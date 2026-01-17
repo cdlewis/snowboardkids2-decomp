@@ -7,6 +7,6 @@ typedef struct {
     s16 unk2;
     s16 unk4;
     s16 unk6;
-} func_800BB7F0_B5A00_arg;
+} WendysHouseProjectileSpawnerState;
 
-void func_800BB7F0_B5A00(func_800BB7F0_B5A00_arg *arg0);
+void initWendysHouseProjectileSpawner(WendysHouseProjectileSpawnerState *arg0);

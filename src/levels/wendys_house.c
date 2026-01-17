@@ -10,7 +10,7 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern Vec3i D_800BB930_B5B40[];
+extern Vec3i gWendysHouseProjectileTargetPositions[];
 
 typedef struct {
     u8 _pad[0x5C];
@@ -19,17 +19,17 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x14];
-    Vec3i unk14;
-    void *unk20;
+    Vec3i position;
+    void *displayLists;
     void *uncompressedAsset;
     void *compressedAsset;
-    s32 unk2C;
+    s32 animTimer;
     u8 _pad1[0xC];
-    Vec3i unk3C;
-    u16 unk48;
-    u16 unk4A;
-    s16 unk4C;
-    s16 unk4E;
+    Vec3i velocity;
+    u16 rotX;
+    u16 rotY;
+    s16 targetIndex;
+    s16 projectileState;
 } WendysHouseProjectileTaskState;
 
 typedef struct {
@@ -61,9 +61,9 @@ typedef struct {
     s16 unk4C;
 } Task;
 
-void func_800BB828_B5A38(func_800BB7F0_B5A00_arg *);
-void func_800BB5B0_B57C0(WendysHouseProjectileTaskState *arg0);
-void func_800BB458_B5668(WendysHouseProjectileTaskState *arg0);
+void updateWendysHouseProjectileSpawner(WendysHouseProjectileSpawnerState *arg0);
+void updateWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0);
+void initWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0);
 void cleanupWendysHouseProjectileTask(TaskAssetState *arg0);
 void cleanupRotatingPlatformTask(TaskAssetState *arg0);
 void updateRotatingPlatformTask(RotatingPlatformTaskState *arg0);
@@ -116,7 +116,7 @@ void cleanupRotatingPlatformTask(TaskAssetState *arg0) {
     arg0->compressedAsset = freeNodeMemory(arg0->compressedAsset);
 }
 
-void func_800BB458_B5668(WendysHouseProjectileTaskState *arg0) {
+void initWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0) {
     AllocB5668 *gameState;
     void *temp;
     s32 randVal;
@@ -124,32 +124,32 @@ void func_800BB458_B5668(WendysHouseProjectileTaskState *arg0) {
     gameState = (AllocB5668 *)getCurrentAllocation();
     arg0->uncompressedAsset = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     arg0->compressedAsset = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
-    arg0->unk2C = 0;
+    arg0->animTimer = 0;
     temp = getSkyDisplayLists3ByIndex(gameState->memoryPoolId);
     randVal = (randA() & 1) << 4;
-    arg0->unk20 = temp + ((randVal) + 0xB0);
-    arg0->unk14.x = 0x225BCB0C;
-    arg0->unk14.y = D_800BB930_B5B40[((s16)arg0->unk4C)].y + 0x1E8000;
-    arg0->unk14.z = 0xF14F9599;
-    diff = D_800BB930_B5B40[arg0->unk4C].x - arg0->unk14.x;
+    arg0->displayLists = temp + ((randVal) + 0xB0);
+    arg0->position.x = 0x225BCB0C;
+    arg0->position.y = gWendysHouseProjectileTargetPositions[((s16)arg0->targetIndex)].y + 0x1E8000;
+    arg0->position.z = 0xF14F9599;
+    diff = gWendysHouseProjectileTargetPositions[arg0->targetIndex].x - arg0->position.x;
     if (diff < 0) {
         diff += 0x3F;
     }
-    arg0->unk3C.x = diff >> 6;
-    diff = D_800BB930_B5B40[arg0->unk4C].z - arg0->unk14.z;
+    arg0->velocity.x = diff >> 6;
+    diff = gWendysHouseProjectileTargetPositions[arg0->targetIndex].z - arg0->position.z;
     if (diff < 0) {
         diff += 0x3F;
     }
-    arg0->unk3C.z = 6;
-    arg0->unk3C.z = diff >> arg0->unk3C.z;
-    arg0->unk3C.y = 0x180000;
-    arg0->unk48 = atan2Fixed(-arg0->unk3C.x, -arg0->unk3C.z);
-    arg0->unk4E = 0;
+    arg0->velocity.z = 6;
+    arg0->velocity.z = diff >> arg0->velocity.z;
+    arg0->velocity.y = 0x180000;
+    arg0->rotX = atan2Fixed(-arg0->velocity.x, -arg0->velocity.z);
+    arg0->projectileState = 0;
     setCleanupCallback(cleanupWendysHouseProjectileTask);
-    setCallback(func_800BB5B0_B57C0);
+    setCallback(updateWendysHouseProjectileTask);
 }
 
-void func_800BB5B0_B57C0(WendysHouseProjectileTaskState *arg0) {
+void updateWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0) {
     GameState *gameState;
     s32 i;
 
@@ -159,41 +159,41 @@ void func_800BB5B0_B57C0(WendysHouseProjectileTaskState *arg0) {
         goto end;
     }
 
-    switch (arg0->unk4E) {
+    switch (arg0->projectileState) {
         case 0:
-            arg0->unk14.x += arg0->unk3C.x;
-            arg0->unk14.y += arg0->unk3C.y;
-            arg0->unk14.z += arg0->unk3C.z;
-            arg0->unk3C.y += (s32)0xFFFF4000;
-            if (arg0->unk3C.y < (s32)0xFFE80000) {
-                arg0->unk3C.y = 0xC0000;
-                arg0->unk4E += 1;
-                queueSoundAtPosition(&arg0->unk14, 0x28);
+            arg0->position.x += arg0->velocity.x;
+            arg0->position.y += arg0->velocity.y;
+            arg0->position.z += arg0->velocity.z;
+            arg0->velocity.y += (s32)0xFFFF4000;
+            if (arg0->velocity.y < (s32)0xFFE80000) {
+                arg0->velocity.y = 0xC0000;
+                arg0->projectileState += 1;
+                queueSoundAtPosition(&arg0->position, 0x28);
             }
-            arg0->unk4A += 0x100;
+            arg0->rotY += 0x100;
             for (i = 0; i < gameState->numPlayers; i++) {
-                if (isPointInPlayerCollisionSphere(&gameState->players[i], (Vec3i *)&arg0->unk14, 0x180000) != 0) {
+                if (isPointInPlayerCollisionSphere(&gameState->players[i], (Vec3i *)&arg0->position, 0x180000) != 0) {
                     setPlayerBouncedBackState(&gameState->players[i]);
                 }
             }
             break;
         case 1:
-            arg0->unk14.x += arg0->unk3C.x;
-            arg0->unk14.y += arg0->unk3C.y;
-            arg0->unk14.z += arg0->unk3C.z;
+            arg0->position.x += arg0->velocity.x;
+            arg0->position.y += arg0->velocity.y;
+            arg0->position.z += arg0->velocity.z;
             for (i = 0; i < gameState->numPlayers; i++) {
-                isPlayerInRangeAndPull((Vec3i *)&arg0->unk14, 0x180000, &gameState->players[i]);
+                isPlayerInRangeAndPull((Vec3i *)&arg0->position, 0x180000, &gameState->players[i]);
             }
-            arg0->unk3C.y += (s32)0xFFFF4000;
-            if (arg0->unk3C.y < (s32)0xFFE20000) {
+            arg0->velocity.y += (s32)0xFFFF4000;
+            if (arg0->velocity.y < (s32)0xFFE20000) {
                 func_80069CF8_6A8F8();
             }
-            arg0->unk4A += 0x100;
+            arg0->rotY += 0x100;
             break;
     }
 
 end:
-    createCombinedRotationMatrix(arg0, arg0->unk4A, arg0->unk48);
+    createCombinedRotationMatrix(arg0, arg0->rotY, arg0->rotX);
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
     }
@@ -204,15 +204,15 @@ void cleanupWendysHouseProjectileTask(TaskAssetState *arg0) {
     arg0->compressedAsset = freeNodeMemory(arg0->compressedAsset);
 }
 
-void func_800BB7F0_B5A00(func_800BB7F0_B5A00_arg *arg0) {
+void initWendysHouseProjectileSpawner(WendysHouseProjectileSpawnerState *arg0) {
     arg0->unk2 = 0x50;
     arg0->unk0 = 0;
     arg0->unk4 = 0;
     arg0->unk6 = 0x28;
-    setCallback(func_800BB828_B5A38);
+    setCallback(updateWendysHouseProjectileSpawner);
 }
 
-void func_800BB828_B5A38(func_800BB7F0_B5A00_arg *arg0) {
+void updateWendysHouseProjectileSpawner(WendysHouseProjectileSpawnerState *arg0) {
     Task *task;
     GameState *gameState = getCurrentAllocation();
 
@@ -222,7 +222,7 @@ void func_800BB828_B5A38(func_800BB7F0_B5A00_arg *arg0) {
             if (arg0->unk0 == 3) {
                 arg0->unk0 = 0;
             }
-            task = scheduleTask(func_800BB458_B5668, 0, 0, 0x5F);
+            task = scheduleTask(initWendysHouseProjectileTask, 0, 0, 0x5F);
             if (task != NULL) {
                 task->unk4C = arg0->unk0;
             }
@@ -236,7 +236,7 @@ void func_800BB828_B5A38(func_800BB7F0_B5A00_arg *arg0) {
             if (arg0->unk4 == 3) {
                 arg0->unk4 = 0;
             }
-            task = scheduleTask(func_800BB458_B5668, 0, 0, 0x5F);
+            task = scheduleTask(initWendysHouseProjectileTask, 0, 0, 0x5F);
             if (task != NULL) {
                 task->unk4C = arg0->unk4 + 3;
             }
