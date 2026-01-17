@@ -20,23 +20,29 @@ typedef struct {
     /* 0x2C */ u8 defaultPosIndex;
 } CourseData;
 
+typedef struct {
+    u8 unk0;
+    u8 unk1;
+    u8 unk2;
+    s8 pathPreference;
+} AIPathPreference;
+
 void func_800BA4B8_AA368(Player *, CourseData *, s16, Vec3i *);
 void func_800B9EF0_A9DA0(Player *, CourseData *, s16, Vec3i *);
 
 void calculateAITargetPosition(Player *player) {
-    Vec3i dir;
-    Vec3i waypointPos;
+    Vec3i finalWaypointPos;
+    Vec3i currentWaypointPos;
     Vec3i nextWaypointPos;
-    Vec3i tempVec;
-    Vec3i targetPos;
+    Vec3i rotatedPos;
+    Vec3i projectedPlayerPos;
     CourseData *courseData;
-    Waypoint *waypoint;
     LevelConfig *defaultPos;
     s32 *pathFlags;
     s32 sectorIndex;
-    s16 angle;
-    s32 distance;
-    s32 maxDist;
+    s16 pathAngle;
+    s32 distanceToWaypoint;
+    s32 maxDistance;
 
     courseData = (CourseData *)((u8 *)getCurrentAllocation() + 0x30);
     sectorIndex = player->sectorIndex;
@@ -48,32 +54,34 @@ void calculateAITargetPosition(Player *player) {
         return;
     }
 
-    func_800BA4B8_AA368(player, courseData, (s16)sectorIndex, &waypointPos);
+    func_800BA4B8_AA368(player, courseData, (s16)sectorIndex, &currentWaypointPos);
     func_800B9EF0_A9DA0(player, courseData, (s16)sectorIndex, &nextWaypointPos);
 
-    targetPos.x = player->worldPos.x - waypointPos.x;
-    targetPos.z = player->worldPos.z - waypointPos.z;
+    // Project player's position onto the path centerline
+    projectedPlayerPos.x = player->worldPos.x - currentWaypointPos.x;
+    projectedPlayerPos.z = player->worldPos.z - currentWaypointPos.z;
 
-    angle = computeAngleToPosition(nextWaypointPos.x, nextWaypointPos.z, waypointPos.x, waypointPos.z);
-    rotateVectorY(&targetPos, -angle, &tempVec);
-    tempVec.x = 0;
-    rotateVectorY(&tempVec, angle, &targetPos);
+    pathAngle =
+        computeAngleToPosition(nextWaypointPos.x, nextWaypointPos.z, currentWaypointPos.x, currentWaypointPos.z);
+    rotateVectorY(&projectedPlayerPos, -pathAngle, &rotatedPos);
+    rotatedPos.x = 0;
+    rotateVectorY(&rotatedPos, pathAngle, &projectedPlayerPos);
 
-    targetPos.x += waypointPos.x;
-    targetPos.z += waypointPos.z;
+    projectedPlayerPos.x += currentWaypointPos.x;
+    projectedPlayerPos.z += currentWaypointPos.z;
 
     while (TRUE) {
         func_800B9EF0_A9DA0(player, courseData, (s16)sectorIndex, &nextWaypointPos);
 
-        dir.x = nextWaypointPos.x - targetPos.x;
-        dir.z = nextWaypointPos.z - targetPos.z;
+        finalWaypointPos.x = nextWaypointPos.x - projectedPlayerPos.x;
+        finalWaypointPos.z = nextWaypointPos.z - projectedPlayerPos.z;
 
-        distance = distance_2d(dir.x, dir.z);
+        distanceToWaypoint = distance_2d(finalWaypointPos.x, finalWaypointPos.z);
 
-        if (distance > 0xA00000) {
-            maxDist = 0xA00000;
-            dir.x = (((s64)dir.x * maxDist) / distance);
-            dir.z = (((s64)dir.z * maxDist) / distance);
+        if (distanceToWaypoint > 0xA00000) {
+            maxDistance = 0xA00000;
+            finalWaypointPos.x = (((s64)finalWaypointPos.x * maxDistance) / distanceToWaypoint);
+            finalWaypointPos.z = (((s64)finalWaypointPos.z * maxDistance) / distanceToWaypoint);
             break;
         }
 
@@ -97,36 +105,30 @@ void calculateAITargetPosition(Player *player) {
         }
     }
 
-    dir.x += targetPos.x;
-    dir.z += targetPos.z;
+    finalWaypointPos.x += projectedPlayerPos.x;
+    finalWaypointPos.z += projectedPlayerPos.z;
 
-    func_800BA4B8_AA368(player, courseData, (s16)sectorIndex, &waypointPos);
+    func_800BA4B8_AA368(player, courseData, (s16)sectorIndex, &currentWaypointPos);
 
-    dir.x -= waypointPos.x;
-    dir.z -= waypointPos.z;
+    finalWaypointPos.x -= currentWaypointPos.x;
+    finalWaypointPos.z -= currentWaypointPos.z;
 
-    angle = computeAngleToPosition(nextWaypointPos.x, nextWaypointPos.z, waypointPos.x, waypointPos.z);
-    rotateVectorY(&dir, -angle, &tempVec);
-    tempVec.x = 0;
-    rotateVectorY(&tempVec, angle, &dir);
+    pathAngle =
+        computeAngleToPosition(nextWaypointPos.x, nextWaypointPos.z, currentWaypointPos.x, currentWaypointPos.z);
+    rotateVectorY(&finalWaypointPos, -pathAngle, &rotatedPos);
+    rotatedPos.x = 0;
+    rotateVectorY(&rotatedPos, pathAngle, &finalWaypointPos);
 
-    dir.x += waypointPos.x;
-    dir.z += waypointPos.z;
+    finalWaypointPos.x += currentWaypointPos.x;
+    finalWaypointPos.z += currentWaypointPos.z;
 
-    player->aiTargetX = dir.x;
-    player->aiTargetZ = dir.z;
+    player->aiTargetX = finalWaypointPos.x;
+    player->aiTargetZ = finalWaypointPos.z;
 }
 
 INCLUDE_ASM("asm/nonmatchings/A9A40", func_800B9EF0_A9DA0);
 
 INCLUDE_ASM("asm/nonmatchings/A9A40", func_800BA4B8_AA368);
-
-typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    s8 pathPreference;
-} AIPathPreference;
 
 typedef struct {
     u8 pad0[0x14];
