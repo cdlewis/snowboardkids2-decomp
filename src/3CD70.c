@@ -72,9 +72,6 @@ typedef struct {
     PlayerDataExt *players;
 } ScriptedCameraAllocation;
 
-// Alias for GameState to use in functions that access it generically
-typedef GameState Allocation;
-
 extern void func_8003C2BC_3CEBC(void);
 extern s32 D_8008FEB0_90AB0;
 extern u8 identityMatrix[];
@@ -83,7 +80,7 @@ void initScriptedCamera(ScriptedCameraState *camera);
 void updateScriptedCamera(ScriptedCameraState *camera);
 
 void initChaseCameraPosition(ChaseCameraState *camera) {
-    Allocation *gameState;
+    GameState *gameState;
     u8 playerIdx;
     Vec3i behindOffset;
     Vec3i worldOffset;
@@ -96,18 +93,18 @@ void initChaseCameraPosition(ChaseCameraState *camera) {
     behindOffset.z = 0xFFC00000;
 
     playerIdx = camera->playerIdx;
-    createYRotationMatrix(&rotationMatrix, *(u16 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0xA94));
+    createYRotationMatrix(&rotationMatrix, gameState->players[playerIdx].rotY);
 
     transformVector2(&behindOffset, &rotationMatrix, &worldOffset);
 
     playerIdx = camera->playerIdx;
-    camera->x = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x434) + worldOffset.x;
+    camera->x = gameState->players[playerIdx].worldPos.x + worldOffset.x;
 
     playerIdx = camera->playerIdx;
-    camera->y = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x438) + worldOffset.y;
+    camera->y = gameState->players[playerIdx].worldPos.y + worldOffset.y;
 
     playerIdx = camera->playerIdx;
-    camera->z = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x43C) + worldOffset.z;
+    camera->z = gameState->players[playerIdx].worldPos.z + worldOffset.z;
 
     camera->distance = 0x600000;
     camera->minDistance = 0x20000;
