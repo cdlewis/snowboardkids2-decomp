@@ -21,7 +21,7 @@ extern void func_8001FFE4_20BE4(void);
 extern void func_8001FA00_20600(void);
 extern void func_8006D7B0_6E3B0(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32);
 struct LevelPreviewPortraitState_202A0_s;
-extern void func_80020A00_21600(struct LevelPreviewPortraitState_202A0_s *arg0);
+extern void animatePortraitRotation(struct LevelPreviewPortraitState_202A0_s *arg0);
 
 USE_ASSET(_458E30);
 USE_ASSET(_43A000);
@@ -95,10 +95,10 @@ typedef struct LevelPreviewPortraitState_202A0_s {
 
 typedef struct {
     u8 _pad0[0xB2F];
-    u8 unkB2F;
-    u8 unkB30;
-    u8 unkB31;
-    u8 unkB32;
+    u8 rotationComplete; // 0xB2F - set to 0 when portrait rotation animation is done
+    u8 toLevelId;        // 0xB30 - level being scrolled to
+    u8 fromLevelId;      // 0xB31 - level being scrolled from
+    u8 scrollDirection;  // 0xB32 - direction of scroll (0 = backward, 1 = forward)
 } Allocation_func_80020A00;
 
 typedef struct {
@@ -439,7 +439,7 @@ void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *portraitEntries) {
     i = 0;
 
     if (allocation->menuState == 1) {
-        setCallbackWithContinue(&func_80020924_21524);
+        setCallbackWithContinue(&initPortraitRotationFrames);
     } else {
         for (i = 0; i < 2; i++) {
             debugEnqueueCallback(8, 7, renderSpriteFrame, &portraitEntries[i]);
@@ -447,30 +447,30 @@ void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *portraitEntries) {
     }
 }
 
-void func_80020924_21524(LevelPreviewPortraitState *arg0) {
+void initPortraitRotationFrames(LevelPreviewPortraitState *arg0) {
     OutputStruct_19E80 sp10;
     Allocation_func_80020A00 *allocation;
     s32 i;
-    u16 frameIndexBase_B30;
-    u16 frameIndexBase_B31;
+    u16 toLevelFrameBase;
+    u16 fromLevelFrameBase;
 
     allocation = (Allocation_func_80020A00 *)getCurrentAllocation();
-    frameIndexBase_B30 = D_8008DAA8_8E6A8[allocation->unkB30];
-    frameIndexBase_B31 = D_8008DAA8_8E6A8[allocation->unkB31];
+    toLevelFrameBase = D_8008DAA8_8E6A8[allocation->toLevelId];
+    fromLevelFrameBase = D_8008DAA8_8E6A8[allocation->fromLevelId];
 
     for (i = 0; i < 4; i++) {
         if (arg0->rotations[i] == 0) {
-            getTableEntryByU16Index(arg0->portraitAsset, (frameIndexBase_B31 + (i & 1)) & 0xFFFF, &sp10);
+            getTableEntryByU16Index(arg0->portraitAsset, (fromLevelFrameBase + (i & 1)) & 0xFFFF, &sp10);
         } else {
-            getTableEntryByU16Index(arg0->portraitAsset, (frameIndexBase_B30 + (i & 1)) & 0xFFFF, &sp10);
+            getTableEntryByU16Index(arg0->portraitAsset, (toLevelFrameBase + (i & 1)) & 0xFFFF, &sp10);
         }
         arg0->matrices[i].data_ptr = sp10.data_ptr;
         arg0->matrices[i].index_ptr = (void *)sp10.index_ptr;
     }
-    setCallbackWithContinue(func_80020A00_21600);
+    setCallbackWithContinue(animatePortraitRotation);
 }
 
-void func_80020A00_21600(LevelPreviewPortraitState_202A0 *arg0) {
+void animatePortraitRotation(LevelPreviewPortraitState_202A0 *arg0) {
     Allocation_func_80020A00 *allocation;
     s32 i;
     s32 rotation;
@@ -478,7 +478,7 @@ void func_80020A00_21600(LevelPreviewPortraitState_202A0 *arg0) {
     u16 val;
 
     allocation = (Allocation_func_80020A00 *)getCurrentAllocation();
-    rotationDelta = (allocation->unkB32 != 0) ? 0x200 : -0x200;
+    rotationDelta = (allocation->scrollDirection != 0) ? 0x200 : -0x200;
 
     for (i = 0; i < 4; i++) {
         rotation = (arg0->rotations[i] + rotationDelta) & 0x1FFF;
@@ -489,9 +489,9 @@ void func_80020A00_21600(LevelPreviewPortraitState_202A0 *arg0) {
 
     val = arg0->rotations[0];
     if (val == 0 || val == 0x1000) {
-        allocation->unkB2F = 0;
+        allocation->rotationComplete = 0;
         for (i = 0; i < 2; i++) {
-            ((LevelPreviewPortraitEntry_202A0 *)arg0)[i].frameIndex = D_8008DAA8_8E6A8[allocation->unkB30] + i;
+            ((LevelPreviewPortraitEntry_202A0 *)arg0)[i].frameIndex = D_8008DAA8_8E6A8[allocation->toLevelId] + i;
         }
         setCallback(renderLevelPreviewPortraits);
     }

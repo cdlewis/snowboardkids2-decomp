@@ -135,7 +135,7 @@ void cleanupLevelPreviewPortraits(LevelPreviewPortraitState *state);
 void initMenuCharacterModel(MenuCharacterModelState *state);
 void setupLevelPreviewCamera(LevelPreviewCharacterState *arg0);
 void updateLevelPreviewCamera(LevelPreviewCharacterState *state);
-void func_80020924_21524(LevelPreviewPortraitState *arg0);
+void initPortraitRotationFrames(LevelPreviewPortraitState *arg0);
 void renderConfirmationIndicator(void *arg0);
 void cleanupConfirmationIndicator(ConfirmationIndicatorState *state);
 void updatePrizeDisplay(PrizeDisplayState *state);
