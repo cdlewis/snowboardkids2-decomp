@@ -175,8 +175,8 @@ void startSelectedGameMode(void) {
 }
 
 void initOptionsDefaults(void) {
-    D_800AFE8C_A71FC->unk1F = 0;
-    D_800AFE8C_A71FC->unk20 = 0;
+    D_800AFE8C_A71FC->optionToggle1 = 0;
+    D_800AFE8C_A71FC->optionToggle2 = 0;
     D_800AFE8C_A71FC->customLapEnabled = 0;
     D_800AFE8C_A71FC->customLapCount = 3;
 }

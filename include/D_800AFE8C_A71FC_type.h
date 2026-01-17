@@ -9,8 +9,8 @@ typedef struct {
     u8 numPlayers;
     u8 unk9[0x15];
     u8 previousSaveSlot;
-    u8 unk1F;
-    u8 unk20;
+    u8 optionToggle1;
+    u8 optionToggle2;
     u8 customLapEnabled;
     u8 customLapCount;
     u8 pendingUnlockCutscene;
