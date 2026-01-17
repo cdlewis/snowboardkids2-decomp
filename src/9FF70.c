@@ -97,9 +97,9 @@ void applyBoostVelocity(Player *player) {
         case 1:
         case 7:
             if (player->unkBC9 == 3) {
-                transformVector2(gameState->unk48 + 0x1D4, (u8 *)player + 0x9F0, &result);
+                transformVector2(gameState->unk48 + 0x1D4, &player->unk9B0.animation_data, &result);
             } else {
-                transformVector2(gameState->unk48 + 0xB4, (u8 *)player + 0x9F0, &result);
+                transformVector2(gameState->unk48 + 0xB4, &player->unk9B0.animation_data, &result);
             }
             player->velocity.x += result.x;
             player->velocity.y += result.y;
@@ -108,9 +108,9 @@ void applyBoostVelocity(Player *player) {
         case 2:
         case 8:
             if (player->unkBC9 == 3) {
-                transformVector2(gameState->unk48 + 0x1E0, (u8 *)player + 0x9F0, &result);
+                transformVector2(gameState->unk48 + 0x1E0, &player->unk9B0.animation_data, &result);
             } else {
-                transformVector2(gameState->unk48 + 0xC0, (u8 *)player + 0x9F0, &result);
+                transformVector2(gameState->unk48 + 0xC0, &player->unk9B0.animation_data, &result);
             }
             player->velocity.x += result.x;
             player->velocity.y += result.y;
@@ -119,7 +119,7 @@ void applyBoostVelocity(Player *player) {
         case 5: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->unk48 + 0xCC, (u8 *)player + 0x9F0, &result);
+            transformVector2(gameState->unk48 + 0xCC, &player->unk9B0.animation_data, &result);
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
@@ -131,7 +131,7 @@ void applyBoostVelocity(Player *player) {
         case 6: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->unk48 + 0xD8, (u8 *)player + 0x9F0, &result);
+            transformVector2(gameState->unk48 + 0xD8, &player->unk9B0.animation_data, &result);
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
