@@ -1912,7 +1912,7 @@ s32 updateStunnedAirbornePhase(Player *player) {
     decayPlayerAirborneAngles(player);
     applyClampedVelocityToPosition(player);
     if (func_8005D308_5DF08(player, 8) != 0) {
-        player->unkAA8 = player->unkAA8 / 2;
+        player->aiLaneWidth = player->aiLaneWidth / 2;
         resetPlayerBehaviorToDefault(player);
     }
     setPlayerBodyPartAnimState(player, 3, 0);
@@ -1965,7 +1965,7 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
     decayPlayerAirborneAngles(player);
     applyClampedVelocityToPosition(player);
     if (func_8005D308_5DF08(player, 7) != 0) {
-        player->unkAA8 = player->unkAA8 / 2;
+        player->aiLaneWidth = player->aiLaneWidth / 2;
         resetPlayerBehaviorToDefault(player);
     }
     setPlayerBodyPartAnimState(player, 3, 0);

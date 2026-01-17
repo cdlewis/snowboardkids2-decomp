@@ -4,3 +4,4 @@
 #include "gamestate.h"
 
 void calculateAITargetPosition(Player *);
+s8 determineAIPathChoice(Player *);

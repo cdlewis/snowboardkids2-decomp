@@ -994,7 +994,7 @@ void descendWarpEffect(WarpEffectState *state) {
 
     gameState = getCurrentAllocation();
     if (gameState->gamePaused == 0) {
-        state->player->unkBDE |= 4;
+        state->player->pathFlags |= 4;
         state->velocity += 0xFFFE0000;
         state->height += state->velocity;
 

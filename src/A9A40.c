@@ -81,7 +81,7 @@ void calculateAITargetPosition(Player *player) {
             break;
         }
 
-        pathFlags = (s32 *)player->unk28;
+        pathFlags = (s32 *)player->aiPathData;
         if (pathFlags != NULL) {
             if (*(s8 *)&pathFlags[sectorIndex] == -1) {
                 sectorIndex = courseData->waypoints[sectorIndex].alt;
@@ -130,9 +130,9 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x14];
-    u16 unk14;
+    u16 trackStartIdx;
     u8 pad16[0x2];
-    u16 unk18;
+    u16 trackEndIdx;
     u8 pad1A[0xA];
 } Section3Entry;
 
@@ -143,12 +143,12 @@ typedef struct {
     s32 _pad2;
 } TrackCalcStackVars;
 
-extern u8 D_800BADD0_AAC80[];
+extern u8 gShortcutChanceByMemoryPool[];
 
 #define SEC3(gs) ((Section3Entry *)((gs)->gameData.section3Data))
 #define SEC1(gs) ((Vec3s *)((gs)->gameData.section1Data))
 
-s8 func_800BA694_AA544(Player *player) {
+s8 determineAIPathChoice(Player *player) {
     GameState *gs;
     volatile TrackCalcStackVars sv;
     s32 trackDirX;
@@ -165,15 +165,16 @@ s8 func_800BA694_AA544(Player *player) {
 
     gs = getCurrentAllocation();
 
-    if (player->unk28 != NULL && ((AIPathPreference *)player->unk28)[player->sectorIndex].pathPreference != 0) {
-        trackStartIdx = SEC3(gs)[player->sectorIndex].unk14;
-        trackEndIdx = SEC3(gs)[player->sectorIndex].unk18;
+    if (player->aiPathData != NULL &&
+        ((AIPathPreference *)player->aiPathData)[player->sectorIndex].pathPreference != 0) {
+        trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
+        trackEndIdx = SEC3(gs)[player->sectorIndex].trackEndIdx;
         trackDirX = SEC1(gs)[trackStartIdx].x - SEC1(gs)[trackEndIdx].x;
         sv.tempX = trackDirX;
 
-        trackStartIdx = SEC3(gs)[player->sectorIndex].unk14;
+        trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         trackLengthSq = trackDirX * trackDirX;
-        trackEndIdx = SEC3(gs)[player->sectorIndex].unk18;
+        trackEndIdx = SEC3(gs)[player->sectorIndex].trackEndIdx;
         trackDirZ = SEC1(gs)[trackStartIdx].z - SEC1(gs)[trackEndIdx].z;
         sv.tempZ = trackDirZ;
         trackLengthSq += trackDirZ * trackDirZ;
@@ -182,45 +183,45 @@ s8 func_800BA694_AA544(Player *player) {
         normalizedDirX = (sv.tempX << 13) / trackLength;
         normalizedDirZ = (sv.tempZ << 13) / trackLength;
 
-        trackStartIdx = SEC3(gs)[player->sectorIndex].unk14;
+        trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         playerToStartX = player->worldPos.x - (SEC1(gs)[trackStartIdx].x << 16);
         sv.tempX = playerToStartX;
 
-        trackStartIdx = SEC3(gs)[player->sectorIndex].unk14;
+        trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         playerToStartZ = player->worldPos.z - (SEC1(gs)[trackStartIdx].z << 16);
         sv.tempZ = playerToStartZ;
 
         lateralOffset =
             (((s64)(-((s16)normalizedDirZ))) * playerToStartX) + (((s64)((s16)normalizedDirX)) * playerToStartZ);
         trackLength = -((s32)(lateralOffset / 0x2000));
-        if (trackLength < (player->unkAA8 * 6)) {
-            return ((AIPathPreference *)player->unk28)[player->sectorIndex].pathPreference;
+        if (trackLength < (player->aiLaneWidth * 6)) {
+            return ((AIPathPreference *)player->aiPathData)[player->sectorIndex].pathPreference;
         }
     }
 
-    if (!(player->unkBDE & 8)) {
-        player->unkBE5 = 0;
+    if (!(player->pathFlags & 8)) {
+        player->aiShortcutChosen = 0;
     }
 
     if (gs->unk86 != 0) {
-        if (player->unkBE5 == 0 && (player->unkBDE & 8)) {
+        if (player->aiShortcutChosen == 0 && (player->pathFlags & 8)) {
             if ((randA() & 0xFF) >= 0xC0) {
                 return 0;
             }
-            player->unkBE5 = 1;
+            player->aiShortcutChosen = 1;
             return 8;
         }
         return 0;
     }
 
     if (gs->raceType != 9) {
-        if (player->unkBE5 == 0 && (player->unkBDE & 8)) {
-            if ((randA() & 0xFF) < D_800BADD0_AAC80[gs->memoryPoolId]) {
-                player->unkBE5 = 1;
+        if (player->aiShortcutChosen == 0 && (player->pathFlags & 8)) {
+            if ((randA() & 0xFF) < gShortcutChanceByMemoryPool[gs->memoryPoolId]) {
+                player->aiShortcutChosen = 1;
                 return 8;
             }
             if (player->characterId >= 6) {
-                player->unkBE5 = 1;
+                player->aiShortcutChosen = 1;
                 return 8;
             }
         }

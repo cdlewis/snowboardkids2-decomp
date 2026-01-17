@@ -50,7 +50,7 @@ typedef struct {
     void *unk1C;
     void *unk20;
     void *unk24;
-    void *unk28;
+    void *aiPathData; /* AI path preference data array */
     void *unk2C;
     u8 padding30[0x8];
     s32 unk38;
@@ -113,7 +113,7 @@ typedef struct {
     s16 unkA9E;
     s32 unkAA0;
     s32 maxSpeedCap; /* 0xAA4 */
-    s32 unkAA8;
+    s32 aiLaneWidth; /* Distance threshold for AI path preference */
     s32 unkAAC;
     s32 unkAB0;
     s32 unkAB4;
@@ -211,14 +211,14 @@ typedef struct {
     u8 unkBDB;
     u8 unkBDC;
     u8 unkBDD;
-    u8 unkBDE;
+    u8 pathFlags; /* Bit 3: shortcut available */
     u8 rumbleEffectType;
     s8 rumbleCounter;
     u8 rumbleDuration;
     u8 rumbleFrame;
     u8 unkBE3;
     u8 unkBE4;
-    u8 unkBE5;
+    u8 aiShortcutChosen; /* AI has made shortcut decision */
     u8 bodyPartAnimIndex;
     u8 bodyPartAnimFlags;
 } Player;
