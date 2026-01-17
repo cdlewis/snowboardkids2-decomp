@@ -1176,6 +1176,6 @@ INCLUDE_RODATA("asm/nonmatchings/2F990", D_8009E47C_9F07C);
 
 INCLUDE_RODATA("asm/nonmatchings/2F990", D_8009E480_9F080);
 
-INCLUDE_RODATA("asm/nonmatchings/2F990", D_8009E488_9F088);
+INCLUDE_RODATA("asm/nonmatchings/2F990", gIntegerFormatString);
 
 INCLUDE_RODATA("asm/nonmatchings/2F990", D_8009E48C_9F08C);

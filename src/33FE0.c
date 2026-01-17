@@ -276,7 +276,7 @@ extern void *D_8008F7DC_903DC;
 extern void *D_8008F7E0_903E0;
 extern s32 D_8008F7D8_903D8;
 extern u16 D_8009ADE0_9B9E0;
-extern char D_8009E488_9F088[];
+extern char gIntegerFormatString[];
 extern void *D_8008F5F0_901F0;
 extern void *D_8008F79C_9039C[];
 extern void *D_8008F7C4_903C4[];
@@ -471,32 +471,32 @@ void cleanupSaveSlotNameText(Func34574Arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
 
-void func_80033F7C_34B7C(SaveSlotNumberLabelsState *arg0) {
-    NumberLabelsAllocation *alloc;
-    s16 temp_s2;
-    void *asset;
+void initSaveSlotItemLabels(SaveSlotNumberLabelsState *arg0) {
+    NumberLabelsAllocation *saveData;
+    s16 itemY;
+    void *spriteSheet;
     s32 i;
-    char *outputString;
+    char *numberBuffer;
 
-    alloc = (NumberLabelsAllocation *)getCurrentAllocation();
-    asset = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    saveData = (NumberLabelsAllocation *)getCurrentAllocation();
+    spriteSheet = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
     setCleanupCallback(cleanupSaveSlotNumberLabels);
 
     for (i = 0; i < 15; i++) {
-        temp_s2 = (alloc->slots[arg0->slotIndex].itemFlags[i] == 0) ? -0x90 : 0;
-        outputString = arg0->textBuffers[i];
+        itemY = (saveData->slots[arg0->slotIndex].itemFlags[i] == 0) ? -0x90 : 0;
+        numberBuffer = arg0->textBuffers[i];
 
         if (i < 9) {
-            sprintf(outputString, D_8009E488_9F088, i + 1);
+            sprintf(numberBuffer, gIntegerFormatString, i + 1);
             arg0->texts[i].x = -0x70 + i * 0x10;
-            arg0->texts[i].y = temp_s2;
-            arg0->texts[i].text = outputString;
+            arg0->texts[i].y = itemY;
+            arg0->texts[i].text = numberBuffer;
             arg0->texts[i].unk4 = 0;
             arg0->texts[i].alpha = 0xFF;
         } else {
             arg0->sprites[i - 9].x = -0x78 + i * 0x10;
-            arg0->sprites[i - 9].y = temp_s2;
-            arg0->sprites[i - 9].spriteSheet = asset;
+            arg0->sprites[i - 9].y = itemY;
+            arg0->sprites[i - 9].spriteSheet = spriteSheet;
             arg0->sprites[i - 9].spriteIndex = i + 4;
             arg0->sprites[i - 9].alpha = 0xFF;
             arg0->sprites[i - 9].unkD = 0;
