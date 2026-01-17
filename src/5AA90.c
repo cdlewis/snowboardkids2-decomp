@@ -241,11 +241,16 @@ void handlePlayerToPlayerCollision(Player *player) {
  * Checks collision between a player and the target player (player index 1).
  * Handles collision response including pushing the player out and knockback effects.
  * The target player may have multiple collision boxes (controlled by targetPlayer->unkBB4).
+ *
+ * unkBD9 values:
+ * - 1: Attack state that bounces player on boxes 4-5
+ * - 2: Attack state that applies knockback on box 0
+ * - 3: Attack state that bounces player on boxes 1-2
  */
 void handleCollisionWithTargetPlayer(Player *player) {
     Vec3i deltaPos;
     u8 pad[0x8];
-    void *collisionBoxPtr;
+    void *boxBasePtr;
     s32 unused1;
     s32 unused2;
     s32 combinedRadius;
@@ -272,10 +277,11 @@ void handleCollisionWithTargetPlayer(Player *player) {
 
     if ((s8)targetPlayer->unkBB4 > 0) {
         boxIndex = 0;
-        collisionBoxPtr = targetPlayer;
+        boxBasePtr = targetPlayer;
         do {
-            /* Copy target's collision box local position (offset 0xAE4 is unkAE4 array) */
-            memcpy(&deltaPos, (u8 *)collisionBoxPtr + 0xAE4, 0xC);
+            /* Copy target's collision box local position (unkAE4 is array of 6 Vec3i at offset 0xAE4)
+             * boxBasePtr increments by 0xC (sizeof(Vec3i)) each loop iteration to index into array */
+            memcpy(&deltaPos, (u8 *)boxBasePtr + 0xAE4, 0xC);
 
             /* Convert to world space */
             deltaPos.x += targetPlayer->worldPos.x;
@@ -287,7 +293,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
             deltaPos.y -= player->worldPos.y + player->collisionOffset.y;
             deltaPos.z -= player->worldPos.z + player->collisionOffset.z;
 
-            /* Sum of both collision box radii */
+            /* Sum of both collision box radii (unkB2C is treated as array of radii) */
             combinedRadius = (&targetPlayer->unkB2C)[boxIndex] + player->collisionRadius;
             negRadius = -combinedRadius;
 
@@ -347,7 +353,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
             }
         next:
             boxIndex++;
-            collisionBoxPtr = (u8 *)collisionBoxPtr + 0xC;
+            boxBasePtr = (u8 *)boxBasePtr + 0xC;
         } while (boxIndex < (s8)targetPlayer->unkBB4);
     }
 }
