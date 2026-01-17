@@ -761,6 +761,7 @@ initScalingSpriteEffect = 0x8000A9A4; // rom:0xB5A4
 updateScalingSpriteEffect = 0x8000AA08; // rom:0xB608
 cleanupScalingSpriteEffect = 0x8000AD08; // rom:0xB908
 initRadialBurstSpriteEffect = 0x8000AD24; // rom:0xB924
+updateRadialBurstSpriteEffect = 0x8000AD88; // rom:0xB988
 cleanupRadialBurstSpriteEffect = 0x8000B028; // rom:0xBC28
 initSpinFadeSpriteEffect = 0x8000B044; // rom:0xBC44
 updateSpinFadeSpriteEffect = 0x8000B0A8; // rom:0xBCA8

@@ -419,17 +419,17 @@ typedef struct {
     /* 0x70 */ s32 currentScale;
 } RadialBurstSpriteEffectState;
 
-void func_8000AD88_B988(RadialBurstSpriteEffectState *arg0);
+void updateRadialBurstSpriteEffect(RadialBurstSpriteEffectState *arg0);
 void cleanupRadialBurstSpriteEffect(SpriteEffectTaskState *);
 
 void initRadialBurstSpriteEffect(SpriteEffectTaskState *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
     setCleanupCallback(cleanupRadialBurstSpriteEffect);
-    setCallback(func_8000AD88_B988);
+    setCallback(updateRadialBurstSpriteEffect);
 }
 
-void func_8000AD88_B988(RadialBurstSpriteEffectState *arg0) {
+void updateRadialBurstSpriteEffect(RadialBurstSpriteEffectState *arg0) {
     SpriteEffectPosition *pos;
     s32 scale;
     s32 cosResult;
@@ -444,6 +444,7 @@ void func_8000AD88_B988(RadialBurstSpriteEffectState *arg0) {
     s32 decrement;
     s32 zOffset;
     SpriteEffectPosition *temp_pos;
+    s32 phase;
 
     scale = arg0->targetScale;
     targetScale = ((scale >> 8) * 273) * 9;
@@ -458,7 +459,6 @@ void func_8000AD88_B988(RadialBurstSpriteEffectState *arg0) {
     pos = temp_pos;
     {
         s32 posX = pos->unk14;
-        s32 phase;
         baseX = posX + arg0->offsetX;
         baseY = pos->unk18 + arg0->offsetY;
         baseZ = pos->unk1C + arg0->offsetZ;
