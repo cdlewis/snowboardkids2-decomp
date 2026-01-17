@@ -47,7 +47,7 @@ typedef struct {
     void *unk20;
     void *unk24;
     u8 pad28[0x38 - 0x28];
-    s16 unk38[0x10]; /* 0x38 - 0x57 */
+    Transform3D groundTransform; /* 0x38 - 0x57 */
     u8 pad58[0x6C - 0x58];
     u8 groundPrimaryR; /* 0x6C */
     u8 groundPrimaryG; /* 0x6D */
@@ -57,7 +57,7 @@ typedef struct {
     u8 groundSecondaryG; /* 0x71 */
     u8 groundSecondaryB; /* 0x72 */
     u8 pad73;
-    u8 unk74[0x20]; /* 0x74 - 0x93 */
+    Transform3D flyingTransform; /* 0x74 - 0x93 */
     u8 pad94[0xA8 - 0x94];
     u8 flyingPrimaryR; /* 0xA8 */
     u8 flyingPrimaryG; /* 0xA9 */
@@ -67,7 +67,7 @@ typedef struct {
     u8 flyingSecondaryG; /* 0xAD */
     u8 flyingSecondaryB; /* 0xAE */
     u8 padAF;
-    u8 unkB0[0x20]; /* 0xB0 - 0xCF */
+    Transform3D unkB0; /* 0xB0 - 0xCF */
     u8 padD0[0x434 - 0xD0];
     Vec3i unk434; /* 0x434 */
     s32 unk440;   /* 0x440 */
@@ -81,12 +81,12 @@ typedef struct {
     u8 pad46C[0x8];
     s32 unk474; /* 0x474 */
     u8 pad478[0x950 - 0x478];
-    u8 unk950[0x20];    /* 0x950 - 0x96F */
+    Transform3D unk950;   /* 0x950 - 0x96F */
     Transform3D unk970; /* 0x970 - 0x98F */
     Transform3D unk990; /* 0x990 - 0x9AF */
     Transform3D unk9B0; /* 0x9B0 - 0x9CF */
     u8 pad9D0[0x9F0 - 0x9D0];
-    u8 unk9F0[0x20];       /* 0x9F0 - 0xA0F */
+    Transform3D unk9F0;    /* 0x9F0 - 0xA0F */
     JointPosition jointPositions[9]; /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
     s32 aiTargetX;            /* 0xA7C */
     u8 padA80[4];
@@ -174,13 +174,6 @@ typedef struct {
     u8 unkBDB; /* 0xBDB */
 } Arg0Struct;
 
-typedef struct {
-    s16 m[3][3];
-    s16 pad;
-    s32 translationX;
-    s32 translationY;
-    s32 translationZ;
-} LocalMat;
 
 typedef struct {
     Transform3D transform;
@@ -307,12 +300,12 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
     addCollisionSectorNodeToList((ListNode_5AA90 *)&arg0->unkB50);
     updateJingleTownBossModelTransforms(arg0);
 
-    transformVector(D_800BCB3C_B40FC, arg0->unk38, &arg0->unkAE4);
+    transformVector(D_800BCB3C_B40FC, (s16 *)&arg0->groundTransform, &arg0->unkAE4);
     arg0->unkAE4 -= arg0->unk970.translation.x;
     arg0->unkAE8 -= arg0->unk970.translation.y;
     arg0->unkAEC -= arg0->unk970.translation.z;
 
-    transformVector(D_800BCB3C_B40FC + 6, (s16 *)arg0->unk74, &arg0->unkAF0);
+    transformVector(D_800BCB3C_B40FC + 6, (s16 *)&arg0->flyingTransform, &arg0->unkAF0);
     arg0->unkAF0 -= arg0->unk970.translation.x;
     arg0->unkAF4 -= arg0->unk970.translation.y;
     arg0->unkAF8 -= arg0->unk970.translation.z;
@@ -474,7 +467,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
     switch (arg0->behaviorCounter) {
         case 0:
             updateJingleTownBossModelTransforms(arg0);
-            transformVectorRelative(&gameState->players->worldPos.x, arg0->unk74, &sp30);
+            transformVectorRelative(&gameState->players->worldPos.x, &arg0->flyingTransform, &sp30);
 
             angleDiff = atan2Fixed(-sp30.x, -sp30.z) & 0x1FFF;
 
@@ -741,21 +734,21 @@ s32 jingleTownBossHoverAttackExitPhase(Arg0Struct *arg0) {
     phase = arg0->behaviorPhase;
     if (phase == 0) {
         arg0->behaviorPhase++;
-        transformVector2((s16 *)gJingleTownBossHoverExitOffsets[0], arg0->unk38, &posOffset);
+        transformVector2((s16 *)gJingleTownBossHoverExitOffsets[0], (s16 *)&arg0->groundTransform, &posOffset);
         arg0->unk434.x += posOffset.x;
         arg0->unk434.y += posOffset.y;
         arg0->unk434.z += posOffset.z;
         memcpy(&arg0->unk440, &arg0->unk434, 0xC);
         arg0->unkB84 |= 0x200000;
-        transformVector((s16 *)gJingleTownBossHoverExitOffsets[1], arg0->unk38, &burstPos);
+        transformVector((s16 *)gJingleTownBossHoverExitOffsets[1], (s16 *)&arg0->groundTransform, &burstPos);
         spawnBurstEffect(&burstPos);
-        transformVector((s16 *)gJingleTownBossHoverExitOffsets[2], arg0->unk38, &burstPos);
+        transformVector((s16 *)gJingleTownBossHoverExitOffsets[2], (s16 *)&arg0->groundTransform, &burstPos);
         spawnBurstEffect(&burstPos);
-        transformVector((s16 *)gJingleTownBossHoverExitOffsets[3], arg0->unk38, &burstPos);
+        transformVector((s16 *)gJingleTownBossHoverExitOffsets[3], (s16 *)&arg0->groundTransform, &burstPos);
         spawnBurstEffect(&burstPos);
-        transformVector((s16 *)gJingleTownBossHoverExitOffsets[4], arg0->unk38, &burstPos);
+        transformVector((s16 *)gJingleTownBossHoverExitOffsets[4], (s16 *)&arg0->groundTransform, &burstPos);
         spawnBurstEffect(&burstPos);
-        transformVector((s16 *)gJingleTownBossHoverExitOffsets[5], arg0->unk38, &burstPos);
+        transformVector((s16 *)gJingleTownBossHoverExitOffsets[5], (s16 *)&arg0->groundTransform, &burstPos);
         spawnBurstEffect(&burstPos);
         arg0->unk468 = 0x100;
     }
@@ -801,44 +794,44 @@ void updateJingleTownBossPositionAndTrackCollision(Arg0Struct *arg0) {
 
 void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     s32 pad1[8];
-    LocalMat scaledMatrix;
-    LocalMat pitchYawMatrix;
+    Transform3D scaledMatrix;
+    Transform3D pitchYawMatrix;
     s32 sp70[4];
-    LocalMat *scaledMatrixPtr;
-    void *combinedTransform;
+    Transform3D *scaledMatrixPtr;
+    Transform3D *combinedTransform;
 
-    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, arg0->unk9F0);
-    combinedTransform = arg0->unk950;
-    func_8006B084_6BC84(&arg0->unk9B0, arg0->unk9F0, combinedTransform);
+    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, &arg0->unk9F0);
+    combinedTransform = &arg0->unk950;
+    func_8006B084_6BC84(&arg0->unk9B0, &arg0->unk9F0, combinedTransform);
 
     if (arg0->unkB88 & 0x10) {
         scaledMatrixPtr = &scaledMatrix;
         memcpy(scaledMatrixPtr, identityMatrix, 0x20);
         scaledMatrixPtr->m[1][1] = arg0->unkB9E;
-        func_8006B084_6BC84(scaledMatrixPtr, combinedTransform, arg0->unk38);
+        func_8006B084_6BC84(scaledMatrixPtr, combinedTransform, &arg0->groundTransform);
     } else {
-        memcpy(arg0->unk38, combinedTransform, 0x20);
+        memcpy(&arg0->groundTransform, combinedTransform, 0x20);
     }
 
     createCombinedRotationMatrix(&pitchYawMatrix, arg0->pitchAngle, arg0->yawAngle);
-    pitchYawMatrix.translationX = 0;
-    pitchYawMatrix.translationZ = 0;
+    pitchYawMatrix.translation.x = 0;
+    pitchYawMatrix.translation.z = 0;
 
     if (arg0->unkB84 & 0x200000) {
-        pitchYawMatrix.translationY = 0x140000;
+        pitchYawMatrix.translation.y = 0x140000;
     } else {
-        pitchYawMatrix.translationY = 0x3A0000;
+        pitchYawMatrix.translation.y = 0x3A0000;
     }
 
-    func_8006B084_6BC84(&pitchYawMatrix, arg0->unk38, arg0->unk74);
+    func_8006B084_6BC84(&pitchYawMatrix, &arg0->groundTransform, &arg0->flyingTransform);
 
-    *(s32 *)&arg0->unk74[0x18] = *(s32 *)&arg0->unk74[0x18] + arg0->unk474;
+    arg0->flyingTransform.translation.y = arg0->flyingTransform.translation.y + arg0->unk474;
 
     D_8009A8A4_9B4A4.x = 0;
     D_8009A8A4_9B4A4.y = 0x140000;
     D_8009A8A4_9B4A4.z = 0;
 
-    func_8006B084_6BC84((s32 *)&D_8009A8A4_9B4A4 - 5, arg0->unk74, arg0->unkB0);
+    func_8006B084_6BC84((Transform3D *)((s32 *)&D_8009A8A4_9B4A4 - 5), &arg0->flyingTransform, &arg0->unkB0);
 }
 
 void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
@@ -867,11 +860,11 @@ void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
     if (index == 0) {
         if (arg0->unkB84 & 0x200000) {
             for (i = 0; i < 4; i++) {
-                enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk74, 2);
+                enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->flyingTransform, 2);
             }
         } else {
             for (i = 0; i < 4; i++) {
-                enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk38, 3);
+                enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->groundTransform, 3);
             }
         }
     } else {
@@ -884,7 +877,7 @@ void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
             arg0->flyingSecondaryB = gBossSurfaceColors[index].secondaryB;
 
             for (i = 0; i < 4; i++) {
-                enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk74, 2);
+                enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->flyingTransform, 2);
             }
         } else {
             arg0->groundPrimaryR = gBossSurfaceColors[index].primaryR;
@@ -895,7 +888,7 @@ void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
             arg0->groundSecondaryB = gBossSurfaceColors[index].secondaryB;
 
             for (i = 0; i < 4; i++) {
-                enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->unk38, 3);
+                enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->groundTransform, 3);
             }
         }
     }
