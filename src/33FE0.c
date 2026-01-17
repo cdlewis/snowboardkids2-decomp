@@ -788,7 +788,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
     offsetY = -(allocation->unkAD4 * 8);
     state->offsetY = offsetY;
 
-    func_8006D7B0_6E3B0(
+    renderTiledSprite3x3(
         state->spriteAsset,
         state->offsetX,
         offsetY,

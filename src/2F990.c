@@ -1003,7 +1003,7 @@ void initStoryMapShopItemStatsDisplay(ItemStatsDisplay *display) {
     setCallback(updateStoryMapShopItemStatsDisplay);
 }
 
-extern void func_8006D7B0_6E3B0(void *, s16, s16, s32, s32, s32, s32, s32, s32, s32);
+extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 
 void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
     GameState *state;
@@ -1017,7 +1017,7 @@ void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
     state = (GameState *)getCurrentAllocation();
     progressBarY = 0x30 - (state->unk5D7 * 8);
     arg0->progressBarY = progressBarY;
-    func_8006D7B0_6E3B0(
+    renderTiledSprite3x3(
         arg0->progressBarAsset,
         arg0->progressBarX,
         progressBarY,

@@ -9,7 +9,7 @@
 
 extern s32 gControllerInputs;
 
-extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
+extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 extern void *handleMenuSelection(DC90TaskStruct *arg0);
 
 void updateCutsceneWaitMenu(DC90TaskStruct *arg0);
@@ -159,8 +159,8 @@ void updateCutsceneWaitMenu(DC90TaskStruct *arg0) {
         );
     }
 
-    func_8006D7B0_6E3B0(
-        (s32)arg0->unk4,
+    renderTiledSprite3x3(
+        arg0->unk4,
         (s16)(arg0->unk2C),
         (s16)(arg0->unk30),
         (s16)(arg0->animFrameX),

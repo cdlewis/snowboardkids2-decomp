@@ -19,7 +19,7 @@
 extern u8 identityMatrix[];
 extern void func_8001FFE4_20BE4(void);
 extern void func_8001FA00_20600(void);
-extern void func_8006D7B0_6E3B0(void *, s32, s32, s32, s32, s32, s32, s32, s32, s32);
+extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 struct LevelPreviewPortraitState_202A0_s;
 extern void animatePortraitRotation(struct LevelPreviewPortraitState_202A0_s *arg0);
 
@@ -870,7 +870,7 @@ void updatePrizeDisplay(PrizeDisplayState *state) {
     }
 
     if ((u32)(allocation->menuState - 2) < 2) {
-        func_8006D7B0_6E3B0(state->backgroundAsset, -0x40, -0x8, 8, 4, 0, 0x60, 0xC0, 8, 0);
+        renderTiledSprite3x3(state->backgroundAsset, -0x40, -0x8, 8, 4, 0, 0x60, 0xC0, 8, 0);
         debugEnqueueCallback(8, 1, func_80035408_36008, &state->titleX);
 
         spriteEntry = state->spriteEntries;

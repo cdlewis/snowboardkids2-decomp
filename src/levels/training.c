@@ -8,7 +8,7 @@
 
 USE_ASSET(_40E1C0);
 
-extern void func_8006D7B0_6E3B0(s32, s16, s16, s16, s16, u8, u8, u8, u8, u8);
+extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 extern s32 gControllerInputs;
 extern s8 *s_trainingPanelMessageTables[];
 
@@ -20,7 +20,7 @@ typedef struct {
 } TrainingInstructionState;
 
 typedef struct {
-    s32 uiAsset;
+    void *uiAsset;
     void *textRenderContext;
     s32 *messageData;
     s16 panelIndex;
@@ -160,8 +160,8 @@ void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) 
     width = arg0->panelWidth;
     height = arg0->panelHeight;
 
-    func_8006D7B0_6E3B0(
-        (s32)arg0->uiAsset,
+    renderTiledSprite3x3(
+        arg0->uiAsset,
         ((-width) << 19) >> 16,
         ((-height) << 19) >> 16,
         width,
@@ -188,8 +188,8 @@ void shrinkTrainingInstructionPanelForNextMessage(TrainingInstructionRuntimeStat
     width = arg0->panelWidth;
     height = arg0->panelHeight;
 
-    func_8006D7B0_6E3B0(
-        (s32)arg0->uiAsset,
+    renderTiledSprite3x3(
+        arg0->uiAsset,
         ((-width) << 19) >> 16,
         ((-height) << 19) >> 16,
         width,
@@ -219,8 +219,8 @@ void expandTrainingInstructionPanelHeight(TrainingInstructionRuntimeState *arg0)
     width = arg0->panelWidth;
     height = arg0->panelHeight;
 
-    func_8006D7B0_6E3B0(
-        (s32)arg0->uiAsset,
+    renderTiledSprite3x3(
+        arg0->uiAsset,
         ((-width) << 19) >> 16,
         ((-height) << 19) >> 16,
         width,
@@ -245,7 +245,7 @@ void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *
     temp_v1_2 = arg0->messageData[table_ptr[arg0->messageIndex]];
     func_80035260_35E60(arg0->textRenderContext, (void *)arg0->messageData + temp_v1_2, -0x68, -0x30, 0xFF, 0xFF, 0, s1_var, s0_var);
 
-    func_8006D7B0_6E3B0(arg0->uiAsset, -0x68, -0x30, 0xD, s0_var, 1, GET_ALPHA_COLOR_HIGH_BYTE(arg0), arg0->colorIndex, s1_var, s0_var);
+    renderTiledSprite3x3(arg0->uiAsset, -0x68, -0x30, 0xD, s0_var, 1, GET_ALPHA_COLOR_HIGH_BYTE(arg0), arg0->colorIndex, s1_var, s0_var);
 
     if (gControllerInputs & A_BUTTON) {
         temp_v0 = arg0->messageIndex + 1;
@@ -285,8 +285,8 @@ void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionRuntime
     width = arg0->panelWidth;
     height = arg0->panelHeight;
 
-    func_8006D7B0_6E3B0(
-        (s32)arg0->uiAsset,
+    renderTiledSprite3x3(
+        arg0->uiAsset,
         ((-width) << 19) >> 16,
         ((-height) << 19) >> 16,
         width,
@@ -321,7 +321,7 @@ void shrinkTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) 
     width = arg0->panelWidth;
     height = arg0->panelHeight;
 
-    func_8006D7B0_6E3B0(
+    renderTiledSprite3x3(
         arg0->uiAsset,
         ((-width) << 19) >> 16,
         ((-height) << 19) >> 16,

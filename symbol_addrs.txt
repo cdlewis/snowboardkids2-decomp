@@ -4,6 +4,7 @@ initStoryMapRareEventWave = 0x8002C8C0; // rom:0x2D4C0
 D_8009A8A4_9B4A4 = 0x8009A8A4; // rom:0x9B4A4 size:0xC
 D_800908E0_914E0 = 0x800908E0; // rom:0x914E0 size:0x48
 gFanSoundCount = 0x800BAD0E; // rom:0x1E7DBE type:s16
+renderTiledSprite3x3 = 0x8006D7B0; // rom:0x6E3B0
 gFanSoundIds = 0x800BAA60; // rom:0x1E7B10 type:s16
 calculateZoomScaleFactor = 0x800B93F0; // rom:0x1E64A0
 updateWipeTransitionSlots = 0x800B9440; // rom:0x1E64F0
