@@ -926,30 +926,30 @@ s32 iceLandBossDefeatedBehavior(IceLandBossAttackArg *arg0) {
     return 0;
 }
 
-void func_800BC520_B1A10(IceLandBossAttackArg *arg0) {
+void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     s32 pad[8];
-    Vec3i sp38;
+    Vec3i collisionOffset;
     s32 pad2[8];
-    GameState *alloc;
-    GameDataLayout *allocPlus30;
-    u16 temp;
+    GameState *gameState;
+    GameDataLayout *gameData;
+    u16 newSectorIndex;
 
-    alloc = getCurrentAllocation();
-    memcpy(arg0->unk984, &arg0->unk434, 0xC);
-    allocPlus30 = &alloc->gameData;
-    temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->sectorIndex, &arg0->unk434);
-    arg0->sectorIndex = temp;
-    func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, &sp38);
-    arg0->unk434.x = arg0->unk434.x + sp38.x;
-    arg0->unk434.z = arg0->unk434.z + sp38.z;
-    func_8005C868_5D468(arg0);
+    gameState = getCurrentAllocation();
+    memcpy(boss->unk984, &boss->unk434, 0xC);
+    gameData = &gameState->gameData;
+    newSectorIndex = getOrUpdatePlayerSectorIndex(boss, gameData, boss->sectorIndex, &boss->unk434);
+    boss->sectorIndex = newSectorIndex;
+    func_80060CDC_618DC(gameData, newSectorIndex, &boss->unk434, 0x187000, &collisionOffset);
+    boss->unk434.x = boss->unk434.x + collisionOffset.x;
+    boss->unk434.z = boss->unk434.z + collisionOffset.z;
+    func_8005C868_5D468(boss);
 
-    if (arg0->bossFlags & 0x10000) {
-        arg0->unkBC9 = 0;
+    if (boss->bossFlags & 0x10000) {
+        boss->unkBC9 = 0;
     } else {
-        func_8005CFFC_5DBFC(allocPlus30, arg0->sectorIndex, &arg0->unk434, &arg0->unkBC9, &arg0->unkBCC);
-        arg0->unkBCA = arg0->unkBC9 >> 4;
-        arg0->unkBC9 = arg0->unkBC9 & 0xF;
+        func_8005CFFC_5DBFC(gameData, boss->sectorIndex, &boss->unk434, &boss->unkBC9, &boss->unkBCC);
+        boss->unkBCA = boss->unkBC9 >> 4;
+        boss->unkBC9 = boss->unkBC9 & 0xF;
     }
 }
 
