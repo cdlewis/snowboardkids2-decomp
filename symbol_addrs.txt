@@ -974,6 +974,7 @@ gTitleCameraSettings = 0x8008D420;
 gTitleInitialized = 0x800A8A98;
 D_800B11A0_1DB740 = 0x800B11A0; // size:0x22 rom:0x1DB740
 D_800B115C_1DB6FC = 0x800B115C; // rom:0x1DB6FC
+renderCharacterSelectBoard = 0x800B10D4; // rom:0x1DB674
 gCoordDisplayFormatString = 0x800B11F0; // rom:0x1DB790
 initCoordinateDisplayTask = 0x800B0BEC; // rom:0x1DB18C
 updateCoordinateDisplayTask = 0x800B0C54; // rom:0x1DB1F4
