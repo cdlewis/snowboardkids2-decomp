@@ -112,7 +112,7 @@ void updateSunnyMountainDisplayObjectsTask(s32 *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
     s32 i;
 
-    for (i = 0; i < state->unk5F; i++) {
+    for (i = 0; i < state->playerCount; i++) {
         if (state->players[i].sectorIndex >= 0x3D) {
             arg0[0] = 0x1C84A5B9;
             arg0[1] = 0x0B1F0000;

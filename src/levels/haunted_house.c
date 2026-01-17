@@ -744,7 +744,7 @@ void updateLapCounter(s16 *currentLap) {
 
     gameState = getCurrentAllocation();
 
-    for (playerIndex = 0; playerIndex < gameState->unk5F; playerIndex++) {
+    for (playerIndex = 0; playerIndex < gameState->playerCount; playerIndex++) {
         playerOffset = (u32)(playerIndex * sizeof(Player));
         player = (Player *)((u32)playerOffset + (u32)gameState->players);
         lapValue = *currentLap;

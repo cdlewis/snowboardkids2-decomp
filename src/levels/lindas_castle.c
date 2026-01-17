@@ -323,7 +323,7 @@ void updateLindasCastleLapCounter(s16 *lapCounter) {
     GameState *gameState = getCurrentAllocation();
     s32 i;
 
-    for (i = 0; i < gameState->unk5F; i++) {
+    for (i = 0; i < gameState->playerCount; i++) {
         if (gameState->players[i].currentLap == *lapCounter) {
             if ((u16)(gameState->players[i].sectorIndex - 0x95) < 0xD) {
                 *lapCounter = *lapCounter + 1;

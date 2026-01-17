@@ -917,17 +917,17 @@ void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *arg0) {
     state = (GameState *)getCurrentAllocation();
 
     i = 0;
-    if (i < state->unk5F) {
+    if (i < state->playerCount) {
     loop1:
         enqueueDisplayListObjectWithFullRenderState(i, arg0);
         i++;
-        if (i < state->unk5F) {
+        if (i < state->playerCount) {
             goto loop1;
         }
     }
 
     i = 0;
-    if (i < state->unk5F) {
+    if (i < state->playerCount) {
         fogG = 0x10;
         fogB = 0x30;
         nodeId = 0x64;
@@ -950,7 +950,7 @@ void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *arg0) {
         viewportId++;
         i++;
         playerOffset += 0xBE8;
-        if (i < state->unk5F) {
+        if (i < state->playerCount) {
             goto loop2;
         }
     }
@@ -1201,7 +1201,7 @@ void updatePlayerSparkleWithStateCheck(PlayerSparkleTask *task) {
     state = (GameState *)getCurrentAllocation();
     updatePlayerSparkle(task);
 
-    for (i = 0; i < state->unk5F; i++) {
+    for (i = 0; i < state->playerCount; i++) {
         if ((u32)(state->players[i].sectorIndex - 6) < 5U) {
             task->velocity = 0xC0000;
             setCallback(updatePlayerSparkleMovement);

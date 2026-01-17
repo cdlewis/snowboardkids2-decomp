@@ -251,7 +251,7 @@ typedef struct {
     u8 memoryPoolId;
     u8 unk5D;
     u8 numPlayers;
-    u8 unk5F;
+    u8 playerCount;
     u8 pendingPlayerRenderTasks;
     u8 unk61;
     u8 PAD_62[0x1];

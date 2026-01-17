@@ -254,12 +254,12 @@ void initPlayerFinishPositionTask(FinishPositionDisplayState *arg0) {
     index = arg0->playerIndex;
     arg0->player = (Player *)((u8 *)state->players + index * 0xBE8);
 
-    numPlayers = state->unk5F;
+    numPlayers = state->playerCount;
     if (numPlayers < 3) {
         if (numPlayers != 0) {
             arg0->x = -0x88;
             arg0->y = 0x40;
-            if (state->unk5F == 2) {
+            if (state->playerCount == 2) {
                 arg0->y = 0x10;
             }
             romStart = &_3F3940_ROM_START;
@@ -296,7 +296,7 @@ void initPlayerItemDisplayTask(PlayerItemDisplayState *state) {
 
     gameState = (GameState *)getCurrentAllocation();
     state->player = &gameState->players[state->playerIndex];
-    playerMode = gameState->unk5F;
+    playerMode = gameState->playerCount;
 
     if (playerMode >= 3) {
         goto else_branch;
@@ -338,7 +338,7 @@ else_branch:
     state->charDisplayFlag = 0;
 
 callbacks:
-    if (gameState->unk5F < 3) {
+    if (gameState->playerCount < 3) {
         setCallbackWithContinue(updatePlayerItemDisplaySinglePlayer);
     } else {
         setCallbackWithContinue(updatePlayerItemDisplayMultiplayer);
@@ -601,7 +601,7 @@ void initPlayerGoldDisplayTask(GoldDisplayState *state) {
     gameState = getCurrentAllocation();
     state->player = (Player *)((u8 *)gameState->players + state->playerIndex * 0xBE8);
 
-    numPlayers = gameState->unk5F;
+    numPlayers = gameState->playerCount;
     if (numPlayers >= 3) {
         state->textX = 0x12;
         goto multiplayer;
@@ -613,7 +613,7 @@ void initPlayerGoldDisplayTask(GoldDisplayState *state) {
 
     // Singleplayer path
     state->x = 0x50;
-    if (gameState->unk5F == 1) {
+    if (gameState->playerCount == 1) {
         state->y = 0x50;
     } else {
         if (state->playerIndex == 0) {
@@ -643,7 +643,7 @@ common:
     state->animCounter = 0;
     setCleanupCallback(cleanupPlayerGoldDisplayTask);
 
-    if (gameState->unk5F < 3) {
+    if (gameState->playerCount < 3) {
         setCallbackWithContinue(updatePlayerGoldDisplaySinglePlayer);
     } else {
         setCallbackWithContinue(updatePlayerGoldDisplayMultiplayer);
@@ -962,7 +962,7 @@ static const char D_8009E88C_9F48C[] = "%4dG";
 void initTrickScoreDisplayTask(TrickScoreDisplayState *state) {
     GameState *gameState = (GameState *)getCurrentAllocation();
 
-    if (gameState->unk5F == 1) {
+    if (gameState->playerCount == 1) {
         state->useGoldFormat = 0;
     } else {
         state->useGoldFormat = 1;

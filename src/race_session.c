@@ -824,7 +824,7 @@ void scheduleRaceTasks(void) {
     scheduleTask(&initPauseMenuDisplayTask, 0, 0, 0xC8);
 
     scheduleLevelEnvironmentTasks(gameState->memoryPoolId);
-    scheduleCourseTasks(gameState->memoryPoolId, gameState->unk5F);
+    scheduleCourseTasks(gameState->memoryPoolId, gameState->playerCount);
     initRaceHudTasks();
 
     if (gameState->raceType == 9) {
@@ -848,7 +848,7 @@ void awaitRaceAssetsLoaded(void) {
             gControllerPollingEnabled = 0;
         }
 
-        if ((state->unk5F == 1) && (state->raceType < 10)) {
+        if ((state->playerCount == 1) && (state->raceType < 10)) {
             spawnOrbitCameraTask();
             state->raceIntroState = 2;
             playMusicTrack(7);
@@ -881,7 +881,7 @@ void waitForFadeAndInitPlayers(void) {
             state->raceIntroState = 0;
 
             if (state->raceType < 0xA) {
-                for (i = 0; i < state->unk5F; i++) {
+                for (i = 0; i < state->playerCount; i++) {
                     schedulePlayerHaloTask(&state->players[i]);
                     state->raceIntroState++;
                 }
@@ -950,7 +950,7 @@ void func_8003F368_3FF68(void) {
         goto handleB;
 
     inputMask = 0;
-    for (i = 0; i < gs->unk5F; i++) {
+    for (i = 0; i < gs->playerCount; i++) {
         inputMask |= gControllerInputs[i];
     }
 
@@ -1034,11 +1034,11 @@ void func_8003F368_3FF68(void) {
         switch (gs->raceType) {
             case 0:
                 count = 0;
-                for (i = 0; i < gs->unk5F; i++) {
+                for (i = 0; i < gs->playerCount; i++) {
                     playerFlags = gs->players[i].unkB84 & 0x80000;
                     count += playerFlags != 0;
                 }
-                if (gs->unk5F == count) {
+                if (gs->playerCount == count) {
                     gs->unk4C = 0x3C;
                     handler = handleSpeedCrossGameResult;
                     setGameStateHandler(handler);
@@ -1066,11 +1066,11 @@ void func_8003F368_3FF68(void) {
                 break;
             case 8:
                 count = 0;
-                for (i = 0; i < gs->unk5F; i++) {
+                for (i = 0; i < gs->playerCount; i++) {
                     playerFlags = gs->players[i].unkB84 & 0x80000;
                     count += playerFlags != 0;
                 }
-                if (gs->unk5F == count) {
+                if (gs->playerCount == count) {
                     gs->unk4C = 0x1E;
                     setMusicFadeOut(0x3C);
                     handler = awaitBattleEndAndPromptContinue;
@@ -1080,11 +1080,11 @@ void func_8003F368_3FF68(void) {
                 break;
             case 9:
                 count = 0;
-                for (i = 0; i < gs->unk5F; i++) {
+                for (i = 0; i < gs->playerCount; i++) {
                     playerFlags = gs->players[i].unkB84 & 0x80000;
                     count += playerFlags != 0;
                 }
-                if (gs->unk5F == count) {
+                if (gs->playerCount == count) {
                     gs->unk4C = 0x1E;
                     setMusicFadeOut(0x3C);
                     handler = handleExpertRaceResult;
@@ -1614,7 +1614,7 @@ void awaitBattleContinuePress(void) {
     GameState *state;
 
     state = (GameState *)getCurrentAllocation();
-    for (i = 0; i < state->unk5F; i++) {
+    for (i = 0; i < state->playerCount; i++) {
         if (gControllerInputs[i] & A_BUTTON) {
             setViewportFadeValue(0, 0xFF, 0x10);
             setMusicFadeOut(0x3C);
@@ -1643,7 +1643,7 @@ void awaitExpertRaceContinuePress(void) {
     s32 i;
     GameState *state = (GameState *)getCurrentAllocation();
 
-    for (i = 0; i < (s32)state->unk5F; i++) {
+    for (i = 0; i < (s32)state->playerCount; i++) {
         if (gControllerInputs[i] & A_BUTTON) {
             setViewportFadeValue(0, 0xFF, 0x10);
             setMusicFadeOut(0x3C);
