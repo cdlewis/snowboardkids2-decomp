@@ -80,7 +80,7 @@ extern Gfx *gRegionAllocPtr;
 extern Gfx gSpriteRDPSetupDL[];
 extern s16 gTileTextureFlipTable[];
 
-void renderTiledTexture(TiledTextureRenderState2 *arg0) {
+void renderTiledTexture(TiledTextureRenderState2 *state) {
     s16 xStart;
     s16 yStart;
     s16 clipLeft;
@@ -95,175 +95,177 @@ void renderTiledTexture(TiledTextureRenderState2 *arg0) {
     s16 col;
     u16 rowStart;
     u16 colStart;
-    s16 origLeft;
-    s16 origTop;
-    s16 right;
-    s16 bottom;
+    s16 screenLeft;
+    s16 screenTop;
+    s16 screenRight;
+    s16 screenBottom;
     s16 texU;
     s16 texV;
-    s16 calcIndex;
-    s16 tileIndex;
+    s16 textureIndex;
+    s16 tileGridIndex;
     s16 lastTile;
     s16 rowRem;
     s16 colRem;
-    s32 sp44;
-    s32 sp48;
-    s32 sp4C;
-    s16 sp50;
-    s16 sp52;
-    u16 sp54;
-    u16 sp56;
+    s32 paletteIndex;
+    s32 tileIndexData;
+    s32 textureData;
+    s16 flipX;
+    s16 flipY;
+    u16 tileMask;
+    u16 tileShift;
     s32 padding1;
     s32 tileCount;
     Gfx *displayList;
     Gfx *displayListHead;
-    TileEntry *tileArr;
-    TexData32 *texDataArr;
-    TexData32 *curTexData;
+    TileEntry *tileEntries;
+    TexData32 *paletteData;
+    TexData32 *curPaletteData;
 
-    sp48 = arg0->tileIndexData;
-    sp4C = arg0->textureData;
-    tileArr = arg0->tileEntries;
-    texDataArr = arg0->paletteData;
-    curTexData = 0;
+    tileIndexData = state->tileIndexData;
+    textureData = state->textureData;
+    tileEntries = state->tileEntries;
+    paletteData = state->paletteData;
+    curPaletteData = 0;
     tileCount = 0;
     lastTile = -1;
-    clipLeft = arg0->clipX;
-    xStart = arg0->x;
+    clipLeft = state->clipX;
+    xStart = state->x;
 
     if ((displayList = arenaAlloc16(0x1B30))) {
         displayListHead = displayList;
 
         if (clipLeft < gTextClipAndOffsetData.clipLeft) {
             clipLeft = gTextClipAndOffsetData.clipLeft;
-            xStart = xStart + (clipLeft - arg0->clipX);
+            xStart = xStart + (clipLeft - state->clipX);
         }
 
-        clipTop = arg0->clipY;
-        yStart = arg0->y;
+        clipTop = state->clipY;
+        yStart = state->y;
 
         if (clipTop < gTextClipAndOffsetData.clipTop) {
             clipTop = gTextClipAndOffsetData.clipTop;
-            yStart = yStart + (clipTop - arg0->clipY);
+            yStart = yStart + (clipTop - state->clipY);
         }
 
-        clipRight = arg0->clipX + arg0->clipWidth;
+        clipRight = state->clipX + state->clipWidth;
 
         if (clipRight > gTextClipAndOffsetData.clipRight) {
             clipRight = gTextClipAndOffsetData.clipRight;
         }
 
-        clipBottom = arg0->clipY + arg0->clipHeight;
+        clipBottom = state->clipY + state->clipHeight;
 
         if (clipBottom > gTextClipAndOffsetData.clipBottom) {
             clipBottom = gTextClipAndOffsetData.clipBottom;
         }
 
-        sp54 = arg0->tileWidth - 1;
+        tileMask = state->tileWidth - 1;
 
-        if (arg0->tileWidth == 16) {
-            sp56 = 4;
+        if (state->tileWidth == 16) {
+            tileShift = 4;
         } else {
-            sp56 = 5;
+            tileShift = 5;
         }
 
-        rowOffset = clipLeft - (xStart & sp54);
-        colOffset = clipTop - (yStart & sp54);
+        rowOffset = clipLeft - (xStart & tileMask);
+        colOffset = clipTop - (yStart & tileMask);
 
-        numRows = (clipRight - clipLeft + (sp54 - 1)) >> sp56;
-        numCols = (clipBottom - clipTop + (sp54 - 1)) >> sp56;
+        numRows = (clipRight - clipLeft + (tileMask - 1)) >> tileShift;
+        numCols = (clipBottom - clipTop + (tileMask - 1)) >> tileShift;
 
-        if (xStart & sp54) {
+        if (xStart & tileMask) {
             ++numRows;
         }
 
-        if (yStart & sp54) {
+        if (yStart & tileMask) {
             ++numCols;
         }
 
         colStart = colOffset;
-        colRem = (yStart >> sp56) % arg0->tileGridHeight;
+        colRem = (yStart >> tileShift) % state->tileGridHeight;
         if (colRem < 0) {
-            colRem = colRem + arg0->tileGridHeight;
+            colRem = colRem + state->tileGridHeight;
         }
 
         gSPDisplayList(gRegionAllocPtr++, (u32)gSpriteRDPSetupDL);
 
         for (col = 0; col < numCols; ++col) {
             rowStart = rowOffset;
-            rowRem = (xStart >> sp56) % arg0->tileGridWidth;
+            rowRem = (xStart >> tileShift) % state->tileGridWidth;
             if (rowRem < 0) {
-                rowRem = rowRem + arg0->tileGridWidth;
+                rowRem = rowRem + state->tileGridWidth;
             }
 
             for (row = 0; row < numRows; ++row) {
-                calcIndex = rowRem + colRem * arg0->tilesPerRow;
-                tileIndex = ((u16 *)sp48)[calcIndex];
-                sp44 = tileArr[tileIndex].paletteIndex;
-                calcIndex = tileArr[tileIndex].textureIndex;
+                textureIndex = rowRem + colRem * state->tilesPerRow;
+                tileGridIndex = ((u16 *)tileIndexData)[textureIndex];
+                paletteIndex = tileEntries[tileGridIndex].paletteIndex;
+                textureIndex = tileEntries[tileGridIndex].textureIndex;
 
-                if (tileIndex != 0) {
+                if (tileGridIndex != 0) {
                     ++tileCount;
-                    sp50 = gTileTextureFlipTable[tileArr[tileIndex].flipMode * 2];
-                    sp52 = gTileTextureFlipTable[tileArr[tileIndex].flipMode * 2 + 1];
+                    flipX = gTileTextureFlipTable[tileEntries[tileGridIndex].flipMode * 2];
+                    flipY = gTileTextureFlipTable[tileEntries[tileGridIndex].flipMode * 2 + 1];
 
-                    origLeft = rowStart;
-                    origTop = colStart;
-                    right = rowStart + arg0->tileWidth;
-                    bottom = colStart + arg0->tileHeight;
+                    screenLeft = rowStart;
+                    screenTop = colStart;
+                    screenRight = rowStart + state->tileWidth;
+                    screenBottom = colStart + state->tileHeight;
                     texU = 0;
                     texV = 0;
 
-                    if (sp50 == -1) {
-                        texU = arg0->tileWidth - 1;
+                    if (flipX == -1) {
+                        texU = state->tileWidth - 1;
                     }
 
-                    if (sp52 == -1) {
-                        texV = arg0->tileHeight - 1;
+                    if (flipY == -1) {
+                        texV = state->tileHeight - 1;
                     }
 
-                    if (origLeft < clipRight && origTop < clipBottom && right >= clipLeft && bottom >= clipTop) {
-                        if (origLeft < clipLeft) {
-                            texU = clipLeft - origLeft;
-                            if (sp50 == -1) {
-                                texU = (arg0->tileWidth - 1) - texU;
+                    if (screenLeft < clipRight && screenTop < clipBottom && screenRight >= clipLeft &&
+                        screenBottom >= clipTop) {
+                        if (screenLeft < clipLeft) {
+                            texU = clipLeft - screenLeft;
+                            if (flipX == -1) {
+                                texU = (state->tileWidth - 1) - texU;
                             }
-                            origLeft = clipLeft;
+                            screenLeft = clipLeft;
                         }
 
-                        if (origTop < clipTop) {
-                            texV = clipTop - origTop;
-                            if (sp52 == -1) {
-                                texV = (arg0->tileHeight - 1) - texV;
+                        if (screenTop < clipTop) {
+                            texV = clipTop - screenTop;
+                            if (flipY == -1) {
+                                texV = (state->tileHeight - 1) - texV;
                             }
-                            origTop = clipTop;
+                            screenTop = clipTop;
                         }
 
-                        if (right >= clipRight) {
-                            right = clipRight - 1;
+                        if (screenRight >= clipRight) {
+                            screenRight = clipRight - 1;
                         }
 
-                        if (bottom >= clipBottom) {
-                            bottom = clipBottom - 1;
+                        if (screenBottom >= clipBottom) {
+                            screenBottom = clipBottom - 1;
                         }
 
-                        if (arg0->ciMode == 0) {
-                            if (&texDataArr[sp44] != curTexData) {
-                                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, (s32)&texDataArr[sp44]);
-                                curTexData = &texDataArr[sp44];
+                        if (state->ciMode == 0) {
+                            if (&paletteData[paletteIndex] != curPaletteData) {
+                                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, (s32)&paletteData[paletteIndex]);
+                                curPaletteData = &paletteData[paletteIndex];
                             }
 
-                            if ((calcIndex - 1) != lastTile) {
+                            if ((textureIndex - 1) != lastTile) {
                                 gDPLoadTextureTile_4b(
                                     gRegionAllocPtr++,
-                                    /*timg*/ sp4C + ((((calcIndex - 1) * arg0->tileWidth * arg0->tileHeight) / 4) * 2),
+                                    /*timg*/ textureData +
+                                        ((((textureIndex - 1) * state->tileWidth * state->tileHeight) / 4) * 2),
                                     G_IM_FMT_CI,
-                                    /*width*/ (arg0->tileWidth),
+                                    /*width*/ (state->tileWidth),
                                     /*height*/ 0,
                                     /*uls*/ 0,
                                     /*ult*/ 0,
-                                    /*lrs*/ (arg0->tileWidth - 1),
-                                    /*lrt*/ (arg0->tileHeight - 1),
+                                    /*lrs*/ (state->tileWidth - 1),
+                                    /*lrt*/ (state->tileHeight - 1),
                                     /*pal*/ 0,
                                     /*cms*/ 2,
                                     /*cmt*/ 2,
@@ -273,28 +275,29 @@ void renderTiledTexture(TiledTextureRenderState2 *arg0) {
                                     /*shiftt*/ 0
                                 );
 
-                                lastTile = calcIndex - 1;
+                                lastTile = textureIndex - 1;
                             }
                         } else {
-                            if (&texDataArr[sp44] != curTexData) {
-                                gDPLoadTLUT_pal256(gRegionAllocPtr++, (s32)&texDataArr[sp44]);
+                            if (&paletteData[paletteIndex] != curPaletteData) {
+                                gDPLoadTLUT_pal256(gRegionAllocPtr++, (s32)&paletteData[paletteIndex]);
 
-                                curTexData = &texDataArr[sp44];
+                                curPaletteData = &paletteData[paletteIndex];
                             }
 
-                            if ((calcIndex - 1) != lastTile) {
+                            if ((textureIndex - 1) != lastTile) {
                                 gDPLoadTextureTile(
                                     gRegionAllocPtr++,
                                     /*timg*/
-                                    (sp4C + ((((calcIndex - 1) * arg0->tileWidth * arg0->tileHeight) / 2) * 2)),
+                                    (textureData +
+                                     ((((textureIndex - 1) * state->tileWidth * state->tileHeight) / 2) * 2)),
                                     G_IM_FMT_CI,
                                     G_IM_SIZ_8b,
-                                    /*width*/ (arg0->tileWidth),
+                                    /*width*/ (state->tileWidth),
                                     /*height*/ 0,
                                     /*uls*/ 0,
                                     /*ult*/ 0,
-                                    /*lrs*/ (arg0->tileWidth - 1),
-                                    /*lrt*/ (arg0->tileHeight - 1),
+                                    /*lrs*/ (state->tileWidth - 1),
+                                    /*lrt*/ (state->tileHeight - 1),
                                     /*pal*/ 0,
                                     /*cms*/ 2,
                                     /*cmt*/ 2,
@@ -303,31 +306,31 @@ void renderTiledTexture(TiledTextureRenderState2 *arg0) {
                                     /*shifts*/ 0,
                                     /*shiftt*/ 0
                                 );
-                                lastTile = calcIndex - 1;
+                                lastTile = textureIndex - 1;
                             }
                         }
 
                         gSPTextureRectangle(
                             gRegionAllocPtr++,
-                            origLeft << 2,
-                            origTop << 2,
-                            right << 2,
-                            bottom << 2,
+                            screenLeft << 2,
+                            screenTop << 2,
+                            screenRight << 2,
+                            screenBottom << 2,
                             0,
                             texU << 5,
                             texV << 5,
-                            sp50 << 10,
-                            sp52 << 10
+                            flipX << 10,
+                            flipY << 10
                         );
                     }
                 }
 
-                rowStart = rowStart + arg0->tileWidth;
-                rowRem = (rowRem + 1) % arg0->tileGridWidth;
+                rowStart = rowStart + state->tileWidth;
+                rowRem = (rowRem + 1) % state->tileGridWidth;
             }
 
-            colStart = colStart + arg0->tileHeight;
-            colRem = (colRem + 1) % arg0->tileGridHeight;
+            colStart = colStart + state->tileHeight;
+            colRem = (colRem + 1) % state->tileGridHeight;
         }
 
         gSPEndDisplayList(displayList++);
