@@ -673,9 +673,9 @@ void cleanupSkiTrailTask(func_80051688_52288_arg *arg0);
 void initSkiTrailTask(SkiTrailTask *task) {
     GameState *gs;
     s32 i;
-    s16 *transformSource;
-    s32 outputOffset;
-    volatile SkiTrailTask *outputPtr;
+    s16 *transforms;
+    s32 offset;
+    volatile SkiTrailTask *iter;
     void *particleAsset;
 
     gs = (GameState *)getCurrentAllocation();
@@ -689,32 +689,32 @@ void initSkiTrailTask(SkiTrailTask *task) {
     i = 0;
 
     if (task->player->unkB84 & 2) {
-        outputPtr = task;
-        outputOffset = 0x48;
-        transformSource = gSkiTrailOffsetTransformsForward;
+        iter = task;
+        offset = 0x48;
+        transforms = gSkiTrailOffsetTransformsForward;
         do {
-            transformVector(transformSource, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + outputOffset));
-            outputPtr->skiOffsets[0].x -= task->player->worldPos.x;
-            outputPtr->skiOffsets[0].y -= task->player->worldPos.y;
-            outputOffset += 0xC;
-            transformSource += 6;
+            transformVector(transforms, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + offset));
+            iter->skiOffsets[0].x -= task->player->worldPos.x;
+            iter->skiOffsets[0].y -= task->player->worldPos.y;
+            offset += 0xC;
+            transforms += 6;
             i++;
-            outputPtr->skiOffsets[0].z -= task->player->worldPos.z;
-            outputPtr = (volatile SkiTrailTask *)((u8 *)outputPtr + 0xC);
+            iter->skiOffsets[0].z -= task->player->worldPos.z;
+            iter = (volatile SkiTrailTask *)((u8 *)iter + 0xC);
         } while (i < 2);
     } else {
-        outputPtr = task;
-        outputOffset = 0x48;
-        transformSource = gSkiTrailOffsetTransformsBackward;
+        iter = task;
+        offset = 0x48;
+        transforms = gSkiTrailOffsetTransformsBackward;
         do {
-            transformVector(transformSource, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + outputOffset));
-            outputPtr->skiOffsets[0].x -= task->player->worldPos.x;
-            outputPtr->skiOffsets[0].y -= task->player->worldPos.y;
-            outputOffset += 0xC;
-            transformSource += 6;
+            transformVector(transforms, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + offset));
+            iter->skiOffsets[0].x -= task->player->worldPos.x;
+            iter->skiOffsets[0].y -= task->player->worldPos.y;
+            offset += 0xC;
+            transforms += 6;
             i++;
-            outputPtr->skiOffsets[0].z -= task->player->worldPos.z;
-            outputPtr = (volatile SkiTrailTask *)((u8 *)outputPtr + 0xC);
+            iter->skiOffsets[0].z -= task->player->worldPos.z;
+            iter = (volatile SkiTrailTask *)((u8 *)iter + 0xC);
         } while (i < 2);
     }
 
