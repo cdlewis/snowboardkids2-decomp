@@ -396,7 +396,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
     }
 
     if (arg0->behaviorStep == 0) {
-        if ((u32)gameState->unk50 < 0x1E) {
+        if ((u32)gameState->raceFrameCounter < 0x1E) {
             arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x69;
         } else {
             arg0->unkB8C = (randA() & 0xFF) >> 1;

@@ -1421,9 +1421,9 @@ typedef struct {
     u8 unk5A;
     u8 pad3[0x1F];
     u8 raceType;
-    u8 unk7B;
+    u8 showResultHUD;
     u8 unk7C;
-    u8 unk7D;
+    u8 playerLost;
 } GameStateLocal;
 
 s32 updateRaceFinishWaitingStep(Player *player) {
@@ -1437,7 +1437,7 @@ s32 updateRaceFinishWaitingStep(Player *player) {
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
     func_8005D180_5DD80(player, 0);
-    if (gameState->unk7B != 0) {
+    if (gameState->showResultHUD != 0) {
         switch (gameState->raceType) {
             case 0:
             case 1:
@@ -1454,17 +1454,17 @@ s32 updateRaceFinishWaitingStep(Player *player) {
                 }
                 break;
             case 4:
-                if (gameState->unk7D == 0) {
+                if (gameState->playerLost == 0) {
                     playerWon = 1;
                 }
                 break;
             case 5:
-                if ((gameState->unk7D == 0) && (gameState->unk5A == 0x14)) {
+                if ((gameState->playerLost == 0) && (gameState->unk5A == 0x14)) {
                     playerWon = 1;
                 }
                 break;
             case 6:
-                if ((gameState->unk7D == 0) && (player->skillPoints >= 0x12C)) {
+                if ((gameState->playerLost == 0) && (player->skillPoints >= 0x12C)) {
                     playerWon = 1;
                 }
                 break;

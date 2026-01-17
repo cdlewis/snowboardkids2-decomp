@@ -162,7 +162,7 @@ extern u8 D_80090520_91120[];
 
 // Bss
 extern s8 gControllerPollingEnabled;
-extern u8 D_800A24A0_A30A0;
+extern u8 gRaceResultCode;
 extern s32 gControllerInputs[4];
 extern SessionConfig *D_800AFE8C_A71FC;
 
@@ -178,7 +178,7 @@ void awaitMeterWinContinuePress(void);
 void awaitPlayersAndPlayRaceMusic(void);
 void loadPlayerAssets(void);
 void func_8003F1F0_3FDF0(void);
-void func_8003F368_3FF68(void);
+void handleRaceStateUpdate(void);
 void handleBossRaceResult(void);
 void handleBossDefeatResult(void);
 void handleSkillGameResult(void);
@@ -222,7 +222,7 @@ void initRace(void) {
         ((u8 *)raceState)[i] = 0;
     }
 
-    D_800A24A0_A30A0 = 2;
+    gRaceResultCode = 2;
     raceState->unk75 = 0x7F;
     raceState->fadeState = 2;
     raceState->battleTimeLimit = 0;
@@ -856,12 +856,12 @@ void awaitRaceAssetsLoaded(void) {
             state->raceIntroState = 1;
         }
 
-        state->unk4C = 0x10;
+        state->stateDelayTimer = 0x10;
 
         if (state->raceType != 0xB) {
             setViewportFadeValue(0, 0, 0x10);
         } else {
-            state->unk4C = 0;
+            state->stateDelayTimer = 0;
         }
 
         disableViewportOverlay(NULL);
@@ -875,8 +875,8 @@ void waitForFadeAndInitPlayers(void) {
     GameState *state;
 
     state = (GameState *)getCurrentAllocation();
-    fadeDelay = state->unk4C;
-    if (state->unk4C == 0) {
+    fadeDelay = state->stateDelayTimer;
+    if (state->stateDelayTimer == 0) {
         if (state->raceIntroState == 1) {
             state->raceIntroState = 0;
 
@@ -894,7 +894,7 @@ void waitForFadeAndInitPlayers(void) {
             setGameStateHandler(&awaitPlayersAndPlayRaceMusic);
         }
     } else {
-        state->unk4C = fadeDelay - 1;
+        state->stateDelayTimer = fadeDelay - 1;
     }
 }
 
@@ -910,7 +910,7 @@ void awaitPlayersAndPlayRaceMusic(void) {
             playMusicTrack(levelConfig->musicTrack);
         }
 
-        setGameStateHandler(func_8003F368_3FF68);
+        setGameStateHandler(handleRaceStateUpdate);
     }
 }
 
@@ -926,11 +926,11 @@ typedef struct {
     s16 value;
 } IntroFrameData2;
 
-extern IntroFrameData D_80090780_91380[];
-extern IntroFrameData2 D_8009079C_9139C[];
+extern IntroFrameData sIntroFrameEvents[];
+extern IntroFrameData2 sIntroCameraEvents[];
 extern void spawnScriptedCameraTask(s16);
 
-void func_8003F368_3FF68(void) {
+void handleRaceStateUpdate(void) {
     GameState *gs;
     s32 i;
     s32 inputMask;
@@ -938,7 +938,7 @@ void func_8003F368_3FF68(void) {
     void (*handler)(void);
     s32 count;
     s16 temp;
-    s32 unk7FTemp;
+    s32 introCutsceneVariant;
     s32 playerFlags;
     volatile u8 padding[0x1C];
 
@@ -980,7 +980,7 @@ void func_8003F368_3FF68(void) {
                             gs->gamePaused = 0;
                             break;
                         case 1:
-                            D_800A24A0_A30A0 = 1;
+                            gRaceResultCode = 1;
                         case 2:
                             setViewportFadeValue(NULL, 0xFF, 0x10);
                             setMusicFadeOut(0x3C);
@@ -1030,7 +1030,7 @@ void func_8003F368_3FF68(void) {
                 break;
         }
     } else {
-        gs->unk50++;
+        gs->raceFrameCounter++;
         switch (gs->raceType) {
             case 0:
                 count = 0;
@@ -1039,7 +1039,7 @@ void func_8003F368_3FF68(void) {
                     count += playerFlags != 0;
                 }
                 if (gs->playerCount == count) {
-                    gs->unk4C = 0x3C;
+                    gs->stateDelayTimer = 0x3C;
                     handler = handleSpeedCrossGameResult;
                     setGameStateHandler(handler);
                     return;
@@ -1048,7 +1048,7 @@ void func_8003F368_3FF68(void) {
             case 1:
                 if (gs->players->unkB84 & 0x80000) {
                     setMusicFadeOut(0x3C);
-                    gs->unk4C = 0x1E;
+                    gs->stateDelayTimer = 0x1E;
                     handler = handleBossRaceResult;
                     setGameStateHandler(handler);
                     return;
@@ -1058,7 +1058,7 @@ void func_8003F368_3FF68(void) {
             case 3:
                 if (gs->players->unkB84 & 0x80000) {
                     setMusicFadeOut(0x3C);
-                    gs->unk4C = 0x1E;
+                    gs->stateDelayTimer = 0x1E;
                     handler = handleBossDefeatResult;
                     setGameStateHandler(handler);
                     return;
@@ -1071,7 +1071,7 @@ void func_8003F368_3FF68(void) {
                     count += playerFlags != 0;
                 }
                 if (gs->playerCount == count) {
-                    gs->unk4C = 0x1E;
+                    gs->stateDelayTimer = 0x1E;
                     setMusicFadeOut(0x3C);
                     handler = awaitBattleEndAndPromptContinue;
                     setGameStateHandler(handler);
@@ -1085,7 +1085,7 @@ void func_8003F368_3FF68(void) {
                     count += playerFlags != 0;
                 }
                 if (gs->playerCount == count) {
-                    gs->unk4C = 0x1E;
+                    gs->stateDelayTimer = 0x1E;
                     setMusicFadeOut(0x3C);
                     handler = handleExpertRaceResult;
                     setGameStateHandler(handler);
@@ -1094,10 +1094,10 @@ void func_8003F368_3FF68(void) {
                 break;
             case 4:
                 if (gs->players->unkB84 & 0x80000) {
-                    if (gs->unk7D != 0) {
-                        gs->unk7B = 1;
+                    if (gs->playerLost != 0) {
+                        gs->showResultHUD = 1;
                     }
-                    gs->unk4C = 0x3C;
+                    gs->stateDelayTimer = 0x3C;
                     setMusicFadeOut(0x3C);
                     handler = handleSkillGameResult;
                     setGameStateHandler(handler);
@@ -1106,10 +1106,10 @@ void func_8003F368_3FF68(void) {
                 break;
             case 5:
                 if (gs->players->unkB84 & 0x80000) {
-                    if (gs->unk7D != 0) {
-                        gs->unk7B = 1;
+                    if (gs->playerLost != 0) {
+                        gs->showResultHUD = 1;
                     }
-                    gs->unk4C = 0x3C;
+                    gs->stateDelayTimer = 0x3C;
                     setMusicFadeOut(0x3C);
                     handler = handleShotCrossGameResult;
                     setGameStateHandler(handler);
@@ -1118,10 +1118,10 @@ void func_8003F368_3FF68(void) {
                 break;
             case 6:
                 if (gs->players->unkB84 & 0x80000) {
-                    if (gs->unk7D != 0) {
-                        gs->unk7B = 1;
+                    if (gs->playerLost != 0) {
+                        gs->showResultHUD = 1;
                     }
-                    gs->unk4C = 0x3C;
+                    gs->stateDelayTimer = 0x3C;
                     setMusicFadeOut(0x3C);
                     handler = handleMeterGameResult;
                     setGameStateHandler(handler);
@@ -1144,16 +1144,16 @@ void func_8003F368_3FF68(void) {
     return;
 
 handleA:
-    gs->unk50++;
-    if (gs->unk50 >= 0x349) {
-        D_800A24A0_A30A0 = 1;
+    gs->raceFrameCounter++;
+    if (gs->raceFrameCounter >= 0x349) {
+        gRaceResultCode = 1;
         setViewportFadeValue(NULL, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(cleanupGameSession);
         return;
     }
     if (gControllerInputs[0] & 0x1000) {
-        D_800A24A0_A30A0 = 2;
+        gRaceResultCode = 2;
         setViewportFadeValue(NULL, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
         setGameStateHandler(cleanupGameSession);
@@ -1162,35 +1162,35 @@ handleA:
 
 handleB:
     if (gs->gamePaused == 0) {
-        if (gs->unk50 == 0) {
+        if (gs->raceFrameCounter == 0) {
             setViewportFadeValue(NULL, 0, 8);
         }
-        gs->unk50++;
+        gs->raceFrameCounter++;
     }
-    unk7FTemp = gs->unk7F;
+    introCutsceneVariant = gs->introCutsceneVariant;
     gs->raceIntroState = 0;
-    if (unk7FTemp < 0) {
+    if (introCutsceneVariant < 0) {
         return;
     }
-    if (unk7FTemp >= 2) {
+    if (introCutsceneVariant >= 2) {
         return;
     }
-    if (D_80090780_91380[gs->unk82].frame == gs->unk50) {
+    if (sIntroFrameEvents[gs->introFrameEventIndex].frame == gs->raceFrameCounter) {
         func_8003F1F0_3FDF0();
-        gs->unk82++;
+        gs->introFrameEventIndex++;
     }
-    if (D_8009079C_9139C[gs->unk85].frame == gs->unk50) {
+    if (sIntroCameraEvents[gs->introCameraEventIndex].frame == gs->raceFrameCounter) {
         terminateTasksByTypeAndID(0, 2);
-        temp = D_8009079C_9139C[gs->unk85].value;
+        temp = sIntroCameraEvents[gs->introCameraEventIndex].value;
         if (temp >= 0) {
             spawnScriptedCameraTask(temp);
         }
-        gs->unk85++;
+        gs->introCameraEventIndex++;
     }
-    switch (gs->unk61) {
+    switch (gs->introSkipState) {
         case 0:
-            if (gs->unk50 >= 0x39E) {
-                D_800A24A0_A30A0 = 2;
+            if (gs->raceFrameCounter >= 0x39E) {
+                gRaceResultCode = 2;
                 setViewportEnvColor(NULL, 0xFF, 0xFF, 0xFF);
                 setViewportFadeValue(NULL, 0xFF, 0x10);
                 setMusicFadeOut(0x20);
@@ -1198,11 +1198,11 @@ handleB:
                 return;
             }
             if (gControllerInputs[0] & 0x1000) {
-                D_800A24A0_A30A0 = 2;
+                gRaceResultCode = 2;
                 setViewportEnvColor(NULL, 0, 0, 0);
                 setViewportFadeValue(NULL, 0xFF, 0x10);
                 setMusicFadeOut(0x20);
-                gs->unk61++;
+                gs->introSkipState++;
             }
             break;
         case 1:
@@ -1218,24 +1218,24 @@ void handleBossRaceResult(void) {
     Player *player;
 
     gs = (GameState *)getCurrentAllocation();
-    gs->unk4C--;
+    gs->stateDelayTimer--;
 
-    if (gs->unk4C != 0) {
+    if (gs->stateDelayTimer != 0) {
         return;
     }
 
     player = gs->players;
 
     if (player->finishPosition == 0) {
-        D_800A24A0_A30A0 = 3;
+        gRaceResultCode = 3;
         playMusicTrack(8);
     } else {
-        D_800A24A0_A30A0 = 4;
+        gRaceResultCode = 4;
         playMusicTrack(9);
     }
 
-    gs->unk4C = 0x96;
-    gs->unk7B = 1;
+    gs->stateDelayTimer = 0x96;
+    gs->showResultHUD = 1;
 
     setGameStateHandler(awaitBossResultAndFadeOut);
 }
@@ -1243,21 +1243,21 @@ void handleBossRaceResult(void) {
 void handleBossDefeatResult(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    state->unk4C--;
-    if (state->unk4C != 0) {
+    state->stateDelayTimer--;
+    if (state->stateDelayTimer != 0) {
         return;
     }
 
     if (state->players[1].unkB84 & 0x100000) {
-        D_800A24A0_A30A0 = 3;
+        gRaceResultCode = 3;
         playMusicTrack(8);
     } else {
-        D_800A24A0_A30A0 = 4;
+        gRaceResultCode = 4;
         playMusicTrack(9);
     }
 
-    state->unk4C = 0x96;
-    state->unk7B = 1;
+    state->stateDelayTimer = 0x96;
+    state->showResultHUD = 1;
 
     setGameStateHandler(awaitBossResultAndFadeOut);
 }
@@ -1267,8 +1267,8 @@ void awaitBossResultAndFadeOut(void) {
     GameState *state;
 
     state = (GameState *)getCurrentAllocation();
-    delayTimer = state->unk4C - 1;
-    state->unk4C = delayTimer;
+    delayTimer = state->stateDelayTimer - 1;
+    state->stateDelayTimer = delayTimer;
     if (delayTimer == 0) {
         setViewportFadeValue(NULL, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
@@ -1281,34 +1281,34 @@ void handleSkillGameResult(void) {
     s32 delayTimer;
 
     state = (GameState *)getCurrentAllocation();
-    delayTimer = state->unk4C;
+    delayTimer = state->stateDelayTimer;
 
     if (delayTimer == 0) {
-        state->unk4C = 0xB4;
+        state->stateDelayTimer = 0xB4;
 
-        if (state->unk7D == 0) {
+        if (state->playerLost == 0) {
             terminateTasksByTypeAndID(0, 1);
-            D_800A24A0_A30A0 = 5;
+            gRaceResultCode = 5;
 
-            if (state->unk7E != 0) {
-                D_800A24A0_A30A0 = 9;
+            if (state->bestBoardBonus != 0) {
+                gRaceResultCode = 9;
             }
 
             playMusicTrack(8);
             spawnSuccessMessageDisplayTask(0x78);
             spawnVictorySnowflakes(0, 0);
-            state->unk7B = 1;
+            state->showResultHUD = 1;
             scheduleTask(&initSkillGameResultTimerDisplay, 1, 0, 0xE6);
             addPlayerGold(0x1388);
             setGameStateHandler(&awaitSkillWinAndPromptContinue);
         } else {
-            D_800A24A0_A30A0 = 6;
+            gRaceResultCode = 6;
             playMusicTrack(9);
-            state->unk7B = 1;
+            state->showResultHUD = 1;
             setGameStateHandler(&awaitSkillLossAndFadeOut);
         }
     } else {
-        state->unk4C = delayTimer - 1;
+        state->stateDelayTimer = delayTimer - 1;
     }
 }
 
@@ -1317,10 +1317,10 @@ void awaitSkillWinAndPromptContinue(void) {
     GameState *state;
 
     state = (GameState *)getCurrentAllocation();
-    delayTimer = state->unk4C - 1;
-    state->unk4C = delayTimer;
+    delayTimer = state->stateDelayTimer - 1;
+    state->stateDelayTimer = delayTimer;
     if (delayTimer == 0) {
-        state->unk7C = 1;
+        state->showGoldReward = 1;
         scheduleTask(initBonusGoldDisplayTask, 1, 0, 0xE6);
         playMusicTrack(0xA);
         setGameStateHandler(&awaitSkillWinContinuePress);
@@ -1337,8 +1337,8 @@ void awaitSkillWinContinuePress(void) {
 
 void awaitSkillLossAndFadeOut(void) {
     GameState *state = (GameState *)getCurrentAllocation();
-    s32 delayTimer = state->unk4C - 1;
-    state->unk4C = delayTimer;
+    s32 delayTimer = state->stateDelayTimer - 1;
+    state->stateDelayTimer = delayTimer;
 
     if (delayTimer == 0) {
         setViewportFadeValue(0, 0xFF, 0x10);
@@ -1354,8 +1354,8 @@ void handleShotCrossGameResult(void) {
 
     state = (GameState *)getCurrentAllocation();
 
-    if (state->unk4C != 0) {
-        state->unk4C = state->unk4C - 1;
+    if (state->stateDelayTimer != 0) {
+        state->stateDelayTimer = state->stateDelayTimer - 1;
         return;
     }
 
@@ -1363,7 +1363,7 @@ void handleShotCrossGameResult(void) {
         return;
     }
 
-    if (state->unk7D == 0) {
+    if (state->playerLost == 0) {
         terminateTasksByTypeAndID(0, 1);
         spawnShotCrossItemCountDisplayTask(1);
 
@@ -1371,11 +1371,11 @@ void handleShotCrossGameResult(void) {
         score = itemsCollected * 300;
 
         if (itemsCollected == 0x14) {
-            D_800A24A0_A30A0 = 5;
+            gRaceResultCode = 5;
             playMusicTrack(8);
 
             if (state->players->unkBD3 == 0xA) {
-                D_800A24A0_A30A0 = 7;
+                gRaceResultCode = 7;
                 score += 0x4E20;
             } else {
                 score += 0x2710;
@@ -1384,29 +1384,29 @@ void handleShotCrossGameResult(void) {
             spawnSuccessMessageDisplayTask(0x78);
             spawnVictorySnowflakes(0, 0);
         } else {
-            D_800A24A0_A30A0 = 6;
+            gRaceResultCode = 6;
             playMusicTrack(9);
         }
 
-        state->unk7B = 1;
+        state->showResultHUD = 1;
         addPlayerGold(score);
         setGameStateHandler(&awaitShotCrossWinAndPromptContinue);
     } else {
-        D_800A24A0_A30A0 = 6;
+        gRaceResultCode = 6;
         playMusicTrack(9);
-        state->unk7B = 1;
+        state->showResultHUD = 1;
         setGameStateHandler(&awaitShotCrossLossAndFadeOut);
     }
 
-    state->unk4C = 0xB4;
+    state->stateDelayTimer = 0xB4;
 }
 
 void awaitShotCrossWinAndPromptContinue(void) {
     GameState *gs = (GameState *)getCurrentAllocation();
-    gs->unk4C--;
+    gs->stateDelayTimer--;
 
-    if (gs->unk4C == 0) {
-        gs->unk7C = 1;
+    if (gs->stateDelayTimer == 0) {
+        gs->showGoldReward = 1;
         playMusicTrack(0xA);
         scheduleTask(&initGoldAwardDisplayTask, 1, 0, 0xE6);
         setGameStateHandler(&awaitShotCrossWinContinuePress);
@@ -1423,8 +1423,8 @@ void awaitShotCrossWinContinuePress(void) {
 
 void awaitShotCrossLossAndFadeOut(void) {
     GameState *state = (GameState *)getCurrentAllocation();
-    s32 delayTimer = state->unk4C - 1;
-    state->unk4C = delayTimer;
+    s32 delayTimer = state->stateDelayTimer - 1;
+    state->stateDelayTimer = delayTimer;
 
     if (delayTimer == 0) {
         setViewportFadeValue(NULL, 0xFF, 0x10);
@@ -1441,8 +1441,8 @@ void handleMeterGameResult(void) {
 
     state = (GameState *)getCurrentAllocation();
 
-    if (state->unk4C == 0) {
-        if (state->unk7D == 0) {
+    if (state->stateDelayTimer == 0) {
+        if (state->playerLost == 0) {
             terminateTasksByTypeAndID(0, 1);
             spawnShotCrossSkillMeterDisplayTask(1);
 
@@ -1450,7 +1450,7 @@ void handleMeterGameResult(void) {
             goldReward = ((meterValue * 2 + meterValue) * 8 + meterValue) * 2;
 
             if (meterValue >= 0x12C) {
-                D_800A24A0_A30A0 = 5;
+                gRaceResultCode = 5;
                 playMusicTrack(8);
                 spawnSuccessMessageDisplayTask(0x78);
                 spawnVictorySnowflakes(0, 0);
@@ -1458,26 +1458,26 @@ void handleMeterGameResult(void) {
                 goldReward += 0x1388;
 
                 if (state->players->skillPoints >= 0x258) {
-                    D_800A24A0_A30A0 = 8;
+                    gRaceResultCode = 8;
                 }
             } else {
-                D_800A24A0_A30A0 = 6;
+                gRaceResultCode = 6;
                 playMusicTrack(9);
             }
 
-            state->unk7B = 1;
+            state->showResultHUD = 1;
             addPlayerGold(goldReward);
             handler = awaitMeterWinAndPromptContinue;
         } else {
-            D_800A24A0_A30A0 = 6;
+            gRaceResultCode = 6;
             playMusicTrack(9);
             handler = awaitMeterLossAndFadeOut;
-            state->unk7B = 1;
+            state->showResultHUD = 1;
         }
         setGameStateHandler(handler);
-        state->unk4C = 0xB4;
+        state->stateDelayTimer = 0xB4;
     } else {
-        state->unk4C = state->unk4C - 1;
+        state->stateDelayTimer = state->stateDelayTimer - 1;
     }
 }
 
@@ -1486,10 +1486,10 @@ void awaitMeterWinAndPromptContinue(void) {
     GameState *state;
 
     state = (GameState *)getCurrentAllocation();
-    delayTimer = state->unk4C - 1;
-    state->unk4C = delayTimer;
+    delayTimer = state->stateDelayTimer - 1;
+    state->stateDelayTimer = delayTimer;
     if (delayTimer == 0) {
-        state->unk7C = 1;
+        state->showGoldReward = 1;
         playMusicTrack(0xA);
         scheduleTask(&initGoldAwardDisplayTask, 1, 0, 0xE6);
         setGameStateHandler(&awaitMeterWinContinuePress);
@@ -1506,8 +1506,8 @@ void awaitMeterWinContinuePress(void) {
 
 void awaitMeterLossAndFadeOut(void) {
     GameState *state = (GameState *)getCurrentAllocation();
-    s32 delayTimer = state->unk4C - 1;
-    state->unk4C = delayTimer;
+    s32 delayTimer = state->stateDelayTimer - 1;
+    state->stateDelayTimer = delayTimer;
     if (delayTimer == 0) {
         setViewportFadeValue(0, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
@@ -1520,28 +1520,28 @@ void handleSpeedCrossGameResult(void) {
     s32 delayTimer;
 
     state = (GameState *)getCurrentAllocation();
-    delayTimer = state->unk4C;
+    delayTimer = state->stateDelayTimer;
 
     if (delayTimer == 0) {
         scheduleTask((void *)initSpeedCrossFinishPositionTask, 1, 0, 0xE6);
-        state->unk4C = 0xB4;
+        state->stateDelayTimer = 0xB4;
 
         if (state->players->finishPosition == 0) {
-            D_800A24A0_A30A0 = 3;
+            gRaceResultCode = 3;
             playMusicTrack(8);
             spawnVictorySnowflakes(0, 0);
             spawnSuccessMessageDisplayTask(0x78);
             terminateTasksByTypeAndID(0, 1);
         } else {
-            D_800A24A0_A30A0 = 4;
+            gRaceResultCode = 4;
             playMusicTrack(9);
             terminateTasksByTypeAndID(0, 1);
         }
 
-        state->unk7B = 1;
+        state->showResultHUD = 1;
         setGameStateHandler((void *)awaitSpeedCrossAwardGold);
     } else {
-        state->unk4C = delayTimer - 1;
+        state->stateDelayTimer = delayTimer - 1;
     }
 }
 
@@ -1550,14 +1550,14 @@ void awaitSpeedCrossAwardGold(void) {
     Player *player;
 
     state = (GameState *)getCurrentAllocation();
-    state->unk4C--;
+    state->stateDelayTimer--;
 
-    if (state->unk4C != 0) {
+    if (state->stateDelayTimer != 0) {
         return;
     }
 
     player = state->players;
-    state->unk7C = 1;
+    state->showGoldReward = 1;
 
     switch (player->finishPosition) {
         case 0:
@@ -1601,8 +1601,8 @@ void awaitBattleEndAndPromptContinue(void) {
     GameState *state;
 
     state = (GameState *)getCurrentAllocation();
-    delayTimer = state->unk4C - 1;
-    state->unk4C = delayTimer;
+    delayTimer = state->stateDelayTimer - 1;
+    state->stateDelayTimer = delayTimer;
     if (delayTimer == 0) {
         playMusicTrack(0xA);
         setGameStateHandler(&awaitBattleContinuePress);
@@ -1629,11 +1629,11 @@ void handleExpertRaceResult(void) {
     s32 playerWon;
 
     gs = (GameState *)getCurrentAllocation();
-    gs->unk4C--;
+    gs->stateDelayTimer--;
 
-    if (gs->unk4C == 0) {
+    if (gs->stateDelayTimer == 0) {
         playerWon = gs->players->finishPosition == 0;
-        D_800A24A0_A30A0 = playerWon ? 3 : 4;
+        gRaceResultCode = playerWon ? 3 : 4;
         playMusicTrack(0xA);
         setGameStateHandler(&awaitExpertRaceContinuePress);
     }
@@ -1705,5 +1705,5 @@ void cleanupGameSession(void) {
 }
 
 void onGameSessionTerminated(void) {
-    returnToParentScheduler(D_800A24A0_A30A0);
+    returnToParentScheduler(gRaceResultCode);
 }

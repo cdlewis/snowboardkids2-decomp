@@ -542,7 +542,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     if (arg0->behaviorStep == 0) {
         arg0->behaviorStep++;
 
-        if (gameState->unk50 < 0x1EU) {
+        if (gameState->raceFrameCounter < 0x1EU) {
             arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
         } else if (arg0->unkB84 & 0x400000) {
             arg0->unkB8C = randA() & 0xF;

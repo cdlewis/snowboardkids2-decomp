@@ -434,7 +434,7 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
     arg0->unkB84 |= 0x40000;
 
     if (arg0->behaviorStep == 0) {
-        if ((u32)gameState->unk50 < 0x1EU) {
+        if ((u32)gameState->raceFrameCounter < 0x1EU) {
             arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
         } else {
             arg0->unkB8C += (randA() & 0xFF) >> 1;
