@@ -1429,37 +1429,28 @@ void initBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg
 
 void animateBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg0) {
     BoardShopScreenAllocation *gameState;
-    s32 portraitIndex;
-    BoardShopCharacterPortrait *portraits;
+    s32 i;
 
     gameState = getCurrentAllocation();
-    portraitIndex = 0;
-    portraits = arg0->portraits;
 
-    while (portraitIndex < 4) {
-        arg0->animationFrameCounters[portraitIndex]++;
+    for (i = 0; i < 4; i++) {
+        arg0->animationFrameCounters[i]++;
 
         if (gameState->unk79C == 1) {
-            portraits[portraitIndex].x -= 10;
+            arg0->portraits[i].x -= 10;
         } else {
-            portraits[portraitIndex].x += 10;
+            arg0->portraits[i].x += 10;
         }
 
-        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &portraits[portraitIndex]);
-        portraitIndex++;
+        debugEnqueueCallback(8, 0, &func_800136E0_142E0, &arg0->portraits[i]);
     }
 
     if (arg0->animationFrameCounters[0] == 4) {
-        u8 *frameCounterPtr;
         gameState->unk788[19] = 0x10;
-        portraitIndex = 3;
-        frameCounterPtr = (u8 *)arg0 + 3;
 
-        do {
-            frameCounterPtr[0x84] = 0;
-            portraitIndex--;
-            frameCounterPtr--;
-        } while (portraitIndex >= 0);
+        for (i = 0; i < 4; i++) {
+            arg0->animationFrameCounters[i] = 0;
+        }
 
         setCallback(&updateBoardShopBoardIconSelection);
     }
