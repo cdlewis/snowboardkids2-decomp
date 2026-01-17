@@ -112,11 +112,11 @@ typedef struct {
 } P2NameRevealState;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 unkA;
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    u8 paletteIndex;
 } P2NameSpriteEntry;
 
 typedef P2NameSpriteEntry func_80027348_entry;
@@ -262,8 +262,8 @@ extern u8 D_8008DD8E_8E98E[];
 extern s32 identityMatrix[];
 extern s32 D_8008DD2C_8E92C[];
 extern Vec3s D_8008DD4E_8E94E[];
-extern Vec3s D_8008DD6C_8E96C[];
-extern Vec3s D_8008DD72_8E972[];
+extern Vec3s charSelectIconPositions[];
+extern Vec3s charSelectIconYIncrements[];
 
 void func_80025418_26018(void *);
 void cleanupCharSelectIcons(SimpleSpriteEntry *);
@@ -285,6 +285,7 @@ void animateCharSelectP2NameReveal(P2NameAnimationState *);
 void animateCharSelectP2NameHide(P2NameHideState *);
 void func_800269C8_275C8(void *);
 void func_80026BAC_277AC(SimpleSpriteEntry *);
+void initCharSelectIconHideSprites(CharSelectIconHideState *);
 void func_80025904_26504(CharSelectIconHideState *);
 void showCharSelectIcons(CharSelectIconHideState *);
 void updateCharSelectSecondarySlide(CharSelectSecondarySlot *);
@@ -984,8 +985,8 @@ void cleanupCharSelectIcons(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void func_800256A8_262A8(CharSelectIconHideState *arg0) {
-    void *dmaResult;
+void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
+    void *spriteAsset;
     u8 numPlayers;
     s32 i;
     s32 iconBaseIndex;
@@ -993,10 +994,10 @@ void func_800256A8_262A8(CharSelectIconHideState *arg0) {
     u16 y;
     s32 yIncrement;
     volatile P2NameSpriteEntry *ptr;
-    u8 *table;
+    u8 *iconPaletteTable;
     s32 pad[4];
 
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
     setCleanupCallback(cleanupCharSelectIconHideAsset);
 
     numPlayers = D_800AFE8C_A71FC->numPlayers;
@@ -1005,13 +1006,13 @@ void func_800256A8_262A8(CharSelectIconHideState *arg0) {
         iconBaseIndex = 0x11;
     }
 
-    x = D_8008DD6C_8E96C[numPlayers].y;
+    x = charSelectIconPositions[numPlayers].y;
     i = 0;
     do {
     } while (0);
-    yIncrement = D_8008DD72_8E972[numPlayers].x;
-    table = D_8008DD8C_8E98C;
-    y = D_8008DD6C_8E96C[numPlayers].z;
+    yIncrement = charSelectIconYIncrements[numPlayers].x;
+    iconPaletteTable = D_8008DD8C_8E98C;
+    y = charSelectIconPositions[numPlayers].z;
     ptr = (volatile P2NameSpriteEntry *)arg0;
 
     do {
@@ -1021,24 +1022,24 @@ void func_800256A8_262A8(CharSelectIconHideState *arg0) {
         s32 offset;
 
         global = D_800AFE8C_A71FC;
-        ptr->unk0 = x;
-        ptr->unk2 = y;
+        ptr->x = x;
+        ptr->y = y;
 
         charIndex = ((u8 *)global + arg0->playerIndex)[0xD];
         offset = charIndex * 3 + i;
-        tableValue = *(u8 *)(offset + (s32)table);
+        tableValue = *(u8 *)(offset + (s32)iconPaletteTable);
 
-        ptr->unk8 = iconBaseIndex + (tableValue - 1) / 2;
+        ptr->spriteIndex = iconBaseIndex + (tableValue - 1) / 2;
 
         global = D_800AFE8C_A71FC;
         charIndex = ((u8 *)global + arg0->playerIndex)[0xD];
         offset = charIndex * 3 + i;
-        tableValue = *(u8 *)(offset + (s32)table);
+        tableValue = *(u8 *)(offset + (s32)iconPaletteTable);
 
         y += yIncrement;
         i += 1;
-        ptr->unk4 = dmaResult;
-        ptr->unkA = (u8)(((tableValue - 1) / 2 + 7) & 0xFF) % 11;
+        ptr->asset = spriteAsset;
+        ptr->paletteIndex = (u8)(((tableValue - 1) / 2 + 7) & 0xFF) % 11;
         ptr++;
     } while (i < 3);
 
@@ -1073,8 +1074,8 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
         constant = 8;
         entryPtr = arg0->entries;
         do {
-            ((volatile func_80027348_entry *)entryPtr)->unk8 = iconIndex;
-            ((volatile func_80027348_entry *)entryPtr)->unkA = constant;
+            ((volatile func_80027348_entry *)entryPtr)->spriteIndex = iconIndex;
+            ((volatile func_80027348_entry *)entryPtr)->paletteIndex = constant;
             entryPtr++;
             i++;
         } while (i < 3);
@@ -1127,8 +1128,8 @@ void func_80025904_26504(CharSelectIconHideState *arg0) {
 
         do {
             tablePtr = (u8 *)((tableOffset + i) + (u32)tableBase);
-            ((func_80027348_entry *)arg0)[i].unk8 = iconBaseIndex + (*tablePtr - 1) / 2;
-            ((func_80027348_entry *)arg0)[i].unkA = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
+            ((func_80027348_entry *)arg0)[i].spriteIndex = iconBaseIndex + (*tablePtr - 1) / 2;
+            ((func_80027348_entry *)arg0)[i].paletteIndex = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
             i++;
         } while (i < 3);
 
@@ -1162,9 +1163,9 @@ void showCharSelectIcons(CharSelectIconHideState *arg0) {
 
 loop:
     tablePtr = (u8 *)((tableOffset + i) + (u32)tableBase);
-    entry->unk8 = iconBaseIndex + (*tablePtr - 1) / 2;
+    entry->spriteIndex = iconBaseIndex + (*tablePtr - 1) / 2;
     i++;
-    entry->unkA = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
+    entry->paletteIndex = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
     debugEnqueueCallback(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
     entry++;
     if (i < 3)
@@ -1221,9 +1222,9 @@ void initCharSelectMenu(SelectionMenuState *arg0) {
     arg0->numEntries = 3;
 
     if (D_800AFE8C_A71FC->unk4 == 0) {
-        x = D_8008DD6C_8E96C[0].x;
-        y = D_8008DD6C_8E96C[0].y;
-        xIncrement = D_8008DD6C_8E96C[0].z;
+        x = charSelectIconPositions[0].x;
+        y = charSelectIconPositions[0].y;
+        xIncrement = charSelectIconPositions[0].z;
         spriteIndexBase = 6;
         arg0->numEntries = 2;
     } else {
@@ -1807,11 +1808,11 @@ void setupCharSelectP2NamePositions(volatile P2NameSpriteEntry *arg0) {
         y = yBase;
         x = xBase;
         do {
-            arg0->unk2 = (s16)y;
+            arg0->y = (s16)y;
             y = y + yInc2;
-            arg0->unk0 = (s16)x;
-            arg0->unk8 = (s16)(spriteIndexBase + i);
-            arg0->unkA = (u8)priority;
+            arg0->x = (s16)x;
+            arg0->spriteIndex = (s16)(spriteIndexBase + i);
+            arg0->paletteIndex = (u8)priority;
             arg0++;
             i++;
             x = x + xInc2;
@@ -1849,14 +1850,14 @@ void animateCharSelectP2NameReveal(P2NameAnimationState *arg0) {
         ptr = (volatile P2NameSpriteEntry *)arg0;
         do {
             i += 1;
-            ptr->unk2 = ptr->unk2 + yIncrement;
+            ptr->y = ptr->y + yIncrement;
             debugEnqueueCallback(arg0->playerIndex + 0xC, 0, renderSpriteFrameWithPalette, (void *)ptr);
             ptr++;
         } while (i < ((s32)new_var));
     }
     val = state->unk1898[arg0->playerIndex];
     if (val == 0x1A) {
-        if (arg0->entries[0].unk2 == minY) {
+        if (arg0->entries[0].y == minY) {
             state->unk1898[arg0->playerIndex] = 0x1B;
         }
     } else if (val == 0x1E) {
@@ -1882,11 +1883,11 @@ void animateCharSelectP2NameHide(P2NameHideState *arg0) {
         increment = -0x13;
     }
     for (i = 0; i < (var_v0 & 0xFF); i++) {
-        arg0->entries[i].unk2 += increment;
+        arg0->entries[i].y += increment;
         debugEnqueueCallback(arg0->playerIndex + 0xC, 0, renderSpriteFrameWithPalette, (void *)(&arg0->entries[i]));
     }
 
-    if (arg0->entries[0].unk2 == target) {
+    if (arg0->entries[0].y == target) {
         *((u16 *)((allocation + (arg0->playerIndex * 2)) + 0x1898)) = 0;
         setCallback(waitForCharSelectP2NameReveal);
     }
