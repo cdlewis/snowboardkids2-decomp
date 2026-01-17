@@ -25,4 +25,4 @@ void func_800BBA50(s32 arg0);
 void initCrazyJungleHazards(void);
 void initFlyingEnemySpawner(FlyingEnemySpawnerState *arg0);
 void updateFlyingEnemySpawner(FlyingEnemySpawnerState *arg0);
-void func_800BBAF8_AB9A8(s16 *arg0);
+void initLindasCastleLapCounter(s16 *lapCounter);

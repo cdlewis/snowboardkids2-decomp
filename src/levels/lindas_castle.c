@@ -312,21 +312,21 @@ void updateFlyingEnemySpawner(FlyingEnemySpawnerState *arg0) {
     }
     arg0->spawnTimer = newValue;
 }
-void func_800BBB1C_AB9CC(s16 *arg0);
+void updateLindasCastleLapCounter(s16 *lapCounter);
 
-void func_800BBAF8_AB9A8(s16 *arg0) {
-    *arg0 = 0;
-    setCallback(func_800BBB1C_AB9CC);
+void initLindasCastleLapCounter(s16 *lapCounter) {
+    *lapCounter = 0;
+    setCallback(updateLindasCastleLapCounter);
 }
 
-void func_800BBB1C_AB9CC(s16 *arg0) {
+void updateLindasCastleLapCounter(s16 *lapCounter) {
     GameState *gameState = getCurrentAllocation();
     s32 i;
 
     for (i = 0; i < gameState->unk5F; i++) {
-        if (gameState->players[i].currentLap == *arg0) {
+        if (gameState->players[i].currentLap == *lapCounter) {
             if ((u16)(gameState->players[i].sectorIndex - 0x95) < 0xD) {
-                *arg0 = *arg0 + 1;
+                *lapCounter = *lapCounter + 1;
                 playSoundEffectWithPriorityDefaultVolume(0x4D, 6);
             }
         }
