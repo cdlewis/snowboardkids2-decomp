@@ -19,33 +19,37 @@ void initClocktowerDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
 }
 
 void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *trigger) {
-    GameState *state = (GameState *)getCurrentAllocation();
+    GameState *gameState = (GameState *)getCurrentAllocation();
     u32 positionCheck;
-    s16 rawAngle;
-    s16 playerAngle;
+    s16 yaw;
+    s16 normalizedYaw;
     u8 locationId;
     s16 minAngle;
     s16 maxAngle;
 
-    positionCheck = state->unk3F8 + 0xFFB3FFFF;
+    // Only check if player is at specific Y position range
+    // (gameState->unk3F8 should be between 0x4C0000 and 0x580000)
+    positionCheck = gameState->unk3F8 + 0xFFB3FFFF;
     if (positionCheck >= 0xBFFFF) {
         return;
     }
 
-    rawAngle = state->unk3F4;
-    playerAngle = rawAngle;
-    if (rawAngle >= 0x1001) {
-        playerAngle -= 0x2000;
+    yaw = gameState->unk3F4;
+    // Normalize angle to range -0x1000 to 0x1000
+    normalizedYaw = yaw;
+    if (yaw >= 0x1001) {
+        normalizedYaw -= 0x2000;
     }
 
     locationId = trigger->locationId;
     minAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2];
-    if (playerAngle < minAngle) {
+    if (normalizedYaw < minAngle) {
         maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(locationId * 2) + 1];
-        if (maxAngle < playerAngle) {
-            if (((u16)(state->unk3FC - 0xC01)) < 0x7FF) {
-                state->locationDiscovered = 1;
-                state->discoveredLocationId = trigger->locationId;
+        if (maxAngle < normalizedYaw) {
+            // Check if player's X position is within discovery range
+            if (((u16)(gameState->unk3FC - 0xC01)) < 0x7FF) {
+                gameState->locationDiscovered = 1;
+                gameState->discoveredLocationId = trigger->locationId;
             }
         }
     }
