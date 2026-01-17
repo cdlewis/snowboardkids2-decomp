@@ -13,7 +13,7 @@ extern u8 identityMatrix[];
 extern u16 D_8008EF70_8FB70[];
 
 void updateStoryMapRareEventJuggling(Func2E024Arg *arg0);
-void func_8002DA54_2E654(void);
+void updateStoryMapRareEventSledding(void);
 void updateStoryMapRareEventSkating(Func2E024Arg *);
 
 void updateStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
@@ -267,7 +267,7 @@ void updateStoryMapRareEventJuggling(Func2E024Arg *arg0) {
     }
 }
 
-void func_8002D814_2E414(Func2E024Arg *arg0) {
+void initStoryMapRareEventSledding(Func2E024Arg *arg0) {
     Transform3D localMatrix;
     Transform3D worldMatrix;
     s32 effectOffset[3];
@@ -279,7 +279,7 @@ void func_8002D814_2E414(Func2E024Arg *arg0) {
     s32 result;
     s32 angle;
     Transform3D *new_var;
-    s32 temp;
+    s32 sinVal;
 
     allocation = (GameState *)getCurrentAllocation();
     effectOffset[0] = 0xFFFD0000;
@@ -305,8 +305,8 @@ void func_8002D814_2E414(Func2E024Arg *arg0) {
 
         arg0->unkCC[i] = 0;
         angle = (s16)angle;
-        temp = approximateSin(angle);
-        result = temp * (-radius);
+        sinVal = approximateSin(angle);
+        result = sinVal * (-radius);
         if (result < 0) {
             result += 0x1FFF;
         }
@@ -341,10 +341,10 @@ void func_8002D814_2E414(Func2E024Arg *arg0) {
         allocation->unk418[i] = D_8008EF70_8FB70[arg0->elements[i].unk5C];
     }
 
-    setCallback(&func_8002DA54_2E654);
+    setCallback(&updateStoryMapRareEventSledding);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2DD40", func_8002DA54_2E654);
+INCLUDE_ASM("asm/nonmatchings/2DD40", updateStoryMapRareEventSledding);
 
 void updateStoryMapRareEventSnowman(Func2E024Arg *arg0);
 
