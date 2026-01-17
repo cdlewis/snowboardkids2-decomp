@@ -80,17 +80,21 @@ typedef struct {
     volatile s32 unk1C;
 } Mat2WithTemp;
 
+// Individual portrait entry - stored in the first 0x18 bytes of LevelPreviewPortraitState_202A0
+// Each entry is 0xC bytes containing a frame index for rendering
 typedef struct {
     u8 _pad0[0x8];
-    s16 frameIndex;
+    s16 frameIndex; // Sprite frame index to display
     u8 _padA[2];
 } LevelPreviewPortraitEntry_202A0;
 
+// State for the 3D portrait rotation animation
+// The first 0x18 bytes are shared with LevelPreviewPortraitEntry_202A0[2]
 typedef struct LevelPreviewPortraitState_202A0_s {
-    u8 _pad0[0x18];
-    MatrixEntry_202A0 matrices[4];
-    u8 _padE8[8];
-    u16 rotations[4];
+    u8 _pad0[0x18];                // 0x00 - padding (also accessed as LevelPreviewPortraitEntry_202A0[2])
+    MatrixEntry_202A0 matrices[4]; // 0x18 - matrix data for 4 portrait quads (front/back of 2 cards)
+    u8 _padE8[8];                  // 0xF0 - padding
+    u16 rotations[4];              // 0xF8 - current X rotation angle for each quad (0-0x1FFF)
 } LevelPreviewPortraitState_202A0;
 
 typedef struct {
@@ -470,28 +474,34 @@ void initPortraitRotationFrames(LevelPreviewPortraitState *arg0) {
     setCallbackWithContinue(animatePortraitRotation);
 }
 
-void animatePortraitRotation(LevelPreviewPortraitState_202A0 *arg0) {
+void animatePortraitRotation(LevelPreviewPortraitState_202A0 *portraitState) {
     Allocation_func_80020A00 *allocation;
     s32 i;
-    s32 rotation;
-    s16 rotationDelta;
-    u16 val;
+    s32 newRotation;
+    s16 rotationStep;
+    u16 firstRotation;
 
     allocation = (Allocation_func_80020A00 *)getCurrentAllocation();
-    rotationDelta = (allocation->scrollDirection != 0) ? 0x200 : -0x200;
+    rotationStep = (allocation->scrollDirection != 0) ? 0x200 : -0x200;
 
+    // Animate all 4 portrait quads (front and back of 2 portrait cards)
+    // The cards rotate around the X-axis to create a 3D flipping effect
     for (i = 0; i < 4; i++) {
-        rotation = (arg0->rotations[i] + rotationDelta) & 0x1FFF;
-        arg0->rotations[i] = rotation;
-        createXRotationMatrix(arg0->matrices[i].matrix, rotation);
-        enqueueRotatedBillboardSprite(9, &arg0->matrices[i]);
+        newRotation = (portraitState->rotations[i] + rotationStep) & 0x1FFF;
+        portraitState->rotations[i] = newRotation;
+        createXRotationMatrix(portraitState->matrices[i].matrix, newRotation);
+        enqueueRotatedBillboardSprite(9, &portraitState->matrices[i]);
     }
 
-    val = arg0->rotations[0];
-    if (val == 0 || val == 0x1000) {
+    // Check if rotation animation is complete (portrait facing forward)
+    firstRotation = portraitState->rotations[0];
+    if (firstRotation == 0 || firstRotation == 0x1000) {
         allocation->rotationComplete = 0;
+        // Update frame indices to show the destination level's portraits
+        // The first 0x18 bytes of portraitState are accessed as LevelPreviewPortraitEntry_202A0[2]
         for (i = 0; i < 2; i++) {
-            ((LevelPreviewPortraitEntry_202A0 *)arg0)[i].frameIndex = D_8008DAA8_8E6A8[allocation->toLevelId] + i;
+            ((LevelPreviewPortraitEntry_202A0 *)portraitState)[i].frameIndex =
+                D_8008DAA8_8E6A8[allocation->toLevelId] + i;
         }
         setCallback(renderLevelPreviewPortraits);
     }
