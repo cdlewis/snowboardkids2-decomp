@@ -984,16 +984,17 @@ void renderIceLandBossWithSurfaceColors(Player *arg0) {
 }
 
 /**
- * Updates ground contact positions for the boss's 9 joints.
+ * Updates ground contact positions for the Ice Land boss's 9 joints.
  * For each joint, computes X/Z world position from local offsets,
  * then finds the terrain height at that position.
+ * Uses different joint offset arrays based on whether the boss is flying or on ground.
  * Enqueues debug callbacks to render joint positions.
  */
-void func_800BC89C_B1D8C(Player *boss) {
+void updateIceLandBossJointPositions(Player *boss) {
     GameState *gameState;
     GameDataLayout *gameData;
     s32 jointIndex;
-    s32 isFlying;
+    s32 flyingFlag;
     s32 jointOffset;
     u8 *jointWritePtr;
     JointPosition *jointPos;
@@ -1001,13 +1002,13 @@ void func_800BC89C_B1D8C(Player *boss) {
 
     gameState = getCurrentAllocation();
     jointIndex = 0;
-    isFlying = 0x400000;
+    flyingFlag = 0x400000;
     gameData = &gameState->gameData;
     jointWritePtr = (u8 *)boss;
     jointOffset = 0xA10;
 
     do {
-        if (boss->unkB84 & isFlying) {
+        if (boss->unkB84 & flyingFlag) {
             // Flying mode: use flying joint offsets
             *(volatile s32 *)(jointWritePtr + 0xA10) =
                 boss->unk970.translation.x + *(s32 *)((u8 *)dispatchIceLandBossAttackPhase + 0x18 + jointOffset);
