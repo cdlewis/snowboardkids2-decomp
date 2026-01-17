@@ -375,20 +375,10 @@ void initRace(void) {
     }
 
     raceState->unk0 = allocateNodeMemory(0x1D8);
-    raceState->unk4 = allocateNodeMemory(
-        ((raceState->humanPlayerCount * 16 - raceState->humanPlayerCount) * 4 - raceState->humanPlayerCount) * 8
-    );
-    raceState->unk8 = allocateNodeMemory(
-        ((raceState->humanPlayerCount * 16 - raceState->humanPlayerCount) * 4 - raceState->humanPlayerCount) * 8
-    );
-    raceState->unkC = allocateNodeMemory(
-        ((raceState->humanPlayerCount * 16 - raceState->humanPlayerCount) * 4 - raceState->humanPlayerCount) * 8
-    );
-    raceState->racers = allocateNodeMemory(
-        ((raceState->totalRacers * 2 + raceState->totalRacers) * 128 -
-         (raceState->totalRacers * 2 + raceState->totalRacers)) *
-        8
-    );
+    raceState->unk4 = allocateNodeMemory(472 * raceState->humanPlayerCount);
+    raceState->unk8 = allocateNodeMemory(472 * raceState->humanPlayerCount);
+    raceState->unkC = allocateNodeMemory(472 * raceState->humanPlayerCount);
+    raceState->racers = allocateNodeMemory(3048 * raceState->totalRacers);
 
     for (i = 0; i < raceState->totalRacers; i++) {
         u8 *racerBytes = (u8 *)&raceState->racers[i];
@@ -400,7 +390,7 @@ void initRace(void) {
         raceState->racerOrder[i] = i;
     }
 
-    for (i = 11; i >= 0; i--) {
+    for (i = 0; i < 12; i++) {
         characterCount[i] = 0;
     }
 
@@ -606,22 +596,22 @@ void initRace(void) {
         default:
             setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x28, 0xA, 0xA, 0xA, 0xA);
             break;
-        case 2:
+        case RACE_TYPE_BOSS_JINGLE:
             setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x28, 0xA, 0x1E, 0, 0);
             break;
-        case 1:
-        case 3:
+        case RACE_TYPE_BOSS_JUNGLE:
+        case RACE_TYPE_BOSS_ICE:
             setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x3C, 0xA, 0x14, 0, 0);
             raceState->frameDelay = 0x3C;
             break;
-        case 5:
+        case RACE_TYPE_SHOT_CROSS:
             setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x28, 0x1E, 0, 0, 0);
             break;
     }
 
     gControllerPollingEnabled = 1;
     setViewportFadeValue(0, 0xFF, 0);
-    setGameStateHandlerWithContinue((void *)initRaceViewports);
+    setGameStateHandlerWithContinue(initRaceViewports);
 }
 
 void initRaceViewports(void) {
