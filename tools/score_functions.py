@@ -9,6 +9,7 @@ Usage:
     python3 tools/score_functions.py --score-func func_800B6544_1E35F4 asm/
     python3 tools/score_functions.py --min-score 100 --max-score 200 asm/
     python3 tools/score_functions.py --by-similarity asm/nonmatchings/
+    python3 tools/score_functions.py --by-coddog-similarity asm/nonmatchings/
 """
 
 import sys
@@ -16,6 +17,7 @@ import os
 import re
 import argparse
 import json
+import subprocess
 import numpy as np
 from pathlib import Path
 from dataclasses import dataclass
@@ -85,8 +87,79 @@ class FunctionScore:
             f"{self.jump_count} | {self.label_count} | {self.stack_size}"
         )
         if self.similar_to:
-            base += f" | (similar: {', '.join(self.similar_to)}, score: {self.similarity_score:.2f})"
+            # Check if percentage is already included (coddog format with "%")
+            if self.similar_to and '%' in str(self.similar_to[0]):
+                base += f" | (similar: {', '.join(self.similar_to)})"
+            else:
+                base += f" | (similar: {', '.join(self.similar_to)}, score: {self.similarity_score:.2f})"
         return base
+
+
+def get_coddog_similarity(func_name: str) -> Optional[Tuple[str, float]]:
+    """Get the best decompiled match for a function using coddog.
+
+    Returns:
+        Tuple of (similar_function_name, percentage) or None if no decompiled match found.
+    """
+    result = subprocess.run(
+        ['coddog', 'match', func_name, '-t', '0.5'],
+        capture_output=True,
+        text=True
+    )
+
+    if result.returncode != 0:
+        return None
+
+    # Import get_c_source_for_function to check if functions are decompiled
+    try:
+        from find_similar_functions import get_project_root, get_c_source_for_function
+        project_root = get_project_root()
+    except ImportError:
+        return None
+
+    # Parse coddog output, looking for the first decompiled match
+    for line in result.stdout.split('\n'):
+        line = line.strip()
+        # Skip error messages and empty lines
+        if not line or line.startswith('Error'):
+            continue
+        # Match format: "99.99% - function_name"
+        match = re.match(r'^(\d+\.?\d*)%\s*-\s*(.+)$', line)
+        if match:
+            percentage = float(match.group(1))
+            similar_func = match.group(2)
+            # Remove "(decompiled)" suffix if present
+            if similar_func.endswith(' (decompiled)'):
+                similar_func = similar_func[:-13].strip()
+            # Check if this function is actually decompiled (has C source, not just INCLUDE_ASM)
+            c_file = get_c_source_for_function(similar_func, project_root)
+            if c_file:
+                # Verify it's not just an INCLUDE_ASM declaration
+                try:
+                    with open(c_file, 'r') as f:
+                        content = f.read()
+                        # Find the function implementation - it should have a body that's not INCLUDE_ASM
+                        # Look for the function name followed by parameters and opening brace
+                        func_pattern = rf'{re.escape(similar_func)}\s*\([^)]*\)\s*{{'
+                        if re.search(func_pattern, content):
+                            # Found a function definition - check it's not just INCLUDE_ASM
+                            # Look for INCLUDE_ASM before the closing brace
+                            # A simple heuristic: if the only content between braces is INCLUDE_ASM, skip it
+                            # For now, just check that INCLUDE_ASM is not on the same line as the function name
+                            lines = content.split('\n')
+                            for i, line in enumerate(lines):
+                                if similar_func in line and '{' in line:
+                                    # Check if next non-empty line is INCLUDE_ASM
+                                    j = i + 1
+                                    while j < len(lines) and lines[j].strip() in ('', '{'):
+                                        j += 1
+                                    if j < len(lines) and 'INCLUDE_ASM' in lines[j]:
+                                        continue  # Skip, this is not decompiled
+                                    return similar_func, percentage
+                except:
+                    pass
+
+    return None
 
 
 def parse_multi_function_file(file_path: str) -> List[FunctionScore]:
@@ -425,6 +498,7 @@ Examples:
   python3 tools/score_functions.py --clean asm/
   python3 tools/score_functions.py --json asm/  # Output JSON array for task-runner.py
   python3 tools/score_functions.py --by-similarity asm/nonmatchings/  # Rank by best reference
+  python3 tools/score_functions.py --by-coddog-similarity asm/nonmatchings/  # Rank by coddog similarity
         """
     )
     parser.add_argument(
@@ -467,6 +541,11 @@ Examples:
         '--by-similarity',
         action='store_true',
         help='Rank functions by how similar they are to existing matched functions (best reference material first)'
+    )
+    parser.add_argument(
+        '--by-coddog-similarity',
+        action='store_true',
+        help='Rank functions by coddog similarity to decompiled functions (best reference material first)'
     )
     parser.add_argument(
         '--top-n',
@@ -570,9 +649,33 @@ Examples:
             print(f"Error: Could not import find_similar_functions: {e}", file=sys.stderr)
             sys.exit(1)
 
+    # If --by-coddog-similarity, compute coddog similarity scores and re-sort
+    if args.by_coddog_similarity:
+        print("Finding coddog similarities to decompiled functions...", file=sys.stderr)
+
+        # For each function, find best coddog match
+        for func_score in filtered_scores:
+            coddog_result = get_coddog_similarity(func_score.name)
+            if coddog_result:
+                similar_func, percentage = coddog_result
+                # Format: "func_name (percentage%)"
+                func_score.similar_to = [f"{similar_func} ({percentage:.2f}%)"]
+                func_score.similarity_score = percentage
+
+        # Filter to only functions with coddog matches
+        filtered_scores = [s for s in filtered_scores if s.similar_to]
+
+        if not filtered_scores:
+            print("Error: No functions with coddog matches to decompiled functions found!", file=sys.stderr)
+            sys.exit(1)
+
+        # Sort by similarity score (highest first - best reference material)
+        filtered_scores.sort(key=lambda s: s.similarity_score, reverse=True)
+        print("", file=sys.stderr)
+
     # JSON output mode - output array of function names
     if args.json:
-        if args.by_similarity:
+        if args.by_similarity or args.by_coddog_similarity:
             # Output [function_name, similar_func1, similar_func2, ...] tuples
             function_data = [[s.name] + (s.similar_to or []) for s in filtered_scores]
         else:
@@ -581,8 +684,10 @@ Examples:
         sys.exit(0)
 
     # In exhaustive mode or by-similarity mode, list all functions
-    if args.exhaustive or args.by_similarity:
-        if args.by_similarity:
+    if args.exhaustive or args.by_similarity or args.by_coddog_similarity:
+        if args.by_coddog_similarity:
+            print("ALL FUNCTIONS (sorted by coddog similarity to decompiled functions):\n")
+        elif args.by_similarity:
             print("ALL FUNCTIONS (sorted by similarity to matched functions):\n")
         else:
             print("ALL FUNCTIONS (sorted by complexity):\n")
@@ -593,10 +698,12 @@ Examples:
     simplest = filtered_scores[0]
 
     # Simple mode: just print the function name if no special flags
-    if not args.exhaustive and not args.by_similarity and args.min_score is None and args.max_score is None:
+    if not args.exhaustive and not args.by_similarity and not args.by_coddog_similarity and args.min_score is None and args.max_score is None:
         print(simplest.name)
     else:
-        if args.by_similarity:
+        if args.by_coddog_similarity:
+            print(f"BEST REFERENCE: {simplest.name}")
+        elif args.by_similarity:
             print(f"BEST REFERENCE: {simplest.name}")
         else:
             print(f"SIMPLEST FUNCTION: {simplest.name}")

@@ -18,6 +18,7 @@ import json
 import time
 import argparse
 import hashlib
+import subprocess
 from pathlib import Path
 from dataclasses import dataclass, field
 from typing import List, Dict, Tuple, Optional, Set
@@ -463,6 +464,28 @@ def get_c_source_for_function(func_name: str, project_root: str) -> Optional[str
             pass
 
     return None
+
+
+def parse_coddog_output(output: str) -> List[Tuple[float, str]]:
+    """Parse coddog output and return list of (percentage, function_name) tuples."""
+    results = []
+    for line in output.split('\n'):
+        line = line.strip()
+        # Skip error messages and empty lines
+        if not line or line.startswith('Error'):
+            continue
+        # Match format: "99.99% - function_name"
+        match = re.match(r'^(\d+\.?\d*)%\s*-\s*(.+)$', line)
+        if match:
+            percentage = float(match.group(1))
+            func_name = match.group(2)
+            # Remove "(decompiled)" suffix if present
+            if func_name.endswith(' (decompiled)'):
+                func_name = func_name[:-13].strip()
+            results.append((percentage, func_name))
+    # Already sorted by coddog, but ensure descending order
+    results.sort(key=lambda x: -x[0])
+    return results
 
 
 # --- Programmatic API for use by other scripts ---
@@ -935,6 +958,7 @@ Examples:
     python3 tools/find_similar_functions.py func_8000FED0_10AD0 --threshold 0.5
     python3 tools/find_similar_functions.py --cache-info
     python3 tools/find_similar_functions.py --rebuild-cache
+    python3 tools/find_similar_functions.py func_8004674C_4734C --coddog-similarity --top 5
         """
     )
     parser.add_argument(
@@ -969,6 +993,11 @@ Examples:
         action='store_true',
         help='Show cache status information and exit'
     )
+    parser.add_argument(
+        '--coddog-similarity',
+        action='store_true',
+        help='Use coddog to find similar decompiled functions'
+    )
 
     args = parser.parse_args()
 
@@ -997,10 +1026,62 @@ Examples:
         print(f"Cached {len(cache_data['function_similarities'])} functions", file=sys.stderr)
         sys.exit(0)
 
+    # Handle --coddog-similarity
+    if args.coddog_similarity:
+        if not args.function_name:
+            print("Error: function_name is required for --coddog-similarity", file=sys.stderr)
+            sys.exit(1)
+
+        print(f"Running coddog to find similar functions...", file=sys.stderr)
+
+        # Run coddog command with fixed threshold of 0.5
+        result = subprocess.run(
+            ['coddog', 'match', args.function_name, '-t', '0.5'],
+            capture_output=True,
+            text=True
+        )
+
+        if result.returncode != 0:
+            print(f"Error running coddog: {result.stderr}", file=sys.stderr)
+            sys.exit(1)
+
+        # Parse output
+        coddog_results = parse_coddog_output(result.stdout)
+
+        if not coddog_results:
+            print("No similar functions found by coddog")
+            sys.exit(0)
+
+        # Filter to only decompiled functions
+        decompiled_results = []
+        for percentage, func_name in coddog_results:
+            c_file = get_c_source_for_function(func_name, project_root)
+            if c_file:
+                decompiled_results.append((percentage, func_name, c_file))
+
+        # Limit to top N
+        decompiled_results = decompiled_results[:args.top]
+
+        if not decompiled_results:
+            print("No similar decompiled functions found")
+            sys.exit(0)
+
+        print()  # Blank line between stderr and stdout
+
+        # Display results
+        print(f"Similar decompiled functions to {args.function_name}:\n")
+
+        for i, (percentage, func_name, c_file) in enumerate(decompiled_results, 1):
+            print(f"{i}. {func_name} (similarity: {percentage:.2f}%)")
+            print(f"   C source: {c_file}")
+            print()
+
+        sys.exit(0)
+
     # Require function_name for normal operation
     if not args.function_name:
         parser.print_help()
-        print("\nError: function_name is required unless using --cache-info or --rebuild-cache", file=sys.stderr)
+        print("\nError: function_name is required unless using --cache-info, --rebuild-cache, or --coddog-similarity", file=sys.stderr)
         sys.exit(1)
 
     nonmatchings_dir = os.path.join(project_root, 'asm', 'nonmatchings')
