@@ -25,33 +25,33 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x1F0];
-    s32 unk1F0;
-    s32 unk1F4;
-    s32 unk1F8;
-    s16 unk1FC;
-    s16 unk1FE;
-    s16 unk200;
+    s32 velocityX;
+    s32 velocityY;
+    s32 velocityZ;
+    s16 posFramesX;
+    s16 posFramesY;
+    s16 posFramesZ;
     s16 pad202;
-    s32 unk204;
-    s32 unk208;
-    s16 unk20C;
-    u16 unk20E;
-} Func8000C5AC_Node;
+    s32 scale;
+    s32 scaleVelocity;
+    s16 scaleFrames;
+    u16 rotationAngle;
+} SceneRenderAnimationState;
 
 typedef struct {
-    /* 0x00 */ Func8000C5AC_Node *unk0;
-    /* 0x04 */ Transform3D unk4;
-    /* 0x24 */ void *unk24;
-    /* 0x28 */ void *unk28;
-    /* 0x2C */ void *unk2C;
+    /* 0x00 */ SceneRenderAnimationState *animState;
+    /* 0x04 */ Transform3D transform1;
+    /* 0x24 */ void *displayList1;
+    /* 0x28 */ void *modelData1;
+    /* 0x2C */ void *textureData1;
     /* 0x30 */ void *unk30;
     /* 0x34 */ u8 pad34[0xC];
-    /* 0x40 */ Transform3D unk40;
-    /* 0x60 */ void *unk60;
-    /* 0x64 */ void *unk64;
-    /* 0x68 */ void *unk68;
+    /* 0x40 */ Transform3D transform2;
+    /* 0x60 */ void *displayList2;
+    /* 0x64 */ void *modelData2;
+    /* 0x68 */ void *textureData2;
     /* 0x6C */ void *unk6C;
-} Func8000C5AC_Arg;
+} SceneRenderTaskLoadContext;
 
 typedef struct {
     u8 pad0[0x28];
@@ -152,7 +152,7 @@ typedef struct {
     u8 renderMode;
 } SceneRenderNode;
 
-void func_8000C5AC_D1AC(Func8000C5AC_Arg *);
+void loadSceneRenderTaskData(SceneRenderTaskLoadContext *);
 void updateSceneRenderTask(SceneRenderTaskCtx *ctx);
 void cleanupSceneRenderTask(SceneRenderTaskData *task);
 
@@ -417,7 +417,7 @@ void initSceneRenderNode(
     node->renderFlags = 0;
     node->renderMode = renderMode;
 
-    task = scheduleTask(func_8000C5AC_D1AC, taskArg1, taskArg2, 0);
+    task = scheduleTask(loadSceneRenderTaskData, taskArg1, taskArg2, 0);
     if (task != NULL) {
         *(SceneRenderNode **)task = node;
     }
@@ -427,51 +427,53 @@ void n_alSeqpDelete(Node_70B00 *arg0) {
     unlinkNode(arg0);
 }
 
-void func_8000C5AC_D1AC(Func8000C5AC_Arg *arg0) {
-    Func8000C5AC_Node *temp;
-    int new_var;
+void loadSceneRenderTaskData(SceneRenderTaskLoadContext *ctx) {
+    SceneRenderAnimationState *animState;
+    int modelScale;
     AssetDataBlock *data;
     s16 scale;
-    arg0->unk30 = 0;
-    arg0->unk2C = 0;
-    arg0->unk28 = 0;
-    arg0->unk6C = 0;
-    arg0->unk68 = 0;
-    arg0->unk64 = 0;
-    arg0->unk0->unk204 = 0x10000;
-    arg0->unk0->unk208 = 0;
-    arg0->unk0->unk20C = 0;
-    arg0->unk0->unk20E = 0;
-    memcpy(&arg0->unk4, identityMatrix, sizeof(Transform3D));
-    memcpy(&arg0->unk40, identityMatrix, sizeof(Transform3D));
-    temp = arg0->unk0;
-    temp->unk200 = 0;
-    temp->unk1FE = 0;
-    temp->unk1FC = 0;
+    ctx->unk30 = 0;
+    ctx->textureData1 = 0;
+    ctx->modelData1 = 0;
+    ctx->unk6C = 0;
+    ctx->textureData2 = 0;
+    ctx->modelData2 = 0;
+    ctx->animState->scale = 0x10000;
+    ctx->animState->scaleVelocity = 0;
+    ctx->animState->scaleFrames = 0;
+    ctx->animState->rotationAngle = 0;
+    memcpy(&ctx->transform1, identityMatrix, sizeof(Transform3D));
+    memcpy(&ctx->transform2, identityMatrix, sizeof(Transform3D));
+    animState = ctx->animState;
+    animState->posFramesZ = 0;
+    animState->posFramesY = 0;
+    animState->posFramesX = 0;
     data = &D_8008CD98_8D998;
-    temp = arg0->unk0;
-    new_var = 0x2000;
-    temp->unk1F8 = 0;
-    temp->unk1F4 = 0;
-    temp->unk1F0 = 0;
+    animState = ctx->animState;
+    modelScale = 0x2000;
+    animState->velocityZ = 0;
+    animState->velocityY = 0;
+    animState->velocityX = 0;
     if (((!(&D_8008CD98_8D998)->vertStart2) && (!(&D_8008CD98_8D998)->vertStart2)) &&
         (!(&D_8008CD98_8D998)->vertStart2)) {}
-    arg0->unk28 = loadUncompressedData((void *)(&D_8008CD98_8D998)->vertStart1, (void *)(&D_8008CD98_8D998)->vertEnd1);
-    arg0->unk2C = loadCompressedData(
+    ctx->modelData1 =
+        loadUncompressedData((void *)(&D_8008CD98_8D998)->vertStart1, (void *)(&D_8008CD98_8D998)->vertEnd1);
+    ctx->textureData1 = loadCompressedData(
         (void *)(&D_8008CD98_8D998)->compStart1,
         (void *)(&D_8008CD98_8D998)->compEnd1,
         (&D_8008CD98_8D998)->compSize1
     );
-    arg0->unk30 = 0;
-    arg0->unk24 = (&D_8008CD98_8D998)->dispList1;
-    scale = (s16)((((s64)(arg0->unk0->unk204 >> 8)) * new_var) >> 8);
-    scaleMatrix(&arg0->unk4, scale, scale, scale);
-    arg0->unk64 = loadUncompressedData((void *)(&D_8008CD98_8D998)->vertStart2, (void *)(&D_8008CD98_8D998)->vertEnd2);
-    arg0->unk68 = loadCompressedData((void *)data->compStart2, (void *)data->compEnd2, data->compSize2);
-    arg0->unk6C = 0;
-    arg0->unk60 = data->dispList2;
-    scale = (s16)((((s64)(arg0->unk0->unk204 >> 8)) * 0x2000) >> 8);
-    scaleMatrix(&arg0->unk40, scale, scale, scale);
+    ctx->unk30 = 0;
+    ctx->displayList1 = (&D_8008CD98_8D998)->dispList1;
+    scale = (s16)((((s64)(ctx->animState->scale >> 8)) * modelScale) >> 8);
+    scaleMatrix(&ctx->transform1, scale, scale, scale);
+    ctx->modelData2 =
+        loadUncompressedData((void *)(&D_8008CD98_8D998)->vertStart2, (void *)(&D_8008CD98_8D998)->vertEnd2);
+    ctx->textureData2 = loadCompressedData((void *)data->compStart2, (void *)data->compEnd2, data->compSize2);
+    ctx->unk6C = 0;
+    ctx->displayList2 = data->dispList2;
+    scale = (s16)((((s64)(ctx->animState->scale >> 8)) * 0x2000) >> 8);
+    scaleMatrix(&ctx->transform2, scale, scale, scale);
     setCleanupCallback(cleanupSceneRenderTask);
     setCallback(updateSceneRenderTask);
 }
