@@ -78,9 +78,9 @@ typedef struct {
     u8 pad9D0[0x9F0 - 0x9D0];
     u8 unk9F0[0x20];       /* 0x9F0 - 0xA0F */
     JointPosition jointPositions[9]; /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
-    s32 unkA7C;            /* 0xA7C */
+    s32 aiTargetX;            /* 0xA7C */
     u8 padA80[4];
-    s32 unkA84; /* 0xA84 */
+    s32 aiTargetZ; /* 0xA84 */
     u8 padA88[4];
     u16 unkA8C; /* 0xA8C */
     u16 unkA8E; /* 0xA8E */
@@ -194,7 +194,7 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
 
     alloc = getCurrentAllocation();
     if (arg0->unkBC7 != 0) {
-        func_800B9B90_A9A40((Player *)arg0);
+        calculateAITargetPosition((Player *)arg0);
     } else {
         arg0->unkB7A = gAnalogStickX[arg0->unkBB8] / 4;
         arg0->unkB7B = gAnalogStickY[arg0->unkBB8] / 4;
@@ -404,7 +404,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         arg0->behaviorStep++;
     }
 
-    angleDiff = computeAngleToPosition(arg0->unkA7C, arg0->unkA84, arg0->unk434.x, arg0->unk434.z) - arg0->unkA94;
+    angleDiff = computeAngleToPosition(arg0->aiTargetX, arg0->aiTargetZ, arg0->unk434.x, arg0->unk434.z) - arg0->unkA94;
     angleDiff = angleDiff & 0x1FFF;
 
     if (angleDiff >= 0x1001) {

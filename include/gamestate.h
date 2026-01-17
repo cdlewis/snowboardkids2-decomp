@@ -97,9 +97,9 @@ typedef struct {
     BoneAnimationState unk9B0;
     u8 padding9FC[0x14];  /* 0x9FC - 0xA10: padding before jointPositions */
     JointPosition jointPositions[9]; /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
-    s32 unkA7C;
+    s32 aiTargetX;     /* 0xA7C - AI target position X coordinate */
     s32 _padA80;
-    s32 unkA84;
+    s32 aiTargetZ;     /* 0xA84 - AI target position Z coordinate */
     u8 _padA88[0x4];
     u16 unkA8C;
     s16 unkA8E;

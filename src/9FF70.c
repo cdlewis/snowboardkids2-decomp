@@ -295,8 +295,9 @@ s32 updatePlayerGroundedSliding(Player *player) {
         player->behaviorCounter = groundTimer + 1;
     }
     if (player->unkBDA != 0) {
-        func_800B9B90_A9A40(player);
-        angleDelta = computeAngleToPosition(player->unkA7C, player->unkA84, player->worldPos.x, player->worldPos.z);
+        calculateAITargetPosition(player);
+        angleDelta =
+            computeAngleToPosition(player->aiTargetX, player->aiTargetZ, player->worldPos.x, player->worldPos.z);
         currentAngle = player->rotY;
         angleDelta = (angleDelta - currentAngle) & 0x1FFF;
         if (angleDelta >= 0x1001) {
@@ -822,8 +823,9 @@ void updateTrickFacingAngle(Player *player) {
     playerFlags = player->unkB84;
     if (!(playerFlags & 0x1000)) {
         if (player->unkBDA != 0) {
-            func_800B9B90_A9A40(player);
-            angleDelta = computeAngleToPosition(player->unkA7C, player->unkA84, player->worldPos.x, player->worldPos.z);
+            calculateAITargetPosition(player);
+            angleDelta =
+                computeAngleToPosition(player->aiTargetX, player->aiTargetZ, player->worldPos.x, player->worldPos.z);
             currentAngle = (u16)player->rotY;
             angleDelta = (angleDelta - currentAngle) & 0x1FFF;
             if (angleDelta >= 0x1001) {

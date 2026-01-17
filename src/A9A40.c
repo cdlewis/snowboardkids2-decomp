@@ -23,7 +23,7 @@ typedef struct {
 void func_800BA4B8_AA368(Player *, CourseData *, s16, Vec3i *);
 void func_800B9EF0_A9DA0(Player *, CourseData *, s16, Vec3i *);
 
-void func_800B9B90_A9A40(Player *player) {
+void calculateAITargetPosition(Player *player) {
     Vec3i dir;
     Vec3i waypointPos;
     Vec3i nextWaypointPos;
@@ -43,8 +43,8 @@ void func_800B9B90_A9A40(Player *player) {
 
     if (courseData->waypoints[sectorIndex].next < 0) {
         defaultPos = getLevelConfig(courseData->defaultPosIndex);
-        player->unkA7C = defaultPos->shortcutPosX;
-        player->unkA84 = defaultPos->shortcutPosZ;
+        player->aiTargetX = defaultPos->shortcutPosX;
+        player->aiTargetZ = defaultPos->shortcutPosZ;
         return;
     }
 
@@ -113,8 +113,8 @@ void func_800B9B90_A9A40(Player *player) {
     dir.x += waypointPos.x;
     dir.z += waypointPos.z;
 
-    player->unkA7C = dir.x;
-    player->unkA84 = dir.z;
+    player->aiTargetX = dir.x;
+    player->aiTargetZ = dir.z;
 }
 
 INCLUDE_ASM("asm/nonmatchings/A9A40", func_800B9EF0_A9DA0);

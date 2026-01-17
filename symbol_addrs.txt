@@ -12,6 +12,7 @@ getCutsceneCommandEntry = 0x800B9774; // rom:0x1E6824
 processCutsceneCommandSequence = 0x800B97C8; // rom:0x1E6878
 initCutsceneWaitSystem = 0x800B993C; // rom:0x1E69EC
 updateCutsceneWaitSystem = 0x800B99A0; // rom:0x1E6A50
+calculateAITargetPosition = 0x800B9B90; // rom:0xA9A40
 cleanupCutsceneWaitSystem = 0x800B9C20; // rom:0x1E6CD0
 gWipeOffsetX = 0x800BADF0; // rom:0x1E7EA0 type:s16 size:8
 gWipeOffsetY = 0x800BADF2; // rom:0x1E7EA2 type:s16 size:8

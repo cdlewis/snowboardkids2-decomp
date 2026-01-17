@@ -76,9 +76,9 @@ typedef struct {
     Transform3D unk9B0;
     u8 pad9D0[0xA10 - 0x9D0];
     UnkA10Entry unkA10[9];
-    s32 unkA7C;
+    s32 aiTargetX;
     u8 padA80[4];
-    s32 unkA84;
+    s32 aiTargetZ;
     u8 padA88[4];
     u16 unkA8C;
     u16 unkA8E;
@@ -172,7 +172,7 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     s32 loopBound;
 
     alloc = getCurrentAllocation();
-    func_800B9B90_A9A40((Player *)arg0);
+    calculateAITargetPosition((Player *)arg0);
 
     arg0->velocity.x = arg0->unk434.x - arg0->unk440;
     arg0->velocity.y = arg0->unk434.y - arg0->unk444;
@@ -444,7 +444,7 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
         arg0->behaviorStep++;
     }
 
-    clampedAngle = (s16)computeAngleToPosition(arg0->unkA7C, arg0->unkA84, arg0->unk434.x, arg0->unk434.z);
+    clampedAngle = (s16)computeAngleToPosition(arg0->aiTargetX, arg0->aiTargetZ, arg0->unk434.x, arg0->unk434.z);
     currentAngle = arg0->unkA94;
     clampedAngle = (clampedAngle - currentAngle) & 0x1FFF;
     if (clampedAngle >= 0x1001) {
