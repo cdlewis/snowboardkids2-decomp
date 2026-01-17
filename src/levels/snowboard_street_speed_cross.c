@@ -24,13 +24,13 @@ typedef struct {
 static void updateRotatingSky(RotatingSkyRenderArg *arg0);
 static void cleanupRotatingSky(RotatingSkyArg *arg0);
 
-void func_800BB2B0_B2750(RotatingSkyArg *arg0) {
-    GameState *allocation;
-    LevelDisplayLists *result;
+void initSpeedCrossRotatingSky(RotatingSkyArg *arg0) {
+    GameState *gameState;
+    LevelDisplayLists *displayLists;
 
-    allocation = (GameState *)getCurrentAllocation();
-    result = getSkyDisplayLists3ByIndex(allocation->memoryPoolId);
-    arg0->displayLists = (void *)((u32)result + 0x90);
+    gameState = (GameState *)getCurrentAllocation();
+    displayLists = getSkyDisplayLists3ByIndex(gameState->memoryPoolId);
+    arg0->displayLists = (void *)((u32)displayLists + 0x90);
     arg0->uncompressedAsset = loadUncompressedAssetByIndex(0xC);
     arg0->compressedAsset = loadCompressedSegment2AssetByIndex(0xC);
     arg0->posX = 0x25990000;
