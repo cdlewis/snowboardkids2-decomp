@@ -43,13 +43,13 @@ typedef struct {
     u8 pad[0x38];
     s16 unk38[6];
     u8 pad44[0x6C - 0x44];
-    u8 unk6C;
-    u8 unk6D;
-    u8 unk6E;
+    u8 primaryR;
+    u8 primaryG;
+    u8 primaryB;
     u8 pad6F[1];
-    u8 unk70;
-    u8 unk71;
-    u8 unk72;
+    u8 secondaryR;
+    u8 secondaryG;
+    u8 secondaryB;
     u8 pad73[0xEC - 0x73];
     s16 unkEC[6];
     u8 padF8[0x1A0 - 0xF8];
@@ -125,7 +125,7 @@ typedef struct {
     u8 padding[0x8];
     u16 unkB9E;
     u8 padB96[0xBB7 - 0xBA0];
-    u8 unkBB7;
+    u8 boneCount;
     u8 unkBB8;
     u8 padBB9[0xBBD - 0xBB9];
     u8 behaviorMode;
@@ -139,7 +139,7 @@ typedef struct {
     u8 unkBC9;
     u8 unkBCA;
     u8 padBCB[1];
-    u8 unkBCC;
+    u8 surfaceTypeIndex;
     u8 padBCD[0x2];
     u8 unkBCF;
     u8 padBD0[0xBDB - 0xBD0];
@@ -606,7 +606,7 @@ void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
     if (arg0->unkB84 & 0x10000) {
         arg0->unkBC9 = 0;
     } else {
-        func_8005CFFC_5DBFC(gameData, arg0->sectorIndex, &arg0->unk434, &arg0->unkBC9, &arg0->unkBCC);
+        func_8005CFFC_5DBFC(gameData, arg0->sectorIndex, &arg0->unk434, &arg0->unkBC9, &arg0->surfaceTypeIndex);
         arg0->unkBCA = arg0->unkBC9 >> 4;
         arg0->unkBC9 = arg0->unkBC9 & 0xF;
     }
@@ -614,30 +614,30 @@ void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BC0E8_AC918);
 
-void func_800BC23C_ACA6C(Arg0Struct *arg0) {
+void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
     s32 i;
-    s32 index;
+    s32 surfaceColorIndex;
     s32 pad[36];
 
     getCurrentAllocation();
     func_800BC0E8_AC918(arg0);
 
-    index = arg0->unkBCC >> 4;
+    surfaceColorIndex = arg0->surfaceTypeIndex >> 4;
 
-    if (index == 0) {
+    if (surfaceColorIndex == 0) {
         for (i = 0; i < 4; i++) {
-            enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);
+            enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->boneCount);
         }
     } else {
-        arg0->unk6C = gBossSurfaceColors[index].primaryR;
-        arg0->unk6D = gBossSurfaceColors[index].primaryG;
-        arg0->unk6E = gBossSurfaceColors[index].primaryB;
-        arg0->unk70 = gBossSurfaceColors[index].secondaryR;
-        arg0->unk71 = gBossSurfaceColors[index].secondaryG;
-        arg0->unk72 = gBossSurfaceColors[index].secondaryB;
+        arg0->primaryR = gBossSurfaceColors[surfaceColorIndex].primaryR;
+        arg0->primaryG = gBossSurfaceColors[surfaceColorIndex].primaryG;
+        arg0->primaryB = gBossSurfaceColors[surfaceColorIndex].primaryB;
+        arg0->secondaryR = gBossSurfaceColors[surfaceColorIndex].secondaryR;
+        arg0->secondaryG = gBossSurfaceColors[surfaceColorIndex].secondaryG;
+        arg0->secondaryB = gBossSurfaceColors[surfaceColorIndex].secondaryB;
 
         for (i = 0; i < 4; i++) {
-            enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);
+            enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->boneCount);
         }
     }
 }
