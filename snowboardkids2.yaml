@@ -347,7 +347,7 @@ segments:
       - [0x8CE00, data, 7F80]
       - [0x8CE70, data]
       - [0x8D840, data, 90F0]
-      - [0x8D8E0, data, CBA0]
+      - [0x8D8E0, .data, CBA0]
       - [0x8D9D0, data, DA20]
       - [0x8DA10, data, E090]
       - [0x8DA40, data, E770]

@@ -3,20 +3,21 @@
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
 
 typedef struct {
-    /* 0x00 */ s32 vertStart1;
-    /* 0x04 */ s32 vertEnd1;
-    /* 0x08 */ s32 compStart1;
-    /* 0x0C */ s32 compEnd1;
+    /* 0x00 */ void *vertStart1;
+    /* 0x04 */ void *vertEnd1;
+    /* 0x08 */ void *compStart1;
+    /* 0x0C */ void *compEnd1;
     /* 0x10 */ u16 compSize1;
     /* 0x12 */ u16 pad12;
     /* 0x14 */ void *dispList1;
-    /* 0x18 */ s32 vertStart2;
-    /* 0x1C */ s32 vertEnd2;
-    /* 0x20 */ s32 compStart2;
-    /* 0x24 */ s32 compEnd2;
+    /* 0x18 */ void *vertStart2;
+    /* 0x1C */ void *vertEnd2;
+    /* 0x20 */ void *compStart2;
+    /* 0x24 */ void *compEnd2;
     /* 0x28 */ u16 compSize2;
     /* 0x2A */ u16 pad2A;
     /* 0x2C */ void *dispList2;
@@ -159,9 +160,74 @@ extern Gfx *volatile gRegionAllocPtr;
 extern u8 D_8016A000[];
 extern s32 gCurrentDisplayBufferIndex;
 extern u8 gMemoryHeapEnd[];
-extern Gfx D_8008CD20_8D920[];
 extern s32 identityMatrix[];
-extern AssetDataBlock D_8008CD98_8D998;
+
+Gfx D_8008CCE0_8D8E0[] = {
+    { .words = { 0x00000000, 0x010000A0 } },
+    { .words = { 0x00000000, 0x00000000 } },
+};
+
+Gfx D_8008CCF0_8D8F0[] = {
+    { .words = { 0x00000000, 0x01000088 } },
+    { .words = { 0x00000000, 0x00000000 } },
+};
+
+u32 D_8008CD00_8D900[] = {
+    0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+};
+
+Gfx D_8008CD20_8D920[] = {
+    gsDPPipeSync(),
+    gsDPSetCycleType(G_CYC_1CYCLE),
+    gsDPSetTexturePersp(G_TP_NONE),
+    gsDPSetTextureFilter(G_TF_POINT),
+    gsDPSetTextureLUT(G_TT_NONE),
+    gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
+    gsDPSetRenderMode(G_RM_AA_ZB_OPA_INTER, G_RM_AA_ZB_OPA_INTER2),
+    gsDPSetTextureImage(G_IM_FMT_I, G_IM_SIZ_8b, 8, D_8008CD00_8D900),
+    gsDPSetTile(
+        G_IM_FMT_I,
+        G_IM_SIZ_8b,
+        1,
+        0x0000,
+        G_TX_LOADTILE,
+        0,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        2,
+        G_TX_NOLOD,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        4,
+        G_TX_NOLOD
+    ),
+    gsDPLoadSync(),
+    { .words = { 0xF4000000, 0x07020010 } },
+    gsDPPipeSync(),
+    { .words = { 0xF5800200, 0x00008040 } },
+    { .words = { 0xF2000000, 0x00040010 } },
+    gsSPEndDisplayList(),
+};
+
+USE_ASSET(_214E70);
+USE_ASSET(_663330);
+USE_ASSET(_214F20);
+USE_ASSET(_6633B0);
+
+AssetDataBlock D_8008CD98_8D998 = {
+    .vertStart1 = &_214E70_ROM_START,
+    .vertEnd1 = &_214E70_ROM_END,
+    .compStart1 = &_663330_ROM_START,
+    .compEnd1 = &_663330_ROM_END,
+    .compSize1 = 0x0180,
+    .pad12 = 0x0001,
+    .dispList1 = D_8008CCE0_8D8E0,
+    .vertStart2 = &_214F20_ROM_START,
+    .vertEnd2 = &_214F20_ROM_END,
+    .compStart2 = &_6633B0_ROM_START,
+    .compEnd2 = &_6633B0_ROM_END,
+    .compSize2 = 0x0120,
+    .pad2A = 0x0001,
+    .dispList2 = D_8008CCF0_8D8F0,
+};
 
 void setColorImageToAuxBuffer(void *arg0) {
     gDPSetColorImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_8016A000);
