@@ -124,7 +124,7 @@ void loadCharacterBodyParts(Player *player) {
     }
     player->unk23C = flags;
     player->unk240 = (s32)player->unk24;
-    player->unk238 = (s32)func_8005DDD8_5E9D8(player->characterId, player->boardIndex) + tableValue * 0x10 - 0x10;
+    player->unk238 = (s32)getAssetDataDirect(player->characterId, player->boardIndex) + tableValue * 0x10 - 0x10;
 }
 
 void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags) {

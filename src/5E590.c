@@ -2365,14 +2365,14 @@ void *loadAssetByIndex_5E990(s32 index) {
     );
 }
 
-MemoryAllocatorNode *func_8005DDD8_5E9D8(s16 groupIndex, s16 entityIndex) {
+MemoryAllocatorNode *getAssetDataDirect(s16 groupIndex, s16 entityIndex) {
     return loadAssetDataByMode(groupIndex, entityIndex, MODE_DIRECT_FETCH);
 }
 
-MemoryAllocatorNode *func_8005DE04_5EA04(s16 groupIndex, s16 entityIndex) {
+MemoryAllocatorNode *loadAssetDataDMA(s16 groupIndex, s16 entityIndex) {
     return loadAssetDataByMode(groupIndex, entityIndex, MODE_DMA);
 }
 
-MemoryAllocatorNode *func_8005DE30_5EA30(s16 groupIndex, s16 entityIndex) {
+MemoryAllocatorNode *loadAssetDataQueuedDMA(s16 groupIndex, s16 entityIndex) {
     return loadAssetDataByMode(groupIndex, entityIndex, MODE_QUEUED_DMA);
 }

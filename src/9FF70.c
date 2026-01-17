@@ -3571,8 +3571,8 @@ void func_800B99E0(void *varg0) {
 
     v0 = arg0->characterId;
     if (v0 < 6) {
-        arg0->unk20 = func_8005DE04_5EA04(arg0->characterId, arg0->boardIndex);
-        arg0->unk24 = func_8005DE30_5EA30(arg0->characterId, arg0->boardIndex);
+        arg0->unk20 = loadAssetDataDMA(arg0->characterId, arg0->boardIndex);
+        arg0->unk24 = loadAssetDataQueuedDMA(arg0->characterId, arg0->boardIndex);
     }
 
     arg0->unkC = loadAssetByIndex_95500(arg0->unkBBB);

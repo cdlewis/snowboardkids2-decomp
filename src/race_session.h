@@ -137,8 +137,8 @@ u8 getItemStat3(s32 itemIndex);
 void *loadBossHudAssetByRaceType(s32 index);
 s32 getBossHudAssetSize(s32 index);
 void *loadAssetByIndex_5E990(s32 index);
-MemoryAllocatorNode *func_8005DE04_5EA04(s16 groupIndex, s16 entityIndex);
-MemoryAllocatorNode *func_8005DE30_5EA30(s16 groupIndex, s16 entityIndex);
+MemoryAllocatorNode *loadAssetDataDMA(s16 groupIndex, s16 entityIndex);
+MemoryAllocatorNode *loadAssetDataQueuedDMA(s16 groupIndex, s16 entityIndex);
 s32 loadSpriteAsset(SpriteAssetState *arg0, s16 arg1);
 
 enum GameMode {
