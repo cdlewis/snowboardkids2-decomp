@@ -585,28 +585,28 @@ s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0) {
     return 0;
 }
 
-void func_800BBFEC_AC81C(Arg0Struct *arg0) {
+void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
     s32 pad[8];
-    Vec3i sp38;
+    Vec3i collisionOffset;
     s32 pad2[8];
-    GameState *alloc;
-    void *allocPlus30;
-    u16 temp;
+    GameState *gameState;
+    GameDataLayout *gameData;
+    u16 newSectorIndex;
 
-    alloc = getCurrentAllocation();
+    gameState = getCurrentAllocation();
     memcpy(&arg0->unk970.translation.x, &arg0->unk434, 0xC);
-    allocPlus30 = &alloc->gameData;
-    temp = func_80059E90_5AA90(arg0, allocPlus30, arg0->sectorIndex, &arg0->unk434);
-    arg0->sectorIndex = temp;
-    func_80060CDC_618DC(allocPlus30, temp, &arg0->unk434, 0x187000, &sp38);
-    arg0->unk434.x = arg0->unk434.x + sp38.x;
-    arg0->unk434.z = arg0->unk434.z + sp38.z;
+    gameData = &gameState->gameData;
+    newSectorIndex = getOrUpdatePlayerSectorIndex(arg0, gameData, arg0->sectorIndex, &arg0->unk434);
+    arg0->sectorIndex = newSectorIndex;
+    func_80060CDC_618DC(gameData, newSectorIndex, &arg0->unk434, 0x187000, &collisionOffset);
+    arg0->unk434.x = arg0->unk434.x + collisionOffset.x;
+    arg0->unk434.z = arg0->unk434.z + collisionOffset.z;
     func_8005C868_5D468(arg0);
 
     if (arg0->unkB84 & 0x10000) {
         arg0->unkBC9 = 0;
     } else {
-        func_8005CFFC_5DBFC(allocPlus30, arg0->sectorIndex, &arg0->unk434, &arg0->unkBC9, &arg0->unkBCC);
+        func_8005CFFC_5DBFC(gameData, arg0->sectorIndex, &arg0->unk434, &arg0->unkBC9, &arg0->unkBCC);
         arg0->unkBCA = arg0->unkBC9 >> 4;
         arg0->unkBC9 = arg0->unkBC9 & 0xF;
     }

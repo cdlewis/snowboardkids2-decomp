@@ -1013,6 +1013,7 @@ crazyJungleBossChaseExitPhase = 0x800BBD98; // rom:0xAC5C8
 dispatchCrazyJungleBossHoverPhase = 0x800BBE1C; // rom:0xAC64C
 crazyJungleBossHoverAttackPhase = 0x800BBE4C; // rom:0xAC67C
 crazyJungleBossHoverJumpPhase = 0x800BBF3C; // rom:0xAC76C
+updateCrazyJungleBossPositionAndTrackCollision = 0x800BBFEC; // rom:0xAC81C
 gCrazyJungleBossChasePhaseHandlers = 0x800BC454; // rom:0xACC84
 gCrazyJungleBossHoverPhaseHandlers = 0x800BC460; // rom:0xACC90
 gWendysHouseProjectileTargetPositions = 0x800BB930; // size:0x50 rom:0xB5B40
