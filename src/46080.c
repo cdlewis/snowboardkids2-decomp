@@ -3044,7 +3044,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
-            scheduleTask(&func_800BBA90_AD510, 0, 0, 0xD3);
+            scheduleTask(&initRotatingSky, 0, 0, 0xD3);
             break;
 
         case X_CROSS:

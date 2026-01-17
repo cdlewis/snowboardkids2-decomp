@@ -53,8 +53,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x5C];
-    u8 unk5C;
-} AD510Allocation;
+    u8 skyDisplayListIndex;
+} RotatingSkyAllocation;
 
 typedef struct {
     u8 _pad[0x14];
@@ -64,12 +64,12 @@ typedef struct {
 typedef struct {
     /* 0x00 */ Transform3D matrix;
     /* 0x20 */ u8 _pad20[0x1C];
-    /* 0x3C */ u16 unk3C;
-} AD594Arg;
+    /* 0x3C */ u16 rotationAngle;
+} RotatingSkyRenderArg;
 
 void renderShootCrossTargets(ShootCrossTargets *arg0);
-void func_800BBB14_AD594(AD594Arg *arg0);
-void func_800BBB70_AD5F0(AD510Arg *arg0);
+void updateRotatingSky(RotatingSkyRenderArg *arg0);
+void cleanupRotatingSky(RotatingSkyArg *arg0);
 void cleanupShootCrossTargets(ShootCrossTargets *arg0);
 void initShootCrossTargetsCallback(ShootCrossTargets *arg0);
 void activateShootCrossTargets(ShootCrossTargets *arg0);
@@ -283,35 +283,35 @@ void scheduleShootCrossTargetsTask(s32 courseId) {
     }
 }
 
-void func_800BBA90_AD510(AD510Arg *arg0) {
-    AD510Allocation *allocation;
+void initRotatingSky(RotatingSkyArg *arg0) {
+    RotatingSkyAllocation *allocation;
     LevelDisplayLists *result;
 
-    allocation = (AD510Allocation *)getCurrentAllocation();
-    result = getSkyDisplayLists3ByIndex(allocation->unk5C);
-    arg0->unk20 = (void *)((u32)result + 0x90);
-    arg0->unk24 = loadUncompressedAssetByIndex(0xD);
-    arg0->unk28 = loadCompressedSegment2AssetByIndex(0xD);
+    allocation = (RotatingSkyAllocation *)getCurrentAllocation();
+    result = getSkyDisplayLists3ByIndex(allocation->skyDisplayListIndex);
+    arg0->displayLists = (void *)((u32)result + 0x90);
+    arg0->uncompressedAsset = loadUncompressedAssetByIndex(0xD);
+    arg0->compressedAsset = loadCompressedSegment2AssetByIndex(0xD);
     arg0->unk14 = 0x25990000;
     arg0->unk18 = 0x1A2B0000;
     arg0->unk2C = 0;
     arg0->unk1C = 0xF7A30000;
-    setCleanupCallback(func_800BBB70_AD5F0);
-    setCallback(func_800BBB14_AD594);
+    setCleanupCallback(cleanupRotatingSky);
+    setCallback(updateRotatingSky);
 }
 
-void func_800BBB14_AD594(AD594Arg *arg0) {
+void updateRotatingSky(RotatingSkyRenderArg *arg0) {
     s32 i;
 
-    arg0->unk3C -= 0x20;
-    createYRotationMatrix(&arg0->matrix, arg0->unk3C);
+    arg0->rotationAngle -= 0x20;
+    createYRotationMatrix(&arg0->matrix, arg0->rotationAngle);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
     }
 }
 
-void func_800BBB70_AD5F0(AD510Arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupRotatingSky(RotatingSkyArg *arg0) {
+    arg0->uncompressedAsset = freeNodeMemory(arg0->uncompressedAsset);
+    arg0->compressedAsset = freeNodeMemory(arg0->compressedAsset);
 }

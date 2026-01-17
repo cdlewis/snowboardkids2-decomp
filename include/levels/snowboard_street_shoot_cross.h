@@ -8,12 +8,12 @@ typedef struct {
     s32 unk14;
     s32 unk18;
     s32 unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
+    void *displayLists;
+    void *uncompressedAsset;
+    void *compressedAsset;
     s32 unk2C;
-} AD510Arg;
+} RotatingSkyArg;
 
-void func_800BBA90_AD510(AD510Arg *arg0);
+void initRotatingSky(RotatingSkyArg *arg0);
 s32 checkProjectileTargetHit(Vec3i *arg0, s32 arg1);
 void scheduleShootCrossTargetsTask(s32 courseId);
