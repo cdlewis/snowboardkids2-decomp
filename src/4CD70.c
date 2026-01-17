@@ -1586,7 +1586,7 @@ void renderVictorySnowflakeSmall(VictorySnowflakeState *state) {
 
     state->screenX = state->posX >> 5;
     state->screenY = state->posY >> 5;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010924_11524, state);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderHalfSizeSpriteWithCustomPalette, state);
 }
 
 void cleanupVictorySnowflake(VictorySnowflakeState *state) {

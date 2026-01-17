@@ -273,7 +273,7 @@ void renderHalfSizeSpriteFrame(SpriteRenderArg *arg0) {
     }
 }
 
-void func_80010924_11524(SpriteRenderArg *arg0) {
+void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *arg0) {
     s32 clipOffsetY;
     s32 left;
     s32 top;
