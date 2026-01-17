@@ -879,7 +879,7 @@ void initSkyRenderTask(SkyRenderTaskState *state) {
 
 void dispatchSkyRenderCallback(ScheduledTask *task) {
     if (task->skyType == 1) {
-        if ((func_800698DC_6A4DC() & 0xFF) == 0x37) {
+        if ((getRenderContext() & 0xFF) == 0x37) {
             setCallbackWithContinue(renderSkyDisplayListsWithCourseFog);
             return;
         }

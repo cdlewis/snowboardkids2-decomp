@@ -215,7 +215,7 @@ void initRace(void) {
 
     LOAD_OVERLAY(_9FF70);
 
-    func_800698CC_6A4CC(0x37);
+    setRenderContext(0x37);
 
     raceState = allocateTaskMemory(sizeof(RaceState));
     for (i = sizeof(RaceState) - 1; i >= 0; i--) {

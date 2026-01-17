@@ -39,7 +39,7 @@ typedef struct gActiveScheduler_type {
     void (*schedulerCleanupCallback)(void);
     u8 schedulerState;
     u8 priority;
-    u8 unk1A;
+    u8 renderContext;
     u8 handlerContinueFlag;
     s32 cleanupFrameCounter;
     /* 0x20 */ void *latestDmaSequenceNumber;
@@ -125,7 +125,7 @@ void createRootTaskScheduler(void (*gamestateHandler)(void), s32 priority) {
     }
 
     // Initialize the scheduler fields
-    newScheduler->unk1A = 0;
+    newScheduler->renderContext = 0;
     newScheduler->gamestateHandler = gamestateHandler;
     newScheduler->schedulerState = SCHEDULER_STATE_INACTIVE;
     newScheduler->priority = priority;
@@ -173,7 +173,7 @@ void createTaskQueue(void (*arg0)(void), s32 arg1) {
         temp_v0->prev = temp_a2;
     }
 
-    temp_a2->unk1A = 0;
+    temp_a2->renderContext = 0;
     temp_a2->schedulerState = SCHEDULER_STATE_INACTIVE;
     temp_a2->priority = arg1;
     temp_a2->gamestateHandler = arg0;
@@ -346,12 +346,12 @@ void *getCurrentAllocation(void) {
     return gActiveScheduler->allocatedState;
 }
 
-void func_800698CC_6A4CC(s8 value) {
-    gActiveScheduler->unk1A = value;
+void setRenderContext(s8 value) {
+    gActiveScheduler->renderContext = value;
 }
 
-u8 func_800698DC_6A4DC(void) {
-    return gActiveScheduler->unk1A;
+u8 getRenderContext(void) {
+    return gActiveScheduler->renderContext;
 }
 
 void setupTaskSchedulerNodes(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 arg5, s32 arg6, s32 arg7) {

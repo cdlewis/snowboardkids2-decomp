@@ -3592,4 +3592,5 @@ initTrickBurstEffect = 0x800B5590; // rom:0x1E2640
 updateTrickBurstEffect = 0x800B5660; // rom:0x1E2710
 cleanupTrickBurstEffect = 0x800B5794; // rom:0x1E2844
 gSpecialTrickTypeTable = 0x800941C4; // rom:0x94DC4
-getTrickType = 0x8005D818; // rom:0x5E418
+setRenderContext = 0x800698CC; // rom:0x6A4CC
+getRenderContext = 0x800698DC; // rom:0x6A4DC

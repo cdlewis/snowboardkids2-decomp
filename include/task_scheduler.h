@@ -72,9 +72,9 @@ s16 getSchedulerReturnValue(void);
 
 void setGameStateHandlerWithContinue(void (*gamestateHandler)(void));
 
-void func_800698CC_6A4CC(s8 value);
+void setRenderContext(s8 value);
 
-u8 func_800698DC_6A4DC(void);
+u8 getRenderContext(void);
 
 void func_80069CF8_6A8F8(void);
 
