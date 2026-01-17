@@ -14,7 +14,10 @@ Usage:
 import sys
 import os
 import re
+import json
+import time
 import argparse
+import hashlib
 from pathlib import Path
 from dataclasses import dataclass, field
 from typing import List, Dict, Tuple, Optional, Set
@@ -63,6 +66,12 @@ JUMP_PATTERN = re.compile(r'\b(jal|j)\b')
 JAL_PATTERN = re.compile(r'\bjal\s+(\S+)')
 STACK_PATTERN = re.compile(r'addiu\s+\$sp,\s*\$sp,\s*-0x([0-9A-Fa-f]+)')
 MEMORY_ACCESS_PATTERN = re.compile(r'(-?0x[0-9A-Fa-f]+|-?\d+)\s*\(\s*\$\w+\s*\)')
+
+# Cache settings
+CACHE_VERSION = 1
+DEFAULT_TOP_N = 20
+CACHE_DIR = ".cache"
+CACHE_FILE = os.path.join(CACHE_DIR, "similar_functions_cache.json")
 
 # Register normalization mappings
 REGISTER_CLASSES = {
@@ -460,12 +469,313 @@ def get_c_source_for_function(func_name: str, project_root: str) -> Optional[str
 
 _cached_matchings_index: Optional[List[ParsedFunction]] = None
 _cached_project_root: Optional[str] = None
+_cached_similarity_data: Optional[dict] = None
 
 
 def get_project_root() -> str:
     """Get the project root directory."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     return os.path.dirname(script_dir)
+
+
+def get_directory_hash(directory: str) -> str:
+    """
+    Compute hash from file metadata (path + mtime + size) of all .s files.
+
+    This is fast and reliable for detecting file changes without reading contents.
+    """
+    if not os.path.isdir(directory):
+        return ""
+
+    hasher = hashlib.sha256()
+    file_entries = []
+
+    for asm_file in sorted(Path(directory).glob('**/*.s')):
+        try:
+            stat = asm_file.stat()
+            # Use relative path for portability
+            rel_path = asm_file.relative_to(directory)
+            file_entries.append(f"{rel_path}:{stat.st_mtime}:{stat.st_size}")
+        except OSError:
+            # If we can't stat a file, skip it
+            continue
+
+    if file_entries:
+        hasher.update("\n".join(file_entries).encode())
+
+    return hasher.hexdigest()
+
+
+def get_cache_path(project_root: Optional[str] = None) -> str:
+    """Get the full cache file path."""
+    if project_root is None:
+        project_root = get_project_root()
+    return os.path.join(project_root, CACHE_FILE)
+
+
+def load_cache(cache_path: str) -> Optional[dict]:
+    """Load cache from file, validate version."""
+    try:
+        with open(cache_path, 'r') as f:
+            cache_data = json.load(f)
+
+        # Validate cache structure and version
+        if not isinstance(cache_data, dict):
+            return None
+
+        metadata = cache_data.get('metadata', {})
+        if metadata.get('cache_version') != CACHE_VERSION:
+            return None
+
+        if 'function_similarities' not in cache_data:
+            return None
+
+        return cache_data
+    except (json.JSONDecodeError, IOError, KeyError):
+        return None
+
+
+def save_cache(cache_path: str, cache_data: dict) -> None:
+    """Save cache to file, create directory if needed."""
+    cache_dir = os.path.dirname(cache_path)
+    if cache_dir and not os.path.exists(cache_dir):
+        os.makedirs(cache_dir, exist_ok=True)
+
+    with open(cache_path, 'w') as f:
+        json.dump(cache_data, f, indent=2)
+
+
+def is_cache_valid(cache_data: Optional[dict], target_dir: str) -> bool:
+    """Check if cache metadata matches current directory state."""
+    if not cache_data:
+        return False
+
+    metadata = cache_data.get('metadata', {})
+    cached_dir = metadata.get('target_directory', '')
+    cached_hash = metadata.get('directory_hash', '')
+
+    if not cached_dir or not cached_hash:
+        return False
+
+    # Normalize paths for comparison
+    target_dir_abs = os.path.abspath(target_dir)
+    cached_dir_abs = os.path.abspath(cached_dir)
+
+    if target_dir_abs != cached_dir_abs:
+        return False
+
+    current_hash = get_directory_hash(target_dir)
+    return current_hash == cached_hash
+
+
+def get_cached_similar_functions(
+    func_name: str,
+    cache_data: dict,
+    candidates: List[ParsedFunction],
+    top_n: int
+) -> Optional[List[SimilarityResult]]:
+    """
+    Get cached similar functions for a function, return as SimilarityResult objects.
+    """
+    similarities = cache_data.get('function_similarities', {})
+    cached = similarities.get(func_name)
+
+    if not cached:
+        return None
+
+    # Build a name -> ParsedFunction mapping
+    func_map = {f.name: f for f in candidates}
+
+    results = []
+    for entry in cached[:top_n]:
+        other_func = func_map.get(entry['name'])
+        if other_func:
+            results.append(SimilarityResult(
+                function=other_func,
+                total_score=entry['score'],
+                instruction_score=entry['instruction'],
+                control_flow_score=entry['control_flow'],
+                data_access_score=entry['data_access'],
+                structural_score=entry['structural']
+            ))
+
+    return results
+
+
+def build_similarity_cache(
+    candidates: List[ParsedFunction],
+    target_dir: str,
+    top_n: int = DEFAULT_TOP_N
+) -> dict:
+    """
+    Pre-compute top-N similarities for all functions and build cache.
+    O(n^2) time complexity.
+    """
+    print(f"Building similarity cache for {len(candidates)} functions...", file=sys.stderr)
+
+    func_similarities = {}
+    func_map = {f.name: f for f in candidates}
+
+    for i, query in enumerate(candidates):
+        if (i + 1) % 100 == 0:
+            print(f"  Progress: {i + 1}/{len(candidates)}", file=sys.stderr)
+
+        # Calculate similarity against all other functions
+        results = []
+        for candidate in candidates:
+            if candidate.name == query.name:
+                continue
+
+            result = calculate_similarity(query, candidate)
+            results.append({
+                'name': candidate.name,
+                'score': result.total_score,
+                'instruction': result.instruction_score,
+                'control_flow': result.control_flow_score,
+                'data_access': result.data_access_score,
+                'structural': result.structural_score,
+            })
+
+        # Sort by total score descending and keep top N
+        results.sort(key=lambda r: (-r['score'], r['name']))
+        func_similarities[query.name] = results[:top_n]
+
+    print(f"  Done: {len(candidates)} functions processed", file=sys.stderr)
+
+    # Build cache structure
+    dir_hash = get_directory_hash(target_dir)
+    cache_data = {
+        'metadata': {
+            'target_directory': target_dir,
+            'directory_hash': dir_hash,
+            'cache_version': CACHE_VERSION,
+            'top_n': top_n,
+            'generated_at': time.time(),
+        },
+        'function_similarities': func_similarities,
+        'function_index': serialize_function_index(candidates),
+    }
+
+    return cache_data
+
+
+def load_similarity_cache(project_root: Optional[str] = None) -> Optional[dict]:
+    """
+    Load similarity cache if valid. Returns None if cache is invalid/missing.
+    """
+    global _cached_similarity_data
+
+    if _cached_similarity_data is not None:
+        return _cached_similarity_data
+
+    if project_root is None:
+        project_root = get_project_root()
+
+    cache_path = get_cache_path(project_root)
+    matchings_dir = os.path.join(project_root, 'asm', 'matchings')
+
+    # Try to load existing cache
+    if os.path.exists(cache_path):
+        cache_data = load_cache(cache_path)
+        if is_cache_valid(cache_data, matchings_dir):
+            _cached_similarity_data = cache_data
+            return cache_data
+
+    return None
+
+
+def ensure_similarity_cache(candidates: List[ParsedFunction], project_root: Optional[str] = None) -> dict:
+    """
+    Ensure similarity cache is loaded, building it if necessary.
+    Returns the cache data.
+    """
+    global _cached_similarity_data
+
+    # Try loading existing cache
+    cache_data = load_similarity_cache(project_root)
+    if cache_data is not None:
+        return cache_data
+
+    # Need to build cache
+    if project_root is None:
+        project_root = get_project_root()
+
+    matchings_dir = os.path.join(project_root, 'asm', 'matchings')
+    cache_data = build_similarity_cache(candidates, matchings_dir)
+
+    # Save to disk
+    cache_path = get_cache_path(project_root)
+    save_cache(cache_path, cache_data)
+    _cached_similarity_data = cache_data
+
+    return cache_data
+
+
+def serialize_function(func: ParsedFunction) -> dict:
+    """Serialize a ParsedFunction to JSON-compatible dict."""
+    return {
+        'name': func.name,
+        'file_path': func.file_path,
+        'raw_instructions': func.raw_instructions,
+        'normalized_instructions': func.normalized_instructions,
+        'instruction_count': func.instruction_count,
+        'branch_count': func.branch_count,
+        'jump_count': func.jump_count,
+        'label_count': func.label_count,
+        'stack_size': func.stack_size,
+        'control_flow_signature': func.control_flow_signature,
+        'data_access_offsets': func.data_access_offsets,
+        'called_functions': func.called_functions,
+        'instruction_ngrams': [list(ngram) for ngram in func.instruction_ngrams],
+    }
+
+
+def deserialize_function(data: dict) -> ParsedFunction:
+    """Deserialize a dict to ParsedFunction."""
+    return ParsedFunction(
+        name=data['name'],
+        file_path=data['file_path'],
+        raw_instructions=data['raw_instructions'],
+        normalized_instructions=data['normalized_instructions'],
+        instruction_count=data['instruction_count'],
+        branch_count=data['branch_count'],
+        jump_count=data['jump_count'],
+        label_count=data['label_count'],
+        stack_size=data['stack_size'],
+        control_flow_signature=data['control_flow_signature'],
+        data_access_offsets=data['data_access_offsets'],
+        called_functions=data['called_functions'],
+        instruction_ngrams={tuple(ngram) for ngram in data['instruction_ngrams']},
+    )
+
+
+def serialize_function_index(functions: List[ParsedFunction]) -> List[dict]:
+    """Serialize a list of ParsedFunction to JSON-compatible format."""
+    return [serialize_function(f) for f in functions]
+
+
+def deserialize_function_index(data: List[dict]) -> List[ParsedFunction]:
+    """Deserialize a list of dicts to ParsedFunction objects."""
+    return [deserialize_function(d) for d in data]
+
+
+def load_function_index_from_cache(cache_path: str) -> Optional[List[ParsedFunction]]:
+    """Load function index from cache if available."""
+    cache_data = load_cache(cache_path)
+    if not cache_data:
+        return None
+
+    project_root = get_project_root()
+    matchings_dir = os.path.join(project_root, 'asm', 'matchings')
+
+    if not is_cache_valid(cache_data, matchings_dir):
+        return None
+
+    index_data = cache_data.get('function_index')
+    if not index_data:
+        return None
+
+    return deserialize_function_index(index_data)
 
 
 def get_matchings_index(project_root: Optional[str] = None) -> List[ParsedFunction]:
@@ -479,6 +789,15 @@ def get_matchings_index(project_root: Optional[str] = None) -> List[ParsedFuncti
     if _cached_matchings_index is not None and _cached_project_root == project_root:
         return _cached_matchings_index
 
+    # Try loading from cache file
+    cache_path = get_cache_path(project_root)
+    cached_index = load_function_index_from_cache(cache_path)
+    if cached_index is not None:
+        _cached_matchings_index = cached_index
+        _cached_project_root = project_root
+        return _cached_matchings_index
+
+    # Build from scratch
     matchings_dir = os.path.join(project_root, 'asm', 'matchings')
     _cached_matchings_index = build_function_index(matchings_dir)
     _cached_project_root = project_root
@@ -513,7 +832,14 @@ def get_best_match_for_function(func_name: str, project_root: Optional[str] = No
     if not candidates:
         return None
 
-    # Find similar functions
+    # Try cache first
+    cache_data = load_similarity_cache(project_root)
+    if cache_data is not None:
+        cached_results = get_cached_similar_functions(func_name, cache_data, candidates, 1)
+        if cached_results:
+            return (cached_results[0].function.name, cached_results[0].total_score)
+
+    # Cache miss - compute similarity
     results = find_similar_functions(query, candidates, top_n=1, threshold=0.0)
 
     if results:
@@ -541,13 +867,61 @@ def get_best_match_for_parsed_function(query: ParsedFunction, project_root: Opti
     if not candidates:
         return None
 
-    # Find similar functions
+    # Try cache first
+    cache_data = load_similarity_cache(project_root)
+    if cache_data is not None:
+        cached_results = get_cached_similar_functions(query.name, cache_data, candidates, 1)
+        if cached_results:
+            return (cached_results[0].function.name, cached_results[0].total_score)
+
+    # Cache miss - compute similarity
     results = find_similar_functions(query, candidates, top_n=1, threshold=0.0)
 
     if results:
         return (results[0].function.name, results[0].total_score)
 
     return None
+
+
+def show_cache_info(project_root: str, cache_path: str) -> None:
+    """Show cache status information."""
+    if not os.path.exists(cache_path):
+        print("Cache status: No cache file exists")
+        print(f"Cache location: {cache_path}")
+        return
+
+    cache_data = load_cache(cache_path)
+    matchings_dir = os.path.join(project_root, 'asm', 'matchings')
+
+    if not cache_data:
+        print("Cache status: Invalid or corrupted cache")
+        print(f"Cache location: {cache_path}")
+        return
+
+    metadata = cache_data.get('metadata', {})
+
+    if not is_cache_valid(cache_data, matchings_dir):
+        print("Cache status: Invalid (directory contents have changed)")
+        print(f"Cache location: {cache_path}")
+        print(f"Cached directory: {metadata.get('target_directory', 'unknown')}")
+        print(f"Functions cached: {len(cache_data.get('function_similarities', {}))}")
+        print(f"Cache version: {metadata.get('cache_version', 'unknown')}")
+        return
+
+    # Valid cache
+    generated_at = metadata.get('generated_at', 0)
+    if generated_at:
+        from datetime import datetime
+        generated_time = datetime.fromtimestamp(generated_at).strftime('%Y-%m-%d %H:%M:%S')
+    else:
+        generated_time = 'unknown'
+
+    print("Cache status: Valid")
+    print(f"Cache location: {cache_path}")
+    print(f"Functions cached: {len(cache_data.get('function_similarities', {}))}")
+    print(f"Top N per function: {metadata.get('top_n', 'unknown')}")
+    print(f"Generated: {generated_time}")
+    print(f"Cache version: {metadata.get('cache_version', 'unknown')}")
 
 
 def main():
@@ -559,10 +933,13 @@ Examples:
     python3 tools/find_similar_functions.py func_8000FED0_10AD0
     python3 tools/find_similar_functions.py func_8000FED0_10AD0 --top 5
     python3 tools/find_similar_functions.py func_8000FED0_10AD0 --threshold 0.5
+    python3 tools/find_similar_functions.py --cache-info
+    python3 tools/find_similar_functions.py --rebuild-cache
         """
     )
     parser.add_argument(
         'function_name',
+        nargs='?',
         help='Name of the function to find similar matches for'
     )
     parser.add_argument(
@@ -582,19 +959,71 @@ Examples:
         action='store_true',
         help='Show detailed similarity breakdown'
     )
+    parser.add_argument(
+        '--rebuild-cache',
+        action='store_true',
+        help='Force rebuild of similarity cache and exit'
+    )
+    parser.add_argument(
+        '--cache-info',
+        action='store_true',
+        help='Show cache status information and exit'
+    )
 
     args = parser.parse_args()
 
     # Determine project root
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
+    cache_path = get_cache_path(project_root)
+    matchings_dir = os.path.join(project_root, 'asm', 'matchings')
+
+    # Handle --cache-info
+    if args.cache_info:
+        show_cache_info(project_root, cache_path)
+        sys.exit(0)
+
+    # Handle --rebuild-cache
+    if args.rebuild_cache:
+        print("Building similarity cache...", file=sys.stderr)
+        candidates = build_function_index(matchings_dir)
+        if not candidates:
+            print("Error: No matched functions found to cache", file=sys.stderr)
+            sys.exit(1)
+
+        cache_data = build_similarity_cache(candidates, matchings_dir)
+        save_cache(cache_path, cache_data)
+        print(f"Cache saved to {cache_path}", file=sys.stderr)
+        print(f"Cached {len(cache_data['function_similarities'])} functions", file=sys.stderr)
+        sys.exit(0)
+
+    # Require function_name for normal operation
+    if not args.function_name:
+        parser.print_help()
+        print("\nError: function_name is required unless using --cache-info or --rebuild-cache", file=sys.stderr)
+        sys.exit(1)
 
     nonmatchings_dir = os.path.join(project_root, 'asm', 'nonmatchings')
-    matchings_dir = os.path.join(project_root, 'asm', 'matchings')
 
     # Find the query function
     print(f"Searching for function: {args.function_name}...", file=sys.stderr)
-    query = find_function(args.function_name, [nonmatchings_dir, matchings_dir])
+
+    # Try to find in matchings cache first (fast)
+    query = None
+    cache_path = get_cache_path(project_root)
+    cached_index = load_function_index_from_cache(cache_path)
+    if cached_index is not None:
+        for func in cached_index:
+            if func.name == args.function_name:
+                query = func
+                break
+
+    # If not in matchings cache, search nonmatchings directory
+    if query is None:
+        query = find_function(args.function_name, [nonmatchings_dir])
+        if query is None:
+            # Also check matchings (in case cache is stale)
+            query = find_function(args.function_name, [matchings_dir])
 
     if not query:
         print(f"Error: Function '{args.function_name}' not found", file=sys.stderr)
@@ -602,22 +1031,36 @@ Examples:
 
     print(f"Found query function with {query.instruction_count} instructions", file=sys.stderr)
 
-    # Build index of matching functions
-    print(f"Indexing matched functions...", file=sys.stderr)
-    candidates = build_function_index(matchings_dir)
-    print(f"Indexed {len(candidates)} functions", file=sys.stderr)
+    # Build index of matching functions (uses cache if available)
+    print(f"Loading matched functions...", file=sys.stderr)
+    candidates = get_matchings_index(project_root)
+    print(f"Loaded {len(candidates)} functions", file=sys.stderr)
 
     if not candidates:
         print("Error: No matched functions found to compare against", file=sys.stderr)
         sys.exit(1)
 
-    # Find similar functions
-    print(f"Calculating similarities...\n", file=sys.stderr)
-    results = find_similar_functions(query, candidates, top_n=args.top, threshold=args.threshold)
+    # Try cache first
+    cache_data = load_similarity_cache(project_root)
+    if cache_data is not None:
+        print(f"Using cached similarities", file=sys.stderr)
+        cached_results = get_cached_similar_functions(args.function_name, cache_data, candidates, args.top)
+        if cached_results:
+            # Filter by threshold
+            filtered_results = [r for r in cached_results if r.total_score >= args.threshold]
+            results = filtered_results[:args.top]
+        else:
+            results = []
+    else:
+        # Cache miss - compute similarities
+        print(f"Calculating similarities...", file=sys.stderr)
+        results = find_similar_functions(query, candidates, top_n=args.top, threshold=args.threshold)
 
     if not results:
         print("No similar functions found above threshold")
         sys.exit(0)
+
+    print()  # Blank line between stderr and stdout
 
     # Display results
     print(f"Similar functions to {query.name}:\n")
