@@ -1,4 +1,5 @@
 candidate_source: python3 tools/score_functions.py asm/nonmatchings --json --by-similarity
 prompt: "decompile the function: $INPUT[0]. There are several similar functions that have been matched, they might provide a useful reference: $INPUT[1:]. When creating your claude environment use --id $TASK_ID. use ultrathink"
+claude_command: glaude
 claude_flags: --model opus
-repeat: 60
+repeat: 3 
