@@ -3516,7 +3516,163 @@ u8 getRumbleDuration(Player *player, s32 effectType) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B7B7C_A7A2C);
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B82D8_A8188);
+void func_800B82D8_A8188(Player *arg0) {
+    Vec3i savedPos;
+    Vec3i transformedVec;
+    Vec3i temp;
+    Transform3D matrix;
+    GameState *gs;
+    s32 sqrtDist;
+    s32 var_s7;
+    s32 temp_v0;
+    s16 angle;
+    s32 var_v0;
+    Vec3i *temp2;
+    s32 temp3;
+
+    gs = getCurrentAllocation();
+
+    switch (gs->raceType) {
+        default:
+        case 0:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            handlePlayerToPlayerCollision(arg0);
+            break;
+        case 1:
+        case 2:
+        case 3:
+            handleCollisionWithTargetPlayer(arg0);
+            break;
+    }
+
+    arg0->sectorIndex = getOrUpdatePlayerSectorIndex(arg0, (u8 *)&gs->gameData, arg0->sectorIndex, &arg0->worldPos);
+    temp2 = &savedPos;
+    memcpy(&arg0->unk970.translation, &arg0->worldPos, 0xC);
+
+    if (!(arg0->unkB84 & 0x100)) {
+        memcpy(temp2, &arg0->worldPos, sizeof(Vec3i));
+
+        if (func_80059ED0_5AAD0(arg0) == -1 && ((savedPos.x != arg0->worldPos.x) || (savedPos.z != arg0->worldPos.z))) {
+            arg0->unkB84 |= 0x10;
+            savedPos.x = arg0->worldPos.x - savedPos.x;
+            savedPos.z = arg0->worldPos.z - savedPos.z;
+            sqrtDist = isqrt64((s64)savedPos.x * savedPos.x + (s64)savedPos.z * savedPos.z);
+
+            if (sqrtDist > 0x8000) {
+                if (arg0->unkB84 & 0x1000) {
+                    setPlayerPullState(arg0, &savedPos);
+                } else {
+                    createYRotationMatrix(&matrix, arg0->rotY + arg0->unkA90);
+                    transformVector3(&savedPos, &matrix, &transformedVec);
+                    var_s7 = 0;
+                    angle = atan2Fixed(transformedVec.x, transformedVec.z);
+                    var_v0 = (angle - 0x981) < 0x67FU;
+                    if (arg0->unkB84 & 2) {
+                        temp3 = (angle - 0x1000) < 0x680U;
+                        var_s7 = temp3;
+                        var_v0 = (angle - 0x981) < 0x67FU;
+                    } else {
+                        if (angle >= 0x1981) {
+                            var_s7 = 1;
+                        }
+                        var_v0 = angle < 0x680;
+                    }
+
+                    if (var_v0) {
+                        var_s7 = 2;
+                    }
+
+                    if (var_s7 != 0) {
+                        if (isqrt64(
+                                (s64)arg0->velocity.x * arg0->velocity.x + (s64)arg0->velocity.z * arg0->velocity.z
+                            ) > 0x30000) {
+                            s32 normX = ((s64)savedPos.x * 0x2000) / sqrtDist;
+                            s32 normZ = ((s64)savedPos.z * 0x2000) / sqrtDist;
+                            s32 negNormX;
+                            s32 dotPerp;
+                            s32 dotPar;
+                            s32 parComponent;
+
+                            negNormX = -normX;
+
+                            dotPerp = ((s64)normZ * arg0->velocity.x + (s64)negNormX * arg0->velocity.z) / 0x2000;
+                            dotPar = ((s64)normX * arg0->velocity.x + (s64)normZ * arg0->velocity.z) / 0x2000;
+
+                            parComponent = dotPar;
+                            if (parComponent < 0) {
+                                parComponent = -parComponent;
+                                if (parComponent > 0x40000) {
+                                    parComponent = 0x40000;
+                                }
+
+                                transformedVec.x =
+                                    ((s64)normZ * dotPerp) / 0x2000 + ((s64)normX * parComponent) / 0x2000;
+                                transformedVec.z =
+                                    ((s64)negNormX * dotPerp) / 0x2000 + ((s64)normZ * parComponent) / 0x2000;
+
+                                setPlayerHitStunState(arg0, var_s7, &transformedVec);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            arg0->unkB84 &= ~0x10;
+        }
+
+        func_8005A930_5B530(arg0);
+
+        temp_v0 = getTrackHeightInSector(&gs->gameData, arg0->sectorIndex, &arg0->worldPos, 0x100000) + 0x3C00000;
+        if (temp_v0 < arg0->worldPos.y) {
+            arg0->worldPos.y = temp_v0;
+        }
+    }
+
+    if (!(arg0->unkB84 & 0x200)) {
+        func_8005A26C_5AE6C(arg0);
+        memcpy(&arg0->unk970.translation, &arg0->worldPos, sizeof(Vec3i));
+    }
+
+    if (arg0->unkB84 & 0x20000) {
+        arg0->unkB84 &= ~1;
+    }
+
+    func_8005CFFC_5DBFC(
+        (TrackGeometryFaceData *)&gs->gameData,
+        arg0->sectorIndex,
+        &arg0->worldPos,
+        &arg0->unkBC9,
+        &arg0->unkBCC
+    );
+
+    arg0->unkBCA = arg0->unkBC9 >> 4;
+    arg0->unkBC9 &= 0xF;
+
+    if (arg0->unkB84 & 0x10000) {
+        arg0->unkBC9 = 0;
+    } else if (arg0->unkB84 & 0x20000) {
+        arg0->unkBC9 = 0;
+        arg0->unkBCC &= 0xF0;
+    }
+
+    if (arg0->unkBC9 == 1) {
+        if ((arg0->unkBCB & 0xFF) == 3) {
+            setPlayerState80(arg0);
+        } else {
+            arg0->unkBCB++;
+        }
+    } else {
+        arg0->unkBCB = 0;
+    }
+
+    if (arg0->unkBC9 == 2) {
+        setPlayerState100(arg0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B8894_A8744);
 
@@ -3544,7 +3700,7 @@ void updatePlayerJointPositions(Player *player) {
         *(volatile s32 *)(jointWritePtr + 0xA18) =
             player->unk970.translation.z + *(s32 *)((u8 *)&D_800BA350_AA200 + offset);
 
-        sectorIndex = func_80059E90_5AA90((void *)player, gameData, player->sectorIndex, jointPos);
+        sectorIndex = getOrUpdatePlayerSectorIndex((void *)player, gameData, player->sectorIndex, jointPos);
         *(volatile s32 *)(jointWritePtr + 0xA14) = getTrackHeightInSector(gameData, sectorIndex, jointPos, 0x100000);
 
         i++;

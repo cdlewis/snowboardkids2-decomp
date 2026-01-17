@@ -69,10 +69,10 @@ typedef struct {
     u8 padAF;
     Transform3D unkB0; /* 0xB0 - 0xCF */
     u8 padD0[0x434 - 0xD0];
-    Vec3i unk434; /* 0x434 */
-    s32 unk440;   /* 0x440 */
-    s32 unk444;   /* 0x444 */
-    s32 unk448;   /* 0x448 */
+    Vec3i unk434;         /* 0x434 */
+    s32 unk440;           /* 0x440 */
+    s32 unk444;           /* 0x444 */
+    s32 unk448;           /* 0x448 */
     s32 sideVelocity;     /* 0x44C */
     s32 verticalVelocity; /* 0x450 */
     s32 forwardVelocity;  /* 0x454 */
@@ -81,14 +81,14 @@ typedef struct {
     u8 pad46C[0x8];
     s32 unk474; /* 0x474 */
     u8 pad478[0x950 - 0x478];
-    Transform3D unk950;   /* 0x950 - 0x96F */
+    Transform3D unk950; /* 0x950 - 0x96F */
     Transform3D unk970; /* 0x970 - 0x98F */
     Transform3D unk990; /* 0x990 - 0x9AF */
     Transform3D unk9B0; /* 0x9B0 - 0x9CF */
     u8 pad9D0[0x9F0 - 0x9D0];
-    Transform3D unk9F0;    /* 0x9F0 - 0xA0F */
+    Transform3D unk9F0;              /* 0x9F0 - 0xA0F */
     JointPosition jointPositions[9]; /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
-    s32 aiTargetX;            /* 0xA7C */
+    s32 aiTargetX;                   /* 0xA7C */
     u8 padA80[4];
     s32 aiTargetZ; /* 0xA84 */
     u8 padA88[4];
@@ -102,7 +102,7 @@ typedef struct {
     u16 yawAngle;   /* 0xA9E */
     u8 padAA0[0x4];
     s32 maxSpeedCap; /* 0xAA4 */
-    s32 unkAA8; /* 0xAA8 */
+    s32 unkAA8;      /* 0xAA8 */
     u8 padAAC[0xAC2 - 0xAAC];
     s16 unkAC2; /* 0xAC2 */
     u8 padAC4[0xAD4 - 0xAC4];
@@ -132,7 +132,7 @@ typedef struct {
     s32 unkB5C; /* 0xB5C */
     s32 unkB60; /* 0xB60 */
     s32 unkB64; /* 0xB64 */
-    u8 unkB68; /* 0xB68 */
+    u8 unkB68;  /* 0xB68 */
     u8 padB69[0xB7A - 0xB69];
     s8 unkB7A;  /* 0xB7A */
     s8 unkB7B;  /* 0xB7B */
@@ -150,9 +150,9 @@ typedef struct {
     u8 padBA0[0xBB4 - 0xBA0];
     u8 unkBB4; /* 0xBB4 */
     u8 padBB5[0xBB8 - 0xBB5];
-    u8 unkBB8; /* 0xBB8 */
+    u8 unkBB8;      /* 0xBB8 */
     u8 characterId; /* 0xBB9 */
-    u8 boardIndex; /* 0xBBA */
+    u8 boardIndex;  /* 0xBBA */
     u8 padBBB[0xBBD - 0xBBB];
     u8 behaviorMode;    /* 0xBBD */
     u8 behaviorPhase;   /* 0xBBE */
@@ -173,7 +173,6 @@ typedef struct {
     u8 padBD0[0xBDB - 0xBD0];
     u8 unkBDB; /* 0xBDB */
 } Arg0Struct;
-
 
 typedef struct {
     Transform3D transform;
@@ -326,13 +325,8 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     arg0->unk434.x = gJingleTownBossSpawnPos[arg0->unkBB8];
     getTrackSegmentWaypoints(&gameState->gameData, 0, &sp10, &sp20);
     arg0->unk434.z = sp10.z + 0x200000;
-    arg0->sectorIndex = func_80059E90_5AA90(arg0, &gameState->gameData, 0, &arg0->unk434);
-    arg0->unk434.y = getTrackHeightInSector(
-        &gameState->gameData,
-        arg0->sectorIndex,
-        &arg0->unk434,
-        0x100000
-    );
+    arg0->sectorIndex = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->unk434);
+    arg0->unk434.y = getTrackHeightInSector(&gameState->gameData, arg0->sectorIndex, &arg0->unk434, 0x100000);
     memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
     arg0->sideVelocity = 0;
     arg0->verticalVelocity = 0;
@@ -345,8 +339,7 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
         *(s32 *)(elem + 0x5C) = (s32)arg0->unk4;
         *(s32 *)(elem + 0x60) = (s32)arg0->unk8;
         *(s32 *)(elem + 0x64) = 0;
-        *(void **)(elem + 0x58) =
-            (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + i * 0x10);
+        *(void **)(elem + 0x58) = (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + i * 0x10);
     }
 
     arg0->behaviorMode = 1;
@@ -899,11 +892,12 @@ void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
     }
 
     if (!(arg0->unkB84 & 0x10000)) {
-        volume = isqrt64(
-                     (s64)arg0->sideVelocity * arg0->sideVelocity + (s64)arg0->verticalVelocity * arg0->verticalVelocity +
-                     (s64)arg0->forwardVelocity * arg0->forwardVelocity
-                 ) >>
-                 12;
+        volume =
+            isqrt64(
+                (s64)arg0->sideVelocity * arg0->sideVelocity + (s64)arg0->verticalVelocity * arg0->verticalVelocity +
+                (s64)arg0->forwardVelocity * arg0->forwardVelocity
+            ) >>
+            12;
         if (volume >= 0x81) {
             volume = 0x80;
         }
@@ -970,7 +964,7 @@ void updateJingleTownBossJointPositions(Arg0Struct *arg0) {
         arg0->jointPositions[i].x = arg0->unk970.translation.x + gJingleTownBossHoverExitOffsets[6 + i][0];
         arg0->jointPositions[i].z = arg0->unk970.translation.z + gJingleTownBossHoverExitOffsets[6 + i][2];
         posPtr = &arg0->jointPositions[i].x;
-        temp = func_80059E90_5AA90(arg0, temp_s5, arg0->sectorIndex, posPtr);
+        temp = getOrUpdatePlayerSectorIndex(arg0, temp_s5, arg0->sectorIndex, posPtr);
         arg0->jointPositions[i].y = getTrackHeightInSector(temp_s5, temp, posPtr, 0x100000);
         i++;
     } while (i < 9);

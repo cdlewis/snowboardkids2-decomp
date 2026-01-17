@@ -577,24 +577,13 @@ void disableViewportOverlay(ViewportNode *arg0) {
     }
 }
 
-// Aliases for non-matching assembly code
-void func_8006FE94_70A94(ViewportNodeWithOverlay *arg0, s8 arg1, s8 arg2, s8 arg3)
-    __attribute__((alias("setViewportOverlayRgbAndEnable")));
-void func_8006FEBC_70ABC(ViewportNode *arg0) __attribute__((alias("disableViewportOverlay")));
-
 void enableViewportDisplayList(void *arg0) {
     ((ViewportNode *)arg0)->viewportDisplayFlags |= 0x2;
 }
 
-void func_8006FED8_70AD8(void *arg0) __attribute__((alias("enableViewportDisplayList")));
-
 void disableViewportDisplayList(ViewportNode *arg0) {
     arg0->viewportDisplayFlags = (u8)(arg0->viewportDisplayFlags & 0xFD);
 }
-
-void func_8006FEE8_70AE8(ViewportNode *arg0) __attribute__((alias("disableViewportDisplayList")));
-
-void func_8006FEF8_70AF8(Node_70B00 *node, u16 id) __attribute__((alias("setViewportId")));
 
 void setViewportId(Node_70B00 *node, u16 id) {
     node->id = id;

@@ -424,7 +424,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     arg0->unk434 = D_800BCA3C_B1F2C[arg0->unkBB8];
     getTrackSegmentWaypoints(&state->gameData, 0, &sp10, &sp20);
     arg0->unk43C = sp10.z + 0x200000;
-    trackIdx = func_80059E90_5AA90(arg0, &state->gameData, 0, (Vec3i *)&arg0->unk434);
+    trackIdx = getOrUpdatePlayerSectorIndex(arg0, &state->gameData, 0, (Vec3i *)&arg0->unk434);
     arg0->sectorIndex = trackIdx;
     arg0->unk438 = getTrackHeightInSector(&state->gameData, trackIdx, (Vec3i *)&arg0->unk434, 0x100000);
     memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
@@ -555,7 +555,8 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     arg0->unkB84 = arg0->unkB84 | 0x40000;
     calculateAITargetPosition(arg0);
 
-    angleDiff = computeAngleToPosition(arg0->aiTargetX, arg0->aiTargetZ, arg0->worldPos.x, arg0->worldPos.z) - arg0->rotY;
+    angleDiff =
+        computeAngleToPosition(arg0->aiTargetX, arg0->aiTargetZ, arg0->worldPos.x, arg0->worldPos.z) - arg0->rotY;
     angleDiff = angleDiff & 0x1FFF;
 
     if (angleDiff >= 0x1001) {
@@ -793,7 +794,8 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
     calculateAITargetPosition(boss);
 
     angleDiff =
-        (computeAngleToPosition(boss->aiTargetX, boss->aiTargetZ, boss->worldPos.x, boss->worldPos.z) - boss->rotY) & 0x1FFF;
+        (computeAngleToPosition(boss->aiTargetX, boss->aiTargetZ, boss->worldPos.x, boss->worldPos.z) - boss->rotY) &
+        0x1FFF;
 
     if (angleDiff >= 0x1001) {
         angleDiff = angleDiff | 0xE000;
@@ -1021,7 +1023,7 @@ void updateIceLandBossJointPositions(Player *boss) {
         }
 
         jointPos = (JointPosition *)((u8 *)boss + jointOffset);
-        sectorIndex = func_80059E90_5AA90((void *)boss, gameData, boss->sectorIndex, jointPos);
+        sectorIndex = getOrUpdatePlayerSectorIndex((void *)boss, gameData, boss->sectorIndex, jointPos);
         jointOffset += 0xC;
         jointIndex += 1;
         *(volatile s32 *)(jointWritePtr + 0xA14) = getTrackHeightInSector(gameData, sectorIndex, jointPos, 0x100000);

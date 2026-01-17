@@ -29,20 +29,20 @@ typedef struct {
 // Starlight Highway Barrier Task
 // Each barrier has two gates (left/right) that open when players enter the trigger sector
 typedef struct {
-    /* 0x00 */ Transform3D leftGateNode;     // Left gate transform
-    /* 0x20 */ void *leftGateDisplayListOffset;  // Left gate display list offset
-    /* 0x24 */ void *displayListMemory1;     // Display list memory pointer 1
-    /* 0x28 */ void *displayListMemory2;     // Display list memory pointer 2
-    /* 0x2C */ s32 unk2C;                    // Unknown
+    /* 0x00 */ Transform3D leftGateNode;        // Left gate transform
+    /* 0x20 */ void *leftGateDisplayListOffset; // Left gate display list offset
+    /* 0x24 */ void *displayListMemory1;        // Display list memory pointer 1
+    /* 0x28 */ void *displayListMemory2;        // Display list memory pointer 2
+    /* 0x2C */ s32 unk2C;                       // Unknown
     /* 0x30 */ u8 pad30[0xC];
-    /* 0x3C */ Transform3D rightGateNode;    // Right gate transform
+    /* 0x3C */ Transform3D rightGateNode;        // Right gate transform
     /* 0x5C */ void *rightGateDisplayListOffset; // Right gate display list offset
-    /* 0x60 */ void *unk60;                   // Unknown
-    /* 0x64 */ void *unk64;                   // Unknown
-    /* 0x68 */ s32 unk68;                    // Unknown
+    /* 0x60 */ void *unk60;                      // Unknown
+    /* 0x64 */ void *unk64;                      // Unknown
+    /* 0x68 */ s32 unk68;                        // Unknown
     /* 0x6C */ u8 pad6C[0xC];
-    /* 0x78 */ s32 gateOpenAmount;            // Gate opening distance (0 = closed, 0x600000 = fully open)
-    /* 0x7C */ u8 barrierIndex;              // Barrier index (0 or 1) to select which configuration to use
+    /* 0x78 */ s32 gateOpenAmount; // Gate opening distance (0 = closed, 0x600000 = fully open)
+    /* 0x7C */ u8 barrierIndex;    // Barrier index (0 or 1) to select which configuration to use
 } StarlightBarrierTask;
 
 typedef struct {
@@ -354,14 +354,26 @@ void loadColorIndexedTexture(void *arg) {
     widthShift = 0;
 loop_1:
     if (!(tempWidth & 1)) {
-        do { widthShift += 1; if (widthShift < 0x10) { tempWidth >>= 1; goto loop_1; } } while (0);
+        do {
+            widthShift += 1;
+            if (widthShift < 0x10) {
+                tempWidth >>= 1;
+                goto loop_1;
+            }
+        } while (0);
     }
 
     tempHeight = tableEntry.field2;
     heightShift = 0;
 loop_2:
     if (!(tempHeight & 1)) {
-        do { heightShift += 1; if (heightShift < 0x10) { tempHeight >>= 1; goto loop_2; } } while (0);
+        do {
+            heightShift += 1;
+            if (heightShift < 0x10) {
+                tempHeight >>= 1;
+                goto loop_2;
+            }
+        } while (0);
     }
 
     gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
@@ -472,9 +484,6 @@ loop_2:
     gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
 }
 
-// Keep original name for auto-generated data file references
-void func_800BB75C_ADB1C(void *arg) __attribute__((alias("loadColorIndexedTexture")));
-
 void renderColorIndexedOpaqueDisplayList(void *arg0) {
     loadColorIndexedTexture(arg0);
     renderOpaqueDisplayList(arg0);
@@ -489,6 +498,9 @@ void renderColorIndexedOverlayDisplayList(void *arg0) {
     loadColorIndexedTexture(arg0);
     renderOverlayDisplayList(arg0);
 }
+
+// This is probably wrong but stops the build failing.
+void func_800BBB90(s16 arg0) __attribute__((alias("spawnDebugDisplayListTask")));
 
 void spawnDebugDisplayListTask(s16 arg0) {
     DebugDisplayListPosition *task;
@@ -508,9 +520,6 @@ void spawnDebugDisplayListTask(s16 arg0) {
         }
     }
 }
-
-// Keep original name for auto-generated data file references
-void func_800BBB90(s16 arg0) __attribute__((alias("spawnDebugDisplayListTask")));
 
 void initStarlightItemTask(StarlightItemTaskState *arg0) {
     arg0->segment1 = loadUncompressedAssetByIndex(8);
@@ -534,12 +543,12 @@ void initStarlightItemTask(StarlightItemTaskState *arg0) {
 // Checks for player proximity, handles collection animation, and renders the item with shadow
 void updateStarlightItemTask(StarlightItemTaskState *arg0) {
     GameState *allocation;
-    s32 var_s0;      // playersChecked - counter for players that have been checked
-    s32 var_s1;      // playerOffset - byte offset into player array
-    s16 temp_v0;     // currentScale - holds the current scale value
-    s16 temp_a1;     // scaleForMatrix - scale value to pass to scaleMatrix
-    u16 temp_v0_2;   // newRotation - new rotation value after increment
-    s32 temp;        // numPlayers - number of players in the game
+    s32 var_s0;    // playersChecked - counter for players that have been checked
+    s32 var_s1;    // playerOffset - byte offset into player array
+    s16 temp_v0;   // currentScale - holds the current scale value
+    s16 temp_a1;   // scaleForMatrix - scale value to pass to scaleMatrix
+    u16 temp_v0_2; // newRotation - new rotation value after increment
+    s32 temp;      // numPlayers - number of players in the game
     u8 pad[0x10];
 
     (void)pad;
@@ -602,14 +611,16 @@ void updateStarlightItemTask(StarlightItemTaskState *arg0) {
         }
     }
     // Full-size display lists (normal state)
-    arg0->displayLists2 = (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)getSkyDisplayLists3ByIndex(8) + 0xD0)),
-                                   (s32)getSkyDisplayLists3ByIndex(8) + 0xE0);
+    arg0->displayLists2 =
+        (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)getSkyDisplayLists3ByIndex(8) + 0xD0)),
+                         (s32)getSkyDisplayLists3ByIndex(8) + 0xE0);
     goto render;
 
 shrinking_animation:
     // Shrinking display lists (collected state)
-    arg0->displayLists2 = (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)getSkyDisplayLists3ByIndex(8) + 0xC0)),
-                                   (s32)getSkyDisplayLists3ByIndex(8) + 0xF0);
+    arg0->displayLists2 =
+        (DisplayLists *)((arg0->displayLists1 = (DisplayLists *)((s32)getSkyDisplayLists3ByIndex(8) + 0xC0)),
+                         (s32)getSkyDisplayLists3ByIndex(8) + 0xF0);
 
 render:
     var_s0 = 0;
@@ -880,13 +891,13 @@ void initStarlightBarrierTask(StarlightBarrierTask *arg0) {
 void updateStarlightBarrier(StarlightBarrierTask *arg0) {
     Vec3i vec;
     s32 pad[2];
-    s32 found;                 // 1 if any player is in the trigger sector
+    s32 found; // 1 if any player is in the trigger sector
     s32 i;
     u8 temp;
     s32 numPlayers;
     GameState *allocation;
     Player *player;
-    s32 gateOpenAmount;        // Copy of gate open amount
+    s32 gateOpenAmount; // Copy of gate open amount
     s32 tempS;
 
     allocation = getCurrentAllocation();
@@ -931,13 +942,19 @@ void updateStarlightBarrier(StarlightBarrierTask *arg0) {
     rotateVectorY(&vec, 0x1BEC, &arg0->rightGateNode.translation);
 
     // Add base position offset for the barrier
-    arg0->leftGateNode.translation.x = arg0->leftGateNode.translation.x + gStarlightBarrierPositionsX[arg0->barrierIndex][0];
-    arg0->leftGateNode.translation.y = arg0->leftGateNode.translation.y + gStarlightBarrierPositionsY[arg0->barrierIndex][0];
-    arg0->leftGateNode.translation.z = arg0->leftGateNode.translation.z + gStarlightBarrierPositionsZ[arg0->barrierIndex][0];
-    arg0->rightGateNode.translation.x = arg0->rightGateNode.translation.x + gStarlightBarrierPositionsX[arg0->barrierIndex][0];
-    arg0->rightGateNode.translation.y = arg0->rightGateNode.translation.y + gStarlightBarrierPositionsY[arg0->barrierIndex][0];
+    arg0->leftGateNode.translation.x =
+        arg0->leftGateNode.translation.x + gStarlightBarrierPositionsX[arg0->barrierIndex][0];
+    arg0->leftGateNode.translation.y =
+        arg0->leftGateNode.translation.y + gStarlightBarrierPositionsY[arg0->barrierIndex][0];
+    arg0->leftGateNode.translation.z =
+        arg0->leftGateNode.translation.z + gStarlightBarrierPositionsZ[arg0->barrierIndex][0];
+    arg0->rightGateNode.translation.x =
+        arg0->rightGateNode.translation.x + gStarlightBarrierPositionsX[arg0->barrierIndex][0];
+    arg0->rightGateNode.translation.y =
+        arg0->rightGateNode.translation.y + gStarlightBarrierPositionsY[arg0->barrierIndex][0];
     i = 0;
-    arg0->rightGateNode.translation.z = arg0->rightGateNode.translation.z + gStarlightBarrierPositionsZ[arg0->barrierIndex][0];
+    arg0->rightGateNode.translation.z =
+        arg0->rightGateNode.translation.z + gStarlightBarrierPositionsZ[arg0->barrierIndex][0];
 
     do {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->leftGateNode);
