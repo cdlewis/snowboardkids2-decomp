@@ -1230,6 +1230,7 @@ getCategorySkipValue = 0x800B07F0; // rom:0x1DD8A0
 
 commandCategories = 0x800BA570; // type:s32 size:0x48 rom:0x1E7620
 commandTable = 0x800B9C70; // type:s32 size:0x900 rom:0x1E6D20
+updatePlayerJointPositions = 0x800B98CC; // rom:0xA977C
 
 cutsceneSys2Wipe_validate = 0x800B2808;
 cutsceneSys2Wipe_isDone = 0x800B292C;

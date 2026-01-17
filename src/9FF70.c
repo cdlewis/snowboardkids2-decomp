@@ -22,8 +22,9 @@
 extern u16 trickScoreTable[];
 extern u16 trickBonusTable[];
 
-extern s32 D_800BA348_AA1F8;
-extern s32 D_800BA350_AA200;
+/* X and Z offset arrays for player's 9 joint positions */
+extern s32 D_800BA348_AA1F8; /* gPlayerJointXOffsets */
+extern s32 D_800BA350_AA200; /* gPlayerJointZOffsets */
 extern s32 D_800BAB40_AA9F0;
 extern s32 D_800BAB44_AA9F4;
 extern s32 D_800BAB3C_AA9EC;
@@ -3519,7 +3520,7 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B8894_A8744);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B9500_A93B0);
 
-void func_800B98CC_A977C(Player *player) {
+void updatePlayerJointPositions(Player *player) {
     GameState *alloc;
     GameDataLayout *gameData;
     s32 i;

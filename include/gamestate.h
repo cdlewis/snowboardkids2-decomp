@@ -95,8 +95,8 @@ typedef struct {
     Transform3D unk970;
     Transform3D unk990;
     BoneAnimationState unk9B0;
-    u8 padding9FC[0x14];
-    JointPosition jointPositions[9];
+    u8 padding9FC[0x14];  /* 0x9FC - 0xA10: padding before jointPositions */
+    JointPosition jointPositions[9]; /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
     s32 unkA7C;
     s32 _padA80;
     s32 unkA84;
