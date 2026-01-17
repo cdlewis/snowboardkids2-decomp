@@ -7,42 +7,42 @@ extern u8 D_8008D714_8E314[];
 
 void checkGenericLocationDiscovery(LocationDiscoveryTrigger *);
 
-void initGenericDiscoveryTrigger(LocationDiscoveryTrigger *arg0) {
-    u8 eventId = arg0->locationId;
-    arg0->unk1 = 0;
-    arg0->unk4 = 0;
-    arg0->unk6 = -0x68;
-    arg0->unk8 = 0;
-    arg0->locationLabel = &D_8008D714_8E314[eventId * 20];
+void initGenericDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
+    u8 eventId = trigger->locationId;
+    trigger->unk1 = 0;
+    trigger->unk4 = 0;
+    trigger->unk6 = -0x68;
+    trigger->unk8 = 0;
+    trigger->locationLabel = &D_8008D714_8E314[eventId * 20];
     setCallback(checkGenericLocationDiscovery);
 }
 
 void checkGenericLocationDiscovery(LocationDiscoveryTrigger *trigger) {
-    GameState *state = (GameState *)getCurrentAllocation();
-    s16 rawAngle;
-    s16 playerAngle;
+    GameState *gameState = (GameState *)getCurrentAllocation();
+    s16 yaw;
+    s16 normalizedYaw;
     u8 locationId;
     s16 minAngle;
     s16 maxAngle;
 
-    if (state->unk3F8 <= 0x6E0000) {
+    if (gameState->unk3F8 <= 0x6E0000) {
         return;
     }
 
-    rawAngle = state->unk3F4;
-    playerAngle = rawAngle;
-    if (rawAngle >= 0x1001) {
-        playerAngle -= 0x2000;
+    yaw = gameState->unk3F4;
+    normalizedYaw = yaw;
+    if (yaw >= 0x1001) {
+        normalizedYaw -= 0x2000;
     }
 
     locationId = trigger->locationId;
     minAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2];
-    if (playerAngle < minAngle) {
+    if (normalizedYaw < minAngle) {
         maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(locationId * 2) + 1];
-        if (maxAngle < playerAngle) {
-            if (((u16)(state->unk3FC - 0xC01)) < 0x7FF) {
-                state->locationDiscovered = 1;
-                state->discoveredLocationId = trigger->locationId;
+        if (maxAngle < normalizedYaw) {
+            if (((u16)(gameState->unk3FC - 0xC01)) < 0x7FF) {
+                gameState->locationDiscovered = 1;
+                gameState->discoveredLocationId = trigger->locationId;
             }
         }
     }
