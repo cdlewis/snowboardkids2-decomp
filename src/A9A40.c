@@ -137,9 +137,9 @@ typedef struct {
 } Section3Entry;
 
 typedef struct {
-    s32 tempX;
+    s32 spillX;
     s32 _pad1;
-    s32 tempZ;
+    s32 spillZ;
     s32 _pad2;
 } TrackCalcStackVars;
 
@@ -170,62 +170,71 @@ s8 determineAIPathChoice(Player *player) {
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         trackEndIdx = SEC3(gs)[player->sectorIndex].trackEndIdx;
         trackDirX = SEC1(gs)[trackStartIdx].x - SEC1(gs)[trackEndIdx].x;
-        sv.tempX = trackDirX;
+        sv.spillX = trackDirX;
 
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         trackLengthSq = trackDirX * trackDirX;
         trackEndIdx = SEC3(gs)[player->sectorIndex].trackEndIdx;
         trackDirZ = SEC1(gs)[trackStartIdx].z - SEC1(gs)[trackEndIdx].z;
-        sv.tempZ = trackDirZ;
+        sv.spillZ = trackDirZ;
         trackLengthSq += trackDirZ * trackDirZ;
 
         trackLength = isqrt64(trackLengthSq);
-        normalizedDirX = (sv.tempX << 13) / trackLength;
-        normalizedDirZ = (sv.tempZ << 13) / trackLength;
+        normalizedDirX = (sv.spillX << 13) / trackLength;
+        normalizedDirZ = (sv.spillZ << 13) / trackLength;
 
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         playerToStartX = player->worldPos.x - (SEC1(gs)[trackStartIdx].x << 16);
-        sv.tempX = playerToStartX;
+        sv.spillX = playerToStartX;
 
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         playerToStartZ = player->worldPos.z - (SEC1(gs)[trackStartIdx].z << 16);
-        sv.tempZ = playerToStartZ;
+        sv.spillZ = playerToStartZ;
 
+        // Calculate lateral offset (perpendicular distance) from track center line
         lateralOffset =
-            (((s64)(-((s16)normalizedDirZ))) * playerToStartX) + (((s64)((s16)normalizedDirX)) * playerToStartZ);
+            ((s64)(-((s16)normalizedDirZ)) * playerToStartX) + ((s64)((s16)normalizedDirX) * playerToStartZ);
         trackLength = -((s32)(lateralOffset / 0x2000));
+
+        // If player is close enough to the center line, follow the stored path preference
         if (trackLength < (player->aiLaneWidth * 6)) {
             return ((AIPathPreference *)player->aiPathData)[player->sectorIndex].pathPreference;
         }
     }
 
+    // Reset shortcut choice if no shortcut available
     if (!(player->pathFlags & 8)) {
         player->aiShortcutChosen = 0;
     }
 
+    // Special mode: unk86 is set (possibly time attack or special mode)
     if (gs->unk86 != 0) {
         if (player->aiShortcutChosen == 0 && (player->pathFlags & 8)) {
+            // 25% chance to skip shortcut (0xC0 = 192/256 = 75% take rate)
             if ((randA() & 0xFF) >= 0xC0) {
                 return 0;
             }
             player->aiShortcutChosen = 1;
-            return 8;
+            return 8; // Take shortcut
         }
         return 0;
     }
 
+    // Normal race mode (not race type 9)
     if (gs->raceType != 9) {
         if (player->aiShortcutChosen == 0 && (player->pathFlags & 8)) {
+            // Check random shortcut chance based on memory pool
             if ((randA() & 0xFF) < gShortcutChanceByMemoryPool[gs->memoryPoolId]) {
                 player->aiShortcutChosen = 1;
-                return 8;
+                return 8; // Take shortcut
             }
+            // Boss characters (ID >= 6) always take shortcuts
             if (player->characterId >= 6) {
                 player->aiShortcutChosen = 1;
-                return 8;
+                return 8; // Take shortcut
             }
         }
     }
 
-    return 0;
+    return 0; // Stay on main path
 }
