@@ -21,8 +21,8 @@ typedef struct {
     /* 0x3C */ u16 rotationAngle;
 } RotatingSkyRenderArg;
 
-static void func_800BB334_B27D4(RotatingSkyRenderArg *arg0);
-static void func_800BB390_B2830(RotatingSkyArg *arg0);
+static void updateRotatingSky(RotatingSkyRenderArg *arg0);
+static void cleanupRotatingSky(RotatingSkyArg *arg0);
 
 void func_800BB2B0_B2750(RotatingSkyArg *arg0) {
     GameState *allocation;
@@ -37,11 +37,11 @@ void func_800BB2B0_B2750(RotatingSkyArg *arg0) {
     arg0->posY = 0x1A2B0000;
     arg0->unk2C = 0;
     arg0->posZ = 0xF7A30000;
-    setCleanupCallback(func_800BB390_B2830);
-    setCallback(func_800BB334_B27D4);
+    setCleanupCallback(cleanupRotatingSky);
+    setCallback(updateRotatingSky);
 }
 
-static void func_800BB334_B27D4(RotatingSkyRenderArg *arg0) {
+static void updateRotatingSky(RotatingSkyRenderArg *arg0) {
     s32 i;
 
     arg0->rotationAngle -= 0x20;
@@ -52,7 +52,7 @@ static void func_800BB334_B27D4(RotatingSkyRenderArg *arg0) {
     }
 }
 
-static void func_800BB390_B2830(RotatingSkyArg *arg0) {
+static void cleanupRotatingSky(RotatingSkyArg *arg0) {
     arg0->uncompressedAsset = freeNodeMemory(arg0->uncompressedAsset);
     arg0->compressedAsset = freeNodeMemory(arg0->compressedAsset);
 }
