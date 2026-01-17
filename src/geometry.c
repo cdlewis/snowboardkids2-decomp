@@ -453,6 +453,7 @@ void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPos
 void transform3DToMtx(void *srcPtr, void *dstPtr) {
     Transform3D *src = (Transform3D *)srcPtr;
     s32 *mtxWords = (s32 *)dstPtr;
+    u16 *yWords = (u16 *)&src->translation.y;
 
     mtxWords[0] = ((src->m[0][0] * 8) & 0xFFFF0000) + (((s32)((u16)src->m[0][1] << 16) >> 29) & 0xFFFF);
     mtxWords[1] = (src->m[0][2] * 8) & 0xFFFF0000;
@@ -460,7 +461,7 @@ void transform3DToMtx(void *srcPtr, void *dstPtr) {
     mtxWords[3] = (src->m[1][2] * 8) & 0xFFFF0000;
     mtxWords[4] = ((src->m[2][0] * 8) & 0xFFFF0000) + (((s32)((u16)src->m[2][1] << 16) >> 29) & 0xFFFF);
     mtxWords[5] = (src->m[2][2] * 8) & 0xFFFF0000;
-    mtxWords[6] = (src->translation.x & 0xFFFF0000) + ((u16 *)&src->translation.y)[0];
+    mtxWords[6] = (src->translation.x & 0xFFFF0000) + yWords[0];
     mtxWords[7] = (src->translation.z & 0xFFFF0000) + 1;
     mtxWords[8] = ((src->m[0][0] << 19) & 0xFFFF0000) + ((src->m[0][1] * 8) & 0xFFFF);
     mtxWords[9] = (src->m[0][2] << 19) & 0xFFFF0000;
@@ -468,7 +469,7 @@ void transform3DToMtx(void *srcPtr, void *dstPtr) {
     mtxWords[11] = (src->m[1][2] << 19) & 0xFFFF0000;
     mtxWords[12] = ((src->m[2][0] << 19) & 0xFFFF0000) + ((src->m[2][1] * 8) & 0xFFFF);
     mtxWords[13] = (src->m[2][2] << 19) & 0xFFFF0000;
-    mtxWords[14] = (src->translation.x << 16) + ((u16 *)&src->translation.y)[1];
+    mtxWords[14] = (src->translation.x << 16) + yWords[1];
     mtxWords[15] = src->translation.z << 16;
 }
 
