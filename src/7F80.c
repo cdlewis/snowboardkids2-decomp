@@ -55,7 +55,7 @@ typedef struct {
 void setupModelTransitionVariant(ModelTransitionEffectState *);
 void updateModelTransitionEffect(ModelTransitionEffectState *);
 void cleanupModelTransitionEffect(ModelTransitionEffectState *);
-void func_800073E0_7FE0(CameraRotationTaskState *);
+void updateCameraRotationTask(CameraRotationTaskState *);
 void cleanupCameraRotationTask(void);
 void renderPalettedTexture(PalettedTextureState *);
 
@@ -67,23 +67,22 @@ extern Gfx *gRegionAllocPtr;
 extern Vec3i D_8009A8A4_9B4A4;
 void createRotationMatrixXYZ(Transform3D *, u16, u16, u16);
 
-void initCameraRotationTask(CameraRotationTaskState *arg0) {
+void initCameraRotationTask(CameraRotationTaskState *state) {
     setCleanupCallback(&cleanupCameraRotationTask);
-    arg0->rotationZ = 0;
-    arg0->rotationY = 0;
-    arg0->rotationX = 0;
-    arg0->unkE = 0;
-    arg0->unkC = 0;
-    arg0->unkA = 0;
-    arg0->angularVelocityZ = 0;
-    arg0->angularVelocityY = 0;
-    arg0->angularVelocityX = 0;
-    setCallback(&func_800073E0_7FE0);
+    state->rotationZ = 0;
+    state->rotationY = 0;
+    state->rotationX = 0;
+    state->unkE = 0;
+    state->unkC = 0;
+    state->unkA = 0;
+    state->angularVelocityZ = 0;
+    state->angularVelocityY = 0;
+    state->angularVelocityX = 0;
+    setCallback(&updateCameraRotationTask);
 }
 
-void func_800073E0_7FE0(CameraRotationTaskState *state) {
-    Transform3D rotationMatrix;
-    s16 velocity;
+void updateCameraRotationTask(CameraRotationTaskState *state) {
+    Transform3D cameraTransform;
     s32 *positionPtr;
 
     if (state->model->isDestroyed == 1) {
@@ -134,13 +133,13 @@ void func_800073E0_7FE0(CameraRotationTaskState *state) {
     *(positionPtr + 1) = (s32)0xFFFB3334;
     *(positionPtr + 2) = 0;
 
-    createRotationMatrixXYZ(&rotationMatrix, state->rotationX, state->rotationY, state->rotationZ);
+    createRotationMatrixXYZ(&cameraTransform, state->rotationX, state->rotationY, state->rotationZ);
 
-    rotationMatrix.translation.x = 0;
-    rotationMatrix.translation.y = 0x4CCCC;
-    rotationMatrix.translation.z = 0;
+    cameraTransform.translation.x = 0;
+    cameraTransform.translation.y = 0x4CCCC;
+    cameraTransform.translation.z = 0;
 
-    func_8006B084_6BC84(positionPtr - 5, &rotationMatrix, (u8 *)state->model + 0xF0);
+    func_8006B084_6BC84(positionPtr - 5, &cameraTransform, (u8 *)state->model + 0xF0);
 }
 
 void cleanupCameraRotationTask(void) {

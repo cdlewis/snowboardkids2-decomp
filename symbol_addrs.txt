@@ -905,6 +905,7 @@ initOrbitalSprite = 0x8000714C; // rom:0x7D4C
 updateOrbitalSprite = 0x800071E4; // rom:0x7DE4
 cleanupOrbitalSprite = 0x80007360; // rom:0x7F60
 initCameraRotationTask = 0x80007380; // rom:0x7F80
+updateCameraRotationTask = 0x800073E0; // rom:0x7FE0
 cleanupCameraRotationTask = 0x80007558; // rom:0x8158
 renderPalettedTexture = 0x80007560; // rom:0x8160
 initModelTransitionEffect = 0x800078C4; // rom:0x84C4
