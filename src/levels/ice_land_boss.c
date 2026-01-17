@@ -1009,13 +1009,11 @@ void updateIceLandBossJointPositions(Player *boss) {
 
     do {
         if (boss->unkB84 & flyingFlag) {
-            // Flying mode: use flying joint offsets
             *(volatile s32 *)(jointWritePtr + 0xA10) =
                 boss->unk970.translation.x + *(s32 *)((u8 *)dispatchIceLandBossAttackPhase + 0x18 + jointOffset);
             *(volatile s32 *)(jointWritePtr + 0xA18) =
                 boss->unk970.translation.z + *(s32 *)((u8 *)dispatchIceLandBossAttackPhase + 0x20 + jointOffset);
         } else {
-            // Ground mode: use ground joint offsets
             *(volatile s32 *)(jointWritePtr + 0xA10) =
                 boss->unk970.translation.x + *(s32 *)((u8 *)&D_800BC054_B1544 + jointOffset);
             *(volatile s32 *)(jointWritePtr + 0xA18) =
@@ -1026,7 +1024,6 @@ void updateIceLandBossJointPositions(Player *boss) {
         sectorIndex = func_80059E90_5AA90((void *)boss, gameData, boss->sectorIndex, jointPos);
         jointOffset += 0xC;
         jointIndex += 1;
-        // Compute terrain height at joint position
         *(volatile s32 *)(jointWritePtr + 0xA14) = getTrackHeightInSector(gameData, sectorIndex, jointPos, 0x100000);
 
         jointWritePtr += 0xC;
@@ -1034,7 +1031,6 @@ void updateIceLandBossJointPositions(Player *boss) {
 
     boss->unkBC1 = 1;
 
-    // Enqueue debug render callbacks for all 4 viewports
     for (jointIndex = 0; jointIndex < 4; jointIndex++) {
         debugEnqueueCallback(jointIndex, 1, func_800B9500_A93B0, (void *)boss);
     }
