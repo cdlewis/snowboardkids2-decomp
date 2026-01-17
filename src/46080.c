@@ -2993,7 +2993,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             spawnPushZone(4);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
-            scheduleTask(&func_800BB688_B2408, 0, 0, 0xD3);
+            scheduleTask(&initIceLandMovingPlatformScheduler, 0, 0, 0xD3);
             scheduleGoldCoinsIfEnabled(courseId);
             scheduleItemBoxSystemTaskIfEnabled(courseId);
             break;

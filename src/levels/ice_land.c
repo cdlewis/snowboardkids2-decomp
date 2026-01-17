@@ -125,7 +125,7 @@ void cleanupIceLandMovingPlatform(IceLandMovingPlatformCleanupArgs *arg0) {
     arg0->segment2 = freeNodeMemory(arg0->segment2);
 }
 
-void func_800BB688_B2408(IceLandMovingPlatformSchedulerTask *arg0) {
+void initIceLandMovingPlatformScheduler(IceLandMovingPlatformSchedulerTask *arg0) {
     arg0->timer = 0x78;
     arg0->pathIndex = 0;
     setCallback(scheduleIceLandMovingPlatform);

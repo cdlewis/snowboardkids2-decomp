@@ -16,4 +16,4 @@ typedef struct {
     void *segment2;
 } IceLandMovingPlatformSchedulerTask;
 
-void func_800BB688_B2408(IceLandMovingPlatformSchedulerTask *arg0);
+void initIceLandMovingPlatformScheduler(IceLandMovingPlatformSchedulerTask *arg0);
