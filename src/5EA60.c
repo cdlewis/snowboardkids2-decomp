@@ -14,20 +14,16 @@ u16 *getAnimationDataByIndex(void *animData, s16 tableIndex, s16 boneIndex) {
 }
 
 void initBoneAnimationState(void *animData, s32 tableIndex, s32 boneIndex, BoneAnimationState *state) {
-    s16 *boneAnimData;
-    s16 tableIdx;
-    s16 boneIdx;
+    s16 *frameData;
+    u16 *boneAnimEntry;
 
-    boneAnimData = getAnimationFrameData(animData);
-    state->frame_data = boneAnimData;
+    frameData = getAnimationFrameData(animData);
+    state->frame_data = frameData;
 
-    tableIdx = (s16)(tableIndex << 16 >> 16);
-    boneIdx = (s16)(boneIndex << 16 >> 16);
+    boneAnimEntry = getAnimationDataByIndex(animData, (s16)tableIndex, (s16)boneIndex);
+    state->animation_data = (s16 *)boneAnimEntry;
 
-    boneAnimData = getAnimationDataByIndex(animData, tableIdx, boneIdx);
-    state->animation_data = boneAnimData;
-
-    state->flags = *(u16 *)boneAnimData + 0x8000;
+    state->flags = *boneAnimEntry + 0x8000;
 }
 
 void createBoneRotMatrix(s16 arg0, s16 arg1, s16 arg2, s16 *arg3) {
