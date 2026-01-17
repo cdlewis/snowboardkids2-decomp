@@ -720,7 +720,7 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
     f32 upZ;
     LookAt *lookAt;
     Mtx *matrixPair;
-    s16 *rotationData = (s16 *)&obj->transform;
+    Transform3D *transform;
 
     if (obj->transformMatrix == NULL) {
         matrixPair = arenaAlloc16(0x80);
@@ -752,28 +752,29 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
         frac16Mask = 0xFFFF;
         ((s32 *)obj->transformMatrix)[15] = obj->transform.translation.z << 16;
         /* Second matrix: rotation matrix built from Transform3D rotation data at offset 0 */
+        transform = &obj->transform;
         /* Integer portion (s32[16-23]) - extracts high bits from s15 rotation values */
         ((s32 *)obj->transformMatrix)[16] =
-            ((rotationData[0] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationData[1] >> 15) & frac16Mask);
-        ((s32 *)obj->transformMatrix)[17] = (rotationData[2] * 2) & 0xFFFF0000;
+            ((transform->m[0][0] * 2) & 0xFFFF0000) + (-(s32)((u16)transform->m[0][1] >> 15) & frac16Mask);
+        ((s32 *)obj->transformMatrix)[17] = (transform->m[0][2] * 2) & 0xFFFF0000;
         ((s32 *)obj->transformMatrix)[18] =
-            ((rotationData[3] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationData[4] >> 15) & frac16Mask);
-        ((s32 *)obj->transformMatrix)[19] = (rotationData[5] * 2) & 0xFFFF0000;
+            ((transform->m[1][0] * 2) & 0xFFFF0000) + (-(s32)((u16)transform->m[1][1] >> 15) & frac16Mask);
+        ((s32 *)obj->transformMatrix)[19] = (transform->m[1][2] * 2) & 0xFFFF0000;
         ((s32 *)obj->transformMatrix)[20] =
-            ((rotationData[6] * 2) & 0xFFFF0000) + (-(s32)((u16)rotationData[7] >> 15) & 0xFFFF);
-        ((s32 *)obj->transformMatrix)[21] = (rotationData[8] * 2) & 0xFFFF0000;
+            ((transform->m[2][0] * 2) & 0xFFFF0000) + (-(s32)((u16)transform->m[2][1] >> 15) & 0xFFFF);
+        ((s32 *)obj->transformMatrix)[21] = (transform->m[2][2] * 2) & 0xFFFF0000;
         ((s32 *)obj->transformMatrix)[22] = 0;
         ((s32 *)obj->transformMatrix)[23] = 1;
         /* Fractional portion (s32[24-31]) - extracts low bits from s15 rotation values */
         ((s32 *)obj->transformMatrix)[24] =
-            ((rotationData[0] << 17) & 0xFFFF0000) + ((rotationData[1] * 2) & frac16Mask);
-        ((s32 *)obj->transformMatrix)[25] = (rotationData[2] << 17) & 0xFFFF0000;
+            ((transform->m[0][0] << 17) & 0xFFFF0000) + ((transform->m[0][1] * 2) & frac16Mask);
+        ((s32 *)obj->transformMatrix)[25] = (transform->m[0][2] << 17) & 0xFFFF0000;
         ((s32 *)obj->transformMatrix)[26] =
-            ((rotationData[3] << 17) & 0xFFFF0000) + ((rotationData[4] * 2) & frac16Mask);
-        ((s32 *)obj->transformMatrix)[27] = (rotationData[5] << 17) & 0xFFFF0000;
+            ((transform->m[1][0] << 17) & 0xFFFF0000) + ((transform->m[1][1] * 2) & frac16Mask);
+        ((s32 *)obj->transformMatrix)[27] = (transform->m[1][2] << 17) & 0xFFFF0000;
         ((s32 *)obj->transformMatrix)[28] =
-            ((rotationData[6] << 17) & 0xFFFF0000) + ((rotationData[7] * 2) & frac16Mask);
-        ((s32 *)obj->transformMatrix)[29] = (rotationData[8] << 17) & 0xFFFF0000;
+            ((transform->m[2][0] << 17) & 0xFFFF0000) + ((transform->m[2][1] * 2) & frac16Mask);
+        ((s32 *)obj->transformMatrix)[29] = (transform->m[2][2] << 17) & 0xFFFF0000;
         ((s32 *)obj->transformMatrix)[30] = 0;
         ((s32 *)obj->transformMatrix)[31] = 0;
     }
