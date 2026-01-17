@@ -7,12 +7,12 @@ u16 *getAnimationDataByIndex(void *animData, s16 tableIndex, s16 boneIndex);
 void createBoneRotMatrix(s16 angleX, s16 angleY, s16 angleZ, s16 *matrix);
 
 typedef struct {
-    u8 padding[0x8];
-    u32 boneCountOffset;
+    /* 0x00 */ u8 unk00[8];
+    /* 0x08 */ u32 boneCountOffset;  // Offset from table to u16 bone count
 } AnimationBoneCountEntry;
 
 typedef struct {
-    AnimationBoneCountEntry entries[0];
+    /* 0x00 */ AnimationBoneCountEntry entries[0];
 } AnimationBoneCountTable;
 
 typedef struct {
