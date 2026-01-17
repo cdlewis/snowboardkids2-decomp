@@ -37,7 +37,7 @@ typedef struct {
 
 void renderSpriteFrame(SpriteRenderArg *arg0);
 void renderSpriteFrameWithPalette(SpriteRenderArg *arg0);
-void func_800105B0_111B0(SpriteRenderArg *arg0);
+void renderHalfSizeSpriteFrame(SpriteRenderArg *arg0);
 void func_80010C98_11898(void *arg0);
 void func_80012FA8_13BA8(void);
 void initDefaultFontPalette(void);

@@ -694,7 +694,7 @@ void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
 
     state->animFrame = (s16)state->animCounter >> 1;
 
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_800105B0_111B0, &state->iconX);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderHalfSizeSpriteFrame, &state->iconX);
 }
 
 void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0) {
