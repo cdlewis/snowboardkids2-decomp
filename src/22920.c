@@ -14,7 +14,7 @@ void initVersusMode(void) {
     TaskData_22920 *data = allocateTaskMemory(4);
     data->unk0 = 0;
     data->unk2 = 0;
-    func_8006983C_6A43C(loadPlayerCountSelect);
+    setGameStateHandlerWithContinue(loadPlayerCountSelect);
 }
 
 void awaitPlayerCountSelect(void);

@@ -70,7 +70,7 @@ void returnToParentScheduler(s32 arg0);
 
 s16 getSchedulerReturnValue(void);
 
-void func_8006983C_6A43C(void (*arg0)(void));
+void setGameStateHandlerWithContinue(void (*gamestateHandler)(void));
 
 void func_800698CC_6A4CC(s8 value);
 

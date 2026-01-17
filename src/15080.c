@@ -40,7 +40,7 @@ void initGameSession(void) {
     EepromSaveData = allocateMemoryNode(0, 0x5C, &allocation);
     gDebugUnlockEnabled = 0;
     initOptionsDefaults();
-    func_8006983C_6A43C(func_800144DC_150DC);
+    setGameStateHandlerWithContinue(func_800144DC_150DC);
 }
 
 void func_800144DC_150DC(void) {
@@ -49,7 +49,7 @@ void func_800144DC_150DC(void) {
     data->unk0 = 0;
     data->unk2 = 0;
     resetGameSession();
-    func_8006983C_6A43C(startLogoScreen);
+    setGameStateHandlerWithContinue(startLogoScreen);
 }
 
 void func_8001452C_1512C(void) {
@@ -58,7 +58,7 @@ void func_8001452C_1512C(void) {
     data->unk0 = 0;
     data->unk2 = 0;
     resetGameSession();
-    func_8006983C_6A43C(func_80014660_15260);
+    setGameStateHandlerWithContinue(func_80014660_15260);
 }
 
 void startLogoScreen(void) {

@@ -105,7 +105,7 @@ void allocateAudioResources(void) {
     gGraphicsManager->ptrBank = loadCompressedData(&_6A83F0_ROM_START, &_6A83F0_ROM_END, 0xCFD8);
     gGraphicsManager->musicBankBuffer = allocateMemoryNode(0, 0x9000, &sp10);
     gGraphicsManager->musicDataBuffer = allocateMemoryNode(0, 0x8000, &sp10);
-    func_8006983C_6A43C(&initializeMusicSystem);
+    setGameStateHandlerWithContinue(&initializeMusicSystem);
 }
 
 void initializeMusicSystem(void) {
@@ -154,7 +154,7 @@ void initializeMusicSystem(void) {
     gGraphicsManager->bufferCount = 0;
     gGraphicsManager->audioOuterDistance = 0xC80;
     initializeGfxCommThread();
-    func_8006983C_6A43C(&func_8005628C_56E8C);
+    setGameStateHandlerWithContinue(&func_8005628C_56E8C);
 }
 
 INCLUDE_ASM("asm/nonmatchings/graphics", func_8005628C_56E8C);

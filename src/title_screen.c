@@ -196,14 +196,14 @@ case_0:
         }
         setMusicFadeOut(0x20);
         setViewportFadeValue(0, 0xFF, 0x10);
-        func_8006983C_6A43C(cleanupTitleAndTransition);
+        setGameStateHandlerWithContinue(cleanupTitleAndTransition);
         goto end;
     }
 
     if (state->frameCounter == 0x384) {
         setMusicFadeOut(0x20);
         setViewportFadeValue(0, 0xFF, 0x10);
-        func_8006983C_6A43C(cleanupTitleAndTransition);
+        setGameStateHandlerWithContinue(cleanupTitleAndTransition);
     }
     goto end;
 
@@ -255,7 +255,7 @@ case1_done_nav:
         playSoundEffectOnChannelNoPriority(0x2C, 1);
         setMusicFadeOut(0x20);
         setViewportFadeValue(0, 0xFF, 8);
-        func_8006983C_6A43C(cleanupTitleAndTransition);
+        setGameStateHandlerWithContinue(cleanupTitleAndTransition);
     }
 
 end:

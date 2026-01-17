@@ -40,7 +40,7 @@ typedef struct gActiveScheduler_type {
     u8 schedulerState;
     u8 priority;
     u8 unk1A;
-    u8 unk1B;
+    u8 handlerContinueFlag;
     s32 cleanupFrameCounter;
     /* 0x20 */ void *latestDmaSequenceNumber;
     /* 0x24 */ void *latestDmaNode;
@@ -215,11 +215,11 @@ void runTaskSchedulers(void) {
 
                 case SCHEDULER_STATE_RUNNING:
                 loop_9:
-                    gActiveScheduler->unk1B = 0;
+                    gActiveScheduler->handlerContinueFlag = 0;
 
                     gActiveScheduler->gamestateHandler();
 
-                    if (gActiveScheduler->unk1B != 0) {
+                    if (gActiveScheduler->handlerContinueFlag != 0) {
                         if (gActiveScheduler->schedulerState == SCHEDULER_STATE_RUNNING) {
                             goto loop_9;
                         }
@@ -318,9 +318,9 @@ void setGameStateHandler(void *arg0) {
     gActiveScheduler->gamestateHandler = arg0;
 }
 
-void func_8006983C_6A43C(void (*arg0)(void)) {
-    gActiveScheduler->gamestateHandler = arg0;
-    gActiveScheduler->unk1B = 1;
+void setGameStateHandlerWithContinue(void (*gamestateHandler)(void)) {
+    gActiveScheduler->gamestateHandler = gamestateHandler;
+    gActiveScheduler->handlerContinueFlag = 1;
 }
 
 void *allocateTaskMemory(s32 size) {

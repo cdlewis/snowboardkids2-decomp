@@ -29,7 +29,7 @@ void initStoryMode(void) {
     D_800AFE8C_A71FC->numPlayers = 1;
     D_800AFE8C_A71FC->unk9[0] = 0;
     setStoryMapCameraMode(0);
-    func_8006983C_6A43C(loadSaveSlotScreen);
+    setGameStateHandlerWithContinue(loadSaveSlotScreen);
 }
 
 void func_80014B1C_1571C(void);

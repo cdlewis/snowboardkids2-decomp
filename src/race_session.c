@@ -621,7 +621,7 @@ void initRace(void) {
 
     gControllerPollingEnabled = 1;
     setViewportFadeValue(0, 0xFF, 0);
-    func_8006983C_6A43C((void *)initRaceViewports);
+    setGameStateHandlerWithContinue((void *)initRaceViewports);
 }
 
 void initRaceViewports(void) {
@@ -766,7 +766,7 @@ void initRaceViewports(void) {
             break;
     }
 
-    func_8006983C_6A43C(&loadRaceGameData);
+    setGameStateHandlerWithContinue(&loadRaceGameData);
 }
 
 void loadRaceGameData(void) {
@@ -775,7 +775,7 @@ void loadRaceGameData(void) {
     gameState = (GameState *)getCurrentAllocation();
     gameState->gameData.dataStart = loadCourseDataByIndex(gameState->memoryPoolId);
     gameState->unk28 = loadCompressedData(&_3FF010_ROM_START, &_3FF010_ROM_END, 0x16E0);
-    func_8006983C_6A43C(&parseRaceAssetData);
+    setGameStateHandlerWithContinue(&parseRaceAssetData);
 }
 
 void parseRaceAssetData(void) {
@@ -786,7 +786,7 @@ void parseRaceAssetData(void) {
     gs->unk44 = (GameStateUnk44 *)((u8 *)gs->unk28 + gs->unk28->assetTableOffset);
     gs->unk48 = (u8 *)gs->unk28 + gs->unk28->transformDataOffset;
 
-    func_8006983C_6A43C(&loadPlayerAssets);
+    setGameStateHandlerWithContinue(&loadPlayerAssets);
 }
 
 void loadPlayerAssets(void) {
@@ -810,7 +810,7 @@ void loadPlayerAssets(void) {
     gs->unk1C = loadAsset_B7E70();
     gs->unk20 = loadAsset_216290();
 
-    func_8006983C_6A43C(&scheduleRaceTasks);
+    setGameStateHandlerWithContinue(&scheduleRaceTasks);
 }
 
 void scheduleRaceTasks(void) {
