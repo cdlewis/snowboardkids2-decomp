@@ -50,28 +50,33 @@ extern s16 identityMatrix[];
 extern s16 gIndicatorSpriteOffset;
 extern void *D_80090860_91460;
 
+// Start gate display object structure (3 parts: main gate, left door, right door)
+// Each part is a DisplayListObject with transform, display lists, and segment pointers
 typedef struct {
-    Transform3D rotationMatrix; // 0x00-0x1F, with position at 0x14-0x1F
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    s32 unk2C;
+    /* Main gate structure (offset 0x00) */
+    Transform3D rotationMatrix;         // 0x00-0x1F, with position at 0x14-0x1F
+    DisplayLists *mainGateDisplayLists; // 0x20
+    void *mainGateSegment1;             // 0x24 - uncompressed asset
+    void *mainGateSegment2;             // 0x28 - compressed asset
+    s32 mainGateSegment3;               // 0x2C
     u8 pad[0xC];
-    Transform3D unk3C;
-    void *unk5C;
-    void *unk60;
-    void *unk64;
-    s32 unk68;
+    /* Left door structure (offset 0x3C) */
+    Transform3D leftDoorTransform;      // 0x3C
+    DisplayLists *leftDoorDisplayLists; // 0x5C
+    void *leftDoorSegment1;             // 0x60
+    void *leftDoorSegment2;             // 0x64
+    s32 leftDoorSegment3;               // 0x68
     u8 pad2[0xC];
-    Transform3D unk78;
-    s32 unk98;
-    void *unk9C;
-    void *unkA0;
-    s32 unkA4;
+    /* Right door structure (offset 0x78) */
+    Transform3D rightDoorTransform;      // 0x78
+    DisplayLists *rightDoorDisplayLists; // 0x98
+    void *rightDoorSegment1;             // 0x9C
+    void *rightDoorSegment2;             // 0xA0
+    s32 rightDoorSegment3;               // 0xA4
     u8 pad3[0xC];
-    s16 gateRotation;
-    s16 animationState;
-    s16 pauseTimer;
+    s16 gateRotation;   // 0xB4
+    s16 animationState; // 0xB6
+    s16 pauseTimer;     // 0xB8
 } StartGate;
 
 void updateStartGate(StartGate *);
@@ -84,8 +89,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
+    void *uncompressedAsset; // 0x24 - same as mainGateSegment1
+    void *compressedAsset;   // 0x28 - same as mainGateSegment2
 } StartGateCleanupArg;
 
 void cleanupStartGate(StartGateCleanupArg *);
@@ -193,30 +198,30 @@ void initStartGate(StartGate *gate) {
 
     gameState = (GameState *)getCurrentAllocation();
     spawnData = getLevelConfig(gameState->memoryPoolId);
-    gate->unk20 = (void *)((u8 *)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x50);
-    gate->unk24 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
-    gate->unk28 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
-    gate->unk2C = 0;
+    gate->mainGateDisplayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x50);
+    gate->mainGateSegment1 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
+    gate->mainGateSegment2 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
+    gate->mainGateSegment3 = 0;
     trackAngle = getTrackEndInfo((u8 *)gameState + 0x30, worldPos);
     createYRotationMatrix(&gate->rotationMatrix, (trackAngle + spawnData->yawOffset) & 0xFFFF);
     rotateVectorY(&D_800907EC_913EC, trackAngle + spawnData->yawOffset, &gate->rotationMatrix.translation);
     gate->rotationMatrix.translation.x = gate->rotationMatrix.translation.x + spawnData->shortcutPosX;
     gate->rotationMatrix.translation.z = gate->rotationMatrix.translation.z + spawnData->shortcutPosZ;
     gate->rotationMatrix.translation.y = worldPos[1];
-    gate->unk5C = (void *)((u8 *)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x60);
+    gate->leftDoorDisplayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x60);
     transformMatrix = tempMatrix;
-    gate->unk60 = gate->unk24;
-    gate->unk64 = gate->unk28;
-    gate->unk68 = gate->unk2C;
+    gate->leftDoorSegment1 = gate->mainGateSegment1;
+    gate->leftDoorSegment2 = gate->mainGateSegment2;
+    gate->leftDoorSegment3 = gate->mainGateSegment3;
     memcpy(transformMatrix, identityMatrix, 0x20);
     transformMatrix[6] = 0x180000;
-    func_8006B084_6BC84(transformMatrix, gate, &gate->unk3C);
-    gate->unk9C = gate->unk24;
-    gate->unkA0 = gate->unk28;
-    gate->unkA4 = gate->unk2C;
+    func_8006B084_6BC84(transformMatrix, gate, &gate->leftDoorTransform);
+    gate->rightDoorSegment1 = gate->mainGateSegment1;
+    gate->rightDoorSegment2 = gate->mainGateSegment2;
+    gate->rightDoorSegment3 = gate->mainGateSegment3;
     transformMatrix[6] = 0x160000;
     transformMatrix[7] = 0xA3333;
-    func_8006B084_6BC84(transformMatrix, gate, &gate->unk78);
+    func_8006B084_6BC84(transformMatrix, gate, &gate->rightDoorTransform);
     gate->gateRotation = 0;
     gate->animationState = 0;
     setCleanupCallback(cleanupStartGate);
@@ -251,7 +256,7 @@ void updateStartGate(StartGate *gate) {
             sp10.translation.x = 0;
             sp10.translation.y = 0xC0000;
             sp10.translation.z = 0;
-            func_8006B084_6BC84(&sp10, gate, &gate->unk3C);
+            func_8006B084_6BC84(&sp10, gate, &gate->leftDoorTransform);
             break;
         case 2:
             if (gameState->gamePaused == 0) {
@@ -268,7 +273,7 @@ void updateStartGate(StartGate *gate) {
             if (gate->gateRotation == 0) {
                 gate->animationState++;
             }
-            s0 = &gate->unk3C;
+            s0 = &gate->leftDoorTransform;
             createZRotationMatrix(s0, gate->gateRotation);
             createZRotationMatrix(&sp10, gate->gateRotation);
             sp10.translation.x = 0;
@@ -284,22 +289,22 @@ void updateStartGate(StartGate *gate) {
     }
 
     if (gameState->shortcutGateState == 3) {
-        gate->unk98 = (s32)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x70;
+        gate->rightDoorDisplayLists = (DisplayLists *)((s32)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x70);
     } else {
     block_else:
-        gate->unk98 = (s32)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x80;
+        gate->rightDoorDisplayLists = (DisplayLists *)((s32)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x80);
     }
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)gate);
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&gate->unk3C);
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&gate->unk78);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&gate->leftDoorTransform);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&gate->rightDoorTransform);
     }
 }
 
-void cleanupStartGate(StartGateCleanupArg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupStartGate(StartGateCleanupArg *arg) {
+    arg->uncompressedAsset = freeNodeMemory(arg->uncompressedAsset);
+    arg->compressedAsset = freeNodeMemory(arg->compressedAsset);
 }
 
 void initPushStartPrompt(PushStartPromptTask *task) {
