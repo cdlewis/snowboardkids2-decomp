@@ -3,7 +3,7 @@
 
 #include "cutscene/cutscene_sys2.h"
 
-void func_800B993C_1E69EC(cutsceneSys2Wait_exec_asset *);
+void initCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *);
 void updateWipeTransitionSlots(cutsceneSys2Wait_exec_asset *arg0);
 
 #endif

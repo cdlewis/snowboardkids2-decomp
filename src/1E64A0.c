@@ -8,11 +8,11 @@
 #include "race_session.h"
 #include "task_scheduler.h"
 
-extern void func_800B99A0_1E6A50(void);
+extern void updateCutsceneWaitSystem(void);
 extern s16 gWipeOffsetX[];
 extern s16 gWipeOffsetY[];
 
-void func_800B9C20_1E6CD0(cutsceneSys2Wait_exec_asset *arg0);
+void cleanupCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0);
 
 s32 calculateZoomScaleFactor(s32 arg0) {
     s32 result;
@@ -187,20 +187,20 @@ void *processCutsceneCommandSequence(cutsceneSys2Wait_exec_asset *ctx) {
     return commandEntry;
 }
 
-void func_800B993C_1E69EC(cutsceneSys2Wait_exec_asset *arg0) {
+void initCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0) {
     arg0->state = 0;
     arg0->tableColumnIndex = 0;
     arg0->sprites = loadSpriteAssetData(0);
-    arg0->unkA0 = loadTextRenderAsset(1);
+    arg0->textRenderAsset = loadTextRenderAsset(1);
     arg0->commandTable = loadDmaAsset(0);
-    setCleanupCallback(&func_800B9C20_1E6CD0);
-    setCallback(&func_800B99A0_1E6A50);
+    setCleanupCallback(&cleanupCutsceneWaitSystem);
+    setCallback(&updateCutsceneWaitSystem);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E64A0", func_800B99A0_1E6A50);
+INCLUDE_ASM("asm/nonmatchings/1E64A0", updateCutsceneWaitSystem);
 
-void func_800B9C20_1E6CD0(cutsceneSys2Wait_exec_asset *arg0) {
-    arg0->unkA0 = freeNodeMemory(arg0->unkA0);
+void cleanupCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0) {
+    arg0->textRenderAsset = freeNodeMemory(arg0->textRenderAsset);
     arg0->sprites = freeNodeMemory(arg0->sprites);
     arg0->commandTable = freeNodeMemory(arg0->commandTable);
 }

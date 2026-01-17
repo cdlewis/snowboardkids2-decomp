@@ -78,7 +78,7 @@ typedef struct {
     u8 unk9C;
     u8 commandOffset;
     u8 padding3[0x2];
-    void *unkA0;
+    void *textRenderAsset;
     s16 unkA4;
     s16 unkA6;
     void *unkA8;
