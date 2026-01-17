@@ -25,6 +25,33 @@ typedef union {
     } halves;
 } WordHalves_1DC480;
 
+// CreditsSubtitlesState: State for updating credits subtitle text with fade and scroll effects
+// unk2: Global frame counter for timing
+// unk3B8: SceneModel/viewport for text layer 1 (background/shadow)
+// unk590: SceneModel/viewport for text layer 2 (foreground)
+// unk95C: Pointer to offset table containing subtitle timing/data
+// unk960: Text rendering asset
+// unk964: 2D table of text data
+// unk96C/unk96E: X/Y position for text layer 1
+// unk970: Text pointer for layer 1
+// unk974: Display list for layer 1
+// unk97A: Alpha value (16-bit from unk994 >> 16)
+// unk980/unk982: X/Y position for text layer 2
+// unk984: Text pointer for layer 2
+// unk988: Display list for layer 2
+// unk98E: Alpha value (16-bit from unk994 >> 16)
+// unk994: Current alpha value (0-0xFF0000 as fixed point)
+// unk998: Scroll increment (0x100000/n or -1)
+// unk99C: Current scroll position
+// unk9A0: Current subtitle index
+// unk9A4: Frame counter for fade-in timing
+// unk9A6: Current index in offset table
+// unk9A8: Width of text in pixels
+// unk9AC: Frame threshold for next subtitle
+// unk9AE: Loop/delay counter
+// unk9B0: Index into data array
+// unk9B2: Current line index
+// unk9B4: Delay counter
 typedef struct {
     u8 _pad0[0x2];
     s16 unk2;
@@ -134,7 +161,7 @@ void initCreditsSubtitles(void *arg0) {
     state->unk994 = NULL;
 }
 
-void func_800B0388_1DC528(Struct_800B0388 *arg0) {
+void updateCreditsSubtitles(Struct_800B0388 *arg0) {
     s16 temp_s0;
     s32 var_s3;
     s16 temp_v1;
