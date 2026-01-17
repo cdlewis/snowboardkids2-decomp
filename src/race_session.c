@@ -800,7 +800,7 @@ void loadPlayerAssets(void) {
     } else {
         offset = 0;
         do {
-            func_800B99E0((void *)(((u8 *)gs->players) + offset));
+            loadPlayerCharacterAssets((void *)(((u8 *)gs->players) + offset));
             i++;
             offset += 0xBE8;
         } while (i < gs->numPlayers);
@@ -1680,7 +1680,7 @@ void cleanupGameSession(void) {
     }
 
     for (i = 0; i < gameState->numPlayers; i++) {
-        func_800B9AE0(gameState->players + i);
+        freePlayerCharacterAssets(gameState->players + i);
     }
 
     unlinkNode(gameState->audioPlayer0);

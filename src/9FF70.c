@@ -62,7 +62,7 @@ extern DefaultBehaviorPhaseHandler D_800BAAD4_AA984[];
 typedef struct {
     u8 _pad0[0x5C];
     u8 unk5C;
-} func_800B99E0_alloc;
+} GameStatePartial5C;
 
 void initStunnedAirborneBehavior(Player *);
 
@@ -3559,57 +3559,57 @@ void updatePlayerJointPositions(Player *player) {
     }
 }
 
-void func_800B99E0(void *varg0) {
-    Player *arg0 = (Player *)varg0;
-    func_800B99E0_alloc *alloc;
-    u8 v0;
-    u8 v1;
+void loadPlayerCharacterAssets(void *varg0) {
+    Player *player = (Player *)varg0;
+    GameStatePartial5C *gameState;
+    u8 characterId;
+    u8 boardType;
 
-    alloc = getCurrentAllocation();
-    arg0->unk4 = loadAssetByIndex_94F90(arg0->characterId, arg0->boardIndex);
-    arg0->unk8 = loadAssetByIndex_95200(arg0->characterId, arg0->boardIndex);
-    arg0->unk0 = loadAssetByIndex_953E0(arg0->characterId);
+    gameState = (GameStatePartial5C *)getCurrentAllocation();
+    player->unk4 = loadAssetByIndex_94F90(player->characterId, player->boardIndex);
+    player->unk8 = loadAssetByIndex_95200(player->characterId, player->boardIndex);
+    player->unk0 = loadAssetByIndex_953E0(player->characterId);
 
-    v0 = arg0->characterId;
-    if (v0 < 6) {
-        arg0->unk20 = loadAssetDataDMA(arg0->characterId, arg0->boardIndex);
-        arg0->unk24 = loadAssetDataQueuedDMA(arg0->characterId, arg0->boardIndex);
+    characterId = player->characterId;
+    if (characterId < 6) {
+        player->unk20 = loadAssetDataDMA(player->characterId, player->boardIndex);
+        player->unk24 = loadAssetDataQueuedDMA(player->characterId, player->boardIndex);
     }
 
-    arg0->unkC = loadAssetByIndex_95500(arg0->unkBBB);
-    arg0->unk10 = loadAssetByIndex_95590(arg0->unkBBB);
+    player->unkC = loadAssetByIndex_95500(player->unkBBB);
+    player->unk10 = loadAssetByIndex_95590(player->unkBBB);
 
-    v1 = arg0->unkBBB;
-    if (v1 < 9) {
-        arg0->unk14 = loadAssetByIndex_95668(arg0->unkBBC);
+    boardType = player->unkBBB;
+    if (boardType < 9) {
+        player->unk14 = loadAssetByIndex_95668(player->unkBBC);
     } else {
-        arg0->unk14 = NULL;
+        player->unk14 = NULL;
     }
 
-    arg0->unk18 = load_3ECE40();
+    player->unk18 = load_3ECE40();
 
-    if (arg0->isBossRacer != 0) {
-        arg0->unk1C = loadBossHudAssetByRaceType(alloc->unk5C);
+    if (player->isBossRacer != 0) {
+        player->unk1C = loadBossHudAssetByRaceType(gameState->unk5C);
     }
 
-    if (arg0->unkBE3 != 0) {
-        arg0->unk2C = loadAssetByIndex_5E990(arg0->unkBE4);
+    if (player->unkBE3 != 0) {
+        player->unk2C = loadAssetByIndex_5E990(player->unkBE4);
     }
 }
 
-void func_800B9AE0(void *varg0) {
-    Player *arg0 = (Player *)varg0;
+void freePlayerCharacterAssets(void *varg0) {
+    Player *player = (Player *)varg0;
     s32 pad[8];
 
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unk20 = freeNodeMemory(arg0->unk20);
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
-    arg0->unk10 = freeNodeMemory(arg0->unk10);
-    arg0->unk14 = freeNodeMemory(arg0->unk14);
-    arg0->unk18 = freeNodeMemory(arg0->unk18);
-    arg0->unk1C = freeNodeMemory(arg0->unk1C);
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+    player->unk4 = freeNodeMemory(player->unk4);
+    player->unk8 = freeNodeMemory(player->unk8);
+    player->unk0 = freeNodeMemory(player->unk0);
+    player->unk20 = freeNodeMemory(player->unk20);
+    player->unk24 = freeNodeMemory(player->unk24);
+    player->unkC = freeNodeMemory(player->unkC);
+    player->unk10 = freeNodeMemory(player->unk10);
+    player->unk14 = freeNodeMemory(player->unk14);
+    player->unk18 = freeNodeMemory(player->unk18);
+    player->unk1C = freeNodeMemory(player->unk1C);
+    player->unk2C = freeNodeMemory(player->unk2C);
 }
