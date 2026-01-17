@@ -1,5 +1,6 @@
 #include "6E840.h"
 #include "common.h"
+#include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
 #include "task_scheduler.h"
@@ -47,28 +48,32 @@ typedef struct {
 } ChaseCameraState;
 
 typedef struct {
-    u8 padding[0x434];
-    void *unk434;
-    u8 padding1[0xBCA - 0x438];
-    u8 unkBCA;
-    u8 padding2[0x101C - 0xBCC];
-    void *unk101C;
-    u8 padding3[0x1C04 - 0x1020];
-    void *unk1C04;
-} AllocationUnk10;
-
-typedef struct {
-    u8 pad0[0x10];
-    /* 0x10 */ AllocationUnk10 *players;
-} Allocation;
-
-typedef struct {
     Node_70B00 *sceneNode;
     u8 pad4[0xC];
     u8 *playerData;
     u8 pad14[0x65];
     u8 unk79;
 } OrbitCameraAllocation;
+
+// Custom allocation struct for use in updateScriptedCamera
+typedef struct {
+    u8 pad0[0x434];
+    Vec3i worldPos; /* 0x434 */
+    u8 pad1[0xBCA - 0x440];
+    u8 unkBCA; /* 0xBCA */
+    u8 pad2[0x101C - 0xBCB];
+    Vec3i unk101C; /* 0x101C */
+    u8 pad3[0x1C04 - 0x1028];
+    Vec3i unk1C04; /* 0x1C04 */
+} PlayerDataExt;
+
+typedef struct {
+    u8 pad0[0x10];
+    PlayerDataExt *players;
+} ScriptedCameraAllocation;
+
+// Alias for GameState to use in functions that access it generically
+typedef GameState Allocation;
 
 extern void func_8003C2BC_3CEBC(void);
 extern s32 D_8008FEB0_90AB0;
@@ -84,28 +89,24 @@ void initChaseCameraPosition(ChaseCameraState *camera) {
     Vec3i worldOffset;
     Transform3D rotationMatrix;
 
-    gameState = (Allocation *)getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
     behindOffset.y = 0;
     behindOffset.x = 0;
     behindOffset.z = 0xFFC00000;
 
     playerIdx = camera->playerIdx;
-
     createYRotationMatrix(&rotationMatrix, *(u16 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0xA94));
 
     transformVector2(&behindOffset, &rotationMatrix, &worldOffset);
 
     playerIdx = camera->playerIdx;
-
     camera->x = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x434) + worldOffset.x;
 
     playerIdx = camera->playerIdx;
-
     camera->y = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x438) + worldOffset.y;
 
     playerIdx = camera->playerIdx;
-
     camera->z = *(s32 *)((u8 *)gameState->players + (playerIdx * 0xBE8) + 0x43C) + worldOffset.z;
 
     camera->distance = 0x600000;
@@ -223,7 +224,7 @@ void initScriptedCamera(ScriptedCameraState *camera) {
 }
 
 void updateScriptedCamera(ScriptedCameraState *camera) {
-    Allocation *allocation;
+    ScriptedCameraAllocation *allocation;
     u8 cameraMatrix[0x30];
 
     allocation = getCurrentAllocation();
@@ -241,7 +242,7 @@ void updateScriptedCamera(ScriptedCameraState *camera) {
 
     switch (camera->tgtMode) {
         case 0:
-            memcpy(&camera->targetX, &allocation->players->unk434, 0xC);
+            memcpy(&camera->targetX, &allocation->players->worldPos, 0xC);
             camera->targetY += 0x200000;
             break;
         case 1:
