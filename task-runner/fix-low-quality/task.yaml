@@ -2,3 +2,4 @@ candidate_source: python3 tools/detect_low_quality_matches.py src --json
 template: template.md
 accept_best_effort: true
 claude_flags: --model opus
+claude_command: glaude
