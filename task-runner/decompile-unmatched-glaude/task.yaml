@@ -1,0 +1,5 @@
+candidate_source: python3 tools/score_functions.py asm/nonmatchings --json
+prompt: "decompile the function: $INPUT. use ultrathink"
+claude_flags: --model opus
+claude_command: glaude
+
