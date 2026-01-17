@@ -579,7 +579,7 @@ void updateFloatingItemSprite(FloatingItemSpriteTask *arg0) {
     }
 
     if (arg0->halfSizeRender == 0) {
-        debugEnqueueCallback(arg0->renderPriority, 1, func_80010240_10E40, arg0);
+        debugEnqueueCallback(arg0->renderPriority, 1, renderSpriteFrameWithPalette, arg0);
     } else {
         debugEnqueueCallback(arg0->renderPriority, 1, func_80010924_11524, arg0);
     }

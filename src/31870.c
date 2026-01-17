@@ -1212,12 +1212,12 @@ void updateBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0) {
     for (; i < 7; i++) {
         if (arg0->goldString[i] != space) {
             digit->digitValue = arg0->goldString[i] - 0x30;
-            debugEnqueueCallback(9, 7, func_80010240_10E40, digit);
+            debugEnqueueCallback(9, 7, renderSpriteFrameWithPalette, digit);
         }
         digit++;
     }
 
-    debugEnqueueCallback(9, 7, func_80010240_10E40, &arg0->iconX);
+    debugEnqueueCallback(9, 7, renderSpriteFrameWithPalette, &arg0->iconX);
 }
 
 void cleanupBoardShopGoldDisplay(BoardShopGoldDisplayCleanupArg *arg0) {

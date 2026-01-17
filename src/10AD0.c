@@ -1,11 +1,11 @@
 #include "10AD0.h"
 #include "common.h"
 
-extern u16 D_8008D3B0_8DFB0[];
-extern u16 D_8008D3B8_8DFB8[];
-extern Gfx D_8008D3D0_8DFD0[];
-extern s32 D_800A8A80_9FDF0;
-extern s32 D_800AFCD0_A7040;
+extern u16 gSpritePaletteModes[];
+extern u16 gSpriteTextureFormats[];
+extern Gfx gSpriteRDPSetupDL[];
+extern s32 gCachedPaletteAddr;
+extern s32 gCachedTextureAddr;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 extern TextClipAndOffsetData gTextClipAndOffsetData;
@@ -36,8 +36,8 @@ void renderSpriteFrame(SpriteRenderArg *arg0) {
     top = arg0->y + gTextClipAndOffsetData.offsetY;
     frameEntry = &frameEntry[arg0->frameIndex];
     framePaletteIndex = frameEntry->paletteIndex;
-    paletteMode = D_8008D3B0_8DFB0[frameEntry->paletteTableIndex];
-    format = D_8008D3B8_8DFB8[frameEntry->formatIndex];
+    paletteMode = gSpritePaletteModes[frameEntry->paletteTableIndex];
+    format = gSpriteTextureFormats[frameEntry->formatIndex];
     right = left + frameEntry->width;
     bottom = top + frameEntry->height;
 
@@ -56,13 +56,13 @@ void renderSpriteFrame(SpriteRenderArg *arg0) {
 
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            D_800A8A80_9FDF0 = 0;
-            D_800AFCD0_A7040 = 0;
-            gSPDisplayList(gRegionAllocPtr++, D_8008D3D0_8DFD0);
+            gCachedPaletteAddr = 0;
+            gCachedTextureAddr = 0;
+            gSPDisplayList(gRegionAllocPtr++, gSpriteRDPSetupDL);
         }
 
-        if ((s32)arg0->spriteData + frameEntry->textureOffset != D_800AFCD0_A7040) {
-            D_800AFCD0_A7040 = (s32)arg0->spriteData + frameEntry->textureOffset;
+        if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
+            gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
             func_80013EA0_14AA0(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
@@ -73,8 +73,8 @@ void renderSpriteFrame(SpriteRenderArg *arg0) {
         }
 
         paletteCacheAddr = paletteBase + (framePaletteIndex << 5);
-        if (paletteCacheAddr != D_800A8A80_9FDF0) {
-            D_800A8A80_9FDF0 = paletteCacheAddr;
+        if (paletteCacheAddr != gCachedPaletteAddr) {
+            gCachedPaletteAddr = paletteCacheAddr;
             if ((paletteMode & 0xFFFF) == 2) {
                 if (format == 0) {
                     gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteCacheAddr);
@@ -99,7 +99,7 @@ void renderSpriteFrame(SpriteRenderArg *arg0) {
     }
 }
 
-void func_80010240_10E40(SpriteRenderArg *arg0) {
+void renderSpriteFrameWithPalette(SpriteRenderArg *arg0) {
     s32 left;
     s32 top;
     s32 right;
@@ -123,8 +123,8 @@ void func_80010240_10E40(SpriteRenderArg *arg0) {
     top = arg0->y + gTextClipAndOffsetData.offsetY;
     frameEntry = &frameEntry[arg0->frameIndex];
     paletteIndex = arg0->paletteIndex;
-    paletteMode = D_8008D3B0_8DFB0[frameEntry->paletteTableIndex];
-    format = D_8008D3B8_8DFB8[frameEntry->formatIndex];
+    paletteMode = gSpritePaletteModes[frameEntry->paletteTableIndex];
+    format = gSpriteTextureFormats[frameEntry->formatIndex];
     right = left + frameEntry->width;
     bottom = top + frameEntry->height;
 
@@ -143,13 +143,13 @@ void func_80010240_10E40(SpriteRenderArg *arg0) {
 
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            D_800A8A80_9FDF0 = 0;
-            D_800AFCD0_A7040 = 0;
-            gSPDisplayList(gRegionAllocPtr++, D_8008D3D0_8DFD0);
+            gCachedPaletteAddr = 0;
+            gCachedTextureAddr = 0;
+            gSPDisplayList(gRegionAllocPtr++, gSpriteRDPSetupDL);
         }
 
-        if (D_800AFCD0_A7040 != (s32)arg0->spriteData + frameEntry->textureOffset) {
-            D_800AFCD0_A7040 = (s32)arg0->spriteData + frameEntry->textureOffset;
+        if (gCachedTextureAddr != (s32)arg0->spriteData + frameEntry->textureOffset) {
+            gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
             func_80013EA0_14AA0(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
@@ -160,8 +160,8 @@ void func_80010240_10E40(SpriteRenderArg *arg0) {
         }
 
         paletteCacheAddr = paletteBase + (paletteIndex << 5);
-        if (paletteCacheAddr != D_800A8A80_9FDF0) {
-            D_800A8A80_9FDF0 = paletteCacheAddr;
+        if (paletteCacheAddr != gCachedPaletteAddr) {
+            gCachedPaletteAddr = paletteCacheAddr;
             if ((paletteMode & 0xFFFF) == 2) {
                 if (format == 0) {
                     gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteCacheAddr);
@@ -209,8 +209,8 @@ void func_800105B0_111B0(SpriteRenderArg *arg0) {
     frameEntry = frameEntry + arg0->frameIndex;
     framePaletteIndex = frameEntry->paletteIndex;
     top = arg0->y + gTextClipAndOffsetData.offsetY;
-    paletteMode = D_8008D3B0_8DFB0[frameEntry->paletteTableIndex];
-    format = D_8008D3B8_8DFB8[frameEntry->formatIndex];
+    paletteMode = gSpritePaletteModes[frameEntry->paletteTableIndex];
+    format = gSpriteTextureFormats[frameEntry->formatIndex];
     right = left + (frameEntry->width / 2);
     bottom = top + (frameEntry->height / 2);
     clipOffsetX = 0;
@@ -230,13 +230,13 @@ void func_800105B0_111B0(SpriteRenderArg *arg0) {
 
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            D_800A8A80_9FDF0 = 0;
-            D_800AFCD0_A7040 = 0;
-            gSPDisplayList(gRegionAllocPtr++, D_8008D3D0_8DFD0);
+            gCachedPaletteAddr = 0;
+            gCachedTextureAddr = 0;
+            gSPDisplayList(gRegionAllocPtr++, gSpriteRDPSetupDL);
         }
 
-        if ((s32)arg0->spriteData + frameEntry->textureOffset != D_800AFCD0_A7040) {
-            D_800AFCD0_A7040 = (s32)arg0->spriteData + frameEntry->textureOffset;
+        if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
+            gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
             func_80013EA0_14AA0(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
@@ -247,8 +247,8 @@ void func_800105B0_111B0(SpriteRenderArg *arg0) {
         }
 
         paletteCacheAddr = paletteBase + (framePaletteIndex << 5);
-        if (paletteCacheAddr != D_800A8A80_9FDF0) {
-            D_800A8A80_9FDF0 = paletteCacheAddr;
+        if (paletteCacheAddr != gCachedPaletteAddr) {
+            gCachedPaletteAddr = paletteCacheAddr;
             if ((paletteMode & 0xFFFF) == 2) {
                 if (format == 0) {
                     gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteCacheAddr);
@@ -296,8 +296,8 @@ void func_80010924_11524(SpriteRenderArg *arg0) {
     frameEntry = frameEntry + arg0->frameIndex;
     paletteIndex = arg0->paletteIndex;
     top = arg0->y + gTextClipAndOffsetData.offsetY;
-    paletteMode = D_8008D3B0_8DFB0[frameEntry->paletteTableIndex];
-    format = D_8008D3B8_8DFB8[frameEntry->formatIndex];
+    paletteMode = gSpritePaletteModes[frameEntry->paletteTableIndex];
+    format = gSpriteTextureFormats[frameEntry->formatIndex];
     right = left + (frameEntry->width / 2);
     bottom = top + (frameEntry->height / 2);
     clipOffsetX = 0;
@@ -317,13 +317,13 @@ void func_80010924_11524(SpriteRenderArg *arg0) {
 
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            D_800A8A80_9FDF0 = 0;
-            D_800AFCD0_A7040 = 0;
-            gSPDisplayList(gRegionAllocPtr++, D_8008D3D0_8DFD0);
+            gCachedPaletteAddr = 0;
+            gCachedTextureAddr = 0;
+            gSPDisplayList(gRegionAllocPtr++, gSpriteRDPSetupDL);
         }
 
-        if ((s32)arg0->spriteData + frameEntry->textureOffset != D_800AFCD0_A7040) {
-            D_800AFCD0_A7040 = (s32)arg0->spriteData + frameEntry->textureOffset;
+        if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
+            gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
             func_80013EA0_14AA0(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
@@ -334,8 +334,8 @@ void func_80010924_11524(SpriteRenderArg *arg0) {
         }
 
         paletteCacheAddr = paletteBase + (paletteIndex << 5);
-        if (paletteCacheAddr != D_800A8A80_9FDF0) {
-            D_800A8A80_9FDF0 = paletteCacheAddr;
+        if (paletteCacheAddr != gCachedPaletteAddr) {
+            gCachedPaletteAddr = paletteCacheAddr;
             if ((paletteMode & 0xFFFF) == 2) {
                 if (format == 0) {
                     gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteCacheAddr);

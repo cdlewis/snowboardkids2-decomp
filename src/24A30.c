@@ -1058,7 +1058,7 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
     i = 0;
     entry = (func_80027348_entry *)arg0;
     do {
-        debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010240_10E40, entry);
+        debugEnqueueCallback(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
         entry++;
         i++;
     } while (i < 3);
@@ -1100,7 +1100,7 @@ void func_80025904_26504(CharSelectIconHideState *arg0) {
     i = 0;
     entry = (func_80027348_entry *)arg0;
     do {
-        debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010240_10E40, entry);
+        debugEnqueueCallback(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
         entry++;
         i++;
     } while (i < 3);
@@ -1165,7 +1165,7 @@ loop:
     entry->unk8 = iconBaseIndex + (*tablePtr - 1) / 2;
     i++;
     entry->unkA = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
-    debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010240_10E40, entry);
+    debugEnqueueCallback(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
     entry++;
     if (i < 3)
         goto loop;
@@ -1850,7 +1850,7 @@ void animateCharSelectP2NameReveal(P2NameAnimationState *arg0) {
         do {
             i += 1;
             ptr->unk2 = ptr->unk2 + yIncrement;
-            debugEnqueueCallback(arg0->playerIndex + 0xC, 0, func_80010240_10E40, (void *)ptr);
+            debugEnqueueCallback(arg0->playerIndex + 0xC, 0, renderSpriteFrameWithPalette, (void *)ptr);
             ptr++;
         } while (i < ((s32)new_var));
     }
@@ -1883,7 +1883,7 @@ void animateCharSelectP2NameHide(P2NameHideState *arg0) {
     }
     for (i = 0; i < (var_v0 & 0xFF); i++) {
         arg0->entries[i].unk2 += increment;
-        debugEnqueueCallback(arg0->playerIndex + 0xC, 0, func_80010240_10E40, (void *)(&arg0->entries[i]));
+        debugEnqueueCallback(arg0->playerIndex + 0xC, 0, renderSpriteFrameWithPalette, (void *)(&arg0->entries[i]));
     }
 
     if (arg0->entries[0].unk2 == target) {

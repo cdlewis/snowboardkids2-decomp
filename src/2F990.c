@@ -882,12 +882,12 @@ void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
         char c = arg0->goldAmountBuffer[i];
         if (c != space) {
             digit->spriteIndex = c - '0';
-            debugEnqueueCallback(8, 0, &func_80010240_10E40, digit);
+            debugEnqueueCallback(8, 0, &renderSpriteFrameWithPalette, digit);
         }
         digit++;
     } while (++i < 7);
 
-    debugEnqueueCallback(8, 0, &func_80010240_10E40, &arg0->goldIconX);
+    debugEnqueueCallback(8, 0, &renderSpriteFrameWithPalette, &arg0->goldIconX);
 }
 
 void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
@@ -967,7 +967,7 @@ void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0)
         char c = arg0->priceBuffer[i];
         if (c != space) {
             digit->spriteIndex = c - '0';
-            debugEnqueueCallback(8, 0, &func_80010240_10E40, digit);
+            debugEnqueueCallback(8, 0, &renderSpriteFrameWithPalette, digit);
         }
         digit++;
     } while (++i < 6);

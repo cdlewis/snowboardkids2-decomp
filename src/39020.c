@@ -77,7 +77,7 @@ typedef struct {
 
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 extern Gfx *gRegionAllocPtr;
-extern Gfx D_8008D3D0_8DFD0[];
+extern Gfx gSpriteRDPSetupDL[];
 extern s16 D_8008D3C0_8DFC0[];
 
 void func_80038420_39020(TextureArg *arg0) {
@@ -187,7 +187,7 @@ void func_80038420_39020(TextureArg *arg0) {
             colRem = colRem + arg0->unk0E;
         }
 
-        gSPDisplayList(gRegionAllocPtr++, (u32)D_8008D3D0_8DFD0);
+        gSPDisplayList(gRegionAllocPtr++, (u32)gSpriteRDPSetupDL);
 
         for (col = 0; col < numCols; ++col) {
             rowStart = rowOffset;

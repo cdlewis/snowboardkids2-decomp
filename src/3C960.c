@@ -72,7 +72,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem12->y = y;
                     elem12->unk4 = texture;
                     elem12->palette = palette;
-                    debugEnqueueCallback(priority, layer & 0xFF, func_80010240_10E40, elem12);
+                    debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 case 0x3A:
@@ -82,7 +82,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem12->y = y;
                     elem12->unk4 = texture;
                     elem12->palette = palette;
-                    debugEnqueueCallback(priority, layer & 0xFF, func_80010240_10E40, elem12);
+                    debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 case 0x22:
@@ -92,7 +92,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem12->y = y;
                     elem12->unk4 = texture;
                     elem12->palette = palette;
-                    debugEnqueueCallback(priority, layer & 0xFF, func_80010240_10E40, elem12);
+                    debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 case 0x27:
@@ -102,7 +102,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem12->y = y;
                     elem12->unk4 = texture;
                     elem12->palette = palette;
-                    debugEnqueueCallback(priority, layer & 0xFF, func_80010240_10E40, elem12);
+                    debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 default:
@@ -112,7 +112,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     x += 8;
                     elem12->unk4 = texture;
                     elem12->palette = palette;
-                    debugEnqueueCallback(priority, layer & 0xFF, func_80010240_10E40, elem12);
+                    debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
             }

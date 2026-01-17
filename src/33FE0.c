@@ -739,7 +739,7 @@ void updateSaveSlotSelectionParticles(SelectionParticleUpdateState *state) {
                 }
             }
 
-            debugEnqueueCallback(8, 0, func_80010240_10E40, (void *)&state->entries[i]);
+            debugEnqueueCallback(8, 0, renderSpriteFrameWithPalette, (void *)&state->entries[i]);
         }
     } else {
         func_80069CF8_6A8F8();

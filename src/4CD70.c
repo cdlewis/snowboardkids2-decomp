@@ -515,9 +515,9 @@ void initPlayerLapCounterTask(LapCounterState *state) {
 void updatePlayerLapCounterSinglePlayer(LapCounterSinglePlayerState *state) {
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
     state->currentLap = state->player->currentLap + 1;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010240_10E40, &state->digitX1);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrameWithPalette, &state->digitX1);
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, &state->digitX2);
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010240_10E40, &state->digitX3);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrameWithPalette, &state->digitX3);
 }
 
 void updatePlayerLapCounterMultiplayer(LapCounterMultiplayerState *state) {
@@ -817,7 +817,7 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
                 elem->hasActiveEffect = 0;
             }
 
-            debugEnqueueCallback(0xC, 0, func_80010240_10E40, elem);
+            debugEnqueueCallback(0xC, 0, renderSpriteFrameWithPalette, elem);
             i++;
             playerCount = allocation->numPlayers;
         } while (i < playerCount);
@@ -1562,7 +1562,7 @@ void renderVictorySnowflake(VictorySnowflakeState *state) {
 
     state->screenX = state->posX >> 4;
     state->screenY = state->posY >> 4;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, func_80010240_10E40, state);
+    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrameWithPalette, state);
 }
 
 void renderVictorySnowflakeSmall(VictorySnowflakeState *state) {
@@ -1679,7 +1679,7 @@ void renderPauseMenuDisplay(PauseMenuDisplayState *state) {
             } else {
                 state->elements[i].padA[0] = 0x11;
             }
-            debugEnqueueCallback(0xC, 6, func_80010240_10E40, &state->elements[i]);
+            debugEnqueueCallback(0xC, 6, renderSpriteFrameWithPalette, &state->elements[i]);
             i++;
         } while (i < 3);
         func_8006D4B8_6E0B8(state->backgroundAsset, -0x20, -8, 4, 1, 0, 0x80, 0, 0, 0xFF, 0x80, 0xC, 6);
