@@ -227,7 +227,7 @@ extern loadAssetMetadata_arg gGlintEffectAssetTemplate;
 extern loadAssetMetadata_arg gCharacterAttackEffectAssetTemplate;
 extern Vec3i gCharacterAttackEffectPositionOffsetsA;
 extern Vec3i gCharacterAttackEffectPositionOffsetsB;
-extern u8 D_80090E70_91A70[];
+extern u8 gCharacterParticleTypeMap[];
 extern s16 gSkiTrailOffsetTransformsForward[];
 extern s16 gSkiTrailOffsetTransformsBackward[];
 extern s16 gGlintEffectTransform[];
@@ -350,7 +350,7 @@ void spawnDualSnowSprayEffect(Vec3i *pos1, Vec3i *pos2, Vec3i *velocity, s16 slo
     u32 signZ;
     u8 particleType;
 
-    if (D_80090E70_91A70[characterId] == 0xFF) {
+    if (gCharacterParticleTypeMap[characterId] == 0xFF) {
         return;
     }
 
@@ -362,7 +362,7 @@ void spawnDualSnowSprayEffect(Vec3i *pos1, Vec3i *pos2, Vec3i *velocity, s16 slo
     memcpy(&task->pos1, pos1, 0xC);
     memcpy(&task->pos2, pos2, 0xC);
 
-    particleType = D_80090E70_91A70[characterId];
+    particleType = gCharacterParticleTypeMap[characterId];
     task->slotIndex = slotIndex;
     task->particleType = particleType;
 
@@ -481,7 +481,7 @@ void spawnPlayerCharacterTrailParticle(Player *arg0, s32 arg1) {
     u8 temp;
 
     allocation = (func_80050C80_51880_allocation *)getCurrentAllocation();
-    temp = D_80090E70_91A70[arg1];
+    temp = gCharacterParticleTypeMap[arg1];
 
     if (temp == 0xFF) {
         return;
@@ -496,7 +496,7 @@ void spawnPlayerCharacterTrailParticle(Player *arg0, s32 arg1) {
     if (task != NULL) {
         u8 temp2;
         task->sourceObj = (func_80050C00_51800_Task_unk34 *)arg0;
-        temp2 = D_80090E70_91A70[arg1];
+        temp2 = gCharacterParticleTypeMap[arg1];
         task->particle.alpha = 0x80;
         task->particleType = temp2;
         task->velX = arg0->velocity.x / 2;
@@ -866,18 +866,18 @@ void spawnCharacterAttackEffect(Player *player) {
     }
 }
 
-void spawnCharacterAttackEffectByType(void *arg0, s32 characterId) {
+void spawnCharacterAttackEffectByType(Player *player, s32 characterId) {
     s32 particleType;
     CharacterAttackEffectSpawnTask *task;
 
-    particleType = D_80090E70_91A70[characterId];
+    particleType = gCharacterParticleTypeMap[characterId];
     if (particleType == 0xFF) {
         particleType = 0xD;
     }
 
     task = (CharacterAttackEffectSpawnTask *)scheduleTask(&initCharacterAttackEffectTask, 2, 0, 0xE7);
     if (task != NULL) {
-        task->sourcePlayer = arg0;
+        task->sourcePlayer = player;
         task->particleType = particleType;
         task->isVariant = 1;
     }
