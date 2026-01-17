@@ -146,3 +146,19 @@ Failure to handle assets properly will almost certainly guarantee a mismatch.
 ### Skills
 
 Consider what skills you have access to and how they may help you achieve your goals.
+
+## Code Structure
+
+C files should be organised in the following way:
+
+* Macro definitions
+* Structs definitions
+* Global variables
+* Function declarations
+* Function implementations
+
+You should proactively reorganise code to preserve this structure.
+
+## Controller Button Macros
+
+You do not need to define your own macros for controller buttons. They are available in `os_cont.h`.

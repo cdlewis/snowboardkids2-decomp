@@ -183,7 +183,7 @@ Examples:
     parser.add_argument('--verbose', '-v', action='store_true',
                        help='Show file paths and detailed stats')
     parser.add_argument('--json', action='store_true',
-                       help='Output file:function pairs as JSON array for task runner')
+                       help='Output [[file, function], ...] pairs as JSON array for task runner')
     parser.add_argument('--limit', type=int, default=None,
                        help='Limit the number of results (for --json or --exhaustive)')
 
@@ -208,10 +208,10 @@ Examples:
 
     # Handle JSON output mode
     if args.json:
-        # Output file:function pairs ranked by badness
+        # Output [file, function] pairs ranked by badness
         results = []
         for filepath, func_name, func_stats in ranked:
-            results.append(f"{filepath}:{func_name}")
+            results.append([filepath, func_name])
 
         # Apply limit if specified
         if args.limit is not None:
