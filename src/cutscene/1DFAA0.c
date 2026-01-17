@@ -875,6 +875,7 @@ void reorderCutsceneEvent(u16 eventIndex, u16 oldPreviousIndex, u16 newPreviousI
     u8 *tablePtr;
     u32 newPreviousOffset;
 
+    // Mask all indices to u16
     eventIndexMasked = eventIndex;
     oldPreviousIndexMasked = oldPreviousIndex;
     newPreviousIndexMasked = newPreviousIndex & 0xFFFF;
@@ -888,33 +889,34 @@ void reorderCutsceneEvent(u16 eventIndex, u16 oldPreviousIndex, u16 newPreviousI
 
     eventTable = (u8 *)gCutsceneStateTable;
 
+    // Convert indices to byte offsets (each entry is 64 bytes)
     oldPreviousOffset = oldPreviousOffset << 6;
     eventOffset = eventOffset << 6;
 
-    /* Read next_index from old prev entry and prev_index from entry being moved */
+    // Read the next_index from old previous entry and prev_index from event entry
     originalNextIndex = *(u16 *)(eventTable + oldPreviousOffset + 0xF8);
     entryPtr = eventTable + eventOffset;
     eventPreviousIndex = *(u16 *)(entryPtr + 0xFA);
 
-    /* Unlink entry from current position: update next entry's prev_index */
+    // Unlink entry from current position: update next entry's prev_index
     if ((originalNextIndex & 0xFFFF) != 0xFFFF) {
         *(u16 *)(eventTable + ((originalNextIndex & 0xFFFF) << 6) + 0xFA) = eventPreviousIndex;
     }
 
-    /* Unlink entry from current position: update prev entry's next_index */
+    // Unlink entry from current position: update prev entry's next_index
     if ((eventPreviousIndex & 0xFFFF) != 0xFFFF) {
         u8 *temp = (u8 *)gCutsceneStateTable;
         *(u16 *)(temp + ((eventPreviousIndex & 0xFFFF) << 6) + 0xF8) = originalNextIndex;
     }
 
-    /* Insert entry after newPreviousIndex */
+    // Insert entry after newPreviousIndex
     tablePtr = (u8 *)gCutsceneStateTable;
     newPreviousOffset = newPreviousIndexMasked << 6;
     originalNextIndex = *(u16 *)(tablePtr + newPreviousOffset + 0xF8);
     *(u16 *)(tablePtr + newPreviousOffset + 0xF8) = eventIndexMasked;
     *(u16 *)(tablePtr + oldPreviousOffset + 0xF8) = originalNextIndex;
 
-    /* Update the next entry's prev_index to point to the old prev */
+    // Update the next entry's prev_index to point to the old prev
     if ((originalNextIndex & 0xFFFF) != 0xFFFF) {
         *(u16 *)(tablePtr + ((originalNextIndex & 0xFFFF) << 6) + 0xFA) = oldPreviousIndexMasked;
     }
