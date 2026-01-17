@@ -22,7 +22,7 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 
 - `./tools/build-and-verify.sh` build the project and verify that it matches the target.
 - `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>`
-- `./tools/claude --bootstrap <function name>` spin up a decompilation environment for a given function.
+- `./tools/claude --bootstrap <function name>` spin up a decompilation environment for a given function. It can also take an optional --id field. The script will only create the directory if one with a matching id does not already exist.
 - `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory (and its subdirectories).
 - `python3 tools/check_pointer_arithmetic.py <file or directory>` detect pointer arithmetic with casts that should be replaced with struct field access. Use `--strict` to fail on violations.
 - `python3 tools/project_status.py` shows functions that are currently non-matching. Use this if `./tools/build-and-verify.sh` is failing and you're not sure which function is the problem.
@@ -44,7 +44,7 @@ First we need to spin up a decomp environment for the function, run:
 
 Move to the directory created by the script. This will be `nonmatchings/<function name>-<number (optional)>`.
 
-Use the tools in this directory to match the function. You may need to make several attempts. Each attempt should be in a new file (base*1.c, base_2.c, ... base_n.c, etc). It's okay to give up if you're unable to match after \_30* attempts.
+Use the tools in this directory to match the function. You may need to make several attempts. Each attempt should be in a new file (base\*1.c, base_2.c, ... base_n.c, etc).
 
 #### Step 2 (successful match, integrate changes into project)
 
@@ -66,10 +66,6 @@ Respect any pre-commit hooks that prevent you from committing your change. A fai
 
 You are done. Do not attemp to find the next closest match.
 
-### What if I can't get a match?
-
-If you cannot get a perfect match after 30 attempts, revert any changes you've made adding the function to the C file or other project files and exit.
-
 ## Validation Checklist
 
 Before declaring any changes to C code complete (including decompiling functions), verify:
@@ -87,19 +83,16 @@ Before declaring any changes to C code complete (including decompiling functions
 When you see pointer arithmetic patterns like `*(type*)((u8*)ptr + offset)`:
 
 1. **Identify the access pattern:**
-
    - What offset is being accessed? (e.g., `0xC` means field at offset 12)
    - Is it accessing an array element? (e.g., `arg1 * 36` means 36-byte elements)
    - What field within the element? (e.g., `+ 0xA` means field at offset 10)
 
 2. **Create appropriate structs:**
-
    - Define the element struct with correct size and field offsets
    - Define the container struct with pointer at correct offset
    - Use meaningful names or `unk[Offset]` naming convention
 
 3. **Verify struct sizes:**
-
    - Calculate total size to ensure it matches the multiplier in pointer arithmetic
    - Example: `arg1 * 36` means struct must be exactly 36 (0x24) bytes
 
@@ -117,7 +110,6 @@ When modifying struct definitions:
 After adding your decompiled function, check for any redundant extern declarations:
 
 1. **Search for existing declarations**: For each extern function you used, search the codebase to see if it's already declared in a header file:
-
    - Use `grep -r "void functionName" include/` to search headers
    - Use `grep -r "void functionName" src/*.h` to search source headers
 
@@ -151,11 +143,11 @@ Consider what skills you have access to and how they may help you achieve your g
 
 C files should be organised in the following way:
 
-* Macro definitions
-* Structs definitions
-* Global variables
-* Function declarations
-* Function implementations
+- Macro definitions
+- Structs definitions
+- Global variables
+- Function declarations
+- Function implementations
 
 You should proactively reorganise code to preserve this structure.
 

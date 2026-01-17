@@ -6,6 +6,7 @@
 
 # Parse arguments
 BOOTSTRAP=false
+ID=""
 ARG=""
 
 while [[ $# -gt 0 ]]; do
@@ -13,6 +14,10 @@ while [[ $# -gt 0 ]]; do
         --bootstrap)
             BOOTSTRAP=true
             shift
+            ;;
+        --id)
+            ID="$2"
+            shift 2
             ;;
         *)
             ARG="$1"
@@ -42,7 +47,7 @@ create_unique_dir() {
 
 # Check if argument is provided
 if [ -z "$ARG" ]; then
-    echo "Usage: $0 [--bootstrap] <function_name_or_path_or_scratch_id>"
+    echo "Usage: $0 [--bootstrap] [--id ID] <function_name_or_path_or_scratch_id>"
     exit 1
 fi
 
@@ -55,6 +60,13 @@ if [[ "$ARG" =~ ^[0-9]+$ ]] || [[ "$ARG" =~ ^[a-zA-Z0-9]+$ && ${#ARG} -ge 5 && $
     if [ "$BOOTSTRAP" = true ]; then
         echo "Error: --bootstrap cannot be used with a scratch ID"
         echo "Bootstrap mode requires a function name to generate code from m2c"
+        exit 1
+    fi
+
+    # Check for invalid --id + scratch ID combination
+    if [ -n "$ID" ]; then
+        echo "Error: --id cannot be used with a scratch ID"
+        echo "The --id flag is only for use with --bootstrap and a function name"
         exit 1
     fi
 
@@ -101,6 +113,13 @@ else
     # Regular function name or path handling
     FUNC_NAME="$ARG"
     USE_SCRATCH_SOURCE=false
+
+    # Check that --id is used with --bootstrap
+    if [ -n "$ID" ] && [ "$BOOTSTRAP" != true ]; then
+        echo "Error: --id requires --bootstrap"
+        echo "The --id flag is only for use with --bootstrap mode"
+        exit 1
+    fi
 fi
 
 # Check if the argument is already a full path
@@ -133,7 +152,27 @@ else
     # Use original argument for directory name
     DIR_NAME="$ARG"
 fi
-created_dir=$(create_unique_dir "$DIR_NAME")
+
+if [ -n "$ID" ]; then
+    # User specified an ID
+    TARGET_DIR="nonmatchings/${DIR_NAME}-${ID}"
+    if [ -d "$TARGET_DIR" ]; then
+        # Directory already exists, just direct user to it
+        echo "Directory already exists: $TARGET_DIR"
+        if command -v claude &> /dev/null; then
+            cd "$TARGET_DIR"
+            claude "decompile ${FUNC_NAME%.s}. the appropriate claude environment has already been created (do not re-run tools/claude --bootstrap). use ultrathink"
+        else
+            echo "Please navigate to: $TARGET_DIR"
+        fi
+        exit 0
+    fi
+    mkdir -p "$TARGET_DIR"
+    created_dir="$TARGET_DIR"
+else
+    # Use existing create_unique_dir logic
+    created_dir=$(create_unique_dir "$DIR_NAME")
+fi
 
 # Populate with base / target files
 if [ "$USE_SCRATCH_SOURCE" = true ]; then
