@@ -480,28 +480,28 @@ def get_project_root() -> str:
 
 def get_directory_hash(directory: str) -> str:
     """
-    Compute hash from file metadata (path + mtime + size) of all .s files.
+    Compute hash from file contents of all .s files.
 
-    This is fast and reliable for detecting file changes without reading contents.
+    This is slower but necessary when the build system recreates files
+    with identical content (changing mtimes).
     """
     if not os.path.isdir(directory):
         return ""
 
     hasher = hashlib.sha256()
-    file_entries = []
 
     for asm_file in sorted(Path(directory).glob('**/*.s')):
         try:
-            stat = asm_file.stat()
-            # Use relative path for portability
-            rel_path = asm_file.relative_to(directory)
-            file_entries.append(f"{rel_path}:{stat.st_mtime}:{stat.st_size}")
-        except OSError:
-            # If we can't stat a file, skip it
-            continue
+            # Use relative path for portability and to include in hash
+            rel_path = str(asm_file.relative_to(directory))
+            hasher.update(rel_path.encode())
 
-    if file_entries:
-        hasher.update("\n".join(file_entries).encode())
+            # Hash the actual file contents
+            with open(asm_file, 'rb') as f:
+                hasher.update(f.read())
+        except (OSError, IOError):
+            # If we can't read a file, skip it
+            continue
 
     return hasher.hexdigest()
 

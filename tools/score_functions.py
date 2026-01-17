@@ -468,6 +468,13 @@ Examples:
         action='store_true',
         help='Rank functions by how similar they are to existing matched functions (best reference material first)'
     )
+    parser.add_argument(
+        '--top-n',
+        type=int,
+        default=5,
+        metavar='N',
+        help='Number of similar functions to return when using --by-similarity (default: 5)'
+    )
 
     args = parser.parse_args()
 
@@ -550,7 +557,7 @@ Examples:
                         break
 
                 if query:
-                    results = find_similar(query, matchings_index, top_n=5, threshold=0.0)
+                    results = find_similar(query, matchings_index, top_n=args.top_n, threshold=0.0)
                     if results:
                         func_score.similar_to = [r.function.name for r in results]
                         func_score.similarity_score = results[0].total_score
