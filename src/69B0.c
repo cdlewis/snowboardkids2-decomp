@@ -21,6 +21,14 @@ typedef struct {
     /* 0x34 */ u8 _pad34[0x8];
 } QuadDisplayListElement; // Size: 0x3C (60 bytes)
 
+// The state structure for updateQuadDisplayList has the following layout:
+// typedef struct {
+//     /* 0x00 */ func_80002B50_3750_arg *model;
+//     /* 0x04 */ QuadDisplayListElement elements[4];
+//     /* 0xF4 */ u16 rotationAngle;
+//     /* 0xF6 */ u16 rotationSpeed;
+// } QuadDisplayListState;
+
 extern s32 D_8009A8A4_9B4A4;
 extern u8 identityMatrix[];
 extern u8 D_80088640_89240[];
@@ -46,6 +54,9 @@ void initializeQuadDisplayList(QuadDisplayListElement *elements) {
 }
 
 void updateQuadDisplayList(func_80002B50_3750_arg **state) {
+    // state parameter is actually QuadDisplayListState* (see commented struct above)
+    // Offset 0xF4: rotationAngle - accumulates rotation over time
+    // Offset 0xF6: rotationSpeed - increases by 0x5B each frame in mode 1, max 0x2AA
     Transform3D rotationMatrix;
     func_80002B50_3750_arg *model;
     s32 i;
