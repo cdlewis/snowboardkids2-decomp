@@ -25,12 +25,6 @@ typedef struct {
 } CharacterPreviewState;
 
 typedef struct {
-    u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-} func_800B1104_arg;
-
-typedef struct {
     u8 _pad0[0x2C];
     void *textureData;
 } TextureDataTaskState;
@@ -80,16 +74,16 @@ typedef struct {
 } CharacterSelectSprites;
 
 typedef struct {
-    s16 m[9];
-    s16 _pad;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    s32 unk2C;
-} func_800B100C_arg;
+    /* 0x00 */ s16 m[9];
+    /* 0x12 */ s16 _pad;
+    /* 0x14 */ s32 translateX;
+    /* 0x18 */ s32 translateY;
+    /* 0x1C */ s32 translateZ;
+    /* 0x20 */ void *displayList;
+    /* 0x24 */ void *textureData1;
+    /* 0x28 */ void *textureData2;
+    /* 0x2C */ s32 animState;
+} CharacterSelectBoardTask;
 
 typedef struct {
     s16 x, y;
@@ -134,8 +128,8 @@ void cleanupCharacterSelectIndicator(CharacterSelectIndicatorCleanupTask *);
 void updatePlayer2CharacterSelectIndicator(void *);
 void cleanupCharacterSelectIndicatorData(CharacterSelectIndicatorCleanupTask *);
 void initCharacterSelectTextureRenderState(TextureDataTaskState *);
-void func_800B10D4_1DB674(void *);
-void func_800B1104_1DB6A4(func_800B1104_arg *);
+void renderCharacterSelectBoard(void *);
+void cleanupCharacterSelectBoardTask(CharacterSelectBoardTask *);
 void updateCoordinateDisplayTask(CoordinateDisplayTaskState *);
 
 extern char gCoordDisplayFormatString[];
@@ -588,33 +582,33 @@ void cleanupCharacterSelectIndicatorData(CharacterSelectIndicatorCleanupTask *ar
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void func_800B100C_1DB5AC(func_800B100C_arg *arg0) {
-    void *temp1;
-    void *temp2;
+void initCharacterSelectBoardTask(CharacterSelectBoardTask *arg0) {
+    void *texture1;
+    void *texture2;
 
-    temp1 = loadUncompressedData(&_1DC0D0_ROM_START, &_1DC0D0_ROM_END);
-    temp2 = loadUncompressedData(&_422C60_ROM_START, &_422C60_ROM_END);
-    setCleanupCallback(func_800B1104_1DB6A4);
+    texture1 = loadUncompressedData(&_1DC0D0_ROM_START, &_1DC0D0_ROM_END);
+    texture2 = loadUncompressedData(&_422C60_ROM_START, &_422C60_ROM_END);
+    setCleanupCallback(cleanupCharacterSelectBoardTask);
 
     memcpy(arg0, identityMatrix, 0x20);
-    arg0->unk20 = &D_800B1140_1DB6E0;
-    arg0->unk14 = 0x2C0000;
-    arg0->unk1C = (s32)0xFF9F0000;
-    arg0->unk24 = temp1;
-    arg0->unk28 = temp2;
-    arg0->unk2C = 0;
-    arg0->unk18 = (s32)0xFFF40000;
+    arg0->displayList = &D_800B1140_1DB6E0;
+    arg0->translateX = 0x2C0000;
+    arg0->translateZ = (s32)0xFF9F0000;
+    arg0->textureData1 = texture1;
+    arg0->textureData2 = texture2;
+    arg0->animState = 0;
+    arg0->translateY = (s32)0xFFF40000;
 
     createZRotationMatrix((Transform3D *)arg0, 0x1F50);
-    setCallback(func_800B10D4_1DB674);
+    setCallback(renderCharacterSelectBoard);
 }
 
-void func_800B10D4_1DB674(void *arg0) {
+void renderCharacterSelectBoard(void *arg0) {
     getCurrentAllocation();
     enqueueDisplayListObjectWithFullRenderState(0, arg0);
 }
 
-void func_800B1104_1DB6A4(func_800B1104_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupCharacterSelectBoardTask(CharacterSelectBoardTask *arg0) {
+    arg0->textureData1 = freeNodeMemory(arg0->textureData1);
+    arg0->textureData2 = freeNodeMemory(arg0->textureData2);
 }
