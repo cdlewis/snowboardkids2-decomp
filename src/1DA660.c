@@ -524,12 +524,12 @@ void initCharacterSelectTextureDataLoad(TextureDataTaskState *arg0) {
 }
 
 void initCharacterSelectTextureRenderState(TextureDataTaskState *arg0) {
-    func_800394BC_3A0BC(arg0, (s32)arg0->textureData);
+    initTiledTextureRenderState(arg0, (s32)arg0->textureData);
     setCallback(&enqueueCharacterSelectTextureRender);
 }
 
 void enqueueCharacterSelectTextureRender(void *arg0) {
-    debugEnqueueCallback(9, 0, func_80038420_39020, arg0);
+    debugEnqueueCallback(9, 0, renderTiledTexture, arg0);
 }
 
 void initPlayer3CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {

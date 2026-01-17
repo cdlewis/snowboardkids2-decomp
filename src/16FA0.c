@@ -36,11 +36,11 @@ void cleanupTitleLogoTask(TitleLogoTask *arg0) {
 }
 
 void enqueueTitleLogoRender(TitleLogoTask *arg0) {
-    debugEnqueueCallback(8, 0, func_80038420_39020, arg0);
+    debugEnqueueCallback(8, 0, renderTiledTexture, arg0);
 }
 
 void initTitleLogoRenderState(TitleLogoTask *arg0) {
-    func_800394BC_3A0BC(arg0, (s32)arg0->assetData);
+    initTiledTextureRenderState(arg0, (s32)arg0->assetData);
     arg0->unk2 = 0x10;
     setCallback(enqueueTitleLogoRender);
 }

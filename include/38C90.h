@@ -6,5 +6,5 @@ void processRaceUnlocks(s16 raceResult);
 s32 areCharacterPalettesUnlocked(s32 count);
 s32 tryAddUnlockedCutsceneId(u8 cutsceneId);
 void tryAddUnlockedBoardId(u8 boardId);
-void func_80038420_39020(void);
-void func_800394BC_3A0BC(void *, s32);
+void renderTiledTexture(void *);
+void initTiledTextureRenderState(void *, s32);

@@ -80,8 +80,8 @@ void initLogoNodeFadeOut(E090_struct *arg0) {
 void initLogoScreenElements(E090_struct *arg0) {
     s32 i;
 
-    func_800394BC_3A0BC(&arg0->unk1EC, (s32)arg0->unk1E0);
-    func_800394BC_3A0BC(&arg0->unk218, (s32)arg0->unk1E4);
+    initTiledTextureRenderState(&arg0->unk1EC, (s32)arg0->unk1E0);
+    initTiledTextureRenderState(&arg0->unk218, (s32)arg0->unk1E4);
 
     arg0->unk1EC.unk10 = 0;
     arg0->unk1EC.unk12 = 0;
@@ -238,11 +238,11 @@ void updateLogoScreen(void) {
 
     state = logoScreen->state;
     if (state == 2) {
-        debugEnqueueCallback(0, 4, func_80038420_39020, &logoScreen->unk1EC);
+        debugEnqueueCallback(0, 4, renderTiledTexture, &logoScreen->unk1EC);
     } else if (state >= 2) {
         if (state < 7) {
             if (state >= 4) {
-                debugEnqueueCallback(0, 4, func_80038420_39020, &logoScreen->unk218);
+                debugEnqueueCallback(0, 4, renderTiledTexture, &logoScreen->unk218);
 
                 for (i = 0; i < logoScreen->visibleLetterCount; i++) {
                     logoScreen->unk2D4[i] += 0x330000;

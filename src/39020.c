@@ -2,38 +2,38 @@
 #include "common.h"
 
 typedef struct {
-    s16 unk00;
-    s16 unk02;
-    s16 unk04;
-    s16 unk06;
-    s16 unk08;
-    s16 unk0A;
-    s16 unk0C;
-    s16 unk0E;
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
+    s16 x;
+    s16 y;
+    s16 tileWidth;
+    s16 tileHeight;
+    s16 tilesPerRow;
+    s16 tilesPerCol;
+    s16 tileGridWidth;
+    s16 tileGridHeight;
+    s16 clipX;
+    s16 clipY;
+    s16 clipWidth;
+    s16 clipHeight;
+    s16 ciMode;
     s16 unk1A;
-    void *unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-} StructA;
+    void *textureData;
+    void *tileIndexData;
+    void *tileEntries;
+    void *paletteData;
+} TiledTextureRenderState;
 
 typedef struct {
-    u16 unk00;
-    u16 unk02;
-    u8 unk04;
-    u8 unk05;
-    u16 unk06;
+    u16 tileGridWidth;
+    u16 tileGridHeight;
+    u8 tileWidth;
+    u8 tileHeight;
+    u16 ciMode;
     u8 pad08[2];
-    u16 unk0A;
-    u16 unk0C;
-    u16 unk0E;
-    u8 data10[1];
-} StructB;
+    u16 tileIndexDataOffset;
+    u16 paletteDataOffset;
+    u16 textureDataOffset;
+    u8 tileEntries[1];
+} TiledTextureAsset;
 
 typedef struct {
     s16 clipLeft;
@@ -45,9 +45,9 @@ typedef struct {
 } TextClipAndOffsetData;
 
 typedef struct {
-    u16 unk00;
-    u8 unk02;
-    u8 unk03;
+    u16 textureIndex;
+    u8 paletteIndex;
+    u8 flipMode;
 } TileEntry;
 
 typedef struct {
@@ -55,32 +55,32 @@ typedef struct {
 } TexData32;
 
 typedef struct {
-    s16 unk00;
-    s16 unk02;
-    u16 unk04;
-    u16 unk06;
-    u16 unk08;
-    u16 unk0A;
-    u16 unk0C;
-    u16 unk0E;
-    u16 unk10;
-    u16 unk12;
-    u16 unk14;
-    u16 unk16;
-    s16 unk18;
+    s16 x;
+    s16 y;
+    u16 tileWidth;
+    u16 tileHeight;
+    u16 tilesPerRow;
+    u16 tilesPerCol;
+    u16 tileGridWidth;
+    u16 tileGridHeight;
+    u16 clipX;
+    u16 clipY;
+    u16 clipWidth;
+    u16 clipHeight;
+    s16 ciMode;
     s16 unk1A;
-    s32 unk1C;
-    s32 unk20;
-    TileEntry *unk24;
-    TexData32 *unk28;
-} TextureArg;
+    s32 textureData;
+    s32 tileIndexData;
+    TileEntry *tileEntries;
+    TexData32 *paletteData;
+} TiledTextureRenderState2;
 
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 extern Gfx *gRegionAllocPtr;
 extern Gfx gSpriteRDPSetupDL[];
-extern s16 D_8008D3C0_8DFC0[];
+extern s16 gTileTextureFlipTable[];
 
-void func_80038420_39020(TextureArg *arg0) {
+void renderTiledTexture(TiledTextureRenderState2 *arg0) {
     s16 xStart;
     s16 yStart;
     s16 clipLeft;
@@ -121,47 +121,47 @@ void func_80038420_39020(TextureArg *arg0) {
     TexData32 *texDataArr;
     TexData32 *curTexData;
 
-    sp48 = arg0->unk20;
-    sp4C = arg0->unk1C;
-    tileArr = arg0->unk24;
-    texDataArr = arg0->unk28;
+    sp48 = arg0->tileIndexData;
+    sp4C = arg0->textureData;
+    tileArr = arg0->tileEntries;
+    texDataArr = arg0->paletteData;
     curTexData = 0;
     tileCount = 0;
     lastTile = -1;
-    clipLeft = arg0->unk10;
-    xStart = arg0->unk00;
+    clipLeft = arg0->clipX;
+    xStart = arg0->x;
 
     if ((displayList = arenaAlloc16(0x1B30))) {
         displayListHead = displayList;
 
         if (clipLeft < gTextClipAndOffsetData.clipLeft) {
             clipLeft = gTextClipAndOffsetData.clipLeft;
-            xStart = xStart + (clipLeft - arg0->unk10);
+            xStart = xStart + (clipLeft - arg0->clipX);
         }
 
-        clipTop = arg0->unk12;
-        yStart = arg0->unk02;
+        clipTop = arg0->clipY;
+        yStart = arg0->y;
 
         if (clipTop < gTextClipAndOffsetData.clipTop) {
             clipTop = gTextClipAndOffsetData.clipTop;
-            yStart = yStart + (clipTop - arg0->unk12);
+            yStart = yStart + (clipTop - arg0->clipY);
         }
 
-        clipRight = arg0->unk10 + arg0->unk14;
+        clipRight = arg0->clipX + arg0->clipWidth;
 
         if (clipRight > gTextClipAndOffsetData.clipRight) {
             clipRight = gTextClipAndOffsetData.clipRight;
         }
 
-        clipBottom = arg0->unk12 + arg0->unk16;
+        clipBottom = arg0->clipY + arg0->clipHeight;
 
         if (clipBottom > gTextClipAndOffsetData.clipBottom) {
             clipBottom = gTextClipAndOffsetData.clipBottom;
         }
 
-        sp54 = arg0->unk04 - 1;
+        sp54 = arg0->tileWidth - 1;
 
-        if (arg0->unk04 == 16) {
+        if (arg0->tileWidth == 16) {
             sp56 = 4;
         } else {
             sp56 = 5;
@@ -182,51 +182,51 @@ void func_80038420_39020(TextureArg *arg0) {
         }
 
         colStart = colOffset;
-        colRem = (yStart >> sp56) % arg0->unk0E;
+        colRem = (yStart >> sp56) % arg0->tileGridHeight;
         if (colRem < 0) {
-            colRem = colRem + arg0->unk0E;
+            colRem = colRem + arg0->tileGridHeight;
         }
 
         gSPDisplayList(gRegionAllocPtr++, (u32)gSpriteRDPSetupDL);
 
         for (col = 0; col < numCols; ++col) {
             rowStart = rowOffset;
-            rowRem = (xStart >> sp56) % arg0->unk0C;
+            rowRem = (xStart >> sp56) % arg0->tileGridWidth;
             if (rowRem < 0) {
-                rowRem = rowRem + arg0->unk0C;
+                rowRem = rowRem + arg0->tileGridWidth;
             }
 
             for (row = 0; row < numRows; ++row) {
-                calcIndex = rowRem + colRem * arg0->unk08;
+                calcIndex = rowRem + colRem * arg0->tilesPerRow;
                 tileIndex = ((u16 *)sp48)[calcIndex];
-                sp44 = tileArr[tileIndex].unk02;
-                calcIndex = tileArr[tileIndex].unk00;
+                sp44 = tileArr[tileIndex].paletteIndex;
+                calcIndex = tileArr[tileIndex].textureIndex;
 
                 if (tileIndex != 0) {
                     ++tileCount;
-                    sp50 = D_8008D3C0_8DFC0[tileArr[tileIndex].unk03 * 2];
-                    sp52 = D_8008D3C0_8DFC0[tileArr[tileIndex].unk03 * 2 + 1];
+                    sp50 = gTileTextureFlipTable[tileArr[tileIndex].flipMode * 2];
+                    sp52 = gTileTextureFlipTable[tileArr[tileIndex].flipMode * 2 + 1];
 
                     origLeft = rowStart;
                     origTop = colStart;
-                    right = rowStart + arg0->unk04;
-                    bottom = colStart + arg0->unk06;
+                    right = rowStart + arg0->tileWidth;
+                    bottom = colStart + arg0->tileHeight;
                     texU = 0;
                     texV = 0;
 
                     if (sp50 == -1) {
-                        texU = arg0->unk04 - 1;
+                        texU = arg0->tileWidth - 1;
                     }
 
                     if (sp52 == -1) {
-                        texV = arg0->unk06 - 1;
+                        texV = arg0->tileHeight - 1;
                     }
 
                     if (origLeft < clipRight && origTop < clipBottom && right >= clipLeft && bottom >= clipTop) {
                         if (origLeft < clipLeft) {
                             texU = clipLeft - origLeft;
                             if (sp50 == -1) {
-                                texU = (arg0->unk04 - 1) - texU;
+                                texU = (arg0->tileWidth - 1) - texU;
                             }
                             origLeft = clipLeft;
                         }
@@ -234,7 +234,7 @@ void func_80038420_39020(TextureArg *arg0) {
                         if (origTop < clipTop) {
                             texV = clipTop - origTop;
                             if (sp52 == -1) {
-                                texV = (arg0->unk06 - 1) - texV;
+                                texV = (arg0->tileHeight - 1) - texV;
                             }
                             origTop = clipTop;
                         }
@@ -247,7 +247,7 @@ void func_80038420_39020(TextureArg *arg0) {
                             bottom = clipBottom - 1;
                         }
 
-                        if (arg0->unk18 == 0) {
+                        if (arg0->ciMode == 0) {
                             if (&texDataArr[sp44] != curTexData) {
                                 gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, (s32)&texDataArr[sp44]);
                                 curTexData = &texDataArr[sp44];
@@ -256,14 +256,14 @@ void func_80038420_39020(TextureArg *arg0) {
                             if ((calcIndex - 1) != lastTile) {
                                 gDPLoadTextureTile_4b(
                                     gRegionAllocPtr++,
-                                    /*timg*/ sp4C + ((((calcIndex - 1) * arg0->unk04 * arg0->unk06) / 4) * 2),
+                                    /*timg*/ sp4C + ((((calcIndex - 1) * arg0->tileWidth * arg0->tileHeight) / 4) * 2),
                                     G_IM_FMT_CI,
-                                    /*width*/ (arg0->unk04),
+                                    /*width*/ (arg0->tileWidth),
                                     /*height*/ 0,
                                     /*uls*/ 0,
                                     /*ult*/ 0,
-                                    /*lrs*/ (arg0->unk04 - 1),
-                                    /*lrt*/ (arg0->unk06 - 1),
+                                    /*lrs*/ (arg0->tileWidth - 1),
+                                    /*lrt*/ (arg0->tileHeight - 1),
                                     /*pal*/ 0,
                                     /*cms*/ 2,
                                     /*cmt*/ 2,
@@ -285,15 +285,16 @@ void func_80038420_39020(TextureArg *arg0) {
                             if ((calcIndex - 1) != lastTile) {
                                 gDPLoadTextureTile(
                                     gRegionAllocPtr++,
-                                    /*timg*/ (sp4C + ((((calcIndex - 1) * arg0->unk04 * arg0->unk06) / 2) * 2)),
+                                    /*timg*/
+                                    (sp4C + ((((calcIndex - 1) * arg0->tileWidth * arg0->tileHeight) / 2) * 2)),
                                     G_IM_FMT_CI,
                                     G_IM_SIZ_8b,
-                                    /*width*/ (arg0->unk04),
+                                    /*width*/ (arg0->tileWidth),
                                     /*height*/ 0,
                                     /*uls*/ 0,
                                     /*ult*/ 0,
-                                    /*lrs*/ (arg0->unk04 - 1),
-                                    /*lrt*/ (arg0->unk06 - 1),
+                                    /*lrs*/ (arg0->tileWidth - 1),
+                                    /*lrt*/ (arg0->tileHeight - 1),
                                     /*pal*/ 0,
                                     /*cms*/ 2,
                                     /*cmt*/ 2,
@@ -321,12 +322,12 @@ void func_80038420_39020(TextureArg *arg0) {
                     }
                 }
 
-                rowStart = rowStart + arg0->unk04;
-                rowRem = (rowRem + 1) % arg0->unk0C;
+                rowStart = rowStart + arg0->tileWidth;
+                rowRem = (rowRem + 1) % arg0->tileGridWidth;
             }
 
-            colStart = colStart + arg0->unk06;
-            colRem = (colRem + 1) % arg0->unk0E;
+            colStart = colStart + arg0->tileHeight;
+            colRem = (colRem + 1) % arg0->tileGridHeight;
         }
 
         gSPEndDisplayList(displayList++);
@@ -335,27 +336,27 @@ void func_80038420_39020(TextureArg *arg0) {
     }
 }
 
-void func_800394BC_3A0BC(StructA *arg0, StructB *arg1) {
-    StructB *temp;
+void initTiledTextureRenderState(TiledTextureRenderState *arg0, TiledTextureAsset *arg1) {
+    TiledTextureAsset *temp;
     s32 padding1;
     s32 padding2;
     temp = arg1;
 
-    arg0->unk00 = 0;
-    arg0->unk02 = 0;
-    arg0->unk08 = arg1->unk00;
-    arg0->unk0A = arg1->unk02;
-    arg0->unk0C = arg0->unk08;
-    arg0->unk0E = arg0->unk0A;
-    arg0->unk04 = arg1->unk04;
-    arg0->unk06 = arg1->unk05;
-    arg0->unk18 = arg1->unk06;
-    arg0->unk10 = 0;
-    arg0->unk12 = 0;
-    arg0->unk14 = 0x140;
-    arg0->unk16 = 0xF0;
-    arg0->unk20 = (u8 *)temp + arg1->unk0A;
-    arg0->unk1C = (u8 *)temp + arg1->unk0E;
-    arg0->unk24 = &arg1->data10;
-    arg0->unk28 = (u8 *)temp + arg1->unk0C;
+    arg0->x = 0;
+    arg0->y = 0;
+    arg0->tilesPerRow = arg1->tileGridWidth;
+    arg0->tilesPerCol = arg1->tileGridHeight;
+    arg0->tileGridWidth = arg0->tilesPerRow;
+    arg0->tileGridHeight = arg0->tilesPerCol;
+    arg0->tileWidth = arg1->tileWidth;
+    arg0->tileHeight = arg1->tileHeight;
+    arg0->ciMode = arg1->ciMode;
+    arg0->clipX = 0;
+    arg0->clipY = 0;
+    arg0->clipWidth = 0x140;
+    arg0->clipHeight = 0xF0;
+    arg0->tileIndexData = (u8 *)temp + arg1->tileIndexDataOffset;
+    arg0->textureData = (u8 *)temp + arg1->textureDataOffset;
+    arg0->tileEntries = &arg1->tileEntries;
+    arg0->paletteData = (u8 *)temp + arg1->paletteDataOffset;
 }

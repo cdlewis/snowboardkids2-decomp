@@ -551,14 +551,14 @@ void initUnlockNotification(UnlockNotificationState *state) {
 }
 
 void initUnlockNotificationSprite(UnlockNotificationState *state) {
-    func_800394BC_3A0BC(state, (s32)state->imageAsset);
+    initTiledTextureRenderState(state, (s32)state->imageAsset);
     setCallback(&renderUnlockNotification);
 }
 
 void renderUnlockNotification(UnlockNotificationState *state) {
     u16 nextFrame;
 
-    debugEnqueueCallback(0xA, 0, func_80038420_39020, state);
+    debugEnqueueCallback(0xA, 0, renderTiledTexture, state);
 
     if (D_800AFE8C_A71FC->unk4 == 0) {
         if (EepromSaveData->save_slot_status[0] == 5) {
@@ -713,7 +713,7 @@ void initMenuBackgroundEffect(MenuBackgroundEffectState *state) {
 }
 
 void setupMenuBackgroundEffect(MenuBackgroundEffectState *state) {
-    func_800394BC_3A0BC(state, (s32)state->effectAsset);
+    initTiledTextureRenderState(state, (s32)state->effectAsset);
     setCallback(&updateMenuBackgroundEffect);
 }
 
@@ -725,7 +725,7 @@ void updateMenuBackgroundEffect(MenuBackgroundEffectState *state) {
         state->rotationY++;
         state->rotationX &= 0x3FF;
         state->rotationY &= 0x3FF;
-        debugEnqueueCallback(0xB, 0, func_80038420_39020, state);
+        debugEnqueueCallback(0xB, 0, renderTiledTexture, state);
     }
 }
 

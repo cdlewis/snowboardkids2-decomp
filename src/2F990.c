@@ -578,12 +578,12 @@ void loadStoryMapShopBackground(StoryMapShopBackgroundState *state) {
 }
 
 void initStoryMapShopBackgroundRenderState(StoryMapShopBackgroundState *state) {
-    func_800394BC_3A0BC(state, (s32)state->backgroundAsset);
+    initTiledTextureRenderState(state, (s32)state->backgroundAsset);
     setCallback(&enqueueStoryMapShopBackgroundRender);
 }
 
 void enqueueStoryMapShopBackgroundRender(void *state) {
-    debugEnqueueCallback(1, 0, func_80038420_39020, state);
+    debugEnqueueCallback(1, 0, renderTiledTexture, state);
 }
 
 void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *state) {

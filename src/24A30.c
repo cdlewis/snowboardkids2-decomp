@@ -1912,7 +1912,7 @@ void initCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
 }
 
 void setupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
-    func_800394BC_3A0BC(state, (s32)state->effectAsset);
+    initTiledTextureRenderState(state, (s32)state->effectAsset);
     setCallback(updateCharSelectBackgroundEffect);
 }
 
@@ -1921,7 +1921,7 @@ void updateCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
     state->rotationY++;
     state->rotationX &= 0x3FF;
     state->rotationY &= 0x3FF;
-    debugEnqueueCallback(7, 0, func_80038420_39020, state);
+    debugEnqueueCallback(7, 0, renderTiledTexture, state);
 }
 
 void cleanupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {

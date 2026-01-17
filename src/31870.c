@@ -876,12 +876,12 @@ void loadBoardShopBackground(BoardShopBackgroundState *state) {
 }
 
 void initBoardShopBackgroundRenderState(BoardShopBackgroundState *state) {
-    func_800394BC_3A0BC(state, (s32)state->backgroundAsset);
+    initTiledTextureRenderState(state, (s32)state->backgroundAsset);
     setCallback(&enqueueBoardShopBackgroundRender);
 }
 
 void enqueueBoardShopBackgroundRender(void *state) {
-    debugEnqueueCallback(9, 0, &func_80038420_39020, state);
+    debugEnqueueCallback(9, 0, &renderTiledTexture, state);
 }
 
 void cleanupBoardShopBackground(BoardShopBackgroundState *state) {

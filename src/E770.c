@@ -128,8 +128,8 @@ void cleanupGalleryMenu(E770_struct *arg0) {
 }
 
 void activateGalleryMenu(E770_struct *arg0) {
-    func_800394BC_3A0BC(&arg0->pad5C8, (s32)arg0->unk5C4);
-    func_800394BC_3A0BC(&arg0->pad5F8, (s32)arg0->unk5F4);
+    initTiledTextureRenderState(&arg0->pad5C8, (s32)arg0->unk5C4);
+    initTiledTextureRenderState(&arg0->pad5F8, (s32)arg0->unk5F4);
     setViewportFadeValue(NULL, 0, 10);
     setMenuAnimation(arg0, 0x90, 0x90, -1, 0);
     arg0->fadeTimer = 10;
