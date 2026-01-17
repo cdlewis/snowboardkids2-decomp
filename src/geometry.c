@@ -489,45 +489,32 @@ void transform3DToMtx(void *srcPtr, void *dstPtr) {
  *   mtx[14-15]: Fractional parts of translation vector
  */
 void transform3DToN64Mtx(Transform3D *transform, Mtx *mtx) {
-    s32 *mtxWords;
-    s16 m01;
+    s32 *dst = (s32 *)mtx;
+    u16 *y_halves = (u16 *)&transform->translation.y;
 
-    mtxWords = (s32 *)mtx;
+    // Integer parts of rotation matrix (s2.13 -> s15.16, scaled by 2)
+    dst[0] = (((s32)transform->m[0][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)transform->m[0][1] >> 15)) & 0xFFFF);
+    dst[1] = ((s32)transform->m[0][2] << 1) & 0xFFFF0000;
+    dst[2] = (((s32)transform->m[1][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)transform->m[1][1] >> 15)) & 0xFFFF);
+    dst[3] = ((s32)transform->m[1][2] << 1) & 0xFFFF0000;
+    dst[4] = (((s32)transform->m[2][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)transform->m[2][1] >> 15)) & 0xFFFF);
+    dst[5] = ((s32)transform->m[2][2] << 1) & 0xFFFF0000;
 
-    /* Row 0: m[0][0] and m[0][1] integer parts */
-    mtxWords[0] = (((s32)transform->m[0][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)transform->m[0][1] >> 15)) & 0xFFFF);
-    mtxWords[1] = ((s32)transform->m[0][2] << 1) & 0xFFFF0000;
+    // Translation integer parts (x high, y high, z high, w=1)
+    dst[6] = (transform->translation.x & 0xFFFF0000) + y_halves[0];
+    dst[7] = (transform->translation.z & 0xFFFF0000) + 1;
 
-    /* Row 1: m[1][0] and m[1][1] integer parts */
-    mtxWords[2] = (((s32)transform->m[1][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)transform->m[1][1] >> 15)) & 0xFFFF);
-    mtxWords[3] = ((s32)transform->m[1][2] << 1) & 0xFFFF0000;
+    // Fractional parts of rotation matrix
+    dst[8] = (((s32)transform->m[0][0] << 17) & 0xFFFF0000) + ((((s32)transform->m[0][1] << 1) & 0xFFFF));
+    dst[9] = ((s32)transform->m[0][2] << 17) & 0xFFFF0000;
+    dst[10] = (((s32)transform->m[1][0] << 17) & 0xFFFF0000) + ((((s32)transform->m[1][1] << 1) & 0xFFFF));
+    dst[11] = ((s32)transform->m[1][2] << 17) & 0xFFFF0000;
+    dst[12] = (((s32)transform->m[2][0] << 17) & 0xFFFF0000) + ((((s32)transform->m[2][1] << 1) & 0xFFFF));
+    dst[13] = ((s32)transform->m[2][2] << 17) & 0xFFFF0000;
 
-    /* Row 2: m[2][0] and m[2][1] integer parts */
-    mtxWords[4] = (((s32)transform->m[2][0] << 1) & 0xFFFF0000) + ((-(s32)((u16)transform->m[2][1] >> 15)) & 0xFFFF);
-    mtxWords[5] = ((s32)transform->m[2][2] << 1) & 0xFFFF0000;
-
-    /* Row 3: translation integer parts (x high, y high, z high, w=1) */
-    mtxWords[6] = (transform->translation.x & 0xFFFF0000) + ((u16 *)&transform->translation.y)[0];
-    mtxWords[7] = (transform->translation.z & 0xFFFF0000) + 1;
-
-    /* Row 0: m[0][0] and m[0][1] fractional parts */
-    m01 = transform->m[0][1];
-    mtxWords[8] = (((s32)transform->m[0][0] << 17) & 0xFFFF0000) + ((((s32)m01 << 1) & 0xFFFF));
-    mtxWords[9] = ((s32)transform->m[0][2] << 17) & 0xFFFF0000;
-
-    /* Row 1: m[1][0] and m[1][1] fractional parts */
-    m01 = transform->m[1][1];
-    mtxWords[10] = (((s32)transform->m[1][0] << 17) & 0xFFFF0000) + ((((s32)m01 << 1) & 0xFFFF));
-    mtxWords[11] = ((s32)transform->m[1][2] << 17) & 0xFFFF0000;
-
-    /* Row 2: m[2][0] and m[2][1] fractional parts */
-    m01 = transform->m[2][1];
-    mtxWords[12] = (((s32)transform->m[2][0] << 17) & 0xFFFF0000) + ((((s32)m01 << 1) & 0xFFFF));
-    mtxWords[13] = ((s32)transform->m[2][2] << 17) & 0xFFFF0000;
-
-    /* Row 3: translation fractional parts (x low, y low, z low, w=0) */
-    mtxWords[14] = (transform->translation.x << 16) + ((u16 *)&transform->translation.y)[1];
-    mtxWords[15] = transform->translation.z << 16;
+    // Translation fractional parts (x low, y low, z low, w=0)
+    dst[14] = (transform->translation.x << 16) + y_halves[1];
+    dst[15] = transform->translation.z << 16;
 }
 
 void convertPackedBoneTransformToN64Matrix(PackedBoneTransform *src, N64MatrixParts *dst) {
