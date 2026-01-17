@@ -155,21 +155,21 @@ typedef struct {
     u8 padding9F[0x4];
     void *unk9B8[6];
     u8 padding11[0x41C];
-    void *unkDEC;
-    s32 unkDF0;
-    s32 unkDF4;
-    s32 unkDF8;
-    s32 unkDFC;
-    u8 unkE00[0xA];
+    void *cornerDecorationAsset;
+    s32 leftCornerAlpha;
+    s32 leftCornerFadeSpeed;
+    s32 rightCornerAlpha;
+    s32 rightCornerFadeSpeed;
+    u8 leftTopCornerSprite[0xA];
     s16 unkE0A;
     u8 paddingE0C[0x4];
-    u8 unkE10[0xA];
+    u8 leftBottomCornerSprite[0xA];
     s16 unkE1A;
     u8 paddingE1C[0x4];
-    u8 unkE20[0xA];
+    u8 rightTopCornerSprite[0xA];
     s16 unkE2A;
     u8 paddingE2C[0x4];
-    u8 unkE30[0xA];
+    u8 rightBottomCornerSprite[0xA];
     s16 unkE3A;
     u8 paddingE3C[0x4];
     s16 unkE40;
@@ -249,7 +249,7 @@ void func_80003EE0_4AE0(void) {
     taskMemory->unk964 = loadDmaAsset(1);
 
     taskMemory->unk968 = loadDmaAsset(3);
-    taskMemory->unkDEC = loadCompressedData(&_67E860_ROM_START, &_67E860_ROM_END, 0x2448);
+    taskMemory->cornerDecorationAsset = loadCompressedData(&_67E860_ROM_START, &_67E860_ROM_END, 0x2448);
     taskMemory->unk95C = loadCompressedData(&_49BA20_ROM_START, &_49BA20_ROM_END, 0x2B0);
 
     for (i = 0; i < 6; i++) {
@@ -310,12 +310,12 @@ void updateCreditsSequence(void) {
     if (state->unk0 == 0) {
         func_800B02E0(state);
         func_800B0760(state);
-        func_800B00C0_1DC260(state);
+        initCreditsCornerDecorationSprites(state);
         state->unk0 = 1;
     }
 
     func_800B0930(state);
-    func_800B016C(state);
+    updateCreditsCornerDecorationSprites(state);
     spawnCreditsCharacter(state);
 
     state->unk2 = (u16)state->unk2 + 1;
@@ -337,14 +337,14 @@ void fadeOutCreditsSequence(void) {
         state->unk968 = freeNodeMemory(state->unk968);
         state->unk964 = freeNodeMemory(state->unk964);
         state->unk960 = freeNodeMemory(state->unk960);
-        state->unkDEC = freeNodeMemory(state->unkDEC);
+        state->cornerDecorationAsset = freeNodeMemory(state->cornerDecorationAsset);
         for (i = 0; i < 6; i++) {
             state->unk9B8[i] = freeNodeMemory(state->unk9B8[i]);
         }
         terminateSchedulerWithCallback(onCreditsComplete);
     } else {
         func_800B0930(state);
-        func_800B016C(state);
+        updateCreditsCornerDecorationSprites(state);
         spawnCreditsCharacter(state);
         state->unk2 = (u16)state->unk2 + 1;
     }

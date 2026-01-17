@@ -64,77 +64,75 @@ typedef struct {
     u8 padding9F[0x4];
     void *unk9B8[6];
     u8 padding11[0x41C];
-    void *volatile unkDEC;
-    s32 unkDF0;
-    s32 unkDF4;
-    s32 unkDF8;
-    s32 unkDFC;
-    SpriteElement16 unkE00;
-    SpriteElement16 unkE10;
-    SpriteElement16 unkE20;
-    SpriteElement16 unkE30;
+    void *volatile cornerDecorationAsset;
+    s32 leftCornerAlpha;
+    s32 leftCornerFadeSpeed;
+    s32 rightCornerAlpha;
+    s32 rightCornerFadeSpeed;
+    SpriteElement16 leftTopCornerSprite;
+    SpriteElement16 leftBottomCornerSprite;
+    SpriteElement16 rightTopCornerSprite;
+    SpriteElement16 rightBottomCornerSprite;
     s16 unkE40;
     s16 unkE42;
     ColorData unkE44[3];
 } func_80003EE0_4AE0_task_memory;
 
-void func_800B00C0_1DC260(volatile func_80003EE0_4AE0_task_memory *state) {
+void initCreditsCornerDecorationSprites(volatile func_80003EE0_4AE0_task_memory *state) {
     void *asset0;
     void *asset1;
     void *asset2;
     void *asset3;
-    s16 negX;
-    s16 negY;
-    s16 new_var;
+    s16 spriteX;
+    s16 topSpriteY;
     s16 alpha;
 
-    asset0 = state->unkDEC;
-    asset1 = state->unkDEC;
-    asset2 = state->unkDEC;
-    asset3 = state->unkDEC;
-    negX = -0x40;
-    negY = -0x10;
+    asset0 = state->cornerDecorationAsset;
+    asset1 = state->cornerDecorationAsset;
+    asset2 = state->cornerDecorationAsset;
+    asset3 = state->cornerDecorationAsset;
+    spriteX = -0x40;
+    topSpriteY = -0x10;
     alpha = 0xFF;
 
     do {
-        state->unkE10.spriteIndex = 1;
-        state->unkE20.spriteIndex = 2;
-        state->unkDF0 = 0;
-        state->unkDF4 = 0;
-        state->unkDF8 = 0;
-        state->unkDFC = 0;
-        state->unkE00.x = negX;
-        state->unkE00.y = negY;
-        state->unkE00.spriteIndex = 0;
-        state->unkE00.alpha = alpha;
-        state->unkE00.unkC = 0;
-        new_var = alpha;
-        state->unkE00.unkD = 0;
-        state->unkE10.x = negX;
-        state->unkE10.y = 0;
-        state->unkE10.alpha = new_var;
-        state->unkE10.unkC = 0;
-        state->unkE10.unkD = 0;
-        state->unkE20.x = negX;
-        state->unkE20.y = negY;
-        state->unkE20.alpha = new_var;
-        state->unkE20.unkC = 0;
-        state->unkE20.unkD = 0;
-        state->unkE30.x = negX;
-        state->unkE30.y = 0;
-        state->unkE30.spriteIndex = 3;
-        state->unkE00.asset = asset0;
-        state->unkE10.asset = asset1;
-        state->unkE20.asset = asset2;
+        state->leftBottomCornerSprite.spriteIndex = 1;
+        state->rightTopCornerSprite.spriteIndex = 2;
+        state->leftCornerAlpha = 0;
+        state->leftCornerFadeSpeed = 0;
+        state->rightCornerAlpha = 0;
+        state->rightCornerFadeSpeed = 0;
+        state->leftTopCornerSprite.x = spriteX;
+        state->leftTopCornerSprite.y = topSpriteY;
+        state->leftTopCornerSprite.spriteIndex = 0;
+        state->leftTopCornerSprite.alpha = alpha;
+        state->leftTopCornerSprite.unkC = 0;
+        state->leftTopCornerSprite.unkD = 0;
+        state->leftBottomCornerSprite.x = spriteX;
+        state->leftBottomCornerSprite.y = 0;
+        state->leftBottomCornerSprite.alpha = alpha;
+        state->leftBottomCornerSprite.unkC = 0;
+        state->leftBottomCornerSprite.unkD = 0;
+        state->rightTopCornerSprite.x = spriteX;
+        state->rightTopCornerSprite.y = topSpriteY;
+        state->rightTopCornerSprite.alpha = alpha;
+        state->rightTopCornerSprite.unkC = 0;
+        state->rightTopCornerSprite.unkD = 0;
+        state->rightBottomCornerSprite.x = spriteX;
+        state->rightBottomCornerSprite.y = 0;
+        state->rightBottomCornerSprite.spriteIndex = 3;
+        state->leftTopCornerSprite.asset = asset0;
+        state->leftBottomCornerSprite.asset = asset1;
+        state->rightTopCornerSprite.asset = asset2;
     } while (0);
 
-    state->unkE30.asset = asset3;
-    state->unkE30.alpha = new_var;
-    state->unkE30.unkC = 0;
-    state->unkE30.unkD = 0;
+    state->rightBottomCornerSprite.asset = asset3;
+    state->rightBottomCornerSprite.alpha = alpha;
+    state->rightBottomCornerSprite.unkC = 0;
+    state->rightBottomCornerSprite.unkD = 0;
 }
 
-void func_800B016C(void *arg0) {
+void updateCreditsCornerDecorationSprites(void *arg0) {
     func_80003EE0_4AE0_task_memory *state = (func_80003EE0_4AE0_task_memory *)arg0;
     s16 temp_v1;
     s32 temp_v0;
@@ -144,57 +142,57 @@ void func_800B016C(void *arg0) {
 
     switch (temp_v1) {
         case 0x1A22:
-            state->unkDFC = 0xC0000;
+            state->rightCornerFadeSpeed = 0xC0000;
             break;
         case 0x1AD6:
-            state->unkDFC = 0xFFF40000;
+            state->rightCornerFadeSpeed = 0xFFF40000;
             break;
         case 0x1B30:
-            state->unkDF4 = 0xC0000;
+            state->leftCornerFadeSpeed = 0xC0000;
             break;
     }
 
-    value = state->unkDF4;
+    value = state->leftCornerFadeSpeed;
     if (value != 0) {
-        temp_v0 = state->unkDF0 + value;
-        state->unkDF0 = temp_v0;
+        temp_v0 = state->leftCornerAlpha + value;
+        state->leftCornerAlpha = temp_v0;
         if (temp_v0 > 0xFF0000) {
-            state->unkDF0 = 0xFF0000;
+            state->leftCornerAlpha = 0xFF0000;
         }
-        if (state->unkDF0 < 0) {
-            state->unkDF0 = 0;
+        if (state->leftCornerAlpha < 0) {
+            state->leftCornerAlpha = 0;
         }
     }
 
-    value = state->unkDFC;
+    value = state->rightCornerFadeSpeed;
     if (value != 0) {
-        temp_v0 = state->unkDF8 + value;
-        state->unkDF8 = temp_v0;
+        temp_v0 = state->rightCornerAlpha + value;
+        state->rightCornerAlpha = temp_v0;
         if (temp_v0 > 0xFF0000) {
-            state->unkDF8 = 0xFF0000;
+            state->rightCornerAlpha = 0xFF0000;
         }
-        if (state->unkDF8 < 0) {
-            state->unkDF8 = 0;
+        if (state->rightCornerAlpha < 0) {
+            state->rightCornerAlpha = 0;
         }
     }
 
-    temp_v0 = state->unkDF0;
+    temp_v0 = state->leftCornerAlpha;
     if (temp_v0 != 0) {
         s16 shortVal = temp_v0 >> 16;
         void *callback = func_80012004_12C04;
-        state->unkE10.alpha = shortVal;
-        state->unkE00.alpha = shortVal;
-        debugEnqueueCallback(1, 4, callback, &state->unkE00);
-        debugEnqueueCallback(1, 4, callback, &state->unkE10);
+        state->leftBottomCornerSprite.alpha = shortVal;
+        state->leftTopCornerSprite.alpha = shortVal;
+        debugEnqueueCallback(1, 4, callback, &state->leftTopCornerSprite);
+        debugEnqueueCallback(1, 4, callback, &state->leftBottomCornerSprite);
     }
 
-    temp_v0 = state->unkDF8;
+    temp_v0 = state->rightCornerAlpha;
     if (temp_v0 != 0) {
         s16 shortVal = temp_v0 >> 16;
         void *callback = func_80012004_12C04;
-        state->unkE30.alpha = shortVal;
-        state->unkE20.alpha = shortVal;
-        debugEnqueueCallback(1, 4, callback, &state->unkE20);
-        debugEnqueueCallback(1, 4, callback, &state->unkE30);
+        state->rightBottomCornerSprite.alpha = shortVal;
+        state->rightTopCornerSprite.alpha = shortVal;
+        debugEnqueueCallback(1, 4, callback, &state->rightTopCornerSprite);
+        debugEnqueueCallback(1, 4, callback, &state->rightBottomCornerSprite);
     }
 }
