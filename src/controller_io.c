@@ -290,8 +290,6 @@ void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders)
     s32 fileIndex;
     s32 baseIndex;
     s32 charIndex;
-    u8 *gameName;
-    u8 *extName;
     s32 packsOffset;
 
     controllerPort = channel & 0xFFFF;
@@ -299,8 +297,6 @@ void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders)
     if (err == 0) {
         fileIndex = 0;
         packsOffset = (s32)&controllerPacks[controllerPort] - (s32)controllerPacks;
-        gameName = (u8 *)pfsState.game_name;
-        extName = (u8 *)pfsState.ext_name;
         baseIndex = controllerPort << 4;
         do {
             if (osPfsFileState((OSPfs *)((s32)controllerPacks + packsOffset), fileIndex, &pfsState) != 0) {
@@ -312,12 +308,12 @@ void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders)
                 fileHeaders[baseIndex + fileIndex].gameCode = pfsState.game_code;
                 fileHeaders[baseIndex + fileIndex].companyCode = pfsState.company_code;
                 do {
-                    fileHeaders[baseIndex + fileIndex].gameName[charIndex] = gameName[charIndex];
+                    fileHeaders[baseIndex + fileIndex].gameName[charIndex] = pfsState.game_name[charIndex];
                     charIndex++;
                 } while (charIndex < 16);
                 charIndex = 0;
                 do {
-                    fileHeaders[baseIndex + fileIndex].extName[charIndex] = extName[charIndex];
+                    fileHeaders[baseIndex + fileIndex].extName[charIndex] = pfsState.ext_name[charIndex];
                     charIndex++;
                 } while (charIndex < 4);
             }
