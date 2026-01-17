@@ -410,8 +410,8 @@ typedef struct {
 } ConfettiEffectTask;
 
 void setupConfettiParticles(ConfettiEffectTask *task);
+void updateConfettiParticles(ConfettiEffectTask *task);
 void cleanupConfettiEffect(ConfettiEffectTask *task);
-void func_8004119C_41D9C(ConfettiEffectTask *task);
 
 void initConfettiEffect(ConfettiEffectTask *task) {
     s16 count;
@@ -452,10 +452,10 @@ void setupConfettiParticles(ConfettiEffectTask *task) {
         }
     } while (0);
     memcpy(&task->lastCameraX, (u8 *)task->cameraNode + 0x134, 0xC);
-    setCallbackWithContinue(&func_8004119C_41D9C);
+    setCallbackWithContinue(&updateConfettiParticles);
 }
 
-void func_8004119C_41D9C(ConfettiEffectTask *task) {
+void updateConfettiParticles(ConfettiEffectTask *task) {
     s32 pad[2];
     s32 i;
     s32 offset;
