@@ -889,7 +889,7 @@ void updateGoalBannerSlideOut(GoalBannerState *state) {
     sinVal = approximateSin((s16)angle);
     state->xPos = -((0x2000 - sinVal) / 20) - 0x38;
     if (state->animAngle == 0x1000) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
     debugEnqueueCallback((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
 }
@@ -1038,7 +1038,7 @@ void updateTrickScoreSlideOut(TrickScoreDisplayState *state) {
     sinVal = approximateSin(angle);
     state->xPos = -((0x2000 - sinVal) / 20) - 0x30;
     if (state->animAngle == 0x1000) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
     renderTrickScoreDisplay(state);
 }
@@ -1506,7 +1506,7 @@ void updateVictorySnowflakeDrift(VictorySnowflakeState *state) {
     state->posY += state->velocityY;
 
     if (state->posY >= 0x6E1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     if (state->useSmallSprite != 0) {
@@ -1531,7 +1531,7 @@ void updateVictorySnowflakeWave(VictorySnowflakeState *state) {
     }
 
     if (state->posY >= 0x6E1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     if (state->useSmallSprite != 0) {
@@ -2351,7 +2351,7 @@ void updateTrickPointsSlideOut(TrickPointsDisplayState *state) {
     sinVal = approximateSin(angle);
     state->x = -((0x2000 - sinVal) / 20);
     if (state->animAngle == 0x1000) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
     renderTrickPointsDisplay(state);
 }

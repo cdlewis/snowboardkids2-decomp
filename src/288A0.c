@@ -99,7 +99,7 @@ check_event:
         state->hasRandomEvent = 1;
         setCallback(nullRandomEventCallback);
     } else {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 

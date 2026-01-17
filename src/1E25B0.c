@@ -74,7 +74,7 @@ void updateTrickBurstEffect(TrickBurstEffectTask *task) {
             task->alphaHighByte = task->alpha >> 16;
             if (task->alpha < 0) {
                 task->alpha = 0;
-                func_80069CF8_6A8F8();
+                terminateCurrentTask();
                 return;
             }
             break;

@@ -303,7 +303,7 @@ void updateCharacterFlyAway(TitleCharacterState *arg0) {
             arg0->transform.translation.y = arg0->transform.translation.y + temp;
             applyTransformToModel(arg0->sceneModel, &arg0->transform);
             if (arg0->transform.translation.y > 0x57FFFF) {
-                func_80069CF8_6A8F8();
+                terminateCurrentTask();
             }
         } break;
     }

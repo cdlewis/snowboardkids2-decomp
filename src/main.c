@@ -417,7 +417,7 @@ void updateRotatingModelTask(func_80000C2C_182C_arg *arg0) {
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
 
     if (arg0->unk0->unk86 != 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     rotationAngle = ((SubEntryVariant *)subEntry)->unk14;
@@ -462,7 +462,7 @@ void updateSwingingModelTask(func_80000C2C_182C_arg *arg0) {
     entry = &D_800891D4_89DD4[arg0->unk0->unk84];
     subEntry = &entry->sub_entries[arg0->unk4];
     if (arg0->unk0->unk86 != 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     switch (arg0->unk5) {
@@ -522,7 +522,7 @@ void updateSpriteAnimationTask(func_80000C2C_182C_arg *arg0) {
     SubEntryVariant *subEntry = (SubEntryVariant *)&entry->sub_entries[arg0->unk4];
 
     if (arg0->unk0->unk86 != 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     switch (arg0->unk5) {
@@ -582,7 +582,7 @@ void updateStaticModelTask(func_80000C2C_182C_arg *arg0) {
     SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
 
     if (arg0->unk0->unk86 != 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     arg0->unk8.translation.x = subEntry->unk8;
@@ -630,7 +630,7 @@ void updateAnimatedModelTask(AnimatedModelTaskUpdateState *state) {
     subEntry = &entry->sub_entries[state->unk4];
 
     if (state->unk0->unk86 != 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     state->unk4C = state->unk4C + state->unk50;
@@ -667,7 +667,7 @@ void updateSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
     u8 tempUnk4;
 
     if (arg0->unk0->unk86 != 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     temp = *(s16 *)&arg0->unk54;
@@ -729,7 +729,7 @@ void updateSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
     subEntry = (SubEntryVariant *)&entry->sub_entries[arg0->unk4];
 
     if (arg0->unk0->unk86 != 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     switch (arg0->unk5) {
@@ -739,7 +739,7 @@ void updateSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
             break;
         case 1:
             if (updateSpriteAnimation(&arg0->unk8, 0x10000) != 0) {
-                func_80069CF8_6A8F8();
+                terminateCurrentTask();
                 return;
             }
             break;

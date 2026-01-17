@@ -305,7 +305,7 @@ void updateDebugDisplayListDecay(DebugDisplayListRenderState *arg0) {
     }
 
     if (arg0->animationTimer == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     renderDebugDisplayLists(arg0);
@@ -680,14 +680,14 @@ void updateStarlightFireworkSimple(StarlightFireworkTaskState *arg0) {
         arg0->lifetime--;
 
         if (arg0->lifetime == 0) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
             return;
         }
 
         posPtr = &arg0->pos;
         if (checkStarHitCollisionWithVulnerablePlayers(posPtr, -1, 0x300000) != 0) {
             spawnSparkleEffect(posPtr);
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
 
         arg0->rotX += gStarlightFireworkRotXSpeeds[arg0->type];
@@ -748,7 +748,7 @@ void updateStarlightFireworkComplex(StarlightFireworkTaskState *firework) {
                 case 7:
                 case 8:
                     spawnSparkleEffect(&firework->pos);
-                    func_80069CF8_6A8F8();
+                    terminateCurrentTask();
                     break;
                 default:
                     break;
@@ -781,12 +781,12 @@ void updateStarlightFirework(StarlightFireworkTaskState *arg0) {
 
         if (arg0->lifetime == 0) {
             spawnSparkleEffect(&arg0->pos);
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         } else {
             posPtr = &arg0->pos;
             if (checkStarHitCollisionWithVulnerablePlayers(posPtr, -1, 0x300000)) {
                 spawnSparkleEffect(posPtr);
-                func_80069CF8_6A8F8();
+                terminateCurrentTask();
             }
         }
 

@@ -62,7 +62,7 @@ void updateOscillatingModelTask(OscillatingModelTaskState *state) {
     memcpy(&local_buffer, identityMatrix, 0x20);
 
     if (state->model->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -106,7 +106,7 @@ void updateOscillatingSpriteTask(OscillatingSpriteTaskState *state) {
     model = state->model;
 
     if (model->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 

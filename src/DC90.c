@@ -134,7 +134,7 @@ void updateCutsceneWaitMenu(DC90TaskStruct *arg0) {
             break;
         case 6:
             arg0->unk0[0xFF7] = 0;
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
             return;
     }
 

@@ -103,7 +103,7 @@ void updateStaticSpriteEffectTask(StaticSpriteEffectUpdateData *arg0) {
 
     arg0->frameCounter++;
     if (arg0->frameCounter == 20) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 

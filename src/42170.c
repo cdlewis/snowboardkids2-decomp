@@ -366,7 +366,7 @@ void animateFallingEffectDescent(FallingEffectState *arg0) {
     }
 
     if (arg0->height == 0x200) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     arg0->matrix[2][1] = -arg0->height;
@@ -423,7 +423,7 @@ void updateShieldEffect(ShieldEffectState *arg0) {
         effectPos.y = arg0->player->worldPos.y + 0x100000;
         effectPos.z = arg0->player->worldPos.z;
         spawnShieldBurstEffect(&effectPos);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -589,7 +589,7 @@ void updateBurstParticles(BurstEffectState *arg0) {
 
         arg0->unkDD++;
         if ((s8)arg0->unkDD == 0x10) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
     }
 
@@ -679,7 +679,7 @@ void updateCrashEffect(CrashEffectState *arg0) {
         pos.y = arg0->player->worldPos.y + 0x100000;
         pos.z = arg0->player->worldPos.z;
         spawnBurstEffect(&pos);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     if (arg0->playSound != 0) {
@@ -774,7 +774,7 @@ void fadeOutSparkleEffect(SparkleEffectState *arg0) {
     }
 
     if (arg0->opacity < 0x18) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -878,7 +878,7 @@ void fadeOutLiftEffect(LiftEffectState *state) {
     }
 
     if (*(s32 *)&state->unk40 == 0x200) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     state->rotationAngle += 0x12C;
@@ -1029,7 +1029,7 @@ void finishWarpEffect(WarpEffectState *state) {
         state->height = state->height + state->velocity;
 
         if (state->height < (s32)0xFFF00000 && state->velocity < 0) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
 
         state->position.x = state->position.x + 0x20000;
@@ -1213,7 +1213,7 @@ void orbitStarEffect(OrbitStarEffectState *arg0) {
             arg0->displayTimer--;
         } else if (arg0->animFrameIndex == 0x40) {
             arg0->player->unkBCF--;
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
     }
 
@@ -1351,7 +1351,7 @@ void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state) {
     if (gameState->unk76 == 0) {
         state->fallVelocity -= 0x8000;
         if (state->fallVelocity <= (s32)0xFFF80000) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
         state->unk18 += state->fallVelocity;
         createZRotationMatrix(&matrix, state->orbitAngle);
@@ -1487,7 +1487,7 @@ void fadeOutPlayerFlashEffect(PlayerFlashEffectState *state) {
     if (gameState->gamePaused == 0) {
         state->fallVelocity -= 0x8000;
         if (state->fallVelocity <= (s32)0xFFF80000) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
         state->unk18 += state->fallVelocity;
     }
@@ -1727,7 +1727,7 @@ void animateGoldStealFinish(GoldStealEffectState *arg0) {
     gameState = (Func43CA4GameState *)getCurrentAllocation();
     if (gameState->unk76 == 0) {
         if (advanceAnimationFrame(arg0, &D_80090974_91574) != 0) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
     }
 
@@ -1832,7 +1832,7 @@ void fadeOutGhostEffect(GhostEffectState *arg0) {
     if (state->gamePaused == 0) {
         arg0->velocityY = arg0->velocityY - 0x8000;
         if ((s32)0xFFF80000 >= arg0->velocityY) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
         arg0->position.y = arg0->position.y + arg0->velocityY;
     }
@@ -2161,7 +2161,7 @@ void fadeOutUfoEffect(UfoEffectState *arg0) {
     if (gameState->unk76 == 0) {
         arg0->fallVelocity -= 0x8000;
         if (arg0->fallVelocity < (s32)0xFFF00000) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
         arg0->unk14.y += arg0->fallVelocity;
     }

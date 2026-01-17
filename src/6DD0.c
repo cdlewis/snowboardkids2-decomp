@@ -88,13 +88,13 @@ void updateFallingParticle(ParticleState *arg0) {
     void *sprite;
 
     if (arg0->owner->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
     lifetime = arg0->unk68;
     if (lifetime < 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -191,7 +191,7 @@ void updateTrailingParticle(ParticleState *arg0) {
     inner = arg0->owner;
 
     if (inner->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 

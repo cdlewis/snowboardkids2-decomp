@@ -58,7 +58,7 @@ void updateQuadDisplayList(func_80002B50_3750_arg **state) {
 
     model = *state;
     if (model->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -137,7 +137,7 @@ void updateRotationController(RotationControllerState *state) {
 
     model = state->model;
     if (model->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 

@@ -54,7 +54,7 @@ void updateBobbingModelTask(BobbingModelState *state) {
     s32 temp;
 
     if (state->model->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -135,7 +135,7 @@ void initTiltingModelTask(void) {
 
 void updateTiltingModelTask(BobbingModelTaskState *state) {
     if (state->model->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 

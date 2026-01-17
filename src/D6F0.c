@@ -113,7 +113,7 @@ void updateSpriteEffectTask(SpriteEffectUpdateData *task) {
 
     task->frameCounter++;
     if (task->frameCounter == 5) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 

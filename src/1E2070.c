@@ -169,7 +169,7 @@ void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *state) {
     state->alphaDecay -= 0x14;
 
     if (++state->frameIndex == 8) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 
@@ -237,7 +237,7 @@ void initScrollingTextureEffectTask(ScrollingTextureState *arg0) {
 
 void updateScrollingTextureEffect(ScrollingTextureEffectUpdateState *arg0) {
     if (arg0->framesRemaining == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     arg0->scrollOffsetX += arg0->scrollSpeedX;

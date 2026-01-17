@@ -549,7 +549,7 @@ void updatePlayer3CharacterSelectIndicator(void *arg0) {
     if (state->playerSlotState[0] == 3) {
         debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
     } else {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 
@@ -574,7 +574,7 @@ void updatePlayer2CharacterSelectIndicator(void *arg0) {
     if (state->playerSlotState[0] == 2) {
         debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
     } else {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 

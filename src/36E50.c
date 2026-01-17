@@ -288,7 +288,7 @@ void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *arg0)
     arg0->unk8 = (s16)(arg0->unk11 + 8);
 
     if (temp_v0->locationDiscovered == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 

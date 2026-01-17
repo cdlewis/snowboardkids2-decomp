@@ -87,7 +87,7 @@ void func_800073E0_7FE0(CameraRotationTaskState *state) {
     s32 *positionPtr;
 
     if (state->model->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -284,7 +284,7 @@ void updateModelTransitionEffect(ModelTransitionEffectState *state) {
     memcpy(&unusedMatrixBuffer, &identityMatrix, 0x20);
 
     if (state->model->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 

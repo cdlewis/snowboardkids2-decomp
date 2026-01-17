@@ -427,7 +427,7 @@ void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     if (arg0->unk60 == 0) {
         state->unk77C = 1;
         unlinkNode(arg0->unk0);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     } else {
         enableViewportDisplayList(arg0->unk0);
         enqueueDisplayListObject(1, (DisplayListObject *)&arg0->unk4);
@@ -516,7 +516,7 @@ void animateBoardShopSnowParticles(SnowParticleState *arg0) {
     };
 
     if ((s16)state->unk780 == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 
@@ -695,7 +695,7 @@ void animateBoardShopCharacterSlideOut(BoardShopCharacterPreviewState *arg0) {
 
     if (arg0->unk50 == 0x600000) {
         allocation->unk79A = 1;
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     } else {
         enqueueDisplayListObject(0, (DisplayListObject *)arg0);
     }
@@ -769,7 +769,7 @@ void animateBoardShopCharacterTransition(func_80031944_32544_arg *arg0) {
     enqueueDisplayListObject(0, &arg0->unk0);
 
     if (arg0->unk50 == targetPosition) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 
@@ -1489,7 +1489,7 @@ void animateBoardShopBoardIconsSlideOut(BoardShopBoardIconsSlideOutState *arg0) 
 
     if (arg0->icons[0].y < (-0x88)) {
         allocation->animationComplete = 1;
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 
@@ -1543,7 +1543,7 @@ void animateBoardShopSnowflakeSlideIn(BoardShopSnowflakeAnimState *arg0) {
     debugEnqueueCallback(8, 0, &func_800136E0_142E0, arg0);
 
     if (arg0->frameCounter == 4) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 

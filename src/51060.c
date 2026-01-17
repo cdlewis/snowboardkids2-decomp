@@ -262,7 +262,7 @@ void updateSprayEffect(SprayEffectUpdateTask *arg0) {
 
         arg0->iteration = arg0->iteration + 1;
         if (arg0->iteration == 4) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
             return;
         }
         arg0->particle.alpha = arg0->particle.alpha - 0x30;
@@ -331,7 +331,7 @@ void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *arg0) {
 
         arg0->frameCounter++;
         if (arg0->frameCounter == 5) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
     }
 }
@@ -431,7 +431,7 @@ void updateCharacterTrailParticle(CharacterTrailParticleTask *arg0) {
 
         arg0->animFrame++;
         if ((s16)arg0->animFrame >= 0xF) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
 
         arg0->particle.position.x += arg0->velX;
@@ -540,7 +540,7 @@ void func_80050E08_51A08(func_80050DB0_519B0_arg *arg0) {
         }
         arg0->unk28++;
         if (arg0->unk28 >= 0xA) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
     }
 
@@ -575,7 +575,7 @@ void updateFloatingItemSprite(FloatingItemSpriteTask *arg0) {
     arg0->frameCounter = arg0->frameCounter + 1;
 
     if (arg0->frameCounter == 0x10) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     if (arg0->halfSizeRender == 0) {
@@ -646,7 +646,7 @@ void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *arg0) {
 
         arg0->frameCounter++;
         if (arg0->frameCounter == 0x14) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
     }
 }
@@ -768,7 +768,7 @@ void updateSkiTrailTask(SkiTrailTask *task) {
         task->particleRight.alpha -= 0x14;
         task->frameCounter++;
         if (task->frameCounter == 8) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
     }
 }
@@ -808,7 +808,7 @@ void updateGlintEffect(GlintEffectTask *arg0) {
     if (gs->gamePaused == 0) {
         arg0->particle.alpha -= 0x10;
         if (arg0->particle.alpha < 0x40) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
     }
 }

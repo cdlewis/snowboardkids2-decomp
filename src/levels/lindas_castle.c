@@ -199,7 +199,7 @@ void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task) {
         rotatedVec.y = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
 
         if ((u32)(rotatedVec.x + 0xFFFFF) <= 0x1FFFFEU && (u32)(rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
 
         pullPlayersInRange(task);
@@ -259,7 +259,7 @@ void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
         rotatedVec.y = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
 
         if (rotatedVec.x + 0xFFFFF <= 0x1FFFFEU && (rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
 
         pullPlayersInRange(task);

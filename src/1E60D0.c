@@ -135,7 +135,7 @@ void updateTransitionFadeOut(TransitionSpawnerState *state) {
 
     alpha = state->delayTimer.word;
     if (alpha <= 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -198,7 +198,7 @@ void updateTransitionSpawner(TransitionSpawnerState *state) {
                 return;
             }
             state->state->isComplete = 1;
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
             return;
         } else {
             state->delayTimer.halfword--;

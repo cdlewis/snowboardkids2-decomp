@@ -261,12 +261,12 @@ void updateSimpleSpriteEffect(SimpleSpriteEffectState *arg0) {
     spriteState = &arg0->spriteState;
 
     if (arg0->duration == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
     if (updateSpriteAnimation(spriteState, 0x10000) == 2) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -358,7 +358,7 @@ void updateScalingSpriteEffect(ScalingSpriteEffectState *arg0) {
             if (val != 0) {
                 arg0->scaleX = arg0->scaleX + val;
             } else {
-                func_80069CF8_6A8F8();
+                terminateCurrentTask();
                 return;
             }
             break;
@@ -377,7 +377,7 @@ void updateScalingSpriteEffect(ScalingSpriteEffectState *arg0) {
 
     spriteState = &arg0->spriteState;
     if (updateSpriteAnimation(spriteState, 0x10000) == 2) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -450,7 +450,7 @@ void func_8000AD88_B988(RadialBurstSpriteEffectState *arg0) {
     yOffsetFactor = (scale >> 8) * 0xF5;
 
     if (updateSpriteAnimation(&arg0->spriteState, 0x10000) == 2) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -497,7 +497,7 @@ void func_8000AD88_B988(RadialBurstSpriteEffectState *arg0) {
             decrement = -targetScale / 10;
             yOffset = 0;
             if (currentScale <= 0) {
-                func_80069CF8_6A8F8();
+                terminateCurrentTask();
                 return;
             }
             arg0->currentScale = currentScale + decrement;
@@ -573,7 +573,7 @@ void updateSpinFadeSpriteEffect(SpinFadeSpriteEffectState *arg0) {
             val += decrement;
             arg0->scale = val;
             if (val <= 0) {
-                func_80069CF8_6A8F8();
+                terminateCurrentTask();
                 return;
             }
         } break;
@@ -653,7 +653,7 @@ void updateDropShrinkSpriteEffect(DropShrinkSpriteEffectState *arg0) {
             val += decrement;
             arg0->scale = val;
             if (decrement == 0) {
-                func_80069CF8_6A8F8();
+                terminateCurrentTask();
                 return;
             }
         } break;
@@ -710,7 +710,7 @@ void updateRiseStretchSpriteEffect(RiseStretchSpriteEffectState *arg0) {
     s32 x, y, z;
 
     if (arg0->unk8 < 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -783,7 +783,7 @@ void updateFloatBobbingSpriteEffect(FloatBobbingSpriteEffectState *arg0) {
     s32 sinVal;
 
     if (arg0->duration < 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 

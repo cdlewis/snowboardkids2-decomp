@@ -92,7 +92,7 @@ void updatePulsingSpriteIndicator(PulsingSpriteState *arg0) {
     sp28[1] = -1;
 
     if (arg0->owner->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -185,7 +185,7 @@ void updateStretchingModelTask(StretchingModelTaskState *arg0) {
     memcpy(&sp50, &((StretchingModelOwner *)arg0->owner)->transformMatrix, 0x20);
 
     if (((StretchingModelOwner *)arg0->owner)->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 

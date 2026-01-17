@@ -196,7 +196,7 @@ void updateFanEffectFade(FanEffectFadeState *fadeState) {
     fadeState->fadeDelta = fadeDelta;
 
     if ((s32)0xFFF80000 >= fadeDelta) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     fadeState->yPosOffset += fadeState->fadeDelta;

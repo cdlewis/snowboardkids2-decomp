@@ -919,7 +919,7 @@ s32 updateViewerFadeOut(E770_struct *arg0) {
     s16 temp = alloc->fadeTimer;
 
     if (temp == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return 1;
     }
     alloc->fadeTimer = temp - 1;

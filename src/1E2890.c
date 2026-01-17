@@ -73,7 +73,7 @@ void initRepeatingFanSoundEffectTask(void) {
 
 void updateRepeatingFanSoundEffect(RepeatingFanSoundEffectState *arg0) {
     if (arg0->remainingCount == 0 || gStopFanSoundTasks != 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -125,7 +125,7 @@ void initRepeatingFanSound3DTask(void) {
 
 void updateRepeatingFanSound3D(RepeatingFanSound3DState *arg0) {
     if (arg0->remainingCount == 0 || gStopFanSoundTasks != 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 

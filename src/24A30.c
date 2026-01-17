@@ -653,7 +653,7 @@ void updateCharSelectSecondarySlide(CharSelectSecondarySlot *arg0) {
 
     if (arg0->worldMatrix.translation.x == target) {
         state->unk18C0[arg0->playerIndex + 4]++;
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     } else {
         enqueueDisplayListObject(arg0->playerIndex, (DisplayListObject *)arg0);
     }
@@ -868,7 +868,7 @@ void updateCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
 
     if (preview->transform.translation.x == target) {
         (state + preview->playerIndex)[0x18C4]++;
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 

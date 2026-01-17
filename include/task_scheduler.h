@@ -76,6 +76,6 @@ void setRenderContext(s8 value);
 
 u8 getRenderContext(void);
 
-void func_80069CF8_6A8F8(void);
+void terminateCurrentTask(void);
 
 s32 getFreeNodeCount(s32 arg0);

@@ -99,7 +99,7 @@ void updateRocketEffectFalling(RocketEffectFallingData *arg0) {
     s32 pad[8];
     arg0->unk7C -= 0x8000;
     if (arg0->unk7C <= (s32)0xFFF80000) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
     arg0->unk0.transform.translation.y += arg0->unk7C;
     enqueueDisplayListObject(0, &arg0->unk0);

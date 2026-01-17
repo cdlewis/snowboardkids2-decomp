@@ -186,7 +186,7 @@ void updateWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0) {
             }
             arg0->velocity.y += (s32)0xFFFF4000;
             if (arg0->velocity.y < (s32)0xFFE20000) {
-                func_80069CF8_6A8F8();
+                terminateCurrentTask();
             }
             arg0->rotY += 0x100;
             break;

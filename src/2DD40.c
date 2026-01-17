@@ -814,7 +814,7 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
                 element->unk5E = 2;
             }
         } else if ((completedCount & 0xFF) == element->unk5E) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
     }
 }

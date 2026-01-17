@@ -40,7 +40,7 @@ void updateSteppedMatrixController(SteppedMatrixState *state) {
     s32 translation;
 
     if (state->owner->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 

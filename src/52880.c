@@ -269,7 +269,7 @@ void launchSlapstickProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0x11);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -364,7 +364,7 @@ void updateSlapstickProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0x11);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     i = 0;
@@ -486,7 +486,7 @@ void launchParachuteProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -581,7 +581,7 @@ void updateParachuteProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     i = 0;
@@ -708,7 +708,7 @@ void launchFryingPanProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -803,7 +803,7 @@ void updateFryingPanProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     i = 0;
@@ -943,7 +943,7 @@ void launchSnowmanProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(s0);
         queueSoundAtPosition(s0, 0xD);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -1042,7 +1042,7 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -1158,7 +1158,7 @@ void launchStarProjectile(Struct_52880 *arg0) {
 
     if (arg0->hitCount != 0) {
         spawnSparkleEffect(&arg0->pos);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -1252,7 +1252,7 @@ void updateStarProjectile(Struct_52880 *arg0) {
 
     if (arg0->hitCount != 0) {
         spawnSparkleEffect(&arg0->pos);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     i = 0;
@@ -1369,7 +1369,7 @@ void launchHomingPanelProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -1471,7 +1471,7 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     i = 0;
@@ -1579,7 +1579,7 @@ void updateFallingStarProjectile(Struct_52880 *projectile) {
 
     if (projectile->hitCount != 0) {
         spawnSparkleEffect(&projectile->pos);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -1703,7 +1703,7 @@ void updatePlayerGuidedStarProjectile(Struct_52880 *arg0) {
 
     if (arg0->hitCount != 0) {
         spawnSparkleEffectWithPlayer(&arg0->pos, arg0->ownerPlayerIdx);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -1854,7 +1854,7 @@ void launchRandomEffectProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(s1);
         queueSoundAtPosition(s1, 0x11);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -1953,7 +1953,7 @@ void updateRandomEffectProjectile(RandomEffectProjectileUpdate *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0x11);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -2025,7 +2025,7 @@ void launchGhostTargetProjectile(Struct_52880 *arg0) {
 
     if (arg0->hitCount != 0) {
         queueSoundAtPosition(&arg0->pos, 0x43);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -2093,7 +2093,7 @@ void updateGhostTargetProjectile(Struct_52880 *arg0) {
 skip_main:
     if (arg0->hitCount != 0) {
         queueSoundAtPosition(&arg0->pos, 0x43);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     for (i = 0; i < 4; i++) {
@@ -2171,7 +2171,7 @@ void launchShrinkProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(s0);
         queueSoundAtPosition(s0, 13);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
     i = 0;
 
@@ -2234,7 +2234,7 @@ void updateShrinkProjectile(Struct_52880 *arg0) {
     if (arg0->hitCount != 0) {
         spawnImpactStar(&arg0->pos);
         queueSoundAtPosition(&arg0->pos, 0xD);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     i = 0;

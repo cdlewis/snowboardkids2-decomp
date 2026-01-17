@@ -151,7 +151,7 @@ void skipCutsceneOnInputCallback(skipCutsceneCallback_arg **arg0) {
     skipCutsceneCallback_arg *taskPayload = *arg0;
     if ((taskPayload->skipAnimation != 0) && (gButtonsPressed[0] & A_BUTTON)) {
         taskPayload->skipAnimation = 0;
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 

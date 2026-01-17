@@ -307,7 +307,7 @@ void fadeOutGhost(AnimatedGhostEntity *ghost) {
     ghost->alpha -= 0x10;
 
     if (ghost->alpha == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     } else {
         updateGhostPositionAndCheckEnd(ghost);
         updateGhostAnimation(ghost);
@@ -467,7 +467,7 @@ void updateFloatingBillboard(FloatingBillboard *arg0) {
         arg0->lifetime -= 1;
 
         if (arg0->lifetime == 0) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
             return;
         }
 

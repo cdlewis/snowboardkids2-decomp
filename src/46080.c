@@ -1229,7 +1229,7 @@ void updatePlayerSparkleMovement(PlayerSparkleTask *task) {
     task->metadata.position.y = temp_a1;
 
     if (temp_a2 == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     updatePlayerSparkle(task);
@@ -1617,7 +1617,7 @@ void updateFlyingSceneryDescendingStep(FlyingSceneryState *state) {
         if (state->frameCounter != 0) {
             state->frameCounter--;
         } else {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
 
         i = 0;
@@ -2010,7 +2010,7 @@ void updatePlayerAuraDescending(PlayerAuraState *state) {
     if (allocation->gamePaused == 0) {
         state->animationAngle -= 0x40;
         if (state->animationAngle == 0) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
     }
 
@@ -2215,7 +2215,7 @@ void updatePlayerHaloDescending(PlayerHaloState *state) {
     if (allocation->unk76 == 0) {
         state->animationAngle -= 0x40;
         if (state->animationAngle == 0) {
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
         }
     }
 
@@ -2563,7 +2563,7 @@ void updateItemBoxBurstFrame(ItemBoxBurstEffectState *state) {
     s32 i;
 
     if (state->frameIndex == 8) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -3160,7 +3160,7 @@ void updateHomingProjectileImpact(HomingProjectileImpactArg *arg0) {
     }
 
     if (arg0->timer == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     s2 = (void *)((s32)arg0 + 8);
@@ -3169,7 +3169,7 @@ void updateHomingProjectileImpact(HomingProjectileImpactArg *arg0) {
     if (s0 != NULL) {
         queueSoundAtPosition(s2, 7);
         addPlayerRaceGold(s0, 100);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     if (D_8009ADE0_9B9E0 & 1) {
@@ -3286,7 +3286,7 @@ void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0) {
             spawnImpactStar(s2);
             queueSoundAtPosition(s2, 0xD);
             setPlayerProjectileHitState(temp_v0_3);
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
             return;
         }
         if (arg0->position.y < sp.y) {
@@ -3324,7 +3324,7 @@ void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0) {
     s2 = &arg0->metadata.position;
 
     if (arg0->metadata.unk32 == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     s3 = findPlayerNearPosition(s2, -1, 0xA0000);
@@ -3336,7 +3336,7 @@ void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0) {
         spawnImpactStar(s0);
         queueSoundAtPosition(s0, 0xD);
         setPlayerProjectileHitState(s3);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     } else {
         i = 0;
         if (arg0->metadata.unk32 < 0x1F) {
@@ -3464,7 +3464,7 @@ void updateItemHomingProjectileImpact(ItemHomingProjectileImpactArg *arg0) {
                 allocation->availableHomingProjectileSlots--;
             }
         }
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -3482,7 +3482,7 @@ void updateItemHomingProjectileImpact(ItemHomingProjectileImpactArg *arg0) {
             player->unkBD8 |= 2;
         }
         queueSoundAtPosition((void *)&arg0->metadataPtr + 4, 8);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     if (arg0->impactTimer < 0x1F) {
@@ -3612,7 +3612,7 @@ void updateBossHomingProjectile(BossHomingProjectile *projectile) {
         spawnImpactStar(position);
         queueSoundAtPosition(position, 0xD);
         setPlayerProjectileHitState(hitPlayer);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -3644,7 +3644,7 @@ void bounceBossHomingProjectile(BossHomingProjectileBounceArg *arg0) {
     position = &arg0->displayListState.position;
 
     if (arg0->displayListState.unk32 == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     hitPlayer = findPlayerNearPosition(position, -1, 0xA0000);
@@ -3656,7 +3656,7 @@ void bounceBossHomingProjectile(BossHomingProjectileBounceArg *arg0) {
         spawnImpactStar(copyPtr);
         queueSoundAtPosition(copyPtr, 0xD);
         setPlayerProjectileHitState(hitPlayer);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     } else {
         if (arg0->displayListState.unk32 < 0x1F) {
             i = 0;
@@ -3772,7 +3772,7 @@ void updateBossHomingProjectileVariant1(BossHomingProjectileVariant1UpdateArg *a
             spawnImpactStar(s2);
             queueSoundAtPosition(s2, 0xD);
             setPlayerProjectileHitState(temp_s0);
-            func_80069CF8_6A8F8();
+            terminateCurrentTask();
             return;
         }
 
@@ -3802,7 +3802,7 @@ void bounceBossHomingProjectileVariant1(BossHomingProjectileVariant1BounceArg *a
     }
 
     if (arg0->displayListState.unk32 == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     s2 = &arg0->displayListState.position;
@@ -3815,7 +3815,7 @@ void bounceBossHomingProjectileVariant1(BossHomingProjectileVariant1BounceArg *a
         spawnImpactStar(s0);
         queueSoundAtPosition(s0, 0xD);
         setPlayerProjectileHitState(s3);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     } else {
         if (arg0->displayListState.unk32 < 0x1F) {
             i = 0;
@@ -3915,7 +3915,7 @@ void updateBossHomingProjectileVariant2(BossHomingProjectileVariant2UpdateArg *a
         spawnImpactStar(s2);
         queueSoundAtPosition(s2, 0xD);
         setPlayerProjectileHitState(temp_s0);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 
@@ -3946,7 +3946,7 @@ void bounceBossHomingProjectileVariant2(BossHomingProjectileVariant2BounceArg *a
     }
 
     if (arg0->unk36 == 0) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 
     s2 = &arg0->unk8;
@@ -3959,7 +3959,7 @@ void bounceBossHomingProjectileVariant2(BossHomingProjectileVariant2BounceArg *a
         spawnImpactStar(s0);
         queueSoundAtPosition(s0, 0xD);
         setPlayerProjectileHitState(s3);
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     } else {
         if (arg0->unk36 < 0x1F) {
             i = 0;

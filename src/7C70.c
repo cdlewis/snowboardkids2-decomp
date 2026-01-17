@@ -78,7 +78,7 @@ void initOrbitalSpriteRing(OrbitalSpriteRingInitArg *arg0) {
 
 void updateOrbitalSpriteRingController(OrbitalSpriteRingControllerState *arg0) {
     if (arg0->owner->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
     }
 }
 
@@ -104,7 +104,7 @@ void updateOrbitalSprite(OrbitalSpriteState *arg0) {
     s32 x, y, z;
 
     if (arg0->owner->isDestroyed == 1) {
-        func_80069CF8_6A8F8();
+        terminateCurrentTask();
         return;
     }
 

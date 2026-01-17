@@ -1340,7 +1340,7 @@ void updateCutsceneFadeTask(FadeTaskData *task) {
         case 2:
             task->fadeAlpha -= 10;
             if (task->fadeAlpha <= 0) {
-                func_80069CF8_6A8F8();
+                terminateCurrentTask();
                 return;
             }
             break;
