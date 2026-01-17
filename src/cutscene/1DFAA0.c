@@ -1067,9 +1067,11 @@ void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
     entryNextIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xF8);
     entryPrevIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xFA);
 
+    /* Add the cut entry to the free list */
     *(u16 *)((u8 *)base + (freeListHead << 6) + 0xF8) = searchResult;
     *(u16 *)((u8 *)base + 0xE) = searchResult;
 
+    /* Update the linked list: unlink the entry */
     if ((entryPrevIndex & 0xFFFF) != 0xFFFF) {
         *(u16 *)((u8 *)base + (entryPrevIndex << 6) + 0xF8) = entryNextIndex;
     }
