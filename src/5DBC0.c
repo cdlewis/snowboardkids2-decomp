@@ -73,8 +73,8 @@ void loadCharacterBodyParts(Player *player) {
             do {
                 *(s32 *)(partPtr + 0x58) = (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) +
                                            gBodyPartRemapTable[partIndex] * 0x10;
-                partIndex += 1;
-                partPtr += 0x3C;
+                partIndex++;
+                partPtr += sizeof(BodyPart);
             } while (partIndex < 0x10);
         } else {
             player->unkB84 = flags & ~8;
@@ -83,7 +83,7 @@ void loadCharacterBodyParts(Player *player) {
             do {
                 *(s32 *)(partPtr + 0x58) =
                     (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) + partIndex * 0x10;
-                partPtr += 0x3C;
+                partPtr += sizeof(BodyPart);
             } while (++partIndex < 0x10);
         }
     } else {
@@ -95,8 +95,8 @@ void loadCharacterBodyParts(Player *player) {
             do {
                 *(s32 *)(partPtr2 + 0x58) = loadAssetByIndex_953B0(player->characterId, player->boardIndex) +
                                             gBodyPartRemapTable[partIndex2] * 0x10;
-                partIndex2 += 1;
-                partPtr2 += 0x3C;
+                partIndex2++;
+                partPtr2 += sizeof(BodyPart);
             } while (partIndex2 < 0x10);
         } else {
             player->unkB84 = flags & ~8;
@@ -105,7 +105,7 @@ void loadCharacterBodyParts(Player *player) {
             do {
                 *(s32 *)(partPtr2 + 0x58) =
                     loadAssetByIndex_953B0(player->characterId, player->boardIndex) + partIndex2 * 0x10;
-                partPtr2 += 0x3C;
+                partPtr2 += sizeof(BodyPart);
             } while (++partIndex2 < 0x10);
         }
     }

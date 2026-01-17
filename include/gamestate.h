@@ -50,6 +50,23 @@ typedef struct {
     void *unk1C;
     void *unk20;
     void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 padding30[0x8];
+    s32 unk38;
+} BodyPart;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+    void *unk10;
+    void *unk14;
+    void *unk18;
+    void *unk1C;
+    void *unk20;
+    void *unk24;
     void *aiPathData; /* AI path preference data array */
     void *unk2C;
     u8 padding30[0x8];
