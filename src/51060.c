@@ -856,11 +856,11 @@ void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *task) {
     task->assetTable = freeNodeMemory(task->assetTable);
 }
 
-void spawnCharacterAttackEffect(void *arg0) {
+void spawnCharacterAttackEffect(Player *player) {
     CharacterAttackEffectSpawnTask *task =
         (CharacterAttackEffectSpawnTask *)scheduleTask(&initCharacterAttackEffectTask, 2, 0, 0xE7);
     if (task != NULL) {
-        task->sourcePlayer = arg0;
+        task->sourcePlayer = player;
         task->particleType = 0x12;
         task->isVariant = 0;
     }
