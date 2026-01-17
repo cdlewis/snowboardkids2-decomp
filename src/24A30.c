@@ -1013,7 +1013,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
     yIncrement = charSelectIconYIncrements[numPlayers].x;
     iconPaletteTable = D_8008DD8C_8E98C;
     y = charSelectIconPositions[numPlayers].z;
-    ptr = (volatile P2NameSpriteEntry *)arg0;
+    ptr = (volatile P2NameSpriteEntry *)arg0->entries;
 
     do {
         D_800AFE8C_A71FC_type *global;
