@@ -295,6 +295,8 @@ void func_80024DCC_259CC(CharSelectBoardPreview *);
 void initCharSelectBoardSlideIn(CharSelectBoardPreview *);
 void waitForCharSelectBoardState(CharSelectBoardPreview *);
 void updateCharSelectBoardSlideIn(CharSelectBoardPreview *);
+void initCharSelectBoardSlideOut(CharSelectBoardPreview *);
+SceneModel *cleanupSceneModelHolder(SceneModelHolder *arg0);
 void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *);
 void updateCharSelectPlayerLabels(PlayerLabelSpritesState *);
 void func_800262D4_26ED4(SelectionArrowsState *);
@@ -773,7 +775,33 @@ void func_80024D40_25940(CharSelectBoardPreview *arg0) {
     setCallback(initCharSelectBoardPreview);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024DCC_259CC);
+void func_80024DCC_259CC(CharSelectBoardPreview *arg0) {
+    u8 *alloc;
+    u32 temp;
+
+    alloc = (u8 *)getCurrentAllocation();
+    temp = D_800AFE8C_A71FC->unk9[arg0->playerIndex];
+    if (temp == 7) {
+        arg0->model = createSceneModelEx(
+            0x39,
+            alloc + (arg0->playerIndex * 0x1D8),
+            *(s8 *)(alloc + arg0->playerIndex + 0x18B8),
+            -1,
+            -1,
+            -1
+        );
+    } else {
+        arg0->model = createSceneModelEx(
+            temp,
+            alloc + (arg0->playerIndex * 0x1D8),
+            *(s8 *)(alloc + arg0->playerIndex + 0x18B8),
+            -1,
+            -1,
+            -1
+        );
+    }
+    setCallback(initCharSelectBoardSlideIn);
+}
 
 void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
     u8 *state;
@@ -849,8 +877,30 @@ void cleanupCharSelectBoardModel(CharSelectBoardPreview *preview) {
     destroySceneModel(preview->model);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80025074_25C74);
+void func_80025074_25C74(CharSelectBoardPreview *arg0) {
 
+    u8 *alloc;
+    u8 playerIndex;
+    u32 var_a0;
+
+    alloc = (u8 *)getCurrentAllocation();
+    playerIndex = arg0->playerIndex;
+    var_a0 = D_800AFE8C_A71FC->unk9[playerIndex];
+
+    if (var_a0 != 7) {
+        arg0->model =
+            createSceneModelEx(var_a0, alloc + (playerIndex * 0x1D8), (alloc + playerIndex)[0x18BC], -1, -1, -1);
+    } else {
+        arg0->model =
+            createSceneModelEx(0x39, alloc + (playerIndex * 0x1D8), (alloc + playerIndex)[0x18BC], -1, -1, -1);
+    }
+    memcpy(&arg0->transform, identityMatrix, 0x20);
+    *(s32 *)((u8 *)arg0 + 0x18) = 0;
+    *(s32 *)((u8 *)arg0 + 0x20) = 0;
+    *(s32 *)((u8 *)arg0 + 0x1C) = 0xFFF00000;
+    setCleanupCallback(cleanupSceneModelHolder);
+    setCallback(initCharSelectBoardSlideOut);
+}
 void initCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
     u8 *base;
 
