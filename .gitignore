@@ -4,6 +4,7 @@ tools/gcc_kmc
 __pycache__
 compile_commands.json
 .cache/*
+src/**/*.asmproc.d
 
 # task-runner
 tools/task-runner/logs
