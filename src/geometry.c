@@ -413,6 +413,7 @@ void func_mulMatrix3x3T(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2)
 }
 
 extern Vec3i D_8009A8A4_9B4A4;
+extern s16 D_8009A8D0_9B4D0[];
 
 typedef void (*CreateXRotS16)(s16 matrix[3][3], s16 angle);
 
@@ -574,7 +575,75 @@ INCLUDE_ASM("asm/nonmatchings/geometry", computeLookAtMatrix);
 
 INCLUDE_ASM("asm/nonmatchings/geometry", matrixToEulerAngles);
 
-INCLUDE_ASM("asm/nonmatchings/geometry", atan2Fixed);
+s32 atan2Fixed(s32 x, s32 y) {
+    s16 ratio;
+    s16 tableVal;
+    s16 result;
+
+    y = -y;
+
+    if (x == 0 && y == 0) {
+        return 0;
+    }
+
+    if (x >= 0 && y >= 0) {
+        if (x < y) {
+            ratio = (s64)x * 640 / y;
+            tableVal = D_8009A8D0_9B4D0[ratio];
+            return (-tableVal * 2) & 0x1FFE;
+        } else {
+            ratio = (s64)y * 640 / x;
+            tableVal = D_8009A8D0_9B4D0[ratio];
+            result = 0x400 - tableVal;
+            return (-(result * 2)) & 0x1FFF;
+        }
+    }
+
+    if (x >= 0 && y < 0) {
+        y = -y;
+        if (y < x) {
+            ratio = (s64)y * 640 / x;
+            result = D_8009A8D0_9B4D0[ratio] + 0x400;
+            return (-(result * 2)) & 0x1FFF;
+        } else {
+            ratio = (s64)x * 640 / y;
+            tableVal = D_8009A8D0_9B4D0[ratio];
+            result = 0x800 - tableVal;
+            return (-(result * 2)) & 0x1FFF;
+        }
+    }
+
+    if (x < 0 && y < 0) {
+        x = -x;
+        y = -y;
+        if (x < y) {
+            ratio = (s64)x * 640 / y;
+            result = D_8009A8D0_9B4D0[ratio] + 0x800;
+            return (-(result * 2)) & 0x1FFF;
+        } else {
+            ratio = (s64)y * 640 / x;
+            tableVal = D_8009A8D0_9B4D0[ratio];
+            result = 0xC00 - tableVal;
+            return (-(result * 2)) & 0x1FFF;
+        }
+    }
+
+    if (x < 0 && y >= 0) {
+        x = -x;
+        if (y < x) {
+            ratio = (s64)y * 640 / x;
+            result = D_8009A8D0_9B4D0[ratio] + 0xC00;
+            return (-(result * 2)) & 0x1FFF;
+        } else {
+            ratio = (s64)x * 640 / y;
+            tableVal = D_8009A8D0_9B4D0[ratio];
+            result = 0x1000 - tableVal;
+            return (-(result * 2)) & 0x1FFF;
+        }
+    }
+
+    return 0;
+}
 
 s16 computeAngleToPosition(s32 fromX, s32 fromZ, s32 toX, s32 toZ) {
     return atan2Fixed(toX - fromX, toZ - fromZ);
