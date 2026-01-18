@@ -44,11 +44,22 @@ typedef struct {
 } PlayerIndicatorSpriteTask;
 
 extern s32 gFrameCounter;
-extern s32 D_800907F8_913F8;
-extern s32 D_800907EC_913EC[];
 extern s16 identityMatrix[];
-extern s16 gIndicatorSpriteOffset;
-extern void *D_80090860_91460;
+
+Vec3i gIndicatorSpriteOffset = { 0x00000000, 0x00200000, 0x00000000 };
+
+Vec3i D_800907EC_913EC = { 0x001E0000, 0x00000000, 0xFFCE0000 };
+
+s32 D_800907F8_913F8[] = {
+    0xFFFC0005, 0x001D8042, 0x803F803B, 0xFFFB803C, 0x80338033, 0xFFFB8041, 0x80358032, 0xFFFB803D, 0x803C8044,
+    0x8032803F, 0xFFFB802F, 0x80328033, 0x803C803F, 0x8032FFFD, 0x8036803B, 0x80408032, 0x803F8041, 0x8036803B,
+    0x8034FFFB, 0x802EFFFB, 0x8030803C, 0x803B8041, 0x803F803C, 0x80398039, 0x8032803F, 0x8050FFFF,
+};
+
+u32 D_80090860_91460[] = {
+    0xFFFE0002, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00020002, 0x00000000, 0x03F0FFF0, 0xFFFFFFFF,
+    0x0002FFFE, 0x00000000, 0x03F003F0, 0xFFFFFFFF, 0xFFFEFFFE, 0x00000000, 0xFFF003F0, 0xFFFFFFFF,
+};
 
 // Start gate display object structure (3 parts: main gate, left door, right door)
 // Each part is a DisplayListObject with transform, display lists, and segment pointers
@@ -165,7 +176,7 @@ void updateRacePlayerIndicatorSprite(PlayerIndicatorSpriteTask *arg0) {
     } else {
         arg0->unk38 = 6;
     }
-    transformVector(&gIndicatorSpriteOffset, &arg0->unk24->unk9F0, &arg0->unk4.unk4);
+    transformVector((s16 *)&gIndicatorSpriteOffset, &arg0->unk24->unk9F0, &arg0->unk4.unk4);
     temp_s0 = &arg0->unk4;
     if (arg0->unk24->pathFlags >= 2 && (gFrameCounter & 1)) {
         loadAssetMetadataByIndex(temp_s0, arg0->unk0, 0x60, 0x14);
