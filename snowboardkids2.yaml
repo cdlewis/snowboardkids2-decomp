@@ -404,7 +404,10 @@ segments:
       - [0x94E10, .data, 5E590]
       - [0x9B270, data, 46080]
       - [0x9B2B0, data, 42170]
-      - [0x9B4D0, data] # 0x9b510 / 0x9b730 has some kind of keyboard / alphabet?
+      - [0x9B3D0, data, displaylist]
+      - [0x9B420, data, 68CF0]
+      - [0x9B460, data, task_scheduler]
+      - [0x9B470, data, geometry]
       - [0x9B9E0, data]
       - [0x9B9F0, data]
       - [0x9BAD0, data]

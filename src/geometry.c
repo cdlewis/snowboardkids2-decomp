@@ -2,6 +2,9 @@
 
 #include "common.h"
 
+extern Vec3i D_8009A8A4_9B4A4;
+extern s16 D_8009A8D0_9B4D0[];
+
 typedef struct {
     s16 m00_int;
     u16 m00_frac;
@@ -411,9 +414,6 @@ void func_mulMatrix3x3T(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2)
         }
     }
 }
-
-extern Vec3i D_8009A8A4_9B4A4;
-extern s16 D_8009A8D0_9B4D0[];
 
 typedef void (*CreateXRotS16)(s16 matrix[3][3], s16 angle);
 
