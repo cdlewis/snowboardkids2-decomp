@@ -48,3 +48,4 @@ void cleanupPlayerIndicatorSprite(PlayerSelectSpriteTask *arg0);
 void initCharacterReadyIndicator(PlayerSelectSpriteTask *arg0);
 void updateCharacterReadyIndicator(void *arg0);
 void cleanupCharacterReadyIndicator(PlayerSelectSpriteTask *arg0);
+void func_800B054C_1DBC2C(PlayerSelectSpriteTask *arg0);
