@@ -1,3 +1,5 @@
+D_800BADE0 = 0x800BADE0; // rom:0xAAC90 size:0x220 type:u8
+
 // this all seems completely pointless
 _6462A0_ROM_END = 0x646850;
 _646910_ROM_START = 0x646910;

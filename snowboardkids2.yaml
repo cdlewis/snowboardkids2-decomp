@@ -7,37 +7,23 @@ options:
   base_path: .
   platform: n64
   compiler: KMC
-
-  create_asm_dependencies: True
-
   ld_script_path: snowboardkids2.ld
-  ld_dependencies: True
-
   find_file_boundaries: True
   header_encoding: ASCII
-
   o_as_suffix: True
-  use_legacy_include_asm: False
   mips_abi_float_regs: o32
-
   section_order: [".text", ".data", ".rodata", ".bss"]
   auto_link_sections: [".data", ".rodata", ".bss"]
-
   symbol_addrs_path:
     - symbol_addrs.txt
   reloc_addrs_path:
     - reloc_addrs.txt
-
   undefined_funcs_auto_path: undefined_funcs_auto.txt
   undefined_syms_auto_path: undefined_syms_auto.txt
-
-  extensions_path: tools/splat_ext
   lib_path: build/lib
-
   symbol_name_format: $VRAM_$ROM
   migrate_rodata_to_functions: True
   gfx_ucode: f3dex2
-
   string_encoding: ASCII
   data_string_encoding: ASCII
   rodata_string_guesser_level: 2
