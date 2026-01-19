@@ -725,8 +725,16 @@ segments:
     subsegments:
       - [0xB74F0, c, levels/crazy_jungle]
       - [0xB7DD0, data, levels/crazy_jungle]
-      - [0xB7E70, data]
-      - [0xB9C40, data]
+
+  - name: _B7E70
+    type: bin
+    vram: 0
+    start: 0xB7E70
+
+  - name: _B9C40
+    type: bin
+    vram: 0
+    start: 0xB9C40
 
   - name: _16D920
     type: bin

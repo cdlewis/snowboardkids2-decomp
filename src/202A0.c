@@ -28,6 +28,7 @@ USE_ASSET(_43A000);
 USE_ASSET(_43F050);
 USE_ASSET(_459310);
 USE_ASSET(_41A1D0);
+USE_ASSET(_4237C0);
 
 typedef struct {
     u8 _pad0[0xB2F];
@@ -125,8 +126,6 @@ typedef struct {
     u8 unk7;
 } D_800AFE8C_type_202A0;
 
-extern u32 D_4237C0;
-extern u32 D_426EF0;
 extern u16 D_8008DC38_8E838;
 extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
 extern u16 D_8009ADE0_9B9E0;
@@ -804,7 +803,7 @@ void initPrizeDisplay(PrizeDisplayState *arg0) {
     allocation = (Allocation_202A0 *)getCurrentAllocation();
     textRenderAsset = loadTextRenderAsset(1);
     arg0->backgroundAsset = loadAsset_34F7E0();
-    spriteAsset = loadCompressedData(&D_4237C0, &D_426EF0, 0x8A08);
+    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupPrizeDisplay);
     titleText = &D_8008DC38_8E838;
     arg0->animationTimer = 0;

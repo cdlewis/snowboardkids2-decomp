@@ -9,9 +9,8 @@ USE_ASSET(_34CB50);
 USE_ASSET(_34F9A0);
 USE_ASSET(_350140);
 USE_ASSET(_3505F0);
+USE_ASSET(_B7E70);
 
-extern s32 D_B7E70;
-extern s32 D_B9C40;
 extern s32 gSkyDisplayLists2[];
 extern s32 gSkyDisplayLists1[];
 extern Asset_56910 gCourseDataAssets[];
@@ -62,7 +61,7 @@ LevelDisplayLists *getSkyDisplayLists3ByIndex(s32 index) {
 }
 
 void *loadAsset_B7E70(void) {
-    return loadUncompressedData(&D_B7E70, &D_B9C40);
+    return loadUncompressedData(&_B7E70_ROM_START, &_B7E70_ROM_END);
 }
 
 void *loadAsset_216290(void) {
