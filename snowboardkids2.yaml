@@ -337,7 +337,7 @@ segments:
       - [0x89330, data]
       - [0x89B00, data, main]
       - [0x8A110, data]
-      - [0x8A140, data, 20F0]
+      - [0x8A140, .data, 20F0]
       - [0x8C980, .data, nonrace_shadow]
       - [0x8CA90, data, 3B80]
       - [0x8CB90, .data, 4050]
@@ -2496,7 +2496,12 @@ segments:
     vram: 0
     start: 0x664660
 
-  - [0x6648C0, bin]
+  - name: _6648C0
+    type: bin
+    vram: 0
+    start: 0x6648C0
+
+  - [0x664C10, bin]
 
   - name: _67AB10
     type: bin

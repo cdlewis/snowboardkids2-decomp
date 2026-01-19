@@ -32,18 +32,18 @@ typedef struct {
     } *unk1C;
     /* 0x20 */ s8 numAssets;
     /* 0x21 */ s8 assetGroupIndex;
-    s16 unk22;
+    /* 0x22 */ s16 padding;
     /* 0x24 */ void *asset3Start;
     /* 0x28 */ void *asset3End;
     /* 0x2C */ u32 asset3Size;
-    /* 0x30 */ s8 anotherAssetIndex;
-    /* 0x31 */ u8 unk31;
+    /* 0x30 */ s32 anotherAssetIndex;
     /* 0x34 */ void *soundSequenceDataStart;
     /* 0x38 */ void *soundSequenceDataEnd;
     /* 0x3C */ s32 soundSequenceDataSize;
     /* 0x40 */ void *initCallback;
     /* 0x44 */ Asset *Assets;
     /* 0x48 */ s8 count;
+    /* 0x49 */ u8 countPadding[3];
 } AssetGroup;
 
 typedef struct {
