@@ -1078,7 +1078,7 @@ segments:
       - [0x1E7E30, data]
       - [0x1E7F00, .rodata, 1E36C0]
       - [0x1E7F30, .rodata, 1E64A0]
-      - { start: 0x1E7F60, type: bss, vram: 0x800BAEB0, name: 1DD170 }
+      - { start: 0x1E7F60, type: bss, vram: 0x800BAEB0, name: cutscene }
 
   # This appears to be dead code. Possibly an overlay
   - name: _1E7F60
