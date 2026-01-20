@@ -57,7 +57,7 @@ CC_CHECK := clang
 
 MACROS := -D_LANGUAGE_C -D_MIPS_SZLONG=32 -D_MIPS_SZINT=32 -D_MIPS_SZLONG=32 -D__USE_ISOC99 -DF3DEX_GBI_2 -DNDEBUG -D_FINALROM -DF3DEX_GBI_2
 ABIFLAG ?= -mabi=32 -mgp32 -mfp32
-CFLAGS_BASE := $(ABIFLAG) -mno-abicalls -nostdinc -fno-PIC -G 0 -Wa,-force-n64align -funsigned-char -w -mips3 -EB -fno-builtin
+CFLAGS_BASE := $(ABIFLAG) -mno-abicalls -nostdinc -fno-PIC -G 0 -Wa,-force-n64align -funsigned-char -w -mips3 -EB -fno-builtin -fno-common
 CFLAGS := $(CFLAGS_BASE) -O2
 
 # Default optimization (can be overridden per-target)

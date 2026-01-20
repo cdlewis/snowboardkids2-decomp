@@ -186,16 +186,15 @@ extern s32 mus_random_seed;
 extern ALPlayer plr_player;
 extern u16 mus_master_volume_effects;
 extern u16 mus_master_volume_songs;
-
-u32 __muscontrol_flag;
-fx_t *D_800A64F4_A70F4;
-s32 *gDefaultSoundEffectPriorityTable;
-ALHeap audio_heap;
+extern u32 __muscontrol_flag;
+extern fx_t *D_800A64F4_A70F4;
+extern s32 *gDefaultSoundEffectPriorityTable;
+extern ALHeap audio_heap;
 // FIFO command queue variables (ring buffer)
-s32 gFifoReadIdx;    // fifo_start (read index)
-s32 gFifoWriteIdx;   // fifo_current (write index)
-s32 gFifoCapacity;   // fifo_limit (capacity)
-fifo_t *gFifoBuffer; // fifo_addr (buffer)
+extern s32 gFifoReadIdx;    // fifo_start (read index)
+extern s32 gFifoWriteIdx;   // fifo_current (write index)
+extern s32 gFifoCapacity;   // fifo_limit (capacity)
+extern fifo_t *gFifoBuffer; // fifo_addr (buffer)
 
 void __MusIntFifoProcess(void);
 void func_80073738_74338(channel_t *cp, int x); // Flush pending wave table to audio channel

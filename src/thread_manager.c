@@ -38,35 +38,33 @@ int D_8009B020_9BC20 = 0;
 int D_8009B024_9BC24 = 0x1E;
 
 // bss
-OSThread thread_a;
-OSThread thread_b;
-OSThread thread_c;
-OSThread thread_d;
-OSMesg framebuffer_message;
-OSMesg vi_message;
-OSMesg event_queue_1_message;
-OSMesg event_queue_2_message;
-OSMesg thread_sync_message;
-OSMesg task_completion_message;
-OSMesg event_queue_3_message;
-OSMesg event_queue_4_message;
-char thread_a_stack[0x180];
-char thread_b_stack[0x180];
-char thread_c_stack[0x180];
-char thread_d_stack[0x180];
-s16 frameCounter;
-s16 frameDelay;
-
-ViConfig *currentViConfig;
-
-OSMesgQueue viEventQueue;
-OSMesgQueue eventQueue1;
-OSMesgQueue eventQueue2;
-OSMesgQueue threadSyncQueue;
-OSMesgQueue taskCompletionQueue;
-OSMesgQueue eventQueue3;
-OSMesgQueue frameBufferQueue;
-OSMesgQueue eventQueue4;
+extern OSThread thread_a;
+extern OSThread thread_b;
+extern OSThread thread_c;
+extern OSThread thread_d;
+extern OSMesg framebuffer_message;
+extern OSMesg vi_message;
+extern OSMesg event_queue_1_message;
+extern OSMesg event_queue_2_message;
+extern OSMesg thread_sync_message;
+extern OSMesg task_completion_message;
+extern OSMesg event_queue_3_message;
+extern OSMesg event_queue_4_message;
+extern char thread_a_stack[0x180];
+extern char thread_b_stack[0x180];
+extern char thread_c_stack[0x180];
+extern char thread_d_stack[0x180];
+extern s16 frameCounter;
+extern s16 frameDelay;
+extern ViConfig *currentViConfig;
+extern OSMesgQueue viEventQueue;
+extern OSMesgQueue eventQueue1;
+extern OSMesgQueue eventQueue2;
+extern OSMesgQueue threadSyncQueue;
+extern OSMesgQueue taskCompletionQueue;
+extern OSMesgQueue eventQueue3;
+extern OSMesgQueue frameBufferQueue;
+extern OSMesgQueue eventQueue4;
 
 void initialize_video_and_threads(s32 viMode) {
     osCreateViManager(OS_PRIORITY_VIMGR);

@@ -203,7 +203,7 @@ typedef struct {
     s32 unk34;
 } StaticModelTaskArg;
 
-s32 spawnedSpriteScales[8];
+extern s32 spawnedSpriteScales[8];
 
 void cleanupSpriteAnimationTask(SpriteAnimationTaskState *state);
 void cleanupSpriteSpawnerTask(func_80000C2C_182C_arg *arg0);
