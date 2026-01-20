@@ -1,8 +1,7 @@
 #include "memory_allocator.h"
-
 #include "common.h"
+#include "memory.h"
 
-extern MemoryAllocatorNode gMemoryHeapEnd;
 extern s32 gFrameCounter;
 extern s32 gBufferedFrameCounter;
 
@@ -11,7 +10,7 @@ void initializeMemoryAllocatorRegion(void) {
     u8 *current_block;
 
     gMemoryAllocatorHead = NULL;
-    current_block = (u8 *)&gMemoryHeapBase;
+    current_block = (u8 *)gMemoryHeapBase;
     i = 0;
     do {
         *current_block = 0;
@@ -46,19 +45,21 @@ void *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *nodeExists) {
     }
 
     if (gMemoryAllocatorHead == NULL) {
+        MemoryAllocatorNode *heapBase;
         if (0x200000 < requestedSize) {
             return NULL;
         }
 
-        gMemoryAllocatorHead = &gMemoryHeapBase;
-        gMemoryHeapBase.prev = 0;
-        gMemoryHeapBase.refCount = 1;
-        gMemoryHeapBase.next = NULL;
-        gMemoryHeapBase.ownerID = ownerID;
-        gMemoryHeapBase.size = requestedSize;
-        gMemoryHeapBase.unk_14 = 0;
-        gMemoryHeapBase.cleanupTimestamp = -1;
-        return (&gMemoryHeapBase) + 1;
+        heapBase = (MemoryAllocatorNode *)gMemoryHeapBase;
+        gMemoryAllocatorHead = heapBase;
+        heapBase->prev = 0;
+        heapBase->refCount = 1;
+        heapBase->next = NULL;
+        heapBase->ownerID = ownerID;
+        heapBase->size = requestedSize;
+        heapBase->unk_14 = 0;
+        heapBase->cleanupTimestamp = -1;
+        return heapBase + 1;
     }
 
     for (node = gMemoryAllocatorHead; node->next != 0; node = node->next) {
@@ -82,7 +83,7 @@ void *allocateMemoryNode(s32 ownerID, u32 requestedSize, u8 *nodeExists) {
         }
     }
 
-    space_between = (s32)(&gMemoryHeapEnd) - (s32)node;
+    space_between = (s32)gMemoryHeapEnd - (s32)node;
     if (space_between >= (requestedSize + node->size)) {
         new_node = (MemoryAllocatorNode *)((s8 *)node + node->size);
         new_node->prev = node;

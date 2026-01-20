@@ -3,6 +3,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
+#include "memory.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
@@ -159,7 +160,6 @@ void cleanupSceneRenderTask(SceneRenderTaskData *task);
 extern Gfx *volatile gRegionAllocPtr;
 extern u8 D_8016A000[];
 extern s32 gCurrentDisplayBufferIndex;
-extern u8 gMemoryHeapEnd[];
 extern s32 identityMatrix[];
 
 Gfx D_8008CCE0_8D8E0[] = {

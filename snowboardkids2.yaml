@@ -545,6 +545,14 @@ segments:
         }
       - { type: bss, vram: 0x800A8A80, name: A8A80 }
 
+  - name: memory
+    type: code
+    vram: 0x8018F800
+    exclusive_ram_id: memory
+    bss_size: 0x200000
+    subsegments:
+      - { type: .bss, vram: 0x8018F800, name: memory }
+
   - name: rand
     type: code
     vram: 0x800AFF30
