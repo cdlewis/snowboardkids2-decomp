@@ -2316,7 +2316,22 @@ void initTrickPointsDisplayTask(TrickPointsDisplayState *state) {
     setCallback(updateTrickPointsSlideIn);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", renderTrickPointsDisplay);
+void renderTrickPointsDisplay(TrickPointsDisplayState *state) {
+    s32 var_s0;
+    s32 temp_s0;
+
+    var_s0 = 0;
+    if (state->scoreText[0] != 0) {
+        do {
+            var_s0++;
+        } while (state->scoreText[var_s0] != 0);
+    }
+    temp_s0 = (var_s0 * 4) + 0x10;
+    state->padding = temp_s0 + (s16)((u16)state->x - 0x28);
+    temp_s0 = state->x - temp_s0;
+    debugEnqueueCallback(8, 6, renderSpriteFrame, state);
+    drawNumericString(state->scoreText, temp_s0, state->y, 0xFF, state->digitAsset, 8, 6);
+}
 
 void updateTrickPointsHold(TrickPointsDisplayState *state);
 
