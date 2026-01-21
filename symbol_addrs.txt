@@ -1,6 +1,8 @@
 gFrameBuffer = 0x8016A000; // segment:buffers size:0x25800
 
-D_800BADE0 = 0x800BADE0; // segment:_9FF70 rom:0xAAC90 size:0x220 type:u8
+D_800BADE0 = 0x800BADE0; // segment:_9FF70 rom:0xAAC90
+D_800BADE1 = 0x800BADE1; // segment:_9FF70 rom:0xAAC91
+D_800BADE2 = 0x800BADE2; // segment:_9FF70 rom:0xAAC91
 
 // this all seems completely pointless
 _6462A0_ROM_END = 0x646850;
