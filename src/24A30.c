@@ -300,6 +300,8 @@ SceneModel *cleanupSceneModelHolder(SceneModelHolder *arg0);
 void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *);
 void updateCharSelectPlayerLabels(PlayerLabelSpritesState *);
 void func_800262D4_26ED4(SelectionArrowsState *);
+void initCharSelectBoardPreview(CharSelectBoardPreview *);
+void cleanupCharSelectBoardModel(CharSelectBoardPreview *);
 void cleanupCharSelectArrows(SimpleSpriteEntry *);
 void updateCharSelectPlayerNumbers(u8 *);
 void cleanupCharSelectPlayerNumbers(SimpleSpriteEntry *);
@@ -667,7 +669,55 @@ void cleanupCharSelectSecondaryAssets(func_8002494C_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80024990_25590);
+void func_80024990_25590(CharSelectBoardPreview *arg0) {
+    void *alloc;
+    u8 playerIdx;
+    u32 var_a0;
+    s32 sinVal;
+    s32 cosVal;
+
+    alloc = getCurrentAllocation();
+    playerIdx = arg0->playerIndex;
+
+    var_a0 = D_800AFE8C_A71FC->unk9[playerIdx];
+    if (var_a0 == 7) {
+        arg0->model = createSceneModelEx(
+            0x39,
+            alloc + (playerIdx * 0x1D8),
+            *(s8 *)((u8 *)alloc + playerIdx + 0x18B8),
+            -1,
+            -1,
+            -1
+        );
+    } else {
+        arg0->model = createSceneModelEx(
+            var_a0,
+            alloc + (playerIdx * 0x1D8),
+            *(s8 *)((u8 *)alloc + playerIdx + 0x18B8),
+            -1,
+            -1,
+            -1
+        );
+    }
+
+    memcpy((u8 *)arg0 + 4, identityMatrix, 0x20);
+
+    sinVal = -(approximateSin(0x800) * 0x1600);
+    if (sinVal < 0) {
+        sinVal += 0x1FFF;
+    }
+    *(s32 *)((u8 *)arg0 + 0x18) = (sinVal >> 13) << 8;
+
+    cosVal = -(approximateCos(0x800) * 0x1600);
+    if (cosVal < 0) {
+        cosVal += 0x1FFF;
+    }
+    *(s32 *)((u8 *)arg0 + 0x20) = (cosVal >> 13) << 8;
+    *(s32 *)((u8 *)arg0 + 0x1C) = 0xFFF00000;
+
+    setCleanupCallback(cleanupCharSelectBoardModel);
+    setCallback(initCharSelectBoardPreview);
+}
 
 void initCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
     Transform3D localMatrix;
