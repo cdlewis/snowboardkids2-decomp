@@ -1733,8 +1733,8 @@ allocateNodeMemory = 0x8006A1C0;
 scheduleTask = 0x800699F4;
 
 gMemoryAllocatorHead = 0x800AB130;
-gMemoryHeapBase = 0x8018F800; // type:s32 size:0x200000 segment:buffers
-
+gMemoryHeapBase = 0x8018F800; // name_end:gMemoryHeapEnd type:s32 size:0x200000 segment:buffers
+gAuxFrameBuffers = 0x8038F800; // segment:buffers
 initializeMemoryAllocatorRegion = 0x8006A220;
 allocateMemoryNode = 0x8006A258;
 decrementNodeRefCount = 0x8006A3FC;

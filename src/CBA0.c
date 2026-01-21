@@ -252,7 +252,7 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
     frameIdx = gCurrentDisplayBufferIndex;
 
     gfx->words.w0 = 0xFF10013F;
-    gfx->words.w1 = (u32)(gMemoryHeapEnd + frameIdx * 0x25800);
+    gfx->words.w1 = (u32)(&gAuxFrameBuffers[frameIdx]);
 
     gfx[1].words.w0 = 0xDE000000;
     gfx[1].words.w1 = (u32)D_8008CD20_8D920;
