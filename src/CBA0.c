@@ -1,9 +1,9 @@
 #include "1DFAA0.h"
 #include "6E840.h"
+#include "buffers.h"
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
-#include "memory.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
@@ -158,7 +158,6 @@ void updateSceneRenderTask(SceneRenderTaskCtx *ctx);
 void cleanupSceneRenderTask(SceneRenderTaskData *task);
 
 extern Gfx *volatile gRegionAllocPtr;
-extern u8 D_8016A000[];
 extern s32 gCurrentDisplayBufferIndex;
 extern s32 identityMatrix[];
 
@@ -230,7 +229,7 @@ AssetDataBlock D_8008CD98_8D998 = {
 };
 
 void setColorImageToAuxBuffer(void *arg0) {
-    gDPSetColorImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, D_8016A000);
+    gDPSetColorImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, &gFrameBuffer);
 }
 
 void buildAuxBufferDisplayList(AuxBufferContext *arg0) {

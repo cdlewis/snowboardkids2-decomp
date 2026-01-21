@@ -1,3 +1,5 @@
+gFrameBuffer = 0x8016A000; // segment:buffers size:0x25800
+
 D_800BADE0 = 0x800BADE0; // segment:_9FF70 rom:0xAAC90 size:0x220 type:u8
 
 // this all seems completely pointless
@@ -1731,7 +1733,7 @@ allocateNodeMemory = 0x8006A1C0;
 scheduleTask = 0x800699F4;
 
 gMemoryAllocatorHead = 0x800AB130;
-gMemoryHeapBase = 0x8018F800; // type:s32 size:0x200000 segment:memory
+gMemoryHeapBase = 0x8018F800; // type:s32 size:0x200000 segment:buffers
 
 initializeMemoryAllocatorRegion = 0x8006A220;
 allocateMemoryNode = 0x8006A258;

@@ -545,13 +545,13 @@ segments:
         }
       - { type: bss, vram: 0x800A8A80, name: A8A80 }
 
-  - name: memory
+  - name: buffers
     type: code
-    vram: 0x8018F800
+    vram: 0x8016A000
     exclusive_ram_id: memory
-    bss_size: 0x200000
+    bss_size: 0x225800
     subsegments:
-      - { type: .bss, vram: 0x8018F800, name: memory }
+      - { type: .bss, vram: 0x8016A000, name: buffers }
 
   - name: rand
     type: code

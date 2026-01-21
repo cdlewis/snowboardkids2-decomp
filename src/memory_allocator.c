@@ -1,6 +1,6 @@
 #include "memory_allocator.h"
 #include "common.h"
-#include "memory.h"
+#include "buffers.h"
 
 extern s32 gFrameCounter;
 extern s32 gBufferedFrameCounter;
