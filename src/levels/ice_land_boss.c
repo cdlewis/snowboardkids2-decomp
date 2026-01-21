@@ -285,20 +285,88 @@ typedef struct {
 void func_800BC61C_B1B0C(Player *);
 
 typedef s32 (*StateFunc)(void *);
-extern StateFunc D_800BCA14_B1F04[];
-extern s16 D_800BC9F0_B1EE0[];
-extern s16 D_800BCA24_B1F14[];
-extern s16 D_800BCA30_B1F20[];
-extern FuncPtr D_800BCA44_B1F34[];
-extern FuncPtr gIceLandBossAttackPhaseHandlers[];
+
+// Forward declarations for function pointer arrays
+s32 initIceLandBoss(IceLandBossArg *);
+void dispatchIceLandBossChasePhase(IceLandBossAttackArg *);
+void dispatchIceLandBossAttackPhase(IceLandBossAttackArg *);
+s32 iceLandBossDefeatedBehavior(IceLandBossAttackArg *);
+s32 iceLandBossChaseIntroPhase(IceLandBossAttackArg *);
+s32 iceLandBossChaseAttackPhase(Player *);
+s32 iceLandBossChaseExitPhase(IceLandBossAttackArg *);
+s32 iceLandBossGroundProjectileAttackPhase(Player *);
+s32 iceLandBossHoverAttackPhase(Player *);
+
+s32 D_800BC9F0_B1EE0[] = {
+    0x00000000, 0x00068000, 0x0003F000, 0x00000000, 0xFFF04000, 0x00018000, 0x00000000, 0xFFF04000, 0x00018000,
+};
+
+StateFunc D_800BCA14_B1F04[] = {
+    (StateFunc)initIceLandBoss,
+    (StateFunc)dispatchIceLandBossChasePhase,
+    (StateFunc)dispatchIceLandBossAttackPhase,
+    (StateFunc)iceLandBossDefeatedBehavior,
+};
+
+s32 D_800BCA24_B1F14[] = {
+    0x00000000,
+    0x00117000,
+    0x00000000,
+};
+
+s32 D_800BCA30_B1F20[] = {
+    0x00000000,
+    0x00100000,
+    0x00000000,
+};
+
+s32 D_800BCA3C_B1F2C[] = {
+    0xFFF00000,
+    0x00300000,
+};
+
+FuncPtr D_800BCA44_B1F34[] = {
+    (FuncPtr)iceLandBossChaseIntroPhase,
+    (FuncPtr)iceLandBossChaseAttackPhase,
+    (FuncPtr)iceLandBossChaseExitPhase,
+};
+
+s32 D_800BCA50_B1F40[] = {
+    0x00000000,
+    0x00000000,
+    0x00006000,
+};
+
+FuncPtr gIceLandBossAttackPhaseHandlers[] = {
+    (FuncPtr)iceLandBossGroundProjectileAttackPhase,
+    (FuncPtr)iceLandBossHoverAttackPhase,
+};
+
+Vec3i D_800BCA64[] = {
+    { 0xFFE79000, 0x00000000, 0x00187000 },
+    { 0x00000000, 0x00000000, 0x00187000 },
+    { 0x00187000, 0x00000000, 0x00187000 },
+    { 0xFFE79000, 0x00000000, 0x00000000 },
+    { 0x00000000, 0x00000000, 0x00000000 },
+    { 0x00187000, 0x00000000, 0x00000000 },
+    { 0xFFE79000, 0x00000000, 0xFFE79000 },
+    { 0x00000000, 0x00000000, 0xFFE79000 },
+    { 0x00187000, 0x00000000, 0xFFE79000 },
+    { 0xFFF40000, 0x00000000, 0x000C0000 },
+    { 0x00000000, 0x00000000, 0x000C0000 },
+    { 0x000C0000, 0x00000000, 0x000C0000 },
+    { 0xFFF40000, 0x00000000, 0x00000000 },
+    { 0x00000000, 0x00000000, 0x00000000 },
+    { 0x000C0000, 0x00000000, 0x00000000 },
+    { 0xFFF40000, 0x00000000, 0xFFF40000 },
+    { 0x00000000, 0x00000000, 0xFFF40000 },
+    { 0x000C0000, 0x00000000, 0xFFF40000 },
+};
+
 extern u16 D_8009ADE0_9B9E0;
 extern BossSurfaceColor gBossSurfaceColors[];
 extern s32 identityMatrix[];
-extern s32 D_800BCA50_B1F40;
 extern s32 gControllerInputs[];
-extern s32 D_800BC054_B1544;
-extern s32 D_800BC05C_B154C;
-extern s32 D_800BCA3C_B1F2C[];
 
 void func_800BB2B0_B07A0(IceBossArg *arg0) {
     Transform3D sp10;
@@ -379,28 +447,28 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
     sp30.translation.z -= arg0->yRotationMatrix.translation.z;
 
     if (arg0->bossFlags & 0x400000) {
-        transformVector(D_800BCA30_B1F20, (s16 *)&sp30, &arg0->transformedPos);
+        transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&sp30, &arg0->transformedPos);
     } else {
-        transformVector(D_800BCA24_B1F14, (s16 *)&sp30, &arg0->transformedPos);
+        transformVector((s16 *)D_800BCA24_B1F14, (s16 *)&sp30, &arg0->transformedPos);
     }
     memcpy(&arg0->sectorListNode.localPos, &arg0->transformedPos, 0xC);
     addCollisionSectorNodeToList(&arg0->sectorListNode);
     func_800BC61C_B1B0C((Player *)arg0);
 
     if (arg0->bossFlags & 0x400000) {
-        transformVector(D_800BCA30_B1F20, (s16 *)&sp30, &arg0->unkAE4);
+        transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&sp30, &arg0->unkAE4);
     } else {
-        transformVector(D_800BC9F0_B1EE0, arg0->groundJointOffsets, &arg0->unkAE4);
+        transformVector((s16 *)D_800BC9F0_B1EE0, arg0->groundJointOffsets, &arg0->unkAE4);
         arg0->unkAE4.x -= arg0->yRotationMatrix.translation.x;
         arg0->unkAE4.y -= arg0->yRotationMatrix.translation.y;
         arg0->unkAE4.z -= arg0->yRotationMatrix.translation.z;
 
-        transformVector(D_800BC9F0_B1EE0 + 6, arg0->groundJointOffsets2, &arg0->unkAF0);
+        transformVector((s16 *)D_800BC9F0_B1EE0 + 6, arg0->groundJointOffsets2, &arg0->unkAF0);
         arg0->unkAF0.x -= arg0->yRotationMatrix.translation.x;
         arg0->unkAF0.y -= arg0->yRotationMatrix.translation.y;
         arg0->unkAF0.z -= arg0->yRotationMatrix.translation.z;
 
-        transformVector(D_800BC9F0_B1EE0 + 12, arg0->groundJointOffsets3, &arg0->unkAFC);
+        transformVector((s16 *)D_800BC9F0_B1EE0 + 12, arg0->groundJointOffsets3, &arg0->unkAFC);
         arg0->unkAFC.x -= arg0->yRotationMatrix.translation.x;
         arg0->unkAFC.y -= arg0->yRotationMatrix.translation.y;
         arg0->unkAFC.z -= arg0->yRotationMatrix.translation.z;
@@ -998,7 +1066,6 @@ void updateIceLandBossJointPositions(Player *boss) {
     s32 jointIndex;
     s32 flyingFlag;
     s32 jointOffset;
-    u8 *jointWritePtr;
     JointPosition *jointPos;
     u16 sectorIndex;
 
@@ -1006,30 +1073,20 @@ void updateIceLandBossJointPositions(Player *boss) {
     jointIndex = 0;
     flyingFlag = 0x400000;
     gameData = &gameState->gameData;
-    jointWritePtr = (u8 *)boss;
-    jointOffset = 0xA10;
 
-    do {
+    for (jointIndex = 0; jointIndex < 9; jointIndex++) {
         if (boss->unkB84 & flyingFlag) {
-            *(volatile s32 *)(jointWritePtr + 0xA10) =
-                boss->unk970.translation.x + *(s32 *)((u8 *)dispatchIceLandBossAttackPhase + 0x18 + jointOffset);
-            *(volatile s32 *)(jointWritePtr + 0xA18) =
-                boss->unk970.translation.z + *(s32 *)((u8 *)dispatchIceLandBossAttackPhase + 0x20 + jointOffset);
+            boss->jointPositions[jointIndex].x = boss->unk970.translation.x + D_800BCA64[jointIndex + 9].x;
+            boss->jointPositions[jointIndex].z = boss->unk970.translation.z + D_800BCA64[jointIndex + 9].z;
         } else {
-            *(volatile s32 *)(jointWritePtr + 0xA10) =
-                boss->unk970.translation.x + *(s32 *)((u8 *)&D_800BC054_B1544 + jointOffset);
-            *(volatile s32 *)(jointWritePtr + 0xA18) =
-                boss->unk970.translation.z + *(s32 *)((u8 *)&D_800BC05C_B154C + jointOffset);
+            boss->jointPositions[jointIndex].x = boss->unk970.translation.x + D_800BCA64[jointIndex].x;
+            boss->jointPositions[jointIndex].z = boss->unk970.translation.z + D_800BCA64[jointIndex].z;
         }
 
-        jointPos = (JointPosition *)((u8 *)boss + jointOffset);
+        jointPos = &boss->jointPositions[jointIndex];
         sectorIndex = getOrUpdatePlayerSectorIndex((void *)boss, gameData, boss->sectorIndex, jointPos);
-        jointOffset += 0xC;
-        jointIndex += 1;
-        *(volatile s32 *)(jointWritePtr + 0xA14) = getTrackHeightInSector(gameData, sectorIndex, jointPos, 0x100000);
-
-        jointWritePtr += 0xC;
-    } while (jointIndex < 9);
+        boss->jointPositions[jointIndex].y = getTrackHeightInSector(gameData, sectorIndex, jointPos, 0x100000);
+    }
 
     boss->unkBC1 = 1;
 

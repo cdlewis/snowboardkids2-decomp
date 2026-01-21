@@ -636,7 +636,7 @@ segments:
     exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB07A0, c, levels/ice_land_boss]
-      - [0xB1EE0, data, levels/ice_land_boss]
+      - [0xB1EE0, .data, levels/ice_land_boss]
 
   - name: levels/ice_land
     type: code
