@@ -10,7 +10,9 @@ typedef struct {
     /* 0x2C */ u16 rotation;
     /* 0x2E */ u16 unk2E;
     /* 0x30 */ u16 unk30;
-    /* 0x32 */ u8 pad2E[0x37-0x32];
+    /* 0x32 */ s16 unk32;
+    /* 0x34 */ u8 pad34[0x2];
+    /* 0x36 */ u8 unk36;
     /* 0x37 */ u8 unk37;
     /* 0x38 */ u8 padding_38[0x3A-0x38];
     /* 0x3A */ u8 unk3A;
