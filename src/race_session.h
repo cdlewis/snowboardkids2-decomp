@@ -115,7 +115,6 @@ typedef struct {
 } BoardShopGoldDisplayState;
 
 void initBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0);
-s32 abs(s32 n);
 void setPlayerHomingProjectileRetaliationState(Player *player);
 void setPlayerParachuteState(Player *player);
 void setPlayerShrinkState(Player *arg0);

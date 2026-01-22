@@ -400,7 +400,7 @@ void finalizeStoryMapExit(void) {
 void storyMapExitComplete(void) {
 }
 
-s32 abs(s32 n) {
+s32 __abs(s32 n) {
     if (n < 0) {
         n = -n;
     }

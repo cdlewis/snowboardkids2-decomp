@@ -1,3 +1,4 @@
+#include "17F50.h"
 #include "20F0.h"
 #include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
@@ -189,7 +190,7 @@ void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
     }
     targetAngle = temp;
 
-    diff = abs(targetAngle - arg0->yawAngle);
+    diff = __abs(targetAngle - arg0->yawAngle);
 
     if (diff >= 0x100) {
         if (targetAngle < arg0->yawAngle) {
