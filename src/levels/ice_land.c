@@ -1,9 +1,13 @@
 #include "levels/ice_land.h"
 #include "56910.h"
+#include "5AA90.h"
 #include "common.h"
+#include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
 #include "task_scheduler.h"
+
+extern void setPlayerBouncedBackState(Player *player);
 
 typedef struct {
     u8 isLastWaypoint;
@@ -19,7 +23,7 @@ typedef struct {
 } ScheduledTask;
 
 typedef struct {
-    Transform3D unk0;
+    Transform3D transform;
     DisplayLists *displayLists;
     void *segment1;
     void *segment2;
@@ -27,7 +31,9 @@ typedef struct {
     u8 pad30[0xC];
     s16 matrix3C[9];
     u8 pad4E[2];
-    s32 position50[3];
+    s32 posX;
+    s32 posY;
+    s32 posZ;
     WaypointEntry *waypoints;
     u8 pad60[4];
     s16 angleX;
@@ -86,7 +92,7 @@ WaypointEntry iceLandWaypoints3[] = {
 
 s32 D_800BB9C0_B2740[] = { 0, 0, 0x00080000, 0 };
 
-void func_800BB3A0_B2120(void);
+void func_800BB3A0_B2120(IceLandMovingPlatformTask *arg0);
 void cleanupIceLandMovingPlatform(IceLandMovingPlatformCleanupArgs *arg0);
 void scheduleIceLandMovingPlatform(IceLandMovingPlatformSchedulerTask *arg0);
 
@@ -101,24 +107,125 @@ void initIceLandMovingPlatform(IceLandMovingPlatformTask *arg0) {
     arg0->currentWaypointIndex = 0;
     arg0->unk2C = 0;
     arg0->unk6C = 0;
-    memcpy(&arg0->position50, &(arg0->waypoints - (-arg0->currentWaypointIndex))->x, 12);
+    memcpy(&arg0->posX, &(arg0->waypoints - (-arg0->currentWaypointIndex))->x, 12);
     arg0->currentWaypointIndex++;
     waypoints = arg0->waypoints;
     arg0->angleX = 0;
     angle = computeAngleToPosition(
         waypoints[arg0->currentWaypointIndex].x,
         waypoints[arg0->currentWaypointIndex].z,
-        arg0->position50[0],
-        arg0->position50[2]
+        arg0->posX,
+        arg0->posZ
     );
     arg0->angleY = angle & 0x1FFF;
-    createYRotationMatrix(&arg0->unk0, arg0->angleY);
+    createYRotationMatrix(&arg0->transform, arg0->angleY);
     createCombinedRotationMatrix(&arg0->matrix3C, arg0->angleX, arg0->angleY);
     setCleanupCallback(cleanupIceLandMovingPlatform);
     setCallback(func_800BB3A0_B2120);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/ice_land", func_800BB3A0_B2120);
+typedef struct {
+    s32 pad_low[24];
+    Vec3i movement;
+    s32 pad7C;
+    Vec3i relativePos;
+    s32 pad_high[6];
+} StackLocals;
+
+void func_800BB3A0_B2120(IceLandMovingPlatformTask *arg0) {
+    StackLocals sp;
+    GameState *allocation;
+    s16 *matrix;
+    WaypointEntry *waypoint;
+    s16 deltaAngle;
+    s16 temp;
+    s32 dist;
+    s32 i;
+    s32 playerOffset;
+
+    allocation = getCurrentAllocation();
+    if (allocation->gamePaused == 0) {
+        matrix = arg0->matrix3C;
+        transformVectorRelative(
+            &arg0->waypoints[arg0->currentWaypointIndex].x,
+            matrix,
+            &sp.relativePos
+        );
+        temp = atan2Fixed(-sp.relativePos.x, -sp.relativePos.z) & 0x1FFF;
+        deltaAngle = temp;
+        if (temp >= 0x1000) {
+            deltaAngle = temp | 0xE000;
+        }
+        if (deltaAngle >= 0x41) {
+            deltaAngle = 0x40;
+        }
+        if (deltaAngle < -0x40) {
+            deltaAngle = -0x40;
+        }
+        arg0->angleY = (arg0->angleY + deltaAngle) & 0x1FFF;
+
+        temp = atan2Fixed(sp.relativePos.y, -distance_2d(sp.relativePos.x, sp.relativePos.z)) & 0x1FFF;
+        deltaAngle = temp;
+        if (temp >= 0x1000) {
+            deltaAngle = temp | 0xE000;
+        }
+        if (deltaAngle >= 0x41) {
+            deltaAngle = 0x40;
+        }
+        if (deltaAngle < -0x40) {
+            deltaAngle = -0x40;
+        }
+
+        arg0->angleX = (arg0->angleX + deltaAngle) & 0x1FFF;
+        arg0->unk68 = arg0->unk68 + 0x100;
+        createCombinedRotationMatrix(arg0, arg0->unk68, arg0->angleY);
+        createCombinedRotationMatrix(matrix, arg0->angleX, arg0->angleY);
+
+        transformVector2(D_800BB9C0_B2740, matrix, &sp.movement);
+
+        arg0->posX = arg0->posX + sp.movement.x;
+        arg0->posY = arg0->posY + sp.movement.y;
+        arg0->posZ = arg0->posZ + sp.movement.z;
+
+        dist = distance_3d(
+            arg0->posX - arg0->waypoints[arg0->currentWaypointIndex].x,
+            arg0->posY - arg0->waypoints[arg0->currentWaypointIndex].y,
+            arg0->posZ - arg0->waypoints[arg0->currentWaypointIndex].z
+        );
+
+        if (dist <= 0x60000) {
+            if (arg0->waypoints[arg0->currentWaypointIndex].isLastWaypoint != 0) {
+                terminateCurrentTask();
+                return;
+            }
+            arg0->currentWaypointIndex = arg0->currentWaypointIndex + 1;
+        }
+    }
+
+    memcpy(&arg0->transform.translation, &arg0->posX, 0xC);
+    arg0->transform.translation.y += 0x280000;
+
+    i = 0;
+    if (allocation->gamePaused == 0) {
+        s32 numPlayers = allocation->numPlayers;
+        if (numPlayers > 0) {
+            playerOffset = 0;
+            do {
+                if (isPointInPlayerCollisionSphere((Player *)((u8 *)allocation->players + playerOffset), &arg0->transform.translation, 0x280000) != 0) {
+                    setPlayerBouncedBackState((Player *)((u8 *)allocation->players + playerOffset));
+                }
+                i++;
+                playerOffset += 0xBE8;
+            } while (i < allocation->numPlayers);
+            i = 0;
+        }
+    }
+
+    do {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        i++;
+    } while (i < 4);
+}
 
 void cleanupIceLandMovingPlatform(IceLandMovingPlatformCleanupArgs *arg0) {
     arg0->segment1 = freeNodeMemory(arg0->segment1);
