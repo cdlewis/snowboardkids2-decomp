@@ -666,7 +666,7 @@ segments:
     exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB2870, c, levels/jingle_town_boss]
-      - [0xB40E0, data, levels/jingle_town_boss]
+      - [0xB40E0, .data, levels/jingle_town_boss]
       - [0xB4220, .rodata, levels/jingle_town_boss]
 
   - name: levels/jingle_town

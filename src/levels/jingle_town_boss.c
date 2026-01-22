@@ -17,8 +17,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-typedef void (*FuncPtr)(void *);
-
 extern s16 identityMatrix[];
 extern Transform3D D_8009A890_9B490;
 extern Vec3i D_8009A8A4_9B4A4;
@@ -47,129 +45,129 @@ typedef struct {
     void *unk20;
     void *unk24;
     u8 pad28[0x38 - 0x28];
-    Transform3D groundTransform; /* 0x38 - 0x57 */
+    /* 0x38 */ Transform3D groundTransform;
     u8 pad58[0x6C - 0x58];
-    u8 groundPrimaryR; /* 0x6C */
-    u8 groundPrimaryG; /* 0x6D */
-    u8 groundPrimaryB; /* 0x6E */
+    /* 0x6C */ u8 groundPrimaryR;
+    /* 0x6D */ u8 groundPrimaryG;
+    /* 0x6E */ u8 groundPrimaryB;
     u8 pad6F;
-    u8 groundSecondaryR; /* 0x70 */
-    u8 groundSecondaryG; /* 0x71 */
-    u8 groundSecondaryB; /* 0x72 */
+    /* 0x70 */ u8 groundSecondaryR;
+    /* 0x71 */ u8 groundSecondaryG;
+    /* 0x72 */ u8 groundSecondaryB;
     u8 pad73;
-    Transform3D flyingTransform; /* 0x74 - 0x93 */
+    /* 0x74 */ Transform3D flyingTransform;
     u8 pad94[0xA8 - 0x94];
-    u8 flyingPrimaryR; /* 0xA8 */
-    u8 flyingPrimaryG; /* 0xA9 */
-    u8 flyingPrimaryB; /* 0xAA */
+    /* 0xA8 */ u8 flyingPrimaryR;
+    /* 0xA9 */ u8 flyingPrimaryG;
+    /* 0xAA */ u8 flyingPrimaryB;
     u8 padAB;
-    u8 flyingSecondaryR; /* 0xAC */
-    u8 flyingSecondaryG; /* 0xAD */
-    u8 flyingSecondaryB; /* 0xAE */
+    /* 0xAC */ u8 flyingSecondaryR;
+    /* 0xAD */ u8 flyingSecondaryG;
+    /* 0xAE */ u8 flyingSecondaryB;
     u8 padAF;
-    Transform3D unkB0; /* 0xB0 - 0xCF */
+    /* 0xB0 */ Transform3D unkB0;
     u8 padD0[0x434 - 0xD0];
-    Vec3i unk434;         /* 0x434 */
-    s32 unk440;           /* 0x440 */
-    s32 unk444;           /* 0x444 */
-    s32 unk448;           /* 0x448 */
-    Vec3i velocity;     /* 0x44C */
+    /* 0x434 */ Vec3i unk434;
+    /* 0x440 */ s32 unk440;
+    /* 0x444 */ s32 unk444;
+    /* 0x448 */ s32 unk448;
+    /* 0x44C */ Vec3i velocity;
     u8 pad458[0x10];
-    s32 unk468; /* 0x468 */
+    /* 0x468 */ s32 unk468;
     u8 pad46C[0x8];
-    s32 unk474; /* 0x474 */
+    /* 0x474 */ s32 unk474;
     u8 pad478[0x950 - 0x478];
-    Transform3D unk950; /* 0x950 - 0x96F */
-    Transform3D unk970; /* 0x970 - 0x98F */
-    Transform3D unk990; /* 0x990 - 0x9AF */
-    Transform3D unk9B0; /* 0x9B0 - 0x9CF */
+    /* 0x950 */ Transform3D unk950;
+    /* 0x970 */ Transform3D unk970;
+    /* 0x990 */ Transform3D unk990;
+    /* 0x9B0 */ Transform3D unk9B0;
     u8 pad9D0[0x9F0 - 0x9D0];
-    Transform3D unk9F0;              /* 0x9F0 - 0xA0F */
-    JointPosition jointPositions[9]; /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
-    s32 aiTargetX;                   /* 0xA7C */
+    /* 0x9F0 */ Transform3D unk9F0;
+    /* 0xA10 */ JointPosition jointPositions[9];
+    /* 0xA7C */ s32 aiTargetX;
     u8 padA80[4];
-    s32 aiTargetZ; /* 0xA84 */
+    /* 0xA84 */ s32 aiTargetZ;
     u8 padA88[4];
-    u16 unkA8C; /* 0xA8C */
-    u16 unkA8E; /* 0xA8E */
-    u16 unkA90; /* 0xA90 */
-    u16 unkA92; /* 0xA92 */
-    u16 unkA94; /* 0xA94 */
+    /* 0xA8C */ u16 unkA8C;
+    /* 0xA8E */ u16 unkA8E;
+    /* 0xA90 */ u16 unkA90;
+    /* 0xA92 */ u16 unkA92;
+    /* 0xA94 */ u16 unkA94;
     u8 padA96[0xA9C - 0xA96];
-    u16 pitchAngle; /* 0xA9C */
-    u16 yawAngle;   /* 0xA9E */
+    /* 0xA9C */ u16 pitchAngle;
+    /* 0xA9E */ u16 yawAngle;
     u8 padAA0[0x4];
-    s32 maxSpeedCap; /* 0xAA4 */
-    s32 unkAA8;      /* 0xAA8 */
+    /* 0xAA4 */ s32 maxSpeedCap;
+    /* 0xAA8 */ s32 unkAA8;
     u8 padAAC[0xAC2 - 0xAAC];
-    s16 unkAC2; /* 0xAC2 */
+    /* 0xAC2 */ s16 unkAC2;
     u8 padAC4[0xAD4 - 0xAC4];
-    s32 unkAD4; /* 0xAD4 */
-    s32 unkAD8; /* 0xAD8 */
-    s32 unkADC; /* 0xADC */
-    s32 unkAE0; /* 0xAE0 */
-    s32 unkAE4; /* 0xAE4 */
-    s32 unkAE8; /* 0xAE8 */
-    s32 unkAEC; /* 0xAEC */
-    s32 unkAF0; /* 0xAF0 */
-    s32 unkAF4; /* 0xAF4 */
-    s32 unkAF8; /* 0xAF8 */
+    /* 0xAD4 */ s32 unkAD4;
+    /* 0xAD8 */ s32 unkAD8;
+    /* 0xADC */ s32 unkADC;
+    /* 0xAE0 */ s32 unkAE0;
+    /* 0xAE4 */ s32 unkAE4;
+    /* 0xAE8 */ s32 unkAE8;
+    /* 0xAEC */ s32 unkAEC;
+    /* 0xAF0 */ s32 unkAF0;
+    /* 0xAF4 */ s32 unkAF4;
+    /* 0xAF8 */ s32 unkAF8;
     u8 padAFC[0xB2C - 0xAFC];
-    s32 unkB2C; /* 0xB2C */
-    s32 unkB30; /* 0xB30 */
-    s32 unkB34; /* 0xB34 */
-    s32 unkB38; /* 0xB38 */
-    s32 unkB3C; /* 0xB3C */
-    s32 unkB40; /* 0xB40 */
-    s32 unkB44; /* 0xB44 */
-    s32 unkB48; /* 0xB48 */
-    s32 unkB4C; /* 0xB4C */
-    s32 unkB50; /* 0xB50 */
-    s32 unkB54; /* 0xB54 */
-    s32 unkB58; /* 0xB58 */
-    s32 unkB5C; /* 0xB5C */
-    s32 unkB60; /* 0xB60 */
-    s32 unkB64; /* 0xB64 */
-    u8 unkB68;  /* 0xB68 */
+    /* 0xB2C */ s32 unkB2C;
+    /* 0xB30 */ s32 unkB30;
+    /* 0xB34 */ s32 unkB34;
+    /* 0xB38 */ s32 unkB38;
+    /* 0xB3C */ s32 unkB3C;
+    /* 0xB40 */ s32 unkB40;
+    /* 0xB44 */ s32 unkB44;
+    /* 0xB48 */ s32 unkB48;
+    /* 0xB4C */ s32 unkB4C;
+    /* 0xB50 */ s32 unkB50;
+    /* 0xB54 */ s32 unkB54;
+    /* 0xB58 */ s32 unkB58;
+    /* 0xB5C */ s32 unkB5C;
+    /* 0xB60 */ s32 unkB60;
+    /* 0xB64 */ s32 unkB64;
+    /* 0xB68 */ u8 unkB68;
     u8 padB69[0xB7A - 0xB69];
-    s8 unkB7A;  /* 0xB7A */
-    s8 unkB7B;  /* 0xB7B */
-    u16 unkB7C; /* 0xB7C */
-    u16 unkB7E; /* 0xB7E */
+    /* 0xB7A */ s8 unkB7A;
+    /* 0xB7B */ s8 unkB7B;
+    /* 0xB7C */ u16 unkB7C;
+    /* 0xB7E */ u16 unkB7E;
     u8 padB80[0x2];
-    u16 unkB82; /* 0xB82 */
-    s32 unkB84; /* 0xB84 */
-    s32 unkB88; /* 0xB88 */
-    s32 unkB8C; /* 0xB8C */
+    /* 0xB82 */ u16 unkB82;
+    /* 0xB84 */ s32 unkB84;
+    /* 0xB88 */ s32 unkB88;
+    /* 0xB8C */ s32 unkB8C;
     u8 padB90[0xB94 - 0xB90];
-    u16 sectorIndex; /* 0xB94 */
+    /* 0xB94 */ u16 sectorIndex;
     u8 padB96[0xB9E - 0xB96];
-    u16 unkB9E; /* 0xB9E */
+    /* 0xB9E */ u16 unkB9E;
     u8 padBA0[0xBB4 - 0xBA0];
-    u8 unkBB4; /* 0xBB4 */
+    /* 0xBB4 */ u8 unkBB4;
     u8 padBB5[0xBB8 - 0xBB5];
-    u8 unkBB8;      /* 0xBB8 */
-    u8 characterId; /* 0xBB9 */
-    u8 boardIndex;  /* 0xBBA */
+    /* 0xBB8 */ u8 unkBB8;
+    /* 0xBB9 */ u8 characterId;
+    /* 0xBBA */ u8 boardIndex;
     u8 padBBB[0xBBD - 0xBBB];
-    u8 behaviorMode;    /* 0xBBD */
-    u8 behaviorPhase;   /* 0xBBE */
-    u8 behaviorStep;    /* 0xBBF */
-    u8 behaviorCounter; /* 0xBC0 */
-    u8 unkBC1;          /* 0xBC1 */
+    /* 0xBBD */ u8 behaviorMode;
+    /* 0xBBE */ u8 behaviorPhase;
+    /* 0xBBF */ u8 behaviorStep;
+    /* 0xBC0 */ u8 behaviorCounter;
+    /* 0xBC1 */ u8 unkBC1;
     u8 padBC2[0x2];
-    u8 finishPosition; /* 0xBC4 */
+    /* 0xBC4 */ u8 finishPosition;
     u8 padBC5[0x2];
-    u8 unkBC7; /* 0xBC7 */
-    u8 unkBC8; /* 0xBC8 */
-    u8 unkBC9; /* 0xBC9 */
-    u8 unkBCA; /* 0xBCA */
+    /* 0xBC7 */ u8 unkBC7;
+    /* 0xBC8 */ u8 unkBC8;
+    /* 0xBC9 */ u8 unkBC9;
+    /* 0xBCA */ u8 unkBCA;
     u8 padBCB[1];
-    u8 unkBCC; /* 0xBCC */
+    /* 0xBCC */ u8 unkBCC;
     u8 padBCD[0x2];
-    u8 unkBCF; /* 0xBCF */
+    /* 0xBCF */ u8 unkBCF;
     u8 padBD0[0xBDB - 0xBD0];
-    u8 unkBDB; /* 0xBDB */
+    /* 0xBDB */ u8 unkBDB;
 } Arg0Struct;
 
 typedef struct {
@@ -181,23 +179,86 @@ typedef struct {
     s32 unk64;
 } Element0x3C;
 
+typedef struct {
+    s16 frames;
+    s16 anim;
+} HoverIntroAnimFrame;
+
+typedef void (*FuncPtr)(void *);
 typedef s32 (*StateFunc)(void *);
 
 extern s8 gAnalogStickY[];
 extern s8 gAnalogStickX[];
-extern StateFunc gJingleTownBossBehaviorModeHandlers[];
-extern s16 D_800BCB30_B40F0[];
-extern s16 D_800BCB3C_B40FC[];
 extern s32 gButtonsPressed[];
-extern FuncPtr gChaseAttackPhaseHandlers[];
-extern FuncPtr gHoverAttackPhaseHandlers[];
-extern s16 gHoverIntroAnimTimers[];
-extern u16 gHoverIntroAnimFrames[];
-extern Vec3i gJingleTownBossHoverExitOffsets[];
-extern Vec3i D_800BCB68_B4128;
-extern s32 gJingleTownBossSpawnPos[];
 void updateJingleTownBossModelTransforms(Arg0Struct *);
 extern BossSurfaceColor gBossSurfaceColors[];
+
+s32 func_800BB66C_B2C2C(Arg0Struct *);
+void dispatchChaseAttackPhase(Arg0Struct *);
+void dispatchHoverAttackPhase(Arg0Struct *);
+s32 jingleTownBossHoverAttackExitPhase(Arg0Struct *);
+s32 jingleTownBossChaseAttackIntroPhase(Arg0Struct *);
+s32 func_800BB930_B2EF0(Arg0Struct *);
+s32 jingleTownBossChaseAttackExitPhase(Arg0Struct *);
+s32 jingleTownBossHoverAttackIntroPhase(Arg0Struct *);
+s32 jingleTownBossHoverAttackMainPhase(Arg0Struct *);
+
+StateFunc gJingleTownBossBehaviorModeHandlers[] = {
+    (StateFunc)func_800BB66C_B2C2C,
+    (StateFunc)dispatchChaseAttackPhase,
+    (StateFunc)dispatchHoverAttackPhase,
+    (StateFunc)jingleTownBossHoverAttackExitPhase,
+};
+
+s16 D_800BCB30_B40F0[] = { 0x0000, 0x0000, 0x0013, (s16)0x9000, 0x0000, 0x0000 };
+
+s16 D_800BCB3C_B40FC[] = { 0x0000, 0x0000, 0x0013, (s16)0x9000, 0x0000, 0x0000,
+                           0x0000, 0x0000, 0x0000, 0x0000,      0x0000, 0x0000 };
+
+s32 gJingleTownBossSpawnPos[] = { 0xFFF00000, 0x00300000 };
+
+FuncPtr gChaseAttackPhaseHandlers[] = {
+    (FuncPtr)jingleTownBossChaseAttackIntroPhase,
+    (FuncPtr)func_800BB930_B2EF0,
+    (FuncPtr)jingleTownBossChaseAttackExitPhase,
+};
+
+Vec3i D_800BCB68_B4128 = { .x = 0, .y = 0, .z = 0x10000 };
+
+FuncPtr gHoverAttackPhaseHandlers[] = {
+    (FuncPtr)jingleTownBossHoverAttackIntroPhase,
+    (FuncPtr)jingleTownBossHoverAttackMainPhase,
+};
+
+HoverIntroAnimFrame gHoverIntroAnimFrames[] = {
+    { 0x0019, 0x0200 },
+    { 0x0001, 0x0400 },
+    { 0x0001, 0x0800 },
+    { 0x0001, 0x1000 },
+    { 0x0001, 0x1400 },
+    { 0x0001, 0x0800 },
+    { 0x0001, 0x1000 },
+    { 0x0001, 0x1800 },
+    { 0xFFFF, 0x2000 },
+};
+
+Vec3i gJingleTownBossHoverExitOffsets[] = {
+    { .x = 0x00000000, .y = 0x00260000, .z = 0x00000000 },
+    { .x = 0x00000000, .y = 0x00150000, .z = 0x00000000 },
+    { .x = 0x00150000, .y = 0x00120000, .z = 0x00000000 },
+    { .x = 0xFFEB0000, .y = 0x00120000, .z = 0x00000000 },
+    { .x = 0x00000000, .y = 0x00120000, .z = 0x00150000 },
+    { .x = 0x00000000, .y = 0x00120000, .z = 0xFFEB0000 },
+    { .x = 0xFFE79000, .y = 0x00000000, .z = 0x00187000 },
+    { .x = 0x00000000, .y = 0x00000000, .z = 0x00187000 },
+    { .x = 0x00187000, .y = 0x00000000, .z = 0x00187000 },
+    { .x = 0xFFE79000, .y = 0x00000000, .z = 0x00000000 },
+    { .x = 0x00000000, .y = 0x00000000, .z = 0x00000000 },
+    { .x = 0x00187000, .y = 0x00000000, .z = 0x00000000 },
+    { .x = 0xFFE79000, .y = 0x00000000, .z = 0xFFE79000 },
+    { .x = 0x00000000, .y = 0x00000000, .z = 0xFFE79000 },
+    { .x = 0x00187000, .y = 0x00000000, .z = 0xFFE79000 },
+};
 
 void updateJingleTownBoss(Arg0Struct *arg0) {
     Transform3D sp10;
@@ -360,7 +421,7 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
 }
 
 void dispatchChaseAttackPhase(Arg0Struct *arg0) {
-    gChaseAttackPhaseHandlers[arg0->behaviorPhase](arg0);
+    ((void (*)(void *))gChaseAttackPhaseHandlers[arg0->behaviorPhase])(arg0);
 }
 
 s32 jingleTownBossChaseAttackIntroPhase(Arg0Struct *arg0) {
@@ -614,31 +675,27 @@ s32 jingleTownBossChaseAttackExitPhase(Arg0Struct *arg0) {
 }
 
 void dispatchHoverAttackPhase(Arg0Struct *arg0) {
-    gHoverAttackPhaseHandlers[arg0->behaviorPhase](arg0);
+    ((void (*)(void *))gHoverAttackPhaseHandlers[arg0->behaviorPhase])(arg0);
 }
 
 s32 jingleTownBossHoverAttackIntroPhase(Arg0Struct *arg0) {
-    u8 step;
-
-    step = arg0->behaviorStep;
-    if (step == 0) {
-        arg0->behaviorStep = step + 1;
+    if (arg0->behaviorStep == 0) {
+        arg0->behaviorStep++;
         arg0->unkB8C = 1;
         if (arg0->velocity.y > 0) {
             arg0->velocity.y = 0;
         }
         if (!(arg0->unkB84 & 0x80000)) {
-            u8 hoverCount = arg0->unkBDB;
-            if (hoverCount != 0) {
-                arg0->unkBDB = hoverCount - 1;
+            if (arg0->unkBDB != 0) {
+                arg0->unkBDB--;
             }
         }
     }
 
     arg0->unkB8C--;
     if (arg0->unkB8C == 0) {
-        arg0->unkB8C = gHoverIntroAnimTimers[arg0->behaviorCounter * 2];
-        arg0->unkB9E = gHoverIntroAnimFrames[arg0->behaviorCounter * 2];
+        arg0->unkB8C = gHoverIntroAnimFrames[arg0->behaviorCounter].frames;
+        arg0->unkB9E = gHoverIntroAnimFrames[arg0->behaviorCounter].anim;
         arg0->behaviorCounter++;
     }
 
@@ -890,12 +947,11 @@ void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
     }
 
     if (!(arg0->unkB84 & 0x10000)) {
-        volume =
-            isqrt64(
-                (s64)arg0->velocity.x * arg0->velocity.x + (s64)arg0->velocity.y * arg0->velocity.y +
-                (s64)arg0->velocity.z * arg0->velocity.z
-            ) >>
-            12;
+        volume = isqrt64(
+                     (s64)arg0->velocity.x * arg0->velocity.x + (s64)arg0->velocity.y * arg0->velocity.y +
+                     (s64)arg0->velocity.z * arg0->velocity.z
+                 ) >>
+                 12;
         if (volume >= 0x81) {
             volume = 0x80;
         }
