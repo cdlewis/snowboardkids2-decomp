@@ -133,7 +133,7 @@ typedef struct {
     u8 padding[0x14];
     u8 unk50;
     u8 unk51;
-    u8 padding2;
+    u8 playerIndex;
     u8 delayTimer;
 } CharSelectIconsState;
 
@@ -265,9 +265,10 @@ extern Vec3s D_8008DD4E_8E94E[];
 extern Vec3s charSelectIconPositions[];
 extern Vec3s charSelectIconYIncrements[];
 
-void func_80025418_26018(void *);
+void func_80025418_26018(CharSelectIconsState *);
 void cleanupCharSelectIcons(SimpleSpriteEntry *);
 void updateCharSelectIconsDelay(CharSelectIconsState *);
+void updateCharSelectIconTargets(CharSelectIconTargetState *);
 void updateCharSelectBoardSlideOut(CharSelectBoardPreview *);
 void updateCharSelectBoardPreview(CharSelectBoardPreview *);
 void updateCharSelectNameSprites(CharSelectNameSpritesState *);
@@ -1073,10 +1074,65 @@ void updateCharSelectIconsDelay(CharSelectIconsState *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80025418_26018);
-
 extern u8 D_8008DD8C_8E98C[];
-extern u16 D_8008DE02_8EA02[];
+extern s16 D_8008DE02_8EA02[];
+
+void func_80025418_26018(CharSelectIconsState *arg0) {
+    u8 *alloc;
+    s32 i;
+    s32 count;
+    CharSelectIconEntry *entry;
+    u8 charIndex;
+    u8 paletteIndex;
+    u8 tableIndex;
+    s16 targetVal;
+    u16 currentY;
+    s16 newY;
+    u8 *ptr;
+
+    alloc = (u8 *)getCurrentAllocation();
+    count = 0;
+
+    for (i = 0; i < arg0->unk50; i++) {
+        ptr = alloc + arg0->playerIndex;
+        charIndex = ptr[0x18A8];
+        paletteIndex = ptr[0x18B0];
+        tableIndex = D_8008DD8C_8E98C[(((u8)(paletteIndex + charIndex * 3)) * 3) + i];
+        targetVal = D_8008DE02_8EA02[tableIndex];
+
+        entry = &arg0->entries[i];
+        currentY = entry->targetY;
+
+        if ((currentY & 0xFFFF) < targetVal) {
+            if (currentY < 0x10) {
+                newY = currentY + 8;
+            } else {
+                newY = currentY + 0xC;
+            }
+            entry->targetY = newY;
+            count++;
+        }
+    }
+
+    if (arg0->unk50 < 3) {
+        arg0->unk51 = (arg0->unk51 + 1) & 3;
+        if (arg0->unk51 == 0) {
+            arg0->unk50 = arg0->unk50 + 1;
+        }
+    } else {
+        if (count == 0) {
+            setCallback(updateCharSelectIconTargets);
+        }
+    }
+
+    for (i = 0; i < 3; i++) {
+        debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010C98_11898, &arg0->entries[i]);
+    }
+
+    if (((u16 *)alloc)[(arg0->playerIndex * 2 + 0x1898) / 2] == 9) {
+        setCallback(updateCharSelectIconTargets);
+    }
+}
 
 void updateCharSelectIconTargets(CharSelectIconTargetState *arg0) {
     GameState *state;
