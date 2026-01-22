@@ -81,7 +81,7 @@ LIBMUS = lib/libmus/build/libmus.a
 UNDEFINED_SYMS := osPfsIsPlug
 LD_SCRIPT = $(BASENAME).ld
 LINKER_SCRIPTS := linker_scripts/hardware_regs.ld linker_scripts/libultra_syms.ld
-LD_FLAGS := -T $(LD_SCRIPT) -T undefined_syms_auto.txt -Map snowboardkids2.map --no-check-sections -u osPfsIsPlug -Lbuild/lib -lmus -lgultra_rom
+LD_FLAGS := -T $(LD_SCRIPT) -Map snowboardkids2.map --no-check-sections -u osPfsIsPlug -Lbuild/lib -lmus -lgultra_rom
 
 ifeq ($(NON_MATCHING),1)
 MACROS += -DNON_MATCHING

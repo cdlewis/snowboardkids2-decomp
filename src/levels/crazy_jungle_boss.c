@@ -152,6 +152,7 @@ typedef struct {
 } D_800BC468_ACC98_type;
 
 extern D_800BC468_ACC98_type D_800BC468_ACC98[];
+extern Vec3i gCrazyJungleBossCheckpointOffsets[];
 extern void func_800BC0E8_AC918(Arg0Struct *);
 extern s32 D_800BBA7C_AC2AC[][3];
 extern s32 D_800BBA84_AC2B4[][3];
@@ -383,8 +384,8 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     *(s32 *)((u8 *)arg0 + 0xAA0) = ((s32 *)gameState->players)[0xAA0 / 4] - 0x10000;
 
     if (*(void **)((u8 *)arg0 + 0x1C) != 0) {
-        *(s32 *)((u8 *)arg0 + 0x28) = (s32)(*(void **)((u8 *)arg0 + 0x1C)) +
-                                      ((s32 *)(*(void **)((u8 *)arg0 + 0x1C)))[arg0->unkBB8];
+        *(s32 *)((u8 *)arg0 + 0x28) =
+            (s32)(*(void **)((u8 *)arg0 + 0x1C)) + ((s32 *)(*(void **)((u8 *)arg0 + 0x1C)))[arg0->unkBB8];
     }
 
     return 1;
@@ -656,12 +657,12 @@ void updateBossProximityCheckpoints(Arg0Struct *arg0) {
         s32 *checkpointPos;
         u16 sectorIndex;
 
-        arg0->checkpoints[checkpointIndex].posX = arg0->unk970.translation.x + D_800BBA7C_AC2AC[CHECKPOINT_DATA_ROW + checkpointIndex][2];
-        arg0->checkpoints[checkpointIndex].posZ =
-            arg0->unk970.translation.z + D_800BBA84_AC2B4[CHECKPOINT_DATA_ROW + checkpointIndex][2];
+        arg0->checkpoints[checkpointIndex].posX = arg0->unk970.translation.x + gCrazyJungleBossCheckpointOffsets[checkpointIndex].x;
+        arg0->checkpoints[checkpointIndex].posZ = arg0->unk970.translation.z + gCrazyJungleBossCheckpointOffsets[checkpointIndex].z;
         checkpointPos = &arg0->checkpoints[checkpointIndex].posX;
         sectorIndex = getOrUpdatePlayerSectorIndex(arg0, (u8 *)gameData, arg0->sectorIndex, checkpointPos);
-        arg0->checkpoints[checkpointIndex].height = getTrackHeightInSector((u8 *)gameData, sectorIndex, checkpointPos, 0x100000);
+        arg0->checkpoints[checkpointIndex].height =
+            getTrackHeightInSector((u8 *)gameData, sectorIndex, checkpointPos, 0x100000);
         checkpointIndex++;
     } while (checkpointIndex < 9);
 
