@@ -1,5 +1,6 @@
 #include "1DFAA0.h"
 #include "33FE0.h"
+#include "38C90.h"
 #include "common.h"
 #include "main.h"
 #include "task_scheduler.h"
@@ -9,6 +10,53 @@ typedef struct {
     ModelEntityRenderState *renderState;
 } TransparentRenderTaskData;
 
+typedef struct {
+    void *context;
+    void **loadedAssets;
+    s32 param;
+    s32 unkC;
+    s32 unk10;
+    struct {
+        u8 _pad00[0x10];
+        s16 unk24;
+        s16 unk26;
+        s16 unk28;
+        s16 unk2A;
+        u8 _pad2C[0x14];
+    } elements[4];
+    u8 groupIndex;
+    s8 unkC5;
+} TiledTextureTaskData;
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    s32 unk8;
+} AssetEntry;
+
+typedef struct {
+    AssetEntry *assetList;
+    u8 *unk4;
+    u8 assetCount;
+    u8 tableSize;
+    u8 _padA[0x2];
+} AssetGroupTableEntry;
+
+typedef struct {
+    void *context;
+    void **loadedAssets;
+    s32 param;
+    void *unkC;
+    void *unk10;
+    u8 _pad14[0xB0];
+    u8 groupIndex;
+    u8 unkC5;
+} AssetGroupTaskData;
+
+extern AssetGroupTableEntry assetGroupTable[];
+
+void func_80003184_3D84(TiledTextureTaskData *);
+void freeAssetGroupResources(AssetGroupTaskData *taskData);
 void renderModelIfTransparent(TransparentRenderTaskData *taskData);
 
 void scheduleTransparentModelRender(CutsceneManager *cutsceneManager, ModelEntityRenderState *renderState) {
@@ -26,30 +74,6 @@ void renderModelIfTransparent(TransparentRenderTaskData *taskData) {
         renderModelEntity(taskData->renderState);
     }
 }
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    s32 unk8;
-} AssetEntry;
-
-typedef struct {
-    AssetEntry *assetList;
-    u8 _pad4[0x4];
-    u8 assetCount;
-    u8 _pad9[0x3];
-} AssetGroupTableEntry;
-
-typedef struct {
-    void *context;
-    void **loadedAssets;
-    s32 param;
-    void *unkC;
-    void *unk10;
-    u8 _pad14[0xB0];
-    u8 groupIndex;
-    u8 unkC5;
-} AssetGroupTaskData;
 
 void loadAssetGroupResources(AssetGroupTaskData *taskData);
 
@@ -72,10 +96,6 @@ void scheduleDualAssetGroupLoad(void *context, u8 groupIndex1, s32 param1, u8 gr
         task->unkC5 = 0;
     }
 }
-
-extern AssetGroupTableEntry assetGroupTable[];
-extern void func_80003184_3D84(void *);
-void freeAssetGroupResources(AssetGroupTaskData *taskData);
 
 void loadAssetGroupResources(AssetGroupTaskData *taskData) {
     AssetGroupTableEntry *entry;
@@ -100,7 +120,61 @@ void loadAssetGroupResources(AssetGroupTaskData *taskData) {
     setCallback(func_80003184_3D84);
 }
 
-INCLUDE_ASM("asm/nonmatchings/3B80", func_80003184_3D84);
+void func_80003184_3D84(TiledTextureTaskData *arg0) {
+    AssetGroupTableEntry *entry;
+    s32 i;
+    s32 temp;
+
+    entry = &assetGroupTable[arg0->groupIndex];
+    if (arg0->unkC5 == 0) {
+        for (i = 0; i < 4; i++) {
+            initTiledTextureRenderState(&arg0->elements[i], (s32)arg0->loadedAssets[i % entry->assetCount]);
+            arg0->elements[i].unk28 = 0x81;
+            arg0->elements[i].unk2A = 0x81;
+        }
+        arg0->unkC5 = 1;
+        return;
+    }
+
+    temp = *(s32 *)((s32 *)*(s32 *)((u8 *)arg0->context + 0xC) + 0x34 / 4);
+    temp = (temp >> 8) * (arg0->param >> 8);
+    temp >>= 16;
+    arg0->unk10 = 0x44;
+    arg0->unkC = temp;
+
+    for (i = 0; i < 4; i++) {
+        u32 shift_temp;
+        u32 idx1;
+        s32 idx2;
+        s32 idx4;
+        s32 unk24_val;
+        s8 check1;
+        s8 check2;
+
+        shift_temp = (u32)arg0->unkC + (i << 7);
+        idx1 = shift_temp >> 7;
+        idx2 = idx1 % entry->tableSize;
+        idx2 = entry->unk4[idx2];
+        idx4 = idx2 % entry->assetCount;
+        initTiledTextureRenderState(&arg0->elements[i], (s32)arg0->loadedAssets[idx4]);
+        arg0->elements[i].unk28 = 0x81;
+        arg0->elements[i].unk2A = 0x81;
+        unk24_val = ~arg0->unkC;
+        unk24_val &= 0x7F;
+        unk24_val += -0x80;
+        unk24_val += i << 7;
+        arg0->elements[i].unk24 = unk24_val;
+        arg0->elements[i].unk26 = arg0->unk10;
+
+        check1 = *(s8 *)((u8 *)arg0->context + 0xFF5);
+        if (check1 != 0) {
+            check2 = *(s8 *)((u8 *)arg0->context + 0x97);
+            if (check2 != 0) {
+                debugEnqueueCallback(3, 2, renderTiledTexture, &arg0->elements[i]);
+            }
+        }
+    }
+}
 
 void freeAssetGroupResources(AssetGroupTaskData *taskData) {
     AssetGroupTableEntry *entry;
