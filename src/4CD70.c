@@ -203,6 +203,140 @@ typedef struct {
     s32 playerIndex;
 } LapCounterMultiplayerState;
 
+typedef struct {
+    u8 pad0[0x10];
+    void *players;
+    u8 pad14[0x4A];
+    u8 numPlayers;
+    u8 raceType;
+} InitAllocation;
+
+typedef struct {
+    u8 pad0[0xBB9];
+    u8 spriteGroupIndex;
+} InitPlayerData;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    u8 unk4;
+    u8 unk5;
+    u8 unk6;
+    u8 pad7;
+    s16 unk8;
+    u8 padA[0x2];
+    s16 positionOffset;
+    u8 padE[0x2];
+    void *playerIconAsset;
+} Elem14;
+
+typedef struct {
+    void *digitsTexture;    // 0x0
+    s16 x;                  // 0x4 (singleplayer)
+    s16 y;                  // 0x6 (singleplayer)
+    s16 iconX;              // 0x8
+    s16 iconY;              // 0xA
+    void *iconAsset;        // 0xC
+    s16 animFrame;          // 0x10
+    u8 pad12[0x2];          // 0x12
+    s16 textX;              // 0x14 (multiplayer)
+    s16 textY;              // 0x16 (multiplayer)
+    s16 digitCount;         // 0x18 (multiplayer)
+    u8 pad1A[0x2];          // 0x1A
+    char *textPtr;          // 0x1C (multiplayer)
+    char goldTextBuffer[8]; // 0x20
+    Player *player;         // 0x28
+    s16 playerIndex;        // 0x2C
+    u16 animCounter;        // 0x2E
+} GoldDisplayState;
+
+typedef struct {
+    void *digitsTexture;
+    s16 x;
+    s16 y;
+    s16 iconX;
+    u8 padA[0x6];
+    s16 animFrame;
+    u8 pad12[0xE];
+    char goldTextBuffer[8];
+    Player *player;
+    u16 playerIndex;
+    u16 animCounter;
+} PlayerGoldDisplayState;
+
+typedef struct {
+    void *playerIconAsset;
+    u8 pad4[0x10];
+} RaceProgressIndicatorPlayerEntry;
+
+typedef struct {
+    u8 pad0[0x4];
+    void *baseAsset;
+    u8 pad8[0x8];
+    RaceProgressIndicatorPlayerEntry playerEntries[4]; // offset 0x10
+} RaceProgressIndicatorCleanupState;
+
+typedef struct {
+    u8 pad0[0x10];
+    void *players;
+    u8 pad14[0x4A];
+    u8 numPlayers;
+    u8 pad5F[0x5];
+    u8 playerIndices[4];
+} RaceProgressIndicatorAllocation;
+
+typedef struct {
+    u8 pad0[0xB88];
+    s32 playerStateFlags;
+    u8 padB8C[0xC];
+    s16 raceProgress;
+    u8 padB9A[0x35];
+    u8 activeEffectCount;
+} RaceProgressPlayerData;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    u8 pad4[0x4];
+    s16 spriteFrame;
+    u8 hasActiveEffect;
+    u8 unkB;
+    u8 flashCounter;
+    s8 flashState;
+    u8 padE[0x2];
+    s16 positionOffset;
+    u8 pad12[0x2];
+} RaceProgressIndicatorElement;
+
+typedef struct {
+    u8 pad0[0x2];
+    s16 baseY;
+    u8 pad4[0x8];
+    RaceProgressIndicatorElement elements[4];
+} RaceProgressIndicatorState;
+
+typedef struct {
+    u8 pad0[0x8];
+    s16 iconX;
+    u8 padA[0x6];
+    s16 animFrame;
+    u8 pad12[0x2];
+    s16 textX;
+    u8 pad16[0x2];
+    s16 digitCount;
+    u8 pad1A[0x6];
+    char goldTextBuffer[8];
+    Player *player;
+    u16 playerIndex;
+    u16 animCounter;
+} MultiplayerGoldDisplayState;
+
+typedef struct {
+    void *goldIconAsset;
+    u8 pad4[0x8];
+    void *digitSpriteAsset;
+} PlayerGoldDisplayCleanupArg;
+
 void updateCenteredSpritePopup(CenteredSpritePopupState *);
 void cleanupCenteredSpritePopupTask(CenteredSpritePopupState *);
 void updateSpeedCrossFinishPositionDisplay(FinishPositionDisplayState *arg0);
@@ -221,15 +355,20 @@ void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state);
 void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void initPlayerItemDisplayTask(PlayerItemDisplayState *state);
 void initPlayerLapCounterTask(LapCounterState *state);
-typedef struct GoldDisplayState_s GoldDisplayState;
 void initPlayerGoldDisplayTask(GoldDisplayState *state);
-void func_8004CDC0_4D9C0(void);
+void func_8004CDC0_4D9C0(Elem14 *);
 void cleanupPlayerItemDisplayTask(Struct_func_8004C6F0 *arg0);
 void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state);
 void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state);
 void updatePlayerLapCounterSinglePlayer(LapCounterSinglePlayerState *state);
 void cleanupPlayerLapCounterTask(Struct_func_8004DCC4 *arg0);
 void updatePlayerLapCounterMultiplayer(LapCounterMultiplayerState *state);
+void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state);
+void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state);
+void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0);
+void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state);
+void cleanupRaceProgressIndicatorTask(RaceProgressIndicatorCleanupState *state);
+void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0);
 
 static const char D_8009E880_9F480[] = "%5d";
 extern char D_8009E89C_9F49C[];
@@ -531,68 +670,6 @@ void cleanupPlayerLapCounterTask(Struct_func_8004DCC4 *arg0) {
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-// Callback struct types (needed for forward declarations)
-typedef struct {
-    void *digitsTexture;
-    s16 x;
-    s16 y;
-    s16 iconX;
-    u8 padA[0x6];
-    s16 animFrame;
-    u8 pad12[0xE];
-    char goldTextBuffer[8];
-    Player *player;
-    u16 playerIndex;
-    u16 animCounter;
-} PlayerGoldDisplayState;
-
-typedef struct {
-    u8 pad0[0x8];
-    s16 iconX;
-    u8 padA[0x6];
-    s16 animFrame;
-    u8 pad12[0x2];
-    s16 textX;
-    u8 pad16[0x2];
-    s16 digitCount;
-    u8 pad1A[0x6];
-    char goldTextBuffer[8];
-    Player *player;
-    u16 playerIndex;
-    u16 animCounter;
-} MultiplayerGoldDisplayState;
-
-typedef struct {
-    void *goldIconAsset;
-    u8 pad4[0x8];
-    void *digitSpriteAsset;
-} PlayerGoldDisplayCleanupArg;
-
-// Forward declarations for callbacks
-void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state);
-void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state);
-void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0);
-
-struct GoldDisplayState_s {
-    void *digitsTexture;    // 0x0
-    s16 x;                  // 0x4 (singleplayer)
-    s16 y;                  // 0x6 (singleplayer)
-    s16 iconX;              // 0x8
-    s16 iconY;              // 0xA
-    void *iconAsset;        // 0xC
-    s16 animFrame;          // 0x10
-    u8 pad12[0x2];          // 0x12
-    s16 textX;              // 0x14 (multiplayer)
-    s16 textY;              // 0x16 (multiplayer)
-    s16 digitCount;         // 0x18 (multiplayer)
-    u8 pad1A[0x2];          // 0x1A
-    char *textPtr;          // 0x1C (multiplayer)
-    char goldTextBuffer[8]; // 0x20
-    Player *player;         // 0x28
-    s16 playerIndex;        // 0x2C
-    u16 animCounter;        // 0x2E
-};
-
 void initPlayerGoldDisplayTask(GoldDisplayState *state) {
     GameState *gameState;
     void *digitsRomStart;
@@ -702,46 +779,61 @@ void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0) {
     arg0->digitSpriteAsset = freeNodeMemory(arg0->digitSpriteAsset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/4CD70", func_8004CDC0_4D9C0);
+void func_8004CDC0_4D9C0(Elem14 *arg0) {
+    InitAllocation *allocation;
+    s32 playerOffset;
+    s32 i;
+    Elem14 *elem;
+    Elem14 *next;
+    Elem14 *temp;
+    InitPlayerData *playerData;
+    s32 numPlayers;
+    volatile s32 pad[2];
 
-typedef struct {
-    u8 pad0[0x10];
-    void *players;
-    u8 pad14[0x4A];
-    u8 numPlayers;
-    u8 pad5F[0x5];
-    u8 playerIndices[4];
-} RaceProgressIndicatorAllocation;
+    allocation = getCurrentAllocation();
+    *(void **)&arg0->unk4 = load_3ECE40();
+    arg0->unk8 = 1;
 
-typedef struct {
-    u8 pad0[0xB88];
-    s32 playerStateFlags;
-    u8 padB8C[0xC];
-    s16 raceProgress;
-    u8 padB9A[0x35];
-    u8 activeEffectCount;
-} RaceProgressPlayerData;
+    if (allocation->raceType < 3) {
+        arg0->x = 0x78;
+    } else {
+        arg0->x = -4;
+    }
+    arg0->y = -0x48;
 
-typedef struct {
-    s16 x;
-    s16 y;
-    u8 pad4[0x4];
-    s16 spriteFrame;
-    u8 hasActiveEffect;
-    u8 unkB;
-    u8 flashCounter;
-    s8 flashState;
-    u8 padE[0x2];
-    s16 positionOffset;
-    u8 pad12[0x2];
-} RaceProgressIndicatorElement;
+    i = 3;
+    temp = arg0 + 3;
+    do {
+        temp->playerIconAsset = 0;
+        i--;
+        temp--;
+    } while (i >= 0);
 
-typedef struct {
-    u8 pad0[0x2];
-    s16 baseY;
-    u8 pad4[0x8];
-    RaceProgressIndicatorElement elements[4];
-} RaceProgressIndicatorState;
+    numPlayers = allocation->numPlayers;
+    i = 0;
+    if (numPlayers <= 0)
+        goto done;
+
+    elem = arg0;
+    playerOffset = 0;
+    do {
+        playerData = (InitPlayerData *)(playerOffset + (s32)allocation->players);
+        elem->playerIconAsset = loadAssetByIndex_95470(playerData->spriteGroupIndex);
+        elem->positionOffset = arg0->x - 4;
+        next = elem + 1;
+        next->unk4 = 0;
+        next->unk5 = 0;
+        next->unk6 = 0;
+        next->unk8 = 0;
+        playerOffset += 0xBE8;
+        i++;
+        elem++;
+    } while (i < allocation->numPlayers);
+
+done:
+    setCleanupCallback(cleanupRaceProgressIndicatorTask);
+    setCallback(updatePlayerRaceProgressIndicator);
+}
 
 void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
     RaceProgressIndicatorAllocation *allocation;
@@ -825,18 +917,6 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
 
     debugEnqueueCallback(0xC, 0, renderSpriteFrame, state);
 }
-
-typedef struct {
-    void *playerIconAsset;
-    u8 pad4[0x10];
-} RaceProgressIndicatorPlayerEntry; // size 0x14
-
-typedef struct {
-    u8 pad0[0x4];
-    void *baseAsset;
-    u8 pad8[0x8];
-    RaceProgressIndicatorPlayerEntry playerEntries[4]; // offset 0x10
-} RaceProgressIndicatorCleanupState;
 
 void cleanupRaceProgressIndicatorTask(RaceProgressIndicatorCleanupState *state) {
     s32 i;
