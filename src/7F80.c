@@ -52,20 +52,21 @@ typedef struct {
     s16 unk16;
 } CameraRotationTaskState;
 
+// Function declarations
 void setupModelTransitionVariant(ModelTransitionEffectState *);
 void updateModelTransitionEffect(ModelTransitionEffectState *);
 void cleanupModelTransitionEffect(ModelTransitionEffectState *);
 void updateCameraRotationTask(CameraRotationTaskState *);
 void cleanupCameraRotationTask(void);
 void renderPalettedTexture(PalettedTextureState *);
+void createRotationMatrixXYZ(Transform3D *, u16, u16, u16);
 
+// Extern variable declarations
 extern u8 identityMatrix[];
 extern s32 D_8008C200_8CE00[];
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
-
 extern Vec3i D_8009A8A4_9B4A4;
-void createRotationMatrixXYZ(Transform3D *, u16, u16, u16);
 
 void initCameraRotationTask(CameraRotationTaskState *state) {
     setCleanupCallback(&cleanupCameraRotationTask);
