@@ -117,7 +117,7 @@ extern s32 D_800A8B14_9FE84;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 
-void func_800BB388_AF078(AnimatedGhostEntity *);
+void initAnimatedGhost(AnimatedGhostEntity *);
 void cleanupAnimatedGhost(void **);
 void fadeInGhost(AnimatedGhostEntity *);
 void oscillateGhostFade(AnimatedGhostEntity *);
@@ -162,7 +162,7 @@ void updateGhostAnimation(AnimatedGhostEntity *ghost) {
     }
 }
 
-void func_800BB388_AF078(AnimatedGhostEntity *ghost) {
+void initAnimatedGhost(AnimatedGhostEntity *ghost) {
     Vec3i direction;
     Vec3i *directionPtr;
     s32 randomSpeed;
