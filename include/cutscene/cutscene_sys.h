@@ -42,7 +42,7 @@ s32 cutsceneSysIntMode_validate(void);
 typedef struct {
     s8 vStartExtension;
 } cutsceneSysIntMode_exec_arg;
-void cutsceneSysIntMode_exec(cutsceneSysIntMode_exec_arg *intModeParams);
+void cutsceneSysIntMode_exec(cutsceneSysIntMode_exec_arg *vStartParams);
 void cutsceneSysWipeColor_init(void);
 s32 cutsceneSysWipeColor_validate(void);
 typedef struct {
