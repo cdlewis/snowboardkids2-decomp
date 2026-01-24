@@ -35,15 +35,14 @@ typedef struct {
     u16 oscillationAngle;
 } OscillatingModelTaskState;
 
-void updateOscillatingModelTask(OscillatingModelTaskState *state);
-void cleanupOscillatingModelTask(void);
-
 typedef struct {
     OscillatingModel *model;
     SpriteAssetState spriteState;
     u8 spriteFlipped;
 } OscillatingSpriteTaskState;
 
+void updateOscillatingModelTask(OscillatingModelTaskState *state);
+void cleanupOscillatingModelTask(void);
 void updateOscillatingSpriteTask(OscillatingSpriteTaskState *state);
 void cleanupOscillatingSpriteTask(OscillatingSpriteTaskState *state);
 
