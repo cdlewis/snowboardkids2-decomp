@@ -3624,7 +3624,7 @@ void func_800B82D8_A8188(Player *arg0) {
             arg0->unkB84 &= ~0x10;
         }
 
-        func_8005A930_5B530(arg0);
+        updatePlayerSectorAndClampYToTrack(arg0);
 
         temp_v0 = getTrackHeightInSector(&gs->gameData, arg0->sectorIndex, &arg0->worldPos, 0x100000) + 0x3C00000;
         if (temp_v0 < arg0->worldPos.y) {

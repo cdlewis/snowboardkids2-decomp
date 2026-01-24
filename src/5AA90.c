@@ -46,8 +46,13 @@ INCLUDE_ASM("asm/nonmatchings/5AA90", func_80059ED0_5AAD0);
 
 INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005A26C_5AE6C);
 
-// Updates player's sector index and clamps Y position to track height
-void func_8005A930_5B530(Player *player) {
+/**
+ * Updates the player's sector index based on their current position and
+ * clamps their Y position to the track height.
+ *
+ * @param player The player to update
+ */
+void updatePlayerSectorAndClampYToTrack(Player *player) {
     GameState *gameState;
     GameDataLayout *gameData;
     Vec3i *playerPos;

@@ -12,7 +12,7 @@ typedef struct ListNode_5AA90 {
     /* 0x18 */ u8 id;
 } ListNode_5AA90;
 
-void func_8005A930_5B530(Player *player);
+void updatePlayerSectorAndClampYToTrack(Player *player);
 s32 isPlayerNearShortcut(Player *player);
 void handlePlayerToPlayerCollision(Player *player);
 void handleCollisionWithTargetPlayer(Player *player);

@@ -124,6 +124,7 @@ gCharacterVoiceSounds2 = 0x80094058; // rom:0x94C58
 gCharacterVoiceSounds3 = 0x8009406C; // rom:0x94C6C
 gFinishBoostVoiceSounds = 0x80093FF4; // rom:0x94BF4
 getOrUpdatePlayerSectorIndex = 0x80059E90; // rom:0x5AA90
+updatePlayerSectorAndClampYToTrack = 0x8005A930; // rom:0x5B530
 isPlayerNearShortcut = 0x8005AA9C; // rom:0x5B69C
 isPointInPlayerCollisionSphere = 0x8005B400; // rom:0x5C000
 initFloatingItemSpriteTask = 0x80050F18; // rom:0x51B18
