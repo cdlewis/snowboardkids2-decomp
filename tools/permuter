@@ -145,7 +145,7 @@ fi
 
 # Run the import scripts with the found path
 echo "Importing from $SOURCE_FILE..."
-IMPORT_OUTPUT=$(./tools/decomp-permuter/import.py --preserve-macros "gSP*" --preserve-macros "gDP*" "$SOURCE_FILE" "$ASM_PATH" 2>&1)
+IMPORT_OUTPUT=$(./tools/decomp-permuter/import.py --preserve-macros='(gDP|gSP|G_).*' "$SOURCE_FILE" "$ASM_PATH" 2>&1)
 IMPORT_EXIT_CODE=$?
 
 echo "$IMPORT_OUTPUT"
