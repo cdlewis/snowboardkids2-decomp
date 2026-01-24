@@ -132,7 +132,7 @@ typedef struct {
 typedef struct {
     union {
         s32 One;
-        s8 Two;
+        s8 animMode;
         s8 bytes[4];
     } unk0;
     Transform3D unk04;
@@ -146,9 +146,9 @@ typedef struct {
     /* 0x30 */ s32 unk30;
     /* 0x34 */ s32 unk34;
     /* 0x38 */ s32 unk38;
-    /* 0x3C */ s32 unk3C;
-    /* 0x40 */ s32 unk40;
-    /* 0x44 */ s32 unk44;
+    /* 0x3C */ s32 posVelX;
+    /* 0x40 */ s32 posVelY;
+    /* 0x44 */ s32 posVelZ;
     /* 0x48 */ s32 unk48;
     /* 0x4C */ s32 unk4C;
     /* 0x50 */ s32 unk50;
@@ -167,8 +167,8 @@ typedef struct {
     /* 0x7E */ s16 rotYVelTarget;
     /* 0x80 */ s16 rotX;
     /* 0x82 */ s16 rotZ;
-    /* 0x84 */ s16 unk84;
-    /* 0x86 */ s16 unk86;
+    /* 0x84 */ s16 animFramesRemaining;
+    /* 0x86 */ s16 animFramesDuration;
     /* 0x88 */ s16 finalRotY;
     /* 0x8A */ s16 unk8A;
     /* 0x8C */ s16 unk8C;
