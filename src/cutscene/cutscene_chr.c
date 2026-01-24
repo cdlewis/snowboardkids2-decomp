@@ -538,22 +538,23 @@ void cutsceneChrAlpha_exec(cutsceneChrAlpha_exec_arg *arg0, CutsceneManager *arg
 
     slot = getCutsceneSlot(arg1, arg2);
     currentSlot = &arg1->slots[arg2];
-    slot->unk0.ChrPayload.unk0 = arg0->duration;
+    slot->unk0.ChrPayload.remainingFrames = arg0->duration;
 
     currentAlpha = getModelAlpha(currentSlot->model);
 
-    if (slot->unk0.ChrPayload.unk0 == 0 || arg0->targetAlpha == currentAlpha) {
+    if (slot->unk0.ChrPayload.remainingFrames == 0 || arg0->targetAlpha == currentAlpha) {
         setModelAlpha(currentSlot->model, arg0->targetAlpha);
     } else {
-        slot->unk0.ChrPayload.unk14 = arg0->reserved0 << 16;
-        slot->unk0.ChrPayload.unk18 = arg0->reserved1 << 16;
-        slot->unk0.ChrPayload.unk1C = arg0->reserved2 << 16;
-        slot->unk0.ChrPayload.unk20 = arg0->targetAlpha << 16;
+        slot->unk0.ChrPayload.easingParam0 = arg0->reserved0 << 16;
+        slot->unk0.ChrPayload.easingParam1 = arg0->reserved1 << 16;
+        slot->unk0.ChrPayload.easingParam2 = arg0->reserved2 << 16;
+        slot->unk0.ChrPayload.targetAlphaFixed = arg0->targetAlpha << 16;
 
         currentAlpha = getModelAlpha(currentSlot->model);
 
-        slot->unk0.ChrPayload.unk10 = currentAlpha << 16;
-        slot->unk0.ChrPayload.unk24 = (slot->unk0.ChrPayload.unk20 - (currentAlpha << 16)) / slot->unk0.ChrPayload.unk0;
+        slot->unk0.ChrPayload.currentAlphaFixed = currentAlpha << 16;
+        slot->unk0.ChrPayload.alphaIncrement =
+            (slot->unk0.ChrPayload.targetAlphaFixed - (currentAlpha << 16)) / slot->unk0.ChrPayload.remainingFrames;
 
         enableSlotUpdate(arg1, arg2);
     }
@@ -567,22 +568,22 @@ void cutsceneChrAlpha_update(CutsceneManager *arg0, s8 arg1) {
     slot = getCutsceneSlot(arg0, arg1);
     managerSlot = &arg0->slots[arg1];
 
-    if (slot->unk0.ChrPayload.unk0 > 0) {
+    if (slot->unk0.ChrPayload.remainingFrames > 0) {
         setModelAlpha(managerSlot->model, slot->unk0.ChrPayload.padding[0xF]);
-        slot->unk0.ChrPayload.unk0--;
-        newValue = slot->unk0.ChrPayload.unk10 + slot->unk0.ChrPayload.unk24;
-        slot->unk0.ChrPayload.unk10 = newValue;
+        slot->unk0.ChrPayload.remainingFrames--;
+        newValue = slot->unk0.ChrPayload.currentAlphaFixed + slot->unk0.ChrPayload.alphaIncrement;
+        slot->unk0.ChrPayload.currentAlphaFixed = newValue;
 
-        if (slot->unk0.ChrPayload.unk24 > 0) {
-            if (slot->unk0.ChrPayload.unk20 < newValue) {
-                slot->unk0.ChrPayload.unk0 = 0;
+        if (slot->unk0.ChrPayload.alphaIncrement > 0) {
+            if (slot->unk0.ChrPayload.targetAlphaFixed < newValue) {
+                slot->unk0.ChrPayload.remainingFrames = 0;
             }
-        } else if (slot->unk0.ChrPayload.unk24 < 0) {
-            if (newValue < slot->unk0.ChrPayload.unk20) {
-                slot->unk0.ChrPayload.unk0 = 0;
+        } else if (slot->unk0.ChrPayload.alphaIncrement < 0) {
+            if (newValue < slot->unk0.ChrPayload.targetAlphaFixed) {
+                slot->unk0.ChrPayload.remainingFrames = 0;
             }
         } else {
-            slot->unk0.ChrPayload.unk0 = 0;
+            slot->unk0.ChrPayload.remainingFrames = 0;
         }
     } else {
         disableSlotUpdate(arg0, arg1);

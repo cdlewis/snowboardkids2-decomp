@@ -37,14 +37,14 @@ typedef struct {
             s16 effectParam;  // Effect parameter passed to trick effect function
         } TrickPayload;
         struct {
-            s16 unk0;
+            s16 remainingFrames;
             u8 padding[0xE];
-            s32 unk10;
-            s32 unk14;
-            s32 unk18;
-            s32 unk1C;
-            s32 unk20;
-            s32 unk24;
+            s32 currentAlphaFixed;
+            s32 easingParam0;
+            s32 easingParam1;
+            s32 easingParam2;
+            s32 targetAlphaFixed;
+            s32 alphaIncrement;
         } ChrPayload;
     } unk0;
     u8 padding[0x18];
@@ -216,14 +216,14 @@ typedef struct {
             s16 effectParam;  // Effect parameter passed to trick effect function
         } TrickPayload;
         struct {
-            s16 unk0;
+            s16 remainingFrames;
             u8 padding[0xE];
-            s32 unk10;
-            s32 unk14;
-            s32 unk18;
-            s32 unk1C;
-            s32 unk20;
-            s32 unk24;
+            s32 currentAlphaFixed;
+            s32 easingParam0;
+            s32 easingParam1;
+            s32 easingParam2;
+            s32 targetAlphaFixed;
+            s32 alphaIncrement;
         } ChrPayload;
     } unk0;
     u8 padding[0x18];
