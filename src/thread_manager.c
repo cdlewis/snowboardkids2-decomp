@@ -2,10 +2,7 @@
 
 #include "common.h"
 
-void thread_function_1(void *);
-void thread_function_2(void *);
-void thread_function_3(void *);
-void thread_function_4(void *);
+// Structs
 
 typedef struct {
     char padding[61];
@@ -14,13 +11,13 @@ typedef struct {
 } eventQueue2Response;
 
 typedef struct {
-    char padding2[61];
+    char padding[61];
     OSMesg messageQueue;
     OSMesg message;
     void *unk48;
     u16 unk4C;
     u16 unk4E;
-    u32 padding;
+    u32 padding2;
 } FrameInfo;
 
 typedef struct {
@@ -28,6 +25,13 @@ typedef struct {
     OSTask *task;
     OSTask *pendingTask;
 } eventQueue1_message;
+
+// Function declarations (static - internal use only)
+
+static void thread_function_1(void *);
+static void thread_function_2(void *);
+static void thread_function_3(void *);
+static void thread_function_4(void *);
 
 // data
 int vertical_retrace_message[3] = { 0x5, 0, 0 };
@@ -103,7 +107,7 @@ void initialize_video_and_threads(s32 viMode) {
     osStartThread(&thread_d);
 }
 
-void thread_function_1(void *arg) {
+static void thread_function_1(void *arg) {
     u32 temp = 0xA << 16;
     s32 *message;
     s16 temp_v0;
@@ -206,7 +210,7 @@ void removeViConfig(ViConfig *configs) {
     osSetIntMask(previousInterruptMask);
 }
 
-void thread_function_2(void *arg) {
+static void thread_function_2(void *arg) {
     eventQueue1_message *msg;
     s32 task;
     s32 next_task;
@@ -301,7 +305,7 @@ void thread_function_2(void *arg) {
     }
 }
 
-void thread_function_3(void *arg) {
+static void thread_function_3(void *arg) {
     // force specific layout of these variables on the stack
     struct {
         OSMesg eventQueueOneMessage;
@@ -327,7 +331,7 @@ void sendMessageToEventQueue2(OSMesg message) {
     osSendMesg(&eventQueue2, message, OS_MESG_BLOCK);
 }
 
-void thread_function_4(void *arg) {
+static void thread_function_4(void *arg) {
     s32 temp_v0;
     s32 delayCounter;
     s16 frameIndex;
