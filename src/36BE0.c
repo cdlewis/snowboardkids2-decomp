@@ -2,8 +2,6 @@
 #include "common.h"
 #include "task_scheduler.h"
 
-extern float __cosf(float);
-
 #define FIXED_POINT_SCALE 8192.0f
 #define FOV_HALF_ANGLE 0.43633232f
 #define SCREEN_CENTER_X 160
@@ -25,6 +23,8 @@ typedef struct {
     s32 camY;
     s32 camZ;
 } CameraTransform;
+
+extern float __cosf(float);
 
 void worldToScreenCoords(s32 *outX, s32 *outY, Vec3i *worldPos) {
     CameraTransform *cam;
