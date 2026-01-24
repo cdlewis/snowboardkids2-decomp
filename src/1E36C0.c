@@ -7,6 +7,8 @@ extern s8 gAnalogStickX;
 extern s32 gButtonsPressed;
 extern s32 gControllerInputs;
 
+#define SLOT_ANIM_MODE_ROTATE_WITH_SPEED 0xB
+
 s16 getSlotMoveDuration(cutsceneSys2Wait_exec_asset *arg0) {
     return arg0->tableRowIndex;
 }
@@ -652,11 +654,9 @@ s32 setupSlotRotateWithSpeed(
     s32 duration,
     s32 direction
 ) {
-    s16 durationS16;
+    s16 durationS16 = duration;
 
-    durationS16 = duration;
-
-    slot->unk0.animMode = 0xB;
+    slot->unk0.animMode = SLOT_ANIM_MODE_ROTATE_WITH_SPEED;
     slot->posVelX = 0;
     slot->posVelY = 0;
     slot->posVelZ = 0;
