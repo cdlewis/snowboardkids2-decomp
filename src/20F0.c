@@ -9,6 +9,39 @@
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
+/* Struct definitions */
+typedef struct {
+    u8 padding[0x24];
+    /* 0x24 */ u8 *data_ptr;
+    /* 0x28 */ TableEntry_19E80 *index_ptr;
+    s8 tableField1;
+    s8 tableField2;
+} AssetSlotTableData;
+
+typedef struct {
+    u8 padding[0x3C];
+    s8 isDestroyed;
+} MarkDestroyedArg;
+
+typedef struct {
+    u8 padding[0x3D];
+    s8 actionMode;
+} getModelActionMode_arg;
+
+typedef struct {
+    void *assetStart;
+    void *assetEnd;
+    void *asset2Start;
+    void *asset2End;
+    s32 asset2Size;
+    s32 unk14;
+} ItemAssetEntry;
+
+/* External declarations */
+extern u8 identityMatrix[32];
+extern u8 D_215D70[];
+
+/* Asset declarations */
 USE_ASSET(_1EA200);
 USE_ASSET(_1EACD0);
 USE_ASSET(_1EC940);
@@ -52,36 +85,7 @@ USE_ASSET(_664400);
 USE_ASSET(_664660);
 USE_ASSET(_6648C0);
 
-typedef struct {
-    u8 padding[0x24];
-    /* 0x24 */ u8 *data_ptr;
-    /* 0x28 */ TableEntry_19E80 *index_ptr;
-    s8 tableField1;
-    s8 tableField2;
-} AssetSlotTableData;
-
-typedef struct {
-    u8 padding[0x3C];
-    s8 isDestroyed;
-} MarkDestroyedArg;
-
-typedef struct {
-    u8 padding[0x3D];
-    s8 actionMode;
-} getModelActionMode_arg;
-
-typedef struct {
-    void *assetStart;
-    void *assetEnd;
-    void *asset2Start;
-    void *asset2End;
-    s32 asset2Size;
-    s32 unk14;
-} ItemAssetEntry;
-
-extern u8 identityMatrix[32];
-extern u8 D_215D70[];
-
+/* Global variables */
 u32 D_80089540_8A140[4] = { 0x0, 0x10000D0, 0x0, 0x0 };
 
 u32 D_80089550_8A150[4] = { 0x0, 0x10000F8, 0x0, 0x0 };
