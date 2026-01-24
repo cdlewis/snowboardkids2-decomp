@@ -2596,7 +2596,6 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
     s32 new_var;
     u32 line;
     s32 lrs;
-    u16 dxt;
     u16 widthDiv16;
     Gfx *loadBlockCmd;
     long loadBlockWord;
