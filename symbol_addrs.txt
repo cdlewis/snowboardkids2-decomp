@@ -1345,15 +1345,15 @@ cutsceneBgmFadeOut_validate = 0x800B0850; // rom:0x1DD900
 cutsceneBgmVolume_validate = 0x800B088C; // rom:0x1DD93C
 
 cutsceneEffectDisp_validate = 0x800B1C98; // rom:0x1DED48
-cutsceneEffectDisp_isDone = 0x800B1D44;
+cutsceneEffectDisp_isDone = 0x800B1D44; // rom:0x1DEDF4
 cutsceneEffectFan_validate = 0x800B1D54;
-cutsceneEffectFan_isDone = 0x800B1D9C;
+cutsceneEffectFan_isDone = 0x800B1D9C; // rom:0x1DEE4C
 cutsceneEffectRocket_validate = 0x800B1DAC;
-cutsceneEffectRocket_isDone = 0x800B1DF4;
+cutsceneEffectRocket_isDone = 0x800B1DF4; // rom:0x1DEEA4
 cutsceneEffectMLight_validate = 0x800B1E04;
 cutsceneEffectMLight_isDone = 0x800B1F94; // rom:0x1DF044
 cutsceneEffectTrick_validate = 0x800B1FA4;
-cutsceneEffectTrick_isDone = 0x800B20A8;
+cutsceneEffectTrick_isDone = 0x800B20A8; // rom:0x1DF158
 
 cutsceneSePlay_validate = 0x800B2120;
 cutsceneSe3dPlay_validate = 0x800B2194;
