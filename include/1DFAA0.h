@@ -107,10 +107,10 @@ typedef struct {
     /* 0xC */ u16 current_index;
     u8 padding[0x2];
     /* 0x10 */ u16 allocatedEventCount;
-    /* 0x12 */ u8 unk12;
-    /* 0x13 */ u8 unk13;
-    /* 0x14 */ u16 unk14;
-    /* 0x16 */ s16 unk16;
+    /* 0x12 */ u8 stateEntryItemSize;
+    /* 0x13 */ u8 slotCount;
+    /* 0x14 */ u16 frameMask;
+    /* 0x16 */ s16 maxEntries;
     /* 0x18 */ s16 initModelIndex;
     /* 0x1A */ s16 defaultEndFrame;
     /* 0x1C */ u8 configByte;

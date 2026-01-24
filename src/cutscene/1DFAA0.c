@@ -388,19 +388,19 @@ u16 getCutsceneAllocatedEventCount(void) {
 }
 
 u8 getCutsceneStateEntryItemSize(void) {
-    return gCutsceneStateTable->unk12;
+    return gCutsceneStateTable->stateEntryItemSize;
 }
 
 u8 getCutsceneSlotCount(void) {
-    return gCutsceneStateTable->unk13;
+    return gCutsceneStateTable->slotCount;
 }
 
 u16 getCutsceneFrameMask(void) {
-    return gCutsceneStateTable->unk14;
+    return gCutsceneStateTable->frameMask;
 }
 
 u16 getCutsceneMaxStateEntries(void) {
-    return gCutsceneStateTable->unk16;
+    return gCutsceneStateTable->maxEntries;
 }
 
 s16 getCutsceneInitModelIndex(void) {
@@ -645,21 +645,21 @@ void initializeCutsceneSystem(void *romAssetAddr) {
         StateEntry *table = gCutsceneStateTable;
         StateEntry *table2;
         negOne = -1;
-        table->unk12 = 0x38; // StateEntryItem size
+        table->stateEntryItemSize = 0x38;
         table2 = gCutsceneStateTable;
         invalidIdx = 0xFFFF;                 // Invalid index marker
         *(s16 *)((u8 *)table + 0xE) = 0x1DF; // Free list head points to last entry
         table->current_index = 0;
         table->allocatedEventCount = 0;
-        table2->unk13 = 0x10; // Number of slots (16)
+        table2->slotCount = 0x10;
     }
 
     // Initialize remaining header fields
     {
         StateEntry *table = gCutsceneStateTable;
         itemByteOffset = 0;
-        table->unk14 = 0x8000; // Frame mask
-        table->unk16 = 0x1E0;  // Max entries (480)
+        table->frameMask = 0x8000;
+        table->maxEntries = 0x1E0;
         table->initModelIndex = 0;
         table->defaultEndFrame = 100; // 0x64
         table->configByte = 0;
@@ -941,7 +941,7 @@ void renderCutsceneSlotMenu(s32 arg0, s16 arg1) {
     s32 target;
     volatile s32 pad;
 
-    count = gCutsceneStateTable->unk13;
+    count = gCutsceneStateTable->slotCount;
     i = 0;
     if (count > 0) {
         target = arg1;
@@ -954,7 +954,7 @@ void renderCutsceneSlotMenu(s32 arg0, s16 arg1) {
         }
         yPos += 0x10000;
         i++;
-        if (i < gCutsceneStateTable->unk13) {
+        if (i < gCutsceneStateTable->slotCount) {
             goto loop;
         }
     }
