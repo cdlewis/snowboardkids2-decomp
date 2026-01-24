@@ -1,9 +1,13 @@
 #include "6E840.h"
 
+#include "buffers.h"
 #include "common.h"
 #include "geometry.h"
 #include "memory_allocator.h"
 #include "thread_manager.h"
+
+#define MEMORY_HEAP_SIZE 0x200000
+#define gMemoryHeapEnd (gMemoryHeapBase + MEMORY_HEAP_SIZE)
 
 typedef struct Node {
     struct Node *next;
@@ -44,8 +48,32 @@ typedef struct {
     u8 defaultLight2B;
 } D_800AB068_A23D8_type;
 
-extern D_800AB068_A23D8_type *D_800AB068_A23D8;
+typedef struct {
+    /* 0x00 */ u32 type;
+    /* 0x04 */ u32 flags;
+    /* 0x08 */ void *ucode_boot;
+    /* 0x0C */ u32 ucode_boot_size;
+    /* 0x10 */ void *ucode;
+    /* 0x14 */ u32 ucode_size;
+    /* 0x18 */ void *output_buff_size;
+    /* 0x1C */ u32 ucode_data_size;
+    /* 0x20 */ void *ucode_data;
+    /* 0x24 */ u32 dram_stack_size;
+    /* 0x28 */ void *dram_stack;
+    /* 0x2C */ u32 task_2C;
+    /* 0x30 */ void *data_ptr;
+    /* 0x34 */ u32 data_size;
+    /* 0x38 */ void *output_buff;
+    /* 0x3C */ u32 yield_data_size;
+    /* 0x40 */ u32 pad40[2];
+    /* 0x48 */ void *yield_data_ptr;
+    /* 0x4C */ u16 unk4C;
+    /* 0x4E */ u16 unk4E;
+    /* 0x50 */ Gfx displayList[15];
+    u32 pad[34];
+} DisplayBufferMsg;
 
+extern void *gDisplayBufferMsgs;
 extern Viewport D_800A3410_A4010;
 extern s8 D_800A3429_A4029;
 extern s8 D_800A342A_A402A;
@@ -84,12 +112,96 @@ extern s32 gCurrentDisplayBufferIndex;
 extern void *gDisplayBufferMsgs;
 extern s32 gFrameCounter;
 extern s16 identityMatrix[];
+extern D_800AB068_A23D8_type *D_800AB068_A23D8;
+extern s32 gFrameBufferFlags[];
+extern s32 gFrameCounter;
+extern s32 gBufferedFrameCounter;
+extern s32 D_8009AFD0_9BBD0;
+extern u32 __additional_scanline_0;
+extern u8 gDisplayFramePending;
+extern void *D_800A3360_A3F60;
+extern void *D_800A3364_A3F64;
+extern void *D_800A3368_A3F68;
+extern long long int rspbootTextStart[];
+extern long long int aspMainTextStart[];
+extern Gfx D_8009AED0_9BAD0[];
+extern s32 D_8009AFE0_9BBE0[];
 
 void *LinearAlloc(size_t size);
 void restoreViewportOffsets(void);
 void initViewportCallbackPool(Node_70B00 *arg0);
+void initGraphicsSystem(void);
+void initGraphicsArenas(void);
+void initLinearAllocator(void);
+void initLinearArenaRegions(void);
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006DC40_6E840);
+void func_8006DC40_6E840(void) {
+    DisplayBufferMsg *msg;
+    u8 exists;
+    s32 i;
+    Gfx *gfx;
+
+    initLinearArenaRegions();
+    initLinearAllocator();
+    initGraphicsArenas();
+
+    D_800A3360_A3F60 = allocateMemoryNode(0, 0x400, &exists);
+    D_800A3364_A3F64 = allocateMemoryNode(0, 0x10000, &exists);
+    D_800A3368_A3F68 = allocateMemoryNode(0, 0xC00, &exists);
+    initGraphicsSystem();
+
+    gFrameBufferFlags[0] = 0;
+    gFrameBufferFlags[1] = 0;
+    gFrameCounter = 1;
+    gBufferedFrameCounter = 0;
+    D_8009AFD0_9BBD0 = 0;
+    __additional_scanline_0 = 0;
+    gDisplayFramePending = 0;
+
+    gDisplayBufferMsgs = msg = allocateMemoryNode(0, 3 * sizeof(DisplayBufferMsg), &exists);
+
+    for (i = 0; i < 3; msg++, i++) {
+        gfx = msg->displayList;
+        gSPSegment(gfx++, 0, 0);
+        gSPDisplayList(gfx++, D_8009AED0_9BAD0);
+        gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        gDPSetCycleType(gfx++, G_CYC_FILL);
+        gDPSetRenderMode(gfx++, G_RM_NOOP, G_RM_NOOP2);
+        gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, &gFrameBuffer);
+        gDPSetFillColor(gfx++, 0xFFFCFFFC);
+        gDPFillRectangle(gfx++, 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1);
+        gDPPipeSync(gfx++);
+        gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, &gAuxFrameBuffers[i]);
+        gDPSetFillColor(gfx++, 0x10001);
+        gDPFillRectangle(gfx++, 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1);
+        gDPPipeSync(gfx++);
+        gDPFullSync(gfx++);
+        gSPEndDisplayList(gfx++);
+
+        msg->yield_data_ptr = &gAuxFrameBuffers[i];
+        msg->unk4C = 0;
+        msg->unk4E = 2;
+
+        msg->data_ptr = msg->displayList;
+        msg->data_size = 0x78;
+        msg->type = 1;
+        msg->flags = 0;
+        msg->ucode_boot = rspbootTextStart;
+
+        msg->ucode_boot_size = (u32)aspMainTextStart;
+        msg->ucode_boot_size = msg->ucode_boot_size - ((u32)rspbootTextStart);
+
+        msg->ucode = (void *)D_8009AFE0_9BBE0[0];
+        msg->output_buff_size = (void *)D_8009AFE0_9BBE0[1];
+        msg->ucode_data_size = 0x800;
+        msg->ucode_data = D_800A3360_A3F60;
+        msg->dram_stack_size = 0x400;
+        msg->dram_stack = D_800A3364_A3F64;
+        msg->task_2C = (u32)msg->dram_stack + 0x10000;
+        msg->output_buff = D_800A3368_A3F68;
+        msg->yield_data_size = 0xC00;
+    }
+}
 
 void processDisplayFrameUpdate(void) {
     Node_70B00 *node;
