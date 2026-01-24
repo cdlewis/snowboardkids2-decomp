@@ -449,31 +449,24 @@ s32 cutsceneChrMove3_validate(void) {
     return 0;
 }
 
-void cutsceneChrMove3_exec(cutsceneChrMove3_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    CutsceneSlot *currentSlot = &arg1->slots[arg2];
+void cutsceneChrMove3_exec(cutsceneChrMove3_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex) {
+    CutsceneSlot *slot = &cutsceneManager->slots[slotIndex];
 
-    getCurrentStateEntryItem(arg2);
+    getCurrentStateEntryItem(slotIndex);
 
     setupSlotMoveToWithRotation(
-        &currentSlot->slotData,
-        currentSlot->model,
-        arg0->targetX,
-        arg0->targetY,
-        arg0->targetZ,
-        arg0->duration,
-        arg0->targetAngle
+        &slot->slotData,
+        slot->model,
+        arg->targetX,
+        arg->targetY,
+        arg->targetZ,
+        arg->duration,
+        arg->targetAngle
     );
 
-    setModelAnimationEx(
-        currentSlot->model,
-        arg0->animIndex,
-        arg0->transitionAnimIndex,
-        arg0->loopCount,
-        -1,
-        arg0->animQueued
-    );
+    setModelAnimationEx(slot->model, arg->animIndex, arg->transitionAnimIndex, arg->loopCount, -1, arg->animQueued);
 
-    setModelActionMode(currentSlot->model, arg0->actionMode);
+    setModelActionMode(slot->model, arg->actionMode);
 }
 
 s32 cutsceneChrMove3_isDone(void) {
