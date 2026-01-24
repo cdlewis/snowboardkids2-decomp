@@ -164,44 +164,44 @@ s32 cutsceneChrMove2_validate(void) {
     return 0;
 }
 
-void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    s32 temp_s0;
+void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex) {
+    s32 decelRate;
     s16 animId;
-    u16 temp_s4;
+    u16 characterId;
     s32 result;
     CutsceneSlot *slot;
 
-    slot = &arg1->slots[arg2];
+    slot = &cutsceneManager->slots[slotIndex];
 
-    temp_s4 = getCurrentStateEntryItem(arg2)->unk4;
+    characterId = getCurrentStateEntryItem(slotIndex)->unk4;
 
-    temp_s0 = 1;
+    decelRate = 1;
     animId = -1;
 
     result = setupSlotMoveToEx(
         &slot->slotData,
         slot->model,
-        arg0->unk0,
-        arg0->unk4,
-        arg0->unk8,
-        arg0->unkE,
-        arg0->unkC,
-        temp_s0,
-        arg0->unk16
+        arg->targetX,
+        arg->targetY,
+        arg->targetZ,
+        arg->duration,
+        arg->fallbackRotY,
+        decelRate,
+        arg->decelRate
     );
 
     switch (result) {
         case 1:
-            animId = getWalkAnimationId(temp_s4);
+            animId = getWalkAnimationId(characterId);
             break;
         case 2:
-            animId = getRunAnimationId(temp_s4);
+            animId = getRunAnimationId(characterId);
             break;
     }
 
-    setModelAnimationEx(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, animId, arg0->unk17);
+    setModelAnimationEx(slot->model, arg->animIndex, arg->transitionAnimIndex, arg->loopCount, animId, arg->animQueued);
 
-    setModelActionMode(slot->model, arg0->unk12);
+    setModelActionMode(slot->model, arg->actionMode);
 }
 
 s32 cutsceneChrMove2_isDone(void) {
@@ -238,27 +238,27 @@ s32 cutsceneChrBoardMove_validate(void) {
     return 0;
 }
 
-void cutsceneChrBoardMove_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    CutsceneSlot *slot = &arg1->slots[arg2];
+void cutsceneChrBoardMove_exec(cutsceneChrMove2_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex) {
+    CutsceneSlot *slot = &cutsceneManager->slots[slotIndex];
 
-    getCurrentStateEntryItem(arg2);
+    getCurrentStateEntryItem(slotIndex);
 
     setupSlotWalkTo(
         &slot->slotData,
         slot->model,
-        arg0->unk0,
-        arg0->unk4,
-        arg0->unk8,
-        arg0->unkE,
-        arg0->unkC,
-        arg0->unk10,
-        arg0->unk16,
-        arg0->unk17
+        arg->targetX,
+        arg->targetY,
+        arg->targetZ,
+        arg->duration,
+        arg->fallbackRotY,
+        arg->animIndex,
+        arg->decelRate,
+        arg->animQueued
     );
 
-    setModelAnimationQueued(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, -1);
+    setModelAnimationQueued(slot->model, arg->animIndex, arg->transitionAnimIndex, arg->loopCount, -1);
 
-    setModelActionMode(slot->model, arg0->unk12);
+    setModelActionMode(slot->model, arg->actionMode);
 }
 
 s32 cutsceneChrBoardMove_isDone(void) {

@@ -76,17 +76,17 @@ typedef struct {
 } cutsceneChrMove_exec_arg;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s8 unk12;
-    s8 unk13;
-    s16 unk14;
-    s8 unk16;
-    s8 unk17;
+    s32 targetX;
+    s32 targetY;
+    s32 targetZ;
+    s16 fallbackRotY;
+    s16 duration;
+    s16 animIndex;
+    s8 actionMode;
+    s8 loopCount;
+    s16 transitionAnimIndex;
+    s8 decelRate;
+    s8 animQueued;
 } cutsceneChrMove2_exec_arg;
 
 typedef struct {
@@ -215,7 +215,7 @@ s32 cutsceneChrTurn_validate(void);
 void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 void cutsceneChrMove2_init(void);
 s32 cutsceneChrMove2_validate(void);
-void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex);
 s32 cutsceneChrMove2_isDone(void);
 void cutsceneChrZoom_init(void);
 s32 cutsceneChrZoom_validate(void);
@@ -223,7 +223,7 @@ void cutsceneChrZoom_exec(cutsceneChrZoom_exec_arg *arg0, CutsceneManager *arg1,
 s32 cutsceneChrZoom_isDone(void);
 void cutsceneChrBoardMove_init(void);
 s32 cutsceneChrBoardMove_validate(void);
-void cutsceneChrBoardMove_exec(cutsceneChrMove2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrBoardMove_exec(cutsceneChrMove2_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex);
 s32 cutsceneChrBoardMove_isDone(void);
 void cutsceneChrTurn2_init(void);
 s32 cutsceneChrTurn2_validate(void);
