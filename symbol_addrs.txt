@@ -3754,6 +3754,7 @@ updateCrossRaceBadgeDisplay = 0x80050098; // rom:0x50C98
 cleanupCrossRaceBadgeTask = 0x800500F0; // rom:0x50CF0
 startRumbleEffect = 0x800B7B44; // rom:0xA79F4
 getRumbleDuration = 0x800B7B64; // rom:0xA7A14
+updateAndRenderRaceCharacters = 0x800B7B7C; // rom:0xA7A2C
 gRumbleDurations = 0x800BACBC; // rom:0xAAB6C type:u8
 gRumblePatterns = 0x800BACA4; // rom:0xAAB54 type:u16
 updateJingleTownBossJointPositions = 0x800BCA10; // rom:0xB3FD0

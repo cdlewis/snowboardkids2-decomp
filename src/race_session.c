@@ -810,7 +810,7 @@ void scheduleRaceTasks(void) {
     gameState->pendingPlayerRenderTasks = 0;
 
     scheduleTask(&func_800B0334_A01E4, 0, 0, 1);
-    scheduleTask(&func_800B7B7C_A7A2C, 0, 0, 0x64);
+    scheduleTask(&updateAndRenderRaceCharacters, 0, 0, 0x64);
     scheduleTask(&initPauseMenuDisplayTask, 0, 0, 0xC8);
 
     scheduleLevelEnvironmentTasks(gameState->memoryPoolId);

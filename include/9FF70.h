@@ -27,4 +27,4 @@ void func_800B9500_A93B0(void *arg0);
 void loadPlayerCharacterAssets(void *arg0);
 void freePlayerCharacterAssets(void *arg0);
 void func_800B0334_A01E4(void);
-void func_800B7B7C_A7A2C(void);
+void updateAndRenderRaceCharacters(void);

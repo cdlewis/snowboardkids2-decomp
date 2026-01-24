@@ -3514,7 +3514,7 @@ u8 getRumbleDuration(Player *player, s32 effectType) {
     return player->rumbleDuration;
 }
 
-INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B7B7C_A7A2C);
+INCLUDE_ASM("asm/nonmatchings/9FF70", updateAndRenderRaceCharacters);
 
 void func_800B82D8_A8188(Player *arg0) {
     Vec3i savedPos;
