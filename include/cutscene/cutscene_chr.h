@@ -190,7 +190,7 @@ void cutsceneChrMove_exec(cutsceneChrMove_exec_arg *arg0, CutsceneManager *arg1,
 s32 cutsceneChrMove_isDone(void);
 void cutsceneChrAnime_init(void);
 s32 cutsceneChrAnime_validate(void);
-void cutsceneChrAnime_exec(cutsceneChrAnime_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrAnime_exec(cutsceneChrAnime_exec_arg *arg, CutsceneManager *manager, s8 slotIndex);
 s32 cutsceneChrAnime_isDone(void);
 void cutsceneChrDisp_init(void);
 s32 cutsceneChrDisp_validate(void);

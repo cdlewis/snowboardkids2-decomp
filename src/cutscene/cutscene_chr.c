@@ -87,11 +87,12 @@ s32 cutsceneChrAnime_validate(void) {
     return 0;
 }
 
-void cutsceneChrAnime_exec(cutsceneChrAnime_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    CutsceneSlot *slot = &arg1->slots[arg2];
+void cutsceneChrAnime_exec(cutsceneChrAnime_exec_arg *arg, CutsceneManager *manager, s8 slotIndex) {
+    CutsceneSlot *slot = &manager->slots[slotIndex];
+
     slot->slotData.unk0.Two = 0;
-    setModelAnimationEx(slot->model, arg0->animIndex, arg0->transitionAnimIndex, arg0->loopCount, -1, -1);
-    setModelActionMode(slot->model, arg0->actionMode);
+    setModelAnimationEx(slot->model, arg->animIndex, arg->transitionAnimIndex, arg->loopCount, -1, -1);
+    setModelActionMode(slot->model, arg->actionMode);
 }
 
 s32 cutsceneChrAnime_isDone(void) {
