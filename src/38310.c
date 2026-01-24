@@ -91,12 +91,14 @@ extern void *D_8008FDAC_909AC;
 extern void *D_8008FDBC_909BC;
 extern void *optionsMenuLabelTextData[];
 
-void cleanupOptionsMenuLabels(OptionsMenuLabelsCleanupArg *);
-void updateOptionsMenuLabels(OptionsMenuLabelsState *);
-void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *);
-void updateOptionsMenuTitle(u8 *);
-void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *);
-void cleanupOptionsMenuCursors(OptionsMenuCursorsCleanupArg *arg0);
+static void cleanupOptionsMenuLabels(OptionsMenuLabelsCleanupArg *);
+static void cleanupOptionsMenuToggles(OptionsMenuTogglesCleanupArg *);
+static void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *);
+static void cleanupOptionsMenuCursors(OptionsMenuCursorsCleanupArg *);
+static void updateOptionsMenuLabels(OptionsMenuLabelsState *);
+static void updateOptionsMenuToggles(OptionsMenuToggleState *);
+static void updateOptionsMenuTitle(u8 *);
+static void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *);
 
 void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
     void *textAsset;
@@ -133,7 +135,7 @@ void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
     setCallback(updateOptionsMenuTitle);
 }
 
-void updateOptionsMenuTitle(u8 *arg0) {
+static void updateOptionsMenuTitle(u8 *arg0) {
     s32 i;
 
     debugEnqueueCallback(8, 0, func_80035408_36008, arg0);
@@ -143,13 +145,10 @@ void updateOptionsMenuTitle(u8 *arg0) {
     }
 }
 
-void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *arg0) {
+static void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *arg0) {
     arg0->textAsset = freeNodeMemory(arg0->textAsset);
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
-
-void cleanupOptionsMenuToggles(OptionsMenuTogglesCleanupArg *);
-void updateOptionsMenuToggles(OptionsMenuToggleState *);
 
 #define ARG0 ((OptionsMenuToggleState *)arg0)
 
@@ -210,7 +209,7 @@ void initOptionsMenuToggles(void *arg0) {
 
 #undef ARG0
 
-void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
+static void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
     OptionsMenuAllocation *alloc;
     s32 i;
     u8 optionValue;
@@ -260,7 +259,7 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
     }
 }
 
-void cleanupOptionsMenuToggles(OptionsMenuTogglesCleanupArg *arg0) {
+static void cleanupOptionsMenuToggles(OptionsMenuTogglesCleanupArg *arg0) {
     arg0->unkD8 = freeNodeMemory(arg0->unkD8);
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
@@ -313,7 +312,7 @@ void initOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
     setCallback(updateOptionsMenuLabels);
 }
 
-void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
+static void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
     OptionsMenuAllocation *alloc;
     s32 i;
     do {
@@ -354,7 +353,7 @@ void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
     } while (0);
 }
 
-void cleanupOptionsMenuLabels(OptionsMenuLabelsCleanupArg *arg0) {
+static void cleanupOptionsMenuLabels(OptionsMenuLabelsCleanupArg *arg0) {
     arg0->unk48 = freeNodeMemory(arg0->unk48);
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
@@ -387,7 +386,7 @@ void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
     setCallback(updateOptionsMenuCursors);
 }
 
-void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
+static void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
     OptionsMenuAllocation *alloc = getCurrentAllocation();
     s32 i;
 
@@ -404,6 +403,6 @@ void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
     }
 }
 
-void cleanupOptionsMenuCursors(OptionsMenuCursorsCleanupArg *arg0) {
+static void cleanupOptionsMenuCursors(OptionsMenuCursorsCleanupArg *arg0) {
     arg0->cursorSpriteAsset = freeNodeMemory(arg0->cursorSpriteAsset);
 }
