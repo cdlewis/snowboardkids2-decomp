@@ -189,7 +189,7 @@ void resetAllSlotTransforms(CutsceneManager *manager) {
             interpolateSlotScaleY(slotData, 0x10000, 0);
             interpolateSlotScaleZ(slotData, 0x10000, 0);
             setupSlotTransform(slotData);
-            applyTransformToModel(model, &slotData->unk04);
+            applyTransformToModel(model, &slotData->transform);
         }
 
         i++;
@@ -320,7 +320,7 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
 
         if (currentModel) {
             setupSlotTransform(slotData);
-            applyTransformToModel(currentModel, &slotData->unk04);
+            applyTransformToModel(currentModel, &slotData->transform);
             if (cutsceneManager->enableTransparency) {
                 setModelVisibility(currentModel, 1);
             } else {

@@ -135,7 +135,7 @@ typedef struct {
         s8 animMode;
         s8 bytes[4];
     } unk0;
-    Transform3D unk04;
+    Transform3D transform;
     union {
         SceneModel *unk20;
         s32 unk20_s32;

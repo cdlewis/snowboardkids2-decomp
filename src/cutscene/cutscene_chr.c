@@ -19,7 +19,7 @@ void cutsceneChrPosition_exec(cutsceneChrPosition_exec_arg *arg, CutsceneManager
 
     initSlotPosition(slotData, arg->x, arg->y, arg->z, arg->rotY);
     setupSlotTransform(slotData);
-    applyTransformToModel(slot->model, &slot->slotData.unk04);
+    applyTransformToModel(slot->model, &slot->slotData.transform);
     setModelAnimationEx(slot->model, arg->animIndex, arg->transitionAnimIndex, arg->loopCount, -1, arg->animQueued);
     setModelActionMode(slot->model, arg->actionMode);
 }
@@ -610,7 +610,7 @@ void cutsceneChrPosition2_exec(cutsceneChrPosition2_exec_arg *arg, CutsceneManag
 
     initSlotPositionEx(slotData, arg->x, arg->y, arg->z, arg->rotY, arg->rotX, arg->rotZ);
     setupSlotTransform(slotData);
-    applyTransformToModel(slot->model, &slot->slotData.unk04);
+    applyTransformToModel(slot->model, &slot->slotData.transform);
     setModelAnimationEx(slot->model, arg->animIndex, arg->transitionAnimIndex, arg->loopCount, -1, arg->animQueued);
     setModelActionMode(slot->model, arg->actionMode);
 }

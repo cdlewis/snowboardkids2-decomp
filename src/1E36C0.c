@@ -82,7 +82,7 @@ end:
 extern u8 identityMatrix[];
 
 void initSlotData(CutsceneSlotData *slot) {
-    memcpy(&slot->unk04, identityMatrix, 0x20);
+    memcpy(&slot->transform, identityMatrix, 0x20);
 
     slot->unk0.bytes[0] = 0;
     slot->unk20_u.unk20_s32 = 0;
@@ -187,12 +187,12 @@ skip3:
     sz = (s16)((scaleZ << 0xD) >> 0x10);
 
     scaleMatrix(pScale, sx, sy, sz);
-    func_8006B084_6BC84(pScale, &tempYZ, &slot->unk04);
+    func_8006B084_6BC84(pScale, &tempYZ, &slot->transform);
 
     retval = slot->unk20_u.unk20_s32;
-    slot->unk04.translation.x = retval;
-    slot->unk04.translation.y = slot->unk28;
-    slot->unk04.translation.z = slot->unk2C;
+    slot->transform.translation.x = retval;
+    slot->transform.translation.y = slot->unk28;
+    slot->transform.translation.z = slot->unk2C;
 
     return retval;
 }
