@@ -5,6 +5,16 @@
 #include "main.h"
 
 typedef struct {
+    u8 pad0[0xA];
+    s16 alpha;
+    void *unkC;
+} ControllerSlotElement;
+
+typedef struct {
+    ControllerSlotElement elements[8];
+} ControllerSlotDisplay;
+
+typedef struct {
     u8 padding[0x2];
     s16 unk2;
     u8 padding2[0x34];
