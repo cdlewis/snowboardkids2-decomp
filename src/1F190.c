@@ -18,61 +18,7 @@ USE_ASSET(_43F050);
 USE_ASSET(_459310);
 USE_ASSET(_4488E0);
 
-typedef struct {
-    Node_70B00 cameraNode;          // 0x000
-    Node_70B00 secondaryCameraNode; // 0x1D8
-    Node_70B00 previewNode;         // 0x3B0
-    Node_70B00 viewportParentNode;  // 0x588
-    Node_70B00 detailNode;          // 0x760
-    Node_70B00 tertiaryCameraNode;  // 0x938
-    void *portraitAsset;            // 0xB10
-    void *imageAsset;               // 0xB14
-    void *effectAsset;              // 0xB18
-    void *textRenderAsset;          // 0xB1C
-    void *uiAsset;                  // 0xB20
-    u8 padB24[0x4];                 // 0xB24
-    u16 transitionCounter;          // 0xB28
-    u8 padB2A[0x2];                 // 0xB2A
-    s8 selectedIndex;               // 0xB2C
-    u8 exitMode;                    // 0xB2D
-    u8 previewLoadCounter;          // 0xB2E
-    u8 padB2F[0x4];                 // 0xB2F
-    u8 levelIdList[12];             // 0xB33
-    u8 padB3F[0x5];                 // 0xB3F
-    u8 isLoadingPreview;            // 0xB44
-    u8 showDetailView;              // 0xB45
-    u8 selectedNumber;              // 0xB46
-} LevelSelectState_Base;
-
-// typedef struct {
-//     Node_70B00 cameraNode;
-//     Node_70B00 secondaryCameraNode;
-//     Node_70B00 previewNode;
-//     Node_70B00 viewportParentNode;
-//     Node_70B00 detailNode;
-//     Node_70B00 tertiaryCameraNode;
-//     void *portraitAsset;
-//     void *imageAsset;
-//     void *effectAsset;
-//     void *textRenderAsset;
-//     void *uiAsset;
-//     s32 loadStartFrame;
-//     u16 transitionCounter;
-//     u8 padB2A[0x2];
-//     s8 selectedIndex;
-//     u8 exitMode;
-//     u8 previewLoadCounter;
-//     u8 menuState;
-//     u8 newLevelId;
-//     u8 oldLevelId;
-//     u8 scrollDirection;
-//     u8 levelIdList[16];
-//     u8 menuItemCount;
-//     u8 isLoadingPreview;
-//     u8 showDetailView;
-//     u8 selectedNumber;
-//     u8 maxLevelCount;
-// } LevelSelectState;
+#define ASPECT_RATIO (4.0f / 3.0f)
 
 typedef struct {
     /* 0x000 */ Node_70B00 cameraNode;
@@ -127,8 +73,7 @@ void cancelLevelSelect(void);
 void applyLevelSelection(void);
 void cleanupLevelSelect(void);
 void loadLevelPreview(void);
-
-extern s32 buildUnlockedLevelList(u8 *);
+s32 buildUnlockedLevelList(u8 *levelIdList);
 
 extern s32 gControllerInputs[];
 extern s32 gFrameCounter;
@@ -136,13 +81,13 @@ extern u8 D_8008D9C0_8E5C0[];
 extern u8 identityMatrix[];
 
 void initLevelSelectWithDetail(void) {
-    LevelSelectState_Base *allocation = allocateTaskMemory(0xB48);
+    LevelSelectState *allocation = allocateTaskMemory(0xB48);
     allocation->showDetailView = 1;
     setGameStateHandler(initLevelSelectState);
 }
 
 void initLevelSelectBasic(void) {
-    LevelSelectState_Base *allocation = allocateTaskMemory(0xB48);
+    LevelSelectState *allocation = allocateTaskMemory(0xB48);
     allocation->showDetailView = 0;
     setGameStateHandler(initLevelSelectState);
 }
@@ -247,7 +192,7 @@ void initLevelSelectState(void) {
 }
 
 void initLevelSelectTransition(void) {
-    LevelSelectState_Base *allocation = (LevelSelectState_Base *)getCurrentAllocation();
+    LevelSelectState *allocation = (LevelSelectState *)getCurrentAllocation();
 
     allocation->transitionCounter++;
     if (allocation->transitionCounter < 3) {
@@ -476,7 +421,7 @@ void handleLevelSelectInput(void) {
 }
 
 void cleanupLevelSelect(void) {
-    LevelSelectState_Base *allocation = (LevelSelectState_Base *)getCurrentAllocation();
+    LevelSelectState *allocation = (LevelSelectState *)getCurrentAllocation();
 
     if (getViewportFadeMode(NULL) != 0) {
         return;
@@ -513,7 +458,7 @@ void cancelLevelSelect(void) {
 }
 
 void applyLevelSelection(void) {
-    LevelSelectState_Base *allocation;
+    LevelSelectState *allocation;
     D_800AFE8C_A71FC_type *ptr;
     u8 unk4;
     u8 saveSlotIndex;
@@ -537,17 +482,15 @@ void applyLevelSelection(void) {
     }
 }
 
-#define ASPECT_RATIO (4.0f / 3.0f)
-
 void loadLevelPreview(void) {
-    LevelSelectState_Base *allocation;
+    LevelSelectState *allocation;
     LevelConfig *item;
     u8 counter;
     u8 poolIdRaw;
     u8 poolId;
     Node_70B00 *node;
 
-    allocation = (LevelSelectState_Base *)getCurrentAllocation();
+    allocation = (LevelSelectState *)getCurrentAllocation();
 
     if (allocation->isLoadingPreview != 0) {
         return;
