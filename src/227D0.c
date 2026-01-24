@@ -5,15 +5,14 @@
 
 void awaitCharacterSelect(void);
 void awaitLevelSelectBasic(void);
+void loadCharacterSelect(void);
+void onLevelSelectCancel(void);
 void onLevelSelectProceed(void);
 
 void initLevelSelectBasicState(void) {
     createTaskQueue(&initLevelSelectBasic, 100);
     setGameStateHandler(&awaitLevelSelectBasic);
 }
-
-void loadCharacterSelect(void);
-void onLevelSelectCancel(void);
 
 void awaitLevelSelectBasic(void) {
     s16 result = getSchedulerReturnValue();
