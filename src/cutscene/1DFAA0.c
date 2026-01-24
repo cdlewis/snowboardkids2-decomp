@@ -50,7 +50,7 @@ extern s16 gCutsceneEntryBufferFrameNumber;
 extern s8 gCutsceneEntryCutFlag;
 extern s16 gCutsceneEntryBufferSlotIndex;
 extern CutsceneFadeAssetNode gCutsceneFadeAssetTable[];
-extern s8 D_800BAE00_1E7EB0[];
+extern char gDebugFrameFormatString[];
 extern u8 identityMatrix[];
 extern CutsceneAssetTable gCutsceneAssetTable[];
 
@@ -260,7 +260,7 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
     u8 eventType;
 
     if (cutsceneManager->showDebugInfo) {
-        sprintf((char *)cutsceneManager->debugText, (const char *)D_800BAE00_1E7EB0, cutsceneManager->currentFrame);
+        sprintf((char *)cutsceneManager->debugText, gDebugFrameFormatString, cutsceneManager->currentFrame);
         debugEnqueueCallback(
             cutsceneManager->uiResource->slot_index,
             6,
