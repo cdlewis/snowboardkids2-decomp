@@ -188,12 +188,12 @@ u8 getCommandEnabled(s32 arg0, s32 arg1) {
     return getCommandEntry(arg0 & 0xFF, arg1 & 0xFF)->enabled;
 }
 
-void *getCommandDescription(u8 a0, u8 a1) {
-    if (a0 == 0xFF || a1 == 0xFF) {
+void *getCommandDescription(u8 commandCategory, u8 commandIndex) {
+    if (commandCategory == 0xFF || commandIndex == 0xFF) {
         return &commandTable.header;
     }
 
-    return &getCommandEntry(a0, a1)->description;
+    return &getCommandEntry(commandCategory, commandIndex)->description;
 }
 
 u8 incrementCommandIndexWithWrap(u8 categoryIndex, s32 commandIndex) {
