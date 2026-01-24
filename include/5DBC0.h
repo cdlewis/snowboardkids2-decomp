@@ -1,0 +1,27 @@
+#ifndef _5DBC0_H_
+#define _5DBC0_H_
+
+#include "common.h"
+#include "gamestate.h"
+
+/* Global data tables */
+extern u8 gCharacterBodyPartAnimTable[];
+extern u8 gBodyPartRemapTable[];
+extern s8 gSpecialTrickTypeTable[];
+
+/* Function declarations */
+s32 getTrackHeightInSector(void *gameData, s32 sectorIndex, void *pos, s32 heightOffset);
+s32 getTrackHeightInSectorWithOffset(void *gameData, u16 sectorIndex, void *pos, s32 unused, s32 heightOffset);
+void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4);
+s32 getSectorTrackHeight(void *gameData, u16 sectorIndex, void *pos, s32 defaultHeight);
+void clampPlayerVelocityToMaxSpeed(Player *player);
+s32 func_8005D180_5DD80(void *arg0, s32 arg1);
+s32 func_8005D308_5DF08(void *arg0, s32 arg1);
+void func_8005D48C_5E08C(void);
+void loadCharacterBodyParts(Player *player);
+void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags);
+s16 onTrickCompletedHook(Player *player);
+s16 getTrickType(Player *player);
+s32 getTrickRecoveryTimerReduction(Player *player);
+
+#endif
