@@ -322,10 +322,10 @@ INCLUDE_ASM("asm/nonmatchings/geometry", createRotationMatrixXYZ);
 
 INCLUDE_ASM("asm/nonmatchings/geometry", createRotationMatrixZYX);
 
-void setBonePosition(BoneAnimationState *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    arg0->position[0] = arg1;
-    arg0->position[1] = arg2;
-    arg0->position[2] = arg3;
+void setBonePosition(BoneAnimationState *state, s32 x, s32 y, s32 z) {
+    state->position[0] = x;
+    state->position[1] = y;
+    state->position[2] = z;
 }
 
 void scaleMatrix(Transform3D *matrix, s16 scaleX, s16 scaleY, s16 scaleZ) {

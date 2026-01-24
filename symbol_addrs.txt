@@ -2831,6 +2831,7 @@ createRotationMatrixXZ = 0x8006A948;
 createRotationMatrixYZ = 0x8006AA5C;
 createRotationMatrixXYZ = 0x8006AB64;
 createRotationMatrixZYX = 0x8006AD9C;
+setBonePosition = 0x8006AFDC; // rom:0x6BBDC
 scaleMatrix = 0x8006AFEC;
 createCombinedRotationMatrix = 0x8006A724;
 createRotationMatrixYX = 0x8006A838;
