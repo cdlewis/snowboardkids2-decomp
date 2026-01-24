@@ -15,6 +15,16 @@
 
 USE_ASSET(_4060A0);
 
+// External globals
+extern Gfx D_8009A780_9B380[];
+extern Gfx *gRegionAllocPtr;
+extern s16 gGraphicsMode;
+extern s32 D_800A8B14_9FE84;
+extern s32 D_8009A8A4_9B4A4;
+extern void *D_800BBBB0_AD630;
+
+// Struct definitions
+
 typedef struct {
     s8 textureIndex;
     u8 pad1[3];
@@ -67,19 +77,14 @@ typedef struct {
     /* 0x3C */ u16 rotationAngle;
 } RotatingSkyRenderArg;
 
+// Forward declarations
 void renderShootCrossTargets(ShootCrossTargets *arg0);
 void updateRotatingSky(RotatingSkyRenderArg *arg0);
 void cleanupRotatingSky(RotatingSkyArg *rotatingSky);
 void cleanupShootCrossTargets(ShootCrossTargets *arg0);
+void initShootCrossTargets(ShootCrossTargets *arg0);
 void initShootCrossTargetsCallback(ShootCrossTargets *arg0);
 void activateShootCrossTargets(ShootCrossTargets *arg0);
-
-extern Gfx D_8009A780_9B380[];
-extern Gfx *gRegionAllocPtr;
-extern s16 gGraphicsMode;
-extern s32 D_800A8B14_9FE84;
-extern s32 D_8009A8A4_9B4A4;
-extern void *D_800BBBB0_AD630;
 
 void initShootCrossTargets(ShootCrossTargets *arg0) {
     arg0->spriteAsset = loadAsset_34F9A0();
