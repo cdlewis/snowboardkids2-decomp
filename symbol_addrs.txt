@@ -1192,9 +1192,10 @@ cutsceneSysFadeIn_exec = 0x800B228C; // rom:0x1DF33C
 cutsceneSysFadeOut_exec = 0x800B2300; // rom:0x1DF3B0
 cutsceneSysFlash_setup = 0x800B2374; // rom:0x1DF424
 cutsceneSysFlash_update = 0x800B2404; // rom:0x1DF4B4
-cutsceneSysIntMode_exec = 0x800B24F8;
-cutsceneSysWipeColor_exec = 0x800B2524;
-cutsceneSysFilter_exec = 0x800B279C;
+cutsceneSysIntMode_exec = 0x800B24F8; // rom:0x1DF5A8
+cutsceneSysWipeColor_exec = 0x800B2524; // rom:0x1DF5D4
+cutsceneSysWait_exec = 0x800B25A0; // rom:0x1DF650
+cutsceneSysFilter_exec = 0x800B279C; // rom:0x1DF84C
 cutsceneSysCurtain_update = 0x800B2700;
 cutsceneSysCurtain_exec = 0x800B261C; // rom:0x1DF6CC
 gButtonsPressed = 0x800AB050; // size:0x10
@@ -1324,8 +1325,8 @@ commandCategories = 0x800BA570; // type:s32 size:0x48 rom:0x1E7620
 commandTable = 0x800B9C70; // type:s32 size:0x900 rom:0x1E6D20
 updatePlayerJointPositions = 0x800B98CC; // rom:0xA977C
 
-cutsceneSys2Wipe_validate = 0x800B2808;
-cutsceneSys2Wipe_isDone = 0x800B292C;
+cutsceneSys2Wipe_validate = 0x800B2808; // rom:0x1DF8B8
+cutsceneSys2Wipe_isDone = 0x800B292C; // rom:0x1DF9DC
 cutsceneSys2Wait_validate = 0x800B293C; // rom:0x1DF9EC
 
 cutsceneBgmPlay_validate = 0x800B0818; // rom:0x1DD8C8
@@ -1404,14 +1405,14 @@ cutsceneSysFlash_isDone = 0x800B24E0; // rom:0x1DF590
 cutsceneSysIntMode_validate = 0x800B24F0; // rom:0x1DF5A0
 cutsceneSysWipeColor_validate = 0x800B251C; // rom:0x1DF5CC
 cutsceneSysWait_validate = 0x800B2598; // rom:0x1DF648
-cutsceneSysCurtain_validate = 0x800B2614;
-cutsceneSysCurtain_isDone = 0x800B2784;
-cutsceneSysFilter_validate = 0x800B2794;
-cutsceneSysFilter_isDone = 0x800B27EC;
+cutsceneSysCurtain_validate = 0x800B2614; // rom:0x1DF6C4
+cutsceneSysCurtain_isDone = 0x800B2784; // rom:0x1DF834
+cutsceneSysFilter_validate = 0x800B2794; // rom:0x1DF844
+cutsceneSysFilter_isDone = 0x800B27EC; // rom:0x1DF89C
 cutsceneSysDisp_validate = 0x800B2268; // rom:0x1DF318
 
-cutsceneSys2Wipe_init = 0x800B2800;
-cutsceneSys2Wait_init = 0x800B2934;
+cutsceneSys2Wipe_init = 0x800B2800; // rom:0x1DF8B0
+cutsceneSys2Wait_init = 0x800B2934; // rom:0x1DF9E4
 
 cutsceneBgmPlay_init = 0x800B0810; // rom:0x1DD8C0
 cutsceneBgmFadeOut_init = 0x800B0848; // rom:0x1DD8F8
@@ -1453,14 +1454,14 @@ cutsceneChrKageDisp_init = 0x800B1C18; // rom:0x1DECC8
 
 cutsceneSysDisp_init = 0x800B2260; // rom:0x1DF310
 gCutsceneFadeBrightnessTable = 0x800BA5C0; // rom:0x1E7670
-cutsceneSysFadeIn_init = 0x800B227C;
+cutsceneSysFadeIn_init = 0x800B227C; // rom:0x1DF32C
 cutsceneSysFadeOut_init = 0x800B22F0; // rom:0x1DF3A0
 cutsceneSysFlash_init = 0x800B2364; // rom:0x1DF414
 cutsceneSysIntMode_init = 0x800B24E8; // rom:0x1DF598
-cutsceneSysWipeColor_init = 0x800B2514;
-cutsceneSysWait_init = 0x800B2590;
-cutsceneSysCurtain_init = 0x800B260C;
-cutsceneSysFilter_init = 0x800B278C;
+cutsceneSysWipeColor_init = 0x800B2514; // rom:0x1DF5C4
+cutsceneSysWait_init = 0x800B2590; // rom:0x1DF640
+cutsceneSysCurtain_init = 0x800B260C; // rom:0x1DF6BC
+cutsceneSysFilter_init = 0x800B278C; // rom:0x1DF83C
 
 cutsceneInitTrack_exec = 0x800B20C0; // rom:0x1DF170
 cutsceneInitTrack_validate = 0x800B20B8; // rom:0x1DF168
