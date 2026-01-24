@@ -1,3 +1,4 @@
+#include "46080.h"
 #include "19E80.h"
 #include "413E0.h"
 #include "51060.h"
@@ -799,7 +800,6 @@ void dispatchSkyRenderCallback(ScheduledTask *);
 void updateItemHomingProjectileMovement(ItemHomingProjectileMoveArg *);
 void func_80045CC8_468C8(void);
 void cleanupBossHomingProjectileTask(BossHomingProjectileCleanupArg *);
-void spawnBossHomingProjectileTask(void *boss);
 void updateItemHomingProjectileImpact(ItemHomingProjectileImpactArg *);
 void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0);
 void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0);
