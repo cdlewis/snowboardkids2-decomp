@@ -10,22 +10,7 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-typedef struct {
-    u8 padding[0x24];
-    void *segment1;
-    void *segment2;
-} DisplayListObjectSegments;
-
-typedef struct {
-    Transform3D matrix;
-    DisplayLists *displayLists;
-    void *segment1;
-    void *segment2;
-    s32 unk2C;
-    u8 PAD[0xC];
-    s16 timer;
-    s16 state;
-} StarLauncherTask;
+// Struct definitions
 
 typedef struct {
     u16 rotX;
@@ -33,22 +18,26 @@ typedef struct {
     s32 position[3];
 } RockPositionEntry;
 
-extern RockPositionEntry crazyJungleRockPositions[];
+typedef struct {
+    /* 0x00 */ DisplayListObject node;
+    /* 0x3C */ u16 timer;
+    /* 0x3E */ s16 state;
+} StarLauncherTask;
 
 typedef struct {
     /* 0x00 */ DisplayListObject node1;
     /* 0x3C */ DisplayListObject node2;
-    s32 rotationMatrix;
-    s8 pad_7C[0x10];
-    s32 posX;
-    s8 pad_90[0x4];
-    s32 posY;
-    s32 posZ;
-    s32 animTimer;
-    s32 posOffset;
-    s16 xRotation;
-    s16 positionIndex;
-    s16 respawnTimer;
+    /* 0x78 */ s32 rotationMatrix;
+    /* 0x7C */ s8 pad_7C[0x10];
+    /* 0x8C */ s32 posX;
+    /* 0x90 */ s8 pad_90[0x4];
+    /* 0x94 */ s32 posY;
+    /* 0x98 */ s32 posZ;
+    /* 0x9C */ s32 animTimer;
+    /* 0xA0 */ s32 posOffset;
+    /* 0xA4 */ s16 xRotation;
+    /* 0xA6 */ s16 positionIndex;
+    /* 0xA8 */ s16 respawnTimer;
 } FallingRockHazard;
 
 typedef struct {
@@ -57,21 +46,25 @@ typedef struct {
     s16 positionIndex;
 } NodeWithPayload;
 
-typedef struct {
-    /* 0x0 */ DisplayListObject node;
-    u16 timer;
-    s16 state;
-} StarLauncherTaskUpdate;
-
-extern s32 D_8009A8A4_9B4A4;
+// Function declarations
 
 void renderFallingRockHazard(FallingRockHazard *rock);
 void updateFallingRockHazard(FallingRockHazard *rock);
 void fallingRockImpactCallback(FallingRockHazard *rock);
 void fallingRockRespawnCallback(FallingRockHazard *rock);
-void cleanupStarLauncherTask(DisplayListObjectSegments *arg0);
-void freeDisplayListSegments(DisplayListObjectSegments *);
-void updateStarLauncherTask(StarLauncherTaskUpdate *arg0);
+void cleanupStarLauncherTask(StarLauncherTask *arg0);
+void freeDisplayListSegments(StarLauncherTask *arg0);
+void updateStarLauncherTask(StarLauncherTask *arg0);
+void initFallingRockHazard(FallingRockHazard *rock);
+void initStarLauncherTask(StarLauncherTask *arg0);
+void initCrazyJungleHazards(void);
+
+// Extern declarations
+
+extern RockPositionEntry crazyJungleRockPositions[];
+extern s32 D_8009A8A4_9B4A4;
+
+// Function implementations
 
 void initFallingRockHazard(FallingRockHazard *rock) {
     GameState *gameState;
@@ -230,28 +223,28 @@ void fallingRockRespawnCallback(FallingRockHazard *rock) {
     }
 }
 
-void freeDisplayListSegments(DisplayListObjectSegments *arg0) {
-    arg0->segment1 = freeNodeMemory(arg0->segment1);
-    arg0->segment2 = freeNodeMemory(arg0->segment2);
+void freeDisplayListSegments(StarLauncherTask *arg0) {
+    arg0->node.segment1 = freeNodeMemory(arg0->node.segment1);
+    arg0->node.segment2 = freeNodeMemory(arg0->node.segment2);
 }
 
 void initStarLauncherTask(StarLauncherTask *arg0) {
     GameState *gs = (GameState *)getCurrentAllocation();
-    arg0->segment1 = loadUncompressedAssetByIndex(gs->memoryPoolId);
-    arg0->segment2 = loadCompressedSegment2AssetByIndex(gs->memoryPoolId);
-    arg0->unk2C = 0;
-    createYRotationMatrix(&arg0->matrix, 0x6C0);
-    arg0->matrix.translation.x = 0xDD196FEA;
-    arg0->matrix.translation.y = 0x0ABD4CA3;
-    arg0->matrix.translation.z = 0xE270649E;
+    arg0->node.segment1 = loadUncompressedAssetByIndex(gs->memoryPoolId);
+    arg0->node.segment2 = loadCompressedSegment2AssetByIndex(gs->memoryPoolId);
+    arg0->node.segment3 = 0;
+    createYRotationMatrix(&arg0->node.transform, 0x6C0);
+    arg0->node.transform.translation.x = 0xDD196FEA;
+    arg0->node.transform.translation.y = 0x0ABD4CA3;
+    arg0->node.transform.translation.z = 0xE270649E;
     arg0->timer = 0x12C;
     arg0->state = 0;
-    arg0->displayLists = &getSkyDisplayLists3ByIndex(gs->memoryPoolId)->sceneryDisplayLists3;
+    arg0->node.displayLists = &getSkyDisplayLists3ByIndex(gs->memoryPoolId)->sceneryDisplayLists3;
     setCleanupCallback(&cleanupStarLauncherTask);
     setCallback(&updateStarLauncherTask);
 }
 
-void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
+void updateStarLauncherTask(StarLauncherTask *arg0) {
     GameState *gameState;
     s16 state;
     s32 i;
@@ -308,9 +301,9 @@ void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
     }
 }
 
-void cleanupStarLauncherTask(DisplayListObjectSegments *arg0) {
-    arg0->segment1 = freeNodeMemory(arg0->segment1);
-    arg0->segment2 = freeNodeMemory(arg0->segment2);
+void cleanupStarLauncherTask(StarLauncherTask *arg0) {
+    arg0->node.segment1 = freeNodeMemory(arg0->node.segment1);
+    arg0->node.segment2 = freeNodeMemory(arg0->node.segment2);
 }
 
 void initCrazyJungleHazards(void) {
