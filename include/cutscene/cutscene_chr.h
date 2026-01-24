@@ -171,18 +171,18 @@ typedef struct {
 } cutsceneChrUpDown_exec_arg;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s16 unkC;
-    s16 unkE;
-    s8 unk10;
-    s8 unk11;
-    s16 unk12;
-    s8 unk14;
+    s32 x;
+    s32 y;
+    s32 z;
+    s16 rotY;
+    s16 animIndex;
+    s8 actionMode;
+    s8 loopCount;
+    s16 transitionAnimIndex;
+    s8 animQueued;
     s8 pad15;
-    s16 unk16;
-    s16 unk18;
+    s16 rotX;
+    s16 rotZ;
 } cutsceneChrPosition2_exec_arg;
 
 void cutsceneChrPosition_init(void);
@@ -272,7 +272,7 @@ void cutsceneChrAlpha_update(CutsceneManager *arg0, s8 arg1);
 s32 cutsceneChrAlpha_isDone(void);
 void cutsceneChrPosition2_init(void);
 s32 cutsceneChrPosition2_validate(void);
-void cutsceneChrPosition2_exec(cutsceneChrPosition2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrPosition2_exec(cutsceneChrPosition2_exec_arg *arg, CutsceneManager *manager, s8 slotIndex);
 s32 cutsceneChrPosition2_isDone(void);
 void cutsceneChrTurn3_init(void);
 s32 cutsceneChrTurn3_validate(void);
