@@ -21,10 +21,10 @@ typedef struct {
     /* 0x00 */ u8 *data_ptr;
     /* 0x04 */ TableEntry_19E80 *index_ptr;
     /* 0x08 */ u16 field1;
-    /* 0x10 */ u16 field2;
+    /* 0x0A */ u16 field2;
 } OutputStruct_19E80;
 
-void getTableEntryByU16Index(DataTable_19E80 *, u16, OutputStruct_19E80 *);
+void getTableEntryByU16Index(DataTable_19E80 *table, u16 index, OutputStruct_19E80 *output);
 
 void getTableEntryByIndex(DataTable_19E80 *table, u32 entry_index, u8 sub_index, OutputStruct_19E80 *output);
 
