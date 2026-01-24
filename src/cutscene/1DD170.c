@@ -179,13 +179,12 @@ CommandEntry *getCommandEntry(s32 categoryIndex, s32 commandIndex) {
     return &entries[(u8)commandIndex];
 }
 
-CommandEntry *getCommandEntryMasked(u8 arg0, u8 arg1) {
-    CommandEntry *temp = getCommandEntry(arg0 & 0xFF, arg1 & 0xFF);
-    return temp;
+CommandEntry *getCommandEntryMasked(u8 categoryIndex, u8 commandIndex) {
+    return getCommandEntry(categoryIndex & 0xFF, commandIndex & 0xFF);
 }
 
-u8 getCommandEnabled(s32 arg0, s32 arg1) {
-    return getCommandEntry(arg0 & 0xFF, arg1 & 0xFF)->enabled;
+u8 getCommandEnabled(s32 categoryIndex, s32 commandIndex) {
+    return getCommandEntry(categoryIndex & 0xFF, commandIndex & 0xFF)->enabled;
 }
 
 void *getCommandDescription(u8 commandCategory, u8 commandIndex) {
@@ -289,7 +288,7 @@ void initializeCutsceneCommand(
 
         handler = getCommandEntry(commandCategory, commandIndex & 0xFF)->init;
         if (handler) {
-            // basically: !arg1[arg4].isActive
+            // Skip init if slot is inactive and category requires a model
             if ((*(isActivePtr = &commandData[(s8)frameIndex].isActive)) == FALSE) {
                 shouldRun = shouldRun & (-(commandCategories[commandCategory].requiresModel != 1));
             }
