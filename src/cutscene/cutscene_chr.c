@@ -272,30 +272,30 @@ s32 cutsceneChrTurn2_validate(void) {
     return 0;
 }
 
-void cutsceneChrTurn2_exec(cutsceneChrTurn2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+void cutsceneChrTurn2_exec(cutsceneChrTurn2_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex) {
     CutsceneSlot *slot;
-    u16 temp_s3;
+    u16 characterId;
     s32 animId;
     s32 result;
 
-    slot = &arg1->slots[arg2];
+    slot = &cutsceneManager->slots[slotIndex];
 
-    temp_s3 = getCurrentStateEntryItem(arg2)->unk4;
+    characterId = getCurrentStateEntryItem(slotIndex)->unk4;
 
     animId = -1;
 
-    result = setupSlotRotateToWithDir(&slot->slotData, slot->model, arg0->unk0, arg0->unk8, arg0->unk6);
+    result = setupSlotRotateToWithDir(&slot->slotData, slot->model, arg->targetRotY, arg->direction, arg->duration);
 
     switch (result) {
         case 1:
-            animId = getWalkAnimationId(temp_s3);
+            animId = getWalkAnimationId(characterId);
             break;
         case 2:
-            animId = getRunAnimationId(temp_s3);
+            animId = getRunAnimationId(characterId);
             break;
     }
 
-    setModelAnimationQueued(slot->model, arg0->unk2, arg0->unk4, -1, animId);
+    setModelAnimationQueued(slot->model, arg->animIndex, arg->transitionAnimIndex, -1, animId);
 }
 
 void cutsceneChrRotate_init(void) {

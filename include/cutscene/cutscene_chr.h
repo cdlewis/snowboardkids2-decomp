@@ -130,11 +130,11 @@ typedef struct {
 } cutsceneChrZoom2_exec_arg;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
+    s16 targetRotY;
+    s16 animIndex;
+    s16 transitionAnimIndex;
+    s16 duration;
+    s16 direction;
 } cutsceneChrTurn2_exec_arg;
 
 typedef struct {
