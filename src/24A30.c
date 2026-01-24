@@ -670,51 +670,51 @@ void cleanupCharSelectSecondaryAssets(func_8002494C_arg *arg0) {
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
 }
 
-void func_80024990_25590(CharSelectBoardPreview *arg0) {
-    void *alloc;
+void initCharSelectBoardModel(CharSelectBoardPreview *arg0) {
+    void *gameState;
     u8 playerIdx;
-    u32 var_a0;
+    u32 boardType;
     s32 sinVal;
     s32 cosVal;
 
-    alloc = getCurrentAllocation();
+    gameState = getCurrentAllocation();
     playerIdx = arg0->playerIndex;
 
-    var_a0 = D_800AFE8C_A71FC->unk9[playerIdx];
-    if (var_a0 == 7) {
+    boardType = D_800AFE8C_A71FC->unk9[playerIdx];
+    if (boardType == 7) {
         arg0->model = createSceneModelEx(
             0x39,
-            alloc + (playerIdx * 0x1D8),
-            *(s8 *)((u8 *)alloc + playerIdx + 0x18B8),
+            gameState + (playerIdx * 0x1D8),
+            *(s8 *)((u8 *)gameState + playerIdx + 0x18B8),
             -1,
             -1,
             -1
         );
     } else {
         arg0->model = createSceneModelEx(
-            var_a0,
-            alloc + (playerIdx * 0x1D8),
-            *(s8 *)((u8 *)alloc + playerIdx + 0x18B8),
+            boardType,
+            gameState + (playerIdx * 0x1D8),
+            *(s8 *)((u8 *)gameState + playerIdx + 0x18B8),
             -1,
             -1,
             -1
         );
     }
 
-    memcpy((u8 *)arg0 + 4, identityMatrix, 0x20);
+    memcpy(&arg0->transform, identityMatrix, 0x20);
 
     sinVal = -(approximateSin(0x800) * 0x1600);
     if (sinVal < 0) {
         sinVal += 0x1FFF;
     }
-    *(s32 *)((u8 *)arg0 + 0x18) = (sinVal >> 13) << 8;
+    arg0->transform.translation.x = (sinVal >> 13) << 8;
 
     cosVal = -(approximateCos(0x800) * 0x1600);
     if (cosVal < 0) {
         cosVal += 0x1FFF;
     }
-    *(s32 *)((u8 *)arg0 + 0x20) = (cosVal >> 13) << 8;
-    *(s32 *)((u8 *)arg0 + 0x1C) = 0xFFF00000;
+    arg0->transform.translation.z = (cosVal >> 13) << 8;
+    arg0->transform.translation.y = 0xFFF00000;
 
     setCleanupCallback(cleanupCharSelectBoardModel);
     setCallback(initCharSelectBoardPreview);
