@@ -305,13 +305,13 @@ s32 cutsceneChrRotate_validate(void) {
     return 0;
 }
 
-void cutsceneChrRotate_exec(cutsceneChrRotate_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+void cutsceneChrRotate_exec(cutsceneChrRotate_exec_arg *arg, CutsceneManager *manager, s8 slotIndex) {
     CutsceneSlot *slot;
 
-    slot = &arg1->slots[arg2];
+    slot = &manager->slots[slotIndex];
 
-    setupSlotOrbit(&slot->slotData, arg0->rotationSpeed, arg0->duration, arg0->unk8);
-    setModelAnimationLooped(slot->model, arg0->animationId, arg0->animationLoopCount, -1);
+    setupSlotOrbit(&slot->slotData, arg->rotationSpeed, arg->duration, arg->orbitSpeed);
+    setModelAnimationLooped(slot->model, arg->animationId, arg->animationLoopCount, -1);
 }
 
 s32 cutsceneChrRotate_isDone(void) {

@@ -142,7 +142,7 @@ typedef struct {
     s16 animationId;
     s16 animationLoopCount;
     s16 duration;
-    s16 unk8;
+    s16 orbitSpeed;
 } cutsceneChrRotate_exec_arg;
 
 typedef struct {
@@ -230,7 +230,7 @@ s32 cutsceneChrTurn2_validate(void);
 void cutsceneChrTurn2_exec(cutsceneChrTurn2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
 void cutsceneChrRotate_init(void);
 s32 cutsceneChrRotate_validate(void);
-void cutsceneChrRotate_exec(cutsceneChrRotate_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrRotate_exec(cutsceneChrRotate_exec_arg *arg, CutsceneManager *manager, s8 slotIndex);
 s32 cutsceneChrRotate_isDone(void);
 void cutsceneChrHop_init(void);
 s32 cutsceneChrHop_validate(void);
