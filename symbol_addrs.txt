@@ -1462,14 +1462,14 @@ cutsceneSysWait_init = 0x800B2590;
 cutsceneSysCurtain_init = 0x800B260C;
 cutsceneSysFilter_init = 0x800B278C;
 
-cutsceneInitTrack_exec = 0x800B20C0;
-cutsceneInitTrack_validate = 0x800B20B8;
-cutsceneEffectDisp_init = 0x800B1C90;
-cutsceneEffectFan_init = 0x800B1D4C;
-cutsceneEffectRocket_init = 0x800B1DA4;
-cutsceneEffectMLight_init = 0x800B1DFC;
-cutsceneEffectTrick_init = 0x800B1F9C;
-cutsceneInitTrack_init = 0x800B20B0;
+cutsceneInitTrack_exec = 0x800B20C0; // rom:0x1DF170
+cutsceneInitTrack_validate = 0x800B20B8; // rom:0x1DF168
+cutsceneEffectDisp_init = 0x800B1C90; // rom:0x1DED40
+cutsceneEffectFan_init = 0x800B1D4C; // rom:0x1DEDFC
+cutsceneEffectRocket_init = 0x800B1DA4; // rom:0x1DEE54
+cutsceneEffectMLight_init = 0x800B1DFC; // rom:0x1DEEAC
+cutsceneEffectTrick_init = 0x800B1F9C; // rom:0x1DF04C
+cutsceneInitTrack_init = 0x800B20B0; // rom:0x1DF160
 
 
 identityMatrix = 0x8009A870; // type:s16 size:0x20
