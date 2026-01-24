@@ -40,6 +40,11 @@ typedef struct {
 } cutsceneChrMove3_exec_arg;
 
 typedef struct {
+    s8 reserved0;
+    s8 displayEnabled;
+} cutsceneChrDisp_exec_arg;
+
+typedef struct {
     s8 pad0;
     s8 partIndex;
     s16 enabled;
@@ -194,10 +199,10 @@ void cutsceneChrAnime_exec(cutsceneChrAnime_exec_arg *arg, CutsceneManager *mana
 s32 cutsceneChrAnime_isDone(void);
 void cutsceneChrDisp_init(void);
 s32 cutsceneChrDisp_validate(void);
-void cutsceneChrDisp_exec(s8 *a0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrDisp_exec(cutsceneChrDisp_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex);
 void cutsceneChrItem_init(void);
 s32 cutsceneChrItem_validate(void);
-void cutsceneChrItem_exec(s8 *a0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrItem_exec(cutsceneChrDisp_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex);
 
 typedef struct {
     s16 unk0;

@@ -106,9 +106,9 @@ s32 cutsceneChrDisp_validate(void) {
     return 0;
 }
 
-void cutsceneChrDisp_exec(s8 *a0, CutsceneManager *arg1, s8 arg2) {
-    CutsceneSlot *slot = &arg1->slots[arg2];
-    setModelDisplayEnabled(slot->model, a0[1]);
+void cutsceneChrDisp_exec(cutsceneChrDisp_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex) {
+    CutsceneSlot *slot = &cutsceneManager->slots[slotIndex];
+    setModelDisplayEnabled(slot->model, arg->displayEnabled);
 }
 
 void cutsceneChrItem_init(void) {
@@ -118,9 +118,9 @@ s32 cutsceneChrItem_validate(void) {
     return 0;
 }
 
-void cutsceneChrItem_exec(s8 *a0, CutsceneManager *arg1, s8 arg2) {
-    CutsceneSlot *slot = &arg1->slots[arg2];
-    setItemDisplayEnabled(slot->model, a0[1]);
+void cutsceneChrItem_exec(cutsceneChrDisp_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex) {
+    CutsceneSlot *slot = &cutsceneManager->slots[slotIndex];
+    setItemDisplayEnabled(slot->model, arg->displayEnabled);
 }
 
 void cutsceneChrTurn_init(void) {
