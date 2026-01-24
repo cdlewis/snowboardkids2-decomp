@@ -26,9 +26,11 @@ typedef struct {
 void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority, u16 layer) {
     s32 count = 0;
     s32 palette = 0;
+    s32 c;
     TextElement12 *elem12;
     TextElement16 *elem16;
     s32 i;
+    TextElement16 *initPtr;
 
     for (i = 0; text[i] != NULL; i++) {
         switch (text[i]) {

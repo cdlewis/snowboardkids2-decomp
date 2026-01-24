@@ -3,8 +3,6 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-// Struct declarations
-
 typedef struct {
     /* 0x00 */ SceneModel *model;
     /* 0x04 */ s16 currentRotationX;
@@ -31,21 +29,15 @@ typedef struct {
 //     /* 0xF6 */ u16 rotationSpeed;
 // } QuadDisplayListState;
 
-// Extern variables
-
 extern s32 D_8009A8A4_9B4A4;
 extern u8 identityMatrix[];
 extern u8 D_80088640_89240[];
 extern s32 D_8008C120_8CD20[];
 
-// Function declarations
-
 void updateQuadDisplayList(func_80002B50_3750_arg **);
 void cleanupQuadDisplayList(QuadDisplayListElement *);
 void updateRotationController(RotationControllerState *);
 void cleanupRotationController(void);
-
-// Function implementations
 
 void initializeQuadDisplayList(QuadDisplayListElement *elements) {
     s32 i;

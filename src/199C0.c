@@ -1,4 +1,4 @@
-#include "199C0.h"
+#include "common.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
@@ -7,8 +7,11 @@ typedef struct {
     u8 isComplete;
 } StoryMapLocationState;
 
-static void awaitStoryMapLocation(void);
-static void onStoryMapLocationComplete(void);
+extern u8 storyMapLocationIndex;
+extern void (*storyMapLocationHandlers[])(void);
+extern s16 storyMapExitCode;
+void awaitStoryMapLocation(void);
+void onStoryMapLocationComplete(void);
 
 void initStoryMapLocation(void) {
     StoryMapLocationState *state;

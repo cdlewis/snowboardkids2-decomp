@@ -5,9 +5,52 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "levels/jingle_town.h"
 #include "rand.h"
 #include "task_scheduler.h"
+
+extern s32 gJingleTownTrainInitialHeights[];
+extern s32 gJingleTownTrainWaypointsX[];
+extern s32 gJingleTownTrainWaypointsZ[];
+extern s32 gJingleTownTrainWaypointsX2[];
+extern s32 gJingleTownTrainWaypointsZ2[];
+extern Vec3i gJingleTownTrainForwardVector;
+extern Vec3i gJingleTownTrainForwardVector2;
+
+typedef struct {
+    u8 _pad0[0x24];
+    void *unk24;
+    void *unk28;
+} B4240Struct;
+
+typedef struct {
+    u8 _pad0[0x30];
+    void *unk30;
+    u8 _pad34[0x28];
+    u8 unk5C;
+    u8 _pad5D[0x19];
+    u8 unk76;
+} B4240AllocationStruct;
+
+typedef struct {
+    DisplayListObject node;
+    s32 posX;
+    s32 height;
+    s32 posZ;
+    s32 yOffset;
+    s32 yVelocity;
+    s16 trainIndex;
+    s16 waypointIndex;
+    u16 rotation;
+    s16 unk56;
+    s16 waitTimer;
+    s16 loopCount;
+} JingleTownTrain;
+
+void initJingleTownTrain(JingleTownTrain *);
+void handleTrainIdleState(JingleTownTrain *);
+void handleTrainHopBehavior(JingleTownTrain *);
+void handleTrainJumpBehavior(JingleTownTrain *);
+void cleanupJingleTownTrain(B4240Struct *);
 
 void renderJingleTownTrain(JingleTownTrain *train) {
     s32 i;

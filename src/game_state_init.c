@@ -1,5 +1,4 @@
 #include "game_state_init.h"
-#include "199C0.h"
 #include "1A770.h"
 #include "288A0.h"
 #include "36B80.h"
@@ -17,6 +16,7 @@ USE_ASSET(_419440);
 USE_ASSET(_45A890);
 
 extern u16 D_8008D6B0_8E2B0;
+extern u8 storyMapLocationIndex;
 extern void storyMapCameraTask;
 extern void func_80018800_19400;
 extern void initStoryMapMiniCamera;

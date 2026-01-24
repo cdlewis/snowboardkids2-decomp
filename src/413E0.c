@@ -12,10 +12,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-/*
- * Struct definitions
- */
-
 typedef struct {
     void *assetTable;
     void *indicatorAsset;
@@ -47,6 +43,24 @@ typedef struct {
     s32 unk38;
 } PlayerIndicatorSpriteTask;
 
+extern s32 gFrameCounter;
+extern s16 identityMatrix[];
+
+Vec3i gIndicatorSpriteOffset = { 0x00000000, 0x00200000, 0x00000000 };
+
+Vec3i D_800907EC_913EC = { 0x001E0000, 0x00000000, 0xFFCE0000 };
+
+s32 D_800907F8_913F8[] = {
+    0xFFFC0005, 0x001D8042, 0x803F803B, 0xFFFB803C, 0x80338033, 0xFFFB8041, 0x80358032, 0xFFFB803D, 0x803C8044,
+    0x8032803F, 0xFFFB802F, 0x80328033, 0x803C803F, 0x8032FFFD, 0x8036803B, 0x80408032, 0x803F8041, 0x8036803B,
+    0x8034FFFB, 0x802EFFFB, 0x8030803C, 0x803B8041, 0x803F803C, 0x80398039, 0x8032803F, 0x8050FFFF,
+};
+
+u32 D_80090860_91460[] = {
+    0xFFFE0002, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00020002, 0x00000000, 0x03F0FFF0, 0xFFFFFFFF,
+    0x0002FFFE, 0x00000000, 0x03F003F0, 0xFFFFFFFF, 0xFFFEFFFE, 0x00000000, 0xFFF003F0, 0xFFFFFFFF,
+};
+
 // Start gate display object structure (3 parts: main gate, left door, right door)
 // Each part is a DisplayListObject with transform, display lists, and segment pointers
 typedef struct {
@@ -76,6 +90,10 @@ typedef struct {
     s16 pauseTimer;     // 0xB8
 } StartGate;
 
+void updateStartGate(StartGate *);
+void updatePushStartText(PushStartTextState *);
+void updateRacePlayerIndicatorSprite(PlayerIndicatorSpriteTask *arg0);
+
 typedef struct {
     void *unk0;
 } func_80040948_41548_arg;
@@ -85,6 +103,8 @@ typedef struct {
     void *uncompressedAsset; // 0x24 - same as mainGateSegment1
     void *compressedAsset;   // 0x28 - same as mainGateSegment2
 } StartGateCleanupArg;
+
+void cleanupStartGate(StartGateCleanupArg *);
 
 typedef struct {
     u8 high;
@@ -96,91 +116,31 @@ typedef union {
     Bytes asBytes;
 } S16OrBytes;
 
+typedef union {
+    s16 asS16;
+    Bytes asBytes;
+} S16OrBytesC;
+
+typedef union {
+    s16 asS16;
+    Bytes asBytes;
+} S16OrBytesE;
+
 typedef struct {
     void *graphicAsset;
     void *textAsset;
     s16 yPosition;
     s16 useGraphicMode;
-    S16OrBytes scaleX;
-    S16OrBytes scaleY;
+    S16OrBytesC scaleX;
+    S16OrBytesE scaleY;
     S16OrBytes pulseAlpha;
     s16 pulseDirection;
 } PushStartPromptTask;
 
-typedef struct {
-    /* 0x00 */ loadAssetMetadata_arg sprite;
-    /* 0x1C */ s32 pad1C;
-    /* 0x20 */ s32 worldX; /* World-space X position (for physics) */
-    /* 0x24 */ s32 worldY; /* World-space Y position (for physics) */
-    /* 0x28 */ s32 worldZ; /* World-space Z position (for physics) */
-    /* 0x2C */ s32 velX;   /* X velocity */
-    /* 0x30 */ s32 velY;   /* Y velocity (includes gravity) */
-    /* 0x34 */ s32 velZ;   /* Z velocity */
-} ConfettiParticle;        /* 0x38 bytes */
-
-typedef struct {
-    void *particleAsset;
-    void *particles;
-    void *cameraNode;
-    s32 lastCameraX;
-    s32 lastCameraY;
-    s32 lastCameraZ;
-    s16 frameCounter;
-    s16 particleCount;
-    u8 pauseWhenPaused;
-} ConfettiEffectTask;
-
-typedef struct {
-    u8 _pad[0x8];
-    void *cameraNode;
-    u8 _pad2[0xC];
-    s16 frameCounter;
-    s16 particleCount;
-    u8 pauseWhenPaused;
-} ConfettiSpawnArgs;
-
-/*
- * Function declarations
- */
-
-void updateStartGate(StartGate *);
-void updatePushStartText(PushStartTextState *);
-void updateRacePlayerIndicatorSprite(PlayerIndicatorSpriteTask *arg0);
-void cleanupStartGate(StartGateCleanupArg *);
 void updatePushStartGraphic(PushStartPromptTask *);
 void cleanupPushStartPrompt(PushStartPromptTask *);
 void awaitPlayerIndicatorReady(PlayerIndicatorSpriteTask *arg0);
 void cleanupPlayerIndicator(func_80040948_41548_arg *arg0);
-void setupConfettiParticles(ConfettiEffectTask *task);
-void updateConfettiParticles(ConfettiEffectTask *task);
-void cleanupConfettiEffect(ConfettiEffectTask *task);
-
-/*
- * Global variables and externs
- */
-
-extern s32 gFrameCounter;
-extern s16 identityMatrix[];
-extern u8 gConnectedControllerMask;
-
-Vec3i gIndicatorSpriteOffset = { 0x00000000, 0x00200000, 0x00000000 };
-
-Vec3i D_800907EC_913EC = { 0x001E0000, 0x00000000, 0xFFCE0000 };
-
-s32 D_800907F8_913F8[] = {
-    0xFFFC0005, 0x001D8042, 0x803F803B, 0xFFFB803C, 0x80338033, 0xFFFB8041, 0x80358032, 0xFFFB803D, 0x803C8044,
-    0x8032803F, 0xFFFB802F, 0x80328033, 0x803C803F, 0x8032FFFD, 0x8036803B, 0x80408032, 0x803F8041, 0x8036803B,
-    0x8034FFFB, 0x802EFFFB, 0x8030803C, 0x803B8041, 0x803F803C, 0x80398039, 0x8032803F, 0x8050FFFF,
-};
-
-u32 D_80090860_91460[] = {
-    0xFFFE0002, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00020002, 0x00000000, 0x03F0FFF0, 0xFFFFFFFF,
-    0x0002FFFE, 0x00000000, 0x03F003F0, 0xFFFFFFFF, 0xFFFEFFFE, 0x00000000, 0xFFF003F0, 0xFFFFFFFF,
-};
-
-/*
- * Function implementations
- */
 
 void initPlayerIndicator(PlayerIndicatorTask *task) {
     GameState *gameState = (GameState *)getCurrentAllocation();
@@ -433,6 +393,8 @@ void cleanupPushStartPrompt(PushStartPromptTask *task) {
     task->textAsset = freeNodeMemory(task->textAsset);
 }
 
+extern u8 gConnectedControllerMask;
+
 void spawnPushStartPrompt(s32 arg0, s16 yPosition, u8 arg2, u8 arg3, s16 scaleX, s16 scaleY) {
     PushStartPromptTask *task;
 
@@ -450,6 +412,22 @@ void spawnPushStartPrompt(s32 arg0, s16 yPosition, u8 arg2, u8 arg3, s16 scaleX,
         }
     }
 }
+
+typedef struct {
+    void *particleAsset;
+    void *particles;
+    void *cameraNode;
+    s32 lastCameraX;
+    s32 lastCameraY;
+    s32 lastCameraZ;
+    s16 frameCounter;
+    s16 particleCount;
+    u8 pauseWhenPaused;
+} ConfettiEffectTask;
+
+void setupConfettiParticles(ConfettiEffectTask *task);
+void updateConfettiParticles(ConfettiEffectTask *task);
+void cleanupConfettiEffect(ConfettiEffectTask *task);
 
 void initConfettiEffect(ConfettiEffectTask *task) {
     s16 count;
@@ -492,6 +470,17 @@ void setupConfettiParticles(ConfettiEffectTask *task) {
     memcpy(&task->lastCameraX, (u8 *)task->cameraNode + 0x134, 0xC);
     setCallbackWithContinue(&updateConfettiParticles);
 }
+
+typedef struct {
+    /* 0x00 */ loadAssetMetadata_arg sprite;
+    /* 0x1C */ s32 pad1C;
+    /* 0x20 */ s32 worldX; /* World-space X position (for physics) */
+    /* 0x24 */ s32 worldY; /* World-space Y position (for physics) */
+    /* 0x28 */ s32 worldZ; /* World-space Z position (for physics) */
+    /* 0x2C */ s32 velX;   /* X velocity */
+    /* 0x30 */ s32 velY;   /* Y velocity (includes gravity) */
+    /* 0x34 */ s32 velZ;   /* Z velocity */
+} ConfettiParticle;        /* 0x38 bytes */
 
 void updateConfettiParticles(ConfettiEffectTask *task) {
     s32 pad[2];
@@ -576,6 +565,15 @@ void cleanupConfettiEffect(ConfettiEffectTask *task) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/413E0", func_80041418_42018);
+
+typedef struct {
+    u8 _pad[0x8];
+    void *cameraNode;
+    u8 _pad2[0xC];
+    s16 frameCounter;
+    s16 particleCount;
+    u8 pauseWhenPaused;
+} ConfettiSpawnArgs;
 
 void spawnConfettiEffect(void *cameraNode) {
     ConfettiSpawnArgs *task;

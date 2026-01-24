@@ -1,5 +1,5 @@
-#include "38BE0.h"
 #include "EepromSaveData_type.h"
+#include "common.h"
 
 s32 isSaveSlotUnlocked(u8 slotIndex) {
     return EepromSaveData->save_slot_status[slotIndex] == 1;

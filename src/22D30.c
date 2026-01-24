@@ -12,6 +12,8 @@ USE_ASSET(_426EF0);
 USE_ASSET(_41A1D0);
 USE_OVERLAY(_1DB7A0);
 
+extern volatile s32 gControllerInputs;
+
 typedef struct {
     Node_70B00 node;
     void *assetData1;
@@ -30,7 +32,6 @@ typedef struct {
 } PlayerCountSelectState;
 
 extern u8 D_8008DCC0_8E8C0[];
-extern volatile s32 gControllerInputs;
 extern void *D_800B054C;
 extern u8 gConnectedControllerMask;
 

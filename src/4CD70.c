@@ -337,29 +337,6 @@ typedef struct {
     void *digitSpriteAsset;
 } PlayerGoldDisplayCleanupArg;
 
-static const char D_8009E880_9F480[] = "%5d";
-extern char D_8009E894_9F494[];
-extern char D_8009E89C_9F49C[];
-extern char D_8009E8A0_9F4A0[];
-extern char D_8009E8A8_9F4A8[];
-extern char D_8009E8D4_9F4D4[];
-extern char D_8009E8E0_9F4E0[];
-extern char D_8009E8EC_9F4EC[];
-extern char D_8009E8F8_9F4F8[];
-extern char D_8009E904_9F504[];
-extern char D_8009E914_9F514[];
-extern char D_8009E928_9F528[];
-extern char D_8009E868_9F468[];
-extern char sGoldFormatShort[];
-extern char sGoldFormatLong[];
-extern char sTrickPointsFormat[];
-extern u8 D_80090E60_91A60[];
-extern u16 D_8009ADE0_9B9E0;
-
-extern s32 gFirstPlaceGoldReward[];
-extern s32 gSecondPlaceGoldReward[];
-extern s32 gThirdPlaceGoldReward[];
-
 void updateCenteredSpritePopup(CenteredSpritePopupState *);
 void cleanupCenteredSpritePopupTask(CenteredSpritePopupState *);
 void updateSpeedCrossFinishPositionDisplay(FinishPositionDisplayState *arg0);
@@ -391,6 +368,18 @@ void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state);
 void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0);
 void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state);
 void cleanupRaceProgressIndicatorTask(RaceProgressIndicatorCleanupState *state);
+void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0);
+
+static const char D_8009E880_9F480[] = "%5d";
+extern char D_8009E89C_9F49C[];
+extern char D_8009E8A0_9F4A0[];
+extern char D_8009E8A8_9F4A8[];
+extern char D_8009E928_9F528[];
+extern char D_8009E868_9F468[];
+
+extern s32 gFirstPlaceGoldReward[];
+extern s32 gSecondPlaceGoldReward[];
+extern s32 gThirdPlaceGoldReward[];
 
 void initPlayerFinishPositionTask(FinishPositionDisplayState *arg0) {
     GameState *state;
@@ -738,6 +727,9 @@ common:
     }
 }
 
+extern char sGoldFormatShort[];
+extern char sGoldFormatLong[];
+
 void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
     s32 gold = state->player->raceGold;
 
@@ -1014,6 +1006,8 @@ void cleanupCenteredSpritePopupTask(CenteredSpritePopupState *state) {
     state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
 
+extern u8 D_80090E60_91A60[];
+
 void showPlacementAnnouncement(u32 playerIndex, s32 placement) {
     CenteredSpritePopupState *task;
 
@@ -1242,6 +1236,8 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
     setCleanupCallback(cleanupGoldAwardDisplayTask);
     setCallback(updateGoldAwardDisplay);
 }
+
+extern char D_8009E894_9F494[];
 
 typedef struct TotalGoldDisplayState TotalGoldDisplayState;
 extern void initTotalGoldDisplayTask(TotalGoldDisplayState *);
@@ -1687,6 +1683,8 @@ typedef struct {
     s16 playerIndex;
     s16 useSmallSprite;
 } VictorySnowflakeTaskState;
+
+extern u16 D_8009ADE0_9B9E0;
 
 void conditionalSpawnVictorySnowflake(VictorySnowflakeSpawnArgs *args) {
     VictorySnowflakeTaskState *task;
@@ -2183,6 +2181,11 @@ void cleanupBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
 void updateRaceTimerDisplay(RaceTimerState *arg0);
 void cleanupRaceTimerDisplay(ShotCrossCountdownTimerState *arg0);
 
+extern char D_8009E8D4_9F4D4[];
+extern char D_8009E8E0_9F4E0[];
+extern char D_8009E8EC_9F4EC[];
+extern char D_8009E8F8_9F4F8[];
+
 void initRaceTimerDisplay(RaceTimerState *arg0) {
     arg0->elapsedTicks = 0x4293C;
     arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
@@ -2301,6 +2304,9 @@ void cleanupSecondaryItemDisplayTask(SecondaryItemDisplayState *state) {
 void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *);
 void cleanupSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *);
 
+extern char D_8009E904_9F504[];
+extern char D_8009E914_9F514[];
+
 typedef struct {
     u8 pad[0x54];
     s32 elapsedTicks;
@@ -2355,6 +2361,8 @@ void cleanupSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
+
+extern char sTrickPointsFormat[];
 
 typedef struct {
     s16 padding;       // 0x0 - unused

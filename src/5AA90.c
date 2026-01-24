@@ -9,7 +9,6 @@
 #include "race_session.h"
 #include "task_scheduler.h"
 
-// Struct definitions
 typedef struct {
     u8 _pad[0x10];
     /* 0x10 */ void *dataArray;
@@ -35,14 +34,6 @@ typedef struct {
     /* 0x1E */ u8 pad3[0x6];
 } Section3Element;
 
-typedef struct {
-    u8 padding[0xB88];
-    s32 collisionFlags;
-    u8 padding2[0x18];
-    u16 invincibilityTimer;
-} PlayerCollisionData;
-
-// Function implementations
 s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSectorIndex, void *position) {
     Player *player = (Player *)entity;
     if (!(player->unkB84 & 0x100)) {
@@ -910,6 +901,13 @@ s32 checkStarHitCollisionWithVulnerablePlayers(Vec3i *pos, s32 excludePlayerIdx,
 
     return result;
 }
+
+typedef struct {
+    u8 padding[0xB88];
+    s32 collisionFlags;
+    u8 padding2[0x18];
+    u16 invincibilityTimer;
+} PlayerCollisionData;
 
 /**
  * Finds a vulnerable player (non-invincible, collision-enabled) near a position.

@@ -11,10 +11,9 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-// Macro definitions
-// (none currently defined)
-
-// Struct definitions
+extern s32 gFrameCounter;
+extern Gfx *gRegionAllocPtr;
+extern s16 gGraphicsMode;
 
 typedef struct {
     u8 _pad[0x80];
@@ -27,11 +26,6 @@ typedef struct {
     DisplayListObject node2;
 } StarlightBuildingRenderData;
 
-typedef struct {
-    u8 _pad[0x76];
-    u8 paused;
-} TaskAllocationState;
-
 // Starlight Highway Barrier Task
 // Each barrier has two gates (left/right) that open when players enter the trigger sector
 typedef struct {
@@ -41,11 +35,11 @@ typedef struct {
     /* 0x28 */ void *displayListMemory2;        // Display list memory pointer 2
     /* 0x2C */ s32 unk2C;                       // Unknown
     /* 0x30 */ u8 pad30[0xC];
-    /* 0x3C */ Transform3D rightGateNode;       // Right gate transform
-    /* 0x5C */ void *rightGateDisplayListOffset;// Right gate display list offset
-    /* 0x60 */ void *unk60;                     // Unknown
-    /* 0x64 */ void *unk64;                     // Unknown
-    /* 0x68 */ s32 unk68;                       // Unknown
+    /* 0x3C */ Transform3D rightGateNode;        // Right gate transform
+    /* 0x5C */ void *rightGateDisplayListOffset; // Right gate display list offset
+    /* 0x60 */ void *unk60;                      // Unknown
+    /* 0x64 */ void *unk64;                      // Unknown
+    /* 0x68 */ s32 unk68;                        // Unknown
     /* 0x6C */ u8 pad6C[0xC];
     /* 0x78 */ s32 gateOpenAmount; // Gate opening distance (0 = closed, 0x600000 = fully open)
     /* 0x7C */ u8 barrierIndex;    // Barrier index (0 or 1) to select which configuration to use
@@ -98,21 +92,19 @@ typedef struct {
 } DebugDisplayListRenderState;
 
 typedef struct {
+    u8 pad[0x76];
+    u8 paused;
+} DebugDisplayListAllocation;
+
+typedef struct {
     /* 0x00 */ Transform3D mat;
     /* 0x20 */ u8 _pad20[0x5C];
 } DebugDisplayListPosition;
 
 typedef struct {
-    /* 0x00 */ u8 _pad0[0x3C];
-    /* 0x3C */ DataTable_19E80 *textureTable;
-    /* 0x40 */ u8 _pad40[4];
-    /* 0x44 */ u16 tileULow;
-    /* 0x46 */ u16 tileVLow;
-    /* 0x48 */ u8 _pad48[4];
-    /* 0x4C */ u16 textureIndex;
-    /* 0x4E */ u8 _pad4E[3];
-    /* 0x51 */ u8 alpha;
-} TextureRenderState;
+    u8 _pad[0x76];
+    u8 paused;
+} TaskAllocationState;
 
 typedef struct {
     /* 0x00 */ u8 _pad0[0x14];
@@ -140,12 +132,6 @@ typedef struct {
     u8 pad2[0xE];
 } FireworkInitRotationMatrix;
 
-// Extern variables
-
-extern s32 gFrameCounter;
-extern Gfx *gRegionAllocPtr;
-extern s16 gGraphicsMode;
-
 extern Vec3i D_800BCA30_AEDF0[];
 extern s32 gStarlightFireworkPositions[][3];
 extern s16 gStarlightFireworkXRotations[];
@@ -157,8 +143,6 @@ extern s32 gStarlightBarrierPositionsY[][3];
 extern s32 gStarlightBarrierPositionsZ[][3];
 extern s16 gStarlightBarrierTriggerSectors[];
 extern void *gDebugDisplayConfig;
-
-// Function declarations
 
 void cleanupStarlightBarrierTask(DualSegmentCleanupState *);
 void cleanupDebugDisplayListTask(DebugDisplayListCleanupState *);
@@ -172,12 +156,6 @@ void updateStarlightFirework(StarlightFireworkTaskState *);
 void cleanupStarlightFireworkTask(StarlightFireworkCleanupState *);
 void updateFireworkShowTimer(FireworkShowTimerState *arg0);
 void updateStarlightBarrier(StarlightBarrierTask *arg0);
-void renderColorIndexedOpaqueDisplayList(void *);
-void renderColorIndexedTransparentDisplayList(void *);
-void renderColorIndexedOverlayDisplayList(void *);
-void renderDebugDisplayLists(DebugDisplayListRenderState *arg0);
-void updateDebugDisplayListSustain(DebugDisplayListRenderState *arg0);
-void updateDebugDisplayListDecay(DebugDisplayListRenderState *arg0);
 
 void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0) {
     arg0->unk24 = loadUncompressedAssetByIndex(8);
@@ -256,6 +234,13 @@ void initDebugDisplayListTask(DebugDisplayListTaskState *arg0) {
     setCallback(&updateDebugDisplayListGrowth);
 }
 
+void renderColorIndexedOpaqueDisplayList(void *);
+void renderColorIndexedTransparentDisplayList(void *);
+void renderColorIndexedOverlayDisplayList(void *);
+void renderDebugDisplayLists(DebugDisplayListRenderState *arg0);
+void updateDebugDisplayListSustain(DebugDisplayListRenderState *arg0);
+void updateDebugDisplayListDecay(DebugDisplayListRenderState *arg0);
+
 void renderDebugDisplayLists(DebugDisplayListRenderState *arg0) {
     s32 i;
 
@@ -284,7 +269,7 @@ void renderDebugDisplayLists(DebugDisplayListRenderState *arg0) {
 }
 
 void updateDebugDisplayListGrowth(DebugDisplayListRenderState *arg0) {
-    TaskAllocationState *allocation = getCurrentAllocation();
+    DebugDisplayListAllocation *allocation = getCurrentAllocation();
 
     if (allocation->paused == 0) {
         arg0->animationTimer += 0x10;
@@ -299,7 +284,7 @@ void updateDebugDisplayListGrowth(DebugDisplayListRenderState *arg0) {
 }
 
 void updateDebugDisplayListSustain(DebugDisplayListRenderState *arg0) {
-    TaskAllocationState *allocation = getCurrentAllocation();
+    DebugDisplayListAllocation *allocation = getCurrentAllocation();
 
     if (allocation->paused == 0) {
         arg0->sustainTimer--;
@@ -313,7 +298,7 @@ void updateDebugDisplayListSustain(DebugDisplayListRenderState *arg0) {
 }
 
 void updateDebugDisplayListDecay(DebugDisplayListRenderState *arg0) {
-    TaskAllocationState *allocation = getCurrentAllocation();
+    DebugDisplayListAllocation *allocation = getCurrentAllocation();
 
     if (allocation->paused == 0) {
         arg0->animationTimer -= 0x10;
@@ -331,6 +316,18 @@ void cleanupDebugDisplayListTask(DebugDisplayListCleanupState *arg0) {
     arg0->displayListMemory2 = freeNodeMemory(arg0->displayListMemory2);
     arg0->displayListMemory3 = freeNodeMemory(arg0->displayListMemory3);
 }
+
+typedef struct {
+    /* 0x00 */ u8 _pad0[0x3C];
+    /* 0x3C */ DataTable_19E80 *textureTable;
+    /* 0x40 */ u8 _pad40[4];
+    /* 0x44 */ u16 tileULow;
+    /* 0x46 */ u16 tileVLow;
+    /* 0x48 */ u8 _pad48[4];
+    /* 0x4C */ u16 textureIndex;
+    /* 0x4E */ u8 _pad4E[3];
+    /* 0x51 */ u8 alpha;
+} TextureRenderState;
 
 void loadColorIndexedTexture(void *arg) {
     TextureRenderState *state = (TextureRenderState *)arg;

@@ -48,14 +48,6 @@ typedef struct {
     u8 memoryPoolId;
 } Allocation;
 
-typedef struct {
-    s32 pad_low[24];
-    Vec3i movement;
-    s32 pad7C;
-    Vec3i relativePos;
-    s32 pad_high[6];
-} StackLocals;
-
 WaypointEntry iceLandWaypoints1[] = {
     { 0, { 0 }, 0xF0B2C5A7, 0x299EB9C0, 0x2CA726AB },
     { 0, { 0 }, 0xEE729266, 0x2913033D, 0x2E4BB956 },
@@ -131,6 +123,14 @@ void initIceLandMovingPlatform(IceLandMovingPlatformTask *arg0) {
     setCleanupCallback(cleanupIceLandMovingPlatform);
     setCallback(func_800BB3A0_B2120);
 }
+
+typedef struct {
+    s32 pad_low[24];
+    Vec3i movement;
+    s32 pad7C;
+    Vec3i relativePos;
+    s32 pad_high[6];
+} StackLocals;
 
 void func_800BB3A0_B2120(IceLandMovingPlatformTask *arg0) {
     StackLocals sp;

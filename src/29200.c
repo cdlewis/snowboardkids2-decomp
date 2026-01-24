@@ -36,12 +36,17 @@ typedef struct {
     u8 pad41A[7];
     u8 unk421;
     u8 unk422;
-    u8 pad423[6];
+    u8 pad423[0x6];
     u8 unk429;
-    u8 pad42A[3];
+    u8 pad42A[0x3];
     u8 unk42D;
     u8 unk42E;
 } AllocationData29200;
+
+void initStoryMapItemMovement(StoryMapItemTask *);
+void awaitStoryMapItemReady(void);
+void awaitStoryMapItemRespawn(StoryMapItem *arg0);
+void cleanupStoryMapItem(StoryMapItem *arg0);
 
 extern u16 gStoryMapItemValues[];
 extern u8 gStoryMapItemTypeTables[][16];
@@ -51,11 +56,6 @@ extern s32 gStoryMapItemAnimationTimers[];
 extern u16 gStoryMapItemAnimationValues[];
 extern void *gStoryMapItemUpdateCallbacks[];
 extern u8 identityMatrix[];
-
-static void initStoryMapItemMovement(StoryMapItemTask *);
-static void awaitStoryMapItemReady(void);
-static void awaitStoryMapItemRespawn(StoryMapItem *arg0);
-static void cleanupStoryMapItem(StoryMapItem *arg0);
 
 void initStoryMapItem(StoryMapItem *arg0) {
     AllocationData29200 *alloc;
@@ -127,7 +127,7 @@ void respawnStoryMapItem(StoryMapItem *arg0) {
     setCallback(awaitStoryMapItemReady);
 }
 
-static void awaitStoryMapItemReady(void) {
+void awaitStoryMapItemReady(void) {
     AllocationData29200 *alloc = getCurrentAllocation();
 
     if (alloc->unk429 == 0) {
@@ -135,7 +135,7 @@ static void awaitStoryMapItemReady(void) {
     }
 }
 
-static void initStoryMapItemMovement(StoryMapItemTask *arg0) {
+void initStoryMapItemMovement(StoryMapItemTask *arg0) {
     GameState *alloc;
     s32 count;
     s32 i;
@@ -218,7 +218,7 @@ void collectStoryMapItem(StoryMapItem *arg0) {
     setCallback(awaitStoryMapItemRespawn);
 }
 
-static void awaitStoryMapItemRespawn(StoryMapItem *arg0) {
+void awaitStoryMapItemRespawn(StoryMapItem *arg0) {
     arg0->respawnTimer--;
     if (arg0->respawnTimer == 0) {
         arg0->respawnTimer = 0;
@@ -226,6 +226,6 @@ static void awaitStoryMapItemRespawn(StoryMapItem *arg0) {
     }
 }
 
-static void cleanupStoryMapItem(StoryMapItem *arg0) {
+void cleanupStoryMapItem(StoryMapItem *arg0) {
     arg0->model = destroySceneModel(arg0->model);
 }

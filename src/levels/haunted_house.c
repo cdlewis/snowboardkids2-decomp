@@ -1,4 +1,5 @@
 #include "levels/haunted_house.h"
+#include "race_session.h"
 #include "42170.h"
 #include "52880.h"
 #include "56910.h"
@@ -11,11 +12,8 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
-#include "race_session.h"
 #include "rand.h"
 #include "task_scheduler.h"
-
-// Struct definitions
 
 typedef struct {
     /* 0x00 */ void *assetData;
@@ -34,6 +32,28 @@ typedef struct {
     /* 0x44 */ s16 animFrameIndex;
     /* 0x46 */ u8 fadeDirection;
 } AnimatedGhostEntity;
+
+typedef struct {
+    u8 pad[0x30];
+    void *unk30;
+} AllocationUnk30;
+
+typedef struct {
+    u8 pad[0x10];
+    Player *players;
+    u8 pad14[0x1C];
+    void *gameData;
+    u8 pad34[0x2A];
+    u8 memoryPoolId;
+    u8 pad5F[0x17];
+    u8 gamePaused;
+} Allocation;
+
+typedef struct {
+    u8 pad[0x24];
+    s32 unk24;
+} Task;
+
 
 typedef struct {
     /* 0x00 */ void *spriteAsset;
@@ -75,24 +95,6 @@ typedef struct {
     s16 animPhase;
 } FloatingSpriteEntity;
 
-typedef struct {
-    u8 pad[0x10];
-    Player *players;
-    u8 pad14[0x1C];
-    void *gameData;
-    u8 pad34[0x2A];
-    u8 memoryPoolId;
-    u8 pad5F[0x17];
-    u8 gamePaused;
-} Allocation;
-
-typedef struct {
-    u8 pad[0x24];
-    s32 unk24;
-} Task;
-
-// Global variable declarations
-
 extern s32 D_8009A8A4_9B4A4;
 extern void *g_GhostDefaultAssetMetadata;
 extern Vec3i g_GhostBaseDirection;
@@ -115,7 +117,6 @@ extern s32 D_800A8B14_9FE84;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 
-s32 updateGhostPositionAndCheckEnd(AnimatedGhostEntity *ghost);
 void initAnimatedGhost(AnimatedGhostEntity *);
 void cleanupAnimatedGhost(void **);
 void fadeInGhost(AnimatedGhostEntity *);
@@ -136,9 +137,7 @@ void cleanupGhostManager(GhostManager *);
 void updateLapCounter(s16 *);
 void updateGhostAnimation(AnimatedGhostEntity *);
 void renderGhosts(GhostRenderState *);
-void cleanupFloatingSpriteEntity(void **);
-
-// Function implementations
+extern void cleanupFloatingSpriteEntity(void **);
 
 void updateGhostAnimation(AnimatedGhostEntity *ghost) {
     s32 viewport;
@@ -146,11 +145,7 @@ void updateGhostAnimation(AnimatedGhostEntity *ghost) {
     ghost->animTimer--;
 
     if (ghost->animTimer == 0) {
-        loadAssetMetadata(
-            (loadAssetMetadata_arg *)&ghost->assetMetadata,
-            ghost->assetData,
-            D_800BC830_B0520[ghost->animFrameIndex].assetIndex
-        );
+        loadAssetMetadata((loadAssetMetadata_arg *)&ghost->assetMetadata, ghost->assetData, D_800BC830_B0520[ghost->animFrameIndex].assetIndex);
 
         ghost->animTimer = D_800BC830_B0520[ghost->animFrameIndex].frameDuration;
         ghost->animFrameIndex++;
@@ -233,8 +228,7 @@ s32 updateGhostPositionAndCheckEnd(AnimatedGhostEntity *ghost) {
 
         func_80060CDC_618DC(collisionContext, newHeight, posPtr, 0x80000, &surfaceNormal);
 
-        ghost->posY =
-            getTrackHeightInSector(collisionContext, (u16)ghost->collisionHeight, posPtr, 0x100000) + 0x180000;
+        ghost->posY = getTrackHeightInSector(collisionContext, (u16)ghost->collisionHeight, posPtr, 0x100000) + 0x180000;
 
         if (ghost->entityType == 0) {
             shouldEnd = (ghost->collisionHeight != 0x1A);

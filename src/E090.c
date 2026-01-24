@@ -19,6 +19,30 @@ typedef struct {
 
 extern E090_DataEntry D_8008CE10_8DA10[];
 
+void transitionFromLogoScreen(void);
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s32 unk4;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s8 unk12;
+    s8 unk13;
+    s8 unk14;
+    u8 pad15[3];
+} E090_InnerStruct;
+
+typedef struct {
+    u8 pad0[0x10];
+    s16 unk10;
+    s16 unk12;
+    u8 pad14[0x18];
+} E090_SubStruct;
+
 typedef struct {
     s8 state;
     s8 visibleLetterCount;
@@ -28,22 +52,27 @@ typedef struct {
     void *unk1E0;
     void *unk1E4;
     void *unk1E8;
-    TiledTextureRenderState unk1EC;
-    TiledTextureRenderState unk218;
-    ScaledSpriteEntry unk244[6];
+    E090_SubStruct unk1EC;
+    E090_SubStruct unk218;
+    E090_InnerStruct unk244[6];
     s32 unk2D4[6];
 } E090_struct;
 
-void loadLogoScreenAssets(void);
-void updateLogoScreen(void);
-void transitionFromLogoScreen(void);
+void initLogoScreenElements(E090_struct *arg0);
+void initLogoDisplaySequence(E090_struct *arg0);
+void updateLogoDisplayFade(E090_struct *arg0);
+void initTitleTextSequence(E090_struct *arg0);
+void updateTitleTextDelay(E090_struct *arg0);
+void updateTitleLetterReveal(E090_struct *arg0);
+void updateTitleFinalFadeIn(E090_struct *arg0);
+void cleanupLogoScreen(E090_struct *arg0);
 
-static void initLogoNodeFadeIn(E090_struct *arg0) {
+void initLogoNodeFadeIn(E090_struct *arg0) {
     setViewportEnvColor(&arg0->unk8, 0, 0, 0);
     setViewportFadeValue(&arg0->unk8, 0xFF, 0xF);
 }
 
-static void initLogoNodeFadeOut(E090_struct *arg0) {
+void initLogoNodeFadeOut(E090_struct *arg0) {
     setViewportEnvColor(&arg0->unk8, 0, 0, 0);
     setViewportFadeValue(&arg0->unk8, 0, 0xF);
 }
@@ -54,20 +83,20 @@ void initLogoScreenElements(E090_struct *arg0) {
     initTiledTextureRenderState(&arg0->unk1EC, (s32)arg0->unk1E0);
     initTiledTextureRenderState(&arg0->unk218, (s32)arg0->unk1E4);
 
-    arg0->unk1EC.clipX = 0;
-    arg0->unk1EC.clipY = 0;
-    arg0->unk218.clipX = 0;
-    arg0->unk218.clipY = 0;
+    arg0->unk1EC.unk10 = 0;
+    arg0->unk1EC.unk12 = 0;
+    arg0->unk218.unk10 = 0;
+    arg0->unk218.unk12 = 0;
 
     for (i = 0; i < 6; i++) {
-        arg0->unk244[i].x = D_8008CE10_8DA10[i].unk0;
-        arg0->unk244[i].y = D_8008CE10_8DA10[i].unk2;
-        arg0->unk244[i].asset = arg0->unk1E8;
-        arg0->unk244[i].spriteIndex = D_8008CE10_8DA10[i].unk4;
-        arg0->unk244[i].scaleX = 0x400;
-        arg0->unk244[i].scaleY = 0x400;
-        arg0->unk244[i].rotation = 0;
-        arg0->unk244[i].alpha = 0xFF;
+        arg0->unk244[i].unk0 = D_8008CE10_8DA10[i].unk0;
+        arg0->unk244[i].unk2 = D_8008CE10_8DA10[i].unk2;
+        arg0->unk244[i].unk4 = (s32)arg0->unk1E8;
+        arg0->unk244[i].unk8 = D_8008CE10_8DA10[i].unk4;
+        arg0->unk244[i].unkA = 0x400;
+        arg0->unk244[i].unkC = 0x400;
+        arg0->unk244[i].unkE = 0;
+        arg0->unk244[i].unk10 = 0xFF;
         arg0->unk244[i].unk12 = 0;
         arg0->unk244[i].unk13 = 0;
         arg0->unk244[i].unk14 = 0;
@@ -140,6 +169,9 @@ void cleanupLogoScreen(E090_struct *arg0) {
     unlinkNode(&arg0->unk8);
     terminateSchedulerWithCallback(transitionFromLogoScreen);
 }
+
+void loadLogoScreenAssets(void);
+void updateLogoScreen(void);
 
 void initLogoScreen(void) {
     setGameStateHandler(loadLogoScreenAssets);

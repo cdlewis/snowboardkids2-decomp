@@ -161,34 +161,3 @@ enum RaceType {
     RACE_TYPE_DEMO = 10,
     RACE_TYPE_INTRO = 11,
 };
-
-typedef struct {
-    u8 unk0[4];
-    u8 gameMode;
-    u8 demoIndex;
-    u8 unk6;
-    u8 currentLevel;
-    u8 numPlayers;
-    u8 characterIDs[4];
-    u8 boardTypes[4];
-    u8 costumeIDs[4];
-    u8 colorSlots[4];
-    u8 lapCount;
-    u8 pad1A[5];
-    u8 battleTimeLimit;
-    u8 battleScoreLimit;
-    u8 pad21[3];
-    u8 isExpertMode;
-} SessionConfig;
-
-typedef struct {
-    void *romStart;
-    void *romEnd;
-    void *ramStart;
-    void *icacheStart;
-    void *icacheEnd;
-    void *dcacheStart;
-    void *dcacheEnd;
-    void *bssStart;
-    void *bssEnd;
-} OverlayEntry;

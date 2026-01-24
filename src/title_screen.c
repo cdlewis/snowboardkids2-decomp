@@ -33,13 +33,6 @@ typedef struct {
 USE_ASSET(_414CF0);
 USE_ASSET(_418520);
 
-extern u8 gTitleExitMode;
-extern s32 gControllerInputs;
-extern s32 gButtonsPressed;
-extern u8 gDebugUnlockEnabled;
-extern u8 gTitleCameraSettings;
-extern s8 gTitleInitialized;
-
 void resetSaveDataToDefaults(void);
 void waitForTitleAssetsReady(void);
 void checkPartialUnlockCheatCode(void);
@@ -47,6 +40,13 @@ void checkUnlockAllCheatCode(void);
 void unlockAllContent(void);
 void unlockPartialContent(void);
 void handleTitleMenuInput(void);
+
+extern u8 gTitleExitMode;
+extern s32 gControllerInputs;
+extern s32 gButtonsPressed;
+extern u8 gDebugUnlockEnabled;
+extern u8 gTitleCameraSettings;
+extern s8 gTitleInitialized;
 
 void exitTitleToNextMode(void) {
     returnToParentScheduler(gTitleExitMode);

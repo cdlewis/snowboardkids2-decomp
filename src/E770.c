@@ -1,4 +1,3 @@
-#include "E770.h"
 #include "20F0.h"
 #include "38C90.h"
 #include "4050.h"
@@ -10,20 +9,62 @@
 #include "task_scheduler.h"
 
 extern s16 gCurrentBgmId;
-extern s32 gControllerInputs;
 extern u8 D_8009DF6C_9EB6C[];
 
+typedef struct {
+    s32 value;
+    void *ptr;
+} ArrayElement_8;
+
 extern ArrayElement_8 D_8008CEA0_8DAA0[];
+
+typedef struct {
+    void *ptr;
+    s32 count;
+} LookupEntry;
+
 extern LookupEntry D_8008CE9C_8DA9C[];
+
+typedef struct {
+    u8 unk0;
+    u8 unk1;
+    s8 pad[5];
+    s8 unlockSlotIndex;
+    u8 pad2[4];
+} GalleryItemEntry;
+
+typedef struct {
+    GalleryItemEntry *items;
+    s32 count;
+} GalleryCategoryData;
+
 extern GalleryCategoryData gGalleryCategories[];
 
-extern void initGalleryViewer(FD98_struct *);
-extern void func_8000DCD8_E8D8(E770_struct *);
-extern void func_8000E6E0_F2E0(void);
-extern void onGalleryMenuExit(void);
-extern void func_8000EE88_FA88(E770_struct *);
-extern void onGalleryViewerCleanup(void);
-extern void updateGalleryViewer(E770_struct *);
+typedef struct {
+    s8 menuState;
+    s8 selectedOption;
+    s8 menuType;
+    s8 viewerComplete;
+    u8 pad4[0x4];
+    void *unk8;
+    void *unkC;
+    s16 unk10;
+    s16 fadeTimer;
+    s16 animTimer;
+    u8 unk16;
+    u8 pad17;
+    void *unk18;
+    u8 pad1C[0x4];
+    Node_70B00 unk20;
+    Node_70B00 fadeNode;
+    Node_70B00 unk3D0;
+    u8 pad5A8[0x1C];
+    void *unk5C4;
+    u8 pad5C8[0x2C];
+    void *unk5F4;
+    u8 pad5F8[0x2C];
+    SceneModel *menuModel;
+} E770_struct;
 
 void playBgmTrack(E770_struct *arg0, s16 bgmId) {
     gCurrentBgmId = bgmId;
@@ -107,6 +148,8 @@ void waitForMenuFadeIn(E770_struct *arg0) {
         arg0->fadeTimer = temp - 1;
     }
 }
+
+extern s32 gControllerInputs;
 
 void handleGalleryMenuInput(E770_struct *arg0) {
     s32 inputs;
@@ -239,6 +282,21 @@ play_sound:
     playSoundEffect(sound);
 }
 
+typedef struct FD98_struct {
+    s8 viewerState;
+    s8 navigationMode;
+    s8 cursorIndex;
+    u8 pageUpCursorDest;
+    u8 pageDownCursorDest;
+    u8 pad5[0x3];
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+} FD98_struct;
+
+extern void initGalleryViewer(FD98_struct *);
+
 void processGalleryMenuSelection(E770_struct *arg0) {
     s16 temp = arg0->fadeTimer;
 
@@ -275,6 +333,8 @@ void beginGalleryMenuExit(E770_struct *arg0) {
     arg0->menuState = 6;
 }
 
+extern void onGalleryMenuExit(void);
+
 s32 completeGalleryMenuExit(E770_struct *arg0) {
     s16 temp;
 
@@ -291,6 +351,8 @@ s32 completeGalleryMenuExit(E770_struct *arg0) {
     return 0;
 }
 
+extern void func_8000E6E0_F2E0(void);
+
 void initGalleryMenu(void) {
     allocateTaskMemory(0xCC0);
     gCurrentBgmId = 5;
@@ -300,6 +362,8 @@ void initGalleryMenu(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/E770", func_8000E6E0_F2E0);
+
+extern void func_8000DCD8_E8D8(E770_struct *);
 
 void updateGalleryMenu(void) {
     E770_struct *s0;
@@ -345,38 +409,71 @@ void onGalleryMenuExit(void) {
 }
 
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEB0_9EAB0);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEB4_9EAB4);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEB8_9EAB8);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEBC_9EABC);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEC0_9EAC0);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEC4_9EAC4);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEC8_9EAC8);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DECC_9EACC);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DED0_9EAD0);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DED4_9EAD4);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DED8_9EAD8);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEDC_9EADC);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEE0_9EAE0);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEE4_9EAE4);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEE8_9EAE8);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEEC_9EAEC);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEF0_9EAF0);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEF4_9EAF4);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEF8_9EAF8);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DEFC_9EAFC);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF00_9EB00);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF04_9EB04);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF08_9EB08);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF0C_9EB0C);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF10_9EB10);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF14_9EB14);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF18_9EB18);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF1C_9EB1C);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF20_9EB20);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF24_9EB24);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF28_9EB28);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF2C_9EB2C);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF30_9EB30);
+
 INCLUDE_RODATA("asm/nonmatchings/E770", D_8009DF34_9EB34);
 
 u8 isGalleryItemUnlocked(u8 itemIndex) {
@@ -829,6 +926,9 @@ s32 updateViewerFadeOut(E770_struct *arg0) {
     return 0;
 }
 
+extern void onGalleryViewerCleanup(void);
+extern void updateGalleryViewer(E770_struct *);
+
 void initGalleryViewer(FD98_struct *arg0) {
     getCurrentAllocation();
     setCleanupCallback(onGalleryViewerCleanup);
@@ -841,6 +941,8 @@ void initGalleryViewer(FD98_struct *arg0) {
     arg0->unkC = 0xFFF10000;
     setCallback(updateGalleryViewer);
 }
+
+extern void func_8000EE88_FA88(E770_struct *);
 
 void updateGalleryViewer(E770_struct *arg0) {
     getCurrentAllocation();

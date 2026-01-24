@@ -19,8 +19,6 @@ USE_ASSET(_4237C0);
 USE_ASSET(_41A1D0);
 USE_ASSET(_426EF0);
 
-#define ICON_TABLE_INDEX 0xB
-
 typedef struct {
     u8 padding[0x24];
     void *unk24;
@@ -93,6 +91,20 @@ typedef struct {
     u8 padding[0x16];
     u8 playerIndex;
 } CharSelectIconTargetState;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 scaleX;
+    s16 scaleY;
+    s16 rotation;
+    s16 alpha;
+    u8 unk12;
+    u8 unk13;
+    u8 unk14;
+} ScaledSpriteEntry;
 
 typedef struct {
     u8 padding[0x24];
@@ -183,7 +195,16 @@ typedef struct {
     u8 playerIndex;
 } P2NameHideState;
 
-typedef SelectionEntry CharacterNameSprite;
+typedef struct {
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 alpha;
+    u8 unkC;
+    u8 blinkState;
+    u8 paddingE[2];
+} CharacterNameSprite;
 
 extern struct {
     u16 unk0;
@@ -243,8 +264,6 @@ extern s32 D_8008DD2C_8E92C[];
 extern Vec3s D_8008DD4E_8E94E[];
 extern Vec3s charSelectIconPositions[];
 extern Vec3s charSelectIconYIncrements[];
-extern u8 D_8008DD8C_8E98C[];
-extern s16 D_8008DE02_8EA02[];
 
 void func_80025418_26018(CharSelectIconsState *);
 void cleanupCharSelectIcons(SimpleSpriteEntry *);
@@ -977,6 +996,8 @@ SceneModel *cleanupSceneModelHolder(SceneModelHolder *arg0) {
     return destroySceneModel(arg0->model);
 }
 
+#define ICON_TABLE_INDEX 0xB
+
 void initCharSelectIcons(CharSelectIconsState *arg0) {
     OutputStruct_19E80 sp10;
     u8 *tablePtr;
@@ -1052,6 +1073,9 @@ void updateCharSelectIconsDelay(CharSelectIconsState *arg0) {
         setCallback(func_80025418_26018);
     }
 }
+
+extern u8 D_8008DD8C_8E98C[];
+extern s16 D_8008DE02_8EA02[];
 
 void func_80025418_26018(CharSelectIconsState *arg0) {
     u8 *alloc;

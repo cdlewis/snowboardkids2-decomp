@@ -8,12 +8,10 @@
 
 USE_ASSET(_40E1C0);
 
-// Macros
-#define GET_ALPHA_COLOR_HIGH_BYTE(arg0) (((u8 *)&(arg0)->alphaColor)[1])
-#define GET_SCALE_AS_S16(arg0) (*(s16 *)&(arg0)->scale)
-#define SET_SCALE_AS_S16(arg0, val) (*(s16 *)&(arg0)->scale = (val))
+extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
+extern s32 gControllerInputs;
+extern s8 *s_trainingPanelMessageTables[];
 
-// Structs
 typedef struct {
     void *uiAsset;
     void *textRenderContext;
@@ -34,22 +32,14 @@ typedef struct {
     u8 colorIndex;
 } TrainingInstructionRuntimeState;
 
-// Extern declarations
-extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
-extern s32 gControllerInputs;
-extern s8 *s_trainingPanelMessageTables[];
+#define GET_ALPHA_COLOR_HIGH_BYTE(arg0) (((u8 *)&(arg0)->alphaColor)[1])
 
-// Function declarations
-void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0);
-void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0);
-void expandTrainingInstructionPanelHeight(TrainingInstructionRuntimeState *arg0);
-void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *arg0);
-void shrinkTrainingInstructionPanelForNextMessage(TrainingInstructionRuntimeState *arg0);
-void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionRuntimeState *arg0);
 void shrinkTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0);
+
 void cleanupTrainingInstructionTask(TrainingInstructionState *arg0);
 
-// Function implementations
+void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0);
+
 void initTrainingInstructionTask(TrainingInstructionState *arg0) {
     getCurrentAllocation();
     arg0->textRenderContext = loadTextRenderAsset(1);
@@ -59,6 +49,8 @@ void initTrainingInstructionTask(TrainingInstructionState *arg0) {
     setCleanupCallback(cleanupTrainingInstructionTask);
     setCallback(checkTrainingInstructionCheckpoint);
 }
+
+void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0);
 
 void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0) {
     GameState *state = getCurrentAllocation();
@@ -140,12 +132,16 @@ void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0) {
             arg0->panelHeight = 1;
             arg0->alphaColor = 0xF0;
             arg0->messageIndex = 0;
-            GET_SCALE_AS_S16(arg0) = 0xC0;
+            *(s16 *)&arg0->scale = 0xC0;
             setCallback(expandTrainingInstructionPanelWidth);
             break;
         }
     }
 }
+
+void expandTrainingInstructionPanelHeight(TrainingInstructionRuntimeState *arg0);
+void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *arg0);
+void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionRuntimeState *arg0);
 
 void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) {
     s16 width;
@@ -249,7 +245,7 @@ void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *
     temp_v1_2 = arg0->messageData[table_ptr[arg0->messageIndex]];
     func_80035260_35E60(arg0->textRenderContext, (void *)arg0->messageData + temp_v1_2, -0x68, -0x30, 0xFF, 0xFF, 0, s1_var, s0_var);
 
-    renderTiledSprite3x3(arg0->uiAsset, -0x68, -0x30, 0xD, s0_var, 1, GET_ALPHA_COLOR_HIGH_BYTE(arg0), arg0->colorIndex, 0xC, 0x6);
+    renderTiledSprite3x3(arg0->uiAsset, -0x68, -0x30, 0xD, s0_var, 1, GET_ALPHA_COLOR_HIGH_BYTE(arg0), arg0->colorIndex, s1_var, s0_var);
 
     if (gControllerInputs & A_BUTTON) {
         temp_v0 = arg0->messageIndex + 1;
@@ -266,6 +262,9 @@ void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *
         }
     }
 }
+
+#define GET_SCALE_AS_S16(arg0) (*(s16 *)&(arg0)->scale)
+#define SET_SCALE_AS_S16(arg0, val) (*(s16 *)&(arg0)->scale = (val))
 
 void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionRuntimeState *arg0) {
     s16 scale;

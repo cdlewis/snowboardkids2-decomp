@@ -3,7 +3,6 @@
 #include "EepromSaveData_type.h"
 #include "memory_allocator.h"
 
-// Structs
 typedef struct {
     s16 command;
     u16 pad;
@@ -18,11 +17,10 @@ typedef struct {
     u8 duration[4];
 } MotorState;
 
-// Function declarations (not in header)
 void initControllerPack(s32);
 void func_8003A294_3AE94(s32, void *);
 void func_8003A52C_3B12C(s32, void *);
-void controllerPackListFiles(s32, controllerPackFileHeader *fileHeaders);
+void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders);
 void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[]);
 void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader *header);
 void controllerPackReadStatus(s32 arg0);

@@ -3,7 +3,6 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-// Struct definitions
 typedef struct {
     func_80002B50_3750_arg *model;
     DisplayListObject displayObject;
@@ -14,6 +13,10 @@ typedef struct {
     s32 verticalOffset;
     s32 verticalVelocity;
 } BobbingModelState;
+
+extern u8 identityMatrix[];
+extern void *D_800882B0_88EB0;
+void updateBobbingModelTask(BobbingModelState *);
 
 typedef struct {
     SceneModel *model;
@@ -29,17 +32,8 @@ typedef struct {
     s32 verticalVelocity;
 } BobbingModelTaskState;
 
-// Global variables
-extern u8 identityMatrix[];
-extern void *D_800882B0_88EB0;
-
-// Function declarations
-void updateBobbingModelTask(BobbingModelState *);
 void cleanupBobbingModelTask(BobbingModelTaskState *);
-void cleanupTiltingModelTask(void);
-void updateTiltingModelTask(BobbingModelTaskState *);
 
-// Function implementations
 void initBobbingModelTask(BobbingModelTaskState *state) {
     memcpy(state->transformMatrix, identityMatrix, 0x20);
     state->displayList = loadAssetGroupDisplayList(state->model);
@@ -130,6 +124,9 @@ void cleanupBobbingModelTask(BobbingModelTaskState *state) {
     state->displayList = freeNodeMemory(state->displayList);
     state->vertexData = freeNodeMemory(state->vertexData);
 }
+
+void cleanupTiltingModelTask(void);
+void updateTiltingModelTask(BobbingModelTaskState *);
 
 void initTiltingModelTask(void) {
     setCleanupCallback(cleanupTiltingModelTask);

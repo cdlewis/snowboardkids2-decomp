@@ -33,4 +33,3 @@ findVulnerablePlayerNearPositionWithDelta(Vec3i *position, s32 excludePlayerIdx,
 s16 func_8005BF50_5CB50(Vec3i *arg0, s16 arg1, s16 arg2, s32 arg3, s32 arg4);
 void func_8005A26C_5AE6C(Player *);
 s32 func_80059ED0_5AAD0(Player *);
-s16 getPlayerTargetTrackAngle(Player *player);

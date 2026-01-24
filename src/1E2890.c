@@ -4,6 +4,8 @@
 #include "race_session.h"
 #include "task_scheduler.h"
 
+extern s8 gStopFanSoundTasks;
+
 typedef struct {
     s16 fanIndex;
     s16 volume;
@@ -13,6 +15,12 @@ typedef struct {
     s16 interval;
     s16 currentFrame;
 } RepeatingFanSoundEffectState;
+
+void cleanupRepeatingFanSoundEffectTask(void);
+void initRepeatingFanSound3DTask(void);
+void cleanupRepeatingFanSound3DTask(void);
+void initRepeatingFanSoundEffectTask(void);
+void updateRepeatingFanSoundEffect(RepeatingFanSoundEffectState *arg0);
 
 typedef struct {
     s16 fanIndex;
@@ -24,13 +32,6 @@ typedef struct {
     CutsceneSlotData *cutsceneSlotData;
 } RepeatingFanSound3DState;
 
-extern s8 gStopFanSoundTasks;
-
-void cleanupRepeatingFanSoundEffectTask(void);
-void initRepeatingFanSoundEffectTask(void);
-void updateRepeatingFanSoundEffect(RepeatingFanSoundEffectState *arg0);
-void cleanupRepeatingFanSound3DTask(void);
-void initRepeatingFanSound3DTask(void);
 void updateRepeatingFanSound3D(RepeatingFanSound3DState *arg0);
 
 void stopFanSoundTasks(void) {

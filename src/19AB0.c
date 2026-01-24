@@ -11,6 +11,7 @@
 #include "task_scheduler.h"
 
 extern u8 gTitleInitialized;
+extern u8 storyMapLocationIndex;
 
 void handleGameStateComplete(void);
 void handleStoryMapLocationComplete(void);

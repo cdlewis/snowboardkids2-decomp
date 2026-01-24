@@ -17,7 +17,6 @@ extern u16 gStunnedVoiceSounds1[];
 extern u16 gStunnedVoiceSounds2[];
 extern u16 gCharacterVoiceSounds1[];
 extern u16 gCharacterVoiceSounds2[];
-extern u16 gCharacterVoiceSounds3[];
 
 void setPlayerHitStunState(Player *player, s16 hitState, void *knockbackData) {
     if (player->unkAC2 != 0) {
@@ -341,6 +340,8 @@ void playCharacterVoice2(Player *arg0) {
         queueSoundAtPositionWithPriority(&arg0->worldPos, gCharacterVoiceSounds2[index], 5, arg0->playerIndex + 4);
     }
 }
+
+extern u16 gCharacterVoiceSounds3[];
 
 void playCharacterVoice3(Player *arg0) {
     u8 index = arg0->characterId;

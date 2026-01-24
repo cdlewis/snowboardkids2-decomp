@@ -15,13 +15,12 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-// Macro definitions
-#define CHECKPOINT_DATA_ROW 214
-
-// Typedefs
 typedef void (*FuncPtr)(void *);
-typedef s32 (*StateFunc)(void *);
 
+extern FuncPtr gCrazyJungleBossChasePhaseHandlers[];
+extern FuncPtr gCrazyJungleBossHoverPhaseHandlers[];
+extern s32 D_800BC44C_ACC7C[];
+extern s16 identityMatrix[];
 typedef struct {
     u8 primaryR;
     u8 primaryG;
@@ -32,17 +31,13 @@ typedef struct {
     u8 secondaryB;
     u8 pad2;
 } BossSurfaceColor;
+extern BossSurfaceColor gBossSurfaceColors[];
 
 typedef struct {
     s32 posX;
     s32 height;
     s32 posZ;
 } BossCheckpoint;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-} D_800BC468_ACC98_type;
 
 typedef struct {
     u8 pad[0x38];
@@ -151,28 +146,19 @@ typedef struct {
     u8 unkBDB;
 } Arg0Struct;
 
-// Function prototypes
-void dispatchCrazyJungleBossChasePhase(Arg0Struct *arg0);
-void dispatchCrazyJungleBossHoverPhase(Arg0Struct *arg0);
-s32 crazyJungleBossChaseIntroPhase(Arg0Struct *arg0);
-s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0);
-s32 crazyJungleBossChaseExitPhase(Arg0Struct *arg0);
-s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0);
-s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0);
-void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+} D_800BC468_ACC98_type;
 
-// Extern declarations
-extern s16 identityMatrix[];
-extern s32 D_800BC44C_ACC7C[];
+extern D_800BC468_ACC98_type D_800BC468_ACC98[];
+extern Vec3i gCrazyJungleBossCheckpointOffsets[];
+extern void func_800BC0E8_AC918(Arg0Struct *);
 extern s32 D_800BBA7C_AC2AC[][3];
 extern s32 D_800BBA84_AC2B4[][3];
-extern BossSurfaceColor gBossSurfaceColors[];
-extern Vec3i gCrazyJungleBossCheckpointOffsets[];
-extern D_800BC468_ACC98_type D_800BC468_ACC98[];
-extern FuncPtr gCrazyJungleBossChasePhaseHandlers[];
-extern FuncPtr gCrazyJungleBossHoverPhaseHandlers[];
+
+typedef s32 (*StateFunc)(void *);
 extern StateFunc D_800BC440_ACC70[];
-extern void func_800BC0E8_AC918(Arg0Struct *);
 
 void updateCrazyJungleBoss(Arg0Struct *arg0) {
     Transform3D sp10;
@@ -655,6 +641,8 @@ void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
         }
     }
 }
+
+#define CHECKPOINT_DATA_ROW 214
 
 void updateBossProximityCheckpoints(Arg0Struct *arg0) {
     s32 checkpointIndex;

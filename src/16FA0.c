@@ -14,12 +14,12 @@ USE_ASSET(_418520);
 
 extern u8 gConnectedControllerMask;
 
+void renderTitleEffectModel(ModelEntityRenderState *arg0);
+void cleanupTitleEffectModel(EffectState *arg0);
+
 extern Transform3D gTitleCharacterTransforms[];
 extern u16 *gTitleCharacterAnimSequences[2];
 
-// Internal function declarations for callbacks
-void renderTitleEffectModel(ModelEntityRenderState *arg0);
-void cleanupTitleEffectModel(EffectState *arg0);
 void updateCharacterFlyAway(TitleCharacterState *arg0);
 void updateTitleCharacterAnimation(TitleCharacterState *arg0);
 void handleUnlockAllCharacterAnim(TitleCharacterState *arg0);
@@ -27,10 +27,9 @@ void handlePartialUnlockCharacterAnim(TitleCharacterState *arg0);
 void updatePartialUnlockAnim(TitleCharacterState *arg0);
 void setupTitleCharacterTransform(TitleCharacterState *arg0);
 void cleanupTitleCharacterModel(TitleCharacterState *arg0);
-void enqueueTitleLogoRender(TitleLogoTask *arg0);
-void cleanupTitleLogoTask(TitleLogoTask *arg0);
-void cleanupPressStartPrompt(void **arg0);
-void func_800167B0_173B0(Struct16728 *arg0);
+
+void enqueueTitleLogoRender(TitleLogoTask *);
+void cleanupTitleLogoTask(TitleLogoTask *);
 
 void cleanupTitleLogoTask(TitleLogoTask *arg0) {
     arg0->assetData = freeNodeMemory(arg0->assetData);
@@ -53,6 +52,16 @@ void loadTitleLogoAsset(TitleLogoTask *arg0) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016488_17088);
+
+typedef struct {
+    u8 pad0[0xA];
+    s16 alpha;
+    void *unkC;
+} ControllerSlotElement;
+
+typedef struct {
+    ControllerSlotElement elements[8];
+} ControllerSlotDisplay;
 
 void updateControllerSlotHighlights(ControllerSlotDisplay *arg0) {
     GameState *state;
@@ -100,6 +109,10 @@ void updateControllerSlotHighlights(ControllerSlotDisplay *arg0) {
 void cleanupControllerSlotDisplay(void **arg0) {
     arg0[1] = freeNodeMemory(arg0[1]);
 }
+
+void cleanupPressStartPrompt(void **);
+
+void func_800167B0_173B0(Struct16728 *);
 
 void func_80016728_17328(Struct16728 *arg0) {
     void *dmaResult;

@@ -1,11 +1,32 @@
 #include "6DE50.h"
-#include "10AD0.h"
 #include "common.h"
 
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
+
+typedef struct {
+    /* 0x00 */ s16 clipLeft;
+    /* 0x02 */ s16 clipTop;
+    /* 0x04 */ s16 clipRight;
+    /* 0x06 */ s16 clipBottom;
+    /* 0x08 */ s16 offsetX;
+    /* 0x0A */ s16 offsetY;
+} TextClipAndOffsetData;
+
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 extern s16 gTextureEnabled;
+
+typedef struct {
+    /* 0x00 */ u16 x;
+    /* 0x02 */ u16 y;
+    /* 0x04 */ u16 width;
+    /* 0x06 */ u16 height;
+    /* 0x08 */ u8 red;
+    /* 0x09 */ u8 green;
+    /* 0x0A */ u8 blue;
+} ColorRect;
+
+void drawColorRectFill(ColorRect *rect);
 
 void drawColorRect(ColorRect *rect) {
     s16 left, top, right, bottom;

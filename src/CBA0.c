@@ -1,4 +1,3 @@
-#include "CBA0.h"
 #include "1DFAA0.h"
 #include "6E840.h"
 #include "buffers.h"
@@ -7,14 +6,6 @@
 #include "geometry.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-// Macro definitions
-USE_ASSET(_214E70);
-USE_ASSET(_663330);
-USE_ASSET(_214F20);
-USE_ASSET(_6633B0);
-
-// Struct definitions
 
 typedef struct {
     /* 0x00 */ void *vertStart1;
@@ -112,6 +103,33 @@ typedef struct {
 
 typedef struct {
     u8 pad[0x1E4];
+    s32 posX;
+    s32 posY;
+    s32 posZ;
+    s32 velocityX;
+    s32 velocityY;
+    s32 velocityZ;
+    s16 framesRemainingX;
+    s16 framesRemainingY;
+    s16 framesRemainingZ;
+} NodePositionTargetArg;
+
+typedef struct {
+    u8 pad[0x204];
+    s32 unk204;
+    s32 unk208;
+    s16 unk20C;
+} Func8000C2CCArg;
+
+typedef struct {
+    u8 pad[0x214];
+    u8 wipeR;
+    u8 wipeG;
+    u8 wipeB;
+} NodeWipeColorArg;
+
+typedef struct {
+    u8 pad[0x1E4];
     s32 position[3];
 } NodePositionArg;
 
@@ -119,6 +137,11 @@ typedef struct {
     u8 pad[0x204];
     s32 unk204;
 } Func8000C2ACArg;
+
+typedef struct {
+    u8 pad[0x218];
+    s8 renderMode;
+} NodeRenderModeArg;
 
 typedef struct {
     Node_70B00 base;
@@ -130,12 +153,10 @@ typedef struct {
     u8 renderMode;
 } SceneRenderNode;
 
-// Function declarations
 void loadSceneRenderTaskData(SceneRenderTaskLoadContext *);
 void updateSceneRenderTask(SceneRenderTaskCtx *ctx);
 void cleanupSceneRenderTask(SceneRenderTaskData *task);
 
-// External declarations
 extern Gfx *volatile gRegionAllocPtr;
 extern s32 gCurrentDisplayBufferIndex;
 extern s32 identityMatrix[];
@@ -184,6 +205,11 @@ Gfx D_8008CD20_8D920[] = {
     { .words = { 0xF2000000, 0x00040010 } },
     gsSPEndDisplayList(),
 };
+
+USE_ASSET(_214E70);
+USE_ASSET(_663330);
+USE_ASSET(_214F20);
+USE_ASSET(_6633B0);
 
 AssetDataBlock D_8008CD98_8D998 = {
     .vertStart1 = &_214E70_ROM_START,
@@ -358,7 +384,7 @@ void setNodePositionTarget(NodePositionTargetArg *node, s32 *targetPos, s16 fram
 }
 
 void initSceneRenderNode(
-    void *node,
+    SceneRenderNode *node,
     u16 slotIndex,
     u8 priority,
     u16 sceneId,
@@ -366,34 +392,33 @@ void initSceneRenderNode(
     u16 taskArg1,
     u16 taskArg2
 ) {
-    SceneRenderNode *n = node;
     void *task;
     s32 pad[8];
 
-    initViewportNode(&n->base, NULL, slotIndex, priority, 1);
-    setViewportScale(&n->base, 1.0f, 1.0f);
-    setViewportId(&n->base, sceneId);
-    setModelCameraTransform(n, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    func_8006FA0C_7060C(&n->base, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+    initViewportNode(&node->base, NULL, slotIndex, priority, 1);
+    setViewportScale(&node->base, 1.0f, 1.0f);
+    setViewportId(&node->base, sceneId);
+    setModelCameraTransform(node, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    func_8006FA0C_7060C(&node->base, 40.0f, 1.3333334f, 10.0f, 10000.0f);
 
-    n->lightColor.r2 = 0;
-    n->lightColor.g2 = 0x7F;
-    n->lightColor.b2 = 0x7F;
-    n->lightColor.r = 0;
-    n->lightColor.g = 0;
-    n->lightColor.b = 0;
-    n->ambientColor.r = 0;
-    n->ambientColor.g = 0;
-    n->ambientColor.b = 0;
+    node->lightColor.r2 = 0;
+    node->lightColor.g2 = 0x7F;
+    node->lightColor.b2 = 0x7F;
+    node->lightColor.r = 0;
+    node->lightColor.g = 0;
+    node->lightColor.b = 0;
+    node->ambientColor.r = 0;
+    node->ambientColor.g = 0;
+    node->ambientColor.b = 0;
 
-    setViewportLightColors(n->base.id, 1, &n->lightColor, &n->ambientColor);
+    setViewportLightColors(node->base.id, 1, &node->lightColor, &node->ambientColor);
 
-    n->renderFlags = 0;
-    n->renderMode = renderMode;
+    node->renderFlags = 0;
+    node->renderMode = renderMode;
 
     task = scheduleTask(loadSceneRenderTaskData, taskArg1, taskArg2, 0);
     if (task != NULL) {
-        *(SceneRenderNode **)task = n;
+        *(SceneRenderNode **)task = node;
     }
 }
 

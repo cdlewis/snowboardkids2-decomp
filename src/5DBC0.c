@@ -7,11 +7,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-/* Global data tables */
-extern u8 gCharacterBodyPartAnimTable[];
-extern u8 gBodyPartRemapTable[];
-extern s8 gSpecialTrickTypeTable[];
-
 s32 getTrackHeightInSector(void *gameData, s32 sectorIndex, void *pos, s32 heightOffset) {
     return func_80061A64_62664(gameData, sectorIndex, pos);
 }
@@ -56,6 +51,9 @@ INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D180_5DD80);
 INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D308_5DF08);
 
 INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D48C_5E08C);
+
+extern u8 gCharacterBodyPartAnimTable[];
+extern u8 gBodyPartRemapTable[];
 
 void loadCharacterBodyParts(Player *player) {
     s32 flags;
@@ -137,6 +135,8 @@ void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags) {
 s16 onTrickCompletedHook(Player *player) {
     (void)player;
 }
+
+extern s8 gSpecialTrickTypeTable[];
 
 s16 getTrickType(Player *player) {
     s16 trickType;

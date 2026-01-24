@@ -1,4 +1,3 @@
-#include "4050.h"
 #include "1DFAA0.h"
 #include "1E60D0.h"
 #include "6E840.h"
@@ -12,10 +11,6 @@
 
 USE_OVERLAY(cutscene);
 
-// Macro definitions
-// (none)
-
-// Struct definitions
 typedef union {
     struct {
         s16 lower;
@@ -33,6 +28,16 @@ typedef struct {
     CompositeInt typeSelection;
 } CutsceneState;
 
+CutsceneState gCutsceneState = { .slotIndex = 0,
+                                 .cutsceneType = 0,
+                                 .frameIndex = 0,
+                                 .unk6 = 0,
+                                 .slotSelection = { .half = { .lower = 0, .upper = 0 } },
+                                 .typeSelection = { .half = { .lower = 0, .upper = 2 } } };
+
+extern s16 D_800AB070_A23E0; // gCutsceneSlotIndex
+extern s16 D_800AFEF0_A7260; // gCutsceneType
+extern s32 gButtonsPressed;
 typedef struct {
     s16 frameCount;
     s8 unk2;
@@ -47,27 +52,16 @@ typedef struct {
     ScreenTransitionState transitionState;
 } CutsceneTaskMemory;
 
-// Global variables
-extern s16 D_800AB070_A23E0; // gCutsceneSlotIndex
-extern s16 D_800AFEF0_A7260; // gCutsceneType
-extern s32 gButtonsPressed;
-
-CutsceneState gCutsceneState = { .slotIndex = 0,
-                                 .cutsceneType = 0,
-                                 .frameIndex = 0,
-                                 .unk6 = 0,
-                                 .slotSelection = { .half = { .lower = 0, .upper = 0 } },
-                                 .typeSelection = { .half = { .lower = 0, .upper = 2 } } };
-
-// Forward declarations
+void awaitCutsceneTransitionComplete(void);
 void func_80003898_4498(void);
-static void initCutscenePlayback(void);
-static void initCutsceneRenderer(void);
-static void signalCutsceneComplete(void);
-static void awaitCutsceneTaskComplete(void);
-static void returnToMainGame(void);
+void loadCutsceneOverlay(void);
+void runCutsceneFrame(void);
+void signalCutsceneComplete(void);
+void awaitCutsceneTaskComplete(void);
+void initCutscenePlayback(void);
+void initCutsceneRenderer(void);
+void returnToMainGame(void);
 
-// Function implementations
 void setCutsceneSelection(s16 slotIndex, s16 cutsceneType) {
     D_800AB070_A23E0 = slotIndex;
     D_800AFEF0_A7260 = cutsceneType;
@@ -94,15 +88,17 @@ void initCutsceneRenderer(void) {
     Node_70B00 *uiNodePtr;
     f32 scale = 1.0f;
     u8 lightBuffer[0x20];
-    CutsceneTaskMemory *taskMemory;
 
-    taskMemory = (CutsceneTaskMemory *)allocateTaskMemory(0x17E8);
-    taskMemory->unk2 = 0;
-    taskMemory->frameCount = 0;
-    taskMemory->exitRequested = 0;
+    struct {
+        CutsceneTaskMemory *taskMemory;
+    } s;
+    s.taskMemory = (CutsceneTaskMemory *)allocateTaskMemory(0x17E8);
+    s.taskMemory->unk2 = 0;
+    s.taskMemory->frameCount = 0;
+    s.taskMemory->exitRequested = 0;
     setupTaskSchedulerNodes(0x40, 0x30, 4, 4, 4, 0, 0, 0);
 
-    nodePtr = &taskMemory->sceneNode;
+    nodePtr = &s.taskMemory->sceneNode;
     initViewportNode(nodePtr, 0, 0, 10, scale);
     setViewportScale(nodePtr, scale, scale);
     setViewportId(nodePtr, 1);
@@ -110,8 +106,8 @@ void initCutsceneRenderer(void) {
     func_8006FA0C_7060C(nodePtr, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     func_8006BEDC_6CADC(lightBuffer, 0, 0, 0x01000000, 0, 0, 0);
 
-    overlayNodePtr = &taskMemory->overlayNode;
-    setViewportTransformById(taskMemory->sceneNode.id, lightBuffer);
+    overlayNodePtr = &s.taskMemory->overlayNode;
+    setViewportTransformById(s.taskMemory->sceneNode.id, lightBuffer);
     setViewportFadeValue(NULL, 0, 0);
 
     nodePtr = overlayNodePtr;
@@ -124,7 +120,7 @@ void initCutsceneRenderer(void) {
     setViewportFadeValue(nodePtr, 0xFF, 0);
     setViewportFadeValue(nodePtr, 0, 8);
 
-    uiNodePtr = &taskMemory->uiNode;
+    uiNodePtr = &s.taskMemory->uiNode;
     initViewportNode(uiNodePtr, 0, 3, 8, 0);
     setViewportScale(uiNodePtr, scale, scale);
     setViewportId(uiNodePtr, 1);

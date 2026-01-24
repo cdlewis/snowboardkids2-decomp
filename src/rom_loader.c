@@ -2,6 +2,20 @@
 
 #include "memory_allocator.h"
 
+typedef enum {
+    DMA_COMPRESSION_NONE = 0,
+    DMA_COMPRESSION_RLE = 1,
+    DMA_COMPRESSION_DIRECT_BUFFER = 2
+} DmaCompressionType;
+
+typedef struct {
+    void *start;
+    void *end;
+    s32 compressionType;
+    s32 size;
+    void *dramAddr;
+} DmaTransferEntry;
+
 // Data
 s32 gPendingDmaCount = 0;
 

@@ -8,17 +8,13 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern u8 dialogueNpcFacesPlayer[];
-extern u8 identityMatrix[];
-extern s8 dialogueNpcAnimations[];
-extern u16 gNpcCollisionRadii[];
 extern void spawnSpriteEffectEx(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
+extern u8 identityMatrix[];
+extern u16 gNpcCollisionRadii[];
 
-static void updateStoryMapRareEventJuggling(Func2E024Arg *arg0);
-static void updateStoryMapRareEventSledding(void);
-static void updateStoryMapRareEventSnowman(Func2E024Arg *arg0);
-static void updateStoryMapRareEventCheering(Func2E024Arg *arg0);
-static void updateStoryMapRareEventSkating(Func2E024Arg *arg0);
+void updateStoryMapRareEventJuggling(Func2E024Arg *arg0);
+void updateStoryMapRareEventSledding(void);
+void updateStoryMapRareEventSkating(Func2E024Arg *);
 
 void updateStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
     GameState *allocation;
@@ -213,7 +209,7 @@ void initStoryMapRareEventJuggling(Func2E024Arg *container) {
     setCallback(updateStoryMapRareEventJuggling);
 }
 
-static void updateStoryMapRareEventJuggling(Func2E024Arg *arg0) {
+void updateStoryMapRareEventJuggling(Func2E024Arg *arg0) {
     GameState *gameState;
     s32 i;
     Func297D8Arg *elements;
@@ -350,6 +346,8 @@ void initStoryMapRareEventSledding(Func2E024Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2DD40", updateStoryMapRareEventSledding);
 
+void updateStoryMapRareEventSnowman(Func2E024Arg *arg0);
+
 void initStoryMapRareEventSnowman(Func2E024Arg *container) {
     GameState *gameState;
     s32 i;
@@ -421,7 +419,7 @@ void initStoryMapRareEventSnowman(Func2E024Arg *container) {
     setCallback(updateStoryMapRareEventSnowman);
 }
 
-static void updateStoryMapRareEventSnowman(Func2E024Arg *arg0) {
+void updateStoryMapRareEventSnowman(Func2E024Arg *arg0) {
     GameState *gameState;
     s32 i;
     Func297D8Arg *elements;
@@ -462,6 +460,8 @@ static void updateStoryMapRareEventSnowman(Func2E024Arg *arg0) {
         setCallback(updateStoryMapNpcDialogue);
     }
 }
+
+void updateStoryMapRareEventCheering(Func2E024Arg *);
 
 void initStoryMapRareEventCheering(Func2E024Arg *arg0) {
     GameState *allocation;
@@ -514,7 +514,7 @@ void initStoryMapRareEventCheering(Func2E024Arg *arg0) {
     setCallback(updateStoryMapRareEventCheering);
 }
 
-static void updateStoryMapRareEventCheering(Func2E024Arg *arg0) {
+void updateStoryMapRareEventCheering(Func2E024Arg *arg0) {
     GameState *allocation;
     s32 i;
     Func297D8Arg *ptr;
@@ -728,7 +728,7 @@ void initStoryMapRareEventSkating(Func2E024Arg *arg0) {
     setCallback(updateStoryMapRareEventSkating);
 }
 
-static void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
+void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
     GameState *gameState;
     s32 completedCount;
     s32 i;
@@ -818,6 +818,9 @@ static void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
         }
     }
 }
+
+extern u8 dialogueNpcFacesPlayer[];
+extern s8 dialogueNpcAnimations[];
 
 void prepareStoryMapNpcDialogue(void *ptr) {
     Func2E024Arg *state = ptr;
