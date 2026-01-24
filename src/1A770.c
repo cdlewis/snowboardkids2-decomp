@@ -1,6 +1,7 @@
 #include "1A770.h"
 
 #include "15690.h"
+#include "199C0.h"
 #include "20F0.h"
 #include "288A0.h"
 #include "4050.h"
@@ -39,7 +40,6 @@ extern void cleanupStoryMapDecorModel(applyTransformToModel_arg1 *);
 extern void setupStoryMapDecorModel(applyTransformToModel_arg1 *);
 extern s32 identityMatrix;
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
-extern u8 storyMapLocationIndex;
 extern void awaitFadeLoadCharacterSelect(void);
 extern s32 gControllerInputs[4];
 void awaitFadeLoadBoardShop(void);
