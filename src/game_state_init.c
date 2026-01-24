@@ -1,3 +1,4 @@
+#include "game_state_init.h"
 #include "1A770.h"
 #include "288A0.h"
 #include "36B80.h"
@@ -22,42 +23,6 @@ extern void initStoryMapMiniCamera;
 extern void initGenericDiscoveryTrigger;
 extern void initStoryMapRandomEvent;
 extern void initPhoneDiscoveryTrigger;
-
-void cleanupTransitionEffect(EffectState *);
-void gameStateCleanupHandler(void);
-void gameStateCountdownHandler(void);
-void invokeTransitionEffect(ModelEntityRenderState *);
-void setShortCountdownAndContinue(void);
-void setupGameStateTransition(ModelEntity *);
-void transitionToMainMenu(void);
-void transitionToNextGameMode(void);
-
-typedef struct {
-    Node_70B00 node1;
-    Node_70B00 node2;
-    u8 padding2[0x20];
-    s32 unk3D0;
-    s32 unk3D4;
-    s32 unk3D8;
-    void *unk3DC;
-    void *unk3E0;
-    void *unk3E4;
-    s16 unk3E8;
-    u8 padding3[0x14];
-    s16 unk3FE;
-    u8 padding4[0x3];
-    u8 unk403;
-    u8 padding5[0x20];
-    u8 locationDiscovered;
-    u8 discoveredLocationId;
-    u8 unk426;
-    u8 unk427;
-    u8 unk428;
-    u8 unk429;
-    u8 unk42A;
-    u8 padding6[0x3];
-    u8 unk42E;
-} task_memory_430;
 
 void initializeGameState(void) {
     int var_s1;
