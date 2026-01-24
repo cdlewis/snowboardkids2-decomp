@@ -314,9 +314,9 @@ void fadeOutGhost(AnimatedGhostEntity *ghost) {
     }
 }
 
-void initGhostSpawnerTask(GhostSpawnerTask *arg0) {
-    arg0->ghostType = 0;
-    arg0->spawnTimer = 0x14;
+void initGhostSpawnerTask(GhostSpawnerTask *spawner) {
+    spawner->ghostType = 0;
+    spawner->spawnTimer = 0x14;
     setCallback(func_800BB778_AF468);
 }
 
