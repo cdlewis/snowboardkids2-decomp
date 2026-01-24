@@ -70,14 +70,14 @@ s32 cutsceneSysFlash_validate(void) {
     return 0;
 }
 
-void cutsceneSysFlash_setup(func_800B2A24_1DFAD4_arg_item *srcItem, CutsceneManager *cutsceneManager, s8 slotIndex) {
+void cutsceneSysFlash_setup(CutsceneCmdItem *cmdItem, CutsceneManager *cutsceneManager, s8 slotIndex) {
     CutsceneSlot *slot;
 
     slot = getCutsceneSlot(cutsceneManager, slotIndex);
-    slot->unk0.FlashPayload.frameCounter = srcItem->unk0.FlashPayload.frameCounter;
+    slot->unk0.FlashPayload.frameCounter = cmdItem->unk0.FlashPayload.frameCounter;
     slot->unk0.FlashPayload.colorToggle = 0xFF;
-    memcpy(&slot->unk0.FlashPayload.colors[0], &srcItem->unk0.FlashPayload.colors[0], 4);
-    memcpy(&slot->unk0.FlashPayload.colors[1], &srcItem->unk0.FlashPayload.colors[1], 4);
+    memcpy(&slot->unk0.FlashPayload.colors[0], &cmdItem->unk0.FlashPayload.colors[0], 4);
+    memcpy(&slot->unk0.FlashPayload.colors[1], &cmdItem->unk0.FlashPayload.colors[1], 4);
     enableSlotUpdate(cutsceneManager, slotIndex);
 }
 
@@ -94,9 +94,9 @@ void cutsceneSysFlash_update(CutsceneManager *cutsceneManager, s8 slotIndex) {
         currentColorIndex = slot->unk0.FlashPayload.colorToggle & 1;
         setViewportEnvColor(
             cutsceneManager->uiResource,
-            slot->unk0.FlashPayload.colors[currentColorIndex].unk0,
-            slot->unk0.FlashPayload.colors[currentColorIndex].unk1,
-            slot->unk0.FlashPayload.colors[currentColorIndex].unk2
+            slot->unk0.FlashPayload.colors[currentColorIndex].r,
+            slot->unk0.FlashPayload.colors[currentColorIndex].g,
+            slot->unk0.FlashPayload.colors[currentColorIndex].b
         );
 
         // Alternate colorToggle between 0xFF and 0
@@ -105,7 +105,7 @@ void cutsceneSysFlash_update(CutsceneManager *cutsceneManager, s8 slotIndex) {
             // Check if the second color is null (all zeros)
             secondColorIsNull = (u16 *)&slot->unk0.FlashPayload.colors[1];
             if (*secondColorIsNull == 0) {
-                // When second color is null, set alpha based on Two.unk8 (overlaps with colors[1].unk2)
+                // When second color is null, set alpha based on Two.unk8 (overlaps with colors[1].b)
                 screenAlpha = -(slot->unk0.Two.unk8 != 0);
             }
         } else {

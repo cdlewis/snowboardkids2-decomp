@@ -6,10 +6,10 @@
 #include "main.h"
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 pad;
 } RGBColor;
 
 typedef struct {
@@ -55,15 +55,15 @@ typedef struct {
     s8 unkEC;
     u8 padding4[0x3];
     s32 unkF4;
-} func_800B2A24_1DFAD4_arg_item;
+} CutsceneCmdItem;
 
 typedef struct {
     Node_70B00 *unk0;
     u8 header[0xA4];
-    func_800B2A24_1DFAD4_arg_item items[18];
+    CutsceneCmdItem items[18];
     u8 padding[0x50];
     s32 unk1220;
-} func_800B2A24_1DFAD4_arg;
+} CutsceneCmdList;
 
 typedef struct {
     u8 padding[0xFF7];

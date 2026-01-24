@@ -34,7 +34,7 @@ void cutsceneSysFadeOut_exec(cutsceneSysFadeOut_exec_arg *fadeParams, Node_70B00
 s32 cutsceneSysFadeOut_isDone(void);
 void cutsceneSysFlash_init(void);
 s32 cutsceneSysFlash_validate(void);
-void cutsceneSysFlash_setup(func_800B2A24_1DFAD4_arg_item *srcItem, CutsceneManager *cutsceneManager, s8 slotIndex);
+void cutsceneSysFlash_setup(CutsceneCmdItem *cmdItem, CutsceneManager *cutsceneManager, s8 slotIndex);
 void cutsceneSysFlash_update(CutsceneManager *cutsceneManager, s8 slotIndex);
 s32 cutsceneSysFlash_isDone(void);
 void cutsceneSysIntMode_init(void);
