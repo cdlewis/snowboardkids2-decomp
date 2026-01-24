@@ -35,6 +35,8 @@ If suitable name thing already exists -- or the name essentially conveys the pur
 
 Avoid renaming functions that correspond to standard library functions. If a function is from the standard library then it is extremely valuable to maintain that naming convention.
 
+But if $INPUT starts with `func` then the symbol_addrs.txt entry for the function is missing or wrong. Make sure it has a rom address.
+
 ## When function names don't match the input name
 
 It's possible that the function name does not match the name listed in the assembly file, and consequently the function name that your asked to clean up. For example you may be asked to clean up func_8004E6F8_4F2F8 only to find that it's called initPauseMenuDisplayTask in the C code. This happens when a function has been renamed without updating symbol_addrs.txt.
