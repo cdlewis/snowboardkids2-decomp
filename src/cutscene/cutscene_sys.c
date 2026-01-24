@@ -83,36 +83,34 @@ void cutsceneSysFlash_setup(CutsceneCmdItem *cmdItem, CutsceneManager *cutsceneM
 
 void cutsceneSysFlash_update(CutsceneManager *cutsceneManager, s8 slotIndex) {
     CutsceneSlot *slot;
-    s32 screenAlpha = 0xFF;
-    s32 currentColorIndex;
-    u16 *secondColorIsNull;
+    s32 fadeAlpha = 0xFF;
+    s32 colorIndex;
 
     slot = getCutsceneSlot(cutsceneManager, slotIndex);
 
     if (slot->unk0.FlashPayload.frameCounter > 0) {
         // Toggle between the two colors each frame
-        currentColorIndex = slot->unk0.FlashPayload.colorToggle & 1;
+        colorIndex = slot->unk0.FlashPayload.colorToggle & 1;
         setViewportEnvColor(
             cutsceneManager->uiResource,
-            slot->unk0.FlashPayload.colors[currentColorIndex].r,
-            slot->unk0.FlashPayload.colors[currentColorIndex].g,
-            slot->unk0.FlashPayload.colors[currentColorIndex].b
+            slot->unk0.FlashPayload.colors[colorIndex].r,
+            slot->unk0.FlashPayload.colors[colorIndex].g,
+            slot->unk0.FlashPayload.colors[colorIndex].b
         );
 
         // Alternate colorToggle between 0xFF and 0
         if (slot->unk0.FlashPayload.colorToggle != 0) {
             slot->unk0.FlashPayload.colorToggle = 0;
             // Check if the second color is null (all zeros)
-            secondColorIsNull = (u16 *)&slot->unk0.FlashPayload.colors[1];
-            if (*secondColorIsNull == 0) {
+            if (*(u16 *)&slot->unk0.FlashPayload.colors[1] == 0) {
                 // When second color is null, set alpha based on Two.unk8 (overlaps with colors[1].b)
-                screenAlpha = -(slot->unk0.Two.unk8 != 0);
+                fadeAlpha = -(slot->unk0.Two.unk8 != 0);
             }
         } else {
-            slot->unk0.FlashPayload.colorToggle = screenAlpha;
+            slot->unk0.FlashPayload.colorToggle = fadeAlpha;
         }
 
-        setViewportFadeValue(cutsceneManager->uiResource, screenAlpha & 0xFF, 0);
+        setViewportFadeValue(cutsceneManager->uiResource, fadeAlpha & 0xFF, 0);
         slot->unk0.FlashPayload.frameCounter--;
     } else {
         // Flash effect complete - clear the screen overlay
