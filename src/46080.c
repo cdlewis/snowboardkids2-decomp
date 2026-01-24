@@ -600,9 +600,9 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x18];
-    u8 unk18;
+    u8 secondaryDropMode;
     u8 _pad[0x7];
-    u8 unk20;
+    u8 secondaryDropSeed;
 } SecondaryItemDropElement;
 
 typedef struct {
@@ -2326,18 +2326,18 @@ s32 rollSecondaryItemDrop(Player *arg0, u8 *arg1) {
 
     element = (SecondaryItemDropElement *)(arg1 + index);
 
-    switch (element->unk18) {
+    switch (element->secondaryDropMode) {
         case 0:
-            element->unk20 = element->unk20 + 1;
+            element->secondaryDropSeed = element->secondaryDropSeed + 1;
             break;
         case 1:
-            element->unk20 = element->unk20 - 1;
+            element->secondaryDropSeed = element->secondaryDropSeed - 1;
             break;
         case 2:
-            element->unk20 = element->unk20 + 3;
+            element->secondaryDropSeed = element->secondaryDropSeed + 3;
             break;
         case 3:
-            element->unk20 = element->unk20 - 3;
+            element->secondaryDropSeed = element->secondaryDropSeed - 3;
             break;
         default:
             return i + 1;

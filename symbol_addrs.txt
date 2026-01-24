@@ -3472,6 +3472,7 @@ decayPlayerSteeringAngles = 0x800B40D4; // rom:0xA3F84
 decayPlayerAirborneAngles = 0x800B419C; // rom:0xA404C
 applyVelocityDeadzone = 0x800B42A8; // rom:0xA4158
 rollPrimaryItemDrop = 0x800488A0; // rom:0x494A0
+rollSecondaryItemDrop = 0x8004899C; // rom:0x4959C
 updateItemBox = 0x80048AE8; // rom:0x496E8
 initItemBoxSystem = 0x80048E34; // rom:0x49A34
 initItemBoxPositions = 0x80049104; // rom:0x49D04
