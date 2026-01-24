@@ -1472,43 +1472,42 @@ void enqueueMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg
     }
 }
 
-void renderCameraRelativeDisplayList(DisplayListObject *arg0) {
-    Mtx sp30;
-    f32 sp70;
-    f32 sp74;
-    f32 sp78;
-    f32 sp7C;
-    f32 sp80;
-    f32 sp84;
-    LookAt *temp_v0;
-    void *alloc;
+void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
+    Mtx lookAtMatrix;
+    f32 lookAtX;
+    f32 lookAtY;
+    f32 lookAtZ;
+    f32 upX;
+    f32 upY;
+    f32 upZ;
+    LookAt *lookAt;
 
-    arg0->transformMatrix = arenaAlloc16(0x40);
-    if (arg0->transformMatrix == NULL) {
+    displayListObj->transformMatrix = arenaAlloc16(0x40);
+    if (displayListObj->transformMatrix == NULL) {
         return;
     }
 
     memcpy(&D_8009A8A4_9B4A4, &D_800AB068_A23D8->cameraX, 0xC);
-    transform3DToMtx(&D_8009A8A4_9B4A4 - 5, arg0->transformMatrix);
+    transform3DToMtx(&D_8009A8A4_9B4A4 - 5, displayListObj->transformMatrix);
 
-    if (arg0->displayLists->flags & 1) {
-        temp_v0 = arenaAlloc16(0x20);
-        if (temp_v0 == NULL) {
+    if (displayListObj->displayLists->flags & 1) {
+        lookAt = arenaAlloc16(0x20);
+        if (lookAt == NULL) {
             return;
         }
 
         matrixToEulerAngles(
             &D_800AB068_A23D8->cameraRotationMatrix,
-            (s32 *)arg0,
-            &sp70,
-            &sp74,
-            &sp78,
-            &sp7C,
-            &sp80,
-            &sp84
+            (s32 *)displayListObj,
+            &lookAtX,
+            &lookAtY,
+            &lookAtZ,
+            &upX,
+            &upY,
+            &upZ
         );
-        guLookAtReflect(&sp30, temp_v0, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
-        gSPLookAt(gRegionAllocPtr++, temp_v0);
+        guLookAtReflect(&lookAtMatrix, lookAt, 0.0f, 0.0f, 0.0f, lookAtX, lookAtY, lookAtZ, upX, upY, upZ);
+        gSPLookAt(gRegionAllocPtr++, lookAt);
     }
 
     if (gGraphicsMode != 3) {
@@ -1517,47 +1516,47 @@ void renderCameraRelativeDisplayList(DisplayListObject *arg0) {
 
         gGraphicsMode = 3;
 
-        if (arg0->segment1 != 0) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
+        if (displayListObj->segment1 != 0) {
+            gSPSegment(gRegionAllocPtr++, 1, displayListObj->segment1);
         }
 
-        if (arg0->segment2 != 0) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
+        if (displayListObj->segment2 != 0) {
+            gSPSegment(gRegionAllocPtr++, 2, displayListObj->segment2);
         }
 
-        if (arg0->segment3 != 0) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
+        if (displayListObj->segment3 != 0) {
+            gSPSegment(gRegionAllocPtr++, 3, displayListObj->segment3);
         }
     } else {
-        if (arg0->segment1 != 0 && arg0->segment1 != D_800A2D40_A3940) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
+        if (displayListObj->segment1 != 0 && displayListObj->segment1 != D_800A2D40_A3940) {
+            gSPSegment(gRegionAllocPtr++, 1, displayListObj->segment1);
         }
 
-        if (arg0->segment2 != 0 && arg0->segment2 != D_800A2D44_A3944) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
+        if (displayListObj->segment2 != 0 && displayListObj->segment2 != D_800A2D44_A3944) {
+            gSPSegment(gRegionAllocPtr++, 2, displayListObj->segment2);
         }
 
-        if (arg0->segment3 != 0 && arg0->segment3 != D_800A2D48_A3948) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
+        if (displayListObj->segment3 != 0 && displayListObj->segment3 != D_800A2D48_A3948) {
+            gSPSegment(gRegionAllocPtr++, 3, displayListObj->segment3);
         }
     }
 
-    D_800A2D40_A3940 = arg0->segment1;
-    D_800A2D44_A3944 = arg0->segment2;
-    D_800A2D48_A3948 = arg0->segment3;
+    D_800A2D40_A3940 = displayListObj->segment1;
+    D_800A2D44_A3944 = displayListObj->segment2;
+    D_800A2D48_A3948 = displayListObj->segment3;
 
-    gSPMatrix(gRegionAllocPtr++, arg0->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(gRegionAllocPtr++, displayListObj->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 
-    if (arg0->displayLists->opaqueDisplayList != 0) {
-        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
+    if (displayListObj->displayLists->opaqueDisplayList != 0) {
+        gSPDisplayList(gRegionAllocPtr++, displayListObj->displayLists->opaqueDisplayList);
     }
 
-    if (arg0->displayLists->transparentDisplayList != 0) {
-        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
+    if (displayListObj->displayLists->transparentDisplayList != 0) {
+        gSPDisplayList(gRegionAllocPtr++, displayListObj->displayLists->transparentDisplayList);
     }
 
-    if (arg0->displayLists->overlayDisplayList != 0) {
-        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
+    if (displayListObj->displayLists->overlayDisplayList != 0) {
+        gSPDisplayList(gRegionAllocPtr++, displayListObj->displayLists->overlayDisplayList);
     }
 }
 
