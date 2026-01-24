@@ -1254,6 +1254,7 @@ setItemFlags = 0x80001630; // rom:0x2230
 getAnimationFrameCount = 0x80001638; // rom:0x2238
 applyTransformToModel = 0x8000153C; // rom:0x213C
 setupSlotTransform = 0x800B6760; // rom:0x1E3810
+setSlotScale = 0x800B68F4; // rom:0x1E39A4
 finalizeAnimationLoop = 0x800B5C18; // rom:0x1E2CC8
 handleAnimationLoopDebugInput = 0x800B5CFC; // rom:0x1E2DAC
 initCutsceneFadeTask = 0x800B477C; // rom:0x1E182C
