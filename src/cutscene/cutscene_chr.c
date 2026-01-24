@@ -626,21 +626,21 @@ s32 cutsceneChrTurn3_validate(void) {
     return 0;
 }
 
-void cutsceneChrTurn3_exec(cutsceneChrTurn3_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    CutsceneSlot *currentSlot = &arg1->slots[arg2];
+void cutsceneChrTurn3_exec(cutsceneChrTurn3_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex) {
+    CutsceneSlot *slot = &cutsceneManager->slots[slotIndex];
 
-    getCurrentStateEntryItem(arg2);
+    getCurrentStateEntryItem(slotIndex);
 
     setupSlotRotateWithSpeed(
-        &currentSlot->slotData,
-        currentSlot->model,
-        arg0->targetAngle,
-        arg0->rotationStep,
-        arg0->duration,
-        arg0->rotationMultiplier
+        &slot->slotData,
+        slot->model,
+        arg->targetAngle,
+        arg->rotationStep,
+        arg->duration,
+        arg->rotationMultiplier
     );
 
-    setModelAnimationQueued(currentSlot->model, arg0->animationIndex, arg0->transitionAnimIndex, -1, -1);
+    setModelAnimationQueued(slot->model, arg->animationIndex, arg->transitionAnimIndex, -1, -1);
 }
 
 s32 cutsceneChrTurn3_isDone(void) {

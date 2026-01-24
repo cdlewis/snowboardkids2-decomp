@@ -1392,7 +1392,7 @@ cutsceneChrAlpha_isDone = 0x800B1A88; // rom:0x1DEB38
 cutsceneChrPosition2_validate = 0x800B1A98; // rom:0x1DEB48
 cutsceneChrPosition2_isDone = 0x800B1B68; // rom:0x1DEC18
 cutsceneChrTurn3_validate = 0x800B1B78;
-cutsceneChrTurn3_isDone = 0x800B1C10;
+cutsceneChrTurn3_isDone = 0x800B1C10; // rom:0x1DECC0
 cutsceneChrKageDisp_validate = 0x800B1C20;
 
 cutsceneSysFadeIn_validate = 0x800B2284;

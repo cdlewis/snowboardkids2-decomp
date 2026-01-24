@@ -276,7 +276,7 @@ void cutsceneChrPosition2_exec(cutsceneChrPosition2_exec_arg *arg, CutsceneManag
 s32 cutsceneChrPosition2_isDone(void);
 void cutsceneChrTurn3_init(void);
 s32 cutsceneChrTurn3_validate(void);
-void cutsceneChrTurn3_exec(cutsceneChrTurn3_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrTurn3_exec(cutsceneChrTurn3_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex);
 s32 cutsceneChrTurn3_isDone(void);
 void cutsceneChrKageDisp_init(void);
 s32 cutsceneChrKageDisp_validate(void);
