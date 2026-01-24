@@ -249,7 +249,7 @@ void cutsceneChrUpDown_exec(cutsceneChrUpDown_exec_arg *arg0, CutsceneManager *a
 s32 cutsceneChrUpDown_isDone(void);
 void cutsceneChrFace_init(void);
 s32 cutsceneChrFace_validate(void);
-void cutsceneChrFace_exec(s8 *arg0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrFace_exec(s8 *animIndex, CutsceneManager *manager, s8 slotIndex);
 void cutsceneChrAnime2_init(void);
 s32 cutsceneChrAnime2_validate(void);
 void cutsceneChrAnime2_exec(cutsceneChrAnime2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);

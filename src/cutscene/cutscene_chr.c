@@ -417,11 +417,9 @@ s32 cutsceneChrFace_validate(void) {
     return 0;
 }
 
-void cutsceneChrFace_exec(s8 *arg0, CutsceneManager *arg1, s8 arg2) {
-    CutsceneSlot *slot = &arg1->slots[arg2];
-    do {
-        setAnimationIndex(slot->model, *arg0);
-    } while (0);
+void cutsceneChrFace_exec(s8 *animIndex, CutsceneManager *manager, s8 slotIndex) {
+    CutsceneSlot *slot = &manager->slots[slotIndex];
+    setAnimationIndex(slot->model, *animIndex);
 }
 
 void cutsceneChrAnime2_init(void) {
