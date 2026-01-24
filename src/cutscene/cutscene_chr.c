@@ -512,7 +512,7 @@ void cutsceneChrMoveSight_exec(cutsceneChrMoveSight_exec_arg *arg0, CutsceneMana
         (s32 *)&targetPosition,
         arg0->duration,
         arg0->verticalVelocity,
-        arg0->unk1C
+        arg0->gravity
     );
 
     setModelAnimationLooped(slot->model, arg0->animIndex, arg0->transitionAnimIndex, arg0->loopCount);

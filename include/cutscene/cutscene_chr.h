@@ -93,14 +93,14 @@ typedef struct {
     s32 targetX;
     s32 targetY;
     s32 targetZ;
-    s16 unkC;
+    s16 targetAngle;
     s16 duration;
     s16 animIndex;
     s8 actionMode;
     s8 loopCount;
     s16 transitionAnimIndex;
     s32 verticalVelocity;
-    s32 unk1C;
+    s32 gravity;
 } cutsceneChrMoveSight_exec_arg;
 
 typedef struct {
