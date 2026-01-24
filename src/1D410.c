@@ -1,3 +1,4 @@
+#include "1D410.h"
 #include "288A0.h"
 #include "6E840.h"
 #include "common.h"
@@ -5,14 +6,6 @@
 #include "task_scheduler.h"
 
 extern s32 gControllerInputs;
-
-typedef struct {
-    Node_70B00 unk0;
-    u16 waitCounter;
-} PostUnlockLocationIntroAllocation;
-
-void postUnlockLocationWaitForDismiss(void);
-void onPostUnlockLocationIntroComplete(void);
 
 void initPostUnlockLocationIntro(void) {
     PostUnlockLocationIntroAllocation *allocation = (PostUnlockLocationIntroAllocation *)allocateTaskMemory(0x1E0);
