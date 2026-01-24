@@ -7,10 +7,6 @@
 #include "common.h"
 #include "race_session.h"
 #include "task_scheduler.h"
-void returnToMainMenu(void);
-void awaitSaveDataLoad(void);
-void awaitUnlockCutscene(void);
-void setStoryMapCameraMode(s32);
 
 typedef struct {
     s16 unk0;
@@ -18,8 +14,34 @@ typedef struct {
 } TaskData_15690;
 
 extern u8 D_800AB1C8_A2538;
+extern u8 gStoryCompleted;
+extern u8 gDebugUnlockEnabled;
+extern u8 D_8009F200_9FE00;
 
+void returnToMainMenu(void);
 void loadSaveSlotScreen(void);
+void awaitSaveDataLoad(void);
+void awaitUnlockCutscene(void);
+void func_80014B1C_1571C(void);
+void loadSaveData(void);
+void awaitStoryMapSelection(void);
+void loadStoryMapScreen(void);
+void loadLevelSelectScreen(void);
+void func_80014C3C_1583C(void);
+void awaitPreRaceCutscene(void);
+void loadPreRaceCutscene(void);
+void loadRace(void);
+void awaitRaceResult(void);
+void loadPostRaceCutscene(void);
+void loadStoryCompleteCutscene(void);
+void loadCreditsSequence(void);
+void awaitPostRaceCutscene(void);
+void awaitStoryCompleteCutscene(void);
+void loadUnlockCutscene(void);
+void awaitCreditsSequence(void);
+void loadPostCreditsSaveScreen(void);
+void awaitPostCreditsSaveScreen(void);
+void setStoryMapCameraMode(s32);
 
 void initStoryMode(void) {
     TaskData_15690 *data = allocateTaskMemory(4);
@@ -32,14 +54,10 @@ void initStoryMode(void) {
     setGameStateHandlerWithContinue(loadSaveSlotScreen);
 }
 
-void func_80014B1C_1571C(void);
-
 void loadSaveSlotScreen(void) {
     createTaskQueue(func_8001C920_1D520, 0x96);
     setGameStateHandler(func_80014B1C_1571C);
 }
-
-void loadSaveData(void);
 
 void func_80014B1C_1571C(void) {
     s16 result = getSchedulerReturnValue();
@@ -53,14 +71,10 @@ void func_80014B1C_1571C(void) {
     }
 }
 
-void awaitStoryMapSelection(void);
-
 void loadStoryMapScreen(void) {
     createTaskQueue(initStoryMapState, 0x96);
     setGameStateHandler(awaitStoryMapSelection);
 }
-
-void loadLevelSelectScreen(void);
 
 void awaitStoryMapSelection(void) {
     s16 result;
@@ -76,9 +90,6 @@ void awaitStoryMapSelection(void) {
         }
     }
 }
-
-void func_80014C3C_1583C(void);
-void loadPreRaceCutscene(void);
 
 void loadLevelSelectScreen(void) {
     createTaskQueue(initLevelSelectBasicState, 0x96);
@@ -108,9 +119,6 @@ void awaitSaveDataLoad(void) {
     }
 }
 
-void awaitPreRaceCutscene(void);
-void loadRace(void);
-
 void loadPreRaceCutscene(void) {
     setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 0);
     createTaskQueue(loadCutsceneOverlay, 0x96);
@@ -124,18 +132,10 @@ void awaitPreRaceCutscene(void) {
     }
 }
 
-void awaitRaceResult(void);
-
 void loadRace(void) {
     createTaskQueue(initRace, 100);
     setGameStateHandler(awaitRaceResult);
 }
-
-extern u8 gStoryCompleted;
-extern u8 gDebugUnlockEnabled;
-
-void loadPostRaceCutscene(void);
-void loadStoryCompleteCutscene(void);
 
 void awaitRaceResult(void) {
     s16 result;
@@ -197,10 +197,6 @@ void awaitRaceResult(void) {
     }
 }
 
-void awaitPostRaceCutscene(void);
-void loadCreditsSequence(void);
-void loadUnlockCutscene(void);
-
 void loadPostRaceCutscene(void) {
     setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 1);
     createTaskQueue(loadCutsceneOverlay, 0x64);
@@ -224,8 +220,6 @@ void awaitPostRaceCutscene(void) {
         setGameStateHandler(handler);
     }
 }
-
-void awaitStoryCompleteCutscene(void);
 
 void loadStoryCompleteCutscene(void) {
     setCutsceneSelection(0xA, 2);
@@ -252,14 +246,10 @@ void awaitUnlockCutscene(void) {
     }
 }
 
-void awaitCreditsSequence(void);
-
 void loadCreditsSequence(void) {
     createTaskQueue(func_80003EE0_4AE0, 0x64);
     setGameStateHandler(awaitCreditsSequence);
 }
-
-void loadPostCreditsSaveScreen(void);
 
 void awaitCreditsSequence(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
@@ -270,8 +260,6 @@ void awaitCreditsSequence(void) {
         setGameStateHandler(loadPostCreditsSaveScreen);
     }
 }
-
-void awaitPostCreditsSaveScreen(void);
 
 void loadPostCreditsSaveScreen(void) {
     D_800AFE8C_A71FC->creditsCompleted = 1;
@@ -288,8 +276,6 @@ void awaitPostCreditsSaveScreen(void) {
 void returnToMainMenu(void) {
     createRootTaskScheduler(func_8001452C_1512C, 0xC8);
 }
-
-extern u8 D_8009F200_9FE00;
 
 u8 getStoryMapCameraMode(void) {
     return D_8009F200_9FE00;
