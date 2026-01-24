@@ -10,6 +10,7 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
+// Struct definitions
 typedef struct {
     s32 x;
     s32 z;
@@ -19,21 +20,6 @@ typedef struct {
     s32 unk0;
     Waypoint unk4[2];
 } WaypointGroup;
-
-extern WaypointGroup g_FlyingEnemyWaypoints[];
-extern Vec3i *g_FlyingEnemyDirection;
-
-void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task);
-void pullPlayersInRange(FlyingEnemyTaskArg *arg0);
-void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task);
-
-typedef struct {
-    u8 pad[0x24];
-    void *displayList2;
-    void *displayList3;
-} FlyingEnemyCleanupArg;
-
-void cleanupFlyingEnemyTask(FlyingEnemyCleanupArg *arg0);
 
 typedef struct {
     u8 pad0[0x30];
@@ -59,6 +45,29 @@ typedef struct {
     u16 rotationAngle;
     s16 surfaceType;
 } FlyingEnemyTask;
+
+typedef struct {
+    u8 pad[0x24];
+    void *displayList2;
+    void *displayList3;
+} FlyingEnemyCleanupArg;
+
+typedef struct {
+    u8 pad[0x50];
+    u16 waypointIndex;
+} FlyingEnemyTaskArg_WaypointIndex;
+
+// Global variables
+extern WaypointGroup g_FlyingEnemyWaypoints[];
+extern Vec3i *g_FlyingEnemyDirection;
+
+// Function declarations
+void pullPlayersInRange(FlyingEnemyTaskArg *arg0);
+void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task);
+void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task);
+void initFlyingEnemyTask(FlyingEnemyTask *task);
+void cleanupFlyingEnemyTask(FlyingEnemyCleanupArg *arg0);
+void updateLindasCastleLapCounter(s16 *lapCounter);
 
 void func_800BB2B0(FlyingEnemyTaskArg *arg0) {
     s32 i;
@@ -273,11 +282,6 @@ void cleanupFlyingEnemyTask(FlyingEnemyCleanupArg *arg0) {
     arg0->displayList3 = freeNodeMemory(arg0->displayList3);
 }
 
-typedef struct {
-    u8 pad[0x50];
-    u16 waypointIndex;
-} FlyingEnemyTaskArg_WaypointIndex;
-
 void initFlyingEnemySpawner(FlyingEnemySpawnerState *arg0) {
     arg0->waypointIndex = 0;
     arg0->spawnTimer = 0x14;
@@ -312,7 +316,6 @@ void updateFlyingEnemySpawner(FlyingEnemySpawnerState *arg0) {
     }
     arg0->spawnTimer = newValue;
 }
-void updateLindasCastleLapCounter(s16 *lapCounter);
 
 void initLindasCastleLapCounter(s16 *lapCounter) {
     *lapCounter = 0;
