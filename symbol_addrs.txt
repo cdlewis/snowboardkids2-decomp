@@ -1396,7 +1396,7 @@ cutsceneChrTurn3_isDone = 0x800B1C10; // rom:0x1DECC0
 cutsceneChrKageDisp_validate = 0x800B1C20; // rom:0x1DECD0
 
 cutsceneSysFadeIn_validate = 0x800B2284;
-cutsceneSysFadeIn_isDone = 0x800B22E8;
+cutsceneSysFadeIn_isDone = 0x800B22E8; // rom:0x1DF398
 cutsceneSysFadeOut_validate = 0x800B22F8;
 cutsceneSysFadeOut_isDone = 0x800B235C;
 cutsceneSysFlash_validate = 0x800B236C;
