@@ -50,11 +50,11 @@ typedef struct {
     SpriteAssetState spriteState;
 } OrbitalSpriteRingInitArg;
 
+void initOrbitalSprite(OrbitalSpriteState *);
 void updateOrbitalSprite(OrbitalSpriteState *);
 void cleanupOrbitalSprite(OrbitalSpriteState *);
 void updateOrbitalSpriteRingController(OrbitalSpriteRingControllerState *);
 void cleanupOrbitalSpriteRingController(OrbitalSpriteState *);
-void initOrbitalSprite(OrbitalSpriteState *);
 
 void initOrbitalSpriteRing(OrbitalSpriteRingInitArg *arg0) {
     s32 i;
