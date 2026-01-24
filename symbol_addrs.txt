@@ -131,6 +131,7 @@ cleanupFloatingItemSpriteTask = 0x80050FE0; // rom:0x51BE0
 spawnFloatingItemSprite = 0x8005100C; // rom:0x51C0C
 spawnCharacterAttackEffectByType = 0x80051C08; // rom:0x52808
 enqueueRotatedBillboardSpriteCI = 0x80066AC0; // rom:0x676C0
+renderRotatedBillboardSpriteCI = 0x80066474; // rom:0x67074
 renderColorIndexedOpaqueDisplayList = 0x800BBB0C; // rom:0xADECC
 renderColorIndexedTransparentDisplayList = 0x800BBB38; // rom:0xADEF8
 renderColorIndexedOverlayDisplayList = 0x800BBB64; // rom:0xADF24

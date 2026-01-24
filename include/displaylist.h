@@ -199,3 +199,4 @@ typedef struct {
     s32 unk30;
 } MatrixEntry_202A0;
 void enqueueRotatedBillboardSprite(s32 arg0, MatrixEntry_202A0 *arg1);
+void renderRotatedBillboardSpriteCI(MatrixEntry_202A0 *arg1);
