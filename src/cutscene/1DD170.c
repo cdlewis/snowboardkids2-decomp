@@ -198,10 +198,10 @@ void *getCommandDescription(u8 commandCategory, u8 commandIndex) {
 
 u8 incrementCommandIndexWithWrap(u8 categoryIndex, s32 commandIndex) {
     s32 nextIndex = commandIndex + 1;
-    s16 count = commandCategories[categoryIndex].count;
-    u8 nextIndexMasked = nextIndex;
-    s32 result = (nextIndexMasked < count) ? nextIndex : 0;
-    return result;
+    s16 categoryCommandCount = commandCategories[categoryIndex].count;
+    u8 nextIndexAsByte = nextIndex;
+    s32 wrappedIndex = (nextIndexAsByte < categoryCommandCount) ? nextIndex : 0;
+    return wrappedIndex;
 }
 
 s32 decrementCommandIndexClamped(s32 categoryIndex, s32 commandIndex) {
