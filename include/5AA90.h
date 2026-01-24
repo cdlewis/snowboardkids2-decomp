@@ -19,7 +19,7 @@ void handleCollisionWithTargetPlayer(Player *player);
 void addCollisionSectorNodeToList(ListNode_5AA90 *arg0);
 Player *findPlayerNearPosition(Vec3i *position, s32 excludePlayerIndex, s32 searchRadius);
 Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex, s32 searchRadius);
-s32 func_8005A9A8_5B5A8(Player *player);
+s32 tryActivateShortcut(Player *player);
 s32 isPointInPlayerCollisionSphere(Player *player, Vec3i *point, s32 extraRadius);
 s32 checkPositionPlayerCollisionWithKnockback(Vec3i *pos, s32 extraRadius, s32 maxHeight, s16 excludePlayerIdx);
 s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeight);

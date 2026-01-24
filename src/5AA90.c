@@ -81,7 +81,7 @@ void updatePlayerSectorAndClampYToTrack(Player *player) {
  * @param player The player to check
  * @return 1 if shortcut was activated, 0 otherwise
  */
-s32 func_8005A9A8_5B5A8(Player *player) {
+s32 tryActivateShortcut(Player *player) {
     GameState *gameState;
     LevelConfig *levelItem;
     s32 deltaX, deltaZ;

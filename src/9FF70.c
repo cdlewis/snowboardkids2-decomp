@@ -404,7 +404,7 @@ s32 updateSharpTurnSlidingStep(Player *player) {
         return 1;
     }
 
-    if (func_8005A9A8_5B5A8(player) != 0) {
+    if (tryActivateShortcut(player) != 0) {
         initKnockbackBehavior((BehaviorState *)player);
         return 1;
     }
@@ -472,7 +472,7 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
         return 1;
     }
 
-    if (func_8005A9A8_5B5A8(player) != 0) {
+    if (tryActivateShortcut(player) != 0) {
         initKnockbackBehavior((BehaviorState *)player);
         return 1;
     }
@@ -508,7 +508,7 @@ s32 initPostTrickLandingStep(Player *player) {
         return 1;
     }
 
-    if (func_8005A9A8_5B5A8(player) != 0) {
+    if (tryActivateShortcut(player) != 0) {
         initKnockbackBehavior((BehaviorState *)player);
         startRumbleEffect(player, 0);
         queueSoundAtPosition(&player->worldPos, 0x25);
@@ -573,7 +573,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
         return 1;
     }
 
-    if (func_8005A9A8_5B5A8(player) != 0) {
+    if (tryActivateShortcut(player) != 0) {
         initKnockbackBehavior((BehaviorState *)player);
         return 1;
     }
@@ -616,7 +616,7 @@ s32 updatePostTrickChargingStep(Player *player) {
         return 1;
     }
 
-    if (func_8005A9A8_5B5A8(player) != 0) {
+    if (tryActivateShortcut(player) != 0) {
         initKnockbackBehavior((BehaviorState *)player);
         return 1;
     }
