@@ -681,27 +681,27 @@ void setupSlotOrbit(CutsceneSlotData *slot, s32 orbitDir, s16 duration, s16 orbi
     s32 radiusAlt;
 
     slot->unk0.animMode = 6;
-    slot->unk94 = orbitDir;
-    slot->unk92 = orbitSpeed;
+    slot->orbitAngularVelocity = orbitDir;
+    slot->orbitSpeedParam = orbitSpeed;
     slot->animFramesRemaining = duration;
     slot->animFramesDuration = duration;
     angle = ((s16)atan2Fixed(slot->unk20_u.unk20_s32, slot->unk2C) + 0x1000) & 0x1FFF;
-    slot->unk9C_u.unk9C_s32 = angle;
+    slot->orbitAngle.orbitAngle_s32 = angle;
     cosVal = approximateCos(angle) << 2;
     if (cosVal == 0) {
-        radiusAlt = (slot->unk20_u.unk20_s32 << 8) / ((approximateSin(slot->unk9C_u.s.unk9E) << 2) >> 8);
+        radiusAlt = (slot->unk20_u.unk20_s32 << 8) / ((approximateSin(slot->orbitAngle.s.orbitAngle_high) << 2) >> 8);
         radiusAlt = (radiusAlt > 0) ? radiusAlt : -radiusAlt;
-        slot->unk98 = radiusAlt;
+        slot->orbitRadius = radiusAlt;
     } else {
         radius = (slot->unk2C << 8) / (cosVal >> 8);
         radius = (radius > 0) ? radius : -radius;
-        slot->unk98 = radius;
+        slot->orbitRadius = radius;
     }
-    orbitDirLocal = slot->unk94;
+    orbitDirLocal = slot->orbitAngularVelocity;
     if (orbitDirLocal > 0) {
-        slot->rotYTarget = (slot->unk9C_u.unk9C_s32 + 0x800) & 0x1FFF;
+        slot->rotYTarget = (slot->orbitAngle.orbitAngle_s32 + 0x800) & 0x1FFF;
     } else if (orbitDirLocal < 0) {
-        slot->rotYTarget = (slot->unk9C_u.unk9C_s32 - 0x800) & 0x1FFF;
+        slot->rotYTarget = (slot->orbitAngle.orbitAngle_s32 - 0x800) & 0x1FFF;
     }
 }
 
@@ -1192,25 +1192,25 @@ s32 updateSlotOrbit(CutsceneSlotData *slot, SceneModel *model) {
     s32 scaledCos;
     s32 scaledSin;
     s32 angleDiff;
-    s32 *anglePtr = &slot->unk9C_u.unk9C_s32;
+    s32 *anglePtr = &slot->orbitAngle.orbitAngle_s32;
     s16 animIndex;
 
     if (slot->animFramesRemaining > 0 || slot->animFramesDuration == -1) {
         sinVal = *anglePtr;
-        *anglePtr = (newAngle = sinVal + slot->unk94);
+        *anglePtr = (newAngle = sinVal + slot->orbitAngularVelocity);
         cosVal = approximateCos((s16)newAngle);
         scaledCos = cosVal << 2;
         scaledCos = scaledCos >> 8;
-        sinVal = approximateSin(slot->unk9C_u.s.unk9E);
+        sinVal = approximateSin(slot->orbitAngle.s.orbitAngle_high);
         scaledSin = (sinVal << 2) >> 8;
 
-        slot->unk2C = scaledCos * (slot->unk98 >> 8);
-        slot->unk20_u.unk20_s32 = scaledSin * (slot->unk98 >> 8);
+        slot->unk2C = scaledCos * (slot->orbitRadius >> 8);
+        slot->unk20_u.unk20_s32 = scaledSin * (slot->orbitRadius >> 8);
 
-        if (slot->unk94 > 0) {
+        if (slot->orbitAngularVelocity > 0) {
             newAngle = *anglePtr + 0x800;
             slot->rotYTarget = newAngle & 0x1FFF;
-        } else if (slot->unk94 < 0) {
+        } else if (slot->orbitAngularVelocity < 0) {
             newAngle = *anglePtr - 0x800;
             slot->rotYTarget = newAngle & 0x1FFF;
         }

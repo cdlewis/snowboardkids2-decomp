@@ -1280,6 +1280,7 @@ setupSlotRotateToWithDir = 0x800B73B8; // rom:0x1E4500
 setupSlotRotateWithSpeed = 0x800B74A8; // rom:0x1E4674
 advanceCameraRotationYContinuous = 0x800B6544; // rom:0x1E35F4
 advanceSceneManager = 0x800B6590; // rom:0x1E3640
+setupSlotOrbit = 0x800B7620; // rom:0x1E46D0
 syncModelFromSlot = 0x800B8E38; // rom:0x1E5EE8
 updateSlotLinearMove = 0x800B826C; // rom:0x1E531C
 updateSlotWalk = 0x800B844C; // rom:0x1E54FC

@@ -174,16 +174,16 @@ typedef struct {
     /* 0x8C */ s16 unk8C;
     /* 0x8E */ s16 angle;
     /* 0x90 */ s16 walkAnimIndex;
-    /* 0x92 */ s16 unk92;
-    /* 0x94 */ s32 unk94;
-    /* 0x98 */ s32 unk98;
+    /* 0x92 */ s16 orbitSpeedParam;
+    /* 0x94 */ s32 orbitAngularVelocity;
+    /* 0x98 */ s32 orbitRadius;
     union {
-        s32 unk9C_s32;
+        s32 orbitAngle_s32;
         struct {
-            s16 unk9C_low;
-            s16 unk9E;
+            s16 orbitAngle_low;
+            s16 orbitAngle_high;
         } s;
-    } unk9C_u;
+    } orbitAngle;
     /* 0xA0 */ s32 unkA0;
     /* 0xA4 */ union {
         SceneModel *ptr;
