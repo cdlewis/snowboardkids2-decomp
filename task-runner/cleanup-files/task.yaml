@@ -1,5 +1,5 @@
-candidate_source: find src -type f -name '*.c' ! -name 'temp.c' ! -name 'ctx.c' | jq -Rsc 'split("\n")[:-1]'
+candidate_source: find src -type f -name '*.c' ! -name 'temp.c' ! -name 'ctx.c'
 template: template.md
 accept_best_effort: true
 claude_flags: --model opus
-
+claude_command: glaude
