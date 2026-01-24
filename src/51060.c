@@ -198,31 +198,6 @@ typedef struct {
     u8 isVariant; // 0 = variant A, 1 = variant B (different alpha and offsets)
 } CharacterAttackEffectState;
 
-void loadFirstSprayParticle(SprayEffectTask *);
-void cleanupSprayEffect(void **);
-void updateSprayEffect(SprayEffectUpdateTask *);
-void initDualSnowSprayTask(DualSnowSprayTask *);
-void initDualSnowSprayTask_SingleSlot(DualSnowSprayTask *);
-void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *);
-void cleanupDualSnowSprayAssetNode(DualSnowSprayAssetNode *);
-void initCharacterTrailParticleTask(MemoryAllocatorNode **);
-void loadCharacterTrailParticleAsset(CharacterTrailParticleTask *);
-void updateCharacterTrailParticle(CharacterTrailParticleTask *);
-void cleanupCharacterTrailParticleTask(s32 **);
-void spawnCharacterTrailParticle(void *);
-void spawnPlayerCharacterTrailParticle(Player *, s32);
-void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
-void func_80050E08_51A08(func_80050DB0_519B0_arg *);
-void func_80050EA0_51AA0(void **);
-void updateFloatingItemSprite(FloatingItemSpriteTask *);
-void cleanupFloatingItemSpriteTask(FloatingItemSpriteTask *);
-void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *);
-void cleanupDualSnowSprayTask(DualSnowSprayTask *);
-void updateGlintEffect(GlintEffectTask *);
-void cleanupGlintEffect(GlintEffectTask *);
-void loadCharacterAttackEffectAssets(CharacterAttackEffectState *);
-void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *);
-
 extern loadAssetMetadata_arg gGlintEffectAssetTemplate;
 extern loadAssetMetadata_arg gCharacterAttackEffectAssetTemplate;
 extern Vec3i gCharacterAttackEffectPositionOffsetsA;
@@ -233,13 +208,44 @@ extern s16 gSkiTrailOffsetTransformsBackward[];
 extern s16 gGlintEffectTransform[];
 extern u16 D_8009ADE0_9B9E0;
 
-void initSprayEffectTask(void **node) {
+static void initSprayEffectTask(void **node);
+static void loadFirstSprayParticle(SprayEffectTask *arg0);
+static void updateSprayEffect(SprayEffectUpdateTask *arg0);
+static void cleanupSprayEffect(void **arg0);
+static void initDualSnowSprayTask(DualSnowSprayTask *arg0);
+static void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *arg0);
+static void cleanupDualSnowSprayAssetNode(DualSnowSprayAssetNode *arg0);
+static void initDualSnowSprayTask_SingleSlot(DualSnowSprayTask *arg0);
+static void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *arg0);
+static void cleanupDualSnowSprayTask(DualSnowSprayTask *arg0);
+static void initCharacterTrailParticleTask(MemoryAllocatorNode **node);
+static void loadCharacterTrailParticleAsset(CharacterTrailParticleTask *arg0);
+static void updateCharacterTrailParticle(CharacterTrailParticleTask *arg0);
+static void cleanupCharacterTrailParticleTask(s32 **arg0);
+static void func_80050D70_51970(MemoryAllocatorNode **node);
+static void func_80050DB0_519B0(func_80050DB0_519B0_arg *arg0);
+static void func_80050E08_51A08(func_80050DB0_519B0_arg *arg0);
+static void func_80050EA0_51AA0(void **arg0);
+static void initFloatingItemSpriteTask(FloatingItemSpriteTask *arg0);
+static void updateFloatingItemSprite(FloatingItemSpriteTask *arg0);
+static void cleanupFloatingItemSpriteTask(FloatingItemSpriteTask *arg0);
+static void updateSkiTrailTask(SkiTrailTask *arg0);
+static void cleanupSkiTrailTask(func_80051688_52288_arg *arg0);
+static void initSkiTrailTask(SkiTrailTask *task);
+static void initGlintEffect(GlintEffectTask *arg0);
+static void updateGlintEffect(GlintEffectTask *arg0);
+static void cleanupGlintEffect(GlintEffectTask *arg0);
+static void initCharacterAttackEffectTask(CharacterAttackEffectTask *task);
+static void loadCharacterAttackEffectAssets(CharacterAttackEffectState *arg0);
+static void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *task);
+
+static void initSprayEffectTask(void **node) {
     *node = load_3ECE40();
     setCleanupCallback(&cleanupSprayEffect);
     setCallbackWithContinue(&loadFirstSprayParticle);
 }
 
-void loadFirstSprayParticle(SprayEffectTask *arg0) {
+static void loadFirstSprayParticle(SprayEffectTask *arg0) {
     GameState *gs = (GameState *)getCurrentAllocation();
     loadAssetMetadata(&arg0->particle, arg0->assetTable, arg0->particleType);
     arg0->particle.alpha = 0xE0;
@@ -248,7 +254,7 @@ void loadFirstSprayParticle(SprayEffectTask *arg0) {
     setCallbackWithContinue(&updateSprayEffect);
 }
 
-void updateSprayEffect(SprayEffectUpdateTask *arg0) {
+static void updateSprayEffect(SprayEffectUpdateTask *arg0) {
     GameState *gs;
     s32 i;
     gs = (GameState *)getCurrentAllocation();
@@ -276,7 +282,7 @@ void updateSprayEffect(SprayEffectUpdateTask *arg0) {
     }
 }
 
-void cleanupSprayEffect(void **arg0) {
+static void cleanupSprayEffect(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
@@ -291,7 +297,7 @@ void spawnSprayEffect(Vec3i *arg0, Vec3i *arg1, s32 arg2) {
     }
 }
 
-void initDualSnowSprayTask(DualSnowSprayTask *arg0) {
+static void initDualSnowSprayTask(DualSnowSprayTask *arg0) {
     GameState *gs = (GameState *)getCurrentAllocation();
     arg0->assetTable = load_3ECE40();
     arg0->particleSlot = &gs->unk44->unk1080[arg0->slotIndex];
@@ -303,7 +309,7 @@ void initDualSnowSprayTask(DualSnowSprayTask *arg0) {
     setCallbackWithContinue(&updateDualSnowSprayParticles);
 }
 
-void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *arg0) {
+static void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *arg0) {
     GameState *gs;
     s32 i;
 
@@ -336,7 +342,7 @@ void updateDualSnowSprayParticles(DualSnowSprayUpdateTask *arg0) {
     }
 }
 
-void cleanupDualSnowSprayAssetNode(DualSnowSprayAssetNode *arg0) {
+static void cleanupDualSnowSprayAssetNode(DualSnowSprayAssetNode *arg0) {
     arg0->assetTable = freeNodeMemory(arg0->assetTable);
 }
 
@@ -385,13 +391,13 @@ void spawnDualSnowSprayEffect(Vec3i *pos1, Vec3i *pos2, Vec3i *velocity, s16 slo
     task->velZ = velZ;
 }
 
-void initCharacterTrailParticleTask(MemoryAllocatorNode **node) {
+static void initCharacterTrailParticleTask(MemoryAllocatorNode **node) {
     *node = load_3ECE40();
     setCleanupCallback(&cleanupCharacterTrailParticleTask);
     setCallbackWithContinue(&loadCharacterTrailParticleAsset);
 }
 
-void loadCharacterTrailParticleAsset(CharacterTrailParticleTask *arg0) {
+static void loadCharacterTrailParticleAsset(CharacterTrailParticleTask *arg0) {
     s32 temp;
     s32 shift9;
     int new_var2;
@@ -415,7 +421,7 @@ void loadCharacterTrailParticleAsset(CharacterTrailParticleTask *arg0) {
     setCallbackWithContinue(updateCharacterTrailParticle);
 }
 
-void updateCharacterTrailParticle(CharacterTrailParticleTask *arg0) {
+static void updateCharacterTrailParticle(CharacterTrailParticleTask *arg0) {
     GameState *gs;
     s32 i;
     s16 temp;
@@ -453,7 +459,7 @@ void updateCharacterTrailParticle(CharacterTrailParticleTask *arg0) {
     }
 }
 
-void cleanupCharacterTrailParticleTask(s32 **arg0) {
+static void cleanupCharacterTrailParticleTask(s32 **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
@@ -507,13 +513,13 @@ void spawnPlayerCharacterTrailParticle(Player *arg0, s32 arg1) {
     }
 }
 
-void func_80050D70_51970(MemoryAllocatorNode **node) {
+static void func_80050D70_51970(MemoryAllocatorNode **node) {
     *node = load_3ECE40();
     setCleanupCallback(&func_80050EA0_51AA0);
     setCallbackWithContinue(&func_80050DB0_519B0);
 }
 
-void func_80050DB0_519B0(func_80050DB0_519B0_arg *arg0) {
+static void func_80050DB0_519B0(func_80050DB0_519B0_arg *arg0) {
     GameState *allocation;
     void *temp;
 
@@ -529,7 +535,7 @@ void func_80050DB0_519B0(func_80050DB0_519B0_arg *arg0) {
     setCallbackWithContinue(&func_80050E08_51A08);
 }
 
-void func_80050E08_51A08(func_80050DB0_519B0_arg *arg0) {
+static void func_80050E08_51A08(func_80050DB0_519B0_arg *arg0) {
     GameState *alloc;
     s32 i;
 
@@ -549,7 +555,7 @@ void func_80050E08_51A08(func_80050DB0_519B0_arg *arg0) {
     }
 }
 
-void func_80050EA0_51AA0(void **arg0) {
+static void func_80050EA0_51AA0(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
@@ -562,7 +568,7 @@ void spawnImpactStar(Vec3i *arg0) {
     }
 }
 
-void initFloatingItemSpriteTask(FloatingItemSpriteTask *arg0) {
+static void initFloatingItemSpriteTask(FloatingItemSpriteTask *arg0) {
     arg0->assetTable = load_3ECE40();
     arg0->baseAssetIndex = 0x45;
     arg0->frameCounter = 0;
@@ -570,7 +576,7 @@ void initFloatingItemSpriteTask(FloatingItemSpriteTask *arg0) {
     setCallbackWithContinue(&updateFloatingItemSprite);
 }
 
-void updateFloatingItemSprite(FloatingItemSpriteTask *arg0) {
+static void updateFloatingItemSprite(FloatingItemSpriteTask *arg0) {
     arg0->baseAssetIndex = (arg0->frameCounter >> 1) + 0x45;
     arg0->frameCounter = arg0->frameCounter + 1;
 
@@ -585,7 +591,7 @@ void updateFloatingItemSprite(FloatingItemSpriteTask *arg0) {
     }
 }
 
-void cleanupFloatingItemSpriteTask(FloatingItemSpriteTask *arg0) {
+static void cleanupFloatingItemSpriteTask(FloatingItemSpriteTask *arg0) {
     arg0->assetTable = freeNodeMemory(arg0->assetTable);
 }
 
@@ -606,7 +612,7 @@ void spawnFloatingItemSprite(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     }
 }
 
-void initDualSnowSprayTask_SingleSlot(DualSnowSprayTask *arg0) {
+static void initDualSnowSprayTask_SingleSlot(DualSnowSprayTask *arg0) {
     GameState *gs = (GameState *)getCurrentAllocation();
     arg0->assetTable = load_3ECE40();
     arg0->particleSlot = &gs->unk44->unk1340;
@@ -618,7 +624,7 @@ void initDualSnowSprayTask_SingleSlot(DualSnowSprayTask *arg0) {
     setCallbackWithContinue(&updateDualSnowSprayParticles_SingleSlot);
 }
 
-void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *arg0) {
+static void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *arg0) {
     GameState *gs;
     s32 i;
 
@@ -651,7 +657,7 @@ void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *arg0) {
     }
 }
 
-void cleanupDualSnowSprayTask(DualSnowSprayTask *arg0) {
+static void cleanupDualSnowSprayTask(DualSnowSprayTask *arg0) {
     arg0->assetTable = freeNodeMemory(arg0->assetTable);
 }
 
@@ -667,10 +673,7 @@ void spawnDualSnowSprayEffect_SingleSlot(Vec3i *pos1, Vec3i *pos2, Vec3i *veloci
     }
 }
 
-void updateSkiTrailTask(SkiTrailTask *arg0);
-void cleanupSkiTrailTask(func_80051688_52288_arg *arg0);
-
-void initSkiTrailTask(SkiTrailTask *task) {
+static void initSkiTrailTask(SkiTrailTask *task) {
     GameState *gs;
     s32 i;
     s16 *transforms;
@@ -734,7 +737,7 @@ void initSkiTrailTask(SkiTrailTask *task) {
     setCallbackWithContinue(updateSkiTrailTask);
 }
 
-void updateSkiTrailTask(SkiTrailTask *task) {
+static void updateSkiTrailTask(SkiTrailTask *task) {
     GameState *gs;
     s32 i;
 
@@ -773,7 +776,7 @@ void updateSkiTrailTask(SkiTrailTask *task) {
     }
 }
 
-void cleanupSkiTrailTask(func_80051688_52288_arg *arg0) {
+static void cleanupSkiTrailTask(func_80051688_52288_arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
@@ -784,7 +787,7 @@ void spawnSkiTrailTask(Player *player) {
     }
 }
 
-void initGlintEffect(GlintEffectTask *arg0) {
+static void initGlintEffect(GlintEffectTask *arg0) {
     getCurrentAllocation();
     arg0->assetTable = load_3ECE40();
     arg0->particle.assetTemplate = &gGlintEffectAssetTemplate;
@@ -794,7 +797,7 @@ void initGlintEffect(GlintEffectTask *arg0) {
     setCallbackWithContinue(&updateGlintEffect);
 }
 
-void updateGlintEffect(GlintEffectTask *arg0) {
+static void updateGlintEffect(GlintEffectTask *arg0) {
     s32 i;
     GameState *gs;
 
@@ -813,7 +816,7 @@ void updateGlintEffect(GlintEffectTask *arg0) {
     }
 }
 
-void cleanupGlintEffect(GlintEffectTask *arg0) {
+static void cleanupGlintEffect(GlintEffectTask *arg0) {
     arg0->assetTable = freeNodeMemory(arg0->assetTable);
 }
 
@@ -824,13 +827,13 @@ void spawnGlintEffect(void *arg0) {
     }
 }
 
-void initCharacterAttackEffectTask(CharacterAttackEffectTask *task) {
+static void initCharacterAttackEffectTask(CharacterAttackEffectTask *task) {
     task->assetTable = load_3ECE40();
     setCleanupCallback(&cleanupCharacterAttackEffectTask);
     setCallbackWithContinue(&loadCharacterAttackEffectAssets);
 }
 
-void loadCharacterAttackEffectAssets(CharacterAttackEffectState *arg0) {
+static void loadCharacterAttackEffectAssets(CharacterAttackEffectState *arg0) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
@@ -852,7 +855,7 @@ void loadCharacterAttackEffectAssets(CharacterAttackEffectState *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/51060", updateCharacterAttackEffect);
 
-void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *task) {
+static void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *task) {
     task->assetTable = freeNodeMemory(task->assetTable);
 }
 
