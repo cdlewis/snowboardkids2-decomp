@@ -205,9 +205,9 @@ s32 cutsceneChrItem_validate(void);
 void cutsceneChrItem_exec(cutsceneChrDisp_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex);
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
+    s16 targetAngle;
+    s16 animIndex;
+    s16 transitionAnimIndex;
 } cutsceneChrTurn_exec_arg;
 
 void cutsceneChrTurn_init(void);

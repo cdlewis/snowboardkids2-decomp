@@ -143,7 +143,7 @@ void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg0, CutsceneManager *arg1,
 
     temp_s0 = getCurrentStateEntryItem(arg2)->unk4;
 
-    result = setupSlotRotateTo(&slot->slotData, slot->model, temp_arg0->unk0);
+    result = setupSlotRotateTo(&slot->slotData, slot->model, temp_arg0->targetAngle);
 
     switch (result) {
         case 1:
@@ -154,7 +154,7 @@ void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg0, CutsceneManager *arg1,
             break;
     }
 
-    setModelAnimationQueued(slot->model, temp_arg0->unk2, temp_arg0->unk4, -1, animId);
+    setModelAnimationQueued(slot->model, temp_arg0->animIndex, temp_arg0->transitionAnimIndex, -1, animId);
 }
 
 void cutsceneChrMove2_init(void) {
