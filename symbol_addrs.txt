@@ -241,6 +241,7 @@ checkMusicLoadRequest = 0x800570E0; // rom:0x57CE0
 loadMusicTrackData = 0x80057124; // rom:0x57D24
 initializeMusicPtrBank = 0x800571D0; // rom:0x57DD0
 setFrequencyOffsetByHandle = 0x80072B3C; // rom:0x7373C
+setTempoScaleByHandle = 0x80072BAC; // rom:0x737AC
 startMusicPlaybackWithFadeIn = 0x80057214; // rom:0x57E14
 updateMusicVolumeFadeIn = 0x800572B0; // rom:0x57EB0
 handleMusicFadeOutTransition = 0x800573F8; // rom:0x57FF8
