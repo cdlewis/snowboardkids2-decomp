@@ -23,10 +23,13 @@ typedef struct {
     u8 playerIndex;
 } CharacterSelectTask;
 
+static void awaitCharacterSelectLoad(void);
+static void cleanupCharacterSelect(void);
+static void onCharacterSelectProceed(void);
+static void onCharacterSelectCancel(void);
 void scheduleCharacterSelectTasks(void);
 void func_80022D74_23974(void);
-void onCharacterSelectProceed(void);
-void onCharacterSelectCancel(void);
+s32 countUnlockedSlotsInCategory(u8 category);
 
 INCLUDE_ASM("asm/nonmatchings/232F0", func_800226F0_232F0);
 
