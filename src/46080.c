@@ -342,18 +342,18 @@ typedef struct {
 typedef struct {
     u8 _pad[0x14];
     Vec3i position;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
+    void *displayListData3; /* Sky display lists 3 + 0x30 */
+    void *skyAsset1;        /* Uncompressed asset */
+    void *skyAsset2;        /* Compressed segment 2 asset */
+    void *reserved;
     u8 _pad3[0x10];
-    s32 unk40;
+    s32 initialized;
 } PlayerRenderTaskState;
 
 typedef struct {
     u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
+    void *skyAsset1;
+    void *skyAsset2;
 } PlayerRenderTaskCleanupArg;
 
 typedef struct {
@@ -411,9 +411,9 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
-    void *unk2C;
+    void *skyAsset1;
+    void *skyAsset2;
+    void *reserved;
     u8 _pad2[0xC];
     void *unk3C;
     u8 _pad3[0x4];
@@ -440,10 +440,10 @@ typedef struct {
     s32 unk14;
     s32 unk18;
     s32 unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
+    void *displayListData3;
+    void *skyAsset1;
+    void *skyAsset2;
+    void *reserved;
     u8 _pad2[0xC];
     u8 unk3C[0x14];
     s32 unk50;
@@ -477,8 +477,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
+    void *skyAsset1;
+    void *skyAsset2;
 } CourseSceneryCleanupArg;
 
 typedef struct {
@@ -982,11 +982,11 @@ void initPlayerRenderTask(PlayerRenderTaskState *state) {
     allocation = (GameState_46080 *)getCurrentAllocation();
     rotation = getTrackEndInfo(&allocation->unk30, &state->position);
     createYRotationMatrix((Transform3D *)state, rotation);
-    state->unk20 = (void *)((u32)getSkyDisplayLists3ByIndex(allocation->unk5C) + 0x30);
-    state->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
-    state->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
-    state->unk2C = NULL;
-    state->unk40 = 1;
+    state->displayListData3 = (void *)((u32)getSkyDisplayLists3ByIndex(allocation->unk5C) + 0x30);
+    state->skyAsset1 = loadUncompressedAssetByIndex(allocation->unk5C);
+    state->skyAsset2 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
+    state->reserved = NULL;
+    state->initialized = 1;
     setCleanupCallback(cleanupPlayerRenderTask);
     setCallback(updatePlayerRenderCounter);
 }
@@ -1027,8 +1027,8 @@ void enqueuePlayerDisplayList(PlayerDisplayListState *state) {
 }
 
 void cleanupPlayerRenderTask(PlayerRenderTaskCleanupArg *state) {
-    state->unk24 = freeNodeMemory(state->unk24);
-    state->unk28 = freeNodeMemory(state->unk28);
+    state->skyAsset1 = freeNodeMemory(state->skyAsset1);
+    state->skyAsset2 = freeNodeMemory(state->skyAsset2);
 }
 
 void schedulePlayerRenderTask(s32 playerIndex) {
@@ -1247,9 +1247,9 @@ void cleanupPlayerSparkleTask(PlayerSparkleTask *task) {
 }
 
 void initScrollingSceneryTask(ScrollingSceneryCleanupState *arg0) {
-    arg0->unk24 = loadUncompressedAssetByIndex(arg0->assetPoolIndex);
-    arg0->unk28 = loadCompressedSegment2AssetByIndex(arg0->assetPoolIndex);
-    arg0->unk2C = NULL;
+    arg0->skyAsset1 = loadUncompressedAssetByIndex(arg0->assetPoolIndex);
+    arg0->skyAsset2 = loadCompressedSegment2AssetByIndex(arg0->assetPoolIndex);
+    arg0->reserved = NULL;
     memcpy(arg0, identityMatrix, 0x20);
     arg0->unk3C = loadSpriteAssetByIndex(arg0->assetPoolIndex);
     arg0->scrollX.halfword = 0;
@@ -1289,8 +1289,8 @@ void updateScrollingSceneryTask(ScrollingSceneryTaskState *arg0) {
 }
 
 void cleanupScrollingSceneryTask(ScrollingSceneryCleanupState *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->skyAsset1 = freeNodeMemory(arg0->skyAsset1);
+    arg0->skyAsset2 = freeNodeMemory(arg0->skyAsset2);
     arg0->unk3C = freeNodeMemory(arg0->unk3C);
 }
 
@@ -1334,10 +1334,10 @@ void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
     rotation = getTrackEndInfo(&allocation->unk30, &sp10) + 0x800;
     levelData = getLevelConfig(allocation->unk5C);
 
-    arg0->unk20 = getSkyDisplayLists3ByIndex(allocation->unk5C);
-    arg0->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
-    arg0->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
-    arg0->unk2C = NULL;
+    arg0->displayListData3 = getSkyDisplayLists3ByIndex(allocation->unk5C);
+    arg0->skyAsset1 = loadUncompressedAssetByIndex(allocation->unk5C);
+    arg0->skyAsset2 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
+    arg0->reserved = NULL;
 
     createYRotationMatrix((Transform3D *)arg0, (u16)(rotation + levelData->yawOffset));
 
@@ -1392,8 +1392,8 @@ void updateCourseSceneryTask(CourseSceneryUpdateState *arg0) {
 }
 
 void cleanupCourseSceneryTask(CourseSceneryCleanupArg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->skyAsset1 = freeNodeMemory(arg0->skyAsset1);
+    arg0->skyAsset2 = freeNodeMemory(arg0->skyAsset2);
 }
 
 void initFlyingSceneryTask(FlyingSceneryState *arg0) {
@@ -1636,8 +1636,8 @@ void updateFlyingSceneryDescendingStep(FlyingSceneryState *state) {
 }
 
 void cleanupFlyingSceneryTask(CourseSceneryCleanupArg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+    arg0->skyAsset1 = freeNodeMemory(arg0->skyAsset1);
+    arg0->skyAsset2 = freeNodeMemory(arg0->skyAsset2);
 }
 
 void initGoldCoinsTask(GoldCoinsTaskState *arg0) {
