@@ -10,63 +10,18 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
+// External declarations
+
 extern Vec3i gWendysHouseProjectileTargetPositions[];
 
-typedef struct {
-    u8 _pad[0x5C];
-    u8 memoryPoolId;
-} AllocB5668;
-
-typedef struct {
-    u8 _pad0[0x14];
-    Vec3i position;
-    void *displayLists;
-    void *uncompressedAsset;
-    void *compressedAsset;
-    s32 animTimer;
-    u8 _pad1[0xC];
-    Vec3i velocity;
-    u16 rotX;
-    u16 rotY;
-    s16 targetIndex;
-    s16 projectileState;
-} WendysHouseProjectileTaskState;
-
-typedef struct {
-    u8 _pad[0x24];
-    void *uncompressedAsset;
-    void *compressedAsset;
-} TaskAssetState;
-
-typedef struct {
-    s16 matrix[6];
-    u8 _pad[0x8];
-    s32 posX;
-    s32 posY;
-    s32 posZ;
-    void *displayLists;
-    void *uncompressedAsset;
-    void *compressedAsset;
-    s32 unk2C;
-    u8 _pad2[0xC];
-    s16 oscillationAngle;
-    u8 _pad3[0x2];
-    s32 localOffsetX;
-    s32 localOffsetZ;
-    s32 unk48;
-} RotatingPlatformTaskState;
+// Local-only types
 
 typedef struct {
     u8 pad[0x4C];
     s16 unk4C;
 } Task;
 
-void updateWendysHouseProjectileSpawner(WendysHouseProjectileSpawnerState *arg0);
-void updateWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0);
-void initWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0);
-void cleanupWendysHouseProjectileTask(TaskAssetState *arg0);
-void cleanupRotatingPlatformTask(TaskAssetState *arg0);
-void updateRotatingPlatformTask(RotatingPlatformTaskState *arg0);
+// Function implementations
 
 void initRotatingPlatformTask(RotatingPlatformTaskState *arg0) {
     s32 pad[3];
@@ -117,11 +72,11 @@ void cleanupRotatingPlatformTask(TaskAssetState *arg0) {
 }
 
 void initWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0) {
-    AllocB5668 *gameState;
+    WendysHouseAllocation *gameState;
     void *temp;
     s32 randVal;
     s32 diff;
-    gameState = (AllocB5668 *)getCurrentAllocation();
+    gameState = (WendysHouseAllocation *)getCurrentAllocation();
     arg0->uncompressedAsset = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     arg0->compressedAsset = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     arg0->animTimer = 0;
