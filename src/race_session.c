@@ -19,6 +19,7 @@
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
+// Macro definitions
 #define SET_PLAYER_CAMERA_PERSPECTIVE(gs, idx, aspect_val)                     \
     do {                                                                       \
         fov = 70.0f;                                                           \
@@ -38,6 +39,7 @@ USE_ASSET(_3FF010);
 USE_ASSET(_40E870);
 USE_OVERLAY(_9FF70);
 
+// Struct definitions
 typedef struct {
     u8 unk0[0x18];
     ColorData unk18;
@@ -55,25 +57,6 @@ typedef struct {
     u8 padding2[0x7A - 0x5E];
     u8 raceType;
 } GameState_temp;
-
-typedef struct {
-    u8 unk0[4];
-    u8 gameMode;
-    u8 demoIndex;
-    u8 unk6;
-    u8 currentLevel;
-    u8 numPlayers;
-    u8 characterIDs[4];
-    u8 boardTypes[4];
-    u8 costumeIDs[4];
-    u8 colorSlots[4];
-    u8 lapCount;
-    u8 pad1A[5];
-    u8 battleTimeLimit;
-    u8 battleScoreLimit;
-    u8 pad21[3];
-    u8 isExpertMode;
-} SessionConfig;
 
 typedef struct {
     u8 padding_0[0xBB8];
@@ -129,78 +112,79 @@ typedef struct {
 } RaceState;
 
 typedef struct {
-    void *romStart;
-    void *romEnd;
-    void *ramStart;
-    void *icacheStart;
-    void *icacheEnd;
-    void *dcacheStart;
-    void *dcacheEnd;
-    void *bssStart;
-    void *bssEnd;
-} OverlayEntry;
-
-typedef struct {
     u8 unk0;
     u8 unk1;
     u8 unk2;
     u8 unk3;
 } Unk800902D0_90ED0;
 
-// Data
+typedef struct {
+    u16 frame;
+    u16 unk2;
+} IntroFrameData;
+
+typedef struct {
+    u16 frame;
+    s16 value;
+} IntroFrameData2;
+
+// Function declarations
+void func_8003F1F0_3FDF0(void);
+static void initRaceViewports(void);
+static void onGameSessionTerminated(void);
+static void parseRaceAssetData(void);
+static void scheduleRaceTasks(void);
+static void awaitRaceAssetsLoaded(void);
+static void waitForFadeAndInitPlayers(void);
+static void awaitBossResultAndFadeOut(void);
+static void awaitMeterWinContinuePress(void);
+static void awaitPlayersAndPlayRaceMusic(void);
+static void loadPlayerAssets(void);
+static void handleRaceStateUpdate(void);
+static void handleBossRaceResult(void);
+static void handleBossDefeatResult(void);
+static void handleSkillGameResult(void);
+static void handleShotCrossGameResult(void);
+static void handleMeterGameResult(void);
+static void handleSpeedCrossGameResult(void);
+static void awaitBattleEndAndPromptContinue(void);
+static void handleExpertRaceResult(void);
+static void awaitSkillWinContinuePress(void);
+static void awaitShotCrossWinContinuePress(void);
+static void awaitSkillWinAndPromptContinue(void);
+static void awaitSkillLossAndFadeOut(void);
+static void awaitShotCrossWinAndPromptContinue(void);
+static void awaitShotCrossLossAndFadeOut(void);
+static void awaitSpeedCrossAwardGold(void);
+static void awaitSpeedCrossContinuePress(void);
+static void awaitMeterWinAndPromptContinue(void);
+static void awaitMeterLossAndFadeOut(void);
+static void awaitBattleContinuePress(void);
+static void awaitExpertRaceContinuePress(void);
+static void cleanupGameSession(void);
+static void loadRaceGameData(void);
+
+// Global variables and externs
 extern s32 gThirdPlaceGoldReward[];
 extern s32 gFirstPlaceGoldReward[];
 extern s32 gSecondPlaceGoldReward[];
 extern u8 D_80090450_91050[];
-extern Unk800902D0_90ED0 D_800902D0_90ED0[16][6]; // unknown size (16)
+extern Unk800902D0_90ED0 D_800902D0_90ED0[16][6];
 extern u8 D_800902C0_90EC0[];
-extern u8 D_80090280_90E80[4][4]; // unknown first (4) size
+extern u8 D_80090280_90E80[4][4];
 extern OverlayEntry Overlays[];
 extern ColorData D_8009077C_9137C;
 extern ColorData D_80090774_91374;
 extern u8 D_80090520_91120[];
 
-// Bss
 extern s8 gControllerPollingEnabled;
 extern u8 gRaceResultCode;
 extern s32 gControllerInputs[4];
 extern SessionConfig *D_800AFE8C_A71FC;
 
-void initRaceViewports(void);
-void func_80040420_41020(void);
-void onGameSessionTerminated(void);
-void parseRaceAssetData(void);
-void scheduleRaceTasks(void);
-void awaitRaceAssetsLoaded(void);
-void waitForFadeAndInitPlayers(void);
-void awaitBossResultAndFadeOut(void);
-void awaitMeterWinContinuePress(void);
-void awaitPlayersAndPlayRaceMusic(void);
-void loadPlayerAssets(void);
-void func_8003F1F0_3FDF0(void);
-void handleRaceStateUpdate(void);
-void handleBossRaceResult(void);
-void handleBossDefeatResult(void);
-void handleSkillGameResult(void);
-void handleShotCrossGameResult(void);
-void handleMeterGameResult(void);
-void handleSpeedCrossGameResult(void);
-void awaitBattleEndAndPromptContinue(void);
-void handleExpertRaceResult(void);
-void awaitSkillWinContinuePress(void);
-void awaitShotCrossWinContinuePress(void);
-void awaitSkillWinAndPromptContinue(void);
-void awaitSkillLossAndFadeOut(void);
-void awaitShotCrossWinAndPromptContinue(void);
-void awaitShotCrossLossAndFadeOut(void);
-void awaitSpeedCrossAwardGold(void);
-void awaitSpeedCrossContinuePress(void);
-void awaitMeterWinAndPromptContinue(void);
-void awaitMeterLossAndFadeOut(void);
-void awaitBattleContinuePress(void);
-void awaitExpertRaceContinuePress(void);
-void cleanupGameSession(void);
-void loadRaceGameData(void);
+extern IntroFrameData sIntroFrameEvents[];
+extern IntroFrameData2 sIntroCameraEvents[];
+extern void spawnScriptedCameraTask(s16 arg0);
 
 void initRace(void) {
     RaceState *raceState;
@@ -905,20 +889,6 @@ void awaitPlayersAndPlayRaceMusic(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/race_session", func_8003F1F0_3FDF0);
-
-typedef struct {
-    u16 frame;
-    u16 unk2;
-} IntroFrameData;
-
-typedef struct {
-    u16 frame;
-    s16 value;
-} IntroFrameData2;
-
-extern IntroFrameData sIntroFrameEvents[];
-extern IntroFrameData2 sIntroCameraEvents[];
-extern void spawnScriptedCameraTask(s16);
 
 void handleRaceStateUpdate(void) {
     GameState *gs;
