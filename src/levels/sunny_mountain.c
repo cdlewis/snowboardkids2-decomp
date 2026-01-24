@@ -6,13 +6,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern u8 D_800BBB68_B5468[];
-extern u8 D_800BBB6C_B546C[];
-extern u8 D_800BBB88_B5488[];
-extern u8 D_800BBB8C_B548C[];
-
-void cleanupSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0);
-
 typedef struct {
     u8 _pad[0x48];
     u8 *positionData; /* 0x48: Source position data for display objects */
@@ -32,9 +25,19 @@ typedef struct {
     s16 unkD8;             /* 0xD8: Always set to 0 */
 } SunnyMountainTaskState;
 
+extern u8 D_800BBB68_B5468[];
+extern u8 D_800BBB6C_B546C[];
+extern u8 D_800BBB88_B5488[];
+extern u8 D_800BBB8C_B548C[];
+extern u16 D_800BBBA8_B54A8[];
+extern s16 identityMatrix[];
 extern void func_800BB488_B4D88(void);
+
+void cleanupSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0);
 void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0);
+void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0);
 void updateSunnyMountainDisplayObjectsTask(s32 *arg0);
+void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0);
 
 /**
  * Initializes the Sunny Mountain level task state.
@@ -133,12 +136,6 @@ void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0) {
     arg0->unk40 = freeNodeMemory(arg0->unk40);
     arg0->displayObjects = freeNodeMemory(arg0->displayObjects);
 }
-
-extern u16 D_800BBBA8_B54A8[];
-extern s16 identityMatrix[];
-
-void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0);
-void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0);
 
 void initSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
