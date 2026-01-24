@@ -1,3 +1,4 @@
+#include "36E50.h"
 #include "36B80.h"
 #include "36BE0.h"
 #include "D_800AFE8C_A71FC_type.h"
@@ -7,46 +8,9 @@
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
-extern s32 gControllerInputs;
-
 USE_ASSET(_45A890);
 
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s32 unk4;
-    s16 unk8;
-    u8 padding[0x6];
-    u8 unk10;
-    u8 unk11;
-    u8 unk12;
-} SpecialLocationMarkerUpdateState;
-
-typedef struct {
-    u8 padding0[0x10];
-    u8 unk10;
-    u8 padding1[0x62];
-    u8 unk73;
-    u8 padding2[0x38F];
-    u8 unk403;
-    u8 padding3[0x4];
-    s32 unk408[1];
-    u8 padding4[0x4];
-    s32 unk410[1];
-    u8 padding5[0x8];
-    s32 numEntries;
-    u8 unk420;
-    u8 unk421;
-    u8 unk422;
-    u8 padding6[0x1];
-    u8 locationDiscovered;
-    u8 discoveredLocationId;
-    u8 padding7[0x4];
-    u8 unk42A;
-    u8 padding8[0x2];
-    u8 unk42D;
-} StoryMapAllocation;
-
+// Struct definitions
 typedef struct {
     s16 unk0;
     s16 unk2;
@@ -79,9 +43,71 @@ typedef struct {
 } StoryMapLocationMarkerState;
 
 typedef struct {
+    char padding;
+    s32 *unk4;
+    char padding2[78];
+    s32 *unk58;
+} StoryMapLocationMarkerCleanupArg;
+
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+    void *unk4;
+    u16 unk8;
+    u16 unkA;
+    u8 unkC;
+    u8 unkD;
+    char padding[2];
+    u8 unk10;
+    u8 unk11;
+    u8 unk12;
+} StoryMapSpecialLocationMarkerState;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s32 unk4;
+    s16 unk8;
+    u8 padding[0x6];
+    u8 unk10;
+    u8 unk11;
+    u8 unk12;
+} SpecialLocationMarkerUpdateState;
+
+typedef struct {
+    char padding[4];
+    s32 *unk4;
+} SpecialLocationMarkerCleanupState;
+
+typedef struct {
     char padding[64];
     void *dialogueScript;
 } StoryMapDialogueState;
+
+typedef struct {
+    u8 padding0[0x10];
+    u8 unk10;
+    u8 padding1[0x62];
+    u8 unk73;
+    u8 padding2[0x38F];
+    u8 unk403;
+    u8 padding3[0x4];
+    s32 unk408[1];
+    u8 padding4[0x4];
+    s32 unk410[1];
+    u8 padding5[0x8];
+    s32 numEntries;
+    u8 unk420;
+    u8 unk421;
+    u8 unk422;
+    u8 padding6[0x1];
+    u8 locationDiscovered;
+    u8 discoveredLocationId;
+    u8 padding7[0x4];
+    u8 unk42A;
+    u8 padding8[0x2];
+    u8 unk42D;
+} StoryMapAllocation;
 
 typedef struct {
     u8 padding[1012];
@@ -99,43 +125,11 @@ typedef struct {
 } func_800698BC_6A4BC_return;
 
 typedef struct {
-    char padding;
-    s32 *unk4;
-    char padding2[78];
-    s32 *unk58;
-} StoryMapLocationMarkerCleanupArg;
+    s32 unk0;
+    s32 unk4;
+} D_8008F810_90410_item;
 
-typedef struct {
-    u8 baseLocationIndex;
-    u8 padding;
-} StoryMapSpecialLocationTriggerState;
-
-typedef struct {
-    char padding[4];
-    s32 *unk4;
-} SpecialLocationMarkerCleanupState;
-
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    void *unk4;
-    u16 unk8;
-    u16 unkA;
-    u8 unkC;
-    u8 unkD;
-    char padding[2];
-    u8 unk10;
-    u8 unk11;
-    u8 unk12;
-} StoryMapSpecialLocationMarkerState;
-
-typedef struct {
-    u8 padding0[0x34];
-    s32 positionX;
-    u8 padding1[0x4];
-    s32 positionZ;
-} StoryMapPlayerState;
-
+// Function declarations
 void updateDiscoveryMarkerDisplay(void *);
 void updateStoryMapLocationMarker(void *);
 void cleanupDiscoveryLocationMarker(void *);
@@ -143,18 +137,21 @@ void initDiscoveryLocationMarker(StoryMapLocationMarkerState *);
 void initTownExitMarker(StoryMapSpecialLocationMarkerState *);
 void checkTownExitTrigger(void *);
 void cleanupTownExitMarker(void *);
+void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *);
+s32 checkStoryMapLocationSelection(StoryMapPlayerState *);
+void func_80036AF8_376F8(void);
+void func_80036D54_37954(void);
+void setupStoryMapCharacterDialogue(StoryMapDialogueState *);
 
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-} D_8008F810_90410_item;
+// Global variables and externs
+extern s32 gControllerInputs;
 extern D_8008F810_90410_item D_8008F810_90410[0x18];
 extern s32 func_80012004_12C04;
 extern void D_8008FAC0_906C0;
 extern u16 D_8008FD10_90910[];
 extern s8 D_8008FD1C_9091C[];
-void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *arg0);
 
+// Function implementations
 void initDiscoveryDisplaySystem(s8 *arg0) {
     *arg0 = 0;
     setCallback(&updateDiscoveryMarkerDisplay);
@@ -190,9 +187,6 @@ void initDiscoveryLocationMarker(StoryMapLocationMarkerState *arg0) {
     void *resource;
     void *temp_value;
     s32 i;
-    s16 var_a0;
-
-    StoryMapLocationMarkerEntry *var_v1;
 
     resource = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
     temp_value = loadTextRenderAsset(1);
@@ -209,7 +203,7 @@ void initDiscoveryLocationMarker(StoryMapLocationMarkerState *arg0) {
     arg0->unk68 = 0xFF;
 
     for (i = 0; i < 4; i++) {
-        var_v1 = &arg0->entries[i];
+        StoryMapLocationMarkerEntry *var_v1 = &arg0->entries[i];
         var_v1->unk0 = 0;
         var_v1->unk2 = 0;
         var_v1->unk8 = i;
@@ -300,9 +294,10 @@ void cleanupTownExitMarker(void *untypedArg) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void initTownExitTrigger(StoryMapSpecialLocationTriggerState *arg0) {
-    arg0->baseLocationIndex = 0xA;
-    arg0->padding = 0;
+void initTownExitTrigger(void *arg0) {
+    StoryMapSpecialLocationTriggerState *state = (StoryMapSpecialLocationTriggerState *)arg0;
+    state->baseLocationIndex = 0xA;
+    state->padding = 0;
     setCallback(&checkTownExitTrigger);
 }
 

@@ -1,6 +1,7 @@
 #include "1A770.h"
 #include "288A0.h"
 #include "36B80.h"
+#include "36E50.h"
 #include "6E840.h"
 #include "clocktrigger_tower.h"
 #include "common.h"
@@ -20,8 +21,6 @@ extern void func_80018800_19400;
 extern void initStoryMapMiniCamera;
 extern void initGenericDiscoveryTrigger;
 extern void initStoryMapRandomEvent;
-extern void initDiscoveryDisplaySystem;
-extern void initTownExitTrigger;
 extern void initPhoneDiscoveryTrigger;
 
 void cleanupTransitionEffect(EffectState *);
