@@ -289,7 +289,7 @@ typedef struct {
     OutputStruct_19E80 textureEntry;
     Transform3D transform;
     Mtx *transformMatrix;
-    GameStateUnk44Unk2C0 *renderEntry;
+    ItemBoxBurstFrameData *renderEntry;
     s32 frameIndex;
     s32 isSecondaryBox;
 } ItemBoxBurstEffectState;
@@ -2566,7 +2566,7 @@ void setupItemBoxBurstTexture(ItemBoxBurstEffectState *arg0) {
 
 void updateItemBoxBurstFrame(ItemBoxBurstEffectState *state) {
     GameState *gameState = (GameState *)getCurrentAllocation();
-    GameStateUnk44Unk2C0 *frameData;
+    ItemBoxBurstFrameData *frameData;
     s32 i;
 
     if (state->frameIndex == 8) {
@@ -2574,7 +2574,7 @@ void updateItemBoxBurstFrame(ItemBoxBurstEffectState *state) {
         return;
     }
 
-    frameData = &gameState->unk44->unk2C0[state->frameIndex];
+    frameData = &gameState->unk44->itemBoxBurstFrames[state->frameIndex];
     state->transformMatrix = 0;
     state->renderEntry = frameData;
 

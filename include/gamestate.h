@@ -20,11 +20,11 @@ typedef struct {
 
 typedef struct {
     u8 data[0x180];
-} GameStateUnk44Unk2C0;
+} ItemBoxBurstFrameData;
 
 typedef struct {
     u8 padding[0x2C0];
-    GameStateUnk44Unk2C0 unk2C0[8];
+    ItemBoxBurstFrameData itemBoxBurstFrames[8];
     u8 padding2[0x100];
     GameStateUnk44_Item unkFC0[3];
     GameStateUnk44_Item unk1080[3];

@@ -188,6 +188,7 @@ cleanupItemBoxSystem = 0x80049230; // rom:0x49E30
 scheduleItemBoxSystemTask = 0x80049280; // rom:0x49E80
 initItemBoxBurstEffect = 0x800492C0; // rom:0x49EC0
 setupItemBoxBurstTexture = 0x80049300; // rom:0x49F00
+updateItemBoxBurstFrame = 0x8004934C; // rom:0x49F4C
 cleanupItemBoxBurstEffect = 0x80049404; // rom:0x4A004
 spawnItemBoxBurstEffect = 0x80049794; // rom:0x4A394
 initHomingProjectileTask = 0x8004A5E0; // rom:0x4B1E0
