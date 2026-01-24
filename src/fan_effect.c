@@ -11,6 +11,7 @@
 USE_ASSET(_1FB4E0);
 USE_ASSET(_4C9E70);
 
+/* Struct definitions */
 typedef struct {
     u8 _pad0[0x20];
     StateEntry *unk20;
@@ -56,16 +57,20 @@ typedef struct {
     s16 unk86;
 } FanEffectTask;
 
-void updateFanEffectGrow(FanEffectGrowState *);
-void cleanupFanEffectTask(FanEffectTaskState *taskState);
-void updateFanEffectFade(FanEffectFadeState *fadeState);
-
+/* Global variables */
 extern Transform3D D_8009A8B0_9B4B0;
 extern StateEntry D_80088650;
 extern StateEntry D_80088660;
 extern s16 gFanSoundCount;
 extern s16 gFanSoundIds[];
 
+/* Forward declarations */
+static void initFanEffectTask(FanEffectTaskState *taskState);
+static void updateFanEffectGrow(FanEffectGrowState *arg);
+static void cleanupFanEffectTask(FanEffectTaskState *taskState);
+static void updateFanEffectFade(FanEffectFadeState *fadeState);
+
+/* Public functions */
 s16 getFanSoundCount(void) {
     return gFanSoundCount;
 }
@@ -128,7 +133,8 @@ void stopFanSoundOnChannel0(void) {
     stopSoundEffectChannel(0, 0);
 }
 
-void initFanEffectTask(FanEffectTaskState *taskState) {
+/* Internal fan effect task functions */
+static void initFanEffectTask(FanEffectTaskState *taskState) {
     StateEntry **uncompressedAssetPtr;
 
     taskState->unk20 = &D_80088650;
@@ -148,7 +154,7 @@ void initFanEffectTask(FanEffectTaskState *taskState) {
     setCallbackWithContinue(&updateFanEffectGrow);
 }
 
-void updateFanEffectGrow(FanEffectGrowState *arg0) {
+static void updateFanEffectGrow(FanEffectGrowState *arg0) {
     Transform3D sp10;
     void *displayListData;
     s16 newZRotation;
@@ -188,7 +194,7 @@ void updateFanEffectGrow(FanEffectGrowState *arg0) {
     }
 }
 
-void updateFanEffectFade(FanEffectFadeState *fadeState) {
+static void updateFanEffectFade(FanEffectFadeState *fadeState) {
     Transform3D rotationMatrix;
     s32 fadeDelta;
 
@@ -211,7 +217,7 @@ void updateFanEffectFade(FanEffectFadeState *fadeState) {
     enqueueDisplayListObject(0, (DisplayListObject *)&fadeState->transform);
 }
 
-void cleanupFanEffectTask(FanEffectTaskState *taskState) {
+static void cleanupFanEffectTask(FanEffectTaskState *taskState) {
     taskState->unk24 = freeNodeMemory(taskState->unk24);
     taskState->unk28 = freeNodeMemory(taskState->unk28);
 }
