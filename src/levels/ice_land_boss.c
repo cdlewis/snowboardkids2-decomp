@@ -18,12 +18,50 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
+// Type definitions
 typedef void (*FuncPtr)(void *);
+typedef s32 (*StateFunc)(void *);
 
+// Struct definitions
 typedef struct {
     /* 0x0 */ void *ptr;
     u8 _pad[0x38];
 } Element0x3C; // Size: 0x3C
+
+typedef struct {
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+    void *unk10;
+    void *unk14;
+    void *unk18;
+    void *unk1C;
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 padding[12];
+} Unk0x3CElem;
+
+typedef struct {
+    Transform3D unk38;
+    void *unk58;
+    s32 unk5C;
+    s32 unk60;
+    s32 unk64;
+} Unk0x3CElemExtra;
+
+typedef struct {
+    u8 primaryR;
+    u8 primaryG;
+    u8 primaryB;
+    u8 pad1;
+    u8 secondaryR;
+    u8 secondaryG;
+    u8 secondaryB;
+    u8 pad2;
+} BossSurfaceColor;
 
 typedef struct {
     u8 _pad0[0x38];
@@ -72,30 +110,6 @@ typedef struct {
     u8 _padBCD[0xBDB - 0xBCD];
     u8 unkBDB;
 } IceLandBossAttackArg;
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
-    void *unk10;
-    void *unk14;
-    void *unk18;
-    void *unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    u8 padding[12];
-} Unk0x3CElem;
-
-typedef struct {
-    Transform3D unk38;
-    void *unk58;
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
-} Unk0x3CElemExtra;
 
 typedef struct {
     Unk0x3CElem unk0_3C[12];
@@ -228,17 +242,6 @@ typedef struct {
 } IceLandBossArg;
 
 typedef struct {
-    u8 primaryR;
-    u8 primaryG;
-    u8 primaryB;
-    u8 pad1;
-    u8 secondaryR;
-    u8 secondaryG;
-    u8 secondaryB;
-    u8 pad2;
-} BossSurfaceColor;
-
-typedef struct {
     u8 pad[0x38];
     s16 groundJointOffsets[6];
     u8 pad44[0xB0 - 0x44];
@@ -282,9 +285,8 @@ typedef struct {
     u8 finishPosition;
 } IceBossArg;
 
+// Function declarations
 void func_800BC61C_B1B0C(Player *);
-
-typedef s32 (*StateFunc)(void *);
 
 // Forward declarations for function pointer arrays
 s32 initIceLandBoss(IceLandBossArg *);
@@ -363,6 +365,7 @@ Vec3i D_800BCA64[] = {
     { 0x000C0000, 0x00000000, 0xFFF40000 },
 };
 
+// External global variables
 extern u16 D_8009ADE0_9B9E0;
 extern BossSurfaceColor gBossSurfaceColors[];
 extern s32 identityMatrix[];
