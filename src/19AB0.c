@@ -1,3 +1,4 @@
+#include "19AB0.h"
 #include "15690.h"
 #include "199C0.h"
 #include "1A770.h"
@@ -11,20 +12,13 @@
 
 extern u8 gTitleInitialized;
 extern u8 storyMapLocationIndex;
+
 void handleGameStateComplete(void);
 void handleStoryMapLocationComplete(void);
 void awaitIntroCutsceneComplete(void);
 void onStoryMapExitBack(void);
 void onStoryMapExitToLevelSelect(void);
 void onStoryMapExitToMenu(void);
-
-typedef struct {
-    s16 unk0;
-    u8 fromGameState;
-    u8 unk3;
-    u8 previousSaveSlot;
-    u8 unk5;
-} StoryMapStateData;
 
 void initStoryMapState(void) {
     StoryMapStateData *state;
