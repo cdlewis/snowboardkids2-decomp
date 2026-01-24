@@ -325,11 +325,11 @@ s32 cutsceneChrHop_validate(void) {
     return 0;
 }
 
-void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    CutsceneSlot *slot = &arg1->slots[arg2];
+void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *arg, CutsceneManager *manager, s8 slotIndex) {
+    CutsceneSlot *slot = &manager->slots[slotIndex];
 
-    setupSlotProjectile(&slot->slotData, arg0->horizontalSpeed, arg0->verticalVelocity, arg0->gravity);
-    setModelAnimationLooped(slot->model, arg0->animationId, arg0->animationLoopCount, 1);
+    setupSlotProjectile(&slot->slotData, arg->horizontalSpeed, arg->verticalVelocity, arg->gravity);
+    setModelAnimationLooped(slot->model, arg->animationId, arg->animationLoopCount, 1);
 }
 
 void cutsceneChrBack_init(void) {

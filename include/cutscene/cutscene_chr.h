@@ -234,7 +234,7 @@ void cutsceneChrRotate_exec(cutsceneChrRotate_exec_arg *arg, CutsceneManager *ma
 s32 cutsceneChrRotate_isDone(void);
 void cutsceneChrHop_init(void);
 s32 cutsceneChrHop_validate(void);
-void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *arg, CutsceneManager *manager, s8 slotIndex);
 void cutsceneChrBack_init(void);
 s32 cutsceneChrBack_validate(void);
 void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
