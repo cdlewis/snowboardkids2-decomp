@@ -4,18 +4,6 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern s32 func_8002A4AC_2B0AC(void *, u8);
-extern s32 func_8002A7CC_2B3CC(void *);
-extern u16 D_8008E768_8F368[];
-extern u16 D_8008E75C_8F35C[];
-
-extern s16 D_8009F240_9FE40;
-extern s16 D_8009F242_9FE42;
-extern s32 D_800AB06C_A23DC;
-extern Vec3i D_800AFF20_A7290;
-
-s32 isNpcFacingPlayer(s32, s32, s16);
-
 typedef struct {
     /* 0x00 */ void *model;
     /* 0x04 */ Transform3D matrix;
@@ -35,6 +23,27 @@ typedef struct {
     /* 0x5F */ u8 pad5F[0x2];
     /* 0x61 */ u8 unk61;
 } Func8002A390Arg;
+
+typedef struct {
+    u8 pad0[0x14];
+    s16 screenX;
+    s16 screenXHi;
+    u8 pad18[4];
+    s16 screenZ;
+    s16 screenZHi;
+} ParallaxSprite;
+
+extern s32 func_8002A4AC_2B0AC(void *, u8);
+extern s32 func_8002A7CC_2B3CC(void *);
+extern u16 D_8008E768_8F368[];
+extern u16 D_8008E75C_8F35C[];
+
+extern s16 D_8009F240_9FE40;
+extern s16 D_8009F242_9FE42;
+extern s32 D_800AB06C_A23DC;
+extern Vec3i D_800AFF20_A7290;
+
+s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle);
 
 s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
     GameState *state;
@@ -216,15 +225,6 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B598_2C198);
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002B760_2C360);
-
-typedef struct {
-    u8 pad0[0x14];
-    s16 screenX;
-    s16 screenXHi;
-    u8 pad18[4];
-    s16 screenZ;
-    s16 screenZHi;
-} ParallaxSprite;
 
 void updateParallaxPosition(ParallaxSprite *sprite) {
     s32 newPosition[3];
