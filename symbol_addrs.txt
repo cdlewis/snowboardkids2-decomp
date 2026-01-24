@@ -3561,6 +3561,7 @@ updateShotCrossSkillMeterDisplay = 0x8004FDD0; // rom:0x509D0
 cleanupShotCrossSkillMeterDisplayTask = 0x8004FF28; // rom:0x50B28
 spawnShotCrossSkillMeterDisplayTask = 0x8004FF60; // rom:0x50B60
 setAudioChannelVolume = 0x80057928; // rom:0x58528
+startMusicPlaybackWithVoice = 0x80057974; // rom:0x58574
 startMusicPlayback = 0x800579CC; // rom:0x585CC
 updateKnockbackBounceLaunchPhase = 0x800B6194; // rom:0xA6044
 updateKnockbackLaunchWithHomingProjectilesPhase = 0x800B62E4; // rom:0xA6194
