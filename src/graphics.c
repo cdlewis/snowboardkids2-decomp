@@ -171,7 +171,7 @@ void queueAnonymousBufferData(void *source) {
         memcpy(dest, source, 0x20);
 
         gGraphicsManager->bufferFlags[gGraphicsManager->bufferCount] = 0;
-        gGraphicsManager->bufferCount += 1;
+        gGraphicsManager->bufferCount++;
     }
 }
 
