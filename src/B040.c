@@ -4,15 +4,7 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-typedef enum {
-    ANIM_STATE_INIT,
-    ANIM_STATE_RAMP_UP,
-    ANIM_STATE_EASE_IN,
-    ANIM_STATE_HOLD,
-    ANIM_STATE_RAMP_OUT,
-    ANIM_STATE_EASE_OUT
-} AnimState;
-
+// Macro definitions
 #define FILL_STRUCT(v)                \
     (v)->unk0 = arg0;                 \
     (v)->unk4 = arg1;                 \
@@ -27,6 +19,17 @@ typedef enum {
     (v)->unk1C = arg9;                \
     (v)->unk1E = arg10;
 
+// Enum definitions
+typedef enum {
+    ANIM_STATE_INIT,
+    ANIM_STATE_RAMP_UP,
+    ANIM_STATE_EASE_IN,
+    ANIM_STATE_HOLD,
+    ANIM_STATE_RAMP_OUT,
+    ANIM_STATE_EASE_OUT
+} AnimState;
+
+// Struct definitions
 typedef union {
     s16 unk70;
     u8 unk70_u8;
@@ -54,17 +57,181 @@ typedef struct {
     s32 count;
 } Table2DRow;
 
+typedef struct {
+    void *unk0;
+    u8 _pad4[0x14];
+    u8 unk18[1];
+} SpriteEffectPositionSource;
+
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+} SpriteEffectPosition;
+
+typedef struct {
+    /* 0x00 */ void *positionSource;
+    /* 0x04 */ s16 layer;
+    /* 0x06 */ u8 _pad6[2];
+    /* 0x08 */ s16 duration;
+    /* 0x0A */ u8 opacity;
+    /* 0x0B */ u8 _padB[1];
+    /* 0x0C */ s32 scale;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ s16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ void *spriteState;
+} SimpleSpriteEffectState;
+
+typedef struct {
+    /* 0x00 */ SpriteEffectPositionSource *positionSource;
+    /* 0x04 */ s16 layer;
+    /* 0x06 */ u8 _pad6[2];
+    /* 0x08 */ s16 duration;
+    /* 0x0A */ u8 opacity;
+    /* 0x0B */ s8 state;
+    /* 0x0C */ s32 targetScale;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ s16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ TableLookupContext spriteState;
+    u8 padding[0x6C - (0x20 + sizeof(TableLookupContext))];
+    /* 0x6C */ s32 scaleX;
+    /* 0x70 */ s32 scaleY;
+    /* 0x74 */ s32 rampSpeed;
+    /* 0x78 */ s32 easingFactor;
+} ScalingSpriteEffectState;
+
+typedef struct {
+    /* 0x00 */ SpriteEffectPositionSource *positionSource;
+    /* 0x04 */ s16 layer;
+    /* 0x06 */ u8 _pad6[2];
+    /* 0x08 */ s16 duration;
+    /* 0x0A */ u8 opacity;
+    /* 0x0B */ s8 state;
+    /* 0x0C */ s32 targetScale;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ s16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ TableLookupContext spriteState;
+    u8 unk32[0x6C - (0x20 + sizeof(TableLookupContext))];
+    /* 0x6C */ s16 bobPhaseHi;
+    /* 0x6E */ s16 bobPhaseLo;
+    /* 0x70 */ s32 currentScale;
+} RadialBurstSpriteEffectState;
+
+typedef struct {
+    /* 0x00 */ SpriteEffectPositionSource *positionSource;
+    /* 0x04 */ s16 layer;
+    /* 0x06 */ u8 _pad6[4];
+    /* 0x0A */ u8 opacity;
+    /* 0x0B */ s8 state;
+    /* 0x0C */ s32 unkC;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ u16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ u8 spriteState[0x4C];
+    /* 0x6C */ s32 scale;
+} SpinFadeSpriteEffectState;
+
+typedef struct {
+    /* 0x00 */ SpriteEffectPositionSource *positionSource;
+    /* 0x04 */ s16 layer;
+    /* 0x06 */ u8 _pad6[2];
+    /* 0x08 */ s16 duration;
+    /* 0x0A */ u8 opacity;
+    /* 0x0B */ s8 state;
+    /* 0x0C */ s32 scale;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ s16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ u8 spriteState[0x4C];
+    /* 0x6C */ s32 dropOffset;
+} DropShrinkSpriteEffectState;
+
+typedef struct {
+    /* 0x00 */ SpriteEffectPositionSource *unk0;
+    /* 0x04 */ s16 unk4;
+    /* 0x06 */ u8 _pad6[2];
+    /* 0x08 */ s16 unk8;
+    /* 0x0A */ u8 unkA;
+    /* 0x0B */ s8 unkB;
+    /* 0x0C */ s32 unkC;
+    /* 0x10 */ s32 unk10;
+    /* 0x14 */ s32 unk14;
+    /* 0x18 */ s32 unk18;
+    /* 0x1C */ s16 unk1C;
+    /* 0x1E */ s16 unk1E;
+    /* 0x20 */ s32 unk20[0x13];
+    /* 0x6C */ s32 unk6C;
+    /* 0x70 */ u8 unk70;
+} RiseStretchSpriteEffectState;
+
+typedef struct {
+    /* 0x00 */ SpriteEffectPositionSource *positionSource;
+    /* 0x04 */ s16 layer;
+    /* 0x06 */ u8 _pad6[2];
+    /* 0x08 */ s16 duration;
+    /* 0x0A */ u8 opacity;
+    /* 0x0B */ u8 _padB[1];
+    /* 0x0C */ s32 scale;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ s16 rotation;
+    /* 0x1E */ s16 useParentPos;
+    /* 0x20 */ s32 spriteState[0x13];
+    /* 0x6C */ s32 bobOffset;
+    /* 0x70 */ s16 bobPhase;
+} FloatBobbingSpriteEffectState;
+
 typedef void (*SchedulerFunc)(SpriteEffectTaskState *);
 
-extern u8 *D_8008C92C_8D52C;
+// Function declarations
+static void updateSimpleSpriteEffect(SimpleSpriteEffectState *);
+static void cleanupSimpleSpriteEffect(SpriteEffectTaskState *);
+static void updateScalingSpriteEffect(ScalingSpriteEffectState *);
+static void cleanupScalingSpriteEffect(SpriteEffectTaskState *);
+static void updateRadialBurstSpriteEffect(RadialBurstSpriteEffectState *);
+static void cleanupRadialBurstSpriteEffect(SpriteEffectTaskState *);
+static void updateSpinFadeSpriteEffect(SpinFadeSpriteEffectState *);
+static void cleanupSpinFadeSpriteEffect(SpriteEffectTaskState *);
+static void updateDropShrinkSpriteEffect(DropShrinkSpriteEffectState *);
+static void cleanupDropShrinkSpriteEffect(SpriteEffectTaskState *);
+static void updateRiseStretchSpriteEffect(RiseStretchSpriteEffectState *);
+static void cleanupRiseStretchSpriteEffect(SpriteEffectTaskState *);
+static void updateFloatBobbingSpriteEffect(FloatBobbingSpriteEffectState *);
+static void cleanupFloatBobbingSpriteEffect(SpriteEffectTaskState *);
+
+static SpriteEffectPosition *getSpriteEffectPosition(SpriteEffectPositionSource *source, s16 useParent);
+
 void initSimpleSpriteEffect(SpriteEffectTaskState *arg0);
 void initScalingSpriteEffect(SpriteEffectTaskState *arg0);
 void initRadialBurstSpriteEffect(SpriteEffectTaskState *arg0);
 void initSpinFadeSpriteEffect(SpriteEffectTaskState *arg0);
 void initDropShrinkSpriteEffect(SpriteEffectTaskState *arg0);
-
 void initRiseStretchSpriteEffect(SpriteEffectTaskState *arg0);
 void initFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0);
+
+// Global variables
+extern u8 *D_8008C92C_8D52C;
+extern DmaEntry *D_8008CC2C_8D82C;
+extern s32 D_8008CC30_8D830;
 
 void spawnSpriteEffect(SceneModel *arg0, s16 arg1, s16 arg2, s16 arg3, void *arg4, s32 arg5, s8 arg6) {
     spawnSpriteEffectEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, 0, 0, 0);
@@ -178,65 +345,6 @@ s32 spawnSpriteEffectInternal(
 
     return 0;
 }
-
-typedef struct {
-    void *unk0;
-    u8 _pad4[0x14];
-    u8 unk18[1];
-} SpriteEffectPositionSource;
-
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-} SpriteEffectPosition;
-
-typedef struct {
-    /* 0x00 */ void *positionSource;
-    /* 0x04 */ s16 layer;
-    /* 0x06 */ u8 _pad6[2];
-    /* 0x08 */ s16 duration;
-    /* 0x0A */ u8 opacity;
-    /* 0x0B */ u8 _padB[1];
-    /* 0x0C */ s32 scale;
-    /* 0x10 */ s32 offsetX;
-    /* 0x14 */ s32 offsetY;
-    /* 0x18 */ s32 offsetZ;
-    /* 0x1C */ s16 rotation;
-    /* 0x1E */ s16 useParentPos;
-    /* 0x20 */ void *spriteState;
-} SimpleSpriteEffectState;
-
-typedef struct {
-    /* 0x00 */ SpriteEffectPositionSource *positionSource;
-    /* 0x04 */ s16 layer;
-    /* 0x06 */ u8 _pad6[2];
-    /* 0x08 */ s16 duration;
-    /* 0x0A */ u8 opacity;
-    /* 0x0B */ s8 state;
-    /* 0x0C */ s32 targetScale;
-    /* 0x10 */ s32 offsetX;
-    /* 0x14 */ s32 offsetY;
-    /* 0x18 */ s32 offsetZ;
-    /* 0x1C */ s16 rotation;
-    /* 0x1E */ s16 useParentPos;
-    /* 0x20 */ TableLookupContext spriteState;
-    u8 padding[0x6C - (0x20 + sizeof(TableLookupContext))];
-    /* 0x6C */ s32 scaleX;
-    /* 0x70 */ s32 scaleY;
-    /* 0x74 */ s32 rampSpeed;
-    /* 0x78 */ s32 easingFactor;
-} ScalingSpriteEffectState;
-
-void updateSimpleSpriteEffect(SimpleSpriteEffectState *);
-void cleanupSimpleSpriteEffect(SpriteEffectTaskState *);
-void updateScalingSpriteEffect(ScalingSpriteEffectState *);
-void cleanupScalingSpriteEffect(SpriteEffectTaskState *);
 
 SpriteEffectPosition *getSpriteEffectPosition(SpriteEffectPositionSource *source, s16 useParent) {
     if (useParent != 0 && source->unk0 != NULL) {
@@ -399,29 +507,6 @@ void cleanupScalingSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
-typedef struct {
-    /* 0x00 */ SpriteEffectPositionSource *positionSource;
-    /* 0x04 */ s16 layer;
-    /* 0x06 */ u8 _pad6[2];
-    /* 0x08 */ s16 duration;
-    /* 0x0A */ u8 opacity;
-    /* 0x0B */ s8 state;
-    /* 0x0C */ s32 targetScale;
-    /* 0x10 */ s32 offsetX;
-    /* 0x14 */ s32 offsetY;
-    /* 0x18 */ s32 offsetZ;
-    /* 0x1C */ s16 rotation;
-    /* 0x1E */ s16 useParentPos;
-    /* 0x20 */ TableLookupContext spriteState;
-    u8 unk32[0x6C - (0x20 + sizeof(TableLookupContext))];
-    /* 0x6C */ s16 bobPhaseHi;
-    /* 0x6E */ s16 bobPhaseLo;
-    /* 0x70 */ s32 currentScale;
-} RadialBurstSpriteEffectState;
-
-void updateRadialBurstSpriteEffect(RadialBurstSpriteEffectState *arg0);
-void cleanupRadialBurstSpriteEffect(SpriteEffectTaskState *);
-
 void initRadialBurstSpriteEffect(SpriteEffectTaskState *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
@@ -526,25 +611,6 @@ void cleanupRadialBurstSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
-typedef struct {
-    /* 0x00 */ SpriteEffectPositionSource *positionSource;
-    /* 0x04 */ s16 layer;
-    /* 0x06 */ u8 _pad6[4];
-    /* 0x0A */ u8 opacity;
-    /* 0x0B */ s8 state;
-    /* 0x0C */ s32 unkC;
-    /* 0x10 */ s32 offsetX;
-    /* 0x14 */ s32 offsetY;
-    /* 0x18 */ s32 offsetZ;
-    /* 0x1C */ u16 rotation;
-    /* 0x1E */ s16 useParentPos;
-    /* 0x20 */ u8 spriteState[0x4C];
-    /* 0x6C */ s32 scale;
-} SpinFadeSpriteEffectState;
-
-void updateSpinFadeSpriteEffect(SpinFadeSpriteEffectState *);
-void cleanupSpinFadeSpriteEffect(SpriteEffectTaskState *);
-
 void initSpinFadeSpriteEffect(SpriteEffectTaskState *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
@@ -593,26 +659,6 @@ void updateSpinFadeSpriteEffect(SpinFadeSpriteEffectState *arg0) {
 void cleanupSpinFadeSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
-
-typedef struct {
-    /* 0x00 */ SpriteEffectPositionSource *positionSource;
-    /* 0x04 */ s16 layer;
-    /* 0x06 */ u8 _pad6[2];
-    /* 0x08 */ s16 duration;
-    /* 0x0A */ u8 opacity;
-    /* 0x0B */ s8 state;
-    /* 0x0C */ s32 scale;
-    /* 0x10 */ s32 offsetX;
-    /* 0x14 */ s32 offsetY;
-    /* 0x18 */ s32 offsetZ;
-    /* 0x1C */ s16 rotation;
-    /* 0x1E */ s16 useParentPos;
-    /* 0x20 */ u8 spriteState[0x4C];
-    /* 0x6C */ s32 dropOffset;
-} DropShrinkSpriteEffectState;
-
-void updateDropShrinkSpriteEffect(DropShrinkSpriteEffectState *);
-void cleanupDropShrinkSpriteEffect(SpriteEffectTaskState *);
 
 void initDropShrinkSpriteEffect(SpriteEffectTaskState *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
@@ -674,27 +720,6 @@ void cleanupDropShrinkSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
-typedef struct {
-    /* 0x00 */ SpriteEffectPositionSource *unk0;
-    /* 0x04 */ s16 unk4;
-    /* 0x06 */ u8 _pad6[2];
-    /* 0x08 */ s16 unk8;
-    /* 0x0A */ u8 unkA;
-    /* 0x0B */ s8 unkB;
-    /* 0x0C */ s32 unkC;
-    /* 0x10 */ s32 unk10;
-    /* 0x14 */ s32 unk14;
-    /* 0x18 */ s32 unk18;
-    /* 0x1C */ s16 unk1C;
-    /* 0x1E */ s16 unk1E;
-    /* 0x20 */ s32 unk20[0x13];
-    /* 0x6C */ s32 unk6C;
-    /* 0x70 */ u8 unk70;
-} RiseStretchSpriteEffectState;
-
-void updateRiseStretchSpriteEffect(RiseStretchSpriteEffectState *);
-void cleanupRiseStretchSpriteEffect(SpriteEffectTaskState *);
-
 void initRiseStretchSpriteEffect(SpriteEffectTaskState *arg0) {
     loadSpriteAsset(&arg0->unk20, 0);
     setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
@@ -747,27 +772,6 @@ void cleanupRiseStretchSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
-typedef struct {
-    /* 0x00 */ SpriteEffectPositionSource *positionSource;
-    /* 0x04 */ s16 layer;
-    /* 0x06 */ u8 _pad6[2];
-    /* 0x08 */ s16 duration;
-    /* 0x0A */ u8 opacity;
-    /* 0x0B */ u8 _padB[1];
-    /* 0x0C */ s32 scale;
-    /* 0x10 */ s32 offsetX;
-    /* 0x14 */ s32 offsetY;
-    /* 0x18 */ s32 offsetZ;
-    /* 0x1C */ s16 rotation;
-    /* 0x1E */ s16 useParentPos;
-    /* 0x20 */ s32 spriteState[0x13];
-    /* 0x6C */ s32 bobOffset;
-    /* 0x70 */ s16 bobPhase;
-} FloatBobbingSpriteEffectState;
-
-void updateFloatBobbingSpriteEffect(FloatBobbingSpriteEffectState *);
-void cleanupFloatBobbingSpriteEffect(SpriteEffectTaskState *);
-
 void initFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0) {
     setCleanupCallback(cleanupFloatBobbingSpriteEffect);
     loadSpriteAsset(&arg0->unk20, 0);
@@ -807,9 +811,6 @@ void updateFloatBobbingSpriteEffect(FloatBobbingSpriteEffectState *arg0) {
 void cleanupFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
-
-extern DmaEntry *D_8008CC2C_8D82C;
-extern s32 D_8008CC30_8D830;
 
 DmaEntry *getDmaTable(void) {
     return D_8008CC2C_8D82C;
