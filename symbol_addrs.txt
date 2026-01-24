@@ -477,6 +477,7 @@ updatePlayerLapCounterMultiplayer = 0x8004C9E8; // rom:0x4D5E8
 updatePlayerRenderCounter = 0x80045878; // rom:0x46478
 cleanupPlayerLapCounterTask = 0x8004CA58; // rom:0x4D658
 cleanupPlayerRenderTask = 0x8004592C; // rom:0x4652C
+schedulePlayerRenderTask = 0x80045964; // rom:0x46564
 updatePlayerGoldDisplaySinglePlayer = 0x8004CBF0; // rom:0x4D7F0
 updatePlayerGoldDisplayMultiplayer = 0x8004CCC4; // rom:0x4D8C4
 cleanupPlayerGoldDisplayTask = 0x8004CD88; // rom:0x4D988
