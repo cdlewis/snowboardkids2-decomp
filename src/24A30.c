@@ -95,20 +95,6 @@ typedef struct {
 } CharSelectIconTargetState;
 
 typedef struct {
-    s16 x;
-    s16 y;
-    void *asset;
-    s16 spriteIndex;
-    s16 scaleX;
-    s16 scaleY;
-    s16 rotation;
-    s16 alpha;
-    u8 unk12;
-    u8 unk13;
-    u8 unk14;
-} ScaledSpriteEntry;
-
-typedef struct {
     u8 padding[0x24];
     u8 playerIndex;
 } P2NameRevealState;
