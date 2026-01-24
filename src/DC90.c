@@ -10,7 +10,6 @@
 extern s32 gControllerInputs;
 
 extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
-extern void *handleMenuSelection(DC90TaskStruct *arg0);
 
 void updateCutsceneWaitMenu(DC90TaskStruct *arg0);
 void cleanupCutsceneWaitMenu(DC90TaskStruct *arg0);
