@@ -1,7 +1,7 @@
+#include "1DC900.h"
 #include "19E80.h"
 #include "B040.h"
 #include "C870.h"
-#include "common.h"
 
 typedef struct {
     s16 unk0;
@@ -45,60 +45,61 @@ typedef struct {
     s32 unkDE8;
 } CreditsScrollerState;
 
-void initCreditsScrollingTextEffects(CreditsScrollerState *state) {
+void initCreditsScrollingTextEffects(void *state) {
+    CreditsScrollerState *s = (CreditsScrollerState *)state;
     s32 i;
     void *textData;
     s16 yOffset;
 
-    state->currentDataIndex = 0;
-    state->unkD8C = 0;
-    state->currentPaletteIndex = 0;
-    state->unkD38 = 0;
-    state->unkD8E = 0;
+    s->currentDataIndex = 0;
+    s->unkD8C = 0;
+    s->currentPaletteIndex = 0;
+    s->unkD38 = 0;
+    s->unkD8E = 0;
 
     for (i = 0; i < 0x12; i++) {
-        state->textEntriesA[i].unk0 = 0;
-        state->textEntriesA[i].y = -0x60 + i * 8;
-        state->textEntriesA[i].dataTable = state->paletteDataTable[state->currentDataIndex];
-        state->textEntriesA[i].index = i;
-        state->textEntriesA[i].height = 0x400;
-        state->textEntriesA[i].width = 0x400;
-        state->textEntriesA[i].unkE = 0;
-        state->textEntriesA[i].alpha = 0xFF;
-        state->textEntriesA[i].unk12 = 0;
-        state->textEntriesA[i].flags = 0;
-        state->textEntriesA[i].unk14 = 0;
-        state->textEntriesB[i].unk0 = 0;
-        state->textEntriesB[i].y = -0x60 + i * 8;
-        state->textEntriesB[i].dataTable = state->paletteDataTable[state->currentDataIndex];
-        state->textEntriesB[i].index = i;
-        state->textEntriesB[i].height = 0x400;
-        state->textEntriesB[i].width = 0x400;
-        state->textEntriesB[i].unkE = 0;
-        state->textEntriesB[i].alpha = 0x64;
-        state->textEntriesB[i].unk12 = 0;
-        state->textEntriesB[i].flags = 0x11;
-        state->textEntriesB[i].unk14 = 0;
+        s->textEntriesA[i].unk0 = 0;
+        s->textEntriesA[i].y = -0x60 + i * 8;
+        s->textEntriesA[i].dataTable = s->paletteDataTable[s->currentDataIndex];
+        s->textEntriesA[i].index = i;
+        s->textEntriesA[i].height = 0x400;
+        s->textEntriesA[i].width = 0x400;
+        s->textEntriesA[i].unkE = 0;
+        s->textEntriesA[i].alpha = 0xFF;
+        s->textEntriesA[i].unk12 = 0;
+        s->textEntriesA[i].flags = 0;
+        s->textEntriesA[i].unk14 = 0;
+        s->textEntriesB[i].unk0 = 0;
+        s->textEntriesB[i].y = -0x60 + i * 8;
+        s->textEntriesB[i].dataTable = s->paletteDataTable[s->currentDataIndex];
+        s->textEntriesB[i].index = i;
+        s->textEntriesB[i].height = 0x400;
+        s->textEntriesB[i].width = 0x400;
+        s->textEntriesB[i].unkE = 0;
+        s->textEntriesB[i].alpha = 0x64;
+        s->textEntriesB[i].unk12 = 0;
+        s->textEntriesB[i].flags = 0x11;
+        s->textEntriesB[i].unk14 = 0;
     }
 
     for (i = 0; i < 6; i++) {
-        initPaletteContext(&state->paletteContexts[i], state->paletteDataTable[i]);
-        applyPaletteShift(&state->paletteContexts[i], 0xF00000, 0xB80000, 0x800000, 0x640000);
+        initPaletteContext(&s->paletteContexts[i], s->paletteDataTable[i]);
+        applyPaletteShift(&s->paletteContexts[i], 0xF00000, 0xB80000, 0x800000, 0x640000);
     }
 
-    state->unkD84 = 0;
-    state->unkD88 = 0;
-    state->textRowIndex = 0;
-    state->unkDE4 = 0;
-    state->unkDE8 = 0;
-    state->unkD8F = 0;
+    s->unkD84 = 0;
+    s->unkD88 = 0;
+    s->textRowIndex = 0;
+    s->unkDE4 = 0;
+    s->unkDE8 = 0;
+    s->unkD8F = 0;
 
     for (i = 0; i < 8; i++) {
-        textData = getTable2DEntry(state->textTable, state->textRowIndex, 0);
-        state->textData[i] = textData;
-        state->textXOffset[i] = -(getMaxLinePixelWidth(textData) / 2);
-        state->textYOffset[i] = -0x18;
-        state->textScrollOffset[i] = 0;
+        textData = getTable2DEntry(s->textTable, s->textRowIndex, 0);
+        s->textData[i] = textData;
+        s->textXOffset[i] = -(getMaxLinePixelWidth(textData) / 2);
+        s->textYOffset[i] = -0x18;
+        s->textScrollOffset[i] = 0;
     }
 }
 
