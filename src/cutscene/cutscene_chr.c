@@ -10,20 +10,18 @@ s32 cutsceneChrPosition_validate(void) {
     return 0;
 }
 
-void cutsceneChrPosition_exec(cutsceneChrPosition_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+void cutsceneChrPosition_exec(cutsceneChrPosition_exec_arg *arg, CutsceneManager *manager, s8 slotIndex) {
     CutsceneSlot *slot;
     CutsceneSlotData *slotData;
-    s16 temp;
 
-    temp = arg0->unkC;
-    slot = &arg1->slots[arg2];
+    slot = &manager->slots[slotIndex];
     slotData = &slot->slotData;
 
-    initSlotPosition(slotData, arg0->unk0, arg0->unk4, arg0->unk8, temp);
+    initSlotPosition(slotData, arg->x, arg->y, arg->z, arg->rotY);
     setupSlotTransform(slotData);
     applyTransformToModel(slot->model, &slot->slotData.unk04);
-    setModelAnimationEx(slot->model, arg0->unkE, arg0->unk12, arg0->unk11, -1, arg0->unk14);
-    setModelActionMode(slot->model, arg0->unk10);
+    setModelAnimationEx(slot->model, arg->animIndex, arg->transitionAnimIndex, arg->loopCount, -1, arg->animQueued);
+    setModelActionMode(slot->model, arg->actionMode);
 }
 
 s32 cutsceneChrPosition_isDone(void) {

@@ -46,15 +46,15 @@ typedef struct {
 } cutsceneChrModelDisp_exec_arg;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s16 unkC;
-    s16 unkE;
-    s8 unk10;
-    s8 unk11;
-    s16 unk12;
-    s8 unk14;
+    s32 x;
+    s32 y;
+    s32 z;
+    s16 rotY;
+    s16 animIndex;
+    s8 actionMode;
+    s8 loopCount;
+    s16 transitionAnimIndex;
+    s8 animQueued;
 } cutsceneChrPosition_exec_arg;
 
 typedef struct {
