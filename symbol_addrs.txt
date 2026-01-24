@@ -1451,7 +1451,7 @@ cutsceneChrPosition2_init = 0x800B1A90; // rom:0x1DEB40
 cutsceneChrTurn3_init = 0x800B1B70; // rom:0x1DEC20
 cutsceneChrKageDisp_init = 0x800B1C18; // rom:0x1DECC8
 
-cutsceneSysDisp_init = 0x800B2260;
+cutsceneSysDisp_init = 0x800B2260; // rom:0x1DF310
 gCutsceneFadeBrightnessTable = 0x800BA5C0; // rom:0x1E7670
 cutsceneSysFadeIn_init = 0x800B227C;
 cutsceneSysFadeOut_init = 0x800B22F0;
