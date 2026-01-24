@@ -5,6 +5,11 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
+// Macro definitions
+#define SEC3(gs) ((Section3Entry *)((gs)->gameData.section3Data))
+#define SEC1(gs) ((Vec3s *)((gs)->gameData.section1Data))
+
+// Struct definitions
 typedef struct {
     /* 0x00 */ s16 next;
     /* 0x02 */ s16 pad;
@@ -27,6 +32,25 @@ typedef struct {
     s8 pathPreference;
 } AIPathPreference;
 
+typedef struct {
+    u8 pad0[0x14];
+    u16 trackStartIdx;
+    u8 pad16[0x2];
+    u16 trackEndIdx;
+    u8 pad1A[0xA];
+} Section3Entry;
+
+typedef struct {
+    s32 spillX;
+    s32 _pad1;
+    s32 spillZ;
+    s32 _pad2;
+} TrackCalcStackVars;
+
+// Global variables
+extern u8 gShortcutChanceByMemoryPool[];
+
+// Function declarations (for functions defined via INCLUDE_ASM below)
 void func_800BA4B8_AA368(Player *, CourseData *, s16, Vec3i *);
 void func_800B9EF0_A9DA0(Player *, CourseData *, s16, Vec3i *);
 
@@ -129,26 +153,6 @@ void calculateAITargetPosition(Player *player) {
 INCLUDE_ASM("asm/nonmatchings/A9A40", func_800B9EF0_A9DA0);
 
 INCLUDE_ASM("asm/nonmatchings/A9A40", func_800BA4B8_AA368);
-
-typedef struct {
-    u8 pad0[0x14];
-    u16 trackStartIdx;
-    u8 pad16[0x2];
-    u16 trackEndIdx;
-    u8 pad1A[0xA];
-} Section3Entry;
-
-typedef struct {
-    s32 spillX;
-    s32 _pad1;
-    s32 spillZ;
-    s32 _pad2;
-} TrackCalcStackVars;
-
-extern u8 gShortcutChanceByMemoryPool[];
-
-#define SEC3(gs) ((Section3Entry *)((gs)->gameData.section3Data))
-#define SEC1(gs) ((Vec3s *)((gs)->gameData.section1Data))
 
 s8 determineAIPathChoice(Player *player) {
     GameState *gs;
