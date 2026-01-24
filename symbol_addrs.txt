@@ -1448,7 +1448,7 @@ cutsceneChrModelDisp_init = 0x800B173C; // rom:0x1DE7EC
 cutsceneChrMoveSight_init = 0x800B17B0;
 cutsceneChrAlpha_init = 0x800B1868; // rom:0x1DE918
 cutsceneChrPosition2_init = 0x800B1A90; // rom:0x1DEB40
-cutsceneChrTurn3_init = 0x800B1B70;
+cutsceneChrTurn3_init = 0x800B1B70; // rom:0x1DEC20
 cutsceneChrKageDisp_init = 0x800B1C18;
 
 cutsceneSysDisp_init = 0x800B2260;
