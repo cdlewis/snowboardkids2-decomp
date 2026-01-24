@@ -1122,7 +1122,7 @@ void enqueuePreLitMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg
     }
 }
 
-void prepareDisplayListRenderStateWithLights(DisplayListObject *arg0) {
+void prepareDisplayListRenderStateWithLights(DisplayListObject *obj) {
     Mtx sp30;
     f32 sp70;
     f32 sp74;
@@ -1132,15 +1132,15 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *arg0) {
     f32 sp84;
     LookAt *lookat;
 
-    if (arg0->transformMatrix == NULL) {
-        arg0->transformMatrix = arenaAlloc16(0x40);
-        if (arg0->transformMatrix == NULL) {
+    if (obj->transformMatrix == NULL) {
+        obj->transformMatrix = arenaAlloc16(0x40);
+        if (obj->transformMatrix == NULL) {
             return;
         }
-        transform3DToN64Mtx((Transform3D *)arg0, arg0->transformMatrix);
+        transform3DToN64Mtx((Transform3D *)obj, obj->transformMatrix);
     }
 
-    if (arg0->displayLists->flags & 1) {
+    if (obj->displayLists->flags & 1) {
         lookat = arenaAlloc16(0x20);
         if (lookat == NULL) {
             return;
@@ -1148,7 +1148,7 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *arg0) {
 
         matrixToEulerAngles(
             &D_800AB068_A23D8->cameraRotationMatrix,
-            (s32 *)arg0,
+            (s32 *)obj,
             &sp70,
             &sp74,
             &sp78,
@@ -1166,38 +1166,38 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *arg0) {
 
         gGraphicsMode = 3;
 
-        if (arg0->segment1 != 0) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
+        if (obj->segment1 != 0) {
+            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
         }
 
-        if (arg0->segment2 != 0) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
+        if (obj->segment2 != 0) {
+            gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
         }
 
-        if (arg0->segment3 != 0) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
+        if (obj->segment3 != 0) {
+            gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
         }
     } else {
-        if (arg0->segment1 != 0 && arg0->segment1 != D_800A2D40_A3940) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
+        if (obj->segment1 != 0 && obj->segment1 != D_800A2D40_A3940) {
+            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
         }
 
-        if (arg0->segment2 != 0 && arg0->segment2 != D_800A2D44_A3944) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
+        if (obj->segment2 != 0 && obj->segment2 != D_800A2D44_A3944) {
+            gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
         }
 
-        if (arg0->segment3 != 0 && arg0->segment3 != D_800A2D48_A3948) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
+        if (obj->segment3 != 0 && obj->segment3 != D_800A2D48_A3948) {
+            gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
         }
     }
 
-    D_800A2D40_A3940 = arg0->segment1;
-    D_800A2D44_A3944 = arg0->segment2;
-    D_800A2D48_A3948 = arg0->segment3;
+    D_800A2D40_A3940 = obj->segment1;
+    D_800A2D44_A3944 = obj->segment2;
+    D_800A2D48_A3948 = obj->segment3;
 
-    gSPLightColor(gRegionAllocPtr++, LIGHT_1, arg0->light1R << 24 | arg0->light1G << 16 | arg0->light1B << 8);
-    gSPLightColor(gRegionAllocPtr++, LIGHT_2, arg0->light2R << 24 | arg0->light2G << 16 | arg0->light2B << 8);
-    gSPMatrix(gRegionAllocPtr++, arg0->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPLightColor(gRegionAllocPtr++, LIGHT_1, obj->light1R << 24 | obj->light1G << 16 | obj->light1B << 8);
+    gSPLightColor(gRegionAllocPtr++, LIGHT_2, obj->light2R << 24 | obj->light2G << 16 | obj->light2B << 8);
+    gSPMatrix(gRegionAllocPtr++, obj->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
 void renderOpaqueDisplayListWithLights(DisplayListObject *arg0) {
