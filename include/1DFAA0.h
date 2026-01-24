@@ -161,12 +161,12 @@ typedef struct {
     /* 0x6C */ s32 scaleVelX;
     /* 0x70 */ s32 scaleVelY;
     /* 0x74 */ s32 scaleVelZ;
-    /* 0x78 */ s16 unk78;
-    /* 0x7A */ s16 unk7A;
-    /* 0x7C */ s16 unk7C;
-    /* 0x7E */ s16 unk7E;
-    /* 0x80 */ s16 unk80;
-    /* 0x82 */ s16 unk82;
+    /* 0x78 */ s16 rotY;
+    /* 0x7A */ s16 rotYTarget;
+    /* 0x7C */ s16 rotYVel;
+    /* 0x7E */ s16 rotYVelTarget;
+    /* 0x80 */ s16 rotX;
+    /* 0x82 */ s16 rotZ;
     /* 0x84 */ s16 unk84;
     /* 0x86 */ s16 unk86;
     /* 0x88 */ s16 finalRotY;

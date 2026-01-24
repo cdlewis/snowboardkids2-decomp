@@ -104,13 +104,13 @@ void initSlotData(CutsceneSlotData *slot) {
     slot->scaleVelY = 0;
     slot->scaleVelZ = 0;
 
-    slot->unk78 = 0;
-    slot->unk7A = 0;
-    slot->unk7C = 0;
+    slot->rotY = 0;
+    slot->rotYTarget = 0;
+    slot->rotYVel = 0;
     slot->unk84 = 0;
     slot->unk86 = 0;
-    slot->unk80 = 0;
-    slot->unk82 = 0;
+    slot->rotX = 0;
+    slot->rotZ = 0;
 
     slot->unk0.bytes[1] = 0;
 
@@ -152,12 +152,12 @@ s32 setupSlotTransform(CutsceneSlotData *slot) {
             zRot = -tilt;
         }
     } else {
-        zRot = (s16)(u16)slot->unk82;
+        zRot = (s16)(u16)slot->rotZ;
     }
 
     createZRotationMatrix(&rotZ, zRot & 0xFFFF);
-    createYRotationMatrix(&rotY, (u16)slot->unk78);
-    createXRotationMatrix(rotX.m, (u16)slot->unk80);
+    createYRotationMatrix(&rotY, (u16)slot->rotY);
+    createXRotationMatrix(rotX.m, (u16)slot->rotX);
     func_8006B084_6BC84(&rotZ, &rotY, &tempXYZ);
     func_8006B084_6BC84(&rotX, &tempXYZ, &tempYZ);
 
@@ -205,57 +205,63 @@ void setSlotScale(CutsceneSlotScaleData *slot, s32 scaleX, s32 scaleY, s32 scale
 }
 
 void handleSlotDebugInput(CutsceneSlotData *slot, CutsceneCameraState *camera) {
-    s32 sinVal;
-    s32 cosVal;
-    s32 inputX;
-    s32 inputZ;
-    u16 newAngle;
+    s32 cameraSin;
+    s32 cameraCos;
+    s32 moveX;
+    s32 moveZ;
+    u16 flippedAngle;
     s16 *pRotX;
     s16 *pRotZ;
 
+    // L+R+Z: Flip rotation 180 degrees
     if (((gButtonsPressed & (L_TRIG + R_TRIG)) == (L_TRIG + R_TRIG)) && (gControllerInputs & Z_TRIG)) {
-        newAngle = (slot->unk78 + 0x800) & 0x1FFF;
-        slot->unk78 = newAngle;
-        slot->unk7A = newAngle;
+        flippedAngle = (slot->rotY + 0x800) & 0x1FFF;
+        slot->rotY = flippedAngle;
+        slot->rotYTarget = flippedAngle;
         return;
     }
+    // R+Z: Reset Y position and X/Z rotations
     if ((gButtonsPressed & (Z_TRIG + R_TRIG)) == (Z_TRIG + R_TRIG)) {
         slot->unk28 = 0;
-        slot->unk80 = 0;
-        slot->unk82 = 0;
+        slot->rotX = 0;
+        slot->rotZ = 0;
         return;
     }
+    // Z: Rotate Y with analog stick
     if (gButtonsPressed & Z_TRIG) {
-        slot->unk78 = slot->unk78 - (gAnalogStickX * 4);
+        slot->rotY = slot->rotY - (gAnalogStickX * 4);
         return;
     }
+    // R: Move Y position with analog stick
     if (gButtonsPressed & R_TRIG) {
         slot->unk28 = slot->unk28 + (gAnalogStickY << 12);
         return;
     }
+    // L: Rotate X/Z with analog stick
     if (gButtonsPressed & L_TRIG) {
-        pRotX = &slot->unk80;
+        pRotX = &slot->rotX;
         *pRotX = (u16)(*pRotX + (gAnalogStickY * 4));
-        pRotZ = &slot->unk82;
+        pRotZ = &slot->rotZ;
         *pRotZ = (u16)(*pRotZ + (gAnalogStickX * 4));
         return;
     }
 
-    sinVal = approximateSin(camera->rotYCurrent) * 4;
-    cosVal = (approximateCos(camera->rotYCurrent) * 4) >> 8;
-    inputX = gAnalogStickX * 16;
-    inputZ = -gAnalogStickY * 16;
-    sinVal = sinVal >> 8;
+    // Default: Move based on camera orientation
+    cameraSin = approximateSin(camera->rotYCurrent) * 4;
+    cameraCos = (approximateCos(camera->rotYCurrent) * 4) >> 8;
+    moveX = gAnalogStickX * 16;
+    moveZ = -gAnalogStickY * 16;
+    cameraSin = cameraSin >> 8;
 
-    slot->unk20_u.unk20_s32 = slot->unk20_u.unk20_s32 + ((cosVal * inputX) + (sinVal * inputZ));
-    slot->unk2C = slot->unk2C + ((-sinVal * inputX) + (cosVal * inputZ));
+    slot->unk20_u.unk20_s32 = slot->unk20_u.unk20_s32 + ((cameraCos * moveX) + (cameraSin * moveZ));
+    slot->unk2C = slot->unk2C + ((-cameraSin * moveX) + (cameraCos * moveZ));
 }
 
 void updateSlotRotVelocity(CutsceneSlotData *slot, s16 speedMode) {
     s32 diff;
     s16 delta;
 
-    diff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
+    diff = calcAngleDiff(slot, 0, slot->rotYTarget, slot->rotY);
 
     if (speedMode == 1)
         goto set_aa;
@@ -272,29 +278,29 @@ set_aa:
 
 check_diff:
     if (diff > 0) {
-        slot->unk7C = delta;
-        slot->unk78 -= delta;
+        slot->rotYVel = delta;
+        slot->rotY -= delta;
     } else if (diff < 0) {
-        slot->unk7C = -delta;
-        slot->unk78 += delta;
+        slot->rotYVel = -delta;
+        slot->rotY += delta;
     } else {
-        slot->unk7C = 0;
+        slot->rotYVel = 0;
     }
 }
 
 void updateSlotRotVelocityFixed(CutsceneSlotData *slot) {
     s16 diff;
 
-    diff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
+    diff = calcAngleDiff(slot, 0, slot->rotYTarget, slot->rotY);
 
     if (diff > 0) {
-        slot->unk7C = 0xAA;
-        slot->unk78 -= 0xAA;
+        slot->rotYVel = 0xAA;
+        slot->rotY -= 0xAA;
     } else if (diff < 0) {
-        slot->unk7C = -0xAA;
-        slot->unk78 += 0xAA;
+        slot->rotYVel = -0xAA;
+        slot->rotY += 0xAA;
     } else {
-        slot->unk7C = 0;
+        slot->rotYVel = 0;
     }
 }
 
@@ -320,16 +326,16 @@ void initSlotPositionEx(CutsceneSlotData *slot, s32 x, s32 y, s32 z, s16 rotY, s
     slot->scaleVelX = 0;
     slot->scaleVelY = 0;
     slot->scaleVelZ = 0;
-    slot->unk7C = 0;
+    slot->rotYVel = 0;
     slot->unk84 = 0;
     slot->unk86 = 0;
     slot->unk0.bytes[1] = 0;
     slot->finalRotY = 0;
     slot->angle = 0;
-    slot->unk78 = maskedRotY;
-    slot->unk7A = maskedRotY;
-    slot->unk80 = rotX;
-    slot->unk82 = rotZ;
+    slot->rotY = maskedRotY;
+    slot->rotYTarget = maskedRotY;
+    slot->rotX = rotX;
+    slot->rotZ = rotZ;
 
     updateSlotRotVelocity(slot, 0);
 }
@@ -400,24 +406,24 @@ s32 setupSlotMoveToEx(
         slot->unk50 = deltaZ / frames;
     }
     if ((deltaX == 0) && (deltaZ == 0)) {
-        slot->unk7A = (s16)rotYParam;
+        slot->rotYTarget = (s16)rotYParam;
     } else {
-        slot->unk7A = (atan2Fixed(deltaX, deltaZ) + 0x1000) & 0x1FFF;
+        slot->rotYTarget = (atan2Fixed(deltaX, deltaZ) + 0x1000) & 0x1FFF;
     }
-    angleDiff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
+    angleDiff = calcAngleDiff(slot, 0, slot->rotYTarget, slot->rotY);
 
     if ((angleDiff >= 0 ? angleDiff : -angleDiff) >= 0xAAB) {
         turnDir = 2;
-        slot->unk78 = ((u16)slot->unk78 + 0x1000) & 0x1FFF;
+        slot->rotY = ((u16)slot->rotY + 0x1000) & 0x1FFF;
         if (angleDiff > 0) {
             turnDir = 1;
         }
     }
     updateSlotRotVelocity(slot, 0);
     if (moveModeS8 == 1) {
-        savedRotVel = (u16)slot->unk7C;
-        slot->unk7C = 0;
-        slot->unk7E = (s16)savedRotVel;
+        savedRotVel = (u16)slot->rotYVel;
+        slot->rotYVel = 0;
+        slot->rotYVelTarget = (s16)savedRotVel;
     }
     return turnDir;
 }
@@ -448,16 +454,16 @@ s32 setupSlotMoveToWithRotation(
     slot->unk84 = frames;
     slot->unk86 = frames;
     slot->angle = 0;
-    slot->unk7A = targetRotY;
+    slot->rotYTarget = targetRotY;
     slot->unk0.Two = 1;
 
     slot->unk3C = (slot->unk30 - slot->unk20_u.unk20_s32) / frames;
     slot->unk40 = (slot->unk34 - slot->unk28) / frames;
     slot->unk44 = (slot->unk38 - slot->unk2C) / frames;
 
-    rotVel = calcAngleDiff(slot, 0, targetRotY, slot->unk78) / frames;
-    slot->unk7C = rotVel;
-    slot->unk7E = rotVel;
+    rotVel = calcAngleDiff(slot, 0, targetRotY, slot->rotY) / frames;
+    slot->rotYVel = rotVel;
+    slot->rotYVelTarget = rotVel;
 
     return 0;
 }
@@ -521,16 +527,16 @@ void setupSlotWalkTo(
 
     if ((u32)deltaX < 1 && (u32)deltaZ < 1) {
     } else {
-        slot->unk7A = (atan2Fixed(deltaX, deltaZ) + 0x1000) & 0x1FFF;
+        slot->rotYTarget = (atan2Fixed(deltaX, deltaZ) + 0x1000) & 0x1FFF;
     }
 
-    calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
+    calcAngleDiff(slot, 0, slot->rotYTarget, slot->rotY);
     updateSlotRotVelocity(slot, 1);
 
-    finalAngleDiff = calcAngleDiff(slot, 0, slot->finalRotY, slot->unk7A);
+    finalAngleDiff = calcAngleDiff(slot, 0, slot->finalRotY, slot->rotYTarget);
     absDiff = finalAngleDiff >= 0 ? finalAngleDiff : -finalAngleDiff;
     if (absDiff >= 0x1001) {
-        finalAngleDiff = slot->unk78 - slot->unk7A;
+        finalAngleDiff = slot->rotY - slot->rotYTarget;
     }
 
     if (finalAngleDiff > 0) {
@@ -550,22 +556,22 @@ s32 setupSlotRotateTo(CutsceneSlotData *slot, SceneModel *unused, s16 targetRotY
     s16 rotVel;
 
     turnDir = 0;
-    slot->unk7A = targetRotY;
+    slot->rotYTarget = targetRotY;
     slot->unk0.Two = 4;
     slot->unk3C = 0;
     slot->unk40 = 0;
     slot->unk44 = 0;
-    angleDiff = calcAngleDiff(slot, 0, targetRotY, slot->unk78);
+    angleDiff = calcAngleDiff(slot, 0, targetRotY, slot->rotY);
 
     if ((angleDiff >= 0 ? angleDiff : -angleDiff) >= 0xAAB) {
         turnDir = 2;
-        slot->unk78 = ((u16)slot->unk78 + 0x1000) & 0x1FFF;
+        slot->rotY = ((u16)slot->rotY + 0x1000) & 0x1FFF;
         if (angleDiff > 0) {
             turnDir = 1;
         }
     }
     updateSlotRotVelocity(slot, 0);
-    rotVel = slot->unk7C;
+    rotVel = slot->rotYVel;
     if (rotVel != 0) {
         slot->unk84 = (angleDiff >= 0 ? angleDiff : -angleDiff) / (rotVel >= 0 ? rotVel : -rotVel);
     } else {
@@ -588,22 +594,22 @@ s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 tar
     slot->unk3C = 0;
     slot->unk40 = 0;
     slot->unk44 = 0;
-    slot->unk7A = targetRotY;
-    initialDiff = calcAngleDiff(slot, direction, targetRotY, slot->unk78);
+    slot->rotYTarget = targetRotY;
+    initialDiff = calcAngleDiff(slot, direction, targetRotY, slot->rotY);
 
     if ((initialDiff >= 0 ? initialDiff : -initialDiff) >= 0xAAB) {
         turnDir = 2;
-        slot->unk78 = ((u16)slot->unk78 + 0x1000) & 0x1FFF;
+        slot->rotY = ((u16)slot->rotY + 0x1000) & 0x1FFF;
         if (initialDiff > 0) {
             turnDir = 1;
         }
     }
-    angleDiff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
+    angleDiff = calcAngleDiff(slot, 0, slot->rotYTarget, slot->rotY);
     slot->unk84 = duration;
     slot->unk86 = duration;
     if (duration != 0) {
         rotVel = angleDiff / duration;
-        slot->unk7C = rotVel;
+        slot->rotYVel = rotVel;
         absRotVel = (s16)rotVel >= 0 ? (s16)rotVel : -(s16)rotVel;
         if (absRotVel >= 0x101) {
             s16 result;
@@ -612,7 +618,7 @@ s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 tar
             } else {
                 result = 0;
             }
-            slot->unk7C = result;
+            slot->rotYVel = result;
             absDiff = angleDiff >= 0 ? angleDiff : -angleDiff;
             if (absDiff < 0) {
                 absDiff += 0xFF;
@@ -622,7 +628,7 @@ s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 tar
             slot->unk86 = absDiff;
         }
     } else {
-        slot->unk7C = 0;
+        slot->rotYVel = 0;
     }
     return turnDir;
 }
@@ -643,14 +649,14 @@ s32 setupSlotRotateWithSpeed(
     slot->unk3C = 0;
     slot->unk40 = 0;
     slot->unk44 = 0;
-    slot->unk7A = targetRotY;
+    slot->rotYTarget = targetRotY;
     slot->unk84 = durationS16;
     slot->unk86 = durationS16;
 
     if (durationS16 != 0) {
-        slot->unk7C = direction * speedMult;
+        slot->rotYVel = direction * speedMult;
     } else {
-        slot->unk7C = 0;
+        slot->rotYVel = 0;
     }
 
     return 0;
@@ -682,9 +688,9 @@ void setupSlotOrbit(CutsceneSlotData *slot, s32 orbitDir, s16 duration, s16 orbi
     }
     orbitDirLocal = slot->unk94;
     if (orbitDirLocal > 0) {
-        slot->unk7A = (slot->unk9C_u.unk9C_s32 + 0x800) & 0x1FFF;
+        slot->rotYTarget = (slot->unk9C_u.unk9C_s32 + 0x800) & 0x1FFF;
     } else if (orbitDirLocal < 0) {
-        slot->unk7A = (slot->unk9C_u.unk9C_s32 - 0x800) & 0x1FFF;
+        slot->rotYTarget = (slot->unk9C_u.unk9C_s32 - 0x800) & 0x1FFF;
     }
 }
 
@@ -736,13 +742,13 @@ void setupSlotProjectile(CutsceneSlotData *slot, s32 speed, s32 velY, s32 gravit
 
     slot->unk0.bytes[0] = 7;
 
-    sinResult = approximateSin(slot->unk78);
+    sinResult = approximateSin(slot->rotY);
     scaledSpeed = speed >> 8;
     slot->unk3C = (scaledSpeed * (sinResult >> 4));
 
     slot->unk40 = velY;
 
-    cosResult = approximateCos(slot->unk78);
+    cosResult = approximateCos(slot->rotY);
     slot->unk44 = (scaledSpeed * (cosResult >> 4));
 
     slot->unkA0 = gravity;
@@ -785,7 +791,7 @@ void setupSlotMoveToFacing(CutsceneSlotData *slot, s32 targetX, s32 targetY, s32
     slot->unk44 = velZ;
     if ((u32)deltaX < 1 && (u32)deltaZ < 1) {
     } else {
-        slot->unk7A = atan2Fixed(deltaX, deltaZ) & 0x1FFF;
+        slot->rotYTarget = atan2Fixed(deltaX, deltaZ) & 0x1FFF;
     }
     updateSlotRotVelocity(slot, 0);
 }
@@ -818,10 +824,10 @@ void setupSlotMoveToNoRotation(
     slot->unk84 = frames;
     slot->unk86 = frames;
     slot->angle = 0;
-    slot->unk7C = 0;
-    slot->unk7E = 0;
+    slot->rotYVel = 0;
+    slot->rotYVelTarget = 0;
     slot->unk0.bytes[0] = 1;
-    slot->unk7A = slot->unk78;
+    slot->rotYTarget = slot->rotY;
 }
 
 void setupSlotMoveToWithBounce(CutsceneSlotData *slot, s32 *targetPos, s16 duration, s32 bounceVelY, s32 gravity) {
@@ -870,16 +876,16 @@ s16 updateSlotLinearMove(CutsceneSlotData *slot, SceneModel *model) {
         slot->unk20_u.unk20_s32 += slot->unk3C;
         slot->unk28 += slot->unk40;
         slot->unk2C += slot->unk44;
-        slot->unk78 += slot->unk7C;
+        slot->rotY += slot->rotYVel;
 
-        angleDiff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
-        rotVel = slot->unk7C;
+        angleDiff = calcAngleDiff(slot, 0, slot->rotYTarget, slot->rotY);
+        rotVel = slot->rotYVel;
 
         if (((rotVel > 0) & (angleDiff < 0)) || ((rotVel < 0) & (angleDiff > 0))) {
-            slot->unk7C = 0;
-            slot->unk78 = slot->unk7A;
+            slot->rotYVel = 0;
+            slot->rotY = slot->rotYTarget;
         } else if (rotVel == 0) {
-            slot->unk78 = slot->unk7A;
+            slot->rotY = slot->rotYTarget;
         }
 
         moving = 1;
@@ -888,8 +894,8 @@ s16 updateSlotLinearMove(CutsceneSlotData *slot, SceneModel *model) {
         slot->unk3C = 0;
         slot->unk40 = 0;
         slot->unk44 = 0;
-        slot->unk7C = 0;
-        slot->unk78 = slot->unk7A;
+        slot->rotYVel = 0;
+        slot->rotY = slot->rotYTarget;
 
         if ((model->unk38 != -1) && (model->unk3E <= 0)) {
             setModelAnimation(model, model->unk38);
@@ -905,11 +911,11 @@ s32 updateSlotRotation(CutsceneSlotData *slot, StateEntry *state) {
 
     result = 0;
     if (slot->unk84 > 0) {
-        slot->unk78 += slot->unk7C;
+        slot->rotY += slot->rotYVel;
         slot->unk84--;
         result = 1;
     } else {
-        slot->unk7C = 0;
+        slot->rotYVel = 0;
         nextIndex = state->next_index;
         if ((nextIndex == -1) || ((s8)state->commandCategory > 0)) {
             slot->unk0.bytes[0] = 0;
@@ -918,7 +924,7 @@ s32 updateSlotRotation(CutsceneSlotData *slot, StateEntry *state) {
             slot->unk0.bytes[0] = 0;
         }
     }
-    slot->unk7A = slot->unk78;
+    slot->rotYTarget = slot->rotY;
     return result;
 }
 
@@ -964,17 +970,17 @@ s16 updateSlotWalk(CutsceneSlotData *arg0, SceneModel *arg1) {
             unk84_val = arg0->unk84;
             unk8C_val = arg0->unk8C;
             if (unk84_val > unk8C_val) {
-                temp_v0 = (u16)arg0->unk78 + (u16)arg0->unk7C;
-                arg0->unk78 = temp_v0;
-                temp_v0_2 = calcAngleDiff(arg0, 0, arg0->unk7A, temp_v0);
-                temp_a0 = arg0->unk7C;
+                temp_v0 = (u16)arg0->rotY + (u16)arg0->rotYVel;
+                arg0->rotY = temp_v0;
+                temp_v0_2 = calcAngleDiff(arg0, 0, arg0->rotYTarget, temp_v0);
+                temp_a0 = arg0->rotYVel;
                 if (((temp_a0 > 0) & (temp_v0_2 < 0)) || ((temp_a0 < 0) & (temp_v0_2 > 0))) {
-                    arg0->unk7C = 0;
-                    arg0->unk78 = arg0->unk7A;
+                    arg0->rotYVel = 0;
+                    arg0->rotY = arg0->rotYTarget;
                 } else if (temp_a0 == 0) {
                     temp_v0_3 = (u16)arg0->angle - 0x40;
                     arg0->angle = temp_v0_3;
-                    arg0->unk78 = arg0->unk7A;
+                    arg0->rotY = arg0->rotYTarget;
                     if (temp_v0_3 < 0) {
                         arg0->angle = 0;
                     }
@@ -982,19 +988,19 @@ s16 updateSlotWalk(CutsceneSlotData *arg0, SceneModel *arg1) {
                 arg0->unk84 = (u16)arg0->unk84 - 1;
             } else {
                 arg0->unk0.bytes[1] = 1;
-                arg0->unk78 = arg0->unk7A;
+                arg0->rotY = arg0->rotYTarget;
             }
             var_s2 = 1;
             break;
         case 1:
             if (arg0->unk84 > 0) {
-                temp_v0_4 = arg0->unk78 + arg0->unk8A;
-                arg0->unk78 = (u16)temp_v0_4;
+                temp_v0_4 = arg0->rotY + arg0->unk8A;
+                arg0->rotY = (u16)temp_v0_4;
                 temp_v0_5 = calcAngleDiff(arg0, 0, arg0->finalRotY, temp_v0_4);
                 temp_a1 = arg0->unk8A;
                 if (((temp_a1 > 0) & (temp_v0_5 < 0)) || ((temp_a1 < 0) & (temp_v0_5 > 0))) {
                     arg0->unk8A = 0;
-                    arg0->unk78 = arg0->finalRotY;
+                    arg0->rotY = arg0->finalRotY;
                 } else if (arg0->unk84 < 6) {
                     temp_v0_6 = arg0->angle;
                     var_v0_angle = -temp_v0_6;
@@ -1018,8 +1024,8 @@ s16 updateSlotWalk(CutsceneSlotData *arg0, SceneModel *arg1) {
             } else {
                 temp_v1 = (u16)arg0->finalRotY;
                 arg0->unk0.bytes[0] = 9;
-                arg0->unk78 = (s16)temp_v1;
-                arg0->unk7A = (s16)temp_v1;
+                arg0->rotY = (s16)temp_v1;
+                arg0->rotYTarget = (s16)temp_v1;
             }
             break;
     }
@@ -1076,7 +1082,7 @@ s16 updateSlotWalk(CutsceneSlotData *arg0, SceneModel *arg1) {
         } else {
             goto block_51;
         }
-    } else if (arg0->unk7C != 0) {
+    } else if (arg0->rotYVel != 0) {
         if (arg0->unk0.bytes[2] != 0) {
             var_a1 = 0x71;
             setModelAnimationQueued(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
@@ -1145,20 +1151,20 @@ update_position:
     slot->unk40 += (slot->unk4C - slot->unk40) / slot->unk0.bytes[3];
     slot->unk44 += (slot->unk50 - slot->unk44) / slot->unk0.bytes[3];
 
-    slot->unk7C += (slot->unk7E - slot->unk7C) / 32;
+    slot->rotYVel += (slot->rotYVelTarget - slot->rotYVel) / 32;
 
     slot->unk20_u.unk20_s32 += slot->unk3C;
     slot->unk28 += slot->unk40;
     slot->unk2C += slot->unk44;
-    slot->unk78 += slot->unk7C;
+    slot->rotY += slot->rotYVel;
 
-    angleDiff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
+    angleDiff = calcAngleDiff(slot, 0, slot->rotYTarget, slot->rotY);
 
-    if ((slot->unk7C > 0 && angleDiff < 0) || (slot->unk7C < 0 && angleDiff > 0)) {
-        slot->unk7C = 0;
-        slot->unk78 = slot->unk7A;
-    } else if (slot->unk7C == 0) {
-        slot->unk78 = slot->unk7A;
+    if ((slot->rotYVel > 0 && angleDiff < 0) || (slot->rotYVel < 0 && angleDiff > 0)) {
+        slot->rotYVel = 0;
+        slot->rotY = slot->rotYTarget;
+    } else if (slot->rotYVel == 0) {
+        slot->rotY = slot->rotYTarget;
     }
 
     if (slot->unk84 > 0) {
@@ -1192,20 +1198,20 @@ s32 updateSlotOrbit(CutsceneSlotData *slot, SceneModel *model) {
 
         if (slot->unk94 > 0) {
             newAngle = *anglePtr + 0x800;
-            slot->unk7A = newAngle & 0x1FFF;
+            slot->rotYTarget = newAngle & 0x1FFF;
         } else if (slot->unk94 < 0) {
             newAngle = *anglePtr - 0x800;
-            slot->unk7A = newAngle & 0x1FFF;
+            slot->rotYTarget = newAngle & 0x1FFF;
         }
 
-        slot->unk78 += slot->unk7C;
-        angleDiff = calcAngleDiff(slot, 0, slot->unk7A, slot->unk78);
+        slot->rotY += slot->rotYVel;
+        angleDiff = calcAngleDiff(slot, 0, slot->rotYTarget, slot->rotY);
 
-        if ((slot->unk7C > 0 && angleDiff < 0) || (slot->unk7C < 0 && angleDiff > 0)) {
-            slot->unk7C = 0;
-            slot->unk78 = slot->unk7A;
-        } else if (slot->unk7C == 0) {
-            slot->unk78 = slot->unk7A;
+        if ((slot->rotYVel > 0 && angleDiff < 0) || (slot->rotYVel < 0 && angleDiff > 0)) {
+            slot->rotYVel = 0;
+            slot->rotY = slot->rotYTarget;
+        } else if (slot->rotYVel == 0) {
+            slot->rotY = slot->rotYTarget;
         }
     } else {
         animIndex = model->unk38;
