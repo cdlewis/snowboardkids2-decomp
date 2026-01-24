@@ -5,7 +5,7 @@
 
 void checkNewspaperLocationDiscovery(LocationDiscoveryTrigger *);
 
-u8 WallNewspaperLabel[] = "WALL NEWSPAPER";
+char WallNewspaperLabel[] = "WALL NEWSPAPER";
 
 void initNewspaperDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
     trigger->locationId = WALL_NEWSPAPER_EVENT_ID;
