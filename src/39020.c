@@ -1,26 +1,16 @@
+#include "10AD0.h"
 #include "6E840.h"
 #include "common.h"
 
 typedef struct {
-    s16 x;
-    s16 y;
-    s16 tileWidth;
-    s16 tileHeight;
-    s16 tilesPerRow;
-    s16 tilesPerCol;
-    s16 tileGridWidth;
-    s16 tileGridHeight;
-    s16 clipX;
-    s16 clipY;
-    s16 clipWidth;
-    s16 clipHeight;
-    s16 ciMode;
-    s16 unk1A;
-    void *textureData;
-    void *tileIndexData;
-    void *tileEntries;
-    void *paletteData;
-} TiledTextureRenderState;
+    u16 textureIndex;
+    u8 paletteIndex;
+    u8 flipMode;
+} TileEntry;
+
+typedef struct {
+    u8 data[32];
+} TexData32;
 
 typedef struct {
     u16 tileGridWidth;
@@ -34,25 +24,6 @@ typedef struct {
     u16 textureDataOffset;
     u8 tileEntries[1];
 } TiledTextureAsset;
-
-typedef struct {
-    s16 clipLeft;
-    s16 clipTop;
-    s16 clipRight;
-    s16 clipBottom;
-    s16 offsetX;
-    s16 offsetY;
-} TextClipAndOffsetData;
-
-typedef struct {
-    u16 textureIndex;
-    u8 paletteIndex;
-    u8 flipMode;
-} TileEntry;
-
-typedef struct {
-    u8 data[32];
-} TexData32;
 
 typedef struct {
     s16 x;
@@ -73,14 +44,14 @@ typedef struct {
     s32 tileIndexData;
     TileEntry *tileEntries;
     TexData32 *paletteData;
-} TiledTextureRenderState2;
+} TiledTextureRenderState;
 
-extern TextClipAndOffsetData gTextClipAndOffsetData;
 extern Gfx *gRegionAllocPtr;
 extern Gfx gSpriteRDPSetupDL[];
 extern s16 gTileTextureFlipTable[];
+extern TextClipAndOffsetData gTextClipAndOffsetData;
 
-void renderTiledTexture(TiledTextureRenderState2 *state) {
+void renderTiledTexture(TiledTextureRenderState *state) {
     s16 xStart;
     s16 yStart;
     s16 clipLeft;
@@ -358,8 +329,8 @@ void initTiledTextureRenderState(TiledTextureRenderState *arg0, TiledTextureAsse
     arg0->clipY = 0;
     arg0->clipWidth = 0x140;
     arg0->clipHeight = 0xF0;
-    arg0->tileIndexData = (u8 *)temp + arg1->tileIndexDataOffset;
-    arg0->textureData = (u8 *)temp + arg1->textureDataOffset;
-    arg0->tileEntries = &arg1->tileEntries;
-    arg0->paletteData = (u8 *)temp + arg1->paletteDataOffset;
+    arg0->tileIndexData = (s32)((u8 *)temp + arg1->tileIndexDataOffset);
+    arg0->textureData = (s32)((u8 *)temp + arg1->textureDataOffset);
+    arg0->tileEntries = (TileEntry *)&arg1->tileEntries;
+    arg0->paletteData = (TexData32 *)((u8 *)temp + arg1->paletteDataOffset);
 }
