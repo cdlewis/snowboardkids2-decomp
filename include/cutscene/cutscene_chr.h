@@ -149,13 +149,13 @@ typedef struct {
     s32 targetX;
     s32 targetY;
     s32 targetZ;
-    s16 unkC;
+    s16 fallbackRotY;
     s16 duration;
     s16 animationId;
     s8 actionMode;
     s8 animationLoopCount;
     s16 transitionAnimId;
-} cutsceneChrBack_exec_arg;
+} cutsceneChrMoveToFacing_exec_arg;
 
 typedef struct {
     s32 targetX;
@@ -235,10 +235,10 @@ s32 cutsceneChrRotate_isDone(void);
 void cutsceneChrHop_init(void);
 s32 cutsceneChrHop_validate(void);
 void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *arg, CutsceneManager *manager, s8 slotIndex);
-void cutsceneChrBack_init(void);
-s32 cutsceneChrBack_validate(void);
-void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg, CutsceneManager *manager, s8 slotIndex);
-s32 cutsceneChrBack_isDone(void);
+void cutsceneChrMoveToFacing_init(void);
+s32 cutsceneChrMoveToFacing_validate(void);
+void cutsceneChrMoveToFacing_exec(cutsceneChrMoveToFacing_exec_arg *arg, CutsceneManager *manager, s8 slotIndex);
+s32 cutsceneChrMoveToFacing_isDone(void);
 void cutsceneChrZoom2_init(void);
 s32 cutsceneChrZoom2_validate(void);
 void cutsceneChrZoom2_exec(cutsceneChrZoom2_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);

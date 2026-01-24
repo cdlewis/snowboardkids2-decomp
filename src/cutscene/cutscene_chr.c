@@ -332,14 +332,14 @@ void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *arg, CutsceneManager *manager,
     setModelAnimationLooped(slot->model, arg->animationId, arg->animationLoopCount, 1);
 }
 
-void cutsceneChrBack_init(void) {
+void cutsceneChrMoveToFacing_init(void) {
 }
 
-s32 cutsceneChrBack_validate(void) {
+s32 cutsceneChrMoveToFacing_validate(void) {
     return 0;
 }
 
-void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg, CutsceneManager *manager, s8 slotIndex) {
+void cutsceneChrMoveToFacing_exec(cutsceneChrMoveToFacing_exec_arg *arg, CutsceneManager *manager, s8 slotIndex) {
     CutsceneSlot *slot = &manager->slots[slotIndex];
 
     setupSlotMoveToFacing(&slot->slotData, arg->targetX, arg->targetY, arg->targetZ, arg->duration);
@@ -347,7 +347,7 @@ void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg, CutsceneManager *manage
     setModelActionMode(slot->model, arg->actionMode);
 }
 
-s32 cutsceneChrBack_isDone(void) {
+s32 cutsceneChrMoveToFacing_isDone(void) {
     return 0;
 }
 
