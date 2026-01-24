@@ -8,26 +8,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-typedef struct StoryMapNpcStillArg StoryMapNpcStillArg;
-void updateStoryMapNpcStill(StoryMapNpcStillArg *);
-void updateStoryMapNpcTalking(Func297D8Arg *);
-
-struct StoryMapNpcStillArg {
-    /* 0x00 */ void *model;
-    /* 0x04 */ Transform3D matrix;
-    /* 0x24 */ u8 pad24[0xC];
-    /* 0x30 */ u16 rotation;
-    /* 0x32 */ u8 pad32[0xA];
-    /* 0x3C */ void *callback;
-    /* 0x40 */ u8 pad40[0x10];
-    /* 0x50 */ u16 unk50;
-    /* 0x52 */ u8 pad52[0x4];
-    /* 0x56 */ u16 unk56;
-    /* 0x58 */ u8 pad58[0x6];
-    /* 0x5E */ u8 state;
-    /* 0x5F */ u8 unk5F;
-};
-
 typedef struct {
     /* 0x000 */ u8 pad0[0x408];
     /* 0x408 */ s32 unk408;
@@ -38,6 +18,10 @@ typedef struct {
     /* 0x42B */ u8 pad42B[0x3];
     /* 0x42E */ u8 unk42E;
 } AllocationData;
+
+extern u16 D_8008E568_8F168[];
+extern u16 D_8008E57C_8F17C[];
+extern u16 D_8008E590_8F190[];
 
 void initStoryMapNpcJump(Func297D8Arg *arg0) {
     arg0->unk5E = 0;
@@ -788,8 +772,6 @@ void playStoryMapNpcIdleSound(Func297D8Arg *arg0) {
     }
 }
 
-extern u16 D_8008E590_8F190[];
-
 void playStoryMapNpcTalkSound(Func297D8Arg *arg0) {
     playSoundEffect(D_8008E590_8F190[arg0->unk5C]);
 }
@@ -803,28 +785,28 @@ void initStoryMapNpcStill(Func297D8Arg *arg0) {
     setCallback(updateStoryMapNpcStill);
 }
 
-void updateStoryMapNpcStill(StoryMapNpcStillArg *arg0) {
+void updateStoryMapNpcStill(Func297D8Arg *arg0) {
     u16 savedUnk50;
-    u8 savedState;
+    u8 savedUnk5E;
     AllocationData *alloc = getCurrentAllocation();
 
     if (tryStoryMapNpcInteraction(arg0) != 0) {
         setCallback(collectStoryMapItem);
     }
 
-    updateStoryMapNpcModel((Func297D8Arg *)arg0);
+    updateStoryMapNpcModel(arg0);
 
     alloc->unk408 = arg0->matrix.translation.x;
     alloc->unk410 = arg0->matrix.translation.z;
 
     if (alloc->unk42A == 0x11) {
         savedUnk50 = arg0->unk50;
-        savedState = arg0->state;
-        arg0->state = 0x14;
+        savedUnk5E = arg0->unk5E;
+        arg0->unk5E = 0x14;
         arg0->unk50 = 0;
         arg0->callback = updateStoryMapNpcStill;
         arg0->unk56 = savedUnk50;
-        arg0->unk5F = savedState;
+        arg0->unk5F = savedUnk5E;
         setCallback(updateStoryMapNpcTalking);
     }
 }

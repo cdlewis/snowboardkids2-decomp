@@ -58,3 +58,5 @@ void updateStoryMapNpcTalk(Func297D8Arg *);
 void playStoryMapNpcTalkSound(Func297D8Arg *);
 void updateStoryMapNpcIdle(Func297D8Arg *);
 void playStoryMapNpcIdleSound(Func297D8Arg *);
+void updateStoryMapNpcStill(Func297D8Arg *);
+void updateStoryMapNpcTalking(Func297D8Arg *);
