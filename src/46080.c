@@ -300,8 +300,8 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x24];
-    void *unk24;
-    void *unk28;
+    void *skyAsset1;
+    void *skyAsset2;
 } SkyRenderTaskCleanupArg;
 
 typedef struct {
@@ -311,18 +311,18 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x20];
-    s32 unk20;
-    void *unk24;
-    void *unk28;
+    s32 displayListData1;
+    void *skyAsset1;
+    void *skyAsset2;
     s32 unk2C;
     u8 _pad30[0xC];
-    u8 unk3C[0x20];
-    s32 unk5C;
-    void *unk60;
-    void *unk64;
+    u8 courseFogTransform[0x20];
+    s32 displayListData2;
+    void *skyAsset1Copy;
+    void *skyAsset2Copy;
     s32 unk68;
     u8 _pad6C[0xC];
-    u8 unk78[0x20];
+    u8 defaultFogTransform[0x20];
     void *unk98;
     void *unk9C;
     void *unkA0;
@@ -854,24 +854,24 @@ void initSkyRenderTask(SkyRenderTaskState *state) {
 
     memcpy(state, identity, 0x20);
 
-    state->unk20 = getSkyDisplayLists1ByIndex(state->skyType);
-    state->unk24 = loadUncompressedAssetByIndex(state->skyType);
-    state->unk28 = loadCompressedSegment2AssetByIndex(state->skyType);
+    state->displayListData1 = getSkyDisplayLists1ByIndex(state->skyType);
+    state->skyAsset1 = loadUncompressedAssetByIndex(state->skyType);
+    state->skyAsset2 = loadCompressedSegment2AssetByIndex(state->skyType);
     state->unk2C = 0;
 
-    memcpy(state->unk3C, identity, 0x20);
+    memcpy(state->courseFogTransform, identity, 0x20);
 
-    state->unk5C = getSkyDisplayLists2ByIndex(state->skyType);
+    state->displayListData2 = getSkyDisplayLists2ByIndex(state->skyType);
     state->unk68 = 0;
-    state->unk60 = state->unk24;
-    state->unk64 = state->unk28;
+    state->skyAsset1Copy = state->skyAsset1;
+    state->skyAsset2Copy = state->skyAsset2;
 
-    memcpy(state->unk78, identity, 0x20);
+    memcpy(state->defaultFogTransform, identity, 0x20);
 
     state->unk98 = &D_80094DD0_959D0;
     state->unkA4 = 0;
-    state->unk9C = state->unk24;
-    state->unkA0 = state->unk28;
+    state->unk9C = state->skyAsset1;
+    state->unkA0 = state->skyAsset2;
 
     setCleanupCallback(&cleanupSkyRenderTask);
     setCallback(&dispatchSkyRenderCallback);
@@ -894,71 +894,78 @@ void renderSkyDisplayLists(SkyRenderTaskState *arg0) {
         enqueueDisplayListObjectWithFullRenderState(i, arg0);
     }
 
-    if (arg0->unk5C != 0) {
+    if (arg0->displayListData2 != 0) {
         for (i = 0; i < 4; i++) {
-            enqueueCameraRelativeDisplayList(i + 4, (DisplayListObject *)&arg0->unk3C);
+            enqueueCameraRelativeDisplayList(i + 4, (DisplayListObject *)&arg0->courseFogTransform);
         }
     }
 }
 
-void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *arg0) {
-    s32 nodeId;
+void renderSkyDisplayListsWithCourseFog(SkyRenderTaskState *skyRenderState) {
+    s32 fogNodeId;
     s32 viewportId;
-    GameState *state;
+    GameState *gameState;
     s32 playerOffset;
     s32 i;
     LevelConfig *levelData;
-    u8 fogR;
-    u16 fogNodeId;
-    s32 fogG;
-    s32 fogB;
+    u8 courseFogR;
+    u16 nodeIdForFog;
+    s32 defaultFogG;
+    s32 defaultFogB;
     Player *player;
 
-    state = (GameState *)getCurrentAllocation();
+    gameState = (GameState *)getCurrentAllocation();
 
     i = 0;
-    if (i < state->playerCount) {
+    if (i < gameState->playerCount) {
     loop1:
-        enqueueDisplayListObjectWithFullRenderState(i, arg0);
+        enqueueDisplayListObjectWithFullRenderState(i, skyRenderState);
         i++;
-        if (i < state->playerCount) {
+        if (i < gameState->playerCount) {
             goto loop1;
         }
     }
 
     i = 0;
-    if (i < state->playerCount) {
-        fogG = 0x10;
-        fogB = 0x30;
-        nodeId = 0x64;
+    if (i < gameState->playerCount) {
+        defaultFogG = 0x10;
+        defaultFogB = 0x30;
+        fogNodeId = 0x64;
         viewportId = 4;
         playerOffset = 0;
     loop2:
-        player = (Player *)(playerOffset + (s32)state->players);
+        player = (Player *)(playerOffset + (s32)gameState->players);
         if (player->sectorIndex < 0x39) {
-            enqueueCameraRelativeDisplayList(viewportId, (DisplayListObject *)&arg0->unk3C);
-            levelData = getLevelConfig(state->memoryPoolId);
-            fogR = levelData->fogColors.r2;
-            fogNodeId = nodeId;
-            setViewportFogById(fogNodeId, 0x3E3, 0x3E7, fogR, levelData->fogColors.g2, levelData->fogColors.b2);
+            enqueueCameraRelativeDisplayList(viewportId, (DisplayListObject *)&skyRenderState->courseFogTransform);
+            levelData = getLevelConfig(gameState->memoryPoolId);
+            courseFogR = levelData->fogColors.r2;
+            nodeIdForFog = fogNodeId;
+            setViewportFogById(
+                nodeIdForFog,
+                0x3E3,
+                0x3E7,
+                courseFogR,
+                levelData->fogColors.g2,
+                levelData->fogColors.b2
+            );
         } else {
-            enqueueCameraRelativeDisplayList(viewportId, (DisplayListObject *)&arg0->unk78);
-            fogNodeId = nodeId;
-            setViewportFogById(fogNodeId, 0x3E3, 0x3E7, 0x10, fogG, fogB);
+            enqueueCameraRelativeDisplayList(viewportId, (DisplayListObject *)&skyRenderState->defaultFogTransform);
+            nodeIdForFog = fogNodeId;
+            setViewportFogById(nodeIdForFog, 0x3E3, 0x3E7, 0x10, defaultFogG, defaultFogB);
         }
-        nodeId++;
+        fogNodeId++;
         viewportId++;
         i++;
         playerOffset += 0xBE8;
-        if (i < state->playerCount) {
+        if (i < gameState->playerCount) {
             goto loop2;
         }
     }
 }
 
 void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *state) {
-    state->unk24 = freeNodeMemory(state->unk24);
-    state->unk28 = freeNodeMemory(state->unk28);
+    state->skyAsset1 = freeNodeMemory(state->skyAsset1);
+    state->skyAsset2 = freeNodeMemory(state->skyAsset2);
 }
 
 void scheduleSkyRenderTask(s32 skyType) {
