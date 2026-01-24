@@ -49,13 +49,13 @@ typedef struct {
     u8 r;
     u8 g;
     u8 b;
-} cutsceneSysWipeColor_exec_arg0;
+} WipeColorParams;
 
 typedef struct {
     u8 padding[0xFF8];
     s32 wipeColorNode;
-} cutsceneSysWipeColor_exec_arg1;
-void cutsceneSysWipeColor_exec(cutsceneSysWipeColor_exec_arg0 *colorParams, cutsceneSysWipeColor_exec_arg1 *wipeParams);
+} WipeColorNodeParams;
+void cutsceneSysWipeColor_exec(WipeColorParams *colorParams, WipeColorNodeParams *wipeParams);
 void cutsceneSysWait_init(void);
 s32 cutsceneSysWait_validate(void);
 void cutsceneSysWait_exec(u16 *waitFrames, CutsceneManager *cutsceneManager);

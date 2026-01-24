@@ -141,10 +141,7 @@ s32 cutsceneSysWipeColor_validate(void) {
     return 0;
 }
 
-void cutsceneSysWipeColor_exec(
-    cutsceneSysWipeColor_exec_arg0 *colorParams,
-    cutsceneSysWipeColor_exec_arg1 *wipeParams
-) {
+void cutsceneSysWipeColor_exec(WipeColorParams *colorParams, WipeColorNodeParams *wipeParams) {
     setNodeWipeColor((NodeWipeColorArg *)&wipeParams->wipeColorNode, colorParams->r, colorParams->g, colorParams->b);
 }
 
