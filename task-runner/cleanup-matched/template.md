@@ -19,6 +19,10 @@ Run the following command to verify your changes are safe:
 
 Once you have successfully made your changes, commit them with a suitable commit message.
 
+## If the function name does not match $INPUT
+
+If the function name in the C code is not $INPUT it means that the C function's name has been changed without updating symbol_addrs.txt. Update symbol_addrs.txt to reflect the proper name.
+
 ## Build errors and checksum mismatches
 
 The project is complicated and you will often encounter a build error or mismatch error on your initial attempt. Keep trying. Maintaining the 100% match is ESSENTIAL. If you think the build or function was not matching initially, you are wrong. It did match and it's your job to keep it matching.
@@ -39,7 +43,7 @@ You should update symbol_addrs.txt to reflect the new name.
 
 # How to rename a global variable or function
 
-Global variables and function names are mapped to specific addresses in memory through the symbol*addrs.txt file at the root of the project. Each symbol should only appear at most once. If a symbol is not present it will be given a default name (usually starting with `func_`or`D_`).
+Global variables and function names are mapped to specific addresses in memory through the symbol_addrs.txt file at the root of the project. Each symbol should only appear at most once. If a symbol is not present it will be given a default name (usually starting with `func_` or `D_`).
 
 So at a minimum this file will need to be updated when attempting to rename a variable. However additional steps may also be needed.
 
