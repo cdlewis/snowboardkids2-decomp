@@ -1,6 +1,6 @@
 #include "1DFAA0.h"
-#include "1E1BA0.h"
 #include "common.h"
+#include "fan_effect.h"
 #include "race_session.h"
 #include "task_scheduler.h"
 

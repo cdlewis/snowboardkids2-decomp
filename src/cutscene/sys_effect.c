@@ -1,8 +1,8 @@
 #include "cutscene/sys_effect.h"
-#include "1E1BA0.h"
 #include "1E2070.h"
 #include "B040.h"
 #include "C570.h"
+#include "fan_effect.h"
 #include "geometry.h"
 
 extern u8 identityMatrix[];
