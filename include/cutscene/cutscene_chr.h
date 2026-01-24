@@ -237,7 +237,7 @@ s32 cutsceneChrHop_validate(void);
 void cutsceneChrHop_exec(cutsceneChrHop_exec_arg *arg, CutsceneManager *manager, s8 slotIndex);
 void cutsceneChrBack_init(void);
 s32 cutsceneChrBack_validate(void);
-void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg, CutsceneManager *manager, s8 slotIndex);
 s32 cutsceneChrBack_isDone(void);
 void cutsceneChrZoom2_init(void);
 s32 cutsceneChrZoom2_validate(void);

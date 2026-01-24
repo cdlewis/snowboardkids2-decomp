@@ -339,14 +339,12 @@ s32 cutsceneChrBack_validate(void) {
     return 0;
 }
 
-void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    CutsceneSlot *slot;
+void cutsceneChrBack_exec(cutsceneChrBack_exec_arg *arg, CutsceneManager *manager, s8 slotIndex) {
+    CutsceneSlot *slot = &manager->slots[slotIndex];
 
-    slot = &arg1->slots[arg2];
-
-    setupSlotMoveToFacing(&slot->slotData, arg0->targetX, arg0->targetY, arg0->targetZ, arg0->duration);
-    setModelAnimationQueued(slot->model, arg0->animationId, arg0->transitionAnimId, arg0->animationLoopCount, -1);
-    setModelActionMode(slot->model, arg0->actionMode);
+    setupSlotMoveToFacing(&slot->slotData, arg->targetX, arg->targetY, arg->targetZ, arg->duration);
+    setModelAnimationQueued(slot->model, arg->animationId, arg->transitionAnimId, arg->animationLoopCount, -1);
+    setModelActionMode(slot->model, arg->actionMode);
 }
 
 s32 cutsceneChrBack_isDone(void) {
