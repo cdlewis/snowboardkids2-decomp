@@ -245,6 +245,7 @@ initMusicPtrBank = 0x80072CC0; // rom:0x738C0
 startSongWithSingleFxBank = 0x80072CDC; // rom:0x738DC
 startSoundEffectWithSingleFxBank = 0x80072D20; // rom:0x73920
 startSoundEffectWithSingleFxBankEx = 0x80072D64; // rom:0x73964
+MusGetHandleFxBank = 0x80072DBC; // rom:0x739BC
 queueAnonymousBufferData = 0x80056914; // rom:0x57514
 setAudioDistanceLimits = 0x80056990; // rom:0x57590
 queueBufferDataNoFlags = 0x800569A4; // rom:0x575A4
