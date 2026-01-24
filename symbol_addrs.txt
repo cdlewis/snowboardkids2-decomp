@@ -1341,7 +1341,7 @@ cutsceneBgmPlay_validate = 0x800B0818; // rom:0x1DD8C8
 cutsceneBgmFadeOut_validate = 0x800B0850; // rom:0x1DD900
 cutsceneBgmVolume_validate = 0x800B088C; // rom:0x1DD93C
 
-cutsceneEffectDisp_validate = 0x800B1C98;
+cutsceneEffectDisp_validate = 0x800B1C98; // rom:0x1DED48
 cutsceneEffectDisp_isDone = 0x800B1D44;
 cutsceneEffectFan_validate = 0x800B1D54;
 cutsceneEffectFan_isDone = 0x800B1D9C;
