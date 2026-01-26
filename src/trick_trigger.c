@@ -5,7 +5,7 @@
 
 void checkTrickLocationDiscovery(LocationDiscoveryTrigger *);
 
-u8 TrickLabel[] = "TRICK";
+char TrickLabel[] = "TRICK";
 
 void initTrickDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
     trigger->locationId = TRICK_EVENT_ID;
@@ -18,27 +18,27 @@ void initTrickDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
 }
 
 void checkTrickLocationDiscovery(LocationDiscoveryTrigger *trigger) {
-    s16 rawAngle;
-    s16 playerAngle;
+    s16 rawYaw;
+    s16 normalizedYaw;
     u8 locationId;
-    GameState *state;
+    GameState *gameState;
     s32 minAngle;
     s32 maxAngle;
 
-    state = (GameState *)getCurrentAllocation();
-    if (state->unk3F8 > 0x800000) {
-        rawAngle = state->unk3F4;
-        playerAngle = rawAngle;
-        if (rawAngle >= 0x1001) {
-            playerAngle -= 0x2000;
+    gameState = (GameState *)getCurrentAllocation();
+    if (gameState->unk3F8 > 0x800000) {
+        rawYaw = gameState->unk3F4;
+        normalizedYaw = rawYaw;
+        if (rawYaw >= 0x1001) {
+            normalizedYaw -= 0x2000;
         }
         locationId = trigger->locationId;
         minAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2];
-        if (playerAngle < minAngle) {
+        if (normalizedYaw < minAngle) {
             maxAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2 + 1];
-            if (maxAngle < playerAngle) {
-                state->locationDiscovered = 1;
-                state->discoveredLocationId = trigger->locationId;
+            if (maxAngle < normalizedYaw) {
+                gameState->locationDiscovered = 1;
+                gameState->discoveredLocationId = trigger->locationId;
             }
         }
     }
