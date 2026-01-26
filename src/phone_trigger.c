@@ -13,7 +13,7 @@ void initPhoneDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
     trigger->unk1 = 0;
     trigger->unk4 = 0;
     trigger->unk8 = 0;
-    trigger->locationLabel = &PhoneLabel;
+    trigger->locationLabel = PhoneLabel;
 
     setCallback(&checkPhoneLocationDiscovery);
 }
@@ -23,10 +23,10 @@ void checkPhoneLocationDiscovery(LocationDiscoveryTrigger *trigger) {
     s16 playerAngle;
     u8 locationId;
     GameState *state;
-    s32 minAngle;
-    s32 maxAngle;
+    s16 minAngle;
+    s16 maxAngle;
 
-    state = (GameState *)getCurrentAllocation();
+    state = getCurrentAllocation();
     // Only check if player is above certain Y threshold
     if (state->unk3F8 > 0x760000) {
         rawAngle = state->unk3F4;
