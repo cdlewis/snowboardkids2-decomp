@@ -1071,7 +1071,7 @@ void func_80025418_26018(CharSelectIconsState *arg0) {
     CharSelectIconEntry *entry;
     u8 charIndex;
     u8 paletteIndex;
-    u8 tableIndex;
+    u8 itemIconIndex;
     s16 targetVal;
     u16 currentY;
     s16 newY;
@@ -1084,8 +1084,8 @@ void func_80025418_26018(CharSelectIconsState *arg0) {
         ptr = alloc + arg0->playerIndex;
         charIndex = ptr[0x18A8];
         paletteIndex = ptr[0x18B0];
-        tableIndex = D_8008DD8C_8E98C[(((u8)(paletteIndex + charIndex * 3)) * 3) + i];
-        targetVal = D_8008DE02_8EA02[tableIndex];
+        itemIconIndex = D_8008DD8C_8E98C[(((u8)(paletteIndex + charIndex * 3)) * 3) + i];
+        targetVal = D_8008DE02_8EA02[itemIconIndex];
 
         entry = &arg0->entries[i];
         currentY = entry->targetY;
