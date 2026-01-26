@@ -43,21 +43,21 @@ typedef struct {
 } Func43CA4Unk28;
 
 typedef struct {
-    void *assetData;
-    loadAssetMetadata_arg sprite;
+    void *assetData;              /* Pointer to asset table */
+    loadAssetMetadata_arg sprite; /* Sprite metadata for rendering */
     u8 padding[0x2];
-    Func43CA4Unk28 *unk24;
-    Func43CA4Unk28 *player;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    s16 animFrameIndex;
-    s16 frameTimer;
-    s16 displayTimer;
-    s16 alphaPulseDir;
-    s16 rotationAngle;
-    u8 playSoundFlag;
-    u8 immediateMode;
+    Func43CA4Unk28 *unk24;  /* Unknown pointer at offset 0x24 */
+    Func43CA4Unk28 *player; /* Target player for the star effect */
+    s32 offsetX;            /* X offset from player position */
+    s32 offsetY;            /* Y offset from player position */
+    s32 offsetZ;            /* Z offset from player position */
+    s16 animFrameIndex;     /* Current animation frame index */
+    s16 startDelay;         /* Timer for initial delay and animation frames */
+    s16 displayTimer;       /* How long to display the orbiting star */
+    s16 alphaPulseDir;      /* Direction of alpha pulse (0=increasing, 1=decreasing) */
+    s16 rotationAngle;      /* Unused in star effect, present for struct compatibility */
+    u8 playSoundFlag;       /* Flag to play star spawn sound */
+    u8 immediateMode;       /* Non-zero to skip expand animation and go straight to orbit */
 } StarEffectState;
 
 typedef struct {
@@ -1053,11 +1053,11 @@ WarpEffectState *createWarpEffect(WarpEffectSource *source, Player *player, s16 
 
 void updateStarEffectAnimation(StarEffectState *arg0) {
     unsigned int new_var;
-    arg0->frameTimer--;
-    if ((arg0->frameTimer << 0x10) == 0) {
+    arg0->startDelay--; /* startDelay is reused as frameTimer after initialization */
+    if ((arg0->startDelay << 0x10) == 0) {
         new_var = 2;
         loadAssetMetadata(&arg0->sprite, arg0->assetData, starAnimFrameIndices[arg0->animFrameIndex * new_var]);
-        arg0->frameTimer = starAnimFrameDurations[arg0->animFrameIndex * 2];
+        arg0->startDelay = starAnimFrameDurations[arg0->animFrameIndex * 2];
         arg0->animFrameIndex++;
         if (starAnimFrameDurations[arg0->animFrameIndex * new_var] == 0) {
             arg0->animFrameIndex = 0;
@@ -1083,25 +1083,25 @@ void initStarEffect(void **arg0) {
 }
 
 void updateStarEffect(StarEffectState *arg0) {
-    EffectTaskState *taskState;
-    s16 startDelay;
-    void *assetTemplatePtr;
+    EffectTaskState *effectTask;
+    s16 initialDelay;
+    void *spriteDataTable;
 
-    taskState = (EffectTaskState *)getCurrentAllocation();
-    startDelay = arg0->frameTimer;
+    effectTask = (EffectTaskState *)getCurrentAllocation();
+    initialDelay = arg0->startDelay;
 
-    if (startDelay == 0) {
+    if (initialDelay == 0) {
         /* Initialize star effect animation state */
-        arg0->frameTimer = 1;
+        arg0->startDelay = 1; /* Reuse as frame timer after initialization */
         arg0->alphaPulseDir = 0;
         arg0->sprite.alpha = 0;
-        assetTemplatePtr = taskState->spriteData;
-        arg0->unk30 = 0x200000; /* Y offset above player */
-        arg0->unk2C = 0;        /* X offset */
-        arg0->unk34 = 0;        /* Z offset */
+        spriteDataTable = effectTask->spriteData;
+        arg0->offsetY = 0x200000; /* Y offset above player */
+        arg0->offsetX = 0;        /* X offset */
+        arg0->offsetZ = 0;        /* Z offset */
         arg0->animFrameIndex = 0;
         arg0->playSoundFlag = 1;
-        arg0->sprite.assetTemplate = (void *)((u8 *)assetTemplatePtr + 0xF00);
+        arg0->sprite.assetTemplate = (void *)((u8 *)spriteDataTable + 0xF00);
         updateStarEffectAnimation(arg0);
 
         if (arg0->immediateMode != 0) {
@@ -1114,16 +1114,16 @@ void updateStarEffect(StarEffectState *arg0) {
                 arg0->displayTimer = 0x12C; /* Normal display time */
             }
 
-            arg0->unk2C = 0x140000; /* X offset for orbit */
-            arg0->unk30 = 0x190000; /* Y offset for orbit */
+            arg0->offsetX = 0x140000; /* X offset for orbit */
+            arg0->offsetY = 0x190000; /* Y offset for orbit */
             setCallbackWithContinue(orbitStarEffect);
         } else {
             setCallbackWithContinue(expandStarEffect);
         }
     } else {
-        /* Wait for start delay to expire */
-        if (taskState->paused == 0) {
-            arg0->frameTimer = startDelay - 1;
+        /* Wait for initial delay to expire */
+        if (effectTask->paused == 0) {
+            arg0->startDelay = initialDelay - 1;
         }
     }
 }
@@ -1161,15 +1161,15 @@ void contractStarEffect(StarEffectState *state) {
     gameState = (EffectTaskState *)getCurrentAllocation();
     if (gameState->paused == 0) {
         updateStarEffectAnimation(state);
-        transformVector((s16 *)&state->unk2C, state->unk24->unk9F0, &state->sprite.position);
+        transformVector((s16 *)&state->offsetX, state->unk24->unk9F0, &state->sprite.position);
 
         if (state->sprite.alpha == 0x40) {
             if (state->player->unkBD9 != 0) {
-                state->unk2C = 0x300000;
-                state->unk30 = 0x300000;
+                state->offsetX = 0x300000;
+                state->offsetY = 0x300000;
             } else {
-                state->unk2C = 0x140000;
-                state->unk30 = 0x190000;
+                state->offsetX = 0x140000;
+                state->offsetY = 0x190000;
             }
 
             if (state->player->unkBBB == 0xC) {
@@ -1229,7 +1229,7 @@ void spawnStarEffect(void *arg0, void *arg1, s16 arg2) {
     if (task != NULL) {
         task->unk24 = arg0;
         task->player = arg1;
-        task->frameTimer = arg2;
+        task->startDelay = arg2;
         task->immediateMode = 0;
     }
 }
@@ -1241,7 +1241,7 @@ StarEffectTask *spawnStarEffectImmediate(void *arg0) {
     if (task != NULL) {
         task->unk24 = arg0;
         task->player = arg0;
-        task->frameTimer = 0;
+        task->startDelay = 0;
         task->immediateMode = 1;
     }
     return task;

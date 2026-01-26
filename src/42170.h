@@ -25,9 +25,9 @@ typedef struct {
     void *unk24;          /* 0x24 */
     void *player;         /* 0x28 */
     u8 _pad2C[0xE];       /* 0x2C */
-    s16 frameTimer;       /* 0x3A */
+    s16 startDelay;       /* 0x3A - Initial delay before star effect starts */
     u8 _pad3C[0x7];       /* 0x3C */
-    u8 immediateMode;     /* 0x43 */
+    u8 immediateMode;     /* 0x43 - Non-zero to skip expand animation */
 } StarEffectTask;
 
 SparkleEffectState *spawnSparkleEffect(void *arg0);
