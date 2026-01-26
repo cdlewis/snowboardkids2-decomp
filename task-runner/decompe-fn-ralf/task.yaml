@@ -1,0 +1,5 @@
+candidate_source: ls asm/nonmatchings/6E840/func_8006E054_6EC54.s 2>/dev/null | sed 's/.*\/func_\(.*\)\.s/func_\1/'
+prompt: "decompile the function: $INPUT. When creating your claude environment use --id ralf"
+claude_command: glaude
+claude_flags: --model opus
+repeat: 100

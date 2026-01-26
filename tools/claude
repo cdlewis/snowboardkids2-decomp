@@ -103,6 +103,7 @@ if [[ "$ARG" =~ ^[0-9]+$ ]] || [[ "$ARG" =~ ^[a-zA-Z0-9]+$ && ${#ARG} -ge 5 && $
 
     if [ -z "$DIFF_LABEL" ] || [ -z "$SOURCE_CODE" ]; then
         echo "Error: Could not extract diff_label or source_code from API response"
+	echo $SCRATCH_DATA
         exit 1
     fi
 
