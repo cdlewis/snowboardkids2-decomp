@@ -210,15 +210,15 @@ typedef struct {
     s32 unk50;
     s32 unk54;
     u8 _pad58[0x3F4];
-    s32 velocity;
-    s32 unk450;
-    s32 unk454;
+    s32 velocity; /* 0x44C - X velocity */
+    s32 unk450;   /* 0x450 - Y velocity */
+    s32 unk454;   /* 0x454 - Z velocity */
     u8 _pad458[0x63C];
-    u16 unkA94;
+    u16 unkA94; /* 0xA94 - Y rotation angle */
     u8 _padA96[0xFE];
     u16 sectorIndex;
     u8 _padB96[0x22];
-    u8 unkBB8;
+    u8 unkBB8; /* 0xBB8 - Player index */
 } BossEntity;
 
 typedef struct {
