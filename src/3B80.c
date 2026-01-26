@@ -148,8 +148,6 @@ void func_80003184_3D84(TiledTextureTaskData *arg0) {
         s32 idx2;
         s32 idx4;
         s32 unk24_val;
-        s8 check1;
-        s8 check2;
 
         shift_temp = (u32)arg0->unkC + (i << 7);
         idx1 = shift_temp >> 7;
@@ -166,10 +164,8 @@ void func_80003184_3D84(TiledTextureTaskData *arg0) {
         arg0->elements[i].unk24 = unk24_val;
         arg0->elements[i].unk26 = arg0->unk10;
 
-        check1 = *(s8 *)((u8 *)arg0->context + 0xFF5);
-        if (check1 != 0) {
-            check2 = *(s8 *)((u8 *)arg0->context + 0x97);
-            if (check2 != 0) {
+        if (((CutsceneManager *)arg0->context)->enableTransparency != 0) {
+            if (((CutsceneManager *)arg0->context)->unk10.unk87 != 0) {
                 debugEnqueueCallback(3, 2, renderTiledTexture, &arg0->elements[i]);
             }
         }
