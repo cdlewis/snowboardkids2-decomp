@@ -71,25 +71,25 @@ void calculateAITargetPosition(Player *player) {
     Vec3i rotatedPos;
     Vec3i projectedPlayerPos;
     CourseData *courseData;
-    LevelConfig *defaultPos;
-    s32 *pathFlags;
-    s32 sectorIndex;
+    LevelConfig *levelConfig;
+    s32 *pathChoiceData;
+    s32 currentSectorIndex;
     s16 pathAngle;
     s32 distanceToWaypoint;
     s32 maxDistance;
 
     courseData = (CourseData *)((u8 *)getCurrentAllocation() + 0x30);
-    sectorIndex = player->sectorIndex;
+    currentSectorIndex = player->sectorIndex;
 
-    if (courseData->waypoints[sectorIndex].next < 0) {
-        defaultPos = getLevelConfig(courseData->defaultPosIndex);
-        player->aiTargetX = defaultPos->shortcutPosX;
-        player->aiTargetZ = defaultPos->shortcutPosZ;
+    if (courseData->waypoints[currentSectorIndex].next < 0) {
+        levelConfig = getLevelConfig(courseData->defaultPosIndex);
+        player->aiTargetX = levelConfig->shortcutPosX;
+        player->aiTargetZ = levelConfig->shortcutPosZ;
         return;
     }
 
-    func_800BA4B8_AA368(player, courseData, (s16)sectorIndex, &currentWaypointPos);
-    func_800B9EF0_A9DA0(player, courseData, (s16)sectorIndex, &nextWaypointPos);
+    func_800BA4B8_AA368(player, courseData, (s16)currentSectorIndex, &currentWaypointPos);
+    func_800B9EF0_A9DA0(player, courseData, (s16)currentSectorIndex, &nextWaypointPos);
 
     // Project player's position onto the path centerline
     projectedPlayerPos.x = player->worldPos.x - currentWaypointPos.x;
@@ -105,7 +105,7 @@ void calculateAITargetPosition(Player *player) {
     projectedPlayerPos.z += currentWaypointPos.z;
 
     while (TRUE) {
-        func_800B9EF0_A9DA0(player, courseData, (s16)sectorIndex, &nextWaypointPos);
+        func_800B9EF0_A9DA0(player, courseData, (s16)currentSectorIndex, &nextWaypointPos);
 
         finalWaypointPos.x = nextWaypointPos.x - projectedPlayerPos.x;
         finalWaypointPos.z = nextWaypointPos.z - projectedPlayerPos.z;
@@ -119,30 +119,30 @@ void calculateAITargetPosition(Player *player) {
             break;
         }
 
-        if (courseData->waypoints[sectorIndex].next < 0) {
+        if (courseData->waypoints[currentSectorIndex].next < 0) {
             break;
         }
 
-        pathFlags = (s32 *)player->aiPathData;
-        if (pathFlags != NULL) {
-            if (*(s8 *)&pathFlags[sectorIndex] == -1) {
-                sectorIndex = courseData->waypoints[sectorIndex].alt;
+        pathChoiceData = (s32 *)player->aiPathData;
+        if (pathChoiceData != NULL) {
+            if (*(s8 *)&pathChoiceData[currentSectorIndex] == -1) {
+                currentSectorIndex = courseData->waypoints[currentSectorIndex].alt;
             }
-            if (*(s8 *)&pathFlags[sectorIndex] == 0) {
-                sectorIndex = courseData->waypoints[sectorIndex].next;
+            if (*(s8 *)&pathChoiceData[currentSectorIndex] == 0) {
+                currentSectorIndex = courseData->waypoints[currentSectorIndex].next;
             }
-            if (*(s8 *)&pathFlags[sectorIndex] == 1) {
-                sectorIndex = courseData->waypoints[sectorIndex].alt2;
+            if (*(s8 *)&pathChoiceData[currentSectorIndex] == 1) {
+                currentSectorIndex = courseData->waypoints[currentSectorIndex].alt2;
             }
         } else {
-            sectorIndex = courseData->waypoints[sectorIndex].next;
+            currentSectorIndex = courseData->waypoints[currentSectorIndex].next;
         }
     }
 
     finalWaypointPos.x += projectedPlayerPos.x;
     finalWaypointPos.z += projectedPlayerPos.z;
 
-    func_800BA4B8_AA368(player, courseData, (s16)sectorIndex, &currentWaypointPos);
+    func_800BA4B8_AA368(player, courseData, (s16)currentSectorIndex, &currentWaypointPos);
 
     finalWaypointPos.x -= currentWaypointPos.x;
     finalWaypointPos.z -= currentWaypointPos.z;
