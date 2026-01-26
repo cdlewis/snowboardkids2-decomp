@@ -368,110 +368,110 @@ extern BossSurfaceColor gBossSurfaceColors[];
 extern s32 identityMatrix[];
 extern s32 gControllerInputs[];
 
-void func_800BB2B0_B07A0(IceBossArg *arg0) {
-    Transform3D sp10;
-    Transform3D sp30;
-    GameState *alloc;
+void func_800BB2B0_B07A0(IceBossArg *boss) {
+    Transform3D combinedRotMatrix;
+    Transform3D fullTransform;
+    GameState *gameState;
     IceBossArg *player;
-    s32 dist;
-    s32 diff;
+    s32 distanceToPlayer;
+    s32 speedDiff;
 
-    alloc = getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    arg0->velocity.x = arg0->position.x - arg0->prevPosition.x;
-    arg0->velocity.y = arg0->position.y - arg0->prevPosition.y;
-    arg0->velocity.z = arg0->position.z - arg0->prevPosition.z;
-    memcpy(&arg0->prevPosition, &arg0->position, 0xC);
+    boss->velocity.x = boss->position.x - boss->prevPosition.x;
+    boss->velocity.y = boss->position.y - boss->prevPosition.y;
+    boss->velocity.z = boss->position.z - boss->prevPosition.z;
+    memcpy(&boss->prevPosition, &boss->position, 0xC);
 
-    player = (IceBossArg *)alloc->players;
-    dist = distance_3d(
-        arg0->position.x - player->position.x,
-        arg0->position.y - player->position.y,
-        arg0->position.z - player->position.z
+    player = (IceBossArg *)gameState->players;
+    distanceToPlayer = distance_3d(
+        boss->position.x - player->position.x,
+        boss->position.y - player->position.y,
+        boss->position.z - player->position.z
     );
 
-    if ((arg0->finishPosition == 0) & (dist > 0xE00000)) {
-        if (arg0->bossFlags & 0x400000) {
-            arg0->targetSpeed = getCharacterBoardStatParam0(0, 4) + -0x8000;
-        } else if (dist > 0x8C00000) {
-            arg0->targetSpeed = 0x70000;
+    if ((boss->finishPosition == 0) & (distanceToPlayer > 0xE00000)) {
+        if (boss->bossFlags & 0x400000) {
+            boss->targetSpeed = getCharacterBoardStatParam0(0, 4) + -0x8000;
+        } else if (distanceToPlayer > 0x8C00000) {
+            boss->targetSpeed = 0x70000;
         } else {
-            arg0->targetSpeed = getCharacterBoardStatParam0(0, 0) + -0x8000;
+            boss->targetSpeed = getCharacterBoardStatParam0(0, 0) + -0x8000;
         }
     } else {
-        arg0->targetSpeed = getCharacterBoardStatParam0(0, 8) + 0x18000;
+        boss->targetSpeed = getCharacterBoardStatParam0(0, 8) + 0x18000;
     }
 
-    if (arg0->targetSpeed > 0x180000) {
-        arg0->targetSpeed = 0x180000;
+    if (boss->targetSpeed > 0x180000) {
+        boss->targetSpeed = 0x180000;
     }
 
-    diff = arg0->targetSpeed - arg0->currentSpeed;
-    if (diff >= 0x1001) {
-        diff = 0x1000;
+    speedDiff = boss->targetSpeed - boss->currentSpeed;
+    if (speedDiff >= 0x1001) {
+        speedDiff = 0x1000;
     }
-    if (diff < -0x80) {
-        diff = -0x80;
+    if (speedDiff < -0x80) {
+        speedDiff = -0x80;
     }
 
-    arg0->currentSpeed = arg0->currentSpeed + diff;
-    arg0->bossFlags &= 0xFFFBFFFF;
+    boss->currentSpeed = boss->currentSpeed + speedDiff;
+    boss->bossFlags &= 0xFFFBFFFF;
 
-    if (arg0->behaviorMode != 3) {
-        if (arg0->behaviorTrigger != 0) {
-            if (arg0->behaviorTrigger == 0x3D) {
-                arg0->behaviorMode = 2;
-                arg0->behaviorPhase = 0;
-                arg0->behaviorStep = 0;
-                arg0->behaviorCounter = 0;
-                if (arg0->bossFlags & 0x400000) {
-                    arg0->behaviorPhase = 1;
+    if (boss->behaviorMode != 3) {
+        if (boss->behaviorTrigger != 0) {
+            if (boss->behaviorTrigger == 0x3D) {
+                boss->behaviorMode = 2;
+                boss->behaviorPhase = 0;
+                boss->behaviorStep = 0;
+                boss->behaviorCounter = 0;
+                if (boss->bossFlags & 0x400000) {
+                    boss->behaviorPhase = 1;
                 }
             }
         }
     }
-    arg0->behaviorTrigger = 0;
+    boss->behaviorTrigger = 0;
 
     do {
-    } while (D_800BCA14_B1F04[arg0->behaviorMode](arg0) != 0);
+    } while (D_800BCA14_B1F04[boss->behaviorMode](boss) != 0);
 
-    createZRotationMatrix(&arg0->zRotationMatrix, arg0->unkA92);
-    createCombinedRotationMatrix(&arg0->combinedRotationMatrix, arg0->unkA8E, arg0->unkA90);
-    createYRotationMatrix(&arg0->yRotationMatrix, arg0->rotY);
+    createZRotationMatrix(&boss->zRotationMatrix, boss->unkA92);
+    createCombinedRotationMatrix(&boss->combinedRotationMatrix, boss->unkA8E, boss->unkA90);
+    createYRotationMatrix(&boss->yRotationMatrix, boss->rotY);
 
-    func_8006B084_6BC84(&arg0->zRotationMatrix, &arg0->combinedRotationMatrix, &sp10);
-    func_8006B084_6BC84(&sp10, &arg0->yRotationMatrix, &sp30);
+    func_8006B084_6BC84(&boss->zRotationMatrix, &boss->combinedRotationMatrix, &combinedRotMatrix);
+    func_8006B084_6BC84(&combinedRotMatrix, &boss->yRotationMatrix, &fullTransform);
 
-    sp30.translation.x -= arg0->yRotationMatrix.translation.x;
-    sp30.translation.y -= arg0->yRotationMatrix.translation.y;
-    sp30.translation.z -= arg0->yRotationMatrix.translation.z;
+    fullTransform.translation.x -= boss->yRotationMatrix.translation.x;
+    fullTransform.translation.y -= boss->yRotationMatrix.translation.y;
+    fullTransform.translation.z -= boss->yRotationMatrix.translation.z;
 
-    if (arg0->bossFlags & 0x400000) {
-        transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&sp30, &arg0->transformedPos);
+    if (boss->bossFlags & 0x400000) {
+        transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&fullTransform, &boss->transformedPos);
     } else {
-        transformVector((s16 *)D_800BCA24_B1F14, (s16 *)&sp30, &arg0->transformedPos);
+        transformVector((s16 *)D_800BCA24_B1F14, (s16 *)&fullTransform, &boss->transformedPos);
     }
-    memcpy(&arg0->sectorListNode.localPos, &arg0->transformedPos, 0xC);
-    addCollisionSectorNodeToList(&arg0->sectorListNode);
-    func_800BC61C_B1B0C((Player *)arg0);
+    memcpy(&boss->sectorListNode.localPos, &boss->transformedPos, 0xC);
+    addCollisionSectorNodeToList(&boss->sectorListNode);
+    func_800BC61C_B1B0C((Player *)boss);
 
-    if (arg0->bossFlags & 0x400000) {
-        transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&sp30, &arg0->unkAE4);
+    if (boss->bossFlags & 0x400000) {
+        transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&fullTransform, &boss->unkAE4);
     } else {
-        transformVector((s16 *)D_800BC9F0_B1EE0, arg0->groundJointOffsets, &arg0->unkAE4);
-        arg0->unkAE4.x -= arg0->yRotationMatrix.translation.x;
-        arg0->unkAE4.y -= arg0->yRotationMatrix.translation.y;
-        arg0->unkAE4.z -= arg0->yRotationMatrix.translation.z;
+        transformVector((s16 *)D_800BC9F0_B1EE0, boss->groundJointOffsets, &boss->unkAE4);
+        boss->unkAE4.x -= boss->yRotationMatrix.translation.x;
+        boss->unkAE4.y -= boss->yRotationMatrix.translation.y;
+        boss->unkAE4.z -= boss->yRotationMatrix.translation.z;
 
-        transformVector((s16 *)D_800BC9F0_B1EE0 + 6, arg0->groundJointOffsets2, &arg0->unkAF0);
-        arg0->unkAF0.x -= arg0->yRotationMatrix.translation.x;
-        arg0->unkAF0.y -= arg0->yRotationMatrix.translation.y;
-        arg0->unkAF0.z -= arg0->yRotationMatrix.translation.z;
+        transformVector((s16 *)D_800BC9F0_B1EE0 + 6, boss->groundJointOffsets2, &boss->unkAF0);
+        boss->unkAF0.x -= boss->yRotationMatrix.translation.x;
+        boss->unkAF0.y -= boss->yRotationMatrix.translation.y;
+        boss->unkAF0.z -= boss->yRotationMatrix.translation.z;
 
-        transformVector((s16 *)D_800BC9F0_B1EE0 + 12, arg0->groundJointOffsets3, &arg0->unkAFC);
-        arg0->unkAFC.x -= arg0->yRotationMatrix.translation.x;
-        arg0->unkAFC.y -= arg0->yRotationMatrix.translation.y;
-        arg0->unkAFC.z -= arg0->yRotationMatrix.translation.z;
+        transformVector((s16 *)D_800BC9F0_B1EE0 + 12, boss->groundJointOffsets3, &boss->unkAFC);
+        boss->unkAFC.x -= boss->yRotationMatrix.translation.x;
+        boss->unkAFC.y -= boss->yRotationMatrix.translation.y;
+        boss->unkAFC.z -= boss->yRotationMatrix.translation.z;
     }
 }
 
