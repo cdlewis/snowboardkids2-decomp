@@ -1256,12 +1256,13 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
     s32 iconBaseIndex;
     u8 charIndex;
     u8 paletteIndex;
-    s32 iconMappingOffset;
-    u8 *iconMappingTable;
-    u8 *iconMappingPtr;
+    s32 itemTableOffset;
+    u8 *itemIconTable;
+    u8 *itemIconPtr;
 
     state = (GameState *)getCurrentAllocation();
 
+    // Render the 3 item icons for the current character selection
     i = 0;
     entry = (func_80027348_entry *)arg0;
     do {
@@ -1272,12 +1273,16 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
 
     charSelectState = state->unk1898[arg0->playerIndex];
 
+    // If character selection is confirmed, transition to showing the icons
     if (charSelectState == 0xA) {
         setCallback(showCharSelectIcons);
         return;
     }
 
+    // If still in character selection mode (states 0-2), update icons to match
+    // the selected character's item set
     if (charSelectState < 3) {
+        // Icon base index depends on player count (different layouts for 1P vs 2P+)
         iconBaseIndex = 0xC;
         if (D_800AFE8C_A71FC->numPlayers == 1) {
             iconBaseIndex = 0x11;
@@ -1285,15 +1290,18 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
 
         charIndex = state->unk18A8[arg0->playerIndex];
         i = 0;
-        iconMappingTable = D_8008DD8C_8E98C;
+        itemIconTable = D_8008DD8C_8E98C;
         paletteIndex = state->unk18B0[arg0->playerIndex];
         entry = (func_80027348_entry *)arg0;
-        iconMappingOffset = ((u8)(paletteIndex + charIndex * 3)) * 3;
+        // Calculate offset into item icon table:
+        // Each character has 3 board options (palette 0-2), and 3 items per option
+        itemTableOffset = ((u8)(paletteIndex + charIndex * 3)) * 3;
 
+        // Update each of the 3 item icons based on the selected character+board combo
         do {
-            iconMappingPtr = (u8 *)((iconMappingOffset + i) + (u32)iconMappingTable);
-            ((func_80027348_entry *)arg0)[i].spriteIndex = iconBaseIndex + (*iconMappingPtr - 1) / 2;
-            ((func_80027348_entry *)arg0)[i].paletteIndex = (u8)(((*iconMappingPtr - 1) / 2 + 7) & 0xFF) % 11;
+            itemIconPtr = (u8 *)((itemTableOffset + i) + (u32)itemIconTable);
+            ((func_80027348_entry *)arg0)[i].spriteIndex = iconBaseIndex + (*itemIconPtr - 1) / 2;
+            ((func_80027348_entry *)arg0)[i].paletteIndex = (u8)(((*itemIconPtr - 1) / 2 + 7) & 0xFF) % 11;
             i++;
         } while (i < 3);
 
