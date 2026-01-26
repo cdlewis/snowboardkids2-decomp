@@ -153,7 +153,9 @@ typedef struct {
     s32 storedPosX;
     s32 storedPosY;
     s32 storedPosZ;
-    u8 padding2c_2[0x1C];
+    u8 padding2c_2[0x14];
+    s32 rearCollisionRadius; /* 0xB64 - Used for pull collision calculations */
+    u8 padding2c_2_after[4];
     s32 raceGold;
     s32 skillPoints;
     u16 storedRotY;
