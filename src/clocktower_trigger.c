@@ -14,14 +14,14 @@ void initClocktowerDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
     trigger->unk1 = 0;
     trigger->unk4 = 0;
     trigger->unk8 = 0;
-    trigger->locationLabel = &ClocktowerLabel;
+    trigger->locationLabel = ClocktowerLabel;
     setCallback(&checkClocktowerLocationDiscovery);
 }
 
 void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *trigger) {
     GameState *gameState = (GameState *)getCurrentAllocation();
     u32 positionCheck;
-    s16 yaw;
+    s16 rawYaw;
     s16 normalizedYaw;
     u8 locationId;
     s16 minAngle;
@@ -34,10 +34,10 @@ void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *trigger) {
         return;
     }
 
-    yaw = gameState->unk3F4;
+    rawYaw = gameState->unk3F4;
     // Normalize angle to range -0x1000 to 0x1000
-    normalizedYaw = yaw;
-    if (yaw >= 0x1001) {
+    normalizedYaw = rawYaw;
+    if (rawYaw >= 0x1001) {
         normalizedYaw -= 0x2000;
     }
 
