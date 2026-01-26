@@ -74,15 +74,6 @@ typedef struct {
 } DisplayBufferMsg;
 
 extern void *gDisplayBufferMsgs;
-extern Viewport D_800A3410_A4010;
-extern s8 D_800A3429_A4029;
-extern s8 D_800A342A_A402A;
-extern s8 D_800A342B_A402B;
-extern s8 D_800A342C_A402C;
-extern s8 D_800A342D_A402D;
-extern s8 D_800A342E_A402E;
-extern s8 D_800A342F_A402F;
-extern s8 D_800A3431_A4031;
 extern s32 D_800A35C8_A41C8[];
 extern s16 D_800A8A9A_9FE0A;
 extern s16 D_800AB478_A27E8;
@@ -339,8 +330,8 @@ s32 isRegionAllocSpaceLow(void) {
 }
 
 void restoreViewportOffsets(void) {
-    D_800A3410_A4010.originX = D_800AB478_A27E8;
-    D_800A3410_A4010.originY = D_800A8A9A_9FE0A;
+    D_800A3370_A3F70.originX = D_800AB478_A27E8;
+    D_800A3370_A3F70.originY = D_800A8A9A_9FE0A;
 }
 
 void initGraphicsSystem(void) {
@@ -349,27 +340,27 @@ void initGraphicsSystem(void) {
 
     D_800A3370_A3F70.unk0.next = NULL;
     D_800A3370_A3F70.slot_index = 0xFFFF;
-    D_800A3410_A4010.left = -0xA0;
-    D_800A3410_A4010.top = -0x78;
-    D_800A3410_A4010.right = 0xA0;
+    D_800A3370_A3F70.viewportLeft = -0xA0;
+    D_800A3370_A3F70.viewportTop = -0x78;
+    D_800A3370_A3F70.viewportRight = 0xA0;
     D_800A3370_A3F70.prev = NULL;
     D_800A3370_A3F70.unk8.list2_next = NULL;
     D_800A3370_A3F70.list2_prev = NULL;
     D_800A3370_A3F70.list3_next = NULL;
     D_800A3370_A3F70.unk14 = 0;
-    D_800A3410_A4010.originX = 0;
-    D_800A3410_A4010.originY = 0;
-    D_800A3410_A4010.bottom = 0x78;
-    D_800A342C_A402C = 0;
-    D_800A342D_A402D = 0;
-    D_800A342E_A402E = 0;
-    D_800A342F_A402F = 0;
-    D_800A3431_A4031 = 0;
+    D_800A3370_A3F70.originX = 0;
+    D_800A3370_A3F70.originY = 0;
+    D_800A3370_A3F70.viewportBottom = 0x78;
+    D_800A3370_A3F70.envR = 0;
+    D_800A3370_A3F70.envG = 0;
+    D_800A3370_A3F70.envB = 0;
+    D_800A3370_A3F70.prevFadeValue = 0;
+    D_800A3370_A3F70.fadeMode = 0;
     D_800AB478_A27E8 = 0;
     D_800A8A9A_9FE0A = 0;
-    D_800A3429_A4029 = 0;
-    D_800A342A_A402A = 0;
-    D_800A342B_A402B = 0;
+    D_800A3370_A3F70.overlayR = 0;
+    D_800A3370_A3F70.overlayG = 0;
+    D_800A3370_A3F70.overlayB = 0;
     initViewportCallbackPool(&D_800A3370_A3F70);
     resetLinearAllocator();
     restoreViewportOffsets();
@@ -407,40 +398,40 @@ void updateViewportBounds(void) {
         do {
             childNode = node->unk0.next;
             if (childNode != NULL) {
-                inheritedCenterX = childNode->unkAC;
-                inheritedCenterY = childNode->unkAE;
-                inheritedMinX = childNode->unkB0;
-                inheritedMinY = childNode->unkB2;
-                inheritedMaxX = childNode->unkB4;
-                inheritedMaxY = childNode->unkB6;
+                inheritedCenterX = childNode->offsetX;
+                inheritedCenterY = childNode->offsetY;
+                inheritedMinX = childNode->clipLeft;
+                inheritedMinY = childNode->clipTop;
+                inheritedMaxX = childNode->clipRight;
+                inheritedMaxY = childNode->clipBottom;
             }
-            node->unkAC = inheritedCenterX + (u16)node->unkA0;
-            node->unkAE = inheritedCenterY + (u16)node->unkA2;
-            node->unkD0 = node->unkAC * 4;
-            node->unkD2 = node->unkAE * 4;
-            node->unkB0 = (u16)node->unkAC + (u16)node->unkA4;
-            node->unkB2 = (u16)node->unkAE + (u16)node->unkA6;
-            node->unkB4 = (u16)node->unkAC + (u16)node->unkA8;
-            node->unkB6 = (u16)node->unkAE + (u16)node->unkAA;
-            if (node->unkB0 < (s16)inheritedMinX) {
-                node->unkB0 = inheritedMinX;
+            node->offsetX = inheritedCenterX + (u16)node->originX;
+            node->offsetY = inheritedCenterY + (u16)node->originY;
+            node->unkD0 = node->offsetX * 4;
+            node->unkD2 = node->offsetY * 4;
+            node->clipLeft = (u16)node->offsetX + (u16)node->viewportLeft;
+            node->clipTop = (u16)node->offsetY + (u16)node->viewportTop;
+            node->clipRight = (u16)node->offsetX + (u16)node->viewportRight;
+            node->clipBottom = (u16)node->offsetY + (u16)node->viewportBottom;
+            if (node->clipLeft < (s16)inheritedMinX) {
+                node->clipLeft = inheritedMinX;
             }
-            if (node->unkB2 < (s16)inheritedMinY) {
-                node->unkB2 = inheritedMinY;
+            if (node->clipTop < (s16)inheritedMinY) {
+                node->clipTop = inheritedMinY;
             }
-            if ((s16)inheritedMaxX < node->unkB4) {
-                node->unkB4 = inheritedMaxX;
+            if ((s16)inheritedMaxX < node->clipRight) {
+                node->clipRight = inheritedMaxX;
             }
-            if ((s16)inheritedMaxY < node->unkB6) {
-                node->unkB6 = inheritedMaxY;
+            if ((s16)inheritedMaxY < node->clipBottom) {
+                node->clipBottom = inheritedMaxY;
             }
-            computedLeft = node->unkB0;
-            if (node->unkB4 < computedLeft) {
-                node->unkB4 = computedLeft;
+            computedLeft = node->clipLeft;
+            if (node->clipRight < computedLeft) {
+                node->clipRight = computedLeft;
             }
-            computedTop = node->unkB2;
-            if (node->unkB6 < computedTop) {
-                node->unkB6 = computedTop;
+            computedTop = node->clipTop;
+            if (node->clipBottom < computedTop) {
+                node->clipBottom = computedTop;
             }
             node = node->unk8.list2_next;
         } while (node != NULL);
@@ -449,12 +440,12 @@ void updateViewportBounds(void) {
 
 void setModelCameraTransform(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6) {
     Node_70B00 *node = (Node_70B00 *)arg0;
-    node->unkA0 = arg1;
-    node->unkA2 = arg2;
-    node->unkA4 = arg3;
-    node->unkA6 = arg4;
-    node->unkA8 = arg5;
-    node->unkAA = arg6;
+    node->originX = arg1;
+    node->originY = arg2;
+    node->viewportLeft = arg3;
+    node->viewportTop = arg4;
+    node->viewportRight = arg5;
+    node->viewportBottom = arg6;
 }
 
 void setViewportScale(Node_70B00 *arg0, f32 scaleX, f32 scaleY) {
@@ -534,7 +525,7 @@ void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s3
     arg0->unk14 = (s8)arg3;
     arg0->slot_index = (u16)arg2;
     arg0->unk15 = (s8)arg4_byte;
-    arg0->padding2b[0] = 0;
+    arg0->displayFlags = 0;
     arg0->id = 0;
     arg0->unk140 = 0;
     arg0->viewportWidth = 0x280;

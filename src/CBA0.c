@@ -258,15 +258,15 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
     gfx[1].words.w1 = (u32)D_8008CD20_8D920;
 
     {
-        s32 ulxf = (s32)(node->unkB0 * 4.0f);
+        s32 ulxf = (s32)(node->clipLeft * 4.0f);
         s32 ulyf;
         otherMode = 0xE2001D00;
         gfx[2].words.w0 =
-            ((unsigned long long)((ulxf & 0xFFF) << 12)) | ((((s32)(node->unkB2 * 4.0f)) & 0xFFF) | 0xED000000);
+            ((unsigned long long)((ulxf & 0xFFF) << 12)) | ((((s32)(node->clipTop * 4.0f)) & 0xFFF) | 0xED000000);
     }
 
-    lrxf = node->unkB4;
-    lryf = node->unkB6;
+    lrxf = node->clipRight;
+    lryf = node->clipBottom;
     texCoord = 0x04000400;
 
     gfx[3].words.w0 = 0xFA000000;
@@ -283,11 +283,11 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
 
     gfx[2].words.w1 = (((s32)lrxf & 0xFFF) << 12) | ((s32)lryf & 0xFFF);
 
-    lrx = node->unkB4;
-    lry = node->unkB6;
-    gfx[6].words.w0 = (((lrx << 2) & 0xFFF) << 12) | (((node->unkB6 << 2) & 0xFFF) | (new_var = 0xE4000000));
+    lrx = node->clipRight;
+    lry = node->clipBottom;
+    gfx[6].words.w0 = (((lrx << 2) & 0xFFF) << 12) | (((node->clipBottom << 2) & 0xFFF) | (new_var = 0xE4000000));
 
-    ulx = node->unkB0;
+    ulx = node->clipLeft;
     uly = 1;
     gRegionAllocPtr = gfx + uly;
     gRegionAllocPtr = gfx + 2;
@@ -298,7 +298,7 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
     gRegionAllocPtr = gfx + 7;
     gRegionAllocPtr = gfx + 8;
 
-    uly = node->unkB2;
+    uly = node->clipTop;
     gfx[6].words.w1 = (((ulx << 2) & 0xFFF) << 12) | ((uly << 2) & 0xFFF);
 
     gfx[7].words.w0 = 0xE1000000;
