@@ -19,29 +19,29 @@ void initNewspaperDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
 }
 
 void checkNewspaperLocationDiscovery(LocationDiscoveryTrigger *trigger) {
-    s16 rawAngle;
-    s16 playerAngle;
+    s16 playerYaw;
+    s16 normalizedYaw;
+    s16 minAngle;
+    s16 maxAngle;
     u8 locationId;
     GameState *state;
-    s32 minAngle;
-    s32 maxAngle;
 
     state = (GameState *)getCurrentAllocation();
     // Only check if player is above certain Y threshold
     if (state->unk3F8 > 0x760000) {
-        rawAngle = state->unk3F4;
+        playerYaw = state->unk3F4;
         // Normalize angle to range -0x1000 to 0x1000
-        playerAngle = rawAngle;
-        if (rawAngle >= 0x1001) {
-            playerAngle -= 0x2000;
+        normalizedYaw = playerYaw;
+        if (playerYaw >= 0x1001) {
+            normalizedYaw -= 0x2000;
         }
-        // Get angle bounds for this location from TriggerAngleBoundsTable
+        // Get angle bounds for this location from the angle bounds table
         locationId = trigger->locationId;
         minAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2];
-        if (playerAngle < minAngle) {
+        if (normalizedYaw < minAngle) {
             maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(locationId * 2) + 1];
-            if (playerAngle > maxAngle) {
-                // Note: temp is unused but required for stack size matching
+            if (normalizedYaw > maxAngle) {
+                // Note: temp is computed but the result is not used
                 u32 temp = state->unk3FC - 0xC01;
                 state->locationDiscovered = 1;
                 state->discoveredLocationId = trigger->locationId;
