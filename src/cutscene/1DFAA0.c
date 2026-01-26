@@ -795,6 +795,18 @@ s32 findEventAtFrame(u8 a0, u16 a1) {
     return 0xFFFF;
 }
 
+/**
+ * Insert a new cutscene event into the linked list for a given slot.
+ * Events are stored in a doubly-linked list sorted by frame number.
+ *
+ * This function inserts a new event after the event with the largest
+ * frame number less than the target frame. If an event with the target
+ * frame number already exists, the insertion fails.
+ *
+ * @param slotIndex The slot index (0-15) to insert into
+ * @param frameNumber The frame number for the new event
+ * @return The index of the newly inserted event, or 0xFFFF on failure
+ */
 s32 insertCutsceneEvent(u8 slotIndex, u16 frameNumber) {
     u16 insertAfterIndex;
     u16 entryIndex;
