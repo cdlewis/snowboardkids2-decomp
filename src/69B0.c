@@ -21,20 +21,19 @@ typedef struct {
     /* 0x34 */ u8 _pad34[0x8];
 } QuadDisplayListElement; // Size: 0x3C (60 bytes)
 
-// The state structure for updateQuadDisplayList has the following layout:
-// typedef struct {
-//     /* 0x00 */ func_80002B50_3750_arg *model;
-//     /* 0x04 */ QuadDisplayListElement elements[4];
-//     /* 0xF4 */ u16 rotationAngle;
-//     /* 0xF6 */ u16 rotationSpeed;
-// } QuadDisplayListState;
+typedef struct {
+    /* 0x00 */ func_80002B50_3750_arg *model;
+    /* 0x04 */ QuadDisplayListElement elements[4];
+    /* 0xF4 */ u16 rotationAngle;
+    /* 0xF6 */ u16 rotationSpeed;
+} QuadDisplayListState;
 
 extern s32 D_8009A8A4_9B4A4;
 extern u8 identityMatrix[];
 extern u8 D_80088640_89240[];
 extern s32 D_8008C120_8CD20[];
 
-void updateQuadDisplayList(func_80002B50_3750_arg **);
+void updateQuadDisplayList(QuadDisplayListState *);
 void cleanupQuadDisplayList(QuadDisplayListElement *);
 void updateRotationController(RotationControllerState *);
 void cleanupRotationController(void);
@@ -53,10 +52,7 @@ void initializeQuadDisplayList(QuadDisplayListElement *elements) {
     setCallback(updateQuadDisplayList);
 }
 
-void updateQuadDisplayList(func_80002B50_3750_arg **state) {
-    // state parameter is actually QuadDisplayListState* (see commented struct above)
-    // Offset 0xF4: rotationAngle - accumulates rotation over time
-    // Offset 0xF6: rotationSpeed - increases by 0x5B each frame in mode 1, max 0x2AA
+void updateQuadDisplayList(QuadDisplayListState *state) {
     Transform3D rotationMatrix;
     func_80002B50_3750_arg *model;
     s32 i;
@@ -67,7 +63,7 @@ void updateQuadDisplayList(func_80002B50_3750_arg **state) {
 
     memcpy(&rotationMatrix, identityMatrix, 0x20);
 
-    model = *state;
+    model = state->model;
     if (model->isDestroyed == 1) {
         terminateCurrentTask();
         return;
@@ -76,16 +72,16 @@ void updateQuadDisplayList(func_80002B50_3750_arg **state) {
     switch (model->actionMode) {
         default:
         case 0:
-            *(u16 *)((u8 *)state + 0xF6) = 0;
-            *(u16 *)((u8 *)state + 0xF4) = 0;
+            state->rotationSpeed = 0;
+            state->rotationAngle = 0;
             break;
         case 1: {
-            u16 newSpeed = *(u16 *)((u8 *)state + 0xF6) + 0x5B;
-            *(u16 *)((u8 *)state + 0xF6) = newSpeed;
+            u16 newSpeed = state->rotationSpeed + 0x5B;
+            state->rotationSpeed = newSpeed;
             if ((s16)newSpeed >= 0x2AB) {
-                *(u16 *)((u8 *)state + 0xF6) = 0x2AA;
+                state->rotationSpeed = 0x2AA;
             }
-            *(u16 *)((u8 *)state + 0xF4) = *(u16 *)((u8 *)state + 0xF4) + *(u16 *)((u8 *)state + 0xF6);
+            state->rotationAngle = state->rotationAngle + state->rotationSpeed;
         } break;
     }
 
@@ -101,17 +97,17 @@ loop:
         goto negative;
     }
 positive:
-    createCombinedRotationMatrix(&rotationMatrix, *(u16 *)((u8 *)state + 0xF4), 0);
+    createCombinedRotationMatrix(&rotationMatrix, state->rotationAngle, 0);
     goto after;
 negative:
-    createCombinedRotationMatrix(&rotationMatrix, -*(u16 *)((u8 *)state + 0xF4), 0x1000);
+    createCombinedRotationMatrix(&rotationMatrix, -state->rotationAngle, 0x1000);
 after:
     displayListElement = (u8 *)state + elementOffset;
     memcpy(&rotationMatrix.translation, translationData, 0xC);
-    func_8006B084_6BC84(&rotationMatrix, (*state)->matrix18, displayListElement);
+    func_8006B084_6BC84(&rotationMatrix, state->model->matrix18, displayListElement);
     elementOffset += 0x3C;
     translationData += 3;
-    enqueueModelDisplayList(*state, (DisplayListObject *)displayListElement);
+    enqueueModelDisplayList(state->model, (DisplayListObject *)displayListElement);
     if (++i < 4) {
         goto loop;
     }
