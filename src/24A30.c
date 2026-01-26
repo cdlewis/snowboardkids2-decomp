@@ -1167,9 +1167,11 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
     u16 x;
     u16 y;
     s32 yIncrement;
-    volatile P2NameSpriteEntry *ptr;
-    u8 *iconPaletteTable;
+    volatile P2NameSpriteEntry *entry;
+    u8 *iconMappingTable;
     s32 pad[4];
+
+    (void)pad;
 
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
     setCleanupCallback(cleanupCharSelectIconHideAsset);
@@ -1185,36 +1187,36 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
     do {
     } while (0);
     yIncrement = charSelectIconYIncrements[numPlayers].x;
-    iconPaletteTable = D_8008DD8C_8E98C;
+    iconMappingTable = D_8008DD8C_8E98C;
     y = charSelectIconPositions[numPlayers].z;
-    ptr = (volatile P2NameSpriteEntry *)arg0->entries;
+    entry = (volatile P2NameSpriteEntry *)arg0->entries;
 
     do {
         D_800AFE8C_A71FC_type *global;
         u8 charIndex;
         u8 tableValue;
-        s32 offset;
+        s32 tableOffset;
 
         global = D_800AFE8C_A71FC;
-        ptr->x = x;
-        ptr->y = y;
+        entry->x = x;
+        entry->y = y;
 
         charIndex = ((u8 *)global + arg0->playerIndex)[0xD];
-        offset = charIndex * 3 + i;
-        tableValue = *(u8 *)(offset + (s32)iconPaletteTable);
+        tableOffset = charIndex * 3 + i;
+        tableValue = *(u8 *)(tableOffset + (s32)iconMappingTable);
 
-        ptr->spriteIndex = iconBaseIndex + (tableValue - 1) / 2;
+        entry->spriteIndex = iconBaseIndex + (tableValue - 1) / 2;
 
         global = D_800AFE8C_A71FC;
         charIndex = ((u8 *)global + arg0->playerIndex)[0xD];
-        offset = charIndex * 3 + i;
-        tableValue = *(u8 *)(offset + (s32)iconPaletteTable);
+        tableOffset = charIndex * 3 + i;
+        tableValue = *(u8 *)(tableOffset + (s32)iconMappingTable);
 
         y += yIncrement;
         i += 1;
-        ptr->asset = spriteAsset;
-        ptr->paletteIndex = (u8)(((tableValue - 1) / 2 + 7) & 0xFF) % 11;
-        ptr++;
+        entry->asset = spriteAsset;
+        entry->paletteIndex = (u8)(((tableValue - 1) / 2 + 7) & 0xFF) % 11;
+        entry++;
     } while (i < 3);
 
     setCallback(hideCharSelectIcons);
