@@ -19,7 +19,7 @@ void initGenericDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
 
 void checkGenericLocationDiscovery(LocationDiscoveryTrigger *trigger) {
     GameState *gameState = (GameState *)getCurrentAllocation();
-    s16 yaw;
+    s16 orbitAngle;
     s16 normalizedYaw;
     u8 locationId;
     s16 minAngle;
@@ -29,9 +29,9 @@ void checkGenericLocationDiscovery(LocationDiscoveryTrigger *trigger) {
         return;
     }
 
-    yaw = gameState->unk3F4;
-    normalizedYaw = yaw;
-    if (yaw >= 0x1001) {
+    orbitAngle = gameState->unk3F4;
+    normalizedYaw = orbitAngle;
+    if (orbitAngle >= 0x1001) {
         normalizedYaw -= 0x2000;
     }
 
