@@ -141,18 +141,18 @@ typedef struct {
 } OverlayEntry;
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-} Unk800902D0_90ED0;
+    u8 costumeID;
+    u8 colorSlot;
+    u8 cpuDifficulty1P;
+    u8 cpuDifficultyMP;
+} CharacterCostumeConfig;
 
 // Data
 extern s32 gThirdPlaceGoldReward[];
 extern s32 gFirstPlaceGoldReward[];
 extern s32 gSecondPlaceGoldReward[];
 extern u8 D_80090450_91050[];
-extern Unk800902D0_90ED0 D_800902D0_90ED0[16][6]; // unknown size (16)
+extern CharacterCostumeConfig D_800902D0_90ED0[16][6];
 extern u8 D_800902C0_90EC0[];
 extern u8 D_80090280_90E80[4][4]; // unknown first (4) size
 extern OverlayEntry Overlays[];
@@ -349,7 +349,6 @@ void initRace(void) {
             raceState->activePlayerCount = 4;
             raceState->totalRacers = 4;
 
-            j = raceState->demoMode;
             switch (raceState->demoMode) {
                 case 0:
                 case 1:
@@ -512,16 +511,16 @@ void initRace(void) {
     for (i = raceState->activePlayerCount; i < raceState->totalRacers; i++) {
         if (raceState->racers[i].characterID < 6) {
             raceState->racers[i].costumeID =
-                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].unk0;
+                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].costumeID;
             raceState->racers[i].colorSlot =
-                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].unk1;
+                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].colorSlot;
 
             if (raceState->activePlayerCount == 1) {
                 raceState->racers[i].cpuDifficulty =
-                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].unk2;
+                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].cpuDifficulty1P;
             } else {
                 raceState->racers[i].cpuDifficulty =
-                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].unk3;
+                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].cpuDifficultyMP;
             }
 
             if (raceState->isExpertMode != 0) {
