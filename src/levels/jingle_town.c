@@ -211,7 +211,7 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
 void handleTrainJumpBehavior(JingleTownTrain *arg0) {
     B4240AllocationStruct *alloc;
     Vec3i rotatedVec;
-    s32 waypointOffset;
+    s32 waypointByteOffset;
     s16 angleDiff;
     s16 clampedAngle;
     void *terrainPtr;
@@ -219,10 +219,10 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
 
     alloc = getCurrentAllocation();
     if (alloc->unk76 == 0) {
-        waypointOffset = (arg0->waypointIndex * 8) + (arg0->trainIndex * 0x14);
+        waypointByteOffset = (arg0->waypointIndex * 8) + (arg0->trainIndex * 20);
         angleDiff = (computeAngleToPosition(
-                     *(s32 *)((u8 *)gJingleTownTrainWaypointsX + waypointOffset),
-                     *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + waypointOffset),
+                     *(s32 *)((u8 *)gJingleTownTrainWaypointsX + waypointByteOffset),
+                     *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + waypointByteOffset),
                      arg0->posX,
                      arg0->posZ
                  ) -
@@ -239,7 +239,7 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
         if (clampedAngle < -0x80) {
             clampedAngle = -0x80;
         }
-        arg0->rotation = arg0->rotation + clampedAngle;
+        arg0->rotation += clampedAngle;
         rotateVectorY(&gJingleTownTrainForwardVector2, arg0->rotation, &rotatedVec);
 
         terrainPtr = &alloc->unk30;
@@ -263,8 +263,8 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
             }
         }
 
-        rotatedVec.x = *(s32 *)((u8 *)gJingleTownTrainWaypointsX + (arg0->waypointIndex * 8) + (arg0->trainIndex * 0x14)) - arg0->posX;
-        rotatedVec.y = *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + (arg0->waypointIndex * 8) + (arg0->trainIndex * 0x14)) - arg0->posZ;
+        rotatedVec.x = *(s32 *)((u8 *)gJingleTownTrainWaypointsX + (arg0->waypointIndex * 8) + (arg0->trainIndex * 20)) - arg0->posX;
+        rotatedVec.y = *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + (arg0->waypointIndex * 8) + (arg0->trainIndex * 20)) - arg0->posZ;
 
         if ((u32)(rotatedVec.x + 0xFFFFF) <= 0x1FFFFE && (u32)(rotatedVec.z + 0xFFFFF) <= 0x1FFFFE) {
             arg0->waypointIndex = (arg0->waypointIndex + 1) & 1;
