@@ -201,24 +201,24 @@ void spawnPlayerIndicatorTask(void *cleanupArg) {
 
 void initStartGate(StartGate *gate) {
     s32 tempMatrix[8];
-    s32 worldPos[4];
+    Vec3i trackEndPos;
     s32 *transformMatrix;
     GameState *gameState;
-    LevelConfig *spawnData;
+    LevelConfig *levelConfig;
     u16 trackAngle;
 
     gameState = (GameState *)getCurrentAllocation();
-    spawnData = getLevelConfig(gameState->memoryPoolId);
+    levelConfig = getLevelConfig(gameState->memoryPoolId);
     gate->mainGateDisplayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x50);
     gate->mainGateSegment1 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     gate->mainGateSegment2 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     gate->mainGateSegment3 = 0;
-    trackAngle = getTrackEndInfo((u8 *)gameState + 0x30, worldPos);
-    createYRotationMatrix(&gate->rotationMatrix, (trackAngle + spawnData->yawOffset) & 0xFFFF);
-    rotateVectorY(&D_800907EC_913EC, trackAngle + spawnData->yawOffset, &gate->rotationMatrix.translation);
-    gate->rotationMatrix.translation.x = gate->rotationMatrix.translation.x + spawnData->shortcutPosX;
-    gate->rotationMatrix.translation.z = gate->rotationMatrix.translation.z + spawnData->shortcutPosZ;
-    gate->rotationMatrix.translation.y = worldPos[1];
+    trackAngle = getTrackEndInfo((u8 *)gameState + 0x30, &trackEndPos);
+    createYRotationMatrix(&gate->rotationMatrix, (trackAngle + levelConfig->yawOffset) & 0xFFFF);
+    rotateVectorY(&D_800907EC_913EC, trackAngle + levelConfig->yawOffset, &gate->rotationMatrix.translation);
+    gate->rotationMatrix.translation.x = gate->rotationMatrix.translation.x + levelConfig->shortcutPosX;
+    gate->rotationMatrix.translation.z = gate->rotationMatrix.translation.z + levelConfig->shortcutPosZ;
+    gate->rotationMatrix.translation.y = trackEndPos.y;
     gate->leftDoorDisplayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x60);
     transformMatrix = tempMatrix;
     gate->leftDoorSegment1 = gate->mainGateSegment1;
