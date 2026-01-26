@@ -1910,7 +1910,6 @@ void enqueueAlphaBillboardSprite(s32 arg0, loadAssetMetadata_arg *arg1) {
 
 void renderAlphaSprite(AlphaSpriteState *state) {
     // Frustum culling - check if sprite is within view distance
-    // The offset and threshold define a spherical culling region
     if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
@@ -1921,15 +1920,12 @@ void renderAlphaSprite(AlphaSpriteState *state) {
         return;
     }
 
-    // Allocate and initialize transformation matrix if needed
     if (state->matrix == NULL) {
         state->matrix = arenaAlloc16(0x40);
         if (state->matrix == NULL) {
             return;
         }
-        // Copy position to temporary buffer (D_8009A8A4_9B4A4 is at offset 0x14 in Transform3D)
         memcpy(&D_8009A8A4_9B4A4, &state->posX, sizeof(Vec3i));
-        // Convert Transform3D to N64 matrix format (-5 subtracts 5 s32s = 20 bytes = 0x14)
         transform3DToN64Mtx((Transform3D *)((s32 *)&D_8009A8A4_9B4A4 - 5), state->matrix);
     }
 
@@ -1962,7 +1958,6 @@ void renderAlphaSprite(AlphaSpriteState *state) {
         D_800A2D50_A3950 = (u32)state->paletteData;
         D_800A2D54_A3954 = state->alpha;
     } else {
-        // Only reload texture if it changed
         if (D_800A2D4C_A394C != (u32)state->textureData) {
             gDPLoadTextureBlock_4b(
                 gRegionAllocPtr++,
@@ -1982,14 +1977,12 @@ void renderAlphaSprite(AlphaSpriteState *state) {
             D_800A2D4C_A394C = (u32)state->textureData;
         }
 
-        // Only reload palette if it changed
         if (D_800A2D50_A3950 != (u32)state->paletteData) {
             gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
 
             D_800A2D50_A3950 = (u32)state->paletteData;
         }
 
-        // Only update alpha if it changed
         if (state->alpha != D_800A2D54_A3954) {
             gDPPipeSync(gRegionAllocPtr++);
             gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
@@ -1997,7 +1990,6 @@ void renderAlphaSprite(AlphaSpriteState *state) {
         }
     }
 
-    // Render the sprite as two triangles
     gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
