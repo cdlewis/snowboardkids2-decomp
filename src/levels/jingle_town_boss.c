@@ -369,9 +369,21 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
     arg0->unkAF8 -= arg0->unk970.translation.z;
 }
 
+/**
+ * Initialize the Jingle Town Boss state.
+ *
+ * This function is the entry point for the boss behavior state machine
+ * (behaviorMode = 0). It initializes:
+ * - Transform matrices for rotation
+ * - Boss spawn position based on track waypoints
+ * - Display object transforms and asset pointers
+ * - Various behavior state variables
+ *
+ * @return 1 to indicate the state machine should continue processing
+ */
 s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
-    Vec3i sp10;
-    Vec3i sp20;
+    Vec3i spawnWaypoint1;
+    Vec3i spawnWaypoint2;
     GameState *gameState;
     s32 i;
 
@@ -382,8 +394,8 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     memcpy(&arg0->unk9B0, identityMatrix, sizeof(Transform3D));
 
     arg0->unk434.x = gJingleTownBossSpawnPos[arg0->unkBB8];
-    getTrackSegmentWaypoints(&gameState->gameData, 0, &sp10, &sp20);
-    arg0->unk434.z = sp10.z + 0x200000;
+    getTrackSegmentWaypoints(&gameState->gameData, 0, &spawnWaypoint1, &spawnWaypoint2);
+    arg0->unk434.z = spawnWaypoint1.z + 0x200000;
     arg0->sectorIndex = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->unk434);
     arg0->unk434.y = getTrackHeightInSector(&gameState->gameData, arg0->sectorIndex, &arg0->unk434, 0x100000);
     memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
@@ -392,6 +404,10 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     arg0->velocity.z = 0;
     arg0->unkA94 = 0x1000;
 
+    /* Initialize 3 display objects:
+     * - Each element is 0x3C bytes apart
+     * - Transform3D at offset 0x38 (groundTransform, flyingTransform, unkB0)
+     * - Asset pointer and params at offsets 0x58, 0x5C, 0x60, 0x64 */
     for (i = 0; i < 3; i++) {
         u8 *elem = (u8 *)arg0 + i * 0x3C;
         memcpy(elem + 0x38, identityMatrix, sizeof(Transform3D));
