@@ -242,7 +242,7 @@ s32 projectPositionOntoTrackSegment(TrackGeometryData *arg0, u16 arg1, PositionX
 }
 
 s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index) {
-    return ((TrackSegmentEntry *)gameData->section3Data)[index].finishZoneFlag;
+    return gameData->section3Data[index].finishZoneFlag;
 }
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062274_62E74);

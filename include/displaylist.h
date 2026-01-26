@@ -49,10 +49,17 @@ void enqueuePreLitMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg
 void enqueueMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2);
 
 typedef struct {
+    s16 linkedSegmentIdx;
+    u8 _pad[0x8];
+    s16 finishZoneFlag;
+    u8 _pad2[0x18];
+} TrackSegmentEntry;
+
+typedef struct {
     u16 *dataStart;
     u16 *section1Data;
     u16 *section2Data;
-    void *section3Data;
+    TrackSegmentEntry *section3Data;
     u16 finalValue;
 } GameDataLayout;
 
@@ -177,13 +184,6 @@ void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *display
 void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObjects);
 
 u16 getTrackSegmentWaypoints(void *trackGeom, u16 waypointIdx, void *waypointStart, void *waypointEnd);
-
-typedef struct {
-    s16 linkedSegmentIdx;
-    u8 _pad[0x8];
-    s16 finishZoneFlag;
-    u8 _pad2[0x18];
-} TrackSegmentEntry;
 
 s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index);
 
