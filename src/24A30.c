@@ -827,25 +827,25 @@ void func_80024D40_25940(CharSelectBoardPreview *arg0) {
 }
 
 void func_80024DCC_259CC(CharSelectBoardPreview *arg0) {
-    u8 *alloc;
-    u32 temp;
+    GameState *state;
+    u32 boardType;
 
-    alloc = (u8 *)getCurrentAllocation();
-    temp = D_800AFE8C_A71FC->unk9[arg0->playerIndex];
-    if (temp == 7) {
+    state = (GameState *)getCurrentAllocation();
+    boardType = D_800AFE8C_A71FC->unk9[arg0->playerIndex];
+    if (boardType == 7) {
         arg0->model = createSceneModelEx(
             0x39,
-            alloc + (arg0->playerIndex * 0x1D8),
-            *(s8 *)(alloc + arg0->playerIndex + 0x18B8),
+            (u8 *)state + (arg0->playerIndex * 0x1D8),
+            state->PAD_22[arg0->playerIndex],
             -1,
             -1,
             -1
         );
     } else {
         arg0->model = createSceneModelEx(
-            temp,
-            alloc + (arg0->playerIndex * 0x1D8),
-            *(s8 *)(alloc + arg0->playerIndex + 0x18B8),
+            boardType,
+            (u8 *)state + (arg0->playerIndex * 0x1D8),
+            state->PAD_22[arg0->playerIndex],
             -1,
             -1,
             -1
