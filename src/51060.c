@@ -672,11 +672,11 @@ void cleanupSkiTrailTask(func_80051688_52288_arg *arg0);
 
 void initSkiTrailTask(SkiTrailTask *task) {
     GameState *gs;
-    s32 i;
-    s16 *transforms;
-    s32 offset;
-    volatile SkiTrailTask *iter;
     void *particleAsset;
+    volatile SkiTrailTask *iter;
+    s32 i;
+    s32 offset;
+    s16 *transforms;
 
     gs = (GameState *)getCurrentAllocation();
     task->assetTable = load_3ECE40();
@@ -718,16 +718,14 @@ void initSkiTrailTask(SkiTrailTask *task) {
         } while (i < 2);
     }
 
-    i = 0;
     task->frameCounter = 0;
     task->particleIndex = -1;
 
-    do {
+    for (i = 0; i < 8; i++) {
         if ((task->player->tricksPerformedMask >> i) & 1) {
             task->particleIndex++;
         }
-        i++;
-    } while (i < 8);
+    }
 
     task->particleIndex += 0x15;
     setCleanupCallback(cleanupSkiTrailTask);
