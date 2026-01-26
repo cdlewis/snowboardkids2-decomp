@@ -671,34 +671,22 @@ void cleanupCharSelectSecondaryAssets(func_8002494C_arg *arg0) {
 }
 
 void initCharSelectBoardModel(CharSelectBoardPreview *arg0) {
-    void *gameState;
+    GameState *state;
     u8 playerIdx;
     u32 boardType;
     s32 sinVal;
     s32 cosVal;
 
-    gameState = getCurrentAllocation();
+    state = (GameState *)getCurrentAllocation();
     playerIdx = arg0->playerIndex;
 
     boardType = D_800AFE8C_A71FC->unk9[playerIdx];
     if (boardType == 7) {
-        arg0->model = createSceneModelEx(
-            0x39,
-            gameState + (playerIdx * 0x1D8),
-            *(s8 *)((u8 *)gameState + playerIdx + 0x18B8),
-            -1,
-            -1,
-            -1
-        );
+        arg0->model =
+            createSceneModelEx(0x39, (void *)state + (playerIdx * 0x1D8), state->PAD_22[playerIdx], -1, -1, -1);
     } else {
-        arg0->model = createSceneModelEx(
-            boardType,
-            gameState + (playerIdx * 0x1D8),
-            *(s8 *)((u8 *)gameState + playerIdx + 0x18B8),
-            -1,
-            -1,
-            -1
-        );
+        arg0->model =
+            createSceneModelEx(boardType, (void *)state + (playerIdx * 0x1D8), state->PAD_22[playerIdx], -1, -1, -1);
     }
 
     memcpy(&arg0->transform, identityMatrix, 0x20);
