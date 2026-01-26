@@ -58,10 +58,9 @@ extern u8 gBodyPartRemapTable[];
 void loadCharacterBodyParts(Player *player) {
     s32 flags;
     s32 partIndex;
-    s32 partIndex2;
     u8 tableValue;
-    u8 *partPtr;
-    u8 *partPtr2;
+    BodyPart *bodyPart;
+    BodyPart *bodyPart2;
     u8 *lookupTable;
 
     if (((GameState *)getCurrentAllocation())->raceType == 0xB) {
@@ -69,44 +68,44 @@ void loadCharacterBodyParts(Player *player) {
         if (flags & 4) {
             player->unkB84 = flags | 8;
             partIndex = 0;
-            partPtr = (u8 *)player;
+            bodyPart = (BodyPart *)player;
             do {
-                *(s32 *)(partPtr + 0x58) = (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) +
-                                           gBodyPartRemapTable[partIndex] * 0x10;
+                *(s32 *)((u8 *)bodyPart + 0x58) = (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) +
+                                                  gBodyPartRemapTable[partIndex] * 0x10;
                 partIndex++;
-                partPtr += sizeof(BodyPart);
+                bodyPart++;
             } while (partIndex < 0x10);
         } else {
             player->unkB84 = flags & ~8;
             partIndex = 0;
-            partPtr = (u8 *)player;
+            bodyPart = (BodyPart *)player;
             do {
-                *(s32 *)(partPtr + 0x58) =
+                *(s32 *)((u8 *)bodyPart + 0x58) =
                     (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) + partIndex * 0x10;
-                partPtr += sizeof(BodyPart);
+                bodyPart++;
             } while (++partIndex < 0x10);
         }
     } else {
         flags = player->unkB84;
         if (flags & 4) {
             player->unkB84 = flags | 8;
-            partIndex2 = 0;
-            partPtr2 = (u8 *)player;
+            partIndex = 0;
+            bodyPart2 = (BodyPart *)player;
             do {
-                *(s32 *)(partPtr2 + 0x58) = loadAssetByIndex_953B0(player->characterId, player->boardIndex) +
-                                            gBodyPartRemapTable[partIndex2] * 0x10;
-                partIndex2++;
-                partPtr2 += sizeof(BodyPart);
-            } while (partIndex2 < 0x10);
+                *(s32 *)((u8 *)bodyPart2 + 0x58) = loadAssetByIndex_953B0(player->characterId, player->boardIndex) +
+                                                   gBodyPartRemapTable[partIndex] * 0x10;
+                partIndex++;
+                bodyPart2++;
+            } while (partIndex < 0x10);
         } else {
             player->unkB84 = flags & ~8;
-            partIndex2 = 0;
-            partPtr2 = (u8 *)player;
+            partIndex = 0;
+            bodyPart2 = (BodyPart *)player;
             do {
-                *(s32 *)(partPtr2 + 0x58) =
-                    loadAssetByIndex_953B0(player->characterId, player->boardIndex) + partIndex2 * 0x10;
-                partPtr2 += sizeof(BodyPart);
-            } while (++partIndex2 < 0x10);
+                *(s32 *)((u8 *)bodyPart2 + 0x58) =
+                    loadAssetByIndex_953B0(player->characterId, player->boardIndex) + partIndex * 0x10;
+                bodyPart2++;
+            } while (++partIndex < 0x10);
         }
     }
 
