@@ -9,6 +9,16 @@
 #define SEC3(gs) ((Section3Entry *)((gs)->gameData.section3Data))
 #define SEC1(gs) ((Vec3s *)((gs)->gameData.section1Data))
 
+// AI path choice values
+#define PATH_CHOICE_MAIN 0
+#define PATH_CHOICE_SHORTCUT 8
+
+// AI path flags
+#define PATH_FLAG_SHORTCUT_AVAILABLE 8
+
+// Random thresholds for AI decision making
+#define SHORTCUT_SKIP_CHANCE 0xC0 // 192/256 = 75% take rate in special mode
+
 // Struct definitions
 typedef struct {
     /* 0x00 */ s16 next;
@@ -41,11 +51,11 @@ typedef struct {
 } Section3Entry;
 
 typedef struct {
-    s32 spillX;
+    s32 valX;
     s32 _pad1;
-    s32 spillZ;
+    s32 valZ;
     s32 _pad2;
-} TrackCalcStackVars;
+} StackSpillVars;
 
 // Global variables
 extern u8 gShortcutChanceByMemoryPool[];
@@ -156,7 +166,7 @@ INCLUDE_ASM("asm/nonmatchings/A9A40", func_800BA4B8_AA368);
 
 s8 determineAIPathChoice(Player *player) {
     GameState *gs;
-    volatile TrackCalcStackVars sv;
+    volatile StackSpillVars spill;
     s32 trackDirX;
     s32 trackDirZ;
     s32 trackLengthSq;
@@ -176,28 +186,29 @@ s8 determineAIPathChoice(Player *player) {
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         trackEndIdx = SEC3(gs)[player->sectorIndex].trackEndIdx;
         trackDirX = SEC1(gs)[trackStartIdx].x - SEC1(gs)[trackEndIdx].x;
-        sv.spillX = trackDirX;
+        spill.valX = trackDirX;
 
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         trackLengthSq = trackDirX * trackDirX;
         trackEndIdx = SEC3(gs)[player->sectorIndex].trackEndIdx;
         trackDirZ = SEC1(gs)[trackStartIdx].z - SEC1(gs)[trackEndIdx].z;
-        sv.spillZ = trackDirZ;
+        spill.valZ = trackDirZ;
         trackLengthSq += trackDirZ * trackDirZ;
 
         trackLength = isqrt64(trackLengthSq);
-        normalizedDirX = (sv.spillX << 13) / trackLength;
-        normalizedDirZ = (sv.spillZ << 13) / trackLength;
+        normalizedDirX = (spill.valX << 13) / trackLength;
+        normalizedDirZ = (spill.valZ << 13) / trackLength;
 
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         playerToStartX = player->worldPos.x - (SEC1(gs)[trackStartIdx].x << 16);
-        sv.spillX = playerToStartX;
+        spill.valX = playerToStartX;
 
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         playerToStartZ = player->worldPos.z - (SEC1(gs)[trackStartIdx].z << 16);
-        sv.spillZ = playerToStartZ;
+        spill.valZ = playerToStartZ;
 
         // Calculate lateral offset (perpendicular distance) from track center line
+        // trackLength is reused here to store the lateral distance from center
         lateralOffset =
             ((s64)(-((s16)normalizedDirZ)) * playerToStartX) + ((s64)((s16)normalizedDirX) * playerToStartZ);
         trackLength = -((s32)(lateralOffset / 0x2000));
@@ -209,38 +220,38 @@ s8 determineAIPathChoice(Player *player) {
     }
 
     // Reset shortcut choice if no shortcut available
-    if (!(player->pathFlags & 8)) {
+    if (!(player->pathFlags & PATH_FLAG_SHORTCUT_AVAILABLE)) {
         player->aiShortcutChosen = 0;
     }
 
     // Special mode: unk86 is set (possibly time attack or special mode)
     if (gs->unk86 != 0) {
-        if (player->aiShortcutChosen == 0 && (player->pathFlags & 8)) {
-            // 25% chance to skip shortcut (0xC0 = 192/256 = 75% take rate)
-            if ((randA() & 0xFF) >= 0xC0) {
-                return 0;
+        if (player->aiShortcutChosen == 0 && (player->pathFlags & PATH_FLAG_SHORTCUT_AVAILABLE)) {
+            // 25% chance to skip shortcut
+            if ((randA() & 0xFF) >= SHORTCUT_SKIP_CHANCE) {
+                return PATH_CHOICE_MAIN;
             }
             player->aiShortcutChosen = 1;
-            return 8; // Take shortcut
+            return PATH_CHOICE_SHORTCUT;
         }
-        return 0;
+        return PATH_CHOICE_MAIN;
     }
 
     // Normal race mode (not race type 9)
     if (gs->raceType != 9) {
-        if (player->aiShortcutChosen == 0 && (player->pathFlags & 8)) {
+        if (player->aiShortcutChosen == 0 && (player->pathFlags & PATH_FLAG_SHORTCUT_AVAILABLE)) {
             // Check random shortcut chance based on memory pool
             if ((randA() & 0xFF) < gShortcutChanceByMemoryPool[gs->memoryPoolId]) {
                 player->aiShortcutChosen = 1;
-                return 8; // Take shortcut
+                return PATH_CHOICE_SHORTCUT;
             }
             // Boss characters (ID >= 6) always take shortcuts
             if (player->characterId >= 6) {
                 player->aiShortcutChosen = 1;
-                return 8; // Take shortcut
+                return PATH_CHOICE_SHORTCUT;
             }
         }
     }
 
-    return 0; // Stay on main path
+    return PATH_CHOICE_MAIN;
 }
