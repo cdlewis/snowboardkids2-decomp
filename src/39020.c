@@ -3,47 +3,47 @@
 #include "common.h"
 
 typedef struct {
-    u16 textureIndex;
-    u8 paletteIndex;
-    u8 flipMode;
+    /* 0x00 */ u16 textureIndex;
+    /* 0x02 */ u8 paletteIndex;
+    /* 0x03 */ u8 flipMode;
 } TileEntry;
 
 typedef struct {
-    u8 data[32];
+    /* 0x00 */ u8 data[32];
 } TexData32;
 
 typedef struct {
-    u16 tileGridWidth;
-    u16 tileGridHeight;
-    u8 tileWidth;
-    u8 tileHeight;
-    u16 ciMode;
-    u8 pad08[2];
-    u16 tileIndexDataOffset;
-    u16 paletteDataOffset;
-    u16 textureDataOffset;
-    u8 tileEntries[1];
+    /* 0x00 */ u16 tileGridWidth;
+    /* 0x02 */ u16 tileGridHeight;
+    /* 0x04 */ u8 tileWidth;
+    /* 0x05 */ u8 tileHeight;
+    /* 0x06 */ u16 ciMode;
+    /* 0x08 */ u8 pad08[2];
+    /* 0x0A */ u16 tileIndexDataOffset;
+    /* 0x0C */ u16 paletteDataOffset;
+    /* 0x0E */ u16 textureDataOffset;
+    /* 0x10 */ u8 tileEntries[1];
 } TiledTextureAsset;
 
 typedef struct {
-    s16 x;
-    s16 y;
-    u16 tileWidth;
-    u16 tileHeight;
-    u16 tilesPerRow;
-    u16 tilesPerCol;
-    u16 tileGridWidth;
-    u16 tileGridHeight;
-    u16 clipX;
-    u16 clipY;
-    u16 clipWidth;
-    u16 clipHeight;
-    s16 ciMode;
-    s16 unk1A;
-    s32 textureData;
-    s32 tileIndexData;
-    TileEntry *tileEntries;
-    TexData32 *paletteData;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ u16 tileWidth;
+    /* 0x06 */ u16 tileHeight;
+    /* 0x08 */ u16 tilesPerRow;
+    /* 0x0A */ u16 tilesPerCol;
+    /* 0x0C */ u16 tileGridWidth;
+    /* 0x0E */ u16 tileGridHeight;
+    /* 0x10 */ u16 clipX;
+    /* 0x12 */ u16 clipY;
+    /* 0x14 */ u16 clipWidth;
+    /* 0x16 */ u16 clipHeight;
+    /* 0x18 */ s16 ciMode;
+    /* 0x1A */ s16 unk1A;
+    /* 0x1C */ s32 textureData;
+    /* 0x20 */ s32 tileIndexData;
+    /* 0x24 */ TileEntry *tileEntries;
+    /* 0x28 */ TexData32 *paletteData;
 } TiledTextureRenderState;
 
 extern Gfx *gRegionAllocPtr;
