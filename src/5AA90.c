@@ -284,8 +284,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
         boxIndex = 0;
         boxBasePtr = targetPlayer;
         do {
-            /* Copy target's collision box local position (unkAE4 is array of 6 Vec3i at offset 0xAE4)
-             * boxBasePtr increments by 0xC (sizeof(Vec3i)) each loop iteration to index into array */
+            /* Copy target's collision box local position */
             memcpy(&deltaPos, (u8 *)boxBasePtr + 0xAE4, 0xC);
 
             /* Convert to world space */
@@ -298,7 +297,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
             deltaPos.y -= player->worldPos.y + player->collisionOffset.y;
             deltaPos.z -= player->worldPos.z + player->collisionOffset.z;
 
-            /* Sum of both collision box radii (unkB2C is treated as array of radii) */
+            /* Sum of both collision box radii */
             combinedRadius = (&targetPlayer->unkB2C)[boxIndex] + player->collisionRadius;
             negRadius = -combinedRadius;
 
