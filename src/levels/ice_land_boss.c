@@ -206,7 +206,7 @@ typedef struct {
     u8 unkBB4;
     s8 trickCount;
     u8 spinsPerformedMask;
-    u8 unkBB7;
+    u8 boneCount;
     u8 unkBB8;
     u8 characterId;
     u8 boardIndex;
@@ -476,47 +476,56 @@ void func_800BB2B0_B07A0(IceBossArg *arg0) {
 }
 
 s32 initIceLandBoss(IceLandBossArg *arg0) {
-    Vec3i sp10;
-    Vec3i sp20;
-    GameState *state;
+    Vec3i waypoint1;
+    Vec3i waypoint2;
+    GameState *gameState;
     s32 i;
     u16 trackIdx;
-    s32 temp;
+    s32 assetOffset;
 
-    state = getCurrentAllocation();
+    gameState = getCurrentAllocation();
+
+    // Initialize rotation matrices for bone transformations
     memcpy(&arg0->unk970, identityMatrix, sizeof(Transform3D));
     createYRotationMatrix(&arg0->unk970, arg0->rotY);
     memcpy(&arg0->unk990, identityMatrix, sizeof(Transform3D));
     memcpy(&arg0->unk9B0, identityMatrix, sizeof(Transform3D));
 
+    // Set initial position based on boss index
     arg0->unk434 = D_800BCA3C_B1F2C[arg0->unkBB8];
-    getTrackSegmentWaypoints(&state->gameData, 0, &sp10, &sp20);
-    arg0->unk43C = sp10.z + 0x200000;
-    trackIdx = getOrUpdatePlayerSectorIndex(arg0, &state->gameData, 0, (Vec3i *)&arg0->unk434);
+    getTrackSegmentWaypoints(&gameState->gameData, 0, &waypoint1, &waypoint2);
+    arg0->unk43C = waypoint1.z + 0x200000;
+    trackIdx = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, (Vec3i *)&arg0->unk434);
     arg0->sectorIndex = trackIdx;
-    arg0->unk438 = getTrackHeightInSector(&state->gameData, trackIdx, (Vec3i *)&arg0->unk434, 0x100000);
+    arg0->unk438 = getTrackHeightInSector(&gameState->gameData, trackIdx, (Vec3i *)&arg0->unk434, 0x100000);
     memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
+
+    // Zero out velocity and set initial rotation
     arg0->velocity.x = 0;
     arg0->velocity.y = 0;
     arg0->velocity.z = 0;
     arg0->rotY = 0x1000;
 
+    // Initialize body part transforms (12 body parts, each 0x3C bytes apart)
+    // Each has Transform3D at offset 0x38, asset pointer at 0x58
     for (i = 0; i < 12; i++) {
         Unk0x3CElemExtra *extra = (Unk0x3CElemExtra *)((u8 *)&arg0->unk0_3C[i] + 0x38);
         memcpy(&extra->unk38, identityMatrix, sizeof(Transform3D));
         extra->unk5C = (s32)arg0->unk0_3C[0].unk4;
         extra->unk60 = (s32)arg0->unk0_3C[0].unk8;
-        temp = i * 0x10;
+        assetOffset = i * 0x10;
         extra->unk64 = 0;
-        extra->unk58 = (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + temp);
+        extra->unk58 = (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + assetOffset);
     }
 
+    // Initialize bone animation state
     arg0->unkA8C = 0;
-    arg0->unkBB7 = getAnimationBoneCount(arg0->unk0_3C[0].unk0, 0);
-    for (i = 0; i < arg0->unkBB7; i++) {
+    arg0->boneCount = getAnimationBoneCount(arg0->unk0_3C[0].unk0, 0);
+    for (i = 0; i < arg0->boneCount; i++) {
         resetBoneAnimation(arg0->unk0_3C[0].unk0, arg0->unkA8C, i, &arg0->unk488[i]);
     }
 
+    // Initialize behavior state
     arg0->behaviorMode = 1;
     arg0->unkB2C = 0x240000;
     arg0->unkBB4 = 3;
@@ -526,12 +535,15 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     arg0->unkB34 = 0x11C000;
     arg0->unkB64 = 0x150000;
     arg0->unkB68 = arg0->unkBB8;
+
+    // Spawn chase camera if needed
     if (arg0->unkBC7 == 0) {
         spawnChaseCameraTask(arg0->unkBB8);
     }
 
-    arg0->unkAA0 = ((s32 *)state->players)[0xAA0 / 4] - 0x10000;
+    arg0->unkAA0 = ((s32 *)gameState->players)[0xAA0 / 4] - 0x10000;
 
+    // Initialize asset offset table
     if (arg0->unk0_3C[0].unk1C != 0) {
         arg0->unk0_3C[0].unk28 = arg0->unk0_3C[0].unk1C + ((s32 *)arg0->unk0_3C[0].unk1C)[arg0->unkBB8];
     }
