@@ -1050,6 +1050,7 @@ void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
     u16 freeListHead;
     StateEntry *base;
 
+    // Find the state entry for the given slot and frame
     searchResult = findStateEntryIndex(slotIndex, frameNumber & 0xFFFF, 0);
     entryIndex = searchResult & 0xFFFF;
 
@@ -1057,22 +1058,25 @@ void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
         return;
     }
 
+    // Don't allow cutting the frame 0 entry
     if ((u16)getStateEntry(entryIndex)->frameNumber == 0) {
         return;
     }
 
+    // Copy the entry to the global buffer for paste operations
     memcpy(gCutsceneEntryBuffer, getStateEntry(entryIndex), 0x40);
 
+    // Get the state table and linked list pointers
     base = gCutsceneStateTable;
-    freeListHead = *(u16 *)((u8 *)base + 0xE);
-    entryNextIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xF8);
-    entryPrevIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xFA);
+    freeListHead = *(u16 *)((u8 *)base + 0xE);                        // Free list head is at offset 0xE
+    entryNextIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xF8); // next_index
+    entryPrevIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xFA); // prev_index
 
-    /* Add the cut entry to the free list */
+    // Add the cut entry to the free list (insert at head)
     *(u16 *)((u8 *)base + (freeListHead << 6) + 0xF8) = searchResult;
     *(u16 *)((u8 *)base + 0xE) = searchResult;
 
-    /* Update the linked list: unlink the entry */
+    // Update the linked list: unlink the entry from its current position
     if ((entryPrevIndex & 0xFFFF) != 0xFFFF) {
         *(u16 *)((u8 *)base + (entryPrevIndex << 6) + 0xF8) = entryNextIndex;
     }
@@ -1081,6 +1085,7 @@ void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
         *(u16 *)((u8 *)gCutsceneStateTable + (entryNextIndex << 6) + 0xFA) = entryPrevIndex;
     }
 
+    // Set global flags to indicate a cut operation
     gCutsceneEntryCopyFlag = 1;
     gCutsceneEntryBufferSlotIndex = slotIndex;
     gCutsceneEntryBufferFrameNumber = frameNumber;
