@@ -88,14 +88,14 @@ typedef struct {
     u8 padA96[6];
     u16 unkA9C;
     u16 unkA9E;
-    u8 padAA0[4];
+    s32 unkAA0;
     s32 maxSpeedCap;
     s32 unkAA8;
     u8 padAAC[0xAC2 - 0xAAC];
     s16 unkAC2;
     u8 padAC4[0xAD4 - 0xAC4];
     Vec3i unkAD4;
-    u8 padAE0[0x4];
+    s32 unkAE0;
     s32 unkAE4;
     s32 unkAE8;
     s32 unkAEC;
@@ -114,7 +114,13 @@ typedef struct {
     s32 unkB20;
     s32 unkB24;
     s32 unkB28;
-    u8 padB2C[0xB50 - 0xB2C];
+    s32 unkB2C;
+    s32 unkB30;
+    s32 unkB34;
+    s32 unkB38;
+    s32 unkB3C;
+    s32 unkB40;
+    u8 padB44[0xB50 - 0xB44];
     ListNode_5AA90 unkB50;
     u8 padB69[0xB84 - 0xB6C];
     s32 unkB84;
@@ -124,10 +130,14 @@ typedef struct {
     u16 sectorIndex;
     u8 padding[0x8];
     u16 unkB9E;
-    u8 padB96[0xBB7 - 0xBA0];
+    u8 padB96[0xBB4 - 0xBA0];
+    u8 unkBB4;
+    u8 padBB5[0xBB7 - 0xBB5];
     u8 boneCount;
     u8 unkBB8;
-    u8 padBB9[0xBBD - 0xBB9];
+    u8 characterId;
+    u8 boardIndex;
+    u8 padBBB[0xBBD - 0xBBB];
     u8 behaviorMode;
     u8 behaviorPhase;
     u8 behaviorStep;
@@ -135,7 +145,9 @@ typedef struct {
     u8 unkBC1;
     u8 padBC2[0x2];
     u8 finishPosition;
-    u8 padBC5[0x4];
+    u8 padBC5[0xBC7 - 0xBC5];
+    u8 unkBC7;
+    u8 padBC8[0xBC9 - 0xBC8];
     u8 unkBC9;
     u8 unkBCA;
     u8 padBCB[1];
@@ -344,7 +356,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
         *(s32 *)(elem + 0x64) = 0;
         assetOffset = i * 0x10;
         *(void **)(elem + 0x58) =
-            (void *)(loadAssetByIndex_953B0(*(u8 *)((u8 *)arg0 + 0xBB9), *(u8 *)((u8 *)arg0 + 0xBBA)) + assetOffset);
+            (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + assetOffset);
     }
 
     arg0->unkA8C = 0;
@@ -363,25 +375,25 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
 
     // Initialize behavior state
     arg0->behaviorMode = 1;
-    *(s32 *)((u8 *)arg0 + 0xAE0) = 0xA0000;
-    *(s32 *)((u8 *)arg0 + 0xB2C) = 0x240000;
-    *(u8 *)((u8 *)arg0 + 0xBB4) = 6;
-    *(u8 *)((u8 *)arg0 + 0xBBE) = 0;
-    *(s32 *)((u8 *)arg0 + 0xB30) = 0x174000;
-    *(s32 *)((u8 *)arg0 + 0xB34) = 0xDC000;
-    *(s32 *)((u8 *)arg0 + 0xB38) = 0xDC000;
-    *(s32 *)((u8 *)arg0 + 0xB3C) = 0x148000;
-    *(s32 *)((u8 *)arg0 + 0xB40) = 0x148000;
-    *(s32 *)((u8 *)arg0 + 0xB54) = (s32)&arg0->unk434;
-    *(s32 *)((u8 *)arg0 + 0xB64) = 0x15E000;
-    *(u8 *)((u8 *)arg0 + 0xB68) = arg0->unkBB8;
+    arg0->unkAE0 = 0xA0000;
+    arg0->unkB2C = 0x240000;
+    arg0->unkBB4 = 6;
+    arg0->behaviorPhase = 0;
+    arg0->unkB30 = 0x174000;
+    arg0->unkB34 = 0xDC000;
+    arg0->unkB38 = 0xDC000;
+    arg0->unkB3C = 0x148000;
+    arg0->unkB40 = 0x148000;
+    arg0->unkB50.posPtr = (Vec3i *)&arg0->unk434;
+    arg0->unkB50.radius = 0x15E000;
+    arg0->unkB50.id = arg0->unkBB8;
 
     // Spawn chase camera if needed
-    if (*(u8 *)((u8 *)arg0 + 0xBC7) == 0) {
+    if (arg0->unkBC7 == 0) {
         spawnChaseCameraTask(arg0->unkBB8);
     }
 
-    *(s32 *)((u8 *)arg0 + 0xAA0) = ((s32 *)gameState->players)[0xAA0 / 4] - 0x10000;
+    arg0->unkAA0 = ((s32 *)gameState->players)[0xAA0 / 4] - 0x10000;
 
     if (*(void **)((u8 *)arg0 + 0x1C) != 0) {
         *(s32 *)((u8 *)arg0 + 0x28) =
