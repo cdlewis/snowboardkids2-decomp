@@ -729,18 +729,17 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
             return;
         }
         /* First matrix: translation matrix */
-        /* Integer portion (s32[0-7]) */
-        ((s32 *)obj->transformMatrix)[0] = 0x10000; /* m[0][0] = 1.0 (integer part: 1, high; 0, low) */
-        ((s32 *)obj->transformMatrix)[1] = 0;       /* m[0][1] = 0, m[0][2] = 0 */
-        ((s32 *)obj->transformMatrix)[2] =
-            1; /* m[0][3] = 0 (int=0, frac packed), m[1][0] = 0 (int=1 for perspective) */
-        ((s32 *)obj->transformMatrix)[3] = 0;       /* m[1][1] = 0, m[1][2] = 0 */
-        ((s32 *)obj->transformMatrix)[4] = 0;       /* m[1][3] = 0, m[2][0] = 0 */
-        ((s32 *)obj->transformMatrix)[5] = 0x10000; /* m[2][1] = 0, m[2][2] = 1.0 (integer part) */
+        /* Integer portion */
+        ((s32 *)obj->transformMatrix)[0] = 0x10000;
+        ((s32 *)obj->transformMatrix)[1] = 0;
+        ((s32 *)obj->transformMatrix)[2] = 1;
+        ((s32 *)obj->transformMatrix)[3] = 0;
+        ((s32 *)obj->transformMatrix)[4] = 0;
+        ((s32 *)obj->transformMatrix)[5] = 0x10000;
         ((s32 *)obj->transformMatrix)[6] =
             (obj->transform.translation.x & 0xFFFF0000) + ((u16 *)&obj->transform.translation.y)[0];
         ((s32 *)obj->transformMatrix)[7] = (obj->transform.translation.z & 0xFFFF0000) + 1;
-        /* Fractional portion (s32[8-15]) */
+        /* Fractional portion */
         ((s32 *)obj->transformMatrix)[8] = 0;
         ((s32 *)obj->transformMatrix)[9] = 0;
         ((s32 *)obj->transformMatrix)[10] = 0;
@@ -751,9 +750,9 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
             (obj->transform.translation.x << 16) + ((u16 *)&obj->transform.translation.y)[1];
         frac16Mask = 0xFFFF;
         ((s32 *)obj->transformMatrix)[15] = obj->transform.translation.z << 16;
-        /* Second matrix: rotation matrix built from Transform3D rotation data at offset 0 */
+        /* Second matrix: rotation matrix built from Transform3D rotation data */
         transform = &obj->transform;
-        /* Integer portion (s32[16-23]) - extracts high bits from s15 rotation values */
+        /* Integer portion */
         ((s32 *)obj->transformMatrix)[16] =
             ((transform->m[0][0] * 2) & 0xFFFF0000) + (-(s32)((u16)transform->m[0][1] >> 15) & frac16Mask);
         ((s32 *)obj->transformMatrix)[17] = (transform->m[0][2] * 2) & 0xFFFF0000;
@@ -765,7 +764,7 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
         ((s32 *)obj->transformMatrix)[21] = (transform->m[2][2] * 2) & 0xFFFF0000;
         ((s32 *)obj->transformMatrix)[22] = 0;
         ((s32 *)obj->transformMatrix)[23] = 1;
-        /* Fractional portion (s32[24-31]) - extracts low bits from s15 rotation values */
+        /* Fractional portion */
         ((s32 *)obj->transformMatrix)[24] =
             ((transform->m[0][0] << 17) & 0xFFFF0000) + ((transform->m[0][1] * 2) & frac16Mask);
         ((s32 *)obj->transformMatrix)[25] = (transform->m[0][2] << 17) & 0xFFFF0000;
