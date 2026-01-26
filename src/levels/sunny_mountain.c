@@ -55,19 +55,19 @@ void updateSunnyMountainDisplayObjectsTask(s32 *arg0);
  * 5. Registers cleanup and update callbacks
  */
 void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
-    s32 loopCounter;
+    s32 i;
     s32 srcPositionOffset;
     SunnyMountainTaskState *destPositionPtr;
     u8 *destPositionAddr;
     s32 displayObjectOffset;
-    LevelDisplayLists *displayListResult;
+    LevelDisplayLists *displayLists;
     SunnyMountainAllocation *allocation;
 
     allocation = (SunnyMountainAllocation *)getCurrentAllocation();
 
-    loopCounter = 0;
-    displayListResult = getSkyDisplayLists3ByIndex(allocation->memoryPoolId);
-    taskState->displayList = (void *)((u32)displayListResult + 0x90);
+    i = 0;
+    displayLists = getSkyDisplayLists3ByIndex(allocation->memoryPoolId);
+    taskState->displayList = (void *)((u32)displayLists + 0x90);
 
     srcPositionOffset = 0;
     taskState->assetData = loadUncompressedAssetByIndex(allocation->memoryPoolId);
@@ -82,11 +82,11 @@ void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
 
     do {
         s32 objectBaseAddr;
-        loopCounter++;
+        i++;
 
-        displayListResult = getSkyDisplayLists3ByIndex(allocation->memoryPoolId);
+        displayLists = getSkyDisplayLists3ByIndex(allocation->memoryPoolId);
         objectBaseAddr = displayObjectOffset + (s32)taskState->displayObjects;
-        *(void **)(objectBaseAddr + 0x20) = (void *)((u32)displayListResult + 0xA0);
+        *(void **)(objectBaseAddr + 0x20) = (void *)((u32)displayLists + 0xA0);
 
         destPositionAddr = (u8 *)destPositionPtr;
         destPositionAddr = destPositionAddr + 0x6C;
@@ -102,7 +102,7 @@ void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
         destPositionPtr = (SunnyMountainTaskState *)((u8 *)destPositionPtr + 0x20);
         displayObjectOffset += 0x3C;
         srcPositionOffset += 0xC;
-    } while (loopCounter < 4);
+    } while (i < 4);
 
     setCleanupCallback(cleanupSunnyMountainDisplayObjectsTask);
     setCallback(updateSunnyMountainDisplayObjectsTask);
