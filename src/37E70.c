@@ -28,7 +28,6 @@ typedef struct {
 void initOptionsMenu(void) {
     MenuAllocation *allocation;
     s32 i;
-    MenuAllocation *ptr;
 
     allocation = allocateTaskMemory(0x1F0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
@@ -40,13 +39,9 @@ void initOptionsMenu(void) {
     allocation->frameCounter = 0;
     allocation->menuState = 0;
     allocation->selectedIndex = 0;
-    i = 3;
-    ptr = (MenuAllocation *)((u8 *)allocation + 3);
-    do {
-        ptr->itemTimers[0] = 0;
-        i--;
-        ptr = (MenuAllocation *)((u8 *)ptr - 1);
-    } while (i >= 0);
+    for (i = 0; i < 4; i++) {
+        allocation->itemTimers[i] = 0;
+    }
     scheduleTask(initOptionsMenuTitle, 0, 0, 0x5A);
     scheduleTask(initOptionsMenuToggles, 0, 0, 0x5A);
     scheduleTask(initOptionsMenuLabels, 0, 0, 0x5A);
