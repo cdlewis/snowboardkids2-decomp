@@ -864,11 +864,14 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     Transform3D *scaledMatrixPtr;
     Transform3D *combinedTransform;
 
+    // Combine rotation matrices: unk990 (Z rotation) * unk970 (Y rotation) = unk9F0
     func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, &arg0->unk9F0);
     combinedTransform = &arg0->unk950;
+    // Combine with unk9B0 (X rotation) to get base transform
     func_8006B084_6BC84(&arg0->unk9B0, &arg0->unk9F0, combinedTransform);
 
     if (arg0->unkB88 & 0x10) {
+        // Apply vertical scale transformation during intro animation
         scaledMatrixPtr = &scaledMatrix;
         memcpy(scaledMatrixPtr, identityMatrix, 0x20);
         scaledMatrixPtr->m[1][1] = arg0->unkB9E;
@@ -877,20 +880,24 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
         memcpy(&arg0->groundTransform, combinedTransform, 0x20);
     }
 
+    // Create pitch and yaw rotation matrix for the flying/floating transform
     createCombinedRotationMatrix(&pitchYawMatrix, arg0->pitchAngle, arg0->yawAngle);
     pitchYawMatrix.translation.x = 0;
     pitchYawMatrix.translation.z = 0;
-
+    // Y offset: lower (0x140000) during hover exit, higher (0x3A0000) otherwise
     if (arg0->unkB84 & 0x200000) {
         pitchYawMatrix.translation.y = 0x140000;
     } else {
         pitchYawMatrix.translation.y = 0x3A0000;
     }
 
+    // Apply rotation/offset to ground transform to get flying transform
     func_8006B084_6BC84(&pitchYawMatrix, &arg0->groundTransform, &arg0->flyingTransform);
 
+    // Add hover height offset to flying transform
     arg0->flyingTransform.translation.y = arg0->flyingTransform.translation.y + arg0->unk474;
 
+    // Create translation-only matrix for the third transform (unkB0)
     D_8009A8A4_9B4A4.x = 0;
     D_8009A8A4_9B4A4.y = 0x140000;
     D_8009A8A4_9B4A4.z = 0;
