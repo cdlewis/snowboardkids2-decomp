@@ -311,10 +311,10 @@ void renderTiledTexture(TiledTextureRenderState *state) {
 }
 
 void initTiledTextureRenderState(TiledTextureRenderState *arg0, TiledTextureAsset *arg1) {
-    TiledTextureAsset *temp;
+    TiledTextureAsset *asset;
     s32 padding1;
     s32 padding2;
-    temp = arg1;
+    asset = arg1;
 
     arg0->x = 0;
     arg0->y = 0;
@@ -329,8 +329,8 @@ void initTiledTextureRenderState(TiledTextureRenderState *arg0, TiledTextureAsse
     arg0->clipY = 0;
     arg0->clipWidth = 0x140;
     arg0->clipHeight = 0xF0;
-    arg0->tileIndexData = (s32)((u8 *)temp + arg1->tileIndexDataOffset);
-    arg0->textureData = (s32)((u8 *)temp + arg1->textureDataOffset);
+    arg0->tileIndexData = (s32)((u8 *)asset + arg1->tileIndexDataOffset);
+    arg0->textureData = (s32)((u8 *)asset + arg1->textureDataOffset);
     arg0->tileEntries = (TileEntry *)&arg1->tileEntries;
-    arg0->paletteData = (TexData32 *)((u8 *)temp + arg1->paletteDataOffset);
+    arg0->paletteData = (TexData32 *)((u8 *)asset + arg1->paletteDataOffset);
 }
