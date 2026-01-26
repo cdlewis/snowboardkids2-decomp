@@ -929,26 +929,25 @@ void cleanupCharSelectBoardModel(CharSelectBoardPreview *preview) {
 }
 
 void func_80025074_25C74(CharSelectBoardPreview *arg0) {
-
     u8 *alloc;
     u8 playerIndex;
-    u32 var_a0;
+    u32 boardType;
 
     alloc = (u8 *)getCurrentAllocation();
     playerIndex = arg0->playerIndex;
-    var_a0 = D_800AFE8C_A71FC->unk9[playerIndex];
+    boardType = D_800AFE8C_A71FC->unk9[playerIndex];
 
-    if (var_a0 != 7) {
+    if (boardType != 7) {
         arg0->model =
-            createSceneModelEx(var_a0, alloc + (playerIndex * 0x1D8), (alloc + playerIndex)[0x18BC], -1, -1, -1);
+            createSceneModelEx(boardType, alloc + (playerIndex * 0x1D8), (alloc + playerIndex)[0x18BC], -1, -1, -1);
     } else {
         arg0->model =
             createSceneModelEx(0x39, alloc + (playerIndex * 0x1D8), (alloc + playerIndex)[0x18BC], -1, -1, -1);
     }
     memcpy(&arg0->transform, identityMatrix, 0x20);
-    *(s32 *)((u8 *)arg0 + 0x18) = 0;
-    *(s32 *)((u8 *)arg0 + 0x20) = 0;
-    *(s32 *)((u8 *)arg0 + 0x1C) = 0xFFF00000;
+    arg0->transform.translation.x = 0;
+    arg0->transform.translation.z = 0;
+    arg0->transform.translation.y = 0xFFF00000;
     setCleanupCallback(cleanupSceneModelHolder);
     setCallback(initCharSelectBoardSlideOut);
 }
