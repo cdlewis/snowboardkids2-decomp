@@ -81,16 +81,45 @@ typedef struct {
     volatile s32 unk1C;
 } Mat2WithTemp;
 
-// Individual portrait entry - stored in the first 0x18 bytes of LevelPreviewPortraitState_202A0
-// Each entry is 0xC bytes containing a frame index for rendering
+typedef struct {
+    u8 _pad0[0xB30];
+    u8 toLevelId;
+} AllocationState;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 frameIndex;
+} PortraitSubEntry;
+
+typedef struct {
+    u8 _pad00[0x4];
+    s16 matrix[9];
+    u8 _pad16[0x2];
+    u8 *textureData;
+    Transform3D transform;
+    u8 *data_ptr;
+    TableEntry_19E80 *index_ptr;
+    u8 field1;
+    u8 field2;
+    u8 alpha;
+} MatrixData;
+
+typedef struct {
+    PortraitSubEntry entries[2];
+    MatrixData matrices[4];
+    s16 frameIndices[4];
+    s16 rotations[4];
+    DataTable_19E80 *portraitAsset;
+} PortraitState;
+
 typedef struct {
     u8 _pad0[0x8];
     s16 frameIndex; // Sprite frame index to display
     u8 _padA[2];
 } LevelPreviewPortraitEntry_202A0;
 
-// State for the 3D portrait rotation animation during level selection transitions
-// The first 0x18 bytes are shared with LevelPreviewPortraitEntry_202A0[2] (2 portrait entries)
 typedef struct LevelPreviewPortraitState_202A0_s {
     LevelPreviewPortraitEntry_202A0 entries[2]; // 0x00 - portrait entries with frame indices
     MatrixEntry_202A0 matrices[4];              // 0x18 - matrix data for 4 portrait quads (front/back of 2 cards)
@@ -136,6 +165,12 @@ extern u16 D_8008DAC8_8E6C8[];
 extern void *D_8008DC2C_8E82C[];
 extern u16 D_8008DAA8_8E6A8[];
 extern u8 D_8008D9F0_8E5F0[];
+
+extern u8 D_8008DA28_8E628[];
+extern u16 D_8008DAA8_8E6A8[];
+extern void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *);
+extern void *getCurrentAllocation(void);
+extern void setCallback(void *);
 
 void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     Allocation_80020418 *allocation;
@@ -432,7 +467,55 @@ void initLevelPreviewPortraits(LevelPreviewPortraitState *state) {
     setCallback(&func_80020708_21308);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80020708_21308);
+void func_80020708_21308(void *arg0) {
+    volatile s32 pad[8];
+    AllocationState *allocation;
+    OutputStruct_19E80 sp30;
+    s32 i;
+    s32 j;
+
+    allocation = (AllocationState *)getCurrentAllocation();
+
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 2; j++) {
+            s32 index = (i * 2) + j;
+            u8 *base = (u8 *)arg0;
+            MatrixData *element = (MatrixData *)(base + (index * 52));
+
+            memcpy(&element->transform, &identityMatrix, 0x20);
+            *(s16 *)(base + (index * 2) + 0xF0) = i << 0xC;
+            element->transform.translation.x = 0;
+            element->transform.translation.y = 0x3A0000;
+            element->transform.translation.z = 0xFF700000;
+            element->textureData = D_8008DA28_8E628 + (j << 6);
+
+            {
+                s16 frameIndex = D_8008DAA8_8E6A8[allocation->toLevelId] + j;
+                *(s16 *)(base + (index * 2) + 0xE8) = frameIndex;
+                getTableEntryByU16Index(*(DataTable_19E80 **)(base + 0xF8), frameIndex, &sp30);
+            }
+
+            element->data_ptr = sp30.data_ptr;
+            element->index_ptr = sp30.index_ptr;
+            element->field1 = sp30.field1;
+            element->field2 = sp30.field2;
+            element->alpha = 0xFF;
+        }
+
+        {
+            u8 *base = (u8 *)arg0;
+            s32 offset = i * 12;
+            PortraitSubEntry *entry = (PortraitSubEntry *)(base + offset);
+
+            entry->x = -0x68;
+            entry->y = (-0x46) + (i * 0x10);
+            entry->frameIndex = D_8008DAA8_8E6A8[allocation->toLevelId] + i;
+            entry->spriteAsset = *(DataTable_19E80 **)(base + 0xF8);
+        }
+    }
+
+    setCallback(renderLevelPreviewPortraits);
+}
 
 void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *portraitEntries) {
     Allocation_202A0 *allocation;
