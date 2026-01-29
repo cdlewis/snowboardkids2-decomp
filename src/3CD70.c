@@ -48,7 +48,7 @@ typedef struct {
 } ChaseCameraState;
 
 typedef struct {
-    Node_70B00 *sceneNode;
+    ViewportNode *sceneNode;
     u8 pad4[0xC];
     u8 *playerData;
     u8 pad14[0x65];

@@ -48,7 +48,7 @@ typedef struct {
     s8 visibleLetterCount;
     s16 frameTimer;
     u8 pad4[0x4];
-    Node_70B00 unk8;
+    ViewportNode unk8;
     void *unk1E0;
     void *unk1E4;
     void *unk1E8;
@@ -179,7 +179,7 @@ void initLogoScreen(void) {
 
 void loadLogoScreenAssets(void) {
     E090_struct *logoScreen;
-    Node_70B00 *node;
+    ViewportNode *node;
     u8 nodeParams[0x20];
 
     logoScreen = (E090_struct *)allocateTaskMemory(0x2F0);

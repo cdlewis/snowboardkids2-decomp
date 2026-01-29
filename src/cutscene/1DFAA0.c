@@ -79,7 +79,7 @@ CutsceneSlot *getCutsceneSlot(CutsceneManager *manager, s16 slotIndex) {
     return &manager->slots[slotIndex];
 }
 
-void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *shadowModel, void *reflectionModel) {
+void initCutsceneManager(CutsceneManager *manager, ViewportNode *sceneNode, void *shadowModel, void *reflectionModel) {
     s32 i;
     s16 modelIndex = getCutsceneInitModelIndex();
     s32 needsVisibility = initModelEntity((ModelEntity *)&manager->unk10, modelIndex, sceneNode);
@@ -126,7 +126,7 @@ void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *
 void cleanupCutsceneManager(CutsceneManager *manager) {
     s32 i;
 
-    n_alSeqpDelete((Node_70B00 *)&manager->unkFF8);
+    n_alSeqpDelete((ViewportNode *)&manager->unkFF8);
 
     freeAnimationLoopState(manager->sceneContext);
 

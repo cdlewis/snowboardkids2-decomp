@@ -131,9 +131,9 @@ void unlockScreenCleanupAndExit(void) {
         return;
     }
 
-    unlinkNode((Node_70B00 *)state);
-    unlinkNode((Node_70B00 *)&state->cameraNode1);
-    unlinkNode((Node_70B00 *)&state->cameraNode2);
+    unlinkNode((ViewportNode *)state);
+    unlinkNode((ViewportNode *)&state->cameraNode1);
+    unlinkNode((ViewportNode *)&state->cameraNode2);
 
     state->arrowSpriteAsset = freeNodeMemory(state->arrowSpriteAsset);
     state->backgroundAsset = freeNodeMemory(state->backgroundAsset);

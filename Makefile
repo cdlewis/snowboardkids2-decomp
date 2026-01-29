@@ -76,7 +76,7 @@ ASFLAGS = -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 LIBULTRA = lib/ultralib/build/J/libgultra_rom/libgultra_rom.a
 LIBMUS = lib/libmus/build/libmus.a
 
-# note: his is probably an issue with headers. Once ultra headers are properly included this should
+# note: this is probably an issue with headers. Once ultra headers are properly included this should
 # go away.
 UNDEFINED_SYMS := osPfsIsPlug
 LD_SCRIPT = $(BASENAME).ld

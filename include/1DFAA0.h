@@ -58,7 +58,7 @@ typedef struct {
 } CutsceneCmdItem;
 
 typedef struct {
-    Node_70B00 *unk0;
+    ViewportNode *unk0;
     u8 header[0xA4];
     CutsceneCmdItem items[18];
     u8 padding[0x50];
@@ -237,7 +237,7 @@ typedef struct {
 } CutsceneSlot; /* Total size: 0xF4 */
 
 typedef struct {
-    /* 0x0 */ Node_70B00 *uiResource;
+    /* 0x0 */ ViewportNode *uiResource;
     /* 0x4 */ s8 pad4[0x8];
     /* 0xC */ void *sceneContext;
     /* 0x10 */ setModelRenderMode_arg unk10;
@@ -265,7 +265,7 @@ void disableCutsceneSkipOnInput(CutsceneManager *arg0);
 void enableSlotUpdate(CutsceneManager *arg0, s16 arg1);
 void disableSlotUpdate(CutsceneManager *arg0, s16 arg1);
 CutsceneSlot *getCutsceneSlot(CutsceneManager *manager, s16 slotIndex);
-void initCutsceneManager(CutsceneManager *manager, Node_70B00 *sceneNode, void *shadowModel, void *reflectionModel);
+void initCutsceneManager(CutsceneManager *manager, ViewportNode *sceneNode, void *shadowModel, void *reflectionModel);
 void cleanupCutsceneManager(CutsceneManager *manager);
 void hideAllSlotModels(CutsceneSlot *slots);
 void showAllSlotModels(CutsceneSlot *slots);

@@ -16,10 +16,10 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    Node_70B00 unk0;
-    Node_70B00 unk1D8;
-    Node_70B00 unk3B0;
-    Node_70B00 unk588;
+    ViewportNode unk0;
+    ViewportNode unk1D8;
+    ViewportNode unk3B0;
+    ViewportNode unk588;
     s32 *unk760;
     void *unk764;
     void *unk768;
@@ -343,14 +343,14 @@ void initStoryMapLocationIntro(void) {
     allocation_1B8C8 *temp_s0 = (allocation_1B8C8 *)allocateTaskMemory(0x1E0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     temp_s0->unk1D8.unk0.callback_selector = 0;
-    initMenuCameraNode((Node_70B00 *)temp_s0, 0, 0xA, 0);
+    initMenuCameraNode((ViewportNode *)temp_s0, 0, 0xA, 0);
     setViewportFadeValue(0, 0, 8);
     scheduleTask(&storyMapLocationTextTask, 0U, 0U, 0x5AU);
     setGameStateHandler(&awaitStoryMapLocationIntro);
 }
 
 void awaitStoryMapLocationIntro(void) {
-    Node_70B00 *state = (Node_70B00 *)getCurrentAllocation();
+    ViewportNode *state = (ViewportNode *)getCurrentAllocation();
 
     state[1].unk0.callback_selector++;
 

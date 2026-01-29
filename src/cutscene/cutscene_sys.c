@@ -36,7 +36,7 @@ s32 cutsceneSysFadeIn_validate(void) {
     return 0;
 }
 
-void cutsceneSysFadeIn_exec(cutsceneSysFadeIn_exec_arg *fadeParams, Node_70B00 *viewport) {
+void cutsceneSysFadeIn_exec(cutsceneSysFadeIn_exec_arg *fadeParams, ViewportNode *viewport) {
     u8 brightness = gCutsceneFadeBrightnessTable[fadeParams->brightnessIndex];
     setViewportEnvColor(viewport->unk0.next, brightness, brightness, brightness);
     setViewportFadeValue(viewport->unk0.next, 0, fadeParams->fadeMode);
@@ -53,7 +53,7 @@ s32 cutsceneSysFadeOut_validate(void) {
     return 0;
 }
 
-void cutsceneSysFadeOut_exec(cutsceneSysFadeOut_exec_arg *fadeParams, Node_70B00 *viewport) {
+void cutsceneSysFadeOut_exec(cutsceneSysFadeOut_exec_arg *fadeParams, ViewportNode *viewport) {
     u8 brightness = gCutsceneFadeBrightnessTable[fadeParams->brightnessIndex];
     setViewportEnvColor(viewport->unk0.next, brightness, brightness, brightness);
     setViewportFadeValue(viewport->unk0.next, 0xFF, fadeParams->fadeMode);
@@ -228,7 +228,7 @@ s32 cutsceneSysFilter_validate(void) {
     return 0;
 }
 
-void cutsceneSysFilter_exec(cutsceneSysFilter_exec_arg *filterArgs, Node_70B00 *viewport) {
+void cutsceneSysFilter_exec(cutsceneSysFilter_exec_arg *filterArgs, ViewportNode *viewport) {
     setViewportEnvColor(
         viewport->unk0.next,
         filterArgs->envColorRed,

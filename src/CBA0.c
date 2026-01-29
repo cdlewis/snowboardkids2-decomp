@@ -98,7 +98,7 @@ typedef struct {
 } SceneRenderTaskCtx;
 
 typedef struct {
-    Node_70B00 *node;
+    ViewportNode *node;
 } AuxBufferContext;
 
 typedef struct {
@@ -144,7 +144,7 @@ typedef struct {
 } NodeRenderModeArg;
 
 typedef struct {
-    Node_70B00 base;
+    ViewportNode base;
     ColorData lightColor;
     ColorData ambientColor;
     u8 pad1E8[0x28];
@@ -233,7 +233,7 @@ void setColorImageToAuxBuffer(void *arg0) {
 }
 
 void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
-    Node_70B00 *node;
+    ViewportNode *node;
     Gfx *gfx;
     int new_var2;
     s32 frameIdx;
@@ -422,7 +422,7 @@ void initSceneRenderNode(
     }
 }
 
-void n_alSeqpDelete(Node_70B00 *arg0) {
+void n_alSeqpDelete(ViewportNode *arg0) {
     unlinkNode(arg0);
 }
 

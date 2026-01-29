@@ -83,7 +83,7 @@ typedef struct {
 } BoardShopIconSelectionState;
 
 typedef struct {
-    Node_70B00 *unk0;
+    ViewportNode *unk0;
     s32 unk4;
     u8 padding[0x18];
     void *unk20;
@@ -358,7 +358,7 @@ void initBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     u8 paletteId;
     void *transformMatrix;
     BoardShopScreenAllocation *state;
-    Node_70B00 *cameraNode;
+    ViewportNode *cameraNode;
     Transform3D *rotationZPtr;
 
     rotationZPtr = &rotationZ;
@@ -435,7 +435,7 @@ void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
 }
 
 void cleanupBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
-    arg0->unk0 = (Node_70B00 *)freeNodeMemory(arg0->unk0);
+    arg0->unk0 = (ViewportNode *)freeNodeMemory(arg0->unk0);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
     arg0->unk2C = freeNodeMemory(arg0->unk2C);
     arg0->unk30 = freeNodeMemory(arg0->unk30);
@@ -521,7 +521,7 @@ void animateBoardShopSnowParticles(SnowParticleState *arg0) {
 }
 
 void cleanupBoardShopSnowParticles(SnowParticleState *arg0) {
-    ((Node_70B00 *)arg0->particles)->prev = freeNodeMemory(((Node_70B00 *)arg0->particles)->prev);
+    ((ViewportNode *)arg0->particles)->prev = freeNodeMemory(((ViewportNode *)arg0->particles)->prev);
     arg0->particles = freeNodeMemory(arg0->particles);
 }
 

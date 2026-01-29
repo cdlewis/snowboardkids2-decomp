@@ -18,7 +18,8 @@ typedef struct {
     u8 light2G;
     u8 light2B;
     u8 padding[0x5];
-} Node_70B00_ColorData;
+} ViewportNode_ColorData;
+
 typedef struct PoolEntry {
     struct PoolEntry *next;
     void *callback;
@@ -27,25 +28,44 @@ typedef struct PoolEntry {
     u8 poolIndex;
 } PoolEntry;
 
-typedef struct Node_70B00 {
+/* Render callback pool entry — linked list of draw callbacks */
+typedef struct CallbackEntry {
+    struct CallbackEntry *next;
+    void *callback;
+    void *callbackData;
+    u8 _padC[3];
+    u8 poolIndex;
+} CallbackEntry;
+
+/* RSP task message sent to the scheduler for each viewport group */
+typedef struct {
+    OSTask t;
+    OSMesgQueue *msgQueue;
+    s32 msgData;
+    void *auxBuffer;
+    u16 scanlineValue;
+    u16 taskFlags;
+} FrameCallbackMsg;
+
+typedef struct ViewportNode {
     /* 0x00 */ union {
-        struct Node_70B00 *next;
+        struct ViewportNode *next;
         u16 callback_selector;
     } unk0;
-    /* 0x04 */ struct Node_70B00 *prev;
+    /* 0x04 */ struct ViewportNode *prev;
     /* 0x08 */ union {
-        struct Node_70B00 *list2_next;
+        struct ViewportNode *list2_next;
         u16 callback_selector;
     } unk8;
-    /* 0x0C */ struct Node_70B00 *list2_prev;
-    /* 0x10 */ struct Node_70B00 *list3_next;
+    /* 0x0C */ struct ViewportNode *list2_prev;
+    /* 0x10 */ struct ViewportNode *list3_next;
     /* 0x14 */ s8 unk14;
-    /* 0x15 */ s8 unk15;
+    /* 0x15 */ u8 priority;
     /* 0x16 */ u16 slot_index;
     /* 0x18 */ PoolEntry pool[7];
     /* 0x88 */ void *unk88;
     /* 0x8C */ u8 padding8C[0x10];
-    /* 0x9C */ void *frameCallbackMsg;
+    /* 0x9C */ FrameCallbackMsg *frameCallbackMsg;
     /* 0xA0 */ s16 originX;
     /* 0xA2 */ s16 originY;
     /* 0xA4 */ s16 viewportLeft;
@@ -79,24 +99,27 @@ typedef struct Node_70B00 {
     /* 0xD6 */ s16 unkD6;
     /* 0xD8 */ u16 perspNorm;
     /* 0xDA */ u16 id;
+    /* 0xDC */ s16 unkDC;
+    /* 0xDE */ s16 unkDE;
     /* 0xE0 */ Mtx perspectiveMatrix;
     u8 modelingMatrix[0x20];
-    u16 unk140;
+    u16 numLights;
     u8 padding140[6];
-    Node_70B00_ColorData unk148[1];
+    ViewportNode_ColorData unk148[1];
     u8 padding158[0x70];
     s16 fogMin;
     s16 fogMax;
     u8 fogR;
     u8 fogG;
     u8 fogB;
-    u8 padding1CF;
+    u8 fogA;
     f32 scaleY;
-    u8 padding5[0x2];
-} Node_70B00;
-extern Node_70B00 D_800A3370_A3F70;
+    u8 padding1D0[0x2];
+} ViewportNode;
 
-void setViewportFadeValue(Node_70B00 *node, u8 fadeValue, u8 fadeMode);
+extern ViewportNode D_800A3370_A3F70;
+
+void setViewportFadeValue(ViewportNode *node, u8 fadeValue, u8 fadeMode);
 
 void setViewportFadeValueBySlotIndex(u16 slotIndex, u8 fadeValue, u8 fadeMode);
 
@@ -112,40 +135,40 @@ void processDisplayFrameUpdate(void);
 
 void handleFrameBufferComplete(s32 bufferIndex);
 
-void setViewportEnvColor(Node_70B00 *node, u8 r, u8 g, u8 b);
+void setViewportEnvColor(ViewportNode *node, u8 r, u8 g, u8 b);
 
 void setViewportFogById(u16 viewportId, s16 fogMin, s16 fogMax, u8 fogR, u8 fogG, u8 fogB);
 
-void setViewportScale(Node_70B00 *arg0, f32 scaleX, f32 scaleY);
+void setViewportScale(ViewportNode *arg0, f32 scaleX, f32 scaleY);
 
 void func_8006E054_6EC54(u16);
 
 void func_8006DC40_6E840(void);
 
-void func_8006FEF8_70AF8(Node_70B00 *node, u16 id);
+void func_8006FEF8_70AF8(ViewportNode *node, u16 id);
 
-void setViewportId(Node_70B00 *node, u16 id);
+void setViewportId(ViewportNode *node, u16 id);
 
 void setViewportTransformById(u16 viewportId, void *transformMatrix);
 
-void initViewportNode(Node_70B00 *node, Node_70B00 *parent, s32 slotIndex, s32 priority, s32 flags);
+void initViewportNode(ViewportNode *node, ViewportNode *parent, s32 slotIndex, s32 priority, s32 flags);
 
-void func_8006FA0C_7060C(Node_70B00 *node, f32 fov, f32 aspect, f32 near, f32 far);
+void func_8006FA0C_7060C(ViewportNode *node, f32 fov, f32 aspect, f32 near, f32 far);
 
 void setModelCameraTransform(void *, s16, s16, s16, s16, s16, s16);
 
-void unlinkNode(Node_70B00 *player);
+void unlinkNode(ViewportNode *player);
 
-void n_alSeqpDelete(Node_70B00 *arg0);
+void n_alSeqpDelete(ViewportNode *arg0);
 
-s32 getViewportFadeMode(Node_70B00 *);
+s32 getViewportFadeMode(ViewportNode *);
 
 s32 isObjectCulled(Vec3i *arg0);
 
 typedef struct {
     u8 padding[0xB8];
     u8 viewportDisplayFlags;
-} ViewportNode;
+} ViewportOverlay;
 
 typedef struct {
     u8 padding[0xB8];
@@ -153,13 +176,13 @@ typedef struct {
     u8 overlayR;
     u8 overlayG;
     u8 overlayB;
-} ViewportNodeWithOverlay;
+} ViewportOverlayWithColor;
 
 void disableViewportOverlay(ViewportNode *arg0);
 void enableViewportDisplayList(void *arg0);
 void disableViewportDisplayList(ViewportNode *arg0);
 void func_8006FEE8_70AE8(ViewportNode *arg0);
-void setViewportOverlayRgbAndEnable(ViewportNodeWithOverlay *arg0, s8 r, s8 g, s8 b);
+void setViewportOverlayRgbAndEnable(ViewportOverlayWithColor *arg0, s8 r, s8 g, s8 b);
 
 typedef struct {
     /* 0x0 */ u8 r;

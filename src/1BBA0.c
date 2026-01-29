@@ -47,7 +47,7 @@ INCLUDE_ASM("asm/nonmatchings/1BBA0", func_8001B3E8_1BFE8);
 
 void storyMapAwaitFadeOutAndCleanup(void) {
     void *exitCallback;
-    Node_70B00 *state = (Node_70B00 *)getCurrentAllocation();
+    ViewportNode *state = (ViewportNode *)getCurrentAllocation();
 
     if (getViewportFadeMode(0) == 0) {
         unlinkNode(&state[0]);

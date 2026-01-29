@@ -19,38 +19,38 @@ USE_ASSET(_459310);
 USE_ASSET(_4488E0);
 
 typedef struct {
-    Node_70B00 cameraNode;          // 0x000
-    Node_70B00 secondaryCameraNode; // 0x1D8
-    Node_70B00 previewNode;         // 0x3B0
-    Node_70B00 viewportParentNode;  // 0x588
-    Node_70B00 detailNode;          // 0x760
-    Node_70B00 tertiaryCameraNode;  // 0x938
-    void *portraitAsset;            // 0xB10
-    void *imageAsset;               // 0xB14
-    void *effectAsset;              // 0xB18
-    void *textRenderAsset;          // 0xB1C
-    void *uiAsset;                  // 0xB20
-    u8 padB24[0x4];                 // 0xB24
-    u16 transitionCounter;          // 0xB28
-    u8 padB2A[0x2];                 // 0xB2A
-    s8 selectedIndex;               // 0xB2C
-    u8 exitMode;                    // 0xB2D
-    u8 previewLoadCounter;          // 0xB2E
-    u8 padB2F[0x4];                 // 0xB2F
-    u8 levelIdList[12];             // 0xB33
-    u8 padB3F[0x5];                 // 0xB3F
-    u8 isLoadingPreview;            // 0xB44
-    u8 showDetailView;              // 0xB45
-    u8 selectedNumber;              // 0xB46
+    ViewportNode cameraNode;          // 0x000
+    ViewportNode secondaryCameraNode; // 0x1D8
+    ViewportNode previewNode;         // 0x3B0
+    ViewportNode viewportParentNode;  // 0x588
+    ViewportNode detailNode;          // 0x760
+    ViewportNode tertiaryCameraNode;  // 0x938
+    void *portraitAsset;              // 0xB10
+    void *imageAsset;                 // 0xB14
+    void *effectAsset;                // 0xB18
+    void *textRenderAsset;            // 0xB1C
+    void *uiAsset;                    // 0xB20
+    u8 padB24[0x4];                   // 0xB24
+    u16 transitionCounter;            // 0xB28
+    u8 padB2A[0x2];                   // 0xB2A
+    s8 selectedIndex;                 // 0xB2C
+    u8 exitMode;                      // 0xB2D
+    u8 previewLoadCounter;            // 0xB2E
+    u8 padB2F[0x4];                   // 0xB2F
+    u8 levelIdList[12];               // 0xB33
+    u8 padB3F[0x5];                   // 0xB3F
+    u8 isLoadingPreview;              // 0xB44
+    u8 showDetailView;                // 0xB45
+    u8 selectedNumber;                // 0xB46
 } LevelSelectState_Base;
 
 // typedef struct {
-//     Node_70B00 cameraNode;
-//     Node_70B00 secondaryCameraNode;
-//     Node_70B00 previewNode;
-//     Node_70B00 viewportParentNode;
-//     Node_70B00 detailNode;
-//     Node_70B00 tertiaryCameraNode;
+//     ViewportNode cameraNode;
+//     ViewportNode secondaryCameraNode;
+//     ViewportNode previewNode;
+//     ViewportNode viewportParentNode;
+//     ViewportNode detailNode;
+//     ViewportNode tertiaryCameraNode;
 //     void *portraitAsset;
 //     void *imageAsset;
 //     void *effectAsset;
@@ -75,12 +75,12 @@ typedef struct {
 // } LevelSelectState;
 
 typedef struct {
-    /* 0x000 */ Node_70B00 cameraNode;
-    /* 0x1D8 */ Node_70B00 secondaryCameraNode;
-    /* 0x3B0 */ Node_70B00 previewNode;
-    /* 0x588 */ Node_70B00 viewportParentNode;
-    /* 0x760 */ Node_70B00 detailNode;
-    /* 0x938 */ Node_70B00 tertiaryCameraNode;
+    /* 0x000 */ ViewportNode cameraNode;
+    /* 0x1D8 */ ViewportNode secondaryCameraNode;
+    /* 0x3B0 */ ViewportNode previewNode;
+    /* 0x588 */ ViewportNode viewportParentNode;
+    /* 0x760 */ ViewportNode detailNode;
+    /* 0x938 */ ViewportNode tertiaryCameraNode;
     /* 0xB10 */ void *portraitAsset;
     /* 0xB14 */ void *imageAsset;
     /* 0xB18 */ void *effectAsset;
@@ -376,7 +376,7 @@ void handleLevelSelectInput(void) {
 
         case MENU_STATE_DETAIL_OPEN:
             if (getViewportFadeMode(&allocation->previewNode) == 0) {
-                Node_70B00 *node760;
+                ViewportNode *node760;
 
                 terminateTasksByType(0);
                 node760 = &allocation->detailNode;
@@ -399,7 +399,7 @@ void handleLevelSelectInput(void) {
             break;
 
         case MENU_STATE_DETAIL_CLOSE: {
-            Node_70B00 *node760 = &allocation->detailNode;
+            ViewportNode *node760 = &allocation->detailNode;
             if (getViewportFadeMode(node760) == 0) {
                 unlinkNode(node760);
                 allocation->menuState = 5;
@@ -545,7 +545,7 @@ void loadLevelPreview(void) {
     u8 counter;
     u8 poolIdRaw;
     u8 poolId;
-    Node_70B00 *node;
+    ViewportNode *node;
 
     allocation = (LevelSelectState_Base *)getCurrentAllocation();
 

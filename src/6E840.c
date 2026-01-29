@@ -120,7 +120,7 @@ extern s32 D_8009AFE0_9BBE0[];
 
 void *LinearAlloc(size_t size);
 void restoreViewportOffsets(void);
-void initViewportCallbackPool(Node_70B00 *arg0);
+void initViewportCallbackPool(ViewportNode *arg0);
 void initGraphicsSystem(void);
 void initGraphicsArenas(void);
 void initLinearAllocator(void);
@@ -195,8 +195,8 @@ void func_8006DC40_6E840(void) {
 }
 
 void processDisplayFrameUpdate(void) {
-    Node_70B00 *node;
-    Node_70B00 *temp;
+    ViewportNode *node;
+    ViewportNode *temp;
 
     temp = D_800A3370_A3F70.list3_next;
     gDisplayFramePending = 0;
@@ -375,8 +375,8 @@ void initGraphicsSystem(void) {
 }
 
 void updateViewportBounds(void) {
-    Node_70B00 *childNode;
-    Node_70B00 *node;
+    ViewportNode *childNode;
+    ViewportNode *node;
     u16 inheritedCenterX;
     u16 inheritedCenterY;
     u16 inheritedMinX;
@@ -439,7 +439,7 @@ void updateViewportBounds(void) {
 }
 
 void setModelCameraTransform(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6) {
-    Node_70B00 *node = (Node_70B00 *)arg0;
+    ViewportNode *node = (ViewportNode *)arg0;
     node->originX = arg1;
     node->originY = arg2;
     node->viewportLeft = arg3;
@@ -448,17 +448,17 @@ void setModelCameraTransform(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4,
     node->viewportBottom = arg6;
 }
 
-void setViewportScale(Node_70B00 *arg0, f32 scaleX, f32 scaleY) {
+void setViewportScale(ViewportNode *arg0, f32 scaleX, f32 scaleY) {
     arg0->scaleY = scaleY;
     arg0->viewportWidth = (s16)(scaleX * 640.0f);
     arg0->viewportHeight = (s16)(scaleY * 480.0f);
 }
 
-void func_8006FA0C_7060C(Node_70B00 *node, f32 fov, f32 aspect, f32 near, f32 far) {
+void func_8006FA0C_7060C(ViewportNode *node, f32 fov, f32 aspect, f32 near, f32 far) {
     guPerspective(&node->perspectiveMatrix, &node->perspNorm, fov, aspect, near, far, 1.0f);
 }
 
-void initViewportCallbackPool(Node_70B00 *node) {
+void initViewportCallbackPool(ViewportNode *node) {
     s32 i;
 
     i = 7;
@@ -476,9 +476,9 @@ void initViewportCallbackPool(Node_70B00 *node) {
     node->unk88 = NULL;
 }
 
-void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s32 arg4) {
-    Node_70B00 *temp_v0;
-    Node_70B00 *var_a0;
+void initViewportNode(ViewportNode *arg0, ViewportNode *arg1, s32 arg2, s32 arg3, s32 arg4) {
+    ViewportNode *temp_v0;
+    ViewportNode *var_a0;
     u8 arg4_byte = (u8)arg4;
 
     D_800A3588_A4188[arg2 & 0xFFFF] = (Item_A4188 *)arg0;
@@ -506,7 +506,7 @@ void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s3
     var_a0 = &D_800A3370_A3F70;
     if (D_800A3370_A3F70.list3_next != NULL) {
         do {
-            Node_70B00 *temp_v1 = var_a0->list3_next;
+            ViewportNode *temp_v1 = var_a0->list3_next;
             if ((u8)arg3 < (u8)temp_v1->unk14) {
                 break;
             }
@@ -524,10 +524,10 @@ void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s3
 
     arg0->unk14 = (s8)arg3;
     arg0->slot_index = (u16)arg2;
-    arg0->unk15 = (s8)arg4_byte;
+    arg0->priority = (s8)arg4_byte;
     arg0->displayFlags = 0;
     arg0->id = 0;
-    arg0->unk140 = 0;
+    arg0->numLights = 0;
     arg0->viewportWidth = 0x280;
     arg0->viewportHeight = 0x1E0;
     arg0->unkCC = 0x1FF;
@@ -538,7 +538,7 @@ void initViewportNode(Node_70B00 *arg0, Node_70B00 *arg1, s32 arg2, s32 arg3, s3
     arg0->unkD6 = 0;
     memcpy(arg0->modelingMatrix, identityMatrix, 0x20);
     guPerspective(&arg0->perspectiveMatrix, &arg0->perspNorm, 30.0f, 1.3333334f, 20.0f, 2000.0f, 1.0f);
-    arg0->padding1CF = 0xFF;
+    arg0->fogA = 0xFF;
     arg0->fogMin = 0x3DE;
     arg0->fogB = 0;
     arg0->fogG = 0;
@@ -557,7 +557,7 @@ void nullViewportFunction(void) {
 }
 
 void setViewportLightColors(u16 viewportId, u16 colorCount, ColorData *lightColors, ColorData *ambientColor) {
-    Node_70B00 *viewport;
+    ViewportNode *viewport;
     s32 i;
 
     viewport = D_800A3370_A3F70.unk8.list2_next;
@@ -581,7 +581,7 @@ void setViewportLightColors(u16 viewportId, u16 colorCount, ColorData *lightColo
             viewport->unk148[i].light1G = viewport->unk148[i].light1G_dup = ambientColor[0].g;
             viewport->unk148[i].light1B = viewport->unk148[i].light1B_dup = ambientColor[0].b;
 
-            viewport->unk140 = colorCount;
+            viewport->numLights = colorCount;
         }
 
         viewport = viewport->unk8.list2_next;
@@ -589,7 +589,7 @@ void setViewportLightColors(u16 viewportId, u16 colorCount, ColorData *lightColo
 }
 
 void setViewportTransformById(u16 viewportId, void *transformMatrix) {
-    Node_70B00 *node;
+    ViewportNode *node;
 
     node = D_800A3370_A3F70.unk8.list2_next;
 
@@ -601,8 +601,8 @@ void setViewportTransformById(u16 viewportId, void *transformMatrix) {
     }
 }
 
-void setViewportFadeValue(Node_70B00 *node, u8 fadeValue, u8 fadeMode) {
-    Node_70B00 *targetNode;
+void setViewportFadeValue(ViewportNode *node, u8 fadeValue, u8 fadeMode) {
+    ViewportNode *targetNode;
 
     targetNode = node;
     if (targetNode == NULL) {
@@ -617,7 +617,7 @@ void setViewportFadeValue(Node_70B00 *node, u8 fadeValue, u8 fadeMode) {
 }
 
 void setViewportFadeValueBySlotIndex(u16 slotIndex, u8 fadeValue, u8 fadeMode) {
-    Node_70B00 *node;
+    ViewportNode *node;
 
     node = &D_800A3370_A3F70;
     while (node != NULL) {
@@ -632,14 +632,14 @@ void setViewportFadeValueBySlotIndex(u16 slotIndex, u8 fadeValue, u8 fadeMode) {
     }
 }
 
-s32 getViewportFadeMode(Node_70B00 *arg0) {
+s32 getViewportFadeMode(ViewportNode *arg0) {
     if (arg0 == NULL) {
         arg0 = &D_800A3370_A3F70;
     }
     return arg0->fadeMode;
 }
 
-void setViewportEnvColor(Node_70B00 *node, u8 r, u8 g, u8 b) {
+void setViewportEnvColor(ViewportNode *node, u8 r, u8 g, u8 b) {
     if (node == NULL) {
         node = &D_800A3370_A3F70;
     }
@@ -649,7 +649,7 @@ void setViewportEnvColor(Node_70B00 *node, u8 r, u8 g, u8 b) {
 }
 
 void setViewportFogById(u16 viewportId, s16 fogMin, s16 fogMax, u8 fogR, u8 fogG, u8 fogB) {
-    Node_70B00 *node;
+    ViewportNode *node;
 
     node = D_800A3370_A3F70.unk8.list2_next;
 
@@ -665,7 +665,7 @@ void setViewportFogById(u16 viewportId, s16 fogMin, s16 fogMax, u8 fogR, u8 fogG
     }
 }
 
-void setViewportOverlayRgbAndEnable(ViewportNodeWithOverlay *arg0, s8 r, s8 g, s8 b) {
+void setViewportOverlayRgbAndEnable(ViewportOverlayWithColor *arg0, s8 r, s8 g, s8 b) {
     if (arg0 != NULL) {
         arg0->overlayR = r;
         arg0->overlayG = g;
@@ -676,25 +676,25 @@ void setViewportOverlayRgbAndEnable(ViewportNodeWithOverlay *arg0, s8 r, s8 g, s
 
 void disableViewportOverlay(ViewportNode *arg0) {
     if (arg0 != NULL) {
-        arg0->viewportDisplayFlags = (u8)(arg0->viewportDisplayFlags & 0xFE);
+        arg0->displayFlags = (u8)(arg0->displayFlags & 0xFE);
     }
 }
 
 void enableViewportDisplayList(void *arg0) {
-    ((ViewportNode *)arg0)->viewportDisplayFlags |= 0x2;
+    ((ViewportNode *)arg0)->displayFlags |= 0x2;
 }
 
 void disableViewportDisplayList(ViewportNode *arg0) {
-    arg0->viewportDisplayFlags = (u8)(arg0->viewportDisplayFlags & 0xFD);
+    arg0->displayFlags = (u8)(arg0->displayFlags & 0xFD);
 }
 
-void setViewportId(Node_70B00 *node, u16 id) {
+void setViewportId(ViewportNode *node, u16 id) {
     node->id = id;
 }
 
-void unlinkNode(Node_70B00 *node) {
-    Node_70B00 *current;
-    Node_70B00 *next;
+void unlinkNode(ViewportNode *node) {
+    ViewportNode *current;
+    ViewportNode *next;
 
     current = &D_800A3370_A3F70;
     D_800A3588_A4188[node->slot_index] = NULL;
@@ -740,7 +740,7 @@ void debugEnqueueCallback(u16 index, u8 slotIndex, void *callback, void *callbac
     }
 }
 
-void enqueueViewportCallback(Node_70B00 *viewport, u8 poolIndex, void *callback, void *callbackData) {
+void enqueueViewportCallback(ViewportNode *viewport, u8 poolIndex, void *callback, void *callbackData) {
     PoolEntry *newEntry;
     PoolEntry *oldHead;
 
@@ -756,7 +756,7 @@ void enqueueViewportCallback(Node_70B00 *viewport, u8 poolIndex, void *callback,
 }
 
 void enqueueViewportCallbackById(u16 viewportId, u8 poolIndex, void *callback, void *callbackData) {
-    Node_70B00 *viewport;
+    ViewportNode *viewport;
     PoolEntry *newEntry;
     PoolEntry *oldHead;
 

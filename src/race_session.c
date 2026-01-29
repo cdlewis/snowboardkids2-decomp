@@ -45,10 +45,10 @@ typedef struct {
 } VarData;
 
 typedef struct {
-    Node_70B00 *audioPlayer0;
-    Node_70B00 *unk4;
-    Node_70B00 *unk8;
-    Node_70B00 *unkC;
+    ViewportNode *audioPlayer0;
+    ViewportNode *unk4;
+    ViewportNode *unk8;
+    ViewportNode *unkC;
     u8 padding[0x5C - 0x10];
     u8 memoryPoolId;
     u8 numPlayers;

@@ -40,7 +40,7 @@ typedef struct {
     u8 eventTypeIndex;
 } RareEventTask;
 
-void initMenuCameraNode(Node_70B00 *node, s32 slotIndex, s32 priority, s32 isSecondary) {
+void initMenuCameraNode(ViewportNode *node, s32 slotIndex, s32 priority, s32 isSecondary) {
     s8 lightSettings[0x20];
     s32 secondaryFlag;
 

@@ -12,14 +12,14 @@ void onSaveSlotSelectionConfirm(void);
 void onSaveSlotSelectionCancel(void);
 
 typedef struct {
-    Node_70B00 unk0;
-    Node_70B00 slotModels[4];
+    ViewportNode unk0;
+    ViewportNode slotModels[4];
     u8 padding0[0x170];
-    Node_70B00 *unkAA8;
-    Node_70B00 *unkAAC;
-    Node_70B00 *unkAB0;
-    Node_70B00 *unkAB4;
-    Node_70B00 *unkAB8;
+    ViewportNode *unkAA8;
+    ViewportNode *unkAAC;
+    ViewportNode *unkAB0;
+    ViewportNode *unkAB4;
+    ViewportNode *unkAB8;
     s16 slideOffset;
     u16 unkABE;
     u16 selectionY;         // 0xAC0 - animated Y position (wiggles on selection)

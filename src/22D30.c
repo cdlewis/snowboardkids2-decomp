@@ -15,7 +15,7 @@ USE_OVERLAY(_1DB7A0);
 extern volatile s32 gControllerInputs;
 
 typedef struct {
-    Node_70B00 node;
+    ViewportNode node;
     void *assetData1;
     void *assetData2;
     s16 frameCounter;
@@ -172,9 +172,9 @@ void handlePlayerCountSelectInput(void) {
     if (state->menuResult != 0) {
         setMusicFadeOut(0xA);
         if (state->menuResult == 0x63) {
-            setViewportFadeValue((Node_70B00 *)state, 0xFF, 8);
+            setViewportFadeValue((ViewportNode *)state, 0xFF, 8);
         } else {
-            setViewportFadeValue((Node_70B00 *)state, 0xFF, 0x10);
+            setViewportFadeValue((ViewportNode *)state, 0xFF, 0x10);
         }
         setGameStateHandler(&exitPlayerCountSelect);
     }

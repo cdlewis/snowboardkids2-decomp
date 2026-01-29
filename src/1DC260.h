@@ -20,11 +20,11 @@ typedef struct {
     u8 padding[1];
     s16 unk2;
     s32 unk4;
-    Node_70B00 unk8;
-    Node_70B00 unk1E0;
-    Node_70B00 unk3B8;
-    Node_70B00 unk590;
-    Node_70B00 unk768;
+    ViewportNode unk8;
+    ViewportNode unk1E0;
+    ViewportNode unk3B8;
+    ViewportNode unk590;
+    ViewportNode unk768;
     s16 unk940;
     s16 unk942;
     s16 unk944;

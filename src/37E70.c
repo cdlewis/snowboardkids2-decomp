@@ -31,7 +31,7 @@ void initOptionsMenu(void) {
 
     allocation = allocateTaskMemory(0x1F0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
-    initMenuCameraNode((Node_70B00 *)allocation, 8, 0xF, 1);
+    initMenuCameraNode((ViewportNode *)allocation, 8, 0xF, 1);
     setViewportFadeValue(0, 0xFF, 0);
     setViewportFadeValue(0, 0, 0x10);
     allocation->assetData = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
@@ -65,7 +65,7 @@ void onOptionsMenuFadeOutComplete(void) {
         return;
     }
 
-    unlinkNode((Node_70B00 *)allocation);
+    unlinkNode((ViewportNode *)allocation);
     allocation->assetData = freeNodeMemory(allocation->assetData);
     allocation->graphicsData = freeNodeMemory(allocation->graphicsData);
     terminateSchedulerWithCallback(onOptionsMenuExit);

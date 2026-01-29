@@ -10,7 +10,7 @@ void awaitStoryMapExtraIntro(void);
 void onStoryMapExtraIntroComplete(void);
 
 typedef struct {
-    Node_70B00 unk0;
+    ViewportNode unk0;
     u16 waitCounter;
 } StoryMapExtraIntroAllocation;
 

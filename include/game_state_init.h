@@ -5,8 +5,8 @@
 #include "main.h"
 
 typedef struct {
-    /* 0x00 */ struct Node_70B00 node1;
-    /* 0x1C8 */ struct Node_70B00 node2;
+    /* 0x00 */ ViewportNode node1;
+    /* 0x1C8 */ ViewportNode node2;
     /* 0x390 */ u8 padding2[0x20];
     /* 0x3B0 */ s32 unk3D0;
     /* 0x3B4 */ s32 unk3D4;

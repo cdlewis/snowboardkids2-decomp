@@ -55,9 +55,9 @@ typedef struct {
     u8 pad17;
     void *unk18;
     u8 pad1C[0x4];
-    Node_70B00 unk20;
-    Node_70B00 fadeNode;
-    Node_70B00 unk3D0;
+    ViewportNode unk20;
+    ViewportNode fadeNode;
+    ViewportNode unk3D0;
     u8 pad5A8[0x1C];
     void *unk5C4;
     u8 pad5C8[0x2C];

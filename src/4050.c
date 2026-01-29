@@ -43,9 +43,9 @@ typedef struct {
     s8 unk2;
     u8 exitRequested;
     s32 unk4;
-    Node_70B00 sceneNode;
-    Node_70B00 overlayNode;
-    Node_70B00 uiNode;
+    ViewportNode sceneNode;
+    ViewportNode overlayNode;
+    ViewportNode uiNode;
     u8 padding1[0x20];
     u8 cutsceneBuffer;
     u8 padding[0x122F];
@@ -83,9 +83,9 @@ void loadCutsceneOverlay(void) {
 }
 
 void initCutsceneRenderer(void) {
-    Node_70B00 *overlayNodePtr;
-    Node_70B00 *nodePtr;
-    Node_70B00 *uiNodePtr;
+    ViewportNode *overlayNodePtr;
+    ViewportNode *nodePtr;
+    ViewportNode *uiNodePtr;
     f32 scale = 1.0f;
     u8 lightBuffer[0x20];
 

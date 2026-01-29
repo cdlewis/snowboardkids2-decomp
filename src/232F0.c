@@ -7,10 +7,10 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    Node_70B00 unk0[4];
-    Node_70B00 unk760[4];
-    Node_70B00 unkEC0[4];
-    Node_70B00 unk1620;
+    ViewportNode unk0[4];
+    ViewportNode unk760[4];
+    ViewportNode unkEC0[4];
+    ViewportNode unk1620;
     u8 pad17F8[0x1878 - (0x1620 + 0x1D8)];
     void *unk1878;
     void *unk187C;

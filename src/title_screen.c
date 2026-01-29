@@ -15,8 +15,8 @@
 #include "task_scheduler.h"
 
 typedef struct {
-    Node_70B00 node1;
-    Node_70B00 node2;
+    ViewportNode node1;
+    ViewportNode node2;
     void *titleLogoData;
     void *menuGraphicsData;
     u16 frameCounter;
@@ -89,7 +89,7 @@ void cleanupTitleAndTransition(void) {
         gTitleExitMode = 4;
     }
 
-    unlinkNode((Node_70B00 *)state);
+    unlinkNode((ViewportNode *)state);
     unlinkNode((&state->node2));
 
     state->titleLogoData = freeNodeMemory(state->titleLogoData);
@@ -288,7 +288,7 @@ void waitForTitleAssetsReady(void) {
 
 void initTitleScreen(void) {
     TitleState *state;
-    Node_70B00 *node2;
+    ViewportNode *node2;
     void *dmaResult;
     s32 i;
     void *checkResult;
@@ -298,7 +298,7 @@ void initTitleScreen(void) {
     node2 = &state->node2;
     initDefaultFontPalette();
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
-    initViewportNode((Node_70B00 *)state, NULL, 8, 10, 0);
+    initViewportNode((ViewportNode *)state, NULL, 8, 10, 0);
     setModelCameraTransform(state, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     initMenuCameraNode(node2, 0, 8, 0);
     func_8006FA0C_7060C(node2, 40.0f, 1.3333334f, 10.0f, 10000.0f);

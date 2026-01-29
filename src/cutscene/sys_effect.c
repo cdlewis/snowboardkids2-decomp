@@ -25,7 +25,7 @@ s32 cutsceneEffectDisp_validate(void) {
 }
 
 void cutsceneEffectDisp_exec(cutsceneEffectDisp_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    Node_70B00 *uiResource;
+    ViewportNode *uiResource;
     s16 slotIdx;
     s16 posX;
     s16 posY;
