@@ -17,6 +17,12 @@ typedef struct Node {
     u8 poolIndex;
 } Node;
 
+// Microcode pointer pair
+typedef struct {
+    u64 *ucode;
+    u64 *ucode_data;
+} UcodeEntry;
+
 typedef struct {
     u8 padding[0x8];
     Node *unk8;
@@ -116,7 +122,7 @@ extern void *D_800A3368_A3F68;
 extern long long int rspbootTextStart[];
 extern long long int aspMainTextStart[];
 extern Gfx D_8009AED0_9BAD0[];
-extern s32 D_8009AFE0_9BBE0[];
+extern UcodeEntry microcodeGroups[];
 
 void *LinearAlloc(size_t size);
 void restoreViewportOffsets(void);
@@ -182,8 +188,8 @@ void func_8006DC40_6E840(void) {
         msg->ucode_boot_size = (u32)aspMainTextStart;
         msg->ucode_boot_size = msg->ucode_boot_size - ((u32)rspbootTextStart);
 
-        msg->ucode = (void *)D_8009AFE0_9BBE0[0];
-        msg->output_buff_size = (void *)D_8009AFE0_9BBE0[1];
+        msg->ucode = (void *)microcodeGroups[1].ucode;
+        msg->output_buff_size = (void *)microcodeGroups[1].ucode_data;
         msg->ucode_data_size = 0x800;
         msg->ucode_data = D_800A3360_A3F60;
         msg->dram_stack_size = 0x400;
