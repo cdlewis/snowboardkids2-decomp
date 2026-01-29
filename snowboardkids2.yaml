@@ -32,6 +32,7 @@ options:
   hardware_regs: True
   hasm_in_src_path: True
   disassemble_all: True
+  asm_emit_size_directive: True
 
 segments:
   - name: header
