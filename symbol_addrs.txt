@@ -1277,6 +1277,7 @@ updateCutsceneFadeTask = 0x800B4914; // rom:0x1E19C4
 cleanupCutsceneFadeTask = 0x800B4ACC; // rom:0x1E1B7C
 gCutsceneFadeAssetTable = 0x800BA960; // rom:0x1E7A10
 initSlotData = 0x800B66B4; // rom:0x1E3764
+getSlotMoveDuration = 0x800B6610; // rom:0x1E36C0
 calcAngleDiff = 0x800B6618; // rom:0x1E36C8
 updateSlotRotVelocity = 0x800B6AB8; // rom:0x1E3B68
 updateSlotRotVelocityFixed = 0x800B6B6C; // rom:0x1E3C1C
