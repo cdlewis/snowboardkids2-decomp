@@ -79,7 +79,7 @@ void mainThreadEntrypoint(void *arg) {
             cleanupUnusedNodes();
             runTaskSchedulers();
             motorUpdate();
-            func_8006E054_6EC54(messageData);
+            func_8006E054_6EC54((u16)messageData);
         } else {
             gControllerPollingEnabled = 1;
             resumeMotorStates();

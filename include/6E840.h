@@ -64,7 +64,8 @@ typedef struct ViewportNode {
     /* 0x16 */ u16 slot_index;
     /* 0x18 */ PoolEntry pool[7];
     /* 0x88 */ void *unk88;
-    /* 0x8C */ u8 padding8C[0x10];
+    /* 0x8C */ u8 padding8C[0xC];
+    /* 0x98 */ void *displayListPtr;
     /* 0x9C */ FrameCallbackMsg *frameCallbackMsg;
     /* 0xA0 */ s16 originX;
     /* 0xA2 */ s16 originY;
@@ -102,7 +103,7 @@ typedef struct ViewportNode {
     /* 0xDC */ s16 unkDC;
     /* 0xDE */ s16 unkDE;
     /* 0xE0 */ Mtx perspectiveMatrix;
-    u8 modelingMatrix[0x20];
+    Transform3D modelingMatrix;
     u16 numLights;
     u8 padding140[6];
     ViewportNode_ColorData unk148[1];
@@ -141,7 +142,7 @@ void setViewportFogById(u16 viewportId, s16 fogMin, s16 fogMax, u8 fogR, u8 fogG
 
 void setViewportScale(ViewportNode *arg0, f32 scaleX, f32 scaleY);
 
-void func_8006E054_6EC54(u16);
+void func_8006E054_6EC54(u32);
 
 void func_8006DC40_6E840(void);
 

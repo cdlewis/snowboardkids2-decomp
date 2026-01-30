@@ -9,6 +9,9 @@
 #define MEMORY_HEAP_SIZE 0x200000
 #define gMemoryHeapEnd (gMemoryHeapBase + MEMORY_HEAP_SIZE)
 
+// Array view of arena regions [gLinearArenaRegions, gLinearArenaBuffer]
+#define gLinearArenaRegionsArray ((s32 *)&gLinearArenaRegions)
+
 typedef struct Node {
     struct Node *next;
     void *callback;
@@ -79,22 +82,44 @@ typedef struct {
     u32 pad[34];
 } DisplayBufferMsg;
 
+// Screen border overlay region with color
+typedef struct {
+    s16 clipLeft;
+    s16 clipTop;
+    s16 clipRight;
+    s16 clipBottom;
+    u8 displayFlags;
+    u8 overlayR;
+    u8 overlayG;
+    u8 overlayB;
+    u8 envR;
+    u8 envG;
+    u8 envB;
+    u8 envA;
+} BorderData;
+
+// Text rendering clip region and offset
+typedef struct {
+    s16 clipLeft;
+    s16 clipTop;
+    s16 clipRight;
+    s16 clipBottom;
+    s16 offsetX;
+    s16 offsetY;
+} TextClipAndOffsetData;
+
 extern void *gDisplayBufferMsgs;
 extern s32 D_800A35C8_A41C8[];
 extern s16 D_800A8A9A_9FE0A;
 extern s16 D_800AB478_A27E8;
-
 extern Item_A4188 *D_800A3588_A4188[];
 extern u32 __additional_scanline_0;
 extern s32 gRegionAllocEnd;
 extern void **gLinearArenaRegions;
-extern s32 gRegionAllocPtr;
+extern Gfx *gRegionAllocPtr;
 extern void *gArenaBasePtr;
 extern void *gLinearAllocPtr;
 extern void *gLinearAllocEnd;
-
-// Array view of arena regions [gLinearArenaRegions, gLinearArenaBuffer]
-#define gLinearArenaRegionsArray ((s32 *)&gLinearArenaRegions)
 extern s32 gFrameBufferFlags[];
 extern s32 gFrameBufferCounters[];
 extern s32 gBufferedFrameCounter;
@@ -123,7 +148,6 @@ extern long long int rspbootTextStart[];
 extern long long int aspMainTextStart[];
 extern Gfx D_8009AED0_9BAD0[];
 extern UcodeEntry microcodeGroups[];
-
 void *LinearAlloc(size_t size);
 void restoreViewportOffsets(void);
 void initViewportCallbackPool(ViewportNode *arg0);
@@ -131,6 +155,41 @@ void initGraphicsSystem(void);
 void initGraphicsArenas(void);
 void initLinearAllocator(void);
 void initLinearArenaRegions(void);
+extern Gfx D_8009ADF0_9B9F0[]; /* init display list */
+extern Gfx D_8009AED0_9BAD0[]; /* default render state display list */
+extern Gfx D_8009AF48_9BB48[]; /* fade overlay display list */
+extern u16 D_8009AFCA_9BBCA;
+extern UcodeEntry microcodeGroups[];   /* gUcodeTable */
+extern u8 D_8009AFE8_9BBE8;            /* gNeedsDisplayListInit */
+extern void *D_800A3360_A3F60;         /* gDramStack */
+extern void *D_800A3364_A3F64;         /* gOutputBuffer */
+extern void *D_800A3368_A3F68;         /* gYieldBuffer */
+extern ViewportNode *D_800A337C_A3F7C; /* gLastViewportInGroup */
+extern s32 D_800AB198_A2508;           /* gCallbackCounter */
+extern s16 D_800AB250_A25C0;           /* gCurrentPoolIndex */
+extern s16 gGraphicsMode;
+extern s16 gTextureEnabled;
+extern OSMesgQueue mainMessageQueue;
+extern u32 __additional_scanline_0;
+extern s32 gFrameBufferFlags[];
+extern s32 gFrameBufferCounters[];
+extern s32 gCurrentDoubleBufferIndex;
+extern s32 gCurrentDisplayBufferIndex;
+extern s32 gFrameCounter;
+extern u8 gDisplayFramePending;
+extern Gfx *gRegionAllocPtr;
+extern void *D_800A8B14_9FE84; /* gLookAtPtr */
+extern TextClipAndOffsetData gTextClipAndOffsetData;
+extern long long int rspbootTextStart[];
+extern long long int aspMainTextStart[];
+
+void selectGraphicsArena(s32);
+void linearAllocSelectRegion(s32);
+void updateViewportBounds(void);
+void initViewportCallbackPool(ViewportNode *);
+s32 isRegionAllocSpaceLow(void);
+void resetLinearAllocator(void);
+void processDisplayFrameUpdate(void);
 
 void func_8006DC40_6E840(void) {
     DisplayBufferMsg *msg;
@@ -240,7 +299,515 @@ void tryProcessDisplayFrameUpdate(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/6E840", func_8006E054_6EC54);
+/*
+ * Main per-frame rendering dispatch.
+ *
+ * This function orchestrates the entire frame rendering pipeline:
+ *   Phase 0: Update fade animations on all viewports
+ *   Early return: Skip rendering if framebuffer is busy or delay counter active
+ *   Phase 1: Build RSP tasks for each viewport priority group
+ *   Phase 2: Construct RDP display lists for each visible viewport
+ *
+ * viScanline: current VI scanline position, used for task scheduling
+ */
+void func_8006E054_6EC54(u32 viScanline) {
+    ViewportNode *node;
+    ViewportNode *rootNode;
+    ViewportNode **rootNodePtr;
+    Gfx *displayListStart;
+    Gfx *displayListEnd;
+    s32 needsDisplayListSetup;
+    CallbackEntry *callbackEntry;
+    void *viewportAlloc;
+    void *projectionAlloc;
+    s32 *lookAtAlloc;
+    Light *lightArray;
+    u8 *borderPtr;
+    s32 i;
+    s32 fogDiff;
+    s32 fogMul;
+    s32 fogOffset;
+    void *tempLight;
+    u32 storedViScanline;
+    s32 temp;
+    s32 pipeSyncW;
+    u8 padding[0x20];
+
+    // Phase 0: Update fade animations
+    for (node = &D_800A3370_A3F70; node != NULL; node = node->list3_next) {
+        if (node->fadeMode != 0) {
+            temp = node->fadeValue - node->prevFadeValue;
+            temp /= node->fadeMode;
+            node->prevFadeValue += temp;
+            node->fadeMode--;
+        }
+    }
+
+    // Early return: framebuffer busy or delay active
+    if (gFrameBufferFlags[gCurrentDoubleBufferIndex] != 0 || D_8009AFD0_9BBD0 != 0) {
+        if (D_8009AFD0_9BBD0 != 0) {
+            D_8009AFD0_9BBD0 = D_8009AFD0_9BBD0 - 1;
+        }
+
+        for (node = &D_800A3370_A3F70; node != NULL; node = node->list3_next) {
+            initViewportCallbackPool(node);
+        }
+
+        resetLinearAllocator();
+        return;
+    }
+
+    // Main rendering path setup
+    selectGraphicsArena(gCurrentDoubleBufferIndex);
+    linearAllocSelectRegion(gCurrentDoubleBufferIndex);
+    D_8009AFD0_9BBD0 = __additional_scanline_0;
+    gFrameBufferCounters[gCurrentDoubleBufferIndex] = gFrameCounter;
+    updateViewportBounds();
+
+    // Find the root viewport node
+    rootNodePtr = &D_800A3370_A3F70.list3_next;
+    rootNode = *rootNodePtr;
+    if (!rootNode) {
+        rootNode = (ViewportNode *)((u8 *)rootNodePtr - 0x10);
+    }
+
+    node = rootNode;
+    needsDisplayListSetup = TRUE;
+    if (node != NULL) {
+        pipeSyncW = 0xE7000000;
+        storedViScanline = viScanline + 3;
+
+        do {
+            temp = node->priority;
+
+            while (node->list3_next != NULL) {
+                node->frameCallbackMsg = NULL;
+                if (node->list3_next->priority != (u8)temp) {
+                    break;
+                }
+
+                node = node->list3_next;
+            }
+
+            node->frameCallbackMsg = arenaAlloc16(0x50);
+            displayListStart = gRegionAllocPtr;
+
+            gSPSegment(gRegionAllocPtr++, 0, 0);
+            node->displayListPtr = gRegionAllocPtr;
+            {
+                Gfx *_g = gRegionAllocPtr++;
+                _g->words.w0 = pipeSyncW;
+                _g->words.w1 = 0;
+            }
+            {
+                Gfx *_g = gRegionAllocPtr++;
+                _g->words.w0 = pipeSyncW;
+                _g->words.w1 = 0;
+            }
+            gDPFullSync(gRegionAllocPtr++);
+            gSPEndDisplayList(gRegionAllocPtr++);
+            displayListEnd = gRegionAllocPtr;
+
+            if (node->list3_next == NULL) {
+                node->frameCallbackMsg->taskFlags = 1;
+                node->frameCallbackMsg->msgQueue = &mainMessageQueue;
+                callbackEntry = (CallbackEntry *)((u32)callbackEntry & 0xFFFF);
+                callbackEntry = (CallbackEntry *)((u32)callbackEntry | (D_8009AFCA_9BBCA << 16));
+                node->frameCallbackMsg->msgData = (s32)callbackEntry;
+            } else {
+                node->frameCallbackMsg->taskFlags = 0;
+            }
+
+            node->frameCallbackMsg->auxBuffer =
+                (void *)((u8 *)gAuxFrameBuffers +
+                         ((gCurrentDisplayBufferIndex * 5 * 16 - gCurrentDisplayBufferIndex * 5) << 11));
+            node->frameCallbackMsg->scanlineValue = storedViScanline + __additional_scanline_0 * 2;
+
+            node->frameCallbackMsg->t.t.data_ptr = (u64 *)displayListStart;
+            node->frameCallbackMsg->t.t.data_size = (s32)displayListEnd - (s32)displayListStart;
+            node->frameCallbackMsg->t.t.type = M_GFXTASK;
+            node->frameCallbackMsg->t.t.flags = 0;
+            node->frameCallbackMsg->t.t.ucode_boot = (u64 *)rspbootTextStart;
+            node->frameCallbackMsg->t.t.ucode_boot_size = (s32)aspMainTextStart - (s32)rspbootTextStart;
+            node->frameCallbackMsg->t.t.ucode = microcodeGroups[temp].ucode;
+            node->frameCallbackMsg->t.t.ucode_data = microcodeGroups[temp].ucode_data;
+            node->frameCallbackMsg->t.t.ucode_data_size = 0x800;
+            node->frameCallbackMsg->t.t.dram_stack = (u64 *)D_800A3360_A3F60;
+            node->frameCallbackMsg->t.t.dram_stack_size = 0x400;
+            node->frameCallbackMsg->t.t.output_buff = (u64 *)D_800A3364_A3F64;
+            node->frameCallbackMsg->t.t.output_buff_size = (u64 *)((s32)D_800A3364_A3F64 + 0x10000);
+            node->frameCallbackMsg->t.t.yield_data_ptr = (u64 *)D_800A3368_A3F68;
+            node->frameCallbackMsg->t.t.yield_data_size = 0xC00;
+            node = node->list3_next;
+        } while (node != NULL);
+    }
+
+    node = rootNode;
+    needsDisplayListSetup = TRUE;
+    if (node != NULL) {
+        borderPtr = &D_800A3370_A3F70.prevFadeValue;
+
+        for (node = rootNode; node != NULL; node = node->list3_next) {
+            // Future cleanup: D_800AB068_A23D8_type is probably just ViewportNode
+            D_800AB068_A23D8 = (D_800AB068_A23D8_type *)node;
+
+            if (!isRegionAllocSpaceLow() && node->clipLeft < node->clipRight && node->clipTop < node->clipBottom) {
+
+                if (needsDisplayListSetup) {
+                    displayListStart = gRegionAllocPtr;
+                    if (D_8009AFE8_9BBE8 != 0) {
+                        D_8009AFE8_9BBE8 = 0;
+                        gSPDisplayList(gRegionAllocPtr++, D_8009ADF0_9B9F0);
+                    }
+
+                    gSPDisplayList(gRegionAllocPtr++, D_8009AED0_9BAD0);
+                } else {
+                    gDPPipeSync(gRegionAllocPtr++);
+                }
+
+                gDPSetScissor(
+                    gRegionAllocPtr++,
+                    G_SC_NON_INTERLACE,
+                    node->clipLeft,
+                    node->clipTop,
+                    node->clipRight,
+                    node->clipBottom
+                );
+
+                if (node->displayFlags & 0x2) {
+                    gDPSetCycleType(gRegionAllocPtr++, G_CYC_FILL);
+                    gDPSetRenderMode(gRegionAllocPtr++, G_RM_NOOP, G_RM_NOOP2);
+                    gDPSetColorImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, &gFrameBuffer);
+                    gDPSetFillColor(gRegionAllocPtr++, 0xFFFCFFFC);
+                    gDPFillRectangle(
+                        gRegionAllocPtr++,
+                        node->clipLeft,
+                        node->clipTop,
+                        node->clipRight,
+                        node->clipBottom
+                    );
+                    needsDisplayListSetup = TRUE;
+                }
+
+                if (node->displayFlags & 0x1) {
+                    gDPPipeSync(gRegionAllocPtr++);
+                    gDPSetColorImage(
+                        gRegionAllocPtr++,
+                        G_IM_FMT_RGBA,
+                        G_IM_SIZ_16b,
+                        320,
+                        (void *)((u8 *)gAuxFrameBuffers +
+                                 ((gCurrentDisplayBufferIndex * 5 * 16 - gCurrentDisplayBufferIndex * 5) << 11))
+                    );
+                    gDPSetCycleType(gRegionAllocPtr++, G_CYC_1CYCLE);
+                    gDPSetEnvColor(gRegionAllocPtr++, node->overlayR, node->overlayG, node->overlayB, 0xFF);
+                    gDPSetCombineLERP(
+                        gRegionAllocPtr++,
+                        1,
+                        0,
+                        ENVIRONMENT,
+                        0,
+                        1,
+                        0,
+                        ENVIRONMENT,
+                        0,
+                        1,
+                        0,
+                        ENVIRONMENT,
+                        0,
+                        1,
+                        0,
+                        ENVIRONMENT,
+                        0
+                    );
+                    gDPSetRenderMode(gRegionAllocPtr++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+                    gDPFillRectangle(
+                        gRegionAllocPtr++,
+                        node->clipLeft,
+                        node->clipTop,
+                        node->clipRight + 1,
+                        node->clipBottom + 1
+                    );
+                    gDPPipeSync(gRegionAllocPtr++);
+                    gDPSetDepthImage(gRegionAllocPtr++, &gFrameBuffer);
+                    needsDisplayListSetup = FALSE;
+                }
+
+                if (needsDisplayListSetup) {
+                    needsDisplayListSetup = FALSE;
+                    gDPPipeSync(gRegionAllocPtr++);
+                    gDPSetColorImage(
+                        gRegionAllocPtr++,
+                        G_IM_FMT_RGBA,
+                        G_IM_SIZ_16b,
+                        320,
+                        (void *)((u8 *)gAuxFrameBuffers +
+                                 ((gCurrentDisplayBufferIndex * 5 * 16 - gCurrentDisplayBufferIndex * 5) << 11))
+                    );
+                    gDPSetDepthImage(gRegionAllocPtr++, &gFrameBuffer);
+                }
+
+                gTextClipAndOffsetData.clipLeft = node->clipLeft;
+                gTextClipAndOffsetData.clipTop = node->clipTop;
+                gTextClipAndOffsetData.clipRight = node->clipRight;
+                gTextClipAndOffsetData.clipBottom = node->clipBottom;
+                gTextClipAndOffsetData.offsetX = node->offsetX;
+                gTextClipAndOffsetData.offsetY = node->offsetY;
+
+                gTextureEnabled = node->priority;
+                gGraphicsMode = -1;
+
+                if (node->priority == 0) {
+                    gDPSetColorDither(gRegionAllocPtr++, G_CD_DISABLE);
+
+                    for (callbackEntry = (CallbackEntry *)node->pool; callbackEntry != NULL;
+                         callbackEntry = callbackEntry->next) {
+                        if (callbackEntry->callback == NULL) {
+                            continue;
+                        }
+
+                        if (isRegionAllocSpaceLow()) {
+                            break;
+                        }
+
+                        D_800AB250_A25C0 = callbackEntry->poolIndex;
+                        ((void (*)(void *))callbackEntry->callback)(callbackEntry->callbackData);
+                        D_800AB198_A2508++;
+                    }
+
+                    if (node->prevFadeValue != 0) {
+                        gSPDisplayList(gRegionAllocPtr++, D_8009AF48_9BB48);
+                        gDPSetPrimColor(
+                            gRegionAllocPtr++,
+                            0,
+                            0,
+                            node->envR,
+                            node->envG,
+                            node->envB,
+                            node->prevFadeValue
+                        );
+                        gSPTextureRectangle(
+                            gRegionAllocPtr++,
+                            node->clipLeft << 2,
+                            node->clipTop << 2,
+                            node->clipRight << 2,
+                            node->clipBottom << 2,
+                            0,
+                            0,
+                            0,
+                            0x400,
+                            0x400
+                        );
+                        gDPPipeSync(gRegionAllocPtr++);
+                    }
+                } else {
+                    viewportAlloc = arenaAlloc16(sizeof(node->viewportWidth) * 8);
+                    projectionAlloc = arenaAlloc16(sizeof(node->perspectiveMatrix));
+                    lookAtAlloc = arenaAlloc16(48 * sizeof(s32));
+
+                    if (node->numLights > 0) {
+                        lightArray = arenaAlloc16((node->numLights + 1) * sizeof(Light));
+                        if (lightArray != NULL) {
+                            for (i = 0; i < node->numLights; i++) {
+                                memcpy(
+                                    (Light *)(i * sizeof(Light) + (u32)lightArray),
+                                    (u8 *)(i * sizeof(Light) + (u32)node) + 0x148,
+                                    sizeof(Light)
+                                );
+                                gSPLight(gRegionAllocPtr++, (Light *)(i * sizeof(Light) + (u32)lightArray), i + 1);
+                            }
+
+                            memcpy(
+                                (Light *)(i * sizeof(Light) + (u32)lightArray),
+                                (u8 *)(i * sizeof(Light) + (u32)node) + 0x148,
+                                sizeof(Light)
+                            );
+                            gSPLight(gRegionAllocPtr++, (Light *)(i * sizeof(Light) + (u32)lightArray), i + 1);
+
+                            gSPNumLights(gRegionAllocPtr++, node->numLights);
+                        } else {
+                            goto bail;
+                        }
+                    }
+
+                    if (lookAtAlloc != NULL) {
+                        memcpy(viewportAlloc, &node->viewportWidth, 16);
+                        memcpy(projectionAlloc, &node->perspectiveMatrix, sizeof(node->perspectiveMatrix));
+
+                        lookAtAlloc[0] = ((node->modelingMatrix.m[0][0] << 3) & 0xFFFF0000) +
+                                         (u16)(((u16)node->modelingMatrix.m[1][0] << 16) >> 29);
+                        lookAtAlloc[1] = (node->modelingMatrix.m[2][0] << 3) & 0xFFFF0000;
+                        lookAtAlloc[2] = ((node->modelingMatrix.m[0][1] << 3) & 0xFFFF0000) +
+                                         (u16)(((u16)node->modelingMatrix.m[1][1] << 16) >> 29);
+                        lookAtAlloc[3] = (node->modelingMatrix.m[2][1] << 3) & 0xFFFF0000;
+                        lookAtAlloc[4] = ((node->modelingMatrix.m[0][2] << 3) & 0xFFFF0000) +
+                                         (u16)(((u16)node->modelingMatrix.m[1][2] << 16) >> 29);
+                        lookAtAlloc[5] = (node->modelingMatrix.m[2][2] << 3) & 0xFFFF0000;
+                        lookAtAlloc[6] = 0;
+                        lookAtAlloc[7] = 1;
+                        lookAtAlloc[8] = ((node->modelingMatrix.m[0][0] << 19) & 0xFFFF0000) +
+                                         ((node->modelingMatrix.m[1][0] << 3) & 0xFFFF);
+                        lookAtAlloc[9] = (node->modelingMatrix.m[2][0] << 19) & 0xFFFF0000;
+                        lookAtAlloc[10] = ((node->modelingMatrix.m[0][1] << 19) & 0xFFFF0000) +
+                                          ((node->modelingMatrix.m[1][1] << 3) & 0xFFFF);
+                        lookAtAlloc[11] = (node->modelingMatrix.m[2][1] << 19) & 0xFFFF0000;
+                        lookAtAlloc[12] = ((node->modelingMatrix.m[0][2] << 19) & 0xFFFF0000) +
+                                          ((node->modelingMatrix.m[1][2] << 3) & 0xFFFF);
+                        lookAtAlloc[13] = (node->modelingMatrix.m[2][2] << 19) & 0xFFFF0000;
+                        lookAtAlloc[14] = 0;
+                        lookAtAlloc[15] = 0;
+
+                        lookAtAlloc[16] = 0x10000;
+                        lookAtAlloc[17] = 0;
+                        lookAtAlloc[18] = 1;
+                        lookAtAlloc[19] = 0;
+                        lookAtAlloc[20] = 0;
+                        lookAtAlloc[21] = 0x10000;
+                        lookAtAlloc[22] = ((-node->modelingMatrix.translation.x) & 0xFFFF0000) +
+                                          (u16)(((u32)(-node->modelingMatrix.translation.y)) >> 16);
+                        lookAtAlloc[23] = ((-node->modelingMatrix.translation.z) & 0xFFFF0000) + 1;
+                        lookAtAlloc[24] = 0;
+                        lookAtAlloc[25] = 0;
+                        lookAtAlloc[26] = 0;
+                        lookAtAlloc[27] = 0;
+                        lookAtAlloc[28] = 0;
+                        lookAtAlloc[29] = 0;
+                        lookAtAlloc[30] =
+                            -(node->modelingMatrix.translation.x << 16) + (u16)(-node->modelingMatrix.translation.y);
+                        lookAtAlloc[31] = (-node->modelingMatrix.translation.z) << 16;
+
+                        lookAtAlloc[32] = ((node->modelingMatrix.m[0][0] << 3) & 0xFFFF0000) +
+                                          (u16)(((u16)node->modelingMatrix.m[0][1] << 16) >> 29);
+                        lookAtAlloc[33] = (node->modelingMatrix.m[0][2] << 3) & 0xFFFF0000;
+                        lookAtAlloc[34] = ((node->modelingMatrix.m[1][0] << 3) & 0xFFFF0000) +
+                                          (u16)(((u16)node->modelingMatrix.m[1][1] << 16) >> 29);
+                        lookAtAlloc[35] = (node->modelingMatrix.m[1][2] << 3) & 0xFFFF0000;
+                        lookAtAlloc[36] = ((node->modelingMatrix.m[2][0] << 3) & 0xFFFF0000) +
+                                          (u16)(((u16)node->modelingMatrix.m[2][1] << 16) >> 29);
+                        lookAtAlloc[37] = (node->modelingMatrix.m[2][2] << 3) & 0xFFFF0000;
+                        lookAtAlloc[38] = 0;
+                        lookAtAlloc[39] = 1;
+                        lookAtAlloc[40] = ((node->modelingMatrix.m[0][0] << 19) & 0xFFFF0000) +
+                                          ((node->modelingMatrix.m[0][1] << 3) & 0xFFFF);
+                        lookAtAlloc[41] = (node->modelingMatrix.m[0][2] << 19) & 0xFFFF0000;
+                        lookAtAlloc[42] = ((node->modelingMatrix.m[1][0] << 19) & 0xFFFF0000) +
+                                          ((node->modelingMatrix.m[1][1] << 3) & 0xFFFF);
+                        lookAtAlloc[43] = (node->modelingMatrix.m[1][2] << 19) & 0xFFFF0000;
+                        lookAtAlloc[44] = ((node->modelingMatrix.m[2][0] << 19) & 0xFFFF0000) +
+                                          ((node->modelingMatrix.m[2][1] << 3) & 0xFFFF);
+                        lookAtAlloc[45] = (node->modelingMatrix.m[2][2] << 19) & 0xFFFF0000;
+                        lookAtAlloc[46] = 0;
+                        lookAtAlloc[47] = 0;
+
+                        D_800A8B14_9FE84 = (void *)&lookAtAlloc[32];
+
+                        gSPViewport(gRegionAllocPtr++, viewportAlloc);
+                        gSPPerspNormalize(gRegionAllocPtr++, node->perspNorm);
+                        gSPMatrix(gRegionAllocPtr++, projectionAlloc, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+                        gSPMatrix(gRegionAllocPtr++, lookAtAlloc, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+                        gSPMatrix(gRegionAllocPtr++, &lookAtAlloc[16], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+
+                        gSPFogPosition(gRegionAllocPtr++, node->fogMin, node->fogMax);
+                        gDPSetFogColor(gRegionAllocPtr++, node->fogR, node->fogG, node->fogB, node->fogA);
+                    } else {
+                        goto bail;
+                    }
+
+                    for (callbackEntry = (CallbackEntry *)node->pool; callbackEntry != NULL;
+                         callbackEntry = callbackEntry->next) {
+                        if (callbackEntry->callback == NULL) {
+                            continue;
+                        }
+
+                        if (isRegionAllocSpaceLow() != 0) {
+                            break;
+                        }
+
+                        D_800AB250_A25C0 = callbackEntry->poolIndex;
+                        ((void (*)(void *))callbackEntry->callback)(callbackEntry->callbackData);
+                        D_800AB198_A2508++;
+                    }
+
+                bail:
+                    if (node->prevFadeValue != 0) {
+                        gSPDisplayList(gRegionAllocPtr++, D_8009AF48_9BB48);
+                        gDPSetPrimColor(
+                            gRegionAllocPtr++,
+                            0,
+                            0,
+                            node->envR,
+                            node->envG,
+                            node->envB,
+                            node->prevFadeValue
+                        );
+                        gSPTextureRectangle(
+                            gRegionAllocPtr++,
+                            node->clipLeft << 2,
+                            node->clipTop << 2,
+                            node->clipRight << 2,
+                            node->clipBottom << 2,
+                            0,
+                            0,
+                            0,
+                            0x400,
+                            0x400
+                        );
+                        gDPPipeSync(gRegionAllocPtr++);
+                        gDPSetColorDither(gRegionAllocPtr++, G_CD_MAGICSQ);
+                    }
+                }
+            }
+
+            if (node->frameCallbackMsg != NULL) {
+                if (!needsDisplayListSetup) {
+                    if (((*(&D_800A3370_A3F70.prevFadeValue)) != 0) && (node->list3_next == 0)) {
+                        BorderData *bd = (BorderData *)(((u8 *)(&D_800A3370_A3F70.prevFadeValue)) - 0xF);
+
+                        gSPDisplayList(gRegionAllocPtr++, D_8009AF48_9BB48);
+
+                        gDPSetScissor(
+                            gRegionAllocPtr++,
+                            G_SC_NON_INTERLACE,
+                            bd->clipLeft,
+                            bd->clipTop,
+                            bd->clipRight,
+                            bd->clipBottom
+                        );
+
+                        gDPSetPrimColor(gRegionAllocPtr++, 0, 0, bd->envR, bd->envG, bd->envB, bd->envA);
+
+                        gSPTextureRectangle(
+                            gRegionAllocPtr++,
+                            bd->clipLeft << 2,
+                            bd->clipTop << 2,
+                            bd->clipRight << 2,
+                            bd->clipBottom << 2,
+                            0,
+                            0,
+                            0,
+                            0x400,
+                            0x400
+                        );
+                    }
+
+                    gSPEndDisplayList(gRegionAllocPtr++);
+                    gSPDisplayList(node->displayListPtr, displayListStart);
+                }
+                needsDisplayListSetup = TRUE;
+            }
+
+            initViewportCallbackPool(node);
+        }
+    }
+
+    if (gFrameBufferFlags[(gCurrentDoubleBufferIndex + 1) & 1] != 0) {
+        gDisplayFramePending = TRUE;
+    } else {
+        processDisplayFrameUpdate();
+    }
+
+    resetLinearAllocator();
+}
 
 void osViExtendVStart(u32 arg0) {
     __additional_scanline_0 = arg0;
@@ -327,12 +894,12 @@ void linearAllocSelectRegion(s32 region) {
 
     temp_v0 = gLinearArenaRegionsArray[region];
 
-    gRegionAllocPtr = temp_v0;
+    gRegionAllocPtr = (Gfx *)temp_v0;
     gRegionAllocEnd = temp_v0 + 0x10000;
 }
 
 s32 isRegionAllocSpaceLow(void) {
-    return (u32)(gRegionAllocEnd - gRegionAllocPtr) < 0x1AE1U;
+    return (u32)(gRegionAllocEnd - (u32)gRegionAllocPtr) < 0x1AE1U;
 }
 
 void restoreViewportOffsets(void) {
@@ -542,7 +1109,7 @@ void initViewportNode(ViewportNode *arg0, ViewportNode *arg1, s32 arg2, s32 arg3
     arg0->unkD2 = 0x1E0;
     arg0->unkD4 = 0x1FF;
     arg0->unkD6 = 0;
-    memcpy(arg0->modelingMatrix, identityMatrix, 0x20);
+    memcpy(&arg0->modelingMatrix, identityMatrix, sizeof(Transform3D));
     guPerspective(&arg0->perspectiveMatrix, &arg0->perspNorm, 30.0f, 1.3333334f, 20.0f, 2000.0f, 1.0f);
     arg0->fogA = 0xFF;
     arg0->fogMin = 0x3DE;
@@ -601,7 +1168,7 @@ void setViewportTransformById(u16 viewportId, void *transformMatrix) {
 
     while (node != NULL) {
         if (node->id == viewportId) {
-            memcpy(node->modelingMatrix, transformMatrix, 0x20);
+            memcpy(&node->modelingMatrix, transformMatrix, sizeof(Transform3D));
         }
         node = node->unk8.list2_next;
     }
