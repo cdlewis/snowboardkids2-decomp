@@ -203,8 +203,8 @@ void initAnimatedGhost(AnimatedGhostEntity *ghost) {
     setCallbackWithContinue(fadeInGhost);
 }
 
-void cleanupAnimatedGhost(void **arg0) {
-    *arg0 = freeNodeMemory(*arg0);
+void cleanupAnimatedGhost(void **ghostEntity) {
+    *ghostEntity = freeNodeMemory(*ghostEntity);
 }
 
 s32 updateGhostPositionAndCheckEnd(AnimatedGhostEntity *ghost) {
