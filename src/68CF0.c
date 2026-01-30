@@ -1,8 +1,8 @@
 #include "68CF0.h"
 
 #include "19E80.h"
-#include "6E840.h"
 #include "common.h"
+#include "graphics.h"
 
 extern s32 gFontTextureData;
 extern s32 gFontPaletteBase;

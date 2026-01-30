@@ -1,7 +1,7 @@
+#include "audio.h"
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "graphics.h"
 #include "task_scheduler.h"
 
 typedef struct {

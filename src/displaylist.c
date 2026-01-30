@@ -3,11 +3,11 @@
 #include "19E80.h"
 #include "5AA90.h"
 #include "68CF0.h"
-#include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
 #include "gbi.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
@@ -30,7 +30,7 @@ typedef struct {
     u8 defaultLight2R;
     u8 defaultLight2G;
     u8 defaultLight2B;
-} D_800AB068_A23D8_arg;
+} gActiveViewport_arg;
 
 typedef struct {
     /* 0x00 */ s32 vertices;
@@ -74,8 +74,8 @@ typedef struct {
     /* 0x1C */ Mtx *matrix;
 } AlphaSpriteState;
 
-extern s32 D_800A8B14_9FE84;
-extern D_800AB068_A23D8_arg *D_800AB068_A23D8;
+extern s32 gLookAtPtr;
+extern gActiveViewport_arg *gActiveViewport;
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
 extern void *D_800A2D40_A3940;
@@ -422,7 +422,7 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
         }
 
         matrixToEulerAngles(
-            &D_800AB068_A23D8->cameraRotationMatrix,
+            &gActiveViewport->cameraRotationMatrix,
             (s32 *)obj,
             &lookAtX,
             &lookAtY,
@@ -529,7 +529,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
         }
 
         matrixToEulerAngles(
-            &D_800AB068_A23D8->cameraRotationMatrix,
+            &gActiveViewport->cameraRotationMatrix,
             (s32 *)arg0,
             &sp70,
             &sp74,
@@ -784,7 +784,7 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
             return;
         }
 
-        matrixToEulerAngles(&D_800AB068_A23D8->cameraRotationMatrix, (s32 *)obj, &eyeX, &eyeY, &eyeZ, &upX, &upY, &upZ);
+        matrixToEulerAngles(&gActiveViewport->cameraRotationMatrix, (s32 *)obj, &eyeX, &eyeY, &eyeZ, &upX, &upY, &upZ);
         guLookAtReflect(&lookAtMatrix, lookAt, 0.0f, 0.0f, 0.0f, eyeX, eyeY, eyeZ, upX, upY, upZ);
         gSPLookAt(gRegionAllocPtr++, lookAt);
     }
@@ -835,7 +835,7 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
 
     gSPMatrix(gRegionAllocPtr++, obj->transformMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
     gSPMatrix(gRegionAllocPtr++, &obj->transformMatrix[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 }
@@ -961,7 +961,7 @@ void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
         }
 
         matrixToEulerAngles(
-            &D_800AB068_A23D8->cameraRotationMatrix,
+            &gActiveViewport->cameraRotationMatrix,
             (s32 *)arg0,
             &sp70,
             &sp74,
@@ -1146,7 +1146,7 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *obj) {
         }
 
         matrixToEulerAngles(
-            &D_800AB068_A23D8->cameraRotationMatrix,
+            &gActiveViewport->cameraRotationMatrix,
             (s32 *)obj,
             &sp70,
             &sp74,
@@ -1207,15 +1207,15 @@ void renderOpaqueDisplayListWithLights(DisplayListObject *arg0) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
-            D_800AB068_A23D8->defaultLight1B << 8
+        gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
+            gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
-            D_800AB068_A23D8->defaultLight2B << 8
+        gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
+            gActiveViewport->defaultLight2B << 8
     );
 }
 
@@ -1227,15 +1227,15 @@ void renderTransparentDisplayListWithLights(DisplayListObject *arg0) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
-            D_800AB068_A23D8->defaultLight1B << 8
+        gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
+            gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
-            D_800AB068_A23D8->defaultLight2B << 8
+        gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
+            gActiveViewport->defaultLight2B << 8
     );
 }
 
@@ -1247,15 +1247,15 @@ void renderOverlayDisplayListWithLights(DisplayListObject *arg0) {
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
-            D_800AB068_A23D8->defaultLight1B << 8
+        gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
+            gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
-            D_800AB068_A23D8->defaultLight2B << 8
+        gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
+            gActiveViewport->defaultLight2B << 8
     );
 }
 
@@ -1315,15 +1315,15 @@ void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjec
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
-            D_800AB068_A23D8->defaultLight1B << 8
+        gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
+            gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
-            D_800AB068_A23D8->defaultLight2B << 8
+        gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
+            gActiveViewport->defaultLight2B << 8
     );
 }
 
@@ -1367,15 +1367,15 @@ void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *display
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
-            D_800AB068_A23D8->defaultLight1B << 8
+        gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
+            gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
-            D_800AB068_A23D8->defaultLight2B << 8
+        gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
+            gActiveViewport->defaultLight2B << 8
     );
 }
 
@@ -1419,15 +1419,15 @@ void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObje
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_1,
-        D_800AB068_A23D8->defaultLight1R << 0x18 | D_800AB068_A23D8->defaultLight1G << 0x10 |
-            D_800AB068_A23D8->defaultLight1B << 8
+        gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
+            gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
         gRegionAllocPtr++,
         LIGHT_2,
-        D_800AB068_A23D8->defaultLight2R << 0x18 | D_800AB068_A23D8->defaultLight2G << 0x10 |
-            D_800AB068_A23D8->defaultLight2B << 8
+        gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
+            gActiveViewport->defaultLight2B << 8
     );
 }
 
@@ -1486,7 +1486,7 @@ void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
         return;
     }
 
-    memcpy(&D_8009A8A4_9B4A4, &D_800AB068_A23D8->cameraX, 0xC);
+    memcpy(&D_8009A8A4_9B4A4, &gActiveViewport->cameraX, 0xC);
     transform3DToMtx(&D_8009A8A4_9B4A4 - 5, displayListObj->transformMatrix);
 
     if (displayListObj->displayLists->flags & 1) {
@@ -1496,7 +1496,7 @@ void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
         }
 
         matrixToEulerAngles(
-            &D_800AB068_A23D8->cameraRotationMatrix,
+            &gActiveViewport->cameraRotationMatrix,
             (s32 *)displayListObj,
             &lookAtX,
             &lookAtY,
@@ -1565,13 +1565,13 @@ void enqueueCameraRelativeDisplayList(s32 arg0, DisplayListObject *arg1) {
 }
 
 void renderTexturedBillboardSprite(TexturedSpriteState *state) {
-    if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
 
@@ -1636,7 +1636,7 @@ void renderTexturedBillboardSprite(TexturedSpriteState *state) {
     }
 
     gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
@@ -1647,13 +1647,13 @@ void enqueueTexturedBillboardSprite(s32 arg0, TexturedBillboardSprite *arg1) {
 }
 
 void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
-    if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
 
@@ -1717,7 +1717,7 @@ void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
     }
 
     gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
@@ -1728,13 +1728,13 @@ void enqueueRotatedBillboardSprite(s32 arg0, MatrixEntry_202A0 *arg1) {
 }
 
 void renderTexturedBillboardSpriteTile(TexturedSpriteState *state) {
-    if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
 
@@ -1807,7 +1807,7 @@ void renderTexturedBillboardSpriteTile(TexturedSpriteState *state) {
     }
 
     gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
@@ -1818,13 +1818,13 @@ void enqueueTexturedBillboardSpriteTile(u16 arg0, TexturedBillboardSprite *arg1)
 }
 
 void renderAlphaBillboardSprite(AlphaSpriteState *state) {
-    if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
 
@@ -1898,7 +1898,7 @@ void renderAlphaBillboardSprite(AlphaSpriteState *state) {
     }
 
     gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
@@ -1910,13 +1910,13 @@ void enqueueAlphaBillboardSprite(s32 arg0, loadAssetMetadata_arg *arg1) {
 
 void renderAlphaSprite(AlphaSpriteState *state) {
     // Frustum culling - check if sprite is within view distance
-    if ((u32)((D_800AB068_A23D8->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
-    if ((u32)((D_800AB068_A23D8->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
+    if ((u32)((gActiveViewport->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
         return;
     }
 
@@ -1991,7 +1991,7 @@ void renderAlphaSprite(AlphaSpriteState *state) {
     }
 
     gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
     gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }

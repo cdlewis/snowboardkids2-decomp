@@ -1,7 +1,7 @@
 #include "90F0.h"
 
-#include "6E840.h"
 #include "common.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 extern s16 D_8008C930_8D530[][10];

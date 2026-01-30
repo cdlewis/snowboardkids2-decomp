@@ -1,12 +1,12 @@
 #include "10AD0.h"
 #include "20F0.h"
 #include "38C90.h"
-#include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 

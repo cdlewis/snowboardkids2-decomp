@@ -1,9 +1,9 @@
 #include "1DFAA0.h"
-#include "6E840.h"
 #include "buffers.h"
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 

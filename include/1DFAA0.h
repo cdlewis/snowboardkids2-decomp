@@ -1,8 +1,8 @@
 #pragma once
 
 #include "20F0.h"
-#include "6E840.h"
 #include "common.h"
+#include "graphics.h"
 #include "main.h"
 
 typedef struct {
@@ -33,8 +33,8 @@ typedef struct {
             s8 padding;
         } CurtainPayload;
         struct {
-            s16 frameCount;   // Number of frames remaining for trick effect
-            s16 effectParam;  // Effect parameter passed to trick effect function
+            s16 frameCount;  // Number of frames remaining for trick effect
+            s16 effectParam; // Effect parameter passed to trick effect function
         } TrickPayload;
         struct {
             s16 remainingFrames;
@@ -212,8 +212,8 @@ typedef struct {
             s8 padding;
         } CurtainPayload;
         struct {
-            s16 frameCount;   // Number of frames remaining for trick effect
-            s16 effectParam;  // Effect parameter passed to trick effect function
+            s16 frameCount;  // Number of frames remaining for trick effect
+            s16 effectParam; // Effect parameter passed to trick effect function
         } TrickPayload;
         struct {
             s16 remainingFrames;
@@ -271,7 +271,14 @@ void hideAllSlotModels(CutsceneSlot *slots);
 void showAllSlotModels(CutsceneSlot *slots);
 void resetAllSlotModels(CutsceneSlot *slots);
 void resetAllSlotTransforms(CutsceneManager *manager);
-void prepareCutsceneForPlayback(CutsceneManager *manager, s32 uiResource, s32 pad4_0, s32 pad4_4, u16 maxFrame, u8 showDebugInfo);
+void prepareCutsceneForPlayback(
+    CutsceneManager *manager,
+    s32 uiResource,
+    s32 pad4_0,
+    s32 pad4_4,
+    u16 maxFrame,
+    u8 showDebugInfo
+);
 s32 processCutsceneFrame(CutsceneManager *cutsceneManager);
 s16 getCutsceneFrameCount(s16 slotIndex, s16 cutsceneType);
 void *getCutsceneDataMagicPrimary(void);

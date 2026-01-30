@@ -1,8 +1,8 @@
 #include "42170.h"
 #include "5DBC0.h"
+#include "audio.h"
 #include "common.h"
 #include "gamestate.h"
-#include "graphics.h"
 #include "race_session.h"
 #include "rand.h"
 

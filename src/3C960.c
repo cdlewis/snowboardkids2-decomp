@@ -1,6 +1,6 @@
 #include "10AD0.h"
-#include "6E840.h"
 #include "common.h"
+#include "graphics.h"
 
 typedef struct {
     s16 x;

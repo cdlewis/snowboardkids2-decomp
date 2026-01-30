@@ -6,7 +6,7 @@
 #include "594E0.h"
 #include "5AA90.h"
 #include "5E590.h"
-#include "6E840.h"
+#include "audio.h"
 #include "common.h"
 #include "course.h"
 #include "displaylist.h"
@@ -740,7 +740,7 @@ extern void *D_800955E0_961E0;
 extern void *D_80095860_96460;
 extern void *D_80095930_96530;
 extern Gfx D_8009A780_9B380[];
-extern s32 D_800A8B14_9FE84;
+extern s32 gLookAtPtr;
 extern CompressedAsset D_80090BD4_917D4[];
 extern s32 gFlyingSceneryInitOffset[3];
 extern CompressedAsset D_80090AF0_916F0[];
@@ -1871,7 +1871,7 @@ void renderGoldCoins(GoldCoinRenderState *state) {
                     (u8 *)state->matrixBuffer + (i << 6),
                     G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
                 );
-                gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+                gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
                 gSPVertex(gRegionAllocPtr++, state->displayData, 4, 0);
                 gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
             }

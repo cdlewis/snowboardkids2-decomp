@@ -1,8 +1,8 @@
 #include "../race_session.h"
 #include "36B80.h"
 #include "56910.h"
+#include "audio.h"
 #include "common.h"
-#include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
@@ -57,84 +57,84 @@ void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0) {
 
     if (state->gamePaused == 0) {
         switch (arg0->panelIndex) {
-        case 0:
-            if (state->raceIntroState != 0) {
+            case 0:
+                if (state->raceIntroState != 0) {
+                    break;
+                }
+                goto do_action;
+            case 1:
+                if ((state->players->sectorIndex < 3) || (state->players->unkB84 & 1)) {
+                    break;
+                }
+                goto do_action;
+            case 2:
+                if (state->players->sectorIndex < 0xE) {
+                    break;
+                }
+                goto do_action;
+            case 3:
+                if ((state->players->sectorIndex < 0x12) || (state->players->unkB84 & 1)) {
+                    break;
+                }
+                goto do_action;
+            case 4:
+                if (state->players->sectorIndex < 0x14) {
+                    break;
+                }
+                goto do_action;
+            case 5:
+                if (state->players->sectorIndex < 0x1A) {
+                    break;
+                }
+                goto do_action;
+            case 6:
+                if (state->players->sectorIndex < 0x28) {
+                    break;
+                }
+                goto do_action;
+            case 7:
+                if (state->players->sectorIndex < 0x2D) {
+                    break;
+                }
+                goto do_action;
+            case 8:
+                if (state->players->sectorIndex < 0x30) {
+                    break;
+                }
+                goto do_action;
+            case 9:
+                if (state->players->sectorIndex < 0x32) {
+                    break;
+                }
+                goto do_action;
+            case 10:
+                if (state->players->sectorIndex < 0x35) {
+                    break;
+                }
+                goto do_action;
+            case 11:
+                if (state->players->sectorIndex < 0x38) {
+                    break;
+                }
+                goto do_action;
+            case 12:
+                if ((state->players->currentLap == 0) || (state->players->sectorIndex == 0)) {
+                    break;
+                }
+                goto do_action;
+            case 13:
                 break;
-            }
-            goto do_action;
-        case 1:
-            if ((state->players->sectorIndex < 3) || (state->players->unkB84 & 1)) {
+            default:
+            do_action:
+                state->trainingPanelState = 1;
+                playSoundEffect(0x2C);
+                arg0->panelWidth = 1;
+                arg0->panelHeight = 1;
+                arg0->alphaColor = 0xF0;
+                arg0->messageIndex = 0;
+                *(s16 *)&arg0->scale = 0xC0;
+                setCallback(expandTrainingInstructionPanelWidth);
                 break;
-            }
-            goto do_action;
-        case 2:
-            if (state->players->sectorIndex < 0xE) {
-                break;
-            }
-            goto do_action;
-        case 3:
-            if ((state->players->sectorIndex < 0x12) || (state->players->unkB84 & 1)) {
-                break;
-            }
-            goto do_action;
-        case 4:
-            if (state->players->sectorIndex < 0x14) {
-                break;
-            }
-            goto do_action;
-        case 5:
-            if (state->players->sectorIndex < 0x1A) {
-                break;
-            }
-            goto do_action;
-        case 6:
-            if (state->players->sectorIndex < 0x28) {
-                break;
-            }
-            goto do_action;
-        case 7:
-            if (state->players->sectorIndex < 0x2D) {
-                break;
-            }
-            goto do_action;
-        case 8:
-            if (state->players->sectorIndex < 0x30) {
-                break;
-            }
-            goto do_action;
-        case 9:
-            if (state->players->sectorIndex < 0x32) {
-                break;
-            }
-            goto do_action;
-        case 10:
-            if (state->players->sectorIndex < 0x35) {
-                break;
-            }
-            goto do_action;
-        case 11:
-            if (state->players->sectorIndex < 0x38) {
-                break;
-            }
-            goto do_action;
-        case 12:
-            if ((state->players->currentLap == 0) || (state->players->sectorIndex == 0)) {
-                break;
-            }
-            goto do_action;
-        case 13:
-            break;
-        default:
-        do_action:
-            state->trainingPanelState = 1;
-            playSoundEffect(0x2C);
-            arg0->panelWidth = 1;
-            arg0->panelHeight = 1;
-            arg0->alphaColor = 0xF0;
-            arg0->messageIndex = 0;
-            *(s16 *)&arg0->scale = 0xC0;
-            setCallback(expandTrainingInstructionPanelWidth);
-            break;
         }
     }
 }
@@ -243,9 +243,30 @@ void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *
 
     table_ptr = s_trainingPanelMessageTables[arg0->panelIndex];
     temp_v1_2 = arg0->messageData[table_ptr[arg0->messageIndex]];
-    func_80035260_35E60(arg0->textRenderContext, (void *)arg0->messageData + temp_v1_2, -0x68, -0x30, 0xFF, 0xFF, 0, s1_var, s0_var);
+    func_80035260_35E60(
+        arg0->textRenderContext,
+        (void *)arg0->messageData + temp_v1_2,
+        -0x68,
+        -0x30,
+        0xFF,
+        0xFF,
+        0,
+        s1_var,
+        s0_var
+    );
 
-    renderTiledSprite3x3(arg0->uiAsset, -0x68, -0x30, 0xD, s0_var, 1, GET_ALPHA_COLOR_HIGH_BYTE(arg0), arg0->colorIndex, s1_var, s0_var);
+    renderTiledSprite3x3(
+        arg0->uiAsset,
+        -0x68,
+        -0x30,
+        0xD,
+        s0_var,
+        1,
+        GET_ALPHA_COLOR_HIGH_BYTE(arg0),
+        arg0->colorIndex,
+        s1_var,
+        s0_var
+    );
 
     if (gControllerInputs & A_BUTTON) {
         temp_v0 = arg0->messageIndex + 1;

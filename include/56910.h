@@ -1,7 +1,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
-#include "6E840.h"
+#include "graphics.h"
 
 typedef struct {
     void *start;
@@ -19,10 +19,10 @@ typedef struct {
     s32 shortcutPosZ;
     u16 yawOffset;
     u8 padding[2];
-    Vec3i spawnPos;     /* 0x0C - Shortcut spawn/warp position */
+    Vec3i spawnPos;        /* 0x0C - Shortcut spawn/warp position */
     ColorData lightColors; /* 0x18 - Viewport light colors */
     ColorData fogColors;   /* 0x20 - Fog colors */
-    s16 musicTrack;     /* 0x28 - Music track for this level */
+    s16 musicTrack;        /* 0x28 - Music track for this level */
     u8 padding2[0x2];
 } LevelConfig;
 

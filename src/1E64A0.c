@@ -2,9 +2,9 @@
 #include "36B80.h"
 #include "90F0.h"
 #include "B040.h"
+#include "audio.h"
 #include "common.h"
 #include "cutscene/cutscene_sys2.h"
-#include "graphics.h"
 #include "race_session.h"
 #include "task_scheduler.h"
 

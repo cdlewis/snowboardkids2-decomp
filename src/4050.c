@@ -1,6 +1,6 @@
 #include "1DFAA0.h"
 #include "1E60D0.h"
-#include "6E840.h"
+#include "audio.h"
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"

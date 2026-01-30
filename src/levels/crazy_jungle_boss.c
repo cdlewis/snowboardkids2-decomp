@@ -7,11 +7,11 @@
 #include "5EA60.h"
 #include "9FF70.h"
 #include "A9A40.h"
+#include "audio.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
@@ -355,8 +355,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
         *(s32 *)(elem + 0x60) = *(s32 *)((u8 *)arg0 + 8);
         *(s32 *)(elem + 0x64) = 0;
         assetOffset = i * 0x10;
-        *(void **)(elem + 0x58) =
-            (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + assetOffset);
+        *(void **)(elem + 0x58) = (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + assetOffset);
     }
 
     arg0->unkA8C = 0;
@@ -669,8 +668,10 @@ void updateBossProximityCheckpoints(Arg0Struct *arg0) {
         s32 *checkpointPos;
         u16 sectorIndex;
 
-        arg0->checkpoints[checkpointIndex].posX = arg0->unk970.translation.x + gCrazyJungleBossCheckpointOffsets[checkpointIndex].x;
-        arg0->checkpoints[checkpointIndex].posZ = arg0->unk970.translation.z + gCrazyJungleBossCheckpointOffsets[checkpointIndex].z;
+        arg0->checkpoints[checkpointIndex].posX =
+            arg0->unk970.translation.x + gCrazyJungleBossCheckpointOffsets[checkpointIndex].x;
+        arg0->checkpoints[checkpointIndex].posZ =
+            arg0->unk970.translation.z + gCrazyJungleBossCheckpointOffsets[checkpointIndex].z;
         checkpointPos = &arg0->checkpoints[checkpointIndex].posX;
         sectorIndex = getOrUpdatePlayerSectorIndex(arg0, (u8 *)gameData, arg0->sectorIndex, checkpointPos);
         arg0->checkpoints[checkpointIndex].height =

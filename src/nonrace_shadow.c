@@ -1,7 +1,7 @@
 #include "20F0.h"
-#include "6E840.h"
 #include "common.h"
 #include "geometry.h"
+#include "graphics.h"
 
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;

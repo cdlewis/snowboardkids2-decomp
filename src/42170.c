@@ -3,7 +3,7 @@
 #include "56910.h"
 #include "5AA90.h"
 #include "5E590.h"
-#include "6E840.h"
+#include "audio.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -2340,7 +2340,7 @@ void cleanupItemTriggerTask(Func45010Arg *arg0) {
 }
 
 extern Gfx D_8009A780_9B380[];
-extern s32 D_800A8B14_9FE84;
+extern s32 gLookAtPtr;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 
@@ -2486,7 +2486,7 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
                     G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
                 );
 
-                gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+                gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
                 gSPVertex(gRegionAllocPtr++, arg0->vertices, 4, 0);
 

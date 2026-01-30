@@ -1,0 +1,84 @@
+#pragma once
+
+#include "common.h"
+#include "geometry.h"
+
+void allocateAudioResources(void);
+void initializeMusicSystem(void);
+void queueAnonymousBufferData(void *source);
+void setAudioDistanceLimits(s32 innerDistance, s32 outerDistance);
+void queueBufferDataNoFlags(u8 *source, s8 bufferId);
+void setBufferData(void *source, u8 arg1, s32 arg2);
+void queueSoundAtPosition(Vec3i *position, s16 soundId);
+void queueSoundAtPositionWithDuration(Vec3i *position, u32 soundId, s16 duration);
+void queueSoundAtPositionWithPriority(Vec3i *position, s32 soundId, s16 priority, s16 duration);
+void queueSoundAtPositionWithVolume(Vec3i *position, s32 soundId, f32 volume, s16 priority, s32 duration);
+void queueSoundAtPositionWithVolumeAndFlags(Vec3i *position, s32 soundId, f32 volume, s16 priority, s32 duration, s32 flags);
+void incrementSoundSequence(void);
+void checkMusicLoadRequest(void *arg);
+void loadMusicTrackData(void);
+void initializeMusicPtrBank(void);
+void startMusicPlaybackWithFadeIn(void);
+void updateMusicVolumeFadeIn(void *arg);
+void handleMusicFadeOutTransition(void);
+void checkNoActiveAudioChannels(void);
+void playMusicTrack(s32 musicTrackId);
+void playMusicTrackWithVoice(s16 musicTrackId, s8 voiceIndex);
+void playMusicTrackWithFadeIn(u32 musicTrackId, u16 targetVolume, u16 fadeDuration);
+void setMusicVolumeFade(u16 targetVolume, u16 fadeDuration);
+void setMusicFadeOut(s32 fadeOutDuration);
+void initializeGfxCommThread(void);
+void gfxCommThreadFunc(void *arg0);
+void sendStopAudioChannelsCommand(s32 stoppingSpeed);
+void stopAudioChannelWithSpeed(void *audioChannel, s32 stoppingSpeed);
+void setAudioChannelVolume(void *audioChannel, s32 volume);
+void *startMusicPlaybackWithVoice(void *musicDataBuffer, void *musicBankBuffer, s32 voiceIndex);
+void *startMusicPlayback(void *musicDataBuffer, void *musicBankBuffer);
+void initializeMusicPtrBankAsync(void *ptrBank, void *waveBank);
+void *getAudioChannelActiveState(void *audioChannel);
+void *getActiveEffectChannelCount(void);
+void stopSoundEffectChannel(s32 channelIndex, s32 stoppingSpeed);
+void stopAllSoundEffectsAndClearQueues(s32 stoppingSpeed);
+void playSoundEffectAtPositionWithPriority(
+    s32 soundId,
+    s32 volume,
+    s32 pan,
+    f32 position,
+    s32 priority,
+    s32 channelIndex,
+    s32 voiceIndex
+);
+void playSoundEffectAtPosition(
+    s32 soundId,
+    s32 volume,
+    s32 pan,
+    f32 position,
+    s32 priority,
+    s32 channelIndex
+);
+// Play sound effect on specified channel with voice control
+void playSoundEffectOnChannelWithVoice(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex, s32 voiceIndex);
+// Play sound effect on specified channel with default voice
+void playSoundEffectOnChannel(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex);
+void playOrStopSoundEffectOnChannelWithVoice(s32 soundId, s32 volume, s32 priority, s32 channelIndex, s32 voiceIndex);
+void playOrStopSoundEffectOnChannel(s32 soundId, s32 volume, s32 priority, s32 channelIndex);
+void playOrStopSoundEffectNoPriorityWithVoice(s32 soundId, s32 volume, s32 channelIndex, s32 voiceIndex);
+void playOrStopSoundEffectNoPriority(s32 soundId, s32 volume, s32 channelIndex);
+void playSoundEffectOnChannelWithPriorityAndVoice(s32 soundId, s32 priority, s32 channelIndex, s32 voiceIndex);
+void playSoundEffectOnChannelWithPriority(s32 soundId, s32 priority, s32 channelIndex);
+void playSoundEffectOnChannelNoPriorityWithVoice(s32 soundId, s32 channelIndex, s32 voiceIndex);
+void playSoundEffectOnChannelNoPriority(s32 soundId, s32 channelIndex);
+void playSoundEffectWithPriorityAndVoice(s32 soundId, s32 volume, s32 priority, s32 voiceIndex);
+void playSoundEffectWithPriority(s32 soundId, s32 volume, s32 priority);
+void playSoundEffectWithPriorityPanAndVoice(s32 soundId, s32 volume, s32 pan, s32 priority, s32 voiceIndex);
+void playSoundEffectWithPriorityAndPan(s32 soundId, s32 volume, s32 pan, s32 priority);
+void playSoundEffectWithVolumePanAndVoice(s32 soundId, s32 volume, s32 pan, s32 voiceIndex);
+void playSoundEffectWithVolumeAndPan(s32 soundId, s32 volume, s32 pan);
+void playSoundEffectWithVolumeAndVoice(s32 soundId, s32 volume, s32 voiceIndex);
+void playSoundEffectWithVolume(s32 soundId, s32 volume);
+void playSoundEffectWithPriorityAndVoiceDefaultVolume(s32 soundId, s32 priority, s32 voiceIndex);
+void playSoundEffectWithPriorityDefaultVolume(s32 soundId, s32 priority);
+void playSoundEffectWithVoice(s32 soundId, s32 voiceIndex);
+void playSoundEffect(s32 soundId);
+void *getActiveAudioChannelCount(void);
+void *getActiveSongChannelCount(void);

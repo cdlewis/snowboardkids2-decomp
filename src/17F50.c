@@ -1,8 +1,8 @@
 #include "15690.h"
-#include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "race_session.h"
 #include "task_scheduler.h"
 

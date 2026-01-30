@@ -1,10 +1,10 @@
 #include "15690.h"
 #include "38C90.h"
 #include "4050.h"
-#include "6E840.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "graphics.h"
 #include "race_session.h"
 #include "task_scheduler.h"
 

@@ -1,17 +1,17 @@
 #include "levels/haunted_house.h"
-#include "race_session.h"
 #include "42170.h"
 #include "52880.h"
 #include "56910.h"
 #include "5AA90.h"
 #include "5DBC0.h"
 #include "5E590.h"
-#include "6E840.h"
+#include "audio.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
+#include "race_session.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
@@ -53,7 +53,6 @@ typedef struct {
     u8 pad[0x24];
     s32 unk24;
 } Task;
-
 
 typedef struct {
     /* 0x00 */ void *spriteAsset;
@@ -113,7 +112,7 @@ extern s32 g_FloatingBillboardTargetY;
 extern s32 g_FloatingBillboardTargetZ;
 extern Gfx D_8009A780_9B380[];
 extern Gfx D_800BCA60_B0750[];
-extern s32 D_800A8B14_9FE84;
+extern s32 gLookAtPtr;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 
@@ -145,7 +144,11 @@ void updateGhostAnimation(AnimatedGhostEntity *ghost) {
     ghost->animTimer--;
 
     if (ghost->animTimer == 0) {
-        loadAssetMetadata((loadAssetMetadata_arg *)&ghost->assetMetadata, ghost->assetData, D_800BC830_B0520[ghost->animFrameIndex].assetIndex);
+        loadAssetMetadata(
+            (loadAssetMetadata_arg *)&ghost->assetMetadata,
+            ghost->assetData,
+            D_800BC830_B0520[ghost->animFrameIndex].assetIndex
+        );
 
         ghost->animTimer = D_800BC830_B0520[ghost->animFrameIndex].frameDuration;
         ghost->animFrameIndex++;
@@ -228,7 +231,8 @@ s32 updateGhostPositionAndCheckEnd(AnimatedGhostEntity *ghost) {
 
         func_80060CDC_618DC(collisionContext, newHeight, posPtr, 0x80000, &surfaceNormal);
 
-        ghost->posY = getTrackHeightInSector(collisionContext, (u16)ghost->collisionHeight, posPtr, 0x100000) + 0x180000;
+        ghost->posY =
+            getTrackHeightInSector(collisionContext, (u16)ghost->collisionHeight, posPtr, 0x100000) + 0x180000;
 
         if (ghost->entityType == 0) {
             shouldEnd = (ghost->collisionHeight != 0x1A);
@@ -721,7 +725,7 @@ void renderGhosts(GhostRenderState *state) {
                 G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
             );
 
-            gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
             gSPVertex(gRegionAllocPtr++, D_800BCA60_B0750, 4, 0);
 

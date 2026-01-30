@@ -1,7 +1,7 @@
 #include "1DC480.h"
-#include "6E840.h"
 #include "B040.h"
 #include "common.h"
+#include "graphics.h"
 #include "race_session.h"
 
 extern s32 getOffsetTableEntryCount(s32);

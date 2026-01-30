@@ -2,11 +2,11 @@
 #include "56910.h"
 #include "594E0.h"
 #include "5AA90.h"
+#include "audio.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
@@ -96,7 +96,11 @@ void initFallingRockHazard(FallingRockHazard *rock) {
     rock->node2.segment2 = rock->node1.segment2;
     rock->node2.segment3 = rock->node1.segment3;
     memcpy(&rock->posX, &crazyJungleRockPositions[rock->positionIndex].position, 0xC);
-    createCombinedRotationMatrix(&rock->rotationMatrix, crazyJungleRockPositions[rock->positionIndex].rotX, crazyJungleRockPositions[rock->positionIndex].rotY);
+    createCombinedRotationMatrix(
+        &rock->rotationMatrix,
+        crazyJungleRockPositions[rock->positionIndex].rotX,
+        crazyJungleRockPositions[rock->positionIndex].rotY
+    );
     rock->xRotation = 0;
 
     setCleanupCallback(freeDisplayListSegments);
@@ -276,7 +280,8 @@ void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
 
                 for (i = 0; i < numPlayers; i++) {
                     if ((u32)gameState->players[i].sectorIndex - 0x60 < 6) {
-                        arg0->node.displayLists = &getSkyDisplayLists3ByIndex(gameState->memoryPoolId)->sceneryDisplayLists4;
+                        arg0->node.displayLists =
+                            &getSkyDisplayLists3ByIndex(gameState->memoryPoolId)->sceneryDisplayLists4;
                         randVal = (u8)randA();
                         randVal = randVal - 0x60;
                         i = randVal << 1;
@@ -296,7 +301,8 @@ void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
                 arg0->timer--;
                 if ((arg0->timer << 16) == 0) {
                     arg0->state = 0;
-                    arg0->node.displayLists = &getSkyDisplayLists3ByIndex(gameState->memoryPoolId)->sceneryDisplayLists3;
+                    arg0->node.displayLists =
+                        &getSkyDisplayLists3ByIndex(gameState->memoryPoolId)->sceneryDisplayLists3;
                     arg0->timer = 0x14;
                 }
             }

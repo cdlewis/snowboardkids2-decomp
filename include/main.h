@@ -1,8 +1,8 @@
 #pragma once
 
-#include "6E840.h"
 #include "common.h"
 #include "gamestate.h"
+#include "graphics.h"
 
 typedef struct {
     struct {

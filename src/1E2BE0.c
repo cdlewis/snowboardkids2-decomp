@@ -1,7 +1,7 @@
 #include "1E2BE0.h"
+#include "audio.h"
 #include "common.h"
 #include "geometry.h"
-#include "graphics.h"
 #include "task_scheduler.h"
 
 extern Transform3D D_8009A890_9B490;

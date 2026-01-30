@@ -1,5 +1,5 @@
 #include "2F990.h"
-#include "6E840.h"
+#include "audio.h"
 #include "common.h"
 #include "graphics.h"
 #include "rom_loader.h"

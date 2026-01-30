@@ -1,6 +1,6 @@
 #pragma once
 
-#include "6E840.h"
+#include "audio.h"
 #include "graphics.h"
 #include "main.h"
 

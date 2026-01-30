@@ -5,9 +5,9 @@
 #include "4050.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
+#include "audio.h"
 #include "common.h"
 #include "game_state_init.h"
-#include "graphics.h"
 #include "task_scheduler.h"
 
 extern u8 gTitleInitialized;

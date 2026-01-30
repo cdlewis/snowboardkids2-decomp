@@ -1,5 +1,5 @@
 microcodeGroups = 0x8009AFD8; // size:0x10
-D_800A3370_A3F70 = 0x800A3370; // size:0x1D8
+gRootViewport = 0x800A3370; // size:0xC
 D_800BCA64 = 0x800BCA64; // segment:levels/ice_land_boss rom:0xB1F54
 gFrameBuffer = 0x8016A000; // segment:buffers size:0x25800
 
@@ -3780,3 +3780,20 @@ getRenderContext = 0x800698DC; // rom:0x6A4DC
 updateCharSelectIconsLockedState = 0x80025904; // rom:0x26504
 updateBossProximityCheckpoints = 0x800BC330; // rom:0xACB60
 initCharSelectBoardModel = 0x80024990; // rom:0x25590
+gInitDisplayList = 0x8009ADF0; // rom:0x9B9F0
+gDefaultRenderDisplayList = 0x8009AED0; // rom:0x9BAD0
+gFadeOverlayDisplayList = 0x8009AF48; // rom:0x9BB48
+gCallbackEntrySegment = 0x8009AFCA; // rom:0x9BBCA size:0x2
+gNeedsDisplayListInit = 0x8009AFE8; // rom:0x9BBE8 size:0x1
+gFrameSkipCounter = 0x8009AFD0; // rom:0x9BBD0 size:0x4
+gCallbackCounter = 0x800AB198; // size:0x4
+gCurrentPoolIndex = 0x800AB250; // size:0x2
+gActiveViewport = 0x800AB068; // size:0x4
+gViewportOriginX = 0x800AB478; // size:0x2
+gViewportOriginY = 0x800A8A9A; // size:0x2
+gLastViewportInGroup = 0x800A337C; // size:0x4
+gDramStack = 0x800A3360; // size:0x4
+gOutputBuffer = 0x800A3364; // size:0x4
+gYieldBuffer = 0x800A3368; // size:0x4
+gLookAtPtr = 0x800A8B14; // size:0x4
+renderFrame = 0x8006E054; // rom:0x6EC54

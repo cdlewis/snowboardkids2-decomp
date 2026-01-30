@@ -1,6 +1,6 @@
 #include "mainEntrypoint.h"
-#include "6E840.h"
 #include "PRinternal/viint.h"
+#include "audio.h"
 #include "common.h"
 #include "controller_io.h"
 #include "displaylist.h"
@@ -79,7 +79,7 @@ void mainThreadEntrypoint(void *arg) {
             cleanupUnusedNodes();
             runTaskSchedulers();
             motorUpdate();
-            func_8006E054_6EC54((u16)messageData);
+            renderFrame((u16)messageData);
         } else {
             gControllerPollingEnabled = 1;
             resumeMotorStates();

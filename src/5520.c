@@ -1,7 +1,7 @@
 #include "5520.h"
-#include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
+#include "graphics.h"
 #include "task_scheduler.h"
 
 extern u8 identityMatrix[];

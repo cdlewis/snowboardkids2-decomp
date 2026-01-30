@@ -3,7 +3,7 @@
 #include "288A0.h"
 #include "36B80.h"
 #include "36E50.h"
-#include "6E840.h"
+#include "audio.h"
 #include "clocktrigger_tower.h"
 #include "common.h"
 #include "gamestate.h"

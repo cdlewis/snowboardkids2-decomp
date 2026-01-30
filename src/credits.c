@@ -2,7 +2,7 @@
 #include "1DC480.h"
 #include "1DC900.h"
 #include "20F0.h"
-#include "6E840.h"
+#include "audio.h"
 #include "common.h"
 #include "geometry.h"
 #include "graphics.h"

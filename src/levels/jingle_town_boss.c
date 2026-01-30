@@ -9,11 +9,11 @@
 #include "5E590.h"
 #include "9FF70.h"
 #include "A9A40.h"
+#include "audio.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
 

@@ -2,11 +2,11 @@
 #include "56910.h"
 #include "594E0.h"
 #include "5AA90.h"
+#include "audio.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
@@ -195,8 +195,10 @@ void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task) {
             task->gravity = 0x40000;
         }
 
-        rotatedVec.x = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x - task->targetPosition[0];
-        rotatedVec.y = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
+        rotatedVec.x =
+            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x - task->targetPosition[0];
+        rotatedVec.y =
+            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
 
         if ((u32)(rotatedVec.x + 0xFFFFF) <= 0x1FFFFEU && (u32)(rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
             terminateCurrentTask();
@@ -255,8 +257,10 @@ void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
             task->gravity = 0x18000;
         }
 
-        rotatedVec.x = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x - task->targetPosition[0];
-        rotatedVec.y = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
+        rotatedVec.x =
+            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x - task->targetPosition[0];
+        rotatedVec.y =
+            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
 
         if (rotatedVec.x + 0xFFFFF <= 0x1FFFFEU && (rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
             terminateCurrentTask();

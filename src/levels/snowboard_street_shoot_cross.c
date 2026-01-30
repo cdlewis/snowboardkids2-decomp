@@ -3,11 +3,11 @@
 #include "56910.h"
 #include "594E0.h"
 #include "5AA90.h"
-#include "6E840.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
+#include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
@@ -24,11 +24,11 @@ typedef struct {
 } ShootCrossTargetEntry;
 
 typedef struct {
-    void *transformMatrices;  // Transform3D array
-    void *vertexData;         // Vtx[4] for rendering quad
+    void *transformMatrices; // Transform3D array
+    void *vertexData;        // Vtx[4] for rendering quad
     ShootCrossTargetEntry *targets;
-    void *spriteAsset;        // Texture data for targets
-    s32 *targetPositionData;  // Compressed position data
+    void *spriteAsset;       // Texture data for targets
+    s32 *targetPositionData; // Compressed position data
     u8 _pad14[0x2];
     s16 targetCount;
 } ShootCrossTargets;
@@ -77,7 +77,7 @@ void activateShootCrossTargets(ShootCrossTargets *arg0);
 extern Gfx D_8009A780_9B380[];
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
-extern s32 D_800A8B14_9FE84;
+extern s32 gLookAtPtr;
 extern s32 D_8009A8A4_9B4A4;
 extern void *D_800BBBB0_AD630;
 
@@ -263,9 +263,13 @@ void renderShootCrossTargets(ShootCrossTargets *arg0) {
                 gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
             }
 
-            gSPMatrix(gRegionAllocPtr++, (u8 *)arg0->transformMatrices + (i << 6), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(
+                gRegionAllocPtr++,
+                (u8 *)arg0->transformMatrices + (i << 6),
+                G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
+            );
 
-            gSPMatrix(gRegionAllocPtr++, D_800A8B14_9FE84, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
             gSPVertex(gRegionAllocPtr++, arg0->vertexData, 4, 0);
 

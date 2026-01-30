@@ -1,5 +1,5 @@
+#include "audio.h"
 #include "common.h"
-#include "graphics.h"
 #include "task_scheduler.h"
 
 typedef struct {

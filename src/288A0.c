@@ -1,7 +1,7 @@
 #include "288A0.h"
 #include "29200.h"
 #include "2C8F0.h"
-#include "6E840.h"
+#include "graphics.h"
 #include "race_session.h"
 #include "rand.h"
 #include "task_scheduler.h"

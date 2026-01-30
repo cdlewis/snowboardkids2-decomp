@@ -3,8 +3,8 @@
 #include "297B0.h"
 #include "2C8F0.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "audio.h"
 #include "gamestate.h"
-#include "graphics.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
