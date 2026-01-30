@@ -10,8 +10,6 @@ extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 
-void func_80013EA0_14AA0(s32, u16, u16, u16, s32);
-
 void renderSpriteFrame(SpriteRenderArg *arg0) {
     s32 left;
     s32 top;

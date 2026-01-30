@@ -281,7 +281,6 @@ extern void *D_8008F5F0_901F0;
 extern void *D_8008F79C_9039C[];
 extern void *D_8008F7C4_903C4[];
 
-void func_80035260_35E60(void *arg0, void *arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8);
 void func_800340F4_34CF4(void);
 void cleanupSaveSlotNumberLabels(Func34574Arg *);
 void updateSaveSlotDeleteText(SaveSlotDeleteTextState *);

@@ -167,10 +167,8 @@ extern u16 D_8008DAA8_8E6A8[];
 extern u8 D_8008D9F0_8E5F0[];
 
 extern u8 D_8008DA28_8E628[];
-extern u16 D_8008DAA8_8E6A8[];
+
 extern void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *);
-extern void *getCurrentAllocation(void);
-extern void setCallback(void *);
 
 void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     Allocation_80020418 *allocation;

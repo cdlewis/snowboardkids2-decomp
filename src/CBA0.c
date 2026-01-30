@@ -455,20 +455,18 @@ void loadSceneRenderTaskData(SceneRenderTaskLoadContext *ctx) {
     animState->velocityX = 0;
     if (((!(&D_8008CD98_8D998)->vertStart2) && (!(&D_8008CD98_8D998)->vertStart2)) &&
         (!(&D_8008CD98_8D998)->vertStart2)) {}
-    ctx->modelData1 =
-        loadUncompressedData((void *)(&D_8008CD98_8D998)->vertStart1, (void *)(&D_8008CD98_8D998)->vertEnd1);
+    ctx->modelData1 = loadUncompressedData((&D_8008CD98_8D998)->vertStart1, (&D_8008CD98_8D998)->vertEnd1);
     ctx->textureData1 = loadCompressedData(
-        (void *)(&D_8008CD98_8D998)->compStart1,
-        (void *)(&D_8008CD98_8D998)->compEnd1,
+        (&D_8008CD98_8D998)->compStart1,
+        (&D_8008CD98_8D998)->compEnd1,
         (&D_8008CD98_8D998)->compSize1
     );
     ctx->unk30 = 0;
     ctx->displayList1 = (&D_8008CD98_8D998)->dispList1;
     scale = (s16)((((s64)(ctx->animState->scale >> 8)) * modelScale) >> 8);
     scaleMatrix(&ctx->transform1, scale, scale, scale);
-    ctx->modelData2 =
-        loadUncompressedData((void *)(&D_8008CD98_8D998)->vertStart2, (void *)(&D_8008CD98_8D998)->vertEnd2);
-    ctx->textureData2 = loadCompressedData((void *)data->compStart2, (void *)data->compEnd2, data->compSize2);
+    ctx->modelData2 = loadUncompressedData((&D_8008CD98_8D998)->vertStart2, (&D_8008CD98_8D998)->vertEnd2);
+    ctx->textureData2 = loadCompressedData(data->compStart2, data->compEnd2, data->compSize2);
     ctx->unk6C = 0;
     ctx->displayList2 = data->dispList2;
     scale = (s16)((((s64)(ctx->animState->scale >> 8)) * 0x2000) >> 8);
@@ -508,7 +506,7 @@ void updateSceneRenderTask(SceneRenderTaskCtx *ctx) {
                 memcpy(&ctx->staticTransform.translation, &ctx->node->posX, sizeof(Vec3i));
                 nodeA = ctx->node;
                 scaleFactor = (s16)((s64)(nodeA->scale >> 8) * 0x2000 >> 8);
-                scaleMatrix((Transform3D *)transform, scaleFactor, scaleFactor, scaleFactor);
+                scaleMatrix(transform, scaleFactor, scaleFactor, scaleFactor);
                 enqueueDisplayListObject(ctx->node->slot_index, (DisplayListObject *)transform);
                 break;
             case 1:

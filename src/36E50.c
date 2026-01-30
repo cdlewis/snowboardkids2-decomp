@@ -138,7 +138,7 @@ void initTownExitMarker(StoryMapSpecialLocationMarkerState *);
 void checkTownExitTrigger(void *);
 void cleanupTownExitMarker(void *);
 void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *);
-s32 checkStoryMapLocationSelection(StoryMapPlayerState *);
+
 void func_80036AF8_376F8(void);
 void func_80036D54_37954(void);
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *);

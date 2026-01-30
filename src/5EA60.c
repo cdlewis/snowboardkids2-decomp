@@ -1017,7 +1017,7 @@ s32 advanceIndexedBoneAnimationAuto(void *arg0, s16 arg1, s16 arg2, BoneAnimatio
     frame_data = getAnimationFrameData(arg0);
 
     if ((state->flags < 2) && (animation_data[state->animation_index * 5] == 0)) {
-        resetBoneAnimation(arg0, arg1, arg2, (BoneAnimationStateIndexed *)state);
+        resetBoneAnimation(arg0, arg1, arg2, state);
         animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
     }
 
@@ -1123,7 +1123,7 @@ s32 advanceIndexedBoneAnimationAutoMirrored(void *arg0, s16 arg1, s16 arg2, Bone
     frame_data = getAnimationFrameData(arg0);
 
     if ((state->flags < 2) && (animation_data[state->animation_index * 5] == 0)) {
-        resetBoneAnimation(arg0, arg1, arg2, (BoneAnimationStateIndexed *)state);
+        resetBoneAnimation(arg0, arg1, arg2, state);
         animation_data = getAnimationDataByIndex(arg0, arg1, arg2);
     }
 

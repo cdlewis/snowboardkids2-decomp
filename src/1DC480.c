@@ -229,7 +229,7 @@ void updateCreditsSubtitles(Struct_800B0388 *arg0) {
                     arg0->unk998 = -1;
                 } else {
                     if (arg0->unk9AE != 0) {
-                        arg0->unk998 = 0x100000 / (s16)arg0->unk9AE;
+                        arg0->unk998 = 0x100000 / arg0->unk9AE;
                     } else {
                         arg0->unk998 = -1;
                     }

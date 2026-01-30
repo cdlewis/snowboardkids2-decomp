@@ -131,7 +131,7 @@ format:
 	clang-format -i -style=file $(C_FILES)
 
 tidy:
-	clang-tidy --fix $(C_FILES) -- -Isrc $(IINC) $(MACROS)
+	clang-tidy --fix-errors --fix $(C_FILES) -- -Isrc $(IINC) $(MACROS)
 
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
 	$(PRINTF) "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"

@@ -965,11 +965,11 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        spawnSprayEffect(&arg0->pos, (Vec3i *)&arg0->vel, 5);
+        spawnSprayEffect(&arg0->pos, (&arg0->vel), 5);
 
         arg0->vel.y += 0xFFFC0000;
 
-        normalizeVelocityToSpeed((Vec3i *)&arg0->vel, 0x1E0000);
+        normalizeVelocityToSpeed((&arg0->vel), 0x1E0000);
 
         memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
 
@@ -1029,7 +1029,7 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
             }
 
             memcpy(&rotateVec, &arg0->vel, sizeof(Vec3i));
-            rotateVectorY(&rotateVec, var_s3, (Vec3i *)&arg0->vel);
+            rotateVectorY(&rotateVec, var_s3, (&arg0->vel));
         }
 
         if (alloc->unk10[arg0->ownerPlayerIdx].unkBD9 == 0) {
@@ -1184,7 +1184,7 @@ void updateStarProjectile(Struct_52880 *arg0) {
 
         arg0->vel.y += 0xFFFC0000;
 
-        normalizeVelocityToSpeed((Vec3i *)&arg0->vel, arg0->unk3C);
+        normalizeVelocityToSpeed((&arg0->vel), arg0->unk3C);
 
         memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
 
@@ -1242,7 +1242,7 @@ void updateStarProjectile(Struct_52880 *arg0) {
             }
 
             memcpy(&rotateVec, &arg0->vel, sizeof(Vec3i));
-            rotateVectorY(&rotateVec, var_s3, (Vec3i *)&arg0->vel);
+            rotateVectorY(&rotateVec, var_s3, (&arg0->vel));
         }
 
         if ((s16)arg0->turnRate < 0x19) {
@@ -1391,11 +1391,11 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
 
     if (alloc->unk76 == 0) {
 
-        spawnSprayEffect(&arg0->pos, (Vec3i *)&arg0->vel, 7);
+        spawnSprayEffect(&arg0->pos, (&arg0->vel), 7);
 
         arg0->vel.y += 0xFFFC0000;
 
-        normalizeVelocityToSpeed((Vec3i *)&arg0->vel, 0x198000);
+        normalizeVelocityToSpeed((&arg0->vel), 0x198000);
 
         memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
 
@@ -1411,11 +1411,11 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
             arg0->pos.x = arg0->pos.x + sp18.x;
             arg0->pos.z = arg0->pos.z + sp18.z;
             temp_v0 = atan2Fixed(-sp18.x, -sp18.z);
-            rotateVectorY((Vec3i *)&arg0->vel, -temp_v0, &rotateVec);
+            rotateVectorY((&arg0->vel), -temp_v0, &rotateVec);
             if (rotateVec.z < 0) {
                 rotateVec.z = -rotateVec.z;
             }
-            rotateVectorY(&rotateVec, temp_v0, (Vec3i *)&arg0->vel);
+            rotateVectorY(&rotateVec, temp_v0, (&arg0->vel));
             arg0->ownerPlayerIdx = -1;
         } else {
             arg0->vel.x = arg0->pos.x - savedVec.x;
@@ -1459,8 +1459,8 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
                 var_s3 = -(s16)arg0->turnRate;
             }
 
-            memcpy(&rotateVec, (Vec3i *)&arg0->vel, sizeof(Vec3i));
-            rotateVectorY(&rotateVec, var_s3, (Vec3i *)&arg0->vel);
+            memcpy(&rotateVec, (&arg0->vel), sizeof(Vec3i));
+            rotateVectorY(&rotateVec, var_s3, (&arg0->vel));
         }
 
         if ((s16)arg0->turnRate < 0x19) {
@@ -1674,7 +1674,7 @@ void updatePlayerGuidedStarProjectile(Struct_52880 *arg0) {
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
     if (alloc->unk76 == 0) {
-        spawnSprayEffect(&arg0->pos, (Vec3i *)&arg0->vel, 6);
+        spawnSprayEffect(&arg0->pos, (&arg0->vel), 6);
 
         s1 = &alloc->unk30;
         arg0->vel.y -= 0x8000;
@@ -2155,7 +2155,7 @@ void launchShrinkProjectile(Struct_52880 *arg0) {
         rotateVectorY((u8 *)alloc->unk48 + 0x21C, arg0->unk44, &localVec);
     }
 
-    rotateVectorY((u8 *)alloc->unk48 + 0x228, arg0->unk44, (Vec3i *)&arg0->vel);
+    rotateVectorY((u8 *)alloc->unk48 + 0x228, arg0->unk44, (&arg0->vel));
 
     arg0->pos.x += localVec.x;
     arg0->pos.y += localVec.y;

@@ -107,7 +107,6 @@ void cleanupTrickSpriteEffectTask(TrickSpriteEffectCleanupState *);
 void initTrickSpriteEffectTask(TrickSpriteEffectInitState *);
 
 extern ScrollingTextureDisplayLists D_80089510_8A110;
-extern ScrollingTextureDisplayLists D_80089520;
 
 u32 gTrickSpriteEffectVertexData[] = { 0xFFE80018, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00180018, 0x00000000,
                                        0x07F0FFF0, 0xFFFFFFFF, 0x0018FFE8, 0x00000000, 0x07F007F0, 0xFFFFFFFF,

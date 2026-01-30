@@ -209,8 +209,7 @@ void initCharacterTrailParticleTask(MemoryAllocatorNode **);
 void loadCharacterTrailParticleAsset(CharacterTrailParticleTask *);
 void updateCharacterTrailParticle(CharacterTrailParticleTask *);
 void cleanupCharacterTrailParticleTask(s32 **);
-void spawnCharacterTrailParticle(void *);
-void spawnPlayerCharacterTrailParticle(Player *, s32);
+
 void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
 void func_80050E08_51A08(func_80050DB0_519B0_arg *);
 void func_80050EA0_51AA0(void **);

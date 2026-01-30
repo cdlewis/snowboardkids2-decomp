@@ -132,46 +132,33 @@ extern void *gGraphicsArenaPtrs[];
 extern void *gGraphicsArena0;
 extern s32 gCurrentDoubleBufferIndex;
 extern s32 gCurrentDisplayBufferIndex;
-extern void *gDisplayBufferMsgs;
+
 extern s32 gFrameCounter;
 extern s16 identityMatrix[];
 extern gActiveViewport_type *gActiveViewport;
-extern s32 gFrameBufferFlags[];
-extern s32 gFrameCounter;
-extern s32 gBufferedFrameCounter;
+
 extern s32 gFrameSkipCounter;
-extern u32 __additional_scanline_0;
-extern u8 gDisplayFramePending;
+
 extern void *gDramStack;
 extern void *gOutputBuffer;
 extern void *gYieldBuffer;
-extern long long int rspbootTextStart[];
-extern long long int aspMainTextStart[];
+
 extern Gfx gDefaultRenderDisplayList[];
 extern UcodeEntry microcodeGroups[];
 extern Gfx gInitDisplayList[];
-extern Gfx gDefaultRenderDisplayList[];
+
 extern Gfx gFadeOverlayDisplayList[];
 extern u16 gCallbackEntrySegment;
-extern UcodeEntry microcodeGroups[];
+
 extern u8 gNeedsDisplayListInit;
-extern void *gDramStack;
-extern void *gOutputBuffer;
-extern void *gYieldBuffer;
+
 extern ViewportNode *gLastViewportInGroup;
 extern s32 gCallbackCounter;
 extern s16 gCurrentPoolIndex;
 extern s16 gGraphicsMode;
 extern s16 gTextureEnabled;
 extern OSMesgQueue mainMessageQueue;
-extern u32 __additional_scanline_0;
-extern s32 gFrameBufferFlags[];
-extern s32 gFrameBufferCounters[];
-extern s32 gCurrentDoubleBufferIndex;
-extern s32 gCurrentDisplayBufferIndex;
-extern s32 gFrameCounter;
-extern u8 gDisplayFramePending;
-extern Gfx *gRegionAllocPtr;
+
 extern void *gLookAtPtr;
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 
@@ -181,10 +168,10 @@ void updateViewportBounds(void);
 void initViewportCallbackPool(ViewportNode *);
 s32 isRegionAllocSpaceLow(void);
 void resetLinearAllocator(void);
-void processDisplayFrameUpdate(void);
+
 void *LinearAlloc(size_t size);
 void restoreViewportOffsets(void);
-void initViewportCallbackPool(ViewportNode *arg0);
+
 void initGraphicsSystem(void);
 void initGraphicsArenas(void);
 void initLinearAllocator(void);
@@ -760,7 +747,7 @@ void renderFrame(u32 viScanline) {
             if (node->frameCallbackMsg != NULL) {
                 if (!needsDisplayListSetup) {
                     if (((*(&gRootViewport.prevFadeValue)) != 0) && (node->list3_next == 0)) {
-                        BorderData *bd = (BorderData *)(((u8 *)(&gRootViewport.prevFadeValue)) - 0xF);
+                        BorderData *bd = (BorderData *)(((&gRootViewport.prevFadeValue))-0xF);
 
                         gSPDisplayList(gRegionAllocPtr++, gFadeOverlayDisplayList);
 

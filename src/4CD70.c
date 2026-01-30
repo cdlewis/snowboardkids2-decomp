@@ -349,7 +349,7 @@ void updateGoalBannerSlideIn(GoalBannerState *state);
 void updateGoalBannerHold(GoalBannerState *state);
 void updateGoalBannerSlideOut(GoalBannerState *state);
 void cleanupGoalBannerTask(GoalBannerState *state);
-void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0);
+
 void initPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state);
 void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state);
@@ -368,7 +368,6 @@ void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state);
 void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0);
 void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state);
 void cleanupRaceProgressIndicatorTask(RaceProgressIndicatorCleanupState *state);
-void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0);
 
 static const char D_8009E880_9F480[] = "%5d";
 extern char D_8009E89C_9F49C[];
@@ -1973,8 +1972,6 @@ void spawnShotCrossItemCountDisplayTask(s16 arg0) {
     }
 }
 
-void cleanupShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0);
-
 void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
@@ -2092,9 +2089,6 @@ void spawnSuccessMessageDisplayTask(s16 delayFrames) {
         task->initDelay = delayFrames;
     }
 }
-
-void updateBonusGoldDisplay(BonusGoldDisplayState *);
-void cleanupBonusGoldDisplayTask(BonusGoldDisplayState *);
 
 void initBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();

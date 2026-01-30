@@ -88,9 +88,6 @@ extern u32 D_800A2D4C_A394C;
 extern u32 D_800A2D50_A3950;
 extern u8 D_800A2D54_A3954;
 
-void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjects);
-void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *displayObjects);
-void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObjects);
 void renderCameraRelativeDisplayList(DisplayListObject *arg0);
 void renderTexturedBillboardSprite(TexturedSpriteState *);
 void renderTexturedBillboardSpriteTile(TexturedSpriteState *);
@@ -1926,7 +1923,7 @@ void renderAlphaSprite(AlphaSpriteState *state) {
             return;
         }
         memcpy(&D_8009A8A4_9B4A4, &state->posX, sizeof(Vec3i));
-        transform3DToN64Mtx((Transform3D *)((s32 *)&D_8009A8A4_9B4A4 - 5), state->matrix);
+        transform3DToN64Mtx((Transform3D *)((&D_8009A8A4_9B4A4) - 5), state->matrix);
     }
 
     // Graphics mode 7 = alpha-blended textured sprites

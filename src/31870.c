@@ -515,7 +515,7 @@ void animateBoardShopSnowParticles(SnowParticleState *arg0) {
         debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->particles[i]);
     };
 
-    if ((s16)state->unk780 == 0) {
+    if (state->unk780 == 0) {
         terminateCurrentTask();
     }
 }

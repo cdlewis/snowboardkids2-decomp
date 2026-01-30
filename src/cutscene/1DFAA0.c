@@ -751,7 +751,7 @@ u16 findStateEntryIndex(u8 slotIndex, u16 frameNumber, s32 findInsertionPoint) {
             }
 
             entry = getStateEntry(nextIdx);
-            if (targetFrame < (u16)entry->frameNumber) {
+            if (targetFrame < entry->frameNumber) {
                 break;
             }
             current = next;
@@ -762,7 +762,7 @@ u16 findStateEntryIndex(u8 slotIndex, u16 frameNumber, s32 findInsertionPoint) {
 
     if ((mode & 0xFF) == 0) {
         entry = getStateEntry(current);
-        if ((u16)entry->frameNumber != frameNumber) {
+        if (entry->frameNumber != frameNumber) {
             return 0xFFFF;
         }
     }
@@ -780,12 +780,12 @@ s32 findEventAtFrame(u8 a0, u16 a1) {
 
     while (current != 0xFFFF) {
         temp = getStateEntry(current);
-        if (a1 < (u16)temp->frameNumber) {
+        if (a1 < temp->frameNumber) {
             return 0xFFFF;
         }
 
         temp = getStateEntry(current);
-        if ((u16)temp->frameNumber == a1) {
+        if (temp->frameNumber == a1) {
             return current;
         }
 
@@ -828,7 +828,7 @@ s32 insertCutsceneEvent(u8 slotIndex, u16 frameNumber) {
     }
 
     entry = getStateEntry(entryIndex);
-    if ((u16)entry->frameNumber != frameNumber) {
+    if (entry->frameNumber != frameNumber) {
         goto insert_entry;
     }
 
@@ -1085,7 +1085,7 @@ void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
     }
 
     // Don't allow cutting the frame 0 entry
-    if ((u16)getStateEntry(entryIndex)->frameNumber == 0) {
+    if (getStateEntry(entryIndex)->frameNumber == 0) {
         return;
     }
 
