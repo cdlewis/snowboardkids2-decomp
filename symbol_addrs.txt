@@ -1390,8 +1390,8 @@ cutsceneCameraShake_validate = 0x800B09AC;
 cutsceneCameraRotate_validate = 0x800B09FC;
 cutsceneCameraRotate_isDone = 0x800B0A2C;
 
-cutsceneChrPosition_validate = 0x800B0A48;
-cutsceneChrPosition_isDone = 0x800B0B08;
+cutsceneChrPosition_validate = 0x800B0A48; // rom:0x1DDAF8
+cutsceneChrPosition_isDone = 0x800B0B08; // rom:0x1DDBB8
 cutsceneChrMove_validate = 0x800B0B18;
 cutsceneChrMove_isDone = 0x800B0C38;
 cutsceneChrAnime_validate = 0x800B0C48;
