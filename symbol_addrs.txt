@@ -1309,7 +1309,7 @@ getStateEntry = 0x800B3F48; // rom:0x1E0FF8
 findEventAtFrame = 0x800B3C7C; // rom:0x1E0D2C
 getCutsceneSlotCount = 0x800B3460; // rom:0x1E0510
 getCutsceneSlot = 0x800B2A78; // rom:0x1DFB28
-processCutsceneFrame = 0x800B305C;
+processCutsceneFrame = 0x800B305C; // rom:0x1E010C
 
 EepromSaveData = 0x800A8D14;
 gControllerInputs = 0x800AFF10; // type:s32 size:0x10
