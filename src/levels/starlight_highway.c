@@ -157,21 +157,21 @@ void cleanupStarlightFireworkTask(StarlightFireworkCleanupState *);
 void updateFireworkShowTimer(FireworkShowTimerState *arg0);
 void updateStarlightBarrier(StarlightBarrierTask *arg0);
 
-void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0) {
-    arg0->unk24 = loadUncompressedAssetByIndex(8);
-    arg0->unk28 = loadCompressedSegment2AssetByIndex(8);
-    arg0->unk2C = 0;
-    createYRotationMatrix(&arg0->node1, 0x98A);
-    arg0->node1.translation.x = 0x130F588E;
-    arg0->node1.translation.y = 0x03930000;
-    arg0->node1.translation.z = 0x0DB72F2C;
-    arg0->unk68 = 0;
-    arg0->unk60 = arg0->unk24;
-    arg0->unk64 = arg0->unk28;
-    createYRotationMatrix(&arg0->node2, 0);
-    arg0->node2.translation.x = 0;
-    arg0->node2.translation.y = 0x30000000;
-    arg0->node2.translation.z = 0x30458CB2;
+void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *task) {
+    task->segment1 = loadUncompressedAssetByIndex(8);
+    task->segment2 = loadCompressedSegment2AssetByIndex(8);
+    task->unk2C = 0;
+    createYRotationMatrix(&task->node1, 0x98A);
+    task->node1.translation.x = 0x130F588E;
+    task->node1.translation.y = 0x03930000;
+    task->node1.translation.z = 0x0DB72F2C;
+    task->unk68 = 0;
+    task->cleanupSegment1 = task->segment1;
+    task->cleanupSegment2 = task->segment2;
+    createYRotationMatrix(&task->node2, 0);
+    task->node2.translation.x = 0;
+    task->node2.translation.y = 0x30000000;
+    task->node2.translation.z = 0x30458CB2;
     setCleanupCallback(&cleanupStarlightHighwayBuildingTask);
     setCallback(&renderStarlightHighwayBuildings);
 }

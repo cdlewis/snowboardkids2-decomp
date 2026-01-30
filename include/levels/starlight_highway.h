@@ -11,14 +11,14 @@ typedef struct {
 typedef struct {
     /* 0x00 */ Transform3D node1;
     /* 0x20 */ u8 _pad20[4];
-    /* 0x24 */ void *unk24;
-    /* 0x28 */ void *unk28;
+    /* 0x24 */ void *segment1;
+    /* 0x28 */ void *segment2;
     /* 0x2C */ s32 unk2C;
     /* 0x30 */ u8 _pad30[0xC];
     /* 0x3C */ Transform3D node2;
     /* 0x5C */ u8 _pad5C[4];
-    /* 0x60 */ void *unk60;
-    /* 0x64 */ void *unk64;
+    /* 0x60 */ void *cleanupSegment1;
+    /* 0x64 */ void *cleanupSegment2;
     /* 0x68 */ s32 unk68;
 } StarlightBuildingTaskState;
 
@@ -52,7 +52,7 @@ void spawnStarlightItems(void);
 void spawnStarlightBarriers(void);
 void initFireworkShowTimer(FireworkShowTimerState *arg0);
 void updateFireworkShowTimer(FireworkShowTimerState *arg0);
-void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *arg0);
+void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *task);
 void initStarlightItemTask(StarlightItemTaskState *);
 void cleanupStarlightItemTask(DualSegmentCleanupState *);
 void updateStarlightItemTask(StarlightItemTaskState *);
