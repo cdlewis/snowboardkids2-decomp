@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "displaylist.h"
 #include "geometry.h"
 
 typedef struct {
@@ -24,3 +25,4 @@ typedef struct {
 } SunnyMountainFlyingBirdTask;
 
 void initSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0);
+void updateSunnyMountainChairLiftTask(void);

@@ -32,7 +32,7 @@ typedef struct {
     s16 unkD8;             /* 0xD8: Always set to 0 */
 } SunnyMountainTaskState;
 
-extern void func_800BB488_B4D88(void);
+extern void updateSunnyMountainChairLiftTask(void);
 void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0);
 void updateSunnyMountainDisplayObjectsTask(s32 *arg0);
 
@@ -120,13 +120,20 @@ void updateSunnyMountainDisplayObjectsTask(s32 *arg0) {
             arg0[3] = 0x1CE44F4D;
             arg0[4] = 0x0B1F0000;
             arg0[5] = 0x02E17D96;
-            setCallbackWithContinue(func_800BB488_B4D88);
+            setCallbackWithContinue(updateSunnyMountainChairLiftTask);
             return;
         }
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/sunny_mountain", func_800BB488_B4D88);
+typedef struct {
+    s32 x;
+    s32 y;
+} ChairLiftWaypoint;
+
+extern ChairLiftWaypoint gChairLiftWaypoints[];
+
+INCLUDE_ASM("asm/nonmatchings/levels/sunny_mountain", updateSunnyMountainChairLiftTask);
 
 void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0) {
     arg0->assetData = freeNodeMemory(arg0->assetData);
