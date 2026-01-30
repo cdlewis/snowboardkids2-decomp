@@ -179,6 +179,7 @@ dispatchChaseAttackPhase = 0x800BB86C; // rom:0xB2E2C
 jingleTownBossChaseAttackIntroPhase = 0x800BB89C; // rom:0xB2E5C
 initSwingingPendulumTrap = 0x800BB8E8; // rom:0xAF5D8
 updateSwingingPendulumTrap = 0x800BB9A4; // rom:0xAF694
+cleanupSwingingPendulumTrap = 0x800BBC2C; // rom:0xAF91C
 gSpritePaletteModes = 0x8008D3B0; // rom:0x8DFB0 size:0x8
 gSpriteTextureFormats = 0x8008D3B8; // rom:0x8DFB8 size:0x8
 gTileTextureFlipTable = 0x8008D3C0; // rom:0x8DFC0 size:0x10

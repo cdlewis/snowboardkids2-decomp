@@ -37,6 +37,8 @@ void initGhostSpawnerTask(GhostSpawnerTask *arg0);
 
 void initSwingingPendulumTrap(SwingingPendulumTrap *arg0);
 
+void cleanupSwingingPendulumTrap(SwingingPendulumTrap *arg0);
+
 void initFloatingBillboardSpawner(s16 *spawnTimer);
 
 void initGhostManager(GhostManager *ghostManager);

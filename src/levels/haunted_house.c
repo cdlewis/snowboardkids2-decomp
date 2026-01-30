@@ -123,7 +123,7 @@ void oscillateGhostFade(AnimatedGhostEntity *);
 void fadeOutGhost(AnimatedGhostEntity *);
 void func_800BB778_AF468(void);
 void updateSwingingPendulumTrap(SwingingPendulumTrap *);
-void freeSwingingPendulumTrapAssets(SwingingPendulumTrap *);
+void cleanupSwingingPendulumTrap(SwingingPendulumTrap *);
 void initFloatingBillboard(FloatingBillboard *);
 void updateFloatingBillboardSpawner(s16 *);
 void freeFloatingBillboard(void **);
@@ -348,7 +348,7 @@ void initSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
 
     temp_a1 = arg0->swingAngle + 0x2A0;
     createYRotationMatrix((Transform3D *)arg0, temp_a1 & 0xFFFF);
-    setCleanupCallback(freeSwingingPendulumTrapAssets);
+    setCleanupCallback(cleanupSwingingPendulumTrap);
     setCallback(updateSwingingPendulumTrap);
 }
 
@@ -435,7 +435,7 @@ void updateSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
     }
 }
 
-void freeSwingingPendulumTrapAssets(SwingingPendulumTrap *trap) {
+void cleanupSwingingPendulumTrap(SwingingPendulumTrap *trap) {
     trap->uncompressedAsset = freeNodeMemory(trap->uncompressedAsset);
     trap->compressedAsset = freeNodeMemory(trap->compressedAsset);
 }
