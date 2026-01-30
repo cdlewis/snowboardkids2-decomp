@@ -100,7 +100,7 @@ typedef struct {
     /* 0xAA4 */ s32 maxSpeedCap;
     /* 0xAA8 */ s32 unkAA8;
     u8 padAAC[0xAC2 - 0xAAC];
-    /* 0xAC2 */ s16 unkAC2;
+    /* 0xAC2 */ s16 hitReactionState;
     u8 padAC4[0xAD4 - 0xAC4];
     /* 0xAD4 */ s32 unkAD4;
     /* 0xAD8 */ s32 unkAD8;
@@ -137,7 +137,7 @@ typedef struct {
     u8 padB80[0x2];
     /* 0xB82 */ u16 unkB82;
     /* 0xB84 */ s32 unkB84;
-    /* 0xB88 */ s32 unkB88;
+    /* 0xB88 */ s32 behaviorFlags;
     /* 0xB8C */ s32 unkB8C;
     u8 padB90[0xB94 - 0xB90];
     /* 0xB94 */ u16 sectorIndex;
@@ -318,7 +318,7 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
     arg0->unkB84 &= 0xFFFBFFFF;
 
     if (arg0->behaviorMode != 3) {
-        playerState = arg0->unkAC2;
+        playerState = arg0->hitReactionState;
         if (playerState != 0) {
             if (playerState != 0x3D) {
                 if (playerState == 0x3E) {
@@ -337,7 +337,7 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
             }
         }
     }
-    arg0->unkAC2 = 0;
+    arg0->hitReactionState = 0;
 
     do {
     } while (gJingleTownBossBehaviorModeHandlers[arg0->behaviorMode](arg0) != 0);
@@ -587,7 +587,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
             if (arg0->unkB8C != 0) {
                 arg0->unkB8C--;
             } else {
-                if (gameState->players->unkB88 != 0) {
+                if (gameState->players->behaviorFlags != 0) {
                     return 0;
                 }
 
@@ -715,14 +715,14 @@ s32 jingleTownBossHoverAttackIntroPhase(Arg0Struct *arg0) {
         arg0->behaviorCounter++;
     }
 
-    arg0->unkB88 = 0x10;
+    arg0->behaviorFlags = 0x10;
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
     arg0->velocity.y -= 0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->unkB8C == -1) {
-        arg0->unkB88 = 0;
+        arg0->behaviorFlags = 0;
         arg0->behaviorMode = 1;
         arg0->behaviorPhase = 1;
         arg0->behaviorStep = 0;
@@ -749,7 +749,7 @@ s32 jingleTownBossHoverAttackMainPhase(Arg0Struct *arg0) {
         }
     }
 
-    arg0->unkB88 = 0x200;
+    arg0->behaviorFlags = 0x200;
     arg0->velocity.y += -0x8000;
     arg0->unk468 += -0x8000;
 
@@ -773,7 +773,7 @@ s32 jingleTownBossHoverAttackMainPhase(Arg0Struct *arg0) {
     arg0->unk474 += arg0->unk468;
 
     if (arg0->unk474 == 0) {
-        arg0->unkB88 = 0;
+        arg0->behaviorFlags = 0;
         arg0->behaviorMode = 1;
         arg0->behaviorPhase = 1;
         arg0->behaviorStep = 0;
@@ -870,7 +870,7 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     // Combine with unk9B0 (X rotation) to get base transform
     func_8006B084_6BC84(&arg0->unk9B0, &arg0->unk9F0, combinedTransform);
 
-    if (arg0->unkB88 & 0x10) {
+    if (arg0->behaviorFlags & 0x10) {
         // Apply vertical scale transformation during intro animation
         scaledMatrixPtr = &scaledMatrix;
         memcpy(scaledMatrixPtr, identityMatrix, 0x20);

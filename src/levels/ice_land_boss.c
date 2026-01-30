@@ -49,7 +49,7 @@ typedef struct {
     s32 unkB2C;
     u8 _padB30[0xB84 - 0xB30];
     s32 bossFlags;
-    s32 unkB88;
+    s32 behaviorFlags;
     u8 _padB8C[0xB94 - 0xB8C];
     u16 sectorIndex;
     u8 _padB96[0xBB4 - 0xB96];
@@ -734,7 +734,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
         }
 
         player = gameState->players;
-        if (player->unkB88 != 0) {
+        if (player->behaviorFlags != 0) {
             return 0;
         }
 
@@ -870,7 +870,7 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
         spawnBossHomingProjectileVariant1Task(boss);
     }
 
-    boss->unkB88 = 0x200;
+    boss->behaviorFlags = 0x200;
     calculateAITargetPosition(boss);
 
     angleDiff =
@@ -919,7 +919,7 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
     applyClampedVelocityToPosition(boss);
 
     if (func_8005D308_5DF08(boss, 4) != 0) {
-        boss->unkB88 = 0;
+        boss->behaviorFlags = 0;
         boss->behaviorMode = 1;
         boss->behaviorPhase = 1;
         boss->behaviorStep = 0;
@@ -956,7 +956,7 @@ s32 iceLandBossHoverAttackPhase(Player *arg0) {
         }
     }
 
-    arg0->unkB88 = 0x200;
+    arg0->behaviorFlags = 0x200;
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
     arg0->velocity.y = arg0->velocity.y + (-0x8000);
@@ -971,7 +971,7 @@ s32 iceLandBossHoverAttackPhase(Player *arg0) {
     if (arg0->velocity.y < 0) {
         if (!(arg0->unkB84 & 0x1)) {
             hoverCount = arg0->unkBDB;
-            arg0->unkB88 = 0;
+            arg0->behaviorFlags = 0;
             arg0->behaviorMode = 1;
             arg0->behaviorPhase = 1;
             arg0->behaviorStep = 0;

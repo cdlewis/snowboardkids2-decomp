@@ -138,7 +138,7 @@ typedef struct {
     s32 unkABC;
     u8 unkAC0;
     u8 unkAC1;
-    s16 unkAC2;
+    s16 hitReactionState;
     s16 unkAC4;
     u8 padding2b[0x2];
     s32 unkAC8;
@@ -169,7 +169,7 @@ typedef struct {
     s8 unkB81;
     u8 padding6c[0x2];
     s32 unkB84;
-    s32 unkB88;
+    s32 behaviorFlags;
     s32 unkB8C;
     s32 unkB90;
     u16 sectorIndex;

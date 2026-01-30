@@ -180,10 +180,10 @@ void handlePlayerToPlayerCollision(Player *player) {
         }
 
         /* Skip if either player has collision disabled (flag 0x10) */
-        if (player->unkB88 & 0x10) {
+        if (player->behaviorFlags & 0x10) {
             continue;
         }
-        if (targetPlayer->unkB88 & 0x10) {
+        if (targetPlayer->behaviorFlags & 0x10) {
             continue;
         }
 
@@ -273,10 +273,10 @@ void handleCollisionWithTargetPlayer(Player *player) {
         return;
     }
     /* Skip if either player has collision disabled (flag 0x10) */
-    if (player->unkB88 & 0x10) {
+    if (player->behaviorFlags & 0x10) {
         return;
     }
-    if (targetPlayer->unkB88 & 0x10) {
+    if (targetPlayer->behaviorFlags & 0x10) {
         return;
     }
 
@@ -447,7 +447,7 @@ s32 isPointInPlayerCollisionSphere(Player *player, Vec3i *point, s32 extraRadius
 /**
  * Finds a vulnerable (non-invincible, collision-enabled) player within a given radius of a position.
  * Similar to findPlayerNearPosition, but additionally filters out:
- * - Players with collision disabled (unkB88 & 0x10)
+ * - Players with collision disabled (behaviorFlags & 0x10)
  * - Players with active invincibility (invincibilityTimer != 0)
  *
  * @param position Center position to search from (pointer to 3 consecutive s32 values: x, y, z)
@@ -477,7 +477,7 @@ Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex,
         playerData = (Player *)(playerId * 0xBE8 + (s32)dataArray);
 
         /* Skip players with collision disabled */
-        if (playerData->unkB88 & 0x10) {
+        if (playerData->behaviorFlags & 0x10) {
             continue;
         }
 
@@ -858,7 +858,7 @@ s32 checkStarHitCollisionWithVulnerablePlayers(Vec3i *pos, s32 excludePlayerIdx,
                 dataArray = allocation->dataArray;
                 playerData = (Player *)(id * 0xBE8 + (s32)dataArray);
 
-                if (playerData->unkB88 & 0x10) {
+                if (playerData->behaviorFlags & 0x10) {
                     ;
                 } else if (playerData->invincibilityTimer != 0) {
                     ;

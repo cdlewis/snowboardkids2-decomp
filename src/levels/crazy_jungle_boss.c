@@ -92,7 +92,7 @@ typedef struct {
     s32 maxSpeedCap;
     s32 unkAA8;
     u8 padAAC[0xAC2 - 0xAAC];
-    s16 unkAC2;
+    s16 hitReactionState;
     u8 padAC4[0xAD4 - 0xAC4];
     Vec3i unkAD4;
     s32 unkAE0;
@@ -124,7 +124,7 @@ typedef struct {
     ListNode_5AA90 unkB50;
     u8 padB69[0xB84 - 0xB6C];
     s32 unkB84;
-    s32 unkB88;
+    s32 behaviorFlags;
     s32 unkB8C;
     s32 unkB90;
     u16 sectorIndex;
@@ -242,9 +242,9 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     arg0->unkB84 &= 0xFFFBFFFF;
 
     if (arg0->behaviorMode != 3) {
-        if (arg0->unkAC2 != 0) {
-            if (arg0->unkAC2 != 0x3D) {
-                if (arg0->unkAC2 == 0x3E) {
+        if (arg0->hitReactionState != 0) {
+            if (arg0->hitReactionState != 0x3D) {
+                if (arg0->hitReactionState == 0x3E) {
                     arg0->behaviorMode = 2;
                     arg0->behaviorPhase = 0;
                     arg0->behaviorStep = 0;
@@ -258,7 +258,7 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
             }
         }
     }
-    arg0->unkAC2 = 0;
+    arg0->hitReactionState = 0;
 
     do {
     } while (D_800BC440_ACC70[arg0->behaviorMode](arg0) != 0);
@@ -553,14 +553,14 @@ s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0) {
         arg0->behaviorCounter++;
     }
 
-    arg0->unkB88 = 0x10;
+    arg0->behaviorFlags = 0x10;
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
     arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->unkB8C == -1) {
-        arg0->unkB88 = 0;
+        arg0->behaviorFlags = 0;
         arg0->behaviorMode = 1;
         arg0->behaviorPhase = 1;
         arg0->behaviorStep = 0;
@@ -578,7 +578,7 @@ s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0) {
         queueSoundAtPosition(&arg0->unk434, 0x21);
     }
 
-    arg0->unkB88 = 0x200;
+    arg0->behaviorFlags = 0x200;
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
     arg0->velocity.y = arg0->velocity.y + -0x8000;
@@ -587,7 +587,7 @@ s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0) {
 
     if (arg0->unkB84 & 1) {
     } else {
-        arg0->unkB88 = 0;
+        arg0->behaviorFlags = 0;
         arg0->behaviorMode = 1;
         arg0->behaviorPhase = 1;
         arg0->behaviorStep = 0;

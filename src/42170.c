@@ -66,7 +66,7 @@ typedef struct {
     /* 0x1F4 */ s32 pos1F4;
     /* 0x1F8 */ s32 pos1F8;
     /* 0x1FC */ u8 _pad1FC[0x98C];
-    /* 0xB88 */ s32 unkB88;
+    /* 0xB88 */ s32 behaviorFlags;
 } FallingEffectPlayer;
 
 typedef struct {
@@ -342,7 +342,7 @@ void updateFallingEffect(FallingEffectState *arg0) {
     arg0->position.y = arg0->player->pos1F4;
     arg0->position.z = arg0->player->pos1F8;
 
-    if ((arg0->player->unkB88 & 0x20) == 0) {
+    if ((arg0->player->behaviorFlags & 0x20) == 0) {
         setCallback(animateFallingEffectDescent);
     }
 
@@ -418,7 +418,7 @@ void updateShieldEffect(ShieldEffectState *arg0) {
     s16 scaleFactor;
     s32 i;
 
-    if (!(arg0->player->unkB88 & 0x40)) {
+    if (!(arg0->player->behaviorFlags & 0x40)) {
         effectPos.x = arg0->player->worldPos.x;
         effectPos.y = arg0->player->worldPos.y + 0x100000;
         effectPos.z = arg0->player->worldPos.z;
@@ -667,7 +667,7 @@ void updateCrashEffect(CrashEffectState *arg0) {
 
     func_8006B084_6BC84(arg0->rotationMatrix, &arg0->player->unk3F8, arg0);
 
-    if ((arg0->player->unkB88 & 0x80) == 0) {
+    if ((arg0->player->behaviorFlags & 0x80) == 0) {
         pos.x = arg0->player->worldPos.x;
         pos.y = arg0->player->worldPos.y + 0x100000;
         pos.z = arg0->player->worldPos.z;
@@ -850,7 +850,7 @@ void updateLiftEffect(LiftEffectState *state) {
         state->playSound = 0;
     }
 
-    if ((state->player->unkB88 & 0x400) == 0) {
+    if ((state->player->behaviorFlags & 0x400) == 0) {
         setCallback(fadeOutLiftEffect);
     }
 

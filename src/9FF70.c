@@ -1879,7 +1879,7 @@ s32 updateStunnedAirbornePhase(Player *player) {
 
     if (player->behaviorStep == 0) {
         player->unkA8C = 0xFFFF;
-        player->unkB88 = 0;
+        player->behaviorFlags = 0;
         player->velocity.x = player->unkAC8;
         player->velocity.z = player->unkAD0;
         player->behaviorStep++;
@@ -1932,7 +1932,7 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
 
     if (player->behaviorStep == 0) {
         player->unkA8C = 0xFFFF;
-        player->unkB88 = 0;
+        player->behaviorFlags = 0;
         player->velocity.x = player->unkAC8;
         player->velocity.z = player->unkAD0;
         player->behaviorStep++;
@@ -1973,7 +1973,7 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
 }
 
 s32 updateStunnedFallingPhase(Player *player) {
-    player->unkB88 = 1;
+    player->behaviorFlags = 1;
     player->unkB84 |= 0x20;
     player->velocity.y -= 0x6000;
     player->velocity.x -= player->velocity.x >> 6;
@@ -2003,7 +2003,7 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
 
     player->unkB84 |= 0x60;
     player->velocity.y -= 0x6000;
-    player->unkB88 = 1;
+    player->behaviorFlags = 1;
 
     if (player->unkB84 & 1) {
         player->unkA8C = -1;
@@ -2031,7 +2031,7 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
                 dist = isqrt64(distSq);
 
                 if (dist <= 0x1FFFF) {
-                    player->unkB88 = 0;
+                    player->behaviorFlags = 0;
                     setPlayerBehaviorPhase(player, 4);
                 }
             } else {
@@ -2050,7 +2050,7 @@ s32 updateStunnedRecoveryFallingPhase(Player *player) {
     s16 clampedDelta;
 
     if (player->behaviorStep == 0) {
-        player->unkB88 = 0;
+        player->behaviorFlags = 0;
         player->unkB8C = 0xF;
         player->behaviorStep++;
         if (player->velocity.y > 0) {
@@ -2107,7 +2107,7 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
 
     player->unkB84 |= 0x60;
     player->velocity.y -= 0x6000;
-    player->unkB88 = 3;
+    player->behaviorFlags = 3;
 
     if (player->unkB84 & 1) {
         player->velocity.x -= player->velocity.x >> 5;
@@ -2158,7 +2158,7 @@ s32 updateEdgeFallRecoveryGetUpPhase(Player *arg0) {
         arg0->behaviorStep++;
     }
 
-    arg0->unkB88 = 7;
+    arg0->behaviorFlags = 7;
     arg0->unkB84 |= 0x60;
 
     if (arg0->velocity.y > 0) {
@@ -2231,7 +2231,7 @@ s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
         spawnImpactStar(&stackVec);
     }
 
-    arg0->unkB88 = 1;
+    arg0->behaviorFlags = 1;
     arg0->unkB84 |= 0x20;
     arg0->velocity.y -= 0x6000;
 
@@ -2264,7 +2264,7 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
     }
 
     arg0->unkB84 = arg0->unkB84 | 0x60;
-    arg0->unkB88 = 1;
+    arg0->behaviorFlags = 1;
     arg0->velocity.y = arg0->velocity.y - 0x6000;
 
     if (arg0->unkB84 & 1) {
@@ -2289,7 +2289,7 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
     if (func_8005D308_5DF08(arg0, 0xF) != 0) {
         if (!(arg0->unkB84 & 1)) {
             if (arg0->unkB8C == 0) {
-                arg0->unkB88 = 0;
+                arg0->behaviorFlags = 0;
                 setPlayerBehaviorPhase(arg0, 0xD);
             } else {
                 arg0->unkB8C = arg0->unkB8C - 1;
@@ -2307,7 +2307,7 @@ s32 updateStunnedRecoverySlidePhase(Player *arg0) {
         queueSoundAtPosition(&arg0->worldPos, 0xD);
     }
 
-    arg0->unkB88 = 8;
+    arg0->behaviorFlags = 8;
     arg0->unkB84 = arg0->unkB84 | 0x20;
 
     if (arg0->velocity.y > 0) {
@@ -2341,7 +2341,7 @@ s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
         }
     }
 
-    arg0->unkB88 = 8;
+    arg0->behaviorFlags = 8;
     arg0->unkB84 = arg0->unkB84 | 0x60;
 
     if (arg0->velocity.y > 0) {
@@ -2376,12 +2376,12 @@ s32 updateStunnedRecoveryEndPhase(Player *arg0) {
     arg0->unkB8C -= 1;
 
     if (arg0->unkB8C == 0) {
-        arg0->unkB88 = 0;
+        arg0->behaviorFlags = 0;
         resetPlayerBehaviorToDefault(arg0);
         return 1;
     }
 
-    arg0->unkB88 = 8;
+    arg0->behaviorFlags = 8;
     arg0->worldPos.y = arg0->worldPos.y + 0xFFFF0000;
     decayPlayerSteeringAngles(arg0);
     func_8005D180_5DD80(arg0, 0);
@@ -2394,7 +2394,7 @@ s32 updateStunnedRecoveryStandUpPhase(Player *arg0) {
     s16 angleDelta;
 
     if (arg0->behaviorStep == 0) {
-        arg0->unkB88 = 0;
+        arg0->behaviorFlags = 0;
         arg0->unkB8C = 0xF;
         arg0->behaviorStep++;
         if (arg0->velocity.y > 0) {
@@ -2445,7 +2445,7 @@ s32 updateKnockbackAirborneLaunchPhase(Player *player) {
         prevFlags = player->unkB84;
         player->behaviorStep++;
         player->velocity.y = 0xA0000;
-        player->unkB88 = 0x20;
+        player->behaviorFlags = 0x20;
         player->unkB8C = 5;
         player->unkA8C = 0xFFFF;
         player->unkB84 = prevFlags | 0x20;
@@ -2504,7 +2504,7 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
         if (arg0->velocity.y > 0) {
             arg0->velocity.y = 0;
         }
-        arg0->unkB88 = 0x40;
+        arg0->behaviorFlags = 0x40;
         arg0->unkB8C = 0x1E;
         arg0->unkA8C = 0xFFFF;
         arg0->unkB84 |= 0x20;
@@ -2538,7 +2538,7 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
 }
 
 s32 updateStunnedBounceFallPhase(Player *arg0) {
-    arg0->unkB88 = 1;
+    arg0->behaviorFlags = 1;
     arg0->unkB84 |= 0x20;
     arg0->velocity.y -= 0x6000;
     arg0->velocity.x -= arg0->velocity.x >> 6;
@@ -2568,7 +2568,7 @@ s32 updateStunnedBounceFallRecoverPhase(Player *arg0) {
         }
     }
 
-    arg0->unkB88 = 0x80;
+    arg0->behaviorFlags = 0x80;
     arg0->velocity.y = arg0->velocity.y - arg0->unkAB8;
     decayPlayerSteeringAngles(arg0);
 
@@ -2583,7 +2583,7 @@ s32 updateStunnedBounceFallRecoverPhase(Player *arg0) {
     func_8005D308_5DF08(arg0, 0);
 
     if (arg0->unkB8C == 0) {
-        arg0->unkB88 = 0;
+        arg0->behaviorFlags = 0;
         startRumbleEffect(arg0, 4);
         resetPlayerBehaviorToDefault(arg0);
         return 0;
@@ -2606,7 +2606,7 @@ s32 updateStunnedBounceLaunchPhase(Player *arg0) {
     }
 
     arg0->unkB84 = arg0->unkB84 | 0x60;
-    arg0->unkB88 = 0x102;
+    arg0->behaviorFlags = 0x102;
     arg0->velocity.y = arg0->velocity.y - 0x6000;
 
     if (arg0->unkB84 & 1) {
@@ -2660,7 +2660,7 @@ s32 updateKnockbackAirbornePhase(Player *arg0) {
         arg0->unkA8C = 0xFFFF;
     }
 
-    arg0->unkB88 = 0x200;
+    arg0->behaviorFlags = 0x200;
     arg0->unkB84 |= 0x20;
     arg0->velocity.y += 0xFFFF7000;
     arg0->velocity.x -= arg0->velocity.x >> 6;
@@ -2693,7 +2693,7 @@ s32 updateKnockbackBounceLaunchPhase(Player *player) {
 
     player->unkB84 = player->unkB84 | 0x60;
     player->velocity.y = player->velocity.y - 0x6000;
-    player->unkB88 = 0x202;
+    player->behaviorFlags = 0x202;
 
     if (player->unkB84 & 1) {
         player->velocity.x = player->velocity.x - (player->velocity.x >> 5);
@@ -2744,7 +2744,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
     if ((player->behaviorStep == 1) && (createLiftEffect(player) != 0)) {
         player->behaviorStep = player->behaviorStep + 1;
     }
-    player->unkB88 = 0x400;
+    player->behaviorFlags = 0x400;
     player->velocity.x = 0;
     player->velocity.z = 0;
     player->unkB84 |= 0x20;
@@ -2846,7 +2846,7 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
         }
     }
 
-    arg0->unkB88 = 0x10;
+    arg0->behaviorFlags = 0x10;
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
     arg0->unkB84 |= 0x40;
@@ -2855,7 +2855,7 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
     applyVelocityToPosition(arg0);
 
     if (arg0->unkB8C == -1) {
-        arg0->unkB88 = 0;
+        arg0->behaviorFlags = 0;
         setPlayerBehaviorPhase(arg0, 4);
     }
 

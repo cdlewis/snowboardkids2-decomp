@@ -19,28 +19,28 @@ extern u16 gCharacterVoiceSounds1[];
 extern u16 gCharacterVoiceSounds2[];
 
 void setPlayerHitStunState(Player *player, s16 hitState, void *knockbackData) {
-    if (player->unkAC2 != 0) {
+    if (player->hitReactionState != 0) {
         return;
     }
-    if (player->unkB88 & ~0x80) {
+    if (player->behaviorFlags & ~0x80) {
         return;
     }
-    player->unkAC2 = hitState;
+    player->hitReactionState = hitState;
     memcpy(&player->unkAC8, knockbackData, 0xC);
 }
 
 void setPlayerProjectileHitState(Player *player) {
-    if (player->unkAC2 < 3) {
-        if (!(player->unkB88 & 0x77F)) {
-            player->unkAC2 = 3;
+    if (player->hitReactionState < 3) {
+        if (!(player->behaviorFlags & 0x77F)) {
+            player->hitReactionState = 3;
         }
     }
 }
 
 void setPlayerCollisionKnockbackState(Player *player, s16 knockbackAngle, s32 knockbackStrength) {
-    if (player->unkAC2 < 4) {
-        if ((player->unkB88 & 0x77F) == 0) {
-            player->unkAC2 = 4;
+    if (player->hitReactionState < 4) {
+        if ((player->behaviorFlags & 0x77F) == 0) {
+            player->hitReactionState = 4;
             player->unkAC4 = knockbackAngle;
             player->unkAC8 = 0;
             player->unkACC = 0;
@@ -53,92 +53,92 @@ void setPlayerCollisionKnockbackState(Player *player, s16 knockbackAngle, s32 kn
 }
 
 void setPlayerState50(Player *player) {
-    if (player->unkAC2 < 0x32) {
-        if (!(player->unkB88 & 0x71F)) {
-            player->unkAC2 = 0x32;
+    if (player->hitReactionState < 0x32) {
+        if (!(player->behaviorFlags & 0x71F)) {
+            player->hitReactionState = 0x32;
         }
     }
 }
 
 void setPlayerPullState(Player *player, void *pullTarget) {
-    if (player->unkAC2 < 0x31) {
-        if (!(player->unkB88 & 0x71F)) {
-            player->unkAC2 = 0x31;
+    if (player->hitReactionState < 0x31) {
+        if (!(player->behaviorFlags & 0x71F)) {
+            player->hitReactionState = 0x31;
             memcpy(&player->unkAC8, pullTarget, 0xC);
         }
     }
 }
 
 void setPlayerHomingProjectileRetaliationState(Player *player) {
-    if (player->unkAC2 < 0x33) {
-        if (!(player->unkB88 & 0x59F)) {
-            player->unkAC2 = 0x33;
+    if (player->hitReactionState < 0x33) {
+        if (!(player->behaviorFlags & 0x59F)) {
+            player->hitReactionState = 0x33;
         }
     }
 }
 
 void setPlayerParachuteState(Player *player) {
-    if (player->unkAC2 < 0x34) {
-        if (!(player->unkB88 & 0x4BC)) {
-            player->unkAC2 = 0x34;
+    if (player->hitReactionState < 0x34) {
+        if (!(player->behaviorFlags & 0x4BC)) {
+            player->hitReactionState = 0x34;
         }
     }
 }
 
 void setPlayerShrinkState(Player *arg0) {
-    if (arg0->unkAC2 < 0x35) {
-        if (!(arg0->unkB88 & 0xD8)) {
-            arg0->unkAC2 = 0x35;
+    if (arg0->hitReactionState < 0x35) {
+        if (!(arg0->behaviorFlags & 0xD8)) {
+            arg0->hitReactionState = 0x35;
         }
     }
 }
 
 void setPlayerPanelHitState(Player *arg0) {
-    if (arg0->unkAC2 < 0x36) {
-        if (!(arg0->unkB88 & 0x49C)) {
-            arg0->unkAC2 = 0x36;
+    if (arg0->hitReactionState < 0x36) {
+        if (!(arg0->behaviorFlags & 0x49C)) {
+            arg0->hitReactionState = 0x36;
         }
     }
 }
 
 void setPlayerFrozenState(Player *player) {
-    if (player->unkAC2 < 0x3C) {
-        if (!(player->unkB88 & 0x9C)) {
-            player->unkAC2 = 0x3C;
+    if (player->hitReactionState < 0x3C) {
+        if (!(player->behaviorFlags & 0x9C)) {
+            player->hitReactionState = 0x3C;
         }
     }
 }
 
 void setPlayerStarHitState(Player *player, Vec3i *hitPosition) {
-    if (player->unkAC2 < 0x3C) {
-        if (!(player->unkB88 & 0x218)) {
-            player->unkAC2 = 0x3D;
+    if (player->hitReactionState < 0x3C) {
+        if (!(player->behaviorFlags & 0x218)) {
+            player->hitReactionState = 0x3D;
             memcpy(&player->unkAC8, hitPosition, 0xC);
         }
     }
 }
 
 void setPlayerBouncedBackState(Player *player) {
-    if (player->unkAC2 < 0x3C) {
+    if (player->hitReactionState < 0x3C) {
         if (player->invincibilityTimer == 0) {
-            if (!(player->unkB88 & 0x18)) {
-                player->unkAC2 = 0x3E;
+            if (!(player->behaviorFlags & 0x18)) {
+                player->hitReactionState = 0x3E;
             }
         }
     }
 }
 
 void setPlayerState80(Player *player) {
-    if (player->unkAC2 < 0x50) {
-        if (!(player->unkB88 & 0x1C)) {
-            player->unkAC2 = 0x50;
+    if (player->hitReactionState < 0x50) {
+        if (!(player->behaviorFlags & 0x1C)) {
+            player->hitReactionState = 0x50;
         }
     }
 }
 
 void setPlayerState100(Player *player) {
-    if (!(player->unkB88 & 8)) {
-        player->unkAC2 = 100;
+    if (!(player->behaviorFlags & 8)) {
+        player->hitReactionState = 100;
     }
 }
 
@@ -268,7 +268,7 @@ void playTrickLandingVoice(Player *player) {
 void playTrickSuccessVoice(Player *player) {
     u8 index = player->characterId;
     if (index < 9) {
-        if (player->unkB88 == 0) {
+        if (player->behaviorFlags == 0) {
             queueSoundAtPositionWithPriority(&player->worldPos, D_80093FCC_94BCC[index], 5, player->playerIndex + 4);
         }
     }
@@ -277,7 +277,7 @@ void playTrickSuccessVoice(Player *player) {
 void playAttackHitVoice(Player *player) {
     u8 index = player->characterId;
     if (index < 9) {
-        if (player->unkB88 == 0) {
+        if (player->behaviorFlags == 0) {
             queueSoundAtPositionWithPriority(&player->worldPos, D_80093FE0_94BE0[index], 5, player->playerIndex + 4);
             setPlayerBodyPartAnimState(player, 1, 0xF);
         }
@@ -287,7 +287,7 @@ void playAttackHitVoice(Player *player) {
 void playFinishBoostVoice(Player *player) {
     u8 index = player->characterId;
     if (index < 9) {
-        if (player->unkB88 == 0) {
+        if (player->behaviorFlags == 0) {
             queueSoundAtPositionWithPriority(
                 &player->worldPos,
                 gFinishBoostVoiceSounds[index],
@@ -301,7 +301,7 @@ void playFinishBoostVoice(Player *player) {
 void playRaceWinVoice(Player *player) {
     u8 index = player->characterId;
     if (index < 9) {
-        if (player->unkB88 == 0) {
+        if (player->behaviorFlags == 0) {
             queueSoundAtPositionWithPriority(&player->worldPos, D_80094008_94C08[index], 5, player->playerIndex + 4);
         }
     }
