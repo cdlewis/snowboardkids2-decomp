@@ -63,16 +63,16 @@ typedef struct {
 } cutsceneChrPosition_exec_arg;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s8 unk12;
-    s8 unk13;
-    s16 unk14;
-    s8 unk16;
+    s32 targetX;
+    s32 targetY;
+    s32 targetZ;
+    s16 fallbackRotY;
+    s16 duration;
+    s16 animIndex;
+    s8 actionMode;
+    s8 loopCount;
+    s16 transitionAnimIndex;
+    s8 animQueued;
 } cutsceneChrMove_exec_arg;
 
 typedef struct {

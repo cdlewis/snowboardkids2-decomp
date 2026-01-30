@@ -35,45 +35,45 @@ s32 cutsceneChrMove_validate(void) {
     return 0;
 }
 
-void cutsceneChrMove_exec(cutsceneChrMove_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
-    s32 temp_s0;
+void cutsceneChrMove_exec(cutsceneChrMove_exec_arg *arg, CutsceneManager *manager, s8 slotIndex) {
+    s32 moveMode;
     s32 animId;
-    u16 temp_s4;
-    s32 result;
+    u16 characterId;
+    s32 moveResult;
     CutsceneSlot *slot;
     s32 pad[4];
 
-    slot = &arg1->slots[arg2];
+    slot = &manager->slots[slotIndex];
 
-    temp_s4 = getCurrentStateEntryItem(arg2)->unk4;
+    characterId = getCurrentStateEntryItem(slotIndex)->unk4;
 
-    temp_s0 = 1;
+    moveMode = 1;
     animId = -1;
 
-    result = setupSlotMoveToEx(
+    moveResult = setupSlotMoveToEx(
         &slot->slotData,
         slot->model,
-        arg0->unk0,
-        arg0->unk4,
-        arg0->unk8,
-        arg0->unkE,
-        arg0->unkC,
+        arg->targetX,
+        arg->targetY,
+        arg->targetZ,
+        arg->duration,
+        arg->fallbackRotY,
         0,
-        temp_s0
+        moveMode
     );
 
-    switch (result) {
+    switch (moveResult) {
         case 1:
-            animId = getWalkAnimationId(temp_s4);
+            animId = getWalkAnimationId(characterId);
             break;
         case 2:
-            animId = getRunAnimationId(temp_s4);
+            animId = getRunAnimationId(characterId);
             break;
     }
 
-    setModelAnimationEx(slot->model, arg0->unk10, arg0->unk14, arg0->unk13, animId, arg0->unk16);
+    setModelAnimationEx(slot->model, arg->animIndex, arg->transitionAnimIndex, arg->loopCount, animId, arg->animQueued);
 
-    setModelActionMode(slot->model, arg0->unk12);
+    setModelActionMode(slot->model, arg->actionMode);
 }
 
 s32 cutsceneChrMove_isDone(void) {
