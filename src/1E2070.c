@@ -118,31 +118,31 @@ s32 gTrickSpriteEffectTransformData[2][3] = {
     { 0x00040000, 0x00000000, 0xFFF30000 }
 };
 
-void initTrickSpriteEffectTask(TrickSpriteEffectInitState *arg0) {
+void initTrickSpriteEffectTask(TrickSpriteEffectInitState *initState) {
     s32 i;
 
-    arg0->modelData = loadCompressedData(&_646DF0_ROM_START, &_646DF0_ROM_END, 0x1188);
-    arg0->vertexData = (s32 *)&gTrickSpriteEffectVertexData;
-    arg0->alpha = 0xFF;
+    initState->modelData = loadCompressedData(&_646DF0_ROM_START, &_646DF0_ROM_END, 0x1188);
+    initState->vertexData = (s32 *)&gTrickSpriteEffectVertexData;
+    initState->alpha = 0xFF;
 
-    arg0->vertexDataCopy = arg0->vertexData;
-    arg0->alphaCopy = arg0->alpha;
+    initState->vertexDataCopy = initState->vertexData;
+    initState->alphaCopy = initState->alpha;
 
     for (i = 0; i < 2; i++) {
-        // vector is different size (32 vs 16 bit) because that helped
-        // the data segment to match.
+        // Cast is required - transformData is s32 but function expects s16*
+        // This size difference helps the data segment match correctly
         transformVector(
             (s16 *)gTrickSpriteEffectTransformData[i],
-            &arg0->positionData->modelPtr->rotationY,
-            &arg0->spritePositions[i]
+            &initState->positionData->modelPtr->rotationY,
+            &initState->spritePositions[i]
         );
-        arg0->spritePositions[i].x -= arg0->positionData->posX;
-        arg0->spritePositions[i].y -= arg0->positionData->posY;
-        arg0->spritePositions[i].z -= arg0->positionData->posZ;
+        initState->spritePositions[i].x -= initState->positionData->posX;
+        initState->spritePositions[i].y -= initState->positionData->posY;
+        initState->spritePositions[i].z -= initState->positionData->posZ;
     }
 
-    arg0->frameIndex = 0;
-    arg0->effectParam = arg0->effectParam;
+    initState->frameIndex = 0;
+    initState->effectParam = initState->effectParam;
 
     setCleanupCallback(&cleanupTrickSpriteEffectTask);
     setCallbackWithContinue(&updateTrickSpriteEffect);

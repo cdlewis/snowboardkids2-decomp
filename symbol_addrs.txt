@@ -88,6 +88,7 @@ updateFanEffectGrow = 0x800B4D74; // rom:0x1E1E24
 updateFanEffectFade = 0x800B4E7C; // rom:0x1E1F2C
 cleanupFanEffectTask = 0x800B4F28; // rom:0x1E1FD8
 spawnFanEffect = 0x800B4F60; // rom:0x1E2010
+initTrickSpriteEffectTask = 0x800B4FC0; // rom:0x1E2070
 renderCutsceneSlotMenu = 0x800B3F64; // rom:0x1E1014
 gChairLiftWaypoints = 0x800BBB50; // rom:0xB5450 size:0x18
 D_800BBB68_B5468 = 0x800BBB68; // rom:0xB5468
