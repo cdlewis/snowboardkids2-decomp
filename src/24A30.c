@@ -291,7 +291,7 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *);
 void showCharSelectIcons(CharSelectIconHideState *);
 void updateCharSelectSecondarySlide(CharSelectSecondarySlot *);
 void cleanupCharSelectSecondaryAssets(func_8002494C_arg *);
-void func_80024D40_25940(CharSelectBoardPreview *);
+void recreateCharSelectBoardModel(CharSelectBoardPreview *);
 void func_80024DCC_259CC(CharSelectBoardPreview *);
 void initCharSelectBoardSlideIn(CharSelectBoardPreview *);
 void waitForCharSelectBoardState(CharSelectBoardPreview *);
@@ -786,16 +786,16 @@ void dispatchCharSelectBoardState(CharSelectBoardPreview *arg0) {
     } else if (boardState == 0) {
         arg0->transform.translation.x = 0xFFEA0000;
         destroySceneModel(arg0->model);
-        setCallback(func_80024D40_25940);
+        setCallback(recreateCharSelectBoardModel);
     } else if (boardState == 0x11) {
         arg0->transform.translation.x = 0xFFEA0000;
         setCallback(updateCharSelectBoardPreview);
     }
 }
 
-void func_80024D40_25940(CharSelectBoardPreview *arg0) {
+void recreateCharSelectBoardModel(CharSelectBoardPreview *arg0) {
     u8 *sessionPtr;
-    s32 var_a0;
+    s32 boardType;
     u8 *alloc;
     s32 playerIdx;
 
@@ -804,10 +804,11 @@ void func_80024D40_25940(CharSelectBoardPreview *arg0) {
 
     sessionPtr = (u8 *)D_800AFE8C_A71FC;
     sessionPtr = sessionPtr + playerIdx;
-    var_a0 = sessionPtr[9];
+    boardType = sessionPtr[9];
 
-    if (var_a0 != 7) {
-        arg0->model = createSceneModelEx(var_a0, alloc + (playerIdx * 0x1D8), (alloc + playerIdx)[0x18B8], -1, -1, -1);
+    if (boardType != 7) {
+        arg0->model =
+            createSceneModelEx(boardType, alloc + (playerIdx * 0x1D8), (alloc + playerIdx)[0x18B8], -1, -1, -1);
     } else {
         arg0->model = createSceneModelEx(0x39, alloc + (playerIdx * 0x1D8), (alloc + playerIdx)[0x18B8], -1, -1, -1);
     }
