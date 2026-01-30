@@ -88,14 +88,14 @@ void initCutsceneManager(CutsceneManager *manager, ViewportNode *sceneNode, void
 
     for (i = 0; i < (getCutsceneSlotCount() & 0xFF); i++) {
         StateEntryItem *slot = getCurrentStateEntryItem(i);
-        manager->slots[i].unk40 = slot->unk4;
+        manager->slots[i].unk40 = slot->characterId;
 
-        if (slot->unk4 != -1) {
-            if (isAssetGroupEmpty(slot->unk4)) {
+        if (slot->characterId != -1) {
+            if (isAssetGroupEmpty(slot->characterId)) {
                 manager->slots[i].model =
-                    createSceneModelEx(slot->unk4, sceneNode, slot->unk6, slot->unk7, slot->unk8, slot->unk9);
+                    createSceneModelEx(slot->characterId, sceneNode, slot->unk6, slot->unk7, slot->unk8, slot->unk9);
             } else {
-                manager->slots[i].model = createSceneModel(slot->unk4, sceneNode);
+                manager->slots[i].model = createSceneModel(slot->characterId, sceneNode);
             }
 
             if (needsVisibility) {
@@ -216,7 +216,7 @@ void prepareCutsceneForPlayback(
     manager->maxFrame = maxFrame;
     manager->endFrame = getCutsceneDefaultEndFrame();
     do {
-        modelId = getCurrentStateEntryItem(i)->unk4;
+        modelId = getCurrentStateEntryItem(i)->characterId;
         model = manager->slots[i].model;
         manager->slots[i].unk42 = 0xFF;
         manager->slots[i].unk43 = 0xFF;
@@ -1156,7 +1156,7 @@ void pasteCutsceneEntryToSlot(u8 slotIndex, u16 frameNumber) {
     s32 i;
 
     srcEntry = gCutsceneEntryBuffer;
-    categorySkip = (-((~getCurrentStateEntryItem(slotIndex)->unk4) != 0)) | 1;
+    categorySkip = (-((~getCurrentStateEntryItem(slotIndex)->characterId) != 0)) | 1;
 
     if (gCutsceneEntryCopyFlag != 0 && getCategorySkipValue(D_800BAF06_1E7FB6) != categorySkip) {
         s32 eventIndex = findEventAtFrame(slotIndex, frameNumber);

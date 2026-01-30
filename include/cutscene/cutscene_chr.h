@@ -212,7 +212,7 @@ typedef struct {
 
 void cutsceneChrTurn_init(void);
 s32 cutsceneChrTurn_validate(void);
-void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg0, CutsceneManager *arg1, s8 arg2);
+void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex);
 void cutsceneChrMove2_init(void);
 s32 cutsceneChrMove2_validate(void);
 void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex);

@@ -90,7 +90,7 @@ typedef struct {
 typedef struct {
     s16 headIndex;
     s16 unk2;
-    s16 unk4;
+    s16 characterId;
     s8 unk6;
     s8 unk7;
     s8 unk8;

@@ -45,7 +45,7 @@ void cutsceneChrMove_exec(cutsceneChrMove_exec_arg *arg, CutsceneManager *manage
 
     slot = &manager->slots[slotIndex];
 
-    characterId = getCurrentStateEntryItem(slotIndex)->unk4;
+    characterId = getCurrentStateEntryItem(slotIndex)->characterId;
 
     moveMode = 1;
     animId = -1;
@@ -130,31 +130,31 @@ s32 cutsceneChrTurn_validate(void) {
     return 0;
 }
 
-void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg0, CutsceneManager *arg1, s8 arg2) {
+void cutsceneChrTurn_exec(cutsceneChrTurn_exec_arg *arg, CutsceneManager *cutsceneManager, s8 slotIndex) {
     CutsceneSlot *slot;
-    cutsceneChrTurn_exec_arg *temp_arg0;
+    cutsceneChrTurn_exec_arg *cmd;
     s16 animId;
-    u16 temp_s0;
+    u16 characterId;
     s32 result;
 
-    temp_arg0 = arg0;
+    cmd = arg;
     animId = -1;
-    slot = &arg1->slots[arg2];
+    slot = &cutsceneManager->slots[slotIndex];
 
-    temp_s0 = getCurrentStateEntryItem(arg2)->unk4;
+    characterId = getCurrentStateEntryItem(slotIndex)->characterId;
 
-    result = setupSlotRotateTo(&slot->slotData, slot->model, temp_arg0->targetAngle);
+    result = setupSlotRotateTo(&slot->slotData, slot->model, cmd->targetAngle);
 
     switch (result) {
         case 1:
-            animId = getWalkAnimationId(temp_s0);
+            animId = getWalkAnimationId(characterId);
             break;
         case 2:
-            animId = getRunAnimationId(temp_s0);
+            animId = getRunAnimationId(characterId);
             break;
     }
 
-    setModelAnimationQueued(slot->model, temp_arg0->animIndex, temp_arg0->transitionAnimIndex, -1, animId);
+    setModelAnimationQueued(slot->model, cmd->animIndex, cmd->transitionAnimIndex, -1, animId);
 }
 
 void cutsceneChrMove2_init(void) {
@@ -173,7 +173,7 @@ void cutsceneChrMove2_exec(cutsceneChrMove2_exec_arg *arg, CutsceneManager *cuts
 
     slot = &cutsceneManager->slots[slotIndex];
 
-    characterId = getCurrentStateEntryItem(slotIndex)->unk4;
+    characterId = getCurrentStateEntryItem(slotIndex)->characterId;
 
     decelRate = 1;
     animId = -1;
@@ -280,7 +280,7 @@ void cutsceneChrTurn2_exec(cutsceneChrTurn2_exec_arg *arg, CutsceneManager *cuts
 
     slot = &cutsceneManager->slots[slotIndex];
 
-    characterId = getCurrentStateEntryItem(slotIndex)->unk4;
+    characterId = getCurrentStateEntryItem(slotIndex)->characterId;
 
     animId = -1;
 
