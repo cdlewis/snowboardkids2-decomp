@@ -917,7 +917,7 @@ void cleanupCharSelectBoardModel(CharSelectBoardPreview *preview) {
     destroySceneModel(preview->model);
 }
 
-void func_80025074_25C74(CharSelectBoardPreview *arg0) {
+void initCharSelectBoardModelForSlideOut(CharSelectBoardPreview *arg0) {
     u8 *alloc;
     u8 playerIndex;
     u32 boardType;
