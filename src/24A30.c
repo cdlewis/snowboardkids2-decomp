@@ -292,7 +292,7 @@ void showCharSelectIcons(CharSelectIconHideState *);
 void updateCharSelectSecondarySlide(CharSelectSecondarySlot *);
 void cleanupCharSelectSecondaryAssets(func_8002494C_arg *);
 void recreateCharSelectBoardModel(CharSelectBoardPreview *);
-void func_80024DCC_259CC(CharSelectBoardPreview *);
+void recreateCharSelectBoardModelForSlideIn(CharSelectBoardPreview *);
 void initCharSelectBoardSlideIn(CharSelectBoardPreview *);
 void waitForCharSelectBoardState(CharSelectBoardPreview *);
 void updateCharSelectBoardSlideIn(CharSelectBoardPreview *);
@@ -765,7 +765,7 @@ void updateCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
     val = state->unk1898[arg0->playerIndex];
     if (val == 0x10) {
         destroySceneModel(arg0->model);
-        setCallback(func_80024DCC_259CC);
+        setCallback(recreateCharSelectBoardModelForSlideIn);
     }
 }
 
@@ -782,7 +782,7 @@ void dispatchCharSelectBoardState(CharSelectBoardPreview *arg0) {
 
     if (boardState == 0x10) {
         destroySceneModel(arg0->model);
-        setCallback(func_80024DCC_259CC);
+        setCallback(recreateCharSelectBoardModelForSlideIn);
     } else if (boardState == 0) {
         arg0->transform.translation.x = 0xFFEA0000;
         destroySceneModel(arg0->model);
@@ -815,7 +815,7 @@ void recreateCharSelectBoardModel(CharSelectBoardPreview *arg0) {
     setCallback(initCharSelectBoardPreview);
 }
 
-void func_80024DCC_259CC(CharSelectBoardPreview *arg0) {
+void recreateCharSelectBoardModelForSlideIn(CharSelectBoardPreview *arg0) {
     GameState *state;
     u32 boardType;
 
