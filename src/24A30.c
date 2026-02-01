@@ -74,16 +74,16 @@ typedef struct {
 } SelectionMenuState;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 targetY;
+    s16 baseY;
+    s16 x;
+    void *spriteAsset;
+    s16 spriteIndex;
+    s16 scaleX;
+    s16 scaleY;
+    s16 currentY;
     s16 unk10;
-    u8 unk12;
-    u8 unk13;
+    u8 padding;
+    u8 maxItems;
 } CharSelectIconEntry;
 
 typedef struct {
@@ -131,8 +131,8 @@ typedef P2NameAnimationState CharSelectIconHideState;
 typedef struct {
     CharSelectIconEntry entries[3];
     u8 padding[0x14];
-    u8 unk50;
-    u8 unk51;
+    u8 numVisibleIcons;
+    u8 revealCounter;
     u8 playerIndex;
     u8 delayTimer;
 } CharSelectIconsState;
@@ -265,7 +265,7 @@ extern Vec3s D_8008DD4E_8E94E[];
 extern Vec3s charSelectIconPositions[];
 extern Vec3s charSelectIconYIncrements[];
 
-void func_80025418_26018(CharSelectIconsState *);
+void animateCharSelectIconReveal(CharSelectIconsState *);
 void cleanupCharSelectIcons(SimpleSpriteEntry *);
 void updateCharSelectIconsDelay(CharSelectIconsState *);
 void updateCharSelectIconTargets(CharSelectIconTargetState *);
@@ -1033,39 +1033,39 @@ void initCharSelectIcons(CharSelectIconsState *arg0) {
 
     do {
         u8 tableVal;
-        iconEntry->unk0 = yPos;
-        iconEntry->unk2 = xPos;
-        iconEntry->unk8 = iconTableIndex;
+        iconEntry->baseY = yPos;
+        iconEntry->x = xPos;
+        iconEntry->spriteIndex = iconTableIndex;
         tableVal = tablePtr[1];
         tablePtr += 2;
-        iconEntry->unk12 = 0;
-        iconEntry->unkA = scaleX;
-        iconEntry->unkC = scaleY;
-        iconEntry->unk4 = spriteAsset;
-        iconEntry->targetY = 0;
-        iconEntry->unk13 = (s8)(tableVal + 1);
+        iconEntry->padding = 0;
+        iconEntry->scaleX = scaleX;
+        iconEntry->scaleY = scaleY;
+        iconEntry->spriteAsset = spriteAsset;
+        iconEntry->currentY = 0;
+        iconEntry->maxItems = (s8)(tableVal + 1);
         xPos += xIncrement;
         i++;
         iconEntry->unk10 = sp10.field2;
         iconEntry++;
     } while (i < 3);
 
-    arg0->unk50 = 1;
-    arg0->unk51 = 0;
+    arg0->numVisibleIcons = 1;
+    arg0->revealCounter = 0;
     arg0->delayTimer = 8;
     setCallback(updateCharSelectIconsDelay);
 }
 
 void updateCharSelectIconsDelay(CharSelectIconsState *arg0) {
     if (--arg0->delayTimer == 0) {
-        setCallback(func_80025418_26018);
+        setCallback(animateCharSelectIconReveal);
     }
 }
 
 extern u8 D_8008DD8C_8E98C[];
 extern s16 D_8008DE02_8EA02[];
 
-void func_80025418_26018(CharSelectIconsState *arg0) {
+void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
     u8 *alloc;
     s32 i;
     s32 count;
@@ -1081,7 +1081,7 @@ void func_80025418_26018(CharSelectIconsState *arg0) {
     alloc = (u8 *)getCurrentAllocation();
     count = 0;
 
-    for (i = 0; i < arg0->unk50; i++) {
+    for (i = 0; i < arg0->numVisibleIcons; i++) {
         ptr = alloc + arg0->playerIndex;
         charIndex = ptr[0x18A8];
         paletteIndex = ptr[0x18B0];
@@ -1089,7 +1089,7 @@ void func_80025418_26018(CharSelectIconsState *arg0) {
         targetVal = D_8008DE02_8EA02[itemIconIndex];
 
         entry = &arg0->entries[i];
-        currentY = entry->targetY;
+        currentY = entry->currentY;
 
         if ((currentY & 0xFFFF) < targetVal) {
             if (currentY < 0x10) {
@@ -1097,15 +1097,15 @@ void func_80025418_26018(CharSelectIconsState *arg0) {
             } else {
                 newY = currentY + 0xC;
             }
-            entry->targetY = newY;
+            entry->currentY = newY;
             count++;
         }
     }
 
-    if (arg0->unk50 < 3) {
-        arg0->unk51 = (arg0->unk51 + 1) & 3;
-        if (arg0->unk51 == 0) {
-            arg0->unk50 = arg0->unk50 + 1;
+    if (arg0->numVisibleIcons < 3) {
+        arg0->revealCounter = (arg0->revealCounter + 1) & 3;
+        if (arg0->revealCounter == 0) {
+            arg0->numVisibleIcons = arg0->numVisibleIcons + 1;
         }
     } else {
         if (count == 0) {
@@ -1138,7 +1138,7 @@ void updateCharSelectIconTargets(CharSelectIconTargetState *arg0) {
         paletteIndex = state->unk18B0[arg0->playerIndex];
         tableIndex = D_8008DD8C_8E98C[((u8)(paletteIndex + charIndex * 3)) * 3 + i];
         entry = &arg0->entries[i];
-        entry->targetY = D_8008DE02_8EA02[tableIndex];
+        entry->currentY = D_8008DE02_8EA02[tableIndex];
         debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010C98_11898, entry);
         i++;
     } while (i < 3);
