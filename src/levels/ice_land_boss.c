@@ -368,6 +368,15 @@ extern BossSurfaceColor gBossSurfaceColors[];
 extern s32 identityMatrix[];
 extern s32 gControllerInputs[];
 
+/**
+ * Main update function for the Ice Land boss.
+ * Handles:
+ * - Velocity calculation from position delta
+ * - Speed adjustment based on distance to player and flying state
+ * - Behavior mode transitions
+ * - Transform matrix updates
+ * - Ground joint position calculations
+ */
 void func_800BB2B0_B07A0(IceBossArg *boss) {
     Transform3D combinedRotMatrix;
     Transform3D fullTransform;
@@ -378,11 +387,13 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
 
     gameState = getCurrentAllocation();
 
+    // Calculate velocity based on position change since last frame
     boss->velocity.x = boss->position.x - boss->prevPosition.x;
     boss->velocity.y = boss->position.y - boss->prevPosition.y;
     boss->velocity.z = boss->position.z - boss->prevPosition.z;
     memcpy(&boss->prevPosition, &boss->position, 0xC);
 
+    // Get distance to player for AI speed calculation
     player = (IceBossArg *)gameState->players;
     distanceToPlayer = distance_3d(
         boss->position.x - player->position.x,
@@ -390,8 +401,9 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
         boss->position.z - player->position.z
     );
 
+    // Set target speed based on race state and distance
     if ((boss->finishPosition == 0) & (distanceToPlayer > 0xE00000)) {
-        if (boss->bossFlags & 0x400000) {
+        if (boss->bossFlags & 0x400000) {  // Flying mode
             boss->targetSpeed = getCharacterBoardStatParam0(0, 4) + -0x8000;
         } else if (distanceToPlayer > 0x8C00000) {
             boss->targetSpeed = 0x70000;
@@ -402,10 +414,12 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
         boss->targetSpeed = getCharacterBoardStatParam0(0, 8) + 0x18000;
     }
 
+    // Clamp target speed to maximum
     if (boss->targetSpeed > 0x180000) {
         boss->targetSpeed = 0x180000;
     }
 
+    // Gradually adjust current speed toward target
     speedDiff = boss->targetSpeed - boss->currentSpeed;
     if (speedDiff >= 0x1001) {
         speedDiff = 0x1000;
@@ -415,8 +429,9 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     }
 
     boss->currentSpeed = boss->currentSpeed + speedDiff;
-    boss->bossFlags &= 0xFFFBFFFF;
+    boss->bossFlags &= 0xFFFBFFFF;  // Clear bit 22 (0x40000)
 
+    // Check for attack trigger (0x3D)
     if (boss->behaviorMode != 3) {
         if (boss->behaviorTrigger != 0) {
             if (boss->behaviorTrigger == 0x3D) {
@@ -424,7 +439,7 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
                 boss->behaviorPhase = 0;
                 boss->behaviorStep = 0;
                 boss->behaviorCounter = 0;
-                if (boss->bossFlags & 0x400000) {
+                if (boss->bossFlags & 0x400000) {  // Skip to phase 1 if flying
                     boss->behaviorPhase = 1;
                 }
             }
@@ -432,9 +447,11 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     }
     boss->behaviorTrigger = 0;
 
+    // Dispatch to current behavior mode handler
     do {
     } while (D_800BCA14_B1F04[boss->behaviorMode](boss) != 0);
 
+    // Build transformation matrices for rendering and collision
     createZRotationMatrix(&boss->zRotationMatrix, boss->unkA92);
     createCombinedRotationMatrix(&boss->combinedRotationMatrix, boss->unkA8E, boss->unkA90);
     createYRotationMatrix(&boss->yRotationMatrix, boss->rotY);
@@ -446,7 +463,8 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     fullTransform.translation.y -= boss->yRotationMatrix.translation.y;
     fullTransform.translation.z -= boss->yRotationMatrix.translation.z;
 
-    if (boss->bossFlags & 0x400000) {
+    // Transform position for collision detection
+    if (boss->bossFlags & 0x400000) {  // Flying mode offset
         transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&fullTransform, &boss->transformedPos);
     } else {
         transformVector((s16 *)D_800BCA24_B1F14, (s16 *)&fullTransform, &boss->transformedPos);
@@ -455,9 +473,11 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     addCollisionSectorNodeToList(&boss->sectorListNode);
     func_800BC61C_B1B0C((Player *)boss);
 
-    if (boss->bossFlags & 0x400000) {
+    // Calculate ground joint positions for leg animation
+    if (boss->bossFlags & 0x400000) {  // Flying mode
         transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&fullTransform, &boss->unkAE4);
     } else {
+        // Transform three sets of ground joint offsets
         transformVector((s16 *)D_800BC9F0_B1EE0, boss->groundJointOffsets, &boss->unkAE4);
         boss->unkAE4.x -= boss->yRotationMatrix.translation.x;
         boss->unkAE4.y -= boss->yRotationMatrix.translation.y;
