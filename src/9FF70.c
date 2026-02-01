@@ -3516,19 +3516,19 @@ u8 getRumbleDuration(Player *player, s32 effectType) {
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", updateAndRenderRaceCharacters);
 
-void func_800B82D8_A8188(Player *arg0) {
+void handlePlayerPositionAndTrackCollision(Player *player) {
     Vec3i savedPos;
     Vec3i transformedVec;
     Vec3i temp;
     Transform3D matrix;
     GameState *gs;
     s32 sqrtDist;
-    s32 var_s7;
-    s32 temp_v0;
+    s32 hitDirection;
+    s32 trackHeight;
     s16 angle;
-    s32 var_v0;
+    s32 isFacingCollision;
+    s32 hitAngleInFront;
     Vec3i *temp2;
-    s32 temp3;
 
     gs = getCurrentAllocation();
 
@@ -3540,55 +3540,58 @@ void func_800B82D8_A8188(Player *arg0) {
         case 6:
         case 7:
         case 8:
-            handlePlayerToPlayerCollision(arg0);
+            handlePlayerToPlayerCollision(player);
             break;
         case 1:
         case 2:
         case 3:
-            handleCollisionWithTargetPlayer(arg0);
+            handleCollisionWithTargetPlayer(player);
             break;
     }
 
-    arg0->sectorIndex = getOrUpdatePlayerSectorIndex(arg0, (u8 *)&gs->gameData, arg0->sectorIndex, &arg0->worldPos);
+    player->sectorIndex =
+        getOrUpdatePlayerSectorIndex(player, (u8 *)&gs->gameData, player->sectorIndex, &player->worldPos);
     temp2 = &savedPos;
-    memcpy(&arg0->unk970.translation, &arg0->worldPos, 0xC);
+    memcpy(&player->unk970.translation, &player->worldPos, 0xC);
 
-    if (!(arg0->unkB84 & 0x100)) {
-        memcpy(temp2, &arg0->worldPos, sizeof(Vec3i));
+    if (!(player->unkB84 & 0x100)) {
+        memcpy(temp2, &player->worldPos, sizeof(Vec3i));
 
-        if (func_80059ED0_5AAD0(arg0) == -1 && ((savedPos.x != arg0->worldPos.x) || (savedPos.z != arg0->worldPos.z))) {
-            arg0->unkB84 |= 0x10;
-            savedPos.x = arg0->worldPos.x - savedPos.x;
-            savedPos.z = arg0->worldPos.z - savedPos.z;
+        if (func_80059ED0_5AAD0(player) == -1 &&
+            ((savedPos.x != player->worldPos.x) || (savedPos.z != player->worldPos.z))) {
+            player->unkB84 |= 0x10;
+            savedPos.x = player->worldPos.x - savedPos.x;
+            savedPos.z = player->worldPos.z - savedPos.z;
             sqrtDist = isqrt64((s64)savedPos.x * savedPos.x + (s64)savedPos.z * savedPos.z);
 
             if (sqrtDist > 0x8000) {
-                if (arg0->unkB84 & 0x1000) {
-                    setPlayerPullState(arg0, &savedPos);
+                if (player->unkB84 & 0x1000) {
+                    setPlayerPullState(player, &savedPos);
                 } else {
-                    createYRotationMatrix(&matrix, arg0->rotY + arg0->unkA90);
+                    createYRotationMatrix(&matrix, player->rotY + player->unkA90);
                     transformVector3(&savedPos, &matrix, &transformedVec);
-                    var_s7 = 0;
+                    hitDirection = 0;
                     angle = atan2Fixed(transformedVec.x, transformedVec.z);
-                    var_v0 = (angle - 0x981) < 0x67FU;
-                    if (arg0->unkB84 & 2) {
-                        temp3 = (angle - 0x1000) < 0x680U;
-                        var_s7 = temp3;
-                        var_v0 = (angle - 0x981) < 0x67FU;
+                    isFacingCollision = (angle - 0x981) < 0x67FU;
+                    if (player->unkB84 & 2) {
+                        hitAngleInFront = (angle - 0x1000) < 0x680U;
+                        hitDirection = hitAngleInFront;
+                        isFacingCollision = (angle - 0x981) < 0x67FU;
                     } else {
                         if (angle >= 0x1981) {
-                            var_s7 = 1;
+                            hitDirection = 1;
                         }
-                        var_v0 = angle < 0x680;
+                        isFacingCollision = angle < 0x680;
                     }
 
-                    if (var_v0) {
-                        var_s7 = 2;
+                    if (isFacingCollision) {
+                        hitDirection = 2;
                     }
 
-                    if (var_s7 != 0) {
+                    if (hitDirection != 0) {
                         if (isqrt64(
-                                (s64)arg0->velocity.x * arg0->velocity.x + (s64)arg0->velocity.z * arg0->velocity.z
+                                (s64)player->velocity.x * player->velocity.x +
+                                (s64)player->velocity.z * player->velocity.z
                             ) > 0x30000) {
                             s32 normX = ((s64)savedPos.x * 0x2000) / sqrtDist;
                             s32 normZ = ((s64)savedPos.z * 0x2000) / sqrtDist;
@@ -3599,8 +3602,8 @@ void func_800B82D8_A8188(Player *arg0) {
 
                             negNormX = -normX;
 
-                            dotPerp = ((s64)normZ * arg0->velocity.x + (s64)negNormX * arg0->velocity.z) / 0x2000;
-                            dotPar = ((s64)normX * arg0->velocity.x + (s64)normZ * arg0->velocity.z) / 0x2000;
+                            dotPerp = ((s64)normZ * player->velocity.x + (s64)negNormX * player->velocity.z) / 0x2000;
+                            dotPar = ((s64)normX * player->velocity.x + (s64)normZ * player->velocity.z) / 0x2000;
 
                             parComponent = dotPar;
                             if (parComponent < 0) {
@@ -3614,63 +3617,64 @@ void func_800B82D8_A8188(Player *arg0) {
                                 transformedVec.z =
                                     ((s64)negNormX * dotPerp) / 0x2000 + ((s64)normZ * parComponent) / 0x2000;
 
-                                setPlayerHitStunState(arg0, var_s7, &transformedVec);
+                                setPlayerHitStunState(player, hitDirection, &transformedVec);
                             }
                         }
                     }
                 }
             }
         } else {
-            arg0->unkB84 &= ~0x10;
+            player->unkB84 &= ~0x10;
         }
 
-        updatePlayerSectorAndClampYToTrack(arg0);
+        updatePlayerSectorAndClampYToTrack(player);
 
-        temp_v0 = getTrackHeightInSector(&gs->gameData, arg0->sectorIndex, &arg0->worldPos, 0x100000) + 0x3C00000;
-        if (temp_v0 < arg0->worldPos.y) {
-            arg0->worldPos.y = temp_v0;
+        trackHeight =
+            getTrackHeightInSector(&gs->gameData, player->sectorIndex, &player->worldPos, 0x100000) + 0x3C00000;
+        if (trackHeight < player->worldPos.y) {
+            player->worldPos.y = trackHeight;
         }
     }
 
-    if (!(arg0->unkB84 & 0x200)) {
-        func_8005A26C_5AE6C(arg0);
-        memcpy(&arg0->unk970.translation, &arg0->worldPos, sizeof(Vec3i));
+    if (!(player->unkB84 & 0x200)) {
+        func_8005A26C_5AE6C(player);
+        memcpy(&player->unk970.translation, &player->worldPos, sizeof(Vec3i));
     }
 
-    if (arg0->unkB84 & 0x20000) {
-        arg0->unkB84 &= ~1;
+    if (player->unkB84 & 0x20000) {
+        player->unkB84 &= ~1;
     }
 
     func_8005CFFC_5DBFC(
         (TrackGeometryFaceData *)&gs->gameData,
-        arg0->sectorIndex,
-        &arg0->worldPos,
-        &arg0->unkBC9,
-        &arg0->unkBCC
+        player->sectorIndex,
+        &player->worldPos,
+        &player->unkBC9,
+        &player->unkBCC
     );
 
-    arg0->unkBCA = arg0->unkBC9 >> 4;
-    arg0->unkBC9 &= 0xF;
+    player->unkBCA = player->unkBC9 >> 4;
+    player->unkBC9 &= 0xF;
 
-    if (arg0->unkB84 & 0x10000) {
-        arg0->unkBC9 = 0;
-    } else if (arg0->unkB84 & 0x20000) {
-        arg0->unkBC9 = 0;
-        arg0->unkBCC &= 0xF0;
+    if (player->unkB84 & 0x10000) {
+        player->unkBC9 = 0;
+    } else if (player->unkB84 & 0x20000) {
+        player->unkBC9 = 0;
+        player->unkBCC &= 0xF0;
     }
 
-    if (arg0->unkBC9 == 1) {
-        if ((arg0->unkBCB & 0xFF) == 3) {
-            setPlayerState80(arg0);
+    if (player->unkBC9 == 1) {
+        if ((player->unkBCB & 0xFF) == 3) {
+            setPlayerState80(player);
         } else {
-            arg0->unkBCB++;
+            player->unkBCB++;
         }
     } else {
-        arg0->unkBCB = 0;
+        player->unkBCB = 0;
     }
 
-    if (arg0->unkBC9 == 2) {
-        setPlayerState100(arg0);
+    if (player->unkBC9 == 2) {
+        setPlayerState100(player);
     }
 }
 
