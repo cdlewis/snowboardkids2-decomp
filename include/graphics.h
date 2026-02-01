@@ -144,7 +144,7 @@ void setViewportScale(ViewportNode *arg0, f32 scaleX, f32 scaleY);
 
 void renderFrame(u32);
 
-void func_8006DC40_6E840(void);
+void initDisplayBuffers(void);
 
 void func_8006FEF8_70AF8(ViewportNode *node, u16 id);
 

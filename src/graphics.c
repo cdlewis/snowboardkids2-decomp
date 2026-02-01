@@ -177,7 +177,7 @@ void initGraphicsArenas(void);
 void initLinearAllocator(void);
 void initLinearArenaRegions(void);
 
-void func_8006DC40_6E840(void) {
+void initDisplayBuffers(void) {
     DisplayBufferMsg *msg;
     u8 exists;
     s32 i;

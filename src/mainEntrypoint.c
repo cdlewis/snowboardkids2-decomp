@@ -32,7 +32,7 @@ void mainThreadEntrypoint(void *arg) {
 
     initControllerSubsystem();
     initializeMemoryAllocatorRegion();
-    func_8006DC40_6E840();
+    initDisplayBuffers();
     initPiManager();
     initTaskScheduler();
 
