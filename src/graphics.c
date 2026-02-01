@@ -308,12 +308,7 @@ void renderFrame(u32 viScanline) {
     void *projectionAlloc;
     s32 *lookAtAlloc;
     Light *lightArray;
-    u8 *borderPtr;
     s32 i;
-    s32 fogDiff;
-    s32 fogMul;
-    s32 fogOffset;
-    void *tempLight;
     u32 storedViScanline;
     s32 temp;
     s32 pipeSyncW;
@@ -354,7 +349,7 @@ void renderFrame(u32 viScanline) {
     rootNodePtr = &gRootViewport.list3_next;
     rootNode = *rootNodePtr;
     if (!rootNode) {
-        rootNode = (ViewportNode *)((u8 *)rootNodePtr - 0x10);
+        rootNode = &gRootViewport;
     }
 
     node = rootNode;
@@ -397,6 +392,7 @@ void renderFrame(u32 viScanline) {
             if (node->list3_next == NULL) {
                 node->frameCallbackMsg->taskFlags = 1;
                 node->frameCallbackMsg->msgQueue = &mainMessageQueue;
+                // Construct segmented address: offset (lower 16 bits) | segment (upper 16 bits)
                 callbackEntry = (CallbackEntry *)((u32)callbackEntry & 0xFFFF);
                 callbackEntry = (CallbackEntry *)((u32)callbackEntry | (gCallbackEntrySegment << 16));
                 node->frameCallbackMsg->msgData = (s32)callbackEntry;
@@ -431,8 +427,6 @@ void renderFrame(u32 viScanline) {
     node = rootNode;
     needsDisplayListSetup = TRUE;
     if (node != NULL) {
-        borderPtr = &gRootViewport.prevFadeValue;
-
         for (node = rootNode; node != NULL; node = node->list3_next) {
             // Future cleanup: ActiveViewport is probably just ViewportNode
             gActiveViewport = (gActiveViewport_type *)node;
@@ -460,7 +454,7 @@ void renderFrame(u32 viScanline) {
                     node->clipBottom
                 );
 
-                if (node->displayFlags & 0x2) {
+                if (node->displayFlags & 0x2) { // VIEWPORT_DISPLAY_CLEAR_SCREEN flag
                     gDPSetCycleType(gRegionAllocPtr++, G_CYC_FILL);
                     gDPSetRenderMode(gRegionAllocPtr++, G_RM_NOOP, G_RM_NOOP2);
                     gDPSetColorImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, &gFrameBuffer);
@@ -475,7 +469,7 @@ void renderFrame(u32 viScanline) {
                     needsDisplayListSetup = TRUE;
                 }
 
-                if (node->displayFlags & 0x1) {
+                if (node->displayFlags & 0x1) { // VIEWPORT_DISPLAY_OVERLAY flag
                     gDPPipeSync(gRegionAllocPtr++);
                     gDPSetColorImage(
                         gRegionAllocPtr++,
@@ -587,13 +581,16 @@ void renderFrame(u32 viScanline) {
                         gDPPipeSync(gRegionAllocPtr++);
                     }
                 } else {
+                    // Allocate Vp (16 bytes), projection matrix (64 bytes), and LookAt matrices (192 bytes)
                     viewportAlloc = arenaAlloc16(sizeof(node->viewportWidth) * 8);
                     projectionAlloc = arenaAlloc16(sizeof(node->perspectiveMatrix));
                     lookAtAlloc = arenaAlloc16(48 * sizeof(s32));
 
                     if (node->numLights > 0) {
+                        // Allocate light array: numLights + 1 (the +1 is for ambient light)
                         lightArray = arenaAlloc16((node->numLights + 1) * sizeof(Light));
                         if (lightArray != NULL) {
+                            // Copy each light from node->unk148 to allocated array
                             for (i = 0; i < node->numLights; i++) {
                                 memcpy(
                                     (Light *)(i * sizeof(Light) + (u32)lightArray),
@@ -603,6 +600,7 @@ void renderFrame(u32 viScanline) {
                                 gSPLight(gRegionAllocPtr++, (Light *)(i * sizeof(Light) + (u32)lightArray), i + 1);
                             }
 
+                            // Copy ambient light (at index numLights)
                             memcpy(
                                 (Light *)(i * sizeof(Light) + (u32)lightArray),
                                 (u8 *)(i * sizeof(Light) + (u32)node) + 0x148,
@@ -746,8 +744,9 @@ void renderFrame(u32 viScanline) {
 
             if (node->frameCallbackMsg != NULL) {
                 if (!needsDisplayListSetup) {
-                    if (((*(&gRootViewport.prevFadeValue)) != 0) && (node->list3_next == 0)) {
-                        BorderData *bd = (BorderData *)(((&gRootViewport.prevFadeValue))-0xF);
+                    // If this is the last viewport and root has a fade value, render root's fade overlay
+                    if (gRootViewport.prevFadeValue != 0 && node->list3_next == 0) {
+                        BorderData *bd = (BorderData *)&gRootViewport.clipLeft;
 
                         gSPDisplayList(gRegionAllocPtr++, gFadeOverlayDisplayList);
 
