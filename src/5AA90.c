@@ -54,13 +54,13 @@ INCLUDE_ASM("asm/nonmatchings/5AA90", func_8005A26C_5AE6C);
  */
 void updatePlayerSectorAndClampYToTrack(Player *player) {
     GameState *gameState;
-    GameDataLayout *gameData;
+    TrackGeometryFaceData *gameData;
     Vec3i *playerPos;
     u16 newSectorIndex;
     s32 trackHeight;
 
     gameState = (GameState *)getCurrentAllocation();
-    gameData = &gameState->gameData;
+    gameData = (TrackGeometryFaceData *)&gameState->gameData;
     playerPos = &player->worldPos;
     newSectorIndex = getOrUpdatePlayerSectorIndex(player, gameData, player->sectorIndex, playerPos);
     player->sectorIndex = newSectorIndex;

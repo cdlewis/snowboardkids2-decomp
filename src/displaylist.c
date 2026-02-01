@@ -140,57 +140,6 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80061A64_62664);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80061D6C_6296C);
 
-typedef struct {
-    s16 x;
-    s16 y;
-    s16 z;
-} Vertex6;
-
-typedef struct {
-    u16 v0;
-    u16 v1;
-    u16 v2;
-    u8 flags;
-    u8 surfaceIndex;
-} TrackFace;
-
-typedef struct {
-    s16 unk0;
-    u8 padding[0xA];
-    u16 baseIndex;
-    u16 count;
-    u8 padding2[0x14];
-} TrackFaceGroup;
-
-typedef struct {
-    /* 0x00 */ s16 nextElementIdx;
-    /* 0x02 */ u8 padding[0x14];
-    /* 0x16 */ u16 vertexIdx1;
-    /* 0x18 */ u8 padding2[0x4];
-    /* 0x1C */ u16 vertexIdx2;
-    /* 0x1E */ u8 padding3[0x6];
-} TrackSegmentElement;
-
-typedef struct {
-    /* 0x00 */ void *unk0;
-    /* 0x04 */ Vertex6 *vertices;
-    /* 0x08 */ void *unk8;
-    /* 0x0C */ TrackSegmentElement *elements;
-} TrackGeometryData;
-
-struct TrackGeometryFaceData {
-    void *unk0;
-    Vertex6 *vertices;
-    TrackFace *faces;
-    TrackFaceGroup *faceGroups;
-};
-
-typedef struct {
-    s16 x;
-    u8 pad[6];
-    s16 z;
-} PositionXZ;
-
 s32 projectPositionOntoTrackSegment(TrackGeometryData *arg0, u16 arg1, PositionXZ *arg2) {
     s32 dz;
     s32 dx;
@@ -242,7 +191,69 @@ s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index) {
     return gameData->section3Data[index].finishZoneFlag;
 }
 
-INCLUDE_ASM("asm/nonmatchings/displaylist", func_80062274_62E74);
+s32 func_80062274_62E74(TrackGeometryFaceData *geom, u16 groupIdx, Vec3i *pos, s32 yOffset) {
+    s32 i;
+    s32 v0x;
+    s32 v0z;
+    s32 v1x;
+    s32 v1z;
+    s32 v2x;
+    s32 v2z;
+    TrackFace *face;
+    Vertex6 *verts;
+    s32 y0;
+    s32 dY_v1;
+    s32 dY_v2;
+    s32 cross_a;
+    s32 cross_b;
+    s64 num_a;
+    s64 num_b;
+    s32 area;
+    s32 result;
+    s32 defaultVal = 0x3E800000;
+
+    for (i = geom->faceGroups[groupIdx].baseIndex2;
+         i < geom->faceGroups[groupIdx].baseIndex2 + geom->faceGroups[groupIdx].count2;
+         i++) {
+        face = (TrackFace *)((i * sizeof(TrackFace)) + (s32)geom->faces);
+        verts = geom->vertices;
+        v0x = verts[face->v0].x;
+        v0z = verts[face->v0].z;
+        v1x = verts[face->v2].x;
+        v1z = verts[face->v2].z;
+        v2x = verts[face->v1].x;
+        v2z = verts[face->v1].z;
+
+        if (cross2d(pos->x, pos->z, v0x << 16, v0z << 16, v1x << 16, v1z << 16) >= 0) {
+            if (cross2d(pos->x, pos->z, v1x << 16, v1z << 16, v2x << 16, v2z << 16) >= 0) {
+                if (cross2d(pos->x, pos->z, v2x << 16, v2z << 16, v0x << 16, v0z << 16) >= 0) {
+                    y0 = geom->vertices[geom->faces[i].v0].y;
+                    dY_v1 = geom->vertices[geom->faces[i].v1].y - y0;
+                    v1z = v1z - v0z;
+                    cross_a = dY_v1 * v1z;
+
+                    dY_v2 = geom->vertices[geom->faces[i].v2].y - y0;
+                    v2z = v2z - v0z;
+                    cross_b = v2z * dY_v2;
+
+                    v1x = v1x - v0x;
+                    v2x = v2x - v0x;
+
+                    v0x = pos->x - (v0x << 16);
+                    v0z = pos->z - (v0z << 16);
+                    area = (v2z * v1x) - (v2x * v1z);
+
+                    y0 <<= 16;
+                    y0 += (s32)((-((s64)(cross_a - cross_b) * v0x) - ((s64)((v2x * dY_v2) - (dY_v1 * v1x)) * v0z)) /
+                                area);
+                    return y0 - yOffset;
+                }
+            }
+        }
+    }
+
+    return defaultVal - yOffset;
+}
 
 u16 getTrackEndInfo(void *arg0, void *arg1) {
     s32 var_v1;

@@ -29,6 +29,59 @@ typedef struct {
     /* 0x3B */ u8 envColorAlpha;
 } DisplayListObject;
 
+typedef struct {
+    s16 x;
+    s16 y;
+    s16 z;
+} Vertex6;
+
+typedef struct {
+    u16 v0;
+    u16 v1;
+    u16 v2;
+    u8 flags;
+    u8 surfaceIndex;
+} TrackFace;
+
+typedef struct {
+    s16 unk0;
+    u8 padding[0xA];
+    u16 baseIndex;
+    u16 count;
+    u16 baseIndex2;
+    u16 count2;
+    u8 padding2[0x10];
+} TrackFaceGroup;
+
+typedef struct {
+    /* 0x00 */ s16 nextElementIdx;
+    /* 0x02 */ u8 padding[0x14];
+    /* 0x16 */ u16 vertexIdx1;
+    /* 0x18 */ u8 padding2[0x4];
+    /* 0x1C */ u16 vertexIdx2;
+    /* 0x1E */ u8 padding3[0x6];
+} TrackSegmentElement;
+
+typedef struct {
+    /* 0x00 */ void *unk0;
+    /* 0x04 */ Vertex6 *vertices;
+    /* 0x08 */ void *unk8;
+    /* 0x0C */ TrackSegmentElement *elements;
+} TrackGeometryData;
+
+typedef struct {
+    void *unk0;
+    Vertex6 *vertices;
+    TrackFace *faces;
+    TrackFaceGroup *faceGroups;
+} TrackGeometryFaceData;
+
+typedef struct {
+    s16 x;
+    u8 pad[6];
+    s16 z;
+} PositionXZ;
+
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1);
 void enqueueDisplayListObjectWithSegments(s32 arg0, DisplayListObject *arg1);
 
@@ -169,9 +222,8 @@ s32 func_80061A64_62664(void *arg0, u16 arg1, void *arg2);
 
 s32 func_80061D6C_6296C(void *arg0, u16 arg1, void *arg2, s32 arg3);
 
-s32 func_80062274_62E74(void *arg0, u16 arg1);
+s32 func_80062274_62E74(TrackGeometryFaceData *geom, u16 groupIdx, Vec3i *pos, s32 yOffset);
 
-typedef struct TrackGeometryFaceData TrackGeometryFaceData;
 void findTrackFaceAtPosition(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 *arg3, u8 *arg4);
 
 void prepareDisplayListRenderStateWithLights(DisplayListObject *obj);
