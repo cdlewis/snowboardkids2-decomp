@@ -1081,10 +1081,12 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
     alloc = (u8 *)getCurrentAllocation();
     count = 0;
 
+    // Animate icon Y positions towards their target values
     for (i = 0; i < arg0->numVisibleIcons; i++) {
         ptr = alloc + arg0->playerIndex;
         charIndex = ptr[0x18A8];
         paletteIndex = ptr[0x18B0];
+        // Each character has 3 board options (palette 0-2), with 3 items each
         itemIconIndex = D_8008DD8C_8E98C[(((u8)(paletteIndex + charIndex * 3)) * 3) + i];
         targetVal = D_8008DE02_8EA02[itemIconIndex];
 
@@ -1102,6 +1104,7 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
         }
     }
 
+    // Gradually reveal more icons (1 -> 2 -> 3) over time
     if (arg0->numVisibleIcons < 3) {
         arg0->revealCounter = (arg0->revealCounter + 1) & 3;
         if (arg0->revealCounter == 0) {
@@ -1113,10 +1116,12 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
         }
     }
 
+    // Render all 3 icon slots
     for (i = 0; i < 3; i++) {
         debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010C98_11898, &arg0->entries[i]);
     }
 
+    // If character selection is confirmed, skip animation
     if (((u16 *)alloc)[(arg0->playerIndex * 2 + 0x1898) / 2] == 9) {
         setCallback(updateCharSelectIconTargets);
     }
