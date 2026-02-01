@@ -20,7 +20,7 @@ typedef struct {
     s16 spawnTimer;
 } FlyingEnemySpawnerState;
 
-void func_800BB2B0(FlyingEnemyTaskArg *arg0);
+void renderFlyingEnemy(FlyingEnemyTaskArg *arg0);
 void func_800BBA50(s32 arg0);
 void initCrazyJungleHazards(void);
 void initFlyingEnemySpawner(FlyingEnemySpawnerState *arg0);

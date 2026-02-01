@@ -60,7 +60,7 @@ typedef struct {
     s16 surfaceType;
 } FlyingEnemyTask;
 
-void func_800BB2B0(FlyingEnemyTaskArg *arg0) {
+void renderFlyingEnemy(FlyingEnemyTaskArg *arg0) {
     s32 i;
 
     createYRotationMatrix(&arg0->matrix, arg0->rotationAngle);
@@ -207,7 +207,7 @@ void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task) {
         pullPlayersInRange(task);
     }
 
-    func_800BB2B0(task);
+    renderFlyingEnemy(task);
 }
 
 void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
@@ -269,7 +269,7 @@ void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
         pullPlayersInRange(task);
     }
 
-    func_800BB2B0(task);
+    renderFlyingEnemy(task);
 }
 
 void cleanupFlyingEnemyTask(FlyingEnemyCleanupArg *arg0) {

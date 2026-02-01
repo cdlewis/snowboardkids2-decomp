@@ -2844,7 +2844,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 schedulePlayerRenderTask(i);
             }
             schedulePlayerSparkleTask();
-            scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
+            scheduleTask(&renderFlyingEnemy, 0, 0, 0xD3);
             scheduleTask(&initSunnyMountainFlyingBirdTask, 0, 0, 0xD3);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
@@ -2901,7 +2901,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
                 gs->pendingPlayerRenderTasks = gs->pendingPlayerRenderTasks + 1;
                 schedulePlayerRenderTask(i);
             }
-            scheduleTask(&func_800BB2B0, 0, 0, 0x32);
+            scheduleTask(&renderFlyingEnemy, 0, 0, 0x32);
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initWendysHouseProjectileSpawner, 0, 0, 0x5E);
             scheduleGoldCoinsIfEnabled(courseId);
@@ -3034,7 +3034,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
-            scheduleTask(&func_800BB2B0, 0, 0, 0xD3);
+            scheduleTask(&renderFlyingEnemy, 0, 0, 0xD3);
             break;
 
         case SNOWBOARD_STREET_SHOT_CROSS:
