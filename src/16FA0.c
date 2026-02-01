@@ -12,14 +12,22 @@
 USE_ASSET(_414CF0);
 USE_ASSET(_418520);
 
+typedef struct {
+    u8 pad0[0xA];
+    s16 alpha;
+    void *unkC;
+} ControllerSlotElement;
+
+typedef struct {
+    ControllerSlotElement elements[8];
+} ControllerSlotDisplay;
+
 extern u8 gConnectedControllerMask;
 
 void renderTitleEffectModel(ModelEntityRenderState *arg0);
 void cleanupTitleEffectModel(EffectState *arg0);
-
 extern Transform3D gTitleCharacterTransforms[];
 extern u16 *gTitleCharacterAnimSequences[2];
-
 void updateCharacterFlyAway(TitleCharacterState *arg0);
 void updateTitleCharacterAnimation(TitleCharacterState *arg0);
 void handleUnlockAllCharacterAnim(TitleCharacterState *arg0);
@@ -27,9 +35,12 @@ void handlePartialUnlockCharacterAnim(TitleCharacterState *arg0);
 void updatePartialUnlockAnim(TitleCharacterState *arg0);
 void setupTitleCharacterTransform(TitleCharacterState *arg0);
 void cleanupTitleCharacterModel(TitleCharacterState *arg0);
-
 void enqueueTitleLogoRender(TitleLogoTask *);
 void cleanupTitleLogoTask(TitleLogoTask *);
+void cleanupPressStartPrompt(void **);
+void func_800167B0_173B0(Struct16728 *);
+void cleanupControllerSlotDisplay(void **);
+void updateControllerSlotHighlights(ControllerSlotDisplay *);
 
 void cleanupTitleLogoTask(TitleLogoTask *arg0) {
     arg0->assetData = freeNodeMemory(arg0->assetData);
@@ -51,17 +62,48 @@ void loadTitleLogoAsset(TitleLogoTask *arg0) {
     setCallback(initTitleLogoRenderState);
 }
 
-INCLUDE_ASM("asm/nonmatchings/16FA0", func_80016488_17088);
+void func_80016488_17088(ControllerSlotState *state) {
+    GameState *allocation;
+    s32 i;
+    void *asset;
 
-typedef struct {
-    u8 pad0[0xA];
-    s16 alpha;
-    void *unkC;
-} ControllerSlotElement;
+    allocation = (GameState *)getCurrentAllocation();
+    asset = loadCompressedData(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
+    setCleanupCallback(cleanupControllerSlotDisplay);
 
-typedef struct {
-    ControllerSlotElement elements[8];
-} ControllerSlotDisplay;
+    for (i = 0; i < allocation->unk3BC; i++) {
+        state->entries[i].x = -0x38;
+        state->entries[i].y = 0x26 + (i * 0x10);
+        state->entries[i].unkD = 0;
+        state->entries[i].asset = asset;
+        state->entries[i].spriteIndex = i;
+        state->entries[i].alpha = 0x80;
+        state->entries[i].unkE = 0xF0;
+        state->entries[i].unkC = 0;
+    }
+
+    for (i = 0; i < 2; i++) {
+        state->entries[i + 4].x = -0x38;
+        state->entries[i + 4].y = 0x2E + i * 0x12;
+        state->entries[i + 4].unkD = 0;
+        state->entries[i + 4].asset = asset;
+        state->entries[i + 4].spriteIndex = 3;
+        state->entries[i + 4].spriteIndex += i;
+        state->entries[i + 4].alpha = 0x80;
+        state->entries[i + 4].unkE = 0xF0;
+        state->entries[i + 4].unkC = 0;
+    }
+
+    state->entry6.y = 0x55;
+    state->entry6.x = -0x48;
+    state->entry6.spriteIndex = 5;
+    state->entry6.asset = asset;
+    state->entry6.nested.x = -0x48;
+    state->entry6.nested.asset = asset;
+    state->entry6.nested.spriteIndex = 6;
+    state->entry6.nested.y = state->entry6.y + 0xE;
+    setCallback(updateControllerSlotHighlights);
+}
 
 void updateControllerSlotHighlights(ControllerSlotDisplay *arg0) {
     GameState *state;
@@ -109,10 +151,6 @@ void updateControllerSlotHighlights(ControllerSlotDisplay *arg0) {
 void cleanupControllerSlotDisplay(void **arg0) {
     arg0[1] = freeNodeMemory(arg0[1]);
 }
-
-void cleanupPressStartPrompt(void **);
-
-void func_800167B0_173B0(Struct16728 *);
 
 void func_80016728_17328(Struct16728 *arg0) {
     void *dmaResult;

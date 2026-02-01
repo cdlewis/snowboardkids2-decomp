@@ -5,6 +5,39 @@
 #include "main.h"
 
 typedef struct {
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+} MiniSpriteEntry;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 alpha;
+    u8 unkC;
+    u8 unkD;
+    u8 unkE;
+    u8 padding;
+} ControllerSlotEntry;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    void *asset;
+    s16 spriteIndex;
+    s16 alpha;
+    MiniSpriteEntry nested;
+} ControllerSlotEntry6;
+
+typedef struct {
+    ControllerSlotEntry entries[6];
+    ControllerSlotEntry6 entry6;
+} ControllerSlotState;
+
+typedef struct {
     u8 padding[0x2];
     s16 unk2;
     u8 padding2[0x34];
@@ -37,7 +70,7 @@ typedef struct {
 } TitleCharacterState;
 
 void loadTitleLogoAsset(TitleLogoTask *arg0);
-void func_80016488_17088(void);
+void func_80016488_17088(ControllerSlotState *);
 void func_80016728_17328(Struct16728 *arg0);
 void initTitleEffectModel(ModelEntity *arg0);
 void initTitleCharacterModel(TitleCharacterState *arg0);
