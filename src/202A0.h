@@ -130,7 +130,7 @@ void func_80020B44_21744(void);
 void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0);
 void initUnlockNotification(UnlockNotificationState *state);
 void initLevelPreviewPortraits(LevelPreviewPortraitState *state);
-void func_80020708_21308(void *);
+void initLevelPreviewPortraitDisplay(void *portraitState);
 void cleanupLevelPreviewPortraits(LevelPreviewPortraitState *state);
 void initMenuCharacterModel(MenuCharacterModelState *state);
 void setupLevelPreviewCamera(LevelPreviewCharacterState *arg0);

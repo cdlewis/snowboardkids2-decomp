@@ -462,10 +462,11 @@ void initLevelPreviewPortraits(LevelPreviewPortraitState *state) {
     s32 pad[4];
     state->portraitAsset = loadCompressedData(&_43A000_ROM_START, &_43A000_ROM_END, 0xB198);
     setCleanupCallback(&cleanupLevelPreviewPortraits);
-    setCallback(&func_80020708_21308);
+    setCallback(&initLevelPreviewPortraitDisplay);
 }
 
-void func_80020708_21308(void *arg0) {
+void initLevelPreviewPortraitDisplay(void *arg0) {
+    PortraitState *portraitState = (PortraitState *)arg0;
     volatile s32 pad[8];
     AllocationState *allocation;
     OutputStruct_19E80 sp30;
@@ -477,7 +478,7 @@ void func_80020708_21308(void *arg0) {
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 2; j++) {
             s32 index = (i * 2) + j;
-            u8 *base = (u8 *)arg0;
+            u8 *base = (u8 *)portraitState;
             MatrixData *element = (MatrixData *)(base + (index * 52));
 
             memcpy(&element->transform, &identityMatrix, 0x20);
@@ -501,7 +502,7 @@ void func_80020708_21308(void *arg0) {
         }
 
         {
-            u8 *base = (u8 *)arg0;
+            u8 *base = (u8 *)portraitState;
             s32 offset = i * 12;
             PortraitSubEntry *entry = (PortraitSubEntry *)(base + offset);
 
