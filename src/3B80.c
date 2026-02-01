@@ -11,21 +11,21 @@ typedef struct {
 } TransparentRenderTaskData;
 
 typedef struct {
-    void *context;
-    void **loadedAssets;
-    s32 param;
-    s32 unkC;
-    s32 unk10;
-    struct {
-        u8 _pad00[0x10];
-        s16 unk24;
-        s16 unk26;
-        s16 unk28;
-        s16 unk2A;
-        u8 _pad2C[0x14];
+    /* 0x00 */ void *context;
+    /* 0x04 */ void **loadedAssets;
+    /* 0x08 */ s32 scrollParam;
+    /* 0x0C */ s32 scrollOffset;
+    /* 0x10 */ s32 yPos;
+    /* 0x14 */ struct {
+        /* 0x00 */ u8 _pad00[0x10];
+        /* 0x10 */ s16 xPos;
+        /* 0x12 */ s16 yPos;
+        /* 0x14 */ s16 width;
+        /* 0x16 */ s16 height;
+        /* 0x18 */ u8 _pad18[0x14];
     } elements[4];
-    u8 groupIndex;
-    s8 unkC5;
+    /* 0xC4 */ u8 groupIndex;
+    /* 0xC5 */ s8 initialized;
 } TiledTextureTaskData;
 
 typedef struct {
@@ -120,51 +120,51 @@ void loadAssetGroupResources(AssetGroupTaskData *taskData) {
     setCallback(updateTiledTextureAssetDisplay);
 }
 
-void updateTiledTextureAssetDisplay(TiledTextureTaskData *arg0) {
+void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
     AssetGroupTableEntry *entry;
     s32 i;
-    s32 temp;
+    s32 scrollOffset;
 
-    entry = &assetGroupTable[arg0->groupIndex];
-    if (arg0->unkC5 == 0) {
+    entry = &assetGroupTable[taskData->groupIndex];
+    if (taskData->initialized == 0) {
         for (i = 0; i < 4; i++) {
-            initTiledTextureRenderState(&arg0->elements[i], (s32)arg0->loadedAssets[i % entry->assetCount]);
-            arg0->elements[i].unk28 = 0x81;
-            arg0->elements[i].unk2A = 0x81;
+            initTiledTextureRenderState(&taskData->elements[i], (s32)taskData->loadedAssets[i % entry->assetCount]);
+            taskData->elements[i].width = 0x81;
+            taskData->elements[i].height = 0x81;
         }
-        arg0->unkC5 = 1;
+        taskData->initialized = 1;
         return;
     }
 
-    temp = *(s32 *)((u8 *)((CutsceneManager *)arg0->context)->sceneContext + 0x34);
-    temp = (temp >> 8) * (arg0->param >> 8);
-    temp >>= 16;
-    arg0->unk10 = 0x44;
-    arg0->unkC = temp;
+    scrollOffset = *(s32 *)((u8 *)((CutsceneManager *)taskData->context)->sceneContext + 0x34);
+    scrollOffset = (scrollOffset >> 8) * (taskData->scrollParam >> 8);
+    scrollOffset >>= 16;
+    taskData->yPos = 0x44;
+    taskData->scrollOffset = scrollOffset;
 
     for (i = 0; i < 4; i++) {
         u32 tableIndex;
         s32 tileIndex;
         s32 assetIndex;
-        s32 scrollValue;
+        s32 xPos;
 
-        tableIndex = ((u32)arg0->unkC + (i << 7)) >> 7;
+        tableIndex = ((u32)taskData->scrollOffset + (i << 7)) >> 7;
         tileIndex = tableIndex % entry->tableSize;
         tileIndex = entry->unk4[tileIndex];
         assetIndex = tileIndex % entry->assetCount;
-        initTiledTextureRenderState(&arg0->elements[i], (s32)arg0->loadedAssets[assetIndex]);
-        arg0->elements[i].unk28 = 0x81;
-        arg0->elements[i].unk2A = 0x81;
-        scrollValue = ~arg0->unkC;
-        scrollValue &= 0x7F;
-        scrollValue += -0x80;
-        scrollValue += i << 7;
-        arg0->elements[i].unk24 = scrollValue;
-        arg0->elements[i].unk26 = arg0->unk10;
+        initTiledTextureRenderState(&taskData->elements[i], (s32)taskData->loadedAssets[assetIndex]);
+        taskData->elements[i].width = 0x81;
+        taskData->elements[i].height = 0x81;
+        xPos = ~taskData->scrollOffset;
+        xPos &= 0x7F;
+        xPos += -0x80;
+        xPos += i << 7;
+        taskData->elements[i].xPos = xPos;
+        taskData->elements[i].yPos = taskData->yPos;
 
-        if (((CutsceneManager *)arg0->context)->enableTransparency != 0) {
-            if (((CutsceneManager *)arg0->context)->unk10.unk87 != 0) {
-                debugEnqueueCallback(3, 2, renderTiledTexture, &arg0->elements[i]);
+        if (((CutsceneManager *)taskData->context)->enableTransparency != 0) {
+            if (((CutsceneManager *)taskData->context)->unk10.unk87 != 0) {
+                debugEnqueueCallback(3, 2, renderTiledTexture, &taskData->elements[i]);
             }
         }
     }
