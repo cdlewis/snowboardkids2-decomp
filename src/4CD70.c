@@ -219,16 +219,13 @@ typedef struct {
 typedef struct {
     s16 x;
     s16 y;
-    u8 unk4;
-    u8 unk5;
-    u8 unk6;
-    u8 pad7;
-    s16 unk8;
+    u8 baseAssetBytes[4];
+    s16 initFlags;
     u8 padA[0x2];
     s16 positionOffset;
     u8 padE[0x2];
     void *playerIconAsset;
-} Elem14;
+} RaceProgressIndicatorInitEntry;
 
 typedef struct {
     void *digitsTexture;    // 0x0
@@ -356,7 +353,7 @@ void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state);
 void initPlayerItemDisplayTask(PlayerItemDisplayState *state);
 void initPlayerLapCounterTask(LapCounterState *state);
 void initPlayerGoldDisplayTask(GoldDisplayState *state);
-void func_8004CDC0_4D9C0(Elem14 *);
+void initRaceProgressIndicatorTask(RaceProgressIndicatorInitEntry *);
 void cleanupPlayerItemDisplayTask(Struct_func_8004C6F0 *arg0);
 void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state);
 void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state);
@@ -778,20 +775,20 @@ void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0) {
     arg0->digitSpriteAsset = freeNodeMemory(arg0->digitSpriteAsset);
 }
 
-void func_8004CDC0_4D9C0(Elem14 *arg0) {
+void initRaceProgressIndicatorTask(RaceProgressIndicatorInitEntry *arg0) {
     InitAllocation *allocation;
     s32 playerOffset;
     s32 i;
-    Elem14 *elem;
-    Elem14 *next;
-    Elem14 *temp;
+    RaceProgressIndicatorInitEntry *elem;
+    RaceProgressIndicatorInitEntry *next;
+    RaceProgressIndicatorInitEntry *temp;
     InitPlayerData *playerData;
     s32 numPlayers;
     volatile s32 pad[2];
 
     allocation = getCurrentAllocation();
-    *(void **)&arg0->unk4 = load_3ECE40();
-    arg0->unk8 = 1;
+    *(void **)&arg0->baseAssetBytes = load_3ECE40();
+    arg0->initFlags = 1;
 
     if (allocation->raceType < 3) {
         arg0->x = 0x78;
@@ -820,10 +817,10 @@ void func_8004CDC0_4D9C0(Elem14 *arg0) {
         elem->playerIconAsset = loadAssetByIndex_95470(playerData->spriteGroupIndex);
         elem->positionOffset = arg0->x - 4;
         next = elem + 1;
-        next->unk4 = 0;
-        next->unk5 = 0;
-        next->unk6 = 0;
-        next->unk8 = 0;
+        next->baseAssetBytes[0] = 0;
+        next->baseAssetBytes[1] = 0;
+        next->baseAssetBytes[2] = 0;
+        next->initFlags = 0;
         playerOffset += 0xBE8;
         i++;
         elem++;
@@ -2638,28 +2635,28 @@ void initRaceHudTasks(void) {
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
                 SCHEDULE_AND_SET_SHORT(initPlayerGoldDisplayTask, 22, i);
-                scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
+                scheduleTask(initRaceProgressIndicatorTask, 0, 1, 0xE6);
                 break;
 
             case 1:
                 SCHEDULE_AND_SET(initPlayerFinishPositionTask, 4, i);
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
-                scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
+                scheduleTask(initRaceProgressIndicatorTask, 0, 1, 0xE6);
                 break;
 
             case 2:
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
                 SCHEDULE_AND_SET_SHORT(initShotScoreDisplayTask, 60, 0xA);
-                scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
+                scheduleTask(initRaceProgressIndicatorTask, 0, 1, 0xE6);
                 break;
 
             case 3:
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
                 SCHEDULE_AND_SET_SHORT(initShotScoreDisplayTask, 60, 0xB);
-                scheduleTask(func_8004CDC0_4D9C0, 0, 1, 0xE6);
+                scheduleTask(initRaceProgressIndicatorTask, 0, 1, 0xE6);
                 break;
 
             case 4:

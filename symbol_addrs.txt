@@ -511,6 +511,7 @@ schedulePlayerRenderTask = 0x80045964; // rom:0x46564
 updatePlayerGoldDisplaySinglePlayer = 0x8004CBF0; // rom:0x4D7F0
 updatePlayerGoldDisplayMultiplayer = 0x8004CCC4; // rom:0x4D8C4
 cleanupPlayerGoldDisplayTask = 0x8004CD88; // rom:0x4D988
+initRaceProgressIndicatorTask = 0x8004CDC0; // rom:0x4D9C0
 updatePlayerRaceProgressIndicator = 0x8004CEC4; // rom:0x4DAC4
 cleanupRaceProgressIndicatorTask = 0x8004D0D0; // rom:0x4DCD0
 initGoalBannerTask = 0x8004D134; // rom:0x4DD34
