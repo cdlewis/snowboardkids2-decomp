@@ -11,32 +11,14 @@ typedef struct {
 } TransparentRenderTaskData;
 
 typedef struct {
-    /* 0x00 */ void *context;
-    /* 0x04 */ void **loadedAssets;
-    /* 0x08 */ s32 scrollParam;
-    /* 0x0C */ s32 scrollOffset;
-    /* 0x10 */ s32 yPos;
-    /* 0x14 */ struct {
-        /* 0x00 */ u8 _pad00[0x10];
-        /* 0x10 */ s16 xPos;
-        /* 0x12 */ s16 yPos;
-        /* 0x14 */ s16 width;
-        /* 0x16 */ s16 height;
-        /* 0x18 */ u8 _pad18[0x14];
-    } elements[4];
-    /* 0xC4 */ u8 groupIndex;
-    /* 0xC5 */ s8 initialized;
-} TiledTextureTaskData;
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    s32 unk8;
+    void *romStart;
+    void *romEnd;
+    s32 size;
 } AssetEntry;
 
 typedef struct {
     AssetEntry *assetList;
-    u8 *unk4;
+    u8 *tileIndexMap;
     u8 assetCount;
     u8 tableSize;
     u8 _padA[0x2];
@@ -55,7 +37,6 @@ typedef struct {
 
 extern AssetGroupTableEntry assetGroupTable[];
 
-void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData);
 void freeAssetGroupResources(AssetGroupTaskData *taskData);
 void renderModelIfTransparent(TransparentRenderTaskData *taskData);
 
@@ -114,7 +95,7 @@ void loadAssetGroupResources(AssetGroupTaskData *taskData) {
     taskData->loadedAssets = allocateNodeMemory(entry->assetCount * 4);
 
     for (i = 0; i < entry->assetCount; i++) {
-        taskData->loadedAssets[i] = loadCompressedData(assetList[i].unk0, assetList[i].unk4, assetList[i].unk8);
+        taskData->loadedAssets[i] = loadCompressedData(assetList[i].romStart, assetList[i].romEnd, assetList[i].size);
     }
 
     setCallback(updateTiledTextureAssetDisplay);
@@ -137,7 +118,7 @@ void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
     }
 
     scrollOffset = *(s32 *)((u8 *)((CutsceneManager *)taskData->context)->sceneContext + 0x34);
-    scrollOffset = (scrollOffset >> 8) * (taskData->scrollParam >> 8);
+    scrollOffset = (scrollOffset >> 8) * (taskData->scrollSpeedParam >> 8);
     scrollOffset >>= 16;
     taskData->yPos = 0x44;
     taskData->scrollOffset = scrollOffset;
@@ -150,7 +131,7 @@ void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
 
         tableIndex = ((u32)taskData->scrollOffset + (i << 7)) >> 7;
         tileIndex = tableIndex % entry->tableSize;
-        tileIndex = entry->unk4[tileIndex];
+        tileIndex = entry->tileIndexMap[tileIndex];
         assetIndex = tileIndex % entry->assetCount;
         initTiledTextureRenderState(&taskData->elements[i], (s32)taskData->loadedAssets[assetIndex]);
         taskData->elements[i].width = 0x81;
