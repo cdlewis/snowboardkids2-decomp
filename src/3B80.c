@@ -55,7 +55,7 @@ typedef struct {
 
 extern AssetGroupTableEntry assetGroupTable[];
 
-void func_80003184_3D84(TiledTextureTaskData *);
+void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData);
 void freeAssetGroupResources(AssetGroupTaskData *taskData);
 void renderModelIfTransparent(TransparentRenderTaskData *taskData);
 
@@ -117,10 +117,10 @@ void loadAssetGroupResources(AssetGroupTaskData *taskData) {
         taskData->loadedAssets[i] = loadCompressedData(assetList[i].unk0, assetList[i].unk4, assetList[i].unk8);
     }
 
-    setCallback(func_80003184_3D84);
+    setCallback(updateTiledTextureAssetDisplay);
 }
 
-void func_80003184_3D84(TiledTextureTaskData *arg0) {
+void updateTiledTextureAssetDisplay(TiledTextureTaskData *arg0) {
     AssetGroupTableEntry *entry;
     s32 i;
     s32 temp;
@@ -136,32 +136,30 @@ void func_80003184_3D84(TiledTextureTaskData *arg0) {
         return;
     }
 
-    temp = *(s32 *)((s32 *)*(s32 *)((u8 *)arg0->context + 0xC) + 0x34 / 4);
+    temp = *(s32 *)((u8 *)((CutsceneManager *)arg0->context)->sceneContext + 0x34);
     temp = (temp >> 8) * (arg0->param >> 8);
     temp >>= 16;
     arg0->unk10 = 0x44;
     arg0->unkC = temp;
 
     for (i = 0; i < 4; i++) {
-        u32 shift_temp;
-        u32 idx1;
-        s32 idx2;
-        s32 idx4;
-        s32 unk24_val;
+        u32 tableIndex;
+        s32 tileIndex;
+        s32 assetIndex;
+        s32 scrollValue;
 
-        shift_temp = (u32)arg0->unkC + (i << 7);
-        idx1 = shift_temp >> 7;
-        idx2 = idx1 % entry->tableSize;
-        idx2 = entry->unk4[idx2];
-        idx4 = idx2 % entry->assetCount;
-        initTiledTextureRenderState(&arg0->elements[i], (s32)arg0->loadedAssets[idx4]);
+        tableIndex = ((u32)arg0->unkC + (i << 7)) >> 7;
+        tileIndex = tableIndex % entry->tableSize;
+        tileIndex = entry->unk4[tileIndex];
+        assetIndex = tileIndex % entry->assetCount;
+        initTiledTextureRenderState(&arg0->elements[i], (s32)arg0->loadedAssets[assetIndex]);
         arg0->elements[i].unk28 = 0x81;
         arg0->elements[i].unk2A = 0x81;
-        unk24_val = ~arg0->unkC;
-        unk24_val &= 0x7F;
-        unk24_val += -0x80;
-        unk24_val += i << 7;
-        arg0->elements[i].unk24 = unk24_val;
+        scrollValue = ~arg0->unkC;
+        scrollValue &= 0x7F;
+        scrollValue += -0x80;
+        scrollValue += i << 7;
+        arg0->elements[i].unk24 = scrollValue;
         arg0->elements[i].unk26 = arg0->unk10;
 
         if (((CutsceneManager *)arg0->context)->enableTransparency != 0) {
