@@ -6,15 +6,15 @@
 
 typedef struct {
     DisplayListObject base;
-    void *unk3C;
+    void *textureTable;
     s32 unk40;
-    s16 unk44;
-    s16 unk46;
+    s16 tileScrollU;
+    s16 tileScrollV;
     s16 unk48;
     s16 unk4A;
-    s16 unk4C;
-    s16 unk4E;
-    s16 unk50;
+    s16 textureIndex;
+    s16 paletteMode;
+    s16 paletteIndex;
     s16 unk52;
     s16 unk54;
     s16 unk56;

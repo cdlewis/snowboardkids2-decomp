@@ -208,28 +208,28 @@ void initScrollingTextureEffectTask(ScrollingTextureState *arg0) {
         arg0->base.segment2 = loadCompressedData(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
         arg0->base.segment3 = 0;
         arg0->base.displayLists = &D_80089510_8A110;
-        arg0->unk50 = 0;
+        arg0->paletteIndex = 0;
     } else if (arg0->unk58 != 1) {
         arg0->base.segment1 = loadUncompressedData(&_215120_ROM_START, &_215120_ROM_END);
         arg0->base.segment2 = loadCompressedData(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
         arg0->base.segment3 = 0;
         arg0->base.displayLists = &D_80089510_8A110;
-        arg0->unk50 = 0;
+        arg0->paletteIndex = 0;
     } else {
         arg0->base.segment1 = loadUncompressedData(&_2151D0_ROM_START, &_2151D0_ROM_END);
         arg0->base.segment2 = loadCompressedData(&_663BE0_ROM_START, &_663BE0_ROM_END, 0x200);
         arg0->base.displayLists = &D_80089520;
         arg0->base.segment3 = 0;
-        arg0->unk50 = 1;
+        arg0->paletteIndex = 1;
     }
 
-    arg0->unk3C = loadCompressedData(&_6637B0_ROM_START, &_6637B0_ROM_END, 0x858);
-    arg0->unk44 = 0;
-    arg0->unk46 = 0;
+    arg0->textureTable = loadCompressedData(&_6637B0_ROM_START, &_6637B0_ROM_END, 0x858);
+    arg0->tileScrollU = 0;
+    arg0->tileScrollV = 0;
     arg0->unk48 = 0;
     arg0->unk4A = 0x10;
-    arg0->unk4C = 0;
-    arg0->unk4E = 0;
+    arg0->textureIndex = 0;
+    arg0->paletteMode = 0;
 
     setCallback(&updateScrollingTextureEffect);
 }
@@ -252,7 +252,7 @@ void updateScrollingTextureEffect(ScrollingTextureEffectUpdateState *arg0) {
 }
 
 void cleanupScrollingTextureEffectTask(ScrollingTextureState *arg0) {
-    arg0->unk3C = freeNodeMemory(arg0->unk3C);
+    arg0->textureTable = freeNodeMemory(arg0->textureTable);
     arg0->base.segment2 = freeNodeMemory(arg0->base.segment2);
     arg0->base.segment1 = freeNodeMemory(arg0->base.segment1);
 }

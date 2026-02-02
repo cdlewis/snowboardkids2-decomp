@@ -54,7 +54,7 @@ void renderOpaqueTiledTexture(DisplayListObject *arg0);
 void renderTransparentTiledTexture(s32 arg0);
 void renderOverlayTiledTexture(s32 arg0);
 void func_80004920_5520(void);
-void func_80005094_5C94(ScrollingTextureState *);
+void loadScrollingTiledTexture(ScrollingTextureState *);
 void cleanupRotatingLogo(RotatingLogoState *);
 void func_8000595C_655C(void);
 void *loadAssetGroupDisplayList(void *);
@@ -97,7 +97,7 @@ void enqueueScrollingTextureRender(u16 renderLayer, DisplayListObject *displayLi
     }
 }
 
-void func_80005094_5C94(ScrollingTextureState *arg0) {
+void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
     OutputStruct_19E80 tableEntry;
     s32 tempWidth;
     s32 tempHeight;
@@ -109,7 +109,7 @@ void func_80005094_5C94(ScrollingTextureState *arg0) {
     gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
     gGraphicsMode = -1;
 
-    getTableEntryByU16Index(arg0->unk3C, arg0->unk4C, &tableEntry);
+    getTableEntryByU16Index(arg0->textureTable, arg0->textureIndex, &tableEntry);
 
     do {
         tempWidth = tableEntry.field1;
@@ -135,8 +135,8 @@ void func_80005094_5C94(ScrollingTextureState *arg0) {
         }
     } while (0);
 
-    if (arg0->unk4E == 0) {
-        paletteAddr = (void *)((u8 *)tableEntry.index_ptr + (arg0->unk50 << 5));
+    if (arg0->paletteMode == 0) {
+        paletteAddr = (void *)((u8 *)tableEntry.index_ptr + (arg0->paletteIndex << 5));
 
         gDPLoadTextureBlock_4b(
             gRegionAllocPtr++,
@@ -156,10 +156,10 @@ void func_80005094_5C94(ScrollingTextureState *arg0) {
         gDPSetTileSize(
             gRegionAllocPtr++,
             G_TX_RENDERTILE,
-            arg0->unk44,
-            arg0->unk46,
-            ((tableEntry.field1 + (s16)arg0->unk44 - 1) << 2),
-            ((tableEntry.field2 + (s16)arg0->unk46 - 1) << 2)
+            arg0->tileScrollU,
+            arg0->tileScrollV,
+            ((tableEntry.field1 + (s16)arg0->tileScrollU - 1) << 2),
+            ((tableEntry.field2 + (s16)arg0->tileScrollV - 1) << 2)
         );
 
         gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteAddr);
@@ -183,10 +183,10 @@ void func_80005094_5C94(ScrollingTextureState *arg0) {
         gDPSetTileSize(
             gRegionAllocPtr++,
             G_TX_RENDERTILE,
-            arg0->unk44,
-            arg0->unk46,
-            ((tableEntry.field1 + (s16)arg0->unk44 - 1) << 2),
-            ((tableEntry.field2 + (s16)arg0->unk46 - 1) << 2)
+            arg0->tileScrollU,
+            arg0->tileScrollV,
+            ((tableEntry.field1 + (s16)arg0->tileScrollU - 1) << 2),
+            ((tableEntry.field2 + (s16)arg0->tileScrollV - 1) << 2)
         );
 
         gDPLoadTLUT_pal256(gRegionAllocPtr++, tableEntry.index_ptr);
@@ -194,17 +194,17 @@ void func_80005094_5C94(ScrollingTextureState *arg0) {
 }
 
 void renderOpaqueTiledTexture(DisplayListObject *arg0) {
-    func_80005094_5C94((ScrollingTextureState *)arg0);
+    loadScrollingTiledTexture((ScrollingTextureState *)arg0);
     buildDisplayListSegment(arg0);
 }
 
 void renderTransparentTiledTexture(s32 arg0) {
-    func_80005094_5C94((ScrollingTextureState *)arg0);
+    loadScrollingTiledTexture((ScrollingTextureState *)arg0);
     buildTransparentDisplayListSegment((DisplayListObject *)arg0);
 }
 
 void renderOverlayTiledTexture(s32 arg0) {
-    func_80005094_5C94((ScrollingTextureState *)arg0);
+    loadScrollingTiledTexture((ScrollingTextureState *)arg0);
     buildOverlayDisplayListSegment((DisplayListObject *)arg0);
 }
 
