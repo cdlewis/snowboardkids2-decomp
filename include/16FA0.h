@@ -70,7 +70,7 @@ typedef struct {
 } TitleCharacterState;
 
 void loadTitleLogoAsset(TitleLogoTask *arg0);
-void func_80016488_17088(ControllerSlotState *);
+void initControllerSlotDisplay(ControllerSlotState *);
 void func_80016728_17328(Struct16728 *arg0);
 void initTitleEffectModel(ModelEntity *arg0);
 void initTitleCharacterModel(TitleCharacterState *arg0);

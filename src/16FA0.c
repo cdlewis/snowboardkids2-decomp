@@ -62,20 +62,20 @@ void loadTitleLogoAsset(TitleLogoTask *arg0) {
     setCallback(initTitleLogoRenderState);
 }
 
-void func_80016488_17088(ControllerSlotState *state) {
-    GameState *allocation;
+void initControllerSlotDisplay(ControllerSlotState *state) {
+    GameState *gameState;
     s32 i;
-    void *asset;
+    void *spriteAsset;
 
-    allocation = (GameState *)getCurrentAllocation();
-    asset = loadCompressedData(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
+    gameState = (GameState *)getCurrentAllocation();
+    spriteAsset = loadCompressedData(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
     setCleanupCallback(cleanupControllerSlotDisplay);
 
-    for (i = 0; i < allocation->unk3BC; i++) {
+    for (i = 0; i < gameState->unk3BC; i++) {
         state->entries[i].x = -0x38;
         state->entries[i].y = 0x26 + (i * 0x10);
         state->entries[i].unkD = 0;
-        state->entries[i].asset = asset;
+        state->entries[i].asset = spriteAsset;
         state->entries[i].spriteIndex = i;
         state->entries[i].alpha = 0x80;
         state->entries[i].unkE = 0xF0;
@@ -86,7 +86,7 @@ void func_80016488_17088(ControllerSlotState *state) {
         state->entries[i + 4].x = -0x38;
         state->entries[i + 4].y = 0x2E + i * 0x12;
         state->entries[i + 4].unkD = 0;
-        state->entries[i + 4].asset = asset;
+        state->entries[i + 4].asset = spriteAsset;
         state->entries[i + 4].spriteIndex = 3;
         state->entries[i + 4].spriteIndex += i;
         state->entries[i + 4].alpha = 0x80;
@@ -97,9 +97,9 @@ void func_80016488_17088(ControllerSlotState *state) {
     state->entry6.y = 0x55;
     state->entry6.x = -0x48;
     state->entry6.spriteIndex = 5;
-    state->entry6.asset = asset;
+    state->entry6.asset = spriteAsset;
     state->entry6.nested.x = -0x48;
-    state->entry6.nested.asset = asset;
+    state->entry6.nested.asset = spriteAsset;
     state->entry6.nested.spriteIndex = 6;
     state->entry6.nested.y = state->entry6.y + 0xE;
     setCallback(updateControllerSlotHighlights);

@@ -780,6 +780,7 @@ cleanupTitleLogoTask = 0x800163A0; // rom:0x16FA0
 enqueueTitleLogoRender = 0x800163CC; // rom:0x16FCC
 initTitleLogoRenderState = 0x800163F8; // rom:0x16FF8
 loadTitleLogoAsset = 0x80016434; // rom:0x17034
+initControllerSlotDisplay = 0x80016488; // rom:0x17088
 updateControllerSlotHighlights = 0x800165D8; // rom:0x171D8
 cleanupControllerSlotDisplay = 0x800166FC; // rom:0x172FC
 initPressStartPrompt = 0x80016728; // rom:0x17328
