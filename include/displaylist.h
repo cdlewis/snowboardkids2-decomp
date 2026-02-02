@@ -222,7 +222,7 @@ s32 func_80061A64_62664(void *arg0, u16 arg1, void *arg2);
 
 s32 func_80061D6C_6296C(void *arg0, u16 arg1, void *arg2, s32 arg3);
 
-s32 func_80062274_62E74(TrackGeometryFaceData *geom, u16 groupIdx, Vec3i *pos, s32 yOffset);
+s32 computeSectorTrackHeight(TrackGeometryFaceData *geom, u16 groupIdx, Vec3i *pos, s32 yOffset);
 
 void findTrackFaceAtPosition(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 *arg3, u8 *arg4);
 

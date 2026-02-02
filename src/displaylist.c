@@ -191,7 +191,7 @@ s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index) {
     return gameData->section3Data[index].finishZoneFlag;
 }
 
-s32 func_80062274_62E74(TrackGeometryFaceData *geom, u16 groupIdx, Vec3i *pos, s32 yOffset) {
+s32 computeSectorTrackHeight(TrackGeometryFaceData *geom, u16 groupIdx, Vec3i *pos, s32 yOffset) {
     s32 i;
     s32 v0x;
     s32 v0z;

@@ -20,7 +20,7 @@ void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg
 }
 
 s32 getSectorTrackHeight(TrackGeometryFaceData *geom, u16 groupIdx, Vec3i *pos, s32 yOffset) {
-    return func_80062274_62E74(geom, groupIdx, pos, yOffset);
+    return computeSectorTrackHeight(geom, groupIdx, pos, yOffset);
 }
 
 void clampPlayerVelocityToMaxSpeed(Player *player) {

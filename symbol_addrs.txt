@@ -3542,6 +3542,7 @@ showAllSlotModels = 0x800B2D68; // rom:0x1DFE18
 jtbl_8009E740_9F340 = 0x8009E740; // type:u32 size:0x58
 initStoryMapRareEvent = 0x8002BCF0; // rom:0x2C8F0
 projectPositionOntoTrackSegment = 0x800620D0; // rom:0x62CD0
+computeSectorTrackHeight = 0x80062274; // rom:0x62E74
 getTrackEndInfo = 0x800625A4; // rom:0x631A4
 findTrackFaceAtPosition = 0x80062918; // rom:0x63518
 getTrackSegmentWaypoints = 0x80062B1C; // rom:0x6371C
