@@ -5,20 +5,7 @@
 #include "geometry.h"
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-} ScrollingTextureDisplayLists;
-
-typedef struct {
-    Transform3D unk0;
-    ScrollingTextureDisplayLists *unk20;
-    void *unk24;
-    void *unk28;
-    s32 unk2C;
-    s32 unk30;
-    u8 padding2[0x8];
+    DisplayListObject base;
     void *unk3C;
     s32 unk40;
     s16 unk44;
@@ -36,17 +23,10 @@ typedef struct {
 
 void enqueueScrollingTextureRender(u16 renderLayer, DisplayListObject *displayListObj);
 
-extern ScrollingTextureDisplayLists D_80089520;
+extern DisplayLists D_80089520;
 
 typedef struct {
-    /* 0x00 */ u8 _pad0[0x20];
-    /* 0x20 */ ScrollingTextureDisplayLists *displayLists;
-    /* 0x24 */ void *textureData;
-    /* 0x28 */ void *compressedData;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ s32 unk30;
-    /* 0x34 */ u8 _pad34[0x3B - 0x34];
-    /* 0x3B */ u8 alphaHighByte;
+    /* 0x00 */ DisplayListObject base;
     /* 0x3C */ void *vertexData;
     /* 0x40 */ s32 unk40;
     /* 0x44 */ union {

@@ -106,7 +106,7 @@ void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *);
 void cleanupTrickSpriteEffectTask(TrickSpriteEffectCleanupState *);
 void initTrickSpriteEffectTask(TrickSpriteEffectInitState *);
 
-extern ScrollingTextureDisplayLists D_80089510_8A110;
+extern DisplayLists D_80089510_8A110;
 
 u32 gTrickSpriteEffectVertexData[] = { 0xFFE80018, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00180018, 0x00000000,
                                        0x07F0FFF0, 0xFFFFFFFF, 0x0018FFE8, 0x00000000, 0x07F007F0, 0xFFFFFFFF,
@@ -204,22 +204,22 @@ void initScrollingTextureEffectTask(ScrollingTextureState *arg0) {
     setCleanupCallback(&cleanupScrollingTextureEffectTask);
 
     if (arg0->unk58 == 0) {
-        arg0->unk24 = loadUncompressedData(&_215120_ROM_START, &_215120_ROM_END);
-        arg0->unk28 = loadCompressedData(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
-        arg0->unk2C = 0;
-        arg0->unk20 = &D_80089510_8A110;
+        arg0->base.segment1 = loadUncompressedData(&_215120_ROM_START, &_215120_ROM_END);
+        arg0->base.segment2 = loadCompressedData(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
+        arg0->base.segment3 = 0;
+        arg0->base.displayLists = &D_80089510_8A110;
         arg0->unk50 = 0;
     } else if (arg0->unk58 != 1) {
-        arg0->unk24 = loadUncompressedData(&_215120_ROM_START, &_215120_ROM_END);
-        arg0->unk28 = loadCompressedData(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
-        arg0->unk2C = 0;
-        arg0->unk20 = &D_80089510_8A110;
+        arg0->base.segment1 = loadUncompressedData(&_215120_ROM_START, &_215120_ROM_END);
+        arg0->base.segment2 = loadCompressedData(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
+        arg0->base.segment3 = 0;
+        arg0->base.displayLists = &D_80089510_8A110;
         arg0->unk50 = 0;
     } else {
-        arg0->unk24 = loadUncompressedData(&_2151D0_ROM_START, &_2151D0_ROM_END);
-        arg0->unk28 = loadCompressedData(&_663BE0_ROM_START, &_663BE0_ROM_END, 0x200);
-        arg0->unk20 = &D_80089520;
-        arg0->unk2C = 0;
+        arg0->base.segment1 = loadUncompressedData(&_2151D0_ROM_START, &_2151D0_ROM_END);
+        arg0->base.segment2 = loadCompressedData(&_663BE0_ROM_START, &_663BE0_ROM_END, 0x200);
+        arg0->base.displayLists = &D_80089520;
+        arg0->base.segment3 = 0;
         arg0->unk50 = 1;
     }
 
@@ -253,6 +253,6 @@ void updateScrollingTextureEffect(ScrollingTextureEffectUpdateState *arg0) {
 
 void cleanupScrollingTextureEffectTask(ScrollingTextureState *arg0) {
     arg0->unk3C = freeNodeMemory(arg0->unk3C);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
+    arg0->base.segment2 = freeNodeMemory(arg0->base.segment2);
+    arg0->base.segment1 = freeNodeMemory(arg0->base.segment1);
 }

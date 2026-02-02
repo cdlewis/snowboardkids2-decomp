@@ -209,14 +209,14 @@ void renderOverlayTiledTexture(s32 arg0) {
 }
 
 void enqueueTiledTextureRender(s32 arg0, TrickBurstEffectTask *arg1) {
-    arg1->unk30 = 0;
-    if (arg1->displayLists->unk4 != 0) {
+    arg1->base.transformMatrix = 0;
+    if (arg1->base.displayLists->opaqueDisplayList != 0) {
         debugEnqueueCallback(arg0 & 0xFFFF, 1, &renderOpaqueTiledTexture, arg1);
     }
-    if (arg1->displayLists->unk8 != 0) {
+    if (arg1->base.displayLists->transparentDisplayList != 0) {
         debugEnqueueCallback(arg0 & 0xFFFF, 3, &renderTransparentTiledTexture, arg1);
     }
-    if (arg1->displayLists->unkC != 0) {
+    if (arg1->base.displayLists->overlayDisplayList != 0) {
         debugEnqueueCallback(arg0 & 0xFFFF, 5, &renderOverlayTiledTexture, arg1);
     }
 }
