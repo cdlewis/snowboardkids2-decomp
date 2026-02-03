@@ -47,7 +47,47 @@ void clampPlayerVelocityToMaxSpeed(Player *player) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D180_5DD80);
+s32 func_8005D180_5DD80(void *arg0_, s16 arg1) {
+    Player *arg0 = arg0_;
+    s32 result;
+    s32 flags;
+    s32 i;
+    s16 animIndex;
+
+    flags = arg0->unkB84;
+    result = 0;
+    animIndex = arg1;
+
+    if (flags & 2) {
+        if (!(flags & 4)) {
+            arg0->unkA8C = 0xFFFF;
+            arg0->unkB84 = arg0->unkB84 | 4;
+        }
+    } else if (flags & 4) {
+        arg0->unkA8C = 0xFFFF;
+        arg0->unkB84 = arg0->unkB84 & ~4;
+    }
+
+    if (arg0->unkA8C != animIndex) {
+        arg0->unkA8C = animIndex;
+        arg0->unkBB7 = getAnimationBoneCount(arg0->unk0, animIndex);
+        for (i = 0; i < arg0->unkBB7; i++) {
+            resetBoneAnimation(arg0->unk0, (s16)arg0->unkA8C, (s16)i, &arg0->unk488[i]);
+        }
+    }
+
+    if (arg0->unkB84 & 4) {
+        for (i = 0; i < arg0->unkBB7; i++) {
+            result |= advanceIndexedBoneAnimationAutoMirrored(arg0->unk0, (s16)arg0->unkA8C, (s16)i, &arg0->unk488[i]);
+        }
+    } else {
+        for (i = 0; i < arg0->unkBB7; i++) {
+            result |= advanceIndexedBoneAnimationAuto(arg0->unk0, (s16)arg0->unkA8C, (s16)i, &arg0->unk488[i]);
+        }
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D308_5DF08);
 
