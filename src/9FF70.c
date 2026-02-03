@@ -297,7 +297,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
     if (player->unkBDA != 0) {
         calculateAITargetPosition(player);
         angleDelta =
-            computeAngleToPosition(player->aiTargetX, player->aiTargetZ, player->worldPos.x, player->worldPos.z);
+            computeAngleToPosition(player->aiTarget.x, player->aiTarget.z, player->worldPos.x, player->worldPos.z);
         currentAngle = player->rotY;
         angleDelta = (angleDelta - currentAngle) & 0x1FFF;
         if (angleDelta >= 0x1001) {
@@ -825,7 +825,7 @@ void updateTrickFacingAngle(Player *player) {
         if (player->unkBDA != 0) {
             calculateAITargetPosition(player);
             angleDelta =
-                computeAngleToPosition(player->aiTargetX, player->aiTargetZ, player->worldPos.x, player->worldPos.z);
+                computeAngleToPosition(player->aiTarget.x, player->aiTarget.z, player->worldPos.x, player->worldPos.z);
             currentAngle = (u16)player->rotY;
             angleDelta = (angleDelta - currentAngle) & 0x1FFF;
             if (angleDelta >= 0x1001) {
@@ -3688,7 +3688,7 @@ void updatePlayerJointPositions(Player *player) {
     s32 i;
     s32 offset;
     u8 *jointWritePtr;
-    JointPosition *jointPos;
+    Vec3i *jointPos;
     s32 sectorIndex;
 
     alloc = getCurrentAllocation();
@@ -3698,7 +3698,7 @@ void updatePlayerJointPositions(Player *player) {
     jointWritePtr = (u8 *)player;
 
     do {
-        jointPos = (JointPosition *)((u8 *)player + offset);
+        jointPos = (Vec3i *)((u8 *)player + offset);
         *(volatile s32 *)(jointWritePtr + 0xA10) =
             player->unk970.translation.x + *(s32 *)((u8 *)&D_800BA348_AA1F8 + offset);
         *(volatile s32 *)(jointWritePtr + 0xA18) =

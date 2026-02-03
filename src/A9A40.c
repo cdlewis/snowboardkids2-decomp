@@ -83,8 +83,8 @@ void calculateAITargetPosition(Player *player) {
 
     if (courseData->waypoints[currentSectorIndex].next < 0) {
         levelConfig = getLevelConfig(courseData->defaultPosIndex);
-        player->aiTargetX = levelConfig->shortcutPosX;
-        player->aiTargetZ = levelConfig->shortcutPosZ;
+        player->aiTarget.x = levelConfig->shortcutPosX;
+        player->aiTarget.z = levelConfig->shortcutPosZ;
         return;
     }
 
@@ -156,8 +156,8 @@ void calculateAITargetPosition(Player *player) {
     finalWaypointPos.x += currentWaypointPos.x;
     finalWaypointPos.z += currentWaypointPos.z;
 
-    player->aiTargetX = finalWaypointPos.x;
-    player->aiTargetZ = finalWaypointPos.z;
+    player->aiTarget.x = finalWaypointPos.x;
+    player->aiTarget.z = finalWaypointPos.z;
 }
 
 INCLUDE_ASM("asm/nonmatchings/A9A40", func_800B9EF0_A9DA0);

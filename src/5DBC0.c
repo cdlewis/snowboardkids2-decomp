@@ -1,5 +1,6 @@
 #include "5DBC0.h"
 #include "5E590.h"
+#include "5EA60.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -50,7 +51,44 @@ INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D180_5DD80);
 
 INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D308_5DF08);
 
-INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D48C_5E08C);
+void func_8005D48C_5E08C(Player *arg0, s32 arg1, s32 arg2) {
+    s32 i;
+
+    if (arg0->unkB84 & 2) {
+        if (!(arg0->unkB84 & 4)) {
+            arg0->unkA8C = 0xFFFF;
+            arg0->unkB84 = arg0->unkB84 | 4;
+        }
+    } else if (arg0->unkB84 & 4) {
+        arg0->unkA8C = 0xFFFF;
+        arg0->unkB84 = arg0->unkB84 & ~4;
+    }
+
+    if (arg0->unkA8C != (s16)arg1) {
+        arg0->unkA8C = arg1;
+        i = (s16)arg1;
+        arg0->unkBB7 = getAnimationBoneCount(arg0->unk0, i);
+        for (i = 0; i < arg0->unkBB7; i++) {
+            resetBoneAnimation(arg0->unk0, (s16)arg0->unkA8C, (s16)i, &arg0->unk488[i]);
+        }
+    }
+
+    if (arg0->unkB84 & 4) {
+        for (i = 0; i < arg0->unkBB7; i++) {
+            interpolateIndexedBoneAnimationMirrored(
+                arg0->unk0,
+                (s16)arg0->unkA8C,
+                (s16)i,
+                &arg0->unk488[i],
+                arg2 & 0xFFFF
+            );
+        }
+    } else {
+        for (i = 0; i < arg0->unkBB7; i++) {
+            interpolateIndexedBoneAnimation(arg0->unk0, (s16)arg0->unkA8C, (s16)i, &arg0->unk488[i], (s16)arg2);
+        }
+    }
+}
 
 extern u8 gCharacterBodyPartAnimTable[];
 extern u8 gBodyPartRemapTable[];

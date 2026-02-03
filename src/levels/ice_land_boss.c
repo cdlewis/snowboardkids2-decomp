@@ -403,7 +403,7 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
 
     // Set target speed based on race state and distance
     if ((boss->finishPosition == 0) & (distanceToPlayer > 0xE00000)) {
-        if (boss->bossFlags & 0x400000) {  // Flying mode
+        if (boss->bossFlags & 0x400000) { // Flying mode
             boss->targetSpeed = getCharacterBoardStatParam0(0, 4) + -0x8000;
         } else if (distanceToPlayer > 0x8C00000) {
             boss->targetSpeed = 0x70000;
@@ -429,7 +429,7 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     }
 
     boss->currentSpeed = boss->currentSpeed + speedDiff;
-    boss->bossFlags &= 0xFFFBFFFF;  // Clear bit 22 (0x40000)
+    boss->bossFlags &= 0xFFFBFFFF; // Clear bit 22 (0x40000)
 
     // Check for attack trigger (0x3D)
     if (boss->behaviorMode != 3) {
@@ -439,7 +439,7 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
                 boss->behaviorPhase = 0;
                 boss->behaviorStep = 0;
                 boss->behaviorCounter = 0;
-                if (boss->bossFlags & 0x400000) {  // Skip to phase 1 if flying
+                if (boss->bossFlags & 0x400000) { // Skip to phase 1 if flying
                     boss->behaviorPhase = 1;
                 }
             }
@@ -464,7 +464,7 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     fullTransform.translation.z -= boss->yRotationMatrix.translation.z;
 
     // Transform position for collision detection
-    if (boss->bossFlags & 0x400000) {  // Flying mode offset
+    if (boss->bossFlags & 0x400000) { // Flying mode offset
         transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&fullTransform, &boss->transformedPos);
     } else {
         transformVector((s16 *)D_800BCA24_B1F14, (s16 *)&fullTransform, &boss->transformedPos);
@@ -474,7 +474,7 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     func_800BC61C_B1B0C((Player *)boss);
 
     // Calculate ground joint positions for leg animation
-    if (boss->bossFlags & 0x400000) {  // Flying mode
+    if (boss->bossFlags & 0x400000) { // Flying mode
         transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&fullTransform, &boss->unkAE4);
     } else {
         // Transform three sets of ground joint offsets
@@ -656,7 +656,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     calculateAITargetPosition(arg0);
 
     angleDiff =
-        computeAngleToPosition(arg0->aiTargetX, arg0->aiTargetZ, arg0->worldPos.x, arg0->worldPos.z) - arg0->rotY;
+        computeAngleToPosition(arg0->aiTarget.x, arg0->aiTarget.z, arg0->worldPos.x, arg0->worldPos.z) - arg0->rotY;
     angleDiff = angleDiff & 0x1FFF;
 
     if (angleDiff >= 0x1001) {
@@ -894,7 +894,7 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
     calculateAITargetPosition(boss);
 
     angleDiff =
-        (computeAngleToPosition(boss->aiTargetX, boss->aiTargetZ, boss->worldPos.x, boss->worldPos.z) - boss->rotY) &
+        (computeAngleToPosition(boss->aiTarget.x, boss->aiTarget.z, boss->worldPos.x, boss->worldPos.z) - boss->rotY) &
         0x1FFF;
 
     if (angleDiff >= 0x1001) {
@@ -1098,7 +1098,7 @@ void updateIceLandBossJointPositions(Player *boss) {
     s32 jointIndex;
     s32 flyingFlag;
     s32 jointOffset;
-    JointPosition *jointPos;
+    Vec3i *jointPos;
     u16 sectorIndex;
 
     gameState = getCurrentAllocation();

@@ -1,5 +1,4 @@
-#ifndef _GAMESTATE_H_
-#define _GAMESTATE_H_
+#pragma once
 
 #include "36BE0.h"
 #include "common.h"
@@ -8,10 +7,15 @@
 #include "graphics.h"
 
 typedef struct {
-    s32 x; /* 0x00 - X position */
-    s32 y; /* 0x04 - Y position (height) */
-    s32 z; /* 0x08 - Z position */
-} JointPosition;
+    /* 0x00 */ s16 values[10];
+    /* 0x14 */ s32 position[3];
+    /* 0x20 */ s16 prev_position[10];
+    /* 0x34 */ s32 interpolated[3];
+    /* 0x40 */ u16 flags;
+    /* 0x42 */ u16 counter;
+    /* 0x44 */ u16 animation_index;
+    /* 0x46 */ u16 pad;
+} BoneAnimationStateIndexed;
 
 typedef struct {
     loadAssetMetadata_arg asset;
@@ -67,7 +71,7 @@ typedef struct {
     void *unk1C;
     void *unk20;
     void *unk24;
-    void *aiPathData; /* AI path preference data array */
+    void *aiPathData;
     void *unk2C;
     u8 padding30[0x8];
     s32 unk38;
@@ -96,7 +100,7 @@ typedef struct {
     s32 unk440;
     s32 unk444;
     s32 unk448;
-    Vec3i velocity; /* 0x44C */
+    /* 0x44C */ Vec3i velocity;
     s32 unk458;
     s32 unk45C;
     s32 unk460;
@@ -108,15 +112,15 @@ typedef struct {
     s32 unk478;
     s32 unk47C;
     s32 unk480;
-    u8 padding2a_3[0x4EC];
+    s32 unk484;
+    BoneAnimationStateIndexed unk488[1];
+    u8 padding2a_3[0x4A0];
     Transform3D unk970;
     Transform3D unk990;
     BoneAnimationState unk9B0;
-    u8 padding9FC[0x14];             /* 0x9FC - 0xA10: padding before jointPositions */
-    JointPosition jointPositions[9]; /* 0xA10 - 0xA7B (9 * 12 = 108 = 0x6C) */
-    s32 aiTargetX;                   /* 0xA7C - AI target position X coordinate */
-    s32 _padA80;
-    s32 aiTargetZ; /* 0xA84 - AI target position Z coordinate */
+    u8 padding9FC[0x14];
+    /* 0xA10 */ Vec3i jointPositions[9];
+    /* 0xA7C */ Vec3i aiTarget;
     u8 _padA88[0x4];
     u16 unkA8C;
     s16 unkA8E;
@@ -129,8 +133,8 @@ typedef struct {
     u8 padding4a_1[0x2];
     s16 unkA9E;
     s32 unkAA0;
-    s32 maxSpeedCap; /* 0xAA4 */
-    s32 aiLaneWidth; /* Distance threshold for AI path preference */
+    /* 0xAA4 */ s32 maxSpeedCap;
+    s32 aiLaneWidth;
     s32 unkAAC;
     s32 unkAB0;
     s32 unkAB4;
@@ -154,7 +158,7 @@ typedef struct {
     s32 storedPosY;
     s32 storedPosZ;
     u8 padding2c_2[0x14];
-    s32 rearCollisionRadius; /* 0xB64 - Used for pull collision calculations */
+    /* 0xB64 */ s32 rearCollisionRadius;
     u8 padding2c_2_after[4];
     s32 raceGold;
     s32 skillPoints;
@@ -405,5 +409,3 @@ typedef struct {
     u8 PAD_23[0x5];
     u8 unk18D2[8];
 } GameState;
-
-#endif

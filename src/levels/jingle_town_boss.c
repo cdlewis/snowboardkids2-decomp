@@ -83,7 +83,7 @@ typedef struct {
     /* 0x9B0 */ Transform3D unk9B0;
     u8 pad9D0[0x9F0 - 0x9D0];
     /* 0x9F0 */ Transform3D unk9F0;
-    /* 0xA10 */ JointPosition jointPositions[9];
+    /* 0xA10 */ Vec3i jointPositions[9];
     /* 0xA7C */ s32 aiTargetX;
     u8 padA80[4];
     /* 0xA84 */ s32 aiTargetZ;
