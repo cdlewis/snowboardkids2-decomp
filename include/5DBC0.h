@@ -12,6 +12,7 @@ void clampPlayerVelocityToMaxSpeed(Player *player);
 s32 func_8005D180_5DD80(void *arg0, s16 arg1);
 s32 func_8005D308_5DF08(void *arg0, s16 arg1);
 void func_8005D48C_5E08C(Player *, s32, s32);
+void setPlayerLeanAnimation(Player *player, s32 animIndex, s32 progress);
 void loadCharacterBodyParts(Player *player);
 void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags);
 s16 onTrickCompletedHook(Player *player);

@@ -477,6 +477,19 @@ typedef struct {
 } ScrollingSceneryTask;
 
 typedef struct {
+    DisplayListObject base;
+    void *textureTable;
+    s32 unk40;
+    u16 tileScrollU;
+    u16 tileScrollV;
+    u16 unk48;
+    u16 unk4A;
+    s16 unk4C;
+    u16 textureIndex;
+    s16 paletteMode;
+} ScrollingSceneryTextureState;
+
+typedef struct {
     u8 _pad[0x24];
     void *skyAsset1;
     void *skyAsset2;
@@ -824,7 +837,7 @@ void cleanupScrollingSceneryTask(ScrollingSceneryCleanupState *arg0);
 void updatePlayerSparkleWithStateCheck(PlayerSparkleTask *);
 void updatePlayerSparkle(PlayerSparkleTask *);
 void updatePlayerSparkleMovement(PlayerSparkleTask *);
-void func_8004674C_4734C(DisplayListObject *);
+void func_8004674C_4734C(ScrollingSceneryTextureState *);
 void renderScrollingSceneryOpaque(DisplayListObject *);
 void renderScrollingSceneryTransparent(DisplayListObject *);
 void renderScrollingSceneryOverlay(DisplayListObject *);
@@ -1294,20 +1307,111 @@ void cleanupScrollingSceneryTask(ScrollingSceneryCleanupState *arg0) {
     arg0->unk3C = freeNodeMemory(arg0->unk3C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_8004674C_4734C);
+void func_8004674C_4734C(ScrollingSceneryTextureState *arg0) {
+    OutputStruct_19E80 tableEntry;
+    s32 tempWidth;
+    s32 tempHeight;
+    s32 widthShift;
+    s32 heightShift;
+
+    gDPPipeSync(gRegionAllocPtr++);
+    gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
+    gGraphicsMode = -1;
+
+    getTableEntryByU16Index(arg0->textureTable, arg0->textureIndex, &tableEntry);
+
+    do {
+        tempWidth = tableEntry.field1;
+        widthShift = 0;
+    loop_1:
+        if (!(tempWidth & 1)) {
+            widthShift += 1;
+            if (widthShift < 16) {
+                tempWidth >>= 1;
+                goto loop_1;
+            }
+        }
+
+        tempHeight = tableEntry.field2;
+        heightShift = 0;
+    loop_2:
+        if (!(tempHeight & 1)) {
+            heightShift += 1;
+            if (heightShift < 16) {
+                tempHeight >>= 1;
+                goto loop_2;
+            }
+        }
+    } while (0);
+
+    if (arg0->paletteMode == 0) {
+        gDPLoadTextureBlock_4b(
+            gRegionAllocPtr++,
+            tableEntry.data_ptr,
+            G_IM_FMT_CI,
+            tableEntry.field1,
+            tableEntry.field2,
+            0,
+            0,
+            0,
+            widthShift,
+            heightShift,
+            0,
+            0
+        );
+
+        gDPSetTileSize(
+            gRegionAllocPtr++,
+            G_TX_RENDERTILE,
+            arg0->tileScrollU,
+            arg0->tileScrollV,
+            ((tableEntry.field1 + (s16)arg0->tileScrollU - 1) << 2),
+            ((tableEntry.field2 + (s16)arg0->tileScrollV - 1) << 2)
+        );
+
+        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
+    } else {
+        gDPLoadTextureBlock(
+            gRegionAllocPtr++,
+            tableEntry.data_ptr,
+            G_IM_FMT_CI,
+            G_IM_SIZ_8b,
+            tableEntry.field1,
+            tableEntry.field2,
+            0,
+            0,
+            0,
+            widthShift,
+            heightShift,
+            0,
+            0
+        );
+
+        gDPSetTileSize(
+            gRegionAllocPtr++,
+            G_TX_RENDERTILE,
+            arg0->tileScrollU,
+            arg0->tileScrollV,
+            ((tableEntry.field1 + (s16)arg0->tileScrollU - 1) << 2),
+            ((tableEntry.field2 + (s16)arg0->tileScrollV - 1) << 2)
+        );
+
+        gDPLoadTLUT_pal256(gRegionAllocPtr++, tableEntry.index_ptr);
+    }
+}
 
 void renderScrollingSceneryOpaque(DisplayListObject *arg0) {
-    func_8004674C_4734C(arg0);
+    func_8004674C_4734C((ScrollingSceneryTextureState *)arg0);
     renderOpaqueDisplayList(arg0);
 }
 
 void renderScrollingSceneryTransparent(DisplayListObject *arg0) {
-    func_8004674C_4734C(arg0);
+    func_8004674C_4734C((ScrollingSceneryTextureState *)arg0);
     renderTransparentDisplayList(arg0);
 }
 
 void renderScrollingSceneryOverlay(DisplayListObject *arg0) {
-    func_8004674C_4734C(arg0);
+    func_8004674C_4734C((ScrollingSceneryTextureState *)arg0);
     renderOverlayDisplayList(arg0);
 }
 

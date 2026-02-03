@@ -54,35 +54,36 @@ s32 func_8005D180_5DD80(void *arg0_, s16 arg1) {
     s32 i;
     s16 animIndex;
 
-    flags = arg0->unkB84;
+    flags = arg0->animFlags;
     result = 0;
     animIndex = arg1;
 
     if (flags & 2) {
         if (!(flags & 4)) {
-            arg0->unkA8C = 0xFFFF;
-            arg0->unkB84 = arg0->unkB84 | 4;
+            arg0->leanAnimIndex = 0xFFFF;
+            arg0->animFlags = arg0->animFlags | 4;
         }
     } else if (flags & 4) {
-        arg0->unkA8C = 0xFFFF;
-        arg0->unkB84 = arg0->unkB84 & ~4;
+        arg0->leanAnimIndex = 0xFFFF;
+        arg0->animFlags = arg0->animFlags & ~4;
     }
 
-    if (arg0->unkA8C != animIndex) {
-        arg0->unkA8C = animIndex;
-        arg0->unkBB7 = getAnimationBoneCount(arg0->unk0, animIndex);
-        for (i = 0; i < arg0->unkBB7; i++) {
-            resetBoneAnimation(arg0->unk0, (s16)arg0->unkA8C, (s16)i, &arg0->unk488[i]);
+    if (arg0->leanAnimIndex != animIndex) {
+        arg0->leanAnimIndex = animIndex;
+        arg0->leanBoneCount = getAnimationBoneCount(arg0->unk0, animIndex);
+        for (i = 0; i < arg0->leanBoneCount; i++) {
+            resetBoneAnimation(arg0->unk0, (s16)arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
         }
     }
 
-    if (arg0->unkB84 & 4) {
-        for (i = 0; i < arg0->unkBB7; i++) {
-            result |= advanceIndexedBoneAnimationAutoMirrored(arg0->unk0, (s16)arg0->unkA8C, (s16)i, &arg0->unk488[i]);
+    if (arg0->animFlags & 4) {
+        for (i = 0; i < arg0->leanBoneCount; i++) {
+            result |=
+                advanceIndexedBoneAnimationAutoMirrored(arg0->unk0, (s16)arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
         }
     } else {
-        for (i = 0; i < arg0->unkBB7; i++) {
-            result |= advanceIndexedBoneAnimationAuto(arg0->unk0, (s16)arg0->unkA8C, (s16)i, &arg0->unk488[i]);
+        for (i = 0; i < arg0->leanBoneCount; i++) {
+            result |= advanceIndexedBoneAnimationAuto(arg0->unk0, (s16)arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
         }
     }
 
@@ -95,33 +96,33 @@ s32 func_8005D308_5DF08(void *arg0_, s16 arg1) {
     s32 flags;
     s32 i;
 
-    flags = arg0->unkB84;
+    flags = arg0->animFlags;
 
     if (flags & 2) {
         if (!(flags & 4)) {
-            arg0->unkA8C = 0xFFFF;
-            arg0->unkB84 = arg0->unkB84 | 4;
+            arg0->leanAnimIndex = 0xFFFF;
+            arg0->animFlags = arg0->animFlags | 4;
         }
     } else if (flags & 4) {
-        arg0->unkA8C = 0xFFFF;
-        arg0->unkB84 = arg0->unkB84 & ~4;
+        arg0->leanAnimIndex = 0xFFFF;
+        arg0->animFlags = arg0->animFlags & ~4;
     }
 
-    if (arg0->unkA8C != arg1) {
-        arg0->unkA8C = arg1;
-        arg0->unkBB7 = getAnimationBoneCount(arg0->unk0, arg1);
-        for (i = 0; i < arg0->unkBB7; i++) {
-            resetBoneAnimation(arg0->unk0, arg0->unkA8C, (s16)i, &arg0->unk488[i]);
+    if (arg0->leanAnimIndex != arg1) {
+        arg0->leanAnimIndex = arg1;
+        arg0->leanBoneCount = getAnimationBoneCount(arg0->unk0, arg1);
+        for (i = 0; i < arg0->leanBoneCount; i++) {
+            resetBoneAnimation(arg0->unk0, arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
         }
     }
 
-    if (arg0->unkB84 & 4) {
-        for (i = 0; i < arg0->unkBB7; i++) {
-            result = advanceIndexedBoneAnimationMirrored(arg0->unk0, arg0->unkA8C, (s16)i, &arg0->unk488[i]);
+    if (arg0->animFlags & 4) {
+        for (i = 0; i < arg0->leanBoneCount; i++) {
+            result = advanceIndexedBoneAnimationMirrored(arg0->unk0, arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
         }
     } else {
-        for (i = 0; i < arg0->unkBB7; i++) {
-            result = advanceIndexedBoneAnimation(arg0->unk0, arg0->unkA8C, (s16)i, &arg0->unk488[i]);
+        for (i = 0; i < arg0->leanBoneCount; i++) {
+            result = advanceIndexedBoneAnimation(arg0->unk0, arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
         }
     }
 
