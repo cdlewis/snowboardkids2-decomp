@@ -968,6 +968,7 @@ spawnCreditsCharacter = 0x80004570; // rom:0x5170
 initCreditsCharacter = 0x8000464C; // rom:0x524C
 updateCreditsCharacter = 0x800047A0; // rom:0x53A0
 cleanupCreditsCharacter = 0x800048D0; // rom:0x54D0
+loadScrollingTexture = 0x80004920; // rom:0x5520
 loadScrollingTiledTexture = 0x80005094; // rom:0x5C94
 renderOpaqueTiledTexture = 0x800056E8; // rom:0x62E8
 renderTransparentTiledTexture = 0x80005714; // rom:0x6314
