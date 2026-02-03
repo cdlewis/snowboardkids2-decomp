@@ -687,7 +687,7 @@ void initSkiTrailTask(SkiTrailTask *task) {
 
     i = 0;
 
-    if (task->player->unkB84 & 2) {
+    if (task->player->animFlags & 2) {
         iter = task;
         offset = 0x48;
         transforms = gSkiTrailOffsetTransformsForward;

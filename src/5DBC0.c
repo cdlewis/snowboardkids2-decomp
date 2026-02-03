@@ -51,41 +51,47 @@ INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D180_5DD80);
 
 INCLUDE_ASM("asm/nonmatchings/5DBC0", func_8005D308_5DF08);
 
-void func_8005D48C_5E08C(Player *arg0, s32 arg1, s32 arg2) {
+void setPlayerLeanAnimation(Player *player, s32 animIndex, s32 progress) {
     s32 i;
 
-    if (arg0->unkB84 & 2) {
-        if (!(arg0->unkB84 & 4)) {
-            arg0->unkA8C = 0xFFFF;
-            arg0->unkB84 = arg0->unkB84 | 4;
+    if (player->animFlags & 2) {
+        if (!(player->animFlags & 4)) {
+            player->leanAnimIndex = 0xFFFF;
+            player->animFlags = player->animFlags | 4;
         }
-    } else if (arg0->unkB84 & 4) {
-        arg0->unkA8C = 0xFFFF;
-        arg0->unkB84 = arg0->unkB84 & ~4;
+    } else if (player->animFlags & 4) {
+        player->leanAnimIndex = 0xFFFF;
+        player->animFlags = player->animFlags & ~4;
     }
 
-    if (arg0->unkA8C != (s16)arg1) {
-        arg0->unkA8C = arg1;
-        i = (s16)arg1;
-        arg0->unkBB7 = getAnimationBoneCount(arg0->unk0, i);
-        for (i = 0; i < arg0->unkBB7; i++) {
-            resetBoneAnimation(arg0->unk0, (s16)arg0->unkA8C, (s16)i, &arg0->unk488[i]);
+    if (player->leanAnimIndex != (s16)animIndex) {
+        player->leanAnimIndex = animIndex;
+        i = (s16)animIndex;
+        player->leanBoneCount = getAnimationBoneCount(player->unk0, i);
+        for (i = 0; i < player->leanBoneCount; i++) {
+            resetBoneAnimation(player->unk0, (s16)player->leanAnimIndex, (s16)i, &player->unk488[i]);
         }
     }
 
-    if (arg0->unkB84 & 4) {
-        for (i = 0; i < arg0->unkBB7; i++) {
+    if (player->animFlags & 4) {
+        for (i = 0; i < player->leanBoneCount; i++) {
             interpolateIndexedBoneAnimationMirrored(
-                arg0->unk0,
-                (s16)arg0->unkA8C,
+                player->unk0,
+                (s16)player->leanAnimIndex,
                 (s16)i,
-                &arg0->unk488[i],
-                arg2 & 0xFFFF
+                &player->unk488[i],
+                progress & 0xFFFF
             );
         }
     } else {
-        for (i = 0; i < arg0->unkBB7; i++) {
-            interpolateIndexedBoneAnimation(arg0->unk0, (s16)arg0->unkA8C, (s16)i, &arg0->unk488[i], (s16)arg2);
+        for (i = 0; i < player->leanBoneCount; i++) {
+            interpolateIndexedBoneAnimation(
+                player->unk0,
+                (s16)player->leanAnimIndex,
+                (s16)i,
+                &player->unk488[i],
+                (s16)progress
+            );
         }
     }
 }
@@ -102,9 +108,9 @@ void loadCharacterBodyParts(Player *player) {
     u8 *lookupTable;
 
     if (((GameState *)getCurrentAllocation())->raceType == 0xB) {
-        flags = player->unkB84;
+        flags = player->animFlags;
         if (flags & 4) {
-            player->unkB84 = flags | 8;
+            player->animFlags = flags | 8;
             partIndex = 0;
             bodyPart = (BodyPart *)player;
             do {
@@ -114,7 +120,7 @@ void loadCharacterBodyParts(Player *player) {
                 bodyPart++;
             } while (partIndex < 0x10);
         } else {
-            player->unkB84 = flags & ~8;
+            player->animFlags = flags & ~8;
             partIndex = 0;
             bodyPart = (BodyPart *)player;
             do {
@@ -124,9 +130,9 @@ void loadCharacterBodyParts(Player *player) {
             } while (++partIndex < 0x10);
         }
     } else {
-        flags = player->unkB84;
+        flags = player->animFlags;
         if (flags & 4) {
-            player->unkB84 = flags | 8;
+            player->animFlags = flags | 8;
             partIndex = 0;
             bodyPart2 = (BodyPart *)player;
             do {
@@ -136,7 +142,7 @@ void loadCharacterBodyParts(Player *player) {
                 bodyPart2++;
             } while (partIndex < 0x10);
         } else {
-            player->unkB84 = flags & ~8;
+            player->animFlags = flags & ~8;
             partIndex = 0;
             bodyPart2 = (BodyPart *)player;
             do {

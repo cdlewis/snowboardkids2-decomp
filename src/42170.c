@@ -1315,7 +1315,7 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
         enqueueDisplayListWithFrustumCull(i, (&state->orbitObj));
     }
 
-    if (state->player->unkB84 & 0x80000) {
+    if (state->player->animFlags & 0x80000) {
         state->player->boostTimer = 0;
     }
 
@@ -1375,7 +1375,7 @@ void *spawnPlayerAuraEffect(Player *player) {
     if (task != NULL) {
         task->player = player;
         task->yRotation = 0;
-        if (player->unkB84 & 2) {
+        if (player->animFlags & 2) {
             task->yRotation = 0x1000;
         }
     }
@@ -1447,7 +1447,7 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
         player = state->player;
     }
 
-    if (player->unkB84 & 0x80000) {
+    if (player->animFlags & 0x80000) {
         player->boostTimer = 0;
     }
 
@@ -1505,7 +1505,7 @@ PlayerFlashEffectState *spawnPlayerFlashEffect(Player *player) {
     if (task != NULL) {
         task->player = player;
         task->yRotation = 0;
-        if (player->unkB84 & 2) {
+        if (player->animFlags & 2) {
             task->yRotation = 0x1000;
         }
     }
@@ -1795,7 +1795,7 @@ void updateGhostEffect(GhostEffectState *arg0) {
     } while (i < 4);
 
     player = arg0->player;
-    if (player->unkB84 & 0x80000) {
+    if (player->animFlags & 0x80000) {
         player->ghostEffectTimer = 0;
     }
 
@@ -1850,7 +1850,7 @@ void *spawnGhostEffect(Player *arg0) {
     if (task != NULL) {
         task->player = arg0;
         task->rotation = 0;
-        if (arg0->unkB84 & 2) {
+        if (arg0->animFlags & 2) {
             task->rotation = 0x1000;
         }
     }

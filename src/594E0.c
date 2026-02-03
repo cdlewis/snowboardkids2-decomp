@@ -145,7 +145,7 @@ void setPlayerState100(Player *player) {
 s32 tryActivateFinishBoost(Player *arg0) {
     if (arg0->boostState == 0) {
         if (spawnPlayerFlashEffect(arg0) != 0) {
-            if (arg0->unkB84 & 2) {
+            if (arg0->animFlags & 2) {
                 arg0->boostState = 4;
             } else {
                 arg0->boostState = 3;
@@ -171,7 +171,7 @@ s32 tryActivateGhostEffect(Player *player) {
 s32 tryActivateBoost(Player *arg0) {
     if (arg0->boostState == 0) {
         if (spawnPlayerAuraEffect(arg0) != NULL) {
-            if (arg0->unkB84 & 2) {
+            if (arg0->animFlags & 2) {
                 arg0->boostState = 2;
             } else {
                 arg0->boostState = 1;

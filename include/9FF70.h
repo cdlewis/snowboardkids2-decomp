@@ -5,7 +5,7 @@
 
 typedef struct {
     u8 _pad0[0xB84];
-    s32 unkB84;
+    s32 animFlags;
     u8 _padB88[0x12]; // 0xB88 to 0xB9A
     s16 boostTimer;
     u8 _padB9C[0x8]; // 0xB9C to 0xBA4

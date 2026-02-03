@@ -1024,7 +1024,7 @@ void handleRaceStateUpdate(void) {
             case 0:
                 count = 0;
                 for (i = 0; i < gs->playerCount; i++) {
-                    playerFlags = gs->players[i].unkB84 & 0x80000;
+                    playerFlags = gs->players[i].animFlags & 0x80000;
                     count += playerFlags != 0;
                 }
                 if (gs->playerCount == count) {
@@ -1035,7 +1035,7 @@ void handleRaceStateUpdate(void) {
                 }
                 break;
             case 1:
-                if (gs->players->unkB84 & 0x80000) {
+                if (gs->players->animFlags & 0x80000) {
                     setMusicFadeOut(0x3C);
                     gs->stateDelayTimer = 0x1E;
                     handler = handleBossRaceResult;
@@ -1045,7 +1045,7 @@ void handleRaceStateUpdate(void) {
                 break;
             case 2:
             case 3:
-                if (gs->players->unkB84 & 0x80000) {
+                if (gs->players->animFlags & 0x80000) {
                     setMusicFadeOut(0x3C);
                     gs->stateDelayTimer = 0x1E;
                     handler = handleBossDefeatResult;
@@ -1056,7 +1056,7 @@ void handleRaceStateUpdate(void) {
             case 8:
                 count = 0;
                 for (i = 0; i < gs->playerCount; i++) {
-                    playerFlags = gs->players[i].unkB84 & 0x80000;
+                    playerFlags = gs->players[i].animFlags & 0x80000;
                     count += playerFlags != 0;
                 }
                 if (gs->playerCount == count) {
@@ -1070,7 +1070,7 @@ void handleRaceStateUpdate(void) {
             case 9:
                 count = 0;
                 for (i = 0; i < gs->playerCount; i++) {
-                    playerFlags = gs->players[i].unkB84 & 0x80000;
+                    playerFlags = gs->players[i].animFlags & 0x80000;
                     count += playerFlags != 0;
                 }
                 if (gs->playerCount == count) {
@@ -1082,7 +1082,7 @@ void handleRaceStateUpdate(void) {
                 }
                 break;
             case 4:
-                if (gs->players->unkB84 & 0x80000) {
+                if (gs->players->animFlags & 0x80000) {
                     if (gs->playerLost != 0) {
                         gs->showResultHUD = 1;
                     }
@@ -1094,7 +1094,7 @@ void handleRaceStateUpdate(void) {
                 }
                 break;
             case 5:
-                if (gs->players->unkB84 & 0x80000) {
+                if (gs->players->animFlags & 0x80000) {
                     if (gs->playerLost != 0) {
                         gs->showResultHUD = 1;
                     }
@@ -1106,7 +1106,7 @@ void handleRaceStateUpdate(void) {
                 }
                 break;
             case 6:
-                if (gs->players->unkB84 & 0x80000) {
+                if (gs->players->animFlags & 0x80000) {
                     if (gs->playerLost != 0) {
                         gs->showResultHUD = 1;
                     }
@@ -1237,7 +1237,7 @@ void handleBossDefeatResult(void) {
         return;
     }
 
-    if (state->players[1].unkB84 & 0x100000) {
+    if (state->players[1].animFlags & 0x100000) {
         gRaceResultCode = 3;
         playMusicTrack(8);
     } else {

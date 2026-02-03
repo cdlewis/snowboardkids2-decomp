@@ -63,7 +63,7 @@ void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0) {
                 }
                 goto do_action;
             case 1:
-                if ((state->players->sectorIndex < 3) || (state->players->unkB84 & 1)) {
+                if ((state->players->sectorIndex < 3) || (state->players->animFlags & 1)) {
                     break;
                 }
                 goto do_action;
@@ -73,7 +73,7 @@ void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0) {
                 }
                 goto do_action;
             case 3:
-                if ((state->players->sectorIndex < 0x12) || (state->players->unkB84 & 1)) {
+                if ((state->players->sectorIndex < 0x12) || (state->players->animFlags & 1)) {
                     break;
                 }
                 goto do_action;

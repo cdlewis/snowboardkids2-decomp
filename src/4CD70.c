@@ -57,7 +57,7 @@ typedef struct {
 typedef struct {
     s32 unk0;
     u8 pad0[0xB80];
-    s32 unkB84;
+    s32 animFlags;
 } PlayerInfo;
 
 typedef struct {
@@ -1999,7 +1999,7 @@ void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0) {
 
     if (allocation->unk79 == 0 && allocation->unk76 == 0) {
         PlayerInfo *player = allocation->timeRemaining;
-        if ((player->unkB84 & 0x80000) == 0) {
+        if ((player->animFlags & 0x80000) == 0) {
             if (arg0->timeRemaining != 0) {
                 arg0->timeRemaining--;
                 if (arg0->timeRemaining == 0) {
@@ -2203,7 +2203,7 @@ void updateRaceTimerDisplay(RaceTimerState *arg0) {
     if (alloc->unk76 != 0) {
         goto check_time_flag;
     }
-    if (alloc->timeRemaining->unkB84 & 0x80000) {
+    if (alloc->timeRemaining->animFlags & 0x80000) {
         goto set_7E;
     }
     if (arg0->elapsedTicks == 0x433C8) {
@@ -2217,7 +2217,7 @@ void updateRaceTimerDisplay(RaceTimerState *arg0) {
     playSoundEffectWithPriorityDefaultVolume(0x46, 6);
 
 check_time_flag:
-    if (!(alloc->timeRemaining->unkB84 & 0x80000)) {
+    if (!(alloc->timeRemaining->animFlags & 0x80000)) {
         goto after_7E;
     }
 set_7E:

@@ -36,7 +36,7 @@ typedef struct {
 
 s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSectorIndex, void *position) {
     Player *player = (Player *)entity;
-    if (!(player->unkB84 & 0x100)) {
+    if (!(player->animFlags & 0x100)) {
         return func_80060A3C_6163C(gameData, currentSectorIndex, position);
     }
     return player->sectorIndex;
@@ -222,12 +222,12 @@ void handlePlayerToPlayerCollision(Player *player) {
                 deltaPos.z = ((s64)deltaPos.z * combinedRadius / dist) - deltaPos.z;
 
                 /* Skip push if player has flag 0x80 */
-                if (player->unkB84 & 0x80) {
+                if (player->animFlags & 0x80) {
                     continue;
                 }
 
                 /* If target has flag 0x80, do full push */
-                if (targetPlayer->unkB84 & 0x80) {
+                if (targetPlayer->animFlags & 0x80) {
                     player->worldPos.x -= deltaPos.x;
                     player->worldPos.y -= deltaPos.y;
                     player->worldPos.z -= deltaPos.z;
@@ -311,13 +311,13 @@ void handleCollisionWithTargetPlayer(Player *player) {
                 if (dist < combinedRadius) {
                     /* Check for special bounce-back on collision boxes 4-5 when target is in state 1 */
                     if (targetPlayer->unkBD9 == 1) {
-                        if ((targetPlayer->unkB84 & 0x40000) && (u32)(boxIndex - 4) < 2U) {
+                        if ((targetPlayer->animFlags & 0x40000) && (u32)(boxIndex - 4) < 2U) {
                             setPlayerBouncedBackState(player);
                             goto next;
                         }
                     }
                     /* Check for special bounce-back on collision boxes 1-2 when target is in state 3 */
-                    if (targetPlayer->unkBD9 == 3 && (targetPlayer->unkB84 & 0x40000) && (u32)(boxIndex - 1) < 2U) {
+                    if (targetPlayer->unkBD9 == 3 && (targetPlayer->animFlags & 0x40000) && (u32)(boxIndex - 1) < 2U) {
                         setPlayerBouncedBackState(player);
                         goto next;
                     }
@@ -705,7 +705,7 @@ s32 checkPositionPlayerCollisionWithKnockback(Vec3i *pos, s32 extraRadius, s32 m
         deltaPos.z = ((s64)deltaZ * combinedRadius / dist) - deltaZ;
 
         /* Skip push if target has flag 0x80 */
-        if (targetPlayer->unkB84 & 0x80) {
+        if (targetPlayer->animFlags & 0x80) {
             continue;
         }
 
@@ -803,7 +803,7 @@ s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeig
             deltaPos.x = (((s64)deltaX * combinedRadius) / dist) - deltaX;
             deltaPos.z = (((s64)deltaZ * combinedRadius) / dist) - deltaZ;
 
-            if (targetPlayer->unkB84 & 0x80) {
+            if (targetPlayer->animFlags & 0x80) {
                 goto next;
             }
 
@@ -1036,7 +1036,7 @@ s16 getPlayerTargetTrackAngle(Player *player) {
                 player->worldPos.x,
                 player->worldPos.z
             );
-            if (player->unkB84 & 2) {
+            if (player->animFlags & 2) {
                 targetAngle += 0x1000;
             }
         }
@@ -1045,7 +1045,7 @@ s16 getPlayerTargetTrackAngle(Player *player) {
         Section1Element *waypoint1 = (Section1Element *)(sectorEntry->unk16 * 6 + (u32)waypointData);
         Section1Element *waypoint2 = (Section1Element *)(sectorEntry->unk1C * 6 + (u32)waypointData);
         targetAngle = computeAngleToPosition(waypoint1->unk0, waypoint1->unk4, waypoint2->unk0, waypoint2->unk4);
-        if (player->unkB84 & 2) {
+        if (player->animFlags & 2) {
             targetAngle += 0x1000;
         }
     }

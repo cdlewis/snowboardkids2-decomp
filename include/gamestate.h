@@ -122,7 +122,7 @@ typedef struct {
     /* 0xA10 */ Vec3i jointPositions[9];
     /* 0xA7C */ Vec3i aiTarget;
     u8 _padA88[0x4];
-    u16 unkA8C;
+    u16 leanAnimIndex;
     s16 unkA8E;
     s16 unkA90;
     s16 unkA92;
@@ -172,7 +172,7 @@ typedef struct {
     s8 unkB80;
     s8 unkB81;
     u8 padding6c[0x2];
-    s32 unkB84;
+    s32 animFlags;
     s32 behaviorFlags;
     s32 unkB8C;
     s32 unkB90;
@@ -195,7 +195,7 @@ typedef struct {
     u8 unkBB4;
     s8 trickCount;
     u8 spinsPerformedMask;
-    u8 unkBB7;
+    u8 leanBoneCount;
     u8 playerIndex;
     u8 characterId;
     u8 boardIndex;

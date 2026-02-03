@@ -80,7 +80,7 @@ typedef struct {
     u8 padA80[4];
     s32 aiTargetZ;
     u8 padA88[4];
-    u16 unkA8C;
+    u16 leanAnimIndex;
     u16 unkA8E;
     u16 unkA90;
     u16 unkA92;
@@ -123,7 +123,7 @@ typedef struct {
     u8 padB44[0xB50 - 0xB44];
     ListNode_5AA90 unkB50;
     u8 padB69[0xB84 - 0xB6C];
-    s32 unkB84;
+    s32 animFlags;
     s32 behaviorFlags;
     s32 unkB8C;
     s32 unkB90;
@@ -239,7 +239,7 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
         diff = -0x80;
     }
     arg0->unkAA8 = arg0->unkAA8 + diff;
-    arg0->unkB84 &= 0xFFFBFFFF;
+    arg0->animFlags &= 0xFFFBFFFF;
 
     if (arg0->behaviorMode != 3) {
         if (arg0->hitReactionState != 0) {
@@ -358,7 +358,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
         *(void **)(elem + 0x58) = (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + assetOffset);
     }
 
-    arg0->unkA8C = 0;
+    arg0->leanAnimIndex = 0;
 
     // Get number of bones and reset animations
     arg0->boneCount = getAnimationBoneCount(*(void **)((u8 *)arg0 + 0), 0);
@@ -366,7 +366,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     for (i = 0; i < arg0->boneCount; i++) {
         resetBoneAnimation(
             *(void **)((u8 *)arg0 + 0),
-            arg0->unkA8C,
+            arg0->leanAnimIndex,
             i,
             (BoneAnimationStateIndexed *)((u8 *)arg0 + 0x488 + i * 0x48)
         );
@@ -442,7 +442,7 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
         return 1;
     }
 
-    arg0->unkB84 |= 0x40000;
+    arg0->animFlags |= 0x40000;
 
     if (arg0->behaviorStep == 0) {
         if ((u32)gameState->raceFrameCounter < 0x1EU) {
@@ -451,7 +451,7 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
             arg0->unkB8C += (randA() & 0xFF) >> 1;
         }
         arg0->unkB90 = 0;
-        arg0->unkA8C = 0xFFFF;
+        arg0->leanAnimIndex = 0xFFFF;
         arg0->behaviorStep++;
     }
 
@@ -469,7 +469,7 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
     }
     arg0->unkA94 = currentAngle + clampedAngle;
 
-    if (!(arg0->unkB84 & 1)) {
+    if (!(arg0->animFlags & 1)) {
         createYRotationMatrix(&arg0->unk970, arg0->unkA94);
         func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->unk990, &arg0->unk970, &sp10);
         transformVector3(&arg0->velocity, &sp10, &sp30);
@@ -572,7 +572,7 @@ s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0) {
 
 s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0) {
     if (arg0->behaviorStep == 0) {
-        arg0->unkA8C = 0xFFFF;
+        arg0->leanAnimIndex = 0xFFFF;
         arg0->velocity.y = 0x80000;
         arg0->behaviorStep = arg0->behaviorStep + 1;
         queueSoundAtPosition(&arg0->unk434, 0x21);
@@ -585,7 +585,7 @@ s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0) {
     applyClampedVelocityToPosition((Player *)arg0);
     func_8005D180_5DD80(arg0, 2);
 
-    if (arg0->unkB84 & 1) {
+    if (arg0->animFlags & 1) {
     } else {
         arg0->behaviorFlags = 0;
         arg0->behaviorMode = 1;
@@ -614,7 +614,7 @@ void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
     arg0->unk434.z = arg0->unk434.z + collisionOffset.z;
     func_8005C868_5D468(arg0);
 
-    if (arg0->unkB84 & 0x10000) {
+    if (arg0->animFlags & 0x10000) {
         arg0->unkBC9 = 0;
     } else {
         func_8005CFFC_5DBFC(gameData, arg0->sectorIndex, &arg0->unk434, &arg0->unkBC9, &arg0->surfaceTypeIndex);

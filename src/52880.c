@@ -200,7 +200,7 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
     projectilePos = &arg0->pos;
     hitPlayer = findVulnerablePlayerNearPosition(projectilePos, arg0->ownerPlayerIdx, 0x80000);
     if (hitPlayer != NULL) {
-        if (!(hitPlayer->unkB84 & 0x1000)) {
+        if (!(hitPlayer->animFlags & 0x1000)) {
             /* Player has no shield - apply hit effects */
             setPlayerHomingProjectileRetaliationState(hitPlayer);
             for (i = 0; i < 3; i++) {
@@ -426,7 +426,7 @@ void checkParachuteProjectileHit(Struct_52880 *arg0) {
         return;
     }
 
-    new_var2 = result->unkB84 & 0x1000;
+    new_var2 = result->animFlags & 0x1000;
     if (new_var2 == 0) {
         setPlayerParachuteState(result);
         arg0->hitCount++;
@@ -642,7 +642,7 @@ void checkFryingPanProjectileHit(Struct_52880 *arg0) {
         return;
     }
 
-    new_var2 = result->unkB84 & 0x1000;
+    new_var2 = result->animFlags & 0x1000;
     if (new_var2 == 0) {
         setPlayerShrinkState(result);
         arg0->hitCount++;
@@ -865,7 +865,7 @@ void checkSnowmanProjectileHit(Struct_52880 *arg0) {
         return;
     }
 
-    new_var2 = result->unkB84 & 0x1000;
+    new_var2 = result->animFlags & 0x1000;
     if (new_var2 == 0) {
         setPlayerFrozenState(result);
         arg0->hitCount++;
@@ -1093,7 +1093,7 @@ void checkStarProjectileHit(Struct_52880 *arg0) {
     s1 = &arg0->pos;
     player = findVulnerablePlayerNearPositionWithDelta(s1, arg0->ownerPlayerIdx, 0xC0000, &localVec);
     if (player != NULL) {
-        if ((player->unkB84 & 0x1000) == 0) {
+        if ((player->animFlags & 0x1000) == 0) {
             setPlayerStarHitState(player, &localVec);
             arg0->hitCount++;
             if (arg0->targetPlayerIdx >= 0) {
@@ -1311,7 +1311,7 @@ void checkHomingPanelProjectileHit(Struct_52880 *arg0) {
         return;
     }
 
-    new_var2 = result->unkB84 & 0x1000;
+    new_var2 = result->animFlags & 0x1000;
     if (new_var2 == 0) {
         setPlayerPanelHitState(result);
         arg0->hitCount++;
@@ -2134,7 +2134,7 @@ void checkShrinkProjectileHit(Struct_52880 *arg0) {
     getCurrentAllocation();
     result = findVulnerablePlayerNearPosition((&arg0->pos), arg0->ownerPlayerIdx, 0x80000);
     if (result != NULL) {
-        if ((result->unkB84 & 0x1000) == 0) {
+        if ((result->animFlags & 0x1000) == 0) {
             setPlayerShrinkState(result);
             arg0->hitCount++;
         }

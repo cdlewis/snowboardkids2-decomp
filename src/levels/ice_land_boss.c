@@ -55,7 +55,7 @@ typedef struct {
     u8 _padB96[0xBB4 - 0xB96];
     u8 unkBB4;
     u8 _padBB5[0xBB7 - 0xBB5];
-    u8 unkBB7;
+    u8 leanBoneCount;
     u8 _padBB8[0xBB9 - 0xBB8];
     u8 characterId;
     u8 boardIndex;
@@ -125,7 +125,7 @@ typedef struct {
     Transform3D unk990;
     Transform3D unk9B0;
     u8 paddingA88[0xA8C - 0x9D0];
-    u16 unkA8C;
+    u16 leanAnimIndex;
     s16 unkA8E;
     s16 unkA90;
     s16 unkA92;
@@ -183,7 +183,7 @@ typedef struct {
     s8 unkB80;
     s8 unkB81;
     u8 paddingB82[0x2];
-    s32 unkB84;
+    s32 animFlags;
     s32 unkB88;
     s32 unkB8C;
     s32 unkB90;
@@ -539,10 +539,10 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     }
 
     // Initialize bone animation state
-    arg0->unkA8C = 0;
+    arg0->leanAnimIndex = 0;
     arg0->boneCount = getAnimationBoneCount(arg0->unk0_3C[0].unk0, 0);
     for (i = 0; i < arg0->boneCount; i++) {
-        resetBoneAnimation(arg0->unk0_3C[0].unk0, arg0->unkA8C, i, &arg0->unk488[i]);
+        resetBoneAnimation(arg0->unk0_3C[0].unk0, arg0->leanAnimIndex, i, &arg0->unk488[i]);
     }
 
     // Initialize behavior state
@@ -589,7 +589,7 @@ void setIceBossFlyingMode(Player *arg0) {
     arg0->collisionRadius = 0x100000;
     arg0->unkB2C = 0x100000;
     arg0->unkBB4 = 1;
-    arg0->unkB84 = arg0->unkB84 | 0x400000;
+    arg0->animFlags = arg0->animFlags | 0x400000;
 }
 
 s32 iceLandBossChaseIntroPhase(IceLandBossAttackArg *arg0) {
@@ -625,12 +625,12 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
 
     gameState = (GameState *)getCurrentAllocation();
 
-    if (arg0->unkB84 & 0x100000) {
+    if (arg0->animFlags & 0x100000) {
         setPlayerBehaviorMode(arg0, 3);
         return 1;
     }
 
-    if (arg0->unkB84 & 0x80000) {
+    if (arg0->animFlags & 0x80000) {
         setPlayerBehaviorPhase(arg0, 2);
         return 1;
     }
@@ -644,7 +644,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
 
         if (gameState->raceFrameCounter < 0x1EU) {
             arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
-        } else if (arg0->unkB84 & 0x400000) {
+        } else if (arg0->animFlags & 0x400000) {
             arg0->unkB8C = randA() & 0xF;
         } else {
             arg0->unkB8C = (randA() & 0xFF) >> 1;
@@ -652,7 +652,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
         arg0->unkB90 = 0;
     }
 
-    arg0->unkB84 = arg0->unkB84 | 0x40000;
+    arg0->animFlags = arg0->animFlags | 0x40000;
     calculateAITargetPosition(arg0);
 
     angleDiff =
@@ -673,7 +673,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
 
     arg0->rotY = arg0->rotY + angleDiff;
 
-    if (!(arg0->unkB84 & 0x1)) {
+    if (!(arg0->animFlags & 0x1)) {
         createYRotationMatrix(&arg0->unk970, arg0->rotY);
         func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->unk990, &arg0->unk970, &sp10);
         transformVector3(&arg0->velocity, &sp10, &sp30);
@@ -719,7 +719,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
 
     arg0->unkA9E = arg0->unkA9E + angleDiff;
 
-    if (arg0->unkB84 & 0x400000) {
+    if (arg0->animFlags & 0x400000) {
         if (func_8005D180_5DD80(arg0, 3) != 0) {
             arg0->unkB90 = 0;
         }
@@ -865,11 +865,11 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
     getCurrentAllocation();
 
     if (boss->behaviorStep == 0) {
-        boss->unkA8C = 0xFFFF;
+        boss->leanAnimIndex = 0xFFFF;
         boss->unkB8C = 0;
         boss->behaviorStep += 1;
 
-        if (!(boss->unkB84 & 0x80000)) {
+        if (!(boss->animFlags & 0x80000)) {
             if (boss->unkBDB == 0) {
                 queueSoundAtPosition(&boss->worldPos, 0x4C);
             } else {
@@ -911,7 +911,7 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
 
     boss->rotY = boss->rotY + angleDiff;
 
-    if (!(boss->unkB84 & 1)) {
+    if (!(boss->animFlags & 1)) {
         createYRotationMatrix(&boss->unk970, boss->rotY);
         func_8006BDBC_6C9BC((BoneAnimationState *)&boss->unk990, &boss->unk970, &rotMatrix);
         transformVector3(&boss->velocity, &rotMatrix, &tempVec);
@@ -969,7 +969,7 @@ s32 iceLandBossHoverAttackPhase(Player *arg0) {
     if (savedStep == 0) {
         arg0->behaviorStep = savedStep + 1;
         arg0->velocity.y = 0x80000;
-        if (!(arg0->unkB84 & 0x80000)) {
+        if (!(arg0->animFlags & 0x80000)) {
             if (arg0->unkBDB != 0) {
                 arg0->unkBDB = arg0->unkBDB - 1;
             }
@@ -989,7 +989,7 @@ s32 iceLandBossHoverAttackPhase(Player *arg0) {
     }
 
     if (arg0->velocity.y < 0) {
-        if (!(arg0->unkB84 & 0x1)) {
+        if (!(arg0->animFlags & 0x1)) {
             hoverCount = arg0->unkBDB;
             arg0->behaviorFlags = 0;
             arg0->behaviorMode = 1;
@@ -998,7 +998,7 @@ s32 iceLandBossHoverAttackPhase(Player *arg0) {
             arg0->behaviorCounter = 0;
 
             if (hoverCount == 0) {
-                arg0->unkB84 = arg0->unkB84 | 0x100000;
+                arg0->animFlags = arg0->animFlags | 0x100000;
             }
 
             return 0;
@@ -1069,7 +1069,7 @@ void renderIceLandBossWithSurfaceColors(Player *arg0) {
 
     if (index == 0) {
         for (i = 0; i < 4; i++) {
-            enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);
+            enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->leanBoneCount);
         }
     } else {
         arg0->unk6C = gBossSurfaceColors[index].primaryR;
@@ -1080,7 +1080,7 @@ void renderIceLandBossWithSurfaceColors(Player *arg0) {
         arg0->unk72 = gBossSurfaceColors[index].secondaryB;
 
         for (i = 0; i < 4; i++) {
-            enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->unkBB7);
+            enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->leanBoneCount);
         }
     }
 }
@@ -1107,7 +1107,7 @@ void updateIceLandBossJointPositions(Player *boss) {
     gameData = &gameState->gameData;
 
     for (jointIndex = 0; jointIndex < 9; jointIndex++) {
-        if (boss->unkB84 & flyingFlag) {
+        if (boss->animFlags & flyingFlag) {
             boss->jointPositions[jointIndex].x = boss->unk970.translation.x + D_800BCA64[jointIndex + 9].x;
             boss->jointPositions[jointIndex].z = boss->unk970.translation.z + D_800BCA64[jointIndex + 9].z;
         } else {

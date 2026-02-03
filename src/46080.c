@@ -2305,7 +2305,7 @@ s32 rollSecondaryItemDrop(Player *arg0, u8 *arg1) {
     u8 index;
     SecondaryItemDropElement *element;
 
-    if (arg0->unkB84 & 0x1000000) {
+    if (arg0->animFlags & 0x1000000) {
         randVal = randB() & 0xFF;
         for (i = 0; i < 9; i++) {
             if (D_80090CE0_918E0[i] >= randVal) {
