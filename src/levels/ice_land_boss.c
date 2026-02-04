@@ -282,7 +282,7 @@ typedef struct {
     u8 finishPosition;
 } IceBossArg;
 
-void func_800BC61C_B1B0C(Player *);
+void updateIceLandBossLeanBoneTransforms(Player *);
 
 typedef s32 (*StateFunc)(void *);
 
@@ -471,7 +471,7 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     }
     memcpy(&boss->sectorListNode.localPos, &boss->transformedPos, 0xC);
     addCollisionSectorNodeToList(&boss->sectorListNode);
-    func_800BC61C_B1B0C((Player *)boss);
+    updateIceLandBossLeanBoneTransforms((Player *)boss);
 
     // Calculate ground joint positions for leg animation
     if (boss->bossFlags & 0x400000) { // Flying mode
@@ -699,7 +699,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
 
     arg0->velocity.y -= 0x10000;
     applyClampedVelocityToPosition(arg0);
-    func_800BC61C_B1B0C(arg0);
+    updateIceLandBossLeanBoneTransforms(arg0);
 
     transformVectorRelative(&gameState->players->worldPos.x, arg0->unk164, &sp40);
 
@@ -1062,7 +1062,7 @@ typedef struct {
     u8 parentBone;
 } BoneHierarchyEntry;
 
-void func_800BC61C_B1B0C(Player *arg0) {
+void updateIceLandBossLeanBoneTransforms(Player *arg0) {
     Transform3D sp10;
     Transform3D sp30;
     BoneHierarchyEntry *animData;
@@ -1111,7 +1111,7 @@ void renderIceLandBossWithSurfaceColors(Player *arg0) {
     s32 index;
 
     getCurrentAllocation();
-    func_800BC61C_B1B0C(arg0);
+    updateIceLandBossLeanBoneTransforms(arg0);
 
     index = arg0->unkBCC >> 4;
 

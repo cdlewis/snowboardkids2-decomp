@@ -174,6 +174,7 @@ iceLandBossGroundProjectileAttackPhase = 0x800BC0D8; // rom:0xB15C8
 iceLandBossHoverAttackPhase = 0x800BC3B8; // rom:0xB18A8
 iceLandBossDefeatedBehavior = 0x800BC4AC; // rom:0xB199C
 updateIceLandBossPositionAndTrackCollision = 0x800BC520; // rom:0xB1A10
+updateIceLandBossLeanBoneTransforms = 0x800BC61C; // rom:0xB1B0C
 renderIceLandBossWithSurfaceColors = 0x800BC7A8; // rom:0xB1C98
 updateIceLandBossJointPositions = 0x800BC89C; // rom:0xB1D8C
 renderCrazyJungleBossWithSurfaceColors = 0x800BC23C; // rom:0xACA6C
