@@ -3499,6 +3499,7 @@ applyVelocityToPosition = 0x800B0300; // rom:0xA01B0
 initScrollingSceneryTask = 0x800465A8; // rom:0x471A8
 updateScrollingSceneryTask = 0x80046628; // rom:0x47228
 cleanupScrollingSceneryTask = 0x80046708; // rom:0x47308
+loadScrollingSceneryTexture = 0x8004674C; // rom:0x4734C
 renderScrollingSceneryOpaque = 0x80046CB4; // rom:0x478B4
 renderScrollingSceneryTransparent = 0x80046CE0; // rom:0x478E0
 renderScrollingSceneryOverlay = 0x80046D0C; // rom:0x4790C
