@@ -107,22 +107,46 @@ def get_base_function_name(function_name: str) -> str:
     return re.sub(r'-\d+$', '', function_name)
 
 
-def find_promising_functions(repo_root: Path) -> List[Tuple[str, float]]:
+def count_asm_instructions(asm_path: Path) -> int:
     """
-    Find all functions with their best match percentages.
+    Count the number of assembly instructions in a .s file.
+
+    Instructions are lines that contain /* (the address/comment marker).
+
+    Args:
+        asm_path: Path to the .s file
+
+    Returns:
+        The number of instructions, or 0 if the file cannot be read
+    """
+    if not asm_path.exists():
+        return 0
+
+    try:
+        with open(asm_path, 'r') as f:
+            return sum(1 for line in f if '/*' in line)
+    except (IOError, ValueError):
+        return 0
+
+
+def find_promising_functions(repo_root: Path) -> List[Tuple[str, float, int]]:
+    """
+    Find all functions with their best match percentages and instruction counts.
 
     Args:
         repo_root: Root directory of the repository
 
     Returns:
-        List of (function_name, best_match_percentage) tuples, sorted by percentage descending
+        List of (function_name, best_match_percentage, instruction_count) tuples,
+        sorted by percentage descending
     """
     nonmatchings_dir = repo_root / 'nonmatchings'
     matchings_dir = repo_root / 'asm' / 'matchings'
+    asm_nonmatchings = repo_root / 'asm' / 'nonmatchings'
 
     # Dictionary to track best attempt for each base function
-    # Key: base function name, Value: (full function name, percentage)
-    best_attempts: Dict[str, Tuple[str, float]] = {}
+    # Key: base function name, Value: (full function name, percentage, instruction_count)
+    best_attempts: Dict[str, Tuple[str, float, int]] = {}
 
     # Find all match_log.txt files
     for match_log in nonmatchings_dir.rglob('match_log.txt'):
@@ -139,12 +163,21 @@ def find_promising_functions(repo_root: Path) -> List[Tuple[str, float]]:
         if best_match is not None:
             base_name = get_base_function_name(function_name)
 
+            # Find the corresponding .s file in asm/nonmatchings to count instructions
+            asm_file = None
+            for s_file in asm_nonmatchings.rglob(f'{base_name}.s'):
+                asm_file = s_file
+                break
+
+            instruction_count = count_asm_instructions(asm_file) if asm_file else 0
+
             # Keep only the best attempt for each base function
-            if base_name not in best_attempts or best_match > best_attempts[base_name][1]:
-                best_attempts[base_name] = (function_name, best_match)
+            if (base_name not in best_attempts or
+                best_match > best_attempts[base_name][1]):
+                best_attempts[base_name] = (function_name, best_match, instruction_count)
 
     # Convert to list and sort by percentage descending
-    results = [(name, pct) for name, pct in best_attempts.values()]
+    results = [(name, pct, instr) for name, pct, instr in best_attempts.values()]
     results.sort(key=lambda x: x[1], reverse=True)
 
     return results
@@ -163,12 +196,12 @@ def main():
         return 0
 
     # Print header
-    print(f"{'Function Name':<40} {'Best Match %':>12}")
-    print("-" * 53)
+    print(f"{'Function Name':<40} {'Ins':>5} {'Best Match %':>12}")
+    print("-" * 60)
 
     # Print results
-    for function_name, percentage in functions:
-        print(f"{function_name:<40} {percentage:>11.2f}%")
+    for function_name, percentage, instruction_count in functions:
+        print(f"{function_name:<40} {instruction_count:>4} {percentage:>11.2f}%")
 
     print(f"\nTotal: {len(functions)} unmatched functions")
 
