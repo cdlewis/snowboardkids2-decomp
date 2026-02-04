@@ -419,7 +419,7 @@ s32 crazyJungleBossChaseIntroPhase(Arg0Struct *arg0) {
     arg0->velocity.z -= arg0->velocity.z / 8;
     arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
-    func_8005D180_5DD80(arg0, 0);
+    advancePlayerLeanAnimationAuto(arg0, 0);
 
     return 0;
 }
@@ -495,7 +495,7 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
     arg0->velocity.y += -0x10000;
 
     applyClampedVelocityToPosition((Player *)arg0);
-    if (func_8005D180_5DD80(arg0, 1) != 0) {
+    if (advancePlayerLeanAnimationAuto(arg0, 1) != 0) {
         arg0->unkB90 = 0;
     }
 
@@ -526,7 +526,7 @@ s32 crazyJungleBossChaseExitPhase(Arg0Struct *arg0) {
     arg0->velocity.z -= arg0->velocity.z / 8;
     arg0->velocity.y += -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
-    func_8005D180_5DD80(arg0, 0);
+    advancePlayerLeanAnimationAuto(arg0, 0);
 
     return 0;
 }
@@ -583,7 +583,7 @@ s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0) {
     arg0->velocity.z = 0;
     arg0->velocity.y = arg0->velocity.y + -0x8000;
     applyClampedVelocityToPosition((Player *)arg0);
-    func_8005D180_5DD80(arg0, 2);
+    advancePlayerLeanAnimationAuto(arg0, 2);
 
     if (arg0->animFlags & 1) {
     } else {

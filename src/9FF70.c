@@ -208,7 +208,7 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
     arg0->velocity.z = 0;
     arg0->velocity.y = arg0->velocity.y - arg0->unkAB8;
     applyClampedVelocityToPosition(arg0);
-    func_8005D180_5DD80(arg0, 0);
+    advancePlayerLeanAnimationAuto(arg0, 0);
     return 0;
 }
 
@@ -255,11 +255,11 @@ s32 updatePlayerSlidingConstrained(Player *player) {
     applyClampedVelocityToPosition(player);
 
     if (player->behaviorCounter == 0) {
-        if (func_8005D308_5DF08(player, 0x21) != 0) {
+        if (advancePlayerLeanAnimation(player, 0x21) != 0) {
             player->behaviorCounter++;
         }
     } else {
-        func_8005D180_5DD80(player, 0x22);
+        advancePlayerLeanAnimationAuto(player, 0x22);
     }
 
     setPlayerBodyPartAnimState(player, 1, 0);
@@ -487,7 +487,7 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
     applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
     applyBoostVelocity(player);
 
-    if (func_8005D308_5DF08(player, 6) != 0) {
+    if (advancePlayerLeanAnimation(player, 6) != 0) {
         player->unkBC2 = 6;
         setPlayerBehaviorPhase(player, 0);
     }
@@ -542,7 +542,7 @@ s32 initPostTrickLandingStep(Player *player) {
         }
     }
 
-    if (func_8005D308_5DF08(player, 5) != 0) {
+    if (advancePlayerLeanAnimation(player, 5) != 0) {
         setPlayerBehaviorPhase(player, 0);
     }
 
@@ -593,7 +593,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
     }
 
     getTrickType(player);
-    func_8005D308_5DF08(player, 3);
+    advancePlayerLeanAnimation(player, 3);
 
     player->unkB8C -= 1;
     if (player->unkB8C == 0) {
@@ -650,7 +650,7 @@ s32 updatePostTrickChargingStep(Player *player) {
         player->behaviorStep += 1;
     }
 
-    func_8005D308_5DF08(player, 3);
+    advancePlayerLeanAnimation(player, 3);
 
     if (shouldInitiateSharpTurn((shouldInitiateSharpTurn_arg *)player, steeringValue) != 0) {
         setPlayerBehaviorPhase(player, 2);
@@ -809,7 +809,7 @@ s32 updatePostTrickDescentStep(Player *player) {
         if (player->behaviorCounter == 0) {
             setPlayerBehaviorPhase(player, 0);
         }
-        func_8005D308_5DF08(player, 3);
+        advancePlayerLeanAnimation(player, 3);
         func_80058CFC_598FC(player);
         return 0;
     }
@@ -1340,11 +1340,11 @@ void updateFlipSpinTrickAnimation(Player *player) {
                 player->unkBD5 = player->unkBD5 + 1;
                 player->animFlags |= 0x8000;
             }
-            func_8005D308_5DF08(player, player->unkBD6);
+            advancePlayerLeanAnimation(player, player->unkBD6);
             break;
 
         case 2:
-            animId = func_8005D308_5DF08(player, player->unkBD6);
+            animId = advancePlayerLeanAnimation(player, player->unkBD6);
             if (animId != 0) {
                 if (player->unkBD6 == 0x17) {
                     addSpinTrickScore(player, 0);
@@ -1374,7 +1374,7 @@ void updateFlipSpinTrickAnimation(Player *player) {
             break;
 
         case 3:
-            animId = func_8005D308_5DF08(player, player->unkBD6);
+            animId = advancePlayerLeanAnimation(player, player->unkBD6);
             if (animId != 0) {
                 if (player->unkBD7 != 0) {
                     player->unkBD5 = 2;
@@ -1436,7 +1436,7 @@ s32 updateRaceFinishWaitingStep(Player *player) {
     player->velocity.y -= 0x6000;
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
-    func_8005D180_5DD80(player, 0);
+    advancePlayerLeanAnimationAuto(player, 0);
     if (gameState->showResultHUD != 0) {
         switch (gameState->raceType) {
             case 0:
@@ -1492,13 +1492,13 @@ s32 updateRaceFinishWinStep(Player *player) {
 
     switch (player->behaviorCounter) {
         case 0:
-            if (func_8005D308_5DF08(player, 0x1B) != 0) {
+            if (advancePlayerLeanAnimation(player, 0x1B) != 0) {
                 player->behaviorCounter = player->behaviorCounter + 1;
                 playRaceWinVoice(player);
             }
             break;
         case 1:
-            if (func_8005D308_5DF08(player, 0x1D) != 0) {
+            if (advancePlayerLeanAnimation(player, 0x1D) != 0) {
                 player->unkB8C = 0x14;
                 player->behaviorCounter = player->behaviorCounter + 1;
             }
@@ -1511,13 +1511,13 @@ s32 updateRaceFinishWinStep(Player *player) {
             }
             break;
         case 3:
-            if (func_8005D308_5DF08(player, 0x1C) == 0) {
+            if (advancePlayerLeanAnimation(player, 0x1C) == 0) {
                 goto end;
             }
             player->behaviorCounter = player->behaviorCounter + 1;
             break;
         case 4:
-            if (func_8005D308_5DF08(player, 0x1D) != 0) {
+            if (advancePlayerLeanAnimation(player, 0x1D) != 0) {
                 player->behaviorCounter = 2;
                 player->unkB8C = 0x14;
             }
@@ -1560,7 +1560,7 @@ s32 updateRaceFinishLoseStep(Player *player) {
 
     switch (state) {
         case 0:
-            if (func_8005D308_5DF08(player, 0x1E)) {
+            if (advancePlayerLeanAnimation(player, 0x1E)) {
                 temp = player->behaviorCounter;
                 temp++;
                 player->behaviorCounter = temp;
@@ -1568,7 +1568,7 @@ s32 updateRaceFinishLoseStep(Player *player) {
             break;
 
         case 1:
-            if (func_8005D308_5DF08(player, 0x20)) {
+            if (advancePlayerLeanAnimation(player, 0x20)) {
                 velocityY = 0x14;
                 temp = player->behaviorCounter;
                 player->unkB8C = velocityY;
@@ -1590,7 +1590,7 @@ s32 updateRaceFinishLoseStep(Player *player) {
             break;
 
         case 3:
-            if (func_8005D308_5DF08(player, 0x1F)) {
+            if (advancePlayerLeanAnimation(player, 0x1F)) {
                 temp = player->behaviorCounter;
                 temp++;
                 player->behaviorCounter = temp;
@@ -1598,7 +1598,7 @@ s32 updateRaceFinishLoseStep(Player *player) {
             break;
 
         case 4:
-            if (func_8005D308_5DF08(player, 0x20)) {
+            if (advancePlayerLeanAnimation(player, 0x20)) {
                 player->behaviorCounter = 2;
                 player->unkB8C = 0x14;
             }
@@ -1911,7 +1911,7 @@ s32 updateStunnedAirbornePhase(Player *player) {
     player->velocity.z = velZ - (velZ >> 4);
     decayPlayerAirborneAngles(player);
     applyClampedVelocityToPosition(player);
-    if (func_8005D308_5DF08(player, 8) != 0) {
+    if (advancePlayerLeanAnimation(player, 8) != 0) {
         player->aiLaneWidth = player->aiLaneWidth / 2;
         resetPlayerBehaviorToDefault(player);
     }
@@ -1964,7 +1964,7 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
     player->velocity.z = velZ - (velZ >> 4);
     decayPlayerAirborneAngles(player);
     applyClampedVelocityToPosition(player);
-    if (func_8005D308_5DF08(player, 7) != 0) {
+    if (advancePlayerLeanAnimation(player, 7) != 0) {
         player->aiLaneWidth = player->aiLaneWidth / 2;
         resetPlayerBehaviorToDefault(player);
     }
@@ -1981,7 +1981,7 @@ s32 updateStunnedFallingPhase(Player *player) {
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
 
-    if (func_8005D308_5DF08(player, 9) != 0) {
+    if (advancePlayerLeanAnimation(player, 9) != 0) {
         if ((player->animFlags & 1) == 0) {
             setPlayerBehaviorPhase(player, 3);
         }
@@ -2024,7 +2024,7 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
 
-    if (func_8005D308_5DF08(player, 0xA) != 0) {
+    if (advancePlayerLeanAnimation(player, 0xA) != 0) {
         if ((player->animFlags & 1) == 0) {
             if (player->unkB8C == 0) {
                 distSq = (s64)player->velocity.x * player->velocity.x + (s64)player->velocity.z * player->velocity.z;
@@ -2087,7 +2087,7 @@ s32 updateStunnedRecoveryFallingPhase(Player *player) {
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
 
-    if (func_8005D308_5DF08(player, 0xB) != 0) {
+    if (advancePlayerLeanAnimation(player, 0xB) != 0) {
         resetPlayerBehaviorToDefault(player);
     }
 
@@ -2133,7 +2133,7 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
 
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
-    func_8005D180_5DD80(player, 0xC);
+    advancePlayerLeanAnimationAuto(player, 0xC);
 
     if (player->unkB8C == 0) {
         setPlayerBehaviorPhase(player, 2);
@@ -2184,7 +2184,7 @@ s32 updateEdgeFallRecoveryGetUpPhase(Player *arg0) {
 
     decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
-    func_8005D180_5DD80(arg0, 0xC);
+    advancePlayerLeanAnimationAuto(arg0, 0xC);
 
     if (arg0->unkBC9 != 1) {
         if (!(arg0->animFlags & 1)) {
@@ -2244,7 +2244,7 @@ s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
     decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
-    if (func_8005D308_5DF08(arg0, 0xE) != 0) {
+    if (advancePlayerLeanAnimation(arg0, 0xE) != 0) {
         if ((arg0->animFlags & 1) == 0) {
             setPlayerBehaviorPhase(arg0, 8);
         }
@@ -2286,7 +2286,7 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
     decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
-    if (func_8005D308_5DF08(arg0, 0xF) != 0) {
+    if (advancePlayerLeanAnimation(arg0, 0xF) != 0) {
         if (!(arg0->animFlags & 1)) {
             if (arg0->unkB8C == 0) {
                 arg0->behaviorFlags = 0;
@@ -2322,7 +2322,7 @@ s32 updateStunnedRecoverySlidePhase(Player *arg0) {
     decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
-    if (func_8005D308_5DF08(arg0, 0xE) != 0) {
+    if (advancePlayerLeanAnimation(arg0, 0xE) != 0) {
         setPlayerBehaviorPhase(arg0, 0xA);
     }
 
@@ -2356,7 +2356,7 @@ s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
     decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
-    if (func_8005D308_5DF08(arg0, 0xF) != 0) {
+    if (advancePlayerLeanAnimation(arg0, 0xF) != 0) {
         if ((arg0->animFlags & 1) == 0) {
             if (arg0->unkB8C == 0) {
                 setPlayerBehaviorPhase(arg0, 0xB);
@@ -2384,7 +2384,7 @@ s32 updateStunnedRecoveryEndPhase(Player *arg0) {
     arg0->behaviorFlags = 8;
     arg0->worldPos.y = arg0->worldPos.y + 0xFFFF0000;
     decayPlayerSteeringAngles(arg0);
-    func_8005D180_5DD80(arg0, 0);
+    advancePlayerLeanAnimationAuto(arg0, 0);
     setPlayerBodyPartAnimState(arg0, 3, 0);
     return 0;
 }
@@ -2431,7 +2431,7 @@ s32 updateStunnedRecoveryStandUpPhase(Player *arg0) {
     decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
 
-    if (func_8005D308_5DF08(arg0, 0x10) != 0) {
+    if (advancePlayerLeanAnimation(arg0, 0x10) != 0) {
         resetPlayerBehaviorToDefault(arg0);
     }
 
@@ -2475,7 +2475,7 @@ s32 updateKnockbackAirborneLaunchPhase(Player *player) {
     player->rotY += 0x40;
 
     applyVelocityToPosition(player);
-    func_8005D308_5DF08(player, 9);
+    advancePlayerLeanAnimation(player, 9);
 
     if (player->unkB8C != 0) {
         player->unkB8C--;
@@ -2509,7 +2509,7 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
         arg0->leanAnimIndex = 0xFFFF;
         arg0->animFlags |= 0x20;
         arg0->ufoFlags &= 0xFE;
-        func_8005D308_5DF08(arg0, 0xE);
+        advancePlayerLeanAnimation(arg0, 0xE);
     }
     if (arg0->behaviorStep == 1) {
         scheduleShieldEffect(arg0);
@@ -2546,7 +2546,7 @@ s32 updateStunnedBounceFallPhase(Player *arg0) {
     decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
 
-    if (func_8005D308_5DF08(arg0, 0xE) != 0) {
+    if (advancePlayerLeanAnimation(arg0, 0xE) != 0) {
         if ((arg0->animFlags & 1) == 0) {
             setPlayerBehaviorPhase(arg0, 8);
         }
@@ -2580,7 +2580,7 @@ s32 updateStunnedBounceFallRecoverPhase(Player *arg0) {
     }
 
     applyClampedVelocityToPosition(arg0);
-    func_8005D308_5DF08(arg0, 0);
+    advancePlayerLeanAnimation(arg0, 0);
 
     if (arg0->unkB8C == 0) {
         arg0->behaviorFlags = 0;
@@ -2625,7 +2625,7 @@ s32 updateStunnedBounceLaunchPhase(Player *arg0) {
 
     decayPlayerSteeringAngles(arg0);
     applyClampedVelocityToPosition(arg0);
-    func_8005D180_5DD80(arg0, 0xC);
+    advancePlayerLeanAnimationAuto(arg0, 0xC);
 
     if (arg0->unkB8C == 0) {
         setPlayerBehaviorPhase(arg0, 2);
@@ -2669,7 +2669,7 @@ s32 updateKnockbackAirbornePhase(Player *arg0) {
     decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
 
-    if (func_8005D308_5DF08(arg0, 9) != 0) {
+    if (advancePlayerLeanAnimation(arg0, 9) != 0) {
         if ((arg0->animFlags & 1) == 0) {
             setPlayerBehaviorPhase(arg0, 0x14);
         }
@@ -2711,7 +2711,7 @@ s32 updateKnockbackBounceLaunchPhase(Player *player) {
 
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
-    func_8005D180_5DD80(player, 0xC);
+    advancePlayerLeanAnimationAuto(player, 0xC);
 
     if (player->unkB8C == 0) {
         setPlayerBehaviorPhase(player, 2);
@@ -2739,7 +2739,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
         player->behaviorStep = step;
         player->unkB8C = 0x8000;
         player->leanAnimIndex = 0xFFFF;
-        func_8005D308_5DF08(player, 0xE);
+        advancePlayerLeanAnimation(player, 0xE);
     }
     if ((player->behaviorStep == 1) && (createLiftEffect(player) != 0)) {
         player->behaviorStep = player->behaviorStep + 1;
@@ -2826,7 +2826,7 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
         arg0->unkB8C = 0;
         arg0->velocity.y = 0;
         arg0->leanAnimIndex = 0xFFFF;
-        func_8005D308_5DF08(arg0, 0xB);
+        advancePlayerLeanAnimation(arg0, 0xB);
         queueSoundAtPosition(&arg0->worldPos, 0x34);
         if (!(arg0->animFlags & 1)) {
             spawnCharacterAttackEffectByType(arg0, arg0->unkBCC & 0xF);
@@ -2927,11 +2927,11 @@ s32 updateKnockbackRecoveryStep(Player *player) {
     player->unkB8C -= 1;
 
     if (player->behaviorCounter != 0) {
-        if (func_8005D308_5DF08(player, 6) != 0) {
+        if (advancePlayerLeanAnimation(player, 6) != 0) {
             player->behaviorCounter = 0;
         }
     } else {
-        func_8005D180_5DD80(player, 0);
+        advancePlayerLeanAnimationAuto(player, 0);
     }
 
     if (player->unkB8C == 0) {
@@ -2955,7 +2955,7 @@ s32 fallToTrackCenterStep(Player *player) {
     applyClampedVelocityToPosition(player);
     decayPlayerSteeringAngles(player);
 
-    if (func_8005D308_5DF08(player, 3) != 0) {
+    if (advancePlayerLeanAnimation(player, 3) != 0) {
         player->behaviorCounter = 0;
         player->behaviorStep = player->behaviorStep + 1;
     }
@@ -2986,7 +2986,7 @@ s32 slideDuringKnockbackRecoveryStep(Player *player) {
     }
 
     applyClampedVelocityToPosition(player);
-    func_8005D308_5DF08(player, 0xD);
+    advancePlayerLeanAnimation(player, 0xD);
 
     return 0;
 }
@@ -3013,7 +3013,7 @@ s32 slideDiagonallyDuringKnockbackRecoveryStep(Player *player) {
         player->behaviorCounter = 0;
     }
 
-    func_8005D308_5DF08(player, 0xD);
+    advancePlayerLeanAnimation(player, 0xD);
     return 0;
 }
 
@@ -3066,7 +3066,7 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
         player->behaviorStep++;
     }
 
-    func_8005D308_5DF08(player, 0xD);
+    advancePlayerLeanAnimation(player, 0xD);
     return 0;
 }
 
@@ -3085,7 +3085,7 @@ s32 slideForwardAndResetStep(Player *player) {
         resetPlayerBehaviorToDefault(player);
     }
 
-    func_8005D308_5DF08(player, 0xD);
+    advancePlayerLeanAnimation(player, 0xD);
     return 0;
 }
 
@@ -3095,7 +3095,7 @@ s32 dropDownwardStep(Player *player) {
     player->velocity.y -= 0x6000;
     applyClampedVelocityToPosition(player);
     decayPlayerSteeringAngles(player);
-    func_8005D308_5DF08(player, 3);
+    advancePlayerLeanAnimation(player, 3);
 
     player->unkB8C--;
     if (player->unkB8C == 0) {
@@ -3130,7 +3130,7 @@ s32 jumpUpwardStep(Player *player) {
     player->unk468 = player->unk468 - 0x6000;
     player->worldPos.y = updatedYOffset + player->unk480;
     decayPlayerSteeringAngles(player);
-    func_8005D308_5DF08(player, 4);
+    advancePlayerLeanAnimation(player, 4);
     if (player->unkB8C == 16) {
         s32 flags = player->animFlags;
         u8 step = player->behaviorStep;
@@ -3150,7 +3150,7 @@ s32 restoreStoredPositionStep(Player *arg0) {
     arg0->worldPos.z = arg0->storedPosZ;
     arg0->unkA8E = arg0->storedRotY;
 
-    if (func_8005D308_5DF08(arg0, 5) != 0) {
+    if (advancePlayerLeanAnimation(arg0, 5) != 0) {
         arg0->behaviorCounter = 0;
         arg0->behaviorStep = arg0->behaviorStep + 1;
     }
@@ -3189,7 +3189,7 @@ s32 handleUfoStoredPositionStep(Player *player) {
         }
     }
 
-    func_8005D308_5DF08(player, 0);
+    advancePlayerLeanAnimation(player, 0);
 
     return 0;
 }
@@ -3200,7 +3200,7 @@ s32 handleUfoAbductionRecoveryStep(Player *arg0) {
     arg0->worldPos.z = arg0->storedPosZ;
     arg0->unkA8E = arg0->storedRotY;
 
-    func_8005D308_5DF08(arg0, 0);
+    advancePlayerLeanAnimation(arg0, 0);
 
     if (arg0->ufoFlags & 0x4) {
         arg0->unkB8C = 6;
@@ -3216,7 +3216,7 @@ s32 waitAtStoredPositionStep(Player *arg0) {
     arg0->worldPos.z = arg0->storedPosZ;
     arg0->unkA8E = arg0->storedRotY;
 
-    func_8005D308_5DF08(arg0, 3);
+    advancePlayerLeanAnimation(arg0, 3);
 
     arg0->unkB8C = arg0->unkB8C - 1;
     if (arg0->unkB8C == 0) {
@@ -3247,7 +3247,7 @@ s32 handleFallFromUfoStep(Player *player) {
         resetPlayerBehaviorToDefault(player);
     }
 
-    func_8005D308_5DF08(player, 4);
+    advancePlayerLeanAnimation(player, 4);
     return 0;
 }
 
@@ -3257,7 +3257,7 @@ s32 dropAfterUfoReleaseStep(Player *player) {
     player->velocity.y = player->velocity.y - 0x6000;
     applyClampedVelocityToPosition(player);
     decayPlayerSteeringAngles(player);
-    func_8005D180_5DD80(player, 0);
+    advancePlayerLeanAnimationAuto(player, 0);
 
     player->unkB8C = player->unkB8C - 1;
     if (player->unkB8C == 0) {
@@ -3277,7 +3277,7 @@ s32 spinRampUpStep(Player *arg0) {
     arg0->velocity.y = arg0->velocity.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
-    func_8005D180_5DD80(arg0, 0);
+    advancePlayerLeanAnimationAuto(arg0, 0);
     arg0->rotY = arg0->rotY + arg0->unkB8C;
     arg0->unkB8C = arg0->unkB8C + 0x10;
 
@@ -3303,7 +3303,7 @@ s32 maintainMaxSpinStep(Player *arg0) {
     arg0->velocity.y = arg0->velocity.y - 0x6000;
     applyClampedVelocityToPosition(arg0);
     decayPlayerSteeringAngles(arg0);
-    func_8005D180_5DD80(arg0, 0);
+    advancePlayerLeanAnimationAuto(arg0, 0);
     arg0->rotY = arg0->rotY + 0x400;
     timerRemaining = arg0->unkB8C - 1;
     arg0->unkB8C = timerRemaining;
@@ -3340,7 +3340,7 @@ s32 spinRampDownStep(Player *player) {
     player->velocity.y = player->velocity.y - 0x6000;
     applyClampedVelocityToPosition(player);
     decayPlayerSteeringAngles(player);
-    func_8005D180_5DD80(player, 0);
+    advancePlayerLeanAnimationAuto(player, 0);
 
     spinDecrementCounter = player->unkBA0;
     spinIncrementCounter = player->unkBA2;
@@ -3375,7 +3375,7 @@ s32 spinFadeInWaitStep(Player *player) {
     player->velocity.y = player->velocity.y - 0x6000;
     applyClampedVelocityToPosition(player);
     decayPlayerSteeringAngles(player);
-    func_8005D180_5DD80(player, 0);
+    advancePlayerLeanAnimationAuto(player, 0);
     player->rotY = player->rotY + 0x400;
 
     timerRemaining = player->unkB8C - 1;
@@ -3425,7 +3425,7 @@ s32 warpToShortcutSpinUpStep(Player *player) {
     }
 
     decayPlayerSteeringAngles(player);
-    func_8005D180_5DD80(player, 0);
+    advancePlayerLeanAnimationAuto(player, 0);
 
     player->unkBA0 += 0x400;
     player->unkB8C = 0x400;
@@ -3446,7 +3446,7 @@ s32 shortcutSpinDownStep(Player *player) {
     s32 newSpinRate;
 
     decayPlayerSteeringAngles(player);
-    func_8005D180_5DD80(player, 0);
+    advancePlayerLeanAnimationAuto(player, 0);
 
     player->rotY = player->rotY + player->unkB8C;
     newSpinRate = player->unkB8C - 0x10;
@@ -3463,7 +3463,7 @@ s32 shortcutSpinDownStep(Player *player) {
 }
 
 s32 shortcutPostSpinWaitStep(Player *player) {
-    func_8005D308_5DF08(player, 3);
+    advancePlayerLeanAnimation(player, 3);
 
     player->unkB8C = player->unkB8C - 1;
     if (player->unkB8C == 0) {
@@ -3496,7 +3496,7 @@ s32 shortcutLaunchStep(Player *player) {
         resetPlayerBehaviorToDefault(player);
     }
 
-    func_8005D308_5DF08(player, 4);
+    advancePlayerLeanAnimation(player, 4);
     return 0;
 }
 

@@ -47,7 +47,7 @@ void clampPlayerVelocityToMaxSpeed(Player *player) {
     }
 }
 
-s32 func_8005D180_5DD80(void *arg0_, s16 arg1) {
+s32 advancePlayerLeanAnimationAuto(void *arg0_, s16 arg1) {
     Player *arg0 = arg0_;
     s32 result;
     s32 flags;
@@ -90,7 +90,7 @@ s32 func_8005D180_5DD80(void *arg0_, s16 arg1) {
     return result;
 }
 
-s32 func_8005D308_5DF08(void *arg0_, s16 arg1) {
+s32 advancePlayerLeanAnimation(void *arg0_, s16 arg1) {
     Player *arg0 = arg0_;
     s32 result;
     s32 flags;

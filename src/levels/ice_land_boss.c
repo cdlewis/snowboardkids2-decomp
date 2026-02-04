@@ -607,9 +607,9 @@ s32 iceLandBossChaseIntroPhase(IceLandBossAttackArg *arg0) {
     applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->bossFlags & 0x400000) {
-        func_8005D180_5DD80(arg0, 2);
+        advancePlayerLeanAnimationAuto(arg0, 2);
     } else {
-        func_8005D180_5DD80(arg0, 0);
+        advancePlayerLeanAnimationAuto(arg0, 0);
     }
 
     return 0;
@@ -720,7 +720,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     arg0->unkA9E = arg0->unkA9E + angleDiff;
 
     if (arg0->animFlags & 0x400000) {
-        if (func_8005D180_5DD80(arg0, 3) != 0) {
+        if (advancePlayerLeanAnimationAuto(arg0, 3) != 0) {
             arg0->unkB90 = 0;
         }
 
@@ -743,7 +743,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
             arg0->unkB8C = arg0->unkB8C - 1;
         }
     } else {
-        if (func_8005D180_5DD80(arg0, 1) != 0) {
+        if (advancePlayerLeanAnimationAuto(arg0, 1) != 0) {
             arg0->unkB90 = 0;
         }
 
@@ -843,9 +843,9 @@ s32 iceLandBossChaseExitPhase(IceLandBossAttackArg *arg0) {
     applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->bossFlags & 0x400000) {
-        func_8005D180_5DD80(arg0, 2);
+        advancePlayerLeanAnimationAuto(arg0, 2);
     } else {
-        func_8005D180_5DD80(arg0, 0);
+        advancePlayerLeanAnimationAuto(arg0, 0);
     }
 
     return 0;
@@ -938,7 +938,7 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
     boss->velocity.y += -0x10000;
     applyClampedVelocityToPosition(boss);
 
-    if (func_8005D308_5DF08(boss, 4) != 0) {
+    if (advancePlayerLeanAnimation(boss, 4) != 0) {
         boss->behaviorFlags = 0;
         boss->behaviorMode = 1;
         boss->behaviorPhase = 1;
@@ -954,7 +954,7 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
             spawnSparkleEffectWithPlayer(&tempVec, boss->playerIndex);
             setIceBossFlyingMode(boss);
             boss->unkBDB = 3;
-            func_8005D180_5DD80(boss, 2);
+            advancePlayerLeanAnimationAuto(boss, 2);
         }
     }
 
@@ -982,7 +982,7 @@ s32 iceLandBossHoverAttackPhase(Player *arg0) {
     arg0->velocity.y = arg0->velocity.y + (-0x8000);
 
     applyClampedVelocityToPosition(arg0);
-    func_8005D180_5DD80(arg0, 5);
+    advancePlayerLeanAnimationAuto(arg0, 5);
 
     if ((D_8009ADE0_9B9E0 & 0xF) == 0) {
         spawnBossHomingProjectileVariant2Task(arg0);
@@ -1017,13 +1017,13 @@ s32 iceLandBossDefeatedBehavior(IceLandBossAttackArg *arg0) {
     applyClampedVelocityToPosition((Player *)arg0);
 
     if (arg0->behaviorStep == 0) {
-        if (func_8005D308_5DF08(arg0, 6) != 0) {
+        if (advancePlayerLeanAnimation(arg0, 6) != 0) {
             arg0->behaviorStep = arg0->behaviorStep + 1;
         }
         return 0;
     }
 
-    func_8005D180_5DD80(arg0, 7);
+    advancePlayerLeanAnimationAuto(arg0, 7);
 
     return 0;
 }
