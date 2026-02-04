@@ -1055,7 +1055,55 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/ice_land_boss", func_800BC61C_B1B0C);
+extern void *getIndexedAnimationDataPtr(void *, s16);
+
+typedef struct {
+    u8 boneIndex;
+    u8 parentBone;
+} BoneHierarchyEntry;
+
+void func_800BC61C_B1B0C(Player *arg0) {
+    Transform3D sp10;
+    Transform3D sp30;
+    BoneHierarchyEntry *animData;
+    s32 i;
+    u8 parentBone;
+    void *animDataPtr;
+    Transform3D *temp;
+
+    animDataPtr = &arg0->unk9B0.animation_data;
+    animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
+    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, animDataPtr);
+    func_8006B084_6BC84(&arg0->unk9B0, animDataPtr, &arg0->padding2a_3[0x480]);
+
+    for (i = 0; i < arg0->leanBoneCount; i++) {
+        if (animData[i].parentBone == 0xFF) {
+            if (arg0->behaviorFlags & 0x10) {
+                memcpy(&sp30, &identityMatrix, sizeof(Transform3D));
+                sp30.m[1][1] = arg0->unkB9E;
+                func_8006B084_6BC84(&arg0->unk488[animData[i].boneIndex].prev_position, &sp30, &sp10);
+                func_8006B084_6BC84(&sp10, &arg0->padding2a_3[0x480], animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0);
+            } else {
+                func_8006B084_6BC84(
+                    &arg0->unk488[animData[i].boneIndex].prev_position,
+                    &arg0->padding2a_3[0x480],
+                    animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0
+                );
+            }
+        } else {
+            func_8006B084_6BC84(
+                &arg0->unk488[animData[i].boneIndex].prev_position,
+                animData[i].parentBone * 0x3C + 0x38 + (u8 *)arg0,
+                animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0
+            );
+        }
+    }
+
+    temp = &sp10;
+    memcpy(temp, &arg0->unk164, sizeof(Transform3D));
+    createYRotationMatrix(&sp30, (u16)arg0->unkA9E);
+    func_8006BDBC_6C9BC((BoneAnimationState *)&sp30, &sp10, &arg0->unk164);
+}
 
 void renderIceLandBossWithSurfaceColors(Player *arg0) {
     s32 pad[36];
