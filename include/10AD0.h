@@ -35,12 +35,23 @@ typedef struct {
     /* 0x0A */ u8 paletteIndex;
 } SpriteRenderArg;
 
+typedef struct {
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ SpriteSheetData *spriteData;
+    /* 0x08 */ u16 frameIndex;
+    /* 0x0A */ u8 paletteIndex;
+    /* 0x0B */ u8 alpha;
+    /* 0x0C */ u8 tileMode;
+    /* 0x0D */ u8 overridePaletteCount;
+} TextRenderArg;
+
 void renderSpriteFrame(SpriteRenderArg *arg0);
 void renderSpriteFrameWithPalette(SpriteRenderArg *arg0);
 void renderHalfSizeSpriteFrame(SpriteRenderArg *arg0);
 void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *arg0);
 void func_80010C98_11898(void *arg0);
-void func_80012FA8_13BA8(void);
+void func_80012FA8_13BA8(TextRenderArg *arg0);
 void initDefaultFontPalette(void);
 void func_80013EA0_14AA0(s32, u16, u16, u16, s32);
 void func_80012518_13118(void);
