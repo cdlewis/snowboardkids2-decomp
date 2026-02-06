@@ -1,11 +1,24 @@
 #include "90F0.h"
 
 #include "common.h"
+#include "gbi.h"
+#include "geometry.h"
 #include "graphics.h"
 #include "task_scheduler.h"
+#include "ultra64.h"
 
 extern s16 D_8008C930_8D530[][10];
 extern s32 D_8008C920_8D520[];
+
+extern Gfx D_8008CC40_8D840[];
+extern Vec3i D_8009A8A4_9B4A4;
+extern s32 D_8009F1F0_9FDF0;
+extern s16 gGraphicsMode;
+extern s32 gLookAtPtr;
+extern Gfx *gRegionAllocPtr;
+extern s16 identityMatrix[];
+extern void *arenaAlloc16(s32 size);
+extern s32 isObjectCulled(Vec3i *arg0);
 
 // Data pointers for different sprite dimension combinations
 extern void *D_8008C9E8_8D5E8;
@@ -25,13 +38,180 @@ s16 getSpriteAssetId(s32 index) {
     return D_8008C930_8D530[index][0];
 }
 
-INCLUDE_ASM("asm/nonmatchings/90F0", func_80008514_9114);
+typedef struct {
+    /* 0x00 */ u32 vertices;
+    /* 0x04 */ Vec3i position;
+    /* 0x10 */ DataTable_19E80 *table;
+    /* 0x14 */ u16 index;
+    /* 0x16 */ u8 padding16;
+    /* 0x17 */ u8 flags;
+    /* 0x18 */ Mtx *unk18;
+    /* 0x1C */ Mtx *unk1C;
+    /* 0x20 */ Mtx *unk20;
+    /* 0x24 */ Mtx *unk24;
+    /* 0x28 */ s32 scaleX;
+    /* 0x2C */ s32 scaleY;
+    /* 0x30 */ u16 zRotation;
+    /* 0x32 */ s16 texIndex;
+} OpaqueSpriteStruct_90F0;
+
+void func_80008514_9114(OpaqueSpriteStruct_90F0 *arg0) {
+    OutputStruct_19E80 sp10;
+    Transform3D sp20;
+    s32 t3;
+    s32 t2;
+    s32 temp_t4;
+    s32 var_v1;
+    s32 scaleX_temp;
+    s32 scaleY_temp;
+    s16 scale_x;
+    s16 scale_y;
+
+    if (isObjectCulled(&arg0->position) != 0) {
+        return;
+    }
+
+    getTableEntryByU16Index(arg0->table, arg0->index, &sp10);
+    temp_t4 = (s32)sp10.index_ptr + (arg0->texIndex << 5);
+    t3 = 0;
+
+    if (gGraphicsMode != 0x202) {
+        var_v1 = sp10.field1;
+    loop_3:
+        if (!(var_v1 & 1)) {
+            t3 += 1;
+            var_v1 = var_v1 >> 1;
+            if (t3 < 0x10) {
+                goto loop_3;
+            }
+        }
+        var_v1 = sp10.field2;
+        t2 = 0;
+    loop_6:
+        if (!(var_v1 & 1)) {
+            t2 += 1;
+            var_v1 = var_v1 >> 1;
+            if (t2 < 0x10) {
+                goto loop_6;
+            }
+        }
+
+        gSPDisplayList(gRegionAllocPtr++, D_8008CC40_8D840);
+        gDPLoadTextureBlock_4b(
+            gRegionAllocPtr++,
+            sp10.data_ptr,
+            G_IM_FMT_CI,
+            sp10.field1,
+            sp10.field2,
+            0,
+            G_TX_CLAMP,
+            G_TX_CLAMP,
+            t3,
+            t2,
+            0,
+            0
+        );
+        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, temp_t4);
+    } else if (D_8009F1F0_9FDF0 != (s32)sp10.data_ptr) {
+        var_v1 = sp10.field1;
+    loop_16:
+        if (!(var_v1 & 1)) {
+            t3 += 1;
+            var_v1 = var_v1 >> 1;
+            if (t3 < 0x10) {
+                goto loop_16;
+            }
+        }
+        var_v1 = sp10.field2;
+        t2 = 0;
+    loop_19:
+        if (!(var_v1 & 1)) {
+            t2 += 1;
+            var_v1 = var_v1 >> 1;
+            if (t2 < 0x10) {
+                goto loop_19;
+            }
+        }
+
+        gDPPipeSync(gRegionAllocPtr++);
+        gDPLoadTextureBlock_4b(
+            gRegionAllocPtr++,
+            sp10.data_ptr,
+            G_IM_FMT_CI,
+            sp10.field1,
+            sp10.field2,
+            0,
+            G_TX_CLAMP,
+            G_TX_CLAMP,
+            t3,
+            t2,
+            0,
+            0
+        );
+        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, temp_t4);
+    } else {
+        gDPPipeSync(gRegionAllocPtr++);
+        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, temp_t4);
+    }
+
+    gGraphicsMode = 0x202;
+    memcpy(&D_8009F1F0_9FDF0, &sp10, 0xC);
+
+    if (arg0->unk18 == NULL) {
+        arg0->unk18 = arenaAlloc16(0x40);
+    }
+    if (arg0->unk1C == NULL) {
+        arg0->unk1C = arenaAlloc16(0x40);
+    }
+    if (arg0->unk20 == NULL) {
+        arg0->unk20 = arenaAlloc16(0x40);
+    }
+    if (arg0->unk24 == NULL) {
+        arg0->unk24 = arenaAlloc16(0x40);
+    }
+    if (arg0->unk18 != NULL && arg0->unk1C != NULL && arg0->unk20 != NULL && arg0->unk24 != NULL) {
+        memcpy(&sp20, identityMatrix, 0x20);
+        memcpy(&D_8009A8A4_9B4A4, &arg0->position, 0xC);
+        transform3DToMtx((u8 *)&D_8009A8A4_9B4A4 - 0x14, arg0->unk18);
+
+        memcpy(&sp20, identityMatrix, 0x20);
+        scaleX_temp = arg0->scaleX;
+        if (scaleX_temp < 0) {
+            scaleX_temp += 3;
+        }
+        scale_x = (scaleX_temp << 14) >> 16;
+        scaleY_temp = arg0->scaleY;
+        if (scaleY_temp < 0) {
+            scaleY_temp += 3;
+        }
+        scale_y = (scaleY_temp << 14) >> 16;
+        scaleMatrix(&sp20, scale_x, scale_y, 0x2000);
+        transform3DToMtx(&sp20, arg0->unk1C);
+
+        memcpy(&sp20, identityMatrix, 0x20);
+        if (arg0->flags & 1) {
+            createYRotationMatrix(&sp20, 0x1000);
+        }
+        transform3DToMtx(&sp20, arg0->unk20);
+
+        memcpy(&sp20, identityMatrix, 0x20);
+        createZRotationMatrix(&sp20, arg0->zRotation);
+        transform3DToMtx(&sp20, arg0->unk24);
+
+        gSPMatrix(gRegionAllocPtr++, arg0->unk18, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gRegionAllocPtr++, arg0->unk1C, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gRegionAllocPtr++, arg0->unk20, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gRegionAllocPtr++, arg0->unk24, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPVertex(gRegionAllocPtr++, arg0->vertices, 4, 0);
+        gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_80008D18_9918);
 
 INCLUDE_ASM("asm/nonmatchings/90F0", func_80009548_A148);
 
-extern void func_80008514_9114(void *);
 extern void func_80008D18_9918(void);
 extern void func_80009548_A148(void);
 
