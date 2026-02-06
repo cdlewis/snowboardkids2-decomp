@@ -51,7 +51,7 @@ void renderSpriteFrameWithPalette(SpriteRenderArg *arg0);
 void renderHalfSizeSpriteFrame(SpriteRenderArg *arg0);
 void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *arg0);
 void func_80010C98_11898(void *arg0);
-void func_80012FA8_13BA8(TextRenderArg *arg0);
+void renderAlphaBlendedTextSprite(TextRenderArg *arg0);
 void initDefaultFontPalette(void);
 void func_80013EA0_14AA0(s32, u16, u16, u16, s32);
 void func_80012518_13118(void);

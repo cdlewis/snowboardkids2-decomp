@@ -245,7 +245,7 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
             arg0->labelEntries[i].highlight.asShort = 0;
         }
 
-        debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0->iconEntries[i]);
+        debugEnqueueCallback(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
 
         func_80035DE0_369E0(
             arg0->textRenderAsset,
@@ -338,7 +338,7 @@ void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
                 arg0->textEntries[i].highlight = 0;
             }
 
-            debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0->iconEntries[i]);
+            debugEnqueueCallback(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
 
             func_80035DE0_369E0(
                 arg0->textRenderAsset,
@@ -400,7 +400,7 @@ void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
         }
         arg0[i].y = (alloc->selectedIndex * 32) - 32;
         arg0[i].highlightValue = alloc->itemValues[alloc->selectedIndex];
-        debugEnqueueCallback(8, 0, func_80012FA8_13BA8, &arg0[i]);
+        debugEnqueueCallback(8, 0, renderAlphaBlendedTextSprite, &arg0[i]);
     }
 }
 

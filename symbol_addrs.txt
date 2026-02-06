@@ -192,6 +192,7 @@ gSpriteRDPSetupDL = 0x8008D3D0; // rom:0x8DFD0 size:0x50
 gCachedPaletteAddr = 0x800A8A80; // size:0x4
 gCachedTextureAddr = 0x800AFCD0; // size:0x4
 renderSpriteFrameWithPalette = 0x80010240; // rom:0x10E40
+renderAlphaBlendedTextSprite = 0x80012FA8; // rom:0x13BA8
 sIntroFrameEvents = 0x80090780; // rom:0x91380
 sIntroCameraEvents = 0x8009079C; // rom:0x9139C size:0x44
 gIndicatorSpriteOffset = 0x800907E0; // rom:0x913E0

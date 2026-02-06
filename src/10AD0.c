@@ -372,7 +372,7 @@ INCLUDE_ASM("asm/nonmatchings/10AD0", func_80012518_13118);
 
 INCLUDE_ASM("asm/nonmatchings/10AD0", func_80012A58_13658);
 
-void func_80012FA8_13BA8(TextRenderArg *arg0) {
+void renderAlphaBlendedTextSprite(TextRenderArg *arg0) {
     s32 right;
     s32 bottom;
     s32 left;
@@ -382,7 +382,7 @@ void func_80012FA8_13BA8(TextRenderArg *arg0) {
     s32 paletteBase;
     u16 paletteMode;
     u16 format;
-    u16 unk4;
+    u16 paletteIndex;
     u8 tileMode;
     SpriteFrameEntry *frameEntry;
     s16 scaleS;
@@ -393,9 +393,9 @@ void func_80012FA8_13BA8(TextRenderArg *arg0) {
     frameEntry = &frameEntry[arg0->frameIndex];
 
     if (arg0->overridePaletteCount == 0) {
-        unk4 = frameEntry->paletteIndex;
+        paletteIndex = frameEntry->paletteIndex;
     } else {
-        unk4 = arg0->overridePaletteCount - 1;
+        paletteIndex = arg0->overridePaletteCount - 1;
     }
 
     tileMode = arg0->tileMode & 3;
@@ -450,7 +450,7 @@ void func_80012FA8_13BA8(TextRenderArg *arg0) {
         }
 
         if ((paletteMode & 0xFFFF) == 2) {
-            if ((unk4 & 0xFFFF) == 0xFE) {
+            if ((paletteIndex & 0xFFFF) == 0xFE) {
                 if (gCachedPaletteAddr != (s32)gDefaultFontPalette) {
                     gCachedPaletteAddr = (s32)gDefaultFontPalette;
                     if (format == 0) {
@@ -462,9 +462,9 @@ void func_80012FA8_13BA8(TextRenderArg *arg0) {
             } else {
                 gCachedPaletteAddr = 0;
                 if (format == 0) {
-                    gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteBase + ((unk4 & 0xFFFF) << 5));
+                    gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteBase + ((paletteIndex & 0xFFFF) << 5));
                 } else {
-                    gDPLoadTLUT_pal256(gRegionAllocPtr++, paletteBase + ((unk4 & 0xFFFF) << 5));
+                    gDPLoadTLUT_pal256(gRegionAllocPtr++, paletteBase + ((paletteIndex & 0xFFFF) << 5));
                 }
             }
         }
