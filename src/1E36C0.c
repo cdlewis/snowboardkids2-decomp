@@ -9,8 +9,8 @@ extern s8 gAnalogStickY;
 extern s8 gAnalogStickX;
 extern s32 gButtonsPressed;
 extern s32 gControllerInputs;
-extern s16 D_800BAD80_1E7E30[];
-extern s16 D_800BADB0_1E7E60[];
+extern s16 gCharacterEffectSpawnPoints[];
+extern s16 gCharacterEffectSpawnPointsBoard[];
 
 #define SLOT_ANIM_MODE_ROTATE_WITH_SPEED 0xB
 
@@ -878,7 +878,7 @@ void setupSlotMoveToWithBounce(CutsceneSlotData *slot, s32 *targetPos, s16 durat
     slot->unkA0 = gravity;
 }
 
-s32 func_800B7C48_1E4CF8(CutsceneSlotData *arg0, SceneModel *arg1) {
+s32 spawnCutsceneMovementEffects(CutsceneSlotData *arg0, SceneModel *arg1) {
     Transform3D localMatrix;
     Vec3i transformedVecs[4];
     Vec3i point1;
@@ -900,7 +900,7 @@ s32 func_800B7C48_1E4CF8(CutsceneSlotData *arg0, SceneModel *arg1) {
     var_s7 = 0;
     if ((arg1->index == 0x12) && (arg1->actionMode == 1)) {
         for (i = 0; i < 4; i++) {
-            transformVector(&D_800BADB0_1E7E60[i * 6], (s16 *)&arg1->unk18, &transformedVecs[i]);
+            transformVector(&gCharacterEffectSpawnPointsBoard[i * 6], (s16 *)&arg1->unk18, &transformedVecs[i]);
         }
     } else {
         if (hasModelGraphicsData(arg1) == 0) {
@@ -914,12 +914,12 @@ s32 func_800B7C48_1E4CF8(CutsceneSlotData *arg0, SceneModel *arg1) {
 
             memcpy(&localMatrix, &arg1->unk18, sizeof(Transform3D));
             for (i = 0; i < 4; i++) {
-                transformVector(&D_800BAD80_1E7E30[i * 6], (s16 *)&localMatrix, &transformedVecs[i]);
+                transformVector(&gCharacterEffectSpawnPoints[i * 6], (s16 *)&localMatrix, &transformedVecs[i]);
             }
         } else {
             do {
                 for (i = 0; i < 4; i++) {
-                    transformVector(&D_800BAD80_1E7E30[i * 6], arg1->unk0->unk3C0, &transformedVecs[i]);
+                    transformVector(&gCharacterEffectSpawnPoints[i * 6], arg1->unk0->unk3C0, &transformedVecs[i]);
                 }
             } while (0);
         }
@@ -1040,7 +1040,7 @@ s16 updateSlotLinearMove(CutsceneSlotData *slot, SceneModel *model) {
         }
         slot->unk0.animMode = 0;
     }
-    return moving | func_800B7C48_1E4CF8(slot, model);
+    return moving | spawnCutsceneMovementEffects(slot, model);
 }
 
 s32 updateSlotRotation(CutsceneSlotData *slot, StateEntry *state) {
@@ -1233,7 +1233,7 @@ s16 updateSlotWalk(CutsceneSlotData *arg0, SceneModel *arg1) {
         }
     }
 
-    return (s16)(var_s2 | func_800B7C48_1E4CF8(arg0, arg1));
+    return (s16)(var_s2 | spawnCutsceneMovementEffects(arg0, arg1));
 }
 
 s32 updateSlotDecelMove(CutsceneSlotData *slot, SceneModel *model) {
