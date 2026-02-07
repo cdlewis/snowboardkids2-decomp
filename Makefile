@@ -73,7 +73,7 @@ OBJCOPYFLAGS = -O binary
 
 ASFLAGS = -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 
-LIBULTRA = lib/ultralib/build/J/libgultra_rom/libgultra_rom.a
+LIBULTRA = lib/libgultra_rom.a
 LIBMUS = lib/libmus/build/libmus.a
 
 # note: this is probably an issue with headers. Once ultra headers are properly included this should
@@ -114,9 +114,6 @@ clean:
 	rm -rf assets
 	rm -rf build
 	rm -f *auto.txt
-
-clean-ultralib:
-	rm -r lib/ultralib/build
 
 clean-libmus:
 	rm -r lib/libmus/build
