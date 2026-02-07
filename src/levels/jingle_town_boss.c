@@ -18,7 +18,7 @@
 #include "task_scheduler.h"
 
 extern s16 identityMatrix[];
-extern Transform3D D_8009A890_9B490;
+extern Transform3D gScaleMatrix;
 extern Vec3i gTempPosition;
 extern s32 gJingleTownBossSpawnPos[];
 

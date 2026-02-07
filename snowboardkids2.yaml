@@ -393,7 +393,7 @@ segments:
       - [0x9B3D0, data, displaylist]
       - [0x9B420, data, 68CF0]
       - [0x9B460, data, task_scheduler]
-      - [0x9B470, data, geometry]
+      - [0x9B470, .data, geometry]
       - [0x9B9E0, data]
       - [0x9B9F0, data]
       - [0x9BAD0, data]

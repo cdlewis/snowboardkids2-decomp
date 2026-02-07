@@ -1531,6 +1531,9 @@ cutsceneInitTrack_init = 0x800B20B0; // rom:0x1DF160
 
 
 identityMatrix = 0x8009A870; // type:s16 size:0x20
+gScaleMatrix = 0x8009A890; // rom:0x9B490 size:0x14
+gIdentityMatrix32 = 0x8009A8B0; // rom:0x9B4B0 size:0x20
+gAtan2LookupTable = 0x8009A8D0; // rom:0x9B4D0 type:s16
 setViewportTransformById = 0x8006FD3C; // rom:0x7093C
 
 gBufferedFrameCounter = 0x800AB12C;

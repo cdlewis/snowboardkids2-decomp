@@ -58,7 +58,7 @@ typedef struct {
 } FanEffectTask;
 
 /* Global variables */
-extern Transform3D D_8009A8B0_9B4B0;
+extern Transform3D gIdentityMatrix32;
 extern StateEntry D_80088650;
 extern StateEntry D_80088660;
 extern s16 gFanSoundCount;
@@ -160,11 +160,11 @@ static void updateFanEffectGrow(FanEffectGrowState *arg0) {
     s16 newZRotation;
     s16 currentScale;
 
-    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->yRotation);
+    createYRotationMatrix(&gIdentityMatrix32, arg0->yRotation);
 
     displayListData = (void *)((u8 *)(*arg0->displayList) + 0x3C0);
 
-    func_8006B084_6BC84(&D_8009A8B0_9B4B0, displayListData, arg0);
+    func_8006B084_6BC84(&gIdentityMatrix32, displayListData, arg0);
 
     scaleMatrix((Transform3D *)arg0, arg0->scale, arg0->scale, arg0->scale);
 

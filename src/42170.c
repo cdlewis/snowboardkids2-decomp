@@ -26,7 +26,7 @@ extern void *D_8009A720_9B320;
 extern void *D_8009A760_9B360;
 extern void *D_8009A770_9B370;
 extern Vec3i gTempPosition;
-extern Transform3D D_8009A8B0_9B4B0;
+extern Transform3D gIdentityMatrix32;
 extern s32 gFrameCounter;
 
 void cleanupStarEffect(void **);
@@ -1297,8 +1297,8 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
     Transform3D matrix;
 
     gameState = (EffectTaskState *)getCurrentAllocation();
-    createYRotationMatrix(&D_8009A8B0_9B4B0, state->yRotation);
-    func_8006B084_6BC84(&D_8009A8B0_9B4B0, &state->player->unk3F8, state);
+    createYRotationMatrix(&gIdentityMatrix32, state->yRotation);
+    func_8006B084_6BC84(&gIdentityMatrix32, &state->player->unk3F8, state);
     scaleMatrix((Transform3D *)state, state->scale, state->scale, state->scale);
 
     state->orbitAngle += 0x300;
@@ -1413,8 +1413,8 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
     s16 scale;
 
     allocation = (GameState *)getCurrentAllocation();
-    createYRotationMatrix(&D_8009A8B0_9B4B0, state->yRotation);
-    func_8006B084_6BC84(&D_8009A8B0_9B4B0, &state->player->unk3F8, state);
+    createYRotationMatrix(&gIdentityMatrix32, state->yRotation);
+    func_8006B084_6BC84(&gIdentityMatrix32, &state->player->unk3F8, state);
     scale = state->scale;
     scaleMatrix((Transform3D *)state, scale, scale, scale);
 
@@ -1769,8 +1769,8 @@ void updateGhostEffect(GhostEffectState *arg0) {
     s32 i;
 
     allocation = (EffectTaskState *)getCurrentAllocation();
-    createYRotationMatrix(&D_8009A8B0_9B4B0, arg0->rotation);
-    func_8006B084_6BC84(&D_8009A8B0_9B4B0, (u8 *)arg0->player + 0x3F8, arg0);
+    createYRotationMatrix(&gIdentityMatrix32, arg0->rotation);
+    func_8006B084_6BC84(&gIdentityMatrix32, (u8 *)arg0->player + 0x3F8, arg0);
 
     if (arg0->scale == 0x200) {
         queueSoundAtPosition(&arg0->position, 0x1D);

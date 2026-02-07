@@ -1610,7 +1610,7 @@ s32 updateRaceFinishLoseStep(Player *player) {
     return 0;
 }
 
-extern Transform3D D_8009A890_9B490;
+extern Transform3D gScaleMatrix;
 extern Vec3i gTempPosition;
 
 void updateTrickRotationTransform(Player *player) {
@@ -1627,7 +1627,7 @@ void updateTrickRotationTransform(Player *player) {
     rotationMatrix.translation.x = 0;
     rotationMatrix.translation.y = 0x100000;
     rotationMatrix.translation.z = 0;
-    func_8006B084_6BC84(&D_8009A890_9B490, &rotationMatrix, &player->unk9B0.prev_position);
+    func_8006B084_6BC84(&gScaleMatrix, &rotationMatrix, &player->unk9B0.prev_position);
     player->animFlags |= 0x800;
 }
 

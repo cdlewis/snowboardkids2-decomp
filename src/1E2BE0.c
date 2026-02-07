@@ -4,7 +4,7 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-extern Transform3D D_8009A890_9B490;
+extern Transform3D gScaleMatrix;
 
 void setAnimationLoopMode(CutsceneCameraState *arg0, s8 mode) {
     arg0->inputMode = mode;
@@ -63,9 +63,9 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
     Transform3D sp70;
     Transform3D *temp_s0;
 
-    D_8009A890_9B490.translation.x = arg0->posXCurrent;
-    D_8009A890_9B490.translation.y = arg0->posYCurrent + arg0->posYOffset;
-    D_8009A890_9B490.translation.z = arg0->posZCurrent;
+    gScaleMatrix.translation.x = arg0->posXCurrent;
+    gScaleMatrix.translation.y = arg0->posYCurrent + arg0->posYOffset;
+    gScaleMatrix.translation.z = arg0->posZCurrent;
 
     createYRotationMatrix(&sp70, arg0->rotYCurrent);
 
@@ -73,7 +73,7 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
     sp70.translation.y = 0;
     sp70.translation.z = 0;
 
-    func_8006B084_6BC84(&D_8009A890_9B490, &sp70, &sp30);
+    func_8006B084_6BC84(&gScaleMatrix, &sp70, &sp30);
 
     createXRotationMatrix(sp50.m, arg0->rotXCurrent);
 
