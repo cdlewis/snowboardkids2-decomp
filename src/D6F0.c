@@ -66,12 +66,6 @@ typedef struct {
     s16 textureIndex;
 } SpriteEffectTaskMemory;
 
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-} Vec3i_SpriteEffect;
-
 void updateSpriteEffectTask(SpriteEffectUpdateData *task);
 void cleanupSpriteEffectTask(SpriteEffectCleanupData *);
 
@@ -122,7 +116,7 @@ void cleanupSpriteEffectTask(SpriteEffectCleanupData *task) {
     task->modelData = freeNodeMemory(task->modelData);
 }
 
-void scheduleSpriteEffectTask(void *startPos, void *endPos, Vec3i_SpriteEffect *velocity, s32 textureIndex) {
+void scheduleSpriteEffectTask(void *startPos, void *endPos, Vec3i *velocity, s32 textureIndex) {
     SpriteEffectTaskMemory *task = (SpriteEffectTaskMemory *)scheduleTask(&initSpriteEffectTask, 0, 0, 0);
     if (task != NULL) {
         memcpy(&task->unkC, startPos, 0xC);

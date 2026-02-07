@@ -61,12 +61,6 @@ typedef struct {
     s16 frameCounter;
 } StaticSpriteEffectTaskMemory;
 
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-} Vec3i_StaticSpriteEffect;
-
 void initStaticSpriteEffectTask(StaticSpriteEffectTaskData *arg0) {
     arg0->modelData = loadCompressedData(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
     arg0->textureData = &staticSpriteEffectTexture;
@@ -111,7 +105,7 @@ void cleanupStaticSpriteEffectTask(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void scheduleStaticSpriteEffectTask(void *startPos, void *endPos, Vec3i_StaticSpriteEffect *velocity) {
+void scheduleStaticSpriteEffectTask(void *startPos, void *endPos, Vec3i *velocity, s32 unused) {
     StaticSpriteEffectTaskMemory *task =
         (StaticSpriteEffectTaskMemory *)scheduleTask(&initStaticSpriteEffectTask, 0, 0, 0);
     if (task != NULL) {

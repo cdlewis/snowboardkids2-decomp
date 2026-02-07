@@ -1,11 +1,16 @@
 #include "1E36C0.h"
 #include "1E2BE0.h"
+#include "D6F0.h"
+#include "DA20.h"
 #include "geometry.h"
+#include "rand.h"
 
 extern s8 gAnalogStickY;
 extern s8 gAnalogStickX;
 extern s32 gButtonsPressed;
 extern s32 gControllerInputs;
+extern s16 D_800BAD80_1E7E30[];
+extern s16 D_800BADB0_1E7E60[];
 
 #define SLOT_ANIM_MODE_ROTATE_WITH_SPEED 0xB
 
@@ -873,9 +878,131 @@ void setupSlotMoveToWithBounce(CutsceneSlotData *slot, s32 *targetPos, s16 durat
     slot->unkA0 = gravity;
 }
 
-INCLUDE_ASM("asm/nonmatchings/1E36C0", func_800B7C48_1E4CF8);
+s32 func_800B7C48_1E4CF8(CutsceneSlotData *arg0, SceneModel *arg1) {
+    Transform3D localMatrix;
+    Vec3i transformedVecs[4];
+    Vec3i point1;
+    Vec3i point2;
+    Vec3i velocity;
+    volatile u8 padding[0x10];
+    s64 sqSum;
+    u8 var_s7;
+    s32 var_s6;
+    s32 var_s4;
+    s32 i;
+    s16 *var_s0;
+    s32 *var_s1;
+    s32 randVal;
+    s16 modelIndex;
+    s32 temp;
 
-extern s32 func_800B7C48_1E4CF8(CutsceneSlotData *, SceneModel *);
+    var_s6 = 1;
+    var_s7 = 0;
+    if ((arg1->index == 0x12) && (arg1->actionMode == 1)) {
+        for (i = 0; i < 4; i++) {
+            transformVector(&D_800BADB0_1E7E60[i * 6], (s16 *)&arg1->unk18, &transformedVecs[i]);
+        }
+    } else {
+        if (hasModelGraphicsData(arg1) == 0) {
+            modelIndex = arg1->index;
+            if (((modelIndex != 0xA) & (modelIndex != 0x3D)) && (modelIndex != 0x3C)) {
+                var_s6 = 0;
+            } else {
+                temp = arg1->partDisplayFlags & 1;
+                var_s6 = var_s6 & -temp;
+            }
+
+            memcpy(&localMatrix, &arg1->unk18, sizeof(Transform3D));
+            for (i = 0; i < 4; i++) {
+                transformVector(&D_800BAD80_1E7E30[i * 6], (s16 *)&localMatrix, &transformedVecs[i]);
+            }
+        } else {
+            do {
+                for (i = 0; i < 4; i++) {
+                    transformVector(&D_800BAD80_1E7E30[i * 6], arg1->unk0->unk3C0, &transformedVecs[i]);
+                }
+            } while (0);
+        }
+    }
+
+    sqSum =
+        (s64)arg0->posVelX * arg0->posVelX + (s64)arg0->posVelY * arg0->posVelY + (s64)arg0->posVelZ * arg0->posVelZ;
+    var_s4 = isqrt64(sqSum) >> 0xF;
+
+    if (var_s4 != 0) {
+        var_s4 = var_s4 - 1;
+        if (var_s4 >= 9) {
+            var_s4 = 8;
+        }
+        modelIndex = arg1->index;
+        if (((modelIndex == 0xA) | (modelIndex == 0x3D)) || (modelIndex == 0x3C) ||
+            ((modelIndex == 0x12) && (arg1->actionMode == 1))) {
+            if (arg0->unk28 > 0x19998) {
+            } else {
+                goto block_31;
+            }
+        } else {
+            if (arg1->unk16 == 0x78) {
+                randVal = randA() & 0xFF;
+                point1.x =
+                    transformedVecs[1].x + (s32)(((s64)(transformedVecs[0].x - transformedVecs[1].x) * randVal) / 0xFF);
+                point1.y =
+                    transformedVecs[1].y + (s32)(((s64)(transformedVecs[0].y - transformedVecs[1].y) * randVal) / 0xFF);
+                point1.z =
+                    transformedVecs[1].z + (s32)(((s64)(transformedVecs[0].z - transformedVecs[1].z) * randVal) / 0xFF);
+                randVal = randA() & 0xFF;
+                point2.x =
+                    transformedVecs[1].x + (s32)(((s64)(transformedVecs[0].x - transformedVecs[1].x) * randVal) / 0xFF);
+                point2.y =
+                    transformedVecs[1].y + (s32)(((s64)(transformedVecs[0].y - transformedVecs[1].y) * randVal) / 0xFF);
+                point2.z =
+                    transformedVecs[1].z + (s32)(((s64)(transformedVecs[0].z - transformedVecs[1].z) * randVal) / 0xFF);
+            } else if (arg1->unk16 == 0x77) {
+                randVal = randA() & 0xFF;
+                point1.x =
+                    transformedVecs[3].x + (s32)(((s64)(transformedVecs[2].x - transformedVecs[3].x) * randVal) / 0xFF);
+                point1.y =
+                    transformedVecs[3].y + (s32)(((s64)(transformedVecs[2].y - transformedVecs[3].y) * randVal) / 0xFF);
+                point1.z =
+                    transformedVecs[3].z + (s32)(((s64)(transformedVecs[2].z - transformedVecs[3].z) * randVal) / 0xFF);
+                goto second_rand;
+            } else if (arg0->unk28 <= 0x19998) {
+            block_31:
+                randVal = randA() & 0xFF;
+                point1.x =
+                    transformedVecs[1].x + (s32)(((s64)(transformedVecs[0].x - transformedVecs[1].x) * randVal) / 0xFF);
+                point1.y =
+                    transformedVecs[1].y + (s32)(((s64)(transformedVecs[0].y - transformedVecs[1].y) * randVal) / 0xFF);
+                point1.z =
+                    transformedVecs[1].z + (s32)(((s64)(transformedVecs[0].z - transformedVecs[1].z) * randVal) / 0xFF);
+            second_rand:
+                randVal = randA() & 0xFF;
+                point2.x =
+                    transformedVecs[3].x + (s32)(((s64)(transformedVecs[2].x - transformedVecs[3].x) * randVal) / 0xFF);
+                point2.y =
+                    transformedVecs[3].y + (s32)(((s64)(transformedVecs[2].y - transformedVecs[3].y) * randVal) / 0xFF);
+                point2.z =
+                    transformedVecs[3].z + (s32)(((s64)(transformedVecs[2].z - transformedVecs[3].z) * randVal) / 0xFF);
+            } else {
+                var_s6 = 0;
+            }
+        }
+        if (var_s6 && arg1->displayEnabled) {
+            velocity.x = arg0->posVelX;
+            velocity.y = arg0->posVelY;
+            velocity.z = arg0->posVelZ;
+            modelIndex = arg1->index;
+            if (((modelIndex == 0xA) | (modelIndex == 0x3D)) || (modelIndex == 0x3C) ||
+                ((modelIndex == 0x12) && (arg1->actionMode == 1))) {
+                scheduleStaticSpriteEffectTask(&point1, &point2, &velocity, var_s4);
+                return var_s7;
+            }
+            scheduleSpriteEffectTask(&point1, &point2, &velocity, var_s4);
+        }
+    }
+
+    return var_s7;
+}
 
 s16 updateSlotLinearMove(CutsceneSlotData *slot, SceneModel *model) {
     s16 angleDiff;
