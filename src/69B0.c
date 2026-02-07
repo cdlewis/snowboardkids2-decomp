@@ -28,7 +28,7 @@ typedef struct {
     /* 0xF6 */ u16 rotationSpeed;
 } QuadDisplayListState;
 
-extern s32 D_8009A8A4_9B4A4;
+extern s32 gTempPosition;
 extern u8 identityMatrix[];
 extern u8 D_80088640_89240[];
 extern s32 D_8008C120_8CD20[];
@@ -194,7 +194,7 @@ void updateRotationController(RotationControllerState *state) {
         state->currentRotationY = 0;
     }
 
-    positionPtr = &D_8009A8A4_9B4A4;
+    positionPtr = &gTempPosition;
     *positionPtr = 0;
     *(positionPtr + 1) = (s32)0xFFF00000;
     *(positionPtr + 2) = 0;

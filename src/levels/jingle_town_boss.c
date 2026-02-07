@@ -19,7 +19,7 @@
 
 extern s16 identityMatrix[];
 extern Transform3D D_8009A890_9B490;
-extern Vec3i D_8009A8A4_9B4A4;
+extern Vec3i gTempPosition;
 extern s32 gJingleTownBossSpawnPos[];
 
 typedef struct {
@@ -898,11 +898,11 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     arg0->flyingTransform.translation.y = arg0->flyingTransform.translation.y + arg0->unk474;
 
     // Create translation-only matrix for the third transform (unkB0)
-    D_8009A8A4_9B4A4.x = 0;
-    D_8009A8A4_9B4A4.y = 0x140000;
-    D_8009A8A4_9B4A4.z = 0;
+    gTempPosition.x = 0;
+    gTempPosition.y = 0x140000;
+    gTempPosition.z = 0;
 
-    func_8006B084_6BC84((Transform3D *)((s32 *)&D_8009A8A4_9B4A4 - 5), &arg0->flyingTransform, &arg0->unkB0);
+    func_8006B084_6BC84((Transform3D *)((s32 *)&gTempPosition - 5), &arg0->flyingTransform, &arg0->unkB0);
 }
 
 void renderJingleTownBossWithEffects(Arg0Struct *arg0) {

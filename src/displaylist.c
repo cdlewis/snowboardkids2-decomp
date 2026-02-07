@@ -81,7 +81,7 @@ extern s16 gGraphicsMode;
 extern void *D_800A2D40_A3940;
 extern void *D_800A2D44_A3944;
 extern void *D_800A2D48_A3948;
-extern s32 D_8009A8A4_9B4A4;
+extern s32 gTempPosition;
 extern Gfx D_8009A780_9B380[];
 extern Gfx D_8009A7D0_9B3D0[];
 extern u32 D_800A2D4C_A394C;
@@ -1494,8 +1494,8 @@ void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
         return;
     }
 
-    memcpy(&D_8009A8A4_9B4A4, &gActiveViewport->cameraX, 0xC);
-    transform3DToMtx(&D_8009A8A4_9B4A4 - 5, displayListObj->transformMatrix);
+    memcpy(&gTempPosition, &gActiveViewport->cameraX, 0xC);
+    transform3DToMtx(&gTempPosition - 5, displayListObj->transformMatrix);
 
     if (displayListObj->displayLists->flags & 1) {
         lookAt = arenaAlloc16(0x20);
@@ -1588,8 +1588,8 @@ void renderTexturedBillboardSprite(TexturedSpriteState *state) {
         if (state->matrix == NULL) {
             return;
         }
-        memcpy(&D_8009A8A4_9B4A4, &state->posX, 0xC);
-        transform3DToMtx(&D_8009A8A4_9B4A4 - 5, state->matrix);
+        memcpy(&gTempPosition, &state->posX, 0xC);
+        transform3DToMtx(&gTempPosition - 5, state->matrix);
     }
 
     if (gGraphicsMode != 6) {
@@ -1751,8 +1751,8 @@ void renderTexturedBillboardSpriteTile(TexturedSpriteState *state) {
         if (state->matrix == NULL) {
             return;
         }
-        memcpy(&D_8009A8A4_9B4A4, &state->posX, 0xC);
-        transform3DToMtx(&D_8009A8A4_9B4A4 - 5, state->matrix);
+        memcpy(&gTempPosition, &state->posX, 0xC);
+        transform3DToMtx(&gTempPosition - 5, state->matrix);
     }
 
     if (gGraphicsMode != 6) {
@@ -1841,8 +1841,8 @@ void renderAlphaBillboardSprite(AlphaSpriteState *state) {
         if (state->matrix == NULL) {
             return;
         }
-        memcpy(&D_8009A8A4_9B4A4, &state->posX, 0xC);
-        transform3DToMtx(&D_8009A8A4_9B4A4 - 5, state->matrix);
+        memcpy(&gTempPosition, &state->posX, 0xC);
+        transform3DToMtx(&gTempPosition - 5, state->matrix);
     }
 
     if (gGraphicsMode != 7) {
@@ -1933,8 +1933,8 @@ void renderAlphaSprite(AlphaSpriteState *state) {
         if (state->matrix == NULL) {
             return;
         }
-        memcpy(&D_8009A8A4_9B4A4, &state->posX, sizeof(Vec3i));
-        transform3DToN64Mtx((Transform3D *)((&D_8009A8A4_9B4A4) - 5), state->matrix);
+        memcpy(&gTempPosition, &state->posX, sizeof(Vec3i));
+        transform3DToN64Mtx((Transform3D *)((&gTempPosition) - 5), state->matrix);
     }
 
     // Graphics mode 7 = alpha-blended textured sprites

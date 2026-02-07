@@ -10,8 +10,8 @@
 extern s16 D_8008C930_8D530[][10];
 extern s32 D_8008C920_8D520[];
 
-extern Gfx D_8008CC40_8D840[];
-extern Vec3i D_8009A8A4_9B4A4;
+extern Gfx gSpriteTextureSetupDL[];
+extern Vec3i gTempPosition;
 extern s32 D_8009F1F0_9FDF0;
 extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
@@ -45,90 +45,90 @@ typedef struct {
     /* 0x14 */ u16 index;
     /* 0x16 */ u8 padding16;
     /* 0x17 */ u8 flags;
-    /* 0x18 */ Mtx *unk18;
-    /* 0x1C */ Mtx *unk1C;
-    /* 0x20 */ Mtx *unk20;
-    /* 0x24 */ Mtx *unk24;
+    /* 0x18 */ Mtx *translationMtx;
+    /* 0x1C */ Mtx *scaleMtx;
+    /* 0x20 */ Mtx *yRotationMtx;
+    /* 0x24 */ Mtx *zRotationMtx;
     /* 0x28 */ s32 scaleX;
     /* 0x2C */ s32 scaleY;
     /* 0x30 */ u16 zRotation;
     /* 0x32 */ s16 texIndex;
 } OpaqueSpriteStruct_90F0;
 
-void func_80008514_9114(OpaqueSpriteStruct_90F0 *arg0) {
-    OutputStruct_19E80 sp10;
-    Transform3D sp20;
-    s32 t3;
-    s32 t2;
-    s32 temp_t4;
-    s32 var_v1;
-    s32 scaleX_temp;
-    s32 scaleY_temp;
-    s16 scale_x;
-    s16 scale_y;
+void renderOpaqueSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
+    OutputStruct_19E80 textureEntry;
+    Transform3D transform;
+    s32 texWidthShift;
+    s32 texHeightShift;
+    s32 tlutAddr;
+    s32 dim;
+    s32 scaleXRaw;
+    s32 scaleYRaw;
+    s16 scaleX;
+    s16 scaleY;
 
-    if (isObjectCulled(&arg0->position) != 0) {
+    if (isObjectCulled(&sprite->position) != 0) {
         return;
     }
 
-    getTableEntryByU16Index(arg0->table, arg0->index, &sp10);
-    temp_t4 = (s32)sp10.index_ptr + (arg0->texIndex << 5);
-    t3 = 0;
+    getTableEntryByU16Index(sprite->table, sprite->index, &textureEntry);
+    tlutAddr = (s32)textureEntry.index_ptr + (sprite->texIndex << 5);
+    texWidthShift = 0;
 
     if (gGraphicsMode != 0x202) {
-        var_v1 = sp10.field1;
+        dim = textureEntry.field1;
     loop_3:
-        if (!(var_v1 & 1)) {
-            t3 += 1;
-            var_v1 = var_v1 >> 1;
-            if (t3 < 0x10) {
+        if (!(dim & 1)) {
+            texWidthShift += 1;
+            dim = dim >> 1;
+            if (texWidthShift < 0x10) {
                 goto loop_3;
             }
         }
-        var_v1 = sp10.field2;
-        t2 = 0;
+        dim = textureEntry.field2;
+        texHeightShift = 0;
     loop_6:
-        if (!(var_v1 & 1)) {
-            t2 += 1;
-            var_v1 = var_v1 >> 1;
-            if (t2 < 0x10) {
+        if (!(dim & 1)) {
+            texHeightShift += 1;
+            dim = dim >> 1;
+            if (texHeightShift < 0x10) {
                 goto loop_6;
             }
         }
 
-        gSPDisplayList(gRegionAllocPtr++, D_8008CC40_8D840);
+        gSPDisplayList(gRegionAllocPtr++, gSpriteTextureSetupDL);
         gDPLoadTextureBlock_4b(
             gRegionAllocPtr++,
-            sp10.data_ptr,
+            textureEntry.data_ptr,
             G_IM_FMT_CI,
-            sp10.field1,
-            sp10.field2,
+            textureEntry.field1,
+            textureEntry.field2,
             0,
             G_TX_CLAMP,
             G_TX_CLAMP,
-            t3,
-            t2,
+            texWidthShift,
+            texHeightShift,
             0,
             0
         );
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, temp_t4);
-    } else if (D_8009F1F0_9FDF0 != (s32)sp10.data_ptr) {
-        var_v1 = sp10.field1;
+        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
+    } else if (D_8009F1F0_9FDF0 != (s32)textureEntry.data_ptr) {
+        dim = textureEntry.field1;
     loop_16:
-        if (!(var_v1 & 1)) {
-            t3 += 1;
-            var_v1 = var_v1 >> 1;
-            if (t3 < 0x10) {
+        if (!(dim & 1)) {
+            texWidthShift += 1;
+            dim = dim >> 1;
+            if (texWidthShift < 0x10) {
                 goto loop_16;
             }
         }
-        var_v1 = sp10.field2;
-        t2 = 0;
+        dim = textureEntry.field2;
+        texHeightShift = 0;
     loop_19:
-        if (!(var_v1 & 1)) {
-            t2 += 1;
-            var_v1 = var_v1 >> 1;
-            if (t2 < 0x10) {
+        if (!(dim & 1)) {
+            texHeightShift += 1;
+            dim = dim >> 1;
+            if (texHeightShift < 0x10) {
                 goto loop_19;
             }
         }
@@ -136,74 +136,75 @@ void func_80008514_9114(OpaqueSpriteStruct_90F0 *arg0) {
         gDPPipeSync(gRegionAllocPtr++);
         gDPLoadTextureBlock_4b(
             gRegionAllocPtr++,
-            sp10.data_ptr,
+            textureEntry.data_ptr,
             G_IM_FMT_CI,
-            sp10.field1,
-            sp10.field2,
+            textureEntry.field1,
+            textureEntry.field2,
             0,
             G_TX_CLAMP,
             G_TX_CLAMP,
-            t3,
-            t2,
+            texWidthShift,
+            texHeightShift,
             0,
             0
         );
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, temp_t4);
+        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
     } else {
         gDPPipeSync(gRegionAllocPtr++);
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, temp_t4);
+        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
     }
 
     gGraphicsMode = 0x202;
-    memcpy(&D_8009F1F0_9FDF0, &sp10, 0xC);
+    memcpy(&D_8009F1F0_9FDF0, &textureEntry, 0xC);
 
-    if (arg0->unk18 == NULL) {
-        arg0->unk18 = arenaAlloc16(0x40);
+    if (sprite->translationMtx == NULL) {
+        sprite->translationMtx = arenaAlloc16(0x40);
     }
-    if (arg0->unk1C == NULL) {
-        arg0->unk1C = arenaAlloc16(0x40);
+    if (sprite->scaleMtx == NULL) {
+        sprite->scaleMtx = arenaAlloc16(0x40);
     }
-    if (arg0->unk20 == NULL) {
-        arg0->unk20 = arenaAlloc16(0x40);
+    if (sprite->yRotationMtx == NULL) {
+        sprite->yRotationMtx = arenaAlloc16(0x40);
     }
-    if (arg0->unk24 == NULL) {
-        arg0->unk24 = arenaAlloc16(0x40);
+    if (sprite->zRotationMtx == NULL) {
+        sprite->zRotationMtx = arenaAlloc16(0x40);
     }
-    if (arg0->unk18 != NULL && arg0->unk1C != NULL && arg0->unk20 != NULL && arg0->unk24 != NULL) {
-        memcpy(&sp20, identityMatrix, 0x20);
-        memcpy(&D_8009A8A4_9B4A4, &arg0->position, 0xC);
-        transform3DToMtx((u8 *)&D_8009A8A4_9B4A4 - 0x14, arg0->unk18);
+    if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
+        sprite->zRotationMtx != NULL) {
+        memcpy(&transform, identityMatrix, 0x20);
+        memcpy(&gTempPosition, &sprite->position, 0xC);
+        transform3DToMtx((u8 *)&gTempPosition - 0x14, sprite->translationMtx);
 
-        memcpy(&sp20, identityMatrix, 0x20);
-        scaleX_temp = arg0->scaleX;
-        if (scaleX_temp < 0) {
-            scaleX_temp += 3;
+        memcpy(&transform, identityMatrix, 0x20);
+        scaleXRaw = sprite->scaleX;
+        if (scaleXRaw < 0) {
+            scaleXRaw += 3;
         }
-        scale_x = (scaleX_temp << 14) >> 16;
-        scaleY_temp = arg0->scaleY;
-        if (scaleY_temp < 0) {
-            scaleY_temp += 3;
+        scaleX = (scaleXRaw << 14) >> 16;
+        scaleYRaw = sprite->scaleY;
+        if (scaleYRaw < 0) {
+            scaleYRaw += 3;
         }
-        scale_y = (scaleY_temp << 14) >> 16;
-        scaleMatrix(&sp20, scale_x, scale_y, 0x2000);
-        transform3DToMtx(&sp20, arg0->unk1C);
+        scaleY = (scaleYRaw << 14) >> 16;
+        scaleMatrix(&transform, scaleX, scaleY, 0x2000);
+        transform3DToMtx(&transform, sprite->scaleMtx);
 
-        memcpy(&sp20, identityMatrix, 0x20);
-        if (arg0->flags & 1) {
-            createYRotationMatrix(&sp20, 0x1000);
+        memcpy(&transform, identityMatrix, 0x20);
+        if (sprite->flags & 1) {
+            createYRotationMatrix(&transform, 0x1000);
         }
-        transform3DToMtx(&sp20, arg0->unk20);
+        transform3DToMtx(&transform, sprite->yRotationMtx);
 
-        memcpy(&sp20, identityMatrix, 0x20);
-        createZRotationMatrix(&sp20, arg0->zRotation);
-        transform3DToMtx(&sp20, arg0->unk24);
+        memcpy(&transform, identityMatrix, 0x20);
+        createZRotationMatrix(&transform, sprite->zRotation);
+        transform3DToMtx(&transform, sprite->zRotationMtx);
 
-        gSPMatrix(gRegionAllocPtr++, arg0->unk18, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(gRegionAllocPtr++, sprite->translationMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, arg0->unk1C, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, arg0->unk20, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, arg0->unk24, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPVertex(gRegionAllocPtr++, arg0->vertices, 4, 0);
+        gSPMatrix(gRegionAllocPtr++, sprite->scaleMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gRegionAllocPtr++, sprite->yRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gRegionAllocPtr++, sprite->zRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPVertex(gRegionAllocPtr++, sprite->vertices, 4, 0);
         gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
     }
 }
@@ -220,7 +221,7 @@ void enqueueOpaqueSprite(u16 slot, Node *node) {
     node->unk1C = NULL;
     node->callback = NULL;
     node->cleanupCallback = NULL;
-    debugEnqueueCallback(slot, 4, &func_80008514_9114, node);
+    debugEnqueueCallback(slot, 4, &renderOpaqueSpriteCallback, node);
 }
 
 void enqueueTranslucentSprite(u16 slot, Node *node) {

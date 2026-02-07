@@ -63,7 +63,7 @@ typedef struct {
     s16 state;
 } StarLauncherTaskUpdate;
 
-extern s32 D_8009A8A4_9B4A4;
+extern s32 gTempPosition;
 
 void renderFallingRockHazard(FallingRockHazard *rock);
 void updateFallingRockHazard(FallingRockHazard *rock);
@@ -111,8 +111,8 @@ void renderFallingRockHazard(FallingRockHazard *rock) {
     s32 matrix[8];
     s32 i;
 
-    memcpy(&D_8009A8A4_9B4A4, &rock->posZ, 0xC);
-    func_8006B084_6BC84(&D_8009A8A4_9B4A4 - 5, &rock->rotationMatrix, rock);
+    memcpy(&gTempPosition, &rock->posZ, 0xC);
+    func_8006B084_6BC84(&gTempPosition - 5, &rock->rotationMatrix, rock);
     createXRotationMatrix((s16(*)[3])matrix, rock->xRotation);
 
     matrix[6] = 0x3b333;

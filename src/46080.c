@@ -757,7 +757,7 @@ extern s32 gLookAtPtr;
 extern CompressedAsset D_80090BD4_917D4[];
 extern s32 gFlyingSceneryInitOffset[3];
 extern CompressedAsset D_80090AF0_916F0[];
-extern s32 D_8009A8A4_9B4A4;
+extern s32 gTempPosition;
 extern CompressedAsset D_80090CEC_918EC[];
 extern u8 D_80090CA8_918A8[][5];
 extern u8 D_80090CE0_918E0[];
@@ -1093,7 +1093,7 @@ void setupSceneAnimationTask(SceneAnimationTask *arg0) {
     arg0->transformBuffer = allocateNodeMemory(arg0->entryCount << 6);
 
     if (arg0->entryCount > 0) {
-        ptr = &D_8009A8A4_9B4A4;
+        ptr = &gTempPosition;
         offset = 0;
         do {
             memcpy(ptr, (u8 *)(offset + (s32)arg0->entries) + 8, 0xC);
@@ -1793,7 +1793,7 @@ void setupGoldCoinEntries(GoldCoinSetupState *arg0) {
 
     if (arg0->coinCount > 0) {
         one = 1;
-        globalBuf = &D_8009A8A4_9B4A4;
+        globalBuf = &gTempPosition;
         do {
             offset = i * 16;
             *(s8 *)(offset + (s32)arg0->entries) = one;

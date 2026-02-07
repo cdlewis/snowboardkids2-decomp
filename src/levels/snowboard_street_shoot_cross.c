@@ -78,7 +78,7 @@ extern Gfx D_8009A780_9B380[];
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
-extern s32 D_8009A8A4_9B4A4;
+extern s32 gTempPosition;
 extern void *D_800BBBB0_AD630;
 
 void initShootCrossTargets(ShootCrossTargets *arg0) {
@@ -115,7 +115,7 @@ void initShootCrossTargetsCallback(ShootCrossTargets *arg0) {
     arg0->transformMatrices = allocateNodeMemory(arg0->targetCount << 6);
 
     if (arg0->targetCount > 0) {
-        ptr = &D_8009A8A4_9B4A4;
+        ptr = &gTempPosition;
         do {
             offset = i << 4;
             *((s8 *)(offset + (s32)arg0->targets)) = 0;

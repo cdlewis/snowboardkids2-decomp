@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-extern Vec3i D_8009A8A4_9B4A4;
+extern Vec3i gTempPosition;
 extern s16 D_8009A8D0_9B4D0[];
 
 typedef struct {
@@ -432,10 +432,10 @@ void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPos
     xRotation.translation.y = 0;
     xRotation.translation.x = 0;
     func_8006B084_6BC84(&xRotation, &yRotation, &combined);
-    D_8009A8A4_9B4A4.x = 0;
-    D_8009A8A4_9B4A4.y = 0;
-    D_8009A8A4_9B4A4.z = tempPosZ;
-    tempTransformPtr = (s32 *)&D_8009A8A4_9B4A4;
+    gTempPosition.x = 0;
+    gTempPosition.y = 0;
+    gTempPosition.z = tempPosZ;
+    tempTransformPtr = (s32 *)&gTempPosition;
     func_8006B084_6BC84(tempTransformPtr - 5, &combined, output);
 }
 
