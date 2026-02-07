@@ -37,7 +37,7 @@ void cleanupBobbingModelTask(BobbingModelTaskState *);
 void initBobbingModelTask(BobbingModelTaskState *state) {
     memcpy(state->transformMatrix, identityMatrix, 0x20);
     state->displayList = loadAssetGroupDisplayList(state->model);
-    state->vertexData = loadAssetGroupVertexData(state->model);
+    state->vertexData = loadAssetGroupCompressedData(state->model);
     state->materialData = &D_800882B0_88EB0;
     state->renderFlags = 0;
     state->bobbingEnabled = 0;

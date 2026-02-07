@@ -44,7 +44,7 @@ void initializeQuadDisplayList(QuadDisplayListElement *elements) {
     for (i = 0; i < 4; i++) {
         memcpy(elements[i].transformMatrix, identityMatrix, 0x20);
         elements[i].displayList = loadAssetGroupDisplayList(elements->model);
-        elements[i].vertexData = loadAssetGroupVertexData(elements->model);
+        elements[i].vertexData = loadAssetGroupCompressedData(elements->model);
         elements[i].renderFlag = 0;
         elements[i].renderSettings = D_80088640_89240;
     }

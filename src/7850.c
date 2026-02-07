@@ -161,7 +161,7 @@ void cleanupPulsingSpriteIndicator(PulsingSpriteState *arg0) {
 void initStretchingModelTask(StretchingModelTaskState *arg0) {
     memcpy(arg0->transformMatrix, identityMatrix, 0x20);
     arg0->displayList = loadAssetGroupDisplayList(arg0->owner);
-    arg0->vertexData = loadAssetGroupVertexData(arg0->owner);
+    arg0->vertexData = loadAssetGroupCompressedData(arg0->owner);
     arg0->unk30 = 0;
     arg0->unk24 = &D_80088720_89320;
     arg0->rotationAngle = 0;

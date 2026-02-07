@@ -13,29 +13,29 @@
 typedef struct {
     void *displayListStart;
     void *displayListEnd;
-    void *vertexDataStart;
-    void *vertexDataEnd;
-    u16 romBSize;
+    void *compressedDataStart;
+    void *compressedDataEnd;
+    u16 decompressedSize;
     u16 padding;
-    void *unk14;
+    void *directDataPtr;
 } Asset;
 
 typedef struct {
     /* 0x00 */ char name[8];
     /* 0x08 */ void *displayListStart;
     /* 0x0C */ void *displayListEnd;
-    /* 0x10 */ void *vertexDataStart;
-    /* 0x14 */ void *vertexDataEnd;
-    /* 0x18 */ s32 size;
+    /* 0x10 */ void *compressedDataStart;
+    /* 0x14 */ void *compressedDataEnd;
+    /* 0x18 */ s32 decompressedSize;
     /* 0x1C */ struct {
         u8 padding[0x10];
     } *unk1C;
     /* 0x20 */ s8 numAssets;
     /* 0x21 */ s8 assetGroupIndex;
     /* 0x22 */ s16 padding;
-    /* 0x24 */ void *asset3Start;
-    /* 0x28 */ void *asset3End;
-    /* 0x2C */ u32 asset3Size;
+    /* 0x24 */ void *animationDataStart;
+    /* 0x28 */ void *animationDataEnd;
+    /* 0x2C */ u32 animationDataSize;
     /* 0x30 */ s32 anotherAssetIndex;
     /* 0x34 */ void *soundSequenceDataStart;
     /* 0x38 */ void *soundSequenceDataEnd;
@@ -169,7 +169,7 @@ createSceneModelEx(s32 assetGroupIndex, void *allocation, s8 assetPairIndex, s8 
 void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode);
 void *loadAssetGroupSoundData(SceneModel *);
 void *loadAssetGroupDisplayList(SceneModel *);
-void *loadAssetGroupVertexData(SceneModel *);
+void *loadAssetGroupCompressedData(SceneModel *);
 void *createSceneModel(s32 assetGroupIndex, void *allocation);
 
 void setModelAnimation(SceneModel *model, s16 animationIndex);

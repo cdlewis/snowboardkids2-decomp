@@ -58,7 +58,7 @@ void loadScrollingTexture(ScrollingTextureState *);
 void cleanupRotatingLogo(RotatingLogoState *);
 void func_8000595C_655C(void);
 void *loadAssetGroupDisplayList(void *);
-void *loadAssetGroupVertexData(void *);
+void *loadAssetGroupCompressedData(void *);
 void *loadAssetGroupSoundData(void *);
 
 extern s16 gGraphicsMode;
@@ -320,17 +320,17 @@ void enqueueTiledTextureRender(s32 arg0, TrickBurstEffectTask *arg1) {
 void initializeRotatingLogo(RotatingLogoState *state) {
     memcpy(&state->opaqueMatrix, identityMatrix, 0x20);
     state->opaqueDisplayList = loadAssetGroupDisplayList(state->model);
-    state->opaqueVertexData = loadAssetGroupVertexData(state->model);
+    state->opaqueVertexData = loadAssetGroupCompressedData(state->model);
     state->opaqueFlag = 0;
     state->opaqueSettings = &D_800885D0_891D0;
     memcpy(&state->transparentMatrix, identityMatrix, 0x20);
     state->transparentDisplayList = loadAssetGroupDisplayList(state->model);
-    state->transparentVertexData = loadAssetGroupVertexData(state->model);
+    state->transparentVertexData = loadAssetGroupCompressedData(state->model);
     state->transparentFlag = 0;
     state->transparentSettings = &D_800885E0_891E0;
     memcpy(&state->overlayMatrix, identityMatrix, 0x20);
     state->overlayDisplayList = loadAssetGroupDisplayList(state->model);
-    state->overlayVertexData = loadAssetGroupVertexData(state->model);
+    state->overlayVertexData = loadAssetGroupCompressedData(state->model);
     state->overlaySettings = &D_800885F0_891F0;
     state->overlayFlag = 0;
     state->scale = 0x2000;
