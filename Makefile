@@ -74,7 +74,7 @@ OBJCOPYFLAGS = -O binary
 ASFLAGS = -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 
 LIBULTRA = lib/libgultra_rom.a
-LIBMUS = lib/libmus/build/libmus.a
+LIBMUS = lib/libmus.a
 
 # note: this is probably an issue with headers. Once ultra headers are properly included this should
 # go away.
@@ -114,9 +114,6 @@ clean:
 	rm -rf assets
 	rm -rf build
 	rm -f *auto.txt
-
-clean-libmus:
-	rm -r lib/libmus/build
 
 diff-line:
 	@(diff --old-line-format='OLD: %L' --new-line-format='NEW: %L' <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
@@ -159,15 +156,6 @@ $(BUILD_DIR)/lib/libgultra_rom.a: $(LIBULTRA)
 $(BUILD_DIR)/lib/libmus.a: $(LIBMUS)
 	@mkdir -p $$(dirname $@)
 	@cp $< $@
-
-LIBULTRA_FLAGS = VERSION=J TARGET=libgultra_rom COMPARE=0 MODERN_LD=1 GBIDEFINE="DF3DEX_GBI_2=1"
-$(LIBULTRA):
-	$(LIBULTRA_FLAGS) $(MAKE) -C lib/ultralib setup
-	$(LIBULTRA_FLAGS) $(MAKE) -C lib/ultralib
-
-LIBMUS_FLAGS = COMPILER_DIR=../../$(COMPILER_DIR) ULTRA_DIR=../ultralib
-$(LIBMUS):
-	$(LIBMUS_FLAGS) $(MAKE) -C lib/libmus
 
 $(BUILD_DIR)/%.o: %.bin
 	$(PRINTF) "[$(PINK) linker $(NO_COL)]  $<\n"
