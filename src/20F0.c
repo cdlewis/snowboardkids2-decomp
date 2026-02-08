@@ -182,7 +182,7 @@ ItemAssetEntry TOMMY_ASSETS[4] = {
      0x48D00005, (void *)0x80088DA0 },
 };
 
-ItemAssetEntry D_8008994C_8A54C[4] = {
+ItemAssetEntry WENDY_ASSETS[4] = {
     { (void *)&_2110E0_ROM_START,
      (void *)&_2110E0_ROM_END,
      (void *)&_4E33D0_ROM_START,
@@ -320,7 +320,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_576600_ROM_END,
      .animationDataSize = 0xFE66,
      .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)D_8008994C_8A54C,
+     .Assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {
@@ -547,7 +547,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_580AD0_ROM_END,
      .animationDataSize = 0x6C2A,
      .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)D_8008994C_8A54C,
+     .Assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {
@@ -802,7 +802,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_584650_ROM_END,
      .animationDataSize = 0x12DD2,
      .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)D_8008994C_8A54C,
+     .Assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {
@@ -922,7 +922,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_4666C0_ROM_END,
      .animationDataSize = 0x4E52,
      .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)D_8008994C_8A54C,
+     .Assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {
@@ -1176,7 +1176,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_590790_ROM_END,
      .animationDataSize = 0x5E66,
      .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)D_8008994C_8A54C,
+     .Assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {
@@ -1297,7 +1297,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_48E8F0_ROM_END,
      .animationDataSize = 0x800E,
      .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)D_8008994C_8A54C,
+     .Assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {

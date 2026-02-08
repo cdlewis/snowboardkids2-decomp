@@ -8,6 +8,7 @@ SLASH_ASSETS = 0x8008976C;
 JAM_ASSETS = 0x8008982C;
 LINDA_ASSETS = 0x8008988C; // rom:0x8A48C
 TOMMY_ASSETS = 0x800898EC; // rom:0x8A4EC
+WENDY_ASSETS = 0x8008994C; // rom:0x8A54C
 microcodeGroups = 0x8009AFD8; // size:0x10
 gRootViewport = 0x800A3370; // size:0xC
 D_800BCA64 = 0x800BCA64; // segment:levels/ice_land_boss rom:0xB1F54
