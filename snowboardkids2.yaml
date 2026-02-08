@@ -3171,7 +3171,7 @@ segments:
 
   - [0x6448D0, bin]
 
-  - name: _6462A0
+  - name: GHOST_SOUND_SEQUENCE_DATA
     type: bin
     vram: 0
     start: 0x6462A0
