@@ -2414,7 +2414,7 @@ segments:
     vram: 0
     start: 0x45B130
 
-  - name: _45D620
+  - name: NANCYS_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x45D620
