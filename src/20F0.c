@@ -1,6 +1,7 @@
 #include "20F0.h"
 
 #include "19E80.h"
+#include "5520.h"
 #include "5E590.h"
 #include "D6F0.h"
 #include "assets.h"
@@ -553,7 +554,7 @@ AssetGroup gameAssets[] = {
      .soundSequenceDataStart = (void *)&UFO_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&UFO_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x838,
-     .initCallback = (void *)0x80005808,
+     .initCallback = &initializeRotatingLogo,
      },
     {
      .name = " SLASH2",
@@ -1676,7 +1677,7 @@ AssetGroup gameAssets[] = {
      .soundSequenceDataStart = (void *)&UFO_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&UFO_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x838,
-     .initCallback = (void *)0x80005808,
+     .initCallback = &initializeRotatingLogo,
      },
     {
      .name = " KANI  ",
