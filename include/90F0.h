@@ -98,3 +98,4 @@ s32 updateSpriteAnimation(void *state, s32 arg1);
 void renderOpaqueSprite(void *state, s32 slot, s32 posX, s32 posY, s32 posZ, s32 scaleX, s32 scaleY, s16 renderMode, u8 flipH);
 void renderSprite(void *state, s32 slot, s32 posX, s32 posY, s32 posZ, s32 scaleX, s32 scaleY, s16 renderMode, u8 flipH, u8 alpha);
 s32 getTableEntryValue(TableLookupContext *ctx);
+void initOscillatingModelTask(void);

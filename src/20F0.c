@@ -3,6 +3,7 @@
 #include "19E80.h"
 #include "5520.h"
 #include "5E590.h"
+#include "90F0.h"
 #include "D6F0.h"
 #include "assets.h"
 #include "audio.h"
@@ -1055,7 +1056,7 @@ AssetGroup gameAssets[] = {
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
-     .initCallback = (void *)0x800081C0,
+     .initCallback = initOscillatingModelTask,
      },
     {
      .name = " SNOW3 ",
