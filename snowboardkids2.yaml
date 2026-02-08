@@ -3220,6 +3220,11 @@ segments:
 
   - [0x648C60, bin]
 
+  - name: POST2_SPRITE_COMPRESSED_DATA
+    type: bin
+    vram: 0
+    start: 0x648EB0
+
   - name: POST2_SOUND_SEQUENCE_DATA
     type: bin
     vram: 0
