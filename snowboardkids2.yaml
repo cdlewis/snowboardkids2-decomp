@@ -1154,7 +1154,7 @@ segments:
     vram: 0
     start: 0x1EC940
 
-  - name: _1ECAD0
+  - name: HELI_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1ECAD0
@@ -1319,22 +1319,22 @@ segments:
     vram: 0
     start: 0x1FD6B0
 
-  - name: _1FDA30
+  - name: SLASH1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FDA30
 
-  - name: _1FEEE0
+  - name: SLASH2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FEEE0
 
-  - name: _200580
+  - name: SLASH3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x200580
 
-  - name: _202550
+  - name: SLASH4_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x202550
@@ -2579,7 +2579,7 @@ segments:
     vram: 0
     start: 0x4A3E80
 
-  - name: _4A4260
+  - name: HELI_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A4260
@@ -2749,22 +2749,22 @@ segments:
     vram: 0
     start: 0x4CE760
 
-  - name: _4CEFF0
+  - name: SLASH1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CEFF0
 
-  - name: _4D0470
+  - name: SLASH2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4D0470
 
-  - name: _4D1870
+  - name: SLASH3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4D1870
 
-  - name: _4D2FD0
+  - name: SLASH4_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4D2FD0
