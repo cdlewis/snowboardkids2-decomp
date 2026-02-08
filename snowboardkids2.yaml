@@ -1294,7 +1294,7 @@ segments:
     vram: 0
     start: 0x1FC9A0
 
-  - name: _1FCBA0
+  - name: ABOXL_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FCBA0
@@ -2724,7 +2724,7 @@ segments:
     vram: 0
     start: 0x4CCE20
 
-  - name: _4CD980
+  - name: ABOXL_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CD980
