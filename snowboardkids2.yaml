@@ -2879,7 +2879,7 @@ segments:
     vram: 0
     start: 0x4E7640
 
-  - name: SLASH_ANIMATION_DATA
+  - name: SLASH1_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x4E7AA0
