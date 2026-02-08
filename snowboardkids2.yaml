@@ -1189,7 +1189,7 @@ segments:
     vram: 0
     start: 0x1EDB30
 
-  - name: _1EDCF0
+  - name: TUTUM_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EDCF0
@@ -2614,7 +2614,7 @@ segments:
     vram: 0
     start: 0x4A5C20
 
-  - name: _4A5E10
+  - name: TUTUM_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A5E10
