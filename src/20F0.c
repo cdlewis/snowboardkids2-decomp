@@ -1163,7 +1163,7 @@ AssetGroup gameAssets[] = {
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff160000,
-     .initCallback = (void *)0x80007E40,
+     .initCallback = initBobbingModelTask,
      },
     {
      .name = " BURG  ",

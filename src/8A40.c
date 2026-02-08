@@ -18,20 +18,6 @@ extern u8 identityMatrix[];
 extern void *D_800882B0_88EB0;
 void updateBobbingModelTask(BobbingModelState *);
 
-typedef struct {
-    SceneModel *model;
-    u8 transformMatrix[0x20];
-    void *materialData;
-    void *displayList;
-    void *vertexData;
-    s32 renderFlags;
-    u8 _pad34[0x10];
-    u8 bobbingEnabled;
-    u8 _pad45[3];
-    s32 verticalOffset;
-    s32 verticalVelocity;
-} BobbingModelTaskState;
-
 void cleanupBobbingModelTask(BobbingModelTaskState *);
 
 void initBobbingModelTask(BobbingModelTaskState *state) {
