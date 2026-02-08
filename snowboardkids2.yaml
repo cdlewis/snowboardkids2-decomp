@@ -915,7 +915,7 @@ segments:
     vram: 0
     start: 0x1D3FF0
 
-  - name: _1D54C0
+  - name: SNOW4_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D54C0
@@ -1842,7 +1842,7 @@ segments:
     vram: 0
     start: 0x39D100
 
-  - name: _39E030
+  - name: SNOW4_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x39E030
