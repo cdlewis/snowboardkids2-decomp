@@ -3054,7 +3054,7 @@ segments:
     vram: 0
     start: 0x5B4130
 
-  - name: _5B4B50
+  - name: SNOW_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5B4B50
