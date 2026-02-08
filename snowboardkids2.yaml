@@ -2914,7 +2914,7 @@ segments:
     vram: 0
     start: 0x510AD0
 
-  - name: _518BA0
+  - name: NANCY2_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x518BA0
