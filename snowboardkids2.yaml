@@ -2424,7 +2424,7 @@ segments:
     vram: 0
     start: 0x45F6D0
 
-  - name: _462B50
+  - name: LINDAS_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x462B50
@@ -2469,7 +2469,7 @@ segments:
     vram: 0
     start: 0x47EFC0
 
-  - name: _482E40
+  - name: LINDAN_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x482E40
@@ -2954,17 +2954,17 @@ segments:
     vram: 0
     start: 0x542AF0
 
-  - name: _54B280
+  - name: LINDA2_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x54B280
 
-  - name: _550BC0
+  - name: LINDA3_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x550BC0
 
-  - name: _5596D0
+  - name: LINDAO_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5596D0
