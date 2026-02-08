@@ -1179,7 +1179,7 @@ segments:
     vram: 0
     start: 0x1ED890
 
-  - name: _1ED9E0
+  - name: ITEM_DEBRIS_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1ED9E0
@@ -1214,7 +1214,7 @@ segments:
     vram: 0
     start: 0x1EE7D0
 
-  - name: _1EEC10
+  - name: CHAIR_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EEC10
@@ -2604,7 +2604,7 @@ segments:
     vram: 0
     start: 0x4A5840
 
-  - name: _4A5A30
+  - name: ITEM_DEBRIS_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A5A30
@@ -2639,7 +2639,7 @@ segments:
     vram: 0
     start: 0x4A7070
 
-  - name: _4A73F0
+  - name: CHAIR_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A73F0
