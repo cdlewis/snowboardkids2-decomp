@@ -3044,7 +3044,7 @@ segments:
     vram: 0
     start: 0x5B0030
 
-  - name: _5B05A0
+  - name: DINOS_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5B05A0
