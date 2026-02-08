@@ -41,7 +41,7 @@ u32 itemMatrix_215700[4] = { 0x0, 0x10001A0, 0x0, 0x0 };
 
 u32 itemMatrix_2158B0[4] = { 0x0, 0x10001A0, 0x0, 0x0 };
 
-u32 D_80089590_8A190[4] = { 0x0, 0x10002F8, 0x0, 0x0 };
+u32 itemMatrix_215A60[4] = { 0x0, 0x10002F8, 0x0, 0x0 };
 
 ItemAssetEntry itemAssetTable[] = {
     { &_214FC0_ROM_START, &_214FC0_ROM_END, &_663440_ROM_START, &_663440_ROM_END, 0x520, (void *)0x80089500        },
@@ -62,7 +62,7 @@ ItemAssetEntry itemAssetTable[] = {
     { &_1EACD0_ROM_START, &_1EACD0_ROM_END, &_4A2980_ROM_START, &_4A2980_ROM_END, 0x790, (void *)0x800881E0        },
     { &_1EA200_ROM_START, &_1EA200_ROM_END, &_4A0E80_ROM_START, &_4A0E80_ROM_END, 0x7E0, (void *)0x800881A0        },
     { &_215360_ROM_START, &_215360_ROM_END, &_663DB0_ROM_START, &_663DB0_ROM_END, 0x240, (void *)itemMatrix_215360 },
-    { &_215A60_ROM_START, &_215A60_ROM_END, &_6648C0_ROM_START, &_6648C0_ROM_END, 0x810, (void *)D_80089590_8A190  },
+    { &_215A60_ROM_START, &_215A60_ROM_END, &_6648C0_ROM_START, &_6648C0_ROM_END, 0x810, (void *)itemMatrix_215A60 },
 };
 
 s32 itemAssetCount = 0x13;
