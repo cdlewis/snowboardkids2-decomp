@@ -161,10 +161,10 @@ ItemAssetEntry JAM_ASSETS[4] = {
 };
 
 ItemAssetEntry LINDA_ASSETS[4] = {
-    { (void *)&_20B0B0_ROM_START,
-     (void *)&_20B0B0_ROM_END,
-     (void *)&_4DBC80_ROM_START,
-     (void *)&_4DBC80_ROM_END,
+    { (void *)&JAM5_DISPLAY_LIST_ROM_START,
+     (void *)&JAM5_DISPLAY_LIST_ROM_END,
+     (void *)&JAM5_COMPRESSED_DATA_ROM_START,
+     (void *)&JAM5_COMPRESSED_DATA_ROM_END,
      0x27F00005, (void *)0x80088B70 },
     { (void *)&_20BB50_ROM_START,
      (void *)&_20BB50_ROM_END,
