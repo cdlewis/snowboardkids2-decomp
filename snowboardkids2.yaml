@@ -2459,7 +2459,7 @@ segments:
     vram: 0
     start: 0x476EB0
 
-  - name: _47B2D0
+  - name: NANCYN_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x47B2D0
