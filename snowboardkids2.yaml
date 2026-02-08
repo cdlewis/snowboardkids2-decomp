@@ -1094,12 +1094,12 @@ segments:
     vram: 0
     start: 0x1E7F60
 
-  - name: _1E8900
+  - name: LTBL3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E8900
 
-  - name: _1E8A90
+  - name: LTBL2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E8A90
@@ -1109,12 +1109,12 @@ segments:
     vram: 0
     start: 0x1E8E60
 
-  - name: _1E9300
+  - name: LTBL1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E9300
 
-  - name: _1E9490
+  - name: LTBL0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E9490
@@ -2519,12 +2519,12 @@ segments:
     vram: 0
     start: 0x49BC40
 
-  - name: _49D710
+  - name: LTBL3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x49D710
 
-  - name: _49D8F0
+  - name: LTBL2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x49D8F0
@@ -2534,12 +2534,12 @@ segments:
     vram: 0
     start: 0x49E2E0
 
-  - name: _49F0D0
+  - name: LTBL1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x49F0D0
 
-  - name: _49F270
+  - name: LTBL0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x49F270
