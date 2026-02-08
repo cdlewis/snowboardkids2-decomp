@@ -1279,7 +1279,7 @@ segments:
     vram: 0
     start: 0x1FC140
 
-  - name: _1FC370
+  - name: CAKE_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FC370
@@ -1289,7 +1289,7 @@ segments:
     vram: 0
     start: 0x1FC700
 
-  - name: _1FC9A0
+  - name: CAKEE_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FC9A0
@@ -2709,7 +2709,7 @@ segments:
     vram: 0
     start: 0x4CB700
 
-  - name: _4CBCF0
+  - name: CAKE_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CBCF0
@@ -2719,7 +2719,7 @@ segments:
     vram: 0
     start: 0x4CCA00
 
-  - name: _4CCE20
+  - name: CAKEE_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CCE20
@@ -3196,7 +3196,7 @@ segments:
     vram: 0
     start: 0x646DF0
 
-  - name: _647740
+  - name: CAKE_SOUND_SEQUENCE_DATA
     type: bin
     vram: 0
     start: 0x647740
