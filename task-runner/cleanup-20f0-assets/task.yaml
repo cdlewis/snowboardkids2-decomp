@@ -1,3 +1,3 @@
-candidate_source: grep -o '.name = .*"' src/20F0.c | sort | uniq
-prompt: "Look up the gameAsset entry or entries where `$INPUT` in src/20F0.c. Look at the assets it references (an asset is anything ending in _ROM_START/_ROM_END). Look also at the assets array that it references (e.g. NANCY_ASSETS). Update all the assets to have proper names (e.g. NANCY_ANIMATION_DATA) rather than nonsense names such as _527EE0. This will require you to rename the asset in snowboardkids2.yaml and the USE_ASSET reference in include/assets.h. Commit your changes once the renaming is finished"
+candidate_source: grep -E '\.[a-zA-Z_]+\s*=\s*\(void \*\)0x8[0-9A-Fa-f]+,' src/20F0.c | sort | uniq
+prompt: "Look up the gameAsset entry or entries where `$INPUT` in src/20F0.c. This hex address should match an actual function, look up what that function name is an change the hex value to be a pointer to that function instead. symbol_addrs.txt is a good reference for function names for a given hex address. Commit your changes once the renaming is finished"
 claude_command: glaude
