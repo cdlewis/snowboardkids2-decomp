@@ -201,6 +201,7 @@ sIntroCameraEvents = 0x8009079C; // rom:0x9139C size:0x44
 gIndicatorSpriteOffset = 0x800907E0; // rom:0x913E0
 gRaceResultCode = 0x800A24A0; // type:u8
 itemHomingProjectileBaseVector = 0x80090E20; // rom:0x91A20
+itemMatrix_215360 = 0x80089540; // rom:0x8A140
 bossHomingProjectileBaseVector = 0x80090E2C; // rom:0x91A2C
 gCharacterParticleTypeMap = 0x80090E70; // rom:0x91A70
 scheduleItemBoxSystemTaskIfEnabled = 0x80049C70; // rom:0x4A870
