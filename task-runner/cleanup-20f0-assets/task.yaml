@@ -1,0 +1,3 @@
+candidate_source: grep -o 'D_[0-9A-Fa-f]*_[0-9A-Fa-f]*' src/20F0.c | sort | uniq
+prompt: "Look up `$INPUT` in src/20F0.c. Look at where it is used. Rename it to a more appropriate name. This should be based on the asset name but note that asset names aren't guaranteed to be unique. To rename these variables you will need to update symbol_addrs.txt"
+claude_command: glaude
