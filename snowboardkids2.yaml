@@ -1304,7 +1304,7 @@ segments:
     vram: 0
     start: 0x1FCE20
 
-  - name: _1FD350
+  - name: KEYO_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FD350
@@ -2734,7 +2734,7 @@ segments:
     vram: 0
     start: 0x4CDCB0
 
-  - name: _4CE2A0
+  - name: KEYO_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CE2A0
