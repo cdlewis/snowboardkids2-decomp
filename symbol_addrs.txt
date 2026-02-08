@@ -1,5 +1,6 @@
 itemMatrix_215440 = 0x80089550; // rom:0x8A150
 itemMatrix_215550 = 0x80089560; // rom:0x8A160
+itemMatrix_215700 = 0x80089570; // rom:0x8A170
 NANCY_ASSETS = 0x800897CC;
 SLASH_ASSETS = 0x8008976C;
 microcodeGroups = 0x8009AFD8; // size:0x10
