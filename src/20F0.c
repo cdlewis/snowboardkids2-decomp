@@ -32,6 +32,7 @@ typedef struct {
 
 extern u8 identityMatrix[32];
 extern u8 D_215D70[];
+extern void initDriftingParticle(void *arg0);
 
 u32 itemMatrix_17[4] = { 0x0, 0x10000D0, 0x0, 0x0 };
 
@@ -526,7 +527,7 @@ AssetGroup gameAssets[] = {
      .name = " BUTTE ",
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
-     .initCallback = (void *)0x800063B4,
+     .initCallback = initDriftingParticle,
      },
     {
      .name = " BUS   ",
@@ -1662,7 +1663,7 @@ AssetGroup gameAssets[] = {
      .name = " BUTTE ",
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
-     .initCallback = (void *)0x800063B4,
+     .initCallback = initDriftingParticle,
      },
     {
      .name = " UFO   ",
