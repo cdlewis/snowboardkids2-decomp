@@ -17,8 +17,6 @@ extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
 extern Gfx *gRegionAllocPtr;
 extern s16 identityMatrix[];
-extern void *arenaAlloc16(s32 size);
-extern s32 isObjectCulled(Vec3i *arg0);
 
 // Data pointers for different sprite dimension combinations
 extern void *D_8008C9E8_8D5E8;

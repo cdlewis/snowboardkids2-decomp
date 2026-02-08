@@ -21,6 +21,15 @@ typedef struct {
 } Asset;
 
 typedef struct {
+    void *assetStart;
+    void *assetEnd;
+    void *asset2Start;
+    void *asset2End;
+    s32 asset2Size;
+    void *unk14;
+} ItemAssetEntry;
+
+typedef struct {
     /* 0x00 */ char name[8];
     /* 0x08 */ void *displayListStart;
     /* 0x0C */ void *displayListEnd;
