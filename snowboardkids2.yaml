@@ -2419,7 +2419,7 @@ segments:
     vram: 0
     start: 0x45D620
 
-  - name: _45F6D0
+  - name: JAMS_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x45F6D0
@@ -2464,7 +2464,7 @@ segments:
     vram: 0
     start: 0x47B2D0
 
-  - name: _47EFC0
+  - name: JAMN_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x47EFC0
@@ -2939,12 +2939,12 @@ segments:
     vram: 0
     start: 0x52FC30
 
-  - name: _535E80
+  - name: JAM3_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x535E80
 
-  - name: _53E160
+  - name: JAMO_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x53E160
