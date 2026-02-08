@@ -1229,7 +1229,7 @@ segments:
     vram: 0
     start: 0x1EF1C0
 
-  - name: _1EF780
+  - name: SNOW2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EF780
@@ -2654,7 +2654,7 @@ segments:
     vram: 0
     start: 0x4A79C0
 
-  - name: _4A8180
+  - name: SNOW2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A8180
