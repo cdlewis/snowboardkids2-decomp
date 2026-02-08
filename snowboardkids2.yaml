@@ -2449,7 +2449,7 @@ segments:
     vram: 0
     start: 0x46D570
 
-  - name: _46F0C0
+  - name: DOGS_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x46F0C0
@@ -2494,7 +2494,7 @@ segments:
     vram: 0
     start: 0x498680
 
-  - name: _4998E0
+  - name: DOGN_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x4998E0
@@ -2974,7 +2974,7 @@ segments:
     vram: 0
     start: 0x55E550
 
-  - name: _564920
+  - name: DOG2_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x564920
@@ -3039,7 +3039,7 @@ segments:
     vram: 0
     start: 0x5AD910
 
-  - name: _5B0030
+  - name: DOGO_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5B0030
@@ -3069,7 +3069,7 @@ segments:
     vram: 0
     start: 0x5B7D30
 
-  - name: _5B9AC0
+  - name: DOG_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5B9AC0
