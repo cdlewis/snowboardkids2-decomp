@@ -2934,7 +2934,7 @@ segments:
     vram: 0
     start: 0x527EE0
 
-  - name: _52FC30
+  - name: JAM2_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x52FC30
