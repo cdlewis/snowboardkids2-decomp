@@ -1124,7 +1124,7 @@ segments:
     vram: 0
     start: 0x1E9790
 
-  - name: _1E9C40
+  - name: DOOR_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E9C40
@@ -2549,7 +2549,7 @@ segments:
     vram: 0
     start: 0x49FA20
 
-  - name: _4A0670
+  - name: DOOR_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A0670
