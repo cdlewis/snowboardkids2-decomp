@@ -314,3 +314,21 @@ void enqueueModelDisplayList(func_80002B50_3750_arg *arg0, DisplayListObject *ar
 s32 isAssetGroupEmpty(s16);
 
 s32 hasModelGraphicsData(SceneModel *);
+
+typedef struct {
+    void *owner;
+    u8 transformMatrix[0x18];
+    s32 unk1C;
+    u8 padding[0x4];
+    void *unk24;
+    MemoryAllocatorNode *displayList;
+    MemoryAllocatorNode *vertexData;
+    s32 unk30;
+    u8 padding2[0xC];
+    s16 rotationAngle;
+    s16 stretchAngle;
+} StretchingModelTaskState;
+
+void cleanupStretchingModelTask(StretchingModelTaskState *);
+void initStretchingModelTask(StretchingModelTaskState *);
+void updateStretchingModelTask(StretchingModelTaskState *);
