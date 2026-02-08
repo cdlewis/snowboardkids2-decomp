@@ -34,6 +34,7 @@ extern u8 identityMatrix[32];
 extern u8 D_215D70[];
 extern void initDriftingParticle(void *arg0);
 extern void initTrailingParticle(void *arg0);
+extern void initSteppedMatrixController(void *arg0);
 
 u32 itemMatrix_17[4] = { 0x0, 0x10000D0, 0x0, 0x0 };
 
@@ -908,7 +909,7 @@ AssetGroup gameAssets[] = {
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff050000,
-     .initCallback = (void *)0x80006AB0,
+     .initCallback = initSteppedMatrixController,
      },
     {
      .name = " TABLE ",
