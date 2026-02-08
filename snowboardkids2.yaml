@@ -1199,7 +1199,7 @@ segments:
     vram: 0
     start: 0x1EDEE0
 
-  - name: _1EE140
+  - name: RADIO_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EE140
@@ -2624,7 +2624,7 @@ segments:
     vram: 0
     start: 0x4A6360
 
-  - name: _4A6920
+  - name: RADIO_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A6920
