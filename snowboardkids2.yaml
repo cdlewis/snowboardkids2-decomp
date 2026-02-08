@@ -1239,7 +1239,7 @@ segments:
     vram: 0
     start: 0x1EFB50
 
-  - name: _1F8D10
+  - name: UFO_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1F8D10
@@ -2664,12 +2664,12 @@ segments:
     vram: 0
     start: 0x4A8650
 
-  - name: _4C20A0
+  - name: UFO_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4C20A0
 
-  - name: _4C3660
+  - name: UFO_SOUND_SEQUENCE_DATA
     type: bin
     vram: 0
     start: 0x4C3660
