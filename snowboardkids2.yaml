@@ -1194,7 +1194,7 @@ segments:
     vram: 0
     start: 0x1EDCF0
 
-  - name: _1EDEE0
+  - name: TABLE_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EDEE0
@@ -2619,7 +2619,7 @@ segments:
     vram: 0
     start: 0x4A5E10
 
-  - name: _4A6360
+  - name: TABLE_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A6360
