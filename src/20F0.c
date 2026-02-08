@@ -36,6 +36,7 @@ extern void initDriftingParticle(void *arg0);
 extern void initTrailingParticle(void *arg0);
 extern void initSteppedMatrixController(void *arg0);
 extern void initPulsingSpriteIndicator(void *arg0);
+extern void initOrbitalSpriteRing(void *arg0);
 
 u32 itemMatrix_17[4] = { 0x0, 0x10000D0, 0x0, 0x0 };
 
@@ -778,7 +779,7 @@ AssetGroup gameAssets[] = {
      .soundSequenceDataStart = (void *)&CAKE_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&CAKE_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x468,
-     .initCallback = (void *)0x80007070,
+     .initCallback = initOrbitalSpriteRing,
      },
     {
      .name = " POSP  ",
