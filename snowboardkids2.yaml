@@ -1419,22 +1419,22 @@ segments:
     vram: 0
     start: 0x210390
 
-  - name: _2110E0
+  - name: WENDY_DISPLAY_LIST_0
     type: bin
     vram: 0
     start: 0x2110E0
 
-  - name: _211920
+  - name: WENDY_DISPLAY_LIST_1
     type: bin
     vram: 0
     start: 0x211920
 
-  - name: _211F40
+  - name: WENDY_DISPLAY_LIST_2
     type: bin
     vram: 0
     start: 0x211F40
 
-  - name: _2125A0
+  - name: WENDY_DISPLAY_LIST_3
     type: bin
     vram: 0
     start: 0x2125A0
@@ -2849,22 +2849,22 @@ segments:
     vram: 0
     start: 0x4E21A0
 
-  - name: _4E33D0
+  - name: WENDY_COMPRESSED_DATA_0
     type: bin
     vram: 0
     start: 0x4E33D0
 
-  - name: _4E40A0
+  - name: WENDY_COMPRESSED_DATA_1
     type: bin
     vram: 0
     start: 0x4E40A0
 
-  - name: _4E4AA0
+  - name: WENDY_COMPRESSED_DATA_2
     type: bin
     vram: 0
     start: 0x4E4AA0
 
-  - name: _4E54E0
+  - name: WENDY_COMPRESSED_DATA_3
     type: bin
     vram: 0
     start: 0x4E54E0
