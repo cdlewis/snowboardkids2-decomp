@@ -35,6 +35,7 @@ extern u8 D_215D70[];
 extern void initDriftingParticle(void *arg0);
 extern void initTrailingParticle(void *arg0);
 extern void initSteppedMatrixController(void *arg0);
+extern void initPulsingSpriteIndicator(void *arg0);
 
 u32 itemMatrix_17[4] = { 0x0, 0x10000D0, 0x0, 0x0 };
 
@@ -1458,7 +1459,7 @@ AssetGroup gameAssets[] = {
      .soundSequenceDataStart = (void *)&GHOST_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&GHOST_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0xA78,
-     .initCallback = (void *)0x80006C50,
+     .initCallback = initPulsingSpriteIndicator,
      },
     {
      .name = " POST2 ",
