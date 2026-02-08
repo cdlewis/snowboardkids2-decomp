@@ -33,6 +33,7 @@ typedef struct {
 extern u8 identityMatrix[32];
 extern u8 D_215D70[];
 extern void initDriftingParticle(void *arg0);
+extern void initTrailingParticle(void *arg0);
 
 u32 itemMatrix_17[4] = { 0x0, 0x10000D0, 0x0, 0x0 };
 
@@ -521,7 +522,7 @@ AssetGroup gameAssets[] = {
      .soundSequenceDataStart = (void *)&BOMB_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&BOMB_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x358,
-     .initCallback = (void *)0x80006940,
+     .initCallback = initTrailingParticle,
      },
     {
      .name = " BUTTE ",
@@ -1306,7 +1307,7 @@ AssetGroup gameAssets[] = {
      .soundSequenceDataStart = (void *)&BOMB2_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&BOMB2_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x358,
-     .initCallback = (void *)0x80006940,
+     .initCallback = initTrailingParticle,
      },
     {
      .name = " SLASHN",
