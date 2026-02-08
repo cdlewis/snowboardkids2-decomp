@@ -1284,7 +1284,7 @@ segments:
     vram: 0
     start: 0x1FC370
 
-  - name: _1FC700
+  - name: KANI_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FC700
@@ -2714,7 +2714,7 @@ segments:
     vram: 0
     start: 0x4CBCF0
 
-  - name: _4CCA00
+  - name: KANI_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CCA00
