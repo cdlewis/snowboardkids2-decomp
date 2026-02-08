@@ -1249,7 +1249,7 @@ segments:
     vram: 0
     start: 0x1F94F0
 
-  - name: _1FB040
+  - name: BUS_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FB040
@@ -2679,7 +2679,7 @@ segments:
     vram: 0
     start: 0x4C3A60
 
-  - name: _4C9310
+  - name: BUS_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4C9310
