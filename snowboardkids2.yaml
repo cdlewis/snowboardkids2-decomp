@@ -1269,7 +1269,7 @@ segments:
     vram: 0
     start: 0x1FBE00
 
-  - name: _1FBF30
+  - name: POST_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FBF30
@@ -2699,7 +2699,7 @@ segments:
     vram: 0
     start: 0x4CAD30
 
-  - name: _4CB1E0
+  - name: POST_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CB1E0
@@ -3220,7 +3220,7 @@ segments:
 
   - [0x648C60, bin]
 
-  - name: _663010
+  - name: POST2_SOUND_SEQUENCE_DATA
     type: bin
     vram: 0
     start: 0x663010
