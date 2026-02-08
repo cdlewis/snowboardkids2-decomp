@@ -1144,7 +1144,7 @@ segments:
     vram: 0
     start: 0x1EACD0
 
-  - name: _1EAEF0
+  - name: MROBO_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EAEF0
@@ -1339,22 +1339,22 @@ segments:
     vram: 0
     start: 0x202550
 
-  - name: _203C30
+  - name: NANCY1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x203C30
 
-  - name: _204980
+  - name: NANCY2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x204980
 
-  - name: _205510
+  - name: NANCY3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x205510
 
-  - name: _206080
+  - name: NANCY4_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x206080
@@ -2569,7 +2569,7 @@ segments:
     vram: 0
     start: 0x4A2980
 
-  - name: _4A2BC0
+  - name: MROBO_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A2BC0
@@ -2769,22 +2769,22 @@ segments:
     vram: 0
     start: 0x4D2FD0
 
-  - name: _4D45C0
+  - name: NANCY1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4D45C0
 
-  - name: _4D5270
+  - name: NANCY2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4D5270
 
-  - name: _4D5D60
+  - name: NANCY3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4D5D60
 
-  - name: _4D6880
+  - name: NANCY4_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4D6880
@@ -3064,7 +3064,7 @@ segments:
     vram: 0
     start: 0x5B5590
 
-  - name: _5B7D30
+  - name: MROBO_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5B7D30
