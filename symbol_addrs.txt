@@ -10,6 +10,7 @@ LINDA_ASSETS = 0x8008988C; // rom:0x8A48C
 TOMMY_ASSETS = 0x800898EC; // rom:0x8A4EC
 WENDY_ASSETS = 0x8008994C; // rom:0x8A54C
 BLACK_ASSETS_212CF0 = 0x800899AC; // rom:0x8A5AC
+PEN_ASSETS = 0x80089A0C; // rom:0x8A60C
 microcodeGroups = 0x8009AFD8; // size:0x10
 gRootViewport = 0x800A3370; // size:0xC
 D_800BCA64 = 0x800BCA64; // segment:levels/ice_land_boss rom:0xB1F54

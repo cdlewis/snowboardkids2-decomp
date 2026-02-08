@@ -228,7 +228,7 @@ ItemAssetEntry BLACK_ASSETS_212CF0[4] = {
      0x3DE00008, (void *)0x80088E80 },
 };
 
-ItemAssetEntry D_80089A0C_8A60C[4] = {
+ItemAssetEntry PEN_ASSETS[4] = {
     { (void *)&_214B70_ROM_START,
      (void *)&_214B70_ROM_END,
      (void *)&_4E7640_ROM_START,
@@ -344,7 +344,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_576600_ROM_END,
      .animationDataSize = 0xFE66,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)D_80089A0C_8A60C,
+     .Assets = (void *)PEN_ASSETS,
      .count = 4,
      },
     {
@@ -571,7 +571,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_5AD910_ROM_END,
      .animationDataSize = 0x40A2,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)D_80089A0C_8A60C,
+     .Assets = (void *)PEN_ASSETS,
      .count = 4,
      },
     {
@@ -946,7 +946,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_46D570_ROM_END,
      .animationDataSize = 0x35BC,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)D_80089A0C_8A60C,
+     .Assets = (void *)PEN_ASSETS,
      .count = 4,
      },
     {
@@ -1200,7 +1200,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_576600_ROM_END,
      .animationDataSize = 0xFE66,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)D_80089A0C_8A60C,
+     .Assets = (void *)PEN_ASSETS,
      .count = 4,
      },
     {
@@ -1321,7 +1321,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_498680_ROM_END,
      .animationDataSize = 0x252E,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)D_80089A0C_8A60C,
+     .Assets = (void *)PEN_ASSETS,
      .count = 4,
      },
     {
