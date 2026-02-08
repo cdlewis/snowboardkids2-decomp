@@ -1399,22 +1399,22 @@ segments:
     vram: 0
     start: 0x20D040
 
-  - name: _20DAE0
+  - name: TOMMY_DISPLAY_LIST_0
     type: bin
     vram: 0
     start: 0x20DAE0
 
-  - name: _20E850
+  - name: TOMMY_DISPLAY_LIST_1
     type: bin
     vram: 0
     start: 0x20E850
 
-  - name: _20F730
+  - name: TOMMY_DISPLAY_LIST_2
     type: bin
     vram: 0
     start: 0x20F730
 
-  - name: _210390
+  - name: TOMMY_DISPLAY_LIST_3
     type: bin
     vram: 0
     start: 0x210390
@@ -2429,7 +2429,7 @@ segments:
     vram: 0
     start: 0x462B50
 
-  - name: _464DD0
+  - name: TOMMYS_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x464DD0
@@ -2474,7 +2474,7 @@ segments:
     vram: 0
     start: 0x482E40
 
-  - name: _4875E0
+  - name: TOMMYN_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x4875E0
@@ -2829,22 +2829,22 @@ segments:
     vram: 0
     start: 0x4DDD90
 
-  - name: _4DE820
+  - name: TOMMY_COMPRESSED_DATA_0
     type: bin
     vram: 0
     start: 0x4DE820
 
-  - name: _4DFAC0
+  - name: TOMMY_COMPRESSED_DATA_1
     type: bin
     vram: 0
     start: 0x4DFAC0
 
-  - name: _4E0ED0
+  - name: TOMMY_COMPRESSED_DATA_2
     type: bin
     vram: 0
     start: 0x4E0ED0
 
-  - name: _4E21A0
+  - name: TOMMY_COMPRESSED_DATA_3
     type: bin
     vram: 0
     start: 0x4E21A0
@@ -2969,7 +2969,7 @@ segments:
     vram: 0
     start: 0x5596D0
 
-  - name: _55E550
+  - name: TOMMY_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x55E550
@@ -2979,12 +2979,12 @@ segments:
     vram: 0
     start: 0x564920
 
-  - name: _568A70
+  - name: TOMMY3_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x568A70
 
-  - name: _573660
+  - name: TOMMYO_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x573660
