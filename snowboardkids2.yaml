@@ -1149,7 +1149,7 @@ segments:
     vram: 0
     start: 0x1EAEF0
 
-  - name: _1EC940
+  - name: BURG_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EC940
@@ -2574,7 +2574,7 @@ segments:
     vram: 0
     start: 0x4A2BC0
 
-  - name: _4A3E80
+  - name: BURG_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A3E80
