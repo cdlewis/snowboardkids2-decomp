@@ -1274,7 +1274,7 @@ segments:
     vram: 0
     start: 0x1FBF30
 
-  - name: _1FC140
+  - name: POSP_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FC140
@@ -2704,7 +2704,7 @@ segments:
     vram: 0
     start: 0x4CB1E0
 
-  - name: _4CB700
+  - name: POSP_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CB700
