@@ -1439,7 +1439,7 @@ segments:
     vram: 0
     start: 0x2125A0
 
-  - name: _212CF0
+  - name: BLACK_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x212CF0
@@ -2439,7 +2439,7 @@ segments:
     vram: 0
     start: 0x4666C0
 
-  - name: _46A0E0
+  - name: BLACKS_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x46A0E0
@@ -2484,7 +2484,7 @@ segments:
     vram: 0
     start: 0x48E8F0
 
-  - name: _4937A0
+  - name: BLACKN_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x4937A0
@@ -2869,7 +2869,7 @@ segments:
     vram: 0
     start: 0x4E54E0
 
-  - name: _4E5FC0
+  - name: BLACK_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4E5FC0
@@ -3009,22 +3009,22 @@ segments:
     vram: 0
     start: 0x590790
 
-  - name: _5944E0
+  - name: BLACK_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5944E0
 
-  - name: _59C0A0
+  - name: BLACK2_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x59C0A0
 
-  - name: _59EF90
+  - name: BLACK3_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x59EF90
 
-  - name: _5A9D70
+  - name: BLACKO_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5A9D70
@@ -3079,7 +3079,7 @@ segments:
     vram: 0
     start: 0x5BD9F0
 
-  - name: _5BDB20
+  - name: BLACK_5BDB20
     type: bin
     vram: 0
     start: 0x5BDB20
