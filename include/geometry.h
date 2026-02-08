@@ -84,3 +84,15 @@ void computeLookAtMatrix(void *arg0, void *arg1, void *arg2);
 void transformVectorRelative(void *arg0, void *arg1, void *arg2);
 
 void transform3DToN64Mtx(Transform3D *transform, Mtx *mtx);
+
+typedef struct QuadDisplayListElement {
+    /* 0x00 */ void *model;  // SceneModel *model
+    /* 0x04 */ u8 transformMatrix[0x20];
+    /* 0x24 */ void *renderSettings;
+    /* 0x28 */ void *displayList;
+    /* 0x2C */ void *vertexData;
+    /* 0x30 */ s32 renderFlag;
+    /* 0x34 */ u8 _pad34[0x8];
+} QuadDisplayListElement;
+
+void initializeQuadDisplayList(QuadDisplayListElement *elements);

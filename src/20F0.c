@@ -7,6 +7,7 @@
 #include "assets.h"
 #include "audio.h"
 #include "displaylist.h"
+#include "geometry.h"
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
@@ -538,7 +539,7 @@ AssetGroup gameAssets[] = {
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
-     .initCallback = (void *)0x80005DB0,
+     .initCallback = initializeQuadDisplayList,
      },
     {
      .name = " UFO   ",

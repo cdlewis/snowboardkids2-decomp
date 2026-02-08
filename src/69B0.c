@@ -12,16 +12,6 @@ typedef struct {
 } RotationControllerState;
 
 typedef struct {
-    /* 0x00 */ SceneModel *model;
-    /* 0x04 */ u8 transformMatrix[0x20];
-    /* 0x24 */ void *renderSettings;
-    /* 0x28 */ void *displayList;
-    /* 0x2C */ void *vertexData;
-    /* 0x30 */ s32 renderFlag;
-    /* 0x34 */ u8 _pad34[0x8];
-} QuadDisplayListElement; // Size: 0x3C (60 bytes)
-
-typedef struct {
     /* 0x00 */ func_80002B50_3750_arg *model;
     /* 0x04 */ QuadDisplayListElement elements[4];
     /* 0xF4 */ u16 rotationAngle;
