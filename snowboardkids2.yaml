@@ -2924,7 +2924,7 @@ segments:
     vram: 0
     start: 0x51BCF0
 
-  - name: _5242F0
+  - name: NANCYO_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5242F0
