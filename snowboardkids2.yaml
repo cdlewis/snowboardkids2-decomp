@@ -1209,7 +1209,7 @@ segments:
     vram: 0
     start: 0x1EE410
 
-  - name: _1EE7D0
+  - name: CUP_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EE7D0
@@ -2634,7 +2634,7 @@ segments:
     vram: 0
     start: 0x4A6B60
 
-  - name: _4A7070
+  - name: CUP_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A7070
