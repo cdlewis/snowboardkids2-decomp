@@ -37,6 +37,7 @@ extern void initTrailingParticle(void *arg0);
 extern void initSteppedMatrixController(void *arg0);
 extern void initPulsingSpriteIndicator(void *arg0);
 extern void initOrbitalSpriteRing(void *arg0);
+extern void initModelTransitionEffect(void *arg0);
 
 u32 itemMatrix_17[4] = { 0x0, 0x10000D0, 0x0, 0x0 };
 
@@ -1100,7 +1101,7 @@ AssetGroup gameAssets[] = {
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff020000,
-     .initCallback = (void *)0x800078C4,
+     .initCallback = initModelTransitionEffect,
      },
     {
      .name = " PBOX1 ",
@@ -1113,7 +1114,7 @@ AssetGroup gameAssets[] = {
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff020000,
-     .initCallback = (void *)0x800078C4,
+     .initCallback = initModelTransitionEffect,
      },
     {
      .name = " USAGI ",
