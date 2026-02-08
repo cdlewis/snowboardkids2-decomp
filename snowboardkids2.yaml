@@ -2909,7 +2909,7 @@ segments:
     vram: 0
     start: 0x50BFD0
 
-  - name: _510AD0
+  - name: NANCY_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x510AD0
