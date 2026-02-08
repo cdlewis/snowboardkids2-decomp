@@ -6,6 +6,7 @@
 void *memcpy(void *, const void *, size_t);
 
 #define ABS(d) ((d) > 0) ? (d) : -(d)
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 
 #define STICK_RIGHT 0x40000
 #define STICK_LEFT 0x80000

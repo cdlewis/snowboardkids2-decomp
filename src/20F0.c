@@ -65,7 +65,7 @@ ItemAssetEntry itemAssetTable[] = {
     { &_215A60_ROM_START, &_215A60_ROM_END, &_6648C0_ROM_START, &_6648C0_ROM_END, 0x810, (void *)itemMatrix_215A60 },
 };
 
-s32 itemAssetCount = 0x13;
+s32 itemAssetCount = ARRAY_SIZE(itemAssetTable);
 
 ItemAssetEntry SLASH_ASSETS[4] = {
     { (void *)&_1FDA30_ROM_START,
@@ -205,7 +205,7 @@ ItemAssetEntry WENDY_ASSETS[4] = {
      0x1D000002, (void *)0x80088E60 },
 };
 
-ItemAssetEntry BLACK_ASSETS_212CF0[4] = {
+ItemAssetEntry BLACK_ASSETS[4] = {
     { (void *)&_212CF0_ROM_START,
      (void *)&_212CF0_ROM_END,
      (void *)&_4E5FC0_ROM_START,
@@ -332,7 +332,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_5944E0_ROM_END,
      .animationDataSize = 0xC8A4,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)BLACK_ASSETS_212CF0,
+     .Assets = (void *)BLACK_ASSETS,
      .count = 4,
      },
     {
@@ -559,7 +559,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_59C0A0_ROM_END,
      .animationDataSize = 0x5A70,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)BLACK_ASSETS_212CF0,
+     .Assets = (void *)BLACK_ASSETS,
      .count = 4,
      },
     {
@@ -814,7 +814,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_59EF90_ROM_END,
      .animationDataSize = 0x11794,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)BLACK_ASSETS_212CF0,
+     .Assets = (void *)BLACK_ASSETS,
      .count = 4,
      },
     {
@@ -934,7 +934,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_46A0E0_ROM_END,
      .animationDataSize = 0x58A4,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)BLACK_ASSETS_212CF0,
+     .Assets = (void *)BLACK_ASSETS,
      .count = 4,
      },
     {
@@ -1188,7 +1188,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_5A9D70_ROM_END,
      .animationDataSize = 0x53D6,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)BLACK_ASSETS_212CF0,
+     .Assets = (void *)BLACK_ASSETS,
      .count = 4,
      },
     {
@@ -1309,7 +1309,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_4937A0_ROM_END,
      .animationDataSize = 0x8F0C,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)BLACK_ASSETS_212CF0,
+     .Assets = (void *)BLACK_ASSETS,
      .count = 4,
      },
     {
