@@ -2919,7 +2919,7 @@ segments:
     vram: 0
     start: 0x518BA0
 
-  - name: _51BCF0
+  - name: NANCY3_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x51BCF0
