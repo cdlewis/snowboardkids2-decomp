@@ -205,7 +205,7 @@ ItemAssetEntry WENDY_ASSETS[4] = {
      0x1D000002, (void *)0x80088E60 },
 };
 
-ItemAssetEntry D_800899AC_8A5AC[4] = {
+ItemAssetEntry BLACK_ASSETS_212CF0[4] = {
     { (void *)&_212CF0_ROM_START,
      (void *)&_212CF0_ROM_END,
      (void *)&_4E5FC0_ROM_START,
@@ -332,7 +332,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_5944E0_ROM_END,
      .animationDataSize = 0xC8A4,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)D_800899AC_8A5AC,
+     .Assets = (void *)BLACK_ASSETS_212CF0,
      .count = 4,
      },
     {
@@ -559,7 +559,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_59C0A0_ROM_END,
      .animationDataSize = 0x5A70,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)D_800899AC_8A5AC,
+     .Assets = (void *)BLACK_ASSETS_212CF0,
      .count = 4,
      },
     {
@@ -814,7 +814,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_59EF90_ROM_END,
      .animationDataSize = 0x11794,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)D_800899AC_8A5AC,
+     .Assets = (void *)BLACK_ASSETS_212CF0,
      .count = 4,
      },
     {
@@ -934,7 +934,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_46A0E0_ROM_END,
      .animationDataSize = 0x58A4,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)D_800899AC_8A5AC,
+     .Assets = (void *)BLACK_ASSETS_212CF0,
      .count = 4,
      },
     {
@@ -1188,7 +1188,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_5A9D70_ROM_END,
      .animationDataSize = 0x53D6,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)D_800899AC_8A5AC,
+     .Assets = (void *)BLACK_ASSETS_212CF0,
      .count = 4,
      },
     {
@@ -1309,7 +1309,7 @@ AssetGroup gameAssets[] = {
      .animationDataEnd = (void *)&_4937A0_ROM_END,
      .animationDataSize = 0x8F0C,
      .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)D_800899AC_8A5AC,
+     .Assets = (void *)BLACK_ASSETS_212CF0,
      .count = 4,
      },
     {
