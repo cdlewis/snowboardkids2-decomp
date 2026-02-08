@@ -90,7 +90,8 @@ void updateOscillatingModelTask(OscillatingModelTaskState *state) {
 void cleanupOscillatingModelTask(void) {
 }
 
-void initOscillatingSpriteTask(OscillatingSpriteTaskState *state) {
+void initOscillatingSpriteTask(void *statePtr) {
+    OscillatingSpriteTaskState *state = (OscillatingSpriteTaskState *)statePtr;
     state->spriteFlipped = 0;
     loadSpriteAsset(&state->spriteState, 9);
     setSpriteAnimation(&state->spriteState, 0x10000, 0, -1);

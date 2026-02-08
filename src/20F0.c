@@ -1472,7 +1472,7 @@ AssetGroup gameAssets[] = {
      .soundSequenceDataStart = (void *)&POST2_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&POST2_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x848,
-     .initCallback = (void *)0x80008310,
+     .initCallback = initOscillatingSpriteTask,
      },
     {
      .name = " LTBL2 ",
