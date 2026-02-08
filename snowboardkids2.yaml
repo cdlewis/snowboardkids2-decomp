@@ -1309,7 +1309,7 @@ segments:
     vram: 0
     start: 0x1FD350
 
-  - name: _1FD500
+  - name: KEYL_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FD500
@@ -2739,7 +2739,7 @@ segments:
     vram: 0
     start: 0x4CE2A0
 
-  - name: _4CE500
+  - name: KEYL_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CE500
@@ -3074,7 +3074,7 @@ segments:
     vram: 0
     start: 0x5B9AC0
 
-  - name: _5BD9F0
+  - name: KEYL_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5BD9F0
