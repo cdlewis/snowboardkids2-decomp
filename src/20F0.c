@@ -31,74 +31,114 @@ typedef struct {
 extern u8 identityMatrix[32];
 extern u8 D_215D70[];
 
-u32 itemMatrix_215360[4] = { 0x0, 0x10000D0, 0x0, 0x0 };
+u32 itemMatrix_17[4] = { 0x0, 0x10000D0, 0x0, 0x0 };
 
-u32 itemMatrix_215440[4] = { 0x0, 0x10000F8, 0x0, 0x0 };
+u32 itemMatrix_4[4] = { 0x0, 0x10000F8, 0x0, 0x0 };
 
-u32 itemMatrix_215550[4] = { 0x0, 0x1000198, 0x0, 0x0 };
+u32 itemMatrix_7[4] = { 0x0, 0x1000198, 0x0, 0x0 };
 
-u32 itemMatrix_215700[4] = { 0x0, 0x10001A0, 0x0, 0x0 };
+u32 itemMatrix_9[4] = { 0x0, 0x10001A0, 0x0, 0x0 };
 
-u32 itemMatrix_2158B0[4] = { 0x0, 0x10001A0, 0x0, 0x0 };
+u32 itemMatrix_10[4] = { 0x0, 0x10001A0, 0x0, 0x0 };
 
-u32 itemMatrix_215A60[4] = { 0x0, 0x10002F8, 0x0, 0x0 };
+u32 itemMatrix_18[4] = { 0x0, 0x10002F8, 0x0, 0x0 };
 
 ItemAssetEntry itemAssetTable[] = {
-    { &_214FC0_ROM_START,                  &_214FC0_ROM_END, &_663440_ROM_START, &_663440_ROM_END, 0x520, (void *)0x80089500        },
-    { &_1ED890_ROM_START,                  &_1ED890_ROM_END, &_4A5840_ROM_START, &_4A5840_ROM_END, 0x370, (void *)0x800882F0        },
+    { &ITEM_0_DISPLAY_LIST_ROM_START,
+     &ITEM_0_DISPLAY_LIST_ROM_END,
+     &ITEM_0_COMPRESSED_DATA_ROM_START,
+     &ITEM_0_COMPRESSED_DATA_ROM_END,
+     0x520, (void *)0x80089500    },
+    { &ITEM_1_DISPLAY_LIST_ROM_START,
+     &ITEM_1_DISPLAY_LIST_ROM_END,
+     &ITEM_1_COMPRESSED_DATA_ROM_START,
+     &ITEM_1_COMPRESSED_DATA_ROM_END,
+     0x370, (void *)0x800882F0    },
     { &ITEM_DEBRIS_DISPLAY_LIST_ROM_START,
      &ITEM_DEBRIS_DISPLAY_LIST_ROM_END,
      &ITEM_DEBRIS_COMPRESSED_DATA_ROM_START,
      &ITEM_DEBRIS_COMPRESSED_DATA_ROM_END,
-     0x370,                                                                                               (void *)0x80088300        },
-    { &_215280_ROM_START,                  &_215280_ROM_END, &_663C90_ROM_START, &_663C90_ROM_END, 0x1D0, (void *)0x80089530        },
-    { &_215440_ROM_START,                  &_215440_ROM_END, &_663EE0_ROM_START, &_663EE0_ROM_END, 0x3C0, (void *)itemMatrix_215440 },
+     0x370, (void *)0x80088300    },
+    { &ITEM_3_DISPLAY_LIST_ROM_START,
+     &ITEM_3_DISPLAY_LIST_ROM_END,
+     &ITEM_3_COMPRESSED_DATA_ROM_START,
+     &ITEM_3_COMPRESSED_DATA_ROM_END,
+     0x1D0, (void *)0x80089530    },
+    { &ITEM_4_DISPLAY_LIST_ROM_START,
+     &ITEM_4_DISPLAY_LIST_ROM_END,
+     &ITEM_4_COMPRESSED_DATA_ROM_START,
+     &ITEM_4_COMPRESSED_DATA_ROM_END,
+     0x3C0, (void *)itemMatrix_4  },
     { &BURG_DISPLAY_LIST_ROM_START,
      &BURG_DISPLAY_LIST_ROM_END,
      &BURG_COMPRESSED_DATA_ROM_START,
      &BURG_COMPRESSED_DATA_ROM_END,
-     0x620,                                                                                               (void *)0x80088290        },
+     0x620, (void *)0x80088290    },
     { &NEWS_DISPLAY_LIST_ROM_START,
      &NEWS_DISPLAY_LIST_ROM_END,
      &NEWS_COMPRESSED_DATA_ROM_START,
      &NEWS_COMPRESSED_DATA_ROM_END,
-     0x620,                                                                                               (void *)0x800886A0        },
-    { &_215550_ROM_START,                  &_215550_ROM_END, &_664140_ROM_START, &_664140_ROM_END, 0x3B0, (void *)itemMatrix_215550 },
+     0x620, (void *)0x800886A0    },
+    { &ITEM_7_DISPLAY_LIST_ROM_START,
+     &ITEM_7_DISPLAY_LIST_ROM_END,
+     &ITEM_7_COMPRESSED_DATA_ROM_START,
+     &ITEM_7_COMPRESSED_DATA_ROM_END,
+     0x3B0, (void *)itemMatrix_7  },
     { &KANI_DISPLAY_LIST_ROM_START,
      &KANI_DISPLAY_LIST_ROM_END,
      &KANI_COMPRESSED_DATA_ROM_START,
      &KANI_COMPRESSED_DATA_ROM_END,
-     0x770,                                                                                               (void *)0x800886E0        },
-    { &_215700_ROM_START,                  &_215700_ROM_END, &_664400_ROM_START, &_664400_ROM_END, 0x4A0, (void *)itemMatrix_215700 },
-    { &_2158B0_ROM_START,                  &_2158B0_ROM_END, &_664660_ROM_START, &_664660_ROM_END, 0x4A0, (void *)itemMatrix_2158B0 },
+     0x770, (void *)0x800886E0    },
+    { &ITEM_9_DISPLAY_LIST_ROM_START,
+     &ITEM_9_DISPLAY_LIST_ROM_END,
+     &ITEM_9_COMPRESSED_DATA_ROM_START,
+     &ITEM_9_COMPRESSED_DATA_ROM_END,
+     0x4A0, (void *)itemMatrix_9  },
+    { &ITEM_10_DISPLAY_LIST_ROM_START,
+     &ITEM_10_DISPLAY_LIST_ROM_END,
+     &ITEM_10_COMPRESSED_DATA_ROM_START,
+     &ITEM_10_COMPRESSED_DATA_ROM_END,
+     0x4A0, (void *)itemMatrix_10 },
     { &CUP_DISPLAY_LIST_ROM_START,
      &CUP_DISPLAY_LIST_ROM_END,
      &CUP_COMPRESSED_DATA_ROM_START,
      &CUP_COMPRESSED_DATA_ROM_END,
-     0xA90,                                                                                               (void *)0x80088360        },
+     0xA90, (void *)0x80088360    },
     { &POT_DISPLAY_LIST_ROM_START,
      &POT_DISPLAY_LIST_ROM_END,
      &POT_COMPRESSED_DATA_ROM_START,
      &POT_COMPRESSED_DATA_ROM_END,
-     0xA90,                                                                                               (void *)0x80088350        },
+     0xA90, (void *)0x80088350    },
     { &DISH_DISPLAY_LIST_ROM_START,
      &DISH_DISPLAY_LIST_ROM_END,
      &DISH_COMPRESSED_DATA_ROM_START,
      &DISH_COMPRESSED_DATA_ROM_END,
-     0x320,                                                                                               (void *)0x80088310        },
+     0x320, (void *)0x80088310    },
     { &ABOXL_DISPLAY_LIST_ROM_START,
      &ABOXL_DISPLAY_LIST_ROM_END,
      &ABOXL_COMPRESSED_DATA_ROM_START,
      &ABOXL_COMPRESSED_DATA_ROM_END,
-     0x710,                                                                                               (void *)0x80088700        },
-    { &_1EACD0_ROM_START,                  &_1EACD0_ROM_END, &_4A2980_ROM_START, &_4A2980_ROM_END, 0x790, (void *)0x800881E0        },
+     0x710, (void *)0x80088700    },
+    { &ITEM_15_DISPLAY_LIST_ROM_START,
+     &ITEM_15_DISPLAY_LIST_ROM_END,
+     &ITEM_15_COMPRESSED_DATA_ROM_START,
+     &ITEM_15_COMPRESSED_DATA_ROM_END,
+     0x790, (void *)0x800881E0    },
     { &BOMB2_DISPLAY_LIST_ROM_START,
      &BOMB2_DISPLAY_LIST_ROM_END,
      &BOMB2_COMPRESSED_DATA_ROM_START,
      &BOMB2_COMPRESSED_DATA_ROM_END,
-     0x7E0,                                                                                               (void *)0x800881A0        },
-    { &_215360_ROM_START,                  &_215360_ROM_END, &_663DB0_ROM_START, &_663DB0_ROM_END, 0x240, (void *)itemMatrix_215360 },
-    { &_215A60_ROM_START,                  &_215A60_ROM_END, &_6648C0_ROM_START, &_6648C0_ROM_END, 0x810, (void *)itemMatrix_215A60 },
+     0x7E0, (void *)0x800881A0    },
+    { &ITEM_17_DISPLAY_LIST_ROM_START,
+     &ITEM_17_DISPLAY_LIST_ROM_END,
+     &ITEM_17_COMPRESSED_DATA_ROM_START,
+     &ITEM_17_COMPRESSED_DATA_ROM_END,
+     0x240, (void *)itemMatrix_17 },
+    { &ITEM_18_DISPLAY_LIST_ROM_START,
+     &ITEM_18_DISPLAY_LIST_ROM_END,
+     &ITEM_18_COMPRESSED_DATA_ROM_START,
+     &ITEM_18_COMPRESSED_DATA_ROM_END,
+     0x810, (void *)itemMatrix_18 },
 };
 
 s32 itemAssetCount = ARRAY_SIZE(itemAssetTable);
@@ -2069,7 +2109,7 @@ void initializeGameEntity(
     ent->renderEnabled = 0;
     ent->height = 0;
 
-    ent->unk120 = loadCompressedData(_646850_ROM_START, _646850_ROM_END, 0x238);
+    ent->unk120 = loadCompressedData(GHOST_COMPRESSED_DATA_ROM_START, GHOST_COMPRESSED_DATA_ROM_END, 0x238);
     ent->unk124 = &gDefaultEntityData8C938;
     ent->unk13A = 0x50;
     ent->unk154 = 0;

@@ -1139,7 +1139,7 @@ segments:
     vram: 0
     start: 0x1EA480
 
-  - name: _1EACD0
+  - name: ITEM_15_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EACD0
@@ -1174,7 +1174,7 @@ segments:
     vram: 0
     start: 0x1ED740
 
-  - name: _1ED890
+  - name: ITEM_1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1ED890
@@ -1459,7 +1459,7 @@ segments:
     vram: 0
     start: 0x214F20
 
-  - name: _214FC0
+  - name: ITEM_0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x214FC0
@@ -1474,37 +1474,37 @@ segments:
     vram: 0
     start: 0x2151D0
 
-  - name: _215280
+  - name: ITEM_3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x215280
 
-  - name: _215360
+  - name: ITEM_17_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x215360
 
-  - name: _215440
+  - name: ITEM_4_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x215440
 
-  - name: _215550
+  - name: ITEM_7_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x215550
 
-  - name: _215700
+  - name: ITEM_9_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x215700
 
-  - name: _2158B0
+  - name: ITEM_10_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x2158B0
 
-  - name: _215A60
+  - name: ITEM_18_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x215A60
@@ -2564,7 +2564,7 @@ segments:
     vram: 0
     start: 0x4A1160
 
-  - name: _4A2980
+  - name: ITEM_15_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A2980
@@ -2599,7 +2599,7 @@ segments:
     vram: 0
     start: 0x4A5650
 
-  - name: _4A5840
+  - name: ITEM_1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A5840
@@ -3176,12 +3176,12 @@ segments:
     vram: 0
     start: 0x6462A0
 
-  - name: _646850
+  - name: GHOST_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x646850
 
-  - name: _646910
+  - name: GHOST_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x646910
@@ -3240,7 +3240,7 @@ segments:
     vram: 0
     start: 0x6633B0
 
-  - name: _663440
+  - name: ITEM_0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x663440
@@ -3260,37 +3260,37 @@ segments:
     vram: 0
     start: 0x663BE0
 
-  - name: _663C90
+  - name: ITEM_3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x663C90
 
-  - name: _663DB0
+  - name: ITEM_17_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x663DB0
 
-  - name: _663EE0
+  - name: ITEM_4_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x663EE0
 
-  - name: _664140
+  - name: ITEM_7_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x664140
 
-  - name: _664400
+  - name: ITEM_9_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x664400
 
-  - name: _664660
+  - name: ITEM_10_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x664660
 
-  - name: _6648C0
+  - name: ITEM_18_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x6648C0

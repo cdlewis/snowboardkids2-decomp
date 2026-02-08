@@ -96,7 +96,7 @@ void initScreenTransition(ScreenTransitionState *state) {
 }
 
 void loadTransitionAsset(void **assetData) {
-    *assetData = loadCompressedData(&_646910_ROM_START, &_646910_ROM_END, 0x658);
+    *assetData = loadCompressedData(&GHOST_COMPRESSED_DATA_ROM_START, &GHOST_COMPRESSED_DATA_ROM_END, 0x658);
 }
 
 void freeTransitionData(TransitionCleanupData **data) {

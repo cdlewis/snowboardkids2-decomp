@@ -1,8 +1,8 @@
-itemMatrix_215440 = 0x80089550; // rom:0x8A150
-itemMatrix_215550 = 0x80089560; // rom:0x8A160
-itemMatrix_215700 = 0x80089570; // rom:0x8A170
-itemMatrix_2158B0 = 0x80089580; // rom:0x8A180
-itemMatrix_215A60 = 0x80089590; // rom:0x8A190
+itemMatrix_4 = 0x80089550; // rom:0x8A150
+itemMatrix_7 = 0x80089560; // rom:0x8A160
+itemMatrix_9 = 0x80089570; // rom:0x8A170
+itemMatrix_10 = 0x80089580; // rom:0x8A180
+itemMatrix_18 = 0x80089590; // rom:0x8A190
 NANCY_ASSETS = 0x800897CC;
 SLASH_ASSETS = 0x8008976C;
 JAM_ASSETS = 0x8008982C;
@@ -22,7 +22,7 @@ D_800BADE2 = 0x800BADE2; // segment:_9FF70 rom:0xAAC91
 
 // this all seems completely pointless
 GHOST_SOUND_SEQUENCE_DATA_ROM_END = 0x646850;
-_646910_ROM_START = 0x646910;
+GHOST_COMPRESSED_DATA_ROM_START = 0x646910;
 _67FB80_ROM_START = 0x67FB80;
 _684630_ROM_START = 0x684630;
 _6848B0_ROM_START = 0x6848B0;
@@ -213,7 +213,7 @@ sIntroCameraEvents = 0x8009079C; // rom:0x9139C size:0x44
 gIndicatorSpriteOffset = 0x800907E0; // rom:0x913E0
 gRaceResultCode = 0x800A24A0; // type:u8
 itemHomingProjectileBaseVector = 0x80090E20; // rom:0x91A20
-itemMatrix_215360 = 0x80089540; // rom:0x8A140
+itemMatrix_17 = 0x80089540; // rom:0x8A140
 bossHomingProjectileBaseVector = 0x80090E2C; // rom:0x91A2C
 gCharacterParticleTypeMap = 0x80090E70; // rom:0x91A70
 scheduleItemBoxSystemTaskIfEnabled = 0x80049C70; // rom:0x4A870
