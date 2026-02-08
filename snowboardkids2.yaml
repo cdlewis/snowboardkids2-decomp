@@ -1264,7 +1264,7 @@ segments:
     vram: 0
     start: 0x1FB8B0
 
-  - name: _1FBE00
+  - name: NEWS_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FBE00
@@ -2694,7 +2694,7 @@ segments:
     vram: 0
     start: 0x4CA440
 
-  - name: _4CAD30
+  - name: NEWS_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CAD30
