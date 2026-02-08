@@ -735,7 +735,7 @@ AssetGroup gameAssets[] = {
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff040000,
-     .initCallback = (void *)0x80007380,
+     .initCallback = &initCameraRotationTask,
      },
     {
      .name = " NEZU  ",
@@ -1696,7 +1696,7 @@ AssetGroup gameAssets[] = {
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff040000,
-     .initCallback = (void *)0x80007380,
+     .initCallback = &initCameraRotationTask,
      },
 };
 

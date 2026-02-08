@@ -332,3 +332,19 @@ typedef struct {
 void cleanupStretchingModelTask(StretchingModelTaskState *);
 void initStretchingModelTask(StretchingModelTaskState *);
 void updateStretchingModelTask(StretchingModelTaskState *);
+
+typedef struct {
+    SceneModel *model;
+    s16 rotationX;
+    s16 rotationY;
+    s16 rotationZ;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 angularVelocityX;
+    s16 angularVelocityY;
+    s16 angularVelocityZ;
+    s16 unk16;
+} CameraRotationTaskState;
+
+void initCameraRotationTask(CameraRotationTaskState *);
