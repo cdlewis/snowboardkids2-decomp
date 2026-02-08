@@ -1379,7 +1379,7 @@ segments:
     vram: 0
     start: 0x209A40
 
-  - name: JAM5_DISPLAY_LIST
+  - name: LINDA_DISPLAY_LIST_0
     type: bin
     vram: 0
     start: 0x20B0B0
@@ -2809,7 +2809,7 @@ segments:
     vram: 0
     start: 0x4DA6E0
 
-  - name: JAM5_COMPRESSED_DATA
+  - name: LINDA_COMPRESSED_DATA_0
     type: bin
     vram: 0
     start: 0x4DBC80
