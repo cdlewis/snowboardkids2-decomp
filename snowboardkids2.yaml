@@ -1204,7 +1204,7 @@ segments:
     vram: 0
     start: 0x1EE140
 
-  - name: _1EE410
+  - name: POT_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EE410
@@ -2629,7 +2629,7 @@ segments:
     vram: 0
     start: 0x4A6920
 
-  - name: _4A6B60
+  - name: POT_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A6B60
