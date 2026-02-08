@@ -3079,7 +3079,7 @@ segments:
     vram: 0
     start: 0x5BD9F0
 
-  - name: BLACK_5BDB20
+  - name: CHARACTER_SELECT_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5BDB20
