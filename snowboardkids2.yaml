@@ -1384,17 +1384,17 @@ segments:
     vram: 0
     start: 0x20B0B0
 
-  - name: _20BB50
+  - name: LINDA_DISPLAY_LIST_1
     type: bin
     vram: 0
     start: 0x20BB50
 
-  - name: _20C5F0
+  - name: LINDA_DISPLAY_LIST_2
     type: bin
     vram: 0
     start: 0x20C5F0
 
-  - name: _20D040
+  - name: LINDA_DISPLAY_LIST_3
     type: bin
     vram: 0
     start: 0x20D040
@@ -2814,17 +2814,17 @@ segments:
     vram: 0
     start: 0x4DBC80
 
-  - name: _4DC7A0
+  - name: LINDA_COMPRESSED_DATA_1
     type: bin
     vram: 0
     start: 0x4DC7A0
 
-  - name: _4DD2C0
+  - name: LINDA_COMPRESSED_DATA_2
     type: bin
     vram: 0
     start: 0x4DD2C0
 
-  - name: _4DDD90
+  - name: LINDA_COMPRESSED_DATA_3
     type: bin
     vram: 0
     start: 0x4DDD90
@@ -2949,7 +2949,7 @@ segments:
     vram: 0
     start: 0x53E160
 
-  - name: _542AF0
+  - name: LINDA_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x542AF0
