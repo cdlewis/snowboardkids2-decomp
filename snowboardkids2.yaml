@@ -1299,7 +1299,7 @@ segments:
     vram: 0
     start: 0x1FCBA0
 
-  - name: _1FCE20
+  - name: ABOXO_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FCE20
@@ -2729,7 +2729,7 @@ segments:
     vram: 0
     start: 0x4CD980
 
-  - name: _4CDCB0
+  - name: ABOXO_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CDCB0
