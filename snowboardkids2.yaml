@@ -1159,7 +1159,7 @@ segments:
     vram: 0
     start: 0x1ECAD0
 
-  - name: _1ED370
+  - name: USAGI_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1ED370
@@ -2584,7 +2584,7 @@ segments:
     vram: 0
     start: 0x4A4260
 
-  - name: _4A51C0
+  - name: USAGI_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A51C0
