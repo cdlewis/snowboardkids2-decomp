@@ -3059,7 +3059,7 @@ segments:
     vram: 0
     start: 0x5B4B50
 
-  - name: _5B5590
+  - name: ROBO_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5B5590
