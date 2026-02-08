@@ -1129,7 +1129,7 @@ segments:
     vram: 0
     start: 0x1E9C40
 
-  - name: _1EA200
+  - name: BOMB2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EA200
@@ -2554,7 +2554,7 @@ segments:
     vram: 0
     start: 0x4A0670
 
-  - name: _4A0E80
+  - name: BOMB2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A0E80
@@ -3208,12 +3208,12 @@ segments:
     vram: 0
     start: 0x647F90
 
-  - name: _6489F0
+  - name: BOMB_SOUND_SEQUENCE_DATA
     type: bin
     vram: 0
     start: 0x6489F0
 
-  - name: _648B50
+  - name: BOMB2_SOUND_SEQUENCE_DATA
     type: bin
     vram: 0
     start: 0x648B50
