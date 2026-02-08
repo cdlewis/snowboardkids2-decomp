@@ -1621,9 +1621,9 @@ OSThread *__osActiveQueue_0 = (OSThread *)0x75;
 
 char emptyAssetGroup[12] = "       \0\0\0";
 
-u32 D_8008BD38_8C938[18] = { 0xFFE00008, 0x0,        0x7F0FFF0,  0xFFFFFFFF, 0x200008,   0x0,
-                             0x7F007F0,  0xFFFFFFFF, 0x20FFF8,   0x0,        0xFFF007F0, 0xFFFFFFFF,
-                             0xFFE0FFF8, 0x0,        0xFFF0FFF0, 0xFFFFFFFF, 0x0,        0x0 };
+u32 gDefaultEntityData8C938[18] = { 0xFFE00008, 0x0,        0x7F0FFF0,  0xFFFFFFFF, 0x200008,   0x0,
+                                    0x7F007F0,  0xFFFFFFFF, 0x20FFF8,   0x0,        0xFFF007F0, 0xFFFFFFFF,
+                                    0xFFE0FFF8, 0x0,        0xFFF0FFF0, 0xFFFFFFFF, 0x0,        0x0 };
 
 void markEntityDestroyed(MarkDestroyedArg *arg0) {
     arg0->isDestroyed = 1;
@@ -2034,7 +2034,7 @@ void initializeGameEntity(
     ent->height = 0;
 
     ent->unk120 = loadCompressedData(_646850_ROM_START, _646850_ROM_END, 0x238);
-    ent->unk124 = &D_8008BD38_8C938;
+    ent->unk124 = &gDefaultEntityData8C938;
     ent->unk13A = 0x50;
     ent->unk154 = 0;
     ent->unk156 = 0;

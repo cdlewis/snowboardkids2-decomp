@@ -67,6 +67,7 @@ disableViewportOverlay = 0x8006FEBC; // rom:0x70ABC
 enableViewportDisplayList = 0x8006FED8; // rom:0x70AD8
 disableViewportDisplayList = 0x8006FEE8; // rom:0x70AE8
 setViewportId = 0x8006FEF8; // rom:0x70AF8
+gDefaultEntityData8C938 = 0x8008BD38; // rom:0x8C938 size:0x48
 D_8008CD98_8D998 = 0x8008CD98; // rom:0x8D998 size:0x38
 gSpriteTextureSetupDL = 0x8008CC40; // rom:0x8D840
 gNpcCollisionRadii = 0x8008EF70; // rom:0x8FB70 type:u16
