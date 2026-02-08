@@ -1,13 +1,11 @@
 #include "19E80.h"
 #include "20F0.h"
+#include "assets.h"
 #include "common.h"
 #include "geometry.h"
 #include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_49B500);
-USE_ASSET(_646CD0);
 
 typedef struct {
     s32 unk0;

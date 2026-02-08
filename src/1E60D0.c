@@ -1,10 +1,9 @@
 #include "10AD0.h"
+#include "assets.h"
 #include "common.h"
 #include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_646910);
 
 typedef struct {
     s8 isComplete;

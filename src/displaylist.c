@@ -3,6 +3,7 @@
 #include "19E80.h"
 #include "5AA90.h"
 #include "68CF0.h"
+#include "assets.h"
 #include "common.h"
 #include "gamestate.h"
 #include "gbi.h"
@@ -13,7 +14,6 @@
 #include "task_scheduler.h"
 
 USE_OVERLAY(rand);
-USE_ASSET(_215D70);
 
 typedef struct {
     u8 padding[0x120];

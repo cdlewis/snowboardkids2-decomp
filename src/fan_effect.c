@@ -1,5 +1,6 @@
 #include "1DFAA0.h"
 #include "20F0.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
 #include "displaylist.h"
@@ -7,9 +8,6 @@
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_1FB4E0);
-USE_ASSET(_4C9E70);
 
 /* Struct definitions */
 typedef struct {

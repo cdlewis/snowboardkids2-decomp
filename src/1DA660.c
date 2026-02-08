@@ -2,6 +2,7 @@
 #include "20F0.h"
 #include "38C90.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "assets.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -9,11 +10,6 @@
 #include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_41A1D0);
-USE_ASSET(_41AD80);
-USE_ASSET(_422C60);
-USE_ASSET(_1DC0D0);
 
 typedef struct {
     SceneModel *model;

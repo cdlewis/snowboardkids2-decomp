@@ -5,6 +5,7 @@
 #include "5E590.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
+#include "assets.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -12,12 +13,6 @@
 #include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_458E30);
-USE_ASSET(_459310);
-USE_ASSET(_4237C0);
-USE_ASSET(_41A1D0);
-USE_ASSET(_426EF0);
 
 typedef struct {
     u8 padding[0x24];

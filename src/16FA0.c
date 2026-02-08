@@ -2,15 +2,13 @@
 #include "10AD0.h"
 #include "20F0.h"
 #include "38C90.h"
+#include "assets.h"
 #include "common.h"
 #include "gamestate.h"
 #include "graphics.h"
 #include "main.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_414CF0);
-USE_ASSET(_418520);
 
 typedef struct {
     u8 pad0[0xA];

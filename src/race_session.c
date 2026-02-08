@@ -6,6 +6,7 @@
 #include "4CD70.h"
 #include "56910.h"
 #include "9FF70.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
 #include "controller_io.h"
@@ -33,9 +34,6 @@
         func_8006FA0C_7060C(&(gs)->unkC[idx], fov, aspect, near, far);         \
     } while (0)
 
-USE_ASSET(_34CB50);
-USE_ASSET(_3FF010);
-USE_ASSET(_40E870);
 USE_OVERLAY(_9FF70);
 
 typedef struct {

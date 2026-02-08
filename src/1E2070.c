@@ -1,17 +1,11 @@
 #include "36BE0.h"
 #include "5520.h"
+#include "assets.h"
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_215120);
-USE_ASSET(_2151D0);
-USE_ASSET(_646DF0);
-USE_ASSET(_6636F0);
-USE_ASSET(_6637B0);
-USE_ASSET(_663BE0);
 
 typedef struct {
     s32 reserved;

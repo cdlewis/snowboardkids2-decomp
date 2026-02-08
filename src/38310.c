@@ -3,15 +3,11 @@
 #include "33FE0.h"
 #include "36B80.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "assets.h"
 #include "common.h"
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_4196E0);
-USE_ASSET(_419C60);
-USE_ASSET(_4237C0);
-USE_ASSET(_426EF0);
 
 typedef struct {
     s16 x;

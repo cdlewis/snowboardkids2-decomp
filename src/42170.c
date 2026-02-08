@@ -3,6 +3,7 @@
 #include "56910.h"
 #include "5AA90.h"
 #include "5E590.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
 #include "displaylist.h"
@@ -12,8 +13,6 @@
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_3F3EF0);
 
 extern void *D_8009A6B0_9B2B0;
 extern void *D_8009A6C0_9B2C0;

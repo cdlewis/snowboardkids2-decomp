@@ -2,6 +2,7 @@
 #include "1DC480.h"
 #include "1DC900.h"
 #include "20F0.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
 #include "geometry.h"
@@ -10,15 +11,6 @@
 #include "task_scheduler.h"
 
 USE_OVERLAY(_1DC260)
-
-USE_ASSET(_49BA20);
-USE_ASSET(_619E10);
-USE_ASSET(_621390);
-USE_ASSET(_6280F0);
-USE_ASSET(_62F2F0);
-USE_ASSET(_635AB0);
-USE_ASSET(_63C9F0);
-USE_ASSET(_67E860)
 
 void *loadDmaAsset(s32);
 void *loadTextRenderAsset(s32);

@@ -1,11 +1,10 @@
 #include "audio.h"
+#include "assets.h"
 #include "common.h"
 #include "displaylist.h"
 #include "player.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_6A83F0);
 
 typedef struct {
     void *musicBankBuffer;
@@ -74,8 +73,6 @@ extern s32 D_8009397C_9457C[];
 extern s32 D_80093B00_94700;
 extern s32 D_80092E28_93A28;
 extern s32 D_80093308_93F08;
-
-USE_ASSET(wavetables);
 
 extern OSMesg gfxTaskQueueBuffer;
 extern OSMesg gfxResultQueueBuffer;

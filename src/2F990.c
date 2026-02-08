@@ -6,6 +6,7 @@
 #include "56910.h"
 #include "5E590.h"
 #include "68CF0.h"
+#include "assets.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -14,14 +15,6 @@
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_419C60);
-USE_ASSET(_42F1D0);
-USE_ASSET(_41A1D0);
-USE_ASSET(_4237C0);
-USE_ASSET(_3F6670);
-USE_ASSET(_3F6950);
-USE_ASSET(_3F6BB0);
 
 typedef struct {
     u8 padding[0x2C];

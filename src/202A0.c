@@ -8,6 +8,7 @@
 #include "56910.h"
 #include "B040.h"
 #include "EepromSaveData_type.h"
+#include "assets.h"
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
@@ -22,13 +23,6 @@ extern void func_8001FA00_20600(void);
 extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 struct LevelPreviewPortraitState_202A0_s;
 extern void animatePortraitRotation(struct LevelPreviewPortraitState_202A0_s *arg0);
-
-USE_ASSET(_458E30);
-USE_ASSET(_43A000);
-USE_ASSET(_43F050);
-USE_ASSET(_459310);
-USE_ASSET(_41A1D0);
-USE_ASSET(_4237C0);
 
 typedef struct {
     u8 _pad0[0xB2F];

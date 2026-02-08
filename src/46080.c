@@ -6,6 +6,7 @@
 #include "594E0.h"
 #include "5AA90.h"
 #include "5E590.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
 #include "course.h"
@@ -26,10 +27,6 @@
 #include "rand.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_3F6670);
-USE_ASSET(_3F6950);
-USE_ASSET(_3F3EF0);
 
 typedef struct {
     void *assetTable;

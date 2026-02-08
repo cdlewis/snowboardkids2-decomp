@@ -4,6 +4,7 @@
 #include "56910.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
 #include "geometry.h"
@@ -11,12 +12,6 @@
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_458E30);
-USE_ASSET(_43A000);
-USE_ASSET(_43F050);
-USE_ASSET(_459310);
-USE_ASSET(_4488E0);
 
 typedef struct {
     ViewportNode cameraNode;          // 0x000

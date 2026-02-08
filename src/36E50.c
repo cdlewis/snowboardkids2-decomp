@@ -2,13 +2,12 @@
 #include "36B80.h"
 #include "36BE0.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
 #include "geometry.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_45A890);
 
 // Struct definitions
 typedef struct {

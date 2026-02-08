@@ -7,6 +7,7 @@
 #include "68CF0.h"
 #include "6DE50.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
 #include "gamestate.h"
@@ -34,16 +35,6 @@ extern s32 gFrameCounter;
         if (task)                                    \
             ((s16 *)task)[offset] = (value);         \
     } while (0)
-
-USE_ASSET(_3F3940);
-USE_ASSET(_3F3D10);
-USE_ASSET(_3F6670);
-USE_ASSET(_3F6950);
-USE_ASSET(_3F6BB0);
-USE_ASSET(_3F3EF0);
-USE_ASSET(_3F58E0);
-USE_ASSET(_3F6420);
-USE_ASSET(_3F65C0);
 
 typedef struct {
     u8 padding[0x10];

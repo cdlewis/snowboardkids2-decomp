@@ -5,8 +5,8 @@
 #include "common.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
+#include "assets.h"
 
-USE_ASSET(_40E1C0);
 
 extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 extern s32 gControllerInputs;

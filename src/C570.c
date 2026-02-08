@@ -1,12 +1,10 @@
 #include "C570.h"
+#include "assets.h"
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_1FB8B0);
-USE_ASSET(_4CA440);
 
 extern void *D_80088670_89270;
 extern void *D_80088680_89280;

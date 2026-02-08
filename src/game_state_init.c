@@ -3,6 +3,7 @@
 #include "288A0.h"
 #include "36B80.h"
 #include "36E50.h"
+#include "assets.h"
 #include "audio.h"
 #include "clocktrigger_tower.h"
 #include "common.h"
@@ -11,9 +12,6 @@
 #include "main.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_419440);
-USE_ASSET(_45A890);
 
 extern u16 D_8008D6B0_8E2B0;
 extern u8 storyMapLocationIndex;

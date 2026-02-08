@@ -10,10 +10,10 @@
 #include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
+#include "assets.h"
 
 #define Y_OFFSET 0xFFE80000
 
-USE_ASSET(_4060A0);
 
 typedef struct {
     s8 textureIndex;

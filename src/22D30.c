@@ -2,14 +2,13 @@
 #include "288A0.h"
 #include "9FF70.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
 #include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
-USE_ASSET(_426EF0);
-USE_ASSET(_41A1D0);
 USE_OVERLAY(_1DB7A0);
 
 extern volatile s32 gControllerInputs;

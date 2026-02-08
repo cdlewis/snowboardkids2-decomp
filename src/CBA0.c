@@ -1,4 +1,5 @@
 #include "1DFAA0.h"
+#include "assets.h"
 #include "buffers.h"
 #include "common.h"
 #include "displaylist.h"
@@ -205,11 +206,6 @@ Gfx D_8008CD20_8D920[] = {
     { .words = { 0xF2000000, 0x00040010 } },
     gsSPEndDisplayList(),
 };
-
-USE_ASSET(_214E70);
-USE_ASSET(_663330);
-USE_ASSET(_214F20);
-USE_ASSET(_6633B0);
 
 AssetDataBlock D_8008CD98_8D998 = {
     .vertStart1 = &_214E70_ROM_START,

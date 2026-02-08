@@ -1,14 +1,13 @@
 #include "288A0.h"
 #include "36B80.h"
 #include "38310.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
 #include "graphics.h"
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_4196E0);
 
 extern void func_800373E0_37FE0(void);
 void onOptionsMenuFadeInComplete(void);

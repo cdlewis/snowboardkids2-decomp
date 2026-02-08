@@ -9,6 +9,7 @@
 #include "68CF0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
+#include "assets.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -18,15 +19,6 @@
 #include "rand.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_419C60);
-USE_ASSET(_41A1D0);
-USE_ASSET(_4237C0);
-USE_ASSET(_4547D0);
-USE_ASSET(_3F6950);
-USE_ASSET(_3F6670);
-USE_ASSET(_4488E0);
-USE_ASSET(_4237C0);
 
 extern u16 D_8008F150_8FD50[];
 extern const char D_8009E47C_9F07C[];

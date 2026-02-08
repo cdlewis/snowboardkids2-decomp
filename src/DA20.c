@@ -1,10 +1,9 @@
+#include "assets.h"
 #include "common.h"
 #include "displaylist.h"
 #include "rand.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_647F90);
 
 extern void *staticSpriteEffectTexture;
 

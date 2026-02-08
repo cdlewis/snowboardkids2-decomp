@@ -5,6 +5,7 @@
 #include "413E0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
 #include "controller_io.h"
@@ -29,9 +30,6 @@ typedef struct {
     u8 unlockAllCheatProgress;
     u8 initialSoundDelay;
 } TitleState;
-
-USE_ASSET(_414CF0);
-USE_ASSET(_418520);
 
 void resetSaveDataToDefaults(void);
 void waitForTitleAssetsReady(void);

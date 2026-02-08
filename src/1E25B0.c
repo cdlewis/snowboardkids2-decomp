@@ -1,12 +1,9 @@
 #include "5520.h"
+#include "assets.h"
 #include "common.h"
 #include "geometry.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_2151D0);
-USE_ASSET(_663BE0);
-USE_ASSET(_6637B0);
 
 void initTrickBurstEffect(TrickBurstEffectTask *arg0);
 void updateTrickBurstEffect(TrickBurstEffectTask *arg0);

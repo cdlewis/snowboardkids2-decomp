@@ -4,17 +4,12 @@
 #include "56910.h"
 #include "6DE50.h"
 #include "B040.h"
+#include "assets.h"
 #include "common.h"
 #include "graphics.h"
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_459310);
-USE_ASSET(_41A1D0);
-USE_ASSET(_3F6670);
-USE_ASSET(_4547D0);
-USE_ASSET(_459310);
 
 typedef struct {
     /* 0x000 */ u8 pad0[0xABC];

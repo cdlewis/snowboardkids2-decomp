@@ -1,14 +1,11 @@
 #include "10AD0.h"
 #include "38C90.h"
+#include "assets.h"
 #include "common.h"
 #include "graphics.h"
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_67AB10);
-USE_ASSET(_67BEB0);
-USE_ASSET(_67DB80);
 
 typedef struct {
     s16 unk0;

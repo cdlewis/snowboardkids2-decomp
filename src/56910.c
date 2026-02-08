@@ -1,15 +1,8 @@
 #include "56910.h"
+#include "assets.h"
 #include "common.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(_216290);
-USE_ASSET(_34F7E0);
-USE_ASSET(_34CB50);
-USE_ASSET(_34F9A0);
-USE_ASSET(_350140);
-USE_ASSET(_3505F0);
-USE_ASSET(_B7E70);
 
 extern s32 gSkyDisplayLists2[];
 extern s32 gSkyDisplayLists1[];
