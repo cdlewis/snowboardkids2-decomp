@@ -1169,7 +1169,7 @@ segments:
     vram: 0
     start: 0x1ED5F0
 
-  - name: _1ED740
+  - name: PBOX1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1ED740
@@ -2594,7 +2594,7 @@ segments:
     vram: 0
     start: 0x4A5460
 
-  - name: _4A5650
+  - name: PBOX1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A5650
