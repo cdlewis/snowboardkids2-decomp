@@ -2434,7 +2434,7 @@ segments:
     vram: 0
     start: 0x464DD0
 
-  - name: _4666C0
+  - name: WENDYS_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x4666C0
@@ -2479,7 +2479,7 @@ segments:
     vram: 0
     start: 0x4875E0
 
-  - name: _48E8F0
+  - name: WENDYN_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x48E8F0
@@ -2994,17 +2994,17 @@ segments:
     vram: 0
     start: 0x576600
 
-  - name: _580AD0
+  - name: WENDY2_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x580AD0
 
-  - name: _584650
+  - name: WENDY3_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x584650
 
-  - name: _590790
+  - name: WENDYO_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x590790
