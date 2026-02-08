@@ -1314,7 +1314,7 @@ segments:
     vram: 0
     start: 0x1FD500
 
-  - name: _1FD6B0
+  - name: NEZU_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FD6B0
@@ -2744,7 +2744,7 @@ segments:
     vram: 0
     start: 0x4CE500
 
-  - name: _4CE760
+  - name: NEZU_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CE760
@@ -3049,7 +3049,7 @@ segments:
     vram: 0
     start: 0x5B05A0
 
-  - name: _5B4130
+  - name: NEZU_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5B4130
