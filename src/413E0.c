@@ -44,7 +44,7 @@ typedef struct {
 } PlayerIndicatorSpriteTask;
 
 extern s32 gFrameCounter;
-extern s16 identityMatrix[];
+extern Transform3D identityMatrix;
 
 Vec3i gIndicatorSpriteOffset = { 0x00000000, 0x00200000, 0x00000000 };
 
@@ -224,7 +224,7 @@ void initStartGate(StartGate *gate) {
     gate->leftDoorSegment1 = gate->mainGateSegment1;
     gate->leftDoorSegment2 = gate->mainGateSegment2;
     gate->leftDoorSegment3 = gate->mainGateSegment3;
-    memcpy(transformMatrix, identityMatrix, 0x20);
+    memcpy(transformMatrix, &identityMatrix, 0x20);
     transformMatrix[6] = 0x180000;
     func_8006B084_6BC84(transformMatrix, gate, &gate->leftDoorTransform);
     gate->rightDoorSegment1 = gate->mainGateSegment1;
