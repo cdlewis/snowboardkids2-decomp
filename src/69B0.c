@@ -19,7 +19,7 @@ typedef struct {
 } QuadDisplayListState;
 
 extern s32 gTempPosition;
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 extern u8 D_80088640_89240[];
 extern s32 D_8008C120_8CD20[];
 
@@ -32,7 +32,7 @@ void initializeQuadDisplayList(QuadDisplayListElement *elements) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        memcpy(elements[i].transformMatrix, identityMatrix, 0x20);
+        memcpy(elements[i].transformMatrix, &identityMatrix, 0x20);
         elements[i].displayList = loadAssetGroupDisplayList(elements->model);
         elements[i].vertexData = loadAssetGroupCompressedData(elements->model);
         elements[i].renderFlag = 0;
@@ -51,7 +51,7 @@ void updateQuadDisplayList(QuadDisplayListState *state) {
     s32 *translationData;
     s32 positiveRotationIndex;
 
-    memcpy(&rotationMatrix, identityMatrix, 0x20);
+    memcpy(&rotationMatrix, &identityMatrix, 0x20);
 
     model = state->model;
     if (model->isDestroyed == 1) {
