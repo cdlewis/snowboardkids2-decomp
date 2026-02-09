@@ -1000,7 +1000,117 @@ INCLUDE_ASM("asm/nonmatchings/33FE0", func_80035408_36008);
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80035548_36148);
 
+#ifdef NON_MATCHING
+typedef struct {
+    s16 x;
+    s16 y;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u8 unkE;
+} TextElementState;
+
+extern void initHudElementState(TextElementState *arg0);
+
+void func_800356AC_362AC(
+    s32 arg0,
+    u16 *arg1,
+    u16 arg2,
+    s16 arg3,
+    u8 arg4,
+    u8 arg5,
+    u8 arg6,
+    u8 arg7,
+    u8 arg8,
+    u8 arg9
+) {
+    u16 *ptr;
+    u16 cmd;
+    s16 xPos;
+    s16 startX;
+    s16 yPos;
+    s32 count;
+    s32 xAdvance;
+    u8 palette;
+    u8 a;
+    u8 b;
+    u8 c;
+    u8 d;
+    u8 e;
+    TextElementState *elem;
+    u16 temp;
+
+    startX = arg2;
+    xPos = startX;
+    ptr = arg1;
+    cmd = *ptr;
+    yPos = arg3;
+    a = arg4;
+    b = arg5;
+    c = arg7;
+    count = 0;
+    d = arg8;
+    palette = arg6 & 0xFF;
+    e = arg9;
+
+    while ((cmd & 0xFFFF) != 0xFFFF) {
+        if ((u8)count >= c) {
+            return;
+        }
+
+        temp = cmd & 0xFFFF;
+
+        if (temp == 0xFFFD) {
+            xPos = startX;
+            yPos += 0x10;
+        } else if (temp == 0xFFFE || temp == 0xFFFB) {
+            xPos += 4;
+        } else if (temp == 0xFFFC) {
+            ptr += 2;
+            count += 1;
+            if (palette == 0) {
+                palette = *ptr;
+                ptr += 2;
+            }
+            cmd = *ptr;
+            count += 1;
+            continue;
+        } else if (temp == 0xFFF0) {
+            ptr += 6;
+            count += 3;
+        } else if (temp == 0xFFF1) {
+            ptr += 6;
+            count += 3;
+        } else {
+            xAdvance = cmd >> 12;
+            if (xAdvance == 0) {
+                xAdvance = 0xC;
+            }
+            elem = advanceLinearAlloc(0x10);
+            if (elem != NULL) {
+                initHudElementState(elem);
+                elem->unkE = b;
+                elem->unkA = a;
+                elem->unkD = palette + 1;
+                elem->x = xPos;
+                elem->y = yPos;
+                elem->unk8 = cmd & 0xFFF;
+                elem->unk4 = (void *)arg0;
+                debugEnqueueCallback(d, e, func_80012518_13118, elem);
+            }
+            xPos += xAdvance;
+        }
+
+        ptr += 2;
+        cmd = *ptr;
+        count += 1;
+    }
+}
+#else
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_800356AC_362AC);
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/33FE0", func_80035878_36478);
 
