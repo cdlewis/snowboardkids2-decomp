@@ -17,7 +17,7 @@
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 extern void func_8001FFE4_20BE4(void);
 extern void func_8001FA00_20600(void);
 extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
@@ -241,7 +241,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
     getTrackSegmentWaypoints(state->gameData, state->startWaypoint, waypointStart, waypointEnd);
 
-    memcpy(&state->transform, identityMatrix, sizeof(Transform3D));
+    memcpy(&state->transform, &identityMatrix, sizeof(Transform3D));
     memcpy(state, waypointEnd, 0xC);
 
     state->posY = func_80061A64_62664(state->gameData, state->startWaypoint, state);
@@ -287,7 +287,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
     computeLookAtMatrix(&state->targetX, state, &lookAtTransform);
 
-    memcpy(&offsetTransform, identityMatrix, 0x20);
+    memcpy(&offsetTransform, &identityMatrix, 0x20);
     offsetTransform.translation.z = state->cameraDistance;
 
     func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
@@ -319,7 +319,7 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
     void *gameData;
 
     allocation = (Allocation_8001FEB4 *)getCurrentAllocation();
-    memcpy(cameraTransform, identityMatrix, 0x20);
+    memcpy(cameraTransform, &identityMatrix, 0x20);
 
     gameData = state->gameData;
     waypoint = func_80060A3C_6163C(gameData, state->startWaypoint, state);
@@ -341,7 +341,7 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
     computeLookAtMatrix(&state->targetX, state, lookAtTransform);
 
-    memcpy(&offsetTransform, identityMatrix, 0x20);
+    memcpy(&offsetTransform, &identityMatrix, 0x20);
 
     offsetTransform.unk1C = state->cameraDistance;
 
@@ -367,7 +367,7 @@ void resumeLevelPreviewAfterHold(Func80020418Arg *arg0) {
 
     if (arg0->unk72 == 0x5A) {
         arg0->unk72 = 0;
-        memcpy(mat1, identityMatrix, 0x20);
+        memcpy(mat1, &identityMatrix, 0x20);
 
         unk18 = &arg0->unk18;
         temp = func_80060A3C_6163C(unk18, arg0->unk52, arg0);
@@ -689,7 +689,7 @@ void initMenuCharacterModel(MenuCharacterModelState *state) {
         state->model = createSceneModelEx(modelIndex, allocation, (s8)assetPairIndex, -1, -1, -1);
     }
 
-    memcpy((u8 *)&state->transform, identityMatrix, 0x20);
+    memcpy((u8 *)&state->transform, &identityMatrix, 0x20);
 
     if ((allocation->unkB45 != 0) && (modelIndex != 0x3A)) {
         createYRotationMatrix((&state->transform), 0x1E00);
