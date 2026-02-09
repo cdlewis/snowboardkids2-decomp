@@ -5,7 +5,7 @@
 #include "fan_effect.h"
 #include "geometry.h"
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 
 typedef struct {
     union {
@@ -105,9 +105,9 @@ void cutsceneEffectMLight_exec(cutsceneEffectMLight_exec_arg *arg0, CutsceneMana
 
     slot = &arg1->slots[arg2];
     rotMatrix = &sp10;
-    memcpy(rotMatrix, identityMatrix, 0x20);
-    memcpy(&sp30, identityMatrix, 0x20);
-    memcpy(&sp50, identityMatrix, 0x20);
+    memcpy(rotMatrix, &identityMatrix, 0x20);
+    memcpy(&sp30, &identityMatrix, 0x20);
+    memcpy(&sp50, &identityMatrix, 0x20);
 
     memcpy(&sp30, (u8 *)slot->model + 0x18, 0x20);
 
