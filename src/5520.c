@@ -4,7 +4,7 @@
 #include "graphics.h"
 #include "task_scheduler.h"
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 extern void *D_800885D0_891D0;
 extern void *D_800885E0_891E0;
 extern void *D_800885F0_891F0;
@@ -277,17 +277,17 @@ void enqueueTiledTextureRender(s32 arg0, TrickBurstEffectTask *arg1) {
 }
 
 void initializeRotatingLogo(RotatingLogoState *state) {
-    memcpy(&state->opaqueMatrix, identityMatrix, 0x20);
+    memcpy(&state->opaqueMatrix, &identityMatrix, 0x20);
     state->opaqueDisplayList = loadAssetGroupDisplayList(state->model);
     state->opaqueVertexData = loadAssetGroupCompressedData(state->model);
     state->opaqueFlag = 0;
     state->opaqueSettings = &D_800885D0_891D0;
-    memcpy(&state->transparentMatrix, identityMatrix, 0x20);
+    memcpy(&state->transparentMatrix, &identityMatrix, 0x20);
     state->transparentDisplayList = loadAssetGroupDisplayList(state->model);
     state->transparentVertexData = loadAssetGroupCompressedData(state->model);
     state->transparentFlag = 0;
     state->transparentSettings = &D_800885E0_891E0;
-    memcpy(&state->overlayMatrix, identityMatrix, 0x20);
+    memcpy(&state->overlayMatrix, &identityMatrix, 0x20);
     state->overlayDisplayList = loadAssetGroupDisplayList(state->model);
     state->overlayVertexData = loadAssetGroupCompressedData(state->model);
     state->overlaySettings = &D_800885F0_891F0;
