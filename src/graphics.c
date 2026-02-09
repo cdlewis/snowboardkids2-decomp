@@ -134,7 +134,7 @@ extern s32 gCurrentDoubleBufferIndex;
 extern s32 gCurrentDisplayBufferIndex;
 
 extern s32 gFrameCounter;
-extern s16 identityMatrix[];
+extern Transform3D identityMatrix;
 extern gActiveViewport_type *gActiveViewport;
 
 extern s32 gFrameSkipCounter;
@@ -1094,7 +1094,7 @@ void initViewportNode(ViewportNode *arg0, ViewportNode *arg1, s32 arg2, s32 arg3
     arg0->unkD2 = 0x1E0;
     arg0->unkD4 = 0x1FF;
     arg0->unkD6 = 0;
-    memcpy(&arg0->modelingMatrix, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->modelingMatrix, &identityMatrix, sizeof(Transform3D));
     guPerspective(&arg0->perspectiveMatrix, &arg0->perspNorm, 30.0f, 1.3333334f, 20.0f, 2000.0f, 1.0f);
     arg0->fogA = 0xFF;
     arg0->fogMin = 0x3DE;
