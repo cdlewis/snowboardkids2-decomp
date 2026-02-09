@@ -7,7 +7,11 @@
 #include "displaylist.h"
 #include "geometry.h"
 #include "rand.h"
+#include "rom_loader.h"
 #include "task_scheduler.h"
+
+USE_ASSET(LINDA_B_DISPLAY_LIST);
+USE_ASSET(LINDA_B_COMPRESSED_DATA);
 
 typedef struct {
     u8 padding[0x2C];
@@ -464,10 +468,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0x60,
      .unk3B = 0xFF },
     { .name = "LINDA B",
-     .displayListStart = (void *)0x001E8E60,
-     .displayListEnd = (void *)0x001E9300,
-     .compressedDataStart = (void *)0x0049E2E0,
-     .compressedDataEnd = (void *)0x0049F0D0,
+     .displayListStart = (void *)&LINDA_B_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&LINDA_B_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&LINDA_B_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&LINDA_B_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00001680,
      .unk1C = 0x80088150,
      .unk20 = 0x00010000,

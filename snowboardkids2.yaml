@@ -1104,7 +1104,7 @@ segments:
     vram: 0
     start: 0x1E8A90
 
-  - name: _1E8E60
+  - name: LINDA_B_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E8E60
@@ -2544,7 +2544,7 @@ segments:
     vram: 0
     start: 0x49D8F0
 
-  - name: _49E2E0
+  - name: LINDA_B_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x49E2E0
