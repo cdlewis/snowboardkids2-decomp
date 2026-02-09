@@ -128,7 +128,7 @@ extern s32 buildUnlockedLevelList(u8 *);
 extern s32 gControllerInputs[];
 extern s32 gFrameCounter;
 extern u8 D_8008D9C0_8E5C0[];
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 
 void initLevelSelectWithDetail(void) {
     LevelSelectState_Base *allocation = allocateTaskMemory(0xB48);
@@ -155,7 +155,7 @@ void initLevelSelectState(void) {
 
     playMusicTrack(3);
     setupTaskSchedulerNodes(0x44, 0x14, 0, 0, 0, 0, 0, 0);
-    memcpy(transformPtr, identityMatrix, sizeof(Transform3D));
+    memcpy(transformPtr, &identityMatrix, sizeof(Transform3D));
 
     state->transitionCounter = 0;
     state->exitMode = 0;
