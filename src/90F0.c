@@ -16,7 +16,7 @@ extern s32 D_8009F1F0_9FDF0;
 extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
 extern Gfx *gRegionAllocPtr;
-extern s16 identityMatrix[];
+extern Transform3D identityMatrix;
 
 // Data pointers for different sprite dimension combinations
 extern void *D_8008C9E8_8D5E8;
@@ -169,11 +169,11 @@ void renderOpaqueSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
     }
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {
-        memcpy(&transform, identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, 0x20);
         memcpy(&gTempPosition, &sprite->position, 0xC);
         transform3DToMtx((u8 *)&gTempPosition - 0x14, sprite->translationMtx);
 
-        memcpy(&transform, identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, 0x20);
         scaleXRaw = sprite->scaleX;
         if (scaleXRaw < 0) {
             scaleXRaw += 3;
@@ -187,13 +187,13 @@ void renderOpaqueSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
         scaleMatrix(&transform, scaleX, scaleY, 0x2000);
         transform3DToMtx(&transform, sprite->scaleMtx);
 
-        memcpy(&transform, identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, 0x20);
         if (sprite->flags & 1) {
             createYRotationMatrix(&transform, 0x1000);
         }
         transform3DToMtx(&transform, sprite->yRotationMtx);
 
-        memcpy(&transform, identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, 0x20);
         createZRotationMatrix(&transform, sprite->zRotation);
         transform3DToMtx(&transform, sprite->zRotationMtx);
 
