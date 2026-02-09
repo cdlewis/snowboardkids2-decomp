@@ -17,7 +17,7 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern s16 identityMatrix[];
+extern Transform3D identityMatrix;
 extern Transform3D gScaleMatrix;
 extern Vec3i gTempPosition;
 extern s32 gJingleTownBossSpawnPos[];
@@ -388,10 +388,10 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     s32 i;
 
     gameState = getCurrentAllocation();
-    memcpy(&arg0->unk970, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk970, &identityMatrix, sizeof(Transform3D));
     createYRotationMatrix(&arg0->unk970, arg0->unkA94);
-    memcpy(&arg0->unk990, identityMatrix, sizeof(Transform3D));
-    memcpy(&arg0->unk9B0, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk990, &identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk9B0, &identityMatrix, sizeof(Transform3D));
 
     arg0->unk434.x = gJingleTownBossSpawnPos[arg0->unkBB8];
     getTrackSegmentWaypoints(&gameState->gameData, 0, &spawnWaypoint1, &spawnWaypoint2);
@@ -410,7 +410,7 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
      * - Asset pointer and params at offsets 0x58, 0x5C, 0x60, 0x64 */
     for (i = 0; i < 3; i++) {
         u8 *elem = (u8 *)arg0 + i * 0x3C;
-        memcpy(elem + 0x38, identityMatrix, sizeof(Transform3D));
+        memcpy(elem + 0x38, &identityMatrix, sizeof(Transform3D));
         *(s32 *)(elem + 0x5C) = (s32)arg0->unk4;
         *(s32 *)(elem + 0x60) = (s32)arg0->unk8;
         *(s32 *)(elem + 0x64) = 0;
@@ -873,7 +873,7 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     if (arg0->behaviorFlags & 0x10) {
         // Apply vertical scale transformation during intro animation
         scaledMatrixPtr = &scaledMatrix;
-        memcpy(scaledMatrixPtr, identityMatrix, 0x20);
+        memcpy(scaledMatrixPtr, &identityMatrix, 0x20);
         scaledMatrixPtr->m[1][1] = arg0->unkB9E;
         func_8006B084_6BC84(scaledMatrixPtr, combinedTransform, &arg0->groundTransform);
     } else {
