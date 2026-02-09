@@ -51,7 +51,7 @@ extern s8 gCutsceneEntryCutFlag;
 extern s16 gCutsceneEntryBufferSlotIndex;
 extern CutsceneFadeAssetNode gCutsceneFadeAssetTable[];
 extern char gDebugFrameFormatString[];
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 extern CutsceneAssetTable gCutsceneAssetTable[];
 
 extern void *func_800B5B38_1E2BE8(u16);
@@ -166,7 +166,7 @@ void resetAllSlotModels(CutsceneSlot *slots) {
         getCurrentStateEntryItem(i);
 
         if (slots[i].slotData.unkA4.ptr != NULL) {
-            applyTransformToModel(slots[i].slotData.unkA4.ptr, (Transform3D *)identityMatrix);
+            applyTransformToModel(slots[i].slotData.unkA4.ptr, &identityMatrix);
             setModelAnimation(slots[i].slotData.unkA4.ptr, 0);
         }
     }
