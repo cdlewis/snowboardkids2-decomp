@@ -254,7 +254,7 @@ extern struct {
 } D_8008DE9C_8EA9C[];
 extern u8 D_8008DD8D_8E98D[];
 extern u8 D_8008DD8E_8E98E[];
-extern s32 identityMatrix[];
+extern Transform3D identityMatrix;
 extern s32 D_8008DD2C_8E92C[];
 extern Vec3s D_8008DD4E_8E94E[];
 extern Vec3s charSelectIconPositions[];
@@ -330,7 +330,7 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
 
     gameState = (u8 *)getCurrentAllocation();
     posMatPtr = &arg0->positionMatrix;
-    memcpy(posMatPtr, identityMatrix, 0x20);
+    memcpy(posMatPtr, &identityMatrix, 0x20);
     rotMatPtr = &arg0->rotationMatrix;
     memcpy(rotMatPtr, posMatPtr, 0x20);
     memcpy(&sp30, rotMatPtr, 0x20);
@@ -403,7 +403,7 @@ void updateCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     paletteIndex = state->unk18B0[arg0->playerIndex];
     assetIndex = paletteIndex + charIndex * 3;
 
-    memcpy(&sp10, identityMatrix, sizeof(Transform3D));
+    memcpy(&sp10, &identityMatrix, sizeof(Transform3D));
     memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, 0xC);
 
     if (state->unk18D2[arg0->playerIndex] == state->unk18CC - 1) {
@@ -493,7 +493,7 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     arg0->paletteAsset = loadAssetByIndex_95668((u8)paletteValue);
 
     localPtr = &sp10;
-    memcpy(localPtr, identityMatrix, 0x20);
+    memcpy(localPtr, &identityMatrix, 0x20);
     memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, 0xC);
 
     posMatPtr = &arg0->positionMatrix;
@@ -519,7 +519,7 @@ void updateCharSelectSlide(CharSelectSlideState *arg0) {
 
     adjustment = (-(0 < arg0->targetX) & 0xFFF00000) | 0x100000;
 
-    memcpy(localPtr, identityMatrix, sizeof(Transform3D));
+    memcpy(localPtr, &identityMatrix, sizeof(Transform3D));
     memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, 0xC);
 
     arg0->worldMatrix.translation.x = arg0->worldMatrix.translation.x + adjustment;
@@ -548,7 +548,7 @@ void updateCharSelectPostSlide(CharSelectSlideState *arg0) {
     base = (GameState *)getCurrentAllocation();
 
     localPtr = &localMatrix;
-    memcpy(localPtr, identityMatrix, sizeof(Transform3D));
+    memcpy(localPtr, &identityMatrix, sizeof(Transform3D));
     memcpy(&localMatrix.translation, &arg0->positionMatrix.translation.x, 0xC);
 
     rotation = base->unk1888[arg0->playerIndex];
@@ -590,7 +590,7 @@ void initCharSelectSecondarySlot(CharSelectSecondarySlot *arg0) {
     state = (GameState *)getCurrentAllocation();
 
     localMatrix3Ptr = &localMatrix3;
-    memcpy(localMatrix3Ptr, identityMatrix, 0x20);
+    memcpy(localMatrix3Ptr, &identityMatrix, 0x20);
     posMatrixPtr = &arg0->positionMatrix;
     memcpy(posMatrixPtr, localMatrix3Ptr, 0x20);
     rotMatrixPtr = &arg0->rotationMatrix;
@@ -640,7 +640,7 @@ void updateCharSelectSecondarySlide(CharSelectSecondarySlot *arg0) {
     target = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->numPlayers * 2) + ((state->unk18C0[arg0->playerIndex] + 1) & 1)];
     adjustment = (-(target < 0) & 0xFFF00000) | 0x100000;
 
-    memcpy(localMatrixPtr, identityMatrix, 0x20);
+    memcpy(localMatrixPtr, &identityMatrix, 0x20);
     memcpy(&localMatrix.translation, &arg0->positionMatrix.translation.x, 0xC);
 
     arg0->worldMatrix.translation.x += adjustment;
@@ -684,7 +684,7 @@ void initCharSelectBoardModel(CharSelectBoardPreview *arg0) {
             createSceneModelEx(boardType, (void *)state + (playerIdx * 0x1D8), state->PAD_22[playerIdx], -1, -1, -1);
     }
 
-    memcpy(&arg0->transform, identityMatrix, 0x20);
+    memcpy(&arg0->transform, &identityMatrix, 0x20);
 
     sinVal = -(approximateSin(0x800) * 0x1600);
     if (sinVal < 0) {
@@ -713,7 +713,7 @@ void initCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
     state = (GameState *)getCurrentAllocation();
 
     localPtr = &localMatrix;
-    memcpy(localPtr, identityMatrix, sizeof(Transform3D));
+    memcpy(localPtr, &identityMatrix, sizeof(Transform3D));
 
     transformPtr = &arg0->transform;
     rotation = state->unk1880[arg0->playerIndex];
@@ -744,7 +744,7 @@ void updateCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
     state = (GameState *)getCurrentAllocation();
 
     localPtr = &localMatrix;
-    memcpy(localPtr, identityMatrix, sizeof(Transform3D));
+    memcpy(localPtr, &identityMatrix, sizeof(Transform3D));
 
     transformPtr = &arg0->transform;
     rotation = state->unk1880[arg0->playerIndex];
@@ -845,7 +845,7 @@ void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
 
     state = (u8 *)getCurrentAllocation();
 
-    memcpy(&preview->transform, identityMatrix, 0x20);
+    memcpy(&preview->transform, &identityMatrix, 0x20);
 
     playerIdx = preview->playerIndex;
     preview->transform.translation.x = D_8008DD2C_8E92C[D_800AFE8C_A71FC->numPlayers * 2 + (state + playerIdx)[0x18C0]];
@@ -928,7 +928,7 @@ void initCharSelectBoardModelForSlideOut(CharSelectBoardPreview *arg0) {
         arg0->model =
             createSceneModelEx(0x39, alloc + (playerIndex * 0x1D8), (alloc + playerIndex)[0x18BC], -1, -1, -1);
     }
-    memcpy(&arg0->transform, identityMatrix, 0x20);
+    memcpy(&arg0->transform, &identityMatrix, 0x20);
     arg0->transform.translation.x = 0;
     arg0->transform.translation.z = 0;
     arg0->transform.translation.y = 0xFFF00000;
