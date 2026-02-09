@@ -142,7 +142,7 @@ void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0) {
 }
 
 extern u16 D_800BBBA8_B54A8[];
-extern s16 identityMatrix[];
+extern Transform3D identityMatrix;
 
 void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0);
 void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0);
@@ -174,7 +174,7 @@ void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0) {
         return;
     }
 
-    memcpy(arg0, identityMatrix, 0x20);
+    memcpy(arg0, &identityMatrix, 0x20);
 
     offset = (randA() & 3) * 8;
 
