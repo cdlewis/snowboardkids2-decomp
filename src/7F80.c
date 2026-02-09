@@ -43,7 +43,7 @@ void updateCameraRotationTask(CameraRotationTaskState *);
 void cleanupCameraRotationTask(void);
 void renderPalettedTexture(PalettedTextureState *);
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 extern s32 D_8008C200_8CE00[];
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
