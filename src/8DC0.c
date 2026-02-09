@@ -3,7 +3,7 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 
 typedef struct {
     u8 padding[0x16];
@@ -59,14 +59,14 @@ void updateOscillatingModelTask(OscillatingModelTaskState *state) {
     s32 scaledCos;
     s32 scaledSin;
 
-    memcpy(&local_buffer, identityMatrix, 0x20);
+    memcpy(&local_buffer, &identityMatrix, 0x20);
 
     if (state->model->isDestroyed == 1) {
         terminateCurrentTask();
         return;
     }
 
-    memcpy(&state->model->rotationMatrix, identityMatrix, 0x20);
+    memcpy(&state->model->rotationMatrix, &identityMatrix, 0x20);
 
     if (state->model->actionMode == 0) {
         return;
