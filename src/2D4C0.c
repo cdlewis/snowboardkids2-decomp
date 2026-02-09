@@ -64,7 +64,7 @@ struct Func8002CD3CArg {
     /* 0xD5 */ u8 unkD5;
 };
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 extern u16 gNpcCollisionRadii[];
 
 void updateStoryMapRareEventIdle(RareEventIdleState *);
@@ -83,7 +83,7 @@ void initStoryMapRareEventWave(Func2E024Arg *arg0) {
 
     elements = arg0->elements;
     for (i = 0; i < arg0->unkD5; i++) {
-        memcpy(&elements[i].matrix, identityMatrix, sizeof(Transform3D));
+        memcpy(&elements[i].matrix, &identityMatrix, sizeof(Transform3D));
         elements[i].unk62 = 0;
 
         if (i == 0) {
@@ -165,7 +165,7 @@ void initStoryMapRareEventIdle(RareEventIdleState *arg0) {
     vec3[1] = 0x280000;
 
     for (i = 0; i < arg0->npcCount; i++) {
-        memcpy(&arg0->elements[i].unk4, identityMatrix, sizeof(Transform3D));
+        memcpy(&arg0->elements[i].unk4, &identityMatrix, sizeof(Transform3D));
         arg0->elements[i].unk62 = 0;
         arg0->effectDelay[i] = 0;
         if (i == 0) {
@@ -308,7 +308,7 @@ void initStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
     effectOffset[1] = 0x2C0000;
 
     for (i = 0; i < arg0->unkD5; i++) {
-        memcpy(&arg0->elements[i].matrix, identityMatrix, sizeof(Transform3D));
+        memcpy(&arg0->elements[i].matrix, &identityMatrix, sizeof(Transform3D));
         arg0->elements[i].unk62 = 0;
 
         if (i == 0) {
