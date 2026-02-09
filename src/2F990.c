@@ -131,7 +131,7 @@ typedef struct {
 
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 extern s32 D_8008F110_8FD10;
 extern s16 D_8008F0B2_8FCB2[];
 extern u16 D_8008F0B4_8FCB4[];
@@ -230,7 +230,7 @@ void initStoryMapShopFairyModel(StoryMapShopFairyState *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     arg0->model = createSceneModel(0x3A, state);
-    memcpy(&arg0->transform, identityMatrix, 0x20);
+    memcpy(&arg0->transform, &identityMatrix, 0x20);
     arg0->transform.translation.x = 0x200000;
     arg0->transform.translation.y = 0xFFE00000;
     arg0->transform.translation.z = 0x80000;
@@ -305,7 +305,7 @@ void initStoryMapShopItemCard(StoryMapShopItemCardState *card) {
 
     cardTransform = &card->transform;
     state = (GameState *)getCurrentAllocation();
-    memcpy(cardTransform, identityMatrix, 0x20);
+    memcpy(cardTransform, &identityMatrix, 0x20);
     rotationZPtr = &rotationZ;
     memcpy(rotationZPtr, cardTransform, 0x20);
     rotationYXPtr = &rotationYX;
