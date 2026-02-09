@@ -1249,6 +1249,11 @@ segments:
     vram: 0
     start: 0x1F94F0
 
+  - name: ISLAND_DISPLAY_LIST
+    type: bin
+    vram: 0
+    start: 0x1FA080
+
   - name: BUS_DISPLAY_LIST
     type: bin
     vram: 0
@@ -2678,6 +2683,11 @@ segments:
     type: bin
     vram: 0
     start: 0x4C3A60
+
+  - name: ISLAND_COMPRESSED_DATA
+    type: bin
+    vram: 0
+    start: 0x4C5840
 
   - name: BUS_COMPRESSED_DATA
     type: bin
