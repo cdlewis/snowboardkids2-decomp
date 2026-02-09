@@ -2,7 +2,7 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 extern s32 gSteppedMatrixTranslations;
 extern u16 gSteppedMatrixAngles;
 extern s32 gSteppedMatrixStepCount;
@@ -28,7 +28,7 @@ typedef struct {
 void updateSteppedMatrixController(SteppedMatrixState *state);
 
 void initSteppedMatrixController(SteppedMatrixState *state) {
-    memcpy(&state->matrix, identityMatrix, 0x20);
+    memcpy(&state->matrix, &identityMatrix, 0x20);
     state->frameDelay = 0;
     state->stepIndex = 0;
     setCleanupCallback(cleanupSteppedMatrixController);
@@ -52,13 +52,13 @@ void updateSteppedMatrixController(SteppedMatrixState *state) {
     }
 
 copy_identity:
-    memcpy(&state->matrix, identityMatrix, 0x20);
+    memcpy(&state->matrix, &identityMatrix, 0x20);
     goto final_copy;
 
 do_rotation:
     if (state->frameDelay == 0) {
         matrix = &state->matrix;
-        memcpy(matrix, identityMatrix, 0x20);
+        memcpy(matrix, &identityMatrix, 0x20);
         createZRotationMatrix(matrix, (&gSteppedMatrixAngles)[state->stepIndex * 4]);
         translation = (&gSteppedMatrixTranslations)[state->stepIndex * 2];
         state->frameDelay = 4;
