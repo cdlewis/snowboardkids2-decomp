@@ -1139,7 +1139,7 @@ segments:
     vram: 0
     start: 0x1EA480
 
-  - name: ITEM_15_DISPLAY_LIST
+  - name: HAUNTED_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EACD0
@@ -2564,7 +2564,7 @@ segments:
     vram: 0
     start: 0x4A1160
 
-  - name: ITEM_15_COMPRESSED_DATA
+  - name: HAUNTED_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A2980
