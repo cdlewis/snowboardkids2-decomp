@@ -171,7 +171,7 @@ typedef struct {
     s16 unkE60;
 } CreditsState;
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 
 typedef struct {
     SceneModel *model;
@@ -395,7 +395,7 @@ void initCreditsCharacter(CreditsCharacter *character) {
 
     initializeGameEntity(character->model, config->modelId, &creditsState->unk768, character->direction, -1, -1, -1);
 
-    memcpy((void *)((u8 *)character->model + 0x18), identityMatrix, 0x20);
+    memcpy((void *)((u8 *)character->model + 0x18), &identityMatrix, 0x20);
 
     createYRotationMatrix((Transform3D *)((u8 *)character->model + 0x18), config->rotation);
 
