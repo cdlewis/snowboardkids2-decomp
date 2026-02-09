@@ -1119,7 +1119,7 @@ segments:
     vram: 0
     start: 0x1E9490
 
-  - name: _1E9790
+  - name: LINDA_P_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E9790
@@ -2559,7 +2559,7 @@ segments:
     vram: 0
     start: 0x49F270
 
-  - name: _49FA20
+  - name: LINDA_P_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x49FA20
