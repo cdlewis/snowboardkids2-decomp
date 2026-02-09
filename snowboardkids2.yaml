@@ -1234,7 +1234,7 @@ segments:
     vram: 0
     start: 0x1EF780
 
-  - name: BEACH_DISPLAY_LIST
+  - name: TOWN_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EFB50
@@ -2684,7 +2684,7 @@ segments:
     vram: 0
     start: 0x4A8180
 
-  - name: BEACH_COMPRESSED_DATA
+  - name: TOWN_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A8650
