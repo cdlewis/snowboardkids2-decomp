@@ -106,14 +106,15 @@ def parse_data_file(filepath: Path) -> List[Tuple[str, int, int, str]]:
     current_status = None
     start_offset = None
     end_offset = None
+    last_element_size = None
 
     for line in lines:
         # Look for symbol declarations: nonmatching D_80088130_88D30 or matching D_80088130_88D30
         symbol_match = re.match(r'(non)?matching\s+(D_[0-9A-Fa-f]+_[0-9A-Fa-f]+)', line.strip())
         if symbol_match:
             # Save previous segment if exists
-            if current_symbol and start_offset is not None and end_offset is not None:
-                size = end_offset - start_offset
+            if current_symbol and start_offset is not None and end_offset is not None and last_element_size is not None:
+                size = (end_offset + last_element_size) - start_offset
                 segments.append((current_symbol, start_offset, size, current_status))
 
             # Start new segment
@@ -121,18 +122,20 @@ def parse_data_file(filepath: Path) -> List[Tuple[str, int, int, str]]:
             current_status = 'nonmatching' if symbol_match.group(1) else 'matching'
             start_offset = None
             end_offset = None
+            last_element_size = None
             continue
 
         # Look for enddlabel to finalize current segment
         enddlabel_match = re.match(r'enddlabel\s+(D_[0-9A-Fa-f]+_[0-9A-Fa-f]+)', line.strip())
         if enddlabel_match and current_symbol:
-            if start_offset is not None and end_offset is not None:
-                size = end_offset - start_offset
+            if start_offset is not None and end_offset is not None and last_element_size is not None:
+                size = (end_offset + last_element_size) - start_offset
                 segments.append((current_symbol, start_offset, size, current_status))
             current_symbol = None
             current_status = None
             start_offset = None
             end_offset = None
+            last_element_size = None
             continue
 
         # Parse data lines to extract ROM offsets
@@ -147,15 +150,15 @@ def parse_data_file(filepath: Path) -> List[Tuple[str, int, int, str]]:
 
                 # Determine size increment based on data type
                 if '.word' in line:
-                    end_offset += 4
+                    last_element_size = 4
                 elif '.short' in line or '.half' in line:
-                    end_offset += 2
+                    last_element_size = 2
                 elif '.byte' in line:
-                    end_offset += 1
+                    last_element_size = 1
 
     # Save last segment if exists
-    if current_symbol and start_offset is not None and end_offset is not None:
-        size = end_offset - start_offset
+    if current_symbol and start_offset is not None and end_offset is not None and last_element_size is not None:
+        size = (end_offset + last_element_size) - start_offset
         segments.append((current_symbol, start_offset, size, current_status))
 
     return segments

@@ -321,7 +321,7 @@ segments:
       - [0x892B0, data]
       - [0x89320, .data, 7850]
       - [0x89330, data]
-      - [0x89B00, data, main]
+      - [0x89B00, .data, main]
       - [0x8A110, data]
       - [0x8A140, .data, 20F0]
       - [0x8C980, .data, nonrace_shadow]

@@ -41,10 +41,8 @@ typedef struct {
     s8 isDestroyed;
 } StretchingModelOwner;
 
-void cleanupStretchingModelTask(StretchingModelTaskState *);
 void updatePulsingSpriteIndicator(PulsingSpriteState *);
 void cleanupPulsingSpriteIndicator(PulsingSpriteState *);
-void updateStretchingModelTask(StretchingModelTaskState *);
 
 s32 D_80088720_89320[] = { 0, 0x01000508, 0x01000518, 0 };
 
