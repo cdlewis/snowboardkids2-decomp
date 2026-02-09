@@ -358,7 +358,6 @@ ModelEntityTaskConfig D_8008913C_89D3C[] = {
 };
 
 ModelEntityConfig modelEntityConfigs[14] = {
-    /* [0] TOWN */
     { .name = "TOWN   ",
      .displayListStart = (void *)0x001EFB50,
      .displayListEnd = (void *)0x001F1DB0,
@@ -380,7 +379,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0x70,
      .ambientColorB = 0x80,
      .unk3B = 0xFF },
-    /* [1] TOWN */
     { .name = "TOWN   ",
      .displayListStart = (void *)0x001EFB50,
      .displayListEnd = (void *)0x001F1DB0,
@@ -402,7 +400,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0xD0,
      .ambientColorB = 0xD0,
      .unk3B = 0xFF },
-    /* [2] YAMA */
     { .name = "YAMA   ",
      .displayListStart = (void *)0x001F6D00,
      .displayListEnd = (void *)0x001F7DB0,
@@ -424,7 +421,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0x80,
      .ambientColorB = 0xA0,
      .unk3B = 0xFF },
-    /* [3] YAMA_Y */
     { .name = "YAMA_Y ",
      .displayListStart = (void *)0x001F7DB0,
      .displayListEnd = (void *)0x001F8D10,
@@ -446,7 +442,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0x50,
      .ambientColorB = 0x40,
      .unk3B = 0xFF },
-    /* [4] LINDA P */
     { .name = "LINDA P",
      .displayListStart = (void *)0x001E9790,
      .displayListEnd = (void *)0x001E9C40,
@@ -468,7 +463,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0x70,
      .ambientColorB = 0x60,
      .unk3B = 0xFF },
-    /* [5] LINDA B */
     { .name = "LINDA B",
      .displayListStart = (void *)0x001E8E60,
      .displayListEnd = (void *)0x001E9300,
@@ -490,7 +484,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0x70,
      .ambientColorB = 0x60,
      .unk3B = 0xFF },
-    /* [6] WENDY H */
     { .name = "WENDY H",
      .displayListStart = (void *)0x001F94F0,
      .displayListEnd = (void *)0x001FA080,
@@ -512,7 +505,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0x80,
      .ambientColorB = 0xA0,
      .unk3B = 0xFF },
-    /* [7] BEACH */
     { .name = "BEACH  ",
      .displayListStart = (void *)0x001EFB50,
      .displayListEnd = (void *)0x001F1DB0,
@@ -534,7 +526,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0xD0,
      .ambientColorB = 0xD0,
      .unk3B = 0xFF },
-    /* [8] JUNGLE */
     { .name = "JUNGLE ",
      .displayListStart = (void *)0x001F4730,
      .displayListEnd = (void *)0x001F5270,
@@ -556,7 +547,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0x60,
      .ambientColorB = 0x60,
      .unk3B = 0xFF },
-    /* [9] SPACE */
     { .name = "SPACE  ",
      .displayListStart = (void *)0x001F5FD0,
      .displayListEnd = (void *)0x001F6D00,
@@ -578,7 +568,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0x20,
      .ambientColorB = 0x40,
      .unk3B = 0xFF },
-    /* [10] ISLAND */
     { .name = "ISLAND ",
      .displayListStart = (void *)0x001FA080,
      .displayListEnd = (void *)0x001FB040,
@@ -600,7 +589,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0x60,
      .ambientColorB = 0x60,
      .unk3B = 0xFF },
-    /* [11] HAUNTED */
     { .name = "HAUNTED",
      .displayListStart = (void *)0x001EA480,
      .displayListEnd = (void *)0x001EACD0,
@@ -622,7 +610,6 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0x20,
      .ambientColorB = 0x80,
      .unk3B = 0xFF },
-    /* [12] JUNGLE2 */
     { .name = "JUNGLE2",
      .displayListStart = (void *)0x001F5270,
      .displayListEnd = (void *)0x001F5FD0,
@@ -644,20 +631,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorG = 0x40,
      .ambientColorB = 0xBF,
      .unk3B = 0xFF },
-    /* [13] OPENING */
     { .name = "OPENING",
-     .displayListStart = NULL,
-     .displayListEnd = NULL,
-     .compressedDataStart = NULL,
-     .compressedDataEnd = NULL,
-     .decompressedSize = 0,
-     .unk1C = 0,
-     .unk20 = 0,
-     .unk24 = 0,
-     .unk28 = 0,
-     .taskConfigs = NULL,
-     .taskCount = 0,
-     .unk32 = 0,
      .diffuseColorR = 0xFF,
      .diffuseColorG = 0xFF,
      .diffuseColorB = 0xFF,
