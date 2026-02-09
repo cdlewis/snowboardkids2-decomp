@@ -84,10 +84,10 @@ end:
     return (s16)(result << 16 >> 16);
 }
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 
 void initSlotData(CutsceneSlotData *slot) {
-    memcpy(&slot->transform, identityMatrix, 0x20);
+    memcpy(&slot->transform, &identityMatrix, 0x20);
 
     slot->unk0.bytes[0] = 0;
     slot->unk20_u.unk20_s32 = 0;
@@ -142,12 +142,12 @@ s32 setupSlotTransform(CutsceneSlotData *slot) {
     s32 retval;
     s16 sx, sy, sz;
 
-    memcpy(&rotY, identityMatrix, 0x20U);
-    memcpy(&rotZ, identityMatrix, 0x20U);
-    memcpy(&rotX, identityMatrix, 0x20U);
-    memcpy(&tempYZ, identityMatrix, 0x20U);
-    memcpy(&tempXYZ, identityMatrix, 0x20U);
-    memcpy(&scaleMat, identityMatrix, 0x20U);
+    memcpy(&rotY, &identityMatrix, 0x20U);
+    memcpy(&rotZ, &identityMatrix, 0x20U);
+    memcpy(&rotX, &identityMatrix, 0x20U);
+    memcpy(&tempYZ, &identityMatrix, 0x20U);
+    memcpy(&tempXYZ, &identityMatrix, 0x20U);
+    memcpy(&scaleMat, &identityMatrix, 0x20U);
 
     tilt = slot->angle;
     zRot = 0;

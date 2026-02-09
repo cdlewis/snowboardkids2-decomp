@@ -1,3 +1,3 @@
 candidate_source: grep -E '\.[a-zA-Z_]+\s*=\s*\(void \*\)0x8[0-9A-Fa-f]+,' src/20F0.c | sort | uniq
-prompt: "Look up the gameAsset entry or entries where `$INPUT` in src/20F0.c. This hex address should match an actual function, look up what that function name is an change the hex value to be a pointer to that function instead. symbol_addrs.txt is a good reference for function names for a given hex address. Commit your changes once the renaming is finished"
+prompt: "Look up the gameAsset entry or entries where `$INPUT` in src/20F0.c. This hex address should match an actual function, look up what that function name is an change the hex value to be a pointer to that function instead. symbol_addrs.txt is a good reference for function names for a given hex address. If you see any memcopy calls that operate on a Transform3D type, ensure size is defined as sizeof(Transform3D) not 0x20. Commit your changes once the renaming is finished"
 claude_command: glaude
