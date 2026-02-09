@@ -21,42 +21,12 @@ typedef struct {
     s32 unk8;
     s32 unkC;
     s32 unk10;
-    s16 unk14;
-    s16 unk16;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-} SubEntry;
-
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
     s32 unk14;
     s16 unk18;
     s16 unk1A;
     s32 unk1C;
     s32 unk20;
 } SubEntryVariant;
-
-typedef struct {
-    SubEntry *sub_entries;
-    u32 param1;
-    u32 color1;
-    u32 color2;
-    char name[8];
-    u32 addr1;
-    u32 addr2;
-    u32 addr3;
-    u32 addr4;
-    u32 size;
-    void *ptr1;
-    u32 param2;
-    void *ptr2;
-    u32 param3;
-} DataEntry;
 
 typedef struct {
     char padding[44];
@@ -387,195 +357,316 @@ ModelEntityTaskConfig D_8008913C_89D3C[] = {
      .unk1C = 0x00010000 }
 };
 
-u32 modelEntityConfigs[] = { 0x544F574E, 0x20202000, 0x001EFB50, 0x001F1DB0, 0x004A8650, 0x004B04A0,
-                             0x0000E180, 0x800883F0, 0x00010000, 0x80088450, 0x00010000 };
-
-DataEntry D_800891D4_89DD4[] = {
-    { .sub_entries = (SubEntry *)D_80088F20_89B20,
-     .param1 = 0x0005FFFF,
-     .color1 = 0xFFFFC0FF,
-     .color2 = 0x607080FF,
-     .name = "TOWN   ",
-     .addr1 = 0x001EFB50,
-     .addr2 = 0x001F1DB0,
-     .addr3 = 0x004A8650,
-     .addr4 = 0x004B04A0,
-     .size = 0x0000E180,
-     .ptr1 = (void *)0x800883F0,
-     .param2 = 0x00010000,
-     .ptr2 = (void *)0x80088450,
-     .param3 = 0x00010000 },
-    { .sub_entries = (SubEntry *)D_80088F20_89B20,
-     .param1 = 0x0005FFFF,
-     .color1 = 0xFFFFFFFF,
-     .color2 = 0xD0D0D0FF,
-     .name = "YAMA   ",
-     .addr1 = 0x001F6D00,
-     .addr2 = 0x001F7DB0,
-     .addr3 = 0x004BCFB0,
-     .addr4 = 0x004BF950,
-     .size = 0x00003FE0,
-     .ptr1 = (void *)0x80088580,
-     .param2 = 0x00010000,
-     .ptr2 = (void *)0x80088590,
-     .param3 = 0x00010000 },
-    { .sub_entries = (SubEntry *)D_80089088_89C88,
-     .param1 = 0x0001FFFF,
-     .color1 = 0xFFFFC0FF,
-     .color2 = 0x8080A0FF,
-     .name = "YAMA_Y ",
-     .addr1 = 0x001F7DB0,
-     .addr2 = 0x001F8D10,
-     .addr3 = 0x004BF950,
-     .addr4 = 0x004C20A0,
-     .size = 0x00003B30,
-     .ptr1 = (void *)0x800885A0,
-     .param2 = 0x00010000,
-     .ptr2 = (void *)0x800885B0,
-     .param3 = 0x00010000 },
-    { .sub_entries = (SubEntry *)D_80089088_89C88,
-     .param1 = 0x0001FFFF,
-     .color1 = 0xFFC000FF,
-     .color2 = 0x605040FF,
-     .name = "LINDA P",
-     .addr1 = 0x001E9790,
-     .addr2 = 0x001E9C40,
-     .addr3 = 0x0049FA20,
-     .addr4 = 0x004A0670,
-     .size = 0x000014A0,
-     .ptr1 = (void *)0x80088180,
-     .param2 = 0x00010000,
-     .ptr2 = NULL,
-     .param3 = 0x00000000 },
-    { .sub_entries = NULL,
-     .param1 = 0x0000FFFF,
-     .color1 = 0xFFFFFFFF,
-     .color2 = 0x807060FF,
-     .name = "LINDA B",
-     .addr1 = 0x001E8E60,
-     .addr2 = 0x001E9300,
-     .addr3 = 0x0049E2E0,
-     .addr4 = 0x0049F0D0,
-     .size = 0x00001680,
-     .ptr1 = (void *)0x80088150,
-     .param2 = 0x00010000,
-     .ptr2 = NULL,
-     .param3 = 0x00000000 },
-    { .sub_entries = NULL,
-     .param1 = 0x0000FFFF,
-     .color1 = 0xFFFFFFFF,
-     .color2 = 0x807060FF,
-     .name = "WENDY H",
-     .addr1 = 0x001F94F0,
-     .addr2 = 0x001FA080,
-     .addr3 = 0x004C3A60,
-     .addr4 = 0x004C5840,
-     .size = 0x00004120,
-     .ptr1 = (void *)0x80088600,
-     .param2 = 0x00010000,
-     .ptr2 = NULL,
-     .param3 = 0x00000000 },
-    { .sub_entries = NULL,
-     .param1 = 0x0000FFFF,
-     .color1 = 0xFFFFFFFF,
-     .color2 = 0x8080A0FF,
-     .name = "BEACH  ",
-     .addr1 = 0x001EFB50,
-     .addr2 = 0x001F1DB0,
-     .addr3 = 0x004A8650,
-     .addr4 = 0x004B04A0,
-     .size = 0x0000E180,
-     .ptr1 = (void *)0x800883F0,
-     .param2 = 0x00010000,
-     .ptr2 = (void *)0x80088450,
-     .param3 = 0x00010000 },
-    { .sub_entries = NULL,
-     .param1 = 0x0000FFFF,
-     .color1 = 0xFFFFFFFF,
-     .color2 = 0xD0D0D0FF,
-     .name = "JUNGLE ",
-     .addr1 = 0x001F4730,
-     .addr2 = 0x001F5270,
-     .addr3 = 0x004B73C0,
-     .addr4 = 0x004B8D10,
-     .size = 0x000021D0,
-     .ptr1 = (void *)0x800884D0,
-     .param2 = 0x00010000,
-     .ptr2 = (void *)0x800884E0,
-     .param3 = 0x00010000 },
-    { .sub_entries = (SubEntry *)D_800890AC_89CAC,
-     .param1 = 0x0004FFFF,
-     .color1 = 0xFFFFFFFF,
-     .color2 = 0x606060FF,
-     .name = "SPACE  ",
-     .addr1 = 0x001F5FD0,
-     .addr2 = 0x001F6D00,
-     .addr3 = 0x004BAF60,
-     .addr4 = 0x004BCFB0,
-     .size = 0x000036D0,
-     .ptr1 = (void *)0x80088560,
-     .param2 = 0x00010000,
-     .ptr2 = (void *)0x80088570,
-     .param3 = 0x00010000 },
-    { .sub_entries = NULL,
-     .param1 = 0x0000FFFF,
-     .color1 = 0xFFFF80FF,
-     .color2 = 0x002040FF,
-     .name = "ISLAND ",
-     .addr1 = 0x001FA080,
-     .addr2 = 0x001FB040,
-     .addr3 = 0x004C5840,
-     .addr4 = 0x004C9310,
-     .size = 0x00005AD0,
-     .ptr1 = (void *)&D_80088610_89210,
-     .param2 = 0x00010000,
-     .ptr2 = (void *)0x80088620,
-     .param3 = 0x00010000 },
-    { .sub_entries = NULL,
-     .param1 = 0x0000FFFF,
-     .color1 = 0xFFFFFFFF,
-     .color2 = 0x606060FF,
-     .name = "HAUNTED",
-     .addr1 = 0x001EA480,
-     .addr2 = 0x001EACD0,
-     .addr3 = 0x004A1160,
-     .addr4 = 0x004A2980,
-     .size = 0x000024B0,
-     .ptr1 = (void *)0x800881B0,
-     .param2 = 0x00010000,
-     .ptr2 = (void *)0x800881C0,
-     .param3 = 0x00010000 },
-    { .sub_entries = NULL,
-     .param1 = 0x0000FFFF,
-     .color1 = 0xFF8000FF,
-     .color2 = 0x002080FF,
-     .name = "JUNGLE2",
-     .addr1 = 0x001F5270,
-     .addr2 = 0x001F5FD0,
-     .addr3 = 0x004B8D10,
-     .addr4 = 0x004BAF60,
-     .size = 0x00002EC0,
-     .ptr1 = (void *)0x80088520,
-     .param2 = 0x00010000,
-     .ptr2 = (void *)0x80088530,
-     .param3 = 0x00010000 },
-    { .sub_entries = (SubEntry *)D_8008913C_89D3C,
-     .param1 = 0x0003FFFF,
-     .color1 = 0xFAFAA7FF,
-     .color2 = 0x4A40BFFF,
-     .name = "OPENING",
-     .addr1 = 0x00000000,
-     .addr2 = 0x00000000,
-     .addr3 = 0x00000000,
-     .addr4 = 0x00000000,
-     .size = 0x00000000,
-     .ptr1 = NULL,
-     .param2 = 0x00000000,
-     .ptr2 = NULL,
-     .param3 = 0x00000000 }
+ModelEntityConfig modelEntityConfigs[14] = {
+    /* [0] TOWN */
+    { .name = "TOWN   ",
+     .asset1Start = (void *)0x001EFB50,
+     .asset1End = (void *)0x001F1DB0,
+     .asset2Start = (void *)0x004A8650,
+     .asset2End = (void *)0x004B04A0,
+     .asset2Size = 0x0000E180,
+     .unk1C = 0x800883F0,
+     .unk20 = 0x00010000,
+     .unk24 = 0x80088450,
+     .unk28 = 0x00010000,
+     .taskConfigs = D_80088F20_89B20,
+     .taskCount = 5,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xFF,
+     .diffuseColorB = 0xC0,
+     .unk37 = 0xFF,
+     .ambientColorR = 0x60,
+     .ambientColorG = 0x70,
+     .ambientColorB = 0x80,
+     .unk3B = 0xFF },
+    /* [1] TOWN */
+    { .name = "TOWN   ",
+     .asset1Start = (void *)0x001EFB50,
+     .asset1End = (void *)0x001F1DB0,
+     .asset2Start = (void *)0x004A8650,
+     .asset2End = (void *)0x004B04A0,
+     .asset2Size = 0x0000E180,
+     .unk1C = 0x800883F0,
+     .unk20 = 0x00010000,
+     .unk24 = 0x80088450,
+     .unk28 = 0x00010000,
+     .taskConfigs = D_80088F20_89B20,
+     .taskCount = 5,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xFF,
+     .diffuseColorB = 0xFF,
+     .unk37 = 0xFF,
+     .ambientColorR = 0xD0,
+     .ambientColorG = 0xD0,
+     .ambientColorB = 0xD0,
+     .unk3B = 0xFF },
+    /* [2] YAMA */
+    { .name = "YAMA   ",
+     .asset1Start = (void *)0x001F6D00,
+     .asset1End = (void *)0x001F7DB0,
+     .asset2Start = (void *)0x004BCFB0,
+     .asset2End = (void *)0x004BF950,
+     .asset2Size = 0x00003FE0,
+     .unk1C = 0x80088580,
+     .unk20 = 0x00010000,
+     .unk24 = 0x80088590,
+     .unk28 = 0x00010000,
+     .taskConfigs = D_80089088_89C88,
+     .taskCount = 1,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xFF,
+     .diffuseColorB = 0xC0,
+     .unk37 = 0xFF,
+     .ambientColorR = 0x80,
+     .ambientColorG = 0x80,
+     .ambientColorB = 0xA0,
+     .unk3B = 0xFF },
+    /* [3] YAMA_Y */
+    { .name = "YAMA_Y ",
+     .asset1Start = (void *)0x001F7DB0,
+     .asset1End = (void *)0x001F8D10,
+     .asset2Start = (void *)0x004BF950,
+     .asset2End = (void *)0x004C20A0,
+     .asset2Size = 0x00003B30,
+     .unk1C = 0x800885A0,
+     .unk20 = 0x00010000,
+     .unk24 = 0x800885B0,
+     .unk28 = 0x00010000,
+     .taskConfigs = D_80089088_89C88,
+     .taskCount = 1,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xC0,
+     .diffuseColorB = 0x00,
+     .unk37 = 0xFF,
+     .ambientColorR = 0x60,
+     .ambientColorG = 0x50,
+     .ambientColorB = 0x40,
+     .unk3B = 0xFF },
+    /* [4] LINDA P */
+    { .name = "LINDA P",
+     .asset1Start = (void *)0x001E9790,
+     .asset1End = (void *)0x001E9C40,
+     .asset2Start = (void *)0x0049FA20,
+     .asset2End = (void *)0x004A0670,
+     .asset2Size = 0x000014A0,
+     .unk1C = 0x80088180,
+     .unk20 = 0x00010000,
+     .unk24 = 0,
+     .unk28 = 0,
+     .taskConfigs = NULL,
+     .taskCount = 0,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xFF,
+     .diffuseColorB = 0xFF,
+     .unk37 = 0xFF,
+     .ambientColorR = 0x80,
+     .ambientColorG = 0x70,
+     .ambientColorB = 0x60,
+     .unk3B = 0xFF },
+    /* [5] LINDA B */
+    { .name = "LINDA B",
+     .asset1Start = (void *)0x001E8E60,
+     .asset1End = (void *)0x001E9300,
+     .asset2Start = (void *)0x0049E2E0,
+     .asset2End = (void *)0x0049F0D0,
+     .asset2Size = 0x00001680,
+     .unk1C = 0x80088150,
+     .unk20 = 0x00010000,
+     .unk24 = 0,
+     .unk28 = 0,
+     .taskConfigs = NULL,
+     .taskCount = 0,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xFF,
+     .diffuseColorB = 0xFF,
+     .unk37 = 0xFF,
+     .ambientColorR = 0x80,
+     .ambientColorG = 0x70,
+     .ambientColorB = 0x60,
+     .unk3B = 0xFF },
+    /* [6] WENDY H */
+    { .name = "WENDY H",
+     .asset1Start = (void *)0x001F94F0,
+     .asset1End = (void *)0x001FA080,
+     .asset2Start = (void *)0x004C3A60,
+     .asset2End = (void *)0x004C5840,
+     .asset2Size = 0x00004120,
+     .unk1C = 0x80088600,
+     .unk20 = 0x00010000,
+     .unk24 = 0,
+     .unk28 = 0,
+     .taskConfigs = NULL,
+     .taskCount = 0,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xFF,
+     .diffuseColorB = 0xFF,
+     .unk37 = 0xFF,
+     .ambientColorR = 0x80,
+     .ambientColorG = 0x80,
+     .ambientColorB = 0xA0,
+     .unk3B = 0xFF },
+    /* [7] BEACH */
+    { .name = "BEACH  ",
+     .asset1Start = (void *)0x001EFB50,
+     .asset1End = (void *)0x001F1DB0,
+     .asset2Start = (void *)0x004A8650,
+     .asset2End = (void *)0x004B04A0,
+     .asset2Size = 0x0000E180,
+     .unk1C = 0x800883F0,
+     .unk20 = 0x00010000,
+     .unk24 = 0x80088450,
+     .unk28 = 0x00010000,
+     .taskConfigs = NULL,
+     .taskCount = 0,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xFF,
+     .diffuseColorB = 0xFF,
+     .unk37 = 0xFF,
+     .ambientColorR = 0xD0,
+     .ambientColorG = 0xD0,
+     .ambientColorB = 0xD0,
+     .unk3B = 0xFF },
+    /* [8] JUNGLE */
+    { .name = "JUNGLE ",
+     .asset1Start = (void *)0x001F4730,
+     .asset1End = (void *)0x001F5270,
+     .asset2Start = (void *)0x004B73C0,
+     .asset2End = (void *)0x004B8D10,
+     .asset2Size = 0x000021D0,
+     .unk1C = 0x800884D0,
+     .unk20 = 0x00010000,
+     .unk24 = 0x800884E0,
+     .unk28 = 0x00010000,
+     .taskConfigs = D_800890AC_89CAC,
+     .taskCount = 4,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xFF,
+     .diffuseColorB = 0xFF,
+     .unk37 = 0xFF,
+     .ambientColorR = 0x60,
+     .ambientColorG = 0x60,
+     .ambientColorB = 0x60,
+     .unk3B = 0xFF },
+    /* [9] SPACE */
+    { .name = "SPACE  ",
+     .asset1Start = (void *)0x001F5FD0,
+     .asset1End = (void *)0x001F6D00,
+     .asset2Start = (void *)0x004BAF60,
+     .asset2End = (void *)0x004BCFB0,
+     .asset2Size = 0x000036D0,
+     .unk1C = 0x80088560,
+     .unk20 = 0x00010000,
+     .unk24 = 0x80088570,
+     .unk28 = 0x00010000,
+     .taskConfigs = NULL,
+     .taskCount = 0,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xFF,
+     .diffuseColorB = 0x80,
+     .unk37 = 0xFF,
+     .ambientColorR = 0x00,
+     .ambientColorG = 0x20,
+     .ambientColorB = 0x40,
+     .unk3B = 0xFF },
+    /* [10] ISLAND */
+    { .name = "ISLAND ",
+     .asset1Start = (void *)0x001FA080,
+     .asset1End = (void *)0x001FB040,
+     .asset2Start = (void *)0x004C5840,
+     .asset2End = (void *)0x004C9310,
+     .asset2Size = 0x00005AD0,
+     .unk1C = (s32)&D_80088610_89210,
+     .unk20 = 0x00010000,
+     .unk24 = 0x80088620,
+     .unk28 = 0x00010000,
+     .taskConfigs = NULL,
+     .taskCount = 0,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xFF,
+     .diffuseColorB = 0xFF,
+     .unk37 = 0xFF,
+     .ambientColorR = 0x60,
+     .ambientColorG = 0x60,
+     .ambientColorB = 0x60,
+     .unk3B = 0xFF },
+    /* [11] HAUNTED */
+    { .name = "HAUNTED",
+     .asset1Start = (void *)0x001EA480,
+     .asset1End = (void *)0x001EACD0,
+     .asset2Start = (void *)0x004A1160,
+     .asset2End = (void *)0x004A2980,
+     .asset2Size = 0x000024B0,
+     .unk1C = 0x800881B0,
+     .unk20 = 0x00010000,
+     .unk24 = 0x800881C0,
+     .unk28 = 0x00010000,
+     .taskConfigs = NULL,
+     .taskCount = 0,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0x80,
+     .diffuseColorB = 0x00,
+     .unk37 = 0xFF,
+     .ambientColorR = 0x00,
+     .ambientColorG = 0x20,
+     .ambientColorB = 0x80,
+     .unk3B = 0xFF },
+    /* [12] JUNGLE2 */
+    { .name = "JUNGLE2",
+     .asset1Start = (void *)0x001F5270,
+     .asset1End = (void *)0x001F5FD0,
+     .asset2Start = (void *)0x004B8D10,
+     .asset2End = (void *)0x004BAF60,
+     .asset2Size = 0x00002EC0,
+     .unk1C = 0x80088520,
+     .unk20 = 0x00010000,
+     .unk24 = 0x80088530,
+     .unk28 = 0x00010000,
+     .taskConfigs = D_8008913C_89D3C,
+     .taskCount = 3,
+     .unk32 = 0xFFFF,
+     .diffuseColorR = 0xFA,
+     .diffuseColorG = 0xFA,
+     .diffuseColorB = 0xA7,
+     .unk37 = 0xFF,
+     .ambientColorR = 0x4A,
+     .ambientColorG = 0x40,
+     .ambientColorB = 0xBF,
+     .unk3B = 0xFF },
+    /* [13] OPENING */
+    { .name = "OPENING",
+     .asset1Start = NULL,
+     .asset1End = NULL,
+     .asset2Start = NULL,
+     .asset2End = NULL,
+     .asset2Size = 0,
+     .unk1C = 0,
+     .unk20 = 0,
+     .unk24 = 0,
+     .unk28 = 0,
+     .taskConfigs = NULL,
+     .taskCount = 0,
+     .unk32 = 0,
+     .diffuseColorR = 0xFF,
+     .diffuseColorG = 0xFF,
+     .diffuseColorB = 0xFF,
+     .unk37 = 0xFF,
+     .ambientColorR = 0xD0,
+     .ambientColorG = 0xD0,
+     .ambientColorB = 0xD0,
+     .unk3B = 0xFF }
 };
-
-u32 D_800894E0_8A0E0[] = { 0x00000000, 0x00000000, 0xFFFFFFFF, 0xD0D0D0FF };
 
 s32 spawnedSpriteScales[8] = { 0x00010000, 0x00011999, 0x0000E666, 0x00013333,
                                0x00000000, 0x01000148, 0x00000000, 0x00000000 };
@@ -598,7 +689,7 @@ void setupModelEntityLighting(ModelEntity *entity, ColorData *lightColors, Color
     s32 new_var;
     ModelEntityConfig *config;
 
-    config = &((ModelEntityConfig *)modelEntityConfigs)[entity->configIndex];
+    config = &modelEntityConfigs[entity->configIndex];
     colorSum = config->diffuseColorR + config->diffuseColorG;
     temp_v0 = colorSum;
     blueValue = config->diffuseColorB;
@@ -648,7 +739,7 @@ s32 initModelEntity(ModelEntity *entity, s16 index, void *arg2) {
 
     entity->configIndex = index;
     entity->isVisible = 1;
-    entry = &((ModelEntityConfig *)modelEntityConfigs)[index];
+    entry = &modelEntityConfigs[index];
     entity->parent = arg2;
     entity->isDisposed = 0;
 
@@ -729,7 +820,7 @@ void enqueueDisplayListIfVisible(func_80000C2C_182C_arg_unk0 *state, void *displ
 }
 
 void initRotatingModelTask(func_80000C2C_182C_arg *arg0) {
-    ModelEntityConfig *config = &((ModelEntityConfig *)modelEntityConfigs)[arg0->unk0->unk84];
+    ModelEntityConfig *config = &modelEntityConfigs[arg0->unk0->unk84];
     ModelEntityTaskConfig *taskConfig = &config->taskConfigs[arg0->unk4];
 
     setCleanupCallback(&cleanupRotatingModelTask);
@@ -749,8 +840,8 @@ void initRotatingModelTask(func_80000C2C_182C_arg *arg0) {
 
 void updateRotatingModelTask(func_80000C2C_182C_arg *arg0) {
     u16 rotationAngle;
-    DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
-    SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
+    ModelEntityConfig *config = &modelEntityConfigs[arg0->unk0->unk84];
+    ModelEntityTaskConfig *subEntry = &config->taskConfigs[arg0->unk4];
 
     if (arg0->unk0->unk86 != 0) {
         terminateCurrentTask();
@@ -773,7 +864,7 @@ void initSwingingModelTask(func_80000C2C_182C_arg *arg0) {
     ModelEntityConfig *temp_s0;
     ModelEntityTaskConfig *temp_s2;
 
-    temp_s0 = &((ModelEntityConfig *)modelEntityConfigs)[arg0->unk0->unk84];
+    temp_s0 = &modelEntityConfigs[arg0->unk0->unk84];
     temp_s2 = &temp_s0->taskConfigs[arg0->unk4];
 
     setCleanupCallback(&cleanupSwingingModelTask);
@@ -792,11 +883,11 @@ void initSwingingModelTask(func_80000C2C_182C_arg *arg0) {
 void updateSwingingModelTask(func_80000C2C_182C_arg *arg0) {
     Transform3D yRotMatrix;
     Transform3D zRotMatrix;
-    DataEntry *entry;
-    SubEntry *subEntry;
+    ModelEntityConfig *config;
+    ModelEntityTaskConfig *subEntry;
 
-    entry = &D_800891D4_89DD4[arg0->unk0->unk84];
-    subEntry = &entry->sub_entries[arg0->unk4];
+    config = &modelEntityConfigs[arg0->unk0->unk84];
+    subEntry = &config->taskConfigs[arg0->unk4];
     if (arg0->unk0->unk86 != 0) {
         terminateCurrentTask();
     }
@@ -846,16 +937,16 @@ void cleanupSwingingModelTask(SwingingModelTaskState *state) {
 }
 
 void initSpriteAnimationTask(func_80000C2C_182C_arg *arg0) {
-    DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
-    SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
+    ModelEntityConfig *config = &modelEntityConfigs[arg0->unk0->unk84];
+    ModelEntityTaskConfig *subEntry = &config->taskConfigs[arg0->unk4];
     setCleanupCallback(&cleanupSpriteAnimationTask);
     loadSpriteAsset((SpriteAssetState *)&arg0->unk8, subEntry->unk16);
     setCallback(&updateSpriteAnimationTask);
 }
 
 void updateSpriteAnimationTask(func_80000C2C_182C_arg *arg0) {
-    DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
-    SubEntryVariant *subEntry = (SubEntryVariant *)&entry->sub_entries[arg0->unk4];
+    ModelEntityConfig *config = &modelEntityConfigs[arg0->unk0->unk84];
+    SubEntryVariant *subEntry = (SubEntryVariant *)&config->taskConfigs[arg0->unk4];
 
     if (arg0->unk0->unk86 != 0) {
         terminateCurrentTask();
@@ -898,7 +989,7 @@ void initStaticModelTask(StaticModelTaskArg *arg0) {
 
     temp = arg0->unk0->unk84;
     temp2 = arg0->unk4;
-    var_s0 = &((ModelEntityConfig *)modelEntityConfigs)[temp];
+    var_s0 = &modelEntityConfigs[temp];
     var_s2 = &var_s0->taskConfigs[temp2];
 
     setCleanupCallback(cleanupStaticModelTask);
@@ -914,8 +1005,8 @@ void initStaticModelTask(StaticModelTaskArg *arg0) {
 }
 
 void updateStaticModelTask(func_80000C2C_182C_arg *arg0) {
-    DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
-    SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
+    ModelEntityConfig *config = &modelEntityConfigs[arg0->unk0->unk84];
+    ModelEntityTaskConfig *subEntry = &config->taskConfigs[arg0->unk4];
 
     if (arg0->unk0->unk86 != 0) {
         terminateCurrentTask();
@@ -936,7 +1027,7 @@ void initAnimatedModelTask(AnimatedModelTaskState *arg0) {
     ModelEntityConfig *temp_s0;
     ModelEntityTaskConfig *temp_s2;
 
-    temp_s0 = &((ModelEntityConfig *)modelEntityConfigs)[arg0->unk0->unk84];
+    temp_s0 = &modelEntityConfigs[arg0->unk0->unk84];
     temp_s2 = &temp_s0->taskConfigs[arg0->unk4];
 
     setCleanupCallback(&cleanupAnimatedModelTask);
@@ -959,11 +1050,11 @@ void initAnimatedModelTask(AnimatedModelTaskState *arg0) {
 }
 
 void updateAnimatedModelTask(AnimatedModelTaskUpdateState *state) {
-    DataEntry *entry;
-    SubEntry *subEntry;
+    ModelEntityConfig *config;
+    ModelEntityTaskConfig *subEntry;
 
-    entry = &D_800891D4_89DD4[state->unk0->unk84];
-    subEntry = &entry->sub_entries[state->unk4];
+    config = &modelEntityConfigs[state->unk0->unk84];
+    subEntry = &config->taskConfigs[state->unk4];
 
     if (state->unk0->unk86 != 0) {
         terminateCurrentTask();
@@ -989,8 +1080,8 @@ void cleanupAnimatedModelTask(AnimatedModelTaskCleanupState *state) {
 }
 
 void initSpriteSpawnerTask(func_80000C2C_182C_arg *arg0) {
-    DataEntry *entry = &D_800891D4_89DD4[arg0->unk0->unk84];
-    SubEntry *subEntry = &entry->sub_entries[arg0->unk4];
+    ModelEntityConfig *config = &modelEntityConfigs[arg0->unk0->unk84];
+    ModelEntityTaskConfig *subEntry = &config->taskConfigs[arg0->unk4];
     setCleanupCallback(&cleanupSpriteSpawnerTask);
     loadSpriteAsset((SpriteAssetState *)&arg0->unk8, subEntry->unk16);
     *(s16 *)&arg0->unk54 = 0;
@@ -1032,11 +1123,11 @@ void initSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
     volatile s32 sp18;
     volatile s32 sp1C;
     Transform3D sp20;
-    DataEntry *entry;
-    SubEntry *subEntry;
+    ModelEntityConfig *config;
+    ModelEntityTaskConfig *subEntry;
 
-    entry = &D_800891D4_89DD4[arg0->unk0->unk84];
-    subEntry = &entry->sub_entries[arg0->unk4];
+    config = &modelEntityConfigs[arg0->unk0->unk84];
+    subEntry = &config->taskConfigs[arg0->unk4];
 
     memcpy(&sp20, &identityMatrix, sizeof(Transform3D));
     setCleanupCallback(&cleanupSpawnedSpriteTask);
@@ -1058,11 +1149,11 @@ void initSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
 }
 
 void updateSpawnedSpriteTask(func_80000C2C_182C_arg *arg0) {
-    DataEntry *entry;
+    ModelEntityConfig *config;
     SubEntryVariant *subEntry;
 
-    entry = &D_800891D4_89DD4[arg0->unk0->unk84];
-    subEntry = (SubEntryVariant *)&entry->sub_entries[arg0->unk4];
+    config = &modelEntityConfigs[arg0->unk0->unk84];
+    subEntry = (SubEntryVariant *)&config->taskConfigs[arg0->unk4];
 
     if (arg0->unk0->unk86 != 0) {
         terminateCurrentTask();
