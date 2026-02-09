@@ -365,7 +365,7 @@ Vec3i D_800BCA64[] = {
 
 extern u16 D_8009ADE0_9B9E0;
 extern BossSurfaceColor gBossSurfaceColors[];
-extern s32 identityMatrix[];
+extern Transform3D identityMatrix;
 extern s32 gControllerInputs[];
 
 /**
@@ -506,10 +506,10 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     gameState = getCurrentAllocation();
 
     // Initialize rotation matrices for bone transformations
-    memcpy(&arg0->unk970, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk970, &identityMatrix, sizeof(Transform3D));
     createYRotationMatrix(&arg0->unk970, arg0->rotY);
-    memcpy(&arg0->unk990, identityMatrix, sizeof(Transform3D));
-    memcpy(&arg0->unk9B0, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk990, &identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk9B0, &identityMatrix, sizeof(Transform3D));
 
     // Set initial position based on boss index
     arg0->unk434 = D_800BCA3C_B1F2C[arg0->unkBB8];
@@ -530,7 +530,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     // Each has Transform3D at offset 0x38, asset pointer at 0x58
     for (i = 0; i < 12; i++) {
         Unk0x3CElemExtra *extra = (Unk0x3CElemExtra *)((u8 *)&arg0->unk0_3C[i] + 0x38);
-        memcpy(&extra->unk38, identityMatrix, sizeof(Transform3D));
+        memcpy(&extra->unk38, &identityMatrix, sizeof(Transform3D));
         extra->unk5C = (s32)arg0->unk0_3C[0].unk4;
         extra->unk60 = (s32)arg0->unk0_3C[0].unk8;
         assetOffset = i * 0x10;
