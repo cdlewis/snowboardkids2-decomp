@@ -207,7 +207,7 @@ void cleanupStaticModelTask(SwingingModelTaskState *arg0);
 void updateAnimatedModelTask(AnimatedModelTaskUpdateState *arg0);
 void cleanupAnimatedModelTask(AnimatedModelTaskCleanupState *arg0);
 
-extern s32 identityMatrix[];
+extern Transform3D identityMatrix;
 extern u32 D_80088610_89210;
 
 void initRotatingModelTask(func_80000C2C_182C_arg *arg0);
@@ -756,7 +756,7 @@ s32 initModelEntity(ModelEntity *entity, s16 index, void *arg2) {
         entity->displayConfig = entry->unk1C;
 
         if (entry->unk24 != 0) {
-            memcpy(&entity->secondaryMatrix, identityMatrix, 0x20);
+            memcpy(&entity->secondaryMatrix, &identityMatrix, 0x20);
             entity->secondaryModel = entity->modelData;
             entity->secondaryTexture = entity->textureData;
             entity->secondaryConfig = entry->unk24;
