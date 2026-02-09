@@ -9,7 +9,7 @@
 #include "task_scheduler.h"
 
 extern void spawnSpriteEffectEx(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 extern u16 gNpcCollisionRadii[];
 
 void updateStoryMapRareEventJuggling(Func2E024Arg *arg0);
@@ -148,7 +148,7 @@ void initStoryMapRareEventJuggling(Func2E024Arg *container) {
     characters = container->elements;
 
     for (i = 0; i < container->unkD5; i++) {
-        memcpy(&characters[i].matrix, identityMatrix, sizeof(Transform3D));
+        memcpy(&characters[i].matrix, &identityMatrix, sizeof(Transform3D));
         characters[i].unk62 = 0;
         container->unkCC[i] = 0;
 
@@ -290,7 +290,7 @@ void initStoryMapRareEventSledding(Func2E024Arg *arg0) {
         new_var = &worldMatrix;
         localMatrixPtr = &localMatrix;
 
-        memcpy(&worldMatrix, identityMatrix, sizeof(Transform3D));
+        memcpy(&worldMatrix, &identityMatrix, sizeof(Transform3D));
         memcpy(&localMatrix, new_var, sizeof(Transform3D));
         memcpy(&arg0->elements[i].matrix, localMatrixPtr, sizeof(Transform3D));
 
@@ -359,7 +359,7 @@ void initStoryMapRareEventSnowman(Func2E024Arg *container) {
     for (i = 0; i < container->unkD5; i++) {
         Func297D8Arg *element = &elements[i];
 
-        memcpy(&elements[i].matrix, identityMatrix, 0x20);
+        memcpy(&elements[i].matrix, &identityMatrix, 0x20);
         element->unk62 = 0;
 
         if (i == 0) {
@@ -472,7 +472,7 @@ void initStoryMapRareEventCheering(Func2E024Arg *arg0) {
     arg0->unkD2 = 0;
 
     for (; i < arg0->unkD5; i++) {
-        memcpy(&arg0->elements[i].matrix, identityMatrix, sizeof(Transform3D));
+        memcpy(&arg0->elements[i].matrix, &identityMatrix, sizeof(Transform3D));
         arg0->elements[i].unk62 = 0;
         arg0->elements[i].unk5A = 0;
 
@@ -681,7 +681,7 @@ void initStoryMapRareEventSkating(Func2E024Arg *arg0) {
         worldMatrixPtr = &worldMatrix;
         localMatrixPtr = &localMatrix;
 
-        memcpy(&worldMatrix, identityMatrix, sizeof(Transform3D));
+        memcpy(&worldMatrix, &identityMatrix, sizeof(Transform3D));
         memcpy(&localMatrix, worldMatrixPtr, sizeof(Transform3D));
         memcpy(&arg0->elements[i].matrix, localMatrixPtr, sizeof(Transform3D));
 
@@ -748,7 +748,7 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
     for (i = 0; i < arg0->unkD5; i++) {
         element = &arg0->elements[i];
 
-        memcpy(&localMatrix, identityMatrix, sizeof(Transform3D));
+        memcpy(&localMatrix, &identityMatrix, sizeof(Transform3D));
         memcpy(&worldMatrix, &element->matrix, sizeof(Transform3D));
 
         switch (element->unk5E) {
