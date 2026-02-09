@@ -1254,10 +1254,15 @@ segments:
     vram: 0
     start: 0x1F5FD0
 
-  - name: _1F6D00
+  - name: YAMA_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1F6D00
+
+  - name: YAMA_Y_DISPLAY_LIST
+    type: bin
+    vram: 0
+    start: 0x1F7DB0
 
   - name: UFO_DISPLAY_LIST
     type: bin
@@ -2704,10 +2709,15 @@ segments:
     vram: 0
     start: 0x4BAF60
 
-  - name: _4BCFB0
+  - name: YAMA_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4BCFB0
+
+  - name: YAMA_Y_COMPRESSED_DATA
+    type: bin
+    vram: 0
+    start: 0x4BF950
 
   - name: UFO_COMPRESSED_DATA
     type: bin

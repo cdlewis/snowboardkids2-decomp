@@ -12,6 +12,10 @@
 
 USE_ASSET(LINDA_B_DISPLAY_LIST);
 USE_ASSET(LINDA_B_COMPRESSED_DATA);
+USE_ASSET(YAMA_COMPRESSED_DATA);
+USE_ASSET(YAMA_DISPLAY_LIST);
+USE_ASSET(YAMA_Y_COMPRESSED_DATA);
+USE_ASSET(YAMA_Y_DISPLAY_LIST);
 USE_ASSET(SPACE_COMPRESSED_DATA);
 USE_ASSET(SPACE_DISPLAY_LIST);
 USE_ASSET(WENDY_H_DISPLAY_LIST);
@@ -409,10 +413,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0xD0,
      .unk3B = 0xFF },
     { .name = "YAMA   ",
-     .displayListStart = (void *)0x001F6D00,
-     .displayListEnd = (void *)0x001F7DB0,
-     .compressedDataStart = (void *)0x004BCFB0,
-     .compressedDataEnd = (void *)0x004BF950,
+     .displayListStart = (void *)&YAMA_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&YAMA_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&YAMA_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&YAMA_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00003FE0,
      .unk1C = 0x80088580,
      .unk20 = 0x00010000,
@@ -430,10 +434,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0xA0,
      .unk3B = 0xFF },
     { .name = "YAMA_Y ",
-     .displayListStart = (void *)0x001F7DB0,
-     .displayListEnd = (void *)0x001F8D10,
-     .compressedDataStart = (void *)0x004BF950,
-     .compressedDataEnd = (void *)0x004C20A0,
+     .displayListStart = (void *)&YAMA_Y_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&YAMA_Y_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&YAMA_Y_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&YAMA_Y_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00003B30,
      .unk1C = 0x800885A0,
      .unk20 = 0x00010000,
