@@ -1234,7 +1234,7 @@ segments:
     vram: 0
     start: 0x1EF780
 
-  - name: _1EFB50
+  - name: BEACH_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EFB50
@@ -2659,7 +2659,7 @@ segments:
     vram: 0
     start: 0x4A8180
 
-  - name: _4A8650
+  - name: BEACH_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A8650
