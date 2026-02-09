@@ -1752,7 +1752,7 @@ void decayPlayerAirborneAngles(Player *player) {
     player->unk990.translation.x = savedTilt + tiltDecay;
 }
 
-extern s16 identityMatrix[];
+extern Transform3D identityMatrix;
 
 s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadzone, s32 lateralDeadzone) {
     Vec3i tempVec;
@@ -1772,8 +1772,8 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     forwardDir.y = yawRotation.m[2][1];
     forwardDir.z = yawRotation.m[2][2];
 
-    memcpy(&pitchMatrix, identityMatrix, 0x20);
-    memcpy(&slopeMatrix, identityMatrix, 0x20);
+    memcpy(&pitchMatrix, &identityMatrix, 0x20);
+    memcpy(&slopeMatrix, &identityMatrix, 0x20);
 
     sqrtResult = approximate_sqrt(player->unk458 * player->unk458 + player->unk460 * player->unk460);
     magnitude = sqrtResult & 0xFFFF;
@@ -1798,7 +1798,7 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     }
 
     transformVector2(&forwardDir, &combinedTransform, &localVelocity);
-    memcpy(&slopeMatrix, identityMatrix, 0x20);
+    memcpy(&slopeMatrix, &identityMatrix, 0x20);
 
     sqrtResult = approximate_sqrt(localVelocity.x * localVelocity.x + localVelocity.z * localVelocity.z);
     magnitude = sqrtResult & 0xFFFF;
