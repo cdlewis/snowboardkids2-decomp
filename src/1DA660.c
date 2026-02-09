@@ -133,7 +133,7 @@ extern s16 D_800B1160_1DB700[];
 extern s16 D_800B1162_1DB702[];
 extern Vec2s D_800B11A0_1DB740[];
 extern s16 D_800B11C2_1DB762[];
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 extern void *D_800B1140_1DB6E0;
 extern char D_800B115C_1DB6FC[];
 extern s32 gButtonsPressed;
@@ -209,7 +209,7 @@ void initCharacterPreview(CharacterPreviewState *arg0) {
 
     matrix = &arg0->matrix;
     arg0->model = createSceneModel(modelIndex, allocation);
-    memcpy(matrix, identityMatrix, 0x20);
+    memcpy(matrix, &identityMatrix, 0x20);
 
     arg0->matrix.translation.x = D_800B1160_1DB700[arg0->characterIndex * 2] << 16;
     arg0->matrix.translation.z = D_800B1162_1DB702[arg0->characterIndex * 2] << 16;
@@ -586,7 +586,7 @@ void initCharacterSelectBoardTask(CharacterSelectBoardTask *arg0) {
     texture2 = loadUncompressedData(&_422C60_ROM_START, &_422C60_ROM_END);
     setCleanupCallback(cleanupCharacterSelectBoardTask);
 
-    memcpy(arg0, identityMatrix, 0x20);
+    memcpy(arg0, &identityMatrix, 0x20);
     arg0->displayList = &D_800B1140_1DB6E0;
     arg0->translateX = 0x2C0000;
     arg0->translateZ = (s32)0xFF9F0000;
