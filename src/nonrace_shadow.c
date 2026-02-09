@@ -5,7 +5,7 @@
 
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 
 u32 g_NonRaceShadowTex[];
 
@@ -93,7 +93,7 @@ void renderNonRaceShadow(ShadowEntity *entity) {
     s16 negValue;
     s32 shadowScale;
 
-    memcpy(&matrix, identityMatrix, sizeof(Transform3D));
+    memcpy(&matrix, &identityMatrix, sizeof(Transform3D));
 
     if (entity->shadowRadius <= 0) {
         return;
