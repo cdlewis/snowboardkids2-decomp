@@ -160,7 +160,7 @@ void cleanupSceneRenderTask(SceneRenderTaskData *task);
 
 extern Gfx *volatile gRegionAllocPtr;
 extern s32 gCurrentDisplayBufferIndex;
-extern s32 identityMatrix[];
+extern Transform3D identityMatrix;
 
 Gfx D_8008CCE0_8D8E0[] = {
     { .words = { 0x00000000, 0x010000A0 } },
@@ -437,8 +437,8 @@ void loadSceneRenderTaskData(SceneRenderTaskLoadContext *ctx) {
     ctx->animState->scaleVelocity = 0;
     ctx->animState->scaleFrames = 0;
     ctx->animState->rotationAngle = 0;
-    memcpy(&ctx->transform1, identityMatrix, sizeof(Transform3D));
-    memcpy(&ctx->transform2, identityMatrix, sizeof(Transform3D));
+    memcpy(&ctx->transform1, &identityMatrix, sizeof(Transform3D));
+    memcpy(&ctx->transform2, &identityMatrix, sizeof(Transform3D));
     animState = ctx->animState;
     animState->posFramesZ = 0;
     animState->posFramesY = 0;
@@ -486,9 +486,9 @@ void updateSceneRenderTask(SceneRenderTaskCtx *ctx) {
     nodeB = ctx->node;
     if (nodeB->renderFlags & 1) {
         rotMatrix = &sp10;
-        memcpy(rotMatrix, identityMatrix, sizeof(Transform3D));
+        memcpy(rotMatrix, &identityMatrix, sizeof(Transform3D));
         tempMatrix = &sp30;
-        memcpy(tempMatrix, identityMatrix, sizeof(Transform3D));
+        memcpy(tempMatrix, &identityMatrix, sizeof(Transform3D));
         enableViewportDisplayList(ctx->node);
         enqueueAuxBufferRender((AuxBufferContext *)ctx);
         nodeB = ctx->node;
