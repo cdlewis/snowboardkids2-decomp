@@ -74,7 +74,7 @@ typedef struct {
 
 extern void func_8003C2BC_3CEBC(void);
 extern s32 D_8008FEB0_90AB0;
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 void updateOrbitCamera(OrbitCameraState *camera);
 void initScriptedCamera(ScriptedCameraState *camera);
 void updateScriptedCamera(ScriptedCameraState *camera);
@@ -144,7 +144,7 @@ void updateOrbitCamera(OrbitCameraState *camera) {
 
     allocation = getCurrentAllocation();
     cameraMatrixPtr = &cameraMatrix;
-    memcpy(cameraMatrixPtr, identityMatrix, 0x20);
+    memcpy(cameraMatrixPtr, &identityMatrix, 0x20);
     cameraMatrix.translation.y = 0x1E0000;
     cameraMatrix.translation.z = 0x870000;
     newAngle = camera->rotationAngle + 0x58;
@@ -161,7 +161,7 @@ void updateOrbitCamera(OrbitCameraState *camera) {
         return;
     }
     createYRotationMatrix(&rotationMatrix, (currentAngle + 0x1000) & 0xFFFF);
-    memcpy(&rotationMatrix.translation, &((Transform3D *)identityMatrix)->translation, 0xC);
+    memcpy(&rotationMatrix.translation, &identityMatrix.translation, 0xC);
     func_8006B084_6BC84(cameraMatrixPtr, &rotationMatrix, &tempMatrix);
     func_8006B084_6BC84(&tempMatrix, allocation->playerData + 0x950, cameraMatrixPtr);
     transformVector2(&D_8008FEB0_90AB0, allocation->playerData + 0x950, &translationOffset);
