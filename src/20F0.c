@@ -2066,8 +2066,12 @@ void initializeGameEntity(
         node8A1A0 = &itemAssetTable[yetAnotherAssetIndex];
 
         // ent->unk00[17].unk20 = node8A1A0->unk14;
-        ent->unk00[17].asset1 = loadUncompressedData(node8A1A0->assetStart, node8A1A0->assetEnd);
-        ent->unk00[17].asset2 = loadCompressedData(node8A1A0->asset2Start, node8A1A0->asset2End, node8A1A0->asset2Size);
+        ent->unk00[17].asset1 = loadUncompressedData(node8A1A0->displayListStart, node8A1A0->displayListEnd);
+        ent->unk00[17].asset2 = loadCompressedData(
+            node8A1A0->compressedDataStart,
+            node8A1A0->compressedDataEnd,
+            node8A1A0->decompressedSize
+        );
         ent->unk00[17].asset3 = NULL;
 
         memcpy(&ent->unk00[17].transformationMatrix, identityMatrix, 0x20);

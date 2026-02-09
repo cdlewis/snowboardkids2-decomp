@@ -21,11 +21,11 @@ typedef struct {
 } Asset;
 
 typedef struct {
-    void *assetStart;
-    void *assetEnd;
-    void *asset2Start;
-    void *asset2End;
-    s32 asset2Size;
+    void *displayListStart;
+    void *displayListEnd;
+    void *compressedDataStart;
+    void *compressedDataEnd;
+    s32 decompressedSize;
     void *unk14;
 } ItemAssetEntry;
 

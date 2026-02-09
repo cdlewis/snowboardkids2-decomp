@@ -57,11 +57,11 @@ typedef struct {
 
 typedef struct {
     char name[8];
-    /* 0x8 */ void *asset1Start;
-    /* 0xC */ void *asset1End;
-    /* 0x10 */ void *asset2Start;
-    /* 0x14 */ void *asset2End;
-    /* 0x18 */ s32 asset2Size;
+    /* 0x8 */ void *displayListStart;
+    /* 0xC */ void *displayListEnd;
+    /* 0x10 */ void *compressedDataStart;
+    /* 0x14 */ void *compressedDataEnd;
+    /* 0x18 */ s32 decompressedSize;
     s32 unk1C;
     s32 unk20;
     s32 unk24;
@@ -360,11 +360,11 @@ ModelEntityTaskConfig D_8008913C_89D3C[] = {
 ModelEntityConfig modelEntityConfigs[14] = {
     /* [0] TOWN */
     { .name = "TOWN   ",
-     .asset1Start = (void *)0x001EFB50,
-     .asset1End = (void *)0x001F1DB0,
-     .asset2Start = (void *)0x004A8650,
-     .asset2End = (void *)0x004B04A0,
-     .asset2Size = 0x0000E180,
+     .displayListStart = (void *)0x001EFB50,
+     .displayListEnd = (void *)0x001F1DB0,
+     .compressedDataStart = (void *)0x004A8650,
+     .compressedDataEnd = (void *)0x004B04A0,
+     .decompressedSize = 0x0000E180,
      .unk1C = 0x800883F0,
      .unk20 = 0x00010000,
      .unk24 = 0x80088450,
@@ -382,11 +382,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [1] TOWN */
     { .name = "TOWN   ",
-     .asset1Start = (void *)0x001EFB50,
-     .asset1End = (void *)0x001F1DB0,
-     .asset2Start = (void *)0x004A8650,
-     .asset2End = (void *)0x004B04A0,
-     .asset2Size = 0x0000E180,
+     .displayListStart = (void *)0x001EFB50,
+     .displayListEnd = (void *)0x001F1DB0,
+     .compressedDataStart = (void *)0x004A8650,
+     .compressedDataEnd = (void *)0x004B04A0,
+     .decompressedSize = 0x0000E180,
      .unk1C = 0x800883F0,
      .unk20 = 0x00010000,
      .unk24 = 0x80088450,
@@ -404,11 +404,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [2] YAMA */
     { .name = "YAMA   ",
-     .asset1Start = (void *)0x001F6D00,
-     .asset1End = (void *)0x001F7DB0,
-     .asset2Start = (void *)0x004BCFB0,
-     .asset2End = (void *)0x004BF950,
-     .asset2Size = 0x00003FE0,
+     .displayListStart = (void *)0x001F6D00,
+     .displayListEnd = (void *)0x001F7DB0,
+     .compressedDataStart = (void *)0x004BCFB0,
+     .compressedDataEnd = (void *)0x004BF950,
+     .decompressedSize = 0x00003FE0,
      .unk1C = 0x80088580,
      .unk20 = 0x00010000,
      .unk24 = 0x80088590,
@@ -426,11 +426,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [3] YAMA_Y */
     { .name = "YAMA_Y ",
-     .asset1Start = (void *)0x001F7DB0,
-     .asset1End = (void *)0x001F8D10,
-     .asset2Start = (void *)0x004BF950,
-     .asset2End = (void *)0x004C20A0,
-     .asset2Size = 0x00003B30,
+     .displayListStart = (void *)0x001F7DB0,
+     .displayListEnd = (void *)0x001F8D10,
+     .compressedDataStart = (void *)0x004BF950,
+     .compressedDataEnd = (void *)0x004C20A0,
+     .decompressedSize = 0x00003B30,
      .unk1C = 0x800885A0,
      .unk20 = 0x00010000,
      .unk24 = 0x800885B0,
@@ -448,11 +448,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [4] LINDA P */
     { .name = "LINDA P",
-     .asset1Start = (void *)0x001E9790,
-     .asset1End = (void *)0x001E9C40,
-     .asset2Start = (void *)0x0049FA20,
-     .asset2End = (void *)0x004A0670,
-     .asset2Size = 0x000014A0,
+     .displayListStart = (void *)0x001E9790,
+     .displayListEnd = (void *)0x001E9C40,
+     .compressedDataStart = (void *)0x0049FA20,
+     .compressedDataEnd = (void *)0x004A0670,
+     .decompressedSize = 0x000014A0,
      .unk1C = 0x80088180,
      .unk20 = 0x00010000,
      .unk24 = 0,
@@ -470,11 +470,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [5] LINDA B */
     { .name = "LINDA B",
-     .asset1Start = (void *)0x001E8E60,
-     .asset1End = (void *)0x001E9300,
-     .asset2Start = (void *)0x0049E2E0,
-     .asset2End = (void *)0x0049F0D0,
-     .asset2Size = 0x00001680,
+     .displayListStart = (void *)0x001E8E60,
+     .displayListEnd = (void *)0x001E9300,
+     .compressedDataStart = (void *)0x0049E2E0,
+     .compressedDataEnd = (void *)0x0049F0D0,
+     .decompressedSize = 0x00001680,
      .unk1C = 0x80088150,
      .unk20 = 0x00010000,
      .unk24 = 0,
@@ -492,11 +492,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [6] WENDY H */
     { .name = "WENDY H",
-     .asset1Start = (void *)0x001F94F0,
-     .asset1End = (void *)0x001FA080,
-     .asset2Start = (void *)0x004C3A60,
-     .asset2End = (void *)0x004C5840,
-     .asset2Size = 0x00004120,
+     .displayListStart = (void *)0x001F94F0,
+     .displayListEnd = (void *)0x001FA080,
+     .compressedDataStart = (void *)0x004C3A60,
+     .compressedDataEnd = (void *)0x004C5840,
+     .decompressedSize = 0x00004120,
      .unk1C = 0x80088600,
      .unk20 = 0x00010000,
      .unk24 = 0,
@@ -514,11 +514,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [7] BEACH */
     { .name = "BEACH  ",
-     .asset1Start = (void *)0x001EFB50,
-     .asset1End = (void *)0x001F1DB0,
-     .asset2Start = (void *)0x004A8650,
-     .asset2End = (void *)0x004B04A0,
-     .asset2Size = 0x0000E180,
+     .displayListStart = (void *)0x001EFB50,
+     .displayListEnd = (void *)0x001F1DB0,
+     .compressedDataStart = (void *)0x004A8650,
+     .compressedDataEnd = (void *)0x004B04A0,
+     .decompressedSize = 0x0000E180,
      .unk1C = 0x800883F0,
      .unk20 = 0x00010000,
      .unk24 = 0x80088450,
@@ -536,11 +536,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [8] JUNGLE */
     { .name = "JUNGLE ",
-     .asset1Start = (void *)0x001F4730,
-     .asset1End = (void *)0x001F5270,
-     .asset2Start = (void *)0x004B73C0,
-     .asset2End = (void *)0x004B8D10,
-     .asset2Size = 0x000021D0,
+     .displayListStart = (void *)0x001F4730,
+     .displayListEnd = (void *)0x001F5270,
+     .compressedDataStart = (void *)0x004B73C0,
+     .compressedDataEnd = (void *)0x004B8D10,
+     .decompressedSize = 0x000021D0,
      .unk1C = 0x800884D0,
      .unk20 = 0x00010000,
      .unk24 = 0x800884E0,
@@ -558,11 +558,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [9] SPACE */
     { .name = "SPACE  ",
-     .asset1Start = (void *)0x001F5FD0,
-     .asset1End = (void *)0x001F6D00,
-     .asset2Start = (void *)0x004BAF60,
-     .asset2End = (void *)0x004BCFB0,
-     .asset2Size = 0x000036D0,
+     .displayListStart = (void *)0x001F5FD0,
+     .displayListEnd = (void *)0x001F6D00,
+     .compressedDataStart = (void *)0x004BAF60,
+     .compressedDataEnd = (void *)0x004BCFB0,
+     .decompressedSize = 0x000036D0,
      .unk1C = 0x80088560,
      .unk20 = 0x00010000,
      .unk24 = 0x80088570,
@@ -580,11 +580,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [10] ISLAND */
     { .name = "ISLAND ",
-     .asset1Start = (void *)0x001FA080,
-     .asset1End = (void *)0x001FB040,
-     .asset2Start = (void *)0x004C5840,
-     .asset2End = (void *)0x004C9310,
-     .asset2Size = 0x00005AD0,
+     .displayListStart = (void *)0x001FA080,
+     .displayListEnd = (void *)0x001FB040,
+     .compressedDataStart = (void *)0x004C5840,
+     .compressedDataEnd = (void *)0x004C9310,
+     .decompressedSize = 0x00005AD0,
      .unk1C = (s32)&D_80088610_89210,
      .unk20 = 0x00010000,
      .unk24 = 0x80088620,
@@ -602,11 +602,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [11] HAUNTED */
     { .name = "HAUNTED",
-     .asset1Start = (void *)0x001EA480,
-     .asset1End = (void *)0x001EACD0,
-     .asset2Start = (void *)0x004A1160,
-     .asset2End = (void *)0x004A2980,
-     .asset2Size = 0x000024B0,
+     .displayListStart = (void *)0x001EA480,
+     .displayListEnd = (void *)0x001EACD0,
+     .compressedDataStart = (void *)0x004A1160,
+     .compressedDataEnd = (void *)0x004A2980,
+     .decompressedSize = 0x000024B0,
      .unk1C = 0x800881B0,
      .unk20 = 0x00010000,
      .unk24 = 0x800881C0,
@@ -624,11 +624,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [12] JUNGLE2 */
     { .name = "JUNGLE2",
-     .asset1Start = (void *)0x001F5270,
-     .asset1End = (void *)0x001F5FD0,
-     .asset2Start = (void *)0x004B8D10,
-     .asset2End = (void *)0x004BAF60,
-     .asset2Size = 0x00002EC0,
+     .displayListStart = (void *)0x001F5270,
+     .displayListEnd = (void *)0x001F5FD0,
+     .compressedDataStart = (void *)0x004B8D10,
+     .compressedDataEnd = (void *)0x004BAF60,
+     .decompressedSize = 0x00002EC0,
      .unk1C = 0x80088520,
      .unk20 = 0x00010000,
      .unk24 = 0x80088530,
@@ -646,11 +646,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF },
     /* [13] OPENING */
     { .name = "OPENING",
-     .asset1Start = NULL,
-     .asset1End = NULL,
-     .asset2Start = NULL,
-     .asset2End = NULL,
-     .asset2Size = 0,
+     .displayListStart = NULL,
+     .displayListEnd = NULL,
+     .compressedDataStart = NULL,
+     .compressedDataEnd = NULL,
+     .decompressedSize = 0,
      .unk1C = 0,
      .unk20 = 0,
      .unk24 = 0,
@@ -744,8 +744,9 @@ s32 initModelEntity(ModelEntity *entity, s16 index, void *arg2) {
     entity->isDisposed = 0;
 
     if (entry->unk32 == 0xFFFF) {
-        entity->modelData = loadUncompressedData(entry->asset1Start, entry->asset1End);
-        entity->textureData = loadCompressedData(entry->asset2Start, entry->asset2End, entry->asset2Size);
+        entity->modelData = loadUncompressedData(entry->displayListStart, entry->displayListEnd);
+        entity->textureData =
+            loadCompressedData(entry->compressedDataStart, entry->compressedDataEnd, entry->decompressedSize);
 
         memcpy(&entity->primaryMatrix, &identityMatrix, 0x20);
 
@@ -826,8 +827,8 @@ void initRotatingModelTask(func_80000C2C_182C_arg *arg0) {
     setCleanupCallback(&cleanupRotatingModelTask);
     memcpy(&arg0->unk8, &identityMatrix, sizeof(Transform3D));
 
-    arg0->unk2C = loadUncompressedData(config->asset1Start, config->asset1End);
-    arg0->unk30 = loadCompressedData(config->asset2Start, config->asset2End, config->asset2Size);
+    arg0->unk2C = loadUncompressedData(config->displayListStart, config->displayListEnd);
+    arg0->unk30 = loadCompressedData(config->compressedDataStart, config->compressedDataEnd, config->decompressedSize);
     arg0->unk34 = 0;
     arg0->unk28 = taskConfig->unk4;
     arg0->unk8.translation.x = taskConfig->unk8;
@@ -871,8 +872,9 @@ void initSwingingModelTask(func_80000C2C_182C_arg *arg0) {
 
     memcpy(&arg0->unk8, &identityMatrix, 0x20);
 
-    arg0->unk2C = loadUncompressedData(temp_s0->asset1Start, temp_s0->asset1End);
-    arg0->unk30 = loadCompressedData(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
+    arg0->unk2C = loadUncompressedData(temp_s0->displayListStart, temp_s0->displayListEnd);
+    arg0->unk30 =
+        loadCompressedData(temp_s0->compressedDataStart, temp_s0->compressedDataEnd, temp_s0->decompressedSize);
     arg0->unk34 = 0;
     arg0->unk28 = temp_s2->unk4;
     arg0->unk44 = 0;
@@ -996,8 +998,8 @@ void initStaticModelTask(StaticModelTaskArg *arg0) {
 
     memcpy(&arg0->unk8, &identityMatrix, 0x20);
 
-    arg0->unk2C = loadUncompressedData(var_s0->asset1Start, var_s0->asset1End);
-    arg0->unk30 = loadCompressedData(var_s0->asset2Start, var_s0->asset2End, var_s0->asset2Size);
+    arg0->unk2C = loadUncompressedData(var_s0->displayListStart, var_s0->displayListEnd);
+    arg0->unk30 = loadCompressedData(var_s0->compressedDataStart, var_s0->compressedDataEnd, var_s0->decompressedSize);
     arg0->unk34 = 0;
     arg0->unk28 = var_s2->unk4;
 
@@ -1033,8 +1035,9 @@ void initAnimatedModelTask(AnimatedModelTaskState *arg0) {
     setCleanupCallback(&cleanupAnimatedModelTask);
     memcpy(&arg0->unk8, &identityMatrix, 0x20);
 
-    arg0->unk2C = loadUncompressedData(temp_s0->asset1Start, temp_s0->asset1End);
-    arg0->unk30 = loadCompressedData(temp_s0->asset2Start, temp_s0->asset2End, temp_s0->asset2Size);
+    arg0->unk2C = loadUncompressedData(temp_s0->displayListStart, temp_s0->displayListEnd);
+    arg0->unk30 =
+        loadCompressedData(temp_s0->compressedDataStart, temp_s0->compressedDataEnd, temp_s0->decompressedSize);
     arg0->unk34 = 0;
     arg0->unk28 = temp_s2->unk4;
     arg0->unk44 = loadSpriteAssetData(temp_s2->unk16);
