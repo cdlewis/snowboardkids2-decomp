@@ -12,6 +12,8 @@
 
 USE_ASSET(LINDA_B_DISPLAY_LIST);
 USE_ASSET(LINDA_B_COMPRESSED_DATA);
+USE_ASSET(SPACE_COMPRESSED_DATA);
+USE_ASSET(SPACE_DISPLAY_LIST);
 
 typedef struct {
     u8 padding[0x2C];
@@ -552,10 +554,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0x60,
      .unk3B = 0xFF },
     { .name = "SPACE  ",
-     .displayListStart = (void *)0x001F5FD0,
-     .displayListEnd = (void *)0x001F6D00,
-     .compressedDataStart = (void *)0x004BAF60,
-     .compressedDataEnd = (void *)0x004BCFB0,
+     .displayListStart = (void *)&SPACE_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&SPACE_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&SPACE_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&SPACE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000036D0,
      .unk1C = 0x80088560,
      .unk20 = 0x00010000,
