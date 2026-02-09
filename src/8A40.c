@@ -14,14 +14,14 @@ typedef struct {
     s32 verticalVelocity;
 } BobbingModelState;
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 extern void *D_800882B0_88EB0;
 void updateBobbingModelTask(BobbingModelState *);
 
 void cleanupBobbingModelTask(BobbingModelTaskState *);
 
 void initBobbingModelTask(BobbingModelTaskState *state) {
-    memcpy(state->transformMatrix, identityMatrix, 0x20);
+    memcpy(state->transformMatrix, &identityMatrix, 0x20);
     state->displayList = loadAssetGroupDisplayList(state->model);
     state->vertexData = loadAssetGroupCompressedData(state->model);
     state->materialData = &D_800882B0_88EB0;
@@ -125,7 +125,7 @@ void updateTiltingModelTask(BobbingModelTaskState *state) {
         return;
     }
 
-    memcpy(&state->model->unkF0, identityMatrix, 0x20);
+    memcpy(&state->model->unkF0, &identityMatrix, 0x20);
 
     if (state->model->actionMode == 0) {
         return;
