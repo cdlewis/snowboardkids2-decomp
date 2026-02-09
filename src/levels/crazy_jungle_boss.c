@@ -20,7 +20,7 @@ typedef void (*FuncPtr)(void *);
 extern FuncPtr gCrazyJungleBossChasePhaseHandlers[];
 extern FuncPtr gCrazyJungleBossHoverPhaseHandlers[];
 extern s32 D_800BC44C_ACC7C[];
-extern s16 identityMatrix[];
+extern Transform3D identityMatrix;
 typedef struct {
     u8 primaryR;
     u8 primaryG;
@@ -322,10 +322,10 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     gameState = getCurrentAllocation();
 
     // Initialize rotation matrices
-    memcpy(&arg0->unk970, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk970, &identityMatrix, sizeof(Transform3D));
     createYRotationMatrix(&arg0->unk970, arg0->unkA94);
-    memcpy(&arg0->unk990, identityMatrix, sizeof(Transform3D));
-    memcpy(&arg0->unk9B0, identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk990, &identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->unk9B0, &identityMatrix, sizeof(Transform3D));
 
     // Set initial position based on boss index
     arg0->unk434.x = D_800BC44C_ACC7C[arg0->unkBB8];
@@ -350,7 +350,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     // Initialize bone matrices (17 bones)
     for (i = 0; i < 17; i++) {
         elem = (u8 *)arg0 + i * 0x3C;
-        memcpy(elem + 0x38, identityMatrix, sizeof(Transform3D));
+        memcpy(elem + 0x38, &identityMatrix, sizeof(Transform3D));
         *(s32 *)(elem + 0x5C) = *(s32 *)((u8 *)arg0 + 4);
         *(s32 *)(elem + 0x60) = *(s32 *)((u8 *)arg0 + 8);
         *(s32 *)(elem + 0x64) = 0;
