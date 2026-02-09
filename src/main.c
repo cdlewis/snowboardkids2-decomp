@@ -14,6 +14,8 @@ USE_ASSET(LINDA_B_DISPLAY_LIST);
 USE_ASSET(LINDA_B_COMPRESSED_DATA);
 USE_ASSET(SPACE_COMPRESSED_DATA);
 USE_ASSET(SPACE_DISPLAY_LIST);
+USE_ASSET(WENDY_H_DISPLAY_LIST);
+USE_ASSET(WENDY_H_COMPRESSED_DATA);
 
 typedef struct {
     u8 padding[0x2C];
@@ -491,10 +493,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0x60,
      .unk3B = 0xFF },
     { .name = "WENDY H",
-     .displayListStart = (void *)0x001F94F0,
-     .displayListEnd = (void *)0x001FA080,
-     .compressedDataStart = (void *)0x004C3A60,
-     .compressedDataEnd = (void *)0x004C5840,
+     .displayListStart = (void *)&WENDY_H_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&WENDY_H_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&WENDY_H_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&WENDY_H_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00004120,
      .unk1C = 0x80088600,
      .unk20 = 0x00010000,

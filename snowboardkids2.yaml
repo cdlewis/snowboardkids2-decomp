@@ -1264,7 +1264,7 @@ segments:
     vram: 0
     start: 0x1F8D10
 
-  - name: _1F94F0
+  - name: WENDY_H_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1F94F0
@@ -2719,7 +2719,7 @@ segments:
     vram: 0
     start: 0x4C3660
 
-  - name: _4C3A60
+  - name: WENDY_H_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4C3A60
