@@ -1,7 +1,8 @@
 #include "common.h"
+#include "geometry.h"
 #include "task_scheduler.h"
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 void cleanupModelScaleAnimation(void);
 extern void updateModelScaleAnimation(void);
 
@@ -14,7 +15,7 @@ typedef struct {
 } ModelScaleAnimationState;
 
 void initModelScaleAnimation(ModelScaleAnimationState *state) {
-    memcpy(&state->transformMatrix, identityMatrix, 0x20);
+    memcpy(&state->transformMatrix, &identityMatrix, 0x20);
     state->scaleVelocity = 0;
     state->rotationAngle = 0;
     state->delayTimer = 0;
