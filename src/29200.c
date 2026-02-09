@@ -55,7 +55,7 @@ extern u16 gStoryMapItemWaypointDataSizes[];
 extern s32 gStoryMapItemAnimationTimers[];
 extern u16 gStoryMapItemAnimationValues[];
 extern void *gStoryMapItemUpdateCallbacks[];
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 
 void initStoryMapItem(StoryMapItem *arg0) {
     AllocationData29200 *alloc;
@@ -145,7 +145,7 @@ void initStoryMapItemMovement(StoryMapItemTask *arg0) {
     s32 posZ;
 
     alloc = getCurrentAllocation();
-    memcpy(&arg0->matrix, identityMatrix, 0x20);
+    memcpy(&arg0->matrix, &identityMatrix, 0x20);
     alloc->unk42E = 0;
 
     if (arg0->itemType == 5 || arg0->itemType == 0xB) {
