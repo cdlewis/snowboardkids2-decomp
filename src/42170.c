@@ -137,7 +137,7 @@ void renderShieldLayer1(ShieldEffectRenderState *);
 void renderShieldLayer2(ShieldEffectRenderState *);
 void renderShieldLayer3(ShieldEffectRenderState *);
 
-extern s32 identityMatrix[];
+extern Transform3D identityMatrix;
 
 typedef struct {
     u8 _pad0[0x4];
@@ -429,7 +429,7 @@ void updateShieldEffect(ShieldEffectState *arg0) {
     scale = arg0->scale.full;
     if (scale != 0x2000) {
         arg0->scale.full = scale + 0x400;
-        memcpy(arg0, identityMatrix, 0x20);
+        memcpy(arg0, &identityMatrix, 0x20);
         scaleFactor = arg0->scale.half.lo;
         scaleMatrix((Transform3D *)arg0, scaleFactor, scaleFactor, scaleFactor);
     }
