@@ -9,7 +9,7 @@
 #include "race_session.h"
 #include "task_scheduler.h"
 
-extern u8 identityMatrix[];
+extern Transform3D identityMatrix;
 
 typedef struct {
     u8 padding[0x3B0];
@@ -141,7 +141,7 @@ void initStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
     arg0->cameraX = 0;
     arg0->cameraY = 0x200000;
     arg0->cameraZ = 0;
-    memcpy(arg0, identityMatrix, 0x20);
+    memcpy(arg0, &identityMatrix, 0x20);
 
     arg0->translateX = 0;
     arg0->translateY = 0;
