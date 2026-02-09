@@ -1239,6 +1239,16 @@ segments:
     vram: 0
     start: 0x1EFB50
 
+  - name: JUNGLE_DISPLAY_LIST
+    type: bin
+    vram: 0
+    start: 0x1F4730
+
+  - name: JUNGLE2_DISPLAY_LIST
+    type: bin
+    vram: 0
+    start: 0x1F5270
+
   - name: UFO_DISPLAY_LIST
     type: bin
     vram: 0
@@ -2668,6 +2678,16 @@ segments:
     type: bin
     vram: 0
     start: 0x4A8650
+
+  - name: JUNGLE_COMPRESSED_DATA
+    type: bin
+    vram: 0
+    start: 0x4B73C0
+
+  - name: JUNGLE2_COMPRESSED_DATA
+    type: bin
+    vram: 0
+    start: 0x4B8D10
 
   - name: UFO_COMPRESSED_DATA
     type: bin
