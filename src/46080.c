@@ -774,7 +774,7 @@ extern u16 D_8009ADE0_9B9E0;
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
 extern Gfx D_80090DB0_919B0[];
-extern s32 identityMatrix[];
+extern Transform3D identityMatrix;
 extern void *D_80094DD0_959D0;
 extern s32 bossHomingProjectileBaseVector;
 
@@ -860,7 +860,7 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state);
 void updateGoldCoinsTask(GoldCoinUpdateState *arg0);
 
 void initSkyRenderTask(SkyRenderTaskState *state) {
-    void *identity = identityMatrix;
+    Transform3D *identity = &identityMatrix;
 
     memcpy(state, identity, 0x20);
 
@@ -1260,7 +1260,7 @@ void initScrollingSceneryTask(ScrollingSceneryCleanupState *arg0) {
     arg0->skyAsset1 = loadUncompressedAssetByIndex(arg0->assetPoolIndex);
     arg0->skyAsset2 = loadCompressedSegment2AssetByIndex(arg0->assetPoolIndex);
     arg0->reserved = NULL;
-    memcpy(arg0, identityMatrix, 0x20);
+    memcpy(arg0, &identityMatrix, 0x20);
     arg0->unk3C = loadSpriteAssetByIndex(arg0->assetPoolIndex);
     arg0->scrollX.halfword = 0;
     arg0->scrollY.halfword = 0;
