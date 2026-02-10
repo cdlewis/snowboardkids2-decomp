@@ -851,6 +851,7 @@ nullsub_s32_2 = 0x800084E0; // rom:0x90E0
 getSpriteAssetCount = 0x800084F0; // rom:0x90F0
 getSpriteAssetId = 0x800084F8; // rom:0x90F8
 renderOpaqueSpriteCallback = 0x80008514; // rom:0x9114
+renderTranslucentSpriteCallback = 0x80008918; // rom:0x9918
 enqueueOpaqueSprite = 0x80009D58; // rom:0xA958
 enqueueTranslucentSprite = 0x80009D94; // rom:0xA994
 enqueueTransformedSprite = 0x80009DD0; // rom:0xA9D0
