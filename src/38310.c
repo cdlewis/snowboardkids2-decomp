@@ -135,7 +135,7 @@ void updateOptionsMenuTitle(u8 *arg0) {
     debugEnqueueCallback(8, 0, func_80035408_36008, arg0);
 
     for (i = 0; i < 2; i++) {
-        debugEnqueueCallback(8, 0, func_80012004_12C04, arg0 + 0x14 + i * 0x10);
+        debugEnqueueCallback(8, 0, renderTextSprite, arg0 + 0x14 + i * 0x10);
     }
 }
 

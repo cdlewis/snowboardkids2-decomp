@@ -461,7 +461,7 @@ void updateCharacterSelectSprites(CharacterSelectSprites *arg0) {
             arg0->sprites[i].scale = 0xFF;
         }
 
-        debugEnqueueCallback(8, 0, func_80012004_12C04, &arg0->sprites[i]);
+        debugEnqueueCallback(8, 0, renderTextSprite, &arg0->sprites[i]);
     }
 }
 

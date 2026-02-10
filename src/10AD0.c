@@ -367,7 +367,7 @@ INCLUDE_ASM("asm/nonmatchings/10AD0", func_800112AC_11EAC);
 
 INCLUDE_ASM("asm/nonmatchings/10AD0", func_80011924_12524);
 
-void func_80012004_12C04(TextRenderArg *arg0) {
+void renderTextSprite(TextRenderArg *arg0) {
     s32 left;
     s32 top;
     s32 right;
@@ -383,8 +383,8 @@ void func_80012004_12C04(TextRenderArg *arg0) {
     s16 scaleS;
     s16 scaleT;
     Gfx *gfx;
-    s32 temp_v1;
-    s32 temp_s3;
+    u32 setOtherModeCmd;
+    u32 pipeSyncCmd;
 
     frameEntry = arg0->spriteData->frames;
     paletteBase = (s32)frameEntry + (arg0->spriteData->numFrames * 0x10);
@@ -438,17 +438,17 @@ void func_80012004_12C04(TextRenderArg *arg0) {
         }
 
         gfx = gRegionAllocPtr;
-        temp_v1 = 0xFC11FE23;
-        temp_s3 = 0xE7000000;
+        setOtherModeCmd = 0xFC11FE23;
+        pipeSyncCmd = 0xE7000000;
         gRegionAllocPtr = (Gfx *)((s32)gfx + 8);
         __asm__ volatile("" : : "r"(gRegionAllocPtr) : "memory");
         gRegionAllocPtr = (Gfx *)((s32)gfx + 0x10);
         *(s32 *)((s32)gfx + 0xC) = -0xC07;
         gRegionAllocPtr = (Gfx *)((s32)gfx + 0x18);
 
-        gfx->words.w0 = temp_s3;
+        gfx->words.w0 = pipeSyncCmd;
         (gfx + 0)->words.w1 = 0;
-        (gfx + 1)->words.w0 = temp_v1;
+        (gfx + 1)->words.w0 = setOtherModeCmd;
         (gfx + 2)->words.w0 = 0xFA000000;
 
         {

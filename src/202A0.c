@@ -958,7 +958,7 @@ void updatePrizeDisplay(PrizeDisplayState *state) {
 
         spriteEntry = state->spriteEntries;
         for (i = 0; i < 2; i++) {
-            debugEnqueueCallback(8, 1, func_80012004_12C04, &spriteEntry[i]);
+            debugEnqueueCallback(8, 1, renderTextSprite, &spriteEntry[i]);
         }
 
         state->prizeCount = allocation->unkB46;

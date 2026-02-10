@@ -344,7 +344,7 @@ void updateSaveSlotIconGrid(SaveSlotGridState *arg0) {
             entryIndex = rowStartIndex + colIndex;
             arg0->entries[entryIndex].x = allocation->unkABE + col;
             arg0->entries[entryIndex].y = allocation->unkAC0 + row;
-            debugEnqueueCallback(8U, 0U, func_80012004_12C04, &arg0->entries[entryIndex]);
+            debugEnqueueCallback(8U, 0U, renderTextSprite, &arg0->entries[entryIndex]);
         }
 
         row += 0x10;
@@ -921,7 +921,7 @@ void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state) {
             state->blinkAlpha = 0;
         }
 
-        debugEnqueueCallback(8, 1, func_80012004_12C04, state);
+        debugEnqueueCallback(8, 1, renderTextSprite, state);
 
         if (allocation->unkAC6 == 0x33) {
             state->animDelay++;

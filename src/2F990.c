@@ -651,7 +651,7 @@ void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arrowState) {
         arrowState->animationCounter &= 0x1F;
 
         for (i = 0; i < 2; i++) {
-            debugEnqueueCallback(8, 0, &func_80012004_12C04, &arrowState->arrows[i]);
+            debugEnqueueCallback(8, 0, &renderTextSprite, &arrowState->arrows[i]);
         }
     }
 }
@@ -721,7 +721,7 @@ void updateStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
                 }
             }
             itemValue = 0;
-            debugEnqueueCallback(8, itemValue, &func_80012004_12C04, iconState);
+            debugEnqueueCallback(8, itemValue, &renderTextSprite, iconState);
         }
     }
 }
@@ -790,7 +790,7 @@ void updateStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
             }
         }
 
-        debugEnqueueCallback(8, 0, &func_80012004_12C04, arg0);
+        debugEnqueueCallback(8, 0, &renderTextSprite, arg0);
     }
 }
 

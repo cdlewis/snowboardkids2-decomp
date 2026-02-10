@@ -145,7 +145,7 @@ void setupStoryMapCharacterDialogue(StoryMapDialogueState *);
 // Global variables and externs
 extern s32 gControllerInputs;
 extern D_8008F810_90410_item D_8008F810_90410[0x18];
-extern s32 func_80012004_12C04;
+extern s32 renderTextSprite;
 extern void D_8008FAC0_906C0;
 extern u16 D_8008FD10_90910[];
 extern s8 D_8008FD1C_9091C[];
@@ -285,7 +285,7 @@ void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *arg0)
         return;
     }
 
-    debugEnqueueCallback(8, 7, &func_80012004_12C04, arg0);
+    debugEnqueueCallback(8, 7, &renderTextSprite, arg0);
 }
 
 void cleanupTownExitMarker(void *untypedArg) {

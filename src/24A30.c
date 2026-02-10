@@ -1468,7 +1468,7 @@ void updateCharSelectMenu(SelectionMenuState *menu) {
                 entries[entryIndex].alpha = 0x50;
                 menu->blinkTimers[entryIndex] = 0;
             }
-            debugEnqueueCallback(menu->playerIndex + 0xC, 0, func_80012004_12C04, &entries[entryIndex]);
+            debugEnqueueCallback(menu->playerIndex + 0xC, 0, renderTextSprite, &entries[entryIndex]);
             entryIndex++;
         } while (entryIndex < (s32)menu->numEntries);
     }
@@ -1506,7 +1506,7 @@ void updateCharSelectMenuConfirm(SelectionMenuState *menu) {
             } else {
                 entries[entryIndex].alpha = 0x50;
             }
-            debugEnqueueCallback(menu->playerIndex + 0xC, 0, func_80012004_12C04, &entries[entryIndex]);
+            debugEnqueueCallback(menu->playerIndex + 0xC, 0, renderTextSprite, &entries[entryIndex]);
             entryIndex++;
         } while (entryIndex < (s32)menu->numEntries);
     }

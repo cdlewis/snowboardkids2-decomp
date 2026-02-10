@@ -103,7 +103,7 @@ void enqueuePlayerSelectSpritesRender(PlayerSelectSpriteTask *arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback(8, 0, func_80012004_12C04, &arg0[i]);
+        debugEnqueueCallback(8, 0, renderTextSprite, &arg0[i]);
     }
 }
 

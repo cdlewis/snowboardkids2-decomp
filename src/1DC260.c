@@ -102,7 +102,7 @@ void updateCreditsCornerDecorationSprites(void *arg0) {
     temp_v0 = state->leftCornerAlpha;
     if (temp_v0 != 0) {
         s16 shortVal = temp_v0 >> 16;
-        void *callback = func_80012004_12C04;
+        void *callback = renderTextSprite;
         state->leftBottomCornerSprite.alpha = shortVal;
         state->leftTopCornerSprite.alpha = shortVal;
         debugEnqueueCallback(1, 4, callback, &state->leftTopCornerSprite);
@@ -112,7 +112,7 @@ void updateCreditsCornerDecorationSprites(void *arg0) {
     temp_v0 = state->rightCornerAlpha;
     if (temp_v0 != 0) {
         s16 shortVal = temp_v0 >> 16;
-        void *callback = func_80012004_12C04;
+        void *callback = renderTextSprite;
         state->rightBottomCornerSprite.alpha = shortVal;
         state->rightTopCornerSprite.alpha = shortVal;
         debugEnqueueCallback(1, 4, callback, &state->rightTopCornerSprite);

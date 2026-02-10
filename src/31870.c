@@ -974,7 +974,7 @@ void updateBoardShopComparisonIcons(BoardShopComparisonIconsState *arg0) {
             }
         }
 
-        debugEnqueueCallback(8, 0, func_80012004_12C04, icon);
+        debugEnqueueCallback(8, 0, renderTextSprite, icon);
         icon++;
         if ((s32)icon < (s32)(arg0->icons + 2)) {
             goto loop;
@@ -1057,7 +1057,7 @@ void updateBoardShopRowSelectorArrow(BoardShopRowSelectorArrowState *arg0) {
                 }
             }
 
-            debugEnqueueCallback(8, 0, func_80012004_12C04, arg0);
+            debugEnqueueCallback(8, 0, renderTextSprite, arg0);
         }
     }
 }
@@ -1115,7 +1115,7 @@ void updateBoardShopColumnSelectorArrow(BoardShopColumnSelectorArrowState *arg0)
                 }
             }
 
-            debugEnqueueCallback(8, 0, &func_80012004_12C04, arg0);
+            debugEnqueueCallback(8, 0, &renderTextSprite, arg0);
         }
     }
 }
@@ -1590,7 +1590,7 @@ void updateBoardShopTitleCorners(BoardShopTitleCornerState *arg0) {
 
     if (((BoardShopTitleCornersAllocation *)getCurrentAllocation())->titleCornersVisible != NULL) {
         for (i = 0; i < 4; i++) {
-            debugEnqueueCallback(9, 1, &func_80012004_12C04, &arg0[i]);
+            debugEnqueueCallback(9, 1, &renderTextSprite, &arg0[i]);
         }
     }
 }
