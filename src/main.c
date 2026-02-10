@@ -3,23 +3,13 @@
 #include "4050.h"
 #include "5520.h"
 #include "90F0.h"
+#include "assets.h"
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
 #include "rand.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-USE_ASSET(LINDA_B_DISPLAY_LIST);
-USE_ASSET(LINDA_B_COMPRESSED_DATA);
-USE_ASSET(YAMA_COMPRESSED_DATA);
-USE_ASSET(YAMA_DISPLAY_LIST);
-USE_ASSET(YAMA_Y_COMPRESSED_DATA);
-USE_ASSET(YAMA_Y_DISPLAY_LIST);
-USE_ASSET(SPACE_COMPRESSED_DATA);
-USE_ASSET(SPACE_DISPLAY_LIST);
-USE_ASSET(WENDY_H_DISPLAY_LIST);
-USE_ASSET(WENDY_H_COMPRESSED_DATA);
 
 typedef struct {
     u8 padding[0x2C];
@@ -371,10 +361,10 @@ ModelEntityTaskConfig D_8008913C_89D3C[] = {
 
 ModelEntityConfig modelEntityConfigs[14] = {
     { .name = "TOWN   ",
-     .displayListStart = (void *)0x001EFB50,
-     .displayListEnd = (void *)0x001F1DB0,
-     .compressedDataStart = (void *)0x004A8650,
-     .compressedDataEnd = (void *)0x004B04A0,
+     .displayListStart = (void *)&TOWN_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&TOWN_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x0000E180,
      .unk1C = 0x800883F0,
      .unk20 = 0x00010000,
@@ -392,10 +382,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0x80,
      .unk3B = 0xFF },
     { .name = "TOWN   ",
-     .displayListStart = (void *)0x001EFB50,
-     .displayListEnd = (void *)0x001F1DB0,
-     .compressedDataStart = (void *)0x004A8650,
-     .compressedDataEnd = (void *)0x004B04A0,
+     .displayListStart = (void *)&TOWN_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&TOWN_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x0000E180,
      .unk1C = 0x800883F0,
      .unk20 = 0x00010000,
@@ -455,10 +445,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0x40,
      .unk3B = 0xFF },
     { .name = "LINDA P",
-     .displayListStart = (void *)0x001E9790,
-     .displayListEnd = (void *)0x001E9C40,
-     .compressedDataStart = (void *)0x0049FA20,
-     .compressedDataEnd = (void *)0x004A0670,
+     .displayListStart = (void *)&LINDA_P_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&LINDA_P_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&LINDA_P_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&LINDA_P_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000014A0,
      .unk1C = 0x80088180,
      .unk20 = 0x00010000,
@@ -518,10 +508,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0xA0,
      .unk3B = 0xFF },
     { .name = "BEACH  ",
-     .displayListStart = (void *)0x001EFB50,
-     .displayListEnd = (void *)0x001F1DB0,
-     .compressedDataStart = (void *)0x004A8650,
-     .compressedDataEnd = (void *)0x004B04A0,
+     .displayListStart = (void *)&TOWN_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&TOWN_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x0000E180,
      .unk1C = 0x800883F0,
      .unk20 = 0x00010000,
@@ -539,10 +529,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0xD0,
      .unk3B = 0xFF },
     { .name = "JUNGLE ",
-     .displayListStart = (void *)0x001F4730,
-     .displayListEnd = (void *)0x001F5270,
-     .compressedDataStart = (void *)0x004B73C0,
-     .compressedDataEnd = (void *)0x004B8D10,
+     .displayListStart = (void *)&JUNGLE_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&JUNGLE_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&JUNGLE_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&JUNGLE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000021D0,
      .unk1C = 0x800884D0,
      .unk20 = 0x00010000,
@@ -581,10 +571,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0x40,
      .unk3B = 0xFF },
     { .name = "ISLAND ",
-     .displayListStart = (void *)0x001FA080,
-     .displayListEnd = (void *)0x001FB040,
-     .compressedDataStart = (void *)0x004C5840,
-     .compressedDataEnd = (void *)0x004C9310,
+     .displayListStart = (void *)&ISLAND_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&ISLAND_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&ISLAND_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&ISLAND_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00005AD0,
      .unk1C = (s32)&D_80088610_89210,
      .unk20 = 0x00010000,
@@ -602,10 +592,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0x60,
      .unk3B = 0xFF },
     { .name = "HAUNTED",
-     .displayListStart = (void *)0x001EA480,
-     .displayListEnd = (void *)0x001EACD0,
-     .compressedDataStart = (void *)0x004A1160,
-     .compressedDataEnd = (void *)0x004A2980,
+     .displayListStart = (void *)&OTHER_HAUNTED_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&OTHER_HAUNTED_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&OTHER_HAUNTED_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&OTHER_HAUNTED_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000024B0,
      .unk1C = 0x800881B0,
      .unk20 = 0x00010000,
@@ -623,10 +613,10 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .ambientColorB = 0x80,
      .unk3B = 0xFF },
     { .name = "JUNGLE2",
-     .displayListStart = (void *)0x001F5270,
-     .displayListEnd = (void *)0x001F5FD0,
-     .compressedDataStart = (void *)0x004B8D10,
-     .compressedDataEnd = (void *)0x004BAF60,
+     .displayListStart = (void *)&JUNGLE2_DISPLAY_LIST_ROM_START,
+     .displayListEnd = (void *)&JUNGLE2_DISPLAY_LIST_ROM_END,
+     .compressedDataStart = (void *)&JUNGLE2_COMPRESSED_DATA_ROM_START,
+     .compressedDataEnd = (void *)&JUNGLE2_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00002EC0,
      .unk1C = 0x80088520,
      .unk20 = 0x00010000,
