@@ -3770,6 +3770,7 @@ loadCharacterAttackEffectAssets = 0x800518AC; // rom:0x524AC
 updateCharacterAttackEffect = 0x80051978; // rom:0x52578
 getTrackHeightInSector = 0x8005CFC0; // rom:0x5DBC0
 getTrackHeightInSectorWithOffset = 0x8005CFDC; // rom:0x5DBDC
+getTrackHeightAtPosition = 0x80061A64; // rom:0x62664
 getSectorTrackHeight = 0x8005D020; // rom:0x5DC20
 spinFadeInWaitStep = 0x800B7784; // rom:0xA7634
 warpToShortcutSpinUpStep = 0x800B781C; // rom:0xA76CC

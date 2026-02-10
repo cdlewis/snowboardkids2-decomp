@@ -9,7 +9,7 @@
 #include "task_scheduler.h"
 
 s32 getTrackHeightInSector(void *gameData, s32 sectorIndex, void *pos, s32 heightOffset) {
-    return func_80061A64_62664(gameData, sectorIndex, pos);
+    return getTrackHeightAtPosition(gameData, sectorIndex, pos);
 }
 
 s32 getTrackHeightInSectorWithOffset(void *gameData, u16 sectorIndex, void *pos, s32 unused, s32 heightOffset) {

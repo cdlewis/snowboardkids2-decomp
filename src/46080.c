@@ -3234,7 +3234,7 @@ void updateHomingProjectileMovement(HomingProjectileUpdateArg *arg0) {
         arg0->posX = arg0->posX + sp.x;
         arg0->posZ = arg0->posZ + sp.z;
 
-        sp.y = func_80061A64_62664(temp_s0, arg0->sectorIndex, s2);
+        sp.y = getTrackHeightAtPosition(temp_s0, arg0->sectorIndex, s2);
 
         if (arg0->posY < sp.y) {
             arg0->posY = sp.y;
@@ -3387,7 +3387,7 @@ void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0) {
         func_80060CDC_618DC(temp_s0, arg0->sectorIndex, s2, 0x100000, &sp);
         arg0->position.x = arg0->position.x + sp.x;
         arg0->position.z = arg0->position.z + sp.z;
-        sp.y = func_80061A64_62664(temp_s0, arg0->sectorIndex, s2);
+        sp.y = getTrackHeightAtPosition(temp_s0, arg0->sectorIndex, s2);
         temp_v0_3 = findPlayerNearPosition(s2, arg0->playerIndex, 0xA0000);
         if (temp_v0_3 != NULL) {
             spawnImpactStar(s2);
@@ -3538,7 +3538,7 @@ void updateItemHomingProjectileMovement(ItemHomingProjectileMoveArg *arg0) {
         arg0->posX = arg0->posX + sp18.x;
         arg0->posZ = arg0->posZ + sp18.z;
 
-        tempS32 = func_80061A64_62664(allocPlus30, arg0->sectorIndex, argPlus8);
+        tempS32 = getTrackHeightAtPosition(allocPlus30, arg0->sectorIndex, argPlus8);
         sp18.y = tempS32;
 
         if (arg0->posY < tempS32) {
@@ -3711,7 +3711,7 @@ void updateBossHomingProjectile(BossHomingProjectile *projectile) {
     projectile->position.x += groundOffset.x;
     projectile->position.z += groundOffset.z;
 
-    groundOffset.y = func_80061A64_62664(&gameState->unk30, projectile->sectorIndex, position);
+    groundOffset.y = getTrackHeightAtPosition(&gameState->unk30, projectile->sectorIndex, position);
 
     hitPlayer = findPlayerNearPosition(position, projectile->playerIndex, 0xA0000);
 
@@ -3871,7 +3871,7 @@ void updateBossHomingProjectileVariant1(BossHomingProjectileVariant1UpdateArg *a
         arg0->displayListState.position.x += sp.x;
         arg0->displayListState.position.z += sp.z;
 
-        sp.y = func_80061A64_62664(s0, arg0->displayListState.unk30, s2);
+        sp.y = getTrackHeightAtPosition(s0, arg0->displayListState.unk30, s2);
 
         temp_s0 = findPlayerNearPosition(s2, arg0->playerIndex, 0xA0000);
 
@@ -4014,7 +4014,7 @@ void updateBossHomingProjectileVariant2(BossHomingProjectileVariant2UpdateArg *a
     arg0->position.x += sp.x;
     arg0->position.z += sp.z;
 
-    sp.y = func_80061A64_62664(s0->unk30, arg0->sectorIndex, s2);
+    sp.y = getTrackHeightAtPosition(s0->unk30, arg0->sectorIndex, s2);
 
     temp_s0 = findPlayerNearPosition(s2, arg0->playerIndex, 0xA0000);
 

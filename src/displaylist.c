@@ -136,9 +136,9 @@ INCLUDE_ASM("asm/nonmatchings/displaylist", func_80060A3C_6163C);
 
 INCLUDE_ASM("asm/nonmatchings/displaylist", func_80060CDC_618DC);
 
-s32 func_80061A64_62664(void *arg0_void, u16 arg1, void *arg2_void) {
-    TrackGeometryFaceData *arg0 = (TrackGeometryFaceData *)arg0_void;
-    Vec3i *arg2 = (Vec3i *)arg2_void;
+s32 getTrackHeightAtPosition(void *trackGeom_void, u16 groupIdx, void *pos_void) {
+    TrackGeometryFaceData *trackGeom = (TrackGeometryFaceData *)trackGeom_void;
+    Vec3i *pos = (Vec3i *)pos_void;
     s32 sp1C;
     s32 sp24;
     s32 v0x;
@@ -166,8 +166,8 @@ s32 func_80061A64_62664(void *arg0_void, u16 arg1, void *arg2_void) {
     TrackFaceGroup *temp_v0;
     TrackFaceGroup *temp_v0_2;
 
-    idx = arg1;
-    base = arg0->faceGroups;
+    idx = groupIdx;
+    base = trackGeom->faceGroups;
     temp_v1 = ((idx << 3) + idx) << 2;
     temp_v0 = (TrackFaceGroup *)(temp_v1 + (s32)base);
     sp1C = temp_v0->baseIndex;
@@ -176,8 +176,8 @@ s32 func_80061A64_62664(void *arg0_void, u16 arg1, void *arg2_void) {
 
     if (sp1C < sp1C + temp_v0->count) {
         do {
-            temp_a0 = (TrackFace *)(var_fp + (s32)arg0->faces);
-            temp_a1 = arg0->vertices;
+            temp_a0 = (TrackFace *)(var_fp + (s32)trackGeom->faces);
+            temp_a1 = trackGeom->vertices;
             v0x = ((Vertex6 *)((temp_a0->v0 * 6) + (s32)temp_a1))->x;
             v0z = ((Vertex6 *)((temp_a0->v0 * 6) + (s32)temp_a1))->z;
             v1x = ((Vertex6 *)((temp_a0->v1 * 6) + (s32)temp_a1))->x;
@@ -185,14 +185,14 @@ s32 func_80061A64_62664(void *arg0_void, u16 arg1, void *arg2_void) {
             v2x = ((Vertex6 *)((temp_a0->v2 * 6) + (s32)temp_a1))->x;
             v2z = ((Vertex6 *)((temp_a0->v2 * 6) + (s32)temp_a1))->z;
 
-            if ((temp_a0->flags & 1) || (cross2d(arg2->x, arg2->z, v0x << 16, v0z << 16, v1x << 16, v1z << 16) >= 0)) {
-                if ((((TrackFace *)(var_fp + (s32)arg0->faces))->flags & 2) ||
-                    (cross2d(arg2->x, arg2->z, v1x << 16, v1z << 16, v2x << 16, v2z << 16) >= 0)) {
+            if ((temp_a0->flags & 1) || (cross2d(pos->x, pos->z, v0x << 16, v0z << 16, v1x << 16, v1z << 16) >= 0)) {
+                if ((((TrackFace *)(var_fp + (s32)trackGeom->faces))->flags & 2) ||
+                    (cross2d(pos->x, pos->z, v1x << 16, v1z << 16, v2x << 16, v2z << 16) >= 0)) {
                     t0 = v0x << 16;
                     t3 = v0z << 16;
-                    if (cross2d(arg2->x, arg2->z, v2x << 16, v2z << 16, t0, t3) >= 0) {
-                        temp_a0_2 = (TrackFace *)(var_fp + (s32)arg0->faces);
-                        temp_a3 = arg0->vertices;
+                    if (cross2d(pos->x, pos->z, v2x << 16, v2z << 16, t0, t3) >= 0) {
+                        temp_a0_2 = (TrackFace *)(var_fp + (s32)trackGeom->faces);
+                        temp_a3 = trackGeom->vertices;
                         y0 = ((Vertex6 *)((temp_a0_2->v0 * 6) + (s32)temp_a3))->y;
                         dY_v2 = ((Vertex6 *)((temp_a0_2->v2 * 6) + (s32)temp_a3))->y - y0;
                         v1z = v1z - v0z;
@@ -205,8 +205,8 @@ s32 func_80061A64_62664(void *arg0_void, u16 arg1, void *arg2_void) {
                         v1x = v1x - v0x;
                         v2x = v2x - v0x;
 
-                        v0x = arg2->x - t0;
-                        v0z = arg2->z - t3;
+                        v0x = pos->x - t0;
+                        v0z = pos->z - t3;
                         area = (v2z * v1x) - (v2x * v1z);
 
                         return (s32)((-((s64)(cross_a - cross_b) * v0x) - ((s64)((v2x * dY_v1) - (dY_v2 * v1x)) * v0z)
@@ -217,7 +217,7 @@ s32 func_80061A64_62664(void *arg0_void, u16 arg1, void *arg2_void) {
                 }
             }
 
-            temp_v0_2 = (TrackFaceGroup *)(sp24 + (s32)arg0->faceGroups);
+            temp_v0_2 = (TrackFaceGroup *)(sp24 + (s32)trackGeom->faceGroups);
             var_fp += 8;
             sp1C += 1;
         } while (sp1C < temp_v0_2->baseIndex + temp_v0_2->count);

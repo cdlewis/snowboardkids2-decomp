@@ -244,7 +244,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     memcpy(&state->transform, &identityMatrix, sizeof(Transform3D));
     memcpy(state, waypointEnd, 0xC);
 
-    state->posY = func_80061A64_62664(state->gameData, state->startWaypoint, state);
+    state->posY = getTrackHeightAtPosition(state->gameData, state->startWaypoint, state);
 
     if (allocation->unkB33[allocation->unkB2C] == 5) {
         state->posY = state->posY + state->altHeightOffset;
@@ -282,7 +282,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     angle = func_80060A3C_6163C(state->gameData, state->currentWaypoint, &state->targetX);
     state->currentWaypoint = angle;
 
-    state->targetY = func_80061A64_62664(state->gameData, angle, &state->targetX);
+    state->targetY = getTrackHeightAtPosition(state->gameData, angle, &state->targetX);
     state->targetY = state->targetY + state->heightOffset;
 
     computeLookAtMatrix(&state->targetX, state, &lookAtTransform);
@@ -438,7 +438,7 @@ s32 sampleMaxSurroundingTerrainHeight(LevelPreviewCharacterState *state) {
         samplePos[0] += state->targetX;
         samplePos[2] += state->targetZ;
 
-        terrainHeight = func_80061A64_62664(
+        terrainHeight = getTrackHeightAtPosition(
             gameData,
             func_80060A3C_6163C(gameData, state->currentWaypoint, samplePos) & 0xFFFF,
             samplePos

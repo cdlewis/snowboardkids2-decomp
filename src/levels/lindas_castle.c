@@ -120,7 +120,7 @@ void initFlyingEnemyTask(FlyingEnemyTask *task) {
 
     task->waypointZ = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[0].z;
 
-    task->posY = func_80061A64_62664(&gamestate->gameData, task->surfaceType, &task->waypointX);
+    task->posY = getTrackHeightAtPosition(&gamestate->gameData, task->surfaceType, &task->waypointX);
 
     index = task->waypointIndex;
 
@@ -186,7 +186,7 @@ void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task) {
         task->targetPosition[2] += rotatedVec.z;
 
         task->surfaceType = func_80060A3C_6163C(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
-        task->targetPosition[1] = func_80061A64_62664(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
+        task->targetPosition[1] = getTrackHeightAtPosition(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
 
         task->velocityY += task->gravity;
         task->gravity = task->gravity - 0x8000;
@@ -248,7 +248,7 @@ void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
         task->targetPosition[2] += rotatedVec.z;
 
         task->surfaceType = func_80060A3C_6163C(gameData, task->surfaceType, &task->targetPosition[0]);
-        task->targetPosition[1] = func_80061A64_62664(gameData, task->surfaceType, &task->targetPosition[0]);
+        task->targetPosition[1] = getTrackHeightAtPosition(gameData, task->surfaceType, &task->targetPosition[0]);
 
         task->velocityY += task->gravity;
         task->gravity = task->gravity - 0x8000;

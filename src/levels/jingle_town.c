@@ -107,7 +107,7 @@ void initJingleTownTrain(JingleTownTrain *arg0) {
     arg0->posX = temp3;
     arg0->posZ = gJingleTownTrainWaypointsZ[arg0->trainIndex * 5];
 
-    arg0->height = func_80061A64_62664(&alloc->unk30, arg0->unk56, &arg0->posX);
+    arg0->height = getTrackHeightAtPosition(&alloc->unk30, arg0->unk56, &arg0->posX);
 
     temp4 = arg0->trainIndex;
     arg0->rotation =
@@ -186,7 +186,7 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
         arg0->posZ += rotResult.z;
         newUnk56 = func_80060A3C_6163C(terrainPtr, arg0->unk56, posPtr);
         arg0->unk56 = newUnk56;
-        arg0->height = func_80061A64_62664(terrainPtr, newUnk56, posPtr);
+        arg0->height = getTrackHeightAtPosition(terrainPtr, newUnk56, posPtr);
         arg0->yOffset += arg0->yVelocity;
         arg0->yVelocity -= 0x8000;
         if (arg0->yOffset == 0) {
@@ -248,7 +248,7 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
         arg0->posZ += rotatedVec.z;
 
         arg0->unk56 = func_80060A3C_6163C(terrainPtr, arg0->unk56, posPtr);
-        arg0->height = func_80061A64_62664(terrainPtr, arg0->unk56, posPtr);
+        arg0->height = getTrackHeightAtPosition(terrainPtr, arg0->unk56, posPtr);
 
         arg0->yOffset += arg0->yVelocity;
         arg0->yVelocity -= 0x8000;
