@@ -313,7 +313,7 @@ segments:
       - { start: 0x852C0, type: textbin, use_src_path: True, name: rsp/aspMain }
       - { start: 0x85AC0, type: textbin, use_src_path: True, name: rsp/s2dex }
       - { start: 0x879A0, type: textbin, use_src_path: True, name: rsp/f3dex2 }
-      - [0x88D30, data, 8A40]
+      - [0x88D30, .data, 8A40]
       - [0x891D0, data, 5520]
       - [0x89210, data]
       - [0x89240, data, 69B0]
