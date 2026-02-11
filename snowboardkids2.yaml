@@ -322,7 +322,7 @@ segments:
       - [0x89320, .data, 7850]
       - [0x89330, .data, main]
       - [0x8A110, data]
-      - [0x8A140, .data, 20F0]
+      - [0x8A130, .data, 20F0]
       - [0x8C980, .data, nonrace_shadow]
       - [0x8CA90, data, 3B80]
       - [0x8CB90, .data, 4050]

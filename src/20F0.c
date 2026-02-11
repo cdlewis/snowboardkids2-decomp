@@ -95,7 +95,6 @@ extern s32 D_80088E40;
 extern s32 D_80088E60;
 extern s32 D_80088E80;
 extern s32 D_80088F00;
-extern s32 D_80089530;
 extern u8 identityMatrix[32];
 extern u8 D_215D70[];
 extern void initDriftingParticle(void *arg0);
@@ -105,6 +104,8 @@ extern void initPulsingSpriteIndicator(void *arg0);
 extern void initOrbitalSpriteRing(void *arg0);
 extern void initModelTransitionEffect(void *arg0);
 extern void initModelScaleAnimation(void *arg0);
+
+s32 D_80089530[4] = { 0x00000000, 0x010000D0, 0x00000000, 0x00000000 };
 
 u32 itemMatrix_17[4] = { 0x0, 0x10000D0, 0x0, 0x0 };
 
