@@ -366,7 +366,7 @@ segments:
       - [0x90AA0, .data, rom_loader]
       - [0x90AB0, data]
       - [0x90AF0, data]
-      - [0x90E80, data, race_session]
+      - [0x90E80, .data, race_session]
       - [0x913E0, .data, 413E0]
       - [0x914A0, data]
       - [0x916F0, data]

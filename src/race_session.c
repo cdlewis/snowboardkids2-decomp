@@ -145,18 +145,247 @@ typedef struct {
     u8 cpuDifficultyMP;
 } CharacterCostumeConfig;
 
+typedef struct {
+    u16 frame;
+    u16 unk2;
+} IntroFrameData;
+
+typedef struct {
+    u16 frame;
+    s16 value;
+} IntroFrameData2;
+
+extern u32 *levels_lindas_castle_ROM_START;
+extern void func_800BBB90(s16);
+
 // Data
-extern s32 gThirdPlaceGoldReward[];
-extern s32 gFirstPlaceGoldReward[];
-extern s32 gSecondPlaceGoldReward[];
-extern u8 D_80090450_91050[];
-extern CharacterCostumeConfig D_800902D0_90ED0[16][6];
-extern u8 D_800902C0_90EC0[];
-extern u8 D_80090280_90E80[4][4]; // unknown first (4) size
-extern OverlayEntry Overlays[];
-extern ColorData D_8009077C_9137C;
-extern ColorData D_80090774_91374;
-extern u8 D_80090520_91120[];
+u8 D_80090280_90E80[16][4] = {
+    { 0x01, 0x04, 0x05, 0x00 },
+    { 0x00, 0x01, 0x03, 0x02 },
+    { 0x01, 0x05, 0x00, 0x03 },
+    { 0x00, 0x02, 0x01, 0x04 },
+    { 0x00, 0x04, 0x01, 0x05 },
+    { 0x01, 0x02, 0x00, 0x03 },
+    { 0x00, 0x00, 0x04, 0x01 },
+    { 0x00, 0x03, 0x05, 0x02 },
+    { 0x00, 0x03, 0x01, 0x05 },
+    { 0x00, 0x02, 0x04, 0x05 },
+    { 0x01, 0x02, 0x00, 0x06 },
+    { 0x00, 0x07, 0x08, 0x06 },
+    { 0x01, 0x00, 0x03, 0x04 },
+    { 0x01, 0x00, 0x03, 0x04 },
+    { 0x03, 0x01, 0x02, 0x00 },
+    { 0x00, 0x07, 0x02, 0x03 },
+};
+
+u8 D_800902C0_90EC0[16] = {
+    0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+CharacterCostumeConfig D_800902D0_90ED0[16][6] = {
+    { { 0, 7, 0, 0 }, { 0, 8, 0, 0 }, { 0, 9, 0, 0 }, { 0, 10, 0, 0 }, { 0, 11, 0, 0 }, { 6, 12, 0, 0 } },
+    { { 0, 7, 1, 1 }, { 0, 8, 0, 0 }, { 0, 9, 0, 0 }, { 0, 10, 1, 1 }, { 0, 11, 0, 0 }, { 6, 12, 1, 1 } },
+    { { 0, 7, 2, 2 }, { 0, 8, 1, 1 }, { 0, 9, 2, 2 }, { 0, 10, 1, 1 }, { 0, 11, 2, 1 }, { 6, 12, 1, 2 } },
+    { { 0, 7, 3, 3 }, { 0, 8, 4, 2 }, { 0, 9, 3, 3 }, { 0, 10, 3, 3 }, { 0, 11, 4, 2 }, { 6, 12, 4, 2 } },
+    { { 1, 7, 3, 2 }, { 1, 8, 2, 3 }, { 1, 9, 2, 2 }, { 1, 10, 3, 3 }, { 4, 11, 2, 2 }, { 1, 12, 3, 3 } },
+    { { 1, 7, 3, 3 }, { 1, 8, 3, 2 }, { 1, 9, 4, 2 }, { 1, 10, 3, 3 }, { 4, 11, 4, 2 }, { 1, 12, 4, 3 } },
+    { { 1, 7, 5, 3 }, { 1, 8, 5, 4 }, { 1, 9, 4, 3 }, { 1, 10, 5, 4 }, { 4, 11, 4, 4 }, { 1, 12, 4, 3 } },
+    { { 1, 7, 5, 5 }, { 1, 8, 6, 4 }, { 1, 9, 6, 4 }, { 1, 10, 5, 5 }, { 4, 11, 6, 4 }, { 1, 12, 5, 5 } },
+    { { 2, 7, 5, 4 }, { 2, 8, 6, 3 }, { 2, 9, 6, 3 }, { 5, 10, 5, 4 }, { 5, 11, 6, 3 }, { 2, 12, 5, 4 } },
+    { { 2, 7, 5, 5 }, { 2, 8, 6, 4 }, { 2, 9, 5, 4 }, { 5, 10, 6, 4 }, { 5, 11, 5, 4 }, { 2, 12, 6, 5 } },
+    { { 2, 7, 7, 4 }, { 2, 8, 6, 5 }, { 2, 9, 6, 5 }, { 5, 10, 7, 5 }, { 5, 11, 6, 4 }, { 2, 12, 7, 5 } },
+    { { 2, 7, 6, 5 }, { 2, 8, 7, 6 }, { 2, 9, 7, 6 }, { 5, 10, 7, 5 }, { 5, 11, 6, 5 }, { 2, 12, 6, 6 } },
+    { { 1, 7, 3, 3 }, { 1, 8, 3, 4 }, { 1, 9, 4, 4 }, { 1, 10, 4, 4 }, { 4, 11, 3, 3 }, { 1, 12, 4, 3 } },
+    { { 1, 7, 3, 3 }, { 1, 8, 3, 4 }, { 1, 9, 4, 4 }, { 1, 10, 4, 4 }, { 4, 11, 3, 3 }, { 1, 12, 4, 3 } },
+    { { 1, 7, 4, 4 }, { 1, 8, 4, 3 }, { 1, 9, 3, 3 }, { 1, 10, 3, 3 }, { 4, 11, 4, 4 }, { 1, 12, 3, 4 } },
+    { { 1, 7, 7, 7 }, { 1, 8, 7, 7 }, { 1, 9, 7, 7 }, { 1, 10, 7, 7 }, { 4, 11, 7, 7 }, { 1, 12, 7, 7 } },
+};
+
+u8 D_80090450_91050[16] = {
+    0x0D, 0x0A, 0x02, 0x0B, 0x09, 0x0E, 0x02, 0x11, 0x0F, 0x0C, 0x02, 0x10, 0x02, 0x02, 0x02, 0x00,
+};
+
+s32 gFirstPlaceGoldReward[16] = {
+    10000, 20000, 20000, 0, 40000, 40000, 40000, 0, 60000, 60000, 80000, 0, 0, 0, 0, 0,
+};
+
+s32 gSecondPlaceGoldReward[16] = {
+    2000, 4000, 4000, 0, 8000, 8000, 8000, 0, 12000, 12000, 16000, 0, 0, 0, 0, 0,
+};
+
+s32 gThirdPlaceGoldReward[16] = {
+    1000, 2000, 2000, 0, 4000, 4000, 4000, 0, 6000, 6000, 8000, 0, 0, 0, 0, 0,
+};
+
+u8 D_80090520_91120[] = {
+    0x00, 0x01, 0x02, 0x00, 0x01, 0x02, 0x00, 0x01, 0x02, 0x03,
+    0x02, 0x00, 0x03, 0x03, 0x03, 0x03, 0x04, 0x05, 0x00, 0x00,
+};
+
+OverlayEntry Overlays[16] = {
+    { (void *)0x000B4BB0,
+     (void *)0x000B54C0,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BBB50,
+     (void *)0x800BBB50,
+     (void *)0x800BBBC0,
+     (void *)0x800BBBC0,
+     (void *)0x800BBBC0                                                                       },
+    { NULL,                                    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
+    { (void *)0x000B4240,
+     (void *)0x000B4BB0,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)func_800BBB90,
+     (void *)func_800BBB90,
+     (void *)0x800BBC20,
+     (void *)0x800BBC20,
+     (void *)0x800BBC20                                                                       },
+    { (void *)0x000B2870,
+     (void *)0x000B4240,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BCB20,
+     (void *)0x800BCB20,
+     (void *)0x800BCC80,
+     (void *)0x800BCC80,
+     (void *)0x800BCC80                                                                       },
+    { (void *)0x000B54C0,
+     (void *)0x000B5B90,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BB930,
+     (void *)0x800BB930,
+     (void *)0x800BB980,
+     (void *)0x800BB980,
+     (void *)0x800BB980                                                                       },
+    { (void *)&levels_lindas_castle_ROM_START,
+     (void *)0x000ABAE0,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BBBC0,
+     (void *)0x800BBBC0,
+     (void *)0x800BBC30,
+     (void *)0x800BBC30,
+     (void *)0x800BBC30                                                                       },
+    { (void *)0x000B74F0,
+     (void *)&_B7E70_ROM_START,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)func_800BBB90,
+     (void *)func_800BBB90,
+     (void *)0x800BBC30,
+     (void *)0x800BBC30,
+     (void *)0x800BBC30                                                                       },
+    { (void *)0x000ABAE0,
+     (void *)0x000ACD30,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BC440,
+     (void *)0x800BC440,
+     (void *)0x800BC500,
+     (void *)0x800BC500,
+     (void *)0x800BC500                                                                       },
+    { (void *)0x000AD670,
+     (void *)0x000AEFA0,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BCA30,
+     (void *)0x800BCA30,
+     (void *)0x800BCBE0,
+     (void *)0x800BCBE0,
+     (void *)0x800BCBE0                                                                       },
+    { (void *)0x000AEFA0,
+     (void *)0x000B07A0,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BC7F0,
+     (void *)0x800BC7F0,
+     (void *)0x800BCAB0,
+     (void *)0x800BCAB0,
+     (void *)0x800BCAB0                                                                       },
+    { (void *)0x000B2030,
+     (void *)0x000B2750,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BB7B0,
+     (void *)0x800BB7B0,
+     (void *)0x800BB9D0,
+     (void *)0x800BB9D0,
+     (void *)0x800BB9D0                                                                       },
+    { (void *)0x000B07A0,
+     (void *)0x000B2030,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BC9F0,
+     (void *)0x800BC9F0,
+     (void *)0x800BCB40,
+     (void *)0x800BCB40,
+     (void *)0x800BCB40                                                                       },
+    { (void *)0x000B2750,
+     (void *)0x000B2870,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BB3D0,
+     (void *)0x800BB3D0,
+     (void *)0x800BB3D0,
+     (void *)0x800BB3D0,
+     (void *)0x800BB3D0                                                                       },
+    { (void *)0x000ACD30,
+     (void *)0x000AD670,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BBBB0,
+     (void *)0x800BBBB0,
+     (void *)0x800BBBF0,
+     (void *)0x800BBBF0,
+     (void *)0x800BBBF0                                                                       },
+    { NULL,                                    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
+    { (void *)0x000B5B90,
+     (void *)0x000B74F0,
+     (void *)renderFlyingEnemy,
+     (void *)renderFlyingEnemy,
+     (void *)0x800BBA30,
+     (void *)0x800BBA30,
+     (void *)0x800BCC10,
+     (void *)0x800BCC10,
+     (void *)0x800BCC10                                                                       },
+};
+
+ColorData D_80090774_91374 = { 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x50, 0xB0, 0x00 };
+
+u32 D_8009077C_9137C = 0xA0A0A000;
+
+IntroFrameData sIntroFrameEvents[] = {
+    { 1,   1 },
+    { 338, 2 },
+    { 436, 4 },
+    { 541, 3 },
+    { 669, 0 },
+    { 812, 5 },
+    { 0,   0 },
+};
+
+IntroFrameData2 sIntroCameraEvents[] = {
+    { 1,   0  },
+    { 91,  1  },
+    { 181, 2  },
+    { 240, 3  },
+    { 338, 4  },
+    { 436, 5  },
+    { 470, 6  },
+    { 541, 7  },
+    { 614, 8  },
+    { 669, 9  },
+    { 731, 10 },
+    { 773, 11 },
+    { 812, 12 },
+    { 836, 13 },
+    { 0,   0  },
+    { 0,   0  },
+    { 0,   0  },
+};
 
 // Bss
 extern s8 gControllerPollingEnabled;
@@ -637,7 +866,7 @@ void initRaceViewports(void) {
         setViewportId(&gs->unkC[i], (u16)(i + 0x64));
 
         if (gs->raceType == 0xB) {
-            setViewportLightColors(i + 0x64, 1, &D_80090774_91374, &D_8009077C_9137C);
+            setViewportLightColors(i + 0x64, 1, &D_80090774_91374, (ColorData *)&D_8009077C_9137C);
         } else {
             setViewportLightColors(i + 0x64, 1, &levelConfig->lightColors, &levelConfig->fogColors);
         }
@@ -903,18 +1132,6 @@ void awaitPlayersAndPlayRaceMusic(void) {
 
 INCLUDE_ASM("asm/nonmatchings/race_session", func_8003F1F0_3FDF0);
 
-typedef struct {
-    u16 frame;
-    u16 unk2;
-} IntroFrameData;
-
-typedef struct {
-    u16 frame;
-    s16 value;
-} IntroFrameData2;
-
-extern IntroFrameData sIntroFrameEvents[];
-extern IntroFrameData2 sIntroCameraEvents[];
 extern void spawnScriptedCameraTask(s16);
 
 void handleRaceStateUpdate(void) {
