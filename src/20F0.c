@@ -41,6 +41,61 @@ extern s32 D_80088700;
 extern s32 D_800881E0;
 extern s32 D_800881A0;
 extern s32 D_80088290;
+extern s32 D_80088130;
+extern s32 D_80088140;
+extern s32 D_80088160;
+extern s32 D_80088170;
+extern s32 D_80088190;
+extern s32 D_800881F0;
+extern s32 D_800882A0;
+extern s32 D_800882C0;
+extern s32 D_800882D0;
+extern s32 D_800882E0;
+extern s32 D_800882F0;
+extern s32 D_80088300;
+extern s32 D_80088320;
+extern s32 D_80088330;
+extern s32 D_80088340;
+extern s32 D_80088370;
+extern s32 D_800883A0;
+extern s32 D_800883D0;
+extern s32 D_800885C0;
+extern s32 D_80088630;
+extern s32 D_800886B0;
+extern s32 D_800886C0;
+extern s32 D_800886D0;
+extern s32 D_800886F0;
+extern s32 D_80088710;
+extern s32 D_80088730;
+extern s32 D_80088740;
+extern s32 D_80088750;
+extern s32 D_80088770;
+extern s32 D_800887D0;
+extern s32 D_80088830;
+extern s32 D_80088890;
+extern s32 D_800888F0;
+extern s32 D_80088940;
+extern s32 D_80088990;
+extern s32 D_800889E0;
+extern s32 D_80088A30;
+extern s32 D_80088A80;
+extern s32 D_80088AD0;
+extern s32 D_80088B20;
+extern s32 D_80088B70;
+extern s32 D_80088BC0;
+extern s32 D_80088C10;
+extern s32 D_80088C60;
+extern s32 D_80088CB0;
+extern s32 D_80088D00;
+extern s32 D_80088D50;
+extern s32 D_80088DA0;
+extern s32 D_80088DF0;
+extern s32 D_80088E20;
+extern s32 D_80088E40;
+extern s32 D_80088E60;
+extern s32 D_80088E80;
+extern s32 D_80088F00;
+extern s32 D_80089530;
 extern u8 identityMatrix[32];
 extern u8 D_215D70[];
 extern void initDriftingParticle(void *arg0);
@@ -73,17 +128,17 @@ ItemAssetEntry itemAssetTable[] = {
      &ITEM_1_DISPLAY_LIST_ROM_END,
      &ITEM_1_COMPRESSED_DATA_ROM_START,
      &ITEM_1_COMPRESSED_DATA_ROM_END,
-     0x370, (void *)0x800882F0    },
+     0x370, (void *)&D_800882F0   },
     { &ITEM_DEBRIS_DISPLAY_LIST_ROM_START,
      &ITEM_DEBRIS_DISPLAY_LIST_ROM_END,
      &ITEM_DEBRIS_COMPRESSED_DATA_ROM_START,
      &ITEM_DEBRIS_COMPRESSED_DATA_ROM_END,
-     0x370, (void *)0x80088300    },
+     0x370, (void *)&D_80088300   },
     { &ITEM_3_DISPLAY_LIST_ROM_START,
      &ITEM_3_DISPLAY_LIST_ROM_END,
      &ITEM_3_COMPRESSED_DATA_ROM_START,
      &ITEM_3_COMPRESSED_DATA_ROM_END,
-     0x1D0, (void *)0x80089530    },
+     0x1D0, (void *)&D_80089530   },
     { &ITEM_4_DISPLAY_LIST_ROM_START,
      &ITEM_4_DISPLAY_LIST_ROM_END,
      &ITEM_4_COMPRESSED_DATA_ROM_START,
@@ -168,22 +223,22 @@ ItemAssetEntry SLASH_ASSETS[4] = {
      (void *)&SLASH1_DISPLAY_LIST_ROM_END,
      (void *)&SLASH1_COMPRESSED_DATA_ROM_START,
      (void *)&SLASH1_COMPRESSED_DATA_ROM_END,
-     0x3DE00006, (void *)0x80088770 },
+     0x3DE00006, (void *)&D_80088770 },
     { (void *)&SLASH2_DISPLAY_LIST_ROM_START,
      (void *)&SLASH2_DISPLAY_LIST_ROM_END,
      (void *)&SLASH2_COMPRESSED_DATA_ROM_START,
      (void *)&SLASH2_COMPRESSED_DATA_ROM_END,
-     0x3AD00006, (void *)0x800887D0 },
+     0x3AD00006, (void *)&D_800887D0 },
     { (void *)&SLASH3_DISPLAY_LIST_ROM_START,
      (void *)&SLASH3_DISPLAY_LIST_ROM_END,
      (void *)&SLASH3_COMPRESSED_DATA_ROM_START,
      (void *)&SLASH3_COMPRESSED_DATA_ROM_END,
-     0x4D900006, (void *)0x80088830 },
+     0x4D900006, (void *)&D_80088830 },
     { (void *)&SLASH4_DISPLAY_LIST_ROM_START,
      (void *)&SLASH4_DISPLAY_LIST_ROM_END,
      (void *)&SLASH4_COMPRESSED_DATA_ROM_START,
      (void *)&SLASH4_COMPRESSED_DATA_ROM_END,
-     0x3F600006, (void *)0x80088890 },
+     0x3F600006, (void *)&D_80088890 },
 };
 
 ItemAssetEntry NANCY_ASSETS[4] = {
@@ -191,22 +246,22 @@ ItemAssetEntry NANCY_ASSETS[4] = {
      (void *)&NANCY1_DISPLAY_LIST_ROM_END,
      (void *)&NANCY1_COMPRESSED_DATA_ROM_START,
      (void *)&NANCY1_COMPRESSED_DATA_ROM_END,
-     0x2F200005, (void *)0x800888F0 },
+     0x2F200005, (void *)&D_800888F0 },
     { (void *)&NANCY2_DISPLAY_LIST_ROM_START,
      (void *)&NANCY2_DISPLAY_LIST_ROM_END,
      (void *)&NANCY2_COMPRESSED_DATA_ROM_START,
      (void *)&NANCY2_COMPRESSED_DATA_ROM_END,
-     0x27F00005, (void *)0x80088940 },
+     0x27F00005, (void *)&D_80088940 },
     { (void *)&NANCY3_DISPLAY_LIST_ROM_START,
      (void *)&NANCY3_DISPLAY_LIST_ROM_END,
      (void *)&NANCY3_COMPRESSED_DATA_ROM_START,
      (void *)&NANCY3_COMPRESSED_DATA_ROM_END,
-     0x28900005, (void *)0x80088990 },
+     0x28900005, (void *)&D_80088990 },
     { (void *)&NANCY4_DISPLAY_LIST_ROM_START,
      (void *)&NANCY4_DISPLAY_LIST_ROM_END,
      (void *)&NANCY4_COMPRESSED_DATA_ROM_START,
      (void *)&NANCY4_COMPRESSED_DATA_ROM_END,
-     0x2C000005, (void *)0x800889E0 },
+     0x2C000005, (void *)&D_800889E0 },
 };
 
 ItemAssetEntry JAM_ASSETS[4] = {
@@ -214,22 +269,22 @@ ItemAssetEntry JAM_ASSETS[4] = {
      (void *)&JAM1_DISPLAY_LIST_ROM_END,
      (void *)&JAM1_COMPRESSED_DATA_ROM_START,
      (void *)&JAM1_COMPRESSED_DATA_ROM_END,
-     0x2B000005, (void *)0x80088A30 },
+     0x2B000005, (void *)&D_80088A30 },
     { (void *)&JAM2_DISPLAY_LIST_ROM_START,
      (void *)&JAM2_DISPLAY_LIST_ROM_END,
      (void *)&JAM2_COMPRESSED_DATA_ROM_START,
      (void *)&JAM2_COMPRESSED_DATA_ROM_END,
-     0x2FE00005, (void *)0x80088A80 },
+     0x2FE00005, (void *)&D_80088A80 },
     { (void *)&JAM3_DISPLAY_LIST_ROM_START,
      (void *)&JAM3_DISPLAY_LIST_ROM_END,
      (void *)&JAM3_COMPRESSED_DATA_ROM_START,
      (void *)&JAM3_COMPRESSED_DATA_ROM_END,
-     0x2B800005, (void *)0x80088AD0 },
+     0x2B800005, (void *)&D_80088AD0 },
     { (void *)&JAM4_DISPLAY_LIST_ROM_START,
      (void *)&JAM4_DISPLAY_LIST_ROM_END,
      (void *)&JAM4_COMPRESSED_DATA_ROM_START,
      (void *)&JAM4_COMPRESSED_DATA_ROM_END,
-     0x40500005, (void *)0x80088B20 },
+     0x40500005, (void *)&D_80088B20 },
 };
 
 ItemAssetEntry LINDA_ASSETS[4] = {
@@ -237,22 +292,22 @@ ItemAssetEntry LINDA_ASSETS[4] = {
      (void *)&LINDA_DISPLAY_LIST_0_ROM_END,
      (void *)&LINDA_COMPRESSED_DATA_0_ROM_START,
      (void *)&LINDA_COMPRESSED_DATA_0_ROM_END,
-     0x27F00005, (void *)0x80088B70 },
+     0x27F00005, (void *)&D_80088B70 },
     { (void *)&LINDA_DISPLAY_LIST_1_ROM_START,
      (void *)&LINDA_DISPLAY_LIST_1_ROM_END,
      (void *)&LINDA_COMPRESSED_DATA_1_ROM_START,
      (void *)&LINDA_COMPRESSED_DATA_1_ROM_END,
-     0x27F00005, (void *)0x80088BC0 },
+     0x27F00005, (void *)&D_80088BC0 },
     { (void *)&LINDA_DISPLAY_LIST_2_ROM_START,
      (void *)&LINDA_DISPLAY_LIST_2_ROM_END,
      (void *)&LINDA_COMPRESSED_DATA_2_ROM_START,
      (void *)&LINDA_COMPRESSED_DATA_2_ROM_END,
-     0x27500005, (void *)0x80088C10 },
+     0x27500005, (void *)&D_80088C10 },
     { (void *)&LINDA_DISPLAY_LIST_3_ROM_START,
      (void *)&LINDA_DISPLAY_LIST_3_ROM_END,
      (void *)&LINDA_COMPRESSED_DATA_3_ROM_START,
      (void *)&LINDA_COMPRESSED_DATA_3_ROM_END,
-     0x25C00005, (void *)0x80088C60 },
+     0x25C00005, (void *)&D_80088C60 },
 };
 
 ItemAssetEntry TOMMY_ASSETS[4] = {
@@ -260,22 +315,22 @@ ItemAssetEntry TOMMY_ASSETS[4] = {
      (void *)&TOMMY_DISPLAY_LIST_0_ROM_END,
      (void *)&TOMMY_COMPRESSED_DATA_0_ROM_START,
      (void *)&TOMMY_COMPRESSED_DATA_0_ROM_END,
-     0x4D000005, (void *)0x80088CB0 },
+     0x4D000005, (void *)&D_80088CB0 },
     { (void *)&TOMMY_DISPLAY_LIST_1_ROM_START,
      (void *)&TOMMY_DISPLAY_LIST_1_ROM_END,
      (void *)&TOMMY_COMPRESSED_DATA_1_ROM_START,
      (void *)&TOMMY_COMPRESSED_DATA_1_ROM_END,
-     0x50200005, (void *)0x80088D00 },
+     0x50200005, (void *)&D_80088D00 },
     { (void *)&TOMMY_DISPLAY_LIST_2_ROM_START,
      (void *)&TOMMY_DISPLAY_LIST_2_ROM_END,
      (void *)&TOMMY_COMPRESSED_DATA_2_ROM_START,
      (void *)&TOMMY_COMPRESSED_DATA_2_ROM_END,
-     0x4E400005, (void *)0x80088D50 },
+     0x4E400005, (void *)&D_80088D50 },
     { (void *)&TOMMY_DISPLAY_LIST_3_ROM_START,
      (void *)&TOMMY_DISPLAY_LIST_3_ROM_END,
      (void *)&TOMMY_COMPRESSED_DATA_3_ROM_START,
      (void *)&TOMMY_COMPRESSED_DATA_3_ROM_END,
-     0x48D00005, (void *)0x80088DA0 },
+     0x48D00005, (void *)&D_80088DA0 },
 };
 
 ItemAssetEntry WENDY_ASSETS[4] = {
@@ -283,22 +338,22 @@ ItemAssetEntry WENDY_ASSETS[4] = {
      (void *)&WENDY_DISPLAY_LIST_0_ROM_END,
      (void *)&WENDY_COMPRESSED_DATA_0_ROM_START,
      (void *)&WENDY_COMPRESSED_DATA_0_ROM_END,
-     0x27A00003, (void *)0x80088DF0 },
+     0x27A00003, (void *)&D_80088DF0 },
     { (void *)&WENDY_DISPLAY_LIST_1_ROM_START,
      (void *)&WENDY_DISPLAY_LIST_1_ROM_END,
      (void *)&WENDY_COMPRESSED_DATA_1_ROM_START,
      (void *)&WENDY_COMPRESSED_DATA_1_ROM_END,
-     0x1AC00002, (void *)0x80088E20 },
+     0x1AC00002, (void *)&D_80088E20 },
     { (void *)&WENDY_DISPLAY_LIST_2_ROM_START,
      (void *)&WENDY_DISPLAY_LIST_2_ROM_END,
      (void *)&WENDY_COMPRESSED_DATA_2_ROM_START,
      (void *)&WENDY_COMPRESSED_DATA_2_ROM_END,
-     0x1AE00002, (void *)0x80088E40 },
+     0x1AE00002, (void *)&D_80088E40 },
     { (void *)&WENDY_DISPLAY_LIST_3_ROM_START,
      (void *)&WENDY_DISPLAY_LIST_3_ROM_END,
      (void *)&WENDY_COMPRESSED_DATA_3_ROM_START,
      (void *)&WENDY_COMPRESSED_DATA_3_ROM_END,
-     0x1D000002, (void *)0x80088E60 },
+     0x1D000002, (void *)&D_80088E60 },
 };
 
 ItemAssetEntry BLACK_ASSETS[4] = {
@@ -306,22 +361,22 @@ ItemAssetEntry BLACK_ASSETS[4] = {
      (void *)&BLACK_DISPLAY_LIST_ROM_END,
      (void *)&BLACK_COMPRESSED_DATA_ROM_START,
      (void *)&BLACK_COMPRESSED_DATA_ROM_END,
-     0x3DE00008, (void *)0x80088E80 },
+     0x3DE00008, (void *)&D_80088E80 },
     { (void *)&BLACK_DISPLAY_LIST_ROM_START,
      (void *)&BLACK_DISPLAY_LIST_ROM_END,
      (void *)&BLACK_COMPRESSED_DATA_ROM_START,
      (void *)&BLACK_COMPRESSED_DATA_ROM_END,
-     0x3DE00008, (void *)0x80088E80 },
+     0x3DE00008, (void *)&D_80088E80 },
     { (void *)&BLACK_DISPLAY_LIST_ROM_START,
      (void *)&BLACK_DISPLAY_LIST_ROM_END,
      (void *)&BLACK_COMPRESSED_DATA_ROM_START,
      (void *)&BLACK_COMPRESSED_DATA_ROM_END,
-     0x3DE00008, (void *)0x80088E80 },
+     0x3DE00008, (void *)&D_80088E80 },
     { (void *)&BLACK_DISPLAY_LIST_ROM_START,
      (void *)&BLACK_DISPLAY_LIST_ROM_END,
      (void *)&BLACK_COMPRESSED_DATA_ROM_START,
      (void *)&BLACK_COMPRESSED_DATA_ROM_END,
-     0x3DE00008, (void *)0x80088E80 },
+     0x3DE00008, (void *)&D_80088E80 },
 };
 
 ItemAssetEntry PEN_ASSETS[4] = {
@@ -329,22 +384,22 @@ ItemAssetEntry PEN_ASSETS[4] = {
      (void *)&PEN_DISPLAY_LIST_ROM_END,
      (void *)&PEN_COMPRESSED_DATA_ROM_START,
      (void *)&PEN_COMPRESSED_DATA_ROM_END,
-     0x09800001, (void *)0x80088F00 },
+     0x09800001, (void *)&D_80088F00 },
     { (void *)&PEN_DISPLAY_LIST_ROM_START,
      (void *)&PEN_DISPLAY_LIST_ROM_END,
      (void *)&PEN_COMPRESSED_DATA_ROM_START,
      (void *)&PEN_COMPRESSED_DATA_ROM_END,
-     0x09800001, (void *)0x80088F00 },
+     0x09800001, (void *)&D_80088F00 },
     { (void *)&PEN_DISPLAY_LIST_ROM_START,
      (void *)&PEN_DISPLAY_LIST_ROM_END,
      (void *)&PEN_COMPRESSED_DATA_ROM_START,
      (void *)&PEN_COMPRESSED_DATA_ROM_END,
-     0x09800001, (void *)0x80088F00 },
+     0x09800001, (void *)&D_80088F00 },
     { (void *)&PEN_DISPLAY_LIST_ROM_START,
      (void *)&PEN_DISPLAY_LIST_ROM_END,
      (void *)&PEN_COMPRESSED_DATA_ROM_START,
      (void *)&PEN_COMPRESSED_DATA_ROM_END,
-     0x09800001, (void *)0x80088F00 },
+     0x09800001, (void *)&D_80088F00 },
 };
 
 AssetGroup gameAssets[] = {
@@ -486,7 +541,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CHAIR_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CHAIR_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x560,
-     .unk1C = (void *)0x80088370,
+     .unk1C = (void *)&D_80088370,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff020000,
@@ -498,7 +553,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CUP_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CUP_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xA90,
-     .unk1C = (void *)0x80088360,
+     .unk1C = (void *)&D_80088360,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
@@ -510,7 +565,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&POT_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&POT_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xA90,
-     .unk1C = (void *)0x80088350,
+     .unk1C = (void *)&D_80088350,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
@@ -522,7 +577,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&SNOW2_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&SNOW2_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xB20,
-     .unk1C = (void *)0x800883D0,
+     .unk1C = (void *)&D_800883D0,
      .numAssets = (s8)0x02,
      .assetGroupIndex = (s8)-0x01,
      .padding = 0x0136,
@@ -553,7 +608,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&BUS_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&BUS_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x1280,
-     .unk1C = (void *)0x80088630,
+     .unk1C = (void *)&D_80088630,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
@@ -566,7 +621,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&UFO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&UFO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x25A0,
-     .unk1C = (void *)0x800885C0,
+     .unk1C = (void *)&D_800885C0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff140000,
@@ -687,7 +742,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&ABOXO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&ABOXO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xD10,
-     .unk1C = (void *)0x80088710,
+     .unk1C = (void *)&D_80088710,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
@@ -700,7 +755,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&KEYO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&KEYO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4A0,
-     .unk1C = (void *)0x80088730,
+     .unk1C = (void *)&D_80088730,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .padding = 0x0003,
@@ -716,7 +771,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&KEYL_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&KEYL_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4A0,
-     .unk1C = (void *)0x80088740,
+     .unk1C = (void *)&D_80088740,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .padding = 0x0003,
@@ -732,7 +787,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&ABOXL_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&ABOXL_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x710,
-     .unk1C = (void *)0x80088700,
+     .unk1C = (void *)&D_80088700,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
@@ -744,7 +799,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&KANI_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&KANI_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x770,
-     .unk1C = (void *)0x800886E0,
+     .unk1C = (void *)&D_800886E0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff040000,
@@ -757,7 +812,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&NEZU_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&NEZU_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x1080,
-     .unk1C = (void *)0x80088750,
+     .unk1C = (void *)&D_80088750,
      .numAssets = (s8)0x02,
      .assetGroupIndex = (s8)-0x01,
      .padding = 0x017C,
@@ -773,7 +828,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CAKEE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CAKEE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xF80,
-     .unk1C = (void *)0x800886F0,
+     .unk1C = (void *)&D_800886F0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
@@ -785,7 +840,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CAKE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CAKE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x1620,
-     .unk1C = (void *)0x800886D0,
+     .unk1C = (void *)&D_800886D0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
@@ -801,7 +856,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&POSP_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&POSP_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x8E0,
-     .unk1C = (void *)0x800886C0,
+     .unk1C = (void *)&D_800886C0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff030000,
@@ -813,7 +868,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&POST_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&POST_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x7A0,
-     .unk1C = (void *)0x800886B0,
+     .unk1C = (void *)&D_800886B0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff030000,
@@ -825,7 +880,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&NEWS_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&NEWS_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x620,
-     .unk1C = (void *)0x800886A0,
+     .unk1C = (void *)&D_800886A0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
@@ -920,7 +975,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&RADIO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&RADIO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x620,
-     .unk1C = (void *)0x80088340,
+     .unk1C = (void *)&D_80088340,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff050000,
@@ -933,7 +988,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&TABLE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TABLE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xC20,
-     .unk1C = (void *)0x80088330,
+     .unk1C = (void *)&D_80088330,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff080000,
@@ -945,7 +1000,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&TUTUM_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TUTUM_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x930,
-     .unk1C = (void *)0x80088320,
+     .unk1C = (void *)&D_80088320,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
@@ -1062,7 +1117,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&DISH_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&DISH_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x320,
-     .unk1C = (void *)0x80088310,
+     .unk1C = (void *)&D_80088310,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
@@ -1075,7 +1130,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&SNOW3_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&SNOW3_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xEB0,
-     .unk1C = (void *)0x800883A0,
+     .unk1C = (void *)&D_800883A0,
      .numAssets = (s8)0x03,
      .assetGroupIndex = (s8)-0x01,
      .padding = 0x0136,
@@ -1109,7 +1164,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&PBOX0_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&PBOX0_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x370,
-     .unk1C = (void *)0x800882D0,
+     .unk1C = (void *)&D_800882D0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff020000,
@@ -1122,7 +1177,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&PBOX1_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&PBOX1_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x370,
-     .unk1C = (void *)0x800882E0,
+     .unk1C = (void *)&D_800882E0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff020000,
@@ -1135,7 +1190,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&USAGI_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&USAGI_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x5E0,
-     .unk1C = (void *)0x800882C0,
+     .unk1C = (void *)&D_800882C0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff040000,
@@ -1170,7 +1225,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&HELI_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&HELI_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x1A80,
-     .unk1C = (void *)0x800882A0,
+     .unk1C = (void *)&D_800882A0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff160000,
@@ -1183,7 +1238,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&BURG_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&BURG_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x620,
-     .unk1C = (void *)0x80088290,
+     .unk1C = (void *)&D_80088290,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff010000,
@@ -1195,7 +1250,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&MROBO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&MROBO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4070,
-     .unk1C = (void *)0x800881F0,
+     .unk1C = (void *)&D_800881F0,
      .numAssets = (s8)0x0A,
      .assetGroupIndex = (s8)-0x01,
      .padding = 0x00A0,
@@ -1316,7 +1371,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&BOMB2_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&BOMB2_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x7E0,
-     .unk1C = (void *)0x800881A0,
+     .unk1C = (void *)&D_800881A0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff020000,
@@ -1437,7 +1492,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&DOOR_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&DOOR_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xF50,
-     .unk1C = (void *)0x80088190,
+     .unk1C = (void *)&D_80088190,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff000000,
@@ -1449,7 +1504,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&LTBL0_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&LTBL0_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xBC0,
-     .unk1C = (void *)0x80088170,
+     .unk1C = (void *)&D_80088170,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff090000,
@@ -1461,7 +1516,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&LTBL1_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&LTBL1_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4A0,
-     .unk1C = (void *)0x80088160,
+     .unk1C = (void *)&D_80088160,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff090000,
@@ -1491,7 +1546,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&LTBL2_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&LTBL2_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x1240,
-     .unk1C = (void *)0x80088140,
+     .unk1C = (void *)&D_80088140,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff090000,
@@ -1503,7 +1558,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&LTBL3_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&LTBL3_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4A0,
-     .unk1C = (void *)0x80088130,
+     .unk1C = (void *)&D_80088130,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff090000,
@@ -1654,7 +1709,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&MROBO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&MROBO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4070,
-     .unk1C = (void *)0x800881F0,
+     .unk1C = (void *)&D_800881F0,
      .numAssets = (s8)0x0A,
      .assetGroupIndex = (s8)-0x01,
      .padding = 0x0011,
@@ -1670,7 +1725,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&USAGI_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&USAGI_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x5E0,
-     .unk1C = (void *)0x800882C0,
+     .unk1C = (void *)&D_800882C0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff040000,
@@ -1689,7 +1744,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&UFO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&UFO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x25A0,
-     .unk1C = (void *)0x800885C0,
+     .unk1C = (void *)&D_800885C0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff140000,
@@ -1705,7 +1760,7 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&KANI_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&KANI_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x770,
-     .unk1C = (void *)0x800886E0,
+     .unk1C = (void *)&D_800886E0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
      .anotherAssetIndex = 0xff040000,
