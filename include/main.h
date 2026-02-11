@@ -12,13 +12,13 @@ typedef struct {
     void *modelData;
     void *textureData;
     f32 primaryMatrix[8];
-    s32 displayConfig;
+    void *displayConfig;
     void *activeModel;
     void *activeTexture;
     void *animState;
     s8 pad3C[12];
     float secondaryMatrix[8];
-    s32 secondaryConfig;
+    void *secondaryConfig;
     void *secondaryModel;
     void *secondaryTexture;
     void *unk74;

@@ -46,7 +46,7 @@ typedef struct {
 
 typedef struct {
     void *unk0;
-    s32 unk4;
+    void *unk4;
     s32 unk8;
     s32 unkC;
     s32 unk10;
@@ -64,9 +64,9 @@ typedef struct {
     /* 0x10 */ void *compressedDataStart;
     /* 0x14 */ void *compressedDataEnd;
     /* 0x18 */ s32 decompressedSize;
-    s32 unk1C;
+    void *unk1C;
     s32 unk20;
-    s32 unk24;
+    void *unk24;
     s32 unk28;
     ModelEntityTaskConfig *taskConfigs;
     s16 taskCount;
@@ -98,7 +98,7 @@ typedef struct {
     s8 unk4;
     s8 unk5;
     Transform3D unk8;
-    s32 unk28;
+    void *unk28;
     void *unk2C;
     void *unk30;
     s32 unk34;
@@ -123,7 +123,7 @@ typedef struct {
     s8 unk5;
     u8 pad6[2];
     Transform3D unk8;
-    s32 unk28;
+    void *unk28;
     void *unk2C;
     void *unk30;
     s32 unk34;
@@ -166,19 +166,11 @@ typedef struct {
     s32 unk1C;
     s32 unk20;
     s32 unk24;
-    s32 unk28;
+    void *unk28;
     void *unk2C;
     void *unk30;
     s32 unk34;
 } StaticModelTaskArg;
-
-void cleanupSpriteAnimationTask(SpriteAnimationTaskState *state);
-void cleanupSpriteSpawnerTask(func_80000C2C_182C_arg *arg0);
-void updateSpriteSpawnerTask(func_80000C2C_182C_arg *);
-void initSpawnedSpriteTask(func_80000C2C_182C_arg *arg0);
-void updateSpriteAnimationTask(func_80000C2C_182C_arg *);
-void updateSwingingModelTask(func_80000C2C_182C_arg *);
-void cleanupSwingingModelTask(SwingingModelTaskState *);
 
 typedef struct {
     func_80000C2C_182C_arg_unk0 *unk0;
@@ -199,26 +191,6 @@ typedef struct {
     s32 unk60;
 } AnimatedModelTaskUpdateState;
 
-void enqueueDisplayListIfVisible(func_80000C2C_182C_arg_unk0 *state, void *displayList);
-void updateSpawnedSpriteTask(func_80000C2C_182C_arg *arg0);
-void cleanupSpawnedSpriteTask(func_800014C8_20C8_arg *arg0);
-void updateRotatingModelTask(func_80000C2C_182C_arg *arg0);
-void cleanupRotatingModelTask(RotatingModelTaskState *state);
-void updateStaticModelTask(func_80000C2C_182C_arg *arg0);
-void cleanupStaticModelTask(SwingingModelTaskState *arg0);
-void updateAnimatedModelTask(AnimatedModelTaskUpdateState *arg0);
-void cleanupAnimatedModelTask(AnimatedModelTaskCleanupState *arg0);
-
-extern Transform3D identityMatrix;
-extern u32 D_80088610_89210;
-
-void initRotatingModelTask(func_80000C2C_182C_arg *arg0);
-void initSwingingModelTask(func_80000C2C_182C_arg *arg0);
-void initSpriteAnimationTask(func_80000C2C_182C_arg *arg0);
-void initAnimatedModelTask(AnimatedModelTaskState *arg0);
-void initSpriteSpawnerTask(func_80000C2C_182C_arg *arg0);
-void initStaticModelTask(StaticModelTaskArg *arg0);
-
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -234,16 +206,76 @@ D_80088F00_89B00_entry D_80088F00_89B00[] = {
     { 0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00010000 }
 };
 
+void enqueueDisplayListIfVisible(func_80000C2C_182C_arg_unk0 *state, void *displayList);
+void updateSpawnedSpriteTask(func_80000C2C_182C_arg *arg0);
+void cleanupSpawnedSpriteTask(func_800014C8_20C8_arg *arg0);
+void updateRotatingModelTask(func_80000C2C_182C_arg *arg0);
+void cleanupRotatingModelTask(RotatingModelTaskState *state);
+void updateStaticModelTask(func_80000C2C_182C_arg *arg0);
+void cleanupStaticModelTask(SwingingModelTaskState *arg0);
+void updateAnimatedModelTask(AnimatedModelTaskUpdateState *arg0);
+void cleanupAnimatedModelTask(AnimatedModelTaskCleanupState *arg0);
+void cleanupSpriteAnimationTask(SpriteAnimationTaskState *state);
+void cleanupSpriteSpawnerTask(func_80000C2C_182C_arg *arg0);
+void updateSpriteSpawnerTask(func_80000C2C_182C_arg *);
+void initSpawnedSpriteTask(func_80000C2C_182C_arg *arg0);
+void updateSpriteAnimationTask(func_80000C2C_182C_arg *);
+void updateSwingingModelTask(func_80000C2C_182C_arg *);
+void cleanupSwingingModelTask(SwingingModelTaskState *);
+void initRotatingModelTask(func_80000C2C_182C_arg *arg0);
+void initSwingingModelTask(func_80000C2C_182C_arg *arg0);
+void initSpriteAnimationTask(func_80000C2C_182C_arg *arg0);
+void initAnimatedModelTask(AnimatedModelTaskState *arg0);
+void initSpriteSpawnerTask(func_80000C2C_182C_arg *arg0);
+void initStaticModelTask(StaticModelTaskArg *arg0);
+
+extern s32 D_80088410;
+extern s32 D_80088400;
+extern s32 D_80088420;
+extern s32 D_80088430;
+extern s32 D_80088440;
+extern s32 D_80088470;
+extern s32 D_80088480;
+extern s32 D_80088490;
+extern s32 D_800884A0;
+extern s32 D_800884B0;
+extern s32 D_80088500;
+extern s32 D_800884F0;
+extern s32 D_80088510;
+extern s32 D_80088550;
+extern s32 D_80088540;
+extern s32 D_80088450;
+extern s32 D_800883F0;
+extern s32 D_80088580;
+extern s32 D_80088590;
+extern s32 D_800885A0;
+extern s32 D_800885B0;
+extern s32 D_80088180;
+extern s32 D_80088150;
+extern s32 D_80088600;
+extern s32 D_800884D0;
+extern s32 D_800884E0;
+extern s32 D_80088560;
+extern s32 D_80088570;
+extern s32 D_80088620;
+extern s32 D_800881B0;
+extern s32 D_800881C0;
+extern s32 D_80088520;
+extern s32 D_80088530;
+extern s32 D_800882F0;
+extern Transform3D identityMatrix;
+extern u32 D_80088610_89210;
+
 ModelEntityTaskConfig D_80088F20_89B20[] = {
     { .unk0 = initRotatingModelTask,
-     .unk4 = 0x80088410,
+     .unk4 = &D_80088410,
      .unk8 = 0xFF8A0000,
      .unkC = 0x00390000,
      .unk10 = 0xFF8A0000,
      .unk14 = -1,
      .unk16 = -64 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = 0x80088400,
+     .unk4 = &D_80088400,
      .unk8 = 0xFF2E0000,
      .unkC = 0x00410000,
      .unk10 = 0xFFC80000,
@@ -252,7 +284,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000020,
      .unk1C = 0x000001C7 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = 0x80088420,
+     .unk4 = &D_80088420,
      .unk8 = 0x002E0000,
      .unkC = 0x00330000,
      .unk10 = 0xFF590000,
@@ -261,7 +293,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000010,
      .unk1C = 0x000000E3 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = 0x80088430,
+     .unk4 = &D_80088430,
      .unk8 = 0x00AD0000,
      .unkC = 0x00390000,
      .unk10 = 0xFFAF0000,
@@ -270,7 +302,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000010,
      .unk1C = 0x000000E3 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = 0x80088440,
+     .unk4 = &D_80088440,
      .unk8 = 0x00BE0000,
      .unkC = 0x00390000,
      .unk10 = 0xFFF00000,
@@ -279,14 +311,14 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = -16,
      .unk1C = 0x000000E3 },
     { .unk0 = initRotatingModelTask,
-     .unk4 = 0x80088480,
+     .unk4 = &D_80088480,
      .unk8 = 0xFF8A0000,
      .unkC = 0x00390000,
      .unk10 = 0xFF8A0000,
      .unk14 = -1,
      .unk16 = -64 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = 0x80088470,
+     .unk4 = &D_80088470,
      .unk8 = 0xFF2E0000,
      .unkC = 0x00410000,
      .unk10 = 0xFFC80000,
@@ -295,7 +327,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000020,
      .unk1C = 0x000001C7 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = 0x80088490,
+     .unk4 = &D_80088490,
      .unk8 = 0x002E0000,
      .unkC = 0x00330000,
      .unk10 = 0xFF590000,
@@ -304,7 +336,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000010,
      .unk1C = 0x000000E3 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = 0x800884A0,
+     .unk4 = &D_800884A0,
      .unk8 = 0x00AD0000,
      .unkC = 0x00390000,
      .unk10 = 0xFFAF0000,
@@ -313,7 +345,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000010,
      .unk1C = 0x000000E3 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = 0x800884B0,
+     .unk4 = &D_800884B0,
      .unk8 = 0x00BE0000,
      .unkC = 0x00390000,
      .unk10 = 0xFFF00000,
@@ -337,20 +369,20 @@ ModelEntityTaskConfig D_80089088_89C88[] = {
 };
 
 ModelEntityTaskConfig D_800890AC_89CAC[] = {
-    { .unk0 = initAnimatedModelTask, .unk4 = 0x80088500, .unk14 = 0, .unk16 = 4, .unk1C = 0x00000004 },
-    { .unk0 = initAnimatedModelTask, .unk4 = 0x800884F0, .unk14 = 0, .unk16 = 4, .unk1C = 0x00000008 },
+    { .unk0 = initAnimatedModelTask, .unk4 = &D_80088500, .unk14 = 0, .unk16 = 4, .unk1C = 0x00000004 },
+    { .unk0 = initAnimatedModelTask, .unk4 = &D_800884F0, .unk14 = 0, .unk16 = 4, .unk1C = 0x00000008 },
     { .unk0 = initSpriteSpawnerTask,
      .unk8 = 0x00570000,
      .unkC = 0x00020000,
      .unk10 = 0xFF470000,
      .unk16 = 4,
      .unk1C = 0x00010000 },
-    { .unk0 = initStaticModelTask, .unk4 = 0x80088510 }
+    { .unk0 = initStaticModelTask, .unk4 = &D_80088510 }
 };
 
 ModelEntityTaskConfig D_8008913C_89D3C[] = {
-    { .unk0 = initAnimatedModelTask, .unk4 = 0x80088550, .unk16 = 4, .unk1C = 0x00000004 },
-    { .unk0 = initAnimatedModelTask, .unk4 = 0x80088540, .unk16 = 4, .unk1C = 0x00000008 },
+    { .unk0 = initAnimatedModelTask, .unk4 = &D_80088550, .unk16 = 4, .unk1C = 0x00000004 },
+    { .unk0 = initAnimatedModelTask, .unk4 = &D_80088540, .unk16 = 4, .unk1C = 0x00000008 },
     { .unk0 = initSpriteSpawnerTask,
      .unk8 = 0x00570000,
      .unkC = 0x00020000,
@@ -366,9 +398,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x0000E180,
-     .unk1C = 0x800883F0,
+     .unk1C = &D_800883F0,
      .unk20 = 0x00010000,
-     .unk24 = 0x80088450,
+     .unk24 = &D_80088450,
      .unk28 = 0x00010000,
      .taskConfigs = D_80088F20_89B20,
      .taskCount = 5,
@@ -387,9 +419,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x0000E180,
-     .unk1C = 0x800883F0,
+     .unk1C = &D_800883F0,
      .unk20 = 0x00010000,
-     .unk24 = 0x80088450,
+     .unk24 = &D_80088450,
      .unk28 = 0x00010000,
      .taskConfigs = D_80088F20_89B20,
      .taskCount = 5,
@@ -408,9 +440,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&YAMA_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&YAMA_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00003FE0,
-     .unk1C = 0x80088580,
+     .unk1C = &D_80088580,
      .unk20 = 0x00010000,
-     .unk24 = 0x80088590,
+     .unk24 = &D_80088590,
      .unk28 = 0x00010000,
      .taskConfigs = D_80089088_89C88,
      .taskCount = 1,
@@ -429,9 +461,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&YAMA_Y_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&YAMA_Y_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00003B30,
-     .unk1C = 0x800885A0,
+     .unk1C = &D_800885A0,
      .unk20 = 0x00010000,
-     .unk24 = 0x800885B0,
+     .unk24 = &D_800885B0,
      .unk28 = 0x00010000,
      .taskConfigs = D_80089088_89C88,
      .taskCount = 1,
@@ -450,12 +482,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&LINDA_P_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&LINDA_P_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000014A0,
-     .unk1C = 0x80088180,
+     .unk1C = &D_80088180,
      .unk20 = 0x00010000,
-     .unk24 = 0,
-     .unk28 = 0,
      .taskConfigs = NULL,
-     .taskCount = 0,
      .unk32 = 0xFFFF,
      .diffuseColorR = 0xFF,
      .diffuseColorG = 0xFF,
@@ -471,7 +500,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&LINDA_B_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&LINDA_B_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00001680,
-     .unk1C = 0x80088150,
+     .unk1C = &D_80088150,
      .unk20 = 0x00010000,
      .unk24 = 0,
      .unk28 = 0,
@@ -492,7 +521,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&WENDY_H_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&WENDY_H_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00004120,
-     .unk1C = 0x80088600,
+     .unk1C = &D_80088600,
      .unk20 = 0x00010000,
      .unk24 = 0,
      .unk28 = 0,
@@ -513,9 +542,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x0000E180,
-     .unk1C = 0x800883F0,
+     .unk1C = &D_800883F0,
      .unk20 = 0x00010000,
-     .unk24 = 0x80088450,
+     .unk24 = &D_80088450,
      .unk28 = 0x00010000,
      .taskConfigs = NULL,
      .taskCount = 0,
@@ -534,9 +563,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&JUNGLE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&JUNGLE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000021D0,
-     .unk1C = 0x800884D0,
+     .unk1C = &D_800884D0,
      .unk20 = 0x00010000,
-     .unk24 = 0x800884E0,
+     .unk24 = &D_800884E0,
      .unk28 = 0x00010000,
      .taskConfigs = D_800890AC_89CAC,
      .taskCount = 4,
@@ -555,9 +584,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&SPACE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&SPACE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000036D0,
-     .unk1C = 0x80088560,
+     .unk1C = &D_80088560,
      .unk20 = 0x00010000,
-     .unk24 = 0x80088570,
+     .unk24 = &D_80088570,
      .unk28 = 0x00010000,
      .taskConfigs = NULL,
      .taskCount = 0,
@@ -576,12 +605,11 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&ISLAND_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&ISLAND_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00005AD0,
-     .unk1C = (s32)&D_80088610_89210,
+     .unk1C = &D_80088610_89210,
      .unk20 = 0x00010000,
-     .unk24 = 0x80088620,
+     .unk24 = &D_80088620,
      .unk28 = 0x00010000,
      .taskConfigs = NULL,
-     .taskCount = 0,
      .unk32 = 0xFFFF,
      .diffuseColorR = 0xFF,
      .diffuseColorG = 0xFF,
@@ -597,9 +625,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&OTHER_HAUNTED_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&OTHER_HAUNTED_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000024B0,
-     .unk1C = 0x800881B0,
+     .unk1C = &D_800881B0,
      .unk20 = 0x00010000,
-     .unk24 = 0x800881C0,
+     .unk24 = &D_800881C0,
      .unk28 = 0x00010000,
      .taskConfigs = NULL,
      .taskCount = 0,
@@ -618,9 +646,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&JUNGLE2_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&JUNGLE2_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00002EC0,
-     .unk1C = 0x80088520,
+     .unk1C = &D_80088520,
      .unk20 = 0x00010000,
-     .unk24 = 0x80088530,
+     .unk24 = &D_80088530,
      .unk28 = 0x00010000,
      .taskConfigs = D_8008913C_89D3C,
      .taskCount = 3,
@@ -644,8 +672,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .unk3B = 0xFF }
 };
 
-s32 spawnedSpriteScales[8] = { 0x00010000, 0x00011999, 0x0000E666, 0x00013333,
-                               0x00000000, 0x01000148, 0x00000000, 0x00000000 };
+s32 spawnedSpriteScales[4] = { 0x00010000, 0x00011999, 0x0000E666, 0x00013333 };
+
+s32 D_80089500[4] = { 0x00000000, 0x01000148, 0x00000000, 0x00000000 };
 
 void setModelRenderMode(setModelRenderMode_arg *arg0, s8 arg1) {
     arg0->unk87 = arg1;

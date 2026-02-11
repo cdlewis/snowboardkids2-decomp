@@ -31,6 +31,16 @@ typedef struct {
     s8 actionMode;
 } getModelActionMode_arg;
 
+extern s32 D_80089500;
+extern s32 D_800886A0;
+extern s32 D_800886E0;
+extern s32 D_80088360;
+extern s32 D_80088350;
+extern s32 D_80088310;
+extern s32 D_80088700;
+extern s32 D_800881E0;
+extern s32 D_800881A0;
+extern s32 D_80088290;
 extern u8 identityMatrix[32];
 extern u8 D_215D70[];
 extern void initDriftingParticle(void *arg0);
@@ -58,7 +68,7 @@ ItemAssetEntry itemAssetTable[] = {
      &ITEM_0_DISPLAY_LIST_ROM_END,
      &ITEM_0_COMPRESSED_DATA_ROM_START,
      &ITEM_0_COMPRESSED_DATA_ROM_END,
-     0x520, (void *)0x80089500    },
+     0x520, (void *)&D_80089500   },
     { &ITEM_1_DISPLAY_LIST_ROM_START,
      &ITEM_1_DISPLAY_LIST_ROM_END,
      &ITEM_1_COMPRESSED_DATA_ROM_START,
@@ -83,12 +93,12 @@ ItemAssetEntry itemAssetTable[] = {
      &BURG_DISPLAY_LIST_ROM_END,
      &BURG_COMPRESSED_DATA_ROM_START,
      &BURG_COMPRESSED_DATA_ROM_END,
-     0x620, (void *)0x80088290    },
+     0x620, (void *)&D_80088290   },
     { &NEWS_DISPLAY_LIST_ROM_START,
      &NEWS_DISPLAY_LIST_ROM_END,
      &NEWS_COMPRESSED_DATA_ROM_START,
      &NEWS_COMPRESSED_DATA_ROM_END,
-     0x620, (void *)0x800886A0    },
+     0x620, (void *)&D_800886A0   },
     { &ITEM_7_DISPLAY_LIST_ROM_START,
      &ITEM_7_DISPLAY_LIST_ROM_END,
      &ITEM_7_COMPRESSED_DATA_ROM_START,
@@ -98,7 +108,7 @@ ItemAssetEntry itemAssetTable[] = {
      &KANI_DISPLAY_LIST_ROM_END,
      &KANI_COMPRESSED_DATA_ROM_START,
      &KANI_COMPRESSED_DATA_ROM_END,
-     0x770, (void *)0x800886E0    },
+     0x770, (void *)&D_800886E0   },
     { &ITEM_9_DISPLAY_LIST_ROM_START,
      &ITEM_9_DISPLAY_LIST_ROM_END,
      &ITEM_9_COMPRESSED_DATA_ROM_START,
@@ -113,32 +123,32 @@ ItemAssetEntry itemAssetTable[] = {
      &CUP_DISPLAY_LIST_ROM_END,
      &CUP_COMPRESSED_DATA_ROM_START,
      &CUP_COMPRESSED_DATA_ROM_END,
-     0xA90, (void *)0x80088360    },
+     0xA90, (void *)&D_80088360   },
     { &POT_DISPLAY_LIST_ROM_START,
      &POT_DISPLAY_LIST_ROM_END,
      &POT_COMPRESSED_DATA_ROM_START,
      &POT_COMPRESSED_DATA_ROM_END,
-     0xA90, (void *)0x80088350    },
+     0xA90, (void *)&D_80088350   },
     { &DISH_DISPLAY_LIST_ROM_START,
      &DISH_DISPLAY_LIST_ROM_END,
      &DISH_COMPRESSED_DATA_ROM_START,
      &DISH_COMPRESSED_DATA_ROM_END,
-     0x320, (void *)0x80088310    },
+     0x320, (void *)&D_80088310   },
     { &ABOXL_DISPLAY_LIST_ROM_START,
      &ABOXL_DISPLAY_LIST_ROM_END,
      &ABOXL_COMPRESSED_DATA_ROM_START,
      &ABOXL_COMPRESSED_DATA_ROM_END,
-     0x710, (void *)0x80088700    },
+     0x710, (void *)&D_80088700   },
     { &HAUNTED_DISPLAY_LIST_ROM_START,
      &HAUNTED_DISPLAY_LIST_ROM_END,
      &HAUNTED_COMPRESSED_DATA_ROM_START,
      &HAUNTED_COMPRESSED_DATA_ROM_END,
-     0x790, (void *)0x800881E0    },
+     0x790, (void *)&D_800881E0   },
     { &BOMB2_DISPLAY_LIST_ROM_START,
      &BOMB2_DISPLAY_LIST_ROM_END,
      &BOMB2_COMPRESSED_DATA_ROM_START,
      &BOMB2_COMPRESSED_DATA_ROM_END,
-     0x7E0, (void *)0x800881A0    },
+     0x7E0, (void *)&D_800881A0   },
     { &ITEM_17_DISPLAY_LIST_ROM_START,
      &ITEM_17_DISPLAY_LIST_ROM_END,
      &ITEM_17_COMPRESSED_DATA_ROM_START,
