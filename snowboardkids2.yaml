@@ -314,11 +314,11 @@ segments:
       - { start: 0x85AC0, type: textbin, use_src_path: True, name: rsp/s2dex }
       - { start: 0x879A0, type: textbin, use_src_path: True, name: rsp/f3dex2 }
       - [0x88D30, .data, 8A40]
-      - [0x891D0, data, 5520]
+      - [0x891D0, .data, 5520]
       - [0x89210, data]
       - [0x89240, data, 69B0]
       - [0x89270, data, C570]
-      - [0x892B0, data]
+      - [0x892B0, data] # 20F0.c?
       - [0x89320, .data, 7850]
       - [0x89330, .data, main]
       - [0x8A110, data]

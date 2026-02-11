@@ -5,9 +5,11 @@
 #include "task_scheduler.h"
 
 extern Transform3D identityMatrix;
-extern void *D_800885D0_891D0;
-extern void *D_800885E0_891E0;
-extern void *D_800885F0_891F0;
+
+u32 D_800885D0_891D0[] = { 0x00000000, 0x00000000, 0x010005F0, 0x00000000 };
+u32 D_800885E0_891E0[] = { 0x00000000, 0x00000000, 0x01000718, 0x00000000 };
+u32 D_800885F0_891F0[] = { 0x00000000, 0x00000000, 0x00000000, 0x010007C8 };
+u32 D_80088600[] = { 0x00000000, 0x01000B68, 0x01000B78, 0x00000000 };
 
 void renderOpaqueTiledTexture(DisplayListObject *arg0);
 void renderTransparentTiledTexture(s32 arg0);
