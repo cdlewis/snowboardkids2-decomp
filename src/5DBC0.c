@@ -177,6 +177,10 @@ void setPlayerLeanAnimation(Player *player, s32 animIndex, s32 progress) {
 extern u8 gCharacterBodyPartAnimTable[];
 extern u8 gBodyPartRemapTable[];
 
+/* Load character body part display lists. Each player has 16 body parts (0x3C bytes each).
+ * Offset 0x58 in each body part contains the display list pointer.
+ * For race type 0xB, uses loadAssetByIndex_95380; otherwise uses loadAssetByIndex_953B0.
+ */
 void loadCharacterBodyParts(Player *player) {
     s32 flags;
     s32 partIndex;
