@@ -83,19 +83,45 @@ DmaEntry *gSpriteDmaTablePtr = gSpriteDmaTable;
 s32 gSpriteDmaTableInfo[] = { 0x00000005, 0x00000001, 0x00000000, 0x00000000 };
 
 Gfx gSpriteTextureSetupDL[] = {
-    { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00210005 } },
-    { .words = { 0xD7000002, 0x80008000 } }, { .words = { 0xE7000000, 0x00000000 } },
-    { .words = { 0xE3001201, 0x00002000 } }, { .words = { 0xE3000A01, 0x00100000 } },
-    { .words = { 0xFC127FFF, 0xFFFFF238 } }, { .words = { 0xE200001C, 0xC8113078 } },
-    { .words = { 0xE3001001, 0x00008000 } }, { .words = { 0xDF000000, 0x00000000 } },
+    gsSPClearGeometryMode(
+        G_ZBUFFER | G_SHADE | G_CULL_FRONT | G_CULL_BACK | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR |
+        G_SHADING_SMOOTH
+    ),
+    gsSPSetGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_SHADING_SMOOTH),
+    gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
+    gsDPPipeSync(),
+    gsDPSetTextureFilter(G_TF_BILERP),
+    gsDPSetCycleType(G_CYC_2CYCLE),
+    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_PASS2),
+    gsDPSetRenderMode(
+        AA_EN | Z_CMP | Z_UPD | IM_RD | CVG_X_ALPHA | ALPHA_CVG_SEL |
+            GBL_c1(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA),
+        AA_EN | Z_CMP | Z_UPD | IM_RD | CVG_X_ALPHA | ALPHA_CVG_SEL |
+            GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM)
+    ),
+    gsDPSetTextureLUT(G_TT_RGBA16),
+    gsSPEndDisplayList(),
 };
 
 Gfx gTranslucentSpriteTextureSetupDL[] = {
-    { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00210005 } },
-    { .words = { 0xD7000002, 0x80008000 } }, { .words = { 0xE7000000, 0x00000000 } },
-    { .words = { 0xE3001201, 0x00002000 } }, { .words = { 0xE3000A01, 0x00100000 } },
-    { .words = { 0xFC121BFF, 0xFFFFFE38 } }, { .words = { 0xE200001C, 0xC81049D8 } },
-    { .words = { 0xE3001001, 0x00008000 } }, { .words = { 0xDF000000, 0x00000000 } },
+    gsSPClearGeometryMode(
+        G_ZBUFFER | G_SHADE | G_CULL_FRONT | G_CULL_BACK | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR |
+        G_SHADING_SMOOTH
+    ),
+    gsSPSetGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_SHADING_SMOOTH),
+    gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
+    gsDPPipeSync(),
+    gsDPSetTextureFilter(G_TF_BILERP),
+    gsDPSetCycleType(G_CYC_2CYCLE),
+    gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, COMBINED, 0, 0, 0, COMBINED),
+    gsDPSetRenderMode(
+        AA_EN | Z_CMP | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+            GBL_c1(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA),
+        AA_EN | Z_CMP | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+            GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)
+    ),
+    gsDPSetTextureLUT(G_TT_RGBA16),
+    gsSPEndDisplayList(),
 };
 
 s32 getSpriteAssetCount(void) {
