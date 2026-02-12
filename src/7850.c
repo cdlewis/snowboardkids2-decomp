@@ -46,8 +46,6 @@ void cleanupPulsingSpriteIndicator(PulsingSpriteState *);
 
 s32 D_80088720_89320[] = { 0, 0x01000508, 0x01000518, 0 };
 
-extern Transform3D identityMatrix;
-
 void initPulsingSpriteIndicator(PulsingSpriteState *arg0) {
     SpriteAssetState *temp_s0;
 
