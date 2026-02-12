@@ -23,11 +23,11 @@ typedef struct {
 typedef struct {
     u8 _pad[0x38];
     void *displayList;     /* 0x38: Main display list (offset 0x90 from result) */
-    void *assetData;       /* 0x3C: Shared asset data pointer for all display objects */
-    void *unk40;           /* 0x40: Shared pointer for all display objects */
+    void *assetData;       /* 0x3C: Shared asset data pointer for all display objects (segment1) */
+    void *unk40;           /* 0x40: Shared pointer for all display objects (segment2) */
     s32 unk44;             /* 0x44: Always set to 0 */
     u8 _pad2[0xC];
-    u8 *displayObjects;    /* 0x54: Array of 4 DisplayListObjects (0xF0 bytes) */
+    u8 *displayObjects;    /* 0x54: Array of 4 DisplayListObjects (0xF0 bytes total, 0x3C each) */
     u8 _pad3[0x80];
     s16 unkD8;             /* 0xD8: Always set to 0 */
 } SunnyMountainTaskState;
@@ -49,8 +49,10 @@ void updateSunnyMountainDisplayObjectsTask(s32 *arg0);
  * 2. Sets up the main display list pointer (offset 0x90)
  * 3. Allocates 0xF0 bytes for 4 DisplayListObject entries (0x3C bytes each)
  * 4. For each of the 4 objects:
- *    - Sets display list pointer (offset 0xA0)
- *    - Sets shared assetData and unk40 pointers
+ *    - Sets display list pointer (offset 0x20 -> DisplayListObject.displayLists)
+ *    - Sets shared assetData (offset 0x24 -> DisplayListObject.segment1)
+ *    - Sets shared unk40 (offset 0x28 -> DisplayListObject.segment2)
+ *    - Sets segment3 to 0 (offset 0x2C -> DisplayListObject.segment3)
  *    - Copies 12 bytes of position data from the allocation
  * 5. Registers cleanup and update callbacks
  */
