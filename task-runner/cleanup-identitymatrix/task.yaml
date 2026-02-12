@@ -1,4 +1,4 @@
-candidate_source: grep -rE 'extern\s+\w+\s+identityMatrix\[\]' src/ --exclude-dir=claude | grep -v 'Transform3D'
-prompt: "Look up the use of identityMatrix in this file: `$INPUT`. identityMatrix should be Transform3D (see include/geometry.h for definition). update the file so that it uses the correct identityMatrix type. commit your changes when you're done"
+candidate_source: grep -R "extern Transform3D identityMatrix;" src
+prompt: "Look up the use of identityMatrix in this file: `$INPUT`. identityMatrix should be defined by including `geometry.h` not with an extern definition. fix it. commit your changes when you're done"
 claude_command: glaude
 
