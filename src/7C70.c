@@ -7,9 +7,14 @@
 #define ORBITAL_SPRITE_COUNT 12
 #define ORBITAL_SPRITE_Y_OFFSET 0x16147A
 
-extern s32 orbitalSpriteOffsetsZ[];
-extern s32 orbitalSpriteOffsetsX[];
-extern s32 maxActiveOrbitalSprites;
+s32 orbitalSpriteOffsetsZ[] = { 0x00100000 };
+
+s32 orbitalSpriteOffsetsX[] = { 0xFFFAE667, 0x00109999, 0x0005CCCC, 0xFFEF3334, 0xFFFA6667, 0xFFF00000,
+                                0x00051999, 0xFFF33334, 0x000CCCCC, 0xFFF33334, 0xFFF33334, 0x000CCCCC,
+                                0xFFF33334, 0x000CCCCC, 0x000CCCCC, 0x00030000, 0xFFEECCCD, 0xFFFBB334,
+                                0xFFEECCCD, 0xFFFC8000, 0x00119999, 0x00038000, 0x00119999 };
+
+s32 maxActiveOrbitalSprites = 12;
 
 typedef struct {
     u8 _pad[0x16];
