@@ -891,63 +891,67 @@ insert_entry:
  */
 void reorderCutsceneEvent(u16 eventIndex, u16 oldPreviousIndex, u16 newPreviousIndex) {
     u8 *eventPtr;
-    u32 oldPrevOffset;
-    u16 newPrevMasked;
+    u32 oldPrevByteOffset;
+    u16 newPrevIdxMasked;
     u16 eventIdxMasked;
-    u16 oldPrevMasked;
-    u32 eventOffset;
+    u16 oldPrevIdxMasked;
+    u32 eventByteOffset;
     u16 nextIdx;
     u16 prevIdx;
     u8 *tableBase;
-    u8 *tablePtr;
-    u32 newPrevOffset;
+    u8 *tableBase2;
+    u32 newPrevByteOffset;
 
-    // Mask all indices to u16 and call getStateEntry (for validation)
+    // Mask indices to u16 and validate entries exist via getStateEntry calls
     eventIdxMasked = eventIndex;
-    oldPrevMasked = oldPreviousIndex;
-    newPrevMasked = newPreviousIndex & 0xFFFF;
-    getStateEntry(newPrevMasked);
+    oldPrevIdxMasked = oldPreviousIndex;
+    newPrevIdxMasked = newPreviousIndex & 0xFFFF;
+    getStateEntry(newPrevIdxMasked);
 
-    eventOffset = eventIdxMasked & 0xFFFF;
-    getStateEntry(eventOffset);
+    eventByteOffset = eventIdxMasked & 0xFFFF;
+    getStateEntry(eventByteOffset);
 
-    oldPrevOffset = oldPrevMasked & 0xFFFF;
-    getStateEntry(oldPrevOffset);
+    oldPrevByteOffset = oldPrevIdxMasked & 0xFFFF;
+    getStateEntry(oldPrevByteOffset);
 
     tableBase = (u8 *)gCutsceneStateTable;
 
-    // Convert indices to byte offsets (each entry is 64 bytes)
-    oldPrevOffset = oldPrevOffset << 6;
-    eventOffset = eventOffset << 6;
+    // Convert indices to byte offsets (each StateEntry is 64 bytes)
+    oldPrevByteOffset = oldPrevByteOffset << 6;
+    eventByteOffset = eventByteOffset << 6;
 
-    // Read the next_index from old previous entry and prev_index from event entry
-    // Offset 0xF8 = 3 * 64 (reserved entries) + 0x38 (next_index offset in StateEntry)
-    nextIdx = *(u16 *)(tableBase + oldPrevOffset + 0xF8);
-    eventPtr = tableBase + eventOffset;
-    // Offset 0xFA = 3 * 64 (reserved entries) + 0x3A (prev_index offset in StateEntry)
+    // Read the linked list pointers:
+    // - nextIdx = next_index of old previous entry (offset 0xF8)
+    // - prevIdx = prev_index of event entry (offset 0xFA)
+    // Offsets include 0xC0 (3 * 64 reserved entries) + field offset (0x38/0x3A)
+    nextIdx = *(u16 *)(tableBase + oldPrevByteOffset + 0xF8);
+    eventPtr = tableBase + eventByteOffset;
     prevIdx = *(u16 *)(eventPtr + 0xFA);
 
-    // Unlink entry from current position: update next entry's prev_index
+    // Unlink event from current position: update next entry's prev_index
     if (nextIdx != 0xFFFF) {
         *(u16 *)(tableBase + (nextIdx << 6) + 0xFA) = prevIdx;
     }
 
-    // Unlink entry from current position: update prev entry's next_index
+    // Unlink event from current position: update prev entry's next_index
     if (prevIdx != 0xFFFF) {
         u8 *temp = (u8 *)gCutsceneStateTable;
         *(u16 *)(temp + (prevIdx << 6) + 0xF8) = nextIdx;
     }
 
-    // Insert entry after newPreviousIndex
-    tablePtr = (u8 *)gCutsceneStateTable;
-    newPrevOffset = newPrevMasked << 6;
-    nextIdx = *(u16 *)(tablePtr + newPrevOffset + 0xF8);
-    *(u16 *)(tablePtr + newPrevOffset + 0xF8) = eventIdxMasked;
-    *(u16 *)(tablePtr + oldPrevOffset + 0xF8) = nextIdx;
+    // Insert event after newPreviousIndex:
+    // 1. Get the current next_index of new previous entry
+    // 2. Link new previous entry -> event entry
+    // 3. Link old previous entry -> what was after new previous entry
+    tableBase2 = (u8 *)gCutsceneStateTable;
+    newPrevByteOffset = newPrevIdxMasked << 6;
+    nextIdx = *(u16 *)(tableBase2 + newPrevByteOffset + 0xF8);
+    *(u16 *)(tableBase2 + newPrevByteOffset + 0xF8) = eventIdxMasked;
+    *(u16 *)(tableBase2 + oldPrevByteOffset + 0xF8) = nextIdx;
 
-    // Update the next entry's prev_index to point to the old prev
+    // Update the next entry's prev_index to point to the old previous entry
     if (nextIdx != 0xFFFF) {
-        *(u16 *)(tablePtr + (nextIdx << 6) + 0xFA) = oldPrevMasked;
+        *(u16 *)(tableBase2 + (nextIdx << 6) + 0xFA) = oldPrevIdxMasked;
     }
 }
 
