@@ -44,7 +44,6 @@ typedef struct {
 } PlayerIndicatorSpriteTask;
 
 extern s32 gFrameCounter;
-extern Transform3D identityMatrix;
 
 Vec3i gIndicatorSpriteOffset = { 0x00000000, 0x00200000, 0x00000000 };
 
