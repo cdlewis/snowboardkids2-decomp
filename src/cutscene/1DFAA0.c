@@ -841,7 +841,7 @@ insert_entry:
 
     // Get the next_index from the entry we're inserting after
     nextIndex = *(u16 *)((u8 *)entry + (u32)(entryIndex << 6) + 0xF8);
-    // Update the entry's next_index to point to the new entry
+    // Link the new entry into the list by updating the next_index field
     *(u16 *)((u8 *)entry + (u32)(entryIndex << 6) + 0xF8) = allocatedIndex;
 
     if (nextIndex != 0xFFFF) {
