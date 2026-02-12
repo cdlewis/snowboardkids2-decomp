@@ -1752,8 +1752,6 @@ void decayPlayerAirborneAngles(Player *player) {
     player->unk990.translation.x = savedTilt + tiltDecay;
 }
 
-extern Transform3D identityMatrix;
-
 s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadzone, s32 lateralDeadzone) {
     Vec3i tempVec;
     Vec3i localVelocity;
