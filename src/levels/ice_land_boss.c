@@ -390,7 +390,7 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     boss->velocity.x = boss->position.x - boss->prevPosition.x;
     boss->velocity.y = boss->position.y - boss->prevPosition.y;
     boss->velocity.z = boss->position.z - boss->prevPosition.z;
-    memcpy(&boss->prevPosition, &boss->position, 0xC);
+    memcpy(&boss->prevPosition, &boss->position, sizeof(Vec3i));
 
     // Get distance to player for AI speed calculation
     player = (IceBossArg *)gameState->players;
@@ -468,7 +468,7 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     } else {
         transformVector((s16 *)D_800BCA24_B1F14, (s16 *)&fullTransform, &boss->transformedPos);
     }
-    memcpy(&boss->sectorListNode.localPos, &boss->transformedPos, 0xC);
+    memcpy(&boss->sectorListNode.localPos, &boss->transformedPos, sizeof(Vec3i));
     addCollisionSectorNodeToList(&boss->sectorListNode);
     updateIceLandBossLeanBoneTransforms((Player *)boss);
 
@@ -1036,7 +1036,7 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     u16 newSectorIndex;
 
     gameState = getCurrentAllocation();
-    memcpy(boss->unk984, &boss->unk434, 0xC);
+    memcpy(boss->unk984, &boss->unk434, sizeof(Vec3i));
     gameData = &gameState->gameData;
     newSectorIndex = getOrUpdatePlayerSectorIndex(boss, gameData, boss->sectorIndex, &boss->unk434);
     boss->sectorIndex = newSectorIndex;
