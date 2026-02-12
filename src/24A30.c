@@ -1060,41 +1060,41 @@ extern u8 D_8008DD8C_8E98C[];
 extern s16 D_8008DE02_8EA02[];
 
 void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
-    u8 *alloc;
+    u8 *gameState;
     s32 i;
-    s32 count;
+    s32 iconsStillAnimating;
     CharSelectIconEntry *entry;
     u8 charIndex;
     u8 paletteIndex;
     u8 itemIconIndex;
-    s16 targetVal;
+    s16 targetY;
     u16 currentY;
     s16 newY;
     u8 *ptr;
 
-    alloc = (u8 *)getCurrentAllocation();
-    count = 0;
+    gameState = (u8 *)getCurrentAllocation();
+    iconsStillAnimating = 0;
 
     // Animate icon Y positions towards their target values
     for (i = 0; i < arg0->numVisibleIcons; i++) {
-        ptr = alloc + arg0->playerIndex;
+        ptr = gameState + arg0->playerIndex;
         charIndex = ptr[0x18A8];
         paletteIndex = ptr[0x18B0];
         // Each character has 3 board options (palette 0-2), with 3 items each
         itemIconIndex = D_8008DD8C_8E98C[(((u8)(paletteIndex + charIndex * 3)) * 3) + i];
-        targetVal = D_8008DE02_8EA02[itemIconIndex];
+        targetY = D_8008DE02_8EA02[itemIconIndex];
 
         entry = &arg0->entries[i];
         currentY = entry->currentY;
 
-        if ((currentY & 0xFFFF) < targetVal) {
+        if ((currentY & 0xFFFF) < targetY) {
             if (currentY < 0x10) {
                 newY = currentY + 8;
             } else {
                 newY = currentY + 0xC;
             }
             entry->currentY = newY;
-            count++;
+            iconsStillAnimating++;
         }
     }
 
@@ -1102,10 +1102,10 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
     if (arg0->numVisibleIcons < 3) {
         arg0->revealCounter = (arg0->revealCounter + 1) & 3;
         if (arg0->revealCounter == 0) {
-            arg0->numVisibleIcons = arg0->numVisibleIcons + 1;
+            arg0->numVisibleIcons++;
         }
     } else {
-        if (count == 0) {
+        if (iconsStillAnimating == 0) {
             setCallback(updateCharSelectIconTargets);
         }
     }
@@ -1116,7 +1116,7 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
     }
 
     // If character selection is confirmed, skip animation
-    if (((u16 *)alloc)[(arg0->playerIndex * 2 + 0x1898) / 2] == 9) {
+    if (((u16 *)gameState)[(arg0->playerIndex * 2 + 0x1898) / 2] == 9) {
         setCallback(updateCharSelectIconTargets);
     }
 }
