@@ -208,6 +208,7 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
     renderJingleTownTrain(arg0);
 }
 
+// Handle the train's jump behavior - moves train between waypoints while performing jumping animation
 void handleTrainJumpBehavior(JingleTownTrain *arg0) {
     B4240AllocationStruct *alloc;
     Vec3i rotatedVec;
@@ -219,7 +220,9 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
 
     alloc = getCurrentAllocation();
     if (alloc->unk76 == 0) {
+        // Calculate byte offset into waypoint arrays: (waypointIndex * 8) + (trainIndex * 20)
         waypointByteOffset = (arg0->waypointIndex * 8) + (arg0->trainIndex * 20);
+        // Compute angle to target waypoint and clamp to [-128, 128] degrees
         angleDiff = (computeAngleToPosition(
                      *(s32 *)((u8 *)gJingleTownTrainWaypointsX + waypointByteOffset),
                      *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + waypointByteOffset),
@@ -242,6 +245,7 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
         arg0->rotation += clampedAngle;
         rotateVectorY(&gJingleTownTrainForwardVector2, arg0->rotation, &rotatedVec);
 
+        // Move train along its forward vector and update height from terrain
         terrainPtr = &alloc->unk30;
         arg0->posX += rotatedVec.x;
         posPtr = &arg0->posX;
@@ -250,9 +254,11 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
         arg0->unk56 = func_80060A3C_6163C(terrainPtr, arg0->unk56, posPtr);
         arg0->height = getTrackHeightAtPosition(terrainPtr, arg0->unk56, posPtr);
 
+        // Handle jump physics (gravity affects vertical velocity)
         arg0->yOffset += arg0->yVelocity;
         arg0->yVelocity -= 0x8000;
 
+        // When train lands, decrement loop count and either return to idle or continue jumping
         if (arg0->yOffset == 0) {
             arg0->loopCount--;
             if (arg0->loopCount == 0) {
@@ -263,6 +269,7 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
             }
         }
 
+        // Check if train reached waypoint and advance waypoint index if so
         rotatedVec.x = *(s32 *)((u8 *)gJingleTownTrainWaypointsX + (arg0->waypointIndex * 8) + (arg0->trainIndex * 20)) - arg0->posX;
         rotatedVec.y = *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + (arg0->waypointIndex * 8) + (arg0->trainIndex * 20)) - arg0->posZ;
 
