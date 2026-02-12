@@ -133,7 +133,6 @@ extern s16 D_800B1160_1DB700[];
 extern s16 D_800B1162_1DB702[];
 extern Vec2s D_800B11A0_1DB740[];
 extern s16 D_800B11C2_1DB762[];
-extern Transform3D identityMatrix;
 extern void *D_800B1140_1DB6E0;
 extern char D_800B115C_1DB6FC[];
 extern s32 gButtonsPressed;
