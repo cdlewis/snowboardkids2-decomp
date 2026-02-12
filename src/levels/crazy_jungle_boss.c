@@ -20,7 +20,6 @@ typedef void (*FuncPtr)(void *);
 extern FuncPtr gCrazyJungleBossChasePhaseHandlers[];
 extern FuncPtr gCrazyJungleBossHoverPhaseHandlers[];
 extern s32 D_800BC44C_ACC7C[];
-extern Transform3D identityMatrix;
 typedef struct {
     u8 primaryR;
     u8 primaryG;
