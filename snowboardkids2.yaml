@@ -324,7 +324,7 @@ segments:
       - [0x8A110, data]
       - [0x8A130, .data, 20F0]
       - [0x8C980, .data, nonrace_shadow]
-      - [0x8CA90, data, 3B80]
+      - [0x8CA90, .data, 3B80]
       - [0x8CB90, .data, 4050]
       - [0x8CBA0, .data, credits]
       - [0x8CD50, data, 76B0]
@@ -3358,7 +3358,50 @@ segments:
     vram: 0
     start: 0x6648C0
 
-  - [0x664C10, bin]
+  - name: _664C10
+    type: bin
+    vram: 0
+    start: 0x664C10
+
+  - name: _667220
+    type: bin
+    vram: 0
+    start: 0x667220
+
+  - name: _669380
+    type: bin
+    vram: 0
+    start: 0x669380
+
+  - name: _66A560
+    type: bin
+    vram: 0
+    start: 0x66A560
+
+  - name: _66C040
+    type: bin
+    vram: 0
+    start: 0x66C040
+
+  - name: _66F9D0
+    type: bin
+    vram: 0
+    start: 0x66F9D0
+
+  - name: _671E90
+    type: bin
+    vram: 0
+    start: 0x671E90
+
+  - name: _674970
+    type: bin
+    vram: 0
+    start: 0x674970
+
+  - name: _677F60
+    type: bin
+    vram: 0
+    start: 0x677F60
 
   - name: _67AB10
     type: bin
