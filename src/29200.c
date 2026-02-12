@@ -2,6 +2,7 @@
 #include "20F0.h"
 #include "C570.h"
 #include "common.h"
+#include "geometry.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
@@ -55,7 +56,6 @@ extern u16 gStoryMapItemWaypointDataSizes[];
 extern s32 gStoryMapItemAnimationTimers[];
 extern u16 gStoryMapItemAnimationValues[];
 extern void *gStoryMapItemUpdateCallbacks[];
-extern Transform3D identityMatrix;
 
 void initStoryMapItem(StoryMapItem *arg0) {
     AllocationData29200 *alloc;
