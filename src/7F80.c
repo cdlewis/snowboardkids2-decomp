@@ -4,7 +4,6 @@
 #include "common.h"
 #include "geometry.h"
 #include "graphics.h"
-#include "rom_loader.h"
 #include "task_scheduler.h"
 
 typedef struct {
@@ -44,7 +43,12 @@ void cleanupCameraRotationTask(void);
 void renderPalettedTexture(PalettedTextureState *);
 
 extern Transform3D identityMatrix;
-extern s32 D_8008C200_8CE00[];
+s32 D_8008C200_8CE00[] = {
+    0xD9D0F9FA, 0x00000000, 0xD9FFFFFF, 0x00210005, 0xD7000002, 0x80008000, 0x01018030,
+    0x02000000, 0xE7000000, 0x00000000, 0xE3001201, 0x00002000, 0xE3000A01, 0x00100000,
+    0xFC127FFF, 0xFFFFF238, 0xE200001C, 0xC8112078, 0x06000204, 0x0006080A, 0x060C0E10,
+    0x00121416, 0x06181A1C, 0x001E2022, 0x06242628, 0x002A2C2E, 0xDF000000, 0x00000000,
+};
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 

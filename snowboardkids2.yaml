@@ -329,7 +329,7 @@ segments:
       - [0x8CBA0, .data, credits]
       - [0x8CD50, .data, 76B0]
       - [0x8CD90, .data, 7C70]
-      - [0x8CE00, data, 7F80]
+      - [0x8CE00, .data, 7F80]
       - [0x8CE70, data]
       - [0x8D840, data, 90F0]
       - [0x8D8E0, .data, CBA0]
