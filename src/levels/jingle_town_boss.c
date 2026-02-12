@@ -32,6 +32,19 @@ typedef struct {
     u8 pad2;
 } BossSurfaceColor;
 
+// Display object element structure.
+// Overlaps with each 0x3C-byte element at offset 0x38-0x5F:
+// - Transform3D at 0x38 (within the element, offset 0 within this struct)
+// - Asset pointer at 0x58 (offset 0x20 within this struct)
+// - Render parameters at 0x5C, 0x60, 0x64 (offsets 0x24, 0x28, 0x2C)
+typedef struct {
+    Transform3D transform;       // 0x38 (relative to element start, 0x00 relative to struct)
+    void *assetPointer;          // 0x58 (relative to element, 0x20 relative to struct)
+    s32 param1;                  // 0x5C (relative to element, 0x24 relative to struct)
+    s32 param2;                  // 0x60 (relative to element, 0x28 relative to struct)
+    s32 param3;                  // 0x64 (relative to element, 0x2C relative to struct)
+} DisplayObjectElement;
+
 typedef struct {
     void *unk0;
     void *unk4;
@@ -373,49 +386,58 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
  *
  * This function is the entry point for the boss behavior state machine
  * (behaviorMode = 0). It initializes:
- * - Transform matrices for rotation
- * - Boss spawn position based on track waypoints
- * - Display object transforms and asset pointers
+ * - Transform matrices for rotation (unk970: Y rotation, unk990: combined, unk9B0: Z rotation)
+ * - Boss spawn position based on track waypoints and boss index
+ * - Display object transforms and asset pointers for 3 boss body parts
  * - Various behavior state variables
  *
  * @return 1 to indicate the state machine should continue processing
  */
 s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
-    Vec3i spawnWaypoint1;
-    Vec3i spawnWaypoint2;
+    Vec3i waypoint1;
+    Vec3i waypoint2;
     GameState *gameState;
     s32 i;
 
     gameState = getCurrentAllocation();
+
+    // Initialize rotation matrices for boss transformations
     memcpy(&arg0->unk970, &identityMatrix, sizeof(Transform3D));
     createYRotationMatrix(&arg0->unk970, arg0->unkA94);
     memcpy(&arg0->unk990, &identityMatrix, sizeof(Transform3D));
     memcpy(&arg0->unk9B0, &identityMatrix, sizeof(Transform3D));
 
+    // Set initial spawn position based on boss index and track waypoint
     arg0->unk434.x = gJingleTownBossSpawnPos[arg0->unkBB8];
-    getTrackSegmentWaypoints(&gameState->gameData, 0, &spawnWaypoint1, &spawnWaypoint2);
-    arg0->unk434.z = spawnWaypoint1.z + 0x200000;
+    getTrackSegmentWaypoints(&gameState->gameData, 0, &waypoint1, &waypoint2);
+    arg0->unk434.z = waypoint1.z + 0x200000;
     arg0->sectorIndex = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->unk434);
     arg0->unk434.y = getTrackHeightInSector(&gameState->gameData, arg0->sectorIndex, &arg0->unk434, 0x100000);
     memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
+
+    // Zero out velocity and set initial Y rotation
     arg0->velocity.x = 0;
     arg0->velocity.y = 0;
     arg0->velocity.z = 0;
     arg0->unkA94 = 0x1000;
 
-    /* Initialize 3 display objects:
-     * - Each element is 0x3C bytes apart
-     * - Transform3D at offset 0x38 (groundTransform, flyingTransform, unkB0)
-     * - Asset pointer and params at offsets 0x58, 0x5C, 0x60, 0x64 */
+    /* Initialize 3 display objects (boss body parts).
+     * Each element is 0x3C bytes and contains:
+     * - Transform3D at offset 0x38
+     * - Asset pointer at 0x58
+     * - Render parameters at 0x5C, 0x60, 0x64
+     */
     for (i = 0; i < 3; i++) {
         u8 *elem = (u8 *)arg0 + i * 0x3C;
-        memcpy(elem + 0x38, &identityMatrix, sizeof(Transform3D));
-        *(s32 *)(elem + 0x5C) = (s32)arg0->unk4;
-        *(s32 *)(elem + 0x60) = (s32)arg0->unk8;
-        *(s32 *)(elem + 0x64) = 0;
-        *(void **)(elem + 0x58) = (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + i * 0x10);
+        DisplayObjectElement *dispObj = (DisplayObjectElement *)(elem + 0x38);
+        memcpy(&dispObj->transform, &identityMatrix, sizeof(Transform3D));
+        dispObj->param1 = (s32)arg0->unk4;
+        dispObj->param2 = (s32)arg0->unk8;
+        dispObj->param3 = 0;
+        dispObj->assetPointer = (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + i * 0x10);
     }
 
+    // Set boss behavior mode to chase mode
     arg0->behaviorMode = 1;
     arg0->unkB30 = 0x180000;
     arg0->unkBB4 = 2;
@@ -425,13 +447,20 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     arg0->unkB54 = (s32)&arg0->unk434;
     arg0->unkB64 = 0x1EC000;
     arg0->unkB68 = arg0->unkBB8;
+
+    // Spawn chase camera if this is the player-controlled character
     if (arg0->unkBC7 == 0) {
         spawnChaseCameraTask(arg0->unkBB8);
     }
+
+    // Initialize special attack timer (10 frames)
     arg0->unkBDB = 0xA;
+
+    // Initialize asset offset table pointer if valid
     if ((s32)arg0->unk1C != 0) {
         *(s32 *)arg0->pad28 = (s32)arg0->unk1C + ((s32 *)arg0->unk1C)[arg0->unkBB8];
     }
+
     return 1;
 }
 
