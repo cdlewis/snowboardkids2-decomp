@@ -560,7 +560,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
         spawnChaseCameraTask(arg0->unkBB8);
     }
 
-    arg0->unkAA0 = ((s32 *)gameState->players)[0xAA0 / 4] - 0x10000;
+    arg0->unkAA0 = gameState->players[0].unkAA0 - 0x10000;
 
     // Initialize asset offset table
     if (arg0->unk0_3C[0].unk1C != 0) {
