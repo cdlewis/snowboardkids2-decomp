@@ -142,7 +142,6 @@ void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0) {
 }
 
 extern u16 D_800BBBA8_B54A8[];
-extern Transform3D identityMatrix;
 
 void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0);
 void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0);
