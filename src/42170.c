@@ -137,8 +137,6 @@ void renderShieldLayer1(ShieldEffectRenderState *);
 void renderShieldLayer2(ShieldEffectRenderState *);
 void renderShieldLayer3(ShieldEffectRenderState *);
 
-extern Transform3D identityMatrix;
-
 typedef struct {
     u8 _pad0[0x4];
     loadAssetMetadata_arg sprite;
