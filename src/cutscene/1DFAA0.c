@@ -1068,12 +1068,23 @@ void pasteCutsceneEntry(void) {
     gCutsceneEntryCutFlag = 0;
 }
 
+/**
+ * Cut (remove) a cutscene event entry from its slot and move it to a buffer.
+ *
+ * This function removes a cutscene event at the given slot and frame number,
+ * stores it in a global buffer for pasting later, and adds the entry back
+ * to the free list for reuse. The entry is unlinked from the slot's
+ * doubly-linked list of events.
+ *
+ * @param slotIndex The slot index (0-15) containing the entry
+ * @param frameNumber The frame number of the entry to cut
+ */
 void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
     u16 searchResult;
     u16 entryIndex;
     u16 entryNextIndex;
     u16 entryPrevIndex;
-    u16 freeListHead;
+    u16 freeListTail;
     StateEntry *base;
 
     // Find the state entry for the given slot and frame
@@ -1090,16 +1101,16 @@ void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
     }
 
     // Copy the entry to the global buffer for paste operations
-    memcpy(gCutsceneEntryBuffer, getStateEntry(entryIndex), 0x40);
+    memcpy(gCutsceneEntryBuffer, getStateEntry(entryIndex), sizeof(StateEntry));
 
     // Get the state table and linked list pointers
     base = gCutsceneStateTable;
-    freeListHead = *(u16 *)((u8 *)base + 0xE);                        // Free list head is at offset 0xE
-    entryNextIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xF8); // next_index
-    entryPrevIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xFA); // prev_index
+    freeListTail = *(u16 *)((u8 *)base + 0xE);                        // Free list tail (at offset 0xE in first entry)
+    entryNextIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xF8); // StateEntry::next_index
+    entryPrevIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xFA); // StateEntry::prev_index
 
     // Add the cut entry to the free list (insert at head)
-    *(u16 *)((u8 *)base + (freeListHead << 6) + 0xF8) = searchResult;
+    *(u16 *)((u8 *)base + (freeListTail << 6) + 0xF8) = searchResult;
     *(u16 *)((u8 *)base + 0xE) = searchResult;
 
     // Update the linked list: unlink the entry from its current position
@@ -1119,6 +1130,14 @@ void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
     gCutsceneStateTable->allocatedEventCount -= 1;
 }
 
+/**
+ * Copy a cutscene entry to the global buffer for later pasting.
+ *
+ * Unlike cutCutsceneEntry, this leaves the original entry in place.
+ *
+ * @param slotIndex The slot index (0-15) containing the entry
+ * @param frameNumber The frame number of the entry to copy
+ */
 void copyCutsceneEntry(u8 slotIndex, u16 frameNumber) {
     u16 eventId;
     StateEntry *src;
@@ -1131,12 +1150,15 @@ void copyCutsceneEntry(u8 slotIndex, u16 frameNumber) {
     eventId = findEventAtFrame(slotIndex, frameNumber);
 
     // Copy the current entry to gCutsceneEntryBuffer
+    // We copy 0x38 bytes which is everything before next_index/prev_index linked list pointers,
+    // then separately copy commandCategory and commandType
     if (eventId != 0xFFFF) {
         src = getStateEntry(eventId);
         dst = &gCutsceneEntryBuffer[0];
         srcBytes = (u8 *)src;
         dstBytes = (u8 *)dst;
 
+        // Copy the data portion (everything except linked list pointers)
         for (i = 0; i < 0x38; i++) {
             dstBytes[i] = srcBytes[i];
         }
@@ -1149,6 +1171,15 @@ void copyCutsceneEntry(u8 slotIndex, u16 frameNumber) {
     }
 }
 
+/**
+ * Paste a previously copied/cut cutscene entry to a slot and frame.
+ *
+ * If an entry doesn't exist at the target location, a new one is created.
+ * The entry data from the global buffer is copied to the target entry.
+ *
+ * @param slotIndex The slot index (0-15) to paste into
+ * @param frameNumber The frame number where the entry should be pasted
+ */
 void pasteCutsceneEntryToSlot(u8 slotIndex, u16 frameNumber) {
     s32 categorySkip;
     StateEntry *dest;
@@ -1165,6 +1196,7 @@ void pasteCutsceneEntryToSlot(u8 slotIndex, u16 frameNumber) {
         }
 
         dest = getStateEntry(eventIndex);
+        // Copy the data portion (0x38 bytes = everything before linked list pointers)
         for (i = 0; i < 0x38; i++) {
             dest->scriptData[i] = srcEntry->scriptData[i];
         }
