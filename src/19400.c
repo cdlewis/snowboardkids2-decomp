@@ -9,8 +9,6 @@
 #include "race_session.h"
 #include "task_scheduler.h"
 
-extern Transform3D identityMatrix;
-
 typedef struct {
     u8 padding[0x3B0];
     applyTransformToModel_arg1 transform;
