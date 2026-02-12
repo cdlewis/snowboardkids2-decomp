@@ -17,7 +17,6 @@
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
-extern Transform3D identityMatrix;
 extern void func_8001FFE4_20BE4(void);
 extern void func_8001FA00_20600(void);
 extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
