@@ -3,9 +3,6 @@
 #include "task_scheduler.h"
 
 extern Transform3D identityMatrix;
-extern s32 gSteppedMatrixTranslations;
-extern u16 gSteppedMatrixAngles;
-extern s32 gSteppedMatrixStepCount;
 
 void cleanupSteppedMatrixController(void);
 
@@ -26,6 +23,19 @@ typedef struct {
 } SteppedMatrixState;
 
 void updateSteppedMatrixController(SteppedMatrixState *state);
+
+// Data
+s32 gSteppedMatrixTranslations = 0x00033333;
+
+u16 gSteppedMatrixAngles[] = {
+    0x00E3, 0x0000, 0x0003, 0x3333, 0xFF1D, 0x0000, 0x0003, 0x3333, 0x00E3, 0x0000, 0x0003,
+    0x3333, 0xFF1D, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+};
+
+s32 gSteppedMatrixStepCount = 6;
+s32 D_8008C184 = 0;
+s32 D_8008C188 = 0;
+s32 D_8008C18C = 0;
 
 void initSteppedMatrixController(SteppedMatrixState *state) {
     memcpy(&state->matrix, &identityMatrix, 0x20);
@@ -59,7 +69,7 @@ do_rotation:
     if (state->frameDelay == 0) {
         matrix = &state->matrix;
         memcpy(matrix, &identityMatrix, 0x20);
-        createZRotationMatrix(matrix, (&gSteppedMatrixAngles)[state->stepIndex * 4]);
+        createZRotationMatrix(matrix, gSteppedMatrixAngles[state->stepIndex * 4]);
         translation = (&gSteppedMatrixTranslations)[state->stepIndex * 2];
         state->frameDelay = 4;
         state->matrix.translation.y = translation;
