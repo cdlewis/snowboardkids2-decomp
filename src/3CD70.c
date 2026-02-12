@@ -74,7 +74,6 @@ typedef struct {
 
 extern void func_8003C2BC_3CEBC(void);
 extern s32 D_8008FEB0_90AB0;
-extern Transform3D identityMatrix;
 void updateOrbitCamera(OrbitCameraState *camera);
 void initScriptedCamera(ScriptedCameraState *camera);
 void updateScriptedCamera(ScriptedCameraState *camera);
