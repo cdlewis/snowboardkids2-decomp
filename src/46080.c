@@ -774,7 +774,6 @@ extern u16 D_8009ADE0_9B9E0;
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
 extern Gfx D_80090DB0_919B0[];
-extern Transform3D identityMatrix;
 extern void *D_80094DD0_959D0;
 extern s32 bossHomingProjectileBaseVector;
 
