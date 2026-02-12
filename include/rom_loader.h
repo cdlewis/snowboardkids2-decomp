@@ -32,6 +32,7 @@ s32 getPendingDmaCount(void);
     extern void *id##_TEXT_START; \
     extern void *id##_TEXT_END;   \
     extern void *id##_DATA_START; \
+    extern void *id##_DATA_END; \
     extern void *id##_RODATA_END; \
     extern void *id##_BSS_START;  \
     extern void *id##_BSS_END;
