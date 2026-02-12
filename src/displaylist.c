@@ -805,11 +805,20 @@ void enqueueDisplayListObjectWithSegments(s32 arg0, DisplayListObject *arg1) {
     }
 }
 
+/**
+ * Sets up the display list matrix for billboarded sprites.
+ *
+ * Billboarded sprites always face the camera. This is achieved by:
+ * 1. First applying a translation matrix (positions the sprite)
+ * 2. Then applying a look-at matrix (makes the sprite face the camera)
+ * 3. Finally applying a rotation matrix (applies local sprite rotation)
+ *
+ * Allocates 128 bytes (2 matrices) if not already allocated.
+ */
 void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
     Mtx lookAtMatrix;
     f32 eyeX;
     f32 eyeY;
-    s32 frac16Mask;
     f32 eyeZ;
     f32 upX;
     f32 upY;
@@ -817,6 +826,7 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
     LookAt *lookAt;
     Mtx *matrixPair;
     Transform3D *transform;
+    s32 frac16Mask;
 
     if (obj->transformMatrix == NULL) {
         matrixPair = arenaAlloc16(0x80);
@@ -824,7 +834,7 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
         if (matrixPair == NULL) {
             return;
         }
-        /* First matrix: translation matrix */
+        /* First matrix: translation matrix (identity + translation) */
         /* Integer portion */
         ((s32 *)obj->transformMatrix)[0] = 0x10000;
         ((s32 *)obj->transformMatrix)[1] = 0;
