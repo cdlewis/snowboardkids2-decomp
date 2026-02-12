@@ -134,7 +134,6 @@ extern s32 gCurrentDoubleBufferIndex;
 extern s32 gCurrentDisplayBufferIndex;
 
 extern s32 gFrameCounter;
-extern Transform3D identityMatrix;
 extern gActiveViewport_type *gActiveViewport;
 
 extern s32 gFrameSkipCounter;
