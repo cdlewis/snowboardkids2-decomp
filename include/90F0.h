@@ -5,6 +5,12 @@
 #include "19E80.h"
 
 typedef struct {
+    void *romStart;
+    void *romEnd;
+    s32 size;
+} DmaEntry;
+
+typedef struct {
     /* 0x00 */ DataTable_19E80 *table;
     u8 _pad[0xC];
     /* 0x10 */ u16 index;

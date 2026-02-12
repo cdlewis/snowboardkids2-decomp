@@ -45,12 +45,6 @@ typedef struct {
 } SpriteEffectTaskState;
 
 typedef struct {
-    void *romStart;
-    void *romEnd;
-    s32 size;
-} DmaEntry;
-
-typedef struct {
     s32 arrayOffset;
     s32 count;
 } Table2DRow;

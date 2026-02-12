@@ -70,25 +70,15 @@ s32 gSpriteVtx_64x64[] = {
     (s32)0xFF80FF80, 0x00000000,      0x00001000, (s32)0xFFFFFFFF, 0x00000000, 0x00000000,
 };
 
-s32 gSpriteDmaTable[] = {
-    (s32)&_49BC40_ROM_START,
-    0x0049C200,
-    0x00000D80,
-    0x0049C200,
-    0x0049C430,
-    0x00000660,
-    0x0049C430,
-    0x0049C5B0,
-    0x000002A0,
-    0x0049C5B0,
-    0x0049CCA0,
-    0x00000CB0,
-    0x0049CCA0,
-    0x0049D710,
-    0x00001940,
+DmaEntry gSpriteDmaTable[] = {
+    { &_49BC40_ROM_START, (void *)0x0049C200, 0x00000D80 },
+    { (void *)0x0049C200, (void *)0x0049C430, 0x00000660 },
+    { (void *)0x0049C430, (void *)0x0049C5B0, 0x000002A0 },
+    { (void *)0x0049C5B0, (void *)0x0049CCA0, 0x00000CB0 },
+    { (void *)0x0049CCA0, (void *)0x0049D710, 0x00001940 },
 };
 
-s32 *gSpriteDmaTablePtr = gSpriteDmaTable;
+DmaEntry *gSpriteDmaTablePtr = gSpriteDmaTable;
 
 s32 gSpriteDmaTableInfo[] = { 0x00000005, 0x00000001, 0x00000000, 0x00000000 };
 
