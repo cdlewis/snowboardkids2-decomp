@@ -2550,6 +2550,26 @@ segments:
     vram: 0
     start: 0x49BC40
 
+  - name: _49C200
+    type: bin
+    vram: 0
+    start: 0x49C200
+
+  - name: _49C430
+    type: bin
+    vram: 0
+    start: 0x49C430
+
+  - name: _49C5B0
+    type: bin
+    vram: 0
+    start: 0x49C5B0
+
+  - name: _49CCA0
+    type: bin
+    vram: 0
+    start: 0x49CCA0
+
   - name: LTBL3_COMPRESSED_DATA
     type: bin
     vram: 0
