@@ -199,7 +199,7 @@ void spawnPlayerIndicatorTask(void *cleanupArg) {
 }
 
 void initStartGate(StartGate *gate) {
-    s32 tempMatrix[8];
+    s32 doorOffsetMatrix[8];
     Vec3i trackEndPos;
     s32 *transformMatrix;
     GameState *gameState;
@@ -212,14 +212,14 @@ void initStartGate(StartGate *gate) {
     gate->mainGateSegment1 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     gate->mainGateSegment2 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     gate->mainGateSegment3 = 0;
-    trackAngle = getTrackEndInfo((u8 *)gameState + 0x30, &trackEndPos);
+    trackAngle = getTrackEndInfo(&gameState->gameData, &trackEndPos);
     createYRotationMatrix(&gate->rotationMatrix, (trackAngle + levelConfig->yawOffset) & 0xFFFF);
     rotateVectorY(&D_800907EC_913EC, trackAngle + levelConfig->yawOffset, &gate->rotationMatrix.translation);
     gate->rotationMatrix.translation.x = gate->rotationMatrix.translation.x + levelConfig->shortcutPosX;
     gate->rotationMatrix.translation.z = gate->rotationMatrix.translation.z + levelConfig->shortcutPosZ;
     gate->rotationMatrix.translation.y = trackEndPos.y;
     gate->leftDoorDisplayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x60);
-    transformMatrix = tempMatrix;
+    transformMatrix = doorOffsetMatrix;
     gate->leftDoorSegment1 = gate->mainGateSegment1;
     gate->leftDoorSegment2 = gate->mainGateSegment2;
     gate->leftDoorSegment3 = gate->mainGateSegment3;
@@ -239,8 +239,8 @@ void initStartGate(StartGate *gate) {
 }
 
 void updateStartGate(StartGate *gate) {
-    Transform3D sp10;
-    Transform3D *s0;
+    Transform3D localRotation;
+    Transform3D *doorTransform;
     GameState *gameState;
     s32 i;
 
@@ -262,11 +262,11 @@ void updateStartGate(StartGate *gate) {
                 gate->pauseTimer = 0xA;
                 gate->animationState++;
             }
-            createZRotationMatrix(&sp10, gate->gateRotation);
-            sp10.translation.x = 0;
-            sp10.translation.y = 0xC0000;
-            sp10.translation.z = 0;
-            func_8006B084_6BC84(&sp10, gate, &gate->leftDoorTransform);
+            createZRotationMatrix(&localRotation, gate->gateRotation);
+            localRotation.translation.x = 0;
+            localRotation.translation.y = 0xC0000;
+            localRotation.translation.z = 0;
+            func_8006B084_6BC84(&localRotation, gate, &gate->leftDoorTransform);
             break;
         case 2:
             if (gameState->gamePaused == 0) {
@@ -283,13 +283,13 @@ void updateStartGate(StartGate *gate) {
             if (gate->gateRotation == 0) {
                 gate->animationState++;
             }
-            s0 = &gate->leftDoorTransform;
-            createZRotationMatrix(s0, gate->gateRotation);
-            createZRotationMatrix(&sp10, gate->gateRotation);
-            sp10.translation.x = 0;
-            sp10.translation.y = 0xC0000;
-            sp10.translation.z = 0;
-            func_8006B084_6BC84(&sp10, gate, s0);
+            doorTransform = &gate->leftDoorTransform;
+            createZRotationMatrix(doorTransform, gate->gateRotation);
+            createZRotationMatrix(&localRotation, gate->gateRotation);
+            localRotation.translation.x = 0;
+            localRotation.translation.y = 0xC0000;
+            localRotation.translation.z = 0;
+            func_8006B084_6BC84(&localRotation, gate, doorTransform);
             break;
         case 4:
             if (gameState->shortcutGateState != 3) {
