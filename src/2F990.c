@@ -131,7 +131,6 @@ typedef struct {
 
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
-extern Transform3D identityMatrix;
 extern s32 D_8008F110_8FD10;
 extern s16 D_8008F0B2_8FCB2[];
 extern u16 D_8008F0B4_8FCB4[];
