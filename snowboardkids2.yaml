@@ -3288,6 +3288,8 @@ segments:
     vram: 0
     start: 0x648EB0
 
+  - [0x64EFD0, bin]
+
   - name: POST2_SOUND_SEQUENCE_DATA
     type: bin
     vram: 0

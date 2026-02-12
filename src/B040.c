@@ -1,5 +1,6 @@
 #include "B040.h"
 #include "90F0.h"
+#include "assets.h"
 #include "common.h"
 #include "geometry.h"
 #include "task_scheduler.h"
@@ -305,7 +306,9 @@ s32 D_8008C908_8D508[] = {
     0x00000000, 0x00000003, (s32)D_8008C900_8D500, 0x00010000, (s32)D_8008C908_8D508, 0x00010000,
 };
 
-s32 D_8008C920_8D520[] = { 0x00648EB0, 0x0064EFD0, 0x000147C8 };
+s32 D_8008C920_8D520[] = { (s32)&POST2_SPRITE_COMPRESSED_DATA_ROM_START,
+                           (s32)&POST2_SPRITE_COMPRESSED_DATA_ROM_END,
+                           0x000147C8 };
 
 u8 *D_8008C92C_8D52C = (u8 *)D_8008C5C0_8D1C0;
 
