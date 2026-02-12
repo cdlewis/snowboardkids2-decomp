@@ -3,8 +3,6 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-extern Transform3D identityMatrix;
-
 typedef struct {
     u8 padding[0x16];
     u16 spriteIndex;
