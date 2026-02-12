@@ -153,8 +153,8 @@ typedef struct {
     s32 unkAD0;
     s32 unkAD4[3];
     s32 unkAE0;
-    Vec3i unkAE4[6];
-    s32 unkB2C;
+    Vec3i extraCollisionOffsets[6];
+    s32 extraCollisionRadii;
     s32 unkB30;
     s32 unkB34;
     s32 unkB38;
@@ -546,7 +546,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
 
     // Initialize behavior state
     arg0->behaviorMode = 1;
-    arg0->unkB2C = 0x240000;
+    arg0->extraCollisionRadii = 0x240000;
     arg0->unkBB4 = 3;
     arg0->unkB54 = (void *)&arg0->unk434;
     arg0->behaviorPhase = 0;
@@ -586,7 +586,7 @@ void setIceBossFlyingMode(Player *arg0) {
     }
 
     arg0->collisionRadius = 0x100000;
-    arg0->unkB2C = 0x100000;
+    arg0->extraCollisionRadii = 0x100000;
     arg0->unkBB4 = 1;
     arg0->animFlags = arg0->animFlags | 0x400000;
 }

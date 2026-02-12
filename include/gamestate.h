@@ -150,8 +150,8 @@ typedef struct {
     s32 unkAD0;
     Vec3i collisionOffset;
     s32 collisionRadius;
-    Vec3i unkAE4[6];
-    s32 unkB2C;
+    Vec3i extraCollisionOffsets[6];
+    s32 extraCollisionRadii;
     u8 paddingB30[0xB40 - 0xB30];
     s32 unkB40;
     s32 storedPosX;

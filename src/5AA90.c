@@ -247,7 +247,11 @@ void handlePlayerToPlayerCollision(Player *player) {
  * Handles collision response including pushing the player out and knockback effects.
  * The target player may have multiple collision boxes (controlled by targetPlayer->unkBB4).
  *
- * unkBD9 values:
+ * The extra collision system allows entities to have up to 6 additional collision boxes
+ * beyond the main collision sphere. Each box has an offset (extraCollisionOffsets)
+ * and a radius (extraCollisionRadii, treated as an array via pointer arithmetic).
+ *
+ * Attack state (unkBD9) determines collision behavior:
  * - 1: Attack state that bounces player on boxes 4-5
  * - 2: Attack state that applies knockback on box 0
  * - 3: Attack state that bounces player on boxes 1-2
@@ -298,7 +302,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
             deltaPos.z -= player->worldPos.z + player->collisionOffset.z;
 
             /* Sum of both collision box radii */
-            combinedRadius = (&targetPlayer->unkB2C)[boxIndex] + player->collisionRadius;
+            combinedRadius = (&targetPlayer->extraCollisionRadii)[boxIndex] + player->collisionRadius;
             negRadius = -combinedRadius;
 
             /* Quick AABB check before expensive distance calculation */
