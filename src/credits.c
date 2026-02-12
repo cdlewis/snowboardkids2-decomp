@@ -171,8 +171,6 @@ typedef struct {
     s16 unkE60;
 } CreditsState;
 
-extern Transform3D identityMatrix;
-
 typedef struct {
     SceneModel *model;
     s16 animState;
