@@ -365,7 +365,6 @@ Vec3i D_800BCA64[] = {
 
 extern u16 D_8009ADE0_9B9E0;
 extern BossSurfaceColor gBossSurfaceColors[];
-extern Transform3D identityMatrix;
 extern s32 gControllerInputs[];
 
 /**
