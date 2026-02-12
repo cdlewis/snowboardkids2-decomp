@@ -84,8 +84,6 @@ end:
     return (s16)(result << 16 >> 16);
 }
 
-extern Transform3D identityMatrix;
-
 void initSlotData(CutsceneSlotData *slot) {
     memcpy(&slot->transform, &identityMatrix, 0x20);
 

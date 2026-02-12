@@ -7,7 +7,6 @@
 #include "task_scheduler.h"
 
 extern u8 storyMapLocationIndex;
-extern s16 identityMatrix[9];
 
 typedef struct {
     s16 x;
@@ -68,8 +67,8 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
         return;
     }
 
-    memcpy(&camera->orientMatrix, identityMatrix, 0x20);
-    memcpy(&camera->viewMatrix, identityMatrix, 0x20);
+    memcpy(&camera->orientMatrix, &identityMatrix, 0x20);
+    memcpy(&camera->viewMatrix, &identityMatrix, 0x20);
 
     mode = getStoryMapCameraMode();
 
@@ -260,8 +259,8 @@ void initStoryMapCameraAtLocation(StoryMapCameraState *camera) {
 
     state = getCurrentAllocation();
 
-    memcpy(&camera->orientMatrix, identityMatrix, 0x20);
-    memcpy(camera, identityMatrix, 0x20);
+    memcpy(&camera->orientMatrix, &identityMatrix, 0x20);
+    memcpy(camera, &identityMatrix, 0x20);
 
     camera->cameraX = D_8008D6EC_8E2EC[(u8)state->discoveredLocationId].x;
     camera->cameraZ = D_8008D6EC_8E2EC[(u8)state->discoveredLocationId].z;

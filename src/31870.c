@@ -336,7 +336,6 @@ extern s32 D_8008F18C_8FD8C;
 extern s32 D_8008F200_8FE00[];
 extern u16 D_8008F20A_8FE0A[];
 extern u16 D_8008F20C_8FE0C;
-extern s32 identityMatrix;
 extern s16 boardIconTargetYPositions[];
 extern u16 D_8008F184_8FD84[];
 

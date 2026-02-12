@@ -95,7 +95,6 @@ extern s32 D_80088E40;
 extern s32 D_80088E60;
 extern s32 D_80088E80;
 extern s32 D_80088F00;
-extern u8 identityMatrix[32];
 extern u8 D_215D70[];
 extern void initDriftingParticle(void *arg0);
 extern void initTrailingParticle(void *arg0);
@@ -2061,7 +2060,7 @@ void initializeGameEntity(
     ent->unk48 = 0;
     ent->unk95 = 0;
 
-    memcpy(&ent->asset2TransformationMatrix, identityMatrix, 0x20);
+    memcpy(&ent->asset2TransformationMatrix, &identityMatrix, 0x20);
 
     ent->partDisplayFlags = -1;
     ent->alpha = 0xFF;
@@ -2084,7 +2083,7 @@ void initializeGameEntity(
             ent->unk00[i].unk20 = &assetEntry->unk1C[i];
             ent->unk00[i].asset1 = asset1;
             ent->unk00[i].asset2 = asset2;
-            memcpy(ent->unk00[i].transformationMatrix, identityMatrix, 0x20);
+            memcpy(ent->unk00[i].transformationMatrix, &identityMatrix, 0x20);
         }
     } else if (assetEntry->assetGroupIndex != -1) {
         asset1 = loadAssetByIndex_94F90(assetEntry->assetGroupIndex, assetPairIndex);
@@ -2094,7 +2093,7 @@ void initializeGameEntity(
             ent->unk00[i].unk20 = &loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
             ent->unk00[i].asset1 = asset1;
             ent->unk00[i].asset2 = asset2;
-            memcpy(ent->unk00[i].transformationMatrix, identityMatrix, 0x20);
+            memcpy(ent->unk00[i].transformationMatrix, &identityMatrix, 0x20);
         }
     }
 
@@ -2125,7 +2124,7 @@ void initializeGameEntity(
         ent->unk00[16].asset2 = loadAssetByIndex_95590(param5);
         ent->unk00[16].asset3 = loadAssetByIndex_95668(param6);
 
-        memcpy(&ent->unk00[16].transformationMatrix, identityMatrix, 0x20);
+        memcpy(&ent->unk00[16].transformationMatrix, &identityMatrix, 0x20);
     }
 
     if (yetAnotherAssetIndex != -1 && yetAnotherAssetIndex < itemAssetCount) {
@@ -2140,7 +2139,7 @@ void initializeGameEntity(
         );
         ent->unk00[17].asset3 = NULL;
 
-        memcpy(&ent->unk00[17].transformationMatrix, identityMatrix, 0x20);
+        memcpy(&ent->unk00[17].transformationMatrix, &identityMatrix, 0x20);
     }
 
     if (assetEntry->initCallback != NULL) {
@@ -2173,7 +2172,7 @@ void initializeGameEntity(
 
     ent->unk10 = param3;
 
-    memcpy(&ent->transformationMatrix, identityMatrix, 0x20);
+    memcpy(&ent->transformationMatrix, &identityMatrix, 0x20);
 
     ent->isDestroyed = 0;
     ent->displayEnabled = 1;

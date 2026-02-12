@@ -35,6 +35,8 @@ typedef struct {
     Vec3i translation;
 } Transform3D;
 
+extern Transform3D identityMatrix;
+
 void createYRotationMatrix(Transform3D *, u16 angle);
 void createZRotationMatrix(Transform3D *, u16 angle);
 void createXRotationMatrix(s16 matrix[3][3], u16 angle);

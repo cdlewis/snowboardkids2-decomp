@@ -37,7 +37,6 @@ extern void awaitStoryMapLocationIntro(void);
 extern void awaitStoryMapDecorReady(void);
 extern void cleanupStoryMapDecorModel(applyTransformToModel_arg1 *);
 extern void setupStoryMapDecorModel(applyTransformToModel_arg1 *);
-extern s32 identityMatrix;
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 storyMapLocationIndex;
 extern void awaitFadeLoadCharacterSelect(void);
