@@ -1063,15 +1063,15 @@ void cleanupFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0) {
     releaseNodeMemoryRef((void **)&arg0->unk20);
 }
 
-extern DmaEntry *D_8008CC2C_8D82C;
-extern s32 D_8008CC30_8D830;
+extern DmaEntry *gSpriteDmaTablePtr;
+extern s32 gSpriteDmaTableInfo;
 
 DmaEntry *getDmaTable(void) {
-    return D_8008CC2C_8D82C;
+    return gSpriteDmaTablePtr;
 }
 
 s32 getDmaTableCount(void) {
-    return D_8008CC30_8D830;
+    return gSpriteDmaTableInfo;
 }
 
 void *loadDmaAsset(s16 arg0) {

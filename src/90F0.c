@@ -15,7 +15,7 @@ extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
 extern Gfx *gRegionAllocPtr;
 
-s16 D_8008C930_8D530[][10] = {
+s16 gSpriteAssetTable[][10] = {
     { 0x0043, 0x0000, 0x0064, (s16)0xEFD0, 0x0064, (s16)0xF190, 0x0000, 0x01F8, (s16)0x8008, (s16)0xC7F0 },
     { 0x0001, 0x0000, 0x0064, (s16)0x8C60, 0x0064, (s16)0x8EB0, 0x0000, 0x0358, (s16)0x8008, (s16)0xC830 },
     { 0x0002, 0x0000, 0x0064, (s16)0x89F0, 0x0064, (s16)0x8B50, 0x0000, 0x0358, (s16)0x8008, (s16)0xC858 },
@@ -27,50 +27,50 @@ s16 D_8008C930_8D530[][10] = {
     { 0x0002, 0x0000, 0x0066, 0x3010,      0x0066, 0x3330,      0x0000, 0x0848, (s16)0x8008, (s16)0xC910 },
 };
 
-s16 D_8008C9E4_8D5E4[] = { 0x0002, 0x0000 };
+s16 gSpriteAssetTablePadding[] = { 0x0002, 0x0000 };
 
-s32 D_8008C9E8_8D5E8[] = {
+s32 gSpriteVtx_8x8[] = {
     (s32)0xFFF00010, 0x00000000, 0x00000000, (s32)0xFFFFFFFF, 0x00100010,      0x00000000, 0x02000000, (s32)0xFFFFFFFF,
     0x0010FFF0,      0x00000000, 0x02000200, (s32)0xFFFFFFFF, (s32)0xFFF0FFF0, 0x00000000, 0x00000200, (s32)0xFFFFFFFF,
 };
 
-s32 D_8008CA28_8D628[] = {
+s32 gSpriteVtx_16x16[] = {
     (s32)0xFFE00020, 0x00000000, 0x00000000, (s32)0xFFFFFFFF, 0x00200020,      0x00000000, 0x04000000, (s32)0xFFFFFFFF,
     0x0020FFE0,      0x00000000, 0x04000400, (s32)0xFFFFFFFF, (s32)0xFFE0FFE0, 0x00000000, 0x00000400, (s32)0xFFFFFFFF,
 };
 
-s32 D_8008CA68_8D668[] = {
+s32 gSpriteVtx_16x32[] = {
     (s32)0xFFE00040, 0x00000000, 0x00000000, (s32)0xFFFFFFFF, 0x00200040,      0x00000000, 0x04000000, (s32)0xFFFFFFFF,
     0x0020FFC0,      0x00000000, 0x04000800, (s32)0xFFFFFFFF, (s32)0xFFE0FFC0, 0x00000000, 0x00000800, (s32)0xFFFFFFFF,
 };
 
-s32 D_8008CAA8_8D6A8[] = {
+s32 gSpriteVtx_32x16[] = {
     (s32)0xFFC00020, 0x00000000, 0x00000000, (s32)0xFFFFFFFF, 0x00400020,      0x00000000, 0x08000000, (s32)0xFFFFFFFF,
     0x0040FFE0,      0x00000000, 0x08000400, (s32)0xFFFFFFFF, (s32)0xFFC0FFE0, 0x00000000, 0x00000400, (s32)0xFFFFFFFF,
 };
 
-s32 D_8008CAE8_8D6E8[] = {
+s32 gSpriteVtx_32x32[] = {
     (s32)0xFFC00040, 0x00000000, 0x00000000, (s32)0xFFFFFFFF, 0x00400040,      0x00000000, 0x08000000, (s32)0xFFFFFFFF,
     0x0040FFC0,      0x00000000, 0x08000800, (s32)0xFFFFFFFF, (s32)0xFFC0FFC0, 0x00000000, 0x00000800, (s32)0xFFFFFFFF,
 };
 
-s32 D_8008CB28_8D728[] = {
+s32 gSpriteVtx_64x32[] = {
     (s32)0xFF800040, 0x00000000, 0x00000000, (s32)0xFFFFFFFF, 0x00800040,      0x00000000, 0x10000000, (s32)0xFFFFFFFF,
     0x0080FFC0,      0x00000000, 0x10000800, (s32)0xFFFFFFFF, (s32)0xFF80FFC0, 0x00000000, 0x00000800, (s32)0xFFFFFFFF,
 };
 
-s32 D_8008CB68_8D768[] = {
+s32 gSpriteVtx_32x64[] = {
     (s32)0xFFC00080, 0x00000000, 0x00000000, (s32)0xFFFFFFFF, 0x00400080,      0x00000000, 0x08000000, (s32)0xFFFFFFFF,
     0x0040FF80,      0x00000000, 0x08001000, (s32)0xFFFFFFFF, (s32)0xFFC0FF80, 0x00000000, 0x00001000, (s32)0xFFFFFFFF,
 };
 
-s32 D_8008CBA8_8D7A8[] = {
+s32 gSpriteVtx_64x64[] = {
     (s32)0xFF800080, 0x00000000,      0x00000000, (s32)0xFFFFFFFF, 0x00800080, 0x00000000,
     0x10000000,      (s32)0xFFFFFFFF, 0x0080FF80, 0x00000000,      0x10001000, (s32)0xFFFFFFFF,
     (s32)0xFF80FF80, 0x00000000,      0x00001000, (s32)0xFFFFFFFF, 0x00000000, 0x00000000,
 };
 
-s32 D_8008CBF0_8D7F0[] = {
+s32 gSpriteDmaTable[] = {
     (s32)&_49BC40_ROM_START,
     0x0049C200,
     0x00000D80,
@@ -88,9 +88,9 @@ s32 D_8008CBF0_8D7F0[] = {
     0x00001940,
 };
 
-s32 *D_8008CC2C_8D82C = D_8008CBF0_8D7F0;
+s32 *gSpriteDmaTablePtr = gSpriteDmaTable;
 
-s32 D_8008CC30_8D830[] = { 0x00000005, 0x00000001, 0x00000000, 0x00000000 };
+s32 gSpriteDmaTableInfo[] = { 0x00000005, 0x00000001, 0x00000000, 0x00000000 };
 
 Gfx gSpriteTextureSetupDL[] = {
     { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00210005 } },
@@ -100,7 +100,7 @@ Gfx gSpriteTextureSetupDL[] = {
     { .words = { 0xE3001001, 0x00008000 } }, { .words = { 0xDF000000, 0x00000000 } },
 };
 
-Gfx D_8008CC90_8D890[] = {
+Gfx gTranslucentSpriteTextureSetupDL[] = {
     { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00210005 } },
     { .words = { 0xD7000002, 0x80008000 } }, { .words = { 0xE7000000, 0x00000000 } },
     { .words = { 0xE3001201, 0x00002000 } }, { .words = { 0xE3000A01, 0x00100000 } },
@@ -113,7 +113,7 @@ s32 getSpriteAssetCount(void) {
 }
 
 s16 getSpriteAssetId(s32 index) {
-    return D_8008C930_8D530[index][0];
+    return gSpriteAssetTable[index][0];
 }
 
 typedef struct {
@@ -328,7 +328,7 @@ void renderTranslucentSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
             }
         }
 
-        gSPDisplayList(gRegionAllocPtr++, D_8008CC90_8D890);
+        gSPDisplayList(gRegionAllocPtr++, gTranslucentSpriteTextureSetupDL);
         gDPLoadTextureBlock_4b(
             gRegionAllocPtr++,
             textureEntry.data_ptr,
@@ -685,28 +685,28 @@ void setupAndEnqueueSprite(
 
     switch (dimensions) {
         case 0x80008:
-            state->displayListData = &D_8008C9E8_8D5E8;
+            state->displayListData = &gSpriteVtx_8x8;
             break;
         case 0x100010:
-            state->displayListData = &D_8008CA28_8D628;
+            state->displayListData = &gSpriteVtx_16x16;
             break;
         case 0x100020:
-            state->displayListData = &D_8008CA68_8D668;
+            state->displayListData = &gSpriteVtx_16x32;
             break;
         case 0x200010:
-            state->displayListData = &D_8008CAA8_8D6A8;
+            state->displayListData = &gSpriteVtx_32x16;
             break;
         case 0x200020:
-            state->displayListData = &D_8008CAE8_8D6E8;
+            state->displayListData = &gSpriteVtx_32x32;
             break;
         case 0x400020:
-            state->displayListData = &D_8008CB28_8D728;
+            state->displayListData = &gSpriteVtx_64x32;
             break;
         case 0x200040:
-            state->displayListData = &D_8008CB68_8D768;
+            state->displayListData = &gSpriteVtx_32x64;
             break;
         case 0x400040:
-            state->displayListData = &D_8008CBA8_8D7A8;
+            state->displayListData = &gSpriteVtx_64x64;
             break;
     }
 

@@ -169,6 +169,7 @@ setViewportId = 0x8006FEF8; // rom:0x70AF8
 gDefaultEntityData8C938 = 0x8008BD38; // rom:0x8C938 size:0x48
 D_8008CD98_8D998 = 0x8008CD98; // rom:0x8D998 size:0x38
 gSpriteTextureSetupDL = 0x8008CC40; // rom:0x8D840
+gTranslucentSpriteTextureSetupDL = 0x8008CC90; // rom:0x8D890
 gNpcCollisionRadii = 0x8008EF70; // rom:0x8FB70 type:u16
 initStoryMapRareEventWave = 0x8002C8C0; // rom:0x2D4C0
 gTempPosition = 0x8009A8A4; // rom:0x9B4A4 size:0xC
