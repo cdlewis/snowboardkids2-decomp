@@ -4,6 +4,7 @@
 #include "B040.h"
 #include "common.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
@@ -64,7 +65,6 @@ struct Func8002CD3CArg {
     /* 0xD5 */ u8 unkD5;
 };
 
-extern Transform3D identityMatrix;
 extern u16 gNpcCollisionRadii[];
 
 void updateStoryMapRareEventIdle(RareEventIdleState *);
