@@ -5,8 +5,6 @@
 #include "fan_effect.h"
 #include "geometry.h"
 
-extern Transform3D identityMatrix;
-
 typedef struct {
     union {
         Transform3D mat;
