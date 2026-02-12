@@ -889,23 +889,19 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     Transform3D scaledMatrix;
     Transform3D pitchYawMatrix;
     s32 sp70[4];
-    Transform3D *scaledMatrixPtr;
-    Transform3D *combinedTransform;
 
     // Combine rotation matrices: unk990 (Z rotation) * unk970 (Y rotation) = unk9F0
     func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, &arg0->unk9F0);
-    combinedTransform = &arg0->unk950;
-    // Combine with unk9B0 (X rotation) to get base transform
-    func_8006B084_6BC84(&arg0->unk9B0, &arg0->unk9F0, combinedTransform);
+    // Combine with unk9B0 (X rotation) to get base transform (unk950)
+    func_8006B084_6BC84(&arg0->unk9B0, &arg0->unk9F0, &arg0->unk950);
 
     if (arg0->behaviorFlags & 0x10) {
         // Apply vertical scale transformation during intro animation
-        scaledMatrixPtr = &scaledMatrix;
-        memcpy(scaledMatrixPtr, &identityMatrix, 0x20);
-        scaledMatrixPtr->m[1][1] = arg0->unkB9E;
-        func_8006B084_6BC84(scaledMatrixPtr, combinedTransform, &arg0->groundTransform);
+        memcpy(&scaledMatrix, &identityMatrix, 0x20);
+        scaledMatrix.m[1][1] = arg0->unkB9E;
+        func_8006B084_6BC84(&scaledMatrix, &arg0->unk950, &arg0->groundTransform);
     } else {
-        memcpy(&arg0->groundTransform, combinedTransform, 0x20);
+        memcpy(&arg0->groundTransform, &arg0->unk950, 0x20);
     }
 
     // Create pitch and yaw rotation matrix for the flying/floating transform
@@ -925,7 +921,8 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     // Add hover height offset to flying transform
     arg0->flyingTransform.translation.y = arg0->flyingTransform.translation.y + arg0->unk474;
 
-    // Create translation-only matrix for the third transform (unkB0)
+    // Create translation-only matrix for the third transform (unkB0).
+    // Uses gTempPosition for translation; -5 * 4 = -20 bytes gives Transform3D start
     gTempPosition.x = 0;
     gTempPosition.y = 0x140000;
     gTempPosition.z = 0;
