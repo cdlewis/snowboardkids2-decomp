@@ -5,11 +5,11 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "audio.h"
 #include "gamestate.h"
+#include "geometry.h"
 #include "rand.h"
 #include "task_scheduler.h"
 
 extern void spawnSpriteEffectEx(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
-extern Transform3D identityMatrix;
 extern u16 gNpcCollisionRadii[];
 
 void updateStoryMapRareEventJuggling(Func2E024Arg *arg0);
