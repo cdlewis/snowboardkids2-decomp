@@ -500,7 +500,7 @@ void func_80009548_A148(OpaqueSpriteStruct_90F0 *sprite) {
             }
         }
 
-        gSPDisplayList(gRegionAllocPtr++, D_8008CC90_8D890);
+        gSPDisplayList(gRegionAllocPtr++, gTranslucentSpriteTextureSetupDL);
         gDPLoadTextureBlock_4b(
             gRegionAllocPtr++,
             textureEntry.data_ptr,
