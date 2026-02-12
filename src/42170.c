@@ -1049,14 +1049,13 @@ WarpEffectState *createWarpEffect(WarpEffectSource *source, Player *player, s16 
 }
 
 void updateStarEffectAnimation(StarEffectState *arg0) {
-    unsigned int new_var;
+    s32 stride = 2;
     arg0->startDelay--; /* startDelay is reused as frameTimer after initialization */
     if ((arg0->startDelay << 0x10) == 0) {
-        new_var = 2;
-        loadAssetMetadata(&arg0->sprite, arg0->assetData, starAnimFrameIndices[arg0->animFrameIndex * new_var]);
-        arg0->startDelay = starAnimFrameDurations[arg0->animFrameIndex * 2];
+        loadAssetMetadata(&arg0->sprite, arg0->assetData, starAnimFrameIndices[arg0->animFrameIndex * stride]);
+        arg0->startDelay = starAnimFrameDurations[arg0->animFrameIndex * stride];
         arg0->animFrameIndex++;
-        if (starAnimFrameDurations[arg0->animFrameIndex * new_var] == 0) {
+        if (starAnimFrameDurations[arg0->animFrameIndex * stride] == 0) {
             arg0->animFrameIndex = 0;
         }
     }
@@ -1082,7 +1081,7 @@ void initStarEffect(void **arg0) {
 void updateStarEffect(StarEffectState *arg0) {
     EffectTaskState *effectTask;
     s16 initialDelay;
-    void *spriteDataTable;
+    void *assetTable;
 
     effectTask = (EffectTaskState *)getCurrentAllocation();
     initialDelay = arg0->startDelay;
@@ -1092,13 +1091,13 @@ void updateStarEffect(StarEffectState *arg0) {
         arg0->startDelay = 1; /* Reuse as frame timer after initialization */
         arg0->alphaPulseDir = 0;
         arg0->sprite.alpha = 0;
-        spriteDataTable = effectTask->spriteData;
+        assetTable = effectTask->spriteData;
         arg0->offsetY = 0x200000; /* Y offset above player */
         arg0->offsetX = 0;        /* X offset */
         arg0->offsetZ = 0;        /* Z offset */
         arg0->animFrameIndex = 0;
         arg0->playSoundFlag = 1;
-        arg0->sprite.assetTemplate = (void *)((u8 *)spriteDataTable + 0xF00);
+        arg0->sprite.assetTemplate = (void *)((u8 *)assetTable + 0xF00);
         updateStarEffectAnimation(arg0);
 
         if (arg0->immediateMode != 0) {
