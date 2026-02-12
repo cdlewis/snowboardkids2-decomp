@@ -9,6 +9,7 @@
 #include "90D0.h"
 #include "CBA0.h"
 #include "controller_io.h"
+#include "geometry.h"
 #include "graphics.h"
 #include "main.h"
 #include "task_scheduler.h"
@@ -51,7 +52,6 @@ extern s8 gCutsceneEntryCutFlag;
 extern s16 gCutsceneEntryBufferSlotIndex;
 extern CutsceneFadeAssetNode gCutsceneFadeAssetTable[];
 extern char gDebugFrameFormatString[];
-extern Transform3D identityMatrix;
 extern CutsceneAssetTable gCutsceneAssetTable[];
 
 extern void *func_800B5B38_1E2BE8(u16);
