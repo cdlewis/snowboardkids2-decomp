@@ -17,7 +17,6 @@ extern s32 D_8009F1F0_9FDF0;
 extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
 extern Gfx *gRegionAllocPtr;
-extern Transform3D identityMatrix;
 
 // Data pointers for different sprite dimension combinations
 extern void *D_8008C9E8_8D5E8;
