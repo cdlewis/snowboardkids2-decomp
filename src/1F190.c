@@ -128,7 +128,6 @@ extern s32 buildUnlockedLevelList(u8 *);
 extern s32 gControllerInputs[];
 extern s32 gFrameCounter;
 extern u8 D_8008D9C0_8E5C0[];
-extern Transform3D identityMatrix;
 
 void initLevelSelectWithDetail(void) {
     LevelSelectState_Base *allocation = allocateTaskMemory(0xB48);
