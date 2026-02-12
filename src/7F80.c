@@ -42,7 +42,6 @@ void updateCameraRotationTask(CameraRotationTaskState *);
 void cleanupCameraRotationTask(void);
 void renderPalettedTexture(PalettedTextureState *);
 
-extern Transform3D identityMatrix;
 s32 D_8008C200_8CE00[] = {
     0xD9D0F9FA, 0x00000000, 0xD9FFFFFF, 0x00210005, 0xD7000002, 0x80008000, 0x01018030,
     0x02000000, 0xE7000000, 0x00000000, 0xE3001201, 0x00002000, 0xE3000A01, 0x00100000,
