@@ -5,7 +5,6 @@
 
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
-extern Transform3D identityMatrix;
 
 u32 g_NonRaceShadowTex[];
 
