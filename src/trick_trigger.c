@@ -18,18 +18,18 @@ void initTrickDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
 }
 
 void checkTrickLocationDiscovery(LocationDiscoveryTrigger *trigger) {
-    s16 rawYaw;
+    s16 playerYaw;
     s16 normalizedYaw;
     u8 locationId;
     GameState *gameState;
-    s32 minAngle;
-    s32 maxAngle;
+    s16 minAngle;
+    s16 maxAngle;
 
-    gameState = (GameState *)getCurrentAllocation();
+    gameState = getCurrentAllocation();
     if (gameState->unk3F8 > 0x800000) {
-        rawYaw = gameState->unk3F4;
-        normalizedYaw = rawYaw;
-        if (rawYaw >= 0x1001) {
+        playerYaw = gameState->unk3F4;
+        normalizedYaw = playerYaw;
+        if (playerYaw >= 0x1001) {
             normalizedYaw -= 0x2000;
         }
         locationId = trigger->locationId;
