@@ -19,7 +19,6 @@ typedef struct {
 } QuadDisplayListState;
 
 extern s32 gTempPosition;
-extern Transform3D identityMatrix;
 extern u8 D_80088640_89240[];
 extern s32 D_8008C120_8CD20[];
 
