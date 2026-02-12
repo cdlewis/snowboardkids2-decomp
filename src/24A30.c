@@ -1147,6 +1147,8 @@ void cleanupCharSelectIcons(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
+// Initialize character select item icon sprites for display/hide animation
+// Sets up 3 item icons per character, positioned based on player count
 void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
     void *spriteAsset;
     u8 numPlayers;
@@ -1210,6 +1212,8 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
     setCallback(hideCharSelectIcons);
 }
 
+// Render the 3 item icons for character selection
+// If character selection is confirmed (state 3), switch to locked state icons
 void hideCharSelectIcons(CharSelectIconHideState *arg0) {
     func_80027348_entry *entry;
     GameState *state;
@@ -1309,6 +1313,8 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
     }
 }
 
+// Show character select item icons after selection is confirmed
+// Renders the 3 item icons and transitions to locked state if needed
 void showCharSelectIcons(CharSelectIconHideState *arg0) {
     GameState *state;
     s32 i;
