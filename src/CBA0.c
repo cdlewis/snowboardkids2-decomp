@@ -160,7 +160,6 @@ void cleanupSceneRenderTask(SceneRenderTaskData *task);
 
 extern Gfx *volatile gRegionAllocPtr;
 extern s32 gCurrentDisplayBufferIndex;
-extern Transform3D identityMatrix;
 
 Gfx D_8008CCE0_8D8E0[] = {
     { .words = { 0x00000000, 0x010000A0 } },
