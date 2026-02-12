@@ -398,7 +398,6 @@ u32 D_800885C0[] = {
     0x00000000,
 };
 
-extern Transform3D identityMatrix;
 void updateBobbingModelTask(BobbingModelState *);
 
 void cleanupBobbingModelTask(BobbingModelTaskState *);
