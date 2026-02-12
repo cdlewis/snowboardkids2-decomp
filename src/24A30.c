@@ -254,7 +254,6 @@ extern struct {
 } D_8008DE9C_8EA9C[];
 extern u8 D_8008DD8D_8E98D[];
 extern u8 D_8008DD8E_8E98E[];
-extern Transform3D identityMatrix;
 extern s32 D_8008DD2C_8E92C[];
 extern Vec3s D_8008DD4E_8E94E[];
 extern Vec3s charSelectIconPositions[];
