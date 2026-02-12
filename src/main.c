@@ -363,7 +363,6 @@ extern s32 D_800881C0;
 extern s32 D_80088520;
 extern s32 D_80088530;
 extern s32 D_800882F0;
-extern Transform3D identityMatrix;
 extern u32 D_80088610_89210;
 
 ModelEntityTaskConfig D_80088F20_89B20[] = {
