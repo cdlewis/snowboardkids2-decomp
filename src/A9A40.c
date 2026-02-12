@@ -19,6 +19,13 @@
 // Random thresholds for AI decision making
 #define SHORTCUT_SKIP_CHANCE 0xC0 // 192/256 = 75% take rate in special mode
 
+// Maximum look-ahead distance for AI target calculation
+#define AI_MAX_LOOKAHEAD_DISTANCE 0xA00000
+
+// AI lateral offset scaling factors
+#define LATERAL_OFFSET_SCALE 0x2000
+#define LANE_WIDTH_MULTIPLIER 6
+
 // Struct definitions
 typedef struct {
     /* 0x00 */ s16 next;
@@ -77,8 +84,10 @@ void calculateAITargetPosition(Player *player) {
     s16 pathAngle;
     s32 distanceToWaypoint;
     s32 maxDistance;
+    GameState *gs;
 
-    courseData = (CourseData *)((u8 *)getCurrentAllocation() + 0x30);
+    gs = getCurrentAllocation();
+    courseData = (CourseData *)&gs->gameData;
     currentSectorIndex = player->sectorIndex;
 
     if (courseData->waypoints[currentSectorIndex].next < 0) {
@@ -112,8 +121,8 @@ void calculateAITargetPosition(Player *player) {
 
         distanceToWaypoint = distance_2d(finalWaypointPos.x, finalWaypointPos.z);
 
-        if (distanceToWaypoint > 0xA00000) {
-            maxDistance = 0xA00000;
+        if (distanceToWaypoint > AI_MAX_LOOKAHEAD_DISTANCE) {
+            maxDistance = AI_MAX_LOOKAHEAD_DISTANCE;
             finalWaypointPos.x = (((s64)finalWaypointPos.x * maxDistance) / distanceToWaypoint);
             finalWaypointPos.z = (((s64)finalWaypointPos.z * maxDistance) / distanceToWaypoint);
             break;
@@ -211,10 +220,10 @@ s8 determineAIPathChoice(Player *player) {
         // trackLength is reused here to store the lateral distance from center
         lateralOffset =
             ((s64)(-((s16)normalizedDirZ)) * playerToStartX) + ((s64)((s16)normalizedDirX) * playerToStartZ);
-        trackLength = -((s32)(lateralOffset / 0x2000));
+        trackLength = -((s32)(lateralOffset / LATERAL_OFFSET_SCALE));
 
         // If player is close enough to the center line, follow the stored path preference
-        if (trackLength < (player->aiLaneWidth * 6)) {
+        if (trackLength < (player->aiLaneWidth * LANE_WIDTH_MULTIPLIER)) {
             return ((AIPathPreference *)player->aiPathData)[player->sectorIndex].pathPreference;
         }
     }
