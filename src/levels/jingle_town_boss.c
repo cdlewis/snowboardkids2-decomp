@@ -17,7 +17,6 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern Transform3D identityMatrix;
 extern Transform3D gScaleMatrix;
 extern Vec3i gTempPosition;
 extern s32 gJingleTownBossSpawnPos[];
