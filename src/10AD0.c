@@ -1,14 +1,29 @@
 #include "10AD0.h"
 #include "common.h"
 #include "gbi.h"
+#include "gs2dex.h"
 
-extern u16 gSpritePaletteModes[];
-extern u16 gSpriteTextureFormats[];
-extern Gfx gSpriteRDPSetupDL[];
+u16 gSpritePaletteModes[] = { 0x0002, 0x0000, 0x0003, 0x0004 };
+
+u16 gSpriteTextureFormats[] = { 0x0000, 0x0001, 0x0002, 0x0000 };
+
+s16 gTileTextureFlipTable[] = { 1, 1, -1, 1, 1, -1, -1, -1 };
+
+Gfx gSpriteRDPSetupDL[] = {
+    gsDPPipeSync(),
+    gsDPSetCycleType(G_CYC_1CYCLE),
+    gsDPSetTexturePersp(G_TP_NONE),
+    gsDPSetTextureFilter(G_TF_BILERP),
+    gsSPObjRenderMode(G_OBJRM_BILERP),
+    gsDPSetTextureLUT(G_TT_RGBA16),
+    gsDPSetCombineLERP(1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0),
+    gsDPSetRenderMode(G_RM_RA_SPRITE | IM_RD, G_RM_RA_SPRITE2),
+    gsSPEndDisplayList(),
+};
+
 extern s32 gCachedPaletteAddr;
 extern s32 gCachedTextureAddr;
 extern s16 gGraphicsMode;
-extern s16 gTileTextureFlipTable[];
 extern Gfx *gRegionAllocPtr;
 extern u16 gDefaultFontPalette[];
 extern TextClipAndOffsetData gTextClipAndOffsetData;
