@@ -209,8 +209,8 @@ s32 getTrackHeightAtPosition(void *trackGeom_void, u16 groupIdx, void *pos_void)
                         v0z = pos->z - t3;
                         area = (v2z * v1x) - (v2x * v1z);
 
-                        return (s32)((-((s64)(cross_a - cross_b) * v0x) - ((s64)((v2x * dY_v1) - (dY_v2 * v1x)) * v0z)
-                                     ) /
+                        return (s32)((-((s64)(cross_a - cross_b) * v0x) -
+                                      ((s64)((v2x * dY_v1) - (dY_v2 * v1x)) * v0z)) /
                                      area) +
                                (y0 << 16);
                     }
@@ -425,8 +425,8 @@ void findTrackFaceAtPosition(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2,
             if ((temp_a0->flags & 1) ||
                 (cross2d(arg2->x, arg2->z, temp_fp << 0x10, sp24 << 0x10, temp_s4 << 0x10, temp_s5 << 0x10) >= 0)) {
                 if ((((TrackFace *)(var_s2 + (s32)arg0->faces))->flags & 2) ||
-                    (cross2d(arg2->x, arg2->z, temp_s4 << 0x10, temp_s5 << 0x10, temp_s6 << 0x10, temp_s7 << 0x10) >= 0
-                    )) {
+                    (cross2d(arg2->x, arg2->z, temp_s4 << 0x10, temp_s5 << 0x10, temp_s6 << 0x10, temp_s7 << 0x10) >=
+                     0)) {
                     if (cross2d(arg2->x, arg2->z, temp_s6 << 0x10, temp_s7 << 0x10, temp_fp << 0x10, sp24 << 0x10) >=
                         0) {
                         *arg3 = ((TrackFace *)(var_s2 + (s32)arg0->faces))->flags >> 2;

@@ -1130,7 +1130,7 @@ musHandle startSongWithSingleFxBank(fx_header_t *fxBank, void *songAddr) {
         }
     }
 
-    result = ((s32(*)(void *))__MusIntStartSong)(songAddr);
+    result = ((s32 (*)(void *))__MusIntStartSong)(songAddr);
     libmus_fxheader_single = libmus_fxheader_current;
 
     return result;
