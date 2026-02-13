@@ -310,27 +310,28 @@ void renderTiledTexture(TiledTextureRenderState *state) {
     }
 }
 
-void initTiledTextureRenderState(TiledTextureRenderState *arg0, TiledTextureAsset *arg1) {
-    TiledTextureAsset *asset;
-    s32 padding1;
-    s32 padding2;
-    asset = arg1;
+void initTiledTextureRenderState(TiledTextureRenderState *state, TiledTextureAsset *asset) {
+    TiledTextureAsset *assetBase;
+    s32 unused1;
+    s32 unused2;
 
-    arg0->x = 0;
-    arg0->y = 0;
-    arg0->tilesPerRow = arg1->tileGridWidth;
-    arg0->tilesPerCol = arg1->tileGridHeight;
-    arg0->tileGridWidth = arg0->tilesPerRow;
-    arg0->tileGridHeight = arg0->tilesPerCol;
-    arg0->tileWidth = arg1->tileWidth;
-    arg0->tileHeight = arg1->tileHeight;
-    arg0->ciMode = arg1->ciMode;
-    arg0->clipX = 0;
-    arg0->clipY = 0;
-    arg0->clipWidth = 0x140;
-    arg0->clipHeight = 0xF0;
-    arg0->tileIndexData = (s32)((u8 *)asset + arg1->tileIndexDataOffset);
-    arg0->textureData = (s32)((u8 *)asset + arg1->textureDataOffset);
-    arg0->tileEntries = (TileEntry *)&arg1->tileEntries;
-    arg0->paletteData = (TexData32 *)((u8 *)asset + arg1->paletteDataOffset);
+    assetBase = asset;
+
+    state->x = 0;
+    state->y = 0;
+    state->tilesPerRow = asset->tileGridWidth;
+    state->tilesPerCol = asset->tileGridHeight;
+    state->tileGridWidth = state->tilesPerRow;
+    state->tileGridHeight = state->tilesPerCol;
+    state->tileWidth = asset->tileWidth;
+    state->tileHeight = asset->tileHeight;
+    state->ciMode = asset->ciMode;
+    state->clipX = 0;
+    state->clipY = 0;
+    state->clipWidth = 0x140;
+    state->clipHeight = 0xF0;
+    state->tileIndexData = (s32)((u8 *)assetBase + asset->tileIndexDataOffset);
+    state->textureData = (s32)((u8 *)assetBase + asset->textureDataOffset);
+    state->tileEntries = (TileEntry *)&asset->tileEntries;
+    state->paletteData = (TexData32 *)((u8 *)assetBase + asset->paletteDataOffset);
 }

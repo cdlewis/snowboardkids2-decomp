@@ -153,8 +153,8 @@ typedef struct {
     s32 unkAD0;
     s32 unkAD4[3];
     s32 unkAE0;
-    Vec3i unkAE4[6];
-    s32 unkB2C;
+    Vec3i extraCollisionOffsets[6];
+    s32 extraCollisionRadii;
     s32 unkB30;
     s32 unkB34;
     s32 unkB38;
@@ -390,7 +390,7 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     boss->velocity.x = boss->position.x - boss->prevPosition.x;
     boss->velocity.y = boss->position.y - boss->prevPosition.y;
     boss->velocity.z = boss->position.z - boss->prevPosition.z;
-    memcpy(&boss->prevPosition, &boss->position, 0xC);
+    memcpy(&boss->prevPosition, &boss->position, sizeof(Vec3i));
 
     // Get distance to player for AI speed calculation
     player = (IceBossArg *)gameState->players;
@@ -468,7 +468,7 @@ void func_800BB2B0_B07A0(IceBossArg *boss) {
     } else {
         transformVector((s16 *)D_800BCA24_B1F14, (s16 *)&fullTransform, &boss->transformedPos);
     }
-    memcpy(&boss->sectorListNode.localPos, &boss->transformedPos, 0xC);
+    memcpy(&boss->sectorListNode.localPos, &boss->transformedPos, sizeof(Vec3i));
     addCollisionSectorNodeToList(&boss->sectorListNode);
     updateIceLandBossLeanBoneTransforms((Player *)boss);
 
@@ -546,7 +546,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
 
     // Initialize behavior state
     arg0->behaviorMode = 1;
-    arg0->unkB2C = 0x240000;
+    arg0->extraCollisionRadii = 0x240000;
     arg0->unkBB4 = 3;
     arg0->unkB54 = (void *)&arg0->unk434;
     arg0->behaviorPhase = 0;
@@ -560,7 +560,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
         spawnChaseCameraTask(arg0->unkBB8);
     }
 
-    arg0->unkAA0 = ((s32 *)gameState->players)[0xAA0 / 4] - 0x10000;
+    arg0->unkAA0 = gameState->players[0].unkAA0 - 0x10000;
 
     // Initialize asset offset table
     if (arg0->unk0_3C[0].unk1C != 0) {
@@ -586,7 +586,7 @@ void setIceBossFlyingMode(Player *arg0) {
     }
 
     arg0->collisionRadius = 0x100000;
-    arg0->unkB2C = 0x100000;
+    arg0->extraCollisionRadii = 0x100000;
     arg0->unkBB4 = 1;
     arg0->animFlags = arg0->animFlags | 0x400000;
 }
@@ -1036,7 +1036,7 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     u16 newSectorIndex;
 
     gameState = getCurrentAllocation();
-    memcpy(boss->unk984, &boss->unk434, 0xC);
+    memcpy(boss->unk984, &boss->unk434, sizeof(Vec3i));
     gameData = &gameState->gameData;
     newSectorIndex = getOrUpdatePlayerSectorIndex(boss, gameData, boss->sectorIndex, &boss->unk434);
     boss->sectorIndex = newSectorIndex;

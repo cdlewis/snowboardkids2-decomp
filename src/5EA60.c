@@ -1242,7 +1242,7 @@ s32 getIndexedAnimationDataPtr(IndexedAnimationDataLayout *data, s16 index) {
 }
 
 s32 getAnimationBoneCount(AnimationBoneCountTable *table, s32 index) {
-    u8 *tableBytes = (u8 *)table;
-    u32 boneCountOffset = *((u32 *)(tableBytes + ((index << 16) >> 14) + 8));
-    return *(u16 *)(tableBytes + boneCountOffset);
+    u8 *tableBase = (u8 *)table;
+    u32 boneCountDataOffset = *((u32 *)(tableBase + ((index << 16) >> 14) + 8));
+    return *(u16 *)(tableBase + boneCountDataOffset);
 }

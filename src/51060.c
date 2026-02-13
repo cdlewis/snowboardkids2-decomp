@@ -699,7 +699,7 @@ void initSkiTrailTask(SkiTrailTask *task) {
             transforms += 6;
             i++;
             iter->skiOffsets[0].z -= task->player->worldPos.z;
-            iter = (volatile SkiTrailTask *)((u8 *)iter + 0xC);
+            iter = (SkiTrailTask *)((u8 *)iter + 0xC);
         } while (i < 2);
     } else {
         iter = task;
@@ -713,7 +713,7 @@ void initSkiTrailTask(SkiTrailTask *task) {
             transforms += 6;
             i++;
             iter->skiOffsets[0].z -= task->player->worldPos.z;
-            iter = (volatile SkiTrailTask *)((u8 *)iter + 0xC);
+            iter = (SkiTrailTask *)((u8 *)iter + 0xC);
         } while (i < 2);
     }
 

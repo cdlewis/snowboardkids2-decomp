@@ -19,31 +19,38 @@
 // Random thresholds for AI decision making
 #define SHORTCUT_SKIP_CHANCE 0xC0 // 192/256 = 75% take rate in special mode
 
+// Maximum look-ahead distance for AI target calculation
+#define AI_MAX_LOOKAHEAD_DISTANCE 0xA00000
+
+// AI lateral offset scaling factors
+#define LATERAL_OFFSET_SCALE 0x2000
+#define LANE_WIDTH_MULTIPLIER 6
+
 // Struct definitions
 typedef struct {
     /* 0x00 */ s16 next;
-    /* 0x02 */ s16 pad;
+    /* 0x02 */ s16 pad02;
     /* 0x04 */ s16 alt2;
     /* 0x06 */ s16 alt;
-    /* 0x08 */ char unk_08[0x1C];
+    /* 0x08 */ char pad08[0x1C];
 } Waypoint; // size = 0x24
 
 typedef struct {
-    /* 0x00 */ char unk_00[0x0C];
+    /* 0x00 */ char pad00[0x0C];
     /* 0x0C */ Waypoint *waypoints;
-    /* 0x10 */ char unk_10[0x1C];
+    /* 0x10 */ char pad10[0x1C];
     /* 0x2C */ u8 defaultPosIndex;
 } CourseData;
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    s8 pathPreference;
+    /* 0x00 */ u8 unk00;
+    /* 0x01 */ u8 unk01;
+    /* 0x02 */ u8 unk02;
+    /* 0x03 */ s8 pathPreference;
 } AIPathPreference;
 
 typedef struct {
-    u8 pad0[0x14];
+    u8 pad14[0x14];
     u16 trackStartIdx;
     u8 pad16[0x2];
     u16 trackEndIdx;
@@ -51,9 +58,9 @@ typedef struct {
 } Section3Entry;
 
 typedef struct {
-    s32 valX;
+    s32 dirX;
     s32 _pad1;
-    s32 valZ;
+    s32 dirZ;
     s32 _pad2;
 } StackSpillVars;
 
@@ -77,8 +84,10 @@ void calculateAITargetPosition(Player *player) {
     s16 pathAngle;
     s32 distanceToWaypoint;
     s32 maxDistance;
+    GameState *gs;
 
-    courseData = (CourseData *)((u8 *)getCurrentAllocation() + 0x30);
+    gs = getCurrentAllocation();
+    courseData = (CourseData *)&gs->gameData;
     currentSectorIndex = player->sectorIndex;
 
     if (courseData->waypoints[currentSectorIndex].next < 0) {
@@ -112,8 +121,8 @@ void calculateAITargetPosition(Player *player) {
 
         distanceToWaypoint = distance_2d(finalWaypointPos.x, finalWaypointPos.z);
 
-        if (distanceToWaypoint > 0xA00000) {
-            maxDistance = 0xA00000;
+        if (distanceToWaypoint > AI_MAX_LOOKAHEAD_DISTANCE) {
+            maxDistance = AI_MAX_LOOKAHEAD_DISTANCE;
             finalWaypointPos.x = (((s64)finalWaypointPos.x * maxDistance) / distanceToWaypoint);
             finalWaypointPos.z = (((s64)finalWaypointPos.z * maxDistance) / distanceToWaypoint);
             break;
@@ -186,35 +195,35 @@ s8 determineAIPathChoice(Player *player) {
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         trackEndIdx = SEC3(gs)[player->sectorIndex].trackEndIdx;
         trackDirX = SEC1(gs)[trackStartIdx].x - SEC1(gs)[trackEndIdx].x;
-        spill.valX = trackDirX;
+        spill.dirX = trackDirX;
 
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         trackLengthSq = trackDirX * trackDirX;
         trackEndIdx = SEC3(gs)[player->sectorIndex].trackEndIdx;
         trackDirZ = SEC1(gs)[trackStartIdx].z - SEC1(gs)[trackEndIdx].z;
-        spill.valZ = trackDirZ;
+        spill.dirZ = trackDirZ;
         trackLengthSq += trackDirZ * trackDirZ;
 
         trackLength = isqrt64(trackLengthSq);
-        normalizedDirX = (spill.valX << 13) / trackLength;
-        normalizedDirZ = (spill.valZ << 13) / trackLength;
+        normalizedDirX = (spill.dirX << 13) / trackLength;
+        normalizedDirZ = (spill.dirZ << 13) / trackLength;
 
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         playerToStartX = player->worldPos.x - (SEC1(gs)[trackStartIdx].x << 16);
-        spill.valX = playerToStartX;
+        spill.dirX = playerToStartX;
 
         trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         playerToStartZ = player->worldPos.z - (SEC1(gs)[trackStartIdx].z << 16);
-        spill.valZ = playerToStartZ;
+        spill.dirZ = playerToStartZ;
 
         // Calculate lateral offset (perpendicular distance) from track center line
         // trackLength is reused here to store the lateral distance from center
         lateralOffset =
             ((s64)(-((s16)normalizedDirZ)) * playerToStartX) + ((s64)((s16)normalizedDirX) * playerToStartZ);
-        trackLength = -((s32)(lateralOffset / 0x2000));
+        trackLength = -((s32)(lateralOffset / LATERAL_OFFSET_SCALE));
 
         // If player is close enough to the center line, follow the stored path preference
-        if (trackLength < (player->aiLaneWidth * 6)) {
+        if (trackLength < (player->aiLaneWidth * LANE_WIDTH_MULTIPLIER)) {
             return ((AIPathPreference *)player->aiPathData)[player->sectorIndex].pathPreference;
         }
     }

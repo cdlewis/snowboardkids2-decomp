@@ -3681,40 +3681,40 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B8894_A8744);
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B9500_A93B0);
 
 void updatePlayerJointPositions(Player *player) {
-    GameState *alloc;
+    GameState *gameSt;
     GameDataLayout *gameData;
-    s32 i;
-    s32 offset;
-    u8 *jointWritePtr;
+    s32 jointIdx;
+    s32 jointOff;
+    u8 *jointBase;
     Vec3i *jointPos;
-    s32 sectorIndex;
+    s32 sectorIdx;
 
-    alloc = getCurrentAllocation();
-    i = 0;
-    gameData = &alloc->gameData;
-    offset = 0xA10;
-    jointWritePtr = (u8 *)player;
+    gameSt = getCurrentAllocation();
+    jointIdx = 0;
+    gameData = &gameSt->gameData;
+    jointOff = 0xA10;
+    jointBase = (u8 *)player;
 
     do {
-        jointPos = (Vec3i *)((u8 *)player + offset);
-        *(volatile s32 *)(jointWritePtr + 0xA10) =
-            player->unk970.translation.x + *(s32 *)((u8 *)&D_800BA348_AA1F8 + offset);
-        *(volatile s32 *)(jointWritePtr + 0xA18) =
-            player->unk970.translation.z + *(s32 *)((u8 *)&D_800BA350_AA200 + offset);
+        jointPos = (Vec3i *)((u8 *)player + jointOff);
+        *(volatile s32 *)(jointBase + 0xA10) =
+            player->unk970.translation.x + *(s32 *)((u8 *)&D_800BA348_AA1F8 + jointOff);
+        *(volatile s32 *)(jointBase + 0xA18) =
+            player->unk970.translation.z + *(s32 *)((u8 *)&D_800BA350_AA200 + jointOff);
 
-        sectorIndex = getOrUpdatePlayerSectorIndex((void *)player, gameData, player->sectorIndex, jointPos);
-        *(volatile s32 *)(jointWritePtr + 0xA14) = getTrackHeightInSector(gameData, sectorIndex, jointPos, 0x100000);
+        sectorIdx = getOrUpdatePlayerSectorIndex((void *)player, gameData, player->sectorIndex, jointPos);
+        *(volatile s32 *)(jointBase + 0xA14) = getTrackHeightInSector(gameData, sectorIdx, jointPos, 0x100000);
 
-        i++;
-        offset += 0xC;
-        jointWritePtr += 0xC;
-    } while (i < 9);
+        jointIdx++;
+        jointOff += 0xC;
+        jointBase += 0xC;
+    } while (jointIdx < 9);
 
     player->unkBC1 = 1;
 
     if (!(player->animFlags & 0x800000)) {
-        for (i = 0; i < 4; i++) {
-            debugEnqueueCallback(i, 1, func_800B9500_A93B0, (void *)player);
+        for (jointIdx = 0; jointIdx < 4; jointIdx++) {
+            debugEnqueueCallback(jointIdx, 1, func_800B9500_A93B0, (void *)player);
         }
     }
 }

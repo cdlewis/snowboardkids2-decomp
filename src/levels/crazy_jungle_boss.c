@@ -346,7 +346,8 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
 
     arg0->unkA94 = 0x1000;
 
-    // Initialize bone matrices (17 bones)
+    // Initialize body part elements (17 elements, each 0x3C bytes)
+    // Each element contains Transform3D at offset 0x38, asset pointer at 0x58
     for (i = 0; i < 17; i++) {
         elem = (u8 *)arg0 + i * 0x3C;
         memcpy(elem + 0x38, &identityMatrix, sizeof(Transform3D));

@@ -25,17 +25,20 @@ void checkGenericLocationDiscovery(LocationDiscoveryTrigger *trigger) {
     s16 minAngle;
     s16 maxAngle;
 
+    // Only check if player is above certain Y threshold
     if (gameState->unk3F8 <= 0x6E0000) {
         return;
     }
 
     orbitAngle = gameState->unk3F4;
+    // Normalize angle to range -0x1000 to 0x1000
     normalizedYaw = orbitAngle;
     if (orbitAngle >= 0x1001) {
         normalizedYaw -= 0x2000;
     }
 
     locationId = trigger->locationId;
+    // Get angle bounds for this location from the angle bounds table (TriggerAngleBounds)
     minAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2];
     if (normalizedYaw < minAngle) {
         maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(locationId * 2) + 1];

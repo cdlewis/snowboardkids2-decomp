@@ -1060,41 +1060,41 @@ extern u8 D_8008DD8C_8E98C[];
 extern s16 D_8008DE02_8EA02[];
 
 void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
-    u8 *alloc;
+    u8 *gameState;
     s32 i;
-    s32 count;
+    s32 iconsStillAnimating;
     CharSelectIconEntry *entry;
     u8 charIndex;
     u8 paletteIndex;
     u8 itemIconIndex;
-    s16 targetVal;
+    s16 targetY;
     u16 currentY;
     s16 newY;
     u8 *ptr;
 
-    alloc = (u8 *)getCurrentAllocation();
-    count = 0;
+    gameState = (u8 *)getCurrentAllocation();
+    iconsStillAnimating = 0;
 
     // Animate icon Y positions towards their target values
     for (i = 0; i < arg0->numVisibleIcons; i++) {
-        ptr = alloc + arg0->playerIndex;
+        ptr = gameState + arg0->playerIndex;
         charIndex = ptr[0x18A8];
         paletteIndex = ptr[0x18B0];
         // Each character has 3 board options (palette 0-2), with 3 items each
         itemIconIndex = D_8008DD8C_8E98C[(((u8)(paletteIndex + charIndex * 3)) * 3) + i];
-        targetVal = D_8008DE02_8EA02[itemIconIndex];
+        targetY = D_8008DE02_8EA02[itemIconIndex];
 
         entry = &arg0->entries[i];
         currentY = entry->currentY;
 
-        if ((currentY & 0xFFFF) < targetVal) {
+        if ((currentY & 0xFFFF) < targetY) {
             if (currentY < 0x10) {
                 newY = currentY + 8;
             } else {
                 newY = currentY + 0xC;
             }
             entry->currentY = newY;
-            count++;
+            iconsStillAnimating++;
         }
     }
 
@@ -1102,10 +1102,10 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
     if (arg0->numVisibleIcons < 3) {
         arg0->revealCounter = (arg0->revealCounter + 1) & 3;
         if (arg0->revealCounter == 0) {
-            arg0->numVisibleIcons = arg0->numVisibleIcons + 1;
+            arg0->numVisibleIcons++;
         }
     } else {
-        if (count == 0) {
+        if (iconsStillAnimating == 0) {
             setCallback(updateCharSelectIconTargets);
         }
     }
@@ -1116,7 +1116,7 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
     }
 
     // If character selection is confirmed, skip animation
-    if (((u16 *)alloc)[(arg0->playerIndex * 2 + 0x1898) / 2] == 9) {
+    if (((u16 *)gameState)[(arg0->playerIndex * 2 + 0x1898) / 2] == 9) {
         setCallback(updateCharSelectIconTargets);
     }
 }
@@ -1147,6 +1147,8 @@ void cleanupCharSelectIcons(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
+// Initialize character select item icon sprites for display/hide animation
+// Sets up 3 item icons per character, positioned based on player count
 void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
     void *spriteAsset;
     u8 numPlayers;
@@ -1210,18 +1212,19 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
     setCallback(hideCharSelectIcons);
 }
 
+// Render the 3 item icons for character selection
+// If character selection is confirmed (state 3), switch to locked state icons
 void hideCharSelectIcons(CharSelectIconHideState *arg0) {
-    func_80027348_entry *entry;
+    P2NameSpriteEntry *entry;
     GameState *state;
     s32 i;
     s16 iconIndex;
     u8 constant;
-    func_80027348_entry *entryPtr;
 
     state = (GameState *)getCurrentAllocation();
 
     i = 0;
-    entry = (func_80027348_entry *)arg0;
+    entry = arg0->entries;
     do {
         debugEnqueueCallback(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
         entry++;
@@ -1236,11 +1239,9 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
 
         i = 0;
         constant = 8;
-        entryPtr = arg0->entries;
         do {
-            ((volatile func_80027348_entry *)entryPtr)->spriteIndex = iconIndex;
-            ((volatile func_80027348_entry *)entryPtr)->paletteIndex = constant;
-            entryPtr++;
+            arg0->entries[i].spriteIndex = iconIndex;
+            arg0->entries[i].paletteIndex = constant;
             i++;
         } while (i < 3);
 
@@ -1251,7 +1252,7 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
 void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
     GameState *state;
     s32 i;
-    func_80027348_entry *entry;
+    P2NameSpriteEntry *entry;
     u16 charSelectState;
     s32 iconBaseIndex;
     u8 charIndex;
@@ -1264,7 +1265,7 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
 
     // Render the 3 item icons for the current character selection
     i = 0;
-    entry = (func_80027348_entry *)arg0;
+    entry = arg0->entries;
     do {
         debugEnqueueCallback(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
         entry++;
@@ -1292,7 +1293,6 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
         i = 0;
         itemIconTable = D_8008DD8C_8E98C;
         paletteIndex = state->unk18B0[arg0->playerIndex];
-        entry = (func_80027348_entry *)arg0;
         // Calculate offset into item icon table:
         // Each character has 3 board options (palette 0-2), and 3 items per option
         itemTableOffset = ((u8)(paletteIndex + charIndex * 3)) * 3;
@@ -1300,8 +1300,8 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
         // Update each of the 3 item icons based on the selected character+board combo
         do {
             itemIconPtr = (u8 *)((itemTableOffset + i) + (u32)itemIconTable);
-            ((func_80027348_entry *)arg0)[i].spriteIndex = iconBaseIndex + (*itemIconPtr - 1) / 2;
-            ((func_80027348_entry *)arg0)[i].paletteIndex = (u8)(((*itemIconPtr - 1) / 2 + 7) & 0xFF) % 11;
+            arg0->entries[i].spriteIndex = iconBaseIndex + (*itemIconPtr - 1) / 2;
+            arg0->entries[i].paletteIndex = (u8)(((*itemIconPtr - 1) / 2 + 7) & 0xFF) % 11;
             i++;
         } while (i < 3);
 
@@ -1309,13 +1309,16 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
     }
 }
 
+// Show character select item icons after selection is confirmed
+// Renders the 3 item icons and transitions to locked state if needed
 void showCharSelectIcons(CharSelectIconHideState *arg0) {
     GameState *state;
     s32 i;
     s32 iconBaseIndex;
     s32 tableOffset;
-    func_80027348_entry *entry;
-    u8 charIndex, paletteIndex;
+    P2NameSpriteEntry *entry;
+    u8 charIndex;
+    u8 paletteIndex;
     u8 *tableBase;
     u8 *tablePtr;
 
@@ -1330,7 +1333,7 @@ void showCharSelectIcons(CharSelectIconHideState *arg0) {
     i = 0;
     tableBase = D_8008DD8C_8E98C;
     paletteIndex = state->unk18B0[arg0->playerIndex];
-    entry = (func_80027348_entry *)arg0;
+    entry = arg0->entries;
     tableOffset = ((u8)(paletteIndex + charIndex * 3)) * 3;
 
 loop:
@@ -1344,21 +1347,15 @@ loop:
         goto loop;
 
     if (state->unk1898[arg0->playerIndex] == 3) {
-        s32 constant;
-        u8 *a0;
-
         iconBaseIndex = 0xD;
         if (D_800AFE8C_A71FC->numPlayers == 1) {
             iconBaseIndex = 0x12;
         }
 
         i = 0;
-        constant = 8;
-        a0 = (u8 *)arg0;
         do {
-            ((volatile s16 *)a0)[4] = iconBaseIndex;
-            ((volatile u8 *)a0)[0xA] = constant;
-            a0 += 0xC;
+            arg0->entries[i].spriteIndex = iconBaseIndex;
+            arg0->entries[i].paletteIndex = 8;
             i++;
         } while (i < 3);
 

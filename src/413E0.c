@@ -199,7 +199,7 @@ void spawnPlayerIndicatorTask(void *cleanupArg) {
 }
 
 void initStartGate(StartGate *gate) {
-    s32 tempMatrix[8];
+    s32 doorOffsetMatrix[8];
     Vec3i trackEndPos;
     s32 *transformMatrix;
     GameState *gameState;
@@ -212,14 +212,14 @@ void initStartGate(StartGate *gate) {
     gate->mainGateSegment1 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     gate->mainGateSegment2 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     gate->mainGateSegment3 = 0;
-    trackAngle = getTrackEndInfo((u8 *)gameState + 0x30, &trackEndPos);
+    trackAngle = getTrackEndInfo(&gameState->gameData, &trackEndPos);
     createYRotationMatrix(&gate->rotationMatrix, (trackAngle + levelConfig->yawOffset) & 0xFFFF);
     rotateVectorY(&D_800907EC_913EC, trackAngle + levelConfig->yawOffset, &gate->rotationMatrix.translation);
     gate->rotationMatrix.translation.x = gate->rotationMatrix.translation.x + levelConfig->shortcutPosX;
     gate->rotationMatrix.translation.z = gate->rotationMatrix.translation.z + levelConfig->shortcutPosZ;
     gate->rotationMatrix.translation.y = trackEndPos.y;
     gate->leftDoorDisplayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(gameState->memoryPoolId) + 0x60);
-    transformMatrix = tempMatrix;
+    transformMatrix = doorOffsetMatrix;
     gate->leftDoorSegment1 = gate->mainGateSegment1;
     gate->leftDoorSegment2 = gate->mainGateSegment2;
     gate->leftDoorSegment3 = gate->mainGateSegment3;
@@ -239,8 +239,8 @@ void initStartGate(StartGate *gate) {
 }
 
 void updateStartGate(StartGate *gate) {
-    Transform3D sp10;
-    Transform3D *s0;
+    Transform3D localRotation;
+    Transform3D *doorTransform;
     GameState *gameState;
     s32 i;
 
@@ -262,11 +262,11 @@ void updateStartGate(StartGate *gate) {
                 gate->pauseTimer = 0xA;
                 gate->animationState++;
             }
-            createZRotationMatrix(&sp10, gate->gateRotation);
-            sp10.translation.x = 0;
-            sp10.translation.y = 0xC0000;
-            sp10.translation.z = 0;
-            func_8006B084_6BC84(&sp10, gate, &gate->leftDoorTransform);
+            createZRotationMatrix(&localRotation, gate->gateRotation);
+            localRotation.translation.x = 0;
+            localRotation.translation.y = 0xC0000;
+            localRotation.translation.z = 0;
+            func_8006B084_6BC84(&localRotation, gate, &gate->leftDoorTransform);
             break;
         case 2:
             if (gameState->gamePaused == 0) {
@@ -283,13 +283,13 @@ void updateStartGate(StartGate *gate) {
             if (gate->gateRotation == 0) {
                 gate->animationState++;
             }
-            s0 = &gate->leftDoorTransform;
-            createZRotationMatrix(s0, gate->gateRotation);
-            createZRotationMatrix(&sp10, gate->gateRotation);
-            sp10.translation.x = 0;
-            sp10.translation.y = 0xC0000;
-            sp10.translation.z = 0;
-            func_8006B084_6BC84(&sp10, gate, s0);
+            doorTransform = &gate->leftDoorTransform;
+            createZRotationMatrix(doorTransform, gate->gateRotation);
+            createZRotationMatrix(&localRotation, gate->gateRotation);
+            localRotation.translation.x = 0;
+            localRotation.translation.y = 0xC0000;
+            localRotation.translation.z = 0;
+            func_8006B084_6BC84(&localRotation, gate, doorTransform);
             break;
         case 4:
             if (gameState->shortcutGateState != 3) {
@@ -498,15 +498,13 @@ void updateConfettiParticles(ConfettiEffectTask *task) {
         cameraOffset = 0xFF000000;
         offset = 0;
         do {
-            /* Particle array layout:
-             * particle[0]    = vertices/asset ptr
-             * particle[1-3]  = position (x, y, z) - for rendering
-             * particle[8]    = worldX - physics position
-             * particle[9]    = worldY - physics position
-             * particle[0xA]  = worldZ - physics position
-             * particle[0xB]  = velX - velocity X
-             * particle[0xC]  = velY - velocity Y
-             * particle[0xD]  = velZ - velocity Z
+            /* ConfettiParticle struct fields:
+             * worldX - physics position X (offset 0x20)
+             * worldY - physics position Y (offset 0x24)
+             * worldZ - physics position Z (offset 0x28)
+             * velX   - velocity X (offset 0x2C)
+             * velY   - velocity Y (offset 0x30)
+             * velZ   - velocity Z (offset 0x34)
              */
             if (task->pauseWhenPaused != 0) {
                 GameState *gameState = (GameState *)getCurrentAllocation();
@@ -515,53 +513,53 @@ void updateConfettiParticles(ConfettiEffectTask *task) {
             if (running != 0) {
                 /* Update particle physics position */
                 {
-                    s32 *particle = (s32 *)(offset + (s32)task->particles);
-                    particle[8] += particle[0xB]; /* worldX += velX */
+                    s32 *p = (s32 *)(offset + (s32)task->particles);
+                    p[8] += p[0xB]; /* worldX += velX */
                 }
                 {
-                    s32 *particle = (s32 *)(offset + (s32)task->particles);
-                    particle[9] += particle[0xC]; /* worldY += velY */
+                    s32 *p = (s32 *)(offset + (s32)task->particles);
+                    p[9] += p[0xC]; /* worldY += velY */
                 }
                 /* Respawn particle if it falls below the world */
-                if (*(s32 *)(offset + (s32)task->particles + 0x24) < 0) {                    /* worldY < 0 */
-                    *(s32 *)(offset + (s32)task->particles + 0x20) = (randA() & 0xFF) << 17; /* worldX */
-                    *(s32 *)(offset + (s32)task->particles + 0x24) = 0x02000000;             /* worldY */
-                    *(s32 *)(offset + (s32)task->particles + 0x28) = (randA() & 0xFF) << 17; /* worldZ */
-                    *(s32 *)(offset + (s32)task->particles + 0x30) = 0xFFFC0000 - ((randA() & 0xFF) << 8); /* velY */
+                if (*(s32 *)(offset + (s32)task->particles + 0x24) < 0) {
+                    *(s32 *)(offset + (s32)task->particles + 0x20) = (randA() & 0xFF) << 17;
+                    *(s32 *)(offset + (s32)task->particles + 0x24) = 0x02000000;
+                    *(s32 *)(offset + (s32)task->particles + 0x28) = (randA() & 0xFF) << 17;
+                    *(s32 *)(offset + (s32)task->particles + 0x30) = 0xFFFC0000 - ((randA() & 0xFF) << 8);
                 }
             }
             /* Adjust world position relative to camera movement */
             {
-                s32 *particle = (s32 *)(offset + (s32)task->particles);
-                particle[8] -= *(s32 *)((u8 *)task->cameraNode + 0x134) - task->lastCameraX; /* worldX */
+                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
+                p->worldX -= *(s32 *)((u8 *)task->cameraNode + 0x134) - task->lastCameraX;
             }
             {
-                s32 *particle = (s32 *)(offset + (s32)task->particles);
-                particle[8] &= mask; /* Wrap worldX */
+                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
+                p->worldX &= mask;
             }
             {
-                s32 *particle = (s32 *)(offset + (s32)task->particles);
-                particle[0xA] -= *(s32 *)((u8 *)task->cameraNode + 0x13C) - task->lastCameraZ; /* worldZ */
+                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
+                p->worldZ -= *(s32 *)((u8 *)task->cameraNode + 0x13C) - task->lastCameraZ;
             }
             {
-                s32 *particle = (s32 *)(offset + (s32)task->particles);
-                particle[0xA] &= mask; /* Wrap worldZ */
+                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
+                p->worldZ &= mask;
             }
             /* Update render position based on world position and camera */
             {
-                s32 *particle = (s32 *)(offset + (s32)task->particles);
+                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
                 s32 camX = *(s32 *)((u8 *)task->cameraNode + 0x134) + cameraOffset;
-                particle[1] = particle[8] + camX; /* position.x = worldX + camX */
+                p->sprite.position.x = p->worldX + camX;
             }
             {
-                s32 *particle = (s32 *)(offset + (s32)task->particles);
+                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
                 s32 camY = *(s32 *)((u8 *)task->cameraNode + 0x138) + cameraOffset;
-                particle[2] = particle[9] + camY; /* position.y = worldY + camY */
+                p->sprite.position.y = p->worldY + camY;
             }
             {
-                s32 *particle = (s32 *)(offset + (s32)task->particles);
+                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
                 s32 camZ = *(s32 *)((u8 *)task->cameraNode + 0x13C) + cameraOffset;
-                particle[3] = particle[0xA] + camZ; /* position.z = worldZ + camZ */
+                p->sprite.position.z = p->worldZ + camZ;
             }
             enqueueTexturedBillboardSprite(task->frameCounter, (void *)((s32)task->particles + offset));
             i++;

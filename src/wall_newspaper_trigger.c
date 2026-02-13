@@ -24,12 +24,12 @@ void checkNewspaperLocationDiscovery(LocationDiscoveryTrigger *trigger) {
     s16 minAngle;
     s16 maxAngle;
     u8 locationId;
-    GameState *state;
+    GameState *gameState;
 
-    state = (GameState *)getCurrentAllocation();
+    gameState = getCurrentAllocation();
     // Only check if player is above certain Y threshold
-    if (state->unk3F8 > 0x760000) {
-        playerYaw = state->unk3F4;
+    if (gameState->unk3F8 > 0x760000) {
+        playerYaw = gameState->unk3F4;
         // Normalize angle to range -0x1000 to 0x1000
         normalizedYaw = playerYaw;
         if (playerYaw >= 0x1001) {
@@ -41,10 +41,10 @@ void checkNewspaperLocationDiscovery(LocationDiscoveryTrigger *trigger) {
         if (normalizedYaw < minAngle) {
             maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(locationId * 2) + 1];
             if (normalizedYaw > maxAngle) {
-                // Note: temp is computed but the result is not used
-                u32 temp = state->unk3FC - 0xC01;
-                state->locationDiscovered = 1;
-                state->discoveredLocationId = trigger->locationId;
+                // Note: xDist is computed but the result is not used
+                u32 xDist = gameState->unk3FC - 0xC01;
+                gameState->locationDiscovered = 1;
+                gameState->discoveredLocationId = trigger->locationId;
             }
         }
     }

@@ -203,19 +203,17 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x4C];
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
+    Vec3i positionAt4C; /* 0x4C - Position used by projectile variant 1 */
     u8 _pad58[0x3F4];
-    s32 velocity; /* 0x44C - X velocity */
-    s32 unk450;   /* 0x450 - Y velocity */
-    s32 unk454;   /* 0x454 - Z velocity */
+    s32 velocity;  /* 0x44C - Boss velocity X */
+    s32 velocityY; /* 0x450 - Boss velocity Y */
+    s32 velocityZ; /* 0x454 - Boss velocity Z */
     u8 _pad458[0x63C];
-    u16 unkA94; /* 0xA94 - Y rotation angle */
+    u16 yRotation; /* 0xA94 - Y rotation angle */
     u8 _padA96[0xFE];
     u16 sectorIndex;
     u8 _padB96[0x22];
-    u8 unkBB8; /* 0xBB8 - Player index */
+    u8 targetPlayerIndex; /* 0xBB8 - Target player index */
 } BossEntity;
 
 typedef struct {
@@ -3666,16 +3664,16 @@ void spawnBossHomingProjectile(BossHomingProjectileSpawnArg *arg0) {
     arg0->position.y = arg0->position.y + (s32)0xFFF10000;
 
     arg0->sectorIndex = arg0->boss->sectorIndex;
-    arg0->playerIndex = arg0->boss->unkBB8;
+    arg0->playerIndex = arg0->boss->targetPlayerIndex;
 
     randomOffset = randA() & 0xFF;
     rotationAngle = ((randomOffset - 0x80) * 6) - -0x1000;
 
-    rotateVectorY(&bossHomingProjectileBaseVector, arg0->boss->unkA94 + rotationAngle, &arg0->velocity);
+    rotateVectorY(&bossHomingProjectileBaseVector, arg0->boss->yRotation + rotationAngle, &arg0->velocity);
 
     arg0->velocity.x = arg0->velocity.x + arg0->boss->velocity;
-    arg0->velocity.y = arg0->velocity.y + arg0->boss->unk450;
-    arg0->velocity.z = arg0->velocity.z + arg0->boss->unk454;
+    arg0->velocity.y = arg0->velocity.y + arg0->boss->velocityY;
+    arg0->velocity.z = arg0->velocity.z + arg0->boss->velocityZ;
 
     queueSoundAtPosition(position, 0x1F);
 
@@ -3818,15 +3816,15 @@ void spawnBossHomingProjectileVariant1(BossHomingProjectileSpawnArg *arg0) {
     randomValue = randA();
     loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->projectileAsset, (randomValue % 3) + 0x6B);
 
-    memcpy(&arg0->position.x, (void *)((s32)arg0->boss + 0x4C), 0xC);
+    memcpy(&arg0->position.x, &arg0->boss->positionAt4C, 0xC);
 
     arg0->position.y = arg0->position.y + (s32)0xFFF10000;
 
     arg0->sectorIndex = arg0->boss->sectorIndex;
-    arg0->playerIndex = arg0->boss->unkBB8;
+    arg0->playerIndex = arg0->boss->targetPlayerIndex;
 
     randomValue = randA();
-    rotationAngle = ((randomValue & 0xFF) << 5) + arg0->boss->unkA94;
+    rotationAngle = ((randomValue & 0xFF) << 5) + arg0->boss->yRotation;
 
     randomValue3 = randA();
     addr = &D_80090E40_91A40;
@@ -3836,8 +3834,8 @@ void spawnBossHomingProjectileVariant1(BossHomingProjectileSpawnArg *arg0) {
     arg0->velocity.x = arg0->velocity.x + arg0->boss->velocity;
 
     randomValue4 = randA();
-    arg0->velocity.y = arg0->velocity.y + (arg0->boss->unk450 + (((randomValue4 & 0xFF) * 5) << 9));
-    arg0->velocity.z = arg0->velocity.z + arg0->boss->unk454;
+    arg0->velocity.y = arg0->velocity.y + (arg0->boss->velocityY + (((randomValue4 & 0xFF) * 5) << 9));
+    arg0->velocity.z = arg0->velocity.z + arg0->boss->velocityZ;
 
     setCallbackWithContinue(&updateBossHomingProjectileVariant1);
 }
@@ -3973,14 +3971,14 @@ void spawnBossHomingProjectileVariant2(BossHomingProjectileSpawnArg *arg0) {
     arg0->sectorIndex = arg0->boss->sectorIndex;
     temp_s2 = (Vec3i *)((s32)arg0 + 8);
     transformVector(&D_80090E50_91A50, (s16 *)((s32)arg0->boss + 0x164), temp_s2);
-    arg0->playerIndex = arg0->boss->unkBB8;
-    rotationAngle = ((randA() & 0xFF) << 5) + arg0->boss->unkA94;
+    arg0->playerIndex = arg0->boss->targetPlayerIndex;
+    rotationAngle = ((randA() & 0xFF) << 5) + arg0->boss->yRotation;
     addr = &D_80090E4C_91A4C;
     *addr = (randA() & 0xFF) * 0x580;
     rotateVectorY(addr - 2, rotationAngle, (Vec3i *)((s32)arg0 + 0x28));
     arg0->velocity.x = arg0->velocity.x + arg0->boss->velocity;
-    arg0->velocity.y = arg0->velocity.y + (arg0->boss->unk450 + ((randA() & 0xFF) * 0x600));
-    arg0->velocity.z = arg0->velocity.z + arg0->boss->unk454;
+    arg0->velocity.y = arg0->velocity.y + (arg0->boss->velocityY + ((randA() & 0xFF) * 0x600));
+    arg0->velocity.z = arg0->velocity.z + arg0->boss->velocityZ;
     queueSoundAtPosition(temp_s2, 0x17);
     setCallbackWithContinue(&updateBossHomingProjectileVariant2);
 }

@@ -150,7 +150,7 @@ void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
         return;
     }
 
-    scrollOffset = *(s32 *)((u8 *)((CutsceneManager *)taskData->context)->sceneContext + 0x34);
+    scrollOffset = ((CutsceneCameraState *)taskData->cutsceneManager->sceneContext)->posXCurrent;
     scrollOffset = (scrollOffset >> 8) * (taskData->scrollSpeedParam >> 8);
     scrollOffset >>= 16;
     taskData->yPos = 0x44;
@@ -176,8 +176,8 @@ void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
         taskData->elements[i].xPos = xPos;
         taskData->elements[i].yPos = taskData->yPos;
 
-        if (((CutsceneManager *)taskData->context)->enableTransparency != 0) {
-            if (((CutsceneManager *)taskData->context)->unk10.unk87 != 0) {
+        if (taskData->cutsceneManager->enableTransparency != 0) {
+            if (taskData->cutsceneManager->unk10.unk87 != 0) {
                 debugEnqueueCallback(3, 2, renderTiledTexture, &taskData->elements[i]);
             }
         }

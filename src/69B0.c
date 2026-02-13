@@ -44,11 +44,11 @@ void initializeQuadDisplayList(QuadDisplayListElement *elements) {
 void updateQuadDisplayList(QuadDisplayListState *state) {
     Transform3D rotationMatrix;
     func_80002B50_3750_arg *model;
-    s32 i;
-    u8 *displayListElement;
+    s32 elementIndex;
     s32 elementOffset;
-    s32 *translationData;
-    s32 positiveRotationIndex;
+    s32 *translationOffset;
+    s32 positiveRotationElementIndex;
+    QuadDisplayListElement *element;
 
     memcpy(&rotationMatrix, &identityMatrix, 0x20);
 
@@ -74,30 +74,30 @@ void updateQuadDisplayList(QuadDisplayListState *state) {
         } break;
     }
 
-    i = 0;
-    positiveRotationIndex = 2;
+    elementIndex = 0;
+    positiveRotationElementIndex = 2;
     elementOffset = 4;
-    translationData = D_8008C120_8CD20;
+    translationOffset = D_8008C120_8CD20;
 loop:
-    if (i == 0) {
-        goto positive;
+    if (elementIndex == 0) {
+        goto positiveRotation;
     }
-    if (i != positiveRotationIndex) {
-        goto negative;
+    if (elementIndex != positiveRotationElementIndex) {
+        goto negativeRotation;
     }
-positive:
+positiveRotation:
     createCombinedRotationMatrix(&rotationMatrix, state->rotationAngle, 0);
-    goto after;
-negative:
+    goto afterRotation;
+negativeRotation:
     createCombinedRotationMatrix(&rotationMatrix, -state->rotationAngle, 0x1000);
-after:
-    displayListElement = (u8 *)state + elementOffset;
-    memcpy(&rotationMatrix.translation, translationData, 0xC);
-    func_8006B084_6BC84(&rotationMatrix, state->model->matrix18, displayListElement);
+afterRotation:
+    element = (QuadDisplayListElement *)((u8 *)state + elementOffset);
+    memcpy(&rotationMatrix.translation, translationOffset, 0xC);
+    func_8006B084_6BC84(&rotationMatrix, state->model->matrix18, element);
     elementOffset += 0x3C;
-    translationData += 3;
-    enqueueModelDisplayList(state->model, (DisplayListObject *)displayListElement);
-    if (++i < 4) {
+    translationOffset += 3;
+    enqueueModelDisplayList(state->model, (DisplayListObject *)element);
+    if (++elementIndex < 4) {
         goto loop;
     }
 }
