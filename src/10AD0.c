@@ -672,7 +672,140 @@ void renderAlphaBlendedTextSprite(TextRenderArg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/10AD0", func_800136E0_142E0);
 
-INCLUDE_ASM("asm/nonmatchings/10AD0", func_80013EA0_14AA0);
+void func_80013EA0_14AA0(s32 textureAddr, u16 width, u16 height, u16 format, s32 paletteMode) {
+    s32 fmt;
+
+    fmt = paletteMode;
+    if (!(format & 0xFFFF)) {
+        if (!(width & 0xF)) {
+            gDPLoadTextureBlock_4b(
+                gRegionAllocPtr++,
+                textureAddr,
+                fmt,
+                width,
+                height,
+                0,
+                G_TX_CLAMP,
+                G_TX_CLAMP,
+                0,
+                0,
+                0,
+                0
+            );
+        } else {
+            gDPSetTextureImage(gRegionAllocPtr++, fmt, G_IM_SIZ_8b, (width >> 1), textureAddr);
+            gDPSetTile(
+                gRegionAllocPtr++,
+                fmt,
+                G_IM_SIZ_8b,
+                (((width >> 1) + 7) >> 3),
+                0,
+                G_TX_LOADTILE,
+                0,
+                G_TX_CLAMP,
+                0,
+                0,
+                G_TX_CLAMP,
+                0,
+                0
+            );
+            gDPLoadSync(gRegionAllocPtr++);
+            gDPLoadTile(gRegionAllocPtr++, G_TX_LOADTILE, 0, 0, ((width)-1) << 1, ((height)-1) << G_TEXTURE_IMAGE_FRAC);
+            gDPPipeSync(gRegionAllocPtr++);
+            gDPSetTile(
+                gRegionAllocPtr++,
+                fmt,
+                G_IM_SIZ_4b,
+                (((width >> 1) + 7) >> 3),
+                0,
+                G_TX_RENDERTILE,
+                0,
+                G_TX_CLAMP,
+                0,
+                0,
+                G_TX_CLAMP,
+                0,
+                0
+            );
+            gDPSetTileSize(
+                gRegionAllocPtr++,
+                G_TX_RENDERTILE,
+                0,
+                0,
+                ((width)-1) << G_TEXTURE_IMAGE_FRAC,
+                ((height)-1) << G_TEXTURE_IMAGE_FRAC
+            );
+        }
+    } else {
+        if (!(width & 7)) {
+            gDPLoadTextureBlock(
+                gRegionAllocPtr++,
+                textureAddr,
+                fmt,
+                G_IM_SIZ_8b,
+                width,
+                height,
+                0,
+                G_TX_CLAMP,
+                G_TX_CLAMP,
+                0,
+                0,
+                0,
+                0
+            );
+        } else {
+            gDPSetTextureImage(gRegionAllocPtr++, fmt, G_IM_SIZ_8b, width, textureAddr);
+            gDPSetTile(
+                gRegionAllocPtr++,
+                fmt,
+                G_IM_SIZ_8b,
+                (((width) + 7) >> 3),
+                0,
+                G_TX_LOADTILE,
+                0,
+                G_TX_CLAMP,
+                0,
+                0,
+                G_TX_CLAMP,
+                0,
+                0
+            );
+            gDPLoadSync(gRegionAllocPtr++);
+            gDPLoadTile(
+                gRegionAllocPtr++,
+                G_TX_LOADTILE,
+                0,
+                0,
+                ((width)-1) << G_TEXTURE_IMAGE_FRAC,
+                ((height)-1) << G_TEXTURE_IMAGE_FRAC
+            );
+            gDPPipeSync(gRegionAllocPtr++);
+            gDPSetTile(
+                gRegionAllocPtr++,
+                fmt,
+                G_IM_SIZ_8b,
+                (((width) + 7) >> 3),
+                0,
+                G_TX_RENDERTILE,
+                0,
+                G_TX_CLAMP,
+                0,
+                0,
+                G_TX_CLAMP,
+                0,
+                0
+            );
+            gDPSetTileSize(
+                gRegionAllocPtr++,
+                G_TX_RENDERTILE,
+                0,
+                0,
+                ((width)-1) << G_TEXTURE_IMAGE_FRAC,
+                ((height)-1) << G_TEXTURE_IMAGE_FRAC
+            );
+        }
+    }
+}
 
 void initDefaultFontPalette(void) {
     s32 i;
