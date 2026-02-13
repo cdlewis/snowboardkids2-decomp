@@ -5,7 +5,11 @@
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
-extern void *staticSpriteEffectTexture;
+s32 staticSpriteEffectTexture[] = {
+    (s32)0xFFE00040, 0x00000000,      (s32)0xFFF0FFF0, (s32)0xFFFFFFFF, 0x00200040, 0x00000000,
+    0x03F0FFF0,      (s32)0xFFFFFFFF, 0x00200000,      0x00000000,      0x03F003F0, (s32)0xFFFFFFFF,
+    (s32)0xFFE00000, 0x00000000,      (s32)0xFFF003F0, (s32)0xFFFFFFFF,
+};
 
 void cleanupStaticSpriteEffectTask(void **);
 
