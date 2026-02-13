@@ -334,7 +334,7 @@ segments:
       - [0x8D530, .data, 90F0]
       - [0x8D8E0, .data, CBA0]
       - [0x8D9D0, .data, DA20]
-      - [0x8DA10, data, E090]
+      - [0x8DA10, .data, E090]
       - [0x8DA40, data, E770]
       - [0x8DFB0, data, 10AD0]
       - [0x8E020, data, title_screen]

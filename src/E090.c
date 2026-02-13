@@ -14,7 +14,14 @@ typedef struct {
     s16 pad6;
 } E090_DataEntry;
 
-extern E090_DataEntry D_8008CE10_8DA10[];
+E090_DataEntry D_8008CE10_8DA10[] = {
+    { (s16)0xFF78, 0x0058,      0x0000, 0x0000 },
+    { (s16)0xFFA8, 0x0050,      0x0001, 0x0000 },
+    { (s16)0xFFA0, 0x0020,      0x0002, 0x0000 },
+    { (s16)0xFFC0, 0x0008,      0x0003, 0x0000 },
+    { (s16)0xFFB8, (s16)0xFFC8, 0x0004, 0x0000 },
+    { (s16)0xFFE8, (s16)0xFFA8, 0x0005, 0x0000 },
+};
 
 void transitionFromLogoScreen(void);
 
