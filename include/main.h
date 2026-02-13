@@ -48,6 +48,9 @@ typedef struct {
 
 void renderModelEntity(ModelEntityRenderState *);
 
+struct CutsceneManager;
+void scheduleTransparentModelRender(struct CutsceneManager *cutsceneManager, ModelEntityRenderState *renderState);
+
 typedef struct {
     s32 unk0;
     void *unk4;

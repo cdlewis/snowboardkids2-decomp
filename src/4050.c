@@ -1,3 +1,4 @@
+#include "4050.h"
 #include "1DFAA0.h"
 #include "1E60D0.h"
 #include "audio.h"
@@ -38,19 +39,6 @@ CutsceneState gCutsceneState = { .slotIndex = 0,
 extern s16 D_800AB070_A23E0; // gCutsceneSlotIndex
 extern s16 D_800AFEF0_A7260; // gCutsceneType
 extern s32 gButtonsPressed;
-typedef struct {
-    s16 frameCount;
-    s8 unk2;
-    u8 exitRequested;
-    s32 unk4;
-    ViewportNode sceneNode;
-    ViewportNode overlayNode;
-    ViewportNode uiNode;
-    u8 padding1[0x20];
-    u8 cutsceneBuffer;
-    u8 padding[0x122F];
-    ScreenTransitionState transitionState;
-} CutsceneTaskMemory;
 
 void awaitCutsceneTransitionComplete(void);
 void func_80003898_4498(void);
@@ -155,7 +143,7 @@ void runCutsceneFrame(void) {
 
     setCutsceneParameters(D_800AB070_A23E0, D_800AFEF0_A7260, taskMemory->frameCount);
     taskMemory->frameCount++;
-    initializeCutsceneSystem(&taskMemory->cutsceneBuffer);
+    initializeCutsceneSystem(&taskMemory->cutsceneData);
     setGameStateHandler(&func_80003898_4498);
 }
 

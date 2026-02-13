@@ -236,11 +236,14 @@ typedef struct {
     /* 0x4C */ CutsceneSlotData slotData;
 } CutsceneSlot; /* Total size: 0xF4 */
 
-typedef struct {
+typedef struct CutsceneManager {
     /* 0x0 */ ViewportNode *uiResource;
     /* 0x4 */ s8 pad4[0x8];
     /* 0xC */ void *sceneContext;
-    /* 0x10 */ setModelRenderMode_arg unk10;
+    union {
+        /* 0x10 */ setModelRenderMode_arg renderModeArg;
+        /* 0x10 */ ModelEntity modelEntity;
+    } unk10;
     /* 0x98 */ u16 currentFrame;
     /* 0x9A */ u16 maxFrame;
     /* 0x9C */ u16 endFrame;

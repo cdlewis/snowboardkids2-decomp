@@ -82,9 +82,9 @@ CutsceneSlot *getCutsceneSlot(CutsceneManager *manager, s16 slotIndex) {
 void initCutsceneManager(CutsceneManager *manager, ViewportNode *sceneNode, void *shadowModel, void *reflectionModel) {
     s32 i;
     s16 modelIndex = getCutsceneInitModelIndex();
-    s32 needsVisibility = initModelEntity((ModelEntity *)&manager->unk10, modelIndex, sceneNode);
+    s32 needsVisibility = initModelEntity(&manager->unk10.modelEntity, modelIndex, sceneNode);
 
-    setModelRenderMode(&manager->unk10, 0);
+    setModelRenderMode(&manager->unk10.renderModeArg, 0);
 
     for (i = 0; i < (getCutsceneSlotCount() & 0xFF); i++) {
         StateEntryItem *slot = getCurrentStateEntryItem(i);
@@ -136,7 +136,7 @@ void cleanupCutsceneManager(CutsceneManager *manager) {
         }
     }
 
-    freeEffectResources((EffectState *)&manager->unk10);
+    freeEffectResources((EffectState *)&manager->unk10.modelEntity);
 }
 
 void hideAllSlotModels(CutsceneSlot *slots) {
@@ -341,7 +341,7 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
     cameraOffsetX = -((cameraAnimTimer * 120) >> 16);
     cameraScaleZ = (cameraAnimTimer * 119) >> 16;
 
-    setModelRenderMode(&cutsceneManager->unk10, cutsceneManager->enableTransparency);
+    setModelRenderMode(&cutsceneManager->unk10.renderModeArg, cutsceneManager->enableTransparency);
     setModelCameraTransform(cutsceneManager->uiResource, 0, 0, -0xA0, cameraOffsetX, 0x9F, cameraScaleZ);
     setModelCameraTransform(cutsceneManager->shadowModel, 0, 0, -0xA0, cameraOffsetX, 0x9F, cameraScaleZ);
     setModelCameraTransform(cutsceneManager->reflectionModel, 0, 0, -0xA0, cameraOffsetX, 0x9F, cameraScaleZ);

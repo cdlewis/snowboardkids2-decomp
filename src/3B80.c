@@ -177,7 +177,7 @@ void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
         taskData->elements[i].yPos = taskData->yPos;
 
         if (taskData->cutsceneManager->enableTransparency != 0) {
-            if (taskData->cutsceneManager->unk10.unk87 != 0) {
+            if (taskData->cutsceneManager->unk10.renderModeArg.unk87 != 0) {
                 debugEnqueueCallback(3, 2, renderTiledTexture, &taskData->elements[i]);
             }
         }
