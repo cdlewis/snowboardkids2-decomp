@@ -10,8 +10,8 @@ typedef struct {
     s16 maxAngle;
 } TriggerAngleBounds;
 
-extern u8 D_8008D6C4_8E2C4[];
-#define TriggerAngleBoundsTable ((TriggerAngleBounds *)D_8008D6C4_8E2C4)
+extern u8 storyMapAngleBounds[];
+#define TriggerAngleBoundsTable ((TriggerAngleBounds *)storyMapAngleBounds)
 
 typedef struct {
     s8 locationId;

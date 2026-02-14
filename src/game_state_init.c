@@ -13,7 +13,7 @@
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
-extern u16 D_8008D6B0_8E2B0;
+extern u16 storyMapLocationModelIds;
 extern u8 storyMapLocationIndex;
 extern void storyMapCameraTask;
 extern void func_80018800_19400;
@@ -41,7 +41,8 @@ void initializeGameState(void) {
     temp_s0->unk42A = 0;
     var_s1 = 0;
     do {
-        temp_s0->unk3FE = (s16)(D_8008D6B0_8E2B0 - (((s32)((((short)D_8008D6B0_8E2B0) / 10) << 0x10)) >> 0xF));
+        temp_s0->unk3FE =
+            (s16)(storyMapLocationModelIds - (((s32)((((short)storyMapLocationModelIds) / 10) << 0x10)) >> 0xF));
         temp_s0->unk403 = 0xFF;
         setupTaskSchedulerNodes(0x30, 0xA, 0x14, 0, 0, 0, 0, 0);
         initMenuCameraNode(&temp_s0->node1, 0, 0xA, 0);

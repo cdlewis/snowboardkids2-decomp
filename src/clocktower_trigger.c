@@ -42,9 +42,9 @@ void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *trigger) {
     }
 
     locationId = trigger->locationId;
-    minAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2];
+    minAngle = ((s16 *)storyMapAngleBounds)[locationId * 2];
     if (normalizedYaw < minAngle) {
-        maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(locationId * 2) + 1];
+        maxAngle = ((s16 *)storyMapAngleBounds)[(locationId * 2) + 1];
         if (maxAngle < normalizedYaw) {
             // Check if player's X position is within discovery range
             if (((u16)(gameState->unk3FC - 0xC01)) < 0x7FF) {

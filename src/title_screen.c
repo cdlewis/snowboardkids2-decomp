@@ -61,64 +61,64 @@ s32 gTitleCameraSettings[64] = {
     0xF9C00000, 0x1A780000, 0x1B330000, 0xE5880000, 0xF9C00000, 0x0018FB7A, 0x00000000, 0x0008D966,
 };
 
-s32 D_8008D520_8E120[2] = {
+s32 titleAnimSequence0[2] = {
     0x00040004,
     0xFFFF0000,
 };
 
-s32 D_8008D528_8E128[3] = {
+s32 titleAnimSequence1[3] = {
     0x00050006,
     0x00060007,
     0xFFFF0000,
 };
 
 s32 *gTitleCharacterAnimSequences[2] = {
-    D_8008D520_8E120,
-    D_8008D528_8E128,
+    titleAnimSequence0,
+    titleAnimSequence1,
 };
 
-s32 D_8008D53C_8E13C[3] = {
+s32 titleEffectSequence0[3] = {
     0xFFFE004C,
     0x004F002B,
     0x0053FFFF,
 };
 
-s32 D_8008D548_8E148[4] = {
+s32 titleEffectSequence1[4] = {
     0x00530069,
     0x002B0055,
     0x003F006E,
     0xFFFF0000,
 };
 
-s32 D_8008D558_8E158[4] = {
+s32 titleEffectSequence2[4] = {
     0xFFFB0044,
     0x0082004B,
     0x003D003F,
     0xFFFF0000,
 };
 
-s32 D_8008D568_8E168[3] = {
+s32 titleEffectSequence3[3] = {
     0xFFFE0043,
     0x00790036,
     0x004FFFFF,
 };
 
-s32 D_8008D574_8E174[3] = {
+s32 titleEffectSequence4[3] = {
     0x004C0053,
     0x002B0067,
     0x002BFFFF,
 };
 
-s32 D_8008D580_8E180[17] = {
+s32 titleEffectSequenceTable[17] = {
     0xFFFE007B,
     0x00530068,
     0xFFFF0000,
-    (s32)D_8008D53C_8E13C,
-    (s32)D_8008D548_8E148,
-    (s32)D_8008D558_8E158,
-    (s32)D_8008D568_8E168,
-    (s32)D_8008D574_8E174,
-    (s32)D_8008D580_8E180,
+    (s32)titleEffectSequence0,
+    (s32)titleEffectSequence1,
+    (s32)titleEffectSequence2,
+    (s32)titleEffectSequence3,
+    (s32)titleEffectSequence4,
+    (s32)titleEffectSequenceTable,
     0xF8BE0000,
     0x1F2B07B8,
     0x1F0001CC,
@@ -139,20 +139,20 @@ s32 gTitleCharacterTransforms[59] = {
     0x00000000, 0x0008D966, 0x00000000, 0x00000000, 0x00000000,
 };
 
-s16 D_8008D6B0_8E2B0[10] = {
+s16 storyMapLocationModelIds[10] = {
     0x000F, 0x000F, 0x0013, 0x0013, 0x0013, 0x000F, 0x000F, 0x000F, 0x0013, 0x0000,
 };
 
-// D_8008D6C4_8E2C4: 20 shorts (40 bytes)
-// D_8008D6EC_8E2EC follows immediately: 10 CoordPairs (40 bytes)
+// storyMapAngleBounds: 20 shorts (40 bytes)
+// storyMapLocationCoords follows immediately: 10 CoordPairs (40 bytes)
 // Total: 80 bytes = 0x50 as shown in symbol_addrs.txt
-s16 D_8008D6C4_8E2C4[20] = {
+s16 storyMapAngleBounds[20] = {
     0xF93E, 0xF83E, 0xFC84, 0xFB84, 0xFF26, 0xFE26, 0x01CC, 0x00CC, 0x047E, 0x037E,
     0x072A, 0x062A, 0x0020, 0xFF80, 0xFDB8, 0xFCF8, 0x0374, 0x0294, 0x05C2, 0x04E2,
 };
 
-// D_8008D6EC_8E2EC must immediately follow D_8008D6C4_8E2C4
-CoordPair D_8008D6EC_8E2EC[10] = {
+// storyMapLocationCoords must immediately follow storyMapAngleBounds
+CoordPair storyMapLocationCoords[10] = {
     { 0x009D, 0xFFEF },
     { 0x008E, 0xFF82 },
     { 0x002B, 0xFF66 },
@@ -166,7 +166,7 @@ CoordPair D_8008D6EC_8E2EC[10] = {
 };
 
 // Location names: 6 groups of 20 bytes each (total 120 bytes)
-s8 D_8008D714_8E314[6][20] = {
+s8 storyMapLocationNames[6][20] = {
     "PAINT", "U.F.O.", "TIMES", "SCHOOL", "BOARDSHOP", "TEACHER",
 };
 

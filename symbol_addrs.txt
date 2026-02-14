@@ -1,6 +1,6 @@
-D_8008D6C4_8E2C4 = 0x8008D6C4; // size:0x28
-D_8008D6EC_8E2EC = 0x8008D6EC; // size:0x28
-D_8008D714_8E314 = 0x8008D714; // size:0x78 type:char
+storyMapAngleBounds = 0x8008D6C4; // rom:0x8E2C4 size:0x28
+storyMapLocationCoords = 0x8008D6EC; // rom:0x8E2EC size:0x28
+storyMapLocationNames = 0x8008D714; // rom:0x8E314 size:0x78 type:char
 D_80088290 = 0x80088290;
 D_800886A0 = 0x800886A0;
 D_800886E0 = 0x800886E0;

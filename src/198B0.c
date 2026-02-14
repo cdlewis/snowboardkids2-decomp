@@ -3,7 +3,7 @@
 #include "gamestate.h"
 #include "task_scheduler.h"
 
-extern char D_8008D714_8E314[][20];
+extern char storyMapLocationNames[][20];
 
 void checkGenericLocationDiscovery(LocationDiscoveryTrigger *);
 
@@ -13,7 +13,7 @@ void initGenericDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
     trigger->unk4 = 0;
     trigger->unk6 = -0x68;
     trigger->unk8 = 0;
-    trigger->locationLabel = &D_8008D714_8E314[eventId];
+    trigger->locationLabel = &storyMapLocationNames[eventId];
     setCallback(checkGenericLocationDiscovery);
 }
 
@@ -39,9 +39,9 @@ void checkGenericLocationDiscovery(LocationDiscoveryTrigger *trigger) {
 
     locationId = trigger->locationId;
     // Get angle bounds for this location from the angle bounds table (TriggerAngleBounds)
-    minAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2];
+    minAngle = ((s16 *)storyMapAngleBounds)[locationId * 2];
     if (normalizedYaw < minAngle) {
-        maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(locationId * 2) + 1];
+        maxAngle = ((s16 *)storyMapAngleBounds)[(locationId * 2) + 1];
         if (maxAngle < normalizedYaw) {
             if (((u16)(gameState->unk3FC - 0xC01)) < 0x7FF) {
                 gameState->locationDiscovered = 1;

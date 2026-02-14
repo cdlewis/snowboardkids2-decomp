@@ -13,7 +13,7 @@ typedef struct {
     s16 z;
 } CoordPair;
 
-extern CoordPair D_8008D6EC_8E2EC[];
+extern CoordPair storyMapLocationCoords[];
 
 typedef struct {
     s16 viewMatrix[9];
@@ -154,8 +154,8 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
 
     state = getCurrentAllocation();
 
-    targetX = D_8008D6EC_8E2EC[state->discoveredLocationId].x;
-    targetZ = D_8008D6EC_8E2EC[state->discoveredLocationId].z;
+    targetX = storyMapLocationCoords[state->discoveredLocationId].x;
+    targetZ = storyMapLocationCoords[state->discoveredLocationId].z;
     targetX <<= 16;
     targetZ <<= 16;
 
@@ -262,8 +262,8 @@ void initStoryMapCameraAtLocation(StoryMapCameraState *camera) {
     memcpy(&camera->orientMatrix, &identityMatrix, 0x20);
     memcpy(camera, &identityMatrix, 0x20);
 
-    camera->cameraX = D_8008D6EC_8E2EC[(u8)state->discoveredLocationId].x;
-    camera->cameraZ = D_8008D6EC_8E2EC[(u8)state->discoveredLocationId].z;
+    camera->cameraX = storyMapLocationCoords[(u8)state->discoveredLocationId].x;
+    camera->cameraZ = storyMapLocationCoords[(u8)state->discoveredLocationId].z;
 
     camera->cameraX <<= 16;
     camera->cameraZ <<= 16;

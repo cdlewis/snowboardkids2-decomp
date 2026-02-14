@@ -37,9 +37,9 @@ void checkNewspaperLocationDiscovery(LocationDiscoveryTrigger *trigger) {
         }
         // Get angle bounds for this location from the angle bounds table
         locationId = trigger->locationId;
-        minAngle = ((s16 *)D_8008D6C4_8E2C4)[locationId * 2];
+        minAngle = ((s16 *)storyMapAngleBounds)[locationId * 2];
         if (normalizedYaw < minAngle) {
-            maxAngle = ((s16 *)D_8008D6C4_8E2C4)[(locationId * 2) + 1];
+            maxAngle = ((s16 *)storyMapAngleBounds)[(locationId * 2) + 1];
             if (normalizedYaw > maxAngle) {
                 // Note: xDist is computed but the result is not used
                 u32 xDist = gameState->unk3FC - 0xC01;
