@@ -37,24 +37,24 @@ typedef struct {
 
 s16 gCurrentBgmId[2] = { 5, 0 };
 
-s32 D_8008CE44_8DA44[] = { 0xFFD0FFE8, 0x00010103, 0x0000FFE8, 0x01020204, 0x0030FFE8,
-                           0x02040306, 0xFFE80010, 0x03030405, 0x00180010, 0x04050507 };
+s32 gMenuOptionLayout_Type0[] = { 0xFFD0FFE8, 0x00010103, 0x0000FFE8, 0x01020204, 0x0030FFE8,
+                                  0x02040306, 0xFFE80010, 0x03030405, 0x00180010, 0x04050507 };
 
-s32 D_8008CE6C_8DA6C[] = { 0xFFD0FFE8, 0x00010103, 0x0000FFE8, 0x01020204, 0x0030FFE8, 0x02040306,
-                           0xFFD00010, 0x03030405, 0x00000010, 0x04050507, 0x00300010, 0x00060608 };
+s32 gMenuOptionLayout_Type1[] = { 0xFFD0FFE8, 0x00010103, 0x0000FFE8, 0x01020204, 0x0030FFE8, 0x02040306,
+                                  0xFFD00010, 0x03030405, 0x00000010, 0x04050507, 0x00300010, 0x00060608 };
 
-void *D_8008CE9C_8DA9C = D_8008CE44_8DA44;
+void *gMenuOptionLookupPtr = gMenuOptionLayout_Type0;
 
-s32 D_8008CEA0_8DAA0[] = { 5, (s32)D_8008CE6C_8DA6C, 6 };
+s32 gMenuOptionCounts[] = { 5, (s32)gMenuOptionLayout_Type1, 6 };
 
-u8 D_8008CEAC_8DAAC[] = { 0x00, 0x01, 0x02, 0x01 };
+u8 gNavigationCycleIndices[] = { 0x00, 0x01, 0x02, 0x01 };
 
-s32 D_8008CEB0_8DAB0 = 4;
-s32 D_8008CEB4_8DAB4 = 0x00285000;
-s32 D_8008CEB8_8DAB8 = 0xFFDE3000;
-s32 D_8008CEBC_8DABC = 0x003A7000;
+s32 gDefaultMenuOptionCount = 4;
+s32 gViewerDefaultPosX = 0x00285000;
+s32 gViewerDefaultPosY = 0xFFDE3000;
+s32 gViewerDefaultPosZ = 0x003A7000;
 
-s32 D_8008CEC0_8DAC0[] = { 0x00A92000, 0, 0, 0 };
+s32 gViewerInitPosition[] = { 0x00A92000, 0, 0, 0 };
 
 extern s32 D_8009DEB0_9EAB0;
 extern s32 D_8009DEB4_9EAB4;
@@ -91,7 +91,7 @@ extern s32 D_8009DF2C_9EB2C;
 extern s32 D_8009DF30_9EB30;
 extern s32 D_8009DF34_9EB34;
 
-s32 *D_8008CED0_8DAD0[] = {
+s32 *gGalleryLabelPtrs[] = {
     &D_8009DF34_9EB34, &D_8009DF30_9EB30, &D_8009DF2C_9EB2C, &D_8009DF28_9EB28, &D_8009DF24_9EB24, &D_8009DF20_9EB20,
     &D_8009DF1C_9EB1C, &D_8009DF18_9EB18, &D_8009DF14_9EB14, &D_8009DF10_9EB10, &D_8009DF0C_9EB0C, &D_8009DF08_9EB08,
     &D_8009DF04_9EB04, &D_8009DF00_9EB00, &D_8009DEFC_9EAFC, &D_8009DEF8_9EAF8, &D_8009DEF4_9EAF4, &D_8009DEF0_9EAF0,
@@ -100,7 +100,7 @@ s32 *D_8008CED0_8DAD0[] = {
     &D_8009DEBC_9EABC, &D_8009DEB8_9EAB8, &D_8009DEB4_9EAB4, &D_8009DEB0_9EAB0
 };
 
-GalleryItemEntry D_8008CF58_8DB58[] = {
+GalleryItemEntry gGalleryItems_SaveSlots[] = {
     { 0xA0, 0xB8, { 0x07, 0x00, 0x0C, 0x01, 0x01 }, 0x00, { 0 } },
     { 0xB8, 0xB8, { 0x07, 0x01, 0x0C, 0x02, 0x02 }, 0x00, { 0 } },
     { 0xD0, 0xB8, { 0x07, 0x02, 0x0C, 0x03, 0x02 }, 0x00, { 0 } },
@@ -118,7 +118,7 @@ GalleryItemEntry D_8008CF58_8DB58[] = {
     { 0x3C, 0xD0, { 0x07, 0x0E, 0x0C, 0x21, 0x03 }, 0x00, { 0 } },
 };
 
-GalleryItemEntry D_8008D00C_8DC0C[] = {
+GalleryItemEntry gGalleryItems_Characters[] = {
     { 0x94, 0xB8, { 0x08, 0x00, 0x0D, 0x1C, 0x00 }, 0x00, { 0 } },
     { 0xAC, 0xB8, { 0x08, 0x01, 0x0D, 0x1D, 0x00 }, 0x00, { 0 } },
     { 0xC4, 0xB8, { 0x08, 0x02, 0x0D, 0x1E, 0x00 }, 0x00, { 0 } },
@@ -139,7 +139,7 @@ GalleryItemEntry D_8008D00C_8DC0C[] = {
     { 0x54, 0xD0, { 0x08, 0x11, 0x18, 0xFF, 0x00 }, 0x00, { 0 } },
 };
 
-GalleryItemEntry D_8008D0E4_8DCE4[] = {
+GalleryItemEntry gGalleryItems_Boards[] = {
     { 0x94, 0xC8, { 0x09, 0x00, 0x26, 0xFF, 0x00 }, 0x00, { 0 } },
     { 0xAC, 0xC8, { 0x09, 0x01, 0x27, 0xFF, 0x00 }, 0x00, { 0 } },
     { 0xC4, 0xC8, { 0x09, 0x02, 0x28, 0xFF, 0x00 }, 0x00, { 0 } },
@@ -151,7 +151,7 @@ GalleryItemEntry D_8008D0E4_8DCE4[] = {
     { 0x54, 0xC8, { 0x09, 0x07, 0x2E, 0xFF, 0x00 }, 0x00, { 0 } },
 };
 
-GalleryItemEntry D_8008D150_8DD50[] = {
+GalleryItemEntry gGalleryItems_Prizes[] = {
     { 0x94, 0xB8, { 0x0A, 0x00, 0x19, 0x01, 0x01 }, 0xFF, { 0 } },
     { 0xAC, 0xB8, { 0x0A, 0x01, 0x19, 0x02, 0x19 }, 0xFF, { 0 } },
     { 0xC4, 0xB8, { 0x0A, 0x02, 0x19, 0x03, 0x03 }, 0xFF, { 0 } },
@@ -181,7 +181,7 @@ GalleryItemEntry D_8008D150_8DD50[] = {
     { 0x54, 0xD8, { 0x0A, 0x1A, 0x19, 0x1B, 0x0B }, 0xFE, { 0 } },
 };
 
-GalleryItemEntry D_8008D294_8DE94[] = {
+GalleryItemEntry gGalleryItems_Extras[] = {
     { 0xA0, 0xB8, { 0x0B, 0x00, 0x1B, 0x01, 0x00 }, 0x00, { 0 } },
     { 0xB8, 0xB8, { 0x0B, 0x01, 0x1B, 0x02, 0x00 }, 0x00, { 0 } },
     { 0xD0, 0xB8, { 0x0B, 0x02, 0x1B, 0x03, 0x00 }, 0x00, { 0 } },
@@ -200,18 +200,18 @@ GalleryItemEntry D_8008D294_8DE94[] = {
 };
 
 GalleryCategoryData gGalleryCategories[] = {
-    { D_8008CF58_8DB58, 15 },
-    { D_8008D00C_8DC0C, 18 },
-    { D_8008D0E4_8DCE4, 9  },
-    { D_8008D150_8DD50, 27 },
-    { D_8008D294_8DE94, 15 },
+    { gGalleryItems_SaveSlots,  15 },
+    { gGalleryItems_Characters, 18 },
+    { gGalleryItems_Boards,     9  },
+    { gGalleryItems_Prizes,     27 },
+    { gGalleryItems_Extras,     15 },
 };
 
-void *gGalleryCategories_5_items = (void *)5;
+void *gGalleryCategory_Exit_Ptr = (void *)5;
 
-s32 D_8008D374_8DF74[] = { 0x00000004, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
-                           0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000030,
-                           0x00000000, 0x01000000, 0x00000001, 0x00000000, 0xFFFFFFFF };
+s32 gViewerStateConfig[] = { 0x00000004, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+                             0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000030,
+                             0x00000000, 0x01000000, 0x00000001, 0x00000000, 0xFFFFFFFF };
 
 typedef struct {
     s8 menuState;
@@ -259,7 +259,7 @@ s32 getMenuOptionCount(E770_struct *arg0) {
     s8 temp = arg0->menuType;
 
     if (temp < 2) {
-        return ((ArrayElement_8 *)D_8008CEA0_8DAA0)[temp].value;
+        return ((ArrayElement_8 *)gMenuOptionCounts)[temp].value;
     }
     return 0;
 }
@@ -273,7 +273,7 @@ void *getMenuOptionEntry(E770_struct *arg0, s32 index) {
     menuType = arg0->menuType;
 
     if (menuType < 2) {
-        entry = &((LookupEntry *)&D_8008CE9C_8DA9C)[menuType];
+        entry = &((LookupEntry *)&gMenuOptionLookupPtr)[menuType];
         if (index < entry->count) {
             result = (u8 *)entry->ptr + index * 8;
         }
