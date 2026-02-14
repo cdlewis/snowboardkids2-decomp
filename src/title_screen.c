@@ -9,11 +9,15 @@
 #include "audio.h"
 #include "common.h"
 #include "controller_io.h"
-#include "gamestate.h"
 #include "graphics.h"
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
+
+typedef struct {
+    s16 x;
+    s16 z;
+} CoordPair;
 
 typedef struct {
     ViewportNode node1;
@@ -43,8 +47,150 @@ extern u8 gTitleExitMode;
 extern s32 gControllerInputs;
 extern s32 gButtonsPressed;
 extern u8 gDebugUnlockEnabled;
-extern u8 gTitleCameraSettings;
 extern s8 gTitleInitialized;
+
+// Data segment definitions
+s32 gTitleCameraSettings[64] = {
+    0xF8BE0000, 0x1F2B07B8, 0x1F0001CC, 0xE1CF07ED, 0xF8F90000, 0xFF6D2B6E, 0x003D9000, 0xFFDDCF14,
+    0x00C00000, 0x1B300000, 0x1B330000, 0xE4D00000, 0x00C00000, 0x0018A67A, 0x00000000, 0xFFF42D86,
+    0x0AA50000, 0x19070000, 0x1B330000, 0xE6F90000, 0x0AA50000, 0x000BB2DA, 0x00000000, 0xFFE07296,
+    0xECE70000, 0x135D0000, 0x1B330000, 0xECA30000, 0xECE70000, 0xFFFE414A, 0x00000000, 0x00283266,
+    0xE9590000, 0x0F0D0000, 0x1B330000, 0xF0F30000, 0xE9590000, 0xFFE526BA, 0x00000000, 0x002AB996,
+    0x14630000, 0x12000000, 0x1B330000, 0xEE000000, 0x14630000, 0xFFFF477A, 0x00000000, 0xFFCF1276,
+    0xF1310000, 0x16D00000, 0x1B330000, 0xE9300000, 0xF1310000, 0x00107E5A, 0x00000000, 0x001B4646,
+    0xF9C00000, 0x1A780000, 0x1B330000, 0xE5880000, 0xF9C00000, 0x0018FB7A, 0x00000000, 0x0008D966,
+};
+
+s32 D_8008D520_8E120[2] = {
+    0x00040004,
+    0xFFFF0000,
+};
+
+s32 D_8008D528_8E128[3] = {
+    0x00050006,
+    0x00060007,
+    0xFFFF0000,
+};
+
+s32 *gTitleCharacterAnimSequences[2] = {
+    D_8008D520_8E120,
+    D_8008D528_8E128,
+};
+
+s32 D_8008D53C_8E13C[3] = {
+    0xFFFE004C,
+    0x004F002B,
+    0x0053FFFF,
+};
+
+s32 D_8008D548_8E148[4] = {
+    0x00530069,
+    0x002B0055,
+    0x003F006E,
+    0xFFFF0000,
+};
+
+s32 D_8008D558_8E158[4] = {
+    0xFFFB0044,
+    0x0082004B,
+    0x003D003F,
+    0xFFFF0000,
+};
+
+s32 D_8008D568_8E168[3] = {
+    0xFFFE0043,
+    0x00790036,
+    0x004FFFFF,
+};
+
+s32 D_8008D574_8E174[3] = {
+    0x004C0053,
+    0x002B0067,
+    0x002BFFFF,
+};
+
+s32 D_8008D580_8E180[17] = {
+    0xFFFE007B,
+    0x00530068,
+    0xFFFF0000,
+    (s32)D_8008D53C_8E13C,
+    (s32)D_8008D548_8E148,
+    (s32)D_8008D558_8E158,
+    (s32)D_8008D568_8E168,
+    (s32)D_8008D574_8E174,
+    (s32)D_8008D580_8E180,
+    0xF8BE0000,
+    0x1F2B07B8,
+    0x1F0001CC,
+    0xE1CF07ED,
+    0xF8F90000,
+    0xFF6D2B6E,
+    0x003D9000,
+    0xFFDDCF14,
+};
+
+s32 gTitleCharacterTransforms[59] = {
+    0x00C00000, 0x1B300000, 0x1B330000, 0xE4D00000, 0x00C00000, 0x0018A67A, 0x00000000, 0xFFF42D86, 0x0AA50000,
+    0x19070000, 0x1B330000, 0xE6F90000, 0x0AA50000, 0x000BB2DA, 0x00000000, 0xFFE07296, 0xECE70000, 0x135D0000,
+    0x1B330000, 0xECA30000, 0xECE70000, 0xFFFE414A, 0x00000000, 0x00283266, 0xE9590000, 0x0F0D0000, 0x1B330000,
+    0xF0F30000, 0xE9590000, 0xFFE526BA, 0x00000000, 0x002AB996, 0x14630000, 0x12000000, 0x1B330000, 0xEE000000,
+    0x14630000, 0xFFFF477A, 0x00000000, 0xFFCF1276, 0xF1310000, 0x16D00000, 0x1B330000, 0xE9300000, 0xF1310000,
+    0x00107E5A, 0x00000000, 0x001B4646, 0xF9C00000, 0x1A780000, 0x1B330000, 0xE5880000, 0xF9C00000, 0x0018FB7A,
+    0x00000000, 0x0008D966, 0x00000000, 0x00000000, 0x00000000,
+};
+
+s16 D_8008D6B0_8E2B0[10] = {
+    0x000F, 0x000F, 0x0013, 0x0013, 0x0013, 0x000F, 0x000F, 0x000F, 0x0013, 0x0000,
+};
+
+// D_8008D6C4_8E2C4: 20 shorts (40 bytes)
+// D_8008D6EC_8E2EC follows immediately: 10 CoordPairs (40 bytes)
+// Total: 80 bytes = 0x50 as shown in symbol_addrs.txt
+s16 D_8008D6C4_8E2C4[20] = {
+    0xF93E, 0xF83E, 0xFC84, 0xFB84, 0xFF26, 0xFE26, 0x01CC, 0x00CC, 0x047E, 0x037E,
+    0x072A, 0x062A, 0x0020, 0xFF80, 0xFDB8, 0xFCF8, 0x0374, 0x0294, 0x05C2, 0x04E2,
+};
+
+// D_8008D6EC_8E2EC must immediately follow D_8008D6C4_8E2C4
+CoordPair D_8008D6EC_8E2EC[10] = {
+    { 0x009D, 0xFFEF },
+    { 0x008E, 0xFF82 },
+    { 0x002B, 0xFF66 },
+    { 0xFFD6, 0xFF66 },
+    { 0xFF90, 0xFF8D },
+    { 0xFF65, 0xFFD5 },
+    { 0x0006, 0xFF78 },
+    { 0x0044, 0xFF8A },
+    { 0xFFD3, 0xFFBE },
+    { 0xFF8B, 0xFFBC },
+};
+
+// Location names: 6 groups of 20 bytes each (total 120 bytes)
+s8 D_8008D714_8E314[6][20] = {
+    "PAINT", "U.F.O.", "TIMES", "SCHOOL", "BOARDSHOP", "TEACHER",
+};
+
+extern void func_8001A110_1AD10(void);
+extern void initGalleryMenu(void);
+extern void initStoryMapLocationIntro(void);
+extern void initUnlockScreen(void);
+extern void initStoryMapExtraIntro(void);
+
+void (*storyMapLocationHandlers[])(void) = {
+    NULL,
+    func_8001A110_1AD10,
+    initGalleryMenu,
+    initStoryMapLocationIntro,
+    loadOverlay_1BBA0,
+    initUnlockScreen,
+    initStoryMapLocationIntro,
+    func_8001C920_1D520,
+    initStoryMapExtraIntro,
+    initStoryMapLocationIntro,
+    initStoryMapLocationIntro,
+    NULL,
+    NULL,
+};
 
 void exitTitleToNextMode(void) {
     returnToParentScheduler(gTitleExitMode);
