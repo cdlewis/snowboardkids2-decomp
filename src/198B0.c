@@ -3,7 +3,7 @@
 #include "gamestate.h"
 #include "task_scheduler.h"
 
-extern u8 D_8008D714_8E314[];
+extern char D_8008D714_8E314[][20];
 
 void checkGenericLocationDiscovery(LocationDiscoveryTrigger *);
 
@@ -13,7 +13,7 @@ void initGenericDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
     trigger->unk4 = 0;
     trigger->unk6 = -0x68;
     trigger->unk8 = 0;
-    trigger->locationLabel = &D_8008D714_8E314[eventId * 20];
+    trigger->locationLabel = &D_8008D714_8E314[eventId];
     setCallback(checkGenericLocationDiscovery);
 }
 
