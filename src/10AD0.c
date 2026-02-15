@@ -79,7 +79,7 @@ void renderSpriteFrame(SpriteRenderArg *arg0) {
 
         if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
-            func_80013EA0_14AA0(
+            loadSpriteTexture(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
                 frameEntry->height,
@@ -166,7 +166,7 @@ void renderSpriteFrameWithPalette(SpriteRenderArg *arg0) {
 
         if (gCachedTextureAddr != (s32)arg0->spriteData + frameEntry->textureOffset) {
             gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
-            func_80013EA0_14AA0(
+            loadSpriteTexture(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
                 frameEntry->height,
@@ -253,7 +253,7 @@ void renderHalfSizeSpriteFrame(SpriteRenderArg *arg0) {
 
         if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
-            func_80013EA0_14AA0(
+            loadSpriteTexture(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
                 frameEntry->height,
@@ -340,7 +340,7 @@ void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *arg0) {
 
         if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
-            func_80013EA0_14AA0(
+            loadSpriteTexture(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
                 frameEntry->height,
@@ -474,7 +474,7 @@ void renderTextSprite(TextRenderArg *arg0) {
 
         if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
-            func_80013EA0_14AA0(
+            loadSpriteTexture(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
                 frameEntry->height,
@@ -633,7 +633,7 @@ void renderTextSpriteWithTransparency(TextRenderArg *arg0) {
 
         if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
-            func_80013EA0_14AA0(
+            loadSpriteTexture(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
                 frameEntry->height,
@@ -778,7 +778,7 @@ void renderTintedSprite(TintedSpriteArg *arg0) {
 
         if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
-            func_80013EA0_14AA0(
+            loadSpriteTexture(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
                 frameEntry->height,
@@ -896,7 +896,7 @@ void renderAlphaBlendedTextSprite(TextRenderArg *arg0) {
 
         if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
-            func_80013EA0_14AA0(
+            loadSpriteTexture(
                 (s32)arg0->spriteData + frameEntry->textureOffset,
                 frameEntry->width,
                 frameEntry->height,
@@ -969,7 +969,7 @@ void renderAlphaBlendedTextSprite(TextRenderArg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/10AD0", func_800136E0_142E0);
 
-void func_80013EA0_14AA0(s32 textureAddr, u16 width, u16 height, u16 format, s32 paletteMode) {
+void loadSpriteTexture(s32 textureAddr, u16 width, u16 height, u16 format, s32 paletteMode) {
     s32 fmt;
 
     fmt = paletteMode;

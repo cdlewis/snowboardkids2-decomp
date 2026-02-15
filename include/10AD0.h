@@ -68,7 +68,7 @@ void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *arg0);
 void func_80010C98_11898(void *arg0);
 void renderAlphaBlendedTextSprite(TextRenderArg *arg0);
 void initDefaultFontPalette(void);
-void func_80013EA0_14AA0(s32, u16, u16, u16, s32);
+void loadSpriteTexture(s32 textureAddr, u16 width, u16 height, u16 format, s32 paletteMode);
 void renderTintedSprite(TintedSpriteArg *arg0);
 void renderTextSpriteWithTransparency(TextRenderArg *arg0);
 void func_800136E0_142E0(void);
