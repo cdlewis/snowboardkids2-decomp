@@ -39,7 +39,19 @@ typedef struct {
 } BossCheckpoint;
 
 typedef struct {
-    u8 pad[0x38];
+    void *unk0;
+    void *unk4;
+    void *unk8;
+    void *unkC;
+    void *unk10;
+    void *unk14;
+    void *unk18;
+    void *unk1C;
+    void *unk20;
+    void *unk24;
+    void *unk28;
+    void *unk2C;
+    u8 pad30[0x38 - 0x30];
     s16 unk38[6];
     u8 pad44[0x6C - 0x44];
     u8 primaryR;
@@ -69,7 +81,11 @@ typedef struct {
     s32 unk468;
     u8 pad46C[0x8];
     s32 unk474;
-    u8 pad478[0x970 - 0x478];
+    u8 pad478[0x488 - 0x478];
+    BoneAnimationStateIndexed unk488[17];
+    u8 pad940[0x950 - 0x488 - sizeof(BoneAnimationStateIndexed) * 17];
+    Transform3D unk950;
+    u8 pad990[0x970 - 0x950 - sizeof(Transform3D)];
     Transform3D unk970;
     Transform3D unk990;
     Transform3D unk9B0;
@@ -170,6 +186,13 @@ extern s32 D_800BBA84_AC2B4[][3];
 
 typedef s32 (*StateFunc)(void *);
 extern StateFunc D_800BC440_ACC70[];
+
+typedef struct {
+    u8 boneIndex;
+    u8 parentBone;
+} BoneHierarchyEntry;
+
+void *getIndexedAnimationDataPtr(void *, s16);
 
 void updateCrazyJungleBoss(Arg0Struct *arg0) {
     Transform3D sp10;
@@ -623,7 +646,39 @@ void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/crazy_jungle_boss", func_800BC0E8_AC918);
+void func_800BC0E8_AC918(Arg0Struct *arg0) {
+    Transform3D sp10;
+    Transform3D sp30;
+    BoneHierarchyEntry *animData;
+    s32 i;
+
+    animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
+    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, &arg0->pad9D0[0x20]);
+    func_8006B084_6BC84(&arg0->unk9B0, &arg0->pad9D0[0x20], &arg0->unk950);
+
+    for (i = 0; i < arg0->boneCount; i++) {
+        if (animData[i].parentBone == 0xFF) {
+            if (arg0->behaviorFlags & 0x10) {
+                memcpy(&sp30, &identityMatrix, sizeof(Transform3D));
+                sp30.m[1][1] = arg0->unkB9E;
+                func_8006B084_6BC84(&arg0->unk488[animData[i].boneIndex].prev_position, &sp30, &sp10);
+                func_8006B084_6BC84(&sp10, &arg0->unk950, animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0);
+            } else {
+                func_8006B084_6BC84(
+                    &arg0->unk488[animData[i].boneIndex].prev_position,
+                    &arg0->unk950,
+                    animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0
+                );
+            }
+        } else {
+            func_8006B084_6BC84(
+                &arg0->unk488[animData[i].boneIndex].prev_position,
+                animData[i].parentBone * 0x3C + 0x38 + (u8 *)arg0,
+                animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0
+            );
+        }
+    }
+}
 
 void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
     s32 i;
