@@ -180,7 +180,7 @@ typedef struct {
 
 extern D_800BC468_ACC98_type D_800BC468_ACC98[];
 extern Vec3i gCrazyJungleBossCheckpointOffsets[];
-extern void func_800BC0E8_AC918(Arg0Struct *);
+extern void updateCrazyJungleBossLeanBoneTransforms(Arg0Struct *);
 extern s32 D_800BBA7C_AC2AC[][3];
 extern s32 D_800BBA84_AC2B4[][3];
 
@@ -299,7 +299,7 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     transformVector((s16 *)(alloc->unk48 + 0xF0), (s16 *)&sp30, &arg0->unkAD4);
     memcpy(&arg0->unkB50.localPos, &arg0->unkAD4, sizeof(Vec3i));
     addCollisionSectorNodeToList(&arg0->unkB50);
-    func_800BC0E8_AC918(arg0);
+    updateCrazyJungleBossLeanBoneTransforms(arg0);
 
     transformVector((s16 *)(alloc->unk48 + 0xFC), arg0->unk38, &arg0->unkAE4);
     arg0->unkAE4 -= arg0->unk970.translation.x;
@@ -646,7 +646,7 @@ void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
     }
 }
 
-void func_800BC0E8_AC918(Arg0Struct *arg0) {
+void updateCrazyJungleBossLeanBoneTransforms(Arg0Struct *arg0) {
     Transform3D sp10;
     Transform3D sp30;
     BoneHierarchyEntry *animData;
@@ -686,7 +686,7 @@ void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
     s32 pad[36];
 
     getCurrentAllocation();
-    func_800BC0E8_AC918(arg0);
+    updateCrazyJungleBossLeanBoneTransforms(arg0);
 
     surfaceColorIndex = arg0->surfaceTypeIndex >> 4;
 
