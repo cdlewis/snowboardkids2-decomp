@@ -56,8 +56,8 @@ typedef struct {
     /* 0x0B */ u8 g;
     /* 0x0C */ u8 b;
     /* 0x0D */ u8 a;
-    /* 0x0E */ u8 mode;
-    /* 0x0F */ u8 paletteOverride;
+    /* 0x0E */ u8 tileMode;
+    /* 0x0F */ u8 paletteOverrideCount;
     /* 0x10 */ u8 primColor;
 } TintedSpriteArg;
 
@@ -69,7 +69,7 @@ void func_80010C98_11898(void *arg0);
 void renderAlphaBlendedTextSprite(TextRenderArg *arg0);
 void initDefaultFontPalette(void);
 void func_80013EA0_14AA0(s32, u16, u16, u16, s32);
-void func_80012A58_13658(TintedSpriteArg *arg0);
+void renderTintedSprite(TintedSpriteArg *arg0);
 void renderTextSpriteWithTransparency(TextRenderArg *arg0);
 void func_800136E0_142E0(void);
 void renderTextSprite(TextRenderArg *arg0);

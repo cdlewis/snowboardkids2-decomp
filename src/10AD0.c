@@ -686,7 +686,7 @@ void renderTextSpriteWithTransparency(TextRenderArg *arg0) {
     }
 }
 
-void func_80012A58_13658(TintedSpriteArg *arg0) {
+void renderTintedSprite(TintedSpriteArg *arg0) {
     s32 left;
     s32 top;
     s32 right;
@@ -706,14 +706,14 @@ void func_80012A58_13658(TintedSpriteArg *arg0) {
     paletteBase = (s32)frameEntry + (arg0->spriteData->numFrames * 0x10);
     frameEntry = &frameEntry[arg0->frameIndex];
 
-    if (arg0->paletteOverride == 0) {
+    if (arg0->paletteOverrideCount == 0) {
         paletteIndex = frameEntry->paletteIndex;
     } else {
-        paletteIndex = arg0->paletteOverride - 1;
+        paletteIndex = arg0->paletteOverrideCount - 1;
     }
 
-    tileMode = arg0->mode & 3;
-    arg0->mode = tileMode;
+    tileMode = arg0->tileMode & 3;
+    arg0->tileMode = tileMode;
     clipOffsetY = 0;
     left = arg0->x + gTextClipAndOffsetData.offsetX;
     clipOffsetX = 0;
