@@ -1098,7 +1098,7 @@ void func_800356AC_362AC(
                 elem->y = yPos;
                 elem->unk8 = cmd & 0xFFF;
                 elem->unk4 = (void *)arg0;
-                debugEnqueueCallback(d, e, func_80012518_13118, elem);
+                debugEnqueueCallback(d, e, renderTextSpriteWithTransparency, elem);
             }
             xPos += xAdvance;
         }

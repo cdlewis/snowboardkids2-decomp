@@ -527,7 +527,7 @@ void renderTextSprite(TextRenderArg *arg0) {
     }
 }
 
-void func_80012518_13118(TextRenderArg *arg0) {
+void renderTextSpriteWithTransparency(TextRenderArg *arg0) {
     s32 left;
     s32 top;
     s32 right;

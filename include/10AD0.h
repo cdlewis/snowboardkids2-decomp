@@ -70,7 +70,7 @@ void renderAlphaBlendedTextSprite(TextRenderArg *arg0);
 void initDefaultFontPalette(void);
 void func_80013EA0_14AA0(s32, u16, u16, u16, s32);
 void func_80012A58_13658(TintedSpriteArg *arg0);
-void func_80012518_13118(TextRenderArg *arg0);
+void renderTextSpriteWithTransparency(TextRenderArg *arg0);
 void func_800136E0_142E0(void);
 void renderTextSprite(TextRenderArg *arg0);
 void func_80011924_12524(void);

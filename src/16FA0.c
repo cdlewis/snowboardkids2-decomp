@@ -136,7 +136,7 @@ void updateControllerSlotHighlights(ControllerSlotDisplay *arg0) {
                     slot->alpha = unselectedAlpha;
                 }
 
-                debugEnqueueCallback(8, 1, func_80012518_13118, &arg0->elements[i + (state->unk3BD << 2)]);
+                debugEnqueueCallback(8, 1, renderTextSpriteWithTransparency, &arg0->elements[i + (state->unk3BD << 2)]);
                 i++;
             } while (i < numControllers);
         }

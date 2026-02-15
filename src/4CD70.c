@@ -1260,7 +1260,7 @@ void updateGoldAwardDisplay(GoldAwardDisplayState *arg0) {
     }
 
     arg0->padA[4] = (u8)arg0->alpha;
-    debugEnqueueCallback(8, 6, func_80012518_13118, arg0);
+    debugEnqueueCallback(8, 6, renderTextSpriteWithTransparency, arg0);
 
     sprintf(buf, D_8009E894_9F494, arg0->goldAmount);
 
@@ -1357,7 +1357,7 @@ void updateTotalGoldDisplay(TotalGoldDisplayState *arg0) {
     }
 
     arg0->unkE = (u8)arg0->alpha;
-    debugEnqueueCallback(8, 6, func_80012518_13118, arg0);
+    debugEnqueueCallback(8, 6, renderTextSpriteWithTransparency, arg0);
 
     sprintf(buf, D_8009E894_9F494, getPlayerGold());
 
@@ -1451,7 +1451,7 @@ void updateTotalLapDisplay(TotalLapDisplayState *state) {
 
     state->unkE = (u8)state->alpha;
 
-    debugEnqueueCallback(state->player->playerIndex + 8, 6, func_80012518_13118, state);
+    debugEnqueueCallback(state->player->playerIndex + 8, 6, renderTextSpriteWithTransparency, state);
 
     drawNumericString(
         buffer,
@@ -2122,7 +2122,7 @@ void updateBonusGoldDisplay(BonusGoldDisplayState *arg0) {
     }
 
     arg0->alpha = (u8)arg0->alphaValue;
-    debugEnqueueCallback(8, 6, func_80012518_13118, arg0);
+    debugEnqueueCallback(8, 6, renderTextSpriteWithTransparency, arg0);
 
     var = 0;
     if (allocation->raceType == 4) {
