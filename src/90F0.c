@@ -459,7 +459,7 @@ void renderTranslucentSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
     }
 }
 
-void func_80009548_A148(OpaqueSpriteStruct_90F0 *sprite) {
+void renderTransformedSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
     OutputStruct_19E80 textureEntry;
     Transform3D transform;
     s32 texWidthShift;
@@ -635,7 +635,7 @@ void enqueueTransformedSprite(u16 slot, Node *node) {
     node->unk1C = NULL;
     node->callback = NULL;
     node->cleanupCallback = NULL;
-    debugEnqueueCallback(slot, 4, &func_80009548_A148, node);
+    debugEnqueueCallback(slot, 4, &renderTransformedSpriteCallback, node);
 }
 
 void setSpriteAssetEnabled(SpriteAssetState *state) {
