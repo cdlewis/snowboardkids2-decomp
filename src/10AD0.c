@@ -527,7 +527,164 @@ void renderTextSprite(TextRenderArg *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/10AD0", func_80012518_13118);
+void func_80012518_13118(TextRenderArg *arg0) {
+    s32 left;
+    s32 top;
+    s32 right;
+    s32 bottom;
+    s32 clipOffsetY;
+    s32 clipOffsetX;
+    s32 paletteBase;
+    u16 paletteMode;
+    u16 format;
+    u16 paletteIndex;
+    u8 tileMode;
+    SpriteFrameEntry *frameEntry;
+    s16 scaleS;
+    s16 scaleT;
+    Gfx *gfx;
+    u32 renderModeCmd;
+    u32 renderModeArg;
+    u32 combineCmd;
+    u32 combineArg;
+    u32 pipeSyncCmd;
+
+    frameEntry = arg0->spriteData->frames;
+    paletteBase = (s32)frameEntry + (arg0->spriteData->numFrames * 0x10);
+    frameEntry = &frameEntry[arg0->frameIndex];
+
+    if (arg0->overridePaletteCount == 0) {
+        paletteIndex = frameEntry->paletteIndex;
+    } else {
+        paletteIndex = arg0->overridePaletteCount - 1;
+    }
+
+    tileMode = arg0->tileMode & 3;
+    arg0->tileMode = tileMode;
+    left = arg0->x + gTextClipAndOffsetData.offsetX;
+    top = arg0->y + gTextClipAndOffsetData.offsetY;
+    scaleT = gTileTextureFlipTable[tileMode * 2 + 1];
+    paletteMode = gSpritePaletteModes[frameEntry->paletteTableIndex];
+    format = gSpriteTextureFormats[frameEntry->formatIndex];
+    scaleS = gTileTextureFlipTable[tileMode * 2];
+    right = left + frameEntry->width;
+    bottom = top + frameEntry->height;
+
+    clipOffsetY = 0;
+    clipOffsetX = 0;
+
+    if (scaleS == -1) {
+        clipOffsetX = frameEntry->width - 1;
+    }
+    if (scaleT == -1) {
+        clipOffsetY = frameEntry->height - 1;
+    }
+
+    if (left < gTextClipAndOffsetData.clipLeft) {
+        clipOffsetX = gTextClipAndOffsetData.clipLeft - left;
+        left = gTextClipAndOffsetData.clipLeft;
+    }
+
+    if (top < gTextClipAndOffsetData.clipTop) {
+        clipOffsetY = gTextClipAndOffsetData.clipTop - top;
+        top = gTextClipAndOffsetData.clipTop;
+    }
+
+    if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
+        (top < bottom)) {
+
+        if (gGraphicsMode != 0x100) {
+            gGraphicsMode = 0x100;
+            gCachedTextureAddr = 0;
+            gCachedPaletteAddr = 0;
+            gSPDisplayList(gRegionAllocPtr++, gSpriteRDPSetupDL);
+        }
+
+        renderModeCmd = 0xE200001C;
+        renderModeArg = 0x504240;
+        combineCmd = 0xFC119623;
+        gfx = gRegionAllocPtr;
+        combineArg = 0xFF2FFFFF;
+        pipeSyncCmd = 0xE7000000;
+        gRegionAllocPtr = (Gfx *)((s32)gfx + 8);
+        __asm__ volatile(""
+                         :
+                         : "r"(gRegionAllocPtr), "r"(renderModeCmd), "r"(renderModeArg), "r"(combineArg)
+                         : "memory");
+        gRegionAllocPtr = (Gfx *)((s32)gfx + 0x10);
+        __asm__ volatile("" : : "r"(gRegionAllocPtr) : "memory");
+        gRegionAllocPtr = (Gfx *)((s32)gfx + 0x18);
+        __asm__ volatile("" : : "r"(gRegionAllocPtr) : "memory");
+        gRegionAllocPtr = (Gfx *)((s32)gfx + 0x20);
+
+        gfx->words.w0 = pipeSyncCmd;
+        (gfx + 0)->words.w1 = 0;
+        (gfx + 1)->words.w0 = renderModeCmd;
+        (gfx + 1)->words.w1 = renderModeArg;
+        (gfx + 2)->words.w0 = combineCmd;
+        (gfx + 2)->words.w1 = combineArg;
+        (gfx + 3)->words.w0 = 0xFA000000;
+
+        {
+            u8 alpha = arg0->alpha;
+            u32 color = (alpha << 24) | (alpha << 16) | (alpha << 8) | arg0->transparency;
+            (gfx + 3)->words.w1 = color;
+        }
+
+        if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
+            gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
+            func_80013EA0_14AA0(
+                (s32)arg0->spriteData + frameEntry->textureOffset,
+                frameEntry->width,
+                frameEntry->height,
+                format,
+                paletteMode
+            );
+        }
+
+        paletteMode &= 0xFFFF;
+        if (paletteMode == 2) {
+            paletteIndex &= 0xFFFF;
+            if (paletteIndex == 0xFE) {
+                if (gCachedPaletteAddr != (s32)gDefaultFontPalette) {
+                    gCachedPaletteAddr = (s32)gDefaultFontPalette;
+                    if (format == 0) {
+                        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gDefaultFontPalette);
+                    } else {
+                        gDPLoadTLUT_pal256(gRegionAllocPtr++, gDefaultFontPalette);
+                    }
+                }
+            } else {
+                s32 paletteAddr = paletteBase + (paletteIndex << 5);
+                if (paletteAddr != gCachedPaletteAddr) {
+                    gCachedPaletteAddr = paletteAddr;
+                    if (format == 0) {
+                        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteAddr);
+                    } else {
+                        gDPLoadTLUT_pal256(gRegionAllocPtr++, paletteAddr);
+                    }
+                }
+            }
+        }
+
+        gSPTextureRectangle(
+            gRegionAllocPtr++,
+            left * 4,
+            top * 4,
+            right * 4,
+            bottom * 4,
+            G_TX_RENDERTILE,
+            clipOffsetX << 5,
+            clipOffsetY << 5,
+            scaleS << 10,
+            scaleT << 10
+        );
+
+        gDPPipeSync(gRegionAllocPtr++);
+        gDPSetCombineMode(gRegionAllocPtr++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+        gDPSetPrimColor(gRegionAllocPtr++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+    }
+}
 
 void func_80012A58_13658(TintedSpriteArg *arg0) {
     s32 left;
