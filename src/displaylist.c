@@ -226,10 +226,10 @@ s32 getTrackHeightAtPosition(void *trackGeom_void, u16 groupIdx, void *pos_void)
     return -0x3E800000;
 }
 
-s32 func_80061D6C_6296C(void *trackGeom_void, u16 groupIdx, void *pos_void, s32 arg3) {
+s32 getTrackHeightWithNormalAtPosition(void *trackGeom_void, u16 groupIdx, void *pos_void, s32 arg3) {
     TrackGeometryFaceData *trackGeom = (TrackGeometryFaceData *)trackGeom_void;
     Vec3i *pos;
-    s32 *outNormals;
+    s32 *outNormal;
     s32 sp24;
     s32 var_fp;
     s32 v0x;
@@ -259,7 +259,7 @@ s32 func_80061D6C_6296C(void *trackGeom_void, u16 groupIdx, void *pos_void, s32 
     temp_v1 = ((idx << 3) + idx) << 2;
     temp_v0 = (TrackFaceGroup *)(temp_v1 + (s32)base);
     sp1C = temp_v0->baseIndex;
-    outNormals = (s32 *)arg3;
+    outNormal = (s32 *)arg3;
     var_fp = sp1C << 3;
     pos = (Vec3i *)pos_void;
     sp24 = temp_v1;
@@ -296,11 +296,11 @@ s32 func_80061D6C_6296C(void *trackGeom_void, u16 groupIdx, void *pos_void, s32 
                         v0x = pos->x - t0;
                         v0z = pos->z - t3;
 
-                        outNormals[0] = (dY_v2 * v1z) - (v2z * dY_v1);
-                        outNormals[1] = (v2z * v1x) - (v2x * v1z);
-                        outNormals[2] = (v2x * dY_v1) - (dY_v2 * v1x);
+                        outNormal[0] = (dY_v2 * v1z) - (v2z * dY_v1);
+                        outNormal[1] = (v2z * v1x) - (v2x * v1z);
+                        outNormal[2] = (v2x * dY_v1) - (dY_v2 * v1x);
 
-                        return (s32)((-((s64)outNormals[0] * v0x) - ((s64)outNormals[2] * v0z)) / outNormals[1]) +
+                        return (s32)((-((s64)outNormal[0] * v0x) - ((s64)outNormal[2] * v0z)) / outNormal[1]) +
                                (((Vertex6 *)(((TrackFace *)(var_fp + (s32)trackGeom->faces))->v0 * 6 +
                                              (s32)trackGeom->vertices))
                                     ->y

@@ -220,7 +220,7 @@ void func_80060CDC_618DC(void *arg0, u16 arg1, void *arg2, s32 arg3, Vec3i *arg4
 
 s32 getTrackHeightAtPosition(void *trackGeom, u16 groupIdx, void *pos);
 
-s32 func_80061D6C_6296C(void *arg0, u16 arg1, void *arg2, s32 arg3);
+s32 getTrackHeightWithNormalAtPosition(void *arg0, u16 arg1, void *arg2, s32 arg3);
 
 s32 computeSectorTrackHeight(TrackGeometryFaceData *geom, u16 groupIdx, Vec3i *pos, s32 yOffset);
 
