@@ -126,10 +126,10 @@ typedef struct {
     /* 0x08 */ s16 frameIndex;
     /* 0x0A */ u8 frameDelay;
     /* 0x0B */ u8 padB;
-} SaveSlotSelectionParticle; // size 0x0C
+} SaveSlotSelectionParticle;
 
 typedef struct {
-    /* 0x00 */ SaveSlotSelectionParticle entries[4]; // 0x00 - 0x2F
+    /* 0x00 */ SaveSlotSelectionParticle entries[4];
     /* 0x30 */ u8 pad30[0x18];
     /* 0x48 */ u8 isRightSide;
     /* 0x49 */ u8 animToggle;
@@ -175,9 +175,9 @@ typedef struct {
 } SaveSlotGoldTextBuffer;
 
 typedef struct {
-    /* 0x00 */ SaveSlotGoldIcon icons[4];             // 4 * 0x14 = 0x50
-    /* 0x50 */ SaveSlotGoldText text[4];              // 4 * 0x0C = 0x30
-    /* 0x80 */ SaveSlotGoldTextBuffer textBuffers[4]; // 4 * 0x0A = 0x28
+    /* 0x00 */ SaveSlotGoldIcon icons[4];
+    /* 0x50 */ SaveSlotGoldText text[4];
+    /* 0x80 */ SaveSlotGoldTextBuffer textBuffers[4];
     /* 0xA8 */ u8 animFrames[4];
 } SaveSlotGoldDisplayState;
 
@@ -195,7 +195,7 @@ typedef struct {
     /* 0x0C */ u8 unkC;
     /* 0x0D */ u8 unkD;
     /* 0x0E */ u8 padE[2];
-} SaveSlotItemIcon; // size 0x10
+} SaveSlotItemIcon;
 
 typedef struct {
     /* 0x00 */ s16 x;
@@ -203,19 +203,19 @@ typedef struct {
     /* 0x04 */ s16 unk4;
     /* 0x06 */ s16 alpha;
     /* 0x08 */ char *text;
-} SaveSlotNumberLabelText; // size 0x0C
+} SaveSlotNumberLabelText;
 
 typedef struct {
-    /* 0x00 */ SaveSlotItemIcon sprites[6];      // 0x00 - 0x5F
-    /* 0x60 */ SaveSlotNumberLabelText texts[9]; // 0x60 - 0xCB
-    /* 0xCC */ char textBuffers[9][4];           // 0xCC - 0xEF
+    /* 0x00 */ SaveSlotItemIcon sprites[6];
+    /* 0x60 */ SaveSlotNumberLabelText texts[9];
+    /* 0xCC */ char textBuffers[9][4];
     /* 0xF0 */ u8 slotIndex;
 } SaveSlotNumberLabelsState;
 
 typedef struct {
     /* 0x00 */ u8 itemFlags[15];
     /* 0x0F */ u8 pad0F[0x4D];
-} SaveSlotSaveData; // size 0x5C
+} SaveSlotSaveData;
 
 typedef struct {
     /* 0x000 */ u8 pad0[0x948];
@@ -286,7 +286,7 @@ void cleanupSaveSlotGoldDisplay(Func34574Arg *arg0);
 void updateSaveSlotGoldDisplay(void);
 void updateSaveSlotSelectionParticles(SelectionParticleUpdateState *arg0);
 void cleanupSaveSlotSelectionParticles(Func34574Arg *arg0);
-void updateSaveSlotItemIcons(void);
+void updateSaveSlotItemIcons(SaveSlotItemIconsState *);
 void cleanupSaveSlotDeleteText(SaveSlotDeleteTextState *arg0);
 void updateSaveSlotStatSprites(void);
 void cleanupSaveSlotStatSprites(Func34574Arg *arg0);
@@ -402,7 +402,110 @@ void initSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
     setCallback(updateSaveSlotItemIcons);
 }
 
-INCLUDE_ASM("asm/nonmatchings/33FE0", updateSaveSlotItemIcons);
+typedef struct {
+    /* 0x000 */ u8 pad0[0x948];
+    /* 0x948 */ SaveSlotSaveData slots[3];
+    /* 0xA5C */ u8 globalItemFlags[15];
+    /* 0xA6B */ u8 padA6B[0x59];
+    /* 0xAC4 */ u16 unkAC4;
+    /* 0xAC6 */ u16 unkAC6;
+    /* 0xAC8 */ u8 unkAC8;
+} ItemIconsAllocation;
+
+void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
+    ItemIconsAllocation *allocation;
+    u16 alpha;
+    s32 alphaCheck;
+    s32 i;
+    u16 screenState;
+    u8 slotIndex;
+    u8 animFrame;
+
+    allocation = getCurrentAllocation();
+    screenState = allocation->unkAC6;
+
+    if (screenState >= 0x32) {
+        arg0->animFrame = 0;
+        alpha = 0x60;
+    } else if (screenState == 0) {
+        alpha = 0xFF;
+    } else {
+        if (allocation->unkAC8 == arg0->slotIndex) {
+            if (screenState < 2) {
+                alpha = 0xFE;
+            } else {
+                alpha = 0xFF;
+                arg0->animFrame = 0;
+            }
+        } else {
+            arg0->animFrame = 0;
+            alpha = ((arg0->slotIndex == 3) ? 0xFE : 0) | 0x60;
+        }
+    }
+
+    i = 0;
+
+    do {
+        alphaCheck = alpha & 0xFFFF;
+        if (alphaCheck == 0xFE) {
+            slotIndex = arg0->slotIndex;
+            if (slotIndex != 3) {
+                if (allocation->slots[slotIndex].itemFlags[i] == 1) {
+                    animFrame = arg0->animFrame;
+                    if (animFrame < 0x10) {
+                        arg0->icons[i].alpha = alphaCheck - ((animFrame + 1) * 8);
+                    } else if (animFrame != 0x1F) {
+                        arg0->icons[i].alpha = (animFrame * 8) | 6;
+                    } else {
+                        arg0->icons[i].alpha = alphaCheck;
+                    }
+                } else {
+                    arg0->icons[i].alpha = 0x60;
+                }
+            } else {
+                if (allocation->globalItemFlags[i] == 1) {
+                    arg0->icons[i].alpha = alphaCheck;
+                } else {
+                    arg0->icons[i].alpha = 0x60;
+                }
+            }
+        } else {
+            arg0->icons[i].alpha = alpha;
+            if (alphaCheck == 0xFF && allocation->unkAC6 != 2) {
+                if (allocation->slots[arg0->slotIndex].itemFlags[i] == 1) {
+                    arg0->icons[i].alpha = 0xFE;
+                } else {
+                    arg0->icons[i].alpha = 0x60;
+                }
+            } else if (alphaCheck == 0x60) {
+                if (allocation->slots[arg0->slotIndex].itemFlags[i] != 1) {
+                    arg0->icons[i].alpha = 0x30;
+                }
+            }
+        }
+
+        if (alphaCheck != 0x60) {
+            arg0->icons[i].x = (i * 16) - 0x78;
+        } else {
+            arg0->icons[i].x = (i * 15) - 0x72;
+        }
+
+        arg0->icons[i].unkD = 0;
+
+        if (allocation->unkAC6 == 2 && arg0->slotIndex == allocation->unkAC8 && (allocation->unkAC4 & 1)) {
+            arg0->icons[i].unkD = 0xFF;
+        }
+
+        debugEnqueueCallback(arg0->slotIndex + 9, 0, renderTextSprite, &arg0->icons[i]);
+        i++;
+    } while (i < 15);
+
+    if ((alpha & 0xFFFF) == 0xFE && arg0->slotIndex != 3) {
+        arg0->animFrame = (arg0->animFrame + 1) & 0x1F;
+    } else {
+        arg0->animFrame = 0;
+    }
+}
 
 void cleanupSaveSlotItemIcons(Func34574Arg *arg0) {
     arg0->unk0 = freeNodeMemory(arg0->unk0);
