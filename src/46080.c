@@ -229,8 +229,9 @@ typedef struct {
 } BossHomingProjectileSpawnArg;
 
 typedef struct {
-    s16 unk0;
-    u8 _pad2[0x4];
+    s16 textureIndex;
+    u16 animFrameCount;
+    u16 vertexIndex;
     u16 unk6;
     u8 unk8[0xC];
 } SceneAnimationEntryNew;
@@ -245,7 +246,7 @@ typedef struct {
     s16 dataIndex;
     s16 entryCount;
     s16 unk1A;
-    s32 frameCounter;
+    u32 frameCounter;
 } SceneAnimationTaskNew;
 
 typedef struct {
@@ -805,7 +806,7 @@ void cleanupItemHomingProjectileTask(func_8004B264_4BE64_arg *arg0);
 void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *);
 void dispatchSkyRenderCallback(ScheduledTask *);
 void updateItemHomingProjectileMovement(ItemHomingProjectileMoveArg *);
-void func_80045CC8_468C8(void);
+void func_80045CC8_468C8(SceneAnimationTaskNew *arg0);
 void cleanupBossHomingProjectileTask(BossHomingProjectileCleanupArg *);
 void updateItemHomingProjectileImpact(ItemHomingProjectileImpactArg *);
 void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0);
@@ -1138,7 +1139,88 @@ void cleanupSceneAnimationTask(SceneAnimationTask *arg0) {
     arg0->loadedData = freeNodeMemory(arg0->loadedData);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46080", func_80045CC8_468C8);
+void func_80045CC8_468C8(SceneAnimationTaskNew *arg0) {
+    OutputStruct_19E80 tableEntry;
+    s32 prevTextureIndex;
+    s32 i;
+    s32 vertexOffset;
+    s32 textureIndex;
+
+    prevTextureIndex = -1;
+    gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+    gGraphicsMode = -1;
+
+    for (i = 0; i < arg0->entryCount; i++) {
+        if (isObjectCulled((Vec3i *)arg0->entries[i].unk8) == 0) {
+            textureIndex = arg0->entries[i].textureIndex;
+
+            if (arg0->entries[i].animFrameCount != 0) {
+                textureIndex += (arg0->frameCounter >> 3) % arg0->entries[i].animFrameCount;
+            }
+
+            if (textureIndex != prevTextureIndex) {
+                prevTextureIndex = textureIndex;
+
+                if (textureIndex & 0x100) {
+                    getTableEntryByU16Index(arg0->assetData, (u16)(textureIndex & 0xFF), &tableEntry);
+
+                    gDPLoadTextureBlock(
+                        gRegionAllocPtr++,
+                        tableEntry.data_ptr,
+                        G_IM_FMT_CI,
+                        G_IM_SIZ_8b,
+                        tableEntry.field1,
+                        tableEntry.field2,
+                        0,
+                        G_TX_CLAMP,
+                        G_TX_CLAMP,
+                        G_TX_NOMASK,
+                        G_TX_NOMASK,
+                        G_TX_NOLOD,
+                        G_TX_NOLOD
+                    );
+
+                    gDPLoadTLUT_pal256(gRegionAllocPtr++, tableEntry.index_ptr);
+                } else {
+                    getTableEntryByU16Index(arg0->assetData, (u16)textureIndex, &tableEntry);
+
+                    gDPLoadMultiBlock_4b(
+                        gRegionAllocPtr++,
+                        tableEntry.data_ptr,
+                        0,
+                        G_TX_RENDERTILE,
+                        G_IM_FMT_CI,
+                        tableEntry.field1,
+                        tableEntry.field2,
+                        0,
+                        G_TX_CLAMP,
+                        G_TX_CLAMP,
+                        G_TX_NOMASK,
+                        G_TX_NOMASK,
+                        G_TX_NOLOD,
+                        G_TX_NOLOD
+                    );
+
+                    gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
+                }
+
+                vertexOffset = arg0->entries[i].vertexIndex * 4;
+            }
+
+            gSPMatrix(
+                gRegionAllocPtr++,
+                (u8 *)arg0->transformBuffer + (i << 6),
+                G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
+            );
+
+            gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+
+            gSPVertex(gRegionAllocPtr++, (u8 *)arg0->headerData + (vertexOffset << 4), 4, 0);
+
+            gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+        }
+    }
+}
 
 void scheduleSceneAnimationTask(s32 arg0, s16 arg1) {
     SceneAnimationTask *task = (SceneAnimationTask *)scheduleTask(initSceneAnimationTask, 0, 0, 0xD3);
