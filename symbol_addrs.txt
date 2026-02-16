@@ -3636,6 +3636,7 @@ initSceneAnimationTask = 0x800459A4; // rom:0x465A4
 setupSceneAnimationTask = 0x80045A28; // rom:0x46628
 updateSceneAnimationTask = 0x80045B3C; // rom:0x4673C
 cleanupSceneAnimationTask = 0x80045C84; // rom:0x46884
+renderSceneAnimationTask = 0x80045CC8; // rom:0x468C8
 scheduleSceneAnimationTask = 0x80046244; // rom:0x46E44
 initPlayerSparkleTask = 0x80046298; // rom:0x46E98
 loadPlayerSparkleData = 0x800462D8; // rom:0x46ED8

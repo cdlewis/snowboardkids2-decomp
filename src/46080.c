@@ -232,8 +232,8 @@ typedef struct {
     s16 textureIndex;
     u16 animFrameCount;
     u16 vertexIndex;
-    u16 unk6;
-    u8 unk8[0xC];
+    u16 collisionType;
+    Vec3i position;
 } SceneAnimationEntryNew;
 
 typedef struct {
@@ -806,7 +806,7 @@ void cleanupItemHomingProjectileTask(func_8004B264_4BE64_arg *arg0);
 void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *);
 void dispatchSkyRenderCallback(ScheduledTask *);
 void updateItemHomingProjectileMovement(ItemHomingProjectileMoveArg *);
-void func_80045CC8_468C8(SceneAnimationTaskNew *arg0);
+void renderSceneAnimationTask(SceneAnimationTaskNew *arg0);
 void cleanupBossHomingProjectileTask(BossHomingProjectileCleanupArg *);
 void updateItemHomingProjectileImpact(ItemHomingProjectileImpactArg *);
 void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0);
@@ -1107,29 +1107,29 @@ void updateSceneAnimationTask(SceneAnimationTaskNew *arg0) {
     arg0->frameCounter = (arg0->frameCounter + 1) & 0x7FFFFFFF;
 
     for (i = 0; i < arg0->entryCount; i++) {
-        if (arg0->entries[i].unk6 == 0) {
+        if (arg0->entries[i].collisionType == 0) {
             break;
         }
 
-        if (arg0->entries[i].unk6 == 1) {
-            checkPositionPlayerCollisionWithPull(arg0->entries[i].unk8, 0x100000, 0xC00000);
+        if (arg0->entries[i].collisionType == 1) {
+            checkPositionPlayerCollisionWithPull(&arg0->entries[i].position, 0x100000, 0xC00000);
         }
 
-        if (arg0->entries[i].unk6 == 2) {
-            checkPositionPlayerCollisionWithPull(arg0->entries[i].unk8, 0x100000, 0x680000);
+        if (arg0->entries[i].collisionType == 2) {
+            checkPositionPlayerCollisionWithPull(&arg0->entries[i].position, 0x100000, 0x680000);
         }
 
-        if (arg0->entries[i].unk6 == 3) {
-            checkPositionPlayerCollisionWithPull(arg0->entries[i].unk8, 0x140000, 0x300000);
+        if (arg0->entries[i].collisionType == 3) {
+            checkPositionPlayerCollisionWithPull(&arg0->entries[i].position, 0x140000, 0x300000);
         }
 
-        if (arg0->entries[i].unk6 == 4) {
-            checkPositionPlayerCollisionWithPull(arg0->entries[i].unk8, 0x120000, 0xC00000);
+        if (arg0->entries[i].collisionType == 4) {
+            checkPositionPlayerCollisionWithPull(&arg0->entries[i].position, 0x120000, 0xC00000);
         }
     }
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 4, func_80045CC8_468C8, arg0);
+        debugEnqueueCallback((u16)i, 4, renderSceneAnimationTask, arg0);
     }
 }
 
@@ -1139,7 +1139,7 @@ void cleanupSceneAnimationTask(SceneAnimationTask *arg0) {
     arg0->loadedData = freeNodeMemory(arg0->loadedData);
 }
 
-void func_80045CC8_468C8(SceneAnimationTaskNew *arg0) {
+void renderSceneAnimationTask(SceneAnimationTaskNew *arg0) {
     OutputStruct_19E80 tableEntry;
     s32 prevTextureIndex;
     s32 i;
@@ -1151,7 +1151,7 @@ void func_80045CC8_468C8(SceneAnimationTaskNew *arg0) {
     gGraphicsMode = -1;
 
     for (i = 0; i < arg0->entryCount; i++) {
-        if (isObjectCulled((Vec3i *)arg0->entries[i].unk8) == 0) {
+        if (isObjectCulled(&arg0->entries[i].position) == 0) {
             textureIndex = arg0->entries[i].textureIndex;
 
             if (arg0->entries[i].animFrameCount != 0) {
