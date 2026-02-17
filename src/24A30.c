@@ -15,6 +15,20 @@
 #include "task_scheduler.h"
 
 typedef struct {
+    u16 x;
+    u16 y;
+    u16 palette;
+    u8 *string;
+} TextData;
+
+typedef struct {
+    SpriteRenderArg spriteEntries[6];
+    TextData textEntries[3];
+    u8 strings[3][3];
+    u8 playerIndex;
+} CharSelectStatsState;
+
+typedef struct {
     u8 padding[0x24];
     void *unk24;
     void *unk28;
@@ -241,6 +255,11 @@ typedef struct {
     func_80027348_entry entries[3];
 } PlayerLabelSpritesState;
 
+extern struct {
+    u16 x;
+    u16 y;
+} D_8008DE9C_8EA9C[];
+
 extern Vec2_u16 playerNumberPositions[];
 extern PositionConfig_DDBE D_8008DDBE_8E9BE[];
 extern PositionConfig_DDE6 D_8008DDE6_8E9E6[];
@@ -248,16 +267,15 @@ extern u8 D_8008DE18_8EA18[];
 extern PositionConfig_DE1A D_8008DE1A_8EA1A[];
 extern Vec3s boardSelectArrowPositions[];
 extern u16 D_8008DE7A_8EA7A[];
-extern struct {
-    u16 x;
-    u16 y;
-} D_8008DE9C_8EA9C[];
 extern u8 D_8008DD8D_8E98D[];
 extern u8 D_8008DD8E_8E98E[];
 extern s32 D_8008DD2C_8E92C[];
 extern Vec3s D_8008DD4E_8E94E[];
 extern Vec3s charSelectIconPositions[];
 extern Vec3s charSelectIconYIncrements[];
+extern void *renderTextPalette;
+extern u8 D_8008DD8C_8E98C[];
+extern char D_8009E288_9EE88[];
 
 void animateCharSelectIconReveal(CharSelectIconsState *);
 void cleanupCharSelectIcons(SimpleSpriteEntry *);
@@ -2068,7 +2086,43 @@ void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/24A30", func_80027678_28278);
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_800277F4_283F4);
+void func_800277F4_283F4(CharSelectStatsState *arg0) {
+    GameState *gameState;
+    u8 charIndex;
+    u8 paletteIndex;
+    s32 lookupBase;
+    s32 i;
+    s32 j;
+    u8 ch;
+    s32 temp;
+
+    gameState = (GameState *)getCurrentAllocation();
+    charIndex = gameState->unk18A8[arg0->playerIndex];
+    temp = charIndex * 3;
+    paletteIndex = gameState->unk18B0[arg0->playerIndex];
+    lookupBase = paletteIndex + temp;
+
+    if ((u32)(gameState->unk1898[arg0->playerIndex] - 3) < 2u) {
+        return;
+    }
+
+    for (i = 0; i < 3; i++) {
+        sprintf((char *)arg0->strings[i], D_8009E288_9EE88, D_8008DD8C_8E98C[lookupBase * 3 + i]);
+
+        if (D_800AFE8C_A71FC->numPlayers == 1) {
+            for (j = 0; j < 2; j++) {
+                ch = arg0->strings[i][j];
+                if (ch != ' ') {
+                    arg0->spriteEntries[i * 2 + j].frameIndex = (u16)(ch - 0x30);
+                    debugEnqueueCallback(arg0->playerIndex + 8, 7, renderSpriteFrame, &arg0->spriteEntries[i * 2 + j]);
+                }
+            }
+        } else {
+            arg0->textEntries[i].string = arg0->strings[i];
+            debugEnqueueCallback(arg0->playerIndex + 8, 7, &renderTextPalette, &arg0->textEntries[i]);
+        }
+    }
+}
 
 void cleanupCharSelectStats(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
