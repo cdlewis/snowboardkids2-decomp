@@ -1,6 +1,5 @@
 #include "2F990.h"
 #include "audio.h"
-#include "common.h"
 #include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
@@ -14,6 +13,10 @@ void onUnlockScreenExit(void);
 void unlockScreenCleanupAndExit(void);
 void unlockScreenAwaitUserDismiss(void);
 void unlockScreenAwaitFadeIn(void);
+
+s32 D_8008D960_8E560[] = { 0x00000000, 0x0000C350, 0x000186A0, 0x00000000, 0x0000AFC8, 0x00015F90, 0x00000000,
+                           0x0000EA60, 0x0001D4C0, 0x000249F0, 0x00001388, 0x000003E8, 0x00013880, 0x00000064,
+                           0x00013880, 0x0000C350, 0x00030D40, 0x00061A80, 0x00000000, 0x00000000 };
 
 typedef struct {
     /* 0x000 */ u8 cameraNode0[0x1D8];
