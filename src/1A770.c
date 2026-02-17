@@ -32,18 +32,18 @@ typedef struct {
     u8 unk79A;
 } allocation_1B8C8;
 
-extern void onStoryModeRaceCancelled(void);
-extern void awaitStoryMapLocationIntro(void);
-extern void awaitStoryMapDecorReady(void);
-extern void cleanupStoryMapDecorModel(applyTransformToModel_arg1 *);
-extern void setupStoryMapDecorModel(applyTransformToModel_arg1 *);
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 storyMapLocationIndex;
-extern void awaitFadeLoadCharacterSelect(void);
 extern s32 gControllerInputs[4];
-void awaitFadeLoadBoardShop(void);
-extern void func_8001A478_1B078(void);
 
+void awaitFadeLoadCharacterSelect(void);
+void awaitFadeLoadBoardShop(void);
+void func_8001A478_1B078(void);
+void onStoryModeRaceCancelled(void);
+void awaitStoryMapLocationIntro(void);
+void awaitStoryMapDecorReady(void);
+void cleanupStoryMapDecorModel(applyTransformToModel_arg1 *);
+void setupStoryMapDecorModel(applyTransformToModel_arg1 *);
 void awaitFadeCleanupBoardShop(void);
 void onBoardShopCleanupComplete(void);
 void awaitStoryModeUnlockCutscene(void);
