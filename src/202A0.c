@@ -26,53 +26,53 @@ extern void animatePortraitRotation(struct LevelPreviewPortraitState_202A0_s *ar
 s16 D_8008D9D0_8E5D0[] = { 0x0618, 0x0672, 0x03DE, 0x03DE, 0x0708, 0x01E0, 0x0708, 0x0708,
                            0x0546, 0x04CE, 0x04B0, 0x04B0, 0x04B0, 0x04B0, 0x0564, 0x0564 };
 
-u8 D_8008D9F0_8E5F0[] = {
-    0x18, 0x0C, 0x4B, 0x4B, 0x0B, 0x43, 0x52, 0x52, 0x16, 0x08, 0x23, 0x23, 0x62, 0x62, 0x12, 0x12
-};
+u8 characterStartWaypoints[] = { 0x18, 0x0C, 0x4B, 0x4B, 0x0B, 0x43, 0x52, 0x52,
+                                 0x16, 0x08, 0x23, 0x23, 0x62, 0x62, 0x12, 0x12 };
 
 s16 D_8008DA00_8E600[] = { 0xFFE0, 0xFF98, 0xFF80, 0xFFA8, 0xFF80, 0xFFB8, 0xFF80, 0xFFC8, 0xFF80, 0xFFD8,
                            0xFF90, 0xFFE8, 0x0058, 0xFFE8, 0xFF90, 0x0048, 0xFF90, 0x0058, 0x0000, 0x0048 };
 
-u8 D_8008DA28_8E628[] = { 0xFF, 0x94, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
-                          0xFF, 0x00, 0x6C, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x34, 0x00, 0x00, 0x00, 0xFF, 0xFF,
-                          0xFF, 0xFF, 0x00, 0x6C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x34, 0x00, 0x04, 0x00, 0xFF,
-                          0xFF, 0xFF, 0xFF, 0xFF, 0x94, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00,
-                          0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x94, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                          0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x6C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x34, 0x00,
-                          0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x6C, 0xFF, 0xF8, 0x00, 0x00, 0x00, 0x00, 0x34,
-                          0x00, 0x02, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x94, 0xFF, 0xF8, 0x00, 0x00, 0x00, 0x00,
-                          0x00, 0x00, 0x02, 0x00, 0xFF, 0xFF, 0xFF, 0xFF };
+u8 portraitTextureData[] = { 0xFF, 0x94, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
+                             0xFF, 0x00, 0x6C, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x34, 0x00, 0x00, 0x00, 0xFF, 0xFF,
+                             0xFF, 0xFF, 0x00, 0x6C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x34, 0x00, 0x04, 0x00, 0xFF,
+                             0xFF, 0xFF, 0xFF, 0xFF, 0x94, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00,
+                             0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x94, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                             0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x6C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x34, 0x00,
+                             0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x6C, 0xFF, 0xF8, 0x00, 0x00, 0x00, 0x00, 0x34,
+                             0x00, 0x02, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x94, 0xFF, 0xF8, 0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x02, 0x00, 0xFF, 0xFF, 0xFF, 0xFF };
 
-u16 D_8008DAA8_8E6A8[] = { 0x000F, 0x0011, 0x0013, 0x0013 };
-u16 D_8008DAB0_8E6B0[] = { 0x0015, 0x0017, 0x0019, 0x0019 };
-u16 D_8008DAB8_8E6B8[] = { 0x001B, 0x001D, 0x001F, 0x001F };
-u16 D_8008DAC0_8E6C0[] = { 0x0021, 0x0021, 0x0023, 0x0023 };
+u16 levelPortraitFrameBases[] = { 0x000F, 0x0011, 0x0013, 0x0013 };
+u16 characterModelIndices[] = { 0x0015, 0x0017, 0x0019, 0x0019 };
+u16 characterAssetPairIndices[] = { 0x001B, 0x001D, 0x001F, 0x001F };
+u16 characterIdleAnimationIndices[] = { 0x0021, 0x0021, 0x0023, 0x0023 };
 
-u16 D_8008DAC8_8E6C8[] = { 0x000F, 0x003A, 0x0039, 0x0000, 0x0000, 0x0001, 0x0001, 0x0000, 0x0093, 0x0004,
-                           0x0000, 0x0000, 0x0091, 0x000D, 0x0001, 0x0000, 0x0090, 0x0008, 0x0003, 0x0000 };
+u16 characterActionAnimationIndices[] = { 0x000F, 0x003A, 0x0039, 0x0000, 0x0000, 0x0001, 0x0001,
+                                          0x0000, 0x0093, 0x0004, 0x0000, 0x0000, 0x0091, 0x000D,
+                                          0x0001, 0x0000, 0x0090, 0x0008, 0x0003, 0x0000 };
 
-s32 D_8008DAF0_8E6F0[] = { 0xFFFBFFFB, 0x000B8032, 0xFFFB802E, 0xFFFB803D, 0x802E803D, 0x8032803F, 0x802F803C,
-                           0x80468050, 0xFFFDFFFB, 0xFFFB000D, 0x80328039, 0x80368043, 0x8032803F, 0xFFFB8041,
-                           0x803CFFFB, 0x802E8039, 0x8039FFFD, 0xFFFBFFFB, 0x80418035, 0x8032FFFB, 0x8035803C,
-                           0x80428040, 0x80328040, 0xFFFB8041, 0x803CFFFD, 0xFFFBFFFB, 0x803F8032, 0x80308032,
-                           0x80368043, 0x8032FFFB, 0x802EFFFB, 0x802F803C, 0x803B8042, 0x80408050, 0xFFFF0000 };
+s32 characterDescSlash[] = { 0xFFFBFFFB, 0x000B8032, 0xFFFB802E, 0xFFFB803D, 0x802E803D, 0x8032803F, 0x802F803C,
+                             0x80468050, 0xFFFDFFFB, 0xFFFB000D, 0x80328039, 0x80368043, 0x8032803F, 0xFFFB8041,
+                             0x803CFFFB, 0x802E8039, 0x8039FFFD, 0xFFFBFFFB, 0x80418035, 0x8032FFFB, 0x8035803C,
+                             0x80428040, 0x80328040, 0xFFFB8041, 0x803CFFFD, 0xFFFBFFFB, 0x803F8032, 0x80308032,
+                             0x80368043, 0x8032FFFB, 0x802EFFFB, 0x802F803C, 0x803B8042, 0x80408050, 0xFFFF0000 };
 
-s32 D_8008DB7C_8E77C[] = { 0x001E8040, 0x8032FFFB, 0x8040803D, 0x80328032, 0x8031FFFB, 0x8033802E, 0x803B8040,
-                           0xFFFD802E, 0x803B8031, 0xFFFB803F, 0x803C8030, 0x80388032, 0x80418040, 0xFFFB8041,
-                           0x803CFFFD, 0x803F8042, 0x80408035, 0xFFFB8041, 0x803CFFFB, 0x80408030, 0x8035803C,
-                           0x803C8039, 0xFFFD802F, 0x8046FFFB, 0x802C8052, 0x80278024, 0x8050FFFF };
+s32 characterDescDamian[] = { 0x001E8040, 0x8032FFFB, 0x8040803D, 0x80328032, 0x8031FFFB, 0x8033802E, 0x803B8040,
+                              0xFFFD802E, 0x803B8031, 0xFFFB803F, 0x803C8030, 0x80388032, 0x80418040, 0xFFFB8041,
+                              0x803CFFFD, 0x803F8042, 0x80408035, 0xFFFB8041, 0x803CFFFB, 0x80408030, 0x8035803C,
+                              0x803C8039, 0xFFFD802F, 0x8046FFFB, 0x802C8052, 0x80278024, 0x8050FFFF };
 
-s32 D_8008DBE8_8E7E8[] = { 0x000D803C, 0xFFFB8041, 0x803F8036, 0x80308038, 0x80408050, 0xFFFBFFFB,
-                           0x000E802E, 0x803F803B, 0xFFFD8027, 0x80248024, 0x0019FFFB, 0x8041803C,
-                           0xFFFB803E, 0x8042802E, 0x80398036, 0x80338046, 0x8050FFFF };
+s32 characterDescWendy[] = { 0x000D803C, 0xFFFB8041, 0x803F8036, 0x80308038, 0x80408050, 0xFFFBFFFB,
+                             0x000E802E, 0x803F803B, 0xFFFD8027, 0x80248024, 0x0019FFFB, 0x8041803C,
+                             0xFFFB803E, 0x8042802E, 0x80398036, 0x80338046, 0x8050FFFF };
 
-void *D_8008DC2C_8E82C[] = { D_8008DB7C_8E77C, D_8008DAF0_8E6F0, D_8008DBE8_8E7E8 };
+void *characterDescriptionTexts[] = { characterDescDamian, characterDescSlash, characterDescWendy };
 
-s32 D_8008DC38_8E838[] = { 0x000C8035, 0x802E803B, 0x80348032, 0xFFFB8039, 0x802E803D, 0x80408054, 0xFFFF0000,
-                           0x00000000, 0x00000000, 0x00000000, 0x50505000, 0x00505000, 0x50505000, 0xFFFFFF00,
-                           0x00505000, 0x7F7F7F00, 0xFFFFFF00, 0x00505000, 0xFFFFFF00, 0x00000000, 0x00000000,
-                           0x00000000, 0x50505000, 0x00505000, 0x50505000, 0xFFFFFF00, 0x00505000, 0x7F7F7F00,
-                           0xFFFFFF00, 0x00505000, 0xFFFFFF00, 0x00000000, 0x00000000, 0x00000000 };
+s32 prizeTitleText[] = { 0x000C8035, 0x802E803B, 0x80348032, 0xFFFB8039, 0x802E803D, 0x80408054, 0xFFFF0000,
+                         0x00000000, 0x00000000, 0x00000000, 0x50505000, 0x00505000, 0x50505000, 0xFFFFFF00,
+                         0x00505000, 0x7F7F7F00, 0xFFFFFF00, 0x00505000, 0xFFFFFF00, 0x00000000, 0x00000000,
+                         0x00000000, 0x50505000, 0x00505000, 0x50505000, 0xFFFFFF00, 0x00505000, 0x7F7F7F00,
+                         0xFFFFFF00, 0x00505000, 0xFFFFFF00, 0x00000000, 0x00000000, 0x00000000 };
 
 typedef struct {
     u8 _pad0[0xB2F];
@@ -216,7 +216,7 @@ void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     // Read character index from allocation
     temp = allocation->unkB2C;
     charIndex = allocation->unkB33[temp];
-    value = D_8008D9F0_8E5F0[charIndex];
+    value = characterStartWaypoints[charIndex];
 
     // Initialize arg0 structure
     arg0->posZ = 0;
@@ -230,7 +230,7 @@ void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     // Read character index again
     temp = allocation->unkB2C;
     charIndex = allocation->unkB33[temp];
-    value2 = D_8008D9F0_8E5F0[charIndex];
+    value2 = characterStartWaypoints[charIndex];
 
     arg0->cameraHorzOffset = 0x2E000;
     arg0->cameraDistance = 0x800000;
@@ -520,10 +520,10 @@ void initLevelPreviewPortraitDisplay(void *arg0) {
             element->transform.translation.x = 0;
             element->transform.translation.y = 0x3A0000;
             element->transform.translation.z = 0xFF700000;
-            element->textureData = D_8008DA28_8E628 + (j << 6);
+            element->textureData = portraitTextureData + (j << 6);
 
             {
-                s16 frameIndex = D_8008DAA8_8E6A8[allocation->toLevelId] + j;
+                s16 frameIndex = levelPortraitFrameBases[allocation->toLevelId] + j;
                 *(s16 *)(base + (index * 2) + 0xE8) = frameIndex;
                 getTableEntryByU16Index(*(DataTable_19E80 **)(base + 0xF8), frameIndex, &sp30);
             }
@@ -542,7 +542,7 @@ void initLevelPreviewPortraitDisplay(void *arg0) {
 
             entry->x = -0x68;
             entry->y = (-0x46) + (i * 0x10);
-            entry->frameIndex = D_8008DAA8_8E6A8[allocation->toLevelId] + i;
+            entry->frameIndex = levelPortraitFrameBases[allocation->toLevelId] + i;
             entry->spriteAsset = *(DataTable_19E80 **)(base + 0xF8);
         }
     }
@@ -574,8 +574,8 @@ void initPortraitRotationFrames(LevelPreviewPortraitState *arg0) {
     u16 fromLevelFrameBase;
 
     allocation = (Allocation_func_80020A00 *)getCurrentAllocation();
-    toLevelFrameBase = D_8008DAA8_8E6A8[allocation->toLevelId];
-    fromLevelFrameBase = D_8008DAA8_8E6A8[allocation->fromLevelId];
+    toLevelFrameBase = levelPortraitFrameBases[allocation->toLevelId];
+    fromLevelFrameBase = levelPortraitFrameBases[allocation->fromLevelId];
 
     for (i = 0; i < 4; i++) {
         if (arg0->rotations[i] == 0) {
@@ -614,7 +614,7 @@ void animatePortraitRotation(LevelPreviewPortraitState_202A0 *portraitState) {
         allocation->rotationComplete = 0;
         // Update frame indices to show the destination level's portraits
         for (quadIndex = 0; quadIndex < 2; quadIndex++) {
-            portraitState->entries[quadIndex].frameIndex = D_8008DAA8_8E6A8[allocation->toLevelId] + quadIndex;
+            portraitState->entries[quadIndex].frameIndex = levelPortraitFrameBases[allocation->toLevelId] + quadIndex;
         }
         setCallback(renderLevelPreviewPortraits);
     }
@@ -714,9 +714,9 @@ void initMenuCharacterModel(MenuCharacterModelState *state) {
 
     if (allocation->unkB45 != 0) {
         s32 idx = D_800AFE8C_A71FC->unk7 * 2;
-        animIndex = D_8008DAC0_8E6C0[D_800AFE8C_A71FC->unk7];
-        modelIndex = D_8008DAB0_8E6B0[D_800AFE8C_A71FC->unk7];
-        assetPairIndex = D_8008DAB8_8E6B8[D_800AFE8C_A71FC->unk7];
+        animIndex = characterIdleAnimationIndices[D_800AFE8C_A71FC->unk7];
+        modelIndex = characterModelIndices[D_800AFE8C_A71FC->unk7];
+        assetPairIndex = characterAssetPairIndices[D_800AFE8C_A71FC->unk7];
         state->animationIndex = animIndex;
     } else {
         modelIndex = 0x3A;
@@ -801,9 +801,9 @@ void setMenuCharacterAnimation(u8 animationType, MenuCharacterModelState *state)
     allocation->unkB47 = 0;
 
     if (animationType == 2) {
-        state->animationIndex = D_8008DAC0_8E6C0[D_800AFE8C_A71FC->unk7];
+        state->animationIndex = characterIdleAnimationIndices[D_800AFE8C_A71FC->unk7];
     } else {
-        state->animationIndex = D_8008DAC8_8E6C8[D_800AFE8C_A71FC->unk7];
+        state->animationIndex = characterActionAnimationIndices[D_800AFE8C_A71FC->unk7];
     }
 
     setModelAnimation(state->model, state->animationIndex);
@@ -872,7 +872,7 @@ void initCharacterDescriptionText(CharacterDescriptionTextState *state) {
     state->color2.asS16 = 0xFF;
     state->textRenderAsset = textRenderAsset;
     idx = globalState->unk7 - 0xC;
-    state->textString = D_8008DC2C_8E82C[idx];
+    state->textString = characterDescriptionTexts[idx];
 
     setCallback(&renderCharacterDescriptionText);
 }
@@ -919,7 +919,7 @@ void initPrizeDisplay(PrizeDisplayState *arg0) {
     arg0->backgroundAsset = loadAsset_34F7E0();
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupPrizeDisplay);
-    titleText = (u16 *)D_8008DC38_8E838;
+    titleText = (u16 *)prizeTitleText;
     arg0->animationTimer = 0;
     titleWidth = getMaxLinePixelWidth(titleText);
     i = 0;
