@@ -3,6 +3,7 @@
 #include "20F0.h"
 #include "38C90.h"
 #include "5E590.h"
+#include "68CF0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "assets.h"
@@ -13,20 +14,6 @@
 #include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-
-typedef struct {
-    u16 x;
-    u16 y;
-    u16 palette;
-    u8 *string;
-} TextData;
-
-typedef struct {
-    SpriteRenderArg spriteEntries[6];
-    TextData textEntries[3];
-    u8 strings[3][3];
-    u8 playerIndex;
-} CharSelectStatsState;
 
 typedef struct {
     u8 padding[0x24];
@@ -255,10 +242,12 @@ typedef struct {
     func_80027348_entry entries[3];
 } PlayerLabelSpritesState;
 
-extern struct {
-    u16 x;
-    u16 y;
-} D_8008DE9C_8EA9C[];
+typedef struct {
+    SpriteRenderArg spriteEntries[6];
+    TextData textEntries[3];
+    char charBufs[3][3];
+    u8 playerIndex;
+} CharSelectStatsState;
 
 extern Vec2_u16 playerNumberPositions[];
 extern PositionConfig_DDBE D_8008DDBE_8E9BE[];
@@ -267,14 +256,16 @@ extern u8 D_8008DE18_8EA18[];
 extern PositionConfig_DE1A D_8008DE1A_8EA1A[];
 extern Vec3s boardSelectArrowPositions[];
 extern u16 D_8008DE7A_8EA7A[];
+extern struct {
+    u16 x;
+    u16 y;
+} D_8008DE9C_8EA9C[];
 extern u8 D_8008DD8D_8E98D[];
 extern u8 D_8008DD8E_8E98E[];
 extern s32 D_8008DD2C_8E92C[];
 extern Vec3s D_8008DD4E_8E94E[];
 extern Vec3s charSelectIconPositions[];
 extern Vec3s charSelectIconYIncrements[];
-extern void *renderTextPalette;
-extern u8 D_8008DD8C_8E98C[];
 extern char D_8009E288_9EE88[];
 
 void animateCharSelectIconReveal(CharSelectIconsState *);
@@ -2084,52 +2075,50 @@ void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", initCharSelectStats);
+INCLUDE_ASM("asm/nonmatchings/24A30", func_80027678_28278);
 
-void updateCharSelectStats(CharSelectStatsState *state) {
+void func_800277F4_283F4(CharSelectStatsState *arg0) {
     GameState *gameState;
+    s32 i;
+    s32 j;
+    s32 tableOffset;
     u8 charIndex;
-    u8 boardPaletteIndex;
-    s32 statTableIndex;
-    s32 statIndex;
-    s32 digitIndex;
-    u8 digitChar;
-    s32 charBoardOffset;
+    u8 paletteIndex;
+    u8 playerIndex;
+    u8 charByte;
+    s32 tableBase;
+    s32 charMul;
 
-    gameState = (GameState *)getCurrentAllocation();
-    charIndex = gameState->unk18A8[state->playerIndex];
-    charBoardOffset = charIndex * 3;
-    boardPaletteIndex = gameState->unk18B0[state->playerIndex];
-    statTableIndex = boardPaletteIndex + charBoardOffset;
+    gameState = getCurrentAllocation();
+    playerIndex = arg0->playerIndex;
+    charIndex = gameState->unk18A8[playerIndex];
+    paletteIndex = gameState->unk18B0[playerIndex];
+    charMul = charIndex * 3;
+    tableBase = paletteIndex + charMul;
 
-    // Only render stats when in character selection states (not in states 3 or 4)
-    if ((u32)(gameState->unk1898[state->playerIndex] - 3) < 2u) {
-        return;
-    }
+    if ((u32)(gameState->unk1898[playerIndex] - 3) >= 2U) {
+        i = 0;
+        tableOffset = tableBase * 3;
 
-    // Render 3 stats (e.g., Speed, Power, Technique)
-    for (statIndex = 0; statIndex < 3; statIndex++) {
-        // Format stat value as 2-digit string (e.g., " 5" or "10")
-        sprintf((char *)state->strings[statIndex], D_8009E288_9EE88, D_8008DD8C_8E98C[statTableIndex * 3 + statIndex]);
-
-        if (D_800AFE8C_A71FC->numPlayers == 1) {
-            // Single player: render individual digit sprites
-            for (digitIndex = 0; digitIndex < 2; digitIndex++) {
-                digitChar = state->strings[statIndex][digitIndex];
-                if (digitChar != ' ') {
-                    state->spriteEntries[statIndex * 2 + digitIndex].frameIndex = (u16)(digitChar - '0');
-                    debugEnqueueCallback(
-                        state->playerIndex + 8,
-                        7,
-                        renderSpriteFrame,
-                        &state->spriteEntries[statIndex * 2 + digitIndex]
-                    );
+        for (; i < 3; i++) {
+            sprintf(arg0->charBufs[i], D_8009E288_9EE88, D_8008DD8C_8E98C[tableOffset + i]);
+            if (D_800AFE8C_A71FC->numPlayers == 1) {
+                for (j = 0; j < 2; j++) {
+                    charByte = arg0->charBufs[i][j];
+                    if (charByte != 0x20) {
+                        arg0->spriteEntries[i * 2 + j].frameIndex = charByte - 0x30;
+                        debugEnqueueCallback(
+                            arg0->playerIndex + 8,
+                            7,
+                            renderSpriteFrame,
+                            &arg0->spriteEntries[i * 2 + j]
+                        );
+                    }
                 }
+            } else {
+                arg0->textEntries[i].string = (u8 *)arg0->charBufs[i];
+                debugEnqueueCallback(arg0->playerIndex + 8, 7, renderTextPalette, &arg0->textEntries[i]);
             }
-        } else {
-            // Multiplayer: render as text with palette
-            state->textEntries[statIndex].string = state->strings[statIndex];
-            debugEnqueueCallback(state->playerIndex + 8, 7, &renderTextPalette, &state->textEntries[statIndex]);
         }
     }
 }
