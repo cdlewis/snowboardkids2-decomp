@@ -8,6 +8,7 @@ storyMapLocationSpriteIds = 0x8008D92C; // rom:0x8E52C size:0x14
 storyMapLocationConfig = 0x8008D940; // rom:0x8E540 size:0xC
 storyMapLocationOrder3 = 0x8008D94C; // rom:0x8E54C size:0x14
 eeprom_save_magic = 0x8008D9B0; // rom:0x8E5B0
+gLevelWorldTable = 0x8008D9C0; // rom:0x8E5C0
 D_80088290 = 0x80088290;
 D_800886A0 = 0x800886A0;
 D_800886E0 = 0x800886E0;

@@ -114,6 +114,10 @@ typedef enum {
     MENU_STATE_DETAIL_CLOSE = 9, // Closing detail view animation
 } MenuState;
 
+u8 gLevelWorldTable[] = {
+    0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
 void initLevelSelectState(void);
 void handleLevelSelectInput(void);
 void waitForFadeToLevelSelect(void);
@@ -127,7 +131,6 @@ extern s32 buildUnlockedLevelList(u8 *);
 
 extern s32 gControllerInputs[];
 extern s32 gFrameCounter;
-extern u8 D_8008D9C0_8E5C0[];
 
 void initLevelSelectWithDetail(void) {
     LevelSelectState_Base *allocation = allocateTaskMemory(0xB48);
@@ -347,7 +350,7 @@ void handleLevelSelectInput(void) {
                         allocation->exitMode = 1;
                         D_800AFE8C_A71FC->saveSlotIndex = allocation->levelIdList[allocation->selectedIndex];
                         if (D_800AFE8C_A71FC->unk4 == 0) {
-                            D_800AFE8C_A71FC->unk9[0xC] = D_8008D9C0_8E5C0[D_800AFE8C_A71FC->saveSlotIndex];
+                            D_800AFE8C_A71FC->unk9[0xC] = gLevelWorldTable[D_800AFE8C_A71FC->saveSlotIndex];
                         }
                         applyLevelSelection();
                         playSoundEffectOnChannelNoPriority(0x2D, 0);
@@ -409,7 +412,7 @@ void handleLevelSelectInput(void) {
                 allocation->previewLoadCounter = 0;
             } else if (gControllerInputs[0] & (A_BUTTON | START_BUTTON)) {
                 allocation->exitMode = 1;
-                D_800AFE8C_A71FC->unk9[0xC] = D_8008D9C0_8E5C0[D_800AFE8C_A71FC->saveSlotIndex];
+                D_800AFE8C_A71FC->unk9[0xC] = gLevelWorldTable[D_800AFE8C_A71FC->saveSlotIndex];
                 playSoundEffect(0x2D);
             }
             break;
