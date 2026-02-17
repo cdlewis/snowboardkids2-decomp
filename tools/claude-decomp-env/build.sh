@@ -53,7 +53,7 @@ echo $OBJECT_DUMP
 echo ${1//.c/_diff}
 python3 ./normalize_asm.py target_object_dump.s > target_object_dump_normalized.s
 python3 ./normalize_asm.py $OBJECT_DUMP > ${1//.c/_object_dump_normalized.s}
-diff -u --suppress-common-lines target_object_dump_normalized.s ${1//.c/_object_dump_normalized.s} || true > ${1//.c/_diff}
+diff -u --suppress-common-lines target_object_dump_normalized.s ${1//.c/_object_dump_normalized.s} > ${1//.c/_diff} || true
 echo "Comparison with target file: ${1//.c/_diff}"
 
 SCORE_OUTPUT=$(python3 dist.py target.o $OBJECT_OUTPUT --stack-diffs)
