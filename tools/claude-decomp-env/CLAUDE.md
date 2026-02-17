@@ -6,6 +6,8 @@ You are decompiling Nintendo 64 assembly code from Snowboard Kids 2. Your goal i
 
 The compiler is GCC 2.7.2. The following compiler flags are being used: -O2 -mips3. We follow the C89 standard. Keep in mind that variable declarations are generally limited to the beginning of blocks or functions.
 
+As a preliminary step, ensure that `base.c` can actually be built. Use the `gather-project-context` subagent to ensure the necessary dependencies are present.
+
 Repeat the following steps:
 
 1. Run `./build.sh base.c` to build base.c and get an object dump of the compiled code. You will also get a score, with a score of 100% indicating a perfect match.
