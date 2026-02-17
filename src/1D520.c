@@ -6,7 +6,7 @@
 #include "task_scheduler.h"
 
 extern void func_8001CD90_1D990(void);
-extern u8 D_8008D9B0_8E5B0[8];
+u8 eeprom_save_magic[16] = "SNOW2EEP";
 
 void onSaveSlotSelectionConfirm(void);
 void onSaveSlotSelectionCancel(void);
@@ -81,7 +81,7 @@ void cleanupSaveSlotSelectionAndExit(void) {
         }
 
         for (i = 0; i < 8; i++) {
-            EepromSaveData->header_data[i] = D_8008D9B0_8E5B0[i];
+            EepromSaveData->header_data[i] = eeprom_save_magic[i];
         }
     } else {
         for (i = 0; i < 4; i++) {
@@ -145,7 +145,7 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
         slotIndex = arg0 & 0xFFFF;
 
         while (i < 8) {
-            if (allocation->slots[slotIndex].header_data[i] != D_8008D9B0_8E5B0[i]) {
+            if (allocation->slots[slotIndex].header_data[i] != eeprom_save_magic[i]) {
                 allocation->unkACD++;
                 break;
             }
