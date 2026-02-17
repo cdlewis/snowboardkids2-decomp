@@ -11,10 +11,12 @@ As a preliminary step, ensure that `base.c` can actually be built. Use the `gath
 Repeat the following steps:
 
 1. Run `./build.sh base.c` to build base.c and get an object dump of the compiled code. You will also get a score, with a score of 100% indicating a perfect match.
-2. Look for an area where the control flow and instructions do not match. Consider what the original developers probably intended to write given the function's broader purpose. Print out an explanation for why they don't match.
-3. Test your change by creating a new file (base_n.c where `n` is your attempt number).
-4. Run `./build.sh base_n.c` (where `n` is your attempt number).
-5. If your possible solution did not improve the match percentage, use tools to analyse what went wrong and summarise your theory. Then apply this theory to improving the match in your next attempt.
+2. Come up with a plan to improve the match. Look for areas where the control flow and instructions do not match. Consider what the original developers probably intended to write given the function's broader purpose. Consider what theories could be tested independently of one another.
+  3.1 Test your changes by creating several subagents. Each subagent should  creat a new file (base_n.c where `n` is your attempt number, be sure to also keep this unique across different subagents).
+  3.2 On each subagent, run `./build.sh base_n.c` (where `n` is your attempt number).
+  3.3 If your possible solution did not improve the match percentage, use tools to analyse what went wrong and summarise your theory. Then apply this theory to improving the match in your next attempt.
+  3.4 Each sub-agent should report back on how good/bad its change was and what it learned
+4. Gather the learnings from the subagent and return to step (2). Keep improving the match until you hit 100%.
 
 ## Tools
 
