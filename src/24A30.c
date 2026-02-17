@@ -2084,42 +2084,52 @@ void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80027678_28278);
+INCLUDE_ASM("asm/nonmatchings/24A30", initCharSelectStats);
 
-void func_800277F4_283F4(CharSelectStatsState *arg0) {
+void updateCharSelectStats(CharSelectStatsState *state) {
     GameState *gameState;
     u8 charIndex;
-    u8 paletteIndex;
-    s32 lookupBase;
-    s32 i;
-    s32 j;
-    u8 ch;
-    s32 temp;
+    u8 boardPaletteIndex;
+    s32 statTableIndex;
+    s32 statIndex;
+    s32 digitIndex;
+    u8 digitChar;
+    s32 charBoardOffset;
 
     gameState = (GameState *)getCurrentAllocation();
-    charIndex = gameState->unk18A8[arg0->playerIndex];
-    temp = charIndex * 3;
-    paletteIndex = gameState->unk18B0[arg0->playerIndex];
-    lookupBase = paletteIndex + temp;
+    charIndex = gameState->unk18A8[state->playerIndex];
+    charBoardOffset = charIndex * 3;
+    boardPaletteIndex = gameState->unk18B0[state->playerIndex];
+    statTableIndex = boardPaletteIndex + charBoardOffset;
 
-    if ((u32)(gameState->unk1898[arg0->playerIndex] - 3) < 2u) {
+    // Only render stats when in character selection states (not in states 3 or 4)
+    if ((u32)(gameState->unk1898[state->playerIndex] - 3) < 2u) {
         return;
     }
 
-    for (i = 0; i < 3; i++) {
-        sprintf((char *)arg0->strings[i], D_8009E288_9EE88, D_8008DD8C_8E98C[lookupBase * 3 + i]);
+    // Render 3 stats (e.g., Speed, Power, Technique)
+    for (statIndex = 0; statIndex < 3; statIndex++) {
+        // Format stat value as 2-digit string (e.g., " 5" or "10")
+        sprintf((char *)state->strings[statIndex], D_8009E288_9EE88, D_8008DD8C_8E98C[statTableIndex * 3 + statIndex]);
 
         if (D_800AFE8C_A71FC->numPlayers == 1) {
-            for (j = 0; j < 2; j++) {
-                ch = arg0->strings[i][j];
-                if (ch != ' ') {
-                    arg0->spriteEntries[i * 2 + j].frameIndex = (u16)(ch - 0x30);
-                    debugEnqueueCallback(arg0->playerIndex + 8, 7, renderSpriteFrame, &arg0->spriteEntries[i * 2 + j]);
+            // Single player: render individual digit sprites
+            for (digitIndex = 0; digitIndex < 2; digitIndex++) {
+                digitChar = state->strings[statIndex][digitIndex];
+                if (digitChar != ' ') {
+                    state->spriteEntries[statIndex * 2 + digitIndex].frameIndex = (u16)(digitChar - '0');
+                    debugEnqueueCallback(
+                        state->playerIndex + 8,
+                        7,
+                        renderSpriteFrame,
+                        &state->spriteEntries[statIndex * 2 + digitIndex]
+                    );
                 }
             }
         } else {
-            arg0->textEntries[i].string = arg0->strings[i];
-            debugEnqueueCallback(arg0->playerIndex + 8, 7, &renderTextPalette, &arg0->textEntries[i]);
+            // Multiplayer: render as text with palette
+            state->textEntries[statIndex].string = state->strings[statIndex];
+            debugEnqueueCallback(state->playerIndex + 8, 7, &renderTextPalette, &state->textEntries[statIndex]);
         }
     }
 }
