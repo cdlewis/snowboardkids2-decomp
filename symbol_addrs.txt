@@ -1714,6 +1714,7 @@ SaveLoadLabel= 0x8008D888;
 RankingLabel = 0x8008D89C;
 SpeedCrossLabel = 0x8008D8B0;
 SendenLabel = 0x8008D8C4;
+boardShopPrices = 0x8008D8E0; // rom:0x8E4E0
 
 D_8008BFA0_8CBA0 = 0x8008BFA0; // size:0x50
 createRootTaskScheduler = 0x800693C4; // rom:0x69FC4

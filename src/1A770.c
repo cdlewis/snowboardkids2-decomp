@@ -32,6 +32,9 @@ typedef struct {
     u8 unk79A;
 } allocation_1B8C8;
 
+s16 boardShopPrices[] = { 0x0064, 0x0064, 0x0064, 0x00FA, 0x00FA, 0x012C, 0x012C, 0x0190,
+                          0x0190, 0x01C2, 0x01C2, 0x01F4, 0x01F4, 0x0320, 0x03E8, 0x04B0 };
+
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 storyMapLocationIndex;
 extern s32 gControllerInputs[4];
