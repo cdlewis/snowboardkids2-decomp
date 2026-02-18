@@ -350,7 +350,7 @@ segments:
       - [0x8E5B0, .data, 1D520]
       - [0x8E5C0, .data, 1F190]
       - [0x8E5D0, .data, 202A0]
-      - [0x8E8C0, data, 22D30]
+      - [0x8E8C0, .data, 22D30]
       - [0x8E8D0, data, 232F0]
       - [0x8EB00, data]
       - [0x8F710, data, 2C8F0]

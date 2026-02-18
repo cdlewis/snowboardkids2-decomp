@@ -30,7 +30,8 @@ typedef struct {
     u8 menuState;
 } PlayerCountSelectState;
 
-extern u8 D_8008DCC0_8E8C0[];
+u8 gPlayerSlotDefaults[] = { 0x00, 0x02, 0x05, 0x01, 0x00, 0x00, 0x00, 0x00,
+                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 extern void *D_800B054C;
 extern u8 gConnectedControllerMask;
 
@@ -193,7 +194,7 @@ void exitPlayerCountSelect(void) {
             terminateSchedulerWithCallback(onPlayerCountProceed);
             D_800AFE8C_A71FC->numPlayers = state->playerCount.bytes.selectedPlayerIndexLo + 1;
             for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-                D_800AFE8C_A71FC->unk9[i] = D_8008DCC0_8E8C0[i];
+                D_800AFE8C_A71FC->unk9[i] = gPlayerSlotDefaults[i];
             }
         } else {
             terminateSchedulerWithCallback(onPlayerCountCancel);

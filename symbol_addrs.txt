@@ -21,6 +21,7 @@ characterDescDamian = 0x8008DB7C; // rom:0x8E77C
 characterDescWendy = 0x8008DBE8; // rom:0x8E7E8
 characterDescriptionTexts = 0x8008DC2C; // rom:0x8E82C
 prizeTitleText = 0x8008DC38; // rom:0x8E838
+gPlayerSlotDefaults = 0x8008DCC0; // rom:0x8E8C0
 D_80088290 = 0x80088290;
 D_800886A0 = 0x800886A0;
 D_800886E0 = 0x800886E0;
