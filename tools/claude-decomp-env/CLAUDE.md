@@ -6,17 +6,19 @@ You are decompiling Nintendo 64 assembly code from Snowboard Kids 2. Your goal i
 
 The compiler is GCC 2.7.2. The following compiler flags are being used: -O2 -mips3. We follow the C89 standard. Keep in mind that variable declarations are generally limited to the beginning of blocks or functions.
 
-As a preliminary step, ensure that `base.c` can actually be built. Use the `gather-project-context` subagent to ensure the necessary dependencies are present.
+Before doing anything else, ensure that base.c compiles successfully. If there are compiler errors, use the `gather-project-context` agent to fix the file.
 
-Repeat the following steps:
+After base.c builds successfully, repeat the following steps:
 
 1. Run `./build.sh base.c` to build base.c and get an object dump of the compiled code. You will also get a score, with a score of 100% indicating a perfect match.
 2. Come up with a plan to improve the match. Look for areas where the control flow and instructions do not match. Consider what the original developers probably intended to write given the function's broader purpose. Consider what theories could be tested independently of one another.
-  3.1 Test your changes by creating several subagents. Each subagent should  creat a new file (base_n.c where `n` is your attempt number, be sure to also keep this unique across different subagents).
-  3.2 On each subagent, run `./build.sh base_n.c` (where `n` is your attempt number).
+  3.1 Test your changes by creating several agents. Each agent should create a new file (base_n.c where `n` is your attempt number, be sure to also keep this unique across different agents).
+  3.2 On each agent, run `./build.sh base_n.c` (where `n` is your attempt number).
   3.3 If your possible solution did not improve the match percentage, use tools to analyse what went wrong and summarise your theory. Then apply this theory to improving the match in your next attempt.
   3.4 Each sub-agent should report back on how good/bad its change was and what it learned
-4. Gather the learnings from the subagent and return to step (2). Keep improving the match until you hit 100%.
+4. Gather the learnings from the agent and return to step (2). Keep improving the match until you hit 100%.
+
+If you run out of ideas to try and are unable to make forward progress then you may stop.
 
 ## Tools
 
