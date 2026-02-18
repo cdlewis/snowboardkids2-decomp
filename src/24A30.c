@@ -2075,9 +2075,9 @@ void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", func_80027678_28278);
+INCLUDE_ASM("asm/nonmatchings/24A30", initCharSelectStats);
 
-void func_800277F4_283F4(CharSelectStatsState *arg0) {
+void updateCharSelectStats(CharSelectStatsState *arg0) {
     GameState *gameState;
     s32 i;
     s32 j;
