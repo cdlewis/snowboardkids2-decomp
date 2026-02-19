@@ -11,6 +11,7 @@
 #include "assets.h"
 #include "common.h"
 #include "displaylist.h"
+#include "font_encoding.h"
 #include "geometry.h"
 #include "graphics.h"
 #include "race_session.h"
@@ -51,23 +52,36 @@ u16 characterActionAnimationIndices[] = { 0x000F, 0x003A, 0x0039, 0x0000, 0x0000
                                           0x0000, 0x0093, 0x0004, 0x0000, 0x0000, 0x0091, 0x000D,
                                           0x0001, 0x0000, 0x0090, 0x0008, 0x0003, 0x0000 };
 
-s32 characterDescSlash[] = { 0xFFFBFFFB, 0x000B8032, 0xFFFB802E, 0xFFFB803D, 0x802E803D, 0x8032803F, 0x802F803C,
-                             0x80468050, 0xFFFDFFFB, 0xFFFB000D, 0x80328039, 0x80368043, 0x8032803F, 0xFFFB8041,
-                             0x803CFFFB, 0x802E8039, 0x8039FFFD, 0xFFFBFFFB, 0x80418035, 0x8032FFFB, 0x8035803C,
-                             0x80428040, 0x80328040, 0xFFFB8041, 0x803CFFFD, 0xFFFBFFFB, 0x803F8032, 0x80308032,
-                             0x80368043, 0x8032FFFB, 0x802EFFFB, 0x802F803C, 0x803B8042, 0x80408050, 0xFFFF0000 };
+/* "  Be a paperboy.
+      Deliver to all
+      the houses to
+      receive a bonus." */
+// clang-format off
+u8 characterDescSlash[] = { __, __, _B, _e, __, _a, __, _p, _a, _p, _e, _r, _b, _o,       _y,   _DOT,     _NEWLINE, __,
+                            __, _D, _e, _l, _i, _v, _e, _r, __, _t, _o, __, _a, _l,       _l,   _NEWLINE, __,       __,
+                            _t, _h, _e, __, _h, _o, _u, _s, _e, _s, __, _t, _o, _NEWLINE, __,   __,       _r,       _e,
+                            _c, _e, _i, _v, _e, __, _a, __, _b, _o, _n, _u, _s, _DOT,     _END, 0x00,     0x00 };
+// clang-format on
 
-s32 characterDescDamian[] = { 0x001E8040, 0x8032FFFB, 0x8040803D, 0x80328032, 0x8031FFFB, 0x8033802E, 0x803B8040,
-                              0xFFFD802E, 0x803B8031, 0xFFFB803F, 0x803C8030, 0x80388032, 0x80418040, 0xFFFB8041,
-                              0x803CFFFD, 0x803F8042, 0x80408035, 0xFFFB8041, 0x803CFFFB, 0x80408030, 0x8035803C,
-                              0x803C8039, 0xFFFD802F, 0x8046FFFB, 0x802C8052, 0x80278024, 0x8050FFFF };
+/* "Use speed fans
+    and rockets to
+    rush to school
+    by 8:30." */
+// clang-format off
+u8 characterDescDamian[] = {
+    _U,_s,_e,__,_s,_p,_e,_e,_d,__,_f,_a,_n,_s,  _NEWLINE,
+    _a,_n,_d,__,_r,_o,_c,_k,_e,_t,_s,__,_t,_o,  _NEWLINE,
+    _r,_u,_s,_h,__,_t,_o,__,_s,_c,_h,_o,_o,_l,  _NEWLINE,
+    _b,_y,__,_8s,_COLON,_3s,_0s,                _DOT, _END };
+// clang-format on
 
-s32 characterDescWendy[] = { 0x000D803C, 0xFFFB8041, 0x803F8036, 0x80308038, 0x80408050, 0xFFFBFFFB,
-                             0x000E802E, 0x803F803B, 0xFFFD8027, 0x80248024, 0x0019FFFB, 0x8041803C,
-                             0xFFFB803E, 0x8042802E, 0x80398036, 0x80338046, 0x8050FFFF };
+/* "Do tricks.  Earn\n300P to qualify." */
+u8 characterDescWendy[] = { _D,  _o,  __,  _t, _r, _i, _c, _k, _s, _DOT, __, __, _E, _a, _r, _n,   _NEWLINE,
+                            _3s, _0s, _0s, _P, __, _t, _o, __, _q, _u,   _a, _l, _i, _f, _y, _DOT, _END };
 
 void *characterDescriptionTexts[] = { characterDescDamian, characterDescSlash, characterDescWendy };
 
+/* "Change laps'" followed by color data */
 s32 prizeTitleText[] = { 0x000C8035, 0x802E803B, 0x80348032, 0xFFFB8039, 0x802E803D, 0x80408054, 0xFFFF0000,
                          0x00000000, 0x00000000, 0x00000000, 0x50505000, 0x00505000, 0x50505000, 0xFFFFFF00,
                          0x00505000, 0x7F7F7F00, 0xFFFFFF00, 0x00505000, 0xFFFFFF00, 0x00000000, 0x00000000,
