@@ -363,7 +363,7 @@ segments:
       - [0x90410, data, 36E50]
       - [0x90470, data]
       - [0x905F0, data]
-      - [0x90930, data]
+      - [0x90930, data, 38310]
       - [0x90A80, data, controller_io]
       - [0x90AA0, .data, rom_loader]
       - [0x90AB0, data]
