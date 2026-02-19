@@ -1823,7 +1823,7 @@ void cleanupFlyingSceneryTask(CourseSceneryCleanupArg *arg0) {
 void initGoldCoinsTask(GoldCoinsTaskState *arg0) {
     s16 courseIndex;
 
-    arg0->unkC = loadCompressedData(&_3F6670_ROM_START, &_3F6950_ROM_START, 0x388);
+    arg0->unkC = loadCompressedData(&_3F6670_ROM_START, &font_race_timer_ROM_START, 0x388);
 
     courseIndex = arg0->courseIndex;
 

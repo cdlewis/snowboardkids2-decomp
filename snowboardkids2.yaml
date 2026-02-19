@@ -2029,7 +2029,7 @@ segments:
     vram: 0
     start: 0x3F6670
 
-  - name: _3F6950
+  - name: font_race_timer
     type: bin
     vram: 0
     start: 0x3F6950
@@ -2429,7 +2429,7 @@ segments:
     vram: 0
     start: 0x459310
 
-  - name: _459E00
+  - name: font_main
     type: bin
     vram: 0
     start: 0x459E00

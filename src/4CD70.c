@@ -446,7 +446,7 @@ void initPlayerItemDisplayTask(PlayerItemDisplayState *state) {
         loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
     state->itemCountX = state->primaryItemX + 0x18;
     state->itemCountY = state->primaryItemY + 0x10;
-    state->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    state->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
     goto callbacks;
 
 else_branch:
@@ -594,7 +594,7 @@ void initPlayerLapCounterTask(LapCounterState *state) {
         state->spriteIndex = 0;
         state->digitX1 = ((u16)state->x) + 0x1C;
         state->digitY1 = state->y;
-        state->digitsAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+        state->digitsAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
         state->digitX2 = ((u16)state->digitX1) + 8;
         state->unk16 = 1;
         state->unk20 = 1;
@@ -670,7 +670,7 @@ void initPlayerGoldDisplayTask(GoldDisplayState *state) {
         state->textX = 0x12;
         goto multiplayer;
     }
-    digitsRomStart = &_3F6950_ROM_START;
+    digitsRomStart = &font_race_timer_ROM_START;
     if (numPlayers == 0) {
         goto multiplayer_setup;
     }
@@ -689,7 +689,7 @@ void initPlayerGoldDisplayTask(GoldDisplayState *state) {
     state->digitsTexture = loadCompressedData(digitsRomStart, &_3F6BB0_ROM_START, 0x508);
     state->iconX = state->x + 0x28;
     state->iconY = state->y;
-    state->iconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6950_ROM_START, 0x388);
+    state->iconAsset = loadCompressedData(&_3F6670_ROM_START, &font_race_timer_ROM_START, 0x388);
     goto common;
 
 multiplayer_setup:
@@ -701,7 +701,7 @@ multiplayer:
     state->textPtr = state->goldTextBuffer;
     state->iconX = state->textX + 0x28;
     state->iconY = state->textY;
-    state->iconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6950_ROM_START, 0x388);
+    state->iconAsset = loadCompressedData(&_3F6670_ROM_START, &font_race_timer_ROM_START, 0x388);
 
 common:
     state->animCounter = 0;
@@ -1038,7 +1038,7 @@ void initTrickScoreDisplayTask(TrickScoreDisplayState *state) {
     if (state->useGoldFormat == 0) {
         state->yPos = -0x20;
         state->spriteFrame = 0xF;
-        state->digitsTexture = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+        state->digitsTexture = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
         sprintf(state->scoreText, D_8009E884_9F484, state->score);
     } else {
         state->yPos = -0x18;
@@ -1180,7 +1180,7 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
     arg0->spriteAsset = loadAsset_34CB50();
     initHudElementState((HudElementState *)arg0);
     arg0->spriteIndex = 0x14;
-    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    arg0->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
 
     switch (gameState->raceType) {
         case 5:
@@ -1313,7 +1313,7 @@ void initTotalGoldDisplayTask(TotalGoldDisplayState *arg0) {
     arg0->spriteAsset = loadAsset_34CB50();
     initHudElementState((HudElementState *)arg0);
     arg0->spriteIndex = 0x15;
-    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
 
     switch (allocation->raceType) {
         case 5:
@@ -1420,7 +1420,7 @@ void initTotalLapDisplayTask(TotalLapDisplayState *state) {
     }
 
     state->y = 0x10;
-    state->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    state->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
     setCleanupCallback(cleanupTotalLapDisplayTask);
     setCallback(updateTotalLapDisplay);
 }
@@ -1867,7 +1867,7 @@ void initShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
     arg0->hudX = -0x84;
     arg0->hudY = -0x54;
     arg0->spriteAssetCopy = arg0->spriteAsset;
-    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
     setCleanupCallback(cleanupShotCrossScoreDisplayTask);
     setCallback(updateShotCrossScoreDisplay);
 }
@@ -1912,7 +1912,7 @@ void initShotCrossItemCountDisplayTask(ShotCrossItemCountDisplayState *arg0) {
         arg0->y = -0x38;
     }
     arg0->flashCounter = 0;
-    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
     setCleanupCallback(cleanupShotCrossItemCountDisplayTask);
     setCallback(updateShotCrossItemCountDisplay);
 }
@@ -1968,7 +1968,7 @@ void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
     } else {
         arg0->timeRemaining = 0x1194;
     }
-    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
     arg0->spriteAsset = loadAsset_34CB50();
     arg0->spriteIndex = 0x23;
     arg0->x = 0x68;
@@ -2085,7 +2085,7 @@ void initBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
     arg0->spriteAsset = loadAsset_34CB50();
     initHudElementState((HudElementState *)arg0);
     arg0->spriteFrame = 0x24;
-    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
     if (allocation->raceType == 4) {
         arg0->x = 0xC;
         arg0->y = -0x3C;
@@ -2170,7 +2170,7 @@ extern char D_8009E8F8_9F4F8[];
 
 void initRaceTimerDisplay(RaceTimerState *arg0) {
     arg0->elapsedTicks = 0x4293C;
-    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
     arg0->spriteAsset = loadAsset_34CB50();
     arg0->spriteIndex = 0x23;
     arg0->x = 0x68;
@@ -2295,7 +2295,7 @@ typedef struct {
 } SkillGameTimerAllocation;
 
 void initSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
-    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
     arg0->spriteAsset = loadAsset_34CB50();
     arg0->spriteIndex = 0x23;
     arg0->x = -0x4C;
@@ -2370,7 +2370,7 @@ void initTrickPointsDisplayTask(TrickPointsDisplayState *state) {
     state->spriteAsset = loadAsset_3505F0();
     state->y = -0x20;
     state->spriteFrame = 2;
-    state->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    state->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
     sprintf(state->scoreText, sTrickPointsFormat, state->score);
     state->animAngle = 0;
     state->holdTimer = 0x1E;
@@ -2462,7 +2462,7 @@ void initShotCrossSkillMeterDisplayTask(ShotCrossItemCountDisplayState *arg0) {
         arg0->y = -0x30;
     }
     arg0->flashCounter = 0;
-    arg0->digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    arg0->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
     setCleanupCallback(cleanupShotCrossSkillMeterDisplayTask);
     setCallback(updateShotCrossSkillMeterDisplay);
 }

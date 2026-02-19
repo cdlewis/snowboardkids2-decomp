@@ -1153,7 +1153,7 @@ void cleanupBoardShopExitOverlay(SpriteDisplayState *arg0) {
 }
 
 void initBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0) {
-    void *digitAsset = loadCompressedData(&_3F6950_ROM_START, &_3F6950_ROM_END, 0x508);
+    void *digitAsset = loadCompressedData(&font_race_timer_ROM_START, &font_race_timer_ROM_END, 0x508);
     void *iconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     s32 i;
 
