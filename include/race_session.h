@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.h"
-#include "38310.h"
+#include "options_menu.h"
 #include "gamestate.h"
 
 void initRace(void);

@@ -323,8 +323,6 @@ def main():
 
     if output_path:
         process_file(input_path, output_path, charmap)
-        if output_path != '-' and output_path != '/dev/stdout':
-            print(f"Converted {input_path} -> {output_path}", file=sys.stderr)
     else:
         # Just test conversion of strings passed on command line
         with open(input_path, 'r') as f:
