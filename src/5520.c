@@ -1,6 +1,8 @@
 #include "5520.h"
+#include "20F0.h"
 #include "common.h"
 #include "displaylist.h"
+#include "geometry.h"
 #include "graphics.h"
 #include "task_scheduler.h"
 
@@ -15,10 +17,8 @@ void renderOverlayTiledTexture(s32 arg0);
 void loadScrollingTiledTexture(ScrollingTextureState *);
 void loadScrollingTexture(ScrollingTextureState *);
 void cleanupRotatingLogo(RotatingLogoState *);
-void func_8000595C_655C(void);
-void *loadAssetGroupDisplayList(void *);
-void *loadAssetGroupCompressedData(void *);
-void *loadAssetGroupSoundData(void *);
+void func_8000595C_655C(RotatingLogoState *state);
+extern s32 isModelVisible(func_80002B50_3750_arg *model);
 
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
@@ -314,7 +314,165 @@ void initializeRotatingLogo(RotatingLogoState *state) {
     setCallback(&func_8000595C_655C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/5520", func_8000595C_655C);
+void func_8000595C_655C(RotatingLogoState *state) {
+    Transform3D sp10;
+    Transform3D sp30;
+    s32 var_a1;
+    s32 temp;
+    s8 actionMode;
+
+    memcpy(&sp10, &identityMatrix, 0x20);
+    memcpy(&sp30, &identityMatrix, 0x20);
+
+    var_a1 = 0;
+
+    if (((SceneModel *)state->model)->isDestroyed == 1) {
+        terminateCurrentTask();
+        return;
+    }
+
+    actionMode = ((SceneModel *)state->model)->actionMode;
+    switch (actionMode) {
+        case 0:
+        default:
+            state->scale = 0x2000;
+            state->scaleAnimState = 0;
+            break;
+        case 1:
+            break;
+        case 2:
+            state->scaleAnimState = 2;
+            break;
+        case 3:
+            state->scaleAnimState = 3;
+            state->scale = 0;
+            break;
+        case 4:
+            state->transparentEnabled = 1;
+            break;
+        case 5:
+            state->transparentEnabled = 0;
+            break;
+        case 6:
+            state->overlayAnimState = 1;
+            break;
+        case 7:
+            state->overlayAnimState = 2;
+            break;
+        case 8:
+            if (state->oscillationEnabled == 0) {
+                state->oscillationAngle = 0;
+            }
+            state->oscillationEnabled = 1;
+            break;
+        case 9:
+            state->oscillationEnabled = 0;
+            break;
+    }
+
+    switch (state->scaleAnimState) {
+        case 1:
+            temp = state->scale - 0x111;
+            state->scale = temp;
+            if (temp < 0) {
+                state->scale = 0;
+            }
+            break;
+        case 2:
+            temp = state->scale + 0x111;
+            state->scale = temp;
+            if (temp >= 0x2001) {
+                state->scale = 0x2000;
+            }
+            break;
+    }
+
+    state->oscillationAngle += 0x88;
+
+    if (state->oscillationEnabled != 0) {
+        var_a1 = 1;
+    } else {
+        state->oscillationOffset = 0;
+        state->oscillationAngle = 0;
+    }
+
+    if (var_a1 != 0) {
+        state->oscillationOffset = (s32)(((s32)(approximateSin(state->oscillationAngle) * 4) >> 8) << 11);
+    }
+
+    ((SceneModel *)state->model)->unk44 = state->oscillationOffset;
+
+    switch (state->overlayAnimState) {
+        case 1:
+            state->overlayScaleX += 0x222;
+            state->overlayScaleY += 0x111;
+            if (state->overlayScaleX >= 0x4001) {
+                state->overlayScaleX = 0x4000;
+            }
+            if (state->overlayScaleY >= 0x2001) {
+                state->overlayScaleY = 0x2000;
+            }
+            break;
+        case 2:
+            state->overlayScaleX -= 0x222;
+            state->overlayScaleY -= 0x111;
+            if (state->overlayScaleX < 0) {
+                state->overlayScaleX = 0;
+            }
+            if (state->overlayScaleY < 0) {
+                state->overlayScaleY = 0;
+            }
+            if (state->overlayScaleX == 0 && state->overlayScaleY == 0) {
+                state->overlayAnimState = 0;
+            }
+            break;
+    }
+
+    createYRotationMatrix(&sp10, 0x400);
+    func_8006B084_6BC84(&sp10, (void *)((u8 *)state->model + 0x18), (Transform3D *)state->opaqueMatrix);
+    memcpy((void *)((u8 *)state + 0x18), (void *)((u8 *)state->model + 0x2C), 0xC);
+
+    *(s32 *)((u8 *)state + 0x1C) += state->oscillationOffset;
+    scaleMatrix((Transform3D *)state->opaqueMatrix, 0x2000, *(s16 *)((u8 *)state + 0x7E), 0x2000);
+
+    if (state->scale != 0) {
+        enqueueModelDisplayList((func_80002B50_3750_arg *)state->model, (DisplayListObject *)state->opaqueMatrix);
+    }
+
+    if (state->transparentEnabled == 0) {
+        s16 tempAngle;
+
+        state->rotationY -= 0xF;
+        tempAngle = state->rotationY;
+        createYRotationMatrix(&sp30, tempAngle);
+        func_8006B084_6BC84(&sp30, (void *)((u8 *)state->model + 0x18), (Transform3D *)state->transparentMatrix);
+
+        *(s32 *)((u8 *)state + 0x58) += 0x166666;
+        *(s32 *)((u8 *)state + 0x58) += state->oscillationOffset;
+        enqueueModelDisplayList((func_80002B50_3750_arg *)state->model, (DisplayListObject *)state->transparentMatrix);
+    }
+
+    if (state->overlayAnimState != 0 && isModelVisible((func_80002B50_3750_arg *)state->model) != 0) {
+        memcpy((void *)state->overlayMatrix, (void *)((u8 *)state->model + 0x18), 0x20);
+
+        *(s32 *)((u8 *)state + 0xAC) += state->oscillationOffset;
+        scaleMatrix(
+            (Transform3D *)state->overlayMatrix,
+            *(s16 *)((u8 *)state + 0x8A),
+            *(s16 *)((u8 *)state + 0x86),
+            *(s16 *)((u8 *)state + 0x8A)
+        );
+
+        state->scrollU += state->scrollSpeedU;
+        state->scrollV += state->scrollSpeedV;
+        *(s16 *)((u8 *)state + 0xD8) = *(u8 *)((u8 *)state + 0xD9);
+        *(s16 *)((u8 *)state + 0xDA) = *(u8 *)((u8 *)state + 0xDB);
+        enqueueScrollingTextureRender(
+            *(u16 *)((u8 *)*(s32 *)((u8 *)state->model + 0x10) + 0x16),
+            (DisplayListObject *)state->overlayMatrix
+        );
+    }
+}
 
 void cleanupRotatingLogo(RotatingLogoState *state) {
     state->soundData = freeNodeMemory(state->soundData);
