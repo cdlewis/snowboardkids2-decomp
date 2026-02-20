@@ -52,31 +52,27 @@ u16 characterActionAnimationIndices[] = { 0x000F, 0x003A, 0x0039, 0x0000, 0x0000
                                           0x0000, 0x0093, 0x0004, 0x0000, 0x0000, 0x0091, 0x000D,
                                           0x0001, 0x0000, 0x0090, 0x0008, 0x0003, 0x0000 };
 
-/* "  Be a paperboy.
-    Deliver to all
-    the houses to
-    receive a bonus." */
 u8 characterDescSlash[] = { _("  Be a paperboy.\n  Deliver to all\n  the houses to\n  receive a bonus.\0"),
                             0x00,
                             0x00 };
 
-/* "Use speed fans
-    and rockets to
-    rush to school
-    by 8:30." */
 u8 characterDescDamian[] = { _("Use speed fans\nand rockets to\nrush to school\nby 8:30.\0") };
 
-/* "Do tricks.  Earn\n300P to qualify." */
 u8 characterDescWendy[] = { _("Do tricks.  Earn\n300P to qualify.\0") };
 
 void *characterDescriptionTexts[] = { characterDescDamian, characterDescSlash, characterDescWendy };
 
-/* "Change laps'" followed by color data */
-s32 prizeTitleText[] = { 0x000C8035, 0x802E803B, 0x80348032, 0xFFFB8039, 0x802E803D, 0x80408054, 0xFFFF0000,
-                         0x00000000, 0x00000000, 0x00000000, 0x50505000, 0x00505000, 0x50505000, 0xFFFFFF00,
-                         0x00505000, 0x7F7F7F00, 0xFFFFFF00, 0x00505000, 0xFFFFFF00, 0x00000000, 0x00000000,
-                         0x00000000, 0x50505000, 0x00505000, 0x50505000, 0xFFFFFF00, 0x00505000, 0x7F7F7F00,
-                         0xFFFFFF00, 0x00505000, 0xFFFFFF00, 0x00000000, 0x00000000, 0x00000000 };
+/* "Change laps@" followed by color data */
+struct {
+    u8 text[28];
+    s32 colors[27];
+} prizeTitleText = {
+    .text = { _("Change laps@\0"), 0x00, 0x00 },
+    .colors = { 0x00000000, 0x00000000, 0x00000000, 0x50505000, 0x00505000, 0x50505000, 0xFFFFFF00,
+             0x00505000, 0x7F7F7F00, 0xFFFFFF00, 0x00505000, 0xFFFFFF00, 0x00000000, 0x00000000,
+             0x00000000, 0x50505000, 0x00505000, 0x50505000, 0xFFFFFF00, 0x00505000, 0x7F7F7F00,
+             0xFFFFFF00, 0x00505000, 0xFFFFFF00, 0x00000000, 0x00000000, 0x00000000 },
+};
 
 typedef struct {
     u8 _pad0[0xB2F];
@@ -923,7 +919,7 @@ void initPrizeDisplay(PrizeDisplayState *arg0) {
     arg0->backgroundAsset = loadAsset_34F7E0();
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupPrizeDisplay);
-    titleText = (u16 *)prizeTitleText;
+    titleText = (u16 *)&prizeTitleText;
     arg0->animationTimer = 0;
     titleWidth = getMaxLinePixelWidth(titleText);
     i = 0;
