@@ -10,6 +10,7 @@ Usage:
     python3 tools/textconv.py tools/charmap.txt input.c output.c
 
 The tool finds all _("string") patterns and converts them to hex byte arrays.
+An END terminator (0xFF, 0xFF) is automatically appended to each string.
 Digit sizing is context-aware:
     - After lowercase letter: small digit (e.g., "by 8:30" -> small 8)
     - After uppercase letter: big digit (e.g., "LEVEL 1" -> big 1)
@@ -279,9 +280,12 @@ def process_file(input_path: str, output_path: str, charmap: Dict[str, Tuple[int
 
         string_text = ''.join(string_content)
 
-        # Convert the string to bytes
+        # Convert the string to bytes (auto-append END terminator)
         try:
             bytes_list = convert_string(string_text, charmap)
+            if '\0' in charmap:
+                high, low = charmap['\0']
+                bytes_list.extend([high, low])
             result.append(format_bytes_as_array(bytes_list))
         except ValueError as e:
             # On error, keep original and report

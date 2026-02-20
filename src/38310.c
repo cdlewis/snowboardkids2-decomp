@@ -81,32 +81,23 @@ typedef struct {
     u8 selectedIndex;
 } OptionsMenuAllocation;
 
-/* "   You can change the\nrules for battle mode." */
-u8 optionsMenuTitleTextData[] = { _("   You can change the\nrules for battle mode.\0"), 0x00, 0x00 };
+u8 optionsMenuTitleTextData[] = { _("   You can change the\nrules for battle mode."), PAD2 };
 
-/* "   Yes" */
-u8 D_8008FD8C_9098C[] = { _("   Yes\0"), 0x00, 0x00 };
+u8 D_8008FD8C_9098C[] = { _("   Yes"), PAD2 };
 
-/* "    No" */
-u8 D_8008FD9C_9099C[] = { _("    No\0"), 0x00, 0x00 };
+u8 D_8008FD9C_9099C[] = { _("    No"), PAD2 };
 
-/* "   Yes" */
-u8 D_8008FDAC_909AC[] = { _("   Yes\0"), 0x00, 0x00 };
+u8 D_8008FDAC_909AC[] = { _("   Yes"), PAD2 };
 
-/* "    No" */
-u8 D_8008FDBC_909BC[] = { _("    No\0"), 0x00, 0x00 };
+u8 D_8008FDBC_909BC[] = { _("    No"), PAD2 };
 
-/* " Coins on course@" */
-u8 D_8008FDCC_909CC[] = { _(" Coins on course@\0") };
+u8 D_8008FDCC_909CC[] = { _(" Coins on course@") };
 
-/* " Shops on course@" */
-u8 D_8008FDF0_909F0[] = { _(" Shops on course@\0") };
+u8 D_8008FDF0_909F0[] = { _(" Shops on course@") };
 
-/* " Change laps@" */
-u8 D_8008FE14_90A14[] = { _(" Change laps@\0") };
+u8 D_8008FE14_90A14[] = { _(" Change laps@") };
 
-/* " To title screen." */
-u8 D_8008FE30_90A30[] = { _(" To title screen.\0") };
+u8 D_8008FE30_90A30[] = { _(" To title screen.") };
 
 void *optionsMenuLabelTextData[] = {
     D_8008FDCC_909CC,   D_8008FDF0_909F0,   D_8008FE14_90A14,   D_8008FE30_90A30,  NULL, NULL, NULL,
