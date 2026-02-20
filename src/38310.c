@@ -81,36 +81,32 @@ typedef struct {
     u8 selectedIndex;
 } OptionsMenuAllocation;
 
-/* "   You can change the\n rules for battle mode." */
-// clang-format off
-u8 optionsMenuTitleTextData[] = {__,__,__,
-    _Y,_o,_u,__,_c,_a,_n,__,_c,_h,_a,_n,_g,_e,__,_t,_h,_e, _NEWLINE,
-    _r,_u,_l,_e,_s,__,_f,_o,_r,__,_b,_a,_t,_t,_l,_e,__,_m,_o,_d,_e, _DOT, _END, 0x00, 0x00 };
-// clang-format on
+/* "   You can change the\nrules for battle mode." */
+u8 optionsMenuTitleTextData[] = { _("   You can change the\nrules for battle mode.\0"), 0x00, 0x00 };
 
 /* "   Yes" */
-u8 D_8008FD8C_9098C[] = { __, __, __, _Y, _e, _s, _END, 0x00, 0x00 };
+u8 D_8008FD8C_9098C[] = { _("   Yes\0"), 0x00, 0x00 };
 
 /* "    No" */
-u8 D_8008FD9C_9099C[] = { __, __, __, __, _N, _o, _END, 0x00, 0x00 };
+u8 D_8008FD9C_9099C[] = { _("    No\0"), 0x00, 0x00 };
 
 /* "   Yes" */
-u8 D_8008FDAC_909AC[] = { __, __, __, _Y, _e, _s, _END, 0x00, 0x00 };
+u8 D_8008FDAC_909AC[] = { _("   Yes\0"), 0x00, 0x00 };
 
 /* "    No" */
-u8 D_8008FDBC_909BC[] = { __, __, __, __, _N, _o, _END, 0x00, 0x00 };
+u8 D_8008FDBC_909BC[] = { _("    No\0"), 0x00, 0x00 };
 
 /* " Coins on course@" */
-u8 D_8008FDCC_909CC[] = { __, _C, _o, _i, _n, _s, __, _o, _n, __, _c, _o, _u, _r, _s, _e, _QUOTE, _END };
+u8 D_8008FDCC_909CC[] = { _(" Coins on course@\0") };
 
 /* " Shops on course@" */
-u8 D_8008FDF0_909F0[] = { __, _S, _h, _o, _p, _s, __, _o, _n, __, _c, _o, _u, _r, _s, _e, _QUOTE, _END };
+u8 D_8008FDF0_909F0[] = { _(" Shops on course@\0") };
 
 /* " Change laps@" */
-u8 D_8008FE14_90A14[] = { __, _C, _h, _a, _n, _g, _e, __, _l, _a, _p, _s, _QUOTE, _END };
+u8 D_8008FE14_90A14[] = { _(" Change laps@\0") };
 
 /* " To title screen." */
-u8 D_8008FE30_90A30[] = { __, _T, _o, __, _t, _i, _t, _l, _e, __, _s, _c, _r, _e, _e, _n, _DOT, _END };
+u8 D_8008FE30_90A30[] = { _(" To title screen.\0") };
 
 void *optionsMenuLabelTextData[] = {
     D_8008FDCC_909CC,   D_8008FDF0_909F0,   D_8008FE14_90A14,   D_8008FE30_90A30,  NULL, NULL, NULL,
