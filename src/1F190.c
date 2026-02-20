@@ -237,7 +237,7 @@ void initLevelSelectState(void) {
         state->selectedIndex = saveSlot;
         state->levelIdList[saveSlot] = D_800AFE8C_A71FC->saveSlotIndex;
         scheduleTask(initMenuBackgroundEffect, 1, 0, 0x64);
-        scheduleTask(initCharacterDescriptionText, 1, 0, 0x64);
+        scheduleTask(initMinigameDescText, 1, 0, 0x64);
     }
 
     setGameStateHandler(initLevelSelectTransition);

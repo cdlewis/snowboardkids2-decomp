@@ -83,25 +83,25 @@ typedef struct {
 
 u8 optionsMenuTitleTextData[] = { _("   You can change the\nrules for battle mode."), PAD2 };
 
-u8 D_8008FD8C_9098C[] = { _("   Yes"), PAD2 };
+u8 coinsToggleYesText[] = { _("   Yes"), PAD2 };
 
-u8 D_8008FD9C_9099C[] = { _("    No"), PAD2 };
+u8 coinsToggleNoText[] = { _("    No"), PAD2 };
 
-u8 D_8008FDAC_909AC[] = { _("   Yes"), PAD2 };
+u8 lapsToggleYesText[] = { _("   Yes"), PAD2 };
 
-u8 D_8008FDBC_909BC[] = { _("    No"), PAD2 };
+u8 lapsToggleNoText[] = { _("    No"), PAD2 };
 
-u8 D_8008FDCC_909CC[] = { _(" Coins on course@") };
+u8 coinsOnCourseLabelText[] = { _(" Coins on course@") };
 
-u8 D_8008FDF0_909F0[] = { _(" Shops on course@") };
+u8 shopsOnCourseLabelText[] = { _(" Shops on course@") };
 
-u8 D_8008FE14_90A14[] = { _(" Change laps@") };
+u8 changeLapsLabelText[] = { _(" Change laps@") };
 
-u8 D_8008FE30_90A30[] = { _(" To title screen.") };
+u8 toTitleScreenLabelText[] = { _(" To title screen.") };
 
 void *optionsMenuLabelTextData[] = {
-    D_8008FDCC_909CC,   D_8008FDF0_909F0,   D_8008FE14_90A14,   D_8008FE30_90A30,  NULL, NULL, NULL,
-    (void *)0x4E534B4A, (void *)0x45420000, (void *)0x5C688F56, (void *)0x4A830000
+    coinsOnCourseLabelText, shopsOnCourseLabelText, changeLapsLabelText, toTitleScreenLabelText, NULL, NULL, NULL,
+    (void *)0x4E534B4A,     (void *)0x45420000,     (void *)0x5C688F56,  (void *)0x4A830000
 };
 
 void cleanupOptionsMenuLabels(OptionsMenuLabelsCleanupArg *);
@@ -205,15 +205,15 @@ void initOptionsMenuToggles(void *arg0) {
 
         if (i < 4) {
             if (column != 0) {
-                ARG0->labelEntries[i].textData = &D_8008FD9C_9099C;
+                ARG0->labelEntries[i].textData = &coinsToggleNoText;
             } else {
-                ARG0->labelEntries[i].textData = &D_8008FD8C_9098C;
+                ARG0->labelEntries[i].textData = &coinsToggleYesText;
             }
         } else {
             if (column != 0) {
-                ARG0->labelEntries[i].textData = &D_8008FDBC_909BC;
+                ARG0->labelEntries[i].textData = &lapsToggleNoText;
             } else {
-                ARG0->labelEntries[i].textData = &D_8008FDAC_909AC;
+                ARG0->labelEntries[i].textData = &lapsToggleYesText;
             }
         }
     }

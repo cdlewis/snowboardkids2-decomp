@@ -52,13 +52,13 @@ u16 characterActionAnimationIndices[] = { 0x000F, 0x003A, 0x0039, 0x0000, 0x0000
                                           0x0000, 0x0093, 0x0004, 0x0000, 0x0000, 0x0091, 0x000D,
                                           0x0001, 0x0000, 0x0090, 0x0008, 0x0003, 0x0000 };
 
-u8 characterDescSlash[] = { _("  Be a paperboy.\n  Deliver to all\n  the houses to\n  receive a bonus."), PAD2 };
+u8 shootCrossDescText[] = { _("  Be a paperboy.\n  Deliver to all\n  the houses to\n  receive a bonus."), PAD2 };
 
-u8 characterDescDamian[] = { _("Use speed fans\nand rockets to\nrush to school\nby 8:30.") };
+u8 speedCrossDescText[] = { _("Use speed fans\nand rockets to\nrush to school\nby 8:30.") };
 
-u8 characterDescWendy[] = { _("Do tricks.  Earn\n300P to qualify.") };
+u8 trickGameDescText[] = { _("Do tricks.  Earn\n300P to qualify.") };
 
-void *characterDescriptionTexts[] = { characterDescDamian, characterDescSlash, characterDescWendy };
+void *minigameDescTexts[] = { speedCrossDescText, shootCrossDescText, trickGameDescText };
 
 /* "Change laps@" followed by color data */
 struct {
@@ -854,13 +854,13 @@ void cleanupMenuBackgroundEffect(MenuBackgroundEffectState *state) {
     state->effectAsset = freeNodeMemory(state->effectAsset);
 }
 
-void initCharacterDescriptionText(CharacterDescriptionTextState *state) {
+void initMinigameDescText(MinigameDescTextState *state) {
     void *textRenderAsset;
     D_800AFE8C_type_202A0 *globalState;
     s32 idx;
 
     textRenderAsset = loadTextRenderAsset(1);
-    setCleanupCallback(&cleanupCharacterDescriptionText);
+    setCleanupCallback(&cleanupMinigameDescText);
 
     state->priority = 5;
     globalState = D_800AFE8C_A71FC;
@@ -870,12 +870,12 @@ void initCharacterDescriptionText(CharacterDescriptionTextState *state) {
     state->color2.asS16 = 0xFF;
     state->textRenderAsset = textRenderAsset;
     idx = globalState->unk7 - 0xC;
-    state->textString = characterDescriptionTexts[idx];
+    state->textString = minigameDescTexts[idx];
 
-    setCallback(&renderCharacterDescriptionText);
+    setCallback(&renderMinigameDescText);
 }
 
-void renderCharacterDescriptionText(CharacterDescriptionTextState *state) {
+void renderMinigameDescText(MinigameDescTextState *state) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->menuState == 8) {
@@ -893,7 +893,7 @@ void renderCharacterDescriptionText(CharacterDescriptionTextState *state) {
     }
 }
 
-void cleanupCharacterDescriptionText(CharacterDescriptionTextState *state) {
+void cleanupMinigameDescText(MinigameDescTextState *state) {
     state->textRenderAsset = freeNodeMemory(state->textRenderAsset);
 }
 

@@ -80,7 +80,7 @@ typedef struct {
     ColorValue color1;
     ColorValue color2;
     u8 priority;
-} CharacterDescriptionTextState;
+} MinigameDescTextState;
 
 typedef struct {
     /* 0x00 */ s16 x;
@@ -151,11 +151,11 @@ void setMenuCharacterAnimation(u8 animationType, MenuCharacterModelState *state)
 void cleanupMenuBackgroundEffect(MenuBackgroundEffectState *state);
 void setupMenuBackgroundEffect(MenuBackgroundEffectState *state);
 void updateMenuBackgroundEffect(MenuBackgroundEffectState *state);
-void renderCharacterDescriptionText(CharacterDescriptionTextState *state);
-void cleanupCharacterDescriptionText(CharacterDescriptionTextState *state);
+void renderMinigameDescText(MinigameDescTextState *state);
+void cleanupMinigameDescText(MinigameDescTextState *state);
 void initConfirmationIndicator(ConfirmationIndicatorState *state);
 void initPrizeDisplay(PrizeDisplayState *arg0);
 void initMenuBackgroundEffect(MenuBackgroundEffectState *state);
-void initCharacterDescriptionText(CharacterDescriptionTextState *state);
+void initMinigameDescText(MinigameDescTextState *state);
 void initLevelSelectTransition(void);
 void cleanupLevelPreviewCharacter(LevelPreviewCharacterState *state);
