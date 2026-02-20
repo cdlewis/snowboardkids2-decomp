@@ -53,31 +53,21 @@ u16 characterActionAnimationIndices[] = { 0x000F, 0x003A, 0x0039, 0x0000, 0x0000
                                           0x0001, 0x0000, 0x0090, 0x0008, 0x0003, 0x0000 };
 
 /* "  Be a paperboy.
-      Deliver to all
-      the houses to
-      receive a bonus." */
-// clang-format off
-u8 characterDescSlash[] = { __, __, _B, _e, __, _a, __, _p, _a, _p, _e, _r, _b, _o,       _y,   _DOT,     _NEWLINE, __,
-                            __, _D, _e, _l, _i, _v, _e, _r, __, _t, _o, __, _a, _l,       _l,   _NEWLINE, __,       __,
-                            _t, _h, _e, __, _h, _o, _u, _s, _e, _s, __, _t, _o, _NEWLINE, __,   __,       _r,       _e,
-                            _c, _e, _i, _v, _e, __, _a, __, _b, _o, _n, _u, _s, _DOT,     _END, 0x00,     0x00 };
-// clang-format on
+    Deliver to all
+    the houses to
+    receive a bonus." */
+u8 characterDescSlash[] = { _("  Be a paperboy.\n  Deliver to all\n  the houses to\n  receive a bonus.\0"),
+                            0x00,
+                            0x00 };
 
 /* "Use speed fans
     and rockets to
     rush to school
     by 8:30." */
-// clang-format off
-u8 characterDescDamian[] = {
-    _U,_s,_e,__,_s,_p,_e,_e,_d,__,_f,_a,_n,_s,  _NEWLINE,
-    _a,_n,_d,__,_r,_o,_c,_k,_e,_t,_s,__,_t,_o,  _NEWLINE,
-    _r,_u,_s,_h,__,_t,_o,__,_s,_c,_h,_o,_o,_l,  _NEWLINE,
-    _b,_y,__,_8s,_COLON,_3s,_0s,                _DOT, _END };
-// clang-format on
+u8 characterDescDamian[] = { _("Use speed fans\nand rockets to\nrush to school\nby 8:30.\0") };
 
 /* "Do tricks.  Earn\n300P to qualify." */
-u8 characterDescWendy[] = { _D,  _o,  __,  _t, _r, _i, _c, _k, _s, _DOT, __, __, _E, _a, _r, _n,   _NEWLINE,
-                            _3s, _0s, _0s, _P, __, _t, _o, __, _q, _u,   _a, _l, _i, _f, _y, _DOT, _END };
+u8 characterDescWendy[] = { _("Do tricks.  Earn\n300P to qualify.\0") };
 
 void *characterDescriptionTexts[] = { characterDescDamian, characterDescSlash, characterDescWendy };
 

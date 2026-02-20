@@ -10,6 +10,18 @@
  * - Bits 0-11: Character index into font table (0-93)
  *
  * Control codes use 0xFF in the high byte.
+ *
+ * DEPRECATION NOTE:
+ * For new text strings, consider using the textconv tool instead:
+ *   u8 text[] = _("Hello World\n");
+ *
+ * Run: python3 tools/textconv.py tools/charmap.txt input.c output.c
+ * This converts _("string") to hex bytes with proper character encoding.
+ *
+ * Digit sizing is context-aware:
+ *   - After lowercase: small digits (e.g., "by 8:30" -> small 8)
+ *   - After uppercase: big digits (e.g., "LEVEL 1" -> big 1)
+ *   - Explicit override: {0B}-{9B} for big, {0s}-{9s} for small
  */
 
 /* Control codes */
@@ -17,6 +29,22 @@
 #define _END     0xFF, 0xFF
 #define _NEWLINE 0xFF, 0xFD
 #define _SKIP    0xFF, 0xFC
+
+/*
+ * The _() macro for text conversion.
+ *
+ * Usage: u8 text[] = _("Hello World\n");
+ *
+ * The textconv tool (run during build) converts _("string") to hex byte arrays.
+ * This macro is just a placeholder for IDE/clang-check - the build process
+ * runs textconv BEFORE the preprocessor, so this never gets expanded.
+ *
+ * Digit sizing is context-aware:
+ *   - After lowercase: small digits (e.g., "by 8:30" -> small 8)
+ *   - After uppercase: big digits (e.g., "LEVEL 1" -> big 1)
+ *   - Explicit override: {0B}-{9B} for big, {0s}-{9s} for small
+ */
+#define _(str) 0
 
 /* Big uppercase letters (indices 10-35) - default width (12) */
 #define _A  0x00, 0x0A
