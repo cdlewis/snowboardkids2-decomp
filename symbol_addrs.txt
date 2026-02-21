@@ -3877,6 +3877,7 @@ gSkiTrailOffsetTransformsForward = 0x80090E80; // rom:0x91A80 size:0x18
 gSkiTrailOffsetTransformsBackward = 0x80090E98; // rom:0x91A98 size:0x18
 handlePlayerToPlayerCollision = 0x8005AB58; // rom:0x5B758
 handleCollisionWithTargetPlayer = 0x8005AE8C; // rom:0x5BA8C
+findPlayerNearPosition = 0x8005B24C; // rom:0x5BE4C
 handleOrientedAreaCollision = 0x8005B730; // rom:0x5C330
 checkPositionPlayerCollisionWithKnockback = 0x8005B9E4; // rom:0x5C5E4
 checkPositionPlayerCollisionWithPull = 0x8005BCB8; // rom:0x5C8B8
