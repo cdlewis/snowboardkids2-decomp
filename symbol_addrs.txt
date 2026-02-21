@@ -1760,6 +1760,8 @@ loadAssetByIndex_95668 = 0x8005DBD0;
 loadAssetByIndex_95728 = 0x8005DC48;
 loadBossHudAssetByRaceType = 0x8005DC60; // rom:0x5E860
 
+getAnimationFrameData = 0x8005DE60; // rom:0x5EA60
+getAnimationDataByIndex = 0x8005DE6C; // rom:0x5EA6C
 initBoneAnimationState = 0x8005DE98; // rom:0x5EA98
 updateBoneAnimation = 0x8005E22C; // rom:0x5EE2C
 interpolatedBoneAnimationMirrored = 0x8005EA44; // rom:0x5F644
