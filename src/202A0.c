@@ -6,6 +6,7 @@
 #include "36B80.h"
 #include "38C90.h"
 #include "56910.h"
+#include "68CF0.h"
 #include "B040.h"
 #include "EepromSaveData_type.h"
 #include "assets.h"
@@ -73,9 +74,13 @@ struct {
 };
 
 typedef struct {
-    u8 _pad0[0xB2F];
+    u8 _pad0[0xB2C];
+    s8 unkB2C;
+    u8 _padB2D[2];
     u8 menuState;
-    u8 _padB30[0x15];
+    u8 _padB30[3];
+    u8 unkB33[12];
+    u8 _padB3F[6];
     u8 unkB45;
     u8 unkB46;
     u8 unkB47;
@@ -624,7 +629,93 @@ void cleanupLevelPreviewPortraits(LevelPreviewPortraitState *state) {
 
 INCLUDE_ASM("asm/nonmatchings/202A0", func_80020B44_21744);
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_80020D18_21918);
+typedef struct {
+    s16 x;
+    s16 y;
+    void *spriteData;
+    u16 frameIndex;
+    u16 paletteAlpha;
+    u8 tileMode;
+    u8 overridePaletteCount;
+    u8 transparency;
+    u8 _padF;
+} TextSpriteEntry;
+
+typedef struct {
+    SpriteRenderArg iconEntries[10];
+    SpriteRenderArg sprite78;
+    SpriteRenderArg sprite84;
+    SpriteRenderArg sprite90;
+    SpriteRenderArg sprite9C;
+    TextSpriteEntry textEntries[4];
+    TextData textPaletteData;
+    char numBuffer[2];
+    u16 textAlpha;
+    u8 animTimer;
+} CharacterSelectDisplayState;
+
+void func_80020D18_21918(CharacterSelectDisplayState *state) {
+    Allocation_202A0 *allocation;
+    s32 i;
+    void (*callback)(void *);
+    u8 characterIndex;
+    s32 temp_a1;
+    u32 temp_a0;
+
+    allocation = (Allocation_202A0 *)getCurrentAllocation();
+
+    for (i = 0; i < 10; i++) {
+        debugEnqueueCallback(8, 0, renderSpriteFrame, &state->iconEntries[i]);
+    }
+
+    if (D_800AFE8C_A71FC->unk4 == 0) {
+        temp_a1 = allocation->unkB33[allocation->unkB2C];
+        temp_a0 = temp_a1 & 0xFF;
+        if (temp_a0 == 3 || temp_a0 == 7 || temp_a0 == 11) {
+            debugEnqueueCallback(8, 0, renderSpriteFrame, &state->sprite78);
+        } else if ((u32)(temp_a1 - 12) < 3 && allocation->menuState < 6) {
+            debugEnqueueCallback(8, 0, renderSpriteFrame, &state->sprite84);
+        }
+    }
+
+    characterIndex = allocation->unkB33[allocation->unkB2C];
+    if (EepromSaveData->save_slot_status[characterIndex] == 1) {
+        callback = (void (*)(void *))renderSpriteFrame;
+        debugEnqueueCallback(8, 6, callback, &state->sprite90);
+        characterIndex = allocation->unkB33[allocation->unkB2C];
+        if (characterIndex < 9) {
+            sprintf(state->numBuffer, "%d", characterIndex + 1);
+            debugEnqueueCallback(8, 7, renderTextPalette, &state->textPaletteData);
+        } else {
+            state->sprite9C.frameIndex = characterIndex + 4;
+            debugEnqueueCallback(8, 7, callback, &state->sprite9C);
+        }
+    }
+
+    if (allocation->unkB45 == 0) {
+        if (D_800AFE8C_A71FC->unk4 == 1 || (D_800AFE8C_A71FC->unk4 == 0 && EepromSaveData->save_slot_status[0] != 5)) {
+            if (allocation->menuState == 0) {
+                state->animTimer++;
+                if (state->animTimer < 0x11) {
+                    state->textAlpha -= 8;
+                } else {
+                    state->textAlpha += 8;
+                }
+                if (state->animTimer == 0x20) {
+                    state->animTimer = 0;
+                    state->textAlpha = 0xFF;
+                }
+            } else {
+                state->animTimer = 0;
+                state->textAlpha = 0xFF;
+            }
+            for (i = 0; i < 4; i++) {
+                state->textEntries[i].paletteAlpha = state->textAlpha;
+                debugEnqueueCallback(8, 7, renderTextSprite, &state->textEntries[i]);
+            }
+        }
+    }
+}
 
 void cleanupCharacterSelectionIcons(CharacterSelectionIconState *state) {
     state->portraitAsset = freeNodeMemory(state->portraitAsset);
