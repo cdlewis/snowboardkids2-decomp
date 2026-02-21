@@ -6,8 +6,8 @@
 #include "rand.h"
 #include "task_scheduler.h"
 
-extern ColorData gMenuLightColor;
-extern ColorData gMenuAmbientColor;
+ColorData gMenuLightColor = { 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x50, 0x50, 0x00 };
+ColorData gMenuAmbientColor = { 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 extern u8 D_8008DF00_8EB00[][10];
 extern u8 D_8008DF3C_8EB3C[][8];

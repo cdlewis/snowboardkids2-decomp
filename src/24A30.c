@@ -250,22 +250,17 @@ typedef struct {
 } CharSelectStatsState;
 
 extern Vec2_u16 playerNumberPositions[];
-extern PositionConfig_DDBE D_8008DDBE_8E9BE[];
-extern PositionConfig_DDE6 D_8008DDE6_8E9E6[];
 extern u8 D_8008DE18_8EA18[];
-extern PositionConfig_DE1A D_8008DE1A_8EA1A[];
-extern Vec3s boardSelectArrowPositions[];
-extern u16 D_8008DE7A_8EA7A[];
+extern u8 D_8008DE64_8EA64[];
 extern struct {
     u16 x;
     u16 y;
 } D_8008DE9C_8EA9C[];
-extern u8 D_8008DD8D_8E98D[];
-extern u8 D_8008DD8E_8E98E[];
-extern s32 D_8008DD2C_8E92C[];
-extern Vec3s D_8008DD4E_8E94E[];
+extern struct {
+    s16 unk0[17];
+    Vec3s unk22[5];
+} D_8008DD2C_8E92C;
 extern Vec3s charSelectIconPositions[];
-extern Vec3s charSelectIconYIncrements[];
 extern char D_8009E288_9EE88[];
 
 void animateCharSelectIconReveal(CharSelectIconsState *);
@@ -483,7 +478,7 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     offset = arg0->playerIndex << 5;
     memcpy(worldMatPtr, (u8 *)(offset + (s32)base + 0x17F8), 0x20);
 
-    tableValue = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->numPlayers * 2) + state->unk18C0[arg0->playerIndex]];
+    tableValue = ((s32 *)&D_8008DD2C_8E92C)[(D_800AFE8C_A71FC->numPlayers * 2) + state->unk18C0[arg0->playerIndex]];
     arg0->worldMatrix.translation.x = tableValue;
     arg0->targetX = tableValue;
 
@@ -645,7 +640,8 @@ void updateCharSelectSecondarySlide(CharSelectSecondarySlot *arg0) {
     state = (GameState *)getCurrentAllocation();
 
     localMatrixPtr = &localMatrix;
-    target = D_8008DD2C_8E92C[(D_800AFE8C_A71FC->numPlayers * 2) + ((state->unk18C0[arg0->playerIndex] + 1) & 1)];
+    target =
+        ((s32 *)&D_8008DD2C_8E92C)[(D_800AFE8C_A71FC->numPlayers * 2) + ((state->unk18C0[arg0->playerIndex] + 1) & 1)];
     adjustment = (-(target < 0) & 0xFFF00000) | 0x100000;
 
     memcpy(localMatrixPtr, &identityMatrix, 0x20);
@@ -856,7 +852,8 @@ void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
     memcpy(&preview->transform, &identityMatrix, 0x20);
 
     playerIdx = preview->playerIndex;
-    preview->transform.translation.x = D_8008DD2C_8E92C[D_800AFE8C_A71FC->numPlayers * 2 + (state + playerIdx)[0x18C0]];
+    preview->transform.translation.x =
+        ((s32 *)&D_8008DD2C_8E92C)[D_800AFE8C_A71FC->numPlayers * 2 + (state + playerIdx)[0x18C0]];
     preview->transform.translation.z = 0;
     preview->transform.translation.y = 0xFFF00000;
     preview->unk20_u.targetX = preview->transform.translation.x;
@@ -969,7 +966,9 @@ void updateCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
 
     state = (u8 *)getCurrentAllocation();
 
-    target = D_8008DD2C_8E92C[D_800AFE8C_A71FC->numPlayers * 2 + (((state + preview->playerIndex)[0x18C0] + 1) & 1)];
+    target = ((
+        s32 *
+    )&D_8008DD2C_8E92C)[D_800AFE8C_A71FC->numPlayers * 2 + (((state + preview->playerIndex)[0x18C0] + 1) & 1)];
 
     preview->transform.translation.x += ((target >> 31) & slideMask) | slideStep;
 
@@ -1005,9 +1004,6 @@ void initCharSelectIcons(CharSelectIconsState *arg0) {
     s32 temp_v0;
     u8 numPlayers;
     s32 iconTableIndex;
-    s32 pad[4];
-
-    (void)pad;
 
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectIcons);
@@ -1015,9 +1011,9 @@ void initCharSelectIcons(CharSelectIconsState *arg0) {
 
     numPlayers = D_800AFE8C_A71FC->numPlayers;
 
-    yPos = D_8008DDE6_8E9E6[numPlayers].y;
-    xTemp = D_8008DDE6_8E9E6[numPlayers].x;
-    xIncrementU16 = D_8008DDE6_8E9E6[numPlayers].inc;
+    yPos = *(u16 *)((u8 *)playerNumberPositions + numPlayers * 6 + 14);
+    xTemp = *(u16 *)((u8 *)playerNumberPositions + numPlayers * 6 + 16);
+    xIncrementU16 = *(u16 *)((u8 *)playerNumberPositions + numPlayers * 6 + 18);
 
     scaleX = 0x400;
     if (numPlayers == 1) {
@@ -1066,7 +1062,7 @@ void updateCharSelectIconsDelay(CharSelectIconsState *arg0) {
 }
 
 extern u8 D_8008DD8C_8E98C[];
-extern s16 D_8008DE02_8EA02[];
+extern u8 D_8008DDEC_8E9EC[];
 
 void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
     u8 *gameState;
@@ -1091,7 +1087,7 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
         paletteIndex = ptr[0x18B0];
         // Each character has 3 board options (palette 0-2), with 3 items each
         itemIconIndex = D_8008DD8C_8E98C[(((u8)(paletteIndex + charIndex * 3)) * 3) + i];
-        targetY = D_8008DE02_8EA02[itemIconIndex];
+        targetY = *(s16 *)(D_8008DDEC_8E9EC + itemIconIndex * 2 + 22);
 
         entry = &arg0->entries[i];
         currentY = entry->currentY;
@@ -1146,7 +1142,7 @@ void updateCharSelectIconTargets(CharSelectIconTargetState *arg0) {
         paletteIndex = state->unk18B0[arg0->playerIndex];
         tableIndex = D_8008DD8C_8E98C[((u8)(paletteIndex + charIndex * 3)) * 3 + i];
         entry = &arg0->entries[i];
-        entry->currentY = D_8008DE02_8EA02[tableIndex];
+        entry->currentY = *(s16 *)(D_8008DDEC_8E9EC + tableIndex * 2 + 22);
         debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010C98_11898, entry);
         i++;
     } while (i < 3);
@@ -1185,7 +1181,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
     i = 0;
     do {
     } while (0);
-    yIncrement = charSelectIconYIncrements[numPlayers].x;
+    yIncrement = *(s16 *)((u8 *)&charSelectIconPositions[numPlayers] + 6);
     iconMappingTable = D_8008DD8C_8E98C;
     y = charSelectIconPositions[numPlayers].z;
     entry = (volatile P2NameSpriteEntry *)arg0->entries;
@@ -1407,9 +1403,9 @@ void initCharSelectMenu(SelectionMenuState *arg0) {
         arg0->numEntries = 2;
     } else {
         s32 index = D_800AFE8C_A71FC->numPlayers;
-        x = D_8008DD4E_8E94E[index].x;
-        y = D_8008DD4E_8E94E[index].y;
-        xIncrement = D_8008DD4E_8E94E[index].z;
+        x = D_8008DD2C_8E92C.unk22[index].x;
+        y = D_8008DD2C_8E92C.unk22[index].y;
+        xIncrement = D_8008DD2C_8E92C.unk22[index].z;
     }
 
     count = arg0->numEntries;
@@ -1533,16 +1529,15 @@ void initCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
     u16 x;
     s32 increment;
     u16 y;
-    s32 pad[4];
 
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectPlayerLabels);
 
     i = 0;
     index = D_800AFE8C_A71FC->numPlayers;
-    x = D_8008DDBE_8E9BE[index].x;
-    increment = D_8008DDBE_8E9BE[index].inc;
-    y = D_8008DDBE_8E9BE[index].y;
+    x = *(u16 *)(D_8008DD8C_8E98C + index * 6 + 50);
+    increment = *(s16 *)(D_8008DD8C_8E98C + index * 6 + 54);
+    y = *(u16 *)(D_8008DD8C_8E98C + index * 6 + 52);
 
     do {
         arg0[i].y = y;
@@ -1596,7 +1591,7 @@ void initCharSelectArrows(SelectionArrowsState *arg0) {
     SelectionEntry *ptr;
     u16 x;
     s32 iTimesTwo;
-    s32 pad[6];
+    s32 pad[2];
 
     (void)pad;
 
@@ -1605,9 +1600,9 @@ void initCharSelectArrows(SelectionArrowsState *arg0) {
     setCleanupCallback(cleanupCharSelectArrows);
 
     count = D_800AFE8C_A71FC->numPlayers;
-    xBase = D_8008DE1A_8EA1A[count].x;
-    y = D_8008DE1A_8EA1A[count].y;
-    xInc = D_8008DE1A_8EA1A[count].inc;
+    xBase = *(u16 *)(D_8008DE18_8EA18 + count * 6 + 2);
+    y = *(u16 *)(D_8008DE18_8EA18 + count * 6 + 4);
+    xInc = *(u16 *)(D_8008DE18_8EA18 + count * 6 + 6);
 
     i = 0;
     if (count != 0) {
@@ -1655,7 +1650,7 @@ void initBoardSelectArrows(SelectionArrowsState *state) {
     SelectionEntry *arrow;
     u16 x;
     s32 entryOffset;
-    s32 pad[5];
+    s32 pad[2];
 
     (void)pad;
 
@@ -1665,9 +1660,9 @@ void initBoardSelectArrows(SelectionArrowsState *state) {
 
     numPlayers = D_800AFE8C_A71FC->numPlayers;
     unused = numPlayers * 3;
-    xBase = boardSelectArrowPositions[numPlayers].x;
-    y = boardSelectArrowPositions[numPlayers].y;
-    xSpacing = boardSelectArrowPositions[numPlayers].z;
+    xBase = *(s16 *)(D_8008DE18_8EA18 + numPlayers * 6 + 34);
+    y = *(s16 *)(D_8008DE18_8EA18 + numPlayers * 6 + 36);
+    xSpacing = *(s16 *)(D_8008DE18_8EA18 + numPlayers * 6 + 38);
 
     playerIdx = 0;
     if (numPlayers != 0) {
@@ -1731,7 +1726,7 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
             } else {
                 charIndex = D_800AFE8C_A71FC->unk9[i + 4];
                 spriteIdx = charIndex + 0x23;
-                xPos = *((u16 *)&D_8008DE9C_8EA9C + numPlayers * 2) - D_8008DE7A_8EA7A[charIndex];
+                xPos = *((u16 *)&D_8008DE9C_8EA9C + numPlayers * 2) - *(u16 *)(D_8008DE64_8EA64 + charIndex * 2 + 22);
             }
             sprites[i].spriteIndex = spriteIdx;
         } else {
@@ -2216,9 +2211,9 @@ u8 getItemStat1(u8 itemIndex) {
 }
 
 u8 getItemStat2(u8 itemIndex) {
-    return D_8008DD8D_8E98D[itemIndex * 3];
+    return D_8008DD8C_8E98C[itemIndex * 3 + 1];
 }
 
 u8 getItemStat3(u8 itemIndex) {
-    return D_8008DD8E_8E98E[itemIndex * 3];
+    return D_8008DD8C_8E98C[itemIndex * 3 + 2];
 }
