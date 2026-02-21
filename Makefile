@@ -80,7 +80,7 @@ LIBMUS = lib/libmus.a
 # go away.
 UNDEFINED_SYMS := osPfsIsPlug
 LD_SCRIPT = $(BASENAME).ld
-LINKER_SCRIPTS := linker_scripts/hardware_regs.ld linker_scripts/libultra_syms.ld
+LINKER_SCRIPTS := linker_scripts/hardware_regs.ld linker_scripts/libultra_syms.ld linker_scripts/data_field_syms.ld
 LD_FLAGS := -T $(LD_SCRIPT) -Map snowboardkids2.map --no-check-sections -u osPfsIsPlug -Lbuild/lib -lmus -lgultra_rom
 
 ifeq ($(NON_MATCHING),1)
