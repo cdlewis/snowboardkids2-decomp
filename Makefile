@@ -134,20 +134,14 @@ $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/
 # Per-file optimization overrides
 $(BUILD_DIR)/src/39020.o: OPT_FLAGS := -O0
 
-# Text conversion: _("string") -> hex bytes
-# Generates a .c.gen file, then compiles from that file (preserves file context for includes)
 TEXTCONV = $(PYTHON) $(TOOLS_DIR)/textconv.py
 CHARMAP = $(TOOLS_DIR)/charmap.txt
 
-$(BUILD_DIR)/src/%.c.gen: src/%.c $(CHARMAP)
-	@mkdir -p $(shell dirname $@)
-	@$(TEXTCONV) $(CHARMAP) $< $@
-
-$(BUILD_DIR)/src/%.o: $(BUILD_DIR)/src/%.c.gen
+$(BUILD_DIR)/src/%.o: src/%.c $(CHARMAP)
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(GREEN)   c    $(NO_COL)]  src/$*.c\n"; \
-	$(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ -x c $< 2>&1 | tee -a $(BUILD_LOG)
-	@$(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -x c -E $< | $(CC) -x c $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I $(dir $*) -c -o $@ -
+	$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
+	@$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -x c -E - | $(CC) -x c $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I $(dir $*) -c -o $@ -
 	$(OBJDUMP_CMD)
 
 $(BUILD_DIR)/%.o: %.s
