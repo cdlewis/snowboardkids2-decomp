@@ -2,10 +2,34 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
+#include "geometry.h"
 #include "graphics.h"
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
+
+typedef struct {
+    u16 x;
+    u16 y;
+} Vec2_u16;
+
+typedef struct {
+    u16 x;
+    u16 y;
+    s16 inc;
+} PositionConfig_DDBE;
+
+typedef struct {
+    u16 y;
+    u16 x;
+    u16 inc;
+} PositionConfig_DDE6;
+
+typedef struct {
+    u16 x;
+    u16 y;
+    u16 inc;
+} PositionConfig_DE1A;
 
 typedef struct {
     ViewportNode unk0[4];
