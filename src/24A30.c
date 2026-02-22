@@ -2,6 +2,7 @@
 #include "19E80.h"
 #include "20F0.h"
 #include "232F0.h"
+#include "36B80.h"
 #include "38C90.h"
 #include "5E590.h"
 #include "68CF0.h"
@@ -2068,7 +2069,40 @@ void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/24A30", initCharSelectStats);
+extern CharSelectAnimData D_8008DEAC_8EAAC;
+
+void updateCharSelectStats(CharSelectStatsState *arg0);
+void cleanupCharSelectStats(SimpleSpriteEntry *arg0);
+
+void initCharSelectStats(CharSelectStatsState *arg0) {
+    void *textAsset;
+    s32 i;
+    s16 spacing;
+    D_800AFE8C_A71FC_type *gameState;
+
+    textAsset = loadTextRenderAsset(0);
+    setCleanupCallback(cleanupCharSelectStats);
+
+    spacing = D_8008DEAC_8EAAC.unk22[D_800AFE8C_A71FC->numPlayers * 3];
+    gameState = D_800AFE8C_A71FC;
+    arg0->spriteEntries[0].spriteData = textAsset;
+
+    for (i = 0; i < 3; i++) {
+        if (gameState->numPlayers == 1) {
+            arg0->spriteEntries[i * 2].x = D_8008DEAC_8EAAC.unk22[gameState->numPlayers * 3 - 2];
+            arg0->spriteEntries[i * 2 + 1].x = D_8008DEAC_8EAAC.unk22[gameState->numPlayers * 3 - 2] + 8;
+            arg0->spriteEntries[i * 2].y = D_8008DEAC_8EAAC.unk22[gameState->numPlayers * 3 - 1] + spacing * i;
+            arg0->spriteEntries[i * 2 + 1].y = D_8008DEAC_8EAAC.unk22[gameState->numPlayers * 3 - 1] + spacing * i;
+            arg0->spriteEntries[i * 2].spriteData = textAsset;
+            arg0->spriteEntries[i * 2 + 1].spriteData = textAsset;
+        } else {
+            arg0->textEntries[i].x = D_8008DEAC_8EAAC.unk22[gameState->numPlayers * 3 - 2];
+            arg0->textEntries[i].y = D_8008DEAC_8EAAC.unk22[gameState->numPlayers * 3 - 1] + spacing * i;
+            arg0->textEntries[i].palette = 0;
+        }
+    }
+    setCallback(updateCharSelectStats);
+}
 
 void updateCharSelectStats(CharSelectStatsState *arg0) {
     GameState *gameState;
