@@ -4009,3 +4009,6 @@ gOutputBuffer = 0x800A3364; // size:0x4
 gYieldBuffer = 0x800A3368; // size:0x4
 gLookAtPtr = 0x800A8B14; // size:0x4
 renderFrame = 0x8006E054; // rom:0x6EC54
+gStoryMapRareEventTypes = 0x8008DF00; // rom:0x8EB00
+gStoryMapRegularEventTypes = 0x8008DF3C; // rom:0x8EB3C
+gStoryMapRegularEventTypesPad = 0x8008E02C; // rom:0x8EC2C
