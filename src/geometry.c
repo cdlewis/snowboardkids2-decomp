@@ -643,7 +643,92 @@ void transformVector3(Vec3i *arg0, Transform3D *arg1, Vec3i *arg2) {
     arg2->z = int1 + (frac2 >> 13);
 }
 
-INCLUDE_ASM("asm/nonmatchings/geometry", transformVectorRelative);
+void transformVectorRelative(void *arg0, void *arg1, void *arg2) {
+    Vec3i diff;
+    s16 *vec;
+    s32 frac0;
+    s32 int0a;
+    s32 frac1a;
+    s32 int1a;
+    s32 frac2a;
+    s32 int2a;
+    s32 int0b;
+    s32 frac1b;
+    s32 int1b;
+    s32 frac2b;
+    s32 int2b;
+    s32 int0c;
+    s32 frac1c;
+    s32 int1c;
+    s32 frac2c;
+    s32 int2c;
+
+    vec = (s16 *)arg1;
+
+    diff.x = ((s32 *)arg0)[0] - ((BoneAnimationState *)arg1)->position[0];
+    diff.y = ((s32 *)arg0)[1] - ((BoneAnimationState *)arg1)->position[1];
+    diff.z = ((s32 *)arg0)[2] - ((BoneAnimationState *)arg1)->position[2];
+
+    /* Section 1: use int0a as accumulator */
+    frac0 = (diff.x & 0xFFFF) * vec[0];
+    int0a = (diff.x >> 16) * (vec[0] << 3);
+    if (frac0 < 0) {
+        frac0 += 0x1FFF;
+    }
+    frac1a = (diff.y & 0xFFFF) * vec[1];
+    int1a = (diff.y >> 16) * (vec[1] << 3);
+    int0a = (int0a + (frac0 >> 13)) + int1a;
+    if (frac1a < 0) {
+        frac1a += 0x1FFF;
+    }
+    frac2a = (diff.z & 0xFFFF) * vec[2];
+    int2a = (diff.z >> 16) * (vec[2] << 3);
+    int1a = (int0a + (frac1a >> 13)) + int2a;
+    if (frac2a < 0) {
+        frac2a += 0x1FFF;
+    }
+    ((s32 *)arg2)[0] = int1a + (frac2a >> 13);
+
+    /* Section 2: use frac0 as accumulator */
+    frac0 = (diff.x & 0xFFFF) * vec[3];
+    int0b = (diff.x >> 16) * (vec[3] << 3);
+    if (frac0 < 0) {
+        frac0 += 0x1FFF;
+    }
+    frac1b = (diff.y & 0xFFFF) * vec[4];
+    int1b = (diff.y >> 16) * (vec[4] << 3);
+    frac0 = (int0b + (frac0 >> 13)) + int1b;
+    if (frac1b < 0) {
+        frac1b += 0x1FFF;
+    }
+    frac2b = (diff.z & 0xFFFF) * vec[5];
+    int2b = (diff.z >> 16) * (vec[5] << 3);
+    int1b = (frac0 + (frac1b >> 13)) + int2b;
+    if (frac2b < 0) {
+        frac2b += 0x1FFF;
+    }
+    ((s32 *)arg2)[1] = int1b + (frac2b >> 13);
+
+    /* Section 3: use frac0 as accumulator */
+    frac0 = (diff.x & 0xFFFF) * vec[6];
+    int0c = (diff.x >> 16) * (vec[6] << 3);
+    if (frac0 < 0) {
+        frac0 += 0x1FFF;
+    }
+    frac1c = (diff.y & 0xFFFF) * vec[7];
+    int1c = (diff.y >> 16) * (vec[7] << 3);
+    frac0 = (int0c + (frac0 >> 13)) + int1c;
+    if (frac1c < 0) {
+        frac1c += 0x1FFF;
+    }
+    frac2c = (diff.z & 0xFFFF) * vec[8];
+    int2c = (diff.z >> 16) * (vec[8] << 3);
+    int1c = (frac0 + (frac1c >> 13)) + int2c;
+    if (frac2c < 0) {
+        frac2c += 0x1FFF;
+    }
+    ((s32 *)arg2)[2] = int1c + (frac2c >> 13);
+}
 
 INCLUDE_ASM("asm/nonmatchings/geometry", rotateVectorY);
 
