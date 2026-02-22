@@ -1,7 +1,7 @@
+#include "232F0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
-#include "geometry.h"
 #include "graphics.h"
 #include "race_session.h"
 #include "rom_loader.h"
@@ -40,10 +40,7 @@ u16 D_8008DCFC_8E8FC[] = {
     0x0050, 0x5000, 0x5050, 0x5000, 0xFFFF, 0xFF00, 0x0050, 0x5000, 0x7F7F, 0x7F00, 0xFFFF, 0xFF00,
 };
 
-struct {
-    s16 unk0[17];
-    Vec3s unk22[5];
-} D_8008DD2C_8E92C = {
+CharSelectModelPositions D_8008DD2C_8E92C = {
     {
      0x0050, 0x5000,
      (s16)0xFFFF,
@@ -65,11 +62,7 @@ struct {
      },
 };
 
-struct {
-    Vec3s positions;
-    Vec3s yIncrements[4];
-    s16 unk1E;
-} charSelectIconPositions = {
+CharSelectIconPositions charSelectIconPositions = {
     { (s16)0xFFB0,                         0x0040, 0x0058 },
     {
      { 0x0000, (s16)0xFF88, (s16)0xFFD0 },
@@ -80,12 +73,7 @@ struct {
     0x0014,
 };
 
-struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2[48];
-    s16 unkBE[13];
-} D_8008DD8C_8E98C = {
+CharSelectItemData D_8008DD8C_8E98C = {
     3,
     4,
     {
@@ -105,10 +93,7 @@ struct {
       },
 };
 
-struct {
-    s16 positions[7];
-    s16 D_8008DDE6[3];
-} playerNumberPositions = {
+PlayerNumberPositions playerNumberPositions = {
     {
      (s16)0xFFE8,
      0x0014, (s16)0xFF80,
@@ -120,10 +105,7 @@ struct {
     { (s16)0xFFD4, (s16)0xFFC0, (s16)0xFFD4 },
 };
 
-struct {
-    s16 unk0[11];
-    s16 D_8008DE02[11];
-} D_8008DDEC_8E9EC = {
+CharSelectStatsPositions D_8008DDEC_8E9EC = {
     {
      (s16)0xFFA0,
      (s16)0xFFC8,
@@ -143,12 +125,7 @@ struct {
      0x0070, },
 };
 
-struct {
-    u8 unk0[2];
-    s16 unk2[2];
-    s8 unk6[28];
-    s16 arrowPositions[13];
-} D_8008DE18_8EA18 = {
+CharSelectArrowData D_8008DE18_8EA18 = {
     { 0x00, 0x04 },
     { 0x0005, 0x0006 },
     {
@@ -172,10 +149,7 @@ s16 D_8008DE54_8EA54[] = {
     0x0000, 0x0030, (s16)0xFFE8, (s16)0xFFA8, 0x0030, (s16)0xFFD4, (s16)0xFFF0, (s16)0xFFD4,
 };
 
-struct {
-    s16 unk0[11];
-    u16 unk16[17];
-} D_8008DE64_8EA64 = {
+CharSelectBoardData D_8008DE64_8EA64 = {
     {
      (s16)0xFFF0,
      (s16)0xFFD4,
@@ -204,11 +178,7 @@ s16 D_8008DE9C_8EA9C[] = {
     0x0032, 0x0000, 0x0068, (s16)0xFFA8, 0x0070, (s16)0xFFD4, 0x0030, (s16)0xFFD4,
 };
 
-struct {
-    s16 unk0[1];
-    s16 unk2[16];
-    s16 unk22[17];
-} D_8008DEAC_8EAAC = {
+CharSelectAnimData D_8008DEAC_8EAAC = {
     { 0x0030 },
     {
      (s16)0xFFD4,
@@ -238,7 +208,6 @@ struct {
      0x0000, 0x0000,
      0x0000, },
 };
-
 
 /* Function declarations */
 

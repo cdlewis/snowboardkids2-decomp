@@ -1,6 +1,7 @@
 #include "10AD0.h"
 #include "19E80.h"
 #include "20F0.h"
+#include "232F0.h"
 #include "38C90.h"
 #include "5E590.h"
 #include "68CF0.h"
@@ -256,10 +257,7 @@ extern struct {
     u16 x;
     u16 y;
 } D_8008DE9C_8EA9C[];
-extern struct {
-    s16 unk0[17];
-    Vec3s unk22[5];
-} D_8008DD2C_8E92C;
+extern CharSelectModelPositions D_8008DD2C_8E92C;
 extern Vec3s charSelectIconPositions[];
 extern char D_8009E288_9EE88[];
 
