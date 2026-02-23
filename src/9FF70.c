@@ -33,7 +33,7 @@ extern s32 D_800BAB44_AA9F4;
 extern s32 D_800BAB3C_AA9EC;
 
 /* Player initial X positions based on player index */
-extern s32 D_800BAAC4_AA974[];
+extern s32 gPlayerStartXPositions[];
 
 typedef struct {
     void *start;
@@ -188,7 +188,7 @@ INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B0334_A01E4);
 
 INCLUDE_ASM("asm/nonmatchings/9FF70", func_800B05B8_A0468);
 
-s32 func_800B0F14_A0DC4(Player *arg0) {
+s32 initPlayerForRace(Player *player) {
     Vec3i waypoint1;
     Vec3i waypoint2;
     GameState *gameState;
@@ -204,110 +204,110 @@ s32 func_800B0F14_A0DC4(Player *arg0) {
     gameState = getCurrentAllocation();
 
     /* Initialize rotation matrices */
-    memcpy((u8 *)arg0 + 0x970, &identityMatrix, 0x20);
-    createYRotationMatrix((Transform3D *)((u8 *)arg0 + 0x970), arg0->rotY);
-    memcpy((u8 *)arg0 + 0x990, &identityMatrix, 0x20);
-    memcpy((u8 *)arg0 + 0x9B0, &identityMatrix, 0x20);
+    memcpy(&player->unk970, &identityMatrix, 0x20);
+    createYRotationMatrix(&player->unk970, player->rotY);
+    memcpy(&player->unk990, &identityMatrix, 0x20);
+    memcpy(&player->unk9B0, &identityMatrix, 0x20);
 
     /* Set initial X position based on player index */
-    *(s32 *)((u8 *)arg0 + 0x434) = D_800BAAC4_AA974[arg0->playerIndex];
-    if (*(u8 *)((u8 *)gameState + 0x5E) == 1) {
-        *(s32 *)((u8 *)arg0 + 0x434) = 0;
+    *(s32 *)((u8 *)player + 0x434) = gPlayerStartXPositions[player->playerIndex];
+    if (gameState->numPlayers == 1) {
+        *(s32 *)((u8 *)player + 0x434) = 0;
     }
 
     /* Get track waypoints and sector info */
     getTrackSegmentWaypoints(&gameState->gameData, 0, &waypoint1, &waypoint2);
-    posPtr = (s32 *)((u8 *)arg0 + 0x434);
-    *(s32 *)((u8 *)arg0 + 0x43C) = waypoint1.z + 0x200000;
+    posPtr = (s32 *)((u8 *)player + 0x434);
+    *(s32 *)((u8 *)player + 0x43C) = waypoint1.z + 0x200000;
 
-    sectorIdx = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, posPtr);
-    arg0->sectorIndex = sectorIdx;
-    *(s32 *)((u8 *)arg0 + 0x438) = getTrackHeightInSector(&gameState->gameData, sectorIdx, posPtr, 0x100000);
+    sectorIdx = getOrUpdatePlayerSectorIndex(player, &gameState->gameData, 0, posPtr);
+    player->sectorIndex = sectorIdx;
+    *(s32 *)((u8 *)player + 0x438) = getTrackHeightInSector(&gameState->gameData, sectorIdx, posPtr, 0x100000);
 
-    memcpy((u8 *)arg0 + 0x440, posPtr, 0xC);
+    memcpy((u8 *)player + 0x440, posPtr, 0xC);
 
-    *(s32 *)((u8 *)arg0 + 0x44C) = 0;
-    *(s32 *)((u8 *)arg0 + 0x450) = 0;
-    *(s32 *)((u8 *)arg0 + 0x454) = 0;
-    arg0->rotY = 0x1000;
-    arg0->animFlags |= 1;
+    *(s32 *)((u8 *)player + 0x44C) = 0;
+    *(s32 *)((u8 *)player + 0x450) = 0;
+    *(s32 *)((u8 *)player + 0x454) = 0;
+    player->rotY = 0x1000;
+    player->animFlags |= 1;
 
-    applyCharacterBoardStats(arg0);
+    applyCharacterBoardStats(player);
 
     /* Initialize body part elements (17 elements, each 0x3C bytes) */
     for (i = 0; i < 17; i++) {
-        elem = (u8 *)arg0 + i * 0x3C;
+        elem = (u8 *)player + i * 0x3C;
         memcpy(elem + 0x38, &identityMatrix, 0x20);
         if (i != 16) {
-            *(s32 *)(elem + 0x5C) = *(s32 *)((u8 *)arg0 + 4);
-            *(s32 *)(elem + 0x60) = *(s32 *)((u8 *)arg0 + 8);
+            *(s32 *)(elem + 0x5C) = *(s32 *)((u8 *)player + 4);
+            *(s32 *)(elem + 0x60) = *(s32 *)((u8 *)player + 8);
             *(s32 *)(elem + 0x64) = 0;
             assetOffset = i * 0x10;
             *(void **)(elem + 0x58) =
-                (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + assetOffset);
+                (void *)(loadAssetByIndex_953B0(player->characterId, player->boardIndex) + assetOffset);
         } else {
-            *(AssetMeta **)((u8 *)arg0 + 0x418) = &D_8009A550_9B150[0];
-            *(s32 *)((u8 *)arg0 + 0x41C) = *(s32 *)((u8 *)arg0 + 0xC);
-            *(s32 *)((u8 *)arg0 + 0x420) = *(s32 *)((u8 *)arg0 + 0x10);
-            *(s32 *)((u8 *)arg0 + 0x424) = *(s32 *)((u8 *)arg0 + 0x14);
+            *(AssetMeta **)((u8 *)player + 0x418) = &D_8009A550_9B150[0];
+            *(s32 *)((u8 *)player + 0x41C) = *(s32 *)((u8 *)player + 0xC);
+            *(s32 *)((u8 *)player + 0x420) = *(s32 *)((u8 *)player + 0x10);
+            *(s32 *)((u8 *)player + 0x424) = *(s32 *)((u8 *)player + 0x14);
         }
     }
 
-    arg0->leanAnimIndex = 0;
+    player->leanAnimIndex = 0;
 
     /* Get bone count and reset animations */
-    arg0->leanBoneCount = getAnimationBoneCount(*(void **)arg0, 0);
+    player->leanBoneCount = getAnimationBoneCount(*(void **)player, 0);
 
-    for (i = 0; i < arg0->leanBoneCount; i++) {
+    for (i = 0; i < player->leanBoneCount; i++) {
         resetBoneAnimation(
-            *(void **)arg0,
-            arg0->leanAnimIndex,
+            *(void **)player,
+            player->leanAnimIndex,
             i,
-            (BoneAnimationStateIndexed *)((u8 *)arg0 + 0x488 + i * 0x48)
+            (BoneAnimationStateIndexed *)((u8 *)player + 0x488 + i * 0x48)
         );
     }
 
-    *(u8 *)((u8 *)arg0 + 0xBBD) = 1;
-    *(u8 *)((u8 *)arg0 + 0xBBE) = 5;
-    *(s32 *)((u8 *)arg0 + 0xAD4) = 0;
-    *(s32 *)((u8 *)arg0 + 0xAD8) = 0xA0000;
-    *(s32 *)((u8 *)arg0 + 0xADC) = 0;
-    *(s32 *)((u8 *)arg0 + 0xAE0) = 0xA0000;
-    memcpy((u8 *)arg0 + 0xB58, (u8 *)arg0 + 0xAD4, 0xC);
-    *(s32 *)((u8 *)arg0 + 0xB64) = *(s32 *)((u8 *)arg0 + 0xAE0);
-    *(u8 *)((u8 *)arg0 + 0xB68) = arg0->playerIndex;
+    *(u8 *)((u8 *)player + 0xBBD) = 1;
+    *(u8 *)((u8 *)player + 0xBBE) = 5;
+    *(s32 *)((u8 *)player + 0xAD4) = 0;
+    *(s32 *)((u8 *)player + 0xAD8) = 0xA0000;
+    *(s32 *)((u8 *)player + 0xADC) = 0;
+    *(s32 *)((u8 *)player + 0xAE0) = 0xA0000;
+    memcpy((u8 *)player + 0xB58, (u8 *)player + 0xAD4, 0xC);
+    *(s32 *)((u8 *)player + 0xB64) = *(s32 *)((u8 *)player + 0xAE0);
+    *(u8 *)((u8 *)player + 0xB68) = player->playerIndex;
 
-    if (arg0->isBossRacer == 0) {
-        if (*(u8 *)((u8 *)gameState + 0x7A) != 0xB || arg0->playerIndex == 0) {
-            spawnChaseCameraTask(arg0->playerIndex);
-            spawnPlayerIndicatorTask(arg0);
+    if (player->isBossRacer == 0) {
+        if (*(u8 *)((u8 *)gameState + 0x7A) != 0xB || player->playerIndex == 0) {
+            spawnChaseCameraTask(player->playerIndex);
+            spawnPlayerIndicatorTask(player);
         }
-        if (arg0->isBossRacer != 0) {
+        if (player->isBossRacer != 0) {
             goto boss_racer_init;
         }
     } else {
     boss_racer_init:
-        if (*(void **)((u8 *)arg0 + 0x1C) != NULL) {
-            *(void **)((u8 *)arg0 + 0x28) = (void *)((s32) * (void **)((u8 *)arg0 + 0x1C) +
-                                                     ((s32 *)*(void **)((u8 *)arg0 + 0x1C))[arg0->playerIndex]);
+        if (*(void **)((u8 *)player + 0x1C) != NULL) {
+            *(void **)((u8 *)player + 0x28) = (void *)((s32) * (void **)((u8 *)player + 0x1C) +
+                                                       ((s32 *)*(void **)((u8 *)player + 0x1C))[player->playerIndex]);
         }
     }
 
-    *(s8 *)((u8 *)arg0 + 0xBDF) = -1;
-    *(s8 *)((u8 *)arg0 + 0xBE0) = -1;
-    *(u8 *)((u8 *)arg0 + 0xBE1) = 0;
-    *(u8 *)((u8 *)arg0 + 0xBE2) = 0;
+    *(s8 *)((u8 *)player + 0xBDF) = -1;
+    *(s8 *)((u8 *)player + 0xBE0) = -1;
+    *(u8 *)((u8 *)player + 0xBE1) = 0;
+    *(u8 *)((u8 *)player + 0xBE2) = 0;
 
     if (*(u8 *)((u8 *)gameState + 0x7A) == 5) {
-        arg0->unkBD2 = 7;
-        arg0->unkBD3 = 0x1E;
+        player->unkBD2 = 7;
+        player->unkBD3 = 0x1E;
     }
 
     if (*(u8 *)((u8 *)gameState + 0x7A) != 0xB) {
         return 1;
     }
 
-    playerIdx = (s32)arg0->playerIndex;
+    playerIdx = (s32)player->playerIndex;
     v0_temp = 1;
     if (playerIdx == v0_temp)
         goto case_1_or_2;
@@ -330,27 +330,27 @@ check_2_or_3:
     goto set_race_gold;
 
 case_0:
-    arg0->unkBD2 = 2;
-    arg0->unkBD3 = 3;
-    arg0->unkBD4 = 5;
+    player->unkBD2 = 2;
+    player->unkBD3 = 3;
+    player->unkBD4 = 5;
     goto set_race_gold_after_unkBD4;
 
 case_1_or_2:
-    arg0->unkBD2 = 1;
-    arg0->unkBD3 = 3;
-    arg0->unkBD4 = 1;
+    player->unkBD2 = 1;
+    player->unkBD3 = 3;
+    player->unkBD4 = 1;
     goto set_race_gold_after_unkBD4;
 
 case_3:
-    arg0->unkBD2 = 3;
-    arg0->unkBD3 = 3;
-    arg0->unkBD4 = 1;
+    player->unkBD2 = 3;
+    player->unkBD3 = 3;
+    player->unkBD4 = 1;
 
 set_race_gold_after_unkBD4:
     v0_temp = 0xBB8;
 
 set_race_gold:
-    arg0->raceGold = v0_temp;
+    player->raceGold = v0_temp;
 
     return 1;
 }
