@@ -730,7 +730,61 @@ void transformVectorRelative(void *arg0, void *arg1, void *arg2) {
     ((s32 *)arg2)[2] = int1c + (frac2c >> 13);
 }
 
-INCLUDE_ASM("asm/nonmatchings/geometry", rotateVectorY);
+void rotateVectorY(void *arg0, s16 angle, Vec3i *output) {
+    s32 cosVal;
+    s32 sinVal;
+    s32 cosShifted;
+    s32 sinCast;
+    s32 inputX;
+    s32 *input;
+    s32 frac;
+    s32 intPart;
+    s32 frac2;
+    s32 intPart2;
+    s32 accumulated;
+    s32 zInt;
+    s32 zFrac;
+    s32 zAccum;
+
+    input = (s32 *)arg0;
+
+    cosVal = approximateCos(angle);
+    sinVal = approximateSin(angle);
+
+    inputX = input[0];
+    frac = (inputX & 0xFFFF) * (s16)cosVal;
+    cosShifted = (s16)cosVal << 3;
+    inputX >>= 16;
+    intPart = inputX * cosShifted;
+    if (frac < 0) {
+        frac += 0x1FFF;
+    }
+    sinCast = (s16)sinVal;
+    intPart2 = (input[2] >> 16) * (sinCast << 3);
+    frac2 = (input[2] & 0xFFFF) * sinCast;
+    accumulated = intPart + (frac >> 13) + intPart2;
+    if (frac2 < 0) {
+        frac2 += 0x1FFF;
+    }
+    output->x = accumulated + (frac2 >> 13);
+
+    output->y = input[1];
+
+    inputX = input[0];
+    frac = (inputX & 0xFFFF) * -sinCast;
+    inputX >>= 16;
+    intPart2 = inputX * (-sinCast << 3);
+    if (frac < 0) {
+        frac += 0x1FFF;
+    }
+    zInt = (input[2] >> 16) * cosShifted;
+    zFrac = (input[2] & 0xFFFF) * (s16)cosVal;
+    zAccum = intPart2 + (frac >> 13) + zInt;
+    if (zFrac < 0) {
+        zFrac += 0x1FFF;
+    }
+    output->z = zAccum + (zFrac >> 13);
+}
 
 void func_8006BDBC_6C9BC(BoneAnimationState *arg0, void *arg1, void *arg2) {
     Transform3D *mat1 = arg1;
