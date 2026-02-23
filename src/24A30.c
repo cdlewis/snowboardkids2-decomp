@@ -987,8 +987,8 @@ SceneModel *cleanupSceneModelHolder(SceneModelHolder *arg0) {
 
 #define ICON_TABLE_INDEX 0xB
 
-void initCharSelectIcons(CharSelectIconsState *arg0) {
-    OutputStruct_19E80 sp10;
+void initCharSelectIcons(CharSelectIconsState *state) {
+    OutputStruct_19E80 tableEntry;
     u8 *tablePtr;
     volatile CharSelectIconEntry *iconEntry;
     DataTable_19E80 *spriteAsset;
@@ -1000,16 +1000,17 @@ void initCharSelectIcons(CharSelectIconsState *arg0) {
     u16 xPos;
     u16 xTemp;
     u16 xIncrementU16;
-    s32 temp_v0;
     u8 numPlayers;
     s32 iconTableIndex;
 
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectIcons);
-    getTableEntryByU16Index(spriteAsset, 0xB, &sp10);
+    getTableEntryByU16Index(spriteAsset, ICON_TABLE_INDEX, &tableEntry);
 
     numPlayers = D_800AFE8C_A71FC->numPlayers;
 
+    // Load icon layout data from playerNumberPositions table
+    // Layout is stored at offset 14 (after 7 s16 position values)
     yPos = *(u16 *)((u8 *)playerNumberPositions + numPlayers * 6 + 14);
     xTemp = *(u16 *)((u8 *)playerNumberPositions + numPlayers * 6 + 16);
     xIncrementU16 = *(u16 *)((u8 *)playerNumberPositions + numPlayers * 6 + 18);
@@ -1027,13 +1028,15 @@ void initCharSelectIcons(CharSelectIconsState *arg0) {
     iconTableIndex = ICON_TABLE_INDEX;
     tablePtr = D_8008DE18_8EA18;
     xPos = xTemp;
-    iconEntry = (volatile CharSelectIconEntry *)arg0;
+    iconEntry = (volatile CharSelectIconEntry *)state;
 
+    // Initialize 3 icon entries for the character's items
     do {
         u8 tableVal;
         iconEntry->baseY = yPos;
         iconEntry->x = xPos;
         iconEntry->spriteIndex = iconTableIndex;
+        // Read maxItems from byte table (every 2nd byte)
         tableVal = tablePtr[1];
         tablePtr += 2;
         iconEntry->padding = 0;
@@ -1044,13 +1047,13 @@ void initCharSelectIcons(CharSelectIconsState *arg0) {
         iconEntry->maxItems = (s8)(tableVal + 1);
         xPos += xIncrement;
         i++;
-        iconEntry->unk10 = sp10.field2;
+        iconEntry->unk10 = tableEntry.field2;
         iconEntry++;
     } while (i < 3);
 
-    arg0->numVisibleIcons = 1;
-    arg0->revealCounter = 0;
-    arg0->delayTimer = 8;
+    state->numVisibleIcons = 1;
+    state->revealCounter = 0;
+    state->delayTimer = 8;
     setCallback(updateCharSelectIconsDelay);
 }
 
