@@ -199,15 +199,17 @@ typedef struct {
     void *asset;
     s16 spriteIndex;
     s16 alpha;
-    u8 unkC;
+    u8 layerDepth;
     u8 blinkState;
     u8 paddingE[2];
 } CharacterNameSprite;
 
-extern struct {
-    u16 unk0;
-    u16 unk2;
-} D_8008DE54_8EA54[];
+typedef struct CharSelectNamePosition {
+    s16 x;
+    s16 y;
+} CharSelectNamePosition;
+
+extern CharSelectNamePosition D_8008DE54_8EA54[];
 
 typedef struct {
     SelectionEntry entries[4];
@@ -1725,8 +1727,8 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
     setCleanupCallback(func_80026BAC_277AC);
 
     numPlayers = D_800AFE8C_A71FC->numPlayers;
-    xPos = D_8008DE54_8EA54[numPlayers].unk0;
-    yPos = D_8008DE54_8EA54[numPlayers].unk2;
+    xPos = D_8008DE54_8EA54[numPlayers].x;
+    yPos = D_8008DE54_8EA54[numPlayers].y;
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
         numPlayers = gameState->unk18A8[i];
@@ -1749,7 +1751,7 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
             sprites[i].spriteIndex = numPlayers + spriteIdx;
         }
         sprites[i].blinkState = 0;
-        sprites[i].unkC = 0;
+        sprites[i].layerDepth = 0;
         sprites[i].x = xPos;
         sprites[i].y = yPos;
         sprites[i].alpha = 0xFF;
