@@ -463,23 +463,25 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     GameState *state;
     Transform3D *worldMatPtr;
     Transform3D *posMatPtr;
-    s32 tableValue;
+    s32 targetX;
     u8 charIndex;
     u8 assetIndex;
     s32 paletteValue;
     u16 rotation;
     s32 offset;
+    s32 tableIndex;
 
     base = (u8 *)getCurrentAllocation();
     state = (GameState *)base;
 
     worldMatPtr = &arg0->worldMatrix;
     offset = arg0->playerIndex << 5;
-    memcpy(worldMatPtr, (u8 *)(offset + (s32)base + 0x17F8), 0x20);
+    memcpy(worldMatPtr, (u8 *)(offset + (s32)base + 0x17F8), sizeof(Transform3D));
 
-    tableValue = ((s32 *)&D_8008DD2C_8E92C)[(D_800AFE8C_A71FC->numPlayers * 2) + state->unk18C0[arg0->playerIndex]];
-    arg0->worldMatrix.translation.x = tableValue;
-    arg0->targetX = tableValue;
+    tableIndex = (D_800AFE8C_A71FC->numPlayers * 2) + state->unk18C0[arg0->playerIndex];
+    targetX = ((s32 *)&D_8008DD2C_8E92C)[tableIndex];
+    arg0->worldMatrix.translation.x = targetX;
+    arg0->targetX = targetX;
 
     charIndex = state->unk18A8[arg0->playerIndex];
     assetIndex = state->unk18B0[arg0->playerIndex];
@@ -495,8 +497,8 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     arg0->paletteAsset = loadAssetByIndex_95668((u8)paletteValue);
 
     localPtr = &sp10;
-    memcpy(localPtr, &identityMatrix, 0x20);
-    memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, 0xC);
+    memcpy(localPtr, &identityMatrix, sizeof(Transform3D));
+    memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, sizeof(Vec3i));
 
     posMatPtr = &arg0->positionMatrix;
     rotation = state->unk1888[arg0->playerIndex];
