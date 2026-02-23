@@ -852,7 +852,7 @@ void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
 
     playerIdx = preview->playerIndex;
     preview->transform.translation.x =
-        ((s32 *)&D_8008DD2C_8E92C)[D_800AFE8C_A71FC->numPlayers * 2 + (state + playerIdx)[0x18C0]];
+        ((s32 *)&D_8008DD2C_8E92C)[D_800AFE8C_A71FC->numPlayers * 2 + ((GameState *)state)->unk18C0[playerIdx]];
     preview->transform.translation.z = 0;
     preview->transform.translation.y = 0xFFF00000;
     preview->unk20_u.targetX = preview->transform.translation.x;
