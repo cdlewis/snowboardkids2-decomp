@@ -17,7 +17,7 @@ void renderOverlayTiledTexture(s32 arg0);
 void loadScrollingTiledTexture(ScrollingTextureState *);
 void loadScrollingTexture(ScrollingTextureState *);
 void cleanupRotatingLogo(RotatingLogoState *);
-void func_8000595C_655C(RotatingLogoState *state);
+void updateRotatingLogoState(RotatingLogoState *state);
 extern s32 isModelVisible(func_80002B50_3750_arg *model);
 
 extern s16 gGraphicsMode;
@@ -311,20 +311,20 @@ void initializeRotatingLogo(RotatingLogoState *state) {
     state->oscillationOffset = 0;
     state->scaleAnimState = 0;
     setCleanupCallback(&cleanupRotatingLogo);
-    setCallback(&func_8000595C_655C);
+    setCallback(&updateRotatingLogoState);
 }
 
-void func_8000595C_655C(RotatingLogoState *state) {
-    Transform3D sp10;
-    Transform3D sp30;
-    s32 var_a1;
+void updateRotatingLogoState(RotatingLogoState *state) {
+    Transform3D rotationMatrix;
+    Transform3D transparentMatrix;
+    s32 shouldOscillate;
     s32 temp;
     s8 actionMode;
 
-    memcpy(&sp10, &identityMatrix, 0x20);
-    memcpy(&sp30, &identityMatrix, 0x20);
+    memcpy(&rotationMatrix, &identityMatrix, 0x20);
+    memcpy(&transparentMatrix, &identityMatrix, 0x20);
 
-    var_a1 = 0;
+    shouldOscillate = 0;
 
     if (((SceneModel *)state->model)->isDestroyed == 1) {
         terminateCurrentTask();
@@ -390,13 +390,13 @@ void func_8000595C_655C(RotatingLogoState *state) {
     state->oscillationAngle += 0x88;
 
     if (state->oscillationEnabled != 0) {
-        var_a1 = 1;
+        shouldOscillate = 1;
     } else {
         state->oscillationOffset = 0;
         state->oscillationAngle = 0;
     }
 
-    if (var_a1 != 0) {
+    if (shouldOscillate != 0) {
         state->oscillationOffset = (s32)(((s32)(approximateSin(state->oscillationAngle) * 4) >> 8) << 11);
     }
 
@@ -428,8 +428,8 @@ void func_8000595C_655C(RotatingLogoState *state) {
             break;
     }
 
-    createYRotationMatrix(&sp10, 0x400);
-    func_8006B084_6BC84(&sp10, (void *)((u8 *)state->model + 0x18), (Transform3D *)state->opaqueMatrix);
+    createYRotationMatrix(&rotationMatrix, 0x400);
+    func_8006B084_6BC84(&rotationMatrix, (void *)((u8 *)state->model + 0x18), (Transform3D *)state->opaqueMatrix);
     memcpy((void *)((u8 *)state + 0x18), (void *)((u8 *)state->model + 0x2C), 0xC);
 
     *(s32 *)((u8 *)state + 0x1C) += state->oscillationOffset;
@@ -444,8 +444,12 @@ void func_8000595C_655C(RotatingLogoState *state) {
 
         state->rotationY -= 0xF;
         tempAngle = state->rotationY;
-        createYRotationMatrix(&sp30, tempAngle);
-        func_8006B084_6BC84(&sp30, (void *)((u8 *)state->model + 0x18), (Transform3D *)state->transparentMatrix);
+        createYRotationMatrix(&transparentMatrix, tempAngle);
+        func_8006B084_6BC84(
+            &transparentMatrix,
+            (void *)((u8 *)state->model + 0x18),
+            (Transform3D *)state->transparentMatrix
+        );
 
         *(s32 *)((u8 *)state + 0x58) += 0x166666;
         *(s32 *)((u8 *)state + 0x58) += state->oscillationOffset;
