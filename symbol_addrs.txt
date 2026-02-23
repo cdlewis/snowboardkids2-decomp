@@ -3074,6 +3074,7 @@ renderLevelPreviewPortraits = 0x800208AC; // rom:0x214AC
 initPortraitRotationFrames = 0x80020924; // rom:0x21524
 animatePortraitRotation = 0x80020A00; // rom:0x21600
 cleanupLevelPreviewPortraits = 0x80020B18; // rom:0x21718
+renderCharacterSelectDisplay = 0x80020D18; // rom:0x21918
 cleanupCharacterSelectionIcons = 0x80020FA4; // rom:0x21BA4
 initConfirmationIndicator = 0x80020FDC; // rom:0x21BDC
 renderConfirmationIndicator = 0x80021054; // rom:0x21C54

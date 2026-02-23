@@ -197,7 +197,7 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x4];
-    u8 unk4;
+    u8 gameMode;
     u8 _pad5[0x2];
     u8 unk7;
 } D_800AFE8C_type_202A0;
@@ -654,12 +654,12 @@ typedef struct {
     u8 animTimer;
 } CharacterSelectDisplayState;
 
-void func_80020D18_21918(CharacterSelectDisplayState *state) {
+void renderCharacterSelectDisplay(CharacterSelectDisplayState *state) {
     Allocation_202A0 *allocation;
     s32 i;
     void (*callback)(void *);
     u8 characterIndex;
-    s32 temp_a1;
+    s32 selectedChar;
     u32 temp_a0;
 
     allocation = (Allocation_202A0 *)getCurrentAllocation();
@@ -668,12 +668,12 @@ void func_80020D18_21918(CharacterSelectDisplayState *state) {
         debugEnqueueCallback(8, 0, renderSpriteFrame, &state->iconEntries[i]);
     }
 
-    if (D_800AFE8C_A71FC->unk4 == 0) {
-        temp_a1 = allocation->unkB33[allocation->unkB2C];
-        temp_a0 = temp_a1 & 0xFF;
+    if (D_800AFE8C_A71FC->gameMode == 0) {
+        selectedChar = allocation->unkB33[allocation->unkB2C];
+        temp_a0 = selectedChar & 0xFF;
         if (temp_a0 == 3 || temp_a0 == 7 || temp_a0 == 11) {
             debugEnqueueCallback(8, 0, renderSpriteFrame, &state->sprite78);
-        } else if ((u32)(temp_a1 - 12) < 3 && allocation->menuState < 6) {
+        } else if ((u32)(selectedChar - 12) < 3 && allocation->menuState < 6) {
             debugEnqueueCallback(8, 0, renderSpriteFrame, &state->sprite84);
         }
     }
@@ -693,7 +693,8 @@ void func_80020D18_21918(CharacterSelectDisplayState *state) {
     }
 
     if (allocation->unkB45 == 0) {
-        if (D_800AFE8C_A71FC->unk4 == 1 || (D_800AFE8C_A71FC->unk4 == 0 && EepromSaveData->save_slot_status[0] != 5)) {
+        if (D_800AFE8C_A71FC->gameMode == 1 ||
+            (D_800AFE8C_A71FC->gameMode == 0 && EepromSaveData->save_slot_status[0] != 5)) {
             if (allocation->menuState == 0) {
                 state->animTimer++;
                 if (state->animTimer < 0x11) {
@@ -772,7 +773,7 @@ void renderUnlockNotification(UnlockNotificationState *state) {
 
     debugEnqueueCallback(0xA, 0, renderTiledTexture, state);
 
-    if (D_800AFE8C_A71FC->unk4 == 0) {
+    if (D_800AFE8C_A71FC->gameMode == 0) {
         if (EepromSaveData->save_slot_status[0] == 5) {
             if ((D_8009ADE0_9B9E0 & 7) == 0) {
                 nextFrame = state->frameIndex + 1;
