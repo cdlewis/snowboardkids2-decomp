@@ -4,9 +4,13 @@
 
 Look at the $INPUT[1] in $INPUT[0]. Think about what its purpose is in the broader project and how it relates to other functions (as a caller / callee).
 
-Update the function to better reflect what the original developers would've written. This means proper structs, proper struct / array accesses, proper variable names, etc.
+Think about what the original developers would've written. This means proper structs, proper struct / array accesses, proper variable names, etc.
 
-Make sure to preserve the 100% match while doing this. It may require several iterations to get this balance right.
+Make a list of all the problems with the current function. Try various strategies to fix these problems while preserving the 100% match.
+
+It may require several iterations to get this balance right. This is expected.
+
+It may require significant refactoring of the project. This is expected. Do not give up just because the scope of the necessary changes is large.
 
 Once you have cleaned up the function, run the following command to verify you haven't broken the build:
 
@@ -20,7 +24,7 @@ Commit your changes when you're done.
 
 ## Unable to clean up the function
 
-Make several attempts to clean up the function without breaking the build. If you're unable to make progress after 10 attempts, revert all of your changes to ensure the build remains clean then exit.
+Make several attempts to clean up the function without breaking the build. If you're unable to make progress after 30 attempts, revert all of your changes to ensure the build remains clean then exit.
 
 ## Safe Refactoring
 
@@ -59,3 +63,13 @@ temp_a0 = arg0->entries[i]
 ### Local variable names
 
 Local variables within a function can be safely renamed without affecting the match. This can be a great way to communicate the intent behind a function.
+
+### Global variable names
+
+This is safe as long as you use the rename-global skill.
+
+### Creating new structs
+
+Refactoring might be difficult due to the file re-using a shared struct from elsewhere in the project. This re-use may be appropriate. But it also might have been done in error and indeed that might be what is preventing you from properly fixing the hacky pointer code.
+
+GameState is a great example of this. Many functions use something called 'GameState' but they may actually be referring to different types.
