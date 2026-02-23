@@ -147,6 +147,7 @@ typedef struct {
     /* 0x2C */ s32 scaleY;
     /* 0x30 */ u16 zRotation;
     /* 0x32 */ s16 texIndex;
+    /* 0x34 */ Transform3D transform;
 } OpaqueSpriteStruct_90F0;
 
 void renderOpaqueSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
@@ -578,7 +579,7 @@ void renderTransformedSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {
         memcpy(&transform, &identityMatrix, 0x20);
-        transform3DToMtx((u8 *)sprite + 0x34, sprite->translationMtx);
+        transform3DToMtx(&sprite->transform, sprite->translationMtx);
 
         memcpy(&transform, &identityMatrix, 0x20);
         scaleXRaw = sprite->scaleX;
