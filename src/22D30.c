@@ -194,7 +194,7 @@ void exitPlayerCountSelect(void) {
             terminateSchedulerWithCallback(onPlayerCountProceed);
             D_800AFE8C_A71FC->numPlayers = state->playerCount.bytes.selectedPlayerIndexLo + 1;
             for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-                D_800AFE8C_A71FC->unk9[i] = gPlayerSlotDefaults[i];
+                D_800AFE8C_A71FC->playerBoardIds[i] = gPlayerSlotDefaults[i];
             }
         } else {
             terminateSchedulerWithCallback(onPlayerCountCancel);

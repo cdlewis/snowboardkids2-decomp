@@ -678,7 +678,7 @@ void initCharSelectBoardModel(CharSelectBoardPreview *arg0) {
     state = (GameState *)getCurrentAllocation();
     playerIdx = arg0->playerIndex;
 
-    boardType = D_800AFE8C_A71FC->unk9[playerIdx];
+    boardType = D_800AFE8C_A71FC->playerBoardIds[playerIdx];
     if (boardType == 7) {
         arg0->model =
             createSceneModelEx(0x39, (void *)state + (playerIdx * 0x1D8), state->PAD_22[playerIdx], -1, -1, -1);
@@ -726,7 +726,7 @@ void initCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
 
     applyTransformToModel(arg0->model, localPtr);
 
-    if (D_800AFE8C_A71FC->unk9[arg0->playerIndex] == 7) {
+    if (D_800AFE8C_A71FC->playerBoardIds[arg0->playerIndex] == 7) {
         setModelAnimation(arg0->model, 4);
     } else {
         setModelAnimation(arg0->model, 0x90);
@@ -818,7 +818,7 @@ void recreateCharSelectBoardModelForSlideIn(CharSelectBoardPreview *arg0) {
     u32 boardType;
 
     state = (GameState *)getCurrentAllocation();
-    boardType = D_800AFE8C_A71FC->unk9[arg0->playerIndex];
+    boardType = D_800AFE8C_A71FC->playerBoardIds[arg0->playerIndex];
     if (boardType == 7) {
         arg0->model = createSceneModelEx(
             0x39,
@@ -923,7 +923,7 @@ void initCharSelectBoardModelForSlideOut(CharSelectBoardPreview *arg0) {
 
     alloc = (u8 *)getCurrentAllocation();
     playerIndex = arg0->playerIndex;
-    boardType = D_800AFE8C_A71FC->unk9[playerIndex];
+    boardType = D_800AFE8C_A71FC->playerBoardIds[playerIndex];
 
     if (boardType != 7) {
         arg0->model =
@@ -1186,7 +1186,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
     entry = (volatile P2NameSpriteEntry *)arg0->entries;
 
     do {
-        D_800AFE8C_A71FC_type *global;
+        GameSessionContext *global;
         u8 charIndex;
         u8 tableValue;
         s32 tableOffset;
@@ -1394,7 +1394,7 @@ void initCharSelectMenu(SelectionMenuState *arg0) {
 
     arg0->numEntries = 3;
 
-    if (D_800AFE8C_A71FC->unk4 == 0) {
+    if (D_800AFE8C_A71FC->gameMode == 0) {
         x = charSelectIconPositions[0].x;
         y = charSelectIconPositions[0].y;
         xIncrement = charSelectIconPositions[0].z;
@@ -1721,9 +1721,9 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
             numPlayers = D_800AFE8C_A71FC->numPlayers;
             if (numPlayers == 1) {
                 xPos += 0x18;
-                spriteIdx = D_800AFE8C_A71FC->unk9[i + 4] + 0x30;
+                spriteIdx = D_800AFE8C_A71FC->playerBoardIds[i + 4] + 0x30;
             } else {
-                charIndex = D_800AFE8C_A71FC->unk9[i + 4];
+                charIndex = D_800AFE8C_A71FC->playerBoardIds[i + 4];
                 spriteIdx = charIndex + 0x23;
                 xPos = *((u16 *)&D_8008DE9C_8EA9C + numPlayers * 2) - *(u16 *)(D_8008DE64_8EA64 + charIndex * 2 + 22);
             }
@@ -1755,7 +1755,7 @@ void func_80026BAC_277AC(SimpleSpriteEntry *arg0) {
 void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
     u8 *gameState;
     void *spriteAsset;
-    D_800AFE8C_A71FC_type *gameConfig;
+    GameSessionContext *gameConfig;
     u8 numPlayers;
     s32 i;
     u16 xPos;
@@ -1783,7 +1783,7 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
         const_ff = 0xFF;
         entry = (volatile SelectionEntry *)state;
         do {
-            if (gameConfig->unk9[i + 4] >= 9) {
+            if (gameConfig->playerBoardIds[i + 4] >= 9) {
                 spriteIndex = 0x35;
             } else {
                 spriteIndex = 0x24;
@@ -1810,7 +1810,7 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
         state->singlePlayerY = -0x58;
         state->singlePlayerAsset = spriteAsset;
         state->singlePlayerSpriteIndex = 0x42;
-        if (D_800AFE8C_A71FC->unk9[4] >= 9) {
+        if (D_800AFE8C_A71FC->playerBoardIds[4] >= 9) {
             state->singlePlayerX = 0x50;
         }
     }
@@ -1826,7 +1826,7 @@ void cleanupCharSelectNameSprites(SimpleSpriteEntry *arg0) {
 
 void initCharSelectPlayerNumbers(SimpleSpriteEntry *arg0) {
     void *dmaResult;
-    D_800AFE8C_A71FC_type *global;
+    GameSessionContext *global;
     u8 count;
     s32 i;
     s32 spriteOffset;
@@ -2078,7 +2078,7 @@ void initCharSelectStats(CharSelectStatsState *arg0) {
     void *textAsset;
     s32 i;
     s16 spacing;
-    D_800AFE8C_A71FC_type *gameState;
+    GameSessionContext *gameState;
 
     textAsset = loadTextRenderAsset(0);
     setCleanupCallback(cleanupCharSelectStats);

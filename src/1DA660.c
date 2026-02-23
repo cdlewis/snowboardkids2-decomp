@@ -278,7 +278,7 @@ void updateCharacterPreviewAnimation(CharacterPreviewState *arg0) {
 void checkCharacterPreviewState(CharacterPreviewState *arg0) {
     GameState *allocation;
     s32 i;
-    D_800AFE8C_A71FC_type *ptr;
+    GameSessionContext *ptr;
     s32 pad[2];
     s32 count;
 
@@ -296,7 +296,7 @@ void checkCharacterPreviewState(CharacterPreviewState *arg0) {
         if (count > 0) {
             i = 0;
             do {
-                if (ptr->unk9[i] == arg0->characterIndex) {
+                if (ptr->playerBoardIds[i] == arg0->characterIndex) {
                     u8 state = allocation->playerSlotState[i];
                     if (state == 1 || state == 3) {
                         arg0->timer = 0;
@@ -313,7 +313,7 @@ void checkCharacterPreviewState(CharacterPreviewState *arg0) {
 
 void animateCharacterPreview(CharacterPreviewState *arg0) {
     func_800B0A54_allocation *allocation;
-    D_800AFE8C_A71FC_type *ptr;
+    GameSessionContext *ptr;
     s32 i;
     s32 count;
     s32 clearResult;
@@ -351,11 +351,11 @@ void animateCharacterPreview(CharacterPreviewState *arg0) {
     count = ptr->numPlayers;
     i = 0;
     if (count > 0) {
-        D_800AFE8C_A71FC_type *localPtr = ptr;
+        GameSessionContext *localPtr = ptr;
         u16 localIndex = arg0->characterIndex;
         u8 localCount = count;
         do {
-            if (localPtr->unk9[i] != localIndex) {
+            if (localPtr->playerBoardIds[i] != localIndex) {
                 i++;
             } else {
                 u8 state = allocation->playerSlotState[i];

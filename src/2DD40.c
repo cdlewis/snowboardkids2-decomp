@@ -830,12 +830,12 @@ void prepareStoryMapNpcDialogue(void *ptr) {
         state->elements[i].unk56 = state->elements[i].unk50;
         state->elements[i].unk5F = getAnimationIndex(state->elements[i].model);
 
-        if (((state->unkD4 == 1) & (i == 0)) && D_800AFE8C_A71FC->unk9[0] == 3) {
+        if (((state->unkD4 == 1) & (i == 0)) && D_800AFE8C_A71FC->playerBoardIds[0] == 3) {
             setAnimationIndex(state->elements[i].model, -1);
             state->elements[i].unk48 = 0;
             state->elements[i].unk40 = 0;
             state->elements[i].unk44 = 0x240000;
-        } else if (((state->unkD4 == 6) & (i == 1)) && D_800AFE8C_A71FC->unk9[0] == 3) {
+        } else if (((state->unkD4 == 6) & (i == 1)) && D_800AFE8C_A71FC->playerBoardIds[0] == 3) {
             setAnimationIndex(state->elements[i].model, -1);
         } else {
             setAnimationIndex(state->elements[i].model, dialogueNpcAnimations[state->unkD4 * 2 + i]);

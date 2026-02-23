@@ -2,12 +2,12 @@
 
 typedef struct {
     s32 gold;
-    u8 unk4;
+    u8 gameMode;
     u8 unk5;
     char padding2[0x1];
     u8 saveSlotIndex;
     u8 numPlayers;
-    u8 unk9[0x15];
+    u8 playerBoardIds[0x15];
     u8 previousSaveSlot;
     u8 optionToggle1;
     u8 optionToggle2;
@@ -16,6 +16,6 @@ typedef struct {
     u8 pendingUnlockCutscene;
     u8 isStoryMode;
     u8 creditsCompleted;
-} D_800AFE8C_A71FC_type;
+} GameSessionContext;
 
-extern D_800AFE8C_A71FC_type *D_800AFE8C_A71FC;
+extern GameSessionContext *D_800AFE8C_A71FC;

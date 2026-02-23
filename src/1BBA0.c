@@ -27,7 +27,7 @@ extern void initCharacterSelectSprites(void);
 extern void initCharacterSelectTextureDataLoad(void);
 extern void osViExtendVStart(u32);
 
-void func_8001B020_1BC20(void);
+void initStoryMap(void);
 void onStoryMapExitToMainMenu(void);
 void onStoryMapNormalExit(void);
 void storyMapInitFadeIn(void);
@@ -42,36 +42,36 @@ typedef struct {
     ViewportNode viewport0;
     ViewportNode viewport1;
     ViewportNode viewport2;
-    void *unk588;
-    void *unk58C;
-    u16 unk590;
-    u16 locationIds[4];
-    u8 unk59A[4];
-    u8 unk59E[4];
-    u8 locationOverlap[4];
-    u8 characterIds[4];
+    void *portraitAsset;   // 0x588: loaded from _41A1D0
+    void *imageAsset;      // 0x58C: loaded from _41AD80
+    u16 stateTimer;        // 0x590
+    u16 locationIds[4];    // 0x592
+    u8 playerAnimIndex[4]; // 0x59A: animation state for each player
+    u8 playerArrived[4];   // 0x59E: arrival state for each player
+    u8 locationOverlap[4]; // 0x5A2
+    u8 characterIds[4];    // 0x5A6
     u8 unk5AA;
     u8 unk5AB;
     u8 unk5AC;
-    s8 unk5AD;
-    s8 unk5AE;
+    s8 pendingLocationIndex; // 0x5AD
+    s8 specialLocationIndex; // 0x5AE
     u8 unk5AF;
     u8 unk5B0;
     u8 unk5B1;
-    s8 unk5B2;
-    u8 isStoryMapInitializing;
+    s8 bossLocationIndex;      // 0x5B2
+    u8 isStoryMapInitializing; // 0x5B3
     u8 pad5B4[4];
-    u8 unk5B8[9];
-    u8 unk5C1[4];
+    u8 locationHasPlayers[9]; // 0x5B8
+    u8 playerAtLocation[4];   // 0x5C1
     u8 pad5C5[3];
 } StoryMapState;
 
 void loadOverlay_1BBA0(void) {
     LOAD_OVERLAY(_1DA660)
-    setGameStateHandler(&func_8001B020_1BC20);
+    setGameStateHandler(&initStoryMap);
 }
 
-void func_8001B020_1BC20(void) {
+void initStoryMap(void) {
     StoryMapState *state;
     Transform3D sp20;
     s32 i;
@@ -82,7 +82,7 @@ void func_8001B020_1BC20(void) {
     state = allocateTaskMemory(0x5C8);
     playMusicTrack(0x19);
     setupTaskSchedulerNodes(0x14, 0x14, 0, 0, 0, 0, 0, 0);
-    state->unk590 = 0;
+    state->stateTimer = 0;
     state->isStoryMapInitializing = 1;
     initMenuCameraNode(&state->viewport0, 0, 0xA, 0);
     initMenuCameraNode(&state->viewport1, 8, 0x14, 1);
@@ -93,10 +93,10 @@ void func_8001B020_1BC20(void) {
     osViExtendVStart(0);
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        state->unk59E[i] = 0;
-        state->unk59A[i] = 0;
-        state->unk5C1[i] = 0;
-        state->locationIds[i] = storyMapLocationOrder2[D_800AFE8C_A71FC->unk9[i]];
+        state->playerArrived[i] = 0;
+        state->playerAnimIndex[i] = 0;
+        state->playerAtLocation[i] = 0;
+        state->locationIds[i] = storyMapLocationOrder2[D_800AFE8C_A71FC->playerBoardIds[i]];
         state->locationOverlap[i] = 0;
         for (j = 0; j < i + 1; j++) {
             if (state->locationIds[i] == state->locationIds[j]) {
@@ -108,26 +108,26 @@ void func_8001B020_1BC20(void) {
     state->unk5AA = 0;
     state->unk5AB = 0;
     state->unk5AC = 0;
-    state->unk5AD = 0;
-    state->unk5AE = 0;
+    state->pendingLocationIndex = 0;
+    state->specialLocationIndex = 0;
     state->unk5AF = 0;
     state->unk5B0 = 0;
     state->unk5B1 = 0;
-    state->unk5B2 = 0;
+    state->bossLocationIndex = 0;
 
-    if (D_800AFE8C_A71FC->unk4 == 0) {
-        state->unk5B2 = -1;
-        state->unk5AE = -1;
-        state->unk5AD = -1;
+    if (D_800AFE8C_A71FC->gameMode == 0) {
+        state->bossLocationIndex = -1;
+        state->specialLocationIndex = -1;
+        state->pendingLocationIndex = -1;
     } else {
         if (EepromSaveData->setting_4E == 0) {
-            state->unk5B2 = -1;
+            state->bossLocationIndex = -1;
         }
         if (EepromSaveData->setting_4F == 0) {
-            state->unk5AE = -1;
+            state->specialLocationIndex = -1;
         }
         if (EepromSaveData->setting_50 == 0) {
-            state->unk5AD = -1;
+            state->pendingLocationIndex = -1;
         }
     }
 
@@ -137,18 +137,18 @@ void func_8001B020_1BC20(void) {
         task = scheduleTask(initCharacterPreview, 1, 0, 0x5A);
         task->locationId = *locationPtr;
         locationPtr++;
-        state->unk5B8[i] = 0;
+        state->locationHasPlayers[i] = 0;
         i++;
     } while (i < 9);
 
     scheduleTask(initCharacterSelectBoardTask, 1, 0, 0x5A);
-    state->unk588 = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
-    state->unk58C = loadCompressedData(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
+    state->portraitAsset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    state->imageAsset = loadCompressedData(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
     scheduleTask(initCharacterSelectSprites, 1, 0, 0x5A);
     scheduleTask(initCharacterSelectTextureDataLoad, 1, 0, 0x5A);
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        state->characterIds[i] = D_800AFE8C_A71FC->unk9[i];
+        state->characterIds[i] = D_800AFE8C_A71FC->playerBoardIds[i];
     }
 
     setGameStateHandler(storyMapInitFadeIn);
@@ -205,7 +205,7 @@ void onStoryMapNormalExit(void) {
     s32 exitCode;
 
     exitCode = 1;
-    if ((D_800AFE8C_A71FC->unk4 == 0) && (EepromSaveData->save_slot_status[0] == 5)) {
+    if ((D_800AFE8C_A71FC->gameMode == 0) && (EepromSaveData->save_slot_status[0] == 5)) {
         exitCode = 0x44;
     }
     returnToParentScheduler(exitCode);

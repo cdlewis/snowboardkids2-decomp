@@ -1405,7 +1405,7 @@ void updateTotalLapDisplay(TotalLapDisplayState *state);
 void cleanupTotalLapDisplayTask(Struct_func_8004DCC4 *);
 
 void initTotalLapDisplayTask(TotalLapDisplayState *state) {
-    D_800AFE8C_A71FC_type *global;
+    GameSessionContext *global;
 
     getCurrentAllocation();
     state->alpha = 0;
@@ -1415,7 +1415,7 @@ void initTotalLapDisplayTask(TotalLapDisplayState *state) {
     state->spriteIndex = 0x16;
     state->x = 0;
 
-    if (global->unk9[state->player->playerIndex + 0x11] < 10) {
+    if (global->playerBoardIds[state->player->playerIndex + 0x11] < 10) {
         state->x = -4;
     }
 
@@ -1442,10 +1442,10 @@ void updateTotalLapDisplay(TotalLapDisplayState *state) {
 
     player = state->player;
     if (player->finishPosition == 0 && (gFrameCounter & 1)) {
-        lapCount = D_800AFE8C_A71FC->unk9[player->playerIndex + 0x11];
+        lapCount = D_800AFE8C_A71FC->playerBoardIds[player->playerIndex + 0x11];
         sprintf(buffer, D_8009E89C_9F49C, lapCount);
     } else {
-        lapCount = D_800AFE8C_A71FC->unk9[state->player->playerIndex + 0x11];
+        lapCount = D_800AFE8C_A71FC->playerBoardIds[state->player->playerIndex + 0x11];
         sprintf(buffer, D_8009E8A0_9F4A0, lapCount);
     }
 

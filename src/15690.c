@@ -49,7 +49,7 @@ void initStoryMode(void) {
     data->unk0 = 0;
     D_800AB1C8_A2538 = 0;
     D_800AFE8C_A71FC->numPlayers = 1;
-    D_800AFE8C_A71FC->unk9[0] = 0;
+    D_800AFE8C_A71FC->playerBoardIds[0] = 0;
     setStoryMapCameraMode(0);
     setGameStateHandlerWithContinue(loadSaveSlotScreen);
 }

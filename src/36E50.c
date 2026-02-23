@@ -382,7 +382,7 @@ void setupStoryMapCharacterDialogue(StoryMapDialogueState *state) {
 
     if (allocation->unk420 == 3 && allocation->unk42D == 8) {
         state->dialogueScript = &D_8008FAC0_906C0;
-        playSoundEffectOnChannelNoPriority(D_8008FD10_90910[D_800AFE8C_A71FC->unk9[0]], 0);
-        allocation->unk403 = D_8008FD1C_9091C[D_800AFE8C_A71FC->unk9[0]];
+        playSoundEffectOnChannelNoPriority(D_8008FD10_90910[D_800AFE8C_A71FC->playerBoardIds[0]], 0);
+        allocation->unk403 = D_8008FD1C_9091C[D_800AFE8C_A71FC->playerBoardIds[0]];
     }
 }

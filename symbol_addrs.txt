@@ -2009,6 +2009,7 @@ buildTransparentDisplayListSegment = 0x800638C0; // rom:0x644C0
 buildOverlayDisplayListSegment = 0x8006395C; // rom:0x6455C
 
 loadOverlay_1BBA0 = 0x8001AFA0;
+initStoryMap = 0x8001B020; // rom:0x1BC20
 loadCutsceneOverlay = 0x80003488;
 setCutsceneSelection = 0x80003450; // rom:0x4050
 setCutsceneParameters = 0x8000346C; // rom:0x406C

@@ -210,7 +210,7 @@ void initLevelSelectState(void) {
     scheduleTask(initMenuCharacterModel, 1, 0, 0x5B);
     scheduleTask(initConfirmationIndicator, 1, 0, 0x5A);
 
-    if (D_800AFE8C_A71FC->customLapEnabled != 0 && D_800AFE8C_A71FC->unk4 == 1) {
+    if (D_800AFE8C_A71FC->customLapEnabled != 0 && D_800AFE8C_A71FC->gameMode == 1) {
         scheduleTask(initPrizeDisplay, 1, 0, 0x5A);
     }
 
@@ -228,7 +228,7 @@ void initLevelSelectState(void) {
     state->selectedLevelId = saveSlot;
     state->newLevelId = saveSlot;
 
-    state->selectedNumber = D_800AFE8C_A71FC->unk9[0x10];
+    state->selectedNumber = D_800AFE8C_A71FC->playerBoardIds[0x10];
 
     if (state->showDetailView != 0) {
         state->detailViewMode = 0;
@@ -269,7 +269,7 @@ void waitForFadeToLevelSelect(void) {
 
 void handleLevelSelectInput(void) {
     LevelSelectState *allocation;
-    D_800AFE8C_A71FC_type *tempA0;
+    GameSessionContext *tempA0;
     s32 i;
     u8 oldMenuSelection;
     u8 oldB46;
@@ -321,9 +321,9 @@ void handleLevelSelectInput(void) {
                     if (allocation->menuState == MENU_STATE_NAVIGATE && allocation->exitMode != 2) {
                         if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
                             if (tempA0->customLapEnabled != 0) {
-                                if (tempA0->unk4 == 1) {
+                                if (tempA0->gameMode == 1) {
                                     allocation->menuState = 3;
-                                    allocation->selectedNumber = D_800AFE8C_A71FC->unk9[0x10];
+                                    allocation->selectedNumber = D_800AFE8C_A71FC->playerBoardIds[0x10];
                                 } else {
                                     allocation->menuState = 2;
                                 }
@@ -349,8 +349,8 @@ void handleLevelSelectInput(void) {
                     } else if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
                         allocation->exitMode = 1;
                         D_800AFE8C_A71FC->saveSlotIndex = allocation->levelIdList[allocation->selectedIndex];
-                        if (D_800AFE8C_A71FC->unk4 == 0) {
-                            D_800AFE8C_A71FC->unk9[0xC] = gLevelWorldTable[D_800AFE8C_A71FC->saveSlotIndex];
+                        if (D_800AFE8C_A71FC->gameMode == 0) {
+                            D_800AFE8C_A71FC->playerBoardIds[0xC] = gLevelWorldTable[D_800AFE8C_A71FC->saveSlotIndex];
                         }
                         applyLevelSelection();
                         playSoundEffectOnChannelNoPriority(0x2D, 0);
@@ -412,7 +412,7 @@ void handleLevelSelectInput(void) {
                 allocation->previewLoadCounter = 0;
             } else if (gControllerInputs[0] & (A_BUTTON | START_BUTTON)) {
                 allocation->exitMode = 1;
-                D_800AFE8C_A71FC->unk9[0xC] = gLevelWorldTable[D_800AFE8C_A71FC->saveSlotIndex];
+                D_800AFE8C_A71FC->playerBoardIds[0xC] = gLevelWorldTable[D_800AFE8C_A71FC->saveSlotIndex];
                 playSoundEffect(0x2D);
             }
             break;
@@ -511,25 +511,25 @@ void cancelLevelSelect(void) {
 
 void applyLevelSelection(void) {
     LevelSelectState_Base *allocation;
-    D_800AFE8C_A71FC_type *ptr;
+    GameSessionContext *ptr;
     u8 unk4;
     u8 saveSlotIndex;
 
     allocation = getCurrentAllocation();
     ptr = D_800AFE8C_A71FC;
-    unk4 = ptr->unk4;
+    unk4 = ptr->gameMode;
     saveSlotIndex = ptr->saveSlotIndex;
 
     if (unk4 == 0) {
         if (saveSlotIndex == 3 || saveSlotIndex == 7 || saveSlotIndex == 11 || saveSlotIndex >= 12) {
-            ptr->unk9[0x10] = 1;
+            ptr->playerBoardIds[0x10] = 1;
             D_800AFE8C_A71FC->numPlayers = 1;
         } else {
-            ptr->unk9[0x10] = 3;
+            ptr->playerBoardIds[0x10] = 3;
             D_800AFE8C_A71FC->numPlayers = 1;
         }
     } else {
-        ptr->unk9[0x10] = allocation->selectedNumber;
+        ptr->playerBoardIds[0x10] = allocation->selectedNumber;
         D_800AFE8C_A71FC->customLapCount = allocation->selectedNumber;
     }
 }
@@ -592,10 +592,10 @@ s32 buildUnlockedLevelList(u8 *levelIdList) {
     s32 i;
 
     count = 0;
-    maxSlots = D_800AFE8C_A71FC->unk4 ? 15 : 12;
+    maxSlots = D_800AFE8C_A71FC->gameMode ? 15 : 12;
 
     for (i = 0; i < maxSlots; i++) {
-        if (D_800AFE8C_A71FC->unk4 == 0) {
+        if (D_800AFE8C_A71FC->gameMode == 0) {
             do {
                 if (EepromSaveData->save_slot_status[i] != 0) {
                     levelIdList[(u8)(count++)] = i;

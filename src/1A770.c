@@ -175,7 +175,7 @@ void loadStoryModeRace(void) {
 
 void awaitStoryModeRaceResult(void) {
     s16 raceResult;
-    D_800AFE8C_A71FC_type *gameState;
+    GameSessionContext *gameState;
     u8 saveSlotIndex;
 
     raceResult = getSchedulerReturnValue();
