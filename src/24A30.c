@@ -152,11 +152,11 @@ typedef struct {
     void *skeletonAsset;
     void *paletteAsset;
     u8 pad30[0xC];
-    Transform3D rotationMatrix;
-    Transform3D positionMatrix;
-    Transform3D worldMatrix;
+    Transform3D rotationMatrix; // offset 0x3C
+    Transform3D positionMatrix; // offset 0x5C
+    Transform3D worldMatrix;    // offset 0x7C
     u8 pad9C[0x5];
-    u8 playerIndex;
+    u8 playerIndex; // offset 0xA1
 } CharSelectSecondarySlot;
 
 typedef struct {
@@ -628,37 +628,45 @@ void initCharSelectSecondarySlot(CharSelectSecondarySlot *arg0) {
     setCallbackWithContinue(updateCharSelectSecondarySlide);
 }
 
-void updateCharSelectSecondarySlide(CharSelectSecondarySlot *arg0) {
+// Updates the secondary character slot slide animation during character select
+// This slides the secondary character model to a target X position
+void updateCharSelectSecondarySlide(CharSelectSecondarySlot *slot) {
     Transform3D localMatrix;
     Transform3D *localMatrixPtr;
     Transform3D *posMatrixPtr;
     s32 target;
-    s32 adjustment;
+    s32 slideStep;
     GameState *state;
 
     state = (GameState *)getCurrentAllocation();
 
+    // Calculate target X position from the model positions table
+    // The table is indexed by (numPlayers * 2 + selectionSlot)
+    // where selectionSlot alternates between 0 and 1 based on unk18C0
     localMatrixPtr = &localMatrix;
     target =
-        ((s32 *)&D_8008DD2C_8E92C)[(D_800AFE8C_A71FC->numPlayers * 2) + ((state->unk18C0[arg0->playerIndex] + 1) & 1)];
-    adjustment = (-(target < 0) & 0xFFF00000) | 0x100000;
+        ((s32 *)&D_8008DD2C_8E92C)[(D_800AFE8C_A71FC->numPlayers * 2) + ((state->unk18C0[slot->playerIndex] + 1) & 1)];
 
-    memcpy(localMatrixPtr, &identityMatrix, 0x20);
-    memcpy(&localMatrix.translation, &arg0->positionMatrix.translation.x, 0xC);
+    // Calculate slide step direction based on target sign
+    // If target < 0: slideStep = -0x100000, else: slideStep = +0x100000
+    slideStep = (-(target < 0) & 0xFFF00000) | 0x100000;
 
-    arg0->worldMatrix.translation.x += adjustment;
+    memcpy(localMatrixPtr, &identityMatrix, sizeof(Transform3D));
+    memcpy(&localMatrix.translation, &slot->positionMatrix.translation.x, sizeof(Vec3i));
 
-    posMatrixPtr = &arg0->positionMatrix;
-    createYRotationMatrix(posMatrixPtr, state->unk1888[arg0->playerIndex]);
+    slot->worldMatrix.translation.x += slideStep;
 
-    func_8006B084_6BC84(&arg0->rotationMatrix, posMatrixPtr, localMatrixPtr);
-    func_8006B084_6BC84(localMatrixPtr, &arg0->worldMatrix, arg0);
+    posMatrixPtr = &slot->positionMatrix;
+    createYRotationMatrix(posMatrixPtr, state->unk1888[slot->playerIndex]);
 
-    if (arg0->worldMatrix.translation.x == target) {
-        state->unk18C0[arg0->playerIndex + 4]++;
+    func_8006B084_6BC84(&slot->rotationMatrix, posMatrixPtr, localMatrixPtr);
+    func_8006B084_6BC84(localMatrixPtr, &slot->worldMatrix, slot);
+
+    if (slot->worldMatrix.translation.x == target) {
+        state->unk18C0[slot->playerIndex + 4]++;
         terminateCurrentTask();
     } else {
-        enqueueDisplayListObject(arg0->playerIndex, (DisplayListObject *)arg0);
+        enqueueDisplayListObject(slot->playerIndex, (DisplayListObject *)slot);
     }
 }
 
