@@ -32,20 +32,19 @@ void updateControllerMotorInit(void) {
     s32 completedCount;
     u8 state;
     u8 *ptr;
-    u8 *savedPtr;
     s32 mask;
     s32 pollResult;
+    u8 *savedPtr;
 
-    allocation = getCurrentAllocation();
+    allocation = (u8 *)getCurrentAllocation();
     completedCount = 0;
     for (i = 0; i < (s32)D_800AFE8C_A71FC->numPlayers; i++) {
-        ptr = allocation + i;
-        state = *ptr;
+        state = allocation[i];
         switch (state) {
             case 0:
                 motorInitAsync(i & 0xFFFF);
                 state = 1 << i;
-                savedPtr = ptr;
+                savedPtr = &allocation[i];
                 do {
                     pollResult = pollMotorInitAsync();
                 } while (pollResult == -1);
@@ -61,14 +60,14 @@ void updateControllerMotorInit(void) {
                 if (pollResult >= 0) {
                     if (pollResult == 0) {
                         gMotorInitCompleteMask |= state << i;
+                        allocation[i] = 2;
+                    } else {
+                        allocation[i] = 2;
                     }
-                    *ptr = 2;
                 }
                 break;
             case 2:
-                completedCount++;
-                break;
-            case 3:
+                completedCount += 1;
                 break;
         }
     }
