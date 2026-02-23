@@ -11,14 +11,9 @@
 extern u8 D_8009DF6C_9EB6C[];
 
 typedef struct {
-    s32 value;
-    void *ptr;
-} ArrayElement_8;
-
-typedef struct {
-    void *ptr;
+    s32 *layout;
     s32 count;
-} LookupEntry;
+} MenuOptionConfig;
 
 typedef struct {
     u8 unk0;
@@ -43,9 +38,10 @@ s32 gMenuOptionLayout_Type0[] = { 0xFFD0FFE8, 0x00010103, 0x0000FFE8, 0x01020204
 s32 gMenuOptionLayout_Type1[] = { 0xFFD0FFE8, 0x00010103, 0x0000FFE8, 0x01020204, 0x0030FFE8, 0x02040306,
                                   0xFFD00010, 0x03030405, 0x00000010, 0x04050507, 0x00300010, 0x00060608 };
 
-void *gMenuOptionLookupPtr = gMenuOptionLayout_Type0;
-
-s32 gMenuOptionCounts[] = { 5, (s32)gMenuOptionLayout_Type1, 6 };
+MenuOptionConfig gMenuOptionConfig[] = {
+    { gMenuOptionLayout_Type0, 5 },
+    { gMenuOptionLayout_Type1, 6 },
+};
 
 u8 gNavigationCycleIndices[] = { 0x00, 0x01, 0x02, 0x01 };
 
@@ -256,26 +252,22 @@ void beginMenuFadeIn(E770_struct *arg0) {
 }
 
 s32 getMenuOptionCount(E770_struct *arg0) {
-    s8 temp = arg0->menuType;
+    s8 menuType = arg0->menuType;
 
-    if (temp < 2) {
-        return ((ArrayElement_8 *)gMenuOptionCounts)[temp].value;
+    if (menuType < 2) {
+        return gMenuOptionConfig[menuType].count;
     }
     return 0;
 }
 
 void *getMenuOptionEntry(E770_struct *arg0, s32 index) {
-    void *result;
-    s8 menuType;
-    LookupEntry *entry;
-
-    result = NULL;
-    menuType = arg0->menuType;
+    void *result = NULL;
+    s8 menuType = arg0->menuType;
 
     if (menuType < 2) {
-        entry = &((LookupEntry *)&gMenuOptionLookupPtr)[menuType];
-        if (index < entry->count) {
-            result = (u8 *)entry->ptr + index * 8;
+        MenuOptionConfig *config = &gMenuOptionConfig[menuType];
+        if (index < config->count) {
+            result = (u8 *)config->layout + index * 8;
         }
     }
     return result;
