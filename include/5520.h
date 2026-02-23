@@ -4,6 +4,8 @@
 #include "displaylist.h"
 #include "geometry.h"
 
+struct SceneModel;
+
 typedef struct {
     DisplayListObject base;
     void *textureTable;

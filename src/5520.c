@@ -278,18 +278,18 @@ void enqueueTiledTextureRender(s32 arg0, TrickBurstEffectTask *arg1) {
 
 void initializeRotatingLogo(RotatingLogoState *state) {
     memcpy(&state->opaqueMatrix, &identityMatrix, 0x20);
-    state->opaqueDisplayList = loadAssetGroupDisplayList(state->model);
-    state->opaqueVertexData = loadAssetGroupCompressedData(state->model);
+    state->opaqueDisplayList = loadAssetGroupDisplayList((SceneModel *)state->model);
+    state->opaqueVertexData = loadAssetGroupCompressedData((SceneModel *)state->model);
     state->opaqueFlag = 0;
     state->opaqueSettings = &D_800885D0_891D0;
     memcpy(&state->transparentMatrix, &identityMatrix, 0x20);
-    state->transparentDisplayList = loadAssetGroupDisplayList(state->model);
-    state->transparentVertexData = loadAssetGroupCompressedData(state->model);
+    state->transparentDisplayList = loadAssetGroupDisplayList((SceneModel *)state->model);
+    state->transparentVertexData = loadAssetGroupCompressedData((SceneModel *)state->model);
     state->transparentFlag = 0;
     state->transparentSettings = &D_800885E0_891E0;
     memcpy(&state->overlayMatrix, &identityMatrix, 0x20);
-    state->overlayDisplayList = loadAssetGroupDisplayList(state->model);
-    state->overlayVertexData = loadAssetGroupCompressedData(state->model);
+    state->overlayDisplayList = loadAssetGroupDisplayList((SceneModel *)state->model);
+    state->overlayVertexData = loadAssetGroupCompressedData((SceneModel *)state->model);
     state->overlaySettings = &D_800885F0_891F0;
     state->overlayFlag = 0;
     state->scale = 0x2000;
@@ -298,7 +298,7 @@ void initializeRotatingLogo(RotatingLogoState *state) {
     state->overlayAnimState = 0;
     state->overlayScaleX = 0;
     state->overlayScaleY = 0;
-    state->soundData = loadAssetGroupSoundData(state->model);
+    state->soundData = loadAssetGroupSoundData((SceneModel *)state->model);
     state->scrollU = 0;
     state->scrollV = 0;
     state->scrollSpeedU = 0;
@@ -326,12 +326,12 @@ void updateRotatingLogoState(RotatingLogoState *state) {
 
     shouldOscillate = 0;
 
-    if (((SceneModel *)state->model)->isDestroyed == 1) {
+    if (((func_80002B50_3750_arg *)state->model)->isDestroyed == 1) {
         terminateCurrentTask();
         return;
     }
 
-    actionMode = ((SceneModel *)state->model)->actionMode;
+    actionMode = ((func_80002B50_3750_arg *)state->model)->actionMode;
     switch (actionMode) {
         case 0:
         default:
