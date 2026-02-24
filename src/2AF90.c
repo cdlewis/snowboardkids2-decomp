@@ -95,7 +95,11 @@ u16 sNpcDialoguePointerTable[] = {
     0x8008, 0xE73C, 0x8008, 0xE73C, 0x8008, 0xE73C, 0x0000, 0x0000, 0x8008, 0xE744,
 };
 
-u32 sStoryMapNpcConfigTable[] = {
+// Story map NPC configuration table
+// First 10 entries (unk5C=0-9): arrays of 6 dialogue sequence pointers each
+// Entries 10+ contain sound data mixed with pointers
+// Layout per entry: 24 bytes
+u32 sStoryMapNpcDialogueTable[] = {
     0x00000000,
     (u32)sDialogueSequence13_15,
     (u32)sDialogueSequence13_15,

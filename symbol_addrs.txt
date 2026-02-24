@@ -7,7 +7,7 @@ sDialogueSequence22_24 = 0x8008E754; // rom:0x8F354
 sDialogueSequence17_19 = 0x8008E75C; // rom:0x8F35C
 sDialogueSequenceEmpty = 0x8008E764; // rom:0x8F364
 sNpcDialoguePointerTable = 0x8008E768; // rom:0x8F368
-sStoryMapNpcConfigTable = 0x8008E818; // rom:0x8F418
+sStoryMapNpcDialogueTable = 0x8008E818; // rom:0x8F418
 
 D_8008DEAC_8EAAC = 0x8008DEAC; // size:0x24
 D_8008DE64_8EA64 = 0x8008DE64; // size:0x38
