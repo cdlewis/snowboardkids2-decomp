@@ -49,13 +49,232 @@ void awaitStoryMapItemReady(void);
 void awaitStoryMapItemRespawn(StoryMapItem *arg0);
 void cleanupStoryMapItem(StoryMapItem *arg0);
 
-extern u16 gStoryMapItemValues[];
-extern u8 gStoryMapItemTypeTables[][16];
-extern s16 gStoryMapItemWaypointCounts[];
-extern u16 gStoryMapItemWaypointDataSizes[];
-extern s32 gStoryMapItemAnimationTimers[];
-extern u16 gStoryMapItemAnimationValues[];
-extern void *gStoryMapItemUpdateCallbacks[];
+extern void initStoryMapNpcJump(void);
+extern void initStoryMapNpcWave(void);
+extern void initStoryMapNpcFloatEffect(void);
+extern void initStoryMapNpcLookAround(void);
+extern void initStoryMapNpcThinkEffect(void);
+extern void initStoryMapNpcIdle(void);
+extern void initStoryMapNpcIdleNoAnim(void);
+extern void initStoryMapNpcIdleNoAnim2(void);
+extern void initStoryMapNpcIdleWithEffect(void);
+extern void initStoryMapNpcIdleWithEffect2(void);
+extern void initStoryMapNpcNod(void);
+extern void initStoryMapNpcIdleRandomDelay(void);
+extern void initStoryMapNpcIdleRandomDelayNoAnim(void);
+extern void initStoryMapNpcIdleRandomDelayNoAnim2(void);
+extern void initStoryMapNpcIdleRandomDelayNoAnim3(void);
+extern void initStoryMapNpcTalk(void);
+extern void initStoryMapNpcStretch(void);
+
+u8 gStoryMapItemTypeTables[][16] = {
+    { 0x00, 0x0D, 0x06, 0x02, 0x00, 0x0D, 0x06, 0x02, 0x00, 0x0D, 0x06, 0x02, 0x00, 0x0D, 0x06, 0x02 },
+    { 0x03, 0x06, 0x09, 0x0D, 0x03, 0x06, 0x09, 0x0D, 0x03, 0x06, 0x09, 0x0D, 0x03, 0x06, 0x09, 0x0D },
+    { 0x02, 0x0E, 0x0F, 0x07, 0x02, 0x0E, 0x0F, 0x07, 0x02, 0x0E, 0x0F, 0x07, 0x02, 0x0E, 0x0F, 0x07 },
+    { 0x08, 0x0E, 0x04, 0x07, 0x08, 0x0E, 0x04, 0x07, 0x08, 0x0E, 0x04, 0x07, 0x08, 0x0E, 0x04, 0x07 },
+    { 0x01, 0x05, 0x0A, 0x0B, 0x01, 0x05, 0x0A, 0x0B, 0x01, 0x05, 0x0A, 0x0B, 0x01, 0x05, 0x0A, 0x0B },
+    { 0x09, 0x0A, 0x0E, 0x0F, 0x09, 0x0A, 0x0E, 0x0F, 0x09, 0x0A, 0x0E, 0x0F, 0x09, 0x0A, 0x0E, 0x0F },
+    { 0x0C, 0x02, 0x03, 0x04, 0x0C, 0x02, 0x03, 0x04, 0x0C, 0x02, 0x03, 0x04, 0x0C, 0x02, 0x03, 0x04 },
+    { 0x0D, 0x0E, 0x0F, 0x0D, 0x0E, 0x0F, 0x0D, 0x0E, 0x0F, 0x0D, 0x0E, 0x0F, 0x0D, 0x0E, 0x0F, 0x0D },
+    { 0x0D, 0x0E, 0x0F, 0x0D, 0x0E, 0x0F, 0x0D, 0x0E, 0x0F, 0x0D, 0x0E, 0x0F, 0x0D, 0x0E, 0x0F, 0x0D },
+};
+
+s16 gStoryMapItemWaypointCounts[] = {
+    0x0000, 0x0001, 0x0003, 0x0001, 0x0002, 0x0001, 0x0000, 0x0001, 0x0002,
+    0x0004, 0x0004, 0x0000, 0x0001, 0x0002, 0x0001, 0x0000, 0x0002, 0x0000,
+};
+
+u16 gStoryMapItemWaypointDataSizes[] = {
+    0x001A, 0x0028, 0x0020, 0x0020, 0x0022, 0x0000,
+};
+
+s32 gStoryMapItemAnimationTimers[] = {
+    0x00018000, 0x00010000, 0x00012000, 0x00010000, 0x00011000, 0x00010000, 0x00010000, 0x00019000, 0x00010000,
+    0x00010000, 0x00010000, 0x0001F000, 0x0001C000, 0x0002A000, 0x00023000, 0x0002A000, 0x00012000,
+};
+
+u16 gStoryMapItemAnimationValues[] = {
+    0x0004, 0x0002, 0x0002, 0x0002, 0x0002, 0x001D, 0x0002, 0x0004, 0x0002,
+    0x0002, 0x0002, 0x0016, 0x0012, 0x0009, 0x0009, 0x0009, 0x0002, 0x0000,
+};
+
+s32 gStoryMapItemUpdateCallbacks[] = {
+    (s32)initStoryMapNpcJump,
+    (s32)initStoryMapNpcWave,
+    (s32)initStoryMapNpcFloatEffect,
+    (s32)initStoryMapNpcLookAround,
+    (s32)initStoryMapNpcThinkEffect,
+    (s32)initStoryMapNpcIdle,
+    (s32)initStoryMapNpcIdleNoAnim,
+    (s32)initStoryMapNpcIdleNoAnim2,
+    (s32)initStoryMapNpcIdleWithEffect,
+    (s32)initStoryMapNpcIdleWithEffect2,
+    (s32)initStoryMapNpcNod,
+    (s32)initStoryMapNpcIdleRandomDelay,
+    (s32)initStoryMapNpcIdleRandomDelayNoAnim,
+    (s32)initStoryMapNpcIdleRandomDelayNoAnim2,
+    (s32)initStoryMapNpcIdleRandomDelayNoAnim3,
+    (s32)initStoryMapNpcTalk,
+    (s32)initStoryMapNpcStretch,
+};
+
+u16 gStoryMapItemValues[] = {
+    0x000F, 0x000F, 0x0013, 0x0013, 0x0013, 0x000F, 0x000F, 0x000F, 0x0013, 0x0000, 0x0002, 0x0304, 0x0506, 0x0907,
+    0x0001, 0x0304, 0x0506, 0x0809, 0x0001, 0x0204, 0x0506, 0x0907, 0x0001, 0x0203, 0x0506, 0x0807, 0x0001, 0x0203,
+    0x0406, 0x0907, 0x0001, 0x0203, 0x0405, 0x0807, 0x000D, 0x0602, 0x000D, 0x0602, 0x000D, 0x0602, 0x000D, 0x0602,
+    0x0306, 0x090D, 0x0306, 0x090D, 0x0306, 0x090D, 0x0306, 0x090D, 0x020E, 0x0F07, 0x020E, 0x0F07, 0x020E, 0x0F07,
+    0x020E, 0x0F07, 0x080E, 0x0407, 0x080E, 0x0407, 0x080E, 0x0407, 0x080E, 0x0407, 0x0105, 0x0A0B, 0x0105, 0x0A0B,
+    0x0105, 0x0A0B, 0x0105, 0x0A0B, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x0C02, 0x0304,
+    0x0C02, 0x0304, 0x0C02, 0x0304, 0x0C02, 0x0304, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D,
+    0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D, 0x000F, 0x000F, 0x0013, 0x0013, 0x0013, 0x000F,
+    0x000F, 0x000F, 0x0013, 0x0000, 0x0000, 0x005C, 0x005C, 0x0060, 0x005B, 0x005C, 0x005E, 0x0074, 0x0000, 0x0074,
+    0x0074, 0x0074, 0x0074, 0x0076, 0x008A, 0x008A, 0x0000, 0x0090, 0x008A, 0x008A, 0x008D, 0x00AA, 0x00A2, 0x00AA,
+    0x0000, 0x00A2, 0x00A2, 0x00A5, 0x00BB, 0x00BB, 0x00BB, 0x00BB, 0x0000, 0x00BB, 0x00BE, 0x00D0, 0x00D1, 0x00D1,
+    0x00D1, 0x00D0, 0x0000, 0x00D4, 0x0000, 0x005C, 0x005C, 0x0060, 0x005B, 0x005C, 0x0074, 0x0000, 0x0074, 0x0074,
+    0x0074, 0x0074, 0x008A, 0x008A, 0x0000, 0x0090, 0x008A, 0x008A, 0x00A7, 0x00A2, 0x00A7, 0x0000, 0x00A2, 0x00A2,
+    0x00BB, 0x00BB, 0x00BB, 0x00BB, 0x0000, 0x00BB, 0x00D0, 0x00D1, 0x00D1, 0x00D1, 0x00D0, 0x0000, 0x010B, 0x010B,
+    0x010B, 0x010B, 0x010B, 0x010B,
+};
+
+u16 D_8008E32C_8EF2C[] = { 0x000D, 0x000E, 0x000F, 0xFFFF };
+u16 D_8008E334_8EF34[] = { 0x000A, 0x000B, 0x000C, 0xFFFF };
+u16 D_8008E33C_8EF3C[] = { 0x0014, 0x0015, 0x0016, 0xFFFF };
+u16 D_8008E344_8EF44[] = { 0x0016, 0x0017, 0x0018, 0xFFFF };
+u16 D_8008E34C_8EF4C[] = { 0x0011, 0x0012, 0x0013, 0xFFFF };
+
+s32 D_8008E354_8EF54[] = { 0x0000FFFF,
+                           0x001B001B,
+                           0xFFFF0000,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E344_8EF44,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E334_8EF34,
+                           (s32)D_8008E32C_8EF2C,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E334_8EF34,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E334_8EF34,
+                           (s32)D_8008E34C_8EF4C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E34C_8EF4C,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E334_8EF34,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E334_8EF34,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           0x00000000,
+                           (s32)D_8008E334_8EF34,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E344_8EF44,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E33C_8EF3C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E33C_8EF3C,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           0x00000000,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E354_8EF54,
+                           0x00000000,
+                           0x00000000,
+                           0x00000000,
+                           0x00000000,
+                           0x00000000,
+                           0x00000000,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E354_8EF54,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E354_8EF54,
+                           (s32)D_8008E354_8EF54,
+                           (s32)D_8008E354_8EF54,
+                           (s32)D_8008E354_8EF54,
+                           (s32)D_8008E32C_8EF2C,
+                           (s32)D_8008E354_8EF54,
+                           0x0000005C,
+                           0x005E0000,
+                           0x0000005E,
+                           0x00000000,
+                           0x00790074,
+                           0x00000077,
+                           0x00000000,
+                           0x00740000,
+                           0x00000000,
+                           0x008D008E,
+                           0x0000008D,
+                           0x008A0000,
+                           0x00AB00A2,
+                           0x00A50000,
+                           0x000000A5,
+                           0x00A20000,
+                           0x00C000BB,
+                           0x000000BF,
+                           0x000000BE,
+                           0x00000000,
+                           0x00D60000,
+                           0x00D400D5,
+                           0x000000D4,
+                           0x00D00000 };
 
 void initStoryMapItem(StoryMapItem *arg0) {
     AllocationData29200 *alloc;
@@ -205,7 +424,7 @@ void initStoryMapItemMovement(StoryMapItemTask *arg0) {
     alloc->unk422 = 0;
     alloc->npcPosZ[0] = posZ;
 
-    setCallback(gStoryMapItemUpdateCallbacks[arg0->itemType]);
+    setCallback((void *)gStoryMapItemUpdateCallbacks[arg0->itemType]);
 }
 
 void collectStoryMapItem(StoryMapItem *arg0) {
@@ -229,3 +448,11 @@ void awaitStoryMapItemRespawn(StoryMapItem *arg0) {
 void cleanupStoryMapItem(StoryMapItem *arg0) {
     arg0->model = destroySceneModel(arg0->model);
 }
+
+s16 D_8008E568_8F168[] = {
+    0x0051, 0x006D, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x00F5, 0x00E3, 0x0000,
+};
+
+s16 D_8008E57C_8F17C[] = {
+    0x0000, 0x0000, 0x0083, 0x0099, 0x0000, 0x00C9, 0x0000, 0x00F4, 0x00E1, 0x0000,
+};
