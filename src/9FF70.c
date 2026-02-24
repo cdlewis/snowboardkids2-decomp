@@ -199,7 +199,6 @@ s32 initPlayerForRace(Player *player) {
     s32 *posPtr;
     s32 playerIdx;
     s32 v0_temp;
-    s32 v1_temp;
 
     gameState = getCurrentAllocation();
 
@@ -267,18 +266,18 @@ s32 initPlayerForRace(Player *player) {
         );
     }
 
-    *(u8 *)((u8 *)player + 0xBBD) = 1;
-    *(u8 *)((u8 *)player + 0xBBE) = 5;
-    *(s32 *)((u8 *)player + 0xAD4) = 0;
-    *(s32 *)((u8 *)player + 0xAD8) = 0xA0000;
-    *(s32 *)((u8 *)player + 0xADC) = 0;
-    *(s32 *)((u8 *)player + 0xAE0) = 0xA0000;
+    player->behaviorMode = 1;
+    player->behaviorPhase = 5;
+    player->collisionOffset.x = 0;
+    player->collisionOffset.y = 0xA0000;
+    player->collisionOffset.z = 0;
+    player->collisionRadius = 0xA0000;
     memcpy((u8 *)player + 0xB58, (u8 *)player + 0xAD4, 0xC);
     *(s32 *)((u8 *)player + 0xB64) = *(s32 *)((u8 *)player + 0xAE0);
     *(u8 *)((u8 *)player + 0xB68) = player->playerIndex;
 
     if (player->isBossRacer == 0) {
-        if (*(u8 *)((u8 *)gameState + 0x7A) != 0xB || player->playerIndex == 0) {
+        if (gameState->raceType != 0xB || player->playerIndex == 0) {
             spawnChaseCameraTask(player->playerIndex);
             spawnPlayerIndicatorTask(player);
         }
@@ -293,17 +292,17 @@ s32 initPlayerForRace(Player *player) {
         }
     }
 
-    *(s8 *)((u8 *)player + 0xBDF) = -1;
-    *(s8 *)((u8 *)player + 0xBE0) = -1;
-    *(u8 *)((u8 *)player + 0xBE1) = 0;
-    *(u8 *)((u8 *)player + 0xBE2) = 0;
+    *(s8 *)&player->rumbleEffectType = -1;
+    player->rumbleCounter = -1;
+    player->rumbleDuration = 0;
+    player->rumbleFrame = 0;
 
-    if (*(u8 *)((u8 *)gameState + 0x7A) == 5) {
+    if (gameState->raceType == 5) {
         player->unkBD2 = 7;
         player->unkBD3 = 0x1E;
     }
 
-    if (*(u8 *)((u8 *)gameState + 0x7A) != 0xB) {
+    if (gameState->raceType != 0xB) {
         return 1;
     }
 
