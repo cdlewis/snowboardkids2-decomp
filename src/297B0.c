@@ -766,8 +766,8 @@ void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
     }
 }
 
-extern u16 D_8008E568_8F168[];
-extern u16 D_8008E57C_8F17C[];
+extern u16 gStoryMapItemSpawnPositionsX[];
+extern u16 gStoryMapItemSpawnPositionsZ[];
 
 void playStoryMapNpcIdleSound(Func297D8Arg *arg0) {
     arg0->unk5A = 0;
@@ -780,10 +780,10 @@ void playStoryMapNpcIdleSound(Func297D8Arg *arg0) {
             playSoundEffect(0x112);
             break;
         case 0xD:
-            playSoundEffect(D_8008E568_8F168[arg0->unk5C]);
+            playSoundEffect(gStoryMapItemSpawnPositionsX[arg0->unk5C]);
             break;
         case 0xE:
-            playSoundEffect(D_8008E57C_8F17C[arg0->unk5C]);
+            playSoundEffect(gStoryMapItemSpawnPositionsZ[arg0->unk5C]);
             break;
     }
 }
