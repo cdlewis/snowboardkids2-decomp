@@ -35,57 +35,57 @@ typedef struct {
 
 extern s32 func_8002A4AC_2B0AC(void *, u8);
 extern s32 func_8002A7CC_2B3CC(void *);
-u32 D_8008E6D0_8F2D0[] = {
+u32 sNpcInteractionColors[] = {
     0x00BB00BB, 0x000000BB, 0x00BE00D0, 0x00D100D1, 0x00D100D0, 0x000000D4,
 };
 
-u16 D_8008E6E8_8F2E8[] = {
+u16 sNpcInteractionSoundIds[] = {
     0x0000, 0x005C, 0x005C, 0x0060, 0x005B, 0x005C, 0x0074, 0x0000, 0x0074, 0x0074, 0x0074, 0x0074, 0x008A, 0x008A,
     0x0000, 0x0090, 0x008A, 0x008A, 0x00A7, 0x00A2, 0x00A7, 0x0000, 0x00A2, 0x00A2, 0x00BB, 0x00BB, 0x00BB, 0x00BB,
     0x0000, 0x00BB, 0x00D0, 0x00D1, 0x00D1, 0x00D1, 0x00D0, 0x0000, 0x010B, 0x010B, 0x010B, 0x010B, 0x010B, 0x010B,
 };
 
-u16 D_8008E73C_8F33C[] = {
+u16 sDialogueSequence13_15[] = {
     0x000D,
     0x000E,
     0x000F,
     0xFFFF,
 };
 
-u16 D_8008E744_8F344[] = {
+u16 sDialogueSequence10_12[] = {
     0x000A,
     0x000B,
     0x000C,
     0xFFFF,
 };
 
-u16 D_8008E74C_8F34C[] = {
+u16 sDialogueSequence20_22[] = {
     0x0014,
     0x0015,
     0x0016,
     0xFFFF,
 };
 
-u16 D_8008E754_8F354[] = {
+u16 sDialogueSequence22_24[] = {
     0x0016,
     0x0017,
     0x0018,
     0xFFFF,
 };
 
-u16 D_8008E75C_8F35C[] = {
+u16 sDialogueSequence17_19[] = {
     0x0011,
     0x0012,
     0x0013,
     0xFFFF,
 };
 
-u16 D_8008E764_8F364[] = {
+u16 sDialogueSequenceEmpty[] = {
     0x0000,
     0xFFFF,
 };
 
-u16 D_8008E768_8F368[] = {
+u16 sNpcDialoguePointerTable[] = {
     0x001B, 0x001B, 0xFFFF, 0x0000, 0x0000, 0x0000, 0x8008, 0xE73C, 0x8008, 0xE73C, 0x8008, 0xE754, 0x8008,
     0xE73C, 0x8008, 0xE73C, 0x8008, 0xE744, 0x8008, 0xE73C, 0x0000, 0x0000, 0x8008, 0xE73C, 0x8008, 0xE73C,
     0x8008, 0xE73C, 0x8008, 0xE73C, 0x8008, 0xE744, 0x8008, 0xE73C, 0x8008, 0xE73C, 0x0000, 0x0000, 0x8008,
@@ -95,71 +95,71 @@ u16 D_8008E768_8F368[] = {
     0x8008, 0xE73C, 0x8008, 0xE73C, 0x8008, 0xE73C, 0x0000, 0x0000, 0x8008, 0xE744,
 };
 
-u32 D_8008E818_8F418[] = {
+u32 sStoryMapNpcConfigTable[] = {
     0x00000000,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E754_8F354,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence22_24,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
     0x00000000,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
     0x00000000,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E74C_8F34C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E74C_8F34C,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence20_22,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence20_22,
     0x00000000,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
     0x00000000,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
     0x00000000,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    0x00000000,
-    0x00000000,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E764_8F364,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
     0x00000000,
     0x00000000,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequenceEmpty,
     0x00000000,
     0x00000000,
     0x00000000,
     0x00000000,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E764_8F364,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E764_8F364,
-    (u32)D_8008E764_8F364,
-    (u32)D_8008E764_8F364,
-    (u32)D_8008E764_8F364,
-    (u32)D_8008E73C_8F33C,
-    (u32)D_8008E764_8F364,
+    0x00000000,
+    0x00000000,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequenceEmpty,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequenceEmpty,
+    (u32)sDialogueSequenceEmpty,
+    (u32)sDialogueSequenceEmpty,
+    (u32)sDialogueSequenceEmpty,
+    (u32)sDialogueSequence13_15,
+    (u32)sDialogueSequenceEmpty,
     0x0000005C,
     0x005E0000,
     0x0000005E,
@@ -440,7 +440,7 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
 
     if (arg0->unk5C == 4) {
         if (arg0->unk5D == 5) {
-            arg0->unk4C = D_8008E768_8F368;
+            arg0->unk4C = sNpcDialoguePointerTable;
             dialogueIndex = arg0->unk4C[0];
             arg0->unk37 = 0;
             arg0->unk50 = dialogueIndex;
@@ -450,7 +450,7 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
     }
     if (arg0->unk5C == 3) {
         if (arg0->unk5D == 8) {
-            arg0->unk4C = D_8008E75C_8F35C;
+            arg0->unk4C = sDialogueSequence17_19;
             dialogueIndex = arg0->unk4C[0];
             arg0->unk37 = 0;
             arg0->unk50 = dialogueIndex;

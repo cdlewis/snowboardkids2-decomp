@@ -1,3 +1,14 @@
+sNpcInteractionColors = 0x8008E6D0; // rom:0x8F2D0
+sNpcInteractionSoundIds = 0x8008E6E8; // rom:0x8F2E8
+sDialogueSequence13_15 = 0x8008E73C; // rom:0x8F33C
+sDialogueSequence10_12 = 0x8008E744; // rom:0x8F344
+sDialogueSequence20_22 = 0x8008E74C; // rom:0x8F34C
+sDialogueSequence22_24 = 0x8008E754; // rom:0x8F354
+sDialogueSequence17_19 = 0x8008E75C; // rom:0x8F35C
+sDialogueSequenceEmpty = 0x8008E764; // rom:0x8F364
+sNpcDialoguePointerTable = 0x8008E768; // rom:0x8F368
+sStoryMapNpcConfigTable = 0x8008E818; // rom:0x8F418
+
 D_8008DEAC_8EAAC = 0x8008DEAC; // size:0x24
 D_8008DE64_8EA64 = 0x8008DE64; // size:0x38
 D_8008DD8C_8E98C = 0x8008DD8C; // size:0x32
