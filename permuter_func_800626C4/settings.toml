@@ -1,5 +1,0 @@
-[compiler]
-type = "ido"
-
-[scorer]
-algorithm = "difflib"

@@ -1592,54 +1592,58 @@ void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void initCharSelectArrows(SelectionArrowsState *arg0) {
-    void *dmaResult;
-    u8 count;
-    s32 i;
-    s32 j;
+// Initialize left/right selection arrows for each player in character select
+// Each player gets 2 arrows (left and right) positioned based on player count
+void initCharSelectArrows(SelectionArrowsState *state) {
+    void *arrowAsset;
+    u8 numPlayers;
+    s32 playerIdx;
+    s32 arrowIdx;
     s32 index;
     u16 xBase;
     u16 y;
     u16 xInc;
     s32 xIncrement;
-    SelectionEntry *ptr;
+    SelectionEntry *arrow;
     u16 x;
-    s32 iTimesTwo;
+    s32 playerEntryOffset;
     s32 pad[2];
 
     (void)pad;
 
     getCurrentAllocation();
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    arrowAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectArrows);
 
-    count = D_800AFE8C_A71FC->numPlayers;
-    xBase = *(u16 *)(D_8008DE18_8EA18 + count * 6 + 2);
-    y = *(u16 *)(D_8008DE18_8EA18 + count * 6 + 4);
-    xInc = *(u16 *)(D_8008DE18_8EA18 + count * 6 + 6);
+    numPlayers = D_800AFE8C_A71FC->numPlayers;
+    // Load arrow position data from table: xBase, y, xInc at offsets 2, 4, 6
+    xBase = *(u16 *)(D_8008DE18_8EA18 + numPlayers * 6 + 2);
+    y = *(u16 *)(D_8008DE18_8EA18 + numPlayers * 6 + 4);
+    xInc = *(u16 *)(D_8008DE18_8EA18 + numPlayers * 6 + 6);
 
-    i = 0;
-    if (count != 0) {
+    playerIdx = 0;
+    if (numPlayers != 0) {
         xIncrement = (s16)xInc;
         do {
-            j = 0;
-            iTimesTwo = i * 2;
+            arrowIdx = 0;
+            playerEntryOffset = playerIdx * 2;
             x = xBase;
             do {
-                ptr = &arg0->entries[iTimesTwo + j];
-                ((volatile SelectionEntry *)ptr)->x = x;
-                ((volatile SelectionEntry *)ptr)->spriteIndex = j;
-                j++;
-                ptr->y = y;
-                ptr->asset = dmaResult;
-                ptr->alpha = 0xFF;
-                ptr->blinkState = 0;
-                ptr->unkC = 0;
+                arrow = &state->entries[playerEntryOffset + arrowIdx];
+                // Volatile ensures these writes happen in order (required for correct sprite rendering)
+                ((volatile SelectionEntry *)arrow)->x = x;
+                ((volatile SelectionEntry *)arrow)->spriteIndex = arrowIdx;
+                arrowIdx++;
+                arrow->y = y;
+                arrow->asset = arrowAsset;
+                arrow->alpha = 0xFF;
+                arrow->blinkState = 0;
+                arrow->unkC = 0;
                 x += xIncrement;
-            } while (j < 2);
-            arg0->blinkTimers[i] = 0;
-            i++;
-        } while (i < D_800AFE8C_A71FC->numPlayers);
+            } while (arrowIdx < 2);
+            state->blinkTimers[playerIdx] = 0;
+            playerIdx++;
+        } while (playerIdx < D_800AFE8C_A71FC->numPlayers);
     }
 
     setCallback(func_800262D4_26ED4);
