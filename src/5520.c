@@ -278,18 +278,18 @@ void enqueueTiledTextureRender(s32 arg0, TrickBurstEffectTask *arg1) {
 
 void initializeRotatingLogo(RotatingLogoState *state) {
     memcpy(&state->opaqueMatrix, &identityMatrix, 0x20);
-    state->opaqueDisplayList = loadAssetGroupDisplayList((SceneModel *)state->model);
-    state->opaqueVertexData = loadAssetGroupCompressedData((SceneModel *)state->model);
+    state->opaqueDisplayList = loadAssetGroupDisplayList(state->model);
+    state->opaqueVertexData = loadAssetGroupCompressedData(state->model);
     state->opaqueFlag = 0;
     state->opaqueSettings = &D_800885D0_891D0;
     memcpy(&state->transparentMatrix, &identityMatrix, 0x20);
-    state->transparentDisplayList = loadAssetGroupDisplayList((SceneModel *)state->model);
-    state->transparentVertexData = loadAssetGroupCompressedData((SceneModel *)state->model);
+    state->transparentDisplayList = loadAssetGroupDisplayList(state->model);
+    state->transparentVertexData = loadAssetGroupCompressedData(state->model);
     state->transparentFlag = 0;
     state->transparentSettings = &D_800885E0_891E0;
     memcpy(&state->overlayMatrix, &identityMatrix, 0x20);
-    state->overlayDisplayList = loadAssetGroupDisplayList((SceneModel *)state->model);
-    state->overlayVertexData = loadAssetGroupCompressedData((SceneModel *)state->model);
+    state->overlayDisplayList = loadAssetGroupDisplayList(state->model);
+    state->overlayVertexData = loadAssetGroupCompressedData(state->model);
     state->overlaySettings = &D_800885F0_891F0;
     state->overlayFlag = 0;
     state->scale = 0x2000;
@@ -298,7 +298,7 @@ void initializeRotatingLogo(RotatingLogoState *state) {
     state->overlayAnimState = 0;
     state->overlayScaleX = 0;
     state->overlayScaleY = 0;
-    state->soundData = loadAssetGroupSoundData((SceneModel *)state->model);
+    state->soundData = loadAssetGroupSoundData(state->model);
     state->scrollU = 0;
     state->scrollV = 0;
     state->scrollSpeedU = 0;
@@ -318,7 +318,7 @@ void updateRotatingLogoState(RotatingLogoState *state) {
     Transform3D rotationMatrix;
     Transform3D transparentMatrix;
     s32 shouldOscillate;
-    s32 temp;
+    s32 newScale;
     s8 actionMode;
 
     memcpy(&rotationMatrix, &identityMatrix, 0x20);
@@ -372,16 +372,16 @@ void updateRotatingLogoState(RotatingLogoState *state) {
 
     switch (state->scaleAnimState) {
         case 1:
-            temp = state->scale - 0x111;
-            state->scale = temp;
-            if (temp < 0) {
+            newScale = state->scale - 0x111;
+            state->scale = newScale;
+            if (newScale < 0) {
                 state->scale = 0;
             }
             break;
         case 2:
-            temp = state->scale + 0x111;
-            state->scale = temp;
-            if (temp >= 0x2001) {
+            newScale = state->scale + 0x111;
+            state->scale = newScale;
+            if (newScale >= 0x2001) {
                 state->scale = 0x2000;
             }
             break;

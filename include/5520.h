@@ -3,8 +3,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
-
-struct SceneModel;
+#include "20F0.h"
 
 typedef struct {
     DisplayListObject base;
