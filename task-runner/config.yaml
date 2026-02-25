@@ -1,5 +1,5 @@
 # Central task-runner configuration
 claude_command: "~/.local/bin/claude"
-success_command: 'git add -A && git commit -m "task-runner($TASK_NAME): fix $CANDIDATE"'
+success_command: 'git add -U && git commit -m "task-runner($TASK_NAME): fix $CANDIDATE"'
 reset_command: "git clean -f; git reset --hard HEAD || true"
 verify_command: "./tools/build-and-verify.sh"
