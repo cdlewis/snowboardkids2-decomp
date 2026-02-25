@@ -20,12 +20,13 @@
 #include "task_scheduler.h"
 
 extern void func_8001FFE4_20BE4(void);
-extern void func_8001FA00_20600(void);
+extern void func_8001FA00_20600(LevelPreviewCharacterState *);
+void holdLevelPreviewCamera(LevelPreviewCharacterState *state);
 extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 struct LevelPreviewPortraitState_202A0_s;
 extern void animatePortraitRotation(struct LevelPreviewPortraitState_202A0_s *arg0);
 
-s16 D_8008D9D0_8E5D0[] = { 0x0618, 0x0672, 0x03DE, 0x03DE, 0x0708, 0x01E0, 0x0708, 0x0708,
+u16 D_8008D9D0_8E5D0[] = { 0x0618, 0x0672, 0x03DE, 0x03DE, 0x0708, 0x01E0, 0x0708, 0x0708,
                            0x0546, 0x04CE, 0x04B0, 0x04B0, 0x04B0, 0x04B0, 0x0564, 0x0564 };
 
 u8 characterStartWaypoints[] = { 0x18, 0x0C, 0x4B, 0x4B, 0x0B, 0x43, 0x52, 0x52,
@@ -338,7 +339,151 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     setCallback(func_8001FA00_20600);
 }
 
-INCLUDE_ASM("asm/nonmatchings/202A0", func_8001FA00_20600);
+void func_8001FA00_20600(LevelPreviewCharacterState *state) {
+    Allocation_F7C8 *allocation;
+    Transform3D cameraTransform;
+    Transform3D offsetTransform;
+    Transform3D lookAtTransform;
+    s32 waypointStart[4];
+    s32 waypointEnd[4];
+    s32 heightTarget;
+    void *gameData;
+    void *targetPtr;
+    s32 scaled;
+    u16 cameraWaypoint;
+    u16 *timerLimit;
+    u16 timer;
+
+    allocation = (Allocation_F7C8 *)getCurrentAllocation();
+
+    memcpy(&cameraTransform, &identityMatrix, sizeof(Transform3D));
+
+    if (state->extraRotation != 0) {
+        state->extraRotation = state->extraRotation - 1;
+        if ((state->extraRotation & 0xFFFF) < 0x10E) {
+            state->altHeightOffset = state->altHeightOffset + 0x2000;
+        }
+    }
+    {
+        s32 diff;
+        s16 sdiff;
+        diff = (s16)state->currentRotation;
+
+        if (diff != (s16)state->targetRotation) {
+            diff = diff - (s16)state->targetRotation;
+            if (diff < 0) {
+                diff = -diff;
+            }
+            sdiff = diff;
+            if (sdiff >= 0x100) {
+                state->turnSpeed = 6;
+            } else if (sdiff < 2) {
+                state->turnSpeed = diff;
+            } else {
+                state->turnSpeed = 2;
+            }
+            if (state->turnDirection != 0) {
+                state->currentRotation = state->currentRotation - state->turnSpeed;
+            } else {
+                state->currentRotation = state->currentRotation + state->turnSpeed;
+            }
+            state->currentRotation = state->currentRotation & 0x1FFF;
+        }
+    }
+    scaled = approximateSin((s16)state->currentRotation) * (state->cameraHorzOffset >> 8);
+    if (scaled < 0) {
+        scaled += 0x1FFF;
+    }
+    waypointStart[0] = (scaled >> 13) << 8;
+    waypointStart[1] = 0;
+    scaled = approximateCos((s16)state->currentRotation) * (state->cameraHorzOffset >> 8);
+    if (scaled < 0) {
+        scaled += 0x1FFF;
+    }
+    waypointStart[2] = (scaled >> 13) << 8;
+    state->posX = state->posX - waypointStart[0];
+    state->posZ = state->posZ - waypointStart[2];
+    {
+        u16 waypoint;
+        u16 newWaypoint;
+        waypoint = func_80060A3C_6163C(state->gameData, state->startWaypoint, state);
+        newWaypoint = waypoint & 0xFFFF;
+        if (newWaypoint != state->startWaypoint) {
+            u16 angle;
+            state->startWaypoint = waypoint;
+            getTrackSegmentWaypoints(state->gameData, newWaypoint, waypointStart, waypointEnd);
+            angle = (computeAngleToPosition(waypointStart[0], waypointStart[2], state->posX, state->posZ) - 0x1000) &
+                    0x1FFF;
+            state->targetRotation = angle;
+            if (((angle - state->currentRotation) & 0x1FFF) >= 0x1001) {
+                state->turnDirection = 1;
+            } else {
+                state->turnDirection = 0;
+            }
+        }
+    }
+    if (allocation->unkB33[allocation->unkB2C] == 5) {
+        heightTarget = (state->posY - state->altHeightOffset) + ((s32)0xFFFDB340);
+    } else {
+        heightTarget = (state->posY - state->heightOffset) + ((s32)0xFFFDB340);
+    }
+    {
+        s32 trackHeight;
+        trackHeight = getTrackHeightAtPosition(state->gameData, state->startWaypoint, state);
+        state->posY = heightTarget;
+        if (heightTarget < trackHeight) {
+            state->posY = trackHeight;
+        }
+    }
+    if (allocation->unkB33[allocation->unkB2C] == 5) {
+        state->posY = state->posY + state->altHeightOffset;
+    } else {
+        state->posY = state->posY + state->heightOffset;
+    }
+    memcpy(&state->transform.translation, state, 0xC);
+    createYRotationMatrix(&state->transform, state->currentRotation);
+    applyTransformToModel(state->sceneModel, &state->transform);
+    scaled = (approximateSin((s16)state->currentRotation) * 5) << 12;
+    if (scaled < 0) {
+        scaled += 0x1FFF;
+    }
+    state->targetX = (scaled >> 13) << 8;
+    scaled = (approximateCos((s16)state->currentRotation) * 5) << 12;
+    if (scaled < 0) {
+        scaled += 0x1FFF;
+    }
+    gameData = state->gameData;
+    targetPtr = &state->targetX;
+    state->targetZ = (scaled >> 13) << 8;
+    state->targetX = state->targetX + state->posX;
+    state->targetZ = state->targetZ + state->posZ;
+    heightTarget = (state->targetY - state->heightOffset) + ((s32)0xFFFDB340);
+    cameraWaypoint = func_80060A3C_6163C(gameData, state->currentWaypoint, targetPtr);
+    state->currentWaypoint = cameraWaypoint;
+    state->targetY = getTrackHeightAtPosition(gameData, cameraWaypoint & 0xFFFF, targetPtr);
+    if (state->targetY < heightTarget) {
+        state->targetY = heightTarget;
+    }
+    state->targetY = state->targetY + state->heightOffset;
+    computeLookAtMatrix(targetPtr, state, &lookAtTransform);
+    memcpy(&offsetTransform, &identityMatrix, 0x20);
+    offsetTransform.translation.z = state->cameraDistance;
+    func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
+    setViewportTransformById(allocation->unk48A, &cameraTransform);
+    timerLimit = &D_8008D9D0_8E5D0[allocation->unkB33[allocation->unkB2C]];
+    timer = state->frameTimer;
+    if (timer < (*timerLimit)) {
+        timer = (state->frameTimer = timer + 1);
+        state->frameTimer = timer;
+        if ((timer & 0xFFFF) == (*timerLimit)) {
+            state->frameTimer = 0;
+            if (allocation->unkB33[allocation->unkB2C] == 5) {
+                state->extraRotation = 0x10E;
+            }
+            setCallback(holdLevelPreviewCamera);
+        }
+    }
+}
 
 void holdLevelPreviewCamera(LevelPreviewCharacterState *state) {
     getCurrentAllocation();

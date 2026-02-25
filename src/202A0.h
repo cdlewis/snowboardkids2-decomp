@@ -25,9 +25,10 @@ typedef struct {
     s32 cameraDistance;    // 0x60
     s32 heightOffset;      // 0x64
     s32 altHeightOffset;   // 0x68
-    u8 _pad6C[0x6];        // 0x6C
+    u16 turnSpeed;         // 0x6C
+    u8 _pad6E[0x4];        // 0x6E
     u16 frameTimer;        // 0x72
-    s16 extraRotation;     // 0x74
+    u16 extraRotation;     // 0x74
     u8 turnDirection;      // 0x76
 } LevelPreviewCharacterState;
 
