@@ -6,13 +6,14 @@
 #include "common.h"
 #include "graphics.h"
 #include "options_menu.h"
+#include "os_cont.h"
 #include "race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
 
 extern s32 gControllerInputs;
 
-void func_800373E0_37FE0(void);
+void updateOptionsMenu(void);
 void onOptionsMenuFadeInComplete(void);
 void onOptionsMenuFadeOutComplete(void);
 void onOptionsMenuExit(void);
@@ -55,11 +56,11 @@ void initOptionsMenu(void) {
 
 void onOptionsMenuFadeInComplete(void) {
     if (getViewportFadeMode(0) == 0) {
-        setGameStateHandler(func_800373E0_37FE0);
+        setGameStateHandler(updateOptionsMenu);
     }
 }
 
-void func_800373E0_37FE0(void) {
+void updateOptionsMenu(void) {
     MenuAllocation *state;
     u8 shouldExit;
     u8 prevIndex;
@@ -74,11 +75,11 @@ void func_800373E0_37FE0(void) {
         case 0:
             prevIndex = state->selectedIndex;
             prevCompare = prevIndex;
-            if (gControllerInputs & 0x10800) {
+            if (gControllerInputs & (STICK_UP | U_JPAD)) {
                 if (state->selectedIndex != 0) {
                     state->selectedIndex--;
                 }
-            } else if (gControllerInputs & 0x20400) {
+            } else if (gControllerInputs & (STICK_DOWN | D_JPAD)) {
                 if (state->selectedIndex != 3) {
                     state->selectedIndex++;
                 }
@@ -91,7 +92,7 @@ void func_800373E0_37FE0(void) {
                 break;
             }
 
-            if (gControllerInputs & 0x9000) {
+            if (gControllerInputs & (A_BUTTON | START_BUTTON)) {
                 if (curIndex == 3) {
                     playSoundEffect(0x2C);
                     state->menuState = 1;
@@ -99,7 +100,7 @@ void func_800373E0_37FE0(void) {
                 }
             }
 
-            if (gControllerInputs & 0xC8300) {
+            if (gControllerInputs & (STICK_LEFT | STICK_RIGHT | L_JPAD | R_JPAD | A_BUTTON)) {
                 curIndex = state->selectedIndex;
                 if (curIndex == 3) {
 
@@ -117,11 +118,12 @@ void func_800373E0_37FE0(void) {
                     }
                     playSoundEffect(0x2B);
                 }
-            } else if (gControllerInputs & 0x4000) {
+            } else if (gControllerInputs & B_BUTTON) {
                 playSoundEffect(0x2E);
                 shouldExit = 1;
             }
 
+        /* Pulse highlight animation: ramp itemValues up then down over 0x20 frames */
         update_items:
             for (i = 0; i < 4; i++) {
                 if (i == state->selectedIndex) {
@@ -142,7 +144,7 @@ void func_800373E0_37FE0(void) {
 
         case 1:
             state->frameCounter++;
-            if ((u16)state->frameCounter == 0x11) {
+            if (state->frameCounter == 0x11) {
                 state->frameCounter = 0;
                 shouldExit = 1;
             }
