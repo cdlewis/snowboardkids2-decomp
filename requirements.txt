@@ -7,7 +7,7 @@ mapfile_parser>=2.9.4
 
 # permuter
 toml
-pycparser==2.23.0
+pycparser==3.0
 
 # asm-differ
 colorama
