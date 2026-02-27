@@ -3,25 +3,30 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "task_scheduler.h"
+#include "town_collision.h"
 
 typedef struct {
     /* 0x00 */ void *model;
     /* 0x04 */ Transform3D matrix;
-    /* 0x24 */ u8 pad24[0xA];
-    /* 0x2E */ s16 unk2E;
+    /* 0x24 */ s32 speed;
+    /* 0x28 */ s32 unk28;
+    /* 0x2C */ s16 targetAngle;
+    /* 0x2E */ s16 currentAngle;
     /* 0x30 */ u8 pad30[0x7];
     /* 0x37 */ u8 unk37;
     /* 0x38 */ u8 pad38[0x14];
     /* 0x4C */ u16 *unk4C;
-    /* 0x50 */ u16 unk50;
+    /* 0x50 */ u16 animFrame;
     /* 0x52 */ u8 pad52[0x2];
     /* 0x54 */ u16 unk54;
-    /* 0x56 */ u8 pad56[0x6];
+    /* 0x56 */ u16 unk56;
+    /* 0x58 */ u16 animSpeed;
+    /* 0x5A */ u16 unk5A;
     /* 0x5C */ u8 unk5C;
     /* 0x5D */ u8 unk5D;
-    /* 0x5E */ u8 unk5E;
+    /* 0x5E */ u8 state;
     /* 0x5F */ u8 pad5F[0x2];
-    /* 0x61 */ u8 unk61;
+    /* 0x61 */ u8 prevState;
 } Func8002A390Arg;
 
 typedef struct {
@@ -33,8 +38,6 @@ typedef struct {
     s16 screenZHi;
 } ParallaxSprite;
 
-extern s32 func_8002A4AC_2B0AC(void *, u8);
-extern s32 func_8002A7CC_2B3CC(void *);
 u32 sNpcInteractionColors[] = {
     0x00BB00BB, 0x000000BB, 0x00BE00D0, 0x00D100D1, 0x00D100D0, 0x000000D4,
 };
@@ -283,16 +286,22 @@ u32 sStoryMapNpcDialogueTable[] = {
 extern s16 D_8009F240_9FE40;
 extern s16 D_8009F242_9FE42;
 extern s32 D_800AB06C_A23DC;
+extern s32 D_8009F230_9FE30;
+extern s32 D_8009F234_9FE34;
+extern s16 D_8009F238_9FE38;
 extern Vec3i D_800AFF20_A7290;
 
 s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle);
+s32 func_8002A4AC_2B0AC(void *, u8);
+s32 func_8002A7CC_2B3CC(Func8002A390Arg *);
+s16 stepAngleTowardsTarget(s16 targetAngle, s16 currentAngle);
 
 s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
     GameState *state;
     s32 stateVal;
 
     state = getCurrentAllocation();
-    stateVal = arg0->unk5E;
+    stateVal = arg0->state;
 
     switch (stateVal) {
         case 0:
@@ -302,17 +311,17 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
             if (state->unk421 != 0) {
                 return 0;
             }
-            if (isNpcFacingPlayer(arg0->matrix.translation.x, arg0->matrix.translation.z, arg0->unk2E) == 0) {
+            if (isNpcFacingPlayer(arg0->matrix.translation.x, arg0->matrix.translation.z, arg0->currentAngle) == 0) {
                 return 0;
             }
-            arg0->unk54 = arg0->unk50;
+            arg0->unk54 = arg0->animFrame;
             if (arg0->unk5D == 5) {
-                arg0->unk50 = 0x21;
+                arg0->animFrame = 0x21;
             } else {
-                arg0->unk50 = 0;
+                arg0->animFrame = 0;
             }
-            arg0->unk61 = arg0->unk5E;
-            arg0->unk5E = 0x44;
+            arg0->prevState = arg0->state;
+            arg0->state = 0x44;
             break;
         case 1:
         case 2:
@@ -321,16 +330,16 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
             if (func_8002A7CC_2B3CC(arg0) == 0) {
                 return 0;
             }
-            arg0->unk61 = arg0->unk5E;
-            arg0->unk5E = 0;
+            arg0->prevState = arg0->state;
+            arg0->state = 0;
             break;
         case 0x44:
             if (func_8002A7CC_2B3CC(arg0) == 0) {
                 return 0;
             }
-            arg0->unk61 = arg0->unk5E;
-            arg0->unk5E = 0;
-            arg0->unk50 = arg0->unk54;
+            arg0->prevState = arg0->state;
+            arg0->state = 0;
+            arg0->animFrame = arg0->unk54;
             break;
     }
 
@@ -339,7 +348,157 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002A4AC_2B0AC);
 
-INCLUDE_ASM("asm/nonmatchings/2AF90", func_8002A7CC_2B3CC);
+s32 func_8002A7CC_2B3CC(Func8002A390Arg *s0) {
+    Vec3i *new_var;
+    Vec3i sp10;
+    GameState *s3;
+    s32 s4;
+    s16 a2;
+    s32 v0;
+    s32 a0;
+    s32 a1;
+    s32 t0;
+    s32 t1;
+    Vec3i *s1;
+    Vec3i *s2;
+    s3 = getCurrentAllocation();
+    s4 = 0;
+    switch (s0->state) {
+        case 1:
+            s1 = &sp10;
+            s2 = &s0->matrix.translation;
+            memcpy(&sp10, s2, sizeof(Vec3i));
+            v0 = approximateSin(s0->currentAngle) * (s0->speed >> 4);
+            if (v0 < 0) {
+                v0 += 0x1FFF;
+            }
+            sp10.x += (v0 >> 13) * 16;
+            v0 = approximateCos(s0->currentAngle) * (s0->speed >> 4);
+            if (v0 < 0) {
+                v0 += 0x1FFF;
+            }
+            t1 = sp10.z + ((v0 >> 13) * 16);
+            sp10.z = t1;
+            if (checkTownPlayerCollision(sp10.x, t1, 0) != 0) {
+                memcpy(&sp10, s2, sizeof(Vec3i));
+                s0->prevState = s0->state;
+                s0->state = 2;
+            }
+            v0 = checkTownLamppostCollision(sp10.x, sp10.z, s3->npcCollisionRadius[0]);
+            if (v0 != 0) {
+                resolveTownLamppostCollision(&sp10, s3->npcCollisionRadius[0], v0);
+            }
+            if (((u32)(distance_2d(sp10.x, sp10.z) + 0xFFDC0000)) > 0x640000) {
+                memcpy(&sp10, s2, sizeof(Vec3i));
+                s0->prevState = s0->state;
+                s0->state = 2;
+                s0->currentAngle = computeAngleToPosition(D_8009F230_9FE30, D_8009F234_9FE34, sp10.x, sp10.z);
+                break;
+            }
+            memcpy(s2, &sp10, sizeof(Vec3i));
+            a2 = stepAngleTowardsTarget(s0->currentAngle, s0->targetAngle);
+            if (a2 == (s0->targetAngle + 0x1000)) {
+                s0->animFrame = 1;
+            }
+            s0->targetAngle = a2;
+            createYRotationMatrix(&s0->matrix, a2 & 0x1FFF);
+            if (distance_2d(sp10.x - D_8009F230_9FE30, sp10.z - D_8009F234_9FE34) > 0x100000) {
+                s0->prevState = s0->state;
+                s0->state = 2;
+                s0->currentAngle = computeAngleToPosition(s3->unk3EC, s3->unk3F0, sp10.x, s1->z);
+            }
+            break;
+
+        case 2:
+            a2 = stepAngleTowardsTarget(s0->currentAngle, s0->targetAngle);
+            if (a2 == (s0->targetAngle + 0x1000)) {
+                s0->animFrame = 1;
+            }
+            s0->targetAngle = a2;
+            createYRotationMatrix(&s0->matrix, a2 & 0x1FFF);
+            if (s0->currentAngle == s0->targetAngle) {
+                s0->animFrame = 0;
+            } else {
+                s0->animFrame = s0->animSpeed;
+            }
+            if (isNpcFacingPlayer(D_8009F230_9FE30, D_8009F234_9FE34, D_8009F238_9FE38) != 0) {
+                return s4;
+            }
+            s0->prevState = s0->state;
+            s0->animFrame = s0->animSpeed;
+            if (D_8009F230_9FE30 == s0->matrix.translation.x) {
+                if (D_8009F234_9FE34 == s0->matrix.translation.z) {
+                    s0->state = 0;
+                    s0->currentAngle = D_8009F238_9FE38;
+                    break;
+                }
+            }
+            s0->state = 3;
+            s0->currentAngle = computeAngleToPosition(
+                D_8009F230_9FE30,
+                D_8009F234_9FE34,
+                s0->matrix.translation.x,
+                s0->matrix.translation.z
+            );
+            break;
+
+        case 3:
+            new_var = &sp10;
+            s2 = new_var;
+            memcpy(new_var, &s0->matrix.translation, sizeof(Vec3i));
+            v0 = approximateSin(s0->currentAngle) * (s0->speed >> 4);
+            if (v0 < 0) {
+                v0 += 0x1FFF;
+            }
+            sp10.x += (v0 >> 13) * 16;
+            v0 = approximateCos(s0->currentAngle) * (s0->speed >> 4);
+            if (v0 < 0) {
+                v0 += 0x1FFF;
+            }
+            sp10.z += (v0 >> 13) * 16;
+            memcpy(&s0->matrix.translation, new_var, sizeof(Vec3i));
+            a2 = stepAngleTowardsTarget(s0->currentAngle, s0->targetAngle);
+            if (a2 == (s0->targetAngle + 0x1000)) {
+                s0->animFrame = 1;
+            }
+            s0->targetAngle = a2;
+            createYRotationMatrix(&s0->matrix, a2 & 0x1FFF);
+            if (isNpcFacingPlayer(sp10.x, sp10.z, s0->currentAngle) == 0) {
+                if (distance_2d(sp10.x - D_8009F230_9FE30, sp10.z - D_8009F234_9FE34) <= 0xBFFF) {
+                    s4 = 1;
+                    s0->currentAngle = D_8009F238_9FE38;
+                }
+            } else {
+                s0->prevState = s0->state;
+                s0->state = 4;
+                s0->animFrame = 0;
+            }
+            break;
+
+        case 4:
+            if (isNpcFacingPlayer(s0->matrix.translation.x, s0->matrix.translation.z, s0->currentAngle) != 0) {
+                break;
+                return s4;
+            }
+            s0->prevState = s0->state;
+            s0->state = 3;
+            s0->animFrame = s0->animSpeed;
+            s0->currentAngle = computeAngleToPosition(
+                D_8009F230_9FE30,
+                D_8009F234_9FE34,
+                s0->matrix.translation.x,
+                s0->matrix.translation.z
+            );
+            break;
+
+        case 0x44:
+            if (isNpcFacingPlayer(s0->matrix.translation.x, s0->matrix.translation.z, s0->currentAngle) == 0) {
+                s4 = 1;
+            }
+    }
+
+    return s4;
+}
 
 s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle) {
     GameState *state;
@@ -447,7 +606,7 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
             arg0->unk4C = sNpcDialoguePointerTable;
             dialogueIndex = arg0->unk4C[0];
             arg0->unk37 = 0;
-            arg0->unk50 = dialogueIndex;
+            arg0->animFrame = dialogueIndex;
             arg0->unk4C += 1;
             playSoundEffectOnChannelNoPriority(0xBE, 1);
         }
@@ -457,7 +616,7 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
             arg0->unk4C = sDialogueSequence17_19;
             dialogueIndex = arg0->unk4C[0];
             arg0->unk37 = 0;
-            arg0->unk50 = dialogueIndex;
+            arg0->animFrame = dialogueIndex;
             arg0->unk4C += 1;
             playSoundEffectOnChannelNoPriority(0xAA, 1);
         }

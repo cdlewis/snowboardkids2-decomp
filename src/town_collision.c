@@ -11,12 +11,6 @@ typedef struct {
     s16 radius; // collision boundary radius
 } TownLamppost;
 
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-} TownPosition;
-
 // Two lamppost/station bases in the town.
 // Positioned between the player and the back wall (y = -83 is forward depth).
 // Left station (-56) is a level entry point; right station (56) is decorative/functional.
@@ -71,14 +65,14 @@ s32 checkTownLamppostCollision(s32 posX, s32 posY, s16 collisionRadius) {
 // position: player position (will be modified)
 // collisionRadius: player's collision radius
 // lamppostIndex: 1-based index of lamppost being collided with
-void resolveTownLamppostCollision(TownPosition *position, s16 collisionRadius, s32 lamppostIndex) {
+void resolveTownLamppostCollision(Vec3i *position, s16 collisionRadius, s32 lamppostIndex) {
     s16 *lamppostY;
     TownLamppost *lamppost;
     s16 *base;
     s16 angle;
     s32 offset;
     s16 *baseY;
-    TownPosition *pos;
+    Vec3i *pos;
     s16 *radiusPtr;
     s32 combinedRadius;
     s32 yOffset;
@@ -155,7 +149,7 @@ typedef struct {
 // controller: town controller state (distanceFromOrigin will be updated)
 // position: player position (will be modified)
 // characterIndex: 1-based index of NPC being collided with
-void resolveTownNPCCollision(TownController *controller, TownPosition *position, s32 characterIndex) {
+void resolveTownNPCCollision(TownController *controller, Vec3i *position, s32 characterIndex) {
     GameState *state;
     s16 angle;
     s32 combinedRadius;

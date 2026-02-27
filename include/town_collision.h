@@ -1,0 +1,6 @@
+#include "common.h"
+#include "geometry.h"
+
+s32 checkTownPlayerCollision(s32 posX, s32 posZ, u8 characterIndex);
+s32 checkTownLamppostCollision(s32 posX, s32 posY, s16 collisionRadius);
+void resolveTownLamppostCollision(Vec3i *position, s16 collisionRadius, s32 lamppostIndex);
