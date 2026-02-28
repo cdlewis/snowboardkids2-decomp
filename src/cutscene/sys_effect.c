@@ -1,9 +1,9 @@
 #include "cutscene/sys_effect.h"
-#include "1E2070.h"
-#include "B040.h"
-#include "C570.h"
-#include "fan_effect.h"
-#include "geometry.h"
+#include "animation/easing_state.h"
+#include "effects/fan_effect.h"
+#include "effects/rocket_boost.h"
+#include "effects/screen_transition.h"
+#include "math/geometry.h"
 
 typedef struct {
     union {

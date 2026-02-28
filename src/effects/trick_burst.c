@@ -1,9 +1,9 @@
-#include "5520.h"
 #include "assets.h"
 #include "common.h"
-#include "geometry.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "graphics/tiled_texture.h"
+#include "math/geometry.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 void initTrickBurstEffect(TrickBurstEffectTask *arg0);
 void updateTrickBurstEffect(TrickBurstEffectTask *arg0);

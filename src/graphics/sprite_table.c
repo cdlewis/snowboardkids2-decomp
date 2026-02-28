@@ -1,11 +1,11 @@
-#include "90F0.h"
+#include "graphics/sprite_table.h"
 
 #include "assets.h"
 #include "common.h"
 #include "gbi.h"
-#include "geometry.h"
-#include "graphics.h"
-#include "task_scheduler.h"
+#include "graphics/graphics.h"
+#include "math/geometry.h"
+#include "system/task_scheduler.h"
 #include "ultra64.h"
 
 extern s32 D_8008C920_8D520[];

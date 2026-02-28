@@ -1,7 +1,7 @@
-#include "59290.h"
+#include "race/character_stats.h"
 #include "common.h"
 #include "gamestate.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 // Stats for character+snowboard combinations
 // Each entry contains 6 performance parameters that get scaled/transformed

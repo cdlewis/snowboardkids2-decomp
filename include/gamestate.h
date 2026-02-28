@@ -1,10 +1,10 @@
 #pragma once
 
-#include "36BE0.h"
+#include "graphics/camera_transform.h"
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
-#include "graphics.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
+#include "graphics/graphics.h"
 
 typedef struct {
     /* 0x00 */ s16 values[10];

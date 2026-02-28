@@ -1,14 +1,14 @@
 #include "levels/lindas_castle.h"
-#include "56910.h"
-#include "594E0.h"
-#include "5AA90.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
-#include "displaylist.h"
+#include "data/course_data.h"
 #include "gamestate.h"
-#include "geometry.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
 #include "math/rand.h"
-#include "task_scheduler.h"
+#include "race/hit_reactions.h"
+#include "race/track_collision.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     s32 x;

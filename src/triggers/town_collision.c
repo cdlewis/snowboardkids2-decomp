@@ -1,7 +1,7 @@
 #include "common.h"
 #include "gamestate.h"
-#include "geometry.h"
-#include "task_scheduler.h"
+#include "math/geometry.h"
+#include "system/task_scheduler.h"
 
 // Defines circular collision zones for town objects (lampposts/stations)
 // Note: y corresponds to the depth axis (z in 3D space)

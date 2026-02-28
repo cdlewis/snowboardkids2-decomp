@@ -1,6 +1,6 @@
-#include "36BE0.h"
+#include "graphics/camera_transform.h"
 #include "common.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 #define FIXED_POINT_SCALE 8192.0f
 #define FOV_HALF_ANGLE 0.43633232f

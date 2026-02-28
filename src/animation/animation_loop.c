@@ -1,8 +1,8 @@
-#include "1E2BE0.h"
-#include "audio.h"
+#include "animation/animation_loop.h"
+#include "audio/audio.h"
 #include "common.h"
-#include "geometry.h"
-#include "task_scheduler.h"
+#include "math/geometry.h"
+#include "system/task_scheduler.h"
 
 void setAnimationLoopMode(CutsceneCameraState *arg0, s8 mode) {
     arg0->inputMode = mode;

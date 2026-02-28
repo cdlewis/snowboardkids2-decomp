@@ -1,12 +1,12 @@
-#include "5DBC0.h"
-#include "5E590.h"
-#include "5EA60.h"
+#include "race/track_height.h"
+#include "animation/bone_animation.h"
 #include "common.h"
-#include "displaylist.h"
+#include "data/asset_metadata.h"
 #include "gamestate.h"
-#include "geometry.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
 #include "math/rand.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 s32 getTrackHeightInSector(void *gameData, s32 sectorIndex, void *pos, s32 heightOffset) {
     return getTrackHeightAtPosition(gameData, sectorIndex, pos);

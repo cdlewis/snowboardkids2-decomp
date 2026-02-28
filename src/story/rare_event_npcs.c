@@ -1,9 +1,9 @@
-#include "20F0.h"
-#include "297B0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
-#include "geometry.h"
-#include "task_scheduler.h"
+#include "math/geometry.h"
+#include "story/npc_dialogue.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 extern void func_8002BFEC_2CBEC(void *);
 extern void func_8002C570_2D170(void *);

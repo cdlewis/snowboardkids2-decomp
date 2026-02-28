@@ -1,4 +1,4 @@
-#include "1DFAA0.h"
+#include "cutscene/1DFAA0.h"
 #include "common.h"
 
 typedef struct {

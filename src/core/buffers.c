@@ -1,4 +1,4 @@
-#include "buffers.h"
+#include "core/buffers.h"
 
 FrameBuffer gFrameBuffer __attribute__((section(".bss")));
 u8 gMemoryHeapBase[MEMORY_HEAP_SIZE] __attribute__((section(".bss")));

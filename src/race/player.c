@@ -1,5 +1,5 @@
-#include "player.h"
-#include "audio_manager.h"
+#include "race/player.h"
+#include "audio/audio_manager.h"
 #include "common.h"
 
 #define FORNEXT_DEPTH 4

@@ -1,14 +1,14 @@
-#include "10AD0.h"
-#include "16FA0.h"
-#include "20F0.h"
-#include "38C90.h"
+#include "ui/title_ui_elements.h"
 #include "assets.h"
 #include "common.h"
+#include "core/main.h"
 #include "gamestate.h"
-#include "graphics.h"
-#include "main.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "graphics/graphics.h"
+#include "graphics/sprite_rdp.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
+#include "ui/save_data.h"
 
 typedef struct {
     u8 pad0[0xA];

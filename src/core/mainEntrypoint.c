@@ -1,14 +1,14 @@
-#include "mainEntrypoint.h"
+#include "core/mainEntrypoint.h"
 #include "PRinternal/viint.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
-#include "controller_io.h"
-#include "displaylist.h"
-#include "graphics.h"
-#include "memory_allocator.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
-#include "thread_manager.h"
+#include "graphics/displaylist.h"
+#include "graphics/graphics.h"
+#include "system/controller_io.h"
+#include "system/memory_allocator.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
+#include "system/thread_manager.h"
 
 extern OSMesg mainMessageQueueBuffer[32];
 extern OSMesgQueue mainMessageQueue;

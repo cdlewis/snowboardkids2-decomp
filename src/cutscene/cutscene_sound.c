@@ -1,6 +1,6 @@
 #include "cutscene/cutscene_sound.h"
-#include "1E2890.h"
-#include "fan_effect.h"
+#include "effects/fan_effect.h"
+#include "effects/fan_sound_3d.h"
 #include "race/race_session.h"
 
 extern s32 gControllerInputs[4];

@@ -1,10 +1,10 @@
 #include "levels/sunny_mountain.h"
-#include "56910.h"
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
+#include "data/course_data.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
 #include "math/rand.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 extern u8 D_800BBB68_B5468[];
 extern u8 D_800BBB6C_B546C[];

@@ -1,4 +1,4 @@
-#include "19E80.h"
+#include "data/data_table.h"
 
 void getTableEntryByU16Index(DataTable_19E80 *arg0, u16 arg1, OutputStruct_19E80 *arg2) {
     u16 index_offset;

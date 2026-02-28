@@ -1,6 +1,6 @@
-#include "10AD0.h"
 #include "common.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
+#include "graphics/sprite_rdp.h"
 
 typedef struct {
     /* 0x00 */ u16 textureIndex;

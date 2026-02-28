@@ -1,4 +1,4 @@
-#include "10AD0.h"
+#include "graphics/sprite_rdp.h"
 #include "common.h"
 #include "gbi.h"
 #include "gs2dex.h"

@@ -1,4 +1,4 @@
-#include "6DE50.h"
+#include "graphics/clip_text_render.h"
 #include "common.h"
 
 extern s16 gGraphicsMode;

@@ -1,5 +1,5 @@
 #include "common.h"
-#include "1DFAA0.h"
+#include "cutscene/1DFAA0.h"
 
 void debugHandleFanSoundInput(void);
 

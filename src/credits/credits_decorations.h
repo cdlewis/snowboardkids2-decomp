@@ -1,8 +1,8 @@
 #pragma once
 
-#include "10AD0.h"
+#include "graphics/sprite_rdp.h"
 #include "common.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
 
 typedef struct {
     s16 x;

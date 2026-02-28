@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rom_loader.h"
+#include "system/rom_loader.h"
 
 USE_ASSET(_100000);
 USE_ASSET(_100010);

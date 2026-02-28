@@ -1,10 +1,10 @@
-#include "19E80.h"
-#include "20F0.h"
 #include "assets.h"
 #include "common.h"
-#include "geometry.h"
-#include "graphics.h"
-#include "task_scheduler.h"
+#include "data/data_table.h"
+#include "graphics/graphics.h"
+#include "math/geometry.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct {
     s32 unk0;

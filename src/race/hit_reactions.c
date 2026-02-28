@@ -1,10 +1,10 @@
-#include "5DBC0.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
 #include "math/rand.h"
 #include "particle_items.h"
-#include "race_session.h"
+#include "race/race_session.h"
+#include "race/track_height.h"
 
 extern u16 D_80093F90_94B90[];
 extern u16 D_80093FA4_94BA4[];

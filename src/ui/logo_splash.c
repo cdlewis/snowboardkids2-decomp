@@ -1,11 +1,11 @@
-#include "10AD0.h"
-#include "38C90.h"
 #include "assets.h"
 #include "common.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
+#include "graphics/sprite_rdp.h"
 #include "race/race_session.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
+#include "ui/save_data.h"
 
 typedef struct {
     s16 unk0;

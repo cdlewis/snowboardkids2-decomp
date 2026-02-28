@@ -1,6 +1,6 @@
-#include "rom_loader.h"
+#include "system/rom_loader.h"
 
-#include "memory_allocator.h"
+#include "system/memory_allocator.h"
 
 typedef enum {
     DMA_COMPRESSION_NONE = 0,

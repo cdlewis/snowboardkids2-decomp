@@ -1,6 +1,6 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 extern void motorInitAsync(s32);
 extern s32 pollMotorInitAsync(void);

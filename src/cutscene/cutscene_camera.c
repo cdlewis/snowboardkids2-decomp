@@ -1,5 +1,5 @@
 #include "cutscene/cutscene_camera.h"
-#include "1E2BE0.h"
+#include "animation/animation_loop.h"
 
 void cutsceneCameraReset_init(void) {
 }

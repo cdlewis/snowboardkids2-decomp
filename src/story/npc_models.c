@@ -1,10 +1,10 @@
-#include "20F0.h"
-#include "29200.h"
-#include "C570.h"
+#include "story/npc_models.h"
 #include "common.h"
-#include "geometry.h"
+#include "effects/rocket_boost.h"
+#include "math/geometry.h"
 #include "math/rand.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct {
     /* 0x00 */ void *model;

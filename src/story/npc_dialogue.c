@@ -1,12 +1,12 @@
-#include "20F0.h"
-#include "297B0.h"
-#include "B040.h"
-#include "audio.h"
+#include "story/npc_dialogue.h"
+#include "animation/easing_state.h"
+#include "audio/audio.h"
 #include "common.h"
-#include "geometry.h"
+#include "math/geometry.h"
 #include "math/rand.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct StoryMapNpcStillArg StoryMapNpcStillArg;
 void updateStoryMapNpcStill(StoryMapNpcStillArg *);

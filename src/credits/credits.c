@@ -1,14 +1,14 @@
-#include "1DC900.h"
-#include "20F0.h"
 #include "assets.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
+#include "credits/credits_text.h"
 #include "credits_decorations.h"
 #include "credits_subtitles.h"
-#include "geometry.h"
-#include "graphics.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "graphics/graphics.h"
+#include "math/geometry.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 USE_OVERLAY(_1DC260)
 

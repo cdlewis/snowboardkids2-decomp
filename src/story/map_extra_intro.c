@@ -1,8 +1,8 @@
-#include "288A0.h"
 #include "common.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "story/map_events.h"
+#include "system/task_scheduler.h"
 
 extern s32 gControllerInputs;
 

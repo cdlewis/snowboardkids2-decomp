@@ -1,8 +1,8 @@
-#include "1DFAA0.h"
 #include "common.h"
-#include "fan_effect.h"
+#include "cutscene/1DFAA0.h"
+#include "effects/fan_effect.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 extern s8 gStopFanSoundTasks;
 

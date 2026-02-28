@@ -1,17 +1,17 @@
-#include "20F0.h"
+#include "ui/level_preview_3d.h"
 
-#include "19E80.h"
-#include "5520.h"
-#include "5E590.h"
-#include "90F0.h"
-#include "D6F0.h"
 #include "assets.h"
-#include "audio.h"
-#include "displaylist.h"
-#include "geometry.h"
+#include "audio/audio.h"
+#include "data/asset_metadata.h"
+#include "data/data_table.h"
+#include "effects/animated_sprite_effect.h"
+#include "graphics/displaylist.h"
+#include "graphics/sprite_table.h"
+#include "graphics/tiled_texture.h"
+#include "math/geometry.h"
 #include "race/race_session.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     u8 padding[0x24];

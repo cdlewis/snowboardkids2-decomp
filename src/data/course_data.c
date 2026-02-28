@@ -1,8 +1,8 @@
-#include "56910.h"
+#include "data/course_data.h"
 #include "assets.h"
 #include "common.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 extern s32 gSkyDisplayLists2[];
 extern s32 gSkyDisplayLists1[];

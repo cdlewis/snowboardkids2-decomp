@@ -1,6 +1,6 @@
 #include "common.h"
-#include "geometry.h"
-#include "task_scheduler.h"
+#include "math/geometry.h"
+#include "system/task_scheduler.h"
 
 void cleanupSteppedMatrixController(void);
 

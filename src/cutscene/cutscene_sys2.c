@@ -1,7 +1,7 @@
 #include "cutscene/cutscene_sys2.h"
-#include "1E64A0.h"
-#include "CBA0.h"
-#include "task_scheduler.h"
+#include "effects/zoom_effect.h"
+#include "graphics/model_loader.h"
+#include "system/task_scheduler.h"
 
 void cutsceneSys2Wipe_init(void) {
 }

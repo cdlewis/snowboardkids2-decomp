@@ -1,9 +1,9 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 extern void func_8001CD90_1D990(void);
 u8 eeprom_save_magic[16] = "SNOW2EEP";

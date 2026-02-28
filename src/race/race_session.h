@@ -1,14 +1,14 @@
 #pragma once
 
-#include "options_menu.h"
+#include "ui/options_menu.h"
 #include "particle_items.h"
-#include "46080.h"
-#include "5AA90.h"
-#include "90F0.h"
+#include "race/race_hud.h"
+#include "race/track_collision.h"
+#include "graphics/sprite_table.h"
 #include "common.h"
-#include "displaylist.h"
+#include "graphics/displaylist.h"
 #include "gamestate.h"
-#include "memory_allocator.h"
+#include "system/memory_allocator.h"
 
 typedef struct {
     u8 padding[0x14];
@@ -47,6 +47,7 @@ void initGameSession(void);
 void func_8001452C_1512C(void);
 void initControllerMotors(void);
 void initRace(void);
+void playSoundEffect(s32 soundId);
 void initLevelSelectBasicState(void);
 void initPlayerCountSelectState(void);
 void func_800226F0_232F0(void);

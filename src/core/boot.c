@@ -1,5 +1,5 @@
 #include "common.h"
-#include "mainEntrypoint.h"
+#include "core/mainEntrypoint.h"
 #include "ultra64.h"
 
 void idleThreadEntrypoint(void *);

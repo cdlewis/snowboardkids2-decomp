@@ -1,8 +1,8 @@
-#include "2F990.h"
-#include "audio.h"
-#include "graphics.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "audio/audio.h"
+#include "graphics/graphics.h"
+#include "story/shop_ui.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 extern s32 gControllerInputs;
 

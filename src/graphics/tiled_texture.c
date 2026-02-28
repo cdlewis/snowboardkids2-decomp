@@ -1,10 +1,10 @@
-#include "20F0.h"
-#include "5520.h"
+#include "graphics/tiled_texture.h"
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
-#include "graphics.h"
-#include "task_scheduler.h"
+#include "graphics/displaylist.h"
+#include "graphics/graphics.h"
+#include "math/geometry.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 u32 D_800885D0_891D0[] = { 0x00000000, 0x00000000, 0x010005F0, 0x00000000 };
 u32 D_800885E0_891E0[] = { 0x00000000, 0x00000000, 0x01000718, 0x00000000 };

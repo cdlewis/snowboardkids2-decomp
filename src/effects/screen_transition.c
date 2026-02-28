@@ -1,11 +1,11 @@
-#include "36BE0.h"
-#include "5520.h"
 #include "assets.h"
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "graphics/camera_transform.h"
+#include "graphics/displaylist.h"
+#include "graphics/tiled_texture.h"
+#include "math/geometry.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     s32 reserved;

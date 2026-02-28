@@ -1,15 +1,15 @@
-#include "288A0.h"
-#include "36B80.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "assets.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
-#include "graphics.h"
-#include "options_menu.h"
+#include "graphics/graphics.h"
 #include "os_cont.h"
 #include "race/race_session.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "story/map_events.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
+#include "text/font_render.h"
+#include "ui/options_menu.h"
 
 extern s32 gControllerInputs;
 

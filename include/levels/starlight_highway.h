@@ -1,8 +1,8 @@
 #pragma once
 
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
 
 typedef struct {
     s16 timer;

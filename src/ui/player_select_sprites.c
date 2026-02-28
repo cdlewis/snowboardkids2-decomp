@@ -1,8 +1,8 @@
-#include "10AD0.h"
-#include "1DB7A0.h"
+#include "ui/player_select_sprites.h"
 #include "assets.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "graphics/sprite_rdp.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     /* 0x000 */ u8 pad0[0x1E2];

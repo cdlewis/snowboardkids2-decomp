@@ -1,8 +1,8 @@
-#include "56910.h"
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
-#include "task_scheduler.h"
+#include "data/course_data.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     u8 _pad[0x14];

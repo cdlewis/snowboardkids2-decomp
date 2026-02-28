@@ -1,9 +1,9 @@
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
-#include "geometry.h"
-#include "graphics.h"
-#include "task_scheduler.h"
+#include "graphics/graphics.h"
+#include "math/geometry.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     s16 duration; /* 0x00 */

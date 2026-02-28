@@ -1,6 +1,6 @@
-#include "19E80.h"
-#include "C870.h"
+#include "graphics/palette.h"
 #include "common.h"
+#include "data/data_table.h"
 
 typedef struct {
     /* 0x000 */ u8 originalPalette[0x200];

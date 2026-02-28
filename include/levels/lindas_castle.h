@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.h"
-#include "geometry.h"
+#include "math/geometry.h"
 
 typedef struct {
     /* 0x00 */ Transform3D matrix;

@@ -1,13 +1,13 @@
-#include "36B80.h"
-#include "36BE0.h"
-#include "36E50.h"
+#include "story/location_markers.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "assets.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
-#include "geometry.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "graphics/camera_transform.h"
+#include "math/geometry.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
+#include "text/font_render.h"
 
 // Struct definitions
 typedef struct {

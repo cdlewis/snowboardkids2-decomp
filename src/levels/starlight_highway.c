@@ -1,15 +1,15 @@
 #include "levels/starlight_highway.h"
-#include "19E80.h"
-#include "56910.h"
-#include "5AA90.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
-#include "displaylist.h"
+#include "data/course_data.h"
+#include "data/data_table.h"
 #include "gamestate.h"
-#include "geometry.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
 #include "math/rand.h"
 #include "race/particle_items.h"
-#include "task_scheduler.h"
+#include "race/track_collision.h"
+#include "system/task_scheduler.h"
 
 extern s32 gFrameCounter;
 extern Gfx *gRegionAllocPtr;

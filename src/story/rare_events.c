@@ -1,9 +1,9 @@
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
-#include "geometry.h"
-#include "task_scheduler.h"
-#include "town_collision.h"
+#include "math/geometry.h"
+#include "system/task_scheduler.h"
+#include "triggers/town_collision.h"
 
 typedef struct {
     /* 0x00 */ void *model;

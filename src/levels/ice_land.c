@@ -1,11 +1,11 @@
 #include "levels/ice_land.h"
-#include "56910.h"
-#include "5AA90.h"
 #include "common.h"
-#include "displaylist.h"
+#include "data/course_data.h"
 #include "gamestate.h"
-#include "geometry.h"
-#include "task_scheduler.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
+#include "race/track_collision.h"
+#include "system/task_scheduler.h"
 
 extern void setPlayerBouncedBackState(Player *player);
 

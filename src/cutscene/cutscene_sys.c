@@ -1,9 +1,9 @@
 #include "cutscene/cutscene_sys.h"
-#include "1DFAA0.h"
-#include "CBA0.h"
-#include "DC90.h"
-#include "graphics.h"
-#include "task_scheduler.h"
+#include "cutscene/1DFAA0.h"
+#include "graphics/graphics.h"
+#include "graphics/model_loader.h"
+#include "system/task_scheduler.h"
+#include "ui/cutscene_wait_menu.h"
 extern u8 gCutsceneFadeBrightnessTable[];
 extern s32 gButtonsPressed[];
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.h"
-#include "geometry.h"
+#include "math/geometry.h"
 
 typedef struct {
     u8 _pad[0x14];

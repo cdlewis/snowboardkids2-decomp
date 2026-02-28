@@ -1,10 +1,10 @@
-#include "audio.h"
+#include "audio/audio.h"
 #include "assets.h"
 #include "common.h"
-#include "displaylist.h"
-#include "player.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "graphics/displaylist.h"
+#include "race/player.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     void *musicBankBuffer;

@@ -1,7 +1,7 @@
 #include "credits_subtitles.h"
-#include "B040.h"
+#include "animation/easing_state.h"
 #include "common.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
 #include "race/race_session.h"
 
 extern s32 getOffsetTableEntryCount(s32);

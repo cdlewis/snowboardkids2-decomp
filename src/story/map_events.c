@@ -1,10 +1,10 @@
-#include "288A0.h"
-#include "29200.h"
-#include "2C8F0.h"
-#include "graphics.h"
+#include "story/map_events.h"
+#include "graphics/graphics.h"
 #include "math/rand.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "story/npc_models.h"
+#include "story/rare_event_npcs.h"
+#include "system/task_scheduler.h"
 
 ColorData gMenuLightColor = { 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x50, 0x50, 0x00 };
 ColorData gMenuAmbientColor = { 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00 };

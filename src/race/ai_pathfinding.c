@@ -1,9 +1,9 @@
-#include "56910.h"
-#include "A9A40.h"
+#include "race/ai_pathfinding.h"
 #include "common.h"
-#include "geometry.h"
+#include "data/course_data.h"
+#include "math/geometry.h"
 #include "math/rand.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 // Macro definitions
 #define SEC3(gs) ((Section3Entry *)((gs)->gameData.section3Data))

@@ -1,13 +1,13 @@
-#include "56910.h"
-#include "594E0.h"
-#include "5AA90.h"
-#include "5DBC0.h"
+#include "race/track_collision.h"
 #include "common.h"
-#include "displaylist.h"
+#include "data/course_data.h"
 #include "gamestate.h"
-#include "geometry.h"
-#include "race_session.h"
-#include "task_scheduler.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
+#include "race/hit_reactions.h"
+#include "race/race_session.h"
+#include "race/track_height.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     u8 _pad[0x10];

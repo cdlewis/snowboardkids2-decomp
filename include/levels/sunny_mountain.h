@@ -1,8 +1,8 @@
 #pragma once
 
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
 
 typedef struct {
     /* 0x00 */ Transform3D transform;       /* Transformation matrix */

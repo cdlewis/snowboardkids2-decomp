@@ -1,12 +1,12 @@
-#include "20F0.h"
-#include "38C90.h"
-#include "4050.h"
-#include "B040.h"
-#include "audio.h"
+#include "animation/easing_state.h"
+#include "audio/audio.h"
 #include "common.h"
-#include "graphics.h"
+#include "effects/cutscene_keyframes.h"
+#include "graphics/graphics.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
+#include "ui/save_data.h"
 
 extern u8 D_8009DF6C_9EB6C[];
 

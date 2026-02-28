@@ -1,5 +1,5 @@
 #include "cutscene/cutscene_bgm.h"
-#include "audio.h"
+#include "audio/audio.h"
 
 void cutsceneBgmPlay_init(void) {
 }

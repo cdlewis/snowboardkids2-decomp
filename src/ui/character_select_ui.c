@@ -1,12 +1,12 @@
-#include "232F0.h"
+#include "ui/character_select_ui.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
-#include "geometry.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
+#include "math/geometry.h"
 #include "race/race_session.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     u16 x;

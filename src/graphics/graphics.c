@@ -1,10 +1,10 @@
-#include "graphics.h"
+#include "graphics/graphics.h"
 
-#include "buffers.h"
 #include "common.h"
-#include "geometry.h"
-#include "memory_allocator.h"
-#include "thread_manager.h"
+#include "core/buffers.h"
+#include "math/geometry.h"
+#include "system/memory_allocator.h"
+#include "system/thread_manager.h"
 
 #define BUFFER_SIZE 0x10000
 #define MEMORY_HEAP_SIZE 0x200000

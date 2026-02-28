@@ -1,10 +1,10 @@
-#include "1DFAA0.h"
-#include "33FE0.h"
-#include "38C90.h"
 #include "assets.h"
 #include "common.h"
-#include "main.h"
-#include "task_scheduler.h"
+#include "core/main.h"
+#include "cutscene/1DFAA0.h"
+#include "system/task_scheduler.h"
+#include "text/hud_text.h"
+#include "ui/save_data.h"
 
 typedef struct {
     CutsceneManager *cutsceneManager;

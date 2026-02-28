@@ -1,13 +1,13 @@
-#include "1DFAA0.h"
-#include "20F0.h"
 #include "assets.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
+#include "cutscene/1DFAA0.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
 #include "race/race_session.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 /* Struct definitions */
 typedef struct {

@@ -1,9 +1,9 @@
 #include "assets.h"
 #include "common.h"
-#include "displaylist.h"
+#include "graphics/displaylist.h"
 #include "math/rand.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 s32 staticSpriteEffectTexture[] = {
     (s32)0xFFE00040, 0x00000000,      (s32)0xFFF0FFF0, (s32)0xFFFFFFFF, 0x00200040, 0x00000000,

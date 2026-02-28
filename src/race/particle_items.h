@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "gamestate.h"
-#include "geometry.h"
+#include "math/geometry.h"
 
 typedef struct {
     u8 pad0[0x14];    /* 0x00 */

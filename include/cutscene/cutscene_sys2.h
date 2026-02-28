@@ -1,7 +1,7 @@
 #ifndef _CUTSCENE_SYS2_H_
 #define _CUTSCENE_SYS2_H_
 
-#include "1DFAA0.h"
+#include "cutscene/1DFAA0.h"
 #include "common.h"
 
 typedef struct {

@@ -1,7 +1,7 @@
 #include "assets.h"
 #include "common.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 void *loadTextRenderAsset(s32 variant) {
     if ((u8)variant != 1) {

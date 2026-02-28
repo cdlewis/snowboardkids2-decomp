@@ -1,12 +1,12 @@
 #include "session_manager.h"
-#include "38C90.h"
-#include "4050.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
-#include "graphics.h"
+#include "effects/cutscene_keyframes.h"
+#include "graphics/graphics.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
+#include "ui/save_data.h"
 
 typedef struct {
     s16 unk0;

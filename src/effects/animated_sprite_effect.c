@@ -1,10 +1,10 @@
-#include "D6F0.h"
+#include "effects/animated_sprite_effect.h"
 
 #include "assets.h"
-#include "displaylist.h"
+#include "graphics/displaylist.h"
 #include "math/rand.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     void *modelData;

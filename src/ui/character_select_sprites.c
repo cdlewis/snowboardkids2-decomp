@@ -1,15 +1,15 @@
-#include "10AD0.h"
-#include "20F0.h"
-#include "38C90.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "assets.h"
 #include "common.h"
-#include "displaylist.h"
 #include "gamestate.h"
-#include "geometry.h"
-#include "graphics.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "graphics/displaylist.h"
+#include "graphics/graphics.h"
+#include "graphics/sprite_rdp.h"
+#include "math/geometry.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
+#include "ui/save_data.h"
 
 typedef struct {
     SceneModel *model;

@@ -1,12 +1,12 @@
-#include "4050.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"
-#include "graphics.h"
-#include "memory_allocator.h"
+#include "effects/cutscene_keyframes.h"
+#include "graphics/graphics.h"
 #include "race/race_session.h"
 #include "session_manager.h"
-#include "task_scheduler.h"
+#include "system/memory_allocator.h"
+#include "system/task_scheduler.h"
 extern u8 gDebugUnlockEnabled;
 
 void resetGameSession(void);

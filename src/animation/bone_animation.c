@@ -1,6 +1,6 @@
-#include "5EA60.h"
+#include "animation/bone_animation.h"
 #include "common.h"
-#include "geometry.h"
+#include "math/geometry.h"
 
 void *getAnimationFrameData(void *animData) {
     return (void *)((s8 *)animData + *(s32 *)((s8 *)animData + 4));

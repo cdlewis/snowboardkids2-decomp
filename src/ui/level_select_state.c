@@ -1,7 +1,7 @@
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 void awaitCharacterSelect(void);
 void awaitLevelSelectBasic(void);

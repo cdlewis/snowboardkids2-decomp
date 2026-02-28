@@ -1,14 +1,14 @@
-#include "options_menu.h"
-#include "10AD0.h"
-#include "33FE0.h"
-#include "36B80.h"
+#include "ui/options_menu.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "assets.h"
 #include "common.h"
 #include "font_encoding.h"
+#include "graphics/sprite_rdp.h"
 #include "race/race_session.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
+#include "text/font_render.h"
+#include "text/hud_text.h"
 
 typedef struct {
     s16 x;

@@ -1,7 +1,7 @@
-#include "90F0.h"
 #include "common.h"
+#include "graphics/sprite_table.h"
 #include "math/rand.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 extern void setupAndEnqueueSprite(void *, u16, s32, s32, s32, s32, s32, s32, s32, s32, s16);
 

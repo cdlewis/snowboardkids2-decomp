@@ -1,17 +1,17 @@
-#include "displaylist.h"
+#include "graphics/displaylist.h"
 
-#include "19E80.h"
-#include "5AA90.h"
-#include "68CF0.h"
 #include "assets.h"
 #include "common.h"
+#include "data/data_table.h"
 #include "gamestate.h"
 #include "gbi.h"
-#include "geometry.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
+#include "math/geometry.h"
 #include "race/race_session.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "race/track_collision.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
+#include "text/font_assets.h"
 
 USE_OVERLAY(rand);
 

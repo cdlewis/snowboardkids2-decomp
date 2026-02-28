@@ -1,15 +1,15 @@
-#include "20F0.h"
-#include "297B0.h"
-#include "2C8F0.h"
-#include "2DD40.h"
-#include "B040.h"
+#include "race/track_geometry.h"
 #include "D_800AFE8C_A71FC_type.h"
-#include "audio.h"
+#include "animation/easing_state.h"
+#include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
-#include "geometry.h"
+#include "math/geometry.h"
 #include "math/rand.h"
-#include "task_scheduler.h"
+#include "story/npc_dialogue.h"
+#include "story/rare_event_npcs.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct {
     s32 unk0;

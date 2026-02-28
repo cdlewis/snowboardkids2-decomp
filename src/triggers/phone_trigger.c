@@ -1,7 +1,7 @@
 #include "common.h"
-#include "event_trigger.h"
 #include "gamestate.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
+#include "triggers/event_trigger.h"
 
 void checkPhoneLocationDiscovery(LocationDiscoveryTrigger *);
 

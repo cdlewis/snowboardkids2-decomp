@@ -1,15 +1,15 @@
-#include "main.h"
+#include "core/main.h"
 
-#include "4050.h"
-#include "5520.h"
-#include "90F0.h"
 #include "assets.h"
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
+#include "effects/cutscene_keyframes.h"
+#include "graphics/displaylist.h"
+#include "graphics/sprite_table.h"
+#include "graphics/tiled_texture.h"
+#include "math/geometry.h"
 #include "math/rand.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     u8 padding[0x2C];

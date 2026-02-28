@@ -1,12 +1,12 @@
-#include "1DFAA0.h"
 #include "assets.h"
-#include "buffers.h"
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
-#include "graphics.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "core/buffers.h"
+#include "cutscene/1DFAA0.h"
+#include "graphics/displaylist.h"
+#include "graphics/graphics.h"
+#include "math/geometry.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     /* 0x00 */ void *vertStart1;

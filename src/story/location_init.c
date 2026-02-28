@@ -1,6 +1,6 @@
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     s16 frameCounter;

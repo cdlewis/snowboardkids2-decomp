@@ -1,12 +1,12 @@
-#include "288A0.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
-#include "graphics.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "graphics/graphics.h"
+#include "story/map_events.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 USE_OVERLAY(_1DA660)
 USE_OVERLAY(_41AD80)

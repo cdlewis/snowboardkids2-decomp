@@ -1,8 +1,8 @@
 #pragma once
 
-#include "1DFAA0.h"
+#include "cutscene/1DFAA0.h"
 #include "common.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
 
 typedef struct {
     u8 padding[0xFF5];

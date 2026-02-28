@@ -1,9 +1,9 @@
-#include "90F0.h"
-#include "B040.h"
+#include "animation/easing_state.h"
 #include "assets.h"
 #include "common.h"
-#include "geometry.h"
-#include "task_scheduler.h"
+#include "graphics/sprite_table.h"
+#include "math/geometry.h"
+#include "system/task_scheduler.h"
 
 typedef enum {
     ANIM_STATE_INIT,

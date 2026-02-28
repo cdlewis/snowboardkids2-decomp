@@ -1,6 +1,6 @@
-#include "10AD0.h"
 #include "common.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
+#include "graphics/sprite_rdp.h"
 
 typedef struct {
     s16 x;

@@ -1,13 +1,13 @@
-#include "17F50.h"
-#include "20F0.h"
 #include "D_800AFE8C_A71FC_type.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
-#include "geometry.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
+#include "math/geometry.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "story/map_character_anim.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct {
     u8 padding[0x3B0];

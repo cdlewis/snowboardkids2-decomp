@@ -1,7 +1,7 @@
-#include "1DD170.h"
+#include "cutscene/1DD170.h"
 
-#include "1DFAA0.h"
 #include "common.h"
+#include "cutscene/1DFAA0.h"
 #include "cutscene/cutscene_bgm.h"
 #include "cutscene/cutscene_camera.h"
 #include "cutscene/cutscene_chr.h"

@@ -1,7 +1,7 @@
-#include "90F0.h"
 #include "common.h"
-#include "geometry.h"
-#include "task_scheduler.h"
+#include "graphics/sprite_table.h"
+#include "math/geometry.h"
+#include "system/task_scheduler.h"
 
 typedef struct {
     u8 padding[0x16];

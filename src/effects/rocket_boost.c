@@ -1,10 +1,10 @@
-#include "C570.h"
+#include "effects/rocket_boost.h"
 #include "assets.h"
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
 
 extern void *D_80088670_89270;
 extern void *D_80088680_89280;

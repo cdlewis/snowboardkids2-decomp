@@ -1,8 +1,8 @@
-#include "20F0.h"
 #include "common.h"
-#include "geometry.h"
+#include "math/geometry.h"
 #include "math/rand.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct {
     func_80002B50_3750_arg *model;

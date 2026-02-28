@@ -1,8 +1,8 @@
-#include "90F0.h"
 #include "common.h"
-#include "geometry.h"
+#include "graphics/sprite_table.h"
+#include "math/geometry.h"
 #include "math/rand.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 #define ORBITAL_SPRITE_COUNT 12
 #define ORBITAL_SPRITE_Y_OFFSET 0x16147A

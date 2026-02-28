@@ -1,10 +1,10 @@
 #include "common.h"
 #include "core/session_manager.h"
 #include "gamestate.h"
-#include "geometry.h"
-#include "graphics.h"
+#include "graphics/graphics.h"
+#include "math/geometry.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
 
 extern u8 storyMapLocationIndex;
 

@@ -1,14 +1,14 @@
-#include "199C0.h"
-#include "19AB0.h"
-#include "1A770.h"
-#include "4050.h"
+#include "story/map_state.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
+#include "core/game_state_init.h"
 #include "core/session_manager.h"
-#include "game_state_init.h"
-#include "task_scheduler.h"
+#include "effects/cutscene_keyframes.h"
+#include "story/location_init.h"
+#include "story/race_state_machine.h"
+#include "system/task_scheduler.h"
 
 extern u8 gTitleInitialized;
 extern u8 storyMapLocationIndex;

@@ -1,8 +1,8 @@
-#include "1E2BE0.h"
-#include "1E36C0.h"
-#include "D6F0.h"
-#include "DA20.h"
-#include "geometry.h"
+#include "animation/slot_animation.h"
+#include "animation/animation_loop.h"
+#include "effects/animated_sprite_effect.h"
+#include "effects/static_sprite_effect.h"
+#include "math/geometry.h"
 #include "math/rand.h"
 
 extern s8 gAnalogStickY;

@@ -1,13 +1,13 @@
-#include "1DB7A0.h"
-#include "288A0.h"
-#include "9FF70.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "assets.h"
-#include "audio.h"
+#include "audio/audio.h"
 #include "common.h"
-#include "graphics.h"
-#include "rom_loader.h"
-#include "task_scheduler.h"
+#include "graphics/graphics.h"
+#include "race/race_main.h"
+#include "story/map_events.h"
+#include "system/rom_loader.h"
+#include "system/task_scheduler.h"
+#include "ui/player_select_sprites.h"
 
 USE_OVERLAY(_1DB7A0);
 

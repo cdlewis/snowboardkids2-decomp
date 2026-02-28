@@ -1,11 +1,11 @@
-#include "36B80.h"
-#include "56910.h"
-#include "B040.h"
-#include "DC90.h"
-#include "audio.h"
+#include "ui/cutscene_wait_menu.h"
+#include "animation/easing_state.h"
+#include "audio/audio.h"
 #include "common.h"
+#include "data/course_data.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
+#include "text/font_render.h"
 
 extern s32 gControllerInputs;
 

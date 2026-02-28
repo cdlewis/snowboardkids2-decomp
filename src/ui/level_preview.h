@@ -1,9 +1,9 @@
 #pragma once
 
-#include "1DFAA0.h"
+#include "cutscene/1DFAA0.h"
 #include "common.h"
-#include "displaylist.h"
-#include "geometry.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
 
 typedef struct {
     s32 posX;              // 0x00

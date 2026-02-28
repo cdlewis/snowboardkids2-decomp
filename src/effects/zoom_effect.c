@@ -1,12 +1,12 @@
-#include "1E64A0.h"
-#include "36B80.h"
-#include "90F0.h"
-#include "B040.h"
-#include "audio.h"
+#include "effects/zoom_effect.h"
+#include "animation/easing_state.h"
+#include "audio/audio.h"
 #include "common.h"
 #include "cutscene/cutscene_sys2.h"
+#include "graphics/sprite_table.h"
 #include "race/race_session.h"
-#include "task_scheduler.h"
+#include "system/task_scheduler.h"
+#include "text/font_render.h"
 
 extern void updateCutsceneWaitSystem(void);
 extern s16 gWipeOffsetX[];

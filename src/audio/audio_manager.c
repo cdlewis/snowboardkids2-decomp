@@ -1,8 +1,8 @@
-#include "audio_manager.h"
+#include "audio/audio_manager.h"
 
 #include "common.h"
 #include "sched.h"
-#include "thread_manager.h"
+#include "system/thread_manager.h"
 
 typedef struct {
     void *buf;

@@ -1,7 +1,7 @@
-#include "19E80.h"
-#include "1DC900.h"
-#include "B040.h"
-#include "C870.h"
+#include "credits/credits_text.h"
+#include "animation/easing_state.h"
+#include "data/data_table.h"
+#include "graphics/palette.h"
 
 typedef struct {
     s16 unk0;
