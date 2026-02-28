@@ -50,7 +50,13 @@ typedef struct {
     u16 count;
     u16 baseIndex2;
     u16 count2;
-    u8 padding2[0x10];
+    /* 0x14 */ u16 vertexIdx0;
+    /* 0x16 */ u8 padding2[2];
+    /* 0x18 */ u16 vertexIdx1;
+    /* 0x1A */ u16 vertexIdx2;
+    /* 0x1C */ u8 padding3[2];
+    /* 0x1E */ u16 vertexIdx3;
+    /* 0x20 */ u8 padding4[4];
 } TrackFaceGroup;
 
 typedef struct {
@@ -70,7 +76,7 @@ typedef struct {
 } TrackGeometryData;
 
 typedef struct {
-    void *unk0;
+    u16 *unk0;
     Vertex6 *vertices;
     TrackFace *faces;
     TrackFaceGroup *faceGroups;
