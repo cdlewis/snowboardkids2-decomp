@@ -4036,3 +4036,6 @@ gStoryMapRareEventTypes = 0x8008DF00; // rom:0x8EB00
 gStoryMapRegularEventTypes = 0x8008DF3C; // rom:0x8EB3C
 gStoryMapRegularEventTypesPad = 0x8008E02C; // rom:0x8EC2C
 gStoryMapNpcTalkSounds = 0x8008E590; // rom:0x8F190 size:0x140
+rareEventNpcTable = 0x8008EAE0; // rom:0x8F6E0
+rareEventModelModes = 0x8008EB10; // rom:0x8F710
+rareEventEffectDurations = 0x8008EBE0; // rom:0x8F7E0
