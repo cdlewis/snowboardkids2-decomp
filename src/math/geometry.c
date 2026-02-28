@@ -8,14 +8,11 @@ Transform3D identityMatrix = {
     .translation = { 0,                          0,                          0                          }
 };
 
-// Default scale matrix (20-byte packed diagonal matrix with 1.0 values)
-u8 gScaleMatrix[20] = {
-    0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00,
+// Default scale/identity matrix used as a scratch Transform3D for various operations
+Transform3D gScaleMatrix = {
+    .m = { { 0x2000, 0, 0 }, { 0, 0x2000, 0 }, { 0, 0, 0x2000 } },
+    .translation = { 0,                0,                0                }
 };
-
-// Temporary position vector used in transform calculations
-Vec3i gTempPosition = { 0, 0, 0 };
 
 // 32-byte identity matrix used in rotation calculations
 u8 gIdentityMatrix32[32] = {
@@ -878,10 +875,10 @@ void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPos
     xRotation.translation.y = 0;
     xRotation.translation.x = 0;
     func_8006B084_6BC84(&xRotation, &yRotation, &combined);
-    gTempPosition.x = 0;
-    gTempPosition.y = 0;
-    gTempPosition.z = tempPosZ;
-    tempTransformPtr = (s32 *)&gTempPosition;
+    gScaleMatrix.translation.x = 0;
+    gScaleMatrix.translation.y = 0;
+    gScaleMatrix.translation.z = tempPosZ;
+    tempTransformPtr = (s32 *)&gScaleMatrix.translation;
     func_8006B084_6BC84(tempTransformPtr - 5, &combined, output);
 }
 

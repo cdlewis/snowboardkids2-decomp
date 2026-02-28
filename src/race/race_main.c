@@ -1789,24 +1789,24 @@ s32 updateRaceFinishLoseStep(Player *player) {
     return 0;
 }
 
-extern Transform3D gScaleMatrix;
-extern Vec3i gTempPosition;
-
 void updateTrickRotationTransform(Player *player) {
     Transform3D rotationMatrix;
-    s16 *flipAngle;
-    s16 *spinAngle;
+    Transform3D *temp;
 
-    gTempPosition.x = 0;
-    gTempPosition.y = 0xFFF00000;
-    gTempPosition.z = 0;
-    flipAngle = &player->unkA98;
-    spinAngle = &player->unkA96;
-    createRotationMatrixYX(&rotationMatrix, *flipAngle, *spinAngle);
+    temp = &gScaleMatrix;
+
+    gScaleMatrix.translation.x = 0;
+    gScaleMatrix.translation.y = 0xFFF00000;
+    gScaleMatrix.translation.z = 0;
+
+    createRotationMatrixYX(&rotationMatrix, player->unkA98, player->unkA96);
+
     rotationMatrix.translation.x = 0;
     rotationMatrix.translation.y = 0x100000;
     rotationMatrix.translation.z = 0;
-    func_8006B084_6BC84(&gScaleMatrix, &rotationMatrix, &player->unk9B0.prev_position);
+
+    func_8006B084_6BC84(temp, &rotationMatrix, &player->unk9B0.prev_position);
+
     player->animFlags |= 0x800;
 }
 

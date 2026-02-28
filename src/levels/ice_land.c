@@ -146,11 +146,7 @@ void updateIceLandMovingPlatform(IceLandMovingPlatformTask *platform) {
     gameState = getCurrentAllocation();
     if (gameState->gamePaused == 0) {
         matrix = platform->matrix3C;
-        transformVectorRelative(
-            &platform->waypoints[platform->currentWaypointIndex].x,
-            matrix,
-            &sp.relativePos
-        );
+        transformVectorRelative(&platform->waypoints[platform->currentWaypointIndex].x, matrix, &sp.relativePos);
         // Calculate and clamp yaw angle delta to face next waypoint
         computedAngle = atan2Fixed(-sp.relativePos.x, -sp.relativePos.z) & 0x1FFF;
         deltaAngle = computedAngle;
@@ -213,7 +209,11 @@ void updateIceLandMovingPlatform(IceLandMovingPlatformTask *platform) {
         if (numPlayers > 0) {
             playerOffset = 0;
             do {
-                if (isPointInPlayerCollisionSphere((Player *)((u8 *)gameState->players + playerOffset), &platform->transform.translation, 0x280000) != 0) {
+                if (isPointInPlayerCollisionSphere(
+                        (Player *)((u8 *)gameState->players + playerOffset),
+                        &platform->transform.translation,
+                        0x280000
+                    ) != 0) {
                     setPlayerBouncedBackState((Player *)((u8 *)gameState->players + playerOffset));
                 }
                 playerIndex++;

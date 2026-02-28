@@ -4,8 +4,6 @@
 #include "geometry.h"
 #include "task_scheduler.h"
 
-extern Transform3D gScaleMatrix;
-
 void setAnimationLoopMode(CutsceneCameraState *arg0, s8 mode) {
     arg0->inputMode = mode;
 }

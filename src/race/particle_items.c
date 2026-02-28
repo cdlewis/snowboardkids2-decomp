@@ -24,7 +24,6 @@ extern void *D_8009A710_9B310;
 extern void *D_8009A720_9B320;
 extern void *D_8009A760_9B360;
 extern void *D_8009A770_9B370;
-extern Vec3i gTempPosition;
 extern Transform3D gIdentityMatrix32;
 extern s32 gFrameCounter;
 
@@ -1414,10 +1413,10 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
     scale = state->scale;
     scaleMatrix((Transform3D *)state, scale, scale, scale);
 
-    gTempPosition.x = 0;
-    gTempPosition.y = 0x9CCCC;
-    gTempPosition.z = 0xFFE44CCD;
-    ptr = (s32 *)&gTempPosition;
+    gScaleMatrix.translation.x = 0;
+    gScaleMatrix.translation.y = 0x9CCCC;
+    gScaleMatrix.translation.z = 0xFFE44CCD;
+    ptr = (s32 *)&gScaleMatrix.translation;
     func_8006B084_6BC84(ptr - 5, state, state->secondaryObj);
 
     if (gFrameCounter & 1) {
@@ -2246,7 +2245,7 @@ void setupItemTriggerEntries(ItemTriggerTaskState *arg0) {
 
     if (arg0->numItems > 0) {
         one = 1;
-        ptr = (s32 *)&gTempPosition;
+        ptr = (s32 *)&gScaleMatrix.translation;
         do {
             offset = i << 4;
             *((s8 *)(offset + (s32)arg0->items)) = one;

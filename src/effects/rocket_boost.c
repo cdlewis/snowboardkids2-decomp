@@ -10,7 +10,6 @@ extern void *D_80088670_89270;
 extern void *D_80088680_89280;
 extern void *D_80088690_89290;
 extern Transform3D gIdentityMatrix32;
-extern Vec3i gTempPosition;
 extern s32 gFrameCounter;
 
 typedef struct RocketEffectData RocketEffectData;
@@ -62,10 +61,10 @@ void updateRocketEffect(RocketEffectUpdateData *arg0) {
     func_8006B084_6BC84(&gIdentityMatrix32, temp_v0, arg0);
     scaleMatrix((Transform3D *)&arg0->unk0, arg0->unk82, arg0->unk82, arg0->unk82);
 
-    gTempPosition.x = 0;
-    gTempPosition.y = 0x9CCCC;
-    gTempPosition.z = 0xFFE44CCD;
-    ptr = (s32 *)&gTempPosition;
+    gScaleMatrix.translation.x = 0;
+    gScaleMatrix.translation.y = 0x9CCCC;
+    gScaleMatrix.translation.z = 0xFFE44CCD;
+    ptr = (s32 *)&gScaleMatrix.translation;
 
     func_8006B084_6BC84(ptr - 5, arg0, &arg0->unk3C);
 

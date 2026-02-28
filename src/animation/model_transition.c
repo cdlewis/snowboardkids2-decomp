@@ -51,7 +51,6 @@ s32 D_8008C200_8CE00[] = {
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 
-extern Vec3i gTempPosition;
 void createRotationMatrixXYZ(Transform3D *, u16, u16, u16);
 
 void initCameraRotationTask(CameraRotationTaskState *state) {
@@ -115,7 +114,7 @@ void updateCameraRotationTask(CameraRotationTaskState *state) {
     state->rotationY = (u16)state->rotationY + (u16)state->angularVelocityY;
     state->rotationZ = (u16)state->rotationZ + (u16)state->angularVelocityZ;
 
-    positionPtr = (s32 *)&gTempPosition;
+    positionPtr = (s32 *)&gScaleMatrix.translation;
     *positionPtr = 0;
     *(positionPtr + 1) = (s32)0xFFFB3334;
     *(positionPtr + 2) = 0;

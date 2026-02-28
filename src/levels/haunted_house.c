@@ -94,7 +94,6 @@ typedef struct {
     s16 animPhase;
 } FloatingSpriteEntity;
 
-extern s32 gTempPosition;
 extern void *g_GhostDefaultAssetMetadata;
 extern Vec3i g_GhostBaseDirection;
 extern AnimationData D_800BC830_B0520[];
@@ -600,7 +599,7 @@ void initGhostTransformations(GhostManager *ghostManager) {
     ghostManager->ghostSlotData = allocateNodeMemory(0x200);
 
     slotIndex = 0;
-    transformSrc = &gTempPosition;
+    transformSrc = (s32 *)&gScaleMatrix.translation;
     spawnPos = g_GhostSpawnPositions;
 
     while (slotIndex < 8) {

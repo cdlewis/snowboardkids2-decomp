@@ -9,7 +9,6 @@
 #include "ultra64.h"
 
 extern s32 D_8008C920_8D520[];
-extern Vec3i gTempPosition;
 extern s32 D_8009F1F0_9FDF0;
 extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
@@ -267,8 +266,8 @@ void renderOpaqueSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {
         memcpy(&transform, &identityMatrix, 0x20);
-        memcpy(&gTempPosition, &sprite->position, 0xC);
-        transform3DToMtx((u8 *)&gTempPosition - 0x14, sprite->translationMtx);
+        memcpy(&gScaleMatrix.translation, &sprite->position, 0xC);
+        transform3DToMtx(&gScaleMatrix, sprite->translationMtx);
 
         memcpy(&transform, &identityMatrix, 0x20);
         scaleXRaw = sprite->scaleX;
@@ -423,8 +422,8 @@ void renderTranslucentSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {
         memcpy(&transform, &identityMatrix, 0x20);
-        memcpy(&gTempPosition, &sprite->position, 0xC);
-        transform3DToMtx((u8 *)&gTempPosition - 0x14, sprite->translationMtx);
+        memcpy(&gScaleMatrix.translation, &sprite->position, 0xC);
+        transform3DToMtx(&gScaleMatrix, sprite->translationMtx);
 
         memcpy(&transform, &identityMatrix, 0x20);
         scaleXRaw = sprite->scaleX;

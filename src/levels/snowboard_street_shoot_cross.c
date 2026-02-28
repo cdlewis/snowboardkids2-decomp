@@ -3,6 +3,7 @@
 #include "56910.h"
 #include "594E0.h"
 #include "5AA90.h"
+#include "assets.h"
 #include "common.h"
 #include "displaylist.h"
 #include "gamestate.h"
@@ -10,10 +11,8 @@
 #include "graphics.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-#include "assets.h"
 
 #define Y_OFFSET 0xFFE80000
-
 
 typedef struct {
     s8 textureIndex;
@@ -78,7 +77,6 @@ extern Gfx D_8009A780_9B380[];
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
-extern s32 gTempPosition;
 extern void *D_800BBBB0_AD630;
 
 void initShootCrossTargets(ShootCrossTargets *arg0) {
@@ -115,7 +113,7 @@ void initShootCrossTargetsCallback(ShootCrossTargets *arg0) {
     arg0->transformMatrices = allocateNodeMemory(arg0->targetCount << 6);
 
     if (arg0->targetCount > 0) {
-        ptr = &gTempPosition;
+        ptr = (s32 *)&gScaleMatrix.translation;
         do {
             offset = i << 4;
             *((s8 *)(offset + (s32)arg0->targets)) = 0;
