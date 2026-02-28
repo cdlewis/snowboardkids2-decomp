@@ -12,7 +12,7 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "rand.h"
+#include "math/rand.h"
 #include "task_scheduler.h"
 
 typedef void (*FuncPtr)(void *);

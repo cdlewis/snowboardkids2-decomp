@@ -1,0 +1,906 @@
+#include "20F0.h"
+#include "297B0.h"
+#include "B040.h"
+#include "audio.h"
+#include "common.h"
+#include "geometry.h"
+#include "math/rand.h"
+#include "race/race_session.h"
+#include "task_scheduler.h"
+
+typedef struct StoryMapNpcStillArg StoryMapNpcStillArg;
+void updateStoryMapNpcStill(StoryMapNpcStillArg *);
+void updateStoryMapNpcTalking(Func297D8Arg *);
+
+struct StoryMapNpcStillArg {
+    /* 0x00 */ void *model;
+    /* 0x04 */ Transform3D matrix;
+    /* 0x24 */ u8 pad24[0xC];
+    /* 0x30 */ u16 rotation;
+    /* 0x32 */ u8 pad32[0xA];
+    /* 0x3C */ void *callback;
+    /* 0x40 */ u8 pad40[0x10];
+    /* 0x50 */ u16 unk50;
+    /* 0x52 */ u8 pad52[0x4];
+    /* 0x56 */ u16 unk56;
+    /* 0x58 */ u8 pad58[0x6];
+    /* 0x5E */ u8 state;
+    /* 0x5F */ u8 unk5F;
+};
+
+typedef struct {
+    /* 0x000 */ u8 pad0[0x408];
+    /* 0x408 */ s32 unk408;
+    /* 0x40C */ u8 pad40C[0x4];
+    /* 0x410 */ s32 unk410;
+    /* 0x414 */ u8 pad414[0x16];
+    /* 0x42A */ u8 unk42A;
+    /* 0x42B */ u8 pad42B[0x3];
+    /* 0x42E */ u8 unk42E;
+} AllocationData;
+
+void initStoryMapNpcJump(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = randB() & 0xF;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcJump);
+}
+
+void updateStoryMapNpcJump(Func297D8Arg *arg0) {
+    AllocationData *allocation;
+    s32 shouldSetCallback;
+    u16 savedUnk50;
+    u8 savedUnk5E;
+    u8 currentUnk5E;
+    s32 funcArg;
+    SceneModel *model;
+
+    allocation = getCurrentAllocation();
+    shouldSetCallback = 0;
+
+    if (arg0->unk5E == 5) {
+        switch (arg0->unk50) {
+            case 0x1B:
+                if (arg0->unk62 != 0) {
+                    arg0->unk50 = 0x1C;
+                }
+                break;
+
+            case 0x1C:
+                funcArg = -1;
+                if (arg0->unk62 == 3) {
+                    model = arg0->model;
+                    currentUnk5E = *(volatile u8 *)&arg0->unk5E;
+                    arg0->unk50 = 4;
+                    arg0->unk5E = 0;
+                    arg0->unk62 = 0;
+                    goto block_15;
+                }
+                break;
+        }
+    } else {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
+            setCallback(collectStoryMapItem);
+            shouldSetCallback = 1;
+        } else if (arg0->unk5E == 0) {
+            if (arg0->unk5A >= 0) {
+                arg0->unk5A++;
+            }
+            funcArg = 2;
+            if (arg0->unk5A == 0x78) {
+                model = arg0->model;
+                currentUnk5E = arg0->unk5E;
+                arg0->unk5A = -1;
+                arg0->unk5E = 5;
+                arg0->unk50 = 0x1B;
+            block_15:
+                arg0->unk61 = currentUnk5E;
+                setAnimationIndex(model, funcArg);
+            }
+        }
+    }
+
+    updateStoryMapNpcModel(arg0);
+
+    allocation->unk408 = arg0->matrix.translation.x;
+    allocation->unk410 = arg0->matrix.translation.z;
+
+    if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
+        savedUnk50 = arg0->unk50;
+        savedUnk5E = arg0->unk5E;
+        arg0->unk5E = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = updateStoryMapNpcJump;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedUnk5E;
+        setCallback(updateStoryMapNpcTalking);
+    }
+}
+
+void initStoryMapNpcWave(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = arg0->unk5A + (randB() & 0xF);
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcWave);
+}
+
+void updateStoryMapNpcWave(Func297D8Arg *arg0) {
+    AllocationData *allocation;
+    s32 shouldSetCallback;
+    u16 savedUnk50;
+    u8 savedUnk5E;
+    u8 currentUnk5E;
+
+    allocation = getCurrentAllocation();
+    shouldSetCallback = 0;
+
+    if (arg0->unk5E == 6) {
+        switch (arg0->unk50) {
+            case 0x18:
+                if (arg0->unk62 != 0) {
+                    arg0->unk50 = 0x19;
+                }
+                break;
+
+            case 0x19:
+                arg0->unk5A++;
+                if (arg0->unk5A == 0x3C) {
+                    arg0->unk5A = 0;
+                    arg0->unk50 = 0x1A;
+                }
+                break;
+
+            case 0x1A:
+                if (arg0->unk62 != 0) {
+                    arg0->unk62 = 0;
+                    arg0->unk5E = 0;
+                    arg0->unk50 = arg0->unk58;
+                }
+                break;
+        }
+    } else {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
+            setCallback(collectStoryMapItem);
+            shouldSetCallback = 1;
+        } else if (arg0->unk5E == 0) {
+            if (arg0->unk5A >= 0) {
+                arg0->unk5A++;
+            }
+            if (arg0->unk5A == 0x55) {
+                currentUnk5E = arg0->unk5E;
+                arg0->unk5A = -1;
+                arg0->unk5E = 6;
+                arg0->unk50 = 0x18;
+                arg0->unk61 = currentUnk5E;
+            }
+        }
+    }
+
+    updateStoryMapNpcModel(arg0);
+
+    allocation->unk408 = arg0->matrix.translation.x;
+    allocation->unk410 = arg0->matrix.translation.z;
+
+    if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
+        savedUnk50 = arg0->unk50;
+        savedUnk5E = arg0->unk5E;
+        arg0->unk5E = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = updateStoryMapNpcWave;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedUnk5E;
+        setCallback(updateStoryMapNpcTalking);
+    }
+}
+
+void initStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    arg0->unk48 = 0;
+    arg0->unk40 = 0;
+    arg0->unk44 = 0x280000;
+    setCallback(updateStoryMapNpcFloatEffect);
+}
+
+void updateStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
+    AllocationData *allocation;
+    s32 shouldSetCallback;
+    u16 savedUnk50;
+    u8 savedUnk5E;
+
+    allocation = getCurrentAllocation();
+    shouldSetCallback = 0;
+
+    if (arg0->unk5E == 9) {
+        arg0->unk5A++;
+        if (arg0->unk5A == 0x10) {
+            arg0->unk5A = -1;
+            arg0->unk5E = 0;
+            arg0->unk50 = 4;
+            arg0->unk58 = 4;
+            arg0->unk24 = 0x1D000;
+        }
+    } else {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
+            setCallback(collectStoryMapItem);
+            shouldSetCallback = 1;
+        } else if (arg0->unk3A == 0x10) {
+            if (arg0->unk5A >= 0) {
+                arg0->unk5E = 9;
+                arg0->unk50 = 0;
+                spawnSpriteEffectEx(arg0->model, 0, 6, 10, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+            }
+        }
+    }
+
+    updateStoryMapNpcModel(arg0);
+
+    allocation->unk408 = arg0->matrix.translation.x;
+    allocation->unk410 = arg0->matrix.translation.z;
+
+    if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
+        savedUnk50 = arg0->unk50;
+        savedUnk5E = arg0->unk5E;
+        arg0->unk5E = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = updateStoryMapNpcFloatEffect;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedUnk5E;
+        setCallback(updateStoryMapNpcTalking);
+    }
+}
+
+void initStoryMapNpcLookAround(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcLookAround);
+}
+
+void updateStoryMapNpcLookAround(Func297D8Arg *arg0) {
+    AllocationData *alloc;
+    s32 setCallbackFlag;
+    u8 temp;
+
+    alloc = getCurrentAllocation();
+    setCallbackFlag = 0;
+
+    if (arg0->unk5E == 7) {
+        if (arg0->unk62 != 0) {
+            arg0->unk5E = 0;
+            arg0->unk62 = 0;
+            arg0->unk50 = arg0->unk58;
+        }
+    } else {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
+            setCallback(collectStoryMapItem);
+            setCallbackFlag = 1;
+        } else if (arg0->unk5E == 0) {
+            arg0->unk5A++;
+            if (arg0->unk5A == 0x78) {
+                temp = arg0->unk5E;
+                arg0->unk5E = 7;
+                arg0->unk5A = 0;
+                arg0->unk50 = 0x16;
+                arg0->unk61 = temp;
+            }
+        }
+    }
+
+    updateStoryMapNpcModel(arg0);
+
+    alloc->unk408 = arg0->matrix.translation.x;
+    alloc->unk410 = arg0->matrix.translation.z;
+
+    if ((alloc->unk42A == 0x11) && (setCallbackFlag ^ 1)) {
+        u16 savedUnk50 = arg0->unk50;
+        u8 savedUnk5E = arg0->unk5E;
+        arg0->unk5E = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = updateStoryMapNpcLookAround;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedUnk5E;
+        setCallback(updateStoryMapNpcTalking);
+    }
+}
+
+void initStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = 0;
+    arg0->unk48 = 0;
+    arg0->unk40 = 0;
+    arg0->unk44 = 0x260000;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcThinkEffect);
+}
+
+void updateStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
+    AllocationData *allocation;
+    s32 shouldSetCallback;
+    u8 temp;
+    u8 savedUnk5E;
+    u16 savedUnk50;
+
+    allocation = getCurrentAllocation();
+    shouldSetCallback = 0;
+
+    if (arg0->unk5E == 8) {
+        switch (arg0->unk50) {
+            case 0xA:
+                if (arg0->unk62 != 0) {
+                    arg0->unk50 = 0xB;
+                }
+                break;
+
+            case 0xB:
+                arg0->unk5A++;
+                if (arg0->unk5A == 0x3C) {
+                    arg0->unk5A = -1;
+                    arg0->unk50 = 0xC;
+                }
+                break;
+
+            case 0xC:
+                if (arg0->unk62 != 0) {
+                    arg0->unk50 = 0x10;
+                }
+                break;
+
+            case 0x10:
+                if (arg0->unk62 != 0) {
+                    arg0->unk62 = 0;
+                    arg0->unk50 = 4;
+                    arg0->unk58 = 4;
+                    arg0->unk24 = 0x18000;
+                    arg0->unk5E = 0;
+                }
+                break;
+        }
+    } else {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
+            setCallback(collectStoryMapItem);
+            shouldSetCallback = 1;
+        } else if (arg0->unk5E == 0) {
+            if (arg0->unk5A >= 0) {
+                arg0->unk5A++;
+            }
+            if (arg0->unk5A == 0x96) {
+                temp = arg0->unk5E;
+                arg0->unk5E = 8;
+                arg0->unk50 = 0xA;
+                arg0->unk5A = 0;
+                arg0->unk61 = temp;
+                spawnSpriteEffectEx(arg0->model, 0, 7, 0x2D, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+            }
+        }
+    }
+
+    updateStoryMapNpcModel(arg0);
+
+    allocation->unk408 = arg0->matrix.translation.x;
+    allocation->unk410 = arg0->matrix.translation.z;
+
+    if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
+        allocation->unk42E = 1;
+        savedUnk50 = arg0->unk50;
+        savedUnk5E = arg0->unk5E;
+        arg0->unk5E = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = updateStoryMapNpcThinkEffect;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedUnk5E;
+        setCallback(updateStoryMapNpcTalking);
+    }
+}
+
+void initStoryMapNpcIdle(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setAnimationIndex(arg0->model, 4);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcIdle);
+}
+
+void initStoryMapNpcIdleNoAnim(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcIdle);
+}
+
+void initStoryMapNpcIdleNoAnim2(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcIdle);
+}
+
+void initStoryMapNpcIdleWithEffect(Func297D8Arg *arg0) {
+    arg0->unk44 = 0x260000;
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk48 = 0;
+    arg0->unk40 = 0;
+    spawnSpriteEffectEx(arg0->model, 0, 0x29, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+    arg0->unk5A = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setAnimationIndex(arg0->model, 1);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcIdle);
+}
+
+void initStoryMapNpcIdleWithEffect2(Func297D8Arg *arg0) {
+    arg0->unk44 = 0x260000;
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk48 = 0;
+    arg0->unk40 = 0;
+    spawnSpriteEffectEx(arg0->model, 0, 9, -1, &arg0->unk40, 0x10000, 0, 2, 0, 0);
+    arg0->unk5A = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    if (arg0->unk5C == 1) {
+        setAnimationIndex(arg0->model, 0);
+    }
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcIdle);
+}
+
+void initStoryMapNpcIdleRandomDelay(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = (randB() & 0x1F) + 0x14;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setAnimationIndex(arg0->model, 4);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcIdle);
+}
+
+void initStoryMapNpcIdleRandomDelayNoAnim(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = (randB() & 0x1F) + 0x14;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcIdle);
+}
+
+void initStoryMapNpcIdleRandomDelayNoAnim2(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = (randB() & 0x1F) + 0x14;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcIdle);
+}
+
+void initStoryMapNpcIdleRandomDelayNoAnim3(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = (randB() & 0x1F) + 0x14;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcIdle);
+}
+
+void updateStoryMapNpcIdle(Func297D8Arg *arg0) {
+    s32 setCallbackFlag;
+    AllocationData *alloc;
+
+    alloc = getCurrentAllocation();
+    setCallbackFlag = 0;
+
+    if (tryStoryMapNpcInteraction(arg0) != 0) {
+        setCallback(collectStoryMapItem);
+        setCallbackFlag = 1;
+    }
+
+    updateStoryMapNpcModel(arg0);
+
+    alloc->unk408 = arg0->matrix.translation.x;
+    alloc->unk410 = arg0->matrix.translation.z;
+
+    if (arg0->unk5A != 0) {
+        arg0->unk5A--;
+        if (arg0->unk5A == 1) {
+            playStoryMapNpcIdleSound(arg0);
+        }
+    }
+
+    if ((alloc->unk42A == 0x11) && (setCallbackFlag ^ 1)) {
+        u16 savedUnk50 = arg0->unk50;
+        u8 savedUnk5E = arg0->unk5E;
+
+        arg0->unk5E = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = updateStoryMapNpcIdle;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedUnk5E;
+        setCallback(updateStoryMapNpcTalking);
+    }
+
+    if (arg0->unk5D == 9) {
+        arg0->unk62 = 0;
+    }
+}
+
+void initStoryMapNpcNod(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcNod);
+}
+
+void updateStoryMapNpcNod(Func297D8Arg *arg0) {
+    AllocationData *alloc;
+    s32 setCallbackFlag;
+
+    alloc = getCurrentAllocation();
+    setCallbackFlag = 0;
+
+    if (arg0->unk5E == 0xA) {
+        switch (arg0->unk50) {
+            case 0x10:
+                if (arg0->unk62 != 0) {
+                    arg0->unk50 = 0x11;
+                }
+                break;
+
+            case 0x11:
+                arg0->unk5A = arg0->unk5A + 1;
+                if (arg0->unk5A == 0x1E) {
+                    arg0->unk5A = 0;
+                    arg0->unk50 = 0x12;
+                }
+                break;
+
+            case 0x12:
+                if (arg0->unk62 != 0) {
+                    arg0->unk50 = arg0->unk58;
+                    arg0->unk5E = 0;
+                }
+                break;
+        }
+    } else {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
+            setCallback(collectStoryMapItem);
+            setCallbackFlag = 1;
+        } else if (arg0->unk5E == 0) {
+            arg0->unk5A = arg0->unk5A + 1;
+            if (arg0->unk5A == 0x78) {
+                arg0->unk5E = 0xA;
+                arg0->unk5A = 0;
+                arg0->unk50 = 0x10;
+            }
+        }
+    }
+
+    updateStoryMapNpcModel(arg0);
+
+    alloc->unk408 = arg0->matrix.translation.x;
+    alloc->unk410 = arg0->matrix.translation.z;
+
+    if ((alloc->unk42A == 0x11) && (setCallbackFlag ^ 1)) {
+        u16 savedUnk50 = arg0->unk50;
+        u8 savedUnk5E = arg0->unk5E;
+        arg0->unk5E = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = updateStoryMapNpcNod;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedUnk5E;
+        setCallback(updateStoryMapNpcTalking);
+    }
+}
+
+void initStoryMapNpcTalk(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcTalk);
+}
+
+void updateStoryMapNpcTalk(Func297D8Arg *arg0) {
+    AllocationData *alloc = getCurrentAllocation();
+
+    switch (arg0->unk5E) {
+        case 1:
+            if (arg0->unk62 != 0) {
+                arg0->unk5E = 2;
+                arg0->unk50 = arg0->unk50 + 1;
+                if (arg0->unk5C == 5) {
+                    playSoundEffect(0xD6);
+                }
+            }
+            break;
+
+        case 2:
+            arg0->unk5A = arg0->unk5A + 1;
+            if (arg0->unk5A == 0x5A) {
+                arg0->unk5A = 0;
+                arg0->unk5E = 3;
+                arg0->unk50 = arg0->unk50 + 1;
+            }
+            break;
+
+        case 3:
+            if (arg0->unk62 != 0) {
+                arg0->unk5E = 0;
+                arg0->unk50 = arg0->unk58;
+                setAnimationIndex(arg0->model, -1);
+            }
+            break;
+
+        default:
+            if (tryStoryMapNpcInteraction(arg0) != 0) {
+                setCallback(collectStoryMapItem);
+            } else if (arg0->unk5E == 0) {
+                arg0->unk5A = arg0->unk5A + 1;
+                if (arg0->unk5A == 0x4B) {
+                    arg0->unk5E = 1;
+                    arg0->unk5A = 0;
+                    arg0->unk50 = 0x16;
+                    if (arg0->unk5C >= 6) {
+                        arg0->unk50 = 0xA;
+                    }
+                    if (arg0->unk5C == 5) {
+                        setAnimationIndex(arg0->model, 0);
+                    }
+                } else if (arg0->unk5A == 0x37) {
+                    playStoryMapNpcTalkSound(arg0);
+                }
+            }
+            break;
+    }
+
+    updateStoryMapNpcModel(arg0);
+    alloc->unk408 = arg0->matrix.translation.x;
+    alloc->unk410 = arg0->matrix.translation.z;
+}
+
+void initStoryMapNpcStretch(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    arg0->unk5A = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcStretch);
+}
+
+void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
+    AllocationData *allocation;
+    s32 shouldSetCallback;
+    u16 savedUnk50;
+    u8 savedUnk5E;
+
+    allocation = getCurrentAllocation();
+    shouldSetCallback = 0;
+
+    if (arg0->unk5E == 1) {
+        switch (arg0->unk50) {
+            case 0x13:
+                if (arg0->unk62 != 0) {
+                    arg0->unk50 = 0x14;
+                }
+                break;
+
+            case 0x14:
+                arg0->unk5A++;
+                if (arg0->unk5A == 0x2D) {
+                    arg0->unk5A = 0;
+                    arg0->unk50 = 0x15;
+                }
+                break;
+
+            case 0x15:
+                if (arg0->unk62 != 0) {
+                    arg0->unk5E = 0;
+                    arg0->unk50 = arg0->unk58;
+                }
+                break;
+        }
+    } else {
+        if (tryStoryMapNpcInteraction(arg0) != 0) {
+            setCallback(collectStoryMapItem);
+            shouldSetCallback = 1;
+        } else if (arg0->unk5E == 0) {
+            arg0->unk5A++;
+            if (arg0->unk5A == 0x78) {
+                arg0->unk5E = 1;
+                arg0->unk5A = 0;
+                arg0->unk50 = 0x13;
+            }
+        }
+    }
+
+    updateStoryMapNpcModel(arg0);
+
+    allocation->unk408 = arg0->matrix.translation.x;
+    allocation->unk410 = arg0->matrix.translation.z;
+
+    if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
+        savedUnk50 = arg0->unk50;
+        savedUnk5E = arg0->unk5E;
+        arg0->unk5E = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = updateStoryMapNpcStretch;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedUnk5E;
+        setCallback(updateStoryMapNpcTalking);
+    }
+}
+
+extern u16 gStoryMapItemSpawnPositionsX[];
+extern u16 gStoryMapItemSpawnPositionsZ[];
+
+void playStoryMapNpcIdleSound(Func297D8Arg *arg0) {
+    arg0->unk5A = 0;
+
+    switch (arg0->unk5D) {
+        case 0xB:
+            playSoundEffect(0xB2);
+            break;
+        case 0xC:
+            playSoundEffect(0x112);
+            break;
+        case 0xD:
+            playSoundEffect(gStoryMapItemSpawnPositionsX[arg0->unk5C]);
+            break;
+        case 0xE:
+            playSoundEffect(gStoryMapItemSpawnPositionsZ[arg0->unk5C]);
+            break;
+    }
+}
+
+u16 gStoryMapNpcTalkSounds[] = {
+    0x0000, 0x0000, 0x0083, 0x0000, 0x0000, 0x00C9, 0x0000, 0x00F2, 0x00E3, 0x0000, 0x0059, 0x0072, 0x0088, 0x00A0,
+    0x00B9, 0x00CE, 0x0303, 0x0303, 0x0301, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0002, 0x0304, 0x0506, 0x0907,
+    0x0001, 0x0304, 0x0506, 0x0809, 0x0001, 0x0204, 0x0506, 0x0907, 0x0001, 0x0203, 0x0506, 0x0807, 0x0001, 0x0203,
+    0x0406, 0x0907, 0x0001, 0x0203, 0x0405, 0x0807, 0x000D, 0x0602, 0x000D, 0x0602, 0x000D, 0x0602, 0x000D, 0x0602,
+    0x0306, 0x090D, 0x0306, 0x090D, 0x0306, 0x090D, 0x0306, 0x090D, 0x020E, 0x0F07, 0x020E, 0x0F07, 0x020E, 0x0F07,
+    0x020E, 0x0F07, 0x080E, 0x0407, 0x080E, 0x0407, 0x080E, 0x0407, 0x080E, 0x0407, 0x0105, 0x0A0B, 0x0105, 0x0A0B,
+    0x0105, 0x0A0B, 0x0105, 0x0A0B, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x0C02, 0x0304,
+    0x0C02, 0x0304, 0x0C02, 0x0304, 0x0C02, 0x0304, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D,
+    0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D, 0x000F, 0x000F, 0x0013, 0x0013, 0x0013, 0x000F,
+    0x000F, 0x000F, 0x0013, 0x0000, 0x0000, 0x005C, 0x005C, 0x0060, 0x005B, 0x005C, 0x005E, 0x0074, 0x0000, 0x0074,
+    0x0074, 0x0074, 0x0074, 0x0076, 0x008A, 0x008A, 0x0000, 0x0090, 0x008A, 0x008A, 0x008D, 0x00AA, 0x00A2, 0x00AA,
+    0x0000, 0x00A2, 0x00A2, 0x00A5, 0x00BB, 0x00BB,
+};
+
+void playStoryMapNpcTalkSound(Func297D8Arg *arg0) {
+    playSoundEffect(gStoryMapNpcTalkSounds[arg0->unk5C]);
+}
+
+void initStoryMapNpcStill(Func297D8Arg *arg0) {
+    arg0->unk5E = 0;
+    arg0->unk61 = 0;
+    arg0->unk62 = 0;
+    createYRotationMatrix(&arg0->matrix, arg0->rotation);
+    setupStoryMapNpcModel(arg0);
+    setCallback(updateStoryMapNpcStill);
+}
+
+void updateStoryMapNpcStill(StoryMapNpcStillArg *arg0) {
+    u16 savedUnk50;
+    u8 savedState;
+    AllocationData *alloc = getCurrentAllocation();
+
+    if (tryStoryMapNpcInteraction(arg0) != 0) {
+        setCallback(collectStoryMapItem);
+    }
+
+    updateStoryMapNpcModel((Func297D8Arg *)arg0);
+
+    alloc->unk408 = arg0->matrix.translation.x;
+    alloc->unk410 = arg0->matrix.translation.z;
+
+    if (alloc->unk42A == 0x11) {
+        savedUnk50 = arg0->unk50;
+        savedState = arg0->state;
+        arg0->state = 0x14;
+        arg0->unk50 = 0;
+        arg0->callback = updateStoryMapNpcStill;
+        arg0->unk56 = savedUnk50;
+        arg0->unk5F = savedState;
+        setCallback(updateStoryMapNpcTalking);
+    }
+}
+
+void nullStoryMapNpcStillCallback(void) {
+}
+
+void updateStoryMapNpcTalking(Func297D8Arg *arg0) {
+    AllocationData *alloc = getCurrentAllocation();
+
+    switch (arg0->unk5E) {
+        case 0x14:
+            func_8002AE80_2BA80(arg0);
+            createYRotationMatrix(&arg0->matrix, arg0->unk30);
+            break;
+        case 0x15:
+            func_8002B248_2BE48(arg0);
+            createYRotationMatrix(&arg0->matrix, arg0->unk30);
+            break;
+    }
+
+    updateStoryMapNpcModel(arg0);
+
+    if (alloc->unk42A == 0) {
+        setCallback(arg0->callback);
+    }
+}
+
+void setupStoryMapNpcModel(Func297D8Arg *arg0) {
+    applyTransformToModel(arg0->model, &arg0->matrix);
+    setModelAnimation(arg0->model, arg0->unk50);
+    updateModelGeometry(arg0->model);
+}
+
+void updateStoryMapNpcModel(Func297D8Arg *arg0) {
+    s32 result;
+
+    getCurrentAllocation();
+    applyTransformToModel(arg0->model, &arg0->matrix);
+
+    if (arg0->unk50 != arg0->unk52) {
+        arg0->unk52 = arg0->unk50;
+        setModelAnimation(arg0->model, arg0->unk50);
+        arg0->unk62 = 0;
+    }
+
+    if (arg0->unk62 != -1) {
+        result = clearModelRotation(arg0->model);
+    } else {
+        result = 0;
+    }
+
+    if (result != 0) {
+        arg0->unk37 = 1;
+        arg0->unk62 = (arg0->unk62 & 0x7F) + 1;
+        if (arg0->unk50 == 0x98) {
+            if (arg0->unk5E == 2) {
+                arg0->unk50 = 0x90;
+            } else {
+                arg0->unk50 = arg0->unk58;
+            }
+        }
+    }
+
+    updateModelGeometry(arg0->model);
+}

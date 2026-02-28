@@ -1,5 +1,4 @@
 #include "3CD70.h"
-#include "42170.h"
 #include "46080.h"
 #include "51060.h"
 #include "52880.h"
@@ -15,7 +14,8 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "rand.h"
+#include "math/rand.h"
+#include "race/particle_items.h"
 #include "task_scheduler.h"
 
 typedef void (*FuncPtr)(void *);

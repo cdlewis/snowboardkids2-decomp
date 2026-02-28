@@ -3,7 +3,7 @@
 #include "common.h"
 #include "displaylist.h"
 #include "geometry.h"
-#include "rand.h"
+#include "math/rand.h"
 #include "task_scheduler.h"
 
 extern u8 D_800BBB68_B5468[];
@@ -22,14 +22,14 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x38];
-    void *displayList;     /* 0x38: Main display list (offset 0x90 from result) */
-    void *assetData;       /* 0x3C: Shared asset data pointer for all display objects (segment1) */
-    void *unk40;           /* 0x40: Shared pointer for all display objects (segment2) */
-    s32 unk44;             /* 0x44: Always set to 0 */
+    void *displayList; /* 0x38: Main display list (offset 0x90 from result) */
+    void *assetData;   /* 0x3C: Shared asset data pointer for all display objects (segment1) */
+    void *unk40;       /* 0x40: Shared pointer for all display objects (segment2) */
+    s32 unk44;         /* 0x44: Always set to 0 */
     u8 _pad2[0xC];
-    u8 *displayObjects;    /* 0x54: Array of 4 DisplayListObjects (0xF0 bytes total, 0x3C each) */
+    u8 *displayObjects; /* 0x54: Array of 4 DisplayListObjects (0xF0 bytes total, 0x3C each) */
     u8 _pad3[0x80];
-    s16 unkD8;             /* 0xD8: Always set to 0 */
+    s16 unkD8; /* 0xD8: Always set to 0 */
 } SunnyMountainTaskState;
 
 extern void updateSunnyMountainChairLiftTask(void);

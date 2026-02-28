@@ -1,0 +1,231 @@
+#include "1DFAA0.h"
+#include "20F0.h"
+#include "assets.h"
+#include "audio.h"
+#include "common.h"
+#include "displaylist.h"
+#include "geometry.h"
+#include "race/race_session.h"
+#include "rom_loader.h"
+#include "task_scheduler.h"
+
+/* Struct definitions */
+typedef struct {
+    u8 _pad0[0x20];
+    StateEntry *unk20;
+    StateEntry *unk24;
+    StateEntry *unk28;
+    u32 unk2C;
+    u8 _pad30[0x2C];
+    StateEntry *unk5C;
+    StateEntry *unk60;
+    StateEntry *unk64;
+    u32 unk68;
+    u8 _pad6C[0x18];
+    s16 unk84;
+} FanEffectTaskState;
+
+typedef struct {
+    u8 _pad0[0x18];
+    s32 yPosOffset;
+    u8 _pad1C[0x20];
+    u8 transform[0x40];
+    s32 fadeDelta;
+    u8 _pad80[0x2];
+    u16 zRotation;
+} FanEffectFadeState;
+
+typedef struct {
+    u8 _pad0[0x3C];
+    u8 transform[0x3C];
+    void **displayList;
+    s32 fadeDelta;
+    u16 yRotation;
+    u16 zRotation;
+    s16 scale;
+    s16 remainingFrames;
+} FanEffectGrowState;
+
+typedef struct {
+    u8 padding[0x78];
+    s32 unk78;
+    u8 padding2[4];
+    s16 unk80;
+    u8 padding3[4];
+    s16 unk86;
+} FanEffectTask;
+
+/* Global variables */
+extern Transform3D gIdentityMatrix32;
+extern StateEntry D_80088650;
+extern StateEntry D_80088660;
+extern s16 gFanSoundCount;
+extern s16 gFanSoundIds[];
+
+/* Forward declarations */
+static void initFanEffectTask(FanEffectTaskState *taskState);
+static void updateFanEffectGrow(FanEffectGrowState *arg);
+static void cleanupFanEffectTask(FanEffectTaskState *taskState);
+static void updateFanEffectFade(FanEffectFadeState *fadeState);
+
+/* Public functions */
+s16 getFanSoundCount(void) {
+    return gFanSoundCount;
+}
+
+s16 getFanSoundId(s16 fanIndex) {
+    s16 count = gFanSoundCount;
+    s16 index;
+
+    if (fanIndex < count) {
+        index = fanIndex;
+    } else {
+        index = 0;
+    }
+
+    return gFanSoundIds[index];
+}
+
+void playFanSoundEffect(s16 fanIndex, s16 volume, s16 pan, s16 channel) {
+    s16 soundId;
+
+    if (channel <= 0) {
+        soundId = getFanSoundId(fanIndex);
+        playSoundEffectWithPriorityAndPan(soundId, volume, pan + 0x80, 0);
+    } else {
+        soundId = getFanSoundId(fanIndex);
+        playSoundEffectOnChannel(soundId, volume, pan + 0x80, 0, channel);
+    }
+}
+
+void playFanSoundAtPosition(s16 fanIndex, s16 arg1, s16 duration, CutsceneSlotData *cutsceneSlotData) {
+    Vec3i position;
+    s16 soundId;
+
+    if (cutsceneSlotData != NULL) {
+        memcpy(&position, &cutsceneSlotData->unk2C, sizeof(Vec3i));
+    } else {
+        position.x = 0;
+        position.y = 0;
+        position.z = 0;
+    }
+
+    if (duration <= 0) {
+        soundId = getFanSoundId(fanIndex);
+        queueSoundAtPosition(&position, soundId);
+        return;
+    }
+
+    soundId = getFanSoundId(fanIndex);
+    queueSoundAtPositionWithPriority(&position, soundId, 0, duration);
+}
+
+void playFanSoundOnChannel0(s16 fanIndex) {
+    s16 soundId;
+
+    soundId = getFanSoundId(fanIndex);
+    playSoundEffectOnChannelNoPriority(soundId, 0);
+}
+
+void stopFanSoundOnChannel0(void) {
+    stopSoundEffectChannel(0, 0);
+}
+
+/* Internal fan effect task functions */
+static void initFanEffectTask(FanEffectTaskState *taskState) {
+    StateEntry **uncompressedAssetPtr;
+
+    taskState->unk20 = &D_80088650;
+    taskState->unk24 = loadUncompressedData(&_1FB4E0_ROM_START, &_1FB4E0_ROM_END);
+
+    taskState->unk28 = loadCompressedData(&_4C9E70_ROM_START, &_4C9E70_ROM_END, 0xA10);
+    uncompressedAssetPtr = &taskState->unk24;
+
+    taskState->unk5C = &D_80088660;
+    taskState->unk2C = 0;
+    taskState->unk68 = 0;
+    taskState->unk84 = 0x200;
+    taskState->unk60 = *uncompressedAssetPtr;
+    taskState->unk64 = taskState->unk28;
+
+    setCleanupCallback(&cleanupFanEffectTask);
+    setCallbackWithContinue(&updateFanEffectGrow);
+}
+
+static void updateFanEffectGrow(FanEffectGrowState *arg0) {
+    Transform3D sp10;
+    void *displayListData;
+    s16 newZRotation;
+    s16 currentScale;
+
+    createYRotationMatrix(&gIdentityMatrix32, arg0->yRotation);
+
+    displayListData = (void *)((u8 *)(*arg0->displayList) + 0x3C0);
+
+    func_8006B084_6BC84(&gIdentityMatrix32, displayListData, arg0);
+
+    scaleMatrix((Transform3D *)arg0, arg0->scale, arg0->scale, arg0->scale);
+
+    newZRotation = arg0->zRotation + 0x300;
+    arg0->zRotation = newZRotation;
+
+    createZRotationMatrix(&sp10, newZRotation);
+
+    sp10.translation.y = 0xBB333;
+    sp10.translation.x = 0;
+    sp10.translation.z = 0xFFEA0000;
+
+    func_8006B084_6BC84(&sp10, arg0, &arg0->transform);
+
+    enqueueDisplayListObject(0, (DisplayListObject *)arg0);
+    enqueueDisplayListObject(0, (DisplayListObject *)&arg0->transform);
+
+    if (arg0->remainingFrames != 0) {
+        arg0->remainingFrames--;
+        currentScale = arg0->scale;
+        if (currentScale != 0x2000) {
+            arg0->scale = currentScale + 0x200;
+        }
+    } else {
+        arg0->fadeDelta = 0x40000;
+        setCallback(&updateFanEffectFade);
+    }
+}
+
+static void updateFanEffectFade(FanEffectFadeState *fadeState) {
+    Transform3D rotationMatrix;
+    s32 fadeDelta;
+
+    fadeDelta = fadeState->fadeDelta - 0x8000;
+    fadeState->fadeDelta = fadeDelta;
+
+    if ((s32)0xFFF80000 >= fadeDelta) {
+        terminateCurrentTask();
+    }
+
+    fadeState->yPosOffset += fadeState->fadeDelta;
+    createZRotationMatrix(&rotationMatrix, fadeState->zRotation);
+
+    rotationMatrix.translation.y = 0xBB333;
+    rotationMatrix.translation.x = 0;
+    rotationMatrix.translation.z = 0xFFEA0000;
+
+    func_8006B084_6BC84(&rotationMatrix, fadeState, &fadeState->transform);
+    enqueueDisplayListObject(0, (DisplayListObject *)fadeState);
+    enqueueDisplayListObject(0, (DisplayListObject *)&fadeState->transform);
+}
+
+static void cleanupFanEffectTask(FanEffectTaskState *taskState) {
+    taskState->unk24 = freeNodeMemory(taskState->unk24);
+    taskState->unk28 = freeNodeMemory(taskState->unk28);
+}
+
+void spawnFanEffect(s32 displayList, s16 frames) {
+    FanEffectTask *task = (FanEffectTask *)scheduleTask(&initFanEffectTask, 1, 0, 0x64);
+
+    if (task != NULL) {
+        task->unk78 = displayList;
+        task->unk80 = 0;
+        task->unk86 = frames;
+    }
+}

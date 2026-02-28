@@ -25,7 +25,7 @@ BUILD_DIR = build
 ASM_DIRS  = asm asm/data
 BIN_DIRS  = assets
 TOOLS_DIR = tools
-SRC_DIRS  = src src/cutscene
+SRC_DIRS  = src src/core src/system src/audio src/graphics src/text src/math src/animation src/effects src/race src/story src/ui src/credits src/triggers src/data src/cutscene src/levels
 BUILD_LOG = $(BUILD_DIR)/build.log
 
 # Files
@@ -132,7 +132,7 @@ $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/
 	@$(LD) $(LD_FLAGS) $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) -o $@
 
 # Per-file optimization overrides
-$(BUILD_DIR)/src/39020.o: OPT_FLAGS := -O0
+$(BUILD_DIR)/src/graphics/tiled_sprite_grid.o: OPT_FLAGS := -O0
 
 TEXTCONV = $(PYTHON) $(TOOLS_DIR)/textconv.py
 CHARMAP = $(TOOLS_DIR)/charmap.txt
@@ -141,7 +141,7 @@ $(BUILD_DIR)/src/%.o: src/%.c $(CHARMAP)
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(GREEN)   c    $(NO_COL)]  src/$*.c\n"; \
 	$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
-	@$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -x c -E - | $(CC) -x c $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I $(dir $*) -c -o $@ -
+	@$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -x c -E - > $(BUILD_DIR)/src/$*.i && $(CC) -x c $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I $(dir $*) -c -o $@ $(BUILD_DIR)/src/$*.i && rm -f $(BUILD_DIR)/src/$*.i
 	$(OBJDUMP_CMD)
 
 $(BUILD_DIR)/%.o: %.s

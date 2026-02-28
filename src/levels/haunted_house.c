@@ -1,5 +1,4 @@
 #include "levels/haunted_house.h"
-#include "42170.h"
 #include "52880.h"
 #include "56910.h"
 #include "5AA90.h"
@@ -11,8 +10,9 @@
 #include "gamestate.h"
 #include "geometry.h"
 #include "graphics.h"
-#include "race_session.h"
-#include "rand.h"
+#include "math/rand.h"
+#include "race/particle_items.h"
+#include "race/race_session.h"
 #include "task_scheduler.h"
 
 typedef struct {

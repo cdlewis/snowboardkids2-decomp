@@ -1,5 +1,4 @@
 #include "levels/wendys_house.h"
-#include "../race_session.h"
 #include "56910.h"
 #include "5AA90.h"
 #include "audio.h"
@@ -7,7 +6,8 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "rand.h"
+#include "math/rand.h"
+#include "race/race_session.h"
 #include "task_scheduler.h"
 
 extern Vec3i gWendysHouseProjectileTargetPositions[];

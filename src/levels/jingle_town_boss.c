@@ -1,6 +1,5 @@
 #include "36BE0.h"
 #include "3CD70.h"
-#include "42170.h"
 #include "51060.h"
 #include "52880.h"
 #include "59290.h"
@@ -14,7 +13,8 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "rand.h"
+#include "math/rand.h"
+#include "race/particle_items.h"
 #include "task_scheduler.h"
 
 extern Transform3D gScaleMatrix;
@@ -38,11 +38,11 @@ typedef struct {
 // - Asset pointer at 0x58 (offset 0x20 within this struct)
 // - Render parameters at 0x5C, 0x60, 0x64 (offsets 0x24, 0x28, 0x2C)
 typedef struct {
-    Transform3D transform;       // 0x38 (relative to element start, 0x00 relative to struct)
-    void *assetPointer;          // 0x58 (relative to element, 0x20 relative to struct)
-    s32 param1;                  // 0x5C (relative to element, 0x24 relative to struct)
-    s32 param2;                  // 0x60 (relative to element, 0x28 relative to struct)
-    s32 param3;                  // 0x64 (relative to element, 0x2C relative to struct)
+    Transform3D transform; // 0x38 (relative to element start, 0x00 relative to struct)
+    void *assetPointer;    // 0x58 (relative to element, 0x20 relative to struct)
+    s32 param1;            // 0x5C (relative to element, 0x24 relative to struct)
+    s32 param2;            // 0x60 (relative to element, 0x28 relative to struct)
+    s32 param3;            // 0x64 (relative to element, 0x2C relative to struct)
 } DisplayObjectElement;
 
 typedef struct {

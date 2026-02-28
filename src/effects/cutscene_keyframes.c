@@ -1,0 +1,213 @@
+#include "1DFAA0.h"
+#include "1E60D0.h"
+#include "4050.h"
+#include "audio.h"
+#include "common.h"
+#include "gamestate.h"
+#include "geometry.h"
+#include "graphics.h"
+#include "race/race_session.h"
+#include "rom_loader.h"
+#include "task_scheduler.h"
+
+USE_OVERLAY(cutscene);
+
+typedef union {
+    struct {
+        s16 lower;
+        s16 upper;
+    } half;
+    s32 full;
+} CompositeInt;
+
+typedef struct {
+    s16 slotIndex;
+    s16 cutsceneType;
+    s16 frameIndex;
+    s16 unk6;
+    CompositeInt slotSelection;
+    CompositeInt typeSelection;
+} CutsceneState;
+
+CutsceneState gCutsceneState = { .slotIndex = 0,
+                                 .cutsceneType = 0,
+                                 .frameIndex = 0,
+                                 .unk6 = 0,
+                                 .slotSelection = { .half = { .lower = 0, .upper = 0 } },
+                                 .typeSelection = { .half = { .lower = 0, .upper = 2 } } };
+
+extern s16 D_800AB070_A23E0; // gCutsceneSlotIndex
+extern s16 D_800AFEF0_A7260; // gCutsceneType
+extern s32 gButtonsPressed;
+
+void awaitCutsceneTransitionComplete(void);
+void func_80003898_4498(void);
+void loadCutsceneOverlay(void);
+void runCutsceneFrame(void);
+void signalCutsceneComplete(void);
+void awaitCutsceneTaskComplete(void);
+void initCutscenePlayback(void);
+void initCutsceneRenderer(void);
+void returnToMainGame(void);
+
+void setCutsceneSelection(s16 slotIndex, s16 cutsceneType) {
+    D_800AB070_A23E0 = slotIndex;
+    D_800AFEF0_A7260 = cutsceneType;
+}
+
+void *__udiv_w_sdiv(void) {
+    return NULL;
+}
+
+void setCutsceneParameters(s16 slotIndex, s16 cutsceneType, s16 frameIndex) {
+    gCutsceneState.slotIndex = slotIndex;
+    gCutsceneState.cutsceneType = cutsceneType;
+    gCutsceneState.frameIndex = frameIndex;
+}
+
+void loadCutsceneOverlay(void) {
+    LOAD_OVERLAY(cutscene)
+    setGameStateHandler(&initCutsceneRenderer);
+}
+
+void initCutsceneRenderer(void) {
+    ViewportNode *overlayNodePtr;
+    ViewportNode *nodePtr;
+    ViewportNode *uiNodePtr;
+    f32 scale = 1.0f;
+    u8 lightBuffer[0x20];
+
+    struct {
+        CutsceneTaskMemory *taskMemory;
+    } s;
+    s.taskMemory = (CutsceneTaskMemory *)allocateTaskMemory(0x17E8);
+    s.taskMemory->unk2 = 0;
+    s.taskMemory->frameCount = 0;
+    s.taskMemory->exitRequested = 0;
+    setupTaskSchedulerNodes(0x40, 0x30, 4, 4, 4, 0, 0, 0);
+
+    nodePtr = &s.taskMemory->sceneNode;
+    initViewportNode(nodePtr, 0, 0, 10, scale);
+    setViewportScale(nodePtr, scale, scale);
+    setViewportId(nodePtr, 1);
+    setModelCameraTransform(nodePtr, 0, 0, -160, -120, 159, 119);
+    func_8006FA0C_7060C(nodePtr, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+    func_8006BEDC_6CADC(lightBuffer, 0, 0, 0x01000000, 0, 0, 0);
+
+    overlayNodePtr = &s.taskMemory->overlayNode;
+    setViewportTransformById(s.taskMemory->sceneNode.id, lightBuffer);
+    setViewportFadeValue(NULL, 0, 0);
+
+    nodePtr = overlayNodePtr;
+    initViewportNode(nodePtr, 0, 1, 11, 0);
+    setViewportScale(nodePtr, scale, scale);
+
+    setViewportId(nodePtr, 1);
+    setModelCameraTransform(nodePtr, 0, 0, -160, -120, 159, 119);
+    setViewportEnvColor(nodePtr, 0, 0, 0);
+    setViewportFadeValue(nodePtr, 0xFF, 0);
+    setViewportFadeValue(nodePtr, 0, 8);
+
+    uiNodePtr = &s.taskMemory->uiNode;
+    initViewportNode(uiNodePtr, 0, 3, 8, 0);
+    setViewportScale(uiNodePtr, scale, scale);
+    setViewportId(uiNodePtr, 1);
+    setModelCameraTransform(uiNodePtr, 0, 0, -160, -120, 159, 119);
+    setViewportEnvColor(uiNodePtr, 0, 0, 0);
+    setViewportFadeValue(uiNodePtr, 0xFF, 0);
+    setViewportFadeValue(uiNodePtr, 0, 8);
+    setGameStateHandler(runCutsceneFrame);
+}
+
+void runCutsceneFrame(void) {
+    CutsceneTaskMemory *taskMemory = (CutsceneTaskMemory *)getCurrentAllocation();
+
+    if (taskMemory->frameCount >= getCutsceneFrameCount(D_800AB070_A23E0, D_800AFEF0_A7260) ||
+        taskMemory->exitRequested != 0) {
+        if (D_800AB070_A23E0 == 0xB && D_800AFEF0_A7260 == 1) {
+            setViewportFadeValue(&taskMemory->overlayNode, 0, 0);
+            initScreenTransition(&taskMemory->transitionState);
+            setGameStateHandler(&awaitCutsceneTransitionComplete);
+
+            return;
+        }
+
+        setMusicFadeOut(2);
+        unlinkNode(&taskMemory->uiNode);
+        unlinkNode(&taskMemory->overlayNode);
+        unlinkNode(&taskMemory->sceneNode);
+        terminateSchedulerWithCallback(&signalCutsceneComplete);
+
+        return;
+    }
+
+    setCutsceneParameters(D_800AB070_A23E0, D_800AFEF0_A7260, taskMemory->frameCount);
+    taskMemory->frameCount++;
+    initializeCutsceneSystem(&taskMemory->cutsceneData);
+    setGameStateHandler(&func_80003898_4498);
+}
+
+INCLUDE_ASM("asm/nonmatchings/effects/cutscene_keyframes", func_80003898_4498);
+
+void awaitCutsceneTransitionComplete(void) {
+    CutsceneTaskMemory *taskMemory;
+
+    taskMemory = (CutsceneTaskMemory *)getCurrentAllocation();
+    if (taskMemory->transitionState.isComplete != 0) {
+        unlinkNode(&taskMemory->uiNode);
+        unlinkNode(&taskMemory->overlayNode);
+        unlinkNode(&taskMemory->sceneNode);
+        terminateSchedulerWithCallback(&signalCutsceneComplete);
+    }
+}
+
+void signalCutsceneComplete(void) {
+    returnToParentScheduler(1);
+}
+
+void beginCutsceneSequence(void) {
+    setGameStateHandler(&initCutscenePlayback);
+}
+
+void initCutscenePlayback(void) {
+    if ((gCutsceneState.slotSelection.full == 5) && (gCutsceneState.typeSelection.full == 0)) {
+        gCutsceneState.typeSelection.full = 1;
+    }
+    setCutsceneSelection(gCutsceneState.slotSelection.half.upper, gCutsceneState.typeSelection.half.upper);
+    createTaskQueue(&loadCutsceneOverlay, 0x64);
+    setGameStateHandler(&awaitCutsceneTaskComplete);
+}
+
+void awaitCutsceneTaskComplete(void) {
+    s32 typeSelection;
+    CutsceneState *state;
+
+    if ((getSchedulerReturnValue() << 16) != 0) {
+        if (gButtonsPressed & B_BUTTON) {
+            terminateSchedulerWithCallback(returnToMainGame);
+            return;
+        }
+
+        state = &gCutsceneState;
+        typeSelection = state->typeSelection.full;
+
+        if (typeSelection == 2) {
+            state->slotSelection.full = (state->slotSelection.full + 1) % 14;
+            typeSelection = typeSelection;
+        }
+
+        state->typeSelection.full = typeSelection + 1;
+
+        if (typeSelection + 1 >= 3) {
+            state->typeSelection.full = 0;
+        }
+
+        state->slotSelection.full = 0;
+        state->typeSelection.full = 2;
+        setGameStateHandler(initCutscenePlayback);
+    }
+}
+
+void returnToMainGame(void) {
+    createRootTaskScheduler(&initGameSession, 200);
+}

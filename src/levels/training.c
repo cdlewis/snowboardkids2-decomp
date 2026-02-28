@@ -1,12 +1,11 @@
-#include "../race_session.h"
 #include "36B80.h"
 #include "56910.h"
+#include "assets.h"
 #include "audio.h"
 #include "common.h"
+#include "race/race_session.h"
 #include "rom_loader.h"
 #include "task_scheduler.h"
-#include "assets.h"
-
 
 extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 extern s32 gControllerInputs;

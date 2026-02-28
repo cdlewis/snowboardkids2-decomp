@@ -5,7 +5,7 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "rand.h"
+#include "math/rand.h"
 #include "task_scheduler.h"
 
 extern s32 gJingleTownTrainInitialHeights[];
@@ -110,8 +110,12 @@ void initJingleTownTrain(JingleTownTrain *arg0) {
     arg0->height = getTrackHeightAtPosition(&alloc->unk30, arg0->unk56, &arg0->posX);
 
     temp4 = arg0->trainIndex;
-    arg0->rotation =
-        computeAngleToPosition(gJingleTownTrainWaypointsX2[temp4 * 5], gJingleTownTrainWaypointsZ2[temp4 * 5], arg0->posX, arg0->posZ);
+    arg0->rotation = computeAngleToPosition(
+        gJingleTownTrainWaypointsX2[temp4 * 5],
+        gJingleTownTrainWaypointsZ2[temp4 * 5],
+        arg0->posX,
+        arg0->posZ
+    );
 
     arg0->yOffset = 0;
     arg0->yVelocity = 0;
@@ -165,8 +169,12 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
     alloc = getCurrentAllocation();
     if (alloc->unk76 == 0) {
         temp = (arg0->waypointIndex << 3) + (arg0->trainIndex * 5 << 2);
-        angleDiff =
-            computeAngleToPosition(gJingleTownTrainWaypointsX[temp >> 2], gJingleTownTrainWaypointsZ[temp >> 2], arg0->posX, arg0->posZ);
+        angleDiff = computeAngleToPosition(
+            gJingleTownTrainWaypointsX[temp >> 2],
+            gJingleTownTrainWaypointsZ[temp >> 2],
+            arg0->posX,
+            arg0->posZ
+        );
         angleDiff = (angleDiff - arg0->rotation) & 0x1FFF;
         if (angleDiff >= 0x1001) {
             angleDiff = angleDiff | 0xE000;
@@ -198,8 +206,10 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
                 arg0->yVelocity = 0x30000;
             }
         }
-        rotResult.x = gJingleTownTrainWaypointsX[((arg0->waypointIndex << 3) + (arg0->trainIndex * 5 << 2)) >> 2] - arg0->posX;
-        rotResult.y = gJingleTownTrainWaypointsZ[((arg0->waypointIndex << 3) + (arg0->trainIndex * 5 << 2)) >> 2] - arg0->posZ;
+        rotResult.x =
+            gJingleTownTrainWaypointsX[((arg0->waypointIndex << 3) + (arg0->trainIndex * 5 << 2)) >> 2] - arg0->posX;
+        rotResult.y =
+            gJingleTownTrainWaypointsZ[((arg0->waypointIndex << 3) + (arg0->trainIndex * 5 << 2)) >> 2] - arg0->posZ;
         if (((u32)(rotResult.x + 0xFFFFF) <= 0x1FFFFEUL) && ((u32)(rotResult.z + 0xFFFFF) <= 0x1FFFFEUL)) {
             arg0->waypointIndex = (arg0->waypointIndex + 1) & 1;
         }
@@ -224,13 +234,13 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
         waypointByteOffset = (arg0->waypointIndex * 8) + (arg0->trainIndex * 20);
         // Compute angle to target waypoint and clamp to [-128, 128] degrees
         angleDiff = (computeAngleToPosition(
-                     *(s32 *)((u8 *)gJingleTownTrainWaypointsX + waypointByteOffset),
-                     *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + waypointByteOffset),
-                     arg0->posX,
-                     arg0->posZ
-                 ) -
-                 arg0->rotation) &
-                0x1FFF;
+                         *(s32 *)((u8 *)gJingleTownTrainWaypointsX + waypointByteOffset),
+                         *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + waypointByteOffset),
+                         arg0->posX,
+                         arg0->posZ
+                     ) -
+                     arg0->rotation) &
+                    0x1FFF;
         clampedAngle = angleDiff;
         if (angleDiff >= 0x1001) {
             clampedAngle = 0xE000;
@@ -270,8 +280,12 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
         }
 
         // Check if train reached waypoint and advance waypoint index if so
-        rotatedVec.x = *(s32 *)((u8 *)gJingleTownTrainWaypointsX + (arg0->waypointIndex * 8) + (arg0->trainIndex * 20)) - arg0->posX;
-        rotatedVec.y = *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + (arg0->waypointIndex * 8) + (arg0->trainIndex * 20)) - arg0->posZ;
+        rotatedVec.x =
+            *(s32 *)((u8 *)gJingleTownTrainWaypointsX + (arg0->waypointIndex * 8) + (arg0->trainIndex * 20)) -
+            arg0->posX;
+        rotatedVec.y =
+            *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + (arg0->waypointIndex * 8) + (arg0->trainIndex * 20)) -
+            arg0->posZ;
 
         if ((u32)(rotatedVec.x + 0xFFFFF) <= 0x1FFFFE && (u32)(rotatedVec.z + 0xFFFFF) <= 0x1FFFFE) {
             arg0->waypointIndex = (arg0->waypointIndex + 1) & 1;

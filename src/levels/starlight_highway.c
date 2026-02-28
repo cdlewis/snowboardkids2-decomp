@@ -1,6 +1,5 @@
 #include "levels/starlight_highway.h"
 #include "19E80.h"
-#include "42170.h"
 #include "56910.h"
 #include "5AA90.h"
 #include "audio.h"
@@ -8,7 +7,8 @@
 #include "displaylist.h"
 #include "gamestate.h"
 #include "geometry.h"
-#include "rand.h"
+#include "math/rand.h"
+#include "race/particle_items.h"
 #include "task_scheduler.h"
 
 extern s32 gFrameCounter;
