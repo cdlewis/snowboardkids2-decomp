@@ -24,7 +24,6 @@ extern void *D_8009A710_9B310;
 extern void *D_8009A720_9B320;
 extern void *D_8009A760_9B360;
 extern void *D_8009A770_9B370;
-extern Transform3D gIdentityMatrix32;
 extern s32 gFrameCounter;
 
 void cleanupStarEffect(void **);

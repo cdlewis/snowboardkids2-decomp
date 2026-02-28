@@ -9,7 +9,6 @@
 extern void *D_80088670_89270;
 extern void *D_80088680_89280;
 extern void *D_80088690_89290;
-extern Transform3D gIdentityMatrix32;
 extern s32 gFrameCounter;
 
 typedef struct RocketEffectData RocketEffectData;

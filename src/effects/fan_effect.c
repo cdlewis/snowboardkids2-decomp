@@ -56,7 +56,6 @@ typedef struct {
 } FanEffectTask;
 
 /* Global variables */
-extern Transform3D gIdentityMatrix32;
 extern StateEntry D_80088650;
 extern StateEntry D_80088660;
 extern s16 gFanSoundCount;

@@ -37,6 +37,7 @@ typedef struct {
 
 extern Transform3D identityMatrix;
 extern Transform3D gScaleMatrix;
+extern Transform3D gIdentityMatrix32;
 
 void createYRotationMatrix(Transform3D *, u16 angle);
 void createZRotationMatrix(Transform3D *, u16 angle);
