@@ -141,7 +141,7 @@ $(BUILD_DIR)/src/%.o: src/%.c $(CHARMAP)
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(GREEN)   c    $(NO_COL)]  src/$*.c\n"; \
 	$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
-	@$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -x c -E - | $(CC) -x c $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I $(dir $*) -c -o $@ -
+	@$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
 	$(OBJDUMP_CMD)
 
 $(BUILD_DIR)/%.o: %.s
