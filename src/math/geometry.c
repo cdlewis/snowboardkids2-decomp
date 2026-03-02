@@ -355,7 +355,93 @@ void scaleMatrix(Transform3D *matrix, s16 scaleX, s16 scaleY, s16 scaleZ) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/math/geometry", func_8006B084_6BC84);
+void func_8006B084_6BC84(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2) {
+    s32 i, j;
+    s32 sum;
+    s16 *dest;
+    s32 frac0;
+    s32 int0;
+    s32 frac1;
+    s32 int1;
+    s32 frac2;
+    s32 int2;
+
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            dest = &arg2->m[i][j];
+            sum = arg0->m[i][0] * arg1->m[0][j] + arg0->m[i][1] * arg1->m[1][j] + arg0->m[i][2] * arg1->m[2][j];
+            if (sum < 0) {
+                sum += 0x1FFF;
+            }
+            *dest = sum >> 13;
+        }
+    }
+
+    frac0 = (arg0->translation.x & 0xFFFF) * arg1->m[0][0];
+    int0 = (arg0->translation.x >> 16) * (arg1->m[0][0] << 3);
+    if (frac0 < 0) {
+        frac0 += 0x1FFF;
+    }
+
+    frac1 = (arg0->translation.y & 0xFFFF) * arg1->m[1][0];
+    int1 = (arg0->translation.y >> 16) * (arg1->m[1][0] << 3);
+    frac0 = int0 + (frac0 >> 13) + int1;
+    if (frac1 < 0) {
+        frac1 += 0x1FFF;
+    }
+
+    frac2 = (arg0->translation.z & 0xFFFF) * arg1->m[2][0];
+    int2 = (arg0->translation.z >> 16) * (arg1->m[2][0] << 3);
+    int1 = frac0 + (frac1 >> 13) + int2;
+    if (frac2 < 0) {
+        frac2 += 0x1FFF;
+    }
+
+    arg2->translation.x = int1 + (frac2 >> 13) + arg1->translation.x;
+    frac0 = (arg0->translation.x & 0xFFFF) * arg1->m[0][1];
+    int0 = (arg0->translation.x >> 16) * (arg1->m[0][1] << 3);
+    if (frac0 < 0) {
+        frac0 += 0x1FFF;
+    }
+
+    frac1 = (arg0->translation.y & 0xFFFF) * arg1->m[1][1];
+    int1 = (arg0->translation.y >> 16) * (arg1->m[1][1] << 3);
+    frac0 = int0 + (frac0 >> 13) + int1;
+    if (frac1 < 0) {
+        frac1 += 0x1FFF;
+    }
+
+    frac2 = (arg0->translation.z & 0xFFFF) * arg1->m[2][1];
+    int2 = (arg0->translation.z >> 16) * (arg1->m[2][1] << 3);
+    int1 = frac0 + (frac1 >> 13) + int2;
+    if (frac2 < 0) {
+        frac2 += 0x1FFF;
+    }
+
+    arg2->translation.y = int1 + (frac2 >> 13) + arg1->translation.y;
+
+    frac0 = (arg0->translation.x & 0xFFFF) * arg1->m[0][2];
+    int0 = (arg0->translation.x >> 16) * (arg1->m[0][2] << 3);
+    if (frac0 < 0) {
+        frac0 += 0x1FFF;
+    }
+
+    frac1 = (arg0->translation.y & 0xFFFF) * arg1->m[1][2];
+    int1 = (arg0->translation.y >> 16) * (arg1->m[1][2] << 3);
+    frac0 = int0 + (frac0 >> 13) + int1;
+    if (frac1 < 0) {
+        frac1 += 0x1FFF;
+    }
+
+    frac2 = (arg0->translation.z & 0xFFFF) * arg1->m[2][2];
+    int2 = (arg0->translation.z >> 16) * (arg1->m[2][2] << 3);
+    int1 = frac0 + (frac1 >> 13) + int2;
+    if (frac2 < 0) {
+        frac2 += 0x1FFF;
+    }
+
+    arg2->translation.z = int1 + (frac2 >> 13) + arg1->translation.z;
+}
 
 // Matrix for transformVector: 3x3 s16 rotation matrix (9 elements) + s16 padding + Vec3i translation
 // Total size: 18 + 2 + 12 = 32 bytes
