@@ -1780,6 +1780,8 @@ void cleanupBoardSelectArrows(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
+void updateBoardSelectCharNames(CharacterNameSprite *sprites);
+
 void initBoardSelectCharNames(CharacterNameSprite *sprites) {
     GameState *gameState;
     void *spriteAsset;
@@ -1827,24 +1829,25 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
         sprites[i].asset = spriteAsset;
     }
 
-    setCallback(func_800269C8_275C8);
+    setCallback(updateBoardSelectCharNames);
 }
 
-void func_800269C8_275C8(void *arg0) {
-    CharacterNameSprite *sprites = (CharacterNameSprite *)arg0;
+void updateBoardSelectCharNames(CharacterNameSprite *sprites) {
     BoardSelectGameState *gameState;
     s32 i;
-    u16 state;
+    u16 selectionState;
     u8 numPlayers;
     s32 charIndex;
     u16 xPos;
     u16 yPos;
     u16 spriteIdx;
+
     gameState = (BoardSelectGameState *)getCurrentAllocation();
+
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        state = gameState->unk1898[i];
-        if (state != 4) {
-            yPos = state - 3;
+        selectionState = gameState->unk1898[i];
+        if (selectionState != 4) {
+            yPos = selectionState - 3;
             if (((u32)yPos) >= 8) {
                 numPlayers = D_800AFE8C_A71FC->numPlayers;
                 xPos = ((s16 *)D_8008DE54_8EA54)[numPlayers * 2];
