@@ -1805,7 +1805,7 @@ void updateTrickRotationTransform(Player *player) {
     rotationMatrix.translation.y = 0x100000;
     rotationMatrix.translation.z = 0;
 
-    func_8006B084_6BC84(temp, &rotationMatrix, &player->unk9B0.prev_position);
+    func_8006B084_6BC84(temp, &rotationMatrix, (Transform3D *)&player->unk9B0.prev_position);
 
     player->animFlags |= 0x800;
 }

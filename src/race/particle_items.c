@@ -660,7 +660,7 @@ void updateCrashEffect(CrashEffectState *arg0) {
     Vec3i pos;
     s32 i;
 
-    func_8006B084_6BC84(arg0->rotationMatrix, &arg0->player->unk3F8, arg0);
+    func_8006B084_6BC84((Transform3D *)arg0->rotationMatrix, (Transform3D *)&arg0->player->unk3F8, (Transform3D *)arg0);
 
     if ((arg0->player->behaviorFlags & 0x80) == 0) {
         pos.x = arg0->player->worldPos.x;
@@ -1292,7 +1292,7 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
 
     gameState = (EffectTaskState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, state->yRotation);
-    func_8006B084_6BC84(&gIdentityMatrix32, &state->player->unk3F8, state);
+    func_8006B084_6BC84(&gIdentityMatrix32, (Transform3D *)&state->player->unk3F8, (Transform3D *)state);
     scaleMatrix((Transform3D *)state, state->scale, state->scale, state->scale);
 
     state->orbitAngle += 0x300;
@@ -1302,7 +1302,7 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
     matrix.translation.y = 0xBB333;
     matrix.translation.z = 0xFFEA0000;
 
-    func_8006B084_6BC84(&matrix, state, &state->orbitObj);
+    func_8006B084_6BC84(&matrix, (Transform3D *)state, &state->orbitObj.transform);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
@@ -1348,7 +1348,7 @@ void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state) {
         matrix.translation.x = 0;
         matrix.translation.y = 0xBB333;
         matrix.translation.z = 0xFFEA0000;
-        func_8006B084_6BC84(&matrix, state, &state->orbitObj);
+        func_8006B084_6BC84(&matrix, (Transform3D *)state, &state->orbitObj.transform);
     }
 
     for (i = 0; i < 4; i++) {
@@ -1408,7 +1408,7 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
 
     allocation = (GameState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, state->yRotation);
-    func_8006B084_6BC84(&gIdentityMatrix32, &state->player->unk3F8, state);
+    func_8006B084_6BC84(&gIdentityMatrix32, (Transform3D *)&state->player->unk3F8, (Transform3D *)state);
     scale = state->scale;
     scaleMatrix((Transform3D *)state, scale, scale, scale);
 
@@ -1416,7 +1416,7 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
     gScaleMatrix.translation.y = 0x9CCCC;
     gScaleMatrix.translation.z = 0xFFE44CCD;
     ptr = (s32 *)&gScaleMatrix.translation;
-    func_8006B084_6BC84(ptr - 5, state, state->secondaryObj);
+    func_8006B084_6BC84((Transform3D *)(ptr - 5), (Transform3D *)state, (Transform3D *)state->secondaryObj);
 
     if (gFrameCounter & 1) {
         state->unk5C = &D_8009A740_9B340;
@@ -1764,7 +1764,7 @@ void updateGhostEffect(GhostEffectState *arg0) {
 
     allocation = (EffectTaskState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, arg0->rotation);
-    func_8006B084_6BC84(&gIdentityMatrix32, (u8 *)arg0->player + 0x3F8, arg0);
+    func_8006B084_6BC84(&gIdentityMatrix32, (Transform3D *)((u8 *)arg0->player + 0x3F8), (Transform3D *)arg0);
 
     if (arg0->scale == 0x200) {
         queueSoundAtPosition(&arg0->position, 0x1D);
@@ -1922,7 +1922,7 @@ void renderUfoEffectWithWings(UfoEffectState *arg0) {
     matrix.translation.x = 0xFFF7490A;
     matrix.translation.y = 0xFFF98007;
     matrix.translation.z = 0xCB326;
-    func_8006B084_6BC84(&matrix, arg0, &arg0->leftWing);
+    func_8006B084_6BC84(&matrix, (Transform3D *)arg0, &arg0->leftWing.transform);
 
     sinVal = approximateSin(arg0->wingOscillationAngle);
     createZRotationMatrix(&matrix, (-(sinVal >> 5)) & 0xFFFF);
@@ -1930,7 +1930,7 @@ void renderUfoEffectWithWings(UfoEffectState *arg0) {
     matrix.translation.x = 0x8B6F6;
     matrix.translation.y = 0xFFF98007;
     matrix.translation.z = 0xCB326;
-    func_8006B084_6BC84(&matrix, arg0, &arg0->rightWing);
+    func_8006B084_6BC84(&matrix, (Transform3D *)arg0, &arg0->rightWing.transform);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);

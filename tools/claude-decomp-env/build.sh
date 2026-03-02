@@ -1,3 +1,4 @@
+#!/bin/bash
 # build.sh $file_to_compile.c
 # takes a .c file, compiles it, and diffs the resulting object code against the target assembly
 set -e
@@ -26,23 +27,51 @@ fi
 # Set project root to two directories above this script
 SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_PATH/../.." && pwd)"
-pushd "$PROJECT_ROOT"
 
-# Set up / clean up compilation directory
-rm -f "src/claude/$1"
-mkdir -p "src/claude"
+# Compiler settings (mirroring Makefile)
+COMPILER_DIR="$PROJECT_ROOT/tools/gcc_kmc"
+CROSS="mips-linux-gnu-"
+OBJDUMP="${CROSS}objdump"
+TEXTCONV="python3 $PROJECT_ROOT/tools/textconv.py"
+CHARMAP="$PROJECT_ROOT/tools/charmap.txt"
 
-# Move target file to src directory to leverage existing make rule
-cp "$INPUT" "src/claude/$1"
-make ${OPT_FLAG:+OPT_FLAGS=$OPT_FLAG} "build/src/claude/${1//.c/.o}"
-make ${OPT_FLAG:+OPT_FLAGS=$OPT_FLAG} "build/src/claude/${1//.c/_annotated.s}"
+ABIFLAG="-mabi=32 -mgp32 -mfp32"
+CFLAGS_BASE="$ABIFLAG -mno-abicalls -nostdinc -fno-PIC -G 0 -Wa,-force-n64align -funsigned-char -w -mips3 -EB -fno-builtin -fno-common"
+OPT_FLAGS="${OPT_FLAG:--O2}"
+IINC="-I $PROJECT_ROOT/include -I $PROJECT_ROOT/lib/ultralib/include -I $PROJECT_ROOT/lib/ultralib/include/PR -I $PROJECT_ROOT/lib/libmus/include/PR -I $PROJECT_ROOT/lib/libmus/src -I $PROJECT_ROOT/lib/f3dex2/PR"
+MACROS="-D_LANGUAGE_C -D_MIPS_SZLONG=32 -D_MIPS_SZINT=32 -D_MIPS_SZLONG=32 -D__USE_ISOC99 -DF3DEX_GBI_2 -DNDEBUG -D_FINALROM -DF3DEX_GBI_2"
 
-# Move output back to working directory and clean up
-rm "src/claude/$1"
-mv "build/src/claude/${1//.c/.o}" $OBJECT_OUTPUT
-mv "build/src/claude/${1//.c/_annotated.s}" $ANNOTATED_OUTPUT
+# Compile from project root so assembler can find include/labels.inc
+pushd "$PROJECT_ROOT" > /dev/null
 
-popd
+# Run textconv to handle _("string") patterns, then compile
+# textconv passes the file through unchanged if it doesn't use font_encoding.h
+$TEXTCONV "$CHARMAP" "$INPUT" - | \
+    COMPILER_PATH="$COMPILER_DIR" "$COMPILER_DIR/gcc" \
+    $CFLAGS_BASE $OPT_FLAGS -fno-asm \
+    -I "$PROJECT_ROOT/src/" $IINC $MACROS \
+    -x c -c -o "$OBJECT_OUTPUT" -
+
+# Generate annotated assembly (optional - don't fail if this errors)
+{
+    TEMP_OBJ=$(mktemp)
+    COMPILER_PATH="$COMPILER_DIR" "$COMPILER_DIR/gcc" \
+        $CFLAGS_BASE $OPT_FLAGS -g -fno-asm \
+        -I "$PROJECT_ROOT/src/" $IINC $MACROS \
+        -c -o "$TEMP_OBJ" "$INPUT" && \
+    $OBJDUMP -d --line-numbers --reloc --source "$TEMP_OBJ" > "$ANNOTATED_OUTPUT"
+    rm -f "$TEMP_OBJ"
+} 2>/dev/null || true
+
+popd > /dev/null
+
+# Validate the compiled object has actual code
+if ! mips-linux-gnu-nm "$OBJECT_OUTPUT" 2>/dev/null | grep -q ' T '; then
+    echo "ERROR: Compiled object has no text symbols. Check for type conflicts or include issues."
+    echo "Symbols found:"
+    mips-linux-gnu-nm "$OBJECT_OUTPUT" 2>/dev/null || true
+    exit 1
+fi
 
 python3 ./objdump.py target.o > target_object_dump.s
 python3 ./objdump.py $OBJECT_OUTPUT > $OBJECT_DUMP

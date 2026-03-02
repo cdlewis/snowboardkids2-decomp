@@ -92,7 +92,7 @@ negativeRotation:
 afterRotation:
     element = (QuadDisplayListElement *)((u8 *)state + elementOffset);
     memcpy(&rotationMatrix.translation, translationOffset, 0xC);
-    func_8006B084_6BC84(&rotationMatrix, state->model->matrix18, element);
+    func_8006B084_6BC84(&rotationMatrix, &state->model->matrix18, (Transform3D *)element);
     elementOffset += 0x3C;
     translationOffset += 3;
     enqueueModelDisplayList(state->model, (DisplayListObject *)element);
@@ -193,7 +193,7 @@ void updateRotationController(RotationControllerState *state) {
     rotationMatrix.translation.y = 0x100000;
     rotationMatrix.translation.z = 0;
 
-    func_8006B084_6BC84(positionPtr - 5, &rotationMatrix, (u8 *)state->model + 0xF0);
+    func_8006B084_6BC84((Transform3D *)(positionPtr - 5), &rotationMatrix, &state->model->unkF0);
 }
 
 void cleanupRotationController(void) {

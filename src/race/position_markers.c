@@ -225,13 +225,13 @@ void initStartGate(StartGate *gate) {
     gate->leftDoorSegment3 = gate->mainGateSegment3;
     memcpy(transformMatrix, &identityMatrix, 0x20);
     transformMatrix[6] = 0x180000;
-    func_8006B084_6BC84(transformMatrix, gate, &gate->leftDoorTransform);
+    func_8006B084_6BC84((Transform3D *)transformMatrix, (Transform3D *)gate, &gate->leftDoorTransform);
     gate->rightDoorSegment1 = gate->mainGateSegment1;
     gate->rightDoorSegment2 = gate->mainGateSegment2;
     gate->rightDoorSegment3 = gate->mainGateSegment3;
     transformMatrix[6] = 0x160000;
     transformMatrix[7] = 0xA3333;
-    func_8006B084_6BC84(transformMatrix, gate, &gate->rightDoorTransform);
+    func_8006B084_6BC84((Transform3D *)transformMatrix, (Transform3D *)gate, &gate->rightDoorTransform);
     gate->gateRotation = 0;
     gate->animationState = 0;
     setCleanupCallback(cleanupStartGate);
@@ -266,7 +266,7 @@ void updateStartGate(StartGate *gate) {
             localRotation.translation.x = 0;
             localRotation.translation.y = 0xC0000;
             localRotation.translation.z = 0;
-            func_8006B084_6BC84(&localRotation, gate, &gate->leftDoorTransform);
+            func_8006B084_6BC84(&localRotation, (Transform3D *)gate, &gate->leftDoorTransform);
             break;
         case 2:
             if (gameState->gamePaused == 0) {
@@ -289,7 +289,7 @@ void updateStartGate(StartGate *gate) {
             localRotation.translation.x = 0;
             localRotation.translation.y = 0xC0000;
             localRotation.translation.z = 0;
-            func_8006B084_6BC84(&localRotation, gate, doorTransform);
+            func_8006B084_6BC84(&localRotation, (Transform3D *)gate, doorTransform);
             break;
         case 4:
             if (gameState->shortcutGateState != 3) {

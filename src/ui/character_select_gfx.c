@@ -358,7 +358,7 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, 0xC);
 
     func_8006B084_6BC84(rotMatPtr, posMatPtr, sp10Ptr);
-    func_8006B084_6BC84(sp10Ptr, gameState + ((arg0->playerIndex << 5) + 0x17F8), arg0);
+    func_8006B084_6BC84(sp10Ptr, (Transform3D *)(gameState + ((arg0->playerIndex << 5) + 0x17F8)), (Transform3D *)arg0);
 
     globalPtr = (u8 *)D_800AFE8C_A71FC;
     charIndex = *(globalPtr + arg0->playerIndex + 0xD);
@@ -424,7 +424,7 @@ void updateCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
 
 after_rotation:
     func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, &sp10);
-    func_8006B084_6BC84(&sp10, &state->unk17F8[arg0->playerIndex], arg0);
+    func_8006B084_6BC84(&sp10, &state->unk17F8[arg0->playerIndex], (Transform3D *)arg0);
 
     val = state->unk1898[arg0->playerIndex];
     if (val == 4 || val == 9) {
@@ -507,7 +507,7 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     createYRotationMatrix(posMatPtr, rotation);
 
     func_8006B084_6BC84(&arg0->rotationMatrix, posMatPtr, localPtr);
-    func_8006B084_6BC84(localPtr, worldMatPtr, arg0);
+    func_8006B084_6BC84(localPtr, worldMatPtr, (Transform3D *)arg0);
 
     setCallback(updateCharSelectSlide);
 }
@@ -534,7 +534,7 @@ void updateCharSelectSlide(CharSelectSlideState *arg0) {
     createYRotationMatrix(&arg0->positionMatrix, rotation);
 
     func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
-    func_8006B084_6BC84(localPtr, &arg0->worldMatrix, arg0);
+    func_8006B084_6BC84(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
 
     enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
 
@@ -561,7 +561,7 @@ void updateCharSelectPostSlide(CharSelectSlideState *arg0) {
     createYRotationMatrix(&arg0->positionMatrix, rotation);
 
     func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
-    func_8006B084_6BC84(localPtr, &arg0->worldMatrix, arg0);
+    func_8006B084_6BC84(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
 
     enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
 
@@ -616,7 +616,7 @@ void initCharSelectSecondarySlot(CharSelectSecondarySlot *arg0) {
 
     createYRotationMatrix(posMatrixPtr, state->unk1888[arg0->playerIndex]);
     func_8006B084_6BC84(rotMatrixPtr, posMatrixPtr, localMatrix3Ptr);
-    func_8006B084_6BC84(localMatrix3Ptr, worldMatrixPtr, arg0);
+    func_8006B084_6BC84(localMatrix3Ptr, worldMatrixPtr, (Transform3D *)arg0);
 
     charIndex = state->unk18A8[arg0->playerIndex + 4];
     assetIndex = state->unk18B0[arg0->playerIndex + 4];
@@ -664,7 +664,7 @@ void updateCharSelectSecondarySlide(CharSelectSecondarySlot *slot) {
     createYRotationMatrix(posMatrixPtr, state->unk1888[slot->playerIndex]);
 
     func_8006B084_6BC84(&slot->rotationMatrix, posMatrixPtr, localMatrixPtr);
-    func_8006B084_6BC84(localMatrixPtr, &slot->worldMatrix, slot);
+    func_8006B084_6BC84(localMatrixPtr, &slot->worldMatrix, (Transform3D *)slot);
 
     if (slot->worldMatrix.translation.x == target) {
         state->unk18C0[slot->playerIndex + 4]++;

@@ -110,14 +110,18 @@ void renderFallingRockHazard(FallingRockHazard *rock) {
     s32 i;
 
     memcpy(&gScaleMatrix.translation, &rock->posZ, 0xC);
-    func_8006B084_6BC84((s32 *)&gScaleMatrix.translation - 5, &rock->rotationMatrix, rock);
+    func_8006B084_6BC84(
+        (Transform3D *)((s32 *)&gScaleMatrix.translation - 5),
+        (Transform3D *)&rock->rotationMatrix,
+        (Transform3D *)rock
+    );
     createXRotationMatrix((s16(*)[3])matrix, rock->xRotation);
 
     matrix[6] = 0x3b333;
     matrix[5] = 0;
     matrix[7] = 0x170000;
 
-    func_8006B084_6BC84(&matrix[0], rock, &rock->node2);
+    func_8006B084_6BC84((Transform3D *)&matrix[0], (Transform3D *)rock, &rock->node2.transform);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, &rock->node1);

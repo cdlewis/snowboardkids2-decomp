@@ -36,7 +36,7 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x18];
-    u8 transformMatrix[0x20];
+    Transform3D transformMatrix;
     u8 _pad2[0x4];
     s8 isDestroyed;
 } StretchingModelOwner;

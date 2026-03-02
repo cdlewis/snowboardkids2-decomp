@@ -471,10 +471,10 @@ void updateBobbingModelTask(BobbingModelState *state) {
         state->verticalOffset = temp >> 4;
     }
 
-    createXRotationMatrix(state->model->unkF0, state->tiltAngle);
-    state->model->unk104 = 0;
-    state->model->unk108 = state->verticalOffset;
-    state->model->unk10C = 0;
+    createXRotationMatrix(state->model->unkF0.m, state->tiltAngle);
+    state->model->unkF0.translation.x = 0;
+    state->model->unkF0.translation.y = state->verticalOffset;
+    state->model->unkF0.translation.z = 0;
 
     state->rotationAngle += 0x2AA;
     createYRotationMatrix(&rotationMatrix, state->rotationAngle);
@@ -483,8 +483,8 @@ void updateBobbingModelTask(BobbingModelState *state) {
     rotationMatrix.translation.y = 0x499999;
     rotationMatrix.translation.z = 0;
 
-    func_8006B084_6BC84(&rotationMatrix, state->model->unkF0, &combinedMatrix);
-    func_8006B084_6BC84(&combinedMatrix, state->model->matrix18, &state->displayObject);
+    func_8006B084_6BC84(&rotationMatrix, &state->model->unkF0, &combinedMatrix);
+    func_8006B084_6BC84(&combinedMatrix, &state->model->matrix18, &state->displayObject.transform);
     enqueueModelDisplayList(state->model, &state->displayObject);
 }
 
@@ -513,8 +513,8 @@ void updateTiltingModelTask(BobbingModelTaskState *state) {
         return;
     }
     if (state->model->actionMode == 1) {
-        createXRotationMatrix(state->model->unkF0, 0xFCE4);
-        state->model->unk10C += 0x66666;
+        createXRotationMatrix(state->model->unkF0.m, 0xFCE4);
+        state->model->unkF0.translation.z += 0x66666;
     }
 }
 

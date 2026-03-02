@@ -122,7 +122,7 @@ void cutsceneEffectMLight_exec(cutsceneEffectMLight_exec_arg *arg0, CutsceneMana
             break;
         case 1:
             createZRotationMatrix(rotMatrix, 0x1000);
-            func_8006B084_6BC84(rotMatrix, &sp30, &sp50);
+            func_8006B084_6BC84(rotMatrix, &sp30, &sp50.u.mat);
             sp50.u.vec.x = sp70[0];
             sp50.u.vec.y = sp70[1];
             sp50.u.vec.z = sp70[2];

@@ -57,15 +57,15 @@ void updateRocketEffect(RocketEffectUpdateData *arg0) {
 
     createYRotationMatrix(&gIdentityMatrix32, arg0->unk80);
     temp_v0 = (void *)((u8 *)(*arg0->unk78) + 0x3C0);
-    func_8006B084_6BC84(&gIdentityMatrix32, temp_v0, arg0);
-    scaleMatrix((Transform3D *)&arg0->unk0, arg0->unk82, arg0->unk82, arg0->unk82);
+    func_8006B084_6BC84(&gIdentityMatrix32, temp_v0, &arg0->unk0.transform);
+    scaleMatrix(&arg0->unk0.transform, arg0->unk82, arg0->unk82, arg0->unk82);
 
     gScaleMatrix.translation.x = 0;
     gScaleMatrix.translation.y = 0x9CCCC;
     gScaleMatrix.translation.z = 0xFFE44CCD;
     ptr = (s32 *)&gScaleMatrix.translation;
 
-    func_8006B084_6BC84(ptr - 5, arg0, &arg0->unk3C);
+    func_8006B084_6BC84((Transform3D *)(ptr - 5), (Transform3D *)arg0, &arg0->unk3C.transform);
 
     if (gFrameCounter & 1) {
         arg0->unk3C.displayLists = (DisplayLists *)&D_80088680_89280;

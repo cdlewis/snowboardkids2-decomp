@@ -79,8 +79,8 @@ typedef struct {
         u16 unk16;
     } *unk10;
     u8 unk14[0x4];
-    /* 0x18 */ s16 matrix18[3][3];
-    u8 padding2[0x3C - 0x2A];
+    /* 0x18 */ Transform3D matrix18;
+    u8 padding2[0x3C - 0x38];
     s8 isDestroyed;
     s8 actionMode;
     s8 unk3E;
@@ -88,11 +88,7 @@ typedef struct {
     u8 padding3[0x88 - 0x40];
     s8 unk88;
     u8 padding4[0xF0 - 0x89];
-    s16 unkF0[3][3];
-    u8 _padUnk102[2];
-    s32 unk104;
-    s32 unk108;
-    s32 unk10C;
+    Transform3D unkF0;
 } func_80002B50_3750_arg;
 
 typedef struct {
@@ -160,9 +156,7 @@ typedef struct {
     ModelAnimationData *unk9C;
     u8 unkA0[4];
     SpriteAssetState unkA4;
-    s16 unkF0[3][3];
-    u8 unkF4[0x8];
-    s32 unk10C;
+    Transform3D unkF0;
     s32 partDisplayFlags;
     void *unk114;
     void *unk118;

@@ -1072,28 +1072,36 @@ void updateIceLandBossLeanBoneTransforms(Player *arg0) {
 
     animDataPtr = &arg0->unk9B0.animation_data;
     animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
-    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, animDataPtr);
-    func_8006B084_6BC84(&arg0->unk9B0, animDataPtr, &arg0->padding2a_3[0x480]);
+    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, (Transform3D *)animDataPtr);
+    func_8006B084_6BC84(
+        (Transform3D *)&arg0->unk9B0,
+        (Transform3D *)animDataPtr,
+        (Transform3D *)&arg0->padding2a_3[0x480]
+    );
 
     for (i = 0; i < arg0->leanBoneCount; i++) {
         if (animData[i].parentBone == 0xFF) {
             if (arg0->behaviorFlags & 0x10) {
                 memcpy(&sp30, &identityMatrix, sizeof(Transform3D));
                 sp30.m[1][1] = arg0->unkB9E;
-                func_8006B084_6BC84(&arg0->unk488[animData[i].boneIndex].prev_position, &sp30, &sp10);
-                func_8006B084_6BC84(&sp10, &arg0->padding2a_3[0x480], animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0);
+                func_8006B084_6BC84((Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position, &sp30, &sp10);
+                func_8006B084_6BC84(
+                    &sp10,
+                    (Transform3D *)&arg0->padding2a_3[0x480],
+                    (Transform3D *)(animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0)
+                );
             } else {
                 func_8006B084_6BC84(
-                    &arg0->unk488[animData[i].boneIndex].prev_position,
-                    &arg0->padding2a_3[0x480],
-                    animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0
+                    (Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position,
+                    (Transform3D *)&arg0->padding2a_3[0x480],
+                    (Transform3D *)(animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0)
                 );
             }
         } else {
             func_8006B084_6BC84(
-                &arg0->unk488[animData[i].boneIndex].prev_position,
-                animData[i].parentBone * 0x3C + 0x38 + (u8 *)arg0,
-                animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0
+                (Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position,
+                (Transform3D *)(animData[i].parentBone * 0x3C + 0x38 + (u8 *)arg0),
+                (Transform3D *)(animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0)
             );
         }
     }

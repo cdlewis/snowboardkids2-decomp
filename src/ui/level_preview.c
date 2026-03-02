@@ -533,7 +533,11 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
     offsetTransform.unk1C = state->cameraDistance;
 
-    func_8006B084_6BC84(&offsetTransform, lookAtTransform, cameraTransform);
+    func_8006B084_6BC84(
+        (Transform3D *)&offsetTransform,
+        (Transform3D *)lookAtTransform,
+        (Transform3D *)cameraTransform
+    );
 
     setViewportTransformById(allocation->unk48A, cameraTransform);
 

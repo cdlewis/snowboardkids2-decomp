@@ -125,7 +125,7 @@ void updateCameraRotationTask(CameraRotationTaskState *state) {
     cameraTransform.translation.y = 0x4CCCC;
     cameraTransform.translation.z = 0;
 
-    func_8006B084_6BC84(positionPtr - 5, &cameraTransform, (u8 *)state->model + 0xF0);
+    func_8006B084_6BC84((Transform3D *)(positionPtr - 5), &cameraTransform, &state->model->unkF0);
 }
 
 void cleanupCameraRotationTask(void) {

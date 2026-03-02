@@ -167,7 +167,7 @@ void initStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
         arg0->rollAngle,
         arg0->yawAngle
     );
-    func_8006B084_6BC84(arg0, &sp20, &sp40);
+    func_8006B084_6BC84((Transform3D *)arg0, &sp20, &sp40);
     setViewportTransformById(allocation->unkDA, &sp40);
     setCallback(&updateStoryMapMiniCamera);
 }
@@ -213,7 +213,7 @@ void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
         arg0->rollAngle,
         arg0->yawAngle
     );
-    func_8006B084_6BC84(arg0, &sp20, &sp40);
+    func_8006B084_6BC84((Transform3D *)arg0, &sp20, &sp40);
     queueAnonymousBufferData(&sp40);
     setViewportTransformById(allocation->unkDA, &sp40);
 }

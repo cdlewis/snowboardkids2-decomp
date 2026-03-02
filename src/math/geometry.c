@@ -812,7 +812,7 @@ void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPos
     gScaleMatrix.translation.y = 0;
     gScaleMatrix.translation.z = tempPosZ;
     tempTransformPtr = (s32 *)&gScaleMatrix.translation;
-    func_8006B084_6BC84(tempTransformPtr - 5, &combined, output);
+    func_8006B084_6BC84((Transform3D *)(tempTransformPtr - 5), &combined, output);
 }
 
 /**

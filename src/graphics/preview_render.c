@@ -375,7 +375,7 @@ void initBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     createRotationMatrixYX(&rotationYX, 0x1000, 0x800);
     createZRotationMatrix(rotationZPtr, 0x1F00);
 
-    func_8006B084_6BC84(&rotationYX, rotationZPtr, transformMatrix);
+    func_8006B084_6BC84(&rotationYX, rotationZPtr, (Transform3D *)transformMatrix);
 
     arg0->unk5C = 0xFFF80000;
     charIndex = state->unk7A2 + (state->unk7A1 * 3);
@@ -534,7 +534,7 @@ void initBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0) {
     memcpy(pRotationYX, pRotationZ, 0x20);
     createRotationMatrixYX(pRotationYX, 0x1000, 0x800);
     createZRotationMatrix(pRotationZ, 0x1F00);
-    func_8006B084_6BC84(pRotationYX, pRotationZ, transformMatrix);
+    func_8006B084_6BC84(pRotationYX, pRotationZ, (Transform3D *)transformMatrix);
     arg0->unk50 = 0x600000;
     arg0->unk58 = 0xFFF80000;
     paletteIndex = EepromSaveData->character_or_settings[0];
@@ -719,7 +719,7 @@ void initBoardShopCharacterTransition(BoardShopCharacterPreviewState *arg0) {
 
     createRotationMatrixYX(pRotationYX, 0x1000, 0x800);
     createZRotationMatrix(pRotationZ, 0x1F00);
-    func_8006B084_6BC84(pRotationYX, pRotationZ, &arg0->unk3C);
+    func_8006B084_6BC84(pRotationYX, pRotationZ, (Transform3D *)&arg0->unk3C);
 
     arg0->unk58 = 0xFFF80000;
     memcpy(arg0, &arg0->unk3C, 0x20U);
