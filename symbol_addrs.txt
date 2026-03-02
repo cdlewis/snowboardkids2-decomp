@@ -3160,6 +3160,7 @@ waitForOptionsMenu = 0x800148CC; // rom:0x154CC
 startSelectedGameMode = 0x80014900; // rom:0x15500
 initOptionsMenu = 0x80037270; // rom:0x37E70
 onOptionsMenuFadeInComplete = 0x800373B0; // rom:0x37FB0
+updateOptionsMenu = 0x800373E0; // rom:0x37FE0
 onOptionsMenuFadeOutComplete = 0x80037688; // rom:0x38288
 onOptionsMenuExit = 0x800376EC; // rom:0x382EC
 initOptionsMenuTitle = 0x80037710; // rom:0x38310
