@@ -399,7 +399,7 @@ typedef struct {
     u16 unk1880[4];
     u16 unk1888[8];
     u16 unk1898[4];
-    u8 PAD_20[0x8];
+    u8 unk18A0[8];
     u8 unk18A8[8];
     u8 unk18B0[8];
     u8 PAD_22[0x8];

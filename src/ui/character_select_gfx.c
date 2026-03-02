@@ -18,6 +18,13 @@
 #include "ui/save_data.h"
 
 typedef struct {
+    u8 pad0[0x1898];
+    u16 unk1898[4];
+    u16 unk18A0[4];
+    u8 unk18A8[8];
+} BoardSelectGameState;
+
+typedef struct {
     u8 padding[0x24];
     void *unk24;
     void *unk28;
@@ -1823,7 +1830,59 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
     setCallback(func_800269C8_275C8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/ui/character_select_gfx", func_800269C8_275C8);
+void func_800269C8_275C8(void *arg0) {
+    CharacterNameSprite *sprites = (CharacterNameSprite *)arg0;
+    BoardSelectGameState *gameState;
+    s32 i;
+    u16 state;
+    u8 numPlayers;
+    s32 charIndex;
+    u16 xPos;
+    u16 yPos;
+    u16 spriteIdx;
+    gameState = (BoardSelectGameState *)getCurrentAllocation();
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+        state = gameState->unk1898[i];
+        if (state != 4) {
+            yPos = state - 3;
+            if (((u32)yPos) >= 8) {
+                numPlayers = D_800AFE8C_A71FC->numPlayers;
+                xPos = ((s16 *)D_8008DE54_8EA54)[numPlayers * 2];
+                charIndex = D_800AFE8C_A71FC->playerBoardIds[i + 4];
+                yPos = ((s16 *)D_8008DE54_8EA54)[(numPlayers * 2) + 1];
+                if (((u8)charIndex) >= 9) {
+                    if (numPlayers == 1) {
+                        spriteIdx = charIndex + 0x30;
+                        xPos += 0x18;
+                    } else {
+                        spriteIdx = charIndex + 0x23;
+                        xPos = D_8008DE9C_8EA9C[numPlayers].x - ((u16)((s16 *)D_8008DE64_8EA64)[11 + ((u8)charIndex)]);
+                    }
+                    sprites[i].spriteIndex = spriteIdx;
+                } else {
+                    spriteIdx = 0x1D;
+                    if (numPlayers == 1) {
+                        spriteIdx = 0x36;
+                    }
+                    sprites[i].spriteIndex = spriteIdx + gameState->unk18A8[i];
+                }
+            } else {
+                numPlayers = D_800AFE8C_A71FC->numPlayers;
+                xPos = ((s16 *)D_8008DE64_8EA64)[numPlayers * 2];
+                yPos = ((s16 *)D_8008DE64_8EA64)[(numPlayers * 2) + 1];
+                sprites[i].spriteIndex = gameState->unk18A8[i] + 0x1D;
+            }
+            sprites[i].x = xPos;
+            sprites[i].y = yPos;
+            if ((((u32)(gameState->unk1898[i] - 5)) < 2) && (gameState->unk18A0[i] & 1)) {
+                sprites[i].blinkState = 0xFF;
+            } else {
+                sprites[i].blinkState = 0;
+            }
+            debugEnqueueCallback((u16)(i + 0xC), 0, renderTextSprite, &sprites[i]);
+        }
+    }
+}
 
 void func_80026BAC_277AC(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
