@@ -20,14 +20,14 @@
 #include "ui/save_data.h"
 
 extern void func_8001FFE4_20BE4(void);
-extern void func_8001FA00_20600(LevelPreviewCharacterState *);
+void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state);
 void holdLevelPreviewCamera(LevelPreviewCharacterState *state);
 extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 struct LevelPreviewPortraitState_202A0_s;
 extern void animatePortraitRotation(struct LevelPreviewPortraitState_202A0_s *arg0);
 
-u16 D_8008D9D0_8E5D0[] = { 0x0618, 0x0672, 0x03DE, 0x03DE, 0x0708, 0x01E0, 0x0708, 0x0708,
-                           0x0546, 0x04CE, 0x04B0, 0x04B0, 0x04B0, 0x04B0, 0x0564, 0x0564 };
+u16 sLevelPreviewDurations[] = { 0x0618, 0x0672, 0x03DE, 0x03DE, 0x0708, 0x01E0, 0x0708, 0x0708,
+                                 0x0546, 0x04CE, 0x04B0, 0x04B0, 0x04B0, 0x04B0, 0x0564, 0x0564 };
 
 u8 characterStartWaypoints[] = { 0x18, 0x0C, 0x4B, 0x4B, 0x0B, 0x43, 0x52, 0x52,
                                  0x16, 0x08, 0x23, 0x23, 0x62, 0x62, 0x12, 0x12 };
@@ -336,10 +336,10 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
     func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
     setViewportTransformById(allocation->unk48A, &cameraTransform);
-    setCallback(func_8001FA00_20600);
+    setCallback(updateLevelPreviewCharacterAndCamera);
 }
 
-void func_8001FA00_20600(LevelPreviewCharacterState *state) {
+void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
     Allocation_F7C8 *allocation;
     Transform3D cameraTransform;
     Transform3D offsetTransform;
@@ -470,7 +470,7 @@ void func_8001FA00_20600(LevelPreviewCharacterState *state) {
     offsetTransform.translation.z = state->cameraDistance;
     func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
     setViewportTransformById(allocation->unk48A, &cameraTransform);
-    timerLimit = &D_8008D9D0_8E5D0[allocation->unkB33[allocation->unkB2C]];
+    timerLimit = &sLevelPreviewDurations[allocation->unkB33[allocation->unkB2C]];
     timer = state->frameTimer;
     if (timer < (*timerLimit)) {
         timer = (state->frameTimer = timer + 1);
@@ -576,7 +576,7 @@ void resumeLevelPreviewAfterHold(Func80020418Arg *arg0) {
             arg0->unk76 = 1;
         }
 
-        setCallback(&func_8001FA00_20600);
+        setCallback(&updateLevelPreviewCharacterAndCamera);
 
         if (allocation->unkB33[allocation->unkB2C] == 5) {
             arg0->unk74 = 0x1E0;
