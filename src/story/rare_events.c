@@ -293,7 +293,7 @@ extern Vec3i D_800AFF20_A7290;
 
 s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle);
 s32 func_8002A4AC_2B0AC(void *, u8);
-s32 func_8002A7CC_2B3CC(Func8002A390Arg *);
+s32 updateStoryMapNpcBehavior(Func8002A390Arg *);
 s16 stepAngleTowardsTarget(s16 targetAngle, s16 currentAngle);
 
 s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
@@ -327,14 +327,14 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
         case 2:
         case 3:
         case 4:
-            if (func_8002A7CC_2B3CC(arg0) == 0) {
+            if (updateStoryMapNpcBehavior(arg0) == 0) {
                 return 0;
             }
             arg0->prevState = arg0->state;
             arg0->state = 0;
             break;
         case 0x44:
-            if (func_8002A7CC_2B3CC(arg0) == 0) {
+            if (updateStoryMapNpcBehavior(arg0) == 0) {
                 return 0;
             }
             arg0->prevState = arg0->state;
@@ -348,7 +348,7 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002A4AC_2B0AC);
 
-s32 func_8002A7CC_2B3CC(Func8002A390Arg *s0) {
+s32 updateStoryMapNpcBehavior(Func8002A390Arg *s0) {
     Vec3i *new_var;
     Vec3i sp10;
     GameState *s3;

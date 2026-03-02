@@ -4042,3 +4042,4 @@ gStoryMapNpcTalkSounds = 0x8008E590; // rom:0x8F190 size:0x140
 rareEventNpcTable = 0x8008EAE0; // rom:0x8F6E0
 rareEventModelModes = 0x8008EB10; // rom:0x8F710
 rareEventEffectDurations = 0x8008EBE0; // rom:0x8F7E0
+updateStoryMapNpcBehavior = 0x8002A7CC; // rom:0x2B3CC
