@@ -364,28 +364,20 @@ segments:
       - [0x90930, .data, ui/options_menu]
       - [0x90A80, data, system/controller_io]
       - [0x90AA0, .data, system/rom_loader]
-      - [0x90AB0, data]
-      - [0x90AF0, data]
+      - [0x90AB0, data, text/text_elements]
       - [0x90E80, .data, race/race_session]
       - [0x913E0, .data, race/position_markers]
-      - [0x914A0, data]
-      - [0x916F0, data]
-      - [0x919B0, data]
-      - [0x91A20, data]
-      - [0x91A40, data]
-      - [0x91A60, data]
+      - [0x914A0, data] # also particle_items?
+      - [0x916F0, data] # also race_hud?
+      - [0x91A60, data, race/race_effects]
       - [0x91A70, data, race/spray_particles]
-      - [0x91AC0, data]
-      - [0x91B60, data]
+      - [0x91B60, data, race/obstacle_sprites]
       - [0x91B90, data, data/course_data]
-      - [0x91FD0, data]
-      - [0x92050, data]
-      - [0x943C0, data, audio/audio]
-      - [0x94700, data]
+      - [0x921D0, data, audio/audio]
       - [0x947B0, .data, race/character_stats]
-      - [0x94B90, data]
-      - [0x94D10, data]
-      - [0x94D80, data]
+      - [0x94B90, data, race/hit_reactions]
+      - [0x94C80, data, race/track_collision]
+      - [0x94D80, data, race/track_height]
       - [0x94E10, .data, data/asset_metadata]
       - [0x9B270, data, race/race_hud]
       - [0x9B2B0, data, race/particle_items]
@@ -393,13 +385,11 @@ segments:
       - [0x9B420, data, text/font_assets]
       - [0x9B460, data, system/task_scheduler]
       - [0x9B470, .data, math/geometry_data]
-      - [0x9B9E0, data]
-      - [0x9B9F0, data]
-      - [0x9BAD0, data]
+      - [0x9B9E0, data] # lots of stuff under race/
+      - [0x9B9F0, data, graphics/graphics]
       - [0x9BBF0, .data, system/thread_manager]
       - [0x9BC30, .data, audio/audio_manager]
       - [0x9BC50, data, race/player]
-      # - [0x9BC50, lib, libmus, player, .data]
       - [0x9BD00, lib, libmus, player_fx, .data]
       - [0x9BF10, lib, libgultra_rom, sins, .data]
       - [0x9C710, lib, libgultra_rom, thread, .data]
@@ -439,7 +429,7 @@ segments:
           use_src_path: True,
           name: rsp/f3dex2,
         }
-      - [0x9E640, rodata]
+      - [0x9E640, rodata] # no idea what this is
       - [0x9E8E0, .rodata, effects/cutscene_keyframes]
       - [0x9E910, .rodata, graphics/tiled_texture]
       - [0x9E938, .rodata, animation/oscillating_sprite]
@@ -499,7 +489,6 @@ segments:
       - [0x9FD80, lib, libgultra_rom, xldtob, .rodata]
 
       - { start: 0x9FDF0, type: bss, vram: 0x8009F1F0, name: A02E0 }
-      # - { type: lib, vram: 0x800A64C0, name: libmus, object: player, section: .bss }
       - {
           type: lib,
           vram: 0x800A6530,
@@ -573,7 +562,7 @@ segments:
     subsegments:
       - [0x9FF70, c, race/race_main]
       - [0xA9A40, c, race/ai_pathfinding]
-      - [0xAA8E0, data]
+      - [0xAA8E0, data, race/race_main]
       - [0xAAEB0, .rodata, race/race_main]
 
   - name: levels/lindas_castle
@@ -1080,9 +1069,9 @@ segments:
       - [0x1E60D0, c, effects/scrolling_texture]
       - [0x1E64A0, c, effects/zoom_effect]
       - [0x1E6D20, .data, cutscene/1DD170]
-      - [0x1E7670, data]
+      - [0x1E7670, data, cutscene/cutscene_sys]
       - [0x1E7DC0, .data, effects/screen_transition]
-      - [0x1E7E30, data]
+      - [0x1E7E30, data, animation/slot_animation]
       - [0x1E7F00, .rodata, animation/slot_animation]
       - [0x1E7F30, .rodata, effects/zoom_effect]
       - { start: 0x1E7F60, type: bss, vram: 0x800BAEB0, name: cutscene }
