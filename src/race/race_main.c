@@ -1584,7 +1584,132 @@ void dispatchRaceFinishBehaviorStep(BehaviorState *arg0) {
     raceFinishBehaviorStepHandlers[arg0->behaviorStep](arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B3980_A3830);
+s32 func_800B3980_A3830(Player *arg0) {
+    Vec3i sp10;
+    s32 speed;
+    s32 temp_v1;
+    s32 rotX;
+    s32 negRotX;
+    s32 turnDelta;
+    s16 newSteering;
+    u16 currentRotY;
+    s16 angleDiff;
+    s16 clampedAngle;
+    s32 turnAmount;
+    s32 finalSteering;
+    s32 animParam;
+    s32 t0;
+    u32 t1;
+    s32 temp;
+
+    speed = isqrt64((s64)arg0->velocity.x * arg0->velocity.x + (s64)arg0->velocity.z * arg0->velocity.z);
+
+    if (speed <= 0x7FFF) {
+        if (!(arg0->animFlags & 1)) {
+            arg0->behaviorStep += 1;
+            return 1;
+        }
+    }
+
+    if (arg0->animFlags & 1) {
+        arg0->velocity.x -= (arg0->velocity.x >> 5);
+        arg0->velocity.z -= (arg0->velocity.z >> 5);
+        decayPlayerAirborneAngles(arg0);
+    } else {
+        arg0->unkA90 = arg0->unkA90 & 0x1FFF;
+        if (arg0->unkA90 >= 0x1001) {
+            arg0->unkA90 -= 0x2000;
+        }
+        temp_v1 = -arg0->unkA90;
+        if (temp_v1 >= 0x81) {
+            temp_v1 = 0x80;
+        }
+        if (temp_v1 < -0x80) {
+            temp_v1 = -0x80;
+        }
+        rotX = arg0->unk990.translation.x;
+        arg0->unkA90 += temp_v1;
+        negRotX = -rotX;
+        if (negRotX > 0x8000) {
+            negRotX = 0x8000;
+        }
+        if (negRotX < -0x8000) {
+            negRotX = -0x8000;
+        }
+        arg0->unk990.translation.x = rotX + negRotX;
+        applyVelocityDeadzone(arg0, 0x7000, 0x7000, 0x7000);
+        rotateVectorY(&arg0->velocity, -arg0->rotY, &sp10);
+        sp10.x = sp10.x >> 8;
+        if (sp10.x >= 0x401) {
+            sp10.x = 0x400;
+        }
+        if (sp10.x < -0x400) {
+            sp10.x = -0x400;
+        }
+        sp10.x -= arg0->unkA92;
+        if (sp10.x >= 0x51) {
+            sp10.x = 0x50;
+        }
+        if (sp10.x < -0x50) {
+            sp10.x = -0x50;
+        }
+        arg0->unkA92 = arg0->unkA92 + sp10.x;
+        if ((((u16)arg0->unkA92 + 7) & 0xFFFF) < 0xFU) {
+            arg0->unkA92 = 0;
+        }
+        if (arg0->behaviorCounter == 0) {
+            temp = atan2Fixed(-arg0->velocity.x, -arg0->velocity.z);
+            currentRotY = arg0->rotY;
+            temp -= 0x800;
+            angleDiff = (temp - currentRotY) & 0x1FFF;
+            clampedAngle = angleDiff;
+            if (angleDiff >= 0x1001) {
+                clampedAngle = angleDiff | 0xE000;
+            }
+            if (clampedAngle >= 0x101) {
+                clampedAngle = 0x100;
+            }
+            if (clampedAngle < -0x100) {
+                clampedAngle = -0x100;
+            }
+            if (speed > 0x80000) {
+                speed = 0x80000;
+            }
+            turnAmount = clampedAngle * speed;
+            if (turnAmount < 0) {
+                turnAmount += 0x7FFFF;
+            }
+            angleDiff = turnAmount >> 0x13;
+            arg0->rotY = currentRotY + angleDiff;
+            if (angleDiff == 0) {
+                arg0->behaviorCounter = 0;
+            }
+        }
+    }
+
+    arg0->velocity.y -= 0x6000;
+    applyClampedVelocityToPosition(arg0);
+
+    finalSteering = arg0->unkA92;
+    if (finalSteering == 0) {
+        advancePlayerLeanAnimationAuto(arg0, 0);
+        return 0;
+    }
+
+    if (finalSteering > 0) {
+        if (finalSteering >= 0x401) {
+            finalSteering = 0x400;
+        }
+        setPlayerLeanAnimation(arg0, 2, finalSteering / 2);
+    } else {
+        finalSteering = -finalSteering;
+        if (finalSteering >= 0x401) {
+            finalSteering = 0x400;
+        }
+        setPlayerLeanAnimation(arg0, 1, finalSteering / 2);
+    }
+    return 0;
+}
 
 typedef struct {
     u8 pad[0x176C];
