@@ -381,7 +381,7 @@ segments:
       - [0x94E10, .data, data/asset_metadata]
       - [0x9B270, data, race/race_hud]
       - [0x9B2B0, data, race/particle_items]
-      - [0x9B3D0, data, graphics/displaylist]
+      - [0x9B3D0, .data, graphics/displaylist]
       - [0x9B420, data, text/font_assets]
       - [0x9B460, data, system/task_scheduler]
       - [0x9B470, .data, math/geometry_data]

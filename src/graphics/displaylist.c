@@ -82,7 +82,21 @@ extern void *D_800A2D40_A3940;
 extern void *D_800A2D44_A3944;
 extern void *D_800A2D48_A3948;
 extern Gfx D_8009A780_9B380[];
-extern Gfx D_8009A7D0_9B3D0[];
+
+Gfx gAlphaSpriteSetupDL[] = {
+    gsSPClearGeometryMode(
+        G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_SHADING_SMOOTH
+    ),
+    gsSPSetGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_SHADING_SMOOTH),
+    gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
+    gsDPPipeSync(),
+    gsDPSetTextureFilter(G_TF_BILERP),
+    gsDPSetCycleType(G_CYC_2CYCLE),
+    gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, COMBINED, 0, 0, 0, COMBINED),
+    gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2),
+    gsDPSetTextureLUT(G_TT_RGBA16),
+    gsSPEndDisplayList(),
+};
 extern u32 D_800A2D4C_A394C;
 extern u32 D_800A2D50_A3950;
 extern u8 D_800A2D54_A3954;
@@ -2035,7 +2049,7 @@ void renderAlphaBillboardSprite(AlphaSpriteState *state) {
     if (gGraphicsMode != 7) {
         gGraphicsMode = 7;
 
-        gSPDisplayList(gRegionAllocPtr++, D_8009A7D0_9B3D0);
+        gSPDisplayList(gRegionAllocPtr++, gAlphaSpriteSetupDL);
 
         gDPLoadTextureBlock_4b(
             gRegionAllocPtr++,
@@ -2128,7 +2142,7 @@ void renderAlphaSprite(AlphaSpriteState *state) {
     if (gGraphicsMode != 7) {
         gGraphicsMode = 7;
 
-        gSPDisplayList(gRegionAllocPtr++, D_8009A7D0_9B3D0);
+        gSPDisplayList(gRegionAllocPtr++, gAlphaSpriteSetupDL);
 
         gDPLoadTextureBlock_4b(
             gRegionAllocPtr++,
