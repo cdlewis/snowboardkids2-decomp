@@ -4,6 +4,7 @@
 #include "data/asset_metadata.h"
 #include "data/course_data.h"
 #include "gamestate.h"
+#include "graphics/clip_text_render.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
@@ -132,11 +133,21 @@ typedef struct {
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
 extern s32 D_8008F110_8FD10;
-extern s16 D_8008F0B2_8FCB2[];
-extern u16 D_8008F0B4_8FCB4[];
-extern u16 D_8008F0B6_8FCB6[];
+typedef struct {
+    s16 itemOffsets[2];
+    struct {
+        u16 start;
+        u16 duration;
+    } fairyAnim[5];
+} ShopItemData;
+
+extern ShopItemData D_8008F0B0_8FCB0;
 extern s16 D_8008F0C6_8FCC6[];
 extern s32 *D_800AFE8C_A71FC;
+extern s32 D_8008F070_8FC70[];
+
+// Cast to u8* to access EEPROM save data as raw bytes for offset-based access
+extern u8 *EepromSaveData;
 
 void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *);
 void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0);
@@ -167,7 +178,6 @@ void cleanupStoryMapShopItemStatLabel(func_8002FF28_30B28_arg *);
 void updateStoryMapShopExitOverlay(void *arg0);
 void cleanupStoryMapShopExitOverlay(func_8002FF28_30B28_arg *arg0);
 void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
-
 void updateStoryMapShopSoldOutLabel(void *);
 void cleanupStoryMapShopSoldOutLabel(SpriteDisplayState *);
 void drawUnlockScreenItemIcons(void *);
@@ -268,7 +278,8 @@ void updateStoryMapShopFairy(StoryMapShopFairyState *fairy) {
             if (animIndex != 0) {
                 frameCounter = fairy->animationFrame + 1;
                 fairy->animationFrame = frameCounter;
-                if (frameCounter == (u16)(D_8008F0B4_8FCB4[idx] + D_8008F0B6_8FCB6[idx])) {
+                if (frameCounter == (u16)(D_8008F0B0_8FCB0.fairyAnim[animIndex].start +
+                                          D_8008F0B0_8FCB0.fairyAnim[animIndex].duration)) {
                     fairy->animationType = 0;
                     fairy->animationFrame = 4;
                 }
@@ -281,7 +292,7 @@ void updateStoryMapShopFairy(StoryMapShopFairyState *fairy) {
     if (animIndex != 0) {
         u16 start;
         fairy->animationType = animIndex;
-        start = D_8008F0B4_8FCB4[state->pendingFairyAnimation * 2];
+        start = D_8008F0B0_8FCB0.fairyAnim[state->pendingFairyAnimation].start;
         fairy->animationFrame = start;
         setModelAnimation(fairy->model, (s16)start);
         state->pendingFairyAnimation = 0;
@@ -678,7 +689,7 @@ void initStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
         tempValue = state->unk5CA[state->unk5C8];
         iconState->spriteIndex = (tempValue / 3) + 0x1D;
     } else {
-        s16 tableVal = D_8008F0B2_8FCB2[itemValue] + 0x18;
+        s16 tableVal = D_8008F0B0_8FCB0.itemOffsets[itemValue + 1] + 0x18;
         s16 tableVal2 = D_8008F0C6_8FCC6[itemValue];
 
         iconState->spriteIndex = itemValue + 0x23;
@@ -707,7 +718,7 @@ void updateStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
                 iconState->x = -0x30;
                 iconState->spriteIndex = (masked / 3) + 0x1D;
             } else {
-                s16 tableVal = D_8008F0B2_8FCB2[masked];
+                s16 tableVal = D_8008F0B0_8FCB0.itemOffsets[masked + 1];
                 s16 tableVal2 = D_8008F0C6_8FCC6[masked];
                 iconState->spriteIndex = masked + 0x23;
                 iconState->x = (((0x120 - ((s16)(tableVal + 0x18))) / 2) - tableVal2) - 0x96;
@@ -748,7 +759,7 @@ void initStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
         arg0->x = 0x12;
         arg0->spriteIndex = ((itemValue % 3) & 0xFF) + 0x24;
     } else {
-        s16 tableVal = D_8008F0B2_8FCB2[itemValue];
+        s16 tableVal = D_8008F0B0_8FCB0.itemOffsets[itemValue + 1];
         arg0->spriteIndex = 0x35;
         arg0->x = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
     }
@@ -776,7 +787,7 @@ void updateStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
             arg0->x = 0x12;
             arg0->spriteIndex = ((itemValue & 0x1F) % 3) + 0x24;
         } else {
-            s16 tableVal = D_8008F0B2_8FCB2[itemValue];
+            s16 tableVal = D_8008F0B0_8FCB0.itemOffsets[itemValue + 1];
             arg0->spriteIndex = 0x35;
             arg0->x = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
         }
@@ -913,8 +924,6 @@ void initStoryMapShopItemPriceDisplay(SpriteDisplayState *arg0) {
     setCallback(updateStoryMapShopItemPriceDisplay);
 }
 
-extern s32 D_8008F070_8FC70[];
-
 void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
     s32 i;
@@ -994,8 +1003,6 @@ void initStoryMapShopItemStatsDisplay(ItemStatsDisplay *display) {
 
     setCallback(updateStoryMapShopItemStatsDisplay);
 }
-
-extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 
 void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
     GameState *state;
@@ -1125,9 +1132,6 @@ void cleanupUnlockScreenItemIcons(UnlockScreenItemIconsCleanupArg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
     arg0->unk38 = freeNodeMemory(arg0->unk38);
 }
-
-// Cast to u8* to access EEPROM save data as raw bytes for offset-based access
-extern u8 *EepromSaveData;
 
 s32 getLockedShopItemIndices(u8 *buffer) {
     s32 count;
