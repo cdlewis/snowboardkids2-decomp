@@ -154,7 +154,7 @@ void updateStarlightFireworkSimple(StarlightFireworkTaskState *);
 void updateStarlightFireworkComplex(StarlightFireworkTaskState *);
 void updateStarlightFirework(StarlightFireworkTaskState *);
 void cleanupStarlightFireworkTask(StarlightFireworkCleanupState *);
-void updateFireworkShowTimer(FireworkShowTimerState *arg0);
+
 void updateStarlightBarrier(StarlightBarrierTask *arg0);
 
 void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *task) {

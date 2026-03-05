@@ -42,7 +42,7 @@ extern s32 gButtonsPressed;
 
 void awaitCutsceneTransitionComplete(void);
 void func_80003898_4498(void);
-void loadCutsceneOverlay(void);
+
 void runCutsceneFrame(void);
 void signalCutsceneComplete(void);
 void awaitCutsceneTaskComplete(void);

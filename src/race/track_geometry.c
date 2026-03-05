@@ -69,7 +69,6 @@ struct Func8002CD3CArg {
 };
 
 extern u16 gNpcCollisionRadii[];
-extern void spawnSpriteEffectEx(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);
 
 void updateStoryMapRareEventIdle(RareEventIdleState *);
 void updateStoryMapRareEventWave(RareEventIdleState *);

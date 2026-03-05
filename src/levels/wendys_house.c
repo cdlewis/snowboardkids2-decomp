@@ -129,7 +129,7 @@ void initWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0) {
     randVal = (randA() & 1) << 4;
     arg0->displayLists = temp + ((randVal) + 0xB0);
     arg0->position.x = 0x225BCB0C;
-    arg0->position.y = gWendysHouseProjectileTargetPositions[((s16)arg0->targetIndex)].y + 0x1E8000;
+    arg0->position.y = gWendysHouseProjectileTargetPositions[(arg0->targetIndex)].y + 0x1E8000;
     arg0->position.z = 0xF14F9599;
     diff = gWendysHouseProjectileTargetPositions[arg0->targetIndex].x - arg0->position.x;
     if (diff < 0) {
@@ -172,7 +172,7 @@ void updateWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0) {
             }
             arg0->rotY += 0x100;
             for (i = 0; i < gameState->numPlayers; i++) {
-                if (isPointInPlayerCollisionSphere(&gameState->players[i], (Vec3i *)&arg0->position, 0x180000) != 0) {
+                if (isPointInPlayerCollisionSphere(&gameState->players[i], (&arg0->position), 0x180000) != 0) {
                     setPlayerBouncedBackState(&gameState->players[i]);
                 }
             }
@@ -182,7 +182,7 @@ void updateWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0) {
             arg0->position.y += arg0->velocity.y;
             arg0->position.z += arg0->velocity.z;
             for (i = 0; i < gameState->numPlayers; i++) {
-                isPlayerInRangeAndPull((Vec3i *)&arg0->position, 0x180000, &gameState->players[i]);
+                isPlayerInRangeAndPull((&arg0->position), 0x180000, &gameState->players[i]);
             }
             arg0->velocity.y += (s32)0xFFFF4000;
             if (arg0->velocity.y < (s32)0xFFE20000) {

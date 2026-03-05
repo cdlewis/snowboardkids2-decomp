@@ -25,7 +25,6 @@ extern void initCharacterPreview(void);
 extern void initCharacterSelectBoardTask(void);
 extern void initCharacterSelectSprites(void);
 extern void initCharacterSelectTextureDataLoad(void);
-extern void osViExtendVStart(u32);
 
 void initStoryMap(void);
 void onStoryMapExitToMainMenu(void);

@@ -284,12 +284,12 @@ void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
                     if ((u32)gameState->players[i].sectorIndex - 0x60 < 6) {
                         arg0->node.displayLists =
                             &getSkyDisplayLists3ByIndex(gameState->memoryPoolId)->sceneryDisplayLists4;
-                        randVal = (u8)randA();
+                        randVal = randA();
                         randVal = randVal - 0x60;
                         i = randVal << 1;
                         i = i + randVal;
                         i = i + 0x6C0;
-                        spawnFallingStarProjectile(i, (((u8)randA()) << 12) | 0x100000);
+                        spawnFallingStarProjectile(i, ((randA()) << 12) | 0x100000);
                         queueSoundAtPosition(&arg0->node.transform.translation, 0x23);
                         arg0->timer = 0x18;
                         arg0->state++;

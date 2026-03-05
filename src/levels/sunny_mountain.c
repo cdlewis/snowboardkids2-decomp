@@ -32,7 +32,6 @@ typedef struct {
     s16 unkD8; /* 0xD8: Always set to 0 */
 } SunnyMountainTaskState;
 
-extern void updateSunnyMountainChairLiftTask(void);
 void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0);
 void updateSunnyMountainDisplayObjectsTask(s32 *arg0);
 

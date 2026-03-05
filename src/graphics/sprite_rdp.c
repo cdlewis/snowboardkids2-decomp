@@ -728,7 +728,7 @@ void renderTintedSprite(TintedSpriteArg *arg0) {
     if (scaleS == -1) {
         clipOffsetX = frameEntry->width - 1;
     }
-    if ((s16)scaleT == -1) {
+    if (scaleT == -1) {
         clipOffsetY = frameEntry->height - 1;
     }
 

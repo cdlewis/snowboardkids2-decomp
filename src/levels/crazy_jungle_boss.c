@@ -406,7 +406,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     arg0->unkB38 = 0xDC000;
     arg0->unkB3C = 0x148000;
     arg0->unkB40 = 0x148000;
-    arg0->unkB50.posPtr = (Vec3i *)&arg0->unk434;
+    arg0->unkB50.posPtr = (&arg0->unk434);
     arg0->unkB50.radius = 0x15E000;
     arg0->unkB50.id = arg0->unkBB8;
 
@@ -468,7 +468,7 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
     arg0->animFlags |= 0x40000;
 
     if (arg0->behaviorStep == 0) {
-        if ((u32)gameState->raceFrameCounter < 0x1EU) {
+        if (gameState->raceFrameCounter < 0x1EU) {
             arg0->unkB8C = ((randA() & 0xFF) >> 2) + 0x5A;
         } else {
             arg0->unkB8C += (randA() & 0xFF) >> 1;
@@ -478,7 +478,7 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
         arg0->behaviorStep++;
     }
 
-    clampedAngle = (s16)computeAngleToPosition(arg0->aiTargetX, arg0->aiTargetZ, arg0->unk434.x, arg0->unk434.z);
+    clampedAngle = computeAngleToPosition(arg0->aiTargetX, arg0->aiTargetZ, arg0->unk434.x, arg0->unk434.z);
     currentAngle = arg0->unkA94;
     clampedAngle = (clampedAngle - currentAngle) & 0x1FFF;
     if (clampedAngle >= 0x1001) {

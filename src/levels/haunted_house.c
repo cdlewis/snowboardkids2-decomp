@@ -122,7 +122,7 @@ void oscillateGhostFade(AnimatedGhostEntity *);
 void fadeOutGhost(AnimatedGhostEntity *);
 void func_800BB778_AF468(void);
 void updateSwingingPendulumTrap(SwingingPendulumTrap *);
-void cleanupSwingingPendulumTrap(SwingingPendulumTrap *);
+
 void initFloatingBillboard(FloatingBillboard *);
 void updateFloatingBillboardSpawner(s16 *);
 void freeFloatingBillboard(void **);
@@ -372,7 +372,7 @@ void updateSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
             case 1:
                 arg0->fireProjectileCooldown--;
                 arg0->swingAngle -= 0x10;
-                if ((s16)arg0->swingAngle != -0x400) {
+                if (arg0->swingAngle != -0x400) {
                     break;
                 }
                 arg0->phaseTimer = 0xF;
@@ -388,7 +388,7 @@ void updateSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
             case 3:
                 arg0->fireProjectileCooldown--;
                 arg0->swingAngle += 0x10;
-                if ((s16)arg0->swingAngle != 0x400) {
+                if (arg0->swingAngle != 0x400) {
                     break;
                 }
                 arg0->swingPhase = 0;
@@ -749,7 +749,7 @@ void updateLapCounter(s16 *currentLap) {
 
     for (playerIndex = 0; playerIndex < gameState->playerCount; playerIndex++) {
         playerOffset = (u32)(playerIndex * sizeof(Player));
-        player = (Player *)((u32)playerOffset + (u32)gameState->players);
+        player = (Player *)(playerOffset + (u32)gameState->players);
         lapValue = *currentLap;
 
         if (player->currentLap == lapValue) {
