@@ -1,4 +1,5 @@
 #include "story/map_events.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "graphics/graphics.h"
 #include "math/rand.h"
 #include "race/race_session.h"
@@ -55,13 +56,6 @@ u8 gStoryMapRegularEventTypesPad[4] = { 0x04, 0x05, 0x08, 0x07 };
 
 extern u16 D_8009ADE0_9B9E0;
 
-typedef struct {
-    u8 pad0[0x9];
-    u8 unk9;
-} GameConfigLocal_288A0;
-
-extern GameConfigLocal_288A0 *D_800AFE8C_A71FC;
-
 void nullRandomEventCallback(void);
 
 typedef struct {
@@ -107,7 +101,63 @@ void initMenuCameraNode(ViewportNode *node, s32 slotIndex, s32 priority, s32 isS
 
 INCLUDE_ASM("asm/nonmatchings/story/map_events", func_80027E04_28A04);
 
-INCLUDE_ASM("asm/nonmatchings/story/map_events", func_80028074_28C74);
+void func_80028074_28C74(ViewportNode *arg0, s32 arg1, u8 arg2, u8 arg3) {
+    Transform3D sp20;
+    s32 i;
+    u16 s0;
+    ViewportNode *saved;
+
+    saved = arg0;
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+        if (arg3 == 0) {
+            initViewportNode(arg0, 0, ((arg1 & 0xFF) + i) & 0xFFFF, arg2 & 0xFF, 1);
+        } else {
+            initViewportNode(arg0, 0, ((arg1 & 0xFF) + i) & 0xFFFF, arg2 & 0xFF, 0);
+        }
+        s0 = (arg1 & 0xFF) + i + 1;
+        setViewportId(arg0, s0);
+        func_8006BEDC_6CADC(&sp20, 0, 0, 0x200000, 0, 0, 0);
+        setViewportTransformById(arg0->id, &sp20);
+        setViewportLightColors(s0, 1, &gMenuLightColor, &gMenuAmbientColor);
+        setViewportFogById(s0, 0x3E3, 0x3E7, 100, 100, 100);
+        setViewportEnvColor(arg0, 0, 0, 0);
+        setViewportFadeValue(arg0, 0, 0);
+        arg0++;
+    }
+
+    switch (D_800AFE8C_A71FC->numPlayers) {
+        case 3:
+            setModelCameraTransform(saved, -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(saved, 0.5f, 0.5f);
+            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            saved++;
+            setModelCameraTransform(saved, -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(saved, 0.5f, 0.5f);
+            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            saved++;
+            setModelCameraTransform(saved, 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(saved, 0.5f, 0.5f);
+            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            break;
+
+        case 4:
+            setModelCameraTransform(saved, -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(saved, 0.5f, 0.5f);
+            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            saved++;
+            setModelCameraTransform(saved, -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(saved, 0.5f, 0.5f);
+            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            saved++;
+            setModelCameraTransform(saved, 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(saved, 0.5f, 0.5f);
+            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            saved++;
+            setModelCameraTransform(saved, 0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(saved, 0.5f, 0.5f);
+            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+    }
+}
 
 void initStoryMapRandomEvent(u8 *eventTypeOut) {
     StoryMapEventState *state;
@@ -122,14 +172,14 @@ void initStoryMapRandomEvent(u8 *eventTypeOut) {
 
     if ((randA() & 7) == 7) {
         randomIndex = randB();
-        *eventTypeOut = gStoryMapRareEventTypes[D_800AFE8C_A71FC->unk9][randomIndex % 10] - 1;
+        *eventTypeOut = gStoryMapRareEventTypes[D_800AFE8C_A71FC->playerBoardIds[0]][randomIndex % 10] - 1;
         rareTask = scheduleTask(initStoryMapRareEvent, 0, 0, 0x5B);
         rareTask->eventTypeIndex = *eventTypeOut;
         state->rareEventType = *eventTypeOut;
         goto check_event;
     }
 
-    eventTypeIndex = gStoryMapRegularEventTypes[D_800AFE8C_A71FC->unk9][D_8009ADE0_9B9E0 & 7];
+    eventTypeIndex = gStoryMapRegularEventTypes[D_800AFE8C_A71FC->playerBoardIds[0]][D_8009ADE0_9B9E0 & 7];
     if (eventTypeIndex != 0) {
         regularTask = scheduleTask(initStoryMapItem, 0, 0, 0x5B);
         regularTask->eventTypeIndex = eventTypeIndex - 1;
