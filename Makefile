@@ -112,7 +112,7 @@ extract:
 clean:
 	rm -rf asm
 	rm -rf assets
-	rm -rf build
+	rm -rf build || rm -rf build
 	rm -f *auto.txt
 
 diff-line:
