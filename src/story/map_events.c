@@ -99,7 +99,38 @@ void initMenuCameraNode(ViewportNode *node, s32 slotIndex, s32 priority, s32 isS
     setViewportLightColors(node->id, 1, &gMenuLightColor, &gMenuAmbientColor);
 }
 
-INCLUDE_ASM("asm/nonmatchings/story/map_events", func_80027E04_28A04);
+void func_80027E04_28A04(ViewportNode *arg0, s32 arg1, u8 arg2, u8 arg3) {
+    Transform3D sp20;
+    s32 i;
+    u16 s0;
+    ViewportNode *saved;
+
+    saved = arg0;
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+        if (arg3 == 0) {
+            initViewportNode(arg0, 0, ((arg1 & 0xFF) + i) & 0xFFFF, arg2 & 0xFF, 1);
+        } else {
+            initViewportNode(arg0, 0, ((arg1 & 0xFF) + i) & 0xFFFF, arg2 & 0xFF, 0);
+        }
+        s0 = (arg1 & 0xFF) + i + 1;
+        setViewportId(arg0, s0);
+        func_8006BEDC_6CADC(&sp20, 0, 0, 0x200000, 0, 0, 0);
+        setViewportTransformById(arg0->id, &sp20);
+        setViewportLightColors(s0, 1, &gMenuLightColor, &gMenuAmbientColor);
+        setViewportFogById(s0, 0x3E3, 0x3E7, 100, 100, 100);
+        setViewportEnvColor(arg0, 0, 0, 0);
+        setViewportFadeValue(arg0, 0, 0);
+        arg0++;
+    }
+
+    setModelCameraTransform(saved, 0, -0x35, -0xA0, -0x34, 0xA0, 0x34);
+    setViewportScale(saved, 1.0f, 0.5f);
+    func_8006FA0C_7060C(saved, 50.0f, 2.6666667f, 20.0f, 3000.0f);
+    saved++;
+    setModelCameraTransform(saved, 0, 0x35, -0xA0, -0x34, 0xA0, 0x34);
+    setViewportScale(saved, 1.0f, 0.5f);
+    func_8006FA0C_7060C(saved, 50.0f, 2.6666667f, 20.0f, 3000.0f);
+}
 
 void func_80028074_28C74(ViewportNode *arg0, s32 arg1, u8 arg2, u8 arg3) {
     Transform3D sp20;
