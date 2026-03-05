@@ -2,11 +2,23 @@
 #include "common.h"
 #include "math/geometry.h"
 #include "story/npc_dialogue.h"
+#include "story/rare_events.h"
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-extern void func_8002BFEC_2CBEC(void *);
-extern void func_8002C570_2D170(void *);
+typedef struct {
+    /* 0x00 */ void *model;
+    /* 0x04 */ Transform3D matrix;
+    /* 0x24 */ u8 pad24[0xC];
+    /* 0x30 */ u16 targetRotation;
+    /* 0x32 */ u8 pad32[0x96];
+    /* 0xC8 */ void *returnCallback;
+    /* 0xCC */ u8 padCC[0x7];
+    /* 0xD3 */ u8 dialogueState;
+} StoryMapDialogueState;
+
+extern void func_8002BFEC_2CBEC(StoryMapDialogueState *);
+extern void func_8002C570_2D170(StoryMapDialogueState *);
 extern void spawnSpriteEffectEx(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
 
 extern void initStoryMapRareEventWave(void *);
@@ -352,17 +364,6 @@ void destroyStoryMapRareEventModels(StoryMapRareEventState *arg0) {
     }
 }
 
-typedef struct {
-    /* 0x00 */ void *model;
-    /* 0x04 */ Transform3D matrix;
-    /* 0x24 */ u8 pad24[0xC];
-    /* 0x30 */ u16 targetRotation;
-    /* 0x32 */ u8 pad32[0x96];
-    /* 0xC8 */ void *returnCallback;
-    /* 0xCC */ u8 padCC[0x7];
-    /* 0xD3 */ u8 dialogueState;
-} StoryMapDialogueState;
-
 void updateStoryMapNpcDialogue(StoryMapDialogueState *dialogue) {
     GameState *gameState;
     s32 i;
@@ -396,7 +397,85 @@ void updateStoryMapNpcDialogue(StoryMapDialogueState *dialogue) {
 
 INCLUDE_ASM("asm/nonmatchings/story/rare_event_npcs", func_8002BFEC_2CBEC);
 
-INCLUDE_ASM("asm/nonmatchings/story/rare_event_npcs", func_8002C570_2D170);
+void func_8002C570_2D170(StoryMapDialogueState *state) {
+    Func297D8Arg *arg0 = (Func297D8Arg *)state;
+    GameState *allocation;
+    s32 i;
+    s32 completedCount;
+    s16 angleDiff;
+    s32 absAngle;
+    s16 turnSpeed;
+    allocation = getCurrentAllocation();
+    completedCount = 0;
+    for (i = 0; i < allocation->unk41C; i++) {
+        switch (arg0[i].unk32) {
+            case 0:
+                turnSpeed = signedAngleDifference(arg0[i].unk30, arg0[i].unk2E);
+                angleDiff = turnSpeed;
+                if (angleDiff < 0) {
+                    arg0[i].unk36 = 1;
+                } else {
+                    arg0[i].unk36 = 0;
+                }
+                arg0[i].unk50 = 2;
+                arg0[i].unk37 = 1;
+                if (((turnSpeed > 0) ? (turnSpeed) : (-turnSpeed)) >= 0xAAB) {
+                    arg0[i].unk30 = (arg0[i].unk30 + 0x1000) & 0x1FFF;
+                    arg0[i].unk50 = 1;
+                    arg0[i].unk37 = 0;
+                    if (signedAngleDifference(arg0[i].unk30, arg0[i].unk2E) < 0) {
+                        arg0[i].unk36 = 1;
+                    } else {
+                        arg0[i].unk36 = 0;
+                    }
+                }
+                arg0[i].unk32 = 1;
+                break;
+
+            case 1:
+                angleDiff = signedAngleDifference(arg0[i].unk30, arg0[i].unk2E);
+                absAngle = (angleDiff > 0) ? (angleDiff) : (-angleDiff);
+                turnSpeed = 0xA0;
+                if (absAngle < 0xA0) {
+                    if (arg0[i].unk50 == 2) {
+                        arg0[i].unk50 = 0;
+                    }
+                    turnSpeed = absAngle;
+                    arg0[i].unk32 = 3;
+                }
+                if (arg0[i].unk36 != 0) {
+                    turnSpeed = -(turnSpeed >> 0x1200);
+                }
+                arg0[i].unk30 = arg0[i].unk30 + turnSpeed;
+                if (arg0[i].unk50 == 1) {
+                    if (arg0[i].unk37 != 0) {
+                        arg0[i].unk50 = 0;
+                    }
+                }
+                break;
+
+            case 2:
+                completedCount++;
+                break;
+
+            case 3:
+                if (arg0[i].unk37 != 0) {
+                    arg0[i].unk50 = 0;
+                    completedCount++;
+                }
+                break;
+        }
+    }
+
+    if (((u8)completedCount) == allocation->unk41C) {
+        allocation->unk42A = 0;
+        for (i = 0; i < allocation->unk41C; i++) {
+            arg0[i].rotation = arg0[i].unk2E;
+            arg0[i].unk50 = arg0[i].unk56;
+            setAnimationIndex(arg0[i].model, arg0[i].unk5F);
+        }
+    }
+}
 
 void configureRareEventSpriteEffect(StoryMapRareEventState *rareEvent, s32 npcIndex) {
     StoryMapRareEventNpc *npc;
