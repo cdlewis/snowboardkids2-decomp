@@ -317,7 +317,104 @@ void createRotationMatrixYZ(s16 *matrix, u16 angleY, u16 angleZ) {
     matrix[8] = cosZ;
 }
 
-INCLUDE_ASM("asm/nonmatchings/math/geometry", createRotationMatrixXYZ);
+void createRotationMatrixXYZ(s16 *m, u16 angleX, u16 angleY, u16 angleZ) {
+    s32 sinX;
+    s32 cosX;
+    s32 sinY;
+    s32 cosY;
+    s32 sinZ;
+    s32 cosZ;
+    s32 temp1;
+    s32 temp2;
+    s32 temp3;
+    s32 temp4;
+    s32 sinXsinY;
+    s32 cosXsinY;
+    s32 negSinZ;
+    s32 negSinX;
+
+    sinX = approximateSin(angleX);
+    cosX = approximateCos(angleX);
+    sinY = approximateSin(angleY);
+    cosY = approximateCos(angleY);
+    sinZ = approximateSin(angleZ);
+    cosZ = approximateCos(angleZ);
+
+    temp1 = cosY * cosZ;
+    if (temp1 < 0) {
+        temp1 += 0x1FFF;
+    }
+
+    temp2 = cosY * sinZ;
+    m[0] = temp1 >> 13;
+    if (temp2 < 0) {
+        temp2 += 0x1FFF;
+    }
+
+    temp3 = sinX * sinY;
+    m[1] = temp2 >> 13;
+    m[2] = -sinY;
+
+    temp4 = temp3;
+    if (temp3 < 0) {
+        temp4 = temp3 + 0x1FFF;
+    }
+    sinXsinY = temp4 >> 13;
+    __asm__("" : : "r"(temp3));
+
+    negSinZ = -sinZ;
+
+    temp1 = sinXsinY * cosZ + cosX * negSinZ;
+    if (temp1 < 0) {
+        temp1 += 0x1FFF;
+    }
+    m[3] = temp1 >> 13;
+
+    __asm__ __volatile__("" ::: "memory");
+
+    temp1 = sinXsinY * sinZ + cosX * cosZ;
+    if (temp1 < 0) {
+        temp1 += 0x1FFF;
+    }
+
+    temp2 = sinX * cosY;
+    m[4] = temp1 >> 13;
+    if (temp2 < 0) {
+        temp2 += 0x1FFF;
+    }
+
+    temp3 = cosX * sinY;
+    m[5] = temp2 >> 13;
+
+    temp4 = temp3;
+    if (temp3 < 0) {
+        temp4 = temp3 + 0x1FFF;
+    }
+    cosXsinY = temp4 >> 13;
+    __asm__("" : : "r"(temp3));
+    negSinX = -sinX;
+
+    temp1 = cosXsinY * cosZ + negSinX * negSinZ;
+    if (temp1 < 0) {
+        temp1 += 0x1FFF;
+    }
+    m[6] = temp1 >> 13;
+
+    __asm__ __volatile__("" ::: "memory");
+
+    temp1 = cosXsinY * sinZ + negSinX * cosZ;
+    if (temp1 < 0) {
+        temp1 += 0x1FFF;
+    }
+
+    temp2 = cosX * cosY;
+    m[7] = temp1 >> 13;
+    if (temp2 < 0) {
+        temp2 += 0x1FFF;
+    }
+
+    m[8] = temp2 >> 13;
+}
 
 INCLUDE_ASM("asm/nonmatchings/math/geometry", createRotationMatrixZYX);
 
