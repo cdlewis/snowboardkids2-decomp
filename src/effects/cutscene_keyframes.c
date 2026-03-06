@@ -92,7 +92,7 @@ void initCutsceneRenderer(void) {
     setViewportId(nodePtr, 1);
     setModelCameraTransform(nodePtr, 0, 0, -160, -120, 159, 119);
     func_8006FA0C_7060C(nodePtr, 40.0f, 1.3333334f, 10.0f, 10000.0f);
-    func_8006BEDC_6CADC(lightBuffer, 0, 0, 0x01000000, 0, 0, 0);
+    createViewportTransform(lightBuffer, 0, 0, 0x01000000, 0, 0, 0);
 
     overlayNodePtr = &s.taskMemory->overlayNode;
     setViewportTransformById(s.taskMemory->sceneNode.id, lightBuffer);

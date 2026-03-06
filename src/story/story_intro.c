@@ -180,7 +180,7 @@ void initLevelSelectState(void) {
 
     initMenuCameraNode(&state->cameraNode, 9, 0x14, 0);
     setModelCameraTransform(&state->cameraNode, 0, -8, -0x98, -0x70, 0x97, 0x6F);
-    func_8006BEDC_6CADC(transformPtr, 0, 0, 0x800000, 0, 0, 0);
+    createViewportTransform(transformPtr, 0, 0, 0x800000, 0, 0, 0);
     setViewportTransformById(state->cameraNode.id, transformPtr);
 
     initMenuCameraNode(&state->secondaryCameraNode, 8, 0xF, 1);

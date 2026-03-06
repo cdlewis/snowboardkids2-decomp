@@ -364,7 +364,7 @@ void initBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     state->unk782 = (u16)arg0->unk62;
 
     setModelCameraTransform(arg0->unk0, 0, 0, -0x98, arg0->unk60, 0x97, arg0->unk62);
-    func_8006BEDC_6CADC(perspectiveParams, 0, 0, 0x580000, 0, 0, 0);
+    createViewportTransform(perspectiveParams, 0, 0, 0x580000, 0, 0, 0);
     setViewportTransformById(arg0->unk0->id, perspectiveParams);
 
     transformMatrix = &arg0->unk40;

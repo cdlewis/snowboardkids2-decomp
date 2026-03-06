@@ -92,7 +92,7 @@ void initMenuCameraNode(ViewportNode *node, s32 slotIndex, s32 priority, s32 isS
     setModelCameraTransform(node, 0, 0, -0x98, -0x70, 0x97, 0x6F);
     func_8006FA0C_7060C(node, 50.0f, 1.3333334f, 10.0f, 4000.0f);
     setViewportFogById(node->id, 0x3D4, 0x3E6, 0x64, 0x64, 0x64);
-    func_8006BEDC_6CADC(&lightSettings, 0, 0, 0x200000, 0, 0, 0);
+    createViewportTransform(&lightSettings, 0, 0, 0x200000, 0, 0, 0);
     setViewportTransformById(node->id, &lightSettings);
     setViewportEnvColor(node, 0, 0, 0);
     setViewportFadeValue(node, 0, 0);
@@ -114,7 +114,7 @@ void func_80027E04_28A04(ViewportNode *arg0, s32 arg1, u8 arg2, u8 arg3) {
         }
         s0 = (arg1 & 0xFF) + i + 1;
         setViewportId(arg0, s0);
-        func_8006BEDC_6CADC(&sp20, 0, 0, 0x200000, 0, 0, 0);
+        createViewportTransform(&sp20, 0, 0, 0x200000, 0, 0, 0);
         setViewportTransformById(arg0->id, &sp20);
         setViewportLightColors(s0, 1, &gMenuLightColor, &gMenuAmbientColor);
         setViewportFogById(s0, 0x3E3, 0x3E7, 100, 100, 100);
@@ -147,7 +147,7 @@ void func_80028074_28C74(ViewportNode *arg0, s32 arg1, u8 arg2, u8 arg3) {
         }
         s0 = (arg1 & 0xFF) + i + 1;
         setViewportId(arg0, s0);
-        func_8006BEDC_6CADC(&sp20, 0, 0, 0x200000, 0, 0, 0);
+        createViewportTransform(&sp20, 0, 0, 0x200000, 0, 0, 0);
         setViewportTransformById(arg0->id, &sp20);
         setViewportLightColors(s0, 1, &gMenuLightColor, &gMenuAmbientColor);
         setViewportFogById(s0, 0x3E3, 0x3E7, 100, 100, 100);

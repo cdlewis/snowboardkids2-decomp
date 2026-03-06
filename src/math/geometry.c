@@ -976,7 +976,15 @@ void func_mulMatrix3x3T(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2)
 
 typedef void (*CreateXRotS16)(s16 matrix[3][3], s16 angle);
 
-void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPosZ, s32 pitchAngle, s32 yawAngle) {
+void createViewportTransform(
+    void *output,
+    s32 posX,
+    s32 posY,
+    s32 posZ,
+    s32 depthOffset,
+    s32 pitchAngle,
+    s32 yawAngle
+) {
     Transform3D yRotation;
     Transform3D xRotation;
     Transform3D combined;
@@ -993,7 +1001,7 @@ void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPos
     func_8006B084_6BC84(&xRotation, &yRotation, &combined);
     gScaleMatrix.translation.x = 0;
     gScaleMatrix.translation.y = 0;
-    gScaleMatrix.translation.z = tempPosZ;
+    gScaleMatrix.translation.z = depthOffset;
     tempTransformPtr = (s32 *)&gScaleMatrix.translation;
     func_8006B084_6BC84((Transform3D *)(tempTransformPtr - 5), &combined, output);
 }

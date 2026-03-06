@@ -64,7 +64,7 @@ void func_8002AE80_2BA80(void *arg0);
 void func_8002B248_2BE48(void *arg0);
 s32 tryStoryMapNpcInteraction(void *arg0);
 void enqueueTexturedBillboardSprite(s32 arg0, TexturedBillboardSprite *arg1);
-void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPosZ, s32 pitchAngle, s32 yawAngle);
+void createViewportTransform(void *output, s32 posX, s32 posY, s32 posZ, s32 depthOffset, s32 pitchAngle, s32 yawAngle);
 void stopSoundEffectChannel(s32 channelIndex, s32 stoppingSpeed);
 void playFanSoundEffect(s16 fanIndex, s16 volume, s16 pan, s16 channel);
 void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0);

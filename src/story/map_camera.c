@@ -158,7 +158,7 @@ void initStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
     arg0->screenOffsetZ = 0;
     arg0->frameDataPtr = arg0->frameData;
 
-    func_8006BEDC_6CADC(
+    createViewportTransform(
         &sp20,
         arg0->cameraX,
         arg0->cameraY,
@@ -204,7 +204,7 @@ void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
         arg0->yawAngle = -0x65F;
     }
 
-    func_8006BEDC_6CADC(
+    createViewportTransform(
         &sp20,
         arg0->cameraX,
         arg0->cameraY,

@@ -221,7 +221,7 @@ void updateDebugCameraYState(cameraState *arg0) {
     } else if (gControllerInputs[1] & D_JPAD) {
         arg0->cameraY++;
     }
-    func_8006BEDC_6CADC(&sp20, 0, arg0->cameraY << 0x10, 0x600000, 0, (s32)(arg0->cameraRotation), 0);
+    createViewportTransform(&sp20, 0, arg0->cameraY << 0x10, 0x600000, 0, (s32)(arg0->cameraRotation), 0);
     setViewportTransformById(temp_s0->unkDA, &sp20);
 
     cameraYString = &arg0->unk3E;

@@ -199,7 +199,7 @@ void loadLogoScreenAssets(void) {
     setViewportScale(node, 1.0f, 1.0f);
     setModelCameraTransform(node, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     setViewportId(node, 1);
-    func_8006BEDC_6CADC(&nodeParams, 0, 0, 0x01000000, 0, 0, 0);
+    createViewportTransform(&nodeParams, 0, 0, 0x01000000, 0, 0, 0);
     setViewportTransformById(logoScreen->unk8.id, &nodeParams);
     setViewportEnvColor(node, 0, 0, 0);
     setViewportFadeValue(node, 0xFF, 0);

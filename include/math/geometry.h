@@ -55,7 +55,7 @@ void func_8006B084_6BC84(Transform3D *left, Transform3D *right, Transform3D *out
 
 void createCombinedRotationMatrix(void *, u16, u16);
 
-void func_8006BEDC_6CADC(void *output, s32 posX, s32 posY, s32 posZ, s32 tempPosZ, s32 pitchAngle, s32 yawAngle);
+void createViewportTransform(void *output, s32 posX, s32 posY, s32 posZ, s32 depthOffset, s32 pitchAngle, s32 yawAngle);
 
 void transform3DToMtx(void *src, void *dst);
 

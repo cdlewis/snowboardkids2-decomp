@@ -87,7 +87,7 @@ void initStoryMap(void) {
     initMenuCameraNode(&state->viewport1, 8, 0x14, 1);
     initMenuCameraNode(&state->viewport2, 9, 5, 1);
     setViewportFadeValue(NULL, 0xFF, 0);
-    func_8006BEDC_6CADC(&sp20, 0, 0x80000, 0x60000, 0, 0, 0);
+    createViewportTransform(&sp20, 0, 0x80000, 0x60000, 0, 0, 0);
     setViewportTransformById(state->viewport0.id, &sp20);
     osViExtendVStart(0);
 

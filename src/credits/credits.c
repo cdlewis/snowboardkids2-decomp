@@ -268,7 +268,7 @@ void func_80003EE0_4AE0(void) {
     setModelCameraTransform(&taskMemory->unk768, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     setViewportId(&taskMemory->unk768, 1);
     func_8006FA0C_7060C(&taskMemory->unk768, 40.0f, 1.3333334f, 10.0f, 10000.0f);
-    func_8006BEDC_6CADC(buffer, 0, 0, 0x01400000, 0, 0, 0);
+    createViewportTransform(buffer, 0, 0, 0x01400000, 0, 0, 0);
     setViewportTransformById(taskMemory->unk768.id, buffer);
     setViewportEnvColor(&taskMemory->unk8, 0, 0, 0);
     setViewportFadeValue(&taskMemory->unk8, 0, 0);
@@ -409,7 +409,7 @@ void initCreditsCharacter(CreditsCharacter *character) {
         s32 camX = creditsCameraX;
         s32 camY = creditsCameraY;
         s32 camDepth = creditsCameraConfig.depth;
-        func_8006BEDC_6CADC(
+        createViewportTransform(
             cameraTransform,
             camX,
             camY,
