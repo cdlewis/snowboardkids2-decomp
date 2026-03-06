@@ -1589,7 +1589,7 @@ cutsceneSeStop_validate = 0x800B2228; // rom:0x1DF2D8
 
 cutsceneCameraReset_validate = 0x800B08C8; // rom:0x1DD978
 cutsceneCameraMove_validate = 0x800B0918; // rom:0x1DD9C8
-cutsceneCameraMove_isDone = 0x800B099C;
+cutsceneCameraMove_isDone = 0x800B099C; // rom:0x1DDA4C
 cutsceneCameraShake_validate = 0x800B09AC;
 cutsceneCameraRotate_validate = 0x800B09FC;
 cutsceneCameraRotate_isDone = 0x800B0A2C;
