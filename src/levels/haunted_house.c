@@ -150,7 +150,7 @@ void cleanupAnimatedGhost(void **);
 void fadeInGhost(AnimatedGhostEntity *);
 void oscillateGhostFade(AnimatedGhostEntity *);
 void fadeOutGhost(AnimatedGhostEntity *);
-void func_800BB778_AF468(func_800BB74C_AF43C_arg *);
+void updateGhostSpawner(func_800BB74C_AF43C_arg *);
 void updateSwingingPendulumTrap(SwingingPendulumTrap *);
 void initFloatingBillboard(FloatingBillboard *);
 void updateFloatingBillboardSpawner(s16 *);
@@ -348,10 +348,10 @@ void fadeOutGhost(AnimatedGhostEntity *ghost) {
 void initGhostSpawnerTask(GhostSpawnerTask *spawner) {
     spawner->ghostType = 0;
     spawner->spawnTimer = 0x14;
-    setCallback(func_800BB778_AF468);
+    setCallback(updateGhostSpawner);
 }
 
-void func_800BB778_AF468(func_800BB74C_AF43C_arg *arg0) {
+void updateGhostSpawner(func_800BB74C_AF43C_arg *arg0) {
     Allocation *allocation;
     int new_var;
     initAnimatedGhost_arg *task;
