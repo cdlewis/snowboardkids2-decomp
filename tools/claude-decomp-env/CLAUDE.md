@@ -18,7 +18,7 @@ After base.c builds successfully, repeat the following steps:
   3.4 Each sub-agent should report back on how good/bad its change was and what it learned
 4. Gather the learnings from the agent and return to step (2). Keep improving the match until you hit 100%.
 
-If you run out of ideas to try and are unable to make forward progress then you may stop.
+If you run out of ideas to try and are unable to make forward progress then you may give up.
 
 ## Tools
 
