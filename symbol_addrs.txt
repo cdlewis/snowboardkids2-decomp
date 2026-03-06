@@ -1584,7 +1584,7 @@ cutsceneEffectTrick_validate = 0x800B1FA4;
 cutsceneEffectTrick_isDone = 0x800B20A8; // rom:0x1DF158
 
 cutsceneSePlay_validate = 0x800B2120; // rom:0x1DF1D0
-cutsceneSe3dPlay_validate = 0x800B2194;
+cutsceneSe3dPlay_validate = 0x800B2194; // rom:0x1DF244
 cutsceneSeStop_validate = 0x800B2228; // rom:0x1DF2D8
 
 cutsceneCameraReset_validate = 0x800B08C8; // rom:0x1DD978
@@ -1657,9 +1657,9 @@ cutsceneBgmPlay_init = 0x800B0810; // rom:0x1DD8C0
 cutsceneBgmFadeOut_init = 0x800B0848; // rom:0x1DD8F8
 cutsceneBgmVolume_init = 0x800B0884; // rom:0x1DD934
 
-cutsceneSePlay_init = 0x800B2118;
-cutsceneSe3dPlay_init = 0x800B218C;
-cutsceneSeStop_init = 0x800B2220;
+cutsceneSePlay_init = 0x800B2118; // rom:0x1DF1C8
+cutsceneSe3dPlay_init = 0x800B218C; // rom:0x1DF23C
+cutsceneSeStop_init = 0x800B2220; // rom:0x1DF2D0
 
 cutsceneCameraReset_init = 0x800B08C0; // rom:0x1DD970
 cutsceneCameraMove_init = 0x800B0910; // rom:0x1DD9C0
