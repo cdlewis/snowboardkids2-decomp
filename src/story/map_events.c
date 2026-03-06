@@ -132,61 +132,61 @@ void initSplitScreen2P(ViewportNode *viewports, s32 baseSlotIndex, u8 priority, 
     func_8006FA0C_7060C(firstViewport, 50.0f, 2.6666667f, 20.0f, 3000.0f);
 }
 
-void func_80028074_28C74(ViewportNode *arg0, s32 arg1, u8 arg2, u8 arg3) {
-    Transform3D sp20;
-    s32 i;
-    u16 s0;
-    ViewportNode *saved;
+void initSplitScreen3P4P(ViewportNode *viewports, s32 baseSlotIndex, u8 priority, u8 isSecondary) {
+    Transform3D transform;
+    s32 playerIndex;
+    u16 viewportId;
+    ViewportNode *firstViewport;
 
-    saved = arg0;
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        if (arg3 == 0) {
-            initViewportNode(arg0, 0, ((arg1 & 0xFF) + i) & 0xFFFF, arg2 & 0xFF, 1);
+    firstViewport = viewports;
+    for (playerIndex = 0; playerIndex < D_800AFE8C_A71FC->numPlayers; playerIndex++) {
+        if (isSecondary == 0) {
+            initViewportNode(viewports, 0, ((baseSlotIndex & 0xFF) + playerIndex) & 0xFFFF, priority & 0xFF, 1);
         } else {
-            initViewportNode(arg0, 0, ((arg1 & 0xFF) + i) & 0xFFFF, arg2 & 0xFF, 0);
+            initViewportNode(viewports, 0, ((baseSlotIndex & 0xFF) + playerIndex) & 0xFFFF, priority & 0xFF, 0);
         }
-        s0 = (arg1 & 0xFF) + i + 1;
-        setViewportId(arg0, s0);
-        createViewportTransform(&sp20, 0, 0, 0x200000, 0, 0, 0);
-        setViewportTransformById(arg0->id, &sp20);
-        setViewportLightColors(s0, 1, &gMenuLightColor, &gMenuAmbientColor);
-        setViewportFogById(s0, 0x3E3, 0x3E7, 100, 100, 100);
-        setViewportEnvColor(arg0, 0, 0, 0);
-        setViewportFadeValue(arg0, 0, 0);
-        arg0++;
+        viewportId = (baseSlotIndex & 0xFF) + playerIndex + 1;
+        setViewportId(viewports, viewportId);
+        createViewportTransform(&transform, 0, 0, 0x200000, 0, 0, 0);
+        setViewportTransformById(viewports->id, &transform);
+        setViewportLightColors(viewportId, 1, &gMenuLightColor, &gMenuAmbientColor);
+        setViewportFogById(viewportId, 0x3E3, 0x3E7, 100, 100, 100);
+        setViewportEnvColor(viewports, 0, 0, 0);
+        setViewportFadeValue(viewports, 0, 0);
+        viewports++;
     }
 
     switch (D_800AFE8C_A71FC->numPlayers) {
         case 3:
-            setModelCameraTransform(saved, -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
-            setViewportScale(saved, 0.5f, 0.5f);
-            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
-            saved++;
-            setModelCameraTransform(saved, -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
-            setViewportScale(saved, 0.5f, 0.5f);
-            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
-            saved++;
-            setModelCameraTransform(saved, 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
-            setViewportScale(saved, 0.5f, 0.5f);
-            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            setModelCameraTransform(firstViewport, -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(firstViewport, 0.5f, 0.5f);
+            func_8006FA0C_7060C(firstViewport, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            firstViewport++;
+            setModelCameraTransform(firstViewport, -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(firstViewport, 0.5f, 0.5f);
+            func_8006FA0C_7060C(firstViewport, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            firstViewport++;
+            setModelCameraTransform(firstViewport, 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(firstViewport, 0.5f, 0.5f);
+            func_8006FA0C_7060C(firstViewport, 70.0f, 1.3333334f, 20.0f, 3000.0f);
             break;
 
         case 4:
-            setModelCameraTransform(saved, -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
-            setViewportScale(saved, 0.5f, 0.5f);
-            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
-            saved++;
-            setModelCameraTransform(saved, -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
-            setViewportScale(saved, 0.5f, 0.5f);
-            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
-            saved++;
-            setModelCameraTransform(saved, 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
-            setViewportScale(saved, 0.5f, 0.5f);
-            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
-            saved++;
-            setModelCameraTransform(saved, 0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
-            setViewportScale(saved, 0.5f, 0.5f);
-            func_8006FA0C_7060C(saved, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            setModelCameraTransform(firstViewport, -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(firstViewport, 0.5f, 0.5f);
+            func_8006FA0C_7060C(firstViewport, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            firstViewport++;
+            setModelCameraTransform(firstViewport, -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(firstViewport, 0.5f, 0.5f);
+            func_8006FA0C_7060C(firstViewport, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            firstViewport++;
+            setModelCameraTransform(firstViewport, 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(firstViewport, 0.5f, 0.5f);
+            func_8006FA0C_7060C(firstViewport, 70.0f, 1.3333334f, 20.0f, 3000.0f);
+            firstViewport++;
+            setModelCameraTransform(firstViewport, 0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+            setViewportScale(firstViewport, 0.5f, 0.5f);
+            func_8006FA0C_7060C(firstViewport, 70.0f, 1.3333334f, 20.0f, 3000.0f);
     }
 }
 

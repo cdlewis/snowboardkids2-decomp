@@ -825,6 +825,7 @@ motorInitAsync = 0x8003B000; // rom:0x3BC00
 pollMotorInitAsync = 0x8003B098; // rom:0x3BC98
 initMenuCameraNode = 0x80027CA0; // rom:0x288A0
 initSplitScreen2P = 0x80027E04; // rom:0x28A04
+initSplitScreen3P4P = 0x80028074; // rom:0x28C74
 initStoryMapRandomEvent = 0x80028480; // rom:0x29080
 nullRandomEventCallback = 0x800285EC; // rom:0x291EC
 initStoryMapItem = 0x80028600; // rom:0x29200
