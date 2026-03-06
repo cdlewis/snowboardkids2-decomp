@@ -16,6 +16,11 @@
 #include "system/task_scheduler.h"
 
 typedef struct {
+    s16 unk0;
+    s16 unk2;
+} func_800BB74C_AF43C_arg;
+
+typedef struct {
     /* 0x00 */ void *assetData;
     /* 0x04 */ void *assetMetadata;
     /* 0x08 */ s8 renderPositionBuffer[0x16];
@@ -120,7 +125,7 @@ void cleanupAnimatedGhost(void **);
 void fadeInGhost(AnimatedGhostEntity *);
 void oscillateGhostFade(AnimatedGhostEntity *);
 void fadeOutGhost(AnimatedGhostEntity *);
-void func_800BB778_AF468(void);
+void func_800BB778_AF468(func_800BB74C_AF43C_arg *);
 void updateSwingingPendulumTrap(SwingingPendulumTrap *);
 
 void initFloatingBillboard(FloatingBillboard *);
@@ -323,7 +328,83 @@ void initGhostSpawnerTask(GhostSpawnerTask *spawner) {
     setCallback(func_800BB778_AF468);
 }
 
-INCLUDE_ASM("asm/nonmatchings/levels/haunted_house", func_800BB778_AF468);
+typedef struct {
+    void *unk00;
+    void *unk04;
+    s8 unk08[0x16];
+    u8 unk1E;
+    s8 unk1F[0x5];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    s32 unk38;
+    s16 unk3C;
+    s16 unk3E;
+    s16 unk40;
+    s16 unk42;
+    s16 unk44;
+    u8 unk46;
+} initAnimatedGhost_arg;
+
+extern s32 D_800BC844_B0534[];
+extern s32 D_800BC848_B0538[];
+extern s32 D_800BC884_B0574[];
+extern s32 D_800BC888_B0578[];
+
+void func_800BB778_AF468(func_800BB74C_AF43C_arg *arg0) {
+    Allocation *allocation;
+    int new_var;
+    initAnimatedGhost_arg *task;
+    s32 count;
+    s32 inRange;
+    s32 randIdx;
+    s16 countdown;
+    allocation = (Allocation *)getCurrentAllocation();
+    if (allocation->gamePaused != 0) {
+        return;
+    }
+    countdown = arg0->unk2;
+    if (countdown == 0) {
+        for (count = 0; count < allocation->memoryPoolId; count++) {
+            if (arg0->unk0 == 0) {
+                inRange = (allocation->players[count].sectorIndex - 0x18) < 6U;
+            } else {
+                inRange = (allocation->players[count].sectorIndex - 0x53) < 8U;
+            }
+            if (inRange != 0) {
+                break;
+            }
+        }
+
+        if (count < allocation->memoryPoolId) {
+            task = (initAnimatedGhost_arg *)scheduleTask(initAnimatedGhost, 0, 0, 0xDC);
+            if (task != 0) {
+                if (arg0->unk0 == 0) {
+                    task->unk3C = 0;
+                    randIdx = randA();
+                    randIdx &= 7;
+                    count = randIdx;
+                    task->unk24 = *((s32 *)(((u8 *)D_800BC844_B0534) + (count * 8)));
+                    task->unk2C = *((s32 *)(((u8 *)D_800BC848_B0538) + (randIdx * 8)));
+                } else {
+                    task->unk3C = 1;
+                    randIdx = randA();
+                    randIdx &= 7;
+                    count = randIdx;
+                    task->unk24 = *((s32 *)(((u8 *)D_800BC884_B0574) + (count * 8)));
+                    task->unk2C = *((s32 *)(((u8 *)D_800BC888_B0578) + (count * 8)));
+                }
+            }
+        }
+        arg0->unk2 = 4;
+        arg0->unk0 = (arg0->unk0 + 1) & 1;
+    } else {
+        new_var = 1;
+        arg0->unk2 = countdown - new_var;
+    }
+}
 
 void initSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
     LevelDisplayLists *temp_v0_3;
