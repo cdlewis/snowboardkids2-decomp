@@ -3085,6 +3085,7 @@ buildUnlockedLevelList = 0x8001F5EC; // rom:0x201EC
 initLevelPreviewCharacter = 0x8001F6A0; // rom:0x202A0
 setupLevelPreviewCamera = 0x8001F7C8; // rom:0x203C8
 holdLevelPreviewCamera = 0x8001FE64; // rom:0x20A64
+moveCharacterToStartWaypoint = 0x8001FFE4; // rom:0x20BE4
 updateLevelPreviewCamera = 0x8001FEB4; // rom:0x20AB4
 updateLevelPreviewCharacterAndCamera = 0x8001FA00; // rom:0x20600
 resumeLevelPreviewAfterHold = 0x80020418; // rom:0x21018

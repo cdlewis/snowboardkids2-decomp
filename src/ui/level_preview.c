@@ -19,7 +19,7 @@
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
 
-void func_8001FFE4_20BE4(LevelPreviewCharacterState *state);
+void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state);
 void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state);
 void holdLevelPreviewCamera(LevelPreviewCharacterState *state);
 extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
@@ -543,10 +543,10 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
     setViewportTransformById(allocation->unk48A, cameraTransform);
 
-    setCallback(&func_8001FFE4_20BE4);
+    setCallback(&moveCharacterToStartWaypoint);
 }
 
-void func_8001FFE4_20BE4(LevelPreviewCharacterState *state) {
+void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
     Allocation_F7C8 *allocation;
     Transform3D cameraTransform;
     Transform3D offsetTransform;
