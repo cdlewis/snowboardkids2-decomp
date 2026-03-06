@@ -1,3 +1,5 @@
+D_800BC844_B0534 = 0x800BC844; // size:0x40 rom:0xB0534
+
 sNpcInteractionColors = 0x8008E6D0; // rom:0x8F2D0
 sNpcInteractionSoundIds = 0x8008E6E8; // rom:0x8F2E8
 sDialogueSequence13_15 = 0x8008E73C; // rom:0x8F33C

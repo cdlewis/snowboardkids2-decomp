@@ -119,6 +119,14 @@ extern Gfx D_800BCA60_B0750[];
 extern s32 gLookAtPtr;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
+typedef struct {
+    s32 x;
+    s32 z;
+} GhostSpawnPos;
+
+extern GhostSpawnPos D_800BC844_B0534[];
+extern s32 D_800BC884_B0574[];
+extern s32 D_800BC888_B0578[];
 
 void initAnimatedGhost(AnimatedGhostEntity *);
 void cleanupAnimatedGhost(void **);
@@ -127,7 +135,6 @@ void oscillateGhostFade(AnimatedGhostEntity *);
 void fadeOutGhost(AnimatedGhostEntity *);
 void func_800BB778_AF468(func_800BB74C_AF43C_arg *);
 void updateSwingingPendulumTrap(SwingingPendulumTrap *);
-
 void initFloatingBillboard(FloatingBillboard *);
 void updateFloatingBillboardSpawner(s16 *);
 void freeFloatingBillboard(void **);
@@ -140,7 +147,7 @@ void cleanupGhostManager(GhostManager *);
 void updateLapCounter(s16 *);
 void updateGhostAnimation(AnimatedGhostEntity *);
 void renderGhosts(GhostRenderState *);
-extern void cleanupFloatingSpriteEntity(void **);
+void cleanupFloatingSpriteEntity(void **);
 
 void updateGhostAnimation(AnimatedGhostEntity *ghost) {
     s32 viewport;
@@ -348,11 +355,6 @@ typedef struct {
     u8 unk46;
 } initAnimatedGhost_arg;
 
-extern s32 D_800BC844_B0534[];
-extern s32 D_800BC848_B0538[];
-extern s32 D_800BC884_B0574[];
-extern s32 D_800BC888_B0578[];
-
 void func_800BB778_AF468(func_800BB74C_AF43C_arg *arg0) {
     Allocation *allocation;
     int new_var;
@@ -386,8 +388,8 @@ void func_800BB778_AF468(func_800BB74C_AF43C_arg *arg0) {
                     randIdx = randA();
                     randIdx &= 7;
                     count = randIdx;
-                    task->unk24 = *((s32 *)(((u8 *)D_800BC844_B0534) + (count * 8)));
-                    task->unk2C = *((s32 *)(((u8 *)D_800BC848_B0538) + (randIdx * 8)));
+                    task->unk24 = D_800BC844_B0534[count].x;
+                    task->unk2C = D_800BC844_B0534[randIdx].z;
                 } else {
                     task->unk3C = 1;
                     randIdx = randA();
