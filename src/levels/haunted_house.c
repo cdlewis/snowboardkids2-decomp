@@ -125,8 +125,7 @@ typedef struct {
 } GhostSpawnPos;
 
 extern GhostSpawnPos D_800BC844_B0534[];
-extern s32 D_800BC884_B0574[];
-extern s32 D_800BC888_B0578[];
+extern GhostSpawnPos D_800BC884_B0574[];
 
 void initAnimatedGhost(AnimatedGhostEntity *);
 void cleanupAnimatedGhost(void **);
@@ -395,8 +394,8 @@ void func_800BB778_AF468(func_800BB74C_AF43C_arg *arg0) {
                     randIdx = randA();
                     randIdx &= 7;
                     count = randIdx;
-                    task->unk24 = *((s32 *)(((u8 *)D_800BC884_B0574) + (count * 8)));
-                    task->unk2C = *((s32 *)(((u8 *)D_800BC888_B0578) + (count * 8)));
+                    task->unk24 = D_800BC884_B0574[count].x;
+                    task->unk2C = D_800BC884_B0574[count].z;
                 }
             }
         }
