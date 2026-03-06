@@ -99,6 +99,31 @@ typedef struct {
     s16 animPhase;
 } FloatingSpriteEntity;
 
+typedef struct {
+    s32 x;
+    s32 z;
+} GhostSpawnPos;
+
+typedef struct {
+    void *unk00;
+    void *unk04;
+    s8 unk08[0x16];
+    u8 unk1E;
+    s8 unk1F[0x5];
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    s32 unk38;
+    s16 unk3C;
+    s16 unk3E;
+    s16 unk40;
+    s16 unk42;
+    s16 unk44;
+    u8 unk46;
+} initAnimatedGhost_arg;
+
 extern void *g_GhostDefaultAssetMetadata;
 extern Vec3i g_GhostBaseDirection;
 extern AnimationData D_800BC830_B0520[];
@@ -111,19 +136,12 @@ extern s16 D_800BC9DC_B06CC[];
 extern s16 D_800BC9E8_B06D8[];
 extern s16 D_800BC9F4_B06E4[];
 extern Vec3i g_GhostSpawnPositions[];
-extern s32 g_FloatingBillboardTargetX;
-extern s32 g_FloatingBillboardTargetY;
-extern s32 g_FloatingBillboardTargetZ;
+extern Vec3i g_FloatingBillboardTarget;
 extern Gfx D_8009A780_9B380[];
 extern Gfx D_800BCA60_B0750[];
 extern s32 gLookAtPtr;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
-typedef struct {
-    s32 x;
-    s32 z;
-} GhostSpawnPos;
-
 extern GhostSpawnPos D_800BC844_B0534[];
 extern GhostSpawnPos D_800BC884_B0574[];
 
@@ -334,26 +352,6 @@ void initGhostSpawnerTask(GhostSpawnerTask *spawner) {
     setCallback(func_800BB778_AF468);
 }
 
-typedef struct {
-    void *unk00;
-    void *unk04;
-    s8 unk08[0x16];
-    u8 unk1E;
-    s8 unk1F[0x5];
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
-    s16 unk3C;
-    s16 unk3E;
-    s16 unk40;
-    s16 unk42;
-    s16 unk44;
-    u8 unk46;
-} initAnimatedGhost_arg;
-
 void func_800BB778_AF468(func_800BB74C_AF43C_arg *arg0) {
     Allocation *allocation;
     int new_var;
@@ -557,13 +555,13 @@ void updateFloatingBillboard(FloatingBillboard *arg0) {
         }
 
         ptr8 = &arg0->currentX;
-        *ptr8 += (g_FloatingBillboardTargetX - *ptr8) / arg0->lifetime;
+        *ptr8 += (g_FloatingBillboardTarget.x - *ptr8) / arg0->lifetime;
 
         ptrC = &arg0->currentY;
-        *ptrC += (g_FloatingBillboardTargetY - (*ptrC + arg0->yOffset)) / arg0->lifetime;
+        *ptrC += (g_FloatingBillboardTarget.y - (*ptrC + arg0->yOffset)) / arg0->lifetime;
 
         ptr10 = &arg0->currentZ;
-        *ptr10 += (g_FloatingBillboardTargetZ - *ptr10) / arg0->lifetime;
+        *ptr10 += (g_FloatingBillboardTarget.z - *ptr10) / arg0->lifetime;
     }
 
     loadAssetMetadata((loadAssetMetadata_arg *)&arg0->spriteMetadata, arg0->spriteAsset, 5);
