@@ -303,7 +303,6 @@ void fadeInGhost(AnimatedGhostEntity *ghost) {
 }
 
 void oscillateGhostFade(AnimatedGhostEntity *ghost) {
-    u8 unused;
     Player *nearbyPlayer;
 
     if (ghost->fadeDirection != 0) {
@@ -434,7 +433,6 @@ void initSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
 void updateSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
     Allocation *allocation;
     s32 i;
-    s32 offset;
     Vec3i *pos;
     Player *player;
 
