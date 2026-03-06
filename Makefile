@@ -60,8 +60,15 @@ ABIFLAG ?= -mabi=32 -mgp32 -mfp32
 CFLAGS_BASE := $(ABIFLAG) -mno-abicalls -nostdinc -fno-PIC -G 0 -Wa,-force-n64align -funsigned-char -w -mips3 -EB -fno-builtin -fno-common
 CFLAGS := $(CFLAGS_BASE) -O2
 
+# Debug build (0 = release, 1 = include debug symbols)
+DEBUG ?= 0
+
 # Default optimization (can be overridden per-target)
-OPT_FLAGS := -O2
+ifeq ($(DEBUG),1)
+  OPT_FLAGS := -O2 -g
+else
+  OPT_FLAGS := -O2
+endif
 IINC := -I include -I lib/ultralib/include -I lib/ultralib/include/PR -I lib/libmus/include/PR -I lib/libmus/src -I lib/f3dex2/PR
 
 MIPS_BUILTIN_DEFS := -D_MIPS_ISA_MIPS2=2 -D_MIPS_ISA=_MIPS_ISA_MIPS2 -D_ABIO32=1 -D_MIPS_SIM=_ABIO32 -D_MIPS_SZINT=32 -D_MIPS_SZPTR=32
@@ -91,7 +98,12 @@ endif
 
 default: all
 
+# Debug builds skip SHA1 verification since -g affects code generation in GCC 2.7.2
+ifeq ($(DEBUG),1)
+all: dirs no_verify
+else
 all: dirs verify
+endif
 
 nonmatching: dirs no_verify
 
@@ -103,7 +115,7 @@ verify: $(TARGET).z64
 	@shasum --check $(BASENAME).sha1
 
 no_verify: $(TARGET).z64
-	@echo "Skipping SHA1SUM check, updating CRC"
+	@echo "Skipping SHA1SUM check (DEBUG=$(DEBUG) or NON_MATCHING=$(NON_MATCHING)), updating CRC"
 	@$(PYTHON) $(N64CRC) $(TARGET).z64
 
 extract:
