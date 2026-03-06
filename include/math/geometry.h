@@ -49,7 +49,9 @@ void setBonePosition(BoneAnimationState *state, s32 x, s32 y, s32 z);
 
 void func_mulMatrix3x3T(Transform3D *, Transform3D *, Transform3D *);
 
-void func_8006B084_6BC84(Transform3D *, Transform3D *, Transform3D *);
+// Multiplies two Transform3D structures: output = left * right
+// Combines rotation matrices and transforms translation
+void func_8006B084_6BC84(Transform3D *left, Transform3D *right, Transform3D *output);
 
 void createCombinedRotationMatrix(void *, u16, u16);
 
