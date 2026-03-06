@@ -608,6 +608,7 @@ updateLeftBackwardFlipTrick = 0x800B3608; // rom:0xA34B8
 getInputSpinTrickAnimId = 0x800B36F0; // rom:0xA35A0
 updateFlipSpinTrickAnimation = 0x800B3784; // rom:0xA3634
 dispatchRaceFinishBehaviorStep = 0x800B3950; // rom:0xA3800
+updateRaceFinishSlowingDownStep = 0x800B3980; // rom:0xA3830
 dispatchStunnedBehaviorPhase = 0x800B468C; // rom:0xA453C
 dispatchKnockbackBehaviorPhase = 0x800B65C8; // rom:0xA6478
 initKnockbackBehavior = 0x800B65F8; // rom:0xA64A8
