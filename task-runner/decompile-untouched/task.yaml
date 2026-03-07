@@ -1,0 +1,4 @@
+candidate_source: cat task-runner/decompile-untouched/input
+prompt: "decompile the function: $INPUT"
+claude_flags: --model opus
+timeout: 1h
