@@ -6,6 +6,7 @@ compile_commands.json
 .cache/*
 src/**/*.asmproc.d
 *.excalidraw
+tools/scratches.json
 
 # task-runner
 tools/task-runner/logs
