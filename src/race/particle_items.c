@@ -1857,7 +1857,12 @@ typedef struct {
     s32 unk08[3];    /* 0x08 */
     u16 unk14;       /* 0x14 */
     u16 unk16;       /* 0x16 */
-    u8 pad18[0xC];   /* 0x18 */
+    s16 unk18;       /* 0x18 */
+    s16 unk1A;       /* 0x1A */
+    s16 unk1C;       /* 0x1C */
+    s16 unk1E;       /* 0x1E */
+    s16 unk20;       /* 0x20 */
+    s16 unk22;       /* 0x22 */
 } PushZoneDataEntry; /* size: 0x24 */
 
 extern PushZoneDataEntry D_80090980_91580[];
@@ -1899,7 +1904,76 @@ void initPushZone(PushZoneState *arg0) {
     setCallbackWithContinue(func_800441A4_44DA4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/particle_items", func_800441A4_44DA4);
+void func_800441A4_44DA4(PushZoneState *arg0) {
+    GameState *allocation;
+    Player *player;
+    Vec3i localPos;
+    Vec3i result;
+    s32 i;
+    s32 temp;
+
+    allocation = getCurrentAllocation();
+
+    for (i = 0; i < allocation->numPlayers; i++) {
+        player = &allocation->players[i];
+        if (player->unkBD9 != 0)
+            continue;
+        transformVectorRelative(&player->worldPos, arg0, &localPos);
+        localPos.y -= D_80090980_91580[arg0->zoneIndex].unk1E << 16;
+        if (localPos.z < (D_80090980_91580[arg0->zoneIndex].unk20 << 16))
+            continue;
+        if ((D_80090980_91580[arg0->zoneIndex].unk22 << 16) < localPos.z)
+            continue;
+        if (player->behaviorFlags == 0 && (u32)(localPos.y + 0xFFFFF) <= 0xFFFFFU &&
+            localPos.x >= (D_80090980_91580[arg0->zoneIndex].unk18 << 16) &&
+            (D_80090980_91580[arg0->zoneIndex].unk1A << 16) >= localPos.x) {
+            localPos.x = -localPos.x;
+            localPos.y = -localPos.y;
+            localPos.z = 0;
+            transformVector2(&localPos, arg0, &result);
+            player->worldPos.x += result.x;
+            player->worldPos.y += result.y;
+            player->worldPos.z += result.z;
+            localPos.y = 0;
+            transformVector2(&localPos, arg0, &result);
+            player->unk440 = player->unk440 + result.x;
+            player->unk444 = player->unk444 + result.y;
+            player->unk448 = player->unk448 + result.z;
+            player->animFlags = player->animFlags | 0x20000;
+            player->unkBB0 = D_80090980_91580[arg0->zoneIndex].unk14;
+            player->unkBB2 = D_80090980_91580[arg0->zoneIndex].unk16;
+        } else {
+            if ((localPos.y + 0x1FFFFF) > 0x1FFFFFU)
+                continue;
+            if (localPos.x > 0) {
+                temp = localPos.x;
+                temp -= 0xC0000 + (D_80090980_91580[arg0->zoneIndex].unk1A << 16);
+                localPos.x = temp;
+                if (temp >= 0)
+                    continue;
+            } else {
+                temp = 0xC0000;
+                temp = (localPos.x = (localPos.x + temp) - (D_80090980_91580[arg0->zoneIndex].unk18 << 16));
+                if (temp <= 0)
+                    continue;
+            }
+
+            localPos.x = -temp;
+            localPos.y = 0;
+            localPos.z = 0;
+
+            transformVector2(&localPos, arg0, &result);
+
+            player->worldPos.x += result.x;
+            player->worldPos.y += result.y;
+            player->worldPos.z += result.z;
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        enqueueDisplayListObjectWithFullRenderState(i, arg0);
+    }
+}
 
 void cleanupPushZone(Func432D8Arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
