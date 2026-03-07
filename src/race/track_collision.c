@@ -1015,7 +1015,115 @@ void addCollisionSectorNodeToList(ListNode_5AA90 *arg0) {
     alloc->list = arg0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/track_collision", func_8005C868_5D468);
+extern s16 D_80094110_94D10[3][6];
+extern s16 D_80094134_94D34[3][6];
+extern s16 D_80094158_94D58[3][6];
+
+void func_8005C868_5D468(Player *player) {
+    Vec3i normal;
+    Vec3i rotatedNormal;
+    Vec3i points[3];
+    Transform3D combinedMatrix;
+    Transform3D tempMatrix;
+    void *allocation;
+    s32 temp;
+    s16(*srcVecs)[6];
+    s32 i;
+    s32 result;
+    u8 switchVal;
+    s64 distSq;
+    s32 dist;
+    s16 angle1, angle2;
+
+    player->animFlags |= 1;
+
+    allocation = getCurrentAllocation();
+
+    temp = getTrackHeightInSector((u8 *)allocation + 0x30, player->sectorIndex, &player->worldPos, 0x100000);
+
+    if (!(temp < player->worldPos.y)) {
+        player->worldPos.y = temp;
+        player->animFlags &= ~1;
+    }
+
+    memcpy(&player->unk970.translation, &player->worldPos, sizeof(Vec3i));
+
+    createYRotationMatrix(&player->unk970, player->rotY);
+
+    func_8006B084_6BC84(&player->unk990, &player->unk970, &tempMatrix);
+    func_8006B084_6BC84((Transform3D *)&player->unk9B0, &tempMatrix, &combinedMatrix);
+
+    switchVal = player->unkBD9;
+
+    switch (switchVal) {
+        case 1:
+            srcVecs = D_80094110_94D10;
+            break;
+        case 2:
+            srcVecs = D_80094134_94D34;
+            break;
+        case 3:
+            srcVecs = D_80094158_94D58;
+            break;
+    }
+
+    for (i = 0; i < 3; i++) {
+        transformVector(srcVecs[i], combinedMatrix.m[0], &points[i]);
+    }
+
+    for (i = 0; i < 3; i++) {
+        u16 sectorIndex =
+            getOrUpdatePlayerSectorIndex(player, (u8 *)allocation + 0x30, player->sectorIndex, &points[i]);
+        result = getTrackHeightInSector((u8 *)allocation + 0x30, sectorIndex, &points[i], 0x100000);
+
+        if (!(points[i].y >= result)) {
+            points[i].y = result;
+        }
+    }
+
+    points[1].x -= points[0].x;
+    points[1].y -= points[0].y;
+    points[1].z -= points[0].z;
+
+    distSq = (s64)points[1].x * points[1].x + (s64)points[1].y * points[1].y + (s64)points[1].z * points[1].z;
+    dist = isqrt64(distSq);
+
+    points[1].x = (s32)(((s64)points[1].x * 0x2000) / dist);
+    points[1].y = (s32)(((s64)points[1].y * 0x2000) / dist);
+    points[1].z = (s32)(((s64)points[1].z * 0x2000) / dist);
+
+    points[2].x -= points[0].x;
+    points[2].y -= points[0].y;
+    points[2].z -= points[0].z;
+
+    dist = isqrt64((s64)points[2].x * points[2].x + (s64)points[2].y * points[2].y + (s64)points[2].z * points[2].z);
+
+    points[2].x = (s32)(((s64)points[2].x * 0x2000) / dist);
+    points[2].y = (s32)(((s64)points[2].y * 0x2000) / dist);
+    points[2].z = (s32)(((s64)points[2].z * 0x2000) / dist);
+
+    normal.x = points[2].y * points[1].z - points[2].z * points[1].y;
+    normal.y = points[2].z * points[1].x - points[2].x * points[1].z;
+    normal.z = points[2].x * points[1].y - points[2].y * points[1].x;
+
+    dist = isqrt64((s64)normal.x * normal.x + (s64)normal.y * normal.y + (s64)normal.z * normal.z);
+
+    normal.x = (s32)(((s64)normal.x * 0x2000) / dist);
+    normal.y = (s32)(((s64)normal.y * 0x2000) / dist);
+    normal.z = (s32)(((s64)normal.z * 0x2000) / dist);
+
+    transformVector3(&normal, &player->unk970, &rotatedNormal);
+
+    angle1 = atan2Fixed(rotatedNormal.z, -rotatedNormal.y);
+    player->unkA8E = (-angle1) & 0x1FFF;
+
+    dist = isqrt64((s64)rotatedNormal.y * rotatedNormal.y + (s64)rotatedNormal.z * rotatedNormal.z);
+
+    angle2 = atan2Fixed(-rotatedNormal.x, -dist);
+    player->unkA92 = (-angle2) & 0x1FFF;
+
+    createXRotationMatrix(player->unk990.m, player->unkA8E);
+}
 
 s16 getPlayerTargetTrackAngle(Player *player) {
     GameState *gameState;

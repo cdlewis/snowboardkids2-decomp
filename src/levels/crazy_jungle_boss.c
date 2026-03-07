@@ -635,7 +635,7 @@ void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
     func_80060CDC_618DC(gameData, newSectorIndex, &arg0->unk434, 0x187000, &collisionOffset);
     arg0->unk434.x = arg0->unk434.x + collisionOffset.x;
     arg0->unk434.z = arg0->unk434.z + collisionOffset.z;
-    func_8005C868_5D468(arg0);
+    func_8005C868_5D468((Player *)arg0);
 
     if (arg0->animFlags & 0x10000) {
         arg0->unkBC9 = 0;
