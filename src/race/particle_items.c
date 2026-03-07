@@ -2260,9 +2260,13 @@ void spawnUfoEffect(void *arg0) {
     }
 }
 
-extern void *D_80090AB8_916B8[];
-extern void *D_80090ABC_916BC[];
-extern s32 D_80090AC0_916C0[];
+typedef struct {
+    void *romStart;
+    void *romEnd;
+    s32 decompressedSize;
+} CompressedAssetEntry;
+
+extern CompressedAssetEntry D_80090AB8_916B8[];
 
 typedef struct {
     s8 active;      /* 0x00 - 1 when active, set to 0 when processed */
@@ -2292,8 +2296,11 @@ void initItemTriggerTask(ItemTriggerTaskState *arg0) {
 
     arg0->textureTable = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
     idx = arg0->courseIndex;
-    arg0->itemData =
-        loadCompressedData(D_80090AB8_916B8[idx * 3], D_80090ABC_916BC[idx * 3], D_80090AC0_916C0[idx * 3]);
+    arg0->itemData = loadCompressedData(
+        D_80090AB8_916B8[idx].romStart,
+        D_80090AB8_916B8[idx].romEnd,
+        D_80090AB8_916B8[idx].decompressedSize
+    );
     arg0->matrices = NULL;
     setCleanupCallback(cleanupItemTriggerTask);
     setCallback(setupItemTriggerEntries);
