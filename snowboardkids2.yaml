@@ -2178,7 +2178,25 @@ segments:
     vram: 0
     start: 0x4060A0
 
-  - [0x4062B0, bin]
+  - name: _4062B0
+    type: bin
+    vram: 0
+    start: 0x4062B0
+
+  - name: _406480
+    type: bin
+    vram: 0
+    start: 0x406480
+
+  - name: _4068B0
+    type: bin
+    vram: 0
+    start: 0x4068B0
+
+  - name: _406BD0
+    type: bin
+    vram: 0
+    start: 0x406BD0
 
   - name: _406F00
     type: bin
