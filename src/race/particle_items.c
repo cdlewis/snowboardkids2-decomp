@@ -1851,11 +1851,16 @@ void *spawnGhostEffect(Player *arg0) {
     return task;
 }
 
-extern s32 D_80090980_91580[];
-extern s32 D_80090984_91584[];
-extern s32 D_80090988_91588[];
-extern s32 D_80090994_91594[];
-extern s32 D_80090996_91596[];
+typedef struct {
+    s32 unk00;       /* 0x00 */
+    s32 unk04;       /* 0x04 */
+    s32 unk08[3];    /* 0x08 */
+    u16 unk14;       /* 0x14 */
+    u16 unk16;       /* 0x16 */
+    u8 pad18[0xC];   /* 0x18 */
+} PushZoneDataEntry; /* size: 0x24 */
+
+extern PushZoneDataEntry D_80090980_91580[];
 
 typedef struct {
     u8 _pad0[0x5C];
@@ -1878,13 +1883,15 @@ void func_800441A4_44DA4(PushZoneState *);
 
 void initPushZone(PushZoneState *arg0) {
     Func44CB4Allocation *allocation;
-    s32 offset;
 
     allocation = getCurrentAllocation();
-    offset = arg0->zoneIndex * 9;
-    createCombinedRotationMatrix(arg0, *(u16 *)&D_80090994_91594[offset], *(u16 *)&D_80090996_91596[offset]);
-    memcpy(&arg0->unk14, &D_80090988_91588[arg0->zoneIndex * 9], 0xC);
-    arg0->unk20 = (void *)(D_80090980_91580[arg0->zoneIndex * 9] + (D_80090984_91584[arg0->zoneIndex * 9] << 4));
+    createCombinedRotationMatrix(
+        arg0,
+        D_80090980_91580[arg0->zoneIndex].unk14,
+        D_80090980_91580[arg0->zoneIndex].unk16
+    );
+    memcpy(&arg0->unk14, D_80090980_91580[arg0->zoneIndex].unk08, 0xC);
+    arg0->unk20 = (void *)(D_80090980_91580[arg0->zoneIndex].unk00 + (D_80090980_91580[arg0->zoneIndex].unk04 << 4));
     arg0->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
     arg0->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     arg0->unk2C = 0;
