@@ -283,8 +283,7 @@ u32 sStoryMapNpcDialogueTable[] = {
     0x0D0E0F0D,
 };
 
-extern s16 D_8009F240_9FE40;
-extern s16 D_8009F242_9FE42;
+extern s16 D_8009F240_9FE40[];
 extern s32 D_800AB06C_A23DC;
 extern s32 D_8009F230_9FE30;
 extern s32 D_8009F234_9FE34;
@@ -648,7 +647,7 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     historyIndex = D_800AB06C_A23DC;
     currentPtr = currentPosition;
     newPtr = newPosition;
-    positionHistoryX = &D_8009F242_9FE42;
+    positionHistoryX = &D_8009F240_9FE40[1];
     xCoord = sprite->screenX;
     positionHistoryX[historyIndex * 2] = xCoord;
     positionHistoryZ = positionHistoryX + 1;
@@ -685,7 +684,7 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     if (newPosition[2] > 0) {
         if ((u32)(newPosition[0] - 0x100001) <= 0xFFFFE) {
             do {
-                D_8009F240_9FE40 = nextIndex;
+                D_8009F240_9FE40[0] = nextIndex;
             } while (0);
             readX = sprite->screenX;
             positionHistoryX[nextIndex * 2] = readX;
