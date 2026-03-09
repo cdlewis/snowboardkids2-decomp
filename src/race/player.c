@@ -206,7 +206,7 @@ void __MusIntFifoProcess(void);
 void flushPendingVoice(channel_t *cp, int x);
 void __MusIntInitEnvelope(channel_t *cp);
 void initPanSweep(channel_t *cp);
-void func_8007335C_73F5C(channel_t *cp, int x);
+void __MusIntGetNewNote(channel_t *cp, int x);
 void __MusIntProcessContinuousVolume(channel_t *cp);
 void __MusIntProcessContinuousPitchBend(channel_t *cp);
 u8 *Fstop(channel_t *cp, u8 *ptr);
@@ -1335,7 +1335,7 @@ ALMicroTime __MusIntMain(void *node) {
                 if (cp->pdata == NULL) {
                     break;
                 }
-                func_8007335C_73F5C(cp, x);
+                __MusIntGetNewNote(cp, x);
             }
 
             if (cp->pdata == NULL) {
@@ -1393,7 +1393,7 @@ ALMicroTime __MusIntMain(void *node) {
     return mus_next_frame_time;
 }
 
-void func_8007335C_73F5C(channel_t *cp, int x) {
+void __MusIntGetNewNote(channel_t *cp, int x) {
     u8 *ptr;
     u8 command;
 
