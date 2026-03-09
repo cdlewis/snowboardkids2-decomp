@@ -8,14 +8,15 @@
 #define MUSFLAG_SONGS 2
 #define PTRFLAG_REMAPPED (1 << 31)
 #define BASEOFFSET 48
+#define REST 0x60
 #define U8_TO_FLOAT(c) (((c) & 128) ? -(256 - (c)) : (c))
 
 typedef unsigned long musHandle;
 typedef void (*LIBMUScb_marker)(musHandle, int);
 
 typedef struct {
-    u16 wave;
-    u16 adsr;
+    u8 wave;
+    u8 adsr;
     u8 pan;
     u8 pitch;
 } drum_t;
@@ -51,7 +52,9 @@ typedef struct {
     u32 flags;
     ptr_bank_t *ptr_addr;
     u16 *wave_table;
-    fx_t effects[1];
+    u8 padding[0x10];
+    f32 *detune;
+    void **samples;
 } fx_header_t;
 
 typedef struct {
@@ -110,7 +113,7 @@ typedef struct {
     /* 0x0A2 */ u16 fx_addr;
     /* 0x0A4 */ s16 channel_tempo_save;
     /* 0x0A6 */ u16 count;
-    /* 0x0A8 */ s16 fixed_length;
+    /* 0x0A8 */ u16 fixed_length;
     /* 0x0AA */ s16 wave;
     /* 0x0AC */ s16 panscale;
     /* 0x0AE */ u16 cutoff;
@@ -166,6 +169,9 @@ typedef struct {
     u8 padding999[0xC];
 } channel_t;
 
+typedef u8 *(*player_command_func)(channel_t *, u8 *);
+extern player_command_func player_commands_jumptable[];
+
 extern ALGlobals __libmus_alglobals;
 extern ALVoice *mus_voices;
 extern s32 ChangeCustomEffect(s32);
@@ -198,6 +204,8 @@ extern fifo_t *gFifoBuffer; // fifo_addr (buffer)
 
 void __MusIntFifoProcess(void);
 void flushPendingVoice(channel_t *cp, int x);
+void __MusIntInitEnvelope(channel_t *cp);
+void initPanSweep(channel_t *cp);
 void func_8007335C_73F5C(channel_t *cp, int x);
 void __MusIntProcessContinuousVolume(channel_t *cp);
 void __MusIntProcessContinuousPitchBend(channel_t *cp);
@@ -1385,7 +1393,124 @@ ALMicroTime __MusIntMain(void *node) {
     return mus_next_frame_time;
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/player", func_8007335C_73F5C);
+void func_8007335C_73F5C(channel_t *cp, int x) {
+    u8 *ptr;
+    u8 command;
+
+    ptr = cp->pdata;
+    if (ptr == 0)
+        goto _after_loop;
+
+_next_command:
+    command = *ptr;
+    if ((command & 0xFF) < 0x80)
+        goto _after_loop;
+    ptr = player_commands_jumptable[command & 0x7F](cp, ptr + 1);
+    if (ptr != 0)
+        goto _next_command;
+
+_after_loop:
+    cp->pdata = ptr;
+    if (ptr == 0)
+        goto _end;
+
+    {
+        int note;
+        fx_header_t *bank;
+
+        cp->last_note = cp->port_base;
+        note = *(cp->pdata++);
+
+        if (cp->velocity_on) {
+            cp->velocity = *(cp->pdata++);
+        } else {
+            cp->velocity = cp->default_velocity;
+        }
+
+        if (cp->fixed_length) {
+            if (!cp->ignore)
+                cp->length = cp->fixed_length;
+            else {
+                cp->ignore = 0;
+                command = *(cp->pdata++);
+                if (command < 128)
+                    cp->length = command;
+                else
+                    cp->length = ((int)(command & 0x7f) << 8) + *(cp->pdata++);
+            }
+        } else {
+            command = *(cp->pdata++);
+            if (command < 128)
+                cp->length = command;
+            else
+                cp->length = ((int)(command & 0x7f) << 8) + *(cp->pdata++);
+        }
+
+        cp->note_start_frame = cp->note_end_frame;
+        cp->note_end_frame += cp->length * 256;
+        cp->count = 0;
+        cp->wobble_count = cp->wobble_off_speed;
+        cp->wobble_current = 0;
+
+        if (note != REST) {
+            u16 wave;
+
+            bank = cp->sample_bank;
+
+            if (cp->pdrums != 0) {
+                cp->wave = cp->pdrums[note].wave;
+                cp->pan = cp->pdrums[note].pan / 2;
+                Fdefa(cp, cp->song_addr->env_table + (cp->pdrums[note].adsr * 7));
+                note = cp->pdrums[note].pitch;
+            }
+
+            if (!cp->env_trigger_off)
+                __MusIntInitEnvelope(cp);
+
+            if (cp->sweep_speed)
+                initPanSweep(cp);
+
+            wave = cp->wave;
+
+            if (!cp->trigger_off) {
+                cp->pending = bank->samples[wave];
+                if (cp->playing && cp->old_volume) {
+                    cp->old_volume = 0;
+                    alSynSetVol(&__libmus_alglobals.drvr, mus_voices + x, 0, mus_next_frame_time);
+                } else
+                    flushPendingVoice(cp, x);
+            }
+
+            cp->base_note = (f32)note + bank->detune[wave];
+            command = cp->transpose * (1 - cp->ignore_transpose);
+            cp->base_note += (f32)U8_TO_FLOAT(command);
+
+            if (cp->reverb != cp->old_reverb) {
+                u8 work;
+
+                work = cp->reverb_scale;
+                work += ((128 - work) * cp->reverb) >> 7;
+                cp->old_reverb = cp->reverb;
+                alSynSetFXMix(&__libmus_alglobals.drvr, mus_voices + x, work);
+            }
+        } else {
+            if (cp->env_phase < 4) {
+                cp->env_phase = 4;
+                cp->release_frame = cp->channel_frame;
+                cp->env_count = 1;
+                cp->release_start_vol = cp->env_current;
+            }
+        }
+    }
+    return;
+
+_end:
+    if (cp->playing) {
+        cp->playing = 0;
+        alSynSetVol(&__libmus_alglobals.drvr, mus_voices + x, 0, mus_next_frame_time);
+        alSynStopVoice(&__libmus_alglobals.drvr, mus_voices + x);
+    }
+}
 
 void flushPendingVoice(channel_t *cp, int x) {
     if (cp->playing) {
