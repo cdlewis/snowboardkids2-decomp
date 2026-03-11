@@ -30,7 +30,9 @@ typedef struct {
     DataTable_19E80 *modelData;
     loadAssetMetadataByIndex_arg assetMetadata;
     s32 offsetX;
+    /* sprite2 is accessed as an embedded loadAssetMetadata_arg via cast */
     loadAssetMetadata_arg *sprite2;
+    /* These fields serve as sprite2.position when accessed through the cast */
     s32 spriteOffsetX;
     s32 spriteOffsetY;
     s32 spriteOffsetZ;
