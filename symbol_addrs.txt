@@ -1959,6 +1959,7 @@ __MusIntProcessContinuousVolume = 0x80073E20;
 __MusIntProcessContinuousPitchBend = 0x80073EE4;
 __MusIntSetPitch = 0x80073928;
 __MusIntInitEnvelope = 0x80073A3C; // rom:0x7463C
+__MusIntProcessEnvelope = 0x80073AA4; // rom:0x746A4
 initPanSweep = 0x80073C98; // rom:0x74898
 processPanSweep = 0x80073CB4; // rom:0x748B4
 __MusIntPowerOf2 = 0x80073FF8;

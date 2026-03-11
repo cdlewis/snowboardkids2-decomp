@@ -210,7 +210,7 @@ void __MusIntGetNewNote(channel_t *cp, int x);
 void __MusIntProcessContinuousVolume(channel_t *cp);
 void __MusIntProcessContinuousPitchBend(channel_t *cp);
 u8 *Fstop(channel_t *cp, u8 *ptr);
-void processChannelEnvelope(channel_t *cp);
+void __MusIntProcessEnvelope(channel_t *cp);
 void processPanSweep(channel_t *cp);
 f32 calculateVibratoModulation(channel_t *cp);
 f32 calculateWobbleModulation(channel_t *cp);
@@ -1364,7 +1364,7 @@ ALMicroTime __MusIntMain(void *node) {
 
         if (cp->playing != 0) {
             if (cp->env_phase != 0) {
-                processChannelEnvelope(cp);
+                __MusIntProcessEnvelope(cp);
             }
 
             if (cp->sweep_speed != 0 && cp->sweep_frame < cp->channel_frame) {
@@ -1604,7 +1604,7 @@ void __MusIntInitEnvelope(channel_t *cp) {
     cp->env_count = cp->env_speed;
 }
 
-void processChannelEnvelope(channel_t *cp) {
+void __MusIntProcessEnvelope(channel_t *cp) {
     s32 progress;
     u8 phase;
 
