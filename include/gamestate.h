@@ -143,11 +143,9 @@ typedef struct {
     u8 unkAC0;
     u8 unkAC1;
     s16 hitReactionState;
-    s16 unkAC4;
+    s16 knockbackAngle;
     u8 padding2b[0x2];
-    s32 unkAC8;
-    s32 unkACC;
-    s32 unkAD0;
+    Vec3i knockbackVelocity;
     Vec3i collisionOffset;
     s32 collisionRadius;
     Vec3i extraCollisionOffsets[6];

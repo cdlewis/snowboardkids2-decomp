@@ -2187,10 +2187,10 @@ s32 updateStunnedAirbornePhase(Player *player) {
     if (player->behaviorStep == 0) {
         player->leanAnimIndex = 0xFFFF;
         player->behaviorFlags = 0;
-        player->velocity.x = player->unkAC8;
-        player->velocity.z = player->unkAD0;
+        player->velocity.x = player->knockbackVelocity.x;
+        player->velocity.z = player->knockbackVelocity.z;
         player->behaviorStep++;
-        knockbackAngle = atan2Fixed(-player->unkAC8, -player->unkAD0);
+        knockbackAngle = atan2Fixed(-player->knockbackVelocity.x, -player->knockbackVelocity.z);
         rotateVectorY(gameState->unk48 + 0xE4, knockbackAngle, &effectPos);
         effectPos.x += player->worldPos.x;
         effectPos.z += player->worldPos.z;
@@ -2240,10 +2240,10 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
     if (player->behaviorStep == 0) {
         player->leanAnimIndex = 0xFFFF;
         player->behaviorFlags = 0;
-        player->velocity.x = player->unkAC8;
-        player->velocity.z = player->unkAD0;
+        player->velocity.x = player->knockbackVelocity.x;
+        player->velocity.z = player->knockbackVelocity.z;
         player->behaviorStep++;
-        knockbackAngle = atan2Fixed(-player->unkAC8, -player->unkAD0);
+        knockbackAngle = atan2Fixed(-player->knockbackVelocity.x, -player->knockbackVelocity.z);
         rotateVectorY(gameState->unk48 + 0xE4, knockbackAngle, &effectPos);
         effectPos.x += player->worldPos.x;
         effectPos.z += player->worldPos.z;
@@ -2520,9 +2520,9 @@ s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
 
     if (arg0->behaviorStep == 0) {
         arg0->behaviorStep++;
-        angle = arg0->unkAC4;
+        angle = arg0->knockbackAngle;
         arg0->rotY = angle;
-        rotateVectorY(&arg0->unkAC8, angle, &arg0->velocity);
+        rotateVectorY(&arg0->knockbackVelocity, angle, &arg0->velocity);
 
         if (arg0->animFlags & 2) {
             arg0->rotY += 0x1000;
@@ -2954,8 +2954,8 @@ s32 updateKnockbackAirbornePhase(Player *arg0) {
 
     step = arg0->behaviorStep;
     if (step == 0) {
-        arg0->velocity.x = arg0->unkAC8;
-        knockbackVelZ = arg0->unkAD0;
+        arg0->velocity.x = arg0->knockbackVelocity.x;
+        knockbackVelZ = arg0->knockbackVelocity.z;
         arg0->behaviorStep = step + 1;
         arg0->velocity.z = knockbackVelZ;
         horizontalSpeed = isqrt64((s64)arg0->velocity.x * arg0->velocity.x + (s64)knockbackVelZ * knockbackVelZ);

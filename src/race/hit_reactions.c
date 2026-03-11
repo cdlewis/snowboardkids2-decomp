@@ -26,7 +26,7 @@ void setPlayerHitStunState(Player *player, s16 hitState, void *knockbackData) {
         return;
     }
     player->hitReactionState = hitState;
-    memcpy(&player->unkAC8, knockbackData, 0xC);
+    memcpy(&player->knockbackVelocity, knockbackData, sizeof(Vec3i));
 }
 
 void setPlayerProjectileHitState(Player *player) {
@@ -41,13 +41,13 @@ void setPlayerCollisionKnockbackState(Player *player, s16 knockbackAngle, s32 kn
     if (player->hitReactionState < 4) {
         if ((player->behaviorFlags & 0x77F) == 0) {
             player->hitReactionState = 4;
-            player->unkAC4 = knockbackAngle;
-            player->unkAC8 = 0;
-            player->unkACC = 0;
+            player->knockbackAngle = knockbackAngle;
+            player->knockbackVelocity.x = 0;
+            player->knockbackVelocity.y = 0;
             if (knockbackStrength > 0x60000) {
                 knockbackStrength = 0x60000;
             }
-            player->unkAD0 = -knockbackStrength;
+            player->knockbackVelocity.z = -knockbackStrength;
         }
     }
 }
@@ -64,7 +64,7 @@ void setPlayerPullState(Player *player, void *pullTarget) {
     if (player->hitReactionState < 0x31) {
         if (!(player->behaviorFlags & 0x71F)) {
             player->hitReactionState = 0x31;
-            memcpy(&player->unkAC8, pullTarget, 0xC);
+            memcpy(&player->knockbackVelocity, pullTarget, sizeof(Vec3i));
         }
     }
 }
@@ -113,7 +113,7 @@ void setPlayerStarHitState(Player *player, Vec3i *hitPosition) {
     if (player->hitReactionState < 0x3C) {
         if (!(player->behaviorFlags & 0x218)) {
             player->hitReactionState = 0x3D;
-            memcpy(&player->unkAC8, hitPosition, 0xC);
+            memcpy(&player->knockbackVelocity, hitPosition, sizeof(Vec3i));
         }
     }
 }
