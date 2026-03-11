@@ -201,18 +201,18 @@ extern s32 gButtonsPressed[];
 void updateJingleTownBossModelTransforms(Arg0Struct *);
 extern BossSurfaceColor gBossSurfaceColors[];
 
-s32 func_800BB66C_B2C2C(Arg0Struct *);
+s32 initJingleTownBoss(Arg0Struct *);
 void dispatchChaseAttackPhase(Arg0Struct *);
 void dispatchHoverAttackPhase(Arg0Struct *);
 s32 jingleTownBossHoverAttackExitPhase(Arg0Struct *);
 s32 jingleTownBossChaseAttackIntroPhase(Arg0Struct *);
-s32 func_800BB930_B2EF0(Arg0Struct *);
+s32 jingleTownBossChaseAttackMainPhase(Arg0Struct *);
 s32 jingleTownBossChaseAttackExitPhase(Arg0Struct *);
 s32 jingleTownBossHoverAttackIntroPhase(Arg0Struct *);
 s32 jingleTownBossHoverAttackMainPhase(Arg0Struct *);
 
 StateFunc gJingleTownBossBehaviorModeHandlers[] = {
-    (StateFunc)func_800BB66C_B2C2C,
+    (StateFunc)initJingleTownBoss,
     (StateFunc)dispatchChaseAttackPhase,
     (StateFunc)dispatchHoverAttackPhase,
     (StateFunc)jingleTownBossHoverAttackExitPhase,
@@ -227,7 +227,7 @@ s32 gJingleTownBossSpawnPos[] = { 0xFFF00000, 0x00300000 };
 
 FuncPtr gChaseAttackPhaseHandlers[] = {
     (FuncPtr)jingleTownBossChaseAttackIntroPhase,
-    (FuncPtr)func_800BB930_B2EF0,
+    (FuncPtr)jingleTownBossChaseAttackMainPhase,
     (FuncPtr)jingleTownBossChaseAttackExitPhase,
 };
 
@@ -389,7 +389,7 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
  *
  * @return 1 to indicate the state machine should continue processing
  */
-s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
+s32 initJingleTownBoss(Arg0Struct *arg0) {
     Vec3i waypoint1;
     Vec3i waypoint2;
     GameState *gameState;
@@ -481,7 +481,7 @@ s32 jingleTownBossChaseAttackIntroPhase(Arg0Struct *arg0) {
     return 0;
 }
 
-s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
+s32 jingleTownBossChaseAttackMainPhase(Arg0Struct *arg0) {
     Transform3D sp10;
     Vec3i sp30;
     Transform3D *temp_s0;
