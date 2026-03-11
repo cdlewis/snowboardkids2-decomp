@@ -127,7 +127,7 @@ typedef struct {
 extern void *g_GhostDefaultAssetMetadata;
 extern Vec3i g_GhostBaseDirection;
 extern AnimationData D_800BC830_B0520[];
-extern void *D_800BC8C8_B05B8;
+extern void *g_FloatingBillboardSpriteMetadata;
 extern s8 g_FloatingBillboardInitialPos[12];
 extern void *D_800BC920_B0610;
 extern void *D_800BC960_B0650;
@@ -521,7 +521,7 @@ void initFloatingBillboard(FloatingBillboard *billboard) {
     s32 initialY;
 
     billboard->spriteAsset = loadSpriteAssetByIndex(9);
-    billboard->spriteMetadata = &D_800BC8C8_B05B8;
+    billboard->spriteMetadata = &g_FloatingBillboardSpriteMetadata;
     billboard->alpha = 0xFF;
     memcpy(&billboard->currentX, &g_FloatingBillboardInitialPos, 12);
     initialY = billboard->currentY + billboard->yOffset;
