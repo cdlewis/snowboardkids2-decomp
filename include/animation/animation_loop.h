@@ -49,6 +49,7 @@ typedef struct {
 } CutsceneCameraShakeState;
 
 void setAnimationLoopMode(CutsceneCameraState *arg0, s8 mode);
+void *createAnimationLoopState(u16 nodeId);
 void freeAnimationLoopState(void *arg0);
 void initCutsceneCameraWithX(CutsceneCameraState *arg0, s16 rotX, s16 rotY, s32 posY, s32 posZ, s32 posX);
 void copyRotDurationToPosX(CutsceneCameraState *arg0, CutsceneCameraState *arg1);

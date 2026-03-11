@@ -10,10 +10,10 @@ void setAnimationLoopMode(CutsceneCameraState *arg0, s8 mode) {
 
 void initAnimationLoopState(CutsceneCameraState *, u16);
 
-void *func_800B5B38_1E2BE8(u16 arg0) {
-    CutsceneCameraState *temp = allocateNodeMemory(0x74);
-    initAnimationLoopState(temp, arg0);
-    return temp;
+void *createAnimationLoopState(u16 nodeId) {
+    CutsceneCameraState *state = allocateNodeMemory(0x74);
+    initAnimationLoopState(state, nodeId);
+    return state;
 }
 
 void initAnimationLoopState(CutsceneCameraState *arg0, u16 arg1) {

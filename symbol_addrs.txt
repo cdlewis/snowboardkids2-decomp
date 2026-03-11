@@ -1546,6 +1546,7 @@ updateStunnedRecoveryEndPhase = 0x800B58B8; // rom:0xA5768
 updateStunnedRecoveryStandUpPhase = 0x800B5938; // rom:0xA57E8
 updateKnockbackAirborneLaunchPhase = 0x800B5A40; // rom:0xA58F0
 setAnimationLoopMode = 0x800B5B30; // rom:0x1E2BE0
+createAnimationLoopState = 0x800B5B38; // rom:0x1E2BE8
 initAnimationLoopState = 0x800B5B7C; // rom:0x1E2C2C
 freeAnimationLoopState = 0x800B5BFC; // rom:0x1E2CAC
 initCutsceneCameraRotation = 0x800B5E64; // rom:0x1E2F14

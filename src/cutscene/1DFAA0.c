@@ -54,7 +54,6 @@ extern CutsceneFadeAssetNode gCutsceneFadeAssetTable[];
 extern char gDebugFrameFormatString[];
 extern CutsceneAssetTable gCutsceneAssetTable[];
 
-extern void *func_800B5B38_1E2BE8(u16);
 extern void initializeCutsceneCommand(void *, void *, s32, s32, s32);
 
 void enableCutsceneSkip(CutsceneManager *arg0) {
@@ -108,7 +107,7 @@ void initCutsceneManager(CutsceneManager *manager, ViewportNode *sceneNode, void
         initSlotData(&manager->slots[i].slotData);
     }
 
-    manager->sceneContext = func_800B5B38_1E2BE8(sceneNode->id);
+    manager->sceneContext = createAnimationLoopState(sceneNode->id);
 
     if (needsVisibility) {
         scheduleDualAssetGroupLoad(manager, 0, 0x8000, 1, 0x10000);
