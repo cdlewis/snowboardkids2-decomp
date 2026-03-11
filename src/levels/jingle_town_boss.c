@@ -77,15 +77,13 @@ typedef struct {
     u8 padAF;
     /* 0xB0 */ Transform3D unkB0;
     u8 padD0[0x434 - 0xD0];
-    /* 0x434 */ Vec3i unk434;
-    /* 0x440 */ s32 unk440;
-    /* 0x444 */ s32 unk444;
-    /* 0x448 */ s32 unk448;
+    /* 0x434 */ Vec3i position;
+    /* 0x440 */ Vec3i prevPosition;
     /* 0x44C */ Vec3i velocity;
     u8 pad458[0x10];
     /* 0x468 */ s32 unk468;
     u8 pad46C[0x8];
-    /* 0x474 */ s32 unk474;
+    /* 0x474 */ s32 hoverHeight;
     u8 pad478[0x950 - 0x478];
     /* 0x950 */ Transform3D unk950;
     /* 0x970 */ Transform3D unk970;
@@ -108,7 +106,7 @@ typedef struct {
     /* 0xA9E */ u16 yawAngle;
     u8 padAA0[0x4];
     /* 0xAA4 */ s32 maxSpeedCap;
-    /* 0xAA8 */ s32 unkAA8;
+    /* 0xAA8 */ s32 currentSpeed;
     u8 padAAC[0xAC2 - 0xAAC];
     /* 0xAC2 */ s16 hitReactionState;
     u8 padAC4[0xAD4 - 0xAC4];
@@ -140,12 +138,12 @@ typedef struct {
     /* 0xB64 */ s32 unkB64;
     /* 0xB68 */ u8 unkB68;
     u8 padB69[0xB7A - 0xB69];
-    /* 0xB7A */ s8 unkB7A;
-    /* 0xB7B */ s8 unkB7B;
-    /* 0xB7C */ u16 unkB7C;
-    /* 0xB7E */ u16 unkB7E;
+    /* 0xB7A */ s8 inputX;
+    /* 0xB7B */ s8 inputY;
+    /* 0xB7C */ u16 buttonsHeld;
+    /* 0xB7E */ u16 buttonsPressed;
     u8 padB80[0x2];
-    /* 0xB82 */ u16 unkB82;
+    /* 0xB82 */ u16 buttonsPrev;
     /* 0xB84 */ s32 animFlags;
     /* 0xB88 */ s32 behaviorFlags;
     /* 0xB8C */ s32 unkB8C;
@@ -156,7 +154,7 @@ typedef struct {
     u8 padBA0[0xBB4 - 0xBA0];
     /* 0xBB4 */ u8 unkBB4;
     u8 padBB5[0xBB8 - 0xBB5];
-    /* 0xBB8 */ u8 unkBB8;
+    /* 0xBB8 */ u8 playerIndex;
     /* 0xBB9 */ u8 characterId;
     /* 0xBBA */ u8 boardIndex;
     u8 padBBB[0xBBD - 0xBBB];
@@ -168,14 +166,14 @@ typedef struct {
     u8 padBC2[0x2];
     /* 0xBC4 */ u8 finishPosition;
     u8 padBC5[0x2];
-    /* 0xBC7 */ u8 unkBC7;
+    /* 0xBC7 */ u8 isAIControlled;
     /* 0xBC8 */ u8 unkBC8;
     /* 0xBC9 */ u8 unkBC9;
     /* 0xBCA */ u8 unkBCA;
     u8 padBCB[1];
     /* 0xBCC */ u8 unkBCC;
     u8 padBCD[0x2];
-    /* 0xBCF */ u8 unkBCF;
+    /* 0xBCF */ u8 speedReductionCount;
     u8 padBD0[0xBDB - 0xBD0];
     /* 0xBDB */ u8 unkBDB;
 } Arg0Struct;
@@ -220,10 +218,10 @@ StateFunc gJingleTownBossBehaviorModeHandlers[] = {
     (StateFunc)jingleTownBossHoverAttackExitPhase,
 };
 
-s16 D_800BCB30_B40F0[] = { 0x0000, 0x0000, 0x0013, (s16)0x9000, 0x0000, 0x0000 };
+s16 gCollisionLocalPos[] = { 0x0000, 0x0000, 0x0013, (s16)0x9000, 0x0000, 0x0000 };
 
-s16 D_800BCB3C_B40FC[] = { 0x0000, 0x0000, 0x0013, (s16)0x9000, 0x0000, 0x0000,
-                           0x0000, 0x0000, 0x0000, 0x0000,      0x0000, 0x0000 };
+s16 gTrackLocalPosArray[] = { 0x0000, 0x0000, 0x0013, (s16)0x9000, 0x0000, 0x0000,
+                              0x0000, 0x0000, 0x0000, 0x0000,      0x0000, 0x0000 };
 
 s32 gJingleTownBossSpawnPos[] = { 0xFFF00000, 0x00300000 };
 
@@ -233,7 +231,7 @@ FuncPtr gChaseAttackPhaseHandlers[] = {
     (FuncPtr)jingleTownBossChaseAttackExitPhase,
 };
 
-Vec3i D_800BCB68_B4128 = { .x = 0, .y = 0, .z = 0x10000 };
+Vec3i gForwardDirection = { .x = 0, .y = 0, .z = 0x10000 };
 
 FuncPtr gHoverAttackPhaseHandlers[] = {
     (FuncPtr)jingleTownBossHoverAttackIntroPhase,
@@ -274,35 +272,35 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
     Transform3D sp10;
     Transform3D sp30;
     GameState *alloc;
-    s32 temp;
+    s32 distanceToPlayer;
     s32 i;
     s16 playerState;
-    s32 diff;
+    s32 speedDelta;
 
     alloc = getCurrentAllocation();
-    if (arg0->unkBC7 != 0) {
+    if (arg0->isAIControlled != 0) {
         calculateAITargetPosition((Player *)arg0);
     } else {
-        arg0->unkB7A = gAnalogStickX[arg0->unkBB8] / 4;
-        arg0->unkB7B = gAnalogStickY[arg0->unkBB8] / 4;
+        arg0->inputX = gAnalogStickX[arg0->playerIndex] / 4;
+        arg0->inputY = gAnalogStickY[arg0->playerIndex] / 4;
 
-        arg0->unkB82 = arg0->unkB7C;
-        arg0->unkB7C = gButtonsPressed[arg0->unkBB8];
-        arg0->unkB7E = arg0->unkB7C & ~arg0->unkB82;
+        arg0->buttonsPrev = arg0->buttonsHeld;
+        arg0->buttonsHeld = gButtonsPressed[arg0->playerIndex];
+        arg0->buttonsPressed = arg0->buttonsHeld & ~arg0->buttonsPrev;
     }
 
-    arg0->velocity.x = arg0->unk434.x - arg0->unk440;
-    arg0->velocity.y = arg0->unk434.y - arg0->unk444;
-    arg0->velocity.z = arg0->unk434.z - arg0->unk448;
-    memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+    arg0->velocity.x = arg0->position.x - arg0->prevPosition.x;
+    arg0->velocity.y = arg0->position.y - arg0->prevPosition.y;
+    arg0->velocity.z = arg0->position.z - arg0->prevPosition.z;
+    memcpy(&arg0->prevPosition, &arg0->position, sizeof(Vec3i));
 
-    temp = distance_3d(
-        arg0->unk434.x - alloc->players->worldPos.x,
-        arg0->unk434.y - alloc->players->worldPos.y,
-        arg0->unk434.z - alloc->players->worldPos.z
+    distanceToPlayer = distance_3d(
+        arg0->position.x - alloc->players->worldPos.x,
+        arg0->position.y - alloc->players->worldPos.y,
+        arg0->position.z - alloc->players->worldPos.z
     );
 
-    if ((arg0->finishPosition == 0) && (temp > 0x1000000)) {
+    if ((arg0->finishPosition == 0) && (distanceToPlayer > 0x1000000)) {
         arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 0) - 0x40000;
     } else {
         arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 0) + 0x180000;
@@ -312,18 +310,18 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
         arg0->maxSpeedCap = 0x180000;
     }
 
-    for (i = 0; i < arg0->unkBCF; i++) {
+    for (i = 0; i < arg0->speedReductionCount; i++) {
         arg0->maxSpeedCap = arg0->maxSpeedCap - (arg0->maxSpeedCap >> 2);
     }
 
-    diff = arg0->maxSpeedCap - arg0->unkAA8;
-    if (diff >= 0x101) {
-        diff = 0x100;
+    speedDelta = arg0->maxSpeedCap - arg0->currentSpeed;
+    if (speedDelta >= 0x101) {
+        speedDelta = 0x100;
     }
-    if (diff < -0x80) {
-        diff = -0x80;
+    if (speedDelta < -0x80) {
+        speedDelta = -0x80;
     }
-    arg0->unkAA8 = arg0->unkAA8 + diff;
+    arg0->currentSpeed = arg0->currentSpeed + speedDelta;
 
     arg0->animFlags &= 0xFFFBFFFF;
 
@@ -336,14 +334,14 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
                     arg0->behaviorPhase = 0;
                     arg0->behaviorStep = 0;
                     arg0->behaviorCounter = 0;
-                    arg0->unk474 = 0;
+                    arg0->hoverHeight = 0;
                 }
             } else {
                 arg0->behaviorMode = 2;
                 arg0->behaviorPhase = 1;
                 arg0->behaviorStep = 0;
                 arg0->behaviorCounter = 0;
-                arg0->unk474 = 0;
+                arg0->hoverHeight = 0;
             }
         }
     }
@@ -363,17 +361,17 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
     sp30.translation.y -= arg0->unk970.translation.y;
     sp30.translation.z -= arg0->unk970.translation.z;
 
-    transformVector(D_800BCB30_B40F0, (s16 *)&sp30, &arg0->unkAD4);
+    transformVector(gCollisionLocalPos, (s16 *)&sp30, &arg0->unkAD4);
     memcpy(&arg0->unkB58, &arg0->unkAD4, 0xC);
     addCollisionSectorNodeToList((ListNode_5AA90 *)&arg0->unkB50);
     updateJingleTownBossModelTransforms(arg0);
 
-    transformVector(D_800BCB3C_B40FC, (s16 *)&arg0->groundTransform, &arg0->unkAE4);
+    transformVector(gTrackLocalPosArray, (s16 *)&arg0->groundTransform, &arg0->unkAE4);
     arg0->unkAE4 -= arg0->unk970.translation.x;
     arg0->unkAE8 -= arg0->unk970.translation.y;
     arg0->unkAEC -= arg0->unk970.translation.z;
 
-    transformVector(D_800BCB3C_B40FC + 6, (s16 *)&arg0->flyingTransform, &arg0->unkAF0);
+    transformVector(gTrackLocalPosArray + 6, (s16 *)&arg0->flyingTransform, &arg0->unkAF0);
     arg0->unkAF0 -= arg0->unk970.translation.x;
     arg0->unkAF4 -= arg0->unk970.translation.y;
     arg0->unkAF8 -= arg0->unk970.translation.z;
@@ -406,12 +404,12 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     memcpy(&arg0->unk9B0, &identityMatrix, sizeof(Transform3D));
 
     // Set initial spawn position based on boss index and track waypoint
-    arg0->unk434.x = gJingleTownBossSpawnPos[arg0->unkBB8];
+    arg0->position.x = gJingleTownBossSpawnPos[arg0->playerIndex];
     getTrackSegmentWaypoints(&gameState->gameData, 0, &waypoint1, &waypoint2);
-    arg0->unk434.z = waypoint1.z + 0x200000;
-    arg0->sectorIndex = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->unk434);
-    arg0->unk434.y = getTrackHeightInSector(&gameState->gameData, arg0->sectorIndex, &arg0->unk434, 0x100000);
-    memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
+    arg0->position.z = waypoint1.z + 0x200000;
+    arg0->sectorIndex = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->position);
+    arg0->position.y = getTrackHeightInSector(&gameState->gameData, arg0->sectorIndex, &arg0->position, 0x100000);
+    memcpy(&arg0->prevPosition, &arg0->position, sizeof(Vec3i));
 
     // Zero out velocity and set initial Y rotation
     arg0->velocity.x = 0;
@@ -442,13 +440,13 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
     arg0->behaviorPhase = 0;
     arg0->unkB2C = 0x1EC000;
     arg0->unkAE0 = 0x1EC000;
-    arg0->unkB54 = (s32)&arg0->unk434;
+    arg0->unkB54 = (s32)&arg0->position;
     arg0->unkB64 = 0x1EC000;
-    arg0->unkB68 = arg0->unkBB8;
+    arg0->unkB68 = arg0->playerIndex;
 
     // Spawn chase camera if this is the player-controlled character
-    if (arg0->unkBC7 == 0) {
-        spawnChaseCameraTask(arg0->unkBB8);
+    if (arg0->isAIControlled == 0) {
+        spawnChaseCameraTask(arg0->playerIndex);
     }
 
     // Initialize special attack timer (10 frames)
@@ -456,7 +454,7 @@ s32 func_800BB66C_B2C2C(Arg0Struct *arg0) {
 
     // Initialize asset offset table pointer if valid
     if ((s32)arg0->unk1C != 0) {
-        *(s32 *)arg0->pad28 = (s32)arg0->unk1C + ((s32 *)arg0->unk1C)[arg0->unkBB8];
+        *(s32 *)arg0->pad28 = (s32)arg0->unk1C + ((s32 *)arg0->unk1C)[arg0->playerIndex];
     }
 
     return 1;
@@ -512,7 +510,8 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         arg0->behaviorStep++;
     }
 
-    angleDiff = computeAngleToPosition(arg0->aiTargetX, arg0->aiTargetZ, arg0->unk434.x, arg0->unk434.z) - arg0->unkA94;
+    angleDiff =
+        computeAngleToPosition(arg0->aiTargetX, arg0->aiTargetZ, arg0->position.x, arg0->position.z) - arg0->unkA94;
     angleDiff = angleDiff & 0x1FFF;
 
     if (angleDiff >= 0x1001) {
@@ -537,7 +536,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
         transformVector3(temp_s1, &sp10, &sp30);
         sp30.x = 0;
         transformVector2(&sp30, &sp10, temp_s1);
-        transformVector2(&D_800BCB68_B4128, &sp10, &sp30);
+        transformVector2(&gForwardDirection, &sp10, &sp30);
 
         if (sp30.y > 0) {
             sp30.y = 0;
@@ -631,7 +630,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
             arg0->yawAngle = arg0->yawAngle - 0x100;
             arg0->unkB8C--;
             if (arg0->unkB8C == 0) {
-                spawnAttackProjectile(2, arg0->unkBB8, 0);
+                spawnAttackProjectile(2, arg0->playerIndex, 0);
                 arg0->unkB8C = 4;
                 arg0->behaviorCounter++;
             }
@@ -643,7 +642,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
             if (arg0->unkB8C == 0) {
                 arg0->unkB8C = 4;
                 arg0->behaviorCounter++;
-                spawnAttackProjectile(3, arg0->unkBB8, 0);
+                spawnAttackProjectile(3, arg0->playerIndex, 0);
                 return 0;
             }
             break;
@@ -652,7 +651,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
             arg0->yawAngle = arg0->yawAngle + 0x100;
             arg0->unkB8C--;
             if (arg0->unkB8C == 0) {
-                spawnAttackProjectile(2, arg0->unkBB8, 0);
+                spawnAttackProjectile(2, arg0->playerIndex, 0);
                 arg0->behaviorCounter = 0;
                 if (gameState->unk86 != 0) {
                     arg0->unkB8C = (randA() & 0xF) + 8;
@@ -664,7 +663,7 @@ s32 func_800BB930_B2EF0(Arg0Struct *arg0) {
 
         case 5:
             if ((arg0->unkB8C & 3) == 0) {
-                spawnAttackProjectile(3, arg0->unkBB8, 0);
+                spawnAttackProjectile(3, arg0->playerIndex, 0);
             }
             arg0->yawAngle = arg0->yawAngle - 0x100;
             arg0->unkB8C--;
@@ -753,7 +752,7 @@ s32 jingleTownBossHoverAttackIntroPhase(Arg0Struct *arg0) {
         arg0->behaviorPhase = 1;
         arg0->behaviorStep = 0;
         arg0->behaviorCounter = 0;
-        arg0->unk474 = 0;
+        arg0->hoverHeight = 0;
         if (arg0->unkBDB == 0) {
             arg0->animFlags |= 0x100000;
         }
@@ -788,7 +787,7 @@ s32 jingleTownBossHoverAttackMainPhase(Arg0Struct *arg0) {
     if (arg0->unkB8C == 0) {
         u8 rand_val = randA();
         s32 param = (rand_val & 1) | 2;
-        spawnAttackProjectile(param, arg0->unkBB8, 0);
+        spawnAttackProjectile(param, arg0->playerIndex, 0);
         arg0->unkB8C = 4;
     } else {
         arg0->unkB8C--;
@@ -796,15 +795,15 @@ s32 jingleTownBossHoverAttackMainPhase(Arg0Struct *arg0) {
 
     applyClampedVelocityToPosition((Player *)arg0);
 
-    arg0->unk474 += arg0->unk468;
+    arg0->hoverHeight += arg0->unk468;
 
-    if (arg0->unk474 == 0) {
+    if (arg0->hoverHeight == 0) {
         arg0->behaviorFlags = 0;
         arg0->behaviorMode = 1;
         arg0->behaviorPhase = 1;
         arg0->behaviorStep = 0;
         arg0->behaviorCounter = 0;
-        arg0->unk474 = 0;
+        arg0->hoverHeight = 0;
 
         if (arg0->unkBDB == 0) {
             arg0->animFlags |= 0x100000;
@@ -825,10 +824,10 @@ s32 jingleTownBossHoverAttackExitPhase(Arg0Struct *arg0) {
     if (phase == 0) {
         arg0->behaviorPhase++;
         transformVector2((s16 *)&gJingleTownBossHoverExitOffsets[0], (s16 *)&arg0->groundTransform, &posOffset);
-        arg0->unk434.x += posOffset.x;
-        arg0->unk434.y += posOffset.y;
-        arg0->unk434.z += posOffset.z;
-        memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+        arg0->position.x += posOffset.x;
+        arg0->position.y += posOffset.y;
+        arg0->position.z += posOffset.z;
+        memcpy(&arg0->prevPosition, &arg0->position, 0xC);
         arg0->animFlags |= 0x200000;
         transformVector((s16 *)&gJingleTownBossHoverExitOffsets[1], (s16 *)&arg0->groundTransform, &burstPos);
         spawnBurstEffect(&burstPos);
@@ -864,19 +863,19 @@ void updateJingleTownBossPositionAndTrackCollision(Arg0Struct *arg0) {
     u16 newSectorIndex;
 
     gameState = getCurrentAllocation();
-    memcpy(&arg0->unk970.translation.x, &arg0->unk434, 0xC);
+    memcpy(&arg0->unk970.translation.x, &arg0->position, 0xC);
     gameData = &gameState->gameData;
-    newSectorIndex = getOrUpdatePlayerSectorIndex(arg0, gameData, arg0->sectorIndex, &arg0->unk434);
+    newSectorIndex = getOrUpdatePlayerSectorIndex(arg0, gameData, arg0->sectorIndex, &arg0->position);
     arg0->sectorIndex = newSectorIndex;
-    func_80060CDC_618DC(gameData, newSectorIndex, &arg0->unk434, 0x187000, &collisionOffset);
-    arg0->unk434.x = arg0->unk434.x + collisionOffset.x;
-    arg0->unk434.z = arg0->unk434.z + collisionOffset.z;
+    func_80060CDC_618DC(gameData, newSectorIndex, &arg0->position, 0x187000, &collisionOffset);
+    arg0->position.x = arg0->position.x + collisionOffset.x;
+    arg0->position.z = arg0->position.z + collisionOffset.z;
     func_8005C868_5D468((Player *)arg0);
 
     if (arg0->animFlags & 0x10000) {
         arg0->unkBC9 = 0;
     } else {
-        func_8005CFFC_5DBFC(gameData, arg0->sectorIndex, &arg0->unk434, &arg0->unkBC9, &arg0->unkBCC);
+        func_8005CFFC_5DBFC(gameData, arg0->sectorIndex, &arg0->position, &arg0->unkBC9, &arg0->unkBCC);
         arg0->unkBCA = arg0->unkBC9 >> 4;
         arg0->unkBC9 = arg0->unkBC9 & 0xF;
     }
@@ -917,7 +916,7 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     func_8006B084_6BC84(&pitchYawMatrix, &arg0->groundTransform, &arg0->flyingTransform);
 
     // Add hover height offset to flying transform
-    arg0->flyingTransform.translation.y = arg0->flyingTransform.translation.y + arg0->unk474;
+    arg0->flyingTransform.translation.y = arg0->flyingTransform.translation.y + arg0->hoverHeight;
 
     // Create translation-only matrix for the third transform (unkB0).
     gScaleMatrix.translation.x = 0;
@@ -987,7 +986,7 @@ void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
     }
 
     if (alloc->gamePaused != 0) {
-        stopSoundEffectChannel(arg0->unkBB8, 0);
+        stopSoundEffectChannel(arg0->playerIndex, 0);
         return;
     }
 
@@ -1000,9 +999,9 @@ void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
         if (volume >= 0x81) {
             volume = 0x80;
         }
-        queueSoundAtPositionWithVolumeAndFlags(&arg0->unk434, 1, 0, 2, arg0->unkBB8, volume);
+        queueSoundAtPositionWithVolumeAndFlags(&arg0->position, 1, 0, 2, arg0->playerIndex, volume);
     } else {
-        stopSoundEffectChannel(arg0->unkBB8, 0);
+        stopSoundEffectChannel(arg0->playerIndex, 0);
     }
 
     if (!(arg0->animFlags & 1)) {
@@ -1024,12 +1023,12 @@ void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
             sp58.x = -(temp & 0xFF) << 13;
             outVec2 = &sp78;
             rotateVectorY(inputVec, angle, outVec2);
-            sp68.x += arg0->unk434.x;
-            sp68.y += arg0->unk434.y;
-            sp68.z += arg0->unk434.z;
-            sp78.x += arg0->unk434.x;
-            sp78.y += arg0->unk434.y;
-            sp78.z += arg0->unk434.z;
+            sp68.x += arg0->position.x;
+            sp68.y += arg0->position.y;
+            sp68.z += arg0->position.z;
+            sp78.x += arg0->position.x;
+            sp78.y += arg0->position.y;
+            sp78.z += arg0->position.z;
 
             temp = arg0->unkBCC & 0xF;
             if (temp >= 0) {
