@@ -1,10 +1,10 @@
 #pragma once
 
-#include "graphics/camera_transform.h"
 #include "common.h"
+#include "graphics/camera_transform.h"
 #include "graphics/displaylist.h"
-#include "math/geometry.h"
 #include "graphics/graphics.h"
+#include "math/geometry.h"
 
 typedef struct {
     /* 0x00 */ s16 values[10];
@@ -290,11 +290,12 @@ typedef struct {
     u8 playerLost;
     u8 bestBoardBonus;
     u8 introCutsceneVariant;
-    u8 PAD_80[0x2];
-    u8 introFrameEventIndex;
+    u8 unk80;
+    u8 unk81;
+    /* 0x82 */ u8 introFrameEventIndex;
     /* 0x83 */ u8 unk83;
     /* 0x84 */ u8 itemBoxesDisabled;
-    u8 introCameraEventIndex;
+    /* 0x85 */ u8 introCameraEventIndex;
     u8 unk86;
     u8 PAD_7B[0x53];
     u16 unkDA;

@@ -1,7 +1,7 @@
 #include "common.h"
 #include "graphics/displaylist.h"
-#include "math/geometry.h"
 #include "graphics/graphics.h"
+#include "math/geometry.h"
 
 typedef struct {
     void *start;
@@ -15,15 +15,15 @@ typedef struct {
 } AssetWithoutSize;
 
 typedef struct {
-    s32 shortcutPosX;
-    s32 shortcutPosZ;
-    u16 yawOffset;
-    u8 padding[2];
-    Vec3i spawnPos;        /* 0x0C - Shortcut spawn/warp position */
-    ColorData lightColors; /* 0x18 - Viewport light colors */
-    ColorData fogColors;   /* 0x20 - Fog colors */
-    s16 musicTrack;        /* 0x28 - Music track for this level */
-    u8 padding2[0x2];
+    /* 0x0 */ s32 shortcutPosX;
+    /* 0x4 */ s32 shortcutPosZ;
+    /* 0x8 */ u16 yawOffset;
+    /* 0xA */ u8 padding[2];
+    /* 0xC */ Vec3i spawnPos;
+    /* 0x18 */ ColorData lightColors;
+    /* 0x20 */ ColorData fogColors;
+    /* 0x28 */ s16 musicTrack;
+    /* 0x2A */ u8 padding2[0x2];
 } LevelConfig;
 
 typedef struct {
