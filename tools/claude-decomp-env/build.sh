@@ -92,4 +92,28 @@ echo "$SCORE_OUTPUT"
 MATCH_PERCENT=$(echo "$SCORE_OUTPUT" | grep -oP 'Score: \K[0-9.]+')
 if [[ $1 =~ base_[0-9]+ ]]; then
     echo "$1 ${MATCH_PERCENT}%" >> match_log.txt
+
+    # Stall detection: warn if no progress in last 10 attempts
+    if [[ -f match_log.txt ]]; then
+        STALL_INFO=$(awk '
+        {
+            gsub(/%/, "", $2)
+            total++
+            if ($2 + 0 >= best + 0) {
+                best = $2 + 0
+                best_file = $1
+                best_at = total
+            }
+        }
+        END {
+            since = total - best_at
+            if (since > 10) {
+                printf "%d %s %.1f\n", since, best_file, best
+            }
+        }' match_log.txt)
+        if [[ -n "$STALL_INFO" ]]; then
+            read -r SINCE BEST_FILE BEST_SCORE <<< "$STALL_INFO"
+            echo "⚠️ No progress in $SINCE attempts (best: ${BEST_SCORE}% at $BEST_FILE)"
+        fi
+    fi
 fi
