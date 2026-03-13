@@ -80,6 +80,45 @@ Block-scoped variables in C89 can get different register allocation than functio
 
 Write natural division (`x / 2`, `x / 4`) and let the compiler emit the shift-and-bias pattern for signed integers. Don't manually write the shift pattern — it won't match.
 
+## Branch-Likely (bnel/beql) Generation
+
+GCC 2.7.2 with `-mips3` can generate branch-likely instructions (`bnel`, `beql`). The if/else branch order in C affects whether the compiler uses `bnel` vs `beq+j`:
+
+```c
+// Generates bnel (branch not equal likely):
+if (scaleS == -1) {
+    clipOffsetX -= delta;  // else-like path first
+} else {
+    clipOffsetX = delta;   // simple assignment second
+}
+
+// Generates beq+j (less efficient):
+if (scaleS != -1) {
+    clipOffsetX = delta;   // simple assignment first
+} else {
+    clipOffsetX -= delta;  // else-like path second
+}
+```
+
+When the "true" condition's body is a single instruction that fits in a delay slot, putting it as the `else` branch (with the inverted condition as the `if`) triggers `bnel`. The compiler puts the simple assignment in the branch-likely delay slot (annulled if not taken).
+
+## Register Allocation: Extra Variables Affect Register Choice
+
+Adding an explicit local variable for a subexpression can change which physical register the compiler assigns to other variables. For example:
+
+```c
+// Without: frameEntry ends up in $a3, width reloaded from memory
+scaleW = (frameEntry->width << 12) / arg0->renderWidth;
+clipOffsetX = frameEntry->width * 4 - 4;  // re-accesses frameEntry->width
+
+// With: frameEntry moves to $t0, widthTimes4 occupies $a3
+s32 widthTimes4 = frameEntry->width << 2;
+scaleW = (frameEntry->width << 12) / arg0->renderWidth;
+clipOffsetX = widthTimes4 - 4;  // uses cached value
+```
+
+The extra variable creates additional register pressure that shifts the graph coloring, potentially moving a long-lived pointer from an argument register ($a3) to a temp register ($t0).
+
 ## Duff's Device / Switch Fallthrough
 
 GCC 2.7.2 supports Duff's device-style switch fallthrough. A `case` label inside an `else` block is valid C and generates the expected assembly:

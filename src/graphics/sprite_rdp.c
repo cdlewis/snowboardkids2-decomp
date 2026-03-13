@@ -378,7 +378,183 @@ void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/graphics/sprite_rdp", func_80010C98_11898);
 
-INCLUDE_ASM("asm/nonmatchings/graphics/sprite_rdp", func_800112AC_11EAC);
+void func_800112AC_11EAC(ScaledSpriteArg *arg0) {
+    s32 bottom;
+    s16 scaleS;
+    s16 scaleT;
+    s32 left;
+    s32 top;
+    s32 right;
+    s32 clipOffsetX;
+    s32 clipOffsetY;
+    s32 paletteBase;
+    u16 paletteMode;
+    u16 format;
+    u16 paletteIndex;
+    SpriteFrameEntry *frameEntry;
+    s32 scaleW;
+    s32 scaleH;
+    s32 widthTimes4;
+
+    frameEntry = arg0->spriteData->frames;
+    paletteBase = (s32)frameEntry + (arg0->spriteData->numFrames * 0x10);
+    frameEntry = &frameEntry[arg0->frameIndex];
+
+    paletteMode = gSpritePaletteModes[frameEntry->paletteTableIndex];
+    format = gSpriteTextureFormats[frameEntry->formatIndex];
+    scaleS = gTileTextureFlipTable[arg0->tileMode * 2];
+    scaleT = gTileTextureFlipTable[arg0->tileMode * 2 + 1];
+
+    if (arg0->overridePaletteCount == 0) {
+        paletteIndex = frameEntry->paletteIndex;
+    } else {
+        paletteIndex = arg0->overridePaletteCount - 1;
+    }
+
+    if (arg0->renderWidth > 0x7FFF || arg0->renderWidth == 0) {
+        return;
+    }
+    if (arg0->renderHeight > 0x7FFF || arg0->renderHeight == 0) {
+        return;
+    }
+
+    clipOffsetX = 0;
+
+    arg0->tileMode = arg0->tileMode & 3;
+
+    widthTimes4 = frameEntry->width << 2;
+    scaleW = (frameEntry->width << 12) / arg0->renderWidth;
+    scaleH = (frameEntry->height << 12) / arg0->renderHeight;
+
+    left = (arg0->x * 4) - ((u32)scaleW >> 1) + (gTextClipAndOffsetData.offsetX * 4);
+    top = (arg0->y * 4) - ((u32)scaleH >> 1) + (gTextClipAndOffsetData.offsetY * 4);
+    bottom = top + scaleH;
+    right = left + scaleW;
+
+    if (scaleS == -1) {
+        clipOffsetX = widthTimes4 - 4;
+    }
+
+    if (left < gTextClipAndOffsetData.clipLeft * 4) {
+        if (scaleS == -1) {
+            clipOffsetX -= gTextClipAndOffsetData.clipLeft * 4 - left;
+        } else {
+            clipOffsetX = gTextClipAndOffsetData.clipLeft * 4 - left;
+        }
+        left = gTextClipAndOffsetData.clipLeft * 4;
+    }
+
+    clipOffsetY = 0;
+    if (scaleT == -1) {
+        clipOffsetY = frameEntry->height * 4 - 4;
+    }
+
+    if (top < gTextClipAndOffsetData.clipTop * 4) {
+        if (scaleT == -1) {
+            clipOffsetY -= gTextClipAndOffsetData.clipTop * 4 - top;
+        } else {
+            clipOffsetY = gTextClipAndOffsetData.clipTop * 4 - top;
+        }
+        top = gTextClipAndOffsetData.clipTop * 4;
+    }
+
+    if ((gTextClipAndOffsetData.clipRight * 4 >= left) && (!(gTextClipAndOffsetData.clipBottom * 4 < top)) &&
+        (left < right) && (top < bottom)) {
+
+        if (gGraphicsMode != 0x100) {
+            gGraphicsMode = 0x100;
+            gCachedPaletteAddr = 0;
+            gCachedTextureAddr = 0;
+            gSPDisplayList(gRegionAllocPtr++, gSpriteRDPSetupDL);
+        }
+
+        {
+            u32 combineCmd = 0xFC11E223;
+            Gfx *gfx = gRegionAllocPtr;
+            u32 combineArg = 0xFFC7FFFF;
+
+            gRegionAllocPtr = (Gfx *)((s32)gfx + 8);
+            __asm__ volatile("" : : "r"(gRegionAllocPtr) : "memory");
+            gfx->words.w0 = 0xE7000000;
+            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x10);
+            __asm__ volatile("" : : "r"(gRegionAllocPtr) : "memory");
+            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x18);
+
+            gfx->words.w1 = 0;
+            (gfx + 1)->words.w0 = combineCmd;
+            (gfx + 1)->words.w1 = combineArg;
+            (gfx + 2)->words.w0 = 0xFA000000;
+
+            {
+                u8 shade = arg0->shade;
+                (gfx + 2)->words.w1 = (shade << 24) | (shade << 16) | (shade << 8) | 0xFF;
+            }
+
+            if (arg0->renderWidth != 0x400 || arg0->renderHeight != arg0->renderWidth) {
+                gRegionAllocPtr = (Gfx *)((s32)gfx + 0x20);
+                (gfx + 3)->words.w0 = 0xE200001C;
+                (gfx + 3)->words.w1 = 0x0F0A7008;
+            }
+        }
+
+        if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
+            gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
+            loadSpriteTexture(
+                (s32)arg0->spriteData + frameEntry->textureOffset,
+                frameEntry->width,
+                frameEntry->height,
+                format,
+                paletteMode
+            );
+        }
+
+        {
+            u32 palIdx = paletteIndex & 0xFFFF;
+            if (palIdx == 0xFE) {
+                if (gCachedPaletteAddr != (s32)gDefaultFontPalette) {
+                    gCachedPaletteAddr = (s32)gDefaultFontPalette;
+                    if (format == 0) {
+                        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gDefaultFontPalette);
+                    } else {
+                        gDPLoadTLUT_pal256(gRegionAllocPtr++, gDefaultFontPalette);
+                    }
+                }
+            } else {
+                s32 paletteAddr = paletteBase + (palIdx << 5);
+                if (paletteAddr != gCachedPaletteAddr) {
+                    gCachedPaletteAddr = paletteAddr;
+                    if (format == 0) {
+                        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteAddr);
+                    } else {
+                        gDPLoadTLUT_pal256(gRegionAllocPtr++, paletteAddr);
+                    }
+                }
+            }
+        }
+
+        gSPTextureRectangle(
+            gRegionAllocPtr++,
+            left,
+            top,
+            right,
+            bottom,
+            G_TX_RENDERTILE,
+            clipOffsetX << 3,
+            clipOffsetY << 3,
+            (s16)scaleS * arg0->renderWidth,
+            (s16)scaleT * arg0->renderHeight
+        );
+
+        gDPPipeSync(gRegionAllocPtr++);
+        gDPSetCombineMode(gRegionAllocPtr++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+
+        if (arg0->renderWidth != 0x400 || arg0->renderHeight != arg0->renderWidth) {
+            Gfx *_g2 = gRegionAllocPtr++;
+            _g2->words.w0 = 0xE200001C;
+            _g2->words.w1 = 0x503048;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/graphics/sprite_rdp", func_80011924_12524);
 

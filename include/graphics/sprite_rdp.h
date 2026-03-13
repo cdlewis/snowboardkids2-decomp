@@ -65,7 +65,21 @@ void renderSpriteFrame(SpriteRenderArg *arg0);
 void renderSpriteFrameWithPalette(SpriteRenderArg *arg0);
 void renderHalfSizeSpriteFrame(SpriteRenderArg *arg0);
 void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *arg0);
+typedef struct {
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ SpriteSheetData *spriteData;
+    /* 0x08 */ u16 frameIndex;
+    /* 0x0A */ u16 renderWidth;
+    /* 0x0C */ u16 renderHeight;
+    /* 0x0E */ u8 pad0E[3];
+    /* 0x11 */ u8 shade;
+    /* 0x12 */ u8 tileMode;
+    /* 0x13 */ u8 overridePaletteCount;
+} ScaledSpriteArg;
+
 void func_80010C98_11898(void *arg0);
+void func_800112AC_11EAC(ScaledSpriteArg *arg0);
 void renderAlphaBlendedTextSprite(TextRenderArg *arg0);
 void initDefaultFontPalette(void);
 void loadSpriteTexture(s32 textureAddr, u16 width, u16 height, u16 format, s32 paletteMode);

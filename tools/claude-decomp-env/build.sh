@@ -99,7 +99,7 @@ if [[ $1 =~ base_[0-9]+ ]]; then
         {
             gsub(/%/, "", $2)
             total++
-            if ($2 + 0 >= best + 0) {
+            if ($2 + 0 > best + 0) {
                 best = $2 + 0
                 best_file = $1
                 best_at = total
@@ -113,7 +113,7 @@ if [[ $1 =~ base_[0-9]+ ]]; then
         }' match_log.txt)
         if [[ -n "$STALL_INFO" ]]; then
             read -r SINCE BEST_FILE BEST_SCORE <<< "$STALL_INFO"
-            echo "⚠️ No progress in $SINCE attempts (best: ${BEST_SCORE}% at $BEST_FILE)"
+            echo "⚠️ No progress in $SINCE attempts (best: ${BEST_SCORE}% at $BEST_FILE) ⚠️ Consider stopping."
         fi
     fi
 fi
