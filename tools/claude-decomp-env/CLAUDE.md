@@ -2,117 +2,152 @@
 
 ## Your Job
 
-You are decompiling Nintendo 64 assembly code from Snowboard Kids 2. Your goal is to generate C code that when compiled 100% matches the given assembly code.
+You are decompiling Nintendo 64 assembly code from Snowboard Kids 2. Your goal is to generate C code for `$functionName` that, when compiled, 100% matches the given assembly code.
 
-The compiler is GCC 2.7.2. The following compiler flags are being used: -O2 -mips3. We follow the C89 standard. Keep in mind that variable declarations are generally limited to the beginning of blocks or functions.
+The compiler is GCC 2.7.2 with flags `-O2 -mips3`. We follow the C89 standard.
 
-Before doing anything else, ensure that base.c compiles successfully. If there are compiler errors, use the `gather-project-context` agent to fix the file.
+### Laying the Foundation
+
+Before doing anything else, create a subagent to gather context about the $functionName and ensure `base.c` is compilable. 
+
+MAKE THE MINIMAL SET OF CHANGES NECESSARY TO COMPILE `base.c`. This is important for getting an accurate baseline match percentage.
+
+Specifically, the subagent should:
+
+<subagent-instructions>
+1. Explore how $functionName is used in the codebase. Look at ../../src, ../../include as well as the unmatched code (../../asm/nonmatching). Write a summary of what the $functionName is and how it's used to `LEARNINGS.md`.
+2. Ensure that base.c compiles successfully. Ensure that any missing types are present. base.c should only depend on "common.h". Any other missing types should be provided inline rather than via #include statements. Do not stop until base.c can be successfuly built. Report status and a brief summary of your findings upon completion.
+3. Report back on its progress and findings
+</subagent-instructions>
+
+### Build Loop
 
 After base.c builds successfully, repeat the following steps:
 
-1. Run `./build.sh base.c` to build base.c and get an object dump of the compiled code. You will also get a score, with a score of 100% indicating a perfect match.
-2. Come up with a plan to improve the match. Look for areas where the control flow and instructions do not match. Consider what the original developers probably intended to write given the function's broader purpose. Consider what theories could be tested independently of one another.
-  3.1 Test your changes by creating several agents. Each agent should create a new file (base_n.c where `n` is your attempt number, be sure to also keep this unique across different agents).
-  3.2 On each agent, run `./build.sh base_n.c` (where `n` is your attempt number).
-  3.3 If your possible solution did not improve the match percentage, use tools to analyse what went wrong and summarise your theory. Then apply this theory to improving the match in your next attempt.
-  3.4 Each sub-agent should report back on how good/bad its change was and what it learned
-4. Gather the learnings from the agent and return to step (2). Keep improving the match until you hit 100%.
+1. Run `./build.sh base.c` to build and get a diff against the target assembly. A score of 100% indicates a perfect match.
+2. Come up with a plan to improve the match. Look for areas where the control flow and instructions do not match. Consider what the original developers intended to write given the function's broader purpose.
+3. Create a new file (`base_n.c` where `n` is your attempt number) with changes you expect to improve the match. Start small and work incrementally — if you test multiple changes at once they may interact poorly.
+4. Return to step 2 and continue working to improve the match percentage. Record key learnings in LEARNINGS.md. Keep improving until you hit 100%.
 
-If you run out of ideas to try and are unable to make forward progress then you may give up.
+If you run out of ideas and are unable to make forward progress, you may give up.
 
 ## Tools
 
-- `./build.sh <base_n>.c`: this script takes a .c file, compiles it, and diffs the resulting object code against the target assembly. Use build.sh to build your C code and check how close you are to a match.
-- `./objdump.py <base_n>.o`: dumps the assembly code for the specified file. Use this to dump object the target or base_x files for further analysis.
-- `./diff.sh <base_n>.o`: diffs the assembly code for the file against the assembly code for the target file. Use this to identify specific differences between the base_n file and the target file.
-- `./map_asm_to_c.py <base_n.o> <line number>`: Once you've identified the problematic assembly code, use this to map it back to the relevant C code.
-- `gfxdis.f3dex2 -d 0xXXXXXXXXXXXXXXXX`: disassemble an f3dex2 microcode instruction into an approximately correct `gbi.h` macro. For example `gfxdis.f3dex2 -d DA38000300000000` produces `gsSPMatrix(0x00000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW)`.
+- `./build.sh <file>.c` — compile a .c file and diff the resulting object code against the target assembly.
+- `./objdump.py <file>.o` — dump the assembly code for the specified object file.
+- `./diff.sh <file>.o` — diff the assembly of the given object file against the target.
+- `./map_asm_to_c.py <file>.o <line>` — map an assembly line back to the relevant C code.
+- `gfxdis.f3dex2 -d 0xXXXXXXXXXXXXXXXX` — disassemble an f3dex2 microcode instruction into an approximate `gbi.h` macro. For example, `gfxdis.f3dex2 -d DA38000300000000` produces `gsSPMatrix(0x00000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW)`.
 
 ## Coding Guidelines
 
-- When analysing type errors or conflicts, look to the code in src/ and include/ for guidance. These types work and are used elsewhere in the project. Types in the function you're trying to match could be wrong or misleading. Similarly, any extensions or changes to existing types need to be compatible with the rest of the codebase so exercise caution when making such changes.
-- Always use array and struct access. Do not introduce manual pointer arithmatic.
-- If you need to cast between pointer types, STOP - you're solving the wrong problem. Fix the struct layout instead.
-- If you need to cast a pointer to an integer type (e.g., `(s32)ptr`), STOP - check if the struct either has a suitable field (or array of fields) that you can use instead.
-- Look at what memory offset the assembly is accessing and map it directly to struct fields - don't introduce intermediate types.
-- Where appropriate, generate structs to match the expected input arguments, return values, etc.
-- Before adding a new type definition, search in the codebase if this struct already exists and reuse them whenever possible.
-- Favour `for` loops over `do` or `while` loops.
-- VARIABLE DECLARATIONS MUST APPEAR AT THE START OF THE FUNCTION.
-- Never add comments to code.
-- Use temporary variables instead of complex nested expressions
+### Types and Structs
+- Look to existing code in `src/` and `include/` for guidance on types. Types in the function you're matching could be wrong or misleading.
+- Before adding a new type definition, search the codebase first and reuse existing structs whenever possible.
+- Where appropriate, generate structs to match expected input arguments, return values, etc.
+- Exercise caution when extending or changing existing types — they must remain compatible with the rest of the codebase.
 
-🚨 CRITICAL: NEVER USE POINTER CASTS OR OFFSET ARITHMETIC 🚨
-THIS IS THE #1 RULE. VIOLATING THIS RULE MEANS AUTOMATIC FAILURE. Examples of this include:
+### Struct Field Access
 
+<critical>
+NEVER USE POINTER CASTS OR OFFSET ARITHMETIC. This is the #1 rule. Violating it means automatic failure.
+
+Forbidden patterns:
 - `return *(u8 *)(arg0 + 0xC1);`
 - `*(s32*)((u8*)arg0 + 0x34) = value;`
-- `*(u8*)(arg0 + 0xC1);`
 - `*((s16*)ptr + 2);`
 
-When you see assembly accessing an offset:
+If you need to cast between pointer types, STOP — fix the struct layout instead.
+If you need to cast a pointer to an integer type (e.g. `(s32)ptr`), STOP — check if the struct has a suitable field you can use directly.
+</critical>
 
-- STOP - Do NOT write pointer arithmetic
-- FIND or CREATE a struct with a field at that exact offset
-- USE the struct field directly
-  Instead, when decompiling a function that accesses a struct field:
+**Correct approach when assembly accesses an offset:**
+1. Identify the exact offset being accessed
+2. Check if a field exists at that offset in the struct definition
+3. If the field doesn't exist, update the struct definition: add the proper field, adjust padding arrays, and verify all `/* 0xNN */` offset comments remain accurate
+4. Write the C code using the proper field name
 
-1. **First**, identify the exact offset being accessed in the assembly
-2. **Second**, check if a field exists at that offset in the struct definition
-3. **If the field doesn't exist**:
+### Style
+- Use `for` loops over `do` or `while` loops.
+- Use temporary variables to break up complex nested expressions, but don't introduce unnecessary re-assignments of the same value across multiple variables.
+- Variable declarations must appear at the start of the function.
+- Never add comments to code.
 
-- Update the struct definition to add the proper field at that offset
-- Adjust padding arrays as needed to maintain correct offsets
-- Verify all offset comments in the struct remain accurate
+## Decompilation Strategy
 
-4. **Then** write the C code using the proper field name
+### General Approach
+- Think about what the function is *doing* within the game. What is its purpose? Structure the code to fulfill that purpose — this is the surest path to a 100% match.
+- Focus on control flow differences over register or stack differences. Register and stack issues are easy to fix later.
+- Look for clues in how the function is called and how it calls other functions.
 
-A literal decompilation of the code often produces strange artefacts. Account for and avoid these common pitfalls:
+### Cleaning Up Decompilation Artefacts
 
-- Control flow often becomes overly complicated:
-  - `if { do { } while () }` should just be `while {}`
-  - `i = 0; if { do { i++ } while () }` should just be `for {}`
-  - `goto X` is likely just a loop or conditional
-- Arithmatic is often converted to shifts:
-  - `x >> 2` should just be `x / 4`
-  - `x << 2` should just be `x * 4`
-- Explicit returns in assembly might actually be fall-through returns:
-  ```c
-  if (condition) {
-      // main work
-  } else {
-      // alternative path
-      return X;  // explicit return only here
-  }
-  return Y;  // fall-through from if-branch
-  ```
+Literal decompilation often produces artefacts. Watch for these common patterns:
 
-## Decompiling Tips
+<artefact name="for-loops">
+m2c struggles with `for` loops. The compiler often pulls out the condition so it can bail early if it's never met. Note that the comparison operator may also change (e.g. `<` becomes `<=`).
 
-- Think about what the function is _doing_ within the game. What is its purpose? Ensure code is logically structured to fulfill that purpose. This is the surest strategy for finding a 100% match.
-- Focus on control flow differences over register or stack differences. Register and stack are easy to fix later.
+This code:
+```c
+for (i = 0; i < 10; i++) {
+    // stuff
+}
+```
+
+Often decompiles as:
+```c
+i = 0;
+if (i <= 10) {
+    do {
+        // stuff
+        i++;
+    } while (i <= 10);
+}
+```
+</artefact>
+
+<artefact name="gotos">
+Developers rarely, if ever, write GOTO statements but they show up often in decompilation output because many different kinds of control flow are represented as branches and jumps in assembly. Assume that GOTOs are just a decompilation artefact.
+</artefact>
+
+<artefact name="duplicated-variables">
+It's far more likely that a single variable is being reused rather than many temporary variables. Literal decompilation and permuting often produce unnecessary re-assignments that hurt the match rate.
+</artefact>
+
+<artefact name="shifts-instead-of-arithmetic">
+Arithmetic is often converted to shifts:
+- `x >> 2` → `x / 4`
+- `x << 2` → `x * 4`
+</artefact>
+
+<artefact name="false-returns">
+Explicit returns in assembly might actually be fall-through returns:
+```c
+if (condition) {
+    // main work
+} else {
+    // alternative path
+    return X;
+}
+return Y;  // fall-through from if-branch
+```
+</artefact>
+
+<artefact name="gcc-272-codegen">
+GCC 2.7.2 has specific codegen patterns that show up in the target assembly. Recognise these so you don't fight the compiler:
+
+- **Signed division:** dividing a signed integer by a power of two produces a shift-and-bias pattern (shift right to extract the sign bit, add it, then arithmetic shift). Write the natural division (`x / 4`) and let the compiler emit this pattern — don't try to match the shifts manually.
+- **Branchless operations:** the compiler sometimes generates branchless code (e.g. `slti` + `addu`) for simple conditionals. A ternary or `if/else` in C will often produce the same output.
+- **`do{}while(0)` blocks:** wrapping code in `do{}while(0)` can influence register allocation and instruction scheduling without changing semantics. Use this as a last resort when register assignment won't cooperate.
+- **Dead stores:** GCC 2.7.2 sometimes expects a variable to be written before a branch even if the value is overwritten later. Adding an initialisation (e.g. `result = 0`) before a conditional can fix mismatches.
+</artefact>
 
 ### Large Functions
+Don't be intimidated — these are often straightforward if approached methodically:
 
-Do not be intimidated by large functions! These can often be quite straightforward, you just need to approach the problem methodically.
+1. Get the function to compile first, filling in missing types, undefined functions, etc.
+2. Focus on control flow. Compare `base.c` against `target.s` — m2c's generated control flow can be convoluted and misleading. Make a checklist of problems and work through them one by one.
+3. Large structs are easy. Often there are significant gaps between fields, so just focus on getting the field accesses correct.
 
-- Get the function to compile, this might require filling in missing typing information, undefined functions, etc.
-- Focus on getting the control flow correct. Look at the code in `base.c` for clues but also look at the assembly code in `target.s`. Control flows generated by m2c can be convoluted and misleading. As a super smart LLM you'll be able to get a better sense of the true control flow by comparing `base.c` to your understanding of the control flow in `target.s`
-  - Create a checklist of problems with the control flow.
-  - Work through your checklist item-by-item focusing on logical correctness and match percentage.
-- Large structs are easy. Often there will be significant gaps between fields so size isn't that important anyway. Just try to get those field accesses correct.
-- Look for clues in how the function is called and/or how it calls other functions.
-
-### Functions with different compiler flags
-
-99% of functions use the default compiler flags but some have been identified that use a lower level of optimization. If you determine from the assembly code that a lower optimization level is being used, you can adjust it via a command-line flag to build.sh. For example, to select -O0:
-
-```
-./build.sh base.c -O0
-```
-
-For such functions, attempt to match 100% and note in the output that they require human intervention to change the optimization level. Integrating a successful match will generally not be possible.
-
-### Functions using gRegionAllocPtr
-
+### Functions Using gRegionAllocPtr
 Use the `decompile-f3dex` skill if you suspect a function is using RDP display lists.

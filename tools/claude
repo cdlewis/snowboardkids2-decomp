@@ -100,6 +100,7 @@ if [[ "$ARG" =~ ^[0-9]+$ ]] || [[ "$ARG" =~ ^[a-zA-Z0-9]+$ && ${#ARG} -ge 5 && $
     # Extract diff_label and source_code from JSON response
     DIFF_LABEL=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('diff_label', ''))" 2>/dev/null)
     SOURCE_CODE=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('source_code', ''))" 2>/dev/null)
+    SCRATCH_SCORE=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); score = data.get('score', 0); max_score = data.get('max_score', 0); pct = ((max_score - score) / max_score * 100) if max_score > 0 else 0; print(f'{pct:.1f}')" 2>/dev/null)
 
     if [ -z "$DIFF_LABEL" ] || [ -z "$SOURCE_CODE" ]; then
         echo "Error: Could not extract diff_label or source_code from API response"
@@ -179,8 +180,11 @@ fi
 if [ "$USE_SCRATCH_SOURCE" = true ]; then
     # Write the source code from the scratch to base.c
     echo "#include \"common.h\"" > "$created_dir/base.c"
+    echo "" >> "$created_dir/base.c"
+    echo "// Imported from decomp.me scratch $ARG (${SCRATCH_SCORE}% match)" >> "$created_dir/base.c"
+    echo "" >> "$created_dir/base.c"
     echo "$SOURCE_CODE" >> "$created_dir/base.c"
-    echo "Using source code from decomp.me scratch"
+    echo "Using source code from decomp.me scratch (${SCRATCH_SCORE}% match)"
 elif [ "$BOOTSTRAP" = true ]; then
     # Use m2c to generate initial C code from assembly
     echo "Generating initial C code using m2c..."
@@ -248,6 +252,8 @@ mips-linux-gnu-as -EB -march=vr4300 -mtune=vr4300 -Iinclude -o "$created_dir/tar
 
 # Add claude decomp helpers
 ln -sf "${CLAUDE_DIR}"/* "$created_dir/"
+rm "$created_dir/CLAUDE.md"
+sed 's/\$functionName/'"${FUNC_NAME%.s}"'/g' "${CLAUDE_DIR}/CLAUDE.md" > "$created_dir/CLAUDE.md"
 ln -sf "${CLAUDE_CONFIG}" "$created_dir/"
 
 if command -v claude &> /dev/null; then
