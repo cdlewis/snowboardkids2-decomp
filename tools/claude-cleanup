@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+# Removes stale scratch directories under nonmatchings/ for functions that have been matched.
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+SCRATCH_DIR="$ROOT_DIR/nonmatchings"
+ASM_NONMATCHINGS="$ROOT_DIR/asm/nonmatchings"
+SYMBOL_ADDRS="$ROOT_DIR/symbol_addrs.txt"
+
+DELETE=false
+VERBOSE=false
+
+for arg in "$@"; do
+    case "$arg" in
+        --delete) DELETE=true ;;
+        --verbose) VERBOSE=true ;;
+        -h|--help)
+            echo "Usage: $0 [--delete] [--verbose]"
+            echo "  --delete   Actually remove stale directories (default: dry-run)"
+            echo "  --verbose  Show reasoning for each directory"
+            exit 0
+            ;;
+        *) echo "Unknown option: $arg"; exit 1 ;;
+    esac
+done
+
+stale_count=0
+keep_count=0
+stale_bytes=0
+
+is_function_unmatched() {
+    local funcname="$1"
+    # Check if .s file exists anywhere under asm/nonmatchings/
+    find "$ASM_NONMATCHINGS" -name "${funcname}.s" -print -quit 2>/dev/null | grep -q .
+}
+
+resolve_func_name() {
+    # For func_8XXXXXXX_XXXXX names, look up current name in symbol_addrs.txt
+    local basename="$1"
+    if [[ "$basename" =~ ^func_(0x)?([0-9A-Fa-f]{8})_ ]]; then
+        local ram_addr="0x${BASH_REMATCH[2]}"
+        local current_name
+        current_name=$(grep -oP '^[A-Za-z_]\w*(?=\s*=\s*'"$ram_addr"'\s*;)' "$SYMBOL_ADDRS" 2>/dev/null | head -1)
+        if [[ -n "$current_name" && "$current_name" != "$basename" ]]; then
+            echo "$current_name"
+            return
+        fi
+    fi
+    echo ""
+}
+
+for dir in "$SCRATCH_DIR"/*/; do
+    [[ -d "$dir" ]] || continue
+    dirname="$(basename "$dir")"
+
+    # Strip numeric suffix (e.g. -2, -99999, -3002489576050500404)
+    funcname="$(echo "$dirname" | sed 's/-[0-9][0-9a-zA-Z]*$//')"
+
+    # Handle orphan dirs (empty funcname after stripping)
+    if [[ -z "$funcname" ]]; then
+        reason="orphan directory (no function name)"
+        stale=true
+    elif is_function_unmatched "$funcname"; then
+        reason="$funcname.s still in asm/nonmatchings"
+        stale=false
+    else
+        # Try resolving func_ names via symbol_addrs.txt
+        resolved="$(resolve_func_name "$funcname")"
+        if [[ -n "$resolved" ]] && is_function_unmatched "$resolved"; then
+            reason="renamed to $resolved, still unmatched"
+            stale=false
+        else
+            if [[ -n "$resolved" ]]; then
+                reason="renamed to $resolved, already matched"
+            else
+                reason="$funcname already matched"
+            fi
+            stale=true
+        fi
+    fi
+
+    if $stale; then
+        dir_size=$(du -sb "$dir" 2>/dev/null | cut -f1)
+        stale_bytes=$((stale_bytes + dir_size))
+        stale_count=$((stale_count + 1))
+
+        if $VERBOSE; then
+            echo "STALE: $dirname ($reason)"
+        fi
+
+        if $DELETE; then
+            rm -rf "$dir"
+        fi
+    else
+        keep_count=$((keep_count + 1))
+        if $VERBOSE; then
+            echo "KEEP:  $dirname ($reason)"
+        fi
+    fi
+done
+
+stale_mb=$((stale_bytes / 1048576))
+
+if $DELETE; then
+    echo "Removed $stale_count dirs (${stale_mb} MB). Kept $keep_count dirs."
+else
+    echo "Would remove $stale_count dirs (${stale_mb} MB). Would keep $keep_count dirs."
+    if [[ $stale_count -gt 0 ]]; then
+        echo "Run with --delete to actually remove them."
+    fi
+fi
