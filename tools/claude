@@ -6,12 +6,18 @@
 
 # Parse arguments
 BOOTSTRAP=false
+BOOTSTRAP_ONLY=false
 ID=""
 ARG=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
         --bootstrap)
+            BOOTSTRAP=true
+            shift
+            ;;
+        --bootstrap-only)
+            BOOTSTRAP_ONLY=true
             BOOTSTRAP=true
             shift
             ;;
@@ -47,7 +53,7 @@ create_unique_dir() {
 
 # Check if argument is provided
 if [ -z "$ARG" ]; then
-    echo "Usage: $0 [--bootstrap] [--id ID] <function_name_or_path_or_scratch_id>"
+    echo "Usage: $0 [--bootstrap] [--bootstrap-only] [--id ID] <function_name_or_path_or_scratch_id>"
     exit 1
 fi
 
@@ -161,7 +167,9 @@ if [ -n "$ID" ]; then
     if [ -d "$TARGET_DIR" ]; then
         # Directory already exists, just direct user to it
         echo "Directory already exists: $TARGET_DIR"
-        if command -v claude &> /dev/null; then
+        if [ "$BOOTSTRAP_ONLY" = true ]; then
+            echo "Bootstrap-only mode: directory ready at $TARGET_DIR"
+        elif command -v claude &> /dev/null; then
             cd "$TARGET_DIR"
             claude "decompile ${FUNC_NAME%.s}. the appropriate claude environment has already been created (do not re-run tools/claude --bootstrap). use ultrathink"
         else
@@ -256,7 +264,9 @@ rm "$created_dir/CLAUDE.md"
 sed 's/\$functionName/'"${FUNC_NAME%.s}"'/g' "${CLAUDE_DIR}/CLAUDE.md" > "$created_dir/CLAUDE.md"
 ln -sf "${CLAUDE_CONFIG}" "$created_dir/"
 
-if command -v claude &> /dev/null; then
+if [ "$BOOTSTRAP_ONLY" = true ]; then
+    echo "Bootstrap-only mode: environment ready at $created_dir"
+elif command -v claude &> /dev/null; then
     cd "$created_dir"
     claude "decompile ${FUNC_NAME%.s}. the appropriate claude environment has already been created (do not re-run tools/claude --bootstrap). use ultrathink"
 else
