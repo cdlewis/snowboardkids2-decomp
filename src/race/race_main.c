@@ -31,6 +31,7 @@ extern s32 D_800BA350_AA200; /* gPlayerJointZOffsets */
 extern s32 D_800BAB40_AA9F0;
 extern s32 D_800BAB44_AA9F4;
 extern s32 D_800BAB3C_AA9EC;
+extern s16 D_800BAC74_AAB24;
 
 /* Player initial X positions based on player index */
 extern s32 gPlayerStartXPositions[];
@@ -43,6 +44,8 @@ typedef struct {
 extern AssetMeta D_8009A550_9B150[];
 extern void spawnPlayerIndicatorTask(Player *);
 extern void applyCharacterBoardStats(Player *);
+extern void initFlyingSceneryTask(void);
+extern s32 spawnUfoEffect(Player *);
 
 s32 tryFinalizeTrickLanding(Player *);
 void updateTrickFacingAngle(Player *);
@@ -3270,7 +3273,149 @@ s32 fallToTrackCenterStep(Player *player) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B6890_A6740);
+s32 func_800B6890_A6740(Player *arg0) {
+    Transform3D sp10;
+    Vec3i sp30;
+    s32 pad[4];
+    LevelConfig *item;
+    GameState *gameState;
+    s32 dist;
+    s16 temp;
+    s16 rotation;
+
+    gameState = getCurrentAllocation();
+    item = getLevelConfig(gameState->memoryPoolId);
+    rotation = item->yawOffset + getTrackEndInfo(&gameState->gameData, &sp30);
+    temp = rotation + 0x800;
+    createYRotationMatrix(&sp10, (u16)temp);
+    sp10.translation.x = item->shortcutPosX;
+    sp10.translation.y = sp30.y;
+    sp10.translation.z = item->shortcutPosZ;
+    transformVector(&D_800BAC74_AAB24, (s16 *)&sp10, &sp30);
+
+    if (arg0->behaviorCounter == 0) {
+        arg0->velocity.y += 0x30000;
+    }
+    arg0->velocity.y -= 0x6000;
+    arg0->velocity.x = sp30.x - arg0->worldPos.x;
+    arg0->velocity.z = sp30.z - arg0->worldPos.z;
+
+    dist = distance_2d(arg0->velocity.x, arg0->velocity.z);
+
+    if (dist > 0x48000) {
+        arg0->velocity.x = ((s64)arg0->velocity.x * 0x48000) / dist;
+        arg0->velocity.z = ((s64)arg0->velocity.z * 0x48000) / dist;
+    } else {
+        arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 1);
+        arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 1);
+    }
+
+    applyClampedVelocityToPosition(arg0);
+
+    switch (arg0->behaviorCounter) {
+        case 0:
+            advancePlayerLeanAnimation(arg0, 4);
+            arg0->behaviorCounter++;
+            decayPlayerSteeringAngles(arg0);
+            return 0;
+
+        case 1:
+            if (arg0->animFlags & 1) {
+                advancePlayerLeanAnimation(arg0, 4);
+            } else {
+                arg0->behaviorCounter++;
+                queueSoundAtPosition(&arg0->worldPos, 0x25);
+                case 2:
+                    if (advancePlayerLeanAnimation(arg0, 5) != 0) {
+                        arg0->behaviorCounter++;
+                    }
+            }
+            decayPlayerSteeringAngles(arg0);
+            return 0;
+
+        case 3:
+            temp = (temp - arg0->rotY) & 0x1FFF;
+            if (temp >= 0x1001) {
+                temp |= 0xE000;
+            }
+            if (temp >= 0x91) {
+                temp = 0x90;
+            }
+            if (temp < -0x90) {
+                temp = -0x90;
+            }
+            arg0->rotY += temp;
+            temp = ((arg0->rotY - rotation) + 0x1000) & 0x1FFF;
+            if (temp >= 0x1001) {
+                temp |= 0xE000;
+            }
+            if (temp < 0) {
+                temp = -temp;
+                if (temp < 0x401) {
+                    arg0->unkA92 = temp;
+                } else {
+                    decayPlayerAirborneAngles(arg0);
+                }
+            } else if (temp < 0x401) {
+                arg0->unkA92 = -temp;
+            } else {
+                decayPlayerAirborneAngles(arg0);
+            }
+
+            {
+                s16 leanTemp;
+                leanTemp = arg0->unkA92;
+                if (leanTemp >= 0) {
+                    if (leanTemp >= 0x401) {
+                        leanTemp = 0x400;
+                    }
+                    setPlayerLeanAnimation(arg0, 2, leanTemp / 2);
+                } else {
+                    leanTemp = -leanTemp;
+                    if (leanTemp >= 0x401) {
+                        leanTemp = 0x400;
+                    }
+                    setPlayerLeanAnimation(arg0, 1, leanTemp / 2);
+                }
+            }
+
+            if (dist < 0x1000 && arg0->unkA92 == 0) {
+                switch (gameState->memoryPoolId) {
+                    default:
+                        if (scheduleTask(&initFlyingSceneryTask, 0, 0, 0xD3) != NULL) {
+                            arg0->worldPos.x = sp30.x;
+                            arg0->worldPos.z = sp30.z;
+                            arg0->behaviorStep++;
+                            arg0->unkB8C = 0x2F;
+                            gameState->shortcutGateState = gameState->shortcutGateState & 2;
+                        }
+                        break;
+                    case 1:
+                        if (spawnUfoEffect(arg0)) {
+                            arg0->worldPos.x = sp30.x;
+                            arg0->worldPos.z = sp30.z;
+                            arg0->behaviorStep = 8;
+                            arg0->unkB8C = 0xE;
+                            arg0->ufoFlags &= 0xF1;
+                            gameState->shortcutGateState = gameState->shortcutGateState & 2;
+                        }
+                        break;
+                    case 8:
+                        gameState->unk80++;
+                        arg0->worldPos.x = sp30.x;
+                        arg0->worldPos.z = sp30.z;
+                        arg0->behaviorStep = 0xF;
+                        arg0->unkB8C = 0xA;
+                        arg0->ufoFlags &= 0xF1;
+                        break;
+                }
+            }
+            return 0;
+
+        default:
+            return 0;
+    }
+}
 
 extern Vec3i g_KnockbackRecoveryForwardVelocity;
 
