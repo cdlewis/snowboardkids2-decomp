@@ -73,13 +73,14 @@ If you need to cast a pointer to an integer type (e.g. `(s32)ptr`), STOP — che
 
 ## Decompilation Strategy
 
+Learnings from past decompilations can be found at `DECOMPILATION_LEARNINGS.md`.
+
 ### General Approach
 - Think about what the function is *doing* within the game. What is its purpose? Structure the code to fulfill that purpose — this is the surest path to a 100% match.
 - Focus on control flow differences over register or stack differences. Register and stack issues are easy to fix later.
 - Look for clues in how the function is called and how it calls other functions.
 
 ### Cleaning Up Decompilation Artefacts
-
 Literal decompilation often produces artefacts. Watch for these common patterns:
 
 <artefact name="for-loops">

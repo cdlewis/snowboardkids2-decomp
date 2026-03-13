@@ -263,6 +263,7 @@ ln -sf "${CLAUDE_DIR}"/* "$created_dir/"
 rm "$created_dir/CLAUDE.md"
 sed 's/\$functionName/'"${FUNC_NAME%.s}"'/g' "${CLAUDE_DIR}/CLAUDE.md" > "$created_dir/CLAUDE.md"
 ln -sf "${CLAUDE_CONFIG}" "$created_dir/"
+ln -sf "$(pwd)/DECOMPILATION_LEARNINGS.md" "$created_dir/"
 
 if [ "$BOOTSTRAP_ONLY" = true ]; then
     echo "Bootstrap-only mode: environment ready at $created_dir"
