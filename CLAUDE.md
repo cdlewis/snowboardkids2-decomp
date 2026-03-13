@@ -76,6 +76,10 @@ Before declaring any changes to C code complete (including decompiling functions
 - [ ] Struct sizes match the assembly access patterns
 - [ ] `./tools/build-and-verify.sh` succeeds
 
+### Capture Learnings
+
+Update DECOMPILATION_LEARNINGS.md with any new insights from matching functions in this project. These include compiler behavior, codegen quirks, and patterns specific to KMC GCC 2.7.2.
+
 ## Code Quality Standards
 
 ### Avoid Pointer Arithmetic
