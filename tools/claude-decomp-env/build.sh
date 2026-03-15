@@ -113,7 +113,7 @@ if [[ $1 =~ base_[0-9]+ ]]; then
         }' match_log.txt)
         if [[ -n "$STALL_INFO" ]]; then
             read -r SINCE BEST_FILE BEST_SCORE <<< "$STALL_INFO"
-            echo "⚠️ No progress in $SINCE attempts (best: ${BEST_SCORE}% at $BEST_FILE) ⚠️ Consider stopping."
+            echo "🛑 No progress in $SINCE attempts (best: ${BEST_SCORE}% at $BEST_FILE). STOP — do not make another attempt. Report your findings immediately."
         fi
     fi
 fi

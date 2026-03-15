@@ -66,6 +66,20 @@ Respect any pre-commit hooks that prevent you from committing your change. A fai
 
 You are done. Do not attemp to find the next closest match.
 
+#### When to stop
+
+**These rules are mandatory. Do not override them.**
+
+If the build script tells you to stop, you MUST stop immediately. Do not make another attempt. Report:
+- Best score and which file achieved it
+- Summary of approaches tried
+- Analysis of remaining differences
+- Whether the remaining issues seem solvable or may need a different strategy
+
+Additionally:
+- Do not exceed 10 consecutive attempts without meaningful score improvement. If you reach 10 with no progress, stop and report.
+- If 5+ variations of the same technique (e.g., volatile padding placement, asm volatile barriers) haven't improved the score, abandon that technique entirely. Do not try more variations — summarize what you learned and try a fundamentally different approach or stop.
+
 ## Validation Checklist
 
 Before declaring any changes to C code complete (including decompiling functions), verify:
