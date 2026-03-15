@@ -574,7 +574,33 @@ void cleanupConfettiEffect(ConfettiEffectTask *task) {
     task->particles = freeNodeMemory(task->particles);
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/position_markers", func_80041418_42018);
+void func_80041418_42018(void) {
+    GameState *gameState;
+    ConfettiEffectTask *task;
+    s32 i;
+
+    gameState = (GameState *)getCurrentAllocation();
+    for (i = 0; i < gameState->unk5D; i++) {
+        task = (ConfettiEffectTask *)scheduleTask(&initConfettiEffect, 0, 0, 0xF0);
+        if (task != NULL) {
+            task->frameCounter = i;
+            task->cameraNode = &gameState->unk8[(s16)i];
+            switch (gameState->unk5D) {
+                case 1:
+                    task->particleCount = 0x64;
+                    break;
+                case 2:
+                    task->particleCount = 0x32;
+                    break;
+                case 3:
+                default:
+                    task->particleCount = 0x19;
+                    break;
+            }
+            task->pauseWhenPaused = 1;
+        }
+    }
+}
 
 typedef struct {
     u8 _pad[0x8];
