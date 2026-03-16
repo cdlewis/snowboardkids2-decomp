@@ -141,14 +141,14 @@ typedef struct {
     /* 0x04 */ void *spriteSheet;
     /* 0x08 */ s16 spriteIndex;
     /* 0x0A */ s16 alpha;
-    /* 0x0C */ u8 unkC;
-    /* 0x0D */ u8 unkD;
+    /* 0x0C */ u8 paletteIndex;
+    /* 0x0D */ u8 overridePaletteCount;
     /* 0x0E */ u8 padE[2];
 } SaveSlotGridEntry;
 
 typedef struct {
     /* 0x00 */ SaveSlotGridEntry *entries;
-    /* 0x04 */ s16 unk4;
+    /* 0x04 */ s16 cursorX;
     /* 0x06 */ s16 cursorY;
     /* 0x08 */ void *spriteAsset;
     /* 0x0C */ u16 animFrame;
@@ -327,14 +327,13 @@ void cleanupSaveSlotStatSprites(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void func_80033688_34288(SaveSlotGridState *state) {
+void initSaveSlotIconGrid(SaveSlotGridState *state) {
     AllocationStruct *allocation;
     void *spriteSheet;
     s32 i;
-    s32 const_ff;
     s32 entryIndex;
     s32 j;
-    s32 spriteIdx;
+    s32 spriteIndex;
     s32 k;
 
     allocation = getCurrentAllocation();
@@ -342,25 +341,23 @@ void func_80033688_34288(SaveSlotGridState *state) {
     setCleanupCallback(cleanupSaveSlotIconGrid);
     state->entries = allocateNodeMemory(0x370);
 
-    i = 0;
-    const_ff = 0xFF;
-    for (; i < 0x37; i++) {
+    for (i = 0; i < 0x37; i++) {
         state->entries[i].spriteSheet = spriteSheet;
-        state->entries[i].alpha = const_ff;
-        state->entries[i].unkD = 0;
+        state->entries[i].alpha = 0xFF;
+        state->entries[i].overridePaletteCount = 0;
     }
 
     entryIndex = 0;
     for (k = 0; D_8008F22C_8FE2C[k] != 0xFFFF; k += 3) {
-        spriteIdx = D_8008F22C_8FE2C[k];
+        spriteIndex = D_8008F22C_8FE2C[k];
         for (j = 0; j < D_8008F22C_8FE2C[k + 1]; j++) {
-            state->entries[(u16)entryIndex].spriteIndex = spriteIdx;
-            state->entries[(u16)entryIndex].unkC = D_8008F22C_8FE2C[k + 2];
+            state->entries[(u16)entryIndex].spriteIndex = spriteIndex;
+            state->entries[(u16)entryIndex].paletteIndex = D_8008F22C_8FE2C[k + 2];
             entryIndex++;
         }
     }
 
-    state->unk4 = allocation->unkABE + 0x98;
+    state->cursorX = allocation->unkABE + 0x98;
     state->cursorY = allocation->unkAC0 + 0x38;
     state->spriteAsset = spriteSheet;
     state->animFrame = 0x13;
@@ -413,7 +410,7 @@ void updateSaveSlotIconGrid(SaveSlotGridState *arg0) {
         }
     }
 
-    debugEnqueueCallback(8U, 1U, renderSpriteFrame, &arg0->unk4);
+    debugEnqueueCallback(8U, 1U, renderSpriteFrame, &arg0->cursorX);
 }
 
 void cleanupSaveSlotIconGrid(Func34574Arg *arg0) {
