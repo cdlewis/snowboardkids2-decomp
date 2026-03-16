@@ -18,7 +18,7 @@ typedef struct {
 } StoryMapDialogueState;
 
 extern void func_8002BFEC_2CBEC(StoryMapDialogueState *);
-extern void func_8002C570_2D170(StoryMapDialogueState *);
+extern void updateStoryMapNpcTurnToTarget(StoryMapDialogueState *);
 extern void spawnSpriteEffectEx(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
 
 extern void initStoryMapRareEventWave(void *);
@@ -381,7 +381,7 @@ void updateStoryMapNpcDialogue(StoryMapDialogueState *dialogue) {
             }
             break;
         case 1:
-            func_8002C570_2D170(dialogue);
+            updateStoryMapNpcTurnToTarget(dialogue);
             for (i = 0; i < gameState->unk41C; i++) {
                 currentNpc = (StoryMapDialogueState *)((u8 *)dialogue + i * 0x64);
                 createYRotationMatrix(&currentNpc->matrix, currentNpc->targetRotation);
@@ -397,59 +397,61 @@ void updateStoryMapNpcDialogue(StoryMapDialogueState *dialogue) {
 
 INCLUDE_ASM("asm/nonmatchings/story/rare_event_npcs", func_8002BFEC_2CBEC);
 
-void func_8002C570_2D170(StoryMapDialogueState *state) {
-    Func297D8Arg *arg0 = (Func297D8Arg *)state;
-    GameState *allocation;
+void updateStoryMapNpcTurnToTarget(StoryMapDialogueState *state) {
+    Func297D8Arg *npcs = (Func297D8Arg *)state;
+    GameState *gameState;
     s32 i;
     s32 completedCount;
     s16 angleDiff;
-    s32 absAngle;
+    s32 absAngleDiff;
     s16 turnSpeed;
-    allocation = getCurrentAllocation();
+
+    gameState = getCurrentAllocation();
     completedCount = 0;
-    for (i = 0; i < allocation->unk41C; i++) {
-        switch (arg0[i].unk32) {
+
+    for (i = 0; i < gameState->unk41C; i++) {
+        switch (npcs[i].unk32) {
             case 0:
-                turnSpeed = signedAngleDifference(arg0[i].unk30, arg0[i].unk2E);
+                turnSpeed = signedAngleDifference(npcs[i].unk30, npcs[i].unk2E);
                 angleDiff = turnSpeed;
                 if (angleDiff < 0) {
-                    arg0[i].unk36 = 1;
+                    npcs[i].unk36 = 1;
                 } else {
-                    arg0[i].unk36 = 0;
+                    npcs[i].unk36 = 0;
                 }
-                arg0[i].unk50 = 2;
-                arg0[i].unk37 = 1;
+                npcs[i].unk50 = 2;
+                npcs[i].unk37 = 1;
                 if (((turnSpeed > 0) ? (turnSpeed) : (-turnSpeed)) >= 0xAAB) {
-                    arg0[i].unk30 = (arg0[i].unk30 + 0x1000) & 0x1FFF;
-                    arg0[i].unk50 = 1;
-                    arg0[i].unk37 = 0;
-                    if (signedAngleDifference(arg0[i].unk30, arg0[i].unk2E) < 0) {
-                        arg0[i].unk36 = 1;
+                    npcs[i].unk30 = (npcs[i].unk30 + 0x1000) & 0x1FFF;
+                    npcs[i].unk50 = 1;
+                    npcs[i].unk37 = 0;
+                    if (signedAngleDifference(npcs[i].unk30, npcs[i].unk2E) < 0) {
+                        npcs[i].unk36 = 1;
                     } else {
-                        arg0[i].unk36 = 0;
+                        npcs[i].unk36 = 0;
                     }
                 }
-                arg0[i].unk32 = 1;
+                npcs[i].unk32 = 1;
                 break;
 
             case 1:
-                angleDiff = signedAngleDifference(arg0[i].unk30, arg0[i].unk2E);
-                absAngle = (angleDiff > 0) ? (angleDiff) : (-angleDiff);
+                angleDiff = signedAngleDifference(npcs[i].unk30, npcs[i].unk2E);
+                absAngleDiff = (angleDiff > 0) ? (angleDiff) : (-angleDiff);
                 turnSpeed = 0xA0;
-                if (absAngle < 0xA0) {
-                    if (arg0[i].unk50 == 2) {
-                        arg0[i].unk50 = 0;
+                if (absAngleDiff < 0xA0) {
+                    if (npcs[i].unk50 == 2) {
+                        npcs[i].unk50 = 0;
                     }
-                    turnSpeed = absAngle;
-                    arg0[i].unk32 = 3;
+                    turnSpeed = absAngleDiff;
+                    npcs[i].unk32 = 3;
                 }
-                if (arg0[i].unk36 != 0) {
+                if (npcs[i].unk36 != 0) {
                     turnSpeed = -(turnSpeed >> 0x1200);
                 }
-                arg0[i].unk30 = arg0[i].unk30 + turnSpeed;
-                if (arg0[i].unk50 == 1) {
-                    if (arg0[i].unk37 != 0) {
-                        arg0[i].unk50 = 0;
+                npcs[i].unk30 = npcs[i].unk30 + turnSpeed;
+                if (npcs[i].unk50 == 1) {
+                    if (npcs[i].unk37 != 0) {
+                        npcs[i].unk50 = 0;
                     }
                 }
                 break;
@@ -459,20 +461,20 @@ void func_8002C570_2D170(StoryMapDialogueState *state) {
                 break;
 
             case 3:
-                if (arg0[i].unk37 != 0) {
-                    arg0[i].unk50 = 0;
+                if (npcs[i].unk37 != 0) {
+                    npcs[i].unk50 = 0;
                     completedCount++;
                 }
                 break;
         }
     }
 
-    if (((u8)completedCount) == allocation->unk41C) {
-        allocation->unk42A = 0;
-        for (i = 0; i < allocation->unk41C; i++) {
-            arg0[i].rotation = arg0[i].unk2E;
-            arg0[i].unk50 = arg0[i].unk56;
-            setAnimationIndex(arg0[i].model, arg0[i].unk5F);
+    if (((u8)completedCount) == gameState->unk41C) {
+        gameState->unk42A = 0;
+        for (i = 0; i < gameState->unk41C; i++) {
+            npcs[i].rotation = npcs[i].unk2E;
+            npcs[i].unk50 = npcs[i].unk56;
+            setAnimationIndex(npcs[i].model, npcs[i].unk5F);
         }
     }
 }
