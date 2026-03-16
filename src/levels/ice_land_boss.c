@@ -1043,7 +1043,7 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     func_80060CDC_618DC(gameData, newSectorIndex, &boss->unk434, 0x187000, &collisionOffset);
     boss->unk434.x = boss->unk434.x + collisionOffset.x;
     boss->unk434.z = boss->unk434.z + collisionOffset.z;
-    func_8005C868_5D468((Player *)boss);
+    computePlayerTerrainAlignment((Player *)boss);
 
     if (boss->bossFlags & 0x10000) {
         boss->unkBC9 = 0;

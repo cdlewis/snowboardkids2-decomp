@@ -24,7 +24,7 @@ s32 isPointInPlayerCollisionSphere(Player *player, Vec3i *point, s32 extraRadius
 s32 checkPositionPlayerCollisionWithKnockback(Vec3i *pos, s32 extraRadius, s32 maxHeight, s16 excludePlayerIdx);
 s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeight);
 s32 checkStarHitCollisionWithVulnerablePlayers(Vec3i *pos, s32 excludePlayerIdx, s32 extraRadius);
-void func_8005C868_5D468(Player *player);
+void computePlayerTerrainAlignment(Player *player);
 s32 isPlayerInRangeAndPull(Vec3i *arg0, s32 arg1, Player *arg2);
 void handleOrientedAreaCollision(Vec3i *origin, s32 radialThreshold, s32 depthExtent, s16 rotationAngle);
 s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSectorIndex, void *position);
