@@ -79,7 +79,7 @@ typedef struct {
 } ScaledSpriteArg;
 
 void func_80010C98_11898(void *arg0);
-void func_800112AC_11EAC(ScaledSpriteArg *arg0);
+void renderScaledShadedSpriteFrame(ScaledSpriteArg *arg0);
 void renderAlphaBlendedTextSprite(TextRenderArg *arg0);
 void initDefaultFontPalette(void);
 void loadSpriteTexture(s32 textureAddr, u16 width, u16 height, u16 format, s32 paletteMode);

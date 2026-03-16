@@ -378,7 +378,7 @@ void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/graphics/sprite_rdp", func_80010C98_11898);
 
-void func_800112AC_11EAC(ScaledSpriteArg *arg0) {
+void renderScaledShadedSpriteFrame(ScaledSpriteArg *arg0) {
     s32 bottom;
     s16 scaleS;
     s16 scaleT;
