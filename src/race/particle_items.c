@@ -1852,20 +1852,20 @@ void *spawnGhostEffect(Player *arg0) {
 }
 
 typedef struct {
-    s32 unk00;       /* 0x00 */
-    s32 unk04;       /* 0x04 */
-    s32 unk08[3];    /* 0x08 */
-    u16 unk14;       /* 0x14 */
-    u16 unk16;       /* 0x16 */
-    s16 unk18;       /* 0x18 */
-    s16 unk1A;       /* 0x1A */
-    s16 unk1C;       /* 0x1C */
-    s16 unk1E;       /* 0x1E */
-    s16 unk20;       /* 0x20 */
-    s16 unk22;       /* 0x22 */
+    s32 dataOffset;  /* 0x00 - offset to display data */
+    s32 dataCount;   /* 0x04 - count used for calculating display data pointer */
+    s32 pos[3];      /* 0x08 - zone position/translation */
+    u16 pitch;       /* 0x14 - rotation angle X */
+    u16 yaw;         /* 0x16 - rotation angle Y */
+    s16 xMin;        /* 0x18 - minimum X bound */
+    s16 xMax;        /* 0x1A - maximum X bound */
+    s16 unk1C;       /* 0x1C - unused in update function */
+    s16 yOffset;     /* 0x1E - Y offset for bounds checking */
+    s16 zMin;        /* 0x20 - minimum Z bound */
+    s16 zMax;        /* 0x22 - maximum Z bound */
 } PushZoneDataEntry; /* size: 0x24 */
 
-extern PushZoneDataEntry D_80090980_91580[];
+extern PushZoneDataEntry gPushZoneData[];
 
 typedef struct {
     u8 _pad0[0x5C];
@@ -1873,38 +1873,35 @@ typedef struct {
 } Func44CB4Allocation;
 
 typedef struct {
-    u8 pad0[0x14]; /* 0x00 */
-    s32 unk14[3];  /* 0x14 */
-    void *unk20;   /* 0x20 */
-    void *unk24;   /* 0x24 */
-    void *unk28;   /* 0x28 */
-    s32 unk2C;     /* 0x2C */
-    u8 pad30[0xC]; /* 0x30 */
-    s16 zoneIndex; /* 0x3C */
+    u8 pad0[0x14];     /* 0x00 - rotation matrix */
+    Vec3i position;    /* 0x14 - zone position/translation */
+    void *displayData; /* 0x20 - pointer to display data */
+    void *asset1;      /* 0x24 - uncompressed asset */
+    void *asset2;      /* 0x28 - compressed segment 2 asset */
+    s32 unk2C;         /* 0x2C */
+    u8 pad30[0xC];     /* 0x30 */
+    s16 zoneIndex;     /* 0x3C */
 } PushZoneState;
 
-void cleanupPushZone(Func432D8Arg *);
-void func_800441A4_44DA4(PushZoneState *);
+void cleanupPushZone(PushZoneState *);
+void updatePushZone(PushZoneState *);
 
 void initPushZone(PushZoneState *arg0) {
     Func44CB4Allocation *allocation;
 
     allocation = getCurrentAllocation();
-    createCombinedRotationMatrix(
-        arg0,
-        D_80090980_91580[arg0->zoneIndex].unk14,
-        D_80090980_91580[arg0->zoneIndex].unk16
-    );
-    memcpy(&arg0->unk14, D_80090980_91580[arg0->zoneIndex].unk08, 0xC);
-    arg0->unk20 = (void *)(D_80090980_91580[arg0->zoneIndex].unk00 + (D_80090980_91580[arg0->zoneIndex].unk04 << 4));
-    arg0->unk24 = loadUncompressedAssetByIndex(allocation->unk5C);
-    arg0->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
+    createCombinedRotationMatrix(arg0, gPushZoneData[arg0->zoneIndex].pitch, gPushZoneData[arg0->zoneIndex].yaw);
+    memcpy(&arg0->position, gPushZoneData[arg0->zoneIndex].pos, 0xC);
+    arg0->displayData =
+        (void *)(gPushZoneData[arg0->zoneIndex].dataOffset + (gPushZoneData[arg0->zoneIndex].dataCount << 4));
+    arg0->asset1 = loadUncompressedAssetByIndex(allocation->unk5C);
+    arg0->asset2 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     arg0->unk2C = 0;
     setCleanupCallback(cleanupPushZone);
-    setCallbackWithContinue(func_800441A4_44DA4);
+    setCallbackWithContinue(updatePushZone);
 }
 
-void func_800441A4_44DA4(PushZoneState *arg0) {
+void updatePushZone(PushZoneState *arg0) {
     GameState *allocation;
     Player *player;
     Vec3i localPos;
@@ -1919,14 +1916,14 @@ void func_800441A4_44DA4(PushZoneState *arg0) {
         if (player->unkBD9 != 0)
             continue;
         transformVectorRelative(&player->worldPos, arg0, &localPos);
-        localPos.y -= D_80090980_91580[arg0->zoneIndex].unk1E << 16;
-        if (localPos.z < (D_80090980_91580[arg0->zoneIndex].unk20 << 16))
+        localPos.y -= gPushZoneData[arg0->zoneIndex].yOffset << 16;
+        if (localPos.z < (gPushZoneData[arg0->zoneIndex].zMin << 16))
             continue;
-        if ((D_80090980_91580[arg0->zoneIndex].unk22 << 16) < localPos.z)
+        if ((gPushZoneData[arg0->zoneIndex].zMax << 16) < localPos.z)
             continue;
         if (player->behaviorFlags == 0 && (u32)(localPos.y + 0xFFFFF) <= 0xFFFFFU &&
-            localPos.x >= (D_80090980_91580[arg0->zoneIndex].unk18 << 16) &&
-            (D_80090980_91580[arg0->zoneIndex].unk1A << 16) >= localPos.x) {
+            localPos.x >= (gPushZoneData[arg0->zoneIndex].xMin << 16) &&
+            (gPushZoneData[arg0->zoneIndex].xMax << 16) >= localPos.x) {
             localPos.x = -localPos.x;
             localPos.y = -localPos.y;
             localPos.z = 0;
@@ -1940,20 +1937,20 @@ void func_800441A4_44DA4(PushZoneState *arg0) {
             player->unk444 = player->unk444 + result.y;
             player->unk448 = player->unk448 + result.z;
             player->animFlags = player->animFlags | 0x20000;
-            player->unkBB0 = D_80090980_91580[arg0->zoneIndex].unk14;
-            player->unkBB2 = D_80090980_91580[arg0->zoneIndex].unk16;
+            player->unkBB0 = gPushZoneData[arg0->zoneIndex].pitch;
+            player->unkBB2 = gPushZoneData[arg0->zoneIndex].yaw;
         } else {
             if ((localPos.y + 0x1FFFFF) > 0x1FFFFFU)
                 continue;
             if (localPos.x > 0) {
                 temp = localPos.x;
-                temp -= 0xC0000 + (D_80090980_91580[arg0->zoneIndex].unk1A << 16);
+                temp -= 0xC0000 + (gPushZoneData[arg0->zoneIndex].xMax << 16);
                 localPos.x = temp;
                 if (temp >= 0)
                     continue;
             } else {
                 temp = 0xC0000;
-                temp = (localPos.x = (localPos.x + temp) - (D_80090980_91580[arg0->zoneIndex].unk18 << 16));
+                temp = (localPos.x = (localPos.x + temp) - (gPushZoneData[arg0->zoneIndex].xMin << 16));
                 if (temp <= 0)
                     continue;
             }
@@ -1975,9 +1972,9 @@ void func_800441A4_44DA4(PushZoneState *arg0) {
     }
 }
 
-void cleanupPushZone(Func432D8Arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupPushZone(PushZoneState *arg0) {
+    arg0->asset1 = freeNodeMemory(arg0->asset1);
+    arg0->asset2 = freeNodeMemory(arg0->asset2);
 }
 
 void spawnPushZone(s16 zoneIndex) {
