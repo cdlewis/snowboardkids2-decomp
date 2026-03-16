@@ -31,7 +31,7 @@ extern s32 D_800BA350_AA200; /* gPlayerJointZOffsets */
 extern s32 D_800BAB40_AA9F0;
 extern s32 D_800BAB44_AA9F4;
 extern s32 D_800BAB3C_AA9EC;
-extern s16 D_800BAC74_AAB24;
+extern s16 gShortcutWarpForwardOffset;
 
 /* Player initial X positions based on player index */
 extern s32 gPlayerStartXPositions[];
@@ -3273,140 +3273,140 @@ s32 fallToTrackCenterStep(Player *player) {
     return 0;
 }
 
-s32 func_800B6890_A6740(Player *arg0) {
-    Transform3D sp10;
-    Vec3i sp30;
+s32 fallTowardShortcutWarpStep(Player *player) {
+    Transform3D transform;
+    Vec3i targetPos;
     s32 pad[4];
-    LevelConfig *item;
+    LevelConfig *levelConfig;
     GameState *gameState;
-    s32 dist;
-    s16 temp;
-    s16 rotation;
+    s32 distanceToTarget;
+    s16 angleDelta;
+    s16 baseYaw;
 
     gameState = getCurrentAllocation();
-    item = getLevelConfig(gameState->memoryPoolId);
-    rotation = item->yawOffset + getTrackEndInfo(&gameState->gameData, &sp30);
-    temp = rotation + 0x800;
-    createYRotationMatrix(&sp10, (u16)temp);
-    sp10.translation.x = item->shortcutPosX;
-    sp10.translation.y = sp30.y;
-    sp10.translation.z = item->shortcutPosZ;
-    transformVector(&D_800BAC74_AAB24, (s16 *)&sp10, &sp30);
+    levelConfig = getLevelConfig(gameState->memoryPoolId);
+    baseYaw = levelConfig->yawOffset + getTrackEndInfo(&gameState->gameData, &targetPos);
+    angleDelta = baseYaw + 0x800;
+    createYRotationMatrix(&transform, (u16)angleDelta);
+    transform.translation.x = levelConfig->shortcutPosX;
+    transform.translation.y = targetPos.y;
+    transform.translation.z = levelConfig->shortcutPosZ;
+    transformVector(&gShortcutWarpForwardOffset, (s16 *)&transform, &targetPos);
 
-    if (arg0->behaviorCounter == 0) {
-        arg0->velocity.y += 0x30000;
+    if (player->behaviorCounter == 0) {
+        player->velocity.y += 0x30000;
     }
-    arg0->velocity.y -= 0x6000;
-    arg0->velocity.x = sp30.x - arg0->worldPos.x;
-    arg0->velocity.z = sp30.z - arg0->worldPos.z;
+    player->velocity.y -= 0x6000;
+    player->velocity.x = targetPos.x - player->worldPos.x;
+    player->velocity.z = targetPos.z - player->worldPos.z;
 
-    dist = distance_2d(arg0->velocity.x, arg0->velocity.z);
+    distanceToTarget = distance_2d(player->velocity.x, player->velocity.z);
 
-    if (dist > 0x48000) {
-        arg0->velocity.x = ((s64)arg0->velocity.x * 0x48000) / dist;
-        arg0->velocity.z = ((s64)arg0->velocity.z * 0x48000) / dist;
+    if (distanceToTarget > 0x48000) {
+        player->velocity.x = ((s64)player->velocity.x * 0x48000) / distanceToTarget;
+        player->velocity.z = ((s64)player->velocity.z * 0x48000) / distanceToTarget;
     } else {
-        arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 1);
-        arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 1);
+        player->velocity.x = player->velocity.x - (player->velocity.x >> 1);
+        player->velocity.z = player->velocity.z - (player->velocity.z >> 1);
     }
 
-    applyClampedVelocityToPosition(arg0);
+    applyClampedVelocityToPosition(player);
 
-    switch (arg0->behaviorCounter) {
+    switch (player->behaviorCounter) {
         case 0:
-            advancePlayerLeanAnimation(arg0, 4);
-            arg0->behaviorCounter++;
-            decayPlayerSteeringAngles(arg0);
+            advancePlayerLeanAnimation(player, 4);
+            player->behaviorCounter++;
+            decayPlayerSteeringAngles(player);
             return 0;
 
         case 1:
-            if (arg0->animFlags & 1) {
-                advancePlayerLeanAnimation(arg0, 4);
+            if (player->animFlags & 1) {
+                advancePlayerLeanAnimation(player, 4);
             } else {
-                arg0->behaviorCounter++;
-                queueSoundAtPosition(&arg0->worldPos, 0x25);
+                player->behaviorCounter++;
+                queueSoundAtPosition(&player->worldPos, 0x25);
                 case 2:
-                    if (advancePlayerLeanAnimation(arg0, 5) != 0) {
-                        arg0->behaviorCounter++;
+                    if (advancePlayerLeanAnimation(player, 5) != 0) {
+                        player->behaviorCounter++;
                     }
             }
-            decayPlayerSteeringAngles(arg0);
+            decayPlayerSteeringAngles(player);
             return 0;
 
         case 3:
-            temp = (temp - arg0->rotY) & 0x1FFF;
-            if (temp >= 0x1001) {
-                temp |= 0xE000;
+            angleDelta = (angleDelta - player->rotY) & 0x1FFF;
+            if (angleDelta >= 0x1001) {
+                angleDelta |= 0xE000;
             }
-            if (temp >= 0x91) {
-                temp = 0x90;
+            if (angleDelta >= 0x91) {
+                angleDelta = 0x90;
             }
-            if (temp < -0x90) {
-                temp = -0x90;
+            if (angleDelta < -0x90) {
+                angleDelta = -0x90;
             }
-            arg0->rotY += temp;
-            temp = ((arg0->rotY - rotation) + 0x1000) & 0x1FFF;
-            if (temp >= 0x1001) {
-                temp |= 0xE000;
+            player->rotY += angleDelta;
+            angleDelta = ((player->rotY - baseYaw) + 0x1000) & 0x1FFF;
+            if (angleDelta >= 0x1001) {
+                angleDelta |= 0xE000;
             }
-            if (temp < 0) {
-                temp = -temp;
-                if (temp < 0x401) {
-                    arg0->unkA92 = temp;
+            if (angleDelta < 0) {
+                angleDelta = -angleDelta;
+                if (angleDelta < 0x401) {
+                    player->unkA92 = angleDelta;
                 } else {
-                    decayPlayerAirborneAngles(arg0);
+                    decayPlayerAirborneAngles(player);
                 }
-            } else if (temp < 0x401) {
-                arg0->unkA92 = -temp;
+            } else if (angleDelta < 0x401) {
+                player->unkA92 = -angleDelta;
             } else {
-                decayPlayerAirborneAngles(arg0);
+                decayPlayerAirborneAngles(player);
             }
 
             {
-                s16 leanTemp;
-                leanTemp = arg0->unkA92;
-                if (leanTemp >= 0) {
-                    if (leanTemp >= 0x401) {
-                        leanTemp = 0x400;
+                s16 leanAngle;
+                leanAngle = player->unkA92;
+                if (leanAngle >= 0) {
+                    if (leanAngle >= 0x401) {
+                        leanAngle = 0x400;
                     }
-                    setPlayerLeanAnimation(arg0, 2, leanTemp / 2);
+                    setPlayerLeanAnimation(player, 2, leanAngle / 2);
                 } else {
-                    leanTemp = -leanTemp;
-                    if (leanTemp >= 0x401) {
-                        leanTemp = 0x400;
+                    leanAngle = -leanAngle;
+                    if (leanAngle >= 0x401) {
+                        leanAngle = 0x400;
                     }
-                    setPlayerLeanAnimation(arg0, 1, leanTemp / 2);
+                    setPlayerLeanAnimation(player, 1, leanAngle / 2);
                 }
             }
 
-            if (dist < 0x1000 && arg0->unkA92 == 0) {
+            if (distanceToTarget < 0x1000 && player->unkA92 == 0) {
                 switch (gameState->memoryPoolId) {
                     default:
                         if (scheduleTask(&initFlyingSceneryTask, 0, 0, 0xD3) != NULL) {
-                            arg0->worldPos.x = sp30.x;
-                            arg0->worldPos.z = sp30.z;
-                            arg0->behaviorStep++;
-                            arg0->unkB8C = 0x2F;
+                            player->worldPos.x = targetPos.x;
+                            player->worldPos.z = targetPos.z;
+                            player->behaviorStep++;
+                            player->unkB8C = 0x2F;
                             gameState->shortcutGateState = gameState->shortcutGateState & 2;
                         }
                         break;
                     case 1:
-                        if (spawnUfoEffect(arg0)) {
-                            arg0->worldPos.x = sp30.x;
-                            arg0->worldPos.z = sp30.z;
-                            arg0->behaviorStep = 8;
-                            arg0->unkB8C = 0xE;
-                            arg0->ufoFlags &= 0xF1;
+                        if (spawnUfoEffect(player)) {
+                            player->worldPos.x = targetPos.x;
+                            player->worldPos.z = targetPos.z;
+                            player->behaviorStep = 8;
+                            player->unkB8C = 0xE;
+                            player->ufoFlags &= 0xF1;
                             gameState->shortcutGateState = gameState->shortcutGateState & 2;
                         }
                         break;
                     case 8:
                         gameState->unk80++;
-                        arg0->worldPos.x = sp30.x;
-                        arg0->worldPos.z = sp30.z;
-                        arg0->behaviorStep = 0xF;
-                        arg0->unkB8C = 0xA;
-                        arg0->ufoFlags &= 0xF1;
+                        player->worldPos.x = targetPos.x;
+                        player->worldPos.z = targetPos.z;
+                        player->behaviorStep = 0xF;
+                        player->unkB8C = 0xA;
+                        player->ufoFlags &= 0xF1;
                         break;
                 }
             }
