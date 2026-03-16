@@ -3196,7 +3196,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
             }
             scheduleTask(initCourseSceneryTask, 0, 0, 0xD3);
             scheduleTask(&initStartGate, 0, 0, 0xD3);
-            func_80041418_42018();
+            spawnConfettiEffectForAllPlayers();
             spawnPushZone(5);
             break;
 

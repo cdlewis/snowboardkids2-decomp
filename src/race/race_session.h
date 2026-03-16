@@ -86,7 +86,7 @@ s32 tryActivateFinishBoost(Player *arg0);
 void eepromWriteAllAsync(void *buffer);
 void spawnPushZone(s16 zoneIndex);
 void spawnItemTriggerTask(s16 arg0);
-void func_80041418_42018(void);
+void spawnConfettiEffectForAllPlayers(void);
 PlayerFlashEffectState *spawnPlayerFlashEffect(Player *player);
 void initTitleScreen(void);
 void initLogoScreen(void);

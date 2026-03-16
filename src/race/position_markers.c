@@ -574,7 +574,7 @@ void cleanupConfettiEffect(ConfettiEffectTask *task) {
     task->particles = freeNodeMemory(task->particles);
 }
 
-void func_80041418_42018(void) {
+void spawnConfettiEffectForAllPlayers(void) {
     GameState *gameState;
     ConfettiEffectTask *task;
     s32 i;
