@@ -1138,7 +1138,71 @@ s32 distance_3d(s32 x, s32 y, s32 z) {
     return isqrt64((s64)x * x + (s64)y * y + (s64)z * z);
 }
 
-INCLUDE_ASM("asm/nonmatchings/math/geometry", computeLookAtMatrix);
+void computeLookAtMatrix(void *arg0, void *arg1, void *arg2) {
+    s32 diff[3];
+    s32 horzDist;
+    s32 sinPitch;
+    s32 cosPitch;
+    s32 sinYaw;
+    s32 cosYaw;
+    s32 totalDist;
+    s32 temp;
+    s32 temp2;
+
+    diff[0] = ((s32 *)arg1)[0] - ((s32 *)arg0)[0];
+    diff[1] = ((s32 *)arg1)[1] - ((s32 *)arg0)[1];
+    diff[2] = ((s32 *)arg1)[2] - ((s32 *)arg0)[2];
+
+    horzDist = isqrt64((s64)diff[0] * diff[0] + (s64)diff[2] * diff[2]);
+
+    sinPitch = 0;
+    cosPitch = 0x2000;
+    sinYaw = 0;
+    cosYaw = 0x2000;
+
+    totalDist = isqrt64((s64)diff[1] * diff[1] + (s64)horzDist * horzDist);
+
+    if (totalDist != 0) {
+        sinPitch = (s64)diff[1] * 0x2000 / totalDist;
+        cosPitch = (s64)horzDist * 0x2000 / totalDist;
+    }
+
+    if (horzDist != 0) {
+        sinYaw = -(s64)diff[0] * 0x2000 / horzDist;
+        cosYaw = -(s64)diff[2] * 0x2000 / horzDist;
+    }
+
+    temp = sinPitch * sinYaw;
+    ((s16 *)arg2)[0] = cosYaw;
+    ((s16 *)arg2)[1] = 0;
+    ((s16 *)arg2)[2] = -sinYaw;
+    if (temp < 0) {
+        temp += 0x1FFF;
+    }
+
+    temp2 = sinPitch * cosYaw;
+    ((s16 *)arg2)[3] = temp >> 13;
+    ((s16 *)arg2)[4] = cosPitch;
+    if (temp2 < 0) {
+        temp2 += 0x1FFF;
+    }
+
+    temp = cosPitch * sinYaw;
+    ((s16 *)arg2)[5] = temp2 >> 13;
+    if (temp < 0) {
+        temp += 0x1FFF;
+    }
+
+    temp2 = cosPitch * cosYaw;
+    ((s16 *)arg2)[6] = temp >> 13;
+    ((s16 *)arg2)[7] = -sinPitch;
+    if (temp2 < 0) {
+        temp2 += 0x1FFF;
+    }
+
+    ((s16 *)arg2)[8] = temp2 >> 13;
+    memcpy((u8 *)arg2 + 0x14, arg0, 0xC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/math/geometry", matrixToEulerAngles);
 
