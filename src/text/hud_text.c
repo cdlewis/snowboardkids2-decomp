@@ -138,14 +138,19 @@ typedef struct {
 typedef struct {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
-    /* 0x04 */ u8 pad4[0xC];
+    /* 0x04 */ void *spriteSheet;
+    /* 0x08 */ s16 spriteIndex;
+    /* 0x0A */ s16 alpha;
+    /* 0x0C */ u8 unkC;
+    /* 0x0D */ u8 unkD;
+    /* 0x0E */ u8 padE[2];
 } SaveSlotGridEntry;
 
 typedef struct {
     /* 0x00 */ SaveSlotGridEntry *entries;
     /* 0x04 */ s16 unk4;
     /* 0x06 */ s16 cursorY;
-    /* 0x08 */ u8 pad8[4];
+    /* 0x08 */ void *spriteAsset;
     /* 0x0C */ u16 animFrame;
 } SaveSlotGridState;
 
@@ -263,6 +268,7 @@ typedef struct {
     /* 0x49 */ u8 animToggle;
 } SelectionParticleUpdateState;
 
+extern u16 D_8008F22C_8FE2C[];
 extern u16 D_8008F2B8_8FEB8;
 extern u16 D_8008F2AC_8FEAC[];
 extern s16 D_8008F2C4_8FEC4[];
@@ -295,6 +301,8 @@ void cleanupSaveSlotConfirmationIndicator(Func34574Arg *arg0);
 void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state);
 void cleanupSaveSlotDeleteArrow(Func34574Arg *arg0);
 void cleanupSaveSlotPromptText(Func34574Arg *arg0);
+void cleanupSaveSlotIconGrid(Func34574Arg *arg0);
+void updateSaveSlotIconGrid(SaveSlotGridState *arg0);
 void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0);
 void cleanupSaveSlotItemIcons(Func34574Arg *arg0);
 
@@ -319,7 +327,45 @@ void cleanupSaveSlotStatSprites(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80033688_34288);
+void func_80033688_34288(SaveSlotGridState *state) {
+    AllocationStruct *allocation;
+    void *spriteSheet;
+    s32 i;
+    s32 const_ff;
+    s32 entryIndex;
+    s32 j;
+    s32 spriteIdx;
+    s32 k;
+
+    allocation = getCurrentAllocation();
+    spriteSheet = loadCompressedData(&_459310_ROM_START, &font_main_ROM_START, 0x2278);
+    setCleanupCallback(cleanupSaveSlotIconGrid);
+    state->entries = allocateNodeMemory(0x370);
+
+    i = 0;
+    const_ff = 0xFF;
+    for (; i < 0x37; i++) {
+        state->entries[i].spriteSheet = spriteSheet;
+        state->entries[i].alpha = const_ff;
+        state->entries[i].unkD = 0;
+    }
+
+    entryIndex = 0;
+    for (k = 0; D_8008F22C_8FE2C[k] != 0xFFFF; k += 3) {
+        spriteIdx = D_8008F22C_8FE2C[k];
+        for (j = 0; j < D_8008F22C_8FE2C[k + 1]; j++) {
+            state->entries[(u16)entryIndex].spriteIndex = spriteIdx;
+            state->entries[(u16)entryIndex].unkC = D_8008F22C_8FE2C[k + 2];
+            entryIndex++;
+        }
+    }
+
+    state->unk4 = allocation->unkABE + 0x98;
+    state->cursorY = allocation->unkAC0 + 0x38;
+    state->spriteAsset = spriteSheet;
+    state->animFrame = 0x13;
+    setCallback(updateSaveSlotIconGrid);
+}
 
 void updateSaveSlotIconGrid(SaveSlotGridState *arg0) {
     AllocationStruct *allocation;
