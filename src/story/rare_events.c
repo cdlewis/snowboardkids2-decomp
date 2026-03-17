@@ -2,6 +2,7 @@
 #include "common.h"
 #include "gamestate.h"
 #include "math/geometry.h"
+#include "story/npc_dialogue.h"
 #include "system/task_scheduler.h"
 #include "triggers/town_collision.h"
 
@@ -577,7 +578,105 @@ done:
 
 INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002AE80_2BA80);
 
-INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002B248_2BE48);
+s16 signedAngleDifference(s16 fromAngle, s16 toAngle);
+
+void func_8002B248_2BE48(Func297D8Arg *npc) {
+    GameState *alloc;
+    s16 angleDiff;
+    s32 done;
+    s32 absAngleDiff;
+
+    alloc = getCurrentAllocation();
+    done = 0;
+
+    switch (npc->unk32) {
+        case 0:
+            angleDiff = signedAngleDifference(npc->unk30, npc->unk2E);
+            if (angleDiff < 0) {
+                npc->unk36 = 1;
+            } else {
+                npc->unk36 = 0;
+            }
+            absAngleDiff = (angleDiff >= 0) ? angleDiff : -angleDiff;
+            if (absAngleDiff >= 0xAAB) {
+                npc->unk50 = 1;
+                npc->unk30 = (npc->unk30 + 0x1000) & 0x1FFF;
+                if (npc->unk5D == 5) {
+                    npc->unk50 = 0x22;
+                }
+                npc->unk37 = 0;
+                if (signedAngleDifference(npc->unk30, npc->unk2E) < 0) {
+                    npc->unk36 = 1;
+                } else {
+                    npc->unk36 = 0;
+                }
+            } else {
+                npc->unk37 = 1;
+                if (absAngleDiff < 0x2AA) {
+                    if (npc->unk5D != 5) {
+                        npc->unk50 = 0;
+                    } else {
+                        npc->unk50 = 0x21;
+                    }
+                } else {
+                    npc->unk50 = 2;
+                    if (npc->unk5D == 5) {
+                        npc->unk50 = 0x1D;
+                    }
+                }
+            }
+            npc->unk32 = 1;
+            break;
+
+        case 1:
+            angleDiff = signedAngleDifference(npc->unk30, npc->unk2E);
+            absAngleDiff = (angleDiff >= 0) ? angleDiff : -angleDiff;
+            if (absAngleDiff < 0xA0) {
+                angleDiff = absAngleDiff;
+                if (npc->unk37 != 0) {
+                    done = 1;
+                } else {
+                    npc->unk32 = 2;
+                }
+                if (npc->unk50 == 2 || npc->unk50 == 0x1D) {
+                    npc->unk50 = 0;
+                    if (npc->unk5D == 5) {
+                        npc->unk50 = 0x21;
+                    }
+                }
+            } else {
+                angleDiff = 0xA0;
+            }
+            if (npc->unk36 != 0) {
+                s32 temp = angleDiff;
+                angleDiff = -temp;
+            }
+            npc->unk30 = npc->unk30 + angleDiff;
+            if (npc->unk50 == 1 || npc->unk50 == 0x22) {
+                if (npc->unk37 != 0) {
+                    if (npc->unk5D == 5) {
+                        npc->unk50 = 0x21;
+                    } else {
+                        npc->unk50 = 0;
+                    }
+                }
+            }
+            break;
+
+        case 2:
+            if (npc->unk37 != 0) {
+                done = 1;
+            }
+            break;
+    }
+
+    if ((u8)done != 0) {
+        alloc->unk42A = 0;
+        npc->rotation = npc->unk2E;
+        npc->unk50 = npc->unk56;
+        npc->unk5E = npc->unk5F;
+    }
+}
 
 s16 signedAngleDifference(s16 fromAngle, s16 toAngle) {
     s16 diff;
