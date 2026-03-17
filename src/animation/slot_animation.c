@@ -1364,7 +1364,7 @@ s32 updateSlotOrbit(CutsceneSlotData *slot, SceneModel *model) {
     return 1;
 }
 
-void updateSlotScale(CutsceneSlotData *slot) {
+void updateSlotScale(CutsceneSlotData *slot, SceneModel *model) {
     s32 vel;
 
     vel = slot->scaleVelX;
@@ -1413,7 +1413,7 @@ void updateSlotScale(CutsceneSlotData *slot) {
     }
 }
 
-s32 updateSlotProjectile(CutsceneSlotData *slot) {
+s32 updateSlotProjectile(CutsceneSlotData *slot, SceneModel *model) {
     slot->unk20_u.unk20_s32 += slot->posVelX;
     slot->unk28 += slot->posVelY;
     slot->unk2C += slot->posVelZ;
@@ -1432,7 +1432,7 @@ s32 updateSlotProjectile(CutsceneSlotData *slot) {
     return 1;
 }
 
-s32 updateSlotProjectileTimed(CutsceneSlotData *slot) {
+s32 updateSlotProjectileTimed(CutsceneSlotData *slot, SceneModel *model) {
     slot->unk20_u.unk20_s32 += slot->posVelX;
     slot->unk28 += slot->posVelY;
     slot->unk2C += slot->posVelZ;
@@ -1456,4 +1456,68 @@ s32 updateSlotProjectileTimed(CutsceneSlotData *slot) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/animation/slot_animation", syncModelFromSlot);
+s32 syncModelFromSlot(CutsceneSlotData *slot, SceneModel *model) {
+    s16 result;
+
+    result = 0;
+    switch (slot->unk0.animMode) {
+        case 1:
+        case 2:
+        case 4:
+        case 8:
+            result = updateSlotLinearMove(slot, model);
+            break;
+        case 3:
+            result = updateSlotWalk(slot, model);
+            break;
+        case 5:
+            result = updateSlotDecelMove(slot, model);
+            break;
+        case 6:
+            result = updateSlotOrbit(slot, model);
+            break;
+        case 7:
+            result = updateSlotProjectile(slot, model);
+            break;
+        case 9:
+            slot->posVelX = 0;
+            slot->posVelY = 0;
+            slot->posVelZ = 0;
+            slot->rotYVel = 0;
+            slot->rotY = slot->rotYTarget;
+            slot->angle += -(slot->angle << 8) / 6 >> 8;
+            if (slot->angle < 10) {
+                slot->angle = 0;
+            }
+            if (slot->angle == 0) {
+                if (model != NULL) {
+                    setModelAnimationLooped(model, 0x79, model->unk38, 1);
+                    slot->unk0.animMode = 0;
+                }
+            }
+            break;
+        case 10:
+            result = updateSlotProjectileTimed(slot, model);
+            break;
+        case 11:
+            updateSlotRotation(slot, (StateEntry *)model);
+            goto do_scale;
+        case 0:
+        default:
+            slot->posVelX = 0;
+            slot->posVelY = 0;
+            slot->posVelZ = 0;
+            slot->rotYVel = 0;
+            slot->rotY = slot->rotYTarget;
+            slot->angle += -(slot->angle << 8) / 6 >> 8;
+            if (slot->angle < 10) {
+                slot->angle = 0;
+            }
+            break;
+    }
+    updateSlotScale(slot, model);
+    return (s16)result;
+do_scale:
+    updateSlotScale(slot, model);
+    return (s16)result;
+}
