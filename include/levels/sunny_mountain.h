@@ -25,4 +25,3 @@ typedef struct {
 } SunnyMountainFlyingBirdTask;
 
 void initSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0);
-void updateSunnyMountainChairLiftTask(void);

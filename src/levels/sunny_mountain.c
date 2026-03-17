@@ -21,19 +21,27 @@ typedef struct {
 } SunnyMountainAllocation;
 
 typedef struct {
-    u8 _pad[0x38];
-    void *displayList; /* 0x38: Main display list (offset 0x90 from result) */
-    void *assetData;   /* 0x3C: Shared asset data pointer for all display objects (segment1) */
-    void *unk40;       /* 0x40: Shared pointer for all display objects (segment2) */
-    s32 unk44;         /* 0x44: Always set to 0 */
-    u8 _pad2[0xC];
-    u8 *displayObjects; /* 0x54: Array of 4 DisplayListObjects (0xF0 bytes total, 0x3C each) */
-    u8 _pad3[0x80];
-    s16 unkD8; /* 0xD8: Always set to 0 */
+    /* 0x00 */ s32 posX;
+    /* 0x04 */ s32 posY;
+    /* 0x08 */ s32 posZ;
+    /* 0x0C */ s32 targetX;
+    /* 0x10 */ s32 targetY;
+    /* 0x14 */ s32 targetZ;
+    /* 0x18 */ Transform3D mainMatrix;
+    /* 0x38 */ void *displayList;
+    /* 0x3C */ void *assetData;
+    /* 0x40 */ void *unk40;
+    /* 0x44 */ s32 unk44;
+    /* 0x48 */ u8 _pad48[0xC];
+    /* 0x54 */ u8 *displayObjects;
+    /* 0x58 */ Transform3D chairMatrices[4];
+    /* 0xD8 */ s16 waypointIndex;
+    /* 0xDA */ u16 rotationAngle;
 } SunnyMountainTaskState;
 
 void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0);
 void updateSunnyMountainDisplayObjectsTask(s32 *arg0);
+void updateSunnyMountainChairLiftTask(SunnyMountainTaskState *taskState);
 
 /**
  * Initializes the Sunny Mountain level task state.
@@ -78,7 +86,7 @@ void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
     taskState->unk40 = loadCompressedSegment2AssetByIndex(allocation->memoryPoolId);
 
     taskState->unk44 = 0;
-    taskState->unkD8 = 0;
+    taskState->waypointIndex = 0;
     taskState->displayObjects = allocateNodeMemory(0xF0);
 
     do {
@@ -134,7 +142,79 @@ typedef struct {
 
 extern ChairLiftWaypoint gChairLiftWaypoints[];
 
-INCLUDE_ASM("asm/nonmatchings/levels/sunny_mountain", updateSunnyMountainChairLiftTask);
+void updateSunnyMountainChairLiftTask(SunnyMountainTaskState *taskState) {
+    s32 i;
+    s32 dz;
+    s32 distance;
+    s32 j;
+    s32 displayObjectOffset;
+
+    i = gChairLiftWaypoints[taskState->waypointIndex].x - taskState->posX;
+    dz = gChairLiftWaypoints[taskState->waypointIndex].y - taskState->posZ;
+
+    distance = isqrt64((s64)i * (s64)i + (s64)dz * (s64)dz);
+
+    if (distance > 0x10000) {
+        i = (s64)i * 0x10000 / distance;
+        dz = (s64)dz * 0x10000 / distance;
+        taskState->rotationAngle = taskState->rotationAngle + 0x40;
+    } else if (taskState->waypointIndex != 2) {
+        taskState->waypointIndex = taskState->waypointIndex + 1;
+    } else {
+        i -= i >> 3;
+        dz -= dz >> 3;
+    }
+
+    taskState->posX += i;
+    taskState->posZ += dz;
+    i = taskState->targetX - taskState->posX;
+    dz = taskState->targetZ - taskState->posZ;
+
+    distance = isqrt64((s64)i * (s64)i + (s64)dz * (s64)dz);
+
+    i = (s64)i * 0x200000 / distance;
+    dz = (s64)dz * 0x200000 / distance;
+
+    taskState->targetX = i + taskState->posX;
+    taskState->targetZ = dz + taskState->posZ;
+
+    createYRotationMatrix(
+        &taskState->mainMatrix,
+        computeAngleToPosition(taskState->posX, taskState->posZ, taskState->targetX, taskState->targetZ) & 0xFFFF
+    );
+
+    taskState->mainMatrix.translation.x = (taskState->targetX - taskState->posX) / 2 + taskState->posX;
+    taskState->mainMatrix.translation.y = (taskState->targetY - taskState->posY) / 2 + taskState->posY;
+    taskState->mainMatrix.translation.z = (taskState->targetZ - taskState->posZ) / 2 + taskState->posZ;
+
+    i = 0;
+    do {
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&taskState->mainMatrix);
+
+        j = 0;
+        displayObjectOffset = 0;
+        do {
+            if (j < 2) {
+                createXRotationMatrix(taskState->chairMatrices[j].m, taskState->rotationAngle);
+            } else {
+                createCombinedRotationMatrix(&taskState->chairMatrices[j], -taskState->rotationAngle & 0xFFFF, 0x1000);
+            }
+            func_8006B084_6BC84(
+                &taskState->chairMatrices[j],
+                &taskState->mainMatrix,
+                (Transform3D *)(taskState->displayObjects + displayObjectOffset)
+            );
+            enqueueDisplayListWithFrustumCull(
+                i,
+                (DisplayListObject *)(taskState->displayObjects + displayObjectOffset)
+            );
+            j++;
+            displayObjectOffset = j * 0x3C;
+        } while (j < 4);
+
+        i++;
+    } while (i < 4);
+}
 
 void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0) {
     arg0->assetData = freeNodeMemory(arg0->assetData);
