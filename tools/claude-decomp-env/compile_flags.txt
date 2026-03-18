@@ -1,0 +1,8 @@
+-I../../include
+-I../../lib/ultralib/include
+-I../../lib/ultralib/include/PR
+-I../../lib/libmus/include/PR
+-I../../lib/libmus/src
+-I../../lib/f3dex2/PR
+-I../../src/
+-funsigned-char
