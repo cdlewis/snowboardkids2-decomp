@@ -156,6 +156,22 @@ typedef struct {
 } SaveSlotGridState;
 
 typedef struct {
+    /* 0x00 */ s32 gold;
+    /* 0x04 */ u8 pad4[0x58];
+} GoldDisplaySlotData;
+
+typedef struct {
+    /* 0x000 */ u8 pad0[0x944];
+    /* 0x944 */ GoldDisplaySlotData slots[4];
+    /* 0xAB4 */ u8 padAB4[0x10];
+    /* 0xAC4 */ u16 unkAC4;
+    /* 0xAC6 */ u16 unkAC6;
+    /* 0xAC8 */ u8 unkAC8;
+    /* 0xAC9 */ u8 padAC9[5];
+    /* 0xACE */ u8 slotActive[4];
+} GoldDisplayAllocation;
+
+typedef struct {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
     /* 0x04 */ void *spriteSheet;
@@ -286,6 +302,7 @@ extern char gIntegerFormatString[];
 extern void *D_8008F5F0_901F0;
 extern void *D_8008F79C_9039C[];
 extern void *D_8008F7C4_903C4[];
+extern char D_8009E48C_9F08C[];
 
 void func_800340F4_34CF4(SaveSlotNumberLabelsState *arg0);
 void cleanupSaveSlotNumberLabels(Func34574Arg *);
@@ -294,7 +311,7 @@ void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
 void updateSaveSlotNameText(Func34ADCArg *arg0);
 void cleanupSaveSlotNameText(Func34574Arg *arg0);
 void cleanupSaveSlotGoldDisplay(Func34574Arg *arg0);
-void updateSaveSlotGoldDisplay(void);
+void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *);
 void updateSaveSlotSelectionParticles(SelectionParticleUpdateState *arg0);
 void cleanupSaveSlotSelectionParticles(Func34574Arg *arg0);
 void updateSaveSlotItemIcons(SaveSlotItemIconsState *);
@@ -878,7 +895,68 @@ void initSaveSlotGoldDisplay(SaveSlotGoldDisplayState *arg0) {
     setCallback(updateSaveSlotGoldDisplay);
 }
 
-INCLUDE_ASM("asm/nonmatchings/text/hud_text", updateSaveSlotGoldDisplay);
+void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state) {
+    GoldDisplayAllocation *allocation;
+    s32 i;
+
+    allocation = (GoldDisplayAllocation *)getCurrentAllocation();
+
+    for (i = 0; i < 4; i++) {
+        if (allocation->slotActive[i] == 0) {
+            continue;
+        }
+
+        if (allocation->unkAC6 >= 0x32) {
+            state->text[i].width = 0x1D;
+            state->text[i].alpha = 0x60;
+            state->icons[i].spriteIndex = 0;
+            state->icons[i].alpha = 0x60;
+        } else if (i == allocation->unkAC8) {
+            state->text[i].width = 0x18;
+            state->text[i].alpha = 0xFF;
+            state->icons[i].alpha = 0xFF;
+
+            if (allocation->unkAC6 < 2) {
+                state->animFrames[i]++;
+                if (state->animFrames[i] == 2) {
+                    state->animFrames[i] = 0;
+                    state->icons[i].spriteIndex++;
+                    if ((u16)state->icons[i].spriteIndex >= 6) {
+                        state->icons[i].spriteIndex = 0;
+                    }
+                }
+            } else {
+                state->icons[i].spriteIndex = 0;
+                state->icons[i].unk13 = 0;
+                state->text[i].unk4 = 0;
+                if (allocation->unkAC6 == 2 && (allocation->unkAC4 & 1)) {
+                    state->icons[i].unk13 = 0xFF;
+                    state->text[i].unk4 = 0xFF;
+                }
+            }
+        } else {
+            if (i < 3) {
+                state->text[i].width = 0x1D;
+                state->text[i].alpha = 0x60;
+                state->icons[i].spriteIndex = 0;
+                state->icons[i].alpha = 0x60;
+            } else {
+                state->text[i].width = 0x17;
+                state->text[i].alpha = 0xFF;
+                state->icons[i].spriteIndex = 0;
+                state->icons[i].alpha = 0xFF;
+            }
+            state->animFrames[i] = 0;
+        }
+
+        sprintf((char *)&state->textBuffers[i], D_8009E48C_9F08C, allocation->slots[i].gold);
+
+        if (allocation->unkAC6 != 0x18 || allocation->unkAC8 != i) {
+            debugEnqueueCallback(i + 9, 7, renderTextColored, &state->text[i]);
+        }
+        debugEnqueueCallback(i + 9, 0, renderScaledShadedSpriteFrame, &state->icons[i]);
+    }
+}
 
 void cleanupSaveSlotGoldDisplay(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
