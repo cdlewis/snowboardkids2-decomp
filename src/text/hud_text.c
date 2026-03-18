@@ -9,6 +9,7 @@
 #include "race/race_session.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
+#include "text/font_assets.h"
 #include "text/font_render.h"
 
 typedef struct {
@@ -225,6 +226,10 @@ typedef struct {
 typedef struct {
     /* 0x000 */ u8 pad0[0x948];
     /* 0x948 */ SaveSlotSaveData slots[4];
+    /* 0xAB8 */ u8 padAB8[0xC];
+    /* 0xAC4 */ u16 unkAC4;
+    /* 0xAC6 */ u16 unkAC6;
+    /* 0xAC8 */ u8 unkAC8;
 } NumberLabelsAllocation;
 
 typedef struct {
@@ -282,7 +287,7 @@ extern void *D_8008F5F0_901F0;
 extern void *D_8008F79C_9039C[];
 extern void *D_8008F7C4_903C4[];
 
-void func_800340F4_34CF4(void);
+void func_800340F4_34CF4(SaveSlotNumberLabelsState *arg0);
 void cleanupSaveSlotNumberLabels(Func34574Arg *);
 void updateSaveSlotDeleteText(SaveSlotDeleteTextState *);
 void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
@@ -647,7 +652,96 @@ void initSaveSlotItemLabels(SaveSlotNumberLabelsState *arg0) {
     setCallback(func_800340F4_34CF4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_800340F4_34CF4);
+void func_800340F4_34CF4(SaveSlotNumberLabelsState *arg0) {
+    NumberLabelsAllocation *allocation;
+    u16 alpha;
+    u16 alphaCheck;
+    s32 i;
+    u16 screenState;
+
+    allocation = getCurrentAllocation();
+    screenState = allocation->unkAC6;
+
+    alpha = 0x60;
+    if (screenState < 0x32) {
+        alpha = 0xFF;
+        if (screenState != 0) {
+            if (allocation->unkAC8 == arg0->slotIndex) {
+                do {
+                    alpha = ((-((screenState < 2) ^ 1)) & 0xFF) | 0xFE;
+                } while (0);
+            } else {
+                alpha = ((-(arg0->slotIndex == 3)) & 0xFE) | 0x60;
+            }
+        }
+    }
+
+    i = 0;
+    alphaCheck = alpha;
+    do {
+        if (i < 9) {
+            arg0->texts[i].alpha = alpha;
+        } else {
+            arg0->sprites[i - 9].alpha = alpha;
+        }
+
+        if ((alphaCheck == 0xFF) && (allocation->unkAC6 != 2)) {
+            if (allocation->slots[arg0->slotIndex].itemFlags[i] == 1) {
+                if (i < 9) {
+                    arg0->texts[i].alpha = 0xFE;
+                } else {
+                    arg0->sprites[i - 9].alpha = 0xFE;
+                }
+            } else if (i < 9) {
+                arg0->texts[i].alpha = 0x60;
+            } else {
+                arg0->sprites[i - 9].alpha = 0x60;
+            }
+        } else if (alphaCheck == 0x60) {
+            if (allocation->slots[arg0->slotIndex].itemFlags[i] != 1) {
+                if (i < 9) {
+                    arg0->texts[i].alpha = 0x30;
+                } else {
+                    arg0->sprites[i - 9].alpha = 0x30;
+                }
+            }
+        }
+
+        if (alphaCheck != 0x60) {
+            if (i < 9) {
+                arg0->texts[i].x = (s16)((i * 16) - 0x70);
+            } else {
+                arg0->sprites[i - 9].x = (i * 16) - 0x78;
+            }
+        } else if (i < 9) {
+            arg0->texts[i].x = (s16)((i * 15) - 0x6A);
+        } else {
+            arg0->sprites[i - 9].x = (i * 15) - 0x72;
+        }
+
+        if (i < 9) {
+            arg0->texts[i].unk4 = 0;
+        } else {
+            arg0->sprites[i - 9].unkD = 0;
+        }
+
+        if (((allocation->unkAC6 == 2) && (arg0->slotIndex == allocation->unkAC8)) && (allocation->unkAC4 & 1)) {
+            if (i < 9) {
+                arg0->texts[i].unk4 = 0xFF;
+            } else {
+                arg0->sprites[i - 9].unkD = 0xFF;
+            }
+        }
+
+        if (i < 9) {
+            debugEnqueueCallback(arg0->slotIndex + 9, 1, renderTextColored, &arg0->texts[i]);
+        } else {
+            debugEnqueueCallback(arg0->slotIndex + 9, 1, renderTextSprite, &arg0->sprites[i - 9]);
+        }
+
+        i++;
+    } while (i < 15);
+}
 
 void cleanupSaveSlotNumberLabels(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
