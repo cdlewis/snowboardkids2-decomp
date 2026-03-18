@@ -66,7 +66,7 @@ typedef struct {
     u8 padding9F[0x4];
     void *unk9B8[6];
     u8 padding11[0x41C];
-    void *volatile cornerDecorationAsset;
+    void *cornerDecorationAsset;
     s32 leftCornerAlpha;
     s32 leftCornerFadeSpeed;
     s32 rightCornerAlpha;
@@ -80,7 +80,7 @@ typedef struct {
     ColorData unkE44[3];
     u8 paddingE5C[4];
     s16 unkE60;
-} func_80003EE0_4AE0_task_memory;
+} CreditsState;
 
 void initCreditsCornerDecorationSprites(void *arg0);
 void updateCreditsCornerDecorationSprites(void *arg0);

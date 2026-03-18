@@ -1,7 +1,7 @@
 #include "credits_decorations.h"
 
 void initCreditsCornerDecorationSprites(void *arg0) {
-    volatile func_80003EE0_4AE0_task_memory *state = (volatile func_80003EE0_4AE0_task_memory *)arg0;
+    volatile CreditsState *state = (volatile CreditsState *)arg0;
     void *asset0;
     void *asset1;
     void *asset2;
@@ -56,7 +56,7 @@ void initCreditsCornerDecorationSprites(void *arg0) {
 }
 
 void updateCreditsCornerDecorationSprites(void *arg0) {
-    func_80003EE0_4AE0_task_memory *state = (func_80003EE0_4AE0_task_memory *)arg0;
+    CreditsState *state = (CreditsState *)arg0;
     s16 temp_v1;
     s32 temp_v0;
     s32 value;
