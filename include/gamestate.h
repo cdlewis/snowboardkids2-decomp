@@ -73,7 +73,8 @@ typedef struct {
     void *unk24;
     void *aiPathData;
     void *unk2C;
-    u8 padding30[0x8];
+    Vtx *jointVertices;   /* 0x30 */
+    Mtx *jointMatrix;     /* 0x34 */
     s32 unk38;
     u8 padding3C[0x6C - 0x3C];
     u8 unk6C;
