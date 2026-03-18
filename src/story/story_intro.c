@@ -217,7 +217,7 @@ void initLevelSelectState(void) {
     unlockedLevelCount = buildUnlockedLevelList(state->levelIdList);
     state->maxLevelCount = unlockedLevelCount;
 
-    for (i = 0; i < unlockedLevelCount & 0xFF; i++) {
+    for (i = 0; i < unlockedLevelCount; i++) {
         if (D_800AFE8C_A71FC->saveSlotIndex == state->levelIdList[i]) {
             break;
             do { } while (0); }
