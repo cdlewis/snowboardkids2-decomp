@@ -1,0 +1,8 @@
+-Iinclude
+-Ilib/ultralib/include
+-Ilib/ultralib/include/PR
+-Ilib/libmus/include/PR
+-Ilib/libmus/src
+-Ilib/f3dex2/PR
+-Isrc/
+-funsigned-char
