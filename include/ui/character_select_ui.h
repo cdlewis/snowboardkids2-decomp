@@ -49,4 +49,6 @@ typedef struct {
     s16 unk22[17];
 } CharSelectAnimData;
 
+s32 countUnlockedSlotsInCategory(u8 category);
+
 #endif

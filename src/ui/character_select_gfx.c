@@ -1656,7 +1656,67 @@ void initCharSelectArrows(SelectionArrowsState *state) {
     setCallback(func_800262D4_26ED4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/ui/character_select_gfx", func_800262D4_26ED4);
+void func_800262D4_26ED4(SelectionArrowsState *state) {
+    BoardSelectGameState *gameState;
+    s32 playerIdx;
+    s32 arrowIdx;
+    s32 entryStartIdx;
+    u8 timerValue;
+    u16 gameStateValue;
+    u16 yPos;
+    s32 showArrows;
+    s32 canBlink;
+    short numPlayers;
+
+    gameState = (BoardSelectGameState *)getCurrentAllocation();
+    showArrows = 1;
+    for (playerIdx = 0; playerIdx < D_800AFE8C_A71FC->numPlayers; playerIdx++) {
+        gameStateValue = gameState->unk1898[playerIdx];
+        timerValue = 2;
+        if (((u32)(gameStateValue - 3)) < 8U) {
+            numPlayers = D_800AFE8C_A71FC->numPlayers;
+            yPos = *((u16 *)((D_8008DE18_8EA18 + (numPlayers * 6)) + 4));
+            if (gameStateValue >= 6U) {
+                yPos += *((u16 *)((D_8008DE18_8EA18 + (numPlayers * timerValue)) + 0x1E));
+                showArrows &= -(countUnlockedSlotsInCategory(gameState->unk18A8[playerIdx]) != 1);
+            }
+            state->blinkTimers[playerIdx]++;
+            entryStartIdx = playerIdx * 2;
+            for (arrowIdx = 0; arrowIdx < 2; arrowIdx++) {
+                state->entries[entryStartIdx + arrowIdx].y = yPos;
+                gameStateValue = gameState->unk1898[playerIdx];
+                canBlink = (gameStateValue != 4) & (gameStateValue != 9);
+                if (canBlink == 0) {
+                    goto hide_arrow;
+                }
+                if (!(showArrows & 0xFF)) {
+                    goto hide_arrow;
+                }
+                timerValue = state->blinkTimers[playerIdx];
+                if (timerValue < 0x11) {
+                    state->entries[entryStartIdx + arrowIdx].alpha -= 8;
+                } else {
+                    state->entries[entryStartIdx + arrowIdx].alpha += 8;
+                }
+                timerValue = state->blinkTimers[playerIdx];
+                if (timerValue == 0x20) {
+                    state->entries[entryStartIdx + arrowIdx].alpha = 0xFF;
+                }
+                goto enqueue;
+            hide_arrow:
+                state->blinkTimers[playerIdx] = 0;
+                state->entries[entryStartIdx + arrowIdx].alpha = 0xFF;
+            enqueue:
+                debugEnqueueCallback(playerIdx + 0xC, 0, renderTextSprite, &state->entries[entryStartIdx + arrowIdx]);
+            }
+        } else {
+            state->blinkTimers[playerIdx] = 0;
+            state->entries[playerIdx * 2].alpha = 0xFF;
+            state->entries[(playerIdx * timerValue) + 1].alpha = 0xFF;
+        }
+        state->blinkTimers[playerIdx] &= 0x1F;
+    }
+}
 
 void cleanupCharSelectArrows(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
