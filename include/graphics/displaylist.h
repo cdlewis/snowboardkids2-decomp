@@ -222,7 +222,7 @@ u16 getTrackEndInfo(void *arg0, void *arg1);
 
 u16 func_80060A3C_6163C(void *arg0, u16 arg1, void *arg2);
 
-void func_80060CDC_618DC(void *arg0, u16 arg1, void *arg2, s32 arg3, Vec3i *arg4);
+s32 func_80060CDC_618DC(void *arg0, u16 arg1, void *arg2, s32 arg3, Vec3i *arg4);
 
 s32 getTrackHeightAtPosition(void *trackGeom, u16 groupIdx, void *pos);
 

@@ -42,7 +42,106 @@ s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSector
     return player->sectorIndex;
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/track_collision", func_80059ED0_5AAD0);
+typedef struct {
+    s32 value;
+    u8 pad[12];
+} ThresholdEntry;
+
+extern s16 D_80094080_94C80[][8];
+extern ThresholdEntry D_8009408C_94C8C[];
+
+s32 func_80059ED0_5AAD0(Player *arg0) {
+    Vec3i sp18;
+    Vec3i sp28[3];
+    Transform3D sp50;
+    Transform3D sp70;
+    void *allocation;
+    s32 result;
+    s32 i;
+    s32 collisionResult;
+    void *allocData;
+    u8 temp;
+    s32 sectorIdx;
+    s32 j;
+
+    result = 0;
+    allocation = getCurrentAllocation();
+    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, &sp70);
+    func_8006B084_6BC84((Transform3D *)&arg0->unk9B0, &sp70, &sp50);
+
+    i = 0;
+    do {
+        transformVector(D_80094080_94C80[i], sp50.m[0], &sp28[i]);
+        i++;
+    } while (i < 3);
+
+    i = 0;
+    allocData = (u8 *)allocation + 0x30;
+    do {
+        sectorIdx = getOrUpdatePlayerSectorIndex(arg0, allocData, arg0->sectorIndex, &sp28[i]) & 0xFFFF;
+        if (i == 0) {
+            if (arg0->animFlags & 0x20) {
+                temp = arg0->unkBC8;
+                if (temp < 10U) {
+                    arg0->unkBC8 = temp + 1;
+                }
+                collisionResult = func_80060CDC_618DC(allocData, sectorIdx, &sp28[0], (arg0->unkBC8 + 6) << 16, &sp18);
+                arg0->animFlags &= ~0x20;
+            } else {
+                arg0->unkBC8 = 0;
+                collisionResult = func_80060CDC_618DC(allocData, sectorIdx, &sp28[0], D_8009408C_94C8C[0].value, &sp18);
+            }
+            for (j = i; j < 3; j++) {
+                sp28[j].x += sp18.x;
+                sp28[j].z += sp18.z;
+            }
+            arg0->worldPos.x += sp18.x;
+            arg0->worldPos.z += sp18.z;
+            if (collisionResult == -1) {
+                result = -1;
+            }
+            if (collisionResult == -2) {
+                if (sp28[i].y < getTrackHeightInSector(
+                                    allocData,
+                                    getOrUpdatePlayerSectorIndex(arg0, allocData, arg0->sectorIndex, &sp28[i]) & 0xFFFF,
+                                    &sp28[i],
+                                    0x100000
+                                ) + 0x100000) {
+                    result = -1;
+                }
+            }
+        } else {
+            collisionResult = func_80060CDC_618DC(allocData, sectorIdx, &sp28[i], D_8009408C_94C8C[i].value, &sp18);
+            if (collisionResult == -1) {
+                result = -1;
+                for (j = i; j < 3; j++) {
+                    sp28[j].x += sp18.x;
+                    sp28[j].z += sp18.z;
+                }
+                arg0->worldPos.x += sp18.x;
+                arg0->worldPos.z += sp18.z;
+            }
+            if (collisionResult == -2) {
+                if (sp28[i].y < getTrackHeightInSector(
+                                    allocData,
+                                    getOrUpdatePlayerSectorIndex(arg0, allocData, arg0->sectorIndex, &sp28[i]) & 0xFFFF,
+                                    &sp28[i],
+                                    0x100000
+                                ) + 0x100000) {
+                    result = -1;
+                }
+                for (j = i; j < 3; j++) {
+                    sp28[j].x += sp18.x;
+                    sp28[j].z += sp18.z;
+                }
+                arg0->worldPos.x += sp18.x;
+                arg0->worldPos.z += sp18.z;
+            }
+        }
+        i++;
+    } while (i < 3);
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/race/track_collision", func_8005A26C_5AE6C);
 
