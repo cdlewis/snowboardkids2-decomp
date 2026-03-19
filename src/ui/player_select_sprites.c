@@ -1,23 +1,36 @@
 #include "ui/player_select_sprites.h"
 #include "assets.h"
+#include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 typedef struct {
-    /* 0x000 */ u8 pad0[0x1E2];
-    /* 0x1E2 */ u16 unk1E2;
-} Allocation_1DB7A0;
+    u8 hi;
+    u8 lo;
+} U16Bytes;
+
+typedef struct {
+    /* 0x000 */ u8 pad0[0x1E0];
+    /* 0x1E0 */ u16 unk1E0;
+    /* 0x1E2 */ union {
+        u16 val;
+        U16Bytes bytes;
+    } unk1E2;
+    /* 0x1E4 */ u8 pad1[2];
+    /* 0x1E6 */ u8 unk1E6;
+} PlayerSelectAllocation;
 
 extern s16 D_800B09B8_1DC098[];
 extern s16 D_800B09BA_1DC09A[];
 extern s16 D_800B09A8_1DC088[];
+extern u16 D_800B09A0_1DC080[];
 
 void updatePlayerSelectAnim(PlayerSelectState *);
 void cleanupPlayerSelectTask(PlayerSelectSpriteTask *);
 
 void initPlayerSelectSprites(PlayerSelectState *state) {
-    Allocation_1DB7A0 *allocation;
+    PlayerSelectAllocation *allocation;
     void *spriteData;
     s32 i;
     s32 yPos;
@@ -60,7 +73,7 @@ void initPlayerSelectSprites(PlayerSelectState *state) {
     state->unk2C = 0;
     state->unk2D = 0;
     {
-        u16 playerIdx = allocation->unk1E2;
+        u16 playerIdx = allocation->unk1E2.val;
         state->animState = 0;
         state->animCounter = 0;
         state->playerIndex = playerIdx;
@@ -69,7 +82,148 @@ void initPlayerSelectSprites(PlayerSelectState *state) {
     setCallback(updatePlayerSelectAnim);
 }
 
-INCLUDE_ASM("asm/nonmatchings/ui/player_select_sprites", updatePlayerSelectAnim);
+void updatePlayerSelectAnim(PlayerSelectState *state) {
+    PlayerSelectAllocation *allocation;
+    s32 i;
+    volatile PlayerSelectSprite *vsprite;
+
+    allocation = getCurrentAllocation();
+
+    switch (state->unk2C) {
+        case 0:
+            for (i = 0; i < 2; i++) {
+                state->sprites[i].y += 0x10;
+            }
+            if (state->sprites[0].y == -0x1C) {
+                state->unk2C = 1;
+            }
+            break;
+
+        case 1:
+            if (getViewportFadeMode((ViewportNode *)allocation) == 0) {
+                state->unk2C = 2;
+            }
+            break;
+
+        case 2:
+            state->unk2D++;
+            if ((state->unk2D & 0xFF) == 3) {
+                state->unk2C = 3;
+            }
+            break;
+
+        case 3:
+            if (allocation->unk1E2.val != state->playerIndex) {
+                state->playerIndex = allocation->unk1E2.val;
+                state->animState = 0;
+                state->animCounter = 0;
+            } else {
+                state->animCounter = (state->animCounter + 1) & 3;
+                if (state->animCounter == 0) {
+                    state->animState = (state->animState + 1) & 3;
+                }
+            }
+
+            i = 0;
+            if (allocation->unk1E2.val != state->slotIndex) {
+                s16 scaleConst = 0x500;
+                s16 alphaConst = 0x80;
+                s32 divConst = 0x8000;
+                vsprite = (volatile PlayerSelectSprite *)state;
+                do {
+                    s16 scale;
+                    u8 slotIdx;
+                    s16 frame;
+                    s32 yPos;
+
+                    vsprite->scaleY = scaleConst;
+                    scale = divConst / (s32)(u16)vsprite->scaleY;
+                    vsprite->scaleX = scaleConst;
+                    vsprite->alpha = alphaConst;
+                    yPos = i * scale;
+                    yPos -= 0xC;
+                    vsprite->y = yPos - scale / 2;
+                    slotIdx = state->slotIndex;
+                    frame = i + 8;
+                    i++;
+                    frame += slotIdx * 6;
+                    vsprite->frameIndex = frame;
+                    vsprite++;
+                } while (i < 2);
+            } else {
+                s16 scaleConst = 0x400;
+                s16 alphaConst = 0xFF;
+                s32 divConst = 0x8000;
+                u16 *animTable = D_800B09A0_1DC080;
+                vsprite = (volatile PlayerSelectSprite *)state;
+                do {
+                    s16 scale;
+                    u8 slotIdx;
+                    s32 frame;
+                    s32 yPos;
+
+                    vsprite->scaleY = scaleConst;
+                    scale = divConst / (s32)(u16)vsprite->scaleY;
+                    vsprite->scaleX = scaleConst;
+                    vsprite->alpha = alphaConst;
+                    yPos = i * scale;
+                    yPos -= 0xC;
+                    vsprite->y = yPos - scale / 2;
+                    slotIdx = state->slotIndex;
+                    frame = i + 8;
+                    frame += slotIdx * 6;
+                    vsprite->frameIndex = frame;
+                    i++;
+                    vsprite->frameIndex = frame + animTable[state->animState] * 2;
+                    vsprite++;
+                } while (i < 2);
+            }
+
+            if (allocation->unk1E6 == 1) {
+                s32 slot;
+                slot = state->slotIndex;
+                state->unk2C = 4;
+                if (slot == allocation->unk1E2.bytes.lo) {
+                    PlayerSelectSprite *sprite;
+                    s32 frameBase;
+                    s32 offset;
+                    sprite = &state->sprites[i];
+                    frameBase = i + 8;
+                    offset = slot * 6;
+                    sprite->frameIndex = frameBase + offset;
+                    state->animState = 0;
+                    state->animCounter = 0;
+                }
+            }
+            break;
+
+        default:
+            break;
+
+        case 4:
+            if (state->slotIndex == allocation->unk1E2.val) {
+                i = 0;
+                do {
+                    if (allocation->unk1E0 & 1) {
+                        state->sprites[i].unk13 = 0xFF;
+                    } else {
+                        state->sprites[i].unk13 = 0;
+                    }
+                    i++;
+                } while (i < 2);
+            }
+            if (allocation->unk1E6 == 0) {
+                state->unk2C = 3;
+            }
+            break;
+    }
+
+    i = 0;
+    do {
+        debugEnqueueCallback(8, 0, renderScaledShadedSpriteFrame, &state->sprites[i]);
+        i++;
+    } while (i < 2);
+}
 
 void cleanupPlayerSelectTask(PlayerSelectSpriteTask *arg0) {
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
@@ -153,11 +307,11 @@ void initPlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
 
 void updatePlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
     s32 pad[2];
-    Allocation_1DB7A0 *allocation = getCurrentAllocation();
+    PlayerSelectAllocation *allocation = getCurrentAllocation();
 
-    arg0->x = D_800B09B8_1DC098[allocation->unk1E2 * 2];
-    arg0->y = D_800B09BA_1DC09A[allocation->unk1E2 * 2];
-    arg0->frameIndex = allocation->unk1E2 + 2;
+    arg0->x = D_800B09B8_1DC098[allocation->unk1E2.val * 2];
+    arg0->y = D_800B09BA_1DC09A[allocation->unk1E2.val * 2];
+    arg0->frameIndex = allocation->unk1E2.val + 2;
 
     debugEnqueueCallback(8, 7, renderSpriteFrame, arg0);
 }
