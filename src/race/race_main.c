@@ -192,7 +192,89 @@ void applyVelocityToPosition(Player *player) {
     player->worldPos.z = player->worldPos.z + player->velocity.z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B0334_A01E4);
+void func_800B05B8_A0468(Player *);
+void renderFlyingEnemy(Player *);
+
+void func_800B0334_A01E4(void) {
+    s32 distances[4];
+    s8 order[4];
+    GameState *gameState;
+    LevelConfig *levelConfig;
+    s32 tmp;
+    u8 tmpOrder;
+    s32 i;
+    s32 j;
+
+    gameState = getCurrentAllocation();
+    if (gameState->shortcutGateState == 2) {
+        gameState->shortcutGateState = 0;
+    }
+    if (gameState->gamePaused != 0) {
+        return;
+    }
+
+    *(s32 *)gameState->PAD_3 = 0;
+    levelConfig = getLevelConfig(gameState->memoryPoolId);
+
+    i = 0;
+    if (gameState->numPlayers > i) {
+        do {
+            distances[i] = 0x7FFFFFFF;
+            if ((getTrackSegmentFinishZoneFlag(&gameState->gameData, gameState->players[i].sectorIndex) << 16) == 0) {
+                distances[i] = distance_2d(
+                    gameState->players[i].worldPos.x - levelConfig->shortcutPosX,
+                    gameState->players[i].worldPos.z - levelConfig->shortcutPosZ
+                );
+            }
+            i++;
+        } while (i < (s32)gameState->numPlayers);
+    }
+
+    i = 0;
+    if (gameState->numPlayers > i) {
+        do {
+            order[i] = i;
+            i++;
+        } while (i < (s32)gameState->numPlayers);
+    }
+
+    for (i = 0; i < gameState->numPlayers - 1; i++) {
+        for (j = i; j < (s32)gameState->numPlayers; j++) {
+            if (distances[i] > distances[j]) {
+                tmp = distances[i];
+                distances[i] = distances[j];
+                distances[j] = tmp;
+                tmpOrder = order[i];
+                order[i] = order[j];
+                order[j] = tmpOrder;
+            }
+        }
+    }
+
+    j = 0;
+    if (gameState->numPlayers > j) {
+        do {
+            i = (u8)order[j];
+            switch ((gameState->players + i)->unkBD9) {
+                case 0:
+                    func_800B05B8_A0468(gameState->players + i);
+                    break;
+                case 1:
+                    renderFlyingEnemy(gameState->players + i);
+                    __asm__ volatile("");
+                    break;
+                case 2:
+                    renderFlyingEnemy(gameState->players + i);
+                    __asm__ volatile("" ::: "memory");
+                    break;
+                case 3:
+                    renderFlyingEnemy(gameState->players + i);
+                    break;
+            }
+            j++;
+        } while (j < (s32)gameState->numPlayers);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B05B8_A0468);
 
