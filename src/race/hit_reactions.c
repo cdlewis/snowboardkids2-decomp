@@ -192,7 +192,249 @@ s32 grantInvincibilityWithSound(Player *player) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/hit_reactions", func_80058CFC_598FC);
+extern void *getCurrentAllocation(void);
+extern s32 func_80059394_59F94(Player *);
+extern s32 func_800597C0_5A3C0(Player *);
+extern s32 createWarpEffect(void *, void *, s16);
+extern s32 spawnAttackProjectile(s32, s32, s32);
+extern s32 spawnStarEffect(void *, void *, s16);
+extern s32 spawnGoldStealEffect(void *, void *, s16);
+extern s32 spawnPanelProjectile(void *);
+extern s32 getFreeNodeCount(s32);
+extern void playFinishBoostVoice(Player *);
+
+void func_80058CFC_598FC(Player *player) {
+    GameState *gs;
+    s32 delay;
+    s32 i;
+    s32 result;
+    Player *target;
+    s32 targetIndices[2];
+    u8 playerCount;
+    s32 *idxPtr;
+    s32 pad;
+
+    gs = (GameState *)getCurrentAllocation();
+    result = func_80059394_59F94(player);
+
+    if (result >= 0) {
+        if (spawnAttackProjectile(player->unkBD2 - 1, player->playerIndex, result) != 0) {
+            player->unkBD3--;
+            if (player->unkBD3 == 0) {
+                player->unkBD2 = 0;
+            }
+        }
+    }
+
+    if (func_800597C0_5A3C0(player) != 0) {
+        switch (player->unkBD4) {
+            case 1:
+                result = gs->numPlayers - 1;
+                if (result != 0) {
+                    if (getFreeNodeCount(0) < result) {
+                        break;
+                    }
+                    delay = 0;
+                    for (i = 0; i < gs->numPlayers; i++) {
+                        if (player->playerIndex != gs->players[i].playerIndex) {
+                            createWarpEffect(player, &gs->players[i], (s16)delay);
+                            delay += 4;
+                        }
+                    }
+                } else {
+                    if (createWarpEffect(player, player, 0) == 0) {
+                        break;
+                    }
+                }
+                player->unkBD4 = 0;
+                queueSoundAtPosition(&player->worldPos, 0x18);
+                break;
+
+            case 2:
+                target = player;
+                if (randA() & 0xFF) {
+                    for (result = 0; result < gs->numPlayers; result++) {
+                        if (gs->players[gs->PAD_6B_2[result]].playerIndex != player->playerIndex) {
+                            target = &gs->players[gs->PAD_6B_2[result]];
+                            if (target->unkBC6 == 0) {
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (spawnStarEffect(player, target, 0) != 0) {
+                    player->unkBD4 = 0;
+                }
+                break;
+
+            case 3:
+                randA();
+                if (getFreeNodeCount(0) < 3) {
+                    break;
+                }
+                switch (gs->numPlayers) {
+                    case 1:
+                        for (i = 0; i < 3; i++) {
+                            spawnStarEffect(player, player, (s16)(i * 8));
+                        }
+                        player->unkBD4 = 0;
+                        break;
+                    case 2:
+                        for (i = 0; i < gs->numPlayers; i++) {
+                            if (player->playerIndex != gs->players[i].playerIndex) {
+                                for (delay = 0; delay < 3; delay++) {
+                                    spawnStarEffect(player, &gs->players[i], (s16)(delay * 8));
+                                }
+                                break;
+                            }
+                        }
+                        player->unkBD4 = 0;
+                        break;
+                    case 3:
+                        i = 0;
+                        idxPtr = targetIndices;
+                        for (; i < gs->numPlayers; i++) {
+                            playerCount = gs->PAD_6B_2[i];
+                            if (player->playerIndex != gs->players[playerCount].playerIndex) {
+                                *idxPtr = playerCount;
+                                idxPtr++;
+                            }
+                        }
+                        spawnStarEffect(player, &gs->players[targetIndices[0]], 0);
+                        spawnStarEffect(player, &gs->players[targetIndices[0]], 8);
+                        spawnStarEffect(player, &gs->players[targetIndices[1]], 16);
+                        player->unkBD4 = 0;
+                        break;
+                    case 4:
+                        delay = 0;
+                        for (i = 0; i < gs->numPlayers; i++) {
+                            if (player->playerIndex != gs->players[i].playerIndex) {
+                                spawnStarEffect(player, &gs->players[i], (s16)delay);
+                                delay += 8;
+                            }
+                        }
+                        player->unkBD4 = 0;
+                        break;
+                    default:
+                        player->unkBD4 = 0;
+                        break;
+                }
+                break;
+
+            case 4:
+                if (tryActivateBoost(player) != 0) {
+                    player->unkBD4 = 0;
+                }
+                if (player->boostState == 0) {
+                    if (spawnPlayerAuraEffect(player) != NULL) {
+                        if (player->animFlags & 2) {
+                            player->boostState = 2;
+                        } else {
+                            player->boostState = 1;
+                        }
+                        player->boostTimer = 0xB4;
+                        player->unkBD4 = 0;
+                    }
+                }
+                break;
+
+            case 5:
+                if (tryActivateFinishBoost(player) != 0) {
+                    player->unkBD4 = 0;
+                    playFinishBoostVoice(player);
+                }
+                break;
+
+            case 6:
+                if (grantInvincibilityWithSound(player) != 0) {
+                    player->unkBD4 = 0;
+                }
+                break;
+
+            case 7:
+                if (spawnPanelProjectile(player) != 0) {
+                    player->unkBD4 = 0;
+                }
+                break;
+
+            case 8:
+                target = player;
+                result = randA() & 0xFF;
+                i = !result;
+                if (result == 1) {
+                    i = 2;
+                }
+                playerCount = gs->numPlayers;
+                if (i >= (s32)playerCount) {
+                    i = playerCount - 1;
+                }
+                delay = 0;
+                for (result = 0; result < (s32)playerCount; result++) {
+                    if (gs->players[gs->PAD_6B_2[result]].playerIndex == player->playerIndex) {
+                        continue;
+                    }
+                    target = &gs->players[gs->PAD_6B_2[result]];
+                    if (delay < i) {
+                        delay++;
+                        continue;
+                    }
+                    if (target->unkBC6 == 0) {
+                        break;
+                    }
+                    delay++;
+                }
+                if (spawnGoldStealEffect(player, target, 0) != 0) {
+                    player->unkBD4 = 0;
+                }
+                break;
+
+            case 9:
+                result = gs->numPlayers - 1;
+                if (result != 0) {
+                    if (getFreeNodeCount(0) < result) {
+                        break;
+                    }
+                    delay = 0;
+                    for (i = 0; i < gs->numPlayers; i++) {
+                        if (player->playerIndex != gs->players[i].playerIndex) {
+                            spawnGoldStealEffect(player, &gs->players[i], (s16)delay);
+                            delay += 16;
+                        }
+                    }
+                    player->unkBD4 = 0;
+                } else {
+                    if (spawnGoldStealEffect(player, player, 0) != 0) {
+                        player->unkBD4 = 0;
+                    }
+                }
+                break;
+
+            case 10:
+                if (tryActivateGhostEffect(player) != 0) {
+                    player->unkBD4 = 0;
+                }
+                break;
+        }
+    }
+
+    if (player->unkBC9 == 3) {
+        tryActivateFinishBoost(player);
+    }
+    if (!(player->animFlags & 0x80000)) {
+        switch (player->unkBBB) {
+            case 17:
+                tryActivateFinishBoost(player);
+                tryActivateGhostEffect(player);
+                break;
+            case 16:
+                tryActivateBoost(player);
+                break;
+            case 15:
+                grantInvincibilityWithSound(player);
+                break;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/race/hit_reactions", func_80059394_59F94);
 
