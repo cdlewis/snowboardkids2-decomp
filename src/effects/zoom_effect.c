@@ -3,15 +3,18 @@
 #include "audio/audio.h"
 #include "common.h"
 #include "cutscene/cutscene_sys2.h"
+#include "graphics/graphics.h"
+#include "graphics/sprite_rdp.h"
 #include "graphics/sprite_table.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 
-extern void updateCutsceneWaitSystem(void);
 extern s16 gWipeOffsetX[];
 extern s16 gWipeOffsetY[];
+extern void func_80035548_36148(void *);
 
+s16 func_800B956C_1E661C(cutsceneSys2Wait_exec_asset *);
 void cleanupCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0);
 
 s32 calculateZoomScaleFactor(s32 arg0) {
@@ -197,7 +200,145 @@ void initCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0) {
     setCallback(&updateCutsceneWaitSystem);
 }
 
-INCLUDE_ASM("asm/nonmatchings/effects/zoom_effect", updateCutsceneWaitSystem);
+void updateCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0) {
+    s32 i;
+    s32 renderSlots;
+    void *cmdEntry;
+    s32 offset;
+    cutsceneSys2Wait_exec_asset *iter;
+    s16 state;
+    s32 zoomVal;
+    s32 delta;
+    s32 diff;
+    s32 temp;
+    s16 var_v0;
+
+    renderSlots = 0;
+    cmdEntry = NULL;
+    state = arg0->state;
+
+    switch (state) {
+        case 0:
+            arg0->state = func_800B956C_1E661C(arg0);
+            break;
+        case 1:
+            arg0->state = initWipeZoomAccel(arg0);
+            renderSlots = 1;
+            break;
+        case 2:
+            arg0->state = accelerateWipeZoomIn(arg0);
+            renderSlots = 1;
+            break;
+        case 3:
+            arg0->state = decelerateWipeZoomOut(arg0);
+            renderSlots = 1;
+            break;
+        case 4:
+            cmdEntry = getCutsceneCommandEntry(arg0);
+            renderSlots = 1;
+            break;
+        case 5:
+            cmdEntry = processCutsceneCommandSequence(arg0);
+            renderSlots = 1;
+            break;
+        case 6:
+            arg0->zoomLevelX = arg0->zoomLevelX + arg0->zoomSpeed;
+            if (0x1AAAA < arg0->zoomLevelX) {
+                playSoundEffect(0x2D);
+                arg0->zoomLevelX = 0x1AAAA;
+                arg0->state = 7;
+            }
+            updateWipeTransitionSlots(arg0);
+            renderSlots = 1;
+            break;
+        case 7:
+            zoomVal = arg0->zoomLevelX;
+            arg0->zoomDecelRate = 0xA666;
+            delta = ((-zoomVal) >> 8) * (arg0->zoomDecelRate >> 8);
+            if (delta != 0) {
+                arg0->zoomLevelX = zoomVal + delta;
+            } else {
+                arg0->state = 8;
+            }
+            if (arg0->zoomLevelX <= 0) {
+                arg0->zoomLevelX = 0;
+                arg0->state = 8;
+            }
+            updateWipeTransitionSlots(arg0);
+            renderSlots = 1;
+            break;
+        case 8:
+            ((CutsceneManager *)arg0->cutsceneManager)->skipAnimation = 0;
+            terminateCurrentTask();
+            break;
+    }
+
+    state = arg0->state;
+
+    if (state <= 0) {
+        goto state_done;
+    }
+    if (state < 4) {
+        goto do_easing;
+    }
+    if (state >= 8) {
+        goto state_done;
+    }
+    if (state >= 6) {
+        goto do_zoom;
+    }
+    goto state_done;
+
+do_easing:
+    diff = 0x10000 - arg0->zoomLevelY;
+    if (diff < 0) {
+        diff += 3;
+    }
+    temp = diff >> 2;
+    if (temp == 0) {
+        arg0->zoomLevelY = 0x10000;
+    } else {
+        arg0->zoomLevelY = arg0->zoomLevelY + temp;
+    }
+    goto state_done;
+
+do_zoom:
+    arg0->zoomLevelY = arg0->zoomLevelY + 0x800;
+
+state_done:
+
+    if (cmdEntry != NULL) {
+        if (arg0->commandOffset == 0x64) {
+            if (arg0->unkB0 & 0x10) {
+                var_v0 = 0x68;
+            } else {
+                __asm__("");
+                var_v0 = 0x69;
+            }
+            arg0->unkAC = var_v0;
+            __asm__("");
+            debugEnqueueCallback(1, 0, &renderSpriteFrame, &arg0->unkA4);
+            arg0->unkB0 = (u16)(arg0->unkB0 + 1);
+        } else {
+            arg0->unkB0 = 0;
+        }
+        debugEnqueueCallback(1, 0, &func_80035548_36148, &arg0->unk8C);
+    }
+
+    if (renderSlots != 0) {
+        i = 0;
+        offset = 0x14;
+        iter = arg0;
+        do {
+            if ((u16)iter->slots[0].zoomScaleX < 0x4000U) {
+                debugEnqueueCallback(1, 0, &renderScaledShadedSpriteFrame, (u8 *)arg0 + offset);
+            }
+            offset += 0x18;
+            i++;
+            iter = (cutsceneSys2Wait_exec_asset *)((u8 *)iter + 0x18);
+        } while (i < 4);
+    }
+}
 
 void cleanupCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0) {
     arg0->textRenderAsset = freeNodeMemory(arg0->textRenderAsset);

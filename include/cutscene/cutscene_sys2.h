@@ -84,6 +84,7 @@ typedef struct {
     void *unkA8;
     s16 unkAC;
     u8 padding4[0x2];
+    u16 unkB0;
 } cutsceneSys2Wait_exec_asset;
 
 void cutsceneSys2Wipe_init(void);
