@@ -1204,7 +1204,80 @@ void computeLookAtMatrix(void *arg0, void *arg1, void *arg2) {
     memcpy((u8 *)arg2 + 0x14, arg0, 0xC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/math/geometry", matrixToEulerAngles);
+void matrixToEulerAngles(s32 *arg0, s32 *arg1, f32 *lookAtX, f32 *lookAtY, f32 *lookAtZ, f32 *upX, f32 *upY, f32 *upZ) {
+    Transform3D pitchMatrix;
+    Transform3D yawMatrix;
+    Transform3D tempMatrix;
+    Vec3i delta;
+    Vec3i rotated;
+    s32 rxCopy;
+    u32 xzMag;
+    u32 totalMag;
+    s32 cosVal;
+    void *pPitch;
+    void *pIdentity;
+
+    delta.x = arg0[5] - arg1[5];
+    delta.y = arg0[6] - arg1[6];
+    delta.z = arg0[7] - arg1[7];
+
+    if ((u32)(delta.x + 0x10000000) > 0x20000000U || (u32)(delta.y + 0x10000000) > 0x20000000U ||
+        (u32)(delta.z + 0x10000000) > 0x20000000U) {
+        *upX = 0.0f;
+        *upY = 256.0f;
+        *upZ = 0.0f;
+        *lookAtX = 0.0f;
+        *lookAtY = 0.0f;
+        *lookAtZ = -256.0f;
+        return;
+    }
+
+    rotated.x = (s32)((s64)(s16)((u16 *)arg0)[0] * delta.x / 0x2000) +
+                (s32)((s64)(s16)((u16 *)arg0)[1] * delta.y / 0x2000) +
+                (s32)((s64)(s16)((u16 *)arg0)[2] * delta.z / 0x2000);
+    rxCopy = rotated.x;
+
+    rotated.y = (s32)((s64)(s16)((u16 *)arg0)[3] * delta.x / 0x2000) +
+                (s32)((s64)(s16)((u16 *)arg0)[4] * delta.y / 0x2000) +
+                (s32)((s64)(s16)((u16 *)arg0)[5] * delta.z / 0x2000);
+
+    rotated.z = (s32)((s64)(s16)((u16 *)arg0)[6] * delta.x / 0x2000) +
+                (s32)((s64)(s16)((u16 *)arg0)[7] * delta.y / 0x2000) +
+                (s32)((s64)(s16)((u16 *)arg0)[8] * delta.z / 0x2000);
+
+    xzMag = isqrt64((s64)rxCopy * rxCopy + (s64)rotated.z * rotated.z);
+    totalMag = isqrt64((u64)xzMag * xzMag + (s64)rotated.y * rotated.y);
+
+    pPitch = &pitchMatrix;
+    pIdentity = &identityMatrix;
+    memcpy(pPitch, pIdentity, sizeof(Transform3D));
+    if (totalMag != 0) {
+        pitchMatrix.m[2][1] = (s64)rotated.y * 0x2000 / totalMag;
+        pitchMatrix.m[1][2] = -pitchMatrix.m[2][1];
+        cosVal = (s64)xzMag * 0x2000 / totalMag;
+        pitchMatrix.m[2][2] = cosVal;
+        pitchMatrix.m[1][1] = cosVal;
+    }
+
+    memcpy(&yawMatrix, pIdentity, sizeof(Transform3D));
+    if (xzMag != 0) {
+        yawMatrix.m[2][0] = (s64)rotated.x * 0x2000 / xzMag;
+        yawMatrix.m[0][2] = -yawMatrix.m[2][0];
+        cosVal = (s64)rotated.z * 0x2000 / xzMag;
+        yawMatrix.m[2][2] = cosVal;
+        yawMatrix.m[0][0] = cosVal;
+    }
+
+    func_8006BDBC_6C9BC((BoneAnimationState *)pPitch, &yawMatrix, &tempMatrix);
+    func_8006BDBC_6C9BC((BoneAnimationState *)arg0, &tempMatrix, pPitch);
+
+    *lookAtX = (f32)pitchMatrix.m[2][0];
+    *lookAtY = (f32)pitchMatrix.m[2][1];
+    *lookAtZ = (f32)pitchMatrix.m[2][2];
+    *upX = (f32)pitchMatrix.m[1][0];
+    *upY = (f32)pitchMatrix.m[1][1];
+    *upZ = (f32)pitchMatrix.m[1][2];
+}
 
 s32 atan2Fixed(s32 x, s32 y) {
     s16 ratio;
