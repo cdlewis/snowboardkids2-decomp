@@ -1,34 +1,66 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
+#include "assets.h"
 #include "common.h"
+#include "core/session_manager.h"
 #include "graphics/graphics.h"
 #include "race/race_session.h"
+#include "story/map_events.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
+#include "text/font_render.h"
 
 extern void func_8001CD90_1D990(void);
+extern void initSaveSlotStatSprites(void *);
+extern void initSaveSlotNameText(void *);
+extern void initSaveSlotDeleteArrow(void *);
+extern void initSaveSlotGoldDisplay(void *);
+extern void initSaveSlotConfirmationIndicator(void *);
+extern void initSaveSlotDeleteText(void *);
+
 u8 eeprom_save_magic[16] = "SNOW2EEP";
 
+void initSaveSlotSelection(void);
 void onSaveSlotSelectionConfirm(void);
 void onSaveSlotSelectionCancel(void);
+
+typedef struct {
+    u8 pad[0xD0];
+    u8 slotIndex;
+} SaveSlotStatSpritesReturnType;
+
+typedef struct {
+    u8 pad[0x1C];
+    u8 slotIndex;
+} SaveSlotNameTextReturnType;
 
 typedef struct {
     ViewportNode unk0;
     ViewportNode slotModels[4];
     u8 padding0[0x170];
-    ViewportNode *unkAA8;
-    ViewportNode *unkAAC;
-    ViewportNode *unkAB0;
-    ViewportNode *unkAB4;
-    ViewportNode *unkAB8;
+    void *unkAA8;
+    void *unkAAC;
+    void *unkAB0;
+    void *unkAB4;
+    void *unkAB8;
     s16 slideOffset;
-    u16 unkABE;
-    u16 selectionY;         // 0xAC0 - animated Y position (wiggles on selection)
-    u16 selectionBaseY;     // 0xAC2 - base Y position
-    u16 selectionAnimState; // 0xAC4 - animation counter (0-24) / selection result (1=confirmed)
-    u8 padding5[0x2];
+    s16 unkABE;
+    s16 selectionY;
+    u16 selectionBaseY;
+    u16 selectionAnimState;
+    u16 unkAC6;
     u8 saveSlotIndex;
     u8 unkAC9;
-    u8 padding3[0x8];
+    u8 paddingACA[0x2];
+    u8 unkACC;
+    u8 unkACD;
+    u8 unkACE[3];
+    u8 unkAD1;
+    u8 unkAD2;
+    u8 unkAD3;
+    u8 unkAD4;
+    u8 unkAD5;
+    u8 unkAD6;
 } allocation_1D520;
 
 typedef struct {
@@ -37,7 +69,7 @@ typedef struct {
     u8 padding2[0x1C];            // 0xAA8
     u16 unkAC4;                   // 0xAC4
     u8 padding3[2];               // 0xAC6
-    u8 unkAC8;                    // 0xAC8
+    u8 saveSlotIndex;             // 0xAC8
     u8 padding4[3];               // 0xAC9
     u8 unkACC;                    // 0xACC
     u8 unkACD;                    // 0xACD
@@ -46,7 +78,137 @@ typedef struct {
 
 s32 sanitizeSaveSlotData(EepromSaveData_type *saveData);
 
-INCLUDE_ASM("asm/nonmatchings/ui/save_slot_select", func_8001C920_1D520);
+void func_8001C920_1D520(void) {
+    allocation_1D520 *state;
+    s32 i;
+    s32 xOffset;
+    s32 xPos;
+    SaveSlotStatSpritesReturnType *statTask;
+    SaveSlotNameTextReturnType *nameTask;
+    void (*handler)(void);
+    s32 probeResult;
+
+    state = (allocation_1D520 *)allocateTaskMemory(0xAE0);
+    setupTaskSchedulerNodes(0x14, 0x14, 0x14, 0, 0, 0, 0, 0);
+    clearMemory((s8 *)state, 0xAE0);
+
+    state->unkAC6 = 0x28;
+    state->saveSlotIndex = 3;
+    state->slideOffset = -0x140;
+    state->unkABE = -0x58;
+    state->selectionAnimState = 0;
+    state->unkACC = 0;
+    state->selectionY = -0xE0;
+    state->unkAD2 = 0;
+    state->unkAD4 = 0;
+    state->unkAD3 = 0;
+    state->unkAD5 = 0;
+    state->unkAD6 = 0;
+
+    state->unkAA8 = loadCompressedData(&_459310_ROM_START, &font_main_ROM_START, 0x2278);
+    state->unkAB4 = loadTextRenderAsset(1);
+    state->unkAB8 = loadCompressedData(&_3F6670_ROM_START, &font_race_timer_ROM_START, 0x388);
+    state->unkAAC = loadCompressedData(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);
+    state->unkAB0 = loadCompressedData(&_4547D0_ROM_START, &_458E30_ROM_START, 0x9488);
+
+    initMenuCameraNode((ViewportNode *)state, 8, 0xA, 1);
+
+    i = 0;
+    xOffset = (s32)0xFFD00000;
+    do {
+        initViewportNode(&state->slotModels[i], NULL, (u16)(i + 9), 5, 0);
+        setViewportId(&state->slotModels[i], (u16)(i + 0xA));
+
+        if (i & 1) {
+            xPos = -state->slideOffset;
+        } else {
+            xPos = (u16)state->slideOffset;
+        }
+
+        setModelCameraTransform(&state->slotModels[i], xPos, (s16)(xOffset >> 16), -0xA0, -0x18, 0xA0, 0x18);
+        setViewportFadeValue(&state->slotModels[i], 0, 0);
+        setViewportFadeValue(NULL, 0, 0);
+
+        xOffset += 0x380000;
+        state->unkACE[i] = 0;
+        i++;
+    } while (i < 3);
+
+    i = 0;
+    do {
+        eepromProbeAsync();
+        do {
+            probeResult = (s32)pollEepromProbeAsync();
+        } while (probeResult == -1);
+
+        if (probeResult == 1) {
+            state->unkACD = 0;
+            goto eeprom_done;
+        }
+        if (probeResult == 2) {
+            state->unkACD = 0x63;
+            goto eeprom_done;
+        }
+        i++;
+        if (probeResult == 0) {
+            state->unkACD = 0x63;
+            goto eeprom_done;
+        }
+        state->unkACD = state->unkACD + 1;
+    } while (i < 3);
+
+eeprom_done:
+    for (i = 0; i < 3; i++) {
+        statTask = (SaveSlotStatSpritesReturnType *)scheduleTask(initSaveSlotStatSprites, 0, 0, 0x5A);
+        statTask->slotIndex = i;
+        if (state->unkACD != 0) {
+            nameTask = (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotNameText, 0, 0, 0x5B);
+            nameTask->slotIndex = i;
+        }
+    }
+
+    if (state->unkACD != 0) {
+        state->unkAC6 = 0;
+    } else {
+        scheduleTask(initSaveSlotDeleteArrow, 0, 0, 0x5B);
+    }
+
+    i = 0;
+    state->unkAC9 = 0;
+    {
+        u8 *saveDataPtr = (u8 *)EepromSaveData;
+
+        do {
+            if (*saveDataPtr != 0) {
+                state->unkAC9 = 1;
+                goto after_loop;
+            }
+            i++;
+            saveDataPtr++;
+        } while (i < 8);
+    }
+after_loop:
+
+    scheduleTask(initSaveSlotGoldDisplay, 0, 0, 0x5B);
+    scheduleTask(initSaveSlotConfirmationIndicator, 0, 0, 0x5B);
+    scheduleTask(initSaveSlotDeleteText, 0, 0, 0x5B);
+
+    if (state->unkAC9 == 1) {
+        statTask = (SaveSlotStatSpritesReturnType *)scheduleTask(initSaveSlotStatSprites, 0, 0, 0x5A);
+        statTask->slotIndex = 3;
+        state->unkAD1 = 0;
+        initViewportNode(&state->slotModels[3], NULL, 0xC, 6, 0);
+        setViewportId(&state->slotModels[3], 0xD);
+        setModelCameraTransform(&state->slotModels[3], -0x140, -0x30, -0xA0, -0x18, 0xA0, 0x18);
+        *(s32 *)EepromSaveData->unknown_0C = D_800AFE8C_A71FC->gold;
+        handler = initSaveSlotSelection;
+    } else {
+        handler = func_8001CD90_1D990;
+    }
+
+    setGameStateHandler(handler);
+    getFreeNodeCount(0);
+}
 
 void initSaveSlotSelection(void) {
     allocation_1D520 *allocation = (allocation_1D520 *)getCurrentAllocation();
@@ -179,8 +341,8 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
                     allocation->unkACC++;
                     allocation->slotFlags[slotIndex] = 1;
 
-                    if (allocation->unkAC8 >= 3) {
-                        allocation->unkAC8 = arg0;
+                    if (allocation->saveSlotIndex >= 3) {
+                        allocation->saveSlotIndex = arg0;
                     }
                 } else {
                     allocation->slotFlags[slotIndex] = 0;
