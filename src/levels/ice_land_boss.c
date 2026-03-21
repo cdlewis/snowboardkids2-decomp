@@ -216,7 +216,7 @@ typedef struct {
     u8 behaviorPhase;
     u8 behaviorStep;
     u8 behaviorCounter;
-    u8 unkBC1;
+    u8 jointShadowNeedsUpdate;
     u8 unkBC2;
     u8 unkBC3;
     u8 finishPosition;
@@ -1175,9 +1175,9 @@ void updateIceLandBossJointPositions(Player *boss) {
         boss->jointPositions[jointIndex].y = getTrackHeightInSector(gameData, sectorIndex, jointPos, 0x100000);
     }
 
-    boss->unkBC1 = 1;
+    boss->jointShadowNeedsUpdate = 1;
 
     for (jointIndex = 0; jointIndex < 4; jointIndex++) {
-        debugEnqueueCallback(jointIndex, 1, func_800B9500_A93B0, (void *)boss);
+        debugEnqueueCallback(jointIndex, 1, renderPlayerJointShadow, (void *)boss);
     }
 }

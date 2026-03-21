@@ -204,7 +204,7 @@ typedef struct {
     u8 behaviorPhase;
     u8 behaviorStep;
     u8 behaviorCounter;
-    u8 unkBC1;
+    u8 jointShadowNeedsUpdate;
     u8 unkBC2;
     u8 finishAnimState;
     u8 finishPosition;

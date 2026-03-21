@@ -162,7 +162,7 @@ typedef struct {
     /* 0xBBE */ u8 behaviorPhase;
     /* 0xBBF */ u8 behaviorStep;
     /* 0xBC0 */ u8 behaviorCounter;
-    /* 0xBC1 */ u8 unkBC1;
+    /* 0xBC1 */ u8 jointShadowNeedsUpdate;
     u8 padBC2[0x2];
     /* 0xBC4 */ u8 finishPosition;
     u8 padBC5[0x2];
@@ -1066,9 +1066,9 @@ void updateJingleTownBossJointPositions(Arg0Struct *arg0) {
         arg0->jointPositions[i].y = getTrackHeightInSector(temp_s5, temp, posPtr, 0x100000);
     }
 
-    arg0->unkBC1 = 1;
+    arg0->jointShadowNeedsUpdate = 1;
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 1, func_800B9500_A93B0, arg0);
+        debugEnqueueCallback((u16)i, 1, renderPlayerJointShadow, arg0);
     }
 }

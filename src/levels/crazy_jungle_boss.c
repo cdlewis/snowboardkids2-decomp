@@ -157,7 +157,7 @@ typedef struct {
     u8 behaviorPhase;
     u8 behaviorStep;
     u8 behaviorCounter;
-    u8 unkBC1;
+    u8 jointShadowNeedsUpdate;
     u8 padBC2[0x2];
     u8 finishPosition;
     u8 padBC5[0xBC7 - 0xBC5];
@@ -738,9 +738,9 @@ void updateBossProximityCheckpoints(Arg0Struct *arg0) {
         checkpointIndex++;
     } while (checkpointIndex < 9);
 
-    arg0->unkBC1 = 1;
+    arg0->jointShadowNeedsUpdate = 1;
 
     for (checkpointIndex = 0; checkpointIndex < 4; checkpointIndex++) {
-        debugEnqueueCallback((u16)checkpointIndex, 1, func_800B9500_A93B0, arg0);
+        debugEnqueueCallback((u16)checkpointIndex, 1, renderPlayerJointShadow, arg0);
     }
 }

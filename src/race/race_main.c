@@ -4219,13 +4219,13 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
 
 INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B8894_A8744);
 
-void func_800B9500_A93B0(Player *player) {
+void renderPlayerJointShadow(Player *player) {
     OutputStruct_19E80 textureEntry;
     s32 alpha;
     s32 i;
     Player *jointSrc;
 
-    if (player->unkBC1 != 0) {
+    if (player->jointShadowNeedsUpdate != 0) {
         player->jointVertices = arenaAlloc16(0x90);
         if (player->jointVertices != NULL) {
             i = 0;
@@ -4276,7 +4276,7 @@ void func_800B9500_A93B0(Player *player) {
             memcpy(&gScaleMatrix.translation, &player->jointPositions[0], 0xC);
             transform3DToN64Mtx(&gScaleMatrix, player->jointMatrix);
         }
-        player->unkBC1 = 0;
+        player->jointShadowNeedsUpdate = 0;
     }
 
     if (player->jointVertices != NULL && player->jointMatrix != NULL) {
@@ -4359,11 +4359,11 @@ void updatePlayerJointPositions(Player *player) {
         jointBase += 0xC;
     } while (jointIdx < 9);
 
-    player->unkBC1 = 1;
+    player->jointShadowNeedsUpdate = 1;
 
     if (!(player->animFlags & 0x800000)) {
         for (jointIdx = 0; jointIdx < 4; jointIdx++) {
-            debugEnqueueCallback(jointIdx, 1, func_800B9500_A93B0, (void *)player);
+            debugEnqueueCallback(jointIdx, 1, renderPlayerJointShadow, (void *)player);
         }
     }
 }

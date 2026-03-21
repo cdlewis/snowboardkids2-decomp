@@ -2182,6 +2182,7 @@ setCutsceneDefaultEndFrame = 0x800B34E0; // type:func rom:0x1DFAA0
 getCurrentStateEntryItem = 0x800B34B0; // type:func rom:0x1E0560
 loadCutsceneFrameData = 0x800B3570; // type:func rom:0x1DFAA0
 scheduleFloatingSpriteEntity = 0x800BC0FC; // type:func rom:0xAEFA0
+renderPlayerJointShadow = 0x800B9500; // type:func rom:0xA93B0
 loadPlayerCharacterAssets = 0x800B99E0; // type:func rom:0xA9890
 initCutsceneManager = 0x800B2AA0; // type:func rom:0x1DF850
 hideAllSlotModels = 0x800B2D04; // type:func rom:0x1DFDB4
