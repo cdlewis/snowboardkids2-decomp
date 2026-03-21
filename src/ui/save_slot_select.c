@@ -50,10 +50,10 @@ typedef struct {
     u16 selectionAnimState;
     u16 unkAC6;
     u8 saveSlotIndex;
-    u8 unkAC9;
+    u8 hasSaveData;
     u8 paddingACA[0x2];
     u8 unkACC;
-    u8 unkACD;
+    u8 eepromErrorStatus;
     u8 unkACE[3];
     u8 unkAD1;
     u8 unkAD2;
@@ -61,7 +61,7 @@ typedef struct {
     u8 unkAD4;
     u8 unkAD5;
     u8 unkAD6;
-} allocation_1D520;
+} SaveSlotScreenState;
 
 typedef struct {
     u8 padding1[0x938];           // 0x000
@@ -72,14 +72,14 @@ typedef struct {
     u8 saveSlotIndex;             // 0xAC8
     u8 padding4[3];               // 0xAC9
     u8 unkACC;                    // 0xACC
-    u8 unkACD;                    // 0xACD
+    u8 eepromErrorStatus;         // 0xACD
     u8 slotFlags[8];              // 0xACE
 } SaveData;
 
 s32 sanitizeSaveSlotData(EepromSaveData_type *saveData);
 
-void func_8001C920_1D520(void) {
-    allocation_1D520 *state;
+void initSaveSlotScreen(void) {
+    SaveSlotScreenState *state;
     s32 i;
     s32 xOffset;
     s32 xPos;
@@ -88,7 +88,7 @@ void func_8001C920_1D520(void) {
     void (*handler)(void);
     s32 probeResult;
 
-    state = (allocation_1D520 *)allocateTaskMemory(0xAE0);
+    state = (SaveSlotScreenState *)allocateTaskMemory(0xAE0);
     setupTaskSchedulerNodes(0x14, 0x14, 0x14, 0, 0, 0, 0, 0);
     clearMemory((s8 *)state, 0xAE0);
 
@@ -142,45 +142,45 @@ void func_8001C920_1D520(void) {
         } while (probeResult == -1);
 
         if (probeResult == 1) {
-            state->unkACD = 0;
+            state->eepromErrorStatus = 0;
             goto eeprom_done;
         }
         if (probeResult == 2) {
-            state->unkACD = 0x63;
+            state->eepromErrorStatus = 0x63;
             goto eeprom_done;
         }
         i++;
         if (probeResult == 0) {
-            state->unkACD = 0x63;
+            state->eepromErrorStatus = 0x63;
             goto eeprom_done;
         }
-        state->unkACD = state->unkACD + 1;
+        state->eepromErrorStatus = state->eepromErrorStatus + 1;
     } while (i < 3);
 
 eeprom_done:
     for (i = 0; i < 3; i++) {
         statTask = (SaveSlotStatSpritesReturnType *)scheduleTask(initSaveSlotStatSprites, 0, 0, 0x5A);
         statTask->slotIndex = i;
-        if (state->unkACD != 0) {
+        if (state->eepromErrorStatus != 0) {
             nameTask = (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotNameText, 0, 0, 0x5B);
             nameTask->slotIndex = i;
         }
     }
 
-    if (state->unkACD != 0) {
+    if (state->eepromErrorStatus != 0) {
         state->unkAC6 = 0;
     } else {
         scheduleTask(initSaveSlotDeleteArrow, 0, 0, 0x5B);
     }
 
     i = 0;
-    state->unkAC9 = 0;
+    state->hasSaveData = 0;
     {
         u8 *saveDataPtr = (u8 *)EepromSaveData;
 
         do {
             if (*saveDataPtr != 0) {
-                state->unkAC9 = 1;
+                state->hasSaveData = 1;
                 goto after_loop;
             }
             i++;
@@ -193,7 +193,7 @@ after_loop:
     scheduleTask(initSaveSlotConfirmationIndicator, 0, 0, 0x5B);
     scheduleTask(initSaveSlotDeleteText, 0, 0, 0x5B);
 
-    if (state->unkAC9 == 1) {
+    if (state->hasSaveData == 1) {
         statTask = (SaveSlotStatSpritesReturnType *)scheduleTask(initSaveSlotStatSprites, 0, 0, 0x5A);
         statTask->slotIndex = 3;
         state->unkAD1 = 0;
@@ -211,7 +211,7 @@ after_loop:
 }
 
 void initSaveSlotSelection(void) {
-    allocation_1D520 *allocation = (allocation_1D520 *)getCurrentAllocation();
+    SaveSlotScreenState *allocation = (SaveSlotScreenState *)getCurrentAllocation();
     u8 saveSlot = D_800AFE8C_A71FC->previousSaveSlot;
     allocation->saveSlotIndex = saveSlot;
     setGameStateHandler(func_8001CD90_1D990);
@@ -220,10 +220,10 @@ void initSaveSlotSelection(void) {
 INCLUDE_ASM("asm/nonmatchings/ui/save_slot_select", func_8001CD90_1D990);
 
 void cleanupSaveSlotSelectionAndExit(void) {
-    allocation_1D520 *allocation;
+    SaveSlotScreenState *allocation;
     s32 i;
 
-    allocation = (allocation_1D520 *)getCurrentAllocation();
+    allocation = (SaveSlotScreenState *)getCurrentAllocation();
 
     if (getViewportFadeMode(0) != 0) {
         return;
@@ -237,7 +237,7 @@ void cleanupSaveSlotSelectionAndExit(void) {
     allocation->unkAB4 = freeNodeMemory(allocation->unkAB4);
     allocation->unkAB8 = freeNodeMemory(allocation->unkAB8);
 
-    if (allocation->unkAC9 == 0) {
+    if (allocation->hasSaveData == 0) {
         for (i = 0; i < 3; i++) {
             unlinkNode(&allocation->slotModels[i]);
         }
@@ -267,7 +267,7 @@ void onSaveSlotSelectionCancel(void) {
 }
 
 void updateSelectionWiggle(void) {
-    allocation_1D520 *allocation = (allocation_1D520 *)getCurrentAllocation();
+    SaveSlotScreenState *allocation = (SaveSlotScreenState *)getCurrentAllocation();
     u16 counter = allocation->selectionAnimState;
     u16 temp;
 
@@ -308,7 +308,7 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
 
         while (i < 8) {
             if (allocation->slots[slotIndex].header_data[i] != eeprom_save_magic[i]) {
-                allocation->unkACD++;
+                allocation->eepromErrorStatus++;
                 break;
             }
             i++;
@@ -331,12 +331,12 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
 
             slotIndex = arg0 & 0xFFFF;
             if (sum != savedChecksum) {
-                allocation->unkACD++;
+                allocation->eepromErrorStatus++;
 
             } else {
 
                 funcResult = sanitizeSaveSlotData(&allocation->slots[slotIndex]);
-                allocation->unkACD = 0;
+                allocation->eepromErrorStatus = 0;
                 if (!(funcResult & 0xFF)) {
                     allocation->unkACC++;
                     allocation->slotFlags[slotIndex] = 1;
@@ -350,16 +350,16 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
             }
         }
     } else {
-        allocation->unkACD++;
+        allocation->eepromErrorStatus++;
     }
 
-    temp = allocation->unkACD;
+    temp = allocation->eepromErrorStatus;
     if (temp != 0) {
         if (temp < 3) {
             allocation->unkAC4 = allocation->unkAC4 - 1;
             return;
         }
-        allocation->unkACD = 0;
+        allocation->eepromErrorStatus = 0;
         allocation->slotFlags[arg0 & 0xFFFF] = 0;
     }
 }
@@ -481,7 +481,7 @@ s32 sanitizeSaveSlotData(EepromSaveData_type *saveData) {
 
 void verifySaveSlotChecksum(void) {
     u8 saveBuffer[0x60];
-    allocation_1D520 *allocation;
+    SaveSlotScreenState *allocation;
     void *result;
     s32 retryCount;
     u32 computedChecksum;
@@ -489,7 +489,7 @@ void verifySaveSlotChecksum(void) {
     u8 *dataPtr;
     s32 dataSize;
 
-    allocation = (allocation_1D520 *)getCurrentAllocation();
+    allocation = (SaveSlotScreenState *)getCurrentAllocation();
     allocation->selectionAnimState = 0;
 
     computedChecksum = 0;
@@ -532,11 +532,11 @@ void verifySaveSlotChecksum(void) {
 }
 
 void updateSlotSelectionSlide(void) {
-    allocation_1D520 *allocation;
+    SaveSlotScreenState *allocation;
     s16 slideOffset;
     u8 slotIndex;
 
-    allocation = (allocation_1D520 *)getCurrentAllocation();
+    allocation = (SaveSlotScreenState *)getCurrentAllocation();
     slideOffset = allocation->slideOffset;
 
     if (slideOffset != 0) {

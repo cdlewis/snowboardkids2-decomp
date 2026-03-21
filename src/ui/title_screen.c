@@ -184,7 +184,7 @@ void (*storyMapLocationHandlers[])(void) = {
     loadOverlay_1BBA0,
     initUnlockScreen,
     initStoryMapLocationIntro,
-    func_8001C920_1D520,
+    initSaveSlotScreen,
     initStoryMapExtraIntro,
     initStoryMapLocationIntro,
     initStoryMapLocationIntro,

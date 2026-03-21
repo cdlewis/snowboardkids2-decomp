@@ -46,7 +46,7 @@ void awaitPlayerCountSelect(void) {
 }
 
 void func_80021DE8_229E8(void) {
-    createTaskQueue(func_8001C920_1D520, 100);
+    createTaskQueue(initSaveSlotScreen, 100);
     setGameStateHandler(func_80021E18_22A18);
 }
 

@@ -53,7 +53,7 @@ void initPlayerCountSelectState(void);
 void func_800226F0_232F0(void);
 void initStoryMapState(void);
 void storyMapLocationTextTask(func_80019CD0_1A8D0_arg *arg0);
-void func_8001C920_1D520(void);
+void initSaveSlotScreen(void);
 void func_80003EE0_4AE0(void);
 void initLevelSelectWithDetail(void);
 void initLevelSelectBasic(void);

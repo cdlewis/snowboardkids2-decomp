@@ -55,7 +55,7 @@ void initStoryMode(void) {
 }
 
 void loadSaveSlotScreen(void) {
-    createTaskQueue(func_8001C920_1D520, 0x96);
+    createTaskQueue(initSaveSlotScreen, 0x96);
     setGameStateHandler(func_80014B1C_1571C);
 }
 
@@ -263,7 +263,7 @@ void awaitCreditsSequence(void) {
 
 void loadPostCreditsSaveScreen(void) {
     D_800AFE8C_A71FC->creditsCompleted = 1;
-    createTaskQueue(func_8001C920_1D520, 0x96);
+    createTaskQueue(initSaveSlotScreen, 0x96);
     setGameStateHandler(awaitPostCreditsSaveScreen);
 }
 
