@@ -2348,8 +2348,8 @@ void setupItemTriggerEntries(ItemTriggerTaskState *arg0) {
  * For each active entry in arg0->items:
  * - Finds a player within range of the entry's position
  * - If player found (and not a boss), gives them the item:
- *   - Type 0 (primary): Sets unkBD2 to itemId, unkBD3 to 3 (or 9 in special mode)
- *   - Type 1 (secondary): Sets unkBD4 to itemId
+ *   - Type 0 (primary): Sets primaryItemId to itemId, primaryItemAmmo to 3 (or 9 in special mode)
+ *   - Type 1 (secondary): Sets secondaryItemId to itemId
  * - Marks entry as inactive and plays pickup sound
  */
 void processItemTriggers(ItemTriggerTaskState *arg0) {
@@ -2379,15 +2379,15 @@ void processItemTriggers(ItemTriggerTaskState *arg0) {
                     entryForItem = (ItemTriggerEntry *)(offset + (s32)arg0->items);
                     if (entryForItem->type == 0) {
                         itemId = entryForItem->itemId;
-                        player->unkBD3 = three;
-                        player->unkBD2 = (u8)itemId;
+                        player->primaryItemAmmo = three;
+                        player->primaryItemId = (u8)itemId;
                         if (gameState->raceType == three) {
-                            player->unkBD3 = nine;
+                            player->primaryItemAmmo = nine;
                         }
                         itemFlags = player->unkBD8 | 1;
                     } else {
                         itemFlags = player->unkBD8 | 2;
-                        player->unkBD4 = (u8)entryForItem->itemId;
+                        player->secondaryItemId = (u8)entryForItem->itemId;
                     }
                     player->unkBD8 = itemFlags;
                     ((ItemTriggerEntry *)(offset + (s32)arg0->items))->active = 0;

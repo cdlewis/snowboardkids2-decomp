@@ -280,6 +280,7 @@ initWendysHouseProjectileTask = 0x800BB458; // rom:0xB5668
 updateWendysHouseProjectileTask = 0x800BB5B0; // rom:0xB57C0
 initWendysHouseProjectileSpawner = 0x800BB7F0; // rom:0xB5A00
 updateWendysHouseProjectileSpawner = 0x800BB828; // rom:0xB5A38
+processPlayerItemUsage = 0x80058CFC; // rom:0x598FC
 addPlayerRaceGold = 0x80059A48; // rom:0x5A648
 addPlayerSkillPoints = 0x80059A88; // rom:0x5A688
 getPlayerRaceGold = 0x80059AC4; // rom:0x5A6C4

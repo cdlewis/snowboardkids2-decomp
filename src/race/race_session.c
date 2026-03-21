@@ -1589,7 +1589,7 @@ void handleShotCrossGameResult(void) {
             gRaceResultCode = 5;
             playMusicTrack(8);
 
-            if (state->players->unkBD3 == 0xA) {
+            if (state->players->primaryItemAmmo == 0xA) {
                 gRaceResultCode = 7;
                 score += 0x4E20;
             } else {

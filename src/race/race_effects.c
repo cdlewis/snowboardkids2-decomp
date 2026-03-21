@@ -479,14 +479,14 @@ void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state) {
     void *callback;
 
     player = state->player;
-    tempValue = player->unkBD3;
+    tempValue = player->primaryItemAmmo;
     if (tempValue != 0) {
         state->itemCountValue = tempValue;
         debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, renderSpriteFrame, &state->itemCountX);
     }
 
     callback = renderSpriteFrame;
-    tempValue = state->player->unkBD2;
+    tempValue = state->player->primaryItemId;
     state->primaryItemIndex = tempValue;
     debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
 
@@ -504,7 +504,7 @@ void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state) {
         playerRef->unkBD8 = tempValue & 0xFE;
     }
 
-    tempValue = state->player->unkBD4;
+    tempValue = state->player->secondaryItemId;
     state->secondaryItemIndex = tempValue + 7;
     debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, &state->secondaryItemX);
 
@@ -530,14 +530,14 @@ void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state) {
     void *callback;
 
     player = state->player;
-    tempValue = player->unkBD3;
+    tempValue = player->primaryItemAmmo;
     if (tempValue != 0) {
         state->charDisplayValue = tempValue + 0x30;
         debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, renderTextPalette, &state->charDisplayX);
     }
 
     callback = renderSpriteFrame;
-    tempValue = state->player->unkBD2;
+    tempValue = state->player->primaryItemId;
     state->primaryItemIndex = tempValue;
     debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
 
@@ -555,7 +555,7 @@ void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state) {
         playerRef->unkBD8 = tempValue & 0xFE;
     }
 
-    tempValue = state->player->unkBD4;
+    tempValue = state->player->secondaryItemId;
     state->secondaryItemIndex = tempValue + 7;
     debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, &state->secondaryItemX);
 
@@ -1875,7 +1875,7 @@ void initShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
 void updateShotCrossScoreDisplay(ShotCrossScoreDisplayState *arg0) {
     char buf[16];
 
-    sprintf(buf, D_8009E8A8_9F4A8, arg0->player->unkBD3);
+    sprintf(buf, D_8009E8A8_9F4A8, arg0->player->primaryItemAmmo);
     drawNumericString(buf, -0x70, -0x54, 0xFF, arg0->digitAsset, arg0->player->playerIndex + 8, 0);
     debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
     debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->hudX);
@@ -2133,7 +2133,7 @@ void updateBonusGoldDisplay(BonusGoldDisplayState *arg0) {
         }
     } else if (allocation->unk5A == 0x14) {
         var = 0x2710;
-        if (allocation->players->unkBD3 == 0xA) {
+        if (allocation->players->primaryItemAmmo == 0xA) {
             var = 0x4E20;
         }
     }
@@ -2270,7 +2270,7 @@ void initSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0) {
 }
 
 void updateSecondaryItemDisplay(SecondaryItemDisplayState *state) {
-    state->itemIndex = state->player->unkBD4 + 7;
+    state->itemIndex = state->player->secondaryItemId + 7;
     debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
 
     if (state->player->unkBD8 & 2) {

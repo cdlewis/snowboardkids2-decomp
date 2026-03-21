@@ -221,9 +221,9 @@ typedef struct {
     u8 unkBCF;
     u8 boostState;
     u8 ghostEffectState;
-    u8 unkBD2;
-    u8 unkBD3;
-    u8 unkBD4;
+    u8 primaryItemId;
+    u8 primaryItemAmmo;
+    u8 secondaryItemId;
     u8 unkBD5;
     u8 unkBD6;
     u8 unkBD7;

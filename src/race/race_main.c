@@ -388,8 +388,8 @@ s32 initPlayerForRace(Player *player) {
     player->rumbleFrame = 0;
 
     if (gameState->raceType == 5) {
-        player->unkBD2 = 7;
-        player->unkBD3 = 0x1E;
+        player->primaryItemId = 7;
+        player->primaryItemAmmo = 0x1E;
     }
 
     if (gameState->raceType != 0xB) {
@@ -419,21 +419,21 @@ check_2_or_3:
     goto set_race_gold;
 
 case_0:
-    player->unkBD2 = 2;
-    player->unkBD3 = 3;
-    player->unkBD4 = 5;
+    player->primaryItemId = 2;
+    player->primaryItemAmmo = 3;
+    player->secondaryItemId = 5;
     goto set_race_gold_after_unkBD4;
 
 case_1_or_2:
-    player->unkBD2 = 1;
-    player->unkBD3 = 3;
-    player->unkBD4 = 1;
+    player->primaryItemId = 1;
+    player->primaryItemAmmo = 3;
+    player->secondaryItemId = 1;
     goto set_race_gold_after_unkBD4;
 
 case_3:
-    player->unkBD2 = 3;
-    player->unkBD3 = 3;
-    player->unkBD4 = 1;
+    player->primaryItemId = 3;
+    player->primaryItemAmmo = 3;
+    player->secondaryItemId = 1;
 
 set_race_gold_after_unkBD4:
     v0_temp = 0xBB8;
@@ -604,7 +604,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
         }
         setPlayerLeanAnimation(player, 1, angleDelta / 2);
     }
-    func_80058CFC_598FC(player);
+    processPlayerItemUsage(player);
     return 0;
 }
 
@@ -709,7 +709,7 @@ s32 updateSharpTurnSlidingStep(Player *player) {
         player->behaviorStep = player->behaviorStep + 1;
     }
 
-    func_80058CFC_598FC(player);
+    processPlayerItemUsage(player);
     return 0;
 }
 
@@ -761,7 +761,7 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
         setPlayerBehaviorPhase(player, 0);
     }
 
-    func_80058CFC_598FC(player);
+    processPlayerItemUsage(player);
     return 0;
 }
 
@@ -815,7 +815,7 @@ s32 initPostTrickLandingStep(Player *player) {
         setPlayerBehaviorPhase(player, 0);
     }
 
-    func_80058CFC_598FC(player);
+    processPlayerItemUsage(player);
     return 0;
 }
 
@@ -873,7 +873,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
         setPlayerBehaviorPhase(player, 2);
     }
 
-    func_80058CFC_598FC(player);
+    processPlayerItemUsage(player);
     return 0;
 }
 
@@ -925,7 +925,7 @@ s32 updatePostTrickChargingStep(Player *player) {
         setPlayerBehaviorPhase(player, 2);
     }
 
-    func_80058CFC_598FC(player);
+    processPlayerItemUsage(player);
     return 0;
 }
 
@@ -1079,7 +1079,7 @@ s32 updatePostTrickDescentStep(Player *player) {
             setPlayerBehaviorPhase(player, 0);
         }
         advancePlayerLeanAnimation(player, 3);
-        func_80058CFC_598FC(player);
+        processPlayerItemUsage(player);
         return 0;
     }
 }
@@ -1110,7 +1110,7 @@ void updateTrickFacingAngle(Player *player) {
         } else {
             player->rotY = (u16)player->rotY - (player->unkB7A * 4);
         }
-        func_80058CFC_598FC(player);
+        processPlayerItemUsage(player);
         return;
     }
     if (playerFlags & 0x4000) {
@@ -3151,18 +3151,18 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
     player->rotY = (u16)player->rotY + 0x200;
     applyVelocityToPosition(player);
     if (player->unkB8C > 0x7FFFF) {
-        if (player->unkBD4 != 0) {
-            if (player->unkBD2 != 0) {
+        if (player->secondaryItemId != 0) {
+            if (player->primaryItemId != 0) {
                 if (randA() & 1) {
                     if (spawnItemHomingProjectile(
                             &player->worldPos.x,
                             player->sectorIndex,
                             &player->velocity.x,
                             0,
-                            player->unkBD2
+                            player->primaryItemId
                         ) != 0) {
-                        player->unkBD2 = 0;
-                        player->unkBD3 = 0;
+                        player->primaryItemId = 0;
+                        player->primaryItemAmmo = 0;
                     }
                     goto spawn_done;
                 }
@@ -3171,36 +3171,36 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
                         player->sectorIndex,
                         &player->velocity.x,
                         1,
-                        player->unkBD4
+                        player->secondaryItemId
                     ) != 0) {
-                    player->unkBD4 = 0;
+                    player->secondaryItemId = 0;
                 }
                 goto spawn_done;
             }
             goto check_secondary_item;
         }
-        if (player->unkBD2 != 0) {
+        if (player->primaryItemId != 0) {
             if (spawnItemHomingProjectile(
                     &player->worldPos.x,
                     player->sectorIndex,
                     &player->velocity.x,
                     0,
-                    player->unkBD2
+                    player->primaryItemId
                 ) != 0) {
-                player->unkBD2 = 0;
-                player->unkBD3 = 0;
+                player->primaryItemId = 0;
+                player->primaryItemAmmo = 0;
             }
         } else {
         check_secondary_item:
-            if (player->unkBD4 != 0) {
+            if (player->secondaryItemId != 0) {
                 if (spawnItemHomingProjectile(
                         &player->worldPos.x,
                         player->sectorIndex,
                         &player->velocity.x,
                         1,
-                        player->unkBD4
+                        player->secondaryItemId
                     ) != 0) {
-                    player->unkBD4 = 0;
+                    player->secondaryItemId = 0;
                 }
             }
         }

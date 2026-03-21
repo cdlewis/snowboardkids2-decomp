@@ -2550,24 +2550,24 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
                     if ((player->raceGold >= 100) || (player->unkBDA != 0)) {
                         addPlayerRaceGold(player, -100);
                         if (itemBox->isSecondaryItemBox != 0) {
-                            if (player->unkBD4 == 7) {
+                            if (player->secondaryItemId == 7) {
                                 gameState->availableHomingProjectileSlots =
                                     gameState->availableHomingProjectileSlots + 1;
                             }
-                            player->unkBD4 = rollSecondaryItemDrop(player, (u8 *)controller);
+                            player->secondaryItemId = rollSecondaryItemDrop(player, (u8 *)controller);
                             if (gameState->availableHomingProjectileSlots < 6) {
-                                if ((player->unkBD4 & 0xFF) == 7) {
-                                    player->unkBD4 = 10;
+                                if ((player->secondaryItemId & 0xFF) == 7) {
+                                    player->secondaryItemId = 10;
                                 }
                             }
-                            if (player->unkBD4 == 7) {
+                            if (player->secondaryItemId == 7) {
                                 gameState->availableHomingProjectileSlots =
                                     gameState->availableHomingProjectileSlots - 1;
                             }
                             player->unkBD8 |= 2;
                         } else {
-                            player->unkBD2 = rollPrimaryItemDrop(player, (u8 *)controller);
-                            player->unkBD3 = 3;
+                            player->primaryItemId = rollPrimaryItemDrop(player, (u8 *)controller);
+                            player->primaryItemAmmo = 3;
                             player->unkBD8 |= 1;
                         }
                         queueSoundAtPosition(&itemBox->displayList.transform.translation, 8);
@@ -3659,11 +3659,11 @@ void updateItemHomingProjectileImpact(ItemHomingProjectileImpactArg *arg0) {
         if (arg0->targetVariant == 0) {
             u16 val = (u16)arg0->targetPlayerIndex;
             u8 tmp = player->unkBD8 | 1;
-            player->unkBD3 = 3;
-            player->unkBD2 = (u8)val;
+            player->primaryItemAmmo = 3;
+            player->primaryItemId = (u8)val;
             player->unkBD8 = tmp;
         } else {
-            player->unkBD4 = (u8)arg0->targetPlayerIndex;
+            player->secondaryItemId = (u8)arg0->targetPlayerIndex;
             player->unkBD8 |= 2;
         }
         queueSoundAtPosition((void *)&arg0->metadataPtr + 4, 8);

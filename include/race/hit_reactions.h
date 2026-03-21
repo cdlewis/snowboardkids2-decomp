@@ -14,7 +14,7 @@ void setPlayerPanelHitState(Player *player);
 void setPlayerFrozenState(Player *player);
 void setPlayerStarHitState(Player *player, Vec3i *hitPosition);
 void setPlayerBouncedBackState(Player *player);
-void func_80058CFC_598FC(Player *player);
+void processPlayerItemUsage(Player *player);
 void addPlayerRaceGold(Player *player, s32 amount);
 void playTrickLandingVoice(Player *player);
 void playTrickSuccessVoice(Player *player);

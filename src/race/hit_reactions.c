@@ -203,7 +203,7 @@ extern s32 spawnPanelProjectile(void *);
 extern s32 getFreeNodeCount(s32);
 extern void playFinishBoostVoice(Player *);
 
-void func_80058CFC_598FC(Player *player) {
+void processPlayerItemUsage(Player *player) {
     GameState *gs;
     s32 delay;
     s32 i;
@@ -218,16 +218,16 @@ void func_80058CFC_598FC(Player *player) {
     result = func_80059394_59F94(player);
 
     if (result >= 0) {
-        if (spawnAttackProjectile(player->unkBD2 - 1, player->playerIndex, result) != 0) {
-            player->unkBD3--;
-            if (player->unkBD3 == 0) {
-                player->unkBD2 = 0;
+        if (spawnAttackProjectile(player->primaryItemId - 1, player->playerIndex, result) != 0) {
+            player->primaryItemAmmo--;
+            if (player->primaryItemAmmo == 0) {
+                player->primaryItemId = 0;
             }
         }
     }
 
     if (func_800597C0_5A3C0(player) != 0) {
-        switch (player->unkBD4) {
+        switch (player->secondaryItemId) {
             case 1:
                 result = gs->numPlayers - 1;
                 if (result != 0) {
@@ -246,7 +246,7 @@ void func_80058CFC_598FC(Player *player) {
                         break;
                     }
                 }
-                player->unkBD4 = 0;
+                player->secondaryItemId = 0;
                 queueSoundAtPosition(&player->worldPos, 0x18);
                 break;
 
@@ -263,7 +263,7 @@ void func_80058CFC_598FC(Player *player) {
                     }
                 }
                 if (spawnStarEffect(player, target, 0) != 0) {
-                    player->unkBD4 = 0;
+                    player->secondaryItemId = 0;
                 }
                 break;
 
@@ -277,7 +277,7 @@ void func_80058CFC_598FC(Player *player) {
                         for (i = 0; i < 3; i++) {
                             spawnStarEffect(player, player, (s16)(i * 8));
                         }
-                        player->unkBD4 = 0;
+                        player->secondaryItemId = 0;
                         break;
                     case 2:
                         for (i = 0; i < gs->numPlayers; i++) {
@@ -288,7 +288,7 @@ void func_80058CFC_598FC(Player *player) {
                                 break;
                             }
                         }
-                        player->unkBD4 = 0;
+                        player->secondaryItemId = 0;
                         break;
                     case 3:
                         i = 0;
@@ -303,7 +303,7 @@ void func_80058CFC_598FC(Player *player) {
                         spawnStarEffect(player, &gs->players[targetIndices[0]], 0);
                         spawnStarEffect(player, &gs->players[targetIndices[0]], 8);
                         spawnStarEffect(player, &gs->players[targetIndices[1]], 16);
-                        player->unkBD4 = 0;
+                        player->secondaryItemId = 0;
                         break;
                     case 4:
                         delay = 0;
@@ -313,17 +313,17 @@ void func_80058CFC_598FC(Player *player) {
                                 delay += 8;
                             }
                         }
-                        player->unkBD4 = 0;
+                        player->secondaryItemId = 0;
                         break;
                     default:
-                        player->unkBD4 = 0;
+                        player->secondaryItemId = 0;
                         break;
                 }
                 break;
 
             case 4:
                 if (tryActivateBoost(player) != 0) {
-                    player->unkBD4 = 0;
+                    player->secondaryItemId = 0;
                 }
                 if (player->boostState == 0) {
                     if (spawnPlayerAuraEffect(player) != NULL) {
@@ -333,27 +333,27 @@ void func_80058CFC_598FC(Player *player) {
                             player->boostState = 1;
                         }
                         player->boostTimer = 0xB4;
-                        player->unkBD4 = 0;
+                        player->secondaryItemId = 0;
                     }
                 }
                 break;
 
             case 5:
                 if (tryActivateFinishBoost(player) != 0) {
-                    player->unkBD4 = 0;
+                    player->secondaryItemId = 0;
                     playFinishBoostVoice(player);
                 }
                 break;
 
             case 6:
                 if (grantInvincibilityWithSound(player) != 0) {
-                    player->unkBD4 = 0;
+                    player->secondaryItemId = 0;
                 }
                 break;
 
             case 7:
                 if (spawnPanelProjectile(player) != 0) {
-                    player->unkBD4 = 0;
+                    player->secondaryItemId = 0;
                 }
                 break;
 
@@ -384,7 +384,7 @@ void func_80058CFC_598FC(Player *player) {
                     delay++;
                 }
                 if (spawnGoldStealEffect(player, target, 0) != 0) {
-                    player->unkBD4 = 0;
+                    player->secondaryItemId = 0;
                 }
                 break;
 
@@ -401,17 +401,17 @@ void func_80058CFC_598FC(Player *player) {
                             delay += 16;
                         }
                     }
-                    player->unkBD4 = 0;
+                    player->secondaryItemId = 0;
                 } else {
                     if (spawnGoldStealEffect(player, player, 0) != 0) {
-                        player->unkBD4 = 0;
+                        player->secondaryItemId = 0;
                     }
                 }
                 break;
 
             case 10:
                 if (tryActivateGhostEffect(player) != 0) {
-                    player->unkBD4 = 0;
+                    player->secondaryItemId = 0;
                 }
                 break;
         }
