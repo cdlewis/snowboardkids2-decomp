@@ -580,14 +580,14 @@ INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002AE80_2BA80);
 
 s16 signedAngleDifference(s16 fromAngle, s16 toAngle);
 
-void func_8002B248_2BE48(Func297D8Arg *npc) {
+void animateNpcTurnToTarget(Func297D8Arg *npc) {
     GameState *alloc;
     s16 angleDiff;
-    s32 done;
+    s32 turnComplete;
     s32 absAngleDiff;
 
     alloc = getCurrentAllocation();
-    done = 0;
+    turnComplete = 0;
 
     switch (npc->unk32) {
         case 0:
@@ -634,7 +634,7 @@ void func_8002B248_2BE48(Func297D8Arg *npc) {
             if (absAngleDiff < 0xA0) {
                 angleDiff = absAngleDiff;
                 if (npc->unk37 != 0) {
-                    done = 1;
+                    turnComplete = 1;
                 } else {
                     npc->unk32 = 2;
                 }
@@ -665,12 +665,12 @@ void func_8002B248_2BE48(Func297D8Arg *npc) {
 
         case 2:
             if (npc->unk37 != 0) {
-                done = 1;
+                turnComplete = 1;
             }
             break;
     }
 
-    if ((u8)done != 0) {
+    if ((u8)turnComplete != 0) {
         alloc->unk42A = 0;
         npc->rotation = npc->unk2E;
         npc->unk50 = npc->unk56;

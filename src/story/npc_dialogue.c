@@ -854,7 +854,7 @@ void updateStoryMapNpcTalking(Func297D8Arg *arg0) {
             createYRotationMatrix(&arg0->matrix, arg0->unk30);
             break;
         case 0x15:
-            func_8002B248_2BE48(arg0);
+            animateNpcTurnToTarget(arg0);
             createYRotationMatrix(&arg0->matrix, arg0->unk30);
             break;
     }

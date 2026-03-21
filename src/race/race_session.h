@@ -61,7 +61,7 @@ void func_80035260_35E60(void *arg0, void *arg1, s16 arg2, s16 arg3, u8 arg4, u8
 void initCharSelectIcons(void *arg0);
 void collectStoryMapItem(void *arg0);
 void func_8002AE80_2BA80(void *arg0);
-void func_8002B248_2BE48(void *arg0);
+void animateNpcTurnToTarget(void *arg0);
 s32 tryStoryMapNpcInteraction(void *arg0);
 void enqueueTexturedBillboardSprite(s32 arg0, TexturedBillboardSprite *arg1);
 void createViewportTransform(void *output, s32 posX, s32 posY, s32 posZ, s32 depthOffset, s32 pitchAngle, s32 yawAngle);
