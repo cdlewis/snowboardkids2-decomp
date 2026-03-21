@@ -3566,6 +3566,7 @@ initSaveSlotNameText = 0x80033E40; // rom:0x34A40
 updateSaveSlotNameText = 0x80033EDC; // rom:0x34ADC
 cleanupSaveSlotNameText = 0x80033F50; // rom:0x34B50
 initSaveSlotItemLabels = 0x80033F7C; // rom:0x34B7C
+updateSaveSlotNumberLabels = 0x800340F4; // rom:0x34CF4
 cleanupSaveSlotNumberLabels = 0x800343D0; // rom:0x34FD0
 initSaveSlotPromptText = 0x800343FC; // rom:0x34FFC
 updateSaveSlotPromptText = 0x800344A8; // rom:0x350A8

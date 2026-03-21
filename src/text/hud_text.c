@@ -187,7 +187,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ s16 width;
     /* 0x02 */ s16 height;
-    /* 0x04 */ s16 unk4;
+    /* 0x04 */ s16 highlightTint;
     /* 0x06 */ s16 alpha;
     /* 0x08 */ void *textBuffer;
 } SaveSlotGoldText;
@@ -215,14 +215,14 @@ typedef struct {
     /* 0x08 */ s16 spriteIndex;
     /* 0x0A */ s16 alpha;
     /* 0x0C */ u8 unkC;
-    /* 0x0D */ u8 unkD;
+    /* 0x0D */ u8 highlightTint;
     /* 0x0E */ u8 padE[2];
 } SaveSlotItemIcon;
 
 typedef struct {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
-    /* 0x04 */ s16 unk4;
+    /* 0x04 */ s16 highlightTint;
     /* 0x06 */ s16 alpha;
     /* 0x08 */ char *text;
 } SaveSlotNumberLabelText;
@@ -304,7 +304,7 @@ extern void *D_8008F79C_9039C[];
 extern void *D_8008F7C4_903C4[];
 extern char D_8009E48C_9F08C[];
 
-void func_800340F4_34CF4(SaveSlotNumberLabelsState *arg0);
+void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0);
 void cleanupSaveSlotNumberLabels(Func34574Arg *);
 void updateSaveSlotDeleteText(SaveSlotDeleteTextState *);
 void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
@@ -459,7 +459,7 @@ void initSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
         arg0->icons[i].spriteSheet = arg0->spriteSheet;
         arg0->icons[i].spriteIndex = 5;
         arg0->icons[i].alpha = 0xFF;
-        arg0->icons[i].unkD = 0;
+        arg0->icons[i].highlightTint = 0;
         arg0->icons[i].unkC = 0;
     }
 
@@ -555,10 +555,10 @@ void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
             arg0->icons[i].x = (i * 15) - 0x72;
         }
 
-        arg0->icons[i].unkD = 0;
+        arg0->icons[i].highlightTint = 0;
 
         if (allocation->unkAC6 == 2 && arg0->slotIndex == allocation->unkAC8 && (allocation->unkAC4 & 1)) {
-            arg0->icons[i].unkD = 0xFF;
+            arg0->icons[i].highlightTint = 0xFF;
         }
 
         debugEnqueueCallback(arg0->slotIndex + 9, 0, renderTextSprite, &arg0->icons[i]);
@@ -653,7 +653,7 @@ void initSaveSlotItemLabels(SaveSlotNumberLabelsState *arg0) {
             arg0->texts[i].x = -0x70 + i * 0x10;
             arg0->texts[i].y = itemY;
             arg0->texts[i].text = numberBuffer;
-            arg0->texts[i].unk4 = 0;
+            arg0->texts[i].highlightTint = 0;
             arg0->texts[i].alpha = 0xFF;
         } else {
             arg0->sprites[i - 9].x = -0x78 + i * 0x10;
@@ -661,15 +661,15 @@ void initSaveSlotItemLabels(SaveSlotNumberLabelsState *arg0) {
             arg0->sprites[i - 9].spriteSheet = spriteSheet;
             arg0->sprites[i - 9].spriteIndex = i + 4;
             arg0->sprites[i - 9].alpha = 0xFF;
-            arg0->sprites[i - 9].unkD = 0;
+            arg0->sprites[i - 9].highlightTint = 0;
             arg0->sprites[i - 9].unkC = 0;
         }
     }
 
-    setCallback(func_800340F4_34CF4);
+    setCallback(updateSaveSlotNumberLabels);
 }
 
-void func_800340F4_34CF4(SaveSlotNumberLabelsState *arg0) {
+void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
     NumberLabelsAllocation *allocation;
     u16 alpha;
     u16 alphaCheck;
@@ -737,16 +737,16 @@ void func_800340F4_34CF4(SaveSlotNumberLabelsState *arg0) {
         }
 
         if (i < 9) {
-            arg0->texts[i].unk4 = 0;
+            arg0->texts[i].highlightTint = 0;
         } else {
-            arg0->sprites[i - 9].unkD = 0;
+            arg0->sprites[i - 9].highlightTint = 0;
         }
 
         if (((allocation->unkAC6 == 2) && (arg0->slotIndex == allocation->unkAC8)) && (allocation->unkAC4 & 1)) {
             if (i < 9) {
-                arg0->texts[i].unk4 = 0xFF;
+                arg0->texts[i].highlightTint = 0xFF;
             } else {
-                arg0->sprites[i - 9].unkD = 0xFF;
+                arg0->sprites[i - 9].highlightTint = 0xFF;
             }
         }
 
@@ -874,7 +874,7 @@ void initSaveSlotGoldDisplay(SaveSlotGoldDisplayState *arg0) {
     for (i = 0; i < 4; i++) {
         arg0->text[i].width = 0x18;
         arg0->text[i].height = 0xC;
-        arg0->text[i].unk4 = 0;
+        arg0->text[i].highlightTint = 0;
         arg0->text[i].alpha = 0xFF;
         arg0->text[i].textBuffer = &arg0->textBuffers[i];
 
@@ -928,10 +928,10 @@ void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state) {
             } else {
                 state->icons[i].spriteIndex = 0;
                 state->icons[i].unk13 = 0;
-                state->text[i].unk4 = 0;
+                state->text[i].highlightTint = 0;
                 if (allocation->unkAC6 == 2 && (allocation->unkAC4 & 1)) {
                     state->icons[i].unk13 = 0xFF;
-                    state->text[i].unk4 = 0xFF;
+                    state->text[i].highlightTint = 0xFF;
                 }
             }
         } else {
