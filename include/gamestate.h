@@ -228,7 +228,7 @@ typedef struct {
     u8 unkBD6;
     u8 unkBD7;
     u8 unkBD8;
-    u8 unkBD9;
+    u8 flyingAttackState; /* 0=normal, 1-3=flying attack modes */
     u8 unkBDA;
     u8 unkBDB;
     u8 unkBDC;

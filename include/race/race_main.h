@@ -26,5 +26,5 @@ void applyClampedVelocityToPosition(Player *player);
 void func_800B9500_A93B0(Player *player);
 void loadPlayerCharacterAssets(void *arg0);
 void freePlayerCharacterAssets(void *arg0);
-void func_800B0334_A01E4(void);
+void renderPlayersByShortcutDistance(void);
 void updateAndRenderRaceCharacters(void);

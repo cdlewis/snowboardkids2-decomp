@@ -49,7 +49,7 @@ typedef struct {
     u8 padding2[0x242];
     u16 sectorIndex;
     u8 padding3[0x43];
-    u8 unkBD9;
+    u8 flyingAttackState;
     u8 padding4[0xE];
 } Unk10Element_52880;
 
@@ -677,7 +677,7 @@ void launchFryingPanProjectile(Struct_52880 *arg0) {
 
     playerIdx = arg0->ownerPlayerIdx;
 
-    if (alloc->unk10[playerIdx].unkBD9 == 0) {
+    if (alloc->unk10[playerIdx].flyingAttackState == 0) {
         transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
 
         playerIdx = arg0->ownerPlayerIdx;
@@ -903,7 +903,7 @@ void launchSnowmanProjectile(Struct_52880 *arg0) {
 
     playerIdx = arg0->ownerPlayerIdx;
 
-    if (alloc->unk10[playerIdx].unkBD9 == 0) {
+    if (alloc->unk10[playerIdx].flyingAttackState == 0) {
         transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
 
         playerIdx = arg0->ownerPlayerIdx;
@@ -931,7 +931,7 @@ void launchSnowmanProjectile(Struct_52880 *arg0) {
     arg0->lifetime = 0xF0;
 
     playerIdx = arg0->ownerPlayerIdx;
-    if (alloc->unk10[playerIdx].unkBD9 != 0) {
+    if (alloc->unk10[playerIdx].flyingAttackState != 0) {
         arg0->lifetime = 0x78;
     }
 
@@ -1032,7 +1032,7 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
             rotateVectorY(&rotateVec, var_s3, (&arg0->vel));
         }
 
-        if (alloc->unk10[arg0->ownerPlayerIdx].unkBD9 == 0) {
+        if (alloc->unk10[arg0->ownerPlayerIdx].flyingAttackState == 0) {
             if ((s16)arg0->turnRate < 0x13) {
                 arg0->turnRate += 2;
             }

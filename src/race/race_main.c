@@ -195,7 +195,7 @@ void applyVelocityToPosition(Player *player) {
 void func_800B05B8_A0468(Player *);
 void renderFlyingEnemy(Player *);
 
-void func_800B0334_A01E4(void) {
+void renderPlayersByShortcutDistance(void) {
     s32 distances[4];
     s8 order[4];
     GameState *gameState;
@@ -255,7 +255,7 @@ void func_800B0334_A01E4(void) {
     if (gameState->numPlayers > j) {
         do {
             i = (u8)order[j];
-            switch ((gameState->players + i)->unkBD9) {
+            switch ((gameState->players + i)->flyingAttackState) {
                 case 0:
                     func_800B05B8_A0468(gameState->players + i);
                     break;

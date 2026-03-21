@@ -36,7 +36,7 @@ typedef struct {
     u8 _padBBC[0x13];
     u8 unkBCF;
     u8 _padBD0[0x9];
-    u8 unkBD9;
+    u8 flyingAttackState;
 } Func43CA4Unk28;
 
 typedef struct {
@@ -1158,7 +1158,7 @@ void contractStarEffect(StarEffectState *state) {
         transformVector((s16 *)&state->offsetX, state->unk24->unk9F0, &state->sprite.position);
 
         if (state->sprite.alpha == 0x40) {
-            if (state->player->unkBD9 != 0) {
+            if (state->player->flyingAttackState != 0) {
                 state->offsetX = 0x300000;
                 state->offsetY = 0x300000;
             } else {
@@ -1913,7 +1913,7 @@ void updatePushZone(PushZoneState *arg0) {
 
     for (i = 0; i < allocation->numPlayers; i++) {
         player = &allocation->players[i];
-        if (player->unkBD9 != 0)
+        if (player->flyingAttackState != 0)
             continue;
         transformVectorRelative(&player->worldPos, arg0, &localPos);
         localPos.y -= gPushZoneData[arg0->zoneIndex].yOffset << 16;
@@ -2375,7 +2375,7 @@ void processItemTriggers(ItemTriggerTaskState *arg0) {
             entry = (ItemTriggerEntry *)(offset + (s32)arg0->items);
             if (entry->active != 0) {
                 player = findPlayerNearPosition(&entry->position, -1, 0x100000);
-                if (player != NULL && player->unkBD9 == 0) {
+                if (player != NULL && player->flyingAttackState == 0) {
                     entryForItem = (ItemTriggerEntry *)(offset + (s32)arg0->items);
                     if (entryForItem->type == 0) {
                         itemId = entryForItem->itemId;

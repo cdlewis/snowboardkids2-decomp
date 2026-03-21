@@ -350,7 +350,7 @@ void handlePlayerToPlayerCollision(Player *player) {
  * beyond the main collision sphere. Each box has an offset (extraCollisionOffsets)
  * and a radius (extraCollisionRadii, treated as an array via pointer arithmetic).
  *
- * Attack state (unkBD9) determines collision behavior:
+ * Flying attack state (flyingAttackState) determines collision behavior:
  * - 1: Attack state that bounces player on boxes 4-5
  * - 2: Attack state that applies knockback on box 0
  * - 3: Attack state that bounces player on boxes 1-2
@@ -413,14 +413,15 @@ void handleCollisionWithTargetPlayer(Player *player) {
 
                 if (dist < combinedRadius) {
                     /* Check for special bounce-back on collision boxes 4-5 when target is in state 1 */
-                    if (targetPlayer->unkBD9 == 1) {
+                    if (targetPlayer->flyingAttackState == 1) {
                         if ((targetPlayer->animFlags & 0x40000) && (u32)(boxIndex - 4) < 2U) {
                             setPlayerBouncedBackState(player);
                             goto next;
                         }
                     }
                     /* Check for special bounce-back on collision boxes 1-2 when target is in state 3 */
-                    if (targetPlayer->unkBD9 == 3 && (targetPlayer->animFlags & 0x40000) && (u32)(boxIndex - 1) < 2U) {
+                    if (targetPlayer->flyingAttackState == 3 && (targetPlayer->animFlags & 0x40000) &&
+                        (u32)(boxIndex - 1) < 2U) {
                         setPlayerBouncedBackState(player);
                         goto next;
                     }
@@ -441,7 +442,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
                     player->worldPos.z -= deltaPos.z;
 
                     /* Apply knockback if target is in state 2 and colliding with main collision box */
-                    if ((targetPlayer->unkBD9 == 2) & (boxIndex == 0)) {
+                    if ((targetPlayer->flyingAttackState == 2) & (boxIndex == 0)) {
                         dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.z * deltaPos.z);
                         if (dist > 0x30000) {
                             setPlayerCollisionKnockbackState(
@@ -1152,7 +1153,7 @@ void computePlayerTerrainAlignment(Player *player) {
     func_8006B084_6BC84(&player->unk990, &player->unk970, &tempMatrix);
     func_8006B084_6BC84((Transform3D *)&player->unk9B0, &tempMatrix, &combinedMatrix);
 
-    attackState = player->unkBD9;
+    attackState = player->flyingAttackState;
 
     switch (attackState) {
         case 1:
