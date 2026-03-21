@@ -3352,6 +3352,7 @@ initCharSelectPlayerLabels = 0x80026028; // rom:0x26C28
 updateCharSelectPlayerLabels = 0x800260EC; // rom:0x26CEC
 cleanupCharSelectPlayerLabels = 0x80026190; // rom:0x26D90
 initCharSelectArrows = 0x800261BC; // rom:0x26DBC
+updateCharSelectArrows = 0x800262D4; // rom:0x26ED4
 cleanupCharSelectArrows = 0x80026538; // rom:0x27138
 initBoardSelectArrows = 0x80026564; // rom:0x27164
 updateBoardSelectArrows = 0x8002667C; // rom:0x2727C
