@@ -4096,7 +4096,7 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
     if (!(player->animFlags & 0x100)) {
         memcpy(temp2, &player->worldPos, sizeof(Vec3i));
 
-        if (func_80059ED0_5AAD0(player) == -1 &&
+        if (handlePlayerTrackWallCollision(player) == -1 &&
             ((savedPos.x != player->worldPos.x) || (savedPos.z != player->worldPos.z))) {
             player->animFlags |= 0x10;
             savedPos.x = player->worldPos.x - savedPos.x;

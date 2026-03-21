@@ -211,7 +211,7 @@ typedef struct {
     u8 currentLap;
     u8 unkBC6;
     u8 isBossRacer;
-    u8 unkBC8;
+    u8 stunCollisionCounter; /* increments during stunned state for increasing wall collision threshold */
     u8 unkBC9;
     u8 unkBCA;
     u8 unkBCB;
