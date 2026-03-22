@@ -129,17 +129,17 @@ void initSceneLighting(CreditsState *arg0) {
     arg0->unkE44[2].r = 0x65;
     arg0->unkE44[2].g = 0x65;
     arg0->unkE44[2].b = 0x65;
-    arg0->unkE44[3].r = 0x80;
-    arg0->unkE44[3].b = 0xA0;
+    ((ColorData *)&arg0->paddingE5C[0])->r = 0x80;
+    ((ColorData *)&arg0->paddingE5C[0])->b = 0xA0;
     arg0->unkE44[0].b2 = 0x7F;
     arg0->unkE44[1].r2 = 0x7F;
     arg0->unkE44[1].g2 = 0x7F;
     arg0->unkE44[1].b2 = 0;
     arg0->unkE44[2].g2 = 0x7F;
     arg0->unkE44[2].b2 = 0;
-    arg0->unkE44[3].g = 0x90;
+    ((ColorData *)&arg0->paddingE5C[0])->g = 0x90;
 
-    setViewportLightColors(arg0->unk768.id, 3, &arg0->unkE44[0], &arg0->unkE44[3]);
+    setViewportLightColors(arg0->unk768.id, 3, &arg0->unkE44[0], (ColorData *)&arg0->paddingE5C[0]);
 }
 
 void func_80003EE0_4AE0(void) {
