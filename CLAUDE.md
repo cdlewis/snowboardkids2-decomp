@@ -60,7 +60,7 @@ Verify that the project still builds successfully by running `./tools/build-and-
 
 #### Step 3: Commit your successful match
 
-If you are able to get a perfect matching decompilation, commit the change with the message `matched <function name> <attempts>`.
+If you are able to get a perfect matching decompilation, commit the changes with an appropriate message describing what you matched and how.
 
 Respect any pre-commit hooks that prevent you from committing your change. A failed hook indicates that you have not correctly updates the C code.
 
