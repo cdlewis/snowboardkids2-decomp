@@ -20,7 +20,45 @@
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
 
-extern u16 D_8008F150_8FD50[];
+typedef struct {
+    u16 start;
+    u16 end;
+} D_8008F16C_8FD6C_type;
+
+u16 D_8008F150_8FD50[] = { 0x0064, 0x0064, 0x0064, 0x00FA, 0x00FA, 0x012C, 0x012C,
+                           0x0190, 0x0190, 0x01C2, 0x01C2, 0x01F4, 0x01F4, 0x0320 };
+
+D_8008F16C_8FD6C_type D_8008F16C_8FD6C[] = {
+    { 0x03E8, 0x04B0 },
+    { 0x0011, 0x0011 },
+    { 0x0012, 0x0012 },
+    { 0x0013, 0x0015 }
+};
+
+s16 boardIconTargetYPositions[] = { 0xFFC7, 0xFFEF, 0x0017, 0x003F };
+
+u16 D_8008F184_8FD84[] = { 0x0040, 0x00E0, 0x0480, 0x0000 };
+
+s32 D_8008F18C_8FD8C[] = { 0x00208035, 0x80368030, 0x8035FFFB, 0x802F803C, 0x802E803F, 0x8031FFFB,
+                           0x8031803C, 0xFFFB8046, 0x803C8042, 0xFFFB8044, 0x802E803B, 0x8041FFFB,
+                           0x8041803C, 0xFFFB803D, 0x802E8036, 0x803B8041, 0x8054FFFF };
+
+u32 D_8008F1D0_8FDD0[] = { 0x00208035, 0x80368030, 0x8035FFFB, 0x80318032, 0x80408036, 0x8034803B,
+                           0xFFFB8031, 0x803CFFFB, 0x8046803C, 0x8042FFFB, 0x8044802E, 0x803B8041 };
+
+struct {
+    s32 unk0[2];
+    u16 unk8;
+    u16 unkA[1];
+} D_8008F200_8FE00 = {
+    { 0x8054FFFF, 0x8008F18C },
+    0x8008,
+    { 0xF1D0 }
+};
+
+u16 D_8008F20C_8FE0C = 0xFF88;
+u16 D_8008F20E_8FE0E = 0xFF98;
+
 extern const char D_8009E47C_9F07C[];
 extern const char D_8009E480_9F080;
 
@@ -329,22 +367,6 @@ void cleanupBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void waitBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void updateBoardShopBoardIconSelection(BoardShopIconSelectionState *arg0);
-
-typedef struct {
-    u16 start;
-    u16 end;
-} D_8008F16C_8FD6C_type;
-
-extern D_8008F16C_8FD6C_type D_8008F16C_8FD6C[];
-extern s32 D_8008F18C_8FD8C;
-extern struct {
-    s32 unk0[2];
-    u16 unk8;
-    u16 unkA[1];
-} D_8008F200_8FE00;
-extern u16 D_8008F20C_8FE0C;
-extern s16 boardIconTargetYPositions[];
-extern u16 D_8008F184_8FD84[];
 
 void initBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     s32 perspectiveParams[8];
