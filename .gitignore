@@ -20,6 +20,7 @@ task-runner/**/*.log
 .DS_Store
 .vscode
 .venv
+.idea
 
 # permuter
 src/temp.c

@@ -330,8 +330,12 @@ void animateBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void waitBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0);
 void updateBoardShopBoardIconSelection(BoardShopIconSelectionState *arg0);
 
-extern u16 D_8008F16C_8FD6C[];
-extern u16 D_8008F16E_8FD6E[];
+typedef struct {
+    u16 start;
+    u16 end;
+} D_8008F16C_8FD6C_type;
+
+extern D_8008F16C_8FD6C_type D_8008F16C_8FD6C[];
 extern s32 D_8008F18C_8FD8C;
 extern s32 D_8008F200_8FE00[];
 extern u16 D_8008F20A_8FE0A[];
@@ -843,8 +847,8 @@ void updateBoardShopShopkeeper(BoardShopShopkeeperState *arg0) {
 
     if (animState != 1 || allocation->unk7A3 != 0) {
         if (allocation->unk77E != 0) {
-            arg0->animationFrame = D_8008F16C_8FD6C[allocation->unk77E * 2];
-            arg0->animationEndFrame = D_8008F16E_8FD6E[allocation->unk77E * 2];
+            arg0->animationFrame = D_8008F16C_8FD6C[allocation->unk77E].start;
+            arg0->animationEndFrame = D_8008F16C_8FD6C[allocation->unk77E].end;
             setModelAnimation(arg0->model, arg0->animationFrame);
             allocation->unk77E = 0;
             arg0->animationState = 1;
