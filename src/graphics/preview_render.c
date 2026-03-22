@@ -337,8 +337,11 @@ typedef struct {
 
 extern D_8008F16C_8FD6C_type D_8008F16C_8FD6C[];
 extern s32 D_8008F18C_8FD8C;
-extern s32 D_8008F200_8FE00[];
-extern u16 D_8008F20A_8FE0A[];
+extern struct {
+    s32 unk0[2];
+    u16 unk8;
+    u16 unkA[1];
+} D_8008F200_8FE00;
 extern u16 D_8008F20C_8FE0C;
 extern s16 boardIconTargetYPositions[];
 extern u16 D_8008F184_8FD84[];
@@ -1552,10 +1555,14 @@ void initBoardShopTitleText(BoardShopTitleTextState *arg0) {
 
 void updateBoardShopTitleText(BoardShopTitleTextUpdateArg *arg0) {
     BoardShopTitleCornersAllocation *allocation = (BoardShopTitleCornersAllocation *)getCurrentAllocation();
+    u16 *new_var;
     if (allocation->titleCornersVisible != 0) {
-        arg0->textWidth = D_8008F20A_8FE0A[allocation->titleCornersVisible];
-        arg0->textData = D_8008F200_8FE00[allocation->titleCornersVisible];
-        debugEnqueueCallback(9, 7, &func_80035408_36008, arg0);
+        new_var = D_8008F200_8FE00.unkA;
+        arg0->textWidth = new_var[allocation->titleCornersVisible];
+        // this makes no sense but it matches
+        new_var = (void *)&func_80035408_36008;
+        arg0->textData = D_8008F200_8FE00.unk0[allocation->titleCornersVisible];
+        debugEnqueueCallback(9, 7, new_var, arg0);
     }
 }
 
