@@ -290,7 +290,7 @@ typedef struct {
 } SelectionParticleUpdateState;
 
 extern u16 D_8008F22C_8FE2C[];
-extern u16 D_8008F2B8_8FEB8;
+extern u16 D_8008F2B8_8FEB8[];
 extern u16 D_8008F2AC_8FEAC[];
 extern s16 D_8008F2C4_8FEC4[];
 extern void *D_8008F7CC_903CC[];
@@ -1015,7 +1015,7 @@ void initSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
 
     for (i = 0; i < 4; i++) {
         state->entries[i].x = xOffset + D_8008F2AC_8FEAC[i];
-        state->entries[i].y = yOffset + (&D_8008F2B8_8FEB8)[i];
+        state->entries[i].y = yOffset + D_8008F2B8_8FEB8[i];
         state->entries[i].frameIndex = (i % 8) + 0x10;
         state->entries[i].frameDelay = 0x12;
         state->entries[i].spriteAsset = snowflakeAsset;
