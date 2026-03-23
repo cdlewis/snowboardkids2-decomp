@@ -2025,7 +2025,15 @@ createSceneModelEx(s32 assetGroupIndex, void *allocation, s8 assetPairIndex, s8 
     return obj;
 }
 
-#ifdef NON_MATCHING
+typedef struct {
+    u8 _pad[0x30];
+    s8 anotherAssetIndex;
+    u8 unk31;
+} AssetGroupByteView;
+
+#define ent ((GameEntity *)entity)
+#define assetBytes ((AssetGroupByteView *)assetEntry)
+
 void initializeGameEntity(
     void *entity,
     s32 assetGroupIndex,
@@ -2035,13 +2043,12 @@ void initializeGameEntity(
     s8 param6,
     s16 yetAnotherAssetIndex
 ) {
-    GameEntity *ent = (GameEntity *)entity;
     AssetGroup *assetEntry;
     s32 i;
     AssetSlot *slot;
     void *asset1;
     void *asset2;
-    ItemAssetEntry *node8A1A0;
+    ItemAssetEntry *itemEntry;
     Node *task;
 
     assetEntry = &gameAssets[assetGroupIndex];
@@ -2056,7 +2063,7 @@ void initializeGameEntity(
     ent->unk8E = -1;
     ent->unk89 = 0;
     ent->unk40 = 0;
-    ent->unk44 = NULL;
+    ent->unk44 = 0;
     ent->unk48 = 0;
     ent->unk95 = 0;
 
@@ -2080,25 +2087,25 @@ void initializeGameEntity(
         );
 
         for (i = 0; i < assetEntry->numAssets; i++) {
-            ent->unk00[i].unk20 = &assetEntry->unk1C[i];
-            ent->unk00[i].asset1 = asset1;
-            ent->unk00[i].asset2 = asset2;
-            memcpy(ent->unk00[i].transformationMatrix, &identityMatrix, 0x20);
+            i[ent->unk00].unk20 = &assetEntry->unk1C[i];
+            i[ent->unk00].asset1 = asset1;
+            i[ent->unk00].asset2 = asset2;
+            memcpy((void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->unk00), &identityMatrix, 0x20);
         }
     } else if (assetEntry->assetGroupIndex != -1) {
         asset1 = loadAssetByIndex_94F90(assetEntry->assetGroupIndex, assetPairIndex);
         asset2 = loadAssetByIndex_95200(assetEntry->assetGroupIndex, assetPairIndex);
 
         for (i = 0; i < assetEntry->numAssets; i++) {
-            ent->unk00[i].unk20 = &loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
-            ent->unk00[i].asset1 = asset1;
-            ent->unk00[i].asset2 = asset2;
-            memcpy(ent->unk00[i].transformationMatrix, &identityMatrix, 0x20);
+            i[ent->unk00].unk20 = (void *)&loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
+            i[ent->unk00].asset1 = asset1;
+            i[ent->unk00].asset2 = asset2;
+            memcpy((void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->unk00), &identityMatrix, 0x20);
         }
     }
 
     if (assetEntry->padding) {
-        if (assetEntry->anotherAssetIndex == -1) {
+        if (assetBytes->anotherAssetIndex == -1) {
             ent->unk08 = loadCompressedData(
                 assetEntry->animationDataStart,
                 assetEntry->animationDataEnd,
@@ -2109,8 +2116,8 @@ void initializeGameEntity(
             playSoundEffect(0);
         }
     } else {
-        if (assetEntry->anotherAssetIndex != -1) {
-            ent->unk08 = loadAssetByIndex_953E0(assetEntry->anotherAssetIndex);
+        if (assetBytes->anotherAssetIndex != -1) {
+            ent->unk08 = loadAssetByIndex_953E0(assetBytes->anotherAssetIndex);
             ent->unk04 = allocateNodeMemory(0x980);
         } else {
             ent->unk08 = NULL;
@@ -2128,14 +2135,14 @@ void initializeGameEntity(
     }
 
     if (yetAnotherAssetIndex != -1 && yetAnotherAssetIndex < itemAssetCount) {
-        node8A1A0 = &itemAssetTable[yetAnotherAssetIndex];
+        itemEntry = &itemAssetTable[yetAnotherAssetIndex];
 
-        // ent->unk00[17].unk20 = node8A1A0->unk14;
-        ent->unk00[17].asset1 = loadUncompressedData(node8A1A0->displayListStart, node8A1A0->displayListEnd);
+        ent->unk00[17].unk20 = itemEntry->unk14;
+        ent->unk00[17].asset1 = loadUncompressedData(itemEntry->displayListStart, itemEntry->displayListEnd);
         ent->unk00[17].asset2 = loadCompressedData(
-            node8A1A0->compressedDataStart,
-            node8A1A0->compressedDataEnd,
-            node8A1A0->decompressedSize
+            itemEntry->compressedDataStart,
+            itemEntry->compressedDataEnd,
+            itemEntry->decompressedSize
         );
         ent->unk00[17].asset3 = NULL;
 
@@ -2178,7 +2185,7 @@ void initializeGameEntity(
     ent->displayEnabled = 1;
     ent->unk88 = 1;
     ent->unk4E = 0;
-    ent->unk4F = (assetEntry->anotherAssetIndex >> 8) & 0xFF;
+    ent->unk4F = assetBytes->unk31;
     ent->actionMode = 0;
 
     loadSpriteAsset(&ent->unkA4, 0);
@@ -2188,8 +2195,8 @@ void initializeGameEntity(
     ent->renderEnabled = 0;
     ent->height = 0;
 
-    ent->unk120 = loadCompressedData(GHOST_COMPRESSED_DATA_ROM_START, GHOST_COMPRESSED_DATA_ROM_END, 0x238);
-    ent->unk124 = &gDefaultEntityData8C938;
+    ent->unk120 = loadCompressedData(&GHOST_SOUND_SEQUENCE_DATA_ROM_END, &GHOST_COMPRESSED_DATA_ROM_START, 0x238);
+    ent->unk124 = gDefaultEntityData8C938;
     ent->unk13A = 0x50;
     ent->unk154 = 0;
     ent->unk156 = 0;
@@ -2197,9 +2204,9 @@ void initializeGameEntity(
     ent->unk13B = 0;
     ent->unk134 = ent->unk120;
 }
-#else
-INCLUDE_ASM("asm/nonmatchings/ui/level_preview_3d", initializeGameEntity);
-#endif
+
+#undef ent
+#undef assetBytes
 
 SceneModel *destroySceneModel(SceneModel *arg0) {
     cleanupSceneModel(arg0);
