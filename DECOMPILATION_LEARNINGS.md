@@ -119,6 +119,45 @@ clipOffsetX = widthTimes4 - 4;  // uses cached value
 
 The extra variable creates additional register pressure that shifts the graph coloring, potentially moving a long-lived pointer from an argument register ($a3) to a temp register ($t0).
 
+## `addu` Operand Order in Delay Slots
+
+When computing a struct array element address for a function call argument (e.g., `memcpy`), the `addu` operand order depends on the C expression form:
+
+- `&array[i].field` or `array[i].transformationMatrix` → `addu rd, base, offset` (base register first)
+- `(void *)(i * (s32)sizeof(Struct) + (s32)ptr)` → `addu rd, offset, base` (offset first)
+
+When the field is at offset 0 within the struct (e.g., `transformationMatrix` at the start), the compiler simplifies away the field offset and normalizes operand order. Using explicit integer arithmetic with the offset expression on the left preserves the original operand ordering:
+
+```c
+// Generates: addu a0, a0, s0 (base first — WRONG for some targets)
+memcpy(i[ent->unk00].transformationMatrix, &identityMatrix, 0x20);
+
+// Generates: addu a0, s0, a0 (offset first — matches target)
+memcpy((void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->unk00), &identityMatrix, 0x20);
+```
+
+Note: `i[array]` (equivalent to `array[i]`) flips the expression tree, which affects operand order for field accesses at non-zero offsets but not at offset 0.
+
+## Byte-Level Access to Word Fields (Overlay Struct)
+
+When the target assembly uses `lb`/`lbu` (byte loads) to access individual bytes of what is stored as an `s32` in the data section, use an overlay struct cast instead of splitting the `s32` into sub-word fields:
+
+```c
+// Overlay struct for byte-level access
+typedef struct {
+    u8 _pad[0x30];
+    s8 signedByte;   // lb at offset 0x30
+    u8 unsignedByte; // lbu at offset 0x31
+} StructByteView;
+
+// Access via cast — generates lb/lbu as needed
+#define overlay ((StructByteView *)ptr)
+if (overlay->signedByte == -1) { ... }
+value = overlay->unsignedByte;
+```
+
+**Why not split the s32 field?** KMC GCC 2.7.2 has a bug/quirk where splitting an `s32` into `s8 + u8 + u8[2]` in a struct with designated initializers causes the data section to grow (32 bytes in the observed case). The overlay cast approach avoids modifying the struct definition or data initializers while generating the correct byte-load instructions.
+
 ## Duff's Device / Switch Fallthrough
 
 GCC 2.7.2 supports Duff's device-style switch fallthrough. A `case` label inside an `else` block is valid C and generates the expected assembly:
