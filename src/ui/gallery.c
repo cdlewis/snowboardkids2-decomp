@@ -3,6 +3,9 @@
 #include "common.h"
 #include "effects/cutscene_keyframes.h"
 #include "graphics/graphics.h"
+#include "graphics/sprite_rdp.h"
+#include "graphics/sprite_table.h"
+#include "math/geometry.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
@@ -209,6 +212,39 @@ s32 gViewerStateConfig[] = { 0x00000004, 0x00000000, 0x00000000, 0x00000000, 0x0
                              0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000030,
                              0x00000000, 0x01000000, 0x00000001, 0x00000000, 0xFFFFFFFF };
 
+/* Local types for func_8000DCD8_E8D8 */
+typedef struct {
+    u16 x;
+    u16 y;
+    u8 unk4;
+    u8 texFlags;
+    s8 textRow;
+    u8 unk7;
+} MenuLayoutEntry;
+
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+    s32 unk4;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s8 unk12;
+    s8 unk13;
+    s8 unk14;
+    u8 _pad15[3];
+} GalleryRenderSlot;
+
+typedef struct {
+    s16 m[3][3];
+    u8 _pad12[2];
+    s32 tx;
+    s32 ty;
+    s32 tz;
+} Transform3D_local;
+
 typedef struct {
     s8 menuState;
     s8 selectedOption;
@@ -233,6 +269,11 @@ typedef struct {
     void *unk5F4;
     u8 pad5F8[0x2C];
     SceneModel *menuModel;
+    GalleryRenderSlot iconSlots[6];
+    GalleryRenderSlot labelSlots[6];
+    s32 alphaValues[6];
+    u8 animFrames[6];
+    s8 animTimers[6];
 } E770_struct;
 
 void playBgmTrack(E770_struct *arg0, s16 bgmId) {
@@ -278,7 +319,121 @@ void setMenuAnimation(E770_struct *arg0, s16 animIndex, s16 transitionAnimIndex,
     arg0->animTimer = animTimer;
 }
 
-INCLUDE_ASM("asm/nonmatchings/ui/gallery", func_8000DCD8_E8D8);
+void func_8000DCD8_E8D8(E770_struct *arg0) {
+    Transform3D_local viewportTransform;
+    Transform3D_local identityCopy;
+    int new_var;
+    s32 i;
+    u16 *textEntry;
+    MenuLayoutEntry *entry;
+    s32 halfWidth;
+    s16 alpha;
+    s8 temp_v1;
+
+    memcpy(&identityCopy, &identityMatrix, 0x20);
+    if (arg0->menuState == 7) {
+        return;
+    }
+    if (arg0->unk10 == 0) {
+        if (arg0->selectedOption != 5) {
+            playBgmTrack(arg0, *gCurrentBgmId);
+        }
+    } else {
+        arg0->unk10 = arg0->unk10 - 1;
+    }
+    createViewportTransform(&viewportTransform, 0, 0, *gViewerInitPosition, 0, 0, 0);
+    setViewportTransformById(arg0->unk3D0.id, &viewportTransform);
+    createYRotationMatrix(
+        (Transform3D *)&identityCopy,
+        (computeAngleToPosition(gViewerDefaultPosX, gViewerDefaultPosZ, viewportTransform.tx, viewportTransform.tz) +
+         0x1000) &
+            0xFFFF
+    );
+    identityCopy.tx = gViewerDefaultPosX;
+    identityCopy.ty = gViewerDefaultPosY;
+    identityCopy.tz = gViewerDefaultPosZ;
+    applyTransformToModel(arg0->menuModel, (Transform3D *)&identityCopy);
+    enableEntityRendering(arg0->menuModel);
+    setModelHeight(arg0->menuModel, identityCopy.ty);
+    clearModelRotation(arg0->menuModel);
+    updateModelGeometry(arg0->menuModel);
+    debugEnqueueCallback(1, 4, renderTiledTexture, arg0->pad5C8);
+    temp_v1 = arg0->menuState;
+    if (temp_v1 <= 0) {
+        goto menu_end;
+    }
+    if (temp_v1 < 4) {
+        goto menu_body;
+    }
+    if (temp_v1 >= 7) {
+        goto menu_end;
+    }
+    if (temp_v1 < 5) {
+        goto menu_end;
+    }
+menu_body: {
+    __asm__("");
+    textEntry = getTable2DEntry(arg0->unkC, 0, 0);
+}
+    halfWidth = getMaxLinePixelWidth(textEntry) / 2;
+    halfWidth = -halfWidth;
+    func_80035260_35E60(arg0->unk8, textEntry, halfWidth, -0x48, 0xFF, arg0->pad4[1], 5, 2, 0);
+    entry = getMenuOptionEntry(arg0, arg0->selectedOption);
+    textEntry = getTable2DEntry(arg0->unkC, entry->textRow, 0);
+    halfWidth = (new_var = getMaxLinePixelWidth(textEntry) / 2);
+    halfWidth = -halfWidth;
+    func_80035260_35E60(arg0->unk8, textEntry, halfWidth, 0x30, 0xFF, arg0->pad4[1], 5, 2, 0);
+    for (i = 0; i < getMenuOptionCount(arg0); i++) {
+        entry = getMenuOptionEntry(arg0, i);
+        if (arg0->animTimers[i] == 0) {
+            arg0->animTimers[i] = 4;
+            if (i == arg0->selectedOption) {
+                arg0->animFrames[i] = arg0->animFrames[i] + 1;
+            } else if (((s8)arg0->animFrames[i]) != 0) {
+                arg0->animFrames[i] = (u8)(((s8)arg0->animFrames[i]) + 1);
+            }
+            if (((s8)arg0->animFrames[i]) >= gDefaultMenuOptionCount) {
+                arg0->animFrames[i] = 0;
+            }
+            arg0->iconSlots[i].unk8 = (s16)((s8)gNavigationCycleIndices[(s8)arg0->animFrames[i]]);
+        } else {
+            arg0->animTimers[i] = arg0->animTimers[i] - 1;
+        }
+        if (i == arg0->selectedOption) {
+            arg0->iconSlots[i].unkC = 0x370;
+            arg0->iconSlots[i].unkA = 0x370;
+            arg0->alphaValues[i] += 0xF0000;
+            if (arg0->alphaValues[i] > 0xFF0000) {
+                arg0->alphaValues[i] = 0xFF0000;
+            }
+        } else {
+            arg0->iconSlots[i].unkC = 0x400;
+            arg0->iconSlots[i].unkA = 0x400;
+            arg0->alphaValues[i] += (s32)0xFFF10000;
+            if (arg0->alphaValues[i] <= ((s32)0x95FFFF)) {
+                arg0->alphaValues[i] = 0x960000;
+            }
+        }
+        arg0->iconSlots[i].unk0 = entry->x;
+        arg0->iconSlots[i].unk2 = entry->y;
+        arg0->iconSlots[i].unk13 = entry->texFlags;
+        alpha = (s16)(arg0->alphaValues[i] >> 16);
+        arg0->iconSlots[i].unk14 = (s8)alpha;
+        arg0->iconSlots[i].unk10 = alpha & 0xFF;
+        debugEnqueueCallback(2, 4, func_80011924_12524, &arg0->iconSlots[i]);
+        arg0->labelSlots[i].unk0 = entry->x;
+        arg0->labelSlots[i].unk2 = entry->y;
+        arg0->labelSlots[i].unk13 = 0;
+        alpha = (s16)(arg0->alphaValues[i] >> 16);
+        arg0->labelSlots[i].unk14 = (s8)alpha;
+        arg0->labelSlots[i].unk10 = alpha & 0xFF;
+        arg0->labelSlots[i].unk8 = (s16)((s8)entry->unk7);
+        debugEnqueueCallback(2, 5, func_80011924_12524, &arg0->labelSlots[i]);
+    }
+menu_end:;
+    ;
+    ;
+}
 
 void cleanupGalleryMenu(E770_struct *arg0) {
     destroySceneModel(arg0->menuModel);
@@ -527,8 +682,6 @@ void initGalleryMenu(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/ui/gallery", func_8000E6E0_F2E0);
-
-extern void func_8000DCD8_E8D8(E770_struct *);
 
 void updateGalleryMenu(void) {
     E770_struct *s0;
