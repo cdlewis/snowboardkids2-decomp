@@ -362,7 +362,7 @@ segments:
       - [0x8FE10, data, text/hud_text]
       - [0x90410, data, story/location_markers]
       - [0x90930, .data, ui/options_menu]
-      - [0x90A80, data, system/controller_io]
+      - [0x90A80, .data, system/controller_io]
       - [0x90AA0, .data, system/rom_loader]
       - [0x90AB0, data, text/text_elements]
       - [0x90E80, .data, race/race_session]

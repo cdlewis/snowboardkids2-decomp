@@ -33,9 +33,12 @@ void motorProcessState(MotorState *);
 void initMotorStates(void);
 
 // Data
-extern u8 D_8008FE8F_90A8F;
-extern u8 D_8008FE8E_90A8E;
-extern s16 D_8008FE8C_90A8C;
+u32 D_8008FE80_90A80[3] = { 0 };
+s16 D_8008FE8C_90A8C = 0;
+u8 D_8008FE8E_90A8E = 0;
+u8 D_8008FE8F_90A8F = 0;
+u32 D_8008FE90 = 0;
+u32 D_8008FE94_90A94[3] = { 0 };
 
 // Bss
 extern OSMesgQueue D_800A1820_A2420;
