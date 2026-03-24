@@ -285,7 +285,80 @@ void setStoryMapCameraMode(s32 arg0) {
     D_8009F200_9FE00 = arg0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/core/session_manager", func_80015254_15E54);
+void func_80015254_15E54(void) {
+    s32 i;
+    s32 firstEmpty;
+    s32 j;
+    u8 slotIndex;
+
+    i = 0;
+    for (i = 0; i < 12; i++) {
+        if (EepromSaveData->save_slot_status[i] == 0) {
+            firstEmpty = i;
+            break;
+        }
+    }
+
+    if (i == 12) {
+        return;
+    }
+
+    slotIndex = firstEmpty;
+
+    if (slotIndex == 10) {
+        j = 0;
+        for (j = 0; j < slotIndex; j++) {
+            if (EepromSaveData->save_slot_status[j] != 1) {
+                break;
+            }
+        }
+        if (j == (u8)firstEmpty) {
+            for (j = 12; j < 15; j++) {
+                if (EepromSaveData->save_slot_status[j] != 1) {
+                    break;
+                }
+            }
+            if (j == 15) {
+                EepromSaveData->save_slot_status[(u8)firstEmpty] = 5;
+            }
+            goto final_loop;
+        }
+    } else if ((slotIndex == 4) | (slotIndex == 8)) {
+        j = 0;
+        for (j = 0; j < slotIndex; j++) {
+            if (EepromSaveData->save_slot_status[j] != 1) {
+                break;
+            }
+        }
+        if (j == (u8)firstEmpty) {
+            EepromSaveData->save_slot_status[j] = 5;
+            goto final_loop;
+        }
+    } else if (((slotIndex == 3) | (slotIndex == 7)) || (slotIndex == 11)) {
+        if (EepromSaveData->save_slot_status[slotIndex - 1] == 1) {
+            EepromSaveData->save_slot_status[slotIndex] = 5;
+        }
+    } else if ((((u8)(firstEmpty - 1) < 2u) | (slotIndex == 5)) || ((slotIndex == 6) | (slotIndex == 9))) {
+        if (EepromSaveData->save_slot_status[slotIndex - 1] != 5) {
+            EepromSaveData->save_slot_status[slotIndex] = 5;
+            if (slotIndex == 1) {
+                for (j = 12; j < 15; j++) {
+                    EepromSaveData->save_slot_status[j] = 5;
+                }
+                goto final_loop;
+            }
+        } else {
+            goto final_loop;
+        }
+    }
+
+final_loop:
+    for (i = 0; i < 15; i++) {
+        if (EepromSaveData->save_slot_status[i] != 0) {
+            EepromSaveData->save_slot_data[i] = 1;
+        }
+    }
+}
 
 void clearMemory(s8 *dest, u16 size) {
     s32 endAddr;
