@@ -158,6 +158,16 @@ value = overlay->unsignedByte;
 
 **Why not split the s32 field?** KMC GCC 2.7.2 has a bug/quirk where splitting an `s32` into `s8 + u8 + u8[2]` in a struct with designated initializers causes the data section to grow (32 bytes in the observed case). The overlay cast approach avoids modifying the struct definition or data initializers while generating the correct byte-load instructions.
 
+## Register Allocation with `register __asm__` for Multiple Variables
+
+When GCC 2.7.2 needs to load multiple constants into specific registers before a loop, the register assignment in C must use `register ... __asm__("$N")` directives. The declaration order determines the load order in the generated assembly — declare variables in descending register order (e.g., `$22`, `$21`, `$20`, `$19`, `$18`) to get them loaded in that order.
+
+For clang compatibility during `CC_CHECK`, wrap these with `#ifdef CC_CHECK` and provide plain `s32` declarations in the clang path.
+
+## Jump Table: Empty Cases vs Identical Case Bodies
+
+When a switch statement has two consecutive cases with identical bodies, GCC 2.7.2 merges them — both jump table entries point to the same code address. If the target ROM has one case pointing to the post-switch code instead, that case was originally empty (`case N: break;`). Check the jump table `.rodata` section to distinguish merged cases from empty ones.
+
 ## Duff's Device / Switch Fallthrough
 
 GCC 2.7.2 supports Duff's device-style switch fallthrough. A `case` label inside an `else` block is valid C and generates the expected assembly:

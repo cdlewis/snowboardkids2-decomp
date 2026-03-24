@@ -10,19 +10,34 @@
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 
-extern void func_8001CD90_1D990(void);
 extern void initSaveSlotStatSprites(void *);
+extern void initSaveSlotItemIcons(void *);
+extern void initSaveSlotItemLabels(void *);
 extern void initSaveSlotNameText(void *);
+extern void initSaveSlotPromptText(void *);
+extern void initSaveSlotSelectionParticles(void *);
+extern void initSaveSlotIconGrid(void *);
 extern void initSaveSlotDeleteArrow(void *);
 extern void initSaveSlotGoldDisplay(void *);
 extern void initSaveSlotConfirmationIndicator(void *);
 extern void initSaveSlotDeleteText(void *);
+extern void eepromReadAsync(s32 slotIndex, void *buffer);
+extern void *pollEepromReadAsync(void);
+extern void eepromWriteAsync(s32 slotIndex);
+extern s32 pollEepromWriteAsync(void);
+extern s32 gControllerInputs;
 
 u8 eeprom_save_magic[16] = "SNOW2EEP";
 
+void func_8001CD90_1D990(void);
 void initSaveSlotSelection(void);
 void onSaveSlotSelectionConfirm(void);
 void onSaveSlotSelectionCancel(void);
+void cleanupSaveSlotSelectionAndExit(void);
+void updateSelectionWiggle(void);
+void onSaveSlotReadComplete(u16, s32);
+void verifySaveSlotChecksum(void);
+void updateSlotSelectionSlide(void);
 
 typedef struct {
     u8 pad[0xD0];
@@ -37,7 +52,7 @@ typedef struct {
 typedef struct {
     ViewportNode unk0;
     ViewportNode slotModels[4];
-    u8 padding0[0x170];
+    EepromSaveData_type slotData[4];
     void *unkAA8;
     void *unkAAC;
     void *unkAB0;
@@ -51,7 +66,8 @@ typedef struct {
     u16 unkAC6;
     u8 saveSlotIndex;
     u8 hasSaveData;
-    u8 paddingACA[0x2];
+    u8 unkACA;
+    u8 unkACB;
     u8 unkACC;
     u8 eepromErrorStatus;
     u8 unkACE[3];
@@ -61,7 +77,19 @@ typedef struct {
     u8 unkAD4;
     u8 unkAD5;
     u8 unkAD6;
+    u8 unkAD7;
+    u8 unkAD8;
 } SaveSlotScreenState;
+
+typedef struct {
+    u8 pad[0xF0];
+    u8 slotIndex;
+} SaveSlotItemLabelsReturnType;
+
+typedef struct {
+    u8 pad[0x48];
+    u8 particleIndex;
+} SaveSlotParticlesReturnType;
 
 typedef struct {
     u8 padding1[0x938];           // 0x000
@@ -200,7 +228,7 @@ after_loop:
         initViewportNode(&state->slotModels[3], NULL, 0xC, 6, 0);
         setViewportId(&state->slotModels[3], 0xD);
         setModelCameraTransform(&state->slotModels[3], -0x140, -0x30, -0xA0, -0x18, 0xA0, 0x18);
-        *(s32 *)EepromSaveData->unknown_0C = D_800AFE8C_A71FC->gold;
+        EepromSaveData->slotGold = D_800AFE8C_A71FC->gold;
         handler = initSaveSlotSelection;
     } else {
         handler = func_8001CD90_1D990;
@@ -217,7 +245,623 @@ void initSaveSlotSelection(void) {
     setGameStateHandler(func_8001CD90_1D990);
 }
 
-INCLUDE_ASM("asm/nonmatchings/ui/save_slot_select", func_8001CD90_1D990);
+void func_8001CD90_1D990(void) {
+    SaveSlotScreenState *state;
+    u8 slotIdx;
+    s32 i;
+    SaveSlotNameTextReturnType *nameTask;
+    SaveSlotItemLabelsReturnType *labelsTask;
+    SaveSlotParticlesReturnType *particleTask;
+    void *taskResult;
+
+    state = (SaveSlotScreenState *)getCurrentAllocation();
+
+    switch (state->unkAC6) {
+        case 0x28: {
+            u16 counter = state->selectionAnimState;
+            eepromReadAsync(counter & 0xFF, (u8 *)state + ((counter & 0xFFFF) * 0x5C + 0x938));
+        }
+            state->unkAC6 = 0x29;
+            break;
+        case 0x29:
+            taskResult = pollEepromReadAsync();
+            if (taskResult == (void *)-1) {
+                break;
+            }
+            onSaveSlotReadComplete(state->selectionAnimState, (s32)taskResult);
+            if (state->eepromErrorStatus == 0) {
+                u16 counter;
+                counter = state->selectionAnimState;
+                labelsTask = NULL;
+                if (state->unkACE[counter] != 0) {
+                    nameTask =
+                        (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotItemIcons, 2, counter & 0xFF, 0x5B);
+                    labelsTask = (SaveSlotItemLabelsReturnType *)
+                        scheduleTask(initSaveSlotItemLabels, 2, (u8)state->selectionAnimState, 0x5B);
+                } else {
+                    nameTask =
+                        (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotNameText, 2, counter & 0xFF, 0x5B);
+                }
+                if (nameTask != NULL) {
+                    nameTask->slotIndex = (u8)state->selectionAnimState;
+                }
+                if (labelsTask != NULL) {
+                    labelsTask->slotIndex = (u8)state->selectionAnimState;
+                }
+            }
+            state->selectionAnimState += 1;
+            if ((state->selectionAnimState & 0xFFFF) == 3) {
+                state->selectionAnimState = 0;
+                state->unkAC6 = 0;
+            } else {
+                state->unkAC6 = 0x28;
+            }
+            break;
+        case 0:
+            state->slideOffset += 0x20;
+            i = 0;
+            if ((state->slideOffset << 16) == 0) {
+                if (((u8)state->eepromErrorStatus >= 0x62) && (state->hasSaveData == 0)) {
+                    state->unkAC6 = 0x32;
+                    if (state->eepromErrorStatus == 0x62) {
+                        state->unkAD5 = 9;
+                    } else {
+                        state->unkAD5 = 8;
+                    }
+                } else {
+                    state->unkAC6 = 0x32;
+                    if (state->hasSaveData == 0) {
+                        state->unkACB = 0;
+                        state->unkAD5 = 0;
+                        if (state->unkACC != 0) {
+                            state->unkAD6 = 1;
+                        } else {
+                            goto set_ad6_zero;
+                        }
+                    } else {
+                        state->unkACB = 9;
+                        if (D_800AFE8C_A71FC->creditsCompleted != 0) {
+                            state->unkAD5 = 2;
+                        } else {
+                            state->unkAD5 = 1;
+                        }
+                    set_ad6_zero:
+                        state->unkAD6 = 0;
+                    }
+                }
+                scheduleTask(initSaveSlotPromptText, 0, 0, 0x59);
+                i = 0;
+            }
+            {
+#ifdef CC_CHECK
+                s32 constNeg18 = -0x18;
+                s32 constA0 = 0xA0;
+                s32 const18 = 0x18;
+                s32 yPos = (s32)0xFFD00000;
+                s32 slotOffset = 0x1D8;
+#else
+                register s32 constNeg18 __asm__("$22") = -0x18;
+                register s32 constA0 __asm__("$21") = 0xA0;
+                register s32 const18 __asm__("$20") = 0x18;
+                register s32 yPos __asm__("$19") = (s32)0xFFD00000;
+                register s32 slotOffset __asm__("$18") = 0x1D8;
+#endif
+                do {
+                    s32 xPos;
+                    s32 inc;
+                    if (i & 1) {
+                        xPos = -state->slideOffset;
+                    } else {
+                        xPos = (u16)state->slideOffset;
+                    }
+                    setModelCameraTransform(
+                        (u8 *)state + slotOffset,
+                        xPos,
+                        (s16)(yPos >> 16),
+                        -0xA0,
+                        constNeg18,
+                        constA0,
+                        const18
+                    );
+                    __asm__("lui %0, 0x38" : "=r"(inc) : "r"(yPos));
+                    yPos += inc;
+                    i += 1;
+                    slotOffset += 0x1D8;
+                } while (i < 3);
+            }
+            break;
+        case 1:
+            slotIdx = state->saveSlotIndex;
+            if (gControllerInputs & 0x10800) {
+                if (slotIdx != 0) {
+                    state->saveSlotIndex = slotIdx - 1;
+                }
+            } else if (gControllerInputs & 0x20400) {
+                if (slotIdx < 2) {
+                    state->saveSlotIndex = slotIdx + 1;
+                }
+            } else if (gControllerInputs & 0x8000) {
+                playSoundEffect(0x2C);
+                if (state->hasSaveData != 0) {
+                    goto case1_confirm;
+                }
+                if (state->unkACE[state->saveSlotIndex] != 1) {
+                    state->unkAD6 = 0x63;
+                    state->unkACB = 2;
+                    state->unkAC6 = 0x3C;
+                } else {
+                case1_confirm:
+                    state->unkAC6 = 2;
+                    state->selectionAnimState = 0;
+                }
+            } else if (gControllerInputs & 0x4000) {
+                playSoundEffect(0x2E);
+                if (state->hasSaveData == 0) {
+                    state->unkAC6 = 0x32;
+                    state->unkAD5 = 0;
+                    state->unkAD6 = 1;
+                    state->unkACB = 0;
+                } else {
+                    state->unkACB = 9;
+                    if (D_800AFE8C_A71FC->creditsCompleted != 0) {
+                        state->unkAD5 = 2;
+                    } else {
+                        state->unkAD5 = 1;
+                    }
+                    state->unkAC6 = 0x32;
+                }
+            }
+            if (slotIdx != state->saveSlotIndex) {
+                goto play_cursor_sound;
+            }
+            break;
+        case 2:
+            state->selectionAnimState += 1;
+            if ((state->selectionAnimState & 0xFFFF) == 0x11) {
+                state->selectionAnimState = 0;
+                if (state->slotData[state->saveSlotIndex].save_slot_status[0xB] == 1) {
+                    if (state->hasSaveData != 0) {
+                        state->unkAC6 = 3;
+                        break;
+                    }
+                    if (D_800AFE8C_A71FC->gameMode == 0) {
+                        state->unkAC6 = 0x32;
+                        state->unkAD5 = 0xA;
+                        state->unkACB = 0xB;
+                        state->unkAD6 = 0;
+                        break;
+                    }
+                }
+                if (state->hasSaveData == 0) {
+                    state->unkAD5 = 0;
+                }
+                state->unkAC6 = 3;
+            }
+            break;
+        case 3:
+            if (gControllerInputs & 0x8000) {
+                playSoundEffect(0x2C);
+                if (state->hasSaveData == 0) {
+                    D_800AFE8C_A71FC->previousSaveSlot = state->saveSlotIndex;
+                    state->unkACB = 1;
+                    state->unkAC6 = 5;
+                    memcpy(EepromSaveData, (void *)(state->saveSlotIndex * 0x5C + (s32)(u8 *)state + 0x938), 0x5C);
+                    D_800AFE8C_A71FC->gold = state->slotData[state->saveSlotIndex].slotGold;
+                } else {
+                    D_800AFE8C_A71FC->previousSaveSlot = state->saveSlotIndex;
+                    state->unkAC6 = 0x18;
+                    state->unkAD8 = 3;
+                    state->unkAD1 = state->unkACE[state->saveSlotIndex];
+                    memcpy((u8 *)state + 0xA4C, (void *)(state->saveSlotIndex * 0x5C + (s32)(u8 *)state + 0x938), 0x5C);
+                    memcpy((void *)(state->saveSlotIndex * 0x5C + (s32)(u8 *)state + 0x938), EepromSaveData, 0x5C);
+                    state->unkAD2 = state->saveSlotIndex + 1;
+                    if (state->unkACE[state->saveSlotIndex] == 0) {
+                        state->unkACE[state->saveSlotIndex] = 1;
+                        state->unkACC = state->unkACC + 1;
+                    } else {
+                        state->unkAD1 = 1;
+                    }
+                    labelsTask = NULL;
+                    eepromWriteAsync(state->saveSlotIndex);
+                    state->eepromErrorStatus = 0;
+                    state->unkACA = 0;
+                    if (state->unkAD1 != 0) {
+                        nameTask = (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotItemIcons, 1, 0, 0x5A);
+                        labelsTask = (SaveSlotItemLabelsReturnType *)scheduleTask(initSaveSlotItemLabels, 1, 0, 0x5A);
+                    } else {
+                        nameTask = (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotNameText, 1, 0, 0x5A);
+                    }
+                    if (nameTask != NULL) {
+                        nameTask->slotIndex = 3;
+                    }
+                    if (labelsTask != NULL) {
+                        labelsTask->slotIndex = 3;
+                    }
+                    i = 0;
+                    do {
+                        getFreeNodeCount(0);
+                        particleTask =
+                            (SaveSlotParticlesReturnType *)scheduleTask(initSaveSlotSelectionParticles, 1, 0, 0x59);
+                        if (particleTask != NULL) {
+                            particleTask->particleIndex = i;
+                        }
+                        i += 1;
+                    } while (i < 2);
+                    {
+                        void *slotModel;
+                        slotModel = (u8 *)state + 0x760;
+                        state->slideOffset = 0x78;
+                        setModelCameraTransform(
+                            slotModel,
+                            0,
+                            (s16)(state->saveSlotIndex * 0x38 - 0x30),
+                            -0x78,
+                            -0x18,
+                            (s16)(s32)(s16)state->slideOffset,
+                            0x18
+                        );
+                        disableViewportOverlay(slotModel);
+                    }
+                }
+            } else if (gControllerInputs & 0x4000) {
+                playSoundEffect(0x2E);
+                if (state->unkAD5 == 0xA) {
+                    D_800AFE8C_A71FC->isStoryMode = 0;
+                    state->unkAC6 = 0x32;
+                    state->unkACB = 0xB;
+                } else {
+                    state->unkAC6 = 1;
+                }
+            }
+            break;
+        case 5:
+            scheduleTask(initSaveSlotIconGrid, 0, 0, 0x5A);
+            state->unkAC6 = 6;
+            break;
+        case 6: {
+            u16 counter;
+            counter = state->selectionY + 0x1E;
+            state->selectionY = counter;
+            if ((s16)counter >= -0x28) {
+                state->selectionY = -0x28;
+                state->selectionBaseY = state->selectionY;
+                state->unkAC6 = 7;
+                state->selectionAnimState = 0;
+            }
+        } break;
+        case 7:
+            state->selectionAnimState += 1;
+            if ((state->selectionAnimState & 0xFFFF) == 5) {
+                state->selectionAnimState = 0;
+                state->unkAC6 = 8;
+            }
+            break;
+        case 8:
+            updateSelectionWiggle();
+            if (gControllerInputs & 0x8000) {
+                playSoundEffect(0x2C);
+                state->unkAC6 = 9;
+                state->selectionAnimState = 0;
+                state->selectionY = (u16)state->selectionBaseY;
+            }
+            break;
+        case 9:
+        case 0xA:
+            state->selectionAnimState += 1;
+            if ((state->selectionAnimState & 0xFFFF) == 0x10) {
+                state->selectionAnimState = 0;
+                if (state->unkAC6 == 0xA) {
+                    state->selectionAnimState = 1;
+                    state->unkAC6 = 0xC;
+                } else {
+                    state->unkAC6 = 0xB;
+                }
+            }
+            break;
+        case 0xB:
+            updateSelectionWiggle();
+            if (gControllerInputs & 0x8000) {
+                state->selectionAnimState = 0;
+                state->selectionY = (u16)state->selectionBaseY;
+                playSoundEffect(0x2D);
+                state->unkAC6 = 0xA;
+            }
+            break;
+        case 0x3C:
+            if (gControllerInputs & 0x9000) {
+                playSoundEffect(0x2C);
+                state->unkAC6 = 5;
+                state->saveSlotIndex = 4;
+            } else if (gControllerInputs & 0x4000) {
+                playSoundEffect(0x2E);
+                if (state->unkAD6 != 0x63) {
+                    state->unkAC6 = 0x32;
+                    state->unkACB = 0;
+                    state->saveSlotIndex = state->unkAD7;
+                } else {
+                    state->unkAC6 = 1;
+                    state->unkACB = 0xA;
+                }
+            }
+            break;
+        case 0x14:
+            eepromWriteAsync(state->saveSlotIndex);
+            updateSlotSelectionSlide();
+            state->unkAC6 = 0x15;
+            break;
+        case 0x18:
+            state->unkAD8 -= 1;
+            if (!(state->unkAD8 & 0xFF)) {
+                playSoundEffect(0xB);
+                state->unkAC6 = 0x15;
+                terminateTasksByTypeAndID(2, (s32)state->saveSlotIndex);
+                nameTask =
+                    (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotItemIcons, 2, state->saveSlotIndex, 0x5B);
+                labelsTask =
+                    (SaveSlotItemLabelsReturnType *)scheduleTask(initSaveSlotItemLabels, 2, state->saveSlotIndex, 0x5B);
+                if (nameTask != NULL) {
+                    nameTask->slotIndex = state->saveSlotIndex;
+                }
+                if (labelsTask != NULL) {
+                    labelsTask->slotIndex = state->saveSlotIndex;
+                }
+                setViewportOverlayRgbAndEnable((ViewportNode *)((u8 *)state + 0x760), 0, 0, 0);
+            }
+            break;
+        case 0x15:
+            if ((state->unkACA == 0) && (pollEepromWriteAsync() != -1)) {
+                verifySaveSlotChecksum();
+                if (state->selectionAnimState != 0) {
+                    state->eepromErrorStatus += 1;
+                    if ((u32)(state->eepromErrorStatus & 0xFF) < 3) {
+                        state->unkAC6 = 0x14;
+                    } else {
+                        state->eepromErrorStatus = 0;
+                        state->unkACA = 2;
+                    }
+                } else {
+                    state->unkACA = 1;
+                }
+            }
+            updateSlotSelectionSlide();
+            if ((s16)state->slideOffset == 0) {
+                if (state->unkACA != 0) {
+                    state->unkAC6 = 0x32;
+                    if (state->unkACA == 1) {
+                        state->unkACB = 8;
+                    } else {
+                        state->unkACB = 0xE;
+                        state->unkACE[state->saveSlotIndex] = state->unkAD1;
+                        memcpy(
+                            (void *)(state->saveSlotIndex * 0x5C + (s32)(u8 *)state + 0x938),
+                            (u8 *)state + 0xA4C,
+                            0x5C
+                        );
+                        terminateTasksByTypeAndID(2, (s32)state->saveSlotIndex);
+                        slotIdx = state->saveSlotIndex;
+                        labelsTask = NULL;
+                        if (state->unkACE[slotIdx] != 0) {
+                            nameTask =
+                                (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotItemIcons, 2, slotIdx, 0x5B);
+                            labelsTask = (SaveSlotItemLabelsReturnType *)
+                                scheduleTask(initSaveSlotItemLabels, 2, state->saveSlotIndex, 0x5B);
+                        } else {
+                            nameTask =
+                                (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotNameText, 2, slotIdx, 0x5B);
+                        }
+                        if (nameTask != NULL) {
+                            nameTask->slotIndex = state->saveSlotIndex;
+                        }
+                        if (labelsTask != NULL) {
+                            labelsTask->slotIndex = state->saveSlotIndex;
+                        }
+                    }
+                    terminateTasksByType(1);
+                }
+            }
+            break;
+        case 0x16:
+            if (gControllerInputs & 0x8000) {
+                playSoundEffect(0x2C);
+                state->unkAC6 = 0x17;
+                state->unkACB = 7;
+            }
+            break;
+        case 0x17:
+            if (gControllerInputs & 0x8000) {
+                playSoundEffect(0x2D);
+                state->unkAC6 = 0xC;
+                state->selectionAnimState = 0;
+                state->saveSlotIndex = 0x63;
+            } else if (gControllerInputs & 0x4000) {
+                {
+                    playSoundEffect(0x2E);
+                    state->unkACB = 9;
+                    state->unkAC6 = 0x32;
+                    if (D_800AFE8C_A71FC->creditsCompleted != 0) {
+                        state->unkAD5 = 2;
+                    } else {
+                        state->unkAD5 = 1;
+                    }
+                }
+                state->saveSlotIndex = state->unkAD7;
+            }
+            break;
+        case 0x32: {
+            s32 maxChoice;
+            maxChoice = 6;
+            if (state->unkAD5 == 0xA) {
+                maxChoice = 4;
+                state->unkAD3 += 3;
+            } else {
+                state->unkAD3 += 2;
+            }
+            state->unkAD4 += 1;
+            if ((state->unkAD4 & 0xFF) == maxChoice) {
+                if (state->eepromErrorStatus == 0) {
+                    state->unkAC6 = 0x33;
+                } else if (state->eepromErrorStatus == 0x63) {
+                    state->unkAC6 = 0x36;
+                } else {
+                    state->unkAC6 = 0x35;
+                }
+            }
+        } break;
+        case 0x33: {
+            s32 maxChoice;
+            slotIdx = state->unkAD6;
+            maxChoice = 2;
+            if ((state->unkAD5 == 0xA) | (state->unkAD5 == 2)) {
+                maxChoice = 1;
+            }
+            if (gControllerInputs & 0x10800) {
+                if (slotIdx != 0) {
+                    state->unkAD6 = slotIdx - 1;
+                }
+            } else if ((gControllerInputs & 0x20400) && (slotIdx != maxChoice)) {
+                state->unkAD6 = slotIdx + 1;
+            }
+            if (slotIdx != state->unkAD6) {
+            play_cursor_sound:
+                playSoundEffect(0x2B);
+                break;
+            }
+            if (gControllerInputs & 0x9000) {
+                playSoundEffect(0x2C);
+                state->unkAC6 = 0x34;
+                state->selectionAnimState = 0;
+            } else if (gControllerInputs & 0x4000) {
+                playSoundEffect(0x2E);
+                if (state->unkAD5 == 0xA) {
+                    state->unkAC6 = 1;
+                    state->unkACB = 0xA;
+                    state->unkAD4 = 0;
+                    state->unkAD3 = 0;
+                } else if (D_800AFE8C_A71FC->creditsCompleted != 0) {
+                    {
+                        u8 oldSlot = state->saveSlotIndex;
+                        state->unkACB = 7;
+                        state->unkAC6 = 0x17;
+                        state->saveSlotIndex = 0x63;
+                        state->unkAD4 = 0;
+                        state->unkAD3 = 0;
+                        state->unkAD7 = oldSlot;
+                    }
+                } else {
+                    state->unkAC6 = 0xC;
+                    state->saveSlotIndex = 0x63;
+                    if (state->hasSaveData == 0) {
+                        state->selectionAnimState = 0;
+                    } else {
+                        state->selectionAnimState = 1;
+                    }
+                }
+            }
+        } break;
+        case 0x34:
+            state->selectionAnimState += 1;
+            if ((state->selectionAnimState & 0xFFFF) == 0x11) {
+                state->selectionAnimState = 0;
+                state->unkAC6 = 0x37;
+            }
+            break;
+        case 0x37:
+            if (state->unkAD5 == 0xA) {
+                state->unkAD3 -= 3;
+            } else {
+                state->unkAD3 -= 2;
+            }
+            state->unkAD4 -= 1;
+            if (!(state->unkAD4 & 0xFF)) {
+                if (state->eepromErrorStatus == 0x62) {
+                    state->unkAC6 = 5;
+                    state->unkACB = 2;
+                    state->saveSlotIndex = 4;
+                } else {
+                    state->unkAC6 = 0x38;
+                }
+            }
+            break;
+        case 0x38: {
+            u8 oldSlot;
+            if (state->hasSaveData == 0) {
+                if (state->unkAD5 == 0xA) {
+                    state->unkAC6 = 3;
+                    if (state->unkAD6 == 0) {
+                        D_800AFE8C_A71FC->isStoryMode = 1;
+                        state->unkACB = 0xC;
+                    } else {
+                        D_800AFE8C_A71FC->isStoryMode = 0;
+                        state->unkACB = 0xD;
+                    }
+                } else {
+                    if (state->unkAD6 == 0) {
+                        oldSlot = state->saveSlotIndex;
+                        state->unkAC6 = 0x3C;
+                        state->unkACB = 2;
+                        goto set_slot_63_save_old;
+                    }
+                    if (state->unkAD6 == 1) {
+                        if (state->unkACC == 0) {
+                            state->unkAC6 = 0x3C;
+                            state->unkACB = 2;
+                        } else {
+                            state->unkAC6 = 1;
+                            state->unkACB = 0xA;
+                        }
+                    } else {
+                        state->unkAC6 = 0xC;
+                        state->selectionAnimState = 0;
+                        state->saveSlotIndex = 0x63;
+                    }
+                }
+            } else {
+                if (state->unkAD5 == 2) {
+                    if (state->unkAD6 == 0) {
+                        goto set_state1_acb6;
+                    }
+                    goto set_acb7_17;
+                }
+                if (state->unkAD6 == 0) {
+                    if (state->eepromErrorStatus == 0) {
+                    set_state1_acb6:
+                        state->unkAC6 = 1;
+                        state->unkACB = 6;
+                    } else {
+                        state->unkAC6 = 0x32;
+                        state->unkAD5 = 6;
+                    }
+                } else if (state->unkAD6 == 1) {
+                    playSoundEffect(0x2D);
+                    state->unkAC6 = 0xC;
+                    state->selectionAnimState = 1;
+                    state->saveSlotIndex = 0x63;
+                } else {
+                set_acb7_17:
+                    oldSlot = state->saveSlotIndex;
+                    state->unkACB = 7;
+                    state->unkAC6 = 0x17;
+                set_slot_63_save_old:
+                    state->saveSlotIndex = 0x63;
+                    state->unkAD7 = oldSlot;
+                }
+            }
+        } break;
+        case 0x35:
+            if (gControllerInputs & 0x9000) {
+                playSoundEffect(0x2C);
+                state->unkAC6 = 0x37;
+            }
+            break;
+        case 0x36:
+            break;
+    }
+
+    if (state->unkAC6 == 0xC) {
+        setViewportFadeValue(NULL, 0xFF, 0x10);
+        setGameStateHandler(cleanupSaveSlotSelectionAndExit);
+    }
+}
 
 void cleanupSaveSlotSelectionAndExit(void) {
     SaveSlotScreenState *allocation;
@@ -370,16 +1014,16 @@ s32 sanitizeSaveSlotData(EepromSaveData_type *saveData) {
     s32 i;
     u8 value;
 
-    coinValue = *(s32 *)saveData->unknown_0C;
+    coinValue = saveData->slotGold;
     wasModified = 0;
     if (coinValue > 0x98967F) {
-        *(s32 *)saveData->unknown_0C = 0x98967F;
+        saveData->slotGold = 0x98967F;
         wasModified = 1;
         i = 0;
     } else {
         i = 0;
         if (coinValue < 0) {
-            *(s32 *)saveData->unknown_0C = 0;
+            saveData->slotGold = 0;
             wasModified = 1;
             i = 0;
         }

@@ -3,7 +3,7 @@
 typedef struct {
     /* 0x0 */ u8 header_data[8];
     /* 0x8 */ u32 checksum;
-    /* 0xC */ u8 unknown_0C[4];
+    /* 0xC */ s32 slotGold;
     /* 0x10 */ u8 save_slot_status[16];
     /* 0x20 */ u8 save_slot_data[16];
     /* 0x30 */ u8 character_or_settings[18];

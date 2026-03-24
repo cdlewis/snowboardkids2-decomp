@@ -739,9 +739,9 @@ void resetSaveDataToDefaults(void) {
         EepromSaveData->header_data[i] = 0;
     }
 
-    // Zero checksum and unknown_0C
+    // Zero checksum and slotGold
     EepromSaveData->checksum = 0;
-    *(u32 *)&EepromSaveData->unknown_0C = 0;
+    EepromSaveData->slotGold = 0;
 
     // Zero save_slot_status and save_slot_data (16 bytes each)
     for (i = 0; i < 16; i++) {
