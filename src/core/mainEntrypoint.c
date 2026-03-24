@@ -22,12 +22,12 @@ void mainThreadEntrypoint(void *arg) {
     s32 isPaused;
     u32 messageData;
 
-    isPaused = 0;
+    isPaused = FALSE;
 
-    if (osTvType == 1) {
-        initialize_video_and_threads(2);
+    if (osTvType == OS_TV_NTSC) {
+        initialize_video_and_threads(OS_VI_NTSC_LAN1);
     } else {
-        initialize_video_and_threads(0x1E);
+        initialize_video_and_threads(OS_VI_MPAL_LAN1);
     }
 
     initControllerSubsystem();
@@ -43,18 +43,18 @@ void mainThreadEntrypoint(void *arg) {
     createRootTaskScheduler(&allocateAudioResources, 0xFA);
 
     while (TRUE) {
-        osRecvMesg(&mainMessageQueue, (OSMesg *)&message, 1);
+        osRecvMesg(&mainMessageQueue, (OSMesg *)&message, OS_MESG_BLOCK);
 
-        hasSpecialMessage = 0;
+        hasSpecialMessage = FALSE;
 
         do {
             switch (message) {
                 case 5:
                     messageData = *(u32 *)&message;
-                    hasSpecialMessage = 1;
+                    hasSpecialMessage = TRUE;
                     break;
                 case 0xA:
-                    isPaused = 1;
+                    isPaused = TRUE;
                     sendStopAudioChannelsCommand(0x14);
                     break;
                 case 0:
@@ -66,7 +66,7 @@ void mainThreadEntrypoint(void *arg) {
                     break;
             }
 
-        } while (osRecvMesg(&mainMessageQueue, (OSMesg *)&message, 0) != -1);
+        } while (osRecvMesg(&mainMessageQueue, (OSMesg *)&message, OS_MESG_NOBLOCK) != -1);
 
         if (hasSpecialMessage == FALSE) {
             continue;
@@ -81,7 +81,7 @@ void mainThreadEntrypoint(void *arg) {
             motorUpdate();
             renderFrame((u16)messageData);
         } else {
-            gControllerPollingEnabled = 1;
+            gControllerPollingEnabled = TRUE;
             resumeMotorStates();
             motorUpdate();
         }
