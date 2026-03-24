@@ -1,4 +1,5 @@
 #include "animation/easing_state.h"
+#include "assets.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "effects/cutscene_keyframes.h"
@@ -7,7 +8,9 @@
 #include "graphics/sprite_table.h"
 #include "math/geometry.h"
 #include "race/race_session.h"
+#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
+#include "text/font_render.h"
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
 
@@ -233,7 +236,7 @@ typedef struct {
     s16 unk10;
     s8 unk12;
     s8 unk13;
-    s8 unk14;
+    u8 unk14;
     u8 _pad15[3];
 } GalleryRenderSlot;
 
@@ -246,34 +249,68 @@ typedef struct {
 } Transform3D_local;
 
 typedef struct {
-    s8 menuState;
-    s8 selectedOption;
-    s8 menuType;
-    s8 viewerComplete;
-    u8 pad4[0x4];
-    void *unk8;
-    void *unkC;
-    s16 unk10;
-    s16 fadeTimer;
-    s16 animTimer;
-    u8 unk16;
-    u8 pad17;
-    void *unk18;
-    u8 pad1C[0x4];
-    ViewportNode unk20;
-    ViewportNode fadeNode;
-    ViewportNode unk3D0;
-    u8 pad5A8[0x1C];
-    void *unk5C4;
-    u8 pad5C8[0x2C];
-    void *unk5F4;
-    u8 pad5F8[0x2C];
-    SceneModel *menuModel;
-    GalleryRenderSlot iconSlots[6];
-    GalleryRenderSlot labelSlots[6];
-    s32 alphaValues[6];
-    u8 animFrames[6];
-    s8 animTimers[6];
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s8 unkC;
+    s8 unkD;
+    u8 _padE[2];
+} GalleryLabelSlot;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 _padA[2];
+} GallerySmallSlot;
+
+typedef struct {
+    /* 0x000 */ s8 menuState;
+    /* 0x001 */ s8 selectedOption;
+    /* 0x002 */ s8 menuType;
+    /* 0x003 */ s8 viewerComplete;
+    /* 0x004 */ u8 pad4[4];
+    /* 0x008 */ void *unk8;
+    /* 0x00C */ void *unkC;
+    /* 0x010 */ s16 unk10;
+    /* 0x012 */ s16 fadeTimer;
+    /* 0x014 */ s16 animTimer;
+    /* 0x016 */ u8 unk16;
+    /* 0x017 */ u8 pad17;
+    /* 0x018 */ void *unk18;
+    /* 0x01C */ u8 pad1C[4];
+    /* 0x020 */ ViewportNode unk20;
+    /* 0x1F8 */ ViewportNode fadeNode;
+    /* 0x3D0 */ ViewportNode unk3D0;
+    /* 0x5A8 */ ColorData lightColors[3];
+    /* 0x5C0 */ u8 ambientColor[4];
+    /* 0x5C4 */ void *unk5C4;
+    /* 0x5C8 */ u8 pad5C8[0x2C];
+    /* 0x5F4 */ void *unk5F4;
+    /* 0x5F8 */ u8 pad5F8[0x2C];
+    /* 0x624 */ SceneModel *menuModel;
+    /* 0x628 */ GalleryRenderSlot iconSlots[6];
+    /* 0x6B8 */ GalleryRenderSlot labelSlots[6];
+    /* 0x748 */ s32 alphaValues[6];
+    /* 0x760 */ u8 animFrames[6];
+    /* 0x766 */ s8 animTimers[6];
+    /* 0x76C */ GalleryLabelSlot categoryLabels[27];
+    /* 0x91C */ GalleryLabelSlot categoryLabels2[27];
+    /* 0xACC */ GalleryLabelSlot pageLabels[5];
+    /* 0xB1C */ GalleryLabelSlot fixedSlotA;
+    /* 0xB2C */ GalleryLabelSlot fixedSlotB;
+    /* 0xB3C */ GallerySmallSlot fixedSlotC;
+    /* 0xB48 */ GallerySmallSlot fixedSlotD;
+    /* 0xB54 */ u8 padB54[0x144];
+    /* 0xC98 */ s16 unkC98;
+    /* 0xC9A */ s16 unkC9A;
+    /* 0xC9C */ s16 unkC9C;
+    /* 0xC9E */ u8 padC9E[2];
+    /* 0xCA0 */ void *unkCA0;
+    /* 0xCA4 */ u8 unkCA4[4];
 } E770_struct;
 
 void playBgmTrack(E770_struct *arg0, s16 bgmId) {
@@ -671,7 +708,8 @@ s32 completeGalleryMenuExit(E770_struct *arg0) {
     return 0;
 }
 
-extern void func_8000E6E0_F2E0(void);
+void func_8000E6E0_F2E0(void);
+void updateGalleryMenu(void);
 
 void initGalleryMenu(void) {
     allocateTaskMemory(0xCC0);
@@ -681,7 +719,158 @@ void initGalleryMenu(void) {
     setGameStateHandler(func_8000E6E0_F2E0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/ui/gallery", func_8000E6E0_F2E0);
+void func_8000E6E0_F2E0(void) {
+    Transform3D viewportTransform;
+    E770_struct *alloc;
+    s32 i;
+
+    alloc = getCurrentAllocation();
+    alloc->menuState = 0;
+    alloc->selectedOption = 0;
+    alloc->menuType = isCreditsUnlocked();
+    *(s32 *)alloc->pad4 = 0xFF0000;
+    alloc->fadeTimer = 0;
+    alloc->viewerComplete = 0;
+    alloc->animTimer = -1;
+    alloc->unk16 = 0;
+    alloc->unk5C4 = loadCompressedData(&_67FB80_ROM_START, &_67FB80_ROM_END, 0xC010);
+    alloc->unk8 = loadTextRenderAsset(1);
+    alloc->unkC = loadDmaAsset(4);
+    alloc->unk18 = loadSpriteAssetData(8);
+    alloc->unk5F4 = loadCompressedData(&_684630_ROM_START, &_6848B0_ROM_START, 0xD00);
+    for (i = 0; i < 6; i++) {
+        alloc->iconSlots[i].unk0 = 0;
+        alloc->iconSlots[i].unk2 = 0;
+        alloc->iconSlots[i].unk4 = (s32)alloc->unk18;
+        alloc->iconSlots[i].unk8 = 0;
+        alloc->iconSlots[i].unkA = 0x400;
+        alloc->iconSlots[i].unkC = 0x400;
+        alloc->iconSlots[i].unkE = 0;
+        alloc->iconSlots[i].unk10 = 0xFF;
+        alloc->iconSlots[i].unk12 = 0;
+        alloc->iconSlots[i].unk13 = 0;
+        alloc->iconSlots[i].unk14 = 0x96;
+        alloc->labelSlots[i].unk0 = 0;
+        alloc->labelSlots[i].unk2 = 0;
+        alloc->labelSlots[i].unk4 = (s32)alloc->unk18;
+        alloc->labelSlots[i].unk8 = 0;
+        alloc->labelSlots[i].unkA = 0x400;
+        alloc->labelSlots[i].unkC = 0x400;
+        alloc->labelSlots[i].unkE = 0;
+        alloc->labelSlots[i].unk10 = 0xFF;
+        alloc->labelSlots[i].unk12 = 0;
+        alloc->labelSlots[i].unk13 = 0;
+        alloc->labelSlots[i].unk14 = 0x96;
+        alloc->alphaValues[i] = 0x960000;
+        alloc->animFrames[i] = 0;
+        alloc->animTimers[i] = 4;
+    }
+
+    alloc->menuModel = createSceneModel(0x2D, &alloc->unk3D0);
+    gScaleMatrix.translation.x = 0x400000;
+    gScaleMatrix.translation.y = -0x400000;
+    gScaleMatrix.translation.z = 0;
+    applyTransformToModel(alloc->menuModel, &gScaleMatrix);
+    for (i = 0; i < 27; i++) {
+        alloc->categoryLabels[i].unk0 = 0;
+        alloc->categoryLabels[i].unk2 = 0;
+        alloc->categoryLabels[i].unk4 = alloc->unk18;
+        alloc->categoryLabels[i].unk8 = 0;
+        alloc->categoryLabels[i].unkA = 0xFF;
+        alloc->categoryLabels[i].unkC = 0;
+        alloc->categoryLabels[i].unkD = 0;
+        alloc->categoryLabels2[i].unk0 = 0;
+        alloc->categoryLabels2[i].unk2 = 0;
+        alloc->categoryLabels2[i].unk4 = alloc->unk18;
+        alloc->categoryLabels2[i].unk8 = 0x1A;
+        alloc->categoryLabels2[i].unkA = 0xFF;
+        alloc->categoryLabels2[i].unkC = 0;
+        alloc->categoryLabels2[i].unkD = 0;
+    }
+
+    for (i = 0; i < 5; i++) {
+        alloc->pageLabels[i].unk0 = -8 + i * 0x10;
+        alloc->pageLabels[i].unk2 = 0x2C;
+        alloc->pageLabels[i].unk4 = alloc->unk18;
+        alloc->pageLabels[i].unk8 = 0x2F;
+        alloc->pageLabels[i].unkA = 0xFF;
+        alloc->pageLabels[i].unkC = 0;
+        alloc->pageLabels[i].unkD = 0;
+    }
+
+    alloc->fixedSlotA.unk0 = 0;
+    alloc->fixedSlotA.unk2 = 0;
+    alloc->fixedSlotA.unkC = 0;
+    alloc->fixedSlotA.unkD = 0;
+    alloc->fixedSlotB.unkC = 0;
+    alloc->fixedSlotB.unkD = 0;
+    alloc->fixedSlotA.unk4 = alloc->unk18;
+    alloc->fixedSlotB.unk4 = alloc->unk18;
+    alloc->fixedSlotC.unk4 = alloc->unk18;
+    alloc->fixedSlotD.unk4 = alloc->unk18;
+    alloc->fixedSlotA.unk8 = 0x0A;
+    alloc->fixedSlotA.unkA = 0xFF;
+    alloc->fixedSlotB.unk0 = -0x24;
+    alloc->fixedSlotB.unk2 = -0x10;
+    alloc->fixedSlotB.unk8 = 9;
+    alloc->fixedSlotB.unkA = 0xFF;
+    alloc->fixedSlotC.unk0 = 0x18;
+    alloc->fixedSlotC.unk2 = 0x28;
+    alloc->fixedSlotC.unk8 = 0x25;
+    alloc->fixedSlotD.unk0 = 0x48;
+    alloc->fixedSlotD.unk8 = 0x30;
+    alloc->unkC98 = -0x68;
+    alloc->unkC9A = 0x20;
+    alloc->unkC9C = 1;
+    alloc->unkCA0 = &alloc->unkCA4;
+    alloc->fixedSlotD.unk2 = 0x28;
+    initViewportNode(&alloc->unk3D0, 0, 0, 0xE, 1);
+    setViewportScale(&alloc->unk3D0, 1.0f, 1.0f);
+    setViewportId(&alloc->unk3D0, 1);
+    setModelCameraTransform(&alloc->unk3D0, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    func_8006FA0C_7060C(&alloc->unk3D0, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+    createViewportTransform(&viewportTransform, 0, 0, 0x01400000, 0, 0, 0);
+    setViewportTransformById(alloc->unk3D0.id, &viewportTransform);
+    initViewportNode(&alloc->unk20, 0, 1, 0xA, 0);
+    setViewportScale(&alloc->unk20, 1.0f, 1.0f);
+    setViewportId(&alloc->unk20, 1);
+    setModelCameraTransform(&alloc->unk20, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    initViewportNode(&alloc->fadeNode, 0, 2, 0xC, 0);
+    setViewportScale(&alloc->fadeNode, 1.0f, 1.0f);
+    setViewportId(&alloc->fadeNode, 1);
+    setModelCameraTransform(&alloc->fadeNode, 0, 0, -0x6F, -0x56, 0x6E, 0x46);
+    setViewportFadeValue(0, 0xFF, 0);
+    setViewportEnvColor(&alloc->unk3D0, 0, 0, 0);
+    setViewportFadeValue(&alloc->unk3D0, 0, 0);
+    setViewportEnvColor(&alloc->unk20, 0, 0, 0);
+    setViewportFadeValue(&alloc->unk20, 0, 0);
+    setViewportEnvColor(&alloc->fadeNode, 0, 0x70, 0x80);
+    setViewportFadeValue(&alloc->fadeNode, 0, 0);
+    alloc->lightColors[0].r2 = 0;
+    alloc->lightColors[0].g2 = 0x7F;
+    alloc->lightColors[0].b2 = 0x7F;
+    alloc->lightColors[0].r = 0xFF;
+    alloc->lightColors[0].g = 0xFF;
+    alloc->lightColors[0].b = 0xFF;
+    alloc->lightColors[1].r = 0x3F;
+    alloc->lightColors[1].g = 0x3F;
+    alloc->lightColors[1].b = 0x3F;
+    alloc->lightColors[1].r2 = 0x7F;
+    alloc->lightColors[1].g2 = 0x7F;
+    alloc->lightColors[1].b2 = 0;
+    alloc->lightColors[2].r2 = -0x7F;
+    alloc->lightColors[2].g2 = 0x7F;
+    alloc->lightColors[2].b2 = 0;
+    alloc->lightColors[2].r = 0x7F;
+    alloc->lightColors[2].g = 0x7F;
+    alloc->lightColors[2].b = 0x7F;
+    alloc->ambientColor[0] = 0xD2;
+    alloc->ambientColor[1] = 0xD2;
+    alloc->ambientColor[2] = 0xD2;
+    setViewportLightColors(alloc->unk3D0.id, 3, alloc->lightColors, (ColorData *)alloc->ambientColor);
+    playBgmTrack(alloc, gCurrentBgmId[0]);
+    setGameStateHandler(updateGalleryMenu);
+}
 
 void updateGalleryMenu(void) {
     E770_struct *s0;
