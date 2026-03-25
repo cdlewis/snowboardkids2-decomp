@@ -1125,7 +1125,50 @@ s32 approximate_sqrt(u32 input) {
     return quotient;
 }
 
-INCLUDE_ASM("asm/nonmatchings/math/geometry", isqrt64);
+s32 isqrt64(s64 val) {
+    u64 remainder;
+    u64 mask;
+    s32 quotient;
+    s32 shift;
+    s32 count;
+
+    remainder = 0;
+    mask = 0xFFFFFFFF00000000ULL;
+    quotient = 0;
+    shift = 30;
+
+    for (count = 0; count < 16; count++) {
+        if (((u64)val & mask) == 0) {
+            break;
+        }
+        mask <<= 2;
+        shift += 2;
+    }
+
+    if (count == 0) {
+        goto approx_path;
+    }
+
+    count = shift;
+
+    while (count >= 0) {
+        remainder <<= 1;
+        quotient <<= 1;
+
+        if (remainder < ((u64)val >> count)) {
+            remainder += 1;
+            val -= (remainder << count);
+            remainder += 1;
+            quotient += 1;
+        }
+        count -= 2;
+    }
+
+    return quotient;
+
+approx_path:
+    return approximate_sqrt((u32)val);
+}
 
 s32 distance_2d(s32 x, s32 y) {
     s64 x2 = (s64)x * x;
