@@ -73,7 +73,7 @@ extern u16 gNpcCollisionRadii[];
 void updateStoryMapRareEventIdle(RareEventIdleState *);
 void updateStoryMapRareEventWave(RareEventIdleState *);
 void updateStoryMapRareEventJuggling(Func2E024Arg *arg0);
-void updateStoryMapRareEventSledding(void);
+void updateStoryMapRareEventSledding(Func2E024Arg *);
 void updateStoryMapRareEventSkating(Func2E024Arg *);
 
 void initStoryMapRareEventWave(Func2E024Arg *arg0) {
@@ -673,7 +673,143 @@ void initStoryMapRareEventSledding(Func2E024Arg *arg0) {
     setCallback(&updateStoryMapRareEventSledding);
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/track_geometry", updateStoryMapRareEventSledding);
+void updateStoryMapRareEventSledding(Func2E024Arg *arg0) {
+    GameState *gameState;
+    s32 completedCount;
+    s32 i;
+    Func297D8Arg *element;
+    s32 newPosition[3];
+    s32 currentPosition[3];
+    Transform3D localMatrix;
+    Transform3D worldMatrix;
+    s32 *pCurrentPosition;
+    s32 *pNewPosition;
+    s16 movementSpeed;
+    s32 facingAngle;
+    s32 angle2;
+    Vec3i *translationPtr;
+
+    gameState = getCurrentAllocation();
+    completedCount = 0;
+
+    {
+        u16 temp = arg0->unkCC[1];
+        if (temp != 0) {
+            u16 newTemp = temp + 1;
+            arg0->unkCC[1] = newTemp;
+            if ((newTemp & 0xFFFF) == 0x1E) {
+                playSoundEffect(0xC9);
+                arg0->unkCC[1] = 0;
+            }
+        }
+    }
+
+    for (i = 0; i < arg0->unkD5; i++) {
+        pCurrentPosition = currentPosition;
+        pNewPosition = newPosition;
+        element = &arg0->elements[i];
+
+        memcpy(&localMatrix, &identityMatrix, sizeof(Transform3D));
+        memcpy(&worldMatrix, &element->matrix, sizeof(Transform3D));
+
+        switch (element->unk5E) {
+            case 0:
+                translationPtr = &element->matrix.translation;
+                memcpy(pCurrentPosition, translationPtr, 0xC);
+                memcpy(pNewPosition, pCurrentPosition, 0xC);
+
+                movementSpeed = -element->unk5A;
+
+                facingAngle = 0x4400;
+                if (i == 0) {
+                    facingAngle = 0x5200;
+                }
+
+                newPosition[0] += ((movementSpeed * (currentPosition[2] >> 8)) / (s16)facingAngle) << 12;
+                newPosition[2] += ((-movementSpeed * (currentPosition[0] >> 8)) / (s16)facingAngle) << 12;
+                memcpy(translationPtr, pNewPosition, 0xC);
+                break;
+            case 1:
+                completedCount++;
+                break;
+        }
+
+        if (element->unk5E != 1) {
+            createYRotationMatrix(&localMatrix, element->rotation);
+            facingAngle = atan2Fixed(element->matrix.translation.x, element->matrix.translation.z);
+            createYRotationMatrix(&worldMatrix, facingAngle & 0xFFFF);
+            memcpy(&worldMatrix.translation, &element->matrix.translation, 0xC);
+            func_8006B084_6BC84(&localMatrix, &worldMatrix, &element->matrix);
+            updateStoryMapNpcModel(element);
+            gameState->npcPosX[i] = element->matrix.translation.x;
+            gameState->npcPosZ[i] = element->matrix.translation.z;
+            if ((u32)((facingAngle - 0x1001) & 0xFFFF) < 0x468) {
+                element->unk5E = 1;
+            }
+        } else if ((completedCount & 0xFF) == 2) {
+            terminateCurrentTask();
+        }
+    }
+
+    if ((completedCount & 0xFF) != 2) {
+        facingAngle = atan2Fixed(arg0->elements[0].matrix.translation.x, arg0->elements[0].matrix.translation.z);
+        angle2 = atan2Fixed(arg0->elements[1].matrix.translation.x, arg0->elements[1].matrix.translation.z);
+
+        if ((s16)facingAngle >= 0x1001) {
+            facingAngle -= 0x2000;
+        }
+        if ((s16)angle2 >= 0x1001) {
+            angle2 -= 0x2000;
+        }
+
+        {
+            s32 diff = (s16)facingAngle - (s16)angle2;
+            if (diff < 0) {
+                diff = -diff;
+            }
+
+            if (diff >= 0x109) {
+                if ((s16)angle2 < (s16)facingAngle) {
+                    spawnSpriteEffectEx(
+                        arg0->elements[0].model,
+                        0,
+                        0x24,
+                        0x14,
+                        &arg0->elements[0].unk40,
+                        0x10000,
+                        1,
+                        2,
+                        0,
+                        0
+                    );
+                    arg0->elements[0].unk5A = arg0->elements[1].unk5A + 0x10;
+                    {
+                        u16 temp = arg0->unkCC[0] + 1;
+                        arg0->unkCC[0] = temp;
+                        if ((temp & 0xFFFF) == 1) {
+                            arg0->unkCC[1] = 1;
+                            playSoundEffect(0x9B);
+                        }
+                    }
+                } else {
+                    arg0->elements[1].unk5A = (u16)(arg0->elements[0].unk5A + 0x10);
+                    spawnSpriteEffectEx(
+                        arg0->elements[1].model,
+                        0,
+                        0x24,
+                        0x14,
+                        &arg0->elements[1].unk40,
+                        0x10000,
+                        1,
+                        2,
+                        0,
+                        0
+                    );
+                }
+            }
+        }
+    }
+}
 
 void updateStoryMapRareEventSnowman(Func2E024Arg *arg0);
 
