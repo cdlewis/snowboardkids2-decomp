@@ -590,15 +590,19 @@ typedef struct {
 } ItemBoxSystemTaskParams;
 
 typedef struct {
-    Transform3D matrix;
-    u8 padding[0x1C];
-    DisplayListObject displayList;
-    s32 baseY;
-    s16 rotationAngle;
-    s16 stateTimer;
-    s8 state;
-    s8 isSecondaryItemBox;
-    u8 padding4[0x2];
+    /* 0x00 */ Transform3D matrix;
+    /* 0x20 */ DisplayLists *matrixDisplayLists;
+    /* 0x24 */ void *matrixSegment1;
+    /* 0x28 */ void *matrixSegment2;
+    /* 0x2C */ void *matrixSegment3;
+    /* 0x30 */ u8 padding2[0xC];
+    /* 0x3C */ DisplayListObject displayList;
+    /* 0x78 */ s32 baseY;
+    /* 0x7C */ s16 rotationAngle;
+    /* 0x7E */ s16 stateTimer;
+    /* 0x80 */ s8 state;
+    /* 0x81 */ s8 isSecondaryItemBox;
+    /* 0x82 */ u8 padding4[0x2];
 } ItemBox;
 
 typedef struct {
@@ -617,7 +621,8 @@ typedef struct {
 
 typedef struct {
     s16 unk0;
-    u8 _pad[14];
+    u16 rotationAngle;
+    Vec3i position;
 } ItemBoxPositionEntry;
 
 typedef struct {
@@ -774,6 +779,10 @@ extern s16 gGraphicsMode;
 extern Gfx D_80090DB0_919B0[];
 extern void *D_80094DD0_959D0;
 extern s32 bossHomingProjectileBaseVector;
+extern DisplayLists D_8009A670_9B270;
+extern DisplayLists D_8009A680_9B280;
+extern DisplayLists D_8009A690_9B290;
+extern DisplayLists D_8009A6A0_9B2A0;
 
 void updateAllItemBoxes(ItemBoxController *arg0);
 void initHomingProjectileMovement(HomingProjectileInitArg *arg0);
@@ -2672,7 +2681,48 @@ loop:
     setCallback(&initItemBoxPositions);
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/race_hud", func_80048F0C_49B0C);
+void func_80048F0C_49B0C(ItemBoxSystemState *state, s32 index) {
+    ((ItemBox *)state->itemBoxMemory)[index].baseY = state->positionEntries[index].position.y;
+    memcpy((void *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxMemory), &identityMatrix, 0x20);
+    memcpy(
+        (void *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxMemory + 0x14),
+        (void *)(index * (s32)sizeof(ItemBoxPositionEntry) + (s32)state->positionEntries + 4),
+        0xC
+    );
+
+    if (state->positionEntries[index].unk0 == 0) {
+        ((ItemBox *)state->itemBoxMemory)[index].matrixDisplayLists = &D_8009A690_9B290;
+    } else {
+        ((ItemBox *)state->itemBoxMemory)[index].matrixDisplayLists = &D_8009A6A0_9B2A0;
+    }
+
+    ((ItemBox *)state->itemBoxMemory)[index].matrixSegment1 = state->asset1;
+    ((ItemBox *)state->itemBoxMemory)[index].matrixSegment2 = state->asset2;
+    ((ItemBox *)state->itemBoxMemory)[index].matrixSegment3 = NULL;
+
+    createYRotationMatrix(
+        &((ItemBox *)state->itemBoxMemory)[index].displayList.transform,
+        state->positionEntries[index].rotationAngle
+    );
+    memcpy(
+        (void *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxMemory + 0x50),
+        (void *)(index * (s32)sizeof(ItemBoxPositionEntry) + (s32)state->positionEntries + 4),
+        0xC
+    );
+
+    if (state->positionEntries[index].unk0 == 0) {
+        ((ItemBox *)state->itemBoxMemory)[index].displayList.displayLists = &D_8009A670_9B270;
+    } else {
+        ((ItemBox *)state->itemBoxMemory)[index].displayList.displayLists = &D_8009A680_9B280;
+    }
+
+    ((ItemBox *)state->itemBoxMemory)[index].displayList.segment1 = state->asset1;
+    ((ItemBox *)state->itemBoxMemory)[index].displayList.segment2 = state->asset2;
+    ((ItemBox *)state->itemBoxMemory)[index].displayList.segment3 = NULL;
+    ((ItemBox *)state->itemBoxMemory)[index].state = 0;
+    ((ItemBox *)state->itemBoxMemory)[index].rotationAngle = 0;
+    ((ItemBox *)state->itemBoxMemory)[index].isSecondaryItemBox = (u8)state->positionEntries[index].unk0;
+}
 
 void initItemBoxPositions(ItemBoxSystemState *state) {
     ItemBoxPositionEntry *ptr;
