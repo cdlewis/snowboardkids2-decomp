@@ -67,14 +67,19 @@ typedef struct {
 } SaveSlotDeleteArrowState;
 
 typedef struct {
-    /* 0x00 */ void *unk0;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
     /* 0x04 */ void *spriteSheet;
-    /* 0x08 */ s32 unk8;
-    /* 0x0C */ s32 unkC;
+    /* 0x08 */ u16 spriteIndex;
+    /* 0x0A */ u16 alpha;
+    /* 0x0C */ u8 tileMode;
+    /* 0x0D */ u8 paletteOverride;
+    /* 0x0E */ u8 padE[2];
 } SaveSlotStatSprite; // size 0x10
 
 typedef struct {
     /* 0x00 */ SaveSlotStatSprite entries[13];
+    /* 0xD0 */ u8 slotIndex;
 } SaveSlotStatSpritesState;
 
 typedef struct {
@@ -316,7 +321,7 @@ void updateSaveSlotSelectionParticles(SelectionParticleUpdateState *arg0);
 void cleanupSaveSlotSelectionParticles(Func34574Arg *arg0);
 void updateSaveSlotItemIcons(SaveSlotItemIconsState *);
 void cleanupSaveSlotDeleteText(SaveSlotDeleteTextState *arg0);
-void updateSaveSlotStatSprites(void);
+void updateSaveSlotStatSprites(SaveSlotStatSpritesState *arg0);
 void cleanupSaveSlotStatSprites(Func34574Arg *arg0);
 void renderSaveSlotConfirmationIndicator(void *arg0);
 void cleanupSaveSlotConfirmationIndicator(Func34574Arg *arg0);
@@ -343,7 +348,93 @@ void initSaveSlotStatSprites(SaveSlotStatSpritesState *state) {
     setCallback(updateSaveSlotStatSprites);
 }
 
-INCLUDE_ASM("asm/nonmatchings/text/hud_text", updateSaveSlotStatSprites);
+extern u16 D_8008F210_8FE10[];
+
+void updateSaveSlotStatSprites(SaveSlotStatSpritesState *arg0) {
+    AllocationStruct *allocation;
+    s16 x;
+    s16 alpha;
+    s32 step;
+    s32 halfStep;
+    s32 gap;
+    s32 i;
+    u16 *baseTable;
+    s32 three;
+    u8 isSpecial;
+    void *callbackEntry;
+
+    allocation = getCurrentAllocation();
+    step = 0xF;
+
+    if (allocation->unkAC6 < 0x32) {
+        if (allocation->unkAC8 == arg0->slotIndex || arg0->slotIndex == 3) {
+            step = 0x10;
+            gap = 0x48;
+            x = -0x90;
+            alpha = 0xFF;
+        } else {
+            goto notSelected;
+        }
+    } else {
+    notSelected:
+        gap = 0x48;
+        x = -0x8A;
+        alpha = 0x60;
+    }
+
+    i = 0;
+    if (allocation->unkAC6 == 0) {
+        step = 0x10;
+        gap = 0x48;
+        x = -0x90;
+        alpha = 0xFF;
+    }
+
+    halfStep = step / 2;
+    three = 3;
+    baseTable = D_8008F210_8FE10;
+
+    do {
+        if (i == 7) {
+            x += gap;
+        } else {
+            x += step;
+        }
+
+        isSpecial = 0;
+        if (i == 6) {
+            x -= halfStep;
+            arg0->entries[6].spriteIndex = baseTable[6] + arg0->slotIndex;
+            if (arg0->slotIndex == three) {
+                arg0->entries[6].spriteIndex = baseTable[6] + allocation->unkAC8;
+            }
+            isSpecial = 1;
+        } else {
+            arg0->entries[i].spriteIndex = baseTable[i];
+        }
+
+        arg0->entries[i].x = x;
+        arg0->entries[i].y = -0x18;
+        arg0->entries[i].paletteOverride = arg0->slotIndex + 1;
+        if (arg0->slotIndex == three) {
+            arg0->entries[i].paletteOverride = allocation->unkAC8 + 1;
+        }
+        arg0->entries[i].alpha = alpha;
+        if (i >= 7) {
+            arg0->entries[i].tileMode = 1;
+        } else {
+            arg0->entries[i].tileMode = 0;
+        }
+
+        if (arg0->slotIndex == allocation->unkAC8 && allocation->unkAC6 == 2 && (allocation->unkAC4 & 1)) {
+            arg0->entries[i].paletteOverride = 0xFF;
+        }
+        callbackEntry = &arg0->entries[i];
+
+        i++;
+        debugEnqueueCallback(arg0->slotIndex + 9, isSpecial, renderTextSprite, callbackEntry);
+    } while (i < 13);
+}
 
 void cleanupSaveSlotStatSprites(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
