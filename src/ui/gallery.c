@@ -23,10 +23,10 @@ typedef struct {
 } MenuOptionConfig;
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
+    u8 x;
+    u8 y;
     s8 pad[2];
-    u8 unk4;
+    u8 spriteFrame;
     s8 labelIndex;
     s8 numExtra;
     s8 unlockSlotIndex;
@@ -1093,7 +1093,7 @@ u8 isGalleryItemUnlocked(u8 itemIndex) {
     return 1;
 }
 
-void func_8000EE88_FA88(ViewerState *arg0) {
+void renderGalleryViewerContent(ViewerState *arg0) {
     s32 *new_var2;
     GalleryAlloc *alloc;
     GalleryItemEntry *item;
@@ -1146,8 +1146,8 @@ void func_8000EE88_FA88(ViewerState *arg0) {
                 if (item->labelIndex != (-1)) {
                     new_var2 = gViewerStateConfig;
                     configVal = *new_var2;
-                    alloc->labelEntries[i].x = ((s8)item->unk0) + sp34;
-                    new_var = (s8)item->unk1;
+                    alloc->labelEntries[i].x = ((s8)item->x) + sp34;
+                    new_var = (s8)item->y;
                     alloc->labelEntries[i].config = configVal;
                     alloc->labelEntries[i].y = new_var + sp3C;
                     alloc->labelEntries[i].label = (s32)gGalleryLabelPtrs[item->labelIndex];
@@ -1162,8 +1162,8 @@ void func_8000EE88_FA88(ViewerState *arg0) {
 
             item = &category->items[arg0->menuType];
             alloc->unkB26 = arg0->unk8 >> 16;
-            alloc->unkB1C = (s8)item->unk0;
-            alloc->unkB1E = (s8)item->unk1;
+            alloc->unkB1C = (s8)item->x;
+            alloc->unkB1E = (s8)item->y;
             if (alloc->selectedOption == 3) {
                 alloc->unkB24 = 0xB;
             } else {
@@ -1181,9 +1181,9 @@ void func_8000EE88_FA88(ViewerState *arg0) {
             }
             for (i = 0; i < category->count; i++) {
                 item = &category->items[i];
-                alloc->spriteSlots[i].x = ((s8)item->unk0) + sp34;
-                alloc->spriteSlots[i].y = ((s8)item->unk1) + sp3C;
-                alloc->spriteSlots[i].frameIndex = (s8)item->unk4;
+                alloc->spriteSlots[i].x = ((s8)item->x) + sp34;
+                alloc->spriteSlots[i].y = ((s8)item->y) + sp3C;
+                alloc->spriteSlots[i].frameIndex = (s8)item->spriteFrame;
                 if (isGalleryItemUnlocked(i & 0xFF) & 0xFF) {
                     alloc->spriteSlots[i].shade = 0xFF;
                     alloc->spriteSlots[i].transparency = 0;
@@ -1196,8 +1196,8 @@ void func_8000EE88_FA88(ViewerState *arg0) {
                 }
                 debugEnqueueCallback(2, 4, renderTextSprite, &alloc->spriteSlots[i]);
                 if (alloc->selectedOption == 2) {
-                    alloc->extraSpriteSlots[i].x = (s8)item->unk0;
-                    alloc->extraSpriteSlots[i].y = (s8)item->unk1;
+                    alloc->extraSpriteSlots[i].x = (s8)item->x;
+                    alloc->extraSpriteSlots[i].y = (s8)item->y;
                     if (isGalleryItemUnlocked(i & 0xFF) & 0xFF) {
                         alloc->extraSpriteSlots[i].alpha = 0xFF;
                     } else {
@@ -1717,7 +1717,7 @@ void updateGalleryViewer(GalleryMenuState *arg0) {
             }
             break;
     }
-    func_8000EE88_FA88((ViewerState *)arg0);
+    renderGalleryViewerContent((ViewerState *)arg0);
 }
 
 void onGalleryViewerCleanup(void) {

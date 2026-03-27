@@ -1047,6 +1047,7 @@ setupGalleryMenuState = 0x8000E6E0; // rom:0xF2E0
 updateGalleryMenu = 0x8000EC98; // rom:0xF898
 onGalleryMenuExit = 0x8000ED88; // rom:0xF988
 isGalleryItemUnlocked = 0x8000EDB0; // rom:0xF9B0
+renderGalleryViewerContent = 0x8000EE88; // rom:0xFA88
 gGalleryCategories = 0x8008D348; // rom:0x8DF48
 nullsub = 0x800084D0; // rom:0x90D0
 nullsub_s32 = 0x800084D8; // rom:0x90D8
