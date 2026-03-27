@@ -783,7 +783,7 @@ s32 completeGalleryMenuExit(GalleryMenuState *arg0) {
     return 0;
 }
 
-void func_8000E6E0_F2E0(void);
+void setupGalleryMenuState(void);
 void updateGalleryMenu(void);
 
 void initGalleryMenu(void) {
@@ -791,10 +791,10 @@ void initGalleryMenu(void) {
     gCurrentBgmId[0] = 5;
     setupTaskSchedulerNodes(0x40, 4, 0, 0, 0, 0, 0, 0);
     playSoundEffect(0xD0);
-    setGameStateHandler(func_8000E6E0_F2E0);
+    setGameStateHandler(setupGalleryMenuState);
 }
 
-void func_8000E6E0_F2E0(void) {
+void setupGalleryMenuState(void) {
     Transform3D viewportTransform;
     GalleryMenuState *alloc;
     s32 i;
@@ -978,7 +978,7 @@ void updateGalleryMenu(void) {
             break;
         case 7:
             if (getSchedulerReturnValue()) {
-                setGameStateHandler(func_8000E6E0_F2E0);
+                setGameStateHandler(setupGalleryMenuState);
             }
             return;
     }

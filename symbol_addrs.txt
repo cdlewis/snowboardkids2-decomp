@@ -1043,6 +1043,7 @@ waitForGalleryViewerExit = 0x8000E56C; // rom:0xF16C
 beginGalleryMenuExit = 0x8000E5B0; // rom:0xF1B0
 completeGalleryMenuExit = 0x8000E614; // rom:0xF214
 initGalleryMenu = 0x8000E680; // rom:0xF280
+setupGalleryMenuState = 0x8000E6E0; // rom:0xF2E0
 updateGalleryMenu = 0x8000EC98; // rom:0xF898
 onGalleryMenuExit = 0x8000ED88; // rom:0xF988
 isGalleryItemUnlocked = 0x8000EDB0; // rom:0xF9B0
