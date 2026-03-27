@@ -1033,6 +1033,7 @@ beginMenuFadeIn = 0x8000DBE0; // rom:0xE7E0
 getMenuOptionCount = 0x8000DC18; // rom:0xE818
 getMenuOptionEntry = 0x8000DC44; // rom:0xE844
 setMenuAnimation = 0x8000DC88; // rom:0xE888
+renderGalleryMenu = 0x8000DCD8; // rom:0xE8D8
 cleanupGalleryMenu = 0x8000E154; // rom:0xED54
 activateGalleryMenu = 0x8000E1D0; // rom:0xEDD0
 waitForMenuFadeIn = 0x8000E240; // rom:0xEE40

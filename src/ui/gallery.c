@@ -290,28 +290,28 @@ s32 gViewerStateConfig[] = { 0x00000004, 0x00000000, 0x00000000, 0x00000000, 0x0
                              0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000030,
                              0x00000000, 0x01000000, 0x00000001, 0x00000000, 0xFFFFFFFF };
 
-/* Local types for func_8000DCD8_E8D8 */
+/* Local types for renderGalleryMenu */
 typedef struct {
     u16 x;
     u16 y;
-    u8 unk4;
+    u8 pad4;
     u8 texFlags;
     s8 textRow;
-    u8 unk7;
+    u8 labelIndex;
 } MenuLayoutEntry;
 
 typedef struct {
-    u16 unk0;
-    u16 unk2;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s8 unk12;
-    s8 unk13;
-    u8 unk14;
+    u16 posX;
+    u16 posY;
+    s32 spriteData;
+    s16 frameIndex;
+    s16 shadeA;
+    s16 shadeB;
+    s16 zValue;
+    s16 alpha;
+    s8 pad12;
+    s8 texFlags;
+    u8 alphaByte;
     u8 _pad15[3];
 } GalleryRenderSlot;
 
@@ -348,23 +348,23 @@ typedef struct {
     /* 0x002 */ s8 menuType;
     /* 0x003 */ s8 viewerComplete;
     /* 0x004 */ u8 pad4[4];
-    /* 0x008 */ void *unk8;
-    /* 0x00C */ void *unkC;
-    /* 0x010 */ s16 unk10;
+    /* 0x008 */ void *textRenderer;
+    /* 0x00C */ void *textTable;
+    /* 0x010 */ s16 bgmFadeTimer;
     /* 0x012 */ s16 fadeTimer;
     /* 0x014 */ s16 animTimer;
-    /* 0x016 */ u8 unk16;
+    /* 0x016 */ u8 isExiting;
     /* 0x017 */ u8 pad17;
-    /* 0x018 */ void *unk18;
+    /* 0x018 */ void *spriteAsset;
     /* 0x01C */ u8 pad1C[4];
-    /* 0x020 */ ViewportNode unk20;
+    /* 0x020 */ ViewportNode overlayViewport;
     /* 0x1F8 */ ViewportNode fadeNode;
-    /* 0x3D0 */ ViewportNode unk3D0;
+    /* 0x3D0 */ ViewportNode menuViewport;
     /* 0x5A8 */ ColorData lightColors[3];
     /* 0x5C0 */ u8 ambientColor[4];
-    /* 0x5C4 */ void *unk5C4;
+    /* 0x5C4 */ void *tiledTextureData1;
     /* 0x5C8 */ u8 pad5C8[0x2C];
-    /* 0x5F4 */ void *unk5F4;
+    /* 0x5F4 */ void *tiledTextureData2;
     /* 0x5F8 */ u8 pad5F8[0x2C];
     /* 0x624 */ SceneModel *menuModel;
     /* 0x628 */ GalleryRenderSlot iconSlots[6];
@@ -386,25 +386,25 @@ typedef struct {
     /* 0xC9E */ u8 padC9E[2];
     /* 0xCA0 */ void *unkCA0;
     /* 0xCA4 */ u8 unkCA4[4];
-} E770_struct;
+} GalleryMenuState;
 
-void playBgmTrack(E770_struct *arg0, s16 bgmId) {
+void playBgmTrack(GalleryMenuState *arg0, s16 bgmId) {
     gCurrentBgmId[0] = bgmId;
-    arg0->unk10 = 0x28;
+    arg0->bgmFadeTimer = 0x28;
     playMusicTrackWithFadeIn(bgmId, 0x80, 0);
 }
 
-void beginMenuFadeOut(E770_struct *arg0) {
+void beginMenuFadeOut(GalleryMenuState *arg0) {
     setViewportFadeValue(&arg0->fadeNode, 0xFF, 10);
     arg0->fadeTimer = 10;
 }
 
-void beginMenuFadeIn(E770_struct *arg0) {
+void beginMenuFadeIn(GalleryMenuState *arg0) {
     setViewportFadeValue(&arg0->fadeNode, 0, 10);
     arg0->fadeTimer = 10;
 }
 
-s32 getMenuOptionCount(E770_struct *arg0) {
+s32 getMenuOptionCount(GalleryMenuState *arg0) {
     s8 menuType = arg0->menuType;
 
     if (menuType < 2) {
@@ -413,7 +413,7 @@ s32 getMenuOptionCount(E770_struct *arg0) {
     return 0;
 }
 
-void *getMenuOptionEntry(E770_struct *arg0, s32 index) {
+void *getMenuOptionEntry(GalleryMenuState *arg0, s32 index) {
     void *result = NULL;
     s8 menuType = arg0->menuType;
 
@@ -426,75 +426,75 @@ void *getMenuOptionEntry(E770_struct *arg0, s32 index) {
     return result;
 }
 
-void setMenuAnimation(E770_struct *arg0, s16 animIndex, s16 transitionAnimIndex, s8 loopCount, s16 animTimer) {
+void setMenuAnimation(GalleryMenuState *arg0, s16 animIndex, s16 transitionAnimIndex, s8 loopCount, s16 animTimer) {
     setModelAnimationLooped(arg0->menuModel, animIndex, transitionAnimIndex, loopCount);
     arg0->animTimer = animTimer;
 }
 
-void func_8000DCD8_E8D8(E770_struct *arg0) {
+void renderGalleryMenu(GalleryMenuState *arg0) {
     Transform3D_local viewportTransform;
-    Transform3D_local identityCopy;
+    Transform3D_local menuTransform;
     int new_var;
     s32 i;
     u16 *textEntry;
     MenuLayoutEntry *entry;
     s32 halfWidth;
     s16 alpha;
-    s8 temp_v1;
+    s8 menuState;
 
-    memcpy(&identityCopy, &identityMatrix, 0x20);
+    memcpy(&menuTransform, &identityMatrix, 0x20);
     if (arg0->menuState == 7) {
         return;
     }
-    if (arg0->unk10 == 0) {
+    if (arg0->bgmFadeTimer == 0) {
         if (arg0->selectedOption != 5) {
             playBgmTrack(arg0, *gCurrentBgmId);
         }
     } else {
-        arg0->unk10 = arg0->unk10 - 1;
+        arg0->bgmFadeTimer = arg0->bgmFadeTimer - 1;
     }
     createViewportTransform(&viewportTransform, 0, 0, *gViewerInitPosition, 0, 0, 0);
-    setViewportTransformById(arg0->unk3D0.id, &viewportTransform);
+    setViewportTransformById(arg0->menuViewport.id, &viewportTransform);
     createYRotationMatrix(
-        (Transform3D *)&identityCopy,
+        (Transform3D *)&menuTransform,
         (computeAngleToPosition(gViewerDefaultPosX, gViewerDefaultPosZ, viewportTransform.tx, viewportTransform.tz) +
          0x1000) &
             0xFFFF
     );
-    identityCopy.tx = gViewerDefaultPosX;
-    identityCopy.ty = gViewerDefaultPosY;
-    identityCopy.tz = gViewerDefaultPosZ;
-    applyTransformToModel(arg0->menuModel, (Transform3D *)&identityCopy);
+    menuTransform.tx = gViewerDefaultPosX;
+    menuTransform.ty = gViewerDefaultPosY;
+    menuTransform.tz = gViewerDefaultPosZ;
+    applyTransformToModel(arg0->menuModel, (Transform3D *)&menuTransform);
     enableEntityRendering(arg0->menuModel);
-    setModelHeight(arg0->menuModel, identityCopy.ty);
+    setModelHeight(arg0->menuModel, menuTransform.ty);
     clearModelRotation(arg0->menuModel);
     updateModelGeometry(arg0->menuModel);
     debugEnqueueCallback(1, 4, renderTiledTexture, arg0->pad5C8);
-    temp_v1 = arg0->menuState;
-    if (temp_v1 <= 0) {
+    menuState = arg0->menuState;
+    if (menuState <= 0) {
         goto menu_end;
     }
-    if (temp_v1 < 4) {
+    if (menuState < 4) {
         goto menu_body;
     }
-    if (temp_v1 >= 7) {
+    if (menuState >= 7) {
         goto menu_end;
     }
-    if (temp_v1 < 5) {
+    if (menuState < 5) {
         goto menu_end;
     }
 menu_body: {
     __asm__("");
-    textEntry = getTable2DEntry(arg0->unkC, 0, 0);
+    textEntry = getTable2DEntry(arg0->textTable, 0, 0);
 }
     halfWidth = getMaxLinePixelWidth(textEntry) / 2;
     halfWidth = -halfWidth;
-    func_80035260_35E60(arg0->unk8, textEntry, halfWidth, -0x48, 0xFF, arg0->pad4[1], 5, 2, 0);
+    func_80035260_35E60(arg0->textRenderer, textEntry, halfWidth, -0x48, 0xFF, arg0->pad4[1], 5, 2, 0);
     entry = getMenuOptionEntry(arg0, arg0->selectedOption);
-    textEntry = getTable2DEntry(arg0->unkC, entry->textRow, 0);
+    textEntry = getTable2DEntry(arg0->textTable, entry->textRow, 0);
     halfWidth = (new_var = getMaxLinePixelWidth(textEntry) / 2);
     halfWidth = -halfWidth;
-    func_80035260_35E60(arg0->unk8, textEntry, halfWidth, 0x30, 0xFF, arg0->pad4[1], 5, 2, 0);
+    func_80035260_35E60(arg0->textRenderer, textEntry, halfWidth, 0x30, 0xFF, arg0->pad4[1], 5, 2, 0);
     for (i = 0; i < getMenuOptionCount(arg0); i++) {
         entry = getMenuOptionEntry(arg0, i);
         if (arg0->animTimers[i] == 0) {
@@ -507,39 +507,39 @@ menu_body: {
             if (((s8)arg0->animFrames[i]) >= gDefaultMenuOptionCount) {
                 arg0->animFrames[i] = 0;
             }
-            arg0->iconSlots[i].unk8 = (s16)((s8)gNavigationCycleIndices[(s8)arg0->animFrames[i]]);
+            arg0->iconSlots[i].frameIndex = (s16)((s8)gNavigationCycleIndices[(s8)arg0->animFrames[i]]);
         } else {
             arg0->animTimers[i] = arg0->animTimers[i] - 1;
         }
         if (i == arg0->selectedOption) {
-            arg0->iconSlots[i].unkC = 0x370;
-            arg0->iconSlots[i].unkA = 0x370;
+            arg0->iconSlots[i].shadeB = 0x370;
+            arg0->iconSlots[i].shadeA = 0x370;
             arg0->alphaValues[i] += 0xF0000;
             if (arg0->alphaValues[i] > 0xFF0000) {
                 arg0->alphaValues[i] = 0xFF0000;
             }
         } else {
-            arg0->iconSlots[i].unkC = 0x400;
-            arg0->iconSlots[i].unkA = 0x400;
+            arg0->iconSlots[i].shadeB = 0x400;
+            arg0->iconSlots[i].shadeA = 0x400;
             arg0->alphaValues[i] += (s32)0xFFF10000;
             if (arg0->alphaValues[i] <= ((s32)0x95FFFF)) {
                 arg0->alphaValues[i] = 0x960000;
             }
         }
-        arg0->iconSlots[i].unk0 = entry->x;
-        arg0->iconSlots[i].unk2 = entry->y;
-        arg0->iconSlots[i].unk13 = entry->texFlags;
+        arg0->iconSlots[i].posX = entry->x;
+        arg0->iconSlots[i].posY = entry->y;
+        arg0->iconSlots[i].texFlags = entry->texFlags;
         alpha = (s16)(arg0->alphaValues[i] >> 16);
-        arg0->iconSlots[i].unk14 = (s8)alpha;
-        arg0->iconSlots[i].unk10 = alpha & 0xFF;
+        arg0->iconSlots[i].alphaByte = (s8)alpha;
+        arg0->iconSlots[i].alpha = alpha & 0xFF;
         debugEnqueueCallback(2, 4, func_80011924_12524, &arg0->iconSlots[i]);
-        arg0->labelSlots[i].unk0 = entry->x;
-        arg0->labelSlots[i].unk2 = entry->y;
-        arg0->labelSlots[i].unk13 = 0;
+        arg0->labelSlots[i].posX = entry->x;
+        arg0->labelSlots[i].posY = entry->y;
+        arg0->labelSlots[i].texFlags = 0;
         alpha = (s16)(arg0->alphaValues[i] >> 16);
-        arg0->labelSlots[i].unk14 = (s8)alpha;
-        arg0->labelSlots[i].unk10 = alpha & 0xFF;
-        arg0->labelSlots[i].unk8 = (s16)((s8)entry->unk7);
+        arg0->labelSlots[i].alphaByte = (s8)alpha;
+        arg0->labelSlots[i].alpha = alpha & 0xFF;
+        arg0->labelSlots[i].frameIndex = (s16)((s8)entry->labelIndex);
         debugEnqueueCallback(2, 5, func_80011924_12524, &arg0->labelSlots[i]);
     }
 menu_end:;
@@ -547,28 +547,28 @@ menu_end:;
     ;
 }
 
-void cleanupGalleryMenu(E770_struct *arg0) {
+void cleanupGalleryMenu(GalleryMenuState *arg0) {
     destroySceneModel(arg0->menuModel);
-    arg0->unk18 = freeNodeMemory(arg0->unk18);
-    arg0->unkC = freeNodeMemory(arg0->unkC);
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
-    arg0->unk5C4 = freeNodeMemory(arg0->unk5C4);
-    arg0->unk5F4 = freeNodeMemory(arg0->unk5F4);
-    unlinkNode(&arg0->unk3D0);
-    unlinkNode(&arg0->unk20);
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->textTable = freeNodeMemory(arg0->textTable);
+    arg0->textRenderer = freeNodeMemory(arg0->textRenderer);
+    arg0->tiledTextureData1 = freeNodeMemory(arg0->tiledTextureData1);
+    arg0->tiledTextureData2 = freeNodeMemory(arg0->tiledTextureData2);
+    unlinkNode(&arg0->menuViewport);
+    unlinkNode(&arg0->overlayViewport);
     unlinkNode(&arg0->fadeNode);
 }
 
-void activateGalleryMenu(E770_struct *arg0) {
-    initTiledTextureRenderState(&arg0->pad5C8, (s32)arg0->unk5C4);
-    initTiledTextureRenderState(&arg0->pad5F8, (s32)arg0->unk5F4);
+void activateGalleryMenu(GalleryMenuState *arg0) {
+    initTiledTextureRenderState(&arg0->pad5C8, (s32)arg0->tiledTextureData1);
+    initTiledTextureRenderState(&arg0->pad5F8, (s32)arg0->tiledTextureData2);
     setViewportFadeValue(NULL, 0, 10);
     setMenuAnimation(arg0, 0x90, 0x90, -1, 0);
     arg0->fadeTimer = 10;
     arg0->menuState = 2;
 }
 
-void waitForMenuFadeIn(E770_struct *arg0) {
+void waitForMenuFadeIn(GalleryMenuState *arg0) {
     s16 temp = arg0->fadeTimer;
 
     if (temp == 0) {
@@ -583,7 +583,7 @@ void waitForMenuFadeIn(E770_struct *arg0) {
 
 extern s32 gControllerInputs;
 
-void handleGalleryMenuInput(E770_struct *arg0) {
+void handleGalleryMenuInput(GalleryMenuState *arg0) {
     s32 inputs;
     u8 selection;
     s8 sel_signed;
@@ -729,7 +729,7 @@ typedef struct FD98_struct {
 
 extern void initGalleryViewer(FD98_struct *);
 
-void processGalleryMenuSelection(E770_struct *arg0) {
+void processGalleryMenuSelection(GalleryMenuState *arg0) {
     s16 temp = arg0->fadeTimer;
 
     if (temp == 0) {
@@ -737,7 +737,7 @@ void processGalleryMenuSelection(E770_struct *arg0) {
             cleanupGalleryMenu(arg0);
             setCutsceneSelection(0, 2);
             createTaskQueue(loadCutsceneOverlay, 0x64);
-            arg0->unk16 = 1;
+            arg0->isExiting = 1;
             arg0->menuState = 7;
         } else {
             scheduleTask(initGalleryViewer, 0, 0, 0);
@@ -749,7 +749,7 @@ void processGalleryMenuSelection(E770_struct *arg0) {
     }
 }
 
-void waitForGalleryViewerExit(E770_struct *arg0) {
+void waitForGalleryViewerExit(GalleryMenuState *arg0) {
     if (arg0->viewerComplete != 0) {
         terminateTasksByType(1);
         beginMenuFadeIn(arg0);
@@ -757,7 +757,7 @@ void waitForGalleryViewerExit(E770_struct *arg0) {
     }
 }
 
-void beginGalleryMenuExit(E770_struct *arg0) {
+void beginGalleryMenuExit(GalleryMenuState *arg0) {
     playSoundEffect(0xDB);
     setViewportFadeValue(NULL, 0xFF, 10);
     setMenuAnimation(arg0, 0x15A, 0x15B, 1, -1);
@@ -767,7 +767,7 @@ void beginGalleryMenuExit(E770_struct *arg0) {
 
 extern void onGalleryMenuExit(void);
 
-s32 completeGalleryMenuExit(E770_struct *arg0) {
+s32 completeGalleryMenuExit(GalleryMenuState *arg0) {
     s16 temp;
 
     if (arg0->fadeTimer == 8) {
@@ -796,7 +796,7 @@ void initGalleryMenu(void) {
 
 void func_8000E6E0_F2E0(void) {
     Transform3D viewportTransform;
-    E770_struct *alloc;
+    GalleryMenuState *alloc;
     s32 i;
 
     alloc = getCurrentAllocation();
@@ -807,41 +807,41 @@ void func_8000E6E0_F2E0(void) {
     alloc->fadeTimer = 0;
     alloc->viewerComplete = 0;
     alloc->animTimer = -1;
-    alloc->unk16 = 0;
-    alloc->unk5C4 = loadCompressedData(&_67FB80_ROM_START, &_67FB80_ROM_END, 0xC010);
-    alloc->unk8 = loadTextRenderAsset(1);
-    alloc->unkC = loadDmaAsset(4);
-    alloc->unk18 = loadSpriteAssetData(8);
-    alloc->unk5F4 = loadCompressedData(&_684630_ROM_START, &_6848B0_ROM_START, 0xD00);
+    alloc->isExiting = 0;
+    alloc->tiledTextureData1 = loadCompressedData(&_67FB80_ROM_START, &_67FB80_ROM_END, 0xC010);
+    alloc->textRenderer = loadTextRenderAsset(1);
+    alloc->textTable = loadDmaAsset(4);
+    alloc->spriteAsset = loadSpriteAssetData(8);
+    alloc->tiledTextureData2 = loadCompressedData(&_684630_ROM_START, &_6848B0_ROM_START, 0xD00);
     for (i = 0; i < 6; i++) {
-        alloc->iconSlots[i].unk0 = 0;
-        alloc->iconSlots[i].unk2 = 0;
-        alloc->iconSlots[i].unk4 = (s32)alloc->unk18;
-        alloc->iconSlots[i].unk8 = 0;
-        alloc->iconSlots[i].unkA = 0x400;
-        alloc->iconSlots[i].unkC = 0x400;
-        alloc->iconSlots[i].unkE = 0;
-        alloc->iconSlots[i].unk10 = 0xFF;
-        alloc->iconSlots[i].unk12 = 0;
-        alloc->iconSlots[i].unk13 = 0;
-        alloc->iconSlots[i].unk14 = 0x96;
-        alloc->labelSlots[i].unk0 = 0;
-        alloc->labelSlots[i].unk2 = 0;
-        alloc->labelSlots[i].unk4 = (s32)alloc->unk18;
-        alloc->labelSlots[i].unk8 = 0;
-        alloc->labelSlots[i].unkA = 0x400;
-        alloc->labelSlots[i].unkC = 0x400;
-        alloc->labelSlots[i].unkE = 0;
-        alloc->labelSlots[i].unk10 = 0xFF;
-        alloc->labelSlots[i].unk12 = 0;
-        alloc->labelSlots[i].unk13 = 0;
-        alloc->labelSlots[i].unk14 = 0x96;
+        alloc->iconSlots[i].posX = 0;
+        alloc->iconSlots[i].posY = 0;
+        alloc->iconSlots[i].spriteData = (s32)alloc->spriteAsset;
+        alloc->iconSlots[i].frameIndex = 0;
+        alloc->iconSlots[i].shadeA = 0x400;
+        alloc->iconSlots[i].shadeB = 0x400;
+        alloc->iconSlots[i].zValue = 0;
+        alloc->iconSlots[i].alpha = 0xFF;
+        alloc->iconSlots[i].pad12 = 0;
+        alloc->iconSlots[i].texFlags = 0;
+        alloc->iconSlots[i].alphaByte = 0x96;
+        alloc->labelSlots[i].posX = 0;
+        alloc->labelSlots[i].posY = 0;
+        alloc->labelSlots[i].spriteData = (s32)alloc->spriteAsset;
+        alloc->labelSlots[i].frameIndex = 0;
+        alloc->labelSlots[i].shadeA = 0x400;
+        alloc->labelSlots[i].shadeB = 0x400;
+        alloc->labelSlots[i].zValue = 0;
+        alloc->labelSlots[i].alpha = 0xFF;
+        alloc->labelSlots[i].pad12 = 0;
+        alloc->labelSlots[i].texFlags = 0;
+        alloc->labelSlots[i].alphaByte = 0x96;
         alloc->alphaValues[i] = 0x960000;
         alloc->animFrames[i] = 0;
         alloc->animTimers[i] = 4;
     }
 
-    alloc->menuModel = createSceneModel(0x2D, &alloc->unk3D0);
+    alloc->menuModel = createSceneModel(0x2D, &alloc->menuViewport);
     gScaleMatrix.translation.x = 0x400000;
     gScaleMatrix.translation.y = -0x400000;
     gScaleMatrix.translation.z = 0;
@@ -849,14 +849,14 @@ void func_8000E6E0_F2E0(void) {
     for (i = 0; i < 27; i++) {
         alloc->categoryLabels[i].unk0 = 0;
         alloc->categoryLabels[i].unk2 = 0;
-        alloc->categoryLabels[i].unk4 = alloc->unk18;
+        alloc->categoryLabels[i].unk4 = alloc->spriteAsset;
         alloc->categoryLabels[i].unk8 = 0;
         alloc->categoryLabels[i].unkA = 0xFF;
         alloc->categoryLabels[i].unkC = 0;
         alloc->categoryLabels[i].unkD = 0;
         alloc->categoryLabels2[i].unk0 = 0;
         alloc->categoryLabels2[i].unk2 = 0;
-        alloc->categoryLabels2[i].unk4 = alloc->unk18;
+        alloc->categoryLabels2[i].unk4 = alloc->spriteAsset;
         alloc->categoryLabels2[i].unk8 = 0x1A;
         alloc->categoryLabels2[i].unkA = 0xFF;
         alloc->categoryLabels2[i].unkC = 0;
@@ -866,7 +866,7 @@ void func_8000E6E0_F2E0(void) {
     for (i = 0; i < 5; i++) {
         alloc->pageLabels[i].unk0 = -8 + i * 0x10;
         alloc->pageLabels[i].unk2 = 0x2C;
-        alloc->pageLabels[i].unk4 = alloc->unk18;
+        alloc->pageLabels[i].unk4 = alloc->spriteAsset;
         alloc->pageLabels[i].unk8 = 0x2F;
         alloc->pageLabels[i].unkA = 0xFF;
         alloc->pageLabels[i].unkC = 0;
@@ -879,10 +879,10 @@ void func_8000E6E0_F2E0(void) {
     alloc->fixedSlotA.unkD = 0;
     alloc->fixedSlotB.unkC = 0;
     alloc->fixedSlotB.unkD = 0;
-    alloc->fixedSlotA.unk4 = alloc->unk18;
-    alloc->fixedSlotB.unk4 = alloc->unk18;
-    alloc->fixedSlotC.unk4 = alloc->unk18;
-    alloc->fixedSlotD.unk4 = alloc->unk18;
+    alloc->fixedSlotA.unk4 = alloc->spriteAsset;
+    alloc->fixedSlotB.unk4 = alloc->spriteAsset;
+    alloc->fixedSlotC.unk4 = alloc->spriteAsset;
+    alloc->fixedSlotD.unk4 = alloc->spriteAsset;
     alloc->fixedSlotA.unk8 = 0x0A;
     alloc->fixedSlotA.unkA = 0xFF;
     alloc->fixedSlotB.unk0 = -0x24;
@@ -899,26 +899,26 @@ void func_8000E6E0_F2E0(void) {
     alloc->unkC9C = 1;
     alloc->unkCA0 = &alloc->unkCA4;
     alloc->fixedSlotD.unk2 = 0x28;
-    initViewportNode(&alloc->unk3D0, 0, 0, 0xE, 1);
-    setViewportScale(&alloc->unk3D0, 1.0f, 1.0f);
-    setViewportId(&alloc->unk3D0, 1);
-    setModelCameraTransform(&alloc->unk3D0, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    func_8006FA0C_7060C(&alloc->unk3D0, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+    initViewportNode(&alloc->menuViewport, 0, 0, 0xE, 1);
+    setViewportScale(&alloc->menuViewport, 1.0f, 1.0f);
+    setViewportId(&alloc->menuViewport, 1);
+    setModelCameraTransform(&alloc->menuViewport, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    func_8006FA0C_7060C(&alloc->menuViewport, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     createViewportTransform(&viewportTransform, 0, 0, 0x01400000, 0, 0, 0);
-    setViewportTransformById(alloc->unk3D0.id, &viewportTransform);
-    initViewportNode(&alloc->unk20, 0, 1, 0xA, 0);
-    setViewportScale(&alloc->unk20, 1.0f, 1.0f);
-    setViewportId(&alloc->unk20, 1);
-    setModelCameraTransform(&alloc->unk20, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    setViewportTransformById(alloc->menuViewport.id, &viewportTransform);
+    initViewportNode(&alloc->overlayViewport, 0, 1, 0xA, 0);
+    setViewportScale(&alloc->overlayViewport, 1.0f, 1.0f);
+    setViewportId(&alloc->overlayViewport, 1);
+    setModelCameraTransform(&alloc->overlayViewport, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     initViewportNode(&alloc->fadeNode, 0, 2, 0xC, 0);
     setViewportScale(&alloc->fadeNode, 1.0f, 1.0f);
     setViewportId(&alloc->fadeNode, 1);
     setModelCameraTransform(&alloc->fadeNode, 0, 0, -0x6F, -0x56, 0x6E, 0x46);
     setViewportFadeValue(0, 0xFF, 0);
-    setViewportEnvColor(&alloc->unk3D0, 0, 0, 0);
-    setViewportFadeValue(&alloc->unk3D0, 0, 0);
-    setViewportEnvColor(&alloc->unk20, 0, 0, 0);
-    setViewportFadeValue(&alloc->unk20, 0, 0);
+    setViewportEnvColor(&alloc->menuViewport, 0, 0, 0);
+    setViewportFadeValue(&alloc->menuViewport, 0, 0);
+    setViewportEnvColor(&alloc->overlayViewport, 0, 0, 0);
+    setViewportFadeValue(&alloc->overlayViewport, 0, 0);
     setViewportEnvColor(&alloc->fadeNode, 0, 0x70, 0x80);
     setViewportFadeValue(&alloc->fadeNode, 0, 0);
     alloc->lightColors[0].r2 = 0;
@@ -942,13 +942,13 @@ void func_8000E6E0_F2E0(void) {
     alloc->ambientColor[0] = 0xD2;
     alloc->ambientColor[1] = 0xD2;
     alloc->ambientColor[2] = 0xD2;
-    setViewportLightColors(alloc->unk3D0.id, 3, alloc->lightColors, (ColorData *)alloc->ambientColor);
+    setViewportLightColors(alloc->menuViewport.id, 3, alloc->lightColors, (ColorData *)alloc->ambientColor);
     playBgmTrack(alloc, gCurrentBgmId[0]);
     setGameStateHandler(updateGalleryMenu);
 }
 
 void updateGalleryMenu(void) {
-    E770_struct *s0;
+    GalleryMenuState *s0;
 
     s0 = getCurrentAllocation();
     switch (s0->menuState) {
@@ -982,7 +982,7 @@ void updateGalleryMenu(void) {
             }
             return;
     }
-    func_8000DCD8_E8D8(s0);
+    renderGalleryMenu(s0);
 }
 
 void onGalleryMenuExit(void) {
@@ -1059,7 +1059,7 @@ INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF30_9EB30);
 INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF34_9EB34);
 
 u8 isGalleryItemUnlocked(u8 itemIndex) {
-    E770_struct *menu;
+    GalleryMenuState *menu;
     s8 categoryIndex;
     GalleryItemEntry *item;
     s8 unlockSlot;
@@ -1267,14 +1267,14 @@ void func_8000EE88_FA88(ViewerState *arg0) {
     }
 }
 
-void startViewerFadeIn(E770_struct *arg0) {
+void startViewerFadeIn(GalleryMenuState *arg0) {
     void *alloc = getCurrentAllocation();
     arg0->menuState = 1;
     beginMenuFadeIn(alloc);
 }
 
-void waitForViewerFadeIn(E770_struct *arg0) {
-    E770_struct *alloc = getCurrentAllocation();
+void waitForViewerFadeIn(GalleryMenuState *arg0) {
+    GalleryMenuState *alloc = getCurrentAllocation();
     s16 temp;
 
     temp = alloc->fadeTimer;
@@ -1448,7 +1448,7 @@ void handleViewerGridNavigation_SingleRow(FD98_struct *arg0) {
 
 void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
     u8 sp30[0xC];
-    E770_struct *alloc;
+    GalleryMenuState *alloc;
     GalleryItemEntry *entry;
     u8 *sp30_ptr;
 
@@ -1605,7 +1605,7 @@ void handleViewerInput(FD98_struct *arg0) {
     inputs = gControllerInputs;
 
     if (inputs & B_BUTTON) {
-        setMenuAnimation((E770_struct *)alloc, 0x90, 0x90, -1, -1);
+        setMenuAnimation((GalleryMenuState *)alloc, 0x90, 0x90, -1, -1);
         sound = 0x2E;
         arg0->viewerState = 3;
         goto play_sound;
@@ -1643,7 +1643,7 @@ do_switch:
 button_check:
     if (inputs & A_BUTTON) {
         arg0->viewerState = 3;
-        setMenuAnimation((E770_struct *)alloc, 0x90, 0x90, -1, -1);
+        setMenuAnimation((GalleryMenuState *)alloc, 0x90, 0x90, -1, -1);
         sound = 0x2E;
         goto play_sound;
     }
@@ -1662,14 +1662,14 @@ button_check:
     }
 }
 
-void startViewerFadeOut(E770_struct *arg0) {
+void startViewerFadeOut(GalleryMenuState *arg0) {
     void *alloc = getCurrentAllocation();
     beginMenuFadeOut(alloc);
     arg0->menuState = 4;
 }
 
-s32 updateViewerFadeOut(E770_struct *arg0) {
-    E770_struct *alloc = getCurrentAllocation();
+s32 updateViewerFadeOut(GalleryMenuState *arg0) {
+    GalleryMenuState *alloc = getCurrentAllocation();
     s16 temp = alloc->fadeTimer;
 
     if (temp == 0) {
@@ -1681,7 +1681,7 @@ s32 updateViewerFadeOut(E770_struct *arg0) {
 }
 
 extern void onGalleryViewerCleanup(void);
-extern void updateGalleryViewer(E770_struct *);
+extern void updateGalleryViewer(GalleryMenuState *);
 
 void initGalleryViewer(FD98_struct *arg0) {
     getCurrentAllocation();
@@ -1696,7 +1696,7 @@ void initGalleryViewer(FD98_struct *arg0) {
     setCallback(updateGalleryViewer);
 }
 
-void updateGalleryViewer(E770_struct *arg0) {
+void updateGalleryViewer(GalleryMenuState *arg0) {
     getCurrentAllocation();
     switch (arg0->menuState) {
         case 0:
@@ -1721,6 +1721,6 @@ void updateGalleryViewer(E770_struct *arg0) {
 }
 
 void onGalleryViewerCleanup(void) {
-    E770_struct *alloc = getCurrentAllocation();
+    GalleryMenuState *alloc = getCurrentAllocation();
     alloc->viewerComplete = 1;
 }
