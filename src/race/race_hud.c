@@ -620,7 +620,7 @@ typedef struct {
 } SecondaryItemDropElement;
 
 typedef struct {
-    s16 unk0;
+    s16 type;
     u16 rotationAngle;
     Vec3i position;
 } ItemBoxPositionEntry;
@@ -859,7 +859,7 @@ void updatePlayerHaloRising(PlayerHaloState *arg0);
 void updatePlayerHaloDescending(PlayerHaloState *arg0);
 void updatePlayerHaloAnimating(PlayerHaloState *arg0);
 void spawnItemBoxBurstEffect(void *displayList, s32 isSecondaryBox);
-void func_80048F0C_49B0C(ItemBoxSystemState *arg0, s32 arg1);
+void initItemBox(ItemBoxSystemState *state, s32 index);
 void initItemBoxPositions(ItemBoxSystemState *arg0);
 void cleanupItemBoxSystem(ItemBoxSystemState *);
 void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state);
@@ -2681,7 +2681,7 @@ loop:
     setCallback(&initItemBoxPositions);
 }
 
-void func_80048F0C_49B0C(ItemBoxSystemState *state, s32 index) {
+void initItemBox(ItemBoxSystemState *state, s32 index) {
     ((ItemBox *)state->itemBoxMemory)[index].baseY = state->positionEntries[index].position.y;
     memcpy((void *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxMemory), &identityMatrix, 0x20);
     memcpy(
@@ -2690,7 +2690,7 @@ void func_80048F0C_49B0C(ItemBoxSystemState *state, s32 index) {
         0xC
     );
 
-    if (state->positionEntries[index].unk0 == 0) {
+    if (state->positionEntries[index].type == 0) {
         ((ItemBox *)state->itemBoxMemory)[index].matrixDisplayLists = &D_8009A690_9B290;
     } else {
         ((ItemBox *)state->itemBoxMemory)[index].matrixDisplayLists = &D_8009A6A0_9B2A0;
@@ -2710,7 +2710,7 @@ void func_80048F0C_49B0C(ItemBoxSystemState *state, s32 index) {
         0xC
     );
 
-    if (state->positionEntries[index].unk0 == 0) {
+    if (state->positionEntries[index].type == 0) {
         ((ItemBox *)state->itemBoxMemory)[index].displayList.displayLists = &D_8009A670_9B270;
     } else {
         ((ItemBox *)state->itemBoxMemory)[index].displayList.displayLists = &D_8009A680_9B280;
@@ -2721,7 +2721,7 @@ void func_80048F0C_49B0C(ItemBoxSystemState *state, s32 index) {
     ((ItemBox *)state->itemBoxMemory)[index].displayList.segment3 = NULL;
     ((ItemBox *)state->itemBoxMemory)[index].state = 0;
     ((ItemBox *)state->itemBoxMemory)[index].rotationAngle = 0;
-    ((ItemBox *)state->itemBoxMemory)[index].isSecondaryItemBox = (u8)state->positionEntries[index].unk0;
+    ((ItemBox *)state->itemBoxMemory)[index].isSecondaryItemBox = (u8)state->positionEntries[index].type;
 }
 
 void initItemBoxPositions(ItemBoxSystemState *state) {
@@ -2734,18 +2734,18 @@ void initItemBoxPositions(ItemBoxSystemState *state) {
     state->itemBoxCount = 0;
     ptr = state->positionEntries;
 
-    if (ptr->unk0 != -1) {
+    if (ptr->type != -1) {
         base = ptr;
         do {
             state->itemBoxCount++;
-        } while (base[state->itemBoxCount].unk0 != -1);
+        } while (base[state->itemBoxCount].type != -1);
     }
 
     count = state->itemBoxCount;
     state->itemBoxMemory = allocateNodeMemory(count * 132);
 
     for (i = 0; i < state->itemBoxCount; i++) {
-        func_80048F0C_49B0C(state, i);
+        initItemBox(state, i);
     }
 
     setCallback(&updateAllItemBoxes);
