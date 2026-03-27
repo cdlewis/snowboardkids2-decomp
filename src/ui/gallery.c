@@ -10,6 +10,7 @@
 #include "race/race_session.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
+#include "text/font_assets.h"
 #include "text/font_render.h"
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
@@ -36,6 +37,76 @@ typedef struct {
     GalleryItemEntry *items;
     s32 count;
 } GalleryCategoryData;
+
+typedef struct {
+    s8 menuState;
+    s8 selectedOption;
+    s8 menuType;
+    s8 viewerComplete;
+    u8 pad4[0x4];
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+} ViewerState;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    s16 config;
+    s16 alpha;
+    s32 label;
+} LabelRenderEntry;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    u8 pad4[4];
+    s16 frameIndex;
+    s16 shade;
+    u8 padC[1];
+    u8 transparency;
+    u8 padE[2];
+} SpriteSlot;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    u8 pad4[6];
+    s16 alpha;
+    u8 padC[4];
+} ExtraSpriteSlot;
+
+typedef struct {
+    s8 menuState;
+    s8 selectedOption;
+    s8 menuType;
+    s8 viewerComplete;
+    u8 pad4[0x4];
+    void *unk8;
+    void *unkC;
+    u8 pad10[0x5E8];
+    u8 unk5F8[0x174];
+    SpriteSlot spriteSlots[27];
+    ExtraSpriteSlot extraSpriteSlots[27];
+    u8 unkACC[0x50];
+    s16 unkB1C;
+    s16 unkB1E;
+    u8 padB20[0x4];
+    s16 unkB24;
+    s16 unkB26;
+    u8 padB28[0x4];
+    u8 unkB2C[0xA];
+    s16 unkB36;
+    u8 padB38[0x4];
+    u8 unkB3C[0xC];
+    u8 unkB48[0x8];
+    s16 unkB50;
+    u8 padB52[0x2];
+    LabelRenderEntry labelEntries[27];
+    u8 unkC98[0xC];
+    u8 unkCA4[0x40];
+} GalleryAlloc;
 
 /* Data section definitions */
 
@@ -95,6 +166,7 @@ extern s32 D_8009DF28_9EB28;
 extern s32 D_8009DF2C_9EB2C;
 extern s32 D_8009DF30_9EB30;
 extern s32 D_8009DF34_9EB34;
+extern u16 D_8009ADE0_9B9E0;
 
 s32 *gGalleryLabelPtrs[] = {
     &D_8009DF34_9EB34, &D_8009DF30_9EB30, &D_8009DF2C_9EB2C, &D_8009DF28_9EB28, &D_8009DF24_9EB24, &D_8009DF20_9EB20,
@@ -1021,7 +1093,179 @@ u8 isGalleryItemUnlocked(u8 itemIndex) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/ui/gallery", func_8000EE88_FA88);
+void func_8000EE88_FA88(ViewerState *arg0) {
+    s32 *new_var2;
+    GalleryAlloc *alloc;
+    GalleryItemEntry *item;
+    s8 new_var;
+    s32 i;
+    s32 configVal;
+    s16 val;
+    s32 stat1;
+    s32 stat2;
+    GalleryCategoryData *category;
+    s32 sp34;
+    s32 sp3C;
+    s32 tableArg1;
+    s32 tableArg2;
+    void *tableEntry;
+    alloc = getCurrentAllocation();
+    category = &gGalleryCategories[alloc->selectedOption];
+    if (arg0->menuState < 5) {
+        if (arg0->menuState > 0) {
+            arg0->unk10 += arg0->unk14;
+            if (0xFF0000 < arg0->unk10) {
+                arg0->unk10 = 0xFF0000;
+                arg0->unk14 = (s32)0xFFF10000;
+            } else if (arg0->unk10 <= 0x77FFFF) {
+                arg0->unk10 = 0x780000;
+                arg0->unk14 = 0xF0000;
+            }
+            arg0->unk8 += arg0->unkC;
+            if (0xFF0000 < arg0->unk8) {
+                arg0->unk8 = 0xFF0000;
+                arg0->unkC = (s32)0xFFF10000;
+            } else if (arg0->unk8 <= 0x77FFFF) {
+                arg0->unk8 = 0x780000;
+                arg0->unkC = 0xF0000;
+            }
+            if (arg0->selectedOption == 0) {
+                arg0->unk14 = (s32)0xFFF10000;
+            } else {
+                arg0->unkC = (s32)0xFFF10000;
+            }
+            if (alloc->selectedOption == 3) {
+                sp34 = 7;
+                sp3C = 7;
+            } else {
+                sp34 = 7;
+                sp3C = 0xF;
+            }
+            for (i = 0; i < category->count; i++) {
+                item = &category->items[i];
+                if (item->labelIndex != (-1)) {
+                    new_var2 = gViewerStateConfig;
+                    configVal = *new_var2;
+                    alloc->labelEntries[i].x = ((s8)item->unk0) + sp34;
+                    new_var = (s8)item->unk1;
+                    alloc->labelEntries[i].config = configVal;
+                    alloc->labelEntries[i].y = new_var + sp3C;
+                    alloc->labelEntries[i].label = (s32)gGalleryLabelPtrs[item->labelIndex];
+                    if (isGalleryItemUnlocked(i)) {
+                        alloc->labelEntries[i].alpha = 0xFF;
+                    } else {
+                        alloc->labelEntries[i].alpha = 0x64;
+                    }
+                    debugEnqueueCallback(2, 4, renderTextColored, &alloc->labelEntries[i]);
+                }
+            }
+
+            item = &category->items[arg0->menuType];
+            alloc->unkB26 = arg0->unk8 >> 16;
+            alloc->unkB1C = (s8)item->unk0;
+            alloc->unkB1E = (s8)item->unk1;
+            if (alloc->selectedOption == 3) {
+                alloc->unkB24 = 0xB;
+            } else {
+                alloc->unkB24 = 0xA;
+            }
+            if (arg0->selectedOption == 0) {
+                debugEnqueueCallback(2, 4, renderTextSprite, &alloc->unkB1C);
+            }
+            if (alloc->selectedOption == 2) {
+                sp3C = 4;
+                sp34 = 4;
+            } else {
+                sp3C = 0;
+                sp34 = 0;
+            }
+            for (i = 0; i < category->count; i++) {
+                item = &category->items[i];
+                alloc->spriteSlots[i].x = ((s8)item->unk0) + sp34;
+                alloc->spriteSlots[i].y = ((s8)item->unk1) + sp3C;
+                alloc->spriteSlots[i].frameIndex = (s8)item->unk4;
+                if (isGalleryItemUnlocked(i & 0xFF) & 0xFF) {
+                    alloc->spriteSlots[i].shade = 0xFF;
+                    alloc->spriteSlots[i].transparency = 0;
+                } else if (alloc->selectedOption == 2) {
+                    alloc->spriteSlots[i].transparency = 0x14;
+                    alloc->spriteSlots[i].shade = 0x96;
+                } else {
+                    alloc->spriteSlots[i].transparency = 0;
+                    alloc->spriteSlots[i].shade = 0x64;
+                }
+                debugEnqueueCallback(2, 4, renderTextSprite, &alloc->spriteSlots[i]);
+                if (alloc->selectedOption == 2) {
+                    alloc->extraSpriteSlots[i].x = (s8)item->unk0;
+                    alloc->extraSpriteSlots[i].y = (s8)item->unk1;
+                    if (isGalleryItemUnlocked(i & 0xFF) & 0xFF) {
+                        alloc->extraSpriteSlots[i].alpha = 0xFF;
+                    } else {
+                        alloc->extraSpriteSlots[i].alpha = 0x96;
+                    }
+                    debugEnqueueCallback(2, 4, renderTextSprite, &alloc->extraSpriteSlots[i]);
+                }
+            }
+
+            alloc->unkB36 = (s16)(arg0->unk10 >> 16);
+            debugEnqueueCallback(2, 4, renderTextSprite, alloc->unkB2C);
+            item = &category->items[arg0->menuType];
+            if (arg0->selectedOption == 0) {
+                if (isGalleryItemUnlocked(arg0->menuType & 0xFF) & 0xFF) {
+                    switch (alloc->selectedOption) {
+                        case 0:
+                            for (i = 0; i < item->numExtra; i++) {
+                                debugEnqueueCallback(2, 4, renderTextSprite, &alloc->unkACC[i * 0x10]);
+                            }
+
+                            break;
+
+                        case 1:
+                            stat1 = getItemStat1((u8)arg0->menuType);
+                            stat2 = getItemStat2((u8)arg0->menuType);
+                            sprintf(
+                                (char *)alloc->unkCA4,
+                                "SPEED=%2d TURN=%2d JUMP=%2d",
+                                stat1 & 0xFF,
+                                stat2,
+                                getItemStat3((s32)((u8)arg0->menuType)) & 0xFF
+                            );
+                            debugEnqueueCallback(2, 4, renderTextPalette, alloc->unkC98);
+                            break;
+
+                        case 3:
+                            if (D_8009ADE0_9B9E0 & 8) {
+                                alloc->unkB50 = 0x30;
+                            } else {
+                                alloc->unkB50 = 0x31;
+                            }
+                            debugEnqueueCallback(2, 4, renderSpriteFrame, alloc->unkB48);
+                            debugEnqueueCallback(2, 4, renderSpriteFrame, alloc->unkB3C);
+                            break;
+                    }
+
+                    tableArg1 = item->pad[0];
+                    tableArg2 = item->pad[1];
+                } else {
+                    tableArg1 = 0xC;
+                    tableArg2 = 0;
+                }
+                func_80035260_35E60(
+                    alloc->unk8,
+                    getTable2DEntry(alloc->unkC, tableArg1, tableArg2),
+                    -0x68,
+                    0xC,
+                    0xFF,
+                    0xFF,
+                    5,
+                    2,
+                    3
+                );
+            }
+            debugEnqueueCallback(2, 3, renderTiledTexture, alloc->unk5F8);
+        }
+    }
+}
 
 void startViewerFadeIn(E770_struct *arg0) {
     void *alloc = getCurrentAllocation();
@@ -1452,8 +1696,6 @@ void initGalleryViewer(FD98_struct *arg0) {
     setCallback(updateGalleryViewer);
 }
 
-extern void func_8000EE88_FA88(E770_struct *);
-
 void updateGalleryViewer(E770_struct *arg0) {
     getCurrentAllocation();
     switch (arg0->menuState) {
@@ -1475,7 +1717,7 @@ void updateGalleryViewer(E770_struct *arg0) {
             }
             break;
     }
-    func_8000EE88_FA88(arg0);
+    func_8000EE88_FA88((ViewerState *)arg0);
 }
 
 void onGalleryViewerCleanup(void) {
