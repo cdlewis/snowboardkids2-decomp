@@ -131,7 +131,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0xC4];
-    void *sourcePlayer;
+    Player *sourcePlayer;
     u8 padding2[0xC];
     u8 particleType;
     u8 padding3;
@@ -191,12 +191,17 @@ typedef struct {
 typedef struct {
     CharacterAttackEffectParticle particles[6];
     MemoryAllocatorNode *assetTable;
-    void *unkC4;
+    Player *sourcePlayer;
     Vec3i positionOffsets;
     s8 particleType;
     u8 frameCounter;
     u8 isVariant; // 0 = variant A, 1 = variant B (different alpha and offsets)
 } CharacterAttackEffectState;
+
+typedef struct {
+    u8 padding[0x76];
+    u8 unk76;
+} Alloc_CharacterAttackEffect;
 
 void loadFirstSprayParticle(SprayEffectTask *);
 void cleanupSprayEffect(void **);
@@ -220,11 +225,14 @@ void cleanupDualSnowSprayTask(DualSnowSprayTask *);
 void updateGlintEffect(GlintEffectTask *);
 void cleanupGlintEffect(GlintEffectTask *);
 void loadCharacterAttackEffectAssets(CharacterAttackEffectState *);
+void updateCharacterAttackEffect(CharacterAttackEffectState *);
 void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *);
 
 extern loadAssetMetadata_arg gGlintEffectAssetTemplate;
 extern loadAssetMetadata_arg gCharacterAttackEffectAssetTemplate;
 extern Vec3i gCharacterAttackEffectPositionOffsetsA;
+extern s32 D_80090F44_91B44;
+extern s32 D_80090F48_91B48;
 extern Vec3i gCharacterAttackEffectPositionOffsetsB;
 extern u8 gCharacterParticleTypeMap[];
 extern s16 gSkiTrailOffsetTransformsForward[];
@@ -847,7 +855,105 @@ void loadCharacterAttackEffectAssets(CharacterAttackEffectState *arg0) {
     setCallbackWithContinue(&updateCharacterAttackEffect);
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/spray_particles", updateCharacterAttackEffect);
+void updateCharacterAttackEffect(CharacterAttackEffectState *arg0) {
+    Vec3i result;
+    Transform3D rotMatrix;
+    Transform3D transformed;
+    Alloc_CharacterAttackEffect *alloc;
+#ifdef CC_CHECK
+    CharacterAttackEffectParticle *particle;
+    s32 rotation;
+    Transform3D *rm;
+    Transform3D *tf;
+    s32 yOffset;
+#else
+    register CharacterAttackEffectParticle *particle __asm__("$16");
+    register s32 rotation __asm__("$17");
+    register Transform3D *rm __asm__("$21");
+    register Transform3D *tf __asm__("$20");
+    register s32 yOffset __asm__("$22");
+#endif
+    s32 i;
+    s32 j;
+    u8 fc;
+
+    alloc = (Alloc_CharacterAttackEffect *)getCurrentAllocation();
+    j = 0;
+
+    if (alloc->unk76 != 0) {
+        goto render;
+    }
+
+    arg0->positionOffsets.x += gCharacterAttackEffectPositionOffsetsA.x;
+    rm = &rotMatrix;
+    __asm__("");
+    arg0->positionOffsets.y += D_80090F44_91B44;
+    tf = &transformed;
+    yOffset = 0x80000;
+    __asm__("");
+    arg0->positionOffsets.z += D_80090F48_91B48;
+
+    particle = arg0->particles;
+    rotation = 0;
+
+    for (j = 0; j < 6; j++) {
+        createYRotationMatrix(rm, rotation & 0xFFFF);
+        func_8006BDBC_6C9BC((BoneAnimationState *)rm, (u8 *)arg0->sourcePlayer + 0x9F0, tf);
+        transformVector2(&arg0->positionOffsets, tf, &result);
+        particle->particle.position.x = result.x + arg0->sourcePlayer->worldPos.x;
+        particle->particle.position.y = result.y + arg0->sourcePlayer->worldPos.y + yOffset;
+        particle->particle.position.z = result.z + arg0->sourcePlayer->worldPos.z;
+
+        if (arg0->isVariant == 0) {
+            particle->particle.alpha = particle->particle.alpha - 9;
+        } else {
+            particle->particle.alpha = particle->particle.alpha - 21;
+        }
+
+        particle++;
+        rotation += 0x555;
+    }
+
+    fc = arg0->frameCounter;
+    if (!(fc & 1)) {
+        loadAssetMetadata(&arg0->particles[0].particle, arg0->assetTable, arg0->particleType + ((s32)(fc << 24) >> 26));
+        {
+#ifdef CC_CHECK
+            CharacterAttackEffectParticle *d;
+#else
+            register CharacterAttackEffectParticle *d __asm__("$3");
+#endif
+            d = &arg0->particles[1];
+            for (j = 1; j < 6; j++) {
+                d->particle.data_ptr = arg0->particles[0].particle.data_ptr;
+                d->particle.index_ptr = arg0->particles[0].particle.index_ptr;
+                d->particle.unk18 = arg0->particles[0].particle.unk18;
+                d->particle.unk19 = arg0->particles[0].particle.unk19;
+                d++;
+            }
+        }
+    }
+
+    fc = arg0->frameCounter + 1;
+    arg0->frameCounter = fc;
+    j = 0;
+    if ((s8)fc == 10) {
+        terminateCurrentTask();
+    }
+
+render:
+    i = 0;
+    do {
+        particle = arg0->particles;
+        do {
+            enqueueAlphaBillboardSprite(j, &particle->particle);
+            i++;
+            particle++;
+        } while (i < 6);
+        j++;
+        i = 0;
+    } while (j < 4);
+}
 
 void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *task) {
     task->assetTable = freeNodeMemory(task->assetTable);

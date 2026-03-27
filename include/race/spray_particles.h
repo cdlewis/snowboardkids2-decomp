@@ -7,7 +7,6 @@
 void spawnCharacterTrailParticle(void *arg0);
 void spawnPlayerCharacterTrailParticle(Player *player, s32 characterId);
 void spawnImpactStar(Vec3i *arg0);
-void updateCharacterAttackEffect(void);
 void spawnCharacterAttackEffect(Player *player);
 void spawnCharacterAttackEffectByType(Player *player, s32 characterId);
 void spawnGlintEffect(void *arg0);
