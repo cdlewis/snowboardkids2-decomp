@@ -200,7 +200,7 @@ void awaitStoryModeRaceResult(void) {
         }
     }
 
-    func_80015254_15E54();
+    updateStorySlotUnlockStatus();
 
     if (raceResult == 1) {
         setGameStateHandler(loadStoryModeRace);
