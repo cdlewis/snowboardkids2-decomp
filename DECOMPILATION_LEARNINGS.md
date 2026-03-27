@@ -168,6 +168,33 @@ For clang compatibility during `CC_CHECK`, wrap these with `#ifdef CC_CHECK` and
 
 When a switch statement has two consecutive cases with identical bodies, GCC 2.7.2 merges them — both jump table entries point to the same code address. If the target ROM has one case pointing to the post-switch code instead, that case was originally empty (`case N: break;`). Check the jump table `.rodata` section to distinguish merged cases from empty ones.
 
+## Instruction Scheduling: Register Setup as Stall Fillers
+
+GCC 2.7.2 -O2 fills load-use stall slots with independent instructions. When sequential memory operations (load-add-store for each struct field) are followed by a loop, the compiler interleaves loop-setup instructions into the stall slots between each load and its dependent add.
+
+To control which instructions fill which stall slots, use `__asm__("")` barriers to create separate scheduling regions and place the setup instructions in each region:
+
+```c
+// Region 1: x offset + rotMatrix address computation
+arg0->offset.x += global_x;
+rm = &rotMatrix;              // fills x's load-use stall
+__asm__("");
+// Region 2: y offset + transformed address + constant
+arg0->offset.y += global_y;
+tf = &transformed;            // fills y's stall slot 1
+yOffset = 0x80000;            // fills y's stall slot 2
+__asm__("");
+// Region 3: z offset + loop variable setup
+arg0->offset.z += global_z;
+particle = arg0->data;        // fills z's stall slot 1
+rotation = 0;                 // fills z's stall slot 2
+```
+
+Each `__asm__("")` barrier creates a scheduling boundary. The scheduler fills stalls within each region using only the instructions in that region. Use `register __asm__("$N")` on the setup variables to ensure they go to the correct registers.
+
+**Without barriers**: the compiler batches all loads together, then all adds, then all stores (no sequential pattern).
+**With volatile struct fields**: forces sequential access but the scheduler picks its own fill order based on internal priorities — `register __asm__` constraints affect which instructions are prioritized first.
+
 ## Duff's Device / Switch Fallthrough
 
 GCC 2.7.2 supports Duff's device-style switch fallthrough. A `case` label inside an `else` block is valid C and generates the expected assembly:
