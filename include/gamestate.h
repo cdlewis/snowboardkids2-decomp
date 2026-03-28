@@ -251,7 +251,7 @@ typedef struct {
     ViewportNode *unk8;
     ViewportNode *unkC;
     Player *players;
-    void *unk14;
+    void *introAnimationData;
     void *unk18;
     void *unk1C;
     void *unk20;

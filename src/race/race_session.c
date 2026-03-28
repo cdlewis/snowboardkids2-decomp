@@ -114,7 +114,7 @@ typedef struct {
     void *unk8;
     void *unkC;
     RacerConfig *racers;
-    void *unk14;
+    void *introAnimationData;
     u8 pad18[64];
     u16 unk58;
     u8 unk5A;
@@ -161,7 +161,7 @@ typedef struct {
 
 typedef struct {
     u16 frame;
-    u16 unk2;
+    u16 animationSetIndex;
 } IntroFrameData;
 
 typedef struct {
@@ -415,7 +415,7 @@ void awaitBossResultAndFadeOut(void);
 void awaitMeterWinContinuePress(void);
 void awaitPlayersAndPlayRaceMusic(void);
 void loadPlayerAssets(void);
-void func_8003F1F0_3FDF0(void);
+void copyIntroPlayerAnimationData(void);
 void handleRaceStateUpdate(void);
 void handleBossRaceResult(void);
 void handleBossDefeatResult(void);
@@ -591,7 +591,7 @@ void initRace(void) {
                 case 0:
                 case 1:
                     raceState->humanPlayerCount = 1;
-                    raceState->unk14 = loadCompressedData(&_40E870_ROM_START, &_40E870_ROM_END, 0xB8E0);
+                    raceState->introAnimationData = loadCompressedData(&_40E870_ROM_START, &_40E870_ROM_END, 0xB8E0);
                     break;
             }
             break;
@@ -1141,7 +1141,7 @@ void awaitPlayersAndPlayRaceMusic(void) {
     }
 }
 
-void func_8003F1F0_3FDF0(void) {
+void copyIntroPlayerAnimationData(void) {
 #ifdef CC_CHECK
     GameState *gs;
 #else
@@ -1150,17 +1150,17 @@ void func_8003F1F0_3FDF0(void) {
     u8 *src;
     u8 *dst;
     u8 *end;
-    u16 frameIndex;
-    s32 copySize;
+    u16 animSetIndex;
+    s32 animDataSize;
 
     gs = (GameState *)getCurrentAllocation();
 
-    copySize = 0x7B4;
-    frameIndex = sIntroFrameEvents[gs->introFrameEventIndex].unk2;
+    animDataSize = 0x7B4;
+    animSetIndex = sIntroFrameEvents[gs->introFrameEventIndex].animationSetIndex;
     {
-        s32 stride = copySize * 4;
+        s32 stride = animDataSize * 4;
         __asm__("" : "=r"(stride) : "0"(stride));
-        src = (u8 *)gs->unk14 + frameIndex * stride;
+        src = (u8 *)gs->introAnimationData + animSetIndex * stride;
     }
     dst = (u8 *)gs->players + 0x434;
     end = (u8 *)gs->players + 0xBE8;
@@ -1169,45 +1169,45 @@ void func_8003F1F0_3FDF0(void) {
         *dst++ = *src++;
     } while (dst < end);
 
-    frameIndex = sIntroFrameEvents[gs->introFrameEventIndex].unk2;
+    animSetIndex = sIntroFrameEvents[gs->introFrameEventIndex].animationSetIndex;
     {
-        u8 *s = (u8 *)gs->unk14 + copySize * (frameIndex * 4 + 1);
+        u8 *s = (u8 *)gs->introAnimationData + animDataSize * (animSetIndex * 4 + 1);
         u8 *d = (u8 *)gs->players + 0x101C;
-        if (copySize != 0) {
+        if (animDataSize != 0) {
             u8 *e;
             __asm__("" : "=r"(s) : "0"(s));
             src = s;
-            e = (u8 *)(copySize + (s32)d);
+            e = (u8 *)(animDataSize + (s32)d);
             do {
                 *d++ = *src++;
             } while (d < e);
         }
     }
 
-    frameIndex = sIntroFrameEvents[gs->introFrameEventIndex].unk2;
+    animSetIndex = sIntroFrameEvents[gs->introFrameEventIndex].animationSetIndex;
     {
-        u8 *s = (u8 *)gs->unk14 + copySize * (frameIndex * 4 + 2);
+        u8 *s = (u8 *)gs->introAnimationData + animDataSize * (animSetIndex * 4 + 2);
         u8 *d = (u8 *)gs->players + 0x1C04;
-        if (copySize != 0) {
+        if (animDataSize != 0) {
             u8 *e;
             __asm__("" : "=r"(s) : "0"(s));
             src = s;
-            e = (u8 *)(copySize + (s32)d);
+            e = (u8 *)(animDataSize + (s32)d);
             do {
                 *d++ = *src++;
             } while (d < e);
         }
     }
 
-    frameIndex = sIntroFrameEvents[gs->introFrameEventIndex].unk2;
+    animSetIndex = sIntroFrameEvents[gs->introFrameEventIndex].animationSetIndex;
     {
-        u8 *s = (u8 *)gs->unk14 + copySize * (frameIndex * 4 + 3);
+        u8 *s = (u8 *)gs->introAnimationData + animDataSize * (animSetIndex * 4 + 3);
         u8 *d = (u8 *)gs->players + 0x27EC;
-        if (copySize != 0) {
+        if (animDataSize != 0) {
             u8 *e;
             __asm__("" : "=r"(s) : "0"(s));
             src = s;
-            e = (u8 *)(copySize + (s32)d);
+            e = (u8 *)(animDataSize + (s32)d);
             do {
                 *d++ = *src++;
             } while (d < e);
@@ -1463,7 +1463,7 @@ handleB:
         return;
     }
     if (sIntroFrameEvents[gs->introFrameEventIndex].frame == gs->raceFrameCounter) {
-        func_8003F1F0_3FDF0();
+        copyIntroPlayerAnimationData();
         gs->introFrameEventIndex++;
     }
     if (sIntroCameraEvents[gs->introCameraEventIndex].frame == gs->raceFrameCounter) {
@@ -1982,7 +1982,7 @@ void cleanupGameSession(void) {
     freeNodeMemory(gameState->unk1C);
     freeNodeMemory(gameState->unk20);
     freeNodeMemory(gameState->unk28);
-    freeNodeMemory(gameState->unk14);
+    freeNodeMemory(gameState->introAnimationData);
 
     osViExtendVStart(0);
     stopAllSoundEffectsAndClearQueues(0x14);
