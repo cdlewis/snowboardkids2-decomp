@@ -1075,6 +1075,7 @@ loadSpriteAssetData = 0x80009EF8; // rom:0xAAF8
 releaseNodeMemoryRef = 0x80009F5C; // rom:0xAB5C
 setSpriteAnimation = 0x80009F90; // rom:0xAB90
 updateSpriteAnimation = 0x8000A030; // rom:0xAC30
+gCachedSpriteTextureEntry = 0x8009F1F0; // type:OutputStruct_19E80
 renderOpaqueSprite = 0x8000A13C; // rom:0xAD3C
 renderSprite = 0x8000A190; // rom:0xAD90
 setupAndEnqueueSprite = 0x8000A1E4; // rom:0xADE4

@@ -9,7 +9,7 @@
 #include "ultra64.h"
 
 extern s32 D_8008C920_8D520[];
-extern s32 D_8009F1F0_9FDF0;
+extern OutputStruct_19E80 gCachedSpriteTextureEntry;
 extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
 extern Gfx *gRegionAllocPtr;
@@ -132,10 +132,10 @@ s16 getSpriteAssetId(s32 index) {
 }
 
 typedef struct {
-    /* 0x00 */ u32 vertices;
+    /* 0x00 */ u32 vertexData;
     /* 0x04 */ Vec3i position;
-    /* 0x10 */ DataTable_19E80 *table;
-    /* 0x14 */ u16 index;
+    /* 0x10 */ DataTable_19E80 *dataTable;
+    /* 0x14 */ u16 textureIndex;
     /* 0x16 */ u8 alpha;
     /* 0x17 */ u8 flags;
     /* 0x18 */ Mtx *translationMtx;
@@ -145,11 +145,11 @@ typedef struct {
     /* 0x28 */ s32 scaleX;
     /* 0x2C */ s32 scaleY;
     /* 0x30 */ u16 zRotation;
-    /* 0x32 */ s16 texIndex;
+    /* 0x32 */ s16 paletteIndex;
     /* 0x34 */ Transform3D transform;
-} OpaqueSpriteStruct_90F0;
+} SpriteRenderState;
 
-void renderOpaqueSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
+void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
     OutputStruct_19E80 textureEntry;
     Transform3D transform;
     s32 texWidthShift;
@@ -165,8 +165,8 @@ void renderOpaqueSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
         return;
     }
 
-    getTableEntryByU16Index(sprite->table, sprite->index, &textureEntry);
-    tlutAddr = (s32)textureEntry.index_ptr + (sprite->texIndex << 5);
+    getTableEntryByU16Index(sprite->dataTable, sprite->textureIndex, &textureEntry);
+    tlutAddr = (s32)textureEntry.index_ptr + (sprite->paletteIndex << 5);
     texWidthShift = 0;
 
     if (gGraphicsMode != 0x202) {
@@ -206,7 +206,7 @@ void renderOpaqueSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
             0
         );
         gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
-    } else if (D_8009F1F0_9FDF0 != (s32)textureEntry.data_ptr) {
+    } else if (gCachedSpriteTextureEntry.data_ptr != textureEntry.data_ptr) {
         dim = textureEntry.field1;
     loop_16:
         if (!(dim & 1)) {
@@ -249,7 +249,7 @@ void renderOpaqueSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
     }
 
     gGraphicsMode = 0x202;
-    memcpy(&D_8009F1F0_9FDF0, &textureEntry, 0xC);
+    memcpy(&gCachedSpriteTextureEntry, &textureEntry, 0xC);
 
     if (sprite->translationMtx == NULL) {
         sprite->translationMtx = arenaAlloc16(0x40);
@@ -298,12 +298,12 @@ void renderOpaqueSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
         gSPMatrix(gRegionAllocPtr++, sprite->scaleMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         gSPMatrix(gRegionAllocPtr++, sprite->yRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         gSPMatrix(gRegionAllocPtr++, sprite->zRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPVertex(gRegionAllocPtr++, sprite->vertices, 4, 0);
+        gSPVertex(gRegionAllocPtr++, sprite->vertexData, 4, 0);
         gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
     }
 }
 
-void renderTranslucentSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
+void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
     OutputStruct_19E80 textureEntry;
     Transform3D transform;
     s32 texWidthShift;
@@ -319,8 +319,8 @@ void renderTranslucentSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
         return;
     }
 
-    getTableEntryByU16Index(sprite->table, sprite->index, &textureEntry);
-    tlutAddr = (s32)textureEntry.index_ptr + (sprite->texIndex << 5);
+    getTableEntryByU16Index(sprite->dataTable, sprite->textureIndex, &textureEntry);
+    tlutAddr = (s32)textureEntry.index_ptr + (sprite->paletteIndex << 5);
     texWidthShift = 0;
 
     if (gGraphicsMode != 0x203) {
@@ -360,7 +360,7 @@ void renderTranslucentSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
             0
         );
         gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
-    } else if (D_8009F1F0_9FDF0 != (s32)textureEntry.data_ptr) {
+    } else if (gCachedSpriteTextureEntry.data_ptr != textureEntry.data_ptr) {
         dim = textureEntry.field1;
     loop_16:
         if (!(dim & 1)) {
@@ -403,7 +403,7 @@ void renderTranslucentSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
     }
 
     gGraphicsMode = 0x203;
-    memcpy(&D_8009F1F0_9FDF0, &textureEntry, 0xC);
+    memcpy(&gCachedSpriteTextureEntry, &textureEntry, 0xC);
 
     gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);
 
@@ -454,12 +454,12 @@ void renderTranslucentSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
         gSPMatrix(gRegionAllocPtr++, sprite->scaleMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         gSPMatrix(gRegionAllocPtr++, sprite->yRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         gSPMatrix(gRegionAllocPtr++, sprite->zRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPVertex(gRegionAllocPtr++, sprite->vertices, 4, 0);
+        gSPVertex(gRegionAllocPtr++, sprite->vertexData, 4, 0);
         gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
     }
 }
 
-void renderTransformedSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
+void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
     OutputStruct_19E80 textureEntry;
     Transform3D transform;
     s32 texWidthShift;
@@ -475,8 +475,8 @@ void renderTransformedSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
         return;
     }
 
-    getTableEntryByU16Index(sprite->table, sprite->index, &textureEntry);
-    tlutAddr = (s32)textureEntry.index_ptr + (sprite->texIndex << 5);
+    getTableEntryByU16Index(sprite->dataTable, sprite->textureIndex, &textureEntry);
+    tlutAddr = (s32)textureEntry.index_ptr + (sprite->paletteIndex << 5);
     texWidthShift = 0;
 
     if (gGraphicsMode != 0x203) {
@@ -516,7 +516,7 @@ void renderTransformedSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
             0
         );
         gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
-    } else if (D_8009F1F0_9FDF0 != (s32)textureEntry.data_ptr) {
+    } else if (gCachedSpriteTextureEntry.data_ptr != textureEntry.data_ptr) {
         dim = textureEntry.field1;
     loop_16:
         if (!(dim & 1)) {
@@ -559,7 +559,7 @@ void renderTransformedSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
     }
 
     gGraphicsMode = 0x203;
-    memcpy(&D_8009F1F0_9FDF0, &textureEntry, 0xC);
+    memcpy(&gCachedSpriteTextureEntry, &textureEntry, 0xC);
 
     gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);
 
@@ -609,7 +609,7 @@ void renderTransformedSpriteCallback(OpaqueSpriteStruct_90F0 *sprite) {
         gSPMatrix(gRegionAllocPtr++, sprite->scaleMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         gSPMatrix(gRegionAllocPtr++, sprite->yRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         gSPMatrix(gRegionAllocPtr++, sprite->zRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPVertex(gRegionAllocPtr++, sprite->vertices, 4, 0);
+        gSPVertex(gRegionAllocPtr++, sprite->vertexData, 4, 0);
         gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
     }
 }
