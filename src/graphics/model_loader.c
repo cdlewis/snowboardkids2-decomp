@@ -394,7 +394,7 @@ void initSceneRenderNode(
     setViewportScale(&node->base, 1.0f, 1.0f);
     setViewportId(&node->base, sceneId);
     setModelCameraTransform(node, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    func_8006FA0C_7060C(&node->base, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+    setViewportPerspective(&node->base, 40.0f, 1.3333334f, 10.0f, 10000.0f);
 
     node->lightColor.r2 = 0;
     node->lightColor.g2 = 0x7F;

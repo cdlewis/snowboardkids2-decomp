@@ -154,7 +154,7 @@ void setViewportTransformById(u16 viewportId, void *transformMatrix);
 
 void initViewportNode(ViewportNode *node, ViewportNode *parent, s32 slotIndex, s32 priority, s32 flags);
 
-void func_8006FA0C_7060C(ViewportNode *node, f32 fov, f32 aspect, f32 near, f32 far);
+void setViewportPerspective(ViewportNode *node, f32 fov, f32 aspect, f32 near, f32 far);
 
 void setModelCameraTransform(void *, s16, s16, s16, s16, s16, s16);
 

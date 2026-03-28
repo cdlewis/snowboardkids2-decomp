@@ -91,7 +91,7 @@ void initCutsceneRenderer(void) {
     setViewportScale(nodePtr, scale, scale);
     setViewportId(nodePtr, 1);
     setModelCameraTransform(nodePtr, 0, 0, -160, -120, 159, 119);
-    func_8006FA0C_7060C(nodePtr, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+    setViewportPerspective(nodePtr, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     createViewportTransform(lightBuffer, 0, 0, 0x01000000, 0, 0, 0);
 
     overlayNodePtr = &s.taskMemory->overlayNode;

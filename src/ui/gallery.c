@@ -903,7 +903,7 @@ void setupGalleryMenuState(void) {
     setViewportScale(&alloc->menuViewport, 1.0f, 1.0f);
     setViewportId(&alloc->menuViewport, 1);
     setModelCameraTransform(&alloc->menuViewport, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    func_8006FA0C_7060C(&alloc->menuViewport, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+    setViewportPerspective(&alloc->menuViewport, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     createViewportTransform(&viewportTransform, 0, 0, 0x01400000, 0, 0, 0);
     setViewportTransformById(alloc->menuViewport.id, &viewportTransform);
     initViewportNode(&alloc->overlayViewport, 0, 1, 0xA, 0);

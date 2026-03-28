@@ -197,8 +197,8 @@ void initLevelSelectState(void) {
     setModelCameraTransform(&state->previewNode, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
     setModelCameraTransform(&state->viewportParentNode, 0, 0, -0x5C, -0x22, 0x5C, 0x58);
 
-    func_8006FA0C_7060C(&state->previewNode, 70.0f, 1.4375f, 20.0f, 4000.0f);
-    func_8006FA0C_7060C(&state->viewportParentNode, 70.0f, 1.4375f, 20.0f, 10000.0f);
+    setViewportPerspective(&state->previewNode, 70.0f, 1.4375f, 20.0f, 4000.0f);
+    setViewportPerspective(&state->viewportParentNode, 70.0f, 1.4375f, 20.0f, 10000.0f);
 
     setViewportFadeValue(0, 0xFF, 0);
     setViewportFadeValue(&state->viewportParentNode, 0, 0);
@@ -565,11 +565,11 @@ void loadLevelPreview(void) {
 
         if (poolId == 11) {
             node = &allocation->previewNode;
-            func_8006FA0C_7060C(node, 50.0f, ASPECT_RATIO, 10.0f, 1000.0f);
+            setViewportPerspective(node, 50.0f, ASPECT_RATIO, 10.0f, 1000.0f);
             setViewportFogById(100, 900, 999, item->fogColors.r2, item->fogColors.g2, item->fogColors.b2);
             spawnConfettiEffect(node);
         } else {
-            func_8006FA0C_7060C(&allocation->previewNode, 50.0f, ASPECT_RATIO, 10.0f, 4000.0f);
+            setViewportPerspective(&allocation->previewNode, 50.0f, ASPECT_RATIO, 10.0f, 4000.0f);
             setViewportFogById(100, 995, 999, item->fogColors.r2, item->fogColors.g2, item->fogColors.b2);
         }
 

@@ -20,18 +20,18 @@
 #include "system/task_scheduler.h"
 #include "text/text_elements.h"
 
-#define SET_PLAYER_CAMERA_PERSPECTIVE(gs, idx, aspect_val)                     \
-    do {                                                                       \
-        fov = 70.0f;                                                           \
-        aspect = (aspect_val);                                                 \
-        near = 20.0f;                                                          \
-        far = 10000.0f;                                                        \
-        if ((gs)->memoryPoolId != 0xB) {                                       \
-            func_8006FA0C_7060C(&(gs)->unk8[idx], fov, aspect, near, 3000.0f); \
-        } else {                                                               \
-            func_8006FA0C_7060C(&(gs)->unk8[idx], fov, aspect, near, 2000.0f); \
-        }                                                                      \
-        func_8006FA0C_7060C(&(gs)->unkC[idx], fov, aspect, near, far);         \
+#define SET_PLAYER_CAMERA_PERSPECTIVE(gs, idx, aspect_val)                        \
+    do {                                                                          \
+        fov = 70.0f;                                                              \
+        aspect = (aspect_val);                                                    \
+        near = 20.0f;                                                             \
+        far = 10000.0f;                                                           \
+        if ((gs)->memoryPoolId != 0xB) {                                          \
+            setViewportPerspective(&(gs)->unk8[idx], fov, aspect, near, 3000.0f); \
+        } else {                                                                  \
+            setViewportPerspective(&(gs)->unk8[idx], fov, aspect, near, 2000.0f); \
+        }                                                                         \
+        setViewportPerspective(&(gs)->unkC[idx], fov, aspect, near, far);         \
     } while (0)
 
 USE_OVERLAY(_9FF70);
@@ -913,14 +913,14 @@ void initRaceViewports(void) {
                 near = 70.0f;
                 aspect = 4.0f / 3.0f;
                 fov = 20.0f;
-                func_8006FA0C_7060C(gs->unk8, near, aspect, fov, 3800.0f);
+                setViewportPerspective(gs->unk8, near, aspect, fov, 3800.0f);
             } else {
                 near = 70.0f;
                 aspect = 4.0f / 3.0f;
                 fov = 20.0f;
-                func_8006FA0C_7060C(gs->unk8, near, aspect, fov, 2000.0f);
+                setViewportPerspective(gs->unk8, near, aspect, fov, 2000.0f);
             }
-            func_8006FA0C_7060C(gs->unkC, near, aspect, fov, 10000.0f);
+            setViewportPerspective(gs->unkC, near, aspect, fov, 10000.0f);
             break;
 
         case 2:
@@ -944,11 +944,11 @@ void initRaceViewports(void) {
                     far = 10000.0f;
                     new_var = far;
                     if (gs->memoryPoolId != 0xB) {
-                        func_8006FA0C_7060C(&gs->unk8[playerIdx], fov, aspect, near, 3000.0f);
+                        setViewportPerspective(&gs->unk8[playerIdx], fov, aspect, near, 3000.0f);
                     } else {
-                        func_8006FA0C_7060C(&gs->unk8[playerIdx], fov, aspect, near, 2000.0f);
+                        setViewportPerspective(&gs->unk8[playerIdx], fov, aspect, near, 2000.0f);
                     }
-                    func_8006FA0C_7060C(&gs->unkC[playerIdx], fov, aspect, near, new_var);
+                    setViewportPerspective(&gs->unkC[playerIdx], fov, aspect, near, new_var);
                 } while (0);
             }
 
