@@ -23,7 +23,7 @@ typedef struct {
 
 extern s16 D_800B09B8_1DC098[];
 extern s16 D_800B09BA_1DC09A[];
-extern s16 D_800B09A8_1DC088[];
+extern s16 gPlayerCountOptionPositions[];
 extern u16 D_800B09A0_1DC080[];
 
 void updatePlayerSelectAnim(PlayerSelectState *);
@@ -229,25 +229,25 @@ void cleanupPlayerSelectTask(PlayerSelectSpriteTask *arg0) {
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void func_800B054C_1DBC2C(PlayerSelectSpriteTask *arg0) {
-    void *temp;
+void initPlayerCountSelectSprites(PlayerSelectSpriteTask *arg0) {
+    void *spriteData;
     s32 i;
-    s16 v0, v2;
+    s16 x, y;
 
     getCurrentAllocation();
-    temp = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
+    spriteData = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
     setCleanupCallback(cleanupPlayerCountSelectSprites);
 
     for (i = 0; i < 4; i++) {
-        v0 = D_800B09A8_1DC088[i * 2];
-        arg0[i].x = v0;
-        v2 = D_800B09A8_1DC088[i * 2 + 1];
+        x = gPlayerCountOptionPositions[i * 2];
+        arg0[i].x = x;
+        y = gPlayerCountOptionPositions[i * 2 + 1];
         arg0[i].frameIndex = i / 2;
         arg0[i].playerIndex = 0;
         arg0[i].slotIndex = i & 1;
         arg0[i].alpha = 0xFF;
-        arg0[i].spriteData = temp;
-        arg0[i].y = v2;
+        arg0[i].spriteData = spriteData;
+        arg0[i].y = y;
     }
 
     setCallback(enqueuePlayerSelectSpritesRender);

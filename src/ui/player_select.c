@@ -32,7 +32,6 @@ typedef struct {
 
 u8 gPlayerSlotDefaults[] = { 0x00, 0x02, 0x05, 0x01, 0x00, 0x00, 0x00, 0x00,
                              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-extern void *D_800B054C;
 extern u8 gConnectedControllerMask;
 
 void handlePlayerCountSelectInput(void);
@@ -76,7 +75,7 @@ void initPlayerCountSelectState(void) {
     setViewportFadeValue(&state->node, 0, 0x10);
     state->assetData1 = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
     state->assetData2 = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
-    scheduleTask(&func_800B054C_1DBC2C, 0, 0, 0x5A);
+    scheduleTask(&initPlayerCountSelectSprites, 0, 0, 0x5A);
     scheduleTask(&initCharacterReadyIndicator, 0, 0, 0x5A);
     setGameStateHandler(func_80022304_22F04);
 }
