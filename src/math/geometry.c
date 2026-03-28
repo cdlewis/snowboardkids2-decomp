@@ -1322,7 +1322,7 @@ void matrixToEulerAngles(s32 *arg0, s32 *arg1, f32 *lookAtX, f32 *lookAtY, f32 *
     *upZ = (f32)pitchMatrix.m[1][2];
 }
 
-s32 atan2Fixed(s32 x, s32 y) {
+s16 atan2Fixed(s32 x, s32 y) {
     s16 ratio;
     s16 tableVal;
     s16 result;

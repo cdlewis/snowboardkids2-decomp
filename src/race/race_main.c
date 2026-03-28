@@ -1695,7 +1695,7 @@ s32 updateRaceFinishSlowingDownStep(Player *player) {
     s32 animParam;
     s32 t0;
     u32 t1;
-    s32 targetAngle;
+    s16 targetAngle;
 
     speed = isqrt64((s64)player->velocity.x * player->velocity.x + (s64)player->velocity.z * player->velocity.z);
 

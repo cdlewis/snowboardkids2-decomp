@@ -960,7 +960,7 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
     s16 var_s3;
     s32 temp_v0;
     s32 i;
-    s32 s0;
+    s16 s0;
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
@@ -1011,9 +1011,13 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
 
         checkSnowmanProjectileHit(arg0);
 
-        s0 = arg0->vel.z;
-        var_s3 =
-            func_8005BF50_5CB50(&arg0->pos, atan2Fixed(arg0->vel.x, s0), arg0->ownerPlayerIdx, 0x1E00000, 0x1E0000);
+        var_s3 = func_8005BF50_5CB50(
+            &arg0->pos,
+            atan2Fixed(arg0->vel.x, arg0->vel.z),
+            arg0->ownerPlayerIdx,
+            0x1E00000,
+            0x1E0000
+        );
         if ((var_s3 << 16) != 0) {
             var_s3 &= 0x1FFF;
             if (var_s3 >= 0x1001) {
@@ -1025,7 +1029,8 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
             }
 
             if (var_s3 < -(s16)arg0->turnRate) {
-                var_s3 = -(s16)arg0->turnRate;
+                s0 = (s16)arg0->turnRate;
+                var_s3 = -s0;
             }
 
             memcpy(&rotateVec, &arg0->vel, sizeof(Vec3i));
@@ -1385,6 +1390,7 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
     s32 pad[8];
     s16 var_s3;
     s32 temp_v0;
+    s16 angle;
     s32 i;
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
@@ -1395,7 +1401,7 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
 
         arg0->vel.y += 0xFFFC0000;
 
-        normalizeVelocityToSpeed((&arg0->vel), 0x198000);
+        normalizeVelocityToSpeed(&arg0->vel, 0x198000);
 
         memcpy(&savedVec, &arg0->pos, sizeof(Vec3i));
 
@@ -1410,12 +1416,12 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
         if ((sp18.x != 0) || (sp18.z != 0)) {
             arg0->pos.x = arg0->pos.x + sp18.x;
             arg0->pos.z = arg0->pos.z + sp18.z;
-            temp_v0 = atan2Fixed(-sp18.x, -sp18.z);
-            rotateVectorY((&arg0->vel), -temp_v0, &rotateVec);
+            angle = atan2Fixed(-sp18.x, -sp18.z);
+            rotateVectorY(&arg0->vel, -angle, &rotateVec);
             if (rotateVec.z < 0) {
                 rotateVec.z = -rotateVec.z;
             }
-            rotateVectorY(&rotateVec, temp_v0, (&arg0->vel));
+            rotateVectorY(&rotateVec, angle, &arg0->vel);
             arg0->ownerPlayerIdx = -1;
         } else {
             arg0->vel.x = arg0->pos.x - savedVec.x;
@@ -1440,7 +1446,7 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
         var_s3 = func_8005BF50_5CB50(
             &arg0->pos,
             atan2Fixed(arg0->vel.x, arg0->vel.z),
-            arg0->ownerPlayerIdx,
+            angle = arg0->ownerPlayerIdx,
             0x1200000,
             0x198000
         );
@@ -1459,8 +1465,8 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
                 var_s3 = -(s16)arg0->turnRate;
             }
 
-            memcpy(&rotateVec, (&arg0->vel), sizeof(Vec3i));
-            rotateVectorY(&rotateVec, var_s3, (&arg0->vel));
+            memcpy(&rotateVec, &arg0->vel, sizeof(Vec3i));
+            rotateVectorY(&rotateVec, var_s3, &arg0->vel);
         }
 
         if ((s16)arg0->turnRate < 0x19) {
@@ -1474,11 +1480,9 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
         terminateCurrentTask();
     }
 
-    i = 0;
-    do {
+    for (i = 0; i < 4; i++) {
         enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)arg0);
-        i++;
-    } while (i < 4);
+    }
 }
 
 s32 spawnHomingPanelProjectileTask(s32 arg0, s32 arg1) {

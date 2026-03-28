@@ -76,7 +76,7 @@ void scaleMatrix(Transform3D *matrix, s16 scaleX, s16 scaleY, s16 scaleZ);
 
 s16 computeAngleToPosition(s32 fromX, s32 fromZ, s32 toX, s32 toZ);
 
-s32 atan2Fixed(s32, s32);
+s16 atan2Fixed(s32, s32);
 
 s32 approximateSin(s16 inputAngle);
 s32 approximateCos(s16 inputAngle);

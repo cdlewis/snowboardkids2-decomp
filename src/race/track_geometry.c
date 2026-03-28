@@ -678,15 +678,15 @@ void updateStoryMapRareEventSledding(Func2E024Arg *arg0) {
     s32 completedCount;
     s32 i;
     Func297D8Arg *element;
-    s32 newPosition[3];
-    s32 currentPosition[3];
+    Vec3i newPosition;
+    Vec3i currentPosition;
     Transform3D localMatrix;
     Transform3D worldMatrix;
-    s32 *pCurrentPosition;
-    s32 *pNewPosition;
+    Vec3i *pCurrentPosition;
+    Vec3i *pNewPosition;
     s16 movementSpeed;
-    s32 facingAngle;
-    s32 angle2;
+    s16 facingAngle;
+    s16 angle2;
     Vec3i *translationPtr;
 
     gameState = getCurrentAllocation();
@@ -705,8 +705,8 @@ void updateStoryMapRareEventSledding(Func2E024Arg *arg0) {
     }
 
     for (i = 0; i < arg0->unkD5; i++) {
-        pCurrentPosition = currentPosition;
-        pNewPosition = newPosition;
+        pCurrentPosition = &currentPosition;
+        pNewPosition = &newPosition;
         element = &arg0->elements[i];
 
         memcpy(&localMatrix, &identityMatrix, sizeof(Transform3D));
@@ -715,8 +715,8 @@ void updateStoryMapRareEventSledding(Func2E024Arg *arg0) {
         switch (element->unk5E) {
             case 0:
                 translationPtr = &element->matrix.translation;
-                memcpy(pCurrentPosition, translationPtr, 0xC);
-                memcpy(pNewPosition, pCurrentPosition, 0xC);
+                memcpy(pCurrentPosition, translationPtr, sizeof(Vec3i));
+                memcpy(pNewPosition, pCurrentPosition, sizeof(Vec3i));
 
                 movementSpeed = -element->unk5A;
 
@@ -725,9 +725,9 @@ void updateStoryMapRareEventSledding(Func2E024Arg *arg0) {
                     facingAngle = 0x5200;
                 }
 
-                newPosition[0] += ((movementSpeed * (currentPosition[2] >> 8)) / (s16)facingAngle) << 12;
-                newPosition[2] += ((-movementSpeed * (currentPosition[0] >> 8)) / (s16)facingAngle) << 12;
-                memcpy(translationPtr, pNewPosition, 0xC);
+                newPosition.x += ((movementSpeed * (currentPosition.z >> 8)) / facingAngle) << 12;
+                newPosition.z += ((-movementSpeed * (currentPosition.x >> 8)) / facingAngle) << 12;
+                memcpy(translationPtr, pNewPosition, sizeof(Vec3i));
                 break;
             case 1:
                 completedCount++;
@@ -743,7 +743,7 @@ void updateStoryMapRareEventSledding(Func2E024Arg *arg0) {
             updateStoryMapNpcModel(element);
             gameState->npcPosX[i] = element->matrix.translation.x;
             gameState->npcPosZ[i] = element->matrix.translation.z;
-            if ((u32)((facingAngle - 0x1001) & 0xFFFF) < 0x468) {
+            if ((u16)((facingAngle - 0x1001) & 0xFFFF) < 0x468) {
                 element->unk5E = 1;
             }
         } else if ((completedCount & 0xFF) == 2) {
@@ -755,21 +755,21 @@ void updateStoryMapRareEventSledding(Func2E024Arg *arg0) {
         facingAngle = atan2Fixed(arg0->elements[0].matrix.translation.x, arg0->elements[0].matrix.translation.z);
         angle2 = atan2Fixed(arg0->elements[1].matrix.translation.x, arg0->elements[1].matrix.translation.z);
 
-        if ((s16)facingAngle >= 0x1001) {
+        if (facingAngle >= 0x1001) {
             facingAngle -= 0x2000;
         }
-        if ((s16)angle2 >= 0x1001) {
+        if (angle2 >= 0x1001) {
             angle2 -= 0x2000;
         }
 
         {
-            s32 diff = (s16)facingAngle - (s16)angle2;
+            s32 diff = facingAngle - angle2;
             if (diff < 0) {
                 diff = -diff;
             }
 
             if (diff >= 0x109) {
-                if ((s16)angle2 < (s16)facingAngle) {
+                if (angle2 < facingAngle) {
                     spawnSpriteEffectEx(
                         arg0->elements[0].model,
                         0,
@@ -1198,13 +1198,13 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
     s32 completedCount;
     s32 i;
     Func297D8Arg *element;
-    s32 newPosition[3];
-    s32 currentPosition[3];
+    Vec3i newPosition;
+    Vec3i currentPosition;
     Transform3D localMatrix;
     Transform3D worldMatrix;
     s16 movementSpeed;
     s32 radiusFactor;
-    s32 facingAngle;
+    s16 facingAngle;
     s32 unused;
 
     gameState = getCurrentAllocation();
@@ -1224,8 +1224,8 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
                 }
                 break;
             case 1:
-                memcpy(currentPosition, &element->matrix.translation, 0xC);
-                memcpy(newPosition, currentPosition, 0xC);
+                memcpy(&currentPosition, &element->matrix.translation, sizeof(Vec3i));
+                memcpy(&newPosition, &currentPosition, sizeof(Vec3i));
 
                 if (i == 0) {
                     radiusFactor = 0x5200;
@@ -1235,9 +1235,9 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
                     movementSpeed = -0x18;
                 }
 
-                newPosition[0] += ((movementSpeed * (currentPosition[2] >> 8)) / radiusFactor) << 12;
-                newPosition[2] += ((-movementSpeed * (currentPosition[0] >> 8)) / radiusFactor) << 12;
-                memcpy(&element->matrix.translation, newPosition, 0xC);
+                newPosition.x += ((movementSpeed * (currentPosition.z >> 8)) / radiusFactor) << 12;
+                newPosition.z += ((-movementSpeed * (currentPosition.x >> 8)) / radiusFactor) << 12;
+                memcpy(&element->matrix.translation, &newPosition, sizeof(Vec3i));
                 break;
             case 2:
                 completedCount++;
@@ -1275,7 +1275,7 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
             updateStoryMapNpcModel(element);
             gameState->npcPosX[i] = element->matrix.translation.x;
             gameState->npcPosZ[i] = element->matrix.translation.z;
-            if (((u32)((facingAngle - 0x1001) & 0xFFFF) < 0x468)) {
+            if (((u16)((facingAngle - 0x1001) & 0xFFFF) < 0x468)) {
                 element->unk5E = 2;
             }
         } else if ((completedCount & 0xFF) == element->unk5E) {
