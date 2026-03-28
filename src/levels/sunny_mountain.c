@@ -30,7 +30,7 @@ typedef struct {
     /* 0x18 */ Transform3D mainMatrix;
     /* 0x38 */ void *displayList;
     /* 0x3C */ void *assetData;
-    /* 0x40 */ void *unk40;
+    /* 0x40 */ void *compressedAssetData;
     /* 0x44 */ s32 unk44;
     /* 0x48 */ u8 _pad48[0xC];
     /* 0x54 */ u8 *displayObjects;
@@ -83,7 +83,7 @@ void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
 
     destPositionPtr = taskState;
     displayObjectOffset = 0;
-    taskState->unk40 = loadCompressedSegment2AssetByIndex(allocation->memoryPoolId);
+    taskState->compressedAssetData = loadCompressedSegment2AssetByIndex(allocation->memoryPoolId);
 
     taskState->unk44 = 0;
     taskState->waypointIndex = 0;
@@ -102,7 +102,7 @@ void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
 
         *(void **)(displayObjectOffset + (s32)taskState->displayObjects + 0x24) = taskState->assetData;
 
-        *(void **)(displayObjectOffset + (s32)taskState->displayObjects + 0x28) = taskState->unk40;
+        *(void **)(displayObjectOffset + (s32)taskState->displayObjects + 0x28) = taskState->compressedAssetData;
 
         *(void **)(displayObjectOffset + (s32)taskState->displayObjects + 0x2C) = 0;
 
@@ -137,7 +137,7 @@ void updateSunnyMountainDisplayObjectsTask(s32 *arg0) {
 
 typedef struct {
     s32 x;
-    s32 y;
+    s32 z;
 } ChairLiftWaypoint;
 
 extern ChairLiftWaypoint gChairLiftWaypoints[];
@@ -150,7 +150,7 @@ void updateSunnyMountainChairLiftTask(SunnyMountainTaskState *taskState) {
     s32 displayObjectOffset;
 
     i = gChairLiftWaypoints[taskState->waypointIndex].x - taskState->posX;
-    dz = gChairLiftWaypoints[taskState->waypointIndex].y - taskState->posZ;
+    dz = gChairLiftWaypoints[taskState->waypointIndex].z - taskState->posZ;
 
     distance = isqrt64((s64)i * (s64)i + (s64)dz * (s64)dz);
 
@@ -218,7 +218,7 @@ void updateSunnyMountainChairLiftTask(SunnyMountainTaskState *taskState) {
 
 void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0) {
     arg0->assetData = freeNodeMemory(arg0->assetData);
-    arg0->unk40 = freeNodeMemory(arg0->unk40);
+    arg0->compressedAssetData = freeNodeMemory(arg0->compressedAssetData);
     arg0->displayObjects = freeNodeMemory(arg0->displayObjects);
 }
 
