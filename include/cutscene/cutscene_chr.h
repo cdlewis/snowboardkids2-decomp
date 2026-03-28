@@ -40,7 +40,7 @@ typedef struct {
 } cutsceneChrMove3_exec_arg;
 
 typedef struct {
-    s8 reserved0;
+    s8 pad0;
     s8 displayEnabled;
 } cutsceneChrDisp_exec_arg;
 
