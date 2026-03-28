@@ -4184,7 +4184,7 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
         player->animFlags &= ~1;
     }
 
-    func_8005CFFC_5DBFC(
+    findTrackFaceInSector(
         (TrackGeometryFaceData *)&gs->gameData,
         player->sectorIndex,
         &player->worldPos,

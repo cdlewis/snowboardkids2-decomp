@@ -1048,7 +1048,7 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     if (boss->bossFlags & 0x10000) {
         boss->unkBC9 = 0;
     } else {
-        func_8005CFFC_5DBFC(gameData, boss->sectorIndex, &boss->unk434, &boss->unkBC9, &boss->unkBCC);
+        findTrackFaceInSector(gameData, boss->sectorIndex, &boss->unk434, &boss->unkBC9, &boss->unkBCC);
         boss->unkBCA = boss->unkBC9 >> 4;
         boss->unkBC9 = boss->unkBC9 & 0xF;
     }

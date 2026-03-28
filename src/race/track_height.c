@@ -16,8 +16,8 @@ s32 getTrackHeightInSectorWithOffset(void *gameData, u16 sectorIndex, void *pos,
     return getTrackHeightWithNormalAtPosition(gameData, sectorIndex, pos, heightOffset);
 }
 
-void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4) {
-    findTrackFaceAtPosition(arg0, arg1, arg2, arg3, arg4);
+void findTrackFaceInSector(void *geom, u16 sectorIndex, void *pos, u8 *surfaceFlags, u8 *surfaceIndex) {
+    findTrackFaceAtPosition(geom, sectorIndex, pos, surfaceFlags, surfaceIndex);
 }
 
 s32 getSectorTrackHeight(TrackGeometryFaceData *geom, u16 groupIdx, Vec3i *pos, s32 yOffset) {

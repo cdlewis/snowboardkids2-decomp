@@ -4025,6 +4025,7 @@ loadCharacterAttackEffectAssets = 0x800518AC; // rom:0x524AC
 updateCharacterAttackEffect = 0x80051978; // rom:0x52578
 getTrackHeightInSector = 0x8005CFC0; // rom:0x5DBC0
 getTrackHeightInSectorWithOffset = 0x8005CFDC; // rom:0x5DBDC
+findTrackFaceInSector = 0x8005CFFC; // rom:0x5DBFC
 getTrackHeightAtPosition = 0x80061A64; // rom:0x62664
 getTrackHeightWithNormalAtPosition = 0x80061D6C; // rom:0x6296C
 getSectorTrackHeight = 0x8005D020; // rom:0x5DC20

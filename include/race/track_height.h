@@ -6,7 +6,7 @@
 
 s32 getTrackHeightInSector(void *gameData, s32 sectorIndex, void *pos, s32 heightOffset);
 s32 getTrackHeightInSectorWithOffset(void *gameData, u16 sectorIndex, void *pos, s32 unused, s32 heightOffset);
-void func_8005CFFC_5DBFC(void *arg0, u16 arg1, void *arg2, void *arg3, void *arg4);
+void findTrackFaceInSector(void *geom, u16 sectorIndex, void *pos, u8 *surfaceFlags, u8 *surfaceIndex);
 s32 getSectorTrackHeight(TrackGeometryFaceData *geom, u16 groupIdx, Vec3i *pos, s32 yOffset);
 void clampPlayerVelocityToMaxSpeed(Player *player);
 s32 advancePlayerLeanAnimationAuto(void *player, s16 animIndex);

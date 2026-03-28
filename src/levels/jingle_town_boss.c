@@ -875,7 +875,7 @@ void updateJingleTownBossPositionAndTrackCollision(Arg0Struct *arg0) {
     if (arg0->animFlags & 0x10000) {
         arg0->unkBC9 = 0;
     } else {
-        func_8005CFFC_5DBFC(gameData, arg0->sectorIndex, &arg0->position, &arg0->unkBC9, &arg0->unkBCC);
+        findTrackFaceInSector(gameData, arg0->sectorIndex, &arg0->position, &arg0->unkBC9, &arg0->unkBCC);
         arg0->unkBCA = arg0->unkBC9 >> 4;
         arg0->unkBC9 = arg0->unkBC9 & 0xF;
     }
