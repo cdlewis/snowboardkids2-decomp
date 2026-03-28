@@ -50,5 +50,6 @@ typedef struct {
 } CharSelectAnimData;
 
 s32 countUnlockedSlotsInCategory(u8 category);
+void initCharacterSelectScreen(void);
 
 #endif

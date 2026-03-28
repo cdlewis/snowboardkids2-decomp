@@ -33,18 +33,18 @@ typedef struct {
 } PositionConfig_DE1A;
 
 typedef struct {
-    ViewportNode unk0[4];
-    ViewportNode unk760[4];
-    ViewportNode unkEC0[4];
-    ViewportNode unk1620;
+    ViewportNode playerViewports[4];
+    ViewportNode modelViewports[4];
+    ViewportNode iconViewports[4];
+    ViewportNode cameraNode;
     u8 pad17F8[0x80];
-    void *unk1878;
-    void *unk187C;
-    s16 unk1880[4];
-    s16 unk1888[4];
+    void *mainAssets;
+    void *iconAssets;
+    s16 animAngles[4];
+    s16 zoomValues[4];
     u8 pad1890[8];
-    s16 unk1898[4];
-    u16 unk18A0[4];
+    s16 menuStates[4];
+    u16 frameCounters[4];
     u8 charRow[4];
     u8 savedCharRow[4];
     u8 charCol[4];
@@ -53,10 +53,10 @@ typedef struct {
     u8 savedBoardId[4];
     u8 pad18C0[8];
     u8 unk18C8[4];
-    u8 unk18CC;
-    u8 unk18CD;
+    u8 maxMenuOption;
+    u8 hasSecretCharacters;
     u8 unk18CE[4];
-    s8 unk18D2[4];
+    s8 cursorIndices[4];
 } CharacterSelectState;
 
 typedef struct {
@@ -289,55 +289,55 @@ typedef struct {
     u8 unkA1;
 } GenericTaskNode;
 
-void func_800226F0_232F0(void) {
+void initCharacterSelectScreen(void) {
     CharacterSelectState *state;
     Transform3D transform;
     s32 i;
     s32 numOptions;
-    u8 bId;
+    u8 boardId;
     GenericTaskNode *task;
 
     state = (CharacterSelectState *)allocateTaskMemory(0x18E0);
     setupTaskSchedulerNodes(0x30, 8, 4, 8, 0, 0, 0, 0);
 
     if (D_800AFE8C_A71FC->gameMode != 0) {
-        state->unk18CC = 3;
+        state->maxMenuOption = 3;
     } else {
-        state->unk18CC = 2;
+        state->maxMenuOption = 2;
     }
 
     for (i = 0; i < 4; i++) {
-        state->unk1898[i] = 0;
+        state->menuStates[i] = 0;
         state->unk18CE[i] = 0;
-        state->unk18A0[i] = 0;
-        state->unk1888[i] = 0x800;
+        state->frameCounters[i] = 0;
+        state->zoomValues[i] = 0x800;
         state->unk18C8[i] = 0;
         memcpy((void *)((s32)state + i * 0x20 + 0x17F8), &identityMatrix, 0x20);
         *(s32 *)((s32)state + i * 0x20 + 0x1814) = (s32)0xFFEA0000;
-        state->unk1880[i] = 0;
-        state->unk18D2[i] = (s8)(state->unk18CC - 2);
+        state->animAngles[i] = 0;
+        state->cursorIndices[i] = (s8)(state->maxMenuOption - 2);
     }
 
-    initMenuCameraNode(&state->unk1620, 7, 1, 1);
+    initMenuCameraNode(&state->cameraNode, 7, 1, 1);
 
     switch (D_800AFE8C_A71FC->numPlayers) {
         case 1:
-            initMenuCameraNode(&state->unk0[0], 0, 10, 0);
-            initMenuCameraNode(&state->unk760[0], 8, 8, 1);
-            initMenuCameraNode(&state->unkEC0[0], 12, 20, 1);
+            initMenuCameraNode(&state->playerViewports[0], 0, 10, 0);
+            initMenuCameraNode(&state->modelViewports[0], 8, 8, 1);
+            initMenuCameraNode(&state->iconViewports[0], 12, 20, 1);
             break;
         case 2:
-            initSplitScreen2P(&state->unk0[0], 0, 10, 0);
-            setModelCameraTransform(&state->unk0[0], -0x30, -0x35, -0x70, -0x34, 0xD0, 0x34);
-            setModelCameraTransform(&state->unk0[1], -0x30, 0x35, -0x70, -0x34, 0xD0, 0x34);
-            initSplitScreen2P(&state->unk760[0], 8, 8, 1);
-            initSplitScreen2P(&state->unkEC0[0], 12, 20, 1);
+            initSplitScreen2P(&state->playerViewports[0], 0, 10, 0);
+            setModelCameraTransform(&state->playerViewports[0], -0x30, -0x35, -0x70, -0x34, 0xD0, 0x34);
+            setModelCameraTransform(&state->playerViewports[1], -0x30, 0x35, -0x70, -0x34, 0xD0, 0x34);
+            initSplitScreen2P(&state->modelViewports[0], 8, 8, 1);
+            initSplitScreen2P(&state->iconViewports[0], 12, 20, 1);
             break;
         case 3:
         case 4:
-            initSplitScreen3P4P(&state->unk0[0], 0, 10, 0);
-            initSplitScreen3P4P(&state->unk760[0], 8, 8, 1);
-            initSplitScreen3P4P(&state->unkEC0[0], 12, 20, 1);
+            initSplitScreen3P4P(&state->playerViewports[0], 0, 10, 0);
+            initSplitScreen3P4P(&state->modelViewports[0], 8, 8, 1);
+            initSplitScreen3P4P(&state->iconViewports[0], 12, 20, 1);
             break;
     }
 
@@ -352,15 +352,15 @@ void func_800226F0_232F0(void) {
     }
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        setViewportTransformById(state->unk0[i].id, &transform);
+        setViewportTransformById(state->playerViewports[i].id, &transform);
     }
 
-    state->unk1878 = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
-    state->unk187C = loadCompressedData(&_458E30_ROM_START, &_459310_ROM_START, 0xAE0);
+    state->mainAssets = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    state->iconAssets = loadCompressedData(&_458E30_ROM_START, &_459310_ROM_START, 0xAE0);
 
-    state->unk18CD = 0;
+    state->hasSecretCharacters = 0;
     if (countUnlockedSlotsInCategory(3) != 0) {
-        state->unk18CD = 1;
+        state->hasSecretCharacters = 1;
     }
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
@@ -373,9 +373,9 @@ void func_800226F0_232F0(void) {
         }
         state->savedCharRow[i] = state->charRow[i];
         state->savedCharCol[i] = state->charCol[i];
-        bId = D_800AFE8C_A71FC->playerBoardIds[12 + i];
-        state->boardId[i] = bId;
-        state->savedBoardId[i] = bId;
+        boardId = D_800AFE8C_A71FC->playerBoardIds[12 + i];
+        state->boardId[i] = boardId;
+        state->savedBoardId[i] = boardId;
         task = (GenericTaskNode *)scheduleTask(initCharSelectBoardModel, 0, 0, 0x5A);
         task->unk28 = i;
         task = (GenericTaskNode *)scheduleTask(initCharSelectPreviewModel, 0, 0, 0x5A);
@@ -403,15 +403,15 @@ void func_800226F0_232F0(void) {
 void awaitCharacterSelectLoad(void) {
     CharacterSelectState *state = (CharacterSelectState *)getCurrentAllocation();
 
-    state->unk18A0[0]++;
-    if (state->unk18A0[0] < 3) {
+    state->frameCounters[0]++;
+    if (state->frameCounters[0] < 3) {
         return;
     }
-    state->unk18A0[0] = 2;
+    state->frameCounters[0] = 2;
     if (getPendingDmaCount() != 0) {
         return;
     }
-    state->unk18A0[0] = 0;
+    state->frameCounters[0] = 0;
     setViewportFadeValue(NULL, 0, 10);
     setGameStateHandler(scheduleCharacterSelectTasks);
 }
@@ -444,18 +444,18 @@ void cleanupCharacterSelect(void) {
         return;
     }
 
-    unlinkNode(&state->unk1620);
+    unlinkNode(&state->cameraNode);
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        unlinkNode(&state->unk0[i]);
-        unlinkNode(&state->unk760[i]);
-        unlinkNode(&state->unkEC0[i]);
+        unlinkNode(&state->playerViewports[i]);
+        unlinkNode(&state->modelViewports[i]);
+        unlinkNode(&state->iconViewports[i]);
     }
 
-    state->unk1878 = freeNodeMemory(state->unk1878);
-    state->unk187C = freeNodeMemory(state->unk187C);
+    state->mainAssets = freeNodeMemory(state->mainAssets);
+    state->iconAssets = freeNodeMemory(state->iconAssets);
 
-    if (state->unk18A0[0] == 0x63) {
+    if (state->frameCounters[0] == 0x63) {
         terminateSchedulerWithCallback(onCharacterSelectCancel);
     } else {
         terminateSchedulerWithCallback(onCharacterSelectProceed);

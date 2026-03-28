@@ -138,7 +138,7 @@ void awaitStoryModeRaceLevelSelect(void) {
 void awaitFadeLoadCharacterSelect(void) {
     if (getViewportFadeMode(0) == 0) {
         playMusicTrack(2);
-        createTaskQueue(&func_800226F0_232F0, 100);
+        createTaskQueue(&initCharacterSelectScreen, 100);
         setGameStateHandler(&awaitStoryModeCharacterSelect);
     }
 }

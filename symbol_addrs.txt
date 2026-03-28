@@ -3324,6 +3324,7 @@ handlePlayerCountSelectInput = 0x800223CC; // rom:0x22FCC
 exitPlayerCountSelect = 0x800225C8; // rom:0x231C8
 onPlayerCountProceed = 0x800226B0; // rom:0x232B0
 onPlayerCountCancel = 0x800226CC; // rom:0x232CC
+initCharacterSelectScreen = 0x800226F0; // rom:0x232F0
 awaitCharacterSelectLoad = 0x80022C80; // rom:0x23880
 scheduleCharacterSelectTasks = 0x80022CEC; // rom:0x238EC
 cleanupCharacterSelect = 0x80023C7C; // rom:0x2487C

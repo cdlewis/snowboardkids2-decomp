@@ -108,7 +108,7 @@ void awaitVersusLevelSelect(void) {
 
 void loadVersusCharacterSelect(void) {
     playMusicTrack(2);
-    createTaskQueue(func_800226F0_232F0, 100);
+    createTaskQueue(initCharacterSelectScreen, 100);
     setGameStateHandler(awaitVersusCharacterSelect);
 }
 

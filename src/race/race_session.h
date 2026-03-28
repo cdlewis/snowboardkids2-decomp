@@ -50,7 +50,7 @@ void initRace(void);
 void playSoundEffect(s32 soundId);
 void initLevelSelectBasicState(void);
 void initPlayerCountSelectState(void);
-void func_800226F0_232F0(void);
+void initCharacterSelectScreen(void);
 void initStoryMapState(void);
 void storyMapLocationTextTask(func_80019CD0_1A8D0_arg *arg0);
 void initSaveSlotScreen(void);
