@@ -37,36 +37,23 @@ typedef struct {
     /* 0x58 */ Transform3D chairMatrices[4];
     /* 0xD8 */ s16 waypointIndex;
     /* 0xDA */ u16 rotationAngle;
-} SunnyMountainTaskState;
+} SunnyMountainChairLiftTask;
 
-void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0);
-void updateSunnyMountainDisplayObjectsTask(s32 *arg0);
-void updateSunnyMountainChairLiftTask(SunnyMountainTaskState *taskState);
+void cleanupSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *arg0);
+void startSunnyMountainChairLift(s32 *arg0);
+void updateSunnyMountainChairLiftMovement(SunnyMountainChairLiftTask *taskState);
 
 /**
- * Initializes the Sunny Mountain level task state.
+ * Initializes the Sunny Mountain chair lift task.
  *
- * This function sets up display list objects for rendering elements in the
- * Sunny Mountain level. It allocates memory for 4 display objects and
- * initializes each with display list pointers and copies position data
- * from the allocation.
- *
- * The function:
- * 1. Gets the current allocation containing level data and memory pool ID
- * 2. Sets up the main display list pointer (offset 0x90)
- * 3. Allocates 0xF0 bytes for 4 DisplayListObject entries (0x3C bytes each)
- * 4. For each of the 4 objects:
- *    - Sets display list pointer (offset 0x20 -> DisplayListObject.displayLists)
- *    - Sets shared assetData (offset 0x24 -> DisplayListObject.segment1)
- *    - Sets shared unk40 (offset 0x28 -> DisplayListObject.segment2)
- *    - Sets segment3 to 0 (offset 0x2C -> DisplayListObject.segment3)
- *    - Copies 12 bytes of position data from the allocation
- * 5. Registers cleanup and update callbacks
+ * Sets up display list objects for the chair lift system. Allocates memory
+ * for 4 chair display objects and initializes each with display list pointers
+ * and position data.
  */
-void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
+void initSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *taskState) {
     s32 i;
     s32 srcPositionOffset;
-    SunnyMountainTaskState *destPositionPtr;
+    SunnyMountainChairLiftTask *destPositionPtr;
     u8 *destPositionAddr;
     s32 displayObjectOffset;
     LevelDisplayLists *displayLists;
@@ -108,16 +95,16 @@ void initSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *taskState) {
 
         memcpy(destPositionAddr, (u8 *)(srcPositionOffset + (s32)allocation->positionData) + 0x30, 0xC);
 
-        destPositionPtr = (SunnyMountainTaskState *)((u8 *)destPositionPtr + 0x20);
+        destPositionPtr = (SunnyMountainChairLiftTask *)((u8 *)destPositionPtr + 0x20);
         displayObjectOffset += 0x3C;
         srcPositionOffset += 0xC;
     } while (i < 4);
 
-    setCleanupCallback(cleanupSunnyMountainDisplayObjectsTask);
-    setCallback(updateSunnyMountainDisplayObjectsTask);
+    setCleanupCallback(cleanupSunnyMountainChairLiftTask);
+    setCallback(startSunnyMountainChairLift);
 }
 
-void updateSunnyMountainDisplayObjectsTask(s32 *arg0) {
+void startSunnyMountainChairLift(s32 *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
     s32 i;
 
@@ -129,7 +116,7 @@ void updateSunnyMountainDisplayObjectsTask(s32 *arg0) {
             arg0[3] = 0x1CE44F4D;
             arg0[4] = 0x0B1F0000;
             arg0[5] = 0x02E17D96;
-            setCallbackWithContinue(updateSunnyMountainChairLiftTask);
+            setCallbackWithContinue(updateSunnyMountainChairLiftMovement);
             return;
         }
     }
@@ -142,7 +129,7 @@ typedef struct {
 
 extern ChairLiftWaypoint gChairLiftWaypoints[];
 
-void updateSunnyMountainChairLiftTask(SunnyMountainTaskState *taskState) {
+void updateSunnyMountainChairLiftMovement(SunnyMountainChairLiftTask *taskState) {
     s32 i;
     s32 dz;
     s32 distance;
@@ -216,7 +203,7 @@ void updateSunnyMountainChairLiftTask(SunnyMountainTaskState *taskState) {
     } while (i < 4);
 }
 
-void cleanupSunnyMountainDisplayObjectsTask(SunnyMountainTaskState *arg0) {
+void cleanupSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *arg0) {
     arg0->assetData = freeNodeMemory(arg0->assetData);
     arg0->compressedAssetData = freeNodeMemory(arg0->compressedAssetData);
     arg0->displayObjects = freeNodeMemory(arg0->displayObjects);
