@@ -898,7 +898,7 @@ s32 spawnCutsceneMovementEffects(CutsceneSlotData *arg0, SceneModel *arg1) {
     var_s7 = 0;
     if ((arg1->index == 0x12) && (arg1->actionMode == 1)) {
         for (i = 0; i < 4; i++) {
-            transformVector(&gCharacterEffectSpawnPointsBoard[i * 6], (s16 *)&arg1->unk18, &transformedVecs[i]);
+            transformVector(&gCharacterEffectSpawnPointsBoard[i * 6], (s16 *)&arg1->matrix18, &transformedVecs[i]);
         }
     } else {
         if (hasModelGraphicsData(arg1) == 0) {
@@ -910,7 +910,7 @@ s32 spawnCutsceneMovementEffects(CutsceneSlotData *arg0, SceneModel *arg1) {
                 var_s6 = var_s6 & -temp;
             }
 
-            memcpy(&localMatrix, &arg1->unk18, sizeof(Transform3D));
+            memcpy(&localMatrix, &arg1->matrix18, sizeof(Transform3D));
             for (i = 0; i < 4; i++) {
                 transformVector(&gCharacterEffectSpawnPoints[i * 6], (s16 *)&localMatrix, &transformedVecs[i]);
             }

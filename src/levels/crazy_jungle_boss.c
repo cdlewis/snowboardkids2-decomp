@@ -187,12 +187,7 @@ extern s32 D_800BBA84_AC2B4[][3];
 typedef s32 (*StateFunc)(void *);
 extern StateFunc D_800BC440_ACC70[];
 
-typedef struct {
-    u8 boneIndex;
-    u8 parentBone;
-} BoneHierarchyEntry;
-
-void *getIndexedAnimationDataPtr(void *, s16);
+extern s32 getIndexedAnimationDataPtr(void *, s16);
 
 void updateCrazyJungleBoss(Arg0Struct *arg0) {
     Transform3D sp10;

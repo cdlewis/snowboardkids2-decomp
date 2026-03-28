@@ -112,7 +112,8 @@ typedef struct {
 } SceneModel_unk0;
 
 typedef struct {
-    u8 padding[0x24];
+    u8 padding[0x20];
+    void *displayLists;
     void *unk24;
     void *unk28;
 } SceneModel_unk98;
@@ -122,13 +123,14 @@ typedef struct {
     BoneAnimationState *unk4;
     void *unk8;
     /* 0xC */ s16 index;
-    u8 paddingA[0x06];
+    u8 paddingE[2];
+    struct {
+        u8 padding[0x16];
+        u16 unk16;
+    } *unk10;
     s16 unk14;
     s16 unk16;
-    s32 unk18;
-    u8 padding[0x10];
-    s32 unk2C;
-    u8 padding1B[0x8];
+    Transform3D matrix18;
     s16 unk38;
     s16 unk3A;
     s8 isDestroyed;
@@ -150,11 +152,11 @@ typedef struct {
     s32 unk90;
     s8 animationIndex;
     s8 unk95;
-    s8 alpha;
+    u8 alpha;
     s8 shadowEnabled;
     SceneModel_unk98 *unk98;
     ModelAnimationData *unk9C;
-    u8 unkA0[4];
+    void *unkA0;
     SpriteAssetState unkA4;
     Transform3D unkF0;
     s32 partDisplayFlags;

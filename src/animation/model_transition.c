@@ -279,7 +279,7 @@ void updateModelTransitionEffect(ModelTransitionEffectState *state) {
     } else {
         do {
             if (state->currentFrame == 0) {
-                memcpy(&state->transformMatrix, &state->model->unk18, 0x20);
+                memcpy(&state->transformMatrix, &state->model->matrix18, 0x20);
                 scaleMatrix(&state->transformMatrix, 0x1000, 0x1000, 0x1000);
             }
         } while (0);

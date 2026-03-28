@@ -2,6 +2,11 @@
 #include "gamestate.h"
 #include "math/geometry.h"
 
+typedef struct {
+    u8 boneIndex;
+    u8 parentBone;
+} BoneHierarchyEntry;
+
 void *getAnimationFrameData(void *animData);
 u16 *getAnimationDataByIndex(void *animData, s16 tableIndex, s16 boneIndex);
 

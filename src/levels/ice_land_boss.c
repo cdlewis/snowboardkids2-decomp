@@ -1054,12 +1054,7 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     }
 }
 
-extern void *getIndexedAnimationDataPtr(void *, s16);
-
-typedef struct {
-    u8 boneIndex;
-    u8 parentBone;
-} BoneHierarchyEntry;
+extern s32 getIndexedAnimationDataPtr(void *, s16);
 
 void updateIceLandBossLeanBoneTransforms(Player *arg0) {
     Transform3D sp10;
