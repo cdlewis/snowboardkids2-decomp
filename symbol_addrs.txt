@@ -1780,7 +1780,7 @@ tryProcessDisplayFrameUpdate = 0x8006E02C; // rom:0x6EC2C
 initDisplayBuffers = 0x8006DC40; // type:func rom:0x6E840
 
 getRand = 0x800AFF94; // type:func rom:0x9FE54
-randA = 0x800AFF44;
+randA = 0x800AFF44; // type:func rom:0x9FE04
 randB = 0x800AFF6C; // type:func rom:0x9FE2C
 initRand = 0x800AFF30; // type:func rom:0x9FDF0
 gRandIndexA = 0x800B00B0; // segment:rand
