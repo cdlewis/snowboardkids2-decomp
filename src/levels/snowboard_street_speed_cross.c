@@ -21,38 +21,38 @@ typedef struct {
     /* 0x3C */ u16 rotationAngle;
 } RotatingSkyRenderArg;
 
-static void updateRotatingSky(RotatingSkyRenderArg *arg0);
-static void cleanupRotatingSky(RotatingSkyArg *arg0);
+static void updateSpeedCrossRotatingSky(RotatingSkyRenderArg *sky);
+static void cleanupSpeedCrossRotatingSky(RotatingSkyArg *sky);
 
-void initSpeedCrossRotatingSky(RotatingSkyArg *arg0) {
+void initSpeedCrossRotatingSky(RotatingSkyArg *sky) {
     GameState *gameState;
     LevelDisplayLists *displayLists;
 
     gameState = (GameState *)getCurrentAllocation();
     displayLists = getSkyDisplayLists3ByIndex(gameState->memoryPoolId);
-    arg0->displayLists = (void *)((u32)displayLists + 0x90);
-    arg0->uncompressedAsset = loadUncompressedAssetByIndex(0xC);
-    arg0->compressedAsset = loadCompressedSegment2AssetByIndex(0xC);
-    arg0->posX = 0x25990000;
-    arg0->posY = 0x1A2B0000;
-    arg0->unk2C = 0;
-    arg0->posZ = 0xF7A30000;
-    setCleanupCallback(cleanupRotatingSky);
-    setCallback(updateRotatingSky);
+    sky->displayLists = (void *)((u32)displayLists + 0x90);
+    sky->uncompressedAsset = loadUncompressedAssetByIndex(0xC);
+    sky->compressedAsset = loadCompressedSegment2AssetByIndex(0xC);
+    sky->posX = 0x25990000;
+    sky->posY = 0x1A2B0000;
+    sky->unk2C = 0;
+    sky->posZ = 0xF7A30000;
+    setCleanupCallback(cleanupSpeedCrossRotatingSky);
+    setCallback(updateSpeedCrossRotatingSky);
 }
 
-static void updateRotatingSky(RotatingSkyRenderArg *arg0) {
+static void updateSpeedCrossRotatingSky(RotatingSkyRenderArg *sky) {
     s32 i;
 
-    arg0->rotationAngle -= 0x20;
-    createYRotationMatrix(&arg0->matrix, arg0->rotationAngle);
+    sky->rotationAngle -= 0x20;
+    createYRotationMatrix(&sky->matrix, sky->rotationAngle);
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)sky);
     }
 }
 
-static void cleanupRotatingSky(RotatingSkyArg *arg0) {
-    arg0->uncompressedAsset = freeNodeMemory(arg0->uncompressedAsset);
-    arg0->compressedAsset = freeNodeMemory(arg0->compressedAsset);
+static void cleanupSpeedCrossRotatingSky(RotatingSkyArg *sky) {
+    sky->uncompressedAsset = freeNodeMemory(sky->uncompressedAsset);
+    sky->compressedAsset = freeNodeMemory(sky->compressedAsset);
 }
