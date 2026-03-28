@@ -234,3 +234,22 @@ case 2:
         // shared code for case 1 (else) and case 2
     }
 ```
+
+## Forcing Hardware `mult` Over Synthetic Multiply (synth_mult)
+
+GCC 2.7.2 decomposes multiply-by-constant into shift/add sequences (synth_mult) when the constant is known at compile time. If the target uses a hardware `mult` instruction, you need to hide the constant from the synth_mult pass.
+
+**Key insight**: synth_mult runs *before* constant propagation. So if you compute the constant via a variable expression, synth_mult sees a variable multiply (uses `mult`) but later passes constant-propagate the value and emit `li` for the constant.
+
+```c
+// WRONG: literal constant → synth_mult decomposes into 7-instruction shift/add sequence
+src = base + frameIndex * 0x1ED0;
+
+// CORRECT: variable computed from another variable → hardware mult
+s32 copySize = 0x7B4;
+s32 stride = copySize * 4;  // compiler will propagate to 0x1ED0
+__asm__("" : "=r"(stride) : "0"(stride));  // prevent further propagation
+src = base + frameIndex * stride;  // generates: li v0, 0x1ED0; mult v1, v0; mflo v1
+```
+
+The `__asm__` barrier after computing `stride` prevents the compiler from propagating `stride` back into a constant for subsequent uses. Without the barrier, the compiler may re-derive the constant and use synth_mult anyway.
