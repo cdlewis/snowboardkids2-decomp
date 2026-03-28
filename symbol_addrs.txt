@@ -1626,7 +1626,7 @@ cutsceneEffectRocket_validate = 0x800B1DAC; // rom:0x1DEE5C
 cutsceneEffectRocket_isDone = 0x800B1DF4; // rom:0x1DEEA4
 cutsceneEffectMLight_validate = 0x800B1E04; // rom:0x1DEEB4
 cutsceneEffectMLight_isDone = 0x800B1F94; // rom:0x1DF044
-cutsceneEffectTrick_validate = 0x800B1FA4;
+cutsceneEffectTrick_validate = 0x800B1FA4; // rom:0x1DF054
 cutsceneEffectTrick_isDone = 0x800B20A8; // rom:0x1DF158
 
 cutsceneSePlay_validate = 0x800B2120; // rom:0x1DF1D0
