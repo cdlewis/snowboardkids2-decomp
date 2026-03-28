@@ -961,8 +961,14 @@ void func_8006BDBC_6C9BC(BoneAnimationState *arg0, void *arg1, void *arg2) {
     }
 }
 
-// Multiplies a 3x3 rotation matrix by the transpose of another 3x3 rotation matrix.
-// Result = arg0 * transpose(arg1), where * is matrix multiplication.
+/**
+ * Multiplies a 3x3 rotation matrix by the transpose of another 3x3 rotation matrix.
+ * result = left * transpose(right)
+ *
+ * Computes the product of a matrix and the transpose of another matrix in one step,
+ * avoiding the need to explicitly transpose the right matrix first.
+ * Used for coordinate system transformations in skeletal animation.
+ */
 void func_mulMatrix3x3T(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2) {
     Transform3D *mat1 = arg1;
     Transform3D *mat2 = arg2;

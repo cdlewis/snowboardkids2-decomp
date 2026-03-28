@@ -47,6 +47,7 @@ void func_8006BDBC_6C9BC(BoneAnimationState *, void *, void *);
 
 void setBonePosition(BoneAnimationState *state, s32 x, s32 y, s32 z);
 
+// Multiplies a 3x3 rotation matrix by the transpose of another: result = left * transpose(right)
 void func_mulMatrix3x3T(Transform3D *, Transform3D *, Transform3D *);
 
 // Multiplies two Transform3D structures: arg2 = arg0 * arg1
