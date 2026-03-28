@@ -50,35 +50,12 @@ typedef struct {
     s8 unk8C;
 } ParticleState;
 
-typedef struct {
-    func_80006940_inner *owner;
-    SpriteAssetState spriteState;
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
-    s32 unk68;
-    s32 unk6C;
-    s32 unk70;
-    s32 unk74;
-    s32 unk78;
-    s32 unk7C;
-    s32 unk80;
-    s16 unk84;
-    s16 unk86;
-    s16 unk88;
-    s16 unk8A;
-    s8 unk8C;
-} DriftingParticleState;
-
 void cleanupTrailingParticle(ParticleState *);
 void updateTrailingParticle(ParticleState *);
 void cleanupFallingParticle(ParticleState *);
 void updateFallingParticle(ParticleState *);
 void cleanupDriftingParticle(ParticleState *);
-void updateDriftingParticle(DriftingParticleState *);
+void updateDriftingParticle(ParticleState *);
 
 void initFallingParticle(ParticleState *arg0) {
     s32 rand1;
@@ -176,7 +153,7 @@ void initDriftingParticle(ParticleState *arg0) {
     setCallback(updateDriftingParticle);
 }
 
-void updateDriftingParticle(DriftingParticleState *arg0) {
+void updateDriftingParticle(ParticleState *arg0) {
     s8 signs[2];
     s32 posX;
     s32 posY;
@@ -235,7 +212,7 @@ void updateDriftingParticle(DriftingParticleState *arg0) {
     if (arg0->unk88 < 0) {
         arg0->unk88 = (randA() & 0x1F) + 4;
         targetVal = signs[randA() & 1] * (((randA() & 0xFF) << 16) % 419430);
-        arg0->unk68 = targetVal;
+        *(s32 *)&arg0->unk68 = targetVal;
         arg0->unk80 = (targetVal - arg0->unk5C) / (s16)arg0->unk88;
     } else {
         arg0->unk5C += arg0->unk74;
