@@ -1141,7 +1141,79 @@ void awaitPlayersAndPlayRaceMusic(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/race_session", func_8003F1F0_3FDF0);
+void func_8003F1F0_3FDF0(void) {
+#ifdef CC_CHECK
+    GameState *gs;
+#else
+    register GameState *gs __asm__("$6");
+#endif
+    u8 *src;
+    u8 *dst;
+    u8 *end;
+    u16 frameIndex;
+    s32 copySize;
+
+    gs = (GameState *)getCurrentAllocation();
+
+    copySize = 0x7B4;
+    frameIndex = sIntroFrameEvents[gs->introFrameEventIndex].unk2;
+    {
+        s32 stride = copySize * 4;
+        __asm__("" : "=r"(stride) : "0"(stride));
+        src = (u8 *)gs->unk14 + frameIndex * stride;
+    }
+    dst = (u8 *)gs->players + 0x434;
+    end = (u8 *)gs->players + 0xBE8;
+
+    do {
+        *dst++ = *src++;
+    } while (dst < end);
+
+    frameIndex = sIntroFrameEvents[gs->introFrameEventIndex].unk2;
+    {
+        u8 *s = (u8 *)gs->unk14 + copySize * (frameIndex * 4 + 1);
+        u8 *d = (u8 *)gs->players + 0x101C;
+        if (copySize != 0) {
+            u8 *e;
+            __asm__("" : "=r"(s) : "0"(s));
+            src = s;
+            e = (u8 *)(copySize + (s32)d);
+            do {
+                *d++ = *src++;
+            } while (d < e);
+        }
+    }
+
+    frameIndex = sIntroFrameEvents[gs->introFrameEventIndex].unk2;
+    {
+        u8 *s = (u8 *)gs->unk14 + copySize * (frameIndex * 4 + 2);
+        u8 *d = (u8 *)gs->players + 0x1C04;
+        if (copySize != 0) {
+            u8 *e;
+            __asm__("" : "=r"(s) : "0"(s));
+            src = s;
+            e = (u8 *)(copySize + (s32)d);
+            do {
+                *d++ = *src++;
+            } while (d < e);
+        }
+    }
+
+    frameIndex = sIntroFrameEvents[gs->introFrameEventIndex].unk2;
+    {
+        u8 *s = (u8 *)gs->unk14 + copySize * (frameIndex * 4 + 3);
+        u8 *d = (u8 *)gs->players + 0x27EC;
+        if (copySize != 0) {
+            u8 *e;
+            __asm__("" : "=r"(s) : "0"(s));
+            src = s;
+            e = (u8 *)(copySize + (s32)d);
+            do {
+                *d++ = *src++;
+            } while (d < e);
+        }
+    }
+}
 
 extern void spawnScriptedCameraTask(s16);
 
