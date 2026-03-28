@@ -119,7 +119,7 @@ void initCutsceneManager(CutsceneManager *manager, ViewportNode *sceneNode, void
 
     manager->shadowModel = shadowModel;
     manager->reflectionModel = reflectionModel;
-    manager->cameraAnimationTimer = 0x10000;
+    manager->curtainPosition = 0x10000;
 }
 
 void cleanupCutsceneManager(CutsceneManager *manager) {
@@ -254,7 +254,7 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
     StateEntry *eventEntry;
     s32 shouldInitializeSlot;
     u16 commandType;
-    s32 cameraAnimTimer;
+    s32 curtainPos;
     u16 eventIndex;
     u8 eventType;
 
@@ -336,9 +336,9 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
         }
     }
 
-    cameraAnimTimer = cutsceneManager->cameraAnimationTimer;
-    cameraOffsetX = -((cameraAnimTimer * 120) >> 16);
-    cameraScaleZ = (cameraAnimTimer * 119) >> 16;
+    curtainPos = cutsceneManager->curtainPosition;
+    cameraOffsetX = -((curtainPos * 120) >> 16);
+    cameraScaleZ = (curtainPos * 119) >> 16;
 
     setModelRenderMode(&cutsceneManager->unk10.renderModeArg, cutsceneManager->enableTransparency);
     setModelCameraTransform(cutsceneManager->uiResource, 0, 0, -0xA0, cameraOffsetX, 0x9F, cameraScaleZ);

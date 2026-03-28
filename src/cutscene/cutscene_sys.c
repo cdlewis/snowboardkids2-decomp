@@ -181,20 +181,20 @@ void cutsceneSysCurtain_exec(CurtainParams *params, CutsceneManager *cutsceneMan
 
     slot = getCutsceneSlot(cutsceneManager, idx);
 
-    slot->unk0.CurtainPayload.targetTimer = (params->targetPercent << 16) / 100;
+    slot->unk0.CurtainPayload.targetPosition = (params->targetPercent << 16) / 100;
 
     if (params->duration) {
         slot->unk0.CurtainPayload.stepDelta =
-            (slot->unk0.CurtainPayload.targetTimer - cutsceneManager->cameraAnimationTimer) / params->duration;
+            (slot->unk0.CurtainPayload.targetPosition - cutsceneManager->curtainPosition) / params->duration;
         slot->unk0.CurtainPayload.framesRemaining = params->duration;
 
         if (slot->unk0.CurtainPayload.stepDelta != 0) {
             enableSlotUpdate(cutsceneManager, idx);
         } else {
-            cutsceneManager->cameraAnimationTimer = slot->unk0.CurtainPayload.targetTimer;
+            cutsceneManager->curtainPosition = slot->unk0.CurtainPayload.targetPosition;
         }
     } else {
-        cutsceneManager->cameraAnimationTimer = slot->unk0.CurtainPayload.targetTimer;
+        cutsceneManager->curtainPosition = slot->unk0.CurtainPayload.targetPosition;
     }
 }
 
@@ -202,16 +202,16 @@ void cutsceneSysCurtain_update(CutsceneManager *cutsceneManager, s8 slotIndex) {
     CutsceneSlot *slot;
 
     slot = getCutsceneSlot(cutsceneManager, slotIndex);
-    cutsceneManager->cameraAnimationTimer += slot->unk0.CurtainPayload.stepDelta;
+    cutsceneManager->curtainPosition += slot->unk0.CurtainPayload.stepDelta;
 
     if (slot->unk0.CurtainPayload.stepDelta > 0) {
-        if (slot->unk0.CurtainPayload.targetTimer < cutsceneManager->cameraAnimationTimer) {
-            cutsceneManager->cameraAnimationTimer = slot->unk0.CurtainPayload.targetTimer;
+        if (slot->unk0.CurtainPayload.targetPosition < cutsceneManager->curtainPosition) {
+            cutsceneManager->curtainPosition = slot->unk0.CurtainPayload.targetPosition;
             disableSlotUpdate(cutsceneManager, slotIndex);
         }
     } else {
-        if (cutsceneManager->cameraAnimationTimer < slot->unk0.CurtainPayload.targetTimer) {
-            cutsceneManager->cameraAnimationTimer = slot->unk0.CurtainPayload.targetTimer;
+        if (cutsceneManager->curtainPosition < slot->unk0.CurtainPayload.targetPosition) {
+            cutsceneManager->curtainPosition = slot->unk0.CurtainPayload.targetPosition;
             disableSlotUpdate(cutsceneManager, slotIndex);
         }
     }

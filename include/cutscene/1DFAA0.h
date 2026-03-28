@@ -27,7 +27,7 @@ typedef struct {
             s8 unkA;
         } Two;
         struct {
-            s32 targetTimer;
+            s32 targetPosition;
             s32 stepDelta;
             s16 framesRemaining;
             s8 padding;
@@ -206,7 +206,7 @@ typedef struct {
             s8 unkA;
         } Two;
         struct {
-            s32 targetTimer;
+            s32 targetPosition;
             s32 stepDelta;
             s16 framesRemaining;
             s8 padding;
@@ -260,7 +260,7 @@ typedef struct CutsceneManager {
     u8 padding[0xC];
     /* 0x1218 */ void *shadowModel;
     /* 0x121C */ void *reflectionModel;
-    /* 0x1220 */ s32 cameraAnimationTimer;
+    /* 0x1220 */ s32 curtainPosition;
 } CutsceneManager;
 
 void enableCutsceneSkip(CutsceneManager *arg0);
