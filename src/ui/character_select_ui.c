@@ -5,6 +5,7 @@
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "race/race_session.h"
+#include "story/map_events.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
@@ -36,11 +37,26 @@ typedef struct {
     ViewportNode unk760[4];
     ViewportNode unkEC0[4];
     ViewportNode unk1620;
-    u8 pad17F8[0x1878 - (0x1620 + 0x1D8)];
+    u8 pad17F8[0x80];
     void *unk1878;
     void *unk187C;
-    u8 pad1880[0x18A0 - 0x1880];
-    u16 stateCounter;
+    s16 unk1880[4];
+    s16 unk1888[4];
+    u8 pad1890[8];
+    s16 unk1898[4];
+    u16 unk18A0[4];
+    u8 charRow[4];
+    u8 savedCharRow[4];
+    u8 charCol[4];
+    u8 savedCharCol[4];
+    u8 boardId[4];
+    u8 savedBoardId[4];
+    u8 pad18C0[8];
+    u8 unk18C8[4];
+    u8 unk18CC;
+    u8 unk18CD;
+    u8 unk18CE[4];
+    s8 unk18D2[4];
 } CharacterSelectState;
 
 typedef struct {
@@ -235,25 +251,167 @@ CharSelectAnimData D_8008DEAC_8EAAC = {
 
 /* Function declarations */
 
+void awaitCharacterSelectLoad(void);
 void scheduleCharacterSelectTasks(void);
 void func_80022D74_23974(void);
 void onCharacterSelectProceed(void);
 void onCharacterSelectCancel(void);
 
-INCLUDE_ASM("asm/nonmatchings/ui/character_select_ui", func_800226F0_232F0);
+USE_ASSET(_4237C0);
+USE_ASSET(_426EF0);
+USE_ASSET(_458E30);
+USE_ASSET(_459310);
+
+extern void initBoardSelectArrows(void);
+extern void initBoardSelectCharNames(void);
+extern void initCharSelectArrows(void);
+extern void initCharSelectBackgroundEffect(void);
+extern void initCharSelectBoardModel(void);
+extern void initCharSelectIconHideSprites(void);
+extern void initCharSelectMenu(void);
+extern void initCharSelectNameSprites(void);
+extern void initCharSelectPlayer2NameSprites(void);
+extern void initCharSelectPlayerLabels(void);
+extern void initCharSelectPlayerNumbers(void);
+extern void initCharSelectPreviewModel(void);
+extern void initCharSelectStats(void);
+
+typedef struct {
+    u8 pad0[0x24];
+    u8 unk24;
+    u8 pad25[3];
+    u8 unk28;
+    u8 pad29[0xB];
+    u8 unk34;
+    u8 pad35[0x40];
+    u8 unk75;
+    u8 pad76[0x2B];
+    u8 unkA1;
+} GenericTaskNode;
+
+void func_800226F0_232F0(void) {
+    CharacterSelectState *state;
+    Transform3D transform;
+    s32 i;
+    s32 numOptions;
+    u8 bId;
+    GenericTaskNode *task;
+
+    state = (CharacterSelectState *)allocateTaskMemory(0x18E0);
+    setupTaskSchedulerNodes(0x30, 8, 4, 8, 0, 0, 0, 0);
+
+    if (D_800AFE8C_A71FC->gameMode != 0) {
+        state->unk18CC = 3;
+    } else {
+        state->unk18CC = 2;
+    }
+
+    for (i = 0; i < 4; i++) {
+        state->unk1898[i] = 0;
+        state->unk18CE[i] = 0;
+        state->unk18A0[i] = 0;
+        state->unk1888[i] = 0x800;
+        state->unk18C8[i] = 0;
+        memcpy((void *)((s32)state + i * 0x20 + 0x17F8), &identityMatrix, 0x20);
+        *(s32 *)((s32)state + i * 0x20 + 0x1814) = (s32)0xFFEA0000;
+        state->unk1880[i] = 0;
+        state->unk18D2[i] = (s8)(state->unk18CC - 2);
+    }
+
+    initMenuCameraNode(&state->unk1620, 7, 1, 1);
+
+    switch (D_800AFE8C_A71FC->numPlayers) {
+        case 1:
+            initMenuCameraNode(&state->unk0[0], 0, 10, 0);
+            initMenuCameraNode(&state->unk760[0], 8, 8, 1);
+            initMenuCameraNode(&state->unkEC0[0], 12, 20, 1);
+            break;
+        case 2:
+            initSplitScreen2P(&state->unk0[0], 0, 10, 0);
+            setModelCameraTransform(&state->unk0[0], -0x30, -0x35, -0x70, -0x34, 0xD0, 0x34);
+            setModelCameraTransform(&state->unk0[1], -0x30, 0x35, -0x70, -0x34, 0xD0, 0x34);
+            initSplitScreen2P(&state->unk760[0], 8, 8, 1);
+            initSplitScreen2P(&state->unkEC0[0], 12, 20, 1);
+            break;
+        case 3:
+        case 4:
+            initSplitScreen3P4P(&state->unk0[0], 0, 10, 0);
+            initSplitScreen3P4P(&state->unk760[0], 8, 8, 1);
+            initSplitScreen3P4P(&state->unkEC0[0], 12, 20, 1);
+            break;
+    }
+
+    setViewportFadeValue(NULL, 0xFF, 0);
+
+    if (D_800AFE8C_A71FC->numPlayers == 1) {
+        createViewportTransform(&transform, 0, 0, 0x540000, 0, 0, 0);
+    } else if (D_800AFE8C_A71FC->numPlayers == 2) {
+        createViewportTransform(&transform, 0, 0, 0x480000, 0, 0, 0);
+    } else {
+        createViewportTransform(&transform, 0, 0, 0x380000, 0, 0, 0);
+    }
+
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+        setViewportTransformById(state->unk0[i].id, &transform);
+    }
+
+    state->unk1878 = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    state->unk187C = loadCompressedData(&_458E30_ROM_START, &_459310_ROM_START, 0xAE0);
+
+    state->unk18CD = 0;
+    if (countUnlockedSlotsInCategory(3) != 0) {
+        state->unk18CD = 1;
+    }
+
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+        if (D_800AFE8C_A71FC->playerBoardIds[4 + i] < 9) {
+            state->charRow[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] / 3;
+            state->charCol[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] % 3;
+        } else {
+            state->charRow[i] = 3;
+            state->charCol[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] - 9;
+        }
+        state->savedCharRow[i] = state->charRow[i];
+        state->savedCharCol[i] = state->charCol[i];
+        bId = D_800AFE8C_A71FC->playerBoardIds[12 + i];
+        state->boardId[i] = bId;
+        state->savedBoardId[i] = bId;
+        task = (GenericTaskNode *)scheduleTask(initCharSelectBoardModel, 0, 0, 0x5A);
+        task->unk28 = i;
+        task = (GenericTaskNode *)scheduleTask(initCharSelectPreviewModel, 0, 0, 0x5A);
+        task->unkA1 = i;
+        task = (GenericTaskNode *)scheduleTask(initCharSelectMenu, 0, 0, 0x5A);
+        task->unk34 = i;
+        task = (GenericTaskNode *)scheduleTask(initCharSelectIconHideSprites, 0, 0, 0x5A);
+        task->unk24 = i;
+        task = (GenericTaskNode *)scheduleTask(initCharSelectStats, 0, 0, 0x5A);
+        task->unk75 = i;
+        task = (GenericTaskNode *)scheduleTask(initCharSelectPlayer2NameSprites, 0, 0, 0x5A);
+        task->unk24 = i;
+    }
+
+    scheduleTask(initCharSelectPlayerLabels, 0, 0, 0x5A);
+    scheduleTask(initCharSelectArrows, 0, 0, 0x5A);
+    scheduleTask(initBoardSelectArrows, 0, 0, 0x5A);
+    scheduleTask(initCharSelectPlayerNumbers, 0, 0, 0x5A);
+    scheduleTask(initBoardSelectCharNames, 0, 0, 0x5A);
+    scheduleTask(initCharSelectNameSprites, 0, 0, 0x5A);
+    scheduleTask(initCharSelectBackgroundEffect, 0, 0, 0x5A);
+    setGameStateHandler(awaitCharacterSelectLoad);
+}
 
 void awaitCharacterSelectLoad(void) {
     CharacterSelectState *state = (CharacterSelectState *)getCurrentAllocation();
 
-    state->stateCounter++;
-    if (state->stateCounter < 3) {
+    state->unk18A0[0]++;
+    if (state->unk18A0[0] < 3) {
         return;
     }
-    state->stateCounter = 2;
+    state->unk18A0[0] = 2;
     if (getPendingDmaCount() != 0) {
         return;
     }
-    state->stateCounter = 0;
+    state->unk18A0[0] = 0;
     setViewportFadeValue(NULL, 0, 10);
     setGameStateHandler(scheduleCharacterSelectTasks);
 }
@@ -297,7 +455,7 @@ void cleanupCharacterSelect(void) {
     state->unk1878 = freeNodeMemory(state->unk1878);
     state->unk187C = freeNodeMemory(state->unk187C);
 
-    if (state->stateCounter == 0x63) {
+    if (state->unk18A0[0] == 0x63) {
         terminateSchedulerWithCallback(onCharacterSelectCancel);
     } else {
         terminateSchedulerWithCallback(onCharacterSelectProceed);
