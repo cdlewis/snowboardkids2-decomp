@@ -12,7 +12,23 @@ extern s32 gControllerInputs;
 extern s16 gCharacterEffectSpawnPoints[];
 extern s16 gCharacterEffectSpawnPointsBoard[];
 
+// Slot animation modes
+#define SLOT_ANIM_MODE_LINEAR_MOVE 1
+#define SLOT_ANIM_MODE_WALK 3
+#define SLOT_ANIM_MODE_ROTATE 4
+#define SLOT_ANIM_MODE_DECEL_MOVE 5
+#define SLOT_ANIM_MODE_ORBIT 6
+#define SLOT_ANIM_MODE_MOVE_TO_FACING 8
+#define SLOT_ANIM_MODE_BOUNCE 10
 #define SLOT_ANIM_MODE_ROTATE_WITH_SPEED 0xB
+
+// Angle constants for 13-bit angle representation (0x2000 = 360 degrees)
+#define ANGLE_13BIT_MASK 0x1FFF     // Mask for 13-bit angle representation
+#define ANGLE_HALF_CIRCLE 0x1000    // 180 degrees
+#define ANGLE_QUARTER_CIRCLE 0x800  // 90 degrees
+#define ANGLE_TURN_THRESHOLD 0xAAB  // ~60 degrees - threshold for character turn animation
+#define MAX_ROT_VEL_PER_FRAME 0x101 // 257 - max rotation velocity per frame
+#define ANGLE_FULL_CIRCLE 0x2000    // 360 degrees
 
 s16 getSlotMoveDuration(cutsceneSys2Wait_exec_asset *arg0) {
     return arg0->tableRowIndex;
@@ -27,10 +43,10 @@ s16 calcAngleDiff(CutsceneSlotData *unused, s16 direction, s16 targetAngle, s16 
     s16 result;
     s16 adjusted;
 
-    target = targetAngle & 0x1FFF;
-    current = currentAngle & 0x1FFF;
+    target = targetAngle & ANGLE_13BIT_MASK;
+    current = currentAngle & ANGLE_13BIT_MASK;
     rawDiff = target - current;
-    maskedDiff = rawDiff & 0x1FFF;
+    maskedDiff = rawDiff & ANGLE_13BIT_MASK;
     result = maskedDiff;
     savedRaw = rawDiff;
 
@@ -52,11 +68,11 @@ handle_positive:
     goto end;
 
 handle_zero:
-    if (maskedDiff < 0x1001) {
+    if (maskedDiff < (ANGLE_HALF_CIRCLE + 1)) {
         goto end;
     }
     if (current < target) {
-        adjusted = current + 0x2000;
+        adjusted = current + ANGLE_FULL_CIRCLE;
         result = target - adjusted;
     } else {
         result = savedRaw;
@@ -65,7 +81,7 @@ handle_zero:
 
 handle_positive_one:
     if (current >= target) {
-        adjusted = current - 0x2000;
+        adjusted = current - ANGLE_FULL_CIRCLE;
         result = target - adjusted;
     } else {
         result = savedRaw;
@@ -76,7 +92,7 @@ handle_negative:
     if (target < current) {
         result = savedRaw;
     } else {
-        adjusted = current + 0x2000;
+        adjusted = current + ANGLE_FULL_CIRCLE;
         result = target - adjusted;
     }
 
@@ -399,12 +415,12 @@ s32 setupSlotMoveToEx(
     deltaZ = slot->unk38 - slot->unk2C;
     slot->angle = 0;
     if (moveModeS8 == 0) {
-        slot->unk0.animMode = 1;
+        slot->unk0.animMode = SLOT_ANIM_MODE_LINEAR_MOVE;
         slot->posVelX = deltaX / frames;
         slot->posVelY = deltaY / frames;
         slot->posVelZ = deltaZ / frames;
     } else if (moveModeS8 == 1) {
-        slot->unk0.animMode = 5;
+        slot->unk0.animMode = SLOT_ANIM_MODE_DECEL_MOVE;
         slot->unk0.bytes[3] = decelRateU8;
         slot->unk48 = deltaX / frames;
         slot->unk4C = deltaY / frames;
@@ -413,13 +429,13 @@ s32 setupSlotMoveToEx(
     if ((deltaX == 0) && (deltaZ == 0)) {
         slot->rotYTarget = (s16)rotYParam;
     } else {
-        slot->rotYTarget = (atan2Fixed(deltaX, deltaZ) + 0x1000) & 0x1FFF;
+        slot->rotYTarget = (atan2Fixed(deltaX, deltaZ) + ANGLE_HALF_CIRCLE) & ANGLE_13BIT_MASK;
     }
     angleDiff = calcAngleDiff(slot, 0, slot->rotYTarget, slot->rotY);
 
-    if ((angleDiff >= 0 ? angleDiff : -angleDiff) >= 0xAAB) {
+    if ((angleDiff >= 0 ? angleDiff : -angleDiff) >= ANGLE_TURN_THRESHOLD) {
         turnDir = 2;
-        slot->rotY = ((u16)slot->rotY + 0x1000) & 0x1FFF;
+        slot->rotY = ((u16)slot->rotY + ANGLE_HALF_CIRCLE) & ANGLE_13BIT_MASK;
         if (angleDiff > 0) {
             turnDir = 1;
         }
@@ -460,7 +476,7 @@ s32 setupSlotMoveToWithRotation(
     slot->animFramesDuration = frames;
     slot->angle = 0;
     slot->rotYTarget = targetRotY;
-    slot->unk0.animMode = 1;
+    slot->unk0.animMode = SLOT_ANIM_MODE_LINEAR_MOVE;
 
     slot->posVelX = (slot->unk30 - slot->unk20_u.unk20_s32) / frames;
     slot->posVelY = (slot->unk34 - slot->unk28) / frames;
@@ -524,7 +540,7 @@ void setupSlotWalkTo(
     slot->walkAnimIndex = walkAnim;
     slot->unk0.bytes[2] = turnAnimFlag;
     slot->unkA4.byte = decelMode;
-    slot->unk0.animMode = 3;
+    slot->unk0.animMode = SLOT_ANIM_MODE_WALK;
 
     slot->posVelX = velX;
     slot->posVelY = velY;
@@ -532,7 +548,7 @@ void setupSlotWalkTo(
 
     if ((u32)deltaX < 1 && (u32)deltaZ < 1) {
     } else {
-        slot->rotYTarget = (atan2Fixed(deltaX, deltaZ) + 0x1000) & 0x1FFF;
+        slot->rotYTarget = (atan2Fixed(deltaX, deltaZ) + ANGLE_HALF_CIRCLE) & ANGLE_13BIT_MASK;
     }
 
     calcAngleDiff(slot, 0, slot->rotYTarget, slot->rotY);
@@ -562,15 +578,15 @@ s32 setupSlotRotateTo(CutsceneSlotData *slot, SceneModel *unused, s16 targetRotY
 
     turnDir = 0;
     slot->rotYTarget = targetRotY;
-    slot->unk0.animMode = 4;
+    slot->unk0.animMode = SLOT_ANIM_MODE_ROTATE;
     slot->posVelX = 0;
     slot->posVelY = 0;
     slot->posVelZ = 0;
     angleDiff = calcAngleDiff(slot, 0, targetRotY, slot->rotY);
 
-    if ((angleDiff >= 0 ? angleDiff : -angleDiff) >= 0xAAB) {
+    if ((angleDiff >= 0 ? angleDiff : -angleDiff) >= ANGLE_TURN_THRESHOLD) {
         turnDir = 2;
-        slot->rotY = ((u16)slot->rotY + 0x1000) & 0x1FFF;
+        slot->rotY = ((u16)slot->rotY + ANGLE_HALF_CIRCLE) & ANGLE_13BIT_MASK;
         if (angleDiff > 0) {
             turnDir = 1;
         }
@@ -587,15 +603,6 @@ s32 setupSlotRotateTo(CutsceneSlotData *slot, SceneModel *unused, s16 targetRotY
 }
 
 s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 targetRotY, s16 direction, s16 duration) {
-// 0xAAB = ~60 degrees in 13-bit angle units (where 0x2000 = 360 degrees)
-// 0x1000 = 180 degrees (half circle)
-// 0x1FFF = angle mask for 13-bit angle representation
-#define ANGLE_MASK 0x1FFF
-#define HALF_CIRCLE 0x1000
-#define TURN_THRESHOLD 0xAAB
-// 0x101 = 257, max rotation velocity per frame
-#define MAX_ROT_VEL 0x101
-
     s32 initialAngleDiff;
     s32 angleDiff;
     s32 turnDir;
@@ -604,16 +611,16 @@ s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 tar
     s32 absAngleDiff;
 
     turnDir = 0;
-    slot->unk0.animMode = 4;
+    slot->unk0.animMode = SLOT_ANIM_MODE_ROTATE;
     slot->posVelX = 0;
     slot->posVelY = 0;
     slot->posVelZ = 0;
     slot->rotYTarget = targetRotY;
     initialAngleDiff = calcAngleDiff(slot, direction, targetRotY, slot->rotY);
 
-    if ((initialAngleDiff >= 0 ? initialAngleDiff : -initialAngleDiff) >= TURN_THRESHOLD) {
+    if ((initialAngleDiff >= 0 ? initialAngleDiff : -initialAngleDiff) >= ANGLE_TURN_THRESHOLD) {
         turnDir = 2;
-        slot->rotY = ((u16)slot->rotY + HALF_CIRCLE) & ANGLE_MASK;
+        slot->rotY = ((u16)slot->rotY + ANGLE_HALF_CIRCLE) & ANGLE_13BIT_MASK;
         if (initialAngleDiff > 0) {
             turnDir = 1;
         }
@@ -625,7 +632,7 @@ s32 setupSlotRotateToWithDir(CutsceneSlotData *slot, SceneModel *unused, s16 tar
         rotVel = angleDiff / duration;
         slot->rotYVel = rotVel;
         absRotVel = (s16)rotVel >= 0 ? (s16)rotVel : -(s16)rotVel;
-        if (absRotVel >= MAX_ROT_VEL) {
+        if (absRotVel >= MAX_ROT_VEL_PER_FRAME) {
             s16 clampedRotVel;
             if ((s16)rotVel != 0) {
                 // Clamp rotation velocity to 0x100 (256)
@@ -683,12 +690,12 @@ void setupSlotOrbit(CutsceneSlotData *slot, s32 orbitDir, s16 duration, s16 orbi
     s32 radius;
     s32 radiusAlt;
 
-    slot->unk0.animMode = 6;
+    slot->unk0.animMode = SLOT_ANIM_MODE_ORBIT;
     slot->orbitAngularVelocity = orbitDir;
     slot->orbitSpeedParam = orbitSpeed;
     slot->animFramesRemaining = duration;
     slot->animFramesDuration = duration;
-    angle = ((s16)atan2Fixed(slot->unk20_u.unk20_s32, slot->unk2C) + 0x1000) & 0x1FFF;
+    angle = ((s16)atan2Fixed(slot->unk20_u.unk20_s32, slot->unk2C) + ANGLE_HALF_CIRCLE) & ANGLE_13BIT_MASK;
     slot->orbitAngle.orbitAngle_s32 = angle;
     cosVal = approximateCos(angle) << 2;
     if (cosVal == 0) {
@@ -702,9 +709,9 @@ void setupSlotOrbit(CutsceneSlotData *slot, s32 orbitDir, s16 duration, s16 orbi
     }
     orbitDirLocal = slot->orbitAngularVelocity;
     if (orbitDirLocal > 0) {
-        slot->rotYTarget = (slot->orbitAngle.orbitAngle_s32 + 0x800) & 0x1FFF;
+        slot->rotYTarget = (slot->orbitAngle.orbitAngle_s32 + ANGLE_QUARTER_CIRCLE) & ANGLE_13BIT_MASK;
     } else if (orbitDirLocal < 0) {
-        slot->rotYTarget = (slot->orbitAngle.orbitAngle_s32 - 0x800) & 0x1FFF;
+        slot->rotYTarget = (slot->orbitAngle.orbitAngle_s32 - ANGLE_QUARTER_CIRCLE) & ANGLE_13BIT_MASK;
     }
 }
 
@@ -799,13 +806,13 @@ void setupSlotMoveToFacing(CutsceneSlotData *slot, s32 targetX, s32 targetY, s32
     slot->animFramesRemaining = frames;
     slot->animFramesDuration = frames;
     slot->angle = 0;
-    slot->unk0.animMode = 8;
+    slot->unk0.animMode = SLOT_ANIM_MODE_MOVE_TO_FACING;
     slot->posVelX = velX;
     slot->posVelY = velY;
     slot->posVelZ = velZ;
     if ((u32)deltaX < 1 && (u32)deltaZ < 1) {
     } else {
-        slot->rotYTarget = atan2Fixed(deltaX, deltaZ) & 0x1FFF;
+        slot->rotYTarget = atan2Fixed(deltaX, deltaZ) & ANGLE_13BIT_MASK;
     }
     updateSlotRotVelocity(slot, 0);
 }
@@ -856,7 +863,7 @@ void setupSlotMoveToWithBounce(CutsceneSlotData *slot, s32 *targetPos, s16 durat
 
     slot->animFramesDuration = frames;
     slot->animFramesRemaining = frames;
-    slot->unk0.animMode = 10;
+    slot->unk0.animMode = SLOT_ANIM_MODE_BOUNCE;
 
     slot->unk30 = targetPos[0];
     slot->unk34 = targetPos[1];
