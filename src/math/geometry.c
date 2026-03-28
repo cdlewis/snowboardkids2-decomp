@@ -452,6 +452,17 @@ void scaleMatrix(Transform3D *matrix, s16 scaleX, s16 scaleY, s16 scaleZ) {
     }
 }
 
+/**
+ * Multiplies two Transform3D structures: result = left * right
+ *
+ * This function combines two 3D transforms by:
+ * 1. Multiplying the 3x3 rotation matrices (fixed-point s2.13 format)
+ * 2. Transforming the left translation by the right rotation matrix
+ * 3. Adding the right translation to the result
+ *
+ * Used for composing hierarchical transforms in skeletal animation,
+ * camera systems, and object positioning.
+ */
 void func_8006B084_6BC84(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2) {
     s32 i, j;
     s32 sum;
