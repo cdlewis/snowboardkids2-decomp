@@ -195,6 +195,31 @@ Each `__asm__("")` barrier creates a scheduling boundary. The scheduler fills st
 **Without barriers**: the compiler batches all loads together, then all adds, then all stores (no sequential pattern).
 **With volatile struct fields**: forces sequential access but the scheduler picks its own fill order based on internal priorities — `register __asm__` constraints affect which instructions are prioritized first.
 
+## Branchless Codegen for Simple Conditionals
+
+GCC 2.7.2 -O2 generates branchless `sltu`/`negu`/`andi`/`ori` sequences for patterns like `x = 3; if (cond == 0) x = 2;` when using a local variable. To force a branch instead:
+
+**Use direct struct field stores with if/else:**
+```c
+// WRONG: branchless codegen (sltu/negu/andi/ori)
+numOptions = 3;
+if (gameMode == 0) {
+    numOptions = 2;
+}
+state->field = numOptions;
+
+// CORRECT: generates bnez with delay slot fill
+if (gameMode != 0) {
+    state->field = 3;
+} else {
+    state->field = 2;
+}
+```
+
+The if/else with direct stores generates a proper branch because the compiler treats each store as a separate side effect. The local-variable version allows the compiler to compute the value branchlessly since it's just a register operation.
+
+Note: `__asm__("" : "=r"(var) : "0"(var))` barriers can prevent branchless codegen but cause `beqzl` (branch-likely) instead of `bnez`, and may allocate the wrong register.
+
 ## Duff's Device / Switch Fallthrough
 
 GCC 2.7.2 supports Duff's device-style switch fallthrough. A `case` label inside an `else` block is valid C and generates the expected assembly:
