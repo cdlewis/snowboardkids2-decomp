@@ -1,0 +1,20 @@
+CompileFlags:
+  Add:
+    - -I include
+    - -I lib/ultralib/include
+    - -I lib/ultralib/include/PR
+    - -I lib/libmus/include/PR
+    - -I lib/libmus/src
+    - -I lib/f3dex2/PR
+    - -D_LANGUAGE_C
+    - -D_MIPS_SZLONG=32
+    - -D_MIPS_SZINT=32
+    - -D__USE_ISOC99
+    - -DF3DEX_GBI_2
+    - -DNDEBUG
+    - -D_FINALROM
+    - -DNON_MATCHING
+    - -DAVOID_UB
+    - -std=gnu89
+    - -m32
+    - -fno-builtin
