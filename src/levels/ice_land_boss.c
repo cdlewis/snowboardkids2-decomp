@@ -376,7 +376,7 @@ extern s32 gControllerInputs[];
  * - Transform matrix updates
  * - Ground joint position calculations
  */
-void func_800BB2B0_B07A0(IceBossArg *boss) {
+void updateIceLandBoss(IceBossArg *boss) {
     Transform3D combinedRotMatrix;
     Transform3D fullTransform;
     GameState *gameState;

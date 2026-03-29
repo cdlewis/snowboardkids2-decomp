@@ -341,6 +341,7 @@ initGhostTransformations = 0x800BC184; // rom:0xAFE74
 cleanupGhostManager = 0x800BC340; // rom:0xB0030
 renderGhosts = 0x800BC378; // rom:0xB0068
 initIceLandBoss = 0x800BB66C; // rom:0xB0B5C
+updateIceLandBoss = 0x800BB2B0; // rom:0xB07A0
 initIceLandMovingPlatform = 0x800BB2B0; // rom:0xB2030
 updateIceLandMovingPlatform = 0x800BB3A0; // rom:0xB2120
 gIceLandPlatformForwardVec = 0x800BB9C0; // rom:0xB2740
