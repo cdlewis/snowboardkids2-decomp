@@ -2653,6 +2653,6 @@ void loadAssetSlotTableEntry(AssetSlotTableData *slot, DataTable_19E80 *table, s
     getTableEntryByU16Index(table, (s16)entryIndex, &result);
     slot->data_ptr = result.data_ptr;
     slot->index_ptr = result.index_ptr;
-    slot->tableField1 = result.field1;
-    slot->tableField2 = result.field2;
+    slot->tableField1 = result.width;
+    slot->tableField2 = result.height;
 }

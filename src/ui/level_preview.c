@@ -820,8 +820,8 @@ void initLevelPreviewPortraitDisplay(void *arg0) {
 
             element->data_ptr = sp30.data_ptr;
             element->index_ptr = sp30.index_ptr;
-            element->field1 = sp30.field1;
-            element->field2 = sp30.field2;
+            element->field1 = sp30.width;
+            element->field2 = sp30.height;
             element->alpha = 0xFF;
         }
 

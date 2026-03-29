@@ -1177,8 +1177,8 @@ void renderSceneAnimationTask(SceneAnimationTaskNew *arg0) {
                         tableEntry.data_ptr,
                         G_IM_FMT_CI,
                         G_IM_SIZ_8b,
-                        tableEntry.field1,
-                        tableEntry.field2,
+                        tableEntry.width,
+                        tableEntry.height,
                         0,
                         G_TX_CLAMP,
                         G_TX_CLAMP,
@@ -1198,8 +1198,8 @@ void renderSceneAnimationTask(SceneAnimationTaskNew *arg0) {
                         0,
                         G_TX_RENDERTILE,
                         G_IM_FMT_CI,
-                        tableEntry.field1,
-                        tableEntry.field2,
+                        tableEntry.width,
+                        tableEntry.height,
                         0,
                         G_TX_CLAMP,
                         G_TX_CLAMP,
@@ -1405,7 +1405,7 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
     getTableEntryByU16Index(state->textureTable, state->textureIndex, &tableEntry);
 
     do {
-        tempWidth = tableEntry.field1;
+        tempWidth = tableEntry.width;
         widthShift = 0;
     loop_1:
         if (!(tempWidth & 1)) {
@@ -1416,7 +1416,7 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
             }
         }
 
-        tempHeight = tableEntry.field2;
+        tempHeight = tableEntry.height;
         heightShift = 0;
     loop_2:
         if (!(tempHeight & 1)) {
@@ -1433,8 +1433,8 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
             gRegionAllocPtr++,
             tableEntry.data_ptr,
             G_IM_FMT_CI,
-            tableEntry.field1,
-            tableEntry.field2,
+            tableEntry.width,
+            tableEntry.height,
             0,
             0,
             0,
@@ -1449,8 +1449,8 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
             G_TX_RENDERTILE,
             state->tileScrollU,
             state->tileScrollV,
-            ((tableEntry.field1 + (s16)state->tileScrollU - 1) << 2),
-            ((tableEntry.field2 + (s16)state->tileScrollV - 1) << 2)
+            ((tableEntry.width + (s16)state->tileScrollU - 1) << 2),
+            ((tableEntry.height + (s16)state->tileScrollV - 1) << 2)
         );
 
         gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
@@ -1460,8 +1460,8 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
             tableEntry.data_ptr,
             G_IM_FMT_CI,
             G_IM_SIZ_8b,
-            tableEntry.field1,
-            tableEntry.field2,
+            tableEntry.width,
+            tableEntry.height,
             0,
             0,
             0,
@@ -1476,8 +1476,8 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
             G_TX_RENDERTILE,
             state->tileScrollU,
             state->tileScrollV,
-            ((tableEntry.field1 + (s16)state->tileScrollU - 1) << 2),
-            ((tableEntry.field2 + (s16)state->tileScrollV - 1) << 2)
+            ((tableEntry.width + (s16)state->tileScrollU - 1) << 2),
+            ((tableEntry.height + (s16)state->tileScrollV - 1) << 2)
         );
 
         gDPLoadTLUT_pal256(gRegionAllocPtr++, tableEntry.index_ptr);
@@ -1975,12 +1975,12 @@ void renderGoldCoins(GoldCoinRenderState *state) {
 
     loadBlockCmd = gRegionAllocPtr++;
     loadBlockCmd->words.w0 = 0xF3000000;
-    widthDiv16 = tableEntry.field1 >> 4;
+    widthDiv16 = tableEntry.width >> 4;
     dxtBase = 0x800;
     if (widthDiv16 != 0) {
         dxtBase = widthDiv16 + 0x7FF;
     }
-    lrs = (((s32)((tableEntry.field1 * tableEntry.field2) + 3)) >> 2) - 1;
+    lrs = (((s32)((tableEntry.width * tableEntry.height) + 3)) >> 2) - 1;
     if (lrs < 0x800) {
     } else {
         lrs = 0x7FF;
@@ -1997,7 +1997,7 @@ void renderGoldCoins(GoldCoinRenderState *state) {
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    tileLine = (((tableEntry.field1 >> 1) + 7) >> 3) & 0x1FF;
+    tileLine = (((tableEntry.width >> 1) + 7) >> 3) & 0x1FF;
     new_var = G_TX_NOMIRROR;
     gDPSetTile(
         gRegionAllocPtr++,
@@ -2015,14 +2015,7 @@ void renderGoldCoins(GoldCoinRenderState *state) {
         G_TX_NOLOD
     );
 
-    gDPSetTileSize(
-        gRegionAllocPtr++,
-        G_TX_RENDERTILE,
-        0,
-        0,
-        (tableEntry.field1 - 1) << 2,
-        (tableEntry.field2 - 1) << 2
-    );
+    gDPSetTileSize(gRegionAllocPtr++, G_TX_RENDERTILE, 0, 0, (tableEntry.width - 1) << 2, (tableEntry.height - 1) << 2);
 
     gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);
 
@@ -2857,12 +2850,12 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
     loadBlockCmd = gRegionAllocPtr++;
     loadBlockCmd->words.w0 = 0xF3000000;
     gGraphicsMode = -1;
-    widthDiv16 = state->textureEntry.field1 >> 4;
+    widthDiv16 = state->textureEntry.width >> 4;
     dxtBase = 0x800;
     if (widthDiv16 != 0) {
         dxtBase = widthDiv16 + 0x7FF;
     }
-    lrs = (((s32)((state->textureEntry.field1 * state->textureEntry.field2) + 3)) >> 2) - 1;
+    lrs = (((s32)((state->textureEntry.width * state->textureEntry.height) + 3)) >> 2) - 1;
     if (lrs < 0x800) {
     } else {
         lrs = 0x7FF;
@@ -2879,7 +2872,7 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    line = (((state->textureEntry.field1 >> 1) + 7) >> 3) & 0x1FF;
+    line = (((state->textureEntry.width >> 1) + 7) >> 3) & 0x1FF;
     new_var = G_TX_NOMIRROR;
     gDPSetTile(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_4b, line, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0);
 
@@ -2888,8 +2881,8 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
         G_TX_RENDERTILE,
         0,
         0,
-        (state->textureEntry.field1 - 1) << 2,
-        (state->textureEntry.field2 - 1) << 2
+        (state->textureEntry.width - 1) << 2,
+        (state->textureEntry.height - 1) << 2
     );
 
     gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, state->textureEntry.index_ptr);

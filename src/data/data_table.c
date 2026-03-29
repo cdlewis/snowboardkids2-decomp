@@ -12,8 +12,8 @@ void getTableEntryByU16Index(DataTable_19E80 *arg0, u16 arg1, OutputStruct_19E80
 
     arg2->data_ptr = &arg0->header[entry_ptr->data_offset];
     arg2->index_ptr = &index_table[entry_ptr->index_offset * 2];
-    arg2->field1 = entry_ptr->field1;
-    arg2->field2 = entry_ptr->field2;
+    arg2->width = entry_ptr->width;
+    arg2->height = entry_ptr->height;
 }
 
 void getTableEntryByIndex(DataTable_19E80 *table, u32 entry_index, u8 sub_index, OutputStruct_19E80 *output) {
@@ -27,6 +27,6 @@ void getTableEntryByIndex(DataTable_19E80 *table, u32 entry_index, u8 sub_index,
 
     output->data_ptr = &table->header[entry_base->data_offset];
     output->index_ptr = index_ptr + (sub_index << 1);
-    output->field1 = entry_base->field1;
-    output->field2 = entry_base->field2;
+    output->width = entry_base->width;
+    output->height = entry_base->height;
 }

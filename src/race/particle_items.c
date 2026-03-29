@@ -2481,12 +2481,12 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
 
                     loadBlockCmd = gRegionAllocPtr++;
                     loadBlockCmd->words.w0 = 0xF3000000;
-                    widthDiv16 = tableEntry.field1 >> 4;
+                    widthDiv16 = tableEntry.width >> 4;
                     dxtBase = 0x800;
                     if (widthDiv16 != 0) {
                         dxtBase = widthDiv16 + 0x7FF;
                     }
-                    lrs = (((s32)((tableEntry.field1 * tableEntry.field2) + 3)) >> 2) - 1;
+                    lrs = (((s32)((tableEntry.width * tableEntry.height) + 3)) >> 2) - 1;
                     if (lrs < 0x800) {
                     } else {
                         lrs = 0x7FF;
@@ -2503,7 +2503,7 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
 
                     gDPPipeSync(gRegionAllocPtr++);
 
-                    tileLine = (((tableEntry.field1 >> 1) + 7) >> 3) & 0x1FF;
+                    tileLine = (((tableEntry.width >> 1) + 7) >> 3) & 0x1FF;
                     new_var = G_TX_NOMIRROR;
                     gDPSetTile(
                         gRegionAllocPtr++,
@@ -2526,8 +2526,8 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
                         G_TX_RENDERTILE,
                         0,
                         0,
-                        (tableEntry.field1 - 1) << 2,
-                        (tableEntry.field2 - 1) << 2
+                        (tableEntry.width - 1) << 2,
+                        (tableEntry.height - 1) << 2
                     );
 
                     gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);

@@ -37,7 +37,7 @@ void loadScrollingTexture(ScrollingTextureState *state) {
 
     getTableEntryByU16Index(state->textureTable, state->textureIndex, &tableEntry);
 
-    tempWidth = tableEntry.field1;
+    tempWidth = tableEntry.width;
     widthShift = 0;
 loop_1:
     if (!(tempWidth & 1)) {
@@ -50,7 +50,7 @@ loop_1:
         } while (0);
     }
 
-    tempHeight = tableEntry.field2;
+    tempHeight = tableEntry.height;
     heightShift = 0;
 loop_2:
     if (!(tempHeight & 1)) {
@@ -70,8 +70,8 @@ loop_2:
             gRegionAllocPtr++,
             tableEntry.data_ptr,
             G_IM_FMT_CI,
-            tableEntry.field1,
-            tableEntry.field2,
+            tableEntry.width,
+            tableEntry.height,
             0,
             0,
             0,
@@ -86,8 +86,8 @@ loop_2:
             G_TX_RENDERTILE,
             state->tileScrollU,
             state->tileScrollV,
-            ((tableEntry.field1 + (s16)state->tileScrollU - 1) << 2),
-            ((tableEntry.field2 + (s16)state->tileScrollV - 1) << 2)
+            ((tableEntry.width + (s16)state->tileScrollU - 1) << 2),
+            ((tableEntry.height + (s16)state->tileScrollV - 1) << 2)
         );
 
         gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteAddr);
@@ -97,8 +97,8 @@ loop_2:
             tableEntry.data_ptr,
             G_IM_FMT_CI,
             G_IM_SIZ_8b,
-            tableEntry.field1,
-            tableEntry.field2,
+            tableEntry.width,
+            tableEntry.height,
             0,
             0,
             0,
@@ -113,8 +113,8 @@ loop_2:
             G_TX_RENDERTILE,
             state->tileScrollU,
             state->tileScrollV,
-            ((tableEntry.field1 + (s16)state->tileScrollU - 1) << 2),
-            ((tableEntry.field2 + (s16)state->tileScrollV - 1) << 2)
+            ((tableEntry.width + (s16)state->tileScrollU - 1) << 2),
+            ((tableEntry.height + (s16)state->tileScrollV - 1) << 2)
         );
 
         gDPLoadTLUT_pal256(gRegionAllocPtr++, tableEntry.index_ptr);
@@ -167,7 +167,7 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
     getTableEntryByU16Index(arg0->textureTable, arg0->textureIndex, &tableEntry);
 
     do {
-        tempWidth = tableEntry.field1;
+        tempWidth = tableEntry.width;
         widthShift = 0;
     loop_1:
         if (!(tempWidth & 1)) {
@@ -178,7 +178,7 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
             }
         }
 
-        tempHeight = tableEntry.field2;
+        tempHeight = tableEntry.height;
         heightShift = 0;
     loop_2:
         if (!(tempHeight & 1)) {
@@ -197,8 +197,8 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
             gRegionAllocPtr++,
             tableEntry.data_ptr,
             G_IM_FMT_CI,
-            tableEntry.field1,
-            tableEntry.field2,
+            tableEntry.width,
+            tableEntry.height,
             0,
             0,
             0,
@@ -213,8 +213,8 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
             G_TX_RENDERTILE,
             arg0->tileScrollU,
             arg0->tileScrollV,
-            ((tableEntry.field1 + (s16)arg0->tileScrollU - 1) << 2),
-            ((tableEntry.field2 + (s16)arg0->tileScrollV - 1) << 2)
+            ((tableEntry.width + (s16)arg0->tileScrollU - 1) << 2),
+            ((tableEntry.height + (s16)arg0->tileScrollV - 1) << 2)
         );
 
         gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteAddr);
@@ -224,8 +224,8 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
             tableEntry.data_ptr,
             G_IM_FMT_CI,
             G_IM_SIZ_8b,
-            tableEntry.field1,
-            tableEntry.field2,
+            tableEntry.width,
+            tableEntry.height,
             0,
             0,
             0,
@@ -240,8 +240,8 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
             G_TX_RENDERTILE,
             arg0->tileScrollU,
             arg0->tileScrollV,
-            ((tableEntry.field1 + (s16)arg0->tileScrollU - 1) << 2),
-            ((tableEntry.field2 + (s16)arg0->tileScrollV - 1) << 2)
+            ((tableEntry.width + (s16)arg0->tileScrollU - 1) << 2),
+            ((tableEntry.height + (s16)arg0->tileScrollV - 1) << 2)
         );
 
         gDPLoadTLUT_pal256(gRegionAllocPtr++, tableEntry.index_ptr);

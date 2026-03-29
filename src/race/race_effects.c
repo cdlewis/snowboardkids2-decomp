@@ -984,8 +984,8 @@ void updateCenteredSpritePopup(CenteredSpritePopupState *state) {
     OutputStruct_19E80 output;
 
     getTableEntryByU16Index(state->spriteAsset, state->spriteIndex, &output);
-    state->xPos = -output.field1 / 2;
-    state->yPos = -output.field2 / 2;
+    state->xPos = -output.width / 2;
+    state->yPos = -output.height / 2;
     debugEnqueueCallback((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
 }
 

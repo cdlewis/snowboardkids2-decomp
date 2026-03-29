@@ -1066,7 +1066,7 @@ void initCharSelectIcons(CharSelectIconsState *state) {
         iconEntry->maxItems = (s8)(tableVal + 1);
         xPos += xIncrement;
         i++;
-        iconEntry->unk10 = tableEntry.field2;
+        iconEntry->unk10 = tableEntry.height;
         iconEntry++;
     } while (i < 3);
 

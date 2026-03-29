@@ -350,7 +350,7 @@ void loadColorIndexedTexture(void *arg) {
 
     getTableEntryByU16Index(state->textureTable, state->textureIndex, &tableEntry);
 
-    tempWidth = tableEntry.field1;
+    tempWidth = tableEntry.width;
     widthShift = 0;
 loop_1:
     if (!(tempWidth & 1)) {
@@ -363,7 +363,7 @@ loop_1:
         } while (0);
     }
 
-    tempHeight = tableEntry.field2;
+    tempHeight = tableEntry.height;
     heightShift = 0;
 loop_2:
     if (!(tempHeight & 1)) {
@@ -398,12 +398,12 @@ loop_2:
 
     loadBlockCmd = gRegionAllocPtr++;
     loadBlockCmd->words.w0 = 0xF3000000;
-    widthDiv16 = tableEntry.field1 >> 4;
+    widthDiv16 = tableEntry.width >> 4;
     dxtBase = 0x800;
     if (widthDiv16 != 0) {
         dxtBase = widthDiv16 + 0x7FF;
     }
-    lrs = (((s32)((tableEntry.field1 * tableEntry.field2) + 3)) >> 2) - 1;
+    lrs = (((s32)((tableEntry.width * tableEntry.height) + 3)) >> 2) - 1;
     if (lrs >= 0x800) {
         lrs = 0x7FF;
     }
@@ -418,7 +418,7 @@ loop_2:
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    tileLine = (((tableEntry.field1 >> 1) + 7) >> 3) & 0x1FF;
+    tileLine = (((tableEntry.width >> 1) + 7) >> 3) & 0x1FF;
     gDPSetTile(
         gRegionAllocPtr++,
         G_IM_FMT_CI,
@@ -437,22 +437,15 @@ loop_2:
 
     loadTileParams = 15;
 
-    gDPSetTileSize(
-        gRegionAllocPtr++,
-        G_TX_RENDERTILE,
-        0,
-        0,
-        (tableEntry.field1 - 1) << 2,
-        (tableEntry.field2 - 1) << 2
-    );
+    gDPSetTileSize(gRegionAllocPtr++, G_TX_RENDERTILE, 0, 0, (tableEntry.width - 1) << 2, (tableEntry.height - 1) << 2);
 
     gDPSetTileSize(
         gRegionAllocPtr++,
         G_TX_RENDERTILE,
         state->tileULow & 0xFFF,
         state->tileVLow & 0xFFF,
-        ((tableEntry.field1 + (s16)state->tileULow - 1) << 2) & 0xFFF,
-        ((tableEntry.field2 + (s16)state->tileVLow - 1) << 2) & 0xFFF
+        ((tableEntry.width + (s16)state->tileULow - 1) << 2) & 0xFFF,
+        ((tableEntry.height + (s16)state->tileVLow - 1) << 2) & 0xFFF
     );
 
     gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);

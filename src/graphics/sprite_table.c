@@ -170,7 +170,7 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
     texWidthShift = 0;
 
     if (gGraphicsMode != 0x202) {
-        dim = textureEntry.field1;
+        dim = textureEntry.width;
     loop_3:
         if (!(dim & 1)) {
             texWidthShift += 1;
@@ -179,7 +179,7 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
                 goto loop_3;
             }
         }
-        dim = textureEntry.field2;
+        dim = textureEntry.height;
         texHeightShift = 0;
     loop_6:
         if (!(dim & 1)) {
@@ -195,8 +195,8 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
             gRegionAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
-            textureEntry.field1,
-            textureEntry.field2,
+            textureEntry.width,
+            textureEntry.height,
             0,
             G_TX_CLAMP,
             G_TX_CLAMP,
@@ -207,7 +207,7 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
         );
         gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
     } else if (gCachedSpriteTextureEntry.data_ptr != textureEntry.data_ptr) {
-        dim = textureEntry.field1;
+        dim = textureEntry.width;
     loop_16:
         if (!(dim & 1)) {
             texWidthShift += 1;
@@ -216,7 +216,7 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
                 goto loop_16;
             }
         }
-        dim = textureEntry.field2;
+        dim = textureEntry.height;
         texHeightShift = 0;
     loop_19:
         if (!(dim & 1)) {
@@ -232,8 +232,8 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
             gRegionAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
-            textureEntry.field1,
-            textureEntry.field2,
+            textureEntry.width,
+            textureEntry.height,
             0,
             G_TX_CLAMP,
             G_TX_CLAMP,
@@ -324,7 +324,7 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
     texWidthShift = 0;
 
     if (gGraphicsMode != 0x203) {
-        dim = textureEntry.field1;
+        dim = textureEntry.width;
     loop_3:
         if (!(dim & 1)) {
             texWidthShift += 1;
@@ -333,7 +333,7 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
                 goto loop_3;
             }
         }
-        dim = textureEntry.field2;
+        dim = textureEntry.height;
         texHeightShift = 0;
     loop_6:
         if (!(dim & 1)) {
@@ -349,8 +349,8 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
             gRegionAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
-            textureEntry.field1,
-            textureEntry.field2,
+            textureEntry.width,
+            textureEntry.height,
             0,
             G_TX_CLAMP,
             G_TX_CLAMP,
@@ -361,7 +361,7 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
         );
         gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
     } else if (gCachedSpriteTextureEntry.data_ptr != textureEntry.data_ptr) {
-        dim = textureEntry.field1;
+        dim = textureEntry.width;
     loop_16:
         if (!(dim & 1)) {
             texWidthShift += 1;
@@ -370,7 +370,7 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
                 goto loop_16;
             }
         }
-        dim = textureEntry.field2;
+        dim = textureEntry.height;
         texHeightShift = 0;
     loop_19:
         if (!(dim & 1)) {
@@ -386,8 +386,8 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
             gRegionAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
-            textureEntry.field1,
-            textureEntry.field2,
+            textureEntry.width,
+            textureEntry.height,
             0,
             G_TX_CLAMP,
             G_TX_CLAMP,
@@ -480,7 +480,7 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
     texWidthShift = 0;
 
     if (gGraphicsMode != 0x203) {
-        dim = textureEntry.field1;
+        dim = textureEntry.width;
     loop_3:
         if (!(dim & 1)) {
             texWidthShift += 1;
@@ -489,7 +489,7 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
                 goto loop_3;
             }
         }
-        dim = textureEntry.field2;
+        dim = textureEntry.height;
         texHeightShift = 0;
     loop_6:
         if (!(dim & 1)) {
@@ -505,8 +505,8 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
             gRegionAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
-            textureEntry.field1,
-            textureEntry.field2,
+            textureEntry.width,
+            textureEntry.height,
             0,
             G_TX_CLAMP,
             G_TX_CLAMP,
@@ -517,7 +517,7 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
         );
         gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
     } else if (gCachedSpriteTextureEntry.data_ptr != textureEntry.data_ptr) {
-        dim = textureEntry.field1;
+        dim = textureEntry.width;
     loop_16:
         if (!(dim & 1)) {
             texWidthShift += 1;
@@ -526,7 +526,7 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
                 goto loop_16;
             }
         }
-        dim = textureEntry.field2;
+        dim = textureEntry.height;
         texHeightShift = 0;
     loop_19:
         if (!(dim & 1)) {
@@ -542,8 +542,8 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
             gRegionAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
-            textureEntry.field1,
-            textureEntry.field2,
+            textureEntry.width,
+            textureEntry.height,
             0,
             G_TX_CLAMP,
             G_TX_CLAMP,
@@ -848,7 +848,7 @@ void setupAndEnqueueSprite(
 
     getTableEntryByU16Index(state->spriteTable, state->textureIndex, &sp10);
 
-    dimensions = (sp10.field1 << 16) | sp10.field2;
+    dimensions = (sp10.width << 16) | sp10.height;
 
     switch (dimensions) {
         case 0x80008:
@@ -888,5 +888,5 @@ s32 getTableEntryValue(TableLookupContext *ctx) {
     OutputStruct_19E80 output;
 
     getTableEntryByU16Index(ctx->table, ctx->index, &output);
-    return output.field1;
+    return output.width;
 }

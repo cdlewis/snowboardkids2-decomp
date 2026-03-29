@@ -2216,8 +2216,8 @@ void loadAssetMetadata(loadAssetMetadata_arg *arg0, void *arg1, s32 arg2) {
     getTableEntryByU16Index(arg1, (s16)arg2, &result);
     arg0->data_ptr = result.data_ptr;
     arg0->index_ptr = result.index_ptr;
-    arg0->unk18 = result.field1;
-    arg0->unk19 = result.field2;
+    arg0->unk18 = result.width;
+    arg0->unk19 = result.height;
 }
 
 void loadAssetMetadataByIndex(
@@ -2231,8 +2231,8 @@ void loadAssetMetadataByIndex(
     getTableEntryByIndex(table, (u16)entry_index, (u8)sub_index, &result);
     arg0->data_ptr = result.data_ptr;
     arg0->index_ptr = result.index_ptr;
-    arg0->unk18 = result.field1;
-    arg0->unk19 = result.field2;
+    arg0->unk18 = result.width;
+    arg0->unk19 = result.height;
 }
 
 void initializeOverlaySystem(void) {
