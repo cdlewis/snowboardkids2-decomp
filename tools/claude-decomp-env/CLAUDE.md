@@ -36,6 +36,7 @@ After base.c builds successfully, repeat the following steps:
 - `./diff.sh <file>.o` — diff the assembly of the given object file against the target.
 - `./map_asm_to_c.py <file>.o <line>` — map an assembly line back to the relevant C code.
 - `gfxdis.f3dex2 -d 0xXXXXXXXXXXXXXXXX` — disassemble an f3dex2 microcode instruction into an approximate `gbi.h` macro. For example, `gfxdis.f3dex2 -d DA38000300000000` produces `gsSPMatrix(0x00000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW)`.
+- `../../tools/s2dex_dis.py 0x0200000080123456` - disassemble s2dex microcode instruction into an approximate gs2dex.h macro.
 
 ## Coding Guidelines
 
@@ -149,4 +150,4 @@ Don't be intimidated — these are often straightforward if approached methodica
 3. Large structs are easy. Often there are significant gaps between fields, so just focus on getting the field accesses correct.
 
 ### Functions Using gRegionAllocPtr
-Use the `decompile-f3dex` skill if you suspect a function is using RDP display lists.
+Snowboard Kids 2 uses two sets of microcode: f3dex2 and s2dex. Use the `decompile-microcode` skill if you suspect a function is using RDP display lists.
