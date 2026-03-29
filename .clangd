@@ -1,3 +1,8 @@
+Diagnostics:
+  UnusedIncludes: Strict
+  Suppress:
+    - unused-includes:*common.h
+
 CompileFlags:
   Add:
     - -I include
