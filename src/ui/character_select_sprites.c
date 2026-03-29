@@ -138,7 +138,46 @@ extern char D_800B115C_1DB6FC[];
 extern s32 gButtonsPressed;
 extern u8 D_800B1150_1DB6F0[];
 
-INCLUDE_ASM("asm/nonmatchings/ui/character_select_sprites", func_800B00C0_1DA660);
+void func_800B00C0_1DA660(void) {
+    u8 buffer[8];
+    s32 matchCount;
+    LocalGameState *allocation;
+    u8 numPlayers;
+    s32 outerIndex;
+    s32 k;
+    s32 j;
+    u8 temp;
+
+    allocation = (LocalGameState *)getCurrentAllocation();
+    numPlayers = D_800AFE8C_A71FC->numPlayers;
+
+    for (outerIndex = 0; outerIndex < numPlayers; outerIndex++) {
+        k = 0;
+        for (j = 0; j < numPlayers; j++) {
+            if (allocation->unk592[outerIndex] == allocation->unk592[j]) {
+                buffer[k] = j;
+                k++;
+            } else {
+                buffer[j] = 99;
+            }
+            matchCount = k;
+        }
+
+        for (j = 0; j < (u8)matchCount - 1; j++) {
+            for (k = j + 1; k < (u8)matchCount; k++) {
+                if (allocation->unk5A2[buffer[j]] > allocation->unk5A2[buffer[k]]) {
+                    temp = buffer[k];
+                    buffer[k] = buffer[j];
+                    buffer[j] = temp;
+                }
+            }
+        }
+
+        for (j = 0; j < (u8)matchCount; j++) {
+            allocation->unk5A2[buffer[j]] = j + 1;
+        }
+    }
+}
 
 void positionCharacterSelectSprite(CharacterSelectSprite *arg0, u8 arg1) {
     LocalGameState *allocation;
