@@ -41,11 +41,11 @@ typedef struct {
     s32 rotationMatrix;
     s8 pad_7C[0x10];
     s32 posX;
-    s8 pad_90[0x4];
     s32 posY;
     s32 posZ;
+    s32 renderOffsetX;
     s32 animTimer;
-    s32 posOffset;
+    s32 renderOffsetZ;
     s16 xRotation;
     s16 positionIndex;
     s16 respawnTimer;
@@ -87,9 +87,9 @@ void initFallingRockHazard(FallingRockHazard *rock) {
     rock->node1.segment1 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     rock->node1.segment2 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     rock->node1.segment3 = 0;
-    rock->posZ = 0;
+    rock->renderOffsetX = 0;
     rock->animTimer = 0;
-    rock->posOffset = 0;
+    rock->renderOffsetZ = 0;
     rock->node2.segment1 = rock->node1.segment1;
     rock->node2.segment2 = rock->node1.segment2;
     rock->node2.segment3 = rock->node1.segment3;
@@ -109,7 +109,7 @@ void renderFallingRockHazard(FallingRockHazard *rock) {
     s32 matrix[8];
     s32 i;
 
-    memcpy(&gScaleMatrix.translation, &rock->posZ, 0xC);
+    memcpy(&gScaleMatrix.translation, &rock->renderOffsetX, 0xC);
     func_8006B084_6BC84(
         (Transform3D *)((s32 *)&gScaleMatrix.translation - 5),
         (Transform3D *)&rock->rotationMatrix,
@@ -141,7 +141,7 @@ void updateFallingRockHazard(FallingRockHazard *rock) {
 
     for (i = 0; i < gs->numPlayers; i++) {
         xDiff = gs->players[i].worldPos.x - rock->posX;
-        zDiff = gs->players[i].worldPos.z - rock->posY;
+        zDiff = gs->players[i].worldPos.z - rock->posZ;
         if (((0x27FFFFE >= ((u32)xDiff) + 0x13FFFFF) & (0x13FFFFF >= zDiff)) == 0) {
             continue;
         }
