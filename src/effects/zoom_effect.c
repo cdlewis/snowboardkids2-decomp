@@ -12,8 +12,11 @@
 #include "text/font_render.h"
 #include "ui/level_preview_3d.h"
 
-extern s16 gWipeOffsetX[];
-extern s16 gWipeOffsetY[];
+extern struct {
+    s16 x;
+    s16 y;
+} gWipeOffset[];
+
 extern void func_80035548_36148(void *);
 
 s16 func_800B956C_1E661C(cutsceneSys2Wait_exec_asset *);
@@ -40,29 +43,20 @@ void updateWipeTransitionSlots(cutsceneSys2Wait_exec_asset *arg0) {
     s32 offset;
     s32 one;
 
-    i = 0;
-    one = 1;
-    offset = 0;
-
-    do {
+    for (i = 0; i < 4; i++) {
         arg0->slots[i].zoomScaleX = calculateZoomScaleFactor(arg0->zoomLevelX);
         arg0->slots[i].zoomScaleY = calculateZoomScaleFactor(arg0->zoomLevelY);
 
         if (arg0->slots[i].zoomScaleX == 0) {
-            arg0->slots[i].zoomScaleX = one;
+            arg0->slots[i].zoomScaleX = 1;
         }
         if (arg0->slots[i].zoomScaleY == 0) {
-            arg0->slots[i].zoomScaleY = one;
+            arg0->slots[i].zoomScaleY = 1;
         }
 
-        arg0->slots[i].posX =
-            arg0->basePosX + ((((s16 *)((u8 *)gWipeOffsetX + offset))[0]) << 10) / arg0->slots[i].zoomScaleX;
-        arg0->slots[i].posY =
-            arg0->basePosY + ((((s16 *)((u8 *)gWipeOffsetY + offset))[0]) << 10) / arg0->slots[i].zoomScaleY;
-
-        i++;
-        offset += 4;
-    } while (i < 4);
+        arg0->slots[i].posX = arg0->basePosX + (gWipeOffset[i].x << 10) / arg0->slots[i].zoomScaleX;
+        arg0->slots[i].posY = arg0->basePosY + (gWipeOffset[i].y << 10) / arg0->slots[i].zoomScaleY;
+    }
 }
 
 INCLUDE_ASM("asm/nonmatchings/effects/zoom_effect", func_800B956C_1E661C);
