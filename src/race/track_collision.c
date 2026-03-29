@@ -11,7 +11,7 @@
 
 typedef struct {
     u8 _pad[0x10];
-    /* 0x10 */ void *dataArray;
+    /* 0x10 */ Player *dataArray;
     u8 _pad2[0x18];
     /* 0x2C */ ListNode_5AA90 *list;
     /* 0x30 */ u8 unk30[0];
@@ -957,7 +957,66 @@ s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeig
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/track_collision", func_8005BF50_5CB50);
+s16 func_8005BF50_5CB50(Vec3i *pos, s16 angle, s32 excludePlayerIdx, s32 radius, s32 arg4) {
+    Vec3i deltaPos;
+    s16 closestAngle;
+    s32 closestDist;
+    s16 closestId;
+    s16 angleDiff;
+    Allocation5AA90 *allocation;
+    ListNode_5AA90 *node;
+
+    closestAngle = 0;
+    allocation = (Allocation5AA90 *)getCurrentAllocation();
+    closestDist = radius + 10;
+    closestId = -1;
+
+    for (node = allocation->list; node != NULL; node = node->next) {
+        if (excludePlayerIdx != node->id && allocation->dataArray[node->id].invincibilityTimer == 0) {
+            memcpy(&deltaPos, &node->localPos, 0xC);
+
+            deltaPos.x += node->posPtr->x;
+            deltaPos.y += node->posPtr->y;
+            deltaPos.z += node->posPtr->z;
+
+            deltaPos.x -= pos->x;
+            deltaPos.y -= pos->y;
+            deltaPos.z -= pos->z;
+
+            if (deltaPos.x < radius && -radius < deltaPos.x && deltaPos.y < radius && -radius < deltaPos.y &&
+                deltaPos.z < radius && -radius < deltaPos.z) {
+                angleDiff = atan2Fixed(deltaPos.x, deltaPos.z);
+                angleDiff = (angleDiff - angle) & 0x1FFF;
+
+                if ((angleDiff - 0x800) >= 0x1001U) {
+                    s32 dist = isqrt64(
+                        (s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z
+                    );
+
+                    if (dist < radius) {
+                        if (dist <= 0x13FFFFF) {
+                            allocation->dataArray[node->id].pathFlags |= 2;
+                        } else {
+                            allocation->dataArray[node->id].pathFlags |= 1;
+                        }
+
+                        if (dist < closestDist) {
+                            closestAngle = angleDiff;
+                            closestDist = dist;
+                            closestId = node->id;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (closestId >= 0 && closestDist < arg4 * 4 + arg4 / 2) {
+        allocation->dataArray[closestId].pathFlags |= 8;
+    }
+
+    return closestAngle;
+}
 
 /**
  * Checks collision between a position and vulnerable players (non-invincible, collision-enabled).
