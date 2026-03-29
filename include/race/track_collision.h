@@ -30,6 +30,6 @@ void handleOrientedAreaCollision(Vec3i *origin, s32 radialThreshold, s32 depthEx
 s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSectorIndex, void *position);
 Player *
 findVulnerablePlayerNearPositionWithDelta(Vec3i *position, s32 excludePlayerIdx, s32 searchRadius, Vec3i *outDelta);
-s16 func_8005BF50_5CB50(Vec3i *pos, s16 angle, s32 excludePlayerIdx, s32 radius, s32 arg4);
+s16 getHomingAngleToTarget(Vec3i *pos, s16 facingAngle, s32 excludePlayerIdx, s32 searchRadius, s32 closeRangeThreshold);
 void func_8005A26C_5AE6C(Player *);
 s32 handlePlayerTrackWallCollision(Player *player);

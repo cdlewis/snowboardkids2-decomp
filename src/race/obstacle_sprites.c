@@ -330,7 +330,7 @@ void updateSlapstickProjectile(Struct_52880 *arg0) {
 
         checkSlapstickProjectileHit(arg0);
 
-        turnAngle = func_8005BF50_5CB50(
+        turnAngle = getHomingAngleToTarget(
             &arg0->pos,
             atan2Fixed(arg0->vel.x, arg0->vel.z),
             arg0->ownerPlayerIdx,
@@ -547,7 +547,7 @@ void updateParachuteProjectile(Struct_52880 *arg0) {
 
         checkParachuteProjectileHit(arg0);
 
-        var_s3 = func_8005BF50_5CB50(
+        var_s3 = getHomingAngleToTarget(
             &arg0->pos,
             atan2Fixed(arg0->vel.x, arg0->vel.z),
             arg0->ownerPlayerIdx,
@@ -769,7 +769,7 @@ void updateFryingPanProjectile(Struct_52880 *arg0) {
 
         checkFryingPanProjectileHit(arg0);
 
-        var_s3 = func_8005BF50_5CB50(
+        var_s3 = getHomingAngleToTarget(
             &arg0->pos,
             atan2Fixed(arg0->vel.x, arg0->vel.z),
             arg0->ownerPlayerIdx,
@@ -1011,7 +1011,7 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
 
         checkSnowmanProjectileHit(arg0);
 
-        var_s3 = func_8005BF50_5CB50(
+        var_s3 = getHomingAngleToTarget(
             &arg0->pos,
             atan2Fixed(arg0->vel.x, arg0->vel.z),
             arg0->ownerPlayerIdx,
@@ -1224,7 +1224,7 @@ void updateStarProjectile(Struct_52880 *arg0) {
 
         checkStarProjectileHit(arg0);
 
-        var_s3 = func_8005BF50_5CB50(
+        var_s3 = getHomingAngleToTarget(
             &arg0->pos,
             atan2Fixed(arg0->vel.x, arg0->vel.z),
             arg0->ownerPlayerIdx,
@@ -1443,7 +1443,7 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
 
         checkHomingPanelProjectileHit(arg0);
 
-        var_s3 = func_8005BF50_5CB50(
+        var_s3 = getHomingAngleToTarget(
             &arg0->pos,
             atan2Fixed(arg0->vel.x, arg0->vel.z),
             angle = arg0->ownerPlayerIdx,
@@ -1924,7 +1924,7 @@ void updateRandomEffectProjectile(RandomEffectProjectileUpdate *arg0) {
         checkRandomEffectProjectileHit(arg0);
 
         angle = atan2Fixed(arg0->unk24.x, arg0->unk24.z);
-        var_s3 = func_8005BF50_5CB50(&arg0->pos, angle, arg0->ownerPlayerIdx, 0x3C00000, 0x1B0000);
+        var_s3 = getHomingAngleToTarget(&arg0->pos, angle, arg0->ownerPlayerIdx, 0x3C00000, 0x1B0000);
 
         if (var_s3 != 0) {
             var_s3 &= 0x1FFF;

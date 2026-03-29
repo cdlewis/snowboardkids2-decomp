@@ -957,19 +957,39 @@ s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeig
     return 0;
 }
 
-s16 func_8005BF50_5CB50(Vec3i *pos, s16 angle, s32 excludePlayerIdx, s32 radius, s32 arg4) {
+/**
+ * Finds a homing target for projectiles and returns the angle offset to turn toward them.
+ *
+ * Searches for vulnerable (non-invincible) players within a forward-facing cone,
+ * marks them with targeting flags on pathFlags, and returns the angle adjustment
+ * needed to aim at the closest target.
+ *
+ * @param pos Center position to search from
+ * @param facingAngle Current facing angle of the projectile
+ * @param excludePlayerIdx Player index to exclude from targeting (typically the shooter)
+ * @param searchRadius Maximum distance to search for targets
+ * @param closeRangeThreshold Distance threshold for marking target as "close range"
+ * @return Angle offset to turn toward closest target, or 0 if no target found
+ */
+s16 getHomingAngleToTarget(
+    Vec3i *pos,
+    s16 facingAngle,
+    s32 excludePlayerIdx,
+    s32 searchRadius,
+    s32 closeRangeThreshold
+) {
     Vec3i deltaPos;
     s16 closestAngle;
     s32 closestDist;
-    s16 closestId;
+    s16 closestPlayerId;
     s16 angleDiff;
     Allocation5AA90 *allocation;
     ListNode_5AA90 *node;
 
     closestAngle = 0;
     allocation = (Allocation5AA90 *)getCurrentAllocation();
-    closestDist = radius + 10;
-    closestId = -1;
+    closestDist = searchRadius + 10;
+    closestPlayerId = -1;
 
     for (node = allocation->list; node != NULL; node = node->next) {
         if (excludePlayerIdx != node->id && allocation->dataArray[node->id].invincibilityTimer == 0) {
@@ -983,17 +1003,17 @@ s16 func_8005BF50_5CB50(Vec3i *pos, s16 angle, s32 excludePlayerIdx, s32 radius,
             deltaPos.y -= pos->y;
             deltaPos.z -= pos->z;
 
-            if (deltaPos.x < radius && -radius < deltaPos.x && deltaPos.y < radius && -radius < deltaPos.y &&
-                deltaPos.z < radius && -radius < deltaPos.z) {
+            if (deltaPos.x < searchRadius && -searchRadius < deltaPos.x && deltaPos.y < searchRadius &&
+                -searchRadius < deltaPos.y && deltaPos.z < searchRadius && -searchRadius < deltaPos.z) {
                 angleDiff = atan2Fixed(deltaPos.x, deltaPos.z);
-                angleDiff = (angleDiff - angle) & 0x1FFF;
+                angleDiff = (angleDiff - facingAngle) & 0x1FFF;
 
                 if ((angleDiff - 0x800) >= 0x1001U) {
                     s32 dist = isqrt64(
                         (s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z
                     );
 
-                    if (dist < radius) {
+                    if (dist < searchRadius) {
                         if (dist <= 0x13FFFFF) {
                             allocation->dataArray[node->id].pathFlags |= 2;
                         } else {
@@ -1003,7 +1023,7 @@ s16 func_8005BF50_5CB50(Vec3i *pos, s16 angle, s32 excludePlayerIdx, s32 radius,
                         if (dist < closestDist) {
                             closestAngle = angleDiff;
                             closestDist = dist;
-                            closestId = node->id;
+                            closestPlayerId = node->id;
                         }
                     }
                 }
@@ -1011,8 +1031,8 @@ s16 func_8005BF50_5CB50(Vec3i *pos, s16 angle, s32 excludePlayerIdx, s32 radius,
         }
     }
 
-    if (closestId >= 0 && closestDist < arg4 * 4 + arg4 / 2) {
-        allocation->dataArray[closestId].pathFlags |= 8;
+    if (closestPlayerId >= 0 && closestDist < closeRangeThreshold * 4 + closeRangeThreshold / 2) {
+        allocation->dataArray[closestPlayerId].pathFlags |= 8;
     }
 
     return closestAngle;
