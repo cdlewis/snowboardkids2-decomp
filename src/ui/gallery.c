@@ -132,49 +132,52 @@ s32 gViewerDefaultPosZ = 0x003A7000;
 
 s32 gViewerInitPosition[] = { 0x00A92000, 0, 0, 0 };
 
-extern s32 D_8009DEB0_9EAB0;
-extern s32 D_8009DEB4_9EAB4;
-extern s32 D_8009DEB8_9EAB8;
-extern s32 D_8009DEBC_9EABC;
-extern s32 D_8009DEC0_9EAC0;
-extern s32 D_8009DEC4_9EAC4;
-extern s32 D_8009DEC8_9EAC8;
-extern s32 D_8009DECC_9EACC;
-extern s32 D_8009DED0_9EAD0;
-extern s32 D_8009DED4_9EAD4;
-extern s32 D_8009DED8_9EAD8;
-extern s32 D_8009DEDC_9EADC;
-extern s32 D_8009DEE0_9EAE0;
-extern s32 D_8009DEE4_9EAE4;
-extern s32 D_8009DEE8_9EAE8;
-extern s32 D_8009DEEC_9EAEC;
-extern s32 D_8009DEF0_9EAF0;
-extern s32 D_8009DEF4_9EAF4;
-extern s32 D_8009DEF8_9EAF8;
-extern s32 D_8009DEFC_9EAFC;
-extern s32 D_8009DF00_9EB00;
-extern s32 D_8009DF04_9EB04;
-extern s32 D_8009DF08_9EB08;
-extern s32 D_8009DF0C_9EB0C;
-extern s32 D_8009DF10_9EB10;
-extern s32 D_8009DF14_9EB14;
-extern s32 D_8009DF18_9EB18;
-extern s32 D_8009DF1C_9EB1C;
-extern s32 D_8009DF20_9EB20;
-extern s32 D_8009DF24_9EB24;
-extern s32 D_8009DF28_9EB28;
-extern s32 D_8009DF2C_9EB2C;
-extern s32 D_8009DF30_9EB30;
-extern s32 D_8009DF34_9EB34;
+extern const char D_8009DEB0_9EAB0[];
+extern const char D_8009DEB4_9EAB4[];
+extern const char D_8009DEB8_9EAB8[];
+extern const char D_8009DEBC_9EABC[];
+extern const char D_8009DEC0_9EAC0[];
+extern const char D_8009DEC4_9EAC4[];
+extern const char D_8009DEC8_9EAC8[];
+extern const char D_8009DECC_9EACC[];
+extern const char D_8009DED0_9EAD0[];
+extern const char D_8009DED4_9EAD4[];
+extern const char D_8009DED8_9EAD8[];
+extern const char D_8009DEDC_9EADC[];
+extern const char D_8009DEE0_9EAE0[];
+extern const char D_8009DEE4_9EAE4[];
+extern const char D_8009DEE8_9EAE8[];
+extern const char D_8009DEEC_9EAEC[];
+extern const char D_8009DEF0_9EAF0[];
+extern const char D_8009DEF4_9EAF4[];
+extern const char D_8009DEF8_9EAF8[];
+extern const char D_8009DEFC_9EAFC[];
+extern const char D_8009DF00_9EB00[];
+extern const char D_8009DF04_9EB04[];
+extern const char D_8009DF08_9EB08[];
+extern const char D_8009DF0C_9EB0C[];
+extern const char D_8009DF10_9EB10[];
+extern const char D_8009DF14_9EB14[];
+extern const char D_8009DF18_9EB18[];
+extern const char D_8009DF1C_9EB1C[];
+extern const char D_8009DF20_9EB20[];
+extern const char D_8009DF24_9EB24[];
+extern const char D_8009DF28_9EB28[];
+extern const char D_8009DF2C_9EB2C[];
+extern const char D_8009DF30_9EB30[];
+extern const char D_8009DF34_9EB34[];
 extern u16 D_8009ADE0_9B9E0;
 
 s32 *gGalleryLabelPtrs[] = {
-    &D_8009DF34_9EB34, &D_8009DF30_9EB30, &D_8009DF2C_9EB2C, &D_8009DF28_9EB28, &D_8009DF24_9EB24, &D_8009DF20_9EB20,
-    &D_8009DF1C_9EB1C, &D_8009DF18_9EB18, &D_8009DF14_9EB14, &D_8009DF10_9EB10, &D_8009DF0C_9EB0C, &D_8009DF08_9EB08,
-    &D_8009DF04_9EB04, &D_8009DF00_9EB00, &D_8009DEFC_9EAFC, &D_8009DEF8_9EAF8, &D_8009DEF4_9EAF4, &D_8009DEF0_9EAF0,
-    &D_8009DEEC_9EAEC, &D_8009DEE8_9EAE8, &D_8009DEE4_9EAE4, &D_8009DEE0_9EAE0, &D_8009DEDC_9EADC, &D_8009DED8_9EAD8,
-    &D_8009DED4_9EAD4, &D_8009DED0_9EAD0, &D_8009DECC_9EACC, &D_8009DEC8_9EAC8, &D_8009DEC4_9EAC4, &D_8009DEC0_9EAC0,
-    &D_8009DEBC_9EABC, &D_8009DEB8_9EAB8, &D_8009DEB4_9EAB4, &D_8009DEB0_9EAB0
+    (s32 *)D_8009DF34_9EB34, (s32 *)D_8009DF30_9EB30, (s32 *)D_8009DF2C_9EB2C, (s32 *)D_8009DF28_9EB28,
+    (s32 *)D_8009DF24_9EB24, (s32 *)D_8009DF20_9EB20, (s32 *)D_8009DF1C_9EB1C, (s32 *)D_8009DF18_9EB18,
+    (s32 *)D_8009DF14_9EB14, (s32 *)D_8009DF10_9EB10, (s32 *)D_8009DF0C_9EB0C, (s32 *)D_8009DF08_9EB08,
+    (s32 *)D_8009DF04_9EB04, (s32 *)D_8009DF00_9EB00, (s32 *)D_8009DEFC_9EAFC, (s32 *)D_8009DEF8_9EAF8,
+    (s32 *)D_8009DEF4_9EAF4, (s32 *)D_8009DEF0_9EAF0, (s32 *)D_8009DEEC_9EAEC, (s32 *)D_8009DEE8_9EAE8,
+    (s32 *)D_8009DEE4_9EAE4, (s32 *)D_8009DEE0_9EAE0, (s32 *)D_8009DEDC_9EADC, (s32 *)D_8009DED8_9EAD8,
+    (s32 *)D_8009DED4_9EAD4, (s32 *)D_8009DED0_9EAD0, (s32 *)D_8009DECC_9EACC, (s32 *)D_8009DEC8_9EAC8,
+    (s32 *)D_8009DEC4_9EAC4, (s32 *)D_8009DEC0_9EAC0, (s32 *)D_8009DEBC_9EABC, (s32 *)D_8009DEB8_9EAB8,
+    (s32 *)D_8009DEB4_9EAB4, (s32 *)D_8009DEB0_9EAB0
 };
 
 GalleryItemEntry gGalleryItems_SaveSlots[] = {
@@ -990,73 +993,40 @@ void onGalleryMenuExit(void) {
     returnToParentScheduler(1);
 }
 
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEB0_9EAB0);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEB4_9EAB4);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEB8_9EAB8);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEBC_9EABC);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEC0_9EAC0);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEC4_9EAC4);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEC8_9EAC8);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DECC_9EACC);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DED0_9EAD0);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DED4_9EAD4);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DED8_9EAD8);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEDC_9EADC);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEE0_9EAE0);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEE4_9EAE4);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEE8_9EAE8);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEEC_9EAEC);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEF0_9EAF0);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEF4_9EAF4);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEF8_9EAF8);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DEFC_9EAFC);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF00_9EB00);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF04_9EB04);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF08_9EB08);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF0C_9EB0C);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF10_9EB10);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF14_9EB14);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF18_9EB18);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF1C_9EB1C);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF20_9EB20);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF24_9EB24);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF28_9EB28);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF2C_9EB2C);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF30_9EB30);
-
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF34_9EB34);
+const char D_8009DEB0_9EAB0[] = "S3";
+const char D_8009DEB4_9EAB4[] = "S2";
+const char D_8009DEB8_9EAB8[] = "S1";
+const char D_8009DEBC_9EABC[] = "L3";
+const char D_8009DEC0_9EAC0[] = "L2";
+const char D_8009DEC4_9EAC4[] = "L1";
+const char D_8009DEC8_9EAC8[] = "27";
+const char D_8009DECC_9EACC[] = "26";
+const char D_8009DED0_9EAD0[] = "25";
+const char D_8009DED4_9EAD4[] = "24";
+const char D_8009DED8_9EAD8[] = "23";
+const char D_8009DEDC_9EADC[] = "22";
+const char D_8009DEE0_9EAE0[] = "21";
+const char D_8009DEE4_9EAE4[] = "20";
+const char D_8009DEE8_9EAE8[] = "19";
+const char D_8009DEEC_9EAEC[] = "18";
+const char D_8009DEF0_9EAF0[] = "17";
+const char D_8009DEF4_9EAF4[] = "16";
+const char D_8009DEF8_9EAF8[] = "15";
+const char D_8009DEFC_9EAFC[] = "14";
+const char D_8009DF00_9EB00[] = "13";
+const char D_8009DF04_9EB04[] = "12";
+const char D_8009DF08_9EB08[] = "11";
+const char D_8009DF0C_9EB0C[] = "10";
+const char D_8009DF10_9EB10[] = " 9";
+const char D_8009DF14_9EB14[] = " 8";
+const char D_8009DF18_9EB18[] = " 7";
+const char D_8009DF1C_9EB1C[] = " 6";
+const char D_8009DF20_9EB20[] = " 5";
+const char D_8009DF24_9EB24[] = " 4";
+const char D_8009DF28_9EB28[] = " 3";
+const char D_8009DF2C_9EB2C[] = " 2";
+const char D_8009DF30_9EB30[] = " 1";
+const char D_8009DF34_9EB34[] = " 0";
 
 u8 isGalleryItemUnlocked(u8 itemIndex) {
     GalleryMenuState *menu;
