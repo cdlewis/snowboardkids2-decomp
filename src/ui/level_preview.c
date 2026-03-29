@@ -11,7 +11,6 @@
 #include "graphics/sprite_rdp.h"
 #include "math/geometry.h"
 #include "race/race_session.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
 #include "text/font_render.h"
@@ -649,7 +648,7 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
     applyTransformToModel(state->sceneModel, &state->transform);
     {
         s16 cameraRotation;
-        cameraRotation = ((u16)state->currentRotation + 0x1000) & 0x1FFF;
+        cameraRotation = (state->currentRotation + 0x1000) & 0x1FFF;
         scaled = (approximateSin(cameraRotation) * 5) << 12;
         if (scaled < 0) {
             scaled += 0x1FFF;

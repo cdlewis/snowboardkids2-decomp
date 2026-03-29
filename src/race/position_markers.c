@@ -2,6 +2,7 @@
 #include "common.h"
 #include "data/asset_metadata.h"
 #include "data/course_data.h"
+#include "data/data_table.h"
 #include "gamestate.h"
 #include "graphics/clip_text_render.h"
 #include "graphics/displaylist.h"

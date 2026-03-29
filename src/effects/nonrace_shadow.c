@@ -1,6 +1,8 @@
 #include "common.h"
+#include "gbi.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
+#include "mbi.h"
 #include "ui/level_preview_3d.h"
 
 extern Gfx *gRegionAllocPtr;

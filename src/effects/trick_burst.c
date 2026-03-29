@@ -2,7 +2,6 @@
 #include "common.h"
 #include "graphics/tiled_texture.h"
 #include "math/geometry.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 void initTrickBurstEffect(TrickBurstEffectTask *arg0);

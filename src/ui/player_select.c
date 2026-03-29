@@ -3,6 +3,7 @@
 #include "audio/audio.h"
 #include "common.h"
 #include "graphics/graphics.h"
+#include "os_cont.h"
 #include "race/race_main.h"
 #include "story/map_events.h"
 #include "system/rom_loader.h"

@@ -3,7 +3,6 @@
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "race/race_session.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "ui/save_data.h"
 

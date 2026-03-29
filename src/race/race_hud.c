@@ -25,7 +25,7 @@
 #include "race/race_session.h"
 #include "race/spray_particles.h"
 #include "race/track_collision.h"
-#include "system/rom_loader.h"
+#include "system/memory_allocator.h"
 #include "system/task_scheduler.h"
 
 typedef struct {

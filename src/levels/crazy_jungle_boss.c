@@ -4,6 +4,7 @@
 #include "data/asset_metadata.h"
 #include "gamestate.h"
 #include "graphics/displaylist.h"
+#include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "race/ai_pathfinding.h"

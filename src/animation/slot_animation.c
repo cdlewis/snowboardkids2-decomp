@@ -1,9 +1,13 @@
 #include "animation/slot_animation.h"
 #include "animation/animation_loop.h"
+#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_sys2.h"
 #include "effects/animated_sprite_effect.h"
 #include "effects/static_sprite_effect.h"
 #include "math/geometry.h"
 #include "math/rand.h"
+#include "os_cont.h"
+#include "ui/level_preview_3d.h"
 
 extern s8 gAnalogStickY;
 extern s8 gAnalogStickX;
@@ -695,7 +699,7 @@ void setupSlotOrbit(CutsceneSlotData *slot, s32 orbitDir, s16 duration, s16 orbi
     slot->orbitSpeedParam = orbitSpeed;
     slot->animFramesRemaining = duration;
     slot->animFramesDuration = duration;
-    angle = ((s16)atan2Fixed(slot->unk20_u.unk20_s32, slot->unk2C) + ANGLE_HALF_CIRCLE) & ANGLE_13BIT_MASK;
+    angle = (atan2Fixed(slot->unk20_u.unk20_s32, slot->unk2C) + ANGLE_HALF_CIRCLE) & ANGLE_13BIT_MASK;
     slot->orbitAngle.orbitAngle_s32 = angle;
     cosVal = approximateCos(angle) << 2;
     if (cosVal == 0) {
@@ -1523,8 +1527,8 @@ s32 syncModelFromSlot(CutsceneSlotData *slot, SceneModel *model) {
             break;
     }
     updateSlotScale(slot, model);
-    return (s16)result;
+    return result;
 do_scale:
     updateSlotScale(slot, model);
-    return (s16)result;
+    return result;
 }

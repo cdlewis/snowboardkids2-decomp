@@ -14,7 +14,6 @@
 #include "math/rand.h"
 #include "race/race_session.h"
 #include "race/track_geometry.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
 

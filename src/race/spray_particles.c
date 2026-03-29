@@ -1,14 +1,15 @@
 #include "race/spray_particles.h"
 #include "common.h"
 #include "data/asset_metadata.h"
+#include "data/data_table.h"
 #include "gamestate.h"
-#include "graphics/camera_transform.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "race/race_session.h"
+#include "system/memory_allocator.h"
 #include "system/task_scheduler.h"
 
 typedef struct {

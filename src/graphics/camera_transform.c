@@ -1,5 +1,6 @@
 #include "graphics/camera_transform.h"
 #include "common.h"
+#include "math/geometry.h"
 #include "system/task_scheduler.h"
 
 #define FIXED_POINT_SCALE 8192.0f

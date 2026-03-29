@@ -1,9 +1,12 @@
 #include "audio/audio.h"
 #include "assets.h"
 #include "common.h"
-#include "graphics/displaylist.h"
+#include "math/geometry.h"
+#include "os_message.h"
+#include "os_pi.h"
+#include "os_thread.h"
 #include "race/player.h"
-#include "system/rom_loader.h"
+#include "system/memory_allocator.h"
 #include "system/task_scheduler.h"
 
 typedef struct {

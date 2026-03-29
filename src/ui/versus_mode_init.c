@@ -1,5 +1,6 @@
 #include "audio/audio.h"
 #include "common.h"
+#include "graphics/graphics.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 

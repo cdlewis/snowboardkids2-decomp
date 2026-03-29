@@ -2,8 +2,8 @@
 #include "common.h"
 #include "core/main.h"
 #include "cutscene/1DFAA0.h"
+#include "graphics/graphics.h"
 #include "system/task_scheduler.h"
-#include "text/hud_text.h"
 #include "ui/save_data.h"
 
 typedef struct {

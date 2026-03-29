@@ -1,7 +1,9 @@
 #include "animation/animation_loop.h"
 #include "audio/audio.h"
 #include "common.h"
+#include "graphics/graphics.h"
 #include "math/geometry.h"
+#include "os_cont.h"
 #include "system/task_scheduler.h"
 
 void setAnimationLoopMode(CutsceneCameraState *arg0, s8 mode) {

@@ -1,5 +1,7 @@
 #include "graphics/tiled_texture.h"
 #include "common.h"
+#include "data/data_table.h"
+#include "gbi.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"

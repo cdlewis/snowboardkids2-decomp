@@ -21,8 +21,7 @@ extern void initSaveSlotDeleteArrow(void *);
 extern void initSaveSlotGoldDisplay(void *);
 extern void initSaveSlotConfirmationIndicator(void *);
 extern void initSaveSlotDeleteText(void *);
-extern void eepromReadAsync(s32 slotIndex, void *buffer);
-extern void *pollEepromReadAsync(void);
+
 extern void eepromWriteAsync(s32 slotIndex);
 extern s32 pollEepromWriteAsync(void);
 extern s32 gControllerInputs;
@@ -301,7 +300,7 @@ void updateSaveSlotSelectionScreen(void) {
             state->slideOffset += 0x20;
             i = 0;
             if ((state->slideOffset << 16) == 0) {
-                if (((u8)state->eepromErrorStatus >= 0x62) && (state->hasSaveData == 0)) {
+                if ((state->eepromErrorStatus >= 0x62) && (state->hasSaveData == 0)) {
                     state->menuState = 0x32;
                     if (state->eepromErrorStatus == 0x62) {
                         state->menuType = 9;
@@ -497,7 +496,7 @@ void updateSaveSlotSelectionScreen(void) {
                             (s16)(state->saveSlotIndex * 0x38 - 0x30),
                             -0x78,
                             -0x18,
-                            (s16)(s32)(s16)state->slideOffset,
+                            (s16)(s32)state->slideOffset,
                             0x18
                         );
                         disableViewportOverlay(slotModel);
@@ -542,7 +541,7 @@ void updateSaveSlotSelectionScreen(void) {
                 playSoundEffect(0x2C);
                 state->menuState = 9;
                 state->selectionAnimState = 0;
-                state->selectionY = (u16)state->selectionBaseY;
+                state->selectionY = state->selectionBaseY;
             }
             break;
         case 9:
@@ -562,7 +561,7 @@ void updateSaveSlotSelectionScreen(void) {
             updateSelectionWiggle();
             if (gControllerInputs & 0x8000) {
                 state->selectionAnimState = 0;
-                state->selectionY = (u16)state->selectionBaseY;
+                state->selectionY = state->selectionBaseY;
                 playSoundEffect(0x2D);
                 state->menuState = 0xA;
             }
@@ -624,7 +623,7 @@ void updateSaveSlotSelectionScreen(void) {
                 }
             }
             updateSlotSelectionSlide();
-            if ((s16)state->slideOffset == 0) {
+            if (state->slideOffset == 0) {
                 if (state->eepromOperationStatus != 0) {
                     state->menuState = 0x32;
                     if (state->eepromOperationStatus == 1) {

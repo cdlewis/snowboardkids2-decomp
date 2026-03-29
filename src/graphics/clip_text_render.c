@@ -1,5 +1,6 @@
 #include "graphics/clip_text_render.h"
 #include "common.h"
+#include "gbi.h"
 
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;

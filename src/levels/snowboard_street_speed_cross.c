@@ -1,5 +1,6 @@
 #include "common.h"
 #include "data/course_data.h"
+#include "gamestate.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"

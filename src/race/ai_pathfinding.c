@@ -1,6 +1,7 @@
 #include "race/ai_pathfinding.h"
 #include "common.h"
 #include "data/course_data.h"
+#include "gamestate.h"
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "system/task_scheduler.h"

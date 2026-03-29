@@ -1,6 +1,7 @@
 #include "common.h"
 #include "core/mainEntrypoint.h"
-#include "ultra64.h"
+#include "os_system.h"
+#include "os_thread.h"
 
 void idleThreadEntrypoint(void *);
 extern OSThread idleThread;

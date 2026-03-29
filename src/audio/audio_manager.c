@@ -1,8 +1,16 @@
 #include "audio/audio_manager.h"
 
+#include "abi.h"
 #include "common.h"
-#include "sched.h"
+#include "libaudio.h"
+#include "mbi.h"
+#include "os_ai.h"
+#include "os_convert.h"
+#include "os_message.h"
+#include "os_pi.h"
+#include "os_thread.h"
 #include "system/thread_manager.h"
+#include "ucode.h"
 
 typedef struct {
     void *buf;

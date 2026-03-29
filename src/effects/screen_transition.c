@@ -1,10 +1,9 @@
 #include "assets.h"
 #include "common.h"
-#include "graphics/camera_transform.h"
+#include "data/data_table.h"
 #include "graphics/displaylist.h"
 #include "graphics/tiled_texture.h"
 #include "math/geometry.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 typedef struct {

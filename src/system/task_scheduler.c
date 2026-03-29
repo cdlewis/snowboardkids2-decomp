@@ -1,6 +1,6 @@
 #include "system/task_scheduler.h"
 
-#include "gamestate.h"
+#include "system/memory_allocator.h"
 #include "system/rom_loader.h"
 
 #define SCHEDULER_STATE_INACTIVE 0

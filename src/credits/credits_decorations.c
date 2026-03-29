@@ -1,4 +1,6 @@
 #include "credits_decorations.h"
+#include "graphics/graphics.h"
+#include "graphics/sprite_rdp.h"
 
 void initCreditsCornerDecorationSprites(void *arg0) {
     volatile CreditsState *state = (volatile CreditsState *)arg0;

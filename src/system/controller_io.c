@@ -1,7 +1,12 @@
 #include "system/controller_io.h"
 
 #include "EepromSaveData_type.h"
-#include "system/memory_allocator.h"
+#include "os_cont.h"
+#include "os_eeprom.h"
+#include "os_message.h"
+#include "os_motor.h"
+#include "os_pfs.h"
+#include "os_thread.h"
 
 typedef struct {
     s16 command;

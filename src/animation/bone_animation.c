@@ -1,5 +1,6 @@
 #include "animation/bone_animation.h"
 #include "common.h"
+#include "gamestate.h"
 #include "math/geometry.h"
 
 void *getAnimationFrameData(void *animData) {

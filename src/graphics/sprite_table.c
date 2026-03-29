@@ -2,11 +2,12 @@
 
 #include "assets.h"
 #include "common.h"
+#include "data/data_table.h"
 #include "gbi.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
+#include "mbi.h"
 #include "system/task_scheduler.h"
-#include "ultra64.h"
 
 extern s32 D_8008C920_8D520[];
 extern OutputStruct_19E80 gCachedSpriteTextureEntry;

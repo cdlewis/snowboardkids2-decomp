@@ -2,6 +2,7 @@ Checks: >
   -*,
   readability-redundant-declaration,
   readability-redundant-casting,
+  misc-include-cleaner,
 WarningsAsErrors: ""
 HeaderFilterRegex: '^(src|include)\/.*\.h$'
 FormatStyle: "file"
@@ -12,3 +13,5 @@ CheckOptions:
     value: 1
   - key: readability-redundant-casting.IgnoreHeaders
     value: 'common\.h'
+  - key: misc-include-cleaner.IgnoreHeaders
+    value: '(common\.h|ultratypes\.h|include_asm.h|);h>'

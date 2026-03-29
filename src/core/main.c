@@ -2,13 +2,12 @@
 
 #include "assets.h"
 #include "common.h"
-#include "effects/cutscene_keyframes.h"
 #include "graphics/displaylist.h"
+#include "graphics/graphics.h"
 #include "graphics/sprite_table.h"
 #include "graphics/tiled_texture.h"
 #include "math/geometry.h"
 #include "math/rand.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 typedef struct {

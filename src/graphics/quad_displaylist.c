@@ -195,7 +195,7 @@ void updateDriftingParticle(ParticleState *arg0) {
         arg0->unk84 = (randA() & 0x1F) + 4;
         targetVal = signs[randA() & 1] * (((randA() & 0xFF) << 16) % 0x66666);
         arg0->unk60 = targetVal;
-        arg0->unk78 = (targetVal - arg0->unk54) / (s16)arg0->unk84;
+        arg0->unk78 = (targetVal - arg0->unk54) / arg0->unk84;
     } else {
         arg0->unk54 += arg0->unk6C;
     }
@@ -204,7 +204,7 @@ void updateDriftingParticle(ParticleState *arg0) {
         arg0->unk86 = (randA() & 0x1F) + 4;
         targetVal = signs[randA() & 1] * (((randA() & 0xFF) << 16) % 419430);
         arg0->unk64 = targetVal;
-        arg0->unk7C = (targetVal - arg0->unk58) / (s16)arg0->unk86;
+        arg0->unk7C = (targetVal - arg0->unk58) / arg0->unk86;
     } else {
         arg0->unk58 += arg0->unk70;
     }
@@ -213,7 +213,7 @@ void updateDriftingParticle(ParticleState *arg0) {
         arg0->unk88 = (randA() & 0x1F) + 4;
         targetVal = signs[randA() & 1] * (((randA() & 0xFF) << 16) % 419430);
         *(s32 *)&arg0->unk68 = targetVal;
-        arg0->unk80 = (targetVal - arg0->unk5C) / (s16)arg0->unk88;
+        arg0->unk80 = (targetVal - arg0->unk5C) / arg0->unk88;
     } else {
         arg0->unk5C += arg0->unk74;
     }
@@ -256,7 +256,7 @@ void updateDriftingParticle(ParticleState *arg0) {
             0,
             (s32)(u8)arg0->unk8C,
             0xFF,
-            (s16)arg0->unk8A
+            arg0->unk8A
         );
     }
 }

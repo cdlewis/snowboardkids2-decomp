@@ -12,7 +12,6 @@
 #include "race/race_session.h"
 #include "story/map_events.h"
 #include "story/shop_ui.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
 #include "text/font_render.h"

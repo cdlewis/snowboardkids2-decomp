@@ -4,12 +4,12 @@
 #include "data/course_data.h"
 #include "data/data_table.h"
 #include "gamestate.h"
+#include "gbi.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "race/hit_reactions.h"
 #include "race/track_collision.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 #define Y_OFFSET 0xFFE80000

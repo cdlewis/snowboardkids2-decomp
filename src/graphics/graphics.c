@@ -2,9 +2,14 @@
 
 #include "common.h"
 #include "core/buffers.h"
+#include "gbi.h"
+#include "gu.h"
 #include "math/geometry.h"
+#include "mbi.h"
+#include "os_message.h"
 #include "system/memory_allocator.h"
 #include "system/thread_manager.h"
+#include "ucode.h"
 
 #define BUFFER_SIZE 0x10000
 #define MEMORY_HEAP_SIZE 0x200000

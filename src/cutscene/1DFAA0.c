@@ -9,6 +9,7 @@
 #include "graphics/model_loader.h"
 #include "graphics/sprite_rdp.h"
 #include "math/geometry.h"
+#include "os_cont.h"
 #include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"

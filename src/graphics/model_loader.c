@@ -2,10 +2,10 @@
 #include "common.h"
 #include "core/buffers.h"
 #include "cutscene/1DFAA0.h"
+#include "gbi.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 typedef struct {

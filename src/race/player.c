@@ -1,6 +1,9 @@
 #include "race/player.h"
 #include "audio/audio_manager.h"
 #include "common.h"
+#include "libaudio.h"
+#include "os_cache.h"
+#include "os_system.h"
 
 #define FORNEXT_DEPTH 4
 #define MAX_SONGS 4

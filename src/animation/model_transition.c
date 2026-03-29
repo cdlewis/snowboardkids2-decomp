@@ -1,6 +1,7 @@
 #include "assets.h"
 #include "common.h"
 #include "data/data_table.h"
+#include "gbi.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"

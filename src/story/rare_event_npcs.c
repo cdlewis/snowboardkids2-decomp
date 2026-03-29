@@ -1,5 +1,6 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
+#include "gamestate.h"
 #include "math/geometry.h"
 #include "story/npc_dialogue.h"
 #include "story/rare_events.h"

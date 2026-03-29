@@ -6,9 +6,11 @@
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "graphics/sprite_table.h"
+#include "os_cont.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
+#include "ui/level_preview_3d.h"
 
 extern s16 gWipeOffsetX[];
 extern s16 gWipeOffsetY[];
@@ -330,7 +332,7 @@ state_done:
         offset = 0x14;
         iter = arg0;
         do {
-            if ((u16)iter->slots[0].zoomScaleX < 0x4000U) {
+            if (iter->slots[0].zoomScaleX < 0x4000U) {
                 debugEnqueueCallback(1, 0, &renderScaledShadedSpriteFrame, (u8 *)arg0 + offset);
             }
             offset += 0x18;

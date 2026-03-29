@@ -4,7 +4,6 @@
 #include "gamestate.h"
 #include "graphics/displaylist.h"
 #include "levels/snowboard_street_shoot_cross.h"
-#include "levels/starlight_highway.h"
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "particle_items.h"

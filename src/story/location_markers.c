@@ -4,8 +4,9 @@
 #include "audio/audio.h"
 #include "common.h"
 #include "graphics/camera_transform.h"
+#include "graphics/graphics.h"
 #include "math/geometry.h"
-#include "system/rom_loader.h"
+#include "os_cont.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 

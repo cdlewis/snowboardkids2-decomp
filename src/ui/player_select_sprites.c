@@ -1,8 +1,8 @@
 #include "ui/player_select_sprites.h"
 #include "assets.h"
+#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 typedef struct {

@@ -1,6 +1,7 @@
 #include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
+#include "math/geometry.h"
 #include "math/rand.h"
 #include "particle_items.h"
 #include "race/race_session.h"
@@ -201,7 +202,6 @@ extern s32 spawnStarEffect(void *, void *, s16);
 extern s32 spawnGoldStealEffect(void *, void *, s16);
 extern s32 spawnPanelProjectile(void *);
 extern s32 getFreeNodeCount(s32);
-extern void playFinishBoostVoice(Player *);
 
 void processPlayerItemUsage(Player *player) {
     GameState *gs;

@@ -1,7 +1,6 @@
 #include "data/course_data.h"
 #include "assets.h"
 #include "common.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 extern s32 gSkyDisplayLists2[];

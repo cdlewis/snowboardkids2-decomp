@@ -2,6 +2,8 @@
 #include "cutscene/1DFAA0.h"
 #include "graphics/graphics.h"
 #include "graphics/model_loader.h"
+#include "os_cont.h"
+#include "os_vi.h"
 #include "system/task_scheduler.h"
 #include "ui/cutscene_wait_menu.h"
 extern u8 gCutsceneFadeBrightnessTable[];

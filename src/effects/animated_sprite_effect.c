@@ -2,8 +2,8 @@
 
 #include "assets.h"
 #include "graphics/displaylist.h"
+#include "math/geometry.h"
 #include "math/rand.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 typedef struct {

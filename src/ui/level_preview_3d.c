@@ -5,13 +5,14 @@
 #include "data/asset_metadata.h"
 #include "data/data_table.h"
 #include "effects/animated_sprite_effect.h"
+#include "gamestate.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_table.h"
 #include "graphics/tiled_texture.h"
 #include "math/geometry.h"
+#include "os_thread.h"
 #include "race/race_session.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 typedef struct {
@@ -2058,7 +2059,7 @@ void initializeGameEntity(
     ent->unk0C = assetGroupIndex;
     ent->unk14 = -1;
     ent->unk16 = -1;
-    ent->unk0E = (s8)assetEntry->numAssets;
+    ent->unk0E = assetEntry->numAssets;
     ent->unk3A = -1;
     ent->unk38 = -1;
     ent->unk8E = -1;

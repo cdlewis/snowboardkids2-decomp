@@ -6,7 +6,6 @@
 #include "os_cont.h"
 #include "race/race_session.h"
 #include "story/map_events.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 #include "ui/options_menu.h"

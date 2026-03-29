@@ -1,5 +1,10 @@
 #include "system/rom_loader.h"
 
+#include "os_cache.h"
+#include "os_libc.h"
+#include "os_message.h"
+#include "os_pi.h"
+#include "os_thread.h"
 #include "system/memory_allocator.h"
 
 typedef enum {

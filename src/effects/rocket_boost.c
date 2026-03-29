@@ -3,8 +3,8 @@
 #include "common.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 extern void *D_80088670_89270;
 extern void *D_80088680_89280;

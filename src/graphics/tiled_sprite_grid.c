@@ -1,4 +1,5 @@
 #include "common.h"
+#include "gbi.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 

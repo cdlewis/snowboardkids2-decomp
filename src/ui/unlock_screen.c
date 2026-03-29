@@ -139,7 +139,7 @@ void updateUnlockScreen(void) {
             if (gControllerInputs & 0x80200) {
                 state->cursorIndex = prevCursor - 1;
                 state->scrollDirection = 1;
-                if ((s8)state->cursorIndex < 0) {
+                if (state->cursorIndex < 0) {
                     if (state->unlockCount < 3) {
                         state->cursorIndex = prevCursor;
                         state->scrollDirection = 0;
@@ -150,7 +150,7 @@ void updateUnlockScreen(void) {
             } else if (gControllerInputs & 0x40100) {
                 state->cursorIndex = prevCursor + 1;
                 state->scrollDirection = 2;
-                if ((s8)state->cursorIndex == state->unlockCount) {
+                if (state->cursorIndex == state->unlockCount) {
                     if (state->unlockCount >= 3) {
                         state->cursorIndex = 0;
                     } else {
@@ -161,14 +161,14 @@ void updateUnlockScreen(void) {
             }
 
             sound = 0x2B;
-            if ((s8)state->cursorIndex != prevCursor) {
+            if (state->cursorIndex != prevCursor) {
                 channel = 0;
                 state->statePhase = 2;
                 state->scrollStep = 0;
                 goto play_sound;
             }
 
-            itemId = state->itemSlots[(s8)state->cursorIndex];
+            itemId = state->itemSlots[state->cursorIndex];
             if ((itemId & 0xFF) < 0x80) {
                 state->rotationAngle += 0x10;
             } else {
@@ -248,14 +248,14 @@ void updateUnlockScreen(void) {
             break;
 
         case 6:
-            itemId = state->itemSlots[(s8)state->cursorIndex];
-            state->itemSlots[(s8)state->cursorIndex] = itemId + 0x80;
+            itemId = state->itemSlots[state->cursorIndex];
+            state->itemSlots[state->cursorIndex] = itemId + 0x80;
             if ((itemId & 0xFF) < 9) {
                 EepromSaveData->character_or_settings[itemId & 0xFF] = (itemId & 0xFF) / 3 + 1;
             } else {
                 EepromSaveData->character_or_settings[itemId & 0xFF] = itemId + 7;
             }
-            addPlayerGold(-storyMapLocationNames[state->itemSlots[(s8)state->cursorIndex] + 19]);
+            addPlayerGold(-storyMapLocationNames[state->itemSlots[state->cursorIndex] + 19]);
             state->statePhase = 1;
             break;
 

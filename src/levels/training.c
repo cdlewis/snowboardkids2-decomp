@@ -2,8 +2,9 @@
 #include "audio/audio.h"
 #include "common.h"
 #include "data/course_data.h"
+#include "gamestate.h"
+#include "os_cont.h"
 #include "race/race_session.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 

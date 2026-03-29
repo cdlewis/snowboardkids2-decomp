@@ -1,6 +1,7 @@
 #include "story/map_events.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "graphics/graphics.h"
+#include "math/geometry.h"
 #include "math/rand.h"
 #include "race/race_session.h"
 #include "story/npc_models.h"

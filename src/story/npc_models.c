@@ -1,6 +1,7 @@
 #include "story/npc_models.h"
 #include "common.h"
 #include "effects/rocket_boost.h"
+#include "gamestate.h"
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "system/task_scheduler.h"

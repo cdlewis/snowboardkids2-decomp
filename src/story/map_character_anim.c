@@ -3,7 +3,6 @@
 #include "gamestate.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
-#include "race/race_session.h"
 #include "system/task_scheduler.h"
 
 extern u8 storyMapLocationIndex;

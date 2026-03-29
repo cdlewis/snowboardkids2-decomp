@@ -1,6 +1,13 @@
 #include "system/thread_manager.h"
 
+#include "R4300.h"
 #include "common.h"
+#include "os_cache.h"
+#include "os_exception.h"
+#include "os_message.h"
+#include "os_thread.h"
+#include "os_vi.h"
+#include "sptask.h"
 
 // Structs
 

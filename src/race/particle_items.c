@@ -6,12 +6,12 @@
 #include "data/course_data.h"
 #include "data/data_table.h"
 #include "gamestate.h"
+#include "gbi.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "race/race_session.h"
 #include "race/track_collision.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 extern void *D_8009A6B0_9B2B0;

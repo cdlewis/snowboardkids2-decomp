@@ -9,7 +9,6 @@
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "math/geometry.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
 #include "text/font_render.h"

@@ -5,9 +5,7 @@
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 #include "race/race_session.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
-#include "ui/level_preview_3d.h"
 
 /* Struct definitions */
 typedef struct {

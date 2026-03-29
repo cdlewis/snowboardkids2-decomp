@@ -1,6 +1,5 @@
 #include "assets.h"
 #include "common.h"
-#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 void *loadTextRenderAsset(s32 variant) {

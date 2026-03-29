@@ -1,6 +1,8 @@
 #include "math/geometry.h"
 
 #include "common.h"
+#include "gbi.h"
+#include "gu.h"
 
 extern s16 gAtan2LookupTable[];
 
