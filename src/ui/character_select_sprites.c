@@ -87,16 +87,16 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x592];
-    u16 unk592;
+    u16 selectedCharacter;
     u8 padding2[0xE];
-    u8 unk5A2;
+    u8 characterRank;
 } LocalGameState_Player;
 
 typedef struct {
     LocalGameState_Player *players[4];
     u8 pad[0x582];
-    u16 unk592[8];
-    u8 unk5A2[8];
+    u16 selectedCharacter[8];
+    u8 characterRank[8];
 } LocalGameState;
 
 typedef struct {
@@ -108,7 +108,7 @@ typedef struct {
 
 extern void *renderTextPalette;
 
-void func_800B00C0_1DA660(void);
+void sortPlayersByCharacterRank(void);
 void positionCharacterSelectSprite(CharacterSelectSprite *, u8);
 void enqueueCharacterSelectTextureRender(void *);
 void awaitCharacterPreviewReady(CharacterPreviewState *);
@@ -138,43 +138,43 @@ extern char D_800B115C_1DB6FC[];
 extern s32 gButtonsPressed;
 extern u8 D_800B1150_1DB6F0[];
 
-void func_800B00C0_1DA660(void) {
-    u8 buffer[8];
-    s32 matchCount;
+void sortPlayersByCharacterRank(void) {
+    u8 matchingPlayers[8];
+    s32 numMatching;
     LocalGameState *allocation;
     u8 numPlayers;
-    s32 outerIndex;
-    s32 k;
+    s32 playerIndex;
+    s32 i;
     s32 j;
-    u8 temp;
+    u8 swapTemp;
 
     allocation = (LocalGameState *)getCurrentAllocation();
     numPlayers = D_800AFE8C_A71FC->numPlayers;
 
-    for (outerIndex = 0; outerIndex < numPlayers; outerIndex++) {
-        k = 0;
+    for (playerIndex = 0; playerIndex < numPlayers; playerIndex++) {
+        i = 0;
         for (j = 0; j < numPlayers; j++) {
-            if (allocation->unk592[outerIndex] == allocation->unk592[j]) {
-                buffer[k] = j;
-                k++;
+            if (allocation->selectedCharacter[playerIndex] == allocation->selectedCharacter[j]) {
+                matchingPlayers[i] = j;
+                i++;
             } else {
-                buffer[j] = 99;
+                matchingPlayers[j] = 99;
             }
-            matchCount = k;
+            numMatching = i;
         }
 
-        for (j = 0; j < (u8)matchCount - 1; j++) {
-            for (k = j + 1; k < (u8)matchCount; k++) {
-                if (allocation->unk5A2[buffer[j]] > allocation->unk5A2[buffer[k]]) {
-                    temp = buffer[k];
-                    buffer[k] = buffer[j];
-                    buffer[j] = temp;
+        for (j = 0; j < (u8)numMatching - 1; j++) {
+            for (i = j + 1; i < (u8)numMatching; i++) {
+                if (allocation->characterRank[matchingPlayers[j]] > allocation->characterRank[matchingPlayers[i]]) {
+                    swapTemp = matchingPlayers[i];
+                    matchingPlayers[i] = matchingPlayers[j];
+                    matchingPlayers[j] = swapTemp;
                 }
             }
         }
 
-        for (j = 0; j < (u8)matchCount; j++) {
-            allocation->unk5A2[buffer[j]] = j + 1;
+        for (j = 0; j < (u8)numMatching; j++) {
+            allocation->characterRank[matchingPlayers[j]] = j + 1;
         }
     }
 }
@@ -188,31 +188,31 @@ void positionCharacterSelectSprite(CharacterSelectSprite *arg0, u8 arg1) {
 
     allocation = (LocalGameState *)getCurrentAllocation();
 
-    arg0->x = D_800B11A0_1DB740[allocation->unk592[arg1]].x;
-    arg0->y = D_800B11A0_1DB740[allocation->unk592[arg1]].y;
+    arg0->x = D_800B11A0_1DB740[allocation->selectedCharacter[arg1]].x;
+    arg0->y = D_800B11A0_1DB740[allocation->selectedCharacter[arg1]].y;
 
-    if (allocation->unk5A2[arg1] >= 3) {
+    if (allocation->characterRank[arg1] >= 3) {
         arg0->x += 0x10;
     }
 
-    if (!(allocation->unk5A2[arg1] & 1)) {
+    if (!(allocation->characterRank[arg1] & 1)) {
         arg0->y += 0x10;
     }
 
     count = 0;
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        if (allocation->unk592[arg1] == allocation->unk592[i]) {
+        if (allocation->selectedCharacter[arg1] == allocation->selectedCharacter[i]) {
             count++;
         }
     }
 
-    playerState = allocation->unk5A2[arg1];
+    playerState = allocation->characterRank[arg1];
     if ((playerState == 3) && (count == 3)) {
         arg0->y += 0x10;
     }
 
     count--;
-    arg0->frameIndex = D_800B11C2_1DB762[count * 4 + allocation->unk5A2[arg1]] + arg1;
+    arg0->frameIndex = D_800B11C2_1DB762[count * 4 + allocation->characterRank[arg1]] + arg1;
 }
 
 void initCharacterPreview(CharacterPreviewState *arg0) {
@@ -465,7 +465,7 @@ void updateCharacterSelectSprites(CharacterSelectSprites *arg0) {
     u8 state;
 
     allocation = (func_800B0A54_allocation *)getCurrentAllocation();
-    func_800B00C0_1DA660();
+    sortPlayersByCharacterRank();
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
         positionCharacterSelectSprite(&arg0->sprites[i], i);
