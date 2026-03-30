@@ -15,23 +15,40 @@
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
+#include "text/font_render.h"
 #include "ui/level_preview_3d.h"
 
 typedef struct {
-    ViewportNode unk0;
-    ViewportNode unk1D8;
-    ViewportNode unk3B0;
-    ViewportNode unk588;
-    s32 *unk760;
-    void *unk764;
-    void *unk768;
-    void *unk76C;
-    void *unk770;
-    void *unk774;
-    void *unk778;
-    u16 unk77C;
-    u8 padding[0x1C];
-    u8 unk79A;
+    /* 0x000 */ ViewportNode unk0;
+    /* 0x1D8 */ ViewportNode unk1D8;
+    /* 0x3B0 */ ViewportNode unk3B0;
+    /* 0x588 */ ViewportNode unk588;
+    /* 0x760 */ void *unk760;
+    /* 0x764 */ void *unk764;
+    /* 0x768 */ void *unk768;
+    /* 0x76C */ void *unk76C;
+    /* 0x770 */ void *unk770;
+    /* 0x774 */ void *unk774;
+    /* 0x778 */ void *unk778;
+    /* 0x77C */ u16 unk77C;
+    /* 0x77E */ u16 unk77E;
+    /* 0x780 */ u8 pad780[4];
+    /* 0x784 */ s8 unk784[4];
+    /* 0x788 */ u8 unk788[0xD];
+    /* 0x795 */ u8 unk795[3];
+    /* 0x798 */ u8 unk798;
+    /* 0x799 */ u8 unk799;
+    /* 0x79A */ u8 unk79A;
+    /* 0x79B */ u8 unk79B;
+    /* 0x79C */ u8 unk79C;
+    /* 0x79D */ u8 pad79D;
+    /* 0x79E */ u8 unk79E;
+    /* 0x79F */ u8 unk79F;
+    /* 0x7A0 */ u8 pad7A0;
+    /* 0x7A1 */ u8 unk7A1;
+    /* 0x7A2 */ u8 unk7A2;
+    /* 0x7A3 */ u8 pad7A3;
+    /* 0x7A4 */ u8 unk7A4;
 } allocation_1B8C8;
 
 s16 boardShopPrices[] = { 0x0064, 0x0064, 0x0064, 0x00FA, 0x00FA, 0x012C, 0x012C, 0x0190,
@@ -41,8 +58,23 @@ extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 storyMapLocationIndex;
 extern s32 gControllerInputs[4];
 
+USE_ASSET(_4237C0);
+USE_ASSET(_426EF0);
+USE_ASSET(_4488E0);
+USE_ASSET(_4547D0);
+USE_ASSET(_419C60);
+USE_ASSET(_41A1D0);
+USE_ASSET(font_race_timer);
+USE_ASSET(_3F6BB0);
+USE_ASSET(_3F6670);
+
 void awaitFadeLoadCharacterSelect(void);
 void awaitFadeLoadBoardShop(void);
+void awaitBoardShopDmaComplete(void);
+extern void initBoardShopShopkeeper(void);
+extern void initBoardShopCharacterPreview(void);
+extern void loadBoardShopBackground(void);
+extern void initBoardShopExitOverlay(void);
 void func_8001A478_1B078(void);
 void onStoryModeRaceCancelled(void);
 void awaitStoryMapLocationIntro(void);
@@ -234,7 +266,64 @@ void onStoryModeRaceCancelled(void) {
     returnToParentScheduler(0xFF);
 }
 
-INCLUDE_ASM("asm/nonmatchings/story/race_state_machine", func_8001A110_1AD10);
+void func_8001A110_1AD10(void) {
+    allocation_1B8C8 *state;
+    u8 lightBuffer[0x20];
+    u8 *ptr;
+    s32 i;
+
+    state = (allocation_1B8C8 *)allocateTaskMemory(0x7A8);
+    setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
+    state->unk77C = 0;
+    state->unk799 = 0;
+    state->unk79A = 0;
+    state->unk7A2 = 0;
+    state->unk7A1 = 0;
+    state->unk79F = 0;
+    state->unk79E = 0;
+    state->unk77E = 0;
+    state->unk79B = 0;
+    initMenuCameraNode(&state->unk0, 0, 0xA, 0);
+    initMenuCameraNode(&state->unk1D8, 2, 0x14, 0);
+    initMenuCameraNode(&state->unk3B0, 8, 0x14, 1);
+    initMenuCameraNode(&state->unk588, 9, 5, 1);
+    createViewportTransform(lightBuffer, 0, 0, 0x580000, 0, 0, 0);
+    setViewportTransformById(state->unk0.id, lightBuffer);
+    setViewportTransformById(state->unk1D8.id, lightBuffer);
+    state->unk760 = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    state->unk764 = loadCompressedData(&_4488E0_ROM_START, &_4488E0_ROM_END, 0x14410);
+    state->unk768 = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    state->unk76C = loadCompressedData(&_419C60_ROM_START, &_41A1D0_ROM_START, 0x1548);
+    state->unk770 = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    state->unk778 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    state->unk774 = loadTextRenderAsset(1);
+    i = 3;
+    ptr = (u8 *)state + 3;
+    do {
+        ptr[0x784] = i;
+        i--;
+        ptr--;
+    } while (i >= 0);
+    state->unk798 = 0;
+    for (i = 0; i < 0xD; i++) {
+        state->unk798++;
+        state->unk788[i] = i;
+    }
+    for (i = 0; i < 3; i++) {
+        if (EepromSaveData->setting_4B[i] != 0) {
+            state->unk798++;
+            state->unk795[i] = EepromSaveData->setting_4B[i];
+        }
+    }
+    scheduleTask(&initBoardShopShopkeeper, 0, 0, 0x63);
+    scheduleTask(&initBoardShopCharacterPreview, 0, 0, 0x5A);
+    scheduleTask(&loadBoardShopBackground, 0, 0, 0x5A);
+    scheduleTask(&initBoardShopExitOverlay, 0, 0, 0x5A);
+    setViewportFadeValue(0, 0xFF, 0);
+    state->unk7A4 = 0;
+    state->unk77C = 2;
+    setGameStateHandler(&awaitBoardShopDmaComplete);
+}
 
 void awaitBoardShopDmaComplete(void) {
     GameState *state;
