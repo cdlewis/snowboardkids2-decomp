@@ -21,18 +21,26 @@ s16 storyMapLocationSpriteIds[] = { 0x0126, 0x0122, 0x0124, 0x0128, 0x0129, 0x01
 u8 storyMapLocationConfig[] = { 0x0A, 0x0A, 0x0F, 0x0A, 0x19, 0x0A, 0x0D, 0x0A, 0x19, 0x00, 0x00, 0x00 };
 s16 storyMapLocationOrder3[] = { 0x0000, 0x0002, 0x0004, 0x0008, 0x0007, 0x0003, 0x0005, 0x0001, 0x0006, 0x0000 };
 
-extern void func_8001B3E8_1BFE8(void);
+extern s32 gControllerInputs[];
+extern u8 gTitleInitialized;
+extern void initPlayer2CharacterSelectIndicator(void);
+extern void initPlayer3CharacterSelectIndicator(void);
 
 extern void initCharacterPreview(void);
 extern void initCharacterSelectBoardTask(void);
 extern void initCharacterSelectSprites(void);
 extern void initCharacterSelectTextureDataLoad(void);
 
+void func_8001B3E8_1BFE8(void);
+
 void initStoryMap(void);
 void onStoryMapExitToMainMenu(void);
 void onStoryMapNormalExit(void);
 void storyMapInitFadeIn(void);
 void storyMapAwaitFadeIn(void);
+void storyMapAwaitFadeOutAndCleanup(void);
+void storyMapClearLocationArrivalsIfNoActivePlayers(void);
+void storyMapRevertBlockedLocationIndex(s8 *);
 
 typedef struct {
     u8 pad[0x24];
@@ -43,27 +51,19 @@ typedef struct {
     ViewportNode viewport0;
     ViewportNode viewport1;
     ViewportNode viewport2;
-    void *portraitAsset;   // 0x588: loaded from _41A1D0
-    void *imageAsset;      // 0x58C: loaded from _41AD80
-    u16 stateTimer;        // 0x590
-    u16 locationIds[4];    // 0x592
-    u8 playerAnimIndex[4]; // 0x59A: animation state for each player
-    u8 playerArrived[4];   // 0x59E: arrival state for each player
-    u8 locationOverlap[4]; // 0x5A2
-    u8 characterIds[4];    // 0x5A6
-    u8 unk5AA;
-    u8 unk5AB;
-    u8 unk5AC;
-    s8 pendingLocationIndex; // 0x5AD
-    s8 specialLocationIndex; // 0x5AE
-    u8 unk5AF;
-    u8 unk5B0;
-    u8 unk5B1;
-    s8 bossLocationIndex;      // 0x5B2
+    void *portraitAsset;       // 0x588: loaded from _41A1D0
+    void *imageAsset;          // 0x58C: loaded from _41AD80
+    u16 stateTimer;            // 0x590
+    u16 locationIds[4];        // 0x592
+    u8 playerAnimIndex[4];     // 0x59A: animation state for each player
+    u8 playerArrived[4];       // 0x59E: arrival state for each player
+    u8 locationOverlap[4];     // 0x5A2
+    u8 characterIds[4];        // 0x5A6
+    s8 locationBlocked[9];     // 0x5AA
     u8 isStoryMapInitializing; // 0x5B3
-    u8 pad5B4[4];
-    u8 locationHasPlayers[9]; // 0x5B8
-    u8 playerAtLocation[4];   // 0x5C1
+    u8 animTimer[4];           // 0x5B4
+    u8 locationHasPlayers[9];  // 0x5B8
+    u8 playerAtLocation[4];    // 0x5C1
     u8 pad5C5[3];
 } StoryMapState;
 
@@ -106,29 +106,29 @@ void initStoryMap(void) {
         }
     }
 
-    state->unk5AA = 0;
-    state->unk5AB = 0;
-    state->unk5AC = 0;
-    state->pendingLocationIndex = 0;
-    state->specialLocationIndex = 0;
-    state->unk5AF = 0;
-    state->unk5B0 = 0;
-    state->unk5B1 = 0;
-    state->bossLocationIndex = 0;
+    state->locationBlocked[0] = 0;
+    state->locationBlocked[1] = 0;
+    state->locationBlocked[2] = 0;
+    state->locationBlocked[3] = 0;
+    state->locationBlocked[4] = 0;
+    state->locationBlocked[5] = 0;
+    state->locationBlocked[6] = 0;
+    state->locationBlocked[7] = 0;
+    state->locationBlocked[8] = 0;
 
     if (D_800AFE8C_A71FC->gameMode == 0) {
-        state->bossLocationIndex = -1;
-        state->specialLocationIndex = -1;
-        state->pendingLocationIndex = -1;
+        state->locationBlocked[8] = -1;
+        state->locationBlocked[4] = -1;
+        state->locationBlocked[3] = -1;
     } else {
         if (EepromSaveData->setting_4E == 0) {
-            state->bossLocationIndex = -1;
+            state->locationBlocked[8] = -1;
         }
         if (EepromSaveData->setting_4F == 0) {
-            state->specialLocationIndex = -1;
+            state->locationBlocked[4] = -1;
         }
         if (EepromSaveData->setting_50 == 0) {
-            state->pendingLocationIndex = -1;
+            state->locationBlocked[3] = -1;
         }
     }
 
@@ -176,7 +176,233 @@ void storyMapAwaitFadeIn(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/story/map_init", func_8001B3E8_1BFE8);
+void func_8001B3E8_1BFE8(void) {
+    StoryMapState *state;
+    s32 i;
+    s32 j;
+    s32 diagonal;
+    s8 confirmed;
+    u8 allConfirmed;
+    s8 hDir;
+    s8 vDir;
+    u8 currentLoc;
+    u8 fadeSpeed;
+    s32 count;
+
+    state = getCurrentAllocation();
+    confirmed = 0;
+    diagonal = 0;
+    allConfirmed = 0;
+
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+        switch (state->playerAnimIndex[i]) {
+            case 0:
+                vDir = 0;
+                hDir = 0;
+                currentLoc = state->locationIds[i];
+                if (gControllerInputs[i] & 0x40100) {
+                    hDir = 1;
+                } else if (gControllerInputs[i] & 0x80200) {
+                    hDir = -1;
+                }
+
+                if (gControllerInputs[i] & 0x10800) {
+                    vDir = -5;
+                    if ((s8)currentLoc != 8) {
+                        vDir = -4;
+                    }
+                } else if (gControllerInputs[i] & 0x20400) {
+                    vDir = 5;
+                }
+
+                if (hDir != 0 && vDir != 0) {
+                    if (hDir < 0 && vDir < 0) {
+                        vDir = -5;
+                    } else if (hDir < 0 && vDir > 0) {
+                        vDir = 4;
+                    } else if (hDir > 0 && vDir < 0) {
+                        vDir = -4;
+                    } else {
+                        vDir = 5;
+                    }
+                    hDir = 0;
+                    diagonal = 1;
+                }
+
+                if ((currentLoc += hDir + vDir) < 9) {
+                    if (((s8)currentLoc != 4 || state->locationIds[i] != 3) &&
+                        ((s8)currentLoc != 3 || state->locationIds[i] != 4) &&
+                        ((s8)currentLoc != 4 || state->locationIds[i] != 8)) {
+                        if (!((s8)currentLoc == 8 && state->locationIds[i] == 4)) {
+                            goto noReset;
+                        }
+                    }
+                }
+
+                currentLoc = (u8)state->locationIds[i];
+            noReset:
+                if (state->locationBlocked[(s8)currentLoc] == -1) {
+                    if (hDir == 0 && diagonal ^ 1) {
+                        storyMapRevertBlockedLocationIndex((s8 *)&currentLoc);
+                    } else {
+                        currentLoc = state->locationIds[i];
+                    }
+                }
+
+                if (state->locationIds[i] != (s8)currentLoc) {
+                    state->locationOverlap[i] = 0;
+                    playSoundEffectOnChannelNoPriority(0x2B, i);
+                }
+                state->locationIds[i] = (s8)currentLoc;
+
+                if (state->locationOverlap[i] == 0) {
+                    for (j = 0; j < D_800AFE8C_A71FC->numPlayers; j++) {
+                        if ((s8)currentLoc == state->locationIds[j]) {
+                            state->locationOverlap[i]++;
+                        }
+                    }
+                }
+
+                if (gControllerInputs[i] & 0x8000) {
+                    D_800AFE8C_A71FC->playerBoardIds[i] = storyMapLocationOrder1[state->locationIds[i]];
+                    state->playerAnimIndex[i] = 10;
+                    state->playerAtLocation[i] = 0;
+                    state->animTimer[i] = 0;
+                    playSoundEffectOnChannelNoPriority((u16)storyMapLocationSpriteIds[(s8)currentLoc], i + 8);
+                } else if (gControllerInputs[i] & 0x4000) {
+                    s32 k;
+                    playSoundEffect(0x2E);
+                    for (k = 0; k < D_800AFE8C_A71FC->numPlayers; k++) {
+                        D_800AFE8C_A71FC->playerBoardIds[k] = state->characterIds[k];
+                        if (gTitleInitialized != 0) {
+                            state->playerAnimIndex[i] = 4;
+                        } else {
+                            state->playerAnimIndex[k] = 2;
+                        }
+                    }
+                    scheduleTask(&initPlayer2CharacterSelectIndicator, 0, 0, 0x5B);
+                    i = D_800AFE8C_A71FC->numPlayers;
+                }
+                break;
+
+            case 1:
+                if (gControllerInputs[i] & 0x4000) {
+                    playSoundEffectOnChannelNoPriority(0x2E, i);
+                    state->playerAnimIndex[i] = 0;
+                }
+                if (state->animTimer[i] < storyMapLocationConfig[state->locationIds[i]]) {
+                    state->animTimer[i]++;
+                    if (state->animTimer[i] == storyMapLocationConfig[state->locationIds[i]] &&
+                        state->locationHasPlayers[state->locationIds[i]] == 0) {
+                        state->locationHasPlayers[state->locationIds[i]] = 1;
+                        playSoundEffectOnChannelNoPriority(
+                            (u16)storyMapLocationPositions[state->locationIds[i]],
+                            i + 4
+                        );
+                    }
+                }
+                if (i == D_800AFE8C_A71FC->numPlayers - 1) {
+                    for (j = 0, count = 0; j < D_800AFE8C_A71FC->numPlayers; j++) {
+                        count += (state->playerAnimIndex[j] == 1);
+                    }
+                    if (count == D_800AFE8C_A71FC->numPlayers) {
+                        for (j = 0; j < D_800AFE8C_A71FC->numPlayers; j++) {
+                            state->playerAnimIndex[j] = 3;
+                            scheduleTask(&initPlayer3CharacterSelectIndicator, 0, 0, 0x5B);
+                        }
+                    }
+                }
+                break;
+
+            case 2:
+                if (gControllerInputs[i] & 0x8000) {
+                    i = D_800AFE8C_A71FC->numPlayers;
+                    confirmed = 1;
+                } else if (gControllerInputs[i] & 0x4000) {
+#ifdef CC_CHECK
+                    s32 k;
+#else
+                    register s32 k __asm__("$4");
+#endif
+                    playSoundEffect(0x2E);
+                    for (k = 0; k < D_800AFE8C_A71FC->numPlayers; k++) {
+                        state->playerAnimIndex[k] = 0;
+                    }
+                    i = D_800AFE8C_A71FC->numPlayers;
+                }
+                break;
+
+            case 3:
+                if (state->animTimer[i] < storyMapLocationConfig[state->locationIds[i]]) {
+                    state->animTimer[i]++;
+                    if (state->animTimer[i] == storyMapLocationConfig[state->locationIds[i]]) {
+                        if (state->locationHasPlayers[state->locationIds[i]] == 0) {
+                            state->locationHasPlayers[state->locationIds[i]] = 1;
+                            count = 4;
+                            playSoundEffectOnChannelNoPriority(
+                                (u16)storyMapLocationPositions[state->locationIds[i]],
+                                i + count
+                            );
+                        }
+                    }
+                }
+                if (gControllerInputs[i] & 0x4000) {
+#ifdef CC_CHECK
+                    s32 k;
+#else
+                    register s32 k __asm__("$4");
+#endif
+                    playSoundEffectOnChannelNoPriority(0x2E, i);
+                    for (k = 0; k < D_800AFE8C_A71FC->numPlayers; k++) {
+                        if (i == k) {
+                            state->playerAnimIndex[i] = 0;
+                        } else {
+                            state->playerAnimIndex[k] = 1;
+                        }
+                    }
+                    i = D_800AFE8C_A71FC->numPlayers;
+                } else if (gControllerInputs[i] & 0x8000) {
+                    allConfirmed = 1;
+                    i = D_800AFE8C_A71FC->numPlayers;
+                    playSoundEffect(0x2D);
+                }
+                break;
+
+            case 4:
+                i = D_800AFE8C_A71FC->numPlayers;
+                confirmed = 1;
+                break;
+
+            case 10: {
+                state->playerAtLocation[i]++;
+                if ((state->playerAtLocation[i] & 0xFF) == 0x11) {
+                    state->playerAtLocation[i] = 0;
+                    state->playerAnimIndex[i] = 1;
+                }
+                break;
+            }
+        }
+    }
+
+    if (allConfirmed || confirmed) {
+        state->stateTimer = confirmed;
+        if (confirmed != 0) {
+            fadeSpeed = 8;
+        } else {
+            fadeSpeed = 0xE;
+            for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+                if (state->characterIds[i] != D_800AFE8C_A71FC->playerBoardIds[i]) {
+                    D_800AFE8C_A71FC->playerBoardIds[0xC + i] = 0;
+                }
+            }
+        }
+        setViewportFadeValue(NULL, 0xFF, fadeSpeed);
+        setMusicFadeOut(0xA);
+        setGameStateHandler(storyMapAwaitFadeOutAndCleanup);
+    }
+
+    storyMapClearLocationArrivalsIfNoActivePlayers();
+}
 
 void storyMapAwaitFadeOutAndCleanup(void) {
     void *exitCallback;
