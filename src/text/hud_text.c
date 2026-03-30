@@ -3,9 +3,11 @@
 #include "assets.h"
 #include "common.h"
 #include "data/course_data.h"
+#include "gbi.h"
 #include "graphics/clip_text_render.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
+#include "gs2dex.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
@@ -311,7 +313,7 @@ extern char D_8009E48C_9F08C[];
 void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0);
 void cleanupSaveSlotNumberLabels(Func34574Arg *);
 void updateSaveSlotDeleteText(SaveSlotDeleteTextState *);
-void func_80035878_36478(s16, s16, u16, u16, u16, u8, void *);
+void func_80035878_36478(s32, s32, u16, u16, u16, u16, SpriteSheetData *);
 void updateSaveSlotNameText(Func34ADCArg *arg0);
 void cleanupSaveSlotNameText(Func34574Arg *arg0);
 void cleanupSaveSlotGoldDisplay(Func34574Arg *arg0);
@@ -1520,6 +1522,202 @@ void func_800356AC_362AC(
 INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_800356AC_362AC);
 #endif
 
-INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035878_36478);
+extern s32 gCachedPaletteAddr;
+extern s32 gCachedTextureAddr;
+extern s16 gGraphicsMode;
+extern Gfx *gRegionAllocPtr;
+extern u16 gDefaultFontPalette[];
+extern TextClipAndOffsetData gTextClipAndOffsetData;
+extern Gfx gSpriteRDPSetupDL[];
+
+void func_80035878_36478(
+    s32 x,
+    s32 y,
+    u16 frameIndex,
+    u16 shade,
+    u16 alpha,
+    u16 paletteOverride,
+    SpriteSheetData *spriteData
+) {
+    s16 left;
+    s16 top;
+    s16 right;
+    s16 bottom;
+    s32 paletteBase;
+    s32 paletteAddr;
+    SpriteFrameEntry *frameEntry;
+    Gfx *gfx;
+    u32 renderModeCmd;
+    u32 renderModeArg;
+    u32 combineCmd;
+    u32 combineArg;
+#ifdef CC_CHECK
+    u32 pipeSyncCmd;
+#else
+    register u32 pipeSyncCmd __asm__("$10");
+#endif
+
+    frameEntry = spriteData->frames;
+    left = (u16)gTextClipAndOffsetData.offsetX + x;
+    paletteBase = (s32)frameEntry + (spriteData->numFrames * 16);
+    frameEntry = &frameEntry[frameIndex];
+    top = (u16)gTextClipAndOffsetData.offsetY + y;
+    right = left + frameEntry->width;
+    bottom = top + frameEntry->height;
+
+    if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
+        (top < bottom)) {
+
+        if (gGraphicsMode != 0x100) {
+            gGraphicsMode = 0x100;
+            gCachedPaletteAddr = 0;
+            gCachedTextureAddr = 0;
+            gSPDisplayList(gRegionAllocPtr++, gSpriteRDPSetupDL);
+        }
+
+        renderModeCmd = 0xE200001C;
+        renderModeArg = 0x504240;
+        combineCmd = 0xFC119623;
+        gfx = gRegionAllocPtr;
+        combineArg = 0xFF2FFFFF;
+        pipeSyncCmd = 0xE7000000;
+        gRegionAllocPtr = (Gfx *)((s32)gfx + 8);
+        __asm__ volatile("" ::: "memory");
+        gRegionAllocPtr = (Gfx *)((s32)gfx + 0x10);
+        __asm__ volatile("" ::: "memory");
+        gRegionAllocPtr = (Gfx *)((s32)gfx + 0x18);
+        (gfx + 2)->words.w0 = 0x0B000000;
+        (gfx + 2)->words.w1 = 0x0E;
+        gRegionAllocPtr = (Gfx *)((s32)gfx + 0x20);
+        __asm__ volatile("" ::: "memory");
+        gRegionAllocPtr = (Gfx *)((s32)gfx + 0x28);
+        (gfx + 1)->words.w1 = renderModeArg;
+
+        {
+            u8 shadeByte = shade;
+            (gfx + 4)->words.w0 = 0xFA000000;
+            (gfx + 1)->words.w0 = renderModeCmd;
+            (gfx + 4)->words.w1 = (shadeByte << 24) | (shadeByte << 16) | (shadeByte << 8) | (alpha & 0xFF);
+        }
+
+        gfx->words.w0 = pipeSyncCmd;
+        gfx->words.w1 = 0;
+        (gfx + 3)->words.w0 = combineCmd;
+        (gfx + 3)->words.w1 = combineArg;
+
+        {
+            u16 paletteIndex = paletteOverride & 0xFFFF;
+            if (paletteIndex == 0xFF) {
+                paletteAddr = (s32)gDefaultFontPalette;
+                if (gCachedPaletteAddr == (s32)gDefaultFontPalette) {
+                    goto skipPalette;
+                }
+            } else {
+                paletteAddr = paletteBase + (paletteIndex << 5);
+                if (paletteAddr == gCachedPaletteAddr) {
+                    goto skipPalette;
+                }
+            }
+
+            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x30);
+            (gfx + 5)->words.w0 = 0xFD100000;
+            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x38);
+            (gfx + 6)->words.w0 = 0xE8000000;
+            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x40);
+            (gfx + 7)->words.w1 = 0x07000000;
+            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x48);
+            (gfx + 8)->words.w0 = 0xE6000000;
+            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x50);
+            (gfx + 9)->words.w0 = 0xF0000000;
+            gCachedPaletteAddr = paletteAddr;
+            (gfx + 5)->words.w1 = paletteAddr;
+            (gfx + 6)->words.w1 = 0;
+            (gfx + 7)->words.w0 = 0xF5000100;
+            (gfx + 8)->words.w1 = 0;
+            (gfx + 9)->words.w1 = 0x0703C000;
+            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x58);
+            (gfx + 10)->words.w0 = pipeSyncCmd;
+            (gfx + 10)->words.w1 = 0;
+        }
+    skipPalette:
+
+        if ((s32)spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
+            gCachedTextureAddr = (s32)spriteData + frameEntry->textureOffset;
+            gDPSetTextureImage(
+                gRegionAllocPtr++,
+                G_IM_FMT_CI,
+                G_IM_SIZ_8b,
+                frameEntry->width >> 1,
+                (s32)spriteData + frameEntry->textureOffset
+            );
+            gDPSetTile(
+                gRegionAllocPtr++,
+                G_IM_FMT_CI,
+                G_IM_SIZ_8b,
+                ((frameEntry->width >> 1) + 7) >> 3,
+                0,
+                G_TX_LOADTILE,
+                0,
+                G_TX_CLAMP,
+                0,
+                0,
+                G_TX_CLAMP,
+                0,
+                0
+            );
+            gDPLoadSync(gRegionAllocPtr++);
+            gDPLoadTile(
+                gRegionAllocPtr++,
+                G_TX_LOADTILE,
+                0,
+                0,
+                (frameEntry->width - 1) << 1,
+                (frameEntry->height - 1) << G_TEXTURE_IMAGE_FRAC
+            );
+            gDPPipeSync(gRegionAllocPtr++);
+            gDPSetTile(
+                gRegionAllocPtr++,
+                G_IM_FMT_CI,
+                G_IM_SIZ_4b,
+                ((frameEntry->width >> 1) + 7) >> 3,
+                0,
+                G_TX_RENDERTILE,
+                0,
+                G_TX_CLAMP,
+                0,
+                0,
+                G_TX_CLAMP,
+                0,
+                0
+            );
+            gDPSetTileSize(
+                gRegionAllocPtr++,
+                G_TX_RENDERTILE,
+                0,
+                0,
+                (frameEntry->width - 1) << G_TEXTURE_IMAGE_FRAC,
+                (frameEntry->height - 1) << G_TEXTURE_IMAGE_FRAC
+            );
+        }
+
+        gSPTextureRectangle(
+            gRegionAllocPtr++,
+            left << 2,
+            top << 2,
+            right << 2,
+            bottom << 2,
+            G_TX_RENDERTILE,
+            0,
+            0,
+            0x0400,
+            0x0400
+        );
+        gDPPipeSync(gRegionAllocPtr++);
+        gDPSetRenderMode(gRegionAllocPtr++, G_RM_AA_TEX_EDGE, G_RM_AA_TEX_EDGE2);
+        gDPSetCombineMode(gRegionAllocPtr++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+        gSPObjRenderMode(gRegionAllocPtr++, G_OBJRM_BILERP | G_OBJRM_ANTIALIAS);
+        gDPSetPrimColor(gRegionAllocPtr++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035DE0_369E0);
