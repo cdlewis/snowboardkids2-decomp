@@ -9,6 +9,7 @@
 #include "story/map_events.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
+#include "ui/character_select_sprites.h"
 
 USE_OVERLAY(_1DA660)
 USE_OVERLAY(_41AD80)
@@ -23,16 +24,8 @@ s16 storyMapLocationOrder3[] = { 0x0000, 0x0002, 0x0004, 0x0008, 0x0007, 0x0003,
 
 extern s32 gControllerInputs[];
 extern u8 gTitleInitialized;
-extern void initPlayer2CharacterSelectIndicator(void);
-extern void initPlayer3CharacterSelectIndicator(void);
-
-extern void initCharacterPreview(void);
-extern void initCharacterSelectBoardTask(void);
-extern void initCharacterSelectSprites(void);
-extern void initCharacterSelectTextureDataLoad(void);
 
 void func_8001B3E8_1BFE8(void);
-
 void initStoryMap(void);
 void onStoryMapExitToMainMenu(void);
 void onStoryMapNormalExit(void);
@@ -51,19 +44,19 @@ typedef struct {
     ViewportNode viewport0;
     ViewportNode viewport1;
     ViewportNode viewport2;
-    void *portraitAsset;       // 0x588: loaded from _41A1D0
-    void *imageAsset;          // 0x58C: loaded from _41AD80
-    u16 stateTimer;            // 0x590
-    u16 locationIds[4];        // 0x592
-    u8 playerAnimIndex[4];     // 0x59A: animation state for each player
-    u8 playerArrived[4];       // 0x59E: arrival state for each player
-    u8 locationOverlap[4];     // 0x5A2
-    u8 characterIds[4];        // 0x5A6
-    s8 locationBlocked[9];     // 0x5AA
-    u8 isStoryMapInitializing; // 0x5B3
-    u8 animTimer[4];           // 0x5B4
-    u8 locationHasPlayers[9];  // 0x5B8
-    u8 playerAtLocation[4];    // 0x5C1
+    /* 0x588 */ void *portraitAsset;
+    /* 0x58C */ void *imageAsset;
+    /* 0x590 */ u16 stateTimer;
+    /* 0x592 */ u16 locationIds[4];
+    /* 0x59A */ u8 playerAnimIndex[4];
+    /* 0x59E */ u8 playerArrived[4];
+    /* 0x5A2 */ u8 locationOverlap[4];
+    /* 0x5A6 */ u8 characterIds[4];
+    /* 0x5AA */ s8 locationBlocked[9];
+    /* 0x5B3 */ u8 isStoryMapInitializing;
+    /* 0x5B4 */ u8 animTimer[4];
+    /* 0x5B8 */ u8 locationHasPlayers[9];
+    /* 0x5C1 */ u8 playerAtLocation[4];
     u8 pad5C5[3];
 } StoryMapState;
 
