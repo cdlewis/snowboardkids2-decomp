@@ -1,9 +1,11 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
+#include "assets.h"
 #include "audio/audio.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "race/track_geometry.h"
+#include "story/map_events.h"
 #include "story/shop_ui.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
@@ -19,6 +21,7 @@ void unlockScreenCleanupAndExit(void);
 void unlockScreenAwaitUserDismiss(void);
 void unlockScreenAwaitFadeIn(void);
 void unlockScreenCountdownToExit(void);
+void waitForUnlocksAssetsReady(void);
 
 s32 D_8008D960_8E560[] = { 0x00000000, 0x0000C350, 0x000186A0, 0x00000000, 0x0000AFC8, 0x00015F90, 0x00000000,
                            0x0000EA60, 0x0001D4C0, 0x000249F0, 0x00001388, 0x000003E8, 0x00013880, 0x00000064,
@@ -49,7 +52,94 @@ typedef struct {
     /* 0x5D8 */ u8 unk5D8;
 } UnlockScreenState;
 
-INCLUDE_ASM("asm/nonmatchings/ui/unlock_screen", initUnlockScreen);
+typedef struct {
+    u8 padding[0x61];
+    s8 itemIndex;
+    s8 slotPosition;
+} ItemCardTaskState;
+
+extern void initStoryMapShopFairyModel(void *);
+extern void initStoryMapShopItemCard(void *);
+extern void initSlideInStoryMapShopItemCard(void *);
+extern void loadStoryMapShopBackground(void *);
+extern void initStoryMapShopGoldDisplay(void *);
+extern void initStoryMapShopItemIcon(void *);
+extern void initStoryMapShopItemStatLabel(void *);
+extern void initStoryMapShopExitOverlay(void *);
+extern s32 getLockedShopItemIndices(u8 *);
+
+void initUnlockScreen(void) {
+    UnlockScreenState *state;
+    u8 lightBuffer[0x20];
+    volatile s32 pad;
+    ItemCardTaskState *card;
+    s32 unlockResult;
+    u32 count;
+    s32 i;
+
+    state = (UnlockScreenState *)allocateTaskMemory(0x5E0);
+    setupTaskSchedulerNodes(0x44, 6, 0, 0, 0, 0, 0, 0);
+    state->frameCounter = 0;
+    state->statePhase = 0;
+    state->scrollDirection = 0;
+    state->scrollStep = 0;
+    state->unlockCount = 0;
+    state->transitionState = 0;
+    state->unk5D8 = 1;
+    initMenuCameraNode((ViewportNode *)state, 0, 10, 0);
+    initMenuCameraNode((ViewportNode *)&state->cameraNode1, 8, 15, 1);
+    initMenuCameraNode((ViewportNode *)&state->cameraNode2, 1, 8, 1);
+    createViewportTransform(lightBuffer, 0, 0, 0x600000, 0, 0, 0);
+    setViewportTransformById(((ViewportNode *)state)->id, lightBuffer);
+    setViewportFadeValue(NULL, 0xFF, 0);
+    memcpy(state->rotationMatrix, &identityMatrix, 0x20);
+    state->rotationAngle = 0;
+    state->arrowSpriteAsset = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    state->backgroundAsset = loadCompressedData(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);
+    state->itemIconAsset = loadCompressedData(&_42F1D0_ROM_START, &_43A000_ROM_START, 0x14410);
+    state->digitSpriteAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    state->goldIconAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    state->itemLabelAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    scheduleTask(initStoryMapShopFairyModel, 0, 0, 0x5A);
+    unlockResult = getLockedShopItemIndices(state->itemSlots);
+    __asm__("" : "=r"(count) : "0"(unlockResult & 0xFF));
+    state->unlockCount = unlockResult;
+    if (count >= 3) {
+        count = 3;
+    }
+
+    i = 0;
+    if (count != 0) {
+        do {
+            card = (ItemCardTaskState *)scheduleTask(initStoryMapShopItemCard, 0, 0, 0x5A);
+            if (card != NULL) {
+                card->itemIndex = i;
+                card->slotPosition = i;
+                if (state->unlockCount == 2) {
+                    card->slotPosition = i + 1;
+                }
+            }
+            i++;
+        } while (i < (s32)count);
+    }
+
+    if (state->unlockCount >= 3) {
+        scheduleTask(initSlideInStoryMapShopItemCard, 0, 0, 0x5A);
+    }
+    scheduleTask(loadStoryMapShopBackground, 0, 0, 0x5A);
+    scheduleTask(initStoryMapShopGoldDisplay, 0, 0, 0x5A);
+    if (state->unlockCount != 0) {
+        scheduleTask(initStoryMapShopItemIcon, 1, 0, 0x5A);
+        scheduleTask(initStoryMapShopItemStatLabel, 1, 0, 0x5A);
+        scheduleTask(initStoryMapShopExitOverlay, 0, 0, 0x5A);
+    }
+    if ((s32)count >= 3) {
+        state->cursorIndex = 1;
+    } else {
+        state->cursorIndex = 0;
+    }
+    setGameStateHandler(waitForUnlocksAssetsReady);
+}
 
 void waitForUnlocksAssetsReady(void) {
     UnlockScreenState *state = (UnlockScreenState *)getCurrentAllocation();
