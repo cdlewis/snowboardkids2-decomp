@@ -371,15 +371,15 @@ void updateSaveSlotSelectionScreen(void) {
             break;
         case 1:
             slotIdx = state->saveSlotIndex;
-            if (gControllerInputs & 0x10800) {
+            if (gControllerInputs & (STICK_UP | CONT_UP)) {
                 if (slotIdx != 0) {
                     state->saveSlotIndex = slotIdx - 1;
                 }
-            } else if (gControllerInputs & 0x20400) {
+            } else if (gControllerInputs & (STICK_DOWN | CONT_DOWN)) {
                 if (slotIdx < 2) {
                     state->saveSlotIndex = slotIdx + 1;
                 }
-            } else if (gControllerInputs & 0x8000) {
+            } else if (gControllerInputs & CONT_A) {
                 playSoundEffect(0x2C);
                 if (state->hasSaveData != 0) {
                     goto case1_confirm;
@@ -393,7 +393,7 @@ void updateSaveSlotSelectionScreen(void) {
                     state->menuState = 2;
                     state->selectionAnimState = 0;
                 }
-            } else if (gControllerInputs & 0x4000) {
+            } else if (gControllerInputs & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->hasSaveData == 0) {
                     state->menuState = 0x32;
@@ -438,7 +438,7 @@ void updateSaveSlotSelectionScreen(void) {
             }
             break;
         case 3:
-            if (gControllerInputs & 0x8000) {
+            if (gControllerInputs & CONT_A) {
                 playSoundEffect(0x2C);
                 if (state->hasSaveData == 0) {
                     D_800AFE8C_A71FC->previousSaveSlot = state->saveSlotIndex;
@@ -502,7 +502,7 @@ void updateSaveSlotSelectionScreen(void) {
                         disableViewportOverlay(slotModel);
                     }
                 }
-            } else if (gControllerInputs & 0x4000) {
+            } else if (gControllerInputs & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->menuType == 0xA) {
                     D_800AFE8C_A71FC->isStoryMode = 0;
@@ -537,7 +537,7 @@ void updateSaveSlotSelectionScreen(void) {
             break;
         case 8:
             updateSelectionWiggle();
-            if (gControllerInputs & 0x8000) {
+            if (gControllerInputs & CONT_A) {
                 playSoundEffect(0x2C);
                 state->menuState = 9;
                 state->selectionAnimState = 0;
@@ -559,7 +559,7 @@ void updateSaveSlotSelectionScreen(void) {
             break;
         case 0xB:
             updateSelectionWiggle();
-            if (gControllerInputs & 0x8000) {
+            if (gControllerInputs & CONT_A) {
                 state->selectionAnimState = 0;
                 state->selectionY = state->selectionBaseY;
                 playSoundEffect(0x2D);
@@ -567,11 +567,11 @@ void updateSaveSlotSelectionScreen(void) {
             }
             break;
         case 0x3C:
-            if (gControllerInputs & 0x9000) {
+            if (gControllerInputs & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
                 state->menuState = 5;
                 state->saveSlotIndex = 4;
-            } else if (gControllerInputs & 0x4000) {
+            } else if (gControllerInputs & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->menuSelection != 0x63) {
                     state->menuState = 0x32;
@@ -660,19 +660,19 @@ void updateSaveSlotSelectionScreen(void) {
             }
             break;
         case 0x16:
-            if (gControllerInputs & 0x8000) {
+            if (gControllerInputs & CONT_A) {
                 playSoundEffect(0x2C);
                 state->menuState = 0x17;
                 state->promptMode = 7;
             }
             break;
         case 0x17:
-            if (gControllerInputs & 0x8000) {
+            if (gControllerInputs & CONT_A) {
                 playSoundEffect(0x2D);
                 state->menuState = 0xC;
                 state->selectionAnimState = 0;
                 state->saveSlotIndex = 0x63;
-            } else if (gControllerInputs & 0x4000) {
+            } else if (gControllerInputs & CONT_B) {
                 {
                     playSoundEffect(0x2E);
                     state->promptMode = 9;
@@ -713,11 +713,11 @@ void updateSaveSlotSelectionScreen(void) {
             if ((state->menuType == 0xA) | (state->menuType == 2)) {
                 maxChoice = 1;
             }
-            if (gControllerInputs & 0x10800) {
+            if (gControllerInputs & (STICK_UP | CONT_UP)) {
                 if (slotIdx != 0) {
                     state->menuSelection = slotIdx - 1;
                 }
-            } else if ((gControllerInputs & 0x20400) && (slotIdx != maxChoice)) {
+            } else if ((gControllerInputs & (STICK_DOWN | CONT_DOWN)) && (slotIdx != maxChoice)) {
                 state->menuSelection = slotIdx + 1;
             }
             if (slotIdx != state->menuSelection) {
@@ -725,11 +725,11 @@ void updateSaveSlotSelectionScreen(void) {
                 playSoundEffect(0x2B);
                 break;
             }
-            if (gControllerInputs & 0x9000) {
+            if (gControllerInputs & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
                 state->menuState = 0x34;
                 state->selectionAnimState = 0;
-            } else if (gControllerInputs & 0x4000) {
+            } else if (gControllerInputs & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->menuType == 0xA) {
                     state->menuState = 1;
@@ -847,7 +847,7 @@ void updateSaveSlotSelectionScreen(void) {
             }
         } break;
         case 0x35:
-            if (gControllerInputs & 0x9000) {
+            if (gControllerInputs & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
                 state->menuState = 0x37;
             }

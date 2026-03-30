@@ -1428,7 +1428,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
     entry = &gGalleryCategories[alloc->selectedOption].items[arg0->cursorIndex];
     memcpy(sp30_ptr, D_8009DF6C_9EB6C, 0xC);
 
-    if (gControllerInputs & 0x8000) {
+    if (gControllerInputs & CONT_A) {
         if (isGalleryItemUnlocked(arg0->cursorIndex)) {
             playBgmTrack(alloc, entry->numExtra);
             if (alloc->menuModel->unk16 != 0x92) {
@@ -1453,7 +1453,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         return;
     }
 
-    if (gControllerInputs & 0x80200) {
+    if (gControllerInputs & (STICK_LEFT | CONT_LEFT)) {
         s8 temp_v0 = arg0->cursorIndex;
         s8 temp_v1 = temp_v0;
         if (temp_v0 == 0) {
@@ -1465,7 +1465,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         return;
     }
 
-    if (gControllerInputs & 0x40100) {
+    if (gControllerInputs & (STICK_RIGHT | CONT_RIGHT)) {
         s8 temp = arg0->cursorIndex;
         if (temp == 0x1A) {
             arg0->cursorIndex = 0;
@@ -1476,7 +1476,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         return;
     }
 
-    if (gControllerInputs & 0x10800) {
+    if (gControllerInputs & (STICK_UP | CONT_UP)) {
         u8 val = arg0->cursorIndex;
         s8 temp = val - 9;
         if ((u8)temp < 0x12u) {
@@ -1490,7 +1490,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         return;
     }
 
-    if (gControllerInputs & 0x20400) {
+    if (gControllerInputs & (STICK_DOWN | CONT_DOWN)) {
         u8 val = arg0->cursorIndex;
         if (val < 0x12u) {
             arg0->cursorIndex = val + 9;

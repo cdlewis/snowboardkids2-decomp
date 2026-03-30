@@ -127,7 +127,7 @@ void handlePlayerCountSelectInput(void) {
                         break;
                     }
                 }
-                if (gControllerInputs & 0x80200) {
+                if (gControllerInputs & (STICK_LEFT | CONT_LEFT)) {
                     if (state->playerCount.selectedPlayerIndex != 0) {
                         state->playerCount.selectedPlayerIndex = state->playerCount.selectedPlayerIndex - 1;
                         playSoundEffectOnChannelNoPriority(0x2B, 0);

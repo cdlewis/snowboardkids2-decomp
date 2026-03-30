@@ -1306,7 +1306,7 @@ void handleRaceStateUpdate(void) {
                 }
                 break;
             default:
-                if (gControllerInputs[0] & 0x1000) {
+                if (gControllerInputs[0] & START_BUTTON) {
                     gs->gamePaused = 0;
                 }
                 break;
@@ -1440,7 +1440,7 @@ handleA:
         setGameStateHandler(cleanupGameSession);
         return;
     }
-    if (gControllerInputs[0] & 0x1000) {
+    if (gControllerInputs[0] & START_BUTTON) {
         gRaceResultCode = 2;
         setViewportFadeValue(NULL, 0xFF, 0x10);
         setMusicFadeOut(0x3C);
@@ -1485,7 +1485,7 @@ handleB:
                 setGameStateHandler(cleanupGameSession);
                 return;
             }
-            if (gControllerInputs[0] & 0x1000) {
+            if (gControllerInputs[0] & START_BUTTON) {
                 gRaceResultCode = 2;
                 setViewportEnvColor(NULL, 0, 0, 0);
                 setViewportFadeValue(NULL, 0xFF, 0x10);

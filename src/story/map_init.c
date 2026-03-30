@@ -193,18 +193,18 @@ void func_8001B3E8_1BFE8(void) {
                 vDir = 0;
                 hDir = 0;
                 currentLoc = state->locationIds[i];
-                if (gControllerInputs[i] & 0x40100) {
+                if (gControllerInputs[i] & (STICK_RIGHT | CONT_RIGHT)) {
                     hDir = 1;
-                } else if (gControllerInputs[i] & 0x80200) {
+                } else if (gControllerInputs[i] & (STICK_LEFT | CONT_LEFT)) {
                     hDir = -1;
                 }
 
-                if (gControllerInputs[i] & 0x10800) {
+                if (gControllerInputs[i] & (STICK_UP | CONT_UP)) {
                     vDir = -5;
                     if ((s8)currentLoc != 8) {
                         vDir = -4;
                     }
-                } else if (gControllerInputs[i] & 0x20400) {
+                } else if (gControllerInputs[i] & (STICK_DOWN | CONT_DOWN)) {
                     vDir = 5;
                 }
 
@@ -256,13 +256,13 @@ void func_8001B3E8_1BFE8(void) {
                     }
                 }
 
-                if (gControllerInputs[i] & 0x8000) {
+                if (gControllerInputs[i] & CONT_A) {
                     D_800AFE8C_A71FC->playerBoardIds[i] = storyMapLocationOrder1[state->locationIds[i]];
                     state->playerAnimIndex[i] = 10;
                     state->playerAtLocation[i] = 0;
                     state->animTimer[i] = 0;
                     playSoundEffectOnChannelNoPriority((u16)storyMapLocationSpriteIds[(s8)currentLoc], i + 8);
-                } else if (gControllerInputs[i] & 0x4000) {
+                } else if (gControllerInputs[i] & CONT_B) {
                     s32 k;
                     playSoundEffect(0x2E);
                     for (k = 0; k < D_800AFE8C_A71FC->numPlayers; k++) {
@@ -279,7 +279,7 @@ void func_8001B3E8_1BFE8(void) {
                 break;
 
             case 1:
-                if (gControllerInputs[i] & 0x4000) {
+                if (gControllerInputs[i] & CONT_B) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
                     state->playerAnimIndex[i] = 0;
                 }
@@ -308,10 +308,10 @@ void func_8001B3E8_1BFE8(void) {
                 break;
 
             case 2:
-                if (gControllerInputs[i] & 0x8000) {
+                if (gControllerInputs[i] & CONT_A) {
                     i = D_800AFE8C_A71FC->numPlayers;
                     confirmed = 1;
-                } else if (gControllerInputs[i] & 0x4000) {
+                } else if (gControllerInputs[i] & CONT_B) {
 #ifdef CC_CHECK
                     s32 k;
 #else
@@ -339,7 +339,7 @@ void func_8001B3E8_1BFE8(void) {
                         }
                     }
                 }
-                if (gControllerInputs[i] & 0x4000) {
+                if (gControllerInputs[i] & CONT_B) {
 #ifdef CC_CHECK
                     s32 k;
 #else
@@ -354,7 +354,7 @@ void func_8001B3E8_1BFE8(void) {
                         }
                     }
                     i = D_800AFE8C_A71FC->numPlayers;
-                } else if (gControllerInputs[i] & 0x8000) {
+                } else if (gControllerInputs[i] & CONT_A) {
                     allConfirmed = 1;
                     i = D_800AFE8C_A71FC->numPlayers;
                     playSoundEffect(0x2D);

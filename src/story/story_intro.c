@@ -283,13 +283,13 @@ void handleLevelSelectInput(void) {
             oldB46 = oldMenuSelection & 0xFF;
             for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
                 if (oldB46 == (allocation->selectedIndex)) {
-                    if (gControllerInputs[i] & 0x10800) {
+                    if (gControllerInputs[i] & (STICK_UP | U_JPAD)) {
                         allocation->selectedIndex = allocation->selectedIndex - 1;
                         allocation->oldLevelId = 0;
                         if (allocation->selectedIndex < 0) {
                             allocation->selectedIndex = allocation->maxLevelCount - 1;
                         }
-                    } else if (gControllerInputs[i] & 0x20400) {
+                    } else if (gControllerInputs[i] & (STICK_DOWN | D_JPAD)) {
                         allocation->selectedIndex = allocation->selectedIndex + 1;
                         allocation->oldLevelId = 1;
                         if (allocation->selectedIndex > (s32)(allocation->maxLevelCount - 1)) {
@@ -423,12 +423,12 @@ void handleLevelSelectInput(void) {
             oldB46 = allocation->selectedNumber;
             for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
                 if ((oldB46 & 0xFF) == allocation->selectedNumber) {
-                    if (gControllerInputs[i] & 0x40100) {
+                    if (gControllerInputs[i] & (STICK_RIGHT | R_JPAD)) {
                         allocation->selectedNumber = allocation->selectedNumber + 1;
                         if ((allocation->selectedNumber & 0xFF) >= 10) {
                             allocation->selectedNumber = 1;
                         }
-                    } else if (gControllerInputs[i] & 0x80200) {
+                    } else if (gControllerInputs[i] & (STICK_LEFT | L_JPAD)) {
                         allocation->selectedNumber = allocation->selectedNumber - 1;
                         if ((allocation->selectedNumber & 0xFF) == 0) {
                             allocation->selectedNumber = 9;
