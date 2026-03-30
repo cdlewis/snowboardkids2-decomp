@@ -25,7 +25,7 @@ s16 storyMapLocationOrder3[] = { 0x0000, 0x0002, 0x0004, 0x0008, 0x0007, 0x0003,
 extern s32 gControllerInputs[];
 extern u8 gTitleInitialized;
 
-void func_8001B3E8_1BFE8(void);
+void storyMapHandlePlayerInput(void);
 void initStoryMap(void);
 void onStoryMapExitToMainMenu(void);
 void onStoryMapNormalExit(void);
@@ -48,9 +48,9 @@ typedef struct {
     /* 0x58C */ void *imageAsset;
     /* 0x590 */ u16 stateTimer;
     /* 0x592 */ u16 locationIds[4];
-    /* 0x59A */ u8 playerAnimIndex[4];
+    /* 0x59A */ u8 selectionState[4];
     /* 0x59E */ u8 playerArrived[4];
-    /* 0x5A2 */ u8 locationOverlap[4];
+    /* 0x5A2 */ u8 playerCountAtLocation[4];
     /* 0x5A6 */ u8 characterIds[4];
     /* 0x5AA */ s8 locationBlocked[9];
     /* 0x5B3 */ u8 isStoryMapInitializing;
@@ -88,13 +88,13 @@ void initStoryMap(void) {
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
         state->playerArrived[i] = 0;
-        state->playerAnimIndex[i] = 0;
+        state->selectionState[i] = 0;
         state->playerAtLocation[i] = 0;
         state->locationIds[i] = storyMapLocationOrder2[D_800AFE8C_A71FC->playerBoardIds[i]];
-        state->locationOverlap[i] = 0;
+        state->playerCountAtLocation[i] = 0;
         for (j = 0; j < i + 1; j++) {
             if (state->locationIds[i] == state->locationIds[j]) {
-                state->locationOverlap[i]++;
+                state->playerCountAtLocation[i]++;
             }
         }
     }
@@ -165,11 +165,11 @@ void storyMapInitFadeIn(void) {
 
 void storyMapAwaitFadeIn(void) {
     if (!getViewportFadeMode(0)) {
-        setGameStateHandler(&func_8001B3E8_1BFE8);
+        setGameStateHandler(&storyMapHandlePlayerInput);
     }
 }
 
-void func_8001B3E8_1BFE8(void) {
+void storyMapHandlePlayerInput(void) {
     StoryMapState *state;
     s32 i;
     s32 j;
@@ -188,7 +188,7 @@ void func_8001B3E8_1BFE8(void) {
     allConfirmed = 0;
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        switch (state->playerAnimIndex[i]) {
+        switch (state->selectionState[i]) {
             case 0:
                 vDir = 0;
                 hDir = 0;
@@ -243,22 +243,22 @@ void func_8001B3E8_1BFE8(void) {
                 }
 
                 if (state->locationIds[i] != (s8)currentLoc) {
-                    state->locationOverlap[i] = 0;
+                    state->playerCountAtLocation[i] = 0;
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                 }
                 state->locationIds[i] = (s8)currentLoc;
 
-                if (state->locationOverlap[i] == 0) {
+                if (state->playerCountAtLocation[i] == 0) {
                     for (j = 0; j < D_800AFE8C_A71FC->numPlayers; j++) {
                         if ((s8)currentLoc == state->locationIds[j]) {
-                            state->locationOverlap[i]++;
+                            state->playerCountAtLocation[i]++;
                         }
                     }
                 }
 
                 if (gControllerInputs[i] & CONT_A) {
                     D_800AFE8C_A71FC->playerBoardIds[i] = storyMapLocationOrder1[state->locationIds[i]];
-                    state->playerAnimIndex[i] = 10;
+                    state->selectionState[i] = 10;
                     state->playerAtLocation[i] = 0;
                     state->animTimer[i] = 0;
                     playSoundEffectOnChannelNoPriority((u16)storyMapLocationSpriteIds[(s8)currentLoc], i + 8);
@@ -268,9 +268,9 @@ void func_8001B3E8_1BFE8(void) {
                     for (k = 0; k < D_800AFE8C_A71FC->numPlayers; k++) {
                         D_800AFE8C_A71FC->playerBoardIds[k] = state->characterIds[k];
                         if (gTitleInitialized != 0) {
-                            state->playerAnimIndex[i] = 4;
+                            state->selectionState[i] = 4;
                         } else {
-                            state->playerAnimIndex[k] = 2;
+                            state->selectionState[k] = 2;
                         }
                     }
                     scheduleTask(&initPlayer2CharacterSelectIndicator, 0, 0, 0x5B);
@@ -281,7 +281,7 @@ void func_8001B3E8_1BFE8(void) {
             case 1:
                 if (gControllerInputs[i] & CONT_B) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
-                    state->playerAnimIndex[i] = 0;
+                    state->selectionState[i] = 0;
                 }
                 if (state->animTimer[i] < storyMapLocationConfig[state->locationIds[i]]) {
                     state->animTimer[i]++;
@@ -296,11 +296,11 @@ void func_8001B3E8_1BFE8(void) {
                 }
                 if (i == D_800AFE8C_A71FC->numPlayers - 1) {
                     for (j = 0, count = 0; j < D_800AFE8C_A71FC->numPlayers; j++) {
-                        count += (state->playerAnimIndex[j] == 1);
+                        count += (state->selectionState[j] == 1);
                     }
                     if (count == D_800AFE8C_A71FC->numPlayers) {
                         for (j = 0; j < D_800AFE8C_A71FC->numPlayers; j++) {
-                            state->playerAnimIndex[j] = 3;
+                            state->selectionState[j] = 3;
                             scheduleTask(&initPlayer3CharacterSelectIndicator, 0, 0, 0x5B);
                         }
                     }
@@ -319,7 +319,7 @@ void func_8001B3E8_1BFE8(void) {
 #endif
                     playSoundEffect(0x2E);
                     for (k = 0; k < D_800AFE8C_A71FC->numPlayers; k++) {
-                        state->playerAnimIndex[k] = 0;
+                        state->selectionState[k] = 0;
                     }
                     i = D_800AFE8C_A71FC->numPlayers;
                 }
@@ -348,9 +348,9 @@ void func_8001B3E8_1BFE8(void) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
                     for (k = 0; k < D_800AFE8C_A71FC->numPlayers; k++) {
                         if (i == k) {
-                            state->playerAnimIndex[i] = 0;
+                            state->selectionState[i] = 0;
                         } else {
-                            state->playerAnimIndex[k] = 1;
+                            state->selectionState[k] = 1;
                         }
                     }
                     i = D_800AFE8C_A71FC->numPlayers;
@@ -370,7 +370,7 @@ void func_8001B3E8_1BFE8(void) {
                 state->playerAtLocation[i]++;
                 if ((state->playerAtLocation[i] & 0xFF) == 0x11) {
                     state->playerAtLocation[i] = 0;
-                    state->playerAnimIndex[i] = 1;
+                    state->selectionState[i] = 1;
                 }
                 break;
             }
