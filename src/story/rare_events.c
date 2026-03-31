@@ -32,11 +32,15 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x14];
-    s16 screenX;
-    s16 screenXHi;
+    union {
+        s16 low;
+        s32 full;
+    } screenX;
     u8 pad18[4];
-    s16 screenZ;
-    s16 screenZHi;
+    union {
+        s16 low;
+        s32 full;
+    } screenZ;
 } ParallaxSprite;
 
 u32 sNpcInteractionColors[] = {
@@ -726,16 +730,15 @@ INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002B598_2C198);
 INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002B760_2C360);
 
 void updateParallaxPosition(ParallaxSprite *sprite) {
-    s32 newPosition[3];
-    s32 currentPosition[3];
+    Vec3i newPosition;
+    Vec3i currentPosition;
     s32 zAdjust;
     s32 xAdjust;
     s32 historyIndex;
-    s32 nextIndex;
     s16 *positionHistoryX;
     s16 *positionHistoryZ;
-    s32 *currentPtr;
-    s32 *newPtr;
+    Vec3i *currentPtr;
+    Vec3i *newPtr;
     s32 xCoord;
     s32 zCoord;
     s32 readX;
@@ -744,51 +747,48 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     s32 multiplier;
 
     historyIndex = D_800AB06C_A23DC;
-    currentPtr = currentPosition;
-    newPtr = newPosition;
+    currentPtr = &currentPosition;
+    newPtr = &newPosition;
     positionHistoryX = &D_8009F240_9FE40[1];
-    xCoord = sprite->screenX;
+    xCoord = sprite->screenX.low;
     positionHistoryX[historyIndex * 2] = xCoord;
     positionHistoryZ = positionHistoryX + 1;
-    zCoord = sprite->screenZ;
+    zCoord = sprite->screenZ.low;
     positionHistoryZ[historyIndex * 2] = zCoord;
 
-    memcpy(currentPtr, &D_800AFF20_A7290, 12);
-    memcpy(newPosition, currentPtr, 12);
+    memcpy(currentPtr, &D_800AFF20_A7290, sizeof(Vec3i));
+    memcpy(newPtr, currentPtr, sizeof(Vec3i));
 
-    zAdjust = currentPtr[2] >> 8;
+    zAdjust = currentPosition.z >> 8;
     zAdjust = zAdjust * 8;
     zAdjust = zAdjust / 224;
     zCoord = zAdjust;
-    newPtr[0] += zCoord << 12;
+    newPosition.x += zAdjust << 12;
 
     multiplier = -8;
-    xScaled = currentPtr[0] >> 8;
+    xScaled = currentPosition.x >> 8;
     xAdjust = xScaled * multiplier;
     if (xAdjust < 0) {
         xAdjust += 0x7FF;
     }
     xAdjust >>= 11;
     zCoord = xAdjust;
-    newPosition[2] += zCoord << 12;
+    newPosition.z += zCoord << 12;
 
-    memcpy(&D_800AFF20_A7290, newPosition, 12);
+    memcpy(&D_800AFF20_A7290, newPtr, sizeof(Vec3i));
 
-    *(s32 *)&sprite->screenX = newPosition[0];
-    *(s32 *)&sprite->screenZ = newPosition[2] - 0x440000;
+    sprite->screenX.full = newPosition.x;
+    sprite->screenZ.full = newPosition.z - 0x440000;
 
-    nextIndex = D_800AB06C_A23DC + 1;
-    D_800AB06C_A23DC = nextIndex;
+    D_800AB06C_A23DC++;
 
-    if (newPosition[2] > 0) {
-        if ((u32)(newPosition[0] - 0x100001) <= 0xFFFFE) {
-            do {
-                D_8009F240_9FE40[0] = nextIndex;
-            } while (0);
-            readX = sprite->screenX;
-            positionHistoryX[nextIndex * 2] = readX;
-            readZ = sprite->screenZ;
-            positionHistoryZ[nextIndex * 2] = readZ;
+    if (newPosition.z > 0) {
+        if ((u32)(newPosition.x - 0x100001) <= 0xFFFFE) {
+            D_8009F240_9FE40[0] = D_800AB06C_A23DC;
+            readX = sprite->screenX.low;
+            positionHistoryX[D_800AB06C_A23DC * 2] = readX;
+            readZ = sprite->screenZ.low;
+            positionHistoryZ[D_800AB06C_A23DC * 2] = readZ;
         }
     }
 }
