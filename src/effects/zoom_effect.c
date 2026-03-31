@@ -59,7 +59,42 @@ void updateWipeTransitionSlots(cutsceneSys2Wait_exec_asset *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/effects/zoom_effect", func_800B956C_1E661C);
+s16 func_800B956C_1E661C(cutsceneSys2Wait_exec_asset *arg0) {
+    int new_var;
+    cutsceneSys2Wait_exec_asset *new_var2;
+    s32 i;
+    int new_var3;
+    arg0->zoomLevelX = 0;
+    arg0->zoomLevelY = 0;
+    for (i = 0; i < 4; i++) {
+        arg0->slots[i].posX = gWipeOffset[i].x + arg0->basePosX;
+        arg0->slots[i].posY = gWipeOffset[i].y + arg0->basePosY;
+        arg0->slots[i].model = arg0->sprites;
+        arg0->slots[i].unk8 = i + 0x64;
+        arg0->slots[i].zoomScaleX = arg0->zoomLevelX;
+        arg0->slots[i].zoomScaleY = arg0->zoomLevelY;
+        arg0->slots[i].unkE = 0;
+        arg0->slots[i].unk10 = 0xFF;
+        (new_var2 = arg0)->slots[i].unk12 = 0;
+        arg0->slots[i].unk13 = 0;
+        new_var3 = 0xFF;
+        arg0->slots[i].unk14 = new_var3;
+    }
+
+    arg0->unk8C = (arg0->slots[i].posX + arg0->basePosX) - 0x3C;
+    arg0->unk8E = (arg0->slots[i].posY + arg0->basePosY) - 0x20;
+    arg0->unk94 = arg0->textRenderAsset;
+    arg0->unk9C = 0;
+    arg0->commandOffset = 0;
+    arg0->unkA8 = arg0->sprites;
+    arg0->unk98 = 0xFF;
+    new_var = 0x68;
+    arg0->unk9A = 0xFF;
+    arg0->unkA4 = arg0->basePosX + 0x30;
+    arg0->unkA6 = arg0->basePosY + 4;
+    arg0->unkAC = new_var;
+    return 1;
+}
 
 s32 initWipeZoomAccel(cutsceneSys2Wait_exec_asset *arg0) {
     arg0->zoomSpeed = 0x6600;
