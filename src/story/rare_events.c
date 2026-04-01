@@ -6,6 +6,12 @@
 #include "system/task_scheduler.h"
 #include "triggers/town_collision.h"
 
+// Parallax screen coordinate history buffer
+typedef struct {
+    s16 historyIndex;      // Current write position (element [0])
+    s16 coordHistory[502]; // X/Z coordinate pairs (elements [1-502])
+} ParallaxScreenHistory;
+
 typedef struct {
     /* 0x00 */ void *model;
     /* 0x04 */ Transform3D matrix;
@@ -288,12 +294,12 @@ u32 sStoryMapNpcDialogueTable[] = {
     0x0D0E0F0D,
 };
 
-extern s16 D_8009F240_9FE40[];
+extern ParallaxScreenHistory gParallaxScreenHistory;
+extern Vec3i gParallaxOffset;
 extern s32 D_800AB06C_A23DC;
 extern s32 D_8009F230_9FE30;
 extern s32 D_8009F234_9FE34;
 extern s16 D_8009F238_9FE38;
-extern Vec3i D_800AFF20_A7290;
 
 s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle);
 s32 func_8002A4AC_2B0AC(void *, u8);
@@ -735,8 +741,6 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     s32 zAdjust;
     s32 xAdjust;
     s32 historyIndex;
-    s16 *positionHistoryX;
-    s16 *positionHistoryZ;
     Vec3i *currentPtr;
     Vec3i *newPtr;
     s32 xCoord;
@@ -749,14 +753,13 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     historyIndex = D_800AB06C_A23DC;
     currentPtr = &currentPosition;
     newPtr = &newPosition;
-    positionHistoryX = &D_8009F240_9FE40[1];
-    xCoord = sprite->screenX.low;
-    positionHistoryX[historyIndex * 2] = xCoord;
-    positionHistoryZ = positionHistoryX + 1;
-    zCoord = sprite->screenZ.low;
-    positionHistoryZ[historyIndex * 2] = zCoord;
 
-    memcpy(currentPtr, &D_800AFF20_A7290, sizeof(Vec3i));
+    xCoord = sprite->screenX.low;
+    gParallaxScreenHistory.coordHistory[historyIndex * 2] = xCoord;
+    zCoord = sprite->screenZ.low;
+    gParallaxScreenHistory.coordHistory[historyIndex * 2 + 1] = zCoord;
+
+    memcpy(currentPtr, &gParallaxOffset, sizeof(Vec3i));
     memcpy(newPtr, currentPtr, sizeof(Vec3i));
 
     zAdjust = currentPosition.z >> 8;
@@ -775,7 +778,7 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     zCoord = xAdjust;
     newPosition.z += zCoord << 12;
 
-    memcpy(&D_800AFF20_A7290, newPtr, sizeof(Vec3i));
+    memcpy(&gParallaxOffset, newPtr, sizeof(Vec3i));
 
     sprite->screenX.full = newPosition.x;
     sprite->screenZ.full = newPosition.z - 0x440000;
@@ -784,11 +787,11 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
 
     if (newPosition.z > 0) {
         if ((u32)(newPosition.x - 0x100001) <= 0xFFFFE) {
-            D_8009F240_9FE40[0] = D_800AB06C_A23DC;
+            gParallaxScreenHistory.historyIndex = D_800AB06C_A23DC;
             readX = sprite->screenX.low;
-            positionHistoryX[D_800AB06C_A23DC * 2] = readX;
+            gParallaxScreenHistory.coordHistory[D_800AB06C_A23DC * 2] = readX;
             readZ = sprite->screenZ.low;
-            positionHistoryZ[D_800AB06C_A23DC * 2] = readZ;
+            gParallaxScreenHistory.coordHistory[D_800AB06C_A23DC * 2 + 1] = readZ;
         }
     }
 }

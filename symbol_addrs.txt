@@ -8,8 +8,8 @@ D_8008F22C_8FE2C = 0x8008F22C; // rom:0x8FE2C // size:0x80
 initSaveSlotIconGrid = 0x80033688; // rom:0x34288
 __MusIntGetNewNote = 0x8007335C; // rom:0x73F5C
 
-// speculative change -- might be wrong
-D_8009F240_9FE40 = 0x8009F240; // size:0x3F0
+gParallaxScreenHistory = 0x8009F240; // size:0x3F0
+gParallaxOffset = 0x800AFF20;
 
 D_80090AB8_916B8 = 0x80090AB8; // size:0x38 rom:0x916B8
 
