@@ -369,7 +369,7 @@ segments:
       - [0x913E0, .data, race/position_markers]
       - [0x914A0, data] # also particle_items?
       - [0x916F0, data] # also race_hud?
-      - [0x91A60, data, race/race_effects]
+      - [0x91A60, .data, race/race_effects]
       - [0x91A70, data, race/spray_particles]
       - [0x91B60, data, race/obstacle_sprites]
       - [0x91B90, data, data/course_data]

@@ -367,6 +367,10 @@ extern s32 gFirstPlaceGoldReward[];
 extern s32 gSecondPlaceGoldReward[];
 extern s32 gThirdPlaceGoldReward[];
 
+u8 D_80090E60_91A60[] = {
+    0x0E, 0x12, 0x13, 0x25, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+};
+
 void initPlayerFinishPositionTask(FinishPositionDisplayState *arg0) {
     GameState *state;
     s32 index;
@@ -991,8 +995,6 @@ void updateCenteredSpritePopup(CenteredSpritePopupState *state) {
 void cleanupCenteredSpritePopupTask(CenteredSpritePopupState *state) {
     state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
-
-extern u8 D_80090E60_91A60[];
 
 void showPlacementAnnouncement(u32 playerIndex, s32 placement) {
     CenteredSpritePopupState *task;
