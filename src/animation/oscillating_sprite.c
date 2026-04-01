@@ -19,8 +19,15 @@ typedef struct {
     /* 0xF6 */ u16 rotationSpeed;
 } QuadDisplayListState;
 
-extern u8 D_80088640_89240[];
+extern u32 D_80088640_89240[];
 extern s32 D_8008C120_8CD20[];
+
+/* Data segment */
+/* 0x89240 */ u32 D_80088640_89240[] = { 0x00000000, 0x00000000, 0x01000490, 0x00000000 };
+
+/* 0x89250 */ u32 D_80088650[] = { 0x00000000, 0x010002B0, 0x010002C0, 0x00000000 };
+
+/* 0x89260 */ u32 D_80088660[] = { 0x00000000, 0x00000000, 0x010003B8, 0x00000000 };
 
 void updateQuadDisplayList(QuadDisplayListState *);
 void cleanupQuadDisplayList(QuadDisplayListElement *);
