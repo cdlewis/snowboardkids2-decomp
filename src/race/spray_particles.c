@@ -232,8 +232,6 @@ void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *);
 extern loadAssetMetadata_arg gGlintEffectAssetTemplate;
 extern loadAssetMetadata_arg gCharacterAttackEffectAssetTemplate;
 extern Vec3i gCharacterAttackEffectPositionOffsetsA;
-extern s32 D_80090F44_91B44;
-extern s32 D_80090F48_91B48;
 extern Vec3i gCharacterAttackEffectPositionOffsetsB;
 extern u8 gCharacterParticleTypeMap[];
 extern s16 gSkiTrailOffsetTransformsForward[];
@@ -887,12 +885,10 @@ void updateCharacterAttackEffect(CharacterAttackEffectState *arg0) {
 
     arg0->positionOffsets.x += gCharacterAttackEffectPositionOffsetsA.x;
     rm = &rotMatrix;
-    __asm__("");
-    arg0->positionOffsets.y += D_80090F44_91B44;
+    arg0->positionOffsets.y += gCharacterAttackEffectPositionOffsetsA.y;
     tf = &transformed;
     yOffset = 0x80000;
-    __asm__("");
-    arg0->positionOffsets.z += D_80090F48_91B48;
+    arg0->positionOffsets.z += gCharacterAttackEffectPositionOffsetsA.z;
 
     particle = arg0->particles;
     rotation = 0;
