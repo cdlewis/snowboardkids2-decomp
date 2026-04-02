@@ -406,11 +406,9 @@ def find_first_mismatch(
     or None if all match.
     """
     # Build VRAM to ROM address mapping from linker map
-    print(f"{Colors.BLUE}Parsing linker map...{Colors.RESET}")
     vram_to_rom_map = parse_vram_to_rom_map(map_path)
 
     # Get all symbols from ELF
-    print(f"{Colors.BLUE}Extracting symbols from ELF...{Colors.RESET}")
     elf_symbols = parse_map_symbols(elf_path)
 
     # Filter symbols and convert VRAM to ROM addresses
@@ -424,8 +422,6 @@ def find_first_mismatch(
     # Sort by ROM address
     valid_symbols.sort(key=lambda x: x[2])
 
-    print(f"{Colors.BLUE}Scanning {len(valid_symbols)} symbols for mismatches...{Colors.RESET}")
-
     checked = 0
     for name, vram, rom, size, dtype in valid_symbols:
         checked += 1
@@ -434,10 +430,6 @@ def find_first_mismatch(
         if not matches:
             print(f"\n{Colors.RED}{Colors.BOLD}Found mismatch at symbol #{checked}: {name}{Colors.RESET}")
             return (name, vram, rom, size, dtype, target_data, compiled_data)
-
-        # Progress indicator
-        if checked % 100 == 0:
-            print(f"  Checked {checked} symbols...", end='\r')
 
     print(f"\n{Colors.GREEN}{Colors.BOLD}✓ All {checked} symbols match!{Colors.RESET}")
     return None
@@ -590,7 +582,6 @@ Examples:
         sys.exit(1)
 
     # Load symbols from symbol_addrs.txt for single symbol lookup
-    print(f"{Colors.BLUE}Loading symbols from {symbol_addrs}...{Colors.RESET}")
     symbols = load_symbol_addrs(str(symbol_addrs))
 
     # Find the requested symbol
