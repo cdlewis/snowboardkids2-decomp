@@ -18,7 +18,7 @@ typedef struct {
     /* 0x0 */ s32 shortcutPosX;
     /* 0x4 */ s32 shortcutPosZ;
     /* 0x8 */ u16 yawOffset;
-    /* 0xA */ u8 padding[2];
+    /* 0xA */ s16 padding;
     /* 0xC */ Vec3i spawnPos;
     /* 0x18 */ ColorData lightColors;
     /* 0x20 */ ColorData fogColors;
