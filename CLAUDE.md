@@ -27,6 +27,8 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 - `python3 tools/check_pointer_arithmetic.py <file or directory>` detect pointer arithmetic with casts that should be replaced with struct field access. Use `--strict` to fail on violations.
 - `python3 tools/project_status.py` shows functions that are currently non-matching. Use this if `./tools/build-and-verify.sh` is failing and you're not sure which function is the problem.
 - `python3 tools/find_similar_functions.py <function id>` returns a list of similar functions to <function id>. This can provide a useful reference when trying to match code.
+- `python3 tools/data-differ/data_diff.py <symbol>` or `./tools/diff-data <symbol>` compares binary data between the target ROM and compiled output for a specific data symbol.
+- `python3 tools/data-differ/data_diff.py --find-first-mismatch` scans all data symbols in ROM order and shows the first one that doesn't match. Use this when the build fails to identify which data variable is causing the mismatch.
 
 ## Tasks
 
