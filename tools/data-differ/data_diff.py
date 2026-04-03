@@ -292,6 +292,43 @@ def guess_data_type(data: bytes, size: int) -> str:
         return f"u8[{size}]"
 
 
+def parse_asm_data_size(asm_data_dir: str, symbol_name: str) -> Optional[int]:
+    """
+    Parse asm/data/*.s file to find .size directive for a symbol.
+    Returns size in bytes, or None if not found.
+    """
+    import glob
+    import re
+
+    # Search for .s files in asm/data directory
+    pattern = os.path.join(asm_data_dir, "**/*.s")
+    for s_file in glob.glob(pattern, recursive=True):
+        try:
+            with open(s_file, 'r') as f:
+                content = f.read()
+
+            # Look for .size directive for this symbol
+            # Format: .size symbol_name, . - symbol_name
+            # Or: .size symbol_name, 0x10
+            for line in content.split('\n'):
+                line = line.strip()
+                if line.startswith('.size') and symbol_name in line:
+                    # Try hex size first: .size symbol, 0x10
+                    size_match = re.search(r'\.size\s+' + re.escape(symbol_name) + r',\s*0x([0-9a-fA-F]+)', line)
+                    if size_match:
+                        return int(size_match.group(1), 16)
+
+                    # Try decimal size: .size symbol, 16
+                    size_match = re.search(r'\.size\s+' + re.escape(symbol_name) + r',\s*(\d+)', line)
+                    if size_match:
+                        return int(size_match.group(1))
+
+        except (IOError, OSError):
+            continue
+
+    return None
+
+
 def format_value(data: bytes, data_type: Optional[str]) -> str:
     """Format data value based on type."""
     if data_type == 'char' or data_type == 'string':
@@ -605,18 +642,93 @@ Examples:
 
     vram_addr, rom_addr, size, data_type = symbols[symbol_name]
 
+    # Verify this is a data symbol, not a function
+    elf_file = Path(args.elf)
+    if elf_file.exists():
+        elf_symbols = parse_map_symbols(str(elf_file))
+        if symbol_name in elf_symbols:
+            # Symbol exists in ELF, verify it's an OBJECT (data), not FUNC
+            elf_vram, elf_size, _ = elf_symbols[symbol_name]
+            # parse_map_symbols only returns OBJECT symbols, so if we found it, it's data
+            # This is good - we can proceed
+        else:
+            # Symbol not in ELF as OBJECT, check if it's a function
+            # We need to check the raw ELF symbol table for FUNC type
+            import subprocess
+            try:
+                result = subprocess.run(
+                    ['readelf', '-s', '--wide', str(elf_file)],
+                    capture_output=True,
+                    text=True,
+                    check=True
+                )
+                for line in result.stdout.split('\n'):
+                    if symbol_name in line and 'FUNC' in line:
+                        print(f"{Colors.YELLOW}Warning: '{symbol_name}' appears to be a function (FUNC), not a data symbol.{Colors.RESET}", file=sys.stderr)
+                        print(f"{Colors.YELLOW}This tool is for comparing data symbols. Use asm-differ/diff.py for functions.{Colors.RESET}", file=sys.stderr)
+                        sys.exit(1)
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                pass
+
+    # Determine size and size source (priority: symbol_addrs -> ELF -> asm/data -> --size arg)
+    size_source = "symbol_addrs.txt"  # Default if size is already set
+
     # Use override size if provided
     if args.size is not None:
         size = args.size
+        size_source = "command line"
+    # If no size in symbol_addrs.txt, try to find it from ELF or asm/data
+    elif size is None:
+        size_source = None
 
-    if size is None:
-        print(f"{Colors.RED}Error: No size specified for symbol '{symbol_name}'. Use --size to specify.{Colors.RESET}", file=sys.stderr)
-        sys.exit(1)
+        # Try ELF symbol table
+        elf_file = Path(args.elf)
+        if elf_file.exists():
+            elf_symbols = parse_map_symbols(str(elf_file))
+            if symbol_name in elf_symbols:
+                elf_vram, elf_size, _ = elf_symbols[symbol_name]
+                size = elf_size
+                size_source = "ELF symbol table"
+
+        # Try asm/data files
+        if size is None:
+            asm_data_dir = Path("asm/data")
+            if asm_data_dir.exists():
+                asm_size = parse_asm_data_size(str(asm_data_dir), symbol_name)
+                if asm_size is not None:
+                    size = asm_size
+                    size_source = "asm/data file"
+
+        # If still no size, error out
+        if size is None:
+            print(f"{Colors.RED}Error: No size specified for symbol '{symbol_name}'.{Colors.RESET}", file=sys.stderr)
+            print(f"{Colors.YELLOW}Hint: Add 'size:0xXX' to symbol_addrs.txt, use --size, or ensure the symbol is in the ELF.{Colors.RESET}", file=sys.stderr)
+            sys.exit(1)
 
     print(f"{Colors.BOLD}Symbol: {symbol_name}{Colors.RESET}")
     print(f"  VRAM:  0x{vram_addr:08x}")
+
+    # Determine ROM address if not specified
+    if rom_addr is None:
+        # Try to get ROM address from VRAM using the map file
+        if map_file.exists():
+            vram_to_rom_map = parse_vram_to_rom_map(str(map_file))
+            rom_addr = get_rom_for_vram(vram_addr, vram_to_rom_map)
+            if rom_addr is not None:
+                rom_source = "linker map"
+            else:
+                print(f"{Colors.RED}Error: Could not determine ROM address for '{symbol_name}'.{Colors.RESET}", file=sys.stderr)
+                print(f"{Colors.YELLOW}Hint: Add 'rom:0xXX' to symbol_addrs.txt{Colors.RESET}", file=sys.stderr)
+                sys.exit(1)
+        else:
+            print(f"{Colors.RED}Error: No ROM address specified for '{symbol_name}'.{Colors.RESET}", file=sys.stderr)
+            print(f"{Colors.YELLOW}Hint: Add 'rom:0xXX' to symbol_addrs.txt{Colors.RESET}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        rom_source = "symbol_addrs.txt"
+
     print(f"  ROM:   0x{rom_addr:08x}")
-    print(f"  Size:  0x{size:x} ({size} bytes)")
+    print(f"  Size:  0x{size:x} ({size} bytes){Colors.CYAN} (from {size_source}){Colors.RESET}")
     if data_type:
         print(f"  Type:  {data_type}")
     print()
