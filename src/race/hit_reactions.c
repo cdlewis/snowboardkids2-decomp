@@ -3,7 +3,7 @@
 #include "gamestate.h"
 #include "math/geometry.h"
 #include "math/rand.h"
-#include "particle_items.h"
+#include "race/particle_items.h"
 #include "race/race_session.h"
 #include "race/track_height.h"
 

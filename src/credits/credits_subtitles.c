@@ -1,4 +1,4 @@
-#include "credits_subtitles.h"
+#include "credits/credits_subtitles.h"
 #include "animation/easing_state.h"
 #include "common.h"
 #include "graphics/graphics.h"

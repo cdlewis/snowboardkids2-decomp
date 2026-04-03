@@ -1,4 +1,4 @@
-#include "session_manager.h"
+#include "core/session_manager.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "common.h"

@@ -1,4 +1,4 @@
-#include "credits_decorations.h"
+#include "credits/credits_decorations.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ui/options_menu.h"
-#include "particle_items.h"
+#include "race/particle_items.h"
 #include "race/race_hud.h"
 #include "race/track_collision.h"
 #include "graphics/sprite_table.h"
