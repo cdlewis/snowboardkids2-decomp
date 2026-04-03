@@ -9,8 +9,6 @@
 #define SCHEDULER_STATE_DMA_PENDING 3
 #define SCHEDULER_STATE_CLEANUP 4
 
-extern Node *gDMAOverlay;
-
 typedef struct {
     /* 0x00 */ Node n;
     u8 padding[0xFC]; // probably the max possible payload
@@ -53,7 +51,6 @@ typedef struct gActiveScheduler_type {
     s16 returnValue;
     s16 childSchedulerCount;
 } gActiveScheduler_type;
-extern gActiveScheduler_type *gActiveScheduler;
 
 extern TaskNode gSchedulerPool[16];
 extern gActiveScheduler_type gSchedulerListSentinel;
@@ -61,6 +58,9 @@ extern TaskNode *gFreeSchedulerList;
 extern gActiveScheduler_type *gActiveSchedulerList;
 extern s32 gFrameCounter;
 extern s32 gBufferedFrameCounter;
+
+gActiveScheduler_type *gActiveScheduler = NULL;
+Node *gDMAOverlay = NULL;
 
 void initTaskScheduler(void) {
     s32 i;
