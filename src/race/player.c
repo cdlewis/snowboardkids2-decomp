@@ -173,7 +173,6 @@ typedef struct {
 } channel_t;
 
 typedef u8 *(*player_command_func)(channel_t *, u8 *);
-extern player_command_func player_commands_jumptable[];
 
 extern ALGlobals __libmus_alglobals;
 extern ALVoice *mus_voices;
@@ -213,6 +212,48 @@ void __MusIntGetNewNote(channel_t *cp, int x);
 void __MusIntProcessContinuousVolume(channel_t *cp);
 void __MusIntProcessContinuousPitchBend(channel_t *cp);
 u8 *Fstop(channel_t *cp, u8 *ptr);
+u8 *Fwave(channel_t *cp, u8 *ptr);
+u8 *Fport(channel_t *cp, u8 *ptr);
+u8 *Fportoff(channel_t *cp, u8 *ptr);
+u8 *Fdefa(channel_t *cp, u8 *ptr);
+u8 *Ftempo(channel_t *cp, u8 *ptr);
+u8 *Fcutoff(channel_t *cp, u8 *ptr);
+u8 *Fendit(channel_t *cp, u8 *ptr);
+u8 *Fvibup(channel_t *cp, u8 *ptr);
+u8 *Fvibdown(channel_t *cp, u8 *ptr);
+u8 *Fviboff(channel_t *cp, u8 *ptr);
+u8 *Flength(channel_t *cp, u8 *ptr);
+u8 *Fignore(channel_t *cp, u8 *ptr);
+u8 *Ftrans(channel_t *cp, u8 *ptr);
+u8 *Fignore_trans(channel_t *cp, u8 *ptr);
+u8 *Fdistort(channel_t *cp, u8 *ptr);
+u8 *Fenvelope(channel_t *cp, u8 *ptr);
+u8 *Fenvoff(channel_t *cp, u8 *ptr);
+u8 *Fenvon(channel_t *cp, u8 *ptr);
+u8 *Ftroff(channel_t *cp, u8 *ptr);
+u8 *Ftron(channel_t *cp, u8 *ptr);
+u8 *Ffor(channel_t *cp, u8 *ptr);
+u8 *Fnext(channel_t *cp, u8 *ptr);
+u8 *Fwobble(channel_t *cp, u8 *ptr);
+u8 *Fwobbleoff(channel_t *cp, u8 *ptr);
+u8 *Fvelon(channel_t *cp, u8 *ptr);
+u8 *Fveloff(channel_t *cp, u8 *ptr);
+u8 *Fvelocity(channel_t *cp, u8 *ptr);
+u8 *Fpan(channel_t *cp, u8 *ptr);
+u8 *Fstereo(channel_t *cp, u8 *ptr);
+u8 *Fdrums(channel_t *cp, u8 *ptr);
+u8 *Fdrumsoff(channel_t *cp, u8 *ptr);
+u8 *Fprint(channel_t *cp, u8 *ptr);
+u8 *Fgoto(channel_t *cp, u8 *ptr);
+u8 *Freverb(channel_t *cp, u8 *ptr);
+u8 *FrandNote(channel_t *cp, u8 *ptr);
+u8 *FrandVolume(channel_t *cp, u8 *ptr);
+u8 *FrandPan(channel_t *cp, u8 *ptr);
+u8 *Fvolume(channel_t *cp, u8 *ptr);
+u8 *Fstartfx(channel_t *cp, u8 *ptr);
+u8 *Fbendrange(channel_t *cp, u8 *ptr);
+u8 *Fsweep(channel_t *cp, u8 *ptr);
+u8 *Fchangefx(channel_t *cp, u8 *ptr);
 void __MusIntProcessEnvelope(channel_t *cp);
 void processPanSweep(channel_t *cp);
 f32 calculateVibratoModulation(channel_t *cp);
@@ -237,6 +278,13 @@ s32 musFifoEnqueue(u8 *);
 u32 startSoundEffect(s32, s32, s32, s32, s32);
 u32 startSoundEffectWithHandle(s32, s32, s32, s32, s32);
 s32 __MusIntRandom(s32);
+
+player_command_func player_commands_jumptable[] = {
+    Fstop,   Fwave,   Fport,      Fportoff,      Fdefa,    Ftempo,    Fcutoff,  Fendit,     Fvibup, Fvibdown,  Fviboff,
+    Flength, Fignore, Ftrans,     Fignore_trans, Fdistort, Fenvelope, Fenvoff,  Fenvon,     Ftroff, Ftron,     Ffor,
+    Fnext,   Fwobble, Fwobbleoff, Fvelon,        Fveloff,  Fvelocity, Fpan,     Fstereo,    Fdrums, Fdrumsoff, Fprint,
+    Fgoto,   Freverb, FrandNote,  FrandVolume,   FrandPan, Fvolume,   Fstartfx, Fbendrange, Fsweep, Fchangefx
+};
 
 u8 *Fstop(channel_t *cp, u8 *ptr) {
     cp->pvolume = NULL;

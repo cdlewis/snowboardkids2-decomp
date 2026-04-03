@@ -389,7 +389,7 @@ segments:
       - [0x9B9F0, data, graphics/graphics]
       - [0x9BBF0, .data, system/thread_manager]
       - [0x9BC30, .data, audio/audio_manager]
-      - [0x9BC50, data, race/player]
+      - [0x9BC50, .data, race/player]
       - [0x9BD00, lib, libmus, player_fx, .data]
       - [0x9BF10, lib, libgultra_rom, sins, .data]
       - [0x9C710, lib, libgultra_rom, thread, .data]
