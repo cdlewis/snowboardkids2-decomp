@@ -4,8 +4,21 @@
 #include "data/data_table.h"
 #include "graphics/graphics.h"
 
+#include "gbi.h"
+
 extern s32 gFontTextureData;
 extern s32 gFontPaletteBase;
+
+Gfx gFontDisplayListSetup[] = {
+    gsDPPipeSync(),
+    gsDPSetCycleType(G_CYC_1CYCLE),
+    gsDPSetTexturePersp(G_TP_NONE),
+    gsDPSetTextureFilter(G_TF_POINT),
+    gsDPSetTextureLUT(G_TT_RGBA16),
+    gsDPSetCombineLERP(1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0),
+    gsDPSetRenderMode(G_RM_AA_TEX_TERR, G_RM_AA_TEX_TERR2),
+    gsSPEndDisplayList(),
+};
 
 void loadFontAssetsFromDataTable(DataTable_19E80 *dataTable) {
     OutputStruct_19E80 result;

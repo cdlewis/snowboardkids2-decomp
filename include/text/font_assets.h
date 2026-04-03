@@ -3,6 +3,10 @@
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 
+#include "gbi.h"
+
+extern Gfx gFontDisplayListSetup[];
+
 typedef struct {
     u16 x;
     u16 y;
