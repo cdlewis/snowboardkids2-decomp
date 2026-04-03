@@ -2292,7 +2292,35 @@ segments:
     vram: 0
     start: 0x3F86A0
 
-  - [0x3F8B90, bin]
+  - name: _3F8B90
+    type: bin
+    vram: 0
+    start: 0x3F8B90
+
+  - name: _3F9110
+    type: bin
+    vram: 0
+    start: 0x3F9110
+
+  - name: _3F9710
+    type: bin
+    vram: 0
+    start: 0x3F9710
+
+  - name: _3F9B90
+    type: bin
+    vram: 0
+    start: 0x3F9B90
+
+  - name: _3FA1A0
+    type: bin
+    vram: 0
+    start: 0x3FA1A0
+
+  - name: _3FA830
+    type: bin
+    vram: 0
+    start: 0x3FA830
 
   - name: _3FAE90
     type: bin
