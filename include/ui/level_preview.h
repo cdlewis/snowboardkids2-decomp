@@ -161,7 +161,7 @@ typedef struct {
     void *spriteSheetAsset;
 } CharacterSelectionIconState;
 
-void func_80020B44_21744(CharacterSelectDisplayState *);
+void initCharacterSelectDisplay(CharacterSelectDisplayState *);
 void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0);
 void initUnlockNotification(UnlockNotificationState *state);
 void initLevelPreviewPortraits(LevelPreviewPortraitState *state);

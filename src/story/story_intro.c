@@ -205,7 +205,7 @@ void initLevelSelectState(void) {
     setViewportFadeValue(&state->viewportParentNode, 0, 0);
     setViewportFadeValue(&state->previewNode, 0xFF, 0);
 
-    scheduleTask(func_80020B44_21744, 1, 0, 0x5A);
+    scheduleTask(initCharacterSelectDisplay, 1, 0, 0x5A);
     scheduleTask(initUnlockNotification, 1, 0, 0x5A);
     scheduleTask(initLevelPreviewPortraits, 1, 0, 0x5B);
     scheduleTask(initMenuCharacterModel, 1, 0, 0x5B);

@@ -30,8 +30,8 @@ u16 sLevelPreviewDurations[] = { 0x0618, 0x0672, 0x03DE, 0x03DE, 0x0708, 0x01E0,
 u8 characterStartWaypoints[] = { 0x18, 0x0C, 0x4B, 0x4B, 0x0B, 0x43, 0x52, 0x52,
                                  0x16, 0x08, 0x23, 0x23, 0x62, 0x62, 0x12, 0x12 };
 
-s16 D_8008DA00_8E600[] = { 0xFFE0, 0xFF98, 0xFF80, 0xFFA8, 0xFF80, 0xFFB8, 0xFF80, 0xFFC8, 0xFF80, 0xFFD8,
-                           0xFF90, 0xFFE8, 0x0058, 0xFFE8, 0xFF90, 0x0048, 0xFF90, 0x0058, 0x0000, 0x0048 };
+s16 characterSelectIconPositions[] = { 0xFFE0, 0xFF98, 0xFF80, 0xFFA8, 0xFF80, 0xFFB8, 0xFF80, 0xFFC8, 0xFF80, 0xFFD8,
+                                       0xFF90, 0xFFE8, 0x0058, 0xFFE8, 0xFF90, 0x0048, 0xFF90, 0x0058, 0x0000, 0x0048 };
 
 u8 portraitTextureData[] = { 0xFF, 0x94, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
                              0xFF, 0x00, 0x6C, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x34, 0x00, 0x00, 0x00, 0xFF, 0xFF,
@@ -905,7 +905,7 @@ void cleanupLevelPreviewPortraits(LevelPreviewPortraitState *state) {
     state->portraitAsset = freeNodeMemory(state->portraitAsset);
 }
 
-void func_80020B44_21744(CharacterSelectDisplayState *state) {
+void initCharacterSelectDisplay(CharacterSelectDisplayState *state) {
     void *portraitAsset;
     void *fontAsset;
     s32 i;
@@ -916,8 +916,8 @@ void func_80020B44_21744(CharacterSelectDisplayState *state) {
     setCleanupCallback(cleanupCharacterSelectionIcons);
 
     for (i = 0; i < 10; i++) {
-        state->iconEntries[i].x = D_8008DA00_8E600[i * 2];
-        state->iconEntries[i].y = D_8008DA00_8E600[i * 2 + 1];
+        state->iconEntries[i].x = characterSelectIconPositions[i * 2];
+        state->iconEntries[i].y = characterSelectIconPositions[i * 2 + 1];
         if (i == 9) {
             state->iconEntries[9].frameIndex = i;
         } else {
