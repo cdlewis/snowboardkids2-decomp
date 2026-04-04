@@ -163,15 +163,15 @@ def is_data_file(asm_path: Path) -> bool:
         return False
 
 
-def load_decompme_scratches(scratches_path: Path) -> Dict[str, int]:
+def load_decompme_scratches(scratches_path: Path) -> Dict[str, float]:
     """
-    Load decomp.me scratches and build a lookup dict of function name -> best score.
+    Load decomp.me scratches and build a lookup dict of function name -> best match percentage.
 
     Args:
         scratches_path: Path to the scratches.json file
 
     Returns:
-        Dict mapping function name to best (lowest) score, or empty dict if file not found
+        Dict mapping function name to best (highest) match percentage, or empty dict if file not found
     """
     if not scratches_path.exists():
         return {}
@@ -180,31 +180,34 @@ def load_decompme_scratches(scratches_path: Path) -> Dict[str, int]:
         with open(scratches_path, 'r') as f:
             scratches = json.load(f)
 
-        # Build mapping: function_name -> best (lowest) score
+        # Build mapping: function_name -> best (highest) percentage
         # Multiple scratches may exist for the same function; keep the best one
-        result: Dict[str, int] = {}
+        result: Dict[str, float] = {}
         for scratch in scratches:
             name = scratch.get('name')
             score = scratch.get('score')
-            if name and score is not None:
-                if name not in result or score < result[name]:
-                    result[name] = score
+            max_score = scratch.get('max_score')
+            if name is not None and score is not None and max_score is not None and max_score > 0:
+                # Calculate match percentage
+                percentage = ((max_score - score) / max_score) * 100
+                if name not in result or percentage > result[name]:
+                    result[name] = percentage
 
         return result
     except (IOError, json.JSONDecodeError):
         return {}
 
 
-def find_promising_functions(repo_root: Path, decompme_scratches: Dict[str, int]) -> List[Tuple[str, float, int, Optional[int]]]:
+def find_promising_functions(repo_root: Path, decompme_scratches: Dict[str, float]) -> List[Tuple[str, float, int, Optional[float]]]:
     """
     Find all functions with their best match percentages and instruction counts.
 
     Args:
         repo_root: Root directory of the repository
-        decompme_scratches: Dict mapping function name to best decomp.me score
+        decompme_scratches: Dict mapping function name to best decomp.me match percentage
 
     Returns:
-        List of (function_name, best_match_percentage, instruction_count, decompme_score) tuples,
+        List of (function_name, best_match_percentage, instruction_count, decompme_percentage) tuples,
         sorted by percentage descending
     """
     nonmatchings_dir = repo_root / 'nonmatchings'
@@ -212,8 +215,8 @@ def find_promising_functions(repo_root: Path, decompme_scratches: Dict[str, int]
     asm_nonmatchings = repo_root / 'asm' / 'nonmatchings'
 
     # Dictionary to track best attempt for each base function
-    # Key: base function name, Value: (full function name, percentage, instruction_count, decompme_score)
-    best_attempts: Dict[str, Tuple[str, float, int, Optional[int]]] = {}
+    # Key: base function name, Value: (full function name, percentage, instruction_count, decompme_percentage)
+    best_attempts: Dict[str, Tuple[str, float, int, Optional[float]]] = {}
 
     # Find all match_log.txt files
     for match_log in nonmatchings_dir.rglob('match_log.txt'):
@@ -238,13 +241,13 @@ def find_promising_functions(repo_root: Path, decompme_scratches: Dict[str, int]
 
             instruction_count = count_asm_instructions(asm_file) if asm_file else 0
 
-            # Look up decomp.me score for this function
-            decompme_score = decompme_scratches.get(base_name)
+            # Look up decomp.me percentage for this function
+            decompme_percentage = decompme_scratches.get(base_name)
 
             # Keep only the best attempt for each base function
             if (base_name not in best_attempts or
                 best_match > best_attempts[base_name][1]):
-                best_attempts[base_name] = (function_name, best_match, instruction_count, decompme_score)
+                best_attempts[base_name] = (function_name, best_match, instruction_count, decompme_percentage)
 
     # Convert to list and sort by percentage descending
     results = list(best_attempts.values())
@@ -255,8 +258,8 @@ def find_promising_functions(repo_root: Path, decompme_scratches: Dict[str, int]
 
 def find_untouched_functions(
     repo_root: Path,
-    promising_functions: List[Tuple[str, float, int, Optional[int]]],
-    decompme_scratches: Dict[str, int]
+    promising_functions: List[Tuple[str, float, int, Optional[float]]],
+    decompme_scratches: Dict[str, float]
 ) -> List[Tuple[str, int]]:
     """
     Find functions that have no local attempts and no decomp.me scratches.
@@ -332,16 +335,20 @@ def main():
         return 0
 
     # Print header
-    print(f"{'Function Name':<40} {'Ins':>5} {'Best Match %':>12}  {'decomp.me':<15}")
-    print("-" * 78)
+    print(f"{'Function Name':<40} {'Ins':>5} {'Best Match %':>12}  {'decomp.me':<20}")
+    print("-" * 83)
 
     # Print results
-    for function_name, percentage, instruction_count, decompme_score in functions:
-        if decompme_score is not None:
-            decompme_str = f"{FROG_EMOJI} ({decompme_score})"
+    for function_name, percentage, instruction_count, decompme_percentage in functions:
+        if decompme_percentage is not None:
+            # Use mushroom emoji if local match is better than decomp.me
+            if percentage > decompme_percentage:
+                decompme_str = f"🍄 ({decompme_percentage:.2f}%)"
+            else:
+                decompme_str = f"({decompme_percentage:.2f}%)"
         else:
             decompme_str = ""
-        print(f"{function_name:<40} {instruction_count:>4} {percentage:>11.2f}%  {decompme_str:<15}")
+        print(f"{function_name:<40} {instruction_count:>4} {percentage:>11.2f}%  {decompme_str:<20}")
 
     print(f"\nTotal: {len(functions)} unmatched functions with attempts")
 
