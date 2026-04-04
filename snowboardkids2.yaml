@@ -386,7 +386,7 @@ segments:
       - [0x9B460, .data, system/task_scheduler]
       - [0x9B470, .data, math/geometry_data]
       - [0x9B9E0, data] # lots of stuff under race/
-      - [0x9B9F0, data, graphics/graphics]
+      - [0x9B9F0, .data, graphics/graphics]
       - [0x9BBF0, .data, system/thread_manager]
       - [0x9BC30, .data, audio/audio_manager]
       - [0x9BC50, .data, race/player]

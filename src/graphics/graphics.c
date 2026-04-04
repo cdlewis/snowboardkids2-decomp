@@ -18,6 +18,9 @@
 // Array view of arena regions [gLinearArenaRegions, gLinearArenaBuffer]
 #define gLinearArenaRegionsArray ((s32 *)&gLinearArenaRegions)
 
+// gCallbackEntrySegment overlaps with the lower 2 bytes of gCurrentDoubleBufferIndex
+#define gCallbackEntrySegment (*(u16 *)((u8 *)&gCurrentDoubleBufferIndex + 2))
+
 typedef struct Node {
     struct Node *next;
     void *callback;
@@ -114,12 +117,119 @@ typedef struct {
     s16 offsetY;
 } TextClipAndOffsetData;
 
+// Data segment definitions
+
+Gfx gInitDisplayList[] = {
+    gsDPPipeSync(),
+    gsDPSetEnvColor(0, 0, 0, 0),
+    gsDPSetPrimColor(0, 0, 0, 0, 0, 0),
+    gsDPSetBlendColor(0, 0, 0, 0),
+    gsDPSetFogColor(0, 0, 0, 0),
+    gsDPSetFillColor(0),
+    gsDPSetPrimDepth(0, 0),
+    gsDPSetConvert(0, 0, 0, 0, 0, 0),
+    gsDPSetKeyR(0, 0, 0),
+    gsDPSetKeyGB(0, 0, 0, 0, 0, 0),
+    gsDPNoOp(),
+    gsDPSetTileSize(0, 0, 0, 0, 0),
+    gsDPSetTileSize(1, 0, 0, 0, 0),
+    gsDPSetTileSize(2, 0, 0, 0, 0),
+    gsDPSetTileSize(3, 0, 0, 0, 0),
+    gsDPSetTileSize(4, 0, 0, 0, 0),
+    gsDPSetTileSize(5, 0, 0, 0, 0),
+    gsDPSetTileSize(6, 0, 0, 0, 0),
+    gsDPSetTileSize(7, 0, 0, 0, 0),
+    gsDPSetTile(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+    gsDPSetTile(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0),
+    gsDPSetTile(0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0),
+    gsDPSetTile(0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0),
+    gsDPSetTile(0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0),
+    gsDPSetTile(0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0),
+    gsDPSetTile(0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0),
+    gsDPSetTile(0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0),
+    gsSPEndDisplayList(),
+};
+
+Gfx gDefaultRenderDisplayList[] = {
+    gsDPPipeSync(),
+    gsDPPipelineMode(G_PM_NPRIMITIVE),
+    gsDPSetCombineKey(G_CK_NONE),
+    gsDPSetTextureConvert(G_TC_FILT),
+    gsDPSetDepthSource(G_ZS_PIXEL),
+    gsDPSetAlphaCompare(G_AC_NONE),
+    gsDPSetColorDither(G_CD_MAGICSQ),
+    gsDPSetAlphaDither(G_AD_DISABLE),
+    gsDPSetTextureLOD(G_TL_TILE),
+    gsDPSetTextureDetail(G_TD_CLAMP),
+    gsSPEndDisplayList(),
+};
+
+u32 D_8009AF28_9BB28[] = {
+    0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+};
+
+Gfx gFadeOverlayDisplayList[] = {
+    gsDPPipeSync(),
+    gsDPSetColorDither(G_CD_DISABLE),
+    gsDPSetCycleType(G_CYC_1CYCLE),
+    gsDPSetTexturePersp(G_TP_NONE),
+    gsDPSetTextureFilter(G_TF_POINT),
+    gsDPSetTextureLUT(G_TT_NONE),
+    gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
+    gsDPSetRenderMode(G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2),
+    gsDPSetTextureImage(G_IM_FMT_I, G_IM_SIZ_8b, 8, D_8009AF28_9BB28),
+    gsDPSetTile(
+        G_IM_FMT_I,
+        G_IM_SIZ_8b,
+        1,
+        0,
+        G_TX_LOADTILE,
+        0,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        2,
+        G_TX_NOLOD,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        4,
+        G_TX_NOLOD
+    ),
+    gsDPLoadSync(),
+    gsDPLoadTile(G_TX_LOADTILE, 0, 0, 32, 16),
+    gsDPPipeSync(),
+    gsDPSetTile(
+        G_IM_FMT_I,
+        G_IM_SIZ_4b,
+        1,
+        0,
+        G_TX_RENDERTILE,
+        0,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        2,
+        G_TX_NOLOD,
+        G_TX_NOMIRROR | G_TX_WRAP,
+        4,
+        G_TX_NOLOD
+    ),
+    gsDPSetTileSize(G_TX_RENDERTILE, 0, 0, 64, 16),
+    gsSPEndDisplayList(),
+};
+
+s32 gCurrentDoubleBufferIndex = 0;
+s32 gCurrentDisplayBufferIndex = 0;
+s32 gFrameSkipCounter = 0;
+u32 __additional_scanline_0 = 0;
+
+UcodeEntry microcodeGroups[] = {
+    { (u64 *)0x800854E0, (u64 *)0x8009D530 },
+    { (u64 *)0x80086DA0, (u64 *)0x8009D8C0 },
+};
+
+u8 gNeedsDisplayListInit = 1;
+
 extern void *gDisplayBufferMsgs;
 extern s32 D_800A35C8_A41C8[];
 extern s16 gViewportOriginY;
 extern s16 gViewportOriginX;
 extern Item_A4188 *D_800A3588_A4188[];
-extern u32 __additional_scanline_0;
 extern s32 gRegionAllocEnd;
 extern void **gLinearArenaRegions;
 extern Gfx *gRegionAllocPtr;
@@ -135,34 +245,17 @@ extern void *gLinearArenaBuffer;
 extern u8 gDisplayFramePending;
 extern void *gGraphicsArenaPtrs[];
 extern void *gGraphicsArena0;
-extern s32 gCurrentDoubleBufferIndex;
-extern s32 gCurrentDisplayBufferIndex;
-
 extern s32 gFrameCounter;
 extern gActiveViewport_type *gActiveViewport;
-
-extern s32 gFrameSkipCounter;
-
 extern void *gDramStack;
 extern void *gOutputBuffer;
 extern void *gYieldBuffer;
-
-extern Gfx gDefaultRenderDisplayList[];
-extern UcodeEntry microcodeGroups[];
-extern Gfx gInitDisplayList[];
-
-extern Gfx gFadeOverlayDisplayList[];
-extern u16 gCallbackEntrySegment;
-
-extern u8 gNeedsDisplayListInit;
-
 extern ViewportNode *gLastViewportInGroup;
 extern s32 gCallbackCounter;
 extern s16 gCurrentPoolIndex;
 extern s16 gGraphicsMode;
 extern s16 gTextureEnabled;
 extern OSMesgQueue mainMessageQueue;
-
 extern void *gLookAtPtr;
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 
@@ -172,10 +265,8 @@ void updateViewportBounds(void);
 void initViewportCallbackPool(ViewportNode *);
 s32 isRegionAllocSpaceLow(void);
 void resetLinearAllocator(void);
-
 void *LinearAlloc(size_t size);
 void restoreViewportOffsets(void);
-
 void initGraphicsSystem(void);
 void initGraphicsArenas(void);
 void initLinearAllocator(void);
