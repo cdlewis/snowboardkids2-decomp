@@ -1,9 +1,11 @@
 #pragma once
 
-#include "cutscene/1DFAA0.h"
 #include "common.h"
+#include "cutscene/1DFAA0.h"
 #include "graphics/displaylist.h"
+#include "graphics/sprite_rdp.h"
 #include "math/geometry.h"
+#include "text/font_assets.h"
 
 typedef struct {
     s32 posX;              // 0x00
@@ -127,7 +129,39 @@ typedef struct {
     void *effectAsset;
 } MenuBackgroundEffectState;
 
-void func_80020B44_21744(void);
+typedef struct {
+    s16 x;
+    s16 y;
+    void *spriteData;
+    u16 frameIndex;
+    u16 paletteAlpha;
+    u8 tileMode;
+    u8 overridePaletteCount;
+    u8 transparency;
+    u8 _padF;
+} TextSpriteEntry;
+
+typedef struct {
+    SpriteRenderArg iconEntries[10];
+    SpriteRenderArg sprite78;
+    SpriteRenderArg sprite84;
+    SpriteRenderArg sprite90;
+    SpriteRenderArg sprite9C;
+    TextSpriteEntry textEntries[4];
+    TextData textPaletteData;
+    char numBuffer[2];
+    u16 textAlpha;
+    u8 animTimer;
+} CharacterSelectDisplayState;
+
+typedef struct {
+    void *unk0;
+    void *portraitAsset;
+    u8 _pad8[0x98];
+    void *spriteSheetAsset;
+} CharacterSelectionIconState;
+
+void func_80020B44_21744(CharacterSelectDisplayState *);
 void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0);
 void initUnlockNotification(UnlockNotificationState *state);
 void initLevelPreviewPortraits(LevelPreviewPortraitState *state);
@@ -160,3 +194,5 @@ void initMenuBackgroundEffect(MenuBackgroundEffectState *state);
 void initMinigameDescText(MinigameDescTextState *state);
 void initLevelSelectTransition(void);
 void cleanupLevelPreviewCharacter(LevelPreviewCharacterState *state);
+void cleanupCharacterSelectionIcons(CharacterSelectionIconState *state);
+void renderCharacterSelectDisplay(CharacterSelectDisplayState *state);

@@ -8,11 +8,10 @@
 #include "font_encoding.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
-#include "graphics/sprite_rdp.h"
 #include "math/geometry.h"
 #include "race/race_session.h"
+#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
-#include "text/font_assets.h"
 #include "text/font_render.h"
 #include "text/hud_text.h"
 #include "ui/level_preview_3d.h"
@@ -85,13 +84,6 @@ typedef struct {
     u8 unkB46;
     u8 unkB47;
 } Allocation_202A0;
-
-typedef struct {
-    void *unk0;
-    void *portraitAsset;
-    u8 _pad8[0x98];
-    void *spriteSheetAsset;
-} CharacterSelectionIconState;
 
 typedef struct {
     u8 _pad0[0x48A];
@@ -913,32 +905,62 @@ void cleanupLevelPreviewPortraits(LevelPreviewPortraitState *state) {
     state->portraitAsset = freeNodeMemory(state->portraitAsset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/ui/level_preview", func_80020B44_21744);
+void func_80020B44_21744(CharacterSelectDisplayState *state) {
+    void *portraitAsset;
+    void *fontAsset;
+    s32 i;
+    s32 row;
 
-typedef struct {
-    s16 x;
-    s16 y;
-    void *spriteData;
-    u16 frameIndex;
-    u16 paletteAlpha;
-    u8 tileMode;
-    u8 overridePaletteCount;
-    u8 transparency;
-    u8 _padF;
-} TextSpriteEntry;
+    portraitAsset = loadCompressedData(&_43A000_ROM_START, &_43A000_ROM_END, 0xB198);
+    fontAsset = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    setCleanupCallback(cleanupCharacterSelectionIcons);
 
-typedef struct {
-    SpriteRenderArg iconEntries[10];
-    SpriteRenderArg sprite78;
-    SpriteRenderArg sprite84;
-    SpriteRenderArg sprite90;
-    SpriteRenderArg sprite9C;
-    TextSpriteEntry textEntries[4];
-    TextData textPaletteData;
-    char numBuffer[2];
-    u16 textAlpha;
-    u8 animTimer;
-} CharacterSelectDisplayState;
+    for (i = 0; i < 10; i++) {
+        state->iconEntries[i].x = D_8008DA00_8E600[i * 2];
+        state->iconEntries[i].y = D_8008DA00_8E600[i * 2 + 1];
+        if (i == 9) {
+            state->iconEntries[9].frameIndex = i;
+        } else {
+            state->iconEntries[i].frameIndex = i;
+        }
+        state->iconEntries[i].spriteData = portraitAsset;
+    }
+
+    state->sprite78.x = -0x24;
+    state->sprite78.y = 0x38;
+    state->sprite78.frameIndex = 0xC;
+    state->sprite84.frameIndex = 0xD;
+    state->sprite90.x = -0x10;
+    state->sprite90.y = -0x64;
+    state->sprite90.frameIndex = 0xE;
+    state->sprite78.spriteData = portraitAsset;
+    state->sprite84.x = -0x24;
+    state->sprite84.y = 0x38;
+    state->sprite84.spriteData = portraitAsset;
+    state->sprite90.spriteData = portraitAsset;
+    state->sprite9C.x = 0;
+    state->sprite9C.y = -0x4C;
+    state->textPaletteData.x = 8;
+    state->sprite9C.spriteData = fontAsset;
+    state->textPaletteData.y = -0x4C;
+    state->textPaletteData.palette = 0;
+    state->textPaletteData.string = (u8 *)state->numBuffer;
+
+    for (i = 0; i < 4; i++) {
+        row = i / 2;
+        state->textEntries[i].x = (i & 1) * 0xE8 - 0x7C;
+        state->textEntries[i].y = row * 0x2C - 0x58;
+        state->textEntries[i].spriteData = portraitAsset;
+        state->textEntries[i].frameIndex = row + 0xA;
+        state->textEntries[i].paletteAlpha = 0xFF;
+        state->textEntries[i].tileMode = 0;
+        state->textEntries[i].overridePaletteCount = 0;
+    }
+
+    state->animTimer = 0;
+    state->textAlpha = 0xFF;
+    setCallback(renderCharacterSelectDisplay);
+}
 
 void renderCharacterSelectDisplay(CharacterSelectDisplayState *state) {
     Allocation_202A0 *allocation;

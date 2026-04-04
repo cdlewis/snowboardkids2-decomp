@@ -1,5 +1,5 @@
-#include "data/data_table.h"
 #include "common.h"
+#include "data/data_table.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 
@@ -8,9 +8,10 @@
 extern Gfx gFontDisplayListSetup[];
 
 typedef struct {
-    u16 x;
-    u16 y;
-    u16 palette;
+    s16 x;
+    s16 y;
+    s16 palette;
+    u8 _pad6[2];
     u8 *string;
 } TextData;
 
