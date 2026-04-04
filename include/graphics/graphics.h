@@ -1,7 +1,7 @@
 #pragma once
 
-#include "graphics/camera_transform.h"
 #include "common.h"
+#include "graphics/camera_transform.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 
@@ -119,6 +119,10 @@ typedef struct ViewportNode {
 } ViewportNode;
 
 extern ViewportNode gRootViewport;
+
+// Location of S2Dex code/rodata segments
+extern u64 gspS2DEX_fifoTextStart[];
+extern u64 gspS2DEX_fifoDataStart[];
 
 void setViewportFadeValue(ViewportNode *node, u8 fadeValue, u8 fadeMode);
 

@@ -310,7 +310,7 @@ segments:
       - [0x84E20, hasm, ../lib/libkmc/mmuldi3]
       - { start: 0x851F0, type: textbin, use_src_path: True, name: rsp/rspboot }
       - { start: 0x852C0, type: textbin, use_src_path: True, name: rsp/aspMain }
-      - { start: 0x85AC0, type: textbin, use_src_path: True, name: rsp/s2dex }
+      - { start: 0x860E0, type: textbin, use_src_path: True, name: rsp/s2dex }
       - { start: 0x879A0, type: textbin, use_src_path: True, name: rsp/f3dex2 }
       - [0x88D30, .data, animation/bobbing_model]
       - [0x891D0, .data, graphics/tiled_texture]
@@ -422,9 +422,9 @@ segments:
           use_src_path: True,
           name: rsp/aspMain,
         }
-      - { start: 0x9E268, type: rodatabin, use_src_path: True, name: rsp/s2dex }
+      - { start: 0x9E130, type: rodatabin, use_src_path: True, name: rsp/s2dex }
       - {
-          start: 0x9E2B0,
+          start: 0x9E4C0,
           type: rodatabin,
           use_src_path: True,
           name: rsp/f3dex2,

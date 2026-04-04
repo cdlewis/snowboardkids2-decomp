@@ -219,8 +219,8 @@ s32 gFrameSkipCounter = 0;
 u32 __additional_scanline_0 = 0;
 
 UcodeEntry microcodeGroups[] = {
-    { (u64 *)0x800854E0, (u64 *)0x8009D530 },
-    { (u64 *)0x80086DA0, (u64 *)0x8009D8C0 },
+    { (u64 *)gspS2DEX_fifoTextStart,  (u64 *)gspS2DEX_fifoDataStart  },
+    { (u64 *)gspF3DEX2_fifoTextStart, (u64 *)gspF3DEX2_fifoDataStart },
 };
 
 u8 gNeedsDisplayListInit = 1;
