@@ -313,7 +313,7 @@ extern char D_8009E48C_9F08C[];
 void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0);
 void cleanupSaveSlotNumberLabels(Func34574Arg *);
 void updateSaveSlotDeleteText(SaveSlotDeleteTextState *);
-void func_80035878_36478(s32, s32, u16, u16, u16, u16, SpriteSheetData *);
+void renderShadedTextSprite(s32, s32, u16, u16, u16, u16, SpriteSheetData *);
 void updateSaveSlotNameText(Func34ADCArg *arg0);
 void cleanupSaveSlotNameText(Func34574Arg *arg0);
 void cleanupSaveSlotGoldDisplay(Func34574Arg *arg0);
@@ -1396,7 +1396,7 @@ void func_80035408_36008(Func80035408Arg *arg0) {
                 if (sz == 0) {
                     sz = 12;
                 }
-                func_80035878_36478(x, y, cmd & 0xFFF, arg0->unkC, arg0->unkE, a, arg0->unk8);
+                renderShadedTextSprite(x, y, cmd & 0xFFF, arg0->unkC, arg0->unkE, a, arg0->unk8);
                 x += sz;
             }
             ptr++;
@@ -1530,7 +1530,7 @@ extern u16 gDefaultFontPalette[];
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 extern Gfx gSpriteRDPSetupDL[];
 
-void func_80035878_36478(
+void renderShadedTextSprite(
     s32 x,
     s32 y,
     u16 frameIndex,
