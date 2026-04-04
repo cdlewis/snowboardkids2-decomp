@@ -239,6 +239,7 @@ renderTiledSprite3x3 = 0x8006D7B0; // rom:0x6E3B0
 gFanSoundIds = 0x800BAA60; // rom:0x1E7B10 type:s16
 calculateZoomScaleFactor = 0x800B93F0; // rom:0x1E64A0
 updateWipeTransitionSlots = 0x800B9440; // rom:0x1E64F0
+initWipeZoomDisplay = 0x800B956C; // rom:0x1E661C
 initWipeZoomAccel = 0x800B9680; // rom:0x1E6730
 accelerateWipeZoomIn = 0x800B96B4; // rom:0x1E6764
 decelerateWipeZoomOut = 0x800B9708; // rom:0x1E67B8

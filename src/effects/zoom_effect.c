@@ -19,7 +19,7 @@ extern struct {
 
 extern void func_80035548_36148(void *);
 
-s16 func_800B956C_1E661C(cutsceneSys2Wait_exec_asset *);
+s16 initWipeZoomDisplay(cutsceneSys2Wait_exec_asset *);
 void cleanupCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0);
 
 s32 calculateZoomScaleFactor(s32 arg0) {
@@ -59,7 +59,7 @@ void updateWipeTransitionSlots(cutsceneSys2Wait_exec_asset *arg0) {
     }
 }
 
-s16 func_800B956C_1E661C(cutsceneSys2Wait_exec_asset *arg0) {
+s16 initWipeZoomDisplay(cutsceneSys2Wait_exec_asset *arg0) {
     int new_var;
     cutsceneSys2Wait_exec_asset *new_var2;
     s32 i;
@@ -250,7 +250,7 @@ void updateCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0) {
 
     switch (state) {
         case 0:
-            arg0->state = func_800B956C_1E661C(arg0);
+            arg0->state = initWipeZoomDisplay(arg0);
             break;
         case 1:
             arg0->state = initWipeZoomAccel(arg0);
