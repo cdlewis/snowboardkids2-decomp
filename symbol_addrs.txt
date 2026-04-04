@@ -978,6 +978,7 @@ awaitStoryModeRaceResult = 0x80019F60; // rom:0x1AB60
 loadStoryModeUnlockCutscene = 0x8001A070; // rom:0x1AC70
 awaitStoryModeUnlockCutscene = 0x8001A0B4; // rom:0x1ACB4
 onStoryModeRaceCancelled = 0x8001A0F4; // rom:0x1ACF4
+initBoardShopDisplay = 0x8001A110; // rom:0x1AD10
 awaitBoardShopDmaComplete = 0x8001A3D8; // rom:0x1AFD8
 awaitFadeLoadBoardShop = 0x8001A434; // rom:0x1B034
 awaitBoardShopExitDelay = 0x8001AC30; // rom:0x1B830

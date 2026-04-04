@@ -171,7 +171,7 @@ s8 storyMapLocationNames[6][20] = {
     "PAINT", "U.F.O.", "TIMES", "SCHOOL", "BOARDSHOP", "TEACHER",
 };
 
-extern void func_8001A110_1AD10(void);
+extern void initBoardShopDisplay(void);
 extern void initGalleryMenu(void);
 extern void initStoryMapLocationIntro(void);
 extern void initUnlockScreen(void);
@@ -179,7 +179,7 @@ extern void initStoryMapExtraIntro(void);
 
 void (*storyMapLocationHandlers[])(void) = {
     NULL,
-    func_8001A110_1AD10,
+    initBoardShopDisplay,
     initGalleryMenu,
     initStoryMapLocationIntro,
     loadOverlay_1BBA0,

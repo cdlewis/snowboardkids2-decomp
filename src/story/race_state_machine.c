@@ -19,37 +19,37 @@
 #include "ui/level_preview_3d.h"
 
 typedef struct {
-    /* 0x000 */ ViewportNode unk0;
-    /* 0x1D8 */ ViewportNode unk1D8;
-    /* 0x3B0 */ ViewportNode unk3B0;
-    /* 0x588 */ ViewportNode unk588;
-    /* 0x760 */ void *unk760;
-    /* 0x764 */ void *unk764;
-    /* 0x768 */ void *unk768;
-    /* 0x76C */ void *unk76C;
-    /* 0x770 */ void *unk770;
-    /* 0x774 */ void *unk774;
-    /* 0x778 */ void *unk778;
-    /* 0x77C */ u16 unk77C;
+    /* 0x000 */ ViewportNode mainViewport;
+    /* 0x1D8 */ ViewportNode secondaryViewport;
+    /* 0x3B0 */ ViewportNode tertiaryViewport;
+    /* 0x588 */ ViewportNode quaternaryViewport;
+    /* 0x760 */ void *assetSlot0;
+    /* 0x764 */ void *assetSlot1;
+    /* 0x768 */ void *assetSlot2;
+    /* 0x76C */ void *assetSlot3;
+    /* 0x770 */ void *assetSlot4;
+    /* 0x774 */ void *textRenderAsset;
+    /* 0x778 */ void *assetSlot5;
+    /* 0x77C */ u16 delayTimer;
     /* 0x77E */ u16 unk77E;
     /* 0x780 */ u8 pad780[4];
-    /* 0x784 */ s8 unk784[4];
-    /* 0x788 */ u8 unk788[0xD];
-    /* 0x795 */ u8 unk795[3];
-    /* 0x798 */ u8 unk798;
+    /* 0x784 */ s8 boardDisplayIndices[4];
+    /* 0x788 */ u8 boardIndexMap[13];
+    /* 0x795 */ u8 unlockedBoardsInCategory[3];
+    /* 0x798 */ u8 totalBoardCount;
     /* 0x799 */ u8 unk799;
-    /* 0x79A */ u8 unk79A;
+    /* 0x79A */ u8 exitMode;
     /* 0x79B */ u8 unk79B;
-    /* 0x79C */ u8 unk79C;
+    /* 0x79C */ u8 scrollDirection;
     /* 0x79D */ u8 pad79D;
     /* 0x79E */ u8 unk79E;
     /* 0x79F */ u8 unk79F;
     /* 0x7A0 */ u8 pad7A0;
-    /* 0x7A1 */ u8 unk7A1;
+    /* 0x7A1 */ s8 selectedCategoryIndex;
     /* 0x7A2 */ u8 unk7A2;
     /* 0x7A3 */ u8 pad7A3;
     /* 0x7A4 */ u8 unk7A4;
-} allocation_1B8C8;
+} BoardShopState;
 
 s16 boardShopPrices[] = { 0x0064, 0x0064, 0x0064, 0x00FA, 0x00FA, 0x012C, 0x012C, 0x0190,
                           0x0190, 0x01C2, 0x01C2, 0x01F4, 0x01F4, 0x0320, 0x03E8, 0x04B0 };
@@ -266,37 +266,37 @@ void onStoryModeRaceCancelled(void) {
     returnToParentScheduler(0xFF);
 }
 
-void func_8001A110_1AD10(void) {
-    allocation_1B8C8 *state;
+void initBoardShopDisplay(void) {
+    BoardShopState *state;
     u8 lightBuffer[0x20];
     u8 *ptr;
     s32 i;
 
-    state = (allocation_1B8C8 *)allocateTaskMemory(0x7A8);
+    state = (BoardShopState *)allocateTaskMemory(0x7A8);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
-    state->unk77C = 0;
+    state->delayTimer = 0;
     state->unk799 = 0;
-    state->unk79A = 0;
+    state->exitMode = 0;
     state->unk7A2 = 0;
-    state->unk7A1 = 0;
+    state->selectedCategoryIndex = 0;
     state->unk79F = 0;
     state->unk79E = 0;
     state->unk77E = 0;
     state->unk79B = 0;
-    initMenuCameraNode(&state->unk0, 0, 0xA, 0);
-    initMenuCameraNode(&state->unk1D8, 2, 0x14, 0);
-    initMenuCameraNode(&state->unk3B0, 8, 0x14, 1);
-    initMenuCameraNode(&state->unk588, 9, 5, 1);
+    initMenuCameraNode(&state->mainViewport, 0, 0xA, 0);
+    initMenuCameraNode(&state->secondaryViewport, 2, 0x14, 0);
+    initMenuCameraNode(&state->tertiaryViewport, 8, 0x14, 1);
+    initMenuCameraNode(&state->quaternaryViewport, 9, 5, 1);
     createViewportTransform(lightBuffer, 0, 0, 0x580000, 0, 0, 0);
-    setViewportTransformById(state->unk0.id, lightBuffer);
-    setViewportTransformById(state->unk1D8.id, lightBuffer);
-    state->unk760 = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
-    state->unk764 = loadCompressedData(&_4488E0_ROM_START, &_4488E0_ROM_END, 0x14410);
-    state->unk768 = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
-    state->unk76C = loadCompressedData(&_419C60_ROM_START, &_41A1D0_ROM_START, 0x1548);
-    state->unk770 = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
-    state->unk778 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
-    state->unk774 = loadTextRenderAsset(1);
+    setViewportTransformById(state->mainViewport.id, lightBuffer);
+    setViewportTransformById(state->secondaryViewport.id, lightBuffer);
+    state->assetSlot0 = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    state->assetSlot1 = loadCompressedData(&_4488E0_ROM_START, &_4488E0_ROM_END, 0x14410);
+    state->assetSlot2 = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    state->assetSlot3 = loadCompressedData(&_419C60_ROM_START, &_41A1D0_ROM_START, 0x1548);
+    state->assetSlot4 = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    state->assetSlot5 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    state->textRenderAsset = loadTextRenderAsset(1);
     i = 3;
     ptr = (u8 *)state + 3;
     do {
@@ -304,15 +304,15 @@ void func_8001A110_1AD10(void) {
         i--;
         ptr--;
     } while (i >= 0);
-    state->unk798 = 0;
-    for (i = 0; i < 0xD; i++) {
-        state->unk798++;
-        state->unk788[i] = i;
+    state->totalBoardCount = 0;
+    for (i = 0; i < 13; i++) {
+        state->totalBoardCount++;
+        state->boardIndexMap[i] = i;
     }
     for (i = 0; i < 3; i++) {
         if (EepromSaveData->setting_4B[i] != 0) {
-            state->unk798++;
-            state->unk795[i] = EepromSaveData->setting_4B[i];
+            state->totalBoardCount++;
+            state->unlockedBoardsInCategory[i] = EepromSaveData->setting_4B[i];
         }
     }
     scheduleTask(&initBoardShopShopkeeper, 0, 0, 0x63);
@@ -321,16 +321,16 @@ void func_8001A110_1AD10(void) {
     scheduleTask(&initBoardShopExitOverlay, 0, 0, 0x5A);
     setViewportFadeValue(0, 0xFF, 0);
     state->unk7A4 = 0;
-    state->unk77C = 2;
+    state->delayTimer = 2;
     setGameStateHandler(&awaitBoardShopDmaComplete);
 }
 
 void awaitBoardShopDmaComplete(void) {
-    GameState *state;
+    BoardShopState *state;
 
-    state = (GameState *)getCurrentAllocation();
-    if (state->unk77C != 0U) {
-        state->unk77C--;
+    state = (BoardShopState *)getCurrentAllocation();
+    if (state->delayTimer != 0U) {
+        state->delayTimer--;
         return;
     }
     if (getPendingDmaCount() == 0) {
@@ -350,16 +350,16 @@ INCLUDE_ASM("asm/nonmatchings/story/race_state_machine", func_8001A478_1B078);
 
 void awaitBoardShopExitDelay(void) {
     u16 temp_v1;
-    allocation_1B8C8 *temp_v0 = (allocation_1B8C8 *)getCurrentAllocation();
-    temp_v1 = temp_v0->unk77C - 1;
-    temp_v0->unk77C = temp_v1;
+    BoardShopState *temp_v0 = (BoardShopState *)getCurrentAllocation();
+    temp_v1 = temp_v0->delayTimer - 1;
+    temp_v0->delayTimer = temp_v1;
     if (!(temp_v1 & 0xFFFF)) {
         setGameStateHandler(&startBoardShopFadeOut);
     }
 }
 
 void startBoardShopFadeOut(void) {
-    u8 temp_v1 = ((allocation_1B8C8 *)getCurrentAllocation())->unk79A;
+    u8 temp_v1 = ((BoardShopState *)getCurrentAllocation())->exitMode;
 
     if (temp_v1 != 0) {
         if (temp_v1 == 2) {
@@ -374,19 +374,19 @@ void startBoardShopFadeOut(void) {
 }
 
 void awaitFadeCleanupBoardShop(void) {
-    allocation_1B8C8 *temp_s0 = (allocation_1B8C8 *)getCurrentAllocation();
+    BoardShopState *temp_s0 = (BoardShopState *)getCurrentAllocation();
     if (getViewportFadeMode(0) == 0) {
-        unlinkNode(&temp_s0->unk0);
-        unlinkNode(&temp_s0->unk1D8);
-        unlinkNode(&temp_s0->unk3B0);
-        unlinkNode(&temp_s0->unk588);
-        temp_s0->unk760 = freeNodeMemory(temp_s0->unk760);
-        temp_s0->unk764 = freeNodeMemory(temp_s0->unk764);
-        temp_s0->unk768 = freeNodeMemory(temp_s0->unk768);
-        temp_s0->unk76C = freeNodeMemory(temp_s0->unk76C);
-        temp_s0->unk770 = freeNodeMemory(temp_s0->unk770);
-        temp_s0->unk774 = freeNodeMemory(temp_s0->unk774);
-        temp_s0->unk778 = freeNodeMemory(temp_s0->unk778);
+        unlinkNode(&temp_s0->mainViewport);
+        unlinkNode(&temp_s0->secondaryViewport);
+        unlinkNode(&temp_s0->tertiaryViewport);
+        unlinkNode(&temp_s0->quaternaryViewport);
+        temp_s0->assetSlot0 = freeNodeMemory(temp_s0->assetSlot0);
+        temp_s0->assetSlot1 = freeNodeMemory(temp_s0->assetSlot1);
+        temp_s0->assetSlot2 = freeNodeMemory(temp_s0->assetSlot2);
+        temp_s0->assetSlot3 = freeNodeMemory(temp_s0->assetSlot3);
+        temp_s0->assetSlot4 = freeNodeMemory(temp_s0->assetSlot4);
+        temp_s0->textRenderAsset = freeNodeMemory(temp_s0->textRenderAsset);
+        temp_s0->assetSlot5 = freeNodeMemory(temp_s0->assetSlot5);
         terminateSchedulerWithCallback(&onBoardShopCleanupComplete);
     }
 }
@@ -396,14 +396,14 @@ void onBoardShopCleanupComplete(void) {
 }
 
 u8 countOwnedBoardsInCategory(void) {
-    GameState *state;
+    BoardShopState *state;
     u8 count;
     s32 i;
 
     state = getCurrentAllocation();
     count = 0;
     for (i = 0; i < 3; i++) {
-        if (EepromSaveData->character_or_settings[state->unk7A1 * 3 + i] != 0) {
+        if (EepromSaveData->character_or_settings[state->selectedCategoryIndex * 3 + i] != 0) {
             count++;
         }
     }
@@ -412,30 +412,30 @@ u8 countOwnedBoardsInCategory(void) {
 }
 
 void advanceBoardDisplaySlots(void) {
-    GameState *gameState;
+    BoardShopState *gameState;
     s32 delta;
     s32 i;
     s8 val = 1;
 
     gameState = getCurrentAllocation();
-    delta = ((gameState->unk79C ^ 1) != 0) ? -val : 0;
+    delta = ((gameState->scrollDirection ^ 1) != 0) ? -val : 0;
     delta = delta | 1;
 
     for (i = 0; i < 4; i++) {
-        gameState->unk784[i] += delta | 1;
-        val = gameState->unk784[i];
+        gameState->boardDisplayIndices[i] += delta | 1;
+        val = gameState->boardDisplayIndices[i];
         if (val < 0) {
-            gameState->unk784[i] = gameState->unk798 - 1;
-        } else if (val == gameState->unk798) {
-            gameState->unk784[i] = 0;
+            gameState->boardDisplayIndices[i] = gameState->totalBoardCount - 1;
+        } else if (val == gameState->totalBoardCount) {
+            gameState->boardDisplayIndices[i] = 0;
         }
     }
 }
 
 void initStoryMapLocationIntro(void) {
-    allocation_1B8C8 *temp_s0 = (allocation_1B8C8 *)allocateTaskMemory(0x1E0);
+    BoardShopState *temp_s0 = (BoardShopState *)allocateTaskMemory(0x1E0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
-    temp_s0->unk1D8.unk0.callback_selector = 0;
+    temp_s0->secondaryViewport.unk0.callback_selector = 0;
     initMenuCameraNode((ViewportNode *)temp_s0, 0, 0xA, 0);
     setViewportFadeValue(0, 0, 8);
     scheduleTask(&storyMapLocationTextTask, 0U, 0U, 0x5AU);
