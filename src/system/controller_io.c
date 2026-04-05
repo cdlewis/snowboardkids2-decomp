@@ -40,7 +40,7 @@ typedef struct {
 } PfsNote;
 
 void initControllerPack(s32);
-void func_8003A294_3AE94(u16, ControllerPackFileRequest *);
+void controllerPackReadFile(u16, ControllerPackFileRequest *);
 void func_8003A52C_3B12C(s32, void *);
 void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders);
 void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[]);
@@ -85,8 +85,8 @@ extern MotorState gMotorState;
 extern s32 gControllerPackFileCount;
 extern s32 gControllerPackFreeBlockCount;
 extern OSPfs controllerPacks[];
-extern PfsNote D_8009F634_A0234;
-extern s32 D_8009F650_A0250[];
+extern PfsNote gControllerPackFileNote;
+extern s32 gControllerPackFileNumbers[];
 extern OSThread D_800A1DC0_A29C0;
 extern Entry D_800A1C20_A2820[];
 
@@ -162,7 +162,7 @@ void controllerServiceThread(void *arg0) {
                 continue;
 
             case 0x30:
-                func_8003A294_3AE94(cmd & 3, msg->arg);
+                controllerPackReadFile(cmd & 3, msg->arg);
                 continue;
 
             case 0x40:
@@ -292,7 +292,7 @@ int controllerPackReadPollStub(void) {
     return 0;
 }
 
-void func_8003A294_3AE94(u16 arg0, ControllerPackFileRequest *arg1) {
+void controllerPackReadFile(u16 channel, ControllerPackFileRequest *request) {
     s32 numFiles;
     s32 maxFiles;
     s32 freeBlocks;
@@ -308,14 +308,14 @@ void func_8003A294_3AE94(u16 arg0, ControllerPackFileRequest *arg1) {
     s32 i;
 
     mainQueue = &mainStack;
-    err = osPfsInitPak(mainQueue, &controllerPacks[arg0], arg0);
+    err = osPfsInitPak(mainQueue, &controllerPacks[channel], channel);
 
     if (err == 2) {
-        err = osPfsInitPak(mainQueue, &controllerPacks[arg0], arg0);
+        err = osPfsInitPak(mainQueue, &controllerPacks[channel], channel);
     }
 
     if (err == 0) {
-        sizeField = arg1->size;
+        sizeField = request->size;
         if (!(sizeField & 0x1F)) {
             pages = sizeField >> 8;
             reqPages = pages + 1;
@@ -323,39 +323,39 @@ void func_8003A294_3AE94(u16 arg0, ControllerPackFileRequest *arg1) {
                 reqPages = pages;
             }
 
-            D_8009F634_A0234.gameCode = arg1->gameCode;
+            gControllerPackFileNote.gameCode = request->gameCode;
 
-            D_8009F634_A0234.companyCode = arg1->companyCode;
+            gControllerPackFileNote.companyCode = request->companyCode;
 
             for (i = 0; i < 4; i++) {
-                D_8009F634_A0234.extName[i] = arg1->extName[i];
+                gControllerPackFileNote.extName[i] = request->extName[i];
             }
 
             for (i = 0; i < 0x10; i++) {
-                D_8009F634_A0234.gameName[i] = arg1->gameName[i];
+                gControllerPackFileNote.gameName[i] = request->gameName[i];
             }
 
             err = osPfsFindFile(
-                &controllerPacks[arg0],
-                D_8009F634_A0234.companyCode,
-                D_8009F634_A0234.gameCode,
-                D_8009F634_A0234.gameName,
-                D_8009F634_A0234.extName,
-                fileNo = &D_8009F650_A0250[arg0]
+                &controllerPacks[channel],
+                gControllerPackFileNote.companyCode,
+                gControllerPackFileNote.gameCode,
+                gControllerPackFileNote.gameName,
+                gControllerPackFileNote.extName,
+                fileNo = &gControllerPackFileNumbers[channel]
             );
 
             if (err == 0) {
-                if (osPfsReadWriteFile(&controllerPacks[arg0], *fileNo, 0, 0, arg1->size, arg1->data) == 0) {
+                if (osPfsReadWriteFile(&controllerPacks[channel], *fileNo, 0, 0, request->size, request->data) == 0) {
                     checksum = 0;
-                    dataPtr = arg1->data;
-                    size = arg1->size;
+                    dataPtr = request->data;
+                    size = request->size;
                     dataPtr += 4;
                     for (i = 4; i < size; i++) {
                         checksum += *dataPtr;
                         dataPtr++;
                     }
 
-                    if (checksum != *(s32 *)arg1->data) {
+                    if (checksum != *(s32 *)request->data) {
                         err = 0xE;
                     } else {
                         err = 0;
@@ -364,11 +364,11 @@ void func_8003A294_3AE94(u16 arg0, ControllerPackFileRequest *arg1) {
                     err = 0xE;
                 }
             } else {
-                osPfsNumFiles(&controllerPacks[arg0], &numFiles, &maxFiles);
+                osPfsNumFiles(&controllerPacks[channel], &numFiles, &maxFiles);
                 if (maxFiles == 0x10) {
                     err = 0xC;
                 } else {
-                    osPfsFreeBlocks(&controllerPacks[arg0], &freeBlocks);
+                    osPfsFreeBlocks(&controllerPacks[channel], &freeBlocks);
                     freeBlocks = freeBlocks / 256;
                     if (freeBlocks < reqPages) {
                         err = 0xD;

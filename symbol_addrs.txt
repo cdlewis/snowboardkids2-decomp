@@ -1,4 +1,5 @@
-D_8009F634_A0234 = 0x8009F634; // size:0x1C
+gControllerPackFileNote = 0x8009F634; // size:0x1C
+gControllerPackFileNumbers = 0x8009F650; // size:0x10
 
 getHomingAngleToTarget = 0x8005BF50; // rom:0x5CB50
 updateStorySlotUnlockStatus = 0x80015254; // rom:0x15E54
@@ -2322,6 +2323,7 @@ controllerPackInitAsyncStub = 0x8003A1DC; // rom:0x3ADDC
 controllerPackInitPollStub = 0x8003A1E4; // rom:0x3ADE4
 controllerPackReadAsyncStub = 0x8003A284; // rom:0x3AE84
 controllerPackReadPollStub = 0x8003A28C; // rom:0x3AE8C
+controllerPackReadFile = 0x8003A294; // rom:0x3AE94
 controllerPackWriteAsyncStub = 0x8003A51C; // rom:0x3B11C
 controllerPackWritePollStub = 0x8003A524; // rom:0x3B124
 controllerPackListFilesAsyncStub = 0x8003A854; // rom:0x3B454
