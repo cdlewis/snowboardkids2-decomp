@@ -3,8 +3,8 @@
 #include "data/data_table.h"
 
 typedef struct {
-    /* 0x000 */ u8 originalPalette[0x200];
-    /* 0x200 */ u8 workingPalette[0x200];
+    /* 0x000 */ s16 originalPalette[0x100];
+    /* 0x200 */ s16 workingPalette[0x100];
 } PaletteBuffer;
 
 void initPaletteContext(PaletteContext *ctx, DataTable_19E80 *dataTable) {

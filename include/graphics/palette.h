@@ -4,8 +4,8 @@
 
 typedef struct {
     DataTable_19E80 *dataTable;
-    u8 *workingPalette;
-    u8 *originalPalette;
+    s16 *workingPalette;
+    s16 *originalPalette;
 } PaletteContext;
 
 void initPaletteContext(PaletteContext *ctx, DataTable_19E80 *dataTable);
