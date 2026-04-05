@@ -22,8 +22,25 @@ typedef struct {
     u8 duration[4];
 } MotorState;
 
+typedef struct {
+    /* 0x00 */ s32 size;
+    /* 0x04 */ u32 gameCode;
+    /* 0x08 */ u16 companyCode;
+    /* 0x0A */ u8 gameName[16];
+    /* 0x1A */ u8 extName[4];
+    /* 0x1E */ u8 pad[2];
+    /* 0x20 */ u8 *data;
+} ControllerPackFileRequest;
+
+typedef struct {
+    u32 gameCode;
+    u16 companyCode;
+    u8 extName[4];
+    u8 gameName[16];
+} PfsNote;
+
 void initControllerPack(s32);
-void func_8003A294_3AE94(s32, void *);
+void func_8003A294_3AE94(u16, ControllerPackFileRequest *);
 void func_8003A52C_3B12C(s32, void *);
 void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders);
 void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[]);
@@ -68,6 +85,8 @@ extern MotorState gMotorState;
 extern s32 gControllerPackFileCount;
 extern s32 gControllerPackFreeBlockCount;
 extern OSPfs controllerPacks[];
+extern PfsNote D_8009F634_A0234;
+extern s32 D_8009F650_A0250[];
 extern OSThread D_800A1DC0_A29C0;
 extern Entry D_800A1C20_A2820[];
 
@@ -273,7 +292,96 @@ int controllerPackReadPollStub(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/system/controller_io", func_8003A294_3AE94);
+void func_8003A294_3AE94(u16 arg0, ControllerPackFileRequest *arg1) {
+    s32 numFiles;
+    s32 maxFiles;
+    s32 freeBlocks;
+    OSMesgQueue *mainQueue;
+    s32 err;
+    u16 reqPages;
+    u32 sizeField;
+    u32 pages;
+    s32 checksum;
+    s32 size;
+    u8 *dataPtr;
+    s32 *fileNo;
+    s32 i;
+
+    mainQueue = &mainStack;
+    err = osPfsInitPak(mainQueue, &controllerPacks[arg0], arg0);
+
+    if (err == 2) {
+        err = osPfsInitPak(mainQueue, &controllerPacks[arg0], arg0);
+    }
+
+    if (err == 0) {
+        sizeField = arg1->size;
+        if (!(sizeField & 0x1F)) {
+            pages = sizeField >> 8;
+            reqPages = pages + 1;
+            if (!(sizeField & 0xFF)) {
+                reqPages = pages;
+            }
+
+            D_8009F634_A0234.gameCode = arg1->gameCode;
+
+            D_8009F634_A0234.companyCode = arg1->companyCode;
+
+            for (i = 0; i < 4; i++) {
+                D_8009F634_A0234.extName[i] = arg1->extName[i];
+            }
+
+            for (i = 0; i < 0x10; i++) {
+                D_8009F634_A0234.gameName[i] = arg1->gameName[i];
+            }
+
+            err = osPfsFindFile(
+                &controllerPacks[arg0],
+                D_8009F634_A0234.companyCode,
+                D_8009F634_A0234.gameCode,
+                D_8009F634_A0234.gameName,
+                D_8009F634_A0234.extName,
+                fileNo = &D_8009F650_A0250[arg0]
+            );
+
+            if (err == 0) {
+                if (osPfsReadWriteFile(&controllerPacks[arg0], *fileNo, 0, 0, arg1->size, arg1->data) == 0) {
+                    checksum = 0;
+                    dataPtr = arg1->data;
+                    size = arg1->size;
+                    dataPtr += 4;
+                    for (i = 4; i < size; i++) {
+                        checksum += *dataPtr;
+                        dataPtr++;
+                    }
+
+                    if (checksum != *(s32 *)arg1->data) {
+                        err = 0xE;
+                    } else {
+                        err = 0;
+                    }
+                } else {
+                    err = 0xE;
+                }
+            } else {
+                osPfsNumFiles(&controllerPacks[arg0], &numFiles, &maxFiles);
+                if (maxFiles == 0x10) {
+                    err = 0xC;
+                } else {
+                    osPfsFreeBlocks(&controllerPacks[arg0], &freeBlocks);
+                    freeBlocks = freeBlocks / 256;
+                    if (freeBlocks < reqPages) {
+                        err = 0xD;
+                    }
+                }
+            }
+        } else {
+            err = 0xF;
+        }
+    }
+
+    osSendMesg(&D_800A1888_A2488, (OSMesg)err, OS_MESG_BLOCK);
+}
 
 void controllerPackWriteAsyncStub(void) {
 }
