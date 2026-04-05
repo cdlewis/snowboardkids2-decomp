@@ -1143,11 +1143,7 @@ void awaitPlayersAndPlayRaceMusic(void) {
 }
 
 void copyIntroPlayerAnimationData(void) {
-#ifdef CC_CHECK
     GameState *gs;
-#else
-    register GameState *gs __asm__("$6");
-#endif
     u8 *src;
     u8 *dst;
     u8 *end;
