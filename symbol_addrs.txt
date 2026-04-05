@@ -1,9 +1,10 @@
+D_8009F634_A0234 = 0x8009F634; // size:0x1C
+
 getHomingAngleToTarget = 0x8005BF50; // rom:0x5CB50
 updateStorySlotUnlockStatus = 0x80015254; // rom:0x15E54
 copyIntroPlayerAnimationData = 0x8003F1F0; // rom:0x3FDF0
 D_8008F200_8FE00 = 0x8008F200; // rom:0x8FE00 size:0xC
 D_8008F16C_8FD6C = 0x8008F16C; // size:0x10
-D_8009F63A_A023A = 0x8009F63A; // size:0x16
 D_8008F22C_8FE2C = 0x8008F22C; // rom:0x8FE2C // size:0x80
 initSaveSlotIconGrid = 0x80033688; // rom:0x34288
 __MusIntGetNewNote = 0x8007335C; // rom:0x73F5C
