@@ -1468,7 +1468,7 @@ void renderOverlayDisplayListWithLights(DisplayListObject *arg0) {
     );
 }
 
-void enqueueDisplayListObjectWithLights(u16 arg0, DisplayListObject *arg1) {
+void enqueueDisplayListObjectWithLights(s32 arg0, DisplayListObject *arg1) {
     arg1->transformMatrix = 0;
 
     if (arg1->displayLists->opaqueDisplayList != NULL) {

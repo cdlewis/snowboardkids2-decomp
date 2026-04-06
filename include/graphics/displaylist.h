@@ -236,7 +236,7 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *obj);
 void renderOpaqueDisplayListWithLights(DisplayListObject *obj);
 void renderTransparentDisplayListWithLights(DisplayListObject *obj);
 void renderOverlayDisplayListWithLights(DisplayListObject *obj);
-void enqueueDisplayListObjectWithLights(u16 renderLayer, DisplayListObject *displayListObj);
+void enqueueDisplayListObjectWithLights(s32 renderLayer, DisplayListObject *displayListObj);
 void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjects);
 void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *displayObjects);
 void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObjects);
