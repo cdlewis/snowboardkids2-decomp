@@ -346,7 +346,7 @@ void cleanupDualSnowSprayAssetNode(DualSnowSprayAssetNode *arg0) {
     arg0->assetTable = freeNodeMemory(arg0->assetTable);
 }
 
-void spawnDualSnowSprayEffect(Vec3i *pos1, Vec3i *pos2, Vec3i *velocity, s16 slotIndex, s32 characterId) {
+void spawnDualSnowSprayEffect(Vec3i *pos1, Vec3i *pos2, Vec3i *velocity, s32 slotIndex, s32 characterId) {
     DualSnowSprayTask *task;
     s32 velX;
     s32 velY;
