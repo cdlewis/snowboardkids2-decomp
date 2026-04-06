@@ -2,7 +2,21 @@
 
 #include "common.h"
 
-void func_8006D4B8_6E0B8(void *, s16, s16, s16, s32, u8, u8, u8, u8, u8, u8, u8, u8);
+void func_8006D4B8_6E0B8(
+    void *spriteData,
+    s16 savedX,
+    s16 savedY,
+    s16 cols,
+    s16 rows,
+    u8 arg5,
+    u8 intensity,
+    u8 colorR,
+    u8 colorG,
+    u8 colorB,
+    u8 colorA,
+    u8 priority,
+    u8 layer
+);
 
 void renderTiledSprite3x3(
     void *asset,
