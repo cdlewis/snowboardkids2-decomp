@@ -41,7 +41,7 @@ typedef struct {
 
 void initControllerPack(s32);
 void controllerPackReadFile(u16, ControllerPackFileRequest *);
-void func_8003A52C_3B12C(s32, void *);
+void func_8003A52C_3B12C(u16, ControllerPackFileRequest *);
 void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders);
 void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[]);
 void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader *header);
@@ -87,6 +87,7 @@ extern s32 gControllerPackFreeBlockCount;
 extern OSPfs controllerPacks[];
 extern PfsNote gControllerPackFileNote;
 extern s32 gControllerPackFileNumbers[];
+extern s32 D_8009F630_A0230;
 extern OSThread D_800A1DC0_A29C0;
 extern Entry D_800A1C20_A2820[];
 
@@ -390,7 +391,109 @@ int controllerPackWritePollStub(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/system/controller_io", func_8003A52C_3B12C);
+void func_8003A52C_3B12C(u16 channel, ControllerPackFileRequest *request) {
+    s32 numFiles;
+    s32 maxFiles;
+    s32 freeBlocks;
+    OSMesgQueue *mainQueue;
+    s32 err;
+    u16 reqPages;
+    u32 sizeField;
+    u32 pages;
+    s32 checksum;
+    s32 size;
+    u8 *dataPtr;
+    s32 *fileNo;
+    s32 i;
+
+    mainQueue = &mainStack;
+    err = osPfsInitPak(mainQueue, &controllerPacks[channel & 0xFFFF], channel & 0xFFFF);
+
+    if (err == PFS_ERR_NEW_PACK) {
+        err = osPfsInitPak(mainQueue, &controllerPacks[channel & 0xFFFF], channel & 0xFFFF);
+    }
+
+    if (err == 0) {
+        sizeField = request->size;
+        pages = sizeField >> 8;
+        reqPages = pages + 1;
+        if (!(sizeField & 0xFF)) {
+            reqPages = pages;
+        }
+
+        D_8009F630_A0230 = (reqPages & 0xFFFF) << 8;
+        __asm__("");
+        gControllerPackFileNote.gameCode = request->gameCode;
+        gControllerPackFileNote.companyCode = request->companyCode;
+
+        for (i = 0; i < 4; i++) {
+            gControllerPackFileNote.extName[i] = request->extName[i];
+        }
+
+        for (i = 0; i < 16; i++) {
+            gControllerPackFileNote.gameName[i] = request->gameName[i];
+        }
+
+        err = osPfsFindFile(
+            &controllerPacks[channel & 0xFFFF],
+            gControllerPackFileNote.companyCode,
+            gControllerPackFileNote.gameCode,
+            gControllerPackFileNote.gameName,
+            gControllerPackFileNote.extName,
+            fileNo = &gControllerPackFileNumbers[channel & 0xFFFF]
+        );
+
+        if (err == 5) {
+            osPfsNumFiles(&controllerPacks[channel & 0xFFFF], &numFiles, &maxFiles);
+            err = 0;
+            if (maxFiles == 16) {
+                err = 0xC;
+            } else {
+                osPfsFreeBlocks(&controllerPacks[channel & 0xFFFF], &freeBlocks);
+                freeBlocks = freeBlocks / 256;
+                if (freeBlocks < (reqPages & 0xFFFF)) {
+                    err = 0xD;
+                }
+            }
+            if (err == 0) {
+                osPfsAllocateFile(
+                    &controllerPacks[channel & 0xFFFF],
+                    gControllerPackFileNote.companyCode,
+                    gControllerPackFileNote.gameCode,
+                    gControllerPackFileNote.gameName,
+                    gControllerPackFileNote.extName,
+                    D_8009F630_A0230,
+                    &gControllerPackFileNumbers[channel & 0xFFFF]
+                );
+            }
+        }
+
+        if (err == 0) {
+            size = request->size;
+            err = 0xF;
+            if (!(size & 0x1F)) {
+                dataPtr = request->data;
+                checksum = 0;
+                dataPtr += 4;
+                for (i = 4; i < size; i++) {
+                    checksum += *dataPtr;
+                    dataPtr++;
+                }
+                *(s32 *)request->data = checksum;
+                err = osPfsReadWriteFile(
+                    &controllerPacks[channel & 0xFFFF],
+                    gControllerPackFileNumbers[channel & 0xFFFF],
+                    1,
+                    0,
+                    request->size,
+                    request->data
+                );
+            }
+        }
+    }
+
+    osSendMesg(&D_800A1888_A2488, (OSMesg)err, 1);
+}
 
 void controllerPackListFilesAsyncStub(void) {
 }
