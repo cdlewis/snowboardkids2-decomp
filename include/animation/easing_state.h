@@ -1,7 +1,7 @@
 #pragma once
 
-#include "cutscene/1DFAA0.h"
 #include "common.h"
+#include "cutscene/1DFAA0.h"
 #include "cutscene/sys_effect.h"
 
 typedef struct {
@@ -42,6 +42,6 @@ s32 spawnSpriteEffectInternal(
 );
 void *loadDmaAsset(s16 arg0);
 void *getTable2DEntry(Table_B934 *table, s32 rowIndex, s32 colIndex);
-s16 getTable2DRowCount(Table_B934 *table, s32 rowIndex);
+s16 getTable2DRowCount(Table_B934 *table, s32 rowIndex, s32 colIndex);
 s16 getMaxLinePixelWidth(u16 *encodedText);
 void spawnSpriteEffectEx(SceneModel *, s16, s16, s16, void *, s32, s8, u8, u8, s16);

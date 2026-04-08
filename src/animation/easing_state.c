@@ -1194,7 +1194,7 @@ s32 getNewlineCount(u16 *encodedText) {
     return newlineCount;
 }
 
-s16 getTable2DRowCount(Table_B934 *table, s32 rowIndex) {
+s16 getTable2DRowCount(Table_B934 *table, s32 rowIndex, s32 colIndex) {
     s32 rowCount;
     Table2DRow *row;
 
