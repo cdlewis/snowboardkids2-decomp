@@ -1081,7 +1081,7 @@ segments:
     exclusive_ram_id: 800B00C0
     subsegments:
       - [0x1DA660, c, ui/character_select_sprites]
-      - [0x1DB6E0, data, ui/character_select_sprites]
+      - [0x1DB6E0, .data, ui/character_select_sprites]
 
   - name: _1DB7A0
     type: code

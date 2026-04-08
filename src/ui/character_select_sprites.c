@@ -60,6 +60,30 @@ typedef struct {
 } func_800B0A54_allocation;
 
 extern void *renderTextPalette;
+extern s32 gButtonsPressed;
+
+u32 D_800B1140_1DB6E0[] = { 0x00000000, 0x01000000, 0x00000000, 0x00000000 };
+u8 D_800B1150_1DB6F0[] = { 0x0A, 0x0A, 0x01, 0x0A, 0x0A, 0x0D, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00 };
+char D_800B115C_1DB6FC[4] = "+";
+s16 D_800B1160_1DB700[] = { -6, -128, 20,  -112, 14, -128, -20, -112, -35, -128, 0,   -112, 44, -112, -40, -112,
+                            40, -128, -12, -128, 12, -128, -36, -128, 36,  -128, -60, -128, 60, -128, -84, -128 };
+#define D_800B1162_1DB702 (D_800B1160_1DB700 + 1)
+Vec2s D_800B11A0_1DB740[] = {
+    { -80,  -92 },
+    { -26,  -92 },
+    { 14,   -92 },
+    { 64,   -92 },
+    { -100, 70  },
+    { -56,  70  },
+    { -12,  70  },
+    { 32,   70  }
+};
+u8 D_800B11C2_1DB762_data[] = { 0x00, 0x56, 0x00, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                0x00, 0x04, 0x00, 0x04, 0x00, 0x04, 0x00, 0x04, 0x00, 0x04, 0x00, 0x08,
+                                0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08,
+                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+#define D_800B11C2_1DB762 ((s16 *)(void *)&D_800B11C2_1DB762_data[2])
+char gCoordDisplayFormatString[16] = "X=%d Y=%d  ";
 
 void sortPlayersByCharacterRank(void);
 void positionCharacterSelectSprite(CharacterSelectSprite *, u8);
@@ -80,16 +104,6 @@ void initCharacterSelectTextureRenderState(TextureDataTaskState *);
 void renderCharacterSelectBoard(void *);
 void cleanupCharacterSelectBoardTask(CharacterSelectBoardTask *);
 void updateCoordinateDisplayTask(CoordinateDisplayTaskState *);
-
-extern char gCoordDisplayFormatString[];
-extern s16 D_800B1160_1DB700[];
-extern s16 D_800B1162_1DB702[];
-extern Vec2s D_800B11A0_1DB740[];
-extern s16 D_800B11C2_1DB762[];
-extern void *D_800B1140_1DB6E0;
-extern char D_800B115C_1DB6FC[];
-extern s32 gButtonsPressed;
-extern u8 D_800B1150_1DB6F0[];
 
 void sortPlayersByCharacterRank(void) {
     u8 matchingPlayers[8];
@@ -172,7 +186,6 @@ void initCharacterPreview(CharacterPreviewState *arg0) {
     GameState *allocation;
     Transform3D *matrix;
     u16 modelIndex;
-    s32 pad[2];
 
     allocation = getCurrentAllocation();
     modelIndex = arg0->characterIndex + 0x32;
