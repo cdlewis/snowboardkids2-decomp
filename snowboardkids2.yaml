@@ -63,7 +63,7 @@ segments:
       - [0x3870, c, effects/nonrace_shadow]
       - [0x3B80, c, effects/transparent_render]
       - [0x4050, c, effects/cutscene_keyframes]
-      - [0x4A40, c, credits/credits]
+      - [0x4A40, c, credits/credits_controller]
       - [0x5520, c, graphics/tiled_texture]
       - [0x69B0, c, animation/oscillating_sprite]
       - [0x6DD0, c, graphics/quad_displaylist]
@@ -325,7 +325,7 @@ segments:
       - [0x8C980, .data, effects/nonrace_shadow]
       - [0x8CA90, .data, effects/transparent_render]
       - [0x8CB90, .data, effects/cutscene_keyframes]
-      - [0x8CBA0, .data, credits/credits]
+      - [0x8CBA0, .data, credits/credits_controller]
       - [0x8CD50, .data, animation/stepped_matrix]
       - [0x8CD90, .data, effects/orbital_sprite]
       - [0x8CE00, .data, animation/model_transition]
@@ -1099,7 +1099,7 @@ segments:
     vram: 0
     start: 0x1DC0D0
 
-  - name: _1DC260
+  - name: credits
     type: code
     vram: 0x800B00C0
     start: 0x1DC260

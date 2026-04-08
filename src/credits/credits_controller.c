@@ -10,7 +10,7 @@
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-USE_OVERLAY(_1DC260)
+USE_OVERLAY(credits)
 
 void *loadDmaAsset(s32);
 void *loadTextRenderAsset(s32);
@@ -147,7 +147,7 @@ void func_80003EE0_4AE0(void) {
     s32 i;
     CreditsState *taskMemory = (CreditsState *)allocateTaskMemory(0xE68);
 
-    LOAD_OVERLAY(_1DC260);
+    LOAD_OVERLAY(credits);
 
     setupTaskSchedulerNodes(0x40, 0, 0, 0, 0, 0, 0, 0);
 
