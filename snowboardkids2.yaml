@@ -1110,7 +1110,7 @@ segments:
       - [0x1DC480, c, credits/credits_subtitles]
       - [0x1DC900, c, credits/credits_text]
       - [0x1DCF60, c, credits/offset_table]
-      - [0x1DD080, data, credits/credits_text]
+      - [0x1DD080, .data, credits/credits_text]
       - [0x1DD150, .rodata, credits/credits_text]
 
   - name: cutscene
