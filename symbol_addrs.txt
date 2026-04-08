@@ -4176,3 +4176,5 @@ cleanupTrickSpriteEffectTask = 0x800B5210; // rom:0x1E22C0
 spawnTrickSpriteEffect = 0x800B523C; // rom:0x1E22EC
 updateStoryMapNpcBehavior = 0x8002A7CC; // rom:0x2B3CC
 convertPackedBoneTransformToN64Matrix = 0x8006C2A8; // rom:0x6CEA8
+
+D_800B0F90_1DD130 = 0x800B0F90; // size:0x8 rom:0x1DD130
