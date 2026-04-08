@@ -21,10 +21,10 @@ typedef struct {
     /* 0x1E6 */ u8 unk1E6;
 } PlayerSelectAllocation;
 
-extern s16 D_800B09B8_1DC098[];
-extern s16 D_800B09BA_1DC09A[];
-extern s16 gPlayerCountOptionPositions[];
-extern u16 D_800B09A0_1DC080[];
+u16 D_800B09A0_1DC080[] = { 0x0000, 0x0001, 0x0002, 0x0001 };
+s16 gPlayerCountOptionPositions[] = { 0xFFC0, 0x0020, 0x0000, 0x0020, 0xFF98, 0x0040, 0x0028, 0x0040 };
+s16 D_800B09B8_1DC098[] = { 0xFFD7, 0x0024, 0xFFD7, 0x0024, 0xFFC8, 0x0026,
+                            0xFFD8, 0x0024, 0x0000, 0x0000, 0x0000, 0x0000 };
 
 void updatePlayerSelectAnim(PlayerSelectState *);
 void cleanupPlayerSelectTask(PlayerSelectSpriteTask *);
@@ -306,11 +306,10 @@ void initPlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
 }
 
 void updatePlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
-    s32 pad[2];
     PlayerSelectAllocation *allocation = getCurrentAllocation();
 
     arg0->x = D_800B09B8_1DC098[allocation->unk1E2.val * 2];
-    arg0->y = D_800B09BA_1DC09A[allocation->unk1E2.val * 2];
+    arg0->y = D_800B09B8_1DC098[allocation->unk1E2.val * 2 + 1];
     arg0->frameIndex = allocation->unk1E2.val + 2;
 
     debugEnqueueCallback(8, 7, renderSpriteFrame, arg0);
