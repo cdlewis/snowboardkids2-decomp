@@ -75,7 +75,7 @@ extern s32 D_800A18A0_A24A0;
 extern s32 D_800A18C0_A24C0;
 extern s32 D_800A8D10_A0080;
 extern u8 gConnectedControllerMask;
-extern s8 gControllerPollingEnabled;
+extern u8 gControllerPollingEnabled;
 extern OSContStatus D_8009F660_A0260;
 extern OSThread D_8009F670_A0270;
 extern s32 D_800A1838_A2438;
@@ -643,7 +643,73 @@ void motorUpdate(void) {
     motorProcessState(&gMotorState);
 }
 
-INCLUDE_ASM("asm/nonmatchings/system/controller_io", motorProcessState);
+void motorProcessState(MotorState *arg0) {
+    s32 i;
+    s16 temp_v0;
+
+    for (i = 0; i < 4; i++) {
+        switch (arg0->state[i]) {
+            case 0:
+                if (gControllerPollingEnabled != 0) {
+                    break;
+                }
+                if (((gMotorInitCompleteMask >> i) & 1) == 0) {
+                    break;
+                }
+                if (arg0->intensity[i] == 0) {
+                    if (arg0->duration[i] != 0) {
+                        D_800A1C20_A2820[D_8008FE8C_90A8C].command = i + 0xB0;
+                        D_800A1C20_A2820[D_8008FE8C_90A8C].arg = arg0;
+                        osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[D_8008FE8C_90A8C], OS_MESG_BLOCK);
+                        temp_v0 = (u16)D_8008FE8C_90A8C + 1;
+                        D_8008FE8C_90A8C = temp_v0;
+                        if (temp_v0 >= 0xF) {
+                            D_8008FE8C_90A8C = 0;
+                        }
+                        arg0->duration[i]--;
+                    }
+                } else {
+                    D_800A1C20_A2820[D_8008FE8C_90A8C].command = i + 0xA0;
+                    D_800A1C20_A2820[D_8008FE8C_90A8C].arg = arg0;
+                    osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[D_8008FE8C_90A8C], OS_MESG_BLOCK);
+                    temp_v0 = (u16)D_8008FE8C_90A8C + 1;
+                    D_8008FE8C_90A8C = temp_v0;
+                    if (temp_v0 >= 0xF) {
+                        D_8008FE8C_90A8C = 0;
+                    }
+                    arg0->duration[i] = 5;
+                }
+                arg0->intensity[i] = 0;
+                break;
+            case 1:
+                D_800A1C20_A2820[D_8008FE8C_90A8C].command = i + 0x90;
+                D_800A1C20_A2820[D_8008FE8C_90A8C].arg = arg0;
+                osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[D_8008FE8C_90A8C], OS_MESG_BLOCK);
+                temp_v0 = (u16)D_8008FE8C_90A8C + 1;
+                D_8008FE8C_90A8C = temp_v0;
+                if (temp_v0 >= 0xF) {
+                    D_8008FE8C_90A8C = 0;
+                }
+                arg0->duration[i] = 5;
+                arg0->state[i] = 2;
+                break;
+            case 2:
+                D_800A1C20_A2820[D_8008FE8C_90A8C].command = i + 0xB0;
+                D_800A1C20_A2820[D_8008FE8C_90A8C].arg = arg0;
+                osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[D_8008FE8C_90A8C], OS_MESG_BLOCK);
+                temp_v0 = (u16)D_8008FE8C_90A8C + 1;
+                D_8008FE8C_90A8C = temp_v0;
+                if (temp_v0 >= 0xF) {
+                    D_8008FE8C_90A8C = 0;
+                }
+                arg0->duration[i]--;
+                if ((u8)arg0->duration[i] == 0) {
+                    arg0->state[i] = 0;
+                }
+                break;
+        }
+    }
+}
 
 void startMotorRumble(s32 controllerChannel) {
     s32 channel;
