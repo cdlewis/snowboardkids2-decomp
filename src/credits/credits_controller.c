@@ -12,7 +12,6 @@
 
 USE_OVERLAY(credits)
 
-void *loadDmaAsset(s32);
 void *loadTextRenderAsset(s32);
 
 typedef struct {
@@ -229,7 +228,7 @@ void updateCreditsSequence(void) {
         state->unk0 = 1;
     }
 
-    func_800B0930(state);
+    func_800B0930((CreditsScrollerState *)state);
     updateCreditsCornerDecorationSprites(state);
     spawnCreditsCharacter(state);
 
@@ -258,7 +257,7 @@ void fadeOutCreditsSequence(void) {
         }
         terminateSchedulerWithCallback(onCreditsComplete);
     } else {
-        func_800B0930(state);
+        func_800B0930((CreditsScrollerState *)state);
         updateCreditsCornerDecorationSprites(state);
         spawnCreditsCharacter(state);
         state->unk2 = (u16)state->unk2 + 1;
