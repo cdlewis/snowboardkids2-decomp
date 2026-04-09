@@ -251,3 +251,42 @@ src = base + frameIndex * stride;  // generates: li v0, 0x1ED0; mult v1, v0; mfl
 ```
 
 The `__asm__` barrier after computing `stride` prevents the compiler from propagating `stride` back into a constant for subsequent uses. Without the barrier, the compiler may re-derive the constant and use synth_mult anyway.
+
+## Instruction Scheduling: Statement Ordering Controls `andi`/`lw`/`sll` Order
+
+GCC 2.7.2 -O2 schedules instructions based on evaluation order of C statements. When computing `idx * sizeof(Struct)` where `idx` comes from a mask and a pointer load follows, the order of C statements controls whether `andi` (mask) or `lw` (pointer load) comes first:
+
+```c
+// Generates: andi → lw → sll (mask first, pointer load fills stall)
+s32 idx = var & 0xFFFF;
+s32 fgAddr = (s32)trackGeom->faceGroups;
+temp = ((idx << 3) + idx) << 2;
+
+// Generates: lw → andi → sll (pointer load first — WRONG for some targets)
+temp = (((var & 0xFFFF) << 3) + (var & 0xFFFF)) << 2;
+// fgAddr loaded separately
+```
+
+Splitting the mask into a separate statement (`s32 idx = var & 0xFFFF`) forces the compiler to evaluate it first. The subsequent pointer load (`trackGeom->faceGroups`) is then scheduled into the stall slot between the `andi` and the dependent `sll`.
+
+## Block-Scoped Variables for Deferred Update Pattern
+
+When a value should only be updated conditionally (e.g., updating a loop variable only when a neighbor index is non-negative), use block-scoped temporary variables to prevent the compiler from assigning a callee-saved register:
+
+```c
+// CORRECT: block-scoped neighbor uses temporary register (v1)
+if (cross2d(...) > 0) {
+    s16 neighbor = faceGroup->neighbor0;
+    if (neighbor >= 0) {
+        var_v1 = neighbor;
+        goto next;
+    }
+}
+
+// WRONG: function-scoped neighbor gets callee-saved register (s3)
+s16 neighbor;
+// ... later:
+neighbor = faceGroup->neighbor0;  // generates: move s3,v0 instead of move v1,v0
+```
+
+This matters because the target code uses `move v1,v0` (temporary) not `move s3,v0` (callee-saved). The block scope limits the variable's lifetime so the compiler doesn't need to preserve it across function calls.

@@ -44,9 +44,12 @@ typedef struct {
 } TrackFace;
 
 typedef struct {
-    s16 unk0;
-    u8 padding[0xA];
-    u16 baseIndex;
+    /* 0x00 */ s16 neighbor0;
+    /* 0x02 */ s16 neighbor1;
+    /* 0x04 */ s16 neighbor2;
+    /* 0x06 */ s16 neighbor3;
+    /* 0x08 */ u8 padding[4];
+    /* 0x0C */ u16 baseIndex;
     u16 count;
     u16 baseIndex2;
     u16 count2;
