@@ -11,6 +11,7 @@
 #include "math/geometry.h"
 #include "os_cont.h"
 #include "race/race_session.h"
+#include "race/track_geometry.h"
 #include "story/map_events.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
@@ -33,21 +34,21 @@ typedef struct {
     /* 0x77C */ u16 delayTimer;
     /* 0x77E */ u16 unk77E;
     /* 0x780 */ u8 pad780[4];
-    /* 0x784 */ s8 boardDisplayIndices[4];
+    /* 0x784 */ u8 boardDisplayIndices[4];
     /* 0x788 */ u8 boardIndexMap[13];
     /* 0x795 */ u8 unlockedBoardsInCategory[3];
     /* 0x798 */ u8 totalBoardCount;
-    /* 0x799 */ u8 unk799;
+    /* 0x799 */ u8 selectedSlot;
     /* 0x79A */ u8 exitMode;
-    /* 0x79B */ u8 unk79B;
+    /* 0x79B */ u8 shopState;
     /* 0x79C */ u8 scrollDirection;
-    /* 0x79D */ u8 pad79D;
-    /* 0x79E */ u8 unk79E;
-    /* 0x79F */ u8 unk79F;
-    /* 0x7A0 */ u8 pad7A0;
+    /* 0x79D */ s8 transitionDirection;
+    /* 0x79E */ u8 newTransitionIndex;
+    /* 0x79F */ u8 oldTransitionIndex;
+    /* 0x7A0 */ u8 unk7A0;
     /* 0x7A1 */ s8 selectedCategoryIndex;
-    /* 0x7A2 */ u8 unk7A2;
-    /* 0x7A3 */ u8 pad7A3;
+    /* 0x7A2 */ u8 selectedBoardIndex;
+    /* 0x7A3 */ u8 unk7A3;
     /* 0x7A4 */ u8 unk7A4;
 } BoardShopState;
 
@@ -75,7 +76,20 @@ extern void initBoardShopShopkeeper(void);
 extern void initBoardShopCharacterPreview(void);
 extern void loadBoardShopBackground(void);
 extern void initBoardShopExitOverlay(void);
+extern void initBoardShopComparisonIcons(void);
+extern void initBoardShopRowSelectorArrow(void);
+extern void initBoardShopColumnSelectorArrow(void);
+extern void initBoardShopTitleText(void);
+extern void initBoardShopTitleCorners(void);
+extern void initBoardShopCharacterTransition(void);
+extern void initBoardShopBoardIcons(void);
+extern void initBoardShopSnowflakeSlideIn(void);
+extern void initBoardShopPreviewWipe(void);
+extern void initBoardShopSnowParticles(void);
 void func_8001A478_1B078(void);
+void awaitBoardShopExitDelay(void);
+u8 countOwnedBoardsInCategory(void);
+void advanceBoardDisplaySlots(void);
 void onStoryModeRaceCancelled(void);
 void awaitStoryMapLocationIntro(void);
 void awaitStoryMapDecorReady(void);
@@ -275,14 +289,14 @@ void initBoardShopDisplay(void) {
     state = (BoardShopState *)allocateTaskMemory(0x7A8);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     state->delayTimer = 0;
-    state->unk799 = 0;
+    state->selectedSlot = 0;
     state->exitMode = 0;
-    state->unk7A2 = 0;
+    state->selectedBoardIndex = 0;
     state->selectedCategoryIndex = 0;
-    state->unk79F = 0;
-    state->unk79E = 0;
+    state->oldTransitionIndex = 0;
+    state->newTransitionIndex = 0;
     state->unk77E = 0;
-    state->unk79B = 0;
+    state->shopState = 0;
     initMenuCameraNode(&state->mainViewport, 0, 0xA, 0);
     initMenuCameraNode(&state->secondaryViewport, 2, 0x14, 0);
     initMenuCameraNode(&state->tertiaryViewport, 8, 0x14, 1);
@@ -346,7 +360,284 @@ void awaitFadeLoadBoardShop(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/story/race_state_machine", func_8001A478_1B078);
+void func_8001A478_1B078(void) {
+    BoardShopState *state;
+    u8 oldValue;
+    u8 boardCount;
+    u8 dispIdx;
+    u8 boardIdx;
+    u16 timer;
+    s8 transDir;
+
+    state = (BoardShopState *)getCurrentAllocation();
+
+    switch (state->shopState) {
+        case 0:
+            playSoundEffectOnChannelNoPriority(0xEA, 1);
+            state->shopState = 1;
+            break;
+
+        case 12:
+            scheduleTask(&initBoardShopComparisonIcons, 0, 0, 0x5A);
+            scheduleTask(&initBoardShopRowSelectorArrow, 0, 0, 0x5A);
+            scheduleTask(&initBoardShopColumnSelectorArrow, 0, 0, 0x5A);
+            state->unk7A4 = 1;
+            scheduleTask(&initBoardShopTitleText, 0, 0, 0x5A);
+            scheduleTask(&initBoardShopTitleCorners, 0, 0, 0x5A);
+            state->shopState = 2;
+            break;
+
+        case 2:
+            oldValue = state->selectedCategoryIndex;
+            if (*gControllerInputs & 0x80200) {
+                state->scrollDirection = 0;
+                state->selectedCategoryIndex = state->selectedCategoryIndex - 1;
+                if (state->selectedCategoryIndex < 0) {
+                    state->selectedCategoryIndex = 2;
+                }
+            } else if (*gControllerInputs & 0x40100) {
+                state->scrollDirection = 1;
+                state->selectedCategoryIndex = state->selectedCategoryIndex + 1;
+                if ((s8)state->selectedCategoryIndex >= 3) {
+                    state->selectedCategoryIndex = 0;
+                }
+            }
+            if ((s8)oldValue != (s8)state->selectedCategoryIndex) {
+                playSoundEffectOnChannelNoPriority(0x2B, 0);
+                state->oldTransitionIndex = (s8)oldValue * 3;
+                state->shopState = 3;
+                state->transitionDirection = 1;
+                state->selectedBoardIndex = 0;
+                state->newTransitionIndex = (s8)state->selectedCategoryIndex * 3;
+                scheduleTask(&initBoardShopCharacterTransition, 0, 0, 0x5A);
+            } else {
+                if (*gControllerInputs & 0x9000) {
+                    playSoundEffectOnChannelNoPriority(0x2C, 0);
+                    state->delayTimer = 0;
+                    state->shopState = 4;
+                    break;
+                }
+                if (*gControllerInputs & 0x4000) {
+                    state->exitMode = 1;
+                }
+            }
+            break;
+
+        case 3:
+            transDir = state->transitionDirection;
+            if (transDir == 0) {
+                state->shopState = 2;
+                break;
+            }
+            if (transDir == -2) {
+                state->shopState = 5;
+            }
+            break;
+
+        case 4:
+        case 7:
+            state->delayTimer = state->delayTimer + 1;
+            if ((state->delayTimer & 0xFFFF) == 0x11) {
+                state->delayTimer = 0;
+                if (state->shopState == 7) {
+                    state->unk7A4 = 0;
+                    state->shopState = 0xF;
+                    state->delayTimer = 0;
+                    scheduleTask(&initBoardShopBoardIcons, 0, 0, 0x5A);
+                    {
+#ifdef CC_CHECK
+                        s32 j = 3;
+                        s32 ptr = (s32)state + 3;
+#else
+                        register s32 j __asm__("$2") = 3;
+                        register s32 ptr __asm__("$3") = (s32)state + 3;
+#endif
+                        do {
+                            *(u8 *)(ptr + 0x784) = j;
+                            j--;
+                            ptr--;
+                        } while (j >= 0);
+                    }
+                } else {
+                    state->shopState = 5;
+                }
+            }
+            break;
+
+        case 5:
+            boardCount = countOwnedBoardsInCategory();
+            oldValue = state->selectedBoardIndex;
+            if (*gControllerInputs & 0x80200) {
+                state->scrollDirection = 0;
+                state->selectedBoardIndex = state->selectedBoardIndex - 1;
+                if ((s8)state->selectedBoardIndex < 0) {
+                    state->selectedBoardIndex = boardCount - 1;
+                }
+            } else if (*gControllerInputs & 0x40100) {
+                state->scrollDirection = 1;
+                state->selectedBoardIndex = state->selectedBoardIndex + 1;
+                if ((s8)state->selectedBoardIndex == (boardCount & 0xFF)) {
+                    state->selectedBoardIndex = 0;
+                }
+            }
+            if ((s8)oldValue != (s8)state->selectedBoardIndex) {
+                playSoundEffectOnChannelNoPriority(0x2B, 0);
+                state->shopState = 3;
+                state->transitionDirection = -1;
+                state->oldTransitionIndex = oldValue + ((s8)state->selectedCategoryIndex * 3);
+                state->newTransitionIndex = state->selectedBoardIndex + ((s8)state->selectedCategoryIndex * 3);
+                scheduleTask(&initBoardShopCharacterTransition, 0, 0, 0x5A);
+            } else {
+                if (*gControllerInputs & 0x9000) {
+                    playSoundEffectOnChannelNoPriority(0x2C, 0);
+                    state->delayTimer = 0;
+                    state->shopState = 7;
+                    break;
+                }
+                if (*gControllerInputs & 0x4000) {
+                    playSoundEffect(0x2E);
+                    state->shopState = 2;
+                }
+            }
+            break;
+
+        case 15:
+            if (state->delayTimer != 0) {
+                state->delayTimer = 0;
+                state->selectedSlot = 0;
+                setModelCameraTransform((u8 *)state + 0x3B0, 0, 0, -0x98, -0x4D, 0x97, 0x5A);
+                state->shopState = 0x10;
+                state->unk7A4 = 2;
+            }
+            break;
+
+        case 16:
+            oldValue = state->selectedSlot;
+            state->scrollDirection = 0;
+            if (*gControllerInputs & 0x10800) {
+                if (state->selectedSlot == 0) {
+                    state->scrollDirection = 2;
+                    state->unk7A0 = state->boardDisplayIndices[3];
+                    advanceBoardDisplaySlots();
+                    state->shopState = 0x12;
+                } else {
+                    state->selectedSlot = state->selectedSlot - 1;
+                }
+            } else if (*gControllerInputs & 0x20400) {
+                if ((state->selectedSlot & 0xFF) == 3) {
+                    state->scrollDirection = 1;
+                    state->unk7A0 = state->boardDisplayIndices[0];
+                    advanceBoardDisplaySlots();
+                    state->shopState = 0x12;
+                } else {
+                    state->selectedSlot = state->selectedSlot + 1;
+                }
+            }
+            if (((s8)oldValue != state->selectedSlot) || (state->scrollDirection != 0)) {
+                playSoundEffectOnChannelNoPriority(0x2B, 0);
+                state->delayTimer = 0;
+            } else if (*gControllerInputs & 0x4000) {
+                playSoundEffect(0x2E);
+                state->shopState = 0x11;
+                state->unk7A4 = 0;
+                state->delayTimer = 0;
+                setModelCameraTransform((u8 *)state + 0x3B0, 0, 0, -0x98, -0x70, 0x97, 0x6F);
+            } else if (*gControllerInputs & 0x9000) {
+                if (D_800AFE8C_A71FC->gold >=
+                    (s32)(u16)boardShopPrices[state->boardIndexMap[state->boardDisplayIndices[state->selectedSlot]]]) {
+                    playSoundEffectOnChannelNoPriority(0x2C, 0);
+                    state->shopState = 0x14;
+                    state->unk77E = 1;
+                    state->delayTimer = 0;
+                } else {
+                    state->delayTimer = (u16)state->delayTimer;
+                    playSoundEffectOnChannelNoPriority(0xEC, 1);
+                    state->unk77E = 2;
+                }
+            } else {
+                if (state->delayTimer < 5) {
+                    state->delayTimer = state->delayTimer + 1;
+                }
+            }
+            break;
+
+        case 17:
+            if (state->delayTimer != 0) {
+                state->shopState = 2;
+                state->unk7A4 = 1;
+            }
+            break;
+
+        case 18:
+            scheduleTask(&initBoardShopSnowflakeSlideIn, 0, 0, 0x5A);
+            state->shopState = 0x13;
+            break;
+
+        case 20:
+            state->delayTimer = state->delayTimer + 1;
+            if ((state->delayTimer & 0xFFFF) == 0x11) {
+                playSoundEffectOnChannelNoPriority(0xEF, 1);
+                state->delayTimer = 0;
+                state->shopState = 0x19;
+            }
+            break;
+
+        case 25:
+            if (*gControllerInputs & 0x4000) {
+                playSoundEffect(0x2E);
+                state->shopState = 0x10;
+                break;
+            }
+            if (*gControllerInputs & 0x8000) {
+                state->shopState = 0x1A;
+                state->unk77E = 3;
+                state->unk7A4 = 0;
+                state->unk7A3 = 1;
+                scheduleTask(&initBoardShopPreviewWipe, 0, 0, 0x59);
+                scheduleTask(&initBoardShopSnowParticles, 0, 0, 0x5F);
+            }
+            break;
+
+        case 26:
+            state->shopState = 0x1B;
+            state->delayTimer = 0;
+            break;
+
+        case 27:
+            if (state->delayTimer != 0) {
+                state->shopState = 0x1C;
+                state->delayTimer = 0;
+                state->unk77E = 1;
+                boardIdx = state->boardDisplayIndices[state->selectedSlot];
+                boardIdx = state->boardIndexMap[boardIdx];
+                EepromSaveData
+                    ->character_or_settings[((s8)state->selectedCategoryIndex * 3) + (s8)state->selectedBoardIndex] =
+                    boardIdx + 1;
+            }
+            break;
+
+        case 28:
+            state->delayTimer = 0;
+            addPlayerGold(
+                -(s32)(u16)boardShopPrices[state->boardIndexMap[state->boardDisplayIndices[state->selectedSlot]]]
+            );
+            state->shopState = 0x1D;
+            break;
+
+        case 29:
+            playSoundEffectOnChannelNoPriority(0xEB, 1);
+            state->shopState = 0x11;
+            break;
+    }
+
+    if (state->exitMode != 0) {
+        playSoundEffectOnChannelNoPriority(0xED, 1);
+        state->unk77E = 1;
+        state->delayTimer = 0x1E;
+        state->shopState = 0x32;
+        setGameStateHandler(awaitBoardShopExitDelay);
+    }
+}
 
 void awaitBoardShopExitDelay(void) {
     u16 temp_v1;
