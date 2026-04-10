@@ -60,7 +60,7 @@ s16 D_8008FE8C_90A8C = 0;
 u8 D_8008FE8E_90A8E = 0;
 u8 D_8008FE8F_90A8F = 0;
 u32 D_8008FE90 = 0;
-u32 D_8008FE94_90A94[3] = { 0 };
+u8 D_8008FE94_90A94[12] = { 0 };
 
 // Bss
 extern OSMesgQueue D_800A1820_A2420;
@@ -80,6 +80,12 @@ extern OSContStatus D_8009F660_A0260;
 extern OSThread D_8009F670_A0270;
 extern s32 D_800A1838_A2438;
 extern u8 D_800A1C98_A2898;
+extern s8 gAnalogStickX[];
+extern s8 gAnalogStickY[];
+extern s32 gButtonsPressed[];
+extern s32 D_800AB1A0_A2510[];
+extern s32 D_800AB0A8_A2418[];
+extern s32 gControllerInputs[];
 extern u8 gMotorInitCompleteMask;
 extern MotorState gMotorState;
 extern s32 gControllerPackFileCount;
@@ -258,7 +264,144 @@ void startControllerRead(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/system/controller_io", func_80039C34_3A834);
+void func_80039C34_3A834(void) {
+    void *sp10;
+    s32 i;
+    s16 stickVal;
+
+    sp10 = NULL;
+    if (osRecvMesg(&D_800A1868_A2468, (OSMesg *)&sp10, 0) == 0) {
+        i = 0;
+        while ((u16)i < 4) {
+            if (!((D_8008FE8E_90A8E >> (u16)i) & 1))
+                goto next;
+            if (D_800A1C08_A2808[(u16)i].errno != 0)
+                goto next;
+            stickVal = D_800A1C08_A2808[(u16)i].stick_x;
+            if (stickVal > 0) {
+                if (stickVal < 8) {
+                    stickVal = 0;
+                } else {
+                    stickVal = stickVal - 7;
+                    if (stickVal >= 0x38) {
+                        stickVal = 0x37;
+                    }
+                    stickVal = ((s16)stickVal * 30 / 55) + 1;
+                }
+                gAnalogStickX[(u16)i] = stickVal;
+            } else {
+                stickVal = -stickVal;
+                if ((s16)stickVal >= 8) {
+                    stickVal = stickVal - 7;
+                    if (stickVal >= 0x38) {
+                        stickVal = 0x37;
+                    }
+                    stickVal = ((s16)stickVal * 30 / 55) + 1;
+                } else {
+                    stickVal = 0;
+                }
+                gAnalogStickX[(u16)i] = -stickVal;
+            }
+            stickVal = D_800A1C08_A2808[(u16)i].stick_y;
+            if (stickVal > 0) {
+                if (stickVal < 8) {
+                    stickVal = 0;
+                } else {
+                    stickVal = stickVal - 7;
+                    if (stickVal >= 0x38) {
+                        stickVal = 0x37;
+                    }
+                    stickVal = ((s16)stickVal * 30 / 55) + 1;
+                }
+                gAnalogStickY[(u16)i] = stickVal;
+            } else {
+                stickVal = -stickVal;
+                if ((s16)stickVal >= 8) {
+                    stickVal = stickVal - 7;
+                    if (stickVal >= 0x38) {
+                        stickVal = 0x37;
+                    }
+                    stickVal = ((s16)stickVal * 30 / 55) + 1;
+                } else {
+                    stickVal = 0;
+                }
+                gAnalogStickY[(u16)i] = -stickVal;
+            }
+            D_800AB1A0_A2510[(u16)i] = gButtonsPressed[(u16)i];
+            gButtonsPressed[(u16)i] = 0;
+            gButtonsPressed[(u16)i] = D_800A1C08_A2808[(u16)i].button;
+            if (D_800AB1A0_A2510[(u16)i] & STICK_RIGHT) {
+                if (gAnalogStickX[(u16)i] >= 11) {
+                    gButtonsPressed[(u16)i] |= STICK_RIGHT;
+                }
+            } else {
+                if (gAnalogStickX[(u16)i] >= 21) {
+                    gButtonsPressed[(u16)i] |= STICK_RIGHT;
+                }
+            }
+            if (D_800AB1A0_A2510[(u16)i] & STICK_LEFT) {
+                if (gAnalogStickX[(u16)i] < -10) {
+                    gButtonsPressed[(u16)i] |= STICK_LEFT;
+                }
+            } else {
+                if (gAnalogStickX[(u16)i] < -20) {
+                    gButtonsPressed[(u16)i] |= STICK_LEFT;
+                }
+            }
+            if (D_800AB1A0_A2510[(u16)i] & STICK_DOWN) {
+                if (gAnalogStickY[(u16)i] < -10) {
+                    gButtonsPressed[(u16)i] |= STICK_DOWN;
+                }
+            } else {
+                if (gAnalogStickY[(u16)i] < -20) {
+                    gButtonsPressed[(u16)i] |= STICK_DOWN;
+                }
+            }
+            if (D_800AB1A0_A2510[(u16)i] & STICK_UP) {
+                if (gAnalogStickY[(u16)i] >= 11) {
+                    gButtonsPressed[(u16)i] |= STICK_UP;
+                }
+            } else {
+                if (gAnalogStickY[(u16)i] >= 21) {
+                    gButtonsPressed[(u16)i] |= STICK_UP;
+                }
+            }
+            gControllerInputs[(u16)i] = gButtonsPressed[(u16)i] & ~D_800AB1A0_A2510[(u16)i];
+            if (gButtonsPressed[(u16)i] == 0) {
+                D_8008FE94_90A94[(u16)i] = 0;
+                D_800AB0A8_A2418[(u16)i] = gButtonsPressed[(u16)i];
+            } else {
+                if (D_8008FE94_90A94[(u16)i] >= 5) {
+                    D_8008FE94_90A94[(u16)i] = 3;
+                    D_800AB0A8_A2418[(u16)i] = gButtonsPressed[(u16)i];
+                } else {
+                    D_8008FE94_90A94[(u16)i] = D_8008FE94_90A94[(u16)i] + 1;
+                    D_800AB0A8_A2418[(u16)i] = gControllerInputs[(u16)i];
+                }
+            }
+        next:
+            i++;
+        }
+        D_800A1C98_A2898 = 0;
+    } else {
+        for (i = 0; (u16)i < 4; i++) {
+            D_800AB1A0_A2510[(u16)i] = gButtonsPressed[(u16)i];
+            gControllerInputs[(u16)i] = gButtonsPressed[(u16)i] & ~D_800AB1A0_A2510[(u16)i];
+            if (gButtonsPressed[(u16)i] == 0) {
+                D_8008FE94_90A94[(u16)i] = 0;
+                D_800AB0A8_A2418[(u16)i] = gButtonsPressed[(u16)i];
+            } else {
+                if (D_8008FE94_90A94[(u16)i] >= 5) {
+                    D_8008FE94_90A94[(u16)i] = 3;
+                    D_800AB0A8_A2418[(u16)i] = gButtonsPressed[(u16)i];
+                } else {
+                    D_8008FE94_90A94[(u16)i] = D_8008FE94_90A94[(u16)i] + 1;
+                    D_800AB0A8_A2418[(u16)i] = gControllerInputs[(u16)i];
+                }
+            }
+        }
+    }
+}
 
 void controllerPackInitAsyncStub(void) {
 }
