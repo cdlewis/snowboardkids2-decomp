@@ -49,6 +49,9 @@ typedef struct {
 
 extern s16 gTrackCollisionSampleOffsets[][8];
 extern CollisionThresholdEntry gTrackCollisionThresholds[];
+extern s16 D_800940B0_94CB0[];
+extern s16 D_800940E0_94CE0[];
+extern s16 D_800940F8_94CF8[];
 
 /**
  * Checks track wall collision at 3 sample points around the player and pushes them out of walls.
@@ -172,7 +175,169 @@ s32 handlePlayerTrackWallCollision(Player *player) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/track_collision", func_8005A26C_5AE6C);
+void func_8005A26C_5AE6C(Player *arg0) {
+    s32 heights[6];
+    Vec3i points[6];
+    Vec3i normals[6];
+    Transform3D spC0;
+    Transform3D spE0;
+    Allocation5AA90 *allocation;
+    s32 i;
+    s32 var_s5;
+    s32 var_s7;
+    s32 magnitude;
+    s32 sign;
+    s32 lowBits;
+    s16 angle;
+    s16 prevA8E;
+    s32 adjustedY;
+    s32 dx;
+    s32 dz;
+
+    allocation = getCurrentAllocation();
+    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, &spE0);
+    func_8006B084_6BC84((Transform3D *)&arg0->unk9B0, &spE0, &spC0);
+
+    if (arg0->animFlags & 0x40) {
+        arg0->animFlags &= ~0x40;
+        for (i = 0; i < 2; i++) {
+            transformVector(&D_800940F8_94CF8[i * 6], arg0->unk970.m[0], &points[i]);
+        }
+        for (i = 0; i < 2; i++) {
+            heights[i] = getTrackHeightInSector(
+                &allocation->unk30,
+                getOrUpdatePlayerSectorIndex(arg0, &allocation->unk30, arg0->sectorIndex, &points[i]) & 0xFFFF,
+                &points[i],
+                0x100000
+            );
+        }
+        arg0->unkA92 = atan2Fixed(heights[1] - heights[0], -0xC0000) & 0x1FFF;
+        if (arg0->unkA92 > 0x1000) {
+            arg0->unkA92 -= 0x2000;
+        }
+        createZRotationMatrix((Transform3D *)&arg0->unk9B0, (u16)arg0->unkA92);
+        func_8006B084_6BC84((Transform3D *)&arg0->unk9B0, &spE0, &spC0);
+    }
+
+    var_s7 = 0;
+    for (var_s7 = 0; var_s7 < 3; var_s7++) {
+        prevA8E = arg0->unkA8E;
+        var_s5 = 0;
+        for (i = 0; i < 4; i++) {
+            transformVector(&D_800940B0_94CB0[i * 6], spC0.m[0], &points[i]);
+            heights[i] = getTrackHeightInSector(
+                &allocation->unk30,
+                getOrUpdatePlayerSectorIndex(arg0, &allocation->unk30, arg0->sectorIndex, &points[i]) & 0xFFFF,
+                &points[i],
+                0x100000
+            );
+        }
+
+        if (points[0].y < heights[0]) {
+            var_s5 = 1;
+            points[1].y += heights[0] - points[0].y;
+            points[0].y = heights[0];
+        }
+        if (points[1].y < heights[1]) {
+            var_s5 = 1;
+            points[0].y += heights[1] - points[1].y;
+        }
+        if (points[2].y < heights[2]) {
+            var_s5 = 1;
+            points[3].y += heights[2] - points[2].y;
+            points[2].y = heights[2];
+        }
+        if (points[3].y < heights[3]) {
+            var_s5 = 1;
+            points[2].y += heights[3] - points[3].y;
+        }
+
+        if (var_s5 << 16) {
+            dx = points[2].x - points[0].x;
+            dz = points[2].z - points[0].z;
+
+            arg0->unkA8E = atan2Fixed(points[0].y - points[2].y, -isqrt64((s64)dx * dx + (s64)dz * dz));
+            createCombinedRotationMatrix(&arg0->unk990, arg0->unkA8E, arg0->unkA90);
+            func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, &spE0);
+            func_8006B084_6BC84((Transform3D *)&arg0->unk9B0, &spE0, &spC0);
+            if (arg0->unkA8E == prevA8E) {
+                break;
+            }
+        } else {
+            break;
+        }
+    }
+
+    var_s7 = 0;
+    for (i = 0; i < 4; i++) {
+        transformVector(&D_800940B0_94CB0[i * 6], spC0.m[0], &points[i]);
+        heights[i] = getTrackHeightInSectorWithOffset(
+            &allocation->unk30,
+            getOrUpdatePlayerSectorIndex(arg0, &allocation->unk30, arg0->sectorIndex, &points[i]),
+            &points[i],
+            0x100000,
+            (s32)&normals[i]
+        );
+        adjustedY = points[i].y + var_s7;
+        if (adjustedY < heights[i]) {
+            var_s7 += heights[i] - adjustedY;
+        }
+    }
+
+    dx = 0;
+    for (i = 4; i < 6; i++) {
+        transformVector(&D_800940E0_94CE0[dx * 6], spC0.m[0], &points[i]);
+        heights[i] = getTrackHeightInSectorWithOffset(
+            &allocation->unk30,
+            getOrUpdatePlayerSectorIndex(arg0, &allocation->unk30, arg0->sectorIndex, &points[i]),
+            &points[i],
+            0x100000,
+            (s32)&normals[i]
+        );
+        dx++;
+    }
+
+    var_s5 = 0;
+    arg0->unk458 = 0;
+    arg0->unk45C = 0;
+    arg0->unk460 = 0;
+    for (i = 0; i < 6; i++) {
+        adjustedY = points[i].y;
+        adjustedY -= heights[i];
+        lowBits = (adjustedY & 0xFFFF) * spE0.m[1][1];
+        adjustedY = (adjustedY >> 16) * (spE0.m[1][1] << 3);
+        if (lowBits < 0) {
+            lowBits += (1 << 13) - 1;
+        }
+        adjustedY += lowBits >> 13;
+        if (adjustedY < 0x24000) {
+            arg0->unk458 += normals[i].x;
+            arg0->unk45C += normals[i].y;
+            var_s5 |= 1 << i;
+            arg0->unk460 += normals[i].z;
+        }
+    }
+
+    arg0->animFlags |= 1;
+    if ((var_s5 & 3) && (var_s5 & 0x3C) || (var_s5 & 0x30) && (var_s5 & 0xC)) {
+        arg0->animFlags &= ~1;
+        if (var_s7 > 0) {
+            arg0->worldPos.y += var_s7;
+        }
+
+        magnitude = isqrt64(
+            (s64)arg0->unk458 * arg0->unk458 + (s64)arg0->unk45C * arg0->unk45C + (s64)arg0->unk460 * arg0->unk460
+        );
+        sign = magnitude >> 31;
+        arg0->unk458 = (s64)arg0->unk458 * 0x2000 / (s64)magnitude;
+        arg0->unk45C = (s64)arg0->unk45C * 0x2000 / (s64)magnitude;
+        arg0->unk460 = (s64)arg0->unk460 * 0x2000 / (s64)magnitude;
+    } else {
+        arg0->unk458 = 0;
+        arg0->unk45C = 0x2000;
+        arg0->unk460 = 0;
+    }
+}
 
 /**
  * Updates the player's sector index based on their current position and
