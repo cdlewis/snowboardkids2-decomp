@@ -102,6 +102,31 @@ if (scaleS != -1) {
 
 When the "true" condition's body is a single instruction that fits in a delay slot, putting it as the `else` branch (with the inverted condition as the `if`) triggers `bnel`. The compiler puts the simple assignment in the branch-likely delay slot (annulled if not taken).
 
+## `beqzl` vs `beqz`: `for` Loop `continue` vs `while` Loop `goto`
+
+GCC 2.7.2's delay slot filler prefers `beqzl` (branch-likely) over `beqz` when the branch target provides a good delay slot candidate. In a `for` loop, `continue` branches to the loop increment (`addiu t0,t0,1`), which is always eligible for `beqzl`'s delay slot. This means **`continue` in a `for` loop always generates `beqzl`**.
+
+To get `beqz` (regular branch) with the fall-through instruction in the delay slot, convert the `for` loop to a `while` loop with an explicit `goto` to a label at the bottom and a manual increment:
+
+```c
+// Generates beqzl (branch-likely) — for loop + continue
+for (i = 0; (u16)i < 4; i++) {
+    if (!condition) continue;  // beqzl with i++ in delay slot
+    // body
+}
+
+// Generates beqz (regular) — while loop + goto + explicit i++
+i = 0;
+while ((u16)i < 4) {
+    if (!condition) goto next;  // beqz with fall-through in delay slot
+    // body
+    next:
+    i++;
+}
+```
+
+The `while` loop's `goto next` targets a user-defined label, not the loop's continue label. GCC's delay slot filler doesn't find the increment as a beqzl candidate at the goto target, so it falls back to using the fall-through instruction in a regular `beqz` delay slot.
+
 ## Register Allocation: Extra Variables Affect Register Choice
 
 Adding an explicit local variable for a subexpression can change which physical register the compiler assigns to other variables. For example:
