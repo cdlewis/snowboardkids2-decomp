@@ -675,7 +675,7 @@ segments:
     exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB4BB0, c, levels/sunny_mountain]
-      - [0xB5450, data, levels/sunny_mountain]
+      - [0xB5450, .data, levels/sunny_mountain]
 
   - name: levels/wendys_house
     type: code

@@ -7,13 +7,6 @@
 #include "math/rand.h"
 #include "system/task_scheduler.h"
 
-extern u8 D_800BBB68_B5468[];
-extern u8 D_800BBB6C_B546C[];
-extern u8 D_800BBB88_B5488[];
-extern u8 D_800BBB8C_B548C[];
-
-void cleanupSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0);
-
 typedef struct {
     u8 _pad[0x48];
     u8 *positionData; /* 0x48: Source position data for display objects */
@@ -40,9 +33,39 @@ typedef struct {
     /* 0xDA */ u16 rotationAngle;
 } SunnyMountainChairLiftTask;
 
+typedef struct {
+    s32 x;
+    s32 z;
+} ChairLiftWaypoint;
+
+ChairLiftWaypoint gChairLiftWaypoints[] = {
+    { 0x1B890F65, 0x02D8ABE0 },
+    { 0x1B0B6E25, 0x032D3228 },
+    { 0x1A6E1521, 0x0349046C },
+};
+
+u8 D_800BBB68_B5468[] = {
+    0xFE, 0xDC, 0x72, 0x63, 0x15, 0x8C, 0xC0, 0x1C, 0xF8, 0x99, 0xEF, 0x02, 0x16, 0x34, 0xE3, 0xDF,
+    0x03, 0x09, 0xE6, 0x76, 0x12, 0x1F, 0x7F, 0xD1, 0xFB, 0x9B, 0xA7, 0x02, 0x0D, 0x9D, 0x8A, 0x41,
+};
+#define D_800BBB6C_B546C (D_800BBB68_B5468 + 4)
+
+u8 D_800BBB88_B5488[] = {
+    0xF8, 0x8C, 0xBE, 0x95, 0x12, 0xDC, 0x60, 0xCA, 0xFE, 0xBB, 0x6F, 0x02, 0x16, 0x3E, 0x63, 0xDF,
+    0xFE, 0x4D, 0x73, 0x74, 0x0D, 0x15, 0x02, 0x07, 0xFF, 0xB8, 0x44, 0xA4, 0x11, 0x9B, 0xB5, 0x1F,
+};
+#define D_800BBB8C_B548C (D_800BBB88_B5488 + 4)
+
+u16 D_800BBBA8_B54A8[] = {
+    0x005A, 0x0078, 0x00B4, 0x00F0, 0x012C, 0x0168, 0x01A4, 0x01E0, 0x0000, 0x0000, 0x0000, 0x0000,
+};
+
 void cleanupSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *arg0);
 void startSunnyMountainChairLift(s32 *arg0);
 void updateSunnyMountainChairLiftMovement(SunnyMountainChairLiftTask *taskState);
+void cleanupSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0);
+void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0);
+void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0);
 
 /**
  * Initializes the Sunny Mountain chair lift task.
@@ -123,13 +146,6 @@ void startSunnyMountainChairLift(s32 *arg0) {
     }
 }
 
-typedef struct {
-    s32 x;
-    s32 z;
-} ChairLiftWaypoint;
-
-extern ChairLiftWaypoint gChairLiftWaypoints[];
-
 void updateSunnyMountainChairLiftMovement(SunnyMountainChairLiftTask *taskState) {
     s32 i;
     s32 dz;
@@ -209,11 +225,6 @@ void cleanupSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *arg0) {
     arg0->compressedAssetData = freeNodeMemory(arg0->compressedAssetData);
     arg0->displayObjects = freeNodeMemory(arg0->displayObjects);
 }
-
-extern u16 D_800BBBA8_B54A8[];
-
-void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0);
-void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0);
 
 void initSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
