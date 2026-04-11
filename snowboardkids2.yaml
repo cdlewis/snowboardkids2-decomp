@@ -695,7 +695,7 @@ segments:
     exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB5B90, c, levels/training]
-      - [0xB6310, data, levels/training]
+      - [0xB6310, .data, levels/training]
       - [0xB74B0, .rodata, levels/training]
 
   - name: levels/crazy_jungle
