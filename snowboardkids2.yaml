@@ -706,7 +706,7 @@ segments:
     exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB74F0, c, levels/crazy_jungle]
-      - [0xB7DD0, data, levels/crazy_jungle]
+      - [0xB7DD0, .data, levels/crazy_jungle]
 
   - name: _B7E70
     type: bin
