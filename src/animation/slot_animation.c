@@ -13,8 +13,30 @@ extern s8 gAnalogStickY;
 extern s8 gAnalogStickX;
 extern s32 gButtonsPressed;
 extern s32 gControllerInputs;
-extern s16 gCharacterEffectSpawnPoints[];
-extern s16 gCharacterEffectSpawnPointsBoard[];
+s16 gCharacterEffectSpawnPoints[24] = {
+    6, 0, 0, 0, 12, 0, 6, 0, 0, 0, -12, 0, -6, 0, 0, 0, 12, 0, -6, 0, 0, 0, -12, 0,
+};
+s16 gCharacterEffectSpawnPointsBoard[16] = {
+    6, 0, 0, 0, 28, 0, 6, 0, 0, 0, -28, 0, -6, 0, 0, 0,
+};
+u8 gShortcutChanceByMemoryPool[16] = {
+    0x00, 0x1C, 0x00, 0x00, 0xFF, 0xFA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xE4, 0x00, 0x00,
+};
+s8 s_TransitionLayerInitialY[16] = {
+    0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+struct {
+    s16 x;
+    s16 y;
+} gWipeOffset[4] = {
+    { -40, -24 },
+    { 40,  -24 },
+    { -40, 20  },
+    { 40,  20  },
+};
+char gDebugFrameFormatString[] = "%5d";
+char D_800BAE04_1E7EB4[32] = " TRK      %5d %5d %5d %5d %5d";
+char D_800BAE24_1E7ED4[44] = " %2d%s----- ----- ----- ----- ----- ";
 
 // Slot animation modes
 #define SLOT_ANIM_MODE_LINEAR_MOVE 1

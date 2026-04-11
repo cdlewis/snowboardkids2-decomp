@@ -1141,7 +1141,7 @@ segments:
       - [0x1E6D20, .data, cutscene/1DD170]
       - [0x1E7670, data, cutscene/cutscene_sys]
       - [0x1E7DC0, .data, effects/screen_transition]
-      - [0x1E7E30, data, animation/slot_animation]
+      - [0x1E7E30, .data, animation/slot_animation]
       - [0x1E7F00, .rodata, animation/slot_animation]
       - [0x1E7F30, .rodata, effects/zoom_effect]
       - { start: 0x1E7F60, type: bss, vram: 0x800BAEB0, name: cutscene }
