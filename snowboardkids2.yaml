@@ -665,7 +665,7 @@ segments:
     exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xB4240, c, levels/jingle_town]
-      - [0xB4B20, data, levels/jingle_town]
+      - [0xB4B20, .data, levels/jingle_town]
 
   - name: levels/sunny_mountain
     type: code

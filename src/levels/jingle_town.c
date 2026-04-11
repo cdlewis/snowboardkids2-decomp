@@ -8,14 +8,6 @@
 #include "race/track_collision.h"
 #include "system/task_scheduler.h"
 
-extern s32 gJingleTownTrainInitialHeights[];
-extern s32 gJingleTownTrainWaypointsX[];
-extern s32 gJingleTownTrainWaypointsZ[];
-extern s32 gJingleTownTrainWaypointsX2[];
-extern s32 gJingleTownTrainWaypointsZ2[];
-extern Vec3i gJingleTownTrainForwardVector;
-extern Vec3i gJingleTownTrainForwardVector2;
-
 typedef struct {
     u8 _pad0[0x24];
     void *unk24;
@@ -45,6 +37,26 @@ typedef struct {
     s16 waitTimer;
     s16 loopCount;
 } JingleTownTrain;
+
+typedef struct {
+    s32 height;
+    struct {
+        s32 x;
+        s32 z;
+    } waypoints[2];
+} JingleTownTrainWaypointData;
+
+JingleTownTrainWaypointData gTrainWaypointData[] = {
+    { 0x5D, { { 0xD8299448, 0xE2107DBE }, { 0xD92AB84E, 0xE175C07E } } },
+    { 0x5E, { { 0xD9E9BEB6, 0xE04396B0 }, { 0xD8116972, 0xE07CA8B0 } } },
+    { 0x5E, { { 0xD8AA2DA0, 0xDF7121BA }, { 0xD9AE7B18, 0xDF42484E } } },
+    { 0x5E, { { 0xDA6127BC, 0xDE082E92 }, { 0xD7B579FE, 0xDE1DE230 } } },
+    { 0x5F, { { 0xD83B6DDC, 0xDC80E5A4 }, { 0xD9CDD302, 0xDC78BC8C } } },
+    { 0x5F, { { 0xDA55775A, 0xDA896736 }, { 0xD817065C, 0xDACAF1E2 } } },
+};
+
+Vec3i gJingleTownTrainForwardVector = { 0, 0, 0x20000 };
+Vec3i gJingleTownTrainForwardVector2 = { 0, 0, 0x40000 };
 
 void initJingleTownTrain(JingleTownTrain *);
 void handleTrainIdleState(JingleTownTrain *);
@@ -101,18 +113,18 @@ void initJingleTownTrain(JingleTownTrain *arg0) {
     arg0->node.segment3 = 0;
     arg0->waypointIndex = 1;
 
-    temp2 = gJingleTownTrainInitialHeights[arg0->trainIndex * 5];
+    temp2 = gTrainWaypointData[arg0->trainIndex].height;
     arg0->unk56 = temp2;
-    temp3 = gJingleTownTrainWaypointsX[arg0->trainIndex * 5];
+    temp3 = gTrainWaypointData[arg0->trainIndex].waypoints[0].x;
     arg0->posX = temp3;
-    arg0->posZ = gJingleTownTrainWaypointsZ[arg0->trainIndex * 5];
+    arg0->posZ = gTrainWaypointData[arg0->trainIndex].waypoints[0].z;
 
     arg0->height = getTrackHeightAtPosition(&alloc->unk30, arg0->unk56, &arg0->posX);
 
     temp4 = arg0->trainIndex;
     arg0->rotation = computeAngleToPosition(
-        gJingleTownTrainWaypointsX2[temp4 * 5],
-        gJingleTownTrainWaypointsZ2[temp4 * 5],
+        gTrainWaypointData[temp4].waypoints[1].x,
+        gTrainWaypointData[temp4].waypoints[1].z,
         arg0->posX,
         arg0->posZ
     );
@@ -161,17 +173,15 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
     void *terrainPtr;
     s32 *posPtr;
     Vec3i rotResult;
-    s32 temp;
     s16 angleDiff;
     s16 newRotation;
     u16 newUnk56;
 
     alloc = getCurrentAllocation();
     if (alloc->unk76 == 0) {
-        temp = (arg0->waypointIndex << 3) + (arg0->trainIndex * 5 << 2);
         angleDiff = computeAngleToPosition(
-            gJingleTownTrainWaypointsX[temp >> 2],
-            gJingleTownTrainWaypointsZ[temp >> 2],
+            gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].x,
+            gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].z,
             arg0->posX,
             arg0->posZ
         );
@@ -206,10 +216,8 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
                 arg0->yVelocity = 0x30000;
             }
         }
-        rotResult.x =
-            gJingleTownTrainWaypointsX[((arg0->waypointIndex << 3) + (arg0->trainIndex * 5 << 2)) >> 2] - arg0->posX;
-        rotResult.y =
-            gJingleTownTrainWaypointsZ[((arg0->waypointIndex << 3) + (arg0->trainIndex * 5 << 2)) >> 2] - arg0->posZ;
+        rotResult.x = gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].x - arg0->posX;
+        rotResult.y = gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].z - arg0->posZ;
         if (((u32)(rotResult.x + 0xFFFFF) <= 0x1FFFFEUL) && ((u32)(rotResult.z + 0xFFFFF) <= 0x1FFFFEUL)) {
             arg0->waypointIndex = (arg0->waypointIndex + 1) & 1;
         }
@@ -222,7 +230,6 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
 void handleTrainJumpBehavior(JingleTownTrain *arg0) {
     B4240AllocationStruct *alloc;
     Vec3i rotatedVec;
-    s32 waypointByteOffset;
     s16 angleDiff;
     s16 clampedAngle;
     void *terrainPtr;
@@ -230,12 +237,10 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
 
     alloc = getCurrentAllocation();
     if (alloc->unk76 == 0) {
-        // Calculate byte offset into waypoint arrays: (waypointIndex * 8) + (trainIndex * 20)
-        waypointByteOffset = (arg0->waypointIndex * 8) + (arg0->trainIndex * 20);
         // Compute angle to target waypoint and clamp to [-128, 128] degrees
         angleDiff = (computeAngleToPosition(
-                         *(s32 *)((u8 *)gJingleTownTrainWaypointsX + waypointByteOffset),
-                         *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + waypointByteOffset),
+                         gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].x,
+                         gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].z,
                          arg0->posX,
                          arg0->posZ
                      ) -
@@ -280,12 +285,8 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
         }
 
         // Check if train reached waypoint and advance waypoint index if so
-        rotatedVec.x =
-            *(s32 *)((u8 *)gJingleTownTrainWaypointsX + (arg0->waypointIndex * 8) + (arg0->trainIndex * 20)) -
-            arg0->posX;
-        rotatedVec.y =
-            *(s32 *)((u8 *)gJingleTownTrainWaypointsZ + (arg0->waypointIndex * 8) + (arg0->trainIndex * 20)) -
-            arg0->posZ;
+        rotatedVec.x = gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].x - arg0->posX;
+        rotatedVec.y = gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].z - arg0->posZ;
 
         if ((u32)(rotatedVec.x + 0xFFFFF) <= 0x1FFFFE && (u32)(rotatedVec.z + 0xFFFFF) <= 0x1FFFFE) {
             arg0->waypointIndex = (arg0->waypointIndex + 1) & 1;
