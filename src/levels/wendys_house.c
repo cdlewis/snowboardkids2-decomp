@@ -10,8 +10,6 @@
 #include "race/track_collision.h"
 #include "system/task_scheduler.h"
 
-extern Vec3i gWendysHouseProjectileTargetPositions[];
-
 typedef struct {
     u8 _pad[0x5C];
     u8 memoryPoolId;
@@ -60,6 +58,15 @@ typedef struct {
     u8 pad[0x4C];
     s16 unk4C;
 } Task;
+
+Vec3i gWendysHouseProjectileTargetPositions[] = {
+    { 0x1FD00423, 0x1369ECE0, 0xF0CA3271 },
+    { 0x1FAFE66F, 0x134DEC74, 0xF05856C9 },
+    { 0x1F25CB49, 0x136D7E73, 0xF0685FCF },
+    { 0x2034620D, 0x12B9896C, 0xEEBD70F1 },
+    { 0x20F077CF, 0x12B04F94, 0xEF1671EB },
+    { 0x20D008C5, 0x128523E8, 0xEE71B0C3 },
+};
 
 void updateWendysHouseProjectileSpawner(WendysHouseProjectileSpawnerState *arg0);
 void updateWendysHouseProjectileTask(WendysHouseProjectileTaskState *arg0);
