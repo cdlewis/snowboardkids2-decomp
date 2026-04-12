@@ -32,7 +32,7 @@ typedef struct {
     /* 0x774 */ void *textRenderAsset;
     /* 0x778 */ void *assetSlot5;
     /* 0x77C */ u16 delayTimer;
-    /* 0x77E */ u16 unk77E;
+    /* 0x77E */ u16 shopkeeperAnimIndex;
     /* 0x780 */ u8 pad780[4];
     /* 0x784 */ u8 boardDisplayIndices[4];
     /* 0x788 */ u8 boardIndexMap[13];
@@ -45,11 +45,11 @@ typedef struct {
     /* 0x79D */ s8 transitionDirection;
     /* 0x79E */ u8 newTransitionIndex;
     /* 0x79F */ u8 oldTransitionIndex;
-    /* 0x7A0 */ u8 unk7A0;
+    /* 0x7A0 */ u8 scrollOutBoardIndex;
     /* 0x7A1 */ s8 selectedCategoryIndex;
     /* 0x7A2 */ u8 selectedBoardIndex;
-    /* 0x7A3 */ u8 unk7A3;
-    /* 0x7A4 */ u8 unk7A4;
+    /* 0x7A3 */ u8 forceShopkeeperAnimUpdate;
+    /* 0x7A4 */ u8 viewMode;
 } BoardShopState;
 
 s16 boardShopPrices[] = { 0x0064, 0x0064, 0x0064, 0x00FA, 0x00FA, 0x012C, 0x012C, 0x0190,
@@ -86,7 +86,7 @@ extern void initBoardShopBoardIcons(void);
 extern void initBoardShopSnowflakeSlideIn(void);
 extern void initBoardShopPreviewWipe(void);
 extern void initBoardShopSnowParticles(void);
-void func_8001A478_1B078(void);
+void updateBoardShop(void);
 void awaitBoardShopExitDelay(void);
 u8 countOwnedBoardsInCategory(void);
 void advanceBoardDisplaySlots(void);
@@ -295,7 +295,7 @@ void initBoardShopDisplay(void) {
     state->selectedCategoryIndex = 0;
     state->oldTransitionIndex = 0;
     state->newTransitionIndex = 0;
-    state->unk77E = 0;
+    state->shopkeeperAnimIndex = 0;
     state->shopState = 0;
     initMenuCameraNode(&state->mainViewport, 0, 0xA, 0);
     initMenuCameraNode(&state->secondaryViewport, 2, 0x14, 0);
@@ -334,7 +334,7 @@ void initBoardShopDisplay(void) {
     scheduleTask(&loadBoardShopBackground, 0, 0, 0x5A);
     scheduleTask(&initBoardShopExitOverlay, 0, 0, 0x5A);
     setViewportFadeValue(0, 0xFF, 0);
-    state->unk7A4 = 0;
+    state->viewMode = 0;
     state->delayTimer = 2;
     setGameStateHandler(&awaitBoardShopDmaComplete);
 }
@@ -356,11 +356,11 @@ void awaitBoardShopDmaComplete(void) {
 void awaitFadeLoadBoardShop(void) {
     if (getViewportFadeMode(0) == 0) {
         scheduleTask(&initBoardShopGoldDisplay, 0, 0, 0x5A);
-        setGameStateHandler(&func_8001A478_1B078);
+        setGameStateHandler(&updateBoardShop);
     }
 }
 
-void func_8001A478_1B078(void) {
+void updateBoardShop(void) {
     BoardShopState *state;
     u8 oldValue;
     u8 boardCount;
@@ -381,7 +381,7 @@ void func_8001A478_1B078(void) {
             scheduleTask(&initBoardShopComparisonIcons, 0, 0, 0x5A);
             scheduleTask(&initBoardShopRowSelectorArrow, 0, 0, 0x5A);
             scheduleTask(&initBoardShopColumnSelectorArrow, 0, 0, 0x5A);
-            state->unk7A4 = 1;
+            state->viewMode = 1;
             scheduleTask(&initBoardShopTitleText, 0, 0, 0x5A);
             scheduleTask(&initBoardShopTitleCorners, 0, 0, 0x5A);
             state->shopState = 2;
@@ -440,7 +440,7 @@ void func_8001A478_1B078(void) {
             if ((state->delayTimer & 0xFFFF) == 0x11) {
                 state->delayTimer = 0;
                 if (state->shopState == 7) {
-                    state->unk7A4 = 0;
+                    state->viewMode = 0;
                     state->shopState = 0xF;
                     state->delayTimer = 0;
                     scheduleTask(&initBoardShopBoardIcons, 0, 0, 0x5A);
@@ -507,7 +507,7 @@ void func_8001A478_1B078(void) {
                 state->selectedSlot = 0;
                 setModelCameraTransform((u8 *)state + 0x3B0, 0, 0, -0x98, -0x4D, 0x97, 0x5A);
                 state->shopState = 0x10;
-                state->unk7A4 = 2;
+                state->viewMode = 2;
             }
             break;
 
@@ -517,7 +517,7 @@ void func_8001A478_1B078(void) {
             if (*gControllerInputs & 0x10800) {
                 if (state->selectedSlot == 0) {
                     state->scrollDirection = 2;
-                    state->unk7A0 = state->boardDisplayIndices[3];
+                    state->scrollOutBoardIndex = state->boardDisplayIndices[3];
                     advanceBoardDisplaySlots();
                     state->shopState = 0x12;
                 } else {
@@ -526,7 +526,7 @@ void func_8001A478_1B078(void) {
             } else if (*gControllerInputs & 0x20400) {
                 if ((state->selectedSlot & 0xFF) == 3) {
                     state->scrollDirection = 1;
-                    state->unk7A0 = state->boardDisplayIndices[0];
+                    state->scrollOutBoardIndex = state->boardDisplayIndices[0];
                     advanceBoardDisplaySlots();
                     state->shopState = 0x12;
                 } else {
@@ -539,7 +539,7 @@ void func_8001A478_1B078(void) {
             } else if (*gControllerInputs & 0x4000) {
                 playSoundEffect(0x2E);
                 state->shopState = 0x11;
-                state->unk7A4 = 0;
+                state->viewMode = 0;
                 state->delayTimer = 0;
                 setModelCameraTransform((u8 *)state + 0x3B0, 0, 0, -0x98, -0x70, 0x97, 0x6F);
             } else if (*gControllerInputs & 0x9000) {
@@ -547,12 +547,12 @@ void func_8001A478_1B078(void) {
                     (s32)(u16)boardShopPrices[state->boardIndexMap[state->boardDisplayIndices[state->selectedSlot]]]) {
                     playSoundEffectOnChannelNoPriority(0x2C, 0);
                     state->shopState = 0x14;
-                    state->unk77E = 1;
+                    state->shopkeeperAnimIndex = 1;
                     state->delayTimer = 0;
                 } else {
                     state->delayTimer = (u16)state->delayTimer;
                     playSoundEffectOnChannelNoPriority(0xEC, 1);
-                    state->unk77E = 2;
+                    state->shopkeeperAnimIndex = 2;
                 }
             } else {
                 if (state->delayTimer < 5) {
@@ -564,7 +564,7 @@ void func_8001A478_1B078(void) {
         case 17:
             if (state->delayTimer != 0) {
                 state->shopState = 2;
-                state->unk7A4 = 1;
+                state->viewMode = 1;
             }
             break;
 
@@ -590,9 +590,9 @@ void func_8001A478_1B078(void) {
             }
             if (*gControllerInputs & 0x8000) {
                 state->shopState = 0x1A;
-                state->unk77E = 3;
-                state->unk7A4 = 0;
-                state->unk7A3 = 1;
+                state->shopkeeperAnimIndex = 3;
+                state->viewMode = 0;
+                state->forceShopkeeperAnimUpdate = 1;
                 scheduleTask(&initBoardShopPreviewWipe, 0, 0, 0x59);
                 scheduleTask(&initBoardShopSnowParticles, 0, 0, 0x5F);
             }
@@ -607,7 +607,7 @@ void func_8001A478_1B078(void) {
             if (state->delayTimer != 0) {
                 state->shopState = 0x1C;
                 state->delayTimer = 0;
-                state->unk77E = 1;
+                state->shopkeeperAnimIndex = 1;
                 boardIdx = state->boardDisplayIndices[state->selectedSlot];
                 boardIdx = state->boardIndexMap[boardIdx];
                 EepromSaveData
@@ -632,7 +632,7 @@ void func_8001A478_1B078(void) {
 
     if (state->exitMode != 0) {
         playSoundEffectOnChannelNoPriority(0xED, 1);
-        state->unk77E = 1;
+        state->shopkeeperAnimIndex = 1;
         state->delayTimer = 0x1E;
         state->shopState = 0x32;
         setGameStateHandler(awaitBoardShopExitDelay);

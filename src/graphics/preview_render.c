@@ -246,7 +246,7 @@ typedef struct {
     u8 unk79D;
     u8 unk79E;
     u8 unk79F;
-    u8 unk7A0;
+    u8 scrollOutBoardIndex;
     s8 unk7A1;
     u8 unk7A2;
 } BoardShopScreenAllocation;
@@ -834,9 +834,9 @@ typedef struct {
     u8 padding[0x1D8];
     void *audioPlayer2;
     u8 padding2[0x5A2];
-    u16 unk77E;
+    u16 shopkeeperAnimIndex;
     u8 padding3[0x23];
-    u8 unk7A3;
+    u8 forceShopkeeperAnimUpdate;
 } BoardShopUpdateAllocation;
 
 void updateBoardShopShopkeeper(BoardShopShopkeeperState *arg0) {
@@ -869,14 +869,14 @@ void updateBoardShopShopkeeper(BoardShopShopkeeperState *arg0) {
         }
     }
 
-    if (animState != 1 || allocation->unk7A3 != 0) {
-        if (allocation->unk77E != 0) {
-            arg0->animationFrame = D_8008F16C_8FD6C[allocation->unk77E].start;
-            arg0->animationEndFrame = D_8008F16C_8FD6C[allocation->unk77E].end;
+    if (animState != 1 || allocation->forceShopkeeperAnimUpdate != 0) {
+        if (allocation->shopkeeperAnimIndex != 0) {
+            arg0->animationFrame = D_8008F16C_8FD6C[allocation->shopkeeperAnimIndex].start;
+            arg0->animationEndFrame = D_8008F16C_8FD6C[allocation->shopkeeperAnimIndex].end;
             setModelAnimation(arg0->model, arg0->animationFrame);
-            allocation->unk77E = 0;
+            allocation->shopkeeperAnimIndex = 0;
             arg0->animationState = 1;
-            allocation->unk7A3 = 0;
+            allocation->forceShopkeeperAnimUpdate = 0;
         }
     }
 
@@ -1514,7 +1514,7 @@ void initBoardShopSnowflakeSlideIn(BoardShopSnowflakeSpriteState *arg0) {
     snowflakeAsset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
 
     arg0->x = 0x60;
-    arg0->spriteIndex = allocation->unk788[allocation->unk7A0];
+    arg0->spriteIndex = allocation->unk788[allocation->scrollOutBoardIndex];
     arg0->scaleX = 0x400;
     arg0->scaleY = 0x400;
     arg0->rotation = 0;
