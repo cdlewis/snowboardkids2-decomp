@@ -10,7 +10,7 @@ typedef struct {
     u8 param;
 } CreditsCommand;
 
-CreditsCommand D_800B0EE0_1DD080[] = {
+CreditsCommand creditsCommands[] = {
     { 0x0000, 0x02, 0x00 },
     { 0x001E, 0x03, 0x00 },
     { 0x00F0, 0x04, 0x00 },
@@ -56,13 +56,13 @@ CreditsCommand D_800B0EE0_1DD080[] = {
     { 0x19E6, 0x02, 0x00 },
 };
 
-s16 D_800B0F8C_1DD12C = 0x002B;
+s16 creditsCommandCount = 0x002B;
 
-s32 D_800B0F90_1DD130[] = { 0xFFF77778, 0x00088888 };
+s32 paletteFadeSpeeds[] = { 0xFFF77778, 0x00088888 };
 
-s32 D_800B0F98_1DD138[] = { 0xFFFA4FA5, 0x0005B05B };
+s32 overlayFadeSpeeds[] = { 0xFFFA4FA5, 0x0005B05B };
 
-s32 D_800B0FA0_1DD140[] = { 0xFFEEEEEF, 0x00111111, 0x00000000, 0x00000000 };
+s32 textFadeSpeeds[] = { 0xFFEEEEEF, 0x00111111, 0x00000000, 0x00000000 };
 
 void initCreditsScrollingTextEffects(void *state) {
     CreditsScrollerState *s = (CreditsScrollerState *)state;
@@ -71,10 +71,10 @@ void initCreditsScrollingTextEffects(void *state) {
     s16 yOffset;
 
     s->currentDataIndex = 0;
-    s->unkD8C = 0;
+    s->commandIndex = 0;
     s->currentPaletteIndex = 0;
-    s->unkD38 = 0;
-    s->unkD8E = 0;
+    s->nextCommandFrame = 0;
+    s->paletteChangePending = 0;
 
     for (i = 0; i < 0x12; i++) {
         s->textEntriesA[i].unk0 = 0;
@@ -87,7 +87,7 @@ void initCreditsScrollingTextEffects(void *state) {
         s->textEntriesA[i].alpha = 0xFF;
         s->textEntriesA[i].unk12 = 0;
         s->textEntriesA[i].flags = 0;
-        s->textEntriesA[i].unk14 = 0;
+        s->textEntriesA[i].opacity = 0;
         s->textEntriesB[i].unk0 = 0;
         s->textEntriesB[i].y = -0x60 + i * 8;
         s->textEntriesB[i].dataTable = s->paletteDataTable[s->currentDataIndex];
@@ -98,7 +98,7 @@ void initCreditsScrollingTextEffects(void *state) {
         s->textEntriesB[i].alpha = 0x64;
         s->textEntriesB[i].unk12 = 0;
         s->textEntriesB[i].flags = 0x11;
-        s->textEntriesB[i].unk14 = 0;
+        s->textEntriesB[i].opacity = 0;
     }
 
     for (i = 0; i < 6; i++) {
@@ -106,12 +106,12 @@ void initCreditsScrollingTextEffects(void *state) {
         applyPaletteShift(&s->paletteContexts[i], 0xF00000, 0xB80000, 0x800000, 0x640000);
     }
 
-    s->unkD84 = 0;
-    s->unkD88 = 0;
+    s->overlayAlpha = 0;
+    s->overlayAlphaSpeed = 0;
     s->textRowIndex = 0;
-    s->unkDE4 = 0;
-    s->unkDE8 = 0;
-    s->unkD8F = 0;
+    s->textAlpha = 0;
+    s->textFadeSpeed = 0;
+    s->textChangePending = 0;
 
     for (i = 0; i < 8; i++) {
         textData = getTable2DEntry(s->textTable, s->textRowIndex, 0);
@@ -126,7 +126,7 @@ extern void func_80011924_12524(void);
 extern void
 func_80035260_35E60(void *arg0, void *arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8);
 
-void func_800B0930(CreditsScrollerState *s) {
+void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
     s32 showPalette;
     s32 i;
     s32 scaledAlpha;
@@ -137,74 +137,74 @@ void func_800B0930(CreditsScrollerState *s) {
     s32 height;
 
     showPalette = 1;
-    while (s->unk2 == s->unkD38) {
-        if (s->unkD8C >= D_800B0F8C_1DD12C) {
+    while (s->frameCounter == s->nextCommandFrame) {
+        if (s->commandIndex >= creditsCommandCount) {
             break;
         }
-        cmd = &D_800B0EE0_1DD080[s->unkD8C];
+        cmd = &creditsCommands[s->commandIndex];
         switch (cmd->command) {
             case 0:
                 s->currentDataIndex = (s8)cmd->param;
-                s->unkD8E = 1;
-                s->unkD34 = D_800B0F90_1DD130[0];
+                s->paletteChangePending = 1;
+                s->paletteFadeSpeed = paletteFadeSpeeds[0];
                 break;
             case 1:
-                s->unkD88 = D_800B0F98_1DD138[(s8)cmd->param];
+                s->overlayAlphaSpeed = overlayFadeSpeeds[(s8)cmd->param];
                 break;
             case 2:
-                s->unkD34 = D_800B0F90_1DD130[(s8)cmd->param];
-                s->unkD8E = 0;
+                s->paletteFadeSpeed = paletteFadeSpeeds[(s8)cmd->param];
+                s->paletteChangePending = 0;
                 break;
             case 3:
                 s->textRowIndex = (s8)cmd->param;
-                s->unkDE8 = D_800B0FA0_1DD140[0];
-                s->unkD8F = 1;
+                s->textFadeSpeed = textFadeSpeeds[0];
+                s->textChangePending = 1;
                 break;
             case 4:
-                s->unkDE8 = D_800B0FA0_1DD140[(s8)cmd->param];
+                s->textFadeSpeed = textFadeSpeeds[(s8)cmd->param];
                 break;
         }
 
-        s->unkD8C++;
-        if (s->unkD8C >= D_800B0F8C_1DD12C) {
+        s->commandIndex++;
+        if (s->commandIndex >= creditsCommandCount) {
             break;
         }
 
-        cmd = &D_800B0EE0_1DD080[s->unkD8C];
-        s->unkD38 = cmd->frame;
+        cmd = &creditsCommands[s->commandIndex];
+        s->nextCommandFrame = cmd->frame;
     }
 
     do {
-        s32 alphaSum = s->currentPaletteIndex + s->unkD34;
+        s32 alphaSum = s->currentPaletteIndex + s->paletteFadeSpeed;
         s->currentPaletteIndex = alphaSum;
         if (alphaSum > 0xFF0000) {
             s->currentPaletteIndex = 0xFF0000;
         } else if (alphaSum < 0) {
             s->currentPaletteIndex = 0;
-            if (s->unkD8E != 0) {
+            if (s->paletteChangePending != 0) {
                 for (i = 0; i < 0x12; i++) {
                     s->textEntriesA[i].dataTable = s->paletteDataTable[s->currentDataIndex];
                     s->textEntriesB[i].dataTable = s->paletteDataTable[s->currentDataIndex];
                 }
-                s->unkD34 = D_800B0F90_1DD130[1];
-                s->unkD8E = 0;
-                s->unkD84 = 0;
-                s->unkD88 = 0;
+                s->paletteFadeSpeed = paletteFadeSpeeds[1];
+                s->paletteChangePending = 0;
+                s->overlayAlpha = 0;
+                s->overlayAlphaSpeed = 0;
             }
         }
     } while (0);
 
     if (s->currentPaletteIndex >> 16) {
-        s->unkD84 += s->unkD88;
-        if (s->unkD84 > 0xFF0000) {
-            s->unkD84 = 0xFF0000;
+        s->overlayAlpha += s->overlayAlphaSpeed;
+        if (s->overlayAlpha > 0xFF0000) {
+            s->overlayAlpha = 0xFF0000;
         }
-        if (s->unkD84 < 0) {
-            s->unkD84 = 0;
+        if (s->overlayAlpha < 0) {
+            s->overlayAlpha = 0;
         }
 
-        if (s->unkD84 != 0) {
-            scaledAlpha = (((s->currentPaletteIndex >> 16) * (s->unkD84 >> 8)) / 255) << 8;
+        if (s->overlayAlpha != 0) {
+            scaledAlpha = (((s->currentPaletteIndex >> 16) * (s->overlayAlpha >> 8)) / 255) << 8;
             if (scaledAlpha > 0xFF0000) {
                 scaledAlpha = 0xFF0000;
             }
@@ -213,29 +213,29 @@ void func_800B0930(CreditsScrollerState *s) {
 
         for (i = 0; i < 0x12; i++) {
             if (scaledAlpha != 0) {
-                s->textEntriesB[i].unk14 = scaledAlpha >> 16;
+                s->textEntriesB[i].opacity = scaledAlpha >> 16;
                 debugEnqueueCallback(0, 2, func_80011924_12524, &s->textEntriesB[i]);
             }
-            if (s->unkD34 < 0) {
-                if (s->unkD84 == 0xFF0000) {
+            if (s->paletteFadeSpeed < 0) {
+                if (s->overlayAlpha == 0xFF0000) {
                     showPalette = 0;
                 }
             }
             if (showPalette != 0) {
-                s->textEntriesA[i].unk14 = s->currentPaletteIndex >> 16;
+                s->textEntriesA[i].opacity = s->currentPaletteIndex >> 16;
                 debugEnqueueCallback(0, 2, func_80011924_12524, &s->textEntriesA[i]);
             }
         }
     }
 
     do {
-        alphaSum = s->unkDE4 + s->unkDE8;
-        s->unkDE4 = alphaSum;
+        alphaSum = s->textAlpha + s->textFadeSpeed;
+        s->textAlpha = alphaSum;
         if (alphaSum > 0xFF0000) {
-            s->unkDE4 = 0xFF0000;
+            s->textAlpha = 0xFF0000;
         } else if (alphaSum < 0) {
-            s->unkDE4 = 0;
-            if (s->unkD8F != 0) {
+            s->textAlpha = 0;
+            if (s->textChangePending != 0) {
                 for (i = 0, yAccum = -0x18; i < 8; i++) {
                     s->textData[i] = getTable2DEntry(s->textTable, s->textRowIndex, i);
                     if (!s->textData[i]) {
@@ -244,14 +244,14 @@ void func_800B0930(CreditsScrollerState *s) {
                     s->textXOffset[i] = -(getMaxLinePixelWidth(s->textData[i]) / 2);
                     height = getTable2DRowCount(s->textTable, s->textRowIndex, i) * 8 + 8;
                     s->textYOffset[i] = (yAccum + (i * 0x10)) - height;
-                    s->unkDE8 = D_800B0F90_1DD130[1];
+                    s->textFadeSpeed = paletteFadeSpeeds[1];
                 }
-                s->unkD8F = 0;
+                s->textChangePending = 0;
             }
         }
     } while (0);
 
-    if (s->unkDE4 >> 16) {
+    if (s->textAlpha >> 16) {
         for (i = 0; i < 8; i++) {
             if (s->textData[i] == NULL) {
                 break;
@@ -262,7 +262,7 @@ void func_800B0930(CreditsScrollerState *s) {
                 s->textXOffset[i],
                 s->textYOffset[i],
                 0xFF,
-                s->unkDE4 >> 16,
+                s->textAlpha >> 16,
                 0,
                 1,
                 4

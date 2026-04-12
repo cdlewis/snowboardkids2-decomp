@@ -155,7 +155,7 @@ void func_80003EE0_4AE0(void) {
     taskMemory->unkE40 = 0;
     taskMemory->unkE42 = 0;
     taskMemory->unk0 = 0;
-    taskMemory->unk2 = 0;
+    taskMemory->frameCounter = 0;
     taskMemory->unk944 = 0;
     taskMemory->unk948 = &taskMemory->unk94C;
     taskMemory->unk94C = 0;
@@ -210,8 +210,8 @@ void updateCreditsSequence(void) {
 
     state = (CreditsState *)getCurrentAllocation();
 
-    if (state->unk2 == 0x1C98) {
-        state->unk2 = 0x1C98;
+    if (state->frameCounter == 0x1C98) {
+        state->frameCounter = 0x1C98;
         setMusicFadeOut(4);
         setViewportFadeValue(&state->unk8, 0xFF, 0x1E);
         setViewportFadeValue(&state->unk1E0, 0xFF, 0x1E);
@@ -228,11 +228,11 @@ void updateCreditsSequence(void) {
         state->unk0 = 1;
     }
 
-    func_800B0930((CreditsScrollerState *)state);
+    updateCreditsScrollingTextEffects((CreditsScrollerState *)state);
     updateCreditsCornerDecorationSprites(state);
     spawnCreditsCharacter(state);
 
-    state->unk2 = (u16)state->unk2 + 1;
+    state->frameCounter = (u16)state->frameCounter + 1;
 }
 
 void fadeOutCreditsSequence(void) {
@@ -241,7 +241,7 @@ void fadeOutCreditsSequence(void) {
 
     state = (CreditsState *)getCurrentAllocation();
 
-    if (state->unk2 == 0x1CB8) {
+    if (state->frameCounter == 0x1CB8) {
         unlinkNode(&state->unk768);
         unlinkNode(&state->unk590);
         unlinkNode(&state->unk3B8);
@@ -257,10 +257,10 @@ void fadeOutCreditsSequence(void) {
         }
         terminateSchedulerWithCallback(onCreditsComplete);
     } else {
-        func_800B0930((CreditsScrollerState *)state);
+        updateCreditsScrollingTextEffects((CreditsScrollerState *)state);
         updateCreditsCornerDecorationSprites(state);
         spawnCreditsCharacter(state);
-        state->unk2 = (u16)state->unk2 + 1;
+        state->frameCounter = (u16)state->frameCounter + 1;
     }
 }
 
@@ -276,7 +276,7 @@ void spawnCreditsCharacter(CreditsState *arg0) {
     s32 var_v0;
     CreditsCharacter *temp_v0;
 
-    temp_a0 = arg0->unk2;
+    temp_a0 = arg0->frameCounter;
     if ((u32)(temp_a0 - 0x12C) >= 0x1717U) {
         arg0->unkE60 = 0x12C;
         return;
@@ -298,7 +298,7 @@ void spawnCreditsCharacter(CreditsState *arg0) {
             *(s16 *)&temp_v0->unk8 = arg0->unkE42;
         }
         arg0->unkE40 = arg0->unkE40 + 1;
-        arg0->unkE60 = arg0->unk2 + 0x3D;
+        arg0->unkE60 = arg0->frameCounter + 0x3D;
     }
 }
 

@@ -18,7 +18,7 @@ typedef struct {
 typedef struct {
     s8 unk0;
     u8 padding[1];
-    s16 unk2;
+    s16 frameCounter;
     s32 unk4;
     ViewportNode unk8;
     ViewportNode unk1E0;

@@ -63,7 +63,7 @@ void updateCreditsCornerDecorationSprites(void *arg0) {
     s32 temp_v0;
     s32 value;
 
-    temp_v1 = state->unk2;
+    temp_v1 = state->frameCounter;
 
     switch (temp_v1) {
         case 0x1A22:
