@@ -276,7 +276,337 @@ void renderPlayersByShortcutDistance(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B05B8_A0468);
+typedef struct {
+    s8 stickX;
+    s8 stickY;
+    u16 buttons;
+} InputRecord;
+
+typedef s32 (*BehaviorModeHandler)(Player *);
+
+extern u16 D_8009ADE0_9B9E0;
+extern BehaviorModeHandler D_800BAA80_AA930[];
+extern s16 D_800BAA90_AA940;
+extern s32 D_800BAA9C_AA94C[];
+extern s16 D_800BAAAC_AA95C[];
+extern u8 D_800BADE0[];
+extern s8 gAnalogStickX[];
+extern s8 gAnalogStickY[];
+extern s32 gButtonsPressed[];
+
+extern void startRumbleEffect(Player *player, s32 effectType);
+
+void func_800B05B8_A0468(Player *player) {
+    Transform3D sp10;
+    Transform3D sp30;
+    Vec3i sp50;
+    GameState *gameState;
+    s32 temp;
+    s32 diff;
+    s32 myProgress;
+    s32 invTimer;
+
+    gameState = getCurrentAllocation();
+
+    player->velocity.x = player->worldPos.x - player->unk440;
+    player->velocity.y = player->worldPos.y - player->unk444;
+    player->velocity.z = player->worldPos.z - player->unk448;
+
+    memcpy(&player->unk440, &player->worldPos, sizeof(Vec3i));
+
+    if (player->unkBDA == 0) {
+        player->unkB80 = player->unkB7A;
+        player->unkB81 = player->unkB7B;
+        player->unkB82 = player->unkB7C;
+
+        switch (player->unkBE3) {
+            case 0:
+                player->unkB7A = gAnalogStickX[player->playerIndex] / 4;
+                player->unkB7B = gAnalogStickY[player->playerIndex] / 4;
+                player->unkB7C = gButtonsPressed[player->playerIndex];
+                if (player->animFlags & 0x80000) {
+                    player->unkB7C = 0;
+                    player->unkB7A = 0;
+                    player->unkB7B = 0;
+                }
+                break;
+
+            case 1:
+                if (gameState->raceIntroState == 0) {
+                    if (player->unkBA8 < D_800BAAAC_AA95C[player->unkBE4]) {
+                        player->unkB7A = ((InputRecord *)player->unk2C)[player->unkBA8].stickX;
+                        player->unkB7B = ((InputRecord *)player->unk2C)[player->unkBA8].stickY;
+                        player->unkB7C = ((InputRecord *)player->unk2C)[player->unkBA8].buttons;
+                        player->unkBA8++;
+                    } else {
+                        player->unkB7A = 0;
+                        player->unkB7B = 0;
+                        player->unkB7C = 0;
+                    }
+                }
+                break;
+
+            case 2:
+                if (gameState->raceIntroState == 0) {
+                    if (player->unkBA8 < D_800BAAAC_AA95C[player->unkBE4]) {
+                        player->unkB7A = ((InputRecord *)player->unk2C)[player->unkBA8].stickX =
+                            gAnalogStickX[player->playerIndex] / 4;
+                        player->unkB7B = ((InputRecord *)player->unk2C)[player->unkBA8].stickY =
+                            gAnalogStickY[player->playerIndex] / 4;
+                        player->unkB7C = ((InputRecord *)player->unk2C)[player->unkBA8].buttons =
+                            gButtonsPressed[player->playerIndex];
+                        player->unkBA8++;
+                    } else {
+                        player->unkB7A = 0;
+                        player->unkB7B = 0;
+                        player->unkB7C = 0;
+                    }
+                }
+                break;
+        }
+
+        player->unkB7E = player->unkB7C & ~player->unkB82;
+    }
+
+    if (player->unkBC2 != 0) {
+        player->unkBC2--;
+    }
+
+    player->unkAB8 = player->unkAB4;
+    if (player->ghostEffectState != 0) {
+        player->unkAB8 = 0x3000;
+    }
+
+    player->maxSpeedCap = player->unkAA0;
+    if (player->unkBDA != 0) {
+        player->maxSpeedCap -= D_800BADE0[player->unkBDD * 0x44] * 0x202;
+    }
+
+    diff = D_800BAA9C_AA94C[player->finishPosition] - player->unkAAC;
+    invTimer = (gameState->finalLapNumber - gameState->players[gameState->PAD_6B_2[0]].currentLap) * 8192 +
+               gameState->players[gameState->PAD_6B_2[0]].unkB98;
+    myProgress = (gameState->finalLapNumber - player->currentLap) * 8192 + player->unkB98;
+
+    if ((myProgress - invTimer) >= 0x3A9) {
+        diff += 0x8000;
+    }
+
+    player->animFlags &= 0xFEFFFFFF;
+    if ((player->finishPosition == (gameState->numPlayers - 1)) && (player->finishPosition != 0)) {
+        s32 idx = gameState->PAD_6B_2[player->finishPosition - 1];
+        invTimer =
+            (gameState->finalLapNumber - gameState->players[idx].currentLap) * 8192 + gameState->players[idx].unkB98;
+        if ((myProgress - invTimer) >= 0x751) {
+            player->animFlags |= 0x01000000;
+        }
+    }
+
+    if (diff > 0x100) {
+        diff = 0x100;
+    }
+    if (diff < -0x80) {
+        diff = -0x80;
+    }
+
+    player->unkAAC += diff;
+    player->maxSpeedCap = player->maxSpeedCap + player->unkAAC;
+    if (player->animFlags & 0x10) {
+        player->maxSpeedCap = player->maxSpeedCap / 2;
+    }
+
+    if (player->boostState != 0) {
+        switch (player->boostState) {
+            case 1:
+            case 2:
+                player->maxSpeedCap += 0x20000;
+                break;
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                player->maxSpeedCap += 0x100000;
+                break;
+        }
+    }
+
+    if (player->maxSpeedCap > 0x180000) {
+        player->maxSpeedCap = 0x180000;
+    }
+    if (player->maxSpeedCap < 0) {
+        player->maxSpeedCap = 0;
+    }
+
+    for (temp = 0; temp < player->unkBCF; temp++) {
+        player->maxSpeedCap -= (player->maxSpeedCap >> 2);
+    }
+
+    diff = player->maxSpeedCap - player->aiLaneWidth;
+    if (diff >= 0x1001) {
+        diff = 0x1000;
+    }
+    if (diff < -0x600) {
+        diff = -0x600;
+    }
+
+    player->aiLaneWidth += diff;
+    if (player->boostState >= 5 && player->aiLaneWidth < player->maxSpeedCap) {
+        player->aiLaneWidth = player->maxSpeedCap;
+    }
+
+    if (player->behaviorMode != 3) {
+        if (player->hitReactionState != 0) {
+            player->behaviorMode = 2;
+            player->boostTimer = 0;
+            player->ghostEffectTimer = 0;
+            player->invincibilityTimer = 0;
+
+            switch (player->hitReactionState) {
+                case 1:
+                    player->behaviorPhase = 0;
+                    startRumbleEffect(player, 1);
+                    playStunnedVoice(player);
+                    break;
+                case 2:
+                    player->behaviorPhase = 1;
+                    startRumbleEffect(player, 1);
+                    playStunnedVoice(player);
+                    break;
+                case 3:
+                    player->behaviorPhase = 2;
+                    startRumbleEffect(player, 2);
+                    playStunnedVoice(player);
+                    break;
+                case 0x31:
+                    rotateVectorY(
+                        gameState->unk48 + 0xE4,
+                        atan2Fixed(player->knockbackVelocity.x, player->knockbackVelocity.z),
+                        &sp50
+                    );
+                    sp50.x += player->worldPos.x;
+                    sp50.z += player->worldPos.z;
+                    sp50.y = player->worldPos.y + 0x100000;
+                    spawnImpactStar(&sp50);
+                    queueSoundAtPosition(&player->worldPos, 0xD);
+                case 0x32:
+                    player->behaviorPhase = 5;
+                    startRumbleEffect(player, 3);
+                    playStunnedVoice(player);
+                    break;
+                case 0x50:
+                    player->behaviorPhase = 6;
+                    playCharacterVoice3(player);
+                    break;
+                case 4:
+                    player->behaviorPhase = 7;
+                    startRumbleEffect(player, 2);
+                    playStunnedVoice(player);
+                    break;
+                case 0x64:
+                    player->behaviorPhase = 9;
+                    break;
+                case 0x34:
+                    player->behaviorPhase = 0xE;
+                    startRumbleEffect(player, 3);
+                    playStunnedVoice(player);
+                    break;
+                case 0x35:
+                    player->behaviorPhase = 0xF;
+                    startRumbleEffect(player, 3);
+                    playStunnedVoice(player);
+                    break;
+                case 0x3C:
+                    player->behaviorPhase = 0x11;
+                    startRumbleEffect(player, 3);
+                    playStunnedVoice(player);
+                    break;
+                case 0x33:
+                    player->behaviorPhase = 0x12;
+                    startRumbleEffect(player, 3);
+                    playStunnedVoice(player);
+                    break;
+                case 0x3D:
+                    player->behaviorPhase = 0x13;
+                    startRumbleEffect(player, 5);
+                    playStunnedVoice(player);
+                    break;
+                case 0x36:
+                    player->behaviorPhase = 0x15;
+                    startRumbleEffect(player, 6);
+                    playCharacterVoice2(player);
+                    break;
+                case 0x3E:
+                    player->behaviorPhase = 0x16;
+                    startRumbleEffect(player, 2);
+                    playCharacterVoice1(player);
+                    break;
+            }
+
+            player->behaviorStep = 0;
+            player->behaviorCounter = 0;
+            player->animFlags &= 0xFFFF2FFF;
+        }
+    } else {
+        player->boostTimer = 0;
+        player->ghostEffectTimer = 0;
+    }
+
+    {
+        u16 invTimerLocal = player->invincibilityTimer;
+        player->hitReactionState = 0;
+        if (invTimerLocal != 0) {
+            player->invincibilityTimer = invTimerLocal - 1;
+            if ((player->unkBBB == 0xF) && ((u16)(invTimerLocal - 1) < 0xBU)) {
+                player->invincibilityTimer = invTimerLocal;
+            }
+        }
+    }
+
+    if (gameState->raceIntroState == 0 && !(D_8009ADE0_9B9E0 & 3)) {
+        if (player->unkBBB == 0xE) {
+            addPlayerRaceGold(player, 1);
+        }
+        if (player->unkBBB == 0xD) {
+            addPlayerRaceGold(player, -1);
+        }
+    }
+
+    player->animFlags = player->animFlags & 0xFFFEF7FF;
+    if (player->animFlags & 1) {
+        player->animFlags |= 0x10000;
+    }
+
+    if (player->bodyPartAnimFlags != 0) {
+        player->bodyPartAnimFlags--;
+    } else {
+        if (player->unkBCF != 0) {
+            setPlayerBodyPartAnimState(player, 2, 0);
+        } else {
+            setPlayerBodyPartAnimState(player, 0, 0);
+        }
+    }
+
+    do {
+    } while (D_800BAA80_AA930[player->behaviorMode](player));
+
+    player->pathFlags = 0;
+    player->animFlags &= 0xFFFDFFFF;
+
+    createZRotationMatrix((Transform3D *)&player->unk9B0, player->unkA92);
+    createCombinedRotationMatrix(&player->unk990, player->unkA8E, player->unkA90);
+    createYRotationMatrix(&player->unk970, player->rotY);
+
+    func_8006B084_6BC84((Transform3D *)&player->unk9B0, &player->unk990, &sp10);
+    func_8006B084_6BC84(&sp10, &player->unk970, &sp30);
+
+    sp30.translation.x -= player->unk970.translation.x;
+    sp30.translation.y -= player->unk970.translation.y;
+    sp30.translation.z -= player->unk970.translation.z;
+
+    transformVector(&D_800BAA90_AA940, (s16 *)&sp30, &player->collisionOffset);
+    memcpy(&player->collisionListNode.localPos, &player->collisionOffset, sizeof(Vec3i));
+    player->collisionListNode.posPtr = &player->worldPos;
+    addCollisionSectorNodeToList(&player->collisionListNode);
+}
 
 s32 initPlayerForRace(Player *player) {
     Vec3i waypoint1;
@@ -764,8 +1094,6 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
     processPlayerItemUsage(player);
     return 0;
 }
-
-extern void startRumbleEffect(Player *player, s32 effectType);
 
 s32 initPostTrickLandingStep(Player *player) {
     u8 behaviorStep;

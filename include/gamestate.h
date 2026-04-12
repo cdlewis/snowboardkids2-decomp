@@ -6,6 +6,14 @@
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 
+typedef struct ListNode_5AA90 {
+    /* 0x00 */ struct ListNode_5AA90 *next;
+    /* 0x04 */ Vec3i *posPtr;
+    /* 0x08 */ Vec3i localPos;
+    /* 0x14 */ s32 radius;
+    /* 0x18 */ u8 id;
+} ListNode_5AA90;
+
 typedef struct {
     /* 0x00 */ s16 values[10];
     /* 0x14 */ s32 position[3];
@@ -156,9 +164,7 @@ typedef struct {
     s32 storedPosX;
     s32 storedPosY;
     s32 storedPosZ;
-    u8 padding2c_2[0x14];
-    /* 0xB64 */ s32 rearCollisionRadius;
-    u8 padding2c_2_after[4];
+    /* 0xB50 */ ListNode_5AA90 collisionListNode;
     s32 raceGold;
     s32 skillPoints;
     u16 storedRotY;
@@ -170,7 +176,7 @@ typedef struct {
     u16 unkB7E;
     s8 unkB80;
     s8 unkB81;
-    u8 padding6c[0x2];
+    u16 unkB82;
     s32 animFlags;
     s32 behaviorFlags;
     s32 unkB8C;
@@ -185,7 +191,7 @@ typedef struct {
     s16 unkBA2;
     u16 invincibilityTimer;
     s16 ghostEffectTimer;
-    u8 _padBA8[0x2];
+    u16 unkBA8;
     s16 trickPoints;
     s16 trickScore;
     s16 tricksPerformedMask;

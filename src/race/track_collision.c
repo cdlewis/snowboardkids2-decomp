@@ -908,7 +908,7 @@ void handleOrientedAreaCollision(Vec3i *origin, s32 radialThreshold, s32 depthEx
 
             deltaPos.y = 0;
             deltaPos.x = 0;
-            deltaPos.z = -(depthExtent + player->rearCollisionRadius) - rotatedPos.z;
+            deltaPos.z = -(depthExtent + player->collisionListNode.radius) - rotatedPos.z;
 
             rotateVectorY(&deltaPos, rotationAngle, &rotatedPos);
 
