@@ -126,26 +126,104 @@ typedef struct {
     u8 unk46;
 } initAnimatedGhost_arg;
 
-extern void *g_GhostDefaultAssetMetadata;
-extern Vec3i g_GhostBaseDirection;
-extern AnimationData D_800BC830_B0520[];
-extern void *g_FloatingBillboardSpriteMetadata;
-extern s8 g_FloatingBillboardInitialPos[12];
-extern void *D_800BC920_B0610;
-extern void *D_800BC960_B0650;
-extern s32 D_800BC9A0_B0690[];
-extern s16 D_800BC9DC_B06CC[];
-extern s16 D_800BC9E8_B06D8[];
-extern s16 D_800BC9F4_B06E4[];
-extern Vec3i g_GhostSpawnPositions[];
-extern Vec3i g_FloatingBillboardTarget;
+u32 g_GhostDefaultAssetMetadata[] = {
+    0xFFED0013, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00130013, 0x00000000, 0x07F0FFF0, 0xFFFFFFFF,
+    0x0013FFED, 0x00000000, 0x07F007F0, 0xFFFFFFFF, 0xFFEDFFED, 0x00000000, 0xFFF007F0, 0xFFFFFFFF,
+};
+
+AnimationData D_800BC830_B0520[] = {
+    { 0x0F, 0x3A },
+    { 0x0F, 0x3B },
+    { 0x0F, 0x3A },
+    { 0x0F, 0x3B },
+    { 0x1E, 0x3C },
+    { 0x0F, 0x3D },
+    { 0x0F, 0x3E },
+    { 0x0F, 0x3D },
+    { 0x0F, 0x3E },
+    { 0x00, 0x00 },
+};
+
+GhostSpawnPos D_800BC844_B0534[] = {
+    { 0x135B7BF1, 0x1BCF280C },
+    { 0x1441AFC1, 0x1CEC431C },
+    { 0x13AE7075, 0x1DC5AD88 },
+    { 0x13FD7205, 0x1E6CEDA8 },
+    { 0x145E1875, 0x1ED15CC8 },
+    { 0x13AD37D3, 0x1F6A2736 },
+    { 0x1365C56F, 0x1EC52634 },
+    { 0x14795965, 0x1D7E3A1C },
+};
+
+GhostSpawnPos D_800BC884_B0574[] = {
+    { 0xFA0C7CB8,      (s32)0xD326E050 },
+    { (s32)0xFA3DC7A8, (s32)0xD22E1B38 },
+    { (s32)0xFADC44E0, (s32)0xD290BBB0 },
+    { (s32)0xFB5F98B4, (s32)0xD2FEF6E0 },
+    { (s32)0xFBA27952, (s32)0xD2089E18 },
+    { (s32)0xFABF4C4C, (s32)0xD1AA89F8 },
+    { (s32)0xF9A85FCA, (s32)0xD1D046C8 },
+    { (s32)0xFA3FD23C, (s32)0xD3366B26 },
+};
+s32 D_800BC884_B0574_pad = 0;
+
+u32 g_FloatingBillboardSpriteMetadata[] = {
+    0xFFE00020, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00200020, 0x00000000, 0x07F0FFF0, 0xFFFFFFFF,
+    0x0020FFE0, 0x00000000, 0x07F007F0, 0xFFFFFFFF, 0xFFE0FFE0, 0x00000000, 0xFFF007F0, 0xFFFFFFFF,
+};
+
+s8 g_FloatingBillboardInitialPos[12] = {
+    0x1D, 0x98, (s8)0xFF, (s8)0xB8, 0x26, 0x5A, (s8)0x9F, 0x14, 0x13, (s8)0x84, 0x6D, 0x2F,
+};
+
+Vec3i g_FloatingBillboardTarget = { 0x17A8A90D, 0x25A45868, 0x084B69BF };
+
+u32 D_800BC920_B0610[] = {
+    0xFFE80030, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00180030, 0x00000000, 0x07F0FFF0, 0xFFFFFFFF,
+    0x00180000, 0x00000000, 0x07F007F0, 0xFFFFFFFF, 0xFFE80000, 0x00000000, 0xFFF007F0, 0xFFFFFFFF,
+};
+
+u32 D_800BC960_B0650[] = {
+    0xFFE80030, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00180030, 0x00000000, 0x03F0FFF0, 0xFFFFFFFF,
+    0x00180000, 0x00000000, 0x03F003F0, 0xFFFFFFFF, 0xFFE80000, 0x00000000, 0xFFF003F0, 0xFFFFFFFF,
+};
+
+s32 D_800BC9A0_B0690[] = {
+    0x133ABF3D, 0x24530114, 0x0951ED11, 0x12186D79, 0x242698B5, 0x0923670F, 0x11063625, 0x23F96B6F,
+    0x08431DD1, 0x11E788F1, 0x23BB7EAD, 0x0669EF7D, 0x1088584D, 0x23A2F6F8, 0x05D11829,
+};
+
+s16 D_800BC9DC_B06CC[] = { 0x0006, 0x0006, 0x0006, 0x0006, 0x0007, 0x0000 };
+
+s16 D_800BC9E8_B06D8[] = { 0x0060, 0x0000, 0x0060, 0x0000, 0x0060, 0x0000 };
+
+s16 D_800BC9F4_B06E4[] = { 0x0080, 0x0000, 0x0070, 0x0000, 0x0060, 0x0000 };
+
+Vec3i g_GhostSpawnPositions[] = {
+    { 0x0588A7A0, 0x2E2CB884, 0x29185A96 },
+    { 0x04D56484, 0x2E2CC575, 0x27EDF564 },
+    { 0x06917BE4, 0x2DDB7EE8, 0x2876FA08 },
+    { 0x05DE5088, 0x2DDB9103, 0x274CF0E8 },
+    { 0x078E2B74, 0x2D93BB4B, 0x27CB5A48 },
+    { 0x06E97406, 0x2D925515, 0x26AC8DEA },
+    { 0x089C64C4, 0x2D4E0E65, 0x272B2B28 },
+    { 0x07ECB6AC, 0x2D4D6040, 0x25FEEB00 },
+};
+
+Vtx D_800BCA60_B0750[] = {
+    { { { -16, 8, 0 }, 0, { -16, -16 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+    { { { 16, 8, 0 }, 0, { 2032, -16 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+    { { { 16, -8, 0 }, 0, { 2032, 1008 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+    { { { -16, -8, 0 }, 0, { -16, 1008 }, { 0xFF, 0xFF, 0xFF, 0xFF } } },
+};
+
+Vec3i g_GhostBaseDirection = { 0, 0, 0 };
+s32 g_GhostBaseDirection_pad = 0;
+
 extern Gfx D_8009A780_9B380[];
-extern Gfx D_800BCA60_B0750[];
 extern s32 gLookAtPtr;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
-extern GhostSpawnPos D_800BC844_B0534[];
-extern GhostSpawnPos D_800BC884_B0574[];
 
 void initAnimatedGhost(AnimatedGhostEntity *);
 void cleanupAnimatedGhost(void **);

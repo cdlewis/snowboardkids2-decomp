@@ -614,7 +614,7 @@ segments:
     overlay: true
     subsegments:
       - [0xAEFA0, c, levels/haunted_house]
-      - [0xB04E0, data, levels/haunted_house]
+      - [0xB04E0, .data, levels/haunted_house]
 
   - name: levels/ice_land_boss
     type: code

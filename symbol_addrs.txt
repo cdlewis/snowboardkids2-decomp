@@ -1,3 +1,4 @@
+D_800BC830_B0520 = 0x800BC830; // rom:0xB0520 size:0x14
 gControllerPackFileNote = 0x8009F634; // size:0x1C
 gControllerPackFileNumbers = 0x8009F650; // size:0x10
 
