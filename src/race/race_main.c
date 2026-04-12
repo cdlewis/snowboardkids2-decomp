@@ -24,22 +24,364 @@
 #include "system/task_scheduler.h"
 #include "text/text_elements.h"
 
-extern u16 trickScoreTable[];
-extern u16 trickBonusTable[];
-
 /* X and Z offset arrays for player's 9 joint positions */
 extern s32 D_800BA348_AA1F8; /* gPlayerJointXOffsets */
 extern s32 D_800BA350_AA200; /* gPlayerJointZOffsets */
-extern s32 D_800BAB40_AA9F0;
-extern s32 D_800BAB44_AA9F4;
-extern s32 D_800BAB3C_AA9EC;
-extern s16 gShortcutWarpForwardOffset;
-extern Gfx D_800BAA30_AA8E0[];
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
 
-/* Player initial X positions based on player index */
-extern s32 gPlayerStartXPositions[];
+typedef void (*RaceFinishBehaviorStepHandler)(void *);
+typedef void (*StunnedBehaviorPhaseHandler)(void *);
+typedef void (*PostTrickLandingStepHandler)(void *);
+typedef void (*KnockbackBehaviorPhaseHandler)(void *);
+typedef void (*KnockbackBehaviorStepHandler)(void *);
+typedef void (*SharpTurnBehaviorStepHandler)(void *);
+typedef void (*DefaultBehaviorPhaseHandler)(void *);
+
+typedef s32 (*BehaviorModeHandler)(Player *);
+
+typedef struct {
+    u8 primaryR;
+    u8 primaryG;
+    u8 primaryB;
+    u8 pad1;
+    u8 secondaryR;
+    u8 secondaryG;
+    u8 secondaryB;
+    u8 pad2;
+} BossSurfaceColor;
+
+/* Forward declarations for function pointer tables */
+s32 initPlayerForRace(Player *);
+void dispatchDefaultBehaviorPhase(BehaviorState *);
+void dispatchStunnedBehaviorPhase(BehaviorState *);
+void dispatchKnockbackBehaviorPhase(Player *);
+void func_800B1544_A13F4(void *);
+s32 updatePlayerGroundedSliding(Player *);
+void dispatchSharpTurnBehaviorStep(BehaviorState *);
+s32 initPostTrickLandingStep(Player *);
+void dispatchPostTrickLandingStep(BehaviorState *);
+s32 updatePlayerFinishWaiting(Player *);
+s32 updatePlayerSlidingConstrained(Player *);
+void dispatchRaceFinishBehaviorStep(BehaviorState *);
+typedef struct {
+    u8 _pad0[0xB8C];
+    s32 unkB8C;
+    u8 _padB90[0x2F];
+    u8 behaviorStep;
+} initSharpTurnSlidingStep_arg;
+
+typedef struct {
+    u8 _pad0[0xB84];
+    s32 animFlags;
+    u8 _padB88[0x37];
+    u8 behaviorStep;
+} endSharpTurnSlidingStep_arg;
+
+s32 initSharpTurnSlidingStep(initSharpTurnSlidingStep_arg *);
+s32 updateSharpTurnSlidingStep(Player *);
+s32 endSharpTurnSlidingStep(endSharpTurnSlidingStep_arg *);
+s32 recoverSharpTurnSlidingStep(Player *);
+s32 beginPostTrickSlidingStep(Player *);
+s32 updatePostTrickSlidingStep(Player *);
+s32 updatePostTrickChargingStep(Player *);
+s32 beginPostTrickLaunchStep(Player *);
+s32 updatePostTrickDescentStep(Player *);
+s32 updateBasicTrickAirborne(Player *);
+s32 updateRightSpinTrick(Player *);
+s32 updateLeftSpinTrick(Player *);
+s32 updateForwardFlipTrick(Player *);
+s32 updateBackwardFlipTrick(Player *);
+s32 updateRightForwardFlipTrick(Player *);
+s32 updateRightBackwardFlipTrick(Player *);
+s32 updateLeftForwardFlipTrick(Player *);
+s32 updateLeftBackwardFlipTrick(Player *);
+s32 updateRaceFinishSlowingDownStep(Player *);
+s32 updateRaceFinishWaitingStep(Player *);
+s32 updateRaceFinishWinStep(Player *);
+s32 updateRaceFinishLoseStep(Player *);
+s32 updateStunnedAirbornePhase(Player *);
+s32 updateStunnedAirbornePhaseBoss(Player *);
+s32 updateStunnedFallingPhase(Player *);
+s32 updateStunnedLandingBouncePhase(Player *);
+s32 updateStunnedRecoveryFallingPhase(Player *);
+s32 updateStunnedRecoveryGroundSlidePhase(Player *);
+s32 updateEdgeFallRecoveryGetUpPhase(Player *);
+s32 updateStunnedRecoveryBouncePhase(Player *);
+s32 updateStunnedRecoveryBounceFallPhase(Player *);
+s32 updateStunnedRecoverySlidePhase(Player *);
+s32 updateStunnedRecoverySlideBouncePhase(Player *);
+void func_800B55B4_A5464(void *);
+s32 updateStunnedRecoveryEndPhase(Player *);
+s32 updateStunnedRecoveryStandUpPhase(Player *);
+s32 updateKnockbackAirborneLaunchPhase(Player *);
+s32 updateStunnedPanelHitFallPhase(Player *);
+s32 updateStunnedBounceFallPhase(Player *);
+s32 updateStunnedBounceFallRecoverPhase(Player *);
+s32 updateStunnedBounceLaunchPhase(Player *);
+s32 updateKnockbackAirbornePhase(Player *);
+s32 updateKnockbackBounceLaunchPhase(Player *);
+s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *);
+s32 updateKnockbackHomingBouncePhase(Player *);
+void dispatchKnockbackBehaviorStep(BehaviorState *);
+s32 beginKnockbackRecoveryStep(Player *);
+s32 updateKnockbackRecoveryStep(Player *);
+s32 fallToTrackCenterStep(Player *);
+s32 fallTowardShortcutWarpStep(Player *);
+s32 slideDuringKnockbackRecoveryStep(Player *);
+s32 slideDiagonallyDuringKnockbackRecoveryStep(Player *);
+s32 respawnAtFinishLineAndSlideStep(Player *);
+s32 slideForwardAndResetStep(Player *);
+s32 dropDownwardStep(Player *);
+s32 jumpUpwardStep(Player *);
+s32 restoreStoredPositionStep(Player *);
+s32 handleUfoStoredPositionStep(Player *);
+s32 handleUfoAbductionRecoveryStep(Player *);
+s32 waitAtStoredPositionStep(Player *);
+s32 handleFallFromUfoStep(Player *);
+s32 dropAfterUfoReleaseStep(Player *);
+s32 spinRampUpStep(Player *);
+s32 maintainMaxSpinStep(Player *);
+s32 spinRampDownStep(Player *);
+s32 spinFadeInWaitStep(Player *);
+s32 warpToShortcutSpinUpStep(Player *);
+s32 shortcutSpinDownStep(Player *);
+s32 shortcutPostSpinWaitStep(Player *);
+s32 shortcutLaunchStep(Player *);
+
+Gfx D_800BAA30_AA8E0[] = {
+    { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00200405 } },
+    { .words = { 0xD7000002, 0x80008000 } }, { .words = { 0xE7000000, 0x00000000 } },
+    { .words = { 0xE3001001, 0x00000000 } }, { .words = { 0xE3001201, 0x00003000 } },
+    { .words = { 0xE3000A01, 0x00000000 } }, { .words = { 0xFC121824, 0xFF33FFFF } },
+    { .words = { 0xE200001C, 0x00504DD8 } }, { .words = { 0xDF000000, 0x00000000 } },
+};
+
+BehaviorModeHandler D_800BAA80_AA930[] = {
+    (BehaviorModeHandler)initPlayerForRace,
+    (BehaviorModeHandler)dispatchDefaultBehaviorPhase,
+    (BehaviorModeHandler)dispatchStunnedBehaviorPhase,
+    (BehaviorModeHandler)dispatchKnockbackBehaviorPhase,
+};
+
+s16 D_800BAA90_AA940[] = { 0x0000, 0x0000, 0x0010, 0x0000, 0x0000, 0x0000 };
+
+s32 D_800BAA9C_AA94C[] = {
+    0xFFFF8000,
+    0x00000000,
+    0x00008000,
+    0x00010000,
+};
+
+s16 D_800BAAAC_AA95C[] = {
+    0x0384, 0x0384, 0x0384, 0x0384, 0x0384, 0x0384, 0x0384, 0x0CE4, 0x0CE4, 0x0CE4, 0x0CE4, 0x0000,
+};
+
+s32 gPlayerStartXPositions[] = {
+    0xFFF00000,
+    0x00100000,
+    0xFFD00000,
+    0x00300000,
+};
+
+DefaultBehaviorPhaseHandler D_800BAAD4_AA984[] = {
+    (DefaultBehaviorPhaseHandler)func_800B1544_A13F4,
+    (DefaultBehaviorPhaseHandler)updatePlayerGroundedSliding,
+    (DefaultBehaviorPhaseHandler)dispatchSharpTurnBehaviorStep,
+    (DefaultBehaviorPhaseHandler)initPostTrickLandingStep,
+    (DefaultBehaviorPhaseHandler)dispatchPostTrickLandingStep,
+    (DefaultBehaviorPhaseHandler)updatePlayerFinishWaiting,
+    (DefaultBehaviorPhaseHandler)updatePlayerSlidingConstrained,
+    (DefaultBehaviorPhaseHandler)dispatchRaceFinishBehaviorStep,
+};
+
+SharpTurnBehaviorStepHandler sharpTurnBehaviorStepHandlers[] = {
+    (SharpTurnBehaviorStepHandler)initSharpTurnSlidingStep,
+    (SharpTurnBehaviorStepHandler)updateSharpTurnSlidingStep,
+    (SharpTurnBehaviorStepHandler)endSharpTurnSlidingStep,
+    (SharpTurnBehaviorStepHandler)recoverSharpTurnSlidingStep,
+};
+
+PostTrickLandingStepHandler postTrickLandingStepHandlers[] = {
+    (PostTrickLandingStepHandler)beginPostTrickSlidingStep,   (PostTrickLandingStepHandler)updatePostTrickSlidingStep,
+    (PostTrickLandingStepHandler)updatePostTrickChargingStep, (PostTrickLandingStepHandler)beginPostTrickLaunchStep,
+    (PostTrickLandingStepHandler)updatePostTrickDescentStep,  (PostTrickLandingStepHandler)updateBasicTrickAirborne,
+    (PostTrickLandingStepHandler)updateRightSpinTrick,        (PostTrickLandingStepHandler)updateLeftSpinTrick,
+    (PostTrickLandingStepHandler)updateForwardFlipTrick,      (PostTrickLandingStepHandler)updateBackwardFlipTrick,
+    (PostTrickLandingStepHandler)updateRightForwardFlipTrick, (PostTrickLandingStepHandler)updateRightBackwardFlipTrick,
+    (PostTrickLandingStepHandler)updateLeftForwardFlipTrick,  (PostTrickLandingStepHandler)updateLeftBackwardFlipTrick,
+};
+
+s32 D_800BAB3C_AA9EC = 0;
+
+s32 D_800BAB40_AA9F0 = 0;
+
+s32 D_800BAB44_AA9F4 = 0;
+
+u16 trickScoreTable[] = {
+    100, 100, 100, 100, 100, 100, 200, 200,
+};
+
+u16 trickBonusTable[] = {
+    10, 15, 20, 25, 35, 60, 100, 170,
+};
+
+RaceFinishBehaviorStepHandler raceFinishBehaviorStepHandlers[] = {
+    (RaceFinishBehaviorStepHandler)updateRaceFinishSlowingDownStep,
+    (RaceFinishBehaviorStepHandler)updateRaceFinishWaitingStep,
+    (RaceFinishBehaviorStepHandler)updateRaceFinishWinStep,
+    (RaceFinishBehaviorStepHandler)updateRaceFinishLoseStep,
+};
+
+StunnedBehaviorPhaseHandler stunnedBehaviorPhaseHandlers[] = {
+    (StunnedBehaviorPhaseHandler)updateStunnedAirbornePhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedAirbornePhaseBoss,
+    (StunnedBehaviorPhaseHandler)updateStunnedFallingPhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedLandingBouncePhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedRecoveryFallingPhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedRecoveryGroundSlidePhase,
+    (StunnedBehaviorPhaseHandler)updateEdgeFallRecoveryGetUpPhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedRecoveryBouncePhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedRecoveryBounceFallPhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedRecoverySlidePhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedRecoverySlideBouncePhase,
+    (StunnedBehaviorPhaseHandler)func_800B55B4_A5464,
+    (StunnedBehaviorPhaseHandler)updateStunnedRecoveryEndPhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedRecoveryStandUpPhase,
+    (StunnedBehaviorPhaseHandler)updateKnockbackAirborneLaunchPhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedPanelHitFallPhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedBounceFallPhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedBounceFallRecoverPhase,
+    (StunnedBehaviorPhaseHandler)updateStunnedBounceLaunchPhase,
+    (StunnedBehaviorPhaseHandler)updateKnockbackAirbornePhase,
+    (StunnedBehaviorPhaseHandler)updateKnockbackBounceLaunchPhase,
+    (StunnedBehaviorPhaseHandler)updateKnockbackLaunchWithHomingProjectilesPhase,
+    (StunnedBehaviorPhaseHandler)updateKnockbackHomingBouncePhase,
+};
+
+s32 recoverySlideBaseVelocity[3] = { 0x00000000, 0x00000000, 0x00020000 };
+
+s32 D_800BABE0_AAA90[3] = { 0x00000000, 0x00000000, 0xFFE00000 };
+
+s16 knockbackHomingBounceTimers = 0x0028;
+
+u16 knockbackHomingBounceScales = 0x0200;
+u16 D_800BABEE_pad[] = {
+    0x0000, 0x0400, 0x0000, 0x0800, 0x0000, 0x1000, 0x0000, 0x1400,
+    0x0000, 0x0800, 0x0000, 0x1000, 0x0000, 0x1800, 0xFFFF, 0x2000,
+};
+
+KnockbackBehaviorPhaseHandler knockbackBehaviorPhaseHandlers[] = {
+    (KnockbackBehaviorPhaseHandler)dispatchKnockbackBehaviorStep,
+};
+
+KnockbackBehaviorStepHandler knockbackBehaviorStepHandlers[] = {
+    (KnockbackBehaviorStepHandler)beginKnockbackRecoveryStep,
+    (KnockbackBehaviorStepHandler)updateKnockbackRecoveryStep,
+    (KnockbackBehaviorStepHandler)fallToTrackCenterStep,
+    (KnockbackBehaviorStepHandler)fallTowardShortcutWarpStep,
+    (KnockbackBehaviorStepHandler)slideDuringKnockbackRecoveryStep,
+    (KnockbackBehaviorStepHandler)slideDiagonallyDuringKnockbackRecoveryStep,
+    (KnockbackBehaviorStepHandler)respawnAtFinishLineAndSlideStep,
+    (KnockbackBehaviorStepHandler)slideForwardAndResetStep,
+    (KnockbackBehaviorStepHandler)dropDownwardStep,
+    (KnockbackBehaviorStepHandler)jumpUpwardStep,
+    (KnockbackBehaviorStepHandler)restoreStoredPositionStep,
+    (KnockbackBehaviorStepHandler)handleUfoStoredPositionStep,
+    (KnockbackBehaviorStepHandler)handleUfoAbductionRecoveryStep,
+    (KnockbackBehaviorStepHandler)waitAtStoredPositionStep,
+    (KnockbackBehaviorStepHandler)handleFallFromUfoStep,
+    (KnockbackBehaviorStepHandler)dropAfterUfoReleaseStep,
+    (KnockbackBehaviorStepHandler)spinRampUpStep,
+    (KnockbackBehaviorStepHandler)maintainMaxSpinStep,
+    (KnockbackBehaviorStepHandler)spinRampDownStep,
+    (KnockbackBehaviorStepHandler)spinFadeInWaitStep,
+    (KnockbackBehaviorStepHandler)warpToShortcutSpinUpStep,
+    (KnockbackBehaviorStepHandler)shortcutSpinDownStep,
+    (KnockbackBehaviorStepHandler)shortcutPostSpinWaitStep,
+    (KnockbackBehaviorStepHandler)shortcutLaunchStep,
+};
+
+Vec3i gShortcutWarpForwardOffset = { 0x009A8000, 0x00000000, 0x00000000 };
+
+Vec3i g_KnockbackRecoveryForwardVelocity = { 0x00000000, 0x00000000, 0x00040000 };
+
+Vec3i g_KnockbackDiagonalSlideVelocity = { 0x00000000, 0x00018000, 0x00030000 };
+
+Vec3i g_FinishLineRespawnOffset = { 0xFFE20000, 0xFFB50000, 0xFF1E0000 };
+
+u16 gRumblePatterns[] = {
+    0x0009, 0x000F, 0x07BB, 0x003F, 0x000B, 0x07BF, 0x04CF, 0x3333, 0x1249, 0x36DB, 0xFFFF, 0x0000,
+};
+
+u8 gRumbleDurations[] = {
+    0x04, 0x04, 0x0B, 0x06, 0x04, 0x10, 0x0B, 0x08, 0x06, 0x06, 0x06, 0x00,
+};
+
+BossSurfaceColor gBossSurfaceColors[] = {
+    { 0xFF, 0xFF, 0xFF, 0xFF, 0xA0, 0xA0, 0xA0, 0xFF },
+    { 0x70, 0x90, 0xFF, 0xFF, 0x50, 0x50, 0xA0, 0xFF },
+    { 0x88, 0xA8, 0xFF, 0xFF, 0x68, 0x48, 0xF0, 0xFF },
+    { 0xFF, 0xFF, 0x60, 0xFF, 0xA0, 0xB0, 0x00, 0xFF },
+    { 0xD0, 0xD0, 0xF0, 0xFF, 0xA0, 0xB0, 0x30, 0xFF },
+    { 0x20, 0xFF, 0x90, 0xFF, 0x50, 0x60, 0xB0, 0xFF },
+    { 0xE0, 0xFF, 0x50, 0xFF, 0x70, 0x60, 0xA0, 0xFF },
+    { 0xE0, 0xFF, 0xA0, 0xFF, 0x50, 0xC0, 0xCA, 0xFF },
+    { 0xFF, 0xFF, 0xDA, 0xFF, 0x70, 0x7A, 0x60, 0xFF },
+    { 0xFF, 0xFF, 0x60, 0xFF, 0x60, 0x40, 0x20, 0xFF },
+    { 0xFF, 0xA0, 0x00, 0xFF, 0x60, 0x10, 0x20, 0xFF },
+    { 0x0A, 0x40, 0xFF, 0xFF, 0x48, 0x40, 0x60, 0xFF },
+};
+
+s32 D_800BAD28_AABD8[] = {
+    0x00060000, 0x00000000, 0x000C0000, 0x00060000, 0x00000000, 0xFFF40000, 0xFFFA0000, 0x00000000, 0x000C0000,
+    0xFFFA0000, 0x00000000, 0xFFF40000, 0xFFF40000, 0x00000000, 0x000C0000, 0x00000000, 0x00000000, 0x000C0000,
+    0x000C0000, 0x00000000, 0x000C0000, 0xFFF40000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x000C0000, 0x00000000, 0x00000000, 0xFFF40000, 0x00000000, 0xFFF40000, 0x00000000, 0x00000000, 0xFFF40000,
+    0x000C0000, 0x00000000, 0xFFF40000, 0x00000000, 0x00000000, 0x00000000,
+};
+
+u8 D_800BADD0_AAC80[] = {
+    0x00, 0x04, 0x06, 0x08, 0x0A, 0x0C, 0x0E, 0x10, 0x12, 0x14, 0x18, 0x24, 0x0C, 0x0C, 0x0C, 0x00,
+};
+
+u8 D_800BADE0[544] = {
+    0xA8, 0x5A, 0x5A, 0x00, 0x40, 0xFF, 0xFF, 0x00, 0x33, 0xFF, 0xFF, 0x00, 0x40, 0xFF, 0xFF, 0x00, 0x66, 0xFF, 0xFF,
+    0x00, 0x1A, 0xFF, 0xFF, 0x00, 0x33, 0xFF, 0xFF, 0x00, 0x26, 0xFF, 0x00, 0x00, 0x40, 0xFF, 0x00, 0x00, 0x40, 0xFF,
+    0x00, 0x00, 0xB4, 0x96, 0x00, 0x00, 0xB4, 0x96, 0x00, 0x00, 0xCD, 0x5A, 0x1A, 0x00, 0x80, 0xFF, 0x00, 0x00, 0x33,
+    0xFF, 0x00, 0x00, 0x1A, 0xFF, 0x00, 0x00, 0xCD, 0xFF, 0x00, 0x00, 0x80, 0x5A, 0x5A, 0x00, 0x5A, 0xF0, 0xF3, 0x00,
+    0x4D, 0xF0, 0xF3, 0x00, 0x5A, 0xF0, 0xF3, 0x00, 0x80, 0x96, 0xF3, 0x00, 0x33, 0xF0, 0xF3, 0x00, 0x4D, 0xF0, 0xF3,
+    0x00, 0x40, 0xF0, 0x00, 0x00, 0x5A, 0xF0, 0x00, 0x00, 0x5A, 0xF0, 0x00, 0x00, 0xCD, 0x78, 0x00, 0x00, 0xCD, 0x78,
+    0x00, 0x00, 0xC0, 0x78, 0x33, 0x00, 0xB4, 0xF0, 0x00, 0x00, 0x4D, 0xF0, 0x00, 0x00, 0x33, 0xF0, 0x00, 0x00, 0xCD,
+    0xF0, 0x00, 0x00, 0x60, 0x78, 0x78, 0x00, 0x4D, 0xFF, 0xE6, 0x00, 0x40, 0xFF, 0xE6, 0x00, 0x4D, 0xFF, 0xE6, 0x00,
+    0x73, 0xFF, 0xE6, 0x00, 0x26, 0xFF, 0xE6, 0x00, 0x40, 0xFF, 0xE6, 0x00, 0x33, 0xFF, 0x00, 0x00, 0x4D, 0xFF, 0x00,
+    0x00, 0x4D, 0xFF, 0x00, 0x00, 0xC0, 0xD2, 0x00, 0x00, 0xC0, 0xD2, 0x00, 0x00, 0xB4, 0xB4, 0x4D, 0x00, 0x9A, 0xFF,
+    0x00, 0x00, 0x66, 0xFF, 0x00, 0x00, 0x4D, 0xFF, 0x00, 0x00, 0xB4, 0xFF, 0x00, 0x00, 0x40, 0x78, 0x78, 0x00, 0x73,
+    0xD2, 0xE6, 0x00, 0x73, 0xD2, 0xE6, 0x00, 0x73, 0xD2, 0xE6, 0x00, 0x9A, 0x96, 0xE6, 0x00, 0x5A, 0xD2, 0xE6, 0x00,
+    0x73, 0xD2, 0xE6, 0x00, 0x5A, 0xF0, 0x00, 0x00, 0x73, 0xF0, 0x00, 0x00, 0x73, 0xF0, 0x00, 0x00, 0xCD, 0x96, 0x00,
+    0x00, 0xCD, 0x96, 0x00, 0x00, 0xA6, 0x96, 0x66, 0x00, 0x9A, 0x78, 0x00, 0x00, 0x80, 0xF0, 0x00, 0x00, 0x66, 0xF0,
+    0x00, 0x00, 0xB4, 0xF0, 0x00, 0x00, 0x20, 0x5A, 0x5A, 0x00, 0x66, 0xD2, 0xDA, 0x00, 0x66, 0xD2, 0xDA, 0x00, 0x66,
+    0xD2, 0xDA, 0x00, 0x8D, 0xD2, 0xDA, 0x00, 0x4D, 0xD2, 0xDA, 0x00, 0x66, 0xD2, 0xDA, 0x00, 0x4D, 0xF0, 0x00, 0x00,
+    0x66, 0xF0, 0x00, 0x00, 0x66, 0xF0, 0x00, 0x00, 0xB4, 0x96, 0x00, 0x00, 0xB4, 0x96, 0x00, 0x00, 0x9A, 0xB4, 0x80,
+    0x00, 0xB4, 0xF0, 0x00, 0x00, 0x9A, 0xF0, 0x00, 0x00, 0x80, 0xF0, 0x00, 0x00, 0x9A, 0xF0, 0x00, 0x00, 0x10, 0x78,
+    0x78, 0x00, 0x8D, 0xB4, 0xCD, 0x00, 0x8D, 0xB4, 0xCD, 0x00, 0x8D, 0xB4, 0xCD, 0x00, 0xB4, 0x96, 0xCD, 0x00, 0x8D,
+    0xB4, 0xCD, 0x00, 0x8D, 0xB4, 0xCD, 0x00, 0x73, 0xD2, 0x00, 0x00, 0x8D, 0xD2, 0x00, 0x00, 0x8D, 0xD2, 0x00, 0x00,
+    0xB4, 0x96, 0x00, 0x00, 0xB4, 0x96, 0x00, 0x00, 0x8D, 0xD2, 0x9A, 0x00, 0xCD, 0x78, 0x00, 0x00, 0xB4, 0xD2, 0x00,
+    0x00, 0x9A, 0xD2, 0x00, 0x00, 0x80, 0xD2, 0x00, 0x00, 0x00, 0x78, 0x78, 0x00, 0x80, 0xD2, 0xB4, 0x00, 0x80, 0xD2,
+    0xB4, 0x00, 0x80, 0xD2, 0xB4, 0x00, 0xA6, 0xD2, 0xB4, 0x00, 0x80, 0xD2, 0xB4, 0x00, 0x80, 0xD2, 0xB4, 0x00, 0x66,
+    0xF0, 0x00, 0x00, 0x80, 0xF0, 0x00, 0x00, 0x80, 0xF0, 0x00, 0x00, 0xB4, 0xF0, 0x00, 0x00, 0xB4, 0xF0, 0x00, 0x00,
+    0x80, 0xF0, 0xB4, 0x00, 0x4D, 0x78, 0x00, 0x00, 0xCD, 0xF0, 0x00, 0x00, 0xB4, 0xF0, 0x00, 0x00, 0x66, 0xF0, 0x00,
+    0x00, 0x00, 0x78, 0x78, 0x00, 0xB4, 0x96, 0x4D, 0x00, 0xB4, 0x96, 0x4D, 0x00, 0xB4, 0x96, 0x4D, 0x00, 0xB4, 0x96,
+    0x80, 0x00, 0xB4, 0x96, 0x4D, 0x00, 0xB4, 0x96, 0x4D, 0x00, 0x9A, 0x96, 0x00, 0x00, 0xB4, 0x96, 0x00, 0x00, 0xB4,
+    0x96, 0x00, 0x00, 0xCD, 0x96, 0x00, 0x00, 0xCD, 0x96, 0x00, 0x00, 0x00, 0x78, 0xFF, 0x00, 0xCD, 0x78, 0x00, 0x00,
+    0xE6, 0x96, 0x00, 0x00, 0xCD, 0x96, 0x00, 0x00, 0x1A, 0xD2, 0x00, 0x00,
+};
+
+/* D_800BADE1 and D_800BADE2 are offsets into D_800BADE0, referenced by hit_reactions asm */
+__asm__(".globl D_800BADE1");
+__asm__("D_800BADE1 = D_800BADE0 + 1");
+__asm__(".globl D_800BADE2");
+__asm__("D_800BADE2 = D_800BADE0 + 2");
 
 typedef struct {
     void *start;
@@ -60,27 +402,6 @@ void decayPlayerAirborneAngles(Player *);
 void applyBoostVelocity(Player *);
 void decayPlayerSteeringAngles(Player *);
 void resetTrickScore(Player *);
-
-typedef void (*RaceFinishBehaviorStepHandler)(void *);
-extern RaceFinishBehaviorStepHandler raceFinishBehaviorStepHandlers[];
-
-typedef void (*StunnedBehaviorPhaseHandler)(void *);
-extern StunnedBehaviorPhaseHandler stunnedBehaviorPhaseHandlers[];
-
-typedef void (*PostTrickLandingStepHandler)(void *);
-extern PostTrickLandingStepHandler postTrickLandingStepHandlers[];
-
-typedef void (*KnockbackBehaviorPhaseHandler)(void *);
-extern KnockbackBehaviorPhaseHandler knockbackBehaviorPhaseHandlers[];
-
-typedef void (*KnockbackBehaviorStepHandler)(void *);
-extern KnockbackBehaviorStepHandler knockbackBehaviorStepHandlers[];
-
-typedef void (*SharpTurnBehaviorStepHandler)(void *);
-extern SharpTurnBehaviorStepHandler sharpTurnBehaviorStepHandlers[];
-
-typedef void (*DefaultBehaviorPhaseHandler)(void *);
-extern DefaultBehaviorPhaseHandler D_800BAAD4_AA984[];
 
 typedef struct {
     u8 _pad0[0x5C];
@@ -282,14 +603,7 @@ typedef struct {
     u16 buttons;
 } InputRecord;
 
-typedef s32 (*BehaviorModeHandler)(Player *);
-
 extern u16 D_8009ADE0_9B9E0;
-extern BehaviorModeHandler D_800BAA80_AA930[];
-extern s16 D_800BAA90_AA940;
-extern s32 D_800BAA9C_AA94C[];
-extern s16 D_800BAAAC_AA95C[];
-extern u8 D_800BADE0[];
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
 extern s32 gButtonsPressed[];
@@ -602,7 +916,7 @@ void updateRacePlayer(Player *player) {
     sp30.translation.y -= player->headingTransform.translation.y;
     sp30.translation.z -= player->headingTransform.translation.z;
 
-    transformVector(&D_800BAA90_AA940, (s16 *)&sp30, &player->collisionOffset);
+    transformVector((s16 *)&D_800BAA90_AA940, (s16 *)&sp30, &player->collisionOffset);
     memcpy(&player->collisionListNode.localPos, &player->collisionOffset, sizeof(Vec3i));
     player->collisionListNode.posPtr = &player->worldPos;
     addCollisionSectorNodeToList(&player->collisionListNode);
@@ -978,13 +1292,6 @@ void dispatchSharpTurnBehaviorStep(BehaviorState *arg0) {
     sharpTurnBehaviorStepHandlers[arg0->behaviorStep](arg0);
 }
 
-typedef struct {
-    u8 _pad0[0xB8C];
-    s32 unkB8C;
-    u8 _padB90[0x2F];
-    u8 behaviorStep;
-} initSharpTurnSlidingStep_arg;
-
 s32 initSharpTurnSlidingStep(initSharpTurnSlidingStep_arg *player) {
     player->unkB8C = 2;
     player->behaviorStep = player->behaviorStep + 1;
@@ -1042,13 +1349,6 @@ s32 updateSharpTurnSlidingStep(Player *player) {
     processPlayerItemUsage(player);
     return 0;
 }
-
-typedef struct {
-    u8 _pad0[0xB84];
-    s32 animFlags;
-    u8 _padB88[0x37];
-    u8 behaviorStep;
-} endSharpTurnSlidingStep_arg;
 
 s32 endSharpTurnSlidingStep(endSharpTurnSlidingStep_arg *player) {
     s32 flags;
@@ -2821,8 +3121,6 @@ s32 updateStunnedRecoveryFallingPhase(Player *player) {
     return 0;
 }
 
-extern s32 recoverySlideBaseVelocity[3];
-
 s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
     s32 velocityMagnitude;
     s32 timerDelta;
@@ -3541,9 +3839,6 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
     return 0;
 }
 
-extern s16 knockbackHomingBounceTimers;
-extern u16 knockbackHomingBounceScales;
-
 s32 updateKnockbackHomingBouncePhase(Player *arg0) {
     u8 temp_v0;
 
@@ -3708,7 +4003,7 @@ s32 fallTowardShortcutWarpStep(Player *player) {
     transform.translation.x = levelConfig->shortcutPosX;
     transform.translation.y = targetPos.y;
     transform.translation.z = levelConfig->shortcutPosZ;
-    transformVector(&gShortcutWarpForwardOffset, (s16 *)&transform, &targetPos);
+    transformVector((s16 *)&gShortcutWarpForwardOffset, (s16 *)&transform, &targetPos);
 
     if (player->behaviorCounter == 0) {
         player->velocity.y += 0x30000;
@@ -3834,8 +4129,6 @@ s32 fallTowardShortcutWarpStep(Player *player) {
     }
 }
 
-extern Vec3i g_KnockbackRecoveryForwardVelocity;
-
 s32 slideDuringKnockbackRecoveryStep(Player *player) {
     GameState *gameState = getCurrentAllocation();
 
@@ -3859,9 +4152,6 @@ s32 slideDuringKnockbackRecoveryStep(Player *player) {
 
     return 0;
 }
-
-extern Vec3i g_KnockbackDiagonalSlideVelocity;
-extern Vec3i g_FinishLineRespawnOffset;
 
 s32 slideDiagonallyDuringKnockbackRecoveryStep(Player *player) {
     s32 pad[12];
@@ -4368,8 +4658,6 @@ s32 shortcutLaunchStep(Player *player) {
     advancePlayerLeanAnimation(player, 4);
     return 0;
 }
-
-extern u8 gRumbleDurations[];
 
 void startRumbleEffect(Player *player, s32 effectType) {
     player->rumbleEffectType = effectType;

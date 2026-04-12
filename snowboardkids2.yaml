@@ -562,7 +562,7 @@ segments:
     subsegments:
       - [0x9FF70, c, race/race_main]
       - [0xA9A40, c, race/ai_pathfinding]
-      - [0xAA8E0, data, race/race_main]
+      - [0xAA8E0, .data, race/race_main]
       - [0xAAEB0, .rodata, race/race_main]
 
   - name: levels/lindas_castle
