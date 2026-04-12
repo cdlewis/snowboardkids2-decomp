@@ -57,10 +57,10 @@ void initMotorStates(void);
 // Data
 u32 D_8008FE80_90A80[3] = { 0 };
 s16 D_8008FE8C_90A8C = 0;
-u8 D_8008FE8E_90A8E = 0;
+u8 gControllerPresentMask = 0;
 u8 D_8008FE8F_90A8F = 0;
 u32 D_8008FE90 = 0;
-u8 D_8008FE94_90A94[12] = { 0 };
+u8 gButtonRepeatCounter[12] = { 0 };
 
 // Bss
 extern OSMesgQueue D_800A1820_A2420;
@@ -79,12 +79,12 @@ extern u8 gControllerPollingEnabled;
 extern OSContStatus D_8009F660_A0260;
 extern OSThread D_8009F670_A0270;
 extern s32 D_800A1838_A2438;
-extern u8 D_800A1C98_A2898;
+extern u8 gControllerReadPending;
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
 extern s32 gButtonsPressed[];
-extern s32 D_800AB1A0_A2510[];
-extern s32 D_800AB0A8_A2418[];
+extern s32 gPreviousButtonsPressed[];
+extern s32 gRepeatedButtonInputs[];
 extern s32 gControllerInputs[];
 extern u8 gMotorInitCompleteMask;
 extern MotorState gMotorState;
@@ -110,10 +110,10 @@ void initControllerSubsystem(void) {
     osSetEventMesg(5, &mainStack, (OSMesg)1);
 
     for (i = 0; i < 4; i++) {
-        result = osContInit(&mainStack, &D_8008FE8E_90A8E, &D_8009F660_A0260);
+        result = osContInit(&mainStack, &gControllerPresentMask, &D_8009F660_A0260);
         gConnectedControllerMask = 0;
         if (result == 0) {
-            controller_status = D_8008FE8E_90A8E;
+            controller_status = gControllerPresentMask;
 
             // Find the first disconnected controller, if any
             for (i = 0; i < 4; i++) {
@@ -129,7 +129,7 @@ void initControllerSubsystem(void) {
                 D_800A1C08_A2808[i].stick_y = 0;
             }
 
-            D_800A1C98_A2898 = 0;
+            gControllerReadPending = 0;
             initMotorStates();
             gControllerPollingEnabled = 1;
             osCreateThread(&D_8009F670_A0270, 6, &controllerServiceThread, 0, &D_800A1820_A2420, 3);
@@ -137,7 +137,7 @@ void initControllerSubsystem(void) {
             return;
         }
 
-        D_800A1C98_A2898 = 0;
+        gControllerReadPending = 0;
         gControllerPollingEnabled = 1;
     }
 }
@@ -251,7 +251,7 @@ void startControllerRead(void) {
     s16 temp_v0;
     s32 temp_a1;
 
-    if ((D_8008FE8F_90A8F == 0) && (D_800A1C98_A2898 == 0) && (D_8008FE8E_90A8E != 0)) {
+    if ((D_8008FE8F_90A8F == 0) && (gControllerReadPending == 0) && (gControllerPresentMask != 0)) {
         temp_a1 = D_8008FE8C_90A8C;
         D_800A1C20_A2820[temp_a1].command = 0x10;
         osSendMesg(&D_800A1820_A2420, (OSMesg *)&D_800A1C20_A2820[temp_a1], 1);
@@ -260,20 +260,20 @@ void startControllerRead(void) {
         if (temp_v0 >= 0xF) {
             D_8008FE8C_90A8C = 0;
         }
-        D_800A1C98_A2898 = 1;
+        gControllerReadPending = 1;
     }
 }
 
-void func_80039C34_3A834(void) {
-    void *sp10;
+void processControllerInputs(void) {
+    void *receivedMsg;
     s32 i;
     s16 stickVal;
 
-    sp10 = NULL;
-    if (osRecvMesg(&D_800A1868_A2468, (OSMesg *)&sp10, 0) == 0) {
+    receivedMsg = NULL;
+    if (osRecvMesg(&D_800A1868_A2468, (OSMesg *)&receivedMsg, 0) == 0) {
         i = 0;
         while ((u16)i < 4) {
-            if (!((D_8008FE8E_90A8E >> (u16)i) & 1))
+            if (!((gControllerPresentMask >> (u16)i) & 1))
                 goto next;
             if (D_800A1C08_A2808[(u16)i].errno != 0)
                 goto next;
@@ -327,10 +327,10 @@ void func_80039C34_3A834(void) {
                 }
                 gAnalogStickY[(u16)i] = -stickVal;
             }
-            D_800AB1A0_A2510[(u16)i] = gButtonsPressed[(u16)i];
+            gPreviousButtonsPressed[(u16)i] = gButtonsPressed[(u16)i];
             gButtonsPressed[(u16)i] = 0;
             gButtonsPressed[(u16)i] = D_800A1C08_A2808[(u16)i].button;
-            if (D_800AB1A0_A2510[(u16)i] & STICK_RIGHT) {
+            if (gPreviousButtonsPressed[(u16)i] & STICK_RIGHT) {
                 if (gAnalogStickX[(u16)i] >= 11) {
                     gButtonsPressed[(u16)i] |= STICK_RIGHT;
                 }
@@ -339,7 +339,7 @@ void func_80039C34_3A834(void) {
                     gButtonsPressed[(u16)i] |= STICK_RIGHT;
                 }
             }
-            if (D_800AB1A0_A2510[(u16)i] & STICK_LEFT) {
+            if (gPreviousButtonsPressed[(u16)i] & STICK_LEFT) {
                 if (gAnalogStickX[(u16)i] < -10) {
                     gButtonsPressed[(u16)i] |= STICK_LEFT;
                 }
@@ -348,7 +348,7 @@ void func_80039C34_3A834(void) {
                     gButtonsPressed[(u16)i] |= STICK_LEFT;
                 }
             }
-            if (D_800AB1A0_A2510[(u16)i] & STICK_DOWN) {
+            if (gPreviousButtonsPressed[(u16)i] & STICK_DOWN) {
                 if (gAnalogStickY[(u16)i] < -10) {
                     gButtonsPressed[(u16)i] |= STICK_DOWN;
                 }
@@ -357,7 +357,7 @@ void func_80039C34_3A834(void) {
                     gButtonsPressed[(u16)i] |= STICK_DOWN;
                 }
             }
-            if (D_800AB1A0_A2510[(u16)i] & STICK_UP) {
+            if (gPreviousButtonsPressed[(u16)i] & STICK_UP) {
                 if (gAnalogStickY[(u16)i] >= 11) {
                     gButtonsPressed[(u16)i] |= STICK_UP;
                 }
@@ -366,37 +366,37 @@ void func_80039C34_3A834(void) {
                     gButtonsPressed[(u16)i] |= STICK_UP;
                 }
             }
-            gControllerInputs[(u16)i] = gButtonsPressed[(u16)i] & ~D_800AB1A0_A2510[(u16)i];
+            gControllerInputs[(u16)i] = gButtonsPressed[(u16)i] & ~gPreviousButtonsPressed[(u16)i];
             if (gButtonsPressed[(u16)i] == 0) {
-                D_8008FE94_90A94[(u16)i] = 0;
-                D_800AB0A8_A2418[(u16)i] = gButtonsPressed[(u16)i];
+                gButtonRepeatCounter[(u16)i] = 0;
+                gRepeatedButtonInputs[(u16)i] = gButtonsPressed[(u16)i];
             } else {
-                if (D_8008FE94_90A94[(u16)i] >= 5) {
-                    D_8008FE94_90A94[(u16)i] = 3;
-                    D_800AB0A8_A2418[(u16)i] = gButtonsPressed[(u16)i];
+                if (gButtonRepeatCounter[(u16)i] >= 5) {
+                    gButtonRepeatCounter[(u16)i] = 3;
+                    gRepeatedButtonInputs[(u16)i] = gButtonsPressed[(u16)i];
                 } else {
-                    D_8008FE94_90A94[(u16)i] = D_8008FE94_90A94[(u16)i] + 1;
-                    D_800AB0A8_A2418[(u16)i] = gControllerInputs[(u16)i];
+                    gButtonRepeatCounter[(u16)i] = gButtonRepeatCounter[(u16)i] + 1;
+                    gRepeatedButtonInputs[(u16)i] = gControllerInputs[(u16)i];
                 }
             }
         next:
             i++;
         }
-        D_800A1C98_A2898 = 0;
+        gControllerReadPending = 0;
     } else {
         for (i = 0; (u16)i < 4; i++) {
-            D_800AB1A0_A2510[(u16)i] = gButtonsPressed[(u16)i];
-            gControllerInputs[(u16)i] = gButtonsPressed[(u16)i] & ~D_800AB1A0_A2510[(u16)i];
+            gPreviousButtonsPressed[(u16)i] = gButtonsPressed[(u16)i];
+            gControllerInputs[(u16)i] = gButtonsPressed[(u16)i] & ~gPreviousButtonsPressed[(u16)i];
             if (gButtonsPressed[(u16)i] == 0) {
-                D_8008FE94_90A94[(u16)i] = 0;
-                D_800AB0A8_A2418[(u16)i] = gButtonsPressed[(u16)i];
+                gButtonRepeatCounter[(u16)i] = 0;
+                gRepeatedButtonInputs[(u16)i] = gButtonsPressed[(u16)i];
             } else {
-                if (D_8008FE94_90A94[(u16)i] >= 5) {
-                    D_8008FE94_90A94[(u16)i] = 3;
-                    D_800AB0A8_A2418[(u16)i] = gButtonsPressed[(u16)i];
+                if (gButtonRepeatCounter[(u16)i] >= 5) {
+                    gButtonRepeatCounter[(u16)i] = 3;
+                    gRepeatedButtonInputs[(u16)i] = gButtonsPressed[(u16)i];
                 } else {
-                    D_8008FE94_90A94[(u16)i] = D_8008FE94_90A94[(u16)i] + 1;
-                    D_800AB0A8_A2418[(u16)i] = gControllerInputs[(u16)i];
+                    gButtonRepeatCounter[(u16)i] = gButtonRepeatCounter[(u16)i] + 1;
+                    gRepeatedButtonInputs[(u16)i] = gControllerInputs[(u16)i];
                 }
             }
         }

@@ -75,7 +75,7 @@ void mainThreadEntrypoint(void *arg) {
         }
 
         if (isPaused == FALSE) {
-            func_80039C34_3A834();
+            processControllerInputs();
             startControllerRead();
             D_8009ADE0_9B9E0++;
             cleanupUnusedNodes();

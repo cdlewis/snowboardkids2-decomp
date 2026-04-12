@@ -15,7 +15,7 @@ typedef struct {
 void initControllerSubsystem(void);
 void startControllerRead(void);
 
-void func_80039C34_3A834(void);
+void processControllerInputs(void);
 
 void controllerPackReadAsyncStub(void);
 int controllerPackReadPollStub(void);
