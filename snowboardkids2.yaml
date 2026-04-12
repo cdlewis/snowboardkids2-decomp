@@ -583,7 +583,7 @@ segments:
     overlay: true
     subsegments:
       - [0xABAE0, c, levels/crazy_jungle_boss]
-      - [0xACC70, data, levels/crazy_jungle_boss]
+      - [0xACC70, .data, levels/crazy_jungle_boss]
 
   - name: levels/snowboard_street_shoot_cross
     type: code

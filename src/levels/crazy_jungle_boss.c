@@ -18,9 +18,6 @@
 
 typedef void (*FuncPtr)(void *);
 
-extern FuncPtr gCrazyJungleBossChasePhaseHandlers[];
-extern FuncPtr gCrazyJungleBossHoverPhaseHandlers[];
-extern s32 D_800BC44C_ACC7C[];
 typedef struct {
     u8 primaryR;
     u8 primaryG;
@@ -31,6 +28,7 @@ typedef struct {
     u8 secondaryB;
     u8 pad2;
 } BossSurfaceColor;
+
 extern BossSurfaceColor gBossSurfaceColors[];
 
 typedef struct {
@@ -186,9 +184,62 @@ extern s32 D_800BBA7C_AC2AC[][3];
 extern s32 D_800BBA84_AC2B4[][3];
 
 typedef s32 (*StateFunc)(void *);
-extern StateFunc D_800BC440_ACC70[];
 
 extern s32 getIndexedAnimationDataPtr(void *, s16);
+
+/* Forward declarations for data segment function pointer tables */
+s32 initCrazyJungleBoss(Arg0Struct *arg0);
+void dispatchCrazyJungleBossChasePhase(Arg0Struct *arg0);
+void dispatchCrazyJungleBossHoverPhase(Arg0Struct *arg0);
+s32 crazyJungleBossChaseIntroPhase(Arg0Struct *arg0);
+s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0);
+s32 crazyJungleBossChaseExitPhase(Arg0Struct *arg0);
+s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0);
+s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0);
+
+/* Data segment - in ROM order */
+StateFunc D_800BC440_ACC70[] = {
+    (StateFunc)initCrazyJungleBoss,
+    (StateFunc)dispatchCrazyJungleBossChasePhase,
+    (StateFunc)dispatchCrazyJungleBossHoverPhase,
+};
+
+s32 D_800BC44C_ACC7C[] = { 0xFFF00000, 0x00300000 };
+
+FuncPtr gCrazyJungleBossChasePhaseHandlers[] = {
+    (FuncPtr)crazyJungleBossChaseIntroPhase,
+    (FuncPtr)crazyJungleBossChaseAttackPhase,
+    (FuncPtr)crazyJungleBossChaseExitPhase,
+};
+
+FuncPtr gCrazyJungleBossHoverPhaseHandlers[] = {
+    (FuncPtr)crazyJungleBossHoverAttackPhase,
+    (FuncPtr)crazyJungleBossHoverJumpPhase,
+};
+
+D_800BC468_ACC98_type D_800BC468_ACC98[] = {
+    { 0x003C, 0x0200 },
+    { 0x0001, 0x0400 },
+    { 0x0001, 0x0800 },
+    { 0x0001, 0x1000 },
+    { 0x0001, 0x1400 },
+    { 0x0001, 0x0800 },
+    { 0x0001, 0x1000 },
+    { 0x0001, 0x1800 },
+    { 0xFFFF, 0x2000 },
+};
+
+Vec3i gCrazyJungleBossCheckpointOffsets[] = {
+    { 0xFFE79000, 0x00000000, 0x00187000 },
+    { 0x00000000, 0x00000000, 0x00187000 },
+    { 0x00187000, 0x00000000, 0x00187000 },
+    { 0xFFE79000, 0x00000000, 0x00000000 },
+    { 0x00000000, 0x00000000, 0x00000000 },
+    { 0x00187000, 0x00000000, 0x00000000 },
+    { 0xFFE79000, 0x00000000, 0xFFE79000 },
+    { 0x00000000, 0x00000000, 0xFFE79000 },
+    { 0x00187000, 0x00000000, 0xFFE79000 },
+};
 
 void updateCrazyJungleBoss(Arg0Struct *arg0) {
     Transform3D sp10;
