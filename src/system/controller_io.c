@@ -41,7 +41,7 @@ typedef struct {
 
 void initControllerPack(s32);
 void controllerPackReadFile(u16, ControllerPackFileRequest *);
-void func_8003A52C_3B12C(u16, ControllerPackFileRequest *);
+void controllerPackWriteFile(u16, ControllerPackFileRequest *);
 void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders);
 void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[]);
 void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHeader *header);
@@ -173,7 +173,7 @@ void controllerServiceThread(void *arg0) {
                 continue;
 
             case 0x40:
-                func_8003A52C_3B12C(cmd & 3, msg->arg);
+                controllerPackWriteFile(cmd & 3, msg->arg);
                 continue;
 
             case 0x50:
@@ -534,7 +534,7 @@ int controllerPackWritePollStub(void) {
     return 0;
 }
 
-void func_8003A52C_3B12C(u16 channel, ControllerPackFileRequest *request) {
+void controllerPackWriteFile(u16 channel, ControllerPackFileRequest *request) {
     s32 numFiles;
     s32 maxFiles;
     s32 freeBlocks;

@@ -2333,6 +2333,7 @@ controllerPackReadPollStub = 0x8003A28C; // rom:0x3AE8C
 controllerPackReadFile = 0x8003A294; // rom:0x3AE94
 controllerPackWriteAsyncStub = 0x8003A51C; // rom:0x3B11C
 controllerPackWritePollStub = 0x8003A524; // rom:0x3B124
+controllerPackWriteFile = 0x8003A52C; // rom:0x3B12C
 controllerPackListFilesAsyncStub = 0x8003A854; // rom:0x3B454
 controllerPackListFilesPollStub = 0x8003A85C; // rom:0x3B45C
 controllerPackListFiles = 0x8003A864; // rom:0x3B464
