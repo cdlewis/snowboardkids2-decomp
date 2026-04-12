@@ -260,7 +260,7 @@ void applyCharacterBoardStats(Player *player) {
         charId = player->characterId;
     }
 
-    player->unkAA0 = boardStats[charId].param0 * 353894 / 100 + 0xEB333;
+    player->baseMaxSpeed = boardStats[charId].param0 * 353894 / 100 + 0xEB333;
     player->unkAC0 = boardStats[charId].param1 + 0x19;
     player->unkAC1 = boardStats[charId].param2 + 1;
     player->unkAB0 = (boardStats[charId].param3 << 15) / 100 + 0x1000;

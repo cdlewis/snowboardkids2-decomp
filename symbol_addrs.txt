@@ -3780,6 +3780,7 @@ schedulePlayerSparkleTask = 0x80049BFC; // rom:0x4A7FC
 applyClampedVelocityToPosition = 0x800B02AC; // rom:0xA015C
 applyVelocityToPosition = 0x800B0300; // rom:0xA01B0
 renderPlayersByShortcutDistance = 0x800B0334; // rom:0xA01E4
+updateRacePlayer = 0x800B05B8; // rom:0xA0468 type:func
 gPlayerStartXPositions = 0x800BAAC4; // rom:0xAA974 size:0x10
 initPlayerForRace = 0x800B0F14; // rom:0xA0DC4 type:func
 initScrollingSceneryTask = 0x800465A8; // rom:0x471A8

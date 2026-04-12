@@ -34,7 +34,7 @@ typedef struct {
     u8 _pad9F6[0x1C5];
     u8 unkBBB;
     u8 _padBBC[0x13];
-    u8 unkBCF;
+    u8 slowdownLevel;
     u8 _padBD0[0x9];
     u8 flyingAttackState;
 } Func43CA4Unk28;
@@ -1100,7 +1100,7 @@ void updateStarEffect(StarEffectState *arg0) {
 
         if (arg0->immediateMode != 0) {
             /* Immediate orbit mode - skip expand animation */
-            arg0->player->unkBCF++;
+            arg0->player->slowdownLevel++;
 
             if (arg0->player->unkBBB == 0xC) {
                 arg0->displayTimer = 0x1E; /* Shorter display time for boss */
@@ -1172,7 +1172,7 @@ void contractStarEffect(StarEffectState *state) {
                 state->displayTimer = 0x12C;
             }
 
-            state->player->unkBCF++;
+            state->player->slowdownLevel++;
             state->playSoundFlag = 1;
             setCallback(orbitStarEffect);
         }
@@ -1202,7 +1202,7 @@ void orbitStarEffect(OrbitStarEffectState *arg0) {
         if (arg0->displayTimer != 0) {
             arg0->displayTimer--;
         } else if (arg0->animFrameIndex == 0x40) {
-            arg0->player->unkBCF--;
+            arg0->player->slowdownLevel--;
             terminateCurrentTask();
         }
     }
@@ -1933,9 +1933,9 @@ void updatePushZone(PushZoneState *arg0) {
             player->worldPos.z += result.z;
             localPos.y = 0;
             transformVector2(&localPos, arg0, &result);
-            player->unk440 = player->unk440 + result.x;
-            player->unk444 = player->unk444 + result.y;
-            player->unk448 = player->unk448 + result.z;
+            player->prevWorldPosX = player->prevWorldPosX + result.x;
+            player->prevWorldPosY = player->prevWorldPosY + result.y;
+            player->prevWorldPosZ = player->prevWorldPosZ + result.z;
             player->animFlags = player->animFlags | 0x20000;
             player->unkBB0 = gPushZoneData[arg0->zoneIndex].pitch;
             player->unkBB2 = gPushZoneData[arg0->zoneIndex].yaw;

@@ -74,9 +74,9 @@ typedef struct {
     s16 unk3BC[6];
     u8 pad3C8[0x434 - 0x3C8];
     Vec3i unk434;
-    s32 unk440;
-    s32 unk444;
-    s32 unk448;
+    s32 prevWorldPosX;
+    s32 prevWorldPosY;
+    s32 prevWorldPosZ;
     Vec3i velocity;
     u8 pad458[0x10];
     s32 unk468;
@@ -104,7 +104,7 @@ typedef struct {
     u8 padA96[6];
     u16 unkA9C;
     u16 unkA9E;
-    s32 unkAA0;
+    s32 baseMaxSpeed;
     s32 maxSpeedCap;
     s32 unkAA8;
     u8 padAAC[0xAC2 - 0xAAC];
@@ -169,7 +169,7 @@ typedef struct {
     u8 padBCB[1];
     u8 surfaceTypeIndex;
     u8 padBCD[0x2];
-    u8 unkBCF;
+    u8 slowdownLevel;
     u8 padBD0[0xBDB - 0xBD0];
     u8 unkBDB;
 } Arg0Struct;
@@ -205,10 +205,10 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     alloc = getCurrentAllocation();
     calculateAITargetPosition((Player *)arg0);
 
-    arg0->velocity.x = arg0->unk434.x - arg0->unk440;
-    arg0->velocity.y = arg0->unk434.y - arg0->unk444;
-    arg0->velocity.z = arg0->unk434.z - arg0->unk448;
-    memcpy(&arg0->unk440, &arg0->unk434, 0xC);
+    arg0->velocity.x = arg0->unk434.x - arg0->prevWorldPosX;
+    arg0->velocity.y = arg0->unk434.y - arg0->prevWorldPosY;
+    arg0->velocity.z = arg0->unk434.z - arg0->prevWorldPosZ;
+    memcpy(&arg0->prevWorldPosX, &arg0->unk434, 0xC);
 
     if (arg0->sectorIndex < 0x16) {
         arg0->maxSpeedCap = 0x180000;
@@ -239,7 +239,7 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
         arg0->maxSpeedCap = 0x180000;
     }
 
-    count = arg0->unkBCF;
+    count = arg0->slowdownLevel;
     i = 0;
     if (count > 0) {
         loopBound = count;
@@ -356,7 +356,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     arg0->sectorIndex = trackIdx;
     arg0->unk434.y = getTrackHeightInSector(&gameState->gameData, trackIdx, &arg0->unk434, 0x100000);
 
-    memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
+    memcpy(&arg0->prevWorldPosX, &arg0->unk434, sizeof(Vec3i));
 
     // Zero out velocity
     arg0->velocity.x = 0;
@@ -411,7 +411,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
         spawnChaseCameraTask(arg0->unkBB8);
     }
 
-    arg0->unkAA0 = ((s32 *)gameState->players)[0xAA0 / 4] - 0x10000;
+    arg0->baseMaxSpeed = ((s32 *)gameState->players)[0xAA0 / 4] - 0x10000;
 
     if (*(void **)((u8 *)arg0 + 0x1C) != 0) {
         *(s32 *)((u8 *)arg0 + 0x28) =

@@ -106,9 +106,9 @@ typedef struct {
     s32 unk3F8;
     u8 padding1[0x38];
     Vec3i worldPos;
-    s32 unk440;
-    s32 unk444;
-    s32 unk448;
+    s32 prevWorldPosX;
+    s32 prevWorldPosY;
+    s32 prevWorldPosZ;
     /* 0x44C */ Vec3i velocity;
     s32 unk458;
     s32 unk45C;
@@ -141,10 +141,10 @@ typedef struct {
     s16 unkA9A;
     u8 padding4a_1[0x2];
     s16 unkA9E;
-    s32 unkAA0;
+    s32 baseMaxSpeed;
     /* 0xAA4 */ s32 maxSpeedCap;
     s32 aiLaneWidth;
-    s32 unkAAC;
+    s32 speedHandicap;
     s32 unkAB0;
     s32 unkAB4;
     s32 unkAB8;
@@ -170,13 +170,13 @@ typedef struct {
     u16 storedRotY;
     u8 padding2c_3[0x2];
     s16 unkB78;
-    s8 unkB7A;
-    s8 unkB7B;
-    s16 unkB7C;
-    u16 unkB7E;
-    s8 unkB80;
-    s8 unkB81;
-    u16 unkB82;
+    s8 inputStickX;
+    s8 inputStickY;
+    s16 inputButtons;
+    u16 inputButtonsPressed;
+    s8 prevInputStickX;
+    s8 prevInputStickY;
+    u16 prevInputButtons;
     s32 animFlags;
     s32 behaviorFlags;
     s32 unkB8C;
@@ -191,7 +191,7 @@ typedef struct {
     s16 unkBA2;
     u16 invincibilityTimer;
     s16 ghostEffectTimer;
-    u16 unkBA8;
+    u16 inputRecordIndex;
     s16 trickPoints;
     s16 trickScore;
     s16 tricksPerformedMask;
@@ -224,7 +224,7 @@ typedef struct {
     u8 unkBCC;
     s8 unkBCD;
     u8 ufoFlags;
-    u8 unkBCF;
+    u8 slowdownLevel;
     u8 boostState;
     u8 ghostEffectState;
     u8 primaryItemId;
@@ -235,17 +235,17 @@ typedef struct {
     u8 unkBD7;
     u8 unkBD8;
     u8 flyingAttackState; /* 0=normal, 1-3=flying attack modes */
-    u8 unkBDA;
+    u8 inputDisabled;
     u8 unkBDB;
     u8 unkBDC;
-    u8 unkBDD;
+    u8 speedPenaltyIndex;
     u8 pathFlags; /* Bit 3: shortcut available */
     u8 rumbleEffectType;
     s8 rumbleCounter;
     u8 rumbleDuration;
     u8 rumbleFrame;
-    u8 unkBE3;
-    u8 unkBE4;
+    u8 inputMode;
+    u8 inputRecordSet;
     u8 aiShortcutChosen; /* AI has made shortcut decision */
     u8 bodyPartAnimIndex;
     u8 bodyPartAnimFlags;

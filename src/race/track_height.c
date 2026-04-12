@@ -272,7 +272,7 @@ s16 getTrickType(Player *player) {
     s8 trickCount;
 
     trickType = -1;
-    if (player->unkBDA != 0) {
+    if (player->inputDisabled != 0) {
         stickY = player->unkBDC & 7;
         if (stickY != 0) {
             tablePtr = gSpecialTrickTypeTable;
@@ -281,19 +281,19 @@ s16 getTrickType(Player *player) {
         }
         goto return_trick;
     }
-    stickY = player->unkB7B;
+    stickY = player->inputStickY;
     trickType = -(stickY != 7);
     if (stickY == -7) {
         trickType = 1;
     }
-    stickX = player->unkB7A;
+    stickX = player->inputStickX;
     if (stickX == 7) {
         trickType = 2;
     }
     if (stickX == -7) {
         trickType = 3;
     }
-    stickCombo = *(u16 *)&player->unkB7A;
+    stickCombo = *(u16 *)&player->inputStickX;
     if (stickCombo == 0x707) {
         trickType = 4;
     }
@@ -319,7 +319,7 @@ s32 getTrickRecoveryTimerReduction(Player *player) {
 
     count = 1;
 
-    if (player->unkBDA != 0) {
+    if (player->inputDisabled != 0) {
         temp = randA();
         temp = temp & 3;
         temp = temp < 1;
@@ -327,37 +327,37 @@ s32 getTrickRecoveryTimerReduction(Player *player) {
         goto end;
     }
 
-    temp_b7a = player->unkB7A;
+    temp_b7a = player->inputStickX;
     if (temp_b7a == 7) {
-        temp = player->unkB80;
+        temp = player->prevInputStickX;
         temp = temp ^ 7;
         temp = temp != 0;
         count = temp + 1;
     }
 
     if (temp_b7a == -7) {
-        temp = player->unkB80;
+        temp = player->prevInputStickX;
         temp = temp ^ temp_b7a;
         temp = temp != 0;
         count += temp;
     }
 
-    temp_b7b = player->unkB7B;
+    temp_b7b = player->inputStickY;
     if (temp_b7b == 7) {
-        temp = player->unkB81;
+        temp = player->prevInputStickY;
         temp = temp ^ 7;
         temp = temp != 0;
         count += temp;
     }
 
     if (temp_b7b == -7) {
-        temp = player->unkB81;
+        temp = player->prevInputStickY;
         temp = temp ^ temp_b7b;
         temp = temp != 0;
         count += temp;
     }
 
-    temp_b7e = player->unkB7E;
+    temp_b7e = player->inputButtonsPressed;
     temp = temp_b7e & 0xC000;
     temp = temp != 0;
     count += temp;

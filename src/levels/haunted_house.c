@@ -326,7 +326,7 @@ void oscillateGhostFade(AnimatedGhostEntity *ghost) {
     nearbyPlayer = findVulnerablePlayerNearPosition(&ghost->posX, -1, 0x100000);
 
     if (nearbyPlayer != NULL) {
-        if (nearbyPlayer->unkBCF < 3) {
+        if (nearbyPlayer->slowdownLevel < 3) {
             spawnStarEffectImmediate(nearbyPlayer);
         }
 

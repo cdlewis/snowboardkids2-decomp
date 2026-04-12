@@ -2549,7 +2549,7 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
                 if (player != NULL) {
                     itemBox->state = itemBox->state + 1;
                     spawnItemBoxBurstEffect(&itemBox->displayList, itemBox->isSecondaryItemBox);
-                    if ((player->raceGold >= 100) || (player->unkBDA != 0)) {
+                    if ((player->raceGold >= 100) || (player->inputDisabled != 0)) {
                         addPlayerRaceGold(player, -100);
                         if (itemBox->isSecondaryItemBox != 0) {
                             if (player->secondaryItemId == 7) {

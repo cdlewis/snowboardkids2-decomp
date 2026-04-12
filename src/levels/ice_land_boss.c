@@ -105,9 +105,9 @@ typedef struct {
     s32 unk434;
     s32 unk438;
     s32 unk43C;
-    s32 unk440;
-    s32 unk444;
-    s32 unk448;
+    s32 prevWorldPosX;
+    s32 prevWorldPosY;
+    s32 prevWorldPosZ;
     Vec3i velocity;
     s32 unk458;
     s32 unk45C;
@@ -137,7 +137,7 @@ typedef struct {
     s16 unkA9A;
     u8 padding9E[0x2];
     s16 unkA9E;
-    s32 unkAA0;
+    s32 baseMaxSpeed;
     s32 maxSpeedCap;
     s32 unkAA8;
     s32 unkAAC;
@@ -178,12 +178,12 @@ typedef struct {
     u16 unkB74;
     u8 paddingB76[0x2];
     s16 unkB78;
-    s8 unkB7A;
-    s8 unkB7B;
-    s16 unkB7C;
-    u16 unkB7E;
-    s8 unkB80;
-    s8 unkB81;
+    s8 inputStickX;
+    s8 inputStickY;
+    s16 inputButtons;
+    u16 inputButtonsPressed;
+    s8 prevInputStickX;
+    s8 prevInputStickY;
     u8 paddingB82[0x2];
     s32 animFlags;
     s32 unkB88;
@@ -519,7 +519,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     trackIdx = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, (Vec3i *)&arg0->unk434);
     arg0->sectorIndex = trackIdx;
     arg0->unk438 = getTrackHeightInSector(&gameState->gameData, trackIdx, (Vec3i *)&arg0->unk434, 0x100000);
-    memcpy(&arg0->unk440, &arg0->unk434, sizeof(Vec3i));
+    memcpy(&arg0->prevWorldPosX, &arg0->unk434, sizeof(Vec3i));
 
     // Zero out velocity and set initial rotation
     arg0->velocity.x = 0;
@@ -562,7 +562,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
         spawnChaseCameraTask(arg0->unkBB8);
     }
 
-    arg0->unkAA0 = gameState->players[0].unkAA0 - 0x10000;
+    arg0->baseMaxSpeed = gameState->players[0].baseMaxSpeed - 0x10000;
 
     // Initialize asset offset table
     if (arg0->unk0_3C[0].unk1C != 0) {

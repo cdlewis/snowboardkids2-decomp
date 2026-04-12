@@ -192,7 +192,7 @@ void applyVelocityToPosition(Player *player) {
     player->worldPos.z = player->worldPos.z + player->velocity.z;
 }
 
-void func_800B05B8_A0468(Player *);
+void updateRacePlayer(Player *);
 void renderFlyingEnemy(Player *);
 
 void renderPlayersByShortcutDistance(void) {
@@ -257,7 +257,7 @@ void renderPlayersByShortcutDistance(void) {
             i = (u8)order[j];
             switch ((gameState->players + i)->flyingAttackState) {
                 case 0:
-                    func_800B05B8_A0468(gameState->players + i);
+                    updateRacePlayer(gameState->players + i);
                     break;
                 case 1:
                     renderFlyingEnemy(gameState->players + i);
@@ -296,7 +296,7 @@ extern s32 gButtonsPressed[];
 
 extern void startRumbleEffect(Player *player, s32 effectType);
 
-void func_800B05B8_A0468(Player *player) {
+void updateRacePlayer(Player *player) {
     Transform3D sp10;
     Transform3D sp30;
     Vec3i sp50;
@@ -304,68 +304,68 @@ void func_800B05B8_A0468(Player *player) {
     s32 temp;
     s32 diff;
     s32 myProgress;
-    s32 invTimer;
+    s32 refPlayerProgress;
 
     gameState = getCurrentAllocation();
 
-    player->velocity.x = player->worldPos.x - player->unk440;
-    player->velocity.y = player->worldPos.y - player->unk444;
-    player->velocity.z = player->worldPos.z - player->unk448;
+    player->velocity.x = player->worldPos.x - player->prevWorldPosX;
+    player->velocity.y = player->worldPos.y - player->prevWorldPosY;
+    player->velocity.z = player->worldPos.z - player->prevWorldPosZ;
 
-    memcpy(&player->unk440, &player->worldPos, sizeof(Vec3i));
+    memcpy(&player->prevWorldPosX, &player->worldPos, sizeof(Vec3i));
 
-    if (player->unkBDA == 0) {
-        player->unkB80 = player->unkB7A;
-        player->unkB81 = player->unkB7B;
-        player->unkB82 = player->unkB7C;
+    if (player->inputDisabled == 0) {
+        player->prevInputStickX = player->inputStickX;
+        player->prevInputStickY = player->inputStickY;
+        player->prevInputButtons = player->inputButtons;
 
-        switch (player->unkBE3) {
+        switch (player->inputMode) {
             case 0:
-                player->unkB7A = gAnalogStickX[player->playerIndex] / 4;
-                player->unkB7B = gAnalogStickY[player->playerIndex] / 4;
-                player->unkB7C = gButtonsPressed[player->playerIndex];
+                player->inputStickX = gAnalogStickX[player->playerIndex] / 4;
+                player->inputStickY = gAnalogStickY[player->playerIndex] / 4;
+                player->inputButtons = gButtonsPressed[player->playerIndex];
                 if (player->animFlags & 0x80000) {
-                    player->unkB7C = 0;
-                    player->unkB7A = 0;
-                    player->unkB7B = 0;
+                    player->inputButtons = 0;
+                    player->inputStickX = 0;
+                    player->inputStickY = 0;
                 }
                 break;
 
             case 1:
                 if (gameState->raceIntroState == 0) {
-                    if (player->unkBA8 < D_800BAAAC_AA95C[player->unkBE4]) {
-                        player->unkB7A = ((InputRecord *)player->unk2C)[player->unkBA8].stickX;
-                        player->unkB7B = ((InputRecord *)player->unk2C)[player->unkBA8].stickY;
-                        player->unkB7C = ((InputRecord *)player->unk2C)[player->unkBA8].buttons;
-                        player->unkBA8++;
+                    if (player->inputRecordIndex < D_800BAAAC_AA95C[player->inputRecordSet]) {
+                        player->inputStickX = ((InputRecord *)player->unk2C)[player->inputRecordIndex].stickX;
+                        player->inputStickY = ((InputRecord *)player->unk2C)[player->inputRecordIndex].stickY;
+                        player->inputButtons = ((InputRecord *)player->unk2C)[player->inputRecordIndex].buttons;
+                        player->inputRecordIndex++;
                     } else {
-                        player->unkB7A = 0;
-                        player->unkB7B = 0;
-                        player->unkB7C = 0;
+                        player->inputStickX = 0;
+                        player->inputStickY = 0;
+                        player->inputButtons = 0;
                     }
                 }
                 break;
 
             case 2:
                 if (gameState->raceIntroState == 0) {
-                    if (player->unkBA8 < D_800BAAAC_AA95C[player->unkBE4]) {
-                        player->unkB7A = ((InputRecord *)player->unk2C)[player->unkBA8].stickX =
+                    if (player->inputRecordIndex < D_800BAAAC_AA95C[player->inputRecordSet]) {
+                        player->inputStickX = ((InputRecord *)player->unk2C)[player->inputRecordIndex].stickX =
                             gAnalogStickX[player->playerIndex] / 4;
-                        player->unkB7B = ((InputRecord *)player->unk2C)[player->unkBA8].stickY =
+                        player->inputStickY = ((InputRecord *)player->unk2C)[player->inputRecordIndex].stickY =
                             gAnalogStickY[player->playerIndex] / 4;
-                        player->unkB7C = ((InputRecord *)player->unk2C)[player->unkBA8].buttons =
+                        player->inputButtons = ((InputRecord *)player->unk2C)[player->inputRecordIndex].buttons =
                             gButtonsPressed[player->playerIndex];
-                        player->unkBA8++;
+                        player->inputRecordIndex++;
                     } else {
-                        player->unkB7A = 0;
-                        player->unkB7B = 0;
-                        player->unkB7C = 0;
+                        player->inputStickX = 0;
+                        player->inputStickY = 0;
+                        player->inputButtons = 0;
                     }
                 }
                 break;
         }
 
-        player->unkB7E = player->unkB7C & ~player->unkB82;
+        player->inputButtonsPressed = player->inputButtons & ~player->prevInputButtons;
     }
 
     if (player->unkBC2 != 0) {
@@ -377,26 +377,26 @@ void func_800B05B8_A0468(Player *player) {
         player->unkAB8 = 0x3000;
     }
 
-    player->maxSpeedCap = player->unkAA0;
-    if (player->unkBDA != 0) {
-        player->maxSpeedCap -= D_800BADE0[player->unkBDD * 0x44] * 0x202;
+    player->maxSpeedCap = player->baseMaxSpeed;
+    if (player->inputDisabled != 0) {
+        player->maxSpeedCap -= D_800BADE0[player->speedPenaltyIndex * 0x44] * 0x202;
     }
 
-    diff = D_800BAA9C_AA94C[player->finishPosition] - player->unkAAC;
-    invTimer = (gameState->finalLapNumber - gameState->players[gameState->PAD_6B_2[0]].currentLap) * 8192 +
-               gameState->players[gameState->PAD_6B_2[0]].unkB98;
+    diff = D_800BAA9C_AA94C[player->finishPosition] - player->speedHandicap;
+    refPlayerProgress = (gameState->finalLapNumber - gameState->players[gameState->PAD_6B_2[0]].currentLap) * 8192 +
+                        gameState->players[gameState->PAD_6B_2[0]].unkB98;
     myProgress = (gameState->finalLapNumber - player->currentLap) * 8192 + player->unkB98;
 
-    if ((myProgress - invTimer) >= 0x3A9) {
+    if ((myProgress - refPlayerProgress) >= 0x3A9) {
         diff += 0x8000;
     }
 
     player->animFlags &= 0xFEFFFFFF;
     if ((player->finishPosition == (gameState->numPlayers - 1)) && (player->finishPosition != 0)) {
         s32 idx = gameState->PAD_6B_2[player->finishPosition - 1];
-        invTimer =
+        refPlayerProgress =
             (gameState->finalLapNumber - gameState->players[idx].currentLap) * 8192 + gameState->players[idx].unkB98;
-        if ((myProgress - invTimer) >= 0x751) {
+        if ((myProgress - refPlayerProgress) >= 0x751) {
             player->animFlags |= 0x01000000;
         }
     }
@@ -408,8 +408,8 @@ void func_800B05B8_A0468(Player *player) {
         diff = -0x80;
     }
 
-    player->unkAAC += diff;
-    player->maxSpeedCap = player->maxSpeedCap + player->unkAAC;
+    player->speedHandicap += diff;
+    player->maxSpeedCap = player->maxSpeedCap + player->speedHandicap;
     if (player->animFlags & 0x10) {
         player->maxSpeedCap = player->maxSpeedCap / 2;
     }
@@ -436,7 +436,7 @@ void func_800B05B8_A0468(Player *player) {
         player->maxSpeedCap = 0;
     }
 
-    for (temp = 0; temp < player->unkBCF; temp++) {
+    for (temp = 0; temp < player->slowdownLevel; temp++) {
         player->maxSpeedCap -= (player->maxSpeedCap >> 2);
     }
 
@@ -578,7 +578,7 @@ void func_800B05B8_A0468(Player *player) {
     if (player->bodyPartAnimFlags != 0) {
         player->bodyPartAnimFlags--;
     } else {
-        if (player->unkBCF != 0) {
+        if (player->slowdownLevel != 0) {
             setPlayerBodyPartAnimState(player, 2, 0);
         } else {
             setPlayerBodyPartAnimState(player, 0, 0);
@@ -782,7 +782,7 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     if (gameState->raceIntroState == 0) {
-        arg0->unkAAC = 0;
+        arg0->speedHandicap = 0;
         if (arg0->behaviorStep != 0) {
             if (arg0->unkB8C < 9) {
                 tryActivateFinishBoost(arg0);
@@ -794,7 +794,7 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
 
     if (gameState->raceType < 10) {
         if (arg0->behaviorStep == 0) {
-            if (arg0->unkB7E & 0x4000) {
+            if (arg0->inputButtonsPressed & 0x4000) {
                 arg0->unkB8C = 0;
                 arg0->behaviorStep = arg0->behaviorStep + 1;
             }
@@ -875,7 +875,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
     s32 velocityZ;
     u8 groundTimer;
 
-    if (player->unkB7C & 0xF) {
+    if (player->inputButtons & 0xF) {
         setPlayerBehaviorPhase(player, 4);
         player->behaviorStep = 5;
         resetTrickScore(player);
@@ -893,7 +893,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
     if (groundTimer < 0x64U) {
         player->behaviorCounter = groundTimer + 1;
     }
-    if (player->unkBDA != 0) {
+    if (player->inputDisabled != 0) {
         calculateAITargetPosition(player);
         angleDelta =
             computeAngleToPosition(player->aiTarget.x, player->aiTarget.z, player->worldPos.x, player->worldPos.z);
@@ -910,7 +910,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
         }
         player->rotY = currentAngle + angleDelta;
     } else {
-        player->rotY = (u16)player->rotY - (player->unkB7A * 4);
+        player->rotY = (u16)player->rotY - (player->inputStickX * 4);
     }
     velocityX = player->velocity.x;
     velocityZ = player->velocity.z;
@@ -946,11 +946,11 @@ typedef struct {
     u8 _padB9A[0x28]; // 0xB9A to 0xBC2
     u8 unkBC2;
     u8 _padBC3[0x17]; // 0xBC3 to 0xBDA
-    u8 unkBDA;
+    u8 inputDisabled;
 } shouldInitiateSharpTurn_arg;
 
 s32 shouldInitiateSharpTurn(shouldInitiateSharpTurn_arg *player, s32 steeringValue) {
-    if (player->unkBDA != 0) {
+    if (player->inputDisabled != 0) {
         goto end;
     }
     if (player->unkB98 == 0) {
@@ -1185,7 +1185,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
     steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
     applyBoostVelocity(player);
 
-    if (!(player->unkB7C & 0x8000)) {
+    if (!(player->inputButtons & 0x8000)) {
         player->behaviorCounter = 1;
     }
 
@@ -1228,8 +1228,8 @@ s32 updatePostTrickChargingStep(Player *player) {
     steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
     applyBoostVelocity(player);
 
-    if (!(player->unkB7C & 0x8000)) {
-        if (player->unkBDA != 0 && player->unkBDC != 0) {
+    if (!(player->inputButtons & 0x8000)) {
+        if (player->inputDisabled != 0 && player->unkBDC != 0) {
             player->unkB8C = 0x10000;
         }
         player->behaviorCounter = 1;
@@ -1273,7 +1273,7 @@ s32 beginPostTrickLaunchStep(Player *player) {
         D_800BAB44_AA9F4 = 0x20000;
     }
 
-    if (player->unkBDA != 0) {
+    if (player->inputDisabled != 0) {
         if (player->unkBDC == 0) {
             if (player->unkB98 != 0) {
                 launchMagnitudePtr = &D_800BAB44_AA9F4;
@@ -1281,7 +1281,7 @@ s32 beginPostTrickLaunchStep(Player *player) {
             }
         }
     } else {
-        if (*(u16 *)&player->unkB7A == 7) {
+        if (*(u16 *)&player->inputStickX == 7) {
             launchMagnitudePtr = &D_800BAB44_AA9F4;
             *launchMagnitudePtr = *launchMagnitudePtr * 2;
         }
@@ -1419,7 +1419,7 @@ void updateTrickFacingAngle(Player *player) {
 
     playerFlags = player->animFlags;
     if (!(playerFlags & 0x1000)) {
-        if (player->unkBDA != 0) {
+        if (player->inputDisabled != 0) {
             calculateAITargetPosition(player);
             angleDelta =
                 computeAngleToPosition(player->aiTarget.x, player->aiTarget.z, player->worldPos.x, player->worldPos.z);
@@ -1436,7 +1436,7 @@ void updateTrickFacingAngle(Player *player) {
             }
             player->rotY = currentAngle + angleDelta;
         } else {
-            player->rotY = (u16)player->rotY - (player->unkB7A * 4);
+            player->rotY = (u16)player->rotY - (player->inputStickX * 4);
         }
         processPlayerItemUsage(player);
         return;
@@ -1581,14 +1581,14 @@ void updateSpinTrickState(Player *player, s8 trickType) {
             addTrickScore(player, trickType);
             break;
         case 1:
-            if (player->unkBDA != 0 || (player->unkB7C & 0x8000)) {
+            if (player->inputDisabled != 0 || (player->inputButtons & 0x8000)) {
                 player->behaviorCounter = player->behaviorCounter + 1;
             }
             break;
         case 2:
-            if (player->unkBDA != 0 || (!(player->unkB7C & 0x8000) && player->unkB8C == 0x200)) {
+            if (player->inputDisabled != 0 || (!(player->inputButtons & 0x8000) && player->unkB8C == 0x200)) {
                 player->unkBCD = getTrickType(player);
-            } else if (player->unkB7C & 0x8000) {
+            } else if (player->inputButtons & 0x8000) {
                 getTrickType(player);
             }
             break;
@@ -1880,7 +1880,7 @@ s32 updateLeftBackwardFlipTrick(Player *player) {
 }
 
 s32 getInputSpinTrickAnimId(Player *player) {
-    u16 buttonsPressed = player->unkB7E;
+    u16 buttonsPressed = player->inputButtonsPressed;
     s32 animId;
 
     if (buttonsPressed & 0x8) {
@@ -1900,14 +1900,14 @@ s32 getInputSpinTrickAnimId(Player *player) {
         }
     }
 
-    if ((player->unkB7E & 0x2)) {
+    if ((player->inputButtonsPressed & 0x2)) {
         animId = 0x13;
         if (player->animFlags & 0x2) {
             animId = 0x15;
         }
     }
 
-    if (player->unkBDA != 0) {
+    if (player->inputDisabled != 0) {
         u8 trickFlags = player->unkBDC;
         if (trickFlags & 0x8) {
             player->unkBDC = trickFlags & 0xF7;
@@ -3908,7 +3908,7 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
         player->worldPos.y = levelData->spawnPos.y + sp10.y;
         player->worldPos.z = levelData->spawnPos.z + sp10.z;
 
-        memcpy(&player->unk440, &player->worldPos, sizeof(Vec3i));
+        memcpy(&player->prevWorldPosX, &player->worldPos, sizeof(Vec3i));
 
         player->finishAnimState = 1;
         player->unkB8C = 0x32;
@@ -4048,7 +4048,7 @@ s32 handleUfoStoredPositionStep(Player *player) {
         player->behaviorStep++;
         player->animFlags |= 0x200;
         player->currentLap++;
-        memcpy(&player->unk440, &player->worldPos.x, 0xC);
+        memcpy(&player->prevWorldPosX, &player->worldPos.x, 0xC);
         player->finishAnimState = 1;
         setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
         if (player->isBossRacer == 0 && player->currentLap == gameState->finalLapNumber) {
@@ -4277,7 +4277,7 @@ s32 warpToShortcutSpinUpStep(Player *player) {
         player->worldPos.y = shortcutConfig->spawnPos.y;
         player->worldPos.z = shortcutConfig->spawnPos.z;
 
-        memcpy(&player->unk440, &player->worldPos.x, 0xC);
+        memcpy(&player->prevWorldPosX, &player->worldPos.x, 0xC);
 
         player->finishAnimState = 2;
         setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
@@ -4729,8 +4729,8 @@ void loadPlayerCharacterAssets(void *varg0) {
         player->unk1C = loadBossHudAssetByRaceType(gameState->unk5C);
     }
 
-    if (player->unkBE3 != 0) {
-        player->unk2C = loadAssetByIndex_5E990(player->unkBE4);
+    if (player->inputMode != 0) {
+        player->unk2C = loadAssetByIndex_5E990(player->inputRecordSet);
     }
 }
 
