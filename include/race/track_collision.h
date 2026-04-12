@@ -23,5 +23,5 @@ s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSector
 Player *
 findVulnerablePlayerNearPositionWithDelta(Vec3i *position, s32 excludePlayerIdx, s32 searchRadius, Vec3i *outDelta);
 s16 getHomingAngleToTarget(Vec3i *pos, s16 facingAngle, s32 excludePlayerIdx, s32 searchRadius, s32 closeRangeThreshold);
-void func_8005A26C_5AE6C(Player *);
+void alignPlayerToTrackSurface(Player *);
 s32 handlePlayerTrackWallCollision(Player *player);

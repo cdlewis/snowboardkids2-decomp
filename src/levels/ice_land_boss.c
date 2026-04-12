@@ -675,8 +675,8 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     arg0->rotY = arg0->rotY + angleDiff;
 
     if (!(arg0->animFlags & 0x1)) {
-        createYRotationMatrix(&arg0->unk970, arg0->rotY);
-        func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->unk990, &arg0->unk970, &sp10);
+        createYRotationMatrix(&arg0->headingTransform, arg0->rotY);
+        func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->orientationTransform, &arg0->headingTransform, &sp10);
         transformVector3(&arg0->velocity, &sp10, &sp30);
         sp30.x = 0;
         transformVector2(&sp30, &sp10, &arg0->velocity);
@@ -913,8 +913,8 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
     boss->rotY = boss->rotY + angleDiff;
 
     if (!(boss->animFlags & 1)) {
-        createYRotationMatrix(&boss->unk970, boss->rotY);
-        func_8006BDBC_6C9BC((BoneAnimationState *)&boss->unk990, &boss->unk970, &rotMatrix);
+        createYRotationMatrix(&boss->headingTransform, boss->rotY);
+        func_8006BDBC_6C9BC((BoneAnimationState *)&boss->orientationTransform, &boss->headingTransform, &rotMatrix);
         transformVector3(&boss->velocity, &rotMatrix, &tempVec);
         tempVec.x = 0;
         transformVector2(&tempVec, &rotMatrix, &boss->velocity);
@@ -1067,11 +1067,11 @@ void updateIceLandBossLeanBoneTransforms(Player *arg0) {
     void *animDataPtr;
     Transform3D *temp;
 
-    animDataPtr = &arg0->unk9B0.animation_data;
+    animDataPtr = &arg0->tiltTransform.animation_data;
     animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
-    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, (Transform3D *)animDataPtr);
+    func_8006B084_6BC84(&arg0->orientationTransform, &arg0->headingTransform, (Transform3D *)animDataPtr);
     func_8006B084_6BC84(
-        (Transform3D *)&arg0->unk9B0,
+        (Transform3D *)&arg0->tiltTransform,
         (Transform3D *)animDataPtr,
         (Transform3D *)&arg0->padding2a_3[0x480]
     );
@@ -1160,11 +1160,11 @@ void updateIceLandBossJointPositions(Player *boss) {
 
     for (jointIndex = 0; jointIndex < 9; jointIndex++) {
         if (boss->animFlags & flyingFlag) {
-            boss->jointPositions[jointIndex].x = boss->unk970.translation.x + D_800BCA64[jointIndex + 9].x;
-            boss->jointPositions[jointIndex].z = boss->unk970.translation.z + D_800BCA64[jointIndex + 9].z;
+            boss->jointPositions[jointIndex].x = boss->headingTransform.translation.x + D_800BCA64[jointIndex + 9].x;
+            boss->jointPositions[jointIndex].z = boss->headingTransform.translation.z + D_800BCA64[jointIndex + 9].z;
         } else {
-            boss->jointPositions[jointIndex].x = boss->unk970.translation.x + D_800BCA64[jointIndex].x;
-            boss->jointPositions[jointIndex].z = boss->unk970.translation.z + D_800BCA64[jointIndex].z;
+            boss->jointPositions[jointIndex].x = boss->headingTransform.translation.x + D_800BCA64[jointIndex].x;
+            boss->jointPositions[jointIndex].z = boss->headingTransform.translation.z + D_800BCA64[jointIndex].z;
         }
 
         jointPos = &boss->jointPositions[jointIndex];

@@ -49,9 +49,9 @@ typedef struct {
 
 extern s16 gTrackCollisionSampleOffsets[][8];
 extern CollisionThresholdEntry gTrackCollisionThresholds[];
-extern s16 D_800940B0_94CB0[];
-extern s16 D_800940E0_94CE0[];
-extern s16 D_800940F8_94CF8[];
+extern s16 trackAlignmentQuadPoints[];
+extern s16 trackNormalSamplePoints[];
+extern s16 slopeDetectionSamplePoints[];
 
 /**
  * Checks track wall collision at 3 sample points around the player and pushes them out of walls.
@@ -76,8 +76,8 @@ s32 handlePlayerTrackWallCollision(Player *player) {
 
     result = 0;
     allocation = getCurrentAllocation();
-    func_8006B084_6BC84(&player->unk990, &player->unk970, &groundTransform);
-    func_8006B084_6BC84((Transform3D *)&player->unk9B0, &groundTransform, &combinedTransform);
+    func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &groundTransform);
+    func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &groundTransform, &combinedTransform);
 
     i = 0;
     do {
@@ -175,7 +175,7 @@ s32 handlePlayerTrackWallCollision(Player *player) {
     return result;
 }
 
-void func_8005A26C_5AE6C(Player *arg0) {
+void alignPlayerToTrackSurface(Player *player) {
     s32 heights[6];
     Vec3i points[6];
     Vec3i normals[6];
@@ -183,84 +183,84 @@ void func_8005A26C_5AE6C(Player *arg0) {
     Transform3D spE0;
     Allocation5AA90 *allocation;
     s32 i;
-    s32 var_s5;
-    s32 var_s7;
+    s32 contactMask;
+    s32 pushUpOffset;
     s32 magnitude;
     s32 sign;
     s32 lowBits;
     s16 angle;
-    s16 prevA8E;
+    s16 prevPitchAngle;
     s32 adjustedY;
     s32 dx;
     s32 dz;
 
     allocation = getCurrentAllocation();
-    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, &spE0);
-    func_8006B084_6BC84((Transform3D *)&arg0->unk9B0, &spE0, &spC0);
+    func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &spE0);
+    func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &spE0, &spC0);
 
-    if (arg0->animFlags & 0x40) {
-        arg0->animFlags &= ~0x40;
+    if (player->animFlags & 0x40) {
+        player->animFlags &= ~0x40;
         for (i = 0; i < 2; i++) {
-            transformVector(&D_800940F8_94CF8[i * 6], arg0->unk970.m[0], &points[i]);
+            transformVector(&slopeDetectionSamplePoints[i * 6], player->headingTransform.m[0], &points[i]);
         }
         for (i = 0; i < 2; i++) {
             heights[i] = getTrackHeightInSector(
                 &allocation->unk30,
-                getOrUpdatePlayerSectorIndex(arg0, &allocation->unk30, arg0->sectorIndex, &points[i]) & 0xFFFF,
+                getOrUpdatePlayerSectorIndex(player, &allocation->unk30, player->sectorIndex, &points[i]) & 0xFFFF,
                 &points[i],
                 0x100000
             );
         }
-        arg0->unkA92 = atan2Fixed(heights[1] - heights[0], -0xC0000) & 0x1FFF;
-        if (arg0->unkA92 > 0x1000) {
-            arg0->unkA92 -= 0x2000;
+        player->rollAngle = atan2Fixed(heights[1] - heights[0], -0xC0000) & 0x1FFF;
+        if (player->rollAngle > 0x1000) {
+            player->rollAngle -= 0x2000;
         }
-        createZRotationMatrix((Transform3D *)&arg0->unk9B0, (u16)arg0->unkA92);
-        func_8006B084_6BC84((Transform3D *)&arg0->unk9B0, &spE0, &spC0);
+        createZRotationMatrix((Transform3D *)&player->tiltTransform, (u16)player->rollAngle);
+        func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &spE0, &spC0);
     }
 
-    var_s7 = 0;
-    for (var_s7 = 0; var_s7 < 3; var_s7++) {
-        prevA8E = arg0->unkA8E;
-        var_s5 = 0;
+    pushUpOffset = 0;
+    for (pushUpOffset = 0; pushUpOffset < 3; pushUpOffset++) {
+        prevPitchAngle = player->pitchAngle;
+        contactMask = 0;
         for (i = 0; i < 4; i++) {
-            transformVector(&D_800940B0_94CB0[i * 6], spC0.m[0], &points[i]);
+            transformVector(&trackAlignmentQuadPoints[i * 6], spC0.m[0], &points[i]);
             heights[i] = getTrackHeightInSector(
                 &allocation->unk30,
-                getOrUpdatePlayerSectorIndex(arg0, &allocation->unk30, arg0->sectorIndex, &points[i]) & 0xFFFF,
+                getOrUpdatePlayerSectorIndex(player, &allocation->unk30, player->sectorIndex, &points[i]) & 0xFFFF,
                 &points[i],
                 0x100000
             );
         }
 
         if (points[0].y < heights[0]) {
-            var_s5 = 1;
+            contactMask = 1;
             points[1].y += heights[0] - points[0].y;
             points[0].y = heights[0];
         }
         if (points[1].y < heights[1]) {
-            var_s5 = 1;
+            contactMask = 1;
             points[0].y += heights[1] - points[1].y;
         }
         if (points[2].y < heights[2]) {
-            var_s5 = 1;
+            contactMask = 1;
             points[3].y += heights[2] - points[2].y;
             points[2].y = heights[2];
         }
         if (points[3].y < heights[3]) {
-            var_s5 = 1;
+            contactMask = 1;
             points[2].y += heights[3] - points[3].y;
         }
 
-        if (var_s5 << 16) {
+        if (contactMask << 16) {
             dx = points[2].x - points[0].x;
             dz = points[2].z - points[0].z;
 
-            arg0->unkA8E = atan2Fixed(points[0].y - points[2].y, -isqrt64((s64)dx * dx + (s64)dz * dz));
-            createCombinedRotationMatrix(&arg0->unk990, arg0->unkA8E, arg0->unkA90);
-            func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, &spE0);
-            func_8006B084_6BC84((Transform3D *)&arg0->unk9B0, &spE0, &spC0);
-            if (arg0->unkA8E == prevA8E) {
+            player->pitchAngle = atan2Fixed(points[0].y - points[2].y, -isqrt64((s64)dx * dx + (s64)dz * dz));
+            createCombinedRotationMatrix(&player->orientationTransform, player->pitchAngle, player->steeringAngle);
+            func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &spE0);
+            func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &spE0, &spC0);
+            if (player->pitchAngle == prevPitchAngle) {
                 break;
             }
         } else {
@@ -268,28 +268,28 @@ void func_8005A26C_5AE6C(Player *arg0) {
         }
     }
 
-    var_s7 = 0;
+    pushUpOffset = 0;
     for (i = 0; i < 4; i++) {
-        transformVector(&D_800940B0_94CB0[i * 6], spC0.m[0], &points[i]);
+        transformVector(&trackAlignmentQuadPoints[i * 6], spC0.m[0], &points[i]);
         heights[i] = getTrackHeightInSectorWithOffset(
             &allocation->unk30,
-            getOrUpdatePlayerSectorIndex(arg0, &allocation->unk30, arg0->sectorIndex, &points[i]),
+            getOrUpdatePlayerSectorIndex(player, &allocation->unk30, player->sectorIndex, &points[i]),
             &points[i],
             0x100000,
             (s32)&normals[i]
         );
-        adjustedY = points[i].y + var_s7;
+        adjustedY = points[i].y + pushUpOffset;
         if (adjustedY < heights[i]) {
-            var_s7 += heights[i] - adjustedY;
+            pushUpOffset += heights[i] - adjustedY;
         }
     }
 
     dx = 0;
     for (i = 4; i < 6; i++) {
-        transformVector(&D_800940E0_94CE0[dx * 6], spC0.m[0], &points[i]);
+        transformVector(&trackNormalSamplePoints[dx * 6], spC0.m[0], &points[i]);
         heights[i] = getTrackHeightInSectorWithOffset(
             &allocation->unk30,
-            getOrUpdatePlayerSectorIndex(arg0, &allocation->unk30, arg0->sectorIndex, &points[i]),
+            getOrUpdatePlayerSectorIndex(player, &allocation->unk30, player->sectorIndex, &points[i]),
             &points[i],
             0x100000,
             (s32)&normals[i]
@@ -297,10 +297,10 @@ void func_8005A26C_5AE6C(Player *arg0) {
         dx++;
     }
 
-    var_s5 = 0;
-    arg0->unk458 = 0;
-    arg0->unk45C = 0;
-    arg0->unk460 = 0;
+    contactMask = 0;
+    player->surfaceNormalX = 0;
+    player->surfaceNormalY = 0;
+    player->surfaceNormalZ = 0;
     for (i = 0; i < 6; i++) {
         adjustedY = points[i].y;
         adjustedY -= heights[i];
@@ -311,31 +311,32 @@ void func_8005A26C_5AE6C(Player *arg0) {
         }
         adjustedY += lowBits >> 13;
         if (adjustedY < 0x24000) {
-            arg0->unk458 += normals[i].x;
-            arg0->unk45C += normals[i].y;
-            var_s5 |= 1 << i;
-            arg0->unk460 += normals[i].z;
+            player->surfaceNormalX += normals[i].x;
+            player->surfaceNormalY += normals[i].y;
+            contactMask |= 1 << i;
+            player->surfaceNormalZ += normals[i].z;
         }
     }
 
-    arg0->animFlags |= 1;
-    if ((var_s5 & 3) && (var_s5 & 0x3C) || (var_s5 & 0x30) && (var_s5 & 0xC)) {
-        arg0->animFlags &= ~1;
-        if (var_s7 > 0) {
-            arg0->worldPos.y += var_s7;
+    player->animFlags |= 1;
+    if ((contactMask & 3) && (contactMask & 0x3C) || (contactMask & 0x30) && (contactMask & 0xC)) {
+        player->animFlags &= ~1;
+        if (pushUpOffset > 0) {
+            player->worldPos.y += pushUpOffset;
         }
 
         magnitude = isqrt64(
-            (s64)arg0->unk458 * arg0->unk458 + (s64)arg0->unk45C * arg0->unk45C + (s64)arg0->unk460 * arg0->unk460
+            (s64)player->surfaceNormalX * player->surfaceNormalX +
+            (s64)player->surfaceNormalY * player->surfaceNormalY + (s64)player->surfaceNormalZ * player->surfaceNormalZ
         );
         sign = magnitude >> 31;
-        arg0->unk458 = (s64)arg0->unk458 * 0x2000 / (s64)magnitude;
-        arg0->unk45C = (s64)arg0->unk45C * 0x2000 / (s64)magnitude;
-        arg0->unk460 = (s64)arg0->unk460 * 0x2000 / (s64)magnitude;
+        player->surfaceNormalX = (s64)player->surfaceNormalX * 0x2000 / (s64)magnitude;
+        player->surfaceNormalY = (s64)player->surfaceNormalY * 0x2000 / (s64)magnitude;
+        player->surfaceNormalZ = (s64)player->surfaceNormalZ * 0x2000 / (s64)magnitude;
     } else {
-        arg0->unk458 = 0;
-        arg0->unk45C = 0x2000;
-        arg0->unk460 = 0;
+        player->surfaceNormalX = 0;
+        player->surfaceNormalY = 0x2000;
+        player->surfaceNormalZ = 0;
     }
 }
 
@@ -1419,12 +1420,12 @@ void computePlayerTerrainAlignment(Player *player) {
         player->animFlags &= ~1;
     }
 
-    memcpy(&player->unk970.translation, &player->worldPos, sizeof(Vec3i));
+    memcpy(&player->headingTransform.translation, &player->worldPos, sizeof(Vec3i));
 
-    createYRotationMatrix(&player->unk970, player->rotY);
+    createYRotationMatrix(&player->headingTransform, player->rotY);
 
-    func_8006B084_6BC84(&player->unk990, &player->unk970, &tempMatrix);
-    func_8006B084_6BC84((Transform3D *)&player->unk9B0, &tempMatrix, &combinedMatrix);
+    func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &tempMatrix);
+    func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &tempMatrix, &combinedMatrix);
 
     attackState = player->flyingAttackState;
 
@@ -1489,17 +1490,17 @@ void computePlayerTerrainAlignment(Player *player) {
     normal.y = (s32)(((s64)normal.y * 0x2000) / dist);
     normal.z = (s32)(((s64)normal.z * 0x2000) / dist);
 
-    transformVector3(&normal, &player->unk970, &rotatedNormal);
+    transformVector3(&normal, &player->headingTransform, &rotatedNormal);
 
     pitchAngle = atan2Fixed(rotatedNormal.z, -rotatedNormal.y);
-    player->unkA8E = (-pitchAngle) & 0x1FFF;
+    player->pitchAngle = (-pitchAngle) & 0x1FFF;
 
     dist = isqrt64((s64)rotatedNormal.y * rotatedNormal.y + (s64)rotatedNormal.z * rotatedNormal.z);
 
     rollAngle = atan2Fixed(-rotatedNormal.x, -dist);
-    player->unkA92 = (-rollAngle) & 0x1FFF;
+    player->rollAngle = (-rollAngle) & 0x1FFF;
 
-    createXRotationMatrix(player->unk990.m, player->unkA8E);
+    createXRotationMatrix(player->orientationTransform.m, player->pitchAngle);
 }
 
 s16 getPlayerTargetTrackAngle(Player *player) {

@@ -120,9 +120,9 @@ void applyBoostVelocity(Player *player) {
         case 1:
         case 7:
             if (player->unkBC9 == 3) {
-                transformVector2(gameState->unk48 + 0x1D4, &player->unk9B0.animation_data, &result);
+                transformVector2(gameState->unk48 + 0x1D4, &player->tiltTransform.animation_data, &result);
             } else {
-                transformVector2(gameState->unk48 + 0xB4, &player->unk9B0.animation_data, &result);
+                transformVector2(gameState->unk48 + 0xB4, &player->tiltTransform.animation_data, &result);
             }
             player->velocity.x += result.x;
             player->velocity.y += result.y;
@@ -131,9 +131,9 @@ void applyBoostVelocity(Player *player) {
         case 2:
         case 8:
             if (player->unkBC9 == 3) {
-                transformVector2(gameState->unk48 + 0x1E0, &player->unk9B0.animation_data, &result);
+                transformVector2(gameState->unk48 + 0x1E0, &player->tiltTransform.animation_data, &result);
             } else {
-                transformVector2(gameState->unk48 + 0xC0, &player->unk9B0.animation_data, &result);
+                transformVector2(gameState->unk48 + 0xC0, &player->tiltTransform.animation_data, &result);
             }
             player->velocity.x += result.x;
             player->velocity.y += result.y;
@@ -142,7 +142,7 @@ void applyBoostVelocity(Player *player) {
         case 5: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->unk48 + 0xCC, &player->unk9B0.animation_data, &result);
+            transformVector2(gameState->unk48 + 0xCC, &player->tiltTransform.animation_data, &result);
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
@@ -154,7 +154,7 @@ void applyBoostVelocity(Player *player) {
         case 6: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->unk48 + 0xD8, &player->unk9B0.animation_data, &result);
+            transformVector2(gameState->unk48 + 0xD8, &player->tiltTransform.animation_data, &result);
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
@@ -591,16 +591,16 @@ void updateRacePlayer(Player *player) {
     player->pathFlags = 0;
     player->animFlags &= 0xFFFDFFFF;
 
-    createZRotationMatrix((Transform3D *)&player->unk9B0, player->unkA92);
-    createCombinedRotationMatrix(&player->unk990, player->unkA8E, player->unkA90);
-    createYRotationMatrix(&player->unk970, player->rotY);
+    createZRotationMatrix((Transform3D *)&player->tiltTransform, player->rollAngle);
+    createCombinedRotationMatrix(&player->orientationTransform, player->pitchAngle, player->steeringAngle);
+    createYRotationMatrix(&player->headingTransform, player->rotY);
 
-    func_8006B084_6BC84((Transform3D *)&player->unk9B0, &player->unk990, &sp10);
-    func_8006B084_6BC84(&sp10, &player->unk970, &sp30);
+    func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &player->orientationTransform, &sp10);
+    func_8006B084_6BC84(&sp10, &player->headingTransform, &sp30);
 
-    sp30.translation.x -= player->unk970.translation.x;
-    sp30.translation.y -= player->unk970.translation.y;
-    sp30.translation.z -= player->unk970.translation.z;
+    sp30.translation.x -= player->headingTransform.translation.x;
+    sp30.translation.y -= player->headingTransform.translation.y;
+    sp30.translation.z -= player->headingTransform.translation.z;
 
     transformVector(&D_800BAA90_AA940, (s16 *)&sp30, &player->collisionOffset);
     memcpy(&player->collisionListNode.localPos, &player->collisionOffset, sizeof(Vec3i));
@@ -623,10 +623,10 @@ s32 initPlayerForRace(Player *player) {
     gameState = getCurrentAllocation();
 
     /* Initialize rotation matrices */
-    memcpy(&player->unk970, &identityMatrix, 0x20);
-    createYRotationMatrix(&player->unk970, player->rotY);
-    memcpy(&player->unk990, &identityMatrix, 0x20);
-    memcpy(&player->unk9B0, &identityMatrix, 0x20);
+    memcpy(&player->headingTransform, &identityMatrix, 0x20);
+    createYRotationMatrix(&player->headingTransform, player->rotY);
+    memcpy(&player->orientationTransform, &identityMatrix, 0x20);
+    memcpy(&player->tiltTransform, &identityMatrix, 0x20);
 
     /* Set initial X position based on player index */
     *(s32 *)((u8 *)player + 0x434) = gPlayerStartXPositions[player->playerIndex];
@@ -834,15 +834,15 @@ s32 updatePlayerSlidingConstrained(Player *player) {
         player->unkB8C++;
     }
 
-    player->unkA90 = 0;
-    player->unkA92 = 0;
-    player->unk990.translation.x = 0;
+    player->steeringAngle = 0;
+    player->rollAngle = 0;
+    player->orientationTransform.translation.x = 0;
 
     if (player->animFlags & 2) {
-        player->unkA8E = player->unkBB0;
+        player->pitchAngle = player->unkBB0;
         player->rotY = player->unkBB2;
     } else {
-        player->unkA8E = -player->unkBB0;
+        player->pitchAngle = -player->unkBB0;
         player->rotY = player->unkBB2 + 0x1000;
     }
 
@@ -921,7 +921,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
         decayPlayerAirborneAngles(player);
     }
     applyBoostVelocity(player);
-    angleDelta = player->unkA92;
+    angleDelta = player->rollAngle;
     if (angleDelta >= 0) {
         if (angleDelta >= 0x401) {
             angleDelta = 0x400;
@@ -1018,7 +1018,7 @@ s32 updateSharpTurnSlidingStep(Player *player) {
     applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
     applyBoostVelocity(player);
 
-    steeringAngle = player->unkA92;
+    steeringAngle = player->rollAngle;
     clampedAngle = steeringAngle;
     if (steeringAngle >= 0) {
         if (steeringAngle >= 0x401) {
@@ -1154,8 +1154,8 @@ void dispatchPostTrickLandingStep(BehaviorState *arg0) {
 s32 beginPostTrickSlidingStep(Player *player) {
     player->unkB8C = 4;
     player->behaviorStep += 1;
-    player->rotY += player->unkA90;
-    player->unkA90 = 0;
+    player->rotY += player->steeringAngle;
+    player->steeringAngle = 0;
     onTrickCompletedHook(player);
     player->trickCount = 0;
     player->unkBCD = -1;
@@ -1287,8 +1287,8 @@ s32 beginPostTrickLaunchStep(Player *player) {
         }
     }
 
-    func_8006BDBC_6C9BC((BoneAnimationState *)&player->unk990, &player->unk970, rotationTemp1);
-    func_8006BDBC_6C9BC(&player->unk9B0, rotationTemp1, rotationTemp2);
+    func_8006BDBC_6C9BC((BoneAnimationState *)&player->orientationTransform, &player->headingTransform, rotationTemp1);
+    func_8006BDBC_6C9BC(&player->tiltTransform, rotationTemp1, rotationTemp2);
     transformVector2(&D_800BAB3C_AA9EC, rotationTemp2, &launchVelocity);
 
     player->velocity.x += launchVelocity.x;
@@ -2039,19 +2039,19 @@ s32 updateRaceFinishSlowingDownStep(Player *player) {
         player->velocity.z -= (player->velocity.z >> 5);
         decayPlayerAirborneAngles(player);
     } else {
-        player->unkA90 = player->unkA90 & 0x1FFF;
-        if (player->unkA90 >= 0x1001) {
-            player->unkA90 -= 0x2000;
+        player->steeringAngle = player->steeringAngle & 0x1FFF;
+        if (player->steeringAngle >= 0x1001) {
+            player->steeringAngle -= 0x2000;
         }
-        yawDecay = -player->unkA90;
+        yawDecay = -player->steeringAngle;
         if (yawDecay >= 0x81) {
             yawDecay = 0x80;
         }
         if (yawDecay < -0x80) {
             yawDecay = -0x80;
         }
-        tiltAngle = player->unk990.translation.x;
-        player->unkA90 += yawDecay;
+        tiltAngle = player->orientationTransform.translation.x;
+        player->steeringAngle += yawDecay;
         tiltDecay = -tiltAngle;
         if (tiltDecay > 0x8000) {
             tiltDecay = 0x8000;
@@ -2059,7 +2059,7 @@ s32 updateRaceFinishSlowingDownStep(Player *player) {
         if (tiltDecay < -0x8000) {
             tiltDecay = -0x8000;
         }
-        player->unk990.translation.x = tiltAngle + tiltDecay;
+        player->orientationTransform.translation.x = tiltAngle + tiltDecay;
         applyVelocityDeadzone(player, 0x7000, 0x7000, 0x7000);
         rotateVectorY(&player->velocity, -player->rotY, &localVelocity);
         localVelocity.x = localVelocity.x >> 8;
@@ -2069,16 +2069,16 @@ s32 updateRaceFinishSlowingDownStep(Player *player) {
         if (localVelocity.x < -0x400) {
             localVelocity.x = -0x400;
         }
-        localVelocity.x -= player->unkA92;
+        localVelocity.x -= player->rollAngle;
         if (localVelocity.x >= 0x51) {
             localVelocity.x = 0x50;
         }
         if (localVelocity.x < -0x50) {
             localVelocity.x = -0x50;
         }
-        player->unkA92 = player->unkA92 + localVelocity.x;
-        if ((((u16)player->unkA92 + 7) & 0xFFFF) < 0xFU) {
-            player->unkA92 = 0;
+        player->rollAngle = player->rollAngle + localVelocity.x;
+        if ((((u16)player->rollAngle + 7) & 0xFFFF) < 0xFU) {
+            player->rollAngle = 0;
         }
         if (player->behaviorCounter == 0) {
             targetAngle = atan2Fixed(-player->velocity.x, -player->velocity.z);
@@ -2113,7 +2113,7 @@ s32 updateRaceFinishSlowingDownStep(Player *player) {
     player->velocity.y -= 0x6000;
     applyClampedVelocityToPosition(player);
 
-    finalSteering = player->unkA92;
+    finalSteering = player->rollAngle;
     if (finalSteering == 0) {
         advancePlayerLeanAnimationAuto(player, 0);
         return 0;
@@ -2353,7 +2353,7 @@ void updateTrickRotationTransform(Player *player) {
     rotationMatrix.translation.y = 0x100000;
     rotationMatrix.translation.z = 0;
 
-    func_8006B084_6BC84(temp, &rotationMatrix, (Transform3D *)&player->unk9B0.prev_position);
+    func_8006B084_6BC84(temp, &rotationMatrix, (Transform3D *)&player->tiltTransform.prev_position);
 
     player->animFlags |= 0x800;
 }
@@ -2367,12 +2367,12 @@ void decayPlayerSteeringAngles(Player *player) {
     s32 tiltDecay;
     s32 pad[4];
 
-    normalizedAngle = (u16)player->unkA92 & 0x1FFF;
-    player->unkA92 = normalizedAngle;
+    normalizedAngle = (u16)player->rollAngle & 0x1FFF;
+    player->rollAngle = normalizedAngle;
     if (normalizedAngle >= 0x1001) {
-        player->unkA92 = normalizedAngle - 0x2000;
+        player->rollAngle = normalizedAngle - 0x2000;
     }
-    currentAngle = player->unkA92;
+    currentAngle = player->rollAngle;
     decayAmount = -currentAngle, savedAngle = currentAngle;
     if (decayAmount >= 0x81) {
         decayAmount = 0x80;
@@ -2380,14 +2380,14 @@ void decayPlayerSteeringAngles(Player *player) {
     if (decayAmount < -0x80) {
         decayAmount = -0x80;
     }
-    player->unkA92 = savedAngle + decayAmount;
+    player->rollAngle = savedAngle + decayAmount;
 
-    normalizedAngle = (u16)player->unkA90 & 0x1FFF;
-    player->unkA90 = normalizedAngle;
+    normalizedAngle = (u16)player->steeringAngle & 0x1FFF;
+    player->steeringAngle = normalizedAngle;
     if (normalizedAngle >= 0x1001) {
-        player->unkA90 = normalizedAngle - 0x2000;
+        player->steeringAngle = normalizedAngle - 0x2000;
     }
-    currentAngle = player->unkA90;
+    currentAngle = player->steeringAngle;
     decayAmount = -currentAngle, savedAngle = currentAngle;
     if (decayAmount >= 0x81) {
         decayAmount = 0x80;
@@ -2395,8 +2395,8 @@ void decayPlayerSteeringAngles(Player *player) {
     if (decayAmount < -0x80) {
         decayAmount = -0x80;
     }
-    tiltOffset = player->unk990.translation.x;
-    player->unkA90 = savedAngle + decayAmount;
+    tiltOffset = player->orientationTransform.translation.x;
+    player->steeringAngle = savedAngle + decayAmount;
     tiltDecay = -tiltOffset;
     if (tiltDecay > 0x8000) {
         tiltDecay = 0x8000;
@@ -2404,7 +2404,7 @@ void decayPlayerSteeringAngles(Player *player) {
     if (tiltDecay < -0x8000) {
         tiltDecay = -0x8000;
     }
-    player->unk990.translation.x = tiltOffset + tiltDecay;
+    player->orientationTransform.translation.x = tiltOffset + tiltDecay;
 }
 
 void decayPlayerAirborneAngles(Player *player) {
@@ -2416,13 +2416,13 @@ void decayPlayerAirborneAngles(Player *player) {
     s32 pad[5];
 
     // Decay unkA92
-    normalizedAngle = player->unkA92 & 0x1FFF;
-    player->unkA92 = normalizedAngle;
+    normalizedAngle = player->rollAngle & 0x1FFF;
+    player->rollAngle = normalizedAngle;
     if (!(normalizedAngle < 0x1001)) {
-        player->unkA92 = normalizedAngle - 0x2000;
+        player->rollAngle = normalizedAngle - 0x2000;
     }
 
-    currentAngle = player->unkA92;
+    currentAngle = player->rollAngle;
     decayAmount = -currentAngle, savedAngle = currentAngle;
     if (!(decayAmount < 0x29)) {
         decayAmount = 0x28;
@@ -2430,16 +2430,16 @@ void decayPlayerAirborneAngles(Player *player) {
     if (decayAmount < -0x28) {
         decayAmount = -0x28;
     }
-    player->unkA92 = savedAngle + decayAmount;
+    player->rollAngle = savedAngle + decayAmount;
 
     // Decay unkA8E
-    normalizedAngle = player->unkA8E & 0x1FFF;
-    player->unkA8E = normalizedAngle;
+    normalizedAngle = player->pitchAngle & 0x1FFF;
+    player->pitchAngle = normalizedAngle;
     if (!(normalizedAngle < 0x1001)) {
-        player->unkA8E = normalizedAngle - 0x2000;
+        player->pitchAngle = normalizedAngle - 0x2000;
     }
 
-    currentAngle = player->unkA8E;
+    currentAngle = player->pitchAngle;
     decayAmount = -currentAngle, savedAngle = currentAngle;
     if (!(decayAmount < 0x29)) {
         decayAmount = 0x28;
@@ -2447,16 +2447,16 @@ void decayPlayerAirborneAngles(Player *player) {
     if (decayAmount < -0x28) {
         decayAmount = -0x28;
     }
-    player->unkA8E = savedAngle + decayAmount;
+    player->pitchAngle = savedAngle + decayAmount;
 
     // Decay unkA90
-    normalizedAngle = player->unkA90 & 0x1FFF;
-    player->unkA90 = normalizedAngle;
+    normalizedAngle = player->steeringAngle & 0x1FFF;
+    player->steeringAngle = normalizedAngle;
     if (!(normalizedAngle < 0x1001)) {
-        player->unkA90 = normalizedAngle - 0x2000;
+        player->steeringAngle = normalizedAngle - 0x2000;
     }
 
-    currentAngle = player->unkA90;
+    currentAngle = player->steeringAngle;
     decayAmount = -currentAngle, savedAngle = currentAngle;
     if (!(decayAmount < 0x29)) {
         decayAmount = 0x28;
@@ -2467,8 +2467,8 @@ void decayPlayerAirborneAngles(Player *player) {
     result = savedAngle + decayAmount;
 
     // Decay unk990.translation.x (tilt offset)
-    tiltOffset = player->unk990.translation.x;
-    player->unkA90 = result;
+    tiltOffset = player->orientationTransform.translation.x;
+    player->steeringAngle = result;
     tiltDecay = -tiltOffset, savedTilt = tiltOffset;
     if (!(tiltDecay < 0x6001)) {
         tiltDecay = 0x6000;
@@ -2476,7 +2476,7 @@ void decayPlayerAirborneAngles(Player *player) {
     if (tiltDecay < -0x6000) {
         tiltDecay = -0x6000;
     }
-    player->unk990.translation.x = savedTilt + tiltDecay;
+    player->orientationTransform.translation.x = savedTilt + tiltDecay;
 }
 
 s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadzone, s32 lateralDeadzone) {
@@ -2491,7 +2491,7 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     s32 sqrtResult;
     s32 localForwardVelocity;
 
-    createYRotationMatrix(&yawRotation, player->unkA90 + player->rotY);
+    createYRotationMatrix(&yawRotation, player->steeringAngle + player->rotY);
 
     forwardDir.x = yawRotation.m[2][0];
     forwardDir.y = yawRotation.m[2][1];
@@ -2500,20 +2500,22 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     memcpy(&pitchMatrix, &identityMatrix, 0x20);
     memcpy(&slopeMatrix, &identityMatrix, 0x20);
 
-    sqrtResult = approximate_sqrt(player->unk458 * player->unk458 + player->unk460 * player->unk460);
+    sqrtResult = approximate_sqrt(
+        player->surfaceNormalX * player->surfaceNormalX + player->surfaceNormalZ * player->surfaceNormalZ
+    );
     magnitude = sqrtResult & 0xFFFF;
 
     if (magnitude != 0) {
-        slopeMatrix.m[0][0] = (player->unk460 << 13) / magnitude;
-        slopeMatrix.m[0][2] = (player->unk458 << 13) / magnitude;
-        slopeMatrix.m[2][0] = (-player->unk458 << 13) / magnitude;
-        slopeMatrix.m[2][2] = (player->unk460 << 13) / magnitude;
+        slopeMatrix.m[0][0] = (player->surfaceNormalZ << 13) / magnitude;
+        slopeMatrix.m[0][2] = (player->surfaceNormalX << 13) / magnitude;
+        slopeMatrix.m[2][0] = (-player->surfaceNormalX << 13) / magnitude;
+        slopeMatrix.m[2][2] = (player->surfaceNormalZ << 13) / magnitude;
     }
 
-    pitchMatrix.m[1][1] = player->unk45C;
+    pitchMatrix.m[1][1] = player->surfaceNormalY;
     pitchMatrix.m[1][2] = -magnitude;
     pitchMatrix.m[2][1] = magnitude;
-    pitchMatrix.m[2][2] = player->unk45C;
+    pitchMatrix.m[2][2] = player->surfaceNormalY;
 
     func_8006BDBC_6C9BC((void *)&slopeMatrix, &pitchMatrix, &combinedTransform);
     transformVector2(&player->velocity.x, &combinedTransform, &tempVec);
@@ -3767,19 +3769,19 @@ s32 fallTowardShortcutWarpStep(Player *player) {
             if (angleDelta < 0) {
                 angleDelta = -angleDelta;
                 if (angleDelta < 0x401) {
-                    player->unkA92 = angleDelta;
+                    player->rollAngle = angleDelta;
                 } else {
                     decayPlayerAirborneAngles(player);
                 }
             } else if (angleDelta < 0x401) {
-                player->unkA92 = -angleDelta;
+                player->rollAngle = -angleDelta;
             } else {
                 decayPlayerAirborneAngles(player);
             }
 
             {
                 s16 leanAngle;
-                leanAngle = player->unkA92;
+                leanAngle = player->rollAngle;
                 if (leanAngle >= 0) {
                     if (leanAngle >= 0x401) {
                         leanAngle = 0x400;
@@ -3794,7 +3796,7 @@ s32 fallTowardShortcutWarpStep(Player *player) {
                 }
             }
 
-            if (distanceToTarget < 0x1000 && player->unkA92 == 0) {
+            if (distanceToTarget < 0x1000 && player->rollAngle == 0) {
                 switch (gameState->memoryPoolId) {
                     default:
                         if (scheduleTask(&initFlyingSceneryTask, 0, 0, 0xD3) != NULL) {
@@ -3849,7 +3851,7 @@ s32 slideDuringKnockbackRecoveryStep(Player *player) {
 
     if (player->unkB8C < 0x12) {
         player->animFlags = player->animFlags | 0x2000;
-        transformVector2(&g_KnockbackRecoveryForwardVelocity, &player->unk970, &player->velocity);
+        transformVector2(&g_KnockbackRecoveryForwardVelocity, &player->headingTransform, &player->velocity);
     }
 
     applyClampedVelocityToPosition(player);
@@ -3867,7 +3869,7 @@ s32 slideDiagonallyDuringKnockbackRecoveryStep(Player *player) {
 
     getLevelConfig(gameState->memoryPoolId);
     decayPlayerSteeringAngles(player);
-    transformVector2(&g_KnockbackDiagonalSlideVelocity, &player->unk970, &player->velocity);
+    transformVector2(&g_KnockbackDiagonalSlideVelocity, &player->headingTransform, &player->velocity);
     applyClampedVelocityToPosition(player);
 
     if (player->unkB8C != 0) {
@@ -3901,8 +3903,8 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
         player->behaviorCounter++;
         player->currentLap++;
 
-        createYRotationMatrix(&player->unk970, 0x1000);
-        transformVector2(&g_FinishLineRespawnOffset, &player->unk970, &sp10);
+        createYRotationMatrix(&player->headingTransform, 0x1000);
+        transformVector2(&g_FinishLineRespawnOffset, &player->headingTransform, &sp10);
 
         player->worldPos.x = levelData->spawnPos.x + sp10.x;
         player->worldPos.y = levelData->spawnPos.y + sp10.y;
@@ -3923,7 +3925,7 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
     }
 
     decayPlayerSteeringAngles(player);
-    transformVector2(&g_KnockbackDiagonalSlideVelocity, &player->unk970, &player->velocity);
+    transformVector2(&g_KnockbackDiagonalSlideVelocity, &player->headingTransform, &player->velocity);
     applyClampedVelocityToPosition(player);
 
     if (player->unkB8C != 0) {
@@ -3941,7 +3943,7 @@ s32 slideForwardAndResetStep(Player *player) {
     GameState *gameState = getCurrentAllocation();
 
     getLevelConfig(gameState->memoryPoolId);
-    transformVector2(&g_KnockbackRecoveryForwardVelocity, &player->unk970, &player->velocity);
+    transformVector2(&g_KnockbackRecoveryForwardVelocity, &player->headingTransform, &player->velocity);
     applyClampedVelocityToPosition(player);
     decayPlayerSteeringAngles(player);
 
@@ -4015,7 +4017,7 @@ s32 restoreStoredPositionStep(Player *arg0) {
     arg0->worldPos.x = arg0->storedPosX;
     arg0->worldPos.y = arg0->storedPosY;
     arg0->worldPos.z = arg0->storedPosZ;
-    arg0->unkA8E = arg0->storedRotY;
+    arg0->pitchAngle = arg0->storedRotY;
 
     if (advancePlayerLeanAnimation(arg0, 5) != 0) {
         arg0->behaviorCounter = 0;
@@ -4033,7 +4035,7 @@ s32 handleUfoStoredPositionStep(Player *player) {
     player->worldPos.x = player->storedPosX;
     player->worldPos.y = player->storedPosY;
     player->worldPos.z = player->storedPosZ;
-    player->unkA8E = player->storedRotY;
+    player->pitchAngle = player->storedRotY;
     flags = player->ufoFlags;
 
     if (flags & 8) {
@@ -4065,7 +4067,7 @@ s32 handleUfoAbductionRecoveryStep(Player *arg0) {
     arg0->worldPos.x = arg0->storedPosX;
     arg0->worldPos.y = arg0->storedPosY;
     arg0->worldPos.z = arg0->storedPosZ;
-    arg0->unkA8E = arg0->storedRotY;
+    arg0->pitchAngle = arg0->storedRotY;
 
     advancePlayerLeanAnimation(arg0, 0);
 
@@ -4081,7 +4083,7 @@ s32 waitAtStoredPositionStep(Player *arg0) {
     arg0->worldPos.x = arg0->storedPosX;
     arg0->worldPos.y = arg0->storedPosY;
     arg0->worldPos.z = arg0->storedPosZ;
-    arg0->unkA8E = arg0->storedRotY;
+    arg0->pitchAngle = arg0->storedRotY;
 
     advancePlayerLeanAnimation(arg0, 3);
 
@@ -4271,7 +4273,7 @@ s32 warpToShortcutSpinUpStep(Player *player) {
         player->behaviorCounter++;
         player->currentLap++;
 
-        createYRotationMatrix(&player->unk970, 0xE00);
+        createYRotationMatrix(&player->headingTransform, 0xE00);
 
         player->worldPos.x = shortcutConfig->spawnPos.x;
         player->worldPos.y = shortcutConfig->spawnPos.y;
@@ -4419,7 +4421,7 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
     player->sectorIndex =
         getOrUpdatePlayerSectorIndex(player, (u8 *)&gs->gameData, player->sectorIndex, &player->worldPos);
     temp2 = &savedPos;
-    memcpy(&player->unk970.translation, &player->worldPos, 0xC);
+    memcpy(&player->headingTransform.translation, &player->worldPos, 0xC);
 
     if (!(player->animFlags & 0x100)) {
         memcpy(temp2, &player->worldPos, sizeof(Vec3i));
@@ -4435,7 +4437,7 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
                 if (player->animFlags & 0x1000) {
                     setPlayerPullState(player, &savedPos);
                 } else {
-                    createYRotationMatrix(&matrix, player->rotY + player->unkA90);
+                    createYRotationMatrix(&matrix, player->rotY + player->steeringAngle);
                     transformVector3(&savedPos, &matrix, &transformedVec);
                     hitDirection = 0;
                     angle = atan2Fixed(transformedVec.x, transformedVec.z);
@@ -4504,8 +4506,8 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
     }
 
     if (!(player->animFlags & 0x200)) {
-        func_8005A26C_5AE6C(player);
-        memcpy(&player->unk970.translation, &player->worldPos, sizeof(Vec3i));
+        alignPlayerToTrackSurface(player);
+        memcpy(&player->headingTransform.translation, &player->worldPos, sizeof(Vec3i));
     }
 
     if (player->animFlags & 0x20000) {
@@ -4675,9 +4677,9 @@ void updatePlayerJointPositions(Player *player) {
     do {
         jointPos = (Vec3i *)((u8 *)player + jointOff);
         *(volatile s32 *)(jointBase + 0xA10) =
-            player->unk970.translation.x + *(s32 *)((u8 *)&D_800BA348_AA1F8 + jointOff);
+            player->headingTransform.translation.x + *(s32 *)((u8 *)&D_800BA348_AA1F8 + jointOff);
         *(volatile s32 *)(jointBase + 0xA18) =
-            player->unk970.translation.z + *(s32 *)((u8 *)&D_800BA350_AA200 + jointOff);
+            player->headingTransform.translation.z + *(s32 *)((u8 *)&D_800BA350_AA200 + jointOff);
 
         sectorIdx = getOrUpdatePlayerSectorIndex((void *)player, gameData, player->sectorIndex, jointPos);
         *(volatile s32 *)(jointBase + 0xA14) = getTrackHeightInSector(gameData, sectorIdx, jointPos, 0x100000);
