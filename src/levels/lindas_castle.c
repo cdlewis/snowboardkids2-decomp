@@ -20,8 +20,14 @@ typedef struct {
     Waypoint unk4[2];
 } WaypointGroup;
 
-extern WaypointGroup g_FlyingEnemyWaypoints[];
-extern Vec3i *g_FlyingEnemyDirection;
+WaypointGroup g_FlyingEnemyWaypoints[5] = {
+    { 0x65, { { 0x19892B6F, 0xD8134270 }, { 0x1B502799, 0xDAD50296 } } },
+    { 0x65, { { 0x18F06693, 0xD8AC06B4 }, { 0x1AF2F573, 0xDB26E8F8 } } },
+    { 0x68, { { 0x1F210F1B, 0xD9AAE8E0 }, { 0x1E5C75AD, 0xD657D502 } } },
+    { 0x68, { { 0x1FC5DBD9, 0xD995D9FE }, { 0x1F16CDC1, 0xD6300CAE } } },
+    { 0,    { { 0, 0x50000 }, { 0, 0 } }                               },
+};
+s32 D_800BBC24 = 0x000A0000;
 
 void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task);
 void pullPlayersInRange(FlyingEnemyTaskArg *arg0);

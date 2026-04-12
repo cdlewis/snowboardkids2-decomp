@@ -573,7 +573,7 @@ segments:
     exclusive_ram_id: 800BB2B0
     subsegments:
       - [0xAB160, c, levels/lindas_castle]
-      - [0xABA70, data, levels/lindas_castle]
+      - [0xABA70, .data, levels/lindas_castle]
 
   - name: levels/crazy_jungle_boss
     type: code
