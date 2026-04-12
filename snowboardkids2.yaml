@@ -593,7 +593,7 @@ segments:
     overlay: true
     subsegments:
       - [0xACD30, c, levels/snowboard_street_shoot_cross]
-      - [0xAD630, data, levels/snowboard_street_shoot_cross]
+      - [0xAD630, .data, levels/snowboard_street_shoot_cross]
 
   - name: levels/starlight_highway
     type: code

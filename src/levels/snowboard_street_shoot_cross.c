@@ -77,7 +77,12 @@ extern Gfx D_8009A780_9B380[];
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
-extern void *D_800BBBB0_AD630;
+Vtx D_800BBBB0_AD630[4] = {
+    { { { -24, 48, 0 }, 0, { -16, -16 }, { 255, 255, 255, 255 } } },
+    { { { 24, 48, 0 }, 0, { 2032, -16 }, { 255, 255, 255, 255 } } },
+    { { { 24, 0, 0 }, 0, { 2032, 2032 }, { 255, 255, 255, 255 } } },
+    { { { -24, 0, 0 }, 0, { -16, 2032 }, { 255, 255, 255, 255 } } },
+};
 
 void initShootCrossTargets(ShootCrossTargets *arg0) {
     arg0->spriteAsset = loadAsset_34F9A0();
