@@ -185,7 +185,7 @@ void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task) {
         task->targetPosition[0] += rotatedVec.x;
         task->targetPosition[2] += rotatedVec.z;
 
-        task->surfaceType = func_80060A3C_6163C(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
+        task->surfaceType = findTrackSector(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
         task->targetPosition[1] = getTrackHeightAtPosition(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
 
         task->velocityY += task->gravity;
@@ -247,7 +247,7 @@ void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
         task->targetPosition[0] += rotatedVec.x;
         task->targetPosition[2] += rotatedVec.z;
 
-        task->surfaceType = func_80060A3C_6163C(gameData, task->surfaceType, &task->targetPosition[0]);
+        task->surfaceType = findTrackSector(gameData, task->surfaceType, &task->targetPosition[0]);
         task->targetPosition[1] = getTrackHeightAtPosition(gameData, task->surfaceType, &task->targetPosition[0]);
 
         task->velocityY += task->gravity;

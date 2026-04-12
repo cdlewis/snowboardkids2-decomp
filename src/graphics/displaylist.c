@@ -145,109 +145,121 @@ s64 cross2d(s32 x0, s32 y0, s32 x1, s32 y1, s32 x2, s32 y2) {
     return product1 - product2;
 }
 
-u16 func_80060A3C_6163C(void *arg0, u16 arg1, void *arg2) {
+u16 findTrackSector(void *arg0, u16 sectorIndex, void *arg2) {
 #ifdef CC_CHECK
     TrackGeometryFaceData *trackGeom = (TrackGeometryFaceData *)arg0;
     Vec3i *pos = (Vec3i *)arg2;
-    s16 var_v1;
+    s16 currentSector;
     s16 i;
 #else
     register TrackGeometryFaceData *trackGeom __asm__("$19") = (TrackGeometryFaceData *)arg0;
     register Vec3i *pos __asm__("$20") = (Vec3i *)arg2;
-    s16 var_v1;
+    s16 currentSector;
     register s16 i __asm__("$16");
 #endif
-    s32 sp1C;
-    s32 sp24;
-    s32 sp2C;
-    s32 sp34;
-    s32 temp_s2;
-    s32 temp_s6;
-    s32 temp_fp;
-    s32 temp_s5;
-    s32 temp_s2_2;
-    s32 temp_s7;
+    s32 v0x;
+    s32 v1x;
+    s32 v0z;
+    s32 v1z;
+    s32 faceGroupOffset0;
+    s32 faceGroupOffset1;
+    s32 v2x;
+    s32 v3x;
+    s32 v3z;
+    s32 v2z;
 
-    var_v1 = arg1;
+    currentSector = sectorIndex;
     i = 0;
 
     do {
         {
-            s32 idx = var_v1 & 0xFFFF;
+            s32 idx = currentSector & 0xFFFF;
             s32 fgAddr = (s32)trackGeom->faceGroups;
-            temp_s2 = ((idx << 3) + idx) << 2;
-            sp1C = ((Vertex6 *)((((TrackFaceGroup *)(temp_s2 + fgAddr))->vertexIdx0 * 6) + (s32)trackGeom->vertices))->x
-                   << 16;
-            sp2C = ((Vertex6 *)((((TrackFaceGroup *)(temp_s2 + fgAddr))->vertexIdx0 * 6) + (s32)trackGeom->vertices))->z
-                   << 16;
-            sp24 = ((Vertex6 *)((((TrackFaceGroup *)(temp_s2 + fgAddr))->vertexIdx1 * 6) + (s32)trackGeom->vertices))->x
-                   << 16;
-            sp34 = ((Vertex6 *)((((TrackFaceGroup *)(temp_s2 + fgAddr))->vertexIdx1 * 6) + (s32)trackGeom->vertices))->z
-                   << 16;
+            faceGroupOffset0 = ((idx << 3) + idx) << 2;
+            v0x = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset0 + fgAddr))->vertexIdx0 * 6) +
+                               (s32)trackGeom->vertices))
+                      ->x
+                  << 16;
+            v0z = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset0 + fgAddr))->vertexIdx0 * 6) +
+                               (s32)trackGeom->vertices))
+                      ->z
+                  << 16;
+            v1x = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset0 + fgAddr))->vertexIdx1 * 6) +
+                               (s32)trackGeom->vertices))
+                      ->x
+                  << 16;
+            v1z = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset0 + fgAddr))->vertexIdx1 * 6) +
+                               (s32)trackGeom->vertices))
+                      ->z
+                  << 16;
         }
 
-        if (cross2d(pos->x, pos->z, sp24, sp34, sp1C, sp2C) > 0) {
-            s16 neighbor = ((TrackFaceGroup *)(temp_s2 + (s32)trackGeom->faceGroups))->neighbor0;
+        if (cross2d(pos->x, pos->z, v1x, v1z, v0x, v0z) > 0) {
+            s16 neighbor = ((TrackFaceGroup *)(faceGroupOffset0 + (s32)trackGeom->faceGroups))->neighbor0;
             if (neighbor >= 0) {
-                var_v1 = neighbor;
+                currentSector = neighbor;
                 goto next;
             }
         }
 
         {
-            s32 idx = var_v1 & 0xFFFF;
+            s32 idx = currentSector & 0xFFFF;
             s32 fgAddr = (s32)trackGeom->faceGroups;
-            temp_s6 = ((idx << 3) + idx) << 2;
-            temp_fp =
-                ((Vertex6 *)((((TrackFaceGroup *)(temp_s6 + fgAddr))->vertexIdx2 * 6) + (s32)trackGeom->vertices))->x
-                << 16;
-            temp_s7 =
-                ((Vertex6 *)((((TrackFaceGroup *)(temp_s6 + fgAddr))->vertexIdx2 * 6) + (s32)trackGeom->vertices))->z
-                << 16;
-            temp_s5 =
-                ((Vertex6 *)((((TrackFaceGroup *)(temp_s6 + fgAddr))->vertexIdx3 * 6) + (s32)trackGeom->vertices))->x
-                << 16;
-            temp_s2_2 =
-                ((Vertex6 *)((((TrackFaceGroup *)(temp_s6 + fgAddr))->vertexIdx3 * 6) + (s32)trackGeom->vertices))->z
-                << 16;
+            faceGroupOffset1 = ((idx << 3) + idx) << 2;
+            v2x = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset1 + fgAddr))->vertexIdx2 * 6) +
+                               (s32)trackGeom->vertices))
+                      ->x
+                  << 16;
+            v2z = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset1 + fgAddr))->vertexIdx2 * 6) +
+                               (s32)trackGeom->vertices))
+                      ->z
+                  << 16;
+            v3x = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset1 + fgAddr))->vertexIdx3 * 6) +
+                               (s32)trackGeom->vertices))
+                      ->x
+                  << 16;
+            v3z = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset1 + fgAddr))->vertexIdx3 * 6) +
+                               (s32)trackGeom->vertices))
+                      ->z
+                  << 16;
         }
 
-        if (cross2d(pos->x, pos->z, temp_fp, temp_s7, temp_s5, temp_s2_2) > 0) {
-            s16 neighbor = ((TrackFaceGroup *)(temp_s6 + (s32)trackGeom->faceGroups))->neighbor1;
+        if (cross2d(pos->x, pos->z, v2x, v2z, v3x, v3z) > 0) {
+            s16 neighbor = ((TrackFaceGroup *)(faceGroupOffset1 + (s32)trackGeom->faceGroups))->neighbor1;
             if (neighbor >= 0) {
-                var_v1 = neighbor;
+                currentSector = neighbor;
                 goto next;
             }
         }
 
-        if (cross2d(pos->x, pos->z, temp_s5, temp_s2_2, sp24, sp34) > 0) {
-            s32 idx = var_v1 & 0xFFFF;
+        if (cross2d(pos->x, pos->z, v3x, v3z, v1x, v1z) > 0) {
+            s32 idx = currentSector & 0xFFFF;
             s32 fgAddr = (s32)trackGeom->faceGroups;
             s16 neighbor = ((TrackFaceGroup *)(((idx << 3) + idx) * 4 + fgAddr))->neighbor2;
             if (neighbor >= 0) {
-                var_v1 = neighbor;
+                currentSector = neighbor;
                 goto next;
             }
         }
 
-        if (cross2d(pos->x, pos->z, sp1C, sp2C, temp_fp, temp_s7) > 0) {
-            s32 idx = var_v1 & 0xFFFF;
+        if (cross2d(pos->x, pos->z, v0x, v0z, v2x, v2z) > 0) {
+            s32 idx = currentSector & 0xFFFF;
             s32 fgAddr = (s32)trackGeom->faceGroups;
             s16 neighbor = ((TrackFaceGroup *)(((idx << 3) + idx) * 4 + fgAddr))->neighbor3;
             if (neighbor < 0) {
                 break;
             }
-            var_v1 = neighbor;
+            currentSector = neighbor;
             goto next;
         }
 
-        return var_v1 & 0xFFFF;
+        return currentSector & 0xFFFF;
 
     next:
         i += 1;
     } while (i < 4);
 
-    return var_v1 & 0xFFFF;
+    return currentSector & 0xFFFF;
 }
 
 INCLUDE_ASM("asm/nonmatchings/graphics/displaylist", func_80060CDC_618DC);

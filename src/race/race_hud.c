@@ -3348,7 +3348,7 @@ void updateHomingProjectileMovement(HomingProjectileUpdateArg *arg0) {
         temp_s0 = &s0->unk30;
         s2 = &arg0->posX;
 
-        arg0->sectorIndex = func_80060A3C_6163C(temp_s0, arg0->sectorIndex, s2);
+        arg0->sectorIndex = findTrackSector(temp_s0, arg0->sectorIndex, s2);
 
         func_80060CDC_618DC(temp_s0, arg0->sectorIndex, s2, 0x100000, &sp);
 
@@ -3504,7 +3504,7 @@ void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0) {
         }
         temp_s0 = &s0->unk30;
         s2 = &arg0->position;
-        arg0->sectorIndex = func_80060A3C_6163C(temp_s0, arg0->sectorIndex, s2);
+        arg0->sectorIndex = findTrackSector(temp_s0, arg0->sectorIndex, s2);
         func_80060CDC_618DC(temp_s0, arg0->sectorIndex, s2, 0x100000, &sp);
         arg0->position.x = arg0->position.x + sp.x;
         arg0->position.z = arg0->position.z + sp.z;
@@ -3651,7 +3651,7 @@ void updateItemHomingProjectileMovement(ItemHomingProjectileMoveArg *arg0) {
 
         argPlus8 = &arg0->posX;
 
-        tempU16 = func_80060A3C_6163C(allocPlus30, arg0->sectorIndex, argPlus8);
+        tempU16 = findTrackSector(allocPlus30, arg0->sectorIndex, argPlus8);
         arg0->sectorIndex = tempU16;
 
         func_80060CDC_618DC(allocPlus30, tempU16, argPlus8, 0x100000, &sp18);
@@ -3825,7 +3825,7 @@ void updateBossHomingProjectile(BossHomingProjectile *projectile) {
     projectile->position.y += projectile->velocityY;
     projectile->position.z += projectile->velocityZ;
 
-    projectile->sectorIndex = func_80060A3C_6163C(&gameState->unk30, projectile->sectorIndex, position);
+    projectile->sectorIndex = findTrackSector(&gameState->unk30, projectile->sectorIndex, position);
 
     func_80060CDC_618DC(&gameState->unk30, projectile->sectorIndex, position, 0x100000, &groundOffset);
 
@@ -3985,7 +3985,7 @@ void updateBossHomingProjectileVariant1(BossHomingProjectileVariant1UpdateArg *a
         arg0->displayListState.position.y += arg0->displayListState.unk28;
         arg0->displayListState.position.z += arg0->displayListState.unk2C;
 
-        arg0->displayListState.unk30 = func_80060A3C_6163C(s0, arg0->displayListState.unk30, s2);
+        arg0->displayListState.unk30 = findTrackSector(s0, arg0->displayListState.unk30, s2);
 
         func_80060CDC_618DC(s0, arg0->displayListState.unk30, s2, 0x100000, &sp);
 
@@ -4128,7 +4128,7 @@ void updateBossHomingProjectileVariant2(BossHomingProjectileVariant2UpdateArg *a
     arg0->position.y += arg0->velocityY;
     arg0->position.z += arg0->velocityZ;
 
-    arg0->sectorIndex = func_80060A3C_6163C(s0->unk30, arg0->sectorIndex, s2);
+    arg0->sectorIndex = findTrackSector(s0->unk30, arg0->sectorIndex, s2);
 
     func_80060CDC_618DC(s0->unk30, arg0->sectorIndex, s2, 0x100000, &sp);
 

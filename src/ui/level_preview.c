@@ -316,7 +316,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     state->targetX = state->targetX + state->posX;
     state->targetZ = state->targetZ + state->posZ;
 
-    angle = func_80060A3C_6163C(state->gameData, state->currentWaypoint, &state->targetX);
+    angle = findTrackSector(state->gameData, state->currentWaypoint, &state->targetX);
     state->currentWaypoint = angle;
 
     state->targetY = getTrackHeightAtPosition(state->gameData, angle, &state->targetX);
@@ -399,7 +399,7 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
     {
         u16 waypoint;
         u16 newWaypoint;
-        waypoint = func_80060A3C_6163C(state->gameData, state->startWaypoint, state);
+        waypoint = findTrackSector(state->gameData, state->startWaypoint, state);
         newWaypoint = waypoint & 0xFFFF;
         if (newWaypoint != state->startWaypoint) {
             u16 angle;
@@ -451,7 +451,7 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
     state->targetX = state->targetX + state->posX;
     state->targetZ = state->targetZ + state->posZ;
     heightTarget = (state->targetY - state->heightOffset) + ((s32)0xFFFDB340);
-    cameraWaypoint = func_80060A3C_6163C(gameData, state->currentWaypoint, targetPtr);
+    cameraWaypoint = findTrackSector(gameData, state->currentWaypoint, targetPtr);
     state->currentWaypoint = cameraWaypoint;
     state->targetY = getTrackHeightAtPosition(gameData, cameraWaypoint & 0xFFFF, targetPtr);
     if (state->targetY < heightTarget) {
@@ -503,7 +503,7 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
     memcpy(cameraTransform, &identityMatrix, 0x20);
 
     gameData = state->gameData;
-    waypoint = func_80060A3C_6163C(gameData, state->startWaypoint, state);
+    waypoint = findTrackSector(gameData, state->startWaypoint, state);
     state->startWaypoint = waypoint;
 
     getTrackSegmentWaypoints(gameData, waypoint, waypointStart, waypointEnd);
@@ -601,7 +601,7 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
     {
         u16 waypoint;
         u16 newWaypoint;
-        waypoint = func_80060A3C_6163C(state->gameData, state->startWaypoint, state);
+        waypoint = findTrackSector(state->gameData, state->startWaypoint, state);
         newWaypoint = waypoint & 0xFFFF;
         if (newWaypoint != state->startWaypoint) {
             u16 angle;
@@ -657,7 +657,7 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
     state->targetX = state->targetX + state->posX;
     state->targetZ = state->targetZ + state->posZ;
     heightTarget = (state->targetY - state->heightOffset) + ((s32)0xFFFDB340);
-    cameraWaypoint = func_80060A3C_6163C(gameData, state->currentWaypoint, targetPtr);
+    cameraWaypoint = findTrackSector(gameData, state->currentWaypoint, targetPtr);
     state->currentWaypoint = cameraWaypoint;
     state->targetY = getTrackHeightAtPosition(gameData, cameraWaypoint & 0xFFFF, targetPtr);
     if (state->targetY < heightTarget) {
@@ -691,7 +691,7 @@ void resumeLevelPreviewAfterHold(Func80020418Arg *arg0) {
         memcpy(mat1, &identityMatrix, 0x20);
 
         unk18 = &arg0->unk18;
-        temp = func_80060A3C_6163C(unk18, arg0->unk52, arg0);
+        temp = findTrackSector(unk18, arg0->unk52, arg0);
         arg0->unk52 = temp;
 
         getTrackSegmentWaypoints(unk18, temp, pos1, pos2);
@@ -761,7 +761,7 @@ s32 sampleMaxSurroundingTerrainHeight(LevelPreviewCharacterState *state) {
 
         terrainHeight = getTrackHeightAtPosition(
             gameData,
-            func_80060A3C_6163C(gameData, state->currentWaypoint, samplePos) & 0xFFFF,
+            findTrackSector(gameData, state->currentWaypoint, samplePos) & 0xFFFF,
             samplePos
         );
         if (maxHeight < terrainHeight) {

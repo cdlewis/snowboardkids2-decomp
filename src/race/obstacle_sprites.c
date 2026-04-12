@@ -302,7 +302,7 @@ void updateSlapstickProjectile(Struct_52880 *arg0) {
         arg0->pos.y += arg0->vel.y;
         arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
+        arg0->unk40 = findTrackSector(&alloc->unk30, arg0->unk40, &arg0->pos);
 
         func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &collisionOffset);
 
@@ -519,7 +519,7 @@ void updateParachuteProjectile(Struct_52880 *arg0) {
         arg0->pos.y += arg0->vel.y;
         arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
+        arg0->unk40 = findTrackSector(&alloc->unk30, arg0->unk40, &arg0->pos);
 
         func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
@@ -741,7 +741,7 @@ void updateFryingPanProjectile(Struct_52880 *arg0) {
         arg0->pos.y += arg0->vel.y;
         arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
+        arg0->unk40 = findTrackSector(&alloc->unk30, arg0->unk40, &arg0->pos);
 
         func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
@@ -976,7 +976,7 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
         arg0->pos.y += arg0->vel.y;
         arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(alloc->unk30, arg0->unk40, &arg0->pos);
+        arg0->unk40 = findTrackSector(alloc->unk30, arg0->unk40, &arg0->pos);
 
         func_80060CDC_618DC(alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
@@ -1196,7 +1196,7 @@ void updateStarProjectile(Struct_52880 *arg0) {
         arg0->pos.y += arg0->vel.y;
         arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
+        arg0->unk40 = findTrackSector(&alloc->unk30, arg0->unk40, &arg0->pos);
 
         func_80060CDC_618DC(&alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
@@ -1408,7 +1408,7 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
         arg0->pos.y += arg0->vel.y;
         arg0->pos.z += arg0->vel.z;
 
-        arg0->unk40 = func_80060A3C_6163C(alloc->unk30, arg0->unk40, &arg0->pos);
+        arg0->unk40 = findTrackSector(alloc->unk30, arg0->unk40, &arg0->pos);
 
         func_80060CDC_618DC(alloc->unk30, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
@@ -1561,7 +1561,7 @@ void updateFallingStarProjectile(Struct_52880 *projectile) {
         projectile->pos.y += projectile->vel.y;
         projectile->pos.z += projectile->vel.z;
 
-        projectile->unk40 = func_80060A3C_6163C(s1, projectile->unk40, &projectile->pos);
+        projectile->unk40 = findTrackSector(s1, projectile->unk40, &projectile->pos);
         func_80060CDC_618DC(s1, projectile->unk40, &projectile->pos, 0x80000, &collisionOffset);
 
         if ((collisionOffset.x != 0) || (collisionOffset.z != 0)) {
@@ -1685,7 +1685,7 @@ void updatePlayerGuidedStarProjectile(Struct_52880 *arg0) {
         arg0->pos.y += arg0->vel.y + arg0->unk34;
         arg0->pos.z += arg0->vel.z + arg0->unk38;
 
-        arg0->unk40 = func_80060A3C_6163C(s1, arg0->unk40, &arg0->pos);
+        arg0->unk40 = findTrackSector(s1, arg0->unk40, &arg0->pos);
         func_80060CDC_618DC(s1, arg0->unk40, &arg0->pos, 0x80000, &sp18);
 
         if ((sp18.x != 0) || (sp18.z != 0)) {
@@ -1893,7 +1893,7 @@ void updateRandomEffectProjectile(RandomEffectProjectileUpdate *arg0) {
         arg0->pos.y += arg0->unk24.y;
         arg0->pos.z += arg0->unk24.z;
 
-        angle = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
+        angle = findTrackSector(&alloc->unk30, arg0->unk40, &arg0->pos);
         arg0->unk40 = angle;
 
         func_80060CDC_618DC(&alloc->unk30, angle, &arg0->pos, 0x80000, &sp18);
@@ -2069,7 +2069,7 @@ void updateGhostTargetProjectile(Struct_52880 *arg0) {
     arg0->pos.y += arg0->vel.y;
     arg0->pos.z += arg0->vel.z;
 
-    temp_v0_sh = func_80060A3C_6163C(&s3->unk30, arg0->unk40, s1);
+    temp_v0_sh = findTrackSector(&s3->unk30, arg0->unk40, s1);
 
     arg0->unk40 = temp_v0_sh;
 
@@ -2207,7 +2207,7 @@ void updateShrinkProjectile(Struct_52880 *arg0) {
         arg0->pos.y += arg0->vel.y;
         arg0->pos.z += arg0->vel.z;
 
-        temp = func_80060A3C_6163C(&alloc->unk30, arg0->unk40, &arg0->pos);
+        temp = findTrackSector(&alloc->unk30, arg0->unk40, &arg0->pos);
         arg0->unk40 = temp;
         func_80060CDC_618DC(&alloc->unk30, temp, &arg0->pos, 0x80000, &offset);
 

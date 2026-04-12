@@ -202,7 +202,7 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
         arg0->posX += rotResult.x;
         posPtr = &arg0->posX;
         arg0->posZ += rotResult.z;
-        newUnk56 = func_80060A3C_6163C(terrainPtr, arg0->unk56, posPtr);
+        newUnk56 = findTrackSector(terrainPtr, arg0->unk56, posPtr);
         arg0->unk56 = newUnk56;
         arg0->height = getTrackHeightAtPosition(terrainPtr, newUnk56, posPtr);
         arg0->yOffset += arg0->yVelocity;
@@ -266,7 +266,7 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
         posPtr = &arg0->posX;
         arg0->posZ += rotatedVec.z;
 
-        arg0->unk56 = func_80060A3C_6163C(terrainPtr, arg0->unk56, posPtr);
+        arg0->unk56 = findTrackSector(terrainPtr, arg0->unk56, posPtr);
         arg0->height = getTrackHeightAtPosition(terrainPtr, arg0->unk56, posPtr);
 
         // Handle jump physics (gravity affects vertical velocity)

@@ -37,7 +37,7 @@ typedef struct {
 s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSectorIndex, void *position) {
     Player *player = (Player *)entity;
     if (!(player->animFlags & 0x100)) {
-        return func_80060A3C_6163C(gameData, currentSectorIndex, position);
+        return findTrackSector(gameData, currentSectorIndex, position);
     }
     return player->sectorIndex;
 }
