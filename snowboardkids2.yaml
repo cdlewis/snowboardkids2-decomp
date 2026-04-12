@@ -603,7 +603,7 @@ segments:
     overlay: true
     subsegments:
       - [0xAD670, c, levels/starlight_highway]
-      - [0xAEDF0, data, levels/starlight_highway]
+      - [0xAEDF0, .data, levels/starlight_highway]
       - [0xAEF80, .rodata, levels/starlight_highway]
 
   - name: levels/haunted_house

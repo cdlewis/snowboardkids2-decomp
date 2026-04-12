@@ -134,16 +134,61 @@ typedef struct {
     u8 pad2[0xE];
 } FireworkInitRotationMatrix;
 
-extern Vec3i D_800BCA30_AEDF0[];
-extern s32 gStarlightFireworkPositions[][3];
-extern s16 gStarlightFireworkXRotations[];
-extern s32 gStarlightFireworkDirections[][3];
-extern s16 gStarlightFireworkRotXSpeeds[];
-extern s16 gStarlightFireworkRotYSpeeds[];
-extern s32 gStarlightBarrierPositionsX[][3];
-extern s32 gStarlightBarrierPositionsY[][3];
-extern s32 gStarlightBarrierPositionsZ[][3];
-extern s16 gStarlightBarrierTriggerSectors[];
+Vec3i D_800BCA30_AEDF0[] = {
+    { 0x3283FD94, 0x0AEC1B32, 0xF69F18F2 },
+    { 0x30D13944, 0x0AD1B785, 0xF735E7FA },
+    { 0x3246C370, 0x0AC7B8F9, 0xF8E01B6E },
+    { 0x2EA90BB0, 0x0A95E21F, 0xF9BAEF6E },
+    { 0x30568F30, 0x0AAF6437, 0xF92EF006 },
+    { 0x2FC010FC, 0x0A8B78B9, 0xFB2B23CA },
+    { 0x3142ADDC, 0x0AA1C4AA, 0xFAB8D082 },
+};
+
+Vec3i gStarlightFireworkPositions[] = {
+    { 0x238C6C87, 0x1472AC5C, 0xE47D2726 },
+    { 0x238C6C87, 0x1472AC5C, 0xE47D2726 },
+    { 0x238C6C87, 0x1472AC5C, 0xE47D2726 },
+    { 0x30FC2FC7, 0x12259A40, 0xE87CB745 },
+    { 0x312EA2DD, 0x12354C23, 0xE83B215E },
+    { 0x30FC2FC7, 0x12259A40, 0xE87CB745 },
+    { 0x31184770, 0x1286480B, 0xE8735DE5 },
+    { 0x30FC2FC7, 0x12259A40, 0xE87CB745 },
+    { 0x312EA2DD, 0x12354C23, 0xE83B215E },
+};
+
+s16 gStarlightFireworkXRotations[] = {
+    0x0180, 0x0000, 0xFE80, 0xFE00, 0x0180, 0xFE00, 0x0180, 0xFE80, 0x0180, 0x0000,
+};
+
+Vec3i gStarlightFireworkDirections[] = {
+    { 0x00000000, 0x00000000, 0x00100000 },
+    { 0x00000000, 0x00000000, 0x00100000 },
+    { 0x00000000, 0x00000000, 0xFFF00000 },
+    { 0x00000000, 0x00000000, 0xFFF00000 },
+    { 0x00000000, 0x00000000, 0x00140000 },
+    { 0x00000000, 0x00000000, 0xFFEC0000 },
+    { 0x00000000, 0x00000000, 0x00100000 },
+    { 0x00000000, 0x00000000, 0xFFE80000 },
+    { 0x00000000, 0x00000000, 0x00180000 },
+};
+
+s16 gStarlightFireworkRotXSpeeds[] = {
+    0x0040, 0x0010, 0xFFA0, 0xFEE0, 0x0100, 0x0100, 0xFEC0, 0x0100, 0xFF00, 0x0000,
+};
+
+s16 gStarlightFireworkRotYSpeeds[] = {
+    0x0010, 0x0030, 0xFFF0, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+};
+
+Vec3i gStarlightBarrierPositions[] = {
+    { 0x0B1CAE7B, 0x1EC852A1, 0xF7713B01 },
+    { 0x0D503C28, 0x1E6981DD, 0xF54EDDEF },
+};
+
+s16 gStarlightBarrierTriggerSectors[] = {
+    0x003E, 0x003F, 0, 0, 0, 0, 0, 0,
+};
+
 extern void *gDebugDisplayConfig;
 
 void cleanupStarlightBarrierTask(DualSegmentCleanupState *);
@@ -654,10 +699,10 @@ void initStarlightFireworkTask(StarlightFireworkTaskState *arg0) {
     arg0->segment2 = loadCompressedSegment2AssetByIndex(8);
     arg0->unk2C = 0;
     arg0->displayList = (void *)((u32)getSkyDisplayLists3ByIndex(8) + 0x90);
-    memcpy(&arg0->pos, gStarlightFireworkPositions[arg0->type], 0xC);
+    memcpy(&arg0->pos, &gStarlightFireworkPositions[arg0->type], 0xC);
     rotPtr = stack.rotation;
     createXRotationMatrix(rotPtr, gStarlightFireworkXRotations[arg0->type]);
-    transformVector2(gStarlightFireworkDirections[arg0->type], rotPtr, &arg0->velocity);
+    transformVector2(&gStarlightFireworkDirections[arg0->type], rotPtr, &arg0->velocity);
     arg0->pos.x = arg0->pos.x - arg0->velocity.x * 0x78;
     arg0->pos.y = arg0->pos.y - arg0->velocity.y * 0x78;
     arg0->pos.z = arg0->pos.z - arg0->velocity.z * 0x78;
@@ -729,25 +774,25 @@ void updateStarlightFireworkComplex(StarlightFireworkTaskState *firework) {
             switch (fireworkType) {
                 case 3:
                     createXRotationMatrix(rotation, 0xF300);
-                    transformVector2(gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
+                    transformVector2(&gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
                     firework->lifetime = 0x78;
                     setCallbackWithContinue(updateStarlightFireworkSimple);
                     break;
                 case 4:
                     createXRotationMatrix(rotation, 0xE00);
-                    transformVector2(gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
+                    transformVector2(&gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
                     firework->lifetime = 0xA;
                     setCallbackWithContinue(updateStarlightFirework);
                     break;
                 case 5:
                     createXRotationMatrix(rotation, 0xFC00);
-                    transformVector2(gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
+                    transformVector2(&gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
                     firework->lifetime = 0x78;
                     setCallbackWithContinue(updateStarlightFireworkSimple);
                     break;
                 case 6:
                     createXRotationMatrix(rotation, 0);
-                    transformVector2(gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
+                    transformVector2(&gStarlightFireworkDirections[firework->type], rotation, &firework->velocity);
                     firework->lifetime = 0xA;
                     setCallbackWithContinue(updateStarlightFirework);
                     break;
@@ -938,18 +983,18 @@ void updateStarlightBarrier(StarlightBarrierTask *arg0) {
 
     // Add base position offset for the barrier
     arg0->leftGateNode.translation.x =
-        arg0->leftGateNode.translation.x + gStarlightBarrierPositionsX[arg0->barrierIndex][0];
+        arg0->leftGateNode.translation.x + gStarlightBarrierPositions[arg0->barrierIndex].x;
     arg0->leftGateNode.translation.y =
-        arg0->leftGateNode.translation.y + gStarlightBarrierPositionsY[arg0->barrierIndex][0];
+        arg0->leftGateNode.translation.y + gStarlightBarrierPositions[arg0->barrierIndex].y;
     arg0->leftGateNode.translation.z =
-        arg0->leftGateNode.translation.z + gStarlightBarrierPositionsZ[arg0->barrierIndex][0];
+        arg0->leftGateNode.translation.z + gStarlightBarrierPositions[arg0->barrierIndex].z;
     arg0->rightGateNode.translation.x =
-        arg0->rightGateNode.translation.x + gStarlightBarrierPositionsX[arg0->barrierIndex][0];
+        arg0->rightGateNode.translation.x + gStarlightBarrierPositions[arg0->barrierIndex].x;
     arg0->rightGateNode.translation.y =
-        arg0->rightGateNode.translation.y + gStarlightBarrierPositionsY[arg0->barrierIndex][0];
+        arg0->rightGateNode.translation.y + gStarlightBarrierPositions[arg0->barrierIndex].y;
     i = 0;
     arg0->rightGateNode.translation.z =
-        arg0->rightGateNode.translation.z + gStarlightBarrierPositionsZ[arg0->barrierIndex][0];
+        arg0->rightGateNode.translation.z + gStarlightBarrierPositions[arg0->barrierIndex].z;
 
     do {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&arg0->leftGateNode);
