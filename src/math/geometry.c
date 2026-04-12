@@ -418,7 +418,28 @@ void createRotationMatrixXYZ(s16 *m, u16 angleX, u16 angleY, u16 angleZ) {
     m[8] = temp2 >> 13;
 }
 
-INCLUDE_ASM("asm/nonmatchings/math/geometry", createRotationMatrixZYX);
+void createRotationMatrixZYX(s16 *matrix, s16 angleX, s16 angleZ, s16 angleY) {
+    s32 sinZ, cosZ;
+    s32 sinY, cosY;
+    s32 sinX, cosX;
+
+    sinZ = approximateSin(angleZ);
+    cosZ = approximateCos(angleZ);
+    sinY = approximateSin(angleY);
+    cosY = approximateCos(angleY);
+    sinX = approximateSin(angleX);
+    cosX = approximateCos(angleX);
+
+    matrix[0] = (cosX * cosY + ((sinX * sinZ) / 0x2000) * sinY) / 0x2000;
+    matrix[1] = (sinX * cosZ) / 0x2000;
+    matrix[2] = (cosX * -sinY + ((sinX * sinZ) / 0x2000) * cosY) / 0x2000;
+    matrix[3] = (-sinX * cosY + ((cosX * sinZ) / 0x2000) * sinY) / 0x2000;
+    matrix[4] = (cosX * cosZ) / 0x2000;
+    matrix[5] = (-sinX * -sinY + ((cosX * sinZ) / 0x2000) * cosY) / 0x2000;
+    matrix[6] = (cosZ * sinY) / 0x2000;
+    matrix[7] = -sinZ;
+    matrix[8] = (cosZ * cosY) / 0x2000;
+}
 
 void setBonePosition(BoneAnimationState *state, s32 x, s32 y, s32 z) {
     state->position[0] = x;
