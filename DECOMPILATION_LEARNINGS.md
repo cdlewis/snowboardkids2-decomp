@@ -315,3 +315,22 @@ neighbor = faceGroup->neighbor0;  // generates: move s3,v0 instead of move v1,v0
 ```
 
 This matters because the target code uses `move v1,v0` (temporary) not `move s3,v0` (callee-saved). The block scope limits the variable's lifetime so the compiler doesn't need to preserve it across function calls.
+
+## Recognising Signed Division by `0x2000` (and Other Powers of Two)
+
+The shift-and-bias pattern for signed division by `2^N` shows up in m2c output as an explicit `if (x < 0) x += (2^N - 1);` followed by `x >> N`. This is **not** a special operation — it's just `x / (2^N)` written out longhand:
+
+```c
+// Decompilation artefact — DO NOT keep this form
+if (temp < 0) {
+    temp += 0x1FFF;
+}
+result = temp >> 13;
+
+// What the original source actually was
+result = temp / 0x2000;
+```
+
+When you see this pattern, collapse it back to a plain division and let the compiler re-emit the bias. Keeping the longhand form forces extra named locals into the function, which constrains instruction scheduling (see "Inlining vs. Precomputing" considerations) and usually makes the match worse, not better.
+
+The same applies to other powers of two: `+ 0x1` then `>> 1` is `/ 2`, `+ 0x3` then `>> 2` is `/ 4`, etc. The bias constant is always `2^N - 1`.
