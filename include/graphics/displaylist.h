@@ -1,8 +1,8 @@
 #pragma once
 
+#include "common.h"
 #include "data/data_table.h"
 #include "graphics/camera_transform.h"
-#include "common.h"
 #include "math/geometry.h"
 
 typedef struct {
@@ -244,7 +244,7 @@ void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjec
 void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *displayObjects);
 void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObjects);
 
-u16 getTrackSegmentWaypoints(void *trackGeom, u16 waypointIdx, void *waypointStart, void *waypointEnd);
+u16 getTrackSegmentWaypoints(TrackGeometryData *trackGeom, u16 waypointIdx, void *waypointStart, void *waypointEnd);
 
 s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index);
 

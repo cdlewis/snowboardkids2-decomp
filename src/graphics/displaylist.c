@@ -660,8 +660,7 @@ void findTrackFaceAtPosition(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2,
     }
 }
 
-u16 getTrackSegmentWaypoints(void *arg0_void, u16 waypointIdx, void *waypointStart, void *waypointEnd) {
-    TrackGeometryData *trackGeom = (TrackGeometryData *)arg0_void;
+u16 getTrackSegmentWaypoints(TrackGeometryData *trackGeom, u16 waypointIdx, void *waypointStart, void *waypointEnd) {
     Vec3i *startPos = (Vec3i *)waypointStart;
     Vec3i *endPos = (Vec3i *)waypointEnd;
     Vertex6 *verts;

@@ -949,7 +949,7 @@ s32 initPlayerForRace(Player *player) {
     }
 
     /* Get track waypoints and sector info */
-    getTrackSegmentWaypoints(&gameState->gameData, 0, &waypoint1, &waypoint2);
+    getTrackSegmentWaypoints((TrackGeometryData *)&gameState->gameData, 0, &waypoint1, &waypoint2);
     posPtr = (s32 *)((u8 *)player + 0x434);
     *(s32 *)((u8 *)player + 0x43C) = waypoint1.z + 0x200000;
 

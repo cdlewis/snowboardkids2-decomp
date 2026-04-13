@@ -514,7 +514,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
 
     // Set initial position based on boss index
     arg0->unk434 = D_800BCA3C_B1F2C[arg0->unkBB8];
-    getTrackSegmentWaypoints(&gameState->gameData, 0, &waypoint1, &waypoint2);
+    getTrackSegmentWaypoints((TrackGeometryData *)&gameState->gameData, 0, &waypoint1, &waypoint2);
     arg0->unk43C = waypoint1.z + 0x200000;
     trackIdx = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, (Vec3i *)&arg0->unk434);
     arg0->sectorIndex = trackIdx;

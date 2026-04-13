@@ -405,7 +405,7 @@ s32 initJingleTownBoss(Arg0Struct *arg0) {
 
     // Set initial spawn position based on boss index and track waypoint
     arg0->position.x = gJingleTownBossSpawnPos[arg0->playerIndex];
-    getTrackSegmentWaypoints(&gameState->gameData, 0, &waypoint1, &waypoint2);
+    getTrackSegmentWaypoints((TrackGeometryData *)&gameState->gameData, 0, &waypoint1, &waypoint2);
     arg0->position.z = waypoint1.z + 0x200000;
     arg0->sectorIndex = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->position);
     arg0->position.y = getTrackHeightInSector(&gameState->gameData, arg0->sectorIndex, &arg0->position, 0x100000);

@@ -276,7 +276,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     allocation = (Allocation_F7C8 *)getCurrentAllocation();
     parseGameDataLayout((GameDataLayout *)state->gameData);
 
-    getTrackSegmentWaypoints(state->gameData, state->startWaypoint, waypointStart, waypointEnd);
+    getTrackSegmentWaypoints((TrackGeometryData *)state->gameData, state->startWaypoint, waypointStart, waypointEnd);
 
     memcpy(&state->transform, &identityMatrix, sizeof(Transform3D));
     memcpy(state, waypointEnd, 0xC);
@@ -404,7 +404,7 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
         if (newWaypoint != state->startWaypoint) {
             u16 angle;
             state->startWaypoint = waypoint;
-            getTrackSegmentWaypoints(state->gameData, newWaypoint, waypointStart, waypointEnd);
+            getTrackSegmentWaypoints((TrackGeometryData *)state->gameData, newWaypoint, waypointStart, waypointEnd);
             angle = (computeAngleToPosition(waypointStart[0], waypointStart[2], state->posX, state->posZ) - 0x1000) &
                     0x1FFF;
             state->targetRotation = angle;
@@ -606,7 +606,7 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
         if (newWaypoint != state->startWaypoint) {
             u16 angle;
             state->startWaypoint = waypoint;
-            getTrackSegmentWaypoints(state->gameData, newWaypoint, waypointStart, waypointEnd);
+            getTrackSegmentWaypoints((TrackGeometryData *)state->gameData, newWaypoint, waypointStart, waypointEnd);
             angle =
                 (computeAngleToPosition(waypointEnd[0], waypointEnd[2], state->posX, state->posZ) - 0x1000) & 0x1FFF;
             state->targetRotation = angle;

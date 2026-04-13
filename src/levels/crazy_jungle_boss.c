@@ -398,7 +398,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
 
     // Set initial position based on boss index
     arg0->unk434.x = D_800BC44C_ACC7C[arg0->unkBB8];
-    getTrackSegmentWaypoints(&gameState->gameData, 0, &waypoint1, &waypoint2);
+    getTrackSegmentWaypoints((TrackGeometryData *)&gameState->gameData, 0, &waypoint1, &waypoint2);
 
     arg0->unk434.z = waypoint1.z + 0x200000;
 
