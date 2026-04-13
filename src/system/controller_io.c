@@ -286,17 +286,17 @@ void processControllerInputs(void) {
                     if (stickVal >= 0x38) {
                         stickVal = 0x37;
                     }
-                    stickVal = ((s16)stickVal * 30 / 55) + 1;
+                    stickVal = (stickVal * 30 / 55) + 1;
                 }
                 gAnalogStickX[(u16)i] = stickVal;
             } else {
                 stickVal = -stickVal;
-                if ((s16)stickVal >= 8) {
+                if (stickVal >= 8) {
                     stickVal = stickVal - 7;
                     if (stickVal >= 0x38) {
                         stickVal = 0x37;
                     }
-                    stickVal = ((s16)stickVal * 30 / 55) + 1;
+                    stickVal = (stickVal * 30 / 55) + 1;
                 } else {
                     stickVal = 0;
                 }
@@ -311,17 +311,17 @@ void processControllerInputs(void) {
                     if (stickVal >= 0x38) {
                         stickVal = 0x37;
                     }
-                    stickVal = ((s16)stickVal * 30 / 55) + 1;
+                    stickVal = (stickVal * 30 / 55) + 1;
                 }
                 gAnalogStickY[(u16)i] = stickVal;
             } else {
                 stickVal = -stickVal;
-                if ((s16)stickVal >= 8) {
+                if (stickVal >= 8) {
                     stickVal = stickVal - 7;
                     if (stickVal >= 0x38) {
                         stickVal = 0x37;
                     }
-                    stickVal = ((s16)stickVal * 30 / 55) + 1;
+                    stickVal = (stickVal * 30 / 55) + 1;
                 } else {
                     stickVal = 0;
                 }
@@ -846,7 +846,7 @@ void motorProcessState(MotorState *arg0) {
                     D_8008FE8C_90A8C = 0;
                 }
                 arg0->duration[i]--;
-                if ((u8)arg0->duration[i] == 0) {
+                if (arg0->duration[i] == 0) {
                     arg0->state[i] = 0;
                 }
                 break;

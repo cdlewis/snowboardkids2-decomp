@@ -4,6 +4,7 @@
 #include "audio/audio.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
+#include "os_cont.h"
 #include "race/track_geometry.h"
 #include "story/map_events.h"
 #include "story/shop_ui.h"

@@ -2,6 +2,7 @@
 #include "assets.h"
 #include "common.h"
 #include "data/asset_metadata.h"
+#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 USE_ASSET(_B9C40);

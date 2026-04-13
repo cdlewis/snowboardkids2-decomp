@@ -1,6 +1,5 @@
 #include "credits/credits_text.h"
 #include "animation/easing_state.h"
-#include "data/data_table.h"
 #include "graphics/graphics.h"
 #include "graphics/palette.h"
 

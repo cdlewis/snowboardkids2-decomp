@@ -14,4 +14,4 @@ CheckOptions:
   - key: readability-redundant-casting.IgnoreHeaders
     value: 'common\.h'
   - key: misc-include-cleaner.IgnoreHeaders
-    value: '(common\.h|ultratypes\.h|include_asm.h|);h>'
+    value: 'common\.h;ultratypes\.h;include_asm\.h;h>'

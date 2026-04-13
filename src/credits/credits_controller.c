@@ -1,3 +1,4 @@
+#include "animation/easing_state.h"
 #include "assets.h"
 #include "audio/audio.h"
 #include "common.h"

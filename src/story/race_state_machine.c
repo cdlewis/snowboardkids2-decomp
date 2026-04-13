@@ -398,17 +398,17 @@ void updateBoardShop(void) {
             } else if (*gControllerInputs & 0x40100) {
                 state->scrollDirection = 1;
                 state->selectedCategoryIndex = state->selectedCategoryIndex + 1;
-                if ((s8)state->selectedCategoryIndex >= 3) {
+                if (state->selectedCategoryIndex >= 3) {
                     state->selectedCategoryIndex = 0;
                 }
             }
-            if ((s8)oldValue != (s8)state->selectedCategoryIndex) {
+            if ((s8)oldValue != state->selectedCategoryIndex) {
                 playSoundEffectOnChannelNoPriority(0x2B, 0);
                 state->oldTransitionIndex = (s8)oldValue * 3;
                 state->shopState = 3;
                 state->transitionDirection = 1;
                 state->selectedBoardIndex = 0;
-                state->newTransitionIndex = (s8)state->selectedCategoryIndex * 3;
+                state->newTransitionIndex = state->selectedCategoryIndex * 3;
                 scheduleTask(&initBoardShopCharacterTransition, 0, 0, 0x5A);
             } else {
                 if (*gControllerInputs & 0x9000) {
@@ -484,8 +484,8 @@ void updateBoardShop(void) {
                 playSoundEffectOnChannelNoPriority(0x2B, 0);
                 state->shopState = 3;
                 state->transitionDirection = -1;
-                state->oldTransitionIndex = oldValue + ((s8)state->selectedCategoryIndex * 3);
-                state->newTransitionIndex = state->selectedBoardIndex + ((s8)state->selectedCategoryIndex * 3);
+                state->oldTransitionIndex = oldValue + (state->selectedCategoryIndex * 3);
+                state->newTransitionIndex = state->selectedBoardIndex + (state->selectedCategoryIndex * 3);
                 scheduleTask(&initBoardShopCharacterTransition, 0, 0, 0x5A);
             } else {
                 if (*gControllerInputs & 0x9000) {
@@ -550,7 +550,7 @@ void updateBoardShop(void) {
                     state->shopkeeperAnimIndex = 1;
                     state->delayTimer = 0;
                 } else {
-                    state->delayTimer = (u16)state->delayTimer;
+                    state->delayTimer = state->delayTimer;
                     playSoundEffectOnChannelNoPriority(0xEC, 1);
                     state->shopkeeperAnimIndex = 2;
                 }
@@ -611,7 +611,7 @@ void updateBoardShop(void) {
                 boardIdx = state->boardDisplayIndices[state->selectedSlot];
                 boardIdx = state->boardIndexMap[boardIdx];
                 EepromSaveData
-                    ->character_or_settings[((s8)state->selectedCategoryIndex * 3) + (s8)state->selectedBoardIndex] =
+                    ->character_or_settings[(state->selectedCategoryIndex * 3) + (s8)state->selectedBoardIndex] =
                     boardIdx + 1;
             }
             break;

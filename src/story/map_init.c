@@ -5,6 +5,7 @@
 #include "gamestate.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
+#include "os_cont.h"
 #include "os_vi.h"
 #include "story/map_events.h"
 #include "system/rom_loader.h"
