@@ -73,7 +73,9 @@ If you're interested in learning more about decompilation and Snowboard Kids 2, 
 
 Contributing
 ============
-Contributions are most welcome! Obviously we need help decompiling functions but if you're not comfortable with that there are a variety of other ways you can assist:
+Contributions are most welcome! You can find a list of unmatched functions [here](https://github.com/search?q=repo%3Acdlewis%2Fsnowboardkids2-decomp+path%3Asrc%2F+INCLUDE_ASM&type=code). A URL to the decomp.me scratch as well as the current match percentage are included where appropriate.
+
+If you're not comfortable with that there are a variety of other ways you can assist:
 
 * Fix compiler warnings
 * Clean up code: you'll see plenty of hastily decopmiled functions that use pointer arithmatic rather than propre struct access. We need help cleaning up these functions.
