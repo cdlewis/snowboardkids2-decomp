@@ -23,6 +23,16 @@
 // Maximum look-ahead distance for AI target calculation
 #define AI_MAX_LOOKAHEAD_DISTANCE 0xA00000
 
+#define LERP_X(out, wpArr, idx, posPtr, endField, startField, f)                                           \
+    (out)->x = (((((posPtr)[(wpArr)[idx].endField].x - (posPtr)[(wpArr)[idx].startField].x) * (f)) / 32) + \
+                (posPtr)[(wpArr)[idx].startField].x)                                                       \
+               << 16
+
+#define LERP_Z(out, wpArr, idx, posPtr, endField, startField, f)                                           \
+    (out)->z = (((((posPtr)[(wpArr)[idx].endField].z - (posPtr)[(wpArr)[idx].startField].z) * (f)) / 32) + \
+                (posPtr)[(wpArr)[idx].startField].z)                                                       \
+               << 16
+
 // AI lateral offset scaling factors
 #define LATERAL_OFFSET_SCALE 0x2000
 #define LANE_WIDTH_MULTIPLIER 6
@@ -33,20 +43,29 @@ typedef struct {
     /* 0x02 */ s16 pad02;
     /* 0x04 */ s16 alt2;
     /* 0x06 */ s16 alt;
-    /* 0x08 */ char pad08[0x1C];
+    /* 0x08 */ char pad08[0x0C];
+    /* 0x14 */ u16 unk14;
+    /* 0x16 */ u16 unk16;
+    /* 0x18 */ u16 unk18;
+    /* 0x1A */ u16 unk1A;
+    /* 0x1C */ u16 unk1C;
+    /* 0x1E */ u16 unk1E;
+    /* 0x20 */ char pad20[0x04];
 } Waypoint; // size = 0x24
 
 typedef struct {
-    /* 0x00 */ char pad00[0x0C];
+    /* 0x00 */ char pad00[0x04];
+    /* 0x04 */ Vec3s *positions;
+    /* 0x08 */ char pad08[0x04];
     /* 0x0C */ Waypoint *waypoints;
     /* 0x10 */ char pad10[0x1C];
     /* 0x2C */ u8 defaultPosIndex;
 } CourseData;
 
 typedef struct {
-    /* 0x00 */ u8 unk00;
+    /* 0x00 */ s8 pathChoice;
     /* 0x01 */ u8 unk01;
-    /* 0x02 */ u8 unk02;
+    /* 0x02 */ u8 factor;
     /* 0x03 */ s8 pathPreference;
 } AIPathPreference;
 
@@ -170,7 +189,78 @@ void calculateAITargetPosition(Player *player) {
     player->aiTarget.z = finalWaypointPos.z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/ai_pathfinding", func_800B9EF0_A9DA0);
+void func_800B9EF0_A9DA0(Player *player, CourseData *courseData, s16 sectorIdx, Vec3i *result) {
+    AIPathPreference *pathData;
+    s16 waypointIdx;
+    s8 factor;
+    s32 factorRaw = 0;
+
+    pathData = (AIPathPreference *)player->aiPathData;
+    if (pathData != NULL) {
+        s8 pathChoice = pathData[sectorIdx].pathChoice;
+        factorRaw = pathData[sectorIdx].factor;
+
+        switch (pathChoice) {
+            case -1:
+                waypointIdx = (s16)courseData->waypoints[sectorIdx].alt;
+                if ((s8)factorRaw >= 0) {
+                    factor = (s8)factorRaw;
+                    LERP_X(result, courseData->waypoints, waypointIdx, courseData->positions, unk1E, unk1C, factor);
+                    LERP_Z(result, courseData->waypoints, waypointIdx, courseData->positions, unk1E, unk1C, factor);
+                } else {
+                    factor = (s8)(-factorRaw);
+                    LERP_X(result, courseData->waypoints, waypointIdx, courseData->positions, unk1A, unk1C, factor);
+                    LERP_Z(result, courseData->waypoints, waypointIdx, courseData->positions, unk1A, unk1C, factor);
+                }
+                break;
+            case 0:
+                if ((s8)factorRaw >= 0) {
+                    factor = (s8)factorRaw;
+                    LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk18, unk16, factor);
+                    LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk18, unk16, factor);
+                } else {
+                    factor = (s8)(-factorRaw);
+                    LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk14, unk16, factor);
+                    LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk14, unk16, factor);
+                }
+                break;
+            case 1:
+                waypointIdx = (s16)courseData->waypoints[sectorIdx].alt2;
+                if ((s8)factorRaw >= 0) {
+                    factor = (s8)factorRaw;
+                    LERP_X(result, courseData->waypoints, waypointIdx, courseData->positions, unk1E, unk1C, factor);
+                    LERP_Z(result, courseData->waypoints, waypointIdx, courseData->positions, unk1E, unk1C, factor);
+                } else {
+                    factor = (s8)(-factorRaw);
+                    LERP_X(result, courseData->waypoints, waypointIdx, courseData->positions, unk1A, unk1C, factor);
+                    LERP_Z(result, courseData->waypoints, waypointIdx, courseData->positions, unk1A, unk1C, factor);
+                }
+                break;
+            default:
+                return;
+        }
+    } else {
+        if (player->playerIndex == 1) {
+            factorRaw = 3;
+        }
+        if (player->playerIndex == 2) {
+            factorRaw = -10;
+        }
+        if (player->playerIndex == 3) {
+            factorRaw = 10;
+        }
+
+        if ((s8)factorRaw >= 0) {
+            factor = (s8)factorRaw;
+            LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk18, unk16, factor);
+            LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk18, unk16, factor);
+        } else {
+            factor = (s8)(-factorRaw);
+            LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk14, unk16, factor);
+            LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk14, unk16, factor);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/race/ai_pathfinding", func_800BA4B8_AA368);
 
