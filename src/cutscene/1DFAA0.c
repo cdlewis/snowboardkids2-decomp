@@ -22,24 +22,6 @@ typedef struct {
     s32 unk2E0;
 } InitCutsceneManager_slot16;
 
-typedef struct {
-    void *romStart;
-    void *romEnd;
-    s32 decompressedSize;
-} CutsceneFrameInfo;
-
-typedef struct {
-    CutsceneFrameInfo *introFrames;
-    s16 introFrameCount;
-    s16 pad06;
-    CutsceneFrameInfo *winFrames;
-    s16 winFrameCount;
-    s16 pad0E;
-    CutsceneFrameInfo *loseFrames;
-    s16 loseFrameCount;
-    s16 pad16;
-} CutsceneAssetTable;
-
 extern StateEntry *gCutsceneStateTable;
 extern s32 gCutsceneStateTableSize;
 extern StateEntry *gControllerPakTransferPointer;

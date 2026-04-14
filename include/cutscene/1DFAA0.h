@@ -71,6 +71,24 @@ typedef struct {
 } enableCutsceneSkip_arg;
 
 typedef struct {
+    void *romStart;
+    void *romEnd;
+    s32 decompressedSize;
+} CutsceneFrameInfo;
+
+typedef struct {
+    CutsceneFrameInfo *introFrames;
+    s16 introFrameCount;
+    s16 pad06;
+    CutsceneFrameInfo *winFrames;
+    s16 winFrameCount;
+    s16 pad0E;
+    CutsceneFrameInfo *loseFrames;
+    s16 loseFrameCount;
+    s16 pad16;
+} CutsceneAssetTable;
+
+typedef struct {
     void *start;
     void *end;
     u32 size;
