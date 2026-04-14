@@ -1,4 +1,4 @@
-D_800BAD58_AAC08 = 0x800BAD58; // rom:0xAAC08 segment:_9FF70
+D_800BAD58_AAC08 = 0x800BAD58; // rom:0xAAC08 segment:race
 D_800BC830_B0520 = 0x800BC830; // rom:0xB0520 size:0x14
 gControllerPackFileNote = 0x8009F634; // size:0x1C
 gControllerPackFileNumbers = 0x8009F650; // size:0x10
@@ -180,8 +180,8 @@ gRootViewport = 0x800A3370; // size:0xC
 D_800BCA64 = 0x800BCA64; // segment:levels/ice_land_boss rom:0xB1F54
 gFrameBuffer = 0x8016A000; // segment:buffers size:0x25800
 
-D_800BADE0 = 0x800BADE0; // segment:_9FF70 rom:0xAAC90 size:0x220
-D_800BADE2 = 0x800BADE2; // segment:_9FF70 rom:0xAAC92
+D_800BADE0 = 0x800BADE0; // segment:race rom:0xAAC90 size:0x220
+D_800BADE2 = 0x800BADE2; // segment:race rom:0xAAC92
 
 // this all seems completely pointless
 GHOST_SOUND_SEQUENCE_DATA_ROM_END = 0x646850;

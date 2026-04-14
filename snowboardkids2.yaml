@@ -553,7 +553,7 @@ segments:
       - [0x9FE70, .data, math/rand]
       - { type: bss, vram: 0x800B00B0, name: math/rand }
 
-  - name: _9FF70
+  - name: race
     type: code
     vram: 0x800B00C0
     start: 0x9FF70

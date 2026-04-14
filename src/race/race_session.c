@@ -35,7 +35,7 @@
         setViewportPerspective(&(gs)->unkC[idx], fov, aspect, near, far);         \
     } while (0)
 
-USE_OVERLAY(_9FF70);
+USE_OVERLAY(race);
 USE_OVERLAY(levels_sunny_mountain);
 USE_OVERLAY(levels_jingle_town);
 USE_OVERLAY(levels_jingle_town_boss);
@@ -452,7 +452,7 @@ void initRace(void) {
     u8 availableCharacters[6];
     s32 unused_pad[2];
 
-    LOAD_OVERLAY(_9FF70);
+    LOAD_OVERLAY(race);
 
     setRenderContext(0x37);
 
