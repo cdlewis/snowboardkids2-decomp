@@ -1,4 +1,5 @@
 #include "cutscene/cutscene_sys.h"
+#include "assets.h"
 #include "cutscene/1DFAA0.h"
 #include "graphics/graphics.h"
 #include "graphics/model_loader.h"
@@ -25,115 +26,115 @@ u8 gCutsceneFadeBrightnessTable[16] = {
 };
 
 CutsceneFrameInfo D_800BA5D0_1E7680[1] = {
-    { (void *)0x005C4040, (void *)0x005C6450, 0x78E0 }
+    { &_5C4040_ROM_START, &_5C4040_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA5DC_1E768C[1] = {
-    { (void *)0x005C6450, (void *)0x005C8110, 0x78E0 }
+    { &_5C6450_ROM_START, &_5C6450_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA5E8_1E7698[1] = {
-    { (void *)0x005C8110, (void *)0x005CA830, 0x78E0 }
+    { &_5C8110_ROM_START, &_5C8110_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA5F4_1E76A4[1] = {
-    { (void *)0x005CA830, (void *)0x005CCA40, 0x78E0 }
+    { &_5CA830_ROM_START, &_5CA830_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA600_1E76B0[1] = {
-    { (void *)0x005CCA40, (void *)0x005CEEC0, 0x78E0 }
+    { &_5CCA40_ROM_START, &_5CCA40_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA60C_1E76BC[1] = {
-    { (void *)0x005CEEC0, (void *)0x005D1350, 0x78E0 }
+    { &_5CEEC0_ROM_START, &_5CEEC0_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA618_1E76C8[1] = {
-    { (void *)0x005D1350, (void *)0x005D3500, 0x78E0 }
+    { &_5D1350_ROM_START, &_5D1350_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA624_1E76D4[4] = {
-    { (void *)0x005DCA00, (void *)0x005DF040, 0x78E0 },
-    { (void *)0x005DF040, (void *)0x005E0A70, 0x78E0 },
-    { (void *)0x005E0A70, (void *)0x005E2520, 0x78E0 },
-    { (void *)0x005E2520, (void *)0x005E4A50, 0x78E0 },
+    { &_5DCA00_ROM_START, &_5DCA00_ROM_END, 0x78E0 },
+    { &_5DF040_ROM_START, &_5DF040_ROM_END, 0x78E0 },
+    { &_5E0A70_ROM_START, &_5E0A70_ROM_END, 0x78E0 },
+    { &_5E2520_ROM_START, &_5E2520_ROM_END, 0x78E0 },
 };
 CutsceneFrameInfo D_800BA654_1E7704[1] = {
-    { (void *)0x005E4A50, (void *)0x005E6D10, 0x78E0 }
+    { &_5E4A50_ROM_START, &_5E4A50_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA660_1E7710[1] = {
-    { (void *)0x005E6D10, (void *)0x005E9130, 0x78E0 }
+    { &_5E6D10_ROM_START, &_5E6D10_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA66C_1E771C[1] = {
-    { (void *)0x005D3500, (void *)0x005D5960, 0x78E0 }
+    { &_5D3500_ROM_START, &_5D3500_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA678_1E7728[1] = {
-    { (void *)0x005D5960, (void *)0x005D7DD0, 0x78E0 }
+    { &_5D5960_ROM_START, &_5D5960_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA684_1E7734[1] = {
-    { (void *)0x005D7DD0, (void *)0x005DA5C0, 0x78E0 }
+    { &_5D7DD0_ROM_START, &_5D7DD0_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA690_1E7740[1] = {
-    { (void *)0x005DA5C0, (void *)0x005DCA00, 0x78E0 }
+    { &_5DA5C0_ROM_START, &_5DA5C0_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA69C_1E774C[1] = {
-    { (void *)0x005EEE90, (void *)0x005F15F0, 0x78E0 }
+    { &_5EEE90_ROM_START, &_5EEE90_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA6A8_1E7758[1] = {
-    { (void *)0x005F15F0, (void *)0x005F3D30, 0x78E0 }
+    { &_5F15F0_ROM_START, &_5F15F0_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA6B4_1E7764[2] = {
-    { (void *)0x005E9130, (void *)0x005EB590, 0x78E0 },
-    { (void *)0x005EB590, (void *)0x005ED030, 0x78E0 },
+    { &_5E9130_ROM_START, &_5E9130_ROM_END, 0x78E0 },
+    { &_5EB590_ROM_START, &_5EB590_ROM_END, 0x78E0 },
 };
 CutsceneFrameInfo D_800BA6CC_1E777C[1] = {
-    { (void *)0x005ED030, (void *)0x005EEE90, 0x78E0 }
+    { &_5ED030_ROM_START, &_5ED030_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA6D8_1E7788[1] = {
-    { (void *)0x005F3D30, (void *)0x005F62C0, 0x78E0 }
+    { &_5F3D30_ROM_START, &_5F3D30_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA6E4_1E7794[1] = {
-    { (void *)0x005F62C0, (void *)0x005F8140, 0x78E0 }
+    { &_5F62C0_ROM_START, &_5F62C0_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA6F0_1E77A0[1] = {
-    { (void *)0x005F8140, (void *)0x005FAB50, 0x78E0 }
+    { &_5F8140_ROM_START, &_5F8140_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA6FC_1E77AC[1] = {
-    { (void *)0x005FAB50, (void *)0x005FCFB0, 0x78E0 }
+    { &_5FAB50_ROM_START, &_5FAB50_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA708_1E77B8[1] = {
-    { (void *)0x005FCFB0, (void *)0x005FF220, 0x78E0 }
+    { &_5FCFB0_ROM_START, &_5FCFB0_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA714_1E77C4[1] = {
-    { (void *)0x005FF220, (void *)0x006013B0, 0x78E0 }
+    { &_5FF220_ROM_START, &_5FF220_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA720_1E77D0[3] = {
-    { (void *)0x006013B0, (void *)0x006034D0, 0x78E0 },
-    { (void *)0x006034D0, (void *)0x00605840, 0x78E0 },
-    { (void *)0x00605840, (void *)0x00607BF0, 0x78E0 },
+    { &_6013B0_ROM_START, &_6013B0_ROM_END, 0x78E0 },
+    { &_6034D0_ROM_START, &_6034D0_ROM_END, 0x78E0 },
+    { &_605840_ROM_START, &_605840_ROM_END, 0x78E0 },
 };
 CutsceneFrameInfo D_800BA744_1E77F4[1] = {
-    { (void *)0x006099A0, (void *)0x0060B690, 0x78E0 }
+    { &_6099A0_ROM_START, &_6099A0_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA750_1E7800[1] = {
-    { (void *)0x0060B690, (void *)0x0060D380, 0x78E0 }
+    { &_60B690_ROM_START, &_60B690_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA75C_1E780C[1] = {
-    { (void *)0x0060D380, (void *)0x0060F070, 0x78E0 }
+    { &_60D380_ROM_START, &_60D380_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA768_1E7818[1] = {
-    { (void *)0x0060F070, (void *)0x00610D60, 0x78E0 }
+    { &_60F070_ROM_START, &_60F070_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA774_1E7824[1] = {
-    { (void *)0x00610D60, (void *)0x00612A50, 0x78E0 }
+    { &_610D60_ROM_START, &_610D60_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA780_1E7830[1] = {
-    { (void *)0x00612A50, (void *)0x00614740, 0x78E0 }
+    { &_612A50_ROM_START, &_612A50_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA78C_1E783C[1] = {
-    { (void *)0x00614740, (void *)0x00616430, 0x78E0 }
+    { &_614740_ROM_START, &_614740_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA798_1E7848[1] = {
-    { (void *)0x00616430, (void *)0x00618120, 0x78E0 }
+    { &_616430_ROM_START, &_616430_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA7A4_1E7854[1] = {
-    { (void *)0x00618120, (void *)0x00619E10, 0x78E0 }
+    { &_618120_ROM_START, &_618120_ROM_END, 0x78E0 }
 };
 CutsceneFrameInfo D_800BA7B0_1E7860[1] = {
-    { (void *)0x00607BF0, (void *)0x006099A0, 0x78E0 }
+    { &_607BF0_ROM_START, &_607BF0_ROM_END, 0x78E0 }
 };
 
 CutsceneAssetTable gCutsceneAssetTable[16] = {
@@ -160,22 +161,22 @@ u32 D_800BA940_1E79F0[7] = { 0x10101010, 0x10101010, 0x10101010, 0x10101010, 0x1
 StateEntry *gControllerPakStateTablePointer = NULL;
 
 CutsceneFadeAssetNode gCutsceneFadeAssetTable[16] = {
-    { (void *)0x0064F190, (void *)0x00650AD0, 0x36B8, 0, { 0, 0, 0 } },
-    { (void *)0x00650AD0, (void *)0x00652620, 0x3CC8, 1, { 0, 0, 0 } },
-    { (void *)0x00652620, (void *)0x00654050, 0x36B8, 0, { 0, 0, 0 } },
-    { NULL,               NULL,               0,      0, { 0, 0, 0 } },
-    { (void *)0x00654050, (void *)0x00655BF0, 0x3CC8, 1, { 0, 0, 0 } },
-    { (void *)0x00655BF0, (void *)0x00657610, 0x36B8, 0, { 0, 0, 0 } },
-    { (void *)0x00657610, (void *)0x006592F0, 0x3CC8, 1, { 0, 0, 0 } },
-    { NULL,               NULL,               0,      0, { 0, 0, 0 } },
-    { (void *)0x006592F0, (void *)0x0065AC00, 0x36B8, 0, { 0, 0, 0 } },
-    { (void *)0x0065AC00, (void *)0x0065C5C0, 0x36B8, 0, { 0, 0, 0 } },
-    { (void *)0x0065C5C0, (void *)0x0065DFD0, 0x36B8, 0, { 0, 0, 0 } },
-    { NULL,               NULL,               0,      0, { 0, 0, 0 } },
-    { (void *)0x0065DFD0, (void *)0x0065F910, 0x36B8, 0, { 0, 0, 0 } },
-    { (void *)0x0065F910, (void *)0x006613B0, 0x36B8, 0, { 0, 0, 0 } },
-    { (void *)0x006613B0, (void *)0x00663010, 0x3CC8, 1, { 0, 0, 0 } },
-    { NULL,               NULL,               0,      0, { 0, 0, 0 } },
+    { &_64F190_ROM_START, &_64F190_ROM_END, 0x36B8, 0, { 0, 0, 0 } },
+    { &_650AD0_ROM_START, &_650AD0_ROM_END, 0x3CC8, 1, { 0, 0, 0 } },
+    { &_652620_ROM_START, &_652620_ROM_END, 0x36B8, 0, { 0, 0, 0 } },
+    { NULL,               NULL,             0,      0, { 0, 0, 0 } },
+    { &_654050_ROM_START, &_654050_ROM_END, 0x3CC8, 1, { 0, 0, 0 } },
+    { &_655BF0_ROM_START, &_655BF0_ROM_END, 0x36B8, 0, { 0, 0, 0 } },
+    { &_657610_ROM_START, &_657610_ROM_END, 0x3CC8, 1, { 0, 0, 0 } },
+    { NULL,               NULL,             0,      0, { 0, 0, 0 } },
+    { &_6592F0_ROM_START, &_6592F0_ROM_END, 0x36B8, 0, { 0, 0, 0 } },
+    { &_65AC00_ROM_START, &_65AC00_ROM_END, 0x36B8, 0, { 0, 0, 0 } },
+    { &_65C5C0_ROM_START, &_65C5C0_ROM_END, 0x36B8, 0, { 0, 0, 0 } },
+    { NULL,               NULL,             0,      0, { 0, 0, 0 } },
+    { &_65DFD0_ROM_START, &_65DFD0_ROM_END, 0x36B8, 0, { 0, 0, 0 } },
+    { &_65F910_ROM_START, &_65F910_ROM_END, 0x36B8, 0, { 0, 0, 0 } },
+    { &_6613B0_ROM_START, &_6613B0_ROM_END, 0x3CC8, 1, { 0, 0, 0 } },
+    { NULL,               NULL,             0,      0, { 0, 0, 0 } },
 };
 
 s16 gFanSoundIds[343] = {

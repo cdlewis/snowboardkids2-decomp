@@ -3415,6 +3415,156 @@ segments:
     vram: 0
     start: 0x5C4040
 
+  - name: _5C6450
+    type: bin
+    vram: 0
+    start: 0x5C6450
+
+  - name: _5C8110
+    type: bin
+    vram: 0
+    start: 0x5C8110
+
+  - name: _5CA830
+    type: bin
+    vram: 0
+    start: 0x5CA830
+
+  - name: _5CCA40
+    type: bin
+    vram: 0
+    start: 0x5CCA40
+
+  - name: _5CEEC0
+    type: bin
+    vram: 0
+    start: 0x5CEEC0
+
+  - name: _5D1350
+    type: bin
+    vram: 0
+    start: 0x5D1350
+
+  - name: _5D3500
+    type: bin
+    vram: 0
+    start: 0x5D3500
+
+  - name: _5D5960
+    type: bin
+    vram: 0
+    start: 0x5D5960
+
+  - name: _5D7DD0
+    type: bin
+    vram: 0
+    start: 0x5D7DD0
+
+  - name: _5DA5C0
+    type: bin
+    vram: 0
+    start: 0x5DA5C0
+
+  - name: _5DCA00
+    type: bin
+    vram: 0
+    start: 0x5DCA00
+
+  - name: _5DF040
+    type: bin
+    vram: 0
+    start: 0x5DF040
+
+  - name: _5E0A70
+    type: bin
+    vram: 0
+    start: 0x5E0A70
+
+  - name: _5E2520
+    type: bin
+    vram: 0
+    start: 0x5E2520
+
+  - name: _5E4A50
+    type: bin
+    vram: 0
+    start: 0x5E4A50
+
+  - name: _5E6D10
+    type: bin
+    vram: 0
+    start: 0x5E6D10
+
+  - name: _5E9130
+    type: bin
+    vram: 0
+    start: 0x5E9130
+
+  - name: _5EB590
+    type: bin
+    vram: 0
+    start: 0x5EB590
+
+  - name: _5ED030
+    type: bin
+    vram: 0
+    start: 0x5ED030
+
+  - name: _5EEE90
+    type: bin
+    vram: 0
+    start: 0x5EEE90
+
+  - name: _5F15F0
+    type: bin
+    vram: 0
+    start: 0x5F15F0
+
+  - name: _5F3D30
+    type: bin
+    vram: 0
+    start: 0x5F3D30
+
+  - name: _5F62C0
+    type: bin
+    vram: 0
+    start: 0x5F62C0
+
+  - name: _5F8140
+    type: bin
+    vram: 0
+    start: 0x5F8140
+
+  - name: _5FAB50
+    type: bin
+    vram: 0
+    start: 0x5FAB50
+
+  - name: _5FCFB0
+    type: bin
+    vram: 0
+    start: 0x5FCFB0
+
+  - name: _5FF220
+    type: bin
+    vram: 0
+    start: 0x5FF220
+
+  - name: _6013B0
+    type: bin
+    vram: 0
+    start: 0x6013B0
+
+  - name: _6034D0
+    type: bin
+    vram: 0
+    start: 0x6034D0
+
+  - name: _605840
+    type: bin
+    vram: 0
+    start: 0x605840
+
   - name: _607BF0
     type: bin
     vram: 0
@@ -3552,6 +3702,66 @@ segments:
     start: 0x648EB0
 
   - [0x64EFD0, bin]
+
+  - name: _64F190
+    type: bin
+    vram: 0
+    start: 0x64F190
+
+  - name: _650AD0
+    type: bin
+    vram: 0
+    start: 0x650AD0
+
+  - name: _652620
+    type: bin
+    vram: 0
+    start: 0x652620
+
+  - name: _654050
+    type: bin
+    vram: 0
+    start: 0x654050
+
+  - name: _655BF0
+    type: bin
+    vram: 0
+    start: 0x655BF0
+
+  - name: _657610
+    type: bin
+    vram: 0
+    start: 0x657610
+
+  - name: _6592F0
+    type: bin
+    vram: 0
+    start: 0x6592F0
+
+  - name: _65AC00
+    type: bin
+    vram: 0
+    start: 0x65AC00
+
+  - name: _65C5C0
+    type: bin
+    vram: 0
+    start: 0x65C5C0
+
+  - name: _65DFD0
+    type: bin
+    vram: 0
+    start: 0x65DFD0
+
+  - name: _65F910
+    type: bin
+    vram: 0
+    start: 0x65F910
+
+  - name: _6613B0
+    type: bin
+    vram: 0
+    start: 0x6613B0
 
   - name: POST2_SOUND_SEQUENCE_DATA
     type: bin
