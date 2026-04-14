@@ -28,6 +28,7 @@ void loadFontAssetsFromDataTable(DataTable_19E80 *dataTable) {
     gFontPaletteBase = (s32)result.index_ptr;
 }
 
+// 99.82% https://decomp.me/scratch/BuVGD
 INCLUDE_ASM("asm/nonmatchings/text/font_assets", renderTextPalette);
 
 void enqueueTextRender(s16 x, s16 y, s16 palette, u8 *target_string, s32 arg4, s32 arg5) {
@@ -69,4 +70,5 @@ void enqueueTextRender(s16 x, s16 y, s16 palette, u8 *target_string, s32 arg4, s
     }
 }
 
+// 99.74% https://decomp.me/scratch/dnCKt
 INCLUDE_ASM("asm/nonmatchings/text/font_assets", renderTextColored);

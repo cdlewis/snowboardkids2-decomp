@@ -109,6 +109,7 @@ void drawColorRect(ColorRect *rect) {
     gDPFillRectangle(gRegionAllocPtr++, left, top, right + 1, bottom + 1);
 }
 
+// 97.71% https://decomp.me/scratch/c33xU
 INCLUDE_ASM("asm/nonmatchings/graphics/clip_text_render", func_8006D4B8_6E0B8);
 
 void renderTiledSprite3x3(

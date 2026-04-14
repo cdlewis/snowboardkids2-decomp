@@ -434,6 +434,7 @@ void scheduleCharacterSelectTasks(void) {
     setGameStateHandler(func_80022D74_23974);
 }
 
+// 99.03% https://decomp.me/scratch/Knuos
 INCLUDE_ASM("asm/nonmatchings/ui/character_select_ui", func_80022D74_23974);
 
 void cleanupCharacterSelect(void) {

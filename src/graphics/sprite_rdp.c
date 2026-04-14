@@ -376,6 +376,7 @@ void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *arg0) {
     }
 }
 
+// 98.42% https://decomp.me/scratch/x14MR
 INCLUDE_ASM("asm/nonmatchings/graphics/sprite_rdp", func_80010C98_11898);
 
 void renderScaledShadedSpriteFrame(ScaledSpriteArg *arg0) {
@@ -556,6 +557,7 @@ void renderScaledShadedSpriteFrame(ScaledSpriteArg *arg0) {
     }
 }
 
+// 96.02% https://decomp.me/scratch/XCZ63
 INCLUDE_ASM("asm/nonmatchings/graphics/sprite_rdp", func_80011924_12524);
 
 void renderTextSprite(TextRenderArg *arg0) {
@@ -1143,6 +1145,7 @@ void renderAlphaBlendedTextSprite(TextRenderArg *arg0) {
     }
 }
 
+// 92.38% https://decomp.me/scratch/7DiUN
 INCLUDE_ASM("asm/nonmatchings/graphics/sprite_rdp", func_800136E0_142E0);
 
 void loadSpriteTexture(s32 textureAddr, u16 width, u16 height, u16 format, s32 paletteMode) {

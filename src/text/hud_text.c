@@ -1357,6 +1357,7 @@ void cleanupSaveSlotDeleteArrow(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
+// 97.92% https://decomp.me/scratch/DG7hF
 INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035260_35E60);
 
 #ifdef NON_MATCHING
@@ -1405,9 +1406,11 @@ void func_80035408_36008(Func80035408Arg *arg0) {
     }
 }
 #else
+// 98.50% https://decomp.me/scratch/DdlvP
 INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035408_36008);
 #endif
 
+// 95.39% https://decomp.me/scratch/89M5i
 INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035548_36148);
 
 #ifdef NON_MATCHING
@@ -1519,6 +1522,7 @@ void func_800356AC_362AC(
     }
 }
 #else
+// 96.77% https://decomp.me/scratch/1TbwU
 INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_800356AC_362AC);
 #endif
 
@@ -1720,4 +1724,5 @@ void renderShadedTextSprite(
     }
 }
 
+// 99.85% https://decomp.me/scratch/VyKf0
 INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035DE0_369E0);

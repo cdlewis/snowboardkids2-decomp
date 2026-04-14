@@ -115,6 +115,7 @@ void initChaseCameraPosition(ChaseCameraState *camera) {
     setCallbackWithContinue(func_8003C2BC_3CEBC);
 }
 
+// 99.54% https://decomp.me/scratch/7Wq6U
 INCLUDE_ASM("asm/nonmatchings/text/text_elements", func_8003C2BC_3CEBC);
 
 void spawnChaseCameraTask(u8 playerIdx) {

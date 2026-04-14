@@ -133,6 +133,7 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
     }
 }
 
+// 95.55% https://decomp.me/scratch/mjSZ8
 INCLUDE_ASM("asm/nonmatchings/story/map_character_anim", func_800175E0_181E0);
 
 typedef struct {

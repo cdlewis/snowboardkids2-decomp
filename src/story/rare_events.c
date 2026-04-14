@@ -356,6 +356,7 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
     return 0;
 }
 
+// 98.12% https://decomp.me/scratch/bevnt
 INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002A4AC_2B0AC);
 
 s32 updateStoryMapNpcBehavior(Func8002A390Arg *s0) {
@@ -586,6 +587,7 @@ done:
     return current;
 }
 
+// 98.24% https://decomp.me/scratch/y0CS7
 INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002AE80_2BA80);
 
 s16 signedAngleDifference(s16 fromAngle, s16 toAngle);
@@ -731,8 +733,10 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
     }
 }
 
+// 85.96% https://decomp.me/scratch/00Z3Q
 INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002B598_2C198);
 
+// NO_SCRATCH
 INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002B760_2C360);
 
 void updateParallaxPosition(ParallaxSprite *sprite) {
@@ -796,4 +800,5 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     }
 }
 
+// 84.56% https://decomp.me/scratch/aiCFG
 INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002BAEC_2C6EC);

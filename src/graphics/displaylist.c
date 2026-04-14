@@ -262,6 +262,7 @@ u16 findTrackSector(void *arg0, u16 sectorIndex, void *arg2) {
     return currentSector & 0xFFFF;
 }
 
+// 81.76% https://decomp.me/scratch/rRUTa
 INCLUDE_ASM("asm/nonmatchings/graphics/displaylist", func_80060CDC_618DC);
 
 s32 getTrackHeightAtPosition(void *trackGeom_void, u16 groupIdx, void *pos_void) {
@@ -597,6 +598,7 @@ u16 getTrackEndInfo(void *arg0, void *arg1) {
     return (computeAngleToPosition(vert0->x, vert0->z, vert1->x, vert1->z) - 0x1000) & 0xFFFF;
 }
 
+// 99.80% https://decomp.me/scratch/aw3nY
 INCLUDE_ASM("asm/nonmatchings/graphics/displaylist", func_800626C4_632C4);
 
 void findTrackFaceAtPosition(TrackGeometryFaceData *arg0, u16 arg1, Vec3i *arg2, u8 *arg3, u8 *arg4) {

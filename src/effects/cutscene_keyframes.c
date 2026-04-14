@@ -147,6 +147,7 @@ void runCutsceneFrame(void) {
     setGameStateHandler(&func_80003898_4498);
 }
 
+// 99.05% https://decomp.me/scratch/55wjg
 INCLUDE_ASM("asm/nonmatchings/effects/cutscene_keyframes", func_80003898_4498);
 
 void awaitCutsceneTransitionComplete(void) {

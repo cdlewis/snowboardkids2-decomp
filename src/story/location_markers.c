@@ -433,6 +433,7 @@ void initDiscoveryLocationMarker(StoryMapLocationMarkerState *arg0) {
     setCallback(&updateStoryMapLocationMarker);
 }
 
+// NO_SCRATCH
 INCLUDE_ASM("asm/nonmatchings/story/location_markers", updateStoryMapLocationMarker);
 
 void cleanupDiscoveryLocationMarker(void *untypedArg) {
@@ -533,6 +534,7 @@ void checkTownExitTrigger(void *arg0) {
     }
 }
 
+// 97.70% https://decomp.me/scratch/OXSn6
 INCLUDE_ASM("asm/nonmatchings/story/location_markers", func_80036AF8_376F8);
 
 s32 checkStoryMapLocationSelection(StoryMapPlayerState *player) {
@@ -585,6 +587,7 @@ s32 checkStoryMapLocationSelection(StoryMapPlayerState *player) {
     return 2;
 }
 
+// NO_SCRATCH
 INCLUDE_ASM("asm/nonmatchings/story/location_markers", func_80036D54_37954);
 
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *state) {

@@ -157,6 +157,7 @@ void initializeMusicSystem(void) {
     setGameStateHandlerWithContinue(&func_8005628C_56E8C);
 }
 
+// 99.37% https://decomp.me/scratch/NSvL0
 INCLUDE_ASM("asm/nonmatchings/audio/audio", func_8005628C_56E8C);
 
 void queueAnonymousBufferData(void *source) {

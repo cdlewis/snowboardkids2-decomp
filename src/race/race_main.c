@@ -1189,6 +1189,7 @@ s32 updatePlayerSlidingConstrained(Player *player) {
     return 0;
 }
 
+// NO_SCRATCH
 INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B1544_A13F4);
 
 s32 updatePlayerGroundedSliding(Player *player) {
@@ -3404,6 +3405,7 @@ s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
     return 0;
 }
 
+// 93.83% https://decomp.me/scratch/RUTsd
 INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B55B4_A5464);
 
 s32 updateStunnedRecoveryEndPhase(Player *arg0) {
@@ -4680,6 +4682,7 @@ u8 getRumbleDuration(Player *player, s32 effectType) {
     return player->rumbleDuration;
 }
 
+// 91.61% https://decomp.me/scratch/4gkwY
 INCLUDE_ASM("asm/nonmatchings/race/race_main", updateAndRenderRaceCharacters);
 
 void handlePlayerPositionAndTrackCollision(Player *player) {
@@ -4844,6 +4847,7 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
     }
 }
 
+// 98.87% https://decomp.me/scratch/FN35S
 INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B8894_A8744);
 
 void renderPlayerJointShadow(Player *player) {

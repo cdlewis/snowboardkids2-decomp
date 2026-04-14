@@ -975,6 +975,7 @@ void renderCutsceneSlotMenu(s32 arg0, s16 arg1) {
     }
 }
 
+// 91.86% https://decomp.me/scratch/Ol90B
 INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3FFC_1E10AC);
 
 u16 getMaxCutsceneFrameNumber(void) {

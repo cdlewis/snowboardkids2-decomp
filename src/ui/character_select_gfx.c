@@ -2016,6 +2016,7 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
     setCallback(updateCharSelectNameSprites);
 }
 
+// 96.85% https://decomp.me/scratch/4xZjQ
 INCLUDE_ASM("asm/nonmatchings/ui/character_select_gfx", updateCharSelectNameSprites);
 
 void cleanupCharSelectNameSprites(SimpleSpriteEntry *arg0) {

@@ -299,6 +299,7 @@ void initCameraShake(CutsceneCameraShakeState *cameraShake, s32 amplitude, s16 d
     cameraShake->shakeDuration = duration;
 }
 
+// 99.81% https://decomp.me/scratch/iMD3x
 INCLUDE_ASM("asm/nonmatchings/animation/animation_loop", func_800B6190_1E3240);
 
 s16 advanceCameraRotationYContinuous(CutsceneCameraState *camera) {

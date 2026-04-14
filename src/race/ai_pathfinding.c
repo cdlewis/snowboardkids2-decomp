@@ -262,6 +262,7 @@ void func_800B9EF0_A9DA0(Player *player, CourseData *courseData, s16 sectorIdx, 
     }
 }
 
+// 93.11% https://decomp.me/scratch/Wolax
 INCLUDE_ASM("asm/nonmatchings/race/ai_pathfinding", func_800BA4B8_AA368);
 
 s8 determineAIPathChoice(Player *player) {

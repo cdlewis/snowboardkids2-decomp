@@ -396,6 +396,7 @@ void updateStoryMapNpcDialogue(StoryMapDialogueState *dialogue) {
     }
 }
 
+// 98.04% https://decomp.me/scratch/yPStw
 INCLUDE_ASM("asm/nonmatchings/story/rare_event_npcs", func_8002BFEC_2CBEC);
 
 void updateStoryMapNpcTurnToTarget(StoryMapDialogueState *state) {
