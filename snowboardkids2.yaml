@@ -3996,7 +3996,7 @@ segments:
     start: 0x6C03F0
 
   - name: wavetables
-    type: databin
+    type: bin
     vram: 0
     start: 0x6C6300
 
