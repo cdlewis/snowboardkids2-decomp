@@ -24,9 +24,6 @@
 #include "system/task_scheduler.h"
 #include "text/text_elements.h"
 
-/* X and Z offset arrays for player's 9 joint positions */
-extern s32 D_800BA348_AA1F8; /* gPlayerJointXOffsets */
-extern s32 D_800BA350_AA200; /* gPlayerJointZOffsets */
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
 
@@ -333,12 +330,24 @@ BossSurfaceColor gBossSurfaceColors[] = {
     { 0x0A, 0x40, 0xFF, 0xFF, 0x48, 0x40, 0x60, 0xFF },
 };
 
-s32 D_800BAD28_AABD8[] = {
-    0x00060000, 0x00000000, 0x000C0000, 0x00060000, 0x00000000, 0xFFF40000, 0xFFFA0000, 0x00000000, 0x000C0000,
-    0xFFFA0000, 0x00000000, 0xFFF40000, 0xFFF40000, 0x00000000, 0x000C0000, 0x00000000, 0x00000000, 0x000C0000,
-    0x000C0000, 0x00000000, 0x000C0000, 0xFFF40000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
-    0x000C0000, 0x00000000, 0x00000000, 0xFFF40000, 0x00000000, 0xFFF40000, 0x00000000, 0x00000000, 0xFFF40000,
-    0x000C0000, 0x00000000, 0xFFF40000, 0x00000000, 0x00000000, 0x00000000,
+Vec3i D_800BAD28_AABD8[] = {
+    { 0x00060000, 0x00000000, 0x000C0000 },
+    { 0x00060000, 0x00000000, 0xFFF40000 },
+    { 0xFFFA0000, 0x00000000, 0x000C0000 },
+    { 0xFFFA0000, 0x00000000, 0xFFF40000 },
+};
+
+Vec3i D_800BAD58_AAC08[] = {
+    { 0xFFF40000, 0x00000000, 0x000C0000 },
+    { 0x00000000, 0x00000000, 0x000C0000 },
+    { 0x000C0000, 0x00000000, 0x000C0000 },
+    { 0xFFF40000, 0x00000000, 0x00000000 },
+    { 0x00000000, 0x00000000, 0x00000000 },
+    { 0x000C0000, 0x00000000, 0x00000000 },
+    { 0xFFF40000, 0x00000000, 0xFFF40000 },
+    { 0x00000000, 0x00000000, 0xFFF40000 },
+    { 0x000C0000, 0x00000000, 0xFFF40000 },
+    { 0x00000000, 0x00000000, 0x00000000 },
 };
 
 u8 D_800BADD0_AAC80[] = {
@@ -4951,30 +4960,27 @@ void updatePlayerJointPositions(Player *player) {
     GameState *gameSt;
     GameDataLayout *gameData;
     s32 jointIdx;
-    s32 jointOff;
-    u8 *jointBase;
     Vec3i *jointPos;
     s32 sectorIdx;
 
     gameSt = getCurrentAllocation();
     jointIdx = 0;
     gameData = &gameSt->gameData;
-    jointOff = 0xA10;
-    jointBase = (u8 *)player;
 
     do {
-        jointPos = (Vec3i *)((u8 *)player + jointOff);
-        *(volatile s32 *)(jointBase + 0xA10) =
-            player->headingTransform.translation.x + *(s32 *)((u8 *)&D_800BA348_AA1F8 + jointOff);
-        *(volatile s32 *)(jointBase + 0xA18) =
-            player->headingTransform.translation.z + *(s32 *)((u8 *)&D_800BA350_AA200 + jointOff);
+        player->jointPositions[jointIdx].x = player->headingTransform.translation.x + D_800BAD58_AAC08[jointIdx].x;
+        player->jointPositions[jointIdx].z = player->headingTransform.translation.z + D_800BAD58_AAC08[jointIdx].z;
 
-        sectorIdx = getOrUpdatePlayerSectorIndex((void *)player, gameData, player->sectorIndex, jointPos);
-        *(volatile s32 *)(jointBase + 0xA14) = getTrackHeightInSector(gameData, sectorIdx, jointPos, 0x100000);
+        sectorIdx = getOrUpdatePlayerSectorIndex(
+            (void *)player,
+            gameData,
+            player->sectorIndex,
+            &player->jointPositions[jointIdx]
+        );
+        player->jointPositions[jointIdx].y =
+            getTrackHeightInSector(gameData, sectorIdx, &player->jointPositions[jointIdx], 0x100000);
 
         jointIdx++;
-        jointOff += 0xC;
-        jointBase += 0xC;
     } while (jointIdx < 9);
 
     player->jointShadowNeedsUpdate = 1;
