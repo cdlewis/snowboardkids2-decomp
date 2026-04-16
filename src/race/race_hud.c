@@ -4219,9 +4219,3 @@ void spawnBossHomingProjectileVariant2Task(Player *arg0) {
         allocation->availableHomingProjectileSlots--;
     }
 }
-
-INCLUDE_RODATA("asm/nonmatchings/race/race_hud", D_8009E868_9F468);
-
-INCLUDE_RODATA("asm/nonmatchings/race/race_hud", sGoldFormatShort);
-
-INCLUDE_RODATA("asm/nonmatchings/race/race_hud", sGoldFormatLong);

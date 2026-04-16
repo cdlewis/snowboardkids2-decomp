@@ -67,6 +67,9 @@ typedef struct {
 // defined later to keep the rodata gods happy
 const char sTimerFormatLow[];
 const char sTimerFormatNormal[];
+const char D_8009E868_9F468[];
+const char sGoldFormatShort[];
+const char sGoldFormatLong[];
 
 typedef struct {
     s16 x;
@@ -356,12 +359,17 @@ void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0);
 void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state);
 void cleanupRaceProgressIndicatorTask(RaceProgressIndicatorCleanupState *state);
 
+const char D_8009E868_9F468[] = "%d\a/\x04%d";
+
+const char sGoldFormatShort[] = "\x01%5d";
+
+const char sGoldFormatLong[] = "\x02%5d";
+
 static const char D_8009E880_9F480[] = "%5d";
 extern char D_8009E89C_9F49C[];
 extern char D_8009E8A0_9F4A0[];
 extern char D_8009E8A8_9F4A8[];
 extern char D_8009E928_9F528[];
-extern char D_8009E868_9F468[];
 
 extern s32 gFirstPlaceGoldReward[];
 extern s32 gSecondPlaceGoldReward[];
@@ -716,9 +724,6 @@ common:
         setCallbackWithContinue(updatePlayerGoldDisplayMultiplayer);
     }
 }
-
-extern char sGoldFormatShort[];
-extern char sGoldFormatLong[];
 
 void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
     s32 gold = state->player->raceGold;

@@ -456,7 +456,7 @@ segments:
       - [0x9F308, .rodata, race/race_session]
       - [0x9F398, .rodata, race/position_markers]
       - [0x9F3C0, .rodata, race/race_hud]
-      - [0x9F480, .rodata, race/race_effects]
+      - [0x9F468, .rodata, race/race_effects]
       - [0x9F560, .rodata, race/obstacle_sprites]
       - [0x9F598, .rodata, audio/audio]
       - [0x9F5D8, .rodata, race/hit_reactions]
