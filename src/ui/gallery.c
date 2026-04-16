@@ -16,7 +16,7 @@
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
 
-extern u8 D_8009DF6C_9EB6C[];
+extern const u8 D_8009DF6C_9EB6C[];
 
 typedef struct {
     s32 *layout;
@@ -1563,7 +1563,13 @@ void handleViewerGridNavigation_Prize(FD98_struct *arg0) {
     }
 }
 
-INCLUDE_RODATA("asm/nonmatchings/ui/gallery", D_8009DF6C_9EB6C);
+// clang-format off
+const u8 D_8009DF6C_9EB6C[] = {
+    0x00, 0x03, 0x33, 0x33,
+    0x00, 0x1C, 0xCC, 0xCC,
+    0x00, 0x00, 0x00, 0x00,
+};
+// clang-format on
 
 void handleViewerInput(FD98_struct *arg0) {
     FD98_struct *alloc;
