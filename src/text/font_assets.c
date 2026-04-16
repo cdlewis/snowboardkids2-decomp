@@ -12,6 +12,8 @@ extern s8 gCurrentPaletteId;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
 extern s16 gTextureEnabled[];
+extern TextClipAndOffsetData gTextClipAndOffsetData;
+extern u16 gDefaultFontPalette[];
 
 Gfx gFontDisplayListSetup[] = {
     gsDPPipeSync(),
@@ -222,5 +224,117 @@ void enqueueTextRender(s16 x, s16 y, s16 palette, u8 *target_string, s32 arg4, s
     }
 }
 
-// 99.74% https://decomp.me/scratch/dnCKt
-INCLUDE_ASM("asm/nonmatchings/text/font_assets", renderTextColored);
+void renderTextColored(ColoredTextRenderArg *arg0) {
+    u16 sp6;
+    u8 charIndex;
+    u16 var_s7;
+    u8 *str;
+
+    if (gTextureEnabled[0]) {
+        gSPTexture(gRegionAllocPtr++, 0x8000, 0x8000, 0, 0, G_ON);
+    }
+
+    var_s7 = arg0->x;
+    sp6 = arg0->y;
+    str = arg0->string;
+    if (*str == 0) {
+        return;
+    }
+
+    if (gGraphicsMode != 1) {
+        gGraphicsMode = 1;
+        gCurrentPaletteId = -1;
+        gSPDisplayList(gRegionAllocPtr++, gFontDisplayListSetup);
+        gDPLoadTextureBlock_4b(
+            gRegionAllocPtr++,
+            (u32)gFontTextureData,
+            G_IM_FMT_CI,
+            64,
+            64,
+            0,
+            G_TX_CLAMP,
+            G_TX_CLAMP,
+            0,
+            0,
+            0,
+            0
+        );
+    }
+
+    gDPPipeSync(gRegionAllocPtr++);
+    gDPSetCombineMode(gRegionAllocPtr++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
+    gDPSetPrimColor(gRegionAllocPtr++, 0, 0, arg0->shade, arg0->shade, arg0->shade, 0xFF);
+
+    if (gCurrentPaletteId != arg0->palette) {
+        gCurrentPaletteId = arg0->palette;
+        if (arg0->palette == 0xFF) {
+            gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gDefaultFontPalette);
+        } else {
+            gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (arg0->palette << 5));
+        }
+    }
+
+    for (str = arg0->string; *str != 0; str++) {
+        if (*str < 0x20U) {
+            if (*str == 0xA) {
+                var_s7 = arg0->x;
+                sp6 += 8;
+            }
+            if (*str == 1) {
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + 0x20);
+            }
+            if (*str == 2) {
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + 0x40);
+            }
+            if (*str == 3) {
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + 0x60);
+            }
+            if (*str == 4) {
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + 0x80);
+            }
+            if (*str == 7) {
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + 0xE0);
+            }
+        } else {
+            charIndex = *str - 0x20;
+            if (charIndex != 0 && charIndex < 0x40) {
+                s16 clipOffsetY = 0;
+                s16 clipOffsetX = 0;
+                s16 left = var_s7 + gTextClipAndOffsetData.offsetX;
+                s16 top = sp6 + gTextClipAndOffsetData.offsetY;
+                s16 xh = left + 8;
+                s16 yh = top + 8;
+                if (left < gTextClipAndOffsetData.clipLeft) {
+                    clipOffsetX = gTextClipAndOffsetData.clipLeft - left;
+                    left = gTextClipAndOffsetData.clipLeft;
+                }
+                if (gTextClipAndOffsetData.clipTop > top) {
+                    clipOffsetY = gTextClipAndOffsetData.clipTop - top;
+                    top = gTextClipAndOffsetData.clipTop;
+                }
+                if (gTextClipAndOffsetData.clipRight >= left &&
+                    ((gTextClipAndOffsetData.clipBottom < top) ^ 1 && left < xh) && top < yh) {
+                    s16 s = (clipOffsetX + ((charIndex & 7) * 8)) << 5;
+                    s16 t = (clipOffsetY + (charIndex & 0x38));
+                    gSPTextureRectangle(
+                        gRegionAllocPtr++,
+                        left * 4,
+                        top * 4,
+                        xh * 4,
+                        yh * 4,
+                        G_TX_RENDERTILE,
+                        s,
+                        (t << 5) & 0xFFE0,
+                        0x400,
+                        0x400
+                    );
+                }
+            }
+            var_s7 += 8;
+        }
+    }
+
+    gDPPipeSync(gRegionAllocPtr++);
+    gDPSetCombineLERP(gRegionAllocPtr++, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0);
+    gDPSetPrimColor(gRegionAllocPtr++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+}
