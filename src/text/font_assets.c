@@ -8,6 +8,10 @@
 
 extern s32 gFontTextureData;
 extern s32 gFontPaletteBase;
+extern s8 gCurrentPaletteId;
+extern s16 gGraphicsMode;
+extern Gfx *gRegionAllocPtr;
+extern s16 gTextureEnabled[];
 
 Gfx gFontDisplayListSetup[] = {
     gsDPPipeSync(),
@@ -28,8 +32,156 @@ void loadFontAssetsFromDataTable(DataTable_19E80 *dataTable) {
     gFontPaletteBase = (s32)result.index_ptr;
 }
 
-// 99.82% https://decomp.me/scratch/BuVGD
-INCLUDE_ASM("asm/nonmatchings/text/font_assets", renderTextPalette);
+void renderTextPalette(TextData *arg0) {
+    s16 *temp_t2;
+    u16 y_pos;
+    s16 *font_data;
+    u8 char_index;
+    u16 x_pos;
+    u8 ch;
+    u8 *str_ptr;
+    s32 i;
+
+    if (gTextureEnabled[0] != 0) {
+        gSPTexture(gRegionAllocPtr++, 0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON);
+    }
+
+    x_pos = arg0->x;
+    y_pos = arg0->y;
+
+    str_ptr = arg0->string;
+    if (*arg0->string == 0) {
+        return;
+    }
+
+    if (gGraphicsMode != 1) {
+        gGraphicsMode = 1;
+        gCurrentPaletteId = -1;
+
+        gSPDisplayList(gRegionAllocPtr++, gFontDisplayListSetup);
+
+        gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, gFontTextureData);
+
+        gDPSetTile(
+            gRegionAllocPtr++,
+            G_IM_FMT_CI,
+            G_IM_SIZ_16b,
+            0,
+            0x0000,
+            G_TX_LOADTILE,
+            0,
+            G_TX_NOMIRROR | G_TX_CLAMP,
+            G_TX_NOMASK,
+            G_TX_NOLOD,
+            G_TX_NOMIRROR | G_TX_CLAMP,
+            G_TX_NOMASK,
+            G_TX_NOLOD
+        );
+
+        gDPLoadSync(gRegionAllocPtr++);
+
+        gDPLoadBlock(gRegionAllocPtr++, G_TX_LOADTILE, 0, 0, 1023, 512);
+
+        gDPPipeSync(gRegionAllocPtr++);
+
+        gDPSetTile(
+            gRegionAllocPtr++,
+            G_IM_FMT_CI,
+            G_IM_SIZ_4b,
+            4,
+            0x0000,
+            G_TX_RENDERTILE,
+            0,
+            G_TX_NOMIRROR | G_TX_CLAMP,
+            G_TX_NOMASK,
+            G_TX_NOLOD,
+            G_TX_NOMIRROR | G_TX_CLAMP,
+            G_TX_NOMASK,
+            G_TX_NOLOD
+        );
+
+        gDPSetTileSize(gRegionAllocPtr++, G_TX_RENDERTILE, 0, 0, 0x00FC, 0x00FC);
+    }
+
+    if (gCurrentPaletteId != arg0->palette) {
+        gCurrentPaletteId = arg0->palette;
+        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (arg0->palette << 5));
+    }
+
+    str_ptr = arg0->string;
+    temp_t2 -= 2;
+    while (*str_ptr != '\0') {
+        if (*str_ptr < 0x20) {
+            if (*str_ptr == '\n') {
+                x_pos = arg0->x;
+                y_pos += 8;
+            }
+
+            if (*str_ptr == 1) {
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (0x20 * 1));
+            }
+
+            if (*str_ptr == 2) {
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (0x20 * 2));
+            }
+
+            if (*str_ptr == 3) {
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (0x20 * 3));
+            }
+
+            if (*str_ptr == 4) {
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (0x20 * 4));
+            }
+
+            if (*str_ptr == 7) {
+                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (0x20 * 7));
+            }
+        } else {
+            char_index = *str_ptr - 0x20;
+            if (char_index > 0 && char_index < 0x40) {
+                s16 char_x = x_pos + gTextureEnabled[-2];
+                s16 char_y = y_pos + gTextureEnabled[-1];
+                s16 char_right = char_x + 8;
+                s16 char_bottom = char_y + 8;
+                s16 clip_offset_y = 0;
+                s16 clip_offset_x = 0;
+
+                if (char_x < gTextureEnabled[-6]) {
+                    clip_offset_x = gTextureEnabled[-6] - char_x;
+                    char_x = gTextureEnabled[-6];
+                }
+
+                if (char_y < gTextureEnabled[-5]) {
+                    clip_offset_y = gTextureEnabled[-5] - char_y;
+                    char_y = gTextureEnabled[-5];
+                }
+
+                if (gTextureEnabled[-4] >= char_x && gTextureEnabled[-3] >= char_y && char_x < char_right &&
+                    char_y < char_bottom) {
+                    s16 s = (clip_offset_x + (char_index & 7) * 8) << 5;
+                    s16 t = clip_offset_y + (char_index & 0x38);
+
+                    gSPTextureRectangle(
+                        gRegionAllocPtr++,
+                        char_x << 2,
+                        char_y << 2,
+                        char_right << 2,
+                        char_bottom << 2,
+                        G_TX_RENDERTILE,
+                        s,
+                        t << 5 & 0xffe0,
+                        0x0400,
+                        0x0400
+                    );
+                }
+            }
+
+            x_pos += 8;
+        }
+
+        str_ptr++;
+    }
+}
 
 void enqueueTextRender(s16 x, s16 y, s16 palette, u8 *target_string, s32 arg4, s32 arg5) {
     s32 required_size;
