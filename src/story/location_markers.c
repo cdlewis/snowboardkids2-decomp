@@ -7,6 +7,7 @@
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "os_cont.h"
+#include "story/rare_events.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 
@@ -80,33 +81,44 @@ typedef struct {
 } SpecialLocationMarkerCleanupState;
 
 typedef struct {
-    char padding[64];
-    void *dialogueScript;
+    /* 0x00 */ Transform3D localMatrix;
+    /* 0x20 */ Transform3D worldMatrix;
+    /* 0x40 */ u16 *dialogueScript;
+    /* 0x44 */ u16 yawAngle;
+    /* 0x46 */ s16 targetYaw;
+    /* 0x48 */ u16 pitchAngle;
+    /* 0x4A */ u8 pad4A[0x13];
+    /* 0x5D */ u8 turnDirection;
 } StoryMapDialogueState;
 
 typedef struct {
-    u8 padding0[0x10];
-    u8 unk10;
-    u8 padding1[0x62];
-    u8 unk73;
-    u8 padding2[0x38F];
-    u8 unk403;
-    u8 padding3[0x4];
-    s32 unk408[1];
-    u8 padding4[0x4];
-    s32 unk410[1];
-    u8 padding5[0x8];
-    s32 numEntries;
-    u8 unk420;
-    u8 unk421;
-    u8 unk422;
-    u8 padding6[0x1];
-    u8 locationDiscovered;
-    u8 discoveredLocationId;
-    u8 padding7[0x4];
-    u8 unk42A;
-    u8 padding8[0x2];
-    u8 unk42D;
+    /* 0x000 */ u8 padding0[0x10];
+    /* 0x010 */ u8 unk10;
+    /* 0x011 */ u8 padding1[0x62];
+    /* 0x073 */ u8 unk73;
+    /* 0x074 */ u8 padding2[0x33C];
+    /* 0x3B0 */ Transform3D unk3B0;
+    /* 0x3D0 */ u8 padding2b[0x30];
+    /* 0x400 */ u8 unk400;
+    /* 0x401 */ u8 unk401;
+    /* 0x402 */ u8 unk402;
+    /* 0x403 */ u8 unk403;
+    /* 0x404 */ u8 padding3[0x4];
+    /* 0x408 */ s32 npcPosX[2];
+    /* 0x410 */ s32 npcPosZ[2];
+    /* 0x418 */ u8 padding5[0x4];
+    /* 0x41C */ s32 numEntries;
+    /* 0x420 */ u8 unk420;
+    /* 0x421 */ u8 unk421;
+    /* 0x422 */ u8 unk422;
+    /* 0x423 */ u8 padding6[0x1];
+    /* 0x424 */ u8 locationDiscovered;
+    /* 0x425 */ u8 discoveredLocationId;
+    /* 0x426 */ u8 padding7[0x4];
+    /* 0x42A */ u8 unk42A;
+    /* 0x42B */ u8 padding8[0x1];
+    /* 0x42C */ u8 unk42C;
+    /* 0x42D */ u8 unk42D;
 } StoryMapAllocation;
 
 typedef struct {
@@ -140,8 +152,9 @@ void cleanupTownExitMarker(void *);
 void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *);
 
 void func_80036AF8_376F8(void);
-void func_80036D54_37954(void);
+void func_80036D54_37954(void *arg0);
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *);
+void func_800175E0_181E0(void);
 
 // Global variables and externs
 extern s32 gControllerInputs;
@@ -222,139 +235,98 @@ void *D_8008F9B4_905B4[] = { D_8008F880_90480,
                              NULL,
                              NULL };
 
-u8 D_8008F9F0_905F0[] = {
-    0x00, 0x00, 0x00, 0x5C, 0x00, 0x5C, 0x00, 0x60, 0x00, 0x5B, 0x00, 0x5C, 0x00, 0x5E, 0x00, 0x74, 0x00, 0x00, 0x00,
-    0x74, 0x00, 0x74, 0x00, 0x74, 0x00, 0x74, 0x00, 0x76, 0x00, 0x8A, 0x00, 0x8A, 0x00, 0x00, 0x00, 0x90, 0x00, 0x8A,
-    0x00, 0x8A, 0x00, 0x8D, 0x00, 0xAA, 0x00, 0xA2, 0x00, 0xAA, 0x00, 0x00, 0x00, 0xA2, 0x00, 0xA2, 0x00, 0xA5, 0x00,
-    0xBB, 0x00, 0xBB, 0x00, 0xBB, 0x00, 0xBB, 0x00, 0x00, 0x00, 0xBB, 0x00, 0xBE, 0x00, 0xD0, 0x00, 0xD1, 0x00, 0xD1,
-    0x00, 0xD1, 0x00, 0xD0, 0x00, 0x00, 0x00, 0xD4, 0x00, 0x00, 0x00, 0x5C, 0x00, 0x5C, 0x00, 0x60, 0x00, 0x5B, 0x00,
-    0x5C, 0x00, 0x74, 0x00, 0x00, 0x00, 0x74, 0x00, 0x74, 0x00, 0x74, 0x00, 0x74, 0x00, 0x8A, 0x00, 0x8A, 0x00, 0x00,
-    0x00, 0x90, 0x00, 0x8A, 0x00, 0x8A, 0x00, 0xA7, 0x00, 0xA2, 0x00, 0xA7, 0x00, 0x00, 0x00, 0xA2, 0x00, 0xA2, 0x00,
-    0xBB, 0x00, 0xBB, 0x00, 0xBB, 0x00, 0xBB, 0x00, 0x00, 0x00, 0xBB, 0x00, 0xD0, 0x00, 0xD1, 0x00, 0xD1, 0x00, 0xD1,
-    0x00, 0xD0, 0x00, 0x00, 0x01, 0x0B, 0x01, 0x0B, 0x01, 0x0B, 0x01, 0x0B, 0x01, 0x0B, 0x01, 0x0B
+u16 D_8008F9F0_905F0[][7] = {
+    { 0x0000, 0x005C, 0x005C, 0x0060, 0x005B, 0x005C, 0x005E },
+    { 0x0074, 0x0000, 0x0074, 0x0074, 0x0074, 0x0074, 0x0076 },
+    { 0x008A, 0x008A, 0x0000, 0x0090, 0x008A, 0x008A, 0x008D },
+    { 0x00AA, 0x00A2, 0x00AA, 0x0000, 0x00A2, 0x00A2, 0x00A5 },
+    { 0x00BB, 0x00BB, 0x00BB, 0x00BB, 0x0000, 0x00BB, 0x00BE },
+    { 0x00D0, 0x00D1, 0x00D1, 0x00D1, 0x00D0, 0x0000, 0x00D4 },
+    { 0x0000, 0x005C, 0x005C, 0x0060, 0x005B, 0x005C, 0x0074 },
+    { 0x0000, 0x0074, 0x0074, 0x0074, 0x0074, 0x008A, 0x008A },
+    { 0x0000, 0x0090, 0x008A, 0x008A, 0x00A7, 0x00A2, 0x00A7 },
+    { 0x0000, 0x00A2, 0x00A2, 0x00BB, 0x00BB, 0x00BB, 0x00BB },
+    { 0x0000, 0x00BB, 0x00D0, 0x00D1, 0x00D1, 0x00D1, 0x00D0 },
+    { 0x0000, 0x010B, 0x010B, 0x010B, 0x010B, 0x010B, 0x010B },
 };
 
-u8 D_8008FA98_90698[] = { 0x00, 0x0D, 0x00, 0x0E, 0x00, 0x0F, 0xFF, 0xFF };
-u8 D_8008FAA0_906A0[] = { 0x00, 0x0A, 0x00, 0x0B, 0x00, 0x0C, 0xFF, 0xFF };
-u8 D_8008FAA8_906A8[] = { 0x00, 0x14, 0x00, 0x15, 0x00, 0x16, 0xFF, 0xFF };
-u8 D_8008FAB0_906B0[] = { 0x00, 0x16, 0x00, 0x17, 0x00, 0x18, 0xFF, 0xFF };
-u8 D_8008FAB8_906B8[] = { 0x00, 0x11, 0x00, 0x12, 0x00, 0x13, 0xFF, 0xFF };
+u16 D_8008FA98_90698[] = { 0x000D, 0x000E, 0x000F, 0xFFFF };
+u16 D_8008FAA0_906A0[] = { 0x000A, 0x000B, 0x000C, 0xFFFF };
+u16 D_8008FAA8_906A8[] = { 0x0014, 0x0015, 0x0016, 0xFFFF };
+u16 D_8008FAB0_906B0[] = { 0x0016, 0x0017, 0x0018, 0xFFFF };
+u16 D_8008FAB8_906B8[] = { 0x0011, 0x0012, 0x0013, 0xFFFF };
 
-u8 D_8008FAC0_906C0[] = { 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x1B, 0x00, 0x1B, 0xFF, 0xFF, 0x00, 0x00 };
+u16 D_8008FAC0_906C0[] = { 0x0000, 0xFFFF, 0x001B, 0x001B, 0xFFFF, 0x0000 };
 
-void *D_8008FACC_906CC[] = { NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FAB0_906B0,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FAA0_906A0,
-                             D_8008FA98_90698,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FAA0_906A0,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FAA0_906A0,
-                             D_8008FAB8_906B8,
-                             D_8008FA98_90698,
-                             D_8008FAB8_906B8,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FAA0_906A0,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FAA0_906A0,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             NULL,
-                             D_8008FAA0_906A0,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FAB0_906B0,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FAA8_906A8,
-                             D_8008FA98_90698,
-                             D_8008FAA8_906A8,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             NULL,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FAC0_906C0,
-                             NULL,
-                             NULL,
-                             NULL,
-                             NULL,
-                             NULL,
-                             NULL,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698,
-                             D_8008FA98_90698 };
+u16 *D_8008FACC_906CC[][7] = {
+    { NULL,
+     D_8008FA98_90698,        D_8008FA98_90698,
+     D_8008FAB0_906B0,                                            D_8008FA98_90698,
+     D_8008FA98_90698,                                                                                D_8008FAA0_906A0 },
+    { D_8008FA98_90698,
+     NULL,                    D_8008FA98_90698,
+     D_8008FA98_90698,                                            D_8008FA98_90698,
+     D_8008FA98_90698,                                                                                D_8008FAA0_906A0 },
+    { D_8008FA98_90698,
+     D_8008FA98_90698,        NULL,
+     D_8008FA98_90698,                                            D_8008FA98_90698,
+     D_8008FA98_90698,                                                                                D_8008FAA0_906A0 },
+    { D_8008FAB8_906B8,
+     D_8008FA98_90698,        D_8008FAB8_906B8,
+     NULL,                                                        D_8008FA98_90698,
+     D_8008FA98_90698,                                                                                D_8008FAA0_906A0 },
+    { D_8008FA98_90698,
+     D_8008FA98_90698,        D_8008FA98_90698,
+     D_8008FA98_90698,                                            NULL,
+     D_8008FA98_90698,                                                                                D_8008FAA0_906A0 },
+    { D_8008FA98_90698,
+     D_8008FA98_90698,        D_8008FA98_90698,
+     D_8008FA98_90698,                                            D_8008FA98_90698,
+     NULL,                                                                                            D_8008FAA0_906A0 },
+    { NULL,
+     D_8008FA98_90698,        D_8008FA98_90698,
+     D_8008FAB0_906B0,                                            D_8008FA98_90698,
+     D_8008FA98_90698,                                                                                D_8008FA98_90698 },
+    { NULL,
+     D_8008FA98_90698,        D_8008FA98_90698,
+     D_8008FA98_90698,                                            D_8008FA98_90698,
+     D_8008FA98_90698,                                                                                D_8008FA98_90698 },
+    { NULL,
+     D_8008FA98_90698,        D_8008FA98_90698,
+     D_8008FA98_90698,                                            D_8008FAA8_906A8,
+     D_8008FA98_90698,                                                                                D_8008FAA8_906A8 },
+    { NULL,
+     D_8008FA98_90698,        D_8008FA98_90698,
+     D_8008FA98_90698,                                            D_8008FA98_90698,
+     D_8008FA98_90698,                                                                                D_8008FA98_90698 },
+    { NULL,
+     D_8008FA98_90698,        D_8008FA98_90698,
+     D_8008FA98_90698,                                            D_8008FA98_90698,
+     D_8008FA98_90698,                                                                                D_8008FA98_90698 },
+    { NULL,
+     D_8008FA98_90698,        D_8008FA98_90698,
+     D_8008FA98_90698,                                            D_8008FA98_90698,
+     D_8008FA98_90698,                                                                                D_8008FA98_90698 },
+    { NULL,             NULL, D_8008FA98_90698, D_8008FA98_90698, D_8008FAC0_906C0, NULL,             NULL             },
+    { NULL,             NULL, NULL,             NULL,             D_8008FA98_90698, D_8008FA98_90698, D_8008FA98_90698 },
+};
 
-void *D_8008FC54_90854[] = { D_8008FAC0_906C0, D_8008FA98_90698, D_8008FAC0_906C0, D_8008FAC0_906C0,
-                             D_8008FAC0_906C0, D_8008FAC0_906C0, D_8008FA98_90698, D_8008FAC0_906C0 };
+u16 *D_8008FC54_90854[] = { D_8008FAC0_906C0, D_8008FA98_90698, D_8008FAC0_906C0, D_8008FAC0_906C0,
+                            D_8008FAC0_906C0, D_8008FAC0_906C0, D_8008FA98_90698, D_8008FAC0_906C0 };
 
-u8 D_8008FC74_90874[] = { 0x00, 0x00, 0x00, 0x5C, 0x00, 0x5E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5E, 0x00, 0x00, 0x00,
-                          0x00, 0x00, 0x79, 0x00, 0x74, 0x00, 0x00, 0x00, 0x77, 0x00, 0x00, 0x00, 0x00, 0x00, 0x74,
-                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x8D, 0x00, 0x8E, 0x00, 0x00, 0x00, 0x8D, 0x00,
-                          0x8A, 0x00, 0x00, 0x00, 0xAB, 0x00, 0xA2, 0x00, 0xA5, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA5,
-                          0x00, 0xA2, 0x00, 0x00, 0x00, 0xC0, 0x00, 0xBB, 0x00, 0x00, 0x00, 0xBF, 0x00, 0x00, 0x00,
-                          0xBE, 0x00, 0x00, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xD4, 0x00, 0xD5, 0x00, 0x00,
-                          0x00, 0xD4, 0x00, 0xD0, 0x00, 0x00, 0x00, 0x51, 0x00, 0x6D, 0x00, 0x00, 0x00, 0x00, 0x00,
-                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF5, 0x00, 0xE3, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                          0x00, 0x83, 0x00, 0x99, 0x00, 0x00, 0x00, 0xC9, 0x00, 0x00, 0x00, 0xF4, 0x00, 0xE1, 0x00,
-                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC9, 0x00, 0x00,
-                          0x00, 0xF2, 0x00, 0xE3, 0x00, 0x00 };
+u16 D_8008FC74_90874[][8] = {
+    { 0x0000, 0x005C, 0x005E, 0x0000, 0x0000, 0x005E, 0x0000, 0x0000 },
+    { 0x0079, 0x0074, 0x0000, 0x0077, 0x0000, 0x0000, 0x0074, 0x0000 },
+    { 0x0000, 0x0000, 0x008D, 0x008E, 0x0000, 0x008D, 0x008A, 0x0000 },
+    { 0x00AB, 0x00A2, 0x00A5, 0x0000, 0x0000, 0x00A5, 0x00A2, 0x0000 },
+    { 0x00C0, 0x00BB, 0x0000, 0x00BF, 0x0000, 0x00BE, 0x0000, 0x0000 },
+    { 0x00D6, 0x0000, 0x00D4, 0x00D5, 0x0000, 0x00D4, 0x00D0, 0x0000 },
+    { 0x0051, 0x006D, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x00F5 },
+    { 0x00E3, 0x0000, 0x0000, 0x0000, 0x0083, 0x0099, 0x0000, 0x00C9 },
+    { 0x0000, 0x00F4, 0x00E1, 0x0000, 0x0000, 0x0000, 0x0083, 0x0000 },
+};
+
+u16 D_8008FC74_90874_tail[6] = { 0x0000, 0x00C9, 0x0000, 0x00F2, 0x00E3, 0x0000 };
 
 u16 D_8008FD10_90910[] = { 0x0059, 0x0072, 0x0088, 0x00A0, 0x00B9, 0x00CE };
 
@@ -563,8 +535,8 @@ s32 checkStoryMapLocationSelection(StoryMapPlayerState *player) {
     data.maxDistance = 0x01000000;
     if (allocation->unk42A == 0) {
         for (i = 0; i < allocation->numEntries; i++) {
-            deltaX = allocation->unk408[i] - player->positionX;
-            deltaZ = allocation->unk410[i] - player->positionZ;
+            deltaX = allocation->npcPosX[i] - player->positionX;
+            deltaZ = allocation->npcPosZ[i] - player->positionZ;
             deltaX = distance_2d(deltaX, deltaZ);
             data.distances[i] = deltaX;
 
@@ -587,14 +559,173 @@ s32 checkStoryMapLocationSelection(StoryMapPlayerState *player) {
     return 2;
 }
 
-// NO_SCRATCH
-INCLUDE_ASM("asm/nonmatchings/story/location_markers", func_80036D54_37954);
+void func_80036D54_37954(void *arg0) {
+    Transform3D tempMatrix;
+    StoryMapDialogueState *state = arg0;
+    StoryMapAllocation *allocation;
+    s32 switchState;
+    s16 angleDiff;
+    s32 posX;
+    s32 posZ;
+    s32 combinedAngle;
+    s16 targetAngle;
+    s32 absDiff;
+    s32 soundId;
+    s32 temp;
+
+    allocation = (StoryMapAllocation *)getCurrentAllocation();
+    switchState = allocation->unk42A >> 4;
+    allocation->unk42A = allocation->unk42A & 0xF;
+
+    switch (switchState) {
+        case 1:
+            if (allocation->numEntries == 2) {
+                posX = (allocation->npcPosX[0] + allocation->npcPosX[1]) / 2;
+                posZ = (allocation->npcPosZ[0] + allocation->npcPosZ[1]) / 2;
+            } else {
+                posX = allocation->npcPosX[0];
+                posZ = allocation->npcPosZ[0];
+            }
+
+            combinedAngle = (state->yawAngle + state->pitchAngle) & 0x1FFF;
+            targetAngle =
+                computeAngleToPosition(posX, posZ, state->worldMatrix.translation.x, state->worldMatrix.translation.z);
+
+            angleDiff = signedAngleDifference(combinedAngle, targetAngle);
+            if (angleDiff < 0) {
+                state->turnDirection = 1;
+            } else {
+                state->turnDirection = 0;
+            }
+            absDiff = ABS(angleDiff);
+            if (absDiff >= 0xAAB) {
+                temp = state->yawAngle + state->pitchAngle + 0x1000;
+                allocation->unk400 = 1;
+                allocation->unk401 = 0;
+                angleDiff = signedAngleDifference(temp & 0x1FFF, targetAngle);
+                if (angleDiff < 0) {
+                    state->turnDirection = 1;
+                } else {
+                    state->turnDirection = 0;
+                }
+                state->yawAngle = (state->yawAngle + 0x1000) & 0x1FFF;
+            } else {
+                if (absDiff < 0x2AA) {
+                    allocation->unk400 = 0;
+                } else {
+                    allocation->unk400 = 2;
+                }
+                allocation->unk401 = 1;
+            }
+            state->targetYaw = (state->yawAngle + angleDiff) & 0x1FFF;
+            createYRotationMatrix(&state->localMatrix, state->yawAngle & 0x1FFF);
+            createYRotationMatrix(&state->worldMatrix, state->pitchAngle);
+            switchState = 2;
+
+            func_8006B084_6BC84(&state->localMatrix, &state->worldMatrix, &tempMatrix);
+            memcpy(&allocation->unk3B0, &tempMatrix, sizeof(Transform3D));
+            break;
+
+        case 2:
+            angleDiff = signedAngleDifference((s16)state->yawAngle, state->targetYaw);
+            absDiff = ABS(angleDiff);
+            if (absDiff < 0x80) {
+                allocation->unk400 = 0;
+                switchState = 3;
+                angleDiff = absDiff;
+            } else {
+                angleDiff = 0x80;
+            }
+            if (state->turnDirection != 0) {
+                s32 tmp = angleDiff;
+                angleDiff = -tmp;
+            }
+            if (allocation->unk400 == 1 && allocation->unk401 != 0) {
+                allocation->unk400 = 0;
+            }
+
+            state->yawAngle += angleDiff;
+
+            createYRotationMatrix(&state->localMatrix, state->yawAngle & 0x1FFF);
+            createYRotationMatrix(&state->worldMatrix, state->pitchAngle);
+            func_8006B084_6BC84(&state->localMatrix, &state->worldMatrix, &tempMatrix);
+            memcpy(&allocation->unk3B0, &tempMatrix, sizeof(Transform3D));
+            break;
+
+        case 3:
+            if (allocation->unk42A == 5) {
+                if (allocation->numEntries == 1) {
+                    state->dialogueScript = D_8008FACC_906CC[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->unk420];
+                    soundId = D_8008F9F0_905F0[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->unk420];
+                } else {
+                    state->dialogueScript = D_8008FC54_90854[allocation->unk42C];
+                    soundId = D_8008FC74_90874[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->unk42C];
+                }
+
+                playSoundEffectOnChannelNoPriority(soundId, 0);
+                setupStoryMapCharacterDialogue(state);
+
+                allocation->unk400 = *state->dialogueScript;
+                state->dialogueScript++;
+                allocation->unk401 = 0;
+
+                if (allocation->unk400 || allocation->numEntries != 2) {
+                    switchState = 4;
+                } else {
+                    switchState = 6;
+                    allocation->unk402 = 0;
+                }
+            } else if (allocation->unk400 == 1 && allocation->unk401) {
+                allocation->unk400 = 0;
+            }
+            break;
+
+        case 4:
+            if (allocation->unk401 != 0) {
+                allocation->unk401 = 0;
+                if (*state->dialogueScript == 0xFFFF) {
+                    switchState = 5;
+                    if (allocation->unk400 == 0) {
+                        switchState = 6;
+                        allocation->unk402 = 0;
+                    } else {
+                        allocation->unk401 = 0;
+                        allocation->unk400 = 0;
+                    }
+                } else {
+                    allocation->unk400 = *state->dialogueScript;
+                    state->dialogueScript += 1;
+                }
+            }
+            break;
+
+        case 5:
+            switchState = 0;
+            allocation->unk403 = 0xFF;
+            setCallback(func_800175E0_181E0);
+            break;
+
+        case 6:
+            allocation->unk402++;
+            if (allocation->unk402 == 0x14) {
+                allocation->unk402 = 0;
+                switchState = 5;
+            }
+            break;
+    }
+
+    allocation->unk42A |= switchState << 4;
+    if (allocation->unk422 == 1) {
+        allocation->unk42A = 0;
+        setCallback(func_800175E0_181E0);
+    }
+}
 
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *state) {
     func_800698BC_6A4BC_return *allocation = (func_800698BC_6A4BC_return *)getCurrentAllocation();
 
     if (allocation->unk420 == 3 && allocation->unk42D == 8) {
-        state->dialogueScript = &D_8008FAC0_906C0;
+        state->dialogueScript = D_8008FAC0_906C0;
         playSoundEffectOnChannelNoPriority(D_8008FD10_90910[D_800AFE8C_A71FC->playerBoardIds[0]], 0);
         allocation->unk403 = D_8008FD1C_9091C[D_800AFE8C_A71FC->playerBoardIds[0]];
     }
