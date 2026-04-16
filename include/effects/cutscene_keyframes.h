@@ -8,7 +8,7 @@
 
 typedef struct {
     s16 frameCount;
-    u8 unk2;
+    u8 playbackState;
     u8 exitRequested;
     s32 unk4;
     ViewportNode sceneNode;

@@ -1,4 +1,6 @@
-D_800AB070_A23E0 = 0x800AB070; // size:0x8
+updateCutscenePlayback = 0x80003898; // rom:0x4498
+gCutsceneSlotIndex = 0x800AB070; // size:0x8
+gCutsceneType = 0x800AFEF0;
 D_800BAD58_AAC08 = 0x800BAD58; // rom:0xAAC08 segment:race
 D_800BC830_B0520 = 0x800BC830; // rom:0xB0520 size:0x14
 gControllerPackFileNote = 0x8009F634; // size:0x1C

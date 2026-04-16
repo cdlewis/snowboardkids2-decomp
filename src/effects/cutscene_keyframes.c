@@ -36,13 +36,13 @@ CutsceneState gCutsceneState = { .slotIndex = 0,
                                  .slotSelection = { .half = { .lower = 0, .upper = 0 } },
                                  .typeSelection = { .half = { .lower = 0, .upper = 2 } } };
 
-extern s16 D_800AB070_A23E0; // gCutsceneSlotIndex
-extern s16 D_800AFEF0_A7260; // gCutsceneType
+extern s16 gCutsceneSlotIndex;
+extern s16 gCutsceneType;
 extern s32 gControllerInputs;
 extern s32 gButtonsPressed;
 
 void awaitCutsceneTransitionComplete(void);
-void func_80003898_4498(void);
+void updateCutscenePlayback(void);
 
 void runCutsceneFrame(void);
 void signalCutsceneComplete(void);
@@ -52,8 +52,8 @@ void initCutsceneRenderer(void);
 void returnToMainGame(void);
 
 void setCutsceneSelection(s16 slotIndex, s16 cutsceneType) {
-    D_800AB070_A23E0 = slotIndex;
-    D_800AFEF0_A7260 = cutsceneType;
+    gCutsceneSlotIndex = slotIndex;
+    gCutsceneType = cutsceneType;
 }
 
 void *__udiv_w_sdiv(void) {
@@ -82,7 +82,7 @@ void initCutsceneRenderer(void) {
         CutsceneTaskMemory *taskMemory;
     } s;
     s.taskMemory = (CutsceneTaskMemory *)allocateTaskMemory(0x17E8);
-    s.taskMemory->unk2 = 0;
+    s.taskMemory->playbackState = 0;
     s.taskMemory->frameCount = 0;
     s.taskMemory->exitRequested = 0;
     setupTaskSchedulerNodes(0x40, 0x30, 4, 4, 4, 0, 0, 0);
@@ -123,9 +123,9 @@ void initCutsceneRenderer(void) {
 void runCutsceneFrame(void) {
     CutsceneTaskMemory *taskMemory = (CutsceneTaskMemory *)getCurrentAllocation();
 
-    if (taskMemory->frameCount >= getCutsceneFrameCount(D_800AB070_A23E0, D_800AFEF0_A7260) ||
+    if (taskMemory->frameCount >= getCutsceneFrameCount(gCutsceneSlotIndex, gCutsceneType) ||
         taskMemory->exitRequested != 0) {
-        if (D_800AB070_A23E0 == 0xB && D_800AFEF0_A7260 == 1) {
+        if (gCutsceneSlotIndex == 0xB && gCutsceneType == 1) {
             setViewportFadeValue(&taskMemory->overlayNode, 0, 0);
             initScreenTransition(&taskMemory->transitionState);
             setGameStateHandler(&awaitCutsceneTransitionComplete);
@@ -142,10 +142,10 @@ void runCutsceneFrame(void) {
         return;
     }
 
-    setCutsceneParameters(D_800AB070_A23E0, D_800AFEF0_A7260, taskMemory->frameCount);
+    setCutsceneParameters(gCutsceneSlotIndex, gCutsceneType, taskMemory->frameCount);
     taskMemory->frameCount++;
     initializeCutsceneSystem(&taskMemory->cutsceneData);
-    setGameStateHandler(&func_80003898_4498);
+    setGameStateHandler(&updateCutscenePlayback);
 }
 
 typedef enum {
@@ -163,13 +163,13 @@ typedef enum {
     CUTSCENE_STATE_EXIT
 } CutsceneStateEnum;
 
-void func_80003898_4498(void) {
+void updateCutscenePlayback(void) {
     CutsceneTaskMemory *state;
     s32 slotIndex, cutsceneType, frameIndex;
 
     state = (CutsceneTaskMemory *)getCurrentAllocation();
 
-    switch (state->unk2) {
+    switch (state->playbackState) {
         case CUTSCENE_STATE_INIT_DMA:
             slotIndex = gCutsceneState.slotIndex;
             cutsceneType = gCutsceneState.cutsceneType;
@@ -177,17 +177,17 @@ void func_80003898_4498(void) {
             state->delayCounter = 4;
             state->frameDataPtr = loadCutsceneFrameData(slotIndex, cutsceneType, frameIndex);
             if (state->frameDataPtr == NULL) {
-                state->unk2 = CUTSCENE_STATE_EXIT;
+                state->playbackState = CUTSCENE_STATE_EXIT;
             } else {
-                state->unk2 = CUTSCENE_STATE_WAIT_DMA;
+                state->playbackState = CUTSCENE_STATE_WAIT_DMA;
             }
             break;
 
         case CUTSCENE_STATE_WAIT_DMA:
             if (verifyAndLoadCutsceneState(state->frameDataPtr) == 0) {
-                state->unk2 = CUTSCENE_STATE_TERMINATE_TASKS;
+                state->playbackState = CUTSCENE_STATE_TERMINATE_TASKS;
             } else {
-                state->unk2 = CUTSCENE_STATE_INIT_MANAGER;
+                state->playbackState = CUTSCENE_STATE_INIT_MANAGER;
             }
             break;
 
@@ -199,20 +199,20 @@ void func_80003898_4498(void) {
                 &state->uiNode
             );
             hideAllSlotModels((CutsceneSlot *)&state->cutsceneData.cutsceneManager);
-            state->unk2 = CUTSCENE_STATE_DELAY;
+            state->playbackState = CUTSCENE_STATE_DELAY;
             break;
 
         case CUTSCENE_STATE_DELAY:
             if (state->delayCounter == 0) {
-                state->unk2 = CUTSCENE_STATE_START_PLAYBACK;
+                state->playbackState = CUTSCENE_STATE_START_PLAYBACK;
             } else {
                 state->delayCounter--;
             }
             break;
 
         case CUTSCENE_STATE_START_PLAYBACK:
-            if (D_800AFEF0_A7260 == 0 && state->frameCount == 1) {
-                startCutsceneFadeEffect(1, (s8)D_800AB070_A23E0, getCutsceneConfigByte() & 0xFF);
+            if (gCutsceneType == 0 && state->frameCount == 1) {
+                startCutsceneFadeEffect(1, (s8)gCutsceneSlotIndex, getCutsceneConfigByte() & 0xFF);
             }
             scheduleTransparentModelRender(
                 &state->cutsceneData.cutsceneManager,
@@ -232,21 +232,21 @@ void func_80003898_4498(void) {
                 0,
                 0
             );
-            state->unk2 = CUTSCENE_STATE_PLAYING;
+            state->playbackState = CUTSCENE_STATE_PLAYING;
             /* fallthrough */
 
         case CUTSCENE_STATE_PLAYING:
             if (processCutsceneFrame(&state->cutsceneData.cutsceneManager) == 0) {
-                state->unk2 = CUTSCENE_STATE_TERMINATE_TASKS;
+                state->playbackState = CUTSCENE_STATE_TERMINATE_TASKS;
             }
             if (gControllerInputs & START_BUTTON) {
-                state->unk2 = CUTSCENE_STATE_SKIP_START;
+                state->playbackState = CUTSCENE_STATE_SKIP_START;
             }
             break;
 
         case CUTSCENE_STATE_SKIP_START:
             if (processCutsceneFrame(&state->cutsceneData.cutsceneManager) == 0) {
-                state->unk2 = CUTSCENE_STATE_TERMINATE_TASKS;
+                state->playbackState = CUTSCENE_STATE_TERMINATE_TASKS;
             }
             state->fadeCounter = 0x10;
             setMusicFadeOut(0x10);
@@ -258,15 +258,15 @@ void func_80003898_4498(void) {
             setViewportEnvColor(&state->uiNode, 0, 0, 0);
             setViewportFadeValue(&state->uiNode, 0xFF, 0x10);
             state->exitRequested = 1;
-            state->unk2 = CUTSCENE_STATE_SKIP_FADE;
+            state->playbackState = CUTSCENE_STATE_SKIP_FADE;
             break;
 
         case CUTSCENE_STATE_SKIP_FADE:
             if (processCutsceneFrame(&state->cutsceneData.cutsceneManager) == 0) {
-                state->unk2 = CUTSCENE_STATE_TERMINATE_TASKS;
+                state->playbackState = CUTSCENE_STATE_TERMINATE_TASKS;
             }
             if (state->fadeCounter == 0) {
-                state->unk2 = CUTSCENE_STATE_TERMINATE_TASKS;
+                state->playbackState = CUTSCENE_STATE_TERMINATE_TASKS;
             }
             state->fadeCounter--;
             break;
@@ -276,16 +276,16 @@ void func_80003898_4498(void) {
             terminateTasksByType(2);
             terminateTasksByType(3);
             terminateTasksByType(1);
-            state->unk2 = CUTSCENE_STATE_WAIT_TERMINATE;
+            state->playbackState = CUTSCENE_STATE_WAIT_TERMINATE;
             break;
 
         case CUTSCENE_STATE_WAIT_TERMINATE:
-            state->unk2 = CUTSCENE_STATE_CLEANUP;
+            state->playbackState = CUTSCENE_STATE_CLEANUP;
             break;
 
         case CUTSCENE_STATE_CLEANUP:
             cleanupCutsceneManager(&state->cutsceneData.cutsceneManager);
-            state->unk2 = CUTSCENE_STATE_EXIT;
+            state->playbackState = CUTSCENE_STATE_EXIT;
             break;
 
         default:
@@ -294,7 +294,7 @@ void func_80003898_4498(void) {
             setModelCameraTransform(&state->sceneNode, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
             setModelCameraTransform(&state->overlayNode, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
             setModelCameraTransform(&state->uiNode, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-            state->unk2 = CUTSCENE_STATE_INIT_DMA;
+            state->playbackState = CUTSCENE_STATE_INIT_DMA;
             stopAllSoundEffectsAndClearQueues(2);
             cleanupCutsceneSystem();
             setGameStateHandler(runCutsceneFrame);
