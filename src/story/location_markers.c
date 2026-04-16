@@ -97,27 +97,27 @@ typedef struct {
     /* 0x011 */ u8 padding1[0x62];
     /* 0x073 */ u8 unk73;
     /* 0x074 */ u8 padding2[0x33C];
-    /* 0x3B0 */ Transform3D unk3B0;
+    /* 0x3B0 */ Transform3D characterTransform;
     /* 0x3D0 */ u8 padding2b[0x30];
-    /* 0x400 */ u8 unk400;
-    /* 0x401 */ u8 unk401;
-    /* 0x402 */ u8 unk402;
-    /* 0x403 */ u8 unk403;
+    /* 0x400 */ u8 animState;
+    /* 0x401 */ u8 updateFlag;
+    /* 0x402 */ u8 pauseTimer;
+    /* 0x403 */ u8 dialogueResult;
     /* 0x404 */ u8 padding3[0x4];
     /* 0x408 */ s32 npcPosX[2];
     /* 0x410 */ s32 npcPosZ[2];
     /* 0x418 */ u8 padding5[0x4];
     /* 0x41C */ s32 numEntries;
-    /* 0x420 */ u8 unk420;
+    /* 0x420 */ u8 activeNpcIndex;
     /* 0x421 */ u8 unk421;
-    /* 0x422 */ u8 unk422;
+    /* 0x422 */ u8 cancelDialogue;
     /* 0x423 */ u8 padding6[0x1];
     /* 0x424 */ u8 locationDiscovered;
     /* 0x425 */ u8 discoveredLocationId;
     /* 0x426 */ u8 padding7[0x4];
-    /* 0x42A */ u8 unk42A;
+    /* 0x42A */ u8 dialogueTurnState;
     /* 0x42B */ u8 padding8[0x1];
-    /* 0x42C */ u8 unk42C;
+    /* 0x42C */ u8 dialogueLineIndex;
     /* 0x42D */ u8 unk42D;
 } StoryMapAllocation;
 
@@ -126,9 +126,9 @@ typedef struct {
     s16 unk3F4;
     s32 unk3F8;
     u8 padding2[7];
-    u8 unk403;
+    u8 dialogueResult;
     u8 padding3[28];
-    u8 unk420;
+    u8 activeNpcIndex;
     u8 padding5[3];
     u8 locationDiscovered;
     u8 discoveredLocationId;
@@ -152,7 +152,7 @@ void cleanupTownExitMarker(void *);
 void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *);
 
 void func_80036AF8_376F8(void);
-void func_80036D54_37954(void *arg0);
+void updateStoryMapDialogueTurn(void *arg0);
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *);
 void func_800175E0_181E0(void);
 
@@ -528,12 +528,12 @@ s32 checkStoryMapLocationSelection(StoryMapPlayerState *player) {
         return 0;
     }
 
-    if (allocation->unk422 == 1) {
+    if (allocation->cancelDialogue == 1) {
         return 0;
     }
 
     data.maxDistance = 0x01000000;
-    if (allocation->unk42A == 0) {
+    if (allocation->dialogueTurnState == 0) {
         for (i = 0; i < allocation->numEntries; i++) {
             deltaX = allocation->npcPosX[i] - player->positionX;
             deltaZ = allocation->npcPosZ[i] - player->positionZ;
@@ -542,13 +542,13 @@ s32 checkStoryMapLocationSelection(StoryMapPlayerState *player) {
 
             if (deltaX <= 0x37FFFF) {
                 if (gControllerInputs & A_BUTTON) {
-                    allocation->unk42A = 0x11;
+                    allocation->dialogueTurnState = 0x11;
                 }
             }
         }
     }
 
-    if (allocation->unk42A != 0x11) {
+    if (allocation->dialogueTurnState != 0x11) {
         return 0;
     }
 
@@ -559,7 +559,7 @@ s32 checkStoryMapLocationSelection(StoryMapPlayerState *player) {
     return 2;
 }
 
-void func_80036D54_37954(void *arg0) {
+void updateStoryMapDialogueTurn(void *arg0) {
     Transform3D tempMatrix;
     StoryMapDialogueState *state = arg0;
     StoryMapAllocation *allocation;
@@ -574,8 +574,8 @@ void func_80036D54_37954(void *arg0) {
     s32 temp;
 
     allocation = (StoryMapAllocation *)getCurrentAllocation();
-    switchState = allocation->unk42A >> 4;
-    allocation->unk42A = allocation->unk42A & 0xF;
+    switchState = allocation->dialogueTurnState >> 4;
+    allocation->dialogueTurnState = allocation->dialogueTurnState & 0xF;
 
     switch (switchState) {
         case 1:
@@ -600,8 +600,8 @@ void func_80036D54_37954(void *arg0) {
             absDiff = ABS(angleDiff);
             if (absDiff >= 0xAAB) {
                 temp = state->yawAngle + state->pitchAngle + 0x1000;
-                allocation->unk400 = 1;
-                allocation->unk401 = 0;
+                allocation->animState = 1;
+                allocation->updateFlag = 0;
                 angleDiff = signedAngleDifference(temp & 0x1FFF, targetAngle);
                 if (angleDiff < 0) {
                     state->turnDirection = 1;
@@ -611,11 +611,11 @@ void func_80036D54_37954(void *arg0) {
                 state->yawAngle = (state->yawAngle + 0x1000) & 0x1FFF;
             } else {
                 if (absDiff < 0x2AA) {
-                    allocation->unk400 = 0;
+                    allocation->animState = 0;
                 } else {
-                    allocation->unk400 = 2;
+                    allocation->animState = 2;
                 }
-                allocation->unk401 = 1;
+                allocation->updateFlag = 1;
             }
             state->targetYaw = (state->yawAngle + angleDiff) & 0x1FFF;
             createYRotationMatrix(&state->localMatrix, state->yawAngle & 0x1FFF);
@@ -623,14 +623,14 @@ void func_80036D54_37954(void *arg0) {
             switchState = 2;
 
             func_8006B084_6BC84(&state->localMatrix, &state->worldMatrix, &tempMatrix);
-            memcpy(&allocation->unk3B0, &tempMatrix, sizeof(Transform3D));
+            memcpy(&allocation->characterTransform, &tempMatrix, sizeof(Transform3D));
             break;
 
         case 2:
             angleDiff = signedAngleDifference((s16)state->yawAngle, state->targetYaw);
             absDiff = ABS(angleDiff);
             if (absDiff < 0x80) {
-                allocation->unk400 = 0;
+                allocation->animState = 0;
                 switchState = 3;
                 angleDiff = absDiff;
             } else {
@@ -640,8 +640,8 @@ void func_80036D54_37954(void *arg0) {
                 s32 tmp = angleDiff;
                 angleDiff = -tmp;
             }
-            if (allocation->unk400 == 1 && allocation->unk401 != 0) {
-                allocation->unk400 = 0;
+            if (allocation->animState == 1 && allocation->updateFlag != 0) {
+                allocation->animState = 0;
             }
 
             state->yawAngle += angleDiff;
@@ -649,51 +649,52 @@ void func_80036D54_37954(void *arg0) {
             createYRotationMatrix(&state->localMatrix, state->yawAngle & 0x1FFF);
             createYRotationMatrix(&state->worldMatrix, state->pitchAngle);
             func_8006B084_6BC84(&state->localMatrix, &state->worldMatrix, &tempMatrix);
-            memcpy(&allocation->unk3B0, &tempMatrix, sizeof(Transform3D));
+            memcpy(&allocation->characterTransform, &tempMatrix, sizeof(Transform3D));
             break;
 
         case 3:
-            if (allocation->unk42A == 5) {
+            if (allocation->dialogueTurnState == 5) {
                 if (allocation->numEntries == 1) {
-                    state->dialogueScript = D_8008FACC_906CC[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->unk420];
-                    soundId = D_8008F9F0_905F0[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->unk420];
+                    state->dialogueScript =
+                        D_8008FACC_906CC[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->activeNpcIndex];
+                    soundId = D_8008F9F0_905F0[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->activeNpcIndex];
                 } else {
-                    state->dialogueScript = D_8008FC54_90854[allocation->unk42C];
-                    soundId = D_8008FC74_90874[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->unk42C];
+                    state->dialogueScript = D_8008FC54_90854[allocation->dialogueLineIndex];
+                    soundId = D_8008FC74_90874[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->dialogueLineIndex];
                 }
 
                 playSoundEffectOnChannelNoPriority(soundId, 0);
                 setupStoryMapCharacterDialogue(state);
 
-                allocation->unk400 = *state->dialogueScript;
+                allocation->animState = *state->dialogueScript;
                 state->dialogueScript++;
-                allocation->unk401 = 0;
+                allocation->updateFlag = 0;
 
-                if (allocation->unk400 || allocation->numEntries != 2) {
+                if (allocation->animState || allocation->numEntries != 2) {
                     switchState = 4;
                 } else {
                     switchState = 6;
-                    allocation->unk402 = 0;
+                    allocation->pauseTimer = 0;
                 }
-            } else if (allocation->unk400 == 1 && allocation->unk401) {
-                allocation->unk400 = 0;
+            } else if (allocation->animState == 1 && allocation->updateFlag) {
+                allocation->animState = 0;
             }
             break;
 
         case 4:
-            if (allocation->unk401 != 0) {
-                allocation->unk401 = 0;
+            if (allocation->updateFlag != 0) {
+                allocation->updateFlag = 0;
                 if (*state->dialogueScript == 0xFFFF) {
                     switchState = 5;
-                    if (allocation->unk400 == 0) {
+                    if (allocation->animState == 0) {
                         switchState = 6;
-                        allocation->unk402 = 0;
+                        allocation->pauseTimer = 0;
                     } else {
-                        allocation->unk401 = 0;
-                        allocation->unk400 = 0;
+                        allocation->updateFlag = 0;
+                        allocation->animState = 0;
                     }
                 } else {
-                    allocation->unk400 = *state->dialogueScript;
+                    allocation->animState = *state->dialogueScript;
                     state->dialogueScript += 1;
                 }
             }
@@ -701,22 +702,22 @@ void func_80036D54_37954(void *arg0) {
 
         case 5:
             switchState = 0;
-            allocation->unk403 = 0xFF;
+            allocation->dialogueResult = 0xFF;
             setCallback(func_800175E0_181E0);
             break;
 
         case 6:
-            allocation->unk402++;
-            if (allocation->unk402 == 0x14) {
-                allocation->unk402 = 0;
+            allocation->pauseTimer++;
+            if (allocation->pauseTimer == 0x14) {
+                allocation->pauseTimer = 0;
                 switchState = 5;
             }
             break;
     }
 
-    allocation->unk42A |= switchState << 4;
-    if (allocation->unk422 == 1) {
-        allocation->unk42A = 0;
+    allocation->dialogueTurnState |= switchState << 4;
+    if (allocation->cancelDialogue == 1) {
+        allocation->dialogueTurnState = 0;
         setCallback(func_800175E0_181E0);
     }
 }
@@ -724,9 +725,9 @@ void func_80036D54_37954(void *arg0) {
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *state) {
     func_800698BC_6A4BC_return *allocation = (func_800698BC_6A4BC_return *)getCurrentAllocation();
 
-    if (allocation->unk420 == 3 && allocation->unk42D == 8) {
+    if (allocation->activeNpcIndex == 3 && allocation->unk42D == 8) {
         state->dialogueScript = D_8008FAC0_906C0;
         playSoundEffectOnChannelNoPriority(D_8008FD10_90910[D_800AFE8C_A71FC->playerBoardIds[0]], 0);
-        allocation->unk403 = D_8008FD1C_9091C[D_800AFE8C_A71FC->playerBoardIds[0]];
+        allocation->dialogueResult = D_8008FD1C_9091C[D_800AFE8C_A71FC->playerBoardIds[0]];
     }
 }

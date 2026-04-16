@@ -58,7 +58,7 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
     u8 mode;
 
     state = getCurrentAllocation();
-    state->unk400 = 4;
+    state->animState = 4;
 
     if (storyMapLocationIndex != 0) {
         state->discoveredLocationId = storyMapLocationIndex - 1;
@@ -82,7 +82,7 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
 
         camera->targetAngle = 0;
         camera->viewAngle = 0;
-        state->unk400 = 0;
+        state->animState = 0;
     } else {
         mode = getStoryMapCameraMode();
         if (mode == 1) {

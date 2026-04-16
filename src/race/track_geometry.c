@@ -153,7 +153,7 @@ void updateStoryMapRareEventWave(RareEventIdleState *arg0) {
         allocation->npcPosZ[i] = ptr->unk4.translation.z;
     }
 
-    if (allocation->unk42A == 0x11) {
+    if (allocation->dialogueTurnState == 0x11) {
         prepareStoryMapNpcDialogue(arg0);
         arg0->callback = updateStoryMapRareEventWave;
         setCallback(updateStoryMapNpcDialogue);
@@ -291,7 +291,7 @@ void updateStoryMapRareEventIdle(RareEventIdleState *arg0) {
         }
     }
 
-    if (allocation->unk42A == 0x11) {
+    if (allocation->dialogueTurnState == 0x11) {
         prepareStoryMapNpcDialogue(arg0);
         arg0->callback = updateStoryMapRareEventIdle;
         allocation->unk42E = 1;
@@ -456,7 +456,7 @@ void updateStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
         allocation->npcPosZ[i] = ptr[i].matrix.translation.z;
     }
 
-    if (allocation->unk42A == 0x11) {
+    if (allocation->dialogueTurnState == 0x11) {
         if (arg0->unkD2 == 4) {
             allocation->unk42E = 2;
         } else {
@@ -586,7 +586,7 @@ void updateStoryMapRareEventJuggling(Func2E024Arg *arg0) {
         gameState->npcPosZ[i] = elements[i].matrix.translation.z;
     }
 
-    if (gameState->unk42A == 0x11) {
+    if (gameState->dialogueTurnState == 0x11) {
         gameState->unk42E = 1;
         arg0->unkCC[0] = 1;
         arg0->unkCC[1] = 1;
@@ -919,7 +919,7 @@ void updateStoryMapRareEventSnowman(Func2E024Arg *arg0) {
         gameState->npcPosZ[i] = elements[i].matrix.translation.z;
     }
 
-    if (gameState->unk42A == 0x11) {
+    if (gameState->dialogueTurnState == 0x11) {
         prepareStoryMapNpcDialogue(arg0);
         arg0->callback = updateStoryMapRareEventSnowman;
         setCallback(updateStoryMapNpcDialogue);
@@ -1116,7 +1116,7 @@ void updateStoryMapRareEventCheering(Func2E024Arg *arg0) {
         }
     }
     do {
-        if (allocation->unk42A == 0x11) {
+        if (allocation->dialogueTurnState == 0x11) {
             prepareStoryMapNpcDialogue(arg0);
             allocation->unk42E = 1;
             arg0->unkCC[0] = (randB() & 0x1F) + 0x28;

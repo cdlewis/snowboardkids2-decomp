@@ -683,7 +683,7 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
     }
 
     if ((u8)turnComplete != 0) {
-        alloc->unk42A = 0;
+        alloc->dialogueTurnState = 0;
         npc->rotation = npc->unk2E;
         npc->unk50 = npc->unk56;
         npc->unk5E = npc->unk5F;

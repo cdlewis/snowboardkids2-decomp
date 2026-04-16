@@ -37,7 +37,7 @@ typedef struct {
     s16 unk418;
     u8 pad41A[7];
     u8 unk421;
-    u8 unk422;
+    u8 cancelDialogue;
     u8 pad423[0x6];
     u8 unk429;
     u8 pad42A[0x3];
@@ -422,7 +422,7 @@ void initStoryMapItemMovement(StoryMapItemTask *arg0) {
 
     alloc->npcPosX[0] = arg0->matrix.translation.x;
     posZ = arg0->matrix.translation.z;
-    alloc->unk422 = 0;
+    alloc->cancelDialogue = 0;
     alloc->npcPosZ[0] = posZ;
 
     setCallback((void *)gStoryMapItemUpdateCallbacks[arg0->itemType]);
@@ -431,7 +431,7 @@ void initStoryMapItemMovement(StoryMapItemTask *arg0) {
 void collectStoryMapItem(StoryMapItem *arg0) {
     AllocationData29200 *alloc = getCurrentAllocation();
 
-    alloc->unk422 = 1;
+    alloc->cancelDialogue = 1;
     alloc->unk42E = 1;
     arg0->model = destroySceneModel(arg0->model);
     arg0->respawnTimer = (randB() & 0x1F) + 0xF;

@@ -391,7 +391,7 @@ void updateStoryMapNpcDialogue(StoryMapDialogueState *dialogue) {
             break;
     }
 
-    if (gameState->unk42A == 0) {
+    if (gameState->dialogueTurnState == 0) {
         setCallback(dialogue->returnCallback);
     }
 }
@@ -472,7 +472,7 @@ void updateStoryMapNpcTurnToTarget(StoryMapDialogueState *state) {
     }
 
     if (((u8)completedCount) == gameState->unk41C) {
-        gameState->unk42A = 0;
+        gameState->dialogueTurnState = 0;
         for (i = 0; i < gameState->unk41C; i++) {
             npcs[i].rotation = npcs[i].unk2E;
             npcs[i].unk50 = npcs[i].unk56;

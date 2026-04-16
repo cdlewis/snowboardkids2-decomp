@@ -34,7 +34,7 @@ typedef struct {
     /* 0x40C */ u8 pad40C[0x4];
     /* 0x410 */ s32 unk410;
     /* 0x414 */ u8 pad414[0x16];
-    /* 0x42A */ u8 unk42A;
+    /* 0x42A */ u8 dialogueTurnState;
     /* 0x42B */ u8 pad42B[0x3];
     /* 0x42E */ u8 unk42E;
 } AllocationData;
@@ -108,7 +108,7 @@ void updateStoryMapNpcJump(Func297D8Arg *arg0) {
     allocation->unk408 = arg0->matrix.translation.x;
     allocation->unk410 = arg0->matrix.translation.z;
 
-    if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
+    if ((allocation->dialogueTurnState == 0x11) && (shouldSetCallback ^ 1)) {
         savedUnk50 = arg0->unk50;
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
@@ -187,7 +187,7 @@ void updateStoryMapNpcWave(Func297D8Arg *arg0) {
     allocation->unk408 = arg0->matrix.translation.x;
     allocation->unk410 = arg0->matrix.translation.z;
 
-    if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
+    if ((allocation->dialogueTurnState == 0x11) && (shouldSetCallback ^ 1)) {
         savedUnk50 = arg0->unk50;
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
@@ -248,7 +248,7 @@ void updateStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
     allocation->unk408 = arg0->matrix.translation.x;
     allocation->unk410 = arg0->matrix.translation.z;
 
-    if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
+    if ((allocation->dialogueTurnState == 0x11) && (shouldSetCallback ^ 1)) {
         savedUnk50 = arg0->unk50;
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
@@ -305,7 +305,7 @@ void updateStoryMapNpcLookAround(Func297D8Arg *arg0) {
     alloc->unk408 = arg0->matrix.translation.x;
     alloc->unk410 = arg0->matrix.translation.z;
 
-    if ((alloc->unk42A == 0x11) && (setCallbackFlag ^ 1)) {
+    if ((alloc->dialogueTurnState == 0x11) && (setCallbackFlag ^ 1)) {
         u16 savedUnk50 = arg0->unk50;
         u8 savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
@@ -396,7 +396,7 @@ void updateStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
     allocation->unk408 = arg0->matrix.translation.x;
     allocation->unk410 = arg0->matrix.translation.z;
 
-    if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
+    if ((allocation->dialogueTurnState == 0x11) && (shouldSetCallback ^ 1)) {
         allocation->unk42E = 1;
         savedUnk50 = arg0->unk50;
         savedUnk5E = arg0->unk5E;
@@ -537,7 +537,7 @@ void updateStoryMapNpcIdle(Func297D8Arg *arg0) {
         }
     }
 
-    if ((alloc->unk42A == 0x11) && (setCallbackFlag ^ 1)) {
+    if ((alloc->dialogueTurnState == 0x11) && (setCallbackFlag ^ 1)) {
         u16 savedUnk50 = arg0->unk50;
         u8 savedUnk5E = arg0->unk5E;
 
@@ -613,7 +613,7 @@ void updateStoryMapNpcNod(Func297D8Arg *arg0) {
     alloc->unk408 = arg0->matrix.translation.x;
     alloc->unk410 = arg0->matrix.translation.z;
 
-    if ((alloc->unk42A == 0x11) && (setCallbackFlag ^ 1)) {
+    if ((alloc->dialogueTurnState == 0x11) && (setCallbackFlag ^ 1)) {
         u16 savedUnk50 = arg0->unk50;
         u8 savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
@@ -754,7 +754,7 @@ void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
     allocation->unk408 = arg0->matrix.translation.x;
     allocation->unk410 = arg0->matrix.translation.z;
 
-    if ((allocation->unk42A == 0x11) && (shouldSetCallback ^ 1)) {
+    if ((allocation->dialogueTurnState == 0x11) && (shouldSetCallback ^ 1)) {
         savedUnk50 = arg0->unk50;
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
@@ -830,7 +830,7 @@ void updateStoryMapNpcStill(StoryMapNpcStillArg *arg0) {
     alloc->unk408 = arg0->matrix.translation.x;
     alloc->unk410 = arg0->matrix.translation.z;
 
-    if (alloc->unk42A == 0x11) {
+    if (alloc->dialogueTurnState == 0x11) {
         savedUnk50 = arg0->unk50;
         savedState = arg0->state;
         arg0->state = 0x14;
@@ -861,7 +861,7 @@ void updateStoryMapNpcTalking(Func297D8Arg *arg0) {
 
     updateStoryMapNpcModel(arg0);
 
-    if (alloc->unk42A == 0) {
+    if (alloc->dialogueTurnState == 0) {
         setCallback(arg0->callback);
     }
 }

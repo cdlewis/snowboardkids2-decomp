@@ -3647,6 +3647,7 @@ cleanupTownExitMarker = 0x80036A10; // rom:0x37610
 initTownExitTrigger = 0x80036A3C; // rom:0x3763C
 checkTownExitTrigger = 0x80036A68; // rom:0x37668
 checkStoryMapLocationSelection = 0x80036C20; // rom:0x37820
+updateStoryMapDialogueTurn = 0x80036D54; // rom:0x37954
 setupStoryMapCharacterDialogue = 0x800371CC; // rom:0x37DCC
 isSaveSlotUnlocked = 0x80037FE0; // rom:0x38BE0
 isBoardUnlocked = 0x80038000; // rom:0x38C00
