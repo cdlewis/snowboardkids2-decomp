@@ -64,7 +64,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ s8 pathChoice;
-    /* 0x01 */ u8 unk01;
+    /* 0x01 */ u8 lateralFactor;
     /* 0x02 */ u8 factor;
     /* 0x03 */ s8 pathPreference;
 } AIPathPreference;
@@ -88,7 +88,7 @@ typedef struct {
 extern u8 gShortcutChanceByMemoryPool[];
 
 // Function declarations (for functions defined via INCLUDE_ASM below)
-void func_800BA4B8_AA368(Player *, CourseData *, s16, Vec3i *);
+void computeAIWaypointLateralPosition(Player *, CourseData *, s16, Vec3i *);
 void computeAIWaypointPosition(Player *, CourseData *, s16, Vec3i *);
 
 void calculateAITargetPosition(Player *player) {
@@ -115,7 +115,7 @@ void calculateAITargetPosition(Player *player) {
         player->aiTarget.z = levelConfig->shortcutPosZ;
         return;
     }
-    func_800BA4B8_AA368(player, courseData, (s16)currentSectorIndex, &currentWaypointPos);
+    computeAIWaypointLateralPosition(player, courseData, (s16)currentSectorIndex, &currentWaypointPos);
     computeAIWaypointPosition(player, courseData, (s16)currentSectorIndex, &nextWaypointPos);
     projectedPlayerPos.x = player->worldPos.x - currentWaypointPos.x;
     projectedPlayerPos.z = player->worldPos.z - currentWaypointPos.z;
@@ -159,7 +159,7 @@ void calculateAITargetPosition(Player *player) {
 
     finalWaypointPos.x += projectedPlayerPos.x;
     finalWaypointPos.z += projectedPlayerPos.z;
-    func_800BA4B8_AA368(player, courseData, (s16)currentSectorIndex, &currentWaypointPos);
+    computeAIWaypointLateralPosition(player, courseData, (s16)currentSectorIndex, &currentWaypointPos);
     finalWaypointPos.x -= currentWaypointPos.x;
     finalWaypointPos.z -= currentWaypointPos.z;
     pathAngle =
@@ -342,14 +342,14 @@ void computeAIWaypointPosition(Player *player, CourseData *courseData, s16 secto
     }
 }
 
-void func_800BA4B8_AA368(Player *player, CourseData *courseData, s16 sectorIdx, Vec3i *result) {
+void computeAIWaypointLateralPosition(Player *player, CourseData *courseData, s16 sectorIdx, Vec3i *result) {
     AIPathPreference *pathData;
     s8 factor;
     s32 factorRaw = 0;
 
     pathData = (AIPathPreference *)player->aiPathData;
     if (pathData != NULL) {
-        factorRaw = pathData[sectorIdx].unk01;
+        factorRaw = pathData[sectorIdx].lateralFactor;
     } else {
         if (player->playerIndex == 1) {
             factorRaw = 3;

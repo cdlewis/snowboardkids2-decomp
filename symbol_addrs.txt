@@ -256,6 +256,7 @@ initCutsceneWaitSystem = 0x800B993C; // rom:0x1E69EC
 updateCutsceneWaitSystem = 0x800B99A0; // rom:0x1E6A50
 calculateAITargetPosition = 0x800B9B90; // rom:0xA9A40
 computeAIWaypointPosition = 0x800B9EF0; // rom:0xA9DA0
+computeAIWaypointLateralPosition = 0x800BA4B8; // rom:0xAA368
 cleanupCutsceneWaitSystem = 0x800B9C20; // rom:0x1E6CD0
 determineAIPathChoice = 0x800BA694; // rom:0xAA544
 gWipeOffset = 0x800BADF0; // rom:0x1E7EA0 type:s16 size:0x10
