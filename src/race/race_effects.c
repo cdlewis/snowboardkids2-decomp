@@ -366,10 +366,10 @@ const char sGoldFormatShort[] = "\x01%5d";
 const char sGoldFormatLong[] = "\x02%5d";
 
 static const char D_8009E880_9F480[] = "%5d";
-extern char D_8009E89C_9F49C[];
-extern char D_8009E8A0_9F4A0[];
-extern char D_8009E8A8_9F4A8[];
-extern char D_8009E928_9F528[];
+const char D_8009E89C_9F49C[];
+const char D_8009E8A0_9F4A0[];
+const char D_8009E8A8_9F4A8[];
+const char D_8009E928_9F528[];
 
 extern s32 gFirstPlaceGoldReward[];
 extern s32 gSecondPlaceGoldReward[];
@@ -1026,9 +1026,7 @@ void showPlacementAnnouncement(u32 playerIndex, s32 placement) {
     }
 }
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E884_9F484);
-
-extern char D_8009E884_9F484[];
+const char D_8009E884_9F484[] = "\x04%4dG";
 
 static const char D_8009E88C_9F48C[] = "%4dG";
 
@@ -1230,7 +1228,7 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
     setCallback(updateGoldAwardDisplay);
 }
 
-extern char D_8009E894_9F494[];
+const char D_8009E894_9F494[];
 
 typedef struct TotalGoldDisplayState TotalGoldDisplayState;
 extern void initTotalGoldDisplayTask(TotalGoldDisplayState *);
@@ -2169,10 +2167,10 @@ void cleanupBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
 void updateRaceTimerDisplay(RaceTimerState *arg0);
 void cleanupRaceTimerDisplay(ShotCrossCountdownTimerState *arg0);
 
-extern char D_8009E8D4_9F4D4[];
-extern char D_8009E8E0_9F4E0[];
-extern char D_8009E8EC_9F4EC[];
-extern char D_8009E8F8_9F4F8[];
+const char D_8009E8D4_9F4D4[];
+const char D_8009E8E0_9F4E0[];
+const char D_8009E8EC_9F4EC[];
+const char D_8009E8F8_9F4F8[];
 
 void initRaceTimerDisplay(RaceTimerState *arg0) {
     arg0->elapsedTicks = 0x4293C;
@@ -2292,8 +2290,8 @@ void cleanupSecondaryItemDisplayTask(SecondaryItemDisplayState *state) {
 void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *);
 void cleanupSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *);
 
-extern char D_8009E904_9F504[];
-extern char D_8009E914_9F514[];
+const char D_8009E904_9F504[];
+const char D_8009E914_9F514[];
 
 typedef struct {
     u8 pad[0x54];
@@ -2319,7 +2317,7 @@ void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     s32 seconds;
     s32 frames;
     s16 blinkCounter;
-    char *timeFormat;
+    const char *timeFormat;
 
     allocation = (SkillGameTimerAllocation *)getCurrentAllocation();
     time = allocation->elapsedTicks;
@@ -2350,7 +2348,7 @@ void cleanupSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-extern char sTrickPointsFormat[];
+const char sTrickPointsFormat[];
 
 typedef struct {
     s16 padding;       // 0x0 - unused
@@ -2580,33 +2578,33 @@ void cleanupCrossRaceBadgeTask(void *arg0) {
     state->mainSpriteAsset = freeNodeMemory(state->mainSpriteAsset);
 }
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E894_9F494);
+const char D_8009E894_9F494[] = "\x02%dG";
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E89C_9F49C);
+const char D_8009E89C_9F49C[] = "%2d";
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E8A0_9F4A0);
+const char D_8009E8A0_9F4A0[] = "\x02%2d";
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E8A8_9F4A8);
+const char D_8009E8A8_9F4A8[] = "%d";
 
 const char sTimerFormatLow[] = "\x01%2.2d'%2.2d\"%2.2d";
 
 const char sTimerFormatNormal[] = "\x03%2.2d'%2.2d\"%2.2d";
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E8D4_9F4D4);
+const char D_8009E8D4_9F4D4[] = "\x01%d:%2.2d";
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E8E0_9F4E0);
+const char D_8009E8E0_9F4E0[] = "\x01%d %2.2d";
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E8EC_9F4EC);
+const char D_8009E8EC_9F4EC[] = "\x03%d:%2.2d";
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E8F8_9F4F8);
+const char D_8009E8F8_9F4F8[] = "\x03%d %2.2d";
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E904_9F504);
+const char D_8009E904_9F504[] = "\x03%d:%2.2d %2.2d";
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E914_9F514);
+const char D_8009E914_9F514[] = "\x03%d %2.2d %2.2d";
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", sTrickPointsFormat);
+const char sTrickPointsFormat[] = "\x04%d";
 
-INCLUDE_RODATA("asm/nonmatchings/race/race_effects", D_8009E928_9F528);
+const char D_8009E928_9F528[] = "\x02%d";
 
 void initRaceHudTasks(void) {
     RaceHudInitState *hudState;
