@@ -246,8 +246,36 @@ void func_800B9EF0_A9DA0(Player *player, CourseData *courseData, s16 sectorIdx, 
     }
 }
 
-// 93.11% https://decomp.me/scratch/Wolax
-INCLUDE_ASM("asm/nonmatchings/race/ai_pathfinding", func_800BA4B8_AA368);
+void func_800BA4B8_AA368(Player *player, CourseData *courseData, s16 sectorIdx, Vec3i *result) {
+    AIPathPreference *pathData;
+    s8 factor;
+    s32 factorRaw = 0;
+
+    pathData = (AIPathPreference *)player->aiPathData;
+    if (pathData != NULL) {
+        factorRaw = pathData[sectorIdx].unk01;
+    } else {
+        if (player->playerIndex == 1) {
+            factorRaw = 3;
+        }
+        if (player->playerIndex == 2) {
+            factorRaw = -10;
+        }
+        if (player->playerIndex == 3) {
+            factorRaw = 10;
+        }
+    }
+
+    if ((s8)factorRaw >= 0) {
+        factor = (s8)factorRaw;
+        LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk1E, unk1C, factor);
+        LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk1E, unk1C, factor);
+    } else {
+        factor = (s8)(-factorRaw);
+        LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk1A, unk1C, factor);
+        LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk1A, unk1C, factor);
+    }
+}
 
 s8 determineAIPathChoice(Player *player) {
     GameState *gs;
