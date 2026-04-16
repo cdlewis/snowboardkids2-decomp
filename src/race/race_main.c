@@ -1220,7 +1220,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
     if (player->inputDisabled != 0) {
         calculateAITargetPosition(player);
         angleDelta =
-            computeAngleToPosition(player->aiTarget.x, player->aiTarget.z, player->worldPos.x, player->worldPos.z);
+            (s16)computeAngleToPosition(player->aiTarget.x, player->aiTarget.z, player->worldPos.x, player->worldPos.z);
         currentAngle = player->rotY;
         angleDelta = (angleDelta - currentAngle) & 0x1FFF;
         if (angleDelta >= 0x1001) {
@@ -1724,12 +1724,13 @@ s32 updatePostTrickDescentStep(Player *player) {
 
 void updateTrickFacingAngle(Player *player) {
     s32 playerFlags;
+    s32 new_var;
     u16 currentAngle;
     s16 angleDelta;
-
     playerFlags = player->animFlags;
     if (!(playerFlags & 0x1000)) {
-        if (player->inputDisabled != 0) {
+        angleDelta = player->inputDisabled;
+        if (angleDelta != 0) {
             calculateAITargetPosition(player);
             angleDelta =
                 computeAngleToPosition(player->aiTarget.x, player->aiTarget.z, player->worldPos.x, player->worldPos.z);
@@ -1741,12 +1742,13 @@ void updateTrickFacingAngle(Player *player) {
             if (angleDelta >= 0x41) {
                 angleDelta = 0x40;
             }
-            if (angleDelta < -0x40) {
+            new_var = angleDelta;
+            if (new_var < (-0x40)) {
                 angleDelta = -0x40;
             }
             player->rotY = currentAngle + angleDelta;
         } else {
-            player->rotY = (u16)player->rotY - (player->inputStickX * 4);
+            player->rotY = ((u16)player->rotY) - (player->inputStickX * 4);
         }
         processPlayerItemUsage(player);
         return;

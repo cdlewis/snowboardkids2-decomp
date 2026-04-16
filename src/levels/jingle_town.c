@@ -176,9 +176,9 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
     s16 angleDiff;
     s16 newRotation;
     u16 newUnk56;
-
     alloc = getCurrentAllocation();
-    if (alloc->unk76 == 0) {
+    angleDiff = alloc->unk76;
+    if (angleDiff == 0) {
         angleDiff = computeAngleToPosition(
             gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].x,
             gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].z,
@@ -192,7 +192,7 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
         if (angleDiff >= 0x81) {
             angleDiff = 0x80;
         }
-        if (angleDiff < -0x80) {
+        if (angleDiff < (-0x80)) {
             angleDiff = -0x80;
         }
         newRotation = arg0->rotation + angleDiff;
@@ -218,7 +218,7 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
         }
         rotResult.x = gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].x - arg0->posX;
         rotResult.y = gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].z - arg0->posZ;
-        if (((u32)(rotResult.x + 0xFFFFF) <= 0x1FFFFEUL) && ((u32)(rotResult.z + 0xFFFFF) <= 0x1FFFFEUL)) {
+        if ((((u32)(rotResult.x + 0xFFFFF)) <= 0x1FFFFEUL) && (((u32)(rotResult.z + 0xFFFFF)) <= 0x1FFFFEUL)) {
             arg0->waypointIndex = (arg0->waypointIndex + 1) & 1;
         }
         pullPlayersToTrain(arg0);

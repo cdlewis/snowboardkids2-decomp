@@ -1432,6 +1432,6 @@ s16 atan2Fixed(s32 x, s32 y) {
     return 0;
 }
 
-s16 computeAngleToPosition(s32 fromX, s32 fromZ, s32 toX, s32 toZ) {
+s32 computeAngleToPosition(s32 fromX, s32 fromZ, s32 toX, s32 toZ) {
     return atan2Fixed(toX - fromX, toZ - fromZ);
 }

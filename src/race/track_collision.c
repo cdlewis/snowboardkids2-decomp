@@ -1506,7 +1506,7 @@ void computePlayerTerrainAlignment(Player *player) {
 s16 getPlayerTargetTrackAngle(Player *player) {
     GameState *gameState;
     Section3Element *sectorEntry;
-    s16 targetAngle;
+    s32 targetAngle;
 
     gameState = (GameState *)getCurrentAllocation();
     sectorEntry = (Section3Element *)(player->sectorIndex * 0x24 + (u32)gameState->gameData.section3Data);

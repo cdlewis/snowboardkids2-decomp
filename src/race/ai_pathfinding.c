@@ -101,66 +101,55 @@ void calculateAITargetPosition(Player *player) {
     LevelConfig *levelConfig;
     s32 *pathChoiceData;
     s32 currentSectorIndex;
-    s16 pathAngle;
+    int new_var;
+    s32 pathAngle;
     s32 distanceToWaypoint;
     s32 maxDistance;
     GameState *gs;
-
     gs = getCurrentAllocation();
-    courseData = (CourseData *)&gs->gameData;
+    courseData = (CourseData *)(&gs->gameData);
     currentSectorIndex = player->sectorIndex;
-
     if (courseData->waypoints[currentSectorIndex].next < 0) {
         levelConfig = getLevelConfig(courseData->defaultPosIndex);
         player->aiTarget.x = levelConfig->shortcutPosX;
         player->aiTarget.z = levelConfig->shortcutPosZ;
         return;
     }
-
     func_800BA4B8_AA368(player, courseData, (s16)currentSectorIndex, &currentWaypointPos);
     func_800B9EF0_A9DA0(player, courseData, (s16)currentSectorIndex, &nextWaypointPos);
-
-    // Project player's position onto the path centerline
     projectedPlayerPos.x = player->worldPos.x - currentWaypointPos.x;
     projectedPlayerPos.z = player->worldPos.z - currentWaypointPos.z;
-
     pathAngle =
         computeAngleToPosition(nextWaypointPos.x, nextWaypointPos.z, currentWaypointPos.x, currentWaypointPos.z);
     rotateVectorY(&projectedPlayerPos, -pathAngle, &rotatedPos);
     rotatedPos.x = 0;
     rotateVectorY(&rotatedPos, pathAngle, &projectedPlayerPos);
-
     projectedPlayerPos.x += currentWaypointPos.x;
     projectedPlayerPos.z += currentWaypointPos.z;
-
-    while (TRUE) {
+    while (1) {
         func_800B9EF0_A9DA0(player, courseData, (s16)currentSectorIndex, &nextWaypointPos);
-
+        new_var = nextWaypointPos.z - projectedPlayerPos.z;
         finalWaypointPos.x = nextWaypointPos.x - projectedPlayerPos.x;
-        finalWaypointPos.z = nextWaypointPos.z - projectedPlayerPos.z;
-
+        finalWaypointPos.z = new_var;
         distanceToWaypoint = distance_2d(finalWaypointPos.x, finalWaypointPos.z);
-
-        if (distanceToWaypoint > AI_MAX_LOOKAHEAD_DISTANCE) {
-            maxDistance = AI_MAX_LOOKAHEAD_DISTANCE;
-            finalWaypointPos.x = (((s64)finalWaypointPos.x * maxDistance) / distanceToWaypoint);
-            finalWaypointPos.z = (((s64)finalWaypointPos.z * maxDistance) / distanceToWaypoint);
+        if (distanceToWaypoint > 0xA00000) {
+            maxDistance = 0xA00000;
+            finalWaypointPos.x = (((s64)finalWaypointPos.x) * maxDistance) / distanceToWaypoint;
+            finalWaypointPos.z = (((s64)finalWaypointPos.z) * maxDistance) / distanceToWaypoint;
             break;
         }
-
         if (courseData->waypoints[currentSectorIndex].next < 0) {
             break;
         }
-
         pathChoiceData = (s32 *)player->aiPathData;
-        if (pathChoiceData != NULL) {
-            if (*(s8 *)&pathChoiceData[currentSectorIndex] == -1) {
+        if (pathChoiceData != 0) {
+            if ((*((s8 *)(&pathChoiceData[currentSectorIndex]))) == (-1)) {
                 currentSectorIndex = courseData->waypoints[currentSectorIndex].alt;
             }
-            if (*(s8 *)&pathChoiceData[currentSectorIndex] == 0) {
+            if ((*((s8 *)(&pathChoiceData[currentSectorIndex]))) == 0) {
                 currentSectorIndex = courseData->waypoints[currentSectorIndex].next;
             }
-            if (*(s8 *)&pathChoiceData[currentSectorIndex] == 1) {
+            if ((*((s8 *)(&pathChoiceData[currentSectorIndex]))) == 1) {
                 currentSectorIndex = courseData->waypoints[currentSectorIndex].alt2;
             }
         } else {
@@ -170,21 +159,16 @@ void calculateAITargetPosition(Player *player) {
 
     finalWaypointPos.x += projectedPlayerPos.x;
     finalWaypointPos.z += projectedPlayerPos.z;
-
     func_800BA4B8_AA368(player, courseData, (s16)currentSectorIndex, &currentWaypointPos);
-
     finalWaypointPos.x -= currentWaypointPos.x;
     finalWaypointPos.z -= currentWaypointPos.z;
-
     pathAngle =
         computeAngleToPosition(nextWaypointPos.x, nextWaypointPos.z, currentWaypointPos.x, currentWaypointPos.z);
     rotateVectorY(&finalWaypointPos, -pathAngle, &rotatedPos);
     rotatedPos.x = 0;
     rotateVectorY(&rotatedPos, pathAngle, &finalWaypointPos);
-
     finalWaypointPos.x += currentWaypointPos.x;
     finalWaypointPos.z += currentWaypointPos.z;
-
     player->aiTarget.x = finalWaypointPos.x;
     player->aiTarget.z = finalWaypointPos.z;
 }

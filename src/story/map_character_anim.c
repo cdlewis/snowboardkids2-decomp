@@ -150,7 +150,8 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
     TempState17F50 *state;
     s32 targetX;
     s32 targetZ;
-    s16 result, masked;
+    s32 result;
+    s32 masked;
 
     state = getCurrentAllocation();
 
@@ -160,11 +161,11 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
     targetZ <<= 16;
 
     result = computeAngleToPosition(camera->cameraX, camera->cameraZ, targetX, targetZ);
-    camera->targetAngle = result;
-    camera->viewAngle = result;
+    camera->targetAngle = (s16)result;
+    camera->viewAngle = (s16)result;
 
-    if (result < 0x1000) {
-        camera->viewAngle = result + 0x1000;
+    if ((s16)result < 0x1000) {
+        camera->viewAngle = (s16)result + 0x1000;
     } else {
         camera->viewAngle = result - 0x1000;
     }

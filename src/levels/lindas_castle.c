@@ -160,9 +160,7 @@ void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task) {
     GameState *gs;
     Vec3i rotatedVec;
     s16 angleDelta;
-
     gs = (GameState *)getCurrentAllocation();
-
     if (gs->gamePaused == 0) {
         angleDelta = computeAngleToPosition(
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x,
@@ -171,48 +169,35 @@ void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task) {
             task->targetPosition[2]
         );
         angleDelta = (angleDelta - task->rotationAngle) & 0x1FFF;
-
         if (angleDelta >= 0x1001) {
             angleDelta = angleDelta | 0xE000;
         }
-
         if (angleDelta >= 0x81) {
             angleDelta = 0x80;
         }
-
-        if (angleDelta < -0x80) {
+        if (angleDelta < (-0x80)) {
             angleDelta = -0x80;
         }
-
         task->rotationAngle = task->rotationAngle + angleDelta;
-
         rotateVectorY(&g_FlyingEnemyWaypoints[4], task->rotationAngle, &rotatedVec);
-
         task->targetPosition[0] += rotatedVec.x;
         task->targetPosition[2] += rotatedVec.z;
-
         task->surfaceType = findTrackSector(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
         task->targetPosition[1] = getTrackHeightAtPosition(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
-
         task->velocityY += task->gravity;
         task->gravity = task->gravity - 0x8000;
-
         if (task->velocityY == 0) {
             task->gravity = 0x40000;
         }
-
-        rotatedVec.x =
-            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x - task->targetPosition[0];
+        rotatedVec.x = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[angleDelta = task->targetWaypointIndex].x -
+                       task->targetPosition[0];
         rotatedVec.y =
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
-
-        if ((u32)(rotatedVec.x + 0xFFFFF) <= 0x1FFFFEU && (u32)(rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
+        if ((((u32)(rotatedVec.x + 0xFFFFF)) <= 0x1FFFFEU) && (((u32)(rotatedVec.z + 0xFFFFF)) <= 0x1FFFFEU)) {
             terminateCurrentTask();
         }
-
         pullPlayersInRange(task);
     }
-
     renderFlyingEnemy(task);
 }
 
@@ -221,9 +206,7 @@ void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
     Vec3i rotatedVec;
     s16 angleDelta;
     GameDataLayout *gameData;
-
     gs = (GameState *)getCurrentAllocation();
-
     if (gs->gamePaused == 0) {
         angleDelta = computeAngleToPosition(
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x,
@@ -231,50 +214,37 @@ void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
             task->targetPosition[0],
             task->targetPosition[2]
         );
-        angleDelta = angleDelta - task->rotationAngle & 0x1FFF;
-
+        angleDelta = (angleDelta - task->rotationAngle) & 0x1FFF;
         if (angleDelta >= 0x1001) {
             angleDelta = angleDelta | 0xE000;
         }
-
         if (angleDelta >= 0x81) {
             angleDelta = 0x80;
         }
-
-        if (angleDelta < -0x80) {
+        if (angleDelta < (-0x80)) {
             angleDelta = -0x80;
         }
-
         task->rotationAngle = task->rotationAngle + angleDelta;
-
         rotateVectorY(&g_FlyingEnemyWaypoints[4].unk4[1].x, task->rotationAngle, &rotatedVec);
-
         gameData = &gs->gameData;
         task->targetPosition[0] += rotatedVec.x;
         task->targetPosition[2] += rotatedVec.z;
-
-        task->surfaceType = findTrackSector(gameData, task->surfaceType, &task->targetPosition[0]);
+        angleDelta = (task->surfaceType = findTrackSector(gameData, task->surfaceType, &task->targetPosition[0]));
         task->targetPosition[1] = getTrackHeightAtPosition(gameData, task->surfaceType, &task->targetPosition[0]);
-
         task->velocityY += task->gravity;
         task->gravity = task->gravity - 0x8000;
-
         if (task->velocityY == 0) {
             task->gravity = 0x18000;
         }
-
         rotatedVec.x =
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x - task->targetPosition[0];
         rotatedVec.y =
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
-
-        if (rotatedVec.x + 0xFFFFF <= 0x1FFFFEU && (rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU) {
+        if (((rotatedVec.x + 0xFFFFF) <= 0x1FFFFEU) && ((rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU)) {
             terminateCurrentTask();
         }
-
         pullPlayersInRange(task);
     }
-
     renderFlyingEnemy(task);
 }
 

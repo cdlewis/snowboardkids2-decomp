@@ -76,7 +76,7 @@ void rotateVectorY(void *, s16, Vec3i *);
 
 void scaleMatrix(Transform3D *matrix, s16 scaleX, s16 scaleY, s16 scaleZ);
 
-s16 computeAngleToPosition(s32 fromX, s32 fromZ, s32 toX, s32 toZ);
+s32 computeAngleToPosition(s32 fromX, s32 fromZ, s32 toX, s32 toZ);
 
 s16 atan2Fixed(s32, s32);
 
@@ -95,7 +95,7 @@ void transformVectorRelative(void *arg0, void *arg1, void *arg2);
 void transform3DToN64Mtx(Transform3D *transform, Mtx *mtx);
 
 typedef struct QuadDisplayListElement {
-    /* 0x00 */ void *model;  // SceneModel *model
+    /* 0x00 */ void *model; // SceneModel *model
     /* 0x04 */ u8 transformMatrix[0x20];
     /* 0x24 */ void *renderSettings;
     /* 0x28 */ void *displayList;
