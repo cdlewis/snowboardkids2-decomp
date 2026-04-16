@@ -1168,10 +1168,10 @@ s32 getLockedShopItemIndices(u8 *buffer) {
     return count & 0xFF;
 }
 
-INCLUDE_RODATA("asm/nonmatchings/story/shop_ui", D_8009E47C_9F07C);
+const char D_8009E47C_9F07C[] = "%7d";
 
-INCLUDE_RODATA("asm/nonmatchings/story/shop_ui", D_8009E480_9F080);
+const char D_8009E480_9F080[] = "%5dG";
 
-INCLUDE_RODATA("asm/nonmatchings/story/shop_ui", gIntegerFormatString);
+const char gIntegerFormatString[] = "%d";
 
-INCLUDE_RODATA("asm/nonmatchings/story/shop_ui", D_8009E48C_9F08C);
+const char D_8009E48C_9F08C[] = "%7d";
