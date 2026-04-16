@@ -1,9 +1,9 @@
 # splat
-splat64[mips]==0.37.1
+splat64[mips]==0.39.1
 sortedcontainers
 
 # tools/progress.py deps
-mapfile_parser>=2.9.4
+mapfile_parser>=2.12.1
 
 # permuter
 toml
