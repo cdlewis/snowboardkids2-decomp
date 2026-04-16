@@ -364,12 +364,12 @@ void func_800BA4B8_AA368(Player *player, CourseData *courseData, s16 sectorIdx, 
 
     if ((s8)factorRaw >= 0) {
         factor = (s8)factorRaw;
-        LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk1E, unk1C, factor);
-        LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk1E, unk1C, factor);
+        LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, altPosEndIdx, altBaseIdx, factor);
+        LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, altPosEndIdx, altBaseIdx, factor);
     } else {
         factor = (s8)(-factorRaw);
-        LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk1A, unk1C, factor);
-        LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk1A, unk1C, factor);
+        LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, altNegEndIdx, altBaseIdx, factor);
+        LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, altNegEndIdx, altBaseIdx, factor);
     }
 }
 
