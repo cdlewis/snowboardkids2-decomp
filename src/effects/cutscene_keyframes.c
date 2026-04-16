@@ -163,7 +163,6 @@ typedef enum {
     CUTSCENE_STATE_EXIT
 } CutsceneStateEnum;
 
-
 void func_80003898_4498(void) {
     CutsceneTaskMemory *state;
     s32 slotIndex, cutsceneType, frameIndex;

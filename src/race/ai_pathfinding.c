@@ -44,12 +44,12 @@ typedef struct {
     /* 0x04 */ s16 alt2;
     /* 0x06 */ s16 alt;
     /* 0x08 */ char pad08[0x0C];
-    /* 0x14 */ u16 unk14;
-    /* 0x16 */ u16 unk16;
-    /* 0x18 */ u16 unk18;
-    /* 0x1A */ u16 unk1A;
-    /* 0x1C */ u16 unk1C;
-    /* 0x1E */ u16 unk1E;
+    /* 0x14 */ u16 mainNegEndIdx; // main path end pos index for negative factor
+    /* 0x16 */ u16 mainBaseIdx;   // main path base pos index (interpolation start)
+    /* 0x18 */ u16 mainPosEndIdx; // main path end pos index for positive factor
+    /* 0x1A */ u16 altNegEndIdx;  // alt path end pos index for negative factor
+    /* 0x1C */ u16 altBaseIdx;    // alt path base pos index (interpolation start)
+    /* 0x1E */ u16 altPosEndIdx;  // alt path end pos index for positive factor
     /* 0x20 */ char pad20[0x04];
 } Waypoint; // size = 0x24
 
@@ -89,7 +89,7 @@ extern u8 gShortcutChanceByMemoryPool[];
 
 // Function declarations (for functions defined via INCLUDE_ASM below)
 void func_800BA4B8_AA368(Player *, CourseData *, s16, Vec3i *);
-void func_800B9EF0_A9DA0(Player *, CourseData *, s16, Vec3i *);
+void computeAIWaypointPosition(Player *, CourseData *, s16, Vec3i *);
 
 void calculateAITargetPosition(Player *player) {
     Vec3i finalWaypointPos;
@@ -116,7 +116,7 @@ void calculateAITargetPosition(Player *player) {
         return;
     }
     func_800BA4B8_AA368(player, courseData, (s16)currentSectorIndex, &currentWaypointPos);
-    func_800B9EF0_A9DA0(player, courseData, (s16)currentSectorIndex, &nextWaypointPos);
+    computeAIWaypointPosition(player, courseData, (s16)currentSectorIndex, &nextWaypointPos);
     projectedPlayerPos.x = player->worldPos.x - currentWaypointPos.x;
     projectedPlayerPos.z = player->worldPos.z - currentWaypointPos.z;
     pathAngle =
@@ -127,7 +127,7 @@ void calculateAITargetPosition(Player *player) {
     projectedPlayerPos.x += currentWaypointPos.x;
     projectedPlayerPos.z += currentWaypointPos.z;
     while (1) {
-        func_800B9EF0_A9DA0(player, courseData, (s16)currentSectorIndex, &nextWaypointPos);
+        computeAIWaypointPosition(player, courseData, (s16)currentSectorIndex, &nextWaypointPos);
         new_var = nextWaypointPos.z - projectedPlayerPos.z;
         finalWaypointPos.x = nextWaypointPos.x - projectedPlayerPos.x;
         finalWaypointPos.z = new_var;
@@ -173,7 +173,7 @@ void calculateAITargetPosition(Player *player) {
     player->aiTarget.z = finalWaypointPos.z;
 }
 
-void func_800B9EF0_A9DA0(Player *player, CourseData *courseData, s16 sectorIdx, Vec3i *result) {
+void computeAIWaypointPosition(Player *player, CourseData *courseData, s16 sectorIdx, Vec3i *result) {
     AIPathPreference *pathData;
     s16 waypointIdx;
     s8 factor;
@@ -189,35 +189,131 @@ void func_800B9EF0_A9DA0(Player *player, CourseData *courseData, s16 sectorIdx, 
                 waypointIdx = (s16)courseData->waypoints[sectorIdx].alt;
                 if ((s8)factorRaw >= 0) {
                     factor = (s8)factorRaw;
-                    LERP_X(result, courseData->waypoints, waypointIdx, courseData->positions, unk1E, unk1C, factor);
-                    LERP_Z(result, courseData->waypoints, waypointIdx, courseData->positions, unk1E, unk1C, factor);
+                    LERP_X(
+                        result,
+                        courseData->waypoints,
+                        waypointIdx,
+                        courseData->positions,
+                        altPosEndIdx,
+                        altBaseIdx,
+                        factor
+                    );
+                    LERP_Z(
+                        result,
+                        courseData->waypoints,
+                        waypointIdx,
+                        courseData->positions,
+                        altPosEndIdx,
+                        altBaseIdx,
+                        factor
+                    );
                 } else {
                     factor = (s8)(-factorRaw);
-                    LERP_X(result, courseData->waypoints, waypointIdx, courseData->positions, unk1A, unk1C, factor);
-                    LERP_Z(result, courseData->waypoints, waypointIdx, courseData->positions, unk1A, unk1C, factor);
+                    LERP_X(
+                        result,
+                        courseData->waypoints,
+                        waypointIdx,
+                        courseData->positions,
+                        altNegEndIdx,
+                        altBaseIdx,
+                        factor
+                    );
+                    LERP_Z(
+                        result,
+                        courseData->waypoints,
+                        waypointIdx,
+                        courseData->positions,
+                        altNegEndIdx,
+                        altBaseIdx,
+                        factor
+                    );
                 }
                 break;
             case 0:
                 if ((s8)factorRaw >= 0) {
                     factor = (s8)factorRaw;
-                    LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk18, unk16, factor);
-                    LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk18, unk16, factor);
+                    LERP_X(
+                        result,
+                        courseData->waypoints,
+                        sectorIdx,
+                        courseData->positions,
+                        mainPosEndIdx,
+                        mainBaseIdx,
+                        factor
+                    );
+                    LERP_Z(
+                        result,
+                        courseData->waypoints,
+                        sectorIdx,
+                        courseData->positions,
+                        mainPosEndIdx,
+                        mainBaseIdx,
+                        factor
+                    );
                 } else {
                     factor = (s8)(-factorRaw);
-                    LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk14, unk16, factor);
-                    LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk14, unk16, factor);
+                    LERP_X(
+                        result,
+                        courseData->waypoints,
+                        sectorIdx,
+                        courseData->positions,
+                        mainNegEndIdx,
+                        mainBaseIdx,
+                        factor
+                    );
+                    LERP_Z(
+                        result,
+                        courseData->waypoints,
+                        sectorIdx,
+                        courseData->positions,
+                        mainNegEndIdx,
+                        mainBaseIdx,
+                        factor
+                    );
                 }
                 break;
             case 1:
                 waypointIdx = (s16)courseData->waypoints[sectorIdx].alt2;
                 if ((s8)factorRaw >= 0) {
                     factor = (s8)factorRaw;
-                    LERP_X(result, courseData->waypoints, waypointIdx, courseData->positions, unk1E, unk1C, factor);
-                    LERP_Z(result, courseData->waypoints, waypointIdx, courseData->positions, unk1E, unk1C, factor);
+                    LERP_X(
+                        result,
+                        courseData->waypoints,
+                        waypointIdx,
+                        courseData->positions,
+                        altPosEndIdx,
+                        altBaseIdx,
+                        factor
+                    );
+                    LERP_Z(
+                        result,
+                        courseData->waypoints,
+                        waypointIdx,
+                        courseData->positions,
+                        altPosEndIdx,
+                        altBaseIdx,
+                        factor
+                    );
                 } else {
                     factor = (s8)(-factorRaw);
-                    LERP_X(result, courseData->waypoints, waypointIdx, courseData->positions, unk1A, unk1C, factor);
-                    LERP_Z(result, courseData->waypoints, waypointIdx, courseData->positions, unk1A, unk1C, factor);
+                    LERP_X(
+                        result,
+                        courseData->waypoints,
+                        waypointIdx,
+                        courseData->positions,
+                        altNegEndIdx,
+                        altBaseIdx,
+                        factor
+                    );
+                    LERP_Z(
+                        result,
+                        courseData->waypoints,
+                        waypointIdx,
+                        courseData->positions,
+                        altNegEndIdx,
+                        altBaseIdx,
+                        factor
+                    );
                 }
                 break;
             default:
@@ -236,12 +332,12 @@ void func_800B9EF0_A9DA0(Player *player, CourseData *courseData, s16 sectorIdx, 
 
         if ((s8)factorRaw >= 0) {
             factor = (s8)factorRaw;
-            LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk18, unk16, factor);
-            LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk18, unk16, factor);
+            LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, mainPosEndIdx, mainBaseIdx, factor);
+            LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, mainPosEndIdx, mainBaseIdx, factor);
         } else {
             factor = (s8)(-factorRaw);
-            LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, unk14, unk16, factor);
-            LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, unk14, unk16, factor);
+            LERP_X(result, courseData->waypoints, sectorIdx, courseData->positions, mainNegEndIdx, mainBaseIdx, factor);
+            LERP_Z(result, courseData->waypoints, sectorIdx, courseData->positions, mainNegEndIdx, mainBaseIdx, factor);
         }
     }
 }
