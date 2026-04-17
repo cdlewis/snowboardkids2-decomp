@@ -49,6 +49,18 @@ typedef struct {
     } screenZ;
 } ParallaxSprite;
 
+typedef struct {
+    /* 0x00 */ Transform3D matrix;
+    /* 0x20 */ s32 speed;
+    /* 0x24 */ s16 *waypointData;
+    /* 0x28 */ s16 facingAngle;
+    /* 0x2A */ s16 headingAngle;
+    /* 0x2C */ u8 pad2C[0x8];
+    /* 0x34 */ u8 moveDirection;
+    /* 0x35 */ u8 waypointCount;
+    /* 0x36 */ u8 currentWaypoint;
+} WaypointMoveState;
+
 u32 sNpcInteractionColors[] = {
     0x00BB00BB, 0x000000BB, 0x00BE00D0, 0x00D100D1, 0x00D100D0, 0x000000D4,
 };
@@ -300,9 +312,10 @@ extern s32 D_800AB06C_A23DC;
 extern s32 D_8009F230_9FE30;
 extern s32 D_8009F234_9FE34;
 extern s16 D_8009F238_9FE38;
+extern s16 gStoryMapItemWaypointCounts[];
 
 s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle);
-s32 func_8002A4AC_2B0AC(void *, u8);
+s32 func_8002A4AC_2B0AC(WaypointMoveState *, u8);
 s32 updateStoryMapNpcBehavior(Func8002A390Arg *);
 s16 stepAngleTowardsTarget(s16 targetAngle, s16 currentAngle);
 
@@ -315,7 +328,7 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
 
     switch (stateVal) {
         case 0:
-            if (func_8002A4AC_2B0AC(&arg0->matrix, arg0->unk5D) != 0) {
+            if (func_8002A4AC_2B0AC((WaypointMoveState *)&arg0->matrix, arg0->unk5D) != 0) {
                 return 1;
             }
             if (state->unk421 != 0) {
@@ -356,8 +369,91 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
     return 0;
 }
 
-// 98.12% https://decomp.me/scratch/bevnt
-INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002A4AC_2B0AC);
+s32 func_8002A4AC_2B0AC(WaypointMoveState *state, u8 itemType) {
+    s32 targetX;
+    s32 targetZ;
+    s32 result;
+    s16 angle;
+    s32 v4;
+    s32 v3;
+    s32 v2;
+    s32 v;
+    s32 threshold;
+    const s32 highSpeed = 0x1C000;
+    const s32 lowSpeed = 0x10000;
+    s8 wpIdx;
+
+    getCurrentAllocation();
+    result = 0;
+
+    if (state->moveDirection != 0) {
+        wpIdx = ((state->currentWaypoint + 1) % state->waypointCount) * 2;
+    } else {
+        wpIdx = (state->currentWaypoint - 1) * 2;
+        if (wpIdx < 0) {
+            wpIdx = (state->waypointCount - 1) * 2;
+        }
+    }
+
+    targetX = state->waypointData[wpIdx + 1] << 16;
+    targetZ = state->waypointData[wpIdx + 2] << 16;
+
+    state->matrix.translation.x += ((approximateSin(state->headingAngle) * (state->speed >> 4)) / 0x2000) * 16;
+    state->matrix.translation.z += ((approximateCos(state->headingAngle) * (state->speed >> 4)) / 0x2000) * 16;
+
+    {
+        s16 angle = stepAngleTowardsTarget(state->headingAngle, state->facingAngle);
+        state->facingAngle = angle;
+        createYRotationMatrix(&state->matrix, angle & 0x1FFF);
+    }
+
+    threshold = -(state->speed >= 0x1B000) & highSpeed;
+    threshold |= lowSpeed;
+
+    v = targetX - state->matrix.translation.x;
+    v3 = ABS(v);
+
+    if (v3 <= threshold) {
+        v2 = targetZ - state->matrix.translation.z;
+        v4 = ABS(v2);
+        if (v4 <= threshold) {
+            if (state->moveDirection != 0) {
+                state->currentWaypoint = state->currentWaypoint + 1;
+            } else {
+                state->currentWaypoint = state->currentWaypoint - 1;
+            }
+
+            if (state->currentWaypoint == 0xFF) {
+                state->currentWaypoint = state->waypointCount - 1;
+            } else {
+                state->currentWaypoint = state->currentWaypoint % state->waypointCount;
+            }
+
+            if (state->moveDirection != 0) {
+                wpIdx = ((state->currentWaypoint + 1) % state->waypointCount) * 2;
+            } else {
+                wpIdx = (state->currentWaypoint - 1) * 2;
+                if (wpIdx < 0) {
+                    wpIdx = (state->waypointCount - 1) * 2;
+                }
+            }
+
+            if ((state->currentWaypoint == 0 || state->currentWaypoint == state->waypointCount - 1) &&
+                gStoryMapItemWaypointCounts[itemType] != 4) {
+                result = 1;
+            } else {
+                state->headingAngle = computeAngleToPosition(
+                    state->waypointData[wpIdx + 1] << 16,
+                    state->waypointData[wpIdx + 2] << 16,
+                    state->matrix.translation.x,
+                    state->matrix.translation.z
+                );
+            }
+        }
+    }
+
+    return result;
+}
 
 s32 updateStoryMapNpcBehavior(Func8002A390Arg *s0) {
     Vec3i *new_var;
