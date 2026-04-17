@@ -1463,8 +1463,61 @@ void func_80035408_36008(Func80035408Arg *arg0) {
     }
 }
 
-// 95.39% https://decomp.me/scratch/89M5i
-INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035548_36148);
+void func_80035548_36148(Func80035548Arg *arg0) {
+    u16 *ptr;
+    s16 x;
+    s16 y;
+    u16 alpha;
+    s16 size;
+    s32 count;
+    u16 cmd;
+
+    ptr = arg0->unk4;
+    x = arg0->unk0;
+    y = arg0->unk2;
+    cmd = *ptr;
+    alpha = arg0->unk10;
+
+    if (cmd != 0xFFFF) {
+        count = 0;
+        do {
+            if ((u8)count >= arg0->unk11) {
+                return;
+            }
+            if (cmd == 0xFFFD) {
+                x = arg0->unk0;
+                y += 16;
+            } else if ((cmd == 0xFFFE) || (cmd == 0xFFFB)) {
+                if (cmd == 0xFFFE) {
+                    x += 4;
+                } else {
+                    x += 4;
+                }
+            } else if (cmd == 0xFFFC) {
+                ptr++;
+                count++;
+                if (arg0->unk10 == 0) {
+                    alpha = *ptr;
+                }
+            } else if (cmd == 0xFFF0) {
+                ptr += 3;
+                count += 3;
+            } else {
+                if (cmd != 0xFFF1) {
+                    size = (cmd & 0xF000) >> 12;
+                    if (size == 0) {
+                        size = 12;
+                    }
+                    renderShadedTextSprite(x, y, cmd & 0xFFF, arg0->unkC, arg0->unkE, alpha, arg0->unk8);
+                    x += size;
+                }
+            }
+            ptr++;
+            cmd = *ptr;
+            count++;
+        } while (cmd != 0xFFFF);
+    }
+}
 
 #ifdef NON_MATCHING
 void func_800356AC_362AC(

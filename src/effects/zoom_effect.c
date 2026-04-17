@@ -10,14 +10,13 @@
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
+#include "text/hud_text.h"
 #include "ui/level_preview_3d.h"
 
 extern struct {
     s16 x;
     s16 y;
 } gWipeOffset[];
-
-extern void func_80035548_36148(void *);
 
 s16 initWipeZoomDisplay(cutsceneSys2Wait_exec_asset *);
 void cleanupCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0);
