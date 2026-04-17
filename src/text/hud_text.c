@@ -1360,55 +1360,49 @@ void cleanupSaveSlotDeleteArrow(Func34574Arg *arg0) {
 // 97.92% https://decomp.me/scratch/DG7hF
 INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035260_35E60);
 
-#ifdef NON_MATCHING
 void func_80035408_36008(Func80035408Arg *arg0) {
     u16 *ptr;
     s16 x;
     s16 y;
-    u8 a;
-    u16 cmd;
-    s16 sz;
-    s16 unused;
+    u16 alpha;
+    s16 size;
 
     ptr = arg0->unk4;
     x = arg0->unk0;
     y = arg0->unk2;
-    cmd = *ptr;
-    a = arg0->unk10;
-    unused = 0xFFFE;
+    alpha = arg0->unk10;
 
-    if ((cmd & 0xFFFF) != 0xFFFF) {
-        do {
-            if ((cmd & 0xFFFF) == 0xFFFD) {
-                x = arg0->unk0;
-                y += 0x10;
-            } else if ((cmd & 0xFFFF) == 0xFFFE || (cmd & 0xFFFF) == 0xFFFB) {
+    while (*ptr != 0xFFFF) {
+        if (*ptr == 0xFFFD) {
+            x = arg0->unk0;
+            y += 16;
+        } else if ((*ptr == 0xFFFE) || (*ptr == 0xFFFB)) {
+            if (*ptr == 0xFFFE) {
                 x += 4;
-            } else if ((cmd & 0xFFFF) == 0xFFFC) {
-                ptr++;
-                if (arg0->unk10 == 0) {
-                    a = *ptr;
-                    ptr++;
-                }
-            } else if ((cmd & 0xFFFF) == 0xFFF0) {
-                ptr += 3;
-            } else if ((cmd & 0xFFFF) != 0xFFF1) {
-                sz = cmd >> 12;
-                if (sz == 0) {
-                    sz = 12;
-                }
-                renderShadedTextSprite(x, y, cmd & 0xFFF, arg0->unkC, arg0->unkE, a, arg0->unk8);
-                x += sz;
+            } else {
+                x += 4;
             }
+        } else if (*ptr == 0xFFFC) {
             ptr++;
-            cmd = *ptr;
-        } while ((cmd & 0xFFFF) != 0xFFFF);
+            if (arg0->unk10 == 0) {
+                alpha = *ptr;
+            }
+        } else if (*ptr == 0xFFF0) {
+            ptr += 3;
+        } else {
+            if (*ptr != 0xFFF1) {
+                size = (*ptr & 0xF000) >> 12;
+                if (size == 0) {
+                    size = 12;
+                }
+                renderShadedTextSprite(x, y, *ptr & 0xFFF, arg0->unkC, arg0->unkE, alpha, arg0->unk8);
+                x += size;
+            }
+        }
+
+        ptr++;
     }
 }
-#else
-// 98.50% https://decomp.me/scratch/DdlvP
-INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035408_36008);
-#endif
 
 // 95.39% https://decomp.me/scratch/89M5i
 INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035548_36148);
