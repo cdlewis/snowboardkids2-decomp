@@ -1357,8 +1357,67 @@ void cleanupSaveSlotDeleteArrow(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-// 97.92% https://decomp.me/scratch/DG7hF
-INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035260_35E60);
+typedef struct {
+    s16 x;
+    s16 y;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u8 unkE;
+} TextElementState;
+
+extern void initHudElementState(TextElementState *arg0);
+
+void func_80035260_35E60(void *arg0, void *arg1, s16 startX, s16 startY, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8) {
+    s16 x = startX;
+    s16 y = startY;
+    u16 charIndex = arg6;
+    TextElementState *elem;
+    u16 *ptr = (u16 *)arg1;
+
+    while ((*ptr) != 0xFFFF) {
+        if (*ptr == 0xFFFD) {
+            x = startX;
+            y += 16;
+        } else if (*ptr == 0xFFFE || *ptr == 0xFFFB) {
+            if (*ptr == 0xFFFE) {
+                x += 4;
+            } else {
+                x += 4;
+            }
+        } else if (*ptr == 0xFFFC) {
+            ptr++;
+            if (arg6 == 0) {
+                charIndex = *ptr;
+            }
+        } else if (*ptr == 0xFFF0) {
+            ptr += 3;
+        } else if (*ptr != 0xFFF1) {
+            u16 cmd = *ptr;
+            s16 width = ((cmd & 0xF000) >> 12);
+            if (width == 0) {
+                width = 12;
+            }
+
+            elem = advanceLinearAlloc(16);
+            if (elem != NULL) {
+                initHudElementState(elem);
+                elem->unkE = arg5;
+                elem->unkA = arg4;
+                elem->unk4 = arg0;
+                elem->unkD = charIndex + 1;
+                elem->x = x;
+                elem->y = y;
+                elem->unk8 = cmd & 0xFFF;
+                debugEnqueueCallback(arg7, arg8, renderTextSpriteWithTransparency, elem);
+            }
+            x += width;
+        }
+        ptr++;
+    }
+}
 
 void func_80035408_36008(Func80035408Arg *arg0) {
     u16 *ptr;
@@ -1408,19 +1467,6 @@ void func_80035408_36008(Func80035408Arg *arg0) {
 INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035548_36148);
 
 #ifdef NON_MATCHING
-typedef struct {
-    s16 x;
-    s16 y;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC;
-    u8 unkD;
-    u8 unkE;
-} TextElementState;
-
-extern void initHudElementState(TextElementState *arg0);
-
 void func_800356AC_362AC(
     s32 arg0,
     u16 *arg1,
