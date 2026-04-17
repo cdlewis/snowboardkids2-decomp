@@ -436,10 +436,10 @@ void processPlayerItemUsage(Player *player) {
     }
 }
 
-// 0.00% https://decomp.me/scratch/nKClr
+// 91.63% https://decomp.me/scratch/OJwdP
 INCLUDE_ASM("asm/nonmatchings/race/hit_reactions", func_80059394_59F94);
 
-// 0.00% https://decomp.me/scratch/6MMZH
+// 94.73% https://decomp.me/scratch/o0SqJ
 INCLUDE_ASM("asm/nonmatchings/race/hit_reactions", func_800597C0_5A3C0);
 
 void addPlayerRaceGold(Player *player, s32 amount) {

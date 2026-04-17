@@ -832,7 +832,7 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
 // 85.96% https://decomp.me/scratch/00Z3Q
 INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002B598_2C198);
 
-// NO_SCRATCH
+// 71.26% https://decomp.me/scratch/QMrjF
 INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002B760_2C360);
 
 void updateParallaxPosition(ParallaxSprite *sprite) {

@@ -405,7 +405,7 @@ void initDiscoveryLocationMarker(StoryMapLocationMarkerState *arg0) {
     setCallback(&updateStoryMapLocationMarker);
 }
 
-// NO_SCRATCH
+// 96.11% https://decomp.me/scratch/LghGY
 INCLUDE_ASM("asm/nonmatchings/story/location_markers", updateStoryMapLocationMarker);
 
 void cleanupDiscoveryLocationMarker(void *untypedArg) {

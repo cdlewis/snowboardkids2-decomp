@@ -1189,7 +1189,7 @@ s32 updatePlayerSlidingConstrained(Player *player) {
     return 0;
 }
 
-// NO_SCRATCH
+// 94.98% https://decomp.me/scratch/wGgfh
 INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B1544_A13F4);
 
 s32 updatePlayerGroundedSliding(Player *player) {
