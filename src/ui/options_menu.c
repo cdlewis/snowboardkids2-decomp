@@ -267,7 +267,7 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
             arg0->labelEntries[i].y,
             arg0->labelEntries[i].highlight.asBytes[1],
             arg0->labelEntries[i].textStyle,
-            (void *)8,
+            8,
             1
         );
     }
@@ -360,7 +360,7 @@ void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
                 arg0->textEntries[i].y,
                 (u8)arg0->textEntries[i].highlight,
                 arg0->textEntries[i].textStyle,
-                (void *)8,
+                8,
                 1
             );
         }

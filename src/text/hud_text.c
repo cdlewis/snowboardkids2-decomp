@@ -1764,5 +1764,50 @@ void renderShadedTextSprite(
     }
 }
 
-// 99.85% https://decomp.me/scratch/VyKf0
-INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_80035DE0_369E0);
+void func_80035DE0_369E0(void *arg0, void *arg1, s16 startX, s16 startY, u8 arg4, u8 arg5, u8 arg6, u8 arg7) {
+    s16 x = startX;
+    s16 y = startY;
+    u16 palette = arg5 & 0xFF;
+    TextElementState *elem;
+    u16 *ptr = (u16 *)arg1;
+
+    while ((*ptr) != 0xFFFF) {
+        if (*ptr == 0xFFFD) {
+            x = startX;
+            y += 16;
+        } else if (*ptr == 0xFFFE || *ptr == 0xFFFB) {
+            if (*ptr == 0xFFFE) {
+                x += 4;
+            } else {
+                x += 4;
+            }
+        } else if (*ptr == 0xFFFC) {
+            ptr++;
+            if (arg5 == 0) {
+                palette = *ptr;
+            }
+        } else if (*ptr == 0xFFF0) {
+            ptr += 3;
+        } else if (*ptr != 0xFFF1) {
+            u16 cmd = *ptr;
+            s16 width = ((cmd & 0xF000) >> 12);
+            if (width == 0) {
+                width = 12;
+            }
+
+            elem = advanceLinearAlloc(16);
+            if (elem != NULL) {
+                initHudElementState(elem);
+                elem->unkA = arg4;
+                elem->unk4 = arg0;
+                elem->unkD = palette + 1;
+                elem->x = x;
+                elem->y = y;
+                elem->unk8 = cmd & 0xFFF;
+                debugEnqueueCallback(arg6, arg7, renderAlphaBlendedTextSprite, elem);
+            }
+            x += width;
+        }
+        ptr++;
+    }
+}
