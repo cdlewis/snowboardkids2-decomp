@@ -151,7 +151,7 @@ void checkTownExitTrigger(void *);
 void cleanupTownExitMarker(void *);
 void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *);
 
-void func_80036AF8_376F8(void);
+void func_80036AF8_376F8(s16 *outX, s16 *outY, u16 *encodedText);
 void updateStoryMapDialogueTurn(void *arg0);
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *);
 void func_800175E0_181E0(void);
@@ -506,8 +506,55 @@ void checkTownExitTrigger(void *arg0) {
     }
 }
 
-// 97.70% https://decomp.me/scratch/OXSn6
-INCLUDE_ASM("asm/nonmatchings/story/location_markers", func_80036AF8_376F8);
+void func_80036AF8_376F8(s16 *outX, s16 *outY, u16 *encodedText) {
+    u8 lineWidths[16];
+    u8 maxWidth;
+    u8 lineCount;
+    u8 currentWidth;
+    u16 charWidth;
+
+    maxWidth = 0;
+    lineCount = 0;
+    currentWidth = 0;
+
+    while ((*encodedText) != 0xFFFF) {
+        if (*encodedText == 0xFFFD) {
+            lineWidths[lineCount] = currentWidth;
+            currentWidth = 0;
+            lineCount++;
+        } else if ((*encodedText == 0xFFFE) || (*encodedText == 0xFFFB)) {
+            if (*encodedText == 0xFFFE) {
+                currentWidth += 4;
+            } else {
+                currentWidth += 4;
+            }
+        } else if (*encodedText == 0xFFFC) {
+            encodedText++;
+        } else {
+            charWidth = (*encodedText & 0xF000) >> 12;
+            if (charWidth == 0) {
+                currentWidth += 0xC;
+            } else {
+                currentWidth += charWidth;
+            }
+        }
+        encodedText++;
+    }
+
+    lineWidths[lineCount] = currentWidth;
+
+    {
+        s32 i;
+        for (i = 0; i < lineCount + 1; i++) {
+            if (lineWidths[i] > maxWidth) {
+                maxWidth = lineWidths[i];
+            }
+        }
+    }
+
+    *outX = 80 - ((160 - maxWidth) / 2);
+    *outY = 28 - ((56 - ((lineCount + 1) * 0x10)) >> 1);
+}
 
 s32 checkStoryMapLocationSelection(StoryMapPlayerState *player) {
     StoryMapAllocation *allocation;
