@@ -122,8 +122,17 @@ void initCreditsScrollingTextEffects(void *state) {
 }
 
 extern void func_80011924_12524(void);
-extern void
-func_80035260_35E60(void *arg0, void *arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8);
+extern void enqueueHudTextLayout(
+    void *fontAsset,
+    void *textData,
+    s16 startX,
+    s16 startY,
+    u8 alpha,
+    u8 transparency,
+    u8 paletteIndex,
+    u8 priority,
+    u8 flags
+);
 
 void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
     s32 showPalette;
@@ -255,7 +264,7 @@ void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
             if (s->textData[i] == NULL) {
                 break;
             }
-            func_80035260_35E60(
+            enqueueHudTextLayout(
                 s->textAsset,
                 s->textData[i],
                 s->textXOffset[i],

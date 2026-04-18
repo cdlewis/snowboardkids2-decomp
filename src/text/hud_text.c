@@ -899,7 +899,7 @@ void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
         arg0->mainText = promptText;
         centeredX = ((0x120 - getMaxLinePixelWidth(promptText)) / 2) - 0x90;
         arg0->mainTextX = centeredX;
-        func_80035260_35E60(
+        enqueueHudTextLayout(
             arg0->mainTextAsset,
             arg0->mainText,
             centeredX,
@@ -937,7 +937,7 @@ void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
                 arg0->hintTextFlag = 4;
             }
 
-            func_80035260_35E60(
+            enqueueHudTextLayout(
                 arg0->hintTextAsset,
                 arg0->hintText,
                 arg0->hintTextX,
@@ -1210,7 +1210,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
     }
 
     if (allocation->unkAD5 < 8) {
-        func_80035260_35E60(state->textAsset, &D_8008F5F0_901F0, -0x24, -0x30, 0xFF, 0xFF, 5, 8, 7);
+        enqueueHudTextLayout(state->textAsset, &D_8008F5F0_901F0, -0x24, -0x30, 0xFF, 0xFF, 5, 8, 7);
 
         loopCount = (-(allocation->unkAD5 != 2) & 3) | 2;
         if (loopCount == 0) {
@@ -1229,7 +1229,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
                 alphaArg = 0x60;
             }
 
-            func_80035260_35E60(
+            enqueueHudTextLayout(
                 state->textAsset,
                 D_8008F79C_9039C[(allocation->unkAD5 * 3) + i],
                 -0x40,
@@ -1253,7 +1253,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
                 alphaArg = 0x60;
             }
 
-            func_80035260_35E60(
+            enqueueHudTextLayout(
                 state->textAsset,
                 D_8008F7C4_903C4[i],
                 -0x40,
@@ -1273,7 +1273,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
             xOffset = -0x60;
         }
 
-        func_80035260_35E60(
+        enqueueHudTextLayout(
             state->textAsset,
             D_8008F79C_9039C[allocation->unkAD5],
             xOffset,
@@ -1360,22 +1360,32 @@ void cleanupSaveSlotDeleteArrow(Func34574Arg *arg0) {
 typedef struct {
     s16 x;
     s16 y;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC;
-    u8 unkD;
-    u8 unkE;
+    /* 0x04 */ void *spriteData;
+    /* 0x08 */ s16 frameIndex;
+    /* 0x0A */ s16 alpha;
+    /* 0x0C */ u8 tileMode;
+    /* 0x0D */ u8 paletteIndex;
+    /* 0x0E */ u8 transparency;
 } TextElementState;
 
 extern void initHudElementState(TextElementState *arg0);
 
-void func_80035260_35E60(void *arg0, void *arg1, s16 startX, s16 startY, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8) {
+void enqueueHudTextLayout(
+    void *fontAsset,
+    void *textData,
+    s16 startX,
+    s16 startY,
+    u8 alpha,
+    u8 transparency,
+    u8 paletteIndex,
+    u8 priority,
+    u8 flags
+) {
     s16 x = startX;
     s16 y = startY;
-    u16 charIndex = arg6;
+    u16 palette = paletteIndex;
     TextElementState *elem;
-    u16 *ptr = (u16 *)arg1;
+    u16 *ptr = (u16 *)textData;
 
     while ((*ptr) != 0xFFFF) {
         if (*ptr == 0xFFFD) {
@@ -1389,8 +1399,8 @@ void func_80035260_35E60(void *arg0, void *arg1, s16 startX, s16 startY, u8 arg4
             }
         } else if (*ptr == 0xFFFC) {
             ptr++;
-            if (arg6 == 0) {
-                charIndex = *ptr;
+            if (paletteIndex == 0) {
+                palette = *ptr;
             }
         } else if (*ptr == 0xFFF0) {
             ptr += 3;
@@ -1404,14 +1414,14 @@ void func_80035260_35E60(void *arg0, void *arg1, s16 startX, s16 startY, u8 arg4
             elem = advanceLinearAlloc(16);
             if (elem != NULL) {
                 initHudElementState(elem);
-                elem->unkE = arg5;
-                elem->unkA = arg4;
-                elem->unk4 = arg0;
-                elem->unkD = charIndex + 1;
+                elem->transparency = transparency;
+                elem->alpha = alpha;
+                elem->spriteData = fontAsset;
+                elem->paletteIndex = palette + 1;
                 elem->x = x;
                 elem->y = y;
-                elem->unk8 = cmd & 0xFFF;
-                debugEnqueueCallback(arg7, arg8, renderTextSpriteWithTransparency, elem);
+                elem->frameIndex = cmd & 0xFFF;
+                debugEnqueueCallback(priority, flags, renderTextSpriteWithTransparency, elem);
             }
             x += width;
         }
@@ -1597,13 +1607,13 @@ void func_800356AC_362AC(
             elem = advanceLinearAlloc(0x10);
             if (elem != NULL) {
                 initHudElementState(elem);
-                elem->unkE = b;
-                elem->unkA = a;
-                elem->unkD = palette + 1;
+                elem->transparency = b;
+                elem->alpha = a;
+                elem->paletteIndex = palette + 1;
                 elem->x = xPos;
                 elem->y = yPos;
-                elem->unk8 = cmd & 0xFFF;
-                elem->unk4 = (void *)arg0;
+                elem->frameIndex = cmd & 0xFFF;
+                elem->spriteData = (void *)arg0;
                 debugEnqueueCallback(d, e, renderTextSpriteWithTransparency, elem);
             }
             xPos += xAdvance;
@@ -1851,12 +1861,12 @@ void func_80035DE0_369E0(void *arg0, void *arg1, s16 startX, s16 startY, u8 arg4
             elem = advanceLinearAlloc(16);
             if (elem != NULL) {
                 initHudElementState(elem);
-                elem->unkA = arg4;
-                elem->unk4 = arg0;
-                elem->unkD = palette + 1;
+                elem->alpha = arg4;
+                elem->spriteData = arg0;
+                elem->paletteIndex = palette + 1;
                 elem->x = x;
                 elem->y = y;
-                elem->unk8 = cmd & 0xFFF;
+                elem->frameIndex = cmd & 0xFFF;
                 debugEnqueueCallback(arg6, arg7, renderAlphaBlendedTextSprite, elem);
             }
             x += width;

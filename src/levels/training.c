@@ -514,7 +514,7 @@ void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *
 
     table_ptr = s_trainingPanelMessageTables[arg0->panelIndex];
     temp_v1_2 = arg0->messageData[table_ptr[arg0->messageIndex]];
-    func_80035260_35E60(
+    enqueueHudTextLayout(
         arg0->textRenderContext,
         (void *)arg0->messageData + temp_v1_2,
         -0x68,

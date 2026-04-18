@@ -349,7 +349,7 @@ void updatePushStartText(PushStartTextState *state) {
 }
 
 void updatePushStartGraphic(PushStartPromptTask *task) {
-    func_80035260_35E60(
+    enqueueHudTextLayout(
         task->textAsset,
         (void *)&D_800907F8_913F8,
         -0x68,

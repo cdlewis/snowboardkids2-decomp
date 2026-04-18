@@ -268,7 +268,7 @@ void updateCreditsSubtitles(Struct_800B0388 *arg0) {
         arg0->unk97A.halfword = arg0->unk994 >> 16;
         arg0->unk98E.halfword = arg0->unk994 >> 16;
 
-        func_80035260_35E60(
+        enqueueHudTextLayout(
             arg0->unk974,
             arg0->unk970,
             arg0->unk96C,
@@ -279,7 +279,7 @@ void updateCreditsSubtitles(Struct_800B0388 *arg0) {
             2,
             0
         );
-        func_80035260_35E60(
+        enqueueHudTextLayout(
             arg0->unk988,
             arg0->unk984,
             arg0->unk980,

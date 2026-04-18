@@ -1279,7 +1279,7 @@ void renderMinigameDescText(MinigameDescTextState *state) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->menuState == 8) {
-        func_80035260_35E60(
+        enqueueHudTextLayout(
             state->textRenderAsset,
             state->textString,
             state->x,
