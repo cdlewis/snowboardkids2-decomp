@@ -1545,105 +1545,76 @@ void renderHudTextLayoutCapped(HudTextLayoutCappedArg *arg0) {
     }
 }
 
-#ifdef NON_MATCHING
 void func_800356AC_362AC(
-    s32 arg0,
-    u16 *arg1,
-    u16 arg2,
-    s16 arg3,
-    u8 arg4,
-    u8 arg5,
-    u8 arg6,
-    u8 arg7,
-    u8 arg8,
-    u8 arg9
+    void *fontAsset,
+    u16 *textData,
+    u16 startX,
+    s16 startY,
+    u8 alpha,
+    u8 transparency,
+    u8 paletteIndex,
+    u8 maxIterations,
+    u8 priority,
+    u8 flags
 ) {
-    u16 *ptr;
-    u16 cmd;
-    s16 xPos;
-    s16 startX;
-    s16 yPos;
-    s32 count;
-    s32 xAdvance;
-    u8 palette;
-    u8 a;
-    u8 b;
-    u8 c;
-    u8 d;
-    u8 e;
+    s16 x = startX;
+    s16 y = startY;
+    u16 palette = paletteIndex;
     TextElementState *elem;
-    u16 temp;
+    u16 *ptr = textData;
+    u16 cmd;
+    s32 count;
+    s16 width;
 
-    startX = arg2;
-    xPos = startX;
-    ptr = arg1;
     cmd = *ptr;
-    yPos = arg3;
-    a = arg4;
-    b = arg5;
-    c = arg7;
     count = 0;
-    d = arg8;
-    palette = arg6 & 0xFF;
-    e = arg9;
 
-    while ((cmd & 0xFFFF) != 0xFFFF) {
-        if ((u8)count >= c) {
+    while (cmd != 0xFFFF) {
+        if ((u8)count >= maxIterations) {
             return;
         }
-
-        temp = cmd & 0xFFFF;
-
-        if (temp == 0xFFFD) {
-            xPos = startX;
-            yPos += 0x10;
-        } else if (temp == 0xFFFE || temp == 0xFFFB) {
-            xPos += 4;
-        } else if (temp == 0xFFFC) {
-            ptr += 2;
-            count += 1;
-            if (palette == 0) {
-                palette = *ptr;
-                ptr += 2;
+        if (cmd == 0xFFFD) {
+            x = startX;
+            y += 0x10;
+        } else if ((cmd == 0xFFFE) || (cmd == 0xFFFB)) {
+            if (cmd == 0xFFFE) {
+                x += 4;
+            } else {
+                x += 4;
             }
-            cmd = *ptr;
-            count += 1;
-            continue;
-        } else if (temp == 0xFFF0) {
-            ptr += 6;
+        } else if (cmd == 0xFFFC) {
+            ptr++;
+            count++;
+            if (paletteIndex == 0) {
+                palette = *ptr;
+            }
+        } else if (cmd == 0xFFF0) {
+            ptr += 3;
             count += 3;
-        } else if (temp == 0xFFF1) {
-            ptr += 6;
-            count += 3;
-        } else {
-            xAdvance = cmd >> 12;
-            if (xAdvance == 0) {
-                xAdvance = 0xC;
+        } else if (cmd != 0xFFF1) {
+            width = (cmd & 0xF000) >> 12;
+            if (width == 0) {
+                width = 0xC;
             }
             elem = advanceLinearAlloc(0x10);
             if (elem != NULL) {
                 initHudElementState(elem);
-                elem->transparency = b;
-                elem->alpha = a;
+                elem->transparency = transparency;
+                elem->alpha = alpha;
+                elem->spriteData = fontAsset;
                 elem->paletteIndex = palette + 1;
-                elem->x = xPos;
-                elem->y = yPos;
+                elem->x = x;
+                elem->y = y;
                 elem->frameIndex = cmd & 0xFFF;
-                elem->spriteData = (void *)arg0;
-                debugEnqueueCallback(d, e, renderTextSpriteWithTransparency, elem);
+                debugEnqueueCallback(priority, flags, renderTextSpriteWithTransparency, elem);
             }
-            xPos += xAdvance;
+            x += width;
         }
-
-        ptr += 2;
+        ptr++;
         cmd = *ptr;
-        count += 1;
+        count++;
     }
 }
-#else
-// 96.77% https://decomp.me/scratch/1TbwU
-INCLUDE_ASM("asm/nonmatchings/text/hud_text", func_800356AC_362AC);
-#endif
 
 extern s32 gCachedPaletteAddr;
 extern s32 gCachedTextureAddr;
