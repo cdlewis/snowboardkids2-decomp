@@ -149,7 +149,7 @@ void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
 void updateOptionsMenuTitle(u8 *arg0) {
     s32 i;
 
-    debugEnqueueCallback(8, 0, func_80035408_36008, arg0);
+    debugEnqueueCallback(8, 0, renderHudTextLayout, arg0);
 
     for (i = 0; i < 2; i++) {
         debugEnqueueCallback(8, 0, renderTextSprite, arg0 + 0x14 + i * 0x10);

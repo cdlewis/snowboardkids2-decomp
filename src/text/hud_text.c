@@ -718,7 +718,7 @@ check_ac6:
     arg0->unk14 = 0x60;
 
 end:
-    debugEnqueueCallback(arg0->unk1C + 9, 0, func_80035408_36008, &arg0->unk8);
+    debugEnqueueCallback(arg0->unk1C + 9, 0, renderHudTextLayout, &arg0->unk8);
 }
 
 void cleanupSaveSlotNameText(Func34574Arg *arg0) {
@@ -1429,21 +1429,21 @@ void enqueueHudTextLayout(
     }
 }
 
-void func_80035408_36008(Func80035408Arg *arg0) {
+void renderHudTextLayout(HudTextLayoutArg *arg0) {
     u16 *ptr;
     s16 x;
     s16 y;
-    u16 alpha;
-    s16 size;
+    u16 paletteOverride;
+    s16 width;
 
-    ptr = arg0->unk4;
-    x = arg0->unk0;
-    y = arg0->unk2;
-    alpha = arg0->unk10;
+    ptr = arg0->textData;
+    x = arg0->startX;
+    y = arg0->startY;
+    paletteOverride = arg0->paletteIndex;
 
     while (*ptr != 0xFFFF) {
         if (*ptr == 0xFFFD) {
-            x = arg0->unk0;
+            x = arg0->startX;
             y += 16;
         } else if ((*ptr == 0xFFFE) || (*ptr == 0xFFFB)) {
             if (*ptr == 0xFFFE) {
@@ -1453,19 +1453,27 @@ void func_80035408_36008(Func80035408Arg *arg0) {
             }
         } else if (*ptr == 0xFFFC) {
             ptr++;
-            if (arg0->unk10 == 0) {
-                alpha = *ptr;
+            if (arg0->paletteIndex == 0) {
+                paletteOverride = *ptr;
             }
         } else if (*ptr == 0xFFF0) {
             ptr += 3;
         } else {
             if (*ptr != 0xFFF1) {
-                size = (*ptr & 0xF000) >> 12;
-                if (size == 0) {
-                    size = 12;
+                width = (*ptr & 0xF000) >> 12;
+                if (width == 0) {
+                    width = 12;
                 }
-                renderShadedTextSprite(x, y, *ptr & 0xFFF, arg0->unkC, arg0->unkE, alpha, arg0->unk8);
-                x += size;
+                renderShadedTextSprite(
+                    x,
+                    y,
+                    *ptr & 0xFFF,
+                    arg0->shade,
+                    arg0->textAlpha,
+                    paletteOverride,
+                    arg0->fontAsset
+                );
+                x += width;
             }
         }
 
@@ -1473,29 +1481,29 @@ void func_80035408_36008(Func80035408Arg *arg0) {
     }
 }
 
-void func_80035548_36148(Func80035548Arg *arg0) {
+void func_80035548_36148(HudTextLayoutCappedArg *arg0) {
     u16 *ptr;
     s16 x;
     s16 y;
-    u16 alpha;
-    s16 size;
+    u16 paletteOverride;
+    s16 width;
     s32 count;
     u16 cmd;
 
-    ptr = arg0->unk4;
-    x = arg0->unk0;
-    y = arg0->unk2;
+    ptr = arg0->textData;
+    x = arg0->startX;
+    y = arg0->startY;
     cmd = *ptr;
-    alpha = arg0->unk10;
+    paletteOverride = arg0->paletteIndex;
 
     if (cmd != 0xFFFF) {
         count = 0;
         do {
-            if ((u8)count >= arg0->unk11) {
+            if ((u8)count >= arg0->maxIterations) {
                 return;
             }
             if (cmd == 0xFFFD) {
-                x = arg0->unk0;
+                x = arg0->startX;
                 y += 16;
             } else if ((cmd == 0xFFFE) || (cmd == 0xFFFB)) {
                 if (cmd == 0xFFFE) {
@@ -1506,20 +1514,28 @@ void func_80035548_36148(Func80035548Arg *arg0) {
             } else if (cmd == 0xFFFC) {
                 ptr++;
                 count++;
-                if (arg0->unk10 == 0) {
-                    alpha = *ptr;
+                if (arg0->paletteIndex == 0) {
+                    paletteOverride = *ptr;
                 }
             } else if (cmd == 0xFFF0) {
                 ptr += 3;
                 count += 3;
             } else {
                 if (cmd != 0xFFF1) {
-                    size = (cmd & 0xF000) >> 12;
-                    if (size == 0) {
-                        size = 12;
+                    width = (cmd & 0xF000) >> 12;
+                    if (width == 0) {
+                        width = 12;
                     }
-                    renderShadedTextSprite(x, y, cmd & 0xFFF, arg0->unkC, arg0->unkE, alpha, arg0->unk8);
-                    x += size;
+                    renderShadedTextSprite(
+                        x,
+                        y,
+                        cmd & 0xFFF,
+                        arg0->shade,
+                        arg0->textAlpha,
+                        paletteOverride,
+                        arg0->fontAsset
+                    );
+                    x += width;
                 }
             }
             ptr++;

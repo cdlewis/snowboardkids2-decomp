@@ -1123,7 +1123,7 @@ void drawUnlockScreenItemIcons(void *untypedArg0) {
     if (alloc->unk5D8 != 0) {
         for (i = 0; i < 4; i++) {
             debugEnqueueCallback(8, 0, &renderSpriteFrame, &arg0->items[i]);
-            debugEnqueueCallback(8, 1, &func_80035408_36008, &arg0->titleX);
+            debugEnqueueCallback(8, 1, &renderHudTextLayout, &arg0->titleX);
         }
     }
 }

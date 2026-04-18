@@ -3,27 +3,27 @@
 #include "common.h"
 
 typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ u16 *unk4;
-    /* 0x08 */ void *unk8;
-    /* 0x0C */ u16 unkC;
-    /* 0x0E */ u16 unkE;
-    /* 0x10 */ u8 unk10;
-} Func80035408Arg;
+    /* 0x00 */ s16 startX;
+    /* 0x02 */ s16 startY;
+    /* 0x04 */ u16 *textData;
+    /* 0x08 */ void *fontAsset;
+    /* 0x0C */ u16 shade;
+    /* 0x0E */ u16 textAlpha;
+    /* 0x10 */ u8 paletteIndex;
+} HudTextLayoutArg;
 
 typedef struct {
-    /* 0x00 */ s16 unk0;
-    /* 0x02 */ s16 unk2;
-    /* 0x04 */ u16 *unk4;
-    /* 0x08 */ void *unk8;
-    /* 0x0C */ u16 unkC;
-    /* 0x0E */ u16 unkE;
-    /* 0x10 */ u8 unk10;
-    /* 0x11 */ u8 unk11;
-} Func80035548Arg;
+    /* 0x00 */ s16 startX;
+    /* 0x02 */ s16 startY;
+    /* 0x04 */ u16 *textData;
+    /* 0x08 */ void *fontAsset;
+    /* 0x0C */ u16 shade;
+    /* 0x0E */ u16 textAlpha;
+    /* 0x10 */ u8 paletteIndex;
+    /* 0x11 */ u8 maxIterations;
+} HudTextLayoutCappedArg;
 
-void func_80035408_36008(Func80035408Arg *arg0);
-void func_80035548_36148(Func80035548Arg *arg0);
+void renderHudTextLayout(HudTextLayoutArg *arg0);
+void func_80035548_36148(HudTextLayoutCappedArg *arg0);
 void func_80035DE0_369E0(void *, void *, s16, s16, u8, u8, u8, u8);
 void enqueueHudTextLayout(void *fontAsset, void *textData, s16 startX, s16 startY, u8 alpha, u8 transparency, u8 paletteIndex, u8 priority, u8 flags);

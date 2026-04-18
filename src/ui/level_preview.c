@@ -1392,7 +1392,7 @@ void updatePrizeDisplay(PrizeDisplayState *state) {
 
     if ((u32)(allocation->menuState - 2) < 2) {
         renderTiledSprite3x3(state->backgroundAsset, -0x40, -0x8, 8, 4, 0, 0x60, 0xC0, 8, 0);
-        debugEnqueueCallback(8, 1, func_80035408_36008, &state->titleX);
+        debugEnqueueCallback(8, 1, renderHudTextLayout, &state->titleX);
 
         spriteEntry = state->spriteEntries;
         for (i = 0; i < 2; i++) {
@@ -1400,7 +1400,7 @@ void updatePrizeDisplay(PrizeDisplayState *state) {
         }
 
         state->prizeCount = allocation->unkB46;
-        debugEnqueueCallback(8, 1, func_80035408_36008, &state->counterX);
+        debugEnqueueCallback(8, 1, renderHudTextLayout, &state->counterX);
     }
 }
 

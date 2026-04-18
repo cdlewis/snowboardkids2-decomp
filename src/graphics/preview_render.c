@@ -1581,7 +1581,7 @@ void updateBoardShopTitleText(BoardShopTitleTextUpdateArg *arg0) {
         new_var = D_8008F200_8FE00.unkA;
         arg0->textWidth = new_var[allocation->titleCornersVisible];
         // this makes no sense but it matches
-        new_var = (void *)&func_80035408_36008;
+        new_var = (void *)&renderHudTextLayout;
         arg0->textData = D_8008F200_8FE00.unk0[allocation->titleCornersVisible];
         debugEnqueueCallback(9, 7, new_var, arg0);
     }
