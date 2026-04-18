@@ -779,10 +779,10 @@ extern s16 gGraphicsMode;
 extern Gfx D_80090DB0_919B0[];
 extern void *D_80094DD0_959D0;
 extern s32 bossHomingProjectileBaseVector;
-extern DisplayLists D_8009A670_9B270;
-extern DisplayLists D_8009A680_9B280;
-extern DisplayLists D_8009A690_9B290;
-extern DisplayLists D_8009A6A0_9B2A0;
+DisplayLists D_8009A670_9B270 = { 0, (Gfx *)0x01000000, NULL, NULL };
+DisplayLists D_8009A680_9B280 = { 0, (Gfx *)0x01000190, NULL, NULL };
+DisplayLists D_8009A690_9B290 = { 0, NULL, (Gfx *)0x01000338, NULL };
+DisplayLists D_8009A6A0_9B2A0 = { 0, NULL, (Gfx *)0x01000488, NULL };
 
 void updateAllItemBoxes(ItemBoxController *arg0);
 void initHomingProjectileMovement(HomingProjectileInitArg *arg0);
