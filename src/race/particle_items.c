@@ -14,16 +14,26 @@
 #include "race/track_collision.h"
 #include "system/task_scheduler.h"
 
-extern void *D_8009A6B0_9B2B0;
-extern void *D_8009A6C0_9B2C0;
-extern void *D_8009A6D0_9B2D0;
-extern void *D_8009A6E0_9B2E0;
-extern void *D_8009A6F0_9B2F0;
-extern void *D_8009A700_9B300;
-extern void *D_8009A710_9B310;
-extern void *D_8009A720_9B320;
-extern void *D_8009A760_9B360;
-extern void *D_8009A770_9B370;
+s32 D_8009A6B0_9B2B0[4] = { 0x00000000, 0x010005D8, 0x01000780, 0x00000000 };
+s32 D_8009A6C0_9B2C0[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01000878 };
+s32 D_8009A6D0_9B2D0[4] = { 0x00000000, 0x01000A20, 0x00000000, 0x00000000 };
+s32 D_8009A6E0_9B2E0[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01000D28 };
+s32 D_8009A6F0_9B2F0[4] = { 0x00000000, 0x00000000, 0x01000F58, 0x00000000 };
+s32 D_8009A700_9B300[4] = { 0x00000000, 0x010010F8, 0x00000000, 0x00000000 };
+s32 D_8009A710_9B310[4] = { 0x00000000, 0x01001328, 0x010014E0, 0x00000000 };
+s32 D_8009A720_9B320[4] = { 0x00000000, 0x00000000, 0x010015D8, 0x00000000 };
+s32 D_8009A730_9B330[4] = { 0x00000000, 0x010016C0, 0x00000000, 0x00000000 };
+s32 D_8009A740_9B340[4] = { 0x00000000, 0x00000000, 0x010018A8, 0x00000000 };
+s32 D_8009A750_9B350[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01001A40 };
+s32 D_8009A760_9B360[4] = { 0x00000000, 0x00000000, 0x01001BE0, 0x00000000 };
+s32 D_8009A770_9B370[4] = { 0x00000000, 0x00000000, 0x01001CD8, 0x00000000 };
+Gfx D_8009A780_9B380[] = {
+    { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00210405 } },
+    { .words = { 0xD7000002, 0x80008000 } }, { .words = { 0xE7000000, 0x00000000 } },
+    { .words = { 0xE3001201, 0x00002000 } }, { .words = { 0xE3000A01, 0x00100000 } },
+    { .words = { 0xFC127FFF, 0xFFFFF238 } }, { .words = { 0xE200001C, 0xC8113078 } },
+    { .words = { 0xE3001001, 0x00008000 } }, { .words = { 0xDF000000, 0x00000000 } },
+};
 extern s32 gFrameCounter;
 
 void cleanupStarEffect(void **);
@@ -1376,9 +1386,6 @@ void *spawnPlayerAuraEffect(Player *player) {
     return task;
 }
 
-extern void *D_8009A730_9B330;
-extern void *D_8009A740_9B340;
-extern void *D_8009A750_9B350;
 void cleanupPlayerFlashEffect(Func432D8Arg *);
 void updatePlayerFlashEffect(PlayerFlashEffectState *);
 void fadeOutPlayerFlashEffect(PlayerFlashEffectState *);
@@ -2418,7 +2425,6 @@ void cleanupItemTriggerTask(Func45010Arg *arg0) {
     arg0->itemData = freeNodeMemory(arg0->itemData);
 }
 
-extern Gfx D_8009A780_9B380[];
 extern s32 gLookAtPtr;
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
