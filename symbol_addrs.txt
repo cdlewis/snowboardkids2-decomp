@@ -1411,6 +1411,7 @@ shrinkTrainingInstructionPanelWidth = 0x800BB928; // rom:0xB6208
 cleanupTrainingInstructionTask = 0x800BB9E0; // rom:0xB62C0
 s_trainingPanelMessageTables = 0x800BCB94; // rom:0xB7474
 initChaseCameraPosition = 0x8003C170; // rom:0x3CD70
+updateChaseCamera = 0x8003C2BC; // rom:0x3CEBC
 spawnChaseCameraTask = 0x8003CEC4; // rom:0x3DAC4
 initOrbitCamera = 0x8003CF0C; // rom:0x3DB0C
 updateOrbitCamera = 0x8003CF40; // rom:0x3DB40

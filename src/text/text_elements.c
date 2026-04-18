@@ -78,7 +78,7 @@ typedef struct {
     PlayerDataExt *players;
 } ScriptedCameraAllocation;
 
-void func_8003C2BC_3CEBC(ChaseCameraState *camera);
+void updateChaseCamera(ChaseCameraState *camera);
 extern s32 D_8008FEB0_90AB0;
 void updateOrbitCamera(OrbitCameraState *camera);
 void initScriptedCamera(ScriptedCameraState *camera);
@@ -118,10 +118,10 @@ void initChaseCameraPosition(ChaseCameraState *camera) {
     camera->unk24 = 0;
     camera->height = 0x1E0000;
 
-    setCallbackWithContinue(func_8003C2BC_3CEBC);
+    setCallbackWithContinue(updateChaseCamera);
 }
 
-void func_8003C2BC_3CEBC(ChaseCameraState *camera) {
+void updateChaseCamera(ChaseCameraState *camera) {
     GameState *gs;
     Transform3D rotationMatrix;
     Vec3i behindOffset;
