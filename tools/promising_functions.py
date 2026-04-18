@@ -341,8 +341,8 @@ def main():
     # Print results
     for function_name, percentage, instruction_count, decompme_percentage in functions:
         if decompme_percentage is not None:
-            # Use mushroom emoji if local match is better than decomp.me
-            if percentage > decompme_percentage:
+            # Use mushroom emoji if local match is >1% better than decomp.me
+            if percentage > decompme_percentage + 1.0:
                 decompme_str = f"🍄 ({decompme_percentage:.2f}%)"
             else:
                 decompme_str = f"({decompme_percentage:.2f}%)"
