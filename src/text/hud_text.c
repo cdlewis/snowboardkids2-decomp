@@ -1481,13 +1481,13 @@ void renderHudTextLayout(HudTextLayoutArg *arg0) {
     }
 }
 
-void func_80035548_36148(HudTextLayoutCappedArg *arg0) {
+void renderHudTextLayoutCapped(HudTextLayoutCappedArg *arg0) {
     u16 *ptr;
     s16 x;
     s16 y;
     u16 paletteOverride;
     s16 width;
-    s32 count;
+    s32 iterationCount;
     u16 cmd;
 
     ptr = arg0->textData;
@@ -1497,9 +1497,9 @@ void func_80035548_36148(HudTextLayoutCappedArg *arg0) {
     paletteOverride = arg0->paletteIndex;
 
     if (cmd != 0xFFFF) {
-        count = 0;
+        iterationCount = 0;
         do {
-            if ((u8)count >= arg0->maxIterations) {
+            if ((u8)iterationCount >= arg0->maxIterations) {
                 return;
             }
             if (cmd == 0xFFFD) {
@@ -1513,13 +1513,13 @@ void func_80035548_36148(HudTextLayoutCappedArg *arg0) {
                 }
             } else if (cmd == 0xFFFC) {
                 ptr++;
-                count++;
+                iterationCount++;
                 if (arg0->paletteIndex == 0) {
                     paletteOverride = *ptr;
                 }
             } else if (cmd == 0xFFF0) {
                 ptr += 3;
-                count += 3;
+                iterationCount += 3;
             } else {
                 if (cmd != 0xFFF1) {
                     width = (cmd & 0xF000) >> 12;
@@ -1540,7 +1540,7 @@ void func_80035548_36148(HudTextLayoutCappedArg *arg0) {
             }
             ptr++;
             cmd = *ptr;
-            count++;
+            iterationCount++;
         } while (cmd != 0xFFFF);
     }
 }

@@ -352,7 +352,7 @@ state_done:
         } else {
             arg0->unkB0 = 0;
         }
-        debugEnqueueCallback(1, 0, &func_80035548_36148, &arg0->unk8C);
+        debugEnqueueCallback(1, 0, &renderHudTextLayoutCapped, &arg0->unk8C);
     }
 
     if (renderSlots != 0) {

@@ -24,6 +24,6 @@ typedef struct {
 } HudTextLayoutCappedArg;
 
 void renderHudTextLayout(HudTextLayoutArg *arg0);
-void func_80035548_36148(HudTextLayoutCappedArg *arg0);
+void renderHudTextLayoutCapped(HudTextLayoutCappedArg *arg0);
 void func_80035DE0_369E0(void *, void *, s16, s16, u8, u8, u8, u8);
 void enqueueHudTextLayout(void *fontAsset, void *textData, s16 startX, s16 startY, u8 alpha, u8 transparency, u8 paletteIndex, u8 priority, u8 flags);
