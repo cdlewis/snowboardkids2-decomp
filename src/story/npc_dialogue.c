@@ -549,7 +549,7 @@ void updateStoryMapNpcIdle(Func297D8Arg *arg0) {
         setCallback(updateStoryMapNpcTalking);
     }
 
-    if (arg0->unk5D == 9) {
+    if (arg0->itemType == 9) {
         arg0->unk62 = 0;
     }
 }
@@ -772,7 +772,7 @@ extern u16 gStoryMapItemSpawnPositionsZ[];
 void playStoryMapNpcIdleSound(Func297D8Arg *arg0) {
     arg0->unk5A = 0;
 
-    switch (arg0->unk5D) {
+    switch (arg0->itemType) {
         case 0xB:
             playSoundEffect(0xB2);
             break;

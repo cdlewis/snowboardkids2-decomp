@@ -29,7 +29,7 @@ typedef struct {
     /* 0x58 */ u16 unk58;
     /* 0x5A */ s16 unk5A;
     /* 0x5C */ u8 unk5C;
-    /* 0x5D */ u8 unk5D;
+    /* 0x5D */ u8 itemType;
     /* 0x5E */ u8 unk5E;
     /* 0x5F */ u8 unk5F;
     /* 0x60 */ u8 pad60[0x1];

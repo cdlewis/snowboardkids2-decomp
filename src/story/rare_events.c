@@ -25,12 +25,12 @@ typedef struct {
     /* 0x4C */ u16 *unk4C;
     /* 0x50 */ u16 animFrame;
     /* 0x52 */ u8 pad52[0x2];
-    /* 0x54 */ u16 unk54;
+    /* 0x54 */ u16 savedAnimFrame;
     /* 0x56 */ u16 unk56;
     /* 0x58 */ u16 animSpeed;
     /* 0x5A */ u16 unk5A;
     /* 0x5C */ u8 unk5C;
-    /* 0x5D */ u8 unk5D;
+    /* 0x5D */ u8 itemType;
     /* 0x5E */ u8 state;
     /* 0x5F */ u8 pad5F[0x2];
     /* 0x61 */ u8 prevState;
@@ -315,7 +315,7 @@ extern s16 D_8009F238_9FE38;
 extern s16 gStoryMapItemWaypointCounts[];
 
 s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle);
-s32 func_8002A4AC_2B0AC(WaypointMoveState *, u8);
+s32 moveStoryMapItemAlongWaypoints(WaypointMoveState *, u8);
 s32 updateStoryMapNpcBehavior(Func8002A390Arg *);
 s16 stepAngleTowardsTarget(s16 targetAngle, s16 currentAngle);
 
@@ -328,7 +328,7 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
 
     switch (stateVal) {
         case 0:
-            if (func_8002A4AC_2B0AC((WaypointMoveState *)&arg0->matrix, arg0->unk5D) != 0) {
+            if (moveStoryMapItemAlongWaypoints((WaypointMoveState *)&arg0->matrix, arg0->itemType) != 0) {
                 return 1;
             }
             if (state->unk421 != 0) {
@@ -337,8 +337,8 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
             if (isNpcFacingPlayer(arg0->matrix.translation.x, arg0->matrix.translation.z, arg0->currentAngle) == 0) {
                 return 0;
             }
-            arg0->unk54 = arg0->animFrame;
-            if (arg0->unk5D == 5) {
+            arg0->savedAnimFrame = arg0->animFrame;
+            if (arg0->itemType == 5) {
                 arg0->animFrame = 0x21;
             } else {
                 arg0->animFrame = 0;
@@ -362,29 +362,28 @@ s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
             }
             arg0->prevState = arg0->state;
             arg0->state = 0;
-            arg0->animFrame = arg0->unk54;
+            arg0->animFrame = arg0->savedAnimFrame;
             break;
     }
 
     return 0;
 }
 
-s32 func_8002A4AC_2B0AC(WaypointMoveState *state, u8 itemType) {
+s32 moveStoryMapItemAlongWaypoints(WaypointMoveState *state, u8 itemType) {
     s32 targetX;
     s32 targetZ;
-    s32 result;
-    s16 angle;
-    s32 v4;
-    s32 v3;
-    s32 v2;
-    s32 v;
+    s32 reachedEndpoint;
+    s32 absDeltaZ;
+    s32 absDeltaX;
+    s32 deltaZ;
+    s32 deltaX;
     s32 threshold;
     const s32 highSpeed = 0x1C000;
     const s32 lowSpeed = 0x10000;
     s8 wpIdx;
 
     getCurrentAllocation();
-    result = 0;
+    reachedEndpoint = 0;
 
     if (state->moveDirection != 0) {
         wpIdx = ((state->currentWaypoint + 1) % state->waypointCount) * 2;
@@ -410,13 +409,13 @@ s32 func_8002A4AC_2B0AC(WaypointMoveState *state, u8 itemType) {
     threshold = -(state->speed >= 0x1B000) & highSpeed;
     threshold |= lowSpeed;
 
-    v = targetX - state->matrix.translation.x;
-    v3 = ABS(v);
+    deltaX = targetX - state->matrix.translation.x;
+    absDeltaX = ABS(deltaX);
 
-    if (v3 <= threshold) {
-        v2 = targetZ - state->matrix.translation.z;
-        v4 = ABS(v2);
-        if (v4 <= threshold) {
+    if (absDeltaX <= threshold) {
+        deltaZ = targetZ - state->matrix.translation.z;
+        absDeltaZ = ABS(deltaZ);
+        if (absDeltaZ <= threshold) {
             if (state->moveDirection != 0) {
                 state->currentWaypoint = state->currentWaypoint + 1;
             } else {
@@ -440,7 +439,7 @@ s32 func_8002A4AC_2B0AC(WaypointMoveState *state, u8 itemType) {
 
             if ((state->currentWaypoint == 0 || state->currentWaypoint == state->waypointCount - 1) &&
                 gStoryMapItemWaypointCounts[itemType] != 4) {
-                result = 1;
+                reachedEndpoint = 1;
             } else {
                 state->headingAngle = computeAngleToPosition(
                     state->waypointData[wpIdx + 1] << 16,
@@ -452,7 +451,7 @@ s32 func_8002A4AC_2B0AC(WaypointMoveState *state, u8 itemType) {
         }
     }
 
-    return result;
+    return reachedEndpoint;
 }
 
 s32 updateStoryMapNpcBehavior(Func8002A390Arg *s0) {
@@ -709,7 +708,7 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
             if (absAngleDiff >= 0xAAB) {
                 npc->unk50 = 1;
                 npc->unk30 = (npc->unk30 + 0x1000) & 0x1FFF;
-                if (npc->unk5D == 5) {
+                if (npc->itemType == 5) {
                     npc->unk50 = 0x22;
                 }
                 npc->unk37 = 0;
@@ -721,14 +720,14 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
             } else {
                 npc->unk37 = 1;
                 if (absAngleDiff < 0x2AA) {
-                    if (npc->unk5D != 5) {
+                    if (npc->itemType != 5) {
                         npc->unk50 = 0;
                     } else {
                         npc->unk50 = 0x21;
                     }
                 } else {
                     npc->unk50 = 2;
-                    if (npc->unk5D == 5) {
+                    if (npc->itemType == 5) {
                         npc->unk50 = 0x1D;
                     }
                 }
@@ -748,7 +747,7 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
                 }
                 if (npc->unk50 == 2 || npc->unk50 == 0x1D) {
                     npc->unk50 = 0;
-                    if (npc->unk5D == 5) {
+                    if (npc->itemType == 5) {
                         npc->unk50 = 0x21;
                     }
                 }
@@ -762,7 +761,7 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
             npc->unk30 = npc->unk30 + angleDiff;
             if (npc->unk50 == 1 || npc->unk50 == 0x22) {
                 if (npc->unk37 != 0) {
-                    if (npc->unk5D == 5) {
+                    if (npc->itemType == 5) {
                         npc->unk50 = 0x21;
                     } else {
                         npc->unk50 = 0;
@@ -808,7 +807,7 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
     u16 dialogueIndex;
 
     if (arg0->unk5C == 4) {
-        if (arg0->unk5D == 5) {
+        if (arg0->itemType == 5) {
             arg0->unk4C = sNpcDialoguePointerTable;
             dialogueIndex = arg0->unk4C[0];
             arg0->unk37 = 0;
@@ -818,7 +817,7 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
         }
     }
     if (arg0->unk5C == 3) {
-        if (arg0->unk5D == 8) {
+        if (arg0->itemType == 8) {
             arg0->unk4C = sDialogueSequence17_19;
             dialogueIndex = arg0->unk4C[0];
             arg0->unk37 = 0;
