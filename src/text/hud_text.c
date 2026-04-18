@@ -1843,12 +1843,21 @@ void renderShadedTextSprite(
     }
 }
 
-void func_80035DE0_369E0(void *arg0, void *arg1, s16 startX, s16 startY, u8 arg4, u8 arg5, u8 arg6, u8 arg7) {
+void enqueueHudTextLayoutAlphaBlended(
+    void *fontAsset,
+    void *textData,
+    s16 startX,
+    s16 startY,
+    u8 alpha,
+    u8 paletteIndex,
+    u8 priority,
+    u8 flags
+) {
     s16 x = startX;
     s16 y = startY;
-    u16 palette = arg5 & 0xFF;
+    u16 palette = paletteIndex & 0xFF;
     TextElementState *elem;
-    u16 *ptr = (u16 *)arg1;
+    u16 *ptr = (u16 *)textData;
 
     while ((*ptr) != 0xFFFF) {
         if (*ptr == 0xFFFD) {
@@ -1862,7 +1871,7 @@ void func_80035DE0_369E0(void *arg0, void *arg1, s16 startX, s16 startY, u8 arg4
             }
         } else if (*ptr == 0xFFFC) {
             ptr++;
-            if (arg5 == 0) {
+            if (paletteIndex == 0) {
                 palette = *ptr;
             }
         } else if (*ptr == 0xFFF0) {
@@ -1877,13 +1886,13 @@ void func_80035DE0_369E0(void *arg0, void *arg1, s16 startX, s16 startY, u8 arg4
             elem = advanceLinearAlloc(16);
             if (elem != NULL) {
                 initHudElementState(elem);
-                elem->alpha = arg4;
-                elem->spriteData = arg0;
+                elem->alpha = alpha;
+                elem->spriteData = fontAsset;
                 elem->paletteIndex = palette + 1;
                 elem->x = x;
                 elem->y = y;
                 elem->frameIndex = cmd & 0xFFF;
-                debugEnqueueCallback(arg6, arg7, renderAlphaBlendedTextSprite, elem);
+                debugEnqueueCallback(priority, flags, renderAlphaBlendedTextSprite, elem);
             }
             x += width;
         }

@@ -3638,6 +3638,7 @@ enqueueHudTextLayout = 0x80035260; // rom:0x35E60
 renderHudTextLayout = 0x80035408; // rom:0x36008
 renderHudTextLayoutCapped = 0x80035548; // rom:0x36148
 renderShadedTextSprite = 0x80035878; // rom:0x36478
+enqueueHudTextLayoutAlphaBlended = 0x80035DE0; // rom:0x369E0
 loadTextRenderAsset = 0x80035F80; // rom:0x36B80
 worldToScreenCoords = 0x80035FE0; // rom:0x36BE0
 initDiscoveryDisplaySystem = 0x80036250; // rom:0x36E50

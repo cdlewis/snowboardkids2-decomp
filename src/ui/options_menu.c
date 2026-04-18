@@ -260,7 +260,7 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
 
         debugEnqueueCallback(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
 
-        func_80035DE0_369E0(
+        enqueueHudTextLayoutAlphaBlended(
             arg0->textRenderAsset,
             arg0->labelEntries[i].textData,
             arg0->labelEntries[i].x,
@@ -353,7 +353,7 @@ void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
 
             debugEnqueueCallback(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
 
-            func_80035DE0_369E0(
+            enqueueHudTextLayoutAlphaBlended(
                 arg0->textRenderAsset,
                 arg0->textEntries[i].textData,
                 arg0->textEntries[i].x,
