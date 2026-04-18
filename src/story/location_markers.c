@@ -151,7 +151,7 @@ void checkTownExitTrigger(void *);
 void cleanupTownExitMarker(void *);
 void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *);
 
-void func_80036AF8_376F8(s16 *outX, s16 *outY, u16 *encodedText);
+void computeEncodedTextCenterPos(s16 *outX, s16 *outY, u16 *encodedText);
 void updateStoryMapDialogueTurn(void *arg0);
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *);
 void func_800175E0_181E0(void);
@@ -506,7 +506,7 @@ void checkTownExitTrigger(void *arg0) {
     }
 }
 
-void func_80036AF8_376F8(s16 *outX, s16 *outY, u16 *encodedText) {
+void computeEncodedTextCenterPos(s16 *outX, s16 *outY, u16 *encodedText) {
     u8 lineWidths[16];
     u8 maxWidth;
     u8 lineCount;
