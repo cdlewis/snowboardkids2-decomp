@@ -62,10 +62,10 @@ void updateStoryMapNpcJump(Func297D8Arg *arg0) {
     shouldSetCallback = 0;
 
     if (arg0->unk5E == 5) {
-        switch (arg0->unk50) {
+        switch (arg0->animState) {
             case 0x1B:
                 if (arg0->unk62 != 0) {
-                    arg0->unk50 = 0x1C;
+                    arg0->animState = 0x1C;
                 }
                 break;
 
@@ -74,7 +74,7 @@ void updateStoryMapNpcJump(Func297D8Arg *arg0) {
                 if (arg0->unk62 == 3) {
                     model = arg0->model;
                     currentUnk5E = *(volatile u8 *)&arg0->unk5E;
-                    arg0->unk50 = 4;
+                    arg0->animState = 4;
                     arg0->unk5E = 0;
                     arg0->unk62 = 0;
                     goto block_15;
@@ -95,7 +95,7 @@ void updateStoryMapNpcJump(Func297D8Arg *arg0) {
                 currentUnk5E = arg0->unk5E;
                 arg0->unk5A = -1;
                 arg0->unk5E = 5;
-                arg0->unk50 = 0x1B;
+                arg0->animState = 0x1B;
             block_15:
                 arg0->unk61 = currentUnk5E;
                 setAnimationIndex(model, funcArg);
@@ -109,10 +109,10 @@ void updateStoryMapNpcJump(Func297D8Arg *arg0) {
     allocation->unk410 = arg0->matrix.translation.z;
 
     if ((allocation->dialogueTurnState == 0x11) && (shouldSetCallback ^ 1)) {
-        savedUnk50 = arg0->unk50;
+        savedUnk50 = arg0->animState;
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
-        arg0->unk50 = 0;
+        arg0->animState = 0;
         arg0->callback = updateStoryMapNpcJump;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
@@ -141,10 +141,10 @@ void updateStoryMapNpcWave(Func297D8Arg *arg0) {
     shouldSetCallback = 0;
 
     if (arg0->unk5E == 6) {
-        switch (arg0->unk50) {
+        switch (arg0->animState) {
             case 0x18:
                 if (arg0->unk62 != 0) {
-                    arg0->unk50 = 0x19;
+                    arg0->animState = 0x19;
                 }
                 break;
 
@@ -152,7 +152,7 @@ void updateStoryMapNpcWave(Func297D8Arg *arg0) {
                 arg0->unk5A++;
                 if (arg0->unk5A == 0x3C) {
                     arg0->unk5A = 0;
-                    arg0->unk50 = 0x1A;
+                    arg0->animState = 0x1A;
                 }
                 break;
 
@@ -160,7 +160,7 @@ void updateStoryMapNpcWave(Func297D8Arg *arg0) {
                 if (arg0->unk62 != 0) {
                     arg0->unk62 = 0;
                     arg0->unk5E = 0;
-                    arg0->unk50 = arg0->unk58;
+                    arg0->animState = arg0->unk58;
                 }
                 break;
         }
@@ -176,7 +176,7 @@ void updateStoryMapNpcWave(Func297D8Arg *arg0) {
                 currentUnk5E = arg0->unk5E;
                 arg0->unk5A = -1;
                 arg0->unk5E = 6;
-                arg0->unk50 = 0x18;
+                arg0->animState = 0x18;
                 arg0->unk61 = currentUnk5E;
             }
         }
@@ -188,10 +188,10 @@ void updateStoryMapNpcWave(Func297D8Arg *arg0) {
     allocation->unk410 = arg0->matrix.translation.z;
 
     if ((allocation->dialogueTurnState == 0x11) && (shouldSetCallback ^ 1)) {
-        savedUnk50 = arg0->unk50;
+        savedUnk50 = arg0->animState;
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
-        arg0->unk50 = 0;
+        arg0->animState = 0;
         arg0->callback = updateStoryMapNpcWave;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
@@ -226,7 +226,7 @@ void updateStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
         if (arg0->unk5A == 0x10) {
             arg0->unk5A = -1;
             arg0->unk5E = 0;
-            arg0->unk50 = 4;
+            arg0->animState = 4;
             arg0->unk58 = 4;
             arg0->unk24 = 0x1D000;
         }
@@ -237,7 +237,7 @@ void updateStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
         } else if (arg0->unk3A == 0x10) {
             if (arg0->unk5A >= 0) {
                 arg0->unk5E = 9;
-                arg0->unk50 = 0;
+                arg0->animState = 0;
                 spawnSpriteEffectEx(arg0->model, 0, 6, 10, &arg0->unk40, 0x10000, 0, 2, 0, 0);
             }
         }
@@ -249,10 +249,10 @@ void updateStoryMapNpcFloatEffect(Func297D8Arg *arg0) {
     allocation->unk410 = arg0->matrix.translation.z;
 
     if ((allocation->dialogueTurnState == 0x11) && (shouldSetCallback ^ 1)) {
-        savedUnk50 = arg0->unk50;
+        savedUnk50 = arg0->animState;
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
-        arg0->unk50 = 0;
+        arg0->animState = 0;
         arg0->callback = updateStoryMapNpcFloatEffect;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
@@ -282,7 +282,7 @@ void updateStoryMapNpcLookAround(Func297D8Arg *arg0) {
         if (arg0->unk62 != 0) {
             arg0->unk5E = 0;
             arg0->unk62 = 0;
-            arg0->unk50 = arg0->unk58;
+            arg0->animState = arg0->unk58;
         }
     } else {
         if (tryStoryMapNpcInteraction(arg0) != 0) {
@@ -294,7 +294,7 @@ void updateStoryMapNpcLookAround(Func297D8Arg *arg0) {
                 temp = arg0->unk5E;
                 arg0->unk5E = 7;
                 arg0->unk5A = 0;
-                arg0->unk50 = 0x16;
+                arg0->animState = 0x16;
                 arg0->unk61 = temp;
             }
         }
@@ -306,10 +306,10 @@ void updateStoryMapNpcLookAround(Func297D8Arg *arg0) {
     alloc->unk410 = arg0->matrix.translation.z;
 
     if ((alloc->dialogueTurnState == 0x11) && (setCallbackFlag ^ 1)) {
-        u16 savedUnk50 = arg0->unk50;
+        u16 savedUnk50 = arg0->animState;
         u8 savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
-        arg0->unk50 = 0;
+        arg0->animState = 0;
         arg0->callback = updateStoryMapNpcLookAround;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
@@ -341,10 +341,10 @@ void updateStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
     shouldSetCallback = 0;
 
     if (arg0->unk5E == 8) {
-        switch (arg0->unk50) {
+        switch (arg0->animState) {
             case 0xA:
                 if (arg0->unk62 != 0) {
-                    arg0->unk50 = 0xB;
+                    arg0->animState = 0xB;
                 }
                 break;
 
@@ -352,20 +352,20 @@ void updateStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
                 arg0->unk5A++;
                 if (arg0->unk5A == 0x3C) {
                     arg0->unk5A = -1;
-                    arg0->unk50 = 0xC;
+                    arg0->animState = 0xC;
                 }
                 break;
 
             case 0xC:
                 if (arg0->unk62 != 0) {
-                    arg0->unk50 = 0x10;
+                    arg0->animState = 0x10;
                 }
                 break;
 
             case 0x10:
                 if (arg0->unk62 != 0) {
                     arg0->unk62 = 0;
-                    arg0->unk50 = 4;
+                    arg0->animState = 4;
                     arg0->unk58 = 4;
                     arg0->unk24 = 0x18000;
                     arg0->unk5E = 0;
@@ -383,7 +383,7 @@ void updateStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
             if (arg0->unk5A == 0x96) {
                 temp = arg0->unk5E;
                 arg0->unk5E = 8;
-                arg0->unk50 = 0xA;
+                arg0->animState = 0xA;
                 arg0->unk5A = 0;
                 arg0->unk61 = temp;
                 spawnSpriteEffectEx(arg0->model, 0, 7, 0x2D, &arg0->unk40, 0x10000, 0, 2, 0, 0);
@@ -398,10 +398,10 @@ void updateStoryMapNpcThinkEffect(Func297D8Arg *arg0) {
 
     if ((allocation->dialogueTurnState == 0x11) && (shouldSetCallback ^ 1)) {
         allocation->unk42E = 1;
-        savedUnk50 = arg0->unk50;
+        savedUnk50 = arg0->animState;
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
-        arg0->unk50 = 0;
+        arg0->animState = 0;
         arg0->callback = updateStoryMapNpcThinkEffect;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
@@ -538,11 +538,11 @@ void updateStoryMapNpcIdle(Func297D8Arg *arg0) {
     }
 
     if ((alloc->dialogueTurnState == 0x11) && (setCallbackFlag ^ 1)) {
-        u16 savedUnk50 = arg0->unk50;
+        u16 savedUnk50 = arg0->animState;
         u8 savedUnk5E = arg0->unk5E;
 
         arg0->unk5E = 0x14;
-        arg0->unk50 = 0;
+        arg0->animState = 0;
         arg0->callback = updateStoryMapNpcIdle;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
@@ -572,10 +572,10 @@ void updateStoryMapNpcNod(Func297D8Arg *arg0) {
     setCallbackFlag = 0;
 
     if (arg0->unk5E == 0xA) {
-        switch (arg0->unk50) {
+        switch (arg0->animState) {
             case 0x10:
                 if (arg0->unk62 != 0) {
-                    arg0->unk50 = 0x11;
+                    arg0->animState = 0x11;
                 }
                 break;
 
@@ -583,13 +583,13 @@ void updateStoryMapNpcNod(Func297D8Arg *arg0) {
                 arg0->unk5A = arg0->unk5A + 1;
                 if (arg0->unk5A == 0x1E) {
                     arg0->unk5A = 0;
-                    arg0->unk50 = 0x12;
+                    arg0->animState = 0x12;
                 }
                 break;
 
             case 0x12:
                 if (arg0->unk62 != 0) {
-                    arg0->unk50 = arg0->unk58;
+                    arg0->animState = arg0->unk58;
                     arg0->unk5E = 0;
                 }
                 break;
@@ -603,7 +603,7 @@ void updateStoryMapNpcNod(Func297D8Arg *arg0) {
             if (arg0->unk5A == 0x78) {
                 arg0->unk5E = 0xA;
                 arg0->unk5A = 0;
-                arg0->unk50 = 0x10;
+                arg0->animState = 0x10;
             }
         }
     }
@@ -614,10 +614,10 @@ void updateStoryMapNpcNod(Func297D8Arg *arg0) {
     alloc->unk410 = arg0->matrix.translation.z;
 
     if ((alloc->dialogueTurnState == 0x11) && (setCallbackFlag ^ 1)) {
-        u16 savedUnk50 = arg0->unk50;
+        u16 savedUnk50 = arg0->animState;
         u8 savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
-        arg0->unk50 = 0;
+        arg0->animState = 0;
         arg0->callback = updateStoryMapNpcNod;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
@@ -642,7 +642,7 @@ void updateStoryMapNpcTalk(Func297D8Arg *arg0) {
         case 1:
             if (arg0->unk62 != 0) {
                 arg0->unk5E = 2;
-                arg0->unk50 = arg0->unk50 + 1;
+                arg0->animState = arg0->animState + 1;
                 if (arg0->unk5C == 5) {
                     playSoundEffect(0xD6);
                 }
@@ -654,14 +654,14 @@ void updateStoryMapNpcTalk(Func297D8Arg *arg0) {
             if (arg0->unk5A == 0x5A) {
                 arg0->unk5A = 0;
                 arg0->unk5E = 3;
-                arg0->unk50 = arg0->unk50 + 1;
+                arg0->animState = arg0->animState + 1;
             }
             break;
 
         case 3:
             if (arg0->unk62 != 0) {
                 arg0->unk5E = 0;
-                arg0->unk50 = arg0->unk58;
+                arg0->animState = arg0->unk58;
                 setAnimationIndex(arg0->model, -1);
             }
             break;
@@ -674,9 +674,9 @@ void updateStoryMapNpcTalk(Func297D8Arg *arg0) {
                 if (arg0->unk5A == 0x4B) {
                     arg0->unk5E = 1;
                     arg0->unk5A = 0;
-                    arg0->unk50 = 0x16;
+                    arg0->animState = 0x16;
                     if (arg0->unk5C >= 6) {
-                        arg0->unk50 = 0xA;
+                        arg0->animState = 0xA;
                     }
                     if (arg0->unk5C == 5) {
                         setAnimationIndex(arg0->model, 0);
@@ -713,10 +713,10 @@ void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
     shouldSetCallback = 0;
 
     if (arg0->unk5E == 1) {
-        switch (arg0->unk50) {
+        switch (arg0->animState) {
             case 0x13:
                 if (arg0->unk62 != 0) {
-                    arg0->unk50 = 0x14;
+                    arg0->animState = 0x14;
                 }
                 break;
 
@@ -724,14 +724,14 @@ void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
                 arg0->unk5A++;
                 if (arg0->unk5A == 0x2D) {
                     arg0->unk5A = 0;
-                    arg0->unk50 = 0x15;
+                    arg0->animState = 0x15;
                 }
                 break;
 
             case 0x15:
                 if (arg0->unk62 != 0) {
                     arg0->unk5E = 0;
-                    arg0->unk50 = arg0->unk58;
+                    arg0->animState = arg0->unk58;
                 }
                 break;
         }
@@ -744,7 +744,7 @@ void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
             if (arg0->unk5A == 0x78) {
                 arg0->unk5E = 1;
                 arg0->unk5A = 0;
-                arg0->unk50 = 0x13;
+                arg0->animState = 0x13;
             }
         }
     }
@@ -755,10 +755,10 @@ void updateStoryMapNpcStretch(Func297D8Arg *arg0) {
     allocation->unk410 = arg0->matrix.translation.z;
 
     if ((allocation->dialogueTurnState == 0x11) && (shouldSetCallback ^ 1)) {
-        savedUnk50 = arg0->unk50;
+        savedUnk50 = arg0->animState;
         savedUnk5E = arg0->unk5E;
         arg0->unk5E = 0x14;
-        arg0->unk50 = 0;
+        arg0->animState = 0;
         arg0->callback = updateStoryMapNpcStretch;
         arg0->unk56 = savedUnk50;
         arg0->unk5F = savedUnk5E;
@@ -851,11 +851,11 @@ void updateStoryMapNpcTalking(Func297D8Arg *arg0) {
     switch (arg0->unk5E) {
         case 0x14:
             func_8002AE80_2BA80(arg0);
-            createYRotationMatrix(&arg0->matrix, arg0->unk30);
+            createYRotationMatrix(&arg0->matrix, arg0->turnAngle);
             break;
         case 0x15:
             animateNpcTurnToTarget(arg0);
-            createYRotationMatrix(&arg0->matrix, arg0->unk30);
+            createYRotationMatrix(&arg0->matrix, arg0->turnAngle);
             break;
     }
 
@@ -868,7 +868,7 @@ void updateStoryMapNpcTalking(Func297D8Arg *arg0) {
 
 void setupStoryMapNpcModel(Func297D8Arg *arg0) {
     applyTransformToModel(arg0->model, &arg0->matrix);
-    setModelAnimation(arg0->model, arg0->unk50);
+    setModelAnimation(arg0->model, arg0->animState);
     updateModelGeometry(arg0->model);
 }
 
@@ -878,9 +878,9 @@ void updateStoryMapNpcModel(Func297D8Arg *arg0) {
     getCurrentAllocation();
     applyTransformToModel(arg0->model, &arg0->matrix);
 
-    if (arg0->unk50 != arg0->unk52) {
-        arg0->unk52 = arg0->unk50;
-        setModelAnimation(arg0->model, arg0->unk50);
+    if (arg0->animState != arg0->unk52) {
+        arg0->unk52 = arg0->animState;
+        setModelAnimation(arg0->model, arg0->animState);
         arg0->unk62 = 0;
     }
 
@@ -893,11 +893,11 @@ void updateStoryMapNpcModel(Func297D8Arg *arg0) {
     if (result != 0) {
         arg0->unk37 = 1;
         arg0->unk62 = (arg0->unk62 & 0x7F) + 1;
-        if (arg0->unk50 == 0x98) {
+        if (arg0->animState == 0x98) {
             if (arg0->unk5E == 2) {
-                arg0->unk50 = 0x90;
+                arg0->animState = 0x90;
             } else {
-                arg0->unk50 = arg0->unk58;
+                arg0->animState = arg0->unk58;
             }
         }
     }

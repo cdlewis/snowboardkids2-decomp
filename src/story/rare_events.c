@@ -698,7 +698,7 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
 
     switch (npc->unk32) {
         case 0:
-            angleDiff = signedAngleDifference(npc->unk30, npc->unk2E);
+            angleDiff = signedAngleDifference(npc->turnAngle, npc->unk2E);
             if (angleDiff < 0) {
                 npc->unk36 = 1;
             } else {
@@ -706,13 +706,13 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
             }
             absAngleDiff = (angleDiff >= 0) ? angleDiff : -angleDiff;
             if (absAngleDiff >= 0xAAB) {
-                npc->unk50 = 1;
-                npc->unk30 = (npc->unk30 + 0x1000) & 0x1FFF;
+                npc->animState = 1;
+                npc->turnAngle = (npc->turnAngle + 0x1000) & 0x1FFF;
                 if (npc->itemType == 5) {
-                    npc->unk50 = 0x22;
+                    npc->animState = 0x22;
                 }
                 npc->unk37 = 0;
-                if (signedAngleDifference(npc->unk30, npc->unk2E) < 0) {
+                if (signedAngleDifference(npc->turnAngle, npc->unk2E) < 0) {
                     npc->unk36 = 1;
                 } else {
                     npc->unk36 = 0;
@@ -721,14 +721,14 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
                 npc->unk37 = 1;
                 if (absAngleDiff < 0x2AA) {
                     if (npc->itemType != 5) {
-                        npc->unk50 = 0;
+                        npc->animState = 0;
                     } else {
-                        npc->unk50 = 0x21;
+                        npc->animState = 0x21;
                     }
                 } else {
-                    npc->unk50 = 2;
+                    npc->animState = 2;
                     if (npc->itemType == 5) {
-                        npc->unk50 = 0x1D;
+                        npc->animState = 0x1D;
                     }
                 }
             }
@@ -736,7 +736,7 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
             break;
 
         case 1:
-            angleDiff = signedAngleDifference(npc->unk30, npc->unk2E);
+            angleDiff = signedAngleDifference(npc->turnAngle, npc->unk2E);
             absAngleDiff = (angleDiff >= 0) ? angleDiff : -angleDiff;
             if (absAngleDiff < 0xA0) {
                 angleDiff = absAngleDiff;
@@ -745,10 +745,10 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
                 } else {
                     npc->unk32 = 2;
                 }
-                if (npc->unk50 == 2 || npc->unk50 == 0x1D) {
-                    npc->unk50 = 0;
+                if (npc->animState == 2 || npc->animState == 0x1D) {
+                    npc->animState = 0;
                     if (npc->itemType == 5) {
-                        npc->unk50 = 0x21;
+                        npc->animState = 0x21;
                     }
                 }
             } else {
@@ -758,13 +758,13 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
                 s32 temp = angleDiff;
                 angleDiff = -temp;
             }
-            npc->unk30 = npc->unk30 + angleDiff;
-            if (npc->unk50 == 1 || npc->unk50 == 0x22) {
+            npc->turnAngle = npc->turnAngle + angleDiff;
+            if (npc->animState == 1 || npc->animState == 0x22) {
                 if (npc->unk37 != 0) {
                     if (npc->itemType == 5) {
-                        npc->unk50 = 0x21;
+                        npc->animState = 0x21;
                     } else {
-                        npc->unk50 = 0;
+                        npc->animState = 0;
                     }
                 }
             }
@@ -780,7 +780,7 @@ void animateNpcTurnToTarget(Func297D8Arg *npc) {
     if ((u8)turnComplete != 0) {
         alloc->dialogueTurnState = 0;
         npc->rotation = npc->unk2E;
-        npc->unk50 = npc->unk56;
+        npc->animState = npc->unk56;
         npc->unk5E = npc->unk5F;
     }
 }

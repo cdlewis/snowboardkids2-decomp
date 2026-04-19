@@ -9,7 +9,7 @@ typedef struct {
     /* 0x28 */ u8 pad28[0x4];
     /* 0x2C */ u16 rotation;
     /* 0x2E */ u16 unk2E;
-    /* 0x30 */ u16 unk30;
+    /* 0x30 */ u16 turnAngle;
     /* 0x32 */ s16 unk32;
     /* 0x34 */ u8 pad34[0x2];
     /* 0x36 */ u8 unk36;
@@ -21,8 +21,8 @@ typedef struct {
     /* 0x40 */ s32 unk40;
     /* 0x44 */ s32 unk44;
     /* 0x48 */ s32 unk48;
-    /* 0x4C */ u16 *unk4C;
-    /* 0x50 */ s16 unk50;
+    /* 0x4C */ u16 *animSequencePtr;
+    /* 0x50 */ s16 animState;
     /* 0x52 */ s16 unk52;
     /* 0x54 */ u8 pad52[0x2];
     /* 0x56 */ u16 unk56;
