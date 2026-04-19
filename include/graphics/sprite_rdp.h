@@ -87,4 +87,19 @@ void renderTintedSprite(TintedSpriteArg *arg0);
 void renderTextSpriteWithTransparency(TextRenderArg *arg0);
 void func_800136E0_142E0(void);
 void renderTextSprite(TextRenderArg *arg0);
-void func_80011924_12524(void);
+typedef struct {
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ SpriteSheetData *spriteData;
+    /* 0x08 */ u16 frameIndex;
+    /* 0x0A */ u16 scaleX;
+    /* 0x0C */ u16 scaleY;
+    /* 0x0E */ s16 rotation;
+    /* 0x10 */ u8 unk10;
+    /* 0x11 */ u8 shade;
+    /* 0x12 */ u8 tileMode;
+    /* 0x13 */ u8 overridePaletteCount;
+    /* 0x14 */ u8 alpha;
+} FrameSpriteEntry;
+
+void func_80011924_12524(FrameSpriteEntry *arg0);

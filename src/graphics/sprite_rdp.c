@@ -557,8 +557,169 @@ void renderScaledShadedSpriteFrame(ScaledSpriteArg *arg0) {
     }
 }
 
-// 96.02% https://decomp.me/scratch/XCZ63
-INCLUDE_ASM("asm/nonmatchings/graphics/sprite_rdp", func_80011924_12524);
+void func_80011924_12524(FrameSpriteEntry *arg0) {
+    SpriteFrameEntry *paletteBase;
+    u16 paletteMode;
+    s32 tile;
+    s32 right;
+    s32 bottom;
+    s32 left;
+    s32 top;
+    s16 clipOffsetY;
+    s16 clipOffsetX;
+    u16 format;
+    u16 paletteIndex;
+    s16 scaleS;
+    s16 scaleT;
+    s16 dsdx;
+    s16 dtdy;
+    s32 clipVal;
+    SpriteFrameEntry *frameEntry;
+
+    frameEntry = arg0->spriteData->frames;
+    paletteBase = &frameEntry[arg0->spriteData->numFrames];
+    frameEntry = &frameEntry[arg0->frameIndex];
+
+    paletteMode = gSpritePaletteModes[frameEntry->paletteTableIndex];
+    format = gSpriteTextureFormats[frameEntry->formatIndex];
+    scaleS = gTileTextureFlipTable[arg0->tileMode * 2];
+    scaleT = gTileTextureFlipTable[arg0->tileMode * 2 + 1];
+
+    if (arg0->overridePaletteCount == 0) {
+        paletteIndex = frameEntry->paletteIndex;
+    } else {
+        paletteIndex = arg0->overridePaletteCount - 1;
+    }
+
+    if ((arg0->scaleX > 0x7FFF) || (arg0->scaleX == 0)) {
+        return;
+    }
+    if ((arg0->scaleY > 0x7FFF) || (arg0->scaleY == 0)) {
+        return;
+    }
+
+    arg0->tileMode &= 3;
+
+    dsdx = (frameEntry->width << 12) / arg0->scaleX;
+    dtdy = (frameEntry->height << 12) / arg0->scaleY;
+
+    left = (arg0->x * 4 - dsdx / 2) + gTextClipAndOffsetData.offsetX * 4;
+    top = (arg0->y * 4 - dtdy / 2) + gTextClipAndOffsetData.offsetY * 4;
+    bottom = top + dtdy;
+    right = left + dsdx;
+
+    clipOffsetX = 0;
+    if (scaleS == -1) {
+        clipOffsetX = frameEntry->width * 4 - 4;
+    }
+
+    clipVal = gTextClipAndOffsetData.clipLeft;
+    clipVal *= 4;
+    if (left < clipVal) {
+        clipVal = gTextClipAndOffsetData.clipLeft;
+        clipVal *= 4;
+        if (scaleS == -1) {
+            clipOffsetX -= clipVal - left;
+        } else {
+            clipOffsetX = clipVal - left;
+        }
+        left = gTextClipAndOffsetData.clipLeft * 4;
+    }
+
+    clipOffsetY = 0;
+    if (scaleT == -1) {
+        clipOffsetY = frameEntry->height * 4 - 4;
+    }
+
+    clipVal = gTextClipAndOffsetData.clipTop;
+    clipVal *= 4;
+    if (top < clipVal) {
+        clipVal = gTextClipAndOffsetData.clipTop;
+        clipVal *= 4;
+        if (scaleT == -1) {
+            clipOffsetY -= clipVal - top;
+        } else {
+            clipOffsetY = clipVal - top;
+        }
+        top = gTextClipAndOffsetData.clipTop * 4;
+    }
+
+    if (gTextClipAndOffsetData.clipRight * 4 < left) {
+        return;
+    }
+
+    if (!(gTextClipAndOffsetData.clipBottom * 4 < top) && (left < right) && (top < bottom)) {
+        if (gGraphicsMode != 0x100) {
+            gGraphicsMode = 0x100;
+            gCachedPaletteAddr = 0;
+            gCachedTextureAddr = 0;
+            gSPDisplayList(gRegionAllocPtr++, gSpriteRDPSetupDL);
+        }
+
+        gDPPipeSync(gRegionAllocPtr++);
+
+        if (arg0->alpha != 0xFF) {
+            gDPSetRenderMode(gRegionAllocPtr++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
+        } else if (arg0->scaleX != 0x400 || arg0->scaleY != arg0->scaleX) {
+            gDPSetRenderMode(gRegionAllocPtr++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
+        }
+
+        gDPSetCombineMode(gRegionAllocPtr++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+        gDPSetPrimColor(gRegionAllocPtr++, 0, 0, arg0->shade, arg0->shade, arg0->shade, arg0->alpha);
+
+        if ((s32)arg0->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
+            gCachedTextureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
+            loadSpriteTexture(
+                (s32)arg0->spriteData + frameEntry->textureOffset,
+                frameEntry->width,
+                frameEntry->height,
+                format,
+                paletteMode
+            );
+        }
+
+        if (paletteIndex == 0xFE) {
+            if (gCachedPaletteAddr != (s32)gDefaultFontPalette) {
+                gCachedPaletteAddr = (s32)gDefaultFontPalette;
+                if (format == 0) {
+                    gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gDefaultFontPalette);
+                } else {
+                    gDPLoadTLUT_pal256(gRegionAllocPtr++, gDefaultFontPalette);
+                }
+            }
+        } else {
+            s32 paletteAddr = (u32)&paletteBase[paletteIndex << 1];
+            if (paletteAddr != gCachedPaletteAddr) {
+                gCachedPaletteAddr = paletteAddr;
+                if (format == 0) {
+                    gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteAddr);
+                } else {
+                    tile = 0;
+                    gDPLoadTLUT_pal256(gRegionAllocPtr++, paletteAddr);
+                }
+            }
+        }
+
+        gSPTextureRectangle(
+            gRegionAllocPtr++,
+            left,
+            top,
+            right,
+            bottom,
+            tile,
+            clipOffsetX << 3,
+            clipOffsetY << 3,
+            scaleS * arg0->scaleX,
+            scaleT * arg0->scaleY
+        );
+
+        gDPPipeSync(gRegionAllocPtr++);
+        gDPSetCombineMode(gRegionAllocPtr++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+        gDPSetPrimColor(gRegionAllocPtr++, tile, tile, 0xFF, 0xFF, 0xFF, 0xFF);
+        gDPSetRenderMode(gRegionAllocPtr++, G_RM_AA_TEX_TERR, G_RM_AA_TEX_TERR2);
+    }
+}
 
 void renderTextSprite(TextRenderArg *arg0) {
     s32 left;
