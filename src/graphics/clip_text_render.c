@@ -103,13 +103,13 @@ void drawColorRect(ColorRect *rect) {
     gDPFillRectangle(gRegionAllocPtr++, left, top, right + 1, bottom + 1);
 }
 
-void func_8006D4B8_6E0B8(
+void renderTintedSpriteGrid(
     SpriteSheetData *spriteData,
     s16 savedX,
     s16 savedY,
     s16 cols,
     s16 rows,
-    u8 arg5,
+    u8 showIndicator,
     u8 intensity,
     u8 colorR,
     u8 colorG,
@@ -122,17 +122,17 @@ void func_8006D4B8_6E0B8(
     s16 tileX;
     s16 tileY;
     s16 col;
-    s32 temp;
+    s32 tileSize;
 
     tileX = savedX - 8;
     tileY = savedY - 8;
 
-    if (arg5 != 0) {
+    if (showIndicator != 0) {
         SpriteRenderArg *cursor = (SpriteRenderArg *)advanceLinearAlloc(sizeof(SpriteRenderArg));
         if (cursor != NULL) {
-            temp = 0x10;
-            cursor->x = savedX + (cols * temp - temp);
-            cursor->y = savedY + (rows * temp - temp);
+            tileSize = 0x10;
+            cursor->x = savedX + (cols * tileSize - tileSize);
+            cursor->y = savedY + (rows * tileSize - tileSize);
             cursor->spriteData = spriteData;
             if (gFrameCounter & 8) {
                 cursor->frameIndex = 5;
@@ -193,7 +193,7 @@ void renderTiledSprite3x3(
     u8 blue,
     u8 alpha
 ) {
-    func_8006D4B8_6E0B8(asset, x, y, width, (s32)height, flag, red, 0, 0xFF, 0, green, blue, alpha);
+    renderTintedSpriteGrid(asset, x, y, width, (s32)height, flag, red, 0, 0xFF, 0, green, blue, alpha);
 }
 
 void drawColorRectFill(ColorRect *rect) {

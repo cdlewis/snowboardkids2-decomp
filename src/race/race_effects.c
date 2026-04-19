@@ -1753,7 +1753,7 @@ void renderPauseMenuDisplay(PauseMenuDisplayState *state) {
             debugEnqueueCallback(0xC, 6, renderSpriteFrameWithPalette, &state->elements[i]);
             i++;
         } while (i < 3);
-        func_8006D4B8_6E0B8(state->backgroundAsset, -0x20, -8, 4, 1, 0, 0x80, 0, 0, 0xFF, 0x80, 0xC, 6);
+        renderTintedSpriteGrid(state->backgroundAsset, -0x20, -8, 4, 1, 0, 0x80, 0, 0, 0xFF, 0x80, 0xC, 6);
     }
 }
 

@@ -371,7 +371,7 @@ void updatePushStartGraphic(PushStartPromptTask *task) {
         task->pulseDirection = -8;
     }
 
-    func_8006D4B8_6E0B8(
+    renderTintedSpriteGrid(
         task->graphicAsset,
         -0x68,
         task->yPosition,
