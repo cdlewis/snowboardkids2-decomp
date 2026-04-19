@@ -1,7 +1,9 @@
 #include "D_800AFE8C_A71FC_type.h"
+#include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
 #include "math/geometry.h"
+#include "race/track_geometry.h"
 #include "story/npc_dialogue.h"
 #include "story/rare_events.h"
 #include "system/task_scheduler.h"
@@ -18,11 +20,11 @@ typedef struct {
     /* 0xD3 */ u8 dialogueState;
 } StoryMapDialogueState;
 
-extern void func_8002BFEC_2CBEC(StoryMapDialogueState *);
+extern u8 dialogueNpcFacesPlayer[];
+void func_8002BFEC_2CBEC(Func2E024Arg *arg0);
 extern void updateStoryMapNpcTurnToTarget(StoryMapDialogueState *);
 extern void spawnSpriteEffectEx(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
 
-extern void initStoryMapRareEventWave(void *);
 extern void initStoryMapRareEventIdle(void *);
 extern void initStoryMapRareEventMagicShow(void *);
 extern void initStoryMapRareEventJuggling(void *);
@@ -64,7 +66,7 @@ u8 D_8008EB18_8F718[] = {
     0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00,
 };
 
-u16 D_8008EB28_8F728[] = {
+u16 D_8008EB28_8F728[][12] = {
     0x0000, 0x0000, 0x0062, 0x0091, 0x0000, 0x0000, 0x0062, 0x0091, 0x0062, 0x0091, 0x0062, 0x0091, 0x008A, 0x00D0,
     0x008A, 0x00D1, 0x0000, 0x0000, 0x0000, 0x00D0, 0x008A, 0x00D0, 0x0000, 0x0000, 0x0079, 0x0000, 0x0000, 0x0000,
     0x0079, 0x0000, 0x0079, 0x0000, 0x0000, 0x0000, 0x0079, 0x0000, 0x0000, 0x0000, 0x00A9, 0x005D, 0x00A9, 0x005D,
@@ -311,6 +313,7 @@ void *D_8008EE5C_8FA5C[] = {
 };
 
 void awaitStoryMapRareEventReady(StoryMapRareEventState *arg0);
+void configureRareEventSpriteEffect(StoryMapRareEventState *rareEvent, s32 npcIndex);
 void destroyStoryMapRareEventModels(StoryMapRareEventState *arg0);
 
 void initStoryMapRareEvent(StoryMapRareEventState *arg0) {
@@ -374,7 +377,7 @@ void updateStoryMapNpcDialogue(StoryMapDialogueState *dialogue) {
 
     switch (dialogue->dialogueState) {
         case 0:
-            func_8002BFEC_2CBEC(dialogue);
+            func_8002BFEC_2CBEC((Func2E024Arg *)dialogue);
             for (i = 0; i < gameState->unk41C; i++) {
                 currentNpc = (StoryMapDialogueState *)((u8 *)dialogue + i * 0x64);
                 createYRotationMatrix(&currentNpc->matrix, currentNpc->targetRotation);
@@ -396,8 +399,201 @@ void updateStoryMapNpcDialogue(StoryMapDialogueState *dialogue) {
     }
 }
 
-// 98.04% https://decomp.me/scratch/yPStw
-INCLUDE_ASM("asm/nonmatchings/story/rare_event_npcs", func_8002BFEC_2CBEC);
+void func_8002BFEC_2CBEC(Func2E024Arg *arg0) {
+    GameState *gs;
+    s32 i;
+    s32 completedCount;
+    u8 localNibble;
+    s16 angleDiff;
+    s16 targetAngle;
+    s32 turnSpeed;
+    s32 absDiff;
+    u16 nextVal;
+    u16 soundId;
+    u16 rotation;
+    s32 new_var;
+
+    gs = (GameState *)getCurrentAllocation();
+    completedCount = 0;
+    localNibble = gs->dialogueTurnState & 0xF;
+    gs->dialogueTurnState &= 0xF0;
+    for (i = 0; i < gs->unk41C; i++) {
+        switch (arg0->ctrl[i]) {
+            case 1:
+                rotation = (arg0->elements[i].unk30 = arg0->elements[i].rotation);
+                targetAngle = computeAngleToPosition(
+                    gs->unk3EC,
+                    gs->unk3F0,
+                    arg0->elements[i].matrix.translation.x,
+                    arg0->elements[i].matrix.translation.z
+                );
+                arg0->elements[i].unk32 = targetAngle;
+                angleDiff = signedAngleDifference((s16)rotation, targetAngle);
+                if (angleDiff < 0) {
+                    arg0->elements[i].unk36 = 1;
+                } else {
+                    arg0->elements[i].unk36 = 0;
+                }
+                absDiff = angleDiff;
+                if (angleDiff < 0) {
+                    absDiff = -absDiff;
+                }
+                if (absDiff >= 0xAAB) {
+                    arg0->elements[i].unk30 = (arg0->elements[i].unk30 + 0x1000) & 0x1FFF;
+                    arg0->elements[i].unk50 = 1;
+                    arg0->elements[i].unk37 = 0;
+                    if (signedAngleDifference((s16)arg0->elements[i].unk30, arg0->elements[i].unk32) < 0) {
+                        arg0->elements[i].unk36 = 1;
+                    } else {
+                        arg0->elements[i].unk36 = 0;
+                    }
+                } else {
+                    arg0->elements[i].unk50 = 2;
+                    arg0->elements[i].unk37 = 1;
+                }
+                arg0->ctrl[i] = 2;
+                break;
+
+            case 2:
+                angleDiff = signedAngleDifference((s16)arg0->elements[i].unk30, arg0->elements[i].unk32);
+                absDiff = (angleDiff > 0) ? (angleDiff) : (-angleDiff);
+                new_var = absDiff;
+                if (new_var < 0xA0) {
+                    if (arg0->elements[i].unk50 == 2) {
+                        arg0->elements[i].unk50 = 0;
+                    }
+                    angleDiff = new_var;
+                    arg0->ctrl[i] = 3;
+                } else {
+                    angleDiff = 0xA0;
+                }
+                if (arg0->elements[i].unk36 != 0) {
+                    s32 tmp = angleDiff;
+                    angleDiff = -tmp;
+                }
+                arg0->elements[i].unk30 += angleDiff;
+                if ((arg0->elements[i].unk50 == 1) && (arg0->elements[i].unk37 != 0)) {
+                    arg0->elements[i].unk50 = 0;
+                }
+                break;
+
+            case 3:
+                completedCount += 1;
+                if (completedCount == gs->unk41C) {
+                    localNibble = 3;
+                    if (dialogueNpcFacesPlayer[arg0->unkD4 * 2] == 0) {
+                        arg0->elements[0].unk37 = 1;
+                    }
+                    if (dialogueNpcFacesPlayer[(arg0->unkD4 * 2) + 1] == 0) {
+                        arg0->elements[1].unk37 = 1;
+                    }
+                    if (gs->unk42B == 0) {
+                        arg0->ctrl[0] = 4;
+                        arg0->ctrl[1] = 0x5A;
+                    } else {
+                        arg0->ctrl[1] = 4;
+                        arg0->ctrl[0] = 0x5A;
+                    }
+                } else if ((arg0->elements[i].unk50 == 1) && (arg0->elements[i].unk37 != 0)) {
+                    arg0->elements[i].unk50 = 0;
+                }
+                break;
+
+            case 4:
+                if ((gs->dialogueTurnState == 0x30) && (arg0->elements[i].unk37 != 0)) {
+                    if (D_8008EB18_8F718[(arg0->unkD4 * 2) + i] != 0) {
+                        arg0->elements[i].unk4C = (u16 *)D_8008EE5C_8FA5C[(arg0->unkD4 * 2) + i];
+                        configureRareEventSpriteEffect((StoryMapRareEventState *)arg0, i);
+                        arg0->elements[i].unk50 = (s16)(*arg0->elements[i].unk4C);
+                        arg0->elements[i].unk4C++;
+                    } else {
+                        arg0->unkCC[i] = 0;
+                        configureRareEventSpriteEffect((StoryMapRareEventState *)arg0, i);
+                    }
+                    arg0->elements[i].unk37 = 0;
+                    soundId = D_8008EB28_8F728[arg0->unkD4][(D_800AFE8C_A71FC->playerBoardIds[0] * 2) + i];
+                    if (soundId != 0) {
+                        playSoundEffectOnChannelNoPriority(soundId, i + 1);
+                    }
+                    if (arg0->elements[i].unk50 == 0) {
+                        arg0->ctrl[i] = 0xA;
+                        arg0->unkCC[i] = 0;
+                    } else {
+                        arg0->ctrl[i] = 5;
+                    }
+                }
+                break;
+
+            case 5:
+                if (D_8008EB18_8F718[(arg0->unkD4 * 2) + i] != 0) {
+                    if (arg0->elements[i].unk37 != 0) {
+                        arg0->elements[i].unk37 = 0;
+                        nextVal = *arg0->elements[i].unk4C;
+                        if (nextVal == 0xFFFF) {
+                            arg0->ctrl[i] = 6;
+                            arg0->elements[i].unk50 = 0;
+                        } else {
+                            arg0->elements[i].unk50 = (s16)nextVal;
+                            arg0->elements[i].unk4C++;
+                        }
+                    }
+                } else {
+                    arg0->unkCC[i]++;
+                    if (arg0->unkCC[i] == D_8008EBD0_8F7D0[(arg0->unkD4 * 2) + i]) {
+                        arg0->unkCC[i] = 0;
+                        arg0->ctrl[i] = 6;
+                    }
+                }
+                break;
+
+            case 6:
+                arg0->ctrl[i] = 7;
+                if (i == gs->unk42B) {
+                    ;
+                    arg0->ctrl[(i + 1) & 1] = 4;
+                }
+                break;
+
+            case 7:
+                completedCount += 1;
+                if (completedCount == gs->unk41C) {
+                    localNibble = 5;
+                    arg0->ctrl[0] = 8;
+                    arg0->ctrl[1] = 8;
+                }
+                break;
+
+            case 8:
+                rotation = gs->dialogueTurnState;
+                if (rotation == 0) {
+                    arg0->unkD3 = 1;
+                    if (dialogueNpcFacesPlayer[(arg0->unkD4 * 2) + i] != 0) {
+                        arg0->elements[i].unk32 = 0;
+                    } else {
+                        arg0->elements[i].unk32 = 2;
+                        arg0->elements[i].unk37 = 1;
+                    }
+                    arg0->ctrl[i] = 9;
+                    localNibble = 0xF;
+                }
+                break;
+
+            case 0xA:
+                new_var = i;
+                arg0->unkCC[new_var]++;
+                if (arg0->unkCC[i] == rareEventEffectDurations[(arg0->unkD4 * 2) + i]) {
+                    arg0->unkCC[i] = 0;
+                    arg0->ctrl[i] = 6;
+                    arg0->elements[i].unk50 = 0;
+                }
+                break;
+
+            case 0x5A:
+                break;
+        }
+    }
+    gs->dialogueTurnState |= localNibble;
+}
 
 void updateStoryMapNpcTurnToTarget(StoryMapDialogueState *state) {
     Func297D8Arg *npcs = (Func297D8Arg *)state;

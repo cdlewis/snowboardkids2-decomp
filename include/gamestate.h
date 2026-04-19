@@ -358,7 +358,8 @@ typedef struct {
     u8 unk428;
     u8 unk429;
     u8 dialogueTurnState;
-    u8 PAD_11[3];
+    u8 unk42B;
+    u8 PAD_11[2];
     s8 unk42E;
     u8 PAD_12[0x158];
     s32 *unk588;
