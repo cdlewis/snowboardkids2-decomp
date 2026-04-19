@@ -3638,6 +3638,7 @@ cleanupSaveSlotDeleteArrow = 0x80035234; // rom:0x35E34
 enqueueHudTextLayout = 0x80035260; // rom:0x35E60
 renderHudTextLayout = 0x80035408; // rom:0x36008
 renderHudTextLayoutCapped = 0x80035548; // rom:0x36148
+enqueueHudTextLayoutCapped = 0x800356AC; // rom:0x362AC
 renderShadedTextSprite = 0x80035878; // rom:0x36478
 enqueueHudTextLayoutAlphaBlended = 0x80035DE0; // rom:0x369E0
 loadTextRenderAsset = 0x80035F80; // rom:0x36B80

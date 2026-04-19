@@ -1545,7 +1545,7 @@ void renderHudTextLayoutCapped(HudTextLayoutCappedArg *arg0) {
     }
 }
 
-void func_800356AC_362AC(
+void enqueueHudTextLayoutCapped(
     void *fontAsset,
     u16 *textData,
     u16 startX,
@@ -1563,14 +1563,14 @@ void func_800356AC_362AC(
     TextElementState *elem;
     u16 *ptr = textData;
     u16 cmd;
-    s32 count;
+    s32 iterationCount;
     s16 width;
 
     cmd = *ptr;
-    count = 0;
+    iterationCount = 0;
 
     while (cmd != 0xFFFF) {
-        if ((u8)count >= maxIterations) {
+        if ((u8)iterationCount >= maxIterations) {
             return;
         }
         if (cmd == 0xFFFD) {
@@ -1584,13 +1584,13 @@ void func_800356AC_362AC(
             }
         } else if (cmd == 0xFFFC) {
             ptr++;
-            count++;
+            iterationCount++;
             if (paletteIndex == 0) {
                 palette = *ptr;
             }
         } else if (cmd == 0xFFF0) {
             ptr += 3;
-            count += 3;
+            iterationCount += 3;
         } else if (cmd != 0xFFF1) {
             width = (cmd & 0xF000) >> 12;
             if (width == 0) {
@@ -1612,7 +1612,7 @@ void func_800356AC_362AC(
         }
         ptr++;
         cmd = *ptr;
-        count++;
+        iterationCount++;
     }
 }
 
