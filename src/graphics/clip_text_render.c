@@ -1,18 +1,12 @@
 #include "graphics/clip_text_render.h"
 #include "common.h"
 #include "gbi.h"
+#include "graphics/graphics.h"
+#include "graphics/sprite_rdp.h"
 
 extern s16 gGraphicsMode;
 extern Gfx *gRegionAllocPtr;
-
-typedef struct {
-    /* 0x00 */ s16 clipLeft;
-    /* 0x02 */ s16 clipTop;
-    /* 0x04 */ s16 clipRight;
-    /* 0x06 */ s16 clipBottom;
-    /* 0x08 */ s16 offsetX;
-    /* 0x0A */ s16 offsetY;
-} TextClipAndOffsetData;
+extern s32 gFrameCounter;
 
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 extern s16 gTextureEnabled;
@@ -109,8 +103,83 @@ void drawColorRect(ColorRect *rect) {
     gDPFillRectangle(gRegionAllocPtr++, left, top, right + 1, bottom + 1);
 }
 
-// 97.71% https://decomp.me/scratch/c33xU
-INCLUDE_ASM("asm/nonmatchings/graphics/clip_text_render", func_8006D4B8_6E0B8);
+void func_8006D4B8_6E0B8(
+    SpriteSheetData *spriteData,
+    s16 savedX,
+    s16 savedY,
+    s16 cols,
+    s16 rows,
+    u8 arg5,
+    u8 intensity,
+    u8 colorR,
+    u8 colorG,
+    u8 colorB,
+    u8 colorA,
+    u8 priority,
+    u8 layer
+) {
+    s16 row;
+    s16 tileX;
+    s16 tileY;
+    s16 col;
+    s32 temp;
+
+    tileX = savedX - 8;
+    tileY = savedY - 8;
+
+    if (arg5 != 0) {
+        SpriteRenderArg *cursor = (SpriteRenderArg *)advanceLinearAlloc(sizeof(SpriteRenderArg));
+        if (cursor != NULL) {
+            temp = 0x10;
+            cursor->x = savedX + (cols * temp - temp);
+            cursor->y = savedY + (rows * temp - temp);
+            cursor->spriteData = spriteData;
+            if (gFrameCounter & 8) {
+                cursor->frameIndex = 5;
+            } else {
+                cursor->frameIndex = 6;
+            }
+            debugEnqueueCallback(priority, layer, (void *)renderSpriteFrame, cursor);
+        }
+    }
+
+    for (row = 0; row <= rows; row++) {
+        for (col = 0; col <= cols; col++) {
+            TintedSpriteArg *tile = (TintedSpriteArg *)advanceLinearAlloc(sizeof(TintedSpriteArg));
+            if (tile != NULL) {
+                tile->tileMode = 0;
+                tile->paletteOverrideCount = 0;
+                tile->a = colorA;
+                tile->r = (colorR * intensity) / 256;
+                tile->g = (colorG * intensity) / 256;
+                tile->b = (colorB * intensity) / 256;
+                tile->x = tileX;
+                tileX += 16;
+                tile->spriteData = spriteData;
+                tile->primColor = 0xFF;
+                tile->frameIndex = 4;
+
+                tile->y = tileY;
+                if ((row == 0) & (col == 0)) {
+                    tile->frameIndex = 0;
+                }
+
+                if ((row == 0) & (col == cols)) {
+                    tile->frameIndex = 1;
+                }
+                if ((row == rows) & (col == 0)) {
+                    tile->frameIndex = 2;
+                }
+                if ((row == rows) & (col == cols)) {
+                    tile->frameIndex = 3;
+                }
+                debugEnqueueCallback(priority, layer, (void *)renderTintedSprite, tile);
+            }
+        }
+        tileX = savedX - 8;
+        tileY += 16;
+    }
+}
 
 void renderTiledSprite3x3(
     void *asset,

@@ -1,9 +1,10 @@
 #pragma once
 
 #include "common.h"
+#include "graphics/sprite_rdp.h"
 
 void func_8006D4B8_6E0B8(
-    void *spriteData,
+    SpriteSheetData *spriteData,
     s16 savedX,
     s16 savedY,
     s16 cols,
