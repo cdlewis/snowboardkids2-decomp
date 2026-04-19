@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-BASE_URL = "https://decomp.me/api/scratch?preset=164&page_size=100&has_owner=true&ordering=last_updated"
+BASE_URL = "https://decomp.me/api/scratch?preset=164&page_size=100&has_owner=true&ordering=-last_updated"
 OUTPUT_FILE = os.path.join(SCRIPT_DIR, "scratches.json")
 SECRET_FILE = ".decomp_dev_secret"
 
