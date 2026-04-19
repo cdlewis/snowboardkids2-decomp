@@ -108,7 +108,7 @@ s32 updateStunnedRecoveryBouncePhase(Player *);
 s32 updateStunnedRecoveryBounceFallPhase(Player *);
 s32 updateStunnedRecoverySlidePhase(Player *);
 s32 updateStunnedRecoverySlideBouncePhase(Player *);
-void func_800B55B4_A5464(void *);
+s32 func_800B55B4_A5464(Player *);
 s32 updateStunnedRecoveryEndPhase(Player *);
 s32 updateStunnedRecoveryStandUpPhase(Player *);
 s32 updateKnockbackAirborneLaunchPhase(Player *);
@@ -402,6 +402,8 @@ extern void spawnPlayerIndicatorTask(Player *);
 extern void applyCharacterBoardStats(Player *);
 extern void initFlyingSceneryTask(void);
 extern s32 spawnUfoEffect(Player *);
+extern void schedulePlayerAuraTask(Player *);
+extern s32 normalizeSurfaceType(s32);
 
 s32 tryFinalizeTrickLanding(Player *);
 void updateTrickFacingAngle(Player *);
@@ -3407,8 +3409,96 @@ s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
     return 0;
 }
 
-// 93.83% https://decomp.me/scratch/RUTsd
-INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B55B4_A5464);
+s32 func_800B55B4_A5464(Player *player) {
+    Vec3i waypointStart;
+    Vec3i waypointEnd;
+    Vec3i delta;
+    Vec3i rotated;
+    u8 surfaceType;
+    u8 surfaceExtra;
+    GameState *gs;
+    TrackGeometryData *new_var2;
+    TrackGeometryData *trackGeom;
+    s16 pathAngle;
+    Vec3i *worldPos;
+    Vec3i *new_var;
+
+    player->behaviorFlags = 8;
+    player->velocity.x = 0;
+    player->velocity.z = 0;
+    player->animFlags |= 0x60;
+    player->velocity.y -= 0x6000;
+    decayPlayerSteeringAngles(player);
+    applyClampedVelocityToPosition(player);
+    if (player->behaviorStep == 0) {
+        if (advancePlayerLeanAnimation(player, 0x11) != 0) {
+            player->unkB8C = 0x20;
+            player->behaviorStep++;
+            schedulePlayerAuraTask(player);
+        }
+    } else {
+        advancePlayerLeanAnimationAuto(player, 0x12);
+        player->unkB8C--;
+        if (player->unkB8C == 0x10) {
+            setViewportFadeValueBySlotIndex(player->playerIndex, 0xFF, 0x10);
+        }
+        if (player->unkB8C == 0) {
+            gs = getCurrentAllocation();
+            trackGeom = (TrackGeometryData *)&gs->gameData;
+            pathAngle = getTrackSegmentWaypoints(trackGeom, player->sectorIndex, &waypointStart, &waypointEnd);
+            delta.x = player->worldPos.x - waypointStart.x;
+            new_var = &rotated;
+            delta.y = player->worldPos.y - waypointStart.y;
+            delta.z = player->worldPos.z - waypointStart.z;
+            rotateVectorY(&delta, -pathAngle, new_var);
+            rotated.x = 0;
+            rotateVectorY(new_var, (unsigned int)pathAngle, &delta);
+            player->worldPos.x = delta.x + waypointStart.x;
+            worldPos = &player->worldPos;
+            player->worldPos.z = delta.z + waypointStart.z;
+            player->sectorIndex = findTrackSector(trackGeom, player->sectorIndex, worldPos);
+            findTrackFaceAtPosition(
+                (TrackGeometryFaceData *)trackGeom,
+                player->sectorIndex,
+                worldPos,
+                &surfaceType,
+                &surfaceExtra
+            );
+            new_var2 = trackGeom;
+            while (normalizeSurfaceType(surfaceType) != 0) {
+                player->sectorIndex = resolveTrackSegmentIndex((TrackSegmentEntry **)new_var2, player->sectorIndex);
+                pathAngle = getTrackSegmentWaypoints(new_var2, player->sectorIndex, &waypointStart, &waypointEnd);
+                rotateVectorY(&D_800BABE0_AAA90, (s16)pathAngle, &delta);
+                player->worldPos.x = waypointStart.x + delta.x;
+                player->worldPos.z = waypointStart.z + delta.z;
+                findTrackFaceAtPosition(
+                    (TrackGeometryFaceData *)new_var2,
+                    player->sectorIndex,
+                    &player->worldPos,
+                    &surfaceType,
+                    &surfaceExtra
+                );
+            }
+
+            player->behaviorFlags = 8;
+            player->animFlags &= ~2;
+            player->worldPos.y =
+                getTrackHeightAtPosition(&gs->gameData, player->sectorIndex, &player->worldPos) + 0x600000;
+            memcpy(&player->prevWorldPosX, &player->worldPos, 0xC);
+            player->rotY = 0x1000;
+            player->rotY = pathAngle + player->rotY;
+            player->finishAnimState = 1;
+            player->pitchAngle = 0;
+            player->steeringAngle = 0;
+            player->rollAngle = 0;
+            player->unkB8C = 0x1E;
+            setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
+            setPlayerBehaviorPhase(player, 0xC);
+        }
+    }
+    setPlayerBodyPartAnimState(player, 3, 0);
+    return 0;
+}
 
 s32 updateStunnedRecoveryEndPhase(Player *arg0) {
     arg0->unkB8C -= 1;
