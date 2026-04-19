@@ -148,7 +148,7 @@ void updateTransitionFadeOut(TransitionSpawnerState *state) {
     new_var = alpha;
     state->alphaValue = (s8)new_var;
 
-    debugEnqueueCallback(1, 0, &func_80011924_12524, &state->unk10);
+    debugEnqueueCallback(1, 0, &renderScaledAlphaSpriteFrame, &state->unk10);
 }
 
 void updateTransitionFadeIn(TransitionSpawnerState *state) {
@@ -167,7 +167,7 @@ void updateTransitionFadeIn(TransitionSpawnerState *state) {
     alpha = state->delayTimer.halfword;
     state->alphaValue = (s8)alpha;
 
-    debugEnqueueCallback(1, 0, &func_80011924_12524, &state->unk10);
+    debugEnqueueCallback(1, 0, &renderScaledAlphaSpriteFrame, &state->unk10);
 }
 
 void cleanupTransitionLayer(TransitionCleanupData **data) {

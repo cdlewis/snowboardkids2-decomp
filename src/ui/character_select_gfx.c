@@ -2398,7 +2398,7 @@ void initCharSelectScaledSprite(ScaledSpriteEntry *arg0) {
 }
 
 void renderCharSelectScaledSprite(void *arg0) {
-    debugEnqueueCallback(0xC, 7, func_80011924_12524, arg0);
+    debugEnqueueCallback(0xC, 7, renderScaledAlphaSpriteFrame, arg0);
 }
 
 void cleanupCharSelectScaledSprite(ScaledSpriteEntry *arg0) {

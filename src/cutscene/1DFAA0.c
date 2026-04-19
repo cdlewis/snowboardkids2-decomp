@@ -1405,13 +1405,13 @@ void updateCutsceneFadeTask(FadeTaskData *task) {
     switch (node->fadeType) {
         case 0:
             task->centerSprite[0x14] = (u8)task->fadeAlpha;
-            debugEnqueueCallback(task->unk6, 0, &func_80011924_12524, &task->centerSprite);
+            debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
             break;
         case 1:
             task->centerSprite[0x14] = (u8)task->fadeAlpha;
-            debugEnqueueCallback(task->unk6, 0, &func_80011924_12524, &task->centerSprite);
+            debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
             task->bottomSprite[0x14] = (u8)task->fadeAlpha;
-            debugEnqueueCallback(task->unk6, 0, &func_80011924_12524, &task->bottomSprite);
+            debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, &task->bottomSprite);
             break;
     }
 
@@ -1420,7 +1420,7 @@ void updateCutsceneFadeTask(FadeTaskData *task) {
     ptr = (u8 *)task;
     do {
         ptr[0x20] = (u8)task->fadeAlpha;
-        debugEnqueueCallback(task->unk6, 0, &func_80011924_12524, (u8 *)task + offset);
+        debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, (u8 *)task + offset);
         offset += 0x18;
         ptr += 0x18;
         i++;

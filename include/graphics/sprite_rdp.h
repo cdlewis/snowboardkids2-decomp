@@ -102,4 +102,4 @@ typedef struct {
     /* 0x14 */ u8 alpha;
 } FrameSpriteEntry;
 
-void func_80011924_12524(FrameSpriteEntry *arg0);
+void renderScaledAlphaSpriteFrame(FrameSpriteEntry *sprite);

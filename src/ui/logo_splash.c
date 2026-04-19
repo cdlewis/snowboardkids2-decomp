@@ -253,7 +253,7 @@ void updateLogoScreen(void) {
                         logoScreen->unk2D4[i] = 0xFF0000;
                     }
                     logoScreen->unk244[i].unk14 = (s8)(logoScreen->unk2D4[i] >> 16);
-                    debugEnqueueCallback(0, 3, func_80011924_12524, &logoScreen->unk244[i]);
+                    debugEnqueueCallback(0, 3, renderScaledAlphaSpriteFrame, &logoScreen->unk244[i]);
                 }
             }
         }

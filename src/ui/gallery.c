@@ -536,7 +536,7 @@ menu_body: {
         alpha = (s16)(arg0->alphaValues[i] >> 16);
         arg0->iconSlots[i].alphaByte = (s8)alpha;
         arg0->iconSlots[i].alpha = alpha & 0xFF;
-        debugEnqueueCallback(2, 4, func_80011924_12524, &arg0->iconSlots[i]);
+        debugEnqueueCallback(2, 4, renderScaledAlphaSpriteFrame, &arg0->iconSlots[i]);
         arg0->labelSlots[i].posX = entry->x;
         arg0->labelSlots[i].posY = entry->y;
         arg0->labelSlots[i].texFlags = 0;
@@ -544,7 +544,7 @@ menu_body: {
         arg0->labelSlots[i].alphaByte = (s8)alpha;
         arg0->labelSlots[i].alpha = alpha & 0xFF;
         arg0->labelSlots[i].frameIndex = (s16)((s8)entry->labelIndex);
-        debugEnqueueCallback(2, 5, func_80011924_12524, &arg0->labelSlots[i]);
+        debugEnqueueCallback(2, 5, renderScaledAlphaSpriteFrame, &arg0->labelSlots[i]);
     }
 menu_end:;
     ;
