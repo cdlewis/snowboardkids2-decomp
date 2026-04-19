@@ -108,7 +108,7 @@ s32 updateStunnedRecoveryBouncePhase(Player *);
 s32 updateStunnedRecoveryBounceFallPhase(Player *);
 s32 updateStunnedRecoverySlidePhase(Player *);
 s32 updateStunnedRecoverySlideBouncePhase(Player *);
-s32 func_800B55B4_A5464(Player *);
+s32 updateStunnedRecoveryRespawnPhase(Player *);
 s32 updateStunnedRecoveryEndPhase(Player *);
 s32 updateStunnedRecoveryStandUpPhase(Player *);
 s32 updateKnockbackAirborneLaunchPhase(Player *);
@@ -242,7 +242,7 @@ StunnedBehaviorPhaseHandler stunnedBehaviorPhaseHandlers[] = {
     (StunnedBehaviorPhaseHandler)updateStunnedRecoveryBounceFallPhase,
     (StunnedBehaviorPhaseHandler)updateStunnedRecoverySlidePhase,
     (StunnedBehaviorPhaseHandler)updateStunnedRecoverySlideBouncePhase,
-    (StunnedBehaviorPhaseHandler)func_800B55B4_A5464,
+    (StunnedBehaviorPhaseHandler)updateStunnedRecoveryRespawnPhase,
     (StunnedBehaviorPhaseHandler)updateStunnedRecoveryEndPhase,
     (StunnedBehaviorPhaseHandler)updateStunnedRecoveryStandUpPhase,
     (StunnedBehaviorPhaseHandler)updateKnockbackAirborneLaunchPhase,
@@ -258,7 +258,7 @@ StunnedBehaviorPhaseHandler stunnedBehaviorPhaseHandlers[] = {
 
 s32 recoverySlideBaseVelocity[3] = { 0x00000000, 0x00000000, 0x00020000 };
 
-s32 D_800BABE0_AAA90[3] = { 0x00000000, 0x00000000, 0xFFE00000 };
+s32 respawnTrackOffset[3] = { 0x00000000, 0x00000000, 0xFFE00000 };
 
 s16 knockbackHomingBounceTimers = 0x0028;
 
@@ -3409,7 +3409,7 @@ s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
     return 0;
 }
 
-s32 func_800B55B4_A5464(Player *player) {
+s32 updateStunnedRecoveryRespawnPhase(Player *player) {
     Vec3i waypointStart;
     Vec3i waypointEnd;
     Vec3i delta;
@@ -3417,11 +3417,11 @@ s32 func_800B55B4_A5464(Player *player) {
     u8 surfaceType;
     u8 surfaceExtra;
     GameState *gs;
-    TrackGeometryData *new_var2;
+    TrackGeometryData *trackGeomAlias;
     TrackGeometryData *trackGeom;
     s16 pathAngle;
     Vec3i *worldPos;
-    Vec3i *new_var;
+    Vec3i *rotatedPtr;
 
     player->behaviorFlags = 8;
     player->velocity.x = 0;
@@ -3447,12 +3447,12 @@ s32 func_800B55B4_A5464(Player *player) {
             trackGeom = (TrackGeometryData *)&gs->gameData;
             pathAngle = getTrackSegmentWaypoints(trackGeom, player->sectorIndex, &waypointStart, &waypointEnd);
             delta.x = player->worldPos.x - waypointStart.x;
-            new_var = &rotated;
+            rotatedPtr = &rotated;
             delta.y = player->worldPos.y - waypointStart.y;
             delta.z = player->worldPos.z - waypointStart.z;
-            rotateVectorY(&delta, -pathAngle, new_var);
+            rotateVectorY(&delta, -pathAngle, rotatedPtr);
             rotated.x = 0;
-            rotateVectorY(new_var, (unsigned int)pathAngle, &delta);
+            rotateVectorY(rotatedPtr, (unsigned int)pathAngle, &delta);
             player->worldPos.x = delta.x + waypointStart.x;
             worldPos = &player->worldPos;
             player->worldPos.z = delta.z + waypointStart.z;
@@ -3464,15 +3464,16 @@ s32 func_800B55B4_A5464(Player *player) {
                 &surfaceType,
                 &surfaceExtra
             );
-            new_var2 = trackGeom;
+            trackGeomAlias = trackGeom;
             while (normalizeSurfaceType(surfaceType) != 0) {
-                player->sectorIndex = resolveTrackSegmentIndex((TrackSegmentEntry **)new_var2, player->sectorIndex);
-                pathAngle = getTrackSegmentWaypoints(new_var2, player->sectorIndex, &waypointStart, &waypointEnd);
-                rotateVectorY(&D_800BABE0_AAA90, (s16)pathAngle, &delta);
+                player->sectorIndex =
+                    resolveTrackSegmentIndex((TrackSegmentEntry **)trackGeomAlias, player->sectorIndex);
+                pathAngle = getTrackSegmentWaypoints(trackGeomAlias, player->sectorIndex, &waypointStart, &waypointEnd);
+                rotateVectorY(&respawnTrackOffset, (s16)pathAngle, &delta);
                 player->worldPos.x = waypointStart.x + delta.x;
                 player->worldPos.z = waypointStart.z + delta.z;
                 findTrackFaceAtPosition(
-                    (TrackGeometryFaceData *)new_var2,
+                    (TrackGeometryFaceData *)trackGeomAlias,
                     player->sectorIndex,
                     &player->worldPos,
                     &surfaceType,
