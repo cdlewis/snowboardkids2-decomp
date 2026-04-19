@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fetch all scratches from decomp.me API for a user and save as a combined JSON array.
+Fetch all Snowboard Kids 2 scratches from decomp.me API and save as a combined JSON array.
 Supports resuming from a specific cursor on error.
 Supports --update mode to fetch only new or changed scratches.
 """
@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-BASE_URL = "https://decomp.me/api/users/cdlewis/scratches"
+BASE_URL = "https://decomp.me/api/scratch?preset=164&page_size=100&has_owner=true&ordering=last_updated"
 OUTPUT_FILE = os.path.join(SCRIPT_DIR, "scratches.json")
 SECRET_FILE = ".decomp_dev_secret"
 
@@ -32,7 +32,7 @@ def fetch_page(cursor: str | None = None, user_agent: str | None = None) -> dict
     """Fetch a single page of scratches from the API."""
     url = BASE_URL
     if cursor:
-        url = f"{BASE_URL}?cursor={urllib.parse.quote(cursor)}"
+        url = f"{BASE_URL}&cursor={urllib.parse.quote(cursor)}"
 
     print(f"Fetching: {url}")
 
@@ -160,7 +160,7 @@ def main():
                 break
 
             page_num += 1
-            time.sleep(1)  # Rate limiting
+            time.sleep(10)  # Rate limiting
 
     except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError) as e:
         print(f"\nError: {e}", file=sys.stderr)
