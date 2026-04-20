@@ -248,7 +248,7 @@ extern ParallaxScreenHistory gParallaxScreenHistory;
 extern Vec3i gParallaxOffset;
 extern s32 gParallaxFrameCounter;
 extern s16 gParallaxWobbleAngle;
-extern s32 D_800AB248_A25B8;
+extern s32 gParallaxReverseDirection;
 extern s32 D_8009F230_9FE30;
 extern s32 D_8009F234_9FE34;
 extern s16 D_8009F238_9FE38;
@@ -1118,7 +1118,7 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     }
 }
 
-void func_8002BAEC_2C6EC(ParallaxSprite *sprite) {
+void updateParallaxSpriteBounce(ParallaxSprite *sprite) {
     Vec3i newPosition;
     Vec3i currentPosition;
     Vec3i *currentPtr;
@@ -1131,10 +1131,10 @@ void func_8002BAEC_2C6EC(ParallaxSprite *sprite) {
     s32 readZ;
     s32 zScaled;
     s32 xScaled;
-    s8 multiplier;
-    s32 multiplier2;
-    s32 temp_v1;
-    s16 temp_v0;
+    s8 zMultiplier;
+    s32 xMultiplier;
+    s32 scaledOffset;
+    s16 angle;
 
     if (!(gParallaxFrameCounter & 7)) {
         gParallaxScreenHistory.coordHistory[(gParallaxFrameCounter / 8) * 2] = xCoord = (s16)(sprite->screenX >> 16);
@@ -1147,28 +1147,28 @@ void func_8002BAEC_2C6EC(ParallaxSprite *sprite) {
     memcpy(currentPtr, &sprite->screenX, 12);
     memcpy(newPtr, currentPtr, 12);
 
-    if (D_800AB248_A25B8 != 0) {
-        multiplier = -24;
+    if (gParallaxReverseDirection != 0) {
+        zMultiplier = -24;
     } else {
-        multiplier = 24;
+        zMultiplier = 24;
     }
     zScaled = currentPosition.z >> 8;
-    zAdjust = multiplier * zScaled;
-    temp_v1 = zAdjust / 19712;
-    newPosition.x += temp_v1 << 12;
+    zAdjust = zMultiplier * zScaled;
+    scaledOffset = zAdjust / 19712;
+    newPosition.x += scaledOffset << 12;
 
-    multiplier2 = -multiplier;
+    xMultiplier = -zMultiplier;
     xScaled = currentPosition.x >> 8;
-    xAdjust = multiplier2 * xScaled;
-    temp_v1 = xAdjust / 19712;
-    newPosition.z += temp_v1 << 12;
+    xAdjust = xMultiplier * xScaled;
+    scaledOffset = xAdjust / 19712;
+    newPosition.z += scaledOffset << 12;
 
     memcpy(&sprite->screenX, &newPosition, 12);
 
     gParallaxFrameCounter += 1;
 
-    temp_v0 = atan2Fixed(newPosition.x, newPosition.z);
-    if ((u16)(temp_v0 - 0x1001) < 0x450) {
+    angle = atan2Fixed(newPosition.x, newPosition.z);
+    if ((u16)(angle - 0x1001) < 0x450) {
         gParallaxScreenHistory.historyIndex = gParallaxFrameCounter / 8;
 
         if (gParallaxFrameCounter & 7) {
@@ -1179,8 +1179,8 @@ void func_8002BAEC_2C6EC(ParallaxSprite *sprite) {
             gParallaxScreenHistory.historyIndex++;
         }
     } else {
-        if ((u16)(temp_v0 - 0x81) < 0x1F) {
-            D_800AB248_A25B8 = 1;
+        if ((u16)(angle - 0x81) < 0x1F) {
+            gParallaxReverseDirection = 1;
         }
     }
 }
