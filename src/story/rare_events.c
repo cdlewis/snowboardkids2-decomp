@@ -252,7 +252,9 @@ StoryMapNpcDialogueConfig sStoryMapNpcDialogueTable = {
 
 extern ParallaxScreenHistory gParallaxScreenHistory;
 extern Vec3i gParallaxOffset;
+extern s32 D_800AFF28_A7298;
 extern s32 D_800AB06C_A23DC;
+extern s16 D_800AB244_A25B4;
 extern s32 D_800AB248_A25B8;
 extern s32 D_8009F230_9FE30;
 extern s32 D_8009F234_9FE34;
@@ -943,8 +945,61 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
 // 85.96% https://decomp.me/scratch/00Z3Q
 INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002B598_2C198);
 
-// 71.26% https://decomp.me/scratch/QMrjF
-INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002B760_2C360);
+void func_8002B760_2C360(ParallaxSprite *sprite) {
+    Vec3i local;
+    Vec3i *localPtr;
+    s32 zAdjust;
+    s32 xAdjust;
+    s32 xCoord;
+    s32 zCoord;
+    s32 readX;
+    s32 readZ;
+    s32 zScaled;
+    s32 xScaled;
+    s32 multiplier;
+    s32 multiplier2;
+    s32 temp_v1;
+
+    if (!(D_800AB06C_A23DC & 7)) {
+        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2] = xCoord = sprite->screenX.low;
+        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2 + 1] = zCoord = sprite->screenZ.low;
+    }
+
+    localPtr = &local;
+    memcpy(localPtr, &gParallaxOffset, 12);
+
+    multiplier = 16;
+    zScaled = local.z >> 8;
+    zAdjust = zScaled * multiplier;
+    temp_v1 = zAdjust / 0x4000;
+    gParallaxOffset.x += temp_v1 << 12;
+
+    multiplier2 = -16;
+    xScaled = local.x >> 8;
+    xAdjust = xScaled * multiplier2;
+    temp_v1 = xAdjust / 0x4000;
+    D_800AFF28_A7298 += temp_v1 << 12;
+
+    memcpy(&local, &gParallaxOffset, 12);
+
+    temp_v1 = (approximateSin(D_800AB244_A25B4) / 2) << 8;
+    local.z += temp_v1;
+    D_800AB244_A25B4 = (((u16)D_800AB244_A25B4) + 0x40) & 0x1FFF;
+
+    memcpy(&sprite->screenX, &local, 12);
+
+    D_800AB06C_A23DC += 1;
+
+    if ((u16)(atan2Fixed(gParallaxOffset.x, D_800AFF28_A7298) - 0xC18) < 0x3E8) {
+        gParallaxScreenHistory.historyIndex = D_800AB06C_A23DC / 8;
+
+        if (D_800AB06C_A23DC & 7) {
+            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2] = readX = sprite->screenX.low;
+            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2 + 1] = readZ = sprite->screenZ.low;
+            gParallaxScreenHistory.historyIndex++;
+        }
+    }
+}
 
 void updateParallaxPosition(ParallaxSprite *sprite) {
     Vec3i newPosition;
