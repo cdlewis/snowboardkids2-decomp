@@ -282,3 +282,36 @@ result = temp / 0x2000;
 When you see this pattern, collapse it back to a plain division and let the compiler re-emit the bias. Keeping the longhand form forces extra named locals into the function, which constrains instruction scheduling (see "Inlining vs. Precomputing" considerations) and usually makes the match worse, not better.
 
 The same applies to other powers of two: `+ 0x1` then `>> 1` is `/ 2`, `+ 0x3` then `>> 2` is `/ 4`, etc. The bias constant is always `2^N - 1`.
+
+## Comma Operator + Ternary for Goto-Free Lazy Evaluation
+
+When the original code uses gotos to skip an expensive computation, refactoring with a flag variable adds visible branches and instructions for the flag itself, hurting match by 2–3%. A cleaner alternative: collapse the lazy-evaluated branch into a single boolean expression using comma operators and ternary:
+
+```c
+// Original (with gotos): only computes endpointDistSq when needed
+if (cond1) goto push;
+if (cond2) goto push;
+if (alongDist < 0) endpointDistSq = (s64)alongDist * alongDist;
+else { endDist = wallLen - alongDist; endpointDistSq = (s64)endDist * endDist; }
+totalDistSq = (s64)perpDist * perpDist + endpointDistSq;
+if (totalDistSq >= (s64)arg3 * arg3) goto skip;
+push: ... skip: ;
+
+// Goto-free, lazy: comma operator preserves "compute only if needed" semantics
+if (cond1 || cond2 ||
+    (((alongDist < 0) ? (endpointDistSq = (s64)alongDist * alongDist)
+                       : ((endDist = wallLen - alongDist),
+                          (endpointDistSq = (s64)endDist * endDist))),
+     ((totalDistSq = (s64)perpDist * perpDist + endpointDistSq) <
+      (s64)arg3 * arg3))) {
+    push();
+}
+```
+
+In func_80060CDC_618DC, this scored 90.279% vs 89.675% for the always-compute alternative and 88.644% for the flag-variable approach. The `||` short-circuit is what preserves the "only compute when needed" behavior — the comma block is only evaluated if cond1 and cond2 are both false. Wrap the comma chain in a macro to keep the call site readable.
+
+## Macros vs Inline Functions for Repeated Logic
+
+Preprocessor macros (`#define ... \`) expand to identical text and produce **identical codegen** to manually inlined code. Use them freely to deduplicate repeated logic without affecting match score — this is purely a readability win. In contrast, `static inline` helpers may or may not be inlined by GCC 2.7.2 and can introduce function-call overhead or shifted register allocation when not inlined.
+
+For func_80060CDC_618DC, factoring four near-identical wall-projection blocks into `WALL_PROJ_BASIC`/`WALL_PROJ_FULL` macros and the push action into `DO_PUSH` produced byte-identical assembly to the unfactored version (89.675% in both cases).

@@ -1,3 +1,5 @@
+#include "story/rare_events.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
@@ -65,7 +67,7 @@ u32 sNpcInteractionColors[] = {
     0x00BB00BB, 0x000000BB, 0x00BE00D0, 0x00D100D1, 0x00D100D0, 0x000000D4,
 };
 
-u16 sNpcInteractionSoundIds[] = {
+u16 sNpcInteractionSoundIds[][6] = {
     0x0000, 0x005C, 0x005C, 0x0060, 0x005B, 0x005C, 0x0074, 0x0000, 0x0074, 0x0074, 0x0074, 0x0074, 0x008A, 0x008A,
     0x0000, 0x0090, 0x008A, 0x008A, 0x00A7, 0x00A2, 0x00A7, 0x0000, 0x00A2, 0x00A2, 0x00BB, 0x00BB, 0x00BB, 0x00BB,
     0x0000, 0x00BB, 0x00D0, 0x00D1, 0x00D1, 0x00D1, 0x00D0, 0x0000, 0x010B, 0x010B, 0x010B, 0x010B, 0x010B, 0x010B,
@@ -125,185 +127,127 @@ u16 sNpcDialoguePointerTable[] = {
 // First 10 entries (unk5C=0-9): arrays of 6 dialogue sequence pointers each
 // Entries 10+ contain sound data mixed with pointers
 // Layout per entry: 24 bytes
-u32 sStoryMapNpcDialogueTable[] = {
-    0x00000000,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence22_24,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    0x00000000,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    0x00000000,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence20_22,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence20_22,
-    0x00000000,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    0x00000000,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    0x00000000,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    0x00000000,
-    0x00000000,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequenceEmpty,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequenceEmpty,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequenceEmpty,
-    (u32)sDialogueSequenceEmpty,
-    (u32)sDialogueSequenceEmpty,
-    (u32)sDialogueSequenceEmpty,
-    (u32)sDialogueSequence13_15,
-    (u32)sDialogueSequenceEmpty,
-    0x0000005C,
-    0x005E0000,
-    0x0000005E,
-    0x00000000,
-    0x00790074,
-    0x00000077,
-    0x00000000,
-    0x00740000,
-    0x00000000,
-    0x008D008E,
-    0x0000008D,
-    0x008A0000,
-    0x00AB00A2,
-    0x00A50000,
-    0x000000A5,
-    0x00A20000,
-    0x00C000BB,
-    0x000000BF,
-    0x000000BE,
-    0x00000000,
-    0x00D60000,
-    0x00D400D5,
-    0x000000D4,
-    0x00D00000,
-    0x0051006D,
-    0x00000000,
-    0x00000000,
-    0x000000F5,
-    0x00E30000,
-    0x00000000,
-    0x00830099,
-    0x000000C9,
-    0x000000F4,
-    0x00E10000,
-    0x00000000,
-    0x00830000,
-    0x000000C9,
-    0x000000F2,
-    0x00E30000,
-    0x00590072,
-    0x008800A0,
-    0x00B900CE,
-    0x03030303,
-    0x03010000,
-    0x524F4F54,
-    0x204D4F56,
-    0x45000000,
-    0x00000041,
-    0x564F4944,
-    0x00000000,
-    0x00000000,
-    0x00005741,
-    0x49540000,
-    0x00000000,
-    0x00000000,
-    0x00524554,
-    0x55524E00,
-    0x00000000,
-    0x00000000,
-    0x57414954,
-    0x32000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x00020304,
-    0x05060907,
-    0x00010304,
-    0x05060809,
-    0x00010204,
-    0x05060907,
-    0x00010203,
-    0x05060807,
-    0x00010203,
-    0x04060907,
-    0x00010203,
-    0x04050807,
-    0x000D0602,
-    0x000D0602,
-    0x000D0602,
-    0x000D0602,
-    0x0306090D,
-    0x0306090D,
-    0x0306090D,
-    0x0306090D,
-    0x020E0F07,
-    0x020E0F07,
-    0x020E0F07,
-    0x020E0F07,
-    0x080E0407,
-    0x080E0407,
-    0x080E0407,
-    0x080E0407,
-    0x01050A0B,
-    0x01050A0B,
-    0x01050A0B,
-    0x01050A0B,
-    0x090A0E0F,
-    0x090A0E0F,
-    0x090A0E0F,
-    0x090A0E0F,
-    0x0C020304,
-    0x0C020304,
-    0x0C020304,
-    0x0C020304,
-    0x0D0E0F0D,
-    0x0E0F0D0E,
-    0x0F0D0E0F,
-    0x0D0E0F0D,
-    0x0D0E0F0D,
-    0x0E0F0D0E,
-    0x0F0D0E0F,
-    0x0D0E0F0D,
+typedef struct {
+    u32 dialogueTable[10][6];
+    u32 extraData[118];
+} StoryMapNpcDialogueConfig;
+
+StoryMapNpcDialogueConfig sStoryMapNpcDialogueTable = {
+    {
+     0x00000000, (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence22_24,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     0x00000000, (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     0x00000000, (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence20_22,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence20_22,
+     0x00000000, (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     0x00000000, (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     0x00000000, (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     0x00000000, 0x00000000,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequenceEmpty,
+     0x00000000, 0x00000000,
+     0x00000000, 0x00000000,
+     0x00000000, 0x00000000,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequenceEmpty,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequenceEmpty,
+     (u32)sDialogueSequenceEmpty,
+     },
+    {
+     (u32)sDialogueSequenceEmpty,
+     (u32)sDialogueSequenceEmpty,
+     (u32)sDialogueSequence13_15,
+     (u32)sDialogueSequenceEmpty,
+     0x0000005C, 0x005E0000,
+     0x0000005E, 0x00000000,
+     0x00790074, 0x00000077,
+     0x00000000, 0x00740000,
+     0x00000000, 0x008D008E,
+     0x0000008D, 0x008A0000,
+     0x00AB00A2, 0x00A50000,
+     0x000000A5, 0x00A20000,
+     0x00C000BB, 0x000000BF,
+     0x000000BE, 0x00000000,
+     0x00D60000, 0x00D400D5,
+     0x000000D4, 0x00D00000,
+     0x0051006D, 0x00000000,
+     0x00000000, 0x000000F5,
+     0x00E30000, 0x00000000,
+     0x00830099, 0x000000C9,
+     0x000000F4, 0x00E10000,
+     0x00000000, 0x00830000,
+     0x000000C9, 0x000000F2,
+     0x00E30000, 0x00590072,
+     0x008800A0, 0x00B900CE,
+     0x03030303, 0x03010000,
+     0x524F4F54, 0x204D4F56,
+     0x45000000, 0x00000041,
+     0x564F4944, 0x00000000,
+     0x00000000, 0x00005741,
+     0x49540000, 0x00000000,
+     0x00000000, 0x00524554,
+     0x55524E00, 0x00000000,
+     0x00000000, 0x57414954,
+     0x32000000, 0x00000000,
+     0x00000000, 0x00000000,
+     0x00000000, 0x00000000,
+     0x00020304, 0x05060907,
+     0x00010304, 0x05060809,
+     0x00010204, 0x05060907,
+     0x00010203, 0x05060807,
+     0x00010203, 0x04060907,
+     0x00010203, 0x04050807,
+     0x000D0602, 0x000D0602,
+     0x000D0602, 0x000D0602,
+     0x0306090D, 0x0306090D,
+     0x0306090D, 0x0306090D,
+     0x020E0F07, 0x020E0F07,
+     0x020E0F07, 0x020E0F07,
+     0x080E0407, 0x080E0407,
+     0x080E0407, 0x080E0407,
+     0x01050A0B, 0x01050A0B,
+     0x01050A0B, 0x01050A0B,
+     0x090A0E0F, 0x090A0E0F,
+     0x090A0E0F, 0x090A0E0F,
+     0x0C020304, 0x0C020304,
+     0x0C020304, 0x0C020304,
+     0x0D0E0F0D, 0x0E0F0D0E,
+     0x0F0D0E0F, 0x0D0E0F0D,
+     0x0D0E0F0D, 0x0E0F0D0E,
+     0x0F0D0E0F, 0x0D0E0F0D,
+     },
 };
 
 extern ParallaxScreenHistory gParallaxScreenHistory;
@@ -683,10 +627,177 @@ done:
     return current;
 }
 
-// 98.24% https://decomp.me/scratch/y0CS7
-INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002AE80_2BA80);
+typedef struct {
+    /* 0x00 */ void *model;
+    /* 0x04 */ Transform3D matrix;
+    /* 0x24 */ s32 speed;
+    /* 0x28 */ s32 unk28;
+    /* 0x2C */ s16 targetAngle;
+    /* 0x2E */ s16 currentAngle;
+    /* 0x30 */ u16 unk30;
+    /* 0x32 */ s16 unk32;
+    /* 0x34 */ u8 pad34[0x2];
+    /* 0x36 */ u8 unk36;
+    /* 0x37 */ u8 unk37;
+    /* 0x38 */ u8 pad38[0x14];
+    /* 0x4C */ u16 *unk4C;
+    /* 0x50 */ s16 animFrame;
+    /* 0x52 */ u8 pad52[0x2];
+    /* 0x54 */ u16 unk54;
+    /* 0x56 */ u16 unk56;
+    /* 0x58 */ u16 animSpeed;
+    /* 0x5A */ u16 unk5A;
+    /* 0x5C */ u8 unk5C;
+    /* 0x5D */ u8 unk5D;
+    /* 0x5E */ u8 state;
+    /* 0x5F */ u8 pad5F[0x2];
+    /* 0x61 */ u8 prevState;
+} RareEventNpc;
 
-s16 signedAngleDifference(s16 fromAngle, s16 toAngle);
+void initStoryMapNpcSpecialDialogue(Func8002A390Arg *);
+
+void func_8002AE80_2BA80(RareEventNpc *npc) {
+    GameState *alloc;
+    s16 angleDiff;
+    u8 state;
+    s32 absAngleDiff;
+    s16 savedAngle;
+
+    alloc = getCurrentAllocation();
+    state = alloc->dialogueTurnState & 0xF;
+    alloc->dialogueTurnState = alloc->dialogueTurnState & 0xF0;
+
+    switch (state) {
+        case 1:
+            savedAngle = (npc->unk30 = npc->targetAngle);
+            npc->unk32 = computeAngleToPosition(
+                alloc->unk3EC,
+                alloc->unk3F0,
+                npc->matrix.translation.x,
+                npc->matrix.translation.z
+            );
+            angleDiff = signedAngleDifference(savedAngle, npc->unk32);
+            if (angleDiff < 0) {
+                npc->unk36 = 1;
+            } else {
+                npc->unk36 = 0;
+            }
+            absAngleDiff = ABS(angleDiff);
+            if (absAngleDiff >= 0xAAB) {
+                npc->animFrame = 1;
+                npc->unk30 = (npc->unk30 + 0x1000) & 0x1FFF;
+                if (npc->unk5D == 5) {
+                    npc->animFrame = 0x22;
+                }
+                npc->unk37 = 0;
+                if (signedAngleDifference(npc->unk30, npc->unk32) < 0) {
+                    npc->unk36 = 1;
+                } else {
+                    npc->unk36 = 0;
+                }
+            } else {
+                if (absAngleDiff < 0x2AA) {
+                    if (npc->unk5D != 5) {
+                        npc->animFrame = 0;
+                    } else {
+                        npc->animFrame = 0x21;
+                    }
+                } else {
+                    npc->animFrame = 2;
+                    if (npc->unk5D == 5) {
+                        npc->animFrame = 0x1D;
+                    }
+                }
+                npc->unk37 = 1;
+            }
+            state = 2;
+            break;
+
+        case 2: {
+            s32 absVal;
+            angleDiff = signedAngleDifference(npc->unk30, npc->unk32);
+            absVal = ABS(angleDiff);
+            if (absVal < 0xA0) {
+                if (npc->animFrame == 2 || npc->animFrame == 0x1D) {
+                    npc->animFrame = 0;
+                    if (npc->unk5D == 5) {
+                        npc->animFrame = 0x21;
+                    }
+                }
+                angleDiff = (angleDiff >= 0) ? angleDiff : -angleDiff;
+                state = 3;
+            } else {
+                angleDiff = 0xA0;
+            }
+            if (npc->unk36 != 0) {
+                s32 temp = angleDiff;
+                angleDiff = -temp;
+            }
+            if (npc->animFrame == 1 || npc->animFrame == 0x22) {
+                if (npc->unk37 != 0) {
+                    npc->animFrame = 0;
+                    if (npc->unk5D == 5) {
+                        npc->animFrame = 0x21;
+                    }
+                }
+            }
+            npc->unk30 = npc->unk30 + angleDiff;
+            break;
+        }
+
+        case 3:
+            savedAngle = alloc->dialogueTurnState;
+            if (savedAngle == 0x30 && npc->unk37 != 0) {
+                u16 dialogueIndex;
+                npc->unk4C =
+                    (u16 *)sStoryMapNpcDialogueTable.dialogueTable[npc->unk5C][D_800AFE8C_A71FC->playerBoardIds[0]];
+                dialogueIndex = npc->unk4C[0];
+                npc->unk37 = 0;
+                npc->animFrame = dialogueIndex;
+                npc->unk4C += 1;
+                state = 4;
+                playSoundEffectOnChannelNoPriority(
+                    sNpcInteractionSoundIds[npc->unk5C][D_800AFE8C_A71FC->playerBoardIds[0]],
+                    1
+                );
+                initStoryMapNpcSpecialDialogue((Func8002A390Arg *)npc);
+            } else {
+                if ((npc->animFrame == 1 || npc->animFrame == 0x22) && npc->unk37 != 0) {
+                    npc->animFrame = 0;
+                    if (npc->unk5D == 5) {
+                        npc->animFrame = 0x21;
+                    }
+                }
+            }
+            break;
+
+        case 4:
+            if (npc->unk37 != 0) {
+                npc->unk37 = 0;
+                if (*npc->unk4C == 0xFFFF) {
+                    state = 5;
+                    npc->animFrame = 0;
+                    if (npc->unk5D == 5) {
+                        npc->animFrame = 0x21;
+                    }
+                } else {
+                    npc->animFrame = *npc->unk4C;
+                    npc->unk4C += 1;
+                }
+            }
+            break;
+
+        case 5:
+            if (alloc->dialogueTurnState == 0) {
+                state = 0xF;
+                npc->state = 0x15;
+                npc->unk32 = 0;
+            }
+            break;
+    }
+
+    alloc->dialogueTurnState |= state;
+}
 
 void animateNpcTurnToTarget(Func297D8Arg *npc) {
     GameState *alloc;
