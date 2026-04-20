@@ -39,16 +39,10 @@ typedef struct {
 } Func8002A390Arg;
 
 typedef struct {
-    u8 pad0[0x14];
-    union {
-        s16 low;
-        s32 full;
-    } screenX;
-    u8 pad18[4];
-    union {
-        s16 low;
-        s32 full;
-    } screenZ;
+    /* 0x00 */ u8 pad0[0x14];
+    /* 0x14 */ s32 screenX;
+    /* 0x18 */ u8 pad18[4];
+    /* 0x1C */ s32 screenZ;
 } ParallaxSprite;
 
 typedef struct {
@@ -942,8 +936,67 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
     }
 }
 
-// 85.96% https://decomp.me/scratch/00Z3Q
-INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002B598_2C198);
+void func_8002B598_2C198(ParallaxSprite *sprite) {
+    Vec3i newPosition;
+    Vec3i currentPosition;
+    Vec3i *currentPtr;
+    Vec3i *newPtr;
+    s32 zAdjust;
+    s32 xAdjust;
+    s32 historyIndex;
+    s32 nextIndex;
+    u16 *positionHistoryX;
+    u16 *positionHistoryZ;
+    s32 xCoord;
+    s32 zCoord;
+    s32 readX;
+    s32 readZ;
+    s32 zScaled;
+    s32 xScaled;
+    s32 multiplier;
+    s32 multiplier2;
+    s32 temp_a1;
+    u16 *coordHistoryPtr;
+    s32 temp_v1;
+
+    if (!(D_800AB06C_A23DC & 7)) {
+        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2] = xCoord = (s16)(sprite->screenX >> 16);
+        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2 + 1] = zCoord = (s16)(sprite->screenZ >> 16);
+    }
+
+    currentPtr = &currentPosition;
+    newPtr = &newPosition;
+    memcpy(currentPtr, &sprite->screenX, 12);
+    memcpy(newPtr, currentPtr, 12);
+
+    multiplier = 24;
+    zScaled = currentPosition.z >> 8;
+    zAdjust = zScaled * multiplier;
+    temp_v1 = zAdjust / 19712;
+    newPosition.x += temp_v1 << 12;
+
+    multiplier2 = -24;
+    xScaled = currentPosition.x >> 8;
+    xAdjust = xScaled * multiplier2;
+    temp_v1 = xAdjust / 19712;
+    newPosition.z += temp_v1 << 12;
+
+    memcpy(&sprite->screenX, &newPosition, 12);
+
+    D_800AB06C_A23DC += 1;
+
+    if ((u16)(atan2Fixed(newPosition.x, newPosition.z) - 0xBB0) < 0x450) {
+        gParallaxScreenHistory.historyIndex = D_800AB06C_A23DC / 8;
+
+        if (D_800AB06C_A23DC & 7) {
+            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2] = readX =
+                (s16)(sprite->screenX >> 16);
+            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2 + 1] = readZ =
+                (s16)(sprite->screenZ >> 16);
+            gParallaxScreenHistory.historyIndex++;
+        }
+    }
+}
 
 void func_8002B760_2C360(ParallaxSprite *sprite) {
     Vec3i local;
@@ -961,8 +1014,8 @@ void func_8002B760_2C360(ParallaxSprite *sprite) {
     s32 temp_v1;
 
     if (!(D_800AB06C_A23DC & 7)) {
-        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2] = xCoord = sprite->screenX.low;
-        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2 + 1] = zCoord = sprite->screenZ.low;
+        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2] = xCoord = (s16)(sprite->screenX >> 16);
+        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2 + 1] = zCoord = (s16)(sprite->screenZ >> 16);
     }
 
     localPtr = &local;
@@ -994,8 +1047,10 @@ void func_8002B760_2C360(ParallaxSprite *sprite) {
         gParallaxScreenHistory.historyIndex = D_800AB06C_A23DC / 8;
 
         if (D_800AB06C_A23DC & 7) {
-            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2] = readX = sprite->screenX.low;
-            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2 + 1] = readZ = sprite->screenZ.low;
+            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2] = readX =
+                (s16)(sprite->screenX >> 16);
+            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2 + 1] = readZ =
+                (s16)(sprite->screenZ >> 16);
             gParallaxScreenHistory.historyIndex++;
         }
     }
@@ -1020,9 +1075,9 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     currentPtr = &currentPosition;
     newPtr = &newPosition;
 
-    xCoord = sprite->screenX.low;
+    xCoord = (s16)(sprite->screenX >> 16);
     gParallaxScreenHistory.coordHistory[historyIndex * 2] = xCoord;
-    zCoord = sprite->screenZ.low;
+    zCoord = (s16)(sprite->screenZ >> 16);
     gParallaxScreenHistory.coordHistory[historyIndex * 2 + 1] = zCoord;
 
     memcpy(currentPtr, &gParallaxOffset, sizeof(Vec3i));
@@ -1046,17 +1101,17 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
 
     memcpy(&gParallaxOffset, newPtr, sizeof(Vec3i));
 
-    sprite->screenX.full = newPosition.x;
-    sprite->screenZ.full = newPosition.z - 0x440000;
+    sprite->screenX = newPosition.x;
+    sprite->screenZ = newPosition.z - 0x440000;
 
     D_800AB06C_A23DC++;
 
     if (newPosition.z > 0) {
         if ((u32)(newPosition.x - 0x100001) <= 0xFFFFE) {
             gParallaxScreenHistory.historyIndex = D_800AB06C_A23DC;
-            readX = sprite->screenX.low;
+            readX = (s16)(sprite->screenX >> 16);
             gParallaxScreenHistory.coordHistory[D_800AB06C_A23DC * 2] = readX;
-            readZ = sprite->screenZ.low;
+            readZ = (s16)(sprite->screenZ >> 16);
             gParallaxScreenHistory.coordHistory[D_800AB06C_A23DC * 2 + 1] = readZ;
         }
     }
@@ -1081,8 +1136,8 @@ void func_8002BAEC_2C6EC(ParallaxSprite *sprite) {
     s16 temp_v0;
 
     if (!(D_800AB06C_A23DC & 7)) {
-        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2] = xCoord = sprite->screenX.low;
-        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2 + 1] = zCoord = sprite->screenZ.low;
+        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2] = xCoord = (s16)(sprite->screenX >> 16);
+        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2 + 1] = zCoord = (s16)(sprite->screenZ >> 16);
     }
 
     currentPtr = &currentPosition;
@@ -1115,8 +1170,10 @@ void func_8002BAEC_2C6EC(ParallaxSprite *sprite) {
         gParallaxScreenHistory.historyIndex = D_800AB06C_A23DC / 8;
 
         if (D_800AB06C_A23DC & 7) {
-            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2] = readX = sprite->screenX.low;
-            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2 + 1] = readZ = sprite->screenZ.low;
+            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2] = readX =
+                (s16)(sprite->screenX >> 16);
+            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2 + 1] = readZ =
+                (s16)(sprite->screenZ >> 16);
             gParallaxScreenHistory.historyIndex++;
         }
     } else {
