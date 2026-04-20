@@ -247,7 +247,7 @@ StoryMapNpcDialogueConfig sStoryMapNpcDialogueTable = {
 extern ParallaxScreenHistory gParallaxScreenHistory;
 extern Vec3i gParallaxOffset;
 extern s32 D_800AFF28_A7298;
-extern s32 D_800AB06C_A23DC;
+extern s32 gParallaxFrameCounter;
 extern s16 D_800AB244_A25B4;
 extern s32 D_800AB248_A25B8;
 extern s32 D_8009F230_9FE30;
@@ -936,7 +936,7 @@ void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
     }
 }
 
-void func_8002B598_2C198(ParallaxSprite *sprite) {
+void updateParallaxSpriteFast(ParallaxSprite *sprite) {
     Vec3i newPosition;
     Vec3i currentPosition;
     Vec3i *currentPtr;
@@ -953,15 +953,16 @@ void func_8002B598_2C198(ParallaxSprite *sprite) {
     s32 readZ;
     s32 zScaled;
     s32 xScaled;
-    s32 multiplier;
-    s32 multiplier2;
+    s32 zMultiplier;
+    s32 xMultiplier;
     s32 temp_a1;
     u16 *coordHistoryPtr;
-    s32 temp_v1;
+    s32 scaledOffset;
 
-    if (!(D_800AB06C_A23DC & 7)) {
-        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2] = xCoord = (s16)(sprite->screenX >> 16);
-        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2 + 1] = zCoord = (s16)(sprite->screenZ >> 16);
+    if (!(gParallaxFrameCounter & 7)) {
+        gParallaxScreenHistory.coordHistory[(gParallaxFrameCounter / 8) * 2] = xCoord = (s16)(sprite->screenX >> 16);
+        gParallaxScreenHistory.coordHistory[(gParallaxFrameCounter / 8) * 2 + 1] = zCoord =
+            (s16)(sprite->screenZ >> 16);
     }
 
     currentPtr = &currentPosition;
@@ -969,29 +970,29 @@ void func_8002B598_2C198(ParallaxSprite *sprite) {
     memcpy(currentPtr, &sprite->screenX, 12);
     memcpy(newPtr, currentPtr, 12);
 
-    multiplier = 24;
+    zMultiplier = 24;
     zScaled = currentPosition.z >> 8;
-    zAdjust = zScaled * multiplier;
-    temp_v1 = zAdjust / 19712;
-    newPosition.x += temp_v1 << 12;
+    zAdjust = zScaled * zMultiplier;
+    scaledOffset = zAdjust / 19712;
+    newPosition.x += scaledOffset << 12;
 
-    multiplier2 = -24;
+    xMultiplier = -24;
     xScaled = currentPosition.x >> 8;
-    xAdjust = xScaled * multiplier2;
-    temp_v1 = xAdjust / 19712;
-    newPosition.z += temp_v1 << 12;
+    xAdjust = xScaled * xMultiplier;
+    scaledOffset = xAdjust / 19712;
+    newPosition.z += scaledOffset << 12;
 
     memcpy(&sprite->screenX, &newPosition, 12);
 
-    D_800AB06C_A23DC += 1;
+    gParallaxFrameCounter += 1;
 
     if ((u16)(atan2Fixed(newPosition.x, newPosition.z) - 0xBB0) < 0x450) {
-        gParallaxScreenHistory.historyIndex = D_800AB06C_A23DC / 8;
+        gParallaxScreenHistory.historyIndex = gParallaxFrameCounter / 8;
 
-        if (D_800AB06C_A23DC & 7) {
-            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2] = readX =
+        if (gParallaxFrameCounter & 7) {
+            gParallaxScreenHistory.coordHistory[((gParallaxFrameCounter / 8) + 1) * 2] = readX =
                 (s16)(sprite->screenX >> 16);
-            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2 + 1] = readZ =
+            gParallaxScreenHistory.coordHistory[((gParallaxFrameCounter / 8) + 1) * 2 + 1] = readZ =
                 (s16)(sprite->screenZ >> 16);
             gParallaxScreenHistory.historyIndex++;
         }
@@ -1013,9 +1014,10 @@ void func_8002B760_2C360(ParallaxSprite *sprite) {
     s32 multiplier2;
     s32 temp_v1;
 
-    if (!(D_800AB06C_A23DC & 7)) {
-        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2] = xCoord = (s16)(sprite->screenX >> 16);
-        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2 + 1] = zCoord = (s16)(sprite->screenZ >> 16);
+    if (!(gParallaxFrameCounter & 7)) {
+        gParallaxScreenHistory.coordHistory[(gParallaxFrameCounter / 8) * 2] = xCoord = (s16)(sprite->screenX >> 16);
+        gParallaxScreenHistory.coordHistory[(gParallaxFrameCounter / 8) * 2 + 1] = zCoord =
+            (s16)(sprite->screenZ >> 16);
     }
 
     localPtr = &local;
@@ -1041,15 +1043,15 @@ void func_8002B760_2C360(ParallaxSprite *sprite) {
 
     memcpy(&sprite->screenX, &local, 12);
 
-    D_800AB06C_A23DC += 1;
+    gParallaxFrameCounter += 1;
 
     if ((u16)(atan2Fixed(gParallaxOffset.x, D_800AFF28_A7298) - 0xC18) < 0x3E8) {
-        gParallaxScreenHistory.historyIndex = D_800AB06C_A23DC / 8;
+        gParallaxScreenHistory.historyIndex = gParallaxFrameCounter / 8;
 
-        if (D_800AB06C_A23DC & 7) {
-            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2] = readX =
+        if (gParallaxFrameCounter & 7) {
+            gParallaxScreenHistory.coordHistory[((gParallaxFrameCounter / 8) + 1) * 2] = readX =
                 (s16)(sprite->screenX >> 16);
-            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2 + 1] = readZ =
+            gParallaxScreenHistory.coordHistory[((gParallaxFrameCounter / 8) + 1) * 2 + 1] = readZ =
                 (s16)(sprite->screenZ >> 16);
             gParallaxScreenHistory.historyIndex++;
         }
@@ -1071,7 +1073,7 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     s32 xScaled;
     s32 multiplier;
 
-    historyIndex = D_800AB06C_A23DC;
+    historyIndex = gParallaxFrameCounter;
     currentPtr = &currentPosition;
     newPtr = &newPosition;
 
@@ -1104,15 +1106,15 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     sprite->screenX = newPosition.x;
     sprite->screenZ = newPosition.z - 0x440000;
 
-    D_800AB06C_A23DC++;
+    gParallaxFrameCounter++;
 
     if (newPosition.z > 0) {
         if ((u32)(newPosition.x - 0x100001) <= 0xFFFFE) {
-            gParallaxScreenHistory.historyIndex = D_800AB06C_A23DC;
+            gParallaxScreenHistory.historyIndex = gParallaxFrameCounter;
             readX = (s16)(sprite->screenX >> 16);
-            gParallaxScreenHistory.coordHistory[D_800AB06C_A23DC * 2] = readX;
+            gParallaxScreenHistory.coordHistory[gParallaxFrameCounter * 2] = readX;
             readZ = (s16)(sprite->screenZ >> 16);
-            gParallaxScreenHistory.coordHistory[D_800AB06C_A23DC * 2 + 1] = readZ;
+            gParallaxScreenHistory.coordHistory[gParallaxFrameCounter * 2 + 1] = readZ;
         }
     }
 }
@@ -1135,9 +1137,10 @@ void func_8002BAEC_2C6EC(ParallaxSprite *sprite) {
     s32 temp_v1;
     s16 temp_v0;
 
-    if (!(D_800AB06C_A23DC & 7)) {
-        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2] = xCoord = (s16)(sprite->screenX >> 16);
-        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2 + 1] = zCoord = (s16)(sprite->screenZ >> 16);
+    if (!(gParallaxFrameCounter & 7)) {
+        gParallaxScreenHistory.coordHistory[(gParallaxFrameCounter / 8) * 2] = xCoord = (s16)(sprite->screenX >> 16);
+        gParallaxScreenHistory.coordHistory[(gParallaxFrameCounter / 8) * 2 + 1] = zCoord =
+            (s16)(sprite->screenZ >> 16);
     }
 
     currentPtr = &currentPosition;
@@ -1163,16 +1166,16 @@ void func_8002BAEC_2C6EC(ParallaxSprite *sprite) {
 
     memcpy(&sprite->screenX, &newPosition, 12);
 
-    D_800AB06C_A23DC += 1;
+    gParallaxFrameCounter += 1;
 
     temp_v0 = atan2Fixed(newPosition.x, newPosition.z);
     if ((u16)(temp_v0 - 0x1001) < 0x450) {
-        gParallaxScreenHistory.historyIndex = D_800AB06C_A23DC / 8;
+        gParallaxScreenHistory.historyIndex = gParallaxFrameCounter / 8;
 
-        if (D_800AB06C_A23DC & 7) {
-            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2] = readX =
+        if (gParallaxFrameCounter & 7) {
+            gParallaxScreenHistory.coordHistory[((gParallaxFrameCounter / 8) + 1) * 2] = readX =
                 (s16)(sprite->screenX >> 16);
-            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2 + 1] = readZ =
+            gParallaxScreenHistory.coordHistory[((gParallaxFrameCounter / 8) + 1) * 2 + 1] = readZ =
                 (s16)(sprite->screenZ >> 16);
             gParallaxScreenHistory.historyIndex++;
         }
