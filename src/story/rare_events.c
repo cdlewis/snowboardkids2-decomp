@@ -309,6 +309,7 @@ u32 sStoryMapNpcDialogueTable[] = {
 extern ParallaxScreenHistory gParallaxScreenHistory;
 extern Vec3i gParallaxOffset;
 extern s32 D_800AB06C_A23DC;
+extern s32 D_800AB248_A25B8;
 extern s32 D_8009F230_9FE30;
 extern s32 D_8009F234_9FE34;
 extern s16 D_8009F238_9FE38;
@@ -895,5 +896,66 @@ void updateParallaxPosition(ParallaxSprite *sprite) {
     }
 }
 
-// 84.56% https://decomp.me/scratch/aiCFG
-INCLUDE_ASM("asm/nonmatchings/story/rare_events", func_8002BAEC_2C6EC);
+void func_8002BAEC_2C6EC(ParallaxSprite *sprite) {
+    Vec3i newPosition;
+    Vec3i currentPosition;
+    Vec3i *currentPtr;
+    Vec3i *newPtr;
+    s32 zAdjust;
+    s32 xAdjust;
+    s32 xCoord;
+    s32 zCoord;
+    s32 readX;
+    s32 readZ;
+    s32 zScaled;
+    s32 xScaled;
+    s8 multiplier;
+    s32 multiplier2;
+    s32 temp_v1;
+    s16 temp_v0;
+
+    if (!(D_800AB06C_A23DC & 7)) {
+        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2] = xCoord = sprite->screenX.low;
+        gParallaxScreenHistory.coordHistory[(D_800AB06C_A23DC / 8) * 2 + 1] = zCoord = sprite->screenZ.low;
+    }
+
+    currentPtr = &currentPosition;
+    newPtr = &newPosition;
+    memcpy(currentPtr, &sprite->screenX, 12);
+    memcpy(newPtr, currentPtr, 12);
+
+    if (D_800AB248_A25B8 != 0) {
+        multiplier = -24;
+    } else {
+        multiplier = 24;
+    }
+    zScaled = currentPosition.z >> 8;
+    zAdjust = multiplier * zScaled;
+    temp_v1 = zAdjust / 19712;
+    newPosition.x += temp_v1 << 12;
+
+    multiplier2 = -multiplier;
+    xScaled = currentPosition.x >> 8;
+    xAdjust = multiplier2 * xScaled;
+    temp_v1 = xAdjust / 19712;
+    newPosition.z += temp_v1 << 12;
+
+    memcpy(&sprite->screenX, &newPosition, 12);
+
+    D_800AB06C_A23DC += 1;
+
+    temp_v0 = atan2Fixed(newPosition.x, newPosition.z);
+    if ((u16)(temp_v0 - 0x1001) < 0x450) {
+        gParallaxScreenHistory.historyIndex = D_800AB06C_A23DC / 8;
+
+        if (D_800AB06C_A23DC & 7) {
+            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2] = readX = sprite->screenX.low;
+            gParallaxScreenHistory.coordHistory[((D_800AB06C_A23DC / 8) + 1) * 2 + 1] = readZ = sprite->screenZ.low;
+            gParallaxScreenHistory.historyIndex++;
+        }
+    } else {
+        if ((u16)(temp_v0 - 0x81) < 0x1F) {
+            D_800AB248_A25B8 = 1;
+        }
+    }
+}
