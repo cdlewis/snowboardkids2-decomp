@@ -850,7 +850,7 @@ void updateStoryMapNpcTalking(Func297D8Arg *arg0) {
 
     switch (arg0->unk5E) {
         case 0x14:
-            func_8002AE80_2BA80(arg0);
+            updateStoryMapNpcDialogueTurn(arg0);
             createYRotationMatrix(&arg0->matrix, arg0->turnAngle);
             break;
         case 0x15:

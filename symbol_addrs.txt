@@ -915,6 +915,7 @@ updateStoryMapNpcModel = 0x8002A2D0; // rom:0x2AED0
 tryStoryMapNpcInteraction = 0x8002A390; // rom:0x2AF90
 moveStoryMapItemAlongWaypoints = 0x8002A4AC; // rom:0x2B0AC
 isNpcFacingPlayer = 0x8002ACFC; // rom:0x2B8FC
+updateStoryMapNpcDialogueTurn = 0x8002AE80; // rom:0x2BA80
 stepAngleTowardsTarget = 0x8002ADB4; // rom:0x2B9B4
 animateNpcTurnToTarget = 0x8002B248; // rom:0x2BE48
 signedAngleDifference = 0x8002B4B8; // rom:0x2C0B8

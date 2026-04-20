@@ -22,16 +22,16 @@ typedef struct {
     /* 0x2C */ s16 targetAngle;
     /* 0x2E */ s16 currentAngle;
     /* 0x30 */ u8 pad30[0x7];
-    /* 0x37 */ u8 unk37;
+    /* 0x37 */ u8 animFrameComplete;
     /* 0x38 */ u8 pad38[0x14];
-    /* 0x4C */ u16 *unk4C;
+    /* 0x4C */ u16 *animSequencePtr;
     /* 0x50 */ u16 animFrame;
     /* 0x52 */ u8 pad52[0x2];
     /* 0x54 */ u16 savedAnimFrame;
     /* 0x56 */ u16 unk56;
     /* 0x58 */ u16 animSpeed;
     /* 0x5A */ u16 unk5A;
-    /* 0x5C */ u8 unk5C;
+    /* 0x5C */ u8 npcIndex;
     /* 0x5D */ u8 itemType;
     /* 0x5E */ u8 state;
     /* 0x5F */ u8 pad5F[0x2];
@@ -630,21 +630,21 @@ typedef struct {
     /* 0x28 */ s32 unk28;
     /* 0x2C */ s16 targetAngle;
     /* 0x2E */ s16 currentAngle;
-    /* 0x30 */ u16 unk30;
-    /* 0x32 */ s16 unk32;
+    /* 0x30 */ u16 turnAngle;
+    /* 0x32 */ s16 dialogueTargetAngle;
     /* 0x34 */ u8 pad34[0x2];
-    /* 0x36 */ u8 unk36;
-    /* 0x37 */ u8 unk37;
+    /* 0x36 */ u8 turnDirection;
+    /* 0x37 */ u8 animFrameComplete;
     /* 0x38 */ u8 pad38[0x14];
-    /* 0x4C */ u16 *unk4C;
+    /* 0x4C */ u16 *animSequencePtr;
     /* 0x50 */ s16 animFrame;
     /* 0x52 */ u8 pad52[0x2];
     /* 0x54 */ u16 unk54;
     /* 0x56 */ u16 unk56;
     /* 0x58 */ u16 animSpeed;
     /* 0x5A */ u16 unk5A;
-    /* 0x5C */ u8 unk5C;
-    /* 0x5D */ u8 unk5D;
+    /* 0x5C */ u8 npcIndex;
+    /* 0x5D */ u8 itemType;
     /* 0x5E */ u8 state;
     /* 0x5F */ u8 pad5F[0x2];
     /* 0x61 */ u8 prevState;
@@ -652,7 +652,7 @@ typedef struct {
 
 void initStoryMapNpcSpecialDialogue(Func8002A390Arg *);
 
-void func_8002AE80_2BA80(RareEventNpc *npc) {
+void updateStoryMapNpcDialogueTurn(RareEventNpc *npc) {
     GameState *alloc;
     s16 angleDiff;
     u8 state;
@@ -665,58 +665,58 @@ void func_8002AE80_2BA80(RareEventNpc *npc) {
 
     switch (state) {
         case 1:
-            savedAngle = (npc->unk30 = npc->targetAngle);
-            npc->unk32 = computeAngleToPosition(
+            savedAngle = (npc->turnAngle = npc->targetAngle);
+            npc->dialogueTargetAngle = computeAngleToPosition(
                 alloc->unk3EC,
                 alloc->unk3F0,
                 npc->matrix.translation.x,
                 npc->matrix.translation.z
             );
-            angleDiff = signedAngleDifference(savedAngle, npc->unk32);
+            angleDiff = signedAngleDifference(savedAngle, npc->dialogueTargetAngle);
             if (angleDiff < 0) {
-                npc->unk36 = 1;
+                npc->turnDirection = 1;
             } else {
-                npc->unk36 = 0;
+                npc->turnDirection = 0;
             }
             absAngleDiff = ABS(angleDiff);
             if (absAngleDiff >= 0xAAB) {
                 npc->animFrame = 1;
-                npc->unk30 = (npc->unk30 + 0x1000) & 0x1FFF;
-                if (npc->unk5D == 5) {
+                npc->turnAngle = (npc->turnAngle + 0x1000) & 0x1FFF;
+                if (npc->itemType == 5) {
                     npc->animFrame = 0x22;
                 }
-                npc->unk37 = 0;
-                if (signedAngleDifference(npc->unk30, npc->unk32) < 0) {
-                    npc->unk36 = 1;
+                npc->animFrameComplete = 0;
+                if (signedAngleDifference(npc->turnAngle, npc->dialogueTargetAngle) < 0) {
+                    npc->turnDirection = 1;
                 } else {
-                    npc->unk36 = 0;
+                    npc->turnDirection = 0;
                 }
             } else {
                 if (absAngleDiff < 0x2AA) {
-                    if (npc->unk5D != 5) {
+                    if (npc->itemType != 5) {
                         npc->animFrame = 0;
                     } else {
                         npc->animFrame = 0x21;
                     }
                 } else {
                     npc->animFrame = 2;
-                    if (npc->unk5D == 5) {
+                    if (npc->itemType == 5) {
                         npc->animFrame = 0x1D;
                     }
                 }
-                npc->unk37 = 1;
+                npc->animFrameComplete = 1;
             }
             state = 2;
             break;
 
         case 2: {
             s32 absVal;
-            angleDiff = signedAngleDifference(npc->unk30, npc->unk32);
+            angleDiff = signedAngleDifference(npc->turnAngle, npc->dialogueTargetAngle);
             absVal = ABS(angleDiff);
             if (absVal < 0xA0) {
                 if (npc->animFrame == 2 || npc->animFrame == 0x1D) {
                     npc->animFrame = 0;
-                    if (npc->unk5D == 5) {
+                    if (npc->itemType == 5) {
                         npc->animFrame = 0x21;
                     }
                 }
@@ -725,42 +725,42 @@ void func_8002AE80_2BA80(RareEventNpc *npc) {
             } else {
                 angleDiff = 0xA0;
             }
-            if (npc->unk36 != 0) {
+            if (npc->turnDirection != 0) {
                 s32 temp = angleDiff;
                 angleDiff = -temp;
             }
             if (npc->animFrame == 1 || npc->animFrame == 0x22) {
-                if (npc->unk37 != 0) {
+                if (npc->animFrameComplete != 0) {
                     npc->animFrame = 0;
-                    if (npc->unk5D == 5) {
+                    if (npc->itemType == 5) {
                         npc->animFrame = 0x21;
                     }
                 }
             }
-            npc->unk30 = npc->unk30 + angleDiff;
+            npc->turnAngle = npc->turnAngle + angleDiff;
             break;
         }
 
         case 3:
             savedAngle = alloc->dialogueTurnState;
-            if (savedAngle == 0x30 && npc->unk37 != 0) {
+            if (savedAngle == 0x30 && npc->animFrameComplete != 0) {
                 u16 dialogueIndex;
-                npc->unk4C =
-                    (u16 *)sStoryMapNpcDialogueTable.dialogueTable[npc->unk5C][D_800AFE8C_A71FC->playerBoardIds[0]];
-                dialogueIndex = npc->unk4C[0];
-                npc->unk37 = 0;
+                npc->animSequencePtr =
+                    (u16 *)sStoryMapNpcDialogueTable.dialogueTable[npc->npcIndex][D_800AFE8C_A71FC->playerBoardIds[0]];
+                dialogueIndex = npc->animSequencePtr[0];
+                npc->animFrameComplete = 0;
                 npc->animFrame = dialogueIndex;
-                npc->unk4C += 1;
+                npc->animSequencePtr += 1;
                 state = 4;
                 playSoundEffectOnChannelNoPriority(
-                    sNpcInteractionSoundIds[npc->unk5C][D_800AFE8C_A71FC->playerBoardIds[0]],
+                    sNpcInteractionSoundIds[npc->npcIndex][D_800AFE8C_A71FC->playerBoardIds[0]],
                     1
                 );
                 initStoryMapNpcSpecialDialogue((Func8002A390Arg *)npc);
             } else {
-                if ((npc->animFrame == 1 || npc->animFrame == 0x22) && npc->unk37 != 0) {
+                if ((npc->animFrame == 1 || npc->animFrame == 0x22) && npc->animFrameComplete != 0) {
                     npc->animFrame = 0;
-                    if (npc->unk5D == 5) {
+                    if (npc->itemType == 5) {
                         npc->animFrame = 0x21;
                     }
                 }
@@ -768,17 +768,17 @@ void func_8002AE80_2BA80(RareEventNpc *npc) {
             break;
 
         case 4:
-            if (npc->unk37 != 0) {
-                npc->unk37 = 0;
-                if (*npc->unk4C == 0xFFFF) {
+            if (npc->animFrameComplete != 0) {
+                npc->animFrameComplete = 0;
+                if (*npc->animSequencePtr == 0xFFFF) {
                     state = 5;
                     npc->animFrame = 0;
-                    if (npc->unk5D == 5) {
+                    if (npc->itemType == 5) {
                         npc->animFrame = 0x21;
                     }
                 } else {
-                    npc->animFrame = *npc->unk4C;
-                    npc->unk4C += 1;
+                    npc->animFrame = *npc->animSequencePtr;
+                    npc->animSequencePtr += 1;
                 }
             }
             break;
@@ -787,7 +787,7 @@ void func_8002AE80_2BA80(RareEventNpc *npc) {
             if (alloc->dialogueTurnState == 0) {
                 state = 0xF;
                 npc->state = 0x15;
-                npc->unk32 = 0;
+                npc->dialogueTargetAngle = 0;
             }
             break;
     }
@@ -914,23 +914,23 @@ s16 signedAngleDifference(s16 fromAngle, s16 toAngle) {
 void initStoryMapNpcSpecialDialogue(Func8002A390Arg *arg0) {
     u16 dialogueIndex;
 
-    if (arg0->unk5C == 4) {
+    if (arg0->npcIndex == 4) {
         if (arg0->itemType == 5) {
-            arg0->unk4C = sNpcDialoguePointerTable;
-            dialogueIndex = arg0->unk4C[0];
-            arg0->unk37 = 0;
+            arg0->animSequencePtr = sNpcDialoguePointerTable;
+            dialogueIndex = arg0->animSequencePtr[0];
+            arg0->animFrameComplete = 0;
             arg0->animFrame = dialogueIndex;
-            arg0->unk4C += 1;
+            arg0->animSequencePtr += 1;
             playSoundEffectOnChannelNoPriority(0xBE, 1);
         }
     }
-    if (arg0->unk5C == 3) {
+    if (arg0->npcIndex == 3) {
         if (arg0->itemType == 8) {
-            arg0->unk4C = sDialogueSequence17_19;
-            dialogueIndex = arg0->unk4C[0];
-            arg0->unk37 = 0;
+            arg0->animSequencePtr = sDialogueSequence17_19;
+            dialogueIndex = arg0->animSequencePtr[0];
+            arg0->animFrameComplete = 0;
             arg0->animFrame = dialogueIndex;
-            arg0->unk4C += 1;
+            arg0->animSequencePtr += 1;
             playSoundEffectOnChannelNoPriority(0xAA, 1);
         }
     }

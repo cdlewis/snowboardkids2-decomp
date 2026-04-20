@@ -60,7 +60,7 @@ void initLevelSelectBasic(void);
 void enqueueHudTextLayout(void *fontAsset, void *textData, s16 startX, s16 startY, u8 alpha, u8 transparency, u8 paletteIndex, u8 priority, u8 flags);
 void initCharSelectIcons(void *arg0);
 void collectStoryMapItem(void *arg0);
-void func_8002AE80_2BA80(void *arg0);
+void updateStoryMapNpcDialogueTurn(void *arg0);
 void animateNpcTurnToTarget(void *arg0);
 s32 tryStoryMapNpcInteraction(void *arg0);
 void enqueueTexturedBillboardSprite(s32 arg0, TexturedBillboardSprite *arg1);
