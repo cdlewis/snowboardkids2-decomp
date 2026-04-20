@@ -246,9 +246,8 @@ StoryMapNpcDialogueConfig sStoryMapNpcDialogueTable = {
 
 extern ParallaxScreenHistory gParallaxScreenHistory;
 extern Vec3i gParallaxOffset;
-extern s32 D_800AFF28_A7298;
 extern s32 gParallaxFrameCounter;
-extern s16 D_800AB244_A25B4;
+extern s16 gParallaxWobbleAngle;
 extern s32 D_800AB248_A25B8;
 extern s32 D_8009F230_9FE30;
 extern s32 D_8009F234_9FE34;
@@ -999,9 +998,9 @@ void updateParallaxSpriteFast(ParallaxSprite *sprite) {
     }
 }
 
-void func_8002B760_2C360(ParallaxSprite *sprite) {
-    Vec3i local;
-    Vec3i *localPtr;
+void updateParallaxSpriteWobbling(ParallaxSprite *sprite) {
+    Vec3i offset;
+    Vec3i *offsetPtr;
     s32 zAdjust;
     s32 xAdjust;
     s32 xCoord;
@@ -1010,9 +1009,9 @@ void func_8002B760_2C360(ParallaxSprite *sprite) {
     s32 readZ;
     s32 zScaled;
     s32 xScaled;
-    s32 multiplier;
-    s32 multiplier2;
-    s32 temp_v1;
+    s32 zRotationSpeed;
+    s32 xRotationSpeed;
+    s32 scaledOffset;
 
     if (!(gParallaxFrameCounter & 7)) {
         gParallaxScreenHistory.coordHistory[(gParallaxFrameCounter / 8) * 2] = xCoord = (s16)(sprite->screenX >> 16);
@@ -1020,32 +1019,32 @@ void func_8002B760_2C360(ParallaxSprite *sprite) {
             (s16)(sprite->screenZ >> 16);
     }
 
-    localPtr = &local;
-    memcpy(localPtr, &gParallaxOffset, 12);
+    offsetPtr = &offset;
+    memcpy(offsetPtr, &gParallaxOffset, 12);
 
-    multiplier = 16;
-    zScaled = local.z >> 8;
-    zAdjust = zScaled * multiplier;
-    temp_v1 = zAdjust / 0x4000;
-    gParallaxOffset.x += temp_v1 << 12;
+    zRotationSpeed = 16;
+    zScaled = offset.z >> 8;
+    zAdjust = zScaled * zRotationSpeed;
+    scaledOffset = zAdjust / 0x4000;
+    gParallaxOffset.x += scaledOffset << 12;
 
-    multiplier2 = -16;
-    xScaled = local.x >> 8;
-    xAdjust = xScaled * multiplier2;
-    temp_v1 = xAdjust / 0x4000;
-    D_800AFF28_A7298 += temp_v1 << 12;
+    xRotationSpeed = -16;
+    xScaled = offset.x >> 8;
+    xAdjust = xScaled * xRotationSpeed;
+    scaledOffset = xAdjust / 0x4000;
+    gParallaxOffset.z += scaledOffset << 12;
 
-    memcpy(&local, &gParallaxOffset, 12);
+    memcpy(&offset, &gParallaxOffset, 12);
 
-    temp_v1 = (approximateSin(D_800AB244_A25B4) / 2) << 8;
-    local.z += temp_v1;
-    D_800AB244_A25B4 = (((u16)D_800AB244_A25B4) + 0x40) & 0x1FFF;
+    scaledOffset = (approximateSin(gParallaxWobbleAngle) / 2) << 8;
+    offset.z += scaledOffset;
+    gParallaxWobbleAngle = (((u16)gParallaxWobbleAngle) + 0x40) & 0x1FFF;
 
-    memcpy(&sprite->screenX, &local, 12);
+    memcpy(&sprite->screenX, &offset, 12);
 
     gParallaxFrameCounter += 1;
 
-    if ((u16)(atan2Fixed(gParallaxOffset.x, D_800AFF28_A7298) - 0xC18) < 0x3E8) {
+    if ((u16)(atan2Fixed(gParallaxOffset.x, gParallaxOffset.z) - 0xC18) < 0x3E8) {
         gParallaxScreenHistory.historyIndex = gParallaxFrameCounter / 8;
 
         if (gParallaxFrameCounter & 7) {
