@@ -195,7 +195,8 @@ s32 grantInvincibilityWithSound(Player *player) {
 
 extern void *getCurrentAllocation(void);
 extern s32 func_80059394_59F94(Player *);
-extern s32 func_800597C0_5A3C0(Player *);
+extern u8 D_800BADE0_AAC90[][0x11][0x4];
+s32 func_800597C0_5A3C0(Player *);
 extern s32 createWarpEffect(void *, void *, s16);
 extern s32 spawnAttackProjectile(s32, s32, s32);
 extern s32 spawnStarEffect(void *, void *, s16);
@@ -439,8 +440,85 @@ void processPlayerItemUsage(Player *player) {
 // 91.63% https://decomp.me/scratch/OJwdP
 INCLUDE_ASM("asm/nonmatchings/race/hit_reactions", func_80059394_59F94);
 
-// 94.73% https://decomp.me/scratch/o0SqJ
-INCLUDE_ASM("asm/nonmatchings/race/hit_reactions", func_800597C0_5A3C0);
+s32 func_800597C0_5A3C0(Player *player) {
+    GameState *gs;
+    s32 index;
+    u8 threshold;
+    u8 randVal;
+    s32 itemOffset;
+    s32 secondItemOffset;
+
+    gs = (GameState *)getCurrentAllocation();
+
+    if (player->inputDisabled == 0) {
+        if (player->secondaryItemId == 0) {
+            return 0;
+        }
+        if (player->inputButtonsPressed & 0x4000) {
+            return 1;
+        }
+    } else {
+        if (player->secondaryItemId != 0) {
+            if (player->unkB78 > D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][1]) {
+                player->unkB78 = D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][1];
+                player->unkB78 -= (randA() & 0xFF) * D_800BADE0_AAC90[player->speedPenaltyIndex][0][2] / 255;
+            }
+
+            if (player->unkB78 <= 0) {
+                player->unkB78 = D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][1];
+                player->unkB78 -= (randA() & 0xFF) * D_800BADE0_AAC90[player->speedPenaltyIndex][0][2] / 255;
+
+                switch (player->secondaryItemId) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        if ((gs->players[gs->PAD_6B_2[0]].animFlags & 0x100)) {
+                            return 0;
+                        }
+                        if (randA() < D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                            return 1;
+                        }
+                        break;
+                    case 6:
+                        if (player->pathFlags != 0) {
+                            if (randA() < D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][2]) {
+                                return 1;
+                            }
+                        } else {
+                            if (randA() < D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                                return 1;
+                            }
+                        }
+                        break;
+                    case 7:
+                        if (player->finishPosition >= 3) {
+                            return 0;
+                        }
+                        if (randA() < D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                            return 1;
+                        }
+                        break;
+                    case 4:
+                    case 5:
+                    case 8:
+                    case 9:
+                    case 10:
+                        if (randA() < D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                            return 1;
+                        }
+                        break;
+                    default:
+                        return 0;
+                }
+            } else {
+                player->unkB78--;
+            }
+        } else {
+            player->unkB78 = 0x100;
+        }
+    }
+    return 0;
+}
 
 void addPlayerRaceGold(Player *player, s32 amount) {
     if (player->unkBC6 != 0) {
