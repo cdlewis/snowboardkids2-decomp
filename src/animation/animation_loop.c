@@ -94,6 +94,7 @@ extern s32 gButtonsPressed[];
 extern s8 D_800AB04B;
 extern s8 gAnalogStickY;
 extern u8 gAnalogStickX;
+extern u16 D_8009ADE0_9B9E0;
 
 void handleAnimationLoopDebugInput(CutsceneCameraState *arg0) {
     s8 mode = arg0->inputMode;
@@ -299,8 +300,121 @@ void initCameraShake(CutsceneCameraShakeState *cameraShake, s32 amplitude, s16 d
     cameraShake->shakeDuration = duration;
 }
 
-// 99.81% https://decomp.me/scratch/iMD3x
-INCLUDE_ASM("asm/nonmatchings/animation/animation_loop", func_800B6190_1E3240);
+#define DIFFY_ALGO(x)                                          \
+    s32 absStep;                                               \
+    s32 diff;                                                  \
+    posStep = arg0->pos##x##Step;                              \
+    diff = (arg0->pos##x##Target - arg0->pos##x##Current) / 6; \
+    absFrac = (diff > 0) ? (diff) : (-diff);                   \
+    absStep = (posStep > 0) ? (posStep) : (-posStep);          \
+    if (absStep < absFrac) {                                   \
+        diff = posStep;                                        \
+    }                                                          \
+    arg0->pos##x##Current += diff;
+
+#define DIFFY_ROT_ALGO(x)                          \
+    s32 absStep;                                   \
+    s32 step;                                      \
+    s32 wrapTemp;                                  \
+    s16 target = arg0->rot##x##Target;             \
+    s16 current = arg0->rot##x##Current;           \
+    s32 diff = target - current;                   \
+                                                   \
+    if (diff >= 0x1001) {                          \
+        wrapTemp = arg0->rot##x##Current + 0x2000; \
+        diff = target - wrapTemp;                  \
+    } else if (diff < (-0x1000)) {                 \
+        wrapTemp = arg0->rot##x##Current - 0x2000; \
+        diff = target - wrapTemp;                  \
+    }                                              \
+    diff = diff / 8;                               \
+    step = arg0->rot##x##Step;                     \
+    absFrac = (diff > 0) ? (diff) : (-diff);       \
+    absStep = (step > 0) ? (step) : (-step);       \
+    if (absStep < absFrac) {                       \
+        diff = step;                               \
+    }                                              \
+    absStep = step;                                \
+    absFrac = (diff > 0) ? (diff) : (-diff);       \
+    if (absStep < 0) {                             \
+        absStep += 0x1F;                           \
+    }                                              \
+    absStep >>= 5;                                 \
+    if (absStep < 0) {                             \
+        absStep = -absStep;                        \
+    }                                              \
+    if (absFrac >= absStep) {                      \
+        arg0->rot##x##Current += diff;             \
+    }
+
+s16 func_800B6190_1E3240(CutsceneCameraState *arg0) {
+    s32 step;
+    s32 wrapTemp;
+    s32 absFrac;
+    s32 absFrac2;
+    s32 absStep;
+    s32 posCurrent;
+    s32 posStep;
+    s32 posTarget;
+    s16 result = 0;
+    if (arg0->rotXDurationCopy >= 17) {
+        arg0->rotXCurrent += arg0->rotXStep;
+    } else {
+        DIFFY_ROT_ALGO(X)
+    }
+    if (arg0->rotYDurationCopy >= 17) {
+        arg0->rotYCurrent += arg0->rotYStep;
+    } else {
+        DIFFY_ROT_ALGO(Y)
+    }
+    if (arg0->posXDurationCopy >= 17) {
+        arg0->posXCurrent += arg0->posXStep;
+    } else {
+        DIFFY_ALGO(X)
+    }
+    if (arg0->posYDurationCopy >= 17) {
+        arg0->posYCurrent += arg0->posYStep;
+    } else {
+        DIFFY_ALGO(Y)
+    }
+    if (arg0->posZDurationCopy >= 17) {
+        arg0->posZCurrent = arg0->posZCurrent + arg0->posZStep;
+    } else {
+        DIFFY_ALGO(Z)
+    }
+    if (arg0->rotXDurationCopy > 0) {
+        arg0->rotXDurationCopy--;
+        result = 1;
+    }
+    if (arg0->rotYDurationCopy > 0) {
+        arg0->rotYDurationCopy--;
+        result = 1;
+    }
+    if (arg0->posXDurationCopy > 0) {
+        arg0->posXDurationCopy--;
+        result = 1;
+    }
+    if (arg0->posYDurationCopy > 0) {
+        arg0->posYDurationCopy--;
+        result = 1;
+    }
+    if (arg0->posZDurationCopy > 0) {
+        arg0->posZDurationCopy--;
+        result = 1;
+    }
+    if (arg0->shakeDuration > 0) {
+        if (D_8009ADE0_9B9E0 & 1) {
+            arg0->posYOffset = arg0->shakeAmplitude;
+        } else {
+            arg0->posYOffset = -arg0->shakeAmplitude;
+        }
+        result = 1;
+        arg0->shakeDuration--;
+    } else {
+        arg0->posYOffset = 0;
+    }
+    return result;
+}
 
 s16 advanceCameraRotationYContinuous(CutsceneCameraState *camera) {
     if (camera->rotYDurationCopy != 0) {
@@ -313,8 +427,6 @@ s16 advanceCameraRotationYContinuous(CutsceneCameraState *camera) {
     }
     return 0;
 }
-
-extern s16 func_800B6190_1E3240(CutsceneCameraState *);
 
 s16 advanceSceneManager(CutsceneCameraState *arg0) {
     s16 result = 0;
