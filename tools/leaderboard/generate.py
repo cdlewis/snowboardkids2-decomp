@@ -127,7 +127,9 @@ def generate_html(best: Dict[str, Dict]) -> str:
     og_tags = (
         f'    <meta property="og:title" content="Snowboard Kids 2 — {count} {func_text} Left" />\n'
         '    <meta property="og:description" content="Snowboard Kids 2 matching decompilation progress tracker" />\n'
-        '    <meta property="og:image" content="og.png" />\n'
+        '    <meta property="og:image" content="https://chrislewis.au/snowboardkids2-decomp/og.png" />\n'
+        '    <meta property="og:image:width" content="1200" />\n'
+        '    <meta property="og:image:height" content="630" />\n'
     )
     header_part = header_part.replace(
         "</title>", "</title>\n" + og_tags, 1
