@@ -21,6 +21,7 @@ typedef struct {
     u16 unk1898[4];
     u16 unk18A0[4];
     u8 unk18A8[8];
+    u8 unk18B0[8];
 } BoardSelectGameState;
 
 typedef struct {
@@ -268,6 +269,7 @@ extern struct {
 } D_8008DE9C_8EA9C[];
 extern CharSelectModelPositions D_8008DD2C_8E92C;
 extern Vec3s charSelectIconPositions[];
+extern CharSelectAnimData D_8008DEAC_8EAAC;
 
 void animateCharSelectIconReveal(CharSelectIconsState *);
 void cleanupCharSelectIcons(SimpleSpriteEntry *);
@@ -2015,8 +2017,75 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
     setCallback(updateCharSelectNameSprites);
 }
 
-// 96.85% https://decomp.me/scratch/4xZjQ
-INCLUDE_ASM("asm/nonmatchings/ui/character_select_gfx", updateCharSelectNameSprites);
+void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
+    BoardSelectGameState *gameState;
+    s32 i;
+    u16 selectionState;
+    s16 xPos;
+    s16 yPos;
+    s16 spriteIdx;
+    u8 numPlayers;
+    s32 temp;
+    u16 var_v0;
+    s16 tempPos;
+    s16 tempPos2;
+
+    gameState = (BoardSelectGameState *)getCurrentAllocation();
+
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+        selectionState = gameState->unk1898[i];
+        if ((selectionState < 3 | selectionState == 0xA) || (selectionState == 6 | selectionState >= 0xB)) {
+            var_v0 = selectionState - 3;
+            if (var_v0 >= 8) {
+                tempPos = D_800AFE8C_A71FC->numPlayers;
+                tempPos2 = ((u16 *)D_8008DE9C_8EA9C)[tempPos * 2];
+                yPos = ((u16 *)D_8008DE9C_8EA9C)[tempPos * 2 + 1];
+                if (tempPos == 1) {
+                    xPos = tempPos2;
+                    spriteIdx = gameState->unk18B0[i] + 0x43;
+                } else {
+                    if (D_800AFE8C_A71FC->playerBoardIds[i + 4] < 9) {
+                        xPos = tempPos2;
+                        spriteIdx = gameState->unk18B0[i] + 0x24;
+                    } else {
+                        xPos = tempPos2;
+                        spriteIdx = 0x35;
+                    }
+                }
+            } else {
+                tempPos = ((u16 *)&D_8008DEAC_8EAAC)[D_800AFE8C_A71FC->numPlayers * 2];
+                yPos = ((u16 *)&D_8008DEAC_8EAAC)[D_800AFE8C_A71FC->numPlayers * 2 + 1];
+                if (gameState->unk18A8[i] == 3) {
+                    xPos = ((u16 *)D_8008DE64_8EA64)[D_800AFE8C_A71FC->numPlayers * 2];
+                    spriteIdx = gameState->unk18B0[i] + 0x2C;
+                } else {
+                    xPos = tempPos;
+                    spriteIdx = gameState->unk18B0[i] + 0x24;
+                }
+            }
+            arg0->entries[i].x = xPos;
+            arg0->entries[i].y = yPos;
+            arg0->entries[i].spriteIndex = spriteIdx;
+            if (gameState->unk1898[i] == 6 && (gameState->unk18A0[i] & 1)) {
+                arg0->entries[i].blinkState = 0xFF;
+            } else {
+                arg0->entries[i].blinkState = 0;
+            }
+            if (yPos == -0x58) {
+                if (D_800AFE8C_A71FC->playerBoardIds[i + 4] < 9) {
+                    debugEnqueueCallback(i + 0xC, 0, renderTextSprite, &arg0->entries[i]);
+                    arg0->singlePlayerX = 0x38;
+                    debugEnqueueCallback(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerX);
+                } else {
+                    arg0->singlePlayerX = 0x50;
+                    debugEnqueueCallback(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerX);
+                }
+            } else {
+                debugEnqueueCallback(i + 0xC, 0, renderTextSprite, &arg0->entries[i]);
+            }
+        }
+    }
+}
 
 void cleanupCharSelectNameSprites(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
@@ -2266,8 +2335,6 @@ void animateCharSelectP2NameHide(P2NameHideState *arg0) {
 void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
-
-extern CharSelectAnimData D_8008DEAC_8EAAC;
 
 void updateCharSelectStats(CharSelectStatsState *arg0);
 void cleanupCharSelectStats(SimpleSpriteEntry *arg0);
