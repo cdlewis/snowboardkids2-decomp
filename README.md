@@ -73,7 +73,7 @@ If you're interested in learning more about decompilation and Snowboard Kids 2, 
 
 Contributing
 ============
-Contributions are most welcome! You can find a list of unmatched functions [here](https://github.com/search?q=repo%3Acdlewis%2Fsnowboardkids2-decomp+path%3Asrc%2F+INCLUDE_ASM&type=code). A URL to the decomp.me scratch as well as the current match percentage are included where appropriate.
+Contributions are most welcome! You can find a list of unmatched functions [here](https://chrislewis.au/snowboardkids2-decomp/). A URL to the decomp.me scratch as well as the current match percentage are included where appropriate.
 
 If you're not comfortable with that there are a variety of other ways you can assist:
 
