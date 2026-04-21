@@ -268,7 +268,6 @@ extern struct {
 } D_8008DE9C_8EA9C[];
 extern CharSelectModelPositions D_8008DD2C_8E92C;
 extern Vec3s charSelectIconPositions[];
-extern char D_8009E288_9EE88[];
 
 void animateCharSelectIconReveal(CharSelectIconsState *);
 void cleanupCharSelectIcons(SimpleSpriteEntry *);
@@ -2327,7 +2326,7 @@ void updateCharSelectStats(CharSelectStatsState *arg0) {
         tableOffset = tableBase * 3;
 
         for (; i < 3; i++) {
-            sprintf(arg0->charBufs[i], D_8009E288_9EE88, D_8008DD8C_8E98C[tableOffset + i]);
+            sprintf(arg0->charBufs[i], "%2d", D_8008DD8C_8E98C[tableOffset + i]);
             if (D_800AFE8C_A71FC->numPlayers == 1) {
                 for (j = 0; j < 2; j++) {
                     charByte = arg0->charBufs[i][j];

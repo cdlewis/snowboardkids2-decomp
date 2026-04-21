@@ -491,5 +491,3 @@ s32 countUnlockedSlotsInCategory(u8 category) {
 
     return count;
 }
-
-INCLUDE_RODATA("asm/nonmatchings/ui/character_select_ui", D_8009E288_9EE88);
