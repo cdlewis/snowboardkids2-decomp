@@ -123,10 +123,14 @@ def generate_html(best: Dict[str, Dict]) -> str:
         flags=re.DOTALL,
     )
 
-    # Inject og:image meta tag
-    og_tag = '    <meta property="og:image" content="og.png" />\n'
+    # Inject OpenGraph meta tags
+    og_tags = (
+        f'    <meta property="og:title" content="Snowboard Kids 2 — {count} {func_text} Left" />\n'
+        '    <meta property="og:description" content="Snowboard Kids 2 matching decompilation progress tracker" />\n'
+        '    <meta property="og:image" content="og.png" />\n'
+    )
     header_part = header_part.replace(
-        "</title>", "</title>\n" + og_tag, 1
+        "</title>", "</title>\n" + og_tags, 1
     )
 
     header_row = (
