@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snowboard Kids 2 — Remaining Functions</title>
+    <meta property="og:image" content="og.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Titan+One&family=Lilita+One&family=Fredoka:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ice-deep: #0b2a4a;
+        --ice-light: #a9e0f5;
+        --snow: #f4f8ff;
+        --sun: #ffd23f;
+        --sunset: #ff7f2a;
+        --cherry: #e3002d;
+        --ink: #0a0f1f;
+        --mint: #3bd4a0;
+        --paper: #fdf6e3;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        background: var(--ice-deep);
+        color: var(--snow);
+        font-family: "Fredoka", system-ui, sans-serif;
+        font-weight: 500;
+        overflow-x: hidden;
+      }
+
+      body {
+        background:
+          radial-gradient(ellipse at 20% 0%, #3a8fc4 0%, transparent 55%),
+          radial-gradient(ellipse at 80% 10%, #ff9d5a 0%, transparent 45%),
+          linear-gradient(180deg, #1b5a8a 0%, #0b2a4a 40%, #0a0f1f 100%);
+        min-height: 100vh;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          radial-gradient(2px 2px at 20% 30%, #fff, transparent),
+          radial-gradient(1px 1px at 60% 70%, #fff, transparent),
+          radial-gradient(1.5px 1.5px at 80% 20%, #fff, transparent),
+          radial-gradient(1px 1px at 40% 85%, #fff, transparent),
+          radial-gradient(2px 2px at 90% 50%, #fff, transparent),
+          radial-gradient(1px 1px at 10% 60%, #fff, transparent);
+        background-size:
+          500px 500px,
+          350px 350px,
+          600px 600px,
+          400px 400px,
+          450px 450px,
+          300px 300px;
+        pointer-events: none;
+        opacity: 0.6;
+        z-index: 1;
+      }
+
+      @keyframes snow {
+        0% {
+          background-position:
+            0 0,
+            0 0,
+            0 0,
+            0 0,
+            0 0,
+            0 0;
+        }
+        100% {
+          background-position:
+            0 500px,
+            0 350px,
+            0 600px,
+            0 400px,
+            0 450px,
+            0 300px;
+        }
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+        opacity: 0.07;
+        pointer-events: none;
+        mix-blend-mode: overlay;
+        z-index: 2;
+      }
+
+      header,
+      main {
+        position: relative;
+        z-index: 3;
+      }
+
+      header {
+        text-align: center;
+        padding: 72px 24px 56px;
+      }
+
+      /* ---------- Title ---------- */
+      .title {
+        font-family: "Titan One", "Lilita One", sans-serif;
+        font-weight: 400;
+        line-height: 0.95;
+        font-style: italic;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        -webkit-text-stroke: 2px var(--ink);
+        text-shadow:
+          4px 4px 0 var(--cherry),
+          5px 5px 0 var(--cherry),
+          6px 6px 0 var(--cherry),
+          7px 7px 0 var(--ink),
+          8px 8px 0 var(--ink),
+          14px 14px 0 rgba(0, 0, 0, 0.45),
+          22px 22px 30px rgba(0, 0, 0, 0.4);
+        display: inline-block;
+      }
+
+      .line1 {
+        font-size: clamp(40px, 6.5vw, 110px);
+        color: var(--snow);
+        display: block;
+      }
+      .line2 {
+        font-size: clamp(28px, 4.8vw, 78px);
+        color: var(--sun);
+        display: block;
+        transform: rotate(0deg) translateY(6px);
+        margin-top: 16px;
+        margin-bottom: 8px;
+      }
+
+      .line1 span,
+      .line2 span {
+        display: inline-block;
+        transition: transform 0.3s ease;
+      }
+
+      .word {
+        display: inline-block;
+        margin: 0 0.18em;
+      }
+
+      /* ---------- Leaderboard ---------- */
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 32px 120px;
+      }
+
+      .board {
+        background: var(--paper);
+        border: 4px solid var(--ink);
+        border-radius: 18px;
+        box-shadow: 10px 10px 0 var(--ink);
+        overflow: hidden;
+        color: var(--ink);
+      }
+
+      .board-row {
+        display: grid;
+        grid-template-columns: 1fr 220px 140px;
+        align-items: center;
+        gap: 20px;
+        padding: 18px 24px;
+        border-bottom: 2px dashed rgba(10, 15, 31, 0.15);
+        transition: background 0.15s ease;
+      }
+      .board-row:last-child {
+        border-bottom: none;
+      }
+      .board-row:hover {
+        background: rgba(255, 210, 63, 0.35);
+      }
+
+      .board-row.head {
+        background: var(--ink);
+        color: var(--sun);
+        font-family: "Lilita One", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        font-size: 13px;
+        padding: 14px 24px;
+      }
+      .board-row.head:hover {
+        background: var(--ink);
+      }
+
+      .fn-name {
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--ink);
+        word-break: break-all;
+      }
+
+      .match-bar {
+        position: relative;
+        height: 22px;
+        background: rgba(10, 15, 31, 0.08);
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .match-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--cherry),
+          var(--sunset),
+          var(--sun),
+          var(--mint)
+        );
+        border-right: 2px solid var(--ink);
+        transition: width 0.6s ease;
+      }
+      .match-num {
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 600;
+        font-size: 13px;
+        margin-top: 4px;
+        color: var(--ink);
+        text-align: right;
+      }
+
+      .scratch-btn {
+        font-family: "Lilita One", sans-serif;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 10px 18px;
+        border: 3px solid var(--ink);
+        border-radius: 10px;
+        background: var(--sunset);
+        color: var(--ink);
+        text-decoration: none;
+        text-align: center;
+        box-shadow: 4px 4px 0 var(--ink);
+        transition: all 0.15s ease;
+        display: inline-block;
+        white-space: nowrap;
+      }
+      .scratch-btn:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 var(--ink);
+        background: var(--sun);
+      }
+      .scratch-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: 1px 1px 0 var(--ink);
+      }
+
+      @media (max-width: 780px) {
+        .board-row {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+        .board-row.head {
+          display: none;
+        }
+        .scratch-btn {
+          width: 100%;
+        }
+        .title {
+          text-shadow:
+            2px 2px 0 var(--ink),
+            2px 2px 0 rgba(0, 0, 0, 0.4);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 class="title">
+        <span class="line1">
+          <span class="word w1"
+            ><span>S</span><span>N</span><span>O</span><span>W</span
+            ><span>B</span><span>O</span><span>A</span><span>R</span
+            ><span>D</span></span
+          >
+          <span class="word w2"
+            ><span>K</span><span>I</span><span>D</span><span>S</span
+            ><span>&nbsp;&nbsp;</span><span>2</span></span
+          >
+        </span>
+        <span class="line2"><span class="word w1"><span>1</span><span>5</span></span><span class="word w2"><span>F</span><span>U</span><span>N</span><span>C</span><span>T</span><span>I</span><span>O</span><span>N</span><span>S</span></span><span class="word w3"><span>L</span><span>E</span><span>F</span><span>T</span></span></span>
+      </h1>
+    </header>
+
+    <main>
+      <div class="board">
+<div class="board-row head">
+          <div>Function</div>
+          <div>Match</div>
+          <div style="text-align:center">Scratch</div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_800B6190_1E3240</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:99.9%"></div></div><div class="match-num">99.89%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/R1FVL" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_8005628C_56E8C</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:99.9%"></div></div><div class="match-num">99.87%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/lg3Jr" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_800626C4_632C4</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:99.8%"></div></div><div class="match-num">99.80%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/aw3nY" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_80010C98_11898</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:99.6%"></div></div><div class="match-num">99.63%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/ALcTm" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_80022D74_23974</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:99.3%"></div></div><div class="match-num">99.28%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/Knuos" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">updateAndRenderRaceCharacters</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:98.9%"></div></div><div class="match-num">98.94%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/Oc7R6" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_800B8894_A8744</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:98.9%"></div></div><div class="match-num">98.87%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/FN35S" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_800B3FFC_1E10AC</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:98.7%"></div></div><div class="match-num">98.68%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/9sDuy" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_80059394_59F94</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:98.3%"></div></div><div class="match-num">98.30%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/oxXWc" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">updateCharSelectNameSprites</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:96.8%"></div></div><div class="match-num">96.85%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/4xZjQ" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_800175E0_181E0</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:95.5%"></div></div><div class="match-num">95.55%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/mjSZ8" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_800B1544_A13F4</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:95.0%"></div></div><div class="match-num">94.98%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/wGgfh" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_800136E0_142E0</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:92.4%"></div></div><div class="match-num">92.38%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/7DiUN" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">updateStoryMapLocationMarker</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:92.3%"></div></div><div class="match-num">92.34%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/LghGY" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+        <div class="board-row">
+          <div><div class="fn-name">func_80060CDC_618DC</div></div>
+          <div><div class="match-bar"><div class="match-fill" style="width:87.4%"></div></div><div class="match-num">87.42%</div></div>
+          <div><a class="scratch-btn" href="https://decomp.me/scratch/rRUTa" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        </div>
+<div style="text-align:center;padding:12px 24px;font-size:11px;color:#999;font-family:JetBrains Mono,monospace">Generated 2026-04-21 00:53</div>
+      </div>
+    </main>
+  </body>
+</html>

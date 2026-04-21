@@ -165,7 +165,7 @@ def main():
     repo_root = Path(__file__).parent.parent.parent
     tools_dir = Path(__file__).parent.parent
     scratches_path = tools_dir / "scratches.json"
-    public_dir = Path(__file__).parent / "public"
+    public_dir = Path(__file__).parent.parent.parent / "docs"
     public_dir.mkdir(exist_ok=True)
 
     unmatched = get_unmatched_set(repo_root)
