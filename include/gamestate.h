@@ -69,6 +69,19 @@ typedef struct {
 } BodyPart;
 
 typedef struct {
+    /* 0x00 */ Transform3D mtx;
+    /* 0x20 */ u8 padding[0x14];
+    /* 0x34 */ u8 primaryR;
+    /* 0x35 */ u8 primaryG;
+    /* 0x36 */ u8 primaryB;
+    /* 0x37 */ u8 pad1;
+    /* 0x38 */ u8 secondaryR;
+    /* 0x39 */ u8 secondaryG;
+    /* 0x3A */ u8 secondaryB;
+    /* 0x3B */ u8 pad2;
+} BoneResult;
+
+typedef struct {
     void *unk0;
     void *unk4;
     void *unk8;
@@ -83,16 +96,8 @@ typedef struct {
     void *unk2C;
     Vtx *jointVertices;   /* 0x30 */
     Mtx *jointMatrix;     /* 0x34 */
-    s32 unk38;
-    u8 padding3C[0x6C - 0x3C];
-    u8 unk6C;
-    u8 unk6D;
-    u8 unk6E;
-    u8 unk6F;
-    u8 unk70;
-    u8 unk71;
-    u8 unk72;
-    u8 padding73[0x164 - 0x73];
+    /* 0x38 */ BoneResult boneResults[1];
+    /* 0x74 */ u8 padding74[0x164 - 0x74];
     s16 unk164[3];
     u8 padding16A[0x238 - 0x16A];
     s32 unk238;
@@ -103,8 +108,16 @@ typedef struct {
     s32 unk320;
     s32 unk324;
     u8 padding_328[0xD0];
-    s32 unk3F8;
-    u8 padding1[0x38];
+    /* 0x3F8 */ Transform3D unk3F8;
+    /* 0x418 */ u8 padding418[0x14];
+    /* 0x42C */ u8 bossPrimaryR;
+    /* 0x42D */ u8 bossPrimaryG;
+    /* 0x42E */ u8 bossPrimaryB;
+    /* 0x42F */ u8 _pad42F;
+    /* 0x430 */ u8 bossSecondaryR;
+    /* 0x431 */ u8 bossSecondaryG;
+    /* 0x432 */ u8 bossSecondaryB;
+    /* 0x433 */ u8 _pad433;
     Vec3i worldPos;
     s32 prevWorldPosX;
     s32 prevWorldPosY;
@@ -123,7 +136,10 @@ typedef struct {
     s32 unk480;
     s32 unk484;
     BoneAnimationStateIndexed unk488[1];
-    u8 padding2a_3[0x4A0];
+    /* 0x4D0 */ u8 padding_4D0[0x458];
+    /* 0x928 */ Transform3D unk928;
+    /* 0x948 */ u8 padding_948[0x8];
+    /* 0x950 */ Transform3D unk950;
     Transform3D headingTransform;
     Transform3D orientationTransform;
     BoneAnimationState tiltTransform;
@@ -186,7 +202,7 @@ typedef struct {
     s16 unkB98;
     s16 boostTimer;
     s16 shortcutLapCount;
-    s16 unkB9E;
+    u16 unkB9E;
     u16 unkBA0;
     s16 unkBA2;
     u16 invincibilityTimer;

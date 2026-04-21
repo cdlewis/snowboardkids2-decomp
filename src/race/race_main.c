@@ -4940,8 +4940,393 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
     }
 }
 
-// 98.87% https://decomp.me/scratch/FN35S
-INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B8894_A8744);
+extern s32 gFrameCounter;
+extern BoneHierarchyEntry *getIndexedAnimationDataPtr(void *, s16);
+
+void func_800B8894_A8744(Player *player) {
+    Transform3D sp18;
+    Transform3D sp38;
+    Vec3i sp58[4];
+    Vec3i sp88;
+    Vec3i sp98;
+    GameState *gameState;
+    Transform3D *mtxDst;
+    Transform3D *sp18Ptr;
+    s32 i;
+    s32 volume;
+    s32 surfaceType;
+    f32 soundParam;
+    s32 snowTrailMask;
+    s32 snowSpeed;
+    s32 diff;
+    s32 tmp;
+    s32 trackHeight;
+    u16 invTimer;
+    s32 boostState;
+    s32 angle;
+    BoneHierarchyEntry *animData;
+
+    gameState = getCurrentAllocation();
+    loadCharacterBodyParts(player);
+    animData = getIndexedAnimationDataPtr(player->unk0, player->leanAnimIndex);
+
+    if (player->animFlags & 8) {
+        func_8006B084_6BC84(
+            &player->orientationTransform,
+            &player->headingTransform,
+            (Transform3D *)&player->tiltTransform.animation_data
+        );
+        func_8006B084_6BC84(
+            (Transform3D *)&player->tiltTransform,
+            (Transform3D *)&player->tiltTransform.animation_data,
+            &sp18
+        );
+        createYRotationMatrix(&gIdentityMatrix32, 0x1000);
+        if (player->animFlags & 0x800) {
+            func_8006B084_6BC84(&gIdentityMatrix32, &sp18, &sp38);
+            func_8006B084_6BC84((Transform3D *)&player->tiltTransform.prev_position, &sp38, &player->unk950);
+        } else {
+            func_8006B084_6BC84(&gIdentityMatrix32, &sp18, &player->unk950);
+        }
+    } else {
+        mtxDst = (Transform3D *)&player->tiltTransform.animation_data;
+        func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, mtxDst);
+        if (player->animFlags & 0x800) {
+            func_8006B084_6BC84((Transform3D *)&player->tiltTransform, mtxDst, &sp18);
+            func_8006B084_6BC84((Transform3D *)&player->tiltTransform.prev_position, &sp18, &player->unk950);
+        } else {
+            func_8006B084_6BC84((Transform3D *)&player->tiltTransform, mtxDst, &player->unk950);
+        }
+    }
+
+    if (player->behaviorFlags & 0x10) {
+        tmp = player->unk950.m[1][0] * player->unkB9E;
+        if (tmp < 0) {
+            tmp += 0x1FFF;
+        }
+        player->unk950.m[1][0] = tmp >> 13;
+        diff = player->unk950.m[1][1] * player->unkB9E;
+        if (diff < 0) {
+            diff += 0x1FFF;
+        }
+        player->unk950.m[1][1] = diff >> 13;
+        trackHeight = player->unk950.m[1][2] * player->unkB9E;
+        if (trackHeight < 0) {
+            trackHeight += 0x1FFF;
+        }
+        player->unk950.m[1][2] = trackHeight >> 13;
+    }
+
+    for (i = 0; i < player->leanBoneCount; i++) {
+        sp18Ptr = &sp18;
+        if (animData[i].parentBone == 0xFF) {
+            if (animData[i].boneIndex == 0x10) {
+                memcpy(sp18Ptr, &player->unk928, sizeof(Transform3D));
+                if (player->animFlags & 0x800000) {
+                    scaleMatrix(sp18Ptr, player->unkBA0, player->unkBA2, player->unkBA0);
+                }
+                func_8006B084_6BC84(sp18Ptr, &player->unk950, &player->boneResults[animData[i].boneIndex].mtx);
+            } else {
+                func_8006B084_6BC84(
+                    (Transform3D *)&player->unk488[animData[i].boneIndex].prev_position,
+                    &player->unk950,
+                    &player->boneResults[animData[i].boneIndex].mtx
+                );
+            }
+        } else {
+            func_8006B084_6BC84(
+                (Transform3D *)&player->unk488[animData[i].boneIndex].prev_position,
+                &player->boneResults[animData[i].parentBone].mtx,
+                &player->boneResults[animData[i].boneIndex].mtx
+            );
+        }
+    }
+
+    if (player->animFlags & 8) {
+        __asm__("");
+        sp18Ptr = &sp18;
+        memcpy(sp18Ptr, &player->unk3F8, sizeof(Transform3D));
+        func_8006B084_6BC84(&gIdentityMatrix32, sp18Ptr, &player->unk3F8);
+    }
+
+    invTimer = player->invincibilityTimer;
+    snowTrailMask = 0;
+    if (invTimer != 0) {
+        snowTrailMask = 1;
+        if (invTimer >= 0x8F) {
+            snowTrailMask = (gFrameCounter & 1) ^ 1;
+        }
+        if (invTimer < 8) {
+            if (gFrameCounter & 1) {
+                snowTrailMask = 0;
+            }
+        }
+    }
+
+    if (!(player->animFlags & 0x800000) || ((player->unkBA0 != 0) && ((u16)player->unkBA2 != 0))) {
+        surfaceType = (u8)player->unkBCC >> 4;
+        if (surfaceType == 0) {
+            if ((((u32)player->behaviorFlags >> 7) & 1) | (snowTrailMask << 16 != 0)) {
+                {
+                    s32 k;
+                    for (k = 0; k < 4; k++) {
+                        enqueueDisplayListObject(k, (DisplayListObject *)&player->unk3F8);
+                    }
+                }
+            } else {
+                {
+                    s32 k;
+                    for (k = 0; k < 4; k++) {
+                        enqueuePreLitMultiPartDisplayList(
+                            k,
+                            (enqueueMultiPartDisplayList_arg1 *)&player->boneResults,
+                            player->leanBoneCount
+                        );
+                    }
+                }
+            }
+        } else {
+            if ((((u32)player->behaviorFlags >> 7) & 1) | (snowTrailMask << 16 != 0)) {
+                player->bossPrimaryR = gBossSurfaceColors[surfaceType].primaryR;
+                player->bossPrimaryG = gBossSurfaceColors[surfaceType].primaryG;
+                player->bossPrimaryB = gBossSurfaceColors[surfaceType].primaryB;
+                player->bossSecondaryR = gBossSurfaceColors[surfaceType].secondaryR;
+                player->bossSecondaryG = gBossSurfaceColors[surfaceType].secondaryG;
+                player->bossSecondaryB = gBossSurfaceColors[surfaceType].secondaryB;
+                {
+                    s32 k;
+                    for (k = 0; k < 4; k++) {
+                        enqueueDisplayListObjectWithLights(k, (DisplayListObject *)&player->unk3F8);
+                    }
+                }
+            } else {
+                player->boneResults[0].primaryR = gBossSurfaceColors[surfaceType].primaryR;
+                player->boneResults[0].primaryG = gBossSurfaceColors[surfaceType].primaryG;
+                player->boneResults[0].primaryB = gBossSurfaceColors[surfaceType].primaryB;
+                player->boneResults[0].secondaryR = gBossSurfaceColors[surfaceType].secondaryR;
+                player->boneResults[0].secondaryG = gBossSurfaceColors[surfaceType].secondaryG;
+                player->boneResults[0].secondaryB = gBossSurfaceColors[surfaceType].secondaryB;
+                {
+                    s32 k;
+                    for (k = 0; k < 4; k++) {
+                        enqueueMultiPartDisplayList(
+                            k,
+                            (enqueueMultiPartDisplayList_arg1 *)&player->boneResults,
+                            (s32)player->leanBoneCount
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    if (gameState->gamePaused) {
+        stopSoundEffectChannel(player->playerIndex, 0);
+        return;
+    }
+
+    boostState = player->boostState;
+    if (boostState != 0) {
+        if (boostState + 1 != 1) {
+            if (boostState < 3) {
+                queueSoundAtPositionWithVolumeAndFlags(
+                    &player->worldPos,
+                    0x1B,
+                    0.0f,
+                    2,
+                    (s32)player->playerIndex,
+                    0x80
+                );
+                if (player->boostTimer >= 0x78) {
+                    getRumbleDuration(player, 9);
+                }
+            } else if (boostState < 9) {
+                if (boostState >= 5) {
+                    if (player->boostTimer != 0) {
+                        queueSoundAtPositionWithVolumeAndFlags(
+                            &player->worldPos,
+                            0x24,
+                            0.0f,
+                            2,
+                            (s32)player->playerIndex,
+                            0x80
+                        );
+                    }
+                    if (player->boostTimer >= 0x1E) {
+                        getRumbleDuration(player, 0xA);
+                    }
+                }
+            }
+        }
+    } else {
+        if (!(player->animFlags & 0x10000) || ((player->unkBCC & 0xF) == 4)) {
+            if (player->behaviorFlags & 6) {
+                getRumbleDuration(player, 8);
+                queueSoundAtPositionWithVolumeAndFlags(&player->worldPos, 6, 0.0f, 2, (s32)player->playerIndex, 0x80);
+            } else {
+                volume = isqrt64(
+                    (s64)player->velocity.x * player->velocity.x + (s64)player->velocity.y * player->velocity.y +
+                    (s64)player->velocity.z * player->velocity.z
+                );
+
+                if (gameState->playerCount == 1) {
+                    volume >>= 12;
+                    if (volume >= 0x81) {
+                        volume = 0x80;
+                    }
+                    if (player->isBossRacer != 0) {
+                        volume -= 0x40;
+                        volume &= ~volume >> 31;
+                    }
+                } else {
+                    volume /= 3000;
+                    if (volume >= 0x61) {
+                        volume = 0x60;
+                    }
+                }
+
+                switch (player->unkBCC & 0xF) {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 7:
+                    case 8:
+                    case 9:
+                    default:
+                        angle = atan2Fixed(-player->velocity.x, -player->velocity.z);
+                        angle = (angle - (player->rotY + player->steeringAngle)) & 0xFFF;
+                        if (angle > 0x800) {
+                            angle = 0x1000 - angle;
+                        }
+                        soundParam = (f32)(-((f64)angle / 256.0));
+                        queueSoundAtPositionWithVolumeAndFlags(
+                            &player->worldPos,
+                            1,
+                            soundParam,
+                            2,
+                            (s32)player->playerIndex,
+                            volume
+                        );
+                        break;
+                    case 3:
+                    case 11:
+                        queueSoundAtPositionWithVolumeAndFlags(
+                            &player->worldPos,
+                            2,
+                            0.0f,
+                            2,
+                            (s32)player->playerIndex,
+                            volume
+                        );
+                        break;
+                    case 4:
+                    case 10:
+                        queueSoundAtPositionWithVolumeAndFlags(
+                            &player->worldPos,
+                            3,
+                            0.0f,
+                            2,
+                            (s32)player->playerIndex,
+                            volume
+                        );
+                        break;
+                    case 5:
+                        queueSoundAtPositionWithVolumeAndFlags(
+                            &player->worldPos,
+                            4,
+                            0.0f,
+                            2,
+                            (s32)player->playerIndex,
+                            volume
+                        );
+                        break;
+                    case 6:
+                        if (volume >= 0x41) {
+                            getRumbleDuration(player, 7);
+                        }
+                        queueSoundAtPositionWithVolumeAndFlags(
+                            &player->worldPos,
+                            5,
+                            0.0f,
+                            2,
+                            (s32)player->playerIndex,
+                            volume
+                        );
+                        break;
+                }
+            }
+        } else {
+            stopSoundEffectChannel(player->playerIndex, 0);
+        }
+    }
+
+    snowTrailMask = 0;
+    if (!(player->animFlags & 0x2000)) {
+
+        for (i = 0; i < 4; i++) {
+            transformVector((s16 *)&D_800BAD28_AABD8[i], (s16 *)&player->unk3F8, &sp58[i]);
+            trackHeight = getTrackHeightInSector(
+                &gameState->gameData,
+                (s16)getOrUpdatePlayerSectorIndex(player, &gameState->gameData, player->sectorIndex, &sp58[i]),
+                &sp58[i],
+                0x100000
+            );
+            if (sp58[i].y - 0x20000 < trackHeight) {
+                snowTrailMask |= 1 << i;
+            }
+        }
+
+        snowSpeed = isqrt64(
+                        (s64)player->velocity.x * player->velocity.x + (s64)player->velocity.y * player->velocity.y +
+                        (s64)player->velocity.z * player->velocity.z
+                    ) >>
+                    16;
+
+        if (snowSpeed != 0) {
+            snowSpeed--;
+            if (snowSpeed >= 9) {
+                snowSpeed = 8;
+            }
+
+            if (snowTrailMask & 3) {
+                if (snowTrailMask & 0xC) {
+                    i = randA() & 0xFF;
+                    sp88.x = sp58[1].x + ((s64)(sp58[0].x - sp58[1].x) * i / 0xFF);
+                    sp88.y = sp58[1].y + ((s64)(sp58[0].y - sp58[1].y) * i / 0xFF);
+                    sp88.z = sp58[1].z + ((s64)(sp58[0].z - sp58[1].z) * i / 0xFF);
+                    i = randA() & 0xFF;
+                    sp98.x = sp58[3].x + ((s64)(sp58[2].x - sp58[3].x) * i / 0xFF);
+                    sp98.y = sp58[3].y + ((s64)(sp58[2].y - sp58[3].y) * i / 0xFF);
+                    sp98.z = sp58[3].z + ((s64)(sp58[2].z - sp58[3].z) * i / 0xFF);
+                    __asm("");
+                    spawnDualSnowSprayEffect(&sp88, &sp98, &player->velocity, snowSpeed, player->unkBCC & 0xF);
+                } else {
+                    i = randA() & 0xFF;
+                    sp88.x = sp58[1].x + ((s64)(sp58[0].x - sp58[1].x) * i / 0xFF);
+                    sp88.y = sp58[1].y + ((s64)(sp58[0].y - sp58[1].y) * i / 0xFF);
+                    sp88.z = sp58[1].z + ((s64)(sp58[0].z - sp58[1].z) * i / 0xFF);
+                    i = randA() & 0xFF;
+                    sp98.x = sp58[1].x + ((s64)(sp58[0].x - sp58[1].x) * i / 0xFF);
+                    sp98.y = sp58[1].y + ((s64)(sp58[0].y - sp58[1].y) * i / 0xFF);
+                    sp98.z = sp58[1].z + ((s64)(sp58[0].z - sp58[1].z) * i / 0xFF);
+                    __asm("");
+                    spawnDualSnowSprayEffect(&sp88, &sp98, &player->velocity, snowSpeed, player->unkBCC & 0xF);
+                }
+            } else if (snowTrailMask & 0xC) {
+                i = randA() & 0xFF;
+                sp88.x = sp58[3].x + ((s64)(sp58[2].x - sp58[3].x) * i / 0xFF);
+                sp88.y = sp58[3].y + ((s64)(sp58[2].y - sp58[3].y) * i / 0xFF);
+                sp88.z = sp58[3].z + ((s64)(sp58[2].z - sp58[3].z) * i / 0xFF);
+                i = randA() & 0xFF;
+                sp98.x = sp58[3].x + ((s64)(sp58[2].x - sp58[3].x) * i / 0xFF);
+                sp98.y = sp58[3].y + ((s64)(sp58[2].y - sp58[3].y) * i / 0xFF);
+                sp98.z = sp58[3].z + ((s64)(sp58[2].z - sp58[3].z) * i / 0xFF);
+                __asm("");
+                spawnDualSnowSprayEffect(&sp88, &sp98, &player->velocity, snowSpeed, player->unkBCC & 0xF);
+            }
+        }
+    }
+}
 
 void renderPlayerJointShadow(Player *player) {
     OutputStruct_19E80 textureEntry;

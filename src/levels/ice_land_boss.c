@@ -194,7 +194,7 @@ typedef struct {
     s16 unkB98;
     s16 boostTimer;
     s16 unkB9C;
-    s16 unkB9E;
+    u16 unkB9E;
     u16 unkBA0;
     s16 unkBA2;
     u16 unkBA4;
@@ -1070,11 +1070,7 @@ void updateIceLandBossLeanBoneTransforms(Player *arg0) {
     animDataPtr = &arg0->tiltTransform.animation_data;
     animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
     func_8006B084_6BC84(&arg0->orientationTransform, &arg0->headingTransform, (Transform3D *)animDataPtr);
-    func_8006B084_6BC84(
-        (Transform3D *)&arg0->tiltTransform,
-        (Transform3D *)animDataPtr,
-        (Transform3D *)&arg0->padding2a_3[0x480]
-    );
+    func_8006B084_6BC84((Transform3D *)&arg0->tiltTransform, (Transform3D *)animDataPtr, (Transform3D *)&arg0->unk950);
 
     for (i = 0; i < arg0->leanBoneCount; i++) {
         if (animData[i].parentBone == 0xFF) {
@@ -1084,13 +1080,13 @@ void updateIceLandBossLeanBoneTransforms(Player *arg0) {
                 func_8006B084_6BC84((Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position, &sp30, &sp10);
                 func_8006B084_6BC84(
                     &sp10,
-                    (Transform3D *)&arg0->padding2a_3[0x480],
+                    &arg0->unk950,
                     (Transform3D *)(animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0)
                 );
             } else {
                 func_8006B084_6BC84(
                     (Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position,
-                    (Transform3D *)&arg0->padding2a_3[0x480],
+                    &arg0->unk950,
                     (Transform3D *)(animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0)
                 );
             }
@@ -1121,18 +1117,22 @@ void renderIceLandBossWithSurfaceColors(Player *arg0) {
 
     if (index == 0) {
         for (i = 0; i < 4; i++) {
-            enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->leanBoneCount);
+            enqueuePreLitMultiPartDisplayList(
+                i,
+                (enqueueMultiPartDisplayList_arg1 *)&arg0->boneResults,
+                arg0->leanBoneCount
+            );
         }
     } else {
-        arg0->unk6C = gBossSurfaceColors[index].primaryR;
-        arg0->unk6D = gBossSurfaceColors[index].primaryG;
-        arg0->unk6E = gBossSurfaceColors[index].primaryB;
-        arg0->unk70 = gBossSurfaceColors[index].secondaryR;
-        arg0->unk71 = gBossSurfaceColors[index].secondaryG;
-        arg0->unk72 = gBossSurfaceColors[index].secondaryB;
+        arg0->boneResults[0].primaryR = gBossSurfaceColors[index].primaryR;
+        arg0->boneResults[0].primaryG = gBossSurfaceColors[index].primaryG;
+        arg0->boneResults[0].primaryB = gBossSurfaceColors[index].primaryB;
+        arg0->boneResults[0].secondaryR = gBossSurfaceColors[index].secondaryR;
+        arg0->boneResults[0].secondaryG = gBossSurfaceColors[index].secondaryG;
+        arg0->boneResults[0].secondaryB = gBossSurfaceColors[index].secondaryB;
 
         for (i = 0; i < 4; i++) {
-            enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->leanBoneCount);
+            enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->boneResults, arg0->leanBoneCount);
         }
     }
 }
