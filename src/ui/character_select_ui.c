@@ -1,6 +1,7 @@
 #include "ui/character_select_ui.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
+#include "audio/audio.h"
 #include "common.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
@@ -8,6 +9,11 @@
 #include "story/map_events.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
+
+extern s32 gControllerInputs[4];
+extern void initCharSelectSecondarySlot(void);
+extern void initCharSelectBoardModelForSlideOut(void);
+void cleanupCharacterSelect(void);
 
 typedef struct {
     u16 x;
@@ -40,7 +46,7 @@ typedef struct {
     Transform3D pad17F8[4];
     void *mainAssets;
     void *iconAssets;
-    s16 animAngles[4];
+    u16 animAngles[4];
     s16 zoomValues[4];
     u8 pad1890[8];
     u16 menuStates[4];
@@ -51,7 +57,8 @@ typedef struct {
     u8 savedCharCol[4];
     u8 boardId[4];
     u8 savedBoardId[4];
-    u8 pad18C0[8];
+    u8 scrollDirection[4];
+    u8 slideState[4];
     u8 unk18C8[4];
     u8 maxMenuOption;
     u8 hasSecretCharacters;
@@ -64,6 +71,16 @@ typedef struct {
     u8 pad0[0x52];
     u8 playerIndex;
 } CharacterSelectTask;
+
+typedef struct {
+    u8 pad0[0xA1];
+    u8 playerIndex;
+} SecondarySlotTask;
+
+typedef struct {
+    u8 pad0[0x28];
+    u8 playerIndex;
+} BoardModelTask;
 
 /* Data */
 
@@ -435,9 +452,459 @@ void scheduleCharacterSelectTasks(void) {
     setGameStateHandler(func_80022D74_23974);
 }
 
-// 99.03% https://decomp.me/scratch/Knuos
-INCLUDE_ASM("asm/nonmatchings/ui/character_select_ui", func_80022D74_23974);
+void func_80022D74_23974(void) {
+    CharacterSelectState *state;
+    s32 cancelCount;
+    s32 i;
+    u8 prevCharRow;
+    u8 prevBoardId;
+    u8 prevD2;
+    u8 prevCE;
+    s32 rotDir;
+    s32 angle;
+    s32 numUnlocked;
+    s32 limit;
+    s32 j;
+    s32 k;
+    s32 confirmedCount;
+    u8 unlockedSlots[10];
+    u32 charIdx;
+    CharacterSelectTask *task;
+    SecondarySlotTask *secTask;
+    BoardModelTask *boardTask;
+    s32 *temp3;
+    void *eepromResult;
+    state = (CharacterSelectState *)getCurrentAllocation();
 
+    cancelCount = 0;
+    confirmedCount = 0;
+    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+        prevD2 = state->cursorIndices[i];
+        switch (state->menuStates[i]) {
+            case 0:
+                if (gControllerInputs[i] & 0x40100) {
+                    if (state->cursorIndices[i] < (state->maxMenuOption - 1)) {
+                        state->cursorIndices[i]++;
+                    }
+                } else if (gControllerInputs[i] & 0x80200) {
+                    if (state->cursorIndices[i] > 0) {
+                        state->cursorIndices[i]--;
+                    }
+                }
+                if (prevD2 != state->cursorIndices[i]) {
+                    state->menuStates[i] = 1;
+                    state->unk18D6[i] = prevD2;
+                    playSoundEffectOnChannelNoPriority(0x2B, i);
+                } else if (gControllerInputs[i] & 0x8000) {
+                    state->menuStates[i] = 2;
+                    playSoundEffectOnChannelNoPriority(0x2C, i);
+                } else if (gControllerInputs[i] & 0x4000) {
+                    playSoundEffect(0x2E);
+                    for (j = 0; j < D_800AFE8C_A71FC->numPlayers; j++) {
+                        state->menuStates[j] = 0x14;
+                    }
+
+                    i = j;
+                }
+
+                break;
+
+            case 1:
+                if (state->cursorIndices[i] == (state->maxMenuOption - 1)) {
+                    rotDir = -0x200;
+                } else if (state->cursorIndices[i] == (state->maxMenuOption - 3)) {
+                    rotDir = 0x200;
+                } else {
+                    rotDir = (state->unk18D6[i] == (state->maxMenuOption - 1)) ? 0x200 : -0x200;
+                }
+
+                state->animAngles[i] = (state->animAngles[i] + rotDir) & 0x1FFF;
+                if (state->animAngles[i] == 0x1800 || state->animAngles[i] == 0x800 || state->animAngles[i] == 0) {
+                    state->menuStates[i] = 0;
+                }
+                createYRotationMatrix(&state->pad17F8[i], state->animAngles[i]);
+                break;
+
+            case 2:
+                state->frameCounters[i]++;
+                if (state->frameCounters[i] != 0x10) {
+                    break;
+                }
+
+                state->menuStates[i] = 3;
+                state->frameCounters[i] = 0;
+                if (state->cursorIndices[i] == (state->maxMenuOption - 1)) {
+                    setViewportLightColors(
+                        state->playerViewports[i].id,
+                        1,
+                        &D_8008DCD0_8E8D0,
+                        (ColorData *)D_8008DCD8_8E8D8
+                    );
+                    terminateTasksByTypeAndID(1, i & 0xFF);
+                } else if (state->cursorIndices[i] == (state->maxMenuOption - 3)) {
+                    state->menuStates[i] = 0xF;
+                    state->unk18C8[i] = 1;
+                } else if (state->cursorIndices[i] == (state->maxMenuOption - 2)) {
+                    state->menuStates[i] = 0x19;
+                }
+                break;
+
+            case 3:
+                if (gControllerInputs[i] & 0x4000) {
+                    playSoundEffectOnChannelNoPriority(0x2E, i);
+                    state->menuStates[i] = 0;
+                    task = (CharacterSelectTask *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
+                    if (task != 0) {
+                        task->playerIndex = i;
+                    }
+                    state->cursorIndices[i] = state->maxMenuOption - 2;
+                    state->animAngles[i] = 0;
+                    createYRotationMatrix(&state->pad17F8[i], 0);
+                    setViewportLightColors(
+                        state->playerViewports[i].id,
+                        1,
+                        &D_8008DCDC_8E8DC,
+                        (ColorData *)(&D_8008DCE4_8E8E4)
+                    );
+                    if (D_800AFE8C_A71FC->playerBoardIds[4 + i] < 9) {
+                        state->charRow[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] / 3;
+                        state->charCol[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] % 3;
+                    } else {
+                        state->charRow[i] = 3;
+                        state->charCol[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] - 9;
+                    }
+                    break;
+                }
+
+                prevCharRow = state->charRow[i];
+                if (gControllerInputs[i] & 0x40100) {
+                    state->charRow[i]++;
+                    if ((state->hasSecretCharacters + 2) < (state->charRow[i] & 0xFF)) {
+                        state->charRow[i] = 0;
+                    }
+                    state->scrollDirection[i] = 0;
+                } else if (gControllerInputs[i] & 0x80200) {
+                    state->charRow[i]--;
+                    if ((state->hasSecretCharacters + 2) < (state->charRow[i] & 0xFF)) {
+                        state->charRow[i] = state->hasSecretCharacters + 2;
+                    }
+                    state->scrollDirection[i] = 1;
+                }
+
+                if (prevCharRow != state->charRow[i]) {
+                    state->menuStates[i] = 4;
+                    state->slideState[i] = 0;
+                    state->savedCharRow[i] = prevCharRow;
+                    state->savedCharCol[i] = state->charCol[i];
+                    if (state->charRow[i] == 3) {
+                        for (k = 0; k < 9; k++) {
+                            if (EepromSaveData->character_or_settings[9 + k] != 0) {
+                                state->charCol[i] = k;
+                                break;
+                            }
+                        }
+                    } else {
+                        state->charCol[i] = 0;
+                    }
+
+                    secTask = (SecondarySlotTask *)scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
+                    if (secTask != 0) {
+                        secTask->playerIndex = i;
+                    }
+                    playSoundEffectOnChannelNoPriority(0x2B, i);
+                } else if (gControllerInputs[i] & 0x8000) {
+                    state->frameCounters[i] = 0;
+                    state->unk18CE[i] = 0;
+                    state->menuStates[i] = 5;
+                    playSoundEffectOnChannelNoPriority(0x2C, i);
+                    playSoundEffect(D_8008DCF4_8E8F4[state->charRow[i]]);
+                }
+                break;
+
+            case 4:
+
+            case 9:
+                if (state->slideState[i] != 2) {
+                    break;
+                }
+
+                state->slideState[i] = 0;
+                if (state->menuStates[i] == 4) {
+                    state->menuStates[i] = 3;
+                } else {
+                    state->menuStates[i] = 10;
+                }
+                break;
+
+            case 5:
+
+            case 6:
+                state->frameCounters[i]++;
+                if (state->menuStates[i] == 6) {
+                    if (state->frameCounters[i] & 1) {
+                        state->unk18C8[i] = 2;
+                    } else {
+                        state->unk18C8[i] = 0;
+                    }
+                }
+
+                if (state->frameCounters[i] != 0x10) {
+                    break;
+                }
+
+                state->frameCounters[i] = 0;
+                state->unk18C8[i] = 0;
+                if (state->menuStates[i] == 5) {
+                    state->menuStates[i] = 10;
+                    if (state->charRow[i] == 3) {
+                        limit = 9;
+                    } else {
+                        limit = 3;
+                    }
+                    numUnlocked = 0;
+                    for (j = 0; j < limit; j++) {
+                        charIdx = (state->charRow[i] * 3) + j;
+                        if (EepromSaveData->character_or_settings[charIdx] != 0) {
+                            unlockedSlots[numUnlocked] = charIdx;
+                            numUnlocked++;
+                        }
+                    }
+
+                    j = countUnlockedSlotsInCategory(state->charRow[i]);
+                    for (limit = 0; limit < j; limit++) {
+                        prevCE = unlockedSlots[limit];
+                        if (state->charRow[i] == 3) {
+                            prevCE -= 9;
+                        } else {
+                            prevCE %= 3;
+                        }
+
+                        if (prevCE == state->charCol[i]) {
+                            state->unk18CE[i] = limit;
+                        }
+                    }
+
+                    task = (CharacterSelectTask *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
+                    if (task != 0) {
+                        task->playerIndex = i;
+                        break;
+                    }
+                } else {
+                    state->menuStates[i] = 0;
+                    state->cursorIndices[i] = state->maxMenuOption - 2;
+                    state->animAngles[i] = 0;
+                    createYRotationMatrix(&state->pad17F8[i], 0);
+                    setViewportLightColors(
+                        state->playerViewports[i].id,
+                        1,
+                        &D_8008DCDC_8E8DC,
+                        (ColorData *)(&D_8008DCE4_8E8E4)
+                    );
+                }
+                break;
+
+            case 10:
+                if (gControllerInputs[i] & 0x4000) {
+                    playSoundEffectOnChannelNoPriority(0x2E, i);
+                    state->menuStates[i] = 3;
+                    terminateTasksByTypeAndID(1, i & 0xFF);
+                    break;
+                }
+                prevCE = state->unk18CE[i];
+                if (state->charRow[i] == 3) {
+                    limit = 9;
+                } else {
+                    limit = 3;
+                }
+
+                numUnlocked = 0;
+                for (j = 0; j < limit; j++) {
+                    charIdx = (state->charRow[i] * 3) + j;
+                    if (EepromSaveData->character_or_settings[charIdx] != 0) {
+                        unlockedSlots[numUnlocked] = charIdx;
+                        numUnlocked++;
+                    }
+                }
+
+                j = countUnlockedSlotsInCategory(state->charRow[i]);
+                if (gControllerInputs[i] & 0x40100) {
+                    state->unk18CE[i]++;
+                    if (j - 1 < state->unk18CE[i]) {
+                        state->unk18CE[i] = 0;
+                    }
+                    state->scrollDirection[i] = 0;
+                } else if (gControllerInputs[i] & 0x80200) {
+                    state->unk18CE[i]--;
+                    if (state->unk18CE[i] < 0) {
+                        state->unk18CE[i] = j - 1;
+                    }
+                    state->scrollDirection[i] = 1;
+                }
+
+                state->charCol[i] = unlockedSlots[state->unk18CE[i]];
+                if (state->charRow[i] == 3) {
+                    state->charCol[i] -= 9;
+                } else {
+                    state->charCol[i] %= 3;
+                }
+
+                if (prevCE != state->unk18CE[i]) {
+                    state->menuStates[i] = 9;
+                    state->slideState[i] = 0;
+                    playSoundEffectOnChannelNoPriority(0x2B, i);
+                    state->savedCharRow[i] = state->charRow[i];
+                    state->savedCharCol[i] = unlockedSlots[prevCE];
+                    if (state->charRow[i] == 3) {
+                        state->savedCharCol[i] -= 9;
+                    } else {
+                        state->savedCharCol[i] %= 3;
+                    }
+                    secTask = (SecondarySlotTask *)scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
+                    if (secTask != 0) {
+                        secTask->playerIndex = i;
+                        break;
+                    }
+                } else {
+                    if (gControllerInputs[i] & 0x8000) {
+                        state->frameCounters[i] = 0;
+                        state->menuStates[i] = 6;
+                        playSoundEffectOnChannelNoPriority(0x2C, i);
+                        D_800AFE8C_A71FC->playerBoardIds[4 + i] = unlockedSlots[state->unk18CE[i]];
+                        D_800AFE8C_A71FC->playerBoardIds[8 + i] =
+                            EepromSaveData->character_or_settings[D_800AFE8C_A71FC->playerBoardIds[4 + i]] - 1;
+                    }
+                    break;
+                }
+                break;
+
+            case 15:
+                if (gControllerInputs[i] & 0x4000) {
+                    playSoundEffectOnChannelNoPriority(0x2E, i);
+                    state->menuStates[i] = 0;
+                    state->cursorIndices[i] = state->maxMenuOption - 2;
+                    state->animAngles[i] = 0;
+                    createYRotationMatrix(&state->pad17F8[i], 0);
+                    state->boardId[i] = D_800AFE8C_A71FC->playerBoardIds[12 + i];
+                    state->unk18C8[i] = 0;
+                    break;
+                }
+                prevBoardId = state->boardId[i];
+                if (gControllerInputs[i] & 0x40100) {
+                    state->boardId[i]++;
+                    state->scrollDirection[i] = 0;
+                } else if (gControllerInputs[i] & 0x80200) {
+                    state->boardId[i]--;
+                    state->scrollDirection[i] = 1;
+                }
+                state->boardId[i] = state->boardId[i] & 3;
+                if (prevBoardId != state->boardId[i]) {
+                    state->menuStates[i] = 0x10;
+                    state->slideState[i] = 0;
+                    state->savedBoardId[i] = prevBoardId;
+                    playSoundEffectOnChannelNoPriority(0x2B, i);
+                    boardTask = (BoardModelTask *)scheduleTask(&initCharSelectBoardModelForSlideOut, 3, i, 0x59);
+                    if (boardTask != 0) {
+                        boardTask->playerIndex = i;
+                        break;
+                    }
+                } else if (gControllerInputs[i] & 0x8000) {
+                    state->menuStates[i] = 0x11;
+                    D_800AFE8C_A71FC->playerBoardIds[12 + i] = state->boardId[i];
+                    state->frameCounters[i] = 0;
+                    playSoundEffectOnChannelNoPriority(0x2C, i);
+                    playSoundEffect(D_8008DCFC_8E8FC[state->boardId[i]]);
+                }
+                break;
+
+            case 16:
+                if (state->slideState[i] != 2) {
+                    break;
+                }
+                state->slideState[i] = 0;
+                state->menuStates[i] = 0xF;
+                break;
+
+            case 17:
+                state->frameCounters[i]++;
+                if (state->frameCounters[i] & 1) {
+                    setViewportLightColors(
+                        state->playerViewports[i].id,
+                        1,
+                        &D_8008DCE8_8E8E8,
+                        (ColorData *)(&D_8008DCF0_8E8F0)
+                    );
+                } else {
+                    setViewportLightColors(
+                        state->playerViewports[i].id,
+                        1,
+                        &D_8008DCDC_8E8DC,
+                        (ColorData *)(&D_8008DCE4_8E8E4)
+                    );
+                }
+                if (state->frameCounters[i] == 0x10) {
+                    state->frameCounters[i] = 0;
+                    state->menuStates[i] = 0;
+                    state->cursorIndices[i] = state->maxMenuOption - 2;
+                    state->unk18C8[i] = 0;
+                    state->animAngles[i] = 0;
+                    createYRotationMatrix(&state->pad17F8[i], 0);
+                }
+                break;
+
+            case 20:
+                confirmedCount++;
+                break;
+
+            case 25:
+                if (D_800AFE8C_A71FC->numPlayers >= 2) {
+                    state->menuStates[i] = 0x1A;
+                } else {
+                    state->menuStates[i] = 0x1B;
+                    cancelCount++;
+                }
+                break;
+
+            case 27:
+                if (gControllerInputs[i] & 0x4000 && D_800AFE8C_A71FC->numPlayers != 1) {
+                    playSoundEffectOnChannelNoPriority(0x2E, i);
+                    state->menuStates[i] = 0x1E;
+                } else {
+                    cancelCount++;
+                }
+                break;
+
+            case 30:
+                break;
+        }
+
+        if (state->cursorIndices[i] == (state->maxMenuOption - 1) && state->menuStates[i] != 1 &&
+            state->menuStates[i] != 6) {
+            state->zoomValues[i] = (state->zoomValues[i] + 0x28) & 0x1FFF;
+        } else {
+            state->zoomValues[i] = 0x800;
+        }
+    }
+
+    if (confirmedCount == D_800AFE8C_A71FC->numPlayers) {
+        setMusicFadeOut(0xA);
+        state->frameCounters[0] = 0x63;
+        setGameStateHandler(cleanupCharacterSelect);
+        setViewportFadeValue(0, 0xFF, 8);
+        return;
+    }
+    if (cancelCount == D_800AFE8C_A71FC->numPlayers) {
+        setMusicFadeOut(0xA);
+        state->frameCounters[0] = 0;
+        for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+            D_800AFE8C_A71FC->playerBoardIds[8 + i] =
+                EepromSaveData->character_or_settings[D_800AFE8C_A71FC->playerBoardIds[4 + i]] - 1;
+        }
+
+        setGameStateHandler(cleanupCharacterSelect);
+        setViewportFadeValue(0, 0xFF, 0x10);
+        playSoundEffectOnChannelNoPriority(0x2D, 0);
+    }
+}
 void cleanupCharacterSelect(void) {
     CharacterSelectState *state = getCurrentAllocation();
     s32 i;
