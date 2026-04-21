@@ -37,13 +37,13 @@ typedef struct {
     ViewportNode modelViewports[4];
     ViewportNode iconViewports[4];
     ViewportNode cameraNode;
-    u8 pad17F8[0x80];
+    Transform3D pad17F8[4];
     void *mainAssets;
     void *iconAssets;
     s16 animAngles[4];
     s16 zoomValues[4];
     u8 pad1890[8];
-    s16 menuStates[4];
+    u16 menuStates[4];
     u16 frameCounters[4];
     u8 charRow[4];
     u8 savedCharRow[4];
@@ -55,8 +55,9 @@ typedef struct {
     u8 unk18C8[4];
     u8 maxMenuOption;
     u8 hasSecretCharacters;
-    u8 unk18CE[4];
-    s8 cursorIndices[4];
+    s8 unk18CE[4];
+    u8 cursorIndices[4];
+    u8 unk18D6[4];
 } CharacterSelectState;
 
 typedef struct {
