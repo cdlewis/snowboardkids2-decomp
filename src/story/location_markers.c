@@ -17,8 +17,8 @@ typedef struct {
     s16 unk2;
     void *unk4;
     s16 unk8;
-    s16 unkA;
-    s16 unkC;
+    u16 unkA;
+    u16 unkC;
     s16 unkE;
     s16 unk10;
     s8 unk12;
@@ -27,20 +27,23 @@ typedef struct {
 
 typedef struct {
     StoryMapLocationMarkerEntry entries[4];
-    char __padding[6];
+    s16 unk50;
+    s16 unk52;
+    void *unk54;
     void *unk58;
     s16 unk5C;
     s16 unk5E;
     u8 unk60;
     char __padding2[3];
-    s16 unk64;
-    s16 unk66;
+    u16 unk64;
+    u16 unk66;
     s16 unk68;
     s16 unk6A;
     s16 unk6C;
     s16 unk6E;
     s16 unk70;
-    s8 unk72;
+    u8 unk72;
+    u8 unk73;
 } StoryMapLocationMarkerState;
 
 typedef struct {
@@ -143,7 +146,7 @@ typedef struct {
 
 // Function declarations
 void updateDiscoveryMarkerDisplay(void *);
-void updateStoryMapLocationMarker(void *);
+void updateStoryMapLocationMarker(StoryMapLocationMarkerState *);
 void cleanupDiscoveryLocationMarker(void *);
 void initDiscoveryLocationMarker(StoryMapLocationMarkerState *);
 void initTownExitMarker(StoryMapSpecialLocationMarkerState *);
@@ -159,6 +162,8 @@ void func_800175E0_181E0(void);
 // Global variables and externs
 extern s32 gControllerInputs;
 extern s32 renderTextSprite;
+extern void renderScaledShadedSpriteFrame(void *);
+extern void renderHudTextLayout(void *);
 
 // Data definitions
 D_8008F810_90410_item D_8008F810_90410[0xC] = {
@@ -176,9 +181,7 @@ D_8008F810_90410_item D_8008F810_90410[0xC] = {
     { 0x0086EC00, 0x000AB000 }
 };
 
-u8 D_8008F870_90470[] = {
-    0xFF, 0xD8, 0xFF, 0xE8, 0x00, 0x28, 0xFF, 0xE8, 0xFF, 0xD8, 0x00, 0x08, 0x00, 0x28, 0x00, 0x08
-};
+s16 D_8008F870_90470[] = { 0xFFD8, 0xFFE8, 0x0028, 0xFFE8, 0xFFD8, 0x0008, 0x0028, 0x0008 };
 
 u8 D_8008F880_90480[] = { 0x00, 0x19, 0x80, 0x2E, 0x80, 0x36, 0x80, 0x3B, 0x80, 0x41, 0xFF, 0xFB,
                           0x00, 0x1C, 0x80, 0x35, 0x80, 0x3C, 0x80, 0x3D, 0xFF, 0xFF, 0x00, 0x00 };
@@ -405,8 +408,119 @@ void initDiscoveryLocationMarker(StoryMapLocationMarkerState *arg0) {
     setCallback(&updateStoryMapLocationMarker);
 }
 
-// 96.11% https://decomp.me/scratch/LghGY
-INCLUDE_ASM("asm/nonmatchings/story/location_markers", updateStoryMapLocationMarker);
+void updateStoryMapLocationMarker(StoryMapLocationMarkerState *arg0) {
+    StoryMapAllocation *allocation;
+    Vec3i worldPos;
+    s32 screenX;
+    s32 screenY;
+    s16 sp28;
+    s16 sp2A;
+    s16 diff;
+    s8 temp_s5;
+    s32 i;
+    s32 width;
+    s32 height;
+
+    allocation = getCurrentAllocation();
+    temp_s5 = arg0->unk72 < 5;
+    screenY = 0;
+    screenX = 0;
+    sp2A = 0;
+    sp28 = 0;
+
+    switch (arg0->unk72) {
+        case 0:
+            arg0->unk64++;
+            diff = (s16)(arg0->unk6A - 0x300) / 10;
+            if ((s16)(diff * 7)) {
+                arg0->unk6A -= diff * 7;
+            } else {
+                arg0->unk6A = 0x300;
+                arg0->unk72 = 1;
+            }
+            arg0->unk6C = arg0->unk6A;
+            break;
+        case 1:
+            diff = (s16)(0x400 - arg0->unk6A) / 10;
+            if ((s16)(diff * 8) != 0) {
+                arg0->unk6A = arg0->unk6A + diff * 8;
+            } else {
+                arg0->unk6A = 0x400;
+                arg0->unk68 = 0xFF;
+                arg0->unk72 = 2;
+            }
+            arg0->unk6C = arg0->unk6A;
+            break;
+        case 2:
+            arg0->unk66 = (arg0->unk66 + 1) & 0xF;
+            if (arg0->unk66 >= 8) {
+                sp28 = -1;
+                sp2A = -1;
+            }
+            break;
+        case 5:
+            arg0->unk6A = arg0->unk6A + (arg0->unk6A / 10 * 6);
+            if (arg0->unk6A >= 0x4000) {
+                arg0->unk72 = 6;
+            }
+            break;
+        case 6:
+            terminateCurrentTask();
+            break;
+    }
+
+    if (arg0->unk72 != 6) {
+        worldPos.x = D_8008F810_90410[arg0->unk73].unk0;
+        worldPos.z = D_8008F810_90410[arg0->unk73].unk4;
+
+        if (allocation->discoveredLocationId == 8) {
+            worldPos.y = 0x400000;
+        } else {
+            worldPos.y = 0x480000;
+        }
+
+        worldToScreenCoords(&screenX, &screenY, &worldPos);
+
+        for (i = 0; i < 4; i++) {
+            s32 xDiv = (D_8008F870_90470[i * 2 + 0] << 10) / arg0->unk6A;
+            s32 yDiv = (D_8008F870_90470[i * 2 + 1] << 10) / arg0->unk6C;
+
+            width = 320;
+            height = 240;
+            arg0->entries[i].unk0 = xDiv + screenX + (((sp28 - (width / 2))));
+            arg0->entries[i].unk2 = yDiv + screenY + (((sp2A - (height / 2))));
+            arg0->entries[i].unkA = arg0->unk6A;
+            arg0->entries[i].unkC = arg0->unk6C;
+            arg0->entries[i].unk10 = (u8)arg0->unk68;
+
+            if (arg0->unk72 == 2) {
+                arg0->entries[i].unk8 = i;
+                arg0->entries[i].unk12 = 0;
+                if (arg0->unk66 >= 9) {
+                    arg0->entries[i].unk8 = i + 4;
+                }
+            }
+
+            debugEnqueueCallback(8, temp_s5, &renderScaledShadedSpriteFrame, &arg0->entries[i]);
+        }
+
+        if (arg0->unk64 >= 6) {
+            arg0->unk54 = D_8008F9B4_905B4[arg0->unk73];
+            computeEncodedTextCenterPos(&sp28, &sp2A, arg0->unk54);
+            width = 320;
+            height = 272;
+            arg0->unk50 = screenX - (((sp28 + (width / 2))));
+            arg0->unk52 = screenY - (((sp2A + (height / 2))));
+            debugEnqueueCallback(8, temp_s5 + 1, &renderHudTextLayout, &arg0->unk50);
+        }
+
+        if (!allocation->locationDiscovered) {
+            s32 pad[2];
+            arg0->unk72 = 5;
+            arg0->unk64 = 0;
+        }
+    }
+}
 
 void cleanupDiscoveryLocationMarker(void *untypedArg) {
     StoryMapLocationMarkerCleanupArg *arg0 = (StoryMapLocationMarkerCleanupArg *)untypedArg;
