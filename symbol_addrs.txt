@@ -3364,6 +3364,7 @@ onPlayerCountCancel = 0x800226CC; // rom:0x232CC
 initCharacterSelectScreen = 0x800226F0; // rom:0x232F0
 awaitCharacterSelectLoad = 0x80022C80; // rom:0x23880
 scheduleCharacterSelectTasks = 0x80022CEC; // rom:0x238EC
+updateCharacterSelect = 0x80022D74; // rom:0x23974
 cleanupCharacterSelect = 0x80023C7C; // rom:0x2487C
 onCharacterSelectProceed = 0x80023D74; // rom:0x24974
 onCharacterSelectCancel = 0x80023DA0; // rom:0x249A0

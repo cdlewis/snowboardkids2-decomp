@@ -59,12 +59,12 @@ typedef struct {
     u8 savedBoardId[4];
     u8 scrollDirection[4];
     u8 slideState[4];
-    u8 unk18C8[4];
+    u8 iconDisplayState[4];
     u8 maxMenuOption;
     u8 hasSecretCharacters;
-    s8 unk18CE[4];
+    s8 unlockedSlotIndex[4];
     u8 cursorIndices[4];
-    u8 unk18D6[4];
+    u8 prevCursorIndex[4];
 } CharacterSelectState;
 
 typedef struct {
@@ -84,16 +84,16 @@ typedef struct {
 
 /* Data */
 
-ColorData D_8008DCD0_8E8D0 = { 0x50, 0x50, 0x50, 0x00, 0x00, 0x50, 0x50, 0x00 };
-char D_8008DCD8_8E8D8[] = "PPP";
-ColorData D_8008DCDC_8E8DC = { 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x50, 0x50, 0x00 };
-s32 D_8008DCE4_8E8E4 = 0x7F7F7F00;
-ColorData D_8008DCE8_8E8E8 = { 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x50, 0x50, 0x00 };
-s32 D_8008DCF0_8E8F0 = (s32)0xFFFFFF00;
+ColorData charSelectDimLight = { 0x50, 0x50, 0x50, 0x00, 0x00, 0x50, 0x50, 0x00 };
+char charSelectDimAmbientStr[] = "PPP";
+ColorData charSelectNormalLight = { 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x50, 0x50, 0x00 };
+s32 charSelectNormalAmbient = 0x7F7F7F00;
+ColorData charSelectFlashLight = { 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x50, 0x50, 0x00 };
+s32 charSelectFlashAmbient = (s32)0xFFFFFF00;
 
-u16 D_8008DCF4_8E8F4[] = { 0x012C, 0x012D, 0x012B, 0x012E };
+u16 charRowConfirmSoundIds[] = { 0x012C, 0x012D, 0x012B, 0x012E };
 
-u16 D_8008DCFC_8E8FC[] = {
+u16 boardConfirmSoundIds[] = {
     0x012F, 0x0130, 0x0132, 0x0131, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x5050, 0x5000,
     0x0050, 0x5000, 0x5050, 0x5000, 0xFFFF, 0xFF00, 0x0050, 0x5000, 0x7F7F, 0x7F00, 0xFFFF, 0xFF00,
 };
@@ -271,7 +271,7 @@ CharSelectAnimData D_8008DEAC_8EAAC = {
 
 void awaitCharacterSelectLoad(void);
 void scheduleCharacterSelectTasks(void);
-void func_80022D74_23974(void);
+void updateCharacterSelect(void);
 void onCharacterSelectProceed(void);
 void onCharacterSelectCancel(void);
 
@@ -326,10 +326,10 @@ void initCharacterSelectScreen(void) {
 
     for (i = 0; i < 4; i++) {
         state->menuStates[i] = 0;
-        state->unk18CE[i] = 0;
+        state->unlockedSlotIndex[i] = 0;
         state->frameCounters[i] = 0;
         state->zoomValues[i] = 0x800;
-        state->unk18C8[i] = 0;
+        state->iconDisplayState[i] = 0;
         memcpy((void *)((s32)state + i * 0x20 + 0x17F8), &identityMatrix, 0x20);
         *(s32 *)((s32)state + i * 0x20 + 0x1814) = (s32)0xFFEA0000;
         state->animAngles[i] = 0;
@@ -449,17 +449,17 @@ void scheduleCharacterSelectTasks(void) {
         }
     }
 
-    setGameStateHandler(func_80022D74_23974);
+    setGameStateHandler(updateCharacterSelect);
 }
 
-void func_80022D74_23974(void) {
+void updateCharacterSelect(void) {
     CharacterSelectState *state;
     s32 cancelCount;
     s32 i;
     u8 prevCharRow;
     u8 prevBoardId;
-    u8 prevD2;
-    u8 prevCE;
+    u8 prevCursorIdx;
+    u8 prevSlotIdx;
     s32 rotDir;
     s32 angle;
     s32 numUnlocked;
@@ -479,7 +479,7 @@ void func_80022D74_23974(void) {
     cancelCount = 0;
     confirmedCount = 0;
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        prevD2 = state->cursorIndices[i];
+        prevCursorIdx = state->cursorIndices[i];
         switch (state->menuStates[i]) {
             case 0:
                 if (gControllerInputs[i] & 0x40100) {
@@ -491,9 +491,9 @@ void func_80022D74_23974(void) {
                         state->cursorIndices[i]--;
                     }
                 }
-                if (prevD2 != state->cursorIndices[i]) {
+                if (prevCursorIdx != state->cursorIndices[i]) {
                     state->menuStates[i] = 1;
-                    state->unk18D6[i] = prevD2;
+                    state->prevCursorIndex[i] = prevCursorIdx;
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                 } else if (gControllerInputs[i] & 0x8000) {
                     state->menuStates[i] = 2;
@@ -515,7 +515,7 @@ void func_80022D74_23974(void) {
                 } else if (state->cursorIndices[i] == (state->maxMenuOption - 3)) {
                     rotDir = 0x200;
                 } else {
-                    rotDir = (state->unk18D6[i] == (state->maxMenuOption - 1)) ? 0x200 : -0x200;
+                    rotDir = (state->prevCursorIndex[i] == (state->maxMenuOption - 1)) ? 0x200 : -0x200;
                 }
 
                 state->animAngles[i] = (state->animAngles[i] + rotDir) & 0x1FFF;
@@ -537,13 +537,13 @@ void func_80022D74_23974(void) {
                     setViewportLightColors(
                         state->playerViewports[i].id,
                         1,
-                        &D_8008DCD0_8E8D0,
-                        (ColorData *)D_8008DCD8_8E8D8
+                        &charSelectDimLight,
+                        (ColorData *)charSelectDimAmbientStr
                     );
                     terminateTasksByTypeAndID(1, i & 0xFF);
                 } else if (state->cursorIndices[i] == (state->maxMenuOption - 3)) {
                     state->menuStates[i] = 0xF;
-                    state->unk18C8[i] = 1;
+                    state->iconDisplayState[i] = 1;
                 } else if (state->cursorIndices[i] == (state->maxMenuOption - 2)) {
                     state->menuStates[i] = 0x19;
                 }
@@ -563,8 +563,8 @@ void func_80022D74_23974(void) {
                     setViewportLightColors(
                         state->playerViewports[i].id,
                         1,
-                        &D_8008DCDC_8E8DC,
-                        (ColorData *)(&D_8008DCE4_8E8E4)
+                        &charSelectNormalLight,
+                        (ColorData *)(&charSelectNormalAmbient)
                     );
                     if (D_800AFE8C_A71FC->playerBoardIds[4 + i] < 9) {
                         state->charRow[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] / 3;
@@ -614,10 +614,10 @@ void func_80022D74_23974(void) {
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                 } else if (gControllerInputs[i] & 0x8000) {
                     state->frameCounters[i] = 0;
-                    state->unk18CE[i] = 0;
+                    state->unlockedSlotIndex[i] = 0;
                     state->menuStates[i] = 5;
                     playSoundEffectOnChannelNoPriority(0x2C, i);
-                    playSoundEffect(D_8008DCF4_8E8F4[state->charRow[i]]);
+                    playSoundEffect(charRowConfirmSoundIds[state->charRow[i]]);
                 }
                 break;
 
@@ -642,9 +642,9 @@ void func_80022D74_23974(void) {
                 state->frameCounters[i]++;
                 if (state->menuStates[i] == 6) {
                     if (state->frameCounters[i] & 1) {
-                        state->unk18C8[i] = 2;
+                        state->iconDisplayState[i] = 2;
                     } else {
-                        state->unk18C8[i] = 0;
+                        state->iconDisplayState[i] = 0;
                     }
                 }
 
@@ -653,7 +653,7 @@ void func_80022D74_23974(void) {
                 }
 
                 state->frameCounters[i] = 0;
-                state->unk18C8[i] = 0;
+                state->iconDisplayState[i] = 0;
                 if (state->menuStates[i] == 5) {
                     state->menuStates[i] = 10;
                     if (state->charRow[i] == 3) {
@@ -672,15 +672,15 @@ void func_80022D74_23974(void) {
 
                     j = countUnlockedSlotsInCategory(state->charRow[i]);
                     for (limit = 0; limit < j; limit++) {
-                        prevCE = unlockedSlots[limit];
+                        prevSlotIdx = unlockedSlots[limit];
                         if (state->charRow[i] == 3) {
-                            prevCE -= 9;
+                            prevSlotIdx -= 9;
                         } else {
-                            prevCE %= 3;
+                            prevSlotIdx %= 3;
                         }
 
-                        if (prevCE == state->charCol[i]) {
-                            state->unk18CE[i] = limit;
+                        if (prevSlotIdx == state->charCol[i]) {
+                            state->unlockedSlotIndex[i] = limit;
                         }
                     }
 
@@ -697,8 +697,8 @@ void func_80022D74_23974(void) {
                     setViewportLightColors(
                         state->playerViewports[i].id,
                         1,
-                        &D_8008DCDC_8E8DC,
-                        (ColorData *)(&D_8008DCE4_8E8E4)
+                        &charSelectNormalLight,
+                        (ColorData *)(&charSelectNormalAmbient)
                     );
                 }
                 break;
@@ -710,7 +710,7 @@ void func_80022D74_23974(void) {
                     terminateTasksByTypeAndID(1, i & 0xFF);
                     break;
                 }
-                prevCE = state->unk18CE[i];
+                prevSlotIdx = state->unlockedSlotIndex[i];
                 if (state->charRow[i] == 3) {
                     limit = 9;
                 } else {
@@ -728,32 +728,32 @@ void func_80022D74_23974(void) {
 
                 j = countUnlockedSlotsInCategory(state->charRow[i]);
                 if (gControllerInputs[i] & 0x40100) {
-                    state->unk18CE[i]++;
-                    if (j - 1 < state->unk18CE[i]) {
-                        state->unk18CE[i] = 0;
+                    state->unlockedSlotIndex[i]++;
+                    if (j - 1 < state->unlockedSlotIndex[i]) {
+                        state->unlockedSlotIndex[i] = 0;
                     }
                     state->scrollDirection[i] = 0;
                 } else if (gControllerInputs[i] & 0x80200) {
-                    state->unk18CE[i]--;
-                    if (state->unk18CE[i] < 0) {
-                        state->unk18CE[i] = j - 1;
+                    state->unlockedSlotIndex[i]--;
+                    if (state->unlockedSlotIndex[i] < 0) {
+                        state->unlockedSlotIndex[i] = j - 1;
                     }
                     state->scrollDirection[i] = 1;
                 }
 
-                state->charCol[i] = unlockedSlots[state->unk18CE[i]];
+                state->charCol[i] = unlockedSlots[state->unlockedSlotIndex[i]];
                 if (state->charRow[i] == 3) {
                     state->charCol[i] -= 9;
                 } else {
                     state->charCol[i] %= 3;
                 }
 
-                if (prevCE != state->unk18CE[i]) {
+                if (prevSlotIdx != state->unlockedSlotIndex[i]) {
                     state->menuStates[i] = 9;
                     state->slideState[i] = 0;
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                     state->savedCharRow[i] = state->charRow[i];
-                    state->savedCharCol[i] = unlockedSlots[prevCE];
+                    state->savedCharCol[i] = unlockedSlots[prevSlotIdx];
                     if (state->charRow[i] == 3) {
                         state->savedCharCol[i] -= 9;
                     } else {
@@ -769,7 +769,7 @@ void func_80022D74_23974(void) {
                         state->frameCounters[i] = 0;
                         state->menuStates[i] = 6;
                         playSoundEffectOnChannelNoPriority(0x2C, i);
-                        D_800AFE8C_A71FC->playerBoardIds[4 + i] = unlockedSlots[state->unk18CE[i]];
+                        D_800AFE8C_A71FC->playerBoardIds[4 + i] = unlockedSlots[state->unlockedSlotIndex[i]];
                         D_800AFE8C_A71FC->playerBoardIds[8 + i] =
                             EepromSaveData->character_or_settings[D_800AFE8C_A71FC->playerBoardIds[4 + i]] - 1;
                     }
@@ -785,7 +785,7 @@ void func_80022D74_23974(void) {
                     state->animAngles[i] = 0;
                     createYRotationMatrix(&state->pad17F8[i], 0);
                     state->boardId[i] = D_800AFE8C_A71FC->playerBoardIds[12 + i];
-                    state->unk18C8[i] = 0;
+                    state->iconDisplayState[i] = 0;
                     break;
                 }
                 prevBoardId = state->boardId[i];
@@ -812,7 +812,7 @@ void func_80022D74_23974(void) {
                     D_800AFE8C_A71FC->playerBoardIds[12 + i] = state->boardId[i];
                     state->frameCounters[i] = 0;
                     playSoundEffectOnChannelNoPriority(0x2C, i);
-                    playSoundEffect(D_8008DCFC_8E8FC[state->boardId[i]]);
+                    playSoundEffect(boardConfirmSoundIds[state->boardId[i]]);
                 }
                 break;
 
@@ -830,22 +830,22 @@ void func_80022D74_23974(void) {
                     setViewportLightColors(
                         state->playerViewports[i].id,
                         1,
-                        &D_8008DCE8_8E8E8,
-                        (ColorData *)(&D_8008DCF0_8E8F0)
+                        &charSelectFlashLight,
+                        (ColorData *)(&charSelectFlashAmbient)
                     );
                 } else {
                     setViewportLightColors(
                         state->playerViewports[i].id,
                         1,
-                        &D_8008DCDC_8E8DC,
-                        (ColorData *)(&D_8008DCE4_8E8E4)
+                        &charSelectNormalLight,
+                        (ColorData *)(&charSelectNormalAmbient)
                     );
                 }
                 if (state->frameCounters[i] == 0x10) {
                     state->frameCounters[i] = 0;
                     state->menuStates[i] = 0;
                     state->cursorIndices[i] = state->maxMenuOption - 2;
-                    state->unk18C8[i] = 0;
+                    state->iconDisplayState[i] = 0;
                     state->animAngles[i] = 0;
                     createYRotationMatrix(&state->pad17F8[i], 0);
                 }

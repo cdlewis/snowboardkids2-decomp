@@ -402,7 +402,7 @@ void updateCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
 
     state = (GameState *)getCurrentAllocation();
 
-    newSelState = state->unk18C8[arg0->playerIndex];
+    newSelState = state->iconDisplayState[arg0->playerIndex];
     prevSelState = arg0->selectionState;
 
     if (prevSelState != newSelState) {

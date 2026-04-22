@@ -427,7 +427,7 @@ typedef struct {
     u8 unk18B0[8];
     u8 PAD_22[0x8];
     u8 unk18C0[8];
-    u8 unk18C8[4];
+    u8 iconDisplayState[4];
     u8 unk18CC;
     u8 PAD_23[0x5];
     u8 unk18D2[8];
