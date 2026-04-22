@@ -177,7 +177,7 @@ typedef struct {
     s32 unkB70;
     u16 unkB74;
     u8 paddingB76[0x2];
-    s16 unkB78;
+    s16 aiItemUseTimer;
     s8 inputStickX;
     s8 inputStickY;
     s16 inputButtons;

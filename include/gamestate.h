@@ -185,7 +185,7 @@ typedef struct {
     s32 skillPoints;
     u16 storedRotY;
     u8 padding2c_3[0x2];
-    s16 unkB78;
+    s16 aiItemUseTimer;
     s8 inputStickX;
     s8 inputStickY;
     s16 inputButtons;

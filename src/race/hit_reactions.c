@@ -195,8 +195,8 @@ s32 grantInvincibilityWithSound(Player *player) {
 
 extern void *getCurrentAllocation(void);
 extern s32 func_80059394_59F94(Player *);
-extern u8 D_800BADE0_AAC90[][0x11][0x4];
-s32 func_800597C0_5A3C0(Player *);
+extern u8 gAIPlayerParams[][0x11][0x4];
+s32 shouldUseSecondaryItem(Player *);
 extern s32 createWarpEffect(void *, void *, s16);
 extern s32 spawnAttackProjectile(s32, s32, s32);
 extern s32 spawnStarEffect(void *, void *, s16);
@@ -227,7 +227,7 @@ void processPlayerItemUsage(Player *player) {
         }
     }
 
-    if (func_800597C0_5A3C0(player) != 0) {
+    if (shouldUseSecondaryItem(player) != 0) {
         switch (player->secondaryItemId) {
             case 1:
                 result = gs->numPlayers - 1;
@@ -440,13 +440,8 @@ void processPlayerItemUsage(Player *player) {
 // 91.63% https://decomp.me/scratch/OJwdP
 INCLUDE_ASM("asm/nonmatchings/race/hit_reactions", func_80059394_59F94);
 
-s32 func_800597C0_5A3C0(Player *player) {
+s32 shouldUseSecondaryItem(Player *player) {
     GameState *gs;
-    s32 index;
-    u8 threshold;
-    u8 randVal;
-    s32 itemOffset;
-    s32 secondItemOffset;
 
     gs = (GameState *)getCurrentAllocation();
 
@@ -454,19 +449,19 @@ s32 func_800597C0_5A3C0(Player *player) {
         if (player->secondaryItemId == 0) {
             return 0;
         }
-        if (player->inputButtonsPressed & 0x4000) {
+        if (player->inputButtonsPressed & B_BUTTON) {
             return 1;
         }
     } else {
         if (player->secondaryItemId != 0) {
-            if (player->unkB78 > D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][1]) {
-                player->unkB78 = D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][1];
-                player->unkB78 -= (randA() & 0xFF) * D_800BADE0_AAC90[player->speedPenaltyIndex][0][2] / 255;
+            if (player->aiItemUseTimer > gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][1]) {
+                player->aiItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][1];
+                player->aiItemUseTimer -= (randA() & 0xFF) * gAIPlayerParams[player->speedPenaltyIndex][0][2] / 255;
             }
 
-            if (player->unkB78 <= 0) {
-                player->unkB78 = D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][1];
-                player->unkB78 -= (randA() & 0xFF) * D_800BADE0_AAC90[player->speedPenaltyIndex][0][2] / 255;
+            if (player->aiItemUseTimer <= 0) {
+                player->aiItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][1];
+                player->aiItemUseTimer -= (randA() & 0xFF) * gAIPlayerParams[player->speedPenaltyIndex][0][2] / 255;
 
                 switch (player->secondaryItemId) {
                     case 1:
@@ -475,17 +470,17 @@ s32 func_800597C0_5A3C0(Player *player) {
                         if ((gs->players[gs->PAD_6B_2[0]].animFlags & 0x100)) {
                             return 0;
                         }
-                        if (randA() < D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                        if (randA() < gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
                             return 1;
                         }
                         break;
                     case 6:
                         if (player->pathFlags != 0) {
-                            if (randA() < D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][2]) {
+                            if (randA() < gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][2]) {
                                 return 1;
                             }
                         } else {
-                            if (randA() < D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                            if (randA() < gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
                                 return 1;
                             }
                         }
@@ -494,7 +489,7 @@ s32 func_800597C0_5A3C0(Player *player) {
                         if (player->finishPosition >= 3) {
                             return 0;
                         }
-                        if (randA() < D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                        if (randA() < gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
                             return 1;
                         }
                         break;
@@ -503,7 +498,7 @@ s32 func_800597C0_5A3C0(Player *player) {
                     case 8:
                     case 9:
                     case 10:
-                        if (randA() < D_800BADE0_AAC90[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                        if (randA() < gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
                             return 1;
                         }
                         break;
@@ -511,10 +506,10 @@ s32 func_800597C0_5A3C0(Player *player) {
                         return 0;
                 }
             } else {
-                player->unkB78--;
+                player->aiItemUseTimer--;
             }
         } else {
-            player->unkB78 = 0x100;
+            player->aiItemUseTimer = 0x100;
         }
     }
     return 0;
