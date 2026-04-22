@@ -202,9 +202,9 @@ typedef struct {
     s16 unkB98;
     s16 boostTimer;
     s16 shortcutLapCount;
-    u16 unkB9E;
-    u16 unkBA0;
-    s16 unkBA2;
+    u16 squashStretchScale;
+    u16 characterScaleXZ;
+    s16 characterScaleY;
     u16 invincibilityTimer;
     s16 ghostEffectTimer;
     u16 inputRecordIndex;
@@ -237,7 +237,7 @@ typedef struct {
     u8 unkBC9;
     u8 unkBCA;
     u8 unkBCB;
-    u8 unkBCC;
+    u8 surfaceInfo;
     s8 unkBCD;
     u8 ufoFlags;
     u8 slowdownLevel;

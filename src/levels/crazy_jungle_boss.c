@@ -143,7 +143,7 @@ typedef struct {
     s32 unkB90;
     u16 sectorIndex;
     u8 padding[0x8];
-    u16 unkB9E;
+    u16 squashStretchScale;
     u8 padB96[0xBB4 - 0xBA0];
     u8 unkBB4;
     u8 padBB5[0xBB7 - 0xBB5];
@@ -619,7 +619,7 @@ s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0) {
     arg0->unkB8C--;
     if (arg0->unkB8C == 0) {
         arg0->unkB8C = D_800BC468_ACC98[arg0->behaviorCounter].unk0;
-        arg0->unkB9E = D_800BC468_ACC98[arg0->behaviorCounter].unk2;
+        arg0->squashStretchScale = D_800BC468_ACC98[arg0->behaviorCounter].unk2;
         arg0->behaviorCounter++;
     }
 
@@ -707,7 +707,7 @@ void updateCrazyJungleBossLeanBoneTransforms(Arg0Struct *arg0) {
         if (animData[i].parentBone == 0xFF) {
             if (arg0->behaviorFlags & 0x10) {
                 memcpy(&sp30, &identityMatrix, sizeof(Transform3D));
-                sp30.m[1][1] = arg0->unkB9E;
+                sp30.m[1][1] = arg0->squashStretchScale;
                 func_8006B084_6BC84((Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position, &sp30, &sp10);
                 func_8006B084_6BC84(
                     &sp10,

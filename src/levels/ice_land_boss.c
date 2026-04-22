@@ -70,7 +70,7 @@ typedef struct {
     u8 unkBC9;
     u8 unkBCA;
     u8 _padBCB[1];
-    u8 unkBCC;
+    u8 surfaceInfo;
     u8 _padBCD[0xBDB - 0xBCD];
     u8 unkBDB;
 } IceLandBossAttackArg;
@@ -194,9 +194,9 @@ typedef struct {
     s16 unkB98;
     s16 boostTimer;
     s16 unkB9C;
-    u16 unkB9E;
-    u16 unkBA0;
-    s16 unkBA2;
+    u16 squashStretchScale;
+    u16 characterScaleXZ;
+    s16 characterScaleY;
     u16 unkBA4;
     s16 unkBA6;
     u8 paddingBA8[0x2];
@@ -1050,7 +1050,7 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     if (boss->bossFlags & 0x10000) {
         boss->unkBC9 = 0;
     } else {
-        findTrackFaceInSector(gameData, boss->sectorIndex, &boss->unk434, &boss->unkBC9, &boss->unkBCC);
+        findTrackFaceInSector(gameData, boss->sectorIndex, &boss->unk434, &boss->unkBC9, &boss->surfaceInfo);
         boss->unkBCA = boss->unkBC9 >> 4;
         boss->unkBC9 = boss->unkBC9 & 0xF;
     }
@@ -1076,7 +1076,7 @@ void updateIceLandBossLeanBoneTransforms(Player *arg0) {
         if (animData[i].parentBone == 0xFF) {
             if (arg0->behaviorFlags & 0x10) {
                 memcpy(&sp30, &identityMatrix, sizeof(Transform3D));
-                sp30.m[1][1] = arg0->unkB9E;
+                sp30.m[1][1] = arg0->squashStretchScale;
                 func_8006B084_6BC84((Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position, &sp30, &sp10);
                 func_8006B084_6BC84(
                     &sp10,
@@ -1113,7 +1113,7 @@ void renderIceLandBossWithSurfaceColors(Player *arg0) {
     getCurrentAllocation();
     updateIceLandBossLeanBoneTransforms(arg0);
 
-    index = arg0->unkBCC >> 4;
+    index = arg0->surfaceInfo >> 4;
 
     if (index == 0) {
         for (i = 0; i < 4; i++) {

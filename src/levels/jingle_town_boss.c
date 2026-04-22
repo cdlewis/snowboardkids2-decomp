@@ -150,7 +150,7 @@ typedef struct {
     u8 padB90[0xB94 - 0xB90];
     /* 0xB94 */ u16 sectorIndex;
     u8 padB96[0xB9E - 0xB96];
-    /* 0xB9E */ u16 unkB9E;
+    /* 0xB9E */ u16 squashStretchScale;
     u8 padBA0[0xBB4 - 0xBA0];
     /* 0xBB4 */ u8 unkBB4;
     u8 padBB5[0xBB8 - 0xBB5];
@@ -171,7 +171,7 @@ typedef struct {
     /* 0xBC9 */ u8 unkBC9;
     /* 0xBCA */ u8 unkBCA;
     u8 padBCB[1];
-    /* 0xBCC */ u8 unkBCC;
+    /* 0xBCC */ u8 surfaceInfo;
     u8 padBCD[0x2];
     /* 0xBCF */ u8 speedReductionCount;
     u8 padBD0[0xBDB - 0xBD0];
@@ -736,7 +736,7 @@ s32 jingleTownBossHoverAttackIntroPhase(Arg0Struct *arg0) {
     arg0->unkB8C--;
     if (arg0->unkB8C == 0) {
         arg0->unkB8C = gHoverIntroAnimFrames[arg0->behaviorCounter].frames;
-        arg0->unkB9E = gHoverIntroAnimFrames[arg0->behaviorCounter].anim;
+        arg0->squashStretchScale = gHoverIntroAnimFrames[arg0->behaviorCounter].anim;
         arg0->behaviorCounter++;
     }
 
@@ -875,7 +875,7 @@ void updateJingleTownBossPositionAndTrackCollision(Arg0Struct *arg0) {
     if (arg0->animFlags & 0x10000) {
         arg0->unkBC9 = 0;
     } else {
-        findTrackFaceInSector(gameData, arg0->sectorIndex, &arg0->position, &arg0->unkBC9, &arg0->unkBCC);
+        findTrackFaceInSector(gameData, arg0->sectorIndex, &arg0->position, &arg0->unkBC9, &arg0->surfaceInfo);
         arg0->unkBCA = arg0->unkBC9 >> 4;
         arg0->unkBC9 = arg0->unkBC9 & 0xF;
     }
@@ -895,7 +895,7 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
     if (arg0->behaviorFlags & 0x10) {
         // Apply vertical scale transformation during intro animation
         memcpy(&scaledMatrix, &identityMatrix, 0x20);
-        scaledMatrix.m[1][1] = arg0->unkB9E;
+        scaledMatrix.m[1][1] = arg0->squashStretchScale;
         func_8006B084_6BC84(&scaledMatrix, &arg0->unk950, &arg0->groundTransform);
     } else {
         memcpy(&arg0->groundTransform, &arg0->unk950, 0x20);
@@ -947,7 +947,7 @@ void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
     alloc = getCurrentAllocation();
     updateJingleTownBossModelTransforms(arg0);
 
-    index = arg0->unkBCC >> 4;
+    index = arg0->surfaceInfo >> 4;
 
     if (index == 0) {
         if (arg0->animFlags & 0x200000) {
@@ -1030,7 +1030,7 @@ void renderJingleTownBossWithEffects(Arg0Struct *arg0) {
             sp78.y += arg0->position.y;
             sp78.z += arg0->position.z;
 
-            temp = arg0->unkBCC & 0xF;
+            temp = arg0->surfaceInfo & 0xF;
             if (temp >= 0) {
                 if (temp < 2) {
                     spawnDualSnowSprayEffect_SingleSlot(outVec1, outVec2, &arg0->velocity, 0);

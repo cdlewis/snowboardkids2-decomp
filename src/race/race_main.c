@@ -330,7 +330,7 @@ BossSurfaceColor gBossSurfaceColors[] = {
     { 0x0A, 0x40, 0xFF, 0xFF, 0x48, 0x40, 0x60, 0xFF },
 };
 
-Vec3i D_800BAD28_AABD8[] = {
+Vec3i sSnowTrailCornerOffsets[] = {
     { 0x00060000, 0x00000000, 0x000C0000 },
     { 0x00060000, 0x00000000, 0xFFF40000 },
     { 0xFFFA0000, 0x00000000, 0x000C0000 },
@@ -1440,10 +1440,10 @@ s32 initPostTrickLandingStep(Player *player) {
     if (behaviorStep == 0) {
         player->behaviorStep = ++behaviorStep;
         startRumbleEffect(player, 0);
-        if ((player->unkBCC & 0xF) == 7) {
+        if ((player->surfaceInfo & 0xF) == 7) {
             queueSoundAtPosition(&player->worldPos, 0x29);
         }
-        if ((player->unkBCC & 0xF) == 3) {
+        if ((player->surfaceInfo & 0xF) == 3) {
             spawnCharacterAttackEffect(player);
             queueSoundAtPosition(&player->worldPos, 0xF);
         } else {
@@ -3057,7 +3057,7 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
             player->behaviorCounter++;
             startRumbleEffect(player, 0);
             queueSoundAtPosition(&player->worldPos, 0x25);
-            spawnCharacterAttackEffectByType(player, player->unkBCC & 0xF);
+            spawnCharacterAttackEffectByType(player, player->surfaceInfo & 0xF);
         }
         applyVelocityDeadzone(player, 0x8000, 0x8000, 0x8000);
     }
@@ -3153,7 +3153,7 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
         player->velocity.z -= player->velocity.z >> 5;
     } else {
         applyVelocityDeadzone(player, 0x100, 0x100, 0x100);
-        spawnPlayerCharacterTrailParticle(player, player->unkBCC & 0xF);
+        spawnPlayerCharacterTrailParticle(player, player->surfaceInfo & 0xF);
     }
 
     velocityMagnitude = distance_3d(player->velocity.x, player->velocity.y, player->velocity.z);
@@ -3211,7 +3211,7 @@ s32 updateEdgeFallRecoveryGetUpPhase(Player *arg0) {
         arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 5);
     } else {
         applyVelocityDeadzone(arg0, 0x100, 0x100, 0x100);
-        spawnPlayerCharacterTrailParticle(arg0, arg0->unkBCC & 0xF);
+        spawnPlayerCharacterTrailParticle(arg0, arg0->surfaceInfo & 0xF);
     }
 
     angle = atan2Fixed(-arg0->velocity.x, -arg0->velocity.z);
@@ -3317,7 +3317,7 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
             arg0->behaviorCounter++;
             startRumbleEffect(arg0, 0);
             queueSoundAtPosition(&arg0->worldPos, 0x25);
-            spawnCharacterAttackEffectByType(arg0, arg0->unkBCC & 0xF);
+            spawnCharacterAttackEffectByType(arg0, arg0->surfaceInfo & 0xF);
         }
         applyVelocityDeadzone(arg0, 0x8000, 0x8000, 0x8000);
     }
@@ -3376,7 +3376,7 @@ s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
         arg0->behaviorStep = arg0->behaviorStep + 1;
         if ((arg0->animFlags & 1) == 0) {
             queueSoundAtPosition(&arg0->worldPos, 0x25);
-            spawnCharacterAttackEffectByType(arg0, arg0->unkBCC & 0xF);
+            spawnCharacterAttackEffectByType(arg0, arg0->surfaceInfo & 0xF);
         }
     }
 
@@ -3955,13 +3955,13 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
         advancePlayerLeanAnimation(arg0, 0xB);
         queueSoundAtPosition(&arg0->worldPos, 0x34);
         if (!(arg0->animFlags & 1)) {
-            spawnCharacterAttackEffectByType(arg0, arg0->unkBCC & 0xF);
+            spawnCharacterAttackEffectByType(arg0, arg0->surfaceInfo & 0xF);
         }
     }
 
     if (arg0->unkB8C == 0) {
         arg0->unkB8C = *(&knockbackHomingBounceTimers + (arg0->behaviorCounter * 2));
-        arg0->unkB9E = *(&knockbackHomingBounceScales + (arg0->behaviorCounter * 2));
+        arg0->squashStretchScale = *(&knockbackHomingBounceScales + (arg0->behaviorCounter * 2));
         arg0->behaviorCounter += 1;
     } else {
         s32 temp_v1;
@@ -4574,8 +4574,8 @@ s32 maintainMaxSpinStep(Player *arg0) {
     if (timerRemaining == 0) {
         u8 nextStep = arg0->behaviorStep;
         s32 flags = arg0->animFlags;
-        arg0->unkBA0 = 0x2000;
-        arg0->unkBA2 = 0x2000;
+        arg0->characterScaleXZ = 0x2000;
+        arg0->characterScaleY = 0x2000;
         arg0->unkB8C = 10;
         nextStep = nextStep + 1;
         flags = flags | 0x800000;
@@ -4605,15 +4605,15 @@ s32 spinRampDownStep(Player *player) {
     decayPlayerSteeringAngles(player);
     advancePlayerLeanAnimationAuto(player, 0);
 
-    spinDecrementCounter = player->unkBA0;
-    spinIncrementCounter = player->unkBA2;
+    spinDecrementCounter = player->characterScaleXZ;
+    spinIncrementCounter = player->characterScaleY;
     spinDecrementCounter -= 0x400;
-    player->unkBA0 = spinDecrementCounter;
+    player->characterScaleXZ = spinDecrementCounter;
     player->rotY = player->rotY + 0x400;
     spinIncrementCounter += 0x400;
-    player->unkBA2 = spinIncrementCounter;
+    player->characterScaleY = spinIncrementCounter;
 
-    if (player->unkBA0 == 0) {
+    if (player->characterScaleXZ == 0) {
         player->unkB8C = 0x11;
         player->behaviorStep = player->behaviorStep + 1;
         setViewportFadeValueBySlotIndex(player->playerIndex, 0xFF, 0x10);
@@ -4690,12 +4690,12 @@ s32 warpToShortcutSpinUpStep(Player *player) {
     decayPlayerSteeringAngles(player);
     advancePlayerLeanAnimationAuto(player, 0);
 
-    player->unkBA0 += 0x400;
+    player->characterScaleXZ += 0x400;
     player->unkB8C = 0x400;
     player->rotY = player->rotY + 0x400;
-    player->unkBA2 = player->unkBA2 - 0x400;
+    player->characterScaleY = player->characterScaleY - 0x400;
 
-    if (player->unkBA0 == 0x2000) {
+    if (player->characterScaleXZ == 0x2000) {
         player->animFlags &= 0xFF7FFFFF;
         player->behaviorStep++;
     }
@@ -4912,7 +4912,7 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
         player->sectorIndex,
         &player->worldPos,
         &player->unkBC9,
-        &player->unkBCC
+        &player->surfaceInfo
     );
 
     player->unkBCA = player->unkBC9 >> 4;
@@ -4922,7 +4922,7 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
         player->unkBC9 = 0;
     } else if (player->animFlags & 0x20000) {
         player->unkBC9 = 0;
-        player->unkBCC &= 0xF0;
+        player->surfaceInfo &= 0xF0;
     }
 
     if (player->unkBC9 == 1) {
@@ -4943,15 +4943,15 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
 extern s32 gFrameCounter;
 extern BoneHierarchyEntry *getIndexedAnimationDataPtr(void *, s16);
 
-void func_800B8894_A8744(Player *player) {
-    Transform3D sp18;
-    Transform3D sp38;
-    Vec3i sp58[4];
-    Vec3i sp88;
-    Vec3i sp98;
+void renderPlayerModel(Player *player) {
+    Transform3D tmpMtx1;
+    Transform3D tmpMtx2;
+    Vec3i snowTrailCorners[4];
+    Vec3i sprayPosA;
+    Vec3i sprayPosB;
     GameState *gameState;
     Transform3D *mtxDst;
-    Transform3D *sp18Ptr;
+    Transform3D *tmpMtx1Ptr;
     s32 i;
     s32 volume;
     s32 surfaceType;
@@ -4979,38 +4979,38 @@ void func_800B8894_A8744(Player *player) {
         func_8006B084_6BC84(
             (Transform3D *)&player->tiltTransform,
             (Transform3D *)&player->tiltTransform.animation_data,
-            &sp18
+            &tmpMtx1
         );
         createYRotationMatrix(&gIdentityMatrix32, 0x1000);
         if (player->animFlags & 0x800) {
-            func_8006B084_6BC84(&gIdentityMatrix32, &sp18, &sp38);
-            func_8006B084_6BC84((Transform3D *)&player->tiltTransform.prev_position, &sp38, &player->unk950);
+            func_8006B084_6BC84(&gIdentityMatrix32, &tmpMtx1, &tmpMtx2);
+            func_8006B084_6BC84((Transform3D *)&player->tiltTransform.prev_position, &tmpMtx2, &player->unk950);
         } else {
-            func_8006B084_6BC84(&gIdentityMatrix32, &sp18, &player->unk950);
+            func_8006B084_6BC84(&gIdentityMatrix32, &tmpMtx1, &player->unk950);
         }
     } else {
         mtxDst = (Transform3D *)&player->tiltTransform.animation_data;
         func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, mtxDst);
         if (player->animFlags & 0x800) {
-            func_8006B084_6BC84((Transform3D *)&player->tiltTransform, mtxDst, &sp18);
-            func_8006B084_6BC84((Transform3D *)&player->tiltTransform.prev_position, &sp18, &player->unk950);
+            func_8006B084_6BC84((Transform3D *)&player->tiltTransform, mtxDst, &tmpMtx1);
+            func_8006B084_6BC84((Transform3D *)&player->tiltTransform.prev_position, &tmpMtx1, &player->unk950);
         } else {
             func_8006B084_6BC84((Transform3D *)&player->tiltTransform, mtxDst, &player->unk950);
         }
     }
 
     if (player->behaviorFlags & 0x10) {
-        tmp = player->unk950.m[1][0] * player->unkB9E;
+        tmp = player->unk950.m[1][0] * player->squashStretchScale;
         if (tmp < 0) {
             tmp += 0x1FFF;
         }
         player->unk950.m[1][0] = tmp >> 13;
-        diff = player->unk950.m[1][1] * player->unkB9E;
+        diff = player->unk950.m[1][1] * player->squashStretchScale;
         if (diff < 0) {
             diff += 0x1FFF;
         }
         player->unk950.m[1][1] = diff >> 13;
-        trackHeight = player->unk950.m[1][2] * player->unkB9E;
+        trackHeight = player->unk950.m[1][2] * player->squashStretchScale;
         if (trackHeight < 0) {
             trackHeight += 0x1FFF;
         }
@@ -5018,14 +5018,19 @@ void func_800B8894_A8744(Player *player) {
     }
 
     for (i = 0; i < player->leanBoneCount; i++) {
-        sp18Ptr = &sp18;
+        tmpMtx1Ptr = &tmpMtx1;
         if (animData[i].parentBone == 0xFF) {
             if (animData[i].boneIndex == 0x10) {
-                memcpy(sp18Ptr, &player->unk928, sizeof(Transform3D));
+                memcpy(tmpMtx1Ptr, &player->unk928, sizeof(Transform3D));
                 if (player->animFlags & 0x800000) {
-                    scaleMatrix(sp18Ptr, player->unkBA0, player->unkBA2, player->unkBA0);
+                    scaleMatrix(
+                        tmpMtx1Ptr,
+                        player->characterScaleXZ,
+                        player->characterScaleY,
+                        player->characterScaleXZ
+                    );
                 }
-                func_8006B084_6BC84(sp18Ptr, &player->unk950, &player->boneResults[animData[i].boneIndex].mtx);
+                func_8006B084_6BC84(tmpMtx1Ptr, &player->unk950, &player->boneResults[animData[i].boneIndex].mtx);
             } else {
                 func_8006B084_6BC84(
                     (Transform3D *)&player->unk488[animData[i].boneIndex].prev_position,
@@ -5044,9 +5049,9 @@ void func_800B8894_A8744(Player *player) {
 
     if (player->animFlags & 8) {
         __asm__("");
-        sp18Ptr = &sp18;
-        memcpy(sp18Ptr, &player->unk3F8, sizeof(Transform3D));
-        func_8006B084_6BC84(&gIdentityMatrix32, sp18Ptr, &player->unk3F8);
+        tmpMtx1Ptr = &tmpMtx1;
+        memcpy(tmpMtx1Ptr, &player->unk3F8, sizeof(Transform3D));
+        func_8006B084_6BC84(&gIdentityMatrix32, tmpMtx1Ptr, &player->unk3F8);
     }
 
     invTimer = player->invincibilityTimer;
@@ -5063,8 +5068,8 @@ void func_800B8894_A8744(Player *player) {
         }
     }
 
-    if (!(player->animFlags & 0x800000) || ((player->unkBA0 != 0) && ((u16)player->unkBA2 != 0))) {
-        surfaceType = (u8)player->unkBCC >> 4;
+    if (!(player->animFlags & 0x800000) || ((player->characterScaleXZ != 0) && ((u16)player->characterScaleY != 0))) {
+        surfaceType = (u8)player->surfaceInfo >> 4;
         if (surfaceType == 0) {
             if ((((u32)player->behaviorFlags >> 7) & 1) | (snowTrailMask << 16 != 0)) {
                 {
@@ -5159,7 +5164,7 @@ void func_800B8894_A8744(Player *player) {
             }
         }
     } else {
-        if (!(player->animFlags & 0x10000) || ((player->unkBCC & 0xF) == 4)) {
+        if (!(player->animFlags & 0x10000) || ((player->surfaceInfo & 0xF) == 4)) {
             if (player->behaviorFlags & 6) {
                 getRumbleDuration(player, 8);
                 queueSoundAtPositionWithVolumeAndFlags(&player->worldPos, 6, 0.0f, 2, (s32)player->playerIndex, 0x80);
@@ -5185,7 +5190,7 @@ void func_800B8894_A8744(Player *player) {
                     }
                 }
 
-                switch (player->unkBCC & 0xF) {
+                switch (player->surfaceInfo & 0xF) {
                     case 0:
                     case 1:
                     case 2:
@@ -5264,14 +5269,16 @@ void func_800B8894_A8744(Player *player) {
     if (!(player->animFlags & 0x2000)) {
 
         for (i = 0; i < 4; i++) {
-            transformVector((s16 *)&D_800BAD28_AABD8[i], (s16 *)&player->unk3F8, &sp58[i]);
+            transformVector((s16 *)&sSnowTrailCornerOffsets[i], (s16 *)&player->unk3F8, &snowTrailCorners[i]);
             trackHeight = getTrackHeightInSector(
                 &gameState->gameData,
-                (s16)getOrUpdatePlayerSectorIndex(player, &gameState->gameData, player->sectorIndex, &sp58[i]),
-                &sp58[i],
+                (
+                    s16
+                )getOrUpdatePlayerSectorIndex(player, &gameState->gameData, player->sectorIndex, &snowTrailCorners[i]),
+                &snowTrailCorners[i],
                 0x100000
             );
-            if (sp58[i].y - 0x20000 < trackHeight) {
+            if (snowTrailCorners[i].y - 0x20000 < trackHeight) {
                 snowTrailMask |= 1 << i;
             }
         }
@@ -5291,38 +5298,68 @@ void func_800B8894_A8744(Player *player) {
             if (snowTrailMask & 3) {
                 if (snowTrailMask & 0xC) {
                     i = randA() & 0xFF;
-                    sp88.x = sp58[1].x + ((s64)(sp58[0].x - sp58[1].x) * i / 0xFF);
-                    sp88.y = sp58[1].y + ((s64)(sp58[0].y - sp58[1].y) * i / 0xFF);
-                    sp88.z = sp58[1].z + ((s64)(sp58[0].z - sp58[1].z) * i / 0xFF);
+                    sprayPosA.x =
+                        snowTrailCorners[1].x + ((s64)(snowTrailCorners[0].x - snowTrailCorners[1].x) * i / 0xFF);
+                    sprayPosA.y =
+                        snowTrailCorners[1].y + ((s64)(snowTrailCorners[0].y - snowTrailCorners[1].y) * i / 0xFF);
+                    sprayPosA.z =
+                        snowTrailCorners[1].z + ((s64)(snowTrailCorners[0].z - snowTrailCorners[1].z) * i / 0xFF);
                     i = randA() & 0xFF;
-                    sp98.x = sp58[3].x + ((s64)(sp58[2].x - sp58[3].x) * i / 0xFF);
-                    sp98.y = sp58[3].y + ((s64)(sp58[2].y - sp58[3].y) * i / 0xFF);
-                    sp98.z = sp58[3].z + ((s64)(sp58[2].z - sp58[3].z) * i / 0xFF);
+                    sprayPosB.x =
+                        snowTrailCorners[3].x + ((s64)(snowTrailCorners[2].x - snowTrailCorners[3].x) * i / 0xFF);
+                    sprayPosB.y =
+                        snowTrailCorners[3].y + ((s64)(snowTrailCorners[2].y - snowTrailCorners[3].y) * i / 0xFF);
+                    sprayPosB.z =
+                        snowTrailCorners[3].z + ((s64)(snowTrailCorners[2].z - snowTrailCorners[3].z) * i / 0xFF);
                     __asm("");
-                    spawnDualSnowSprayEffect(&sp88, &sp98, &player->velocity, snowSpeed, player->unkBCC & 0xF);
+                    spawnDualSnowSprayEffect(
+                        &sprayPosA,
+                        &sprayPosB,
+                        &player->velocity,
+                        snowSpeed,
+                        player->surfaceInfo & 0xF
+                    );
                 } else {
                     i = randA() & 0xFF;
-                    sp88.x = sp58[1].x + ((s64)(sp58[0].x - sp58[1].x) * i / 0xFF);
-                    sp88.y = sp58[1].y + ((s64)(sp58[0].y - sp58[1].y) * i / 0xFF);
-                    sp88.z = sp58[1].z + ((s64)(sp58[0].z - sp58[1].z) * i / 0xFF);
+                    sprayPosA.x =
+                        snowTrailCorners[1].x + ((s64)(snowTrailCorners[0].x - snowTrailCorners[1].x) * i / 0xFF);
+                    sprayPosA.y =
+                        snowTrailCorners[1].y + ((s64)(snowTrailCorners[0].y - snowTrailCorners[1].y) * i / 0xFF);
+                    sprayPosA.z =
+                        snowTrailCorners[1].z + ((s64)(snowTrailCorners[0].z - snowTrailCorners[1].z) * i / 0xFF);
                     i = randA() & 0xFF;
-                    sp98.x = sp58[1].x + ((s64)(sp58[0].x - sp58[1].x) * i / 0xFF);
-                    sp98.y = sp58[1].y + ((s64)(sp58[0].y - sp58[1].y) * i / 0xFF);
-                    sp98.z = sp58[1].z + ((s64)(sp58[0].z - sp58[1].z) * i / 0xFF);
+                    sprayPosB.x =
+                        snowTrailCorners[1].x + ((s64)(snowTrailCorners[0].x - snowTrailCorners[1].x) * i / 0xFF);
+                    sprayPosB.y =
+                        snowTrailCorners[1].y + ((s64)(snowTrailCorners[0].y - snowTrailCorners[1].y) * i / 0xFF);
+                    sprayPosB.z =
+                        snowTrailCorners[1].z + ((s64)(snowTrailCorners[0].z - snowTrailCorners[1].z) * i / 0xFF);
                     __asm("");
-                    spawnDualSnowSprayEffect(&sp88, &sp98, &player->velocity, snowSpeed, player->unkBCC & 0xF);
+                    spawnDualSnowSprayEffect(
+                        &sprayPosA,
+                        &sprayPosB,
+                        &player->velocity,
+                        snowSpeed,
+                        player->surfaceInfo & 0xF
+                    );
                 }
             } else if (snowTrailMask & 0xC) {
                 i = randA() & 0xFF;
-                sp88.x = sp58[3].x + ((s64)(sp58[2].x - sp58[3].x) * i / 0xFF);
-                sp88.y = sp58[3].y + ((s64)(sp58[2].y - sp58[3].y) * i / 0xFF);
-                sp88.z = sp58[3].z + ((s64)(sp58[2].z - sp58[3].z) * i / 0xFF);
+                sprayPosA.x = snowTrailCorners[3].x + ((s64)(snowTrailCorners[2].x - snowTrailCorners[3].x) * i / 0xFF);
+                sprayPosA.y = snowTrailCorners[3].y + ((s64)(snowTrailCorners[2].y - snowTrailCorners[3].y) * i / 0xFF);
+                sprayPosA.z = snowTrailCorners[3].z + ((s64)(snowTrailCorners[2].z - snowTrailCorners[3].z) * i / 0xFF);
                 i = randA() & 0xFF;
-                sp98.x = sp58[3].x + ((s64)(sp58[2].x - sp58[3].x) * i / 0xFF);
-                sp98.y = sp58[3].y + ((s64)(sp58[2].y - sp58[3].y) * i / 0xFF);
-                sp98.z = sp58[3].z + ((s64)(sp58[2].z - sp58[3].z) * i / 0xFF);
+                sprayPosB.x = snowTrailCorners[3].x + ((s64)(snowTrailCorners[2].x - snowTrailCorners[3].x) * i / 0xFF);
+                sprayPosB.y = snowTrailCorners[3].y + ((s64)(snowTrailCorners[2].y - snowTrailCorners[3].y) * i / 0xFF);
+                sprayPosB.z = snowTrailCorners[3].z + ((s64)(snowTrailCorners[2].z - snowTrailCorners[3].z) * i / 0xFF);
                 __asm("");
-                spawnDualSnowSprayEffect(&sp88, &sp98, &player->velocity, snowSpeed, player->unkBCC & 0xF);
+                spawnDualSnowSprayEffect(
+                    &sprayPosA,
+                    &sprayPosB,
+                    &player->velocity,
+                    snowSpeed,
+                    player->surfaceInfo & 0xF
+                );
             }
         }
     }
