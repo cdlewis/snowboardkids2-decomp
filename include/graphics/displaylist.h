@@ -79,7 +79,7 @@ typedef struct {
 } TrackGeometryData;
 
 typedef struct {
-    u16 *unk0;
+    Vertex6 *unk0;
     Vertex6 *vertices;
     TrackFace *faces;
     TrackFaceGroup *faceGroups;
