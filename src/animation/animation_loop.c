@@ -347,7 +347,7 @@ void initCameraShake(CutsceneCameraShakeState *cameraShake, s32 amplitude, s16 d
         arg0->rot##x##Current += diff;             \
     }
 
-s16 func_800B6190_1E3240(CutsceneCameraState *arg0) {
+s16 advanceCameraAnimation(CutsceneCameraState *arg0) {
     s32 step;
     s32 wrapTemp;
     s32 absFrac;
@@ -442,7 +442,7 @@ s16 advanceSceneManager(CutsceneCameraState *arg0) {
     if (temp != 1) {
         if (temp >= 2) {
         } else if (temp == 0) {
-            result = func_800B6190_1E3240(arg0);
+            result = advanceCameraAnimation(arg0);
         }
     } else {
         result = advanceCameraRotationYContinuous(arg0);

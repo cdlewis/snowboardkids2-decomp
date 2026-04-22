@@ -60,7 +60,7 @@ void animateCameraPositionY(CutsceneCameraState *arg0, s32 targetY, s16 duration
 void animateCameraPositionZ(CutsceneCameraState *arg0, s32 targetZ, s16 duration);
 void animateCameraRotationYContinuous(CutsceneCameraState *camera, s16 step, s16 duration);
 s16 advanceCameraRotationYContinuous(CutsceneCameraState *camera);
-s16 func_800B6190_1E3240(CutsceneCameraState *arg0);
+s16 advanceCameraAnimation(CutsceneCameraState *arg0);
 void initCameraShake(CutsceneCameraShakeState *cameraShake, s32 amplitude, s16 duration);
 void finalizeAnimationLoop(AnimationLoopArg *arg0);
 s16 advanceSceneManager(CutsceneCameraState *arg0);

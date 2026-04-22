@@ -4182,6 +4182,7 @@ initStarlightFireworkTask = 0x800BBF28; // rom:0xAE2E8
 loadAssetGroupCompressedData = 0x800018AC; // rom:0x24AC
 animateCameraRotationYContinuous = 0x800B6130; // rom:0x1E31E0
 initCameraShake = 0x800B6180; // rom:0x1E3230
+advanceCameraAnimation = 0x800B6190; // rom:0x1E3240
 interpolateBoneAnimation = 0x8005E800; // rom:0x5F400
 updateBoneAnimationMirrored = 0x8005E500; // rom:0x5F100
 setupSlotMoveToWithBounce = 0x800B7B70; // rom:0x1E4C20
