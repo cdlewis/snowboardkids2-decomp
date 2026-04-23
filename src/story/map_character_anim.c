@@ -24,7 +24,7 @@ typedef struct {
     s16 orientMatrix[9];
     u8 pad32[0x2];
     s32 cameraX;
-    s32 unk38;
+    s32 cameraY;
     s32 cameraZ;
     u8 pad40[0x4];
     s16 viewAngle;
@@ -35,12 +35,12 @@ typedef struct {
     s16 unk50;
     s32 travelDistance;
     u8 pad58[0x2];
-    s8 unk5A;
-    s8 unk5B;
+    s8 speedH;
+    s8 speedV;
 } StoryMapCameraState;
 
 void initStoryMapCamera(StoryMapCameraState *arg0);
-void func_800175E0_181E0(StoryMapCameraState *camera);
+void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera);
 void updateStoryMapCameraOrbit(StoryMapCameraState *arg0);
 void initStoryMapCameraAtLocation(StoryMapCameraState *arg0);
 void finalizeStoryMapExit(void);
@@ -133,21 +133,21 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
     state->unk3FC = camera->viewAngle & 0x1FFF;
 
     camera->unk50 = 0;
-    camera->unk5B = 8;
-    camera->unk5A = 8;
+    camera->speedV = 8;
+    camera->speedH = 8;
 
     createYRotationMatrix((Transform3D *)&camera->viewMatrix, camera->viewAngle);
     createYRotationMatrix((Transform3D *)&camera->orientMatrix, camera->orbitAngle);
 
     mode = getStoryMapCameraMode();
     if (mode == 3) {
-        setCallback(&func_800175E0_181E0);
+        setCallback(&updateStoryMapCameraFreeRoam);
     } else {
         setCallback(&updateStoryMapCameraOrbit);
     }
 }
 
-void func_800175E0_181E0(StoryMapCameraState *camera) {
+void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera) {
     Vec3i pos;
     Vec3i savedPos;
     Transform3D combinedMatrix;
@@ -159,13 +159,13 @@ void func_800175E0_181E0(StoryMapCameraState *camera) {
     s32 moveX, moveZ;
     s32 absMoveX;
     s32 absMoveZ;
-    s16 temp3;
+    s16 turnDir;
     s16 absDiff;
     s16 hDir, vDir;
     s8 stickX, stickY;
     u8 maxSpeed;
     s32 walkSpeed;
-    u8 temp2;
+    u8 selectedLocation;
     s32 temp_v1;
     s32 temp_a2;
 
@@ -175,7 +175,7 @@ void func_800175E0_181E0(StoryMapCameraState *camera) {
 
     if ((ABS(stickX)) < 0x12 && (ABS(stickY)) < 0x12) {
         maxSpeed = 0xF;
-        if (maxSpeed >= camera->unk5A && maxSpeed >= camera->unk5B) {
+        if (maxSpeed >= camera->speedH && maxSpeed >= camera->speedV) {
             walkSpeed = 2;
         } else {
             walkSpeed = 4;
@@ -208,21 +208,21 @@ void func_800175E0_181E0(StoryMapCameraState *camera) {
             vDir = (moveZ > 0 ? 1 : -1);
         }
 
-        moveX = (camera->unk5A * hDir) / 8 + hDir;
-        moveZ = (camera->unk5B * vDir) / 8 + vDir;
+        moveX = (camera->speedH * hDir) / 8 + hDir;
+        moveZ = (camera->speedV * vDir) / 8 + vDir;
 
-        if (camera->unk5A < maxSpeed) {
-            camera->unk5A += __abs(hDir);
+        if (camera->speedH < maxSpeed) {
+            camera->speedH += __abs(hDir);
         }
-        if (camera->unk5B < maxSpeed) {
-            camera->unk5B += __abs(vDir);
+        if (camera->speedV < maxSpeed) {
+            camera->speedV += __abs(vDir);
         }
 
-        if (camera->unk5A >= maxSpeed) {
-            camera->unk5A -= ABS(hDir);
+        if (camera->speedH >= maxSpeed) {
+            camera->speedH -= ABS(hDir);
         }
-        if (camera->unk5B >= maxSpeed) {
-            camera->unk5B -= ABS(vDir);
+        if (camera->speedV >= maxSpeed) {
+            camera->speedV -= ABS(vDir);
         }
 
         absMoveX = __abs(moveX);
@@ -250,8 +250,8 @@ void func_800175E0_181E0(StoryMapCameraState *camera) {
             camera->orbitRadius = distance_2d(pos.x, pos.z);
         }
     } else {
-        camera->unk5A = 8;
-        camera->unk5B = 8;
+        camera->speedH = 8;
+        camera->speedV = 8;
         state->animState = 0;
     }
 
@@ -309,7 +309,7 @@ void func_800175E0_181E0(StoryMapCameraState *camera) {
             }
         }
 
-        temp3 = (camera->targetAngle > camera->viewAngle) ? 1 : -1;
+        turnDir = (camera->targetAngle > camera->viewAngle) ? 1 : -1;
 
         absDiff = __abs(camera->targetAngle - camera->viewAngle);
         if (absDiff > 0xAAA) {
@@ -317,9 +317,9 @@ void func_800175E0_181E0(StoryMapCameraState *camera) {
             state->animState = 1;
             state->unk404 = 1;
         } else if (absDiff > 0x1A0) {
-            camera->viewAngle += temp3 * 0x1A0;
+            camera->viewAngle += turnDir * 0x1A0;
         } else {
-            camera->viewAngle += absDiff * temp3;
+            camera->viewAngle += absDiff * turnDir;
             camera->viewAngle &= 0x1FFF;
             camera->targetAngle = camera->viewAngle;
         }
@@ -373,9 +373,9 @@ void func_800175E0_181E0(StoryMapCameraState *camera) {
     } else {
         state->locationDiscovered = 0;
         if (state->unk404 == 0) {
-            temp2 = checkStoryMapLocationSelection(camera);
-            if (temp2) {
-                state->unk42B = temp2 - 1;
+            selectedLocation = checkStoryMapLocationSelection(camera);
+            if (selectedLocation) {
+                state->unk42B = selectedLocation - 1;
                 setCallback(&updateStoryMapDialogueTurn);
             }
         }
@@ -531,8 +531,8 @@ void initStoryMapCameraAtLocation(StoryMapCameraState *camera) {
     state->unk3FC = camera->viewAngle & 0x1FFF;
 
     camera->unk50 = 0;
-    camera->unk5B = 8;
-    camera->unk5A = 8;
+    camera->speedV = 8;
+    camera->speedH = 8;
 
     createYRotationMatrix((Transform3D *)&camera->orientMatrix, camera->orbitAngle);
     createYRotationMatrix((Transform3D *)camera, camera->viewAngle);
@@ -574,7 +574,7 @@ void approachStoryMapOrigin(StoryMapCameraState *camera) {
     distance = isqrt64(sumSquares);
 
     if (distance <= 0x880000) {
-        setCallback(&func_800175E0_181E0);
+        setCallback(&updateStoryMapCameraFreeRoam);
     }
 }
 
@@ -625,10 +625,10 @@ void updateStoryMapCameraOrbit(StoryMapCameraState *camera) {
     mode = getStoryMapCameraMode();
     if (mode == 2) {
         if (camera->orbitAngle < 0x8D1) {
-            setCallback(func_800175E0_181E0);
+            setCallback(updateStoryMapCameraFreeRoam);
         }
     } else if (camera->orbitAngle >= 0x1730) {
-        setCallback(func_800175E0_181E0);
+        setCallback(updateStoryMapCameraFreeRoam);
     }
 }
 

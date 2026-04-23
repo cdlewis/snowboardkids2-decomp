@@ -946,6 +946,7 @@ gStoryMapItemSpawnPositionsX = 0x8008E568; // rom:0x8F168
 gStoryMapItemSpawnPositionsZ = 0x8008E57C; // rom:0x8F17C
 storyMapCameraTask = 0x80017350; // rom:0x17F50
 initStoryMapCamera = 0x80017384; // rom:0x17F84
+updateStoryMapCameraFreeRoam = 0x800175E0; // rom:0x181E0
 startStoryMapCameraTravel = 0x80017FE8; // rom:0x18BE8
 updateStoryMapCameraTravel = 0x80018148; // rom:0x18D48
 finalizeStoryMapCameraTravel = 0x8001829C; // rom:0x18E9C

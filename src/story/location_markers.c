@@ -157,7 +157,7 @@ void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *);
 void computeEncodedTextCenterPos(s16 *outX, s16 *outY, u16 *encodedText);
 void updateStoryMapDialogueTurn(void *arg0);
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *);
-void func_800175E0_181E0(void *);
+void updateStoryMapCameraFreeRoam(void *);
 
 // Global variables and externs
 extern s32 gControllerInputs;
@@ -864,7 +864,7 @@ void updateStoryMapDialogueTurn(void *arg0) {
         case 5:
             switchState = 0;
             allocation->dialogueResult = 0xFF;
-            setCallback(func_800175E0_181E0);
+            setCallback(updateStoryMapCameraFreeRoam);
             break;
 
         case 6:
@@ -879,7 +879,7 @@ void updateStoryMapDialogueTurn(void *arg0) {
     allocation->dialogueTurnState |= switchState << 4;
     if (allocation->cancelDialogue == 1) {
         allocation->dialogueTurnState = 0;
-        setCallback(func_800175E0_181E0);
+        setCallback(updateStoryMapCameraFreeRoam);
     }
 }
 
