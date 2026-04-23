@@ -139,23 +139,6 @@ After adding your decompiled function, check for any redundant extern declaratio
 
 Example: If you added `extern void setCallback(void *);` but `task_scheduler.h` (which is already included) declares it, remove your extern declaration.
 
-### Avoid __asm__
-
-Using __asm__ can result in short-term gains but it's not what the original developers would've written and is therefore unlikely to ever give a true match. __asm__ statements should never be used.
-
-### Struct Offsets
-
-Always annotate struct fields with their byte offsets, e.g.:
-
-```
-typedef struct MyStruct {
-   /* 0x0 */ s16 field1;
-   /* 0x2 */ s16 field2;
-   /* 0x4 */ s32 field3;
-}
-```
-
-
 ## Decompilation tips
 
 ### Assets
