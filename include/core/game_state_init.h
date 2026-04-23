@@ -1,8 +1,8 @@
 #pragma once
 
 #include "audio/audio.h"
-#include "graphics/graphics.h"
 #include "core/main.h"
+#include "graphics/graphics.h"
 
 typedef struct {
     /* 0x00 */ ViewportNode node1;
@@ -21,7 +21,7 @@ typedef struct {
     /* 0x3E3 */ u8 unk403;
     /* 0x3E4 */ u8 padding5[0x20];
     /* 0x404 */ u8 locationDiscovered;
-    /* 0x405 */ s8 discoveredLocationId;
+    /* 0x405 */ u8 discoveredLocationId;
     /* 0x406 */ u8 unk426;
     /* 0x407 */ u8 unk427;
     /* 0x408 */ u8 unk428;

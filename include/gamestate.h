@@ -358,7 +358,8 @@ typedef struct {
     u8 animState;
     u8 PAD_E[0x2];
     u8 dialogueResult;
-    u8 PAD_0A_1[0x4];
+    u8 unk404;
+    u8 PAD_0A_1[0x3];
     s32 npcPosX[2];
     s32 npcPosZ[2];
     s16 npcCollisionRadius[2];

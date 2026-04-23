@@ -26,7 +26,7 @@ typedef struct {
     s32 unk38;
     s32 cameraZ;
     u8 pad40[0x4];
-    u16 viewAngle;
+    s16 viewAngle;
     s16 targetAngle;
     s16 orbitAngle;
     u8 pad4A[0x2];
@@ -34,8 +34,8 @@ typedef struct {
     s16 unk50;
     s32 travelDistance;
     u8 pad58[0x2];
-    u8 unk5A;
-    u8 unk5B;
+    s8 unk5A;
+    s8 unk5B;
 } StoryMapCameraState;
 
 void initStoryMapCamera(StoryMapCameraState *arg0);
