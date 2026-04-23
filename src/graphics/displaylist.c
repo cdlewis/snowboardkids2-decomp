@@ -598,32 +598,32 @@ u16 getTrackEndInfo(void *arg0, void *arg1) {
     return (computeAngleToPosition(vert0->x, vert0->z, vert1->x, vert1->z) - 0x1000) & 0xFFFF;
 }
 
-u16 func_800626C4_632C4(TrackGeometryFaceData *arg0, Vec3i *pos) {
+u16 findFaceGroupAtPosition(TrackGeometryFaceData *geom, Vec3i *pos) {
     s16 i;
-    s32 numFaces;
+    s32 numFaceGroups;
     s32 v0x, v0z, v1x, v1z, v2x, v2z, v3x, v3z;
-    TrackFace *new_var;
-    Vertex6 *temp_v1;
+    TrackFace *faceEntry;
+    Vertex6 *vertexIdx;
 
-    temp_v1 = arg0->unk0;
-    temp_v1 = (Vertex6 *)(u32)((u16)arg0->unk0->x);
-    new_var = (TrackFace *)&arg0->vertices[(s32)(temp_v1)];
-    new_var = &arg0->faces[(u16)((Vertex6 *)new_var)->x];
-    numFaces = new_var->v0;
+    vertexIdx = geom->unk0;
+    vertexIdx = (Vertex6 *)(u32)((u16)geom->unk0->x);
+    faceEntry = (TrackFace *)&geom->vertices[(s32)(vertexIdx)];
+    faceEntry = &geom->faces[(u16)((Vertex6 *)faceEntry)->x];
+    numFaceGroups = faceEntry->v0;
 
     i = 0;
     do {
-        v0x = arg0->vertices[arg0->faceGroups[i].vertexIdx0].x << 16;
-        v0z = arg0->vertices[arg0->faceGroups[i].vertexIdx0].z << 16;
+        v0x = geom->vertices[geom->faceGroups[i].vertexIdx0].x << 16;
+        v0z = geom->vertices[geom->faceGroups[i].vertexIdx0].z << 16;
 
-        v1x = arg0->vertices[arg0->faceGroups[i].vertexIdx1].x << 16;
-        v1z = arg0->vertices[arg0->faceGroups[i].vertexIdx1].z << 16;
+        v1x = geom->vertices[geom->faceGroups[i].vertexIdx1].x << 16;
+        v1z = geom->vertices[geom->faceGroups[i].vertexIdx1].z << 16;
 
-        v2x = arg0->vertices[arg0->faceGroups[i].vertexIdx2].x << 16;
-        v2z = arg0->vertices[arg0->faceGroups[i].vertexIdx2].z << 16;
+        v2x = geom->vertices[geom->faceGroups[i].vertexIdx2].x << 16;
+        v2z = geom->vertices[geom->faceGroups[i].vertexIdx2].z << 16;
 
-        v3x = arg0->vertices[arg0->faceGroups[i].vertexIdx3].x << 16;
-        v3z = arg0->vertices[arg0->faceGroups[i].vertexIdx3].z << 16;
+        v3x = geom->vertices[geom->faceGroups[i].vertexIdx3].x << 16;
+        v3z = geom->vertices[geom->faceGroups[i].vertexIdx3].z << 16;
 
         if (cross2d(pos->x, pos->z, v1x, v1z, v0x, v0z) > 0)
             continue;
@@ -634,7 +634,7 @@ u16 func_800626C4_632C4(TrackGeometryFaceData *arg0, Vec3i *pos) {
         if (cross2d(pos->x, pos->z, v0x, v0z, v2x, v2z) > 0)
             continue;
         goto found;
-    } while (++i != numFaces);
+    } while (++i != numFaceGroups);
 
     return 0;
 
