@@ -194,7 +194,7 @@ s32 grantInvincibilityWithSound(Player *player) {
 }
 
 extern void *getCurrentAllocation(void);
-s32 func_80059394_59F94(Player *);
+s32 findPrimaryItemTarget(Player *);
 extern u8 gAIPlayerParams[][0x11][0x4];
 extern u8 D_800BADE1[][0x11][0x4];
 extern u8 D_800BADE2[][0x11][0x4];
@@ -218,7 +218,7 @@ void processPlayerItemUsage(Player *player) {
     s32 pad;
 
     gs = (GameState *)getCurrentAllocation();
-    result = func_80059394_59F94(player);
+    result = findPrimaryItemTarget(player);
 
     if (result >= 0) {
         if (spawnAttackProjectile(player->primaryItemId - 1, player->playerIndex, result) != 0) {
@@ -439,103 +439,105 @@ void processPlayerItemUsage(Player *player) {
     }
 }
 
-s32 func_80059394_59F94(Player *arg0) {
-    s32 var_s1;
-    Player *temp_s2;
-    GameState *temp_s6;
-    Player *var_s7;
-    s32 var_fp;
-    u32 temp;
-    s32 temp2;
-    Vec3i sp10;
+s32 findPrimaryItemTarget(Player *player) {
+    s32 i;
+    Player *otherPlayer;
+    GameState *gs;
+    Player *bestTarget;
+    s32 targetingMode;
+    u32 angleDiff;
+    s32 dist;
+    Vec3i posDiff;
     u8 pad[2];
-    s32 temp_v0;
-    s32 var_a0;
+    s32 numPlayers;
+    s32 maxRange;
 
-    var_s7 = NULL;
-    var_fp = 0;
-    temp_s6 = getCurrentAllocation();
-    if (arg0->inputDisabled == 0) {
-        if (arg0->primaryItemAmmo != 0) {
-            if (arg0->inputButtonsPressed & 0x2000) {
-                return (*(u16 *)&arg0->inputStickX) == 0xF9;
+    bestTarget = NULL;
+    targetingMode = 0;
+    gs = getCurrentAllocation();
+    if (player->inputDisabled == 0) {
+        if (player->primaryItemAmmo != 0) {
+            if (player->inputButtonsPressed & Z_TRIG) {
+                return (*(u16 *)&player->inputStickX) == 0xF9;
             }
         }
         return -1;
     }
 
-    if (arg0->primaryItemAmmo == 0) {
-        arg0->aiPrimaryItemUseTimer = 0x100;
+    if (player->primaryItemAmmo == 0) {
+        player->aiPrimaryItemUseTimer = 0x100;
         return -1;
     }
 
-    if (arg0->aiPrimaryItemUseTimer > D_800BADE1[arg0->speedPenaltyIndex][arg0->primaryItemId][0]) {
-        arg0->aiPrimaryItemUseTimer = D_800BADE1[arg0->speedPenaltyIndex][arg0->primaryItemId][0];
-        arg0->aiPrimaryItemUseTimer -= (randA() * D_800BADE1[arg0->speedPenaltyIndex][0][0]) / 255;
+    if (player->aiPrimaryItemUseTimer > D_800BADE1[player->speedPenaltyIndex][player->primaryItemId][0]) {
+        player->aiPrimaryItemUseTimer = D_800BADE1[player->speedPenaltyIndex][player->primaryItemId][0];
+        player->aiPrimaryItemUseTimer -= (randA() * D_800BADE1[player->speedPenaltyIndex][0][0]) / 255;
     }
-    var_a0 = 0x05000000;
-    if (arg0->aiPrimaryItemUseTimer <= 0) {
-        temp_v0 = temp_s6->numPlayers;
-        var_s1 = 0;
-        if (temp_v0 > 0) {
+    maxRange = 0x05000000;
+    if (player->aiPrimaryItemUseTimer <= 0) {
+        numPlayers = gs->numPlayers;
+        i = 0;
+        if (numPlayers > 0) {
             do {
-                temp_s2 = &temp_s6->players[var_s1];
-                if (temp_s2->playerIndex != arg0->playerIndex) {
-                    sp10.x = temp_s2->worldPos.x - arg0->worldPos.x;
-                    sp10.z = temp_s2->worldPos.z - arg0->worldPos.z;
-                    temp = (((s32 (*)(s32, s32))atan2Fixed)(-sp10.x, -sp10.z) - (u16)arg0->rotY) & 0x1FFF;
-                    if ((temp - 0x200) > 0x1C00) {
-                        if (((u32)(sp10.x + 0x4FFFFFF) < 0x9FFFFFFU) && ((u32)(sp10.z + 0x4FFFFFF) < 0x9FFFFFFU)) {
-                            temp2 = distance_2d(sp10.x, sp10.z);
-                            if ((((arg0->primaryItemId == 3) | (arg0->primaryItemId == 5)) != 0) &&
-                                (temp2 <= 0x9FFFFF)) {
-                                temp2 = 0x05000000;
+                otherPlayer = &gs->players[i];
+                if (otherPlayer->playerIndex != player->playerIndex) {
+                    posDiff.x = otherPlayer->worldPos.x - player->worldPos.x;
+                    posDiff.z = otherPlayer->worldPos.z - player->worldPos.z;
+                    angleDiff = (((s32 (*)(s32, s32))atan2Fixed)(-posDiff.x, -posDiff.z) - (u16)player->rotY) & 0x1FFF;
+                    if ((angleDiff - 0x200) > 0x1C00) {
+                        if (((u32)(posDiff.x + 0x4FFFFFF) < 0x9FFFFFFU) &&
+                            ((u32)(posDiff.z + 0x4FFFFFF) < 0x9FFFFFFU)) {
+                            dist = distance_2d(posDiff.x, posDiff.z);
+                            if ((((player->primaryItemId == 3) | (player->primaryItemId == 5)) != 0) &&
+                                (dist <= 0x9FFFFF)) {
+                                dist = 0x05000000;
                             }
-                            if (temp2 < var_a0) {
-                                var_s7 = temp_s2;
-                                var_fp = 0;
+                            if (dist < maxRange) {
+                                bestTarget = otherPlayer;
+                                targetingMode = 0;
                             }
                         }
-                    } else if ((arg0->primaryItemId == 5) && (temp - 0xE01) < 0x3FF &&
-                               ((u32)(sp10.x + 0x4FFFFFF) < 0x9FFFFFFU) && ((u32)(sp10.z + 0x4FFFFFF) < 0x9FFFFFFU)) {
-                        temp2 = distance_2d(sp10.x, sp10.z);
-                        if (temp2 < var_a0) {
-                            var_s7 = temp_s2;
-                            var_fp = 1;
+                    } else if ((player->primaryItemId == 5) && (angleDiff - 0xE01) < 0x3FF &&
+                               ((u32)(posDiff.x + 0x4FFFFFF) < 0x9FFFFFFU) &&
+                               ((u32)(posDiff.z + 0x4FFFFFF) < 0x9FFFFFFU)) {
+                        dist = distance_2d(posDiff.x, posDiff.z);
+                        if (dist < maxRange) {
+                            bestTarget = otherPlayer;
+                            targetingMode = 1;
                         }
                     }
                 }
-                var_s1++;
-            } while (var_s1 < temp_s6->numPlayers);
+                i++;
+            } while (i < gs->numPlayers);
         }
-        arg0->aiPrimaryItemUseTimer = D_800BADE1[arg0->speedPenaltyIndex][arg0->primaryItemId][0];
-        arg0->aiPrimaryItemUseTimer -= (randA() * (D_800BADE1[arg0->speedPenaltyIndex][0][0])) / 255;
-        if (var_s7 == NULL) {
+        player->aiPrimaryItemUseTimer = D_800BADE1[player->speedPenaltyIndex][player->primaryItemId][0];
+        player->aiPrimaryItemUseTimer -= (randA() * (D_800BADE1[player->speedPenaltyIndex][0][0])) / 255;
+        if (bestTarget == NULL) {
             return -1;
         }
-        if (randA() >= gAIPlayerParams[arg0->speedPenaltyIndex][arg0->primaryItemId][0]) {
+        if (randA() >= gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId][0]) {
             return -1;
         }
-        if (var_s7->isBossRacer == 0) {
-            return var_fp;
+        if (bestTarget->isBossRacer == 0) {
+            return targetingMode;
         }
-        if (randA() >= D_800BADE2[arg0->speedPenaltyIndex][arg0->primaryItemId][0]) {
+        if (randA() >= D_800BADE2[player->speedPenaltyIndex][player->primaryItemId][0]) {
             return -1;
         }
-        var_s1 = arg0->finishPosition;
-        if (var_s1 >= 0) {
-            for (; var_s1 >= 0; var_s1--) {
-                if ((temp_s6->PAD_6B_2[var_s1] + (temp_s6->players))->isBossRacer == 0) {
+        i = player->finishPosition;
+        if (i >= 0) {
+            for (; i >= 0; i--) {
+                if ((gs->PAD_6B_2[i] + (gs->players))->isBossRacer == 0) {
                     break;
                 }
             }
-            if (var_s1 >= 0) {
+            if (i >= 0) {
                 return -1;
             }
         }
-        return var_fp;
+        return targetingMode;
     }
-    arg0->aiPrimaryItemUseTimer--;
+    player->aiPrimaryItemUseTimer--;
     return -1;
 }
 
