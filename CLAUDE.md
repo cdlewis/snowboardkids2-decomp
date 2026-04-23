@@ -1,7 +1,5 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Repository Overview
 
 This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is to create C code that, when compiled, produces the exact same assembly as the original game ROM.
@@ -9,8 +7,6 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 ## Project Structure
 
 - `src` decompiled (or partially decompiled) C code.
-- `src/cutscene` C functions and structures related to cutscene code
-- `src/levels` C functions and structures related to cutscene code
 - `include` headers for decompiled C code
 - `asm/nonmatchings` unmatched asm code extracted from the rom. Each file contains a separate function.
 - `asm/matchings` decompiled assembly code for already matched C functions. We keep this around as it's sometimes convenient to inspect.
@@ -139,26 +135,6 @@ After adding your decompiled function, check for any redundant extern declaratio
 
 Example: If you added `extern void setCallback(void *);` but `task_scheduler.h` (which is already included) declares it, remove your extern declaration.
 
-## Decompilation tips
-
-### Assets
-
-Typically small 5-6 length symbols (e.g. D_4237C0) are asset addresses. Another strong hint that they are assets if if they are passed to `loadCompressedData`.
-
-Use `USE_ASSET(symbol)` to load symbols, for example D_4237C0 and loadCompressedData would become:
-
-```
-USE_ASSET(_4237C0);
-
-loadCompressedData(_4237C0_ROM_START, _4237C0_ROM_END);
-```
-
-Failure to handle assets properly will almost certainly guarantee a mismatch.
-
-### Skills
-
-Consider what skills you have access to and how they may help you achieve your goals.
-
 ## Code Structure
 
 C files should be organised in the following way:
@@ -171,6 +147,3 @@ C files should be organised in the following way:
 
 You should proactively reorganise code to preserve this structure.
 
-## Controller Button Macros
-
-You do not need to define your own macros for controller buttons. They are available in `os_cont.h`.
