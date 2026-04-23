@@ -183,9 +183,40 @@ value = overlay->unsignedByte;
 
 **Why not split the s32 field?** KMC GCC 2.7.2 has a bug/quirk where splitting an `s32` into `s8 + u8 + u8[2]` in a struct with designated initializers causes the data section to grow (32 bytes in the observed case). The overlay cast approach avoids modifying the struct definition or data initializers while generating the correct byte-load instructions.
 
+## Register Allocation with `register __asm__` for Multiple Variables
+
+When GCC 2.7.2 needs to load multiple constants into specific registers before a loop, the register assignment in C must use `register ... __asm__("$N")` directives. The declaration order determines the load order in the generated assembly — declare variables in descending register order (e.g., `$22`, `$21`, `$20`, `$19`, `$18`) to get them loaded in that order.
+
 ## Jump Table: Empty Cases vs Identical Case Bodies
 
 When a switch statement has two consecutive cases with identical bodies, GCC 2.7.2 merges them — both jump table entries point to the same code address. If the target ROM has one case pointing to the post-switch code instead, that case was originally empty (`case N: break;`). Check the jump table `.rodata` section to distinguish merged cases from empty ones.
+
+## Instruction Scheduling: Register Setup as Stall Fillers
+
+GCC 2.7.2 -O2 fills load-use stall slots with independent instructions. When sequential memory operations (load-add-store for each struct field) are followed by a loop, the compiler interleaves loop-setup instructions into the stall slots between each load and its dependent add.
+
+To control which instructions fill which stall slots, use `__asm__("")` barriers to create separate scheduling regions and place the setup instructions in each region:
+
+```c
+// Region 1: x offset + rotMatrix address computation
+arg0->offset.x += global_x;
+rm = &rotMatrix;              // fills x's load-use stall
+__asm__("");
+// Region 2: y offset + transformed address + constant
+arg0->offset.y += global_y;
+tf = &transformed;            // fills y's stall slot 1
+yOffset = 0x80000;            // fills y's stall slot 2
+__asm__("");
+// Region 3: z offset + loop variable setup
+arg0->offset.z += global_z;
+particle = arg0->data;        // fills z's stall slot 1
+rotation = 0;                 // fills z's stall slot 2
+```
+
+Each `__asm__("")` barrier creates a scheduling boundary. The scheduler fills stalls within each region using only the instructions in that region. Use `register __asm__("$N")` on the setup variables to ensure they go to the correct registers.
+
+**Without barriers**: the compiler batches all loads together, then all adds, then all stores (no sequential pattern).
+**With volatile struct fields**: forces sequential access but the scheduler picks its own fill order based on internal priorities — `register __asm__` constraints affect which instructions are prioritized first.
 
 ## Branchless Codegen for Simple Conditionals
 
@@ -210,6 +241,8 @@ if (gameMode != 0) {
 
 The if/else with direct stores generates a proper branch because the compiler treats each store as a separate side effect. The local-variable version allows the compiler to compute the value branchlessly since it's just a register operation.
 
+Note: `__asm__("" : "=r"(var) : "0"(var))` barriers can prevent branchless codegen but cause `beqzl` (branch-likely) instead of `bnez`, and may allocate the wrong register.
+
 ## Duff's Device / Switch Fallthrough
 
 GCC 2.7.2 supports Duff's device-style switch fallthrough. A `case` label inside an `else` block is valid C and generates the expected assembly:
@@ -224,6 +257,25 @@ case 2:
         // shared code for case 1 (else) and case 2
     }
 ```
+
+## Forcing Hardware `mult` Over Synthetic Multiply (synth_mult)
+
+GCC 2.7.2 decomposes multiply-by-constant into shift/add sequences (synth_mult) when the constant is known at compile time. If the target uses a hardware `mult` instruction, you need to hide the constant from the synth_mult pass.
+
+**Key insight**: synth_mult runs *before* constant propagation. So if you compute the constant via a variable expression, synth_mult sees a variable multiply (uses `mult`) but later passes constant-propagate the value and emit `li` for the constant.
+
+```c
+// WRONG: literal constant → synth_mult decomposes into 7-instruction shift/add sequence
+src = base + frameIndex * 0x1ED0;
+
+// CORRECT: variable computed from another variable → hardware mult
+s32 copySize = 0x7B4;
+s32 stride = copySize * 4;  // compiler will propagate to 0x1ED0
+__asm__("" : "=r"(stride) : "0"(stride));  // prevent further propagation
+src = base + frameIndex * stride;  // generates: li v0, 0x1ED0; mult v1, v0; mflo v1
+```
+
+The `__asm__` barrier after computing `stride` prevents the compiler from propagating `stride` back into a constant for subsequent uses. Without the barrier, the compiler may re-derive the constant and use synth_mult anyway.
 
 ## Instruction Scheduling: Statement Ordering Controls `andi`/`lw`/`sll` Order
 
