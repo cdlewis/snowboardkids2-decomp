@@ -37,7 +37,7 @@ def get_unmatched_set(repo_root: Path) -> set:
 
 
 def build_best_scratches(scratches: List[Dict], unmatched: set) -> Dict[str, Dict]:
-    """Build a dict of base_func_name -> {slug, percentage, name} keeping best per function.
+    """Build a dict of base_func_name -> {slug, percentage, name, author} keeping best per function.
 
     Only includes functions whose base name still exists in asm/nonmatchings/.
     """
@@ -54,7 +54,9 @@ def build_best_scratches(scratches: List[Dict], unmatched: set) -> Dict[str, Dic
             continue
         pct = ((max_score - score) / max_score) * 100
         if base not in result or pct > result[base]["pct"]:
-            result[base] = {"slug": slug, "pct": pct, "name": name}
+            owner = scratch.get("owner") or {}
+            author = owner.get("username", "")
+            result[base] = {"slug": slug, "pct": pct, "name": name, "author": author}
     return result
 
 
@@ -77,9 +79,11 @@ def render_rows(best: Dict[str, Dict]) -> str:
             f'<a class="scratch-btn" href="{DECOMP_ME_BASE}/{slug}"'
             + ' target="_blank" rel="noopener">decomp.me ▸</a>'
         )
+        escaped_author = html.escape(entry.get("author", ""))
         rows.append(
             '        <div class="board-row">\n'
             + f'          <div><div class="fn-name">{escaped_name}</div></div>\n'
+            + f'          <div><div class="author-name">{escaped_author}</div></div>\n'
             + f"          <div>{bar_html}</div>\n"
             + f"          <div>{link}</div>\n"
             + "        </div>"
@@ -138,6 +142,7 @@ def generate_html(best: Dict[str, Dict]) -> str:
     header_row = (
         '<div class="board-row head">\n'
         "          <div>Function</div>\n"
+        "          <div>Best Match By</div>\n"
         "          <div>Match</div>\n"
         '          <div style="text-align:center">Scratch</div>\n'
         "        </div>"
