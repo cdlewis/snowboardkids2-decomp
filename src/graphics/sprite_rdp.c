@@ -376,7 +376,6 @@ void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *sprite) {
     }
 }
 
-// 98.42% https://decomp.me/scratch/x14MR
 INCLUDE_ASM("asm/nonmatchings/graphics/sprite_rdp", func_80010C98_11898);
 
 void renderScaledShadedSpriteFrame(ScaledSpriteArg *sprite) {
@@ -1306,7 +1305,6 @@ void renderAlphaBlendedTextSprite(TextRenderArg *sprite) {
     }
 }
 
-// 92.38% https://decomp.me/scratch/7DiUN
 INCLUDE_ASM("asm/nonmatchings/graphics/sprite_rdp", func_800136E0_142E0);
 
 void loadSpriteTexture(s32 textureAddr, u16 width, u16 height, u16 format, s32 paletteMode) {

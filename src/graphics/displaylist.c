@@ -262,7 +262,6 @@ u16 findTrackSector(void *arg0, u16 sectorIndex, void *arg2) {
     return currentSector & 0xFFFF;
 }
 
-// 81.76% https://decomp.me/scratch/rRUTa
 INCLUDE_ASM("asm/nonmatchings/graphics/displaylist", func_80060CDC_618DC);
 
 s32 getTrackHeightAtPosition(void *trackGeom_void, u16 groupIdx, void *pos_void) {

@@ -1191,7 +1191,6 @@ s32 updatePlayerSlidingConstrained(Player *player) {
     return 0;
 }
 
-// 94.98% https://decomp.me/scratch/wGgfh
 INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B1544_A13F4);
 
 s32 updatePlayerGroundedSliding(Player *player) {
@@ -4775,7 +4774,6 @@ u8 getRumbleDuration(Player *player, s32 effectType) {
     return player->rumbleDuration;
 }
 
-// 91.61% https://decomp.me/scratch/4gkwY
 INCLUDE_ASM("asm/nonmatchings/race/race_main", updateAndRenderRaceCharacters);
 
 void handlePlayerPositionAndTrackCollision(Player *player) {
