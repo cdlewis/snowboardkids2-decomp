@@ -4,6 +4,7 @@
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
+#include "triggers/town_collision.h"
 
 extern u8 storyMapLocationIndex;
 
@@ -39,9 +40,22 @@ typedef struct {
 } StoryMapCameraState;
 
 void initStoryMapCamera(StoryMapCameraState *arg0);
-void func_800175E0_181E0(void);
+void func_800175E0_181E0(StoryMapCameraState *camera);
 void updateStoryMapCameraOrbit(StoryMapCameraState *arg0);
 void initStoryMapCameraAtLocation(StoryMapCameraState *arg0);
+void finalizeStoryMapExit(void);
+void startStoryMapCameraTravel(StoryMapCameraState *camera);
+void finalizeStoryMapCameraTravel(void);
+
+extern s8 gAnalogStickX[];
+extern s8 gAnalogStickY[];
+extern s32 gControllerInputs[];
+s32 checkTownNPCCollision(s32, s32, s32);
+void resolveTownNPCCollision(void *, Vec3i *, s32);
+void setStoryMapCameraMode(s32);
+s32 checkStoryMapLocationSelection(void *);
+void updateStoryMapDialogueTurn(void *);
+s32 __abs(s32 n);
 
 void storyMapCameraTask(void) {
     GameState *state = (GameState *)getCurrentAllocation();
@@ -133,8 +147,240 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
     }
 }
 
-// 95.55% https://decomp.me/scratch/mjSZ8
-INCLUDE_ASM("asm/nonmatchings/story/map_character_anim", func_800175E0_181E0);
+void func_800175E0_181E0(StoryMapCameraState *camera) {
+    Vec3i pos;
+    Vec3i savedPos;
+    Transform3D combinedMatrix;
+    GameState *state;
+    s32 collisionResult;
+    s32 i;
+    s32 distance;
+    s32 speedScale;
+    s32 moveX, moveZ;
+    s32 absMoveX;
+    s32 absMoveZ;
+    s16 temp3;
+    s16 absDiff;
+    s16 hDir, vDir;
+    s8 stickX, stickY;
+    u8 maxSpeed;
+    s32 walkSpeed;
+    u8 temp2;
+    s32 temp_v1;
+    s32 temp_a2;
+
+    state = (GameState *)getCurrentAllocation();
+    stickX = gAnalogStickX[0];
+    stickY = gAnalogStickY[0];
+
+    if ((ABS(stickX)) < 0x12 && (ABS(stickY)) < 0x12) {
+        maxSpeed = 0xF;
+        if (maxSpeed >= camera->unk5A && maxSpeed >= camera->unk5B) {
+            walkSpeed = 2;
+        } else {
+            walkSpeed = 4;
+        }
+    } else {
+        maxSpeed = 0x1F;
+        walkSpeed = 4;
+    }
+
+    memcpy(&savedPos, &camera->cameraX, sizeof(Vec3i));
+    memcpy(&pos, &savedPos, sizeof(Vec3i));
+    state->unk426 = 1;
+
+    if (stickX != 0 || stickY != 0) {
+        moveX = stickX;
+        moveZ = stickY;
+        state->animState = walkSpeed;
+        camera->targetAngle = (-atan2Fixed(moveX, moveZ)) & 0x1FFF;
+        moveX = -moveX;
+
+        if (moveX == 0) {
+            hDir = 0;
+        } else {
+            hDir = (moveX > 0) ? 1 : -1;
+        }
+
+        if (moveZ == 0) {
+            vDir = 0;
+        } else {
+            vDir = (moveZ > 0 ? 1 : -1);
+        }
+
+        moveX = (camera->unk5A * hDir) / 8 + hDir;
+        moveZ = (camera->unk5B * vDir) / 8 + vDir;
+
+        if (camera->unk5A < maxSpeed) {
+            camera->unk5A += __abs(hDir);
+        }
+        if (camera->unk5B < maxSpeed) {
+            camera->unk5B += __abs(vDir);
+        }
+
+        if (camera->unk5A >= maxSpeed) {
+            camera->unk5A -= ABS(hDir);
+        }
+        if (camera->unk5B >= maxSpeed) {
+            camera->unk5B -= ABS(vDir);
+        }
+
+        absMoveX = __abs(moveX);
+        absMoveZ = __abs(moveZ);
+        if (absMoveZ < absMoveX) {
+            state->unk426 = absMoveX;
+        } else {
+            state->unk426 = absMoveZ;
+        }
+
+        camera->orbitRadius = isqrt64((s64)pos.x * pos.x + (s64)pos.z * pos.z);
+
+        temp_v1 =
+            ((moveX * (savedPos.z >> 8)) / (camera->orbitRadius >> 8) +
+             (moveZ * (savedPos.x >> 8)) / (camera->orbitRadius >> 8));
+        pos.x += (temp_v1 << 16);
+        temp_v1 =
+            (((-moveX * (savedPos.x >> 8)) / (camera->orbitRadius >> 8)) +
+             (moveZ * (savedPos.z >> 8)) / (camera->orbitRadius >> 8));
+        pos.z += (temp_v1 << 16);
+
+        collisionResult = checkTownLamppostCollision(pos.x, pos.z, state->unk3FE);
+        if (collisionResult != 0) {
+            resolveTownLamppostCollision(&pos, state->unk3FE, collisionResult);
+            camera->orbitRadius = distance_2d(pos.x, pos.z);
+        }
+    } else {
+        camera->unk5A = 8;
+        camera->unk5B = 8;
+        state->animState = 0;
+    }
+
+    if ((isqrt64((s64)pos.x * pos.x + (s64)pos.z * pos.z) - 0x240000) > 0x640000U) {
+        if (stickX) {
+            memcpy(&savedPos, &camera->cameraX, sizeof(Vec3i));
+            memcpy(&pos, &savedPos, sizeof(Vec3i));
+
+            camera->orbitRadius = isqrt64((s64)pos.x * pos.x + (s64)pos.z * pos.z);
+
+            temp_v1 = ((moveX * (savedPos.z >> 8)) / (camera->orbitRadius >> 8));
+            pos.x += (temp_v1 << 16);
+            temp_v1 = ((-moveX * (savedPos.x >> 8)) / (camera->orbitRadius >> 8));
+            pos.z += (temp_v1 << 16);
+        } else {
+            memcpy(&pos, &camera->cameraX, sizeof(Vec3i));
+        }
+
+        camera->orbitAngle = atan2Fixed(pos.x, pos.z);
+        if ((camera->orbitRadius - 0x240000) > 0x640000U) {
+            if (camera->orbitRadius > 0x880000) {
+                speedScale = -0x860000;
+            } else {
+                speedScale = -0x260000;
+            }
+
+            pos.x = (approximateSin(camera->orbitAngle) * (speedScale >> 8) / 8192) << 8;
+            pos.z = (approximateCos(camera->orbitAngle) * (speedScale >> 8) / 8192) << 8;
+        }
+    }
+
+    for (i = 0; i < state->unk41C; i++) {
+        collisionResult = checkTownNPCCollision(pos.x, pos.z, i);
+        if (collisionResult) {
+            resolveTownNPCCollision(camera, &pos, collisionResult);
+            collisionResult = checkTownLamppostCollision(pos.x, pos.z, state->unk3FE);
+            if (collisionResult) {
+                resolveTownLamppostCollision(&pos, state->unk3FE, collisionResult);
+                camera->orbitRadius = distance_2d(pos.x, pos.z);
+            }
+        }
+    }
+
+    memcpy(&camera->cameraX, &pos, sizeof(Vec3i));
+    camera->orbitAngle = atan2Fixed(pos.x, pos.z);
+    camera->orbitRadius = isqrt64((s64)pos.x * pos.x + (s64)pos.z * pos.z);
+
+    if (camera->targetAngle != camera->viewAngle) {
+        absDiff = __abs(camera->targetAngle - camera->viewAngle);
+        if (absDiff > 0x1000) {
+            if (camera->targetAngle > camera->viewAngle) {
+                camera->viewAngle += 0x2000;
+            } else {
+                camera->targetAngle += 0x2000;
+            }
+        }
+
+        temp3 = (camera->targetAngle > camera->viewAngle) ? 1 : -1;
+
+        absDiff = __abs(camera->targetAngle - camera->viewAngle);
+        if (absDiff > 0xAAA) {
+            camera->viewAngle += 0x1000;
+            state->animState = 1;
+            state->unk404 = 1;
+        } else if (absDiff > 0x1A0) {
+            camera->viewAngle += temp3 * 0x1A0;
+        } else {
+            camera->viewAngle += absDiff * temp3;
+            camera->viewAngle &= 0x1FFF;
+            camera->targetAngle = camera->viewAngle;
+        }
+
+        createYRotationMatrix((Transform3D *)camera, (u16)camera->viewAngle & 0x1FFF);
+    }
+
+    createYRotationMatrix((Transform3D *)&camera->orientMatrix, (u16)camera->orbitAngle);
+    func_8006B084_6BC84((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, &combinedMatrix);
+
+    state->unk3EC = camera->cameraX;
+    state->unk3F0 = camera->cameraZ;
+    memcpy(&state->unk3B0, &combinedMatrix, sizeof(Transform3D));
+    memcpy(&state->unk3D0, &combinedMatrix.translation, sizeof(Vec3i));
+    state->unk3F8 = camera->orbitRadius;
+    state->unk3F4 = camera->orbitAngle;
+    state->unk3FC = camera->viewAngle & 0x1FFF;
+
+    {
+        s16 orbitAngle;
+        s32 lowThresh, highThresh;
+
+        orbitAngle = state->unk3F4;
+        if (camera->orbitRadius > 0x580000) {
+            lowThresh = 0xB00;
+            highThresh = 0x1500;
+        } else {
+            lowThresh = 0xD50;
+            highThresh = 0x12B0;
+        }
+
+        if ((lowThresh < orbitAngle && orbitAngle < 0x1000) || (!(orbitAngle < 0x1001) & (orbitAngle < highThresh))) {
+            setViewportFadeValue(NULL, 0xFF, 0x10);
+            if (camera->cameraX > 0) {
+                setStoryMapCameraMode(1);
+            } else {
+                setStoryMapCameraMode(2);
+            }
+            setCallback(&finalizeStoryMapExit);
+        }
+    }
+
+    if (state->locationDiscovered != 0 && (gControllerInputs[0] & A_BUTTON) && (state->discoveredLocationId < 0xA)) {
+        if (state->discoveredLocationId < 6) {
+            state->animState = 4;
+            setCallbackWithContinue(&startStoryMapCameraTravel);
+        } else {
+            setViewportFadeValue(NULL, 0xFF, 0x10);
+            setCallback(&finalizeStoryMapCameraTravel);
+        }
+    } else {
+        state->locationDiscovered = 0;
+        if (state->unk404 == 0) {
+            temp2 = checkStoryMapLocationSelection(camera);
+            if (temp2) {
+                state->unk42B = temp2 - 1;
+                setCallback(&updateStoryMapDialogueTurn);
+            }
+        }
+    }
+}
 
 typedef struct {
     u8 pad[0x3B0];

@@ -369,7 +369,7 @@ typedef struct {
     u8 cancelDialogue;
     u8 unk423;
     u8 locationDiscovered;
-    s8 discoveredLocationId;
+    u8 discoveredLocationId;
     u8 unk426;
     u8 unk427;
     u8 unk428;

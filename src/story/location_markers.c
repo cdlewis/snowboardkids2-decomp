@@ -157,7 +157,7 @@ void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *);
 void computeEncodedTextCenterPos(s16 *outX, s16 *outY, u16 *encodedText);
 void updateStoryMapDialogueTurn(void *arg0);
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *);
-void func_800175E0_181E0(void);
+void func_800175E0_181E0(void *);
 
 // Global variables and externs
 extern s32 gControllerInputs;
