@@ -9,6 +9,7 @@ BOOTSTRAP=false
 BOOTSTRAP_ONLY=false
 ID=""
 ARG=""
+CLI="claude"
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -19,6 +20,10 @@ while [[ $# -gt 0 ]]; do
         --bootstrap-only)
             BOOTSTRAP_ONLY=true
             BOOTSTRAP=true
+            shift
+            ;;
+        --glaude)
+            CLI="glaude"
             shift
             ;;
         --id)
@@ -169,9 +174,9 @@ if [ -n "$ID" ]; then
         echo "Directory already exists: $TARGET_DIR"
         if [ "$BOOTSTRAP_ONLY" = true ]; then
             echo "Bootstrap-only mode: directory ready at $TARGET_DIR"
-        elif command -v claude &> /dev/null; then
+        elif command -v $CLI &> /dev/null; then
             cd "$TARGET_DIR"
-            claude "decompile ${FUNC_NAME%.s}. the appropriate claude environment has already been created (do not re-run tools/claude --bootstrap). use ultrathink"
+            $CLI "decompile ${FUNC_NAME%.s}. the appropriate claude environment has already been created (do not re-run tools/claude --bootstrap). use ultrathink"
         else
             echo "Please navigate to: $TARGET_DIR"
         fi
@@ -267,9 +272,9 @@ ln -sf "$(pwd)/DECOMPILATION_LEARNINGS.md" "$created_dir/"
 
 if [ "$BOOTSTRAP_ONLY" = true ]; then
     echo "Bootstrap-only mode: environment ready at $created_dir"
-elif command -v claude &> /dev/null; then
+elif command -v $CLI &> /dev/null; then
     cd "$created_dir"
-    claude "decompile ${FUNC_NAME%.s}. the appropriate claude environment has already been created (do not re-run tools/claude --bootstrap). use ultrathink"
+    $CLI "decompile ${FUNC_NAME%.s}. the appropriate claude environment has already been created (do not re-run tools/claude --bootstrap). use ultrathink"
 else
     echo "Success! Please navigate to the created directory and start your decompilation work:"
     echo ""
