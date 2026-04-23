@@ -194,8 +194,10 @@ s32 grantInvincibilityWithSound(Player *player) {
 }
 
 extern void *getCurrentAllocation(void);
-extern s32 func_80059394_59F94(Player *);
+s32 func_80059394_59F94(Player *);
 extern u8 gAIPlayerParams[][0x11][0x4];
+extern u8 D_800BADE1[][0x11][0x4];
+extern u8 D_800BADE2[][0x11][0x4];
 s32 shouldUseSecondaryItem(Player *);
 extern s32 createWarpEffect(void *, void *, s16);
 extern s32 spawnAttackProjectile(s32, s32, s32);
@@ -437,8 +439,105 @@ void processPlayerItemUsage(Player *player) {
     }
 }
 
-// 91.63% https://decomp.me/scratch/OJwdP
-INCLUDE_ASM("asm/nonmatchings/race/hit_reactions", func_80059394_59F94);
+s32 func_80059394_59F94(Player *arg0) {
+    s32 var_s1;
+    Player *temp_s2;
+    GameState *temp_s6;
+    Player *var_s7;
+    s32 var_fp;
+    u32 temp;
+    s32 temp2;
+    Vec3i sp10;
+    u8 pad[2];
+    s32 temp_v0;
+    s32 var_a0;
+
+    var_s7 = NULL;
+    var_fp = 0;
+    temp_s6 = getCurrentAllocation();
+    if (arg0->inputDisabled == 0) {
+        if (arg0->primaryItemAmmo != 0) {
+            if (arg0->inputButtonsPressed & 0x2000) {
+                return (*(u16 *)&arg0->inputStickX) == 0xF9;
+            }
+        }
+        return -1;
+    }
+
+    if (arg0->primaryItemAmmo == 0) {
+        arg0->aiPrimaryItemUseTimer = 0x100;
+        return -1;
+    }
+
+    if (arg0->aiPrimaryItemUseTimer > D_800BADE1[arg0->speedPenaltyIndex][arg0->primaryItemId][0]) {
+        arg0->aiPrimaryItemUseTimer = D_800BADE1[arg0->speedPenaltyIndex][arg0->primaryItemId][0];
+        arg0->aiPrimaryItemUseTimer -= (randA() * D_800BADE1[arg0->speedPenaltyIndex][0][0]) / 255;
+    }
+    var_a0 = 0x05000000;
+    if (arg0->aiPrimaryItemUseTimer <= 0) {
+        temp_v0 = temp_s6->numPlayers;
+        var_s1 = 0;
+        if (temp_v0 > 0) {
+            do {
+                temp_s2 = &temp_s6->players[var_s1];
+                if (temp_s2->playerIndex != arg0->playerIndex) {
+                    sp10.x = temp_s2->worldPos.x - arg0->worldPos.x;
+                    sp10.z = temp_s2->worldPos.z - arg0->worldPos.z;
+                    temp = (((s32 (*)(s32, s32))atan2Fixed)(-sp10.x, -sp10.z) - (u16)arg0->rotY) & 0x1FFF;
+                    if ((temp - 0x200) > 0x1C00) {
+                        if (((u32)(sp10.x + 0x4FFFFFF) < 0x9FFFFFFU) && ((u32)(sp10.z + 0x4FFFFFF) < 0x9FFFFFFU)) {
+                            temp2 = distance_2d(sp10.x, sp10.z);
+                            if ((((arg0->primaryItemId == 3) | (arg0->primaryItemId == 5)) != 0) &&
+                                (temp2 <= 0x9FFFFF)) {
+                                temp2 = 0x05000000;
+                            }
+                            if (temp2 < var_a0) {
+                                var_s7 = temp_s2;
+                                var_fp = 0;
+                            }
+                        }
+                    } else if ((arg0->primaryItemId == 5) && (temp - 0xE01) < 0x3FF &&
+                               ((u32)(sp10.x + 0x4FFFFFF) < 0x9FFFFFFU) && ((u32)(sp10.z + 0x4FFFFFF) < 0x9FFFFFFU)) {
+                        temp2 = distance_2d(sp10.x, sp10.z);
+                        if (temp2 < var_a0) {
+                            var_s7 = temp_s2;
+                            var_fp = 1;
+                        }
+                    }
+                }
+                var_s1++;
+            } while (var_s1 < temp_s6->numPlayers);
+        }
+        arg0->aiPrimaryItemUseTimer = D_800BADE1[arg0->speedPenaltyIndex][arg0->primaryItemId][0];
+        arg0->aiPrimaryItemUseTimer -= (randA() * (D_800BADE1[arg0->speedPenaltyIndex][0][0])) / 255;
+        if (var_s7 == NULL) {
+            return -1;
+        }
+        if (randA() >= gAIPlayerParams[arg0->speedPenaltyIndex][arg0->primaryItemId][0]) {
+            return -1;
+        }
+        if (var_s7->isBossRacer == 0) {
+            return var_fp;
+        }
+        if (randA() >= D_800BADE2[arg0->speedPenaltyIndex][arg0->primaryItemId][0]) {
+            return -1;
+        }
+        var_s1 = arg0->finishPosition;
+        if (var_s1 >= 0) {
+            for (; var_s1 >= 0; var_s1--) {
+                if ((temp_s6->PAD_6B_2[var_s1] + (temp_s6->players))->isBossRacer == 0) {
+                    break;
+                }
+            }
+            if (var_s1 >= 0) {
+                return -1;
+            }
+        }
+        return var_fp;
+    }
+    arg0->aiPrimaryItemUseTimer--;
+    return -1;
+}
 
 s32 shouldUseSecondaryItem(Player *player) {
     GameState *gs;
