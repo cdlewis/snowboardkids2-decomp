@@ -48,23 +48,14 @@ After base.c builds successfully, repeat the following steps:
 
 ### Struct Field Access
 
-<critical>
-NEVER USE POINTER CASTS OR OFFSET ARITHMETIC. This is the #1 rule. Violating it means automatic failure.
+Always prefer struct field or array accesses over pointer arithmatic.
 
-Forbidden patterns:
+Common mistakes:
 - `return *(u8 *)(arg0 + 0xC1);`
 - `*(s32*)((u8*)arg0 + 0x34) = value;`
 - `*((s16*)ptr + 2);`
 
-If you need to cast between pointer types, STOP — fix the struct layout instead.
-If you need to cast a pointer to an integer type (e.g. `(s32)ptr`), STOP — check if the struct has a suitable field you can use directly.
-</critical>
-
-**Correct approach when assembly accesses an offset:**
-1. Identify the exact offset being accessed
-2. Check if a field exists at that offset in the struct definition
-3. If the field doesn't exist, update the struct definition: add the proper field, adjust padding arrays, and verify all `/* 0xNN */` offset comments remain accurate
-4. Write the C code using the proper field name
+Instead, check if a field exists at that offset in the struct definition that you could use. If the field doesn't exist, update the struct definition: add the proper field, adjust padding arrays, and verify all `/* 0xNN */` offset comments remain accurate
 
 ### Style
 - Use `for` loops over `do` or `while` loops.
