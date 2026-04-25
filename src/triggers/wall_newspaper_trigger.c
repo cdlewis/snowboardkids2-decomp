@@ -41,8 +41,6 @@ void checkNewspaperLocationDiscovery(LocationDiscoveryTrigger *trigger) {
         if (normalizedYaw < minAngle) {
             maxAngle = ((s16 *)storyMapAngleBounds)[(locationId * 2) + 1];
             if (normalizedYaw > maxAngle) {
-                // Note: xDist is computed but the result is not used
-                u32 xDist = gameState->unk3FC - 0xC01;
                 gameState->locationDiscovered = 1;
                 gameState->discoveredLocationId = trigger->locationId;
             }
