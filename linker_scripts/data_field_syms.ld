@@ -4,7 +4,7 @@
 /* charSelectIconPositions struct (base: 0x8008DD6C) */
 charSelectIconYIncrements = 0x8008DD72;
 
-/* D_8008DD8C_8E98C struct (base: 0x8008DD8C) */
+/* charSelectItemData struct (base: 0x8008DD8C) */
 D_8008DD8D_8E98D = 0x8008DD8D;
 D_8008DD8E_8E98E = 0x8008DD8E;
 D_8008DDBE_8E9BE = 0x8008DDBE;

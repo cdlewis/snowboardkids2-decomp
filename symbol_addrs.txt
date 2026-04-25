@@ -43,7 +43,7 @@ sStoryMapNpcDialogueTable = 0x8008E818; // rom:0x8F418
 
 D_8008DEAC_8EAAC = 0x8008DEAC; // size:0x24
 D_8008DE64_8EA64 = 0x8008DE64; // size:0x38
-D_8008DD8C_8E98C = 0x8008DD8C; // size:0x32
+charSelectItemData = 0x8008DD8C; // size:0x32
 D_8008DD2C_8E92C = 0x8008DD2C; // size:0x24
 
 storyMapAngleBounds = 0x8008D6C4; // rom:0x8E2C4 size:0x28

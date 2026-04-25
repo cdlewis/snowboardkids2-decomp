@@ -1082,7 +1082,7 @@ void updateCharSelectIconsDelay(CharSelectIconsState *arg0) {
     }
 }
 
-extern u8 D_8008DD8C_8E98C[];
+extern u8 charSelectItemData[];
 extern u8 D_8008DDEC_8E9EC[];
 
 void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
@@ -1107,7 +1107,7 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
         charIndex = ptr[0x18A8];
         paletteIndex = ptr[0x18B0];
         // Each character has 3 board options (palette 0-2), with 3 items each
-        itemIconIndex = D_8008DD8C_8E98C[(((u8)(paletteIndex + charIndex * 3)) * 3) + i];
+        itemIconIndex = charSelectItemData[(((u8)(paletteIndex + charIndex * 3)) * 3) + i];
         targetY = *(s16 *)(D_8008DDEC_8E9EC + itemIconIndex * 2 + 22);
 
         entry = &arg0->entries[i];
@@ -1161,7 +1161,7 @@ void updateCharSelectIconTargets(CharSelectIconTargetState *arg0) {
     do {
         charIndex = state->unk18A8[arg0->playerIndex];
         paletteIndex = state->unk18B0[arg0->playerIndex];
-        tableIndex = D_8008DD8C_8E98C[((u8)(paletteIndex + charIndex * 3)) * 3 + i];
+        tableIndex = charSelectItemData[((u8)(paletteIndex + charIndex * 3)) * 3 + i];
         entry = &arg0->entries[i];
         entry->currentY = *(s16 *)(D_8008DDEC_8E9EC + tableIndex * 2 + 22);
         debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010C98_11898, entry);
@@ -1175,7 +1175,7 @@ void cleanupCharSelectIcons(SimpleSpriteEntry *arg0) {
 
 // Initialize character select item icon sprites for display/hide animation
 // Sets up 3 item icons per character, positioned based on player count
-void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
+void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
     void *spriteAsset;
     u8 numPlayers;
     s32 i;
@@ -1184,7 +1184,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
     u16 y;
     s32 yIncrement;
     volatile P2NameSpriteEntry *entry;
-    u8 *iconMappingTable;
+    u8 *itemIconTable;
     s32 pad[4];
 
     (void)pad;
@@ -1202,31 +1202,31 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *arg0) {
     i = 0;
     do {
     } while (0);
-    yIncrement = *(s16 *)((u8 *)&charSelectIconPositions[numPlayers] + 6);
-    iconMappingTable = D_8008DD8C_8E98C;
+    yIncrement = *(s16 *)((u8 *)&charSelectIconPositions[numPlayers] + sizeof(Vec3s));
+    itemIconTable = charSelectItemData;
     y = charSelectIconPositions[numPlayers].z;
-    entry = (volatile P2NameSpriteEntry *)arg0->entries;
+    entry = (volatile P2NameSpriteEntry *)state->entries;
 
     do {
-        GameSessionContext *global;
+        GameSessionContext *session;
         u8 charIndex;
         u8 tableValue;
         s32 tableOffset;
 
-        global = D_800AFE8C_A71FC;
+        session = D_800AFE8C_A71FC;
         entry->x = x;
         entry->y = y;
 
-        charIndex = ((u8 *)global + arg0->playerIndex)[0xD];
+        charIndex = session->playerBoardIds[4 + state->playerIndex];
         tableOffset = charIndex * 3 + i;
-        tableValue = *(u8 *)(tableOffset + (s32)iconMappingTable);
+        tableValue = *(u8 *)(tableOffset + (s32)itemIconTable);
 
         entry->spriteIndex = iconBaseIndex + (tableValue - 1) / 2;
 
-        global = D_800AFE8C_A71FC;
-        charIndex = ((u8 *)global + arg0->playerIndex)[0xD];
+        session = D_800AFE8C_A71FC;
+        charIndex = session->playerBoardIds[4 + state->playerIndex];
         tableOffset = charIndex * 3 + i;
-        tableValue = *(u8 *)(tableOffset + (s32)iconMappingTable);
+        tableValue = *(u8 *)(tableOffset + (s32)itemIconTable);
 
         y += yIncrement;
         i += 1;
@@ -1317,7 +1317,7 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
 
         charIndex = state->unk18A8[arg0->playerIndex];
         i = 0;
-        itemIconTable = D_8008DD8C_8E98C;
+        itemIconTable = charSelectItemData;
         paletteIndex = state->unk18B0[arg0->playerIndex];
         // Calculate offset into item icon table:
         // Each character has 3 board options (palette 0-2), and 3 items per option
@@ -1357,7 +1357,7 @@ void showCharSelectIcons(CharSelectIconHideState *arg0) {
 
     charIndex = state->unk18A8[arg0->playerIndex];
     i = 0;
-    tableBase = D_8008DD8C_8E98C;
+    tableBase = charSelectItemData;
     paletteIndex = state->unk18B0[arg0->playerIndex];
     entry = arg0->entries;
     tableOffset = ((u8)(paletteIndex + charIndex * 3)) * 3;
@@ -1556,9 +1556,9 @@ void initCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
 
     i = 0;
     index = D_800AFE8C_A71FC->numPlayers;
-    x = *(u16 *)(D_8008DD8C_8E98C + index * 6 + 50);
-    increment = *(s16 *)(D_8008DD8C_8E98C + index * 6 + 54);
-    y = *(u16 *)(D_8008DD8C_8E98C + index * 6 + 52);
+    x = *(u16 *)(charSelectItemData + index * 6 + 50);
+    increment = *(s16 *)(charSelectItemData + index * 6 + 54);
+    y = *(u16 *)(charSelectItemData + index * 6 + 52);
 
     do {
         arg0[i].y = y;
@@ -2393,7 +2393,7 @@ void updateCharSelectStats(CharSelectStatsState *arg0) {
         tableOffset = tableBase * 3;
 
         for (; i < 3; i++) {
-            sprintf(arg0->charBufs[i], "%2d", D_8008DD8C_8E98C[tableOffset + i]);
+            sprintf(arg0->charBufs[i], "%2d", charSelectItemData[tableOffset + i]);
             if (D_800AFE8C_A71FC->numPlayers == 1) {
                 for (j = 0; j < 2; j++) {
                     charByte = arg0->charBufs[i][j];
@@ -2504,13 +2504,13 @@ void updateCharSelectPreviewLighting(CharSelectPreviewModel *arg0, u8 arg1) {
 }
 
 u8 getItemStat1(u8 itemIndex) {
-    return D_8008DD8C_8E98C[itemIndex * 3];
+    return charSelectItemData[itemIndex * 3];
 }
 
 u8 getItemStat2(u8 itemIndex) {
-    return D_8008DD8C_8E98C[itemIndex * 3 + 1];
+    return charSelectItemData[itemIndex * 3 + 1];
 }
 
 u8 getItemStat3(u8 itemIndex) {
-    return D_8008DD8C_8E98C[itemIndex * 3 + 2];
+    return charSelectItemData[itemIndex * 3 + 2];
 }
