@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ui/level_preview_3d.h"
 #include "common.h"
-#include "graphics/graphics.h"
 #include "core/main.h"
+#include "graphics/graphics.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct {
     u8 r;
@@ -116,12 +116,17 @@ typedef struct {
 } StateEntryItem;
 
 typedef struct {
+    s32 header[3];
+    u8 data[0x2C];
+} ScriptData;
+
+typedef struct {
     u8 pad[0x210];
     s32 renderFlags;
 } Func8000C268Arg;
 
 typedef struct {
-    u8 scriptData[0xC];
+    s32 header[3];
     /* 0xC */ u16 current_index;
     u8 padding[0x2];
     /* 0x10 */ u16 allocatedEventCount;
@@ -256,7 +261,8 @@ typedef struct {
 
 typedef struct CutsceneManager {
     /* 0x0 */ ViewportNode *uiResource;
-    /* 0x4 */ s8 pad4[0x8];
+    /* 0x4 */ ColorData *lightColors;
+    /* 0x8 */ ColorData *ambientColor;
     /* 0xC */ void *sceneContext;
     union {
         /* 0x10 */ setModelRenderMode_arg renderModeArg;
@@ -268,8 +274,10 @@ typedef struct CutsceneManager {
     /* 0x9E */ s8 pad9E[0x2];
     /* 0xA0 */ s8 debugText[0x8];
     /* 0xA8 */ CutsceneSlot slots[16];
-    /* 0xFE8 */ void *textRenderer;
-    /* 0xFEC */ s8 padFEC[0x8];
+    /* 0xFE8 */ s16 textX;
+    /* 0xFEA */ s16 textY;
+    /* 0xFEC */ u16 textPalette;
+    /* 0xFF0 */ u8 *textString;
     /* 0xFF4 */ s8 showDebugInfo;
     /* 0xFF5 */ s8 enableTransparency;
     /* 0xFF6 */ s8 unused_FF6;
@@ -294,9 +302,9 @@ void resetAllSlotModels(CutsceneSlot *slots);
 void resetAllSlotTransforms(CutsceneManager *manager);
 void prepareCutsceneForPlayback(
     CutsceneManager *manager,
-    s32 uiResource,
-    s32 pad4_0,
-    s32 pad4_4,
+    ViewportNode *uiResource,
+    ColorData *lightColors,
+    ColorData *ambientColor,
     u16 maxFrame,
     u8 showDebugInfo
 );

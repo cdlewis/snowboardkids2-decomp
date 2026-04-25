@@ -22,6 +22,65 @@ typedef struct {
     s32 unk2E0;
 } InitCutsceneManager_slot16;
 
+typedef struct {
+    u8 _pad0[0x4];
+    s32 unk4;
+    s32 unk8;
+} SaveDataBuffer;
+
+typedef struct {
+    void *start;
+    void *end;
+    u32 size;
+    s8 fadeType;
+} CutsceneFadeAsset;
+
+typedef struct {
+    s16 flags;
+    s16 y;
+    void *assetData;
+    s16 slotIndex;
+    s16 scaleY;
+    s16 scaleX;
+    s16 rotation;
+    s16 alpha;
+    u8 r;
+    u8 g;
+    u8 b;
+} FadeSprite;
+
+typedef struct {
+    s8 state;
+    s8 slotIndex;
+    s16 duration;
+    s32 unk4;
+    void *assetData;
+    FadeSprite sprites[6];
+    FadeSprite centerSprite;
+    FadeSprite bottomSprite;
+    u8 unkCC[0x18];
+    s16 fadeAlpha;
+} FadeTaskData2;
+
+typedef struct {
+    s8 state;
+    s8 slotIndex;
+    s16 duration;
+    s16 unk4;
+    u16 unk6;
+    void *unk8;
+    u8 sprites[0x90];
+    u8 centerSprite[0x18];
+    u8 bottomSprite[0x18];
+    u8 unkCC[0x18];
+    s16 fadeAlpha;
+} FadeTaskData;
+
+typedef struct {
+    u8 padding[0x8];
+    void *assetData;
+} CutsceneFadeCleanupArgs;
+
 extern StateEntry *gCutsceneStateTable;
 extern s32 gCutsceneStateTableSize;
 extern StateEntry *gControllerPakTransferPointer;
@@ -38,6 +97,9 @@ extern char gDebugFrameFormatString[];
 extern CutsceneAssetTable gCutsceneAssetTable[];
 
 extern void initializeCutsceneCommand(void *, void *, s32, s32, s32);
+
+void cleanupCutsceneFadeTask(CutsceneFadeCleanupArgs *args);
+void updateCutsceneFadeTask(FadeTaskData *task);
 
 void enableCutsceneSkip(CutsceneManager *arg0) {
     arg0->skipAnimation = TRUE;
@@ -158,9 +220,7 @@ void resetAllSlotTransforms(CutsceneManager *manager) {
     s32 i;
     SceneModel *model;
 
-    i = 0;
-
-    while (i < getCutsceneSlotCount()) {
+    for (i = 0; i < getCutsceneSlotCount(); i++) {
         getCurrentStateEntryItem(i);
         model = manager->slots[i].model;
 
@@ -173,16 +233,14 @@ void resetAllSlotTransforms(CutsceneManager *manager) {
             setupSlotTransform(slotData);
             applyTransformToModel(model, &slotData->transform);
         }
-
-        i++;
     }
 }
 
 void prepareCutsceneForPlayback(
     CutsceneManager *manager,
-    s32 uiResource,
-    s32 pad4_0,
-    s32 pad4_4,
+    ViewportNode *uiResource,
+    ColorData *lightColors,
+    ColorData *ambientColor,
     u16 maxFrame,
     u8 showDebugInfo
 ) {
@@ -190,14 +248,14 @@ void prepareCutsceneForPlayback(
     s32 i;
     u16 modelId;
 
-    i = 0;
-    *(s32 *)&manager->uiResource = uiResource;
-    *(s32 *)&manager->pad4[0] = pad4_0;
-    *(s32 *)&manager->pad4[4] = pad4_4;
+    manager->uiResource = uiResource;
+    manager->lightColors = lightColors;
+    manager->ambientColor = ambientColor;
     manager->currentFrame = 0;
     manager->maxFrame = maxFrame;
     manager->endFrame = getCutsceneDefaultEndFrame();
-    do {
+
+    for (i = 0; i < 0x10; i++) {
         modelId = getCurrentStateEntryItem(i)->characterId;
         model = manager->slots[i].model;
         manager->slots[i].unk42 = 0xFF;
@@ -213,12 +271,12 @@ void prepareCutsceneForPlayback(
             setAnimationIndex(manager->slots[i].model, -1);
             clearModelAnimationState(manager->slots[i].model);
         }
-        i += 1;
-    } while (i < 0x10);
-    *(s16 *)&manager->textRenderer = -0x90;
-    *((s16 *)&manager->textRenderer + 1) = 0x68;
-    *(s16 *)&manager->padFEC[0] = 0;
-    *(s32 *)&manager->padFEC[4] = (s32)&manager->debugText[0];
+    }
+
+    manager->textX = -0x90;
+    manager->textY = 0x68;
+    manager->textPalette = 0;
+    manager->textString = (u8 *)&manager->debugText[0];
     manager->showDebugInfo = showDebugInfo;
     manager->enableTransparency = 0;
     manager->skipAnimation = 0;
@@ -243,12 +301,7 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
 
     if (cutsceneManager->showDebugInfo) {
         sprintf((char *)cutsceneManager->debugText, gDebugFrameFormatString, cutsceneManager->currentFrame);
-        debugEnqueueCallback(
-            cutsceneManager->uiResource->slot_index,
-            6,
-            &renderTextPalette,
-            &cutsceneManager->textRenderer
-        );
+        debugEnqueueCallback(cutsceneManager->uiResource->slot_index, 6, &renderTextPalette, &cutsceneManager->textX);
     }
 
     while (cutsceneManager->currentFrame <= cutsceneManager->maxFrame && !cutsceneManager->skipAnimation) {
@@ -334,7 +387,9 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
 s16 getCutsceneFrameCount(s16 slotIndex, s16 cutsceneType) {
     s16 masked;
     s16 result;
+
     masked = -1;
+
     if ((((((((((((cutsceneType & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & masked) &
              0xFFFFFFFFu) &
             0xFFFFFFFFu) &
@@ -343,26 +398,30 @@ s16 getCutsceneFrameCount(s16 slotIndex, s16 cutsceneType) {
          0xFFFFFFFFu) >= ((u64)3)) {
         return 0;
     }
+
     if (slotIndex >= 0x10) {
         return 0;
     }
+
     if (cutsceneType == 0) {
         result = gCutsceneAssetTable[slotIndex].introFrameCount;
     } else if (cutsceneType == 1) {
         result = gCutsceneAssetTable[slotIndex].winFrameCount;
     }
+
     if (cutsceneType == 2) {
         result = gCutsceneAssetTable[slotIndex].loseFrameCount;
     }
+
     return result;
 }
 
 void *getCutsceneDataMagicPrimary(void) {
-    return &gCutsceneStateTable->scriptData[4];
+    return &gCutsceneStateTable->header[1];
 }
 
 void *getCutsceneDataMagicSecondary(void) {
-    return &gCutsceneStateTable->scriptData[8];
+    return &gCutsceneStateTable->header[2];
 }
 
 u16 getCutsceneAllocatedEventCount(void) {
@@ -427,7 +486,6 @@ void *loadCutsceneFrameData(s16 slotIndex, s16 cutsceneType, s16 frameIndex) {
     s16 cutsceneTypeClamped;
     CutsceneFrameInfo *frameInfo;
     CutsceneAssetTable *assetEntry;
-    s32 tableOffset;
 
     frameInfo = NULL;
 
@@ -441,7 +499,6 @@ void *loadCutsceneFrameData(s16 slotIndex, s16 cutsceneType, s16 frameIndex) {
         return NULL;
     }
 
-    tableOffset = slotIndex * 0x18;
     assetEntry = &gCutsceneAssetTable[slotIndex];
 
     if (cutsceneTypeClamped == 0) {
@@ -469,21 +526,17 @@ void *loadCutsceneFrameData(s16 slotIndex, s16 cutsceneType, s16 frameIndex) {
 
 s32 verifyAndLoadCutsceneState(void *stateBuffer) {
     s32 success;
-    s32 *globalState;
     s32 *inputState;
 
     inputState = (s32 *)stateBuffer;
-    globalState = (s32 *)gCutsceneStateTable;
 
     success = 1;
 
-    // Verify magic values at offsets 0x4 and 0x8 before loading state
-    // These are part of the "EDDAT001" signature (0x45='E' at offset 4, 0x30='0' at offset 8)
-    if (globalState[1] != inputState[1]) {
+    if (gCutsceneStateTable->header[1] != inputState[1]) {
         goto skip_copy;
     }
 
-    if (globalState[2] != inputState[2]) {
+    if (gCutsceneStateTable->header[2] != inputState[2]) {
         goto skip_copy;
     }
 
@@ -506,12 +559,6 @@ void saveCutsceneStateTableToControllerPak(void) {
     gControllerPakStateTablePointer = gCutsceneStateTable;
     ((void (*)(s32, StateEntry **))controllerPackWriteAsyncStub)(0, ptr);
     do { } while (controllerPackWritePollStub() == -1); }
-
-typedef struct {
-    u8 _pad0[0x4];
-    s32 unk4;
-    s32 unk8;
-} SaveDataBuffer;
 
 s32 loadCutsceneStateTableFromControllerPak(void) {
     SaveDataBuffer *buffer;
@@ -560,7 +607,7 @@ void resetScriptState(u8 *arg0) {
 void initializeStateEntry(s32 arg0) {
     StateEntry *temp;
 
-    resetScriptState(gCutsceneStateTable[arg0 + 3].scriptData);
+    resetScriptState((u8 *)(ScriptData *)&gCutsceneStateTable[arg0 + 3]);
 
     temp = (gCutsceneStateTable + arg0 + 3);
     temp->frameNumber = 0;
@@ -581,7 +628,8 @@ void initializeCutsceneSystem(void *romAssetAddr) {
     s32 negOne;
     u16 invalidIdx;
 
-    // Allocate cutscene state table (480 StateEntry structs × 64 bytes = 0x7800, plus 0xE0 byte header = 0x78E0 total)
+    // Allocate cutscene state table (480 StateEntry structs × 64 bytes = 0x7800, plus 0xE0 byte header = 0x78E0
+    // total)
     gCutsceneStateTableSize = 0x78E0;
     gCutsceneStateTable = allocateNodeMemory(0x78E0);
 
@@ -605,25 +653,24 @@ void initializeCutsceneSystem(void *romAssetAddr) {
         slotIdx = next;
     } while (next < 0x1E0); // Initialize 480 entries (0x1E0)
 
-    // Set up magic signature "EDDAT001" in scriptData (used for save data validation)
-    // The magic is stored in the first 12 bytes of gCutsceneStateTable[0].scriptData
+    // Set up magic signature "EDAT0001" (used for save data validation)
     {
         StateEntry *firstEntry = gCutsceneStateTable;
         StateEntry *firstEntry2;
-        firstEntry->scriptData[4] = 0x45; // Magic[4] = 'E'
+        ((u8 *)firstEntry->header)[4] = 0x45; // 'E'
         firstEntry2 = gCutsceneStateTable;
         *(u16 *)((u8 *)firstEntry + 0xFA) = 0xFFFF;   // entry[0].prev_index = invalid (list head)
         *(u16 *)((u8 *)firstEntry + 0x78B8) = 0xFFFF; // entry[479].prev_index = invalid (list tail)
-        *(s32 *)firstEntry->scriptData = 0;           // Magic[0-3] = 0 (part of "EDDAT001")
-        firstEntry2->scriptData[5] = 0x44;            // 'D'
+        firstEntry->header[0] = 0;                    // Magic[0-3] = 0
+        ((u8 *)firstEntry2->header)[5] = 0x44;        // 'D'
     }
-    gCutsceneStateTable->scriptData[6] = 0x41;  // Magic[6] = 'A'
-    gCutsceneStateTable->scriptData[7] = 0x54;  // Magic[7] = 'T'
-    gCutsceneStateTable->scriptData[8] = 0x30;  // Magic[8] = '0'
-    gCutsceneStateTable->scriptData[9] = 0x30;  // Magic[9] = '0'
-    gCutsceneStateTable->scriptData[10] = 0x30; // Magic[10] = '0'
+    ((u8 *)gCutsceneStateTable->header)[6] = 0x41;  // 'A'
+    ((u8 *)gCutsceneStateTable->header)[7] = 0x54;  // 'T'
+    ((u8 *)gCutsceneStateTable->header)[8] = 0x30;  // '0'
+    ((u8 *)gCutsceneStateTable->header)[9] = 0x30;  // '0'
+    ((u8 *)gCutsceneStateTable->header)[10] = 0x30; // '0'
     slotIdx = 0;
-    gCutsceneStateTable->scriptData[11] = 0x31; // Magic[11] = '1'
+    ((u8 *)gCutsceneStateTable->header)[11] = 0x31; // '1'
 
     // Initialize state table header fields (stored in gCutsceneStateTable[0])
     {
@@ -1014,7 +1061,7 @@ StateEntry *getCutsceneStateTable(void) {
 }
 
 u8 *getCutsceneStateTableLastBytePtr(void) {
-    return &gCutsceneStateTable->scriptData[gCutsceneStateTableSize] - 1;
+    return (u8 *)gCutsceneStateTable + gCutsceneStateTableSize - 1;
 }
 
 u16 getCutEntryBufferSlotIndex(u16 defaultSlotIndex) {
@@ -1187,7 +1234,7 @@ void pasteCutsceneEntryToSlot(u8 slotIndex, u16 frameNumber) {
         dest = getStateEntry(eventIndex);
         // Copy the data portion (0x38 bytes = everything before linked list pointers)
         for (i = 0; i < 0x38; i++) {
-            dest->scriptData[i] = srcEntry->scriptData[i];
+            ((u8 *)(ScriptData *)dest)[i] = ((u8 *)(ScriptData *)srcEntry)[i];
         }
 
         dest->commandCategory = srcEntry->commandCategory;
@@ -1246,47 +1293,6 @@ void startCutsceneFadeEffect(s32 arg0, s8 slotIndex, s16 duration) {
         task->fadeAlpha = 0xFF;
     }
 }
-
-typedef struct {
-    void *start;
-    void *end;
-    u32 size;
-    s8 fadeType;
-} CutsceneFadeAsset;
-
-typedef struct {
-    s16 flags;
-    s16 y;
-    void *assetData;
-    s16 slotIndex;
-    s16 scaleY;
-    s16 scaleX;
-    s16 rotation;
-    s16 alpha;
-    u8 r;
-    u8 g;
-    u8 b;
-} FadeSprite;
-
-typedef struct {
-    s8 state;
-    s8 slotIndex;
-    s16 duration;
-    s32 unk4;
-    void *assetData;
-    FadeSprite sprites[6];
-    FadeSprite centerSprite;
-    FadeSprite bottomSprite;
-    u8 unkCC[0x18];
-    s16 fadeAlpha;
-} FadeTaskData2;
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-non-prototype"
-#pragma clang diagnostic ignored "-Wstrict-prototypes"
-extern void updateCutsceneFadeTask();
-extern void cleanupCutsceneFadeTask();
-#pragma clang diagnostic pop
 
 void initCutsceneFadeTask(void *varg0) {
     FadeTaskData2 *task = (FadeTaskData2 *)varg0;
@@ -1356,20 +1362,6 @@ void initCutsceneFadeTask(void *varg0) {
     setCallback((void (*)(void *))updateCutsceneFadeTask);
 }
 
-typedef struct {
-    s8 state;
-    s8 slotIndex;
-    s16 duration;
-    s16 unk4;
-    u16 unk6;
-    void *unk8;
-    u8 sprites[0x90];
-    u8 centerSprite[0x18];
-    u8 bottomSprite[0x18];
-    u8 unkCC[0x18];
-    s16 fadeAlpha;
-} FadeTaskData;
-
 void updateCutsceneFadeTask(FadeTaskData *task) {
     CutsceneFadeAsset *node;
     s32 offset;
@@ -1426,10 +1418,6 @@ void updateCutsceneFadeTask(FadeTaskData *task) {
     } while (i < 6);
 }
 
-typedef struct {
-    u8 padding[0x8];
-    void *assetData;
-} CutsceneFadeCleanupArgs;
 void cleanupCutsceneFadeTask(CutsceneFadeCleanupArgs *args) {
     freeNodeMemory(args->assetData);
 }
