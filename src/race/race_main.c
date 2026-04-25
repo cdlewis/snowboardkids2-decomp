@@ -954,25 +954,25 @@ s32 initPlayerForRace(Player *player) {
     memcpy(&player->tiltTransform, &identityMatrix, 0x20);
 
     /* Set initial X position based on player index */
-    *(s32 *)((u8 *)player + 0x434) = gPlayerStartXPositions[player->playerIndex];
+    player->worldPos.x = gPlayerStartXPositions[player->playerIndex];
     if (gameState->numPlayers == 1) {
-        *(s32 *)((u8 *)player + 0x434) = 0;
+        player->worldPos.x = 0;
     }
 
     /* Get track waypoints and sector info */
     getTrackSegmentWaypoints((TrackGeometryData *)&gameState->gameData, 0, &waypoint1, &waypoint2);
-    posPtr = (s32 *)((u8 *)player + 0x434);
-    *(s32 *)((u8 *)player + 0x43C) = waypoint1.z + 0x200000;
+    posPtr = (s32 *)&player->worldPos;
+    player->worldPos.z = waypoint1.z + 0x200000;
 
     sectorIdx = getOrUpdatePlayerSectorIndex(player, &gameState->gameData, 0, posPtr);
     player->sectorIndex = sectorIdx;
-    *(s32 *)((u8 *)player + 0x438) = getTrackHeightInSector(&gameState->gameData, sectorIdx, posPtr, 0x100000);
+    player->worldPos.y = getTrackHeightInSector(&gameState->gameData, sectorIdx, posPtr, 0x100000);
 
-    memcpy((u8 *)player + 0x440, posPtr, 0xC);
+    memcpy(&player->prevWorldPosX, posPtr, 0xC);
 
-    *(s32 *)((u8 *)player + 0x44C) = 0;
-    *(s32 *)((u8 *)player + 0x450) = 0;
-    *(s32 *)((u8 *)player + 0x454) = 0;
+    player->velocity.x = 0;
+    player->velocity.y = 0;
+    player->velocity.z = 0;
     player->rotY = 0x1000;
     player->animFlags |= 1;
 
@@ -983,32 +983,27 @@ s32 initPlayerForRace(Player *player) {
         elem = (u8 *)player + i * 0x3C;
         memcpy(elem + 0x38, &identityMatrix, 0x20);
         if (i != 16) {
-            *(s32 *)(elem + 0x5C) = *(s32 *)((u8 *)player + 4);
-            *(s32 *)(elem + 0x60) = *(s32 *)((u8 *)player + 8);
+            *(s32 *)(elem + 0x5C) = *(s32 *)&player->unk4;
+            *(s32 *)(elem + 0x60) = *(s32 *)&player->unk8;
             *(s32 *)(elem + 0x64) = 0;
             assetOffset = i * 0x10;
             *(void **)(elem + 0x58) =
                 (void *)(loadAssetByIndex_953B0(player->characterId, player->boardIndex) + assetOffset);
         } else {
-            *(AssetMeta **)((u8 *)player + 0x418) = &D_8009A550_9B150[0];
-            *(s32 *)((u8 *)player + 0x41C) = *(s32 *)((u8 *)player + 0xC);
-            *(s32 *)((u8 *)player + 0x420) = *(s32 *)((u8 *)player + 0x10);
-            *(s32 *)((u8 *)player + 0x424) = *(s32 *)((u8 *)player + 0x14);
+            player->unk418 = &D_8009A550_9B150[0];
+            player->unk41C = *(s32 *)&player->unkC;
+            player->unk420 = *(s32 *)&player->unk10;
+            player->unk424 = *(s32 *)&player->unk14;
         }
     }
 
     player->leanAnimIndex = 0;
 
     /* Get bone count and reset animations */
-    player->leanBoneCount = getAnimationBoneCount(*(void **)player, 0);
+    player->leanBoneCount = getAnimationBoneCount(player->unk0, 0);
 
     for (i = 0; i < player->leanBoneCount; i++) {
-        resetBoneAnimation(
-            *(void **)player,
-            player->leanAnimIndex,
-            i,
-            (BoneAnimationStateIndexed *)((u8 *)player + 0x488 + i * 0x48)
-        );
+        resetBoneAnimation(player->unk0, player->leanAnimIndex, i, &player->unk488[i]);
     }
 
     player->behaviorMode = 1;
@@ -1017,9 +1012,9 @@ s32 initPlayerForRace(Player *player) {
     player->collisionOffset.y = 0xA0000;
     player->collisionOffset.z = 0;
     player->collisionRadius = 0xA0000;
-    memcpy((u8 *)player + 0xB58, (u8 *)player + 0xAD4, 0xC);
-    *(s32 *)((u8 *)player + 0xB64) = *(s32 *)((u8 *)player + 0xAE0);
-    *(u8 *)((u8 *)player + 0xB68) = player->playerIndex;
+    memcpy(&player->collisionListNode.localPos, &player->collisionOffset, 0xC);
+    player->collisionListNode.radius = player->collisionRadius;
+    player->collisionListNode.id = player->playerIndex;
 
     if (player->isBossRacer == 0) {
         if (gameState->raceType != 0xB || player->playerIndex == 0) {
@@ -1031,9 +1026,8 @@ s32 initPlayerForRace(Player *player) {
         }
     } else {
     boss_racer_init:
-        if (*(void **)((u8 *)player + 0x1C) != NULL) {
-            *(void **)((u8 *)player + 0x28) = (void *)((s32) * (void **)((u8 *)player + 0x1C) +
-                                                       ((s32 *)*(void **)((u8 *)player + 0x1C))[player->playerIndex]);
+        if (player->unk1C != NULL) {
+            player->aiPathData = (void *)((s32)player->unk1C + ((s32 *)player->unk1C)[player->playerIndex]);
         }
     }
 

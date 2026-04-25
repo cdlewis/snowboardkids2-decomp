@@ -109,7 +109,11 @@ typedef struct {
     s32 unk324;
     u8 padding_328[0xD0];
     /* 0x3F8 */ Transform3D unk3F8;
-    /* 0x418 */ u8 padding418[0x14];
+    /* 0x418 */ void *unk418;
+    s32 unk41C;
+    s32 unk420;
+    s32 unk424;
+    u8 padding428[0x4];
     /* 0x42C */ u8 bossPrimaryR;
     /* 0x42D */ u8 bossPrimaryG;
     /* 0x42E */ u8 bossPrimaryB;
