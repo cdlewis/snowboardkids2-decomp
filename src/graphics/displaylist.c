@@ -175,23 +175,13 @@ u16 findTrackSector(void *arg0, u16 sectorIndex, void *arg2) {
         {
             s32 idx = currentSector & 0xFFFF;
             s32 fgAddr = (s32)trackGeom->faceGroups;
+            TrackFaceGroup *group;
             faceGroupOffset0 = ((idx << 3) + idx) << 2;
-            v0x = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset0 + fgAddr))->vertexIdx0 * 6) +
-                               (s32)trackGeom->vertices))
-                      ->x
-                  << 16;
-            v0z = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset0 + fgAddr))->vertexIdx0 * 6) +
-                               (s32)trackGeom->vertices))
-                      ->z
-                  << 16;
-            v1x = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset0 + fgAddr))->vertexIdx1 * 6) +
-                               (s32)trackGeom->vertices))
-                      ->x
-                  << 16;
-            v1z = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset0 + fgAddr))->vertexIdx1 * 6) +
-                               (s32)trackGeom->vertices))
-                      ->z
-                  << 16;
+            group = (TrackFaceGroup *)(faceGroupOffset0 + fgAddr);
+            v0x = ((Vertex6 *)(group->vertexIdx0 * 6 + (s32)trackGeom->vertices))->x << 16;
+            v0z = ((Vertex6 *)(group->vertexIdx0 * 6 + (s32)trackGeom->vertices))->z << 16;
+            v1x = ((Vertex6 *)(group->vertexIdx1 * 6 + (s32)trackGeom->vertices))->x << 16;
+            v1z = ((Vertex6 *)(group->vertexIdx1 * 6 + (s32)trackGeom->vertices))->z << 16;
         }
 
         if (cross2d(pos->x, pos->z, v1x, v1z, v0x, v0z) > 0) {
@@ -205,23 +195,13 @@ u16 findTrackSector(void *arg0, u16 sectorIndex, void *arg2) {
         {
             s32 idx = currentSector & 0xFFFF;
             s32 fgAddr = (s32)trackGeom->faceGroups;
+            TrackFaceGroup *group;
             faceGroupOffset1 = ((idx << 3) + idx) << 2;
-            v2x = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset1 + fgAddr))->vertexIdx2 * 6) +
-                               (s32)trackGeom->vertices))
-                      ->x
-                  << 16;
-            v2z = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset1 + fgAddr))->vertexIdx2 * 6) +
-                               (s32)trackGeom->vertices))
-                      ->z
-                  << 16;
-            v3x = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset1 + fgAddr))->vertexIdx3 * 6) +
-                               (s32)trackGeom->vertices))
-                      ->x
-                  << 16;
-            v3z = ((Vertex6 *)((((TrackFaceGroup *)(faceGroupOffset1 + fgAddr))->vertexIdx3 * 6) +
-                               (s32)trackGeom->vertices))
-                      ->z
-                  << 16;
+            group = (TrackFaceGroup *)(faceGroupOffset1 + fgAddr);
+            v2x = ((Vertex6 *)(group->vertexIdx2 * 6 + (s32)trackGeom->vertices))->x << 16;
+            v2z = ((Vertex6 *)(group->vertexIdx2 * 6 + (s32)trackGeom->vertices))->z << 16;
+            v3x = ((Vertex6 *)(group->vertexIdx3 * 6 + (s32)trackGeom->vertices))->x << 16;
+            v3z = ((Vertex6 *)(group->vertexIdx3 * 6 + (s32)trackGeom->vertices))->z << 16;
         }
 
         if (cross2d(pos->x, pos->z, v2x, v2z, v3x, v3z) > 0) {
