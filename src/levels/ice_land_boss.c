@@ -1056,53 +1056,53 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     }
 }
 
-extern s32 getIndexedAnimationDataPtr(void *, s16);
+extern BoneHierarchyEntry *getIndexedAnimationDataPtr(void *, s16);
 
 void updateIceLandBossLeanBoneTransforms(Player *arg0) {
-    Transform3D sp10;
-    Transform3D sp30;
-    BoneHierarchyEntry *animData;
+    Transform3D scratch;
+    Transform3D squashMatrix;
+    BoneHierarchyEntry *hierarchy;
     s32 i;
     u8 parentBone;
-    void *animDataPtr;
+    Transform3D *scratch9F0;
     Transform3D *temp;
 
-    animDataPtr = &arg0->tiltTransform.animation_data;
-    animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
-    func_8006B084_6BC84(&arg0->orientationTransform, &arg0->headingTransform, (Transform3D *)animDataPtr);
-    func_8006B084_6BC84((Transform3D *)&arg0->tiltTransform, (Transform3D *)animDataPtr, (Transform3D *)&arg0->unk950);
+    scratch9F0 = (Transform3D *)&arg0->tiltTransform.animation_data;
+    hierarchy = getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
+    func_8006B084_6BC84(&arg0->orientationTransform, &arg0->headingTransform, scratch9F0);
+    func_8006B084_6BC84((Transform3D *)&arg0->tiltTransform, scratch9F0, &arg0->unk950);
 
     for (i = 0; i < arg0->leanBoneCount; i++) {
-        if (animData[i].parentBone == 0xFF) {
+        if (hierarchy[i].parentBone == 0xFF) {
             if (arg0->behaviorFlags & 0x10) {
-                memcpy(&sp30, &identityMatrix, sizeof(Transform3D));
-                sp30.m[1][1] = arg0->squashStretchScale;
-                func_8006B084_6BC84((Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position, &sp30, &sp10);
+                memcpy(&squashMatrix, &identityMatrix, sizeof(Transform3D));
+                squashMatrix.m[1][1] = arg0->squashStretchScale;
                 func_8006B084_6BC84(
-                    &sp10,
-                    &arg0->unk950,
-                    (Transform3D *)(animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0)
+                    (Transform3D *)&arg0->unk488[hierarchy[i].boneIndex].prev_position,
+                    &squashMatrix,
+                    &scratch
                 );
+                func_8006B084_6BC84(&scratch, &arg0->unk950, &arg0->boneResults[hierarchy[i].boneIndex].mtx);
             } else {
                 func_8006B084_6BC84(
-                    (Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position,
+                    (Transform3D *)&arg0->unk488[hierarchy[i].boneIndex].prev_position,
                     &arg0->unk950,
-                    (Transform3D *)(animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0)
+                    &arg0->boneResults[hierarchy[i].boneIndex].mtx
                 );
             }
         } else {
             func_8006B084_6BC84(
-                (Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position,
-                (Transform3D *)(animData[i].parentBone * 0x3C + 0x38 + (u8 *)arg0),
-                (Transform3D *)(animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0)
+                (Transform3D *)&arg0->unk488[hierarchy[i].boneIndex].prev_position,
+                &arg0->boneResults[hierarchy[i].parentBone].mtx,
+                &arg0->boneResults[hierarchy[i].boneIndex].mtx
             );
         }
     }
 
-    temp = &sp10;
+    temp = &scratch;
     memcpy(temp, &arg0->unk164, sizeof(Transform3D));
-    createYRotationMatrix(&sp30, (u16)arg0->unkA9E);
-    func_8006BDBC_6C9BC((BoneAnimationState *)&sp30, &sp10, &arg0->unk164);
+    createYRotationMatrix(&squashMatrix, (u16)arg0->unkA9E);
+    func_8006BDBC_6C9BC((BoneAnimationState *)&squashMatrix, &scratch, &arg0->unk164);
 }
 
 void renderIceLandBossWithSurfaceColors(Player *arg0) {
