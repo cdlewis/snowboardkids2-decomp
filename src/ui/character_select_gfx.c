@@ -2026,7 +2026,7 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
     s16 spriteIdx;
     u8 numPlayers;
     s32 temp;
-    u16 var_v0;
+    u16 stateOffset;
     s16 tempPos;
     s16 tempPos2;
 
@@ -2035,8 +2035,8 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
         selectionState = gameState->unk1898[i];
         if ((selectionState < 3 | selectionState == 0xA) || (selectionState == 6 | selectionState >= 0xB)) {
-            var_v0 = selectionState - 3;
-            if (var_v0 >= 8) {
+            stateOffset = selectionState - 3;
+            if (stateOffset >= 8) {
                 tempPos = D_800AFE8C_A71FC->numPlayers;
                 tempPos2 = ((u16 *)D_8008DE9C_8EA9C)[tempPos * 2];
                 yPos = ((u16 *)D_8008DE9C_8EA9C)[tempPos * 2 + 1];
