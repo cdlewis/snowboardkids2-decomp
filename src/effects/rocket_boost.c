@@ -6,10 +6,12 @@
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-extern void *D_80088670_89270;
-extern void *D_80088680_89280;
-extern void *D_80088690_89290;
 extern s32 gFrameCounter;
+
+DisplayLists D_80088670_89270 = { 0, (Gfx *)0x010001E8, NULL, NULL };
+DisplayLists D_80088680_89280 = { 0, NULL, (Gfx *)0x01000390, NULL };
+DisplayLists D_80088690_89290 = { 0, NULL, NULL, (Gfx *)0x01000540 };
+DisplayLists D_800886A0 = { 0, (Gfx *)0x01000118, NULL, NULL };
 
 typedef struct RocketEffectData RocketEffectData;
 void cleanupRocketEffect(RocketEffectData *data);
@@ -68,9 +70,9 @@ void updateRocketEffect(RocketEffectUpdateData *arg0) {
     func_8006B084_6BC84((Transform3D *)(ptr - 5), (Transform3D *)arg0, &arg0->unk3C.transform);
 
     if (gFrameCounter & 1) {
-        arg0->unk3C.displayLists = (DisplayLists *)&D_80088680_89280;
+        arg0->unk3C.displayLists = &D_80088680_89280;
     } else {
-        arg0->unk3C.displayLists = (DisplayLists *)&D_80088690_89290;
+        arg0->unk3C.displayLists = &D_80088690_89290;
     }
 
     enqueueDisplayListObject(0, &arg0->unk0);
