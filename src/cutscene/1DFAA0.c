@@ -36,47 +36,6 @@ typedef struct {
 } CutsceneFadeAsset;
 
 typedef struct {
-    s16 flags;
-    s16 y;
-    void *assetData;
-    s16 slotIndex;
-    s16 scaleY;
-    s16 scaleX;
-    s16 rotation;
-    s16 alpha;
-    u8 r;
-    u8 g;
-    u8 b;
-} FadeSprite;
-
-typedef struct {
-    s8 state;
-    s8 slotIndex;
-    s16 duration;
-    s32 unk4;
-    void *assetData;
-    FadeSprite sprites[6];
-    FadeSprite centerSprite;
-    FadeSprite bottomSprite;
-    u8 unkCC[0x18];
-    s16 fadeAlpha;
-} FadeTaskData2;
-
-typedef struct {
-    s8 state;
-    s8 slotIndex;
-    s16 duration;
-    s16 unk4;
-    u16 unk6;
-    void *unk8;
-    u8 sprites[0x90];
-    u8 centerSprite[0x18];
-    u8 bottomSprite[0x18];
-    u8 unkCC[0x18];
-    s16 fadeAlpha;
-} FadeTaskData;
-
-typedef struct {
     u8 padding[0x8];
     void *assetData;
 } CutsceneFadeCleanupArgs;
@@ -1294,8 +1253,7 @@ void startCutsceneFadeEffect(s32 arg0, s8 slotIndex, s16 duration) {
     }
 }
 
-void initCutsceneFadeTask(void *varg0) {
-    FadeTaskData2 *task = (FadeTaskData2 *)varg0;
+void initCutsceneFadeTask(FadeTaskData *task) {
     CutsceneFadeAsset *node;
     s32 i;
 
@@ -1364,8 +1322,6 @@ void initCutsceneFadeTask(void *varg0) {
 
 void updateCutsceneFadeTask(FadeTaskData *task) {
     CutsceneFadeAsset *node;
-    s32 offset;
-    u8 *ptr;
     s32 i;
 
     node = (CutsceneFadeAsset *)&gCutsceneFadeAssetTable[task->slotIndex];
@@ -1395,25 +1351,21 @@ void updateCutsceneFadeTask(FadeTaskData *task) {
 
     switch (node->fadeType) {
         case 0:
-            task->centerSprite[0x14] = (u8)task->fadeAlpha;
+            task->centerSprite.b = (u8)task->fadeAlpha;
             debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
             break;
         case 1:
-            task->centerSprite[0x14] = (u8)task->fadeAlpha;
+            task->centerSprite.b = (u8)task->fadeAlpha;
             debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
-            task->bottomSprite[0x14] = (u8)task->fadeAlpha;
+            task->bottomSprite.b = (u8)task->fadeAlpha;
             debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, &task->bottomSprite);
             break;
     }
 
     i = 0;
-    offset = 0xC;
-    ptr = (u8 *)task;
     do {
-        ptr[0x20] = (u8)task->fadeAlpha;
-        debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, (u8 *)task + offset);
-        offset += 0x18;
-        ptr += 0x18;
+        task->sprites[i].b = (u8)task->fadeAlpha;
+        debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, &task->sprites[i]);
         i++;
     } while (i < 6);
 }

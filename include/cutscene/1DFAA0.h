@@ -289,6 +289,34 @@ typedef struct CutsceneManager {
     /* 0x1220 */ s32 curtainPosition;
 } CutsceneManager;
 
+typedef struct {
+    s16 flags;
+    s16 y;
+    void *assetData;
+    s16 slotIndex;
+    s16 scaleY;
+    s16 scaleX;
+    s16 rotation;
+    s16 alpha;
+    u8 r;
+    u8 g;
+    u8 b;
+} FadeSprite;
+
+typedef struct {
+    s8 state;
+    s8 slotIndex;
+    s16 duration;
+    s16 unk4;
+    u16 unk6;
+    void *assetData;
+    FadeSprite sprites[6];
+    FadeSprite centerSprite;
+    FadeSprite bottomSprite;
+    u8 unkCC[0x18];
+    s16 fadeAlpha;
+} FadeTaskData;
+
 void enableCutsceneSkip(CutsceneManager *arg0);
 void disableCutsceneSkipOnInput(CutsceneManager *arg0);
 void enableSlotUpdate(CutsceneManager *arg0, s16 arg1);
@@ -352,5 +380,5 @@ void pasteCutsceneEntryToSlot(u8 slotIndex, u16 frameNumber);
 void shiftCutsceneEntryFrame(u8 slotIndex, u16 frameNumber, s32 frameDelta);
 void *loadCutsceneSlotAsset(s8 slotIndex);
 void startCutsceneFadeEffect(s32 arg0, s8 slotIndex, s16 duration);
-void initCutsceneFadeTask(void *);
+void initCutsceneFadeTask(FadeTaskData *);
 void initializeCutsceneSystem(void *);
