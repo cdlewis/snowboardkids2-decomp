@@ -3,6 +3,15 @@
 #include "common.h"
 #include "gamestate.h"
 
+typedef struct AIPlayerParamEntry {
+    /* 0x0 */ u8 useChance;
+    /* 0x1 */ u8 delay;
+    /* 0x2 */ u8 altChance;
+    /* 0x3 */ u8 pad;
+} AIPlayerParamEntry;
+
+extern AIPlayerParamEntry gAIPlayerParams[8][0x11];
+
 void setPlayerProjectileHitState(Player *player);
 void setPlayerState50(Player *player);
 void setPlayerPullState(Player *player, void *pullTarget);
