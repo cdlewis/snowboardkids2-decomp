@@ -49,17 +49,11 @@ RockPositionEntry crazyJungleRockPositions[] = {
 typedef struct {
     /* 0x00 */ DisplayListObject node1;
     /* 0x3C */ DisplayListObject node2;
-    s32 rotationMatrix;
-    s8 pad_7C[0x10];
-    s32 posX;
-    s32 posY;
-    s32 posZ;
-    s32 renderOffsetX;
-    s32 animTimer;
-    s32 renderOffsetZ;
-    s16 xRotation;
-    s16 positionIndex;
-    s16 respawnTimer;
+    /* 0x78 */ Transform3D rotationMatrix;
+    /* 0x98 */ Vec3i renderOffset;
+    /* 0xA4 */ s16 xRotation;
+    /* 0xA6 */ s16 positionIndex;
+    /* 0xA8 */ s16 respawnTimer;
 } FallingRockHazard;
 
 typedef struct {
@@ -98,13 +92,13 @@ void initFallingRockHazard(FallingRockHazard *rock) {
     rock->node1.segment1 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
     rock->node1.segment2 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
     rock->node1.segment3 = 0;
-    rock->renderOffsetX = 0;
-    rock->animTimer = 0;
-    rock->renderOffsetZ = 0;
+    rock->renderOffset.x = 0;
+    rock->renderOffset.y = 0;
+    rock->renderOffset.z = 0;
     rock->node2.segment1 = rock->node1.segment1;
     rock->node2.segment2 = rock->node1.segment2;
     rock->node2.segment3 = rock->node1.segment3;
-    memcpy(&rock->posX, &crazyJungleRockPositions[rock->positionIndex].position, 0xC);
+    memcpy(&rock->rotationMatrix.translation, &crazyJungleRockPositions[rock->positionIndex].position, sizeof(Vec3i));
     createCombinedRotationMatrix(
         &rock->rotationMatrix,
         crazyJungleRockPositions[rock->positionIndex].rotX,
@@ -117,22 +111,18 @@ void initFallingRockHazard(FallingRockHazard *rock) {
 }
 
 void renderFallingRockHazard(FallingRockHazard *rock) {
-    s32 matrix[8];
+    Transform3D matrix;
     s32 i;
 
-    memcpy(&gScaleMatrix.translation, &rock->renderOffsetX, 0xC);
-    func_8006B084_6BC84(
-        (Transform3D *)((s32 *)&gScaleMatrix.translation - 5),
-        (Transform3D *)&rock->rotationMatrix,
-        (Transform3D *)rock
-    );
-    createXRotationMatrix((s16(*)[3])matrix, rock->xRotation);
+    memcpy(&gScaleMatrix.translation, &rock->renderOffset, sizeof(Vec3i));
+    func_8006B084_6BC84(&gScaleMatrix, &rock->rotationMatrix, &rock->node1.transform);
+    createXRotationMatrix(matrix.m, rock->xRotation);
 
-    matrix[6] = 0x3b333;
-    matrix[5] = 0;
-    matrix[7] = 0x170000;
+    matrix.translation.y = 0x3b333;
+    matrix.translation.x = 0;
+    matrix.translation.z = 0x170000;
 
-    func_8006B084_6BC84((Transform3D *)&matrix[0], (Transform3D *)rock, &rock->node2.transform);
+    func_8006B084_6BC84(&matrix, &rock->node1.transform, &rock->node2.transform);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, &rock->node1);
@@ -151,8 +141,8 @@ void updateFallingRockHazard(FallingRockHazard *rock) {
     playerInRange = 0;
 
     for (i = 0; i < gs->numPlayers; i++) {
-        xDiff = gs->players[i].worldPos.x - rock->posX;
-        zDiff = gs->players[i].worldPos.z - rock->posZ;
+        xDiff = gs->players[i].worldPos.x - rock->rotationMatrix.translation.x;
+        zDiff = gs->players[i].worldPos.z - rock->rotationMatrix.translation.z;
         if (((0x27FFFFE >= ((u32)xDiff) + 0x13FFFFF) & (0x13FFFFF >= zDiff)) == 0) {
             continue;
         }
@@ -165,8 +155,8 @@ void updateFallingRockHazard(FallingRockHazard *rock) {
 
     if (playerInRange) {
         if (gs->gamePaused == 0) {
-            if (rock->animTimer != 0x60000) {
-                rock->animTimer += 0x20000;
+            if (rock->renderOffset.y != 0x60000) {
+                rock->renderOffset.y += 0x20000;
             }
 
             if (rock->xRotation != (-0x600)) {
@@ -189,12 +179,12 @@ void updateFallingRockHazard(FallingRockHazard *rock) {
         }
     } else {
         if (!gs->gamePaused) {
-            if (rock->animTimer > 0) {
-                rock->animTimer += 0xFFFE0000;
+            if (rock->renderOffset.y > 0) {
+                rock->renderOffset.y += 0xFFFE0000;
             }
 
-            if (rock->animTimer < 0) {
-                rock->animTimer += 0x20000;
+            if (rock->renderOffset.y < 0) {
+                rock->renderOffset.y += 0x20000;
             }
 
             if (rock->xRotation != 0) {
@@ -211,9 +201,9 @@ void fallingRockImpactCallback(FallingRockHazard *rock) {
     s32 i;
 
     gs = (GameState *)getCurrentAllocation();
-    if (rock->animTimer != 0xFFF00000) {
+    if (rock->renderOffset.y != 0xFFF00000) {
         if (gs->gamePaused == FALSE) {
-            rock->animTimer = rock->animTimer - 0x8000;
+            rock->renderOffset.y = rock->renderOffset.y - 0x8000;
         }
     } else {
         rock->respawnTimer = 0x12C;
@@ -237,7 +227,11 @@ void fallingRockRespawnCallback(FallingRockHazard *rock) {
     if (!rock->respawnTimer) {
         positionOffset = randA() & 1;
         rock->positionIndex = positionOffset + (rock->positionIndex & 0xFE);
-        memcpy(&rock->posX, &crazyJungleRockPositions[rock->positionIndex].position, 0xC);
+        memcpy(
+            &rock->rotationMatrix.translation,
+            &crazyJungleRockPositions[rock->positionIndex].position,
+            sizeof(Vec3i)
+        );
         createCombinedRotationMatrix(
             &rock->rotationMatrix,
             crazyJungleRockPositions[rock->positionIndex].rotX,
