@@ -384,23 +384,19 @@ s8 determineAIPathChoice(Player *player) {
     s32 normalizedDirZ;
     s32 playerToStartX;
     s32 playerToStartZ;
-    s64 lateralOffset;
-    u16 trackStartIdx;
-    u16 trackEndIdx;
+    s64 lateralDistance;
 
     gs = getCurrentAllocation();
 
     if (player->aiPathData != NULL &&
         ((AIPathPreference *)player->aiPathData)[player->sectorIndex].pathPreference != 0) {
-        trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
-        trackEndIdx = SEC3(gs)[player->sectorIndex].trackEndIdx;
-        trackDirX = SEC1(gs)[trackStartIdx].x - SEC1(gs)[trackEndIdx].x;
+        trackDirX = SEC1(gs)[SEC3(gs)[player->sectorIndex].trackStartIdx].x -
+                    SEC1(gs)[SEC3(gs)[player->sectorIndex].trackEndIdx].x;
         spill.dirX = trackDirX;
 
-        trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
         trackLengthSq = trackDirX * trackDirX;
-        trackEndIdx = SEC3(gs)[player->sectorIndex].trackEndIdx;
-        trackDirZ = SEC1(gs)[trackStartIdx].z - SEC1(gs)[trackEndIdx].z;
+        trackDirZ = SEC1(gs)[SEC3(gs)[player->sectorIndex].trackStartIdx].z -
+                    SEC1(gs)[SEC3(gs)[player->sectorIndex].trackEndIdx].z;
         spill.dirZ = trackDirZ;
         trackLengthSq += trackDirZ * trackDirZ;
 
@@ -408,21 +404,17 @@ s8 determineAIPathChoice(Player *player) {
         normalizedDirX = (spill.dirX << 13) / trackLength;
         normalizedDirZ = (spill.dirZ << 13) / trackLength;
 
-        trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
-        playerToStartX = player->worldPos.x - (SEC1(gs)[trackStartIdx].x << 16);
+        playerToStartX = player->worldPos.x - (SEC1(gs)[SEC3(gs)[player->sectorIndex].trackStartIdx].x << 16);
         spill.dirX = playerToStartX;
 
-        trackStartIdx = SEC3(gs)[player->sectorIndex].trackStartIdx;
-        playerToStartZ = player->worldPos.z - (SEC1(gs)[trackStartIdx].z << 16);
+        playerToStartZ = player->worldPos.z - (SEC1(gs)[SEC3(gs)[player->sectorIndex].trackStartIdx].z << 16);
         spill.dirZ = playerToStartZ;
 
-        // Calculate lateral offset (perpendicular distance) from track center line
-        // trackLength is reused here to store the lateral distance from center
-        lateralOffset =
+        // Perpendicular distance from track center line
+        lateralDistance =
             ((s64)(-((s16)normalizedDirZ)) * playerToStartX) + ((s64)((s16)normalizedDirX) * playerToStartZ);
-        trackLength = -((s32)(lateralOffset / LATERAL_OFFSET_SCALE));
+        trackLength = -((s32)(lateralDistance / LATERAL_OFFSET_SCALE));
 
-        // If player is close enough to the center line, follow the stored path preference
         if (trackLength < (player->aiLaneWidth * LANE_WIDTH_MULTIPLIER)) {
             return ((AIPathPreference *)player->aiPathData)[player->sectorIndex].pathPreference;
         }
