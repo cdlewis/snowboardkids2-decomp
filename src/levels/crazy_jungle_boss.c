@@ -38,6 +38,23 @@ typedef struct {
 } BossCheckpoint;
 
 typedef struct {
+    /* 0x00 */ Transform3D transform;
+    /* 0x20 */ void *displayList;
+    /* 0x24 */ s32 unk24;
+    /* 0x28 */ s32 unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ s32 unk30;
+    /* 0x34 */ u8 primaryR;
+    /* 0x35 */ u8 primaryG;
+    /* 0x36 */ u8 primaryB;
+    /* 0x37 */ u8 pad37;
+    /* 0x38 */ u8 secondaryR;
+    /* 0x39 */ u8 secondaryG;
+    /* 0x3A */ u8 secondaryB;
+    /* 0x3B */ u8 pad3B;
+} BossBone;
+
+typedef struct {
     void *unk0;
     void *unk4;
     void *unk8;
@@ -51,26 +68,7 @@ typedef struct {
     void *unk28;
     void *unk2C;
     u8 pad30[0x38 - 0x30];
-    s16 unk38[6];
-    u8 pad44[0x6C - 0x44];
-    u8 primaryR;
-    u8 primaryG;
-    u8 primaryB;
-    u8 pad6F[1];
-    u8 secondaryR;
-    u8 secondaryG;
-    u8 secondaryB;
-    u8 pad73[0xEC - 0x73];
-    s16 unkEC[6];
-    u8 padF8[0x1A0 - 0xF8];
-    s16 unk1A0[6];
-    u8 pad1AC[0x344 - 0x1AC];
-    s16 unk344[6];
-    u8 pad350[0x380 - 0x350];
-    s16 unk380[6];
-    u8 pad38C[0x3BC - 0x38C];
-    s16 unk3BC[6];
-    u8 pad3C8[0x434 - 0x3C8];
+    BossBone bones[17];
     Vec3i unk434;
     s32 prevWorldPosX;
     s32 prevWorldPosY;
@@ -88,7 +86,8 @@ typedef struct {
     Transform3D unk970;
     Transform3D unk990;
     Transform3D unk9B0;
-    u8 pad9D0[0xA10 - 0x9D0];
+    u8 pad9D0[0x9F0 - 0x9D0];
+    Transform3D scratch9F0;
     BossCheckpoint checkpoints[9];
     s32 aiTargetX;
     u8 padA80[4];
@@ -348,32 +347,32 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     addCollisionSectorNodeToList(&arg0->unkB50);
     updateCrazyJungleBossLeanBoneTransforms(arg0);
 
-    transformVector((s16 *)(alloc->unk48 + 0xFC), arg0->unk38, &arg0->unkAE4);
+    transformVector((s16 *)(alloc->unk48 + 0xFC), (s16 *)arg0->bones[0].transform.m, &arg0->unkAE4);
     arg0->unkAE4 -= arg0->unk970.translation.x;
     arg0->unkAE8 -= arg0->unk970.translation.y;
     arg0->unkAEC -= arg0->unk970.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0x108), arg0->unk344, &arg0->unkAF0);
+    transformVector((s16 *)(alloc->unk48 + 0x108), (s16 *)arg0->bones[13].transform.m, &arg0->unkAF0);
     arg0->unkAF0 -= arg0->unk970.translation.x;
     arg0->unkAF4 -= arg0->unk970.translation.y;
     arg0->unkAF8 -= arg0->unk970.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0x114), arg0->unk380, &arg0->unkAFC);
+    transformVector((s16 *)(alloc->unk48 + 0x114), (s16 *)arg0->bones[14].transform.m, &arg0->unkAFC);
     arg0->unkAFC -= arg0->unk970.translation.x;
     arg0->unkB00 -= arg0->unk970.translation.y;
     arg0->unkB04 -= arg0->unk970.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0x120), arg0->unk3BC, &arg0->unkB08);
+    transformVector((s16 *)(alloc->unk48 + 0x120), (s16 *)arg0->bones[15].transform.m, &arg0->unkB08);
     arg0->unkB08 -= arg0->unk970.translation.x;
     arg0->unkB0C -= arg0->unk970.translation.y;
     arg0->unkB10 -= arg0->unk970.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0x12C), arg0->unkEC, &arg0->unkB14);
+    transformVector((s16 *)(alloc->unk48 + 0x12C), (s16 *)arg0->bones[3].transform.m, &arg0->unkB14);
     arg0->unkB14 -= arg0->unk970.translation.x;
     arg0->unkB18 -= arg0->unk970.translation.y;
     arg0->unkB1C -= arg0->unk970.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0x138), arg0->unk1A0, &arg0->unkB20);
+    transformVector((s16 *)(alloc->unk48 + 0x138), (s16 *)arg0->bones[6].transform.m, &arg0->unkB20);
     arg0->unkB20 -= arg0->unk970.translation.x;
     arg0->unkB24 -= arg0->unk970.translation.y;
     arg0->unkB28 -= arg0->unk970.translation.z;
@@ -694,38 +693,38 @@ void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
 }
 
 void updateCrazyJungleBossLeanBoneTransforms(Arg0Struct *arg0) {
-    Transform3D sp10;
-    Transform3D sp30;
-    BoneHierarchyEntry *animData;
+    Transform3D scratch;
+    Transform3D squashMatrix;
+    BoneHierarchyEntry *hierarchy;
     s32 i;
 
-    animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
-    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, (Transform3D *)&arg0->pad9D0[0x20]);
-    func_8006B084_6BC84(&arg0->unk9B0, (Transform3D *)&arg0->pad9D0[0x20], &arg0->unk950);
+    hierarchy = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
+    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, &arg0->scratch9F0);
+    func_8006B084_6BC84(&arg0->unk9B0, &arg0->scratch9F0, &arg0->unk950);
 
     for (i = 0; i < arg0->boneCount; i++) {
-        if (animData[i].parentBone == 0xFF) {
+        if (hierarchy[i].parentBone == 0xFF) {
             if (arg0->behaviorFlags & 0x10) {
-                memcpy(&sp30, &identityMatrix, sizeof(Transform3D));
-                sp30.m[1][1] = arg0->squashStretchScale;
-                func_8006B084_6BC84((Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position, &sp30, &sp10);
+                memcpy(&squashMatrix, &identityMatrix, sizeof(Transform3D));
+                squashMatrix.m[1][1] = arg0->squashStretchScale;
                 func_8006B084_6BC84(
-                    &sp10,
-                    &arg0->unk950,
-                    (Transform3D *)(animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0)
+                    (Transform3D *)&arg0->unk488[hierarchy[i].boneIndex].prev_position,
+                    &squashMatrix,
+                    &scratch
                 );
+                func_8006B084_6BC84(&scratch, &arg0->unk950, &arg0->bones[hierarchy[i].boneIndex].transform);
             } else {
                 func_8006B084_6BC84(
-                    (Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position,
+                    (Transform3D *)&arg0->unk488[hierarchy[i].boneIndex].prev_position,
                     &arg0->unk950,
-                    (Transform3D *)(animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0)
+                    &arg0->bones[hierarchy[i].boneIndex].transform
                 );
             }
         } else {
             func_8006B084_6BC84(
-                (Transform3D *)&arg0->unk488[animData[i].boneIndex].prev_position,
-                (Transform3D *)(animData[i].parentBone * 0x3C + 0x38 + (u8 *)arg0),
-                (Transform3D *)(animData[i].boneIndex * 0x3C + 0x38 + (u8 *)arg0)
+                (Transform3D *)&arg0->unk488[hierarchy[i].boneIndex].prev_position,
+                &arg0->bones[hierarchy[i].parentBone].transform,
+                &arg0->bones[hierarchy[i].boneIndex].transform
             );
         }
     }
@@ -743,18 +742,18 @@ void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
 
     if (surfaceColorIndex == 0) {
         for (i = 0; i < 4; i++) {
-            enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->boneCount);
+            enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->bones, arg0->boneCount);
         }
     } else {
-        arg0->primaryR = gBossSurfaceColors[surfaceColorIndex].primaryR;
-        arg0->primaryG = gBossSurfaceColors[surfaceColorIndex].primaryG;
-        arg0->primaryB = gBossSurfaceColors[surfaceColorIndex].primaryB;
-        arg0->secondaryR = gBossSurfaceColors[surfaceColorIndex].secondaryR;
-        arg0->secondaryG = gBossSurfaceColors[surfaceColorIndex].secondaryG;
-        arg0->secondaryB = gBossSurfaceColors[surfaceColorIndex].secondaryB;
+        arg0->bones[0].primaryR = gBossSurfaceColors[surfaceColorIndex].primaryR;
+        arg0->bones[0].primaryG = gBossSurfaceColors[surfaceColorIndex].primaryG;
+        arg0->bones[0].primaryB = gBossSurfaceColors[surfaceColorIndex].primaryB;
+        arg0->bones[0].secondaryR = gBossSurfaceColors[surfaceColorIndex].secondaryR;
+        arg0->bones[0].secondaryG = gBossSurfaceColors[surfaceColorIndex].secondaryG;
+        arg0->bones[0].secondaryB = gBossSurfaceColors[surfaceColorIndex].secondaryB;
 
         for (i = 0; i < 4; i++) {
-            enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->unk38, arg0->boneCount);
+            enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->bones, arg0->boneCount);
         }
     }
 }
