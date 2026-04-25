@@ -254,7 +254,7 @@ void updateChaseCamera(ChaseCameraState *camera) {
         camera->z = diffZ + gs->players[camera->playerIdx].worldPos.z;
     }
 
-    computeLookAtMatrix(camera, &gs->players[camera->playerIdx].worldPos, &camera->lookAtMatrix);
+    computeLookAtMatrix((Vec3i *)camera, &gs->players[camera->playerIdx].worldPos, &camera->lookAtMatrix);
 
     diffX = (s64)camera->lookAtMatrix.m[1][0] * camera->targetY / 0x2000;
     diffY = (s64)camera->lookAtMatrix.m[1][1] * camera->targetY / 0x2000;
@@ -276,7 +276,7 @@ void updateChaseCamera(ChaseCameraState *camera) {
             0xA0000;
         if (camera->lookAtMatrix.translation.y < trackHeight) {
             camera->y += trackHeight - camera->lookAtMatrix.translation.y;
-            computeLookAtMatrix(camera, &gs->players[camera->playerIdx].worldPos, &camera->lookAtMatrix);
+            computeLookAtMatrix((Vec3i *)camera, &gs->players[camera->playerIdx].worldPos, &camera->lookAtMatrix);
 
             diffX = (s64)camera->lookAtMatrix.m[1][0] * camera->targetY / 0x2000;
             diffY = (s64)camera->lookAtMatrix.m[1][1] * camera->targetY / 0x2000;
@@ -457,7 +457,7 @@ void updateScriptedCamera(ScriptedCameraState *camera) {
             break;
     }
 
-    computeLookAtMatrix(camera, &camera->targetX, cameraMatrix);
+    computeLookAtMatrix((Vec3i *)camera, (Vec3i *)&camera->targetX, (Transform3D *)cameraMatrix);
     setViewportTransformById(0x64, cameraMatrix);
 
     if (allocation->players->unkBCA == 0) {

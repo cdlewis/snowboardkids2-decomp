@@ -1221,7 +1221,7 @@ s32 distance_3d(s32 x, s32 y, s32 z) {
     return isqrt64((s64)x * x + (s64)y * y + (s64)z * z);
 }
 
-void computeLookAtMatrix(void *arg0, void *arg1, void *arg2) {
+void computeLookAtMatrix(Vec3i *from, Vec3i *to, Transform3D *out) {
     s32 diff[3];
     s32 horzDist;
     s32 sinPitch;
@@ -1232,9 +1232,9 @@ void computeLookAtMatrix(void *arg0, void *arg1, void *arg2) {
     s32 temp;
     s32 temp2;
 
-    diff[0] = ((s32 *)arg1)[0] - ((s32 *)arg0)[0];
-    diff[1] = ((s32 *)arg1)[1] - ((s32 *)arg0)[1];
-    diff[2] = ((s32 *)arg1)[2] - ((s32 *)arg0)[2];
+    diff[0] = to->x - from->x;
+    diff[1] = to->y - from->y;
+    diff[2] = to->z - from->z;
 
     horzDist = isqrt64((s64)diff[0] * diff[0] + (s64)diff[2] * diff[2]);
 
@@ -1256,35 +1256,35 @@ void computeLookAtMatrix(void *arg0, void *arg1, void *arg2) {
     }
 
     temp = sinPitch * sinYaw;
-    ((s16 *)arg2)[0] = cosYaw;
-    ((s16 *)arg2)[1] = 0;
-    ((s16 *)arg2)[2] = -sinYaw;
+    out->m[0][0] = cosYaw;
+    out->m[0][1] = 0;
+    out->m[0][2] = -sinYaw;
     if (temp < 0) {
         temp += 0x1FFF;
     }
 
     temp2 = sinPitch * cosYaw;
-    ((s16 *)arg2)[3] = temp >> 13;
-    ((s16 *)arg2)[4] = cosPitch;
+    out->m[1][0] = temp >> 13;
+    out->m[1][1] = cosPitch;
     if (temp2 < 0) {
         temp2 += 0x1FFF;
     }
 
     temp = cosPitch * sinYaw;
-    ((s16 *)arg2)[5] = temp2 >> 13;
+    out->m[1][2] = temp2 >> 13;
     if (temp < 0) {
         temp += 0x1FFF;
     }
 
     temp2 = cosPitch * cosYaw;
-    ((s16 *)arg2)[6] = temp >> 13;
-    ((s16 *)arg2)[7] = -sinPitch;
+    out->m[2][0] = temp >> 13;
+    out->m[2][1] = -sinPitch;
     if (temp2 < 0) {
         temp2 += 0x1FFF;
     }
 
-    ((s16 *)arg2)[8] = temp2 >> 13;
-    memcpy((u8 *)arg2 + 0x14, arg0, 0xC);
+    out->m[2][2] = temp2 >> 13;
+    memcpy(&out->translation, from, sizeof(Vec3i));
 }
 
 void matrixToEulerAngles(s32 *arg0, s32 *arg1, f32 *lookAtX, f32 *lookAtY, f32 *lookAtZ, f32 *upX, f32 *upY, f32 *upZ) {

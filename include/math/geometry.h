@@ -88,7 +88,7 @@ s32 distance_2d(s32 x, s32 y);
 s32 distance_3d(s32 x, s32 y, s32 z);
 s32 approximate_sqrt(u32 input);
 
-void computeLookAtMatrix(void *arg0, void *arg1, void *arg2);
+void computeLookAtMatrix(Vec3i *from, Vec3i *to, Transform3D *out);
 
 void transformVectorRelative(void *arg0, void *arg1, void *arg2);
 

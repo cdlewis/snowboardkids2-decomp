@@ -322,7 +322,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     state->targetY = getTrackHeightAtPosition(state->gameData, angle, &state->targetX);
     state->targetY = state->targetY + state->heightOffset;
 
-    computeLookAtMatrix(&state->targetX, state, &lookAtTransform);
+    computeLookAtMatrix((Vec3i *)&state->targetX, (Vec3i *)state, &lookAtTransform);
 
     memcpy(&offsetTransform, &identityMatrix, 0x20);
     offsetTransform.translation.z = state->cameraDistance;
@@ -458,7 +458,7 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
         state->targetY = heightTarget;
     }
     state->targetY = state->targetY + state->heightOffset;
-    computeLookAtMatrix(targetPtr, state, &lookAtTransform);
+    computeLookAtMatrix((Vec3i *)targetPtr, (Vec3i *)state, &lookAtTransform);
     memcpy(&offsetTransform, &identityMatrix, 0x20);
     offsetTransform.translation.z = state->cameraDistance;
     func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
@@ -520,7 +520,7 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
         state->turnDirection = 0;
     }
 
-    computeLookAtMatrix(&state->targetX, state, lookAtTransform);
+    computeLookAtMatrix((Vec3i *)&state->targetX, (Vec3i *)state, (Transform3D *)lookAtTransform);
 
     memcpy(&offsetTransform, &identityMatrix, 0x20);
 
@@ -664,7 +664,7 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
         state->targetY = heightTarget;
     }
     state->targetY = state->targetY + state->heightOffset;
-    computeLookAtMatrix(targetPtr, state, &lookAtTransform);
+    computeLookAtMatrix((Vec3i *)targetPtr, (Vec3i *)state, &lookAtTransform);
     memcpy(&offsetTransform, &identityMatrix, 0x20);
     offsetTransform.translation.z = state->cameraDistance;
     func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
