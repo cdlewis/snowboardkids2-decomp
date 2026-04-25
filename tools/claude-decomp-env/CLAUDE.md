@@ -27,7 +27,7 @@ After base.c builds successfully, repeat the following steps:
 1. Run `./build.sh base.c` to build and get a diff against the target assembly. A score of 100% indicates a perfect match.
 2. Come up with a plan to improve the match. Look for areas where the control flow and instructions do not match. Consider what the original developers intended to write given the function's broader purpose.
 3. Create a new file (`base_n.c` where `n` is your attempt number) with changes you expect to improve the match. Start small and work incrementally — if you test multiple changes at once they may interact poorly.
-4. Return to step 2 and continue working to improve the match percentage. Record key learnings in LEARNINGS.md. Keep going until you reach a 100% match or are unable to make progress (e.g. 10 attempts without any improvement to the match percentage).
+4. Return to step 2 and continue working to improve the match percentage. Record key learnings in LEARNINGS.md. Keep going until you reach a 100% match or are unable to make progress (e.g. 40 attempts without any improvement to the match percentage).
 
 ## Tools
 
