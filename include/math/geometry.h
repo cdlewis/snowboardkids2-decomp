@@ -66,7 +66,7 @@ void createRotationMatrixXZ(Transform3D *matrix, u16 angleX, u16 angleZ);
 void createRotationMatrixYZ(s16 *matrix, u16 angleY, u16 angleZ);
 void createRotationMatrixXYZ(s16 *, u16, u16, u16);
 
-void matrixToEulerAngles(s32 *, s32 *, f32 *, f32 *, f32 *, f32 *, f32 *, f32 *);
+void matrixToEulerAngles(Transform3D *, Transform3D *, f32 *, f32 *, f32 *, f32 *, f32 *, f32 *);
 
 void transformVector(s16 *input, s16 *matrix, void *output);
 void transformVector2(void *input, void *matrix, Vec3i *output);

@@ -59,30 +59,30 @@ typedef struct {
 void enqueueTiledTextureRender(s32 arg0, TrickBurstEffectTask *arg1);
 
 typedef struct {
-    /* 0x00 */ void *model;
-    /* 0x04 */ u8 opaqueMatrix[0x20];
+    /* 0x00 */ SceneModel *model;
+    /* 0x04 */ Transform3D opaqueMatrix;
     /* 0x24 */ void *opaqueSettings;
     /* 0x28 */ void *opaqueDisplayList;
     /* 0x2C */ void *opaqueVertexData;
     /* 0x30 */ s32 opaqueFlag;
     /* 0x34 */ u8 pad34[0xC];
-    /* 0x40 */ u8 transparentMatrix[0x20];
+    /* 0x40 */ Transform3D transparentMatrix;
     /* 0x60 */ void *transparentSettings;
     /* 0x64 */ void *transparentDisplayList;
     /* 0x68 */ void *transparentVertexData;
     /* 0x6C */ s32 transparentFlag;
     /* 0x70 */ u8 pad70[0xC];
-    /* 0x7C */ s32 scale;
+    /* 0x7C */ union { s32 val; s16 halves[2]; } scale;
     /* 0x80 */ s16 rotationY;
     /* 0x82 */ s8 transparentEnabled;
     /* 0x83 */ s8 overlayAnimState;
-    /* 0x84 */ s32 overlayScaleX;
-    /* 0x88 */ s32 overlayScaleY;
+    /* 0x84 */ union { s32 val; s16 halves[2]; } overlayScaleX;
+    /* 0x88 */ union { s32 val; s16 halves[2]; } overlayScaleY;
     /* 0x8C */ s32 oscillationOffset;
     /* 0x90 */ s16 oscillationAngle;
     /* 0x92 */ s8 oscillationEnabled;
     /* 0x93 */ s8 scaleAnimState;
-    /* 0x94 */ u8 overlayMatrix[0x20];
+    /* 0x94 */ Transform3D overlayMatrix;
     /* 0xB4 */ void *overlaySettings;
     /* 0xB8 */ void *overlayDisplayList;
     /* 0xBC */ void *overlayVertexData;

@@ -131,7 +131,7 @@ CharSelectIconPositions charSelectIconPositions = {
     0x0014,
 };
 
-CharSelectItemData D_8008DD8C_8E98C = {
+CharSelectItemData charSelectItemData = {
     3,
     4,
     {

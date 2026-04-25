@@ -41,8 +41,8 @@ typedef struct {
     /* 0x16 */ u16 clipHeight;
     /* 0x18 */ s16 ciMode;
     /* 0x1A */ s16 unk1A;
-    /* 0x1C */ s32 textureData;
-    /* 0x20 */ s32 tileIndexData;
+    /* 0x1C */ u8 *textureData;
+    /* 0x20 */ u16 *tileIndexData;
     /* 0x24 */ TileEntry *tileEntries;
     /* 0x28 */ TexData32 *paletteData;
 } TiledTextureRenderState;
@@ -79,8 +79,8 @@ void renderTiledTexture(TiledTextureRenderState *state) {
     s16 rowRem;
     s16 colRem;
     s32 paletteIndex;
-    s32 tileIndexData;
-    s32 textureData;
+    u16 *tileIndexData;
+    u8 *textureData;
     s16 flipX;
     s16 flipY;
     u16 tileMask;
@@ -170,7 +170,7 @@ void renderTiledTexture(TiledTextureRenderState *state) {
 
             for (row = 0; row < numRows; ++row) {
                 textureIndex = rowRem + colRem * state->tilesPerRow;
-                tileGridIndex = ((u16 *)tileIndexData)[textureIndex];
+                tileGridIndex = tileIndexData[textureIndex];
                 paletteIndex = tileEntries[tileGridIndex].paletteIndex;
                 textureIndex = tileEntries[tileGridIndex].textureIndex;
 
@@ -312,11 +312,11 @@ void renderTiledTexture(TiledTextureRenderState *state) {
 }
 
 void initTiledTextureRenderState(TiledTextureRenderState *state, TiledTextureAsset *asset) {
-    TiledTextureAsset *assetBase;
-    s32 unused1;
-    s32 unused2;
+    TiledTextureAsset *assetPtr;
+    s32 pad1;
+    s32 pad2;
 
-    assetBase = asset;
+    assetPtr = asset;
 
     state->x = 0;
     state->y = 0;
@@ -331,8 +331,8 @@ void initTiledTextureRenderState(TiledTextureRenderState *state, TiledTextureAss
     state->clipY = 0;
     state->clipWidth = 0x140;
     state->clipHeight = 0xF0;
-    state->tileIndexData = (s32)((u8 *)assetBase + asset->tileIndexDataOffset);
-    state->textureData = (s32)((u8 *)assetBase + asset->textureDataOffset);
-    state->tileEntries = (TileEntry *)&asset->tileEntries;
-    state->paletteData = (TexData32 *)((u8 *)assetBase + asset->paletteDataOffset);
+    state->tileIndexData = (u16 *)((u8 *)assetPtr + asset->tileIndexDataOffset);
+    state->textureData = (u8 *)((u8 *)assetPtr + asset->textureDataOffset);
+    state->tileEntries = (TileEntry *)asset->tileEntries;
+    state->paletteData = (TexData32 *)((u8 *)assetPtr + asset->paletteDataOffset);
 }

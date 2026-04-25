@@ -572,119 +572,111 @@ void initializeStateEntry(s32 arg0) {
 }
 
 void initializeCutsceneSystem(void *romAssetAddr) {
-    u8 *base;
+    u8 *entryPtr;
     s32 slotIdx;
-    s32 next;
+    s32 nextIdx;
     s32 itemByteOffset;
     u16 entryIndex;
     s32 negOne;
     u16 invalidIdx;
 
-    // Allocate cutscene state table (480 StateEntry structs × 64 bytes = 0x7800, plus 0xE0 byte header = 0x78E0
-    // total)
     gCutsceneStateTableSize = 0x78E0;
     gCutsceneStateTable = allocateNodeMemory(0x78E0);
 
-    // Initialize free list: link all StateEntry structs via next/prev indices
-    // Each entry points to the next (idx+1) and previous (idx-1) in the array
-    // Note: entries 0-2 are reserved for header use, actual entries start at index 3
+    // Build the free list: link all 480 entries into a doubly-linked list
     slotIdx = 0;
     do {
         StateEntry *entry;
         s32 entryByteOffset;
-        s32 prev;
+        s32 prevIdx;
 
         entry = gCutsceneStateTable;
-        entryByteOffset = slotIdx << 6; // Each StateEntry is 64 bytes
-        next = slotIdx + 1;
-        prev = slotIdx - 1;
-        base = (u8 *)entry + entryByteOffset;
-        *(s16 *)(base + 0xF8) = next; // entry[slotIdx+3].next_index
-        *(s16 *)(base + 0xFA) = prev; // entry[slotIdx+3].prev_index
+        entryByteOffset = slotIdx << 6;
+        nextIdx = slotIdx + 1;
+        prevIdx = slotIdx - 1;
+        entryPtr = (u8 *)entry + entryByteOffset;
+        *(s16 *)(entryPtr + 0xF8) = nextIdx;
+        *(s16 *)(entryPtr + 0xFA) = prevIdx;
         initializeStateEntry(slotIdx);
-        slotIdx = next;
-    } while (next < 0x1E0); // Initialize 480 entries (0x1E0)
+        slotIdx = nextIdx;
+    } while (nextIdx < 0x1E0);
 
-    // Set up magic signature "EDAT0001" (used for save data validation)
+    // Write magic signature "EDAT0001" at header[1..2] (bytes 4-11) for save data validation
     {
         StateEntry *firstEntry = gCutsceneStateTable;
         StateEntry *firstEntry2;
-        ((u8 *)firstEntry->header)[4] = 0x45; // 'E'
+        ((u8 *)firstEntry->header)[4] = 'E';
         firstEntry2 = gCutsceneStateTable;
-        *(u16 *)((u8 *)firstEntry + 0xFA) = 0xFFFF;   // entry[0].prev_index = invalid (list head)
-        *(u16 *)((u8 *)firstEntry + 0x78B8) = 0xFFFF; // entry[479].prev_index = invalid (list tail)
-        firstEntry->header[0] = 0;                    // Magic[0-3] = 0
-        ((u8 *)firstEntry2->header)[5] = 0x44;        // 'D'
+        *(u16 *)((u8 *)firstEntry + 0xFA) = 0xFFFF;
+        *(u16 *)((u8 *)firstEntry + 0x78B8) = 0xFFFF;
+        firstEntry->header[0] = 0;
+        ((u8 *)firstEntry2->header)[5] = 'D';
     }
-    ((u8 *)gCutsceneStateTable->header)[6] = 0x41;  // 'A'
-    ((u8 *)gCutsceneStateTable->header)[7] = 0x54;  // 'T'
-    ((u8 *)gCutsceneStateTable->header)[8] = 0x30;  // '0'
-    ((u8 *)gCutsceneStateTable->header)[9] = 0x30;  // '0'
-    ((u8 *)gCutsceneStateTable->header)[10] = 0x30; // '0'
+    ((u8 *)gCutsceneStateTable->header)[6] = 'A';
+    ((u8 *)gCutsceneStateTable->header)[7] = 'T';
+    ((u8 *)gCutsceneStateTable->header)[8] = '0';
+    ((u8 *)gCutsceneStateTable->header)[9] = '0';
+    ((u8 *)gCutsceneStateTable->header)[10] = '0';
     slotIdx = 0;
-    ((u8 *)gCutsceneStateTable->header)[11] = 0x31; // '1'
+    ((u8 *)gCutsceneStateTable->header)[11] = '1';
 
-    // Initialize state table header fields (stored in gCutsceneStateTable[0])
     {
         StateEntry *table = gCutsceneStateTable;
         StateEntry *table2;
         negOne = -1;
         table->stateEntryItemSize = 0x38;
         table2 = gCutsceneStateTable;
-        invalidIdx = 0xFFFF;                 // Invalid index marker
-        *(s16 *)((u8 *)table + 0xE) = 0x1DF; // Free list tail index (at offset 0xE in header)
+        invalidIdx = 0xFFFF;
+        table->freeListTailIndex = 0x1DF;
         table->current_index = 0;
         table->allocatedEventCount = 0;
-        table2->slotCount = 0x10; // 16 cutscene slots
+        table2->slotCount = 0x10;
     }
 
-    // Initialize remaining header fields (stored in gCutsceneStateTable[0])
     {
         StateEntry *table = gCutsceneStateTable;
         itemByteOffset = 0;
         table->frameMask = 0x8000;
-        table->maxEntries = 0x1E0; // Max 480 state entries
+        table->maxEntries = 0x1E0;
         table->initModelIndex = 0;
-        table->defaultEndFrame = 100; // Default animation end frame
+        table->defaultEndFrame = 100;
         table->configByte = 0;
     }
 
-    // Initialize 16 slot items (stored in gCutsceneStateTable[0].items array)
-    // Each slot represents a cutscene element (character, camera, etc.)
+    // Initialize 16 slot items, allocating a free list entry for each
     do {
         u8 *itemBytes;
         u8 *itemBytes2;
-        u8 *entryBytes;
+        u8 *allocatedEntryBytes;
         s32 slotIdxByte;
         s32 entryByteOffset;
 
         gCutsceneStateTable->allocatedEventCount++;
         entryIndex = allocateStateEntry();
         itemBytes = (u8 *)gCutsceneStateTable;
-        slotIdxByte = slotIdx << 24; // Isolate low byte via shift
+        slotIdxByte = slotIdx << 24;
         itemBytes += itemByteOffset;
-        itemBytes[0x26] = 0; // items[slotIdx].unk6
+        itemBytes[0x26] = 0;
         itemBytes2 = (u8 *)gCutsceneStateTable + itemByteOffset;
         slotIdx++;
         slotIdxByte >>= 24;
-        *(s16 *)(itemBytes + 0x20) = entryIndex;                // items[slotIdx].headIndex: first event in linked list
-        *(s16 *)(itemBytes + 0x24) = negOne;                    // items[slotIdx].characterId (-1 = none)
-        itemBytes2[0x27] = negOne;                              // items[slotIdx].unk7
-        ((u8 *)gCutsceneStateTable + itemByteOffset)[0x28] = 0; // items[slotIdx].unk8
+        *(s16 *)(itemBytes + 0x20) = entryIndex;
+        *(s16 *)(itemBytes + 0x24) = negOne;
+        itemBytes2[0x27] = negOne;
+        ((u8 *)gCutsceneStateTable + itemByteOffset)[0x28] = 0;
         entryByteOffset = (entryIndex & 0xFFFF) << 6;
-        ((u8 *)gCutsceneStateTable + itemByteOffset)[0x29] = negOne; // items[slotIdx].unk9
+        ((u8 *)gCutsceneStateTable + itemByteOffset)[0x29] = negOne;
         {
             u8 *tableBase = (u8 *)gCutsceneStateTable;
-            s32 cmdOffset = entryByteOffset + 0xC0;   // Offset to scriptData in entry (3 * 64 = 0xC0)
-            itemByteOffset += sizeof(StateEntryItem); // Each StateEntryItem is 10 bytes
-            entryBytes = tableBase + entryByteOffset;
-            *(u16 *)(entryBytes + 0xF8) = invalidIdx; // StateEntry::next_index
-            *(u16 *)(entryBytes + 0xFA) = invalidIdx; // StateEntry::prev_index
+            s32 cmdOffset = entryByteOffset + 0xC0;
+            itemByteOffset += sizeof(StateEntryItem);
+            allocatedEntryBytes = tableBase + entryByteOffset;
+            *(u16 *)(allocatedEntryBytes + 0xF8) = invalidIdx;
+            *(u16 *)(allocatedEntryBytes + 0xFA) = invalidIdx;
             initializeCutsceneCommand(tableBase + cmdOffset, romAssetAddr, 0, 0, slotIdxByte);
         }
     } while (slotIdx < 0x10);
 
-    // Initialize global cutscene entry buffer flags (for copy/paste operations)
     gCutsceneEntryCopyFlag = 0;
     gCutsceneEntryBufferSlotIndex = -1;
     gCutsceneEntryBufferFrameNumber = -1;
@@ -821,25 +813,20 @@ return_error:
 
 insert_entry:
     allocatedIndex = allocateStateEntry();
-    entry = gCutsceneStateTable;
 
-    // Get the next_index from the entry we're inserting after
+    entry = gCutsceneStateTable;
     nextIndex = *(u16 *)((u8 *)entry + (u32)(entryIndex << 6) + 0xF8);
-    // Link the new entry into the list by updating the next_index field
     *(u16 *)((u8 *)entry + (u32)(entryIndex << 6) + 0xF8) = allocatedIndex;
 
     if (nextIndex != 0xFFFF) {
-        // Update the original next entry's prev_index to point to the new entry
         *(u16 *)((u8 *)entry + (u32)(nextIndex << 6) + 0xFA) = allocatedIndex;
     }
 
     newEntry = gCutsceneStateTable;
     entryIndex = allocatedIndex;
-    newEntry = (StateEntry *)((u8 *)newEntry + (u32)(entryIndex << 6));
-    // Set the new entry's prev_index to point to the entry we inserted after
-    *(u16 *)((u8 *)newEntry + 0xFA) = insertAfterIndex;
-    // Set the new entry's next_index to point to the original next entry
-    *(u16 *)((u8 *)newEntry + 0xF8) = nextIndex;
+    newEntry = &newEntry[entryIndex];
+    newEntry[3].prev_index = insertAfterIndex;
+    newEntry[3].next_index = nextIndex;
 
     initializeStateEntry(entryIndex);
 
@@ -1056,26 +1043,14 @@ void pasteCutsceneEntry(void) {
     gCutsceneEntryCutFlag = 0;
 }
 
-/**
- * Cut (remove) a cutscene event entry from its slot and move it to a buffer.
- *
- * This function removes a cutscene event at the given slot and frame number,
- * stores it in a global buffer for pasting later, and adds the entry back
- * to the free list for reuse. The entry is unlinked from the slot's
- * doubly-linked list of events.
- *
- * @param slotIndex The slot index (0-15) containing the entry
- * @param frameNumber The frame number of the entry to cut
- */
 void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
     u16 searchResult;
     u16 entryIndex;
-    u16 entryNextIndex;
-    u16 entryPrevIndex;
+    u16 nextIndex;
+    u16 prevIndex;
     u16 freeListTail;
-    StateEntry *base;
+    StateEntry *table;
 
-    // Find the state entry for the given slot and frame
     searchResult = findStateEntryIndex(slotIndex, frameNumber & 0xFFFF, 0);
     entryIndex = searchResult & 0xFFFF;
 
@@ -1083,34 +1058,28 @@ void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
         return;
     }
 
-    // Don't allow cutting the frame 0 entry
     if (getStateEntry(entryIndex)->frameNumber == 0) {
         return;
     }
 
-    // Copy the entry to the global buffer for paste operations
     memcpy(gCutsceneEntryBuffer, getStateEntry(entryIndex), sizeof(StateEntry));
 
-    // Get the state table and linked list pointers
-    base = gCutsceneStateTable;
-    freeListTail = *(u16 *)((u8 *)base + 0xE);                        // Free list tail (at offset 0xE in first entry)
-    entryNextIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xF8); // StateEntry::next_index
-    entryPrevIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xFA); // StateEntry::prev_index
+    table = gCutsceneStateTable;
+    freeListTail = table->freeListTailIndex;
+    nextIndex = *(u16 *)((u8 *)table + (entryIndex << 6) + 0xF8);
+    prevIndex = *(u16 *)((u8 *)table + (entryIndex << 6) + 0xFA);
 
-    // Add the cut entry to the free list (insert at head)
-    *(u16 *)((u8 *)base + (freeListTail << 6) + 0xF8) = searchResult;
-    *(u16 *)((u8 *)base + 0xE) = searchResult;
+    *(u16 *)((u8 *)table + (freeListTail << 6) + 0xF8) = searchResult;
+    table->freeListTailIndex = searchResult;
 
-    // Update the linked list: unlink the entry from its current position
-    if ((entryPrevIndex & 0xFFFF) != 0xFFFF) {
-        *(u16 *)((u8 *)base + (entryPrevIndex << 6) + 0xF8) = entryNextIndex;
+    if ((prevIndex & 0xFFFF) != 0xFFFF) {
+        *(u16 *)((u8 *)table + (prevIndex << 6) + 0xF8) = nextIndex;
     }
 
-    if ((entryNextIndex & 0xFFFF) != 0xFFFF) {
-        *(u16 *)((u8 *)gCutsceneStateTable + (entryNextIndex << 6) + 0xFA) = entryPrevIndex;
+    if ((nextIndex & 0xFFFF) != 0xFFFF) {
+        *(u16 *)((u8 *)gCutsceneStateTable + (nextIndex << 6) + 0xFA) = prevIndex;
     }
 
-    // Set global flags to indicate a cut operation
     gCutsceneEntryCopyFlag = 1;
     gCutsceneEntryBufferSlotIndex = slotIndex;
     gCutsceneEntryBufferFrameNumber = frameNumber;

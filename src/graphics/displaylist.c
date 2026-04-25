@@ -777,8 +777,8 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
         }
 
         matrixToEulerAngles(
-            &gActiveViewport->cameraRotationMatrix,
-            (s32 *)obj,
+            (Transform3D *)&gActiveViewport->cameraRotationMatrix,
+            &obj->transform,
             &lookAtX,
             &lookAtY,
             &lookAtZ,
@@ -884,8 +884,8 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
         }
 
         matrixToEulerAngles(
-            &gActiveViewport->cameraRotationMatrix,
-            (s32 *)arg0,
+            (Transform3D *)&gActiveViewport->cameraRotationMatrix,
+            &arg0->transform,
             &sp70,
             &sp74,
             &sp78,
@@ -1139,7 +1139,16 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
             return;
         }
 
-        matrixToEulerAngles(&gActiveViewport->cameraRotationMatrix, (s32 *)obj, &eyeX, &eyeY, &eyeZ, &upX, &upY, &upZ);
+        matrixToEulerAngles(
+            (Transform3D *)&gActiveViewport->cameraRotationMatrix,
+            &obj->transform,
+            &eyeX,
+            &eyeY,
+            &eyeZ,
+            &upX,
+            &upY,
+            &upZ
+        );
         guLookAtReflect(&lookAtMatrix, lookAt, 0.0f, 0.0f, 0.0f, eyeX, eyeY, eyeZ, upX, upY, upZ);
         gSPLookAt(gRegionAllocPtr++, lookAt);
     }
@@ -1316,8 +1325,8 @@ void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
         }
 
         matrixToEulerAngles(
-            &gActiveViewport->cameraRotationMatrix,
-            (s32 *)arg0,
+            (Transform3D *)&gActiveViewport->cameraRotationMatrix,
+            &arg0->transform,
             &sp70,
             &sp74,
             &sp78,
@@ -1501,8 +1510,8 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *obj) {
         }
 
         matrixToEulerAngles(
-            &gActiveViewport->cameraRotationMatrix,
-            (s32 *)obj,
+            (Transform3D *)&gActiveViewport->cameraRotationMatrix,
+            &obj->transform,
             &sp70,
             &sp74,
             &sp78,
@@ -1851,8 +1860,8 @@ void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
         }
 
         matrixToEulerAngles(
-            &gActiveViewport->cameraRotationMatrix,
-            (s32 *)displayListObj,
+            (Transform3D *)&gActiveViewport->cameraRotationMatrix,
+            &displayListObj->transform,
             &lookAtX,
             &lookAtY,
             &lookAtZ,

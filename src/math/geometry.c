@@ -1287,22 +1287,31 @@ void computeLookAtMatrix(Vec3i *from, Vec3i *to, Transform3D *out) {
     memcpy(&out->translation, from, sizeof(Vec3i));
 }
 
-void matrixToEulerAngles(s32 *arg0, s32 *arg1, f32 *lookAtX, f32 *lookAtY, f32 *lookAtZ, f32 *upX, f32 *upY, f32 *upZ) {
+void matrixToEulerAngles(
+    Transform3D *cameraMatrix,
+    Transform3D *objectTransform,
+    f32 *lookAtX,
+    f32 *lookAtY,
+    f32 *lookAtZ,
+    f32 *upX,
+    f32 *upY,
+    f32 *upZ
+) {
     Transform3D pitchMatrix;
     Transform3D yawMatrix;
     Transform3D tempMatrix;
     Vec3i delta;
     Vec3i rotated;
-    s32 rxCopy;
+    s32 rotatedX;
     u32 xzMag;
     u32 totalMag;
     s32 cosVal;
-    void *pPitch;
-    void *pIdentity;
+    Transform3D *resultMatrix;
+    Transform3D *identity;
 
-    delta.x = arg0[5] - arg1[5];
-    delta.y = arg0[6] - arg1[6];
-    delta.z = arg0[7] - arg1[7];
+    delta.x = cameraMatrix->translation.x - objectTransform->translation.x;
+    delta.y = cameraMatrix->translation.y - objectTransform->translation.y;
+    delta.z = cameraMatrix->translation.z - objectTransform->translation.z;
 
     if ((u32)(delta.x + 0x10000000) > 0x20000000U || (u32)(delta.y + 0x10000000) > 0x20000000U ||
         (u32)(delta.z + 0x10000000) > 0x20000000U) {
@@ -1315,25 +1324,25 @@ void matrixToEulerAngles(s32 *arg0, s32 *arg1, f32 *lookAtX, f32 *lookAtY, f32 *
         return;
     }
 
-    rotated.x = (s32)((s64)(s16)((u16 *)arg0)[0] * delta.x / 0x2000) +
-                (s32)((s64)(s16)((u16 *)arg0)[1] * delta.y / 0x2000) +
-                (s32)((s64)(s16)((u16 *)arg0)[2] * delta.z / 0x2000);
-    rxCopy = rotated.x;
+    rotated.x = (s32)((s64)(s16)((u16 *)cameraMatrix)[0] * delta.x / 0x2000) +
+                (s32)((s64)(s16)((u16 *)cameraMatrix)[1] * delta.y / 0x2000) +
+                (s32)((s64)(s16)((u16 *)cameraMatrix)[2] * delta.z / 0x2000);
+    rotatedX = rotated.x;
 
-    rotated.y = (s32)((s64)(s16)((u16 *)arg0)[3] * delta.x / 0x2000) +
-                (s32)((s64)(s16)((u16 *)arg0)[4] * delta.y / 0x2000) +
-                (s32)((s64)(s16)((u16 *)arg0)[5] * delta.z / 0x2000);
+    rotated.y = (s32)((s64)(s16)((u16 *)cameraMatrix)[3] * delta.x / 0x2000) +
+                (s32)((s64)(s16)((u16 *)cameraMatrix)[4] * delta.y / 0x2000) +
+                (s32)((s64)(s16)((u16 *)cameraMatrix)[5] * delta.z / 0x2000);
 
-    rotated.z = (s32)((s64)(s16)((u16 *)arg0)[6] * delta.x / 0x2000) +
-                (s32)((s64)(s16)((u16 *)arg0)[7] * delta.y / 0x2000) +
-                (s32)((s64)(s16)((u16 *)arg0)[8] * delta.z / 0x2000);
+    rotated.z = (s32)((s64)(s16)((u16 *)cameraMatrix)[6] * delta.x / 0x2000) +
+                (s32)((s64)(s16)((u16 *)cameraMatrix)[7] * delta.y / 0x2000) +
+                (s32)((s64)(s16)((u16 *)cameraMatrix)[8] * delta.z / 0x2000);
 
-    xzMag = isqrt64((s64)rxCopy * rxCopy + (s64)rotated.z * rotated.z);
+    xzMag = isqrt64((s64)rotatedX * rotatedX + (s64)rotated.z * rotated.z);
     totalMag = isqrt64((u64)xzMag * xzMag + (s64)rotated.y * rotated.y);
 
-    pPitch = &pitchMatrix;
-    pIdentity = &identityMatrix;
-    memcpy(pPitch, pIdentity, sizeof(Transform3D));
+    resultMatrix = &pitchMatrix;
+    identity = &identityMatrix;
+    memcpy(resultMatrix, identity, sizeof(Transform3D));
     if (totalMag != 0) {
         pitchMatrix.m[2][1] = (s64)rotated.y * 0x2000 / totalMag;
         pitchMatrix.m[1][2] = -pitchMatrix.m[2][1];
@@ -1342,7 +1351,7 @@ void matrixToEulerAngles(s32 *arg0, s32 *arg1, f32 *lookAtX, f32 *lookAtY, f32 *
         pitchMatrix.m[1][1] = cosVal;
     }
 
-    memcpy(&yawMatrix, pIdentity, sizeof(Transform3D));
+    memcpy(&yawMatrix, identity, sizeof(Transform3D));
     if (xzMag != 0) {
         yawMatrix.m[2][0] = (s64)rotated.x * 0x2000 / xzMag;
         yawMatrix.m[0][2] = -yawMatrix.m[2][0];
@@ -1351,8 +1360,8 @@ void matrixToEulerAngles(s32 *arg0, s32 *arg1, f32 *lookAtX, f32 *lookAtY, f32 *
         yawMatrix.m[0][0] = cosVal;
     }
 
-    func_8006BDBC_6C9BC((BoneAnimationState *)pPitch, &yawMatrix, &tempMatrix);
-    func_8006BDBC_6C9BC((BoneAnimationState *)arg0, &tempMatrix, pPitch);
+    func_8006BDBC_6C9BC((BoneAnimationState *)resultMatrix, &yawMatrix, &tempMatrix);
+    func_8006BDBC_6C9BC((BoneAnimationState *)cameraMatrix, &tempMatrix, resultMatrix);
 
     *lookAtX = (f32)pitchMatrix.m[2][0];
     *lookAtY = (f32)pitchMatrix.m[2][1];

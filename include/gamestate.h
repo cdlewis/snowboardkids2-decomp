@@ -52,25 +52,9 @@ typedef struct {
 } RaceAssetHeader;
 
 typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
-    void *unk10;
-    void *unk14;
-    void *unk18;
-    void *unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    u8 padding30[0x8];
-    s32 unk38;
-} BodyPart;
-
-typedef struct {
     /* 0x00 */ Transform3D mtx;
-    /* 0x20 */ u8 padding[0x14];
+    /* 0x20 */ s32 displayList;
+    /* 0x24 */ u8 padding[0x10];
     /* 0x34 */ u8 primaryR;
     /* 0x35 */ u8 primaryG;
     /* 0x36 */ u8 primaryB;
