@@ -204,7 +204,9 @@ typedef struct {
 typedef struct {
     u8 _pad0[0x4C];
     Vec3i positionAt4C; /* 0x4C - Position used by projectile variant 1 */
-    u8 _pad58[0x3F4];
+    u8 _pad58[0x300];
+    Vec3i projectileSpawnPos; /* 0x358 - Spawn position used by default boss projectile */
+    u8 _pad364[0xE8];
     s32 velocity;  /* 0x44C - Boss velocity X */
     s32 velocityY; /* 0x450 - Boss velocity Y */
     s32 velocityZ; /* 0x454 - Boss velocity Z */
@@ -3780,21 +3782,21 @@ void spawnBossHomingProjectile(BossHomingProjectileSpawnArg *arg0) {
 
     boss = arg0->boss;
     position = &arg0->position;
-    memcpy(position, (u8 *)boss + 0x358, sizeof(Vec3i));
+    memcpy(position, &boss->projectileSpawnPos, sizeof(Vec3i));
 
-    arg0->position.y = arg0->position.y + (s32)0xFFF10000;
+    arg0->position.y -= 0xF0000;
 
     arg0->sectorIndex = arg0->boss->sectorIndex;
     arg0->playerIndex = arg0->boss->targetPlayerIndex;
 
     randomOffset = randA() & 0xFF;
-    rotationAngle = ((randomOffset - 0x80) * 6) - -0x1000;
+    rotationAngle = ((randomOffset - 0x80) * 6) + 0x1000;
 
     rotateVectorY(&bossHomingProjectileBaseVector, arg0->boss->yRotation + rotationAngle, &arg0->velocity);
 
-    arg0->velocity.x = arg0->velocity.x + arg0->boss->velocity;
-    arg0->velocity.y = arg0->velocity.y + arg0->boss->velocityY;
-    arg0->velocity.z = arg0->velocity.z + arg0->boss->velocityZ;
+    arg0->velocity.x += arg0->boss->velocity;
+    arg0->velocity.y += arg0->boss->velocityY;
+    arg0->velocity.z += arg0->boss->velocityZ;
 
     queueSoundAtPosition(position, 0x1F);
 
