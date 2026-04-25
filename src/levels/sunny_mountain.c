@@ -22,7 +22,7 @@ typedef struct {
     /* 0x10 */ s32 targetY;
     /* 0x14 */ s32 targetZ;
     /* 0x18 */ Transform3D mainMatrix;
-    /* 0x38 */ void *displayList;
+    /* 0x38 */ DisplayLists *displayList;
     /* 0x3C */ void *assetData;
     /* 0x40 */ void *compressedAssetData;
     /* 0x44 */ s32 unk44;
@@ -77,8 +77,8 @@ void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0);
 void initSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *taskState) {
     s32 i;
     s32 srcPositionOffset;
-    SunnyMountainChairLiftTask *destPositionPtr;
-    u8 *destPositionAddr;
+    SunnyMountainChairLiftTask *chairMatrix;
+    u8 *chairTranslationAddr;
     s32 displayObjectOffset;
     LevelDisplayLists *displayLists;
     SunnyMountainAllocation *allocation;
@@ -87,39 +87,32 @@ void initSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *taskState) {
 
     i = 0;
     displayLists = getSkyDisplayLists3ByIndex(allocation->memoryPoolId);
-    taskState->displayList = (void *)((u32)displayLists + 0x90);
+    taskState->displayList = &displayLists->sceneryDisplayLists1;
 
     srcPositionOffset = 0;
     taskState->assetData = loadUncompressedAssetByIndex(allocation->memoryPoolId);
 
-    destPositionPtr = taskState;
+    chairMatrix = taskState;
     displayObjectOffset = 0;
     taskState->compressedAssetData = loadCompressedSegment2AssetByIndex(allocation->memoryPoolId);
 
     taskState->unk44 = 0;
     taskState->waypointIndex = 0;
-    taskState->displayObjects = allocateNodeMemory(0xF0);
+    taskState->displayObjects = allocateNodeMemory(4 * sizeof(DisplayListObject));
 
     do {
-        s32 objectBaseAddr;
         i++;
-
         displayLists = getSkyDisplayLists3ByIndex(allocation->memoryPoolId);
-        objectBaseAddr = displayObjectOffset + (s32)taskState->displayObjects;
-        *(void **)(objectBaseAddr + 0x20) = (void *)((u32)displayLists + 0xA0);
-
-        destPositionAddr = (u8 *)destPositionPtr;
-        destPositionAddr = destPositionAddr + 0x6C;
-
-        *(void **)(displayObjectOffset + (s32)taskState->displayObjects + 0x24) = taskState->assetData;
-
-        *(void **)(displayObjectOffset + (s32)taskState->displayObjects + 0x28) = taskState->compressedAssetData;
-
-        *(void **)(displayObjectOffset + (s32)taskState->displayObjects + 0x2C) = 0;
-
-        memcpy(destPositionAddr, (u8 *)(srcPositionOffset + (s32)allocation->positionData) + 0x30, 0xC);
-
-        destPositionPtr = (SunnyMountainChairLiftTask *)((u8 *)destPositionPtr + 0x20);
+        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->displayObjects))->displayLists =
+            &displayLists->sceneryDisplayLists2;
+        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->displayObjects))->segment1 = taskState->assetData;
+        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->displayObjects))->segment2 =
+            taskState->compressedAssetData;
+        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->displayObjects))->segment3 = NULL;
+        chairTranslationAddr = (u8 *)chairMatrix;
+        chairTranslationAddr = chairTranslationAddr + 0x6C;
+        memcpy(chairTranslationAddr, (u8 *)(srcPositionOffset + (s32)allocation->positionData) + 0x30, 0xC);
+        chairMatrix = (SunnyMountainChairLiftTask *)((u8 *)chairMatrix + 0x20);
         displayObjectOffset += 0x3C;
         srcPositionOffset += 0xC;
     } while (i < 4);
