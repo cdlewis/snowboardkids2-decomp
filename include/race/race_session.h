@@ -4,6 +4,7 @@
 #include "race/particle_items.h"
 #include "race/race_hud.h"
 #include "race/track_collision.h"
+#include "graphics/graphics.h"
 #include "graphics/sprite_table.h"
 #include "common.h"
 #include "graphics/displaylist.h"
@@ -68,7 +69,7 @@ void createViewportTransform(void *output, s32 posX, s32 posY, s32 posZ, s32 dep
 void stopSoundEffectChannel(s32 channelIndex, s32 stoppingSpeed);
 void playFanSoundEffect(s16 fanIndex, s16 volume, s16 pan, s16 channel);
 void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0);
-void spawnConfettiEffect(void *cameraNode);
+void spawnConfettiEffect(ViewportNode *cameraNode);
 s32 isSaveSlotUnlocked(u8 slotIndex);
 u8 isBoardUnlocked(u8 boardIndex);
 u8 getCharacterPaletteId(u8 characterIndex);

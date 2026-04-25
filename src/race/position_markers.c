@@ -6,6 +6,7 @@
 #include "gamestate.h"
 #include "graphics/clip_text_render.h"
 #include "graphics/displaylist.h"
+#include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "race/race_session.h"
@@ -414,15 +415,20 @@ void spawnPushStartPrompt(s32 arg0, s16 yPosition, u8 arg2, u8 arg3, s16 scaleX,
 }
 
 typedef struct {
-    void *particleAsset;
-    void *particles;
-    void *cameraNode;
-    s32 lastCameraX;
-    s32 lastCameraY;
-    s32 lastCameraZ;
-    s16 frameCounter;
-    s16 particleCount;
-    u8 pauseWhenPaused;
+    /* 0x00 */ loadAssetMetadata_arg sprite;
+    /* 0x1C */ s32 pad1C;
+    /* 0x20 */ Vec3i worldPos;
+    /* 0x2C */ Vec3i velocity;
+} ConfettiParticle; /* 0x38 bytes */
+
+typedef struct {
+    /* 0x00 */ void *particleAsset;
+    /* 0x04 */ ConfettiParticle *particles;
+    /* 0x08 */ ViewportNode *cameraNode;
+    /* 0x0C */ Vec3i lastCameraPos;
+    /* 0x18 */ s16 frameCounter;
+    /* 0x1A */ s16 particleCount;
+    /* 0x1C */ u8 pauseWhenPaused;
 } ConfettiEffectTask;
 
 void setupConfettiParticles(ConfettiEffectTask *task);
@@ -441,52 +447,34 @@ void initConfettiEffect(ConfettiEffectTask *task) {
 
 void setupConfettiParticles(ConfettiEffectTask *task) {
     s32 pad[2];
-    s32 offset;
     s32 i;
     s32 gravity;
-    void *extPtr;
+    loadAssetMetadata_arg *extPtr;
 
-    do {
-        (void)pad;
-        i = 0;
-        if (task->particleCount > 0) {
-            gravity = 0x40000;
-            extPtr = &D_80090860_91460;
-            offset = 0;
-            do {
-                i++;
-                /* Initialize particle physics state */
-                *(s32 *)(offset + (s32)task->particles + 0x20) = (randA() & 0xFF) << 17;             /* worldX */
-                *(s32 *)(offset + (s32)task->particles + 0x24) = (randA() & 0xFF) << 17;             /* worldY */
-                *(s32 *)(offset + (s32)task->particles + 0x28) = (randA() & 0xFF) << 17;             /* worldZ */
-                *(s32 *)(offset + (s32)task->particles + 0x2C) = gravity;                            /* velX */
-                *(s32 *)(offset + (s32)task->particles + 0x30) = -((randA() & 0xFF) << 8) - gravity; /* velY */
-                *(s32 *)(offset + (s32)task->particles + 0x34) = 0;                                  /* velZ */
-                loadAssetMetadata((loadAssetMetadata_arg *)(task->particles + offset), task->particleAsset, 0);
-                *(void **)(offset + (s32)task->particles) = extPtr; /* vertices/asset ptr */
-                offset += 0x38;
-            } while (i < task->particleCount);
-        }
-    } while (0);
-    memcpy(&task->lastCameraX, (u8 *)task->cameraNode + 0x134, 0xC);
+    (void)pad;
+    i = 0;
+    if (task->particleCount > 0) {
+        gravity = 0x40000;
+        extPtr = (loadAssetMetadata_arg *)&D_80090860_91460;
+        do {
+            task->particles[i].worldPos.x = (randA() & 0xFF) << 17;
+            task->particles[i].worldPos.y = (randA() & 0xFF) << 17;
+            task->particles[i].worldPos.z = (randA() & 0xFF) << 17;
+            task->particles[i].velocity.x = gravity;
+            task->particles[i].velocity.y = -((randA() & 0xFF) << 8) - gravity;
+            task->particles[i].velocity.z = 0;
+            loadAssetMetadata(&task->particles[i].sprite, task->particleAsset, 0);
+            task->particles[i].sprite.assetTemplate = extPtr;
+            i++;
+        } while (i < task->particleCount);
+    }
+    memcpy(&task->lastCameraPos, &task->cameraNode->modelingMatrix.translation, sizeof(Vec3i));
     setCallbackWithContinue(&updateConfettiParticles);
 }
-
-typedef struct {
-    /* 0x00 */ loadAssetMetadata_arg sprite;
-    /* 0x1C */ s32 pad1C;
-    /* 0x20 */ s32 worldX; /* World-space X position (for physics) */
-    /* 0x24 */ s32 worldY; /* World-space Y position (for physics) */
-    /* 0x28 */ s32 worldZ; /* World-space Z position (for physics) */
-    /* 0x2C */ s32 velX;   /* X velocity */
-    /* 0x30 */ s32 velY;   /* Y velocity (includes gravity) */
-    /* 0x34 */ s32 velZ;   /* Z velocity */
-} ConfettiParticle;        /* 0x38 bytes */
 
 void updateConfettiParticles(ConfettiEffectTask *task) {
     s32 pad[2];
     s32 i;
-    s32 offset;
     s32 running;
     s32 mask;
     s32 cameraOffset;
@@ -497,77 +485,36 @@ void updateConfettiParticles(ConfettiEffectTask *task) {
     if (task->particleCount > 0) {
         mask = 0x1FFFFFF;
         cameraOffset = 0xFF000000;
-        offset = 0;
         do {
-            /* ConfettiParticle struct fields:
-             * worldX - physics position X (offset 0x20)
-             * worldY - physics position Y (offset 0x24)
-             * worldZ - physics position Z (offset 0x28)
-             * velX   - velocity X (offset 0x2C)
-             * velY   - velocity Y (offset 0x30)
-             * velZ   - velocity Z (offset 0x34)
-             */
             if (task->pauseWhenPaused != 0) {
                 GameState *gameState = (GameState *)getCurrentAllocation();
                 running &= -(gameState->gamePaused == 0);
             }
             if (running != 0) {
-                /* Update particle physics position */
-                {
-                    s32 *p = (s32 *)(offset + (s32)task->particles);
-                    p[8] += p[0xB]; /* worldX += velX */
-                }
-                {
-                    s32 *p = (s32 *)(offset + (s32)task->particles);
-                    p[9] += p[0xC]; /* worldY += velY */
-                }
-                /* Respawn particle if it falls below the world */
-                if (*(s32 *)(offset + (s32)task->particles + 0x24) < 0) {
-                    *(s32 *)(offset + (s32)task->particles + 0x20) = (randA() & 0xFF) << 17;
-                    *(s32 *)(offset + (s32)task->particles + 0x24) = 0x02000000;
-                    *(s32 *)(offset + (s32)task->particles + 0x28) = (randA() & 0xFF) << 17;
-                    *(s32 *)(offset + (s32)task->particles + 0x30) = 0xFFFC0000 - ((randA() & 0xFF) << 8);
+                task->particles[i].worldPos.x += task->particles[i].velocity.x;
+                task->particles[i].worldPos.y += task->particles[i].velocity.y;
+                if (task->particles[i].worldPos.y < 0) {
+                    task->particles[i].worldPos.x = (randA() & 0xFF) << 17;
+                    task->particles[i].worldPos.y = 0x02000000;
+                    task->particles[i].worldPos.z = (randA() & 0xFF) << 17;
+                    task->particles[i].velocity.y = 0xFFFC0000 - ((randA() & 0xFF) << 8);
                 }
             }
-            /* Adjust world position relative to camera movement */
-            {
-                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
-                p->worldX -= *(s32 *)((u8 *)task->cameraNode + 0x134) - task->lastCameraX;
-            }
-            {
-                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
-                p->worldX &= mask;
-            }
-            {
-                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
-                p->worldZ -= *(s32 *)((u8 *)task->cameraNode + 0x13C) - task->lastCameraZ;
-            }
-            {
-                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
-                p->worldZ &= mask;
-            }
-            /* Update render position based on world position and camera */
-            {
-                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
-                s32 camX = *(s32 *)((u8 *)task->cameraNode + 0x134) + cameraOffset;
-                p->sprite.position.x = p->worldX + camX;
-            }
-            {
-                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
-                s32 camY = *(s32 *)((u8 *)task->cameraNode + 0x138) + cameraOffset;
-                p->sprite.position.y = p->worldY + camY;
-            }
-            {
-                ConfettiParticle *p = (ConfettiParticle *)(offset + (s32)task->particles);
-                s32 camZ = *(s32 *)((u8 *)task->cameraNode + 0x13C) + cameraOffset;
-                p->sprite.position.z = p->worldZ + camZ;
-            }
-            enqueueTexturedBillboardSprite(task->frameCounter, (void *)((s32)task->particles + offset));
+            task->particles[i].worldPos.x -= task->cameraNode->modelingMatrix.translation.x - task->lastCameraPos.x;
+            task->particles[i].worldPos.x &= mask;
+            task->particles[i].worldPos.z -= task->cameraNode->modelingMatrix.translation.z - task->lastCameraPos.z;
+            task->particles[i].worldPos.z &= mask;
+            task->particles[i].sprite.position.x =
+                task->particles[i].worldPos.x + (task->cameraNode->modelingMatrix.translation.x + cameraOffset);
+            task->particles[i].sprite.position.y =
+                task->particles[i].worldPos.y + (task->cameraNode->modelingMatrix.translation.y + cameraOffset);
+            task->particles[i].sprite.position.z =
+                task->particles[i].worldPos.z + (task->cameraNode->modelingMatrix.translation.z + cameraOffset);
+            enqueueTexturedBillboardSprite(task->frameCounter, (TexturedBillboardSprite *)&task->particles[i]);
             i++;
-            offset += sizeof(ConfettiParticle);
         } while (i < task->particleCount);
     }
-    memcpy(&task->lastCameraX, (u8 *)task->cameraNode + 0x134, 0xC);
+    memcpy(&task->lastCameraPos, &task->cameraNode->modelingMatrix.translation, sizeof(Vec3i));
 }
 
 void cleanupConfettiEffect(ConfettiEffectTask *task) {
@@ -603,19 +550,10 @@ void spawnConfettiEffectForAllPlayers(void) {
     }
 }
 
-typedef struct {
-    u8 _pad[0x8];
-    void *cameraNode;
-    u8 _pad2[0xC];
-    s16 frameCounter;
-    s16 particleCount;
-    u8 pauseWhenPaused;
-} ConfettiSpawnArgs;
+void spawnConfettiEffect(ViewportNode *cameraNode) {
+    ConfettiEffectTask *task;
 
-void spawnConfettiEffect(void *cameraNode) {
-    ConfettiSpawnArgs *task;
-
-    task = (ConfettiSpawnArgs *)scheduleTask(&initConfettiEffect, 0, 0, 0xF0);
+    task = (ConfettiEffectTask *)scheduleTask(&initConfettiEffect, 0, 0, 0xF0);
 
     if (task != NULL) {
         task->frameCounter = 0;
