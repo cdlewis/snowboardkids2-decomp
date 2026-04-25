@@ -48,6 +48,15 @@ typedef struct {
     u8 pad2;
 } BossSurfaceColor;
 
+/* Overlay at offset 0x38 of each 0x3C-stride body part slot in Player */
+typedef struct {
+    Transform3D mtx;
+    void *assetPtr;
+    s32 unk5C;
+    s32 unk60;
+    s32 unk64;
+} BodyPartExtra;
+
 /* Forward declarations for function pointer tables */
 s32 initPlayerForRace(Player *);
 void dispatchDefaultBehaviorPhase(BehaviorState *);
@@ -1037,39 +1046,25 @@ void updateRacePlayer(Player *player) {
 s32 initPlayerForRace(Player *player) {
     Vec3i waypoint1;
     Vec3i waypoint2;
-    GameState *gameState;
+    GameState *gameState = getCurrentAllocation();
     s32 i;
-    s32 assetOffset;
-    u8 *elem;
-    u16 sectorIdx;
-    s32 *posPtr;
-    s32 playerIdx;
-    s32 v0_temp;
 
-    gameState = getCurrentAllocation();
-
-    /* Initialize rotation matrices */
-    memcpy(&player->headingTransform, &identityMatrix, 0x20);
+    memcpy(&player->headingTransform, &identityMatrix, sizeof(Transform3D));
     createYRotationMatrix(&player->headingTransform, player->rotY);
-    memcpy(&player->orientationTransform, &identityMatrix, 0x20);
-    memcpy(&player->tiltTransform, &identityMatrix, 0x20);
+    memcpy(&player->orientationTransform, &identityMatrix, sizeof(Transform3D));
+    memcpy(&player->tiltTransform, &identityMatrix, sizeof(Transform3D));
 
-    /* Set initial X position based on player index */
     player->worldPos.x = gPlayerStartXPositions[player->playerIndex];
     if (gameState->numPlayers == 1) {
         player->worldPos.x = 0;
     }
 
-    /* Get track waypoints and sector info */
     getTrackSegmentWaypoints((TrackGeometryData *)&gameState->gameData, 0, &waypoint1, &waypoint2);
-    posPtr = (s32 *)&player->worldPos;
     player->worldPos.z = waypoint1.z + 0x200000;
+    player->sectorIndex = getOrUpdatePlayerSectorIndex(player, &gameState->gameData, 0, &player->worldPos);
+    player->worldPos.y = getTrackHeightInSector(&gameState->gameData, player->sectorIndex, &player->worldPos, 0x100000);
 
-    sectorIdx = getOrUpdatePlayerSectorIndex(player, &gameState->gameData, 0, posPtr);
-    player->sectorIndex = sectorIdx;
-    player->worldPos.y = getTrackHeightInSector(&gameState->gameData, sectorIdx, posPtr, 0x100000);
-
-    memcpy(&player->prevWorldPosX, posPtr, 0xC);
+    memcpy(&player->prevWorldPosX, &player->worldPos, sizeof(Vec3i));
 
     player->velocity.x = 0;
     player->velocity.y = 0;
@@ -1079,30 +1074,24 @@ s32 initPlayerForRace(Player *player) {
 
     applyCharacterBoardStats(player);
 
-    /* Initialize body part elements (17 elements, each 0x3C bytes) */
     for (i = 0; i < 17; i++) {
-        elem = (u8 *)player + i * 0x3C;
-        memcpy(elem + 0x38, &identityMatrix, 0x20);
+        BodyPartExtra *extra = (BodyPartExtra *)((u8 *)player + i * 0x3C + 0x38);
+        memcpy(&extra->mtx, &identityMatrix, sizeof(Transform3D));
         if (i != 16) {
-            *(s32 *)(elem + 0x5C) = *(s32 *)&player->unk4;
-            *(s32 *)(elem + 0x60) = *(s32 *)&player->unk8;
-            *(s32 *)(elem + 0x64) = 0;
-            assetOffset = i * 0x10;
-            *(void **)(elem + 0x58) =
-                (void *)(loadAssetByIndex_953B0(player->characterId, player->boardIndex) + assetOffset);
+            extra->unk5C = (s32)player->unk4;
+            extra->unk60 = (s32)player->unk8;
+            extra->unk64 = 0;
+            extra->assetPtr = (void *)(loadAssetByIndex_953B0(player->characterId, player->boardIndex) + i * 0x10);
         } else {
             player->unk418 = &D_8009A550_9B150[0];
-            player->unk41C = *(s32 *)&player->unkC;
-            player->unk420 = *(s32 *)&player->unk10;
-            player->unk424 = *(s32 *)&player->unk14;
+            player->unk41C = (s32)player->unkC;
+            player->unk420 = (s32)player->unk10;
+            player->unk424 = (s32)player->unk14;
         }
     }
 
     player->leanAnimIndex = 0;
-
-    /* Get bone count and reset animations */
     player->leanBoneCount = getAnimationBoneCount(player->unk0, 0);
-
     for (i = 0; i < player->leanBoneCount; i++) {
         resetBoneAnimation(player->unk0, player->leanAnimIndex, i, &player->unk488[i]);
     }
@@ -1113,7 +1102,7 @@ s32 initPlayerForRace(Player *player) {
     player->collisionOffset.y = 0xA0000;
     player->collisionOffset.z = 0;
     player->collisionRadius = 0xA0000;
-    memcpy(&player->collisionListNode.localPos, &player->collisionOffset, 0xC);
+    memcpy(&player->collisionListNode.localPos, &player->collisionOffset, sizeof(Vec3i));
     player->collisionListNode.radius = player->collisionRadius;
     player->collisionListNode.id = player->playerIndex;
 
@@ -1146,50 +1135,54 @@ s32 initPlayerForRace(Player *player) {
         return 1;
     }
 
-    playerIdx = (s32)player->playerIndex;
-    v0_temp = 1;
-    if (playerIdx == v0_temp)
-        goto case_1_or_2;
-    v0_temp = (playerIdx < 2);
-    if (v0_temp == 0)
-        goto check_2_or_3;
-    if (playerIdx == 0)
-        goto case_0;
-    v0_temp = 0xBB8;
-    goto set_race_gold;
+    {
+        s32 playerIdx = (s32)player->playerIndex;
+        s32 v0_temp;
 
-check_2_or_3:
-    v0_temp = 2;
-    if (playerIdx == v0_temp)
-        goto case_1_or_2;
-    v0_temp = 3;
-    if (playerIdx == v0_temp)
-        goto case_3;
-    v0_temp = 0xBB8;
-    goto set_race_gold;
+        v0_temp = 1;
+        if (playerIdx == v0_temp)
+            goto case_1_or_2;
+        v0_temp = (playerIdx < 2);
+        if (v0_temp == 0)
+            goto check_2_or_3;
+        if (playerIdx == 0)
+            goto case_0;
+        v0_temp = 0xBB8;
+        goto set_race_gold;
 
-case_0:
-    player->primaryItemId = 2;
-    player->primaryItemAmmo = 3;
-    player->secondaryItemId = 5;
-    goto set_race_gold_after_unkBD4;
+    check_2_or_3:
+        v0_temp = 2;
+        if (playerIdx == v0_temp)
+            goto case_1_or_2;
+        v0_temp = 3;
+        if (playerIdx == v0_temp)
+            goto case_3;
+        v0_temp = 0xBB8;
+        goto set_race_gold;
 
-case_1_or_2:
-    player->primaryItemId = 1;
-    player->primaryItemAmmo = 3;
-    player->secondaryItemId = 1;
-    goto set_race_gold_after_unkBD4;
+    case_0:
+        player->primaryItemId = 2;
+        player->primaryItemAmmo = 3;
+        player->secondaryItemId = 5;
+        goto set_race_gold_after_unkBD4;
 
-case_3:
-    player->primaryItemId = 3;
-    player->primaryItemAmmo = 3;
-    player->secondaryItemId = 1;
+    case_1_or_2:
+        player->primaryItemId = 1;
+        player->primaryItemAmmo = 3;
+        player->secondaryItemId = 1;
+        goto set_race_gold_after_unkBD4;
 
-set_race_gold_after_unkBD4:
-    v0_temp = 0xBB8;
+    case_3:
+        player->primaryItemId = 3;
+        player->primaryItemAmmo = 3;
+        player->secondaryItemId = 1;
 
-set_race_gold:
-    player->raceGold = v0_temp;
+    set_race_gold_after_unkBD4:
+        v0_temp = 0xBB8;
+
+    set_race_gold:
+        player->raceGold = v0_temp;
+    }
 
     return 1;
 }
