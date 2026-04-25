@@ -190,7 +190,6 @@ void prepareCutsceneForPlayback(
     s32 i;
     u16 modelId;
 
-
     manager->uiResource = uiResource;
     manager->lightColors = lightColors;
     manager->ambientColor = ambientColor;
@@ -214,10 +213,10 @@ void prepareCutsceneForPlayback(
             clearModelAnimationState(manager->slots[i].model);
         }
     }
-    *(s16 *)&manager->textRenderer = -0x90;
-    *((s16 *)&manager->textRenderer + 1) = 0x68;
-    *(s16 *)&manager->padFEC[0] = 0;
-    *(s32 *)&manager->padFEC[4] = (s32)&manager->debugText[0];
+    manager->textX = -0x90;
+    manager->textY = 0x68;
+    manager->textPalette = 0;
+    manager->textString = (u8 *)&manager->debugText[0];
     manager->showDebugInfo = showDebugInfo;
     manager->enableTransparency = 0;
     manager->skipAnimation = 0;
@@ -242,12 +241,7 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
 
     if (cutsceneManager->showDebugInfo) {
         sprintf((char *)cutsceneManager->debugText, gDebugFrameFormatString, cutsceneManager->currentFrame);
-        debugEnqueueCallback(
-            cutsceneManager->uiResource->slot_index,
-            6,
-            &renderTextPalette,
-            &cutsceneManager->textRenderer
-        );
+        debugEnqueueCallback(cutsceneManager->uiResource->slot_index, 6, &renderTextPalette, &cutsceneManager->textX);
     }
 
     while (cutsceneManager->currentFrame <= cutsceneManager->maxFrame && !cutsceneManager->skipAnimation) {

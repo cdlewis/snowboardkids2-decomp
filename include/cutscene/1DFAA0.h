@@ -269,8 +269,10 @@ typedef struct CutsceneManager {
     /* 0x9E */ s8 pad9E[0x2];
     /* 0xA0 */ s8 debugText[0x8];
     /* 0xA8 */ CutsceneSlot slots[16];
-    /* 0xFE8 */ void *textRenderer;
-    /* 0xFEC */ s8 padFEC[0x8];
+    /* 0xFE8 */ s16 textX;
+    /* 0xFEA */ s16 textY;
+    /* 0xFEC */ u16 textPalette;
+    /* 0xFF0 */ u8 *textString;
     /* 0xFF4 */ s8 showDebugInfo;
     /* 0xFF5 */ s8 enableTransparency;
     /* 0xFF6 */ s8 unused_FF6;
