@@ -813,25 +813,20 @@ return_error:
 
 insert_entry:
     allocatedIndex = allocateStateEntry();
-    entry = gCutsceneStateTable;
 
-    // Get the next_index from the entry we're inserting after
+    entry = gCutsceneStateTable;
     nextIndex = *(u16 *)((u8 *)entry + (u32)(entryIndex << 6) + 0xF8);
-    // Link the new entry into the list by updating the next_index field
     *(u16 *)((u8 *)entry + (u32)(entryIndex << 6) + 0xF8) = allocatedIndex;
 
     if (nextIndex != 0xFFFF) {
-        // Update the original next entry's prev_index to point to the new entry
         *(u16 *)((u8 *)entry + (u32)(nextIndex << 6) + 0xFA) = allocatedIndex;
     }
 
     newEntry = gCutsceneStateTable;
     entryIndex = allocatedIndex;
-    newEntry = (StateEntry *)((u8 *)newEntry + (u32)(entryIndex << 6));
-    // Set the new entry's prev_index to point to the entry we inserted after
-    *(u16 *)((u8 *)newEntry + 0xFA) = insertAfterIndex;
-    // Set the new entry's next_index to point to the original next entry
-    *(u16 *)((u8 *)newEntry + 0xF8) = nextIndex;
+    newEntry = &newEntry[entryIndex];
+    newEntry[3].prev_index = insertAfterIndex;
+    newEntry[3].next_index = nextIndex;
 
     initializeStateEntry(entryIndex);
 
