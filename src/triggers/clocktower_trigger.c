@@ -19,37 +19,33 @@ void initClocktowerDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
 }
 
 void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *trigger) {
-    GameState *gameState = getCurrentAllocation();
-    u32 positionCheck;
     s16 playerYaw;
     s16 normalizedYaw;
-    u8 locationId;
     s16 minAngle;
     s16 maxAngle;
+    u8 locationId;
+    GameState *gameState;
 
-    // Only check if player is at specific Y position range
-    // (gameState->unk3F8 should be between 0x4C0000 and 0x580000)
-    positionCheck = gameState->unk3F8 + 0xFFB3FFFF;
-    if (positionCheck >= 0xBFFFF) {
-        return;
-    }
-
-    playerYaw = gameState->unk3F4;
-    // Normalize angle to range -0x1000 to 0x1000
-    normalizedYaw = playerYaw;
-    if (playerYaw >= 0x1001) {
-        normalizedYaw -= 0x2000;
-    }
-
-    locationId = trigger->locationId;
-    minAngle = ((s16 *)storyMapAngleBounds)[locationId * 2];
-    if (normalizedYaw < minAngle) {
-        maxAngle = ((s16 *)storyMapAngleBounds)[(locationId * 2) + 1];
-        if (maxAngle < normalizedYaw) {
-            // Check if player's X position is within discovery range
-            if (((u16)(gameState->unk3FC - 0xC01)) < 0x7FF) {
-                gameState->locationDiscovered = 1;
-                gameState->discoveredLocationId = trigger->locationId;
+    gameState = getCurrentAllocation();
+    // Only check if player is within the clocktower Y range
+    if ((u32)(gameState->unk3F8 - 0x4C0001) < 0xBFFFF) {
+        playerYaw = gameState->unk3F4;
+        // Normalize angle to range -0x1000 to 0x1000
+        normalizedYaw = playerYaw;
+        if (playerYaw >= 0x1001) {
+            normalizedYaw -= 0x2000;
+        }
+        // Get angle bounds for this location from the angle bounds table
+        locationId = trigger->locationId;
+        minAngle = ((s16 *)storyMapAngleBounds)[locationId * 2];
+        if (normalizedYaw < minAngle) {
+            maxAngle = ((s16 *)storyMapAngleBounds)[(locationId * 2) + 1];
+            if (normalizedYaw > maxAngle) {
+                // Check if player's X position is within discovery range
+                if ((u16)(gameState->unk3FC - 0xC01) < 0x7FF) {
+                    gameState->locationDiscovered = 1;
+                    gameState->discoveredLocationId = trigger->locationId;
+                }
             }
         }
     }
