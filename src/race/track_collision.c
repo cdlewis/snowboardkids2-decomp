@@ -1398,25 +1398,25 @@ void computePlayerTerrainAlignment(Player *player) {
     Vec3i rotatedNormal;
     Vec3i samplePoints[3];
     Transform3D combinedMatrix;
-    Transform3D tempMatrix;
-    void *allocation;
-    s32 temp;
+    Transform3D headingOrientationMatrix;
+    GameState *gameState;
+    s32 groundHeight;
     s16(*samplePattern)[6];
     s32 i;
-    s32 result;
+    s32 sampledHeight;
     u8 attackState;
-    s64 distSq;
-    s32 dist;
+    s64 sampleDistSq;
+    s32 length;
     s16 pitchAngle, rollAngle;
 
     player->animFlags |= 1;
 
-    allocation = getCurrentAllocation();
+    gameState = (GameState *)getCurrentAllocation();
 
-    temp = getTrackHeightInSector((u8 *)allocation + 0x30, player->sectorIndex, &player->worldPos, 0x100000);
+    groundHeight = getTrackHeightInSector(&gameState->gameData, player->sectorIndex, &player->worldPos, 0x100000);
 
-    if (!(temp < player->worldPos.y)) {
-        player->worldPos.y = temp;
+    if (!(groundHeight < player->worldPos.y)) {
+        player->worldPos.y = groundHeight;
         player->animFlags &= ~1;
     }
 
@@ -1424,8 +1424,8 @@ void computePlayerTerrainAlignment(Player *player) {
 
     createYRotationMatrix(&player->headingTransform, player->rotY);
 
-    func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &tempMatrix);
-    func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &tempMatrix, &combinedMatrix);
+    func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &headingOrientationMatrix);
+    func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &headingOrientationMatrix, &combinedMatrix);
 
     attackState = player->flyingAttackState;
 
@@ -1447,11 +1447,11 @@ void computePlayerTerrainAlignment(Player *player) {
 
     for (i = 0; i < 3; i++) {
         u16 sectorIndex =
-            getOrUpdatePlayerSectorIndex(player, (u8 *)allocation + 0x30, player->sectorIndex, &samplePoints[i]);
-        result = getTrackHeightInSector((u8 *)allocation + 0x30, sectorIndex, &samplePoints[i], 0x100000);
+            getOrUpdatePlayerSectorIndex(player, &gameState->gameData, player->sectorIndex, &samplePoints[i]);
+        sampledHeight = getTrackHeightInSector(&gameState->gameData, sectorIndex, &samplePoints[i], 0x100000);
 
-        if (!(samplePoints[i].y >= result)) {
-            samplePoints[i].y = result;
+        if (!(samplePoints[i].y >= sampledHeight)) {
+            samplePoints[i].y = sampledHeight;
         }
     }
 
@@ -1459,45 +1459,45 @@ void computePlayerTerrainAlignment(Player *player) {
     samplePoints[1].y -= samplePoints[0].y;
     samplePoints[1].z -= samplePoints[0].z;
 
-    distSq = (s64)samplePoints[1].x * samplePoints[1].x + (s64)samplePoints[1].y * samplePoints[1].y +
-             (s64)samplePoints[1].z * samplePoints[1].z;
-    dist = isqrt64(distSq);
+    sampleDistSq = (s64)samplePoints[1].x * samplePoints[1].x + (s64)samplePoints[1].y * samplePoints[1].y +
+                   (s64)samplePoints[1].z * samplePoints[1].z;
+    length = isqrt64(sampleDistSq);
 
-    samplePoints[1].x = (s32)(((s64)samplePoints[1].x * 0x2000) / dist);
-    samplePoints[1].y = (s32)(((s64)samplePoints[1].y * 0x2000) / dist);
-    samplePoints[1].z = (s32)(((s64)samplePoints[1].z * 0x2000) / dist);
+    samplePoints[1].x = (s32)(((s64)samplePoints[1].x * 0x2000) / length);
+    samplePoints[1].y = (s32)(((s64)samplePoints[1].y * 0x2000) / length);
+    samplePoints[1].z = (s32)(((s64)samplePoints[1].z * 0x2000) / length);
 
     samplePoints[2].x -= samplePoints[0].x;
     samplePoints[2].y -= samplePoints[0].y;
     samplePoints[2].z -= samplePoints[0].z;
 
-    dist = isqrt64(
+    length = isqrt64(
         (s64)samplePoints[2].x * samplePoints[2].x + (s64)samplePoints[2].y * samplePoints[2].y +
         (s64)samplePoints[2].z * samplePoints[2].z
     );
 
-    samplePoints[2].x = (s32)(((s64)samplePoints[2].x * 0x2000) / dist);
-    samplePoints[2].y = (s32)(((s64)samplePoints[2].y * 0x2000) / dist);
-    samplePoints[2].z = (s32)(((s64)samplePoints[2].z * 0x2000) / dist);
+    samplePoints[2].x = (s32)(((s64)samplePoints[2].x * 0x2000) / length);
+    samplePoints[2].y = (s32)(((s64)samplePoints[2].y * 0x2000) / length);
+    samplePoints[2].z = (s32)(((s64)samplePoints[2].z * 0x2000) / length);
 
     normal.x = samplePoints[2].y * samplePoints[1].z - samplePoints[2].z * samplePoints[1].y;
     normal.y = samplePoints[2].z * samplePoints[1].x - samplePoints[2].x * samplePoints[1].z;
     normal.z = samplePoints[2].x * samplePoints[1].y - samplePoints[2].y * samplePoints[1].x;
 
-    dist = isqrt64((s64)normal.x * normal.x + (s64)normal.y * normal.y + (s64)normal.z * normal.z);
+    length = isqrt64((s64)normal.x * normal.x + (s64)normal.y * normal.y + (s64)normal.z * normal.z);
 
-    normal.x = (s32)(((s64)normal.x * 0x2000) / dist);
-    normal.y = (s32)(((s64)normal.y * 0x2000) / dist);
-    normal.z = (s32)(((s64)normal.z * 0x2000) / dist);
+    normal.x = (s32)(((s64)normal.x * 0x2000) / length);
+    normal.y = (s32)(((s64)normal.y * 0x2000) / length);
+    normal.z = (s32)(((s64)normal.z * 0x2000) / length);
 
     transformVector3(&normal, &player->headingTransform, &rotatedNormal);
 
     pitchAngle = atan2Fixed(rotatedNormal.z, -rotatedNormal.y);
     player->pitchAngle = (-pitchAngle) & 0x1FFF;
 
-    dist = isqrt64((s64)rotatedNormal.y * rotatedNormal.y + (s64)rotatedNormal.z * rotatedNormal.z);
+    length = isqrt64((s64)rotatedNormal.y * rotatedNormal.y + (s64)rotatedNormal.z * rotatedNormal.z);
 
-    rollAngle = atan2Fixed(-rotatedNormal.x, -dist);
+    rollAngle = atan2Fixed(-rotatedNormal.x, -length);
     player->rollAngle = (-rollAngle) & 0x1FFF;
 
     createXRotationMatrix(player->orientationTransform.m, player->pitchAngle);
