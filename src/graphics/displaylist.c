@@ -1083,64 +1083,54 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
     f32 upY;
     f32 upZ;
     LookAt *lookAt;
-    Mtx *matrixPair;
-    Transform3D *transform;
-    s32 frac16Mask;
 
     if (obj->transformMatrix == NULL) {
-        matrixPair = arenaAlloc16(0x80);
-        obj->transformMatrix = matrixPair;
-        if (matrixPair == NULL) {
+        obj->transformMatrix = arenaAlloc16(0x80);
+        if (obj->transformMatrix == NULL) {
             return;
         }
-        /* First matrix: translation matrix (identity + translation) */
-        /* Integer portion */
-        ((s32 *)obj->transformMatrix)[0] = 0x10000;
-        ((s32 *)obj->transformMatrix)[1] = 0;
-        ((s32 *)obj->transformMatrix)[2] = 1;
-        ((s32 *)obj->transformMatrix)[3] = 0;
-        ((s32 *)obj->transformMatrix)[4] = 0;
-        ((s32 *)obj->transformMatrix)[5] = 0x10000;
-        ((s32 *)obj->transformMatrix)[6] =
+        /* First matrix: translation (identity rotation + position) */
+        obj->transformMatrix->m[0][0] = 0x10000;
+        obj->transformMatrix->m[0][1] = 0;
+        obj->transformMatrix->m[0][2] = 1;
+        obj->transformMatrix->m[0][3] = 0;
+        obj->transformMatrix->m[1][0] = 0;
+        obj->transformMatrix->m[1][1] = 0x10000;
+        obj->transformMatrix->m[1][2] =
             (obj->transform.translation.x & 0xFFFF0000) + ((u16 *)&obj->transform.translation.y)[0];
-        ((s32 *)obj->transformMatrix)[7] = (obj->transform.translation.z & 0xFFFF0000) + 1;
-        /* Fractional portion */
-        ((s32 *)obj->transformMatrix)[8] = 0;
-        ((s32 *)obj->transformMatrix)[9] = 0;
-        ((s32 *)obj->transformMatrix)[10] = 0;
-        ((s32 *)obj->transformMatrix)[11] = 0;
-        ((s32 *)obj->transformMatrix)[12] = 0;
-        ((s32 *)obj->transformMatrix)[13] = 0;
-        ((s32 *)obj->transformMatrix)[14] =
+        obj->transformMatrix->m[1][3] = (obj->transform.translation.z & 0xFFFF0000) + 1;
+        obj->transformMatrix->m[2][0] = 0;
+        obj->transformMatrix->m[2][1] = 0;
+        obj->transformMatrix->m[2][2] = 0;
+        obj->transformMatrix->m[2][3] = 0;
+        obj->transformMatrix->m[3][0] = 0;
+        obj->transformMatrix->m[3][1] = 0;
+        obj->transformMatrix->m[3][2] =
             (obj->transform.translation.x << 16) + ((u16 *)&obj->transform.translation.y)[1];
-        frac16Mask = 0xFFFF;
-        ((s32 *)obj->transformMatrix)[15] = obj->transform.translation.z << 16;
-        /* Second matrix: rotation matrix built from Transform3D rotation data */
-        transform = &obj->transform;
-        /* Integer portion */
-        ((s32 *)obj->transformMatrix)[16] =
-            ((transform->m[0][0] * 2) & 0xFFFF0000) + (-(s32)((u16)transform->m[0][1] >> 15) & frac16Mask);
-        ((s32 *)obj->transformMatrix)[17] = (transform->m[0][2] * 2) & 0xFFFF0000;
-        ((s32 *)obj->transformMatrix)[18] =
-            ((transform->m[1][0] * 2) & 0xFFFF0000) + (-(s32)((u16)transform->m[1][1] >> 15) & frac16Mask);
-        ((s32 *)obj->transformMatrix)[19] = (transform->m[1][2] * 2) & 0xFFFF0000;
-        ((s32 *)obj->transformMatrix)[20] =
-            ((transform->m[2][0] * 2) & 0xFFFF0000) + (-(s32)((u16)transform->m[2][1] >> 15) & 0xFFFF);
-        ((s32 *)obj->transformMatrix)[21] = (transform->m[2][2] * 2) & 0xFFFF0000;
-        ((s32 *)obj->transformMatrix)[22] = 0;
-        ((s32 *)obj->transformMatrix)[23] = 1;
-        /* Fractional portion */
-        ((s32 *)obj->transformMatrix)[24] =
-            ((transform->m[0][0] << 17) & 0xFFFF0000) + ((transform->m[0][1] * 2) & frac16Mask);
-        ((s32 *)obj->transformMatrix)[25] = (transform->m[0][2] << 17) & 0xFFFF0000;
-        ((s32 *)obj->transformMatrix)[26] =
-            ((transform->m[1][0] << 17) & 0xFFFF0000) + ((transform->m[1][1] * 2) & frac16Mask);
-        ((s32 *)obj->transformMatrix)[27] = (transform->m[1][2] << 17) & 0xFFFF0000;
-        ((s32 *)obj->transformMatrix)[28] =
-            ((transform->m[2][0] << 17) & 0xFFFF0000) + ((transform->m[2][1] * 2) & frac16Mask);
-        ((s32 *)obj->transformMatrix)[29] = (transform->m[2][2] << 17) & 0xFFFF0000;
-        ((s32 *)obj->transformMatrix)[30] = 0;
-        ((s32 *)obj->transformMatrix)[31] = 0;
+        obj->transformMatrix->m[3][3] = obj->transform.translation.z << 16;
+        /* Second matrix: rotation from Transform3D */
+        obj->transformMatrix[1].m[0][0] =
+            ((obj->transform.m[0][0] * 2) & 0xFFFF0000) + (-(s32)((u16)obj->transform.m[0][1] >> 15) & 0xFFFF);
+        obj->transformMatrix[1].m[0][1] = (obj->transform.m[0][2] * 2) & 0xFFFF0000;
+        obj->transformMatrix[1].m[0][2] =
+            ((obj->transform.m[1][0] * 2) & 0xFFFF0000) + (-(s32)((u16)obj->transform.m[1][1] >> 15) & 0xFFFF);
+        obj->transformMatrix[1].m[0][3] = (obj->transform.m[1][2] * 2) & 0xFFFF0000;
+        obj->transformMatrix[1].m[1][0] =
+            ((obj->transform.m[2][0] * 2) & 0xFFFF0000) + (-(s32)((u16)obj->transform.m[2][1] >> 15) & 0xFFFF);
+        obj->transformMatrix[1].m[1][1] = (obj->transform.m[2][2] * 2) & 0xFFFF0000;
+        obj->transformMatrix[1].m[1][2] = 0;
+        obj->transformMatrix[1].m[1][3] = 1;
+        obj->transformMatrix[1].m[2][0] =
+            ((obj->transform.m[0][0] << 17) & 0xFFFF0000) + ((obj->transform.m[0][1] * 2) & 0xFFFF);
+        obj->transformMatrix[1].m[2][1] = (obj->transform.m[0][2] << 17) & 0xFFFF0000;
+        obj->transformMatrix[1].m[2][2] =
+            ((obj->transform.m[1][0] << 17) & 0xFFFF0000) + ((obj->transform.m[1][1] * 2) & 0xFFFF);
+        obj->transformMatrix[1].m[2][3] = (obj->transform.m[1][2] << 17) & 0xFFFF0000;
+        obj->transformMatrix[1].m[3][0] =
+            ((obj->transform.m[2][0] << 17) & 0xFFFF0000) + ((obj->transform.m[2][1] * 2) & 0xFFFF);
+        obj->transformMatrix[1].m[3][1] = (obj->transform.m[2][2] << 17) & 0xFFFF0000;
+        obj->transformMatrix[1].m[3][2] = 0;
+        obj->transformMatrix[1].m[3][3] = 0;
     }
 
     if (obj->displayLists->flags & 1) {
