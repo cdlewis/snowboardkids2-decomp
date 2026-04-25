@@ -294,12 +294,12 @@ void initializeRotatingLogo(RotatingLogoState *state) {
     state->overlayVertexData = loadAssetGroupCompressedData(state->model);
     state->overlaySettings = &D_800885F0_891F0;
     state->overlayFlag = 0;
-    state->scale = 0x2000;
+    state->scale.val = 0x2000;
     state->rotationY = 0;
     state->transparentEnabled = 0;
     state->overlayAnimState = 0;
-    state->overlayScaleX = 0;
-    state->overlayScaleY = 0;
+    state->overlayScaleX.val = 0;
+    state->overlayScaleY.val = 0;
     state->soundData = loadAssetGroupSoundData(state->model);
     state->scrollU = 0;
     state->scrollV = 0;
@@ -328,16 +328,16 @@ void updateRotatingLogoState(RotatingLogoState *state) {
 
     shouldOscillate = 0;
 
-    if (((func_80002B50_3750_arg *)state->model)->isDestroyed == 1) {
+    if (state->model->isDestroyed == 1) {
         terminateCurrentTask();
         return;
     }
 
-    actionMode = ((func_80002B50_3750_arg *)state->model)->actionMode;
+    actionMode = state->model->actionMode;
     switch (actionMode) {
         case 0:
         default:
-            state->scale = 0x2000;
+            state->scale.val = 0x2000;
             state->scaleAnimState = 0;
             break;
         case 1:
@@ -347,7 +347,7 @@ void updateRotatingLogoState(RotatingLogoState *state) {
             break;
         case 3:
             state->scaleAnimState = 3;
-            state->scale = 0;
+            state->scale.val = 0;
             break;
         case 4:
             state->transparentEnabled = 1;
@@ -374,17 +374,17 @@ void updateRotatingLogoState(RotatingLogoState *state) {
 
     switch (state->scaleAnimState) {
         case 1:
-            newScale = state->scale - 0x111;
-            state->scale = newScale;
+            newScale = state->scale.val - 0x111;
+            state->scale.val = newScale;
             if (newScale < 0) {
-                state->scale = 0;
+                state->scale.val = 0;
             }
             break;
         case 2:
-            newScale = state->scale + 0x111;
-            state->scale = newScale;
+            newScale = state->scale.val + 0x111;
+            state->scale.val = newScale;
             if (newScale >= 0x2001) {
-                state->scale = 0x2000;
+                state->scale.val = 0x2000;
             }
             break;
     }
@@ -402,43 +402,43 @@ void updateRotatingLogoState(RotatingLogoState *state) {
         state->oscillationOffset = (s32)(((s32)(approximateSin(state->oscillationAngle) * 4) >> 8) << 11);
     }
 
-    ((SceneModel *)state->model)->unk44 = state->oscillationOffset;
+    state->model->unk44 = state->oscillationOffset;
 
     switch (state->overlayAnimState) {
         case 1:
-            state->overlayScaleX += 0x222;
-            state->overlayScaleY += 0x111;
-            if (state->overlayScaleX >= 0x4001) {
-                state->overlayScaleX = 0x4000;
+            state->overlayScaleX.val += 0x222;
+            state->overlayScaleY.val += 0x111;
+            if (state->overlayScaleX.val >= 0x4001) {
+                state->overlayScaleX.val = 0x4000;
             }
-            if (state->overlayScaleY >= 0x2001) {
-                state->overlayScaleY = 0x2000;
+            if (state->overlayScaleY.val >= 0x2001) {
+                state->overlayScaleY.val = 0x2000;
             }
             break;
         case 2:
-            state->overlayScaleX -= 0x222;
-            state->overlayScaleY -= 0x111;
-            if (state->overlayScaleX < 0) {
-                state->overlayScaleX = 0;
+            state->overlayScaleX.val -= 0x222;
+            state->overlayScaleY.val -= 0x111;
+            if (state->overlayScaleX.val < 0) {
+                state->overlayScaleX.val = 0;
             }
-            if (state->overlayScaleY < 0) {
-                state->overlayScaleY = 0;
+            if (state->overlayScaleY.val < 0) {
+                state->overlayScaleY.val = 0;
             }
-            if (state->overlayScaleX == 0 && state->overlayScaleY == 0) {
+            if (state->overlayScaleX.val == 0 && state->overlayScaleY.val == 0) {
                 state->overlayAnimState = 0;
             }
             break;
     }
 
     createYRotationMatrix(&rotationMatrix, 0x400);
-    func_8006B084_6BC84(&rotationMatrix, (void *)((u8 *)state->model + 0x18), (Transform3D *)state->opaqueMatrix);
-    memcpy((void *)((u8 *)state + 0x18), (void *)((u8 *)state->model + 0x2C), 0xC);
+    func_8006B084_6BC84(&rotationMatrix, &state->model->matrix18, &state->opaqueMatrix);
+    memcpy(&state->opaqueMatrix.translation, &state->model->matrix18.translation, sizeof(Vec3i));
 
-    *(s32 *)((u8 *)state + 0x1C) += state->oscillationOffset;
-    scaleMatrix((Transform3D *)state->opaqueMatrix, 0x2000, *(s16 *)((u8 *)state + 0x7E), 0x2000);
+    state->opaqueMatrix.translation.y += state->oscillationOffset;
+    scaleMatrix(&state->opaqueMatrix, 0x2000, state->scale.halves[1], 0x2000);
 
-    if (state->scale != 0) {
-        enqueueModelDisplayList((func_80002B50_3750_arg *)state->model, (DisplayListObject *)state->opaqueMatrix);
+    if (state->scale.val != 0) {
+        enqueueModelDisplayList((func_80002B50_3750_arg *)state->model, (DisplayListObject *)&state->opaqueMatrix);
     }
 
     if (state->transparentEnabled == 0) {
@@ -447,36 +447,29 @@ void updateRotatingLogoState(RotatingLogoState *state) {
         state->rotationY -= 0xF;
         tempAngle = state->rotationY;
         createYRotationMatrix(&transparentMatrix, tempAngle);
-        func_8006B084_6BC84(
-            &transparentMatrix,
-            (void *)((u8 *)state->model + 0x18),
-            (Transform3D *)state->transparentMatrix
-        );
+        func_8006B084_6BC84(&transparentMatrix, &state->model->matrix18, &state->transparentMatrix);
 
-        *(s32 *)((u8 *)state + 0x58) += 0x166666;
-        *(s32 *)((u8 *)state + 0x58) += state->oscillationOffset;
-        enqueueModelDisplayList((func_80002B50_3750_arg *)state->model, (DisplayListObject *)state->transparentMatrix);
+        state->transparentMatrix.translation.y += 0x166666;
+        state->transparentMatrix.translation.y += state->oscillationOffset;
+        enqueueModelDisplayList((func_80002B50_3750_arg *)state->model, (DisplayListObject *)&state->transparentMatrix);
     }
 
     if (state->overlayAnimState != 0 && isModelVisible((func_80002B50_3750_arg *)state->model) != 0) {
-        memcpy((void *)state->overlayMatrix, (void *)((u8 *)state->model + 0x18), 0x20);
+        memcpy(&state->overlayMatrix, &state->model->matrix18, sizeof(Transform3D));
 
-        *(s32 *)((u8 *)state + 0xAC) += state->oscillationOffset;
+        state->overlayMatrix.translation.y += state->oscillationOffset;
         scaleMatrix(
-            (Transform3D *)state->overlayMatrix,
-            *(s16 *)((u8 *)state + 0x8A),
-            *(s16 *)((u8 *)state + 0x86),
-            *(s16 *)((u8 *)state + 0x8A)
+            &state->overlayMatrix,
+            state->overlayScaleY.halves[1],
+            state->overlayScaleX.halves[1],
+            state->overlayScaleY.halves[1]
         );
 
         state->scrollU += state->scrollSpeedU;
         state->scrollV += state->scrollSpeedV;
         *(s16 *)((u8 *)state + 0xD8) = *(u8 *)((u8 *)state + 0xD9);
         *(s16 *)((u8 *)state + 0xDA) = *(u8 *)((u8 *)state + 0xDB);
-        enqueueScrollingTextureRender(
-            *(u16 *)((u8 *)*(s32 *)((u8 *)state->model + 0x10) + 0x16),
-            (DisplayListObject *)state->overlayMatrix
-        );
+        enqueueScrollingTextureRender(state->model->unk10->unk16, (DisplayListObject *)&state->overlayMatrix);
     }
 }
 
