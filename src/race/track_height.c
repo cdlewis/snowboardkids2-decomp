@@ -177,16 +177,17 @@ void setPlayerLeanAnimation(Player *player, s32 animIndex, s32 progress) {
 extern u8 gCharacterBodyPartAnimTable[];
 extern u8 gBodyPartRemapTable[];
 
-/* Load character body part display lists. Each player has 16 body parts (0x3C bytes each).
- * Offset 0x58 in each body part contains the display list pointer.
+/* Load character body part display lists into the bone results array.
+ * Iterates 16 body parts (0x3C stride), writing the display list pointer at
+ * offset 0x58 (offsetof(boneResults) + offsetof(BoneResult, displayList)).
  * For race type 0xB, uses loadAssetByIndex_95380; otherwise uses loadAssetByIndex_953B0.
  */
 void loadCharacterBodyParts(Player *player) {
     s32 flags;
     s32 partIndex;
     u8 tableValue;
-    BodyPart *bodyPart;
-    BodyPart *bodyPart2;
+    BoneResult *bodyPart;
+    BoneResult *bodyPart2;
     u8 *lookupTable;
 
     if (((GameState *)getCurrentAllocation())->raceType == 0xB) {
@@ -194,7 +195,7 @@ void loadCharacterBodyParts(Player *player) {
         if (flags & 4) {
             player->animFlags = flags | 8;
             partIndex = 0;
-            bodyPart = (BodyPart *)player;
+            bodyPart = (BoneResult *)player;
             do {
                 *(s32 *)((u8 *)bodyPart + 0x58) = (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) +
                                                   gBodyPartRemapTable[partIndex] * 0x10;
@@ -204,7 +205,7 @@ void loadCharacterBodyParts(Player *player) {
         } else {
             player->animFlags = flags & ~8;
             partIndex = 0;
-            bodyPart = (BodyPart *)player;
+            bodyPart = (BoneResult *)player;
             do {
                 *(s32 *)((u8 *)bodyPart + 0x58) =
                     (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) + partIndex * 0x10;
@@ -216,7 +217,7 @@ void loadCharacterBodyParts(Player *player) {
         if (flags & 4) {
             player->animFlags = flags | 8;
             partIndex = 0;
-            bodyPart2 = (BodyPart *)player;
+            bodyPart2 = (BoneResult *)player;
             do {
                 *(s32 *)((u8 *)bodyPart2 + 0x58) = loadAssetByIndex_953B0(player->characterId, player->boardIndex) +
                                                    gBodyPartRemapTable[partIndex] * 0x10;
@@ -226,7 +227,7 @@ void loadCharacterBodyParts(Player *player) {
         } else {
             player->animFlags = flags & ~8;
             partIndex = 0;
-            bodyPart2 = (BodyPart *)player;
+            bodyPart2 = (BoneResult *)player;
             do {
                 *(s32 *)((u8 *)bodyPart2 + 0x58) =
                     loadAssetByIndex_953B0(player->characterId, player->boardIndex) + partIndex * 0x10;
