@@ -1129,7 +1129,7 @@ segments:
       - [0x1DF180, c, cutscene/cutscene_sound]
       - [0x1DF310, c, cutscene/cutscene_sys]
       - [0x1DF8B0, c, cutscene/cutscene_sys2]
-      - [0x1DFAA0, c, cutscene/1DFAA0]
+      - [0x1DFAA0, c, cutscene/cutscene_manager]
       - [0x1E1BA0, c, effects/fan_effect]
       - [0x1E2070, c, effects/screen_transition]
       - [0x1E25B0, c, effects/trick_burst]

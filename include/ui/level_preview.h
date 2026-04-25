@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "graphics/displaylist.h"
 #include "graphics/sprite_rdp.h"
 #include "math/geometry.h"

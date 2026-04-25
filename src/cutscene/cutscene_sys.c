@@ -1,6 +1,6 @@
 #include "cutscene/cutscene_sys.h"
 #include "assets.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "graphics/graphics.h"
 #include "graphics/model_loader.h"
 #include "os_cont.h"

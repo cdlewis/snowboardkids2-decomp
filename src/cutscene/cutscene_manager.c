@@ -1,4 +1,4 @@
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "animation/animation_loop.h"
 #include "animation/slot_animation.h"
 #include "core/main.h"
@@ -974,7 +974,7 @@ void renderCutsceneSlotMenu(s32 arg0, s16 arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/1DFAA0", func_800B3FFC_1E10AC);
+INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_manager", func_800B3FFC_1E10AC);
 
 u16 getMaxCutsceneFrameNumber(void) {
     u16 maxFrameNumber;

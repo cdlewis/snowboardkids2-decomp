@@ -1,10 +1,10 @@
 #include "cutscene/1DD170.h"
 
 #include "common.h"
-#include "cutscene/1DFAA0.h"
 #include "cutscene/cutscene_bgm.h"
 #include "cutscene/cutscene_camera.h"
 #include "cutscene/cutscene_chr.h"
+#include "cutscene/cutscene_manager.h"
 #include "cutscene/cutscene_sound.h"
 #include "cutscene/cutscene_sys.h"
 #include "cutscene/cutscene_sys2.h"

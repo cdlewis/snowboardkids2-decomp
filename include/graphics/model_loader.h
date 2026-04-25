@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 
 typedef struct {
     u8 pad[0x218];

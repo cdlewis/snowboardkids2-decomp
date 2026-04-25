@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "animation/animation_loop.h"
 #include "common.h"
 

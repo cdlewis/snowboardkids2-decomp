@@ -1,6 +1,6 @@
 #include "cutscene/cutscene_chr.h"
 #include "animation/slot_animation.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "ui/level_preview_3d.h"
 
 void cutsceneChrPosition_init(void) {

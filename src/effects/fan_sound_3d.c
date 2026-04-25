@@ -1,5 +1,5 @@
 #include "common.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "effects/fan_effect.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"

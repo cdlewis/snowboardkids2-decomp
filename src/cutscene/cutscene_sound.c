@@ -1,5 +1,5 @@
 #include "cutscene/cutscene_sound.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "effects/fan_effect.h"
 #include "effects/fan_sound_3d.h"
 #include "os_cont.h"

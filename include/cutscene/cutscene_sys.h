@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "common.h"
 #include "graphics/graphics.h"
 

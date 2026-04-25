@@ -1,5 +1,5 @@
 #include "common.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 
 s32 getCategorySkipValue(u8 categoryIndex);
 s32 initializeSlotState(StateEntry *state, CutsceneManager *cutsceneManager, s8 slotIndex);

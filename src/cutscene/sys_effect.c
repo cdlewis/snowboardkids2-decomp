@@ -1,6 +1,6 @@
 #include "cutscene/sys_effect.h"
 #include "animation/easing_state.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "effects/fan_effect.h"
 #include "effects/rocket_boost.h"
 #include "effects/screen_transition.h"

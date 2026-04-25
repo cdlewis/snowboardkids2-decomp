@@ -1,5 +1,5 @@
 #include "common.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 
 void debugHandleFanSoundInput(void);
 

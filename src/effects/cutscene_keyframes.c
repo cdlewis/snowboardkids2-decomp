@@ -1,7 +1,7 @@
 #include "effects/cutscene_keyframes.h"
 #include "audio/audio.h"
 #include "common.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "effects/scrolling_texture.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"

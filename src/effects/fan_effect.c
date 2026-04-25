@@ -1,7 +1,7 @@
 #include "assets.h"
 #include "audio/audio.h"
 #include "common.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 #include "race/race_session.h"

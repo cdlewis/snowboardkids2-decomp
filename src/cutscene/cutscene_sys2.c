@@ -1,5 +1,5 @@
 #include "cutscene/cutscene_sys2.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "effects/zoom_effect.h"
 #include "graphics/model_loader.h"
 #include "system/task_scheduler.h"

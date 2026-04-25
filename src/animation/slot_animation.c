@@ -1,6 +1,6 @@
 #include "animation/slot_animation.h"
 #include "animation/animation_loop.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "cutscene/cutscene_sys2.h"
 #include "effects/animated_sprite_effect.h"
 #include "effects/static_sprite_effect.h"

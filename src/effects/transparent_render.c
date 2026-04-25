@@ -1,7 +1,7 @@
 #include "assets.h"
 #include "common.h"
 #include "core/main.h"
-#include "cutscene/1DFAA0.h"
+#include "cutscene/cutscene_manager.h"
 #include "graphics/graphics.h"
 #include "system/task_scheduler.h"
 #include "ui/save_data.h"
