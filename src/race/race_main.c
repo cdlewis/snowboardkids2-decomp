@@ -5462,32 +5462,25 @@ void renderPlayerJointShadow(Player *player) {
     OutputStruct_19E80 textureEntry;
     s32 alpha;
     s32 i;
-    Player *jointSrc;
 
     if (player->jointShadowNeedsUpdate != 0) {
         player->jointVertices = arenaAlloc16(0x90);
         if (player->jointVertices != NULL) {
             i = 0;
             alpha = 0x50;
-            jointSrc = player;
             do {
-                s32 offset;
-                s32 vtxBase;
-
-                vtxBase = (s32)player->jointVertices;
-                offset = i << 4;
-                *(s16 *)(offset + vtxBase) =
-                    (s16)((*(volatile s32 *)((u8 *)jointSrc + 0xA10) - player->jointPositions[0].x) >> 14);
+                s32 offset = i << 4;
+                *(s16 *)(offset + (s32)player->jointVertices) =
+                    (s16)((*(volatile s32 *)&player->jointPositions[i].x - player->jointPositions[0].x) >> 14);
                 *(s16 *)(offset + (s32)player->jointVertices + 2) =
-                    (s16)((*(volatile s32 *)((u8 *)jointSrc + 0xA14) - player->jointPositions[0].y) >> 14);
+                    (s16)((*(volatile s32 *)&player->jointPositions[i].y - player->jointPositions[0].y) >> 14);
                 *(s16 *)(offset + (s32)player->jointVertices + 4) =
-                    (s16)((*(volatile s32 *)((u8 *)jointSrc + 0xA18) - player->jointPositions[0].z) >> 14);
+                    (s16)((*(volatile s32 *)&player->jointPositions[i].z - player->jointPositions[0].z) >> 14);
                 *(u8 *)(offset + (s32)player->jointVertices + 0xC) = 0;
                 *(u8 *)(offset + (s32)player->jointVertices + 0xD) = 0;
                 *(u8 *)(offset + (s32)player->jointVertices + 0xE) = 0;
                 *(u8 *)(offset + (s32)player->jointVertices + 0xF) = alpha;
                 i++;
-                jointSrc = (Player *)((u8 *)jointSrc + 0xC);
             } while (i < 9);
 
             player->jointVertices[0].v.tc[0] = -0x20;
