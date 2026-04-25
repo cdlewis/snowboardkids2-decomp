@@ -79,10 +79,133 @@ typedef struct {
 } ScriptedCameraAllocation;
 
 void updateChaseCamera(ChaseCameraState *camera);
-extern s32 D_8008FEB0_90AB0;
 void updateOrbitCamera(OrbitCameraState *camera);
 void initScriptedCamera(ScriptedCameraState *camera);
 void updateScriptedCamera(ScriptedCameraState *camera);
+
+Vec3i D_8008FEB0_90AB0 = { 0xFFF00000, 0x00000000, 0x00200000 };
+
+CameraKeyframe D_8008FEBC_90ABC[] = {
+    { 0x0000, 0x0000, 0xF165807E, 0x1DA0BFDB, 0x01ABD8F2 },
+    { 0x005A, 0x0000, 0xF3AB2D0A, 0x1C3E7396, 0xFFC39E0D },
+    { 0x005A, 0x0000, 0xF3AB2D0A, 0x1C3E7396, 0xFFC39E0D },
+};
+
+CameraKeyframe D_8008FEEC_90AEC[] = {
+    { 0x0000, 0x0000, 0xF2FB7FE5, 0x1C642725, 0x0112CC78 },
+    { 0x0017, 0x0000, 0xF3710909, 0x1C5A277C, 0x005B742F },
+    { 0x0043, 0x0000, 0xF64B1061, 0x1BB7A7BD, 0xFCE4CE44 },
+    { 0x0043, 0x0000, 0xF64B1061, 0x1BB7A7BD, 0xFCE4CE44 },
+};
+
+CameraKeyframe D_8008FF2C_90B2C[] = {
+    { 0x0000, 0x0000, 0xF2FC1BE5, 0x1C46E925, 0x00D9E278 },
+    { 0x0017, 0x0000, 0xF38E7771, 0x1C3CEB24, 0x000CBB3F },
+    { 0x0043, 0x0000, 0xF682D489, 0x1BA2EFE5, 0xFCA2A1AC },
+    { 0x0043, 0x0000, 0xF682D489, 0x1BA2EFE5, 0xFCA2A1AC },
+};
+
+CameraKeyframe D_8008FF6C_90B6C[] = {
+    { 0x00B4, 0x0000, 0xF69ED811, 0x1B9CD87D, 0xFC3F1B58 },
+};
+
+CameraKeyframe D_8008FF7C_90B7C[] = {
+    { 0x0000, 0x0000, 0xF7007AE1, 0x1B77AA1C, 0xFC10AFC0 },
+    { 0x0037, 0x0000, 0xF70F4841, 0x1B966EAC, 0xFBECC9D0 },
+    { 0x0037, 0x0000, 0xF70F4841, 0x1B966EAC, 0xFBECC9D0 },
+};
+
+CameraKeyframe D_8008FFAC_90BAC[] = {
+    { 0x0000, 0x0000, 0xF6DC3611, 0x1B9F407C, 0xFC3C0158 },
+    { 0x0061, 0x0000, 0xF6DC3611, 0x1B783534, 0xFC3C0158 },
+    { 0x0061, 0x0000, 0xF6DC3611, 0x1B783534, 0xFC3C0158 },
+};
+
+CameraKeyframe D_8008FFDC_90BDC[] = {
+    { 0x0000, 0x0000, 0xFAE8AD06, 0x1A020751, 0xF47058DE },
+    { 0x0062, 0x0000, 0xFC48A354, 0x1985029E, 0xF2D0EC6E },
+    { 0x0062, 0x0000, 0xFC48A354, 0x1985029E, 0xF2D0EC6E },
+};
+
+CameraKeyframe D_8009000C_90C0C[] = {
+    { 0x0000, 0x0000, 0xDA8026C3, 0x0A156458, 0xE3EFE99D },
+    { 0x0023, 0x0000, 0xD8F04184, 0x091ADC32, 0xE2618680 },
+    { 0x0023, 0x0000, 0xD8F04184, 0x091ADC32, 0xE2618680 },
+};
+
+CameraKeyframe D_8009003C_90C3C[] = {
+    { 0x0000, 0x0000, 0xD8E0DF54, 0x08F61B0A, 0xE1A4BCC0 },
+    { 0x0046, 0x0000, 0xD8C7913A, 0x07388681, 0xDD873E1B },
+    { 0x0046, 0x0000, 0xD8C7913A, 0x07388681, 0xDD873E1B },
+};
+
+CameraKeyframe D_8009006C_90C6C[] = {
+    { 0x0000, 0x0000, 0xF28F3E39, 0x1428030C, 0xE9004421 },
+    { 0x0034, 0x0000, 0xF01A4F69, 0x1305B077, 0xE8A12BA8 },
+    { 0x0034, 0x0000, 0xF01A4F69, 0x1305B077, 0xE8A12BA8 },
+};
+
+CameraKeyframe D_8009009C_90C9C[] = {
+    { 0x0000, 0x0000, 0xF1B54DE9, 0x14CA0FF7, 0xE8DB8658 },
+    { 0x004C, 0x0000, 0xEFA88C41, 0x14475543, 0xE85521A7 },
+    { 0x004C, 0x0000, 0xEFA88C41, 0x14475543, 0xE85521A7 },
+};
+
+CameraKeyframe D_800900CC_90CCC[] = {
+    { 0x0000, 0x0000, 0x0070E766, 0x26736A7C, 0x18A1B778 },
+    { 0x000A, 0x0000, 0x0012BC39, 0x265D90CA, 0x184CA6AD },
+    { 0x0034, 0x0000, 0xFC1592F5, 0x24A497ED, 0x14E6A5A3 },
+    { 0x0034, 0x0000, 0xFC1592F5, 0x24A497ED, 0x14E6A5A3 },
+};
+
+CameraKeyframe D_8009010C_90D0C[] = {
+    { 0x0000, 0x0000, 0xFC4F38AD, 0x251574E5, 0x159C6A79 },
+    { 0x002A, 0x0000, 0xF97DCE2B, 0x23787CF9, 0x126E2072 },
+    { 0x002A, 0x0000, 0xF97DCE2B, 0x23787CF9, 0x126E2072 },
+};
+
+CameraKeyframe D_8009013C_90D3C[] = {
+    { 0x0000, 0x0000, 0xFBDCF44F, 0x247D5E9A, 0x14589B9A },
+    { 0x000D, 0x0000, 0xFB1F92F9, 0x241B6C98, 0x139D6C75 },
+    { 0x001A, 0x0000, 0xF9C477BF, 0x2381AE1F, 0x1256693D },
+    { 0x001A, 0x0000, 0xF9C477BF, 0x2381AE1F, 0x1256693D },
+};
+
+CameraKeyframe D_8009017C_90D7C[] = {
+    { 0x0000, 0x0000, 0xD7ECFA9B, 0x0408F2CF, 0xD4F59FB1 },
+    { 0x0018, 0x0000, 0xD84159C1, 0x03D67D1E, 0xD441FB89 },
+    { 0x0018, 0x0000, 0xD84159C1, 0x03D67D1E, 0xD441FB89 },
+};
+
+CameraKeyframe D_800901AC_90DAC[] = {
+    { 0x0000, 0x0000, 0xD7E192BA, 0x038707A5, 0xD194D367 },
+    { 0x012C, 0x0000, 0xD7E192BA, 0x038707A5, 0xD194D367 },
+};
+
+typedef struct {
+    s16 posMode;             /* 0x00 */
+    s16 tgtMode;             /* 0x02 */
+    CameraKeyframe *posData; /* 0x04 */
+    CameraKeyframe *tgtData; /* 0x08 */
+} CameraPath;
+
+CameraPath sCameraPaths[] = {
+    { 0, 0, D_8008FEBC_90ABC, NULL             },
+    { 0, 1, D_8008FEEC_90AEC, D_8008FF2C_90B2C },
+    { 0, 0, D_8008FF6C_90B6C, NULL             },
+    { 0, 1, D_8008FF7C_90B7C, D_8008FFAC_90BAC },
+    { 0, 2, D_8008FFDC_90BDC, NULL             },
+    { 0, 0, D_8009000C_90C0C, NULL             },
+    { 0, 0, D_8009003C_90C3C, NULL             },
+    { 0, 0, D_8009006C_90C6C, NULL             },
+    { 0, 0, D_8009009C_90C9C, NULL             },
+    { 0, 3, D_800900CC_90CCC, NULL             },
+    { 0, 0, D_8009010C_90D0C, NULL             },
+    { 0, 3, D_8009013C_90D3C, NULL             },
+    { 0, 0, D_8009017C_90D7C, NULL             },
+    { 0, 0, D_800901AC_90DAC, NULL             },
+    { 0, 0, NULL,             NULL             },
+};
 
 void initChaseCameraPosition(ChaseCameraState *camera) {
     GameState *gameState;
@@ -370,30 +493,21 @@ void spawnOrbitCameraTask(void) {
     scheduleTask(initOrbitCamera, 1, 0, 0xF0);
 }
 
-extern u8 sCameraPathPosMode[];
-extern u8 sCameraPathTgtMode[];
-extern u8 sCameraPathPosData[];
-extern u8 sCameraPathTgtData[];
-
 void initScriptedCamera(ScriptedCameraState *camera) {
     s8 pathIdx;
     s32 offset;
 
     pathIdx = camera->pathIndex;
-    offset = pathIdx * 12;
-    camera->posKeyframes = *(void **)(sCameraPathPosData + offset);
+    camera->posKeyframes = sCameraPaths[pathIdx].posData;
 
     pathIdx = camera->pathIndex;
-    offset = pathIdx * 12;
-    camera->tgtKeyframes = *(void **)(sCameraPathTgtData + offset);
+    camera->tgtKeyframes = sCameraPaths[pathIdx].tgtData;
 
     pathIdx = camera->pathIndex;
-    offset = pathIdx * 12;
-    camera->posMode = *(u16 *)(sCameraPathPosMode + offset);
+    camera->posMode = sCameraPaths[pathIdx].posMode;
 
     pathIdx = camera->pathIndex;
-    offset = pathIdx * 12;
-    camera->tgtMode = *(u16 *)(sCameraPathTgtMode + offset);
+    camera->tgtMode = sCameraPaths[pathIdx].tgtMode;
 
     memcpy(camera, (u8 *)camera->posKeyframes + 4, 0xC);
 

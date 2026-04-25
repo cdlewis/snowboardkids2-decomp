@@ -364,7 +364,7 @@ segments:
       - [0x90930, .data, ui/options_menu]
       - [0x90A80, .data, system/controller_io]
       - [0x90AA0, .data, system/rom_loader]
-      - [0x90AB0, data, text/text_elements]
+      - [0x90AB0, .data, text/text_elements]
       - [0x90E80, .data, race/race_session]
       - [0x913E0, .data, race/position_markers]
       - [0x914A0, data] # also particle_items?
