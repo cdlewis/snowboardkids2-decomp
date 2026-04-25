@@ -261,6 +261,7 @@ typedef struct {
 } CharSelectStatsState;
 
 extern Vec2_u16 playerNumberPositions[];
+extern PositionConfig_DDE6 D_8008DDE6_8E9E6[];
 extern u8 D_8008DE18_8EA18[];
 extern u8 D_8008DE64_8EA64[];
 extern struct {
@@ -1021,6 +1022,9 @@ void initCharSelectIcons(CharSelectIconsState *state) {
     u16 xIncrementU16;
     u8 numPlayers;
     s32 iconTableIndex;
+    s32 pad[4];
+
+    (void)pad;
 
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectIcons);
@@ -1028,11 +1032,9 @@ void initCharSelectIcons(CharSelectIconsState *state) {
 
     numPlayers = D_800AFE8C_A71FC->numPlayers;
 
-    // Load icon layout data from playerNumberPositions table
-    // Layout is stored at offset 14 (after 7 s16 position values)
-    yPos = *(u16 *)((u8 *)playerNumberPositions + numPlayers * 6 + 14);
-    xTemp = *(u16 *)((u8 *)playerNumberPositions + numPlayers * 6 + 16);
-    xIncrementU16 = *(u16 *)((u8 *)playerNumberPositions + numPlayers * 6 + 18);
+    yPos = D_8008DDE6_8E9E6[numPlayers].y;
+    xTemp = D_8008DDE6_8E9E6[numPlayers].x;
+    xIncrementU16 = D_8008DDE6_8E9E6[numPlayers].inc;
 
     scaleX = 0x400;
     if (numPlayers == 1) {
@@ -1047,7 +1049,7 @@ void initCharSelectIcons(CharSelectIconsState *state) {
     iconTableIndex = ICON_TABLE_INDEX;
     tablePtr = D_8008DE18_8EA18;
     xPos = xTemp;
-    iconEntry = (volatile CharSelectIconEntry *)state;
+    iconEntry = state->entries;
 
     // Initialize 3 icon entries for the character's items
     do {
