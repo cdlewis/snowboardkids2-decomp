@@ -1086,48 +1086,45 @@ void initStarEffect(void **arg0) {
     setCallbackWithContinue(updateStarEffect);
 }
 
-void updateStarEffect(StarEffectState *arg0) {
+void updateStarEffect(StarEffectState *state) {
     EffectTaskState *effectTask;
     s16 initialDelay;
     void *assetTable;
 
     effectTask = (EffectTaskState *)getCurrentAllocation();
-    initialDelay = arg0->startDelay;
+    initialDelay = state->startDelay;
 
     if (initialDelay == 0) {
-        /* Initialize star effect animation state */
-        arg0->startDelay = 1; /* Reuse as frame timer after initialization */
-        arg0->alphaPulseDir = 0;
-        arg0->sprite.alpha = 0;
+        state->startDelay = 1;
+        state->alphaPulseDir = 0;
+        state->sprite.alpha = 0;
         assetTable = effectTask->spriteData;
-        arg0->offsetY = 0x200000; /* Y offset above player */
-        arg0->offsetX = 0;        /* X offset */
-        arg0->offsetZ = 0;        /* Z offset */
-        arg0->animFrameIndex = 0;
-        arg0->playSoundFlag = 1;
-        arg0->sprite.assetTemplate = (void *)((u8 *)assetTable + 0xF00);
-        updateStarEffectAnimation(arg0);
+        state->offsetY = 0x200000;
+        state->offsetX = 0;
+        state->offsetZ = 0;
+        state->animFrameIndex = 0;
+        state->playSoundFlag = 1;
+        state->sprite.assetTemplate = (void *)((u8 *)assetTable + 0xF00);
+        updateStarEffectAnimation(state);
 
-        if (arg0->immediateMode != 0) {
-            /* Immediate orbit mode - skip expand animation */
-            arg0->player->slowdownLevel++;
+        if (state->immediateMode != 0) {
+            state->player->slowdownLevel++;
 
-            if (arg0->player->unkBBB == 0xC) {
-                arg0->displayTimer = 0x1E; /* Shorter display time for boss */
+            if (state->player->unkBBB == 0xC) {
+                state->displayTimer = 0x1E;
             } else {
-                arg0->displayTimer = 0x12C; /* Normal display time */
+                state->displayTimer = 0x12C;
             }
 
-            arg0->offsetX = 0x140000; /* X offset for orbit */
-            arg0->offsetY = 0x190000; /* Y offset for orbit */
+            state->offsetX = 0x140000;
+            state->offsetY = 0x190000;
             setCallbackWithContinue(orbitStarEffect);
         } else {
             setCallbackWithContinue(expandStarEffect);
         }
     } else {
-        /* Wait for initial delay to expire */
         if (effectTask->paused == 0) {
-            arg0->startDelay = initialDelay - 1;
+            state->startDelay = initialDelay - 1;
         }
     }
 }
