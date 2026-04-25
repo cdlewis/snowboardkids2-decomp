@@ -22,6 +22,65 @@ typedef struct {
     s32 unk2E0;
 } InitCutsceneManager_slot16;
 
+typedef struct {
+    u8 _pad0[0x4];
+    s32 unk4;
+    s32 unk8;
+} SaveDataBuffer;
+
+typedef struct {
+    void *start;
+    void *end;
+    u32 size;
+    s8 fadeType;
+} CutsceneFadeAsset;
+
+typedef struct {
+    s16 flags;
+    s16 y;
+    void *assetData;
+    s16 slotIndex;
+    s16 scaleY;
+    s16 scaleX;
+    s16 rotation;
+    s16 alpha;
+    u8 r;
+    u8 g;
+    u8 b;
+} FadeSprite;
+
+typedef struct {
+    s8 state;
+    s8 slotIndex;
+    s16 duration;
+    s32 unk4;
+    void *assetData;
+    FadeSprite sprites[6];
+    FadeSprite centerSprite;
+    FadeSprite bottomSprite;
+    u8 unkCC[0x18];
+    s16 fadeAlpha;
+} FadeTaskData2;
+
+typedef struct {
+    s8 state;
+    s8 slotIndex;
+    s16 duration;
+    s16 unk4;
+    u16 unk6;
+    void *unk8;
+    u8 sprites[0x90];
+    u8 centerSprite[0x18];
+    u8 bottomSprite[0x18];
+    u8 unkCC[0x18];
+    s16 fadeAlpha;
+} FadeTaskData;
+
+typedef struct {
+    u8 padding[0x8];
+    void *assetData;
+} CutsceneFadeCleanupArgs;
+
 extern StateEntry *gCutsceneStateTable;
 extern s32 gCutsceneStateTableSize;
 extern StateEntry *gControllerPakTransferPointer;
@@ -38,6 +97,9 @@ extern char gDebugFrameFormatString[];
 extern CutsceneAssetTable gCutsceneAssetTable[];
 
 extern void initializeCutsceneCommand(void *, void *, s32, s32, s32);
+
+void cleanupCutsceneFadeTask(CutsceneFadeCleanupArgs *args);
+void updateCutsceneFadeTask(FadeTaskData *task);
 
 void enableCutsceneSkip(CutsceneManager *arg0) {
     arg0->skipAnimation = TRUE;
@@ -498,12 +560,6 @@ void saveCutsceneStateTableToControllerPak(void) {
     ((void (*)(s32, StateEntry **))controllerPackWriteAsyncStub)(0, ptr);
     do { } while (controllerPackWritePollStub() == -1); }
 
-typedef struct {
-    u8 _pad0[0x4];
-    s32 unk4;
-    s32 unk8;
-} SaveDataBuffer;
-
 s32 loadCutsceneStateTableFromControllerPak(void) {
     SaveDataBuffer *buffer;
     s32 result;
@@ -572,7 +628,8 @@ void initializeCutsceneSystem(void *romAssetAddr) {
     s32 negOne;
     u16 invalidIdx;
 
-    // Allocate cutscene state table (480 StateEntry structs × 64 bytes = 0x7800, plus 0xE0 byte header = 0x78E0 total)
+    // Allocate cutscene state table (480 StateEntry structs × 64 bytes = 0x7800, plus 0xE0 byte header = 0x78E0
+    // total)
     gCutsceneStateTableSize = 0x78E0;
     gCutsceneStateTable = allocateNodeMemory(0x78E0);
 
@@ -1237,47 +1294,6 @@ void startCutsceneFadeEffect(s32 arg0, s8 slotIndex, s16 duration) {
     }
 }
 
-typedef struct {
-    void *start;
-    void *end;
-    u32 size;
-    s8 fadeType;
-} CutsceneFadeAsset;
-
-typedef struct {
-    s16 flags;
-    s16 y;
-    void *assetData;
-    s16 slotIndex;
-    s16 scaleY;
-    s16 scaleX;
-    s16 rotation;
-    s16 alpha;
-    u8 r;
-    u8 g;
-    u8 b;
-} FadeSprite;
-
-typedef struct {
-    s8 state;
-    s8 slotIndex;
-    s16 duration;
-    s32 unk4;
-    void *assetData;
-    FadeSprite sprites[6];
-    FadeSprite centerSprite;
-    FadeSprite bottomSprite;
-    u8 unkCC[0x18];
-    s16 fadeAlpha;
-} FadeTaskData2;
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-non-prototype"
-#pragma clang diagnostic ignored "-Wstrict-prototypes"
-extern void updateCutsceneFadeTask();
-extern void cleanupCutsceneFadeTask();
-#pragma clang diagnostic pop
-
 void initCutsceneFadeTask(void *varg0) {
     FadeTaskData2 *task = (FadeTaskData2 *)varg0;
     CutsceneFadeAsset *node;
@@ -1346,20 +1362,6 @@ void initCutsceneFadeTask(void *varg0) {
     setCallback((void (*)(void *))updateCutsceneFadeTask);
 }
 
-typedef struct {
-    s8 state;
-    s8 slotIndex;
-    s16 duration;
-    s16 unk4;
-    u16 unk6;
-    void *unk8;
-    u8 sprites[0x90];
-    u8 centerSprite[0x18];
-    u8 bottomSprite[0x18];
-    u8 unkCC[0x18];
-    s16 fadeAlpha;
-} FadeTaskData;
-
 void updateCutsceneFadeTask(FadeTaskData *task) {
     CutsceneFadeAsset *node;
     s32 offset;
@@ -1416,10 +1418,6 @@ void updateCutsceneFadeTask(FadeTaskData *task) {
     } while (i < 6);
 }
 
-typedef struct {
-    u8 padding[0x8];
-    void *assetData;
-} CutsceneFadeCleanupArgs;
 void cleanupCutsceneFadeTask(CutsceneFadeCleanupArgs *args) {
     freeNodeMemory(args->assetData);
 }
