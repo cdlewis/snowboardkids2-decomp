@@ -3,6 +3,7 @@
 #include "data/asset_metadata.h"
 #include "data/data_table.h"
 #include "gamestate.h"
+#include "gbi.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
@@ -229,15 +230,41 @@ void loadCharacterAttackEffectAssets(CharacterAttackEffectState *);
 void updateCharacterAttackEffect(CharacterAttackEffectState *);
 void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *);
 
-extern loadAssetMetadata_arg gGlintEffectAssetTemplate;
-extern loadAssetMetadata_arg gCharacterAttackEffectAssetTemplate;
-extern Vec3i gCharacterAttackEffectPositionOffsetsA;
-extern Vec3i gCharacterAttackEffectPositionOffsetsB;
-extern u8 gCharacterParticleTypeMap[];
-extern s16 gSkiTrailOffsetTransformsForward[];
-extern s16 gSkiTrailOffsetTransformsBackward[];
-extern s16 gGlintEffectTransform[];
 extern u16 D_8009ADE0_9B9E0;
+
+u8 gCharacterParticleTypeMap[16] = {
+    0xFF, 0x08, 0x26, 0x12, 0x17, 0x1C, 0xFF, 0x0D, 0x21, 0x0D, 0x17, 0x12, 0xFF, 0xFF, 0xFF, 0xFF,
+};
+
+s16 gSkiTrailOffsetTransformsForward[12] = {
+    4, 0, 0, 0, 13, 0, -4, 0, 0, 0, 13, 0,
+};
+
+s16 gSkiTrailOffsetTransformsBackward[12] = {
+    -4, 0, 0, 0, -13, 0, 4, 0, 0, 0, -13, 0,
+};
+
+s16 gGlintEffectTransform[8] = {
+    0, 0, 6, 0, 0x24, 0, 0, 0,
+};
+
+Vtx gGlintEffectAssetTemplate[4] = {
+    { { { -96, 96, 0 }, 0, { -16, -16 }, { 255, 255, 255, 255 } } },
+    { { { 96, 96, 0 }, 0, { 1008, -16 }, { 255, 255, 255, 255 } } },
+    { { { 96, -96, 0 }, 0, { 1008, 1008 }, { 255, 255, 255, 255 } } },
+    { { { -96, -96, 0 }, 0, { -16, 1008 }, { 255, 255, 255, 255 } } },
+};
+
+Vtx gCharacterAttackEffectAssetTemplate[4] = {
+    { { { -9, 9, 0 }, 0, { -16, -16 }, { 255, 255, 255, 255 } } },
+    { { { 9, 9, 0 }, 0, { 1008, -16 }, { 255, 255, 255, 255 } } },
+    { { { 9, -9, 0 }, 0, { 1008, 1008 }, { 255, 255, 255, 255 } } },
+    { { { -9, -9, 0 }, 0, { -16, 1008 }, { 255, 255, 255, 255 } } },
+};
+
+Vec3i gCharacterAttackEffectPositionOffsetsA = { 0, 0, 0x18000 };
+
+s32 gCharacterAttackEffectPositionOffsetsB[5] = { 0, 0, 0x80000, 0, 0 };
 
 void initSprayEffectTask(void **node) {
     *node = load_3ECE40();
@@ -791,7 +818,7 @@ void spawnSkiTrailTask(Player *player) {
 void initGlintEffect(GlintEffectTask *arg0) {
     getCurrentAllocation();
     arg0->assetTable = load_3ECE40();
-    arg0->particle.assetTemplate = &gGlintEffectAssetTemplate;
+    arg0->particle.assetTemplate = (loadAssetMetadata_arg *)&gGlintEffectAssetTemplate;
     arg0->particle.alpha = 0xFF;
     loadAssetMetadata(&arg0->particle, arg0->assetTable, 0x6A);
     setCleanupCallback(&cleanupGlintEffect);
@@ -839,7 +866,7 @@ void loadCharacterAttackEffectAssets(CharacterAttackEffectState *arg0) {
 
     for (i = 0; i < 6; i++) {
         loadAssetMetadata(&arg0->particles[i].particle, arg0->assetTable, arg0->particleType);
-        arg0->particles[i].particle.assetTemplate = &gCharacterAttackEffectAssetTemplate;
+        arg0->particles[i].particle.assetTemplate = (loadAssetMetadata_arg *)&gCharacterAttackEffectAssetTemplate;
 
         if (arg0->isVariant == 0) {
             memcpy(&arg0->positionOffsets, &gCharacterAttackEffectPositionOffsetsA, 0xC);
