@@ -632,7 +632,7 @@ typedef struct {
 typedef struct {
     void *asset1;
     void *asset2;
-    void *itemBoxMemory;
+    ItemBox *itemBoxes;
     ItemBoxPositionBlock *positionData;
     ItemBoxPositionEntry *positionEntries;
     s16 courseId;
@@ -2655,7 +2655,7 @@ void initItemBoxSystem(ItemBoxSystemState *state) {
         D_80090CEC_918EC[courseID].romEnd,
         D_80090CEC_918EC[courseID].decompressedSize
     );
-    state->itemBoxMemory = NULL;
+    state->itemBoxes = NULL;
 
     setCleanupCallback(&cleanupItemBoxSystem);
 
@@ -2675,46 +2675,43 @@ loop:
 }
 
 void initItemBox(ItemBoxSystemState *state, s32 index) {
-    ((ItemBox *)state->itemBoxMemory)[index].baseY = state->positionEntries[index].position.y;
-    memcpy((void *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxMemory), &identityMatrix, 0x20);
+    state->itemBoxes[index].baseY = state->positionEntries[index].position.y;
+    memcpy(&((ItemBox *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxes))->matrix, &identityMatrix, 0x20);
     memcpy(
-        (void *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxMemory + 0x14),
-        (void *)(index * (s32)sizeof(ItemBoxPositionEntry) + (s32)state->positionEntries + 4),
+        &((ItemBox *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxes))->matrix.translation,
+        &((ItemBoxPositionEntry *)(index * (s32)sizeof(ItemBoxPositionEntry) + (s32)state->positionEntries))->position,
         0xC
     );
 
     if (state->positionEntries[index].type == 0) {
-        ((ItemBox *)state->itemBoxMemory)[index].matrixDisplayLists = &D_8009A690_9B290;
+        state->itemBoxes[index].matrixDisplayLists = &D_8009A690_9B290;
     } else {
-        ((ItemBox *)state->itemBoxMemory)[index].matrixDisplayLists = &D_8009A6A0_9B2A0;
+        state->itemBoxes[index].matrixDisplayLists = &D_8009A6A0_9B2A0;
     }
 
-    ((ItemBox *)state->itemBoxMemory)[index].matrixSegment1 = state->asset1;
-    ((ItemBox *)state->itemBoxMemory)[index].matrixSegment2 = state->asset2;
-    ((ItemBox *)state->itemBoxMemory)[index].matrixSegment3 = NULL;
+    state->itemBoxes[index].matrixSegment1 = state->asset1;
+    state->itemBoxes[index].matrixSegment2 = state->asset2;
+    state->itemBoxes[index].matrixSegment3 = NULL;
 
-    createYRotationMatrix(
-        &((ItemBox *)state->itemBoxMemory)[index].displayList.transform,
-        state->positionEntries[index].rotationAngle
-    );
+    createYRotationMatrix(&state->itemBoxes[index].displayList.transform, state->positionEntries[index].rotationAngle);
     memcpy(
-        (void *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxMemory + 0x50),
-        (void *)(index * (s32)sizeof(ItemBoxPositionEntry) + (s32)state->positionEntries + 4),
+        &((ItemBox *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxes))->displayList.transform.translation,
+        &((ItemBoxPositionEntry *)(index * (s32)sizeof(ItemBoxPositionEntry) + (s32)state->positionEntries))->position,
         0xC
     );
 
     if (state->positionEntries[index].type == 0) {
-        ((ItemBox *)state->itemBoxMemory)[index].displayList.displayLists = &D_8009A670_9B270;
+        state->itemBoxes[index].displayList.displayLists = &D_8009A670_9B270;
     } else {
-        ((ItemBox *)state->itemBoxMemory)[index].displayList.displayLists = &D_8009A680_9B280;
+        state->itemBoxes[index].displayList.displayLists = &D_8009A680_9B280;
     }
 
-    ((ItemBox *)state->itemBoxMemory)[index].displayList.segment1 = state->asset1;
-    ((ItemBox *)state->itemBoxMemory)[index].displayList.segment2 = state->asset2;
-    ((ItemBox *)state->itemBoxMemory)[index].displayList.segment3 = NULL;
-    ((ItemBox *)state->itemBoxMemory)[index].state = 0;
-    ((ItemBox *)state->itemBoxMemory)[index].rotationAngle = 0;
-    ((ItemBox *)state->itemBoxMemory)[index].isSecondaryItemBox = (u8)state->positionEntries[index].type;
+    state->itemBoxes[index].displayList.segment1 = state->asset1;
+    state->itemBoxes[index].displayList.segment2 = state->asset2;
+    state->itemBoxes[index].displayList.segment3 = NULL;
+    state->itemBoxes[index].state = 0;
+    state->itemBoxes[index].rotationAngle = 0;
+    state->itemBoxes[index].isSecondaryItemBox = (u8)state->positionEntries[index].type;
 }
 
 void initItemBoxPositions(ItemBoxSystemState *state) {
@@ -2735,7 +2732,7 @@ void initItemBoxPositions(ItemBoxSystemState *state) {
     }
 
     count = state->itemBoxCount;
-    state->itemBoxMemory = allocateNodeMemory(count * 132);
+    state->itemBoxes = allocateNodeMemory(count * sizeof(ItemBox));
 
     for (i = 0; i < state->itemBoxCount; i++) {
         initItemBox(state, i);
@@ -2755,7 +2752,7 @@ void updateAllItemBoxes(ItemBoxController *controller) {
 void cleanupItemBoxSystem(ItemBoxSystemState *state) {
     state->asset1 = freeNodeMemory(state->asset1);
     state->asset2 = freeNodeMemory(state->asset2);
-    state->itemBoxMemory = freeNodeMemory(state->itemBoxMemory);
+    state->itemBoxes = freeNodeMemory(state->itemBoxes);
     state->positionData = freeNodeMemory(state->positionData);
 }
 
