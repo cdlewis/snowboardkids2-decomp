@@ -556,19 +556,19 @@ void resetScriptState(u8 *arg0) {
     }
 }
 
-void initializeStateEntry(s32 arg0) {
-    StateEntry *temp;
+void initializeStateEntry(s32 entryIndex) {
+    StateEntry *entry;
 
-    resetScriptState((u8 *)(ScriptData *)&gCutsceneStateTable[arg0 + 3]);
+    resetScriptState((u8 *)(ScriptData *)&gCutsceneStateTable[entryIndex + 3]);
 
-    temp = (gCutsceneStateTable + arg0 + 3);
-    temp->frameNumber = 0;
+    entry = gCutsceneStateTable + entryIndex + 3;
+    entry->frameNumber = 0;
 
-    temp = gCutsceneStateTable + arg0 + 3;
-    temp->commandCategory = 0;
+    entry = gCutsceneStateTable + entryIndex + 3;
+    entry->commandCategory = 0;
 
-    temp = gCutsceneStateTable + arg0 + 3;
-    temp->commandType = 0;
+    entry = gCutsceneStateTable + entryIndex + 3;
+    entry->commandType = 0;
 }
 
 void initializeCutsceneSystem(void *romAssetAddr) {
