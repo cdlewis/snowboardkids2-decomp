@@ -158,9 +158,7 @@ void resetAllSlotTransforms(CutsceneManager *manager) {
     s32 i;
     SceneModel *model;
 
-    i = 0;
-
-    while (i < getCutsceneSlotCount()) {
+    for (i = 0; i < getCutsceneSlotCount(); i++) {
         getCurrentStateEntryItem(i);
         model = manager->slots[i].model;
 
@@ -173,8 +171,6 @@ void resetAllSlotTransforms(CutsceneManager *manager) {
             setupSlotTransform(slotData);
             applyTransformToModel(model, &slotData->transform);
         }
-
-        i++;
     }
 }
 
@@ -196,6 +192,7 @@ void prepareCutsceneForPlayback(
     manager->currentFrame = 0;
     manager->maxFrame = maxFrame;
     manager->endFrame = getCutsceneDefaultEndFrame();
+
     for (i = 0; i < 0x10; i++) {
         modelId = getCurrentStateEntryItem(i)->characterId;
         model = manager->slots[i].model;
@@ -213,6 +210,7 @@ void prepareCutsceneForPlayback(
             clearModelAnimationState(manager->slots[i].model);
         }
     }
+
     manager->textX = -0x90;
     manager->textY = 0x68;
     manager->textPalette = 0;
@@ -327,7 +325,9 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
 s16 getCutsceneFrameCount(s16 slotIndex, s16 cutsceneType) {
     s16 masked;
     s16 result;
+
     masked = -1;
+
     if ((((((((((((cutsceneType & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & 0xFFFFFFFFu) & masked) &
              0xFFFFFFFFu) &
             0xFFFFFFFFu) &
@@ -336,17 +336,21 @@ s16 getCutsceneFrameCount(s16 slotIndex, s16 cutsceneType) {
          0xFFFFFFFFu) >= ((u64)3)) {
         return 0;
     }
+
     if (slotIndex >= 0x10) {
         return 0;
     }
+
     if (cutsceneType == 0) {
         result = gCutsceneAssetTable[slotIndex].introFrameCount;
     } else if (cutsceneType == 1) {
         result = gCutsceneAssetTable[slotIndex].winFrameCount;
     }
+
     if (cutsceneType == 2) {
         result = gCutsceneAssetTable[slotIndex].loseFrameCount;
     }
+
     return result;
 }
 
@@ -420,7 +424,6 @@ void *loadCutsceneFrameData(s16 slotIndex, s16 cutsceneType, s16 frameIndex) {
     s16 cutsceneTypeClamped;
     CutsceneFrameInfo *frameInfo;
     CutsceneAssetTable *assetEntry;
-    s32 tableOffset;
 
     frameInfo = NULL;
 
@@ -434,7 +437,6 @@ void *loadCutsceneFrameData(s16 slotIndex, s16 cutsceneType, s16 frameIndex) {
         return NULL;
     }
 
-    tableOffset = slotIndex * 0x18;
     assetEntry = &gCutsceneAssetTable[slotIndex];
 
     if (cutsceneTypeClamped == 0) {
