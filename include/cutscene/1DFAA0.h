@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ui/level_preview_3d.h"
 #include "common.h"
-#include "graphics/graphics.h"
 #include "core/main.h"
+#include "graphics/graphics.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct {
     u8 r;
@@ -256,7 +256,8 @@ typedef struct {
 
 typedef struct CutsceneManager {
     /* 0x0 */ ViewportNode *uiResource;
-    /* 0x4 */ s8 pad4[0x8];
+    /* 0x4 */ ColorData *lightColors;
+    /* 0x8 */ ColorData *ambientColor;
     /* 0xC */ void *sceneContext;
     union {
         /* 0x10 */ setModelRenderMode_arg renderModeArg;
@@ -294,9 +295,9 @@ void resetAllSlotModels(CutsceneSlot *slots);
 void resetAllSlotTransforms(CutsceneManager *manager);
 void prepareCutsceneForPlayback(
     CutsceneManager *manager,
-    s32 uiResource,
-    s32 pad4_0,
-    s32 pad4_4,
+    ViewportNode *uiResource,
+    ColorData *lightColors,
+    ColorData *ambientColor,
     u16 maxFrame,
     u8 showDebugInfo
 );

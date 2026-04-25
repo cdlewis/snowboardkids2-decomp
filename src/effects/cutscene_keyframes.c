@@ -226,9 +226,9 @@ void updateCutscenePlayback(void) {
             osViExtendVStart(0);
             prepareCutsceneForPlayback(
                 &state->cutsceneData.cutsceneManager,
-                (s32)&state->sceneNode,
-                (s32)&state->lightColors,
-                (s32)&state->ambientColor,
+                &state->sceneNode,
+                &state->lightColors,
+                &state->ambientColor,
                 0,
                 0
             );

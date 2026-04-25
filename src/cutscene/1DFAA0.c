@@ -180,9 +180,9 @@ void resetAllSlotTransforms(CutsceneManager *manager) {
 
 void prepareCutsceneForPlayback(
     CutsceneManager *manager,
-    s32 uiResource,
-    s32 pad4_0,
-    s32 pad4_4,
+    ViewportNode *uiResource,
+    ColorData *lightColors,
+    ColorData *ambientColor,
     u16 maxFrame,
     u8 showDebugInfo
 ) {
@@ -190,14 +190,14 @@ void prepareCutsceneForPlayback(
     s32 i;
     u16 modelId;
 
-    i = 0;
-    *(s32 *)&manager->uiResource = uiResource;
-    *(s32 *)&manager->pad4[0] = pad4_0;
-    *(s32 *)&manager->pad4[4] = pad4_4;
+
+    manager->uiResource = uiResource;
+    manager->lightColors = lightColors;
+    manager->ambientColor = ambientColor;
     manager->currentFrame = 0;
     manager->maxFrame = maxFrame;
     manager->endFrame = getCutsceneDefaultEndFrame();
-    do {
+    for (i = 0; i < 0x10; i++) {
         modelId = getCurrentStateEntryItem(i)->characterId;
         model = manager->slots[i].model;
         manager->slots[i].unk42 = 0xFF;
@@ -213,8 +213,7 @@ void prepareCutsceneForPlayback(
             setAnimationIndex(manager->slots[i].model, -1);
             clearModelAnimationState(manager->slots[i].model);
         }
-        i += 1;
-    } while (i < 0x10);
+    }
     *(s16 *)&manager->textRenderer = -0x90;
     *((s16 *)&manager->textRenderer + 1) = 0x68;
     *(s16 *)&manager->padFEC[0] = 0;
