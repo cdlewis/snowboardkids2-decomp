@@ -357,7 +357,7 @@ segments:
       - [0x8F2D0, .data, story/rare_events]
       - [0x8F6E0, .data, story/rare_event_npcs]
       - [0x8FB70, .data, race/track_geometry]
-      - [0x8FC70, data, story/shop_ui]
+      - [0x8FC70, .data, story/shop_ui]
       - [0x8FD50, .data, graphics/preview_render]
       - [0x8FE10, data, text/hud_text]
       - [0x90410, .data, story/location_markers]

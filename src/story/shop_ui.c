@@ -132,19 +132,62 @@ typedef struct {
 
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
-extern s32 D_8008F110_8FD10;
-typedef struct {
-    s16 itemOffsets[2];
-    struct {
-        u16 start;
-        u16 duration;
-    } fairyAnim[5];
-} ShopItemData;
 
-extern ShopItemData D_8008F0B0_8FCB0;
-extern s16 D_8008F0C6_8FCC6[];
+typedef struct {
+    u16 start;
+    u16 duration;
+} FairyAnimRange;
+
+typedef struct {
+    s16 x;
+    s16 y;
+} Vec2s;
+
+typedef struct {
+    s16 unkConstants[2];
+    FairyAnimRange fairyAnim[4];
+    s16 itemWidths[20];
+    Vec2s itemSpriteOffsets[9];
+} ShopUiData;
+
 extern s32 *D_800AFE8C_A71FC;
-extern s32 D_8008F070_8FC70[];
+
+s32 D_8008F070_8FC70[16] = {
+    0x00000000, 0x0000C350, 0x000186A0, 0x00000000, 0x0000AFC8, 0x00015F90, 0x00000000, 0x0000EA60,
+    0x0001D4C0, 0x000249F0, 0x00001388, 0x000003E8, 0x00013880, 0x00000064, 0x00013880, 0x0000C350,
+};
+
+ShopUiData D_8008F0B0_8FCB0 = {
+    { 0x0003, 0x0D40 },
+    {
+     { 0x0006, 0x1A80 },
+     { 0x0005, 0x0001 },
+     { 0x0008, 0x0003 },
+     { 0x000B, 0x0001 },
+     },
+    {
+     0x0016, 0x0027, 0x0010, 0x0020, 0x0028, 0x0013, 0x0018, 0x0033, 0x0022, 0x0000,
+     0x0015, 0x000D, 0x0018, 0x0010, 0x000C, 0x0016, 0x0014, 0x0007, 0x000F, 0x0000,
+     },
+    {
+     { -0x0028, 0x0028 },
+     { -0x0024, 0x0020 },
+     { -0x0024, 0x0020 },
+     { -0x0020, 0x0018 },
+     { -0x0024, 0x0020 },
+     { -0x0020, 0x0018 },
+     { -0x0024, 0x0020 },
+     { -0x0024, 0x0020 },
+     { -0x0024, 0x0020 },
+     },
+};
+
+#define D_8008F0C6_8FCC6 ((s16 *)0x8008F0C6)
+
+s32 D_8008F110_8FD10[16] = {
+    0x00208035, 0x80368030, 0x8035FFFB, 0x802F803C, 0x802E803F, 0x8031FFFB, 0x8031803C, 0xFFFB8046,
+    0x803C8042, 0xFFFB8044, 0x802E803B, 0x80418054, 0xFFFF0000, 0x00000000, 0x00000000, 0x00000000,
+};
 
 // Cast to u8* to access EEPROM save data as raw bytes for offset-based access
 extern u8 *EepromSaveData;
@@ -689,7 +732,7 @@ void initStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
         tempValue = state->unk5CA[state->unk5C8];
         iconState->spriteIndex = (tempValue / 3) + 0x1D;
     } else {
-        s16 tableVal = D_8008F0B0_8FCB0.itemOffsets[itemValue + 1] + 0x18;
+        s16 tableVal = D_8008F0B0_8FCB0.itemWidths[itemValue - 9] + 0x18;
         s16 tableVal2 = D_8008F0C6_8FCC6[itemValue];
 
         iconState->spriteIndex = itemValue + 0x23;
@@ -718,7 +761,7 @@ void updateStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
                 iconState->x = -0x30;
                 iconState->spriteIndex = (masked / 3) + 0x1D;
             } else {
-                s16 tableVal = D_8008F0B0_8FCB0.itemOffsets[masked + 1];
+                s16 tableVal = D_8008F0B0_8FCB0.itemWidths[masked - 9];
                 s16 tableVal2 = D_8008F0C6_8FCC6[masked];
                 iconState->spriteIndex = masked + 0x23;
                 iconState->x = (((0x120 - ((s16)(tableVal + 0x18))) / 2) - tableVal2) - 0x96;
@@ -759,7 +802,7 @@ void initStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
         arg0->x = 0x12;
         arg0->spriteIndex = ((itemValue % 3) & 0xFF) + 0x24;
     } else {
-        s16 tableVal = D_8008F0B0_8FCB0.itemOffsets[itemValue + 1];
+        s16 tableVal = D_8008F0B0_8FCB0.itemWidths[itemValue - 9];
         arg0->spriteIndex = 0x35;
         arg0->x = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
     }
@@ -787,7 +830,7 @@ void updateStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
             arg0->x = 0x12;
             arg0->spriteIndex = ((itemValue & 0x1F) % 3) + 0x24;
         } else {
-            s16 tableVal = D_8008F0B0_8FCB0.itemOffsets[itemValue + 1];
+            s16 tableVal = D_8008F0B0_8FCB0.itemWidths[itemValue - 9];
             arg0->spriteIndex = 0x35;
             arg0->x = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
         }
