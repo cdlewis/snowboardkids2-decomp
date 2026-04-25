@@ -97,13 +97,37 @@ typedef struct {
 } CutsceneFadeAssetNode;
 
 typedef struct {
+    s16 flags;
+    s16 y;
+    void *assetData;
+    s16 slotIndex;
+    s16 scaleY;
+    s16 scaleX;
+    s16 rotation;
+    s16 alpha;
+    u8 r;
+    u8 g;
+    u8 b;
+} FadeSprite;
+
+typedef struct {
     s8 state;
     s8 slotIndex;
     s16 duration;
-    s32 unk4;
-    u8 padding[0xDC];
+    union {
+        s32 unk4;
+        struct {
+            s16 unk4_lo;
+            u16 unk6;
+        } split;
+    } unk04;
+    void *assetData;
+    FadeSprite sprites[6];
+    FadeSprite centerSprite;
+    FadeSprite bottomSprite;
+    u8 unkCC[0x18];
     s16 fadeAlpha;
-} TaskData;
+} FadeTaskData;
 
 typedef struct {
     s16 headIndex;
@@ -288,34 +312,6 @@ typedef struct CutsceneManager {
     /* 0x121C */ void *reflectionModel;
     /* 0x1220 */ s32 curtainPosition;
 } CutsceneManager;
-
-typedef struct {
-    s16 flags;
-    s16 y;
-    void *assetData;
-    s16 slotIndex;
-    s16 scaleY;
-    s16 scaleX;
-    s16 rotation;
-    s16 alpha;
-    u8 r;
-    u8 g;
-    u8 b;
-} FadeSprite;
-
-typedef struct {
-    s8 state;
-    s8 slotIndex;
-    s16 duration;
-    s16 unk4;
-    u16 unk6;
-    void *assetData;
-    FadeSprite sprites[6];
-    FadeSprite centerSprite;
-    FadeSprite bottomSprite;
-    u8 unkCC[0x18];
-    s16 fadeAlpha;
-} FadeTaskData;
 
 void enableCutsceneSkip(CutsceneManager *arg0);
 void disableCutsceneSkipOnInput(CutsceneManager *arg0);

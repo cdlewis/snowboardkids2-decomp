@@ -1229,7 +1229,7 @@ void *loadCutsceneSlotAsset(s8 slotIndex) {
 }
 
 void startCutsceneFadeEffect(s32 arg0, s8 slotIndex, s16 duration) {
-    TaskData *task;
+    FadeTaskData *task;
 
     if (duration == 0) {
         return;
@@ -1243,12 +1243,12 @@ void startCutsceneFadeEffect(s32 arg0, s8 slotIndex, s16 duration) {
         return;
     }
 
-    task = (TaskData *)scheduleTask(&initCutsceneFadeTask, 1, 0, 0x64);
+    task = (FadeTaskData *)scheduleTask(&initCutsceneFadeTask, 1, 0, 0x64);
     if (task != NULL) {
         task->state = 0;
         task->slotIndex = slotIndex;
         task->duration = duration;
-        task->unk4 = arg0;
+        task->unk04.unk4 = arg0;
         task->fadeAlpha = 0xFF;
     }
 }
@@ -1352,22 +1352,20 @@ void updateCutsceneFadeTask(FadeTaskData *task) {
     switch (node->fadeType) {
         case 0:
             task->centerSprite.b = (u8)task->fadeAlpha;
-            debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
+            debugEnqueueCallback(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
             break;
         case 1:
             task->centerSprite.b = (u8)task->fadeAlpha;
-            debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
+            debugEnqueueCallback(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
             task->bottomSprite.b = (u8)task->fadeAlpha;
-            debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, &task->bottomSprite);
+            debugEnqueueCallback(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->bottomSprite);
             break;
     }
 
-    i = 0;
-    do {
+    for (i = 0; i < 6; i++) {
         task->sprites[i].b = (u8)task->fadeAlpha;
-        debugEnqueueCallback(task->unk6, 0, &renderScaledAlphaSpriteFrame, &task->sprites[i]);
-        i++;
-    } while (i < 6);
+        debugEnqueueCallback(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->sprites[i]);
+    }
 }
 
 void cleanupCutsceneFadeTask(CutsceneFadeCleanupArgs *args) {
