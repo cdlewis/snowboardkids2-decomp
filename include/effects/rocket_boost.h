@@ -2,15 +2,16 @@
 
 #include "cutscene/cutscene_manager.h"
 #include "common.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct {
-    DisplayListObject unk0;
-    DisplayListObject unk3C;
-    void **unk78;
-    s32 unk7C;
-    u16 unk80;
-    s16 unk82;
-    s16 unk84;
+    DisplayListObject body;
+    DisplayListObject flame;
+    SceneModel *sceneModel;
+    s32 fallVelocity;
+    u16 yAngle;
+    s16 scale;
+    s16 displayDuration;
 } RocketEffectUpdateData;
 
 typedef struct {

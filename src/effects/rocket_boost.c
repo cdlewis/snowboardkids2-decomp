@@ -54,41 +54,37 @@ void initRocketEffect(RocketEffectData *data) {
 
 void updateRocketEffect(RocketEffectUpdateData *arg0) {
     s32 pad[8];
-    void *temp_v0;
-    s32 *ptr;
 
-    createYRotationMatrix(&gIdentityMatrix32, arg0->unk80);
-    temp_v0 = (void *)((u8 *)(*arg0->unk78) + 0x3C0);
-    func_8006B084_6BC84(&gIdentityMatrix32, temp_v0, &arg0->unk0.transform);
-    scaleMatrix(&arg0->unk0.transform, arg0->unk82, arg0->unk82, arg0->unk82);
+    createYRotationMatrix(&gIdentityMatrix32, arg0->yAngle);
+    func_8006B084_6BC84(&gIdentityMatrix32, (Transform3D *)&arg0->sceneModel->unk0->unk3C0, &arg0->body.transform);
+    scaleMatrix(&arg0->body.transform, arg0->scale, arg0->scale, arg0->scale);
 
     gScaleMatrix.translation.x = 0;
     gScaleMatrix.translation.y = 0x9CCCC;
     gScaleMatrix.translation.z = 0xFFE44CCD;
-    ptr = (s32 *)&gScaleMatrix.translation;
 
-    func_8006B084_6BC84((Transform3D *)(ptr - 5), (Transform3D *)arg0, &arg0->unk3C.transform);
+    func_8006B084_6BC84(&gScaleMatrix, &arg0->body.transform, &arg0->flame.transform);
 
     if (gFrameCounter & 1) {
-        arg0->unk3C.displayLists = &D_80088680_89280;
+        arg0->flame.displayLists = &D_80088680_89280;
     } else {
-        arg0->unk3C.displayLists = &D_80088690_89290;
+        arg0->flame.displayLists = &D_80088690_89290;
     }
 
-    enqueueDisplayListObject(0, &arg0->unk0);
+    enqueueDisplayListObject(0, &arg0->body);
 
-    if (arg0->unk82 == 0x2000) {
-        enqueueDisplayListObject(0, &arg0->unk3C);
+    if (arg0->scale == 0x2000) {
+        enqueueDisplayListObject(0, &arg0->flame);
     }
 
-    if (arg0->unk84 != 0) {
-        if (arg0->unk82 == 0x2000) {
-            arg0->unk84--;
+    if (arg0->displayDuration != 0) {
+        if (arg0->scale == 0x2000) {
+            arg0->displayDuration--;
         } else {
-            arg0->unk82 = arg0->unk82 + 0x200;
+            arg0->scale += 0x200;
         }
     } else {
-        arg0->unk7C = 0x40000;
+        arg0->fallVelocity = 0x40000;
         setCallback(&updateRocketEffectFalling);
     }
 }
