@@ -152,7 +152,7 @@ typedef struct {
 typedef struct {
     s32 header[3];
     /* 0xC */ u16 current_index;
-    u8 padding[0x2];
+    /* 0xE */ u16 freeListTailIndex;
     /* 0x10 */ u16 allocatedEventCount;
     /* 0x12 */ u8 stateEntryItemSize;
     /* 0x13 */ u8 slotCount;

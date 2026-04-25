@@ -631,8 +631,8 @@ void initializeCutsceneSystem(void *romAssetAddr) {
         negOne = -1;
         table->stateEntryItemSize = 0x38;
         table2 = gCutsceneStateTable;
-        invalidIdx = 0xFFFF;                 // Invalid index marker
-        *(s16 *)((u8 *)table + 0xE) = 0x1DF; // Free list tail index (at offset 0xE in header)
+        invalidIdx = 0xFFFF; // Invalid index marker
+        table->freeListTailIndex = 0x1DF;
         table->current_index = 0;
         table->allocatedEventCount = 0;
         table2->slotCount = 0x10; // 16 cutscene slots
@@ -1056,26 +1056,14 @@ void pasteCutsceneEntry(void) {
     gCutsceneEntryCutFlag = 0;
 }
 
-/**
- * Cut (remove) a cutscene event entry from its slot and move it to a buffer.
- *
- * This function removes a cutscene event at the given slot and frame number,
- * stores it in a global buffer for pasting later, and adds the entry back
- * to the free list for reuse. The entry is unlinked from the slot's
- * doubly-linked list of events.
- *
- * @param slotIndex The slot index (0-15) containing the entry
- * @param frameNumber The frame number of the entry to cut
- */
 void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
     u16 searchResult;
     u16 entryIndex;
-    u16 entryNextIndex;
-    u16 entryPrevIndex;
+    u16 nextIndex;
+    u16 prevIndex;
     u16 freeListTail;
-    StateEntry *base;
+    StateEntry *table;
 
-    // Find the state entry for the given slot and frame
     searchResult = findStateEntryIndex(slotIndex, frameNumber & 0xFFFF, 0);
     entryIndex = searchResult & 0xFFFF;
 
@@ -1083,34 +1071,28 @@ void cutCutsceneEntry(u8 slotIndex, s16 frameNumber) {
         return;
     }
 
-    // Don't allow cutting the frame 0 entry
     if (getStateEntry(entryIndex)->frameNumber == 0) {
         return;
     }
 
-    // Copy the entry to the global buffer for paste operations
     memcpy(gCutsceneEntryBuffer, getStateEntry(entryIndex), sizeof(StateEntry));
 
-    // Get the state table and linked list pointers
-    base = gCutsceneStateTable;
-    freeListTail = *(u16 *)((u8 *)base + 0xE);                        // Free list tail (at offset 0xE in first entry)
-    entryNextIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xF8); // StateEntry::next_index
-    entryPrevIndex = *(u16 *)((u8 *)base + (entryIndex << 6) + 0xFA); // StateEntry::prev_index
+    table = gCutsceneStateTable;
+    freeListTail = table->freeListTailIndex;
+    nextIndex = *(u16 *)((u8 *)table + (entryIndex << 6) + 0xF8);
+    prevIndex = *(u16 *)((u8 *)table + (entryIndex << 6) + 0xFA);
 
-    // Add the cut entry to the free list (insert at head)
-    *(u16 *)((u8 *)base + (freeListTail << 6) + 0xF8) = searchResult;
-    *(u16 *)((u8 *)base + 0xE) = searchResult;
+    *(u16 *)((u8 *)table + (freeListTail << 6) + 0xF8) = searchResult;
+    table->freeListTailIndex = searchResult;
 
-    // Update the linked list: unlink the entry from its current position
-    if ((entryPrevIndex & 0xFFFF) != 0xFFFF) {
-        *(u16 *)((u8 *)base + (entryPrevIndex << 6) + 0xF8) = entryNextIndex;
+    if ((prevIndex & 0xFFFF) != 0xFFFF) {
+        *(u16 *)((u8 *)table + (prevIndex << 6) + 0xF8) = nextIndex;
     }
 
-    if ((entryNextIndex & 0xFFFF) != 0xFFFF) {
-        *(u16 *)((u8 *)gCutsceneStateTable + (entryNextIndex << 6) + 0xFA) = entryPrevIndex;
+    if ((nextIndex & 0xFFFF) != 0xFFFF) {
+        *(u16 *)((u8 *)gCutsceneStateTable + (nextIndex << 6) + 0xFA) = prevIndex;
     }
 
-    // Set global flags to indicate a cut operation
     gCutsceneEntryCopyFlag = 1;
     gCutsceneEntryBufferSlotIndex = slotIndex;
     gCutsceneEntryBufferFrameNumber = frameNumber;
