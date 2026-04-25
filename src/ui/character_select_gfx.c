@@ -646,27 +646,22 @@ void updateCharSelectSecondarySlide(CharSelectSecondarySlot *slot) {
     Transform3D localMatrix;
     Transform3D *localMatrixPtr;
     Transform3D *posMatrixPtr;
-    s32 target;
-    s32 slideStep;
+    s32 targetX;
+    s32 xStep;
     GameState *state;
 
     state = (GameState *)getCurrentAllocation();
 
-    // Calculate target X position from the model positions table
-    // The table is indexed by (numPlayers * 2 + selectionSlot)
-    // where selectionSlot alternates between 0 and 1 based on unk18C0
     localMatrixPtr = &localMatrix;
-    target =
+    targetX =
         ((s32 *)&D_8008DD2C_8E92C)[(D_800AFE8C_A71FC->numPlayers * 2) + ((state->unk18C0[slot->playerIndex] + 1) & 1)];
 
-    // Calculate slide step direction based on target sign
-    // If target < 0: slideStep = -0x100000, else: slideStep = +0x100000
-    slideStep = (-(target < 0) & 0xFFF00000) | 0x100000;
+    xStep = (targetX < 0) ? -0x100000 : 0x100000;
 
     memcpy(localMatrixPtr, &identityMatrix, sizeof(Transform3D));
     memcpy(&localMatrix.translation, &slot->positionMatrix.translation.x, sizeof(Vec3i));
 
-    slot->worldMatrix.translation.x += slideStep;
+    slot->worldMatrix.translation.x += xStep;
 
     posMatrixPtr = &slot->positionMatrix;
     createYRotationMatrix(posMatrixPtr, state->unk1888[slot->playerIndex]);
@@ -674,7 +669,7 @@ void updateCharSelectSecondarySlide(CharSelectSecondarySlot *slot) {
     func_8006B084_6BC84(&slot->rotationMatrix, posMatrixPtr, localMatrixPtr);
     func_8006B084_6BC84(localMatrixPtr, &slot->worldMatrix, (Transform3D *)slot);
 
-    if (slot->worldMatrix.translation.x == target) {
+    if (slot->worldMatrix.translation.x == targetX) {
         state->unk18C0[slot->playerIndex + 4]++;
         terminateCurrentTask();
     } else {
