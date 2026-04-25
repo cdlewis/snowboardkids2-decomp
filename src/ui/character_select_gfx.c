@@ -1897,7 +1897,7 @@ void updateBoardSelectCharNames(CharacterNameSprite *sprites) {
     s32 i;
     u16 selectionState;
     u8 numPlayers;
-    s32 charIndex;
+    s32 boardId;
     u16 xPos;
     u16 yPos;
     u16 spriteIdx;
@@ -1911,15 +1911,15 @@ void updateBoardSelectCharNames(CharacterNameSprite *sprites) {
             if (((u32)yPos) >= 8) {
                 numPlayers = D_800AFE8C_A71FC->numPlayers;
                 xPos = ((s16 *)D_8008DE54_8EA54)[numPlayers * 2];
-                charIndex = D_800AFE8C_A71FC->playerBoardIds[i + 4];
+                boardId = D_800AFE8C_A71FC->playerBoardIds[i + 4];
                 yPos = ((s16 *)D_8008DE54_8EA54)[(numPlayers * 2) + 1];
-                if (((u8)charIndex) >= 9) {
+                if (((u8)boardId) >= 9) {
                     if (numPlayers == 1) {
-                        spriteIdx = charIndex + 0x30;
+                        spriteIdx = boardId + 0x30;
                         xPos += 0x18;
                     } else {
-                        spriteIdx = charIndex + 0x23;
-                        xPos = D_8008DE9C_8EA9C[numPlayers].x - ((u16)((s16 *)D_8008DE64_8EA64)[11 + ((u8)charIndex)]);
+                        spriteIdx = boardId + 0x23;
+                        xPos = D_8008DE9C_8EA9C[numPlayers].x - ((u16 *)D_8008DE64_8EA64)[11 + ((u8)boardId)];
                     }
                     sprites[i].spriteIndex = spriteIdx;
                 } else {
