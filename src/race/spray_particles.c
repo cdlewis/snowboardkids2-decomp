@@ -679,9 +679,9 @@ void cleanupSkiTrailTask(func_80051688_52288_arg *arg0);
 void initSkiTrailTask(SkiTrailTask *task) {
     GameState *gs;
     void *particleAsset;
-    volatile SkiTrailTask *iter;
+    volatile SkiTrailTask *skiSlot;
     s32 i;
-    s32 offset;
+    s32 dstOffset;
     s16 *transforms;
 
     gs = (GameState *)getCurrentAllocation();
@@ -695,32 +695,32 @@ void initSkiTrailTask(SkiTrailTask *task) {
     i = 0;
 
     if (task->player->animFlags & 2) {
-        iter = task;
-        offset = 0x48;
+        skiSlot = task;
+        dstOffset = 0x48;
         transforms = gSkiTrailOffsetTransformsForward;
         do {
-            transformVector(transforms, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + offset));
-            iter->skiOffsets[0].x -= task->player->worldPos.x;
-            iter->skiOffsets[0].y -= task->player->worldPos.y;
-            offset += 0xC;
+            transformVector(transforms, (s16 *)&task->player->unk3F8, (u8 *)task + dstOffset);
+            skiSlot->skiOffsets[0].x -= task->player->worldPos.x;
+            skiSlot->skiOffsets[0].y -= task->player->worldPos.y;
+            dstOffset += 0xC;
             transforms += 6;
             i++;
-            iter->skiOffsets[0].z -= task->player->worldPos.z;
-            iter = (SkiTrailTask *)((u8 *)iter + 0xC);
+            skiSlot->skiOffsets[0].z -= task->player->worldPos.z;
+            skiSlot = (SkiTrailTask *)((u8 *)skiSlot + 0xC);
         } while (i < 2);
     } else {
-        iter = task;
-        offset = 0x48;
+        skiSlot = task;
+        dstOffset = 0x48;
         transforms = gSkiTrailOffsetTransformsBackward;
         do {
-            transformVector(transforms, (s16 *)&task->player->unk3F8, (void *)((u8 *)task + offset));
-            iter->skiOffsets[0].x -= task->player->worldPos.x;
-            iter->skiOffsets[0].y -= task->player->worldPos.y;
-            offset += 0xC;
+            transformVector(transforms, (s16 *)&task->player->unk3F8, (u8 *)task + dstOffset);
+            skiSlot->skiOffsets[0].x -= task->player->worldPos.x;
+            skiSlot->skiOffsets[0].y -= task->player->worldPos.y;
+            dstOffset += 0xC;
             transforms += 6;
             i++;
-            iter->skiOffsets[0].z -= task->player->worldPos.z;
-            iter = (SkiTrailTask *)((u8 *)iter + 0xC);
+            skiSlot->skiOffsets[0].z -= task->player->worldPos.z;
+            skiSlot = (SkiTrailTask *)((u8 *)skiSlot + 0xC);
         } while (i < 2);
     }
 
