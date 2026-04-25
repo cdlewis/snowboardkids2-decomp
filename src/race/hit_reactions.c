@@ -1,3 +1,4 @@
+#include "race/hit_reactions.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
@@ -195,9 +196,6 @@ s32 grantInvincibilityWithSound(Player *player) {
 
 extern void *getCurrentAllocation(void);
 s32 findPrimaryItemTarget(Player *);
-extern u8 gAIPlayerParams[][0x11][0x4];
-extern u8 D_800BADE1[][0x11][0x4];
-extern u8 D_800BADE2[][0x11][0x4];
 s32 shouldUseSecondaryItem(Player *);
 extern s32 createWarpEffect(void *, void *, s16);
 extern s32 spawnAttackProjectile(s32, s32, s32);
@@ -469,9 +467,9 @@ s32 findPrimaryItemTarget(Player *player) {
         return -1;
     }
 
-    if (player->aiPrimaryItemUseTimer > D_800BADE1[player->speedPenaltyIndex][player->primaryItemId][0]) {
-        player->aiPrimaryItemUseTimer = D_800BADE1[player->speedPenaltyIndex][player->primaryItemId][0];
-        player->aiPrimaryItemUseTimer -= (randA() * D_800BADE1[player->speedPenaltyIndex][0][0]) / 255;
+    if (player->aiPrimaryItemUseTimer > gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId].delay) {
+        player->aiPrimaryItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId].delay;
+        player->aiPrimaryItemUseTimer -= (randA() * gAIPlayerParams[player->speedPenaltyIndex][0].delay) / 255;
     }
     maxRange = 0x05000000;
     if (player->aiPrimaryItemUseTimer <= 0) {
@@ -510,18 +508,18 @@ s32 findPrimaryItemTarget(Player *player) {
                 i++;
             } while (i < gs->numPlayers);
         }
-        player->aiPrimaryItemUseTimer = D_800BADE1[player->speedPenaltyIndex][player->primaryItemId][0];
-        player->aiPrimaryItemUseTimer -= (randA() * (D_800BADE1[player->speedPenaltyIndex][0][0])) / 255;
+        player->aiPrimaryItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId].delay;
+        player->aiPrimaryItemUseTimer -= (randA() * (gAIPlayerParams[player->speedPenaltyIndex][0].delay)) / 255;
         if (bestTarget == NULL) {
             return -1;
         }
-        if (randA() >= gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId][0]) {
+        if (randA() >= gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId].useChance) {
             return -1;
         }
         if (bestTarget->isBossRacer == 0) {
             return targetingMode;
         }
-        if (randA() >= D_800BADE2[player->speedPenaltyIndex][player->primaryItemId][0]) {
+        if (randA() >= gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId].altChance) {
             return -1;
         }
         i = player->finishPosition;
@@ -555,14 +553,17 @@ s32 shouldUseSecondaryItem(Player *player) {
         }
     } else {
         if (player->secondaryItemId != 0) {
-            if (player->aiItemUseTimer > gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][1]) {
-                player->aiItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][1];
-                player->aiItemUseTimer -= (randA() & 0xFF) * gAIPlayerParams[player->speedPenaltyIndex][0][2] / 255;
+            if (player->aiItemUseTimer >
+                gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].delay) {
+                player->aiItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].delay;
+                player->aiItemUseTimer -=
+                    (randA() & 0xFF) * gAIPlayerParams[player->speedPenaltyIndex][0].altChance / 255;
             }
 
             if (player->aiItemUseTimer <= 0) {
-                player->aiItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][1];
-                player->aiItemUseTimer -= (randA() & 0xFF) * gAIPlayerParams[player->speedPenaltyIndex][0][2] / 255;
+                player->aiItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].delay;
+                player->aiItemUseTimer -=
+                    (randA() & 0xFF) * gAIPlayerParams[player->speedPenaltyIndex][0].altChance / 255;
 
                 switch (player->secondaryItemId) {
                     case 1:
@@ -571,17 +572,20 @@ s32 shouldUseSecondaryItem(Player *player) {
                         if ((gs->players[gs->PAD_6B_2[0]].animFlags & 0x100)) {
                             return 0;
                         }
-                        if (randA() < gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                        if (randA() <
+                            gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].useChance) {
                             return 1;
                         }
                         break;
                     case 6:
                         if (player->pathFlags != 0) {
-                            if (randA() < gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][2]) {
+                            if (randA() <
+                                gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].altChance) {
                                 return 1;
                             }
                         } else {
-                            if (randA() < gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                            if (randA() <
+                                gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].useChance) {
                                 return 1;
                             }
                         }
@@ -590,7 +594,8 @@ s32 shouldUseSecondaryItem(Player *player) {
                         if (player->finishPosition >= 3) {
                             return 0;
                         }
-                        if (randA() < gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                        if (randA() <
+                            gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].useChance) {
                             return 1;
                         }
                         break;
@@ -599,7 +604,8 @@ s32 shouldUseSecondaryItem(Player *player) {
                     case 8:
                     case 9:
                     case 10:
-                        if (randA() < gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6][0]) {
+                        if (randA() <
+                            gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].useChance) {
                             return 1;
                         }
                         break;
