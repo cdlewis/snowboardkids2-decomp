@@ -116,12 +116,17 @@ typedef struct {
 } StateEntryItem;
 
 typedef struct {
+    s32 header[3];
+    u8 data[0x2C];
+} ScriptData;
+
+typedef struct {
     u8 pad[0x210];
     s32 renderFlags;
 } Func8000C268Arg;
 
 typedef struct {
-    u8 scriptData[0xC];
+    s32 header[3];
     /* 0xC */ u16 current_index;
     u8 padding[0x2];
     /* 0x10 */ u16 allocatedEventCount;

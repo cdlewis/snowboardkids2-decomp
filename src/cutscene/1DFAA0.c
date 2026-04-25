@@ -355,11 +355,11 @@ s16 getCutsceneFrameCount(s16 slotIndex, s16 cutsceneType) {
 }
 
 void *getCutsceneDataMagicPrimary(void) {
-    return &gCutsceneStateTable->scriptData[4];
+    return &gCutsceneStateTable->header[1];
 }
 
 void *getCutsceneDataMagicSecondary(void) {
-    return &gCutsceneStateTable->scriptData[8];
+    return &gCutsceneStateTable->header[2];
 }
 
 u16 getCutsceneAllocatedEventCount(void) {
@@ -464,21 +464,17 @@ void *loadCutsceneFrameData(s16 slotIndex, s16 cutsceneType, s16 frameIndex) {
 
 s32 verifyAndLoadCutsceneState(void *stateBuffer) {
     s32 success;
-    s32 *globalState;
     s32 *inputState;
 
     inputState = (s32 *)stateBuffer;
-    globalState = (s32 *)gCutsceneStateTable;
 
     success = 1;
 
-    // Verify magic values at offsets 0x4 and 0x8 before loading state
-    // These are part of the "EDDAT001" signature (0x45='E' at offset 4, 0x30='0' at offset 8)
-    if (globalState[1] != inputState[1]) {
+    if (gCutsceneStateTable->header[1] != inputState[1]) {
         goto skip_copy;
     }
 
-    if (globalState[2] != inputState[2]) {
+    if (gCutsceneStateTable->header[2] != inputState[2]) {
         goto skip_copy;
     }
 
@@ -555,7 +551,7 @@ void resetScriptState(u8 *arg0) {
 void initializeStateEntry(s32 arg0) {
     StateEntry *temp;
 
-    resetScriptState(gCutsceneStateTable[arg0 + 3].scriptData);
+    resetScriptState((u8 *)(ScriptData *)&gCutsceneStateTable[arg0 + 3]);
 
     temp = (gCutsceneStateTable + arg0 + 3);
     temp->frameNumber = 0;
@@ -600,25 +596,24 @@ void initializeCutsceneSystem(void *romAssetAddr) {
         slotIdx = next;
     } while (next < 0x1E0); // Initialize 480 entries (0x1E0)
 
-    // Set up magic signature "EDDAT001" in scriptData (used for save data validation)
-    // The magic is stored in the first 12 bytes of gCutsceneStateTable[0].scriptData
+    // Set up magic signature "EDAT0001" (used for save data validation)
     {
         StateEntry *firstEntry = gCutsceneStateTable;
         StateEntry *firstEntry2;
-        firstEntry->scriptData[4] = 0x45; // Magic[4] = 'E'
+        ((u8 *)firstEntry->header)[4] = 0x45; // 'E'
         firstEntry2 = gCutsceneStateTable;
         *(u16 *)((u8 *)firstEntry + 0xFA) = 0xFFFF;   // entry[0].prev_index = invalid (list head)
         *(u16 *)((u8 *)firstEntry + 0x78B8) = 0xFFFF; // entry[479].prev_index = invalid (list tail)
-        *(s32 *)firstEntry->scriptData = 0;           // Magic[0-3] = 0 (part of "EDDAT001")
-        firstEntry2->scriptData[5] = 0x44;            // 'D'
+        firstEntry->header[0] = 0;                    // Magic[0-3] = 0
+        ((u8 *)firstEntry2->header)[5] = 0x44;        // 'D'
     }
-    gCutsceneStateTable->scriptData[6] = 0x41;  // Magic[6] = 'A'
-    gCutsceneStateTable->scriptData[7] = 0x54;  // Magic[7] = 'T'
-    gCutsceneStateTable->scriptData[8] = 0x30;  // Magic[8] = '0'
-    gCutsceneStateTable->scriptData[9] = 0x30;  // Magic[9] = '0'
-    gCutsceneStateTable->scriptData[10] = 0x30; // Magic[10] = '0'
+    ((u8 *)gCutsceneStateTable->header)[6] = 0x41;  // 'A'
+    ((u8 *)gCutsceneStateTable->header)[7] = 0x54;  // 'T'
+    ((u8 *)gCutsceneStateTable->header)[8] = 0x30;  // '0'
+    ((u8 *)gCutsceneStateTable->header)[9] = 0x30;  // '0'
+    ((u8 *)gCutsceneStateTable->header)[10] = 0x30; // '0'
     slotIdx = 0;
-    gCutsceneStateTable->scriptData[11] = 0x31; // Magic[11] = '1'
+    ((u8 *)gCutsceneStateTable->header)[11] = 0x31; // '1'
 
     // Initialize state table header fields (stored in gCutsceneStateTable[0])
     {
@@ -1009,7 +1004,7 @@ StateEntry *getCutsceneStateTable(void) {
 }
 
 u8 *getCutsceneStateTableLastBytePtr(void) {
-    return &gCutsceneStateTable->scriptData[gCutsceneStateTableSize] - 1;
+    return (u8 *)gCutsceneStateTable + gCutsceneStateTableSize - 1;
 }
 
 u16 getCutEntryBufferSlotIndex(u16 defaultSlotIndex) {
@@ -1182,7 +1177,7 @@ void pasteCutsceneEntryToSlot(u8 slotIndex, u16 frameNumber) {
         dest = getStateEntry(eventIndex);
         // Copy the data portion (0x38 bytes = everything before linked list pointers)
         for (i = 0; i < 0x38; i++) {
-            dest->scriptData[i] = srcEntry->scriptData[i];
+            ((u8 *)(ScriptData *)dest)[i] = ((u8 *)(ScriptData *)srcEntry)[i];
         }
 
         dest->commandCategory = srcEntry->commandCategory;
