@@ -42,8 +42,7 @@ void checkPhoneLocationDiscovery(LocationDiscoveryTrigger *trigger) {
             maxAngle = ((s16 *)storyMapAngleBounds)[(locationId * 2) + 1];
             if (normalizedYaw > maxAngle) {
                 // Check if player's X position is within discovery range
-                u32 xDist = gameState->unk3FC - 0xC01;
-                if (xDist < 0x7FF) {
+                if ((u16)(gameState->unk3FC - 0xC01) < 0x7FF) {
                     gameState->locationDiscovered = 1;
                     gameState->discoveredLocationId = trigger->locationId;
                 }
