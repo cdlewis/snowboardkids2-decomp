@@ -862,26 +862,23 @@ void recreateCharSelectBoardModelForSlideIn(CharSelectBoardPreview *arg0) {
 }
 
 void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
-    u8 *state;
-    u8 *sessionPtr;
+    GameState *state;
     u8 playerIdx;
 
-    state = (u8 *)getCurrentAllocation();
+    state = (GameState *)getCurrentAllocation();
 
     memcpy(&preview->transform, &identityMatrix, 0x20);
 
     playerIdx = preview->playerIndex;
     preview->transform.translation.x =
-        ((s32 *)&D_8008DD2C_8E92C)[D_800AFE8C_A71FC->numPlayers * 2 + ((GameState *)state)->unk18C0[playerIdx]];
+        ((s32 *)&D_8008DD2C_8E92C)[D_800AFE8C_A71FC->numPlayers * 2 + state->unk18C0[playerIdx]];
     preview->transform.translation.z = 0;
     preview->transform.translation.y = 0xFFF00000;
     preview->unk20_u.targetX = preview->transform.translation.x;
 
     applyTransformToModel(preview->model, &preview->transform);
 
-    sessionPtr = (u8 *)D_800AFE8C_A71FC;
-    sessionPtr = sessionPtr + preview->playerIndex;
-    if (sessionPtr[9] == 7) {
+    if (D_800AFE8C_A71FC->playerBoardIds[preview->playerIndex] == 7) {
         setModelAnimation(preview->model, 4);
     } else {
         setModelAnimation(preview->model, 0x90);
