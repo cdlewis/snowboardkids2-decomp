@@ -29,13 +29,6 @@ typedef struct {
 } SaveDataBuffer;
 
 typedef struct {
-    void *start;
-    void *end;
-    u32 size;
-    s8 fadeType;
-} CutsceneFadeAsset;
-
-typedef struct {
     u8 padding[0x8];
     void *assetData;
 } CutsceneFadeCleanupArgs;
@@ -1254,10 +1247,10 @@ void startCutsceneFadeEffect(s32 arg0, s8 slotIndex, s16 duration) {
 }
 
 void initCutsceneFadeTask(FadeTaskData *task) {
-    CutsceneFadeAsset *node;
+    CutsceneFadeAssetNode *node;
     s32 i;
 
-    node = (CutsceneFadeAsset *)&gCutsceneFadeAssetTable[task->slotIndex];
+    node = &gCutsceneFadeAssetTable[task->slotIndex];
     task->assetData = loadCompressedData(node->start, node->end, node->size);
 
     for (i = 0; i < 6; i++) {
@@ -1321,10 +1314,10 @@ void initCutsceneFadeTask(FadeTaskData *task) {
 }
 
 void updateCutsceneFadeTask(FadeTaskData *task) {
-    CutsceneFadeAsset *node;
+    CutsceneFadeAssetNode *node;
     s32 i;
 
-    node = (CutsceneFadeAsset *)&gCutsceneFadeAssetTable[task->slotIndex];
+    node = &gCutsceneFadeAssetTable[task->slotIndex];
 
     switch (task->state) {
         case 0:
