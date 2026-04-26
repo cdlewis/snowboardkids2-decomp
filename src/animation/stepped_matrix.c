@@ -2,8 +2,6 @@
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
 
-void cleanupSteppedMatrixController(void);
-
 typedef struct {
     u8 padding[0x3C];
     s8 isDestroyed;
@@ -20,9 +18,6 @@ typedef struct {
     s16 stepIndex;
 } SteppedMatrixState;
 
-void updateSteppedMatrixController(SteppedMatrixState *state);
-
-// Data
 s32 gSteppedMatrixTranslations = 0x00033333;
 
 u16 gSteppedMatrixAngles[] = {
@@ -34,6 +29,9 @@ s32 gSteppedMatrixStepCount = 6;
 s32 D_8008C184 = 0;
 s32 D_8008C188 = 0;
 s32 D_8008C18C = 0;
+
+void cleanupSteppedMatrixController(void);
+void updateSteppedMatrixController(SteppedMatrixState *state);
 
 void initSteppedMatrixController(SteppedMatrixState *state) {
     memcpy(&state->matrix, &identityMatrix, 0x20);
