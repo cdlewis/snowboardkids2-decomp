@@ -385,7 +385,7 @@ segments:
       - [0x9B420, .data, text/font_assets]
       - [0x9B460, .data, system/task_scheduler]
       - [0x9B470, .data, math/geometry_data]
-      - [0x9B9E0, data] # lots of stuff under race/
+      - [0x9B9E0, .data, data/global_frame_counter]
       - [0x9B9F0, .data, graphics/graphics]
       - [0x9BBF0, .data, system/thread_manager]
       - [0x9BC30, .data, audio/audio_manager]
@@ -395,7 +395,7 @@ segments:
       - [0x9C710, lib, libgultra_rom, thread, .data]
       - [0x9C730, lib, libgultra_rom, drvrnew, .data]
       - [0x9C8C0, lib, libgultra_rom, env, .data]
-      - [0x9C9C0, data] # no idea what this is supposed to be
+      - [0x9C9C0, .data, data/unk_9C9C0]
       - [0x9C9E0, lib, libgultra_rom, sl, .data]
       - [0x9C9F0, lib, libgultra_rom, aisetnextbuf, .data]
       - [0x9CA00, lib, libgultra_rom, controller, .data]
