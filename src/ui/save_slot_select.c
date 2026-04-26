@@ -11,34 +11,6 @@
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 
-extern void initSaveSlotStatSprites(void *);
-extern void initSaveSlotItemIcons(void *);
-extern void initSaveSlotItemLabels(void *);
-extern void initSaveSlotNameText(void *);
-extern void initSaveSlotPromptText(void *);
-extern void initSaveSlotSelectionParticles(void *);
-extern void initSaveSlotIconGrid(void *);
-extern void initSaveSlotDeleteArrow(void *);
-extern void initSaveSlotGoldDisplay(void *);
-extern void initSaveSlotConfirmationIndicator(void *);
-extern void initSaveSlotDeleteText(void *);
-
-extern void eepromWriteAsync(s32 slotIndex);
-extern s32 pollEepromWriteAsync(void);
-extern s32 gControllerInputs;
-
-u8 eeprom_save_magic[16] = "SNOW2EEP";
-
-void updateSaveSlotSelectionScreen(void);
-void initSaveSlotSelection(void);
-void onSaveSlotSelectionConfirm(void);
-void onSaveSlotSelectionCancel(void);
-void cleanupSaveSlotSelectionAndExit(void);
-void updateSelectionWiggle(void);
-void onSaveSlotReadComplete(u16, s32);
-void verifySaveSlotChecksum(void);
-void updateSlotSelectionSlide(void);
-
 typedef struct {
     u8 pad[0xD0];
     u8 slotIndex;
@@ -48,6 +20,16 @@ typedef struct {
     u8 pad[0x1C];
     u8 slotIndex;
 } SaveSlotNameTextReturnType;
+
+typedef struct {
+    u8 pad[0xF0];
+    u8 slotIndex;
+} SaveSlotItemLabelsReturnType;
+
+typedef struct {
+    u8 pad[0x48];
+    u8 particleIndex;
+} SaveSlotParticlesReturnType;
 
 typedef struct {
     ViewportNode unk0;
@@ -81,29 +63,33 @@ typedef struct {
     u8 animDelayCounter;
 } SaveSlotScreenState;
 
-typedef struct {
-    u8 pad[0xF0];
-    u8 slotIndex;
-} SaveSlotItemLabelsReturnType;
+u8 eeprom_save_magic[16] = "SNOW2EEP";
 
-typedef struct {
-    u8 pad[0x48];
-    u8 particleIndex;
-} SaveSlotParticlesReturnType;
+extern void initSaveSlotStatSprites(void *);
+extern void initSaveSlotItemIcons(void *);
+extern void initSaveSlotItemLabels(void *);
+extern void initSaveSlotNameText(void *);
+extern void initSaveSlotPromptText(void *);
+extern void initSaveSlotSelectionParticles(void *);
+extern void initSaveSlotIconGrid(void *);
+extern void initSaveSlotDeleteArrow(void *);
+extern void initSaveSlotGoldDisplay(void *);
+extern void initSaveSlotConfirmationIndicator(void *);
+extern void initSaveSlotDeleteText(void *);
 
-typedef struct {
-    u8 padding1[0x938];           // 0x000
-    EepromSaveData_type slots[4]; // 0x938
-    u8 padding2[0x1C];            // 0xAA8
-    u16 readSlotIndex;            // 0xAC4
-    u8 padding3[2];               // 0xAC6
-    u8 saveSlotIndex;             // 0xAC8
-    u8 padding4[3];               // 0xAC9
-    u8 numValidSlots;             // 0xACC
-    u8 eepromErrorStatus;         // 0xACD
-    u8 slotHasData[8];            // 0xACE
-} SaveData;
+extern void eepromWriteAsync(s32 slotIndex);
+extern s32 pollEepromWriteAsync(void);
+extern s32 gControllerInputs;
 
+void updateSaveSlotSelectionScreen(void);
+void initSaveSlotSelection(void);
+void onSaveSlotSelectionConfirm(void);
+void onSaveSlotSelectionCancel(void);
+void cleanupSaveSlotSelectionAndExit(void);
+void updateSelectionWiggle(void);
+void onSaveSlotReadComplete(u16, s32);
+void verifySaveSlotChecksum(void);
+void updateSlotSelectionSlide(void);
 s32 sanitizeSaveSlotData(EepromSaveData_type *saveData);
 
 void initSaveSlotScreen(void) {
@@ -933,7 +919,7 @@ void updateSelectionWiggle(void) {
 }
 
 void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
-    SaveData *allocation;
+    SaveSlotScreenState *allocation;
     s32 i;
     s32 sum;
     s32 savedChecksum;
@@ -943,14 +929,14 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
     u8 *dataPtr;
     s32 limit;
 
-    allocation = (SaveData *)getCurrentAllocation();
+    allocation = (SaveSlotScreenState *)getCurrentAllocation();
 
     if (arg1 == 0) {
         i = 0;
         slotIndex = arg0 & 0xFFFF;
 
         while (i < 8) {
-            if (allocation->slots[slotIndex].header_data[i] != eeprom_save_magic[i]) {
+            if (allocation->slotData[slotIndex].header_data[i] != eeprom_save_magic[i]) {
                 allocation->eepromErrorStatus++;
                 break;
             }
@@ -960,11 +946,11 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
         if (i == 8) {
             limit = 0x58;
             slotIndex = arg0 & 0xFFFF;
-            dataPtr = allocation->slots[slotIndex].header_data;
-            savedChecksum = allocation->slots[slotIndex].checksum;
+            dataPtr = allocation->slotData[slotIndex].header_data;
+            savedChecksum = allocation->slotData[slotIndex].checksum;
             sum = 0;
             i = 0;
-            allocation->slots[slotIndex].checksum = 0;
+            allocation->slotData[slotIndex].checksum = 0;
 
             while (i < limit) {
                 sum += *dataPtr;
@@ -978,7 +964,7 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
 
             } else {
 
-                funcResult = sanitizeSaveSlotData(&allocation->slots[slotIndex]);
+                funcResult = sanitizeSaveSlotData(&allocation->slotData[slotIndex]);
                 allocation->eepromErrorStatus = 0;
                 if (!(funcResult & 0xFF)) {
                     allocation->numValidSlots++;
@@ -999,7 +985,7 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
     temp = allocation->eepromErrorStatus;
     if (temp != 0) {
         if (temp < 3) {
-            allocation->readSlotIndex = allocation->readSlotIndex - 1;
+            allocation->selectionAnimState = allocation->selectionAnimState - 1;
             return;
         }
         allocation->eepromErrorStatus = 0;
