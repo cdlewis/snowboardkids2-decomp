@@ -111,34 +111,14 @@ typedef struct {
 } SkiTrailTask;
 
 typedef struct {
-    u8 padding[0xC0];
-    MemoryAllocatorNode *assetTable;
-} CharacterAttackEffectTask;
-
-typedef struct {
     Node n;
     s32 unk2C;
     s32 unk30;
 } NodeWithPayload;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} SprayEffectSpawnTask;
-
-typedef struct {
     MemoryAllocatorNode *assetTable;
 } DualSnowSprayAssetNode;
-
-typedef struct {
-    u8 padding[0xC4];
-    Player *sourcePlayer;
-    u8 padding2[0xC];
-    u8 particleType;
-    u8 padding3;
-    u8 isVariant;
-} CharacterAttackEffectSpawnTask;
 
 typedef struct {
     u8 padding[0x12C0];
@@ -164,13 +144,6 @@ typedef struct {
     /* 0x34 */ func_80050C00_51800_Task_unk34 *sourceObj;
     /* 0x38 */ s16 positionSelector;
 } CharacterTrailParticleTask;
-
-typedef struct {
-    u8 padding[0x44C];
-    s32 velocity;
-    s32 unk450;
-    s32 unk454;
-} func_80050C80_51880_arg0;
 
 typedef struct {
     u8 padding[0x44];
@@ -205,6 +178,8 @@ typedef struct {
     u8 unk76;
 } Alloc_CharacterAttackEffect;
 
+extern u16 D_8009ADE0_9B9E0;
+
 void loadFirstSprayParticle(SprayEffectTask *);
 void cleanupSprayEffect(void **);
 void updateSprayEffect(SprayEffectUpdateTask *);
@@ -216,7 +191,6 @@ void initCharacterTrailParticleTask(MemoryAllocatorNode **);
 void loadCharacterTrailParticleAsset(CharacterTrailParticleTask *);
 void updateCharacterTrailParticle(CharacterTrailParticleTask *);
 void cleanupCharacterTrailParticleTask(s32 **);
-
 void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
 void func_80050E08_51A08(func_80050DB0_519B0_arg *);
 void func_80050EA0_51AA0(void **);
@@ -228,9 +202,9 @@ void updateGlintEffect(GlintEffectTask *);
 void cleanupGlintEffect(GlintEffectTask *);
 void loadCharacterAttackEffectAssets(CharacterAttackEffectState *);
 void updateCharacterAttackEffect(CharacterAttackEffectState *);
-void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *);
-
-extern u16 D_8009ADE0_9B9E0;
+void cleanupCharacterAttackEffectTask(CharacterAttackEffectState *);
+void updateSkiTrailTask(SkiTrailTask *arg0);
+void cleanupSkiTrailTask(func_80051688_52288_arg *arg0);
 
 u8 gCharacterParticleTypeMap[16] = {
     0xFF, 0x08, 0x26, 0x12, 0x17, 0x1C, 0xFF, 0x0D, 0x21, 0x0D, 0x17, 0x12, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -700,9 +674,6 @@ void spawnDualSnowSprayEffect_SingleSlot(Vec3i *pos1, Vec3i *pos2, Vec3i *veloci
     }
 }
 
-void updateSkiTrailTask(SkiTrailTask *arg0);
-void cleanupSkiTrailTask(func_80051688_52288_arg *arg0);
-
 void initSkiTrailTask(SkiTrailTask *task) {
     GameState *gs;
     void *particleAsset;
@@ -855,7 +826,7 @@ void spawnGlintEffect(void *arg0) {
     }
 }
 
-void initCharacterAttackEffectTask(CharacterAttackEffectTask *task) {
+void initCharacterAttackEffectState(CharacterAttackEffectState *task) {
     task->assetTable = load_3ECE40();
     setCleanupCallback(&cleanupCharacterAttackEffectTask);
     setCallbackWithContinue(&loadCharacterAttackEffectAssets);
@@ -979,13 +950,13 @@ render:
     } while (j < 4);
 }
 
-void cleanupCharacterAttackEffectTask(CharacterAttackEffectTask *task) {
+void cleanupCharacterAttackEffectTask(CharacterAttackEffectState *task) {
     task->assetTable = freeNodeMemory(task->assetTable);
 }
 
 void spawnCharacterAttackEffect(Player *player) {
-    CharacterAttackEffectSpawnTask *task =
-        (CharacterAttackEffectSpawnTask *)scheduleTask(&initCharacterAttackEffectTask, 2, 0, 0xE7);
+    CharacterAttackEffectState *task =
+        (CharacterAttackEffectState *)scheduleTask(&initCharacterAttackEffectState, 2, 0, 0xE7);
     if (task != NULL) {
         task->sourcePlayer = player;
         task->particleType = 0x12;
@@ -995,14 +966,14 @@ void spawnCharacterAttackEffect(Player *player) {
 
 void spawnCharacterAttackEffectByType(Player *player, s32 characterId) {
     s32 particleType;
-    CharacterAttackEffectSpawnTask *task;
+    CharacterAttackEffectState *task;
 
     particleType = gCharacterParticleTypeMap[characterId];
     if (particleType == 0xFF) {
         particleType = 0xD;
     }
 
-    task = (CharacterAttackEffectSpawnTask *)scheduleTask(&initCharacterAttackEffectTask, 2, 0, 0xE7);
+    task = (CharacterAttackEffectState *)scheduleTask(&initCharacterAttackEffectState, 2, 0, 0xE7);
     if (task != NULL) {
         task->sourcePlayer = player;
         task->particleType = particleType;
