@@ -364,38 +364,36 @@ void updateBoardShop(void) {
     BoardShopState *state;
     u8 oldValue;
     u8 boardCount;
-    u8 dispIdx;
     u8 boardIdx;
-    u16 timer;
     s8 transDir;
 
     state = (BoardShopState *)getCurrentAllocation();
 
     switch (state->shopState) {
-        case 0:
+        case 0x00:
             playSoundEffectOnChannelNoPriority(0xEA, 1);
-            state->shopState = 1;
+            state->shopState = 0x01;
             break;
 
-        case 12:
+        case 0x0C:
             scheduleTask(&initBoardShopComparisonIcons, 0, 0, 0x5A);
             scheduleTask(&initBoardShopRowSelectorArrow, 0, 0, 0x5A);
             scheduleTask(&initBoardShopColumnSelectorArrow, 0, 0, 0x5A);
             state->viewMode = 1;
             scheduleTask(&initBoardShopTitleText, 0, 0, 0x5A);
             scheduleTask(&initBoardShopTitleCorners, 0, 0, 0x5A);
-            state->shopState = 2;
+            state->shopState = 0x02;
             break;
 
-        case 2:
+        case 0x02:
             oldValue = state->selectedCategoryIndex;
-            if (*gControllerInputs & 0x80200) {
+            if (*gControllerInputs & (STICK_LEFT | L_JPAD)) {
                 state->scrollDirection = 0;
                 state->selectedCategoryIndex = state->selectedCategoryIndex - 1;
                 if (state->selectedCategoryIndex < 0) {
                     state->selectedCategoryIndex = 2;
                 }
-            } else if (*gControllerInputs & 0x40100) {
+            } else if (*gControllerInputs & (STICK_RIGHT | R_JPAD)) {
                 state->scrollDirection = 1;
                 state->selectedCategoryIndex = state->selectedCategoryIndex + 1;
                 if (state->selectedCategoryIndex >= 3) {
@@ -405,43 +403,43 @@ void updateBoardShop(void) {
             if ((s8)oldValue != state->selectedCategoryIndex) {
                 playSoundEffectOnChannelNoPriority(0x2B, 0);
                 state->oldTransitionIndex = (s8)oldValue * 3;
-                state->shopState = 3;
+                state->shopState = 0x03;
                 state->transitionDirection = 1;
                 state->selectedBoardIndex = 0;
                 state->newTransitionIndex = state->selectedCategoryIndex * 3;
                 scheduleTask(&initBoardShopCharacterTransition, 0, 0, 0x5A);
             } else {
-                if (*gControllerInputs & 0x9000) {
+                if (*gControllerInputs & (A_BUTTON | START_BUTTON)) {
                     playSoundEffectOnChannelNoPriority(0x2C, 0);
                     state->delayTimer = 0;
-                    state->shopState = 4;
+                    state->shopState = 0x04;
                     break;
                 }
-                if (*gControllerInputs & 0x4000) {
+                if (*gControllerInputs & B_BUTTON) {
                     state->exitMode = 1;
                 }
             }
             break;
 
-        case 3:
+        case 0x03:
             transDir = state->transitionDirection;
             if (transDir == 0) {
-                state->shopState = 2;
+                state->shopState = 0x02;
                 break;
             }
             if (transDir == -2) {
-                state->shopState = 5;
+                state->shopState = 0x05;
             }
             break;
 
-        case 4:
-        case 7:
+        case 0x04:
+        case 0x07:
             state->delayTimer = state->delayTimer + 1;
             if ((state->delayTimer & 0xFFFF) == 0x11) {
                 state->delayTimer = 0;
-                if (state->shopState == 7) {
+                if (state->shopState == 0x07) {
                     state->viewMode = 0;
-                    state->shopState = 0xF;
+                    state->shopState = 0x0F;
                     state->delayTimer = 0;
                     scheduleTask(&initBoardShopBoardIcons, 0, 0, 0x5A);
                     {
@@ -459,21 +457,21 @@ void updateBoardShop(void) {
                         } while (j >= 0);
                     }
                 } else {
-                    state->shopState = 5;
+                    state->shopState = 0x05;
                 }
             }
             break;
 
-        case 5:
+        case 0x05:
             boardCount = countOwnedBoardsInCategory();
             oldValue = state->selectedBoardIndex;
-            if (*gControllerInputs & 0x80200) {
+            if (*gControllerInputs & (STICK_LEFT | L_JPAD)) {
                 state->scrollDirection = 0;
                 state->selectedBoardIndex = state->selectedBoardIndex - 1;
                 if ((s8)state->selectedBoardIndex < 0) {
                     state->selectedBoardIndex = boardCount - 1;
                 }
-            } else if (*gControllerInputs & 0x40100) {
+            } else if (*gControllerInputs & (STICK_RIGHT | R_JPAD)) {
                 state->scrollDirection = 1;
                 state->selectedBoardIndex = state->selectedBoardIndex + 1;
                 if ((s8)state->selectedBoardIndex == (boardCount & 0xFF)) {
@@ -482,39 +480,39 @@ void updateBoardShop(void) {
             }
             if ((s8)oldValue != (s8)state->selectedBoardIndex) {
                 playSoundEffectOnChannelNoPriority(0x2B, 0);
-                state->shopState = 3;
+                state->shopState = 0x03;
                 state->transitionDirection = -1;
                 state->oldTransitionIndex = oldValue + (state->selectedCategoryIndex * 3);
                 state->newTransitionIndex = state->selectedBoardIndex + (state->selectedCategoryIndex * 3);
                 scheduleTask(&initBoardShopCharacterTransition, 0, 0, 0x5A);
             } else {
-                if (*gControllerInputs & 0x9000) {
+                if (*gControllerInputs & (A_BUTTON | START_BUTTON)) {
                     playSoundEffectOnChannelNoPriority(0x2C, 0);
                     state->delayTimer = 0;
-                    state->shopState = 7;
+                    state->shopState = 0x07;
                     break;
                 }
-                if (*gControllerInputs & 0x4000) {
+                if (*gControllerInputs & B_BUTTON) {
                     playSoundEffect(0x2E);
-                    state->shopState = 2;
+                    state->shopState = 0x02;
                 }
             }
             break;
 
-        case 15:
+        case 0x0F:
             if (state->delayTimer != 0) {
                 state->delayTimer = 0;
                 state->selectedSlot = 0;
-                setModelCameraTransform((u8 *)state + 0x3B0, 0, 0, -0x98, -0x4D, 0x97, 0x5A);
+                setModelCameraTransform(&state->tertiaryViewport, 0, 0, -0x98, -0x4D, 0x97, 0x5A);
                 state->shopState = 0x10;
                 state->viewMode = 2;
             }
             break;
 
-        case 16:
+        case 0x10:
             oldValue = state->selectedSlot;
             state->scrollDirection = 0;
-            if (*gControllerInputs & 0x10800) {
+            if (*gControllerInputs & (STICK_UP | U_JPAD)) {
                 if (state->selectedSlot == 0) {
                     state->scrollDirection = 2;
                     state->scrollOutBoardIndex = state->boardDisplayIndices[3];
@@ -523,7 +521,7 @@ void updateBoardShop(void) {
                 } else {
                     state->selectedSlot = state->selectedSlot - 1;
                 }
-            } else if (*gControllerInputs & 0x20400) {
+            } else if (*gControllerInputs & (STICK_DOWN | D_JPAD)) {
                 if ((state->selectedSlot & 0xFF) == 3) {
                     state->scrollDirection = 1;
                     state->scrollOutBoardIndex = state->boardDisplayIndices[0];
@@ -536,13 +534,13 @@ void updateBoardShop(void) {
             if (((s8)oldValue != state->selectedSlot) || (state->scrollDirection != 0)) {
                 playSoundEffectOnChannelNoPriority(0x2B, 0);
                 state->delayTimer = 0;
-            } else if (*gControllerInputs & 0x4000) {
+            } else if (*gControllerInputs & B_BUTTON) {
                 playSoundEffect(0x2E);
                 state->shopState = 0x11;
                 state->viewMode = 0;
                 state->delayTimer = 0;
-                setModelCameraTransform((u8 *)state + 0x3B0, 0, 0, -0x98, -0x70, 0x97, 0x6F);
-            } else if (*gControllerInputs & 0x9000) {
+                setModelCameraTransform(&state->tertiaryViewport, 0, 0, -0x98, -0x70, 0x97, 0x6F);
+            } else if (*gControllerInputs & (A_BUTTON | START_BUTTON)) {
                 if (D_800AFE8C_A71FC->gold >=
                     (s32)(u16)boardShopPrices[state->boardIndexMap[state->boardDisplayIndices[state->selectedSlot]]]) {
                     playSoundEffectOnChannelNoPriority(0x2C, 0);
@@ -561,19 +559,19 @@ void updateBoardShop(void) {
             }
             break;
 
-        case 17:
+        case 0x11:
             if (state->delayTimer != 0) {
-                state->shopState = 2;
+                state->shopState = 0x02;
                 state->viewMode = 1;
             }
             break;
 
-        case 18:
+        case 0x12:
             scheduleTask(&initBoardShopSnowflakeSlideIn, 0, 0, 0x5A);
             state->shopState = 0x13;
             break;
 
-        case 20:
+        case 0x14:
             state->delayTimer = state->delayTimer + 1;
             if ((state->delayTimer & 0xFFFF) == 0x11) {
                 playSoundEffectOnChannelNoPriority(0xEF, 1);
@@ -582,13 +580,13 @@ void updateBoardShop(void) {
             }
             break;
 
-        case 25:
-            if (*gControllerInputs & 0x4000) {
+        case 0x19:
+            if (*gControllerInputs & B_BUTTON) {
                 playSoundEffect(0x2E);
                 state->shopState = 0x10;
                 break;
             }
-            if (*gControllerInputs & 0x8000) {
+            if (*gControllerInputs & A_BUTTON) {
                 state->shopState = 0x1A;
                 state->shopkeeperAnimIndex = 3;
                 state->viewMode = 0;
@@ -598,12 +596,12 @@ void updateBoardShop(void) {
             }
             break;
 
-        case 26:
+        case 0x1A:
             state->shopState = 0x1B;
             state->delayTimer = 0;
             break;
 
-        case 27:
+        case 0x1B:
             if (state->delayTimer != 0) {
                 state->shopState = 0x1C;
                 state->delayTimer = 0;
@@ -616,7 +614,7 @@ void updateBoardShop(void) {
             }
             break;
 
-        case 28:
+        case 0x1C:
             state->delayTimer = 0;
             addPlayerGold(
                 -(s32)(u16)boardShopPrices[state->boardIndexMap[state->boardDisplayIndices[state->selectedSlot]]]
@@ -624,7 +622,7 @@ void updateBoardShop(void) {
             state->shopState = 0x1D;
             break;
 
-        case 29:
+        case 0x1D:
             playSoundEffectOnChannelNoPriority(0xEB, 1);
             state->shopState = 0x11;
             break;
