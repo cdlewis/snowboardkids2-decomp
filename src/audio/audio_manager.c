@@ -13,10 +13,6 @@
 #include "ucode.h"
 
 typedef struct {
-    void *buf;
-    s16 len;
-} AudioBuffer;
-typedef struct {
     /* 0x00 */ void *outputBuffer;
     /* 0x04 */ s16 frameSizeInSamples;
     s16 _pad6;
@@ -72,7 +68,6 @@ typedef struct {
 } AMAudioMgr;
 
 extern AMAudioMgr gAudioManager;
-
 extern Acmd *gAudioCmdBuffers[];
 extern ALGlobals __libmus_alglobals;
 extern AudioNode *D_800A6468_A7068;
@@ -92,21 +87,21 @@ extern u32 gMinAudioFrameSize;
 extern u8 gDriveRomInitialized;
 extern void **gAudioMsgBuffer;
 
-s32 loadAudioDataWithCache(s32, s32);
-void handleAudioUnderrun(void *);
-void processAudioNodeList(void);
-s32 audioCreateAndScheduleTask(AudioStruct *, AudioStruct *);
-void *initAudioDriveAndGetLoader(void *arg0);
-void audioManagerThread(void *);
-extern void CustomInit(void *, ALSynConfig *);
-
-// data
 u32 gCurrentFrame = 0;
 u32 D_8009B034_9BC34 = 0;
 s32 gAudioCmdBufferToggle = 0;
 s32 gAudioThreadCreated = 0;
 AudioStruct *gPendingMessages = NULL;
 s32 gAudioUnderrunFlag = 1;
+
+extern void CustomInit(void *, ALSynConfig *);
+
+s32 loadAudioDataWithCache(s32, s32);
+void handleAudioUnderrun(void *);
+void processAudioNodeList(void);
+s32 audioCreateAndScheduleTask(AudioStruct *, AudioStruct *);
+void *initAudioDriveAndGetLoader(void *arg0);
+void audioManagerThread(void *);
 
 void initAudioManager(
     ALSynConfig *config,
