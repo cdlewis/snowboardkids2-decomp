@@ -9,17 +9,42 @@
 #include "math/geometry.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
+#include "text/font_render.h"
 #include "ui/level_preview_3d.h"
 
 USE_OVERLAY(credits)
-
-void *loadTextRenderAsset(s32);
 
 typedef struct {
     void *start;
     void *end;
     s32 size;
 } asset;
+
+typedef struct {
+    s16 modelId;
+    s16 animationIndex;
+    u8 unk4;
+    s8 actionMode;
+    u16 rotation;
+    u16 unk8;
+    s16 scale;
+    s32 depthOffset;
+} CreditsCharacterConfig; // size 0x10
+
+typedef struct {
+    SceneModel *model;
+    s16 animState;
+    s16 configIndex;
+    u8 unk8;
+    s8 direction;
+    s16 isCleanedUp;
+} CreditsCharacter;
+
+typedef struct {
+    u8 padding[0x2C];
+    s32 zPosition;
+    s32 zOffset;
+} CreditsModelPosition;
 
 static asset D_8008BFA0_8CBA0[6] = {
     { &_619E10_ROM_START, &_619E10_ROM_END, 0x9578 },
@@ -53,17 +78,6 @@ struct {
     0,
 };
 
-typedef struct {
-    s16 modelId;
-    s16 animationIndex;
-    u8 unk4;
-    s8 actionMode;
-    u16 rotation;
-    u16 unk8;
-    s16 scale;
-    s32 depthOffset;
-} CreditsCharacterConfig; // size 0x10
-
 CreditsCharacterConfig creditsCharacterConfigs[] = {
     { 0x64, 0,    0, 0, 0xF800, 0, 0x2000, 0          },
     { 0x65, 1,    0, 0, 0xF800, 0, 0x2000, 0          },
@@ -95,22 +109,6 @@ s32 D_8008C120_8CD20[] = { 0x001428F5, 0x00099999, 0x00266666, 0xFFEBD70B, 0x000
 void updateCreditsSequence(void);
 void fadeOutCreditsSequence(void);
 void onCreditsComplete(void);
-
-typedef struct {
-    SceneModel *model;
-    s16 animState;
-    s16 configIndex;
-    u8 unk8;
-    s8 direction;
-    s16 isCleanedUp;
-} CreditsCharacter;
-
-typedef struct {
-    u8 padding[0x2C];
-    s32 zPosition;
-    s32 zOffset;
-} CreditsModelPosition;
-
 void updateCreditsCharacter(CreditsCharacter *character);
 void cleanupCreditsCharacter(CreditsCharacter *character);
 void spawnCreditsCharacter(CreditsState *);
