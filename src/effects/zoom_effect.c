@@ -17,8 +17,8 @@ extern struct {
     s16 x;
     s16 y;
 } gWipeOffset[];
+extern s32 gControllerInputs;
 
-s16 initWipeZoomDisplay(cutsceneSys2Wait_exec_asset *);
 void cleanupCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0);
 
 s32 calculateZoomScaleFactor(s32 arg0) {
@@ -153,8 +153,6 @@ void *getCutsceneCommandEntry(cutsceneSys2Wait_exec_asset *ctx) {
 
     return tableEntry;
 }
-
-extern s32 gControllerInputs;
 
 void *processCutsceneCommandSequence(cutsceneSys2Wait_exec_asset *ctx) {
     void *commandEntry;
