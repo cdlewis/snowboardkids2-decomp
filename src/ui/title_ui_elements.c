@@ -21,24 +21,24 @@ typedef struct {
 } ControllerSlotDisplay;
 
 extern u8 gConnectedControllerMask;
-
-void renderTitleEffectModel(ModelEntityRenderState *arg0);
-void cleanupTitleEffectModel(EffectState *arg0);
 extern Transform3D gTitleCharacterTransforms[];
 extern u16 *gTitleCharacterAnimSequences[2];
-void updateCharacterFlyAway(TitleCharacterState *arg0);
-void updateTitleCharacterAnimation(TitleCharacterState *arg0);
-void handleUnlockAllCharacterAnim(TitleCharacterState *arg0);
-void handlePartialUnlockCharacterAnim(TitleCharacterState *arg0);
-void updatePartialUnlockAnim(TitleCharacterState *arg0);
-void setupTitleCharacterTransform(TitleCharacterState *arg0);
-void cleanupTitleCharacterModel(TitleCharacterState *arg0);
-void enqueueTitleLogoRender(TitleLogoTask *);
+
 void cleanupTitleLogoTask(TitleLogoTask *);
-void cleanupPressStartPrompt(void **);
-void func_800167B0_173B0(Struct16728 *);
+void enqueueTitleLogoRender(TitleLogoTask *);
 void cleanupControllerSlotDisplay(void **);
 void updateControllerSlotHighlights(ControllerSlotDisplay *);
+void func_800167B0_173B0(Struct16728 *);
+void cleanupPressStartPrompt(void **);
+void renderTitleEffectModel(ModelEntityRenderState *arg0);
+void cleanupTitleEffectModel(EffectState *arg0);
+void setupTitleCharacterTransform(TitleCharacterState *arg0);
+void updateTitleCharacterAnimation(TitleCharacterState *arg0);
+void handleUnlockAllCharacterAnim(TitleCharacterState *arg0);
+void updateCharacterFlyAway(TitleCharacterState *arg0);
+void handlePartialUnlockCharacterAnim(TitleCharacterState *arg0);
+void updatePartialUnlockAnim(TitleCharacterState *arg0);
+void cleanupTitleCharacterModel(TitleCharacterState *arg0);
 
 void cleanupTitleLogoTask(TitleLogoTask *arg0) {
     arg0->assetData = freeNodeMemory(arg0->assetData);
