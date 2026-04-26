@@ -130,8 +130,6 @@ typedef struct {
     void *unk4;
 } func_80030668_31268_arg;
 
-extern s32 gButtonsPressed[];
-extern s32 gControllerInputs[4];
 typedef struct {
     s16 itemOffsets[2];
     struct {
@@ -140,8 +138,17 @@ typedef struct {
     } fairyAnim[5];
 } ShopItemData;
 
+typedef struct {
+    u8 padding[0x5D6];
+    u8 pendingFairyAnimation;
+} ShopFairyGameState;
+
+extern s32 gButtonsPressed[];
+extern s32 gControllerInputs[4];
 extern s32 *D_800AFE8C_A71FC;
 extern s16 D_8008F0C6_8FCC6[];
+// Cast to u8* to access EEPROM save data as raw bytes for offset-based access
+extern u8 *EepromSaveData;
 
 s32 D_8008F070_8FC70[16] = {
     0x00000000, 0x0000C350, 0x000186A0, 0x00000000, 0x0000AFC8, 0x00015F90, 0x00000000, 0x0000EA60,
@@ -170,12 +177,10 @@ s32 D_8008F110_8FD10[16] = {
     0x803C8042, 0xFFFB8044, 0x802E803B, 0x80418054, 0xFFFF0000, 0x00000000, 0x00000000, 0x00000000,
 };
 
-// Cast to u8* to access EEPROM save data as raw bytes for offset-based access
-extern u8 *EepromSaveData;
-
 void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *);
 void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0);
 void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0);
+void cleanupStoryMapShopItemPriceDisplay(func_80030668_31268_arg *);
 void updateStoryMapShopFairyInitial(StoryMapShopFairyState *);
 void updateStoryMapShopFairy(StoryMapShopFairyState *);
 void destroyStoryMapShopFairy(StoryMapShopFairyState *);
@@ -280,11 +285,6 @@ void updateStoryMapShopFairyInitial(StoryMapShopFairyState *arg0) {
     updateModelGeometry(arg0->model);
     setCallback(&updateStoryMapShopFairy);
 }
-
-typedef struct {
-    u8 padding[0x5D6];
-    u8 pendingFairyAnimation;
-} ShopFairyGameState;
 
 void updateStoryMapShopFairy(StoryMapShopFairyState *fairy) {
     ShopFairyGameState *state;
@@ -921,8 +921,6 @@ void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     arg0->digits[0].asset = freeNodeMemory(arg0->digits[0].asset);
     arg0->goldIconAsset = freeNodeMemory(arg0->goldIconAsset);
 }
-
-void cleanupStoryMapShopItemPriceDisplay(func_80030668_31268_arg *);
 
 void initStoryMapShopItemPriceDisplay(SpriteDisplayState *arg0) {
     void *digitSpriteAsset;
