@@ -13,35 +13,26 @@ typedef struct {
 } TransitionEffectFrame;
 
 typedef struct {
-    SceneModel *model;
-    void *animationTable;
-    OutputStruct_19E80 tableEntry;
-    Transform3D transformMatrix;
-    s32 frameIndex;
-    s32 *frameData;
-    s32 currentFrame;
-    s32 effectVariant;
-    TransitionEffectFrame *frameBuffer;
-} ModelTransitionEffectState;
-
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    /* 0x08 */ void *textureData;
-    /* 0x0C */ void *paletteData;
-    /* 0x10 */ u16 width;
-    /* 0x12 */ u16 height;
-    /* 0x14 */ Transform3D rotationMatrix;
+    /* 0x00 */ SceneModel *model;
+    /* 0x04 */ void *animationTable;
+    /* 0x08 */ OutputStruct_19E80 tableEntry;
+    /* 0x14 */ Transform3D transformMatrix;
     /* 0x34 */ Mtx *lookAtMatrix;
     /* 0x38 */ void *segmentData;
-} PalettedTextureState;
+    /* 0x3C */ s32 currentFrame;
+    /* 0x40 */ s32 effectVariant;
+    /* 0x44 */ TransitionEffectFrame *frameBuffer;
+} ModelTransitionEffectState;
+
+extern s16 gGraphicsMode;
+extern Gfx *gRegionAllocPtr;
 
 void setupModelTransitionVariant(ModelTransitionEffectState *);
 void updateModelTransitionEffect(ModelTransitionEffectState *);
 void cleanupModelTransitionEffect(ModelTransitionEffectState *);
 void updateCameraRotationTask(CameraRotationTaskState *);
 void cleanupCameraRotationTask(void);
-void renderPalettedTexture(PalettedTextureState *);
+void renderPalettedTexture(ModelTransitionEffectState *);
 
 s32 D_8008C200_8CE00[] = {
     0xD9D0F9FA, 0x00000000, 0xD9FFFFFF, 0x00210005, 0xD7000002, 0x80008000, 0x01018030,
@@ -49,8 +40,6 @@ s32 D_8008C200_8CE00[] = {
     0xFC127FFF, 0xFFFFF238, 0xE200001C, 0xC8112078, 0x06000204, 0x0006080A, 0x060C0E10,
     0x00121416, 0x06181A1C, 0x001E2022, 0x06242628, 0x002A2C2E, 0xDF000000, 0x00000000,
 };
-extern s16 gGraphicsMode;
-extern Gfx *gRegionAllocPtr;
 
 void initCameraRotationTask(CameraRotationTaskState *state) {
     setCleanupCallback(&cleanupCameraRotationTask);
@@ -130,7 +119,7 @@ void updateCameraRotationTask(CameraRotationTaskState *state) {
 void cleanupCameraRotationTask(void) {
 }
 
-void renderPalettedTexture(PalettedTextureState *state) {
+void renderPalettedTexture(ModelTransitionEffectState *state) {
     s32 dxtBase;
     s32 new_var;
     u32 line;
@@ -145,7 +134,7 @@ void renderPalettedTexture(PalettedTextureState *state) {
 
     gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, state->textureData);
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, state->tableEntry.data_ptr);
 
     gDPSetTile(
         gRegionAllocPtr++,
@@ -168,12 +157,12 @@ void renderPalettedTexture(PalettedTextureState *state) {
     loadBlockCmd = gRegionAllocPtr++;
     loadBlockCmd->words.w0 = 0xF3000000;
     gGraphicsMode = -1;
-    widthDiv16 = state->width >> 4;
+    widthDiv16 = state->tableEntry.width >> 4;
     dxtBase = 0x800;
     if (widthDiv16 != 0) {
         dxtBase = widthDiv16 + 0x7FF;
     }
-    lrs = (((s32)((state->width * state->height) + 3)) >> 2) - 1;
+    lrs = (((s32)((state->tableEntry.width * state->tableEntry.height) + 3)) >> 2) - 1;
     if (lrs < 0x800) {
     } else {
         lrs = 0x7FF;
@@ -190,13 +179,20 @@ void renderPalettedTexture(PalettedTextureState *state) {
 
     gDPPipeSync(gRegionAllocPtr++);
 
-    line = (((state->width >> 1) + 7) >> 3) & 0x1FF;
+    line = (((state->tableEntry.width >> 1) + 7) >> 3) & 0x1FF;
     new_var = G_TX_NOMIRROR;
     gDPSetTile(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_4b, line, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0);
 
-    gDPSetTileSize(gRegionAllocPtr++, G_TX_RENDERTILE, 0, 0, (state->width - 1) << 2, (state->height - 1) << 2);
+    gDPSetTileSize(
+        gRegionAllocPtr++,
+        G_TX_RENDERTILE,
+        0,
+        0,
+        (state->tableEntry.width - 1) << 2,
+        (state->tableEntry.height - 1) << 2
+    );
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, state->paletteData);
+    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, state->tableEntry.index_ptr);
 
     gDPTileSync(gRegionAllocPtr++);
 
@@ -227,7 +223,7 @@ void renderPalettedTexture(PalettedTextureState *state) {
         if (state->lookAtMatrix == 0) {
             return;
         }
-        transform3DToN64Mtx(&state->rotationMatrix, state->lookAtMatrix);
+        transform3DToN64Mtx(&state->transformMatrix, state->lookAtMatrix);
     }
 
     gDPPipeSync(gRegionAllocPtr++);
@@ -290,8 +286,8 @@ void updateModelTransitionEffect(ModelTransitionEffectState *state) {
     if (state->model->actionMode == 1) {
         frameBeforeIncrement = state->currentFrame;
         if (state->currentFrame < 7) {
-            state->frameIndex = 0;
-            state->frameData = &state->frameBuffer[frameBeforeIncrement].unk0;
+            state->lookAtMatrix = NULL;
+            state->segmentData = &state->frameBuffer[frameBeforeIncrement].unk0;
             debugEnqueueCallback(0, 1, &renderPalettedTexture, state);
             state->currentFrame++;
         }
