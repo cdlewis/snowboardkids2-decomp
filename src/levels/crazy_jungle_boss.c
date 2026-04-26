@@ -16,7 +16,10 @@
 #include "system/task_scheduler.h"
 #include "text/text_elements.h"
 
+#define CHECKPOINT_DATA_ROW 214
+
 typedef void (*FuncPtr)(void *);
+typedef s32 (*StateFunc)(void *);
 
 typedef struct {
     u8 primaryR;
@@ -28,8 +31,6 @@ typedef struct {
     u8 secondaryB;
     u8 pad2;
 } BossSurfaceColor;
-
-extern BossSurfaceColor gBossSurfaceColors[];
 
 typedef struct {
     s32 posX;
@@ -176,17 +177,14 @@ typedef struct {
     s16 unk2;
 } D_800BC468_ACC98_type;
 
+extern BossSurfaceColor gBossSurfaceColors[];
 extern D_800BC468_ACC98_type D_800BC468_ACC98[];
 extern Vec3i gCrazyJungleBossCheckpointOffsets[];
-extern void updateCrazyJungleBossLeanBoneTransforms(Arg0Struct *);
 extern s32 D_800BBA7C_AC2AC[][3];
 extern s32 D_800BBA84_AC2B4[][3];
 
-typedef s32 (*StateFunc)(void *);
-
 extern s32 getIndexedAnimationDataPtr(void *, s16);
 
-/* Forward declarations for data segment function pointer tables */
 s32 initCrazyJungleBoss(Arg0Struct *arg0);
 void dispatchCrazyJungleBossChasePhase(Arg0Struct *arg0);
 void dispatchCrazyJungleBossHoverPhase(Arg0Struct *arg0);
@@ -195,8 +193,8 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0);
 s32 crazyJungleBossChaseExitPhase(Arg0Struct *arg0);
 s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0);
 s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0);
+void updateCrazyJungleBossLeanBoneTransforms(Arg0Struct *arg0);
 
-/* Data segment - in ROM order */
 StateFunc D_800BC440_ACC70[] = {
     (StateFunc)initCrazyJungleBoss,
     (StateFunc)dispatchCrazyJungleBossChasePhase,
@@ -757,8 +755,6 @@ void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
         }
     }
 }
-
-#define CHECKPOINT_DATA_ROW 214
 
 void updateBossProximityCheckpoints(Arg0Struct *arg0) {
     s32 checkpointIndex;
