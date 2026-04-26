@@ -6,7 +6,7 @@
 
 typedef struct {
     func_80002B50_3750_arg *model;
-    u8 transformMatrix[0x20];
+    Transform3D transformMatrix;
     s32 velocity;
     s16 rotationAngle;
     s16 delayTimer;
@@ -49,34 +49,34 @@ void updateModelScaleAnimation(ModelScaleAnimationState *state) {
             break;
 
         case 1:
-            scale = *(s32 *)(state->transformMatrix + 0x18);
+            scale = state->transformMatrix.translation.y;
             state->rotationAngle = 0;
             state->velocity += 0xFFFF0000;
             memcpy(&state->transformMatrix, &identityMatrix, 0x20);
-            *(s32 *)(state->transformMatrix + 0x18) = scale;
+            state->transformMatrix.translation.y = scale;
             velocity = state->velocity;
             newScale = scale + velocity;
-            *(s32 *)(state->transformMatrix + 0x18) = newScale;
+            state->transformMatrix.translation.y = newScale;
             if (newScale > 0) {
                 break;
             }
-            *(s32 *)(state->transformMatrix + 0x18) = 0;
+            state->transformMatrix.translation.y = 0;
             state->velocity = 0x8C000;
             break;
 
         case 2:
-            scale = *(s32 *)(state->transformMatrix + 0x18);
+            scale = state->transformMatrix.translation.y;
             state->rotationAngle = 0;
             state->velocity += 0xFFFE0000;
             memcpy(&state->transformMatrix, &identityMatrix, 0x20);
-            *(s32 *)(state->transformMatrix + 0x18) = scale;
+            state->transformMatrix.translation.y = scale;
             velocity = state->velocity;
             newScale = scale + velocity;
-            *(s32 *)(state->transformMatrix + 0x18) = newScale;
+            state->transformMatrix.translation.y = newScale;
             if (newScale > 0) {
                 break;
             }
-            *(s32 *)(state->transformMatrix + 0x18) = 0;
+            state->transformMatrix.translation.y = 0;
             state->velocity = 0x8C000;
             break;
 
@@ -87,25 +87,25 @@ void updateModelScaleAnimation(ModelScaleAnimationState *state) {
             if (angle < -0x800) {
                 state->rotationAngle = -0x800;
             }
-            createXRotationMatrix((s16(*)[3])state->transformMatrix, state->rotationAngle);
-            *(s32 *)(state->transformMatrix + 0x18) += 0x99999;
+            createXRotationMatrix(state->transformMatrix.m, state->rotationAngle);
+            state->transformMatrix.translation.y += 0x99999;
             break;
 
         case 4:
             delay = state->delayTimer;
             if (delay == 0) {
-                scale = *(s32 *)(state->transformMatrix + 0x18);
+                scale = state->transformMatrix.translation.y;
                 state->rotationAngle = 0;
                 state->velocity += 0xFFFF0000;
                 memcpy(&state->transformMatrix, &identityMatrix, 0x20);
-                *(s32 *)(state->transformMatrix + 0x18) = scale;
+                state->transformMatrix.translation.y = scale;
                 velocity = state->velocity;
                 newScale = scale + velocity;
-                *(s32 *)(state->transformMatrix + 0x18) = newScale;
+                state->transformMatrix.translation.y = newScale;
                 if (newScale > 0) {
                     break;
                 }
-                *(s32 *)(state->transformMatrix + 0x18) = 0;
+                state->transformMatrix.translation.y = 0;
                 state->velocity = 0x2EAAA;
                 state->delayTimer = (((randA() & 0xFF) % 25) & 0xFF) + 0xA;
             } else {
@@ -119,19 +119,19 @@ void updateModelScaleAnimation(ModelScaleAnimationState *state) {
             break;
 
         case 6:
-            scale = *(s32 *)(state->transformMatrix + 0x18);
+            scale = state->transformMatrix.translation.y;
             state->rotationAngle = 0;
             state->velocity += 0xFFFD0000;
             memcpy(&state->transformMatrix, &identityMatrix, 0x20);
-            *(s32 *)(state->transformMatrix + 0x18) = scale;
+            state->transformMatrix.translation.y = scale;
             velocity = state->velocity;
             newScale = scale + velocity;
-            *(s32 *)(state->transformMatrix + 0x18) = newScale;
+            state->transformMatrix.translation.y = newScale;
             if (newScale > 0) {
                 break;
             }
             state->bounceCount--;
-            *(s32 *)(state->transformMatrix + 0x18) = 0;
+            state->transformMatrix.translation.y = 0;
             if (state->bounceCount == 0) {
                 state->model->actionMode = 0;
             } else {
