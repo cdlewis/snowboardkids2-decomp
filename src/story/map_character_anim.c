@@ -1,3 +1,4 @@
+#include "story/map_character_anim.h"
 #include "common.h"
 #include "core/session_manager.h"
 #include "gamestate.h"
@@ -6,14 +7,10 @@
 #include "system/task_scheduler.h"
 #include "triggers/town_collision.h"
 
-extern u8 storyMapLocationIndex;
-
 typedef struct {
     s16 x;
     s16 z;
 } CoordPair;
-
-extern CoordPair storyMapLocationCoords[];
 
 typedef struct {
     s16 viewMatrix[9];
@@ -39,20 +36,25 @@ typedef struct {
     s8 speedV;
 } StoryMapCameraState;
 
+extern u8 storyMapLocationIndex;
+extern CoordPair storyMapLocationCoords[];
+extern s8 gAnalogStickX[];
+extern s8 gAnalogStickY[];
+extern s32 gControllerInputs[];
+
 void initStoryMapCamera(StoryMapCameraState *arg0);
 void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera);
 void updateStoryMapCameraOrbit(StoryMapCameraState *arg0);
 void initStoryMapCameraAtLocation(StoryMapCameraState *arg0);
-void finalizeStoryMapExit(void);
+void approachStoryMapOrigin(StoryMapCameraState *camera);
 void startStoryMapCameraTravel(StoryMapCameraState *camera);
+void updateStoryMapCameraTravel(StoryMapCameraState *camera);
 void finalizeStoryMapCameraTravel(void);
-
-extern s8 gAnalogStickX[];
-extern s8 gAnalogStickY[];
-extern s32 gControllerInputs[];
+void storyMapCameraTravelComplete(void);
+void finalizeStoryMapExit(void);
+void storyMapExitComplete(void);
 s32 checkStoryMapLocationSelection(void *);
 void updateStoryMapDialogueTurn(void *);
-s32 __abs(s32 n);
 
 void storyMapCameraTask(void) {
     GameState *state = (GameState *)getCurrentAllocation();
@@ -379,18 +381,9 @@ void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera) {
     }
 }
 
-typedef struct {
-    u8 pad[0x3B0];
-    u8 unk3B0[0x20];
-    u8 pad3D0[0x55];
-    u8 discoveredLocationId;
-} TempState17F50;
-
-void updateStoryMapCameraTravel(StoryMapCameraState *camera);
-
 void startStoryMapCameraTravel(StoryMapCameraState *camera) {
     s32 sp10[10];
-    TempState17F50 *state;
+    GameState *state;
     s32 targetX;
     s32 targetZ;
     s32 result;
@@ -428,12 +421,10 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
 
     func_8006B084_6BC84((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, (Transform3D *)sp10);
 
-    memcpy(state->unk3B0, sp10, 0x20);
+    memcpy(&state->unk3B0, sp10, 0x20);
 
     setCallback(updateStoryMapCameraTravel);
 }
-
-void storyMapCameraTravelComplete(void);
 
 void updateStoryMapCameraTravel(StoryMapCameraState *camera) {
     GameState *state;
@@ -493,8 +484,6 @@ void finalizeStoryMapCameraTravel(void) {
 
 void storyMapCameraTravelComplete(void) {
 }
-
-void approachStoryMapOrigin(StoryMapCameraState *camera);
 
 void initStoryMapCameraAtLocation(StoryMapCameraState *camera) {
     s32 pad[2];
@@ -628,8 +617,6 @@ void updateStoryMapCameraOrbit(StoryMapCameraState *camera) {
         setCallback(updateStoryMapCameraFreeRoam);
     }
 }
-
-void storyMapExitComplete(void);
 
 void finalizeStoryMapExit(void) {
     GameState *state = (GameState *)getCurrentAllocation();
