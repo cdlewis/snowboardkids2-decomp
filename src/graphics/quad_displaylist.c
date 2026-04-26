@@ -3,8 +3,6 @@
 #include "math/rand.h"
 #include "system/task_scheduler.h"
 
-extern void setupAndEnqueueSprite(void *, u16, s32, s32, s32, s32, s32, s32, s32, s32, s16);
-
 typedef struct {
     u8 _pad[0xC];
     s16 unkC;
@@ -49,6 +47,8 @@ typedef struct {
     s16 unk8A;
     s8 unk8C;
 } ParticleState;
+
+extern void setupAndEnqueueSprite(void *, u16, s32, s32, s32, s32, s32, s32, s32, s32, s16);
 
 void cleanupTrailingParticle(ParticleState *);
 void updateTrailingParticle(ParticleState *);
