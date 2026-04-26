@@ -9,10 +9,29 @@
 #include "os_cont.h"
 #include "ui/level_preview_3d.h"
 
+// Slot animation modes
+#define SLOT_ANIM_MODE_LINEAR_MOVE 1
+#define SLOT_ANIM_MODE_WALK 3
+#define SLOT_ANIM_MODE_ROTATE 4
+#define SLOT_ANIM_MODE_DECEL_MOVE 5
+#define SLOT_ANIM_MODE_ORBIT 6
+#define SLOT_ANIM_MODE_MOVE_TO_FACING 8
+#define SLOT_ANIM_MODE_BOUNCE 10
+#define SLOT_ANIM_MODE_ROTATE_WITH_SPEED 0xB
+
+// Angle constants for 13-bit angle representation (0x2000 = 360 degrees)
+#define ANGLE_13BIT_MASK 0x1FFF     // Mask for 13-bit angle representation
+#define ANGLE_HALF_CIRCLE 0x1000    // 180 degrees
+#define ANGLE_QUARTER_CIRCLE 0x800  // 90 degrees
+#define ANGLE_TURN_THRESHOLD 0xAAB  // ~60 degrees - threshold for character turn animation
+#define MAX_ROT_VEL_PER_FRAME 0x101 // 257 - max rotation velocity per frame
+#define ANGLE_FULL_CIRCLE 0x2000    // 360 degrees
+
 extern s8 gAnalogStickY;
 extern s8 gAnalogStickX;
 extern s32 gButtonsPressed;
 extern s32 gControllerInputs;
+
 s16 gCharacterEffectSpawnPoints[24] = {
     6, 0, 0, 0, 12, 0, 6, 0, 0, 0, -12, 0, -6, 0, 0, 0, 12, 0, -6, 0, 0, 0, -12, 0,
 };
@@ -37,24 +56,6 @@ struct {
 char gDebugFrameFormatString[] = "%5d";
 char D_800BAE04_1E7EB4[32] = " TRK      %5d %5d %5d %5d %5d";
 char D_800BAE24_1E7ED4[44] = " %2d%s----- ----- ----- ----- ----- ";
-
-// Slot animation modes
-#define SLOT_ANIM_MODE_LINEAR_MOVE 1
-#define SLOT_ANIM_MODE_WALK 3
-#define SLOT_ANIM_MODE_ROTATE 4
-#define SLOT_ANIM_MODE_DECEL_MOVE 5
-#define SLOT_ANIM_MODE_ORBIT 6
-#define SLOT_ANIM_MODE_MOVE_TO_FACING 8
-#define SLOT_ANIM_MODE_BOUNCE 10
-#define SLOT_ANIM_MODE_ROTATE_WITH_SPEED 0xB
-
-// Angle constants for 13-bit angle representation (0x2000 = 360 degrees)
-#define ANGLE_13BIT_MASK 0x1FFF     // Mask for 13-bit angle representation
-#define ANGLE_HALF_CIRCLE 0x1000    // 180 degrees
-#define ANGLE_QUARTER_CIRCLE 0x800  // 90 degrees
-#define ANGLE_TURN_THRESHOLD 0xAAB  // ~60 degrees - threshold for character turn animation
-#define MAX_ROT_VEL_PER_FRAME 0x101 // 257 - max rotation velocity per frame
-#define ANGLE_FULL_CIRCLE 0x2000    // 360 degrees
 
 s16 getSlotMoveDuration(cutsceneSys2Wait_exec_asset *arg0) {
     return arg0->tableRowIndex;
@@ -242,7 +243,7 @@ skip3:
     return retval;
 }
 
-void setSlotScale(CutsceneSlotScaleData *slot, s32 scaleX, s32 scaleY, s32 scaleZ) {
+void setSlotScale(CutsceneSlotData *slot, s32 scaleX, s32 scaleY, s32 scaleZ) {
     slot->scaleTargetX = scaleX;
     slot->scaleCurrentX = scaleX;
     slot->scaleTargetY = scaleY;

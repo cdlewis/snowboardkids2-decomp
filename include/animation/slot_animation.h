@@ -5,22 +5,12 @@
 #include "cutscene/cutscene_manager.h"
 #include "animation/animation_loop.h"
 
-typedef struct {
-    u8 pad[0x54];
-    s32 scaleCurrentX;
-    s32 scaleCurrentY;
-    s32 scaleCurrentZ;
-    s32 scaleTargetX;
-    s32 scaleTargetY;
-    s32 scaleTargetZ;
-} CutsceneSlotScaleData;
-
 s16 getSlotMoveDuration(cutsceneSys2Wait_exec_asset *slot);
 s16 calcAngleDiff(CutsceneSlotData *unused, s16 direction, s16 targetAngle, s16 currentAngle);
 void initSlotData(CutsceneSlotData *slot);
 s32 setupSlotTransform(CutsceneSlotData *slot);
 s32 syncModelFromSlot(CutsceneSlotData *slot, SceneModel *model);
-void setSlotScale(CutsceneSlotScaleData *slot, s32 scaleX, s32 scaleY, s32 scaleZ);
+void setSlotScale(CutsceneSlotData *slot, s32 scaleX, s32 scaleY, s32 scaleZ);
 void handleSlotDebugInput(CutsceneSlotData *slot, CutsceneCameraState *camera);
 void updateSlotRotVelocity(CutsceneSlotData *slot, s16 speedMode);
 void updateSlotRotVelocityFixed(CutsceneSlotData *slot);
