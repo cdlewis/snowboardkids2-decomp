@@ -52,11 +52,12 @@ def build_best_scratches(scratches: List[Dict], unmatched: set) -> Dict[str, Dic
         base = re.sub(r"-\d+$", "", name)
         if base not in unmatched:
             continue
+        owner = scratch.get("owner") or {}
+        if not owner.get("username") or owner.get("is_anonymous"):
+            continue
         pct = ((max_score - score) / max_score) * 100
         if base not in result or pct > result[base]["pct"]:
-            owner = scratch.get("owner") or {}
-            author = owner.get("username", "")
-            result[base] = {"slug": slug, "pct": pct, "name": name, "author": author}
+            result[base] = {"slug": slug, "pct": pct, "name": name, "author": owner["username"]}
     return result
 
 
