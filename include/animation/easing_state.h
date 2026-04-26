@@ -3,24 +3,25 @@
 #include "common.h"
 #include "cutscene/cutscene_manager.h"
 #include "cutscene/sys_effect.h"
+#include "graphics/sprite_table.h"
 
 typedef struct {
-    SceneModel *unk0;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    u8 unkA;
-    u8 unkB;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    u16 unk1C;
-    u16 unk1E;
-    u8 pad20[0x6C - 0x20];
-    s32 unk6C;
-    s32 unk70;
-} ScheduledTask;
+    /* 0x00 */ SceneModel *parentModel;
+    /* 0x04 */ s16 layer;
+    /* 0x06 */ s16 animId;
+    /* 0x08 */ s16 duration;
+    /* 0x0A */ u8 opacity;
+    /* 0x0B */ u8 state;
+    /* 0x0C */ s32 targetScale;
+    /* 0x10 */ s32 offsetX;
+    /* 0x14 */ s32 offsetY;
+    /* 0x18 */ s32 offsetZ;
+    /* 0x1C */ u16 rotation;
+    /* 0x1E */ u16 useParentPos;
+    /* 0x20 */ SpriteAssetState spriteState;
+    /* 0x6C */ s32 effectScratch0;
+    /* 0x70 */ s32 effectScratch1;
+} SpriteEffectTaskState;
 
 typedef struct {
     s32 array_offset;

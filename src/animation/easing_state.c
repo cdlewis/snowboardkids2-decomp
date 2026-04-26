@@ -16,35 +16,19 @@ typedef enum {
     ANIM_STATE_EASE_OUT
 } AnimState;
 
-#define FILL_STRUCT(v)                \
-    (v)->unk0 = arg0;                 \
-    (v)->unk4 = arg1;                 \
-    (v)->unk6 = arg2;                 \
-    (v)->unk8 = arg3;                 \
-    (v)->unkA = arg6;                 \
-    (v)->unkB = 0;                    \
-    (v)->unk10 = arg4->animDuration1; \
-    (v)->unk14 = arg4->animDuration2; \
-    (v)->unk18 = arg4->animDuration3; \
-    (v)->unkC = arg5;                 \
-    (v)->unk1C = arg9;                \
-    (v)->unk1E = arg10;
-
-typedef union {
-    s16 unk70;
-    u8 unk70_u8;
-} SpriteEffectTaskState_unk70;
-
-typedef struct {
-    u8 _pad0[0x6];
-    s16 unk6;
-    u8 _pad8[0x4];
-    s32 unkC;
-    u8 _pad10[0x10];
-    SpriteAssetState unk20;
-    s32 unk6C;
-    SpriteEffectTaskState_unk70 unk70;
-} SpriteEffectTaskState;
+#define INIT_TASK_STATE(v)              \
+    (v)->parentModel = arg0;            \
+    (v)->layer = arg1;                  \
+    (v)->animId = arg2;                 \
+    (v)->duration = arg3;               \
+    (v)->opacity = arg6;                \
+    (v)->state = 0;                     \
+    (v)->offsetX = arg4->animDuration1; \
+    (v)->offsetY = arg4->animDuration2; \
+    (v)->offsetZ = arg4->animDuration3; \
+    (v)->targetScale = arg5;            \
+    (v)->rotation = arg9;               \
+    (v)->useParentPos = arg10;
 
 typedef struct {
     s32 arrayOffset;
@@ -353,9 +337,9 @@ s32 spawnSpriteEffectInternal(
 ) {
     s32 i;
     u8 temp_v1;
-    ScheduledTask *temp_v0;
-    ScheduledTask *temp_v0_2;
-    ScheduledTask *var_a0_2;
+    SpriteEffectTaskState *temp_v0;
+    SpriteEffectTaskState *temp_v0_2;
+    SpriteEffectTaskState *var_a0_2;
 
     temp_v1 = (D_8008C92C_8D52C + ((s32)(arg2 << 0x10) >> 0xD))[7];
     if (arg0 == NULL) {
@@ -369,7 +353,7 @@ s32 spawnSpriteEffectInternal(
                 break;
             }
 
-            FILL_STRUCT(var_a0_2)
+            INIT_TASK_STATE(var_a0_2)
             return 1;
         case 1:
             temp_v0 = scheduleTask(&initScalingSpriteEffect, arg7, arg8, 0);
@@ -377,9 +361,9 @@ s32 spawnSpriteEffectInternal(
                 break;
             }
 
-            FILL_STRUCT(temp_v0)
-            temp_v0->unk6C = 1;
-            temp_v0->unk70 = 1;
+            INIT_TASK_STATE(temp_v0)
+            temp_v0->effectScratch0 = 1;
+            temp_v0->effectScratch1 = 1;
             return 1;
         case 2:
             for (i = 0; i < 4; i++) {
@@ -388,16 +372,16 @@ s32 spawnSpriteEffectInternal(
                     continue;
                 }
 
-                FILL_STRUCT(temp_v0_2)
-                temp_v0_2->unk6C = i << 0xB;
-                temp_v0_2->unk70 = 0;
+                INIT_TASK_STATE(temp_v0_2)
+                temp_v0_2->effectScratch0 = i << 0xB;
+                temp_v0_2->effectScratch1 = 0;
             }
             return 1;
         case 3:
             var_a0_2 = scheduleTask(&initSpinFadeSpriteEffect, arg7, arg8, 0);
             if (var_a0_2 != NULL) {
-                FILL_STRUCT(var_a0_2)
-                var_a0_2->unk6C = 0;
+                INIT_TASK_STATE(var_a0_2)
+                var_a0_2->effectScratch0 = 0;
                 return 1;
             }
             // fallthrough
@@ -407,13 +391,13 @@ s32 spawnSpriteEffectInternal(
                 break;
             }
 
-            FILL_STRUCT(var_a0_2)
-            var_a0_2->unk6C = 0;
+            INIT_TASK_STATE(var_a0_2)
+            var_a0_2->effectScratch0 = 0;
             return 1;
         case 5:
             var_a0_2 = scheduleTask(&initRiseStretchSpriteEffect, arg7, arg8, 0);
             if (var_a0_2 != NULL) {
-                FILL_STRUCT(var_a0_2)
+                INIT_TASK_STATE(var_a0_2)
                 return 1;
             }
             // fallthrough
@@ -423,7 +407,7 @@ s32 spawnSpriteEffectInternal(
                 break;
             }
 
-            FILL_STRUCT(var_a0_2)
+            INIT_TASK_STATE(var_a0_2)
             return 1;
     }
 
@@ -431,20 +415,16 @@ s32 spawnSpriteEffectInternal(
 }
 
 typedef struct {
-    void *unk0;
-    u8 _pad4[0x14];
-    u8 unk18[1];
+    /* 0x00 */ void *parentOverride;
+    /* 0x04 */ u8 _pad4[0x14];
+    /* 0x18 */ u8 inlinePos[1];
 } SpriteEffectPositionSource;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
+    /* 0x00 */ u8 _pad0[0x14];
+    /* 0x14 */ s32 x;
+    /* 0x18 */ s32 y;
+    /* 0x1C */ s32 z;
 } SpriteEffectPosition;
 
 typedef struct {
@@ -490,15 +470,15 @@ void updateScalingSpriteEffect(ScalingSpriteEffectState *);
 void cleanupScalingSpriteEffect(SpriteEffectTaskState *);
 
 SpriteEffectPosition *getSpriteEffectPosition(SpriteEffectPositionSource *source, s16 useParent) {
-    if (useParent != 0 && source->unk0 != NULL) {
-        return source->unk0;
+    if (useParent != 0 && source->parentOverride != NULL) {
+        return source->parentOverride;
     }
-    return (SpriteEffectPosition *)&source->unk18;
+    return (SpriteEffectPosition *)&source->inlinePos;
 }
 
 void initSimpleSpriteEffect(SpriteEffectTaskState *arg0) {
-    loadSpriteAsset(&arg0->unk20, 0);
-    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    loadSpriteAsset(&arg0->spriteState, 0);
+    setSpriteAnimation(&arg0->spriteState, 0x10000, arg0->animId, -1);
     setCleanupCallback(cleanupSimpleSpriteEffect);
     setCallback(updateSimpleSpriteEffect);
 }
@@ -523,9 +503,9 @@ void updateSimpleSpriteEffect(SimpleSpriteEffectState *arg0) {
 
     pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
 
-    x = pos->unk14 + arg0->offsetX;
-    y = pos->unk18 + arg0->offsetY;
-    z = pos->unk1C + arg0->offsetZ;
+    x = pos->x + arg0->offsetX;
+    y = pos->y + arg0->offsetY;
+    z = pos->z + arg0->offsetZ;
     layer = arg0->layer;
 
     renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scale, arg0->scale, arg0->rotation, arg0->opacity);
@@ -536,12 +516,12 @@ void updateSimpleSpriteEffect(SimpleSpriteEffectState *arg0) {
 }
 
 void cleanupSimpleSpriteEffect(SpriteEffectTaskState *arg0) {
-    releaseNodeMemoryRef((void **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }
 
 void initScalingSpriteEffect(SpriteEffectTaskState *arg0) {
-    loadSpriteAsset(&arg0->unk20, 0);
-    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    loadSpriteAsset(&arg0->spriteState, 0);
+    setSpriteAnimation(&arg0->spriteState, 0x10000, arg0->animId, -1);
     setCleanupCallback(cleanupScalingSpriteEffect);
     setCallback(updateScalingSpriteEffect);
 }
@@ -635,9 +615,9 @@ void updateScalingSpriteEffect(ScalingSpriteEffectState *arg0) {
     pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
 
     layer = arg0->layer;
-    x = pos->unk14 + arg0->offsetX;
-    y = pos->unk18 + arg0->offsetY;
-    z = pos->unk1C + arg0->offsetZ;
+    x = pos->x + arg0->offsetX;
+    y = pos->y + arg0->offsetY;
+    z = pos->z + arg0->offsetZ;
 
     renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scaleX, arg0->scaleY, arg0->rotation, arg0->opacity);
 
@@ -647,7 +627,7 @@ void updateScalingSpriteEffect(ScalingSpriteEffectState *arg0) {
 }
 
 void cleanupScalingSpriteEffect(SpriteEffectTaskState *arg0) {
-    releaseNodeMemoryRef((void **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }
 
 typedef struct {
@@ -674,8 +654,8 @@ void updateRadialBurstSpriteEffect(RadialBurstSpriteEffectState *arg0);
 void cleanupRadialBurstSpriteEffect(SpriteEffectTaskState *);
 
 void initRadialBurstSpriteEffect(SpriteEffectTaskState *arg0) {
-    loadSpriteAsset(&arg0->unk20, 0);
-    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    loadSpriteAsset(&arg0->spriteState, 0);
+    setSpriteAnimation(&arg0->spriteState, 0x10000, arg0->animId, -1);
     setCleanupCallback(cleanupRadialBurstSpriteEffect);
     setCallback(updateRadialBurstSpriteEffect);
 }
@@ -709,10 +689,10 @@ void updateRadialBurstSpriteEffect(RadialBurstSpriteEffectState *arg0) {
     temp_pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
     pos = temp_pos;
     {
-        s32 posX = pos->unk14;
+        s32 posX = pos->x;
         baseX = posX + arg0->offsetX;
-        baseY = pos->unk18 + arg0->offsetY;
-        baseZ = pos->unk1C + arg0->offsetZ;
+        baseY = pos->y + arg0->offsetY;
+        baseZ = pos->z + arg0->offsetZ;
         phase = (*(s32 *)&arg0->bobPhaseHi - 0xAA) & 0x1FFF;
         *(s32 *)&arg0->bobPhaseHi = phase;
         xOffset = (arg0->currentScale >> 8) * ((approximateSin(phase) << 3) >> 8);
@@ -774,7 +754,7 @@ void updateRadialBurstSpriteEffect(RadialBurstSpriteEffectState *arg0) {
 }
 
 void cleanupRadialBurstSpriteEffect(SpriteEffectTaskState *arg0) {
-    releaseNodeMemoryRef((void **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }
 
 typedef struct {
@@ -797,8 +777,8 @@ void updateSpinFadeSpriteEffect(SpinFadeSpriteEffectState *);
 void cleanupSpinFadeSpriteEffect(SpriteEffectTaskState *);
 
 void initSpinFadeSpriteEffect(SpriteEffectTaskState *arg0) {
-    loadSpriteAsset(&arg0->unk20, 0);
-    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    loadSpriteAsset(&arg0->spriteState, 0);
+    setSpriteAnimation(&arg0->spriteState, 0x10000, arg0->animId, -1);
     setCleanupCallback(cleanupSpinFadeSpriteEffect);
     setCallback(updateSpinFadeSpriteEffect);
 }
@@ -833,16 +813,16 @@ void updateSpinFadeSpriteEffect(SpinFadeSpriteEffectState *arg0) {
     spriteState = &arg0->spriteState;
     pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
 
-    x = pos->unk14 + arg0->offsetX;
-    y = pos->unk18 + arg0->offsetY;
-    z = pos->unk1C + arg0->offsetZ;
+    x = pos->x + arg0->offsetX;
+    y = pos->y + arg0->offsetY;
+    z = pos->z + arg0->offsetZ;
     layer = arg0->layer;
 
     renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scale, arg0->scale, (s16)arg0->rotation, arg0->opacity);
 }
 
 void cleanupSpinFadeSpriteEffect(SpriteEffectTaskState *arg0) {
-    releaseNodeMemoryRef((void **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }
 
 typedef struct {
@@ -866,8 +846,8 @@ void updateDropShrinkSpriteEffect(DropShrinkSpriteEffectState *);
 void cleanupDropShrinkSpriteEffect(SpriteEffectTaskState *);
 
 void initDropShrinkSpriteEffect(SpriteEffectTaskState *arg0) {
-    loadSpriteAsset(&arg0->unk20, 0);
-    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
+    loadSpriteAsset(&arg0->spriteState, 0);
+    setSpriteAnimation(&arg0->spriteState, 0x10000, arg0->animId, -1);
     setCleanupCallback(cleanupDropShrinkSpriteEffect);
     setCallback(updateDropShrinkSpriteEffect);
 }
@@ -913,16 +893,16 @@ void updateDropShrinkSpriteEffect(DropShrinkSpriteEffectState *arg0) {
     spriteState = &arg0->spriteState;
     pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
 
-    x = pos->unk14 + arg0->offsetX;
-    y = pos->unk18 + arg0->offsetY + arg0->dropOffset;
-    z = pos->unk1C + arg0->offsetZ;
+    x = pos->x + arg0->offsetX;
+    y = pos->y + arg0->offsetY + arg0->dropOffset;
+    z = pos->z + arg0->offsetZ;
     layer = arg0->layer;
 
     renderOpaqueSprite(spriteState, layer, x, y, z, arg0->scale, arg0->scale, arg0->rotation, arg0->opacity);
 }
 
 void cleanupDropShrinkSpriteEffect(SpriteEffectTaskState *arg0) {
-    releaseNodeMemoryRef((void **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }
 
 typedef struct {
@@ -947,11 +927,11 @@ void updateRiseStretchSpriteEffect(RiseStretchSpriteEffectState *);
 void cleanupRiseStretchSpriteEffect(SpriteEffectTaskState *);
 
 void initRiseStretchSpriteEffect(SpriteEffectTaskState *arg0) {
-    loadSpriteAsset(&arg0->unk20, 0);
-    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
-    arg0->unkC = 0;
-    arg0->unk6C = 0;
-    arg0->unk70.unk70_u8 = 0xFF;
+    loadSpriteAsset(&arg0->spriteState, 0);
+    setSpriteAnimation(&arg0->spriteState, 0x10000, arg0->animId, -1);
+    arg0->targetScale = 0;
+    arg0->effectScratch0 = 0;
+    *(u8 *)&arg0->effectScratch1 = 0xFF;
     setCleanupCallback(cleanupRiseStretchSpriteEffect);
     setCallback(updateRiseStretchSpriteEffect);
 }
@@ -987,15 +967,15 @@ void updateRiseStretchSpriteEffect(RiseStretchSpriteEffectState *arg0) {
 
     temp = getSpriteEffectPosition(arg0->unk0, arg0->unk1E);
 
-    x = temp->unk14 + arg0->unk10;
-    y = temp->unk18 + arg0->unk14 + arg0->unk6C;
-    z = temp->unk1C + arg0->unk18;
+    x = temp->x + arg0->unk10;
+    y = temp->y + arg0->unk14 + arg0->unk6C;
+    z = temp->z + arg0->unk18;
 
     renderSprite(&arg0->unk20, arg0->unk4, x, y, z, 0x10000, arg0->unkC, arg0->unk1C, arg0->unkA, arg0->unk70);
 }
 
 void cleanupRiseStretchSpriteEffect(SpriteEffectTaskState *arg0) {
-    releaseNodeMemoryRef((void **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }
 
 typedef struct {
@@ -1021,10 +1001,10 @@ void cleanupFloatBobbingSpriteEffect(SpriteEffectTaskState *);
 
 void initFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0) {
     setCleanupCallback(cleanupFloatBobbingSpriteEffect);
-    loadSpriteAsset(&arg0->unk20, 0);
-    setSpriteAnimation(&arg0->unk20, 0x10000, arg0->unk6, -1);
-    arg0->unk6C = 0;
-    arg0->unk70.unk70 = 0;
+    loadSpriteAsset(&arg0->spriteState, 0);
+    setSpriteAnimation(&arg0->spriteState, 0x10000, arg0->animId, -1);
+    arg0->effectScratch0 = 0;
+    *(s16 *)&arg0->effectScratch1 = 0;
     setCallback(updateFloatBobbingSpriteEffect);
 }
 
@@ -1048,15 +1028,15 @@ void updateFloatBobbingSpriteEffect(FloatBobbingSpriteEffectState *arg0) {
 
     pos = getSpriteEffectPosition(arg0->positionSource, arg0->useParentPos);
 
-    x = pos->unk14 + arg0->offsetX;
-    y = pos->unk18 + arg0->offsetY + arg0->bobOffset;
-    z = pos->unk1C + arg0->offsetZ;
+    x = pos->x + arg0->offsetX;
+    y = pos->y + arg0->offsetY + arg0->bobOffset;
+    z = pos->z + arg0->offsetZ;
 
     renderSprite(&arg0->spriteState, arg0->layer, x, y, z, 0x10000, arg0->scale, arg0->rotation, arg0->opacity, 0xFF);
 }
 
 void cleanupFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0) {
-    releaseNodeMemoryRef((void **)&arg0->unk20);
+    releaseNodeMemoryRef((void **)&arg0->spriteState);
 }
 
 extern DmaEntry *gSpriteDmaTablePtr;
