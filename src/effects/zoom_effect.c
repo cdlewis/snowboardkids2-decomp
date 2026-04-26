@@ -234,8 +234,6 @@ void updateCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0) {
     s32 i;
     s32 renderSlots;
     void *cmdEntry;
-    s32 offset;
-    cutsceneSys2Wait_exec_asset *iter;
     s16 state;
     s32 zoomVal;
     s32 delta;
@@ -356,17 +354,11 @@ state_done:
     }
 
     if (renderSlots != 0) {
-        i = 0;
-        offset = 0x14;
-        iter = arg0;
-        do {
-            if (iter->slots[0].zoomScaleX < 0x4000U) {
-                debugEnqueueCallback(1, 0, &renderScaledShadedSpriteFrame, (u8 *)arg0 + offset);
+        for (i = 0; i < 4; i++) {
+            if (arg0->slots[i].zoomScaleX < 0x4000U) {
+                debugEnqueueCallback(1, 0, &renderScaledShadedSpriteFrame, &arg0->slots[i]);
             }
-            offset += 0x18;
-            i++;
-            iter = (cutsceneSys2Wait_exec_asset *)((u8 *)iter + 0x18);
-        } while (i < 4);
+        }
     }
 }
 
