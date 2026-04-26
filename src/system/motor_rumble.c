@@ -2,12 +2,11 @@
 #include "common.h"
 #include "system/task_scheduler.h"
 
-extern void motorInitAsync(s32);
-extern s32 pollMotorInitAsync(void);
-
 extern u8 gControllerPollingEnabled;
 extern u8 gMotorInitCompleteMask;
 
+extern void motorInitAsync(s32);
+extern s32 pollMotorInitAsync(void);
 void updateControllerMotorInit(void);
 void onMotorInitComplete(void);
 
