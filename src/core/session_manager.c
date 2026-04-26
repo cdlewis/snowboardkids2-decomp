@@ -41,7 +41,6 @@ void loadUnlockCutscene(void);
 void awaitCreditsSequence(void);
 void loadPostCreditsSaveScreen(void);
 void awaitPostCreditsSaveScreen(void);
-void setStoryMapCameraMode(s32);
 
 void initStoryMode(void) {
     TaskData_15690 *data = allocateTaskMemory(4);

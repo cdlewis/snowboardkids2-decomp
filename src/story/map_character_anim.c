@@ -50,7 +50,6 @@ void finalizeStoryMapCameraTravel(void);
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
 extern s32 gControllerInputs[];
-void setStoryMapCameraMode(s32);
 s32 checkStoryMapLocationSelection(void *);
 void updateStoryMapDialogueTurn(void *);
 s32 __abs(s32 n);
