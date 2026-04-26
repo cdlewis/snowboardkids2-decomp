@@ -12,33 +12,24 @@ typedef struct {
 typedef struct {
     u8 _pad[0x10];
     PulsingSpriteOwnerData *ownerData;
-    u8 _pad2[0x18];
-    s32 posX;
-    s32 posY;
-    s32 posZ;
-    u8 _pad4[0x4];
+    u8 _pad2[0x4];
+    Transform3D transformMatrix;
+    u8 _pad3[0x4];
     s8 isDestroyed;
     s8 actionMode;
-    u8 _pad5;
+    u8 _pad4;
     s8 displayEnabled;
-    u8 _pad6[0x48];
+    u8 _pad5[0x48];
     s8 unk88;
-} PulsingSpriteOwner;
+} PulsingIndicatorOwner;
 
 typedef struct {
-    PulsingSpriteOwner *owner;
+    PulsingIndicatorOwner *owner;
     SpriteAssetState spriteState;
     u8 padding[4];
     s32 scale;
     s32 scaleVelocity;
 } PulsingSpriteState;
-
-typedef struct {
-    u8 _pad[0x18];
-    Transform3D transformMatrix;
-    u8 _pad2[0x4];
-    s8 isDestroyed;
-} StretchingModelOwner;
 
 void updatePulsingSpriteIndicator(PulsingSpriteState *);
 void cleanupPulsingSpriteIndicator(PulsingSpriteState *);
@@ -59,8 +50,8 @@ void initPulsingSpriteIndicator(PulsingSpriteState *arg0) {
 
 void updatePulsingSpriteIndicator(PulsingSpriteState *arg0) {
     s8 sp28[2];
-    PulsingSpriteOwner *ownerRef;
-    PulsingSpriteOwner *owner;
+    PulsingIndicatorOwner *ownerRef;
+    PulsingIndicatorOwner *owner;
     s32 x;
     s32 y;
     s32 z;
@@ -106,9 +97,9 @@ void updatePulsingSpriteIndicator(PulsingSpriteState *arg0) {
     }
 
     owner = arg0->owner;
-    x = owner->posX;
-    y = owner->posY;
-    z = owner->posZ;
+    x = owner->transformMatrix.translation.x;
+    y = owner->transformMatrix.translation.y;
+    z = owner->transformMatrix.translation.z;
     updateSpriteAnimation(&arg0->spriteState, 0x10000);
 
     ownerRef = arg0->owner;
@@ -162,9 +153,9 @@ void updateStretchingModelTask(StretchingModelTaskState *arg0) {
     sp10Ptr = &sp10;
     memcpy(sp10Ptr, &identityMatrix, 0x20);
     memcpy(&sp30, &identityMatrix, 0x20);
-    memcpy(&sp50, &((StretchingModelOwner *)arg0->owner)->transformMatrix, 0x20);
+    memcpy(&sp50, &((PulsingIndicatorOwner *)arg0->owner)->transformMatrix, 0x20);
 
-    if (((StretchingModelOwner *)arg0->owner)->isDestroyed == 1) {
+    if (((PulsingIndicatorOwner *)arg0->owner)->isDestroyed == 1) {
         terminateCurrentTask();
         return;
     }
@@ -174,7 +165,7 @@ void updateStretchingModelTask(StretchingModelTaskState *arg0) {
     createZRotationMatrix(sp10Ptr, rotationOffset);
     scaleMatrix(sp10Ptr, 0x2000, stretchScale, 0x2000);
     outputMatrix = arg0->transformMatrix;
-    func_8006B084_6BC84(sp10Ptr, &((StretchingModelOwner *)arg0->owner)->transformMatrix, outputMatrix);
+    func_8006B084_6BC84(sp10Ptr, &((PulsingIndicatorOwner *)arg0->owner)->transformMatrix, outputMatrix);
     arg0->unk1C = (s32)(arg0->unk1C + 0x33333);
     enqueueModelDisplayList(arg0->owner, outputMatrix);
     arg0->rotationAngle = (s16)(((u16)arg0->rotationAngle + 0xB6) & 0x1FFF);
