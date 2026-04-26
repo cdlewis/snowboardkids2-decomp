@@ -8,6 +8,10 @@
 #include "math/rand.h"
 #include "system/task_scheduler.h"
 
+extern u8 gCharacterBodyPartAnimTable[];
+extern u8 gBodyPartRemapTable[];
+extern s8 gSpecialTrickTypeTable[];
+
 s32 getTrackHeightInSector(void *gameData, s32 sectorIndex, void *pos, s32 heightOffset) {
     return getTrackHeightAtPosition(gameData, sectorIndex, pos);
 }
@@ -174,9 +178,6 @@ void setPlayerLeanAnimation(Player *player, s32 animIndex, s32 progress) {
     }
 }
 
-extern u8 gCharacterBodyPartAnimTable[];
-extern u8 gBodyPartRemapTable[];
-
 /* Load character body part display lists into the bone results array.
  * Iterates 16 body parts (0x3C stride), writing the display list pointer at
  * offset 0x58 (offsetof(boneResults) + offsetof(BoneResult, displayList)).
@@ -261,8 +262,6 @@ void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags) {
 s16 onTrickCompletedHook(Player *player) {
     (void)player;
 }
-
-extern s8 gSpecialTrickTypeTable[];
 
 s16 getTrickType(Player *player) {
     s16 trickType;
