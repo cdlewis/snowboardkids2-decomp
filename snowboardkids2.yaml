@@ -3973,7 +3973,100 @@ segments:
     vram: 0
     start: 0x68D260
 
-  - [0x68F7F0, bin]
+  - name: _68F7F0
+    type: bin
+    vram: 0
+    start: 0x68F7F0
+
+  - name: _691680
+    type: bin
+    vram: 0
+    start: 0x691680
+
+  - name: _693CE0
+    type: bin
+    vram: 0
+    start: 0x693CE0
+
+  - name: _6951A0
+    type: bin
+    vram: 0
+    start: 0x6951A0
+
+  - name: _696A60
+    type: bin
+    vram: 0
+    start: 0x696A60
+
+  - name: _6989D0
+    type: bin
+    vram: 0
+    start: 0x6989D0
+
+  - name: _699E00
+    type: bin
+    vram: 0
+    start: 0x699E00
+
+  - name: _69D1D0
+    type: bin
+    vram: 0
+    start: 0x69D1D0
+
+  - name: _69E750
+    type: bin
+    vram: 0
+    start: 0x69E750
+
+  - name: _69FFA0
+    type: bin
+    vram: 0
+    start: 0x69FFA0
+
+  - name: _6A1650
+    type: bin
+    vram: 0
+    start: 0x6A1650
+
+  - name: _6A2150
+    type: bin
+    vram: 0
+    start: 0x6A2150
+
+  - name: _6A37D0
+    type: bin
+    vram: 0
+    start: 0x6A37D0
+
+  - name: _6A3E30
+    type: bin
+    vram: 0
+    start: 0x6A3E30
+
+  - name: _6A4780
+    type: bin
+    vram: 0
+    start: 0x6A4780
+
+  - name: _6A4FF0
+    type: bin
+    vram: 0
+    start: 0x6A4FF0
+
+  - name: _6A5E20
+    type: bin
+    vram: 0
+    start: 0x6A5E20
+
+  - name: _6A6510
+    type: bin
+    vram: 0
+    start: 0x6A6510
+
+  - name: _6A7210
+    type: bin
+    vram: 0
+    start: 0x6A7210
 
   - name: _6A83F0
     type: bin
@@ -3999,6 +4092,21 @@ segments:
     type: bin
     vram: 0
     start: 0x6C6300
+
+  - name: _8E6B50
+    type: bin
+    vram: 0
+    start: 0x8E6B50
+
+  - name: _B19320
+    type: bin
+    vram: 0
+    start: 0xB19320
+
+  - name: _C54370
+    type: bin
+    vram: 0
+    start: 0xC54370
 
   - [0xE0CAD0, bin]
 
