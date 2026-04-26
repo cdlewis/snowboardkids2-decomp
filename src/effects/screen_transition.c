@@ -1,3 +1,4 @@
+#include "effects/screen_transition.h"
 #include "assets.h"
 #include "common.h"
 #include "data/data_table.h"
@@ -94,12 +95,11 @@ typedef struct {
     s16 effectMode;
 } ScrollingTextureEffectUpdateState;
 
-void updateScrollingTextureEffect(ScrollingTextureEffectUpdateState *);
-void cleanupScrollingTextureEffectTask(ScrollingTextureState *);
-void initScrollingTextureEffectTask(ScrollingTextureState *);
-void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *);
-void cleanupTrickSpriteEffectTask(TrickSpriteEffectCleanupState *);
-void initTrickSpriteEffectTask(TrickSpriteEffectInitState *);
+typedef struct {
+    Node n;
+    u8 padding[0x36];
+    s16 effectParam;
+} TrickSpriteEffectTask;
 
 extern DisplayLists D_80089510_8A110;
 
@@ -112,6 +112,13 @@ s32 gTrickSpriteEffectTransformData[2][3] = {
     { 0xFFFC0000, 0x00000000, 0xFFF30000 },
     { 0x00040000, 0x00000000, 0xFFF30000 }
 };
+
+void updateScrollingTextureEffect(ScrollingTextureEffectUpdateState *);
+void cleanupScrollingTextureEffectTask(ScrollingTextureState *);
+void initScrollingTextureEffectTask(ScrollingTextureState *);
+void updateTrickSpriteEffect(TrickSpriteEffectUpdateState *);
+void cleanupTrickSpriteEffectTask(TrickSpriteEffectCleanupState *);
+void initTrickSpriteEffectTask(TrickSpriteEffectInitState *);
 
 void initTrickSpriteEffectTask(TrickSpriteEffectInitState *initState) {
     s32 i;
@@ -171,11 +178,6 @@ void cleanupTrickSpriteEffectTask(TrickSpriteEffectCleanupState *state) {
     state->modelData = freeNodeMemory(state->modelData);
 }
 
-typedef struct {
-    Node n;
-    u8 padding[0x36];
-    s16 effectParam;
-} TrickSpriteEffectTask;
 void spawnTrickSpriteEffect(void *model, s16 effectParam) {
     TrickSpriteEffectTask *task = (TrickSpriteEffectTask *)scheduleTask(&initTrickSpriteEffectTask, 1, 0, 0x64);
     if (task != NULL) {
