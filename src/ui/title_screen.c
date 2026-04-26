@@ -36,6 +36,18 @@ typedef struct {
     u8 initialSoundDelay;
 } TitleState;
 
+extern u8 gTitleExitMode;
+extern s32 gControllerInputs;
+extern s32 gButtonsPressed;
+extern u8 gDebugUnlockEnabled;
+extern s8 gTitleInitialized;
+
+extern void initBoardShopDisplay(void);
+extern void initGalleryMenu(void);
+extern void initStoryMapLocationIntro(void);
+extern void initUnlockScreen(void);
+extern void initStoryMapExtraIntro(void);
+
 void resetSaveDataToDefaults(void);
 void waitForTitleAssetsReady(void);
 void checkPartialUnlockCheatCode(void);
@@ -44,13 +56,6 @@ void unlockAllContent(void);
 void unlockPartialContent(void);
 void handleTitleMenuInput(void);
 
-extern u8 gTitleExitMode;
-extern s32 gControllerInputs;
-extern s32 gButtonsPressed;
-extern u8 gDebugUnlockEnabled;
-extern s8 gTitleInitialized;
-
-// Data segment definitions
 s32 gTitleCameraSettings[64] = {
     0xF8BE0000, 0x1F2B07B8, 0x1F0001CC, 0xE1CF07ED, 0xF8F90000, 0xFF6D2B6E, 0x003D9000, 0xFFDDCF14,
     0x00C00000, 0x1B300000, 0x1B330000, 0xE4D00000, 0x00C00000, 0x0018A67A, 0x00000000, 0xFFF42D86,
@@ -170,12 +175,6 @@ CoordPair storyMapLocationCoords[10] = {
 s8 storyMapLocationNames[6][20] = {
     "PAINT", "U.F.O.", "TIMES", "SCHOOL", "BOARDSHOP", "TEACHER",
 };
-
-extern void initBoardShopDisplay(void);
-extern void initGalleryMenu(void);
-extern void initStoryMapLocationIntro(void);
-extern void initUnlockScreen(void);
-extern void initStoryMapExtraIntro(void);
 
 void (*storyMapLocationHandlers[])(void) = {
     NULL,
