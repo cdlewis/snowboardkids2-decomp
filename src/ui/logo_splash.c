@@ -13,17 +13,6 @@ typedef struct {
     s16 pad6;
 } E090_DataEntry;
 
-E090_DataEntry D_8008CE10_8DA10[] = {
-    { (s16)0xFF78, 0x0058,      0x0000, 0x0000 },
-    { (s16)0xFFA8, 0x0050,      0x0001, 0x0000 },
-    { (s16)0xFFA0, 0x0020,      0x0002, 0x0000 },
-    { (s16)0xFFC0, 0x0008,      0x0003, 0x0000 },
-    { (s16)0xFFB8, (s16)0xFFC8, 0x0004, 0x0000 },
-    { (s16)0xFFE8, (s16)0xFFA8, 0x0005, 0x0000 },
-};
-
-void transitionFromLogoScreen(void);
-
 typedef struct {
     s16 unk0;
     s16 unk2;
@@ -61,14 +50,18 @@ typedef struct {
     s32 unk2D4[6];
 } E090_struct;
 
-void initLogoScreenElements(E090_struct *arg0);
-void initLogoDisplaySequence(E090_struct *arg0);
-void updateLogoDisplayFade(E090_struct *arg0);
-void initTitleTextSequence(E090_struct *arg0);
-void updateTitleTextDelay(E090_struct *arg0);
-void updateTitleLetterReveal(E090_struct *arg0);
-void updateTitleFinalFadeIn(E090_struct *arg0);
-void cleanupLogoScreen(E090_struct *arg0);
+void transitionFromLogoScreen(void);
+void loadLogoScreenAssets(void);
+void updateLogoScreen(void);
+
+E090_DataEntry D_8008CE10_8DA10[] = {
+    { (s16)0xFF78, 0x0058,      0x0000, 0x0000 },
+    { (s16)0xFFA8, 0x0050,      0x0001, 0x0000 },
+    { (s16)0xFFA0, 0x0020,      0x0002, 0x0000 },
+    { (s16)0xFFC0, 0x0008,      0x0003, 0x0000 },
+    { (s16)0xFFB8, (s16)0xFFC8, 0x0004, 0x0000 },
+    { (s16)0xFFE8, (s16)0xFFA8, 0x0005, 0x0000 },
+};
 
 void initLogoNodeFadeIn(E090_struct *arg0) {
     setViewportEnvColor(&arg0->unk8, 0, 0, 0);
@@ -172,9 +165,6 @@ void cleanupLogoScreen(E090_struct *arg0) {
     unlinkNode(&arg0->unk8);
     terminateSchedulerWithCallback(transitionFromLogoScreen);
 }
-
-void loadLogoScreenAssets(void);
-void updateLogoScreen(void);
 
 void initLogoScreen(void) {
     setGameStateHandler(loadLogoScreenAssets);
