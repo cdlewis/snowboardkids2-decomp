@@ -3,9 +3,9 @@
 #include "system/task_scheduler.h"
 #include "triggers/event_trigger.h"
 
-void checkNewspaperLocationDiscovery(LocationDiscoveryTrigger *);
-
 u8 WallNewspaperLabel[] = "WALL NEWSPAPER";
+
+void checkNewspaperLocationDiscovery(LocationDiscoveryTrigger *);
 
 void initNewspaperDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
     trigger->locationId = WALL_NEWSPAPER_EVENT_ID;
