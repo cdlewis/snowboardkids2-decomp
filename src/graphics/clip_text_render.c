@@ -4,13 +4,6 @@
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 
-extern s16 gGraphicsMode;
-extern Gfx *gRegionAllocPtr;
-extern s32 gFrameCounter;
-
-extern TextClipAndOffsetData gTextClipAndOffsetData;
-extern s16 gTextureEnabled;
-
 typedef struct {
     /* 0x00 */ u16 x;
     /* 0x02 */ u16 y;
@@ -20,6 +13,12 @@ typedef struct {
     /* 0x09 */ u8 green;
     /* 0x0A */ u8 blue;
 } ColorRect;
+
+extern s16 gGraphicsMode;
+extern Gfx *gRegionAllocPtr;
+extern s32 gFrameCounter;
+extern TextClipAndOffsetData gTextClipAndOffsetData;
+extern s16 gTextureEnabled;
 
 void drawColorRectFill(ColorRect *rect);
 
