@@ -367,7 +367,7 @@ segments:
       - [0x90AB0, .data, text/text_elements]
       - [0x90E80, .data, race/race_session]
       - [0x913E0, .data, race/position_markers]
-      - [0x914A0, data] # also particle_items?
+      - [0x914A0, .data, data/particle_tables]
       - [0x916F0, data] # also race_hud?
       - [0x91A60, .data, race/race_effects]
       - [0x91A70, .data, race/spray_particles]
