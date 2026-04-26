@@ -85,6 +85,14 @@ typedef struct {
     /* 0x28 */ s16 (*isDone)(CurrentCommand *, CommandData *, s8);
 } CommandEntry;
 
+typedef struct {
+    CommandEntry *entries;
+    s16 count;
+    s16 requiresModel;
+} CommandCategory;
+
+void func_800BB47C(s32, s32, s32, s32, s32, s32);
+
 // clang-format off
 struct {
     s8 header[16];
@@ -150,12 +158,6 @@ struct {
 // clang-format on
 
 // clang-format off
-typedef struct {
-    CommandEntry *entries;
-    s16 count;
-    s16 requiresModel;
-} CommandCategory;
-
 CommandCategory commandCategories[9] = {
     { &commandTable.entries[COMMAND_INIT_TRACK],   0x01, 0 },
     { &commandTable.entries[COMMAND_SYS_DISP],     0x09, 0 },
@@ -171,8 +173,6 @@ CommandCategory commandCategories[9] = {
 
 u8 gFirstCutsceneCategoryIndex = 0;
 u8 gCutsceneCategoryCount = 9;
-
-void func_800BB47C(s32, s32, s32, s32, s32, s32);
 
 CommandEntry *getCommandEntry(s32 categoryIndex, s32 commandIndex) {
     CommandEntry *entries = commandCategories[(u8)categoryIndex].entries;
