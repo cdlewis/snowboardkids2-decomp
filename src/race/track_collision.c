@@ -34,18 +34,17 @@ typedef struct {
     /* 0x1E */ u8 pad3[0x6];
 } Section3Element;
 
-s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSectorIndex, void *position) {
-    Player *player = (Player *)entity;
-    if (!(player->animFlags & 0x100)) {
-        return findTrackSector(gameData, currentSectorIndex, position);
-    }
-    return player->sectorIndex;
-}
-
 typedef struct {
     s16 sampleOffset[6];
     s32 threshold;
 } TrackCollisionEntry;
+
+typedef struct {
+    u8 padding[0xB88];
+    s32 collisionFlags;
+    u8 padding2[0x18];
+    u16 invincibilityTimer;
+} PlayerCollisionData;
 
 TrackCollisionEntry gTrackCollisionSampleOffsets[3] = {
     { { 0, 0, 0, 0, 0, 0 },   0x00060000 },
@@ -64,6 +63,14 @@ s16 trackNormalSamplePoints[12] = {
 s16 slopeDetectionSamplePoints[12] = {
     6, 0, 0, 0, 0, 0, -6, 0, 0, 0, 0, 0,
 };
+
+s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSectorIndex, void *position) {
+    Player *player = (Player *)entity;
+    if (!(player->animFlags & 0x100)) {
+        return findTrackSector(gameData, currentSectorIndex, position);
+    }
+    return player->sectorIndex;
+}
 
 /**
  * Checks track wall collision at 3 sample points around the player and pushes them out of walls.
@@ -1289,13 +1296,6 @@ s32 checkStarHitCollisionWithVulnerablePlayers(Vec3i *pos, s32 excludePlayerIdx,
 
     return result;
 }
-
-typedef struct {
-    u8 padding[0xB88];
-    s32 collisionFlags;
-    u8 padding2[0x18];
-    u16 invincibilityTimer;
-} PlayerCollisionData;
 
 /**
  * Finds a vulnerable player (non-invincible, collision-enabled) near a position.
