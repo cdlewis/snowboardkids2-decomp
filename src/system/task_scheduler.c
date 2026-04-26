@@ -14,32 +14,18 @@ typedef struct {
     u8 padding[0xFC]; // probably the max possible payload
 } NodeWithPayload;
 
-typedef struct TaskNode {
-    /* 0x00 */ s8 padding_00[8];
-    /* 0x08 */ void *next;
-    /* 0x0C */ s8 padding_0C[0x18];
-    /* 0x24 */ s32 unk24;
-    /* 0x28 */ s32 unk28;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ s32 unk30;
-    /* 0x34 */ s32 unk34;
-    /* 0x38 */ s16 counters[8];
-    /* 0x48 */ s16 unk48;
-    /* 0x4A */ s8 padding_4A[6];
-} TaskNode;
-
 typedef struct gActiveScheduler_type {
-    /* 0x0 */ struct gActiveScheduler_type *prev;
-    /* 0x4 */ struct gActiveScheduler_type *next;
-    TaskNode *freeNext;
-    struct gActiveScheduler_type *parentScheduler;
-    void (*gamestateHandler)(void);
-    void (*schedulerCleanupCallback)(void);
-    u8 schedulerState;
-    u8 priority;
-    u8 renderContext;
-    u8 handlerContinueFlag;
-    s32 cleanupFrameCounter;
+    /* 0x00 */ struct gActiveScheduler_type *prev;
+    /* 0x04 */ struct gActiveScheduler_type *next;
+    /* 0x08 */ struct gActiveScheduler_type *freeNext;
+    /* 0x0C */ struct gActiveScheduler_type *parentScheduler;
+    /* 0x10 */ void (*gamestateHandler)(void);
+    /* 0x14 */ void (*schedulerCleanupCallback)(void);
+    /* 0x18 */ u8 schedulerState;
+    /* 0x19 */ u8 priority;
+    /* 0x1A */ u8 renderContext;
+    /* 0x1B */ u8 handlerContinueFlag;
+    /* 0x1C */ s32 cleanupFrameCounter;
     /* 0x20 */ void *latestDmaSequenceNumber;
     /* 0x24 */ void *latestDmaNode;
     /* 0x28 */ void *allocatedState;
@@ -48,13 +34,13 @@ typedef struct gActiveScheduler_type {
     /* 0x34 */ Node *freeList;
     /* 0x38 */ s16 counters[8];
     /* 0x48 */ s16 total;
-    s16 returnValue;
-    s16 childSchedulerCount;
+    /* 0x4A */ s16 returnValue;
+    /* 0x4C */ s16 childSchedulerCount;
 } gActiveScheduler_type;
 
-extern TaskNode gSchedulerPool[16];
+extern gActiveScheduler_type gSchedulerPool[16];
 extern gActiveScheduler_type gSchedulerListSentinel;
-extern TaskNode *gFreeSchedulerList;
+extern gActiveScheduler_type *gFreeSchedulerList;
 extern gActiveScheduler_type *gActiveSchedulerList;
 extern s32 gFrameCounter;
 extern s32 gBufferedFrameCounter;
@@ -74,19 +60,19 @@ void initTaskScheduler(void) {
     gFreeSchedulerList = NULL;
 
     for (i = 0; i < 16; i++) {
-        gSchedulerPool[i].unk24 = 0;
-        gSchedulerPool[i].unk28 = 0;
-        gSchedulerPool[i].unk30 = 0;
-        gSchedulerPool[i].unk34 = 0;
-        gSchedulerPool[i].unk2C = 0;
-        gSchedulerPool[i].unk48 = 0;
+        gSchedulerPool[i].latestDmaNode = NULL;
+        gSchedulerPool[i].allocatedState = NULL;
+        gSchedulerPool[i].activeList = NULL;
+        gSchedulerPool[i].freeList = NULL;
+        gSchedulerPool[i].nodes = NULL;
+        gSchedulerPool[i].total = 0;
 
         for (j = 0; j < 8; j++) {
             gSchedulerPool[i].counters[j] = 0;
         }
 
         prevHead = gFreeSchedulerList;
-        gSchedulerPool[i].next = prevHead;
+        gSchedulerPool[i].freeNext = prevHead;
         gFreeSchedulerList = &gSchedulerPool[i];
     }
 }
@@ -96,7 +82,7 @@ void createRootTaskScheduler(void (*gamestateHandler)(void), s32 priority) {
     gActiveScheduler_type *current;
     gActiveScheduler_type *insertPos;
 
-    newScheduler = (gActiveScheduler_type *)gFreeSchedulerList;
+    newScheduler = gFreeSchedulerList;
     insertPos = &gSchedulerListSentinel;
     gFreeSchedulerList = newScheduler->freeNext;
 
@@ -147,13 +133,13 @@ void createTaskQueue(void (*arg0)(void), s32 arg1) {
     gActiveScheduler_type *temp_v1;
     gActiveScheduler_type *temp_v0;
 
-    temp_a2 = (gActiveScheduler_type *)gFreeSchedulerList;
+    temp_a2 = gFreeSchedulerList;
     var_a3 = &gSchedulerListSentinel;
     gFreeSchedulerList = temp_a2->freeNext;
 
     if (gActiveSchedulerList != NULL) {
         while (TRUE) {
-            temp_v1 = (gActiveScheduler_type *)var_a3->next;
+            temp_v1 = var_a3->next;
             if ((u8)arg1 < temp_v1->priority) {
                 break;
             }
@@ -193,7 +179,7 @@ void createTaskQueue(void (*arg0)(void), s32 arg1) {
 void runTaskSchedulers(void) {
     gActiveScheduler_type *temp_v0;
     gActiveScheduler_type *temp_v0_2;
-    TaskNode *temp_a0;
+    gActiveScheduler_type *temp_a0;
 
     gActiveScheduler = gActiveSchedulerList;
     if (gActiveSchedulerList != NULL) {
@@ -272,7 +258,7 @@ void runTaskSchedulers(void) {
 
                         gActiveScheduler->prev->next = gActiveScheduler->next;
                         temp_a0 = gFreeSchedulerList;
-                        gFreeSchedulerList = (TaskNode *)gActiveScheduler;
+                        gFreeSchedulerList = gActiveScheduler;
                         gActiveScheduler->freeNext = temp_a0;
                     }
                     break;
