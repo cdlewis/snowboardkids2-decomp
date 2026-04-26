@@ -21,14 +21,6 @@
 // gCallbackEntrySegment overlaps with the lower 2 bytes of gCurrentDoubleBufferIndex
 #define gCallbackEntrySegment (*(u16 *)((u8 *)&gCurrentDoubleBufferIndex + 2))
 
-typedef struct Node {
-    struct Node *next;
-    void *callback;
-    void *callbackData;
-    u8 padding[0x3];
-    u8 poolIndex;
-} Node;
-
 // Microcode pointer pair
 typedef struct {
     u64 *ucode;
@@ -37,18 +29,9 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x8];
-    Node *unk8;
+    PoolEntry *unk8;
     s32 unkC;
 } Item_A4188;
-
-typedef struct {
-    s16 originX;
-    s16 originY;
-    s16 left;
-    s16 top;
-    s16 right;
-    s16 bottom;
-} Viewport;
 
 typedef struct {
     u8 padding[0x134];
@@ -265,7 +248,6 @@ void updateViewportBounds(void);
 void initViewportCallbackPool(ViewportNode *);
 s32 isRegionAllocSpaceLow(void);
 void resetLinearAllocator(void);
-void *LinearAlloc(size_t size);
 void restoreViewportOffsets(void);
 void initGraphicsSystem(void);
 void initGraphicsArenas(void);
@@ -1376,12 +1358,12 @@ void unlinkNode(ViewportNode *node) {
 
 void debugEnqueueCallback(u16 index, u8 slotIndex, void *callback, void *callbackData) {
     Item_A4188 *manager;
-    Node *block;
+    PoolEntry *block;
     Item_A4188 *slot;
 
     manager = D_800A3588_A4188[index];
     if (manager != NULL) {
-        block = (Node *)linearAlloc(0x10);
+        block = (PoolEntry *)linearAlloc(0x10);
         if (block != NULL) {
             slot = &manager[slotIndex];
             block->next = slot[1].unk8;
