@@ -4,8 +4,6 @@
 #include "gbi.h"
 #include "gu.h"
 
-extern s16 gAtan2LookupTable[];
-
 typedef struct {
     s16 m00_int;
     u16 m00_frac;
