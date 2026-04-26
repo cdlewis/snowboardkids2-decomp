@@ -11,23 +11,6 @@
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
-extern s32 gControllerInputs;
-extern s32 storyMapLocationNames[];
-
-void unlockScreenScheduleDisplayTasks(void);
-void updateUnlockScreen(void);
-
-void onUnlockScreenExit(void);
-void unlockScreenCleanupAndExit(void);
-void unlockScreenAwaitUserDismiss(void);
-void unlockScreenAwaitFadeIn(void);
-void unlockScreenCountdownToExit(void);
-void waitForUnlocksAssetsReady(void);
-
-s32 D_8008D960_8E560[] = { 0x00000000, 0x0000C350, 0x000186A0, 0x00000000, 0x0000AFC8, 0x00015F90, 0x00000000,
-                           0x0000EA60, 0x0001D4C0, 0x000249F0, 0x00001388, 0x000003E8, 0x00013880, 0x00000064,
-                           0x00013880, 0x0000C350, 0x00030D40, 0x00061A80, 0x00000000, 0x00000000 };
-
 typedef struct {
     /* 0x000 */ u8 cameraNode0[0x1D8];
     /* 0x1D8 */ u8 cameraNode1[0x1D8];
@@ -59,6 +42,9 @@ typedef struct {
     s8 slotPosition;
 } ItemCardTaskState;
 
+extern s32 gControllerInputs;
+extern s32 storyMapLocationNames[];
+
 extern void initStoryMapShopFairyModel(void *);
 extern void initStoryMapShopItemCard(void *);
 extern void initSlideInStoryMapShopItemCard(void *);
@@ -68,6 +54,19 @@ extern void initStoryMapShopItemIcon(void *);
 extern void initStoryMapShopItemStatLabel(void *);
 extern void initStoryMapShopExitOverlay(void *);
 extern s32 getLockedShopItemIndices(u8 *);
+
+void unlockScreenScheduleDisplayTasks(void);
+void updateUnlockScreen(void);
+void onUnlockScreenExit(void);
+void unlockScreenCleanupAndExit(void);
+void unlockScreenAwaitUserDismiss(void);
+void unlockScreenAwaitFadeIn(void);
+void unlockScreenCountdownToExit(void);
+void waitForUnlocksAssetsReady(void);
+
+s32 D_8008D960_8E560[] = { 0x00000000, 0x0000C350, 0x000186A0, 0x00000000, 0x0000AFC8, 0x00015F90, 0x00000000,
+                           0x0000EA60, 0x0001D4C0, 0x000249F0, 0x00001388, 0x000003E8, 0x00013880, 0x00000064,
+                           0x00013880, 0x0000C350, 0x00030D40, 0x00061A80, 0x00000000, 0x00000000 };
 
 void initUnlockScreen(void) {
     UnlockScreenState *state;
