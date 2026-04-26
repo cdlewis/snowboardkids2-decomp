@@ -5,6 +5,26 @@
 #include "mbi.h"
 #include "ui/level_preview_3d.h"
 
+typedef struct {
+    u8 pad0[0x14];
+    s32 position[3];
+} ModelPositionData;
+
+typedef struct {
+    ModelPositionData *modelData;
+    u8 pad04[0x14];
+    s16 rotationMatrix[3][3];
+    u8 pad2A[2];
+    Vec3i position;
+    u8 pad38[0x17];
+    s8 shadowRadius;
+    u8 pad50[0x30];
+    Vtx *shadowVertices;
+    Mtx *shadowMatrix;
+    u8 pad88[0xE];
+    u8 alpha;
+} ShadowEntity;
+
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
 
@@ -62,25 +82,6 @@ u32 g_NonRaceShadowTex[] = { 0x00000FFF, 0xFFF00000, 0x000FFFFF, 0xFFFFF000, 0x0
                              0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
                              0xFFFFFFFF, 0x0FFFFFFF, 0xFFFFFFF0, 0x0FFFFFFF, 0xFFFFFFF0, 0x00FFFFFF, 0xFFFFFF00,
                              0x000FFFFF, 0xFFFFF000, 0x00000FFF, 0xFFF00000, 0x00000000, 0x00000000 };
-typedef struct {
-    u8 pad0[0x14];
-    s32 position[3];
-} ModelPositionData;
-
-typedef struct {
-    ModelPositionData *modelData;
-    u8 pad04[0x14];
-    s16 rotationMatrix[3][3];
-    u8 pad2A[2];
-    Vec3i position;
-    u8 pad38[0x17];
-    s8 shadowRadius;
-    u8 pad50[0x30];
-    Vtx *shadowVertices;
-    Mtx *shadowMatrix;
-    u8 pad88[0xE];
-    u8 alpha;
-} ShadowEntity;
 
 void renderNonRaceShadow(ShadowEntity *entity) {
     Transform3D matrix;
