@@ -23,6 +23,10 @@
 // Maximum look-ahead distance for AI target calculation
 #define AI_MAX_LOOKAHEAD_DISTANCE 0xA00000
 
+// AI lateral offset scaling factors
+#define LATERAL_OFFSET_SCALE 0x2000
+#define LANE_WIDTH_MULTIPLIER 6
+
 #define LERP_X(out, wpArr, idx, posPtr, endField, startField, f)                                           \
     (out)->x = (((((posPtr)[(wpArr)[idx].endField].x - (posPtr)[(wpArr)[idx].startField].x) * (f)) / 32) + \
                 (posPtr)[(wpArr)[idx].startField].x)                                                       \
@@ -32,10 +36,6 @@
     (out)->z = (((((posPtr)[(wpArr)[idx].endField].z - (posPtr)[(wpArr)[idx].startField].z) * (f)) / 32) + \
                 (posPtr)[(wpArr)[idx].startField].z)                                                       \
                << 16
-
-// AI lateral offset scaling factors
-#define LATERAL_OFFSET_SCALE 0x2000
-#define LANE_WIDTH_MULTIPLIER 6
 
 // Struct definitions
 typedef struct {
@@ -87,7 +87,7 @@ typedef struct {
 // Global variables
 extern u8 gShortcutChanceByMemoryPool[];
 
-// Function declarations (for functions defined via INCLUDE_ASM below)
+// Function declarations
 void computeAIWaypointLateralPosition(Player *, CourseData *, s16, Vec3i *);
 void computeAIWaypointPosition(Player *, CourseData *, s16, Vec3i *);
 
