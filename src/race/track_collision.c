@@ -537,18 +537,19 @@ void handlePlayerToPlayerCollision(Player *player) {
 }
 
 /**
- * Checks collision between a player and the target player (player index 1).
- * Handles collision response including pushing the player out and knockback effects.
- * The target player may have multiple collision boxes (controlled by targetPlayer->unkBB4).
+ * Checks collision between `player` and the boss player at slot 1.
  *
- * The extra collision system allows entities to have up to 6 additional collision boxes
- * beyond the main collision sphere. Each box has an offset (extraCollisionOffsets)
- * and a radius (extraCollisionRadii, treated as an array via pointer arithmetic).
+ * The boss has up to (s8)targetPlayer->unkBB4 collision boxes. Box 0 is the player's
+ * own collisionOffset/collisionRadius; boxes 1+ live in the extraCollisionOffsets /
+ * extraCollisionRadii arrays. The loop walks `boxBasePtr` along the offset array
+ * by sizeof(Vec3i) each iteration so that boxBasePtr + 0xAE4 yields
+ * &extraCollisionOffsets[boxIndex].
  *
- * Flying attack state (flyingAttackState) determines collision behavior:
- * - 1: Attack state that bounces player on boxes 4-5
- * - 2: Attack state that applies knockback on box 0
- * - 3: Attack state that bounces player on boxes 1-2
+ * flyingAttackState selects an "active hit" region on the boss:
+ *   - 1: boxes 4-5 bounce the player back
+ *   - 2: box 0 applies a knockback
+ *   - 3: boxes 1-2 bounce the player back
+ * Other collisions just push `player` out of the box.
  */
 void handleCollisionWithTargetPlayer(Player *player) {
     Vec3i deltaPos;
@@ -566,11 +567,11 @@ void handleCollisionWithTargetPlayer(Player *player) {
     players = ((GameState *)getCurrentAllocation())->players;
     targetPlayer = players + 1;
 
-    /* Skip collision if players are on the same team */
+    /* Don't collide a player against itself. */
     if (player->playerIndex == targetPlayer->playerIndex) {
         return;
     }
-    /* Skip if either player has collision disabled (flag 0x10) */
+    /* Either party can disable collisions via behaviorFlags & 0x10. */
     if (player->behaviorFlags & 0x10) {
         return;
     }
@@ -582,24 +583,20 @@ void handleCollisionWithTargetPlayer(Player *player) {
         boxIndex = 0;
         boxBasePtr = targetPlayer;
         do {
-            /* Copy target's collision box local position */
-            memcpy(&deltaPos, (u8 *)boxBasePtr + 0xAE4, 0xC);
+            /* &targetPlayer->extraCollisionOffsets[boxIndex] (boxBasePtr advances by sizeof(Vec3i)). */
+            memcpy(&deltaPos, (u8 *)boxBasePtr + 0xAE4, sizeof(Vec3i));
 
-            /* Convert to world space */
             deltaPos.x += targetPlayer->worldPos.x;
             deltaPos.y += targetPlayer->worldPos.y;
             deltaPos.z += targetPlayer->worldPos.z;
 
-            /* Calculate relative position to player's collision box */
             deltaPos.x -= player->worldPos.x + player->collisionOffset.x;
             deltaPos.y -= player->worldPos.y + player->collisionOffset.y;
             deltaPos.z -= player->worldPos.z + player->collisionOffset.z;
 
-            /* Sum of both collision box radii */
             combinedRadius = (&targetPlayer->extraCollisionRadii)[boxIndex] + player->collisionRadius;
             negRadius = -combinedRadius;
 
-            /* Quick AABB check before expensive distance calculation */
             if (negRadius < deltaPos.x && deltaPos.x < combinedRadius && negRadius < deltaPos.y &&
                 deltaPos.y < combinedRadius && negRadius < deltaPos.z && deltaPos.z < combinedRadius) {
 
@@ -607,36 +604,33 @@ void handleCollisionWithTargetPlayer(Player *player) {
                     isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z);
 
                 if (dist < combinedRadius) {
-                    /* Check for special bounce-back on collision boxes 4-5 when target is in state 1 */
+                    /* State 1: boxes 4-5 are an active hit zone. */
                     if (targetPlayer->flyingAttackState == 1) {
                         if ((targetPlayer->animFlags & 0x40000) && (u32)(boxIndex - 4) < 2U) {
                             setPlayerBouncedBackState(player);
                             goto next;
                         }
                     }
-                    /* Check for special bounce-back on collision boxes 1-2 when target is in state 3 */
+                    /* State 3: boxes 1-2 are an active hit zone. */
                     if (targetPlayer->flyingAttackState == 3 && (targetPlayer->animFlags & 0x40000) &&
                         (u32)(boxIndex - 1) < 2U) {
                         setPlayerBouncedBackState(player);
                         goto next;
                     }
 
-                    /* Avoid divide by zero */
                     if (dist == 0) {
                         dist = 1;
                     }
 
-                    /* Calculate push vector to separate the players */
                     deltaPos.x = ((s64)deltaPos.x * combinedRadius / dist) - deltaPos.x;
                     deltaPos.y = ((s64)deltaPos.y * combinedRadius / dist) - deltaPos.y;
                     deltaPos.z = ((s64)deltaPos.z * combinedRadius / dist) - deltaPos.z;
 
-                    /* Push player out of collision */
                     player->worldPos.x -= deltaPos.x;
                     player->worldPos.y -= deltaPos.y;
                     player->worldPos.z -= deltaPos.z;
 
-                    /* Apply knockback if target is in state 2 and colliding with main collision box */
+                    /* State 2: main box hit -> apply knockback if push was significant. */
                     if ((targetPlayer->flyingAttackState == 2) & (boxIndex == 0)) {
                         dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.z * deltaPos.z);
                         if (dist > 0x30000) {
@@ -656,7 +650,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
             }
         next:
             boxIndex++;
-            boxBasePtr = (u8 *)boxBasePtr + 0xC;
+            boxBasePtr = (u8 *)boxBasePtr + sizeof(Vec3i);
         } while (boxIndex < (s8)targetPlayer->unkBB4);
     }
 }
