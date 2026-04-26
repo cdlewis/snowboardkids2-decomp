@@ -7,31 +7,30 @@
 #include "race/race_session.h"
 #include "system/memory_allocator.h"
 #include "system/task_scheduler.h"
-extern u8 gDebugUnlockEnabled;
-
-void resetGameSession(void);
-
-void func_800144DC_150DC(void);
-void startOptionsMenu(void);
-void func_80014690_15290(void);
-void func_80014660_15260(void);
-void waitForLogoScreen(void);
-void startLogoScreen(void);
-void waitForOptionsMenu(void);
-void startAttractRace(void);
-void waitForAttractRace(void);
-void startDemoRace(void);
-void waitForDemoRace(void);
-void startSelectedGameMode(void);
-void startBattleRace(void);
-void waitForBattleRace(void);
-void initOptionsDefaults(void);
-
 typedef struct {
     s16 unk0;
     u8 unk2;
     u8 pad;
 } TaskData_1512C;
+
+extern u8 gDebugUnlockEnabled;
+
+void func_800144DC_150DC(void);
+void func_80014660_15260(void);
+void func_80014690_15290(void);
+void startLogoScreen(void);
+void waitForLogoScreen(void);
+void startDemoRace(void);
+void waitForDemoRace(void);
+void startAttractRace(void);
+void waitForAttractRace(void);
+void startBattleRace(void);
+void waitForBattleRace(void);
+void startOptionsMenu(void);
+void waitForOptionsMenu(void);
+void startSelectedGameMode(void);
+void initOptionsDefaults(void);
+void resetGameSession(void);
 
 void initGameSession(void) {
     u8 allocation;
