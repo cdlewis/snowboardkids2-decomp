@@ -64,13 +64,6 @@ typedef struct {
     u8 unk7E;
 } Allocation;
 
-// defined later to keep the rodata gods happy
-const char sTimerFormatLow[];
-const char sTimerFormatNormal[];
-const char D_8009E868_9F468[];
-const char sGoldFormatShort[];
-const char sGoldFormatLong[];
-
 typedef struct {
     s16 x;
     s16 y;
@@ -327,6 +320,175 @@ typedef struct {
     void *digitSpriteAsset;
 } PlayerGoldDisplayCleanupArg;
 
+typedef struct {
+    u8 pad0[0x18];
+    s32 score;
+    u8 pad1C[0xC];
+    s16 playerIndex;
+} TrickScoreDisplaySpawnState;
+
+typedef struct {
+    u8 pad0[0xA];
+    s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u8 unkE;
+} HudElementState;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteIndex;
+    u8 padA[0x4];
+    u8 unkE;
+    u8 padF;
+    void *digitAsset;
+    s32 alpha;
+} TotalGoldDisplayState;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteIndex;
+    u8 padA[0x4];
+    u8 unkE;
+    u8 padF;
+    void *digitAsset;
+    s32 alpha;
+    Player *player;
+} TotalLapDisplayState;
+
+typedef struct {
+    s16 screenX;
+    s16 screenY;
+    void *spriteAsset;
+    s16 spriteFrame;
+    u8 lifetime;
+    u8 padB;
+    s16 playerIndex;
+    s16 useSmallSprite;
+    u16 animFrame;
+    s16 posX;
+    s16 posY;
+    s16 waveAmplitude;
+    s16 velocityX;
+    s16 velocityY;
+    s16 wavePhase;
+    s16 driftTimer;
+} VictorySnowflakeState;
+
+typedef struct {
+    s16 playerIndex;
+    s16 useSmallSprite;
+} VictorySnowflakeSpawnArgs;
+
+typedef struct {
+    u8 pad0[0xC];
+    s16 playerIndex;
+    s16 useSmallSprite;
+} VictorySnowflakeTaskState;
+
+typedef struct {
+    u8 pad0[0x4];
+    void *spriteAsset;
+    u8 pad8[0x1C];
+    void *backgroundAsset;
+} PauseMenuCleanupState;
+
+typedef struct {
+    u8 pad0[0x10];
+    void *gameState;
+} ShotScoreDisplayAllocation;
+
+typedef struct {
+    u8 pad0[0x17C3];
+    u8 itemCount;
+} ShotScoreData;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteFrame;
+    s16 padA;
+} ShotScoreElement;
+
+typedef struct {
+    ShotScoreElement elements[10];
+    s16 spriteGroupIndex;
+    s16 displayedCount;
+    s16 animDelayCounter;
+} ShotScoreDisplayState;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    void *spriteAsset;
+    s16 spriteFrame;
+    u8 padA[0x2];
+    s16 flashState;
+} SuccessMessageDisplayState;
+
+typedef struct {
+    u8 _pad[0xC];
+    s16 initDelay;
+} SuccessMessageSpawnState;
+
+typedef struct {
+    s16 alphaValue_hi;
+    s16 alpha_lo;
+} BonusGoldDisplayState_AlphaSplit;
+
+typedef struct {
+    u8 pad0[0x10];
+    void *players;
+} SecondaryItemAllocation;
+
+typedef struct {
+    u8 pad[0x54];
+    s32 elapsedTicks;
+} SkillGameTimerAllocation;
+
+typedef struct {
+    s16 padding;       // 0x0 - unused
+    s16 y;             // 0x2 - Y position
+    void *spriteAsset; // 0x4
+    s16 spriteFrame;   // 0x8
+    u8 padA[0x2];
+    void *digitAsset;  // 0xC
+    char scoreText[8]; // 0x10
+    s32 score;         // 0x18 - trick points to display
+    s16 x;             // 0x1C - X position (animated)
+    s16 holdTimer;     // 0x1E - frames to hold display
+    s16 animAngle;     // 0x20 - animation angle
+} TrickPointsDisplayState;
+
+extern s32 gFirstPlaceGoldReward[];
+extern s32 gSecondPlaceGoldReward[];
+extern s32 gThirdPlaceGoldReward[];
+extern u16 D_8009ADE0_9B9E0;
+
+// const char definitions appear later to keep the rodata gods happy
+const char sTimerFormatLow[];
+const char sTimerFormatNormal[];
+const char D_8009E868_9F468[];
+const char sGoldFormatShort[];
+const char sGoldFormatLong[];
+const char D_8009E89C_9F49C[];
+const char D_8009E8A0_9F4A0[];
+const char D_8009E8A8_9F4A8[];
+const char D_8009E928_9F528[];
+const char D_8009E894_9F494[];
+const char D_8009E8D4_9F4D4[];
+const char D_8009E8E0_9F4E0[];
+const char D_8009E8EC_9F4EC[];
+const char D_8009E8F8_9F4F8[];
+const char D_8009E904_9F504[];
+const char D_8009E914_9F514[];
+const char sTrickPointsFormat[];
+
 void updateCenteredSpritePopup(CenteredSpritePopupState *);
 void cleanupCenteredSpritePopupTask(CenteredSpritePopupState *);
 void updateSpeedCrossFinishPositionDisplay(FinishPositionDisplayState *arg0);
@@ -359,6 +521,40 @@ void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0);
 void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state);
 void cleanupRaceProgressIndicatorTask(RaceProgressIndicatorCleanupState *state);
 
+void updateGoldAwardDisplay(GoldAwardDisplayState *arg0);
+void cleanupGoldAwardDisplayTask(GoldAwardDisplayState *arg0);
+void initTotalGoldDisplayTask(TotalGoldDisplayState *arg0);
+void updateTotalGoldDisplay(TotalGoldDisplayState *arg0);
+void cleanupTotalGoldDisplayTask(Struct_func_8004DCC4 *);
+void updateTotalLapDisplay(TotalLapDisplayState *state);
+void cleanupTotalLapDisplayTask(Struct_func_8004DCC4 *);
+void cleanupVictorySnowflake(VictorySnowflakeState *state);
+void updateVictorySnowflakeWave(VictorySnowflakeState *state);
+void renderVictorySnowflake(VictorySnowflakeState *state);
+void renderVictorySnowflakeSmall(VictorySnowflakeState *state);
+void updateVictorySnowflakeDrift(VictorySnowflakeState *state);
+void renderPauseMenuDisplay(PauseMenuDisplayState *);
+void cleanupPauseMenuDisplayTask(PauseMenuCleanupState *);
+void updateShotScoreDisplay(ShotScoreDisplayState *);
+void cleanupShotScoreDisplayTask(ShotScoreDisplayState *);
+void updateShotCrossScoreDisplay(ShotCrossScoreDisplayState *arg0);
+void cleanupShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0);
+void updateShotCrossItemCountDisplay(ShotCrossItemCountDisplayState *arg0);
+void cleanupShotCrossItemCountDisplayTask(ShotCrossItemCountDisplayState *arg0);
+void updateSuccessMessageDisplay(SuccessMessageDisplayState *);
+void cleanupSuccessMessageDisplayTask(ShotCrossCountdownTimerState *);
+void updateRaceTimerDisplay(RaceTimerState *arg0);
+void cleanupRaceTimerDisplay(ShotCrossCountdownTimerState *arg0);
+void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *);
+void cleanupSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *);
+void cleanupTrickPointsDisplayTask(ShotCrossCountdownTimerState *state);
+void updateTrickPointsSlideIn(TrickPointsDisplayState *state);
+void renderTrickPointsDisplay(TrickPointsDisplayState *state);
+void updateTrickPointsSlideOut(TrickPointsDisplayState *state);
+void updateTrickPointsHold(TrickPointsDisplayState *state);
+void updateShotCrossSkillMeterDisplay(ShotCrossItemCountDisplayState *);
+void cleanupShotCrossSkillMeterDisplayTask(ShotCrossItemCountDisplayState *);
+
 const char D_8009E868_9F468[] = "%d\a/\x04%d";
 
 const char sGoldFormatShort[] = "\x01%5d";
@@ -366,14 +562,6 @@ const char sGoldFormatShort[] = "\x01%5d";
 const char sGoldFormatLong[] = "\x02%5d";
 
 static const char D_8009E880_9F480[] = "%5d";
-const char D_8009E89C_9F49C[];
-const char D_8009E8A0_9F4A0[];
-const char D_8009E8A8_9F4A8[];
-const char D_8009E928_9F528[];
-
-extern s32 gFirstPlaceGoldReward[];
-extern s32 gSecondPlaceGoldReward[];
-extern s32 gThirdPlaceGoldReward[];
 
 u8 D_80090E60_91A60[] = {
     0x0E, 0x12, 0x13, 0x25, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -1119,13 +1307,6 @@ void cleanupTrickScoreDisplayTask(TrickScoreDisplayState *state) {
     state->digitsTexture = freeNodeMemory(state->digitsTexture);
 }
 
-typedef struct {
-    u8 pad0[0x18];
-    s32 score;
-    u8 pad1C[0xC];
-    s16 playerIndex;
-} TrickScoreDisplaySpawnState;
-
 void showTrickScoreDisplay(s32 playerIndex, s32 trickScore) {
     TrickScoreDisplaySpawnState *task;
 
@@ -1156,23 +1337,12 @@ void cleanupSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-typedef struct {
-    u8 pad0[0xA];
-    s16 unkA;
-    u8 unkC;
-    u8 unkD;
-    u8 unkE;
-} HudElementState;
-
 void initHudElementState(HudElementState *arg0) {
     arg0->unkC = 0;
     arg0->unkD = 0;
     arg0->unkE = 0;
     arg0->unkA = 0xFF;
 }
-
-void updateGoldAwardDisplay(GoldAwardDisplayState *arg0);
-void cleanupGoldAwardDisplayTask(GoldAwardDisplayState *arg0);
 
 void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
     GameState *gameState = (GameState *)getCurrentAllocation();
@@ -1227,11 +1397,6 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
     setCleanupCallback(cleanupGoldAwardDisplayTask);
     setCallback(updateGoldAwardDisplay);
 }
-
-const char D_8009E894_9F494[];
-
-typedef struct TotalGoldDisplayState TotalGoldDisplayState;
-extern void initTotalGoldDisplayTask(TotalGoldDisplayState *);
 
 void updateGoldAwardDisplay(GoldAwardDisplayState *arg0) {
     char buf[24];
@@ -1294,21 +1459,6 @@ void cleanupGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
-
-struct TotalGoldDisplayState {
-    s16 x;
-    s16 y;
-    void *spriteAsset;
-    s16 spriteIndex;
-    u8 padA[0x4];
-    u8 unkE;
-    u8 padF;
-    void *digitAsset;
-    s32 alpha;
-};
-
-void updateTotalGoldDisplay(TotalGoldDisplayState *arg0);
-void cleanupTotalGoldDisplayTask(Struct_func_8004DCC4 *);
 
 void initTotalGoldDisplayTask(TotalGoldDisplayState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
@@ -1392,22 +1542,6 @@ void cleanupTotalGoldDisplayTask(Struct_func_8004DCC4 *arg0) {
     arg0->unk10 = freeNodeMemory(arg0->unk10);
 }
 
-typedef struct {
-    s16 x;
-    s16 y;
-    void *spriteAsset;
-    s16 spriteIndex;
-    u8 padA[0x4];
-    u8 unkE;
-    u8 padF;
-    void *digitAsset;
-    s32 alpha;
-    Player *player;
-} TotalLapDisplayState;
-
-void updateTotalLapDisplay(TotalLapDisplayState *state);
-void cleanupTotalLapDisplayTask(Struct_func_8004DCC4 *);
-
 void initTotalLapDisplayTask(TotalLapDisplayState *state) {
     GameSessionContext *global;
 
@@ -1481,31 +1615,6 @@ void spawnTotalLapDisplayTask(Player *player) {
         task->unk18 = player;
     }
 }
-
-typedef struct {
-    s16 screenX;
-    s16 screenY;
-    void *spriteAsset;
-    s16 spriteFrame;
-    u8 lifetime;
-    u8 padB;
-    s16 playerIndex;
-    s16 useSmallSprite;
-    u16 animFrame;
-    s16 posX;
-    s16 posY;
-    s16 waveAmplitude;
-    s16 velocityX;
-    s16 velocityY;
-    s16 wavePhase;
-    s16 driftTimer;
-} VictorySnowflakeState;
-
-void cleanupVictorySnowflake(VictorySnowflakeState *state);
-void updateVictorySnowflakeWave(VictorySnowflakeState *state);
-void renderVictorySnowflake(VictorySnowflakeState *state);
-void renderVictorySnowflakeSmall(VictorySnowflakeState *state);
-void updateVictorySnowflakeDrift(VictorySnowflakeState *state);
 
 void initVictorySnowflake(VictorySnowflakeState *state) {
     u8 movementType;
@@ -1664,19 +1773,6 @@ void cleanupVictorySnowflake(VictorySnowflakeState *state) {
     state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
 
-typedef struct {
-    s16 playerIndex;
-    s16 useSmallSprite;
-} VictorySnowflakeSpawnArgs;
-
-typedef struct {
-    u8 pad0[0xC];
-    s16 playerIndex;
-    s16 useSmallSprite;
-} VictorySnowflakeTaskState;
-
-extern u16 D_8009ADE0_9B9E0;
-
 void conditionalSpawnVictorySnowflake(VictorySnowflakeSpawnArgs *args) {
     VictorySnowflakeTaskState *task;
 
@@ -1698,16 +1794,6 @@ void spawnVictorySnowflakes(s16 playerIndex, s16 useSmallSprite) {
         task->useSmallSprite = useSmallSprite;
     }
 }
-
-typedef struct {
-    u8 pad0[0x4];
-    void *spriteAsset;
-    u8 pad8[0x1C];
-    void *backgroundAsset;
-} PauseMenuCleanupState;
-
-void renderPauseMenuDisplay(PauseMenuDisplayState *);
-void cleanupPauseMenuDisplayTask(PauseMenuCleanupState *);
 
 void initPauseMenuDisplayTask(PauseMenuDisplayState *state) {
     s32 i;
@@ -1761,34 +1847,6 @@ void cleanupPauseMenuDisplayTask(PauseMenuCleanupState *state) {
     state->spriteAsset = freeNodeMemory(state->spriteAsset);
     state->backgroundAsset = freeNodeMemory(state->backgroundAsset);
 }
-
-typedef struct {
-    u8 pad0[0x10];
-    void *gameState;
-} ShotScoreDisplayAllocation;
-
-typedef struct {
-    u8 pad0[0x17C3];
-    u8 itemCount;
-} ShotScoreData;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    void *spriteAsset;
-    s16 spriteFrame;
-    s16 padA;
-} ShotScoreElement;
-
-typedef struct {
-    ShotScoreElement elements[10];
-    s16 spriteGroupIndex;
-    s16 displayedCount;
-    s16 animDelayCounter;
-} ShotScoreDisplayState;
-
-void updateShotScoreDisplay(ShotScoreDisplayState *);
-void cleanupShotScoreDisplayTask(ShotScoreDisplayState *);
 
 void initShotScoreDisplayTask(ShotScoreDisplayState *arg0) {
     ShotScoreDisplayAllocation *allocation = (ShotScoreDisplayAllocation *)getCurrentAllocation();
@@ -1858,9 +1916,6 @@ void cleanupShotScoreDisplayTask(ShotScoreDisplayState *arg0) {
     arg0->elements[0].spriteAsset = freeNodeMemory(arg0->elements[0].spriteAsset);
 }
 
-void updateShotCrossScoreDisplay(ShotCrossScoreDisplayState *arg0);
-void cleanupShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0);
-
 void initShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
     getCurrentAllocation();
     arg0->spriteAsset = loadAsset_34F9A0();
@@ -1898,9 +1953,6 @@ void spawnShotCrossScoreDisplayTask(void *arg0) {
         task->player = arg0;
     }
 }
-
-void updateShotCrossItemCountDisplay(ShotCrossItemCountDisplayState *arg0);
-void cleanupShotCrossItemCountDisplayTask(ShotCrossItemCountDisplayState *arg0);
 
 void initShotCrossItemCountDisplayTask(ShotCrossItemCountDisplayState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
@@ -2027,18 +2079,6 @@ void cleanupShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-typedef struct {
-    s16 x;
-    s16 y;
-    void *spriteAsset;
-    s16 spriteFrame;
-    u8 padA[0x2];
-    s16 flashState;
-} SuccessMessageDisplayState;
-
-void updateSuccessMessageDisplay(SuccessMessageDisplayState *);
-void cleanupSuccessMessageDisplayTask(ShotCrossCountdownTimerState *);
-
 void initSuccessMessageDisplayTask(SuccessMessageDisplayState *state) {
     if (state->flashState == 0) {
         state->spriteAsset = loadAsset_34CB50();
@@ -2069,11 +2109,6 @@ void cleanupSuccessMessageDisplayTask(ShotCrossCountdownTimerState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
-typedef struct {
-    u8 _pad[0xC];
-    s16 initDelay;
-} SuccessMessageSpawnState;
-
 void spawnSuccessMessageDisplayTask(s16 delayFrames) {
     SuccessMessageSpawnState *task =
         (SuccessMessageSpawnState *)scheduleTask(&initSuccessMessageDisplayTask, 1, 1, 0xE6);
@@ -2100,11 +2135,6 @@ void initBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
     setCleanupCallback(cleanupBonusGoldDisplayTask);
     setCallback(updateBonusGoldDisplay);
 }
-
-typedef struct {
-    s16 alphaValue_hi;
-    s16 alpha_lo;
-} BonusGoldDisplayState_AlphaSplit;
 
 void updateBonusGoldDisplay(BonusGoldDisplayState *arg0) {
     char buf[16];
@@ -2163,14 +2193,6 @@ void cleanupBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
-
-void updateRaceTimerDisplay(RaceTimerState *arg0);
-void cleanupRaceTimerDisplay(ShotCrossCountdownTimerState *arg0);
-
-const char D_8009E8D4_9F4D4[];
-const char D_8009E8E0_9F4E0[];
-const char D_8009E8EC_9F4EC[];
-const char D_8009E8F8_9F4F8[];
 
 void initRaceTimerDisplay(RaceTimerState *arg0) {
     arg0->elapsedTicks = 0x4293C;
@@ -2255,11 +2277,6 @@ void cleanupRaceTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-typedef struct {
-    u8 pad0[0x10];
-    void *players;
-} SecondaryItemAllocation;
-
 void initSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0) {
     SecondaryItemAllocation *alloc = getCurrentAllocation();
     s32 index = arg0->playerIndex;
@@ -2286,17 +2303,6 @@ void updateSecondaryItemDisplay(SecondaryItemDisplayState *state) {
 void cleanupSecondaryItemDisplayTask(SecondaryItemDisplayState *state) {
     state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
-
-void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *);
-void cleanupSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *);
-
-const char D_8009E904_9F504[];
-const char D_8009E914_9F514[];
-
-typedef struct {
-    u8 pad[0x54];
-    s32 elapsedTicks;
-} SkillGameTimerAllocation;
 
 void initSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     arg0->digitAsset = loadCompressedData(&font_race_timer_ROM_START, &_3F6BB0_ROM_START, 0x508);
@@ -2348,27 +2354,6 @@ void cleanupSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-const char sTrickPointsFormat[];
-
-typedef struct {
-    s16 padding;       // 0x0 - unused
-    s16 y;             // 0x2 - Y position
-    void *spriteAsset; // 0x4
-    s16 spriteFrame;   // 0x8
-    u8 padA[0x2];
-    void *digitAsset;  // 0xC
-    char scoreText[8]; // 0x10
-    s32 score;         // 0x18 - trick points to display
-    s16 x;             // 0x1C - X position (animated)
-    s16 holdTimer;     // 0x1E - frames to hold display
-    s16 animAngle;     // 0x20 - animation angle
-} TrickPointsDisplayState;
-
-void cleanupTrickPointsDisplayTask(ShotCrossCountdownTimerState *state);
-void updateTrickPointsSlideIn(TrickPointsDisplayState *state);
-void renderTrickPointsDisplay(TrickPointsDisplayState *state);
-void updateTrickPointsSlideOut(TrickPointsDisplayState *state);
-
 void initTrickPointsDisplayTask(TrickPointsDisplayState *state) {
     getCurrentAllocation();
     state->spriteAsset = loadAsset_3505F0();
@@ -2398,8 +2383,6 @@ void renderTrickPointsDisplay(TrickPointsDisplayState *state) {
     debugEnqueueCallback(8, 6, renderSpriteFrame, state);
     drawNumericString(state->scoreText, temp_s0, state->y, 0xFF, state->digitAsset, 8, 6);
 }
-
-void updateTrickPointsHold(TrickPointsDisplayState *state);
 
 void updateTrickPointsSlideIn(TrickPointsDisplayState *state) {
     s32 sinVal;
@@ -2448,9 +2431,6 @@ void showTrickPointsDisplay(s32 arg0) {
         task->score = arg0;
     }
 }
-
-void updateShotCrossSkillMeterDisplay(ShotCrossItemCountDisplayState *);
-void cleanupShotCrossSkillMeterDisplayTask(ShotCrossItemCountDisplayState *);
 
 void initShotCrossSkillMeterDisplayTask(ShotCrossItemCountDisplayState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
