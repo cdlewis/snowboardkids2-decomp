@@ -259,7 +259,7 @@ void updateSaveSlotSelectionScreen(void) {
     switch (state->menuState) {
         case 0x28: {
             u16 counter = state->selectionAnimState;
-            eepromReadAsync(counter & 0xFF, (u8 *)state + ((counter & 0xFFFF) * 0x5C + 0x938));
+            eepromReadAsync(counter & 0xFF, (u8 *)&state->slotData[counter & 0xFFFF]);
         }
             state->menuState = 0x29;
             break;
@@ -488,8 +488,7 @@ void updateSaveSlotSelectionScreen(void) {
                         i += 1;
                     } while (i < 2);
                     {
-                        void *slotModel;
-                        slotModel = (u8 *)state + 0x760;
+                        ViewportNode *slotModel = &state->slotModels[3];
                         state->slideOffset = 0x78;
                         setModelCameraTransform(
                             slotModel,
@@ -605,7 +604,7 @@ void updateSaveSlotSelectionScreen(void) {
                 if (labelsTask != NULL) {
                     labelsTask->slotIndex = state->saveSlotIndex;
                 }
-                setViewportOverlayRgbAndEnable((ViewportNode *)((u8 *)state + 0x760), 0, 0, 0);
+                setViewportOverlayRgbAndEnable(&state->slotModels[3], 0, 0, 0);
             }
             break;
         case 0x15:
