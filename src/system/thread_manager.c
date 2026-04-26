@@ -15,12 +15,6 @@ typedef struct {
     char padding[61];
     OSMesg messageQueue;
     OSMesg message;
-} eventQueue2Response;
-
-typedef struct {
-    char padding[61];
-    OSMesg messageQueue;
-    OSMesg message;
     void *unk48;
     u16 unk4C;
     u16 unk4E;
@@ -32,13 +26,6 @@ typedef struct {
     OSTask *task;
     OSTask *pendingTask;
 } eventQueue1_message;
-
-// Function declarations (static - internal use only)
-
-static void thread_function_1(void *);
-static void thread_function_2(void *);
-static void thread_function_3(void *);
-static void thread_function_4(void *);
 
 // data
 int vertical_retrace_message[3] = { 0x5, 0, 0 };
@@ -76,6 +63,13 @@ extern OSMesgQueue taskCompletionQueue;
 extern OSMesgQueue eventQueue3;
 extern OSMesgQueue frameBufferQueue;
 extern OSMesgQueue eventQueue4;
+
+// Function declarations (static - internal use only)
+
+static void thread_function_1(void *);
+static void thread_function_2(void *);
+static void thread_function_3(void *);
+static void thread_function_4(void *);
 
 void initialize_video_and_threads(s32 viMode) {
     osCreateViManager(OS_PRIORITY_VIMGR);
@@ -320,7 +314,7 @@ static void thread_function_3(void *arg) {
         OSMesg message;
     } stack;
     OSMesg frameBufferQueueMessage;
-    eventQueue2Response *temp;
+    FrameInfo *temp;
 
     stack.eventQueueOneMessage = (OSMesg)0xB;
 
