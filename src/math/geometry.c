@@ -47,6 +47,18 @@ typedef struct {
     s32 scale_frac;
 } N64MatrixParts;
 
+// Expected memory layout for arg1 of transformVectorRelative:
+// - 3x3 s16 matrix at offset 0 (18 bytes)
+// - 2 bytes padding at offset 18
+// - Vec3i position at offset 20 (0x14)
+typedef struct {
+    s16 m[3][3];
+    s16 _pad;
+    Vec3i position;
+} Matrix3x3AndPosition;
+
+typedef void (*CreateXRotS16)(s16 matrix[3][3], s16 angle);
+
 s32 approximateSin(s16 inputAngle) {
     u16 temp_a0;
     inputAngle = inputAngle & 0x1FFF;
@@ -796,16 +808,6 @@ void transformVector3(Vec3i *arg0, Transform3D *arg1, Vec3i *arg2) {
     arg2->z = int1 + (frac2 >> 13);
 }
 
-// Expected memory layout for arg1:
-// - 3x3 s16 matrix at offset 0 (18 bytes)
-// - 2 bytes padding at offset 18
-// - Vec3i position at offset 20 (0x14)
-typedef struct {
-    s16 m[3][3];
-    s16 _pad;
-    Vec3i position;
-} Matrix3x3AndPosition;
-
 void transformVectorRelative(void *arg0, void *arg1, void *arg2) {
     Vec3i diff;
     Vec3i *input = arg0;
@@ -1001,8 +1003,6 @@ void func_mulMatrix3x3T(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2)
         }
     }
 }
-
-typedef void (*CreateXRotS16)(s16 matrix[3][3], s16 angle);
 
 void createViewportTransform(
     void *output,
