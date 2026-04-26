@@ -1,3 +1,4 @@
+#include "race/position_markers.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "data/asset_metadata.h"
@@ -20,14 +21,6 @@ typedef struct {
 } PlayerIndicatorTask;
 
 typedef struct {
-    u8 padding[0x8];
-    s16 yPosition;
-    s16 padding2;
-    s16 scaleX;
-    s16 scaleY;
-} PushStartTextState;
-
-typedef struct {
     u8 _pad[0x9F0];
     s16 unk9F0;
     u8 _pad2[0x1C6];
@@ -45,7 +38,58 @@ typedef struct {
     s32 unk38;
 } PlayerIndicatorSpriteTask;
 
+typedef struct {
+    u8 high;
+    u8 low;
+} Bytes;
+
+typedef union {
+    s16 asS16;
+    Bytes asBytes;
+} S16OrBytes;
+
+typedef struct {
+    void *graphicAsset;
+    void *textAsset;
+    s16 yPosition;
+    s16 useGraphicMode;
+    S16OrBytes scaleX;
+    S16OrBytes scaleY;
+    S16OrBytes pulseAlpha;
+    s16 pulseDirection;
+} PushStartPromptTask;
+
+typedef struct {
+    /* 0x00 */ loadAssetMetadata_arg sprite;
+    /* 0x1C */ s32 pad1C;
+    /* 0x20 */ Vec3i worldPos;
+    /* 0x2C */ Vec3i velocity;
+} ConfettiParticle; /* 0x38 bytes */
+
+typedef struct {
+    /* 0x00 */ void *particleAsset;
+    /* 0x04 */ ConfettiParticle *particles;
+    /* 0x08 */ ViewportNode *cameraNode;
+    /* 0x0C */ Vec3i lastCameraPos;
+    /* 0x18 */ s16 frameCounter;
+    /* 0x1A */ s16 particleCount;
+    /* 0x1C */ u8 pauseWhenPaused;
+} ConfettiEffectTask;
+
+void updateStartGate(StartGate *);
+void cleanupStartGate(StartGate *);
+void updatePushStartText(PushStartPromptTask *);
+void updatePushStartGraphic(PushStartPromptTask *);
+void cleanupPushStartPrompt(PushStartPromptTask *);
+void updateRacePlayerIndicatorSprite(PlayerIndicatorSpriteTask *arg0);
+void awaitPlayerIndicatorReady(PlayerIndicatorSpriteTask *arg0);
+void cleanupPlayerIndicator(PlayerIndicatorTask *arg0);
+void setupConfettiParticles(ConfettiEffectTask *task);
+void updateConfettiParticles(ConfettiEffectTask *task);
+void cleanupConfettiEffect(ConfettiEffectTask *task);
+
 extern s32 gFrameCounter;
+extern u8 gConnectedControllerMask;
 
 Vec3i gIndicatorSpriteOffset = { 0x00000000, 0x00200000, 0x00000000 };
 
@@ -61,87 +105,6 @@ u32 D_80090860_91460[] = {
     0xFFFE0002, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00020002, 0x00000000, 0x03F0FFF0, 0xFFFFFFFF,
     0x0002FFFE, 0x00000000, 0x03F003F0, 0xFFFFFFFF, 0xFFFEFFFE, 0x00000000, 0xFFF003F0, 0xFFFFFFFF,
 };
-
-// Start gate display object structure (3 parts: main gate, left door, right door)
-// Each part is a DisplayListObject with transform, display lists, and segment pointers
-typedef struct {
-    /* Main gate structure (offset 0x00) */
-    Transform3D rotationMatrix;         // 0x00-0x1F, with position at 0x14-0x1F
-    DisplayLists *mainGateDisplayLists; // 0x20
-    void *mainGateSegment1;             // 0x24 - uncompressed asset
-    void *mainGateSegment2;             // 0x28 - compressed asset
-    s32 mainGateSegment3;               // 0x2C
-    u8 pad[0xC];
-    /* Left door structure (offset 0x3C) */
-    Transform3D leftDoorTransform;      // 0x3C
-    DisplayLists *leftDoorDisplayLists; // 0x5C
-    void *leftDoorSegment1;             // 0x60
-    void *leftDoorSegment2;             // 0x64
-    s32 leftDoorSegment3;               // 0x68
-    u8 pad2[0xC];
-    /* Right door structure (offset 0x78) */
-    Transform3D rightDoorTransform;      // 0x78
-    DisplayLists *rightDoorDisplayLists; // 0x98
-    void *rightDoorSegment1;             // 0x9C
-    void *rightDoorSegment2;             // 0xA0
-    s32 rightDoorSegment3;               // 0xA4
-    u8 pad3[0xC];
-    s16 gateRotation;   // 0xB4
-    s16 animationState; // 0xB6
-    s16 pauseTimer;     // 0xB8
-} StartGate;
-
-void updateStartGate(StartGate *);
-void updatePushStartText(PushStartTextState *);
-void updateRacePlayerIndicatorSprite(PlayerIndicatorSpriteTask *arg0);
-
-typedef struct {
-    void *unk0;
-} func_80040948_41548_arg;
-
-typedef struct {
-    u8 _pad[0x24];
-    void *uncompressedAsset; // 0x24 - same as mainGateSegment1
-    void *compressedAsset;   // 0x28 - same as mainGateSegment2
-} StartGateCleanupArg;
-
-void cleanupStartGate(StartGateCleanupArg *);
-
-typedef struct {
-    u8 high;
-    u8 low;
-} Bytes;
-
-typedef union {
-    s16 asS16;
-    Bytes asBytes;
-} S16OrBytes;
-
-typedef union {
-    s16 asS16;
-    Bytes asBytes;
-} S16OrBytesC;
-
-typedef union {
-    s16 asS16;
-    Bytes asBytes;
-} S16OrBytesE;
-
-typedef struct {
-    void *graphicAsset;
-    void *textAsset;
-    s16 yPosition;
-    s16 useGraphicMode;
-    S16OrBytesC scaleX;
-    S16OrBytesE scaleY;
-    S16OrBytes pulseAlpha;
-    s16 pulseDirection;
-} PushStartPromptTask;
-
-void updatePushStartGraphic(PushStartPromptTask *);
-void cleanupPushStartPrompt(PushStartPromptTask *);
-void awaitPlayerIndicatorReady(PlayerIndicatorSpriteTask *arg0);
-void cleanupPlayerIndicator(func_80040948_41548_arg *arg0);
 
 void initPlayerIndicator(PlayerIndicatorTask *task) {
     GameState *gameState = (GameState *)getCurrentAllocation();
@@ -189,8 +152,8 @@ void updateRacePlayerIndicatorSprite(PlayerIndicatorSpriteTask *arg0) {
     enqueueTexturedBillboardSprite(arg0->unk24->unkBB8, (TexturedBillboardSprite *)temp_s0);
 }
 
-void cleanupPlayerIndicator(func_80040948_41548_arg *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+void cleanupPlayerIndicator(PlayerIndicatorTask *arg0) {
+    arg0->assetTable = freeNodeMemory(arg0->assetTable);
 }
 
 void spawnPlayerIndicatorTask(void *cleanupArg) {
@@ -314,9 +277,9 @@ void updateStartGate(StartGate *gate) {
     }
 }
 
-void cleanupStartGate(StartGateCleanupArg *arg) {
-    arg->uncompressedAsset = freeNodeMemory(arg->uncompressedAsset);
-    arg->compressedAsset = freeNodeMemory(arg->compressedAsset);
+void cleanupStartGate(StartGate *gate) {
+    gate->mainGateSegment1 = freeNodeMemory(gate->mainGateSegment1);
+    gate->mainGateSegment2 = freeNodeMemory(gate->mainGateSegment2);
 }
 
 void initPushStartPrompt(PushStartPromptTask *task) {
@@ -336,15 +299,15 @@ void initPushStartPrompt(PushStartPromptTask *task) {
 
 const char pushStartButtonText[] = "PUSH START BUTTON";
 
-void updatePushStartText(PushStartTextState *state) {
+void updatePushStartText(PushStartPromptTask *task) {
     if (gFrameCounter & 8) {
         enqueueTextRender(
             -0x44,
-            state->yPosition,
+            task->yPosition,
             0,
             (u8 *)&pushStartButtonText,
-            (s32)state->scaleX,
-            (s32)state->scaleY
+            (s32)task->scaleX.asS16,
+            (s32)task->scaleY.asS16
         );
     }
 }
@@ -394,8 +357,6 @@ void cleanupPushStartPrompt(PushStartPromptTask *task) {
     task->textAsset = freeNodeMemory(task->textAsset);
 }
 
-extern u8 gConnectedControllerMask;
-
 void spawnPushStartPrompt(s32 arg0, s16 yPosition, u8 arg2, u8 arg3, s16 scaleX, s16 scaleY) {
     PushStartPromptTask *task;
 
@@ -413,27 +374,6 @@ void spawnPushStartPrompt(s32 arg0, s16 yPosition, u8 arg2, u8 arg3, s16 scaleX,
         }
     }
 }
-
-typedef struct {
-    /* 0x00 */ loadAssetMetadata_arg sprite;
-    /* 0x1C */ s32 pad1C;
-    /* 0x20 */ Vec3i worldPos;
-    /* 0x2C */ Vec3i velocity;
-} ConfettiParticle; /* 0x38 bytes */
-
-typedef struct {
-    /* 0x00 */ void *particleAsset;
-    /* 0x04 */ ConfettiParticle *particles;
-    /* 0x08 */ ViewportNode *cameraNode;
-    /* 0x0C */ Vec3i lastCameraPos;
-    /* 0x18 */ s16 frameCounter;
-    /* 0x1A */ s16 particleCount;
-    /* 0x1C */ u8 pauseWhenPaused;
-} ConfettiEffectTask;
-
-void setupConfettiParticles(ConfettiEffectTask *task);
-void updateConfettiParticles(ConfettiEffectTask *task);
-void cleanupConfettiEffect(ConfettiEffectTask *task);
 
 void initConfettiEffect(ConfettiEffectTask *task) {
     s16 count;
