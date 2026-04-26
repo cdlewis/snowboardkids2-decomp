@@ -74,6 +74,10 @@ typedef struct {
     /* 0x1C */ Mtx *matrix;
 } AlphaSpriteState;
 
+typedef struct {
+    DataTable_19E80 *fontDataTable;
+} FontSystemInitData;
+
 extern s32 gLookAtPtr;
 extern gActiveViewport_arg *gActiveViewport;
 extern Gfx *gRegionAllocPtr;
@@ -82,6 +86,9 @@ extern void *D_800A2D40_A3940;
 extern void *D_800A2D44_A3944;
 extern void *D_800A2D48_A3948;
 extern Gfx D_8009A780_9B380[];
+extern u32 D_800A2D4C_A394C;
+extern u32 D_800A2D50_A3950;
+extern u8 D_800A2D54_A3954;
 
 Gfx gAlphaSpriteSetupDL[] = {
     gsSPClearGeometryMode(
@@ -97,9 +104,6 @@ Gfx gAlphaSpriteSetupDL[] = {
     gsDPSetTextureLUT(G_TT_RGBA16),
     gsSPEndDisplayList(),
 };
-extern u32 D_800A2D4C_A394C;
-extern u32 D_800A2D50_A3950;
-extern u8 D_800A2D54_A3954;
 
 void renderCameraRelativeDisplayList(DisplayListObject *arg0);
 void renderTexturedBillboardSprite(TexturedSpriteState *);
@@ -2378,10 +2382,6 @@ void initializeOverlaySystem(void) {
     *temp_s0 = loadCompressedData(&_215D70_ROM_START, &_215D70_ROM_END, 0x918);
     setGameStateHandler(&initializeFontSystemAndTransitionToMainMenu);
 }
-
-typedef struct {
-    DataTable_19E80 *fontDataTable;
-} FontSystemInitData;
 
 void initializeFontSystemAndTransitionToMainMenu(void) {
     FontSystemInitData *data = (FontSystemInitData *)getCurrentAllocation();
