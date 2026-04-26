@@ -102,10 +102,6 @@ typedef struct {
 } BossHomingProjectileTask;
 
 typedef struct {
-    void *projectileAsset;
-} BossHomingProjectileCleanupArg;
-
-typedef struct {
     u8 _pad0[0x4];
     u8 metadata[0x4];
     Vec3i position;
@@ -130,7 +126,7 @@ typedef struct {
 
 typedef struct {
     void *taskNode;
-} BossHomingProjectileVariant1CleanupArg;
+} BossHomingProjectileVariantCleanupArg;
 
 typedef struct {
     u8 pad[0x24];
@@ -262,10 +258,6 @@ typedef struct {
     TexturedBillboardSprite displayListState;
     s16 playerIndex;
 } BossHomingProjectileVariant1UpdateArg;
-
-typedef struct {
-    void *taskNode;
-} BossHomingProjectileVariant2CleanupArg;
 
 typedef struct {
     void *assetData; /* 0x0 - Asset data pointer */
@@ -522,10 +514,6 @@ typedef struct {
     u8 _pad0[0x76];
     u8 unk76;
 } AllocationData;
-
-typedef struct {
-    void *assetData;
-} PlayerAuraCleanupState;
 
 typedef struct {
     void *assetData;
@@ -876,7 +864,7 @@ void cleanupCourseSceneryTask(CourseSceneryCleanupArg *);
 void resetFlyingSceneryPosition(FlyingSceneryState *);
 void updateFlyingSceneryReturnGlideStep(FlyingSceneryState *state);
 void updateFlyingSceneryDescendingStep(FlyingSceneryState *state);
-void cleanupBossHomingProjectileVariant2Task(BossHomingProjectileVariant2CleanupArg *arg0);
+void cleanupBossHomingProjectileVariant2Task(BossHomingProjectileVariantCleanupArg *arg0);
 void cleanupPanelProjectileTask(s32 **);
 void cleanupHomingProjectileTask(s32 **);
 void updateHomingProjectileMovement(HomingProjectileUpdateArg *arg0);
@@ -888,12 +876,12 @@ void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *);
 void dispatchSkyRenderCallback(ScheduledTask *);
 void updateItemHomingProjectileMovement(ItemHomingProjectileMoveArg *);
 void renderSceneAnimationTask(SceneAnimationTaskNew *arg0);
-void cleanupBossHomingProjectileTask(BossHomingProjectileCleanupArg *);
+void cleanupBossHomingProjectileTask(BossHomingProjectileTask *);
 void updateItemHomingProjectileImpact(ItemHomingProjectileImpactArg *);
 void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0);
 void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0);
 void initPanelProjectileMovement(PanelProjectileInitArg *arg0);
-void cleanupBossHomingProjectileVariant1Task(BossHomingProjectileVariant1CleanupArg *arg0);
+void cleanupBossHomingProjectileVariant1Task(BossHomingProjectileVariantCleanupArg *arg0);
 void spawnBossHomingProjectileVariant1(BossHomingProjectileSpawnArg *);
 void bounceBossHomingProjectileVariant1(BossHomingProjectileVariant1BounceArg *);
 void spawnBossHomingProjectileVariant2(BossHomingProjectileSpawnArg *arg0);
@@ -924,7 +912,7 @@ void updatePlayerAuraHolding(PlayerAuraState *);
 void loadPlayerAuraData(PlayerAuraState *);
 void updatePlayerAuraRising(PlayerAuraState *);
 void updatePlayerAuraDescending(PlayerAuraState *);
-void cleanupPlayerAuraTask(PlayerAuraCleanupState *);
+void cleanupPlayerAuraTask(PlayerAuraTask *);
 void renderGoldCoins(GoldCoinRenderState *state);
 void cleanupPlayerHaloTask(PlayerHaloTask *arg0);
 void loadPlayerHaloData(PlayerHaloState *arg0);
@@ -2302,7 +2290,7 @@ loop:
     } while (i < 4);
 }
 
-void cleanupPlayerAuraTask(PlayerAuraCleanupState *state) {
+void cleanupPlayerAuraTask(PlayerAuraTask *state) {
     state->assetData = freeNodeMemory(state->assetData);
 }
 
@@ -3968,7 +3956,7 @@ void bounceBossHomingProjectile(BossHomingProjectileBounceArg *arg0) {
     }
 }
 
-void cleanupBossHomingProjectileTask(BossHomingProjectileCleanupArg *arg0) {
+void cleanupBossHomingProjectileTask(BossHomingProjectileTask *arg0) {
     GameState *gameState;
 
     gameState = (GameState *)getCurrentAllocation();
@@ -4127,7 +4115,7 @@ void bounceBossHomingProjectileVariant1(BossHomingProjectileVariant1BounceArg *a
     }
 }
 
-void cleanupBossHomingProjectileVariant1Task(BossHomingProjectileVariant1CleanupArg *arg0) {
+void cleanupBossHomingProjectileVariant1Task(BossHomingProjectileVariantCleanupArg *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
     allocation->availableHomingProjectileSlots++;
     arg0->taskNode = freeNodeMemory(arg0->taskNode);
@@ -4271,7 +4259,7 @@ void bounceBossHomingProjectileVariant2(BossHomingProjectileVariant2BounceArg *a
     }
 }
 
-void cleanupBossHomingProjectileVariant2Task(BossHomingProjectileVariant2CleanupArg *arg0) {
+void cleanupBossHomingProjectileVariant2Task(BossHomingProjectileVariantCleanupArg *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
     allocation->availableHomingProjectileSlots++;
     arg0->taskNode = freeNodeMemory(arg0->taskNode);
