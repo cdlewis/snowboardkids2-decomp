@@ -77,9 +77,9 @@ typedef struct {
     u8 currentLevel;
     u8 numPlayers;
     u8 characterIDs[4];
-    u8 boardTypes[4];
     u8 costumeIDs[4];
     u8 colorSlots[4];
+    u8 boardTypes[4];
     u8 lapCount;
     u8 pad1A[5];
     u8 battleTimeLimit;
@@ -447,8 +447,7 @@ void initRace(void) {
     s32 unused_mode;
     s32 j;
     s32 unused_offset;
-    u8 characterCount[6];
-    s32 unused_pad2[2];
+    u8 characterCount[12];
     u8 availableCharacters[6];
     s32 unused_pad[2];
 
@@ -616,7 +615,7 @@ void initRace(void) {
     raceState->unk4 = allocateNodeMemory(472 * raceState->humanPlayerCount);
     raceState->unk8 = allocateNodeMemory(472 * raceState->humanPlayerCount);
     raceState->unkC = allocateNodeMemory(472 * raceState->humanPlayerCount);
-    raceState->racers = allocateNodeMemory(3048 * raceState->totalRacers);
+    raceState->racers = allocateNodeMemory(sizeof(RacerConfig) * raceState->totalRacers);
 
     for (i = 0; i < raceState->totalRacers; i++) {
         u8 *racerBytes = (u8 *)&raceState->racers[i];
@@ -635,9 +634,9 @@ void initRace(void) {
     if (raceState->raceType < RACE_TYPE_TRAINING) {
         for (i = 0; i < raceState->activePlayerCount; i++) {
             raceState->racers[i].characterID = D_800AFE8C_A71FC->characterIDs[i];
-            raceState->racers[i].boardType = D_800AFE8C_A71FC->colorSlots[i];
-            raceState->racers[i].costumeID = D_800AFE8C_A71FC->boardTypes[i];
-            raceState->racers[i].colorSlot = D_800AFE8C_A71FC->costumeIDs[i];
+            raceState->racers[i].boardType = D_800AFE8C_A71FC->boardTypes[i];
+            raceState->racers[i].costumeID = D_800AFE8C_A71FC->costumeIDs[i];
+            raceState->racers[i].colorSlot = D_800AFE8C_A71FC->colorSlots[i];
         }
     }
 
