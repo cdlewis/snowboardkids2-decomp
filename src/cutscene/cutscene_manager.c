@@ -16,22 +16,10 @@
 #include "ui/level_preview_3d.h"
 
 typedef struct {
-    u8 padding[0x2D8];
-    void *unk2D8;
-    void *unk2DC;
-    s32 unk2E0;
-} InitCutsceneManager_slot16;
-
-typedef struct {
     u8 _pad0[0x4];
     s32 unk4;
     s32 unk8;
 } SaveDataBuffer;
-
-typedef struct {
-    u8 padding[0x8];
-    void *assetData;
-} CutsceneFadeCleanupArgs;
 
 extern StateEntry *gCutsceneStateTable;
 extern s32 gCutsceneStateTableSize;
@@ -49,8 +37,9 @@ extern char gDebugFrameFormatString[];
 extern CutsceneAssetTable gCutsceneAssetTable[];
 
 extern void initializeCutsceneCommand(void *, void *, s32, s32, s32);
+extern void func_800BB2F4(s32, s32, s32);
 
-void cleanupCutsceneFadeTask(CutsceneFadeCleanupArgs *args);
+void cleanupCutsceneFadeTask(FadeTaskData *task);
 void updateCutsceneFadeTask(FadeTaskData *task);
 
 void enableCutsceneSkip(CutsceneManager *arg0) {
@@ -910,8 +899,6 @@ StateEntry *getStateEntry(u16 arg0) {
     return &gCutsceneStateTable[arg0 + 3];
 }
 
-extern void func_800BB2F4(s32, s32, s32);
-
 /**
  * Renders a vertical menu of cutscene slots with one item highlighted.
  *
@@ -1313,6 +1300,6 @@ void updateCutsceneFadeTask(FadeTaskData *task) {
     }
 }
 
-void cleanupCutsceneFadeTask(CutsceneFadeCleanupArgs *args) {
-    freeNodeMemory(args->assetData);
+void cleanupCutsceneFadeTask(FadeTaskData *task) {
+    freeNodeMemory(task->assetData);
 }
