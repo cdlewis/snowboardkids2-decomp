@@ -859,67 +859,50 @@ insert_entry:
  */
 void reorderCutsceneEvent(u16 eventIndex, u16 oldPreviousIndex, u16 newPreviousIndex) {
     u8 *eventPtr;
-    u32 oldPrevByteOffset;
-    u16 newPrevIdxMasked;
-    u16 eventIdxMasked;
-    u16 oldPrevIdxMasked;
-    u32 eventByteOffset;
+    u32 oldPrevOffset;
+    u16 newPrevIdx;
+    u32 eventOffset;
     u16 nextIdx;
     u16 prevIdx;
-    u8 *tableBase;
-    u8 *tableBase2;
-    u32 newPrevByteOffset;
+    u8 *table;
+    u8 *table2;
+    u32 newPrevOffset;
 
-    // Mask indices to u16 and validate entries exist via getStateEntry calls
-    eventIdxMasked = eventIndex;
-    oldPrevIdxMasked = oldPreviousIndex;
-    newPrevIdxMasked = newPreviousIndex & 0xFFFF;
-    getStateEntry(newPrevIdxMasked);
+    newPrevIdx = newPreviousIndex & 0xFFFF;
+    getStateEntry(newPrevIdx);
 
-    eventByteOffset = eventIdxMasked & 0xFFFF;
-    getStateEntry(eventByteOffset);
+    eventOffset = eventIndex & 0xFFFF;
+    getStateEntry(eventOffset);
 
-    oldPrevByteOffset = oldPrevIdxMasked & 0xFFFF;
-    getStateEntry(oldPrevByteOffset);
+    oldPrevOffset = oldPreviousIndex & 0xFFFF;
+    getStateEntry(oldPrevOffset);
 
-    tableBase = (u8 *)gCutsceneStateTable;
+    table = (u8 *)gCutsceneStateTable;
 
-    // Convert indices to byte offsets (each StateEntry is 64 bytes)
-    oldPrevByteOffset = oldPrevByteOffset << 6;
-    eventByteOffset = eventByteOffset << 6;
+    oldPrevOffset = oldPrevOffset << 6;
+    eventOffset = eventOffset << 6;
 
-    // Read the linked list pointers:
-    // - nextIdx = next_index of old previous entry (offset 0xF8)
-    // - prevIdx = prev_index of event entry (offset 0xFA)
-    // Offsets include 0xC0 (3 * 64 reserved entries) + field offset (0x38/0x3A)
-    nextIdx = *(u16 *)(tableBase + oldPrevByteOffset + 0xF8);
-    eventPtr = tableBase + eventByteOffset;
+    nextIdx = *(u16 *)(table + oldPrevOffset + 0xF8);
+    eventPtr = table + eventOffset;
     prevIdx = *(u16 *)(eventPtr + 0xFA);
 
-    // Unlink event from current position: update next entry's prev_index
     if (nextIdx != 0xFFFF) {
-        *(u16 *)(tableBase + (nextIdx << 6) + 0xFA) = prevIdx;
+        *(u16 *)(table + (nextIdx << 6) + 0xFA) = prevIdx;
     }
 
-    // Unlink event from current position: update prev entry's next_index
     if (prevIdx != 0xFFFF) {
-        u8 *temp = (u8 *)gCutsceneStateTable;
-        *(u16 *)(temp + (prevIdx << 6) + 0xF8) = nextIdx;
+        u8 *t = (u8 *)gCutsceneStateTable;
+        *(u16 *)(t + (prevIdx << 6) + 0xF8) = nextIdx;
     }
 
-    // Insert event after newPreviousIndex:
-    // 1. Get the current next_index of new previous entry
-    // 2. Link new previous entry -> event entry
-    // 3. Link old previous entry -> what was after new previous entry
-    tableBase2 = (u8 *)gCutsceneStateTable;
-    newPrevByteOffset = newPrevIdxMasked << 6;
-    nextIdx = *(u16 *)(tableBase2 + newPrevByteOffset + 0xF8);
-    *(u16 *)(tableBase2 + newPrevByteOffset + 0xF8) = eventIdxMasked;
-    *(u16 *)(tableBase2 + oldPrevByteOffset + 0xF8) = nextIdx;
+    table2 = (u8 *)gCutsceneStateTable;
+    newPrevOffset = newPrevIdx << 6;
+    nextIdx = *(u16 *)(table2 + newPrevOffset + 0xF8);
+    *(u16 *)(table2 + newPrevOffset + 0xF8) = eventIndex;
+    *(u16 *)(table2 + oldPrevOffset + 0xF8) = nextIdx;
 
-    // Update the next entry's prev_index to point to the old previous entry
     if (nextIdx != 0xFFFF) {
-        *(u16 *)(tableBase2 + (nextIdx << 6) + 0xFA) = oldPrevIdxMasked;
+        *(u16 *)(table2 + (nextIdx << 6) + 0xFA) = oldPreviousIndex;
     }
 }
 
