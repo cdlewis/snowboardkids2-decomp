@@ -1,15 +1,9 @@
+#include "effects/scrolling_texture.h"
 #include "assets.h"
 #include "common.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "system/task_scheduler.h"
-
-typedef struct {
-    s8 isComplete;
-    s8 activeLayerCount;
-    s8 layersRemaining;
-    s8 fadeOutTriggered;
-} ScreenTransitionState;
 
 typedef struct {
     void *state;
