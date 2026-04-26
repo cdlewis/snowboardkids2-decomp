@@ -5,15 +5,15 @@
 #include "story/map_events.h"
 #include "system/task_scheduler.h"
 
-extern s32 gControllerInputs;
-
-void awaitStoryMapExtraIntro(void);
-void onStoryMapExtraIntroComplete(void);
-
 typedef struct {
     ViewportNode unk0;
     u16 waitCounter;
 } StoryMapExtraIntroAllocation;
+
+extern s32 gControllerInputs;
+
+void awaitStoryMapExtraIntro(void);
+void onStoryMapExtraIntroComplete(void);
 
 void initStoryMapExtraIntro(void) {
     StoryMapExtraIntroAllocation *temp_s0 = (StoryMapExtraIntroAllocation *)allocateTaskMemory(0x1E0);
