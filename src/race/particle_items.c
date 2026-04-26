@@ -14,30 +14,6 @@
 #include "race/track_collision.h"
 #include "system/task_scheduler.h"
 
-s32 D_8009A6B0_9B2B0[4] = { 0x00000000, 0x010005D8, 0x01000780, 0x00000000 };
-s32 D_8009A6C0_9B2C0[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01000878 };
-s32 D_8009A6D0_9B2D0[4] = { 0x00000000, 0x01000A20, 0x00000000, 0x00000000 };
-s32 D_8009A6E0_9B2E0[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01000D28 };
-s32 D_8009A6F0_9B2F0[4] = { 0x00000000, 0x00000000, 0x01000F58, 0x00000000 };
-s32 D_8009A700_9B300[4] = { 0x00000000, 0x010010F8, 0x00000000, 0x00000000 };
-s32 D_8009A710_9B310[4] = { 0x00000000, 0x01001328, 0x010014E0, 0x00000000 };
-s32 D_8009A720_9B320[4] = { 0x00000000, 0x00000000, 0x010015D8, 0x00000000 };
-s32 D_8009A730_9B330[4] = { 0x00000000, 0x010016C0, 0x00000000, 0x00000000 };
-s32 D_8009A740_9B340[4] = { 0x00000000, 0x00000000, 0x010018A8, 0x00000000 };
-s32 D_8009A750_9B350[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01001A40 };
-s32 D_8009A760_9B360[4] = { 0x00000000, 0x00000000, 0x01001BE0, 0x00000000 };
-s32 D_8009A770_9B370[4] = { 0x00000000, 0x00000000, 0x01001CD8, 0x00000000 };
-Gfx D_8009A780_9B380[] = {
-    { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00210405 } },
-    { .words = { 0xD7000002, 0x80008000 } }, { .words = { 0xE7000000, 0x00000000 } },
-    { .words = { 0xE3001201, 0x00002000 } }, { .words = { 0xE3000A01, 0x00100000 } },
-    { .words = { 0xFC127FFF, 0xFFFFF238 } }, { .words = { 0xE200001C, 0xC8113078 } },
-    { .words = { 0xE3001001, 0x00008000 } }, { .words = { 0xDF000000, 0x00000000 } },
-};
-extern s32 gFrameCounter;
-
-void cleanupStarEffect(void **);
-
 typedef struct {
     u8 _pad0[0x9F0];
     s16 unk9F0[3];
@@ -91,6 +67,11 @@ typedef struct {
 } FallingEffectState;
 
 typedef struct {
+    u8 _pad0[0x3C];
+    void *player;
+} FallingEffectTask;
+
+typedef struct {
     s32 unk0;
     s32 displayList1;
     s32 displayList2;
@@ -139,11 +120,6 @@ typedef struct {
     u8 padding[0x76];
     u8 paused;
 } updateBurstParticles_alloc;
-
-void cleanupShieldEffect(ShieldEffectState *);
-void renderShieldLayer1(ShieldEffectRenderState *);
-void renderShieldLayer2(ShieldEffectRenderState *);
-void renderShieldLayer3(ShieldEffectRenderState *);
 
 typedef struct {
     u8 _pad0[0x4];
@@ -203,8 +179,6 @@ typedef struct {
     /* 0x46 */ s16 playSound;
 } LiftEffectState;
 
-void cleanupFallingEffect(FallingEffectState *);
-
 typedef struct {
     u8 _pad0[0x30];
     u8 unk30[0x14];   /* 0x30 */
@@ -243,6 +217,11 @@ typedef struct {
     /* 0xC8 */ u16 baseRotation;
     /* 0xCA */ u16 wingOscillationAngle;
 } UfoEffectState;
+
+typedef struct {
+    u8 _pad0[0xB4];
+    void *target;
+} UfoEffectTaskMem;
 
 typedef struct {
     s32 unk0;
@@ -294,6 +273,149 @@ typedef struct {
     u8 playSoundFlag;
 } OrbitStarEffectState;
 
+typedef struct {
+    loadAssetMetadata_arg *unk0; // 0x00
+    Vec3i position;              // 0x04-0x0F
+    u8 *data_ptr;                // 0x10
+    void *index_ptr;             // 0x14
+    u8 unk18;                    // 0x18
+    u8 unk19;                    // 0x19
+    u8 unk1A;                    // 0x1A
+    u8 pad1B;                    // 0x1B
+    u8 pad1C[0x4];               // 0x1C-0x1F
+    s32 unk20;                   // 0x20-0x23
+} BurstParticle;                 // size 0x24
+
+typedef struct {
+    BurstParticle particles[6]; // 0x00-0xD7
+    void *assetTable;           // 0xD8
+    s8 particleType;            // 0xDC
+    u8 unkDD;                   // 0xDD
+} BurstEffectState;
+
+typedef struct {
+    u8 pad0[0x434];        /* 0x00 */
+    s32 sourcePosition[3]; /* 0x434 - warp source position (12 bytes) */
+} WarpEffectSource;
+
+typedef struct {
+    s16 matrix[3][3];         /* 0x00 (0x12 bytes: 9 * s16) */
+    u8 pad12[0x2];            /* 0x12 */
+    Vec3i position;           /* 0x14 */
+    void *displayData;        /* 0x20 */
+    void *asset1;             /* 0x24 */
+    void *asset2;             /* 0x28 */
+    s32 unk2C;                /* 0x2C */
+    u8 pad30[0xC];            /* 0x30 */
+    WarpEffectSource *source; /* 0x3C */
+    Player *player;           /* 0x40 */
+    s32 delayFrames;          /* 0x44 */
+    s32 scale;                /* 0x48 */
+    s32 height;               /* 0x4C */
+    s32 velocity;             /* 0x50 */
+} WarpEffectState;
+
+typedef struct {
+    u8 pad0[0x24];
+    void *asset1;
+    void *asset2;
+} WarpEffectCleanupArg;
+
+typedef struct {
+    u8 pad0[0x24];
+    void *unk24;
+    void *unk28;
+} Func432D8Arg;
+
+typedef struct {
+    u8 pad0[0x18];              /* 0x00 */
+    s32 unk18;                  /* 0x18 */
+    u8 pad1C[0x4];              /* 0x1C */
+    void *unk20;                /* 0x20 */
+    void *unk24;                /* 0x24 */
+    void *unk28;                /* 0x28 */
+    s32 unk2C;                  /* 0x2C */
+    u8 pad30[0xC];              /* 0x30 */
+    DisplayListObject orbitObj; /* 0x3C */
+    Player *player;             /* 0x78 */
+    s32 fallVelocity;           /* 0x7C */
+    u16 yRotation;              /* 0x80 */
+    u16 orbitAngle;             /* 0x82 */
+    s16 scale;                  /* 0x84 */
+} PlayerAuraEffectState;
+
+typedef struct {
+    s32 dataOffset;  /* 0x00 - offset to display data */
+    s32 dataCount;   /* 0x04 - count used for calculating display data pointer */
+    s32 pos[3];      /* 0x08 - zone position/translation */
+    u16 pitch;       /* 0x14 - rotation angle X */
+    u16 yaw;         /* 0x16 - rotation angle Y */
+    s16 xMin;        /* 0x18 - minimum X bound */
+    s16 xMax;        /* 0x1A - maximum X bound */
+    s16 unk1C;       /* 0x1C - unused in update function */
+    s16 yOffset;     /* 0x1E - Y offset for bounds checking */
+    s16 zMin;        /* 0x20 - minimum Z bound */
+    s16 zMax;        /* 0x22 - maximum Z bound */
+} PushZoneDataEntry; /* size: 0x24 */
+
+typedef struct {
+    u8 _pad0[0x5C];
+    u8 unk5C;
+} Func44CB4Allocation;
+
+typedef struct {
+    u8 pad0[0x14];     /* 0x00 - rotation matrix */
+    Vec3i position;    /* 0x14 - zone position/translation */
+    void *displayData; /* 0x20 - pointer to display data */
+    void *asset1;      /* 0x24 - uncompressed asset */
+    void *asset2;      /* 0x28 - compressed segment 2 asset */
+    s32 unk2C;         /* 0x2C */
+    u8 pad30[0xC];     /* 0x30 */
+    s16 zoneIndex;     /* 0x3C */
+} PushZoneState;
+
+typedef struct {
+    void *romStart;
+    void *romEnd;
+    s32 decompressedSize;
+} CompressedAssetEntry;
+
+typedef struct {
+    s8 active;      /* 0x00 - 1 when active, set to 0 when processed */
+    s8 type;        /* 0x01 - 0 for primary item, non-zero for secondary */
+    s16 itemId;     /* 0x02 - item ID to give to the player */
+    Vec3i position; /* 0x04 - world position for player detection */
+} ItemTriggerEntry; /* size: 0x10 */
+
+typedef struct {
+    void *matrices;                /* 0x00 - allocated matrix memory for each item */
+    void *vertices;                /* 0x04 - vertex data pointer */
+    ItemTriggerEntry *items;       /* 0x08 - array of item trigger entries */
+    DataTable_19E80 *textureTable; /* 0x0C - texture table for rendering items */
+    s32 *itemData;                 /* 0x10 - loaded item trigger data */
+    s16 courseIndex;               /* 0x14 - course/level index */
+    s16 numItems;                  /* 0x16 - number of item trigger entries */
+} ItemTriggerTaskState;
+
+struct Func45010Arg {
+    void *matrices;     /* 0x00 */
+    u8 pad4[0x8];       /* 0x04 */
+    void *textureTable; /* 0x0C */
+    void *itemData;     /* 0x10 */
+};
+typedef struct Func45010Arg Func45010Arg;
+
+typedef struct {
+    u8 _pad0[0x14];
+    s16 courseIndex;
+} ItemTriggerTaskMem;
+
+void cleanupStarEffect(void **);
+void cleanupShieldEffect(ShieldEffectState *);
+void renderShieldLayer1(ShieldEffectRenderState *);
+void renderShieldLayer2(ShieldEffectRenderState *);
+void renderShieldLayer3(ShieldEffectRenderState *);
+void cleanupFallingEffect(FallingEffectState *);
 void renderUfoEffectWithWings(UfoEffectState *);
 void initUfoEffect(UfoEffectState *);
 void flyInUfoEffect(UfoEffectState *);
@@ -315,7 +437,63 @@ void animateFallingEffectDescent(FallingEffectState *);
 void cleanupSparkleEffect(SparkleEffectState *);
 void updateSparkleEffect(SparkleEffectState *);
 void fadeOutSparkleEffect(SparkleEffectState *);
+void updateShieldEffect(ShieldEffectState *);
+void spawnShieldBurstEffect(Vec3i *);
+void updateBurstParticles(BurstEffectState *);
+void setupBurstParticles(BurstEffectState *);
+void cleanupBurstEffect(BurstEffectState *);
+void updateCrashEffect(CrashEffectState *);
+void cleanupCrashEffect(CrashEffectState *);
+void cleanupLiftEffect(LiftEffectState *);
+void updateLiftEffect(LiftEffectState *);
+void fadeOutLiftEffect(LiftEffectState *);
+void cleanupWarpEffect(WarpEffectCleanupArg *);
+void updateWarpEffect(WarpEffectState *);
+void finishWarpEffect(WarpEffectState *);
+void descendWarpEffect(WarpEffectState *);
+void cleanupPlayerAuraEffect(Func432D8Arg *);
+void func_80044CA4_458A4(Func432D8Arg *);
+void updatePlayerAuraEffect(PlayerAuraEffectState *state);
+void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state);
+void cleanupPlayerFlashEffect(PlayerFlashEffectState *);
+void updatePlayerFlashEffect(PlayerFlashEffectState *);
+void fadeOutPlayerFlashEffect(PlayerFlashEffectState *);
+void cleanupGoldStealEffect(void **);
+void animateGoldStealApproach(GoldStealEffectState *);
+void prepareGoldStealEffect(GoldStealEffectState *);
+void animateGoldStealLoop(GoldStealEffectState *);
+void animateGoldStealTransfer(GoldStealEffectState *);
+void animateGoldStealFinish(GoldStealEffectState *);
+void animateGoldStealRetreat(GoldStealEffectState *);
+void cleanupPushZone(PushZoneState *);
+void updatePushZone(PushZoneState *);
+void setupItemTriggerEntries(ItemTriggerTaskState *);
+void processItemTriggers(ItemTriggerTaskState *);
+void cleanupItemTriggerTask(Func45010Arg *);
+void renderItemTriggers(ItemTriggerTaskState *);
 
+s32 D_8009A6B0_9B2B0[4] = { 0x00000000, 0x010005D8, 0x01000780, 0x00000000 };
+s32 D_8009A6C0_9B2C0[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01000878 };
+s32 D_8009A6D0_9B2D0[4] = { 0x00000000, 0x01000A20, 0x00000000, 0x00000000 };
+s32 D_8009A6E0_9B2E0[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01000D28 };
+s32 D_8009A6F0_9B2F0[4] = { 0x00000000, 0x00000000, 0x01000F58, 0x00000000 };
+s32 D_8009A700_9B300[4] = { 0x00000000, 0x010010F8, 0x00000000, 0x00000000 };
+s32 D_8009A710_9B310[4] = { 0x00000000, 0x01001328, 0x010014E0, 0x00000000 };
+s32 D_8009A720_9B320[4] = { 0x00000000, 0x00000000, 0x010015D8, 0x00000000 };
+s32 D_8009A730_9B330[4] = { 0x00000000, 0x010016C0, 0x00000000, 0x00000000 };
+s32 D_8009A740_9B340[4] = { 0x00000000, 0x00000000, 0x010018A8, 0x00000000 };
+s32 D_8009A750_9B350[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01001A40 };
+s32 D_8009A760_9B360[4] = { 0x00000000, 0x00000000, 0x01001BE0, 0x00000000 };
+s32 D_8009A770_9B370[4] = { 0x00000000, 0x00000000, 0x01001CD8, 0x00000000 };
+Gfx D_8009A780_9B380[] = {
+    { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00210405 } },
+    { .words = { 0xD7000002, 0x80008000 } }, { .words = { 0xE7000000, 0x00000000 } },
+    { .words = { 0xE3001201, 0x00002000 } }, { .words = { 0xE3000A01, 0x00100000 } },
+    { .words = { 0xFC127FFF, 0xFFFFF238 } }, { .words = { 0xE200001C, 0xC8113078 } },
+    { .words = { 0xE3001001, 0x00008000 } }, { .words = { 0xDF000000, 0x00000000 } },
+};
+
+extern s32 gFrameCounter;
 extern s8 starAnimFrameDurations[];
 extern s8 starAnimFrameIndices[];
 extern s32 D_80090964_91564;
@@ -326,6 +504,13 @@ extern s8 D_8009095C_9155C;
 extern s32 D_80090AA0_916A0;
 extern s32 D_80090AAC_916AC;
 extern s8 D_80090950_91550;
+extern loadAssetMetadata_arg D_800908A0_914A0;
+extern Vec3i D_800908E0_914E0[];
+extern PushZoneDataEntry gPushZoneData[];
+extern CompressedAssetEntry D_80090AB8_916B8[];
+extern s32 gLookAtPtr;
+extern s16 gGraphicsMode;
+extern Gfx *gRegionAllocPtr;
 
 void initFallingEffect(FallingEffectState *arg0) {
     getCurrentAllocation();
@@ -387,11 +572,6 @@ void cleanupFallingEffect(FallingEffectState *arg0) {
     arg0->asset2 = freeNodeMemory(arg0->asset2);
 }
 
-typedef struct {
-    u8 _pad0[0x3C];
-    void *player;
-} FallingEffectTask;
-
 void *createFallingEffect(void *arg0) {
     FallingEffectTask *task;
 
@@ -401,9 +581,6 @@ void *createFallingEffect(void *arg0) {
     }
     return task;
 }
-
-void updateShieldEffect(ShieldEffectState *);
-void spawnShieldBurstEffect(Vec3i *);
 
 void initShieldEffect(ShieldEffectState *arg0) {
     getCurrentAllocation();
@@ -497,33 +674,6 @@ void renderShieldLayer3(ShieldEffectRenderState *arg0) {
     arg0->displayList.transform.translation.z = arg0->player->worldPos.z;
     renderOverlayDisplayListCallback(&arg0->displayList);
 }
-
-typedef struct {
-    loadAssetMetadata_arg *unk0; // 0x00
-    Vec3i position;              // 0x04-0x0F
-    u8 *data_ptr;                // 0x10
-    void *index_ptr;             // 0x14
-    u8 unk18;                    // 0x18
-    u8 unk19;                    // 0x19
-    u8 unk1A;                    // 0x1A
-    u8 pad1B;                    // 0x1B
-    u8 pad1C[0x4];               // 0x1C-0x1F
-    s32 unk20;                   // 0x20-0x23
-} BurstParticle;                 // size 0x24
-
-typedef struct {
-    BurstParticle particles[6]; // 0x00-0xD7
-    void *assetTable;           // 0xD8
-    s8 particleType;            // 0xDC
-    u8 unkDD;                   // 0xDD
-} BurstEffectState;
-
-extern loadAssetMetadata_arg D_800908A0_914A0;
-extern Vec3i D_800908E0_914E0[];
-
-void updateBurstParticles(BurstEffectState *);
-void setupBurstParticles(BurstEffectState *);
-void cleanupBurstEffect(BurstEffectState *);
 
 void initBurstEffect(BurstEffectState *state) {
     state->assetTable = load_3ECE40();
@@ -647,9 +797,6 @@ void spawnBurstEffect(Vec3i *position) {
         queueSoundAtPosition(position, 0xE);
     }
 }
-
-void updateCrashEffect(CrashEffectState *);
-void cleanupCrashEffect(CrashEffectState *);
 
 void initCrashEffect(CrashEffectState *arg0) {
     getCurrentAllocation();
@@ -813,10 +960,6 @@ SparkleEffectState *spawnSparkleEffectWithPlayer(void *arg0, s32 arg1) {
     return task;
 }
 
-void cleanupLiftEffect(LiftEffectState *);
-void updateLiftEffect(LiftEffectState *);
-void fadeOutLiftEffect(LiftEffectState *);
-
 void initLiftEffect(LiftEffectState *state) {
     getCurrentAllocation();
     state->displayData = &D_8009A6F0_9B2F0;
@@ -905,37 +1048,6 @@ void *createLiftEffect(Player *player) {
     return task;
 }
 
-typedef struct {
-    u8 pad0[0x434];        /* 0x00 */
-    s32 sourcePosition[3]; /* 0x434 - warp source position (12 bytes) */
-} WarpEffectSource;
-
-typedef struct {
-    s16 matrix[3][3];         /* 0x00 (0x12 bytes: 9 * s16) */
-    u8 pad12[0x2];            /* 0x12 */
-    Vec3i position;           /* 0x14 */
-    void *displayData;        /* 0x20 */
-    void *asset1;             /* 0x24 */
-    void *asset2;             /* 0x28 */
-    s32 unk2C;                /* 0x2C */
-    u8 pad30[0xC];            /* 0x30 */
-    WarpEffectSource *source; /* 0x3C */
-    Player *player;           /* 0x40 */
-    s32 delayFrames;          /* 0x44 */
-    s32 scale;                /* 0x48 */
-    s32 height;               /* 0x4C */
-    s32 velocity;             /* 0x50 */
-} WarpEffectState;
-
-typedef struct {
-    u8 pad0[0x24];
-    void *asset1;
-    void *asset2;
-} WarpEffectCleanupArg;
-
-void cleanupWarpEffect(WarpEffectCleanupArg *);
-void updateWarpEffect(WarpEffectState *);
-
 void initWarpEffect(WarpEffectState *state) {
     if (state->delayFrames == 0) {
         getCurrentAllocation();
@@ -952,9 +1064,6 @@ void initWarpEffect(WarpEffectState *state) {
         state->delayFrames = state->delayFrames - 1;
     }
 }
-
-void finishWarpEffect(WarpEffectState *);
-void descendWarpEffect(WarpEffectState *);
 
 void updateWarpEffect(WarpEffectState *state) {
     GameState *gameState;
@@ -1248,35 +1357,6 @@ StarEffectTask *spawnStarEffectImmediate(void *arg0) {
     return task;
 }
 
-typedef struct {
-    u8 pad0[0x24];
-    void *unk24;
-    void *unk28;
-} Func432D8Arg;
-
-void cleanupPlayerAuraEffect(Func432D8Arg *);
-void func_80044CA4_458A4(Func432D8Arg *);
-
-typedef struct {
-    u8 pad0[0x18];              /* 0x00 */
-    s32 unk18;                  /* 0x18 */
-    u8 pad1C[0x4];              /* 0x1C */
-    void *unk20;                /* 0x20 */
-    void *unk24;                /* 0x24 */
-    void *unk28;                /* 0x28 */
-    s32 unk2C;                  /* 0x2C */
-    u8 pad30[0xC];              /* 0x30 */
-    DisplayListObject orbitObj; /* 0x3C */
-    Player *player;             /* 0x78 */
-    s32 fallVelocity;           /* 0x7C */
-    u16 yRotation;              /* 0x80 */
-    u16 orbitAngle;             /* 0x82 */
-    s16 scale;                  /* 0x84 */
-} PlayerAuraEffectState;
-
-void updatePlayerAuraEffect(PlayerAuraEffectState *state);
-void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state);
-
 void initPlayerAuraEffect(PlayerAuraEffectState *state) {
     getCurrentAllocation();
     state->unk20 = &D_8009A710_9B310;
@@ -1382,10 +1462,6 @@ void *spawnPlayerAuraEffect(Player *player) {
     }
     return task;
 }
-
-void cleanupPlayerFlashEffect(PlayerFlashEffectState *);
-void updatePlayerFlashEffect(PlayerFlashEffectState *);
-void fadeOutPlayerFlashEffect(PlayerFlashEffectState *);
 
 void initPlayerFlashEffect(PlayerFlashEffectState *state) {
     getCurrentAllocation();
@@ -1556,13 +1632,6 @@ void advanceAnimationFrameLooping(GoldStealEffectState *arg0, s8 *arg1) {
     }
 }
 
-void cleanupGoldStealEffect(void **);
-void animateGoldStealApproach(GoldStealEffectState *);
-void prepareGoldStealEffect(GoldStealEffectState *);
-void animateGoldStealLoop(GoldStealEffectState *);
-void animateGoldStealTransfer(GoldStealEffectState *);
-void animateGoldStealFinish(GoldStealEffectState *);
-
 void initGoldStealEffect(void **arg0) {
     *arg0 = load_3ECE40();
     setCleanupCallback(cleanupGoldStealEffect);
@@ -1645,8 +1714,6 @@ void animateGoldStealLoop(GoldStealEffectState *arg0) {
         enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
     }
 }
-
-void animateGoldStealRetreat(GoldStealEffectState *);
 
 void animateGoldStealTransfer(GoldStealEffectState *arg0) {
     EffectTaskState *gameState;
@@ -1854,41 +1921,6 @@ void *spawnGhostEffect(Player *arg0) {
     }
     return task;
 }
-
-typedef struct {
-    s32 dataOffset;  /* 0x00 - offset to display data */
-    s32 dataCount;   /* 0x04 - count used for calculating display data pointer */
-    s32 pos[3];      /* 0x08 - zone position/translation */
-    u16 pitch;       /* 0x14 - rotation angle X */
-    u16 yaw;         /* 0x16 - rotation angle Y */
-    s16 xMin;        /* 0x18 - minimum X bound */
-    s16 xMax;        /* 0x1A - maximum X bound */
-    s16 unk1C;       /* 0x1C - unused in update function */
-    s16 yOffset;     /* 0x1E - Y offset for bounds checking */
-    s16 zMin;        /* 0x20 - minimum Z bound */
-    s16 zMax;        /* 0x22 - maximum Z bound */
-} PushZoneDataEntry; /* size: 0x24 */
-
-extern PushZoneDataEntry gPushZoneData[];
-
-typedef struct {
-    u8 _pad0[0x5C];
-    u8 unk5C;
-} Func44CB4Allocation;
-
-typedef struct {
-    u8 pad0[0x14];     /* 0x00 - rotation matrix */
-    Vec3i position;    /* 0x14 - zone position/translation */
-    void *displayData; /* 0x20 - pointer to display data */
-    void *asset1;      /* 0x24 - uncompressed asset */
-    void *asset2;      /* 0x28 - compressed segment 2 asset */
-    s32 unk2C;         /* 0x2C */
-    u8 pad30[0xC];     /* 0x30 */
-    s16 zoneIndex;     /* 0x3C */
-} PushZoneState;
-
-void cleanupPushZone(PushZoneState *);
-void updatePushZone(PushZoneState *);
 
 void initPushZone(PushZoneState *arg0) {
     Func44CB4Allocation *allocation;
@@ -2247,11 +2279,6 @@ void cleanupUfoEffect(void *arg0) {
     cleanupArg->unk28 = freeNodeMemory(cleanupArg->unk28);
 }
 
-typedef struct {
-    u8 _pad0[0xB4];
-    void *target;
-} UfoEffectTaskMem;
-
 void spawnUfoEffect(void *arg0) {
     UfoEffectTaskMem *task;
 
@@ -2260,37 +2287,6 @@ void spawnUfoEffect(void *arg0) {
         task->target = arg0;
     }
 }
-
-typedef struct {
-    void *romStart;
-    void *romEnd;
-    s32 decompressedSize;
-} CompressedAssetEntry;
-
-extern CompressedAssetEntry D_80090AB8_916B8[];
-
-typedef struct {
-    s8 active;      /* 0x00 - 1 when active, set to 0 when processed */
-    s8 type;        /* 0x01 - 0 for primary item, non-zero for secondary */
-    s16 itemId;     /* 0x02 - item ID to give to the player */
-    Vec3i position; /* 0x04 - world position for player detection */
-} ItemTriggerEntry; /* size: 0x10 */
-
-typedef struct {
-    void *matrices;                /* 0x00 - allocated matrix memory for each item */
-    void *vertices;                /* 0x04 - vertex data pointer */
-    ItemTriggerEntry *items;       /* 0x08 - array of item trigger entries */
-    DataTable_19E80 *textureTable; /* 0x0C - texture table for rendering items */
-    s32 *itemData;                 /* 0x10 - loaded item trigger data */
-    s16 courseIndex;               /* 0x14 - course/level index */
-    s16 numItems;                  /* 0x16 - number of item trigger entries */
-} ItemTriggerTaskState;
-
-void setupItemTriggerEntries(ItemTriggerTaskState *);
-void processItemTriggers(ItemTriggerTaskState *);
-
-typedef struct Func45010Arg Func45010Arg;
-void cleanupItemTriggerTask(Func45010Arg *);
 
 void initItemTriggerTask(ItemTriggerTaskState *arg0) {
     s16 idx;
@@ -2306,8 +2302,6 @@ void initItemTriggerTask(ItemTriggerTaskState *arg0) {
     setCleanupCallback(cleanupItemTriggerTask);
     setCallback(setupItemTriggerEntries);
 }
-
-void renderItemTriggers(ItemTriggerTaskState *);
 
 void setupItemTriggerEntries(ItemTriggerTaskState *arg0) {
     s32 i;
@@ -2409,22 +2403,11 @@ void processItemTriggers(ItemTriggerTaskState *arg0) {
     } while (i < 4);
 }
 
-struct Func45010Arg {
-    void *matrices;     /* 0x00 */
-    u8 pad4[0x8];       /* 0x04 */
-    void *textureTable; /* 0x0C */
-    void *itemData;     /* 0x10 */
-};
-
 void cleanupItemTriggerTask(Func45010Arg *arg0) {
     arg0->matrices = freeNodeMemory(arg0->matrices);
     arg0->textureTable = freeNodeMemory(arg0->textureTable);
     arg0->itemData = freeNodeMemory(arg0->itemData);
 }
-
-extern s32 gLookAtPtr;
-extern s16 gGraphicsMode;
-extern Gfx *gRegionAllocPtr;
 
 void renderItemTriggers(ItemTriggerTaskState *arg0) {
     OutputStruct_19E80 tableEntry;
@@ -2577,11 +2560,6 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
         }
     }
 }
-
-typedef struct {
-    u8 _pad0[0x14];
-    s16 courseIndex;
-} ItemTriggerTaskMem;
 
 void spawnItemTriggerTask(s16 arg0) {
     ItemTriggerTaskMem *task;
