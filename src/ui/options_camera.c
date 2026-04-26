@@ -10,13 +10,6 @@
 #include "text/font_render.h"
 #include "ui/options_menu.h"
 
-extern s32 gControllerInputs;
-
-void updateOptionsMenu(void);
-void onOptionsMenuFadeInComplete(void);
-void onOptionsMenuFadeOutComplete(void);
-void onOptionsMenuExit(void);
-
 typedef struct {
     /* 0x000 */ u8 pad0[0x1D8];
     /* 0x1D8 */ void *assetData;
@@ -27,6 +20,13 @@ typedef struct {
     /* 0x1E8 */ u8 itemValues[4];
     /* 0x1EC */ u8 selectedIndex;
 } MenuAllocation;
+
+extern s32 gControllerInputs;
+
+void updateOptionsMenu(void);
+void onOptionsMenuFadeInComplete(void);
+void onOptionsMenuFadeOutComplete(void);
+void onOptionsMenuExit(void);
 
 void initOptionsMenu(void) {
     MenuAllocation *allocation;
