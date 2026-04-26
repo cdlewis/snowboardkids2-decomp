@@ -1,3 +1,4 @@
+#include "text/font_render.h"
 #include "assets.h"
 #include "common.h"
 #include "system/task_scheduler.h"
