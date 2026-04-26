@@ -78,10 +78,12 @@ typedef struct {
     PlayerDataExt *players;
 } ScriptedCameraAllocation;
 
-void updateChaseCamera(ChaseCameraState *camera);
-void updateOrbitCamera(OrbitCameraState *camera);
-void initScriptedCamera(ScriptedCameraState *camera);
-void updateScriptedCamera(ScriptedCameraState *camera);
+typedef struct {
+    s16 posMode;             /* 0x00 */
+    s16 tgtMode;             /* 0x02 */
+    CameraKeyframe *posData; /* 0x04 */
+    CameraKeyframe *tgtData; /* 0x08 */
+} CameraPath;
 
 Vec3i D_8008FEB0_90AB0 = { 0xFFF00000, 0x00000000, 0x00200000 };
 
@@ -182,13 +184,6 @@ CameraKeyframe D_800901AC_90DAC[] = {
     { 0x012C, 0x0000, 0xD7E192BA, 0x038707A5, 0xD194D367 },
 };
 
-typedef struct {
-    s16 posMode;             /* 0x00 */
-    s16 tgtMode;             /* 0x02 */
-    CameraKeyframe *posData; /* 0x04 */
-    CameraKeyframe *tgtData; /* 0x08 */
-} CameraPath;
-
 CameraPath sCameraPaths[] = {
     { 0, 0, D_8008FEBC_90ABC, NULL             },
     { 0, 1, D_8008FEEC_90AEC, D_8008FF2C_90B2C },
@@ -206,6 +201,10 @@ CameraPath sCameraPaths[] = {
     { 0, 0, D_800901AC_90DAC, NULL             },
     { 0, 0, NULL,             NULL             },
 };
+
+void updateChaseCamera(ChaseCameraState *camera);
+void updateOrbitCamera(OrbitCameraState *camera);
+void updateScriptedCamera(ScriptedCameraState *camera);
 
 void initChaseCameraPosition(ChaseCameraState *camera) {
     GameState *gameState;
