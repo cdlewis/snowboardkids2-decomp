@@ -125,7 +125,6 @@ void updateRotationController(RotationControllerState *state) {
     s32 diffX;
     s32 diffY;
     s16 targetValue;
-    s32 *positionPtr;
 
     model = state->model;
     if (model->isDestroyed == 1) {
@@ -169,7 +168,7 @@ void updateRotationController(RotationControllerState *state) {
     }
     state->currentRotationX = currentX + deltaX;
     deltaY = diffY >> 3;
-    state->currentRotationY = (u16)state->currentRotationY + deltaY;
+    state->currentRotationY += deltaY;
     if (deltaX == 0) {
         state->targetRotationX = 0;
         state->currentRotationX = 0;
@@ -179,18 +178,17 @@ void updateRotationController(RotationControllerState *state) {
         state->currentRotationY = 0;
     }
 
-    positionPtr = (s32 *)&gScaleMatrix.translation;
-    *positionPtr = 0;
-    *(positionPtr + 1) = (s32)0xFFF00000;
-    *(positionPtr + 2) = 0;
+    gScaleMatrix.translation.x = 0;
+    gScaleMatrix.translation.y = -0x100000;
+    gScaleMatrix.translation.z = 0;
 
-    createRotationMatrixYX(&rotationMatrix, (u16)state->currentRotationY, (u16)state->currentRotationX);
+    createRotationMatrixYX(&rotationMatrix, state->currentRotationY, state->currentRotationX);
 
     rotationMatrix.translation.x = 0;
     rotationMatrix.translation.y = 0x100000;
     rotationMatrix.translation.z = 0;
 
-    func_8006B084_6BC84((Transform3D *)(positionPtr - 5), &rotationMatrix, &state->model->unkF0);
+    func_8006B084_6BC84(&gScaleMatrix, &rotationMatrix, &state->model->unkF0);
 }
 
 void cleanupRotationController(void) {
