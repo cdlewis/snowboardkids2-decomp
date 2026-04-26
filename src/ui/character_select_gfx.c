@@ -292,7 +292,7 @@ void updateCharSelectPreviewLighting(CharSelectPreviewModel *, u8);
 void animateCharSelectP2NameReveal(P2NameAnimationState *);
 void animateCharSelectP2NameHide(P2NameHideState *);
 void func_800269C8_275C8(void *);
-void func_80026BAC_277AC(SimpleSpriteEntry *);
+void cleanupBoardSelectCharNames(SimpleSpriteEntry *);
 void initCharSelectIconHideSprites(CharSelectIconHideState *);
 void updateCharSelectIconsLockedState(CharSelectIconHideState *);
 void showCharSelectIcons(CharSelectIconHideState *);
@@ -1830,27 +1830,27 @@ void cleanupBoardSelectArrows(SimpleSpriteEntry *arg0) {
 void updateBoardSelectCharNames(CharacterNameSprite *sprites);
 
 void initBoardSelectCharNames(CharacterNameSprite *sprites) {
-    GameState *gameState;
+    BoardSelectGameState *gameState;
     void *spriteAsset;
     s32 i;
     u16 xPos;
     u16 yPos;
     s32 spriteIdx;
     u8 charIndex;
+    u8 selectionState;
     u8 numPlayers;
     s32 pad[2];
 
-    gameState = (GameState *)getCurrentAllocation();
+    gameState = (BoardSelectGameState *)getCurrentAllocation();
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
-    setCleanupCallback(func_80026BAC_277AC);
+    setCleanupCallback(cleanupBoardSelectCharNames);
 
-    numPlayers = D_800AFE8C_A71FC->numPlayers;
-    xPos = D_8008DE54_8EA54[numPlayers].x;
-    yPos = D_8008DE54_8EA54[numPlayers].y;
+    xPos = D_8008DE54_8EA54[D_800AFE8C_A71FC->numPlayers].x;
+    yPos = D_8008DE54_8EA54[D_800AFE8C_A71FC->numPlayers].y;
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        numPlayers = gameState->unk18A8[i];
-        if (numPlayers == 3) {
+        selectionState = gameState->unk18A8[i];
+        if (selectionState == 3) {
             numPlayers = D_800AFE8C_A71FC->numPlayers;
             if (numPlayers == 1) {
                 xPos += 0x18;
@@ -1858,7 +1858,7 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
             } else {
                 charIndex = D_800AFE8C_A71FC->playerBoardIds[i + 4];
                 spriteIdx = charIndex + 0x23;
-                xPos = *((u16 *)&D_8008DE9C_8EA9C + numPlayers * 2) - *(u16 *)(D_8008DE64_8EA64 + charIndex * 2 + 22);
+                xPos = *((u16 *)&D_8008DE9C_8EA9C + numPlayers * 2) - ((u16 *)&D_8008DE64_8EA64[22])[charIndex];
             }
             sprites[i].spriteIndex = spriteIdx;
         } else {
@@ -1866,7 +1866,7 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
             if (D_800AFE8C_A71FC->numPlayers == 1) {
                 spriteIdx = 0x36;
             }
-            sprites[i].spriteIndex = numPlayers + spriteIdx;
+            sprites[i].spriteIndex = selectionState + spriteIdx;
         }
         sprites[i].blinkState = 0;
         sprites[i].layerDepth = 0;
@@ -1934,7 +1934,7 @@ void updateBoardSelectCharNames(CharacterNameSprite *sprites) {
     }
 }
 
-void func_80026BAC_277AC(SimpleSpriteEntry *arg0) {
+void cleanupBoardSelectCharNames(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
