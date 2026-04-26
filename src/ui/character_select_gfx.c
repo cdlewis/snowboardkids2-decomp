@@ -1073,7 +1073,7 @@ extern u8 charSelectItemData[];
 extern u8 D_8008DDEC_8E9EC[];
 
 void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
-    u8 *gameState;
+    BoardSelectGameState *state;
     s32 i;
     s32 iconsStillAnimating;
     CharSelectIconEntry *entry;
@@ -1083,16 +1083,14 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
     s16 targetY;
     u16 currentY;
     s16 newY;
-    u8 *ptr;
 
-    gameState = (u8 *)getCurrentAllocation();
+    state = (BoardSelectGameState *)getCurrentAllocation();
     iconsStillAnimating = 0;
 
     // Animate icon Y positions towards their target values
     for (i = 0; i < arg0->numVisibleIcons; i++) {
-        ptr = gameState + arg0->playerIndex;
-        charIndex = ptr[0x18A8];
-        paletteIndex = ptr[0x18B0];
+        charIndex = state->unk18A8[arg0->playerIndex];
+        paletteIndex = state->unk18B0[arg0->playerIndex];
         // Each character has 3 board options (palette 0-2), with 3 items each
         itemIconIndex = charSelectItemData[(((u8)(paletteIndex + charIndex * 3)) * 3) + i];
         targetY = *(s16 *)(D_8008DDEC_8E9EC + itemIconIndex * 2 + 22);
@@ -1129,7 +1127,7 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
     }
 
     // If character selection is confirmed, skip animation
-    if (((u16 *)gameState)[(arg0->playerIndex * 2 + 0x1898) / 2] == 9) {
+    if (state->unk1898[arg0->playerIndex] == 9) {
         setCallback(updateCharSelectIconTargets);
     }
 }
