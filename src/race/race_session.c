@@ -52,12 +52,6 @@ USE_OVERLAY(levels_snowboard_street_speed_cross);
 USE_OVERLAY(levels_training)
 
 typedef struct {
-    u8 unk0[0x18];
-    ColorData unk18;
-    ColorData unk20;
-} VarData;
-
-typedef struct {
     ViewportNode *audioPlayer0;
     ViewportNode *unk4;
     ViewportNode *unk8;
@@ -440,6 +434,7 @@ void awaitBattleContinuePress(void);
 void awaitExpertRaceContinuePress(void);
 void cleanupGameSession(void);
 void loadRaceGameData(void);
+extern void spawnScriptedCameraTask(s16);
 
 void initRace(void) {
     RaceState *raceState;
@@ -1210,8 +1205,6 @@ void copyIntroPlayerAnimationData(void) {
         }
     }
 }
-
-extern void spawnScriptedCameraTask(s16);
 
 void handleRaceStateUpdate(void) {
     GameState *gs;
