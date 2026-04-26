@@ -10,34 +10,6 @@
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
-extern s32 gControllerInputs[4];
-extern void initCharSelectSecondarySlot(void);
-extern void initCharSelectBoardModelForSlideOut(void);
-void cleanupCharacterSelect(void);
-
-typedef struct {
-    u16 x;
-    u16 y;
-} Vec2_u16;
-
-typedef struct {
-    u16 x;
-    u16 y;
-    s16 inc;
-} PositionConfig_DDBE;
-
-typedef struct {
-    u16 y;
-    u16 x;
-    u16 inc;
-} PositionConfig_DDE6;
-
-typedef struct {
-    u16 x;
-    u16 y;
-    u16 inc;
-} PositionConfig_DE1A;
-
 typedef struct {
     ViewportNode playerViewports[4];
     ViewportNode modelViewports[4];
@@ -68,21 +40,49 @@ typedef struct {
 } CharacterSelectState;
 
 typedef struct {
-    u8 pad0[0x52];
-    u8 playerIndex;
-} CharacterSelectTask;
+    u8 pad0[0x24];
+    u8 unk24;
+    u8 pad25[3];
+    u8 unk28;
+    u8 pad29[0xB];
+    u8 unk34;
+    u8 pad35[0x1D];
+    u8 unk52;
+    u8 pad53[0x22];
+    u8 unk75;
+    u8 pad76[0x2B];
+    u8 unkA1;
+} CharSelectTaskNode;
 
-typedef struct {
-    u8 pad0[0xA1];
-    u8 playerIndex;
-} SecondarySlotTask;
+extern s32 gControllerInputs[4];
 
-typedef struct {
-    u8 pad0[0x28];
-    u8 playerIndex;
-} BoardModelTask;
+extern void initBoardSelectArrows(void);
+extern void initBoardSelectCharNames(void);
+extern void initCharSelectArrows(void);
+extern void initCharSelectBackgroundEffect(void);
+extern void initCharSelectBoardModel(void);
+extern void initCharSelectBoardModelForSlideOut(void);
+extern void initCharSelectIconHideSprites(void);
+extern void initCharSelectMenu(void);
+extern void initCharSelectNameSprites(void);
+extern void initCharSelectPlayer2NameSprites(void);
+extern void initCharSelectPlayerLabels(void);
+extern void initCharSelectPlayerNumbers(void);
+extern void initCharSelectPreviewModel(void);
+extern void initCharSelectSecondarySlot(void);
+extern void initCharSelectStats(void);
 
-/* Data */
+void awaitCharacterSelectLoad(void);
+void scheduleCharacterSelectTasks(void);
+void updateCharacterSelect(void);
+void cleanupCharacterSelect(void);
+void onCharacterSelectProceed(void);
+void onCharacterSelectCancel(void);
+
+USE_ASSET(_4237C0);
+USE_ASSET(_426EF0);
+USE_ASSET(_458E30);
+USE_ASSET(_459310);
 
 ColorData charSelectDimLight = { 0x50, 0x50, 0x50, 0x00, 0x00, 0x50, 0x50, 0x00 };
 char charSelectDimAmbientStr[] = "PPP";
@@ -267,53 +267,13 @@ CharSelectAnimData D_8008DEAC_8EAAC = {
      0x0000, },
 };
 
-/* Function declarations */
-
-void awaitCharacterSelectLoad(void);
-void scheduleCharacterSelectTasks(void);
-void updateCharacterSelect(void);
-void onCharacterSelectProceed(void);
-void onCharacterSelectCancel(void);
-
-USE_ASSET(_4237C0);
-USE_ASSET(_426EF0);
-USE_ASSET(_458E30);
-USE_ASSET(_459310);
-
-extern void initBoardSelectArrows(void);
-extern void initBoardSelectCharNames(void);
-extern void initCharSelectArrows(void);
-extern void initCharSelectBackgroundEffect(void);
-extern void initCharSelectBoardModel(void);
-extern void initCharSelectIconHideSprites(void);
-extern void initCharSelectMenu(void);
-extern void initCharSelectNameSprites(void);
-extern void initCharSelectPlayer2NameSprites(void);
-extern void initCharSelectPlayerLabels(void);
-extern void initCharSelectPlayerNumbers(void);
-extern void initCharSelectPreviewModel(void);
-extern void initCharSelectStats(void);
-
-typedef struct {
-    u8 pad0[0x24];
-    u8 unk24;
-    u8 pad25[3];
-    u8 unk28;
-    u8 pad29[0xB];
-    u8 unk34;
-    u8 pad35[0x40];
-    u8 unk75;
-    u8 pad76[0x2B];
-    u8 unkA1;
-} GenericTaskNode;
-
 void initCharacterSelectScreen(void) {
     CharacterSelectState *state;
     Transform3D transform;
     s32 i;
     s32 numOptions;
     u8 boardId;
-    GenericTaskNode *task;
+    CharSelectTaskNode *task;
 
     state = (CharacterSelectState *)allocateTaskMemory(0x18E0);
     setupTaskSchedulerNodes(0x30, 8, 4, 8, 0, 0, 0, 0);
@@ -394,17 +354,17 @@ void initCharacterSelectScreen(void) {
         boardId = D_800AFE8C_A71FC->playerBoardIds[12 + i];
         state->boardId[i] = boardId;
         state->savedBoardId[i] = boardId;
-        task = (GenericTaskNode *)scheduleTask(initCharSelectBoardModel, 0, 0, 0x5A);
+        task = (CharSelectTaskNode *)scheduleTask(initCharSelectBoardModel, 0, 0, 0x5A);
         task->unk28 = i;
-        task = (GenericTaskNode *)scheduleTask(initCharSelectPreviewModel, 0, 0, 0x5A);
+        task = (CharSelectTaskNode *)scheduleTask(initCharSelectPreviewModel, 0, 0, 0x5A);
         task->unkA1 = i;
-        task = (GenericTaskNode *)scheduleTask(initCharSelectMenu, 0, 0, 0x5A);
+        task = (CharSelectTaskNode *)scheduleTask(initCharSelectMenu, 0, 0, 0x5A);
         task->unk34 = i;
-        task = (GenericTaskNode *)scheduleTask(initCharSelectIconHideSprites, 0, 0, 0x5A);
+        task = (CharSelectTaskNode *)scheduleTask(initCharSelectIconHideSprites, 0, 0, 0x5A);
         task->unk24 = i;
-        task = (GenericTaskNode *)scheduleTask(initCharSelectStats, 0, 0, 0x5A);
+        task = (CharSelectTaskNode *)scheduleTask(initCharSelectStats, 0, 0, 0x5A);
         task->unk75 = i;
-        task = (GenericTaskNode *)scheduleTask(initCharSelectPlayer2NameSprites, 0, 0, 0x5A);
+        task = (CharSelectTaskNode *)scheduleTask(initCharSelectPlayer2NameSprites, 0, 0, 0x5A);
         task->unk24 = i;
     }
 
@@ -436,16 +396,16 @@ void awaitCharacterSelectLoad(void) {
 
 void scheduleCharacterSelectTasks(void) {
     s32 i;
-    CharacterSelectTask *task;
+    CharSelectTaskNode *task;
 
     if (getViewportFadeMode(0) != 0) {
         return;
     }
 
     for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        task = (CharacterSelectTask *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
+        task = (CharSelectTaskNode *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
         if (task != NULL) {
-            task->playerIndex = i;
+            task->unk52 = i;
         }
     }
 
@@ -469,9 +429,9 @@ void updateCharacterSelect(void) {
     s32 confirmedCount;
     u8 unlockedSlots[10];
     u32 charIdx;
-    CharacterSelectTask *task;
-    SecondarySlotTask *secTask;
-    BoardModelTask *boardTask;
+    CharSelectTaskNode *task;
+    CharSelectTaskNode *secTask;
+    CharSelectTaskNode *boardTask;
     s32 *temp3;
     void *eepromResult;
     state = (CharacterSelectState *)getCurrentAllocation();
@@ -553,9 +513,9 @@ void updateCharacterSelect(void) {
                 if (gControllerInputs[i] & 0x4000) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
                     state->menuStates[i] = 0;
-                    task = (CharacterSelectTask *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
+                    task = (CharSelectTaskNode *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
                     if (task != 0) {
-                        task->playerIndex = i;
+                        task->unk52 = i;
                     }
                     state->cursorIndices[i] = state->maxMenuOption - 2;
                     state->animAngles[i] = 0;
@@ -607,9 +567,9 @@ void updateCharacterSelect(void) {
                         state->charCol[i] = 0;
                     }
 
-                    secTask = (SecondarySlotTask *)scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
+                    secTask = (CharSelectTaskNode *)scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
                     if (secTask != 0) {
-                        secTask->playerIndex = i;
+                        secTask->unkA1 = i;
                     }
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                 } else if (gControllerInputs[i] & 0x8000) {
@@ -684,9 +644,9 @@ void updateCharacterSelect(void) {
                         }
                     }
 
-                    task = (CharacterSelectTask *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
+                    task = (CharSelectTaskNode *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
                     if (task != 0) {
-                        task->playerIndex = i;
+                        task->unk52 = i;
                         break;
                     }
                 } else {
@@ -759,9 +719,9 @@ void updateCharacterSelect(void) {
                     } else {
                         state->savedCharCol[i] %= 3;
                     }
-                    secTask = (SecondarySlotTask *)scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
+                    secTask = (CharSelectTaskNode *)scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
                     if (secTask != 0) {
-                        secTask->playerIndex = i;
+                        secTask->unkA1 = i;
                         break;
                     }
                 } else {
@@ -802,9 +762,9 @@ void updateCharacterSelect(void) {
                     state->slideState[i] = 0;
                     state->savedBoardId[i] = prevBoardId;
                     playSoundEffectOnChannelNoPriority(0x2B, i);
-                    boardTask = (BoardModelTask *)scheduleTask(&initCharSelectBoardModelForSlideOut, 3, i, 0x59);
+                    boardTask = (CharSelectTaskNode *)scheduleTask(&initCharSelectBoardModelForSlideOut, 3, i, 0x59);
                     if (boardTask != 0) {
-                        boardTask->playerIndex = i;
+                        boardTask->unk28 = i;
                         break;
                     }
                 } else if (gControllerInputs[i] & 0x8000) {
