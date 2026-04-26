@@ -4,9 +4,19 @@
 #include "gamestate.h"
 #include "math/geometry.h"
 #include "math/rand.h"
+#include "race/obstacle_sprites.h"
 #include "race/particle_items.h"
 #include "race/race_session.h"
 #include "race/track_height.h"
+#include "system/task_scheduler.h"
+
+extern s32 createWarpEffect(void *, void *, s16);
+extern s32 spawnStarEffect(void *, void *, s16);
+extern s32 spawnGoldStealEffect(void *, void *, s16);
+extern s32 spawnPanelProjectile(void *);
+
+s32 findPrimaryItemTarget(Player *);
+s32 shouldUseSecondaryItem(Player *);
 
 u16 D_80093F90_94B90[] = { 0x004F, 0x0068, 0x007E, 0x0096, 0x00AF, 0x00C4, 0x00FF, 0x00F0, 0x00DE, 0x0000 };
 u16 D_80093FA4_94BA4[] = { 0x0050, 0x0069, 0x007F, 0x0097, 0x00B0, 0x00C5, 0x0100, 0x00F1, 0x00DF, 0x0000 };
@@ -194,16 +204,6 @@ s32 grantInvincibilityWithSound(Player *player) {
     }
     return 0;
 }
-
-extern void *getCurrentAllocation(void);
-s32 findPrimaryItemTarget(Player *);
-s32 shouldUseSecondaryItem(Player *);
-extern s32 createWarpEffect(void *, void *, s16);
-extern s32 spawnAttackProjectile(s32, s32, s32);
-extern s32 spawnStarEffect(void *, void *, s16);
-extern s32 spawnGoldStealEffect(void *, void *, s16);
-extern s32 spawnPanelProjectile(void *);
-extern s32 getFreeNodeCount(s32);
 
 void processPlayerItemUsage(Player *player) {
     GameState *gs;
