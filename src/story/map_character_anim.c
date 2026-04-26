@@ -50,8 +50,6 @@ void finalizeStoryMapCameraTravel(void);
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
 extern s32 gControllerInputs[];
-s32 checkTownNPCCollision(s32, s32, s32);
-void resolveTownNPCCollision(void *, Vec3i *, s32);
 void setStoryMapCameraMode(s32);
 s32 checkStoryMapLocationSelection(void *);
 void updateStoryMapDialogueTurn(void *);
@@ -286,7 +284,7 @@ void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera) {
     for (i = 0; i < state->unk41C; i++) {
         collisionResult = checkTownNPCCollision(pos.x, pos.z, i);
         if (collisionResult) {
-            resolveTownNPCCollision(camera, &pos, collisionResult);
+            resolveTownNPCCollision((TownController *)camera, &pos, collisionResult);
             collisionResult = checkTownLamppostCollision(pos.x, pos.z, state->unk3FE);
             if (collisionResult) {
                 resolveTownLamppostCollision(&pos, state->unk3FE, collisionResult);

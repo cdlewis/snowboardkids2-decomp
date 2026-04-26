@@ -1,6 +1,5 @@
-#include "common.h"
+#include "triggers/town_collision.h"
 #include "gamestate.h"
-#include "math/geometry.h"
 #include "system/task_scheduler.h"
 
 // Defines circular collision zones for town objects (lampposts/stations)
@@ -138,11 +137,6 @@ s32 checkTownNPCCollision(s32 posX, s32 posY, s32 characterIndex) {
     }
     return 0;
 }
-
-typedef struct {
-    u8 padding[0x4C];
-    s32 distanceFromOrigin;
-} TownController;
 
 // Resolves collision between player and an NPC in the town.
 // Pushes the player to the edge of the NPC's collision boundary.
