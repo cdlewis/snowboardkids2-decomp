@@ -371,7 +371,7 @@ segments:
       - [0x916F0, data] # also race_hud?
       - [0x91A60, .data, race/race_effects]
       - [0x91A70, .data, race/spray_particles]
-      - [0x91B60, data, race/obstacle_sprites]
+      - [0x91B60, .data, race/obstacle_sprites]
       - [0x91B90, .data, data/course_data]
       - [0x921D0, data, audio/audio]
       - [0x947B0, .data, race/character_stats]

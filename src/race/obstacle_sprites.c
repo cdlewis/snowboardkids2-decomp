@@ -138,9 +138,11 @@ void checkStarProjectileHit(Struct_52880 *arg0);
 void loadPlayerGuidedStarProjectile(Struct_52880 *arg0);
 void updatePlayerGuidedStarProjectile(Struct_52880 *arg0);
 
-extern s16 gPlayerGuidedStarTransform[];
-extern s32 gPlayerGuidedStarBaseVelocity;
-extern s32 gPlayerGuidedStarVelocityOffset;
+s16 gPlayerGuidedStarTransform[4] = { 0, 0, 6, 0 };
+
+Vec3i gPlayerGuidedStarBaseVelocity = { 0x240000, 0, 0x60000 };
+
+s32 gPlayerGuidedStarVelocityOffset[7] = { 0, 0, 0x60000, 0, 0, 0, 0 };
 
 void normalizeVelocityToSpeed(Vec3i *vel, s32 targetSpeed) {
     s32 dist;
@@ -1651,7 +1653,7 @@ void loadPlayerGuidedStarProjectile(Struct_52880 *arg0) {
         arg0->vel.z = 0x300000;
     }
 
-    gPlayerGuidedStarVelocityOffset = gPlayerGuidedStarBaseVelocity - arg0->vel.z;
+    gPlayerGuidedStarVelocityOffset[0] = gPlayerGuidedStarBaseVelocity.x - arg0->vel.z;
 
     playerIdx = *playerIdxPtr;
     transformVector(&gPlayerGuidedStarTransform[6], alloc->unk10[arg0->ownerPlayerIdx].unk164, velocity);
