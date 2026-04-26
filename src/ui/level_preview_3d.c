@@ -2456,7 +2456,7 @@ extern void enqueueTranslucentSprite(u16, u8 *);
 extern void renderNonRaceShadow(void);
 
 void updateModelGeometry(SceneModel *arg0) {
-    Transform3D sp10;
+    Transform3D worldMatrix;
     volatile s32 pad[2];
     AssetGroup *assetGroup;
 #ifdef CC_CHECK
@@ -2470,147 +2470,138 @@ void updateModelGeometry(SceneModel *arg0) {
     register s32 boneCount __asm__("$19");
     register s32 i __asm__("$18");
 #endif
-    s32 offset;
+    s32 boneOffset;
     s32 shouldDisplay;
-    s32 scaleFactor;
-    s32 dist1;
+    s32 shadowScale;
+    s32 scaleX;
     s32 one;
-    s32 dist2;
-    s32 v1;
-    s32 a0val;
+    s32 scaleZ;
+    s32 shadowSizeX;
+    s32 shadowSizeZ;
 
     assetGroup = &gameAssets[arg0->index];
-    func_8006B084_6BC84(&arg0->unkF0, &arg0->matrix18, &sp10);
+    func_8006B084_6BC84(&arg0->unkF0, &arg0->matrix18, &worldMatrix);
 
     if (arg0->unk8 != NULL) {
-        if (arg0->unk16 != -1) {
-            animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk8, arg0->unk16);
-            boneCount = getAnimationBoneCount((AnimationBoneCountTable *)arg0->unk8, (s32)arg0->unk16);
-            if (boneCount >= 0x20) {
-                boneCount = 0x1F;
+        if (arg0->unk16 == -1) {
+            return;
+        }
+        animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk8, arg0->unk16);
+        boneCount = getAnimationBoneCount((AnimationBoneCountTable *)arg0->unk8, (s32)arg0->unk16);
+        if (boneCount >= 0x20) {
+            boneCount = 0x1F;
+        }
+        for (i = 0; i < boneCount; i++, animData++) {
+            u8 parent = animData->parentBone;
+            if (parent == 0xFF) {
+                u8 bone = animData->boneIndex;
+                func_8006B084_6BC84(
+                    (Transform3D *)arg0->unk4[bone].prev_position,
+                    &worldMatrix,
+                    &((DisplayListObject *)arg0->unk0)[bone].transform
+                );
+            } else {
+                u8 bone = animData->boneIndex;
+                func_8006B084_6BC84(
+                    (Transform3D *)arg0->unk4[bone].prev_position,
+                    &((DisplayListObject *)arg0->unk0)[parent].transform,
+                    &((DisplayListObject *)arg0->unk0)[bone].transform
+                );
             }
-            for (i = 0; i < boneCount; i++, animData++) {
-                u8 parent = animData->parentBone;
-                if (parent == 0xFF) {
-                    u8 bone = animData->boneIndex;
-                    func_8006B084_6BC84(
-                        (Transform3D *)arg0->unk4[bone].prev_position,
-                        &sp10,
-                        &((DisplayListObject *)arg0->unk0)[bone].transform
-                    );
-                } else {
-                    u8 bone = animData->boneIndex;
-                    func_8006B084_6BC84(
-                        (Transform3D *)arg0->unk4[bone].prev_position,
-                        &((DisplayListObject *)arg0->unk0)[parent].transform,
-                        &((DisplayListObject *)arg0->unk0)[bone].transform
-                    );
-                }
-            }
-            goto check_display;
         }
     } else {
         boneCount = 0x20;
         i = 0;
-        offset = 0;
+        boneOffset = 0;
         do {
-            memcpy((void *)(offset + (s32)arg0->unk0), &sp10, 0x20U);
-            ((DisplayListObject *)(offset + (s32)arg0->unk0))->transform.translation.y += arg0->unk44;
+            memcpy((void *)(boneOffset + (s32)arg0->unk0), &worldMatrix, 0x20U);
+            ((DisplayListObject *)(boneOffset + (s32)arg0->unk0))->transform.translation.y += arg0->unk44;
             i++;
-            offset += 0x3C;
+            boneOffset += 0x3C;
         } while (i < boneCount);
-    check_display:
-        if ((arg0->unk88 != 0) && (arg0->displayEnabled != 0)) {
-            s32 dOffset;
-            i = 0;
-            if (boneCount > 0) {
-                one = 1;
-                dOffset = 0;
-                do {
-                    boneTransform = (DisplayListObject *)((u8 *)arg0->unk0 + dOffset);
-                    shouldDisplay = 1;
-                    if (boneTransform->displayLists != NULL) {
-                        if (i != 8) {
-                            if (i == 0x11) {
-                                shouldDisplay = arg0->unk4E != 0;
-                            }
-                        } else {
-                            s8 animIdx = arg0->animationIndex;
-                            if ((animIdx != -1) && (arg0->unk9C != NULL)) {
-                                arg0->unk98->displayLists = (void *)((s32)arg0->unkA0 + (animIdx * 0x10));
-                                memcpy(arg0->unk98, boneTransform, 0x20U);
-                                boneTransform = (DisplayListObject *)arg0->unk98;
-                            }
-                        }
-                        if ((shouldDisplay != 0) && (arg0->partDisplayFlags & (one << i))) {
-                            s8 countVal = (s8)assetGroup->countPadding[0];
-                            if (countVal == 0) {
-                                enqueueDisplayListObject((s32)arg0->unk10->unk16, boneTransform);
-                            } else if (countVal != one) {
-                                enqueueDisplayListObject((s32)arg0->unk10->unk16, boneTransform);
-                            } else {
-                                boneTransform->envColorAlpha = arg0->alpha;
-                                enqueueDisplayListObjectWithSegments((s32)arg0->unk10->unk16, boneTransform);
-                            }
-                        }
-                    }
-                    dOffset += 0x3C;
-                    i++;
-                } while (i < boneCount);
-            }
-            if (arg0->shadowEnabled == 0) {
-                if (arg0->renderEnabled != 0) {
-                    scaleFactor = (arg0->unk4F << 0xD) / 5;
-                    if (arg0->unk0 != NULL) {
-                        if (hasModelGraphicsData(arg0) == 0) {
-                            memcpy(
-                                &arg0->padding4[4],
-                                &((DisplayListObject *)arg0->unk0)->transform.translation.x,
-                                0xCU
-                            );
-                            dist1 = distance_3d(
-                                (s32)((DisplayListObject *)arg0->unk0)->transform.m[0][0],
-                                (s32)((DisplayListObject *)arg0->unk0)->transform.m[1][0],
-                                (s32)((DisplayListObject *)arg0->unk0)->transform.m[2][0]
-                            );
-                            dist2 = distance_3d(
-                                (s32)((DisplayListObject *)arg0->unk0)->transform.m[0][2],
-                                (s32)((DisplayListObject *)arg0->unk0)->transform.m[1][2],
-                                (s32)((DisplayListObject *)arg0->unk0)->transform.m[2][2]
-                            );
-                        } else {
-                            goto use_matrix18;
+    }
+
+    if ((arg0->unk88 != 0) && (arg0->displayEnabled != 0)) {
+        s32 byteOffset;
+        i = 0;
+        if (boneCount > 0) {
+            one = 1;
+            byteOffset = 0;
+            do {
+                boneTransform = (DisplayListObject *)((u8 *)arg0->unk0 + byteOffset);
+                shouldDisplay = 1;
+                if (boneTransform->displayLists != NULL) {
+                    if (i != 8) {
+                        if (i == 0x11) {
+                            shouldDisplay = arg0->unk4E != 0;
                         }
                     } else {
-                    use_matrix18:
-                        memcpy(&arg0->padding4[4], &arg0->matrix18.translation.x, 0xCU);
-                        dist1 = distance_3d(
-                            (s32)arg0->matrix18.m[0][0],
-                            (s32)arg0->matrix18.m[1][0],
-                            (s32)arg0->matrix18.m[2][0]
-                        );
-                        dist2 = distance_3d(
-                            (s32)arg0->matrix18.m[0][2],
-                            (s32)arg0->matrix18.m[1][2],
-                            (s32)arg0->matrix18.m[2][2]
-                        );
+                        s8 animIdx = arg0->animationIndex;
+                        if ((animIdx != -1) && (arg0->unk9C != NULL)) {
+                            arg0->unk98->displayLists = (void *)((s32)arg0->unkA0 + (animIdx * 0x10));
+                            memcpy(arg0->unk98, boneTransform, 0x20U);
+                            boneTransform = (DisplayListObject *)arg0->unk98;
+                        }
                     }
-                    v1 = dist1 * scaleFactor;
-                    *(s32 *)&arg0->padding4[8] = arg0->height;
-                    if (v1 < 0) {
-                        v1 += 0x1FFF;
+                    if ((shouldDisplay != 0) && (arg0->partDisplayFlags & (one << i))) {
+                        s8 countVal = (s8)assetGroup->countPadding[0];
+                        if (countVal == 0) {
+                            enqueueDisplayListObject((s32)arg0->unk10->unk16, boneTransform);
+                        } else if (countVal != one) {
+                            enqueueDisplayListObject((s32)arg0->unk10->unk16, boneTransform);
+                        } else {
+                            boneTransform->envColorAlpha = arg0->alpha;
+                            enqueueDisplayListObjectWithSegments((s32)arg0->unk10->unk16, boneTransform);
+                        }
                     }
-                    a0val = dist2 * scaleFactor;
-                    *(s32 *)&arg0->padding4[0x28] = v1 >> 0xD;
-                    if (a0val < 0) {
-                        a0val += 0x1FFF;
-                    }
-                    *(s32 *)&arg0->padding4[0x2C] = a0val >> 0xD;
-                    enqueueTranslucentSprite(arg0->unk10->unk16, arg0->padding4);
-                    return;
                 }
-                debugEnqueueCallback(arg0->unk10->unk16, 1U, &renderNonRaceShadow, arg0);
+                byteOffset += 0x3C;
+                i++;
+            } while (i < boneCount);
+        }
+        if (arg0->shadowEnabled == 0) {
+            if (arg0->renderEnabled != 0) {
+                shadowScale = (arg0->unk4F << 0xD) / 5;
+                if (arg0->unk0 != NULL && hasModelGraphicsData(arg0) == 0) {
+                    memcpy(&arg0->padding4[4], &((DisplayListObject *)arg0->unk0)->transform.translation.x, 0xCU);
+                    scaleX = distance_3d(
+                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[0][0],
+                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[1][0],
+                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[2][0]
+                    );
+                    scaleZ = distance_3d(
+                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[0][2],
+                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[1][2],
+                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[2][2]
+                    );
+                } else {
+                    memcpy(&arg0->padding4[4], &arg0->matrix18.translation.x, 0xCU);
+                    scaleX = distance_3d(
+                        (s32)arg0->matrix18.m[0][0],
+                        (s32)arg0->matrix18.m[1][0],
+                        (s32)arg0->matrix18.m[2][0]
+                    );
+                    scaleZ = distance_3d(
+                        (s32)arg0->matrix18.m[0][2],
+                        (s32)arg0->matrix18.m[1][2],
+                        (s32)arg0->matrix18.m[2][2]
+                    );
+                }
+                shadowSizeX = scaleX * shadowScale;
+                *(s32 *)&arg0->padding4[8] = arg0->height;
+                if (shadowSizeX < 0) {
+                    shadowSizeX += 0x1FFF;
+                }
+                shadowSizeZ = scaleZ * shadowScale;
+                *(s32 *)&arg0->padding4[0x28] = shadowSizeX >> 0xD;
+                if (shadowSizeZ < 0) {
+                    shadowSizeZ += 0x1FFF;
+                }
+                *(s32 *)&arg0->padding4[0x2C] = shadowSizeZ >> 0xD;
+                enqueueTranslucentSprite(arg0->unk10->unk16, arg0->padding4);
+                return;
             }
+            debugEnqueueCallback(arg0->unk10->unk16, 1U, &renderNonRaceShadow, arg0);
         }
     }
 }
