@@ -8,12 +8,13 @@
 
 extern s32 gFontTextureData;
 extern s32 gFontPaletteBase;
-extern s8 gCurrentPaletteId;
-extern s16 gGraphicsMode;
+extern u16 gDefaultFontPalette[];
+
 extern Gfx *gRegionAllocPtr;
+extern s16 gGraphicsMode;
+extern s8 gCurrentPaletteId;
 extern s16 gTextureEnabled[];
 extern TextClipAndOffsetData gTextClipAndOffsetData;
-extern u16 gDefaultFontPalette[];
 
 Gfx gFontDisplayListSetup[] = {
     gsDPPipeSync(),
