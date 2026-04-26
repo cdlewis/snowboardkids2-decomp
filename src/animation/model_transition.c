@@ -113,10 +113,10 @@ void updateCameraRotationTask(CameraRotationTaskState *state) {
     state->rotationY = (u16)state->rotationY + (u16)state->angularVelocityY;
     state->rotationZ = (u16)state->rotationZ + (u16)state->angularVelocityZ;
 
+    gScaleMatrix.translation.x = 0;
+    gScaleMatrix.translation.y = -0x4CCCC;
+    gScaleMatrix.translation.z = 0;
     positionPtr = (s32 *)&gScaleMatrix.translation;
-    *positionPtr = 0;
-    *(positionPtr + 1) = (s32)0xFFFB3334;
-    *(positionPtr + 2) = 0;
 
     createRotationMatrixXYZ((s16 *)&cameraTransform, state->rotationX, state->rotationY, state->rotationZ);
 
