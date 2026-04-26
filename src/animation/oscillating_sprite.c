@@ -20,7 +20,7 @@ typedef struct {
 } QuadDisplayListState;
 
 extern u32 D_80088640_89240[];
-extern s32 D_8008C120_8CD20[];
+extern Vec3i D_8008C120_8CD20[];
 
 /* Data segment */
 /* 0x89240 */ u32 D_80088640_89240[] = { 0x00000000, 0x00000000, 0x01000490, 0x00000000 };
@@ -51,13 +51,10 @@ void initializeQuadDisplayList(QuadDisplayListElement *elements) {
 void updateQuadDisplayList(QuadDisplayListState *state) {
     Transform3D rotationMatrix;
     func_80002B50_3750_arg *model;
-    s32 elementIndex;
-    s32 elementOffset;
-    s32 *translationOffset;
-    s32 positiveRotationElementIndex;
     QuadDisplayListElement *element;
+    s32 i;
 
-    memcpy(&rotationMatrix, &identityMatrix, 0x20);
+    memcpy(&rotationMatrix, &identityMatrix, sizeof(Transform3D));
 
     model = state->model;
     if (model->isDestroyed == 1) {
@@ -77,35 +74,27 @@ void updateQuadDisplayList(QuadDisplayListState *state) {
             if ((s16)newSpeed >= 0x2AB) {
                 state->rotationSpeed = 0x2AA;
             }
-            state->rotationAngle = state->rotationAngle + state->rotationSpeed;
+            state->rotationAngle += state->rotationSpeed;
         } break;
     }
 
-    elementIndex = 0;
-    positiveRotationElementIndex = 2;
-    elementOffset = 4;
-    translationOffset = D_8008C120_8CD20;
-loop:
-    if (elementIndex == 0) {
-        goto positiveRotation;
-    }
-    if (elementIndex != positiveRotationElementIndex) {
-        goto negativeRotation;
-    }
-positiveRotation:
-    createCombinedRotationMatrix(&rotationMatrix, state->rotationAngle, 0);
-    goto afterRotation;
-negativeRotation:
-    createCombinedRotationMatrix(&rotationMatrix, -state->rotationAngle, 0x1000);
-afterRotation:
-    element = (QuadDisplayListElement *)((u8 *)state + elementOffset);
-    memcpy(&rotationMatrix.translation, translationOffset, 0xC);
-    func_8006B084_6BC84(&rotationMatrix, &state->model->matrix18, (Transform3D *)element);
-    elementOffset += 0x3C;
-    translationOffset += 3;
-    enqueueModelDisplayList(state->model, (DisplayListObject *)element);
-    if (++elementIndex < 4) {
-        goto loop;
+    for (i = 0; i < 4; i++) {
+        if (i == 0) {
+            goto positive;
+        }
+        if (i != 2) {
+            goto negative;
+        }
+    positive:
+        createCombinedRotationMatrix(&rotationMatrix, state->rotationAngle, 0);
+        goto applyRotation;
+    negative:
+        createCombinedRotationMatrix(&rotationMatrix, -state->rotationAngle, 0x1000);
+    applyRotation:
+        memcpy(&rotationMatrix.translation, &D_8008C120_8CD20[i], sizeof(Vec3i));
+        element = &state->elements[i];
+        func_8006B084_6BC84(&rotationMatrix, &state->model->matrix18, (Transform3D *)element);
+        enqueueModelDisplayList(state->model, (DisplayListObject *)element);
     }
 }
 
