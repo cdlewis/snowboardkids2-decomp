@@ -10,6 +10,8 @@
 #include "text/font_render.h"
 #include "text/hud_text.h"
 
+#define ARG0 ((OptionsMenuToggleState *)arg0)
+
 typedef struct {
     s16 x;
     s16 y;
@@ -47,32 +49,6 @@ typedef struct {
 } OptionsMenuToggleState;
 
 typedef struct {
-    u8 pad[0x8];
-    void *textAsset;
-    u8 pad2[0xC];
-    void *spriteAsset;
-} OptionsMenuTitleCleanupArg;
-
-typedef struct {
-    u8 pad0[0x4];
-    void *unk4;
-    u8 pad[0xD0];
-    void *unkD8;
-} OptionsMenuTogglesCleanupArg;
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    u8 pad[0x40];
-    void *unk48;
-} OptionsMenuLabelsCleanupArg;
-
-typedef struct {
-    u8 pad0[0x4];
-    void *cursorSpriteAsset;
-} OptionsMenuCursorsCleanupArg;
-
-typedef struct {
     u8 pad[0x1E0];
     u16 frameCounter;
     u16 menuState;
@@ -104,12 +80,14 @@ void *optionsMenuLabelTextData[] = {
     (void *)0x4E534B4A,     (void *)0x45420000,     (void *)0x5C688F56,  (void *)0x4A830000
 };
 
-void cleanupOptionsMenuLabels(OptionsMenuLabelsCleanupArg *);
-void updateOptionsMenuLabels(OptionsMenuLabelsState *);
-void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *);
-void updateOptionsMenuTitle(u8 *);
-void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *);
-void cleanupOptionsMenuCursors(OptionsMenuCursorsCleanupArg *arg0);
+void cleanupOptionsMenuTitle(OptionsMenuTitleState *arg0);
+void updateOptionsMenuTitle(u8 *arg0);
+void cleanupOptionsMenuToggles(OptionsMenuToggleState *arg0);
+void updateOptionsMenuToggles(OptionsMenuToggleState *arg0);
+void cleanupOptionsMenuLabels(OptionsMenuLabelsState *arg0);
+void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0);
+void cleanupOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0);
+void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0);
 
 void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
     void *textAsset;
@@ -156,15 +134,10 @@ void updateOptionsMenuTitle(u8 *arg0) {
     }
 }
 
-void cleanupOptionsMenuTitle(OptionsMenuTitleCleanupArg *arg0) {
-    arg0->textAsset = freeNodeMemory(arg0->textAsset);
-    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+void cleanupOptionsMenuTitle(OptionsMenuTitleState *arg0) {
+    arg0->titleText.textAsset = freeNodeMemory(arg0->titleText.textAsset);
+    arg0->leftIcon.spriteAsset = freeNodeMemory(arg0->leftIcon.spriteAsset);
 }
-
-void cleanupOptionsMenuToggles(OptionsMenuTogglesCleanupArg *);
-void updateOptionsMenuToggles(OptionsMenuToggleState *);
-
-#define ARG0 ((OptionsMenuToggleState *)arg0)
 
 void initOptionsMenuToggles(void *arg0) {
     void *spriteAsset;
@@ -221,8 +194,6 @@ void initOptionsMenuToggles(void *arg0) {
     setCallback(updateOptionsMenuToggles);
 }
 
-#undef ARG0
-
 void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
     OptionsMenuAllocation *alloc;
     s32 i;
@@ -273,9 +244,9 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
     }
 }
 
-void cleanupOptionsMenuToggles(OptionsMenuTogglesCleanupArg *arg0) {
-    arg0->unkD8 = freeNodeMemory(arg0->unkD8);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupOptionsMenuToggles(OptionsMenuToggleState *arg0) {
+    arg0->textRenderAsset = freeNodeMemory(arg0->textRenderAsset);
+    arg0->iconEntries[0].spriteAsset = freeNodeMemory(arg0->iconEntries[0].spriteAsset);
 }
 
 void initOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
@@ -367,9 +338,9 @@ void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
     } while (0);
 }
 
-void cleanupOptionsMenuLabels(OptionsMenuLabelsCleanupArg *arg0) {
-    arg0->unk48 = freeNodeMemory(arg0->unk48);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
+    arg0->textEntries[0].textAsset = freeNodeMemory(arg0->textEntries[0].textAsset);
+    arg0->iconEntries[0].spriteAsset = freeNodeMemory(arg0->iconEntries[0].spriteAsset);
 }
 
 void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
@@ -417,6 +388,6 @@ void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
     }
 }
 
-void cleanupOptionsMenuCursors(OptionsMenuCursorsCleanupArg *arg0) {
-    arg0->cursorSpriteAsset = freeNodeMemory(arg0->cursorSpriteAsset);
+void cleanupOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
