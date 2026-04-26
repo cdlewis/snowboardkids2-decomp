@@ -16,8 +16,6 @@
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
 
-extern const u8 D_8009DF6C_9EB6C[];
-
 typedef struct {
     s32 *layout;
     s32 count;
@@ -109,30 +107,117 @@ typedef struct {
     u8 unkCA4[0x40];
 } GalleryAlloc;
 
-/* Data section definitions */
+typedef struct {
+    u16 x;
+    u16 y;
+    u8 pad4;
+    u8 texFlags;
+    s8 textRow;
+    u8 labelIndex;
+} MenuLayoutEntry;
 
-s16 gCurrentBgmId[2] = { 5, 0 };
+typedef struct {
+    u16 posX;
+    u16 posY;
+    s32 spriteData;
+    s16 frameIndex;
+    s16 shadeA;
+    s16 shadeB;
+    s16 zValue;
+    s16 alpha;
+    s8 pad12;
+    s8 texFlags;
+    u8 alphaByte;
+    u8 _pad15[3];
+} GalleryRenderSlot;
 
-s32 gMenuOptionLayout_Type0[] = { 0xFFD0FFE8, 0x00010103, 0x0000FFE8, 0x01020204, 0x0030FFE8,
-                                  0x02040306, 0xFFE80010, 0x03030405, 0x00180010, 0x04050507 };
+typedef struct {
+    s16 m[3][3];
+    u8 _pad12[2];
+    s32 tx;
+    s32 ty;
+    s32 tz;
+} Transform3D_local;
 
-s32 gMenuOptionLayout_Type1[] = { 0xFFD0FFE8, 0x00010103, 0x0000FFE8, 0x01020204, 0x0030FFE8, 0x02040306,
-                                  0xFFD00010, 0x03030405, 0x00000010, 0x04050507, 0x00300010, 0x00060608 };
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    s16 unkA;
+    s8 unkC;
+    s8 unkD;
+    u8 _padE[2];
+} GalleryLabelSlot;
 
-MenuOptionConfig gMenuOptionConfig[] = {
-    { gMenuOptionLayout_Type0, 5 },
-    { gMenuOptionLayout_Type1, 6 },
-};
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    void *unk4;
+    s16 unk8;
+    u8 _padA[2];
+} GallerySmallSlot;
 
-u8 gNavigationCycleIndices[] = { 0x00, 0x01, 0x02, 0x01 };
+typedef struct {
+    /* 0x000 */ s8 menuState;
+    /* 0x001 */ s8 selectedOption;
+    /* 0x002 */ s8 menuType;
+    /* 0x003 */ s8 viewerComplete;
+    /* 0x004 */ u8 pad4[4];
+    /* 0x008 */ void *textRenderer;
+    /* 0x00C */ void *textTable;
+    /* 0x010 */ s16 bgmFadeTimer;
+    /* 0x012 */ s16 fadeTimer;
+    /* 0x014 */ s16 animTimer;
+    /* 0x016 */ u8 isExiting;
+    /* 0x017 */ u8 pad17;
+    /* 0x018 */ void *spriteAsset;
+    /* 0x01C */ u8 pad1C[4];
+    /* 0x020 */ ViewportNode overlayViewport;
+    /* 0x1F8 */ ViewportNode fadeNode;
+    /* 0x3D0 */ ViewportNode menuViewport;
+    /* 0x5A8 */ ColorData lightColors[3];
+    /* 0x5C0 */ u8 ambientColor[4];
+    /* 0x5C4 */ void *tiledTextureData1;
+    /* 0x5C8 */ u8 pad5C8[0x2C];
+    /* 0x5F4 */ void *tiledTextureData2;
+    /* 0x5F8 */ u8 pad5F8[0x2C];
+    /* 0x624 */ SceneModel *menuModel;
+    /* 0x628 */ GalleryRenderSlot iconSlots[6];
+    /* 0x6B8 */ GalleryRenderSlot labelSlots[6];
+    /* 0x748 */ s32 alphaValues[6];
+    /* 0x760 */ u8 animFrames[6];
+    /* 0x766 */ s8 animTimers[6];
+    /* 0x76C */ GalleryLabelSlot categoryLabels[27];
+    /* 0x91C */ GalleryLabelSlot categoryLabels2[27];
+    /* 0xACC */ GalleryLabelSlot pageLabels[5];
+    /* 0xB1C */ GalleryLabelSlot fixedSlotA;
+    /* 0xB2C */ GalleryLabelSlot fixedSlotB;
+    /* 0xB3C */ GallerySmallSlot fixedSlotC;
+    /* 0xB48 */ GallerySmallSlot fixedSlotD;
+    /* 0xB54 */ u8 padB54[0x144];
+    /* 0xC98 */ s16 unkC98;
+    /* 0xC9A */ s16 unkC9A;
+    /* 0xC9C */ s16 unkC9C;
+    /* 0xC9E */ u8 padC9E[2];
+    /* 0xCA0 */ void *unkCA0;
+    /* 0xCA4 */ u8 unkCA4[4];
+} GalleryMenuState;
 
-s32 gDefaultMenuOptionCount = 4;
-s32 gViewerDefaultPosX = 0x00285000;
-s32 gViewerDefaultPosY = 0xFFDE3000;
-s32 gViewerDefaultPosZ = 0x003A7000;
+typedef struct FD98_struct {
+    s8 viewerState;
+    s8 navigationMode;
+    s8 cursorIndex;
+    u8 pageUpCursorDest;
+    u8 pageDownCursorDest;
+    u8 pad5[0x3];
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+} FD98_struct;
 
-s32 gViewerInitPosition[] = { 0x00A92000, 0, 0, 0 };
-
+extern const u8 D_8009DF6C_9EB6C[];
 extern const char D_8009DEB0_9EAB0[];
 extern const char D_8009DEB4_9EAB4[];
 extern const char D_8009DEB8_9EAB8[];
@@ -168,6 +253,38 @@ extern const char D_8009DF2C_9EB2C[];
 extern const char D_8009DF30_9EB30[];
 extern const char D_8009DF34_9EB34[];
 extern u16 D_8009ADE0_9B9E0;
+extern s32 gControllerInputs;
+
+void setupGalleryMenuState(void);
+void updateGalleryMenu(void);
+extern void initGalleryViewer(FD98_struct *);
+extern void onGalleryMenuExit(void);
+extern void onGalleryViewerCleanup(void);
+extern void updateGalleryViewer(GalleryMenuState *);
+
+/* Data section definitions */
+
+s16 gCurrentBgmId[2] = { 5, 0 };
+
+s32 gMenuOptionLayout_Type0[] = { 0xFFD0FFE8, 0x00010103, 0x0000FFE8, 0x01020204, 0x0030FFE8,
+                                  0x02040306, 0xFFE80010, 0x03030405, 0x00180010, 0x04050507 };
+
+s32 gMenuOptionLayout_Type1[] = { 0xFFD0FFE8, 0x00010103, 0x0000FFE8, 0x01020204, 0x0030FFE8, 0x02040306,
+                                  0xFFD00010, 0x03030405, 0x00000010, 0x04050507, 0x00300010, 0x00060608 };
+
+MenuOptionConfig gMenuOptionConfig[] = {
+    { gMenuOptionLayout_Type0, 5 },
+    { gMenuOptionLayout_Type1, 6 },
+};
+
+u8 gNavigationCycleIndices[] = { 0x00, 0x01, 0x02, 0x01 };
+
+s32 gDefaultMenuOptionCount = 4;
+s32 gViewerDefaultPosX = 0x00285000;
+s32 gViewerDefaultPosY = 0xFFDE3000;
+s32 gViewerDefaultPosZ = 0x003A7000;
+
+s32 gViewerInitPosition[] = { 0x00A92000, 0, 0, 0 };
 
 s32 *gGalleryLabelPtrs[] = {
     (s32 *)D_8009DF34_9EB34, (s32 *)D_8009DF30_9EB30, (s32 *)D_8009DF2C_9EB2C, (s32 *)D_8009DF28_9EB28,
@@ -293,104 +410,6 @@ void *gGalleryCategory_Exit_Ptr = (void *)5;
 s32 gViewerStateConfig[] = { 0x00000004, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
                              0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000030,
                              0x00000000, 0x01000000, 0x00000001, 0x00000000, 0xFFFFFFFF };
-
-/* Local types for renderGalleryMenu */
-typedef struct {
-    u16 x;
-    u16 y;
-    u8 pad4;
-    u8 texFlags;
-    s8 textRow;
-    u8 labelIndex;
-} MenuLayoutEntry;
-
-typedef struct {
-    u16 posX;
-    u16 posY;
-    s32 spriteData;
-    s16 frameIndex;
-    s16 shadeA;
-    s16 shadeB;
-    s16 zValue;
-    s16 alpha;
-    s8 pad12;
-    s8 texFlags;
-    u8 alphaByte;
-    u8 _pad15[3];
-} GalleryRenderSlot;
-
-typedef struct {
-    s16 m[3][3];
-    u8 _pad12[2];
-    s32 tx;
-    s32 ty;
-    s32 tz;
-} Transform3D_local;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s8 unkC;
-    s8 unkD;
-    u8 _padE[2];
-} GalleryLabelSlot;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 _padA[2];
-} GallerySmallSlot;
-
-typedef struct {
-    /* 0x000 */ s8 menuState;
-    /* 0x001 */ s8 selectedOption;
-    /* 0x002 */ s8 menuType;
-    /* 0x003 */ s8 viewerComplete;
-    /* 0x004 */ u8 pad4[4];
-    /* 0x008 */ void *textRenderer;
-    /* 0x00C */ void *textTable;
-    /* 0x010 */ s16 bgmFadeTimer;
-    /* 0x012 */ s16 fadeTimer;
-    /* 0x014 */ s16 animTimer;
-    /* 0x016 */ u8 isExiting;
-    /* 0x017 */ u8 pad17;
-    /* 0x018 */ void *spriteAsset;
-    /* 0x01C */ u8 pad1C[4];
-    /* 0x020 */ ViewportNode overlayViewport;
-    /* 0x1F8 */ ViewportNode fadeNode;
-    /* 0x3D0 */ ViewportNode menuViewport;
-    /* 0x5A8 */ ColorData lightColors[3];
-    /* 0x5C0 */ u8 ambientColor[4];
-    /* 0x5C4 */ void *tiledTextureData1;
-    /* 0x5C8 */ u8 pad5C8[0x2C];
-    /* 0x5F4 */ void *tiledTextureData2;
-    /* 0x5F8 */ u8 pad5F8[0x2C];
-    /* 0x624 */ SceneModel *menuModel;
-    /* 0x628 */ GalleryRenderSlot iconSlots[6];
-    /* 0x6B8 */ GalleryRenderSlot labelSlots[6];
-    /* 0x748 */ s32 alphaValues[6];
-    /* 0x760 */ u8 animFrames[6];
-    /* 0x766 */ s8 animTimers[6];
-    /* 0x76C */ GalleryLabelSlot categoryLabels[27];
-    /* 0x91C */ GalleryLabelSlot categoryLabels2[27];
-    /* 0xACC */ GalleryLabelSlot pageLabels[5];
-    /* 0xB1C */ GalleryLabelSlot fixedSlotA;
-    /* 0xB2C */ GalleryLabelSlot fixedSlotB;
-    /* 0xB3C */ GallerySmallSlot fixedSlotC;
-    /* 0xB48 */ GallerySmallSlot fixedSlotD;
-    /* 0xB54 */ u8 padB54[0x144];
-    /* 0xC98 */ s16 unkC98;
-    /* 0xC9A */ s16 unkC9A;
-    /* 0xC9C */ s16 unkC9C;
-    /* 0xC9E */ u8 padC9E[2];
-    /* 0xCA0 */ void *unkCA0;
-    /* 0xCA4 */ u8 unkCA4[4];
-} GalleryMenuState;
 
 void playBgmTrack(GalleryMenuState *arg0, s16 bgmId) {
     gCurrentBgmId[0] = bgmId;
@@ -585,8 +604,6 @@ void waitForMenuFadeIn(GalleryMenuState *arg0) {
     }
 }
 
-extern s32 gControllerInputs;
-
 void handleGalleryMenuInput(GalleryMenuState *arg0) {
     s32 inputs;
     u8 selection;
@@ -718,21 +735,6 @@ play_sound:
     playSoundEffect(sound);
 }
 
-typedef struct FD98_struct {
-    s8 viewerState;
-    s8 navigationMode;
-    s8 cursorIndex;
-    u8 pageUpCursorDest;
-    u8 pageDownCursorDest;
-    u8 pad5[0x3];
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-} FD98_struct;
-
-extern void initGalleryViewer(FD98_struct *);
-
 void processGalleryMenuSelection(GalleryMenuState *arg0) {
     s16 temp = arg0->fadeTimer;
 
@@ -769,8 +771,6 @@ void beginGalleryMenuExit(GalleryMenuState *arg0) {
     arg0->menuState = 6;
 }
 
-extern void onGalleryMenuExit(void);
-
 s32 completeGalleryMenuExit(GalleryMenuState *arg0) {
     s16 temp;
 
@@ -786,9 +786,6 @@ s32 completeGalleryMenuExit(GalleryMenuState *arg0) {
     arg0->fadeTimer = temp - 1;
     return 0;
 }
-
-void setupGalleryMenuState(void);
-void updateGalleryMenu(void);
 
 void initGalleryMenu(void) {
     allocateTaskMemory(0xCC0);
@@ -1656,9 +1653,6 @@ s32 updateViewerFadeOut(GalleryMenuState *arg0) {
     alloc->fadeTimer = temp - 1;
     return 0;
 }
-
-extern void onGalleryViewerCleanup(void);
-extern void updateGalleryViewer(GalleryMenuState *);
 
 void initGalleryViewer(FD98_struct *arg0) {
     getCurrentAllocation();
