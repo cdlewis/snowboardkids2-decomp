@@ -732,11 +732,11 @@ extern s32 gButtonsPressed[];
 extern void startRumbleEffect(Player *player, s32 effectType);
 
 void updateRacePlayer(Player *player) {
-    Transform3D sp10;
-    Transform3D sp30;
-    Vec3i sp50;
+    Transform3D combinedTransform;
+    Transform3D fullTransform;
+    Vec3i impactStarPos;
     GameState *gameState;
-    s32 temp;
+    s32 i;
     s32 diff;
     s32 myProgress;
     s32 refPlayerProgress;
@@ -871,7 +871,7 @@ void updateRacePlayer(Player *player) {
         player->maxSpeedCap = 0;
     }
 
-    for (temp = 0; temp < player->slowdownLevel; temp++) {
+    for (i = 0; i < player->slowdownLevel; i++) {
         player->maxSpeedCap -= (player->maxSpeedCap >> 2);
     }
 
@@ -915,12 +915,12 @@ void updateRacePlayer(Player *player) {
                     rotateVectorY(
                         gameState->unk48 + 0xE4,
                         atan2Fixed(player->knockbackVelocity.x, player->knockbackVelocity.z),
-                        &sp50
+                        &impactStarPos
                     );
-                    sp50.x += player->worldPos.x;
-                    sp50.z += player->worldPos.z;
-                    sp50.y = player->worldPos.y + 0x100000;
-                    spawnImpactStar(&sp50);
+                    impactStarPos.x += player->worldPos.x;
+                    impactStarPos.z += player->worldPos.z;
+                    impactStarPos.y = player->worldPos.y + 0x100000;
+                    spawnImpactStar(&impactStarPos);
                     queueSoundAtPosition(&player->worldPos, 0xD);
                 case 0x32:
                     player->behaviorPhase = 5;
@@ -1030,14 +1030,14 @@ void updateRacePlayer(Player *player) {
     createCombinedRotationMatrix(&player->orientationTransform, player->pitchAngle, player->steeringAngle);
     createYRotationMatrix(&player->headingTransform, player->rotY);
 
-    func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &player->orientationTransform, &sp10);
-    func_8006B084_6BC84(&sp10, &player->headingTransform, &sp30);
+    func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &player->orientationTransform, &combinedTransform);
+    func_8006B084_6BC84(&combinedTransform, &player->headingTransform, &fullTransform);
 
-    sp30.translation.x -= player->headingTransform.translation.x;
-    sp30.translation.y -= player->headingTransform.translation.y;
-    sp30.translation.z -= player->headingTransform.translation.z;
+    fullTransform.translation.x -= player->headingTransform.translation.x;
+    fullTransform.translation.y -= player->headingTransform.translation.y;
+    fullTransform.translation.z -= player->headingTransform.translation.z;
 
-    transformVector((s16 *)&D_800BAA90_AA940, (s16 *)&sp30, &player->collisionOffset);
+    transformVector((s16 *)&D_800BAA90_AA940, (s16 *)&fullTransform, &player->collisionOffset);
     memcpy(&player->collisionListNode.localPos, &player->collisionOffset, sizeof(Vec3i));
     player->collisionListNode.posPtr = &player->worldPos;
     addCollisionSectorNodeToList(&player->collisionListNode);
