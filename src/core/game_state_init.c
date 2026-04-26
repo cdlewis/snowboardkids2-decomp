@@ -3,7 +3,6 @@
 #include "audio/audio.h"
 #include "common.h"
 #include "core/main.h"
-#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "story/location_markers.h"
 #include "story/map_events.h"
@@ -72,7 +71,7 @@ void initializeGameState(void) {
 }
 
 void gameStateCountdownHandler(void) {
-    GameState *gameState = (GameState *)getCurrentAllocation();
+    task_memory_430 *gameState = (task_memory_430 *)getCurrentAllocation();
 
     if (gameState->unk429 != 0) {
         gameState->unk429--;
@@ -135,7 +134,7 @@ void setupGameStateTransition(ModelEntity *arg0) {
 }
 
 void setShortCountdownAndContinue(void) {
-    ((GameState *)getCurrentAllocation())->unk429 = 2;
+    ((task_memory_430 *)getCurrentAllocation())->unk429 = 2;
     setCallback(&invokeTransitionEffect);
 }
 
