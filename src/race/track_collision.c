@@ -65,17 +65,16 @@ s32 handlePlayerTrackWallCollision(Player *player) {
     Vec3i samplePoints[3];
     Transform3D combinedTransform;
     Transform3D groundTransform;
-    void *allocation;
+    GameState *gameState;
     s32 result;
     s32 i;
     s32 collisionResult;
-    void *trackGeomData;
     u8 stunCounter;
     s32 sectorIdx;
     s32 j;
 
     result = 0;
-    allocation = getCurrentAllocation();
+    gameState = (GameState *)getCurrentAllocation();
     func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &groundTransform);
     func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &groundTransform, &combinedTransform);
 
@@ -86,9 +85,9 @@ s32 handlePlayerTrackWallCollision(Player *player) {
     } while (i < 3);
 
     i = 0;
-    trackGeomData = (u8 *)allocation + 0x30;
     do {
-        sectorIdx = getOrUpdatePlayerSectorIndex(player, trackGeomData, player->sectorIndex, &samplePoints[i]) & 0xFFFF;
+        sectorIdx =
+            getOrUpdatePlayerSectorIndex(player, &gameState->gameData, player->sectorIndex, &samplePoints[i]) & 0xFFFF;
         if (i == 0) {
             if (player->animFlags & 0x20) {
                 stunCounter = player->stunCollisionCounter;
@@ -96,7 +95,7 @@ s32 handlePlayerTrackWallCollision(Player *player) {
                     player->stunCollisionCounter = stunCounter + 1;
                 }
                 collisionResult = func_80060CDC_618DC(
-                    trackGeomData,
+                    &gameState->gameData,
                     sectorIdx,
                     &samplePoints[0],
                     (player->stunCollisionCounter + 6) << 16,
@@ -106,7 +105,7 @@ s32 handlePlayerTrackWallCollision(Player *player) {
             } else {
                 player->stunCollisionCounter = 0;
                 collisionResult = func_80060CDC_618DC(
-                    trackGeomData,
+                    &gameState->gameData,
                     sectorIdx,
                     &samplePoints[0],
                     gTrackCollisionThresholds[0].value,
@@ -123,20 +122,23 @@ s32 handlePlayerTrackWallCollision(Player *player) {
                 result = -1;
             }
             if (collisionResult == -2) {
-                if (samplePoints[i].y <
-                    getTrackHeightInSector(
-                        trackGeomData,
-                        getOrUpdatePlayerSectorIndex(player, trackGeomData, player->sectorIndex, &samplePoints[i]) &
-                            0xFFFF,
-                        &samplePoints[i],
-                        0x100000
-                    ) + 0x100000) {
+                if (samplePoints[i].y < getTrackHeightInSector(
+                                            &gameState->gameData,
+                                            getOrUpdatePlayerSectorIndex(
+                                                player,
+                                                &gameState->gameData,
+                                                player->sectorIndex,
+                                                &samplePoints[i]
+                                            ) & 0xFFFF,
+                                            &samplePoints[i],
+                                            0x100000
+                                        ) + 0x100000) {
                     result = -1;
                 }
             }
         } else {
             collisionResult = func_80060CDC_618DC(
-                trackGeomData,
+                &gameState->gameData,
                 sectorIdx,
                 &samplePoints[i],
                 gTrackCollisionThresholds[i].value,
@@ -152,14 +154,17 @@ s32 handlePlayerTrackWallCollision(Player *player) {
                 player->worldPos.z += pushOffset.z;
             }
             if (collisionResult == -2) {
-                if (samplePoints[i].y <
-                    getTrackHeightInSector(
-                        trackGeomData,
-                        getOrUpdatePlayerSectorIndex(player, trackGeomData, player->sectorIndex, &samplePoints[i]) &
-                            0xFFFF,
-                        &samplePoints[i],
-                        0x100000
-                    ) + 0x100000) {
+                if (samplePoints[i].y < getTrackHeightInSector(
+                                            &gameState->gameData,
+                                            getOrUpdatePlayerSectorIndex(
+                                                player,
+                                                &gameState->gameData,
+                                                player->sectorIndex,
+                                                &samplePoints[i]
+                                            ) & 0xFFFF,
+                                            &samplePoints[i],
+                                            0x100000
+                                        ) + 0x100000) {
                     result = -1;
                 }
                 for (j = i; j < 3; j++) {
