@@ -27,14 +27,6 @@ typedef struct {
     u8 _pad0[0x18];
     s32 yPosOffset;
     u8 _pad1C[0x20];
-    u8 transform[0x40];
-    s32 fadeDelta;
-    u8 _pad80[0x2];
-    u16 zRotation;
-} FanEffectFadeState;
-
-typedef struct {
-    u8 _pad0[0x3C];
     u8 transform[0x3C];
     void **displayList;
     s32 fadeDelta;
@@ -42,28 +34,19 @@ typedef struct {
     u16 zRotation;
     s16 scale;
     s16 remainingFrames;
-} FanEffectGrowState;
+} FanEffectState;
 
-typedef struct {
-    u8 padding[0x78];
-    s32 unk78;
-    u8 padding2[4];
-    s16 unk80;
-    u8 padding3[4];
-    s16 unk86;
-} FanEffectTask;
+/* Forward declarations */
+static void initFanEffectTask(FanEffectTaskState *taskState);
+static void updateFanEffectGrow(FanEffectState *arg);
+static void cleanupFanEffectTask(FanEffectTaskState *taskState);
+static void updateFanEffectFade(FanEffectState *fadeState);
 
 /* Global variables */
 extern StateEntry D_80088650;
 extern StateEntry D_80088660;
 extern s16 gFanSoundCount;
 extern s16 gFanSoundIds[];
-
-/* Forward declarations */
-static void initFanEffectTask(FanEffectTaskState *taskState);
-static void updateFanEffectGrow(FanEffectGrowState *arg);
-static void cleanupFanEffectTask(FanEffectTaskState *taskState);
-static void updateFanEffectFade(FanEffectFadeState *fadeState);
 
 /* Public functions */
 s16 getFanSoundCount(void) {
@@ -149,7 +132,7 @@ static void initFanEffectTask(FanEffectTaskState *taskState) {
     setCallbackWithContinue(&updateFanEffectGrow);
 }
 
-static void updateFanEffectGrow(FanEffectGrowState *arg0) {
+static void updateFanEffectGrow(FanEffectState *arg0) {
     Transform3D sp10;
     void *displayListData;
     s16 newZRotation;
@@ -189,7 +172,7 @@ static void updateFanEffectGrow(FanEffectGrowState *arg0) {
     }
 }
 
-static void updateFanEffectFade(FanEffectFadeState *fadeState) {
+static void updateFanEffectFade(FanEffectState *fadeState) {
     Transform3D rotationMatrix;
     s32 fadeDelta;
 
@@ -218,11 +201,11 @@ static void cleanupFanEffectTask(FanEffectTaskState *taskState) {
 }
 
 void spawnFanEffect(s32 displayList, s16 frames) {
-    FanEffectTask *task = (FanEffectTask *)scheduleTask(&initFanEffectTask, 1, 0, 0x64);
+    FanEffectState *task = (FanEffectState *)scheduleTask(&initFanEffectTask, 1, 0, 0x64);
 
     if (task != NULL) {
-        task->unk78 = displayList;
-        task->unk80 = 0;
-        task->unk86 = frames;
+        task->displayList = (void **)displayList;
+        task->yRotation = 0;
+        task->remainingFrames = frames;
     }
 }
