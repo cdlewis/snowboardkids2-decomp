@@ -25,20 +25,22 @@ typedef struct {
 s32 gPendingDmaCount = 0;
 
 // Bss
-extern OSMesgQueue *D_800A2150_A2D50[];
-extern OSThread D_800A1DC0_A29C0;
 extern s32 gDmaQueueIndex;
 extern s32 gDmaRequestCount;
-extern u8 D_800A2168_A2D68[];
+extern DmaTransferEntry *gDmaQueue;
+extern DmaTransferEntry *D_800A2108_A2D08;
 extern u8 *gDmaCompressionBuffer;
+
 extern OSMesgQueue D_800A2110_A2D10;
 extern OSMesgQueue gDmaMsgQueue;
 extern OSMesgQueue gPiDmaMsgQueue;
-extern char piManagerThreadStack[0x8]; // this size seems wrong
-extern DmaTransferEntry *D_800A2108_A2D08;
-extern DmaTransferEntry *gDmaQueue;
+extern OSMesgQueue *D_800A2150_A2D50[];
 extern OSMesg D_800A2128_A2D28[];
 extern OSMesg gPiDmaMsgBuf[];
+extern u8 D_800A2168_A2D68[];
+
+extern OSThread D_800A1DC0_A29C0;
+extern char piManagerThreadStack[0x8]; // this size seems wrong
 
 void piDmaHandlerThread(void *);
 
