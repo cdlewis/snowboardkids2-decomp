@@ -3,6 +3,17 @@
 #include "system/memory_allocator.h"
 
 typedef struct {
+    void *start;
+    void *end;
+} AssetMeta;
+
+typedef struct {
+    void *start;
+    void *end;
+    s32 uncompressedSize;
+} CompressedAssetMeta;
+
+typedef struct {
     void *asset1;
     void *asset2;
     void *asset3;
@@ -53,7 +64,7 @@ extern s32 D_80095940_96540[4];
 extern s32 D_80095950_96550[40];
 extern s32 D_800959F0_965F0[4];
 extern s32 D_80095A00_96600[4];
-extern s32 D_80095A10_96610[4];
+extern s32 D_80095A10_96610[36];
 
 void *load_3ECE40(void);
 void *loadAssetByIndex_94F90(s16 groupIndex, s16 pairIndex);

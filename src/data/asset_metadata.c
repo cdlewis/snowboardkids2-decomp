@@ -1,3 +1,4 @@
+#include "data/asset_metadata.h"
 #include "assets.h"
 #include "common.h"
 #include "gamestate.h"
@@ -5,17 +6,6 @@
 #include "system/memory_allocator.h"
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
-
-typedef struct {
-    void *start;
-    void *end;
-} AssetMeta;
-
-typedef struct {
-    void *start;
-    void *end;
-    s32 uncompressedSize;
-} CompressedAssetMeta;
 
 s32 D_80095AA0_966A0[];
 s32 D_80095BA0_967A0[];
@@ -2081,9 +2071,9 @@ void *loadAssetByIndex_953E0(s16 index) {
     }
 }
 
-s32 loadAssetByIndex_95380(s16 groupIndex, s16 pairIndex) {
+UnknownAssetStruct *loadAssetByIndex_95380(s16 groupIndex, s16 pairIndex) {
     s32 *group = D_80094780_95380[groupIndex];
-    return group[pairIndex];
+    return (UnknownAssetStruct *)group[pairIndex];
 }
 
 s32 loadAssetByIndex_953B0(s16 groupIndex, s16 pairIndex) {

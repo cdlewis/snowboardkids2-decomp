@@ -502,11 +502,6 @@ AIPlayerParamEntry gAIPlayerParams[8][0x11] = {
      { 0x1A, 0xD2, 0x00, 0x00 } },
 };
 
-typedef struct {
-    void *start;
-    void *end;
-} AssetMeta;
-
 extern AssetMeta D_8009A550_9B150[];
 extern void spawnPlayerIndicatorTask(Player *);
 extern void applyCharacterBoardStats(Player *);
