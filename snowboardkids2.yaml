@@ -320,7 +320,7 @@ segments:
       - [0x892B0, .data, data/level_preview_segments]
       - [0x89320, .data, animation/pulsing_indicator]
       - [0x89330, .data, core/main]
-      - [0x8A110, data]
+      - [0x8A110, .data, data/effect_display_lists]
       - [0x8A130, .data, ui/level_preview_3d]
       - [0x8C980, .data, effects/nonrace_shadow]
       - [0x8CA90, .data, effects/transparent_render]
