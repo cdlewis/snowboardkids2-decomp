@@ -29,6 +29,21 @@ typedef struct {
     CompositeInt typeSelection;
 } CutsceneState;
 
+typedef enum {
+    CUTSCENE_STATE_INIT_DMA,
+    CUTSCENE_STATE_WAIT_DMA,
+    CUTSCENE_STATE_INIT_MANAGER,
+    CUTSCENE_STATE_START_PLAYBACK,
+    CUTSCENE_STATE_DELAY,
+    CUTSCENE_STATE_PLAYING,
+    CUTSCENE_STATE_SKIP_START,
+    CUTSCENE_STATE_SKIP_FADE,
+    CUTSCENE_STATE_TERMINATE_TASKS,
+    CUTSCENE_STATE_WAIT_TERMINATE,
+    CUTSCENE_STATE_CLEANUP,
+    CUTSCENE_STATE_EXIT
+} CutsceneStateEnum;
+
 CutsceneState gCutsceneState = { .slotIndex = 0,
                                  .cutsceneType = 0,
                                  .frameIndex = 0,
@@ -43,7 +58,6 @@ extern s32 gButtonsPressed;
 
 void awaitCutsceneTransitionComplete(void);
 void updateCutscenePlayback(void);
-
 void runCutsceneFrame(void);
 void signalCutsceneComplete(void);
 void awaitCutsceneTaskComplete(void);
@@ -147,21 +161,6 @@ void runCutsceneFrame(void) {
     initializeCutsceneSystem(&taskMemory->cutsceneData);
     setGameStateHandler(&updateCutscenePlayback);
 }
-
-typedef enum {
-    CUTSCENE_STATE_INIT_DMA,
-    CUTSCENE_STATE_WAIT_DMA,
-    CUTSCENE_STATE_INIT_MANAGER,
-    CUTSCENE_STATE_START_PLAYBACK,
-    CUTSCENE_STATE_DELAY,
-    CUTSCENE_STATE_PLAYING,
-    CUTSCENE_STATE_SKIP_START,
-    CUTSCENE_STATE_SKIP_FADE,
-    CUTSCENE_STATE_TERMINATE_TASKS,
-    CUTSCENE_STATE_WAIT_TERMINATE,
-    CUTSCENE_STATE_CLEANUP,
-    CUTSCENE_STATE_EXIT
-} CutsceneStateEnum;
 
 void updateCutscenePlayback(void) {
     CutsceneTaskMemory *state;
