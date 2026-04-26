@@ -7,15 +7,6 @@ typedef struct {
     s16 y;
     s32 unk4;
     s16 digit;
-    s8 palette;
-    s8 padB;
-} TextElement12;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    s32 unk4;
-    s16 digit;
     s16 unkA;
     s8 unkC;
     s8 palette;
@@ -27,7 +18,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
     s32 count = 0;
     s32 palette = 0;
     s32 c;
-    TextElement12 *elem12;
+    SpriteRenderArg *elem12;
     TextElement16 *elem16;
     s32 i;
     TextElement16 *initPtr;
@@ -66,52 +57,52 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     x += 8;
                     break;
                 case 0x47:
-                    elem12->digit = 0xA;
+                    elem12->frameIndex = 0xA;
                     elem12->x = x;
                     x += 8;
                     elem12->y = y;
-                    elem12->unk4 = texture;
-                    elem12->palette = palette;
+                    elem12->spriteData = (SpriteSheetData *)texture;
+                    elem12->paletteIndex = palette;
                     debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 case 0x3A:
-                    elem12->digit = 0xD;
+                    elem12->frameIndex = 0xD;
                     elem12->x = x;
                     x += 8;
                     elem12->y = y;
-                    elem12->unk4 = texture;
-                    elem12->palette = palette;
+                    elem12->spriteData = (SpriteSheetData *)texture;
+                    elem12->paletteIndex = palette;
                     debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 case 0x22:
-                    elem12->digit = 0xB;
+                    elem12->frameIndex = 0xB;
                     elem12->x = x;
                     x += 8;
                     elem12->y = y;
-                    elem12->unk4 = texture;
-                    elem12->palette = palette;
+                    elem12->spriteData = (SpriteSheetData *)texture;
+                    elem12->paletteIndex = palette;
                     debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 case 0x27:
-                    elem12->digit = 0xC;
+                    elem12->frameIndex = 0xC;
                     elem12->x = x;
                     x += 8;
                     elem12->y = y;
-                    elem12->unk4 = texture;
-                    elem12->palette = palette;
+                    elem12->spriteData = (SpriteSheetData *)texture;
+                    elem12->paletteIndex = palette;
                     debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 default:
-                    elem12->digit = text[i] - 0x30;
+                    elem12->frameIndex = text[i] - 0x30;
                     elem12->x = x;
                     elem12->y = y;
                     x += 8;
-                    elem12->unk4 = texture;
-                    elem12->palette = palette;
+                    elem12->spriteData = (SpriteSheetData *)texture;
+                    elem12->paletteIndex = palette;
                     debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
