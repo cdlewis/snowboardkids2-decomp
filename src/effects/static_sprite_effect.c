@@ -1,17 +1,10 @@
+#include "effects/static_sprite_effect.h"
 #include "assets.h"
 #include "common.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "system/task_scheduler.h"
-
-s32 staticSpriteEffectTexture[] = {
-    (s32)0xFFE00040, 0x00000000,      (s32)0xFFF0FFF0, (s32)0xFFFFFFFF, 0x00200040, 0x00000000,
-    0x03F0FFF0,      (s32)0xFFFFFFFF, 0x00200000,      0x00000000,      0x03F003F0, (s32)0xFFFFFFFF,
-    (s32)0xFFE00000, 0x00000000,      (s32)0xFFF003F0, (s32)0xFFFFFFFF,
-};
-
-void cleanupStaticSpriteEffectTask(void **);
 
 typedef struct {
     s32 unk0;
@@ -34,21 +27,6 @@ typedef struct {
     s32 velocityY;
     s32 velocityZ;
     s16 frameCounter;
-} StaticSpriteEffectUpdateData;
-
-void updateStaticSpriteEffectTask(StaticSpriteEffectUpdateData *);
-
-typedef struct {
-    void *modelData;
-    void *textureData;
-    u8 padding[0x16];
-    u8 animDuration;
-    u8 padding2[0x5];
-    void *textureData2;
-    u8 padding3[0x16];
-    u8 animDuration2;
-    u8 padding4[0x11];
-    s16 frameCounter;
 } StaticSpriteEffectTaskData;
 
 typedef struct {
@@ -64,18 +42,27 @@ typedef struct {
     s16 frameCounter;
 } StaticSpriteEffectTaskMemory;
 
+s32 staticSpriteEffectTexture[] = {
+    (s32)0xFFE00040, 0x00000000,      (s32)0xFFF0FFF0, (s32)0xFFFFFFFF, 0x00200040, 0x00000000,
+    0x03F0FFF0,      (s32)0xFFFFFFFF, 0x00200000,      0x00000000,      0x03F003F0, (s32)0xFFFFFFFF,
+    (s32)0xFFE00000, 0x00000000,      (s32)0xFFF003F0, (s32)0xFFFFFFFF,
+};
+
+void updateStaticSpriteEffectTask(StaticSpriteEffectTaskData *);
+void cleanupStaticSpriteEffectTask(void **);
+
 void initStaticSpriteEffectTask(StaticSpriteEffectTaskData *arg0) {
     arg0->modelData = loadCompressedData(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
-    arg0->textureData = &staticSpriteEffectTexture;
-    arg0->animDuration = (randA() & 0x1F) + 0x70;
+    arg0->sprite1.assetTemplate = (loadAssetMetadata_arg *)&staticSpriteEffectTexture;
+    arg0->sprite1.alpha = (randA() & 0x1F) + 0x70;
     arg0->frameCounter = 0;
-    arg0->textureData2 = arg0->textureData;
-    arg0->animDuration2 = arg0->animDuration;
+    arg0->sprite2.assetTemplate = arg0->sprite1.assetTemplate;
+    arg0->sprite2.alpha = arg0->sprite1.alpha;
     setCleanupCallback(&cleanupStaticSpriteEffectTask);
     setCallbackWithContinue(&updateStaticSpriteEffectTask);
 }
 
-void updateStaticSpriteEffectTask(StaticSpriteEffectUpdateData *arg0) {
+void updateStaticSpriteEffectTask(StaticSpriteEffectTaskData *arg0) {
     s32 i;
     loadAssetMetadata_arg *sprite1_ptr = &arg0->sprite1;
 
