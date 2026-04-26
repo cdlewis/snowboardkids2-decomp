@@ -7,21 +7,6 @@
 #include "system/task_scheduler.h"
 
 typedef struct {
-    void *modelData;
-    void *textureData;
-    s32 currentTexture;
-    u8 padding[0x16];
-    s8 animDuration;
-    s32 currentTexture2;
-    s32 unk28;
-    u8 padding2[0x16];
-    s8 animDuration2;
-    u8 padding3[0x10];
-    s16 frameCounter;
-    s16 textureIndex;
-} SpriteEffectTaskData;
-
-typedef struct {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -33,57 +18,39 @@ typedef struct {
 } SpriteEffectPositionNode;
 
 typedef struct {
-    SpriteEffectPositionNode *unk0;
-    void *unk4;
-    /* 0x8 */ loadAssetMetadata_arg sprite1;
-    s32 unk24;
-    loadAssetMetadata_arg sprite2;
-    u8 padding3[0x4];
-    s32 velocityX;
-    s32 velocityY;
-    s32 velocityZ;
-    s16 frameCounter;
-    s16 unk56;
-} SpriteEffectUpdateData;
+    /* 0x00 */ void *modelData;
+    /* 0x04 */ void *textureData;
+    /* 0x08 */ loadAssetMetadata_arg sprite1;
+    /* 0x24 */ s32 unk24;
+    /* 0x28 */ loadAssetMetadata_arg sprite2;
+    /* 0x44 */ u8 padding[0x4];
+    /* 0x48 */ s32 velocityX;
+    /* 0x4C */ s32 velocityY;
+    /* 0x50 */ s32 velocityZ;
+    /* 0x54 */ s16 frameCounter;
+    /* 0x56 */ s16 textureIndex;
+} SpriteEffectTask;
 
-typedef struct {
-    void *modelData;
-    void *textureData;
-} SpriteEffectCleanupData;
+void updateSpriteEffectTask(SpriteEffectTask *task);
+void cleanupSpriteEffectTask(SpriteEffectTask *task);
 
-typedef struct {
-    u8 padding[0xC];
-    s32 unkC;
-    u8 padding2[0x1C];
-    s32 unk2C;
-    u8 padding3[0x18];
-    s32 velocityX;
-    s32 velocityY;
-    s32 velocityZ;
-    s16 frameCounter;
-    s16 textureIndex;
-} SpriteEffectTaskMemory;
-
-void updateSpriteEffectTask(SpriteEffectUpdateData *task);
-void cleanupSpriteEffectTask(SpriteEffectCleanupData *);
-
-void initSpriteEffectTask(SpriteEffectTaskData *task) {
+void initSpriteEffectTask(SpriteEffectTask *task) {
     void *textureData;
 
     task->modelData = loadCompressedData(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
     textureData = loadCompressedData(&_49B420_ROM_START, &_49B420_ROM_END, 0x240);
     task->textureData = textureData;
-    task->currentTexture = (s32)(textureData + (task->textureIndex << 6));
-    task->animDuration = (u8)((randA() & 0x1F) + 0x70);
+    task->sprite1.assetTemplate = (loadAssetMetadata_arg *)((u8 *)textureData + (task->textureIndex << 6));
+    task->sprite1.alpha = (randA() & 0x1F) + 0x70;
     task->frameCounter = 0;
-    task->unk28 = task->currentTexture;
-    task->animDuration2 = (u8)task->animDuration;
+    task->sprite2.assetTemplate = task->sprite1.assetTemplate;
+    task->sprite2.alpha = task->sprite1.alpha;
     setCleanupCallback(&cleanupSpriteEffectTask);
     setCallbackWithContinue(&updateSpriteEffectTask);
 }
 
-void updateSpriteEffectTask(SpriteEffectUpdateData *task) {
-    loadAssetMetadata(&task->sprite1, task->unk0, task->frameCounter);
+void updateSpriteEffectTask(SpriteEffectTask *task) {
+    loadAssetMetadata(&task->sprite1, task->modelData, task->frameCounter);
 
     task->sprite2.data_ptr = task->sprite1.data_ptr;
     task->sprite2.index_ptr = task->sprite1.index_ptr;
@@ -95,7 +62,7 @@ void updateSpriteEffectTask(SpriteEffectUpdateData *task) {
 
     if (task->frameCounter != 0) {
         s32 i;
-        SpriteEffectPositionNode *node = (SpriteEffectPositionNode *)&task->unk0;
+        SpriteEffectPositionNode *node = (SpriteEffectPositionNode *)task;
         for (i = 0; i < 2; i++) {
             node[i].posX += task->velocityX;
             node[i].posY += task->velocityY;
@@ -109,20 +76,20 @@ void updateSpriteEffectTask(SpriteEffectUpdateData *task) {
     }
 }
 
-void cleanupSpriteEffectTask(SpriteEffectCleanupData *task) {
+void cleanupSpriteEffectTask(SpriteEffectTask *task) {
     task->textureData = freeNodeMemory(task->textureData);
     task->modelData = freeNodeMemory(task->modelData);
 }
 
 void scheduleSpriteEffectTask(void *startPos, void *endPos, Vec3i *velocity, s32 textureIndex) {
-    SpriteEffectTaskMemory *task = (SpriteEffectTaskMemory *)scheduleTask(&initSpriteEffectTask, 0, 0, 0);
+    SpriteEffectTask *task = (SpriteEffectTask *)scheduleTask(&initSpriteEffectTask, 0, 0, 0);
     if (task != NULL) {
-        memcpy(&task->unkC, startPos, 0xC);
-        memcpy(&task->unk2C, endPos, 0xC);
+        memcpy(&task->sprite1.position, startPos, 0xC);
+        memcpy(&task->sprite2.position, endPos, 0xC);
         task->textureIndex = textureIndex;
-        task->velocityX = (s32)(velocity->x / 2);
-        task->velocityY = (s32)(velocity->y / 2);
-        task->velocityZ = (s32)(velocity->z / 2);
+        task->velocityX = velocity->x / 2;
+        task->velocityY = velocity->y / 2;
+        task->velocityZ = velocity->z / 2;
     }
 }
 
