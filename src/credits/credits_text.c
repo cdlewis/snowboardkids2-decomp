@@ -3,6 +3,7 @@
 #include "graphics/graphics.h"
 #include "graphics/palette.h"
 #include "graphics/sprite_rdp.h"
+#include "text/hud_text.h"
 
 typedef struct {
     u16 frame;
@@ -121,18 +122,6 @@ void initCreditsScrollingTextEffects(void *state) {
         s->textScrollOffset[i] = 0;
     }
 }
-
-extern void enqueueHudTextLayout(
-    void *fontAsset,
-    void *textData,
-    s16 startX,
-    s16 startY,
-    u8 alpha,
-    u8 transparency,
-    u8 paletteIndex,
-    u8 priority,
-    u8 flags
-);
 
 void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
     s32 showPalette;
