@@ -45,11 +45,6 @@ typedef struct {
     u8 unk42E;
 } AllocationData29200;
 
-void initStoryMapItemMovement(StoryMapItemTask *);
-void awaitStoryMapItemReady(void);
-void awaitStoryMapItemRespawn(StoryMapItem *arg0);
-void cleanupStoryMapItem(StoryMapItem *arg0);
-
 extern void initStoryMapNpcJump(void);
 extern void initStoryMapNpcWave(void);
 extern void initStoryMapNpcFloatEffect(void);
@@ -67,6 +62,11 @@ extern void initStoryMapNpcIdleRandomDelayNoAnim2(void);
 extern void initStoryMapNpcIdleRandomDelayNoAnim3(void);
 extern void initStoryMapNpcTalk(void);
 extern void initStoryMapNpcStretch(void);
+
+void initStoryMapItemMovement(StoryMapItemTask *);
+void awaitStoryMapItemReady(void);
+void awaitStoryMapItemRespawn(StoryMapItem *arg0);
+void cleanupStoryMapItem(StoryMapItem *arg0);
 
 u8 gStoryMapItemTypeTables[][16] = {
     { 0x00, 0x0D, 0x06, 0x02, 0x00, 0x0D, 0x06, 0x02, 0x00, 0x0D, 0x06, 0x02, 0x00, 0x0D, 0x06, 0x02 },
@@ -277,6 +277,14 @@ s32 gStoryMapNpcAnimConfig[] = { 0x0000FFFF,
                                  0x000000D4,
                                  0x00D00000 };
 
+s16 gStoryMapItemSpawnPositionsX[] = {
+    0x0051, 0x006D, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x00F5, 0x00E3, 0x0000,
+};
+
+s16 gStoryMapItemSpawnPositionsZ[] = {
+    0x0000, 0x0000, 0x0083, 0x0099, 0x0000, 0x00C9, 0x0000, 0x00F4, 0x00E1, 0x0000,
+};
+
 void initStoryMapItem(StoryMapItem *arg0) {
     AllocationData29200 *alloc;
     u8 temp;
@@ -449,11 +457,3 @@ void awaitStoryMapItemRespawn(StoryMapItem *arg0) {
 void cleanupStoryMapItem(StoryMapItem *arg0) {
     arg0->model = destroySceneModel(arg0->model);
 }
-
-s16 gStoryMapItemSpawnPositionsX[] = {
-    0x0051, 0x006D, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x00F5, 0x00E3, 0x0000,
-};
-
-s16 gStoryMapItemSpawnPositionsZ[] = {
-    0x0000, 0x0000, 0x0083, 0x0099, 0x0000, 0x00C9, 0x0000, 0x00F4, 0x00E1, 0x0000,
-};
