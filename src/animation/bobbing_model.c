@@ -400,8 +400,9 @@ u32 D_800885C0[] = {
 };
 
 void updateBobbingModelTask(BobbingModelState *);
-
 void cleanupBobbingModelTask(BobbingModelTaskState *);
+void updateTiltingModelTask(BobbingModelTaskState *);
+void cleanupTiltingModelTask(void);
 
 void initBobbingModelTask(BobbingModelTaskState *state) {
     memcpy(state->transformMatrix, &identityMatrix, 0x20);
@@ -493,9 +494,6 @@ void cleanupBobbingModelTask(BobbingModelTaskState *state) {
     state->displayList = freeNodeMemory(state->displayList);
     state->vertexData = freeNodeMemory(state->vertexData);
 }
-
-void cleanupTiltingModelTask(void);
-void updateTiltingModelTask(BobbingModelTaskState *);
 
 void initTiltingModelTask(void) {
     setCleanupCallback(cleanupTiltingModelTask);
