@@ -14,9 +14,8 @@
 #include "ui/save_data.h"
 
 typedef struct {
-    u8 _pad0[0x4];
-    void *spriteData;
-} CharacterSelectIndicatorCleanupTask;
+    s16 x, y;
+} Vec2s;
 
 typedef struct {
     s16 coordX;
@@ -33,10 +32,6 @@ typedef struct {
     char *formatString;
     char formattedText[16];
 } CoordinateDisplayTaskState;
-
-typedef struct {
-    s16 x, y;
-} Vec2s;
 
 typedef struct {
     u8 padding[0x592];
@@ -97,9 +92,9 @@ void awaitCharacterPreviewRotationReset(CharacterPreviewState *);
 void updateCharacterSelectSprites(CharacterSelectSprites *);
 void cleanupCharacterSelectSprites(CharacterSelectSprites *);
 void updatePlayer3CharacterSelectIndicator(void *);
-void cleanupCharacterSelectIndicator(CharacterSelectIndicatorCleanupTask *);
+void cleanupCharacterSelectIndicator(CharacterSelectIndicatorTask *);
 void updatePlayer2CharacterSelectIndicator(void *);
-void cleanupCharacterSelectIndicatorData(CharacterSelectIndicatorCleanupTask *);
+void cleanupCharacterSelectIndicatorData(CharacterSelectIndicatorTask *);
 void initCharacterSelectTextureRenderState(TextureDataTaskState *);
 void renderCharacterSelectBoard(void *);
 void cleanupCharacterSelectBoardTask(CharacterSelectBoardTask *);
@@ -553,7 +548,7 @@ void updatePlayer3CharacterSelectIndicator(void *arg0) {
     }
 }
 
-void cleanupCharacterSelectIndicator(CharacterSelectIndicatorCleanupTask *arg0) {
+void cleanupCharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
@@ -578,7 +573,7 @@ void updatePlayer2CharacterSelectIndicator(void *arg0) {
     }
 }
 
-void cleanupCharacterSelectIndicatorData(CharacterSelectIndicatorCleanupTask *arg0) {
+void cleanupCharacterSelectIndicatorData(CharacterSelectIndicatorTask *arg0) {
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
