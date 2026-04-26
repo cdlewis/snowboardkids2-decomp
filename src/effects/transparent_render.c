@@ -25,16 +25,9 @@ typedef struct {
     u8 _padA[0x2];
 } AssetGroupTableEntry;
 
-typedef struct {
-    void *context;
-    void **loadedAssets;
-    s32 param;
-    void *unkC;
-    void *unk10;
-    u8 _pad14[0xB0];
-    u8 groupIndex;
-    u8 unkC5;
-} AssetGroupTaskData;
+void renderModelIfTransparent(TransparentRenderTaskData *taskData);
+void loadAssetGroupResources(TiledTextureTaskData *taskData);
+void freeAssetGroupResources(TiledTextureTaskData *taskData);
 
 u8 D_8008BE90[] = { 0x00, 0x01, 0x00, 0x00 };
 
@@ -70,9 +63,6 @@ AssetGroupTableEntry assetGroupTable[] = {
 s32 D_8008BF88 = 0x00020000;
 s32 D_8008BF8C = 0x00000000;
 
-void freeAssetGroupResources(AssetGroupTaskData *taskData);
-void renderModelIfTransparent(TransparentRenderTaskData *taskData);
-
 void scheduleTransparentModelRender(CutsceneManager *cutsceneManager, ModelEntityRenderState *renderState) {
     TransparentRenderTaskData *task;
 
@@ -89,29 +79,27 @@ void renderModelIfTransparent(TransparentRenderTaskData *taskData) {
     }
 }
 
-void loadAssetGroupResources(AssetGroupTaskData *taskData);
-
 void scheduleDualAssetGroupLoad(void *context, u8 groupIndex1, s32 param1, u8 groupIndex2, s32 param2) {
-    AssetGroupTaskData *task;
+    TiledTextureTaskData *task;
 
     task = scheduleTask(loadAssetGroupResources, 3, 0, 0);
     if (task != NULL) {
-        task->context = context;
+        task->cutsceneManager = context;
         task->groupIndex = groupIndex2;
-        task->param = param2;
-        task->unkC5 = 0;
+        task->scrollSpeedParam = param2;
+        task->initialized = 0;
     }
 
     task = scheduleTask(loadAssetGroupResources, 3, 0, 0);
     if (task != NULL) {
-        task->context = context;
+        task->cutsceneManager = context;
         task->groupIndex = groupIndex1;
-        task->param = param1;
-        task->unkC5 = 0;
+        task->scrollSpeedParam = param1;
+        task->initialized = 0;
     }
 }
 
-void loadAssetGroupResources(AssetGroupTaskData *taskData) {
+void loadAssetGroupResources(TiledTextureTaskData *taskData) {
     AssetGroupTableEntry *entry;
     AssetEntry *assetList;
     s32 i;
@@ -122,8 +110,8 @@ void loadAssetGroupResources(AssetGroupTaskData *taskData) {
     setCleanupCallback(freeAssetGroupResources);
     i = 0;
 
-    taskData->unk10 = NULL;
-    taskData->unkC = NULL;
+    taskData->yPos = 0;
+    taskData->scrollOffset = 0;
 
     taskData->loadedAssets = allocateNodeMemory(entry->assetCount * 4);
 
@@ -184,7 +172,7 @@ void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
     }
 }
 
-void freeAssetGroupResources(AssetGroupTaskData *taskData) {
+void freeAssetGroupResources(TiledTextureTaskData *taskData) {
     AssetGroupTableEntry *entry;
     s32 i;
     u8 index;
