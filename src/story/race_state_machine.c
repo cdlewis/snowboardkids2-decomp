@@ -282,7 +282,7 @@ void onStoryModeRaceCancelled(void) {
 
 void initBoardShopDisplay(void) {
     BoardShopState *state;
-    u8 lightBuffer[0x20];
+    Transform3D viewportTransform;
     u8 *ptr;
     s32 i;
 
@@ -301,9 +301,9 @@ void initBoardShopDisplay(void) {
     initMenuCameraNode(&state->secondaryViewport, 2, 0x14, 0);
     initMenuCameraNode(&state->tertiaryViewport, 8, 0x14, 1);
     initMenuCameraNode(&state->quaternaryViewport, 9, 5, 1);
-    createViewportTransform(lightBuffer, 0, 0, 0x580000, 0, 0, 0);
-    setViewportTransformById(state->mainViewport.id, lightBuffer);
-    setViewportTransformById(state->secondaryViewport.id, lightBuffer);
+    createViewportTransform(&viewportTransform, 0, 0, 0x580000, 0, 0, 0);
+    setViewportTransformById(state->mainViewport.id, &viewportTransform);
+    setViewportTransformById(state->secondaryViewport.id, &viewportTransform);
     state->assetSlot0 = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
     state->assetSlot1 = loadCompressedData(&_4488E0_ROM_START, &_4488E0_ROM_END, 0x14410);
     state->assetSlot2 = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
