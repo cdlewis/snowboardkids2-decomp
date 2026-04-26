@@ -11,70 +11,39 @@
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-typedef struct {
-    s32 unk0;
-    Transform3D unk4;
-    /* 0x24 */ u8 pad2[0x8];
-    /* 0x2C */ u16 unk2C;
-    /* 0x2E */ u16 unk2E;
-    /* 0x30 */ u8 pad3[0x10];
-    /* 0x40 */ s32 unk40;
-    /* 0x44 */ s32 unk44;
-    /* 0x48 */ u8 pad3b[0x8];
-    /* 0x50 */ s16 unk50;
-    /* 0x52 */ s16 unk52;
-    /* 0x54 */ u8 pad4[0x8];
-    /* 0x5C */ u8 unk5C;
-    /* 0x5D */ u8 pad5[0x5];
-    /* 0x62 */ s8 unk62;
-    /* 0x63 */ s8 unk63;
-} Func8002CB88Arg_arg0;
-
-typedef struct RareEventIdleState RareEventIdleState;
-struct RareEventIdleState {
-    /* 0x00 */ Func8002CB88Arg_arg0 elements[2];
-    /* 0xC8 */ void (*callback)(RareEventIdleState *);
-    /* 0xCC */ u16 effectDelay[1];
-    /* 0xCE */ u16 effectDuration;
-    /* 0xD0 */ u8 pad9[0x5];
-    /* 0xD5 */ u8 npcCount;
-};
+void updateStoryMapRareEventIdle(Func2E024Arg *);
+void updateStoryMapRareEventWave(Func2E024Arg *);
+void updateStoryMapRareEventJuggling(Func2E024Arg *);
+void updateStoryMapRareEventSledding(Func2E024Arg *);
+void updateStoryMapRareEventSkating(Func2E024Arg *);
+void updateStoryMapRareEventSnowman(Func2E024Arg *);
+void updateStoryMapRareEventCheering(Func2E024Arg *);
 
 extern u16 D_8009ADE0_9B9E0;
 
-typedef struct Func8002CD3CArg Func8002CD3CArg;
-struct Func8002CD3CArg {
-    /* 0x00 */ s32 unk0;
-    /* 0x04 */ u8 pad0[0x14];
-    /* 0x18 */ s32 unk18;
-    /* 0x1C */ u8 pad1[0x4];
-    /* 0x20 */ s32 unk20;
-    /* 0x24 */ u8 pad2[0x1C];
-    /* 0x40 */ s32 unk40;
-    /* 0x44 */ s32 unk44;
-    /* 0x48 */ u8 pad3[0x8];
-    /* 0x50 */ s16 unk50;
-    /* 0x52 */ u8 pad3b[0x10];
-    /* 0x62 */ s8 unk62;
-    /* 0x63 */ u8 pad5[0x1];
-    /* 0x64 */ s32 unk64;
-    /* 0x68 */ u8 pad6[0x3C];
-    /* 0xA4 */ s32 unkA4;
-    /* 0xA8 */ u8 pad7[0x20];
-    /* 0xC8 */ void (*unkC8)(Func8002CD3CArg *);
-    /* 0xCC */ u16 unkCC;
-    /* 0xCE */ u16 unkCE;
-    /* 0xD0 */ u8 pad12[0x5];
-    /* 0xD5 */ u8 unkD5;
+u16 gNpcCollisionRadii[] = {
+    0x000F, 0x000F, 0x0013, 0x0013, 0x0013, 0x000F, 0x000F, 0x000F, 0x0013, 0x0000, 0x0002, 0x0304, 0x0506, 0x0907,
+    0x0001, 0x0304, 0x0506, 0x0809, 0x0001, 0x0204, 0x0506, 0x0907, 0x0001, 0x0203, 0x0506, 0x0807, 0x0001, 0x0203,
+    0x0406, 0x0907, 0x0001, 0x0203, 0x0405, 0x0807, 0x000D, 0x0602, 0x000D, 0x0602, 0x000D, 0x0602, 0x000D, 0x0602,
+    0x0306, 0x090D, 0x0306, 0x090D, 0x0306, 0x090D, 0x0306, 0x090D, 0x020E, 0x0F07, 0x020E, 0x0F07, 0x020E, 0x0F07,
+    0x020E, 0x0F07, 0x080E, 0x0407, 0x080E, 0x0407, 0x080E, 0x0407, 0x080E, 0x0407, 0x0105, 0x0A0B, 0x0105, 0x0A0B,
+    0x0105, 0x0A0B, 0x0105, 0x0A0B, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x0C02, 0x0304,
+    0x0C02, 0x0304, 0x0C02, 0x0304, 0x0C02, 0x0304, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D,
+    0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D,
 };
 
-extern u16 gNpcCollisionRadii[];
+// Array indexed by (rareEventId * 2 + npcIndex)
+// Only byte 0 is read by prepareStoryMapNpcDialogue (face-player flag)
+// Bytes 1-15 may be unused or referenced by unmapped code
+u8 dialogueNpcFacesPlayer[] = {
+    0x00, // [event 0, NPC 0] face player flag
+    0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00
+};
 
-void updateStoryMapRareEventIdle(RareEventIdleState *);
-void updateStoryMapRareEventWave(RareEventIdleState *);
-void updateStoryMapRareEventJuggling(Func2E024Arg *arg0);
-void updateStoryMapRareEventSledding(Func2E024Arg *);
-void updateStoryMapRareEventSkating(Func2E024Arg *);
+s8 dialogueNpcAnimations[] = {
+    0x01, 0x01, 0x00, -1,   -1,   0x04, 0x01, 0x02, -1,   -1,   0x04, -1,   0x04, 0x00,
+    -1,   -1,   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
 
 void initStoryMapRareEventWave(Func2E024Arg *arg0) {
     GameState *allocation;
@@ -128,29 +97,29 @@ void initStoryMapRareEventWave(Func2E024Arg *arg0) {
     setCallback(updateStoryMapRareEventWave);
 }
 
-void updateStoryMapRareEventWave(RareEventIdleState *arg0) {
+void updateStoryMapRareEventWave(Func2E024Arg *arg0) {
     GameState *allocation;
     s32 i;
-    Func8002CB88Arg_arg0 *ptr;
+    Func297D8Arg *ptr;
 
     allocation = getCurrentAllocation();
 
-    for (i = 0; i < arg0->npcCount; i++) {
+    for (i = 0; i < arg0->unkD5; i++) {
         ptr = &arg0->elements[i];
 
-        if (ptr->unk50 != 0x19) {
-            if (ptr->unk50 == 0x1A) {
+        if (ptr->animState != 0x19) {
+            if (ptr->animState == 0x1A) {
                 ptr->unk62 = 0;
             }
         } else {
             if (ptr->unk62 != 0) {
-                ptr->unk50 = 0x1A;
+                ptr->animState = 0x1A;
             }
         }
 
-        updateStoryMapNpcModel((Func297D8Arg *)ptr);
-        allocation->npcPosX[i] = ptr->unk4.translation.x;
-        allocation->npcPosZ[i] = ptr->unk4.translation.z;
+        updateStoryMapNpcModel(ptr);
+        allocation->npcPosX[i] = ptr->matrix.translation.x;
+        allocation->npcPosZ[i] = ptr->matrix.translation.z;
     }
 
     if (allocation->dialogueTurnState == 0x11) {
@@ -160,7 +129,7 @@ void updateStoryMapRareEventWave(RareEventIdleState *arg0) {
     }
 }
 
-void initStoryMapRareEventIdle(RareEventIdleState *arg0) {
+void initStoryMapRareEventIdle(Func2E024Arg *arg0) {
     GameState *allocation;
     s32 vec3[3];
     s32 i;
@@ -170,24 +139,24 @@ void initStoryMapRareEventIdle(RareEventIdleState *arg0) {
     vec3[0] = 0;
     vec3[1] = 0x280000;
 
-    for (i = 0; i < arg0->npcCount; i++) {
-        memcpy(&arg0->elements[i].unk4, &identityMatrix, sizeof(Transform3D));
+    for (i = 0; i < arg0->unkD5; i++) {
+        memcpy(&arg0->elements[i].matrix, &identityMatrix, sizeof(Transform3D));
         arg0->elements[i].unk62 = 0;
-        arg0->effectDelay[i] = 0;
+        arg0->timer[i] = 0;
         if (i == 0) {
-            arg0->elements[0].unk4.translation.x = 0xFFF40000;
-            arg0->elements[0].unk4.translation.z = 0xFFB80000;
+            arg0->elements[0].matrix.translation.x = 0xFFF40000;
+            arg0->elements[0].matrix.translation.z = 0xFFB80000;
         } else {
-            arg0->elements[1].unk4.translation.x = 0x180000;
-            arg0->elements[1].unk4.translation.z = 0xFFB80000;
+            arg0->elements[1].matrix.translation.x = 0x180000;
+            arg0->elements[1].matrix.translation.z = 0xFFB80000;
         }
 
-        arg0->elements[i].unk2C = 0x800 + i * 0x1000;
-        arg0->elements[i].unk50 = 0x13;
+        arg0->elements[i].rotation = 0x800 + i * 0x1000;
+        arg0->elements[i].animState = 0x13;
         arg0->elements[i].unk52 = 0x13;
         arg0->elements[i].unk2E = 0x800 + i * 0x1000;
 
-        createYRotationMatrix(&arg0->elements[i].unk4, arg0->elements[i].unk2C);
+        createYRotationMatrix(&arg0->elements[i].matrix, arg0->elements[i].rotation);
 
         memcpy(&arg0->elements[i].unk40, vec3, 0xC);
 
@@ -199,31 +168,31 @@ void initStoryMapRareEventIdle(RareEventIdleState *arg0) {
             arg0->elements[i].unk40 += 0x60000;
         }
 
-        setupStoryMapNpcModel((Func297D8Arg *)&arg0->elements[i]);
-        allocation->npcPosX[i] = arg0->elements[i].unk4.translation.x;
-        allocation->npcPosZ[i] = arg0->elements[i].unk4.translation.z;
+        setupStoryMapNpcModel(&arg0->elements[i]);
+        allocation->npcPosX[i] = arg0->elements[i].matrix.translation.x;
+        allocation->npcPosZ[i] = arg0->elements[i].matrix.translation.z;
         allocation->npcCollisionRadius[i] = gNpcCollisionRadii[arg0->elements[i].unk5C];
     }
 
-    arg0->effectDelay[0] = (randB() & 0x1F) + 0x28;
+    arg0->timer[0] = (randB() & 0x1F) + 0x28;
     setCallback(updateStoryMapRareEventIdle);
 }
 
-void updateStoryMapRareEventIdle(RareEventIdleState *arg0) {
+void updateStoryMapRareEventIdle(Func2E024Arg *arg0) {
     GameState *allocation;
     s32 i;
-    Func8002CB88Arg_arg0 *ptr;
+    Func297D8Arg *ptr;
     s32 temp_a0;
 
     allocation = getCurrentAllocation();
 
-    for (i = 0; i < arg0->npcCount; i++) {
+    for (i = 0; i < arg0->unkD5; i++) {
         ptr = &arg0->elements[i];
 
-        switch (ptr->unk50) {
+        switch (ptr->animState) {
             case 0x13:
                 if (ptr->unk62 != 0) {
-                    ptr->unk50 = 0x14;
+                    ptr->animState = 0x14;
                 }
                 break;
             case 0x14:
@@ -231,23 +200,23 @@ void updateStoryMapRareEventIdle(RareEventIdleState *arg0) {
                 break;
         }
 
-        updateStoryMapNpcModel((Func297D8Arg *)ptr);
-        allocation->npcPosX[i] = ptr->unk4.translation.x;
-        allocation->npcPosZ[i] = ptr->unk4.translation.z;
+        updateStoryMapNpcModel(ptr);
+        allocation->npcPosX[i] = ptr->matrix.translation.x;
+        allocation->npcPosZ[i] = ptr->matrix.translation.z;
     }
 
-    if (arg0->effectDelay[0] != 0) {
-        arg0->effectDelay[0]--;
-        if (arg0->effectDelay[0] == 0) {
+    if (arg0->timer[0] != 0) {
+        arg0->timer[0]--;
+        if (arg0->timer[0] == 0) {
             temp_a0 = randB() & 0x1F;
-            arg0->effectDuration = (u8)temp_a0 + 0x18;
+            arg0->timer[1] = (u8)temp_a0 + 0x18;
             if (D_8009ADE0_9B9E0 & 1) {
                 arg0->elements[0].unk44 = 0x290000;
                 spawnSpriteEffectEx(
-                    (SceneModel *)arg0->elements[0].unk0,
+                    arg0->elements[0].model,
                     0,
                     8,
-                    (s16)(arg0->effectDuration - 4),
+                    (s16)(arg0->timer[1] - 4),
                     &arg0->elements[0].unk40,
                     0x10000,
                     0,
@@ -256,13 +225,13 @@ void updateStoryMapRareEventIdle(RareEventIdleState *arg0) {
                     0
                 );
             } else {
-                arg0->effectDuration = (u8)temp_a0 + 0x2C;
+                arg0->timer[1] = (u8)temp_a0 + 0x2C;
                 arg0->elements[0].unk44 = 0x290000;
                 spawnSpriteEffectEx(
-                    (SceneModel *)arg0->elements[0].unk0,
+                    arg0->elements[0].model,
                     0,
                     0x3E,
-                    (s16)(arg0->effectDuration - 4),
+                    (s16)(arg0->timer[1] - 4),
                     &arg0->elements[0].unk40,
                     0x10000,
                     0,
@@ -271,10 +240,10 @@ void updateStoryMapRareEventIdle(RareEventIdleState *arg0) {
                     0x400
                 );
                 spawnSpriteEffectEx(
-                    (SceneModel *)arg0->elements[1].unk0,
+                    arg0->elements[1].model,
                     0,
                     0x3E,
-                    (s16)arg0->effectDuration,
+                    (s16)arg0->timer[1],
                     &arg0->elements[1].unk40,
                     0x10000,
                     0,
@@ -285,9 +254,9 @@ void updateStoryMapRareEventIdle(RareEventIdleState *arg0) {
             }
         }
     } else {
-        arg0->effectDuration--;
-        if (arg0->effectDuration == 0) {
-            arg0->effectDelay[0] = (randB() & 0x1F) + 0x28;
+        arg0->timer[1]--;
+        if (arg0->timer[1] == 0) {
+            arg0->timer[0] = (randB() & 0x1F) + 0x28;
         }
     }
 
@@ -295,8 +264,8 @@ void updateStoryMapRareEventIdle(RareEventIdleState *arg0) {
         prepareStoryMapNpcDialogue(arg0);
         arg0->callback = updateStoryMapRareEventIdle;
         allocation->unk42E = 1;
-        arg0->effectDelay[0] = (randB() & 0x1F) + 0x28;
-        arg0->effectDuration = 0;
+        arg0->timer[0] = (randB() & 0x1F) + 0x28;
+        arg0->timer[1] = 0;
         setCallback(updateStoryMapNpcDialogue);
     }
 }
@@ -811,8 +780,6 @@ void updateStoryMapRareEventSledding(Func2E024Arg *arg0) {
     }
 }
 
-void updateStoryMapRareEventSnowman(Func2E024Arg *arg0);
-
 void initStoryMapRareEventSnowman(Func2E024Arg *container) {
     GameState *gameState;
     s32 i;
@@ -925,8 +892,6 @@ void updateStoryMapRareEventSnowman(Func2E024Arg *arg0) {
         setCallback(updateStoryMapNpcDialogue);
     }
 }
-
-void updateStoryMapRareEventCheering(Func2E024Arg *);
 
 void initStoryMapRareEventCheering(Func2E024Arg *arg0) {
     GameState *allocation;
@@ -1283,30 +1248,6 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
         }
     }
 }
-
-u16 gNpcCollisionRadii[] = {
-    0x000F, 0x000F, 0x0013, 0x0013, 0x0013, 0x000F, 0x000F, 0x000F, 0x0013, 0x0000, 0x0002, 0x0304, 0x0506, 0x0907,
-    0x0001, 0x0304, 0x0506, 0x0809, 0x0001, 0x0204, 0x0506, 0x0907, 0x0001, 0x0203, 0x0506, 0x0807, 0x0001, 0x0203,
-    0x0406, 0x0907, 0x0001, 0x0203, 0x0405, 0x0807, 0x000D, 0x0602, 0x000D, 0x0602, 0x000D, 0x0602, 0x000D, 0x0602,
-    0x0306, 0x090D, 0x0306, 0x090D, 0x0306, 0x090D, 0x0306, 0x090D, 0x020E, 0x0F07, 0x020E, 0x0F07, 0x020E, 0x0F07,
-    0x020E, 0x0F07, 0x080E, 0x0407, 0x080E, 0x0407, 0x080E, 0x0407, 0x080E, 0x0407, 0x0105, 0x0A0B, 0x0105, 0x0A0B,
-    0x0105, 0x0A0B, 0x0105, 0x0A0B, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x090A, 0x0E0F, 0x0C02, 0x0304,
-    0x0C02, 0x0304, 0x0C02, 0x0304, 0x0C02, 0x0304, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D,
-    0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D, 0x0E0F, 0x0D0E, 0x0F0D,
-};
-
-// Array indexed by (rareEventId * 2 + npcIndex)
-// Only byte 0 is read by prepareStoryMapNpcDialogue (face-player flag)
-// Bytes 1-15 may be unused or referenced by unmapped code
-u8 dialogueNpcFacesPlayer[] = {
-    0x00, // [event 0, NPC 0] face player flag
-    0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00
-};
-
-s8 dialogueNpcAnimations[] = {
-    0x01, 0x01, 0x00, -1,   -1,   0x04, 0x01, 0x02, -1,   -1,   0x04, -1,   0x04, 0x00,
-    -1,   -1,   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-};
 
 void prepareStoryMapNpcDialogue(void *ptr) {
     Func2E024Arg *state = ptr;
