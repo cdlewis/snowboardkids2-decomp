@@ -5,12 +5,12 @@
 #include "story/map_events.h"
 #include "system/task_scheduler.h"
 
-extern s32 gControllerInputs;
-
 typedef struct {
     ViewportNode unk0;
     u16 waitCounter;
 } PostUnlockLocationIntroAllocation;
+
+extern s32 gControllerInputs;
 
 void postUnlockLocationWaitForDismiss(void);
 void onPostUnlockLocationIntroComplete(void);
