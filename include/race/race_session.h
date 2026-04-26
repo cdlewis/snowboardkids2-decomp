@@ -24,24 +24,12 @@ typedef struct {
 } func_80019CD0_1A8D0_arg;
 
 typedef struct {
-    u8 pad0[0x18];         /* 0x00 */
-    s32 unk18;             /* 0x18 */
-    u8 pad1C[0x4];         /* 0x1C */
-    void *unk20;           /* 0x20 */
-    void *unk24;           /* 0x24 */
-    void *unk28;           /* 0x28 */
-    s32 unk2C;             /* 0x2C */
-    u8 pad30[0xC];         /* 0x30 */
-    u8 secondaryObj[0x20]; /* 0x3C - first 0x20 bytes of secondary DisplayListObject */
-    void *unk5C;           /* 0x5C */
-    void *unk60;           /* 0x60 */
-    void *unk64;           /* 0x64 */
-    s32 unk68;             /* 0x68 */
-    u8 pad6C[0xC];         /* 0x6C */
-    Player *player;        /* 0x78 */
-    s32 fallVelocity;      /* 0x7C */
-    u16 yRotation;         /* 0x80 */
-    s16 scale;             /* 0x82 */
+    /* 0x00 */ DisplayListObject primary;
+    /* 0x3C */ DisplayListObject secondary;
+    /* 0x78 */ Player *player;
+    /* 0x7C */ s32 fallVelocity;
+    /* 0x80 */ u16 yRotation;
+    /* 0x82 */ s16 scale;
 } PlayerFlashEffectState;
 
 void initGameSession(void);

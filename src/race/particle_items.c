@@ -1383,20 +1383,20 @@ void *spawnPlayerAuraEffect(Player *player) {
     return task;
 }
 
-void cleanupPlayerFlashEffect(Func432D8Arg *);
+void cleanupPlayerFlashEffect(PlayerFlashEffectState *);
 void updatePlayerFlashEffect(PlayerFlashEffectState *);
 void fadeOutPlayerFlashEffect(PlayerFlashEffectState *);
 
 void initPlayerFlashEffect(PlayerFlashEffectState *state) {
     getCurrentAllocation();
-    state->unk20 = &D_8009A730_9B330;
-    state->unk24 = loadAsset_B7E70();
-    state->unk28 = loadAsset_216290();
-    state->unk2C = 0;
-    state->unk68 = 0;
+    state->primary.displayLists = (DisplayLists *)&D_8009A730_9B330;
+    state->primary.segment1 = loadAsset_B7E70();
+    state->primary.segment2 = loadAsset_216290();
+    state->primary.segment3 = NULL;
+    state->secondary.segment3 = NULL;
     state->scale = 0x200;
-    state->unk60 = state->unk24;
-    state->unk64 = state->unk28;
+    state->secondary.segment1 = state->primary.segment1;
+    state->secondary.segment2 = state->primary.segment2;
     setCleanupCallback(cleanupPlayerFlashEffect);
     setCallbackWithContinue(updatePlayerFlashEffect);
 }
@@ -1412,26 +1412,26 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
 
     allocation = (GameState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, state->yRotation);
-    func_8006B084_6BC84(&gIdentityMatrix32, (Transform3D *)&state->player->unk3F8, (Transform3D *)state);
+    func_8006B084_6BC84(&gIdentityMatrix32, &state->player->unk3F8, &state->primary.transform);
     scale = state->scale;
-    scaleMatrix((Transform3D *)state, scale, scale, scale);
+    scaleMatrix(&state->primary.transform, scale, scale, scale);
 
     gScaleMatrix.translation.x = 0;
     gScaleMatrix.translation.y = 0x9CCCC;
     gScaleMatrix.translation.z = 0xFFE44CCD;
     ptr = (s32 *)&gScaleMatrix.translation;
-    func_8006B084_6BC84((Transform3D *)(ptr - 5), (Transform3D *)state, (Transform3D *)state->secondaryObj);
+    func_8006B084_6BC84((Transform3D *)(ptr - 5), &state->primary.transform, &state->secondary.transform);
 
     if (gFrameCounter & 1) {
-        state->unk5C = &D_8009A740_9B340;
+        state->secondary.displayLists = (DisplayLists *)&D_8009A740_9B340;
     } else {
-        state->unk5C = &D_8009A750_9B350;
+        state->secondary.displayLists = (DisplayLists *)&D_8009A750_9B350;
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
+        enqueueDisplayListWithFrustumCull(i, &state->primary);
         if (state->scale == 0x2000) {
-            enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state->secondaryObj);
+            enqueueDisplayListWithFrustumCull(i, &state->secondary);
         }
     }
 
@@ -1483,17 +1483,17 @@ void fadeOutPlayerFlashEffect(PlayerFlashEffectState *state) {
         if (state->fallVelocity <= (s32)0xFFF80000) {
             terminateCurrentTask();
         }
-        state->unk18 += state->fallVelocity;
+        state->primary.transform.translation.y += state->fallVelocity;
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
+        enqueueDisplayListWithFrustumCull(i, &state->primary);
     }
 }
 
-void cleanupPlayerFlashEffect(Func432D8Arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
+void cleanupPlayerFlashEffect(PlayerFlashEffectState *state) {
+    state->primary.segment1 = freeNodeMemory(state->primary.segment1);
+    state->primary.segment2 = freeNodeMemory(state->primary.segment2);
 }
 
 PlayerFlashEffectState *spawnPlayerFlashEffect(Player *player) {
