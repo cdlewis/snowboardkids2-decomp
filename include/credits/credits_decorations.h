@@ -82,5 +82,5 @@ typedef struct {
     s16 unkE60;
 } CreditsState;
 
-void initCreditsCornerDecorationSprites(void *arg0);
-void updateCreditsCornerDecorationSprites(void *arg0);
+void initCreditsCornerDecorationSprites(CreditsState *arg0);
+void updateCreditsCornerDecorationSprites(CreditsState *state);

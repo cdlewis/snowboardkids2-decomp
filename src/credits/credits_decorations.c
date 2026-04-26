@@ -2,7 +2,7 @@
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 
-void initCreditsCornerDecorationSprites(void *arg0) {
+void initCreditsCornerDecorationSprites(CreditsState *arg0) {
     volatile CreditsState *state = (volatile CreditsState *)arg0;
     void *asset0;
     void *asset1;
@@ -57,8 +57,7 @@ void initCreditsCornerDecorationSprites(void *arg0) {
     state->rightBottomCornerSprite.unkD = 0;
 }
 
-void updateCreditsCornerDecorationSprites(void *arg0) {
-    CreditsState *state = (CreditsState *)arg0;
+void updateCreditsCornerDecorationSprites(CreditsState *state) {
     s16 temp_v1;
     s32 temp_v0;
     s32 value;
