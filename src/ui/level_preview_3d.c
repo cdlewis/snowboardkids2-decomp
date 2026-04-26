@@ -33,6 +33,12 @@ typedef struct {
     s8 actionMode;
 } getModelActionMode_arg;
 
+typedef struct {
+    u8 _pad[0x30];
+    s8 anotherAssetIndex;
+    u8 unk31;
+} AssetGroupByteView;
+
 extern s32 D_80089500;
 extern s32 D_800886A0;
 extern s32 D_800886E0;
@@ -105,6 +111,9 @@ extern void initPulsingSpriteIndicator(void *arg0);
 extern void initOrbitalSpriteRing(void *arg0);
 extern void initModelTransitionEffect(void *arg0);
 extern void initModelScaleAnimation(void *arg0);
+extern s32 getIndexedAnimationDataPtr(void *, s16);
+extern void enqueueTranslucentSprite(u16, u8 *);
+extern void renderNonRaceShadow(void);
 
 s32 D_80089530[4] = { 0x00000000, 0x010000D0, 0x00000000, 0x00000000 };
 
@@ -2027,12 +2036,6 @@ createSceneModelEx(s32 assetGroupIndex, void *allocation, s8 assetPairIndex, s8 
     return obj;
 }
 
-typedef struct {
-    u8 _pad[0x30];
-    s8 anotherAssetIndex;
-    u8 unk31;
-} AssetGroupByteView;
-
 #define ent ((GameEntity *)entity)
 #define assetBytes ((AssetGroupByteView *)assetEntry)
 
@@ -2450,10 +2453,6 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
 
     return s7;
 }
-
-extern s32 getIndexedAnimationDataPtr(void *, s16);
-extern void enqueueTranslucentSprite(u16, u8 *);
-extern void renderNonRaceShadow(void);
 
 void updateModelGeometry(SceneModel *arg0) {
     Transform3D worldMatrix;
