@@ -28,10 +28,32 @@ typedef struct {
     u8 currentAnimIndex;
 } StoryMapCharacterArg;
 
+typedef struct {
+    /* 0x00 */ s16 matrix[9]; // 3x3 rotation matrix (0x12 bytes)
+    /* 0x12 */ s16 pad12;
+    /* 0x14 */ s32 translateX;
+    /* 0x18 */ s32 translateY;
+    /* 0x1C */ s32 translateZ;
+    /* 0x20 */ s32 cameraX;
+    /* 0x24 */ s32 cameraY;
+    /* 0x28 */ s32 cameraZ;
+    /* 0x2C */ s32 pitchAngle;
+    /* 0x30 */ s16 rollAngle;
+    /* 0x32 */ s16 yawAngle;
+    /* 0x34 */ s16 pad34[2];
+    /* 0x38 */ s16 screenOffsetX;
+    /* 0x3A */ s16 screenOffsetY;
+    /* 0x3C */ s16 screenOffsetZ;
+    /* 0x3E */ s16 pad3E;
+    /* 0x40 */ s16 *frameDataPtr;
+    /* 0x44 */ s16 frameData[1];
+} StoryMapMiniCameraState;
+
 void awaitStoryMapCharacterReady(StoryMapCharacterArg *arg0);
 void initStoryMapCharacter(StoryMapCharacterArg *arg0);
 void updateStoryMapCharacter(StoryMapCharacterArg *arg0);
 void cleanupStoryMapCharacter(StoryMapCharacterArg *arg0);
+void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0);
 
 void func_80018800_19400(void **arg0) {
     void *allocation = getCurrentAllocation();
@@ -104,29 +126,6 @@ void cleanupStoryMapCharacter(StoryMapCharacterArg *arg0) {
     setModelPendingDestroy(arg0->model);
     arg0->model = destroySceneModel(arg0->model);
 }
-
-typedef struct {
-    /* 0x00 */ s16 matrix[9]; // 3x3 rotation matrix (0x12 bytes)
-    /* 0x12 */ s16 pad12;
-    /* 0x14 */ s32 translateX;
-    /* 0x18 */ s32 translateY;
-    /* 0x1C */ s32 translateZ;
-    /* 0x20 */ s32 cameraX;
-    /* 0x24 */ s32 cameraY;
-    /* 0x28 */ s32 cameraZ;
-    /* 0x2C */ s32 pitchAngle;
-    /* 0x30 */ s16 rollAngle;
-    /* 0x32 */ s16 yawAngle;
-    /* 0x34 */ s16 pad34[2];
-    /* 0x38 */ s16 screenOffsetX;
-    /* 0x3A */ s16 screenOffsetY;
-    /* 0x3C */ s16 screenOffsetZ;
-    /* 0x3E */ s16 pad3E;
-    /* 0x40 */ s16 *frameDataPtr;
-    /* 0x44 */ s16 frameData[1];
-} StoryMapMiniCameraState;
-
-void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0);
 
 void initStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
     GameState *allocation;
