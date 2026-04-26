@@ -9,11 +9,45 @@
 #include "mbi.h"
 #include "system/task_scheduler.h"
 
+typedef struct {
+    /* 0x00 */ u32 vertexData;
+    /* 0x04 */ Vec3i position;
+    /* 0x10 */ DataTable_19E80 *dataTable;
+    /* 0x14 */ u16 textureIndex;
+    /* 0x16 */ u8 alpha;
+    /* 0x17 */ u8 flags;
+    /* 0x18 */ Mtx *translationMtx;
+    /* 0x1C */ Mtx *scaleMtx;
+    /* 0x20 */ Mtx *yRotationMtx;
+    /* 0x24 */ Mtx *zRotationMtx;
+    /* 0x28 */ s32 scaleX;
+    /* 0x2C */ s32 scaleY;
+    /* 0x30 */ u16 zRotation;
+    /* 0x32 */ s16 paletteIndex;
+    /* 0x34 */ Transform3D transform;
+} SpriteRenderState;
+
+typedef void (*SetupAndEnqueueSprite_t)(SpriteState *, s32, s32, s32, s32, s32, s32, s16, u8, u8, s32);
+
 extern s32 D_8008C920_8D520[];
 extern OutputStruct_19E80 gCachedSpriteTextureEntry;
 extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
 extern Gfx *gRegionAllocPtr;
+
+void setupAndEnqueueSprite(
+    SpriteState *state,
+    s32 slot,
+    s32 posX,
+    s32 posY,
+    s32 posZ,
+    s32 scaleX,
+    s32 scaleY,
+    s16 arg7,
+    u8 flipH,
+    u8 alpha,
+    u16 arg10
+);
 
 s16 gSpriteAssetTable[][10] = {
     { 0x0043, 0x0000, 0x0064, (s16)0xEFD0, 0x0064, (s16)0xF190, 0x0000, 0x01F8, (s16)0x8008, (s16)0xC7F0 },
@@ -131,24 +165,6 @@ s32 getSpriteAssetCount(void) {
 s16 getSpriteAssetId(s32 index) {
     return gSpriteAssetTable[index][0];
 }
-
-typedef struct {
-    /* 0x00 */ u32 vertexData;
-    /* 0x04 */ Vec3i position;
-    /* 0x10 */ DataTable_19E80 *dataTable;
-    /* 0x14 */ u16 textureIndex;
-    /* 0x16 */ u8 alpha;
-    /* 0x17 */ u8 flags;
-    /* 0x18 */ Mtx *translationMtx;
-    /* 0x1C */ Mtx *scaleMtx;
-    /* 0x20 */ Mtx *yRotationMtx;
-    /* 0x24 */ Mtx *zRotationMtx;
-    /* 0x28 */ s32 scaleX;
-    /* 0x2C */ s32 scaleY;
-    /* 0x30 */ u16 zRotation;
-    /* 0x32 */ s16 paletteIndex;
-    /* 0x34 */ Transform3D transform;
-} SpriteRenderState;
 
 void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
     OutputStruct_19E80 textureEntry;
@@ -784,22 +800,6 @@ end:
 
     return result;
 }
-
-void setupAndEnqueueSprite(
-    SpriteState *state,
-    s32 slot,
-    s32 posX,
-    s32 posY,
-    s32 posZ,
-    s32 scaleX,
-    s32 scaleY,
-    s16 arg7,
-    u8 flipH,
-    u8 alpha,
-    u16 arg10
-);
-
-typedef void (*SetupAndEnqueueSprite_t)(SpriteState *, s32, s32, s32, s32, s32, s32, s16, u8, u8, s32);
 
 void renderOpaqueSprite(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s16 arg7, u8 arg8) {
     ((SetupAndEnqueueSprite_t)
