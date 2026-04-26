@@ -373,7 +373,7 @@ segments:
       - [0x91A70, .data, race/spray_particles]
       - [0x91B60, .data, race/obstacle_sprites]
       - [0x91B90, .data, data/course_data]
-      - [0x921D0, data, audio/audio]
+      - [0x921D0, .data, audio/audio]
       - [0x947B0, .data, race/character_stats]
       - [0x94B90, data, race/hit_reactions]
       - [0x94C80, data, race/track_collision]
