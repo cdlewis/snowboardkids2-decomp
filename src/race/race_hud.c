@@ -732,8 +732,6 @@ typedef struct {
     s32 decompressedSize;
 } CompressedAsset;
 
-extern s8 D_80090C94_91894[];
-extern u8 D_80090C95_91895[];
 extern void *D_80094DA0_959A0;
 extern void *D_80094DE0_959E0;
 extern void *D_80094DF0_959F0;
@@ -757,34 +755,107 @@ extern void *D_80095860_96460;
 extern void *D_80095930_96530;
 extern Gfx D_8009A780_9B380[];
 extern s32 gLookAtPtr;
-extern CompressedAsset D_80090BD4_917D4[];
-extern s32 gFlyingSceneryInitOffset[3];
-extern CompressedAsset D_80090AF0_916F0[];
-extern CompressedAsset D_80090CEC_918EC[];
-extern u8 D_80090CA8_918A8[][5];
-extern u8 D_80090CE0_918E0[];
-extern u8 D_80090CBC_918BC[][9];
-extern s32 itemHomingProjectileBaseVector;
-extern s32 D_80090E40_91A40;
-extern s32 D_80090E4C_91A4C;
-extern s16 D_80090E50_91A50;
-extern s32 D_80090BC8_917C8[3];
-extern s32 D_80090BBC_917BC[3];
-extern s32 D_80090B98_91798[];
-extern s32 D_80090BB0_917B0;
-extern s32 gCourseSceneryOffset;
-extern s32 D_80090BA4_917A4[3];
 extern s32 gFrameCounter;
 extern u16 D_8009ADE0_9B9E0;
 extern Gfx *gRegionAllocPtr;
 extern s16 gGraphicsMode;
-extern Gfx D_80090DB0_919B0[];
 extern void *D_80094DD0_959D0;
-extern s32 bossHomingProjectileBaseVector;
-DisplayLists D_8009A670_9B270 = { 0, (Gfx *)0x01000000, NULL, NULL };
-DisplayLists D_8009A680_9B280 = { 0, (Gfx *)0x01000190, NULL, NULL };
-DisplayLists D_8009A690_9B290 = { 0, NULL, (Gfx *)0x01000338, NULL };
-DisplayLists D_8009A6A0_9B2A0 = { 0, NULL, (Gfx *)0x01000488, NULL };
+extern DisplayLists D_8009A670_9B270;
+extern DisplayLists D_8009A680_9B280;
+extern DisplayLists D_8009A690_9B290;
+extern DisplayLists D_8009A6A0_9B2A0;
+
+/* 0x916F0 */ CompressedAsset D_80090AF0_916F0[] = {
+    { (void *)0x0034A750, (void *)0x0034AB10,         0x000003A0 },
+    { (void *)0x0034BB10, (void *)0x0034BDE0,         0x00000340 },
+    { (void *)0x0034BDE0, (void *)0x0034C100,         0x00000330 },
+    { (void *)0x0034AF20, (void *)0x0034B450,         0x00000510 },
+    { (void *)0x0034AB10, (void *)0x0034AF20,         0x000003B0 },
+    { (void *)0x0034B450, (void *)0x0034B800,         0x000003E0 },
+    { (void *)0x0034B8B0, (void *)0x0034BB10,         0x00000270 },
+    { (void *)0x0034CAB0, (void *)&_34CB50_ROM_START, 0x000000B0 },
+    { (void *)0x0034C750, (void *)0x0034CA30,         0x00000280 },
+    { (void *)0x0034CA30, (void *)0x0034CAB0,         0x00000090 },
+    { (void *)0x0034B800, (void *)0x0034B8B0,         0x000000B0 },
+    { (void *)0x0034C100, (void *)0x0034C750,         0x00000810 },
+};
+/* 0x91780 */ s32 gCourseSceneryOffset[3] = { 0x00B90000, 0x00000000, 0xFF8D4000 };
+/* 0x9178C */ s32 gFlyingSceneryInitOffset[3] = { 0x009A8000, 0x00000000, 0xFF880000 };
+/* 0x91798 */ s32 D_80090B98_91798[3] = { 0x00000000, 0x00000000, 0x00040000 };
+/* 0x917A4 */ s32 D_80090BA4_917A4[3] = { 0x00000000, 0x00018000, 0x00030000 };
+/* 0x917B0 */ s32 D_80090BB0_917B0[3] = { 0x00000000, 0x00000000, 0x00030000 };
+/* 0x917BC */ s32 D_80090BBC_917BC[3] = { 0x00000000, 0xFFFE8000, 0x00030000 };
+/* 0x917C8 */ s32 D_80090BC8_917C8[3] = { 0xFFE20000, 0xFFB50000, 0xFF1E0000 };
+/* 0x917D4 */ CompressedAsset D_80090BD4_917D4[] = {
+    { (void *)&_3FF910_ROM_START, (void *)0x003FFC00, 0x00000200 },
+    { (void *)0x003FFD30,         (void *)0x00400240, 0x00000370 },
+    { (void *)0x004003D0,         (void *)0x004008F0, 0x00000370 },
+    { (void *)0x00400A80,         (void *)0x00400F90, 0x00000370 },
+    { (void *)0x00401120,         (void *)0x004015B0, 0x00000310 },
+    { (void *)0x00401770,         (void *)0x00401CC0, 0x000003A0 },
+    { (void *)0x00401E60,         (void *)0x004023D0, 0x000003A0 },
+    { (void *)0x00402570,         (void *)0x00402AA0, 0x00000380 },
+    { (void *)0x00402CB0,         (void *)0x00403240, 0x000003D0 },
+    { (void *)0x00403440,         (void *)0x00403980, 0x00000390 },
+    { (void *)0x00403B60,         (void *)0x00404110, 0x000003E0 },
+    { (void *)0x00404310,         (void *)0x004048D0, 0x000003E0 },
+    { (void *)0x00404B30,         (void *)0x00404FF0, 0x00000340 },
+    { (void *)0x004051B0,         (void *)0x00405670, 0x00000340 },
+    { (void *)0x004057E0,         (void *)0x00405AB0, 0x00000200 },
+    { (void *)0x00405BE0,         (void *)0x00405F60, 0x00000280 },
+};
+/* 0x91894 */ s8 D_80090C94_91894[20] = {
+    0x02, 0x06, 0x02, 0x07, 0x02, 0x08, 0x14, 0x09, 0x02, 0x06,
+    0x02, 0x0A, 0x02, 0x0B, 0x0A, 0x0C, 0xFF, 0x0C, 0x00, 0x00,
+};
+#define D_80090C95_91895 ((u8 *)(D_80090C94_91894 + 1))
+/* 0x918A8 */ u8 D_80090CA8_918A8[4][5] = {
+    { 0x14, 0x19, 0x3D, 0xC3, 0xF5 },
+    { 0x37, 0x4B, 0x82, 0x96, 0xC8 },
+    { 0x4B, 0x7D, 0xC8, 0xD2, 0xD7 },
+    { 0x50, 0xA0, 0xE0, 0xE4, 0xE6 },
+};
+/* 0x918BC */ u8 D_80090CBC_918BC[4][9] = {
+    { 0x01, 0x06, 0x07, 0x0F, 0x17, 0x44, 0xCD, 0xCE, 0xCF },
+    { 0x03, 0x5D, 0x5F, 0x7F, 0xA7, 0xDE, 0xEA, 0xF6, 0xF7 },
+    { 0x32, 0x63, 0x6F, 0xDD, 0xDD, 0xF1, 0xF2, 0xFA, 0xFE },
+    { 0x61, 0x75, 0xA2, 0xCA, 0xE8, 0xE9, 0xEA, 0xF4, 0xFE },
+};
+/* 0x918E0 */ u8 D_80090CE0_918E0[] = {
+    0x7F, 0xB4, 0xF5, 0xF8, 0xFA, 0xFA, 0xFA, 0xFD, 0xFF, 0x00, 0x00, 0x00,
+};
+/* 0x918EC */ CompressedAsset D_80090CEC_918EC[] = {
+    { (void *)0x003FFC00, (void *)0x003FFD30,         0x000000C0 },
+    { (void *)0x00400240, (void *)0x004003D0,         0x000000F0 },
+    { (void *)0x004008F0, (void *)0x00400A80,         0x000000F0 },
+    { (void *)0x00400F90, (void *)0x00401120,         0x000000F0 },
+    { (void *)0x004015B0, (void *)0x00401770,         0x00000110 },
+    { (void *)0x00401CC0, (void *)0x00401E60,         0x00000100 },
+    { (void *)0x004023D0, (void *)0x00402570,         0x00000100 },
+    { (void *)0x00402AA0, (void *)0x00402CB0,         0x00000140 },
+    { (void *)0x00403240, (void *)0x00403440,         0x00000130 },
+    { (void *)0x00403980, (void *)0x00403B60,         0x00000120 },
+    { (void *)0x00404110, (void *)0x00404310,         0x00000130 },
+    { (void *)0x004048D0, (void *)0x00404B30,         0x00000170 },
+    { (void *)0x00404FF0, (void *)0x004051B0,         0x00000110 },
+    { (void *)0x00405670, (void *)0x004057E0,         0x000000E0 },
+    { (void *)0x00405AB0, (void *)0x00405BE0,         0x000000C0 },
+    { (void *)0x00405F60, (void *)&_4060A0_ROM_START, 0x000000E0 },
+};
+/* 0x919B0 */ Gfx D_80090DB0_919B0[] = {
+    { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00210005 } },
+    { .words = { 0xD7000002, 0x80008000 } }, { .words = { 0x01018030, 0x02000000 } },
+    { .words = { 0xE7000000, 0x00000000 } }, { .words = { 0xE3001201, 0x00002000 } },
+    { .words = { 0xE3000A01, 0x00100000 } }, { .words = { 0xFC127FFF, 0xFFFFF238 } },
+    { .words = { 0xE200001C, 0xC8112078 } }, { .words = { 0x06000204, 0x0006080A } },
+    { .words = { 0x060C0E10, 0x00121416 } }, { .words = { 0x06181A1C, 0x001E2022 } },
+    { .words = { 0x06242628, 0x002A2C2E } }, { .words = { 0xDF000000, 0x00000000 } },
+};
+/* 0x91A20 */ s32 itemHomingProjectileBaseVector[3] = { 0x00000000, 0x00080000, 0x00020000 };
+/* 0x91A2C */ s32 bossHomingProjectileBaseVector[5] = { 0x00000000, 0x00000000, 0x00100000, 0x00000000, 0x00000000 };
+/* 0x91A40 */ s32 D_80090E40_91A40[3] = { 0x00080000, 0x00000000, 0x00000000 };
+/* 0x91A4C */ s32 D_80090E4C_91A4C = 0x00100000;
+/* 0x91A50 */ s32 D_80090E50_91A50[4] = { 0x00000000, 0x00060000, 0x00000000, 0x00000000 };
 
 void updateAllItemBoxes(ItemBoxController *arg0);
 void initHomingProjectileMovement(HomingProjectileInitArg *arg0);
@@ -3950,7 +4021,7 @@ void spawnBossHomingProjectileVariant1(BossHomingProjectileSpawnArg *arg0) {
     rotationAngle = ((randomValue & 0xFF) << 5) + arg0->boss->yRotation;
 
     randomValue3 = randA();
-    addr = &D_80090E40_91A40;
+    addr = D_80090E40_91A40;
     *addr = (randomValue3 & 0xFF) * 7 * 256;
     rotateVectorY(addr - 2, rotationAngle, &arg0->velocity);
 
@@ -4093,7 +4164,7 @@ void spawnBossHomingProjectileVariant2(BossHomingProjectileSpawnArg *arg0) {
     loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->projectileAsset, 0x3F);
     arg0->sectorIndex = arg0->boss->sectorIndex;
     temp_s2 = (Vec3i *)((s32)arg0 + 8);
-    transformVector(&D_80090E50_91A50, (s16 *)((s32)arg0->boss + 0x164), temp_s2);
+    transformVector((s16 *)D_80090E50_91A50, (s16 *)((s32)arg0->boss + 0x164), temp_s2);
     arg0->playerIndex = arg0->boss->targetPlayerIndex;
     rotationAngle = ((randA() & 0xFF) << 5) + arg0->boss->yRotation;
     addr = &D_80090E4C_91A4C;

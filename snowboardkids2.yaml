@@ -368,7 +368,7 @@ segments:
       - [0x90E80, .data, race/race_session]
       - [0x913E0, .data, race/position_markers]
       - [0x914A0, .data, data/particle_tables]
-      - [0x916F0, data] # also race_hud?
+      - [0x916F0, .data, race/race_hud]
       - [0x91A60, .data, race/race_effects]
       - [0x91A70, .data, race/spray_particles]
       - [0x91B60, .data, race/obstacle_sprites]
@@ -379,7 +379,7 @@ segments:
       - [0x94C80, .data, race/track_collision]
       - [0x94D80, data, race/track_height]
       - [0x94E10, .data, data/asset_metadata]
-      - [0x9B270, .data, race/race_hud]
+      - [0x9B270, .data, race/race_hud_displaylists]
       - [0x9B2B0, .data, race/particle_items]
       - [0x9B3D0, .data, graphics/displaylist]
       - [0x9B420, .data, text/font_assets]
