@@ -314,7 +314,7 @@ segments:
       - { start: 0x879A0, type: textbin, use_src_path: True, name: rsp/f3dex2 }
       - [0x88D30, .data, animation/bobbing_model]
       - [0x891D0, .data, graphics/tiled_texture]
-      - [0x89210, data]
+      - [0x89210, .data, data/segment_ranges]
       - [0x89240, .data, animation/oscillating_sprite]
       - [0x89270, .data, effects/rocket_boost]
       - [0x892B0, data] # 20F0.c?
