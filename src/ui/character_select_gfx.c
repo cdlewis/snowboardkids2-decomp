@@ -471,25 +471,20 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     Transform3D *localPtr;
     u8 *base;
     GameState *state;
-    Transform3D *worldMatPtr;
-    Transform3D *posMatPtr;
     s32 targetX;
     u8 charIndex;
     u8 assetIndex;
-    s32 paletteValue;
+    s32 paletteIndex;
     u16 rotation;
     s32 offset;
-    s32 tableIndex;
 
     base = (u8 *)getCurrentAllocation();
     state = (GameState *)base;
 
-    worldMatPtr = &arg0->worldMatrix;
     offset = arg0->playerIndex << 5;
-    memcpy(worldMatPtr, (u8 *)(offset + (s32)base + 0x17F8), sizeof(Transform3D));
+    memcpy(&arg0->worldMatrix, (u8 *)(offset + (s32)base + 0x17F8), sizeof(Transform3D));
 
-    tableIndex = (D_800AFE8C_A71FC->numPlayers * 2) + state->unk18C0[arg0->playerIndex];
-    targetX = ((s32 *)&D_8008DD2C_8E92C)[tableIndex];
+    targetX = ((s32 *)&D_8008DD2C_8E92C)[(D_800AFE8C_A71FC->numPlayers * 2) + state->unk18C0[arg0->playerIndex]];
     arg0->worldMatrix.translation.x = targetX;
     arg0->targetX = targetX;
 
@@ -498,24 +493,22 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     assetIndex += charIndex * 3;
     arg0->charPaletteIndex = assetIndex;
 
-    paletteValue = EepromSaveData->character_or_settings[assetIndex] - 1;
-    assetIndex &= 0xFF;
+    paletteIndex = EepromSaveData->character_or_settings[assetIndex] - 1;
 
     arg0->modelAsset = loadAssetByIndex_95728(assetIndex);
     arg0->animationAsset = loadAssetByIndex_95500(assetIndex);
     arg0->skeletonAsset = loadAssetByIndex_95590(assetIndex);
-    arg0->paletteAsset = loadAssetByIndex_95668((u8)paletteValue);
+    arg0->paletteAsset = loadAssetByIndex_95668((u8)paletteIndex);
 
     localPtr = &sp10;
     memcpy(localPtr, &identityMatrix, sizeof(Transform3D));
     memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, sizeof(Vec3i));
 
-    posMatPtr = &arg0->positionMatrix;
     rotation = state->unk1888[arg0->playerIndex];
-    createYRotationMatrix(posMatPtr, rotation);
+    createYRotationMatrix(&arg0->positionMatrix, rotation);
 
-    func_8006B084_6BC84(&arg0->rotationMatrix, posMatPtr, localPtr);
-    func_8006B084_6BC84(localPtr, worldMatPtr, (Transform3D *)arg0);
+    func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
+    func_8006B084_6BC84(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
 
     setCallback(updateCharSelectSlide);
 }
