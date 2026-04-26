@@ -71,11 +71,6 @@ typedef struct {
 } Alloc_55650;
 
 typedef struct {
-    u8 padding[0x20];
-    void *assetData;
-} ShrinkProjectileTask; /* Used for func_80055864_56464 - spawn shrinking projectile */
-
-typedef struct {
     void *unk0;
     Vec3i pos;
     u8 padding1[0x10];
@@ -98,10 +93,15 @@ typedef struct {
     void *assetData;
 } RandomEffectProjectile;
 
+s16 gPlayerGuidedStarTransform[4] = { 0, 0, 6, 0 };
+
+Vec3i gPlayerGuidedStarBaseVelocity = { 0x240000, 0, 0x60000 };
+
+s32 gPlayerGuidedStarVelocityOffset[7] = { 0, 0, 0x60000, 0, 0, 0, 0 };
+
 void loadFallingStarProjectileAsset(Struct_52880 *arg0);
 void updateFallingStarProjectile(Struct_52880 *arg0);
 void initFallingStarProjectileTask(Struct_52880 *arg0);
-void spawnFallingStarProjectile(s16 angle, s32 speed);
 void updateHomingPanelProjectile(Struct_52880 *arg0);
 void launchHomingPanelProjectile(Struct_52880 *arg0);
 void loadHomingPanelProjectileAsset(Struct_52880 *arg0);
@@ -131,18 +131,19 @@ void updateFryingPanProjectile(Struct_52880 *);
 void cleanupSlapstickProjectileTask(Struct_52880 *arg0);
 void loadSlapstickProjectileAsset(Struct_52880 *arg0);
 void launchSlapstickProjectile(Struct_52880 *arg0);
+void updateSlapstickProjectile(Struct_52880 *arg0);
 void loadParachuteProjectileAsset(Struct_52880 *arg0);
 void launchParachuteProjectile(Struct_52880 *arg0);
+void updateParachuteProjectile(Struct_52880 *arg0);
+void loadFryingPanProjectileAsset(Struct_52880 *arg0);
+void launchFryingPanProjectile(Struct_52880 *arg0);
+void cleanupSnowmanProjectileTask(Struct_52880 *arg0);
+void loadSnowmanProjectileAsset(Struct_52880 *arg0);
+void launchSnowmanProjectile(Struct_52880 *arg0);
 void loadStarProjectileAsset(Struct_52880 *arg0);
 void checkStarProjectileHit(Struct_52880 *arg0);
 void loadPlayerGuidedStarProjectile(Struct_52880 *arg0);
 void updatePlayerGuidedStarProjectile(Struct_52880 *arg0);
-
-s16 gPlayerGuidedStarTransform[4] = { 0, 0, 6, 0 };
-
-Vec3i gPlayerGuidedStarBaseVelocity = { 0x240000, 0, 0x60000 };
-
-s32 gPlayerGuidedStarVelocityOffset[7] = { 0, 0, 0x60000, 0, 0, 0, 0 };
 
 void normalizeVelocityToSpeed(Vec3i *vel, s32 targetSpeed) {
     s32 dist;
@@ -231,8 +232,6 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
         }
     }
 }
-
-void updateSlapstickProjectile(Struct_52880 *arg0);
 
 void launchSlapstickProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
@@ -449,8 +448,6 @@ void checkParachuteProjectileHit(Struct_52880 *arg0) {
     }
 }
 
-void updateParachuteProjectile(Struct_52880 *arg0);
-
 void launchParachuteProjectile(Struct_52880 *arg0) {
     Alloc_52880 *alloc;
     s16 playerIdx;
@@ -601,9 +598,6 @@ s32 spawnParachuteProjectileTask(s32 arg0, s32 arg1) {
     }
     return (s32)task;
 }
-
-void loadFryingPanProjectileAsset(Struct_52880 *arg0);
-void launchFryingPanProjectile(Struct_52880 *arg0);
 
 void initFryingPanProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
@@ -823,10 +817,6 @@ s32 spawnFryingPanProjectileTask(s32 arg0, s32 arg1) {
     }
     return (s32)task;
 }
-
-void cleanupSnowmanProjectileTask(Struct_52880 *arg0);
-void loadSnowmanProjectileAsset(Struct_52880 *arg0);
-void launchSnowmanProjectile(Struct_52880 *arg0);
 
 void initSnowmanProjectileTask(Struct_52880 *arg0) {
     arg0->targetPlayerIdx = arg0->ownerPlayerIdx;
