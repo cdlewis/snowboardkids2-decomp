@@ -317,7 +317,7 @@ segments:
       - [0x89210, .data, data/segment_ranges]
       - [0x89240, .data, animation/oscillating_sprite]
       - [0x89270, .data, effects/rocket_boost]
-      - [0x892B0, data] # 20F0.c?
+      - [0x892B0, .data, data/level_preview_segments]
       - [0x89320, .data, animation/pulsing_indicator]
       - [0x89330, .data, core/main]
       - [0x8A110, data]
