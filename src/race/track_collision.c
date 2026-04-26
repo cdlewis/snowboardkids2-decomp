@@ -43,15 +43,27 @@ s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSector
 }
 
 typedef struct {
-    s32 value;
-    u8 pad[12];
-} CollisionThresholdEntry;
+    s16 sampleOffset[6];
+    s32 threshold;
+} TrackCollisionEntry;
 
-extern s16 gTrackCollisionSampleOffsets[][8];
-extern CollisionThresholdEntry gTrackCollisionThresholds[];
-extern s16 trackAlignmentQuadPoints[];
-extern s16 trackNormalSamplePoints[];
-extern s16 slopeDetectionSamplePoints[];
+TrackCollisionEntry gTrackCollisionSampleOffsets[3] = {
+    { { 0, 0, 0, 0, 0, 0 },   0x00060000 },
+    { { 0, 0, 0, 0, 11, 0 },  0x00050000 },
+    { { 0, 0, 0, 0, -11, 0 }, 0x00050000 },
+};
+
+s16 trackAlignmentQuadPoints[24] = {
+    -5, 0, 0, 0, 11, 0, 5, 0, 0, 0, 11, 0, -5, 0, 0, 0, -11, 0, 5, 0, 0, 0, -11, 0,
+};
+
+s16 trackNormalSamplePoints[12] = {
+    -5, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0,
+};
+
+s16 slopeDetectionSamplePoints[12] = {
+    6, 0, 0, 0, 0, 0, -6, 0, 0, 0, 0, 0,
+};
 
 /**
  * Checks track wall collision at 3 sample points around the player and pushes them out of walls.
@@ -80,7 +92,7 @@ s32 handlePlayerTrackWallCollision(Player *player) {
 
     i = 0;
     do {
-        transformVector(gTrackCollisionSampleOffsets[i], combinedTransform.m[0], &samplePoints[i]);
+        transformVector(gTrackCollisionSampleOffsets[i].sampleOffset, combinedTransform.m[0], &samplePoints[i]);
         i++;
     } while (i < 3);
 
@@ -108,7 +120,7 @@ s32 handlePlayerTrackWallCollision(Player *player) {
                     &gameState->gameData,
                     sectorIdx,
                     &samplePoints[0],
-                    gTrackCollisionThresholds[0].value,
+                    gTrackCollisionSampleOffsets[0].threshold,
                     &pushOffset
                 );
             }
@@ -141,7 +153,7 @@ s32 handlePlayerTrackWallCollision(Player *player) {
                 &gameState->gameData,
                 sectorIdx,
                 &samplePoints[i],
-                gTrackCollisionThresholds[i].value,
+                gTrackCollisionSampleOffsets[i].threshold,
                 &pushOffset
             );
             if (collisionResult == -1) {
@@ -1388,9 +1400,23 @@ void addCollisionSectorNodeToList(ListNode_5AA90 *arg0) {
     alloc->list = arg0;
 }
 
-extern s16 terrainSamplePattern_State1[3][6];
-extern s16 terrainSamplePattern_State2[3][6];
-extern s16 terrainSamplePattern_State3[3][6];
+s16 terrainSamplePattern_State1[3][6] = {
+    { 0,   0, 0, 0, -64, 0 },
+    { 28,  0, 0, 0, 24,  0 },
+    { -28, 0, 0, 0, 24,  0 },
+};
+
+s16 terrainSamplePattern_State2[3][6] = {
+    { 0,   0, 0, 0, 64,  0 },
+    { -32, 0, 0, 0, -64, 0 },
+    { 32,  0, 0, 0, -64, 0 },
+};
+
+s16 terrainSamplePattern_State3[3][6] = {
+    { 0,   0, 0, 0, -64, 0 },
+    { 28,  0, 0, 0, 24,  0 },
+    { -28, 0, 0, 0, 24,  0 },
+};
 
 void computePlayerTerrainAlignment(Player *player) {
     Vec3i normal;
