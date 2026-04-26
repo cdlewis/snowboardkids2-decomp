@@ -24,9 +24,6 @@
 #include "system/task_scheduler.h"
 #include "text/text_elements.h"
 
-extern Gfx *gRegionAllocPtr;
-extern s16 gGraphicsMode;
-
 typedef void (*RaceFinishBehaviorStepHandler)(void *);
 typedef void (*StunnedBehaviorPhaseHandler)(void *);
 typedef void (*PostTrickLandingStepHandler)(void *);
@@ -57,6 +54,35 @@ typedef struct {
     s32 unk64;
 } BodyPartExtra;
 
+typedef struct {
+    s8 stickX;
+    s8 stickY;
+    u16 buttons;
+} InputRecord;
+
+typedef struct {
+    u8 _pad0[0x5C];
+    u8 unk5C;
+} GameStatePartial5C;
+
+extern Gfx *gRegionAllocPtr;
+extern s16 gGraphicsMode;
+extern AssetMeta D_8009A550_9B150[];
+extern u16 D_8009ADE0_9B9E0;
+extern s8 gAnalogStickX[];
+extern s8 gAnalogStickY[];
+extern s32 gButtonsPressed[];
+extern s32 gFrameCounter;
+extern void spawnPlayerIndicatorTask(Player *);
+extern void applyCharacterBoardStats(Player *);
+extern void initFlyingSceneryTask(void);
+extern s32 spawnUfoEffect(Player *);
+extern void schedulePlayerAuraTask(Player *);
+extern s32 normalizeSurfaceType(s32);
+extern void startRumbleEffect(Player *player, s32 effectType);
+extern s32 applyVelocityDeadzone(Player *, s32, s32, s32);
+extern BoneHierarchyEntry *getIndexedAnimationDataPtr(void *, s16);
+
 /* Forward declarations for function pointer tables */
 s32 initPlayerForRace(Player *);
 void dispatchDefaultBehaviorPhase(BehaviorState *);
@@ -70,23 +96,9 @@ void dispatchPostTrickLandingStep(BehaviorState *);
 s32 updatePlayerFinishWaiting(Player *);
 s32 updatePlayerSlidingConstrained(Player *);
 void dispatchRaceFinishBehaviorStep(BehaviorState *);
-typedef struct {
-    u8 _pad0[0xB8C];
-    s32 unkB8C;
-    u8 _padB90[0x2F];
-    u8 behaviorStep;
-} initSharpTurnSlidingStep_arg;
-
-typedef struct {
-    u8 _pad0[0xB84];
-    s32 animFlags;
-    u8 _padB88[0x37];
-    u8 behaviorStep;
-} endSharpTurnSlidingStep_arg;
-
-s32 initSharpTurnSlidingStep(initSharpTurnSlidingStep_arg *);
+s32 initSharpTurnSlidingStep(Player *);
 s32 updateSharpTurnSlidingStep(Player *);
-s32 endSharpTurnSlidingStep(endSharpTurnSlidingStep_arg *);
+s32 endSharpTurnSlidingStep(Player *);
 s32 recoverSharpTurnSlidingStep(Player *);
 s32 beginPostTrickSlidingStep(Player *);
 s32 updatePostTrickSlidingStep(Player *);
@@ -154,6 +166,17 @@ s32 warpToShortcutSpinUpStep(Player *);
 s32 shortcutSpinDownStep(Player *);
 s32 shortcutPostSpinWaitStep(Player *);
 s32 shortcutLaunchStep(Player *);
+s32 tryFinalizeTrickLanding(Player *);
+void updateTrickFacingAngle(Player *);
+void updateFlipSpinTrickAnimation(Player *);
+void updateTrickRotationTransform(Player *);
+void decayPlayerAirborneAngles(Player *);
+void applyBoostVelocity(Player *);
+void decayPlayerSteeringAngles(Player *);
+void resetTrickScore(Player *);
+void initStunnedAirborneBehavior(Player *);
+void updateRacePlayer(Player *);
+void renderFlyingEnemy(Player *);
 
 Gfx D_800BAA30_AA8E0[] = {
     { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00200405 } },
@@ -502,30 +525,6 @@ AIPlayerParamEntry gAIPlayerParams[8][0x11] = {
      { 0x1A, 0xD2, 0x00, 0x00 } },
 };
 
-extern AssetMeta D_8009A550_9B150[];
-extern void spawnPlayerIndicatorTask(Player *);
-extern void applyCharacterBoardStats(Player *);
-extern void initFlyingSceneryTask(void);
-extern s32 spawnUfoEffect(Player *);
-extern void schedulePlayerAuraTask(Player *);
-extern s32 normalizeSurfaceType(s32);
-
-s32 tryFinalizeTrickLanding(Player *);
-void updateTrickFacingAngle(Player *);
-void updateFlipSpinTrickAnimation(Player *);
-void updateTrickRotationTransform(Player *);
-void decayPlayerAirborneAngles(Player *);
-void applyBoostVelocity(Player *);
-void decayPlayerSteeringAngles(Player *);
-void resetTrickScore(Player *);
-
-typedef struct {
-    u8 _pad0[0x5C];
-    u8 unk5C;
-} GameStatePartial5C;
-
-void initStunnedAirborneBehavior(Player *);
-
 void setPlayerBehaviorMode(Player *player, u8 mode) {
     player->behaviorMode = mode;
     player->behaviorPhase = 0;
@@ -608,14 +607,6 @@ void applyBoostVelocity(Player *player) {
     player->worldPos.z += player->velocity.z;
 }
 
-typedef struct {
-    u8 _pad0[0x434];
-    Vec3i worldPos;
-    u8 _pad440[0xC];
-    Vec3i velocity;
-    s32 unk458;
-} func_800B0300_arg;
-
 void applyClampedVelocityToPosition(Player *player) {
     clampPlayerVelocityToMaxSpeed(player);
     player->worldPos.x = player->worldPos.x + player->velocity.x;
@@ -628,9 +619,6 @@ void applyVelocityToPosition(Player *player) {
     player->worldPos.y = player->worldPos.y + player->velocity.y;
     player->worldPos.z = player->worldPos.z + player->velocity.z;
 }
-
-void updateRacePlayer(Player *);
-void renderFlyingEnemy(Player *);
 
 void renderPlayersByShortcutDistance(void) {
     s32 distances[4];
@@ -712,19 +700,6 @@ void renderPlayersByShortcutDistance(void) {
         } while (j < (s32)gameState->numPlayers);
     }
 }
-
-typedef struct {
-    s8 stickX;
-    s8 stickY;
-    u16 buttons;
-} InputRecord;
-
-extern u16 D_8009ADE0_9B9E0;
-extern s8 gAnalogStickX[];
-extern s8 gAnalogStickY[];
-extern s32 gButtonsPressed[];
-
-extern void startRumbleEffect(Player *player, s32 effectType);
 
 void updateRacePlayer(Player *player) {
     Transform3D combinedTransform;
@@ -1346,18 +1321,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
     return 0;
 }
 
-typedef struct {
-    u8 _pad0[0xB84];
-    s32 animFlags;
-    u8 _padB88[0x10]; // 0xB88 to 0xB98
-    s16 unkB98;
-    u8 _padB9A[0x28]; // 0xB9A to 0xBC2
-    u8 unkBC2;
-    u8 _padBC3[0x17]; // 0xBC3 to 0xBDA
-    u8 inputDisabled;
-} shouldInitiateSharpTurn_arg;
-
-s32 shouldInitiateSharpTurn(shouldInitiateSharpTurn_arg *player, s32 steeringValue) {
+s32 shouldInitiateSharpTurn(Player *player, s32 steeringValue) {
     if (player->inputDisabled != 0) {
         goto end;
     }
@@ -1386,13 +1350,11 @@ void dispatchSharpTurnBehaviorStep(BehaviorState *arg0) {
     sharpTurnBehaviorStepHandlers[arg0->behaviorStep](arg0);
 }
 
-s32 initSharpTurnSlidingStep(initSharpTurnSlidingStep_arg *player) {
+s32 initSharpTurnSlidingStep(Player *player) {
     player->unkB8C = 2;
     player->behaviorStep = player->behaviorStep + 1;
     return 1;
 }
-
-extern s32 applyVelocityDeadzone(Player *, s32, s32, s32);
 
 s32 updateSharpTurnSlidingStep(Player *player) {
     s16 steeringAngle;
@@ -1444,7 +1406,7 @@ s32 updateSharpTurnSlidingStep(Player *player) {
     return 0;
 }
 
-s32 endSharpTurnSlidingStep(endSharpTurnSlidingStep_arg *player) {
+s32 endSharpTurnSlidingStep(Player *player) {
     s32 flags;
 
     player->behaviorStep = player->behaviorStep + 1;
@@ -1591,7 +1553,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
         player->behaviorStep += 1;
     }
 
-    if (shouldInitiateSharpTurn((shouldInitiateSharpTurn_arg *)player, steeringValue) != 0) {
+    if (shouldInitiateSharpTurn(player, steeringValue) != 0) {
         setPlayerBehaviorPhase(player, 2);
     }
 
@@ -1643,7 +1605,7 @@ s32 updatePostTrickChargingStep(Player *player) {
 
     advancePlayerLeanAnimation(player, 3);
 
-    if (shouldInitiateSharpTurn((shouldInitiateSharpTurn_arg *)player, steeringValue) != 0) {
+    if (shouldInitiateSharpTurn(player, steeringValue) != 0) {
         setPlayerBehaviorPhase(player, 2);
     }
 
@@ -5020,9 +4982,6 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
         setPlayerState100(player);
     }
 }
-
-extern s32 gFrameCounter;
-extern BoneHierarchyEntry *getIndexedAnimationDataPtr(void *, s16);
 
 void renderPlayerModel(Player *player) {
     Transform3D tmpMtx1;
