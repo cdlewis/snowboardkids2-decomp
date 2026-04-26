@@ -24,7 +24,6 @@ typedef struct {
     s32 unk2C;
     s32 unk30;
 } GraphicsCommand;
-extern GraphicsCommand gGraphicsCommand;
 
 typedef struct {
     s16 soundId;
@@ -65,26 +64,25 @@ typedef struct {
     /* 0x534 */ s32 audioInnerDistance;
     /* 0x538 */ s32 audioOuterDistance;
 } GraphicsManager;
-extern GraphicsManager *gGraphicsManager;
-
-extern OSMesgQueue gfxTaskQueue;
-extern OSMesgQueue gfxResultQueue;
-
-extern OSMesg gfxTaskQueueBuffer;
-extern OSMesg gfxResultQueueBuffer;
-extern OSThread gfxCommThread;
-
-void func_8005628C_56E8C(void);
-
-void *startSoundEffect(s32, s32, s32, s32, s32);
-s32 countChannelsByHandle(u32 handle);
-void *startSongWithSingleFxBank(void *, void *);
 
 typedef struct {
     void *start;
     void *end;
     s32 size;
 } GraphicsDataSegment;
+
+extern GraphicsCommand gGraphicsCommand;
+extern GraphicsManager *gGraphicsManager;
+extern OSMesgQueue gfxTaskQueue;
+extern OSMesgQueue gfxResultQueue;
+extern OSMesg gfxTaskQueueBuffer;
+extern OSMesg gfxResultQueueBuffer;
+extern OSThread gfxCommThread;
+
+void func_8005628C_56E8C(void);
+void *startSoundEffect(s32, s32, s32, s32, s32);
+s32 countChannelsByHandle(u32 handle);
+void *startSongWithSingleFxBank(void *, void *);
 
 USE_ASSET(_686740)
 USE_ASSET(_686D40)
