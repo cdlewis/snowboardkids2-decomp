@@ -1,9 +1,6 @@
+#include "ui/save_data.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
-#include "common.h"
-
-s32 tryAddUnlockedCutsceneId(u8 cutsceneId);
-void tryAddUnlockedBoardId(u8 boardId);
 
 void processRaceUnlocks(s16 raceResult) {
     u8 saveSlot;
