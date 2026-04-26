@@ -1,12 +1,12 @@
 #include "common.h"
 #include "gamestate.h"
 #include "system/task_scheduler.h"
-#include "triggers/event_trigger.h"
-
-void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *);
+#include "triggers/clocktrigger_tower.h"
 
 char ClocktowerLabel[] = "CLOCKTOWER";
 s32 D_8008D7FC_8E3FC = 0;
+
+void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *);
 
 void initClocktowerDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
     trigger->locationId = CLOCKTOWER_EVENT_ID;
