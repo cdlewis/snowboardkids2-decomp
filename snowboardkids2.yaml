@@ -377,7 +377,7 @@ segments:
       - [0x947B0, .data, race/character_stats]
       - [0x94B90, .data, race/hit_reactions]
       - [0x94C80, .data, race/track_collision]
-      - [0x94D80, data, race/track_height]
+      - [0x94D80, .data, race/track_height]
       - [0x94E10, .data, data/asset_metadata]
       - [0x9B270, .data, race/race_hud_displaylists]
       - [0x9B2B0, .data, race/particle_items]
