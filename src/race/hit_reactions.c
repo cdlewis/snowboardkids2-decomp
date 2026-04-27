@@ -628,14 +628,14 @@ void addPlayerRaceGold(Player *player, s32 amount) {
         return;
     }
 
-    player->raceGold += amount;
+    player->raceCoins += amount;
 
-    if (player->raceGold > 99999) {
-        player->raceGold = 99999;
+    if (player->raceCoins > 99999) {
+        player->raceCoins = 99999;
     }
 
-    if (player->raceGold < 0) {
-        player->raceGold = 0;
+    if (player->raceCoins < 0) {
+        player->raceCoins = 0;
     }
 }
 
@@ -654,7 +654,7 @@ void addPlayerSkillPoints(Player *player, s32 amount) {
 
 s32 getPlayerRaceGold(Player *player) {
     if (!player->unkBC6) {
-        return player->raceGold;
+        return player->raceCoins;
     }
     return 0;
 }

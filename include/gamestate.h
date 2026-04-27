@@ -14,6 +14,30 @@ typedef struct ListNode_5AA90 {
     /* 0x18 */ u8 id;
 } ListNode_5AA90;
 
+typedef enum {
+    PRIMARY_ITEM_NONE        = 0,
+    PRIMARY_ITEM_SLAPSTICK   = 1,
+    PRIMARY_ITEM_PARACHUTE   = 2,
+    PRIMARY_ITEM_FREEZE_SHOT = 3,
+    PRIMARY_ITEM_SNOWMAN     = 4,
+    PRIMARY_ITEM_BOMB        = 5,
+    PRIMARY_ITEM_WHIRLWIND   = 6,
+} PrimaryItemId;
+
+typedef enum {
+    SECONDARY_ITEM_NONE           = 0,
+    SECONDARY_ITEM_PAN            = 1,
+    SECONDARY_ITEM_GHOST          = 2,
+    SECONDARY_ITEM_SUPER_GHOST    = 3,
+    SECONDARY_ITEM_SPEED_FAN      = 4,
+    SECONDARY_ITEM_ROCKET         = 5,
+    SECONDARY_ITEM_INVISIBLE      = 6,
+    SECONDARY_ITEM_ROCK           = 7,
+    SECONDARY_ITEM_RAT_FACE       = 8,
+    SECONDARY_ITEM_SUPER_RAT_FACE = 9,
+    SECONDARY_ITEM_WING           = 10,
+} SecondaryItemId;
+
 typedef struct {
     /* 0x00 */ s16 values[10];
     /* 0x14 */ s32 position[3];
@@ -169,7 +193,7 @@ typedef struct {
     s32 storedPosY;
     s32 storedPosZ;
     /* 0xB50 */ ListNode_5AA90 collisionListNode;
-    s32 raceGold;
+    s32 raceCoins;
     s32 skillPoints;
     u16 storedRotY;
     /* 0xB76 */ s16 aiPrimaryItemUseTimer;

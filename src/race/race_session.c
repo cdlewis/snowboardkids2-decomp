@@ -1837,22 +1837,22 @@ void awaitSpeedCrossAwardGold(void) {
 
     switch (player->finishPosition) {
         case 0:
-            addPlayerGold(player->raceGold);
+            addPlayerGold(player->raceCoins);
             addPlayerGold(gFirstPlaceGoldReward[state->memoryPoolId]);
             break;
 
         case 1:
-            addPlayerGold(player->raceGold);
+            addPlayerGold(player->raceCoins);
             addPlayerGold(gSecondPlaceGoldReward[state->memoryPoolId]);
             break;
 
         case 2:
-            addPlayerGold(player->raceGold);
+            addPlayerGold(player->raceCoins);
             addPlayerGold(gThirdPlaceGoldReward[state->memoryPoolId]);
             break;
 
         case 3:
-            player->raceGold = 0;
+            player->raceCoins = 0;
             break;
 
         default:

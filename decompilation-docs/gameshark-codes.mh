@@ -1,0 +1,496 @@
+1-Player Games Only
+
+
+
+Player 1
+
+8125A5BE xxxx     Coin Modifier
+Replace xxxx with any number 0-9 or letter A-F 
+
+D025A615 0000     Start on Lap Modifier
+8025A615 00xx
+
+Replace xx with:
+00     Lap 1
+01     Lap 2
+02     Lap 3
+03     Lap 4
+04     Lap 5
+
+8025A614 0000     FAKE Always Have 1st
+
+8025A622 00xx     Left Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Slapstick
+02     Parachute
+03     Freeze Shot
+04     Snowman
+05     Bomb
+06     Whirlwind
+
+8025A623 0003     Infinite Left Weapon
+
+8025A624 00xx     Infinite Right Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Pan
+02     Ghost
+03     Super Ghost
+04     Speed Fan
+05     Rocket
+06     Invisible
+07     Rock
+08     Rat Face
+09     Super Rat Face
+0A     Wing
+
+2-Player Games Only
+
+
+
+P1 Codes
+
+8125AB2E xxxx     Coin Modifier
+
+Replace xxxx with any number 0-9 or letter A-F 
+
+D025AB85 0000     Start on Lap Modifier
+8025AB85 xx
+
+Replace xx with:
+00     Lap 1
+01     Lap 2
+02     Lap 3
+03     Lap 4
+04     Lap 5
+
+8025AB84 0000     FAKE Always Have 1st
+
+8025AB92 00xx     Left Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Slapstick
+02     Parachute
+03     Freeze Shot
+04     Snowman
+05     Bomb
+06     Whirlwind
+
+8025AB93 0003     Infinite Left Weapon
+
+8025AB94 00xx     Infinite Right Weapon Modifier
+
+Replace XX with:
+00     Nothing
+01     Pan
+02     Ghost
+03     Super Ghost
+04     Speed Fan
+05     Rocket
+06     Invisible
+07     Rock
+08     Rat Face
+09     Super Rat Face
+0A     Wing
+
+P2 Codes
+
+8125B716 xxxx     Coin Modifier
+
+Replace xxxx with any number 0-9 or letter A-F 
+
+D025B76D 0000     Start on Lap Modifier
+8025B76D 00xx
+
+Replace xx with:
+00     Lap 1
+01     Lap 2
+02     Lap 3
+03     Lap 4
+04     Lap 5
+
+8025B76C 0000     FAKE Always Have 1st
+
+8025B77A 00xx     Left Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Slapstick
+02     Parachute
+03     Freeze Shot
+04     Snowman
+05     Bomb
+06     Whirlwind
+
+8025B77B 0003     Infinite Left Weapon
+
+8025B77C 00xx     Infinite Right Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Pan
+02     Ghost
+03     Super Ghost
+04     Speed Fan
+05     Rocket
+06     Invisible
+07     Rock
+08     Rat Face
+09     Super Rat Face
+0A     Wing
+
+3-Player Games Only
+
+
+
+P1 Codes
+
+8125B0CE xx     Coin Modifier
+
+Replace xx with any number 0-9 or letter A-F 
+
+D025B125 0000     Start on Lap Modifier
+8025B125 00xx
+
+Replace xx with:
+00     Lap 1
+01     Lap 2
+02     Lap 3
+03     Lap 4
+04     Lap 5
+
+8025B124 0000     FAKE Always Have 1st
+
+8025B132 00xx     Left Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Slapstick
+02     Parachute
+03     Freeze Shot
+04     Snowman
+05     Bomb
+06     Whirlwind
+
+8025B133 0003     Infinite Left Weapon
+
+8025B134 00xx     Infinite Right Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Pan
+02     Ghost
+03     Super Ghost
+04     Speed Fan
+05     Rocket
+06     Invisible
+07     Rock
+08     Rat Face
+09     Super Rat Face
+0A     Wing
+
+P2 Codes
+
+8125BCB6 xxxx     Coin Modifier
+
+Replace xxxx with any number 0-9 or letter A-F 
+
+D025BD0D 0000     Start on Lap Modifier
+8025BD0D 00xx
+
+Replace xx with:
+00     Lap 1
+01     Lap 2
+02     Lap 3
+03     Lap 4
+04     Lap 5
+
+8025BD0C 0000     FAKE Always Have 1st
+
+8025BD1A 00xx     Left Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Slapstick
+02     Parachute
+03     Freeze Shot
+04     Snowman
+05     Bomb
+06     Whirlwind
+
+8025BD1B 0003     Infinite Left Weapon
+
+8025BD1C 00xx     Infinite Right Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Pan
+02     Ghost
+03     Super Ghost
+04     Speed Fan
+05     Rocket
+06     Invisible
+07     Rock
+08     Rat Face
+09     Super Rat Face
+0A     Wing
+
+P3 Codes
+
+8125C89E xxxx     Coin Modifier
+
+Replace xxxx with any number 0-9 or letter A-F 
+
+D025C8F5 0000     Start on Lap Modifier
+8025C8F5 00xx
+
+Replace xx with:
+00     Lap 1
+01     Lap 2
+02     Lap 3
+03     Lap 4
+04     Lap 5
+
+8025C8F4 0000     FAKE Always Have 1st
+
+8025C902 00xx     Left Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Slapstick
+02     Parachute
+03     Freeze Shot
+04     Snowman
+05     Bomb
+06     Whirlwind
+
+8025C903 0003     Infinite Left Weapon
+
+8025C904 00xx     Infinite Right Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Pan
+02     Ghost
+03     Super Ghost
+04     Speed Fan
+05     Rocket
+06     Invisible
+07     Rock
+08     Rat Face
+09     Super Rat Face
+0A     Wing
+
+4-Player Games Only
+
+
+
+P1 Codes
+
+8125B63E xxxx     Coin Modifier
+
+Replace xxxx with any number 0-9 or letter A-F 
+
+D025B695 0000     Start on Lap Modifier
+8025B695 00xx
+
+Replace xx with:
+00     Lap 1
+01     Lap 2
+02     Lap 3
+03     Lap 4
+04     Lap 5
+
+8025B694 0000     FAKE Always Have 1st
+
+8025B6A2 00xx     Left Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Slapstick
+02     Parachute
+03     Freeze Shot
+04     Snowman
+05     Bomb
+06     Whirlwind
+
+8025B6A3 0003     Infinite Left Weapon
+
+8025B6A4 00xx     Infinite Right Weapon Modifier
+Replace xx with:
+00     Nothing
+01     Pan
+02     Ghost
+03     Super Ghost
+04     Speed Fan
+05     Rocket
+06     Invisible
+07     Rock
+08     Rat Face
+09     Super Rat Face
+0A     Wing
+
+P2 Codes
+
+8125C226 xxxx     Coin Modifier
+
+Replace xxxx with any number 0-9 or letter A-F 
+
+D025C27D 0000     Start on Lap Modifier
+8025C27D 00xx
+
+Replace xx with:
+00     Lap 1
+01     Lap 2
+02     Lap 3
+03     Lap 4
+04     Lap 5
+
+8025C27C 0000     FAKE Always Have 1st
+
+8025C28A 00xx     Left Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Slapstick
+02     Parachute
+03     Freeze Shot
+04     Snowman
+05     Bomb
+06     Whirlwind
+
+8025C28B 0003     Infinite Left Weapon
+
+8025C28C 00xx     Infinite Right Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Pan
+02     Ghost
+03     Super Ghost
+04     Speed Fan
+05     Rocket
+06     Invisible
+07     Rock
+08     Rat Face
+09     Super Rat Face
+0A     Wing
+
+P3 Codes
+
+8125CE0E xxxx     Coin Modifier
+
+Replace xxxx with any number 0-9 or letter A-F 
+
+D025CE65 0000     Start on Lap Modifier
+8025CE65 00xx
+
+Replace xx with:
+00     Lap 1
+01     Lap 2
+02     Lap 3
+03     Lap 4
+04     Lap 5
+
+8025CE64 0000     FAKE Always Have 1st
+
+8025CE72 00xx     Left Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Slapstick
+02     Parachute
+03     Freeze Shot
+04     Snowman
+05     Bomb
+06     Whirlwind
+
+8025CE73 0003     Infinite Left Weapon
+
+8025CE74 00xx     Infinite Right Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Pan
+02     Ghost
+03     Super Ghost
+04     Speed Fan
+05     Rocket
+06     Invisible
+07     Rock
+08     Rat Face
+09     Super Rat Face
+0A     Wing
+
+P4 Codes
+
+8125D9F6 xxxx     Coin Modifier
+
+Replace xxxx with any number 0-9 or letter A-F 
+
+D025DA4D 0000     Start on Lap Modifier
+8025DA4D 00xx
+
+Replace xx with:
+00     Lap 1
+01     Lap 2
+02     Lap 3
+03     Lap 4
+04     Lap 5
+
+8025DA4C 0000     FAKE Always Have 1st
+
+8025DA5A 00xx     Left Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Slapstick
+02     Parachute
+03     Freeze Shot
+04     Snowman
+05     Bomb
+06     Whirlwind
+
+8025DA5B 0003     Infinite Left Weapon
+
+8025DA5C 00xx     Infinite Right Weapon Modifier
+
+Replace xx with:
+00     Nothing
+01     Pan
+02     Ghost
+03     Super Ghost
+04     Speed Fan
+05     Rocket
+06     Invisible
+07     Rock
+08     Rat Face
+09     Super Rat Face
+0A     Wing
+
+All Mode Codes
+
+
+
+Gold Medal Codes
+
+80259130 0001     Sunny Mountain
+80259131 0001     Turtle Island
+80259132 0001     Jingle Town
+80259133 0001     Jingle Town Boss
+80259134 0001     Wendy's House
+80259135 0001     Linda's Castle
+80259136 0001     Crazy Jungle
+80259137 0001     Crazy Jungle Boss
+80259138 0001     Starlight Highway
+80259139 0001     Haunted House
+
+81259130 0101     Have All Gold Medals
+81259132 0101
+81259134 0101
+81259136 0101
+81259138 0101

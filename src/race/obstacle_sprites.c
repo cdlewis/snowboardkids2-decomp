@@ -206,7 +206,7 @@ void checkSlapstickProjectileHit(Struct_52880 *arg0) {
             /* Player has no shield - apply hit effects */
             setPlayerHomingProjectileRetaliationState(hitPlayer);
             for (i = 0; i < 3; i++) {
-                if (hitPlayer->raceGold >= 100) {
+                if (hitPlayer->raceCoins >= 100) {
                     spawnHomingProjectile(&hitPlayer->worldPos.x, hitPlayer->sectorIndex, &hitPlayer->velocity);
                     addPlayerRaceGold(hitPlayer, -100);
                 }
@@ -1751,7 +1751,7 @@ void checkRandomEffectProjectileHit(RandomEffectProjectileUpdate *arg0) {
             if (player != NULL) {
                 setPlayerHomingProjectileRetaliationState(player);
                 for (i = 0; i < 3; i++) {
-                    if (player->raceGold >= 100) {
+                    if (player->raceCoins >= 100) {
                         spawnHomingProjectile(&player->worldPos.x, player->sectorIndex, &player->velocity);
                         addPlayerRaceGold(player, -100);
                     }

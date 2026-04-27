@@ -1151,7 +1151,7 @@ s32 initPlayerForRace(Player *player) {
         v0_temp = 0xBB8;
 
     set_race_gold:
-        player->raceGold = v0_temp;
+        player->raceCoins = v0_temp;
     }
 
     return 1;
