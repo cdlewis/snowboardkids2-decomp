@@ -139,6 +139,37 @@ typedef struct {
     s8 unk9;
 } StateEntryItem;
 
+/*
+ * The cutscene state table occupies a single 0x78E0-byte allocation:
+ *
+ *   [0x000 - 0x0BF]  Header area (3 entries x 0x40 bytes):
+ *                      - Table metadata at 0x000-0x01F
+ *                      - 16 slot items at 0x020-0x0BF (StateEntryItem items[16])
+ *   [0x0C0 - 0x78BF] Event entries (0x1E0 entries x 0x40 bytes each)
+ *
+ * StateTable describes the header area.
+ * StateEntry describes an individual 0x40-byte event entry.
+ *
+ * gCutsceneStateTable is typed as StateEntry* so that array indexing by
+ * entry ID works: getStateEntry(n) = &gCutsceneStateTable[n + 3].
+ * Cast to (StateTable*) to access items[16] with proper bounds.
+ */
+typedef struct {
+    /* 0x00 */ s32 header[3];
+    /* 0x0C */ u16 current_index;
+    /* 0x0E */ u16 freeListTailIndex;
+    /* 0x10 */ u16 allocatedEventCount;
+    /* 0x12 */ u8 stateEntryItemSize;
+    /* 0x13 */ u8 slotCount;
+    /* 0x14 */ u16 frameMask;
+    /* 0x16 */ s16 maxEntries;
+    /* 0x18 */ s16 initModelIndex;
+    /* 0x1A */ s16 defaultEndFrame;
+    /* 0x1C */ u8 configByte;
+    /* 0x1D */ u8 padding4[0x3];
+    /* 0x20 */ StateEntryItem items[16];
+} StateTable; /* 0xC0 bytes */
+
 typedef struct {
     s32 header[3];
     u8 data[0x2C];
@@ -149,6 +180,13 @@ typedef struct {
     s32 renderFlags;
 } Func8000C268Arg;
 
+/*
+ * Dual-purpose struct: used both as the table header (gCutsceneStateTable[0])
+ * and as individual 0x40-byte event entries (gCutsceneStateTable[3+]).
+ * Access table metadata/items through StateTable*; access event data through StateEntry*.
+ * The items[2] declaration covers only the first 2 items within entry 0's space;
+ * use getCurrentStateEntryItem() for all 16 items.
+ */
 typedef struct {
     s32 header[3];
     /* 0xC */ u16 current_index;

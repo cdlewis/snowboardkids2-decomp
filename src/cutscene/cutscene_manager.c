@@ -394,7 +394,7 @@ void setCutsceneInitModelIndex(s16 arg0) {
 }
 
 StateEntryItem *getCurrentStateEntryItem(s32 itemIndex) {
-    return &gCutsceneStateTable->items[itemIndex];
+    return &((StateTable *)gCutsceneStateTable)->items[itemIndex];
 }
 
 s16 getCutsceneDefaultEndFrame(void) {
@@ -560,44 +560,59 @@ void initializeStateEntry(s32 entryIndex) {
     entry->commandType = 0;
 }
 
+/*
+ * Initializes the cutscene state table from ROM asset data.
+ *
+ * The state table is a 0x78E0-byte block structured as:
+ *   [0x000 - 0x0BF] Header area: metadata + 16 slot items (StateTable)
+ *   [0x0C0 - 0x78BF] 480 (0x1E0) event entries, each 0x40 bytes (StateEntry)
+ *
+ * Event entry n (0-based) is at offset (n+3)*0x40 from the table base.
+ * Its next_index field is at table offset n*0x40 + 0xF8 (= (n+3)*0x40 + 0x38).
+ * Its prev_index field is at table offset n*0x40 + 0xFA (= (n+3)*0x40 + 0x3A).
+ */
 void initializeCutsceneSystem(void *romAssetAddr) {
     u8 *entryPtr;
     s32 slotIdx;
     s32 nextIdx;
     s32 itemByteOffset;
     u16 entryIndex;
-    s32 negOne;
-    u16 invalidIdx;
+    s32 negOne;     /* -1 constant; kept in a callee-saved register for the slot init loop */
+    u16 invalidIdx; /* 0xFFFF sentinel; kept in a callee-saved register for the slot init loop */
 
     gCutsceneStateTableSize = 0x78E0;
     gCutsceneStateTable = allocateNodeMemory(0x78E0);
 
-    // Build the free list: link all 480 entries into a doubly-linked list
+    /* Build doubly-linked free list for all 480 event entries.
+     * The list pointers use raw table indexing: entry n's next_index is
+     * at table base + n*0x40 + 0xF8 (bypassing the 3-entry header offset). */
     slotIdx = 0;
     do {
-        StateEntry *entry;
+        StateEntry *rawTable;
         s32 entryByteOffset;
         s32 prevIdx;
 
-        entry = gCutsceneStateTable;
-        entryByteOffset = slotIdx << 6;
+        rawTable = gCutsceneStateTable;
+        entryByteOffset = slotIdx << 6; /* slotIdx * sizeof(StateEntry) */
         nextIdx = slotIdx + 1;
         prevIdx = slotIdx - 1;
-        entryPtr = (u8 *)entry + entryByteOffset;
-        *(s16 *)(entryPtr + 0xF8) = nextIdx;
-        *(s16 *)(entryPtr + 0xFA) = prevIdx;
+        entryPtr = (u8 *)rawTable + entryByteOffset;
+        *(s16 *)(entryPtr + 0xF8) = nextIdx; /* entry[slotIdx].next_index */
+        *(s16 *)(entryPtr + 0xFA) = prevIdx; /* entry[slotIdx].prev_index */
         initializeStateEntry(slotIdx);
         slotIdx = nextIdx;
     } while (nextIdx < 0x1E0);
 
-    // Write magic signature "EDAT0001" at header[1..2] (bytes 4-11) for save data validation
+    /* Terminate free list boundaries and write "EDAT0001" magic signature.
+     * The magic is stored in header[1] ("EDAT") and header[2] ("0001") and
+     * is used by verifyAndLoadCutsceneState to validate save data. */
     {
         StateEntry *firstEntry = gCutsceneStateTable;
         StateEntry *firstEntry2;
         ((u8 *)firstEntry->header)[4] = 'E';
         firstEntry2 = gCutsceneStateTable;
-        *(u16 *)((u8 *)firstEntry + 0xFA) = 0xFFFF;
-        *(u16 *)((u8 *)firstEntry + 0x78B8) = 0xFFFF;
+        *(u16 *)((u8 *)firstEntry + 0xFA) = 0xFFFF;   /* entry[0].prev_index = none */
+        *(u16 *)((u8 *)firstEntry + 0x78B8) = 0xFFFF; /* entry[0x1DF].next_index = none */
         firstEntry->header[0] = 0;
         ((u8 *)firstEntry2->header)[5] = 'D';
     }
@@ -609,30 +624,41 @@ void initializeCutsceneSystem(void *romAssetAddr) {
     slotIdx = 0;
     ((u8 *)gCutsceneStateTable->header)[11] = '1';
 
+    /* Initialize table metadata */
     {
         StateEntry *table = gCutsceneStateTable;
         StateEntry *table2;
         negOne = -1;
-        table->stateEntryItemSize = 0x38;
+        table->stateEntryItemSize = 0x38; /* size of script data per entry */
         table2 = gCutsceneStateTable;
         invalidIdx = 0xFFFF;
-        table->freeListTailIndex = 0x1DF;
+        table->freeListTailIndex = 0x1DF; /* last entry in free list */
         table->current_index = 0;
         table->allocatedEventCount = 0;
-        table2->slotCount = 0x10;
+        table2->slotCount = 0x10; /* 16 character slots */
     }
 
     {
         StateEntry *table = gCutsceneStateTable;
         itemByteOffset = 0;
-        table->frameMask = 0x8000;
-        table->maxEntries = 0x1E0;
+        table->frameMask = 0x8000; /* high bit marks the sentinel end-of-list frame */
+        table->maxEntries = 0x1E0; /* 480 total event entries */
         table->initModelIndex = 0;
         table->defaultEndFrame = 100;
         table->configByte = 0;
     }
 
-    // Initialize 16 slot items, allocating a free list entry for each
+    /* Allocate one event entry per slot as each slot's head node.
+     * Item fields use raw byte offsets from the table base (itemByteOffset
+     * tracks slot n's position as n * sizeof(StateEntryItem)):
+     *   items[n].headIndex    at itemByteOffset + 0x20
+     *   items[n].characterId  at itemByteOffset + 0x24  (= -1: no character assigned)
+     *   items[n].unk6         at itemByteOffset + 0x26
+     *   items[n].unk7         at itemByteOffset + 0x27
+     *   items[n].unk8         at itemByteOffset + 0x28
+     *   items[n].unk9         at itemByteOffset + 0x29
+     * The allocated entry's linked list pointers are both set to 0xFFFF (no neighbours),
+     * and initializeCutsceneCommand sets up its initial command from the ROM asset. */
     do {
         u8 *itemBytes;
         u8 *itemBytes2;
@@ -645,23 +671,23 @@ void initializeCutsceneSystem(void *romAssetAddr) {
         itemBytes = (u8 *)gCutsceneStateTable;
         slotIdxByte = slotIdx << 24;
         itemBytes += itemByteOffset;
-        itemBytes[0x26] = 0;
+        itemBytes[0x26] = 0; /* item->unk6 = 0 */
         itemBytes2 = (u8 *)gCutsceneStateTable + itemByteOffset;
         slotIdx++;
-        slotIdxByte >>= 24;
-        *(s16 *)(itemBytes + 0x20) = entryIndex;
-        *(s16 *)(itemBytes + 0x24) = negOne;
-        itemBytes2[0x27] = negOne;
-        ((u8 *)gCutsceneStateTable + itemByteOffset)[0x28] = 0;
+        slotIdxByte >>= 24;                                     /* sign-extend to s8 slot index */
+        *(s16 *)(itemBytes + 0x20) = entryIndex;                /* item->headIndex = entryIndex */
+        *(s16 *)(itemBytes + 0x24) = negOne;                    /* item->characterId = -1 */
+        itemBytes2[0x27] = negOne;                              /* item->unk7 = -1 */
+        ((u8 *)gCutsceneStateTable + itemByteOffset)[0x28] = 0; /* item->unk8 = 0 */
         entryByteOffset = (entryIndex & 0xFFFF) << 6;
-        ((u8 *)gCutsceneStateTable + itemByteOffset)[0x29] = negOne;
+        ((u8 *)gCutsceneStateTable + itemByteOffset)[0x29] = negOne; /* item->unk9 = -1 */
         {
             u8 *tableBase = (u8 *)gCutsceneStateTable;
-            s32 cmdOffset = entryByteOffset + 0xC0;
+            s32 cmdOffset = entryByteOffset + 0xC0; /* offset to entry start (skip 3-entry header) */
             itemByteOffset += sizeof(StateEntryItem);
             allocatedEntryBytes = tableBase + entryByteOffset;
-            *(u16 *)(allocatedEntryBytes + 0xF8) = invalidIdx;
-            *(u16 *)(allocatedEntryBytes + 0xFA) = invalidIdx;
+            *(u16 *)(allocatedEntryBytes + 0xF8) = invalidIdx; /* entry->next_index = 0xFFFF */
+            *(u16 *)(allocatedEntryBytes + 0xFA) = invalidIdx; /* entry->prev_index = 0xFFFF */
             initializeCutsceneCommand(tableBase + cmdOffset, romAssetAddr, 0, 0, slotIdxByte);
         }
     } while (slotIdx < 0x10);
