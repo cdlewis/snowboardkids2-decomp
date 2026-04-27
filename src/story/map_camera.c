@@ -138,7 +138,7 @@ void initStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
     arg0->cameraX = 0;
     arg0->cameraY = 0x200000;
     arg0->cameraZ = 0;
-    memcpy(arg0, &identityMatrix, 0x20);
+    memcpy(arg0, &identityMatrix, sizeof(Transform3D));
 
     arg0->translateX = 0;
     arg0->translateY = 0;

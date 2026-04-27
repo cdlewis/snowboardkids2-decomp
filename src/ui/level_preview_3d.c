@@ -2072,7 +2072,7 @@ void initializeGameEntity(
     ent->unk48 = 0;
     ent->unk95 = 0;
 
-    memcpy(&ent->asset2TransformationMatrix, &identityMatrix, 0x20);
+    memcpy(&ent->asset2TransformationMatrix, &identityMatrix, sizeof(Transform3D));
 
     ent->partDisplayFlags = -1;
     ent->alpha = 0xFF;
@@ -2095,7 +2095,7 @@ void initializeGameEntity(
             i[ent->unk00].unk20 = &assetEntry->unk1C[i];
             i[ent->unk00].asset1 = asset1;
             i[ent->unk00].asset2 = asset2;
-            memcpy((void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->unk00), &identityMatrix, 0x20);
+            memcpy((void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->unk00), &identityMatrix, sizeof(Transform3D));
         }
     } else if (assetEntry->assetGroupIndex != -1) {
         asset1 = loadAssetByIndex_94F90(assetEntry->assetGroupIndex, assetPairIndex);
@@ -2105,7 +2105,7 @@ void initializeGameEntity(
             i[ent->unk00].unk20 = (void *)&loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
             i[ent->unk00].asset1 = asset1;
             i[ent->unk00].asset2 = asset2;
-            memcpy((void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->unk00), &identityMatrix, 0x20);
+            memcpy((void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->unk00), &identityMatrix, sizeof(Transform3D));
         }
     }
 
@@ -2136,7 +2136,7 @@ void initializeGameEntity(
         ent->unk00[16].asset2 = loadAssetByIndex_95590(param5);
         ent->unk00[16].asset3 = loadAssetByIndex_95668(param6);
 
-        memcpy(&ent->unk00[16].transformationMatrix, &identityMatrix, 0x20);
+        memcpy(&ent->unk00[16].transformationMatrix, &identityMatrix, sizeof(Transform3D));
     }
 
     if (yetAnotherAssetIndex != -1 && yetAnotherAssetIndex < itemAssetCount) {
@@ -2151,7 +2151,7 @@ void initializeGameEntity(
         );
         ent->unk00[17].asset3 = NULL;
 
-        memcpy(&ent->unk00[17].transformationMatrix, &identityMatrix, 0x20);
+        memcpy(&ent->unk00[17].transformationMatrix, &identityMatrix, sizeof(Transform3D));
     }
 
     if (assetEntry->initCallback != NULL) {
@@ -2184,7 +2184,7 @@ void initializeGameEntity(
 
     ent->unk10 = param3;
 
-    memcpy(&ent->transformationMatrix, &identityMatrix, 0x20);
+    memcpy(&ent->transformationMatrix, &identityMatrix, sizeof(Transform3D));
 
     ent->isDestroyed = 0;
     ent->displayEnabled = 1;

@@ -791,7 +791,7 @@ void initStoryMapRareEventSnowman(Func2E024Arg *container) {
     for (i = 0; i < container->unkD5; i++) {
         Func297D8Arg *element = &elements[i];
 
-        memcpy(&elements[i].matrix, &identityMatrix, 0x20);
+        memcpy(&elements[i].matrix, &identityMatrix, sizeof(Transform3D));
         element->unk62 = 0;
 
         if (i == 0) {

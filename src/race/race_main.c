@@ -2855,8 +2855,8 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     forwardDir.y = yawRotation.m[2][1];
     forwardDir.z = yawRotation.m[2][2];
 
-    memcpy(&pitchMatrix, &identityMatrix, 0x20);
-    memcpy(&slopeMatrix, &identityMatrix, 0x20);
+    memcpy(&pitchMatrix, &identityMatrix, sizeof(Transform3D));
+    memcpy(&slopeMatrix, &identityMatrix, sizeof(Transform3D));
 
     sqrtResult = approximate_sqrt(
         player->surfaceNormalX * player->surfaceNormalX + player->surfaceNormalZ * player->surfaceNormalZ
@@ -2883,7 +2883,7 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     }
 
     transformVector2(&forwardDir, &combinedTransform, &localVelocity);
-    memcpy(&slopeMatrix, &identityMatrix, 0x20);
+    memcpy(&slopeMatrix, &identityMatrix, sizeof(Transform3D));
 
     sqrtResult = approximate_sqrt(localVelocity.x * localVelocity.x + localVelocity.z * localVelocity.z);
     magnitude = sqrtResult & 0xFFFF;

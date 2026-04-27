@@ -465,7 +465,7 @@ void renderGalleryMenu(GalleryMenuState *arg0) {
     s16 alpha;
     s8 menuState;
 
-    memcpy(&menuTransform, &identityMatrix, 0x20);
+    memcpy(&menuTransform, &identityMatrix, sizeof(Transform3D));
     if (arg0->menuState == 7) {
         return;
     }

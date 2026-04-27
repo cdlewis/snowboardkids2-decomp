@@ -282,11 +282,11 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
     }
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         memcpy(&gScaleMatrix.translation, &sprite->position, sizeof(Vec3i));
         transform3DToMtx(&gScaleMatrix, sprite->translationMtx);
 
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         scaleXRaw = sprite->scaleX;
         if (scaleXRaw < 0) {
             scaleXRaw += 3;
@@ -300,13 +300,13 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
         scaleMatrix(&transform, scaleX, scaleY, 0x2000);
         transform3DToMtx(&transform, sprite->scaleMtx);
 
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         if (sprite->flags & 1) {
             createYRotationMatrix(&transform, 0x1000);
         }
         transform3DToMtx(&transform, sprite->yRotationMtx);
 
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         createZRotationMatrix(&transform, sprite->zRotation);
         transform3DToMtx(&transform, sprite->zRotationMtx);
 
@@ -438,11 +438,11 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
     }
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         memcpy(&gScaleMatrix.translation, &sprite->position, sizeof(Vec3i));
         transform3DToMtx(&gScaleMatrix, sprite->translationMtx);
 
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         scaleXRaw = sprite->scaleX;
         if (scaleXRaw < 0) {
             scaleXRaw += 3;
@@ -456,13 +456,13 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
         scaleMatrix(&transform, scaleX, scaleY, 0x2000);
         transform3DToMtx(&transform, sprite->scaleMtx);
 
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         if (sprite->flags & 1) {
             createYRotationMatrix(&transform, 0x1000);
         }
         transform3DToMtx(&transform, sprite->yRotationMtx);
 
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         createZRotationMatrix(&transform, sprite->zRotation);
         transform3DToMtx(&transform, sprite->zRotationMtx);
 
@@ -594,10 +594,10 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
     }
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         transform3DToMtx(&sprite->transform, sprite->translationMtx);
 
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         scaleXRaw = sprite->scaleX;
         if (scaleXRaw < 0) {
             scaleXRaw += 3;
@@ -611,13 +611,13 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
         scaleMatrix(&transform, scaleX, scaleY, 0x2000);
         transform3DToMtx(&transform, sprite->scaleMtx);
 
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         if (sprite->flags & 1) {
             createYRotationMatrix(&transform, 0x1000);
         }
         transform3DToMtx(&transform, sprite->yRotationMtx);
 
-        memcpy(&transform, &identityMatrix, 0x20);
+        memcpy(&transform, &identityMatrix, sizeof(Transform3D));
         createZRotationMatrix(&transform, sprite->zRotation);
         transform3DToMtx(&transform, sprite->zRotationMtx);
 

@@ -261,7 +261,7 @@ void updateModelTransitionEffect(ModelTransitionEffectState *state) {
     s8 actionMode;
     void *unused;
 
-    memcpy(&unusedMatrixBuffer, &identityMatrix, 0x20);
+    memcpy(&unusedMatrixBuffer, &identityMatrix, sizeof(Transform3D));
 
     if (state->model->isDestroyed == 1) {
         terminateCurrentTask();
@@ -276,7 +276,7 @@ void updateModelTransitionEffect(ModelTransitionEffectState *state) {
     } else {
         do {
             if (state->currentFrame == 0) {
-                memcpy(&state->transformMatrix, &state->model->matrix18, 0x20);
+                memcpy(&state->transformMatrix, &state->model->matrix18, sizeof(Transform3D));
                 scaleMatrix(&state->transformMatrix, 0x1000, 0x1000, 0x1000);
             }
         } while (0);

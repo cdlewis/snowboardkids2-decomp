@@ -246,7 +246,7 @@ void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0) {
         return;
     }
 
-    memcpy(arg0, &identityMatrix, 0x20);
+    memcpy(arg0, &identityMatrix, sizeof(Transform3D));
 
     offset = (randA() & 3) * 8;
 

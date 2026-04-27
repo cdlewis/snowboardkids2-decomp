@@ -342,12 +342,12 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
 
     gameState = (u8 *)getCurrentAllocation();
     posMatPtr = &arg0->positionMatrix;
-    memcpy(posMatPtr, &identityMatrix, 0x20);
+    memcpy(posMatPtr, &identityMatrix, sizeof(Transform3D));
     rotMatPtr = &arg0->rotationMatrix;
-    memcpy(rotMatPtr, posMatPtr, 0x20);
-    memcpy(&sp30, rotMatPtr, 0x20);
+    memcpy(rotMatPtr, posMatPtr, sizeof(Transform3D));
+    memcpy(&sp30, rotMatPtr, sizeof(Transform3D));
     sp10Ptr = &sp10;
-    memcpy(sp10Ptr, &sp30, 0x20);
+    memcpy(sp10Ptr, &sp30, sizeof(Transform3D));
     createRotationMatrixYX(sp10Ptr, 0x1000, 0x800);
     createZRotationMatrix(&sp30, 0x1F00);
     func_8006B084_6BC84(sp10Ptr, &sp30, rotMatPtr);
@@ -597,19 +597,19 @@ void initCharSelectSecondarySlot(CharSelectSecondarySlot *arg0) {
     state = (GameState *)getCurrentAllocation();
 
     localMatrix3Ptr = &localMatrix3;
-    memcpy(localMatrix3Ptr, &identityMatrix, 0x20);
+    memcpy(localMatrix3Ptr, &identityMatrix, sizeof(Transform3D));
     posMatrixPtr = &arg0->positionMatrix;
-    memcpy(posMatrixPtr, localMatrix3Ptr, 0x20);
+    memcpy(posMatrixPtr, localMatrix3Ptr, sizeof(Transform3D));
     rotMatrixPtr = &arg0->rotationMatrix;
-    memcpy(rotMatrixPtr, posMatrixPtr, 0x20);
+    memcpy(rotMatrixPtr, posMatrixPtr, sizeof(Transform3D));
     localMatrix2Ptr = &localMatrix2;
-    memcpy(localMatrix2Ptr, rotMatrixPtr, 0x20);
+    memcpy(localMatrix2Ptr, rotMatrixPtr, sizeof(Transform3D));
     localMatrix1Ptr = &localMatrix1;
-    memcpy(localMatrix1Ptr, localMatrix2Ptr, 0x20);
+    memcpy(localMatrix1Ptr, localMatrix2Ptr, sizeof(Transform3D));
 
     offset = arg0->playerIndex << 5;
     worldMatrixPtr = &arg0->worldMatrix;
-    memcpy(worldMatrixPtr, (void *)(offset + (u32)state + 0x17F8), 0x20);
+    memcpy(worldMatrixPtr, (void *)(offset + (u32)state + 0x17F8), sizeof(Transform3D));
 
     createRotationMatrixYX(localMatrix1Ptr, 0x1000, 0x800);
     createZRotationMatrix(localMatrix2Ptr, 0x1F00);
@@ -695,7 +695,7 @@ void initCharSelectBoardModel(CharSelectBoardPreview *arg0) {
             createSceneModelEx(boardType, (void *)state + (playerIdx * 0x1D8), state->PAD_22[playerIdx], -1, -1, -1);
     }
 
-    memcpy(&arg0->transform, &identityMatrix, 0x20);
+    memcpy(&arg0->transform, &identityMatrix, sizeof(Transform3D));
 
     sinVal = -(approximateSin(0x800) * 0x1600);
     if (sinVal < 0) {
@@ -855,7 +855,7 @@ void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
 
     state = (GameState *)getCurrentAllocation();
 
-    memcpy(&preview->transform, &identityMatrix, 0x20);
+    memcpy(&preview->transform, &identityMatrix, sizeof(Transform3D));
 
     playerIdx = preview->playerIndex;
     preview->transform.translation.x =
@@ -937,7 +937,7 @@ void initCharSelectBoardModelForSlideOut(CharSelectBoardPreview *arg0) {
         arg0->model =
             createSceneModelEx(0x39, alloc + (playerIndex * 0x1D8), (alloc + playerIndex)[0x18BC], -1, -1, -1);
     }
-    memcpy(&arg0->transform, &identityMatrix, 0x20);
+    memcpy(&arg0->transform, &identityMatrix, sizeof(Transform3D));
     arg0->transform.translation.x = 0;
     arg0->transform.translation.z = 0;
     arg0->transform.translation.y = 0xFFF00000;

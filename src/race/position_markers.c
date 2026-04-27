@@ -188,7 +188,7 @@ void initStartGate(StartGate *gate) {
     gate->leftDoorSegment1 = gate->mainGateSegment1;
     gate->leftDoorSegment2 = gate->mainGateSegment2;
     gate->leftDoorSegment3 = gate->mainGateSegment3;
-    memcpy(transformMatrix, &identityMatrix, 0x20);
+    memcpy(transformMatrix, &identityMatrix, sizeof(Transform3D));
     transformMatrix[6] = 0x180000;
     func_8006B084_6BC84((Transform3D *)transformMatrix, (Transform3D *)gate, &gate->leftDoorTransform);
     gate->rightDoorSegment1 = gate->mainGateSegment1;

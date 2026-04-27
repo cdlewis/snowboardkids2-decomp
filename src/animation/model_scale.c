@@ -17,7 +17,7 @@ void cleanupModelScaleAnimation(void);
 void updateModelScaleAnimation(ModelScaleAnimationState *state);
 
 void initModelScaleAnimation(ModelScaleAnimationState *state) {
-    memcpy(&state->transformMatrix, &identityMatrix, 0x20);
+    memcpy(&state->transformMatrix, &identityMatrix, sizeof(Transform3D));
     state->velocity = 0;
     state->rotationAngle = 0;
     state->delayTimer = 0;
@@ -45,14 +45,14 @@ void updateModelScaleAnimation(ModelScaleAnimationState *state) {
         default:
             state->velocity = 0;
             state->rotationAngle = 0;
-            memcpy(&state->transformMatrix, &identityMatrix, 0x20);
+            memcpy(&state->transformMatrix, &identityMatrix, sizeof(Transform3D));
             break;
 
         case 1:
             scale = state->transformMatrix.translation.y;
             state->rotationAngle = 0;
             state->velocity += 0xFFFF0000;
-            memcpy(&state->transformMatrix, &identityMatrix, 0x20);
+            memcpy(&state->transformMatrix, &identityMatrix, sizeof(Transform3D));
             state->transformMatrix.translation.y = scale;
             velocity = state->velocity;
             newScale = scale + velocity;
@@ -68,7 +68,7 @@ void updateModelScaleAnimation(ModelScaleAnimationState *state) {
             scale = state->transformMatrix.translation.y;
             state->rotationAngle = 0;
             state->velocity += 0xFFFE0000;
-            memcpy(&state->transformMatrix, &identityMatrix, 0x20);
+            memcpy(&state->transformMatrix, &identityMatrix, sizeof(Transform3D));
             state->transformMatrix.translation.y = scale;
             velocity = state->velocity;
             newScale = scale + velocity;
@@ -81,7 +81,7 @@ void updateModelScaleAnimation(ModelScaleAnimationState *state) {
             break;
 
         case 3:
-            memcpy(&state->transformMatrix, &identityMatrix, 0x20);
+            memcpy(&state->transformMatrix, &identityMatrix, sizeof(Transform3D));
             angle = state->rotationAngle - 0x111;
             state->rotationAngle = angle;
             if (angle < -0x800) {
@@ -97,7 +97,7 @@ void updateModelScaleAnimation(ModelScaleAnimationState *state) {
                 scale = state->transformMatrix.translation.y;
                 state->rotationAngle = 0;
                 state->velocity += 0xFFFF0000;
-                memcpy(&state->transformMatrix, &identityMatrix, 0x20);
+                memcpy(&state->transformMatrix, &identityMatrix, sizeof(Transform3D));
                 state->transformMatrix.translation.y = scale;
                 velocity = state->velocity;
                 newScale = scale + velocity;
@@ -122,7 +122,7 @@ void updateModelScaleAnimation(ModelScaleAnimationState *state) {
             scale = state->transformMatrix.translation.y;
             state->rotationAngle = 0;
             state->velocity += 0xFFFD0000;
-            memcpy(&state->transformMatrix, &identityMatrix, 0x20);
+            memcpy(&state->transformMatrix, &identityMatrix, sizeof(Transform3D));
             state->transformMatrix.translation.y = scale;
             velocity = state->velocity;
             newScale = scale + velocity;
@@ -140,7 +140,7 @@ void updateModelScaleAnimation(ModelScaleAnimationState *state) {
             break;
     }
 
-    memcpy(&state->model->unkF0, &state->transformMatrix, 0x20);
+    memcpy(&state->model->unkF0, &state->transformMatrix, sizeof(Transform3D));
 }
 
 void cleanupModelScaleAnimation(void) {

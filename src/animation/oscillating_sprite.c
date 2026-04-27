@@ -34,7 +34,7 @@ void initializeQuadDisplayList(QuadDisplayListElement *elements) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        memcpy(elements[i].transformMatrix, &identityMatrix, 0x20);
+        memcpy(elements[i].transformMatrix, &identityMatrix, sizeof(Transform3D));
         elements[i].displayList = loadAssetGroupDisplayList(elements->model);
         elements[i].vertexData = loadAssetGroupCompressedData(elements->model);
         elements[i].renderFlag = 0;

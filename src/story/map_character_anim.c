@@ -79,8 +79,8 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
         return;
     }
 
-    memcpy(&camera->orientMatrix, &identityMatrix, 0x20);
-    memcpy(&camera->viewMatrix, &identityMatrix, 0x20);
+    memcpy(&camera->orientMatrix, &identityMatrix, sizeof(Transform3D));
+    memcpy(&camera->viewMatrix, &identityMatrix, sizeof(Transform3D));
 
     mode = getStoryMapCameraMode();
 
@@ -421,7 +421,7 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
 
     func_8006B084_6BC84((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, (Transform3D *)sp10);
 
-    memcpy(&state->unk3B0, sp10, 0x20);
+    memcpy(&state->unk3B0, sp10, sizeof(Transform3D));
 
     setCallback(updateStoryMapCameraTravel);
 }
@@ -460,7 +460,7 @@ void updateStoryMapCameraTravel(StoryMapCameraState *camera) {
 
     func_8006B084_6BC84((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, &localMatrix);
 
-    memcpy(&state->unk3B0, &localMatrix, 0x20);
+    memcpy(&state->unk3B0, &localMatrix, sizeof(Transform3D));
 
     state->unk3EC = camera->cameraX;
     state->unk3F0 = camera->cameraZ;
@@ -492,8 +492,8 @@ void initStoryMapCameraAtLocation(StoryMapCameraState *camera) {
 
     state = getCurrentAllocation();
 
-    memcpy(&camera->orientMatrix, &identityMatrix, 0x20);
-    memcpy(camera, &identityMatrix, 0x20);
+    memcpy(&camera->orientMatrix, &identityMatrix, sizeof(Transform3D));
+    memcpy(camera, &identityMatrix, sizeof(Transform3D));
 
     camera->cameraX = storyMapLocationCoords[(u8)state->discoveredLocationId].x;
     camera->cameraZ = storyMapLocationCoords[(u8)state->discoveredLocationId].z;
@@ -548,7 +548,7 @@ void approachStoryMapOrigin(StoryMapCameraState *camera) {
     state->unk3EC = camera->cameraX;
     state->unk3F0 = camera->cameraZ;
 
-    memcpy(&state->unk3B0, &localMatrix, 0x20);
+    memcpy(&state->unk3B0, &localMatrix, sizeof(Transform3D));
 
     state->unk3F4 = camera->orbitAngle;
     state->unk3F8 = camera->orbitRadius;
@@ -603,7 +603,7 @@ void updateStoryMapCameraOrbit(StoryMapCameraState *camera) {
 
     state->unk3EC = camera->cameraX;
     state->unk3F0 = camera->cameraZ;
-    memcpy(&state->unk3B0, combinedMatrix, 0x20);
+    memcpy(&state->unk3B0, combinedMatrix, sizeof(Transform3D));
     state->unk3F4 = camera->orbitAngle;
     state->unk3F8 = camera->orbitRadius;
     state->unk3FC = camera->viewAngle & 0x1FFF;

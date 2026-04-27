@@ -125,7 +125,7 @@ void awaitStoryMapDecorReady(void) {
 
 void setupStoryMapDecorModel(applyTransformToModel_arg1 *arg0) {
     getCurrentAllocation();
-    memcpy(arg0, &identityMatrix, 0x20);
+    memcpy(arg0, &identityMatrix, sizeof(Transform3D));
     arg0->unk0.translation.x = 0x830000;
     arg0->unk0.translation.y = 0x340000;
     arg0->unk0.translation.z = 0xFF7D0000;

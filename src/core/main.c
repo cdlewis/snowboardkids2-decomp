@@ -851,7 +851,7 @@ s32 initModelEntity(ModelEntity *entity, s16 index, void *arg2) {
         entity->textureData =
             loadCompressedData(entry->compressedDataStart, entry->compressedDataEnd, entry->decompressedSize);
 
-        memcpy(&entity->primaryMatrix, &identityMatrix, 0x20);
+        memcpy(&entity->primaryMatrix, &identityMatrix, sizeof(Transform3D));
 
         entity->animState = 0;
         entity->activeModel = entity->modelData;
@@ -859,7 +859,7 @@ s32 initModelEntity(ModelEntity *entity, s16 index, void *arg2) {
         entity->displayConfig = entry->unk1C;
 
         if (entry->unk24 != 0) {
-            memcpy(&entity->secondaryMatrix, &identityMatrix, 0x20);
+            memcpy(&entity->secondaryMatrix, &identityMatrix, sizeof(Transform3D));
             entity->secondaryModel = entity->modelData;
             entity->secondaryTexture = entity->textureData;
             entity->secondaryConfig = entry->unk24;
@@ -973,7 +973,7 @@ void initSwingingModelTask(func_80000C2C_182C_arg *arg0) {
 
     setCleanupCallback(&cleanupSwingingModelTask);
 
-    memcpy(&arg0->unk8, &identityMatrix, 0x20);
+    memcpy(&arg0->unk8, &identityMatrix, sizeof(Transform3D));
 
     arg0->unk2C = loadUncompressedData(temp_s0->displayListStart, temp_s0->displayListEnd);
     arg0->unk30 =
@@ -1099,7 +1099,7 @@ void initStaticModelTask(StaticModelTaskArg *arg0) {
 
     setCleanupCallback(cleanupStaticModelTask);
 
-    memcpy(&arg0->unk8, &identityMatrix, 0x20);
+    memcpy(&arg0->unk8, &identityMatrix, sizeof(Transform3D));
 
     arg0->unk2C = loadUncompressedData(var_s0->displayListStart, var_s0->displayListEnd);
     arg0->unk30 = loadCompressedData(var_s0->compressedDataStart, var_s0->compressedDataEnd, var_s0->decompressedSize);
@@ -1136,7 +1136,7 @@ void initAnimatedModelTask(AnimatedModelTaskState *arg0) {
     temp_s2 = &temp_s0->taskConfigs[arg0->unk4];
 
     setCleanupCallback(&cleanupAnimatedModelTask);
-    memcpy(&arg0->unk8, &identityMatrix, 0x20);
+    memcpy(&arg0->unk8, &identityMatrix, sizeof(Transform3D));
 
     arg0->unk2C = loadUncompressedData(temp_s0->displayListStart, temp_s0->displayListEnd);
     arg0->unk30 =

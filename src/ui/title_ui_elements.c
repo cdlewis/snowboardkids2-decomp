@@ -226,7 +226,7 @@ void initTitleCharacterModel(TitleCharacterState *arg0) {
 void setupTitleCharacterTransform(TitleCharacterState *arg0) {
     getCurrentAllocation();
     applyTransformToModel(arg0->sceneModel, &gTitleCharacterTransforms[arg0->characterIndex]);
-    memcpy(&arg0->transform, &gTitleCharacterTransforms[arg0->characterIndex], 0x20);
+    memcpy(&arg0->transform, &gTitleCharacterTransforms[arg0->characterIndex], sizeof(Transform3D));
     arg0->currentAnim = *arg0->animSequencePtr;
     arg0->animSequencePtr = arg0->animSequencePtr + 1;
     setModelAnimation(arg0->sceneModel, arg0->currentAnim);

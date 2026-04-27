@@ -15,7 +15,7 @@ void spawnTrickBurstEffect(u16 renderLayer, void *transformMatrix, s16 colorInde
 
     if (task != NULL) {
         task->renderLayer = renderLayer;
-        memcpy(task->initialMatrix, transformMatrix, 0x20);
+        memcpy(task->initialMatrix, transformMatrix, sizeof(Transform3D));
         task->colorIndex = colorIndex;
         task->currentScale_union.currentScale = 0;
         task->targetScale = targetScale;
@@ -73,7 +73,7 @@ void updateTrickBurstEffect(TrickBurstEffectTask *task) {
     task->scrollUUnion.scrollU = task->scrollUUnion.scrollU_bytes[1];
     task->scrollVUnion.scrollV = task->scrollVUnion.scrollV_bytes[1];
 
-    memcpy(&task->base, task->initialMatrix, 0x20);
+    memcpy(&task->base, task->initialMatrix, sizeof(Transform3D));
 
     scaleMatrix(&task->base.transform, 0x2000, task->currentScale_union.currentScale_shorts[1], 0x2000);
 

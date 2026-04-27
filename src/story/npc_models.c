@@ -373,7 +373,7 @@ void initStoryMapItemMovement(StoryMapItemTask *arg0) {
     s32 posZ;
 
     alloc = getCurrentAllocation();
-    memcpy(&arg0->matrix, &identityMatrix, 0x20);
+    memcpy(&arg0->matrix, &identityMatrix, sizeof(Transform3D));
     alloc->unk42E = 0;
 
     if (arg0->itemType == 5 || arg0->itemType == 0xB) {

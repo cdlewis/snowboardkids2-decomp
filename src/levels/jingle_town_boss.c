@@ -860,11 +860,11 @@ void updateJingleTownBossModelTransforms(Arg0Struct *arg0) {
 
     if (arg0->behaviorFlags & 0x10) {
         // Apply vertical scale transformation during intro animation
-        memcpy(&scaledMatrix, &identityMatrix, 0x20);
+        memcpy(&scaledMatrix, &identityMatrix, sizeof(Transform3D));
         scaledMatrix.m[1][1] = arg0->squashStretchScale;
         func_8006B084_6BC84(&scaledMatrix, &arg0->unk950, &arg0->groundTransform);
     } else {
-        memcpy(&arg0->groundTransform, &arg0->unk950, 0x20);
+        memcpy(&arg0->groundTransform, &arg0->unk950, sizeof(Transform3D));
     }
 
     // Create pitch and yaw rotation matrix for the flying/floating transform

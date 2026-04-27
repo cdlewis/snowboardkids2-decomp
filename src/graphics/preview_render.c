@@ -396,9 +396,9 @@ void initBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     setViewportTransformById(arg0->unk0->id, perspectiveParams);
 
     transformMatrix = &arg0->unk40;
-    memcpy(transformMatrix, &identityMatrix, 0x20);
-    memcpy(rotationZPtr, transformMatrix, 0x20);
-    memcpy(&rotationYX, rotationZPtr, 0x20);
+    memcpy(transformMatrix, &identityMatrix, sizeof(Transform3D));
+    memcpy(rotationZPtr, transformMatrix, sizeof(Transform3D));
+    memcpy(&rotationYX, rotationZPtr, sizeof(Transform3D));
 
     createRotationMatrixYX(&rotationYX, 0x1000, 0x800);
     createZRotationMatrix(rotationZPtr, 0x1F00);
@@ -409,7 +409,7 @@ void initBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
     charIndex = state->unk7A2 + (state->unk7A1 * 3);
     paletteId = EepromSaveData->character_or_settings[charIndex & 0xFF];
 
-    memcpy(&arg0->unk4, transformMatrix, 0x20);
+    memcpy(&arg0->unk4, transformMatrix, sizeof(Transform3D));
 
     charIndex = charIndex & 0xFF;
     arg0->unk24 = loadAssetByIndex_95728(charIndex);
@@ -557,16 +557,16 @@ void initBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0) {
 
     getCurrentAllocation();
     transformMatrix = &arg0->unk3C;
-    memcpy(transformMatrix, &identityMatrix, 0x20);
-    memcpy(pRotationZ, transformMatrix, 0x20);
-    memcpy(pRotationYX, pRotationZ, 0x20);
+    memcpy(transformMatrix, &identityMatrix, sizeof(Transform3D));
+    memcpy(pRotationZ, transformMatrix, sizeof(Transform3D));
+    memcpy(pRotationYX, pRotationZ, sizeof(Transform3D));
     createRotationMatrixYX(pRotationYX, 0x1000, 0x800);
     createZRotationMatrix(pRotationZ, 0x1F00);
     func_8006B084_6BC84(pRotationYX, pRotationZ, (Transform3D *)transformMatrix);
     arg0->unk50 = 0x600000;
     arg0->unk58 = 0xFFF80000;
     paletteIndex = EepromSaveData->character_or_settings[0];
-    memcpy(arg0, transformMatrix, 0x20);
+    memcpy(arg0, transformMatrix, sizeof(Transform3D));
     arg0->unk20 = loadAssetByIndex_95728(0);
     arg0->unk24 = loadAssetByIndex_95500(0);
     arg0->unk28 = loadAssetByIndex_95590(0);
@@ -591,7 +591,7 @@ void animateBoardShopCharacterSlideIn(BoardShopCharacterPreviewState *arg0) {
 
     arg0->unk50 += 0xFFF00000;
 
-    memcpy(arg0, &arg0->unk3C, 0x20);
+    memcpy(arg0, &arg0->unk3C, sizeof(Transform3D));
 
     if (arg0->unk50 == 0) {
         allocation->unk788[19] = 0xC;
@@ -641,7 +641,7 @@ void loadBoardShopCharacterAssets(BoardShopCharacterPreviewState *arg0) {
 
     paletteIndex = EepromSaveData->character_or_settings[allocation->unk79E];
 
-    memcpy(arg0, &arg0->unk3C, 0x20);
+    memcpy(arg0, &arg0->unk3C, sizeof(Transform3D));
 
     arg0->unk20 = loadAssetByIndex_95728(allocation->unk79E);
     arg0->unk24 = loadAssetByIndex_95500(allocation->unk79E);
@@ -665,7 +665,7 @@ void animateBoardShopCharacterSwitch(BoardShopCharacterPreviewState *arg0) {
 
     arg0->unk50 += slideSpeed;
 
-    memcpy(arg0, &arg0->unk3C, 0x20);
+    memcpy(arg0, &arg0->unk3C, sizeof(Transform3D));
 
     if (arg0->unk50 == 0) {
         allocation->unk79D--;
@@ -695,7 +695,7 @@ void loadBoardShopPurchaseAssets(BoardShopCharacterPreviewState *arg0) {
     assetIndex = (characterIndex + (assetIndex * 3)) & 0xFF;
     characterIndex = allocation->unk788[new_var];
 
-    memcpy(arg0, &arg0->unk3C, 0x20);
+    memcpy(arg0, &arg0->unk3C, sizeof(Transform3D));
 
     arg0->unk20 = loadAssetByIndex_95728(assetIndex);
     arg0->unk24 = loadAssetByIndex_95500(assetIndex);
@@ -710,7 +710,7 @@ void animateBoardShopCharacterSlideOut(BoardShopCharacterPreviewState *arg0) {
 
     allocation = getCurrentAllocation();
     arg0->unk50 += 0x100000;
-    memcpy(arg0, &arg0->unk3C, 0x20);
+    memcpy(arg0, &arg0->unk3C, sizeof(Transform3D));
 
     if (arg0->unk50 == 0x600000) {
         allocation->unk79A = 1;
@@ -783,7 +783,7 @@ void animateBoardShopCharacterTransition(func_80031944_32544_arg *arg0) {
 
     newPosition = arg0->unk50 + slideSpeed;
     arg0->unk50 = newPosition;
-    memcpy(&arg0->unk0, &arg0->unk3C, 0x20);
+    memcpy(&arg0->unk0, &arg0->unk3C, sizeof(Transform3D));
 
     enqueueDisplayListObject(0, &arg0->unk0);
 

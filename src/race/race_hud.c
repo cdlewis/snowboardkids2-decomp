@@ -929,21 +929,21 @@ void updateGoldCoinsTask(GoldCoinUpdateState *arg0);
 void initSkyRenderTask(SkyRenderTaskState *state) {
     Transform3D *identity = &identityMatrix;
 
-    memcpy(state, identity, 0x20);
+    memcpy(state, identity, sizeof(Transform3D));
 
     state->displayListData1 = getSkyDisplayLists1ByIndex(state->skyType);
     state->skyAsset1 = loadUncompressedAssetByIndex(state->skyType);
     state->skyAsset2 = loadCompressedSegment2AssetByIndex(state->skyType);
     state->unk2C = 0;
 
-    memcpy(state->courseFogTransform, identity, 0x20);
+    memcpy(state->courseFogTransform, identity, sizeof(Transform3D));
 
     state->displayListData2 = getSkyDisplayLists2ByIndex(state->skyType);
     state->unk68 = 0;
     state->skyAsset1Copy = state->skyAsset1;
     state->skyAsset2Copy = state->skyAsset2;
 
-    memcpy(state->defaultFogTransform, identity, 0x20);
+    memcpy(state->defaultFogTransform, identity, sizeof(Transform3D));
 
     state->unk98 = &D_80094DD0_959D0;
     state->unkA4 = 0;
@@ -1408,7 +1408,7 @@ void initScrollingSceneryTask(ScrollingSceneryCleanupState *arg0) {
     arg0->skyAsset1 = loadUncompressedAssetByIndex(arg0->assetPoolIndex);
     arg0->skyAsset2 = loadCompressedSegment2AssetByIndex(arg0->assetPoolIndex);
     arg0->reserved = NULL;
-    memcpy(arg0, &identityMatrix, 0x20);
+    memcpy(arg0, &identityMatrix, sizeof(Transform3D));
     arg0->unk3C = loadSpriteAssetByIndex(arg0->assetPoolIndex);
     arg0->scrollX.halfword = 0;
     arg0->scrollY.halfword = 0;
@@ -2737,7 +2737,11 @@ loop:
 
 void initItemBox(ItemBoxSystemState *state, s32 index) {
     state->itemBoxes[index].baseY = state->positionEntries[index].position.y;
-    memcpy(&((ItemBox *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxes))->matrix, &identityMatrix, 0x20);
+    memcpy(
+        &((ItemBox *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxes))->matrix,
+        &identityMatrix,
+        sizeof(Transform3D)
+    );
     memcpy(
         &((ItemBox *)(index * (s32)sizeof(ItemBox) + (s32)state->itemBoxes))->matrix.translation,
         &((ItemBoxPositionEntry *)(index * (s32)sizeof(ItemBoxPositionEntry) + (s32)state->positionEntries))->position,
@@ -2991,7 +2995,7 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
 void spawnItemBoxBurstEffect(void *displayList, s32 isSecondaryBox) {
     NodeWithPayload *task = (NodeWithPayload *)scheduleTask(&initItemBoxBurstEffect, 0, 0, 0xEB);
     if (task != NULL) {
-        memcpy((void *)((s32)task + 0x10), displayList, 0x20);
+        memcpy((void *)((s32)task + 0x10), displayList, sizeof(Transform3D));
         task->unk3C = isSecondaryBox;
     }
 }

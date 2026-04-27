@@ -612,7 +612,7 @@ void updateShieldEffect(ShieldEffectState *arg0) {
     scale = arg0->scale.full;
     if (scale != 0x2000) {
         arg0->scale.full = scale + 0x400;
-        memcpy(arg0, &identityMatrix, 0x20);
+        memcpy(arg0, &identityMatrix, sizeof(Transform3D));
         scaleFactor = arg0->scale.half.lo;
         scaleMatrix((Transform3D *)arg0, scaleFactor, scaleFactor, scaleFactor);
     }

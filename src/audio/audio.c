@@ -692,7 +692,7 @@ void queueAnonymousBufferData(void *source) {
         dest++;
         dest--;
 
-        memcpy(dest, source, 0x20);
+        memcpy(dest, source, sizeof(Transform3D));
 
         gGraphicsManager->bufferFlags[gGraphicsManager->bufferCount] = 0;
         gGraphicsManager->bufferCount++;
@@ -711,7 +711,7 @@ void queueBufferDataNoFlags(u8 *source, s8 bufferId) {
     for (i = 0; i < gGraphicsManager->bufferCount; i++) {
         if (gGraphicsManager->bufferIds[i] == bufferId) {
             dest = (void *)((i << 5) + (s32)gGraphicsManager + 0x40C);
-            memcpy(dest, source, 0x20);
+            memcpy(dest, source, sizeof(Transform3D));
             return;
         }
     }
@@ -719,7 +719,7 @@ void queueBufferDataNoFlags(u8 *source, s8 bufferId) {
     if (gGraphicsManager->bufferCount < 8) {
         gGraphicsManager->bufferIds[gGraphicsManager->bufferCount] = bufferId;
         dest = (void *)((gGraphicsManager->bufferCount << 5) + (s32)gGraphicsManager + 0x40C);
-        memcpy(dest, source, 0x20);
+        memcpy(dest, source, sizeof(Transform3D));
         gGraphicsManager->bufferFlags[gGraphicsManager->bufferCount] = 0;
         gGraphicsManager->bufferCount++;
     }
@@ -735,7 +735,7 @@ void setBufferData(void *source, u8 arg1, s32 arg2) {
     for (i = 0; i < gGraphicsManager->bufferCount; i++) {
         if (gGraphicsManager->bufferIds[i] == id) {
             bufferPtr = (void *)((i << 5) + (s32)gGraphicsManager + 0x40C);
-            memcpy(bufferPtr, source, 0x20);
+            memcpy(bufferPtr, source, sizeof(Transform3D));
             return;
         }
     }
@@ -746,7 +746,7 @@ void setBufferData(void *source, u8 arg1, s32 arg2) {
 
         bufferPtr = (void *)(((gGraphicsManager->bufferCount) << 5) + (s32)gGraphicsManager + 0x40C);
 
-        memcpy(bufferPtr, source, 0x20);
+        memcpy(bufferPtr, source, sizeof(Transform3D));
 
         gGraphicsManager->bufferFlags[gGraphicsManager->bufferCount] = arg1;
         gGraphicsManager->bufferCount++;

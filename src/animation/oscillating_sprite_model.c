@@ -56,14 +56,14 @@ void updateOscillatingModelTask(OscillatingModelTaskState *state) {
     s32 scaledCos;
     s32 scaledSin;
 
-    memcpy(&local_buffer, &identityMatrix, 0x20);
+    memcpy(&local_buffer, &identityMatrix, sizeof(Transform3D));
 
     if (state->model->isDestroyed == 1) {
         terminateCurrentTask();
         return;
     }
 
-    memcpy(&state->model->rotationMatrix, &identityMatrix, 0x20);
+    memcpy(&state->model->rotationMatrix, &identityMatrix, sizeof(Transform3D));
 
     if (state->model->actionMode == 0) {
         return;

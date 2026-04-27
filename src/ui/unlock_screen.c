@@ -92,7 +92,7 @@ void initUnlockScreen(void) {
     createViewportTransform(lightBuffer, 0, 0, 0x600000, 0, 0, 0);
     setViewportTransformById(((ViewportNode *)state)->id, lightBuffer);
     setViewportFadeValue(NULL, 0xFF, 0);
-    memcpy(state->rotationMatrix, &identityMatrix, 0x20);
+    memcpy(state->rotationMatrix, &identityMatrix, sizeof(Transform3D));
     state->rotationAngle = 0;
     state->arrowSpriteAsset = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
     state->backgroundAsset = loadCompressedData(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);

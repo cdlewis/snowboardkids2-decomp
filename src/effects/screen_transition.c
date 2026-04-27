@@ -191,7 +191,7 @@ void spawnScrollingTextureEffect(u16 renderLayer, void *transformMatrix, s16 col
         (ScrollingTextureEffectTask *)scheduleTask(&initScrollingTextureEffectTask, 1, 0, 0);
     if (task != NULL) {
         task->renderLayer = renderLayer;
-        memcpy(task, transformMatrix, 0x20);
+        memcpy(task, transformMatrix, sizeof(Transform3D));
         task->colorIndex = colorIndex;
         task->effectMode = effectMode;
     }

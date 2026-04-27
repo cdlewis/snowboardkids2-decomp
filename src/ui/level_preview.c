@@ -324,7 +324,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
     computeLookAtMatrix((Vec3i *)&state->targetX, (Vec3i *)state, &lookAtTransform);
 
-    memcpy(&offsetTransform, &identityMatrix, 0x20);
+    memcpy(&offsetTransform, &identityMatrix, sizeof(Transform3D));
     offsetTransform.translation.z = state->cameraDistance;
 
     func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
@@ -459,7 +459,7 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
     }
     state->targetY = state->targetY + state->heightOffset;
     computeLookAtMatrix((Vec3i *)targetPtr, (Vec3i *)state, &lookAtTransform);
-    memcpy(&offsetTransform, &identityMatrix, 0x20);
+    memcpy(&offsetTransform, &identityMatrix, sizeof(Transform3D));
     offsetTransform.translation.z = state->cameraDistance;
     func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
     setViewportTransformById(allocation->unk48A, &cameraTransform);
@@ -500,7 +500,7 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
     void *gameData;
 
     allocation = (Allocation_8001FEB4 *)getCurrentAllocation();
-    memcpy(cameraTransform, &identityMatrix, 0x20);
+    memcpy(cameraTransform, &identityMatrix, sizeof(Transform3D));
 
     gameData = state->gameData;
     waypoint = findTrackSector(gameData, state->startWaypoint, state);
@@ -522,7 +522,7 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
     computeLookAtMatrix((Vec3i *)&state->targetX, (Vec3i *)state, (Transform3D *)lookAtTransform);
 
-    memcpy(&offsetTransform, &identityMatrix, 0x20);
+    memcpy(&offsetTransform, &identityMatrix, sizeof(Transform3D));
 
     offsetTransform.unk1C = state->cameraDistance;
 
@@ -665,7 +665,7 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
     }
     state->targetY = state->targetY + state->heightOffset;
     computeLookAtMatrix((Vec3i *)targetPtr, (Vec3i *)state, &lookAtTransform);
-    memcpy(&offsetTransform, &identityMatrix, 0x20);
+    memcpy(&offsetTransform, &identityMatrix, sizeof(Transform3D));
     offsetTransform.translation.z = state->cameraDistance;
     func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
     setViewportTransformById(allocation->unk48A, &cameraTransform);
@@ -688,7 +688,7 @@ void resumeLevelPreviewAfterHold(Func80020418Arg *arg0) {
 
     if (arg0->unk72 == 0x5A) {
         arg0->unk72 = 0;
-        memcpy(mat1, &identityMatrix, 0x20);
+        memcpy(mat1, &identityMatrix, sizeof(Transform3D));
 
         unk18 = &arg0->unk18;
         temp = findTrackSector(unk18, arg0->unk52, arg0);
@@ -796,7 +796,7 @@ void initLevelPreviewPortraitDisplay(void *arg0) {
             u8 *base = (u8 *)portraitState;
             MatrixData *element = (MatrixData *)(base + (index * 52));
 
-            memcpy(&element->transform, &identityMatrix, 0x20);
+            memcpy(&element->transform, &identityMatrix, sizeof(Transform3D));
             *(s16 *)(base + (index * 2) + 0xF0) = i << 0xC;
             element->transform.translation.x = 0;
             element->transform.translation.y = 0x3A0000;
@@ -1127,7 +1127,7 @@ void initMenuCharacterModel(MenuCharacterModelState *state) {
         state->model = createSceneModelEx(modelIndex, allocation, (s8)assetPairIndex, -1, -1, -1);
     }
 
-    memcpy((u8 *)&state->transform, &identityMatrix, 0x20);
+    memcpy((u8 *)&state->transform, &identityMatrix, sizeof(Transform3D));
 
     if ((allocation->unkB45 != 0) && (modelIndex != 0x3A)) {
         createYRotationMatrix((&state->transform), 0x1E00);

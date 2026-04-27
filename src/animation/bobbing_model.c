@@ -405,7 +405,7 @@ void updateTiltingModelTask(BobbingModelTaskState *);
 void cleanupTiltingModelTask(void);
 
 void initBobbingModelTask(BobbingModelTaskState *state) {
-    memcpy(state->transformMatrix, &identityMatrix, 0x20);
+    memcpy(state->transformMatrix, &identityMatrix, sizeof(Transform3D));
     state->displayList = loadAssetGroupDisplayList(state->model);
     state->vertexData = loadAssetGroupCompressedData(state->model);
     state->materialData = &D_800882B0_88EB0;
@@ -506,7 +506,7 @@ void updateTiltingModelTask(BobbingModelTaskState *state) {
         return;
     }
 
-    memcpy(&state->model->unkF0, &identityMatrix, 0x20);
+    memcpy(&state->model->unkF0, &identityMatrix, sizeof(Transform3D));
 
     if (state->model->actionMode == 0) {
         return;

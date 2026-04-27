@@ -128,7 +128,7 @@ end:
 }
 
 void initSlotData(CutsceneSlotData *slot) {
-    memcpy(&slot->transform, &identityMatrix, 0x20);
+    memcpy(&slot->transform, &identityMatrix, sizeof(Transform3D));
 
     slot->unk0.bytes[0] = 0;
     slot->unk20_u.unk20_s32 = 0;

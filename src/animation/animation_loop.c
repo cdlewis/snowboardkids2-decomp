@@ -84,7 +84,7 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
     func_8006B084_6BC84(&sp50, &sp30, &sp10);
 
     temp_s0 = &sp10;
-    memcpy(arg0, temp_s0, 0x20);
+    memcpy(arg0, temp_s0, sizeof(Transform3D));
     queueAnonymousBufferData(temp_s0);
     setViewportTransformById(arg0->nodeId, temp_s0);
 }

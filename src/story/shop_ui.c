@@ -268,7 +268,7 @@ void initStoryMapShopFairyModel(StoryMapShopFairyState *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     arg0->model = createSceneModel(0x3A, state);
-    memcpy(&arg0->transform, &identityMatrix, 0x20);
+    memcpy(&arg0->transform, &identityMatrix, sizeof(Transform3D));
     arg0->transform.translation.x = 0x200000;
     arg0->transform.translation.y = 0xFFE00000;
     arg0->transform.translation.z = 0x80000;
@@ -339,11 +339,11 @@ void initStoryMapShopItemCard(StoryMapShopItemCardState *card) {
 
     cardTransform = &card->transform;
     state = (GameState *)getCurrentAllocation();
-    memcpy(cardTransform, &identityMatrix, 0x20);
+    memcpy(cardTransform, &identityMatrix, sizeof(Transform3D));
     rotationZPtr = &rotationZ;
-    memcpy(rotationZPtr, cardTransform, 0x20);
+    memcpy(rotationZPtr, cardTransform, sizeof(Transform3D));
     rotationYXPtr = &rotationYX;
-    memcpy(rotationYXPtr, rotationZPtr, 0x20);
+    memcpy(rotationYXPtr, rotationZPtr, sizeof(Transform3D));
     createRotationMatrixYX(rotationYXPtr, 0x1000, 0x800);
     createZRotationMatrix(rotationZPtr, 0x1F00);
     func_8006B084_6BC84(rotationYXPtr, rotationZPtr, cardTransform);
@@ -353,7 +353,7 @@ void initStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     }
 
     itemData = state->unk5CA[card->itemIndex];
-    memcpy(card, cardTransform, 0x20);
+    memcpy(card, cardTransform, sizeof(Transform3D));
     do {
         itemId = itemData & 0x1F;
         itemData = itemId;
@@ -445,7 +445,7 @@ void reloadStoryMapShopItemCard(SlidingItemCardState *card) {
         itemId = state->unk5CA[card->nextItemIndex] & 0x1F;
         itemIndex = itemId;
 
-        memcpy(card, &card->baseTransform, 0x20);
+        memcpy(card, &card->baseTransform, sizeof(Transform3D));
 
         card->displayList.displayLists = loadAssetByIndex_95728(itemIndex);
         card->displayList.segment1 = loadAssetByIndex_95500(itemIndex);
@@ -474,7 +474,7 @@ void slideStoryMapShopItemCard(SlidingItemCardState *card) {
 
     card->translationX += translationStep;
 
-    memcpy(card, (void *)((s32)card + 0x3C), 0x20);
+    memcpy(card, (void *)((s32)card + 0x3C), sizeof(Transform3D));
 
     card->slideFrameCounter++;
     if (card->slideFrameCounter == 4) {
@@ -550,7 +550,7 @@ void prepareSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
             }
         }
         itemData = state->unk5CA[card->itemIndex];
-        memcpy(card, &card->transform, 0x20);
+        memcpy(card, &card->transform, sizeof(Transform3D));
         itemData &= 0x1F;
         itemId = itemData;
         card->displayList.displayLists = loadAssetByIndex_95728(itemId);

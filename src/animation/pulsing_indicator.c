@@ -130,7 +130,7 @@ void cleanupPulsingSpriteIndicator(PulsingSpriteState *arg0) {
 }
 
 void initStretchingModelTask(StretchingModelTaskState *arg0) {
-    memcpy(arg0->transformMatrix, &identityMatrix, 0x20);
+    memcpy(arg0->transformMatrix, &identityMatrix, sizeof(Transform3D));
     arg0->displayList = loadAssetGroupDisplayList(arg0->owner);
     arg0->vertexData = loadAssetGroupCompressedData(arg0->owner);
     arg0->unk30 = 0;
@@ -151,9 +151,9 @@ void updateStretchingModelTask(StretchingModelTaskState *arg0) {
     u16 rotationOffset;
 
     sp10Ptr = &sp10;
-    memcpy(sp10Ptr, &identityMatrix, 0x20);
-    memcpy(&sp30, &identityMatrix, 0x20);
-    memcpy(&sp50, &((PulsingIndicatorOwner *)arg0->owner)->transformMatrix, 0x20);
+    memcpy(sp10Ptr, &identityMatrix, sizeof(Transform3D));
+    memcpy(&sp30, &identityMatrix, sizeof(Transform3D));
+    memcpy(&sp50, &((PulsingIndicatorOwner *)arg0->owner)->transformMatrix, sizeof(Transform3D));
 
     if (((PulsingIndicatorOwner *)arg0->owner)->isDestroyed == 1) {
         terminateCurrentTask();

@@ -290,7 +290,7 @@ void initCharacterSelectScreen(void) {
         state->frameCounters[i] = 0;
         state->zoomValues[i] = 0x800;
         state->iconDisplayState[i] = 0;
-        memcpy((void *)((s32)state + i * 0x20 + 0x17F8), &identityMatrix, 0x20);
+        memcpy((void *)((s32)state + i * 0x20 + 0x17F8), &identityMatrix, sizeof(Transform3D));
         *(s32 *)((s32)state + i * 0x20 + 0x1814) = (s32)0xFFEA0000;
         state->animAngles[i] = 0;
         state->cursorIndices[i] = (s8)(state->maxMenuOption - 2);

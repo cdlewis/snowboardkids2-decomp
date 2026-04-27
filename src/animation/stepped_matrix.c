@@ -34,7 +34,7 @@ void cleanupSteppedMatrixController(void);
 void updateSteppedMatrixController(SteppedMatrixState *state);
 
 void initSteppedMatrixController(SteppedMatrixState *state) {
-    memcpy(&state->matrix, &identityMatrix, 0x20);
+    memcpy(&state->matrix, &identityMatrix, sizeof(Transform3D));
     state->frameDelay = 0;
     state->stepIndex = 0;
     setCleanupCallback(cleanupSteppedMatrixController);
@@ -58,13 +58,13 @@ void updateSteppedMatrixController(SteppedMatrixState *state) {
     }
 
 copy_identity:
-    memcpy(&state->matrix, &identityMatrix, 0x20);
+    memcpy(&state->matrix, &identityMatrix, sizeof(Transform3D));
     goto final_copy;
 
 do_rotation:
     if (state->frameDelay == 0) {
         matrix = &state->matrix;
-        memcpy(matrix, &identityMatrix, 0x20);
+        memcpy(matrix, &identityMatrix, sizeof(Transform3D));
         createZRotationMatrix(matrix, gSteppedMatrixAngles[state->stepIndex * 4]);
         translation = (&gSteppedMatrixTranslations)[state->stepIndex * 2];
         state->frameDelay = 4;
@@ -74,7 +74,7 @@ do_rotation:
     state->frameDelay -= 1;
 
 final_copy:
-    memcpy(state->owner->transformMatrix, &state->matrix, 0x20);
+    memcpy(state->owner->transformMatrix, &state->matrix, sizeof(Transform3D));
 }
 
 void cleanupSteppedMatrixController(void) {

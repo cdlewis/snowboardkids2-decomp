@@ -461,7 +461,7 @@ void updateOrbitCamera(OrbitCameraState *camera) {
 
     allocation = getCurrentAllocation();
     cameraMatrixPtr = &cameraMatrix;
-    memcpy(cameraMatrixPtr, &identityMatrix, 0x20);
+    memcpy(cameraMatrixPtr, &identityMatrix, sizeof(Transform3D));
     cameraMatrix.translation.y = 0x1E0000;
     cameraMatrix.translation.z = 0x870000;
     newAngle = camera->rotationAngle + 0x58;

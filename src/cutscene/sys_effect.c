@@ -105,17 +105,17 @@ void cutsceneEffectMLight_exec(cutsceneEffectMLight_exec_arg *arg0, CutsceneMana
 
     slot = &arg1->slots[arg2];
     rotMatrix = &sp10;
-    memcpy(rotMatrix, &identityMatrix, 0x20);
-    memcpy(&sp30, &identityMatrix, 0x20);
-    memcpy(&sp50, &identityMatrix, 0x20);
+    memcpy(rotMatrix, &identityMatrix, sizeof(Transform3D));
+    memcpy(&sp30, &identityMatrix, sizeof(Transform3D));
+    memcpy(&sp50, &identityMatrix, sizeof(Transform3D));
 
-    memcpy(&sp30, (u8 *)slot->model + 0x18, 0x20);
+    memcpy(&sp30, (u8 *)slot->model + 0x18, sizeof(Transform3D));
 
     transformVector((s16 *)&arg0->positionVec, (s16 *)&sp30, sp70);
 
     switch (arg0->effectMode) {
         case 0:
-            memcpy(&sp50, &sp30, 0x20);
+            memcpy(&sp50, &sp30, sizeof(Transform3D));
             sp50.u.vec.x = sp70[0];
             sp50.u.vec.y = sp70[1];
             sp50.u.vec.z = sp70[2];
