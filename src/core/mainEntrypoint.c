@@ -27,9 +27,9 @@ void mainThreadEntrypoint(void *arg) {
     isPaused = FALSE;
 
     if (osTvType == OS_TV_NTSC) {
-        initialize_video_and_threads(OS_VI_NTSC_LAN1);
+        initThreadManager(OS_VI_NTSC_LAN1);
     } else {
-        initialize_video_and_threads(OS_VI_MPAL_LAN1);
+        initThreadManager(OS_VI_MPAL_LAN1);
     }
 
     initControllerSubsystem();

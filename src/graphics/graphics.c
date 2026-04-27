@@ -336,7 +336,7 @@ void processDisplayFrameUpdate(void) {
         do {
             if (node->frameCallbackMsg != 0) {
                 gFrameBufferFlags[gCurrentDoubleBufferIndex] = 1;
-                sendMessageToThreadSyncQueue((OSMesg)node->frameCallbackMsg);
+                submitDisplayTask((OSMesg)node->frameCallbackMsg);
             }
             node = node->list3_next;
         } while (node != NULL);
@@ -347,7 +347,7 @@ void processDisplayFrameUpdate(void) {
     if (gCurrentDisplayBufferIndex >= 3) {
         gCurrentDisplayBufferIndex = 0;
     }
-    sendMessageToThreadSyncQueue((OSMesg)((u8 *)gDisplayBufferMsgs + (gCurrentDisplayBufferIndex * 0x150)));
+    submitDisplayTask((OSMesg)((u8 *)gDisplayBufferMsgs + (gCurrentDisplayBufferIndex * 0x150)));
 }
 
 void handleFrameBufferComplete(s32 bufferIndex) {

@@ -15,100 +15,100 @@ typedef struct {
     char padding[61];
     OSMesg messageQueue;
     OSMesg message;
-    void *unk48;
-    u16 unk4C;
-    u16 unk4E;
+    void *framebuffer;
+    u16 frameIndex;
+    u16 flags;
     u32 padding2;
-} FrameInfo;
+} GfxTask;
 
 typedef struct {
     u32 type;
-    OSTask *task;
-    OSTask *pendingTask;
-} eventQueue1_message;
+    OSTask *gfxTask;
+    OSTask *audioTask;
+} SchedMsg;
 
 // data
-int vertical_retrace_message[3] = { 0x5, 0, 0 };
-int sp_task_done_message[3] = { 0x6, 0, 0 };
-int dp_interrupt_message[3] = { 0x8, 0, 0 };
-int prenmi_interrupt_message[3] = { 0xA, 0, 0 };
-int D_8009B020_9BC20 = 0;
-int D_8009B024_9BC24 = 0x1E;
+int viRetraceMsg[3] = { 0x5, 0, 0 };
+int spTaskDoneMsg[3] = { 0x6, 0, 0 };
+int dpDoneMsg[3] = { 0x8, 0, 0 };
+int prenmiMsg[3] = { 0xA, 0, 0 };
+int gPrenmiReceived = 0;
+int gPrenmiCountdown = 0x1E;
 
 // bss
-extern OSThread thread_a;
-extern OSThread thread_b;
-extern OSThread thread_c;
-extern OSThread thread_d;
-extern OSMesg framebuffer_message;
-extern OSMesg vi_message;
-extern OSMesg event_queue_1_message;
-extern OSMesg event_queue_2_message;
-extern OSMesg thread_sync_message;
-extern OSMesg task_completion_message;
-extern OSMesg event_queue_3_message;
-extern OSMesg event_queue_4_message;
-extern char thread_a_stack[0x180];
-extern char thread_b_stack[0x180];
-extern char thread_c_stack[0x180];
-extern char thread_d_stack[0x180];
+extern OSThread viThread;
+extern OSThread schedThread;
+extern OSThread audioThread;
+extern OSThread displayThread;
+extern OSMesg audioSpDoneQueueMsgs;
+extern OSMesg viQueueMsgs;
+extern OSMesg schedQueueMsgs;
+extern OSMesg audioTaskQueueMsgs;
+extern OSMesg displayQueueMsgs;
+extern OSMesg dpDoneQueueMsgs;
+extern OSMesg displaySpDoneQueueMsgs;
+extern OSMesg displayViFrameQueueMsgs;
+extern char viThreadStack[0x180];
+extern char schedThreadStack[0x180];
+extern char audioThreadStack[0x180];
+extern char displayThreadStack[0x180];
 extern s16 frameCounter;
-extern s16 frameDelay;
+extern s16 bootBlackoutFrames;
 extern ViConfig *currentViConfig;
 extern OSMesgQueue viEventQueue;
-extern OSMesgQueue eventQueue1;
-extern OSMesgQueue eventQueue2;
-extern OSMesgQueue threadSyncQueue;
-extern OSMesgQueue taskCompletionQueue;
-extern OSMesgQueue eventQueue3;
-extern OSMesgQueue frameBufferQueue;
-extern OSMesgQueue eventQueue4;
+extern OSMesgQueue schedQueue;
+extern OSMesgQueue audioTaskQueue;
+extern OSMesgQueue displayQueue;
+extern OSMesgQueue dpDoneQueue;
+extern OSMesgQueue displaySpDoneQueue;
+extern OSMesgQueue audioSpDoneQueue;
+extern OSMesgQueue displayViFrameQueue;
 
 // Function declarations (static - internal use only)
 
-static void thread_function_1(void *);
-static void thread_function_2(void *);
-static void thread_function_3(void *);
-static void thread_function_4(void *);
+static void viThreadEntry(void *);
+static void schedThreadEntry(void *);
+static void audioThreadEntry(void *);
+static void displayThreadEntry(void *);
 
-void initialize_video_and_threads(s32 viMode) {
+void initThreadManager(s32 viMode) {
     osCreateViManager(OS_PRIORITY_VIMGR);
 
     osViSetMode(&osViModeTable[(u8)viMode]);
     osViBlack(TRUE);
     osViSetSpecialFeatures(OS_VI_GAMMA_OFF | OS_VI_GAMMA_DITHER_OFF | OS_VI_DIVOT_OFF | OS_VI_DITHER_FILTER_ON);
     frameCounter = 0;
-    frameDelay = 0x1E;
+    bootBlackoutFrames = 0x1E;
     currentViConfig = NULL;
-    osCreateMesgQueue(&viEventQueue, &vi_message, 4);
-    osViSetEvent(&viEventQueue, &vertical_retrace_message, 1U);
-    osSetEventMesg(OS_EVENT_PRENMI, &viEventQueue, &prenmi_interrupt_message);
+    osCreateMesgQueue(&viEventQueue, &viQueueMsgs, 4);
+    osViSetEvent(&viEventQueue, &viRetraceMsg, 1U);
+    osSetEventMesg(OS_EVENT_PRENMI, &viEventQueue, &prenmiMsg);
 
-    osCreateThread(&thread_c, 4, thread_function_1, 0, thread_a_stack + sizeof(thread_a_stack), 9);
+    osCreateThread(&viThread, 4, viThreadEntry, 0, viThreadStack + sizeof(viThreadStack), 9);
 
-    osCreateMesgQueue(&eventQueue1, &event_queue_1_message, 8);
+    osCreateMesgQueue(&schedQueue, &schedQueueMsgs, 8);
 
-    osSetEventMesg(OS_EVENT_SP, &eventQueue1, &sp_task_done_message);
-    osCreateThread(&thread_a, 0xA, thread_function_2, 0, thread_b_stack + sizeof(thread_b_stack), 8);
-    osCreateMesgQueue(&eventQueue3, &event_queue_3_message, 4);
+    osSetEventMesg(OS_EVENT_SP, &schedQueue, &spTaskDoneMsg);
+    osCreateThread(&schedThread, 0xA, schedThreadEntry, 0, schedThreadStack + sizeof(schedThreadStack), 8);
+    osCreateMesgQueue(&displaySpDoneQueue, &displaySpDoneQueueMsgs, 4);
 
-    osCreateMesgQueue(&threadSyncQueue, &thread_sync_message, 0x20);
-    osCreateMesgQueue(&taskCompletionQueue, &task_completion_message, 4);
-    osSetEventMesg(OS_EVENT_DP, &taskCompletionQueue, &dp_interrupt_message);
-    osCreateMesgQueue(&eventQueue4, &event_queue_4_message, 1);
-    osCreateThread(&thread_d, 5, thread_function_4, 0, thread_c_stack + sizeof(thread_c_stack), 4);
+    osCreateMesgQueue(&displayQueue, &displayQueueMsgs, 0x20);
+    osCreateMesgQueue(&dpDoneQueue, &dpDoneQueueMsgs, 4);
+    osSetEventMesg(OS_EVENT_DP, &dpDoneQueue, &dpDoneMsg);
+    osCreateMesgQueue(&displayViFrameQueue, &displayViFrameQueueMsgs, 1);
+    osCreateThread(&displayThread, 5, displayThreadEntry, 0, displayThreadStack + sizeof(displayThreadStack), 4);
 
-    osCreateMesgQueue(&frameBufferQueue, &framebuffer_message, 4);
-    osCreateMesgQueue(&eventQueue2, &event_queue_2_message, 8);
-    osCreateThread(&thread_b, 9, thread_function_3, 0, thread_d_stack + sizeof(thread_d_stack), 7);
+    osCreateMesgQueue(&audioSpDoneQueue, &audioSpDoneQueueMsgs, 4);
+    osCreateMesgQueue(&audioTaskQueue, &audioTaskQueueMsgs, 8);
+    osCreateThread(&audioThread, 9, audioThreadEntry, 0, audioThreadStack + sizeof(audioThreadStack), 7);
 
-    osStartThread(&thread_c);
-    osStartThread(&thread_a);
-    osStartThread(&thread_b);
-    osStartThread(&thread_d);
+    osStartThread(&viThread);
+    osStartThread(&schedThread);
+    osStartThread(&audioThread);
+    osStartThread(&displayThread);
 }
 
-static void thread_function_1(void *arg) {
+static void viThreadEntry(void *arg) {
     u32 temp = 0xA << 16;
     s32 *message;
     s16 temp_v0;
@@ -135,7 +135,7 @@ static void thread_function_1(void *arg) {
                 }
 
                 osViBlack(TRUE);
-                D_8009B020_9BC20 = 1;
+                gPrenmiReceived = 1;
             }
 
             continue;
@@ -144,8 +144,8 @@ static void thread_function_1(void *arg) {
         // Increment frameCounter and wrap if > 0xFFF
         frameCounter = (frameCounter + 1) & 0xFFF;
 
-        if (D_8009B020_9BC20 && D_8009B024_9BC24) {
-            D_8009B024_9BC24--;
+        if (gPrenmiReceived && gPrenmiCountdown) {
+            gPrenmiCountdown--;
         }
 
         var_s1 = var_s1 & 0xFFFF;
@@ -164,10 +164,10 @@ static void thread_function_1(void *arg) {
             config = config->nextConfig;
         }
 
-        if (frameDelay == 0) {
+        if (bootBlackoutFrames == 0) {
             continue;
         }
-        frameDelay--;
+        bootBlackoutFrames--;
     }
 }
 
@@ -211,8 +211,8 @@ void removeViConfig(ViConfig *configs) {
     osSetIntMask(previousInterruptMask);
 }
 
-static void thread_function_2(void *arg) {
-    eventQueue1_message *msg;
+static void schedThreadEntry(void *arg) {
+    SchedMsg *msg;
     s32 task;
     s32 next_task;
     s32 status_flags = 0;
@@ -222,13 +222,13 @@ static void thread_function_2(void *arg) {
     s32 mask;
 
     while (TRUE) {
-        osRecvMesg(&eventQueue1, (OSMesg *)&msg, OS_MESG_BLOCK);
+        osRecvMesg(&schedQueue, (OSMesg *)&msg, OS_MESG_BLOCK);
         event = msg->type;
 
         switch (event) {
             case 7:
-                if (!D_8009B020_9BC20) {
-                    current_task = msg->task;
+                if (!gPrenmiReceived) {
+                    current_task = msg->gfxTask;
 
                     if ((status_flags & 2)) {
                         status_flags |= 4;
@@ -242,8 +242,8 @@ static void thread_function_2(void *arg) {
                 }
                 break;
             case 0xB:
-                if (D_8009B024_9BC24 >= 5) {
-                    pending_task = msg->pendingTask;
+                if (gPrenmiCountdown >= 5) {
+                    pending_task = msg->audioTask;
 
                     if (status_flags & 1) {
                         status_flags |= 8;
@@ -262,7 +262,7 @@ static void thread_function_2(void *arg) {
                     status_flags &= ~2;
 
                     if (status_flags & 4) {
-                        if (D_8009B020_9BC20 == 0) {
+                        if (gPrenmiReceived == 0) {
                             s32 mask = osSetIntMask(OS_IM_NONE);
                             osWritebackDCacheAll();
                             osSetIntMask(mask);
@@ -277,7 +277,7 @@ static void thread_function_2(void *arg) {
                         status_flags &= ~0x10;
                         status_flags |= 1;
                     }
-                    osSendMesg(&frameBufferQueue, (OSMesg)6, OS_MESG_BLOCK);
+                    osSendMesg(&audioSpDoneQueue, (OSMesg)6, OS_MESG_BLOCK);
                 } else if (status_flags & 1) {
                     status_flags &= ~1;
 
@@ -298,7 +298,7 @@ static void thread_function_2(void *arg) {
                     }
                     if (status_flags & 0x20) {
                         status_flags &= ~0x20;
-                        osSendMesg(&eventQueue3, (OSMesg)6, OS_MESG_BLOCK);
+                        osSendMesg(&displaySpDoneQueue, (OSMesg)6, OS_MESG_BLOCK);
                     }
                 }
                 break;
@@ -306,40 +306,40 @@ static void thread_function_2(void *arg) {
     }
 }
 
-static void thread_function_3(void *arg) {
+static void audioThreadEntry(void *arg) {
     // force specific layout of these variables on the stack
     struct {
-        OSMesg eventQueueOneMessage;
+        OSMesg audioStartMsg;
         OSMesgQueue *messageQueue;
         OSMesg message;
     } stack;
-    OSMesg frameBufferQueueMessage;
-    FrameInfo *temp;
+    OSMesg audioSpDoneMsg;
+    GfxTask *temp;
 
-    stack.eventQueueOneMessage = (OSMesg)0xB;
+    stack.audioStartMsg = (OSMesg)0xB;
 
     while (TRUE) {
-        osRecvMesg(&eventQueue2, &stack.message, OS_MESG_BLOCK);
-        osSendMesg(&eventQueue1, &stack.eventQueueOneMessage, OS_MESG_BLOCK);
-        osRecvMesg(&frameBufferQueue, &frameBufferQueueMessage, OS_MESG_BLOCK);
+        osRecvMesg(&audioTaskQueue, &stack.message, OS_MESG_BLOCK);
+        osSendMesg(&schedQueue, &stack.audioStartMsg, OS_MESG_BLOCK);
+        osRecvMesg(&audioSpDoneQueue, &audioSpDoneMsg, OS_MESG_BLOCK);
 
         temp = stack.message; // force a copy into v0
         osSendMesg(temp->messageQueue, temp->message, OS_MESG_BLOCK);
     }
 }
 
-void sendMessageToEventQueue2(OSMesg message) {
-    osSendMesg(&eventQueue2, message, OS_MESG_BLOCK);
+void submitAudioTask(OSMesg message) {
+    osSendMesg(&audioTaskQueue, message, OS_MESG_BLOCK);
 }
 
-static void thread_function_4(void *arg) {
+static void displayThreadEntry(void *arg) {
     s32 temp_v0;
     s32 delayCounter;
     s16 frameIndex;
     void *frameBuffer;
     struct {
         s32 sp10;
-        FrameInfo *frameInfo;
+        GfxTask *gfxTask;
         s32 temp_a0;
         char padding2[4];
         ViConfig sp20;
@@ -348,43 +348,43 @@ static void thread_function_4(void *arg) {
     } stack;
     delayCounter = 1;
     stack.sp10 = 7;
-    addViConfig(&stack.sp20, &eventQueue4, 1);
+    addViConfig(&stack.sp20, &displayViFrameQueue, 1);
     while (1) {
-        osRecvMesg(&threadSyncQueue, (OSMesg *)(&stack.frameInfo), OS_MESG_BLOCK);
-        frameIndex = stack.frameInfo->unk4C;
-        frameBuffer = stack.frameInfo->unk48;
+        osRecvMesg(&displayQueue, (OSMesg *)(&stack.gfxTask), OS_MESG_BLOCK);
+        frameIndex = stack.gfxTask->frameIndex;
+        frameBuffer = stack.gfxTask->framebuffer;
         while ((osViGetCurrentFramebuffer() == frameBuffer) || (osViGetNextFramebuffer() == frameBuffer)) {
-            osRecvMesg(&eventQueue4, &stack.sp30, OS_MESG_BLOCK);
+            osRecvMesg(&displayViFrameQueue, &stack.sp30, OS_MESG_BLOCK);
         }
 
-        osSendMesg(&eventQueue1, &stack.sp10, OS_MESG_BLOCK);
-        osRecvMesg(&eventQueue3, &stack.sp34, OS_MESG_BLOCK);
-        osRecvMesg(&taskCompletionQueue, &stack.sp34, OS_MESG_BLOCK);
-        if (!(stack.frameInfo->unk4E & 1)) {
+        osSendMesg(&schedQueue, &stack.sp10, OS_MESG_BLOCK);
+        osRecvMesg(&displaySpDoneQueue, &stack.sp34, OS_MESG_BLOCK);
+        osRecvMesg(&dpDoneQueue, &stack.sp34, OS_MESG_BLOCK);
+        if (!(stack.gfxTask->flags & 1)) {
             continue;
         }
-        osSendMesg(stack.frameInfo->messageQueue, stack.frameInfo->message, 1);
+        osSendMesg(stack.gfxTask->messageQueue, stack.gfxTask->message, 1);
 
         while (((frameCounter - frameIndex & 0xFFF) != 0) && (frameCounter - frameIndex & 0xFFF) < 0x800) {
             frameIndex++;
         }
 
         while ((frameCounter - frameIndex & 0xFFF) >= 0x801) {
-            osRecvMesg(&eventQueue4, &stack.sp30, OS_MESG_BLOCK);
+            osRecvMesg(&displayViFrameQueue, &stack.sp30, OS_MESG_BLOCK);
         }
 
         osViSwapBuffer(frameBuffer);
-        if ((!(delayCounter & 0xFF)) || (frameDelay != 0)) {
+        if ((!(delayCounter & 0xFF)) || (bootBlackoutFrames != 0)) {
             continue;
         }
         delayCounter--;
-        if (D_8009B020_9BC20) {
+        if (gPrenmiReceived) {
             continue;
         }
         osViBlack(0);
     }
 }
 
-void sendMessageToThreadSyncQueue(OSMesg message) {
-    osSendMesg(&threadSyncQueue, message, OS_MESG_BLOCK);
+void submitDisplayTask(OSMesg message) {
+    osSendMesg(&displayQueue, message, OS_MESG_BLOCK);
 }

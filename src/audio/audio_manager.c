@@ -281,7 +281,7 @@ s32 audioCreateAndScheduleTask(AudioStruct *audioTaskDesc, AudioStruct *prevBuff
     audioTaskDesc->unk44 = 0;
     audioTaskDesc->commandBufferSize = commandBufferSize;
 
-    sendMessageToEventQueue2(((OSMesg)&audioTaskDesc->taskType));
+    submitAudioTask(((OSMesg)&audioTaskDesc->taskType));
 
     gAudioCmdBufferToggle ^= 1;
 
