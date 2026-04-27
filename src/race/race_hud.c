@@ -1160,7 +1160,7 @@ void setupSceneAnimationTask(SceneAnimationTask *arg0) {
         ptr = (s32 *)&gScaleMatrix.translation;
         offset = 0;
         do {
-            memcpy(ptr, (u8 *)(offset + (s32)arg0->entries) + 8, 0xC);
+            memcpy(ptr, (u8 *)(offset + (s32)arg0->entries) + 8, sizeof(Vec3i));
             transform3DToMtx(ptr - 5, (u8 *)arg0->transformBuffer + (i << 6));
             i++;
             offset += 0x14;
@@ -1942,7 +1942,7 @@ void setupGoldCoinEntries(GoldCoinSetupState *arg0) {
         do {
             offset = i * 16;
             *(s8 *)(offset + (s32)arg0->entries) = one;
-            memcpy(globalBuf, (u8 *)(offset + (s32)arg0->entries) + 4, 0xC);
+            memcpy(globalBuf, (u8 *)(offset + (s32)arg0->entries) + 4, sizeof(Vec3i));
             transform3DToMtx(globalBuf - 5, (u8 *)arg0->matrixBuffer + (i << 6));
             i++;
         } while (i < arg0->coinCount);
@@ -2604,7 +2604,7 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
         case 0:
             if (gameState->gamePaused == 0) {
                 collisionPosPtr = &collisionPos;
-                memcpy(collisionPosPtr, &itemBox->displayList.transform.translation, 0xC);
+                memcpy(collisionPosPtr, &itemBox->displayList.transform.translation, sizeof(Vec3i));
                 collisionPos.y += 0x100000;
                 player = findPlayerNearPosition(collisionPosPtr, -1, 0x100000);
                 if (player != NULL) {
@@ -3490,8 +3490,8 @@ void spawnHomingProjectile(void *arg0, s32 arg1, void *arg2) {
         node = (HomingProjectileTask *)scheduleTask(&initHomingProjectileTask, 3U, 0U, 0xEFU);
         if (node != NULL) {
             gs->availableHomingProjectileSlots -= 1;
-            memcpy(&node->pos, arg0, 0xC);
-            memcpy(&node->vel, arg2, 0xC);
+            memcpy(&node->pos, arg0, sizeof(Vec3i));
+            memcpy(&node->vel, arg2, sizeof(Vec3i));
             node->playerIndex = arg1;
         }
     }
@@ -3617,7 +3617,7 @@ void updatePanelProjectileImpact(PanelProjectileImpactArg *arg0) {
     s0 = &sp10;
 
     if (s3 != NULL) {
-        memcpy(s0, s2, 0xC);
+        memcpy(s0, s2, sizeof(Vec3i));
         sp10.y = sp10.y + 0xA0000;
         spawnImpactStar(s0);
         queueSoundAtPosition(s0, 0xD);
@@ -3809,8 +3809,8 @@ void *spawnItemHomingProjectile(void *arg0, u32 arg1, void *arg2, s16 arg3, s32 
 
     allocation->availableHomingProjectileSlots--;
 
-    memcpy((u8 *)task + 8, arg0, 0xC);
-    memcpy((u8 *)task + 0x24, arg2, 0xC);
+    memcpy((u8 *)task + 8, arg0, sizeof(Vec3i));
+    memcpy((u8 *)task + 0x24, arg2, sizeof(Vec3i));
 
     *(s16 *)((u8 *)task + 0x30) = (s16)arg1;
     *(s16 *)((u8 *)task + 0x38) = arg3;
@@ -3998,7 +3998,7 @@ void spawnBossHomingProjectileVariant1(BossHomingProjectileSpawnArg *arg0) {
     randomValue = randA();
     loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->projectileAsset, (randomValue % 3) + 0x6B);
 
-    memcpy(&arg0->position.x, &arg0->boss->positionAt4C, 0xC);
+    memcpy(&arg0->position.x, &arg0->boss->positionAt4C, sizeof(Vec3i));
 
     arg0->position.y = arg0->position.y + (s32)0xFFF10000;
 
@@ -4096,7 +4096,7 @@ void bounceBossHomingProjectileVariant1(BossHomingProjectileVariant1BounceArg *a
     s0 = &sp10;
 
     if (s3 != NULL) {
-        memcpy(s0, s2, 0xC);
+        memcpy(s0, s2, sizeof(Vec3i));
         sp10.y = sp10.y + 0xA0000;
         spawnImpactStar(s0);
         queueSoundAtPosition(s0, 0xD);

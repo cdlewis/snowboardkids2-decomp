@@ -363,7 +363,7 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
         sinCosResult += 0x1FFF;
     }
     arg0->positionMatrix.translation.z = (sinCosResult >> 0xD) << 8;
-    memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, 0xC);
+    memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, sizeof(Vec3i));
 
     func_8006B084_6BC84(rotMatPtr, posMatPtr, sp10Ptr);
     func_8006B084_6BC84(sp10Ptr, (Transform3D *)(gameState + ((arg0->playerIndex << 5) + 0x17F8)), (Transform3D *)arg0);
@@ -416,7 +416,7 @@ void updateCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     assetIndex = paletteIndex + charIndex * 3;
 
     memcpy(&sp10, &identityMatrix, sizeof(Transform3D));
-    memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, 0xC);
+    memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, sizeof(Vec3i));
 
     if (state->unk18D2[arg0->playerIndex] == state->unk18CC - 1) {
         val = state->unk1898[arg0->playerIndex];
@@ -527,7 +527,7 @@ void updateCharSelectSlide(CharSelectSlideState *arg0) {
     adjustment = (-(0 < arg0->targetX) & 0xFFF00000) | 0x100000;
 
     memcpy(localPtr, &identityMatrix, sizeof(Transform3D));
-    memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, 0xC);
+    memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, sizeof(Vec3i));
 
     arg0->worldMatrix.translation.x = arg0->worldMatrix.translation.x + adjustment;
 
@@ -556,7 +556,7 @@ void updateCharSelectPostSlide(CharSelectSlideState *arg0) {
 
     localPtr = &localMatrix;
     memcpy(localPtr, &identityMatrix, sizeof(Transform3D));
-    memcpy(&localMatrix.translation, &arg0->positionMatrix.translation.x, 0xC);
+    memcpy(&localMatrix.translation, &arg0->positionMatrix.translation.x, sizeof(Vec3i));
 
     rotation = base->unk1888[arg0->playerIndex];
     createYRotationMatrix(&arg0->positionMatrix, rotation);

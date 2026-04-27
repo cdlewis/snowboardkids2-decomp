@@ -200,7 +200,7 @@ void updateIceLandMovingPlatform(IceLandMovingPlatformTask *platform) {
         }
     }
 
-    memcpy(&platform->transform.translation, &platform->posX, 0xC);
+    memcpy(&platform->transform.translation, &platform->posX, sizeof(Vec3i));
     platform->transform.translation.y += 0x280000;
 
     playerIndex = 0;

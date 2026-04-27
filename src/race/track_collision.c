@@ -506,7 +506,7 @@ void handlePlayerToPlayerCollision(Player *player) {
         }
 
         /* Copy target's collision box local position */
-        memcpy(&deltaPos, &targetPlayer->collisionOffset, 0xC);
+        memcpy(&deltaPos, &targetPlayer->collisionOffset, sizeof(Vec3i));
 
         /* Convert to world space */
         deltaPos.x += targetPlayer->worldPos.x;
@@ -703,7 +703,7 @@ Player *findPlayerNearPosition(Vec3i *position, s32 excludePlayerIndex, s32 sear
             continue;
         }
 
-        memcpy(&deltaPos, &node->localPos, 0xC);
+        memcpy(&deltaPos, &node->localPos, sizeof(Vec3i));
 
         deltaPos.x += node->posPtr->x;
         deltaPos.y += node->posPtr->y;
@@ -737,7 +737,7 @@ s32 isPointInPlayerCollisionSphere(Player *player, Vec3i *point, s32 extraRadius
     s32 negRadius;
     s64 distSq;
 
-    memcpy(&delta, &player->collisionOffset, 0xC);
+    memcpy(&delta, &player->collisionOffset, sizeof(Vec3i));
 
     delta.x += player->worldPos.x;
     delta.y += player->worldPos.y;
@@ -803,7 +803,7 @@ Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex,
             continue;
         }
 
-        memcpy(&deltaPos, &node->localPos, 0xC);
+        memcpy(&deltaPos, &node->localPos, sizeof(Vec3i));
 
         deltaPos.x += node->posPtr->x;
         deltaPos.y += node->posPtr->y;
@@ -971,7 +971,7 @@ s32 checkPositionPlayerCollisionWithKnockback(Vec3i *pos, s32 extraRadius, s32 m
         }
 
         /* Copy target's collision box local position */
-        memcpy(&deltaPos, &targetPlayer->collisionOffset, 0xC);
+        memcpy(&deltaPos, &targetPlayer->collisionOffset, sizeof(Vec3i));
 
         /* Convert to world space */
         deltaPos.x += targetPlayer->worldPos.x;
@@ -1078,7 +1078,7 @@ s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeig
         do {
             targetPlayer = &allocation->players[playerIndex];
 
-            memcpy(deltaPosPtr, &targetPlayer->collisionOffset, 0xC);
+            memcpy(deltaPosPtr, &targetPlayer->collisionOffset, sizeof(Vec3i));
 
             deltaPos.x += targetPlayer->worldPos.x;
             deltaPos.y += targetPlayer->worldPos.y;
@@ -1177,7 +1177,7 @@ s16 getHomingAngleToTarget(
 
     for (node = allocation->list; node != NULL; node = node->next) {
         if (excludePlayerIdx != node->id && allocation->dataArray[node->id].invincibilityTimer == 0) {
-            memcpy(&deltaPos, &node->localPos, 0xC);
+            memcpy(&deltaPos, &node->localPos, sizeof(Vec3i));
 
             deltaPos.x += node->posPtr->x;
             deltaPos.y += node->posPtr->y;
@@ -1259,7 +1259,7 @@ s32 checkStarHitCollisionWithVulnerablePlayers(Vec3i *pos, s32 excludePlayerIdx,
                 } else if (playerData->invincibilityTimer != 0) {
                     ;
                 } else {
-                    memcpy(deltaPosPtr, &node->localPos, 0xC);
+                    memcpy(deltaPosPtr, &node->localPos, sizeof(Vec3i));
 
                     deltaPos.x += node->posPtr->x;
                     deltaPos.y += node->posPtr->y;
@@ -1360,7 +1360,7 @@ s32 isPlayerInRangeAndPull(Vec3i *arg0, s32 arg1, Player *arg2) {
     s32 negRadius;
     s32 dist;
 
-    memcpy(&localVec, arg0, 0xC);
+    memcpy(&localVec, arg0, sizeof(Vec3i));
 
     localVec.x = localVec.x - (arg2->worldPos.x + arg2->collisionOffset.x);
     localVec.y = localVec.y - (arg2->worldPos.y + arg2->collisionOffset.y);

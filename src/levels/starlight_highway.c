@@ -699,7 +699,7 @@ void initStarlightFireworkTask(StarlightFireworkTaskState *arg0) {
     arg0->segment2 = loadCompressedSegment2AssetByIndex(8);
     arg0->unk2C = 0;
     arg0->displayList = (void *)((u32)getSkyDisplayLists3ByIndex(8) + 0x90);
-    memcpy(&arg0->pos, &gStarlightFireworkPositions[arg0->type], 0xC);
+    memcpy(&arg0->pos, &gStarlightFireworkPositions[arg0->type], sizeof(Vec3i));
     rotPtr = stack.rotation;
     createXRotationMatrix(rotPtr, gStarlightFireworkXRotations[arg0->type]);
     transformVector2(&gStarlightFireworkDirections[arg0->type], rotPtr, &arg0->velocity);

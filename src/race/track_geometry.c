@@ -79,7 +79,7 @@ void initStoryMapRareEventWave(Func2E024Arg *arg0) {
 
         createYRotationMatrix(&elements[i].matrix, elements[i].rotation);
 
-        memcpy(&elements[i].unk40, vec3, 0xC);
+        memcpy(&elements[i].unk40, vec3, sizeof(Vec3i));
 
         if (i != 0) {
             elements[i].unk40 += 0x30000;
@@ -158,7 +158,7 @@ void initStoryMapRareEventIdle(Func2E024Arg *arg0) {
 
         createYRotationMatrix(&arg0->elements[i].matrix, arg0->elements[i].rotation);
 
-        memcpy(&arg0->elements[i].unk40, vec3, 0xC);
+        memcpy(&arg0->elements[i].unk40, vec3, sizeof(Vec3i));
 
         if (i == 0) {
             arg0->elements[i].unk44 = 0x290000;
@@ -290,13 +290,13 @@ void initStoryMapRareEventMagicShow(Func2E024Arg *arg0) {
             arg0->elements[0].matrix.translation.x = 0xFFF50000;
             arg0->elements[0].matrix.translation.z = 0xFFB30000;
             arg0->elements[0].animState = 0;
-            memcpy(&arg0->elements[0].unk40, effectOffset, 0xC);
+            memcpy(&arg0->elements[0].unk40, effectOffset, sizeof(Vec3i));
             setAnimationIndex(arg0->elements[0].model, -1);
         } else {
             arg0->elements[1].matrix.translation.x = 0x1B0000;
             arg0->elements[1].matrix.translation.z = 0xFFB30000;
             arg0->elements[1].animState = 0x1B;
-            memcpy(&arg0->elements[1].unk40, effectOffset, 0xC);
+            memcpy(&arg0->elements[1].unk40, effectOffset, sizeof(Vec3i));
             setItemDisplayEnabled(arg0->elements[1].model, 1);
             setAnimationIndex(arg0->elements[1].model, 4);
         }
@@ -618,14 +618,14 @@ void initStoryMapRareEventSledding(Func2E024Arg *arg0) {
         arg0->elements[i].matrix.translation.z = (result >> 13) << 8;
         arg0->elements[i].unk5E = 0;
 
-        memcpy(&arg0->elements[i].unk40, effectOffset, 0xC);
+        memcpy(&arg0->elements[i].unk40, effectOffset, sizeof(Vec3i));
 
         arg0->elements[i].animState = 9;
         arg0->elements[i].unk52 = 9;
         arg0->elements[i].rotation = 0x800;
         arg0->elements[i].unk2E = 0x800;
 
-        memcpy(&worldMatrix.translation, &arg0->elements[i].matrix.translation, 0xC);
+        memcpy(&worldMatrix.translation, &arg0->elements[i].matrix.translation, sizeof(Vec3i));
 
         createYRotationMatrix(&localMatrix, arg0->elements[i].rotation);
         createYRotationMatrix(
@@ -707,7 +707,7 @@ void updateStoryMapRareEventSledding(Func2E024Arg *arg0) {
             createYRotationMatrix(&localMatrix, element->rotation);
             facingAngle = atan2Fixed(element->matrix.translation.x, element->matrix.translation.z);
             createYRotationMatrix(&worldMatrix, facingAngle & 0xFFFF);
-            memcpy(&worldMatrix.translation, &element->matrix.translation, 0xC);
+            memcpy(&worldMatrix.translation, &element->matrix.translation, sizeof(Vec3i));
             func_8006B084_6BC84(&localMatrix, &worldMatrix, &element->matrix);
             updateStoryMapNpcModel(element);
             gameState->npcPosX[i] = element->matrix.translation.x;
@@ -1144,7 +1144,7 @@ void initStoryMapRareEventSkating(Func2E024Arg *arg0) {
         arg0->elements[i].rotation = 0x800;
         arg0->elements[i].unk2E = 0x800;
         arg0->elements[i].unk52 = arg0->elements[i].animState;
-        memcpy(&worldMatrix.translation, &arg0->elements[i].matrix.translation, 0xC);
+        memcpy(&worldMatrix.translation, &arg0->elements[i].matrix.translation, sizeof(Vec3i));
         createYRotationMatrix(&localMatrix, arg0->elements[i].rotation);
         angle = atan2Fixed(worldMatrix.translation.x, worldMatrix.translation.z);
         createYRotationMatrix(&worldMatrix, angle & 0xFFFF);
@@ -1235,7 +1235,7 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
             createYRotationMatrix(&localMatrix, element->rotation);
             facingAngle = atan2Fixed(element->matrix.translation.x, element->matrix.translation.z);
             createYRotationMatrix(&worldMatrix, facingAngle & 0xFFFF);
-            memcpy(&worldMatrix.translation, &element->matrix.translation, 0xC);
+            memcpy(&worldMatrix.translation, &element->matrix.translation, sizeof(Vec3i));
             func_8006B084_6BC84(&localMatrix, &worldMatrix, &element->matrix);
             updateStoryMapNpcModel(element);
             gameState->npcPosX[i] = element->matrix.translation.x;

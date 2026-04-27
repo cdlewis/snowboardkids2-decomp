@@ -578,7 +578,7 @@ void updateStoryMapCameraOrbit(StoryMapCameraState *camera) {
     s8 orbitSpeed;
 
     state = getCurrentAllocation();
-    memcpy(cameraPosition, &camera->cameraX, 0xC);
+    memcpy(cameraPosition, &camera->cameraX, sizeof(Vec3i));
 
     mode = getStoryMapCameraMode();
     orbitSpeed = -3;

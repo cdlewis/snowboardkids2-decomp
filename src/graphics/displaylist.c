@@ -1834,7 +1834,7 @@ void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
         return;
     }
 
-    memcpy(&gScaleMatrix.translation, &gActiveViewport->cameraX, 0xC);
+    memcpy(&gScaleMatrix.translation, &gActiveViewport->cameraX, sizeof(Vec3i));
     transform3DToMtx(&gScaleMatrix, displayListObj->transformMatrix);
 
     if (displayListObj->displayLists->flags & 1) {
@@ -1928,7 +1928,7 @@ void renderTexturedBillboardSprite(TexturedSpriteState *state) {
         if (state->matrix == NULL) {
             return;
         }
-        memcpy(&gScaleMatrix.translation, &state->posX, 0xC);
+        memcpy(&gScaleMatrix.translation, &state->posX, sizeof(Vec3i));
         transform3DToMtx(&gScaleMatrix, state->matrix);
     }
 
@@ -2091,7 +2091,7 @@ void renderTexturedBillboardSpriteTile(TexturedSpriteState *state) {
         if (state->matrix == NULL) {
             return;
         }
-        memcpy(&gScaleMatrix.translation, &state->posX, 0xC);
+        memcpy(&gScaleMatrix.translation, &state->posX, sizeof(Vec3i));
         transform3DToMtx(&gScaleMatrix, state->matrix);
     }
 
@@ -2181,7 +2181,7 @@ void renderAlphaBillboardSprite(AlphaSpriteState *state) {
         if (state->matrix == NULL) {
             return;
         }
-        memcpy(&gScaleMatrix.translation, &state->posX, 0xC);
+        memcpy(&gScaleMatrix.translation, &state->posX, sizeof(Vec3i));
         transform3DToMtx(&gScaleMatrix, state->matrix);
     }
 

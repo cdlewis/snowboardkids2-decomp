@@ -354,7 +354,7 @@ void updateJingleTownBoss(Arg0Struct *arg0) {
     sp30.translation.z -= arg0->unk970.translation.z;
 
     transformVector(gCollisionLocalPos, (s16 *)&sp30, &arg0->unkAD4);
-    memcpy(&arg0->unkB58, &arg0->unkAD4, 0xC);
+    memcpy(&arg0->unkB58, &arg0->unkAD4, sizeof(Vec3i));
     addCollisionSectorNodeToList((ListNode_5AA90 *)&arg0->unkB50);
     updateJingleTownBossModelTransforms(arg0);
 
@@ -793,7 +793,7 @@ s32 jingleTownBossHoverAttackExitPhase(Arg0Struct *arg0) {
         arg0->position.x += posOffset.x;
         arg0->position.y += posOffset.y;
         arg0->position.z += posOffset.z;
-        memcpy(&arg0->prevPosition, &arg0->position, 0xC);
+        memcpy(&arg0->prevPosition, &arg0->position, sizeof(Vec3i));
         arg0->animFlags |= 0x200000;
         transformVector((s16 *)&gJingleTownBossHoverExitOffsets[1], (s16 *)&arg0->groundTransform, &burstPos);
         spawnBurstEffect(&burstPos);
@@ -829,7 +829,7 @@ void updateJingleTownBossPositionAndTrackCollision(Arg0Struct *arg0) {
     u16 newSectorIndex;
 
     gameState = getCurrentAllocation();
-    memcpy(&arg0->unk970.translation.x, &arg0->position, 0xC);
+    memcpy(&arg0->unk970.translation.x, &arg0->position, sizeof(Vec3i));
     gameData = &gameState->gameData;
     newSectorIndex = getOrUpdatePlayerSectorIndex(arg0, gameData, arg0->sectorIndex, &arg0->position);
     arg0->sectorIndex = newSectorIndex;

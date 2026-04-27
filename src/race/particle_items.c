@@ -770,7 +770,7 @@ void spawnShieldBurstEffect(Vec3i *position) {
         i = 0;
         ptr = task;
         do {
-            memcpy(ptr + 4, position, 0xC);
+            memcpy(ptr + 4, position, sizeof(Vec3i));
             i++;
             ptr += 0x24;
         } while (i < 6);
@@ -789,7 +789,7 @@ void spawnBurstEffect(Vec3i *position) {
         i = 0;
         ptr = task;
         do {
-            memcpy(ptr + 4, position, 0xC);
+            memcpy(ptr + 4, position, sizeof(Vec3i));
             i++;
             ptr += 0x24;
         } while (i < 6);
@@ -943,7 +943,7 @@ SparkleEffectState *spawnSparkleEffect(void *arg0) {
 
     task = (SparkleEffectState *)scheduleTask(initSparkleEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        memcpy(&task->position, arg0, 0xC);
+        memcpy(&task->position, arg0, sizeof(Vec3i));
         task->playerIndex = -1;
     }
     return task;
@@ -954,7 +954,7 @@ SparkleEffectState *spawnSparkleEffectWithPlayer(void *arg0, s32 arg1) {
 
     task = (SparkleEffectState *)scheduleTask(&initSparkleEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        memcpy(&task->position, arg0, 0xC);
+        memcpy(&task->position, arg0, sizeof(Vec3i));
         task->playerIndex = arg1;
     }
     return task;
@@ -990,7 +990,7 @@ void updateLiftEffect(LiftEffectState *state) {
     scaleMatrix((Transform3D *)state, state->scaleFactor, state->scaleFactor, state->scaleFactor);
     player = state->player;
     pos = &state->position;
-    memcpy(pos, &player->worldPos, 0xC);
+    memcpy(pos, &player->worldPos, sizeof(Vec3i));
     state->position.y += 0xFFEC0000;
 
     if (state->playSound != 0) {
@@ -1025,7 +1025,7 @@ void fadeOutLiftEffect(LiftEffectState *state) {
     state->rotationAngle += 0x12C;
     createYRotationMatrix((Transform3D *)state, state->rotationAngle);
     scaleMatrix((Transform3D *)state, state->scaleFactor, state->scaleFactor, state->scaleFactor);
-    memcpy(&state->position, &state->player->worldPos, 0xC);
+    memcpy(&state->position, &state->player->worldPos, sizeof(Vec3i));
     state->position.y += 0xFFEC0000;
 
     for (i = 0; i < 4; i++) {
@@ -1087,7 +1087,7 @@ void updateWarpEffect(WarpEffectState *state) {
     createXRotationMatrix(state->matrix, 0);
     scale = (s16)state->scale;
     scaleMatrix((Transform3D *)state, scale, scale, scale);
-    memcpy(&state->position, state->source->sourcePosition, 0xC);
+    memcpy(&state->position, state->source->sourcePosition, sizeof(Vec3i));
     state->position.y += state->height;
 
     for (i = 0; i < 4; i++) {
@@ -1116,7 +1116,7 @@ void descendWarpEffect(WarpEffectState *state) {
         }
     }
 
-    memcpy(&state->position, &state->player->worldPos, 0xC);
+    memcpy(&state->position, &state->player->worldPos, sizeof(Vec3i));
     state->position.y += state->height;
 
     i = 0;
@@ -1927,7 +1927,7 @@ void initPushZone(PushZoneState *arg0) {
 
     allocation = getCurrentAllocation();
     createCombinedRotationMatrix(arg0, gPushZoneData[arg0->zoneIndex].pitch, gPushZoneData[arg0->zoneIndex].yaw);
-    memcpy(&arg0->position, gPushZoneData[arg0->zoneIndex].pos, 0xC);
+    memcpy(&arg0->position, gPushZoneData[arg0->zoneIndex].pos, sizeof(Vec3i));
     arg0->displayData =
         (void *)(gPushZoneData[arg0->zoneIndex].dataOffset + (gPushZoneData[arg0->zoneIndex].dataCount << 4));
     arg0->asset1 = loadUncompressedAssetByIndex(allocation->unk5C);
@@ -2106,7 +2106,7 @@ void flyInUfoEffect(UfoEffectState *arg0) {
         transformVector2(&D_80090AAC_916AC, arg0, &output);
         arg0->unk14.x = arg0->unk14.x + output.x;
         arg0->unk14.z = arg0->unk14.z + output.z;
-        memcpy(&arg0->target->storedPos, &arg0->unk14, 0xC);
+        memcpy(&arg0->target->storedPos, &arg0->unk14, sizeof(Vec3i));
         arg0->target->storedRotY = arg0->yRotation;
         if (arg0->phaseTimer != 0) {
             arg0->phaseTimer = arg0->phaseTimer - 1;
@@ -2142,7 +2142,7 @@ void descendUfoEffect(UfoEffectState *arg0) {
     arg0->unk14.y = arg0->unk14.y + output.y;
     arg0->unk14.z = arg0->unk14.z + output.z;
 
-    memcpy(&arg0->target->storedPos, &arg0->unk14, 0xC);
+    memcpy(&arg0->target->storedPos, &arg0->unk14, sizeof(Vec3i));
     arg0->target->storedRotY = arg0->yRotation;
 
     {
@@ -2227,7 +2227,7 @@ skip_rotation:
     arg0->unk14.x = arg0->unk14.x + output.x;
     arg0->unk14.y = arg0->unk14.y + output.y;
     arg0->unk14.z = arg0->unk14.z + output.z;
-    memcpy(arg0->target->storedPos, &arg0->unk14, 0xC);
+    memcpy(arg0->target->storedPos, &arg0->unk14, sizeof(Vec3i));
     arg0->target->storedRotY = arg0->yRotation;
 
     if (arg0->flyAwayDistance != 0) {
@@ -2251,7 +2251,7 @@ void holdUfoEffect(UfoEffectState *arg0) {
         if (arg0->phaseTimer == 0) {
             setCallback(fadeOutUfoEffect);
         }
-        memcpy(&arg0->target->storedPos, &arg0->unk14, 0xC);
+        memcpy(&arg0->target->storedPos, &arg0->unk14, sizeof(Vec3i));
         arg0->target->storedRotY = arg0->yRotation;
     }
 
@@ -2331,7 +2331,7 @@ void setupItemTriggerEntries(ItemTriggerTaskState *arg0) {
         do {
             offset = i << 4;
             *((s8 *)(offset + (s32)arg0->items)) = one;
-            memcpy(ptr, (s8 *)(offset + (s32)arg0->items + 4), 0xC);
+            memcpy(ptr, (s8 *)(offset + (s32)arg0->items + 4), sizeof(Vec3i));
             transform3DToMtx(ptr - 5, (u8 *)arg0->matrices + (i << 6));
             i++;
         } while (i < arg0->numItems);

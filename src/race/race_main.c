@@ -3529,7 +3529,7 @@ s32 updateStunnedRecoveryRespawnPhase(Player *player) {
             player->animFlags &= ~2;
             player->worldPos.y =
                 getTrackHeightAtPosition(&gs->gameData, player->sectorIndex, &player->worldPos) + 0x600000;
-            memcpy(&player->prevWorldPosX, &player->worldPos, 0xC);
+            memcpy(&player->prevWorldPosX, &player->worldPos, sizeof(Vec3i));
             player->rotY = 0x1000;
             player->rotY = pathAngle + player->rotY;
             player->finishAnimState = 1;
@@ -4408,7 +4408,7 @@ s32 dropDownwardStep(Player *player) {
     if (player->unkB8C == 0) {
         player->behaviorCounter = 0;
         player->behaviorStep++;
-        memcpy(&player->unk470, &player->worldPos.x, 0xC);
+        memcpy(&player->unk470, &player->worldPos.x, sizeof(Vec3i));
         player->unk480 = 0;
         player->unk468 = 0x30000;
         player->unkB8C = 0;
@@ -4488,7 +4488,7 @@ s32 handleUfoStoredPositionStep(Player *player) {
         player->behaviorStep++;
         player->animFlags |= 0x200;
         player->currentLap++;
-        memcpy(&player->prevWorldPosX, &player->worldPos.x, 0xC);
+        memcpy(&player->prevWorldPosX, &player->worldPos.x, sizeof(Vec3i));
         player->finishAnimState = 1;
         setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
         if (player->isBossRacer == 0 && player->currentLap == gameState->finalLapNumber) {
@@ -4717,7 +4717,7 @@ s32 warpToShortcutSpinUpStep(Player *player) {
         player->worldPos.y = shortcutConfig->spawnPos.y;
         player->worldPos.z = shortcutConfig->spawnPos.z;
 
-        memcpy(&player->prevWorldPosX, &player->worldPos.x, 0xC);
+        memcpy(&player->prevWorldPosX, &player->worldPos.x, sizeof(Vec3i));
 
         player->finishAnimState = 2;
         setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
@@ -4857,7 +4857,7 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
     player->sectorIndex =
         getOrUpdatePlayerSectorIndex(player, (u8 *)&gs->gameData, player->sectorIndex, &player->worldPos);
     temp2 = &savedPos;
-    memcpy(&player->headingTransform.translation, &player->worldPos, 0xC);
+    memcpy(&player->headingTransform.translation, &player->worldPos, sizeof(Vec3i));
 
     if (!(player->animFlags & 0x100)) {
         memcpy(temp2, &player->worldPos, sizeof(Vec3i));
@@ -5452,7 +5452,7 @@ void renderPlayerJointShadow(Player *player) {
 
         player->jointMatrix = arenaAlloc16(0x40);
         if (player->jointMatrix != NULL) {
-            memcpy(&gScaleMatrix.translation, &player->jointPositions[0], 0xC);
+            memcpy(&gScaleMatrix.translation, &player->jointPositions[0], sizeof(Vec3i));
             transform3DToN64Mtx(&gScaleMatrix, player->jointMatrix);
         }
         player->jointShadowNeedsUpdate = 0;

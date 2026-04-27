@@ -1423,7 +1423,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
     alloc = getCurrentAllocation();
     sp30_ptr = sp30;
     entry = &gGalleryCategories[alloc->selectedOption].items[arg0->cursorIndex];
-    memcpy(sp30_ptr, D_8009DF6C_9EB6C, 0xC);
+    memcpy(sp30_ptr, D_8009DF6C_9EB6C, sizeof(Vec3i));
 
     if (gControllerInputs & CONT_A) {
         if (isGalleryItemUnlocked(arg0->cursorIndex)) {

@@ -279,7 +279,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     getTrackSegmentWaypoints((TrackGeometryData *)state->gameData, state->startWaypoint, waypointStart, waypointEnd);
 
     memcpy(&state->transform, &identityMatrix, sizeof(Transform3D));
-    memcpy(state, waypointEnd, 0xC);
+    memcpy(state, waypointEnd, sizeof(Vec3i));
 
     state->posY = getTrackHeightAtPosition(state->gameData, state->startWaypoint, state);
 
@@ -289,7 +289,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
         state->posY = state->posY + state->heightOffset;
     }
 
-    memcpy(&state->transform.translation, state, 0xC);
+    memcpy(&state->transform.translation, state, sizeof(Vec3i));
 
     createYRotationMatrix(&state->transform, state->currentRotation);
     applyTransformToModel(state->sceneModel, &state->transform);
@@ -433,7 +433,7 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
     } else {
         state->posY = state->posY + state->heightOffset;
     }
-    memcpy(&state->transform.translation, state, 0xC);
+    memcpy(&state->transform.translation, state, sizeof(Vec3i));
     createYRotationMatrix(&state->transform, state->currentRotation);
     applyTransformToModel(state->sceneModel, &state->transform);
     scaled = (approximateSin((s16)state->currentRotation) * 5) << 12;
@@ -635,7 +635,7 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
     } else {
         state->posY = state->posY + state->heightOffset;
     }
-    memcpy(&state->transform.translation, state, 0xC);
+    memcpy(&state->transform.translation, state, sizeof(Vec3i));
     createYRotationMatrix(&state->transform, state->currentRotation);
     applyTransformToModel(state->sceneModel, &state->transform);
     {

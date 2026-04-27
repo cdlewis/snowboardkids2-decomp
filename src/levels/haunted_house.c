@@ -266,7 +266,7 @@ void updateGhostAnimation(AnimatedGhostEntity *ghost) {
         }
     }
 
-    memcpy(&ghost->renderPositionBuffer, &ghost->posX, 0xC);
+    memcpy(&ghost->renderPositionBuffer, &ghost->posX, sizeof(Vec3i));
 
     for (viewport = 0; viewport < 4; viewport++) {
         enqueueAlphaBillboardSprite(viewport, (loadAssetMetadata_arg *)&ghost->assetMetadata);
@@ -584,7 +584,7 @@ void updateSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
         }
     }
 
-    memcpy(&arg0->position, &arg0->pivotX, 0xC);
+    memcpy(&arg0->position, &arg0->pivotX, sizeof(Vec3i));
     arg0->position.y = arg0->position.y + approximateSin(arg0->bobPhase) * 0x1C0;
 
     for (i = 0; i < 4; i++) {
@@ -713,7 +713,7 @@ void updateFloatingSpriteEntity(FloatingSpriteEntity *arg0) {
 
     index = arg0->variantIndex;
     src = D_800BC9A0_B0690;
-    memcpy(&arg0->posX, &src[index * 3], 0xC);
+    memcpy(&arg0->posX, &src[index * 3], sizeof(Vec3i));
 
     sinResult = approximateSin(arg0->animPhase);
 
@@ -761,7 +761,7 @@ void initGhostTransformations(GhostManager *ghostManager) {
     spawnPos = g_GhostSpawnPositions;
 
     while (slotIndex < 8) {
-        memcpy(transformSrc, spawnPos, 0xC);
+        memcpy(transformSrc, spawnPos, sizeof(Vec3i));
         transform3DToMtx(transformSrc - 5, (void *)((u8 *)ghostManager->ghostSlotData + (slotIndex << 6)));
         spawnPos++;
         slotIndex++;

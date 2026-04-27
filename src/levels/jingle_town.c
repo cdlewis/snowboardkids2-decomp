@@ -68,7 +68,7 @@ void renderJingleTownTrain(JingleTownTrain *train) {
     s32 i;
 
     createYRotationMatrix((Transform3D *)train, train->rotation);
-    memcpy(&train->node.transform.translation.x, &train->posX, 0xC);
+    memcpy(&train->node.transform.translation.x, &train->posX, sizeof(Vec3i));
     train->node.transform.translation.y += train->yOffset;
 
     for (i = 0; i < 4; i++) {
@@ -84,7 +84,7 @@ void pullPlayersToTrain(JingleTownTrain *arg0) {
     Player *player;
 
     gs = getCurrentAllocation();
-    memcpy(&pos, &arg0->posX, 0xC);
+    memcpy(&pos, &arg0->posX, sizeof(Vec3i));
     pos.y += 0xC0000 + arg0->yOffset;
 
     for (i = 0; i < gs->numPlayers; i++) {

@@ -366,8 +366,8 @@ void spawnDualSnowSprayEffect(Vec3i *pos1, Vec3i *pos2, Vec3i *velocity, s32 slo
         return;
     }
 
-    memcpy(&task->pos1, pos1, 0xC);
-    memcpy(&task->pos2, pos2, 0xC);
+    memcpy(&task->pos1, pos1, sizeof(Vec3i));
+    memcpy(&task->pos2, pos2, sizeof(Vec3i));
 
     particleType = gCharacterParticleTypeMap[characterId];
     task->slotIndex = slotIndex;
@@ -665,8 +665,8 @@ void cleanupDualSnowSprayTask(DualSnowSprayTask *arg0) {
 void spawnDualSnowSprayEffect_SingleSlot(Vec3i *pos1, Vec3i *pos2, Vec3i *velocity, s32 particleType) {
     DualSnowSprayTask *task = (DualSnowSprayTask *)scheduleTask(&initDualSnowSprayTask_SingleSlot, 2, 0, 0xDD);
     if (task != NULL) {
-        memcpy(&task->pos1, pos1, 0xC);
-        memcpy(&task->pos2, pos2, 0xC);
+        memcpy(&task->pos1, pos1, sizeof(Vec3i));
+        memcpy(&task->pos2, pos2, sizeof(Vec3i));
         task->particleType = particleType;
         task->velX = (s32)(velocity->x / 2);
         task->velY = (s32)(velocity->y / 2);
@@ -840,10 +840,10 @@ void loadCharacterAttackEffectAssets(CharacterAttackEffectState *arg0) {
         arg0->particles[i].particle.assetTemplate = (loadAssetMetadata_arg *)&gCharacterAttackEffectAssetTemplate;
 
         if (arg0->isVariant == 0) {
-            memcpy(&arg0->positionOffsets, &gCharacterAttackEffectPositionOffsetsA, 0xC);
+            memcpy(&arg0->positionOffsets, &gCharacterAttackEffectPositionOffsetsA, sizeof(Vec3i));
             arg0->particles[i].particle.alpha = 0x90;
         } else {
-            memcpy(&arg0->positionOffsets, &gCharacterAttackEffectPositionOffsetsB, 0xC);
+            memcpy(&arg0->positionOffsets, &gCharacterAttackEffectPositionOffsetsB, sizeof(Vec3i));
             arg0->particles[i].particle.alpha = 0xF0;
         }
     }

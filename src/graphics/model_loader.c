@@ -327,7 +327,7 @@ void clearAuxRenderEnabled(Func8000C268Arg *arg0) {
 }
 
 void copyNodePosition(NodePositionArg *node, void *position) {
-    memcpy(node->position, position, 0xC);
+    memcpy(node->position, position, sizeof(Vec3i));
 }
 
 void setNodeScale(Func8000C2ACArg *arg0, s32 arg1) {
@@ -508,7 +508,7 @@ void updateSceneRenderTask(SceneRenderTaskCtx *ctx) {
                 createZRotationMatrix(rotMatrix, nodeB->rotationAngle);
                 memcpy(tempMatrix, ctx->node->baseTransform, sizeof(Transform3D));
                 func_8006B084_6BC84(rotMatrix, tempMatrix, &ctx->rotatedTransform);
-                memcpy(&ctx->rotatedTransform.translation, &ctx->node->posX, 0xC);
+                memcpy(&ctx->rotatedTransform.translation, &ctx->node->posX, sizeof(Vec3i));
                 nodeA = ctx->node;
                 scaleFactor = (s16)((s64)(nodeA->scale >> 8) * 0x2000 >> 8);
                 scaleMatrix(&ctx->rotatedTransform, scaleFactor, scaleFactor, scaleFactor);

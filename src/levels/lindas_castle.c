@@ -70,7 +70,7 @@ void renderFlyingEnemy(FlyingEnemyTaskArg *arg0) {
     s32 i;
 
     createYRotationMatrix(&arg0->matrix, arg0->rotationAngle);
-    memcpy(&arg0->matrix.translation.x, arg0->targetPosition, 0xC);
+    memcpy(&arg0->matrix.translation.x, arg0->targetPosition, sizeof(Vec3i));
     arg0->matrix.translation.y += arg0->velocityY;
 
     for (i = 0; i < 4; i++) {
@@ -86,7 +86,7 @@ void pullPlayersInRange(FlyingEnemyTaskArg *arg0) {
     Player *player;
 
     gs = getCurrentAllocation();
-    memcpy(&pos, &arg0->targetPosition[0], 0xC);
+    memcpy(&pos, &arg0->targetPosition[0], sizeof(Vec3i));
     pos.y += 0x1C0000 + arg0->velocityY;
 
     for (i = 0; i < gs->numPlayers; i++) {

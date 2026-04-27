@@ -99,8 +99,8 @@ void scheduleStaticSpriteEffectTask(void *startPos, void *endPos, Vec3i *velocit
     StaticSpriteEffectTaskMemory *task =
         (StaticSpriteEffectTaskMemory *)scheduleTask(&initStaticSpriteEffectTask, 0, 0, 0);
     if (task != NULL) {
-        memcpy(&task->startPos, startPos, 0xC);
-        memcpy(&task->endPos, endPos, 0xC);
+        memcpy(&task->startPos, startPos, sizeof(Vec3i));
+        memcpy(&task->endPos, endPos, sizeof(Vec3i));
         task->frameCounter = 0;
         task->velocityX = velocity->x / 2;
         task->velocityY = velocity->y / 2;

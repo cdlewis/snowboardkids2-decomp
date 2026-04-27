@@ -266,7 +266,7 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
     }
 
     gGraphicsMode = 0x202;
-    memcpy(&gCachedSpriteTextureEntry, &textureEntry, 0xC);
+    memcpy(&gCachedSpriteTextureEntry, &textureEntry, sizeof(Vec3i));
 
     if (sprite->translationMtx == NULL) {
         sprite->translationMtx = arenaAlloc16(0x40);
@@ -283,7 +283,7 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {
         memcpy(&transform, &identityMatrix, 0x20);
-        memcpy(&gScaleMatrix.translation, &sprite->position, 0xC);
+        memcpy(&gScaleMatrix.translation, &sprite->position, sizeof(Vec3i));
         transform3DToMtx(&gScaleMatrix, sprite->translationMtx);
 
         memcpy(&transform, &identityMatrix, 0x20);
@@ -420,7 +420,7 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
     }
 
     gGraphicsMode = 0x203;
-    memcpy(&gCachedSpriteTextureEntry, &textureEntry, 0xC);
+    memcpy(&gCachedSpriteTextureEntry, &textureEntry, sizeof(Vec3i));
 
     gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);
 
@@ -439,7 +439,7 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {
         memcpy(&transform, &identityMatrix, 0x20);
-        memcpy(&gScaleMatrix.translation, &sprite->position, 0xC);
+        memcpy(&gScaleMatrix.translation, &sprite->position, sizeof(Vec3i));
         transform3DToMtx(&gScaleMatrix, sprite->translationMtx);
 
         memcpy(&transform, &identityMatrix, 0x20);
@@ -576,7 +576,7 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
     }
 
     gGraphicsMode = 0x203;
-    memcpy(&gCachedSpriteTextureEntry, &textureEntry, 0xC);
+    memcpy(&gCachedSpriteTextureEntry, &textureEntry, sizeof(Vec3i));
 
     gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);
 

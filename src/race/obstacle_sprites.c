@@ -2193,7 +2193,7 @@ void updateShrinkProjectile(Struct_52880 *arg0) {
         spawnSprayEffect(&arg0->pos, vel, 4);
         arg0->vel.y += 0xFFFC0000;
         normalizeVelocityToSpeed(vel, 0x190000);
-        memcpy(&prevPos, &arg0->pos, 0xC);
+        memcpy(&prevPos, &arg0->pos, sizeof(Vec3i));
 
         arg0->pos.x += arg0->vel.x;
         arg0->pos.y += arg0->vel.y;

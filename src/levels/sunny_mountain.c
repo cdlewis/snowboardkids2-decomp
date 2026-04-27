@@ -111,7 +111,7 @@ void initSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *taskState) {
         ((DisplayListObject *)(displayObjectOffset + (s32)taskState->displayObjects))->segment3 = NULL;
         chairTranslationAddr = (u8 *)chairMatrix;
         chairTranslationAddr = chairTranslationAddr + 0x6C;
-        memcpy(chairTranslationAddr, (u8 *)(srcPositionOffset + (s32)allocation->positionData) + 0x30, 0xC);
+        memcpy(chairTranslationAddr, (u8 *)(srcPositionOffset + (s32)allocation->positionData) + 0x30, sizeof(Vec3i));
         chairMatrix = (SunnyMountainChairLiftTask *)((u8 *)chairMatrix + 0x20);
         displayObjectOffset += 0x3C;
         srcPositionOffset += 0xC;

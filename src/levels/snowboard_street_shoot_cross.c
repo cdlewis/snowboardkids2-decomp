@@ -122,7 +122,7 @@ void initShootCrossTargetsCallback(ShootCrossTargets *arg0) {
         do {
             offset = i << 4;
             *((s8 *)(offset + (s32)arg0->targets)) = 0;
-            memcpy(ptr, (s8 *)(offset + (s32)arg0->targets + 4), 0xC);
+            memcpy(ptr, (s8 *)(offset + (s32)arg0->targets + 4), sizeof(Vec3i));
             transform3DToMtx(ptr - 5, (u8 *)arg0->transformMatrices + (i << 6));
             i++;
         } while (i < arg0->targetCount);

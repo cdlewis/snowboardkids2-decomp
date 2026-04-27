@@ -478,7 +478,7 @@ void updateOrbitCamera(OrbitCameraState *camera) {
         return;
     }
     createYRotationMatrix(&rotationMatrix, (currentAngle + 0x1000) & 0xFFFF);
-    memcpy(&rotationMatrix.translation, &identityMatrix.translation, 0xC);
+    memcpy(&rotationMatrix.translation, &identityMatrix.translation, sizeof(Vec3i));
     func_8006B084_6BC84(cameraMatrixPtr, &rotationMatrix, &tempMatrix);
     func_8006B084_6BC84(&tempMatrix, (Transform3D *)(allocation->playerData + 0x950), cameraMatrixPtr);
     transformVector2(&D_8008FEB0_90AB0, allocation->playerData + 0x950, &translationOffset);
@@ -508,7 +508,7 @@ void initScriptedCamera(ScriptedCameraState *camera) {
     pathIdx = camera->pathIndex;
     camera->tgtMode = sCameraPaths[pathIdx].tgtMode;
 
-    memcpy(camera, (u8 *)camera->posKeyframes + 4, 0xC);
+    memcpy(camera, (u8 *)camera->posKeyframes + 4, sizeof(Vec3i));
 
     camera->posFramesLeft = *(u16 *)camera->posKeyframes;
     if (camera->posFramesLeft == 0) {
@@ -517,7 +517,7 @@ void initScriptedCamera(ScriptedCameraState *camera) {
     }
 
     if (camera->tgtKeyframes != NULL) {
-        memcpy(&camera->targetX, (u8 *)camera->tgtKeyframes + 4, 0xC);
+        memcpy(&camera->targetX, (u8 *)camera->tgtKeyframes + 4, sizeof(Vec3i));
         camera->tgtFramesLeft = *(u16 *)camera->tgtKeyframes;
         if (camera->tgtFramesLeft == 0) {
             camera->tgtKeyframes = (CameraKeyframe *)((u8 *)camera->tgtKeyframes + 0x10);
@@ -547,7 +547,7 @@ void updateScriptedCamera(ScriptedCameraState *camera) {
 
     switch (camera->tgtMode) {
         case 0:
-            memcpy(&camera->targetX, &allocation->players->worldPos, 0xC);
+            memcpy(&camera->targetX, &allocation->players->worldPos, sizeof(Vec3i));
             camera->targetY += 0x200000;
             break;
         case 1:
@@ -561,11 +561,11 @@ void updateScriptedCamera(ScriptedCameraState *camera) {
             }
             break;
         case 2:
-            memcpy(&camera->targetX, &allocation->players->unk1C04, 0xC);
+            memcpy(&camera->targetX, &allocation->players->unk1C04, sizeof(Vec3i));
             camera->targetY += 0x200000;
             break;
         case 3:
-            memcpy(&camera->targetX, &allocation->players->unk101C, 0xC);
+            memcpy(&camera->targetX, &allocation->players->unk101C, sizeof(Vec3i));
             camera->targetY += 0x200000;
             break;
     }

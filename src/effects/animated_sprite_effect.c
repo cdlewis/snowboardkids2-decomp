@@ -84,8 +84,8 @@ void cleanupSpriteEffectTask(SpriteEffectTask *task) {
 void scheduleSpriteEffectTask(void *startPos, void *endPos, Vec3i *velocity, s32 textureIndex) {
     SpriteEffectTask *task = (SpriteEffectTask *)scheduleTask(&initSpriteEffectTask, 0, 0, 0);
     if (task != NULL) {
-        memcpy(&task->sprite1.position, startPos, 0xC);
-        memcpy(&task->sprite2.position, endPos, 0xC);
+        memcpy(&task->sprite1.position, startPos, sizeof(Vec3i));
+        memcpy(&task->sprite2.position, endPos, sizeof(Vec3i));
         task->textureIndex = textureIndex;
         task->velocityX = velocity->x / 2;
         task->velocityY = velocity->y / 2;

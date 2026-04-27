@@ -256,7 +256,7 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     arg0->velocity.x = arg0->unk434.x - arg0->prevWorldPosX;
     arg0->velocity.y = arg0->unk434.y - arg0->prevWorldPosY;
     arg0->velocity.z = arg0->unk434.z - arg0->prevWorldPosZ;
-    memcpy(&arg0->prevWorldPosX, &arg0->unk434, 0xC);
+    memcpy(&arg0->prevWorldPosX, &arg0->unk434, sizeof(Vec3i));
 
     if (arg0->sectorIndex < 0x16) {
         arg0->maxSpeedCap = 0x180000;
@@ -672,7 +672,7 @@ void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
     u16 newSectorIndex;
 
     gameState = getCurrentAllocation();
-    memcpy(&arg0->unk970.translation.x, &arg0->unk434, 0xC);
+    memcpy(&arg0->unk970.translation.x, &arg0->unk434, sizeof(Vec3i));
     gameData = &gameState->gameData;
     newSectorIndex = getOrUpdatePlayerSectorIndex(arg0, gameData, arg0->sectorIndex, &arg0->unk434);
     arg0->sectorIndex = newSectorIndex;
