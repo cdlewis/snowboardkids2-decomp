@@ -269,15 +269,6 @@ typedef struct {
 } RaceProgressIndicatorAllocation;
 
 typedef struct {
-    u8 pad0[0xB88];
-    s32 playerStateFlags;
-    u8 padB8C[0xC];
-    s16 raceProgress;
-    u8 padB9A[0x35];
-    u8 activeEffectCount;
-} RaceProgressPlayerData;
-
-typedef struct {
     s16 x;
     s16 y;
     u8 pad4[0x4];
@@ -998,7 +989,7 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
     RaceProgressIndicatorAllocation *allocation;
     s32 i;
     u8 playerIndex;
-    RaceProgressPlayerData *playerData;
+    Player *playerData;
     RaceProgressIndicatorElement *elem;
     s32 targetPosition;
     s32 delta;
@@ -1014,7 +1005,7 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
     if (playerCount > 0) {
         do {
             playerIndex = allocation->playerIndices[i];
-            playerData = (RaceProgressPlayerData *)((u8 *)allocation->players + playerIndex * 0xBE8);
+            playerData = (Player *)((u8 *)allocation->players + playerIndex * 0xBE8);
 
             targetPosition = (0x2000 - playerData->raceProgress) * 0x8C;
             elem = &state->elements[playerIndex];
@@ -1038,7 +1029,7 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
 
             switch (flashState) {
                 case 0:
-                    if (playerData->playerStateFlags & 0x10) {
+                    if (playerData->behaviorFlags & 0x10) {
                         elem->flashState = flashState + 1;
                         case 1:
                             elem->flashCounter++;
@@ -1048,7 +1039,7 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
                     }
                     break;
                 case 2:
-                    if (!(playerData->playerStateFlags & 0x10)) {
+                    if (!(playerData->behaviorFlags & 0x10)) {
                         elem->flashState = flashState + 1;
                         case 3:
                             elem->flashCounter--;
@@ -1062,7 +1053,7 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
             elem->y = (u16)elem->positionOffset + state->baseY - 4;
             elem->spriteFrame = (s8)elem->flashCounter;
 
-            if (playerData->activeEffectCount != 0) {
+            if (playerData->slowdownLevel != 0) {
                 elem->hasActiveEffect = 1;
             } else {
                 elem->hasActiveEffect = 0;

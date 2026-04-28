@@ -789,8 +789,8 @@ void updateRacePlayer(Player *player) {
 
     diff = D_800BAA9C_AA94C[player->finishPosition] - player->speedHandicap;
     refPlayerProgress = (gameState->finalLapNumber - gameState->players[gameState->PAD_6B_2[0]].currentLap) * 8192 +
-                        gameState->players[gameState->PAD_6B_2[0]].unkB98;
-    myProgress = (gameState->finalLapNumber - player->currentLap) * 8192 + player->unkB98;
+                        gameState->players[gameState->PAD_6B_2[0]].raceProgress;
+    myProgress = (gameState->finalLapNumber - player->currentLap) * 8192 + player->raceProgress;
 
     if ((myProgress - refPlayerProgress) >= 0x3A9) {
         diff += 0x8000;
@@ -799,8 +799,8 @@ void updateRacePlayer(Player *player) {
     player->animFlags &= 0xFEFFFFFF;
     if ((player->finishPosition == (gameState->numPlayers - 1)) && (player->finishPosition != 0)) {
         s32 idx = gameState->PAD_6B_2[player->finishPosition - 1];
-        refPlayerProgress =
-            (gameState->finalLapNumber - gameState->players[idx].currentLap) * 8192 + gameState->players[idx].unkB98;
+        refPlayerProgress = (gameState->finalLapNumber - gameState->players[idx].currentLap) * 8192 +
+                            gameState->players[idx].raceProgress;
         if ((myProgress - refPlayerProgress) >= 0x751) {
             player->animFlags |= 0x01000000;
         }
@@ -1325,7 +1325,7 @@ s32 shouldInitiateSharpTurn(Player *player, s32 steeringValue) {
     if (player->inputDisabled != 0) {
         goto end;
     }
-    if (player->unkB98 == 0) {
+    if (player->raceProgress == 0) {
         goto end;
     }
     if (player->unkBC2 != 0) {
@@ -1631,7 +1631,7 @@ s32 beginPostTrickLaunchStep(Player *player) {
 
     if (player->inputDisabled != 0) {
         if (player->unkBDC == 0) {
-            if (player->unkB98 != 0) {
+            if (player->raceProgress != 0) {
                 launchMagnitudePtr = &D_800BAB44_AA9F4;
                 *launchMagnitudePtr = *launchMagnitudePtr * 2;
             }

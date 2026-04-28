@@ -199,7 +199,7 @@ typedef struct {
     s32 unkB90;
     u16 sectorIndex;
     u8 paddingB96[0x2];
-    s16 unkB98;
+    s16 raceProgress;
     s16 boostTimer;
     s16 unkB9C;
     u16 squashStretchScale;

@@ -211,7 +211,7 @@ typedef struct {
     s32 unkB90;
     u16 sectorIndex;
     u8 _padB96[0x2];
-    s16 unkB98;
+    s16 raceProgress;
     s16 boostTimer;
     s16 shortcutLapCount;
     u16 squashStretchScale;
