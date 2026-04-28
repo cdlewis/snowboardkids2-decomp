@@ -2227,7 +2227,7 @@ segments:
     vram: 0
     start: 0x3F6670
 
-  - name: font_race_timer
+  - name: digit_sprite
     type: bin
     vram: 0
     start: 0x3F6950
