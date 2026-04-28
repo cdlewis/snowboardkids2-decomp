@@ -2496,20 +2496,18 @@ void spawnShotCrossSkillMeterDisplayTask(s16 arg0) {
 void initCrossRaceBadgeTask(CrossRaceBadgeState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
-    // unk7A contains the race type:
-    // 4 = SPEED_CROSS, 5 = SHOT_CROSS, 6 = X_CROSS
     switch (allocation->raceType) {
-        case 4: // SPEED_CROSS
+        case RACE_TYPE_SPEED_CROSS:
             arg0->mainSpriteAsset = loadAsset_350140();
             arg0->mainSpriteFrame = 0;
             arg0->bgSpriteFrame = 1;
             break;
-        case 5: // SHOT_CROSS
+        case RACE_TYPE_SHOOT_CROSS:
             arg0->mainSpriteAsset = loadAsset_34F9A0();
             arg0->mainSpriteFrame = 4;
             arg0->bgSpriteFrame = 5;
             break;
-        case 6: // X_CROSS
+        case RACE_TYPE_X_CROSS: // X_CROSS
             arg0->mainSpriteAsset = loadAsset_3505F0();
             arg0->mainSpriteFrame = 0;
             arg0->bgSpriteFrame = 1;

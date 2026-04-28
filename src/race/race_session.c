@@ -509,7 +509,7 @@ void initRace(void) {
                     raceState->lapCount = 0;
                     break;
                 case SNOWBOARD_STREET_SHOT_CROSS:
-                    raceState->raceType = RACE_TYPE_SHOT_CROSS;
+                    raceState->raceType = RACE_TYPE_SHOOT_CROSS;
                     raceState->humanPlayerCount = 1;
                     raceState->activePlayerCount = 1;
                     raceState->totalRacers = 1;
@@ -836,7 +836,7 @@ void initRace(void) {
             setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x3C, 0xA, 0x14, 0, 0);
             raceState->frameDelay = 0x3C;
             break;
-        case RACE_TYPE_SHOT_CROSS:
+        case RACE_TYPE_SHOOT_CROSS:
             setupTaskSchedulerNodes(0x50, 0x1E, 0x50, 0x28, 0x1E, 0, 0, 0);
             break;
     }
