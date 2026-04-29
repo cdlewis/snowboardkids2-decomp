@@ -220,7 +220,7 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
 
     i = 0;
     do {
-        debugEnqueueCallback(8, 0, renderScaledShadedSpriteFrame, &state->sprites[i]);
+        enqueueCallbackBySlotIndex(8, 0, renderScaledShadedSpriteFrame, &state->sprites[i]);
         i++;
     } while (i < 2);
 }
@@ -257,7 +257,7 @@ void enqueuePlayerSelectSpritesRender(PlayerSelectSpriteTask *arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback(8, 0, renderTextSprite, &arg0[i]);
+        enqueueCallbackBySlotIndex(8, 0, renderTextSprite, &arg0[i]);
     }
 }
 
@@ -288,7 +288,7 @@ void updatePlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
         arg0->x = -96;
         arg0->frameIndex = 6;
     }
-    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
 }
 
 void cleanupPlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
@@ -312,7 +312,7 @@ void updatePlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
     arg0->y = D_800B09B8_1DC098[allocation->unk1E2.val * 2 + 1];
     arg0->frameIndex = allocation->unk1E2.val + 2;
 
-    debugEnqueueCallback(8, 7, renderSpriteFrame, arg0);
+    enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, arg0);
 }
 
 void cleanupPlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
@@ -335,7 +335,7 @@ void updateCharacterReadyIndicator(void *arg0) {
     GameState *allocation = getCurrentAllocation();
 
     if (allocation->unk1E6 == 2) {
-        debugEnqueueCallback(8, 7, renderSpriteFrame, arg0);
+        enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, arg0);
     }
 }
 

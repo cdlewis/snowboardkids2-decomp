@@ -30,7 +30,7 @@ typedef struct {
     u8 defaultLight2R;
     u8 defaultLight2G;
     u8 defaultLight2B;
-} gActiveViewport_arg;
+} ActiveViewportOverlay;
 
 typedef struct {
     /* 0x00 */ s32 vertices;
@@ -79,8 +79,8 @@ typedef struct {
 } FontSystemInitData;
 
 extern s32 gLookAtPtr;
-extern gActiveViewport_arg *gActiveViewport;
-extern Gfx *gRegionAllocPtr;
+extern ActiveViewportOverlay *gActiveViewport;
+extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 extern void *D_800A2D40_A3940;
 extern void *D_800A2D44_A3944;
@@ -771,37 +771,37 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
             &upZ
         );
         guLookAtReflect(&tempMatrix, lookAt, 0.0f, 0.0f, 0.0f, lookAtX, lookAtY, lookAtZ, upX, upY, upZ);
-        gSPLookAt(gRegionAllocPtr++, lookAt);
+        gSPLookAt(gDisplayListAllocPtr++, lookAt);
     }
 
     if (gGraphicsMode != 3) {
-        gDPPipeSync(gRegionAllocPtr++);
-        gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
 
         gGraphicsMode = 3;
 
         if (obj->segment1 != 0) {
-            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
+            gSPSegment(gDisplayListAllocPtr++, 1, obj->segment1);
         }
 
         if (obj->segment2 != 0) {
-            gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
+            gSPSegment(gDisplayListAllocPtr++, 2, obj->segment2);
         }
 
         if (obj->segment3 != 0) {
-            gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
+            gSPSegment(gDisplayListAllocPtr++, 3, obj->segment3);
         }
     } else {
         if (obj->segment1 != 0 && obj->segment1 != D_800A2D40_A3940) {
-            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
+            gSPSegment(gDisplayListAllocPtr++, 1, obj->segment1);
         }
 
         if (obj->segment2 != 0 && obj->segment2 != D_800A2D44_A3944) {
-            gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
+            gSPSegment(gDisplayListAllocPtr++, 2, obj->segment2);
         }
 
         if (obj->segment3 != 0 && obj->segment3 != D_800A2D48_A3948) {
-            gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
+            gSPSegment(gDisplayListAllocPtr++, 3, obj->segment3);
         }
     }
 
@@ -809,37 +809,37 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
     D_800A2D44_A3944 = obj->segment2;
     D_800A2D48_A3948 = obj->segment3;
 
-    gSPMatrix(gRegionAllocPtr++, obj->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(gDisplayListAllocPtr++, obj->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
 void renderOpaqueDisplayList(DisplayListObject *arg0) {
     prepareDisplayListRenderState(arg0);
-    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
+    gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->opaqueDisplayList);
 }
 
 void renderTransparentDisplayList(DisplayListObject *arg0) {
     prepareDisplayListRenderState(arg0);
-    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
+    gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->transparentDisplayList);
 }
 
 void renderOverlayDisplayList(DisplayListObject *arg0) {
     prepareDisplayListRenderState(arg0);
-    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
+    gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->overlayDisplayList);
 }
 
 void enqueueDisplayListObjectWithFullRenderState(s32 arg0, void *arg1) {
     ((DisplayListObject *)arg1)->transformMatrix = 0;
 
     if (((DisplayListObject *)arg1)->displayLists->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 1, renderOpaqueDisplayList, arg1);
+        enqueueCallbackBySlotIndex(arg0, 1, renderOpaqueDisplayList, arg1);
     }
 
     if (((DisplayListObject *)arg1)->displayLists->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 3, renderTransparentDisplayList, arg1);
+        enqueueCallbackBySlotIndex(arg0, 3, renderTransparentDisplayList, arg1);
     }
 
     if (((DisplayListObject *)arg1)->displayLists->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 5, renderOverlayDisplayList, arg1);
+        enqueueCallbackBySlotIndex(arg0, 5, renderOverlayDisplayList, arg1);
     }
 }
 
@@ -878,25 +878,25 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
             &sp84
         );
         guLookAtReflect(&sp30, temp_v0, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
-        gSPLookAt(gRegionAllocPtr++, temp_v0);
+        gSPLookAt(gDisplayListAllocPtr++, temp_v0);
     }
 
     if (gGraphicsMode != 3) {
-        gDPPipeSync(gRegionAllocPtr++);
-        gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
 
         gGraphicsMode = 3;
 
         if (arg0->segment1 != 0) {
-            gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
+            gSPSegment(gDisplayListAllocPtr++, 1, arg0->segment1);
         }
 
         if (arg0->segment2 != 0) {
-            gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
+            gSPSegment(gDisplayListAllocPtr++, 2, arg0->segment2);
         }
 
         if (arg0->segment3 != 0) {
-            gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
+            gSPSegment(gDisplayListAllocPtr++, 3, arg0->segment3);
         }
 
         D_800A2D40_A3940 = arg0->segment1;
@@ -905,68 +905,68 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
     } else {
         if (arg0->segment1 != D_800A2D40_A3940) {
             if (arg0->segment1 != 0) {
-                gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
+                gSPSegment(gDisplayListAllocPtr++, 1, arg0->segment1);
             }
             D_800A2D40_A3940 = arg0->segment1;
         }
 
         if (arg0->segment2 != D_800A2D44_A3944) {
             if (arg0->segment2 != 0) {
-                gSPSegment(gRegionAllocPtr++, 2, arg0->segment2);
+                gSPSegment(gDisplayListAllocPtr++, 2, arg0->segment2);
             }
             D_800A2D44_A3944 = arg0->segment2;
         }
 
         if (arg0->segment3 != D_800A2D48_A3948) {
             if (arg0->segment3 != 0) {
-                gSPSegment(gRegionAllocPtr++, 3, arg0->segment3);
+                gSPSegment(gDisplayListAllocPtr++, 3, arg0->segment3);
             }
             D_800A2D48_A3948 = arg0->segment3;
         }
     }
 
-    gSPMatrix(gRegionAllocPtr++, arg0->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(gDisplayListAllocPtr++, arg0->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
 void renderOpaqueDisplayListCallback(DisplayListObject *obj) {
     setupDisplayListMatrix(obj);
-    gSPDisplayList(gRegionAllocPtr++, obj->displayLists->opaqueDisplayList);
+    gSPDisplayList(gDisplayListAllocPtr++, obj->displayLists->opaqueDisplayList);
 }
 
 void renderTransparentDisplayListCallback(DisplayListObject *obj) {
     setupDisplayListMatrix(obj);
-    gSPDisplayList(gRegionAllocPtr++, obj->displayLists->transparentDisplayList);
+    gSPDisplayList(gDisplayListAllocPtr++, obj->displayLists->transparentDisplayList);
 }
 
 void renderOverlayDisplayListCallback(DisplayListObject *obj) {
     setupDisplayListMatrix(obj);
-    gSPDisplayList(gRegionAllocPtr++, obj->displayLists->overlayDisplayList);
+    gSPDisplayList(gDisplayListAllocPtr++, obj->displayLists->overlayDisplayList);
 }
 
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1) {
     arg1->transformMatrix = 0;
     if (arg1->displayLists->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 1, renderOpaqueDisplayListCallback, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 1, renderOpaqueDisplayListCallback, arg1);
     }
     if (arg1->displayLists->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 3, renderTransparentDisplayListCallback, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 3, renderTransparentDisplayListCallback, arg1);
     }
     if (arg1->displayLists->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 5, renderOverlayDisplayListCallback, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 5, renderOverlayDisplayListCallback, arg1);
     }
 }
 
 void renderOpaqueDisplayListWithFrustumCull(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
+        gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->opaqueDisplayList);
     }
 }
 
 void renderTransparentDisplayListWithFrustumCull(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
+        gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->transparentDisplayList);
     }
 }
 
@@ -975,20 +975,20 @@ void renderOverlayDisplayListWithFrustumCull(DisplayListObject *arg0) {
 
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
+        gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->overlayDisplayList);
     }
 }
 
 void enqueueDisplayListWithFrustumCull(s32 arg0, DisplayListObject *arg1) {
     arg1->transformMatrix = 0;
     if (arg1->displayLists->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 1, &renderOpaqueDisplayListWithFrustumCull, arg1);
+        enqueueCallbackBySlotIndex(arg0, 1, &renderOpaqueDisplayListWithFrustumCull, arg1);
     }
     if (arg1->displayLists->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 3, &renderTransparentDisplayListWithFrustumCull, arg1);
+        enqueueCallbackBySlotIndex(arg0, 3, &renderTransparentDisplayListWithFrustumCull, arg1);
     }
     if (arg1->displayLists->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 5, &renderOverlayDisplayListWithFrustumCull, arg1);
+        enqueueCallbackBySlotIndex(arg0, 5, &renderOverlayDisplayListWithFrustumCull, arg1);
     }
 }
 
@@ -996,11 +996,11 @@ void buildDisplayListSegment(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
 
-        gDPPipeSync(gRegionAllocPtr++);
+        gDPPipeSync(gDisplayListAllocPtr++);
 
-        gDPSetColor(gRegionAllocPtr++, 0xFB, arg0->envColorAlpha | ~0xFF);
+        gDPSetColor(gDisplayListAllocPtr++, 0xFB, arg0->envColorAlpha | ~0xFF);
 
-        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
+        gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->opaqueDisplayList);
     }
 }
 
@@ -1010,16 +1010,16 @@ void buildTransparentDisplayListSegment(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupDisplayListMatrix(arg0);
 
-        dl = gRegionAllocPtr;
-        gRegionAllocPtr += 1;
+        dl = gDisplayListAllocPtr;
+        gDisplayListAllocPtr += 1;
         dl->words.w0 = 0xE7000000;
         dl->words.w1 = 0;
 
-        gRegionAllocPtr += 1;
+        gDisplayListAllocPtr += 1;
         dl[1].words.w0 = 0xFB000000;
         dl[1].words.w1 = arg0->envColorAlpha | 0xFFFFFF00;
 
-        gRegionAllocPtr += 1;
+        gDisplayListAllocPtr += 1;
         dl[2].words.w0 = 0xDE000000;
         dl[2].words.w1 = (u32)arg0->displayLists->transparentDisplayList;
     }
@@ -1029,22 +1029,22 @@ void buildOverlayDisplayListSegment(DisplayListObject *obj) {
     if (!isObjectCulled(&obj->transform.translation)) {
         setupDisplayListMatrix(obj);
 
-        gDPPipeSync(gRegionAllocPtr++);
-        gDPSetColor(gRegionAllocPtr++, 0xFB, obj->envColorAlpha | ~0xFF);
-        gSPDisplayList(gRegionAllocPtr++, obj->displayLists->overlayDisplayList);
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetColor(gDisplayListAllocPtr++, 0xFB, obj->envColorAlpha | ~0xFF);
+        gSPDisplayList(gDisplayListAllocPtr++, obj->displayLists->overlayDisplayList);
     }
 }
 
 void enqueueDisplayListObjectWithSegments(s32 arg0, DisplayListObject *arg1) {
     arg1->transformMatrix = 0;
     if (arg1->displayLists->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 1, &buildDisplayListSegment, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 1, &buildDisplayListSegment, arg1);
     }
     if (arg1->displayLists->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 3, &buildTransparentDisplayListSegment, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 3, &buildTransparentDisplayListSegment, arg1);
     }
     if (arg1->displayLists->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 5, &buildOverlayDisplayListSegment, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 5, &buildOverlayDisplayListSegment, arg1);
     }
 }
 
@@ -1134,25 +1134,25 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
             &upZ
         );
         guLookAtReflect(&lookAtMatrix, lookAt, 0.0f, 0.0f, 0.0f, eyeX, eyeY, eyeZ, upX, upY, upZ);
-        gSPLookAt(gRegionAllocPtr++, lookAt);
+        gSPLookAt(gDisplayListAllocPtr++, lookAt);
     }
 
     if (gGraphicsMode != 3) {
-        gDPPipeSync(gRegionAllocPtr++);
-        gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
 
         gGraphicsMode = 3;
 
         if (obj->segment1 != NULL) {
-            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
+            gSPSegment(gDisplayListAllocPtr++, 1, obj->segment1);
         }
 
         if (obj->segment2 != NULL) {
-            gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
+            gSPSegment(gDisplayListAllocPtr++, 2, obj->segment2);
         }
 
         if (obj->segment3 != NULL) {
-            gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
+            gSPSegment(gDisplayListAllocPtr++, 3, obj->segment3);
         }
 
         D_800A2D40_A3940 = obj->segment1;
@@ -1161,51 +1161,51 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
     } else {
         if (obj->segment1 != D_800A2D40_A3940) {
             if (obj->segment1 != NULL) {
-                gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
+                gSPSegment(gDisplayListAllocPtr++, 1, obj->segment1);
             }
             D_800A2D40_A3940 = obj->segment1;
         }
 
         if (obj->segment2 != D_800A2D44_A3944) {
             if (obj->segment2 != NULL) {
-                gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
+                gSPSegment(gDisplayListAllocPtr++, 2, obj->segment2);
             }
             D_800A2D44_A3944 = obj->segment2;
         }
 
         if (obj->segment3 != D_800A2D48_A3948) {
             if (obj->segment3 != NULL) {
-                gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
+                gSPSegment(gDisplayListAllocPtr++, 3, obj->segment3);
             }
             D_800A2D48_A3948 = obj->segment3;
         }
     }
 
-    gSPMatrix(gRegionAllocPtr++, obj->transformMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, obj->transformMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-    gSPMatrix(gRegionAllocPtr++, &obj->transformMatrix[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, &obj->transformMatrix[1], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 }
 
 void renderBillboardedOpaqueDisplayList(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupBillboardDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
+        gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->opaqueDisplayList);
     }
 }
 
 void renderBillboardedTransparentDisplayList(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupBillboardDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
+        gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->transparentDisplayList);
     }
 }
 
 void renderBillboardedOverlayDisplayList(DisplayListObject *arg0) {
     if (!isObjectCulled(&arg0->transform.translation)) {
         setupBillboardDisplayListMatrix(arg0);
-        gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
+        gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->overlayDisplayList);
     }
 }
 
@@ -1213,15 +1213,15 @@ void enqueueBillboardedDisplayListObject(s32 arg0, DisplayListObject *arg1) {
     arg1->transformMatrix = 0;
 
     if (arg1->displayLists->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 1, &renderBillboardedOpaqueDisplayList, arg1);
+        enqueueCallbackBySlotIndex(arg0, 1, &renderBillboardedOpaqueDisplayList, arg1);
     }
 
     if (arg1->displayLists->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 3, &renderBillboardedTransparentDisplayList, arg1);
+        enqueueCallbackBySlotIndex(arg0, 3, &renderBillboardedTransparentDisplayList, arg1);
     }
 
     if (arg1->displayLists->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 5, &renderBillboardedOverlayDisplayList, arg1);
+        enqueueCallbackBySlotIndex(arg0, 5, &renderBillboardedOverlayDisplayList, arg1);
     }
 }
 
@@ -1256,28 +1256,28 @@ void initializeMultiPartDisplayListObjects(DisplayListObject *arg0) {
         return;
     }
 
-    gDPPipeSync(gRegionAllocPtr++);
-    gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
+    gDPPipeSync(gDisplayListAllocPtr++);
+    gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
     segment1 = arg0->segment1;
     gGraphicsMode = 3;
 
     if (segment1 != NULL) {
-        gSPSegment(gRegionAllocPtr++, 1, arg0->segment1);
+        gSPSegment(gDisplayListAllocPtr++, 1, arg0->segment1);
     }
 
     if (arg0->segment2 != NULL) {
-        gfxCmd = gRegionAllocPtr;
+        gfxCmd = gDisplayListAllocPtr;
         gfxCmd->words.w0 = 0xDB060008;
         segmentValue = arg0->segment2;
-        gRegionAllocPtr = gfxCmd + 1;
+        gDisplayListAllocPtr = gfxCmd + 1;
         gfxCmd->words.w1 = (u32)segmentValue;
     }
 
     if (arg0->segment3 != 0) {
-        gfxCmd = gRegionAllocPtr;
+        gfxCmd = gDisplayListAllocPtr;
         gfxCmd->words.w0 = 0xDB06000C;
         segmentValue = arg0->segment3;
-        gRegionAllocPtr = gfxCmd + 1;
+        gDisplayListAllocPtr = gfxCmd + 1;
         gfxCmd->words.w1 = (u32)segmentValue;
     }
 
@@ -1320,13 +1320,13 @@ void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
         );
         guLookAtReflect(&sp30, lookat, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
 
-        gSPLookAt(gRegionAllocPtr++, lookat);
+        gSPLookAt(gDisplayListAllocPtr++, lookat);
     }
 
     temp = obj->segment1;
     if (temp != D_800A2D40_A3940) {
         if (temp != NULL) {
-            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
+            gSPSegment(gDisplayListAllocPtr++, 1, obj->segment1);
         }
         D_800A2D40_A3940 = obj->segment1;
     }
@@ -1335,7 +1335,7 @@ void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
     temp = elem->segment2;
     if (temp != D_800A2D44_A3944) {
         if (temp != NULL) {
-            gSPSegment(gRegionAllocPtr++, 2, elem->segment2);
+            gSPSegment(gDisplayListAllocPtr++, 2, elem->segment2);
         }
         D_800A2D44_A3944 = elem->segment2;
     }
@@ -1344,12 +1344,12 @@ void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
     temp = elem->segment3;
     if (temp != D_800A2D48_A3948) {
         if (temp != NULL) {
-            gSPSegment(gRegionAllocPtr++, 3, elem->segment3);
+            gSPSegment(gDisplayListAllocPtr++, 3, elem->segment3);
         }
         D_800A2D48_A3948 = elem->segment3;
     }
 
-    gSPMatrix(gRegionAllocPtr++, (arg1 + arg0)->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(gDisplayListAllocPtr++, (arg1 + arg0)->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
 void renderMultiPartOpaqueDisplayLists(DisplayListObject *displayObjects) {
@@ -1364,10 +1364,10 @@ void renderMultiPartOpaqueDisplayLists(DisplayListObject *displayObjects) {
         currentObject = &displayObjects[i];
         if (currentObject->displayLists->opaqueDisplayList != NULL) {
             setupMultiPartObjectRenderState(displayObjects, i);
-            displayListCmd = gRegionAllocPtr;
+            displayListCmd = gDisplayListAllocPtr;
             displayListCmd->words.w0 = 0xDE000000;
             displayListCmd->words.w1 = (u32)currentObject->displayLists->opaqueDisplayList;
-            gRegionAllocPtr = displayListCmd + 1;
+            gDisplayListAllocPtr = displayListCmd + 1;
         }
     }
 }
@@ -1388,10 +1388,10 @@ void renderMultiPartTransparentDisplayLists(DisplayListObject *displayObjects) {
         do {
             if (currentObject[i].displayLists->transparentDisplayList != NULL) {
                 setupMultiPartObjectRenderState(displayObjects, i);
-                displayListCmd = gRegionAllocPtr;
+                displayListCmd = gDisplayListAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
                 displayListCmd->words.w1 = (u32)currentObject[i].displayLists->transparentDisplayList;
-                gRegionAllocPtr = displayListCmd + 1;
+                gDisplayListAllocPtr = displayListCmd + 1;
             }
             i++;
             objectCount = displayObjects->numParts;
@@ -1415,10 +1415,10 @@ void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects) {
         do {
             if (currentObject[i].displayLists->overlayDisplayList != NULL) {
                 setupMultiPartObjectRenderState(displayObjects, i);
-                displayListCmd = gRegionAllocPtr;
+                displayListCmd = gDisplayListAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
                 displayListCmd->words.w1 = (u32)currentObject[i].displayLists->overlayDisplayList;
-                gRegionAllocPtr = displayListCmd + 1;
+                gDisplayListAllocPtr = displayListCmd + 1;
             }
             i++;
             objectCount = displayObjects->numParts;
@@ -1458,14 +1458,14 @@ void enqueuePreLitMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg
     }
 
     if (renderFlags & 1) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 1, &renderMultiPartOpaqueDisplayLists, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 1, &renderMultiPartOpaqueDisplayLists, arg1);
     }
     new_var = arg1;
     if (renderFlags & 2) {
-        debugEnqueueCallback((arg0 & 0xFFFF) ^ 0, 3, &renderMultiPartTransparentDisplayLists, new_var);
+        enqueueCallbackBySlotIndex((arg0 & 0xFFFF) ^ 0, 3, &renderMultiPartTransparentDisplayLists, new_var);
     }
     if (renderFlags & 4) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 5, &renderMultiPartOverlayDisplayLists, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 5, &renderMultiPartOverlayDisplayLists, arg1);
     }
 }
 
@@ -1504,37 +1504,37 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *obj) {
             &sp84
         );
         guLookAtReflect(&sp30, lookat, 0.0f, 0.0f, 0.0f, sp70, sp74, sp78, sp7C, sp80, sp84);
-        gSPLookAt(gRegionAllocPtr++, lookat);
+        gSPLookAt(gDisplayListAllocPtr++, lookat);
     }
 
     if (gGraphicsMode != 3) {
-        gDPPipeSync(gRegionAllocPtr++);
-        gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
 
         gGraphicsMode = 3;
 
         if (obj->segment1 != 0) {
-            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
+            gSPSegment(gDisplayListAllocPtr++, 1, obj->segment1);
         }
 
         if (obj->segment2 != 0) {
-            gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
+            gSPSegment(gDisplayListAllocPtr++, 2, obj->segment2);
         }
 
         if (obj->segment3 != 0) {
-            gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
+            gSPSegment(gDisplayListAllocPtr++, 3, obj->segment3);
         }
     } else {
         if (obj->segment1 != 0 && obj->segment1 != D_800A2D40_A3940) {
-            gSPSegment(gRegionAllocPtr++, 1, obj->segment1);
+            gSPSegment(gDisplayListAllocPtr++, 1, obj->segment1);
         }
 
         if (obj->segment2 != 0 && obj->segment2 != D_800A2D44_A3944) {
-            gSPSegment(gRegionAllocPtr++, 2, obj->segment2);
+            gSPSegment(gDisplayListAllocPtr++, 2, obj->segment2);
         }
 
         if (obj->segment3 != 0 && obj->segment3 != D_800A2D48_A3948) {
-            gSPSegment(gRegionAllocPtr++, 3, obj->segment3);
+            gSPSegment(gDisplayListAllocPtr++, 3, obj->segment3);
         }
     }
 
@@ -1542,25 +1542,25 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *obj) {
     D_800A2D44_A3944 = obj->segment2;
     D_800A2D48_A3948 = obj->segment3;
 
-    gSPLightColor(gRegionAllocPtr++, LIGHT_1, obj->light1R << 24 | obj->light1G << 16 | obj->light1B << 8);
-    gSPLightColor(gRegionAllocPtr++, LIGHT_2, obj->light2R << 24 | obj->light2G << 16 | obj->light2B << 8);
-    gSPMatrix(gRegionAllocPtr++, obj->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPLightColor(gDisplayListAllocPtr++, LIGHT_1, obj->light1R << 24 | obj->light1G << 16 | obj->light1B << 8);
+    gSPLightColor(gDisplayListAllocPtr++, LIGHT_2, obj->light2R << 24 | obj->light2G << 16 | obj->light2B << 8);
+    gSPMatrix(gDisplayListAllocPtr++, obj->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 }
 
 void renderOpaqueDisplayListWithLights(DisplayListObject *arg0) {
     prepareDisplayListRenderStateWithLights(arg0);
 
-    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->opaqueDisplayList);
+    gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->opaqueDisplayList);
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_1,
         gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
             gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_2,
         gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
             gActiveViewport->defaultLight2B << 8
@@ -1570,17 +1570,17 @@ void renderOpaqueDisplayListWithLights(DisplayListObject *arg0) {
 void renderTransparentDisplayListWithLights(DisplayListObject *arg0) {
     prepareDisplayListRenderStateWithLights(arg0);
 
-    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->transparentDisplayList);
+    gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->transparentDisplayList);
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_1,
         gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
             gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_2,
         gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
             gActiveViewport->defaultLight2B << 8
@@ -1590,17 +1590,17 @@ void renderTransparentDisplayListWithLights(DisplayListObject *arg0) {
 void renderOverlayDisplayListWithLights(DisplayListObject *arg0) {
     prepareDisplayListRenderStateWithLights(arg0);
 
-    gSPDisplayList(gRegionAllocPtr++, arg0->displayLists->overlayDisplayList);
+    gSPDisplayList(gDisplayListAllocPtr++, arg0->displayLists->overlayDisplayList);
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_1,
         gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
             gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_2,
         gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
             gActiveViewport->defaultLight2B << 8
@@ -1611,15 +1611,15 @@ void enqueueDisplayListObjectWithLights(s32 arg0, DisplayListObject *arg1) {
     arg1->transformMatrix = 0;
 
     if (arg1->displayLists->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 1, &renderOpaqueDisplayListWithLights, arg1);
+        enqueueCallbackBySlotIndex(arg0, 1, &renderOpaqueDisplayListWithLights, arg1);
     }
 
     if (arg1->displayLists->transparentDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 3, &renderTransparentDisplayListWithLights, arg1);
+        enqueueCallbackBySlotIndex(arg0, 3, &renderTransparentDisplayListWithLights, arg1);
     }
 
     if (arg1->displayLists->overlayDisplayList != NULL) {
-        debugEnqueueCallback(arg0, 5, &renderOverlayDisplayListWithLights, arg1);
+        enqueueCallbackBySlotIndex(arg0, 5, &renderOverlayDisplayListWithLights, arg1);
     }
 }
 
@@ -1633,13 +1633,13 @@ void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjec
     initializeMultiPartDisplayListObjects(displayObjects);
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_1,
         displayObjects->light1R << 0x18 | displayObjects->light1G << 0x10 | displayObjects->light1B << 8
     );
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_2,
         displayObjects->light2R << 0x18 | displayObjects->light2G << 0x10 | displayObjects->light2B << 8
     );
@@ -1651,24 +1651,24 @@ void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjec
         do {
             if (currentObject[i].displayLists->opaqueDisplayList != NULL) {
                 setupMultiPartObjectRenderState(displayObjects, i);
-                displayListCmd = gRegionAllocPtr;
+                displayListCmd = gDisplayListAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
                 displayListCmd->words.w1 = (u32)currentObject[i].displayLists->opaqueDisplayList;
-                gRegionAllocPtr = displayListCmd + 1;
+                gDisplayListAllocPtr = displayListCmd + 1;
             }
             i += 1;
         } while (i < (s32)displayObjects->numParts);
     }
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_1,
         gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
             gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_2,
         gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
             gActiveViewport->defaultLight2B << 8
@@ -1685,13 +1685,13 @@ void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *display
     initializeMultiPartDisplayListObjects(displayObjects);
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_1,
         displayObjects->light1R << 0x18 | displayObjects->light1G << 0x10 | displayObjects->light1B << 8
     );
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_2,
         displayObjects->light2R << 0x18 | displayObjects->light2G << 0x10 | displayObjects->light2B << 8
     );
@@ -1703,24 +1703,24 @@ void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *display
         do {
             if (currentObject[i].displayLists->transparentDisplayList != NULL) {
                 setupMultiPartObjectRenderState(displayObjects, i);
-                displayListCmd = gRegionAllocPtr;
+                displayListCmd = gDisplayListAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
                 displayListCmd->words.w1 = (u32)currentObject[i].displayLists->transparentDisplayList;
-                gRegionAllocPtr = displayListCmd + 1;
+                gDisplayListAllocPtr = displayListCmd + 1;
             }
             i += 1;
         } while (i < (s32)displayObjects->numParts);
     }
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_1,
         gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
             gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_2,
         gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
             gActiveViewport->defaultLight2B << 8
@@ -1737,13 +1737,13 @@ void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObje
     initializeMultiPartDisplayListObjects(displayObjects);
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_1,
         displayObjects->light1R << 0x18 | displayObjects->light1G << 0x10 | displayObjects->light1B << 8
     );
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_2,
         displayObjects->light2R << 0x18 | displayObjects->light2G << 0x10 | displayObjects->light2B << 8
     );
@@ -1755,24 +1755,24 @@ void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObje
         do {
             if (currentObject[i].displayLists->overlayDisplayList != NULL) {
                 setupMultiPartObjectRenderState(displayObjects, i);
-                displayListCmd = gRegionAllocPtr;
+                displayListCmd = gDisplayListAllocPtr;
                 displayListCmd->words.w0 = 0xDE000000;
                 displayListCmd->words.w1 = (u32)currentObject[i].displayLists->overlayDisplayList;
-                gRegionAllocPtr = displayListCmd + 1;
+                gDisplayListAllocPtr = displayListCmd + 1;
             }
             i += 1;
         } while (i < (s32)displayObjects->numParts);
     }
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_1,
         gActiveViewport->defaultLight1R << 0x18 | gActiveViewport->defaultLight1G << 0x10 |
             gActiveViewport->defaultLight1B << 8
     );
 
     gSPLightColor(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         LIGHT_2,
         gActiveViewport->defaultLight2R << 0x18 | gActiveViewport->defaultLight2G << 0x10 |
             gActiveViewport->defaultLight2B << 8
@@ -1808,14 +1808,14 @@ void enqueueMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg
         } while (var_a1 < arg2);
     }
     if (var_s0 & 1) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 1, &renderMultiPartOpaqueDisplayListsWithLights, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 1, &renderMultiPartOpaqueDisplayListsWithLights, arg1);
     }
     new_var = arg1;
     if (var_s0 & 2) {
-        debugEnqueueCallback((arg0 & 0xFFFF) ^ 0, 3, &renderMultiPartTransparentDisplayListsWithLights, new_var);
+        enqueueCallbackBySlotIndex((arg0 & 0xFFFF) ^ 0, 3, &renderMultiPartTransparentDisplayListsWithLights, new_var);
     }
     if (var_s0 & 4) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 5, &renderMultiPartOverlayDisplayListsWithLights, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 5, &renderMultiPartOverlayDisplayListsWithLights, arg1);
     }
 }
 
@@ -1854,37 +1854,37 @@ void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
             &upZ
         );
         guLookAtReflect(&lookAtMatrix, lookAt, 0.0f, 0.0f, 0.0f, lookAtX, lookAtY, lookAtZ, upX, upY, upZ);
-        gSPLookAt(gRegionAllocPtr++, lookAt);
+        gSPLookAt(gDisplayListAllocPtr++, lookAt);
     }
 
     if (gGraphicsMode != 3) {
-        gDPPipeSync(gRegionAllocPtr++);
-        gDPSetTexturePersp(gRegionAllocPtr++, 0x80000);
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
 
         gGraphicsMode = 3;
 
         if (displayListObj->segment1 != 0) {
-            gSPSegment(gRegionAllocPtr++, 1, displayListObj->segment1);
+            gSPSegment(gDisplayListAllocPtr++, 1, displayListObj->segment1);
         }
 
         if (displayListObj->segment2 != 0) {
-            gSPSegment(gRegionAllocPtr++, 2, displayListObj->segment2);
+            gSPSegment(gDisplayListAllocPtr++, 2, displayListObj->segment2);
         }
 
         if (displayListObj->segment3 != 0) {
-            gSPSegment(gRegionAllocPtr++, 3, displayListObj->segment3);
+            gSPSegment(gDisplayListAllocPtr++, 3, displayListObj->segment3);
         }
     } else {
         if (displayListObj->segment1 != 0 && displayListObj->segment1 != D_800A2D40_A3940) {
-            gSPSegment(gRegionAllocPtr++, 1, displayListObj->segment1);
+            gSPSegment(gDisplayListAllocPtr++, 1, displayListObj->segment1);
         }
 
         if (displayListObj->segment2 != 0 && displayListObj->segment2 != D_800A2D44_A3944) {
-            gSPSegment(gRegionAllocPtr++, 2, displayListObj->segment2);
+            gSPSegment(gDisplayListAllocPtr++, 2, displayListObj->segment2);
         }
 
         if (displayListObj->segment3 != 0 && displayListObj->segment3 != D_800A2D48_A3948) {
-            gSPSegment(gRegionAllocPtr++, 3, displayListObj->segment3);
+            gSPSegment(gDisplayListAllocPtr++, 3, displayListObj->segment3);
         }
     }
 
@@ -1892,24 +1892,24 @@ void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
     D_800A2D44_A3944 = displayListObj->segment2;
     D_800A2D48_A3948 = displayListObj->segment3;
 
-    gSPMatrix(gRegionAllocPtr++, displayListObj->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(gDisplayListAllocPtr++, displayListObj->transformMatrix, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 
     if (displayListObj->displayLists->opaqueDisplayList != 0) {
-        gSPDisplayList(gRegionAllocPtr++, displayListObj->displayLists->opaqueDisplayList);
+        gSPDisplayList(gDisplayListAllocPtr++, displayListObj->displayLists->opaqueDisplayList);
     }
 
     if (displayListObj->displayLists->transparentDisplayList != 0) {
-        gSPDisplayList(gRegionAllocPtr++, displayListObj->displayLists->transparentDisplayList);
+        gSPDisplayList(gDisplayListAllocPtr++, displayListObj->displayLists->transparentDisplayList);
     }
 
     if (displayListObj->displayLists->overlayDisplayList != 0) {
-        gSPDisplayList(gRegionAllocPtr++, displayListObj->displayLists->overlayDisplayList);
+        gSPDisplayList(gDisplayListAllocPtr++, displayListObj->displayLists->overlayDisplayList);
     }
 }
 
 void enqueueCameraRelativeDisplayList(s32 arg0, DisplayListObject *arg1) {
     arg1->transformMatrix = 0;
-    debugEnqueueCallback(arg0 & 0xFFFF, 0, &renderCameraRelativeDisplayList, arg1);
+    enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 0, &renderCameraRelativeDisplayList, arg1);
 }
 
 void renderTexturedBillboardSprite(TexturedSpriteState *state) {
@@ -1935,10 +1935,10 @@ void renderTexturedBillboardSprite(TexturedSpriteState *state) {
     if (gGraphicsMode != 6) {
         gGraphicsMode = 6;
 
-        gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+        gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
 
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             state->textureData,
             G_IM_FMT_CI,
             state->width,
@@ -1952,14 +1952,14 @@ void renderTexturedBillboardSprite(TexturedSpriteState *state) {
             G_TX_NOLOD
         );
 
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, state->paletteData);
 
         D_800A2D4C_A394C = (u32)state->textureData;
         D_800A2D50_A3950 = (u32)state->paletteData;
     } else {
         if (D_800A2D4C_A394C != (u32)state->textureData) {
             gDPLoadTextureBlock_4b(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 state->textureData,
                 G_IM_FMT_CI,
                 state->width,
@@ -1977,21 +1977,21 @@ void renderTexturedBillboardSprite(TexturedSpriteState *state) {
         }
 
         if (D_800A2D50_A3950 != (u32)state->paletteData) {
-            gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+            gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, state->paletteData);
 
             D_800A2D50_A3950 = (u32)state->paletteData;
         }
     }
 
-    gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
-    gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+    gSPMatrix(gDisplayListAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPVertex(gDisplayListAllocPtr++, state->vertices, 4, 0);
+    gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
 void enqueueTexturedBillboardSprite(s32 arg0, TexturedBillboardSprite *arg1) {
     arg1->matrix = NULL;
-    debugEnqueueCallback(arg0 & 0xFFFF, 4, &renderTexturedBillboardSprite, arg1);
+    enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 4, &renderTexturedBillboardSprite, arg1);
 }
 
 void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
@@ -2016,10 +2016,10 @@ void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
     if (gGraphicsMode != 6) {
         gGraphicsMode = 6;
 
-        gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+        gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
 
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             state->textureData,
             G_IM_FMT_CI,
             state->width,
@@ -2033,14 +2033,14 @@ void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
             G_TX_NOLOD
         );
 
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, state->paletteData);
 
         D_800A2D4C_A394C = (u32)state->textureData;
         D_800A2D50_A3950 = (u32)state->paletteData;
     } else {
         if (D_800A2D4C_A394C != (u32)state->textureData) {
             gDPLoadTextureBlock_4b(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 state->textureData,
                 G_IM_FMT_CI,
                 state->width,
@@ -2058,21 +2058,21 @@ void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
         }
 
         if (D_800A2D50_A3950 != (u32)state->paletteData) {
-            gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+            gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, state->paletteData);
 
             D_800A2D50_A3950 = (u32)state->paletteData;
         }
     }
 
-    gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
-    gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+    gSPMatrix(gDisplayListAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPVertex(gDisplayListAllocPtr++, state->vertices, 4, 0);
+    gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
 void enqueueRotatedBillboardSprite(s32 arg0, MatrixEntry_202A0 *arg1) {
     arg1->unk30 = 0;
-    debugEnqueueCallback(arg0 & 0xFFFF, 4, &renderRotatedBillboardSprite, arg1);
+    enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 4, &renderRotatedBillboardSprite, arg1);
 }
 
 void renderTexturedBillboardSpriteTile(TexturedSpriteState *state) {
@@ -2098,10 +2098,10 @@ void renderTexturedBillboardSpriteTile(TexturedSpriteState *state) {
     if (gGraphicsMode != 6) {
         gGraphicsMode = 6;
 
-        gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+        gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
 
         gDPLoadTextureTile_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             state->textureData,
             G_IM_FMT_CI,
             state->width,
@@ -2119,14 +2119,14 @@ void renderTexturedBillboardSpriteTile(TexturedSpriteState *state) {
             G_TX_NOLOD
         );
 
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, state->paletteData);
 
         D_800A2D4C_A394C = (u32)state->textureData;
         D_800A2D50_A3950 = (u32)state->paletteData;
     } else {
         if (D_800A2D4C_A394C != (u32)state->textureData) {
             gDPLoadTextureTile_4b(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 state->textureData,
                 G_IM_FMT_CI,
                 state->width,
@@ -2148,21 +2148,21 @@ void renderTexturedBillboardSpriteTile(TexturedSpriteState *state) {
         }
 
         if (D_800A2D50_A3950 != (u32)state->paletteData) {
-            gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+            gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, state->paletteData);
 
             D_800A2D50_A3950 = (u32)state->paletteData;
         }
     }
 
-    gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
-    gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+    gSPMatrix(gDisplayListAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPVertex(gDisplayListAllocPtr++, state->vertices, 4, 0);
+    gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
 void enqueueTexturedBillboardSpriteTile(u16 arg0, TexturedBillboardSprite *arg1) {
     arg1->matrix = NULL;
-    debugEnqueueCallback(arg0 & 0xFFFF, 4, &renderTexturedBillboardSpriteTile, arg1);
+    enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 4, &renderTexturedBillboardSpriteTile, arg1);
 }
 
 void renderAlphaBillboardSprite(AlphaSpriteState *state) {
@@ -2188,10 +2188,10 @@ void renderAlphaBillboardSprite(AlphaSpriteState *state) {
     if (gGraphicsMode != 7) {
         gGraphicsMode = 7;
 
-        gSPDisplayList(gRegionAllocPtr++, gAlphaSpriteSetupDL);
+        gSPDisplayList(gDisplayListAllocPtr++, gAlphaSpriteSetupDL);
 
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             state->textureData,
             G_IM_FMT_CI,
             state->width,
@@ -2205,9 +2205,9 @@ void renderAlphaBillboardSprite(AlphaSpriteState *state) {
             G_TX_NOLOD
         );
 
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, state->paletteData);
 
-        gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
+        gDPSetEnvColor(gDisplayListAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
 
         D_800A2D4C_A394C = (u32)state->textureData;
         D_800A2D50_A3950 = (u32)state->paletteData;
@@ -2215,7 +2215,7 @@ void renderAlphaBillboardSprite(AlphaSpriteState *state) {
     } else {
         if (D_800A2D4C_A394C != (u32)state->textureData) {
             gDPLoadTextureBlock_4b(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 state->textureData,
                 G_IM_FMT_CI,
                 state->width,
@@ -2233,27 +2233,27 @@ void renderAlphaBillboardSprite(AlphaSpriteState *state) {
         }
 
         if (D_800A2D50_A3950 != (u32)state->paletteData) {
-            gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+            gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, state->paletteData);
 
             D_800A2D50_A3950 = (u32)state->paletteData;
         }
 
         if (state->alpha != D_800A2D54_A3954) {
-            gDPPipeSync(gRegionAllocPtr++);
-            gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
+            gDPPipeSync(gDisplayListAllocPtr++);
+            gDPSetEnvColor(gDisplayListAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
             D_800A2D54_A3954 = state->alpha;
         }
     }
 
-    gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
-    gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+    gSPMatrix(gDisplayListAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPVertex(gDisplayListAllocPtr++, state->vertices, 4, 0);
+    gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
 void enqueueAlphaBillboardSprite(s32 arg0, loadAssetMetadata_arg *arg1) {
     (arg1 + 1)->assetTemplate = 0;
-    debugEnqueueCallback(arg0 & 0xFFFF, 6, &renderAlphaBillboardSprite, arg1);
+    enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 6, &renderAlphaBillboardSprite, arg1);
 }
 
 void renderAlphaSprite(AlphaSpriteState *state) {
@@ -2281,10 +2281,10 @@ void renderAlphaSprite(AlphaSpriteState *state) {
     if (gGraphicsMode != 7) {
         gGraphicsMode = 7;
 
-        gSPDisplayList(gRegionAllocPtr++, gAlphaSpriteSetupDL);
+        gSPDisplayList(gDisplayListAllocPtr++, gAlphaSpriteSetupDL);
 
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             state->textureData,
             G_IM_FMT_CI,
             state->width,
@@ -2298,9 +2298,9 @@ void renderAlphaSprite(AlphaSpriteState *state) {
             G_TX_NOLOD
         );
 
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, state->paletteData);
 
-        gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
+        gDPSetEnvColor(gDisplayListAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
 
         D_800A2D4C_A394C = (u32)state->textureData;
         D_800A2D50_A3950 = (u32)state->paletteData;
@@ -2308,7 +2308,7 @@ void renderAlphaSprite(AlphaSpriteState *state) {
     } else {
         if (D_800A2D4C_A394C != (u32)state->textureData) {
             gDPLoadTextureBlock_4b(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 state->textureData,
                 G_IM_FMT_CI,
                 state->width,
@@ -2326,27 +2326,27 @@ void renderAlphaSprite(AlphaSpriteState *state) {
         }
 
         if (D_800A2D50_A3950 != (u32)state->paletteData) {
-            gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, state->paletteData);
+            gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, state->paletteData);
 
             D_800A2D50_A3950 = (u32)state->paletteData;
         }
 
         if (state->alpha != D_800A2D54_A3954) {
-            gDPPipeSync(gRegionAllocPtr++);
-            gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
+            gDPPipeSync(gDisplayListAllocPtr++);
+            gDPSetEnvColor(gDisplayListAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
             D_800A2D54_A3954 = state->alpha;
         }
     }
 
-    gSPMatrix(gRegionAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-    gSPVertex(gRegionAllocPtr++, state->vertices, 4, 0);
-    gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+    gSPMatrix(gDisplayListAllocPtr++, state->matrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gSPVertex(gDisplayListAllocPtr++, state->vertices, 4, 0);
+    gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
 }
 
 void enqueueAlphaSprite(s32 arg0, loadAssetMetadata_arg *arg1) {
     (arg1 + 1)->assetTemplate = 0;
-    debugEnqueueCallback(arg0, 6, &renderAlphaSprite, arg1);
+    enqueueCallbackBySlotIndex(arg0, 6, &renderAlphaSprite, arg1);
 }
 
 void loadAssetMetadata(loadAssetMetadata_arg *arg0, void *arg1, s32 arg2) {

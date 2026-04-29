@@ -33,7 +33,7 @@ extern s32 D_8008C920_8D520[];
 extern OutputStruct_19E80 gCachedSpriteTextureEntry;
 extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 
 void setupAndEnqueueSprite(
     SpriteState *state,
@@ -207,9 +207,9 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
             }
         }
 
-        gSPDisplayList(gRegionAllocPtr++, gSpriteTextureSetupDL);
+        gSPDisplayList(gDisplayListAllocPtr++, gSpriteTextureSetupDL);
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
             textureEntry.width,
@@ -222,7 +222,7 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
             0,
             0
         );
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     } else if (gCachedSpriteTextureEntry.data_ptr != textureEntry.data_ptr) {
         dim = textureEntry.width;
     loop_16:
@@ -244,9 +244,9 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
             }
         }
 
-        gDPPipeSync(gRegionAllocPtr++);
+        gDPPipeSync(gDisplayListAllocPtr++);
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
             textureEntry.width,
@@ -259,10 +259,10 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
             0,
             0
         );
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     } else {
-        gDPPipeSync(gRegionAllocPtr++);
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     }
 
     gGraphicsMode = 0x202;
@@ -310,13 +310,13 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
         createZRotationMatrix(&transform, sprite->zRotation);
         transform3DToMtx(&transform, sprite->zRotationMtx);
 
-        gSPMatrix(gRegionAllocPtr++, sprite->translationMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, sprite->scaleMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, sprite->yRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, sprite->zRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPVertex(gRegionAllocPtr++, sprite->vertexData, 4, 0);
-        gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->translationMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->scaleMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->yRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->zRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPVertex(gDisplayListAllocPtr++, sprite->vertexData, 4, 0);
+        gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
     }
 }
 
@@ -361,9 +361,9 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
             }
         }
 
-        gSPDisplayList(gRegionAllocPtr++, gTranslucentSpriteTextureSetupDL);
+        gSPDisplayList(gDisplayListAllocPtr++, gTranslucentSpriteTextureSetupDL);
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
             textureEntry.width,
@@ -376,7 +376,7 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
             0,
             0
         );
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     } else if (gCachedSpriteTextureEntry.data_ptr != textureEntry.data_ptr) {
         dim = textureEntry.width;
     loop_16:
@@ -398,9 +398,9 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
             }
         }
 
-        gDPPipeSync(gRegionAllocPtr++);
+        gDPPipeSync(gDisplayListAllocPtr++);
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
             textureEntry.width,
@@ -413,16 +413,16 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
             0,
             0
         );
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     } else {
-        gDPPipeSync(gRegionAllocPtr++);
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     }
 
     gGraphicsMode = 0x203;
     memcpy(&gCachedSpriteTextureEntry, &textureEntry, sizeof(Vec3i));
 
-    gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);
+    gDPSetEnvColor(gDisplayListAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);
 
     if (sprite->translationMtx == NULL) {
         sprite->translationMtx = arenaAlloc16(0x40);
@@ -466,13 +466,13 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
         createZRotationMatrix(&transform, sprite->zRotation);
         transform3DToMtx(&transform, sprite->zRotationMtx);
 
-        gSPMatrix(gRegionAllocPtr++, sprite->translationMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, sprite->scaleMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, sprite->yRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, sprite->zRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPVertex(gRegionAllocPtr++, sprite->vertexData, 4, 0);
-        gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->translationMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->scaleMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->yRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->zRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPVertex(gDisplayListAllocPtr++, sprite->vertexData, 4, 0);
+        gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
     }
 }
 
@@ -517,9 +517,9 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
             }
         }
 
-        gSPDisplayList(gRegionAllocPtr++, gTranslucentSpriteTextureSetupDL);
+        gSPDisplayList(gDisplayListAllocPtr++, gTranslucentSpriteTextureSetupDL);
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
             textureEntry.width,
@@ -532,7 +532,7 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
             0,
             0
         );
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     } else if (gCachedSpriteTextureEntry.data_ptr != textureEntry.data_ptr) {
         dim = textureEntry.width;
     loop_16:
@@ -554,9 +554,9 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
             }
         }
 
-        gDPPipeSync(gRegionAllocPtr++);
+        gDPPipeSync(gDisplayListAllocPtr++);
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             textureEntry.data_ptr,
             G_IM_FMT_CI,
             textureEntry.width,
@@ -569,16 +569,16 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
             0,
             0
         );
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     } else {
-        gDPPipeSync(gRegionAllocPtr++);
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tlutAddr);
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     }
 
     gGraphicsMode = 0x203;
     memcpy(&gCachedSpriteTextureEntry, &textureEntry, sizeof(Vec3i));
 
-    gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);
+    gDPSetEnvColor(gDisplayListAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);
 
     if (sprite->translationMtx == NULL) {
         sprite->translationMtx = arenaAlloc16(0x40);
@@ -621,13 +621,13 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
         createZRotationMatrix(&transform, sprite->zRotation);
         transform3DToMtx(&transform, sprite->zRotationMtx);
 
-        gSPMatrix(gRegionAllocPtr++, sprite->translationMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, sprite->scaleMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, sprite->yRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPMatrix(gRegionAllocPtr++, sprite->zRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPVertex(gRegionAllocPtr++, sprite->vertexData, 4, 0);
-        gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->translationMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->scaleMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->yRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, sprite->zRotationMtx, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPVertex(gDisplayListAllocPtr++, sprite->vertexData, 4, 0);
+        gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
     }
 }
 
@@ -636,7 +636,7 @@ void enqueueOpaqueSprite(u16 slot, Node *node) {
     node->unk1C = NULL;
     node->callback = NULL;
     node->cleanupCallback = NULL;
-    debugEnqueueCallback(slot, 4, &renderOpaqueSpriteCallback, node);
+    enqueueCallbackBySlotIndex(slot, 4, &renderOpaqueSpriteCallback, node);
 }
 
 void enqueueTranslucentSprite(u16 slot, Node *node) {
@@ -644,7 +644,7 @@ void enqueueTranslucentSprite(u16 slot, Node *node) {
     node->unk1C = NULL;
     node->callback = NULL;
     node->cleanupCallback = NULL;
-    debugEnqueueCallback(slot, 4, &renderTranslucentSpriteCallback, node);
+    enqueueCallbackBySlotIndex(slot, 4, &renderTranslucentSpriteCallback, node);
 }
 
 void enqueueTransformedSprite(u16 slot, Node *node) {
@@ -652,7 +652,7 @@ void enqueueTransformedSprite(u16 slot, Node *node) {
     node->unk1C = NULL;
     node->callback = NULL;
     node->cleanupCallback = NULL;
-    debugEnqueueCallback(slot, 4, &renderTransformedSpriteCallback, node);
+    enqueueCallbackBySlotIndex(slot, 4, &renderTransformedSpriteCallback, node);
 }
 
 void setSpriteAssetEnabled(SpriteAssetState *state) {

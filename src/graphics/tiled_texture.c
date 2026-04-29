@@ -9,7 +9,7 @@
 #include "ui/level_preview_3d.h"
 
 extern s16 gGraphicsMode;
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 
 u32 D_800885D0_891D0[] = { 0x00000000, 0x00000000, 0x010005F0, 0x00000000 };
 u32 D_800885E0_891E0[] = { 0x00000000, 0x00000000, 0x01000718, 0x00000000 };
@@ -34,8 +34,8 @@ void loadScrollingTexture(ScrollingTextureState *state) {
     void *paletteAddr;
     OutputStruct_19E80 tableEntry;
 
-    gDPPipeSync(gRegionAllocPtr++);
-    gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
+    gDPPipeSync(gDisplayListAllocPtr++);
+    gDPSetTextureLUT(gDisplayListAllocPtr++, G_TT_RGBA16);
     gGraphicsMode = -1;
 
     getTableEntryByU16Index(state->textureTable, state->textureIndex, &tableEntry);
@@ -70,7 +70,7 @@ loop_2:
         paletteAddr = (void *)((u8 *)tableEntry.index_ptr + (state->paletteIndex << 5));
 
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             tableEntry.data_ptr,
             G_IM_FMT_CI,
             tableEntry.width,
@@ -85,7 +85,7 @@ loop_2:
         );
 
         gDPSetTileSize(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             G_TX_RENDERTILE,
             state->tileScrollU,
             state->tileScrollV,
@@ -93,10 +93,10 @@ loop_2:
             ((tableEntry.height + (s16)state->tileScrollV - 1) << 2)
         );
 
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteAddr);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, paletteAddr);
     } else {
         gDPLoadTextureBlock(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             tableEntry.data_ptr,
             G_IM_FMT_CI,
             G_IM_SIZ_8b,
@@ -112,7 +112,7 @@ loop_2:
         );
 
         gDPSetTileSize(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             G_TX_RENDERTILE,
             state->tileScrollU,
             state->tileScrollV,
@@ -120,7 +120,7 @@ loop_2:
             ((tableEntry.height + (s16)state->tileScrollV - 1) << 2)
         );
 
-        gDPLoadTLUT_pal256(gRegionAllocPtr++, tableEntry.index_ptr);
+        gDPLoadTLUT_pal256(gDisplayListAllocPtr++, tableEntry.index_ptr);
     }
 }
 
@@ -143,15 +143,15 @@ void enqueueScrollingTextureRender(u16 renderLayer, DisplayListObject *displayLi
     displayListObj->transformMatrix = 0;
 
     if (displayListObj->displayLists->opaqueDisplayList != NULL) {
-        debugEnqueueCallback(renderLayer, 1, &renderOpaqueScrollingTexture, displayListObj);
+        enqueueCallbackBySlotIndex(renderLayer, 1, &renderOpaqueScrollingTexture, displayListObj);
     }
 
     if (displayListObj->displayLists->transparentDisplayList != NULL) {
-        debugEnqueueCallback(renderLayer, 3, &renderTransparentScrollingTexture, displayListObj);
+        enqueueCallbackBySlotIndex(renderLayer, 3, &renderTransparentScrollingTexture, displayListObj);
     }
 
     if (displayListObj->displayLists->overlayDisplayList != NULL) {
-        debugEnqueueCallback(renderLayer, 5, &renderOverlayScrollingTexture, displayListObj);
+        enqueueCallbackBySlotIndex(renderLayer, 5, &renderOverlayScrollingTexture, displayListObj);
     }
 }
 
@@ -163,8 +163,8 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
     s32 heightShift;
     void *paletteAddr;
 
-    gDPPipeSync(gRegionAllocPtr++);
-    gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
+    gDPPipeSync(gDisplayListAllocPtr++);
+    gDPSetTextureLUT(gDisplayListAllocPtr++, G_TT_RGBA16);
     gGraphicsMode = -1;
 
     getTableEntryByU16Index(arg0->textureTable, arg0->textureIndex, &tableEntry);
@@ -197,7 +197,7 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
         paletteAddr = (void *)((u8 *)tableEntry.index_ptr + (arg0->paletteIndex << 5));
 
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             tableEntry.data_ptr,
             G_IM_FMT_CI,
             tableEntry.width,
@@ -212,7 +212,7 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
         );
 
         gDPSetTileSize(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             G_TX_RENDERTILE,
             arg0->tileScrollU,
             arg0->tileScrollV,
@@ -220,10 +220,10 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
             ((tableEntry.height + (s16)arg0->tileScrollV - 1) << 2)
         );
 
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, paletteAddr);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, paletteAddr);
     } else {
         gDPLoadTextureBlock(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             tableEntry.data_ptr,
             G_IM_FMT_CI,
             G_IM_SIZ_8b,
@@ -239,7 +239,7 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
         );
 
         gDPSetTileSize(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             G_TX_RENDERTILE,
             arg0->tileScrollU,
             arg0->tileScrollV,
@@ -247,7 +247,7 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
             ((tableEntry.height + (s16)arg0->tileScrollV - 1) << 2)
         );
 
-        gDPLoadTLUT_pal256(gRegionAllocPtr++, tableEntry.index_ptr);
+        gDPLoadTLUT_pal256(gDisplayListAllocPtr++, tableEntry.index_ptr);
     }
 }
 
@@ -269,13 +269,13 @@ void renderOverlayTiledTexture(s32 arg0) {
 void enqueueTiledTextureRender(s32 arg0, TrickBurstEffectTask *arg1) {
     arg1->base.transformMatrix = 0;
     if (arg1->base.displayLists->opaqueDisplayList != 0) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 1, &renderOpaqueTiledTexture, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 1, &renderOpaqueTiledTexture, arg1);
     }
     if (arg1->base.displayLists->transparentDisplayList != 0) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 3, &renderTransparentTiledTexture, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 3, &renderTransparentTiledTexture, arg1);
     }
     if (arg1->base.displayLists->overlayDisplayList != 0) {
-        debugEnqueueCallback(arg0 & 0xFFFF, 5, &renderOverlayTiledTexture, arg1);
+        enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 5, &renderOverlayTiledTexture, arg1);
     }
 }
 

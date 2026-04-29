@@ -599,7 +599,7 @@ dma_and_callbacks:
 
 void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state) {
     state->spriteIndex = state->player->finishPosition;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
 }
 
 void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state) {
@@ -672,13 +672,13 @@ void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state) {
     tempValue = player->primaryItemAmmo;
     if (tempValue != 0) {
         state->itemCountValue = tempValue;
-        debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, renderSpriteFrame, &state->itemCountX);
+        enqueueCallbackBySlotIndex((state->playerIndex + 8) & 0xFFFF, 0, renderSpriteFrame, &state->itemCountX);
     }
 
     callback = renderSpriteFrame;
     tempValue = state->player->primaryItemId;
     state->primaryItemIndex = tempValue;
-    debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
+    enqueueCallbackBySlotIndex((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
 
     player = state->player;
     if ((player->unkBD8 & 1) != 0) {
@@ -690,7 +690,7 @@ void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state) {
 
     tempValue = state->player->secondaryItemId;
     state->secondaryItemIndex = tempValue + 7;
-    debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, &state->secondaryItemX);
+    enqueueCallbackBySlotIndex((state->playerIndex + 8) & 0xFFFF, 0, callback, &state->secondaryItemX);
 
     player = state->player;
     if ((player->unkBD8 & 2) != 0) {
@@ -711,13 +711,13 @@ void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state) {
     tempValue = player->primaryItemAmmo;
     if (tempValue != 0) {
         state->charDisplayValue = tempValue + 0x30;
-        debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, renderTextPalette, &state->charDisplayX);
+        enqueueCallbackBySlotIndex((state->playerIndex + 8) & 0xFFFF, 0, renderTextPalette, &state->charDisplayX);
     }
 
     callback = renderSpriteFrame;
     tempValue = state->player->primaryItemId;
     state->primaryItemIndex = tempValue;
-    debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
+    enqueueCallbackBySlotIndex((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
 
     player = state->player;
     if ((player->unkBD8 & 1) != 0) {
@@ -729,7 +729,7 @@ void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state) {
 
     tempValue = state->player->secondaryItemId;
     state->secondaryItemIndex = tempValue + 7;
-    debugEnqueueCallback((state->playerIndex + 8) & 0xFFFF, 0, callback, &state->secondaryItemX);
+    enqueueCallbackBySlotIndex((state->playerIndex + 8) & 0xFFFF, 0, callback, &state->secondaryItemX);
 
     player = state->player;
     if ((player->unkBD8 & 2) != 0) {
@@ -805,17 +805,17 @@ void initPlayerLapCounterTask(LapCounterState *state) {
 }
 
 void updatePlayerLapCounterSinglePlayer(LapCounterSinglePlayerState *state) {
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
     state->currentLap = state->player->currentLap + 1;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrameWithPalette, &state->digitX1);
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, &state->digitX2);
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrameWithPalette, &state->digitX3);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrameWithPalette, &state->digitX1);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, &state->digitX2);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrameWithPalette, &state->digitX3);
 }
 
 void updatePlayerLapCounterMultiplayer(LapCounterMultiplayerState *state) {
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
     state->unk3C = state->player->currentLap + 0x31;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->unk30);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->unk30);
 }
 
 void cleanupPlayerLapCounterTask(Struct_func_8004DCC4 *arg0) {
@@ -898,7 +898,7 @@ void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
 
     state->animFrame = (s16)state->animCounter >> 1;
 
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, &state->iconX);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, &state->iconX);
 }
 
 void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
@@ -912,7 +912,7 @@ void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
 
     sprintf(state->goldTextBuffer, D_8009E880_9F480, state->player->raceCoins);
 
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->textX);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->textX);
 
     state->animCounter++;
     if ((s16)state->animCounter >= 12) {
@@ -921,7 +921,7 @@ void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
 
     state->animFrame = (s16)state->animCounter >> 1;
 
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderHalfSizeSpriteFrame, &state->iconX);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderHalfSizeSpriteFrame, &state->iconX);
 }
 
 void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0) {
@@ -1059,13 +1059,13 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
                 elem->hasActiveEffect = 0;
             }
 
-            debugEnqueueCallback(0xC, 0, renderSpriteFrameWithPalette, elem);
+            enqueueCallbackBySlotIndex(0xC, 0, renderSpriteFrameWithPalette, elem);
             i++;
             playerCount = allocation->numPlayers;
         } while (i < playerCount);
     }
 
-    debugEnqueueCallback(0xC, 0, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex(0xC, 0, renderSpriteFrame, state);
 }
 
 void cleanupRaceProgressIndicatorTask(RaceProgressIndicatorCleanupState *state) {
@@ -1099,7 +1099,7 @@ void updateGoalBannerSlideIn(GoalBannerState *state) {
     if (state->animAngle == 0x800) {
         setCallback(updateGoalBannerHold);
     }
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
 }
 
 void updateGoalBannerHold(GoalBannerState *state) {
@@ -1107,7 +1107,7 @@ void updateGoalBannerHold(GoalBannerState *state) {
     if (state->holdFrames == 0) {
         setCallback(updateGoalBannerSlideOut);
     }
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
 }
 
 void updateGoalBannerSlideOut(GoalBannerState *state) {
@@ -1121,7 +1121,7 @@ void updateGoalBannerSlideOut(GoalBannerState *state) {
     if (state->animAngle == 0x1000) {
         terminateCurrentTask();
     }
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
 }
 
 void cleanupGoalBannerTask(GoalBannerState *state) {
@@ -1149,7 +1149,7 @@ void updateCenteredSpritePopup(CenteredSpritePopupState *state) {
     getTableEntryByU16Index(state->spriteAsset, state->spriteIndex, &output);
     state->xPos = -output.width / 2;
     state->yPos = -output.height / 2;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 6, renderSpriteFrame, state);
 }
 
 void cleanupCenteredSpritePopupTask(CenteredSpritePopupState *state) {
@@ -1215,7 +1215,7 @@ void initTrickScoreDisplayTask(TrickScoreDisplayState *state) {
 }
 
 void renderTrickScoreDisplay(TrickScoreDisplayState *state) {
-    debugEnqueueCallback(state->playerIndex + 8, 6, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex(state->playerIndex + 8, 6, renderSpriteFrame, state);
 
     if (state->useGoldFormat == 0) {
         drawNumericString(
@@ -1229,7 +1229,7 @@ void renderTrickScoreDisplay(TrickScoreDisplayState *state) {
         );
     } else {
         state->textX = state->xPos + 0x38;
-        debugEnqueueCallback(state->playerIndex + 8, 6, renderTextPalette, &state->textX);
+        enqueueCallbackBySlotIndex(state->playerIndex + 8, 6, renderTextPalette, &state->textX);
     }
 }
 
@@ -1297,7 +1297,7 @@ void initSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0) {
 
 void updateSpeedCrossFinishPositionDisplay(FinishPositionDisplayState *arg0) {
     arg0->spriteIndex = arg0->player->finishPosition;
-    debugEnqueueCallback(8, 6, &renderSpriteFrame, arg0);
+    enqueueCallbackBySlotIndex(8, 6, &renderSpriteFrame, arg0);
 }
 
 void cleanupSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0) {
@@ -1396,7 +1396,7 @@ void updateGoldAwardDisplay(GoldAwardDisplayState *arg0) {
     }
 
     arg0->padA[4] = (u8)arg0->alpha;
-    debugEnqueueCallback(8, 6, renderTextSpriteWithTransparency, arg0);
+    enqueueCallbackBySlotIndex(8, 6, renderTextSpriteWithTransparency, arg0);
 
     sprintf(buf, D_8009E894_9F494, arg0->goldAmount);
 
@@ -1478,7 +1478,7 @@ void updateTotalGoldDisplay(TotalGoldDisplayState *arg0) {
     }
 
     arg0->unkE = (u8)arg0->alpha;
-    debugEnqueueCallback(8, 6, renderTextSpriteWithTransparency, arg0);
+    enqueueCallbackBySlotIndex(8, 6, renderTextSpriteWithTransparency, arg0);
 
     sprintf(buf, D_8009E894_9F494, getPlayerGold());
 
@@ -1556,7 +1556,7 @@ void updateTotalLapDisplay(TotalLapDisplayState *state) {
 
     state->unkE = (u8)state->alpha;
 
-    debugEnqueueCallback(state->player->playerIndex + 8, 6, renderTextSpriteWithTransparency, state);
+    enqueueCallbackBySlotIndex(state->player->playerIndex + 8, 6, renderTextSpriteWithTransparency, state);
 
     drawNumericString(
         buffer,
@@ -1709,7 +1709,7 @@ void renderVictorySnowflake(VictorySnowflakeState *state) {
 
     state->screenX = state->posX >> 4;
     state->screenY = state->posY >> 4;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrameWithPalette, state);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrameWithPalette, state);
 }
 
 void renderVictorySnowflakeSmall(VictorySnowflakeState *state) {
@@ -1733,7 +1733,7 @@ void renderVictorySnowflakeSmall(VictorySnowflakeState *state) {
 
     state->screenX = state->posX >> 5;
     state->screenY = state->posY >> 5;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderHalfSizeSpriteWithCustomPalette, state);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderHalfSizeSpriteWithCustomPalette, state);
 }
 
 void cleanupVictorySnowflake(VictorySnowflakeState *state) {
@@ -1803,7 +1803,7 @@ void renderPauseMenuDisplay(PauseMenuDisplayState *state) {
             } else {
                 state->elements[i].padA[0] = 0x11;
             }
-            debugEnqueueCallback(0xC, 6, renderSpriteFrameWithPalette, &state->elements[i]);
+            enqueueCallbackBySlotIndex(0xC, 6, renderSpriteFrameWithPalette, &state->elements[i]);
             i++;
         } while (i < 3);
         renderTintedSpriteGrid(state->backgroundAsset, -0x20, -8, 4, 1, 0, 0x80, 0, 0, 0xFF, 0x80, 0xC, 6);
@@ -1875,7 +1875,7 @@ void updateShotScoreDisplay(ShotScoreDisplayState *arg0) {
         arg0->elements[i].x = xPos;
         xPos -= 0x10;
 
-        debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->elements[i]);
+        enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->elements[i]);
     }
 }
 
@@ -1903,8 +1903,8 @@ void updateShotCrossScoreDisplay(ShotCrossScoreDisplayState *arg0) {
 
     sprintf(buf, D_8009E8A8_9F4A8, arg0->player->primaryItemAmmo);
     drawNumericString(buf, -0x70, -0x54, 0xFF, arg0->digitAsset, arg0->player->playerIndex + 8, 0);
-    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
-    debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->hudX);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->hudX);
 }
 
 void cleanupShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
@@ -1945,7 +1945,7 @@ void updateShotCrossItemCountDisplay(ShotCrossItemCountDisplayState *arg0) {
     GameState *allocation;
 
     allocation = getCurrentAllocation();
-    debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->x);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->x);
 
     if (arg0->cachedItemCount != allocation->unk5A) {
         arg0->flashCounter = 9;
@@ -2036,7 +2036,7 @@ void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0) {
         sprintf(buffer, sTimerFormatNormal, minutes, seconds, remainingTicks);
     }
 
-    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
 
     drawNumericString(buffer, 0x48, 0x50, 0xFF, arg0->digitAsset, 8, 0);
 }
@@ -2069,7 +2069,7 @@ void updateSuccessMessageDisplay(SuccessMessageDisplayState *state) {
     } else {
         state->flashState = state->flashState - 1;
     }
-    debugEnqueueCallback(8, 0, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, state);
 }
 
 void cleanupSuccessMessageDisplayTask(ShotCrossCountdownTimerState *arg0) {
@@ -2123,7 +2123,7 @@ void updateBonusGoldDisplay(BonusGoldDisplayState *arg0) {
     }
 
     arg0->alpha = (u8)arg0->alphaValue;
-    debugEnqueueCallback(8, 6, renderTextSpriteWithTransparency, arg0);
+    enqueueCallbackBySlotIndex(8, 6, renderTextSpriteWithTransparency, arg0);
 
     var = 0;
     if (allocation->raceType == 4) {
@@ -2235,7 +2235,7 @@ after_7E:
         }
     }
 
-    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
     drawNumericString(sp20, 0x68, 0x50, 0xFF, arg0->digitAsset, 8, 0);
 }
 
@@ -2259,7 +2259,7 @@ void initSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0) {
 
 void updateSecondaryItemDisplay(SecondaryItemDisplayState *state) {
     state->itemIndex = state->player->secondaryItemId + 7;
-    debugEnqueueCallback((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
 
     if (state->player->unkBD8 & 2) {
         spawnFloatingItemSprite(state->itemX - 8, state->itemY - 8, 1, state->playerIndex + 8, 0);
@@ -2312,7 +2312,7 @@ void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
         sprintf(timeString, timeFormat, minutes, seconds, frames);
     }
 
-    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
     drawNumericString(timeString, -0x54, -0x28, 0xFF, arg0->digitAsset, 8, 0);
 }
 
@@ -2347,7 +2347,7 @@ void renderTrickPointsDisplay(TrickPointsDisplayState *state) {
     temp_s0 = (var_s0 * 4) + 0x10;
     state->padding = temp_s0 + (s16)((u16)state->x - 0x28);
     temp_s0 = state->x - temp_s0;
-    debugEnqueueCallback(8, 6, renderSpriteFrame, state);
+    enqueueCallbackBySlotIndex(8, 6, renderSpriteFrame, state);
     drawNumericString(state->scoreText, temp_s0, state->y, 0xFF, state->digitAsset, 8, 6);
 }
 
@@ -2427,7 +2427,7 @@ void updateShotCrossSkillMeterDisplay(ShotCrossItemCountDisplayState *arg0) {
     s32 x;
 
     allocation = (GameState *)getCurrentAllocation();
-    debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->x);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->x);
 
     if (arg0->cachedItemCount != allocation->players->skillPoints) {
         arg0->flashCounter = 9;
@@ -2514,8 +2514,8 @@ void initCrossRaceBadgeTask(CrossRaceBadgeState *arg0) {
 }
 
 void updateCrossRaceBadgeDisplay(CrossRaceBadgeState *arg0) {
-    debugEnqueueCallback(8, 0, renderSpriteFrame, &arg0->bgX);
-    debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->bgX);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
 }
 
 void cleanupCrossRaceBadgeTask(void *arg0) {

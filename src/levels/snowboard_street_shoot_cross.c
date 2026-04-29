@@ -74,7 +74,7 @@ void initShootCrossTargetsCallback(ShootCrossTargets *arg0);
 void activateShootCrossTargets(ShootCrossTargets *arg0);
 
 extern Gfx D_8009A780_9B380[];
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
 Vtx D_800BBBB0_AD630[4] = {
@@ -140,7 +140,7 @@ void activateShootCrossTargets(ShootCrossTargets *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 4, renderShootCrossTargets, arg0);
+        enqueueCallbackBySlotIndex((u16)i, 4, renderShootCrossTargets, arg0);
     }
 }
 
@@ -234,7 +234,7 @@ void renderShootCrossTargets(ShootCrossTargets *arg0) {
 
     prevTextureIndex = -1;
     gGraphicsMode = -1;
-    gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+    gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
 
     for (i = 0; i < arg0->targetCount; i++) {
         offset = i << 4;
@@ -247,7 +247,7 @@ void renderShootCrossTargets(ShootCrossTargets *arg0) {
                 getTableEntryByU16Index(arg0->spriteAsset, (u16)prevTextureIndex, &tableEntry);
 
                 gDPLoadMultiBlock_4b(
-                    gRegionAllocPtr++,
+                    gDisplayListAllocPtr++,
                     tableEntry.data_ptr,
                     0,
                     G_TX_RENDERTILE,
@@ -263,20 +263,20 @@ void renderShootCrossTargets(ShootCrossTargets *arg0) {
                     G_TX_NOLOD
                 );
 
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tableEntry.index_ptr);
             }
 
             gSPMatrix(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 (u8 *)arg0->transformMatrices + (i << 6),
                 G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
             );
 
-            gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-            gSPVertex(gRegionAllocPtr++, arg0->vertexData, 4, 0);
+            gSPVertex(gDisplayListAllocPtr++, arg0->vertexData, 4, 0);
 
-            gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+            gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
         }
     }
 }

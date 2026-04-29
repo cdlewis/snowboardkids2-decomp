@@ -2600,7 +2600,7 @@ void updateModelGeometry(SceneModel *arg0) {
                 enqueueTranslucentSprite(arg0->unk10->unk16, arg0->padding4);
                 return;
             }
-            debugEnqueueCallback(arg0->unk10->unk16, 1U, &renderNonRaceShadow, arg0);
+            enqueueCallbackBySlotIndex(arg0->unk10->unk16, 1U, &renderNonRaceShadow, arg0);
         }
     }
 }

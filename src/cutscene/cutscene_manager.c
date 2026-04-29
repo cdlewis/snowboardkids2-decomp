@@ -111,7 +111,7 @@ void initCutsceneManager(CutsceneManager *manager, ViewportNode *sceneNode, void
 void cleanupCutsceneManager(CutsceneManager *manager) {
     s32 i;
 
-    n_alSeqpDelete((ViewportNode *)&manager->unkFF8);
+    unlinkViewportNode((ViewportNode *)&manager->unkFF8);
 
     freeAnimationLoopState(manager->sceneContext);
 
@@ -242,7 +242,12 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
 
     if (cutsceneManager->showDebugInfo) {
         sprintf((char *)cutsceneManager->debugText, gDebugFrameFormatString, cutsceneManager->currentFrame);
-        debugEnqueueCallback(cutsceneManager->uiResource->slot_index, 6, &renderTextPalette, &cutsceneManager->textX);
+        enqueueCallbackBySlotIndex(
+            cutsceneManager->uiResource->slot_index,
+            6,
+            &renderTextPalette,
+            &cutsceneManager->textX
+        );
     }
 
     while (cutsceneManager->currentFrame <= cutsceneManager->maxFrame && !cutsceneManager->skipAnimation) {
@@ -1282,19 +1287,19 @@ void updateCutsceneFadeTask(FadeTaskData *task) {
     switch (node->fadeType) {
         case 0:
             task->centerSprite.b = (u8)task->fadeAlpha;
-            debugEnqueueCallback(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
+            enqueueCallbackBySlotIndex(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
             break;
         case 1:
             task->centerSprite.b = (u8)task->fadeAlpha;
-            debugEnqueueCallback(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
+            enqueueCallbackBySlotIndex(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->centerSprite);
             task->bottomSprite.b = (u8)task->fadeAlpha;
-            debugEnqueueCallback(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->bottomSprite);
+            enqueueCallbackBySlotIndex(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->bottomSprite);
             break;
     }
 
     for (i = 0; i < 6; i++) {
         task->sprites[i].b = (u8)task->fadeAlpha;
-        debugEnqueueCallback(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->sprites[i]);
+        enqueueCallbackBySlotIndex(task->unk04.split.unk6, 0, &renderScaledAlphaSpriteFrame, &task->sprites[i]);
     }
 }
 

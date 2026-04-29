@@ -492,7 +492,7 @@ void renderGalleryMenu(GalleryMenuState *arg0) {
     setModelHeight(arg0->menuModel, menuTransform.ty);
     clearModelRotation(arg0->menuModel);
     updateModelGeometry(arg0->menuModel);
-    debugEnqueueCallback(1, 4, renderTiledTexture, arg0->pad5C8);
+    enqueueCallbackBySlotIndex(1, 4, renderTiledTexture, arg0->pad5C8);
     menuState = arg0->menuState;
     if (menuState <= 0) {
         goto menu_end;
@@ -555,7 +555,7 @@ menu_body: {
         alpha = (s16)(arg0->alphaValues[i] >> 16);
         arg0->iconSlots[i].alphaByte = (s8)alpha;
         arg0->iconSlots[i].alpha = alpha & 0xFF;
-        debugEnqueueCallback(2, 4, renderScaledAlphaSpriteFrame, &arg0->iconSlots[i]);
+        enqueueCallbackBySlotIndex(2, 4, renderScaledAlphaSpriteFrame, &arg0->iconSlots[i]);
         arg0->labelSlots[i].posX = entry->x;
         arg0->labelSlots[i].posY = entry->y;
         arg0->labelSlots[i].texFlags = 0;
@@ -563,7 +563,7 @@ menu_body: {
         arg0->labelSlots[i].alphaByte = (s8)alpha;
         arg0->labelSlots[i].alpha = alpha & 0xFF;
         arg0->labelSlots[i].frameIndex = (s16)((s8)entry->labelIndex);
-        debugEnqueueCallback(2, 5, renderScaledAlphaSpriteFrame, &arg0->labelSlots[i]);
+        enqueueCallbackBySlotIndex(2, 5, renderScaledAlphaSpriteFrame, &arg0->labelSlots[i]);
     }
 menu_end:;
     ;
@@ -1124,7 +1124,7 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                     } else {
                         alloc->labelEntries[i].alpha = 0x64;
                     }
-                    debugEnqueueCallback(2, 4, renderTextColored, &alloc->labelEntries[i]);
+                    enqueueCallbackBySlotIndex(2, 4, renderTextColored, &alloc->labelEntries[i]);
                 }
             }
 
@@ -1138,7 +1138,7 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                 alloc->unkB24 = 0xA;
             }
             if (arg0->selectedOption == 0) {
-                debugEnqueueCallback(2, 4, renderTextSprite, &alloc->unkB1C);
+                enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->unkB1C);
             }
             if (alloc->selectedOption == 2) {
                 sp3C = 4;
@@ -1162,7 +1162,7 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                     alloc->spriteSlots[i].transparency = 0;
                     alloc->spriteSlots[i].shade = 0x64;
                 }
-                debugEnqueueCallback(2, 4, renderTextSprite, &alloc->spriteSlots[i]);
+                enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->spriteSlots[i]);
                 if (alloc->selectedOption == 2) {
                     alloc->extraSpriteSlots[i].x = (s8)item->x;
                     alloc->extraSpriteSlots[i].y = (s8)item->y;
@@ -1171,19 +1171,19 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                     } else {
                         alloc->extraSpriteSlots[i].alpha = 0x96;
                     }
-                    debugEnqueueCallback(2, 4, renderTextSprite, &alloc->extraSpriteSlots[i]);
+                    enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->extraSpriteSlots[i]);
                 }
             }
 
             alloc->unkB36 = (s16)(arg0->unk10 >> 16);
-            debugEnqueueCallback(2, 4, renderTextSprite, alloc->unkB2C);
+            enqueueCallbackBySlotIndex(2, 4, renderTextSprite, alloc->unkB2C);
             item = &category->items[arg0->menuType];
             if (arg0->selectedOption == 0) {
                 if (isGalleryItemUnlocked(arg0->menuType & 0xFF) & 0xFF) {
                     switch (alloc->selectedOption) {
                         case 0:
                             for (i = 0; i < item->numExtra; i++) {
-                                debugEnqueueCallback(2, 4, renderTextSprite, &alloc->unkACC[i * 0x10]);
+                                enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->unkACC[i * 0x10]);
                             }
 
                             break;
@@ -1198,7 +1198,7 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                                 stat2,
                                 getItemStat3((s32)((u8)arg0->menuType)) & 0xFF
                             );
-                            debugEnqueueCallback(2, 4, renderTextPalette, alloc->unkC98);
+                            enqueueCallbackBySlotIndex(2, 4, renderTextPalette, alloc->unkC98);
                             break;
 
                         case 3:
@@ -1207,8 +1207,8 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                             } else {
                                 alloc->unkB50 = 0x31;
                             }
-                            debugEnqueueCallback(2, 4, renderSpriteFrame, alloc->unkB48);
-                            debugEnqueueCallback(2, 4, renderSpriteFrame, alloc->unkB3C);
+                            enqueueCallbackBySlotIndex(2, 4, renderSpriteFrame, alloc->unkB48);
+                            enqueueCallbackBySlotIndex(2, 4, renderSpriteFrame, alloc->unkB3C);
                             break;
                     }
 
@@ -1230,7 +1230,7 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                     3
                 );
             }
-            debugEnqueueCallback(2, 3, renderTiledTexture, alloc->unk5F8);
+            enqueueCallbackBySlotIndex(2, 3, renderTiledTexture, alloc->unk5F8);
         }
     }
 }

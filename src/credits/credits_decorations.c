@@ -106,8 +106,8 @@ void updateCreditsCornerDecorationSprites(CreditsState *state) {
         void *callback = renderTextSprite;
         state->leftBottomCornerSprite.alpha = shortVal;
         state->leftTopCornerSprite.alpha = shortVal;
-        debugEnqueueCallback(1, 4, callback, &state->leftTopCornerSprite);
-        debugEnqueueCallback(1, 4, callback, &state->leftBottomCornerSprite);
+        enqueueCallbackBySlotIndex(1, 4, callback, &state->leftTopCornerSprite);
+        enqueueCallbackBySlotIndex(1, 4, callback, &state->leftBottomCornerSprite);
     }
 
     temp_v0 = state->rightCornerAlpha;
@@ -116,7 +116,7 @@ void updateCreditsCornerDecorationSprites(CreditsState *state) {
         void *callback = renderTextSprite;
         state->rightBottomCornerSprite.alpha = shortVal;
         state->rightTopCornerSprite.alpha = shortVal;
-        debugEnqueueCallback(1, 4, callback, &state->rightTopCornerSprite);
-        debugEnqueueCallback(1, 4, callback, &state->rightBottomCornerSprite);
+        enqueueCallbackBySlotIndex(1, 4, callback, &state->rightTopCornerSprite);
+        enqueueCallbackBySlotIndex(1, 4, callback, &state->rightBottomCornerSprite);
     }
 }

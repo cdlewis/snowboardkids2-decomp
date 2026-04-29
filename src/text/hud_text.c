@@ -607,7 +607,7 @@ void updateSaveSlotStatSprites(SaveSlotStatSpritesState *arg0) {
         callbackEntry = &arg0->entries[i];
 
         i++;
-        debugEnqueueCallback(arg0->slotIndex + 9, isSpecial, renderTextSprite, callbackEntry);
+        enqueueCallbackBySlotIndex(arg0->slotIndex + 9, isSpecial, renderTextSprite, callbackEntry);
     } while (i < 13);
 }
 
@@ -675,7 +675,7 @@ void updateSaveSlotIconGrid(SaveSlotGridState *arg0) {
             entryIndex = rowStartIndex + colIndex;
             arg0->entries[entryIndex].x = allocation->unkABE + col;
             arg0->entries[entryIndex].y = allocation->unkAC0 + row;
-            debugEnqueueCallback(8U, 0U, renderTextSprite, &arg0->entries[entryIndex]);
+            enqueueCallbackBySlotIndex(8U, 0U, renderTextSprite, &arg0->entries[entryIndex]);
         }
 
         row += 0x10;
@@ -698,7 +698,7 @@ void updateSaveSlotIconGrid(SaveSlotGridState *arg0) {
         }
     }
 
-    debugEnqueueCallback(8U, 1U, renderSpriteFrame, &arg0->cursorX);
+    enqueueCallbackBySlotIndex(8U, 1U, renderSpriteFrame, &arg0->cursorX);
 }
 
 void cleanupSaveSlotIconGrid(Func34574Arg *arg0) {
@@ -827,7 +827,7 @@ void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
             arg0->icons[i].highlightTint = 0xFF;
         }
 
-        debugEnqueueCallback(arg0->slotIndex + 9, 0, renderTextSprite, &arg0->icons[i]);
+        enqueueCallbackBySlotIndex(arg0->slotIndex + 9, 0, renderTextSprite, &arg0->icons[i]);
         i++;
     } while (i < 15);
 
@@ -892,7 +892,7 @@ check_ac6:
     arg0->unk14 = 0x60;
 
 end:
-    debugEnqueueCallback(arg0->unk1C + 9, 0, renderHudTextLayout, &arg0->unk8);
+    enqueueCallbackBySlotIndex(arg0->unk1C + 9, 0, renderHudTextLayout, &arg0->unk8);
 }
 
 void cleanupSaveSlotNameText(Func34574Arg *arg0) {
@@ -1017,9 +1017,9 @@ void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
         }
 
         if (i < 9) {
-            debugEnqueueCallback(arg0->slotIndex + 9, 1, renderTextColored, &arg0->texts[i]);
+            enqueueCallbackBySlotIndex(arg0->slotIndex + 9, 1, renderTextColored, &arg0->texts[i]);
         } else {
-            debugEnqueueCallback(arg0->slotIndex + 9, 1, renderTextSprite, &arg0->sprites[i - 9]);
+            enqueueCallbackBySlotIndex(arg0->slotIndex + 9, 1, renderTextSprite, &arg0->sprites[i - 9]);
         }
 
         i++;
@@ -1218,9 +1218,9 @@ void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state) {
         sprintf((char *)&state->textBuffers[i], D_8009E48C_9F08C, allocation->slots[i].gold);
 
         if (allocation->unkAC6 != 0x18 || allocation->unkAC8 != i) {
-            debugEnqueueCallback(i + 9, 7, renderTextColored, &state->text[i]);
+            enqueueCallbackBySlotIndex(i + 9, 7, renderTextColored, &state->text[i]);
         }
-        debugEnqueueCallback(i + 9, 0, renderScaledShadedSpriteFrame, &state->icons[i]);
+        enqueueCallbackBySlotIndex(i + 9, 0, renderScaledShadedSpriteFrame, &state->icons[i]);
     }
 }
 
@@ -1249,7 +1249,7 @@ void renderSaveSlotConfirmationIndicator(void *arg0) {
     val = allocation->unkAC6;
 
     if (val == 3 || val == 0x3C || val == 0x17) {
-        debugEnqueueCallback(8, 7, renderSpriteFrame, arg0);
+        enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, arg0);
     }
 }
 
@@ -1317,7 +1317,7 @@ void updateSaveSlotSelectionParticles(SelectionParticleUpdateState *state) {
                 }
             }
 
-            debugEnqueueCallback(8, 0, renderSpriteFrameWithPalette, (void *)&state->entries[i]);
+            enqueueCallbackBySlotIndex(8, 0, renderSpriteFrameWithPalette, (void *)&state->entries[i]);
         }
     } else {
         terminateCurrentTask();
@@ -1505,7 +1505,7 @@ void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state) {
             state->blinkAlpha = 0;
         }
 
-        debugEnqueueCallback(8, 1, renderTextSprite, state);
+        enqueueCallbackBySlotIndex(8, 1, renderTextSprite, state);
 
         if (allocation->unkAC6 == 0x33) {
             state->animDelay++;
@@ -1595,7 +1595,7 @@ void enqueueHudTextLayout(
                 elem->x = x;
                 elem->y = y;
                 elem->frameIndex = cmd & 0xFFF;
-                debugEnqueueCallback(priority, flags, renderTextSpriteWithTransparency, elem);
+                enqueueCallbackBySlotIndex(priority, flags, renderTextSpriteWithTransparency, elem);
             }
             x += width;
         }
@@ -1780,7 +1780,7 @@ void enqueueHudTextLayoutCapped(
                 elem->x = x;
                 elem->y = y;
                 elem->frameIndex = cmd & 0xFFF;
-                debugEnqueueCallback(priority, flags, renderTextSpriteWithTransparency, elem);
+                enqueueCallbackBySlotIndex(priority, flags, renderTextSpriteWithTransparency, elem);
             }
             x += width;
         }
@@ -1793,7 +1793,7 @@ void enqueueHudTextLayoutCapped(
 extern s32 gCachedPaletteAddr;
 extern s32 gCachedTextureAddr;
 extern s16 gGraphicsMode;
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 extern u16 gDefaultFontPalette[];
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 extern Gfx gSpriteRDPSetupDL[];
@@ -1840,25 +1840,25 @@ void renderShadedTextSprite(
             gGraphicsMode = 0x100;
             gCachedPaletteAddr = 0;
             gCachedTextureAddr = 0;
-            gSPDisplayList(gRegionAllocPtr++, gSpriteRDPSetupDL);
+            gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
 
         renderModeCmd = 0xE200001C;
         renderModeArg = 0x504240;
         combineCmd = 0xFC119623;
-        gfx = gRegionAllocPtr;
+        gfx = gDisplayListAllocPtr;
         combineArg = 0xFF2FFFFF;
         pipeSyncCmd = 0xE7000000;
-        gRegionAllocPtr = (Gfx *)((s32)gfx + 8);
+        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 8);
         __asm__ volatile("" ::: "memory");
-        gRegionAllocPtr = (Gfx *)((s32)gfx + 0x10);
+        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x10);
         __asm__ volatile("" ::: "memory");
-        gRegionAllocPtr = (Gfx *)((s32)gfx + 0x18);
+        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x18);
         (gfx + 2)->words.w0 = 0x0B000000;
         (gfx + 2)->words.w1 = 0x0E;
-        gRegionAllocPtr = (Gfx *)((s32)gfx + 0x20);
+        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x20);
         __asm__ volatile("" ::: "memory");
-        gRegionAllocPtr = (Gfx *)((s32)gfx + 0x28);
+        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x28);
         (gfx + 1)->words.w1 = renderModeArg;
 
         {
@@ -1887,15 +1887,15 @@ void renderShadedTextSprite(
                 }
             }
 
-            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x30);
+            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x30);
             (gfx + 5)->words.w0 = 0xFD100000;
-            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x38);
+            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x38);
             (gfx + 6)->words.w0 = 0xE8000000;
-            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x40);
+            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x40);
             (gfx + 7)->words.w1 = 0x07000000;
-            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x48);
+            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x48);
             (gfx + 8)->words.w0 = 0xE6000000;
-            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x50);
+            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x50);
             (gfx + 9)->words.w0 = 0xF0000000;
             gCachedPaletteAddr = paletteAddr;
             (gfx + 5)->words.w1 = paletteAddr;
@@ -1903,7 +1903,7 @@ void renderShadedTextSprite(
             (gfx + 7)->words.w0 = 0xF5000100;
             (gfx + 8)->words.w1 = 0;
             (gfx + 9)->words.w1 = 0x0703C000;
-            gRegionAllocPtr = (Gfx *)((s32)gfx + 0x58);
+            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x58);
             (gfx + 10)->words.w0 = pipeSyncCmd;
             (gfx + 10)->words.w1 = 0;
         }
@@ -1912,14 +1912,14 @@ void renderShadedTextSprite(
         if ((s32)spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)spriteData + frameEntry->textureOffset;
             gDPSetTextureImage(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 G_IM_FMT_CI,
                 G_IM_SIZ_8b,
                 frameEntry->width >> 1,
                 (s32)spriteData + frameEntry->textureOffset
             );
             gDPSetTile(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 G_IM_FMT_CI,
                 G_IM_SIZ_8b,
                 ((frameEntry->width >> 1) + 7) >> 3,
@@ -1933,18 +1933,18 @@ void renderShadedTextSprite(
                 0,
                 0
             );
-            gDPLoadSync(gRegionAllocPtr++);
+            gDPLoadSync(gDisplayListAllocPtr++);
             gDPLoadTile(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 G_TX_LOADTILE,
                 0,
                 0,
                 (frameEntry->width - 1) << 1,
                 (frameEntry->height - 1) << G_TEXTURE_IMAGE_FRAC
             );
-            gDPPipeSync(gRegionAllocPtr++);
+            gDPPipeSync(gDisplayListAllocPtr++);
             gDPSetTile(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 G_IM_FMT_CI,
                 G_IM_SIZ_4b,
                 ((frameEntry->width >> 1) + 7) >> 3,
@@ -1959,7 +1959,7 @@ void renderShadedTextSprite(
                 0
             );
             gDPSetTileSize(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 G_TX_RENDERTILE,
                 0,
                 0,
@@ -1969,7 +1969,7 @@ void renderShadedTextSprite(
         }
 
         gSPTextureRectangle(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             left << 2,
             top << 2,
             right << 2,
@@ -1980,11 +1980,11 @@ void renderShadedTextSprite(
             0x0400,
             0x0400
         );
-        gDPPipeSync(gRegionAllocPtr++);
-        gDPSetRenderMode(gRegionAllocPtr++, G_RM_AA_TEX_EDGE, G_RM_AA_TEX_EDGE2);
-        gDPSetCombineMode(gRegionAllocPtr++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-        gSPObjRenderMode(gRegionAllocPtr++, G_OBJRM_BILERP | G_OBJRM_ANTIALIAS);
-        gDPSetPrimColor(gRegionAllocPtr++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetRenderMode(gDisplayListAllocPtr++, G_RM_AA_TEX_EDGE, G_RM_AA_TEX_EDGE2);
+        gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+        gSPObjRenderMode(gDisplayListAllocPtr++, G_OBJRM_BILERP | G_OBJRM_ANTIALIAS);
+        gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
     }
 }
 
@@ -2037,7 +2037,7 @@ void enqueueHudTextLayoutAlphaBlended(
                 elem->x = x;
                 elem->y = y;
                 elem->frameIndex = cmd & 0xFFF;
-                debugEnqueueCallback(priority, flags, renderAlphaBlendedTextSprite, elem);
+                enqueueCallbackBySlotIndex(priority, flags, renderAlphaBlendedTextSprite, elem);
             }
             x += width;
         }

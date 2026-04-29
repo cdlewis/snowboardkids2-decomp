@@ -460,7 +460,7 @@ void updateCharacterSelectSprites(CharacterSelectSprites *arg0) {
             arg0->sprites[i].scale = 0xFF;
         }
 
-        debugEnqueueCallback(8, 0, renderTextSprite, &arg0->sprites[i]);
+        enqueueCallbackBySlotIndex(8, 0, renderTextSprite, &arg0->sprites[i]);
     }
 }
 
@@ -500,12 +500,12 @@ void updateCoordinateDisplayTask(CoordinateDisplayTaskState *arg0) {
 
     sprintf(arg0->formattedText, gCoordDisplayFormatString, arg0->coordX + 7, arg0->coordY + 7);
 
-    debugEnqueueCallback(0, 7, &renderTextPalette, &arg0->textDisplayX);
+    enqueueCallbackBySlotIndex(0, 7, &renderTextPalette, &arg0->textDisplayX);
 
     arg0->secondDisplayX = arg0->coordX;
     arg0->secondDisplayY = arg0->coordY;
 
-    debugEnqueueCallback(0, 7, &renderTextPalette, &arg0->secondDisplayX);
+    enqueueCallbackBySlotIndex(0, 7, &renderTextPalette, &arg0->secondDisplayX);
 }
 
 void cleanupCharacterSelectTextureData(TextureDataTaskState *arg0) {
@@ -524,7 +524,7 @@ void initCharacterSelectTextureRenderState(TextureDataTaskState *arg0) {
 }
 
 void enqueueCharacterSelectTextureRender(void *arg0) {
-    debugEnqueueCallback(9, 0, renderTiledTexture, arg0);
+    enqueueCallbackBySlotIndex(9, 0, renderTiledTexture, arg0);
 }
 
 void initPlayer3CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
@@ -542,7 +542,7 @@ void initPlayer3CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
 void updatePlayer3CharacterSelectIndicator(void *arg0) {
     GameState *state = getCurrentAllocation();
     if (state->playerSlotState[0] == 3) {
-        debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
+        enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
     } else {
         terminateCurrentTask();
     }
@@ -567,7 +567,7 @@ void initPlayer2CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
 void updatePlayer2CharacterSelectIndicator(void *arg0) {
     GameState *state = getCurrentAllocation();
     if (state->playerSlotState[0] == 2) {
-        debugEnqueueCallback(8, 0, renderSpriteFrame, arg0);
+        enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
     } else {
         terminateCurrentTask();
     }

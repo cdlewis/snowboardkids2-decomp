@@ -155,7 +155,7 @@ void storyMapLocationTextTask(func_80019CD0_1A8D0_arg *arg0) {
 }
 
 void enqueueStoryMapLocationText(TextData *arg0) {
-    debugEnqueueCallback(0, 7, &renderTextPalette, arg0);
+    enqueueCallbackBySlotIndex(0, 7, &renderTextPalette, arg0);
 }
 
 void initStoryModeRace(void) {
@@ -724,7 +724,7 @@ void advanceBoardDisplaySlots(void) {
 void initStoryMapLocationIntro(void) {
     BoardShopState *temp_s0 = (BoardShopState *)allocateTaskMemory(0x1E0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
-    temp_s0->secondaryViewport.unk0.callback_selector = 0;
+    temp_s0->secondaryViewport.unk0.counter = 0;
     initMenuCameraNode((ViewportNode *)temp_s0, 0, 0xA, 0);
     setViewportFadeValue(0, 0, 8);
     scheduleTask(&storyMapLocationTextTask, 0U, 0U, 0x5AU);
@@ -734,15 +734,15 @@ void initStoryMapLocationIntro(void) {
 void awaitStoryMapLocationIntro(void) {
     ViewportNode *state = (ViewportNode *)getCurrentAllocation();
 
-    state[1].unk0.callback_selector++;
+    state[1].unk0.counter++;
 
     do {
         if (gControllerInputs[0] & A_BUTTON) {
-            state[1].unk0.callback_selector = 0x3C;
+            state[1].unk0.counter = 0x3C;
         }
     } while (0);
 
-    if (state[1].unk0.callback_selector >= 0x3C) {
+    if (state[1].unk0.counter >= 0x3C) {
         unlinkNode(state);
         terminateSchedulerWithCallback(&onStoryMapLocationIntroComplete);
     }

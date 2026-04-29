@@ -1163,6 +1163,6 @@ void updateIceLandBossJointPositions(Player *boss) {
     boss->jointShadowNeedsUpdate = 1;
 
     for (jointIndex = 0; jointIndex < 4; jointIndex++) {
-        debugEnqueueCallback(jointIndex, 1, renderPlayerJointShadow, (void *)boss);
+        enqueueCallbackBySlotIndex(jointIndex, 1, renderPlayerJointShadow, (void *)boss);
     }
 }

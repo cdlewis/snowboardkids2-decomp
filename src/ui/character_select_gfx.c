@@ -1123,7 +1123,7 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
 
     // Render all 3 icon slots
     for (i = 0; i < 3; i++) {
-        debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010C98_11898, &arg0->entries[i]);
+        enqueueCallbackBySlotIndex(arg0->playerIndex + 8, 0, func_80010C98_11898, &arg0->entries[i]);
     }
 
     // If character selection is confirmed, skip animation
@@ -1149,7 +1149,7 @@ void updateCharSelectIconTargets(CharSelectIconTargetState *arg0) {
         tableIndex = charSelectItemData[((u8)(paletteIndex + charIndex * 3)) * 3 + i];
         entry = &arg0->entries[i];
         entry->currentY = *(s16 *)(D_8008DDEC_8E9EC + tableIndex * 2 + 22);
-        debugEnqueueCallback(arg0->playerIndex + 8, 0, func_80010C98_11898, entry);
+        enqueueCallbackBySlotIndex(arg0->playerIndex + 8, 0, func_80010C98_11898, entry);
         i++;
     } while (i < 3);
 }
@@ -1237,7 +1237,7 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
     i = 0;
     entry = arg0->entries;
     do {
-        debugEnqueueCallback(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
+        enqueueCallbackBySlotIndex(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
         entry++;
         i++;
     } while (i < 3);
@@ -1278,7 +1278,7 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
     i = 0;
     entry = arg0->entries;
     do {
-        debugEnqueueCallback(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
+        enqueueCallbackBySlotIndex(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
         entry++;
         i++;
     } while (i < 3);
@@ -1352,7 +1352,7 @@ loop:
     entry->spriteIndex = iconBaseIndex + (*tablePtr - 1) / 2;
     i++;
     entry->paletteIndex = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
-    debugEnqueueCallback(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
+    enqueueCallbackBySlotIndex(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
     entry++;
     if (i < 3)
         goto loop;
@@ -1475,7 +1475,7 @@ void updateCharSelectMenu(SelectionMenuState *menu) {
                 entries[entryIndex].alpha = 0x50;
                 menu->blinkTimers[entryIndex] = 0;
             }
-            debugEnqueueCallback(menu->playerIndex + 0xC, 0, renderTextSprite, &entries[entryIndex]);
+            enqueueCallbackBySlotIndex(menu->playerIndex + 0xC, 0, renderTextSprite, &entries[entryIndex]);
             entryIndex++;
         } while (entryIndex < (s32)menu->numEntries);
     }
@@ -1513,7 +1513,7 @@ void updateCharSelectMenuConfirm(SelectionMenuState *menu) {
             } else {
                 entries[entryIndex].alpha = 0x50;
             }
-            debugEnqueueCallback(menu->playerIndex + 0xC, 0, renderTextSprite, &entries[entryIndex]);
+            enqueueCallbackBySlotIndex(menu->playerIndex + 0xC, 0, renderTextSprite, &entries[entryIndex]);
             entryIndex++;
         } while (entryIndex < (s32)menu->numEntries);
     }
@@ -1570,7 +1570,7 @@ void updateCharSelectPlayerLabels(PlayerLabelSpritesState *arg0) {
             index = i + 8;
             ptr = arg0->entries;
             do {
-                debugEnqueueCallback(index, 7, &renderSpriteFrame, ptr);
+                enqueueCallbackBySlotIndex(index, 7, &renderSpriteFrame, ptr);
                 j++;
                 ptr++;
             } while (j < 3);
@@ -1692,7 +1692,12 @@ void updateCharSelectArrows(SelectionArrowsState *state) {
                 state->blinkTimers[playerIdx] = 0;
                 state->entries[entryStartIdx + arrowIdx].alpha = 0xFF;
             enqueue:
-                debugEnqueueCallback(playerIdx + 0xC, 0, renderTextSprite, &state->entries[entryStartIdx + arrowIdx]);
+                enqueueCallbackBySlotIndex(
+                    playerIdx + 0xC,
+                    0,
+                    renderTextSprite,
+                    &state->entries[entryStartIdx + arrowIdx]
+                );
             }
         } else {
             state->blinkTimers[playerIdx] = 0;
@@ -1808,7 +1813,12 @@ void updateBoardSelectArrows(SelectionArrowsState *state) {
                 state->entries[entryStartIdx + arrowIdx].alpha = 0xFF;
 
             enqueue:
-                debugEnqueueCallback(playerIdx + 0xC, 0, renderTextSprite, &state->entries[entryStartIdx + arrowIdx]);
+                enqueueCallbackBySlotIndex(
+                    playerIdx + 0xC,
+                    0,
+                    renderTextSprite,
+                    &state->entries[entryStartIdx + arrowIdx]
+                );
             }
         } else {
             // Hide arrows
@@ -1927,7 +1937,7 @@ void updateBoardSelectCharNames(CharacterNameSprite *sprites) {
             } else {
                 sprites[i].blinkState = 0;
             }
-            debugEnqueueCallback((u16)(i + 0xC), 0, renderTextSprite, &sprites[i]);
+            enqueueCallbackBySlotIndex((u16)(i + 0xC), 0, renderTextSprite, &sprites[i]);
         }
     }
 }
@@ -2058,15 +2068,15 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
             }
             if (yPos == -0x58) {
                 if (D_800AFE8C_A71FC->playerBoardIds[i + 4] < 9) {
-                    debugEnqueueCallback(i + 0xC, 0, renderTextSprite, &arg0->entries[i]);
+                    enqueueCallbackBySlotIndex(i + 0xC, 0, renderTextSprite, &arg0->entries[i]);
                     arg0->singlePlayerX = 0x38;
-                    debugEnqueueCallback(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerX);
+                    enqueueCallbackBySlotIndex(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerX);
                 } else {
                     arg0->singlePlayerX = 0x50;
-                    debugEnqueueCallback(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerX);
+                    enqueueCallbackBySlotIndex(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerX);
                 }
             } else {
-                debugEnqueueCallback(i + 0xC, 0, renderTextSprite, &arg0->entries[i]);
+                enqueueCallbackBySlotIndex(i + 0xC, 0, renderTextSprite, &arg0->entries[i]);
             }
         }
     }
@@ -2123,7 +2133,7 @@ void updateCharSelectPlayerNumbers(u8 *arg0) {
         i = 0;
         ptr = arg0;
         do {
-            debugEnqueueCallback((u16)(i + 0xC), 0, renderSpriteFrame, ptr);
+            enqueueCallbackBySlotIndex((u16)(i + 0xC), 0, renderSpriteFrame, ptr);
             i++;
             ptr += 0xC;
         } while (i < D_800AFE8C_A71FC->numPlayers);
@@ -2155,7 +2165,7 @@ void updateCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
 
     if (state->unk1898[0] == 3) {
         arg0->spriteIndex = state->unk18A8[0] + 0x16;
-        debugEnqueueCallback(0xC, 0, renderSpriteFrame, arg0);
+        enqueueCallbackBySlotIndex(0xC, 0, renderSpriteFrame, arg0);
     }
 }
 
@@ -2275,7 +2285,7 @@ void animateCharSelectP2NameReveal(P2NameAnimationState *arg0) {
         do {
             i += 1;
             ptr->y = ptr->y + yIncrement;
-            debugEnqueueCallback(arg0->playerIndex + 0xC, 0, renderSpriteFrameWithPalette, (void *)ptr);
+            enqueueCallbackBySlotIndex(arg0->playerIndex + 0xC, 0, renderSpriteFrameWithPalette, (void *)ptr);
             ptr++;
         } while (i < ((s32)new_var));
     }
@@ -2308,7 +2318,12 @@ void animateCharSelectP2NameHide(P2NameHideState *arg0) {
     }
     for (i = 0; i < (var_v0 & 0xFF); i++) {
         arg0->entries[i].y += increment;
-        debugEnqueueCallback(arg0->playerIndex + 0xC, 0, renderSpriteFrameWithPalette, (void *)(&arg0->entries[i]));
+        enqueueCallbackBySlotIndex(
+            arg0->playerIndex + 0xC,
+            0,
+            renderSpriteFrameWithPalette,
+            (void *)(&arg0->entries[i])
+        );
     }
 
     if (arg0->entries[0].y == target) {
@@ -2384,7 +2399,7 @@ void updateCharSelectStats(CharSelectStatsState *arg0) {
                     charByte = arg0->charBufs[i][j];
                     if (charByte != 0x20) {
                         arg0->spriteEntries[i * 2 + j].frameIndex = charByte - 0x30;
-                        debugEnqueueCallback(
+                        enqueueCallbackBySlotIndex(
                             arg0->playerIndex + 8,
                             7,
                             renderSpriteFrame,
@@ -2394,7 +2409,7 @@ void updateCharSelectStats(CharSelectStatsState *arg0) {
                 }
             } else {
                 arg0->textEntries[i].string = (u8 *)arg0->charBufs[i];
-                debugEnqueueCallback(arg0->playerIndex + 8, 7, renderTextPalette, &arg0->textEntries[i]);
+                enqueueCallbackBySlotIndex(arg0->playerIndex + 8, 7, renderTextPalette, &arg0->textEntries[i]);
             }
         }
     }
@@ -2420,7 +2435,7 @@ void updateCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
     state->rotationY++;
     state->rotationX &= 0x3FF;
     state->rotationY &= 0x3FF;
-    debugEnqueueCallback(7, 0, renderTiledTexture, state);
+    enqueueCallbackBySlotIndex(7, 0, renderTiledTexture, state);
 }
 
 void cleanupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
@@ -2449,7 +2464,7 @@ void initCharSelectScaledSprite(ScaledSpriteEntry *arg0) {
 }
 
 void renderCharSelectScaledSprite(void *arg0) {
-    debugEnqueueCallback(0xC, 7, renderScaledAlphaSpriteFrame, arg0);
+    enqueueCallbackBySlotIndex(0xC, 7, renderScaledAlphaSpriteFrame, arg0);
 }
 
 void cleanupCharSelectScaledSprite(ScaledSpriteEntry *arg0) {

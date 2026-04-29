@@ -14,7 +14,7 @@
 #include "system/task_scheduler.h"
 
 extern s32 gFrameCounter;
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 
 typedef struct {
@@ -300,18 +300,18 @@ void renderDebugDisplayLists(DebugDisplayListRenderState *arg0) {
 
     for (i = 0; i < 4; i++) {
         if (arg0->config->renderOpaque != 0) {
-            debugEnqueueCallback(i & 0xFFFF, 1, renderColorIndexedOpaqueDisplayList, arg0);
+            enqueueCallbackBySlotIndex(i & 0xFFFF, 1, renderColorIndexedOpaqueDisplayList, arg0);
         }
 
         if (arg0->config->renderTransparent != 0) {
-            debugEnqueueCallback(i & 0xFFFF, 3, renderColorIndexedTransparentDisplayList, arg0);
+            enqueueCallbackBySlotIndex(i & 0xFFFF, 3, renderColorIndexedTransparentDisplayList, arg0);
         }
 
         if (arg0->config->renderOverlay == 0) {
             continue;
         }
 
-        debugEnqueueCallback(i & 0xFFFF, 5, renderColorIndexedOverlayDisplayList, arg0);
+        enqueueCallbackBySlotIndex(i & 0xFFFF, 5, renderColorIndexedOverlayDisplayList, arg0);
     }
 }
 
@@ -391,8 +391,8 @@ void loadColorIndexedTexture(void *arg) {
     s32 tempHeight;
     u32 tileLine;
 
-    gDPPipeSync(gRegionAllocPtr++);
-    gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
+    gDPPipeSync(gDisplayListAllocPtr++);
+    gDPSetTextureLUT(gDisplayListAllocPtr++, G_TT_RGBA16);
     gGraphicsMode = -1;
 
     getTableEntryByU16Index(state->textureTable, state->textureIndex, &tableEntry);
@@ -423,10 +423,10 @@ loop_2:
         } while (0);
     }
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
+    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
 
     gDPSetTile(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_IM_FMT_CI,
         G_IM_SIZ_16b,
         0,
@@ -441,9 +441,9 @@ loop_2:
         0
     );
 
-    gDPLoadSync(gRegionAllocPtr++);
+    gDPLoadSync(gDisplayListAllocPtr++);
 
-    loadBlockCmd = gRegionAllocPtr++;
+    loadBlockCmd = gDisplayListAllocPtr++;
     loadBlockCmd->words.w0 = 0xF3000000;
     widthDiv16 = tableEntry.width >> 4;
     dxtBase = 0x800;
@@ -463,11 +463,11 @@ loop_2:
     }
     loadBlockCmd->words.w1 = loadBlockWord;
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
     tileLine = (((tableEntry.width >> 1) + 7) >> 3) & 0x1FF;
     gDPSetTile(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_IM_FMT_CI,
         G_IM_SIZ_4b,
         tileLine,
@@ -484,10 +484,17 @@ loop_2:
 
     loadTileParams = 15;
 
-    gDPSetTileSize(gRegionAllocPtr++, G_TX_RENDERTILE, 0, 0, (tableEntry.width - 1) << 2, (tableEntry.height - 1) << 2);
+    gDPSetTileSize(
+        gDisplayListAllocPtr++,
+        G_TX_RENDERTILE,
+        0,
+        0,
+        (tableEntry.width - 1) << 2,
+        (tableEntry.height - 1) << 2
+    );
 
     gDPSetTileSize(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_TX_RENDERTILE,
         state->tileULow & 0xFFF,
         state->tileVLow & 0xFFF,
@@ -495,12 +502,12 @@ loop_2:
         ((tableEntry.height + (s16)state->tileVLow - 1) << 2) & 0xFFF
     );
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);
+    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);
 
-    gDPTileSync(gRegionAllocPtr++);
+    gDPTileSync(gDisplayListAllocPtr++);
 
     gDPSetTile(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_IM_FMT_RGBA,
         G_IM_SIZ_4b,
         0,
@@ -515,13 +522,13 @@ loop_2:
         G_TX_NOLOD
     );
 
-    gDPLoadSync(gRegionAllocPtr++);
+    gDPLoadSync(gDisplayListAllocPtr++);
 
-    gDPLoadTLUTCmd(gRegionAllocPtr++, G_TX_LOADTILE, loadTileParams);
+    gDPLoadTLUTCmd(gDisplayListAllocPtr++, G_TX_LOADTILE, loadTileParams);
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
-    gDPSetEnvColor(gRegionAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
+    gDPSetEnvColor(gDisplayListAllocPtr++, 0xFF, 0xFF, 0xFF, state->alpha);
 }
 
 void renderColorIndexedOpaqueDisplayList(void *arg0) {

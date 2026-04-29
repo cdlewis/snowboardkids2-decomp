@@ -47,7 +47,7 @@ typedef struct {
     /* 0x28 */ TexData32 *paletteData;
 } TiledTextureRenderState;
 
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 extern Gfx gSpriteRDPSetupDL[];
 extern s16 gTileTextureFlipTable[];
 extern TextClipAndOffsetData gTextClipAndOffsetData;
@@ -159,7 +159,7 @@ void renderTiledTexture(TiledTextureRenderState *state) {
             colRem = colRem + state->tileGridHeight;
         }
 
-        gSPDisplayList(gRegionAllocPtr++, (u32)gSpriteRDPSetupDL);
+        gSPDisplayList(gDisplayListAllocPtr++, (u32)gSpriteRDPSetupDL);
 
         for (col = 0; col < numCols; ++col) {
             rowStart = rowOffset;
@@ -222,13 +222,13 @@ void renderTiledTexture(TiledTextureRenderState *state) {
 
                         if (state->ciMode == 0) {
                             if (&paletteData[paletteIndex] != curPaletteData) {
-                                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, (s32)&paletteData[paletteIndex]);
+                                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, (s32)&paletteData[paletteIndex]);
                                 curPaletteData = &paletteData[paletteIndex];
                             }
 
                             if ((textureIndex - 1) != lastTile) {
                                 gDPLoadTextureTile_4b(
-                                    gRegionAllocPtr++,
+                                    gDisplayListAllocPtr++,
                                     /*timg*/ textureData +
                                         ((((textureIndex - 1) * state->tileWidth * state->tileHeight) / 4) * 2),
                                     G_IM_FMT_CI,
@@ -251,14 +251,14 @@ void renderTiledTexture(TiledTextureRenderState *state) {
                             }
                         } else {
                             if (&paletteData[paletteIndex] != curPaletteData) {
-                                gDPLoadTLUT_pal256(gRegionAllocPtr++, (s32)&paletteData[paletteIndex]);
+                                gDPLoadTLUT_pal256(gDisplayListAllocPtr++, (s32)&paletteData[paletteIndex]);
 
                                 curPaletteData = &paletteData[paletteIndex];
                             }
 
                             if ((textureIndex - 1) != lastTile) {
                                 gDPLoadTextureTile(
-                                    gRegionAllocPtr++,
+                                    gDisplayListAllocPtr++,
                                     /*timg*/
                                     (textureData +
                                      ((((textureIndex - 1) * state->tileWidth * state->tileHeight) / 2) * 2)),
@@ -283,7 +283,7 @@ void renderTiledTexture(TiledTextureRenderState *state) {
                         }
 
                         gSPTextureRectangle(
-                            gRegionAllocPtr++,
+                            gDisplayListAllocPtr++,
                             screenLeft << 2,
                             screenTop << 2,
                             screenRight << 2,
@@ -307,7 +307,7 @@ void renderTiledTexture(TiledTextureRenderState *state) {
 
         gSPEndDisplayList(displayList++);
 
-        gSPDisplayList(gRegionAllocPtr++, (u32)displayListHead);
+        gSPDisplayList(gDisplayListAllocPtr++, (u32)displayListHead);
     }
 }
 

@@ -63,7 +63,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem12->y = y;
                     elem12->spriteData = (SpriteSheetData *)texture;
                     elem12->paletteIndex = palette;
-                    debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
+                    enqueueCallbackBySlotIndex(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 case 0x3A:
@@ -73,7 +73,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem12->y = y;
                     elem12->spriteData = (SpriteSheetData *)texture;
                     elem12->paletteIndex = palette;
-                    debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
+                    enqueueCallbackBySlotIndex(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 case 0x22:
@@ -83,7 +83,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem12->y = y;
                     elem12->spriteData = (SpriteSheetData *)texture;
                     elem12->paletteIndex = palette;
-                    debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
+                    enqueueCallbackBySlotIndex(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 case 0x27:
@@ -93,7 +93,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem12->y = y;
                     elem12->spriteData = (SpriteSheetData *)texture;
                     elem12->paletteIndex = palette;
-                    debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
+                    enqueueCallbackBySlotIndex(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
                 default:
@@ -103,7 +103,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     x += 8;
                     elem12->spriteData = (SpriteSheetData *)texture;
                     elem12->paletteIndex = palette;
-                    debugEnqueueCallback(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
+                    enqueueCallbackBySlotIndex(priority, layer & 0xFF, renderSpriteFrameWithPalette, elem12);
                     elem12++;
                     break;
             }
@@ -140,7 +140,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem16->y = y;
                     elem16->unk4 = texture;
                     elem16->palette = (s8)(palette + 1);
-                    debugEnqueueCallback(priority, layer & 0xFF, renderTextSpriteWithTransparency, elem16);
+                    enqueueCallbackBySlotIndex(priority, layer & 0xFF, renderTextSpriteWithTransparency, elem16);
                     elem16++;
                     break;
                 case 0x3A:
@@ -150,7 +150,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem16->y = y;
                     elem16->unk4 = texture;
                     elem16->palette = (s8)(palette + 1);
-                    debugEnqueueCallback(priority, layer & 0xFF, renderTextSpriteWithTransparency, elem16);
+                    enqueueCallbackBySlotIndex(priority, layer & 0xFF, renderTextSpriteWithTransparency, elem16);
                     elem16++;
                     break;
                 case 0x22:
@@ -160,7 +160,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem16->y = y;
                     elem16->unk4 = texture;
                     elem16->palette = (s8)(palette + 1);
-                    debugEnqueueCallback(priority, layer & 0xFF, renderTextSpriteWithTransparency, elem16);
+                    enqueueCallbackBySlotIndex(priority, layer & 0xFF, renderTextSpriteWithTransparency, elem16);
                     elem16++;
                     break;
                 case 0x27:
@@ -170,7 +170,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     elem16->y = y;
                     elem16->unk4 = texture;
                     elem16->palette = (s8)(palette + 1);
-                    debugEnqueueCallback(priority, layer & 0xFF, renderTextSpriteWithTransparency, elem16);
+                    enqueueCallbackBySlotIndex(priority, layer & 0xFF, renderTextSpriteWithTransparency, elem16);
                     elem16++;
                     break;
                 default:
@@ -180,7 +180,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
                     x += 8;
                     elem16->unk4 = texture;
                     elem16->palette = (s8)(palette + 1);
-                    debugEnqueueCallback(priority, layer & 0xFF, renderTextSpriteWithTransparency, elem16);
+                    enqueueCallbackBySlotIndex(priority, layer & 0xFF, renderTextSpriteWithTransparency, elem16);
                     elem16++;
                     break;
             }

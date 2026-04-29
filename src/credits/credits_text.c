@@ -211,7 +211,7 @@ void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
         for (i = 0; i < 0x12; i++) {
             if (scaledAlpha != 0) {
                 s->textEntriesB[i].opacity = scaledAlpha >> 16;
-                debugEnqueueCallback(0, 2, renderScaledAlphaSpriteFrame, &s->textEntriesB[i]);
+                enqueueCallbackBySlotIndex(0, 2, renderScaledAlphaSpriteFrame, &s->textEntriesB[i]);
             }
             if (s->paletteFadeSpeed < 0) {
                 if (s->overlayAlpha == 0xFF0000) {
@@ -220,7 +220,7 @@ void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
             }
             if (showPalette != 0) {
                 s->textEntriesA[i].opacity = s->currentPaletteIndex >> 16;
-                debugEnqueueCallback(0, 2, renderScaledAlphaSpriteFrame, &s->textEntriesA[i]);
+                enqueueCallbackBySlotIndex(0, 2, renderScaledAlphaSpriteFrame, &s->textEntriesA[i]);
             }
         }
     }

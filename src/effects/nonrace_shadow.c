@@ -25,7 +25,7 @@ typedef struct {
     u8 alpha;
 } ShadowEntity;
 
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 
 u32 g_NonRaceShadowTex[];
@@ -171,14 +171,14 @@ void renderNonRaceShadow(ShadowEntity *entity) {
         return;
     }
 
-    gSPMatrix(gRegionAllocPtr++, entity->shadowMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, entity->shadowMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (gGraphicsMode != 0x200) {
         gGraphicsMode = 0x200;
-        gSPDisplayList(gRegionAllocPtr++, &g_NonRaceShadowDL);
+        gSPDisplayList(gDisplayListAllocPtr++, &g_NonRaceShadowDL);
     }
 
-    gSPVertex(gRegionAllocPtr++, entity->shadowVertices, 4, 0);
+    gSPVertex(gDisplayListAllocPtr++, entity->shadowVertices, 4, 0);
 
-    gSP1Quadrangle(gRegionAllocPtr++, 0, 1, 2, 3, 0);
+    gSP1Quadrangle(gDisplayListAllocPtr++, 0, 1, 2, 3, 0);
 }

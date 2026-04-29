@@ -45,7 +45,7 @@ void cleanupTitleLogoTask(TitleLogoTask *arg0) {
 }
 
 void enqueueTitleLogoRender(TitleLogoTask *arg0) {
-    debugEnqueueCallback(8, 0, renderTiledTexture, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderTiledTexture, arg0);
 }
 
 void initTitleLogoRenderState(TitleLogoTask *arg0) {
@@ -136,14 +136,19 @@ void updateControllerSlotHighlights(ControllerSlotDisplay *arg0) {
                     slot->alpha = unselectedAlpha;
                 }
 
-                debugEnqueueCallback(8, 1, renderTextSpriteWithTransparency, &arg0->elements[i + (state->unk3BD << 2)]);
+                enqueueCallbackBySlotIndex(
+                    8,
+                    1,
+                    renderTextSpriteWithTransparency,
+                    &arg0->elements[i + (state->unk3BD << 2)]
+                );
                 i++;
             } while (i < numControllers);
         }
     }
 
-    debugEnqueueCallback(8, 1, renderSpriteFrame, &arg0->elements[6]);
-    debugEnqueueCallback(8, 1, renderSpriteFrame, &arg0->elements[6].unkC);
+    enqueueCallbackBySlotIndex(8, 1, renderSpriteFrame, &arg0->elements[6]);
+    enqueueCallbackBySlotIndex(8, 1, renderSpriteFrame, &arg0->elements[6].unkC);
 }
 
 void cleanupControllerSlotDisplay(void **arg0) {
@@ -179,7 +184,7 @@ void func_800167B0_173B0(Struct16728 *arg0) {
     } else {
         arg0->unkC--;
     }
-    debugEnqueueCallback(8, 1, renderSpriteFrame, arg0);
+    enqueueCallbackBySlotIndex(8, 1, renderSpriteFrame, arg0);
 }
 
 void cleanupPressStartPrompt(void **arg0) {

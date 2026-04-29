@@ -343,18 +343,18 @@ state_done:
             }
             arg0->unkAC = var_v0;
             __asm__("");
-            debugEnqueueCallback(1, 0, &renderSpriteFrame, &arg0->unkA4);
+            enqueueCallbackBySlotIndex(1, 0, &renderSpriteFrame, &arg0->unkA4);
             arg0->unkB0 = (u16)(arg0->unkB0 + 1);
         } else {
             arg0->unkB0 = 0;
         }
-        debugEnqueueCallback(1, 0, &renderHudTextLayoutCapped, &arg0->unk8C);
+        enqueueCallbackBySlotIndex(1, 0, &renderHudTextLayoutCapped, &arg0->unk8C);
     }
 
     if (renderSlots != 0) {
         for (i = 0; i < 4; i++) {
             if (arg0->slots[i].zoomScaleX < 0x4000U) {
-                debugEnqueueCallback(1, 0, &renderScaledShadedSpriteFrame, &arg0->slots[i]);
+                enqueueCallbackBySlotIndex(1, 0, &renderScaledShadedSpriteFrame, &arg0->slots[i]);
             }
         }
     }

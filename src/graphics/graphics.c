@@ -29,9 +29,9 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x8];
-    PoolEntry *unk8;
+    CallbackEntry *unk8;
     s32 unkC;
-} Item_A4188;
+} CallbackPoolSlot;
 
 typedef struct {
     u8 padding[0x134];
@@ -47,7 +47,7 @@ typedef struct {
     u8 defaultLight2R;
     u8 defaultLight2G;
     u8 defaultLight2B;
-} gActiveViewport_type;
+} ActiveViewportOverlay;
 
 typedef struct {
     /* 0x00 */ u32 type;
@@ -212,10 +212,10 @@ extern void *gDisplayBufferMsgs;
 extern s32 D_800A35C8_A41C8[];
 extern s16 gViewportOriginY;
 extern s16 gViewportOriginX;
-extern Item_A4188 *D_800A3588_A4188[];
+extern CallbackPoolSlot *gViewportCallbackPools[];
 extern s32 gRegionAllocEnd;
 extern void **gLinearArenaRegions;
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 extern void *gArenaBasePtr;
 extern void *gLinearAllocPtr;
 extern void *gLinearAllocEnd;
@@ -229,7 +229,7 @@ extern u8 gDisplayFramePending;
 extern void *gGraphicsArenaPtrs[];
 extern void *gGraphicsArena0;
 extern s32 gFrameCounter;
-extern gActiveViewport_type *gActiveViewport;
+extern ActiveViewportOverlay *gActiveViewport;
 extern void *gDramStack;
 extern void *gOutputBuffer;
 extern void *gYieldBuffer;
@@ -448,23 +448,23 @@ void renderFrame(u32 viScanline) {
             }
 
             node->frameCallbackMsg = arenaAlloc16(0x50);
-            displayListStart = gRegionAllocPtr;
+            displayListStart = gDisplayListAllocPtr;
 
-            gSPSegment(gRegionAllocPtr++, 0, 0);
-            node->displayListPtr = gRegionAllocPtr;
+            gSPSegment(gDisplayListAllocPtr++, 0, 0);
+            node->displayListPtr = gDisplayListAllocPtr;
             {
-                Gfx *_g = gRegionAllocPtr++;
+                Gfx *_g = gDisplayListAllocPtr++;
                 _g->words.w0 = pipeSyncW;
                 _g->words.w1 = 0;
             }
             {
-                Gfx *_g = gRegionAllocPtr++;
+                Gfx *_g = gDisplayListAllocPtr++;
                 _g->words.w0 = pipeSyncW;
                 _g->words.w1 = 0;
             }
-            gDPFullSync(gRegionAllocPtr++);
-            gSPEndDisplayList(gRegionAllocPtr++);
-            displayListEnd = gRegionAllocPtr;
+            gDPFullSync(gDisplayListAllocPtr++);
+            gSPEndDisplayList(gDisplayListAllocPtr++);
+            displayListEnd = gDisplayListAllocPtr;
 
             if (node->list3_next == NULL) {
                 node->frameCallbackMsg->taskFlags = 1;
@@ -506,24 +506,24 @@ void renderFrame(u32 viScanline) {
     if (node != NULL) {
         for (node = rootNode; node != NULL; node = node->list3_next) {
             // Future cleanup: ActiveViewport is probably just ViewportNode
-            gActiveViewport = (gActiveViewport_type *)node;
+            gActiveViewport = (ActiveViewportOverlay *)node;
 
             if (!isRegionAllocSpaceLow() && node->clipLeft < node->clipRight && node->clipTop < node->clipBottom) {
 
                 if (needsDisplayListSetup) {
-                    displayListStart = gRegionAllocPtr;
+                    displayListStart = gDisplayListAllocPtr;
                     if (gNeedsDisplayListInit != 0) {
                         gNeedsDisplayListInit = 0;
-                        gSPDisplayList(gRegionAllocPtr++, gInitDisplayList);
+                        gSPDisplayList(gDisplayListAllocPtr++, gInitDisplayList);
                     }
 
-                    gSPDisplayList(gRegionAllocPtr++, gDefaultRenderDisplayList);
+                    gSPDisplayList(gDisplayListAllocPtr++, gDefaultRenderDisplayList);
                 } else {
-                    gDPPipeSync(gRegionAllocPtr++);
+                    gDPPipeSync(gDisplayListAllocPtr++);
                 }
 
                 gDPSetScissor(
-                    gRegionAllocPtr++,
+                    gDisplayListAllocPtr++,
                     G_SC_NON_INTERLACE,
                     node->clipLeft,
                     node->clipTop,
@@ -532,12 +532,12 @@ void renderFrame(u32 viScanline) {
                 );
 
                 if (node->displayFlags & 0x2) { // VIEWPORT_DISPLAY_CLEAR_SCREEN flag
-                    gDPSetCycleType(gRegionAllocPtr++, G_CYC_FILL);
-                    gDPSetRenderMode(gRegionAllocPtr++, G_RM_NOOP, G_RM_NOOP2);
-                    gDPSetColorImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, &gFrameBuffer);
-                    gDPSetFillColor(gRegionAllocPtr++, 0xFFFCFFFC);
+                    gDPSetCycleType(gDisplayListAllocPtr++, G_CYC_FILL);
+                    gDPSetRenderMode(gDisplayListAllocPtr++, G_RM_NOOP, G_RM_NOOP2);
+                    gDPSetColorImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, &gFrameBuffer);
+                    gDPSetFillColor(gDisplayListAllocPtr++, 0xFFFCFFFC);
                     gDPFillRectangle(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         node->clipLeft,
                         node->clipTop,
                         node->clipRight,
@@ -547,19 +547,19 @@ void renderFrame(u32 viScanline) {
                 }
 
                 if (node->displayFlags & 0x1) { // VIEWPORT_DISPLAY_OVERLAY flag
-                    gDPPipeSync(gRegionAllocPtr++);
+                    gDPPipeSync(gDisplayListAllocPtr++);
                     gDPSetColorImage(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         G_IM_FMT_RGBA,
                         G_IM_SIZ_16b,
                         320,
                         (void *)((u8 *)gAuxFrameBuffers +
                                  ((gCurrentDisplayBufferIndex * 5 * 16 - gCurrentDisplayBufferIndex * 5) << 11))
                     );
-                    gDPSetCycleType(gRegionAllocPtr++, G_CYC_1CYCLE);
-                    gDPSetEnvColor(gRegionAllocPtr++, node->overlayR, node->overlayG, node->overlayB, 0xFF);
+                    gDPSetCycleType(gDisplayListAllocPtr++, G_CYC_1CYCLE);
+                    gDPSetEnvColor(gDisplayListAllocPtr++, node->overlayR, node->overlayG, node->overlayB, 0xFF);
                     gDPSetCombineLERP(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         1,
                         0,
                         ENVIRONMENT,
@@ -577,31 +577,31 @@ void renderFrame(u32 viScanline) {
                         ENVIRONMENT,
                         0
                     );
-                    gDPSetRenderMode(gRegionAllocPtr++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+                    gDPSetRenderMode(gDisplayListAllocPtr++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
                     gDPFillRectangle(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         node->clipLeft,
                         node->clipTop,
                         node->clipRight + 1,
                         node->clipBottom + 1
                     );
-                    gDPPipeSync(gRegionAllocPtr++);
-                    gDPSetDepthImage(gRegionAllocPtr++, &gFrameBuffer);
+                    gDPPipeSync(gDisplayListAllocPtr++);
+                    gDPSetDepthImage(gDisplayListAllocPtr++, &gFrameBuffer);
                     needsDisplayListSetup = FALSE;
                 }
 
                 if (needsDisplayListSetup) {
                     needsDisplayListSetup = FALSE;
-                    gDPPipeSync(gRegionAllocPtr++);
+                    gDPPipeSync(gDisplayListAllocPtr++);
                     gDPSetColorImage(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         G_IM_FMT_RGBA,
                         G_IM_SIZ_16b,
                         320,
                         (void *)((u8 *)gAuxFrameBuffers +
                                  ((gCurrentDisplayBufferIndex * 5 * 16 - gCurrentDisplayBufferIndex * 5) << 11))
                     );
-                    gDPSetDepthImage(gRegionAllocPtr++, &gFrameBuffer);
+                    gDPSetDepthImage(gDisplayListAllocPtr++, &gFrameBuffer);
                 }
 
                 gTextClipAndOffsetData.clipLeft = node->clipLeft;
@@ -615,7 +615,7 @@ void renderFrame(u32 viScanline) {
                 gGraphicsMode = -1;
 
                 if (node->priority == 0) {
-                    gDPSetColorDither(gRegionAllocPtr++, G_CD_DISABLE);
+                    gDPSetColorDither(gDisplayListAllocPtr++, G_CD_DISABLE);
 
                     for (callbackEntry = (CallbackEntry *)node->pool; callbackEntry != NULL;
                          callbackEntry = callbackEntry->next) {
@@ -633,9 +633,9 @@ void renderFrame(u32 viScanline) {
                     }
 
                     if (node->prevFadeValue != 0) {
-                        gSPDisplayList(gRegionAllocPtr++, gFadeOverlayDisplayList);
+                        gSPDisplayList(gDisplayListAllocPtr++, gFadeOverlayDisplayList);
                         gDPSetPrimColor(
-                            gRegionAllocPtr++,
+                            gDisplayListAllocPtr++,
                             0,
                             0,
                             node->envR,
@@ -644,7 +644,7 @@ void renderFrame(u32 viScanline) {
                             node->prevFadeValue
                         );
                         gSPTextureRectangle(
-                            gRegionAllocPtr++,
+                            gDisplayListAllocPtr++,
                             node->clipLeft << 2,
                             node->clipTop << 2,
                             node->clipRight << 2,
@@ -655,7 +655,7 @@ void renderFrame(u32 viScanline) {
                             0x400,
                             0x400
                         );
-                        gDPPipeSync(gRegionAllocPtr++);
+                        gDPPipeSync(gDisplayListAllocPtr++);
                     }
                 } else {
                     // Allocate Vp (16 bytes), projection matrix (64 bytes), and LookAt matrices (192 bytes)
@@ -674,7 +674,7 @@ void renderFrame(u32 viScanline) {
                                     (u8 *)(i * sizeof(Light) + (u32)node) + 0x148,
                                     sizeof(Light)
                                 );
-                                gSPLight(gRegionAllocPtr++, (Light *)(i * sizeof(Light) + (u32)lightArray), i + 1);
+                                gSPLight(gDisplayListAllocPtr++, (Light *)(i * sizeof(Light) + (u32)lightArray), i + 1);
                             }
 
                             // Copy ambient light (at index numLights)
@@ -683,9 +683,9 @@ void renderFrame(u32 viScanline) {
                                 (u8 *)(i * sizeof(Light) + (u32)node) + 0x148,
                                 sizeof(Light)
                             );
-                            gSPLight(gRegionAllocPtr++, (Light *)(i * sizeof(Light) + (u32)lightArray), i + 1);
+                            gSPLight(gDisplayListAllocPtr++, (Light *)(i * sizeof(Light) + (u32)lightArray), i + 1);
 
-                            gSPNumLights(gRegionAllocPtr++, node->numLights);
+                            gSPNumLights(gDisplayListAllocPtr++, node->numLights);
                         } else {
                             goto bail;
                         }
@@ -762,14 +762,22 @@ void renderFrame(u32 viScanline) {
 
                         gLookAtPtr = (void *)&lookAtAlloc[32];
 
-                        gSPViewport(gRegionAllocPtr++, viewportAlloc);
-                        gSPPerspNormalize(gRegionAllocPtr++, node->perspNorm);
-                        gSPMatrix(gRegionAllocPtr++, projectionAlloc, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-                        gSPMatrix(gRegionAllocPtr++, lookAtAlloc, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
-                        gSPMatrix(gRegionAllocPtr++, &lookAtAlloc[16], G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+                        gSPViewport(gDisplayListAllocPtr++, viewportAlloc);
+                        gSPPerspNormalize(gDisplayListAllocPtr++, node->perspNorm);
+                        gSPMatrix(
+                            gDisplayListAllocPtr++,
+                            projectionAlloc,
+                            G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION
+                        );
+                        gSPMatrix(gDisplayListAllocPtr++, lookAtAlloc, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+                        gSPMatrix(
+                            gDisplayListAllocPtr++,
+                            &lookAtAlloc[16],
+                            G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION
+                        );
 
-                        gSPFogPosition(gRegionAllocPtr++, node->fogMin, node->fogMax);
-                        gDPSetFogColor(gRegionAllocPtr++, node->fogR, node->fogG, node->fogB, node->fogA);
+                        gSPFogPosition(gDisplayListAllocPtr++, node->fogMin, node->fogMax);
+                        gDPSetFogColor(gDisplayListAllocPtr++, node->fogR, node->fogG, node->fogB, node->fogA);
                     } else {
                         goto bail;
                     }
@@ -791,9 +799,9 @@ void renderFrame(u32 viScanline) {
 
                 bail:
                     if (node->prevFadeValue != 0) {
-                        gSPDisplayList(gRegionAllocPtr++, gFadeOverlayDisplayList);
+                        gSPDisplayList(gDisplayListAllocPtr++, gFadeOverlayDisplayList);
                         gDPSetPrimColor(
-                            gRegionAllocPtr++,
+                            gDisplayListAllocPtr++,
                             0,
                             0,
                             node->envR,
@@ -802,7 +810,7 @@ void renderFrame(u32 viScanline) {
                             node->prevFadeValue
                         );
                         gSPTextureRectangle(
-                            gRegionAllocPtr++,
+                            gDisplayListAllocPtr++,
                             node->clipLeft << 2,
                             node->clipTop << 2,
                             node->clipRight << 2,
@@ -813,8 +821,8 @@ void renderFrame(u32 viScanline) {
                             0x400,
                             0x400
                         );
-                        gDPPipeSync(gRegionAllocPtr++);
-                        gDPSetColorDither(gRegionAllocPtr++, G_CD_MAGICSQ);
+                        gDPPipeSync(gDisplayListAllocPtr++);
+                        gDPSetColorDither(gDisplayListAllocPtr++, G_CD_MAGICSQ);
                     }
                 }
             }
@@ -825,10 +833,10 @@ void renderFrame(u32 viScanline) {
                     if (gRootViewport.prevFadeValue != 0 && node->list3_next == 0) {
                         BorderData *bd = (BorderData *)&gRootViewport.clipLeft;
 
-                        gSPDisplayList(gRegionAllocPtr++, gFadeOverlayDisplayList);
+                        gSPDisplayList(gDisplayListAllocPtr++, gFadeOverlayDisplayList);
 
                         gDPSetScissor(
-                            gRegionAllocPtr++,
+                            gDisplayListAllocPtr++,
                             G_SC_NON_INTERLACE,
                             bd->clipLeft,
                             bd->clipTop,
@@ -836,10 +844,10 @@ void renderFrame(u32 viScanline) {
                             bd->clipBottom
                         );
 
-                        gDPSetPrimColor(gRegionAllocPtr++, 0, 0, bd->envR, bd->envG, bd->envB, bd->envA);
+                        gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, bd->envR, bd->envG, bd->envB, bd->envA);
 
                         gSPTextureRectangle(
-                            gRegionAllocPtr++,
+                            gDisplayListAllocPtr++,
                             bd->clipLeft << 2,
                             bd->clipTop << 2,
                             bd->clipRight << 2,
@@ -852,7 +860,7 @@ void renderFrame(u32 viScanline) {
                         );
                     }
 
-                    gSPEndDisplayList(gRegionAllocPtr++);
+                    gSPEndDisplayList(gDisplayListAllocPtr++);
                     gSPDisplayList(node->displayListPtr, displayListStart);
                 }
                 needsDisplayListSetup = TRUE;
@@ -956,12 +964,12 @@ void linearAllocSelectRegion(s32 region) {
 
     temp_v0 = gLinearArenaRegionsArray[region];
 
-    gRegionAllocPtr = (Gfx *)temp_v0;
+    gDisplayListAllocPtr = (Gfx *)temp_v0;
     gRegionAllocEnd = temp_v0 + BUFFER_SIZE;
 }
 
 s32 isRegionAllocSpaceLow(void) {
-    return (u32)(gRegionAllocEnd - (u32)gRegionAllocPtr) < 0x1AE1U;
+    return (u32)(gRegionAllocEnd - (u32)gDisplayListAllocPtr) < 0x1AE1U;
 }
 
 void restoreViewportOffsets(void) {
@@ -1116,7 +1124,7 @@ void initViewportNode(ViewportNode *arg0, ViewportNode *arg1, s32 arg2, s32 arg3
     ViewportNode *var_a0;
     u8 arg4_byte = (u8)arg4;
 
-    D_800A3588_A4188[arg2 & 0xFFFF] = (Item_A4188 *)arg0;
+    gViewportCallbackPools[arg2 & 0xFFFF] = (CallbackPoolSlot *)arg0;
 
     if (arg1 == NULL) {
         arg0->unk0.next = &gRootViewport;
@@ -1332,7 +1340,7 @@ void unlinkNode(ViewportNode *node) {
     ViewportNode *next;
 
     current = &gRootViewport;
-    D_800A3588_A4188[node->slot_index] = NULL;
+    gViewportCallbackPools[node->slot_index] = NULL;
 
     next = gRootViewport.unk8.list2_next;
     while (next != 0) {
@@ -1356,14 +1364,14 @@ void unlinkNode(ViewportNode *node) {
     node->list2_prev->list3_next = node->list3_next;
 }
 
-void debugEnqueueCallback(u16 index, u8 slotIndex, void *callback, void *callbackData) {
-    Item_A4188 *manager;
-    PoolEntry *block;
-    Item_A4188 *slot;
+void enqueueCallbackBySlotIndex(u16 index, u8 slotIndex, void *callback, void *callbackData) {
+    CallbackPoolSlot *manager;
+    CallbackEntry *block;
+    CallbackPoolSlot *slot;
 
-    manager = D_800A3588_A4188[index];
+    manager = gViewportCallbackPools[index];
     if (manager != NULL) {
-        block = (PoolEntry *)linearAlloc(0x10);
+        block = (CallbackEntry *)linearAlloc(0x10);
         if (block != NULL) {
             slot = &manager[slotIndex];
             block->next = slot[1].unk8;
@@ -1376,10 +1384,10 @@ void debugEnqueueCallback(u16 index, u8 slotIndex, void *callback, void *callbac
 }
 
 void enqueueViewportCallback(ViewportNode *viewport, u8 poolIndex, void *callback, void *callbackData) {
-    PoolEntry *newEntry;
-    PoolEntry *oldHead;
+    CallbackEntry *newEntry;
+    CallbackEntry *oldHead;
 
-    newEntry = (PoolEntry *)linearAlloc(0x10);
+    newEntry = (CallbackEntry *)linearAlloc(0x10);
     if (newEntry != NULL) {
         oldHead = viewport->pool[poolIndex].next;
         newEntry->callback = callback;
@@ -1392,14 +1400,14 @@ void enqueueViewportCallback(ViewportNode *viewport, u8 poolIndex, void *callbac
 
 void enqueueViewportCallbackById(u16 viewportId, u8 poolIndex, void *callback, void *callbackData) {
     ViewportNode *viewport;
-    PoolEntry *newEntry;
-    PoolEntry *oldHead;
+    CallbackEntry *newEntry;
+    CallbackEntry *oldHead;
 
     viewport = &gRootViewport;
 
     while (viewport != NULL) {
         if (viewport->id == viewportId) {
-            newEntry = (PoolEntry *)linearAlloc(sizeof(PoolEntry));
+            newEntry = (CallbackEntry *)linearAlloc(sizeof(CallbackEntry));
             if (newEntry != NULL) {
                 oldHead = viewport->pool[poolIndex].next;
                 newEntry->callback = callback;

@@ -166,7 +166,7 @@ void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
 
         if (taskData->cutsceneManager->enableTransparency != 0) {
             if (taskData->cutsceneManager->unk10.renderModeArg.unk87 != 0) {
-                debugEnqueueCallback(3, 2, renderTiledTexture, &taskData->elements[i]);
+                enqueueCallbackBySlotIndex(3, 2, renderTiledTexture, &taskData->elements[i]);
             }
         }
     }

@@ -1035,6 +1035,6 @@ void updateJingleTownBossJointPositions(Arg0Struct *arg0) {
     arg0->jointShadowNeedsUpdate = 1;
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 1, renderPlayerJointShadow, arg0);
+        enqueueCallbackBySlotIndex((u16)i, 1, renderPlayerJointShadow, arg0);
     }
 }

@@ -745,7 +745,7 @@ extern Gfx D_8009A780_9B380[];
 extern s32 gLookAtPtr;
 extern s32 gFrameCounter;
 extern u16 D_8009ADE0_9B9E0;
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 extern void *D_80094DD0_959D0;
 extern DisplayLists D_8009A670_9B270;
@@ -1198,7 +1198,7 @@ void updateSceneAnimationTask(SceneAnimationTaskNew *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 4, renderSceneAnimationTask, arg0);
+        enqueueCallbackBySlotIndex((u16)i, 4, renderSceneAnimationTask, arg0);
     }
 }
 
@@ -1216,7 +1216,7 @@ void renderSceneAnimationTask(SceneAnimationTaskNew *arg0) {
     s32 textureIndex;
 
     prevTextureIndex = -1;
-    gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+    gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
     gGraphicsMode = -1;
 
     for (i = 0; i < arg0->entryCount; i++) {
@@ -1234,7 +1234,7 @@ void renderSceneAnimationTask(SceneAnimationTaskNew *arg0) {
                     getTableEntryByU16Index(arg0->assetData, (u16)(textureIndex & 0xFF), &tableEntry);
 
                     gDPLoadTextureBlock(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         tableEntry.data_ptr,
                         G_IM_FMT_CI,
                         G_IM_SIZ_8b,
@@ -1249,12 +1249,12 @@ void renderSceneAnimationTask(SceneAnimationTaskNew *arg0) {
                         G_TX_NOLOD
                     );
 
-                    gDPLoadTLUT_pal256(gRegionAllocPtr++, tableEntry.index_ptr);
+                    gDPLoadTLUT_pal256(gDisplayListAllocPtr++, tableEntry.index_ptr);
                 } else {
                     getTableEntryByU16Index(arg0->assetData, (u16)textureIndex, &tableEntry);
 
                     gDPLoadMultiBlock_4b(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         tableEntry.data_ptr,
                         0,
                         G_TX_RENDERTILE,
@@ -1270,23 +1270,23 @@ void renderSceneAnimationTask(SceneAnimationTaskNew *arg0) {
                         G_TX_NOLOD
                     );
 
-                    gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
+                    gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tableEntry.index_ptr);
                 }
 
                 vertexOffset = arg0->entries[i].vertexIndex * 4;
             }
 
             gSPMatrix(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 (u8 *)arg0->transformBuffer + (i << 6),
                 G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
             );
 
-            gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-            gSPVertex(gRegionAllocPtr++, (u8 *)arg0->headerData + (vertexOffset << 4), 4, 0);
+            gSPVertex(gDisplayListAllocPtr++, (u8 *)arg0->headerData + (vertexOffset << 4), 4, 0);
 
-            gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+            gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
         }
     }
 }
@@ -1433,15 +1433,15 @@ void updateScrollingSceneryTask(ScrollingSceneryTaskState *arg0) {
 
     for (i = 0; i < 4; i++) {
         if (arg0->displayLists->opaqueDisplayList != NULL) {
-            debugEnqueueCallback(i, 1, &renderScrollingSceneryOpaque, arg0);
+            enqueueCallbackBySlotIndex(i, 1, &renderScrollingSceneryOpaque, arg0);
         }
 
         if (arg0->displayLists->transparentDisplayList != NULL) {
-            debugEnqueueCallback(i, 3, &renderScrollingSceneryTransparent, arg0);
+            enqueueCallbackBySlotIndex(i, 3, &renderScrollingSceneryTransparent, arg0);
         }
 
         if (arg0->displayLists->overlayDisplayList != NULL) {
-            debugEnqueueCallback(i, 5, &renderScrollingSceneryOverlay, arg0);
+            enqueueCallbackBySlotIndex(i, 5, &renderScrollingSceneryOverlay, arg0);
         }
     }
 }
@@ -1459,8 +1459,8 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
     s32 widthShift;
     s32 heightShift;
 
-    gDPPipeSync(gRegionAllocPtr++);
-    gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
+    gDPPipeSync(gDisplayListAllocPtr++);
+    gDPSetTextureLUT(gDisplayListAllocPtr++, G_TT_RGBA16);
     gGraphicsMode = -1;
 
     getTableEntryByU16Index(state->textureTable, state->textureIndex, &tableEntry);
@@ -1491,7 +1491,7 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
 
     if (state->paletteMode == 0) {
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             tableEntry.data_ptr,
             G_IM_FMT_CI,
             tableEntry.width,
@@ -1506,7 +1506,7 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
         );
 
         gDPSetTileSize(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             G_TX_RENDERTILE,
             state->tileScrollU,
             state->tileScrollV,
@@ -1514,10 +1514,10 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
             ((tableEntry.height + (s16)state->tileScrollV - 1) << 2)
         );
 
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, tableEntry.index_ptr);
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tableEntry.index_ptr);
     } else {
         gDPLoadTextureBlock(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             tableEntry.data_ptr,
             G_IM_FMT_CI,
             G_IM_SIZ_8b,
@@ -1533,7 +1533,7 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
         );
 
         gDPSetTileSize(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             G_TX_RENDERTILE,
             state->tileScrollU,
             state->tileScrollV,
@@ -1541,7 +1541,7 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
             ((tableEntry.height + (s16)state->tileScrollV - 1) << 2)
         );
 
-        gDPLoadTLUT_pal256(gRegionAllocPtr++, tableEntry.index_ptr);
+        gDPLoadTLUT_pal256(gDisplayListAllocPtr++, tableEntry.index_ptr);
     }
 }
 
@@ -1987,7 +1987,7 @@ void updateGoldCoinsTask(GoldCoinUpdateState *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 4, renderGoldCoins, arg0);
+        enqueueCallbackBySlotIndex((u16)i, 4, renderGoldCoins, arg0);
     }
 }
 
@@ -2009,15 +2009,15 @@ void renderGoldCoins(GoldCoinRenderState *state) {
     s32 i;
     u32 tileLine;
 
-    gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+    gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
     gGraphicsMode = -1;
 
     getTableEntryByU16Index(state->textureTable, state->animationFrame, &tableEntry);
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
+    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
 
     gDPSetTile(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_IM_FMT_CI,
         G_IM_SIZ_16b,
         0,
@@ -2032,9 +2032,9 @@ void renderGoldCoins(GoldCoinRenderState *state) {
         G_TX_NOLOD
     );
 
-    gDPLoadSync(gRegionAllocPtr++);
+    gDPLoadSync(gDisplayListAllocPtr++);
 
-    loadBlockCmd = gRegionAllocPtr++;
+    loadBlockCmd = gDisplayListAllocPtr++;
     loadBlockCmd->words.w0 = 0xF3000000;
     widthDiv16 = tableEntry.width >> 4;
     dxtBase = 0x800;
@@ -2056,12 +2056,12 @@ void renderGoldCoins(GoldCoinRenderState *state) {
     }
     loadBlockCmd->words.w1 = loadBlockWord;
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
     tileLine = (((tableEntry.width >> 1) + 7) >> 3) & 0x1FF;
     new_var = G_TX_NOMIRROR;
     gDPSetTile(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_IM_FMT_CI,
         G_IM_SIZ_4b,
         tileLine,
@@ -2076,14 +2076,21 @@ void renderGoldCoins(GoldCoinRenderState *state) {
         G_TX_NOLOD
     );
 
-    gDPSetTileSize(gRegionAllocPtr++, G_TX_RENDERTILE, 0, 0, (tableEntry.width - 1) << 2, (tableEntry.height - 1) << 2);
+    gDPSetTileSize(
+        gDisplayListAllocPtr++,
+        G_TX_RENDERTILE,
+        0,
+        0,
+        (tableEntry.width - 1) << 2,
+        (tableEntry.height - 1) << 2
+    );
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);
+    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);
 
-    gDPTileSync(gRegionAllocPtr++);
+    gDPTileSync(gDisplayListAllocPtr++);
 
     gDPSetTile(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_IM_FMT_RGBA,
         G_IM_SIZ_4b,
         0,
@@ -2098,24 +2105,24 @@ void renderGoldCoins(GoldCoinRenderState *state) {
         G_TX_NOLOD
     );
 
-    gDPLoadSync(gRegionAllocPtr++);
+    gDPLoadSync(gDisplayListAllocPtr++);
 
-    gDPLoadTLUTCmd(gRegionAllocPtr++, G_TX_LOADTILE, 15);
+    gDPLoadTLUTCmd(gDisplayListAllocPtr++, G_TX_LOADTILE, 15);
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
     for (i = 0; i < state->coinCount; i++) {
         if (isObjectCulled(&state->entries[i].position) == 0) {
             state->entries[i].processed = 1;
             if (state->entries[i].visible != 0) {
                 gSPMatrix(
-                    gRegionAllocPtr++,
+                    gDisplayListAllocPtr++,
                     (u8 *)state->matrixBuffer + (i << 6),
                     G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
                 );
-                gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-                gSPVertex(gRegionAllocPtr++, state->displayData, 4, 0);
-                gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+                gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+                gSPVertex(gDisplayListAllocPtr++, state->displayData, 4, 0);
+                gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
             }
         } else {
             state->entries[i].processed &= 1;
@@ -2863,7 +2870,7 @@ void updateItemBoxBurstFrame(ItemBoxBurstEffectState *state) {
     state->renderEntry = frameData;
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback(i, 1, &renderItemBoxBurstEffect, state);
+        enqueueCallbackBySlotIndex(i, 1, &renderItemBoxBurstEffect, state);
     }
 
     if (gameState->gamePaused == 0) {
@@ -2885,14 +2892,14 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
     long loadBlockWord;
     volatile u8 padding[0x10];
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
-    gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
+    gDPSetTextureLUT(gDisplayListAllocPtr++, G_TT_RGBA16);
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, state->textureEntry.data_ptr);
+    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, state->textureEntry.data_ptr);
 
     gDPSetTile(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_IM_FMT_CI,
         G_IM_SIZ_16b,
         0,
@@ -2907,9 +2914,9 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
         G_TX_NOLOD
     );
 
-    gDPLoadSync(gRegionAllocPtr++);
+    gDPLoadSync(gDisplayListAllocPtr++);
 
-    loadBlockCmd = gRegionAllocPtr++;
+    loadBlockCmd = gDisplayListAllocPtr++;
     loadBlockCmd->words.w0 = 0xF3000000;
     gGraphicsMode = -1;
     widthDiv16 = state->textureEntry.width >> 4;
@@ -2932,14 +2939,14 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
     }
     loadBlockCmd->words.w1 = loadBlockWord;
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
     line = (((state->textureEntry.width >> 1) + 7) >> 3) & 0x1FF;
     new_var = G_TX_NOMIRROR;
-    gDPSetTile(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_4b, line, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0);
+    gDPSetTile(gDisplayListAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_4b, line, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0);
 
     gDPSetTileSize(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_TX_RENDERTILE,
         0,
         0,
@@ -2947,12 +2954,12 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
         (state->textureEntry.height - 1) << 2
     );
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, state->textureEntry.index_ptr);
+    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, state->textureEntry.index_ptr);
 
-    gDPTileSync(gRegionAllocPtr++);
+    gDPTileSync(gDisplayListAllocPtr++);
 
     gDPSetTile(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_IM_FMT_RGBA,
         G_IM_SIZ_4b,
         0,
@@ -2967,11 +2974,11 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
         G_TX_NOLOD
     );
 
-    gDPLoadSync(gRegionAllocPtr++);
+    gDPLoadSync(gDisplayListAllocPtr++);
 
-    gDPLoadTLUTCmd(gRegionAllocPtr++, G_TX_LOADTILE, 15);
+    gDPLoadTLUTCmd(gDisplayListAllocPtr++, G_TX_LOADTILE, 15);
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
     if (state->transformMatrix == NULL) {
         state->transformMatrix = arenaAlloc16(0x40);
@@ -2981,15 +2988,15 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
         transform3DToN64Mtx(&state->transform, state->transformMatrix);
     }
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
-    gDPSetTexturePersp(gRegionAllocPtr++, G_TP_PERSP);
+    gDPSetTexturePersp(gDisplayListAllocPtr++, G_TP_PERSP);
 
-    gSPSegment(gRegionAllocPtr++, 0x02, state->renderEntry);
+    gSPSegment(gDisplayListAllocPtr++, 0x02, state->renderEntry);
 
-    gSPMatrix(gRegionAllocPtr++, state->transformMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, state->transformMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
 
-    gSPDisplayList(gRegionAllocPtr++, D_80090DB0_919B0);
+    gSPDisplayList(gDisplayListAllocPtr++, D_80090DB0_919B0);
 }
 
 void spawnItemBoxBurstEffect(void *displayList, s32 isSecondaryBox) {

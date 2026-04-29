@@ -65,7 +65,7 @@ typedef struct {
     u8 unk5C;
 } GameStatePartial5C;
 
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 extern AssetMeta D_8009A550_9B150[];
 extern u16 D_8009ADE0_9B9E0;
@@ -5459,14 +5459,14 @@ void renderPlayerJointShadow(Player *player) {
     }
 
     if (player->jointVertices != NULL && player->jointMatrix != NULL) {
-        gSPMatrix(gRegionAllocPtr++, player->jointMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
+        gSPMatrix(gDisplayListAllocPtr++, player->jointMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
         gGraphicsMode = -1;
-        gSPDisplayList(gRegionAllocPtr++, D_800BAA30_AA8E0);
+        gSPDisplayList(gDisplayListAllocPtr++, D_800BAA30_AA8E0);
         getTableEntryByU16Index(player->unk18, 0, &textureEntry);
 
-        gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_I, G_IM_SIZ_16b, 1, textureEntry.data_ptr);
+        gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_I, G_IM_SIZ_16b, 1, textureEntry.data_ptr);
         gDPSetTile(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             G_IM_FMT_I,
             G_IM_SIZ_16b,
             0,
@@ -5480,11 +5480,11 @@ void renderPlayerJointShadow(Player *player) {
             5,
             G_TX_NOLOD
         );
-        gDPLoadSync(gRegionAllocPtr++);
-        gDPLoadBlock(gRegionAllocPtr++, G_TX_LOADTILE, 0, 0, 255, 1024);
-        gDPPipeSync(gRegionAllocPtr++);
+        gDPLoadSync(gDisplayListAllocPtr++);
+        gDPLoadBlock(gDisplayListAllocPtr++, G_TX_LOADTILE, 0, 0, 255, 1024);
+        gDPPipeSync(gDisplayListAllocPtr++);
         gDPSetTile(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             G_IM_FMT_I,
             G_IM_SIZ_4b,
             2,
@@ -5498,13 +5498,13 @@ void renderPlayerJointShadow(Player *player) {
             5,
             G_TX_NOLOD
         );
-        gDPSetTileSize(gRegionAllocPtr++, G_TX_RENDERTILE, 0, 0, 31 << 2, 31 << 2);
+        gDPSetTileSize(gDisplayListAllocPtr++, G_TX_RENDERTILE, 0, 0, 31 << 2, 31 << 2);
 
-        gSPVertex(gRegionAllocPtr++, player->jointVertices, 9, 0);
-        gSP2Triangles(gRegionAllocPtr++, 0, 1, 3, 0, 1, 4, 3, 0);
-        gSP2Triangles(gRegionAllocPtr++, 1, 2, 5, 0, 5, 4, 1, 0);
-        gSP2Triangles(gRegionAllocPtr++, 3, 4, 7, 0, 7, 6, 3, 0);
-        gSP2Triangles(gRegionAllocPtr++, 4, 5, 7, 0, 5, 8, 7, 0);
+        gSPVertex(gDisplayListAllocPtr++, player->jointVertices, 9, 0);
+        gSP2Triangles(gDisplayListAllocPtr++, 0, 1, 3, 0, 1, 4, 3, 0);
+        gSP2Triangles(gDisplayListAllocPtr++, 1, 2, 5, 0, 5, 4, 1, 0);
+        gSP2Triangles(gDisplayListAllocPtr++, 3, 4, 7, 0, 7, 6, 3, 0);
+        gSP2Triangles(gDisplayListAllocPtr++, 4, 5, 7, 0, 5, 8, 7, 0);
     }
 }
 
@@ -5539,7 +5539,7 @@ void updatePlayerJointPositions(Player *player) {
 
     if (!(player->animFlags & 0x800000)) {
         for (jointIdx = 0; jointIdx < 4; jointIdx++) {
-            debugEnqueueCallback(jointIdx, 1, renderPlayerJointShadow, (void *)player);
+            enqueueCallbackBySlotIndex(jointIdx, 1, renderPlayerJointShadow, (void *)player);
         }
     }
 }

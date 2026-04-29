@@ -783,6 +783,6 @@ void updateBossProximityCheckpoints(Arg0Struct *arg0) {
     arg0->jointShadowNeedsUpdate = 1;
 
     for (checkpointIndex = 0; checkpointIndex < 4; checkpointIndex++) {
-        debugEnqueueCallback((u16)checkpointIndex, 1, renderPlayerJointShadow, arg0);
+        enqueueCallbackBySlotIndex((u16)checkpointIndex, 1, renderPlayerJointShadow, arg0);
     }
 }

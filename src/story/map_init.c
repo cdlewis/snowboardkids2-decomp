@@ -412,7 +412,7 @@ void storyMapAwaitFadeOutAndCleanup(void) {
         state[3].unk0.next = freeNodeMemory(state[3].unk0.next);
         state[3].prev = freeNodeMemory(state[3].prev);
 
-        if (state[3].unk8.callback_selector != 0) {
+        if (state[3].unk8.counter != 0) {
             exitCallback = &onStoryMapExitToMainMenu;
         } else {
             exitCallback = &onStoryMapNormalExit;

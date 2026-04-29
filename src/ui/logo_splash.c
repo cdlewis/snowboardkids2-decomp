@@ -231,11 +231,11 @@ void updateLogoScreen(void) {
 
     state = logoScreen->state;
     if (state == 2) {
-        debugEnqueueCallback(0, 4, renderTiledTexture, &logoScreen->unk1EC);
+        enqueueCallbackBySlotIndex(0, 4, renderTiledTexture, &logoScreen->unk1EC);
     } else if (state >= 2) {
         if (state < 7) {
             if (state >= 4) {
-                debugEnqueueCallback(0, 4, renderTiledTexture, &logoScreen->unk218);
+                enqueueCallbackBySlotIndex(0, 4, renderTiledTexture, &logoScreen->unk218);
 
                 for (i = 0; i < logoScreen->visibleLetterCount; i++) {
                     logoScreen->unk2D4[i] += 0x330000;
@@ -243,7 +243,7 @@ void updateLogoScreen(void) {
                         logoScreen->unk2D4[i] = 0xFF0000;
                     }
                     logoScreen->unk244[i].unk14 = (s8)(logoScreen->unk2D4[i] >> 16);
-                    debugEnqueueCallback(0, 3, renderScaledAlphaSpriteFrame, &logoScreen->unk244[i]);
+                    enqueueCallbackBySlotIndex(0, 3, renderScaledAlphaSpriteFrame, &logoScreen->unk244[i]);
                 }
             }
         }

@@ -223,7 +223,7 @@ s32 g_GhostBaseDirection_pad = 0;
 extern Gfx D_8009A780_9B380[];
 extern s32 gLookAtPtr;
 extern s16 gGraphicsMode;
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 
 void initAnimatedGhost(AnimatedGhostEntity *);
 void cleanupAnimatedGhost(void **);
@@ -830,7 +830,7 @@ void updateGhostSlotStates(u8 *ghostSlots) {
     }
 
     for (i = 0; i < 4; i++) {
-        debugEnqueueCallback((u16)i, 4, renderGhosts, ghostSlots);
+        enqueueCallbackBySlotIndex((u16)i, 4, renderGhosts, ghostSlots);
     }
 }
 
@@ -846,7 +846,7 @@ void renderGhosts(GhostRenderState *state) {
 
     currentTextureIndex = -1;
     gGraphicsMode = -1;
-    gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+    gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
 
     for (i = 0; i < 8; i++) {
         if (isObjectCulled(&g_GhostSpawnPositions[i]) == 0) {
@@ -857,7 +857,7 @@ void renderGhosts(GhostRenderState *state) {
                 getTableEntryByU16Index(state->textureTable, (u16)currentTextureIndex, &textureTableEntry);
 
                 gDPLoadMultiBlock_4b(
-                    gRegionAllocPtr++,
+                    gDisplayListAllocPtr++,
                     textureTableEntry.data_ptr,
                     0,
                     G_TX_RENDERTILE,
@@ -873,20 +873,20 @@ void renderGhosts(GhostRenderState *state) {
                     G_TX_NOLOD
                 );
 
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, textureTableEntry.index_ptr);
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, textureTableEntry.index_ptr);
             }
 
             gSPMatrix(
-                gRegionAllocPtr++,
+                gDisplayListAllocPtr++,
                 (u8 *)state->matrixData + (i << 6),
                 G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
             );
 
-            gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-            gSPVertex(gRegionAllocPtr++, D_800BCA60_B0750, 4, 0);
+            gSPVertex(gDisplayListAllocPtr++, D_800BCA60_B0750, 4, 0);
 
-            gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+            gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
         }
     }
 }

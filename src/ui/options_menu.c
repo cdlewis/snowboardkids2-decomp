@@ -127,10 +127,10 @@ void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
 void updateOptionsMenuTitle(u8 *arg0) {
     s32 i;
 
-    debugEnqueueCallback(8, 0, renderHudTextLayout, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderHudTextLayout, arg0);
 
     for (i = 0; i < 2; i++) {
-        debugEnqueueCallback(8, 0, renderTextSprite, arg0 + 0x14 + i * 0x10);
+        enqueueCallbackBySlotIndex(8, 0, renderTextSprite, arg0 + 0x14 + i * 0x10);
     }
 }
 
@@ -229,7 +229,7 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
             arg0->labelEntries[i].highlight.asShort = 0;
         }
 
-        debugEnqueueCallback(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
+        enqueueCallbackBySlotIndex(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
 
         enqueueHudTextLayoutAlphaBlended(
             arg0->textRenderAsset,
@@ -322,7 +322,7 @@ void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
                 arg0->textEntries[i].highlight = 0;
             }
 
-            debugEnqueueCallback(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
+            enqueueCallbackBySlotIndex(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
 
             enqueueHudTextLayoutAlphaBlended(
                 arg0->textRenderAsset,
@@ -384,7 +384,7 @@ void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
         }
         arg0[i].y = (alloc->selectedIndex * 32) - 32;
         arg0[i].highlightValue = alloc->itemValues[alloc->selectedIndex];
-        debugEnqueueCallback(8, 0, renderAlphaBlendedTextSprite, &arg0[i]);
+        enqueueCallbackBySlotIndex(8, 0, renderAlphaBlendedTextSprite, &arg0[i]);
     }
 }
 

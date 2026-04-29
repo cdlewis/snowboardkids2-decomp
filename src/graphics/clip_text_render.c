@@ -15,7 +15,7 @@ typedef struct {
 } ColorRect;
 
 extern s16 gGraphicsMode;
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 extern s32 gFrameCounter;
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 extern s16 gTextureEnabled;
@@ -70,15 +70,15 @@ void drawColorRect(ColorRect *rect) {
         return;
     }
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
     if (gGraphicsMode != 0) {
         gGraphicsMode = 0;
-        gDPPipeSync(gRegionAllocPtr++);
-        gDPSetCycleType(gRegionAllocPtr++, G_CYC_1CYCLE);
-        gDPSetEnvColor(gRegionAllocPtr++, rect->red, rect->green, rect->blue, 0xFF);
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetCycleType(gDisplayListAllocPtr++, G_CYC_1CYCLE);
+        gDPSetEnvColor(gDisplayListAllocPtr++, rect->red, rect->green, rect->blue, 0xFF);
         gDPSetCombineLERP(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             1,
             0,
             ENVIRONMENT,
@@ -96,10 +96,10 @@ void drawColorRect(ColorRect *rect) {
             ENVIRONMENT,
             0
         );
-        gDPSetRenderMode(gRegionAllocPtr++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+        gDPSetRenderMode(gDisplayListAllocPtr++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     }
 
-    gDPFillRectangle(gRegionAllocPtr++, left, top, right + 1, bottom + 1);
+    gDPFillRectangle(gDisplayListAllocPtr++, left, top, right + 1, bottom + 1);
 }
 
 void renderTintedSpriteGrid(
@@ -138,7 +138,7 @@ void renderTintedSpriteGrid(
             } else {
                 cursor->frameIndex = 6;
             }
-            debugEnqueueCallback(priority, layer, (void *)renderSpriteFrame, cursor);
+            enqueueCallbackBySlotIndex(priority, layer, (void *)renderSpriteFrame, cursor);
         }
     }
 
@@ -172,7 +172,7 @@ void renderTintedSpriteGrid(
                 if ((row == rows) & (col == cols)) {
                     tile->frameIndex = 3;
                 }
-                debugEnqueueCallback(priority, layer, (void *)renderTintedSprite, tile);
+                enqueueCallbackBySlotIndex(priority, layer, (void *)renderTintedSprite, tile);
             }
         }
         tileX = savedX - 8;
@@ -241,26 +241,26 @@ void drawColorRectFill(ColorRect *rect) {
         return;
     }
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
     if (gGraphicsMode != 0) {
-        tempGfx = gRegionAllocPtr;
-        gRegionAllocPtr = tempGfx + 1;
+        tempGfx = gDisplayListAllocPtr;
+        gDisplayListAllocPtr = tempGfx + 1;
         tempGfx[0].words.w1 = G_CYC_FILL;
         gGraphicsMode = 0;
         tempGfx[0].words.w0 = 0xE3000A01;
-        gRegionAllocPtr = tempGfx + 2;
+        gDisplayListAllocPtr = tempGfx + 2;
         tempGfx[1].words.w0 = 0xE200001C;
         tempGfx[1].words.w1 = 0;
     }
 
-    gfx = gRegionAllocPtr;
-    gRegionAllocPtr = gfx + 1;
+    gfx = gDisplayListAllocPtr;
+    gDisplayListAllocPtr = gfx + 1;
     gfx->words.w0 = 0xF7000000;
     r = rect->red;
     g = rect->green;
     b = rect->blue;
-    gRegionAllocPtr = gfx + 2;
+    gDisplayListAllocPtr = gfx + 2;
     gfx[1].words.w0 = (0xF6000000 | ((right & 0x3FF) << 14) | ((bottom & 0x3FF) << 2));
     gfx[1].words.w1 = ((left & 0x3FF) << 14) | ((top & 0x3FF) << 2);
 

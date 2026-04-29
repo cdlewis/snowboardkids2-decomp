@@ -158,7 +158,7 @@ void loadSceneRenderTaskData(SceneRenderTaskLoadContext *);
 void updateSceneRenderTask(SceneRenderTaskCtx *ctx);
 void cleanupSceneRenderTask(SceneRenderTaskData *task);
 
-extern Gfx *volatile gRegionAllocPtr;
+extern Gfx *volatile gDisplayListAllocPtr;
 extern s32 gCurrentDisplayBufferIndex;
 
 Gfx D_8008CCE0_8D8E0[] = {
@@ -224,7 +224,7 @@ AssetDataBlock D_8008CD98_8D998 = {
 };
 
 void setColorImageToAuxBuffer(void *arg0) {
-    gDPSetColorImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, &gFrameBuffer);
+    gDPSetColorImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, &gFrameBuffer);
 }
 
 void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
@@ -243,7 +243,7 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
     s32 uly;
 
     node = arg0->node;
-    gfx = gRegionAllocPtr;
+    gfx = gDisplayListAllocPtr;
     frameIdx = gCurrentDisplayBufferIndex;
 
     gfx->words.w0 = 0xFF10013F;
@@ -284,26 +284,26 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
 
     ulx = node->clipLeft;
     uly = 1;
-    gRegionAllocPtr = gfx + uly;
-    gRegionAllocPtr = gfx + 2;
-    gRegionAllocPtr = gfx + 3;
-    gRegionAllocPtr = gfx + 4;
-    gRegionAllocPtr = gfx + 5;
-    gRegionAllocPtr = gfx + 6;
-    gRegionAllocPtr = gfx + 7;
-    gRegionAllocPtr = gfx + 8;
+    gDisplayListAllocPtr = gfx + uly;
+    gDisplayListAllocPtr = gfx + 2;
+    gDisplayListAllocPtr = gfx + 3;
+    gDisplayListAllocPtr = gfx + 4;
+    gDisplayListAllocPtr = gfx + 5;
+    gDisplayListAllocPtr = gfx + 6;
+    gDisplayListAllocPtr = gfx + 7;
+    gDisplayListAllocPtr = gfx + 8;
 
     uly = node->clipTop;
     gfx[6].words.w1 = (((ulx << 2) & 0xFFF) << 12) | ((uly << 2) & 0xFFF);
 
     gfx[7].words.w0 = 0xE1000000;
-    gRegionAllocPtr = gfx + 9;
+    gDisplayListAllocPtr = gfx + 9;
 
     gfx[8].words.w0 = 0xF1000000;
     gfx[7].words.w1 = 0;
     gfx[8].words.w1 = texCoord;
 
-    gRegionAllocPtr = gfx + 10;
+    gDisplayListAllocPtr = gfx + 10;
 
     frameIdx = 0;
     gfx[9].words.w0 = otherMode;
@@ -311,11 +311,11 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
 }
 
 void enqueueAuxBufferRender(AuxBufferContext *ctx) {
-    debugEnqueueCallback(ctx->node->slot_index, 7, buildAuxBufferDisplayList, ctx);
+    enqueueCallbackBySlotIndex(ctx->node->slot_index, 7, buildAuxBufferDisplayList, ctx);
 }
 
 void enqueueAuxBufferSetup(AuxBufferContext *ctx) {
-    debugEnqueueCallback(ctx->node->slot_index, 0, setColorImageToAuxBuffer, ctx);
+    enqueueCallbackBySlotIndex(ctx->node->slot_index, 0, setColorImageToAuxBuffer, ctx);
 }
 
 void setAuxRenderEnabled(Func8000C268Arg *arg0) {
@@ -417,7 +417,7 @@ void initSceneRenderNode(
     }
 }
 
-void n_alSeqpDelete(ViewportNode *arg0) {
+void unlinkViewportNode(ViewportNode *arg0) {
     unlinkNode(arg0);
 }
 

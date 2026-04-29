@@ -842,7 +842,7 @@ void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *portraitEntries) {
         setCallbackWithContinue(&initPortraitRotationFrames);
     } else {
         for (i = 0; i < 2; i++) {
-            debugEnqueueCallback(8, 7, renderSpriteFrame, &portraitEntries[i]);
+            enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, &portraitEntries[i]);
         }
     }
 }
@@ -973,30 +973,30 @@ void renderCharacterSelectDisplay(CharacterSelectDisplayState *state) {
     allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     for (i = 0; i < 10; i++) {
-        debugEnqueueCallback(8, 0, renderSpriteFrame, &state->iconEntries[i]);
+        enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &state->iconEntries[i]);
     }
 
     if (D_800AFE8C_A71FC->gameMode == 0) {
         selectedChar = allocation->unkB33[allocation->unkB2C];
         temp_a0 = selectedChar & 0xFF;
         if (temp_a0 == 3 || temp_a0 == 7 || temp_a0 == 11) {
-            debugEnqueueCallback(8, 0, renderSpriteFrame, &state->sprite78);
+            enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &state->sprite78);
         } else if ((u32)(selectedChar - 12) < 3 && allocation->menuState < 6) {
-            debugEnqueueCallback(8, 0, renderSpriteFrame, &state->sprite84);
+            enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &state->sprite84);
         }
     }
 
     characterIndex = allocation->unkB33[allocation->unkB2C];
     if (EepromSaveData->save_slot_status[characterIndex] == 1) {
         callback = (void (*)(void *))renderSpriteFrame;
-        debugEnqueueCallback(8, 6, callback, &state->sprite90);
+        enqueueCallbackBySlotIndex(8, 6, callback, &state->sprite90);
         characterIndex = allocation->unkB33[allocation->unkB2C];
         if (characterIndex < 9) {
             sprintf(state->numBuffer, "%d", characterIndex + 1);
-            debugEnqueueCallback(8, 7, renderTextPalette, &state->textPaletteData);
+            enqueueCallbackBySlotIndex(8, 7, renderTextPalette, &state->textPaletteData);
         } else {
             state->sprite9C.frameIndex = characterIndex + 4;
-            debugEnqueueCallback(8, 7, callback, &state->sprite9C);
+            enqueueCallbackBySlotIndex(8, 7, callback, &state->sprite9C);
         }
     }
 
@@ -1020,7 +1020,7 @@ void renderCharacterSelectDisplay(CharacterSelectDisplayState *state) {
             }
             for (i = 0; i < 4; i++) {
                 state->textEntries[i].paletteAlpha = state->textAlpha;
-                debugEnqueueCallback(8, 7, renderTextSprite, &state->textEntries[i]);
+                enqueueCallbackBySlotIndex(8, 7, renderTextSprite, &state->textEntries[i]);
             }
         }
     }
@@ -1048,7 +1048,7 @@ void renderConfirmationIndicator(void *arg0) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->menuState == 2) {
-        debugEnqueueCallback(8, 7, renderSpriteFrame, arg0);
+        enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, arg0);
     }
 }
 
@@ -1079,7 +1079,7 @@ void initUnlockNotificationSprite(UnlockNotificationState *state) {
 void renderUnlockNotification(UnlockNotificationState *state) {
     u16 nextFrame;
 
-    debugEnqueueCallback(0xA, 0, renderTiledTexture, state);
+    enqueueCallbackBySlotIndex(0xA, 0, renderTiledTexture, state);
 
     if (D_800AFE8C_A71FC->gameMode == 0) {
         if (EepromSaveData->save_slot_status[0] == 5) {
@@ -1092,7 +1092,7 @@ void renderUnlockNotification(UnlockNotificationState *state) {
                     state->frameIndex = 0x13;
                 }
             }
-            debugEnqueueCallback(8, 7, renderSpriteFrame, &state->x);
+            enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, &state->x);
         }
     }
 }
@@ -1246,7 +1246,7 @@ void updateMenuBackgroundEffect(MenuBackgroundEffectState *state) {
         state->rotationY++;
         state->rotationX &= 0x3FF;
         state->rotationY &= 0x3FF;
-        debugEnqueueCallback(0xB, 0, renderTiledTexture, state);
+        enqueueCallbackBySlotIndex(0xB, 0, renderTiledTexture, state);
     }
 }
 
@@ -1392,15 +1392,15 @@ void updatePrizeDisplay(PrizeDisplayState *state) {
 
     if ((u32)(allocation->menuState - 2) < 2) {
         renderTiledSprite3x3(state->backgroundAsset, -0x40, -0x8, 8, 4, 0, 0x60, 0xC0, 8, 0);
-        debugEnqueueCallback(8, 1, renderHudTextLayout, &state->titleX);
+        enqueueCallbackBySlotIndex(8, 1, renderHudTextLayout, &state->titleX);
 
         spriteEntry = state->spriteEntries;
         for (i = 0; i < 2; i++) {
-            debugEnqueueCallback(8, 1, renderTextSprite, &spriteEntry[i]);
+            enqueueCallbackBySlotIndex(8, 1, renderTextSprite, &spriteEntry[i]);
         }
 
         state->prizeCount = allocation->unkB46;
-        debugEnqueueCallback(8, 1, renderHudTextLayout, &state->counterX);
+        enqueueCallbackBySlotIndex(8, 1, renderHudTextLayout, &state->counterX);
     }
 }
 

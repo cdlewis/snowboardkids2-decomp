@@ -25,7 +25,7 @@ typedef struct {
 } ModelTransitionEffectState;
 
 extern s16 gGraphicsMode;
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 
 void setupModelTransitionVariant(ModelTransitionEffectState *);
 void updateModelTransitionEffect(ModelTransitionEffectState *);
@@ -130,14 +130,14 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
     long loadBlockWord;
     volatile u8 padding[0x10];
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
-    gDPSetTextureLUT(gRegionAllocPtr++, G_TT_RGBA16);
+    gDPSetTextureLUT(gDisplayListAllocPtr++, G_TT_RGBA16);
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, state->tableEntry.data_ptr);
+    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, state->tableEntry.data_ptr);
 
     gDPSetTile(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_IM_FMT_CI,
         G_IM_SIZ_16b,
         0,
@@ -152,9 +152,9 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
         G_TX_NOLOD
     );
 
-    gDPLoadSync(gRegionAllocPtr++);
+    gDPLoadSync(gDisplayListAllocPtr++);
 
-    loadBlockCmd = gRegionAllocPtr++;
+    loadBlockCmd = gDisplayListAllocPtr++;
     loadBlockCmd->words.w0 = 0xF3000000;
     gGraphicsMode = -1;
     widthDiv16 = state->tableEntry.width >> 4;
@@ -177,14 +177,14 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
     }
     loadBlockCmd->words.w1 = loadBlockWord;
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
     line = (((state->tableEntry.width >> 1) + 7) >> 3) & 0x1FF;
     new_var = G_TX_NOMIRROR;
-    gDPSetTile(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_4b, line, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0);
+    gDPSetTile(gDisplayListAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_4b, line, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0);
 
     gDPSetTileSize(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_TX_RENDERTILE,
         0,
         0,
@@ -192,12 +192,12 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
         (state->tableEntry.height - 1) << 2
     );
 
-    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, state->tableEntry.index_ptr);
+    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, state->tableEntry.index_ptr);
 
-    gDPTileSync(gRegionAllocPtr++);
+    gDPTileSync(gDisplayListAllocPtr++);
 
     gDPSetTile(
-        gRegionAllocPtr++,
+        gDisplayListAllocPtr++,
         G_IM_FMT_RGBA,
         G_IM_SIZ_4b,
         0,
@@ -212,11 +212,11 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
         G_TX_NOLOD
     );
 
-    gDPLoadSync(gRegionAllocPtr++);
+    gDPLoadSync(gDisplayListAllocPtr++);
 
-    gDPLoadTLUTCmd(gRegionAllocPtr++, G_TX_LOADTILE, 15);
+    gDPLoadTLUTCmd(gDisplayListAllocPtr++, G_TX_LOADTILE, 15);
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
     if (state->lookAtMatrix == 0) {
         state->lookAtMatrix = arenaAlloc16(0x40);
@@ -226,15 +226,15 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
         transform3DToN64Mtx(&state->transformMatrix, state->lookAtMatrix);
     }
 
-    gDPPipeSync(gRegionAllocPtr++);
+    gDPPipeSync(gDisplayListAllocPtr++);
 
-    gDPSetTexturePersp(gRegionAllocPtr++, G_TP_PERSP);
+    gDPSetTexturePersp(gDisplayListAllocPtr++, G_TP_PERSP);
 
-    gSPSegment(gRegionAllocPtr++, 0x02, state->segmentData);
+    gSPSegment(gDisplayListAllocPtr++, 0x02, state->segmentData);
 
-    gSPMatrix(gRegionAllocPtr++, state->lookAtMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, state->lookAtMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
 
-    gSPDisplayList(gRegionAllocPtr++, &D_8008C200_8CE00);
+    gSPDisplayList(gDisplayListAllocPtr++, &D_8008C200_8CE00);
 }
 
 void initModelTransitionEffect(ModelTransitionEffectState *state) {
@@ -288,7 +288,7 @@ void updateModelTransitionEffect(ModelTransitionEffectState *state) {
         if (state->currentFrame < 7) {
             state->lookAtMatrix = NULL;
             state->segmentData = &state->frameBuffer[frameBeforeIncrement].unk0;
-            debugEnqueueCallback(0, 1, &renderPalettedTexture, state);
+            enqueueCallbackBySlotIndex(0, 1, &renderPalettedTexture, state);
             state->currentFrame++;
         }
     }

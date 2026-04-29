@@ -510,7 +510,7 @@ extern PushZoneDataEntry gPushZoneData[];
 extern CompressedAssetEntry D_80090AB8_916B8[];
 extern s32 gLookAtPtr;
 extern s16 gGraphicsMode;
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 
 void initFallingEffect(FallingEffectState *arg0) {
     getCurrentAllocation();
@@ -629,13 +629,13 @@ void updateShieldEffect(ShieldEffectState *arg0) {
 
     for (i = 0; i < 4; i++) {
         if (arg0->displayConfig->displayList1 != 0) {
-            debugEnqueueCallback((u16)i, 1, renderShieldLayer1, arg0);
+            enqueueCallbackBySlotIndex((u16)i, 1, renderShieldLayer1, arg0);
         }
         if (arg0->displayConfig->displayList2 != 0) {
-            debugEnqueueCallback((u16)i, 3, renderShieldLayer2, arg0);
+            enqueueCallbackBySlotIndex((u16)i, 3, renderShieldLayer2, arg0);
         }
         if (arg0->displayConfig->displayList3 != 0) {
-            debugEnqueueCallback((u16)i, 5, renderShieldLayer3, arg0);
+            enqueueCallbackBySlotIndex((u16)i, 5, renderShieldLayer3, arg0);
         }
     }
 }
@@ -2398,7 +2398,7 @@ void processItemTriggers(ItemTriggerTaskState *arg0) {
         i = 0;
     }
     do {
-        debugEnqueueCallback((u16)i, 4, &renderItemTriggers, arg0);
+        enqueueCallbackBySlotIndex((u16)i, 4, &renderItemTriggers, arg0);
         i++;
     } while (i < 4);
 }
@@ -2426,7 +2426,7 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
     s32 textureIndex;
 
     prevTextureIndex = -1;
-    gSPDisplayList(gRegionAllocPtr++, D_8009A780_9B380);
+    gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
     gGraphicsMode = -1;
 
     for (i = 0; i < arg0->numItems; i++) {
@@ -2445,10 +2445,10 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
                 if (textureIndex != prevTextureIndex) {
                     getTableEntryByU16Index(arg0->textureTable, textureIndex & 0xFFFF, &tableEntry);
 
-                    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
+                    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, tableEntry.data_ptr);
 
                     gDPSetTile(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         G_IM_FMT_CI,
                         G_IM_SIZ_16b,
                         0,
@@ -2463,9 +2463,9 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
                         G_TX_NOLOD
                     );
 
-                    gDPLoadSync(gRegionAllocPtr++);
+                    gDPLoadSync(gDisplayListAllocPtr++);
 
-                    loadBlockCmd = gRegionAllocPtr++;
+                    loadBlockCmd = gDisplayListAllocPtr++;
                     loadBlockCmd->words.w0 = 0xF3000000;
                     widthDiv16 = tableEntry.width >> 4;
                     dxtBase = 0x800;
@@ -2487,12 +2487,12 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
                     }
                     loadBlockCmd->words.w1 = loadBlockWord;
 
-                    gDPPipeSync(gRegionAllocPtr++);
+                    gDPPipeSync(gDisplayListAllocPtr++);
 
                     tileLine = (((tableEntry.width >> 1) + 7) >> 3) & 0x1FF;
                     new_var = G_TX_NOMIRROR;
                     gDPSetTile(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         G_IM_FMT_CI,
                         G_IM_SIZ_4b,
                         tileLine,
@@ -2508,7 +2508,7 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
                     );
 
                     gDPSetTileSize(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         G_TX_RENDERTILE,
                         0,
                         0,
@@ -2516,12 +2516,12 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
                         (tableEntry.height - 1) << 2
                     );
 
-                    gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);
+                    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tableEntry.index_ptr);
 
-                    gDPTileSync(gRegionAllocPtr++);
+                    gDPTileSync(gDisplayListAllocPtr++);
 
                     gDPSetTile(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         G_IM_FMT_RGBA,
                         G_IM_SIZ_4b,
                         0,
@@ -2536,26 +2536,26 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
                         G_TX_NOLOD
                     );
 
-                    gDPLoadSync(gRegionAllocPtr++);
+                    gDPLoadSync(gDisplayListAllocPtr++);
 
-                    gDPLoadTLUTCmd(gRegionAllocPtr++, G_TX_LOADTILE, 15);
+                    gDPLoadTLUTCmd(gDisplayListAllocPtr++, G_TX_LOADTILE, 15);
 
-                    gDPPipeSync(gRegionAllocPtr++);
+                    gDPPipeSync(gDisplayListAllocPtr++);
 
                     prevTextureIndex = textureIndex;
                 }
 
                 gSPMatrix(
-                    gRegionAllocPtr++,
+                    gDisplayListAllocPtr++,
                     (u8 *)arg0->matrices + (i << 6),
                     G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
                 );
 
-                gSPMatrix(gRegionAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+                gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-                gSPVertex(gRegionAllocPtr++, arg0->vertices, 4, 0);
+                gSPVertex(gDisplayListAllocPtr++, arg0->vertices, 4, 0);
 
-                gSP2Triangles(gRegionAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
+                gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
             }
         }
     }

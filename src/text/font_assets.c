@@ -10,7 +10,7 @@ extern s32 gFontTextureData;
 extern s32 gFontPaletteBase;
 extern u16 gDefaultFontPalette[];
 
-extern Gfx *gRegionAllocPtr;
+extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 extern s8 gCurrentPaletteId;
 extern s16 gTextureEnabled[];
@@ -46,7 +46,7 @@ void renderTextPalette(TextData *arg0) {
     s32 i;
 
     if (gTextureEnabled[0] != 0) {
-        gSPTexture(gRegionAllocPtr++, 0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON);
+        gSPTexture(gDisplayListAllocPtr++, 0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON);
     }
 
     x_pos = arg0->x;
@@ -61,12 +61,12 @@ void renderTextPalette(TextData *arg0) {
         gGraphicsMode = 1;
         gCurrentPaletteId = -1;
 
-        gSPDisplayList(gRegionAllocPtr++, gFontDisplayListSetup);
+        gSPDisplayList(gDisplayListAllocPtr++, gFontDisplayListSetup);
 
-        gDPSetTextureImage(gRegionAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, gFontTextureData);
+        gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, gFontTextureData);
 
         gDPSetTile(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             G_IM_FMT_CI,
             G_IM_SIZ_16b,
             0,
@@ -81,14 +81,14 @@ void renderTextPalette(TextData *arg0) {
             G_TX_NOLOD
         );
 
-        gDPLoadSync(gRegionAllocPtr++);
+        gDPLoadSync(gDisplayListAllocPtr++);
 
-        gDPLoadBlock(gRegionAllocPtr++, G_TX_LOADTILE, 0, 0, 1023, 512);
+        gDPLoadBlock(gDisplayListAllocPtr++, G_TX_LOADTILE, 0, 0, 1023, 512);
 
-        gDPPipeSync(gRegionAllocPtr++);
+        gDPPipeSync(gDisplayListAllocPtr++);
 
         gDPSetTile(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             G_IM_FMT_CI,
             G_IM_SIZ_4b,
             4,
@@ -103,12 +103,12 @@ void renderTextPalette(TextData *arg0) {
             G_TX_NOLOD
         );
 
-        gDPSetTileSize(gRegionAllocPtr++, G_TX_RENDERTILE, 0, 0, 0x00FC, 0x00FC);
+        gDPSetTileSize(gDisplayListAllocPtr++, G_TX_RENDERTILE, 0, 0, 0x00FC, 0x00FC);
     }
 
     if (gCurrentPaletteId != arg0->palette) {
         gCurrentPaletteId = arg0->palette;
-        gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (arg0->palette << 5));
+        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + (arg0->palette << 5));
     }
 
     str_ptr = arg0->string;
@@ -121,23 +121,23 @@ void renderTextPalette(TextData *arg0) {
             }
 
             if (*str_ptr == 1) {
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (0x20 * 1));
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + (0x20 * 1));
             }
 
             if (*str_ptr == 2) {
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (0x20 * 2));
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + (0x20 * 2));
             }
 
             if (*str_ptr == 3) {
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (0x20 * 3));
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + (0x20 * 3));
             }
 
             if (*str_ptr == 4) {
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (0x20 * 4));
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + (0x20 * 4));
             }
 
             if (*str_ptr == 7) {
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (0x20 * 7));
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + (0x20 * 7));
             }
         } else {
             char_index = *str_ptr - 0x20;
@@ -165,7 +165,7 @@ void renderTextPalette(TextData *arg0) {
                     s16 t = clip_offset_y + (char_index & 0x38);
 
                     gSPTextureRectangle(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         char_x << 2,
                         char_y << 2,
                         char_right << 2,
@@ -220,7 +220,7 @@ void enqueueTextRender(s16 x, s16 y, s16 palette, u8 *target_string, s32 arg4, s
             string_meta_block->y = y;
             string_meta_block->palette = palette;
             string_meta_block->string = string_block;
-            debugEnqueueCallback(arg4, arg5, &renderTextPalette, string_meta_block);
+            enqueueCallbackBySlotIndex(arg4, arg5, &renderTextPalette, string_meta_block);
         }
     }
 }
@@ -232,7 +232,7 @@ void renderTextColored(ColoredTextRenderArg *arg0) {
     u8 *str;
 
     if (gTextureEnabled[0]) {
-        gSPTexture(gRegionAllocPtr++, 0x8000, 0x8000, 0, 0, G_ON);
+        gSPTexture(gDisplayListAllocPtr++, 0x8000, 0x8000, 0, 0, G_ON);
     }
 
     var_s7 = arg0->x;
@@ -245,9 +245,9 @@ void renderTextColored(ColoredTextRenderArg *arg0) {
     if (gGraphicsMode != 1) {
         gGraphicsMode = 1;
         gCurrentPaletteId = -1;
-        gSPDisplayList(gRegionAllocPtr++, gFontDisplayListSetup);
+        gSPDisplayList(gDisplayListAllocPtr++, gFontDisplayListSetup);
         gDPLoadTextureBlock_4b(
-            gRegionAllocPtr++,
+            gDisplayListAllocPtr++,
             (u32)gFontTextureData,
             G_IM_FMT_CI,
             64,
@@ -262,16 +262,16 @@ void renderTextColored(ColoredTextRenderArg *arg0) {
         );
     }
 
-    gDPPipeSync(gRegionAllocPtr++);
-    gDPSetCombineMode(gRegionAllocPtr++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
-    gDPSetPrimColor(gRegionAllocPtr++, 0, 0, arg0->shade, arg0->shade, arg0->shade, 0xFF);
+    gDPPipeSync(gDisplayListAllocPtr++);
+    gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
+    gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, arg0->shade, arg0->shade, arg0->shade, 0xFF);
 
     if (gCurrentPaletteId != arg0->palette) {
         gCurrentPaletteId = arg0->palette;
         if (arg0->palette == 0xFF) {
-            gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gDefaultFontPalette);
+            gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gDefaultFontPalette);
         } else {
-            gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + (arg0->palette << 5));
+            gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + (arg0->palette << 5));
         }
     }
 
@@ -282,19 +282,19 @@ void renderTextColored(ColoredTextRenderArg *arg0) {
                 sp6 += 8;
             }
             if (*str == 1) {
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + 0x20);
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + 0x20);
             }
             if (*str == 2) {
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + 0x40);
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + 0x40);
             }
             if (*str == 3) {
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + 0x60);
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + 0x60);
             }
             if (*str == 4) {
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + 0x80);
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + 0x80);
             }
             if (*str == 7) {
-                gDPLoadTLUT_pal16(gRegionAllocPtr++, 0, gFontPaletteBase + 0xE0);
+                gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gFontPaletteBase + 0xE0);
             }
         } else {
             charIndex = *str - 0x20;
@@ -318,7 +318,7 @@ void renderTextColored(ColoredTextRenderArg *arg0) {
                     s16 s = (clipOffsetX + ((charIndex & 7) * 8)) << 5;
                     s16 t = (clipOffsetY + (charIndex & 0x38));
                     gSPTextureRectangle(
-                        gRegionAllocPtr++,
+                        gDisplayListAllocPtr++,
                         left * 4,
                         top * 4,
                         xh * 4,
@@ -335,7 +335,7 @@ void renderTextColored(ColoredTextRenderArg *arg0) {
         }
     }
 
-    gDPPipeSync(gRegionAllocPtr++);
-    gDPSetCombineLERP(gRegionAllocPtr++, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0);
-    gDPSetPrimColor(gRegionAllocPtr++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+    gDPPipeSync(gDisplayListAllocPtr++);
+    gDPSetCombineLERP(gDisplayListAllocPtr++, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0, 1, 0, TEXEL0, 0);
+    gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
 }

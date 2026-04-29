@@ -20,14 +20,6 @@ typedef struct {
     u8 padding[0x5];
 } ViewportNode_ColorData;
 
-typedef struct PoolEntry {
-    struct PoolEntry *next;
-    void *callback;
-    void *callbackData;
-    u8 _padC[3];
-    u8 poolIndex;
-} PoolEntry;
-
 /* Render callback pool entry — linked list of draw callbacks */
 typedef struct CallbackEntry {
     struct CallbackEntry *next;
@@ -50,19 +42,19 @@ typedef struct {
 typedef struct ViewportNode {
     /* 0x00 */ union {
         struct ViewportNode *next;
-        u16 callback_selector;
+        u16 counter;
     } unk0;
     /* 0x04 */ struct ViewportNode *prev;
     /* 0x08 */ union {
         struct ViewportNode *list2_next;
-        u16 callback_selector;
+        u16 counter;
     } unk8;
     /* 0x0C */ struct ViewportNode *list2_prev;
     /* 0x10 */ struct ViewportNode *list3_next;
     /* 0x14 */ s8 unk14;
     /* 0x15 */ u8 priority;
     /* 0x16 */ u16 slot_index;
-    /* 0x18 */ PoolEntry pool[7];
+    /* 0x18 */ CallbackEntry pool[7];
     /* 0x88 */ void *unk88;
     /* 0x8C */ u8 padding8C[0xC];
     /* 0x98 */ void *displayListPtr;
@@ -128,7 +120,7 @@ void setViewportFadeValue(ViewportNode *node, u8 fadeValue, u8 fadeMode);
 
 void setViewportFadeValueBySlotIndex(u16 slotIndex, u8 fadeValue, u8 fadeMode);
 
-void debugEnqueueCallback(u16 index, u8 arg1, void *arg2, void *arg3);
+void enqueueCallbackBySlotIndex(u16 index, u8 arg1, void *arg2, void *arg3);
 
 void *arenaAlloc16(s32 size);
 
@@ -164,7 +156,7 @@ void setModelCameraTransform(void *, s16, s16, s16, s16, s16, s16);
 
 void unlinkNode(ViewportNode *player);
 
-void n_alSeqpDelete(ViewportNode *arg0);
+void unlinkViewportNode(ViewportNode *arg0);
 
 s32 getViewportFadeMode(ViewportNode *);
 

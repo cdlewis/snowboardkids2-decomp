@@ -586,9 +586,9 @@ void updateFloatingItemSprite(FloatingItemSpriteTask *arg0) {
     }
 
     if (arg0->halfSizeRender == 0) {
-        debugEnqueueCallback(arg0->renderPriority, 1, renderSpriteFrameWithPalette, arg0);
+        enqueueCallbackBySlotIndex(arg0->renderPriority, 1, renderSpriteFrameWithPalette, arg0);
     } else {
-        debugEnqueueCallback(arg0->renderPriority, 1, renderHalfSizeSpriteWithCustomPalette, arg0);
+        enqueueCallbackBySlotIndex(arg0->renderPriority, 1, renderHalfSizeSpriteWithCustomPalette, arg0);
     }
 }
 
