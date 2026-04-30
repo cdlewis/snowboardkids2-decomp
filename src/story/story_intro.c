@@ -25,7 +25,7 @@ typedef struct {
     /* 0x938 */ ViewportNode tertiaryCameraNode;
     /* 0xB10 */ void *portraitAsset;
     /* 0xB14 */ void *imageAsset;
-    /* 0xB18 */ void *effectAsset;
+    /* 0xB18 */ void *tiledBackgroundAsset;
     /* 0xB1C */ void *textRenderAsset;
     /* 0xB20 */ void *uiAsset;
     /* 0xB24 */ s32 loadStartFrame;
@@ -120,7 +120,7 @@ void initLevelSelectState(void) {
 
     state->portraitAsset = loadCompressedData(&_43A000_ROM_START, &_43A000_ROM_END, 0xB198);
     state->imageAsset = loadCompressedData(&_43F050_ROM_START, &_43F050_ROM_END, 0x14010);
-    state->effectAsset = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
+    state->tiledBackgroundAsset = loadCompressedData(&tiledSnowmanAsset_ROM_START, &tiledSnowmanAsset_ROM_END, 0xAE0);
     state->textRenderAsset = loadTextRenderAsset(1);
     state->uiAsset = loadAsset_34F7E0();
 
@@ -433,7 +433,7 @@ void cleanupLevelSelect(void) {
 
     allocation->portraitAsset = freeNodeMemory(allocation->portraitAsset);
     allocation->imageAsset = freeNodeMemory(allocation->imageAsset);
-    allocation->effectAsset = freeNodeMemory(allocation->effectAsset);
+    allocation->tiledBackgroundAsset = freeNodeMemory(allocation->tiledBackgroundAsset);
     allocation->textRenderAsset = freeNodeMemory(allocation->textRenderAsset);
     allocation->uiAsset = freeNodeMemory(allocation->uiAsset);
 

@@ -81,7 +81,7 @@ void onCharacterSelectCancel(void);
 
 USE_ASSET(_4237C0);
 USE_ASSET(_426EF0);
-USE_ASSET(_458E30);
+USE_ASSET(tiledSnowmanAsset);
 USE_ASSET(_459310);
 
 ColorData charSelectDimLight = { 0x50, 0x50, 0x50, 0x00, 0x00, 0x50, 0x50, 0x00 };
@@ -334,7 +334,7 @@ void initCharacterSelectScreen(void) {
     }
 
     state->mainAssets = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
-    state->iconAssets = loadCompressedData(&_458E30_ROM_START, &_459310_ROM_START, 0xAE0);
+    state->iconAssets = loadCompressedData(&tiledSnowmanAsset_ROM_START, &_459310_ROM_START, 0xAE0);
 
     state->hasSecretCharacters = 0;
     if (countUnlockedSlotsInCategory(3) != 0) {

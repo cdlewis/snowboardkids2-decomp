@@ -45,11 +45,11 @@ void cleanupTitleLogoTask(TitleLogoTask *arg0) {
 }
 
 void enqueueTitleLogoRender(TitleLogoTask *arg0) {
-    enqueueCallbackBySlotIndex(8, 0, renderTiledTexture, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderScrollingTileMap, arg0);
 }
 
 void initTitleLogoRenderState(TitleLogoTask *arg0) {
-    initTiledTextureRenderState(arg0, (s32)arg0->assetData);
+    initScrollingTileMapState(arg0, (s32)arg0->assetData);
     arg0->unk2 = 0x10;
     setCallback(enqueueTitleLogoRender);
 }

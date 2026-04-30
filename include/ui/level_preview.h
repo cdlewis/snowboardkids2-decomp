@@ -123,11 +123,11 @@ typedef struct {
 } PrizeDisplayState;
 
 typedef struct {
-    u16 rotationX;
-    u16 rotationY;
+    u16 scrollX;
+    u16 scrollY;
     u8 _pad4[0x28];
-    void *effectAsset;
-} MenuBackgroundEffectState;
+    void *tiledBackgroundAsset;
+} MenuTiledBackgroundState;
 
 typedef struct {
     s16 x;
@@ -183,14 +183,14 @@ void setupMenuCharacterModel(MenuCharacterModelState *state);
 void updateMenuCharacterModel(MenuCharacterModelState *state);
 void handleMenuCharacterAnimationEnd(MenuCharacterModelState *state);
 void setMenuCharacterAnimation(u8 animationType, MenuCharacterModelState *state);
-void cleanupMenuBackgroundEffect(MenuBackgroundEffectState *state);
-void setupMenuBackgroundEffect(MenuBackgroundEffectState *state);
-void updateMenuBackgroundEffect(MenuBackgroundEffectState *state);
+void cleanupMenuBackgroundEffect(MenuTiledBackgroundState *state);
+void setupMenuBackgroundEffect(MenuTiledBackgroundState *state);
+void updateMenuBackgroundEffect(MenuTiledBackgroundState *state);
 void renderMinigameDescText(MinigameDescTextState *state);
 void cleanupMinigameDescText(MinigameDescTextState *state);
 void initConfirmationIndicator(ConfirmationIndicatorState *state);
 void initPrizeDisplay(PrizeDisplayState *arg0);
-void initMenuBackgroundEffect(MenuBackgroundEffectState *state);
+void initMenuBackgroundEffect(MenuTiledBackgroundState *state);
 void initMinigameDescText(MinigameDescTextState *state);
 void initLevelSelectTransition(void);
 void cleanupLevelPreviewCharacter(LevelPreviewCharacterState *state);

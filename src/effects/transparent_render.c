@@ -130,7 +130,7 @@ void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
     entry = &assetGroupTable[taskData->groupIndex];
     if (taskData->initialized == 0) {
         for (i = 0; i < 4; i++) {
-            initTiledTextureRenderState(&taskData->elements[i], (s32)taskData->loadedAssets[i % entry->assetCount]);
+            initScrollingTileMapState(&taskData->elements[i], (s32)taskData->loadedAssets[i % entry->assetCount]);
             taskData->elements[i].width = 0x81;
             taskData->elements[i].height = 0x81;
         }
@@ -154,7 +154,7 @@ void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
         tileIndex = tableIndex % entry->tableSize;
         tileIndex = entry->tileIndexMap[tileIndex];
         assetIndex = tileIndex % entry->assetCount;
-        initTiledTextureRenderState(&taskData->elements[i], (s32)taskData->loadedAssets[assetIndex]);
+        initScrollingTileMapState(&taskData->elements[i], (s32)taskData->loadedAssets[assetIndex]);
         taskData->elements[i].width = 0x81;
         taskData->elements[i].height = 0x81;
         xPos = ~taskData->scrollOffset;
@@ -166,7 +166,7 @@ void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
 
         if (taskData->cutsceneManager->enableTransparency != 0) {
             if (taskData->cutsceneManager->unk10.renderModeArg.unk87 != 0) {
-                enqueueCallbackBySlotIndex(3, 2, renderTiledTexture, &taskData->elements[i]);
+                enqueueCallbackBySlotIndex(3, 2, renderScrollingTileMap, &taskData->elements[i]);
             }
         }
     }

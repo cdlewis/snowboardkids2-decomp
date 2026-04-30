@@ -1072,14 +1072,14 @@ void initUnlockNotification(UnlockNotificationState *state) {
 }
 
 void initUnlockNotificationSprite(UnlockNotificationState *state) {
-    initTiledTextureRenderState(state, (s32)state->imageAsset);
+    initScrollingTileMapState(state, (s32)state->imageAsset);
     setCallback(&renderUnlockNotification);
 }
 
 void renderUnlockNotification(UnlockNotificationState *state) {
     u16 nextFrame;
 
-    enqueueCallbackBySlotIndex(0xA, 0, renderTiledTexture, state);
+    enqueueCallbackBySlotIndex(0xA, 0, renderScrollingTileMap, state);
 
     if (D_800AFE8C_A71FC->gameMode == 0) {
         if (EepromSaveData->save_slot_status[0] == 5) {
@@ -1227,31 +1227,31 @@ void handleMenuCharacterAnimationEnd(MenuCharacterModelState *state) {
     }
 }
 
-void initMenuBackgroundEffect(MenuBackgroundEffectState *state) {
-    state->effectAsset = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
+void initMenuBackgroundEffect(MenuTiledBackgroundState *state) {
+    state->tiledBackgroundAsset = loadCompressedData(&tiledSnowmanAsset_ROM_START, &tiledSnowmanAsset_ROM_END, 0xAE0);
     setCleanupCallback(&cleanupMenuBackgroundEffect);
     setCallback(&setupMenuBackgroundEffect);
 }
 
-void setupMenuBackgroundEffect(MenuBackgroundEffectState *state) {
-    initTiledTextureRenderState(state, (s32)state->effectAsset);
+void setupMenuBackgroundEffect(MenuTiledBackgroundState *state) {
+    initScrollingTileMapState(state, (s32)state->tiledBackgroundAsset);
     setCallback(&updateMenuBackgroundEffect);
 }
 
-void updateMenuBackgroundEffect(MenuBackgroundEffectState *state) {
+void updateMenuBackgroundEffect(MenuTiledBackgroundState *state) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->menuState == 8) {
-        state->rotationX++;
-        state->rotationY++;
-        state->rotationX &= 0x3FF;
-        state->rotationY &= 0x3FF;
-        enqueueCallbackBySlotIndex(0xB, 0, renderTiledTexture, state);
+        state->scrollX++;
+        state->scrollY++;
+        state->scrollX &= 0x3FF;
+        state->scrollY &= 0x3FF;
+        enqueueCallbackBySlotIndex(0xB, 0, renderScrollingTileMap, state);
     }
 }
 
-void cleanupMenuBackgroundEffect(MenuBackgroundEffectState *state) {
-    state->effectAsset = freeNodeMemory(state->effectAsset);
+void cleanupMenuBackgroundEffect(MenuTiledBackgroundState *state) {
+    state->tiledBackgroundAsset = freeNodeMemory(state->tiledBackgroundAsset);
 }
 
 void initMinigameDescText(MinigameDescTextState *state) {

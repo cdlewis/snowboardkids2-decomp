@@ -519,12 +519,12 @@ void initCharacterSelectTextureDataLoad(TextureDataTaskState *arg0) {
 }
 
 void initCharacterSelectTextureRenderState(TextureDataTaskState *arg0) {
-    initTiledTextureRenderState(arg0, (s32)arg0->textureData);
+    initScrollingTileMapState(arg0, (s32)arg0->textureData);
     setCallback(&enqueueCharacterSelectTextureRender);
 }
 
 void enqueueCharacterSelectTextureRender(void *arg0) {
-    enqueueCallbackBySlotIndex(9, 0, renderTiledTexture, arg0);
+    enqueueCallbackBySlotIndex(9, 0, renderScrollingTileMap, arg0);
 }
 
 void initPlayer3CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {

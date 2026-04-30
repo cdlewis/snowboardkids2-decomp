@@ -7,11 +7,11 @@ typedef struct {
     /* 0x00 */ u16 textureIndex;
     /* 0x02 */ u8 paletteIndex;
     /* 0x03 */ u8 flipMode;
-} TileEntry;
+} TileMapEntry;
 
 typedef struct {
     /* 0x00 */ u8 data[32];
-} TexData32;
+} PaletteChunk32;
 
 typedef struct {
     /* 0x00 */ u16 tileGridWidth;
@@ -24,7 +24,7 @@ typedef struct {
     /* 0x0C */ u16 paletteDataOffset;
     /* 0x0E */ u16 textureDataOffset;
     /* 0x10 */ u8 tileEntries[1];
-} TiledTextureAsset;
+} TileMapTextureAsset;
 
 typedef struct {
     /* 0x00 */ s16 x;
@@ -43,16 +43,16 @@ typedef struct {
     /* 0x1A */ s16 unk1A;
     /* 0x1C */ u8 *textureData;
     /* 0x20 */ u16 *tileIndexData;
-    /* 0x24 */ TileEntry *tileEntries;
-    /* 0x28 */ TexData32 *paletteData;
-} TiledTextureRenderState;
+    /* 0x24 */ TileMapEntry *tileEntries;
+    /* 0x28 */ PaletteChunk32 *paletteData;
+} TileMapScrollRenderState;
 
 extern Gfx *gDisplayListAllocPtr;
 extern Gfx gSpriteRDPSetupDL[];
 extern s16 gTileTextureFlipTable[];
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 
-void renderTiledTexture(TiledTextureRenderState *state) {
+void renderScrollingTileMap(TileMapScrollRenderState *state) {
     s16 xStart;
     s16 yStart;
     s16 clipLeft;
@@ -89,9 +89,9 @@ void renderTiledTexture(TiledTextureRenderState *state) {
     s32 tileCount;
     Gfx *displayList;
     Gfx *displayListHead;
-    TileEntry *tileEntries;
-    TexData32 *paletteData;
-    TexData32 *curPaletteData;
+    TileMapEntry *tileEntries;
+    PaletteChunk32 *paletteData;
+    PaletteChunk32 *curPaletteData;
 
     tileIndexData = state->tileIndexData;
     textureData = state->textureData;
@@ -311,8 +311,8 @@ void renderTiledTexture(TiledTextureRenderState *state) {
     }
 }
 
-void initTiledTextureRenderState(TiledTextureRenderState *state, TiledTextureAsset *asset) {
-    TiledTextureAsset *assetPtr;
+void initScrollingTileMapState(TileMapScrollRenderState *state, TileMapTextureAsset *asset) {
+    TileMapTextureAsset *assetPtr;
     s32 pad1;
     s32 pad2;
 
@@ -333,6 +333,6 @@ void initTiledTextureRenderState(TiledTextureRenderState *state, TiledTextureAss
     state->clipHeight = 0xF0;
     state->tileIndexData = (u16 *)((u8 *)assetPtr + asset->tileIndexDataOffset);
     state->textureData = (u8 *)((u8 *)assetPtr + asset->textureDataOffset);
-    state->tileEntries = (TileEntry *)asset->tileEntries;
-    state->paletteData = (TexData32 *)((u8 *)assetPtr + asset->paletteDataOffset);
+    state->tileEntries = (TileMapEntry *)asset->tileEntries;
+    state->paletteData = (PaletteChunk32 *)((u8 *)assetPtr + asset->paletteDataOffset);
 }

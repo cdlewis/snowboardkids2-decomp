@@ -895,12 +895,12 @@ void loadBoardShopBackground(BoardShopBackgroundState *state) {
 }
 
 void initBoardShopBackgroundRenderState(BoardShopBackgroundState *state) {
-    initTiledTextureRenderState(state, (s32)state->backgroundAsset);
+    initScrollingTileMapState(state, (s32)state->backgroundAsset);
     setCallback(&enqueueBoardShopBackgroundRender);
 }
 
 void enqueueBoardShopBackgroundRender(void *state) {
-    enqueueCallbackBySlotIndex(9, 0, &renderTiledTexture, state);
+    enqueueCallbackBySlotIndex(9, 0, &renderScrollingTileMap, state);
 }
 
 void cleanupBoardShopBackground(BoardShopBackgroundState *state) {

@@ -32,11 +32,11 @@ typedef struct {
 } func_8002494C_arg;
 
 typedef struct {
-    u16 rotationX;
-    u16 rotationY;
+    u16 scrollX;
+    u16 scrollY;
     u8 padding[0x28];
-    void *effectAsset;
-} CharSelectBackgroundEffectState;
+    void *tiledBackgroundAsset;
+} CharSelectTiledBackgroundState;
 
 typedef struct {
     SceneModel *model;
@@ -318,9 +318,9 @@ void cleanupCharSelectPlayer1NameSprite(SimpleSpriteEntry *);
 void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0);
 void waitForCharSelectP2NameReveal(P2NameRevealState *arg0);
 void setupCharSelectP2NamePositions(volatile P2NameSpriteEntry *arg0);
-void cleanupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state);
-void setupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state);
-void updateCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state);
+void cleanupCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state);
+void setupCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state);
+void updateCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state);
 void renderCharSelectScaledSprite(void *);
 void cleanupCharSelectScaledSprite(ScaledSpriteEntry *);
 void updateCharSelectPostSlide(CharSelectSlideState *);
@@ -2419,27 +2419,27 @@ void cleanupCharSelectStats(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
 
-void initCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
-    state->effectAsset = loadCompressedData(&_458E30_ROM_START, &_458E30_ROM_END, 0xAE0);
+void initCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state) {
+    state->tiledBackgroundAsset = loadCompressedData(&tiledSnowmanAsset_ROM_START, &tiledSnowmanAsset_ROM_END, 0xAE0);
     setCleanupCallback(cleanupCharSelectBackgroundEffect);
     setCallback(setupCharSelectBackgroundEffect);
 }
 
-void setupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
-    initTiledTextureRenderState(state, (s32)state->effectAsset);
+void setupCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state) {
+    initScrollingTileMapState(state, (s32)state->tiledBackgroundAsset);
     setCallback(updateCharSelectBackgroundEffect);
 }
 
-void updateCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
-    state->rotationX++;
-    state->rotationY++;
-    state->rotationX &= 0x3FF;
-    state->rotationY &= 0x3FF;
-    enqueueCallbackBySlotIndex(7, 0, renderTiledTexture, state);
+void updateCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state) {
+    state->scrollX++;
+    state->scrollY++;
+    state->scrollX &= 0x3FF;
+    state->scrollY &= 0x3FF;
+    enqueueCallbackBySlotIndex(7, 0, renderScrollingTileMap, state);
 }
 
-void cleanupCharSelectBackgroundEffect(CharSelectBackgroundEffectState *state) {
-    state->effectAsset = freeNodeMemory(state->effectAsset);
+void cleanupCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state) {
+    state->tiledBackgroundAsset = freeNodeMemory(state->tiledBackgroundAsset);
 }
 
 void initCharSelectScaledSprite(ScaledSpriteEntry *arg0) {

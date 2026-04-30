@@ -492,7 +492,7 @@ void renderGalleryMenu(GalleryMenuState *arg0) {
     setModelHeight(arg0->menuModel, menuTransform.ty);
     clearModelRotation(arg0->menuModel);
     updateModelGeometry(arg0->menuModel);
-    enqueueCallbackBySlotIndex(1, 4, renderTiledTexture, arg0->pad5C8);
+    enqueueCallbackBySlotIndex(1, 4, renderScrollingTileMap, arg0->pad5C8);
     menuState = arg0->menuState;
     if (menuState <= 0) {
         goto menu_end;
@@ -583,8 +583,8 @@ void cleanupGalleryMenu(GalleryMenuState *arg0) {
 }
 
 void activateGalleryMenu(GalleryMenuState *arg0) {
-    initTiledTextureRenderState(&arg0->pad5C8, (s32)arg0->tiledTextureData1);
-    initTiledTextureRenderState(&arg0->pad5F8, (s32)arg0->tiledTextureData2);
+    initScrollingTileMapState(&arg0->pad5C8, (s32)arg0->tiledTextureData1);
+    initScrollingTileMapState(&arg0->pad5F8, (s32)arg0->tiledTextureData2);
     setViewportFadeValue(NULL, 0, 10);
     setMenuAnimation(arg0, 0x90, 0x90, -1, 0);
     arg0->fadeTimer = 10;
@@ -1230,7 +1230,7 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                     3
                 );
             }
-            enqueueCallbackBySlotIndex(2, 3, renderTiledTexture, alloc->unk5F8);
+            enqueueCallbackBySlotIndex(2, 3, renderScrollingTileMap, alloc->unk5F8);
         }
     }
 }

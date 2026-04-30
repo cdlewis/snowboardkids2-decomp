@@ -605,12 +605,12 @@ void loadStoryMapShopBackground(StoryMapShopBackgroundState *state) {
 }
 
 void initStoryMapShopBackgroundRenderState(StoryMapShopBackgroundState *state) {
-    initTiledTextureRenderState(state, (s32)state->backgroundAsset);
+    initScrollingTileMapState(state, (s32)state->backgroundAsset);
     setCallback(&enqueueStoryMapShopBackgroundRender);
 }
 
 void enqueueStoryMapShopBackgroundRender(void *state) {
-    enqueueCallbackBySlotIndex(1, 0, renderTiledTexture, state);
+    enqueueCallbackBySlotIndex(1, 0, renderScrollingTileMap, state);
 }
 
 void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *state) {

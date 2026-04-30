@@ -76,8 +76,8 @@ void initLogoNodeFadeOut(E090_struct *arg0) {
 void initLogoScreenElements(E090_struct *arg0) {
     s32 i;
 
-    initTiledTextureRenderState(&arg0->unk1EC, (s32)arg0->unk1E0);
-    initTiledTextureRenderState(&arg0->unk218, (s32)arg0->unk1E4);
+    initScrollingTileMapState(&arg0->unk1EC, (s32)arg0->unk1E0);
+    initScrollingTileMapState(&arg0->unk218, (s32)arg0->unk1E4);
 
     arg0->unk1EC.unk10 = 0;
     arg0->unk1EC.unk12 = 0;
@@ -231,11 +231,11 @@ void updateLogoScreen(void) {
 
     state = logoScreen->state;
     if (state == 2) {
-        enqueueCallbackBySlotIndex(0, 4, renderTiledTexture, &logoScreen->unk1EC);
+        enqueueCallbackBySlotIndex(0, 4, renderScrollingTileMap, &logoScreen->unk1EC);
     } else if (state >= 2) {
         if (state < 7) {
             if (state >= 4) {
-                enqueueCallbackBySlotIndex(0, 4, renderTiledTexture, &logoScreen->unk218);
+                enqueueCallbackBySlotIndex(0, 4, renderScrollingTileMap, &logoScreen->unk218);
 
                 for (i = 0; i < logoScreen->visibleLetterCount; i++) {
                     logoScreen->unk2D4[i] += 0x330000;
