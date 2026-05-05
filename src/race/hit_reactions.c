@@ -423,7 +423,7 @@ void processPlayerItemUsage(Player *player) {
         tryActivateFinishBoost(player);
     }
     if (!(player->animFlags & 0x80000)) {
-        switch (player->unkBBB) {
+        switch (player->costumeID) {
             case 17:
                 tryActivateFinishBoost(player);
                 tryActivateGhostEffect(player);

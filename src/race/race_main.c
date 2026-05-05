@@ -960,17 +960,17 @@ void updateRacePlayer(Player *player) {
         player->hitReactionState = 0;
         if (invTimerLocal != 0) {
             player->invincibilityTimer = invTimerLocal - 1;
-            if ((player->unkBBB == 0xF) && ((u16)(invTimerLocal - 1) < 0xBU)) {
+            if ((player->costumeID == 0xF) && ((u16)(invTimerLocal - 1) < 0xBU)) {
                 player->invincibilityTimer = invTimerLocal;
             }
         }
     }
 
     if (gameState->raceIntroState == 0 && !(D_8009ADE0_9B9E0 & 3)) {
-        if (player->unkBBB == 0xE) {
+        if (player->costumeID == 0xE) {
             addPlayerRaceGold(player, 1);
         }
-        if (player->unkBBB == 0xD) {
+        if (player->costumeID == 0xD) {
             addPlayerRaceGold(player, -1);
         }
     }
@@ -1051,7 +1051,7 @@ s32 initPlayerForRace(Player *player) {
             extra->unk5C = (s32)player->unk4;
             extra->unk60 = (s32)player->unk8;
             extra->unk64 = 0;
-            extra->assetPtr = (void *)(loadAssetByIndex_953B0(player->characterId, player->boardIndex) + i * 0x10);
+            extra->assetPtr = (void *)(loadAssetByIndex_953B0(player->characterId, player->boardType) + i * 0x10);
         } else {
             player->unk418 = &D_8009A550_9B150[0];
             player->unk41C = (s32)player->unkC;
@@ -5551,22 +5551,22 @@ void loadPlayerCharacterAssets(void *varg0) {
     u8 boardType;
 
     gameState = (GameStatePartial5C *)getCurrentAllocation();
-    player->unk4 = loadAssetByIndex_94F90(player->characterId, player->boardIndex);
-    player->unk8 = loadAssetByIndex_95200(player->characterId, player->boardIndex);
+    player->unk4 = loadAssetByIndex_94F90(player->characterId, player->boardType);
+    player->unk8 = loadAssetByIndex_95200(player->characterId, player->boardType);
     player->unk0 = loadAssetByIndex_953E0(player->characterId);
 
     characterId = player->characterId;
     if (characterId < 6) {
-        player->unk20 = loadAssetDataDMA(player->characterId, player->boardIndex);
-        player->unk24 = loadAssetDataQueuedDMA(player->characterId, player->boardIndex);
+        player->unk20 = loadAssetDataDMA(player->characterId, player->boardType);
+        player->unk24 = loadAssetDataQueuedDMA(player->characterId, player->boardType);
     }
 
-    player->unkC = loadAssetByIndex_95500(player->unkBBB);
-    player->unk10 = loadAssetByIndex_95590(player->unkBBB);
+    player->unkC = loadAssetByIndex_95500(player->costumeID);
+    player->unk10 = loadAssetByIndex_95590(player->costumeID);
 
-    boardType = player->unkBBB;
+    boardType = player->costumeID;
     if (boardType < 9) {
-        player->unk14 = loadAssetByIndex_95668(player->unkBBC);
+        player->unk14 = loadAssetByIndex_95668(player->colorSlot);
     } else {
         player->unk14 = NULL;
     }

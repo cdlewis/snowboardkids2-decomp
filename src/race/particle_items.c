@@ -1404,7 +1404,7 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
         if (gameState->paused == 0) {
             state->player->boostTimer--;
             if (state->player->boostTimer == 0) {
-                if (state->player->unkBBB == 0x10) {
+                if (state->player->costumeID == 0x10) {
                     state->player->boostTimer++;
                 }
             }
@@ -1531,7 +1531,7 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
             if (state->scale == 0x2000) {
                 player2->boostTimer--;
                 player = state->player;
-                if (player->boostTimer == 0 && player->unkBBB == 0x11) {
+                if (player->boostTimer == 0 && player->costumeID == 0x11) {
                     player->boostTimer++;
                 }
             } else {
@@ -1872,7 +1872,7 @@ void updateGhostEffect(GhostEffectState *arg0) {
             player = arg0->player;
             new_count = player->ghostEffectTimer;
             if (new_count == 0) {
-                if (player->unkBBB == 0x11) {
+                if (player->costumeID == 0x11) {
                     player->ghostEffectTimer = new_count + 1;
                 }
             }

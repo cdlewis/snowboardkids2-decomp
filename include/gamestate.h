@@ -231,9 +231,9 @@ typedef struct {
     u8 leanBoneCount;
     u8 playerIndex;
     u8 characterId;
-    u8 boardIndex;
-    u8 unkBBB;
-    u8 unkBBC;
+    u8 boardType;
+    u8 costumeID;
+    u8 colorSlot;
     u8 behaviorMode;
     u8 behaviorPhase;
     u8 behaviorStep;

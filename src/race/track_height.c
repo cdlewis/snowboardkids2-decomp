@@ -212,7 +212,7 @@ void loadCharacterBodyParts(Player *player) {
             partIndex = 0;
             bodyPart = (BoneResult *)player;
             do {
-                *(s32 *)((u8 *)bodyPart + 0x58) = (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) +
+                *(s32 *)((u8 *)bodyPart + 0x58) = (s32)loadAssetByIndex_95380(player->characterId, player->boardType) +
                                                   gBodyPartRemapTable[partIndex] * 0x10;
                 partIndex++;
                 bodyPart++;
@@ -223,7 +223,7 @@ void loadCharacterBodyParts(Player *player) {
             bodyPart = (BoneResult *)player;
             do {
                 *(s32 *)((u8 *)bodyPart + 0x58) =
-                    (s32)loadAssetByIndex_95380(player->characterId, player->boardIndex) + partIndex * 0x10;
+                    (s32)loadAssetByIndex_95380(player->characterId, player->boardType) + partIndex * 0x10;
                 bodyPart++;
             } while (++partIndex < 0x10);
         }
@@ -234,7 +234,7 @@ void loadCharacterBodyParts(Player *player) {
             partIndex = 0;
             bodyPart2 = (BoneResult *)player;
             do {
-                *(s32 *)((u8 *)bodyPart2 + 0x58) = loadAssetByIndex_953B0(player->characterId, player->boardIndex) +
+                *(s32 *)((u8 *)bodyPart2 + 0x58) = loadAssetByIndex_953B0(player->characterId, player->boardType) +
                                                    gBodyPartRemapTable[partIndex] * 0x10;
                 partIndex++;
                 bodyPart2++;
@@ -245,7 +245,7 @@ void loadCharacterBodyParts(Player *player) {
             bodyPart2 = (BoneResult *)player;
             do {
                 *(s32 *)((u8 *)bodyPart2 + 0x58) =
-                    loadAssetByIndex_953B0(player->characterId, player->boardIndex) + partIndex * 0x10;
+                    loadAssetByIndex_953B0(player->characterId, player->boardType) + partIndex * 0x10;
                 bodyPart2++;
             } while (++partIndex < 0x10);
         }
@@ -265,7 +265,7 @@ void loadCharacterBodyParts(Player *player) {
     }
     player->unk23C = flags;
     player->unk240 = (s32)player->unk24;
-    player->unk238 = (s32)getAssetDataDirect(player->characterId, player->boardIndex) + tableValue * 0x10 - 0x10;
+    player->unk238 = (s32)getAssetDataDirect(player->characterId, player->boardType) + tableValue * 0x10 - 0x10;
 }
 
 void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags) {

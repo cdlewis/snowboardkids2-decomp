@@ -572,7 +572,7 @@ void setIceBossFlyingMode(Player *arg0) {
 
     for (i = 0; i < 12; i++) {
         *(void **)((u8 *)elements + i * 0x3C + 0x58) =
-            (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + i * 16 + 0xC0);
+            (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardType) + i * 16 + 0xC0);
     }
 
     arg0->collisionRadius = 0x100000;

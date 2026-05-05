@@ -83,32 +83,11 @@ typedef struct {
 } SessionConfig;
 
 typedef struct {
-    u8 padding_0[0xBB8];
-    u8 racerIndex;
-    /* 0xBB9 */ u8 characterID;
-    u8 boardType;
-    u8 costumeID;
-    u8 colorSlot;
-    u8 unkBBD;
-    u8 padding_BBE[0xBC7 - 0xBBE];
-    u8 isCPU;
-    u8 padding_BC8[0xBD9 - 0xBC8];
-    u8 bossID;
-    u8 cpuEnabled;
-    u8 padding_BDB[0xBDD - 0xBDB];
-    u8 cpuDifficulty;
-    u8 padding_BDC[0xBE3 - 0xBDE];
-    u8 demoControlType;
-    u8 demoControllerIndex;
-    u8 padding_BE5[0xBE8 - 0xBE5];
-} RacerConfig;
-
-typedef struct {
     void *unk0;
     void *unk4;
     void *unk8;
     void *unkC;
-    RacerConfig *racers;
+    Player *racers;
     void *introAnimationData;
     u8 pad18[64];
     u16 unk58;
@@ -610,15 +589,15 @@ void initRace(void) {
     raceState->unk4 = allocateNodeMemory(472 * raceState->humanPlayerCount);
     raceState->unk8 = allocateNodeMemory(472 * raceState->humanPlayerCount);
     raceState->unkC = allocateNodeMemory(472 * raceState->humanPlayerCount);
-    raceState->racers = allocateNodeMemory(sizeof(RacerConfig) * raceState->totalRacers);
+    raceState->racers = allocateNodeMemory(sizeof(Player) * raceState->totalRacers);
 
     for (i = 0; i < raceState->totalRacers; i++) {
         u8 *racerBytes = (u8 *)&raceState->racers[i];
-        for (j = sizeof(RacerConfig) - 1; j >= 0; j--) {
+        for (j = sizeof(Player) - 1; j >= 0; j--) {
             racerBytes[j] = 0;
         }
 
-        raceState->racers[i].racerIndex = i;
+        raceState->racers[i].playerIndex = i;
         raceState->racerOrder[i] = i;
     }
 
@@ -628,7 +607,7 @@ void initRace(void) {
 
     if (raceState->raceType < RACE_TYPE_TRAINING) {
         for (i = 0; i < raceState->activePlayerCount; i++) {
-            raceState->racers[i].characterID = D_800AFE8C_A71FC->characterIDs[i];
+            raceState->racers[i].characterId = D_800AFE8C_A71FC->characterIDs[i];
             raceState->racers[i].boardType = D_800AFE8C_A71FC->boardTypes[i];
             raceState->racers[i].costumeID = D_800AFE8C_A71FC->costumeIDs[i];
             raceState->racers[i].colorSlot = D_800AFE8C_A71FC->colorSlots[i];
@@ -636,29 +615,29 @@ void initRace(void) {
     }
 
     for (i = raceState->activePlayerCount; i < raceState->totalRacers; i++) {
-        raceState->racers[i].characterID = D_80090280_90E80[raceState->currentLevel][i];
+        raceState->racers[i].characterId = D_80090280_90E80[raceState->currentLevel][i];
         raceState->racers[i].boardType = D_800902C0_90EC0[raceState->currentLevel];
-        raceState->racers[i].isCPU = 1;
-        raceState->racers[i].cpuEnabled = 1;
+        raceState->racers[i].isBossRacer = 1;
+        raceState->racers[i].inputDisabled = 1;
     }
 
     switch (D_800AFE8C_A71FC->gameMode) {
         case GAME_MODE_STORY:
             switch (raceState->currentLevel) {
                 case CRAZY_JUNGLE_BOSS:
-                    raceState->racers[1].bossID = 1;
-                    raceState->racers[1].characterID = 9;
+                    raceState->racers[1].flyingAttackState = 1;
+                    raceState->racers[1].characterId = 9;
                     break;
                 case JINGLE_TOWN_BOSS:
-                    raceState->racers[1].bossID = 2;
-                    raceState->racers[1].characterID = 10;
+                    raceState->racers[1].flyingAttackState = 2;
+                    raceState->racers[1].characterId = 10;
                     break;
                 case ICE_LAND_BOSS:
-                    raceState->racers[1].bossID = 3;
-                    raceState->racers[1].characterID = 11;
+                    raceState->racers[1].flyingAttackState = 3;
+                    raceState->racers[1].characterId = 11;
                     break;
                 case TRAINING:
-                    raceState->racers[0].characterID = 0;
+                    raceState->racers[0].characterId = 0;
                     raceState->racers[0].boardType = 0;
                     raceState->racers[0].costumeID = 0;
                     raceState->racers[0].colorSlot = 0;
@@ -668,49 +647,49 @@ void initRace(void) {
         case GAME_MODE_DEMO:
             switch (raceState->demoMode) {
                 case 0:
-                    raceState->racers[0].characterID = 0;
+                    raceState->racers[0].characterId = 0;
                     raceState->racers[0].boardType = 0;
                     raceState->racers[0].costumeID = 0;
                     raceState->racers[0].colorSlot = 0;
-                    raceState->racers[0].demoControlType = 1;
-                    raceState->racers[0].demoControllerIndex = 0;
+                    raceState->racers[0].inputMode = 1;
+                    raceState->racers[0].inputRecordSet = 0;
                     break;
                 case 1:
                     for (i = 0; i < 2; i++) {
-                        raceState->racers[i].characterID = i;
+                        raceState->racers[i].characterId = i;
                         raceState->racers[i].boardType = 1;
                         raceState->racers[i].costumeID = 0;
                         raceState->racers[i].colorSlot = i;
-                        raceState->racers[i].demoControlType = 1;
-                        raceState->racers[i].demoControllerIndex = i + 1;
+                        raceState->racers[i].inputMode = 1;
+                        raceState->racers[i].inputRecordSet = i + 1;
                     }
                     break;
                 case 2:
                     for (i = 0; i < 4; i++) {
-                        raceState->racers[i].characterID = i;
+                        raceState->racers[i].characterId = i;
                         raceState->racers[i].boardType = 1;
                         raceState->racers[i].costumeID = 0;
                         raceState->racers[i].colorSlot = i;
-                        raceState->racers[i].demoControlType = 1;
-                        raceState->racers[i].demoControllerIndex = i + 3;
+                        raceState->racers[i].inputMode = 1;
+                        raceState->racers[i].inputRecordSet = i + 3;
                     }
             }
             break;
         case GAME_MODE_INTRO:
-            raceState->racers[0].characterID = 0;
-            raceState->racers[1].characterID = 3;
-            raceState->racers[2].characterID = 5;
-            raceState->racers[3].characterID = 2;
+            raceState->racers[0].characterId = 0;
+            raceState->racers[1].characterId = 3;
+            raceState->racers[2].characterId = 5;
+            raceState->racers[3].characterId = 2;
 
             for (i = 0; i < 4; i++) {
                 raceState->racers[i].boardType = 0;
                 raceState->racers[i].costumeID = 0;
                 raceState->racers[i].colorSlot = i;
-                raceState->racers[i].demoControllerIndex = i + 7;
+                raceState->racers[i].inputRecordSet = i + 7;
                 if (raceState->demoMode == 3) {
-                    raceState->racers[i].demoControlType = 2;
+                    raceState->racers[i].inputMode = 2;
                 } else {
-                    raceState->racers[i].demoControlType = 1;
+                    raceState->racers[i].inputMode = 1;
                 }
             }
             break;
@@ -719,15 +698,15 @@ void initRace(void) {
     }
 
     for (i = 0; i < raceState->totalRacers; i++) {
-        characterCount[raceState->racers[i].characterID]++;
+        characterCount[raceState->racers[i].characterId]++;
     }
 
     for (i = raceState->activePlayerCount; i < raceState->totalRacers; i++) {
         s32 j;
         u8 count;
 
-        if (characterCount[raceState->racers[i].characterID] >= 2) {
-            characterCount[raceState->racers[i].characterID]--;
+        if (characterCount[raceState->racers[i].characterId] >= 2) {
+            characterCount[raceState->racers[i].characterId]--;
             count = 0;
             for (j = 0; j < 6; j++) {
                 if (characterCount[j] == 0) {
@@ -736,24 +715,24 @@ void initRace(void) {
                 }
             }
 
-            raceState->racers[i].characterID = availableCharacters[randA() % count];
-            characterCount[raceState->racers[i].characterID]++;
+            raceState->racers[i].characterId = availableCharacters[randA() % count];
+            characterCount[raceState->racers[i].characterId]++;
         }
     }
 
     for (i = raceState->activePlayerCount; i < raceState->totalRacers; i++) {
-        if (raceState->racers[i].characterID < 6) {
+        if (raceState->racers[i].characterId < 6) {
             raceState->racers[i].costumeID =
-                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].costumeID;
+                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterId].costumeID;
             raceState->racers[i].colorSlot =
-                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].colorSlot;
+                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterId].colorSlot;
 
             if (raceState->activePlayerCount == 1) {
-                raceState->racers[i].cpuDifficulty =
-                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].cpuDifficulty1P;
+                raceState->racers[i].speedPenaltyIndex =
+                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterId].cpuDifficulty1P;
             } else {
-                raceState->racers[i].cpuDifficulty =
-                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterID].cpuDifficultyMP;
+                raceState->racers[i].speedPenaltyIndex =
+                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterId].cpuDifficultyMP;
             }
 
             if (raceState->isExpertMode != 0) {
@@ -765,25 +744,25 @@ void initRace(void) {
         } else {
             raceState->racers[i].costumeID = 13;
             raceState->racers[i].colorSlot = 5;
-            raceState->racers[i].cpuDifficulty = 7;
+            raceState->racers[i].speedPenaltyIndex = 7;
 
             if (raceState->raceType == RACE_TYPE_BATTLE) {
-                raceState->racers[i].cpuDifficulty = 5;
+                raceState->racers[i].speedPenaltyIndex = 5;
             }
 
-            if (raceState->racers[i].characterID != 6) {
+            if (raceState->racers[i].characterId != 6) {
                 raceState->racers[i].costumeID = 9;
                 if (raceState->raceType == RACE_TYPE_BATTLE) {
-                    raceState->racers[i].cpuDifficulty = 5;
+                    raceState->racers[i].speedPenaltyIndex = 5;
                 } else {
-                    raceState->racers[i].cpuDifficulty = 0;
+                    raceState->racers[i].speedPenaltyIndex = 0;
                     raceState->racers[i].costumeID = 1;
                 }
             }
         }
 
         if (raceState->isExpertMode != 0) {
-            raceState->racers[i].cpuDifficulty = 7;
+            raceState->racers[i].speedPenaltyIndex = 7;
         }
     }
 

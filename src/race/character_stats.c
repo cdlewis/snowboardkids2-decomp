@@ -256,7 +256,7 @@ void applyCharacterBoardStats(Player *player) {
         boardStats = &D_80093F7C_94B7C.entry;
         charId = 0;
     } else {
-        boardStats = gBoardStatsTable[player->unkBBB];
+        boardStats = gBoardStatsTable[player->costumeID];
         charId = player->characterId;
     }
 
