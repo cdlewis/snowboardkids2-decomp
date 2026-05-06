@@ -20,7 +20,6 @@ This is a matching decompilation project for Snowboard Kids 2 (N64). The goal is
 - `diff.py` you can view the difference between the compiled and target assembly code of a given function by running `python3 tools/asm-differ/diff.py --no-pager <function name>`
 - `./tools/claude --bootstrap-only <function name>` spin up a decompilation environment for a given function. It can also take an optional --id field. The script will only create the directory if one with a matching id does not already exist.
 - `python3 tools/score_functions.py <directory>` find the easiest function to decompile in a given directory (and its subdirectories).
-- `python3 tools/check_pointer_arithmetic.py <file or directory>` detect pointer arithmetic with casts that should be replaced with struct field access. Use `--strict` to fail on violations.
 - `python3 tools/project_status.py` shows functions that are currently non-matching. Use this if `./tools/build-and-verify.sh` is failing and you're not sure which function is the problem.
 - `python3 tools/find_similar_functions.py <function id>` returns a list of similar functions to <function id>. This can provide a useful reference when trying to match code.
 - `python3 tools/data-differ/data_diff.py <symbol>` or `./tools/diff-data <symbol>` compares binary data between the target ROM and compiled output for a specific data symbol.
