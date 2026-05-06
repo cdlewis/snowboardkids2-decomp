@@ -1088,7 +1088,7 @@ void updateIceLandBossLeanBoneTransforms(Player *arg0) {
     temp = &scratch;
     memcpy(temp, &arg0->boneResults[5].mtx, sizeof(Transform3D));
     createYRotationMatrix(&squashMatrix, (u16)arg0->unkA9E);
-    func_8006BDBC_6C9BC((BoneAnimationState *)&squashMatrix, &scratch, (s16 *)&arg0->boneResults[5].mtx);
+    func_8006BDBC_6C9BC((BoneAnimationState *)&squashMatrix, &scratch, &arg0->boneResults[5].mtx);
 }
 
 void renderIceLandBossWithSurfaceColors(Player *arg0) {

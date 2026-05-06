@@ -951,9 +951,7 @@ void rotateVectorY(void *arg0, s16 angle, Vec3i *output) {
     output->z = zAccum + (zFrac >> 13);
 }
 
-void func_8006BDBC_6C9BC(BoneAnimationState *arg0, void *arg1, void *arg2) {
-    Transform3D *mat1 = arg1;
-    Transform3D *mat2 = arg2;
+void func_8006BDBC_6C9BC(BoneAnimationState *arg0, Transform3D *mat1, Transform3D *mat2) {
     s32 row;
     s16 *rowPtr;
     s32 i;

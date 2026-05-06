@@ -44,7 +44,7 @@ void createYRotationMatrix(Transform3D *, u16 angle);
 void createZRotationMatrix(Transform3D *, u16 angle);
 void createXRotationMatrix(s16 matrix[3][3], u16 angle);
 
-void func_8006BDBC_6C9BC(BoneAnimationState *, void *, void *);
+void func_8006BDBC_6C9BC(BoneAnimationState *, Transform3D *, Transform3D *);
 
 void setBonePosition(BoneAnimationState *state, s32 x, s32 y, s32 z);
 

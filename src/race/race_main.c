@@ -1614,8 +1614,8 @@ s32 updatePostTrickChargingStep(Player *player) {
 }
 
 s32 beginPostTrickLaunchStep(Player *player) {
-    s32 rotationTemp1[8];
-    s32 rotationTemp2[8];
+    Transform3D rotationTemp1;
+    Transform3D rotationTemp2;
     Vec3i launchVelocity;
     s32 *launchMagnitudePtr;
 
@@ -1643,9 +1643,9 @@ s32 beginPostTrickLaunchStep(Player *player) {
         }
     }
 
-    func_8006BDBC_6C9BC((BoneAnimationState *)&player->orientationTransform, &player->headingTransform, rotationTemp1);
-    func_8006BDBC_6C9BC((BoneAnimationState *)&player->tiltTransform, rotationTemp1, rotationTemp2);
-    transformVector2(&D_800BAB3C_AA9EC, rotationTemp2, &launchVelocity);
+    func_8006BDBC_6C9BC((BoneAnimationState *)&player->orientationTransform, &player->headingTransform, &rotationTemp1);
+    func_8006BDBC_6C9BC((BoneAnimationState *)&player->tiltTransform, &rotationTemp1, &rotationTemp2);
+    transformVector2(&D_800BAB3C_AA9EC, &rotationTemp2, &launchVelocity);
 
     player->velocity.x += launchVelocity.x;
     player->velocity.y += launchVelocity.y + player->unkAB8;
@@ -2875,7 +2875,7 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     pitchMatrix.m[2][1] = magnitude;
     pitchMatrix.m[2][2] = player->surfaceNormalY;
 
-    func_8006BDBC_6C9BC((void *)&slopeMatrix, &pitchMatrix, &combinedTransform);
+    func_8006BDBC_6C9BC((BoneAnimationState *)&slopeMatrix, &pitchMatrix, &combinedTransform);
     transformVector2(&player->velocity.x, &combinedTransform, &tempVec);
 
     if (tempVec.y < 0) {

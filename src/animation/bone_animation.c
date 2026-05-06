@@ -192,7 +192,7 @@ s32 updateBoneAnimation(BoneAnimationState *state) {
         s16 *animation_data = state->animation_data;
         if (animation_data[3] != (state->counter & 0xFFFF)) {
             createBoneRotMatrix(animation_data[1], animation_data[2], animation_data[3] - state->counter, stack_data);
-            func_8006BDBC_6C9BC(state, stack_data, state->prev_position);
+            func_8006BDBC_6C9BC(state, (Transform3D *)stack_data, (Transform3D *)state->prev_position);
         }
     }
 
@@ -271,7 +271,7 @@ s32 updateBoneAnimationMirrored(BoneAnimationState *state) {
         s16 *animation_data = state->animation_data;
         if (animation_data[3] != (state->counter & 0xFFFF)) {
             createBoneRotMatrix(animation_data[1], -animation_data[2], state->counter - animation_data[3], stack_data);
-            func_8006BDBC_6C9BC(state, stack_data, state->prev_position);
+            func_8006BDBC_6C9BC(state, (Transform3D *)stack_data, (Transform3D *)state->prev_position);
         }
     }
 
@@ -351,7 +351,7 @@ void interpolateBoneAnimation(BoneAnimationState *state, u16 progress) {
 
         if (state->counter & 0xFFFF) {
             createBoneRotMatrix(state->animation_data[1], state->animation_data[2], state->counter, rotMatrix);
-            func_8006BDBC_6C9BC(state, rotMatrix, state->prev_position);
+            func_8006BDBC_6C9BC(state, (Transform3D *)rotMatrix, (Transform3D *)state->prev_position);
         }
     }
 
@@ -434,7 +434,7 @@ void interpolatedBoneAnimationMirrored(BoneAnimationState *state, u16 progress) 
 
     if (state->counter & 0xFFFF) {
         createBoneRotMatrix(state->animation_data[1], -state->animation_data[2], -state->counter, rotMatrix);
-        func_8006BDBC_6C9BC(state, rotMatrix, state->prev_position);
+        func_8006BDBC_6C9BC(state, (Transform3D *)rotMatrix, (Transform3D *)state->prev_position);
     }
 
     frameIndex = state->animation_data[4];
@@ -507,7 +507,7 @@ s32 advanceBoneAnimation(void *animData, s32 tableIndex, s32 boneIndex, BoneAnim
         s16 *animation_data = state->animation_data;
         if (animation_data[3] != (state->counter & 0xFFFF)) {
             createBoneRotMatrix(animation_data[1], animation_data[2], animation_data[3] - state->counter, stack_data);
-            func_8006BDBC_6C9BC(state, stack_data, state->prev_position);
+            func_8006BDBC_6C9BC(state, (Transform3D *)stack_data, (Transform3D *)state->prev_position);
         }
     }
 
@@ -594,7 +594,7 @@ s32 advanceBoneAnimationMirrored(void *animData, s32 tableIndex, s32 boneIndex, 
         s16 *animation_data = state->animation_data;
         if (animation_data[3] != (state->counter & 0xFFFF)) {
             createBoneRotMatrix(animation_data[1], -animation_data[2], state->counter - animation_data[3], rotMatrix);
-            func_8006BDBC_6C9BC(state, rotMatrix, state->prev_position);
+            func_8006BDBC_6C9BC(state, (Transform3D *)rotMatrix, (Transform3D *)state->prev_position);
         }
     }
 
@@ -701,7 +701,11 @@ s32 advanceIndexedBoneAnimation(void *animData, s16 tableIndex, s16 boneIndex, B
             (s16)animation_data[idx * 5 + 3] - state->counter,
             stack_data
         );
-        func_8006BDBC_6C9BC((BoneAnimationState *)state, stack_data, state->prev_position);
+        func_8006BDBC_6C9BC(
+            (BoneAnimationState *)state,
+            (Transform3D *)stack_data,
+            (Transform3D *)state->prev_position
+        );
     }
 
     idx = state->animation_index;
@@ -798,7 +802,11 @@ s32 advanceIndexedBoneAnimationMirrored(void *arg0, s16 arg1, s16 arg2, BoneAnim
             state->counter - (s16)animation_data[idx * 5 + 3],
             stack_data
         );
-        func_8006BDBC_6C9BC((BoneAnimationState *)state, stack_data, state->prev_position);
+        func_8006BDBC_6C9BC(
+            (BoneAnimationState *)state,
+            (Transform3D *)stack_data,
+            (Transform3D *)state->prev_position
+        );
     }
 
     idx = state->animation_index;
@@ -888,7 +896,11 @@ void interpolateIndexedBoneAnimation(void *arg0, s16 arg1, s16 arg2, BoneAnimati
     if (entity->counter != 0) {
         idx = entity->animation_index;
         createBoneRotMatrix(animation_data[idx * 5 + 1], animation_data[idx * 5 + 2], entity->counter, stack_data);
-        func_8006BDBC_6C9BC((void *)entity, stack_data, entity->prev_position);
+        func_8006BDBC_6C9BC(
+            (BoneAnimationState *)entity,
+            (Transform3D *)stack_data,
+            (Transform3D *)entity->prev_position
+        );
     }
 
     idx = entity->animation_index;
@@ -975,7 +987,11 @@ void interpolateIndexedBoneAnimationMirrored(
     if (entity->counter != 0) {
         idx = entity->animation_index;
         createBoneRotMatrix(animation_data[idx * 5 + 1], -animation_data[idx * 5 + 2], -entity->counter, stack_data);
-        func_8006BDBC_6C9BC((void *)entity, stack_data, entity->prev_position);
+        func_8006BDBC_6C9BC(
+            (BoneAnimationState *)entity,
+            (Transform3D *)stack_data,
+            (Transform3D *)entity->prev_position
+        );
     }
 
     idx = entity->animation_index;
@@ -1069,7 +1085,11 @@ s32 advanceIndexedBoneAnimationAuto(void *arg0, s16 arg1, s16 arg2, BoneAnimatio
             diff - state->counter,
             stack_data
         );
-        func_8006BDBC_6C9BC((BoneAnimationState *)state, stack_data, state->prev_position);
+        func_8006BDBC_6C9BC(
+            (BoneAnimationState *)state,
+            (Transform3D *)stack_data,
+            (Transform3D *)state->prev_position
+        );
     }
 
     idx = state->animation_index;
@@ -1175,7 +1195,11 @@ s32 advanceIndexedBoneAnimationAutoMirrored(void *arg0, s16 arg1, s16 arg2, Bone
             state->counter - diff,
             stack_data
         );
-        func_8006BDBC_6C9BC((BoneAnimationState *)state, stack_data, state->prev_position);
+        func_8006BDBC_6C9BC(
+            (BoneAnimationState *)state,
+            (Transform3D *)stack_data,
+            (Transform3D *)state->prev_position
+        );
     }
 
     idx = state->animation_index;
