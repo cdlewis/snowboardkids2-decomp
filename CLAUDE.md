@@ -73,10 +73,6 @@ If the build script tells you to stop, you MUST stop immediately. Do not make an
 - Analysis of remaining differences
 - Whether the remaining issues seem solvable or may need a different strategy
 
-Additionally:
-- Do not exceed 10 consecutive attempts without meaningful score improvement. If you reach 10 with no progress, stop and report.
-- If 5+ variations of the same technique (e.g., volatile padding placement, asm volatile barriers) haven't improved the score, abandon that technique entirely. Do not try more variations — summarize what you learned and try a fundamentally different approach or stop.
-
 ## Validation Checklist
 
 Before declaring any changes to C code complete (including decompiling functions), verify:
