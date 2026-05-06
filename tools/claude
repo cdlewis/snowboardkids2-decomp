@@ -111,7 +111,7 @@ if [[ "$ARG" =~ ^[0-9]+$ ]] || [[ "$ARG" =~ ^[a-zA-Z0-9]+$ && ${#ARG} -ge 5 && $
     # Extract diff_label and source_code from JSON response
     DIFF_LABEL=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('diff_label', ''))" 2>/dev/null)
     SOURCE_CODE=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); print(data.get('source_code', ''))" 2>/dev/null)
-    SCRATCH_SCORE=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); score = data.get('score', 0); max_score = data.get('max_score', 0); pct = ((max_score - score) / max_score * 100) if max_score > 0 else 0; print(f'{pct:.1f}')" 2>/dev/null)
+    SCRATCH_SCORE=$(echo "$SCRATCH_DATA" | python3 -c "import sys, json; data = json.load(sys.stdin); score = data.get('score', 0); max_score = data.get('max_score', 0); pct = ((max_score - score) / max_score * 100) if max_score > 0 else 0; print(f'{pct:.2f}')" 2>/dev/null)
 
     if [ -z "$DIFF_LABEL" ] || [ -z "$SOURCE_CODE" ]; then
         echo "Error: Could not extract diff_label or source_code from API response"
