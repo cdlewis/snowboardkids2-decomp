@@ -867,10 +867,10 @@ void renderJingleTownBossWithEffects(Player *arg0) {
 }
 
 /**
- * Updates joint positions for the jingle town boss.
- * For each of the 9 joints, computes the X/Z position from the boss's position
- * plus joint-specific offsets, then calculates the track height at that position.
- * Finally enqueues debug callbacks to render the joint positions.
+ * Updates projected shadow sample positions for the jingle town boss.
+ * For each of the 9 samples, computes the X/Z position from the boss's position
+ * plus sample-specific offsets, then calculates the track height at that position.
+ * Finally enqueues callbacks to render the projected shadow.
  */
 void updateJingleTownBossJointPositions(Player *arg0) {
     s32 i;
@@ -885,16 +885,18 @@ void updateJingleTownBossJointPositions(Player *arg0) {
         s32 *posPtr;
         u16 temp;
 
-        arg0->jointPositions[i].x = arg0->headingTransform.translation.x + gJingleTownBossHoverExitOffsets[6 + i].x;
-        arg0->jointPositions[i].z = arg0->headingTransform.translation.z + gJingleTownBossHoverExitOffsets[6 + i].z;
-        posPtr = &arg0->jointPositions[i].x;
+        arg0->shadowSamplePositions[i].x =
+            arg0->headingTransform.translation.x + gJingleTownBossHoverExitOffsets[6 + i].x;
+        arg0->shadowSamplePositions[i].z =
+            arg0->headingTransform.translation.z + gJingleTownBossHoverExitOffsets[6 + i].z;
+        posPtr = &arg0->shadowSamplePositions[i].x;
         temp = getOrUpdatePlayerSectorIndex(arg0, temp_s5, arg0->sectorIndex, posPtr);
-        arg0->jointPositions[i].y = getTrackHeightInSector(temp_s5, temp, posPtr, 0x100000);
+        arg0->shadowSamplePositions[i].y = getTrackHeightInSector(temp_s5, temp, posPtr, 0x100000);
     }
 
-    arg0->jointShadowNeedsUpdate = 1;
+    arg0->shadowMeshNeedsUpdate = 1;
 
     for (i = 0; i < 4; i++) {
-        enqueueCallbackBySlotIndex((u16)i, 1, renderPlayerJointShadow, arg0);
+        enqueueCallbackBySlotIndex((u16)i, 1, renderRacerProjectedShadow, arg0);
     }
 }

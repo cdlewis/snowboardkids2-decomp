@@ -23,7 +23,7 @@ void setPlayerBehaviorPhase(Player *player, s32 phase);
 void resetPlayerBehaviorToDefault(void *arg);
 void initKnockbackBehavior(BehaviorState *arg0);
 void applyClampedVelocityToPosition(Player *player);
-void renderPlayerJointShadow(Player *player);
+void renderRacerProjectedShadow(Player *player);
 void loadPlayerCharacterAssets(void *arg0);
 void freePlayerCharacterAssets(void *arg0);
 void renderPlayersByShortcutDistance(void);

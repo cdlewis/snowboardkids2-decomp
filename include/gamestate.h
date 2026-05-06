@@ -96,14 +96,14 @@ typedef struct {
     void *unkC;
     void *unk10;
     void *unk14;
-    void *unk18;
+    void *assetTable;
     void *unk1C;
     void *unk20;
     void *unk24;
     void *aiPathData;
     void *unk2C;
-    Vtx *jointVertices;   /* 0x30 */
-    Mtx *jointMatrix;     /* 0x34 */
+    Vtx *shadowVertices;   /* 0x30 */
+    Mtx *shadowMatrix;     /* 0x34 */
     /* 0x38 */ BoneResult boneResults[16];
     /* 0x3F8 */ Transform3D unk3F8;
     /* 0x418 */ void *unk418;
@@ -146,7 +146,7 @@ typedef struct {
     /* 0x9B0 */ Transform3D tiltTransform;
     /* 0x9D0 */ Transform3D unk9D0;
     /* 0x9F0 */ Transform3D unk9F0;
-    /* 0xA10 */ Vec3i jointPositions[9];
+    /* 0xA10 */ Vec3i shadowSamplePositions[9];
     /* 0xA7C */ Vec3i aiTarget;
     u8 _padA88[0x4];
     u16 leanAnimIndex;
@@ -231,7 +231,7 @@ typedef struct {
     u8 behaviorPhase;
     u8 behaviorStep;
     u8 behaviorCounter;
-    u8 jointShadowNeedsUpdate;
+    u8 shadowMeshNeedsUpdate;
     u8 unkBC2;
     u8 finishAnimState;
     u8 finishPosition;

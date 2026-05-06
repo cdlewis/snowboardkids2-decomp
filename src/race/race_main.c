@@ -178,7 +178,7 @@ void initStunnedAirborneBehavior(Player *);
 void updateRacePlayer(Player *);
 void renderFlyingEnemy(Player *);
 
-Gfx D_800BAA30_AA8E0[] = {
+Gfx gPlayerShadowRenderSetupDl[] = {
     { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00200405 } },
     { .words = { 0xD7000002, 0x80008000 } }, { .words = { 0xE7000000, 0x00000000 } },
     { .words = { 0xE3001001, 0x00000000 } }, { .words = { 0xE3001201, 0x00003000 } },
@@ -369,7 +369,7 @@ Vec3i sSnowTrailCornerOffsets[] = {
     { 0xFFFA0000, 0x00000000, 0xFFF40000 },
 };
 
-Vec3i D_800BAD58_AAC08[] = {
+Vec3i gPlayerShadowSampleOffsets[] = {
     { 0xFFF40000, 0x00000000, 0x000C0000 },
     { 0x00000000, 0x00000000, 0x000C0000 },
     { 0x000C0000, 0x00000000, 0x000C0000 },
@@ -5397,66 +5397,72 @@ void renderPlayerModel(Player *player) {
     }
 }
 
-void renderPlayerJointShadow(Player *player) {
-    OutputStruct_19E80 textureEntry;
-    s32 alpha;
-    s32 i;
+void renderRacerProjectedShadow(Player *player) {
+    OutputStruct_19E80 shadowTexture;
+    s32 shadowAlpha;
+    s32 sampleIndex;
 
-    if (player->jointShadowNeedsUpdate != 0) {
-        player->jointVertices = arenaAlloc16(0x90);
-        if (player->jointVertices != NULL) {
-            i = 0;
-            alpha = 0x50;
+    if (player->shadowMeshNeedsUpdate != 0) {
+        player->shadowVertices = arenaAlloc16(0x90);
+        if (player->shadowVertices != NULL) {
+            sampleIndex = 0;
+            shadowAlpha = 0x50;
             do {
-                s32 offset = i << 4;
-                *(s16 *)(offset + (s32)player->jointVertices) =
-                    (s16)((*(volatile s32 *)&player->jointPositions[i].x - player->jointPositions[0].x) >> 14);
-                *(s16 *)(offset + (s32)player->jointVertices + 2) =
-                    (s16)((*(volatile s32 *)&player->jointPositions[i].y - player->jointPositions[0].y) >> 14);
-                *(s16 *)(offset + (s32)player->jointVertices + 4) =
-                    (s16)((*(volatile s32 *)&player->jointPositions[i].z - player->jointPositions[0].z) >> 14);
-                *(u8 *)(offset + (s32)player->jointVertices + 0xC) = 0;
-                *(u8 *)(offset + (s32)player->jointVertices + 0xD) = 0;
-                *(u8 *)(offset + (s32)player->jointVertices + 0xE) = 0;
-                *(u8 *)(offset + (s32)player->jointVertices + 0xF) = alpha;
-                i++;
-            } while (i < 9);
+                s32 vertexByteOffset = sampleIndex << 4;
+                *(s16 *)(vertexByteOffset + (s32)player->shadowVertices) =
+                    (s16)((*(volatile s32 *)&player->shadowSamplePositions[sampleIndex].x -
+                           player->shadowSamplePositions[0].x) >>
+                          14);
+                *(s16 *)(vertexByteOffset + (s32)player->shadowVertices + 2) =
+                    (s16)((*(volatile s32 *)&player->shadowSamplePositions[sampleIndex].y -
+                           player->shadowSamplePositions[0].y) >>
+                          14);
+                *(s16 *)(vertexByteOffset + (s32)player->shadowVertices + 4) =
+                    (s16)((*(volatile s32 *)&player->shadowSamplePositions[sampleIndex].z -
+                           player->shadowSamplePositions[0].z) >>
+                          14);
+                *(u8 *)(vertexByteOffset + (s32)player->shadowVertices + 0xC) = 0;
+                *(u8 *)(vertexByteOffset + (s32)player->shadowVertices + 0xD) = 0;
+                *(u8 *)(vertexByteOffset + (s32)player->shadowVertices + 0xE) = 0;
+                *(u8 *)(vertexByteOffset + (s32)player->shadowVertices + 0xF) = shadowAlpha;
+                sampleIndex++;
+            } while (sampleIndex < 9);
 
-            player->jointVertices[0].v.tc[0] = -0x20;
-            player->jointVertices[0].v.tc[1] = -0x20;
-            player->jointVertices[1].v.tc[0] = 0x3E0;
-            player->jointVertices[1].v.tc[1] = -0x20;
-            player->jointVertices[2].v.tc[0] = 0x7E0;
-            player->jointVertices[2].v.tc[1] = -0x20;
-            player->jointVertices[3].v.tc[0] = -0x20;
-            player->jointVertices[3].v.tc[1] = 0x3E0;
-            player->jointVertices[4].v.tc[0] = 0x3E0;
-            player->jointVertices[4].v.tc[1] = 0x3E0;
-            player->jointVertices[5].v.tc[0] = 0x7E0;
-            player->jointVertices[5].v.tc[1] = 0x3E0;
-            player->jointVertices[6].v.tc[0] = -0x20;
-            player->jointVertices[6].v.tc[1] = 0x7E0;
-            player->jointVertices[7].v.tc[0] = 0x3E0;
-            player->jointVertices[7].v.tc[1] = 0x7E0;
-            player->jointVertices[8].v.tc[0] = 0x7E0;
-            player->jointVertices[8].v.tc[1] = 0x7E0;
+            player->shadowVertices[0].v.tc[0] = -0x20;
+            player->shadowVertices[0].v.tc[1] = -0x20;
+            player->shadowVertices[1].v.tc[0] = 0x3E0;
+            player->shadowVertices[1].v.tc[1] = -0x20;
+            player->shadowVertices[2].v.tc[0] = 0x7E0;
+            player->shadowVertices[2].v.tc[1] = -0x20;
+            player->shadowVertices[3].v.tc[0] = -0x20;
+            player->shadowVertices[3].v.tc[1] = 0x3E0;
+            player->shadowVertices[4].v.tc[0] = 0x3E0;
+            player->shadowVertices[4].v.tc[1] = 0x3E0;
+            player->shadowVertices[5].v.tc[0] = 0x7E0;
+            player->shadowVertices[5].v.tc[1] = 0x3E0;
+            player->shadowVertices[6].v.tc[0] = -0x20;
+            player->shadowVertices[6].v.tc[1] = 0x7E0;
+            player->shadowVertices[7].v.tc[0] = 0x3E0;
+            player->shadowVertices[7].v.tc[1] = 0x7E0;
+            player->shadowVertices[8].v.tc[0] = 0x7E0;
+            player->shadowVertices[8].v.tc[1] = 0x7E0;
         }
 
-        player->jointMatrix = arenaAlloc16(0x40);
-        if (player->jointMatrix != NULL) {
-            memcpy(&gScaleMatrix.translation, &player->jointPositions[0], sizeof(Vec3i));
-            transform3DToN64Mtx(&gScaleMatrix, player->jointMatrix);
+        player->shadowMatrix = arenaAlloc16(0x40);
+        if (player->shadowMatrix != NULL) {
+            memcpy(&gScaleMatrix.translation, &player->shadowSamplePositions[0], sizeof(Vec3i));
+            transform3DToN64Mtx(&gScaleMatrix, player->shadowMatrix);
         }
-        player->jointShadowNeedsUpdate = 0;
+        player->shadowMeshNeedsUpdate = 0;
     }
 
-    if (player->jointVertices != NULL && player->jointMatrix != NULL) {
-        gSPMatrix(gDisplayListAllocPtr++, player->jointMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
+    if (player->shadowVertices != NULL && player->shadowMatrix != NULL) {
+        gSPMatrix(gDisplayListAllocPtr++, player->shadowMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
         gGraphicsMode = -1;
-        gSPDisplayList(gDisplayListAllocPtr++, D_800BAA30_AA8E0);
-        getTableEntryByU16Index(player->unk18, 0, &textureEntry);
+        gSPDisplayList(gDisplayListAllocPtr++, gPlayerShadowRenderSetupDl);
+        getTableEntryByU16Index(player->assetTable, 0, &shadowTexture);
 
-        gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_I, G_IM_SIZ_16b, 1, textureEntry.data_ptr);
+        gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_I, G_IM_SIZ_16b, 1, shadowTexture.data_ptr);
         gDPSetTile(
             gDisplayListAllocPtr++,
             G_IM_FMT_I,
@@ -5492,7 +5498,7 @@ void renderPlayerJointShadow(Player *player) {
         );
         gDPSetTileSize(gDisplayListAllocPtr++, G_TX_RENDERTILE, 0, 0, 31 << 2, 31 << 2);
 
-        gSPVertex(gDisplayListAllocPtr++, player->jointVertices, 9, 0);
+        gSPVertex(gDisplayListAllocPtr++, player->shadowVertices, 9, 0);
         gSP2Triangles(gDisplayListAllocPtr++, 0, 1, 3, 0, 1, 4, 3, 0);
         gSP2Triangles(gDisplayListAllocPtr++, 1, 2, 5, 0, 5, 4, 1, 0);
         gSP2Triangles(gDisplayListAllocPtr++, 3, 4, 7, 0, 7, 6, 3, 0);
@@ -5500,38 +5506,40 @@ void renderPlayerJointShadow(Player *player) {
     }
 }
 
-void updatePlayerJointPositions(Player *player) {
+void updateRacerShadowSamplePositions(Player *player) {
     GameState *gameSt;
     GameDataLayout *gameData;
-    s32 jointIdx;
-    Vec3i *jointPos;
-    s32 sectorIdx;
+    s32 sampleIndex;
+    Vec3i *samplePos;
+    s32 trackSectorIndex;
 
     gameSt = getCurrentAllocation();
-    jointIdx = 0;
+    sampleIndex = 0;
     gameData = &gameSt->gameData;
 
     do {
-        player->jointPositions[jointIdx].x = player->headingTransform.translation.x + D_800BAD58_AAC08[jointIdx].x;
-        player->jointPositions[jointIdx].z = player->headingTransform.translation.z + D_800BAD58_AAC08[jointIdx].z;
+        player->shadowSamplePositions[sampleIndex].x =
+            player->headingTransform.translation.x + gPlayerShadowSampleOffsets[sampleIndex].x;
+        player->shadowSamplePositions[sampleIndex].z =
+            player->headingTransform.translation.z + gPlayerShadowSampleOffsets[sampleIndex].z;
 
-        sectorIdx = getOrUpdatePlayerSectorIndex(
+        trackSectorIndex = getOrUpdatePlayerSectorIndex(
             (void *)player,
             gameData,
             player->sectorIndex,
-            &player->jointPositions[jointIdx]
+            &player->shadowSamplePositions[sampleIndex]
         );
-        player->jointPositions[jointIdx].y =
-            getTrackHeightInSector(gameData, sectorIdx, &player->jointPositions[jointIdx], 0x100000);
+        player->shadowSamplePositions[sampleIndex].y =
+            getTrackHeightInSector(gameData, trackSectorIndex, &player->shadowSamplePositions[sampleIndex], 0x100000);
 
-        jointIdx++;
-    } while (jointIdx < 9);
+        sampleIndex++;
+    } while (sampleIndex < 9);
 
-    player->jointShadowNeedsUpdate = 1;
+    player->shadowMeshNeedsUpdate = 1;
 
     if (!(player->animFlags & 0x800000)) {
-        for (jointIdx = 0; jointIdx < 4; jointIdx++) {
-            enqueueCallbackBySlotIndex(jointIdx, 1, renderPlayerJointShadow, (void *)player);
+        for (sampleIndex = 0; sampleIndex < 4; sampleIndex++) {
+            enqueueCallbackBySlotIndex(sampleIndex, 1, renderRacerProjectedShadow, (void *)player);
         }
     }
 }
@@ -5563,7 +5571,7 @@ void loadPlayerCharacterAssets(void *varg0) {
         player->unk14 = NULL;
     }
 
-    player->unk18 = load_3ECE40();
+    player->assetTable = load_3ECE40();
 
     if (player->isBossRacer != 0) {
         player->unk1C = loadBossHudAssetByRaceType(gameState->unk5C);
@@ -5586,7 +5594,7 @@ void freePlayerCharacterAssets(void *varg0) {
     player->unkC = freeNodeMemory(player->unkC);
     player->unk10 = freeNodeMemory(player->unk10);
     player->unk14 = freeNodeMemory(player->unk14);
-    player->unk18 = freeNodeMemory(player->unk18);
+    player->assetTable = freeNodeMemory(player->assetTable);
     player->unk1C = freeNodeMemory(player->unk1C);
     player->unk2C = freeNodeMemory(player->unk2C);
 }

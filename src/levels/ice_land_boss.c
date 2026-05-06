@@ -226,7 +226,7 @@ typedef struct {
     u8 behaviorPhase;
     u8 behaviorStep;
     u8 behaviorCounter;
-    u8 jointShadowNeedsUpdate;
+    u8 shadowMeshNeedsUpdate;
     u8 unkBC2;
     u8 unkBC3;
     u8 finishPosition;
@@ -1120,11 +1120,11 @@ void renderIceLandBossWithSurfaceColors(Player *arg0) {
 }
 
 /**
- * Updates ground contact positions for the Ice Land boss's 9 joints.
- * For each joint, computes X/Z world position from local offsets,
+ * Updates projected shadow sample positions for the Ice Land boss.
+ * For each sample, computes X/Z world position from local offsets,
  * then finds the terrain height at that position.
- * Uses different joint offset arrays based on whether the boss is flying or on ground.
- * Enqueues debug callbacks to render joint positions.
+ * Uses different sample offset arrays based on whether the boss is flying or on ground.
+ * Enqueues callbacks to render the projected shadow.
  */
 void updateIceLandBossJointPositions(Player *boss) {
     GameState *gameState;
@@ -1142,21 +1142,23 @@ void updateIceLandBossJointPositions(Player *boss) {
 
     for (jointIndex = 0; jointIndex < 9; jointIndex++) {
         if (boss->animFlags & flyingFlag) {
-            boss->jointPositions[jointIndex].x = boss->headingTransform.translation.x + D_800BCA64[jointIndex + 9].x;
-            boss->jointPositions[jointIndex].z = boss->headingTransform.translation.z + D_800BCA64[jointIndex + 9].z;
+            boss->shadowSamplePositions[jointIndex].x =
+                boss->headingTransform.translation.x + D_800BCA64[jointIndex + 9].x;
+            boss->shadowSamplePositions[jointIndex].z =
+                boss->headingTransform.translation.z + D_800BCA64[jointIndex + 9].z;
         } else {
-            boss->jointPositions[jointIndex].x = boss->headingTransform.translation.x + D_800BCA64[jointIndex].x;
-            boss->jointPositions[jointIndex].z = boss->headingTransform.translation.z + D_800BCA64[jointIndex].z;
+            boss->shadowSamplePositions[jointIndex].x = boss->headingTransform.translation.x + D_800BCA64[jointIndex].x;
+            boss->shadowSamplePositions[jointIndex].z = boss->headingTransform.translation.z + D_800BCA64[jointIndex].z;
         }
 
-        jointPos = &boss->jointPositions[jointIndex];
+        jointPos = &boss->shadowSamplePositions[jointIndex];
         sectorIndex = getOrUpdatePlayerSectorIndex((void *)boss, gameData, boss->sectorIndex, jointPos);
-        boss->jointPositions[jointIndex].y = getTrackHeightInSector(gameData, sectorIndex, jointPos, 0x100000);
+        boss->shadowSamplePositions[jointIndex].y = getTrackHeightInSector(gameData, sectorIndex, jointPos, 0x100000);
     }
 
-    boss->jointShadowNeedsUpdate = 1;
+    boss->shadowMeshNeedsUpdate = 1;
 
     for (jointIndex = 0; jointIndex < 4; jointIndex++) {
-        enqueueCallbackBySlotIndex(jointIndex, 1, renderPlayerJointShadow, (void *)boss);
+        enqueueCallbackBySlotIndex(jointIndex, 1, renderRacerProjectedShadow, (void *)boss);
     }
 }
