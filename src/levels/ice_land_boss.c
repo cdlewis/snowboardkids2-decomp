@@ -690,7 +690,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     applyClampedVelocityToPosition(arg0);
     updateIceLandBossLeanBoneTransforms(arg0);
 
-    transformVectorRelative(&gameState->players->worldPos.x, arg0->unk164, &sp40);
+    transformVectorRelative(&gameState->players->worldPos.x, (s16 *)&arg0->boneResults[5].mtx, &sp40);
 
     angleDiff = atan2Fixed(-sp40.x, -sp40.z) & 0x1FFF;
 
@@ -1052,13 +1052,11 @@ void updateIceLandBossLeanBoneTransforms(Player *arg0) {
     BoneHierarchyEntry *hierarchy;
     s32 i;
     u8 parentBone;
-    Transform3D *scratch9F0;
     Transform3D *temp;
 
-    scratch9F0 = (Transform3D *)&arg0->tiltTransform.animation_data;
     hierarchy = getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
-    func_8006B084_6BC84(&arg0->orientationTransform, &arg0->headingTransform, scratch9F0);
-    func_8006B084_6BC84((Transform3D *)&arg0->tiltTransform, scratch9F0, &arg0->unk950);
+    func_8006B084_6BC84(&arg0->orientationTransform, &arg0->headingTransform, &arg0->unk9F0);
+    func_8006B084_6BC84(&arg0->tiltTransform, &arg0->unk9F0, &arg0->unk950);
 
     for (i = 0; i < arg0->leanBoneCount; i++) {
         if (hierarchy[i].parentBone == 0xFF) {
@@ -1088,9 +1086,9 @@ void updateIceLandBossLeanBoneTransforms(Player *arg0) {
     }
 
     temp = &scratch;
-    memcpy(temp, &arg0->unk164, sizeof(Transform3D));
+    memcpy(temp, &arg0->boneResults[5].mtx, sizeof(Transform3D));
     createYRotationMatrix(&squashMatrix, (u16)arg0->unkA9E);
-    func_8006BDBC_6C9BC((BoneAnimationState *)&squashMatrix, &scratch, &arg0->unk164);
+    func_8006BDBC_6C9BC((BoneAnimationState *)&squashMatrix, &scratch, (s16 *)&arg0->boneResults[5].mtx);
 }
 
 void renderIceLandBossWithSurfaceColors(Player *arg0) {

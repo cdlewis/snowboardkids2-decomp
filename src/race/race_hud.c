@@ -3525,7 +3525,7 @@ void initPanelProjectileMovement(PanelProjectileInitArg *arg0) {
     loadAssetMetadata(&arg0->metadata, arg0->assetTable, 0x3F);
     player = arg0->player;
     temp_s1 = &arg0->metadata.position;
-    memcpy(temp_s1, &player->unk31C, sizeof(Vec3i));
+    memcpy(temp_s1, &player->boneResults[12].mtx.translation, sizeof(Vec3i));
     arg0->sectorIndex = arg0->player->sectorIndex;
     arg0->playerIndex = (s16)arg0->player->playerIndex;
     memcpy(&arg0->velX, &arg0->player->velocity, sizeof(Vec3i));

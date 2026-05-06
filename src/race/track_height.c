@@ -192,11 +192,6 @@ void setPlayerLeanAnimation(Player *player, s32 animIndex, s32 progress) {
     }
 }
 
-/* Load character body part display lists into the bone results array.
- * Iterates 16 body parts (0x3C stride), writing the display list pointer at
- * offset 0x58 (offsetof(boneResults) + offsetof(BoneResult, displayList)).
- * For race type 0xB, uses loadAssetByIndex_95380; otherwise uses loadAssetByIndex_953B0.
- */
 void loadCharacterBodyParts(Player *player) {
     s32 flags;
     s32 partIndex;
@@ -259,13 +254,14 @@ void loadCharacterBodyParts(Player *player) {
     flags = (s32)player->unk20;
     if (flags == 0) {
     copy_basic:
-        player->unk23C = (s32)player->unk4;
-        player->unk240 = (s32)player->unk8;
+        player->boneResults[8].unk24 = (s32)player->unk4;
+        player->boneResults[8].unk28 = (s32)player->unk8;
         return;
     }
-    player->unk23C = flags;
-    player->unk240 = (s32)player->unk24;
-    player->unk238 = (s32)getAssetDataDirect(player->characterId, player->boardType) + tableValue * 0x10 - 0x10;
+    player->boneResults[8].unk24 = flags;
+    player->boneResults[8].unk28 = (s32)player->unk24;
+    player->boneResults[8].displayList =
+        (s32)getAssetDataDirect(player->characterId, player->boardType) + tableValue * 0x10 - 0x10;
 }
 
 void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags) {

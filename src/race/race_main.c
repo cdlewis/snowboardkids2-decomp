@@ -556,9 +556,9 @@ void applyBoostVelocity(Player *player) {
         case 1:
         case 7:
             if (player->unkBC9 == 3) {
-                transformVector2(gameState->unk48 + 0x1D4, &player->tiltTransform.animation_data, &result);
+                transformVector2(gameState->unk48 + 0x1D4, player->unk9F0.m[0], &result);
             } else {
-                transformVector2(gameState->unk48 + 0xB4, &player->tiltTransform.animation_data, &result);
+                transformVector2(gameState->unk48 + 0xB4, player->unk9F0.m[0], &result);
             }
             player->velocity.x += result.x;
             player->velocity.y += result.y;
@@ -567,9 +567,9 @@ void applyBoostVelocity(Player *player) {
         case 2:
         case 8:
             if (player->unkBC9 == 3) {
-                transformVector2(gameState->unk48 + 0x1E0, &player->tiltTransform.animation_data, &result);
+                transformVector2(gameState->unk48 + 0x1E0, player->unk9F0.m[0], &result);
             } else {
-                transformVector2(gameState->unk48 + 0xC0, &player->tiltTransform.animation_data, &result);
+                transformVector2(gameState->unk48 + 0xC0, player->unk9F0.m[0], &result);
             }
             player->velocity.x += result.x;
             player->velocity.y += result.y;
@@ -578,7 +578,7 @@ void applyBoostVelocity(Player *player) {
         case 5: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->unk48 + 0xCC, &player->tiltTransform.animation_data, &result);
+            transformVector2(gameState->unk48 + 0xCC, player->unk9F0.m[0], &result);
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
@@ -590,7 +590,7 @@ void applyBoostVelocity(Player *player) {
         case 6: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->unk48 + 0xD8, &player->tiltTransform.animation_data, &result);
+            transformVector2(gameState->unk48 + 0xD8, player->unk9F0.m[0], &result);
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
@@ -996,11 +996,11 @@ void updateRacePlayer(Player *player) {
     player->pathFlags = 0;
     player->animFlags &= 0xFFFDFFFF;
 
-    createZRotationMatrix((Transform3D *)&player->tiltTransform, player->rollAngle);
+    createZRotationMatrix(&player->tiltTransform, player->rollAngle);
     createCombinedRotationMatrix(&player->orientationTransform, player->pitchAngle, player->steeringAngle);
     createYRotationMatrix(&player->headingTransform, player->rotY);
 
-    func_8006B084_6BC84((Transform3D *)&player->tiltTransform, &player->orientationTransform, &combinedTransform);
+    func_8006B084_6BC84(&player->tiltTransform, &player->orientationTransform, &combinedTransform);
     func_8006B084_6BC84(&combinedTransform, &player->headingTransform, &fullTransform);
 
     fullTransform.translation.x -= player->headingTransform.translation.x;
@@ -1644,7 +1644,7 @@ s32 beginPostTrickLaunchStep(Player *player) {
     }
 
     func_8006BDBC_6C9BC((BoneAnimationState *)&player->orientationTransform, &player->headingTransform, rotationTemp1);
-    func_8006BDBC_6C9BC(&player->tiltTransform, rotationTemp1, rotationTemp2);
+    func_8006BDBC_6C9BC((BoneAnimationState *)&player->tiltTransform, rotationTemp1, rotationTemp2);
     transformVector2(&D_800BAB3C_AA9EC, rotationTemp2, &launchVelocity);
 
     player->velocity.x += launchVelocity.x;
@@ -2711,7 +2711,7 @@ void updateTrickRotationTransform(Player *player) {
     rotationMatrix.translation.y = 0x100000;
     rotationMatrix.translation.z = 0;
 
-    func_8006B084_6BC84(temp, &rotationMatrix, (Transform3D *)&player->tiltTransform.prev_position);
+    func_8006B084_6BC84(temp, &rotationMatrix, &player->unk9D0);
 
     player->animFlags |= 0x800;
 }
@@ -5011,31 +5011,23 @@ void renderPlayerModel(Player *player) {
     animData = getIndexedAnimationDataPtr(player->unk0, player->leanAnimIndex);
 
     if (player->animFlags & 8) {
-        func_8006B084_6BC84(
-            &player->orientationTransform,
-            &player->headingTransform,
-            (Transform3D *)&player->tiltTransform.animation_data
-        );
-        func_8006B084_6BC84(
-            (Transform3D *)&player->tiltTransform,
-            (Transform3D *)&player->tiltTransform.animation_data,
-            &tmpMtx1
-        );
+        func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &player->unk9F0);
+        func_8006B084_6BC84(&player->tiltTransform, &player->unk9F0, &tmpMtx1);
         createYRotationMatrix(&gIdentityMatrix32, 0x1000);
         if (player->animFlags & 0x800) {
             func_8006B084_6BC84(&gIdentityMatrix32, &tmpMtx1, &tmpMtx2);
-            func_8006B084_6BC84((Transform3D *)&player->tiltTransform.prev_position, &tmpMtx2, &player->unk950);
+            func_8006B084_6BC84(&player->unk9D0, &tmpMtx2, &player->unk950);
         } else {
             func_8006B084_6BC84(&gIdentityMatrix32, &tmpMtx1, &player->unk950);
         }
     } else {
-        mtxDst = (Transform3D *)&player->tiltTransform.animation_data;
+        mtxDst = &player->unk9F0;
         func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, mtxDst);
         if (player->animFlags & 0x800) {
-            func_8006B084_6BC84((Transform3D *)&player->tiltTransform, mtxDst, &tmpMtx1);
-            func_8006B084_6BC84((Transform3D *)&player->tiltTransform.prev_position, &tmpMtx1, &player->unk950);
+            func_8006B084_6BC84(&player->tiltTransform, mtxDst, &tmpMtx1);
+            func_8006B084_6BC84(&player->unk9D0, &tmpMtx1, &player->unk950);
         } else {
-            func_8006B084_6BC84((Transform3D *)&player->tiltTransform, mtxDst, &player->unk950);
+            func_8006B084_6BC84(&player->tiltTransform, mtxDst, &player->unk950);
         }
     }
 

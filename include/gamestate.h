@@ -78,7 +78,10 @@ typedef struct {
 typedef struct {
     /* 0x00 */ Transform3D mtx;
     /* 0x20 */ s32 displayList;
-    /* 0x24 */ u8 padding[0x10];
+    /* 0x24 */ s32 unk24;
+    /* 0x28 */ s32 unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ s32 unk30;
     /* 0x34 */ u8 primaryR;
     /* 0x35 */ u8 primaryG;
     /* 0x36 */ u8 primaryB;
@@ -104,18 +107,7 @@ typedef struct {
     void *unk2C;
     Vtx *jointVertices;   /* 0x30 */
     Mtx *jointMatrix;     /* 0x34 */
-    /* 0x38 */ BoneResult boneResults[1];
-    /* 0x74 */ u8 padding74[0x164 - 0x74];
-    s16 unk164[3];
-    u8 padding16A[0x238 - 0x16A];
-    s32 unk238;
-    s32 unk23C;
-    s32 unk240;
-    u8 padding244[0x31C - 0x244];
-    s32 unk31C;
-    s32 unk320;
-    s32 unk324;
-    u8 padding_328[0xD0];
+    /* 0x38 */ BoneResult boneResults[16];
     /* 0x3F8 */ Transform3D unk3F8;
     /* 0x418 */ void *unk418;
     s32 unk41C;
@@ -154,8 +146,9 @@ typedef struct {
     /* 0x950 */ Transform3D unk950;
     Transform3D headingTransform;
     Transform3D orientationTransform;
-    BoneAnimationState tiltTransform;
-    u8 padding9FC[0x14];
+    /* 0x9B0 */ Transform3D tiltTransform;
+    /* 0x9D0 */ Transform3D unk9D0;
+    /* 0x9F0 */ Transform3D unk9F0;
     /* 0xA10 */ Vec3i jointPositions[9];
     /* 0xA7C */ Vec3i aiTarget;
     u8 _padA88[0x4];
@@ -167,7 +160,7 @@ typedef struct {
     s16 unkA96;
     s16 unkA98;
     s16 unkA9A;
-    u8 padding4a_1[0x2];
+    u16 jingleBossPitchAngle;
     s16 unkA9E;
     s32 baseMaxSpeed;
     /* 0xAA4 */ s32 maxSpeedCap;
@@ -187,7 +180,10 @@ typedef struct {
     s32 collisionRadius;
     Vec3i extraCollisionOffsets[6];
     s32 extraCollisionRadii;
-    u8 paddingB30[0xB40 - 0xB30];
+    s32 unkB30;
+    s32 unkB34;
+    s32 unkB38;
+    s32 unkB3C;
     s32 unkB40;
     s32 storedPosX;
     s32 storedPosY;
