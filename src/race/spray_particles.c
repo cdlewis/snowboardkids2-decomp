@@ -893,7 +893,7 @@ void updateCharacterAttackEffect(CharacterAttackEffectState *arg0) {
 
     for (j = 0; j < 6; j++) {
         createYRotationMatrix(rm, rotation & 0xFFFF);
-        func_8006BDBC_6C9BC((BoneAnimationState *)rm, &arg0->sourcePlayer->unk9F0, tf);
+        func_8006BDBC_6C9BC((Transform3D *)rm, &arg0->sourcePlayer->unk9F0, tf);
         transformVector2(&arg0->positionOffsets, tf, &result);
         particle->particle.position.x = result.x + arg0->sourcePlayer->worldPos.x;
         particle->particle.position.y = result.y + arg0->sourcePlayer->worldPos.y + yOffset;

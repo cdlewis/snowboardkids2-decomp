@@ -1643,8 +1643,8 @@ s32 beginPostTrickLaunchStep(Player *player) {
         }
     }
 
-    func_8006BDBC_6C9BC((BoneAnimationState *)&player->orientationTransform, &player->headingTransform, &rotationTemp1);
-    func_8006BDBC_6C9BC((BoneAnimationState *)&player->tiltTransform, &rotationTemp1, &rotationTemp2);
+    func_8006BDBC_6C9BC((Transform3D *)&player->orientationTransform, &player->headingTransform, &rotationTemp1);
+    func_8006BDBC_6C9BC((Transform3D *)&player->tiltTransform, &rotationTemp1, &rotationTemp2);
     transformVector2(&D_800BAB3C_AA9EC, &rotationTemp2, &launchVelocity);
 
     player->velocity.x += launchVelocity.x;
@@ -2875,7 +2875,7 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     pitchMatrix.m[2][1] = magnitude;
     pitchMatrix.m[2][2] = player->surfaceNormalY;
 
-    func_8006BDBC_6C9BC((BoneAnimationState *)&slopeMatrix, &pitchMatrix, &combinedTransform);
+    func_8006BDBC_6C9BC((Transform3D *)&slopeMatrix, &pitchMatrix, &combinedTransform);
     transformVector2(&player->velocity.x, &combinedTransform, &tempVec);
 
     if (tempVec.y < 0) {
@@ -5065,14 +5065,14 @@ void renderPlayerModel(Player *player) {
                 func_8006B084_6BC84(tmpMtx1Ptr, &player->unk950, &player->boneResults[animData[i].boneIndex].mtx);
             } else {
                 func_8006B084_6BC84(
-                    (Transform3D *)&player->unk488[animData[i].boneIndex].prev_position,
+                    &player->unk488[animData[i].boneIndex].transform.previous,
                     &player->unk950,
                     &player->boneResults[animData[i].boneIndex].mtx
                 );
             }
         } else {
             func_8006B084_6BC84(
-                (Transform3D *)&player->unk488[animData[i].boneIndex].prev_position,
+                &player->unk488[animData[i].boneIndex].transform.previous,
                 &player->boneResults[animData[i].parentBone].mtx,
                 &player->boneResults[animData[i].boneIndex].mtx
             );

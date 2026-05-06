@@ -15,17 +15,6 @@ typedef struct {
 } Vec3s;
 
 typedef struct {
-    /* 0x00 */ s16 values[0xA];
-    /* 0x14 */ s32 position[3];
-    /* 0x20 */ s16 prev_position[0xA];
-    /* 0x34 */ s32 interpolated[3];
-    /* 0x40 */ s16 *animation_data;
-    /* 0x44 */ s16 *frame_data;
-    /* 0x48 */ u16 flags;
-    /* 0x4A */ u16 counter;
-} BoneAnimationState;
-
-typedef struct {
     s16 m[9];
 } Mat3x3;
 
@@ -34,6 +23,19 @@ typedef struct {
     s16 m[3][3];
     Vec3i translation;
 } Transform3D;
+
+typedef struct {
+    /* 0x00 */ Transform3D current;
+    /* 0x20 */ Transform3D previous;
+} BoneAnimationTransformState;
+
+typedef struct {
+    /* 0x00 */ BoneAnimationTransformState transform;
+    /* 0x40 */ s16 *animation_data;
+    /* 0x44 */ s16 *frame_data;
+    /* 0x48 */ u16 flags;
+    /* 0x4A */ u16 counter;
+} BoneAnimationState;
 
 extern Transform3D identityMatrix;
 extern Transform3D gScaleMatrix;
@@ -44,9 +46,9 @@ void createYRotationMatrix(Transform3D *, u16 angle);
 void createZRotationMatrix(Transform3D *, u16 angle);
 void createXRotationMatrix(s16 matrix[3][3], u16 angle);
 
-void func_8006BDBC_6C9BC(BoneAnimationState *, Transform3D *, Transform3D *);
+void func_8006BDBC_6C9BC(Transform3D *, Transform3D *, Transform3D *);
 
-void setBonePosition(BoneAnimationState *state, s32 x, s32 y, s32 z);
+void setBonePosition(Transform3D *state, s32 x, s32 y, s32 z);
 
 // Multiplies a 3x3 rotation matrix by the transpose of another: result = left * transpose(right)
 void func_mulMatrix3x3T(Transform3D *, Transform3D *, Transform3D *);

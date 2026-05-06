@@ -2495,14 +2495,14 @@ void updateModelGeometry(SceneModel *arg0) {
             if (parent == 0xFF) {
                 u8 bone = animData->boneIndex;
                 func_8006B084_6BC84(
-                    (Transform3D *)arg0->unk4[bone].prev_position,
+                    &arg0->unk4[bone].transform.previous,
                     &worldMatrix,
                     &((DisplayListObject *)arg0->unk0)[bone].transform
                 );
             } else {
                 u8 bone = animData->boneIndex;
                 func_8006B084_6BC84(
-                    (Transform3D *)arg0->unk4[bone].prev_position,
+                    &arg0->unk4[bone].transform.previous,
                     &((DisplayListObject *)arg0->unk0)[parent].transform,
                     &((DisplayListObject *)arg0->unk0)[bone].transform
                 );

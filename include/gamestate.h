@@ -39,10 +39,7 @@ typedef enum {
 } SecondaryItemId;
 
 typedef struct {
-    /* 0x00 */ s16 values[10];
-    /* 0x14 */ s32 position[3];
-    /* 0x20 */ s16 prev_position[10];
-    /* 0x34 */ s32 interpolated[3];
+    /* 0x00 */ BoneAnimationTransformState transform;
     /* 0x40 */ u16 flags;
     /* 0x42 */ u16 counter;
     /* 0x44 */ u16 animation_index;

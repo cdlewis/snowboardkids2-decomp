@@ -451,10 +451,10 @@ void createRotationMatrixZYX(s16 *matrix, s16 angleX, s16 angleZ, s16 angleY) {
     matrix[8] = (cosZ * cosY) / 0x2000;
 }
 
-void setBonePosition(BoneAnimationState *state, s32 x, s32 y, s32 z) {
-    state->position[0] = x;
-    state->position[1] = y;
-    state->position[2] = z;
+void setBonePosition(Transform3D *state, s32 x, s32 y, s32 z) {
+    state->translation.x = x;
+    state->translation.y = y;
+    state->translation.z = z;
 }
 
 void scaleMatrix(Transform3D *matrix, s16 scaleX, s16 scaleY, s16 scaleZ) {
@@ -951,7 +951,7 @@ void rotateVectorY(void *arg0, s16 angle, Vec3i *output) {
     output->z = zAccum + (zFrac >> 13);
 }
 
-void func_8006BDBC_6C9BC(BoneAnimationState *arg0, Transform3D *mat1, Transform3D *mat2) {
+void func_8006BDBC_6C9BC(Transform3D *arg0, Transform3D *mat1, Transform3D *mat2) {
     s32 row;
     s16 *rowPtr;
     s32 i;
@@ -960,10 +960,9 @@ void func_8006BDBC_6C9BC(BoneAnimationState *arg0, Transform3D *mat1, Transform3
 
     for (i = 0; i < 3; i++) {
         row = i;
-        rowPtr = arg0->values + (row * 3);
+        rowPtr = arg0->m[row];
         for (j = 0; j < 3; j++) {
-            sum = rowPtr[0] * mat1->m[0][j] + arg0->values[row * 3 + 1] * mat1->m[1][j] +
-                  arg0->values[row * 3 + 2] * mat1->m[2][j];
+            sum = rowPtr[0] * mat1->m[0][j] + arg0->m[row][1] * mat1->m[1][j] + arg0->m[row][2] * mat1->m[2][j];
             if (sum < 0) {
                 sum += 0x1FFF;
             }
@@ -1346,8 +1345,8 @@ void matrixToEulerAngles(
         yawMatrix.m[0][0] = cosVal;
     }
 
-    func_8006BDBC_6C9BC((BoneAnimationState *)resultMatrix, &yawMatrix, &tempMatrix);
-    func_8006BDBC_6C9BC((BoneAnimationState *)cameraMatrix, &tempMatrix, resultMatrix);
+    func_8006BDBC_6C9BC((Transform3D *)resultMatrix, &yawMatrix, &tempMatrix);
+    func_8006BDBC_6C9BC((Transform3D *)cameraMatrix, &tempMatrix, resultMatrix);
 
     *lookAtX = (f32)pitchMatrix.m[2][0];
     *lookAtY = (f32)pitchMatrix.m[2][1];

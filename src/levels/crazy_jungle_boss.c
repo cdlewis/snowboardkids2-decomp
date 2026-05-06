@@ -538,7 +538,7 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
 
     if (!(arg0->animFlags & 1)) {
         createYRotationMatrix(&arg0->unk970, arg0->unkA94);
-        func_8006BDBC_6C9BC((BoneAnimationState *)&arg0->unk990, &arg0->unk970, &sp10);
+        func_8006BDBC_6C9BC((Transform3D *)&arg0->unk990, &arg0->unk970, &sp10);
         transformVector3(&arg0->velocity, &sp10, &sp30);
         sp30.x = 0;
         transformVector2(&sp30, &sp10, &arg0->velocity);
@@ -705,22 +705,18 @@ void updateCrazyJungleBossLeanBoneTransforms(Arg0Struct *arg0) {
             if (arg0->behaviorFlags & 0x10) {
                 memcpy(&squashMatrix, &identityMatrix, sizeof(Transform3D));
                 squashMatrix.m[1][1] = arg0->squashStretchScale;
-                func_8006B084_6BC84(
-                    (Transform3D *)&arg0->unk488[hierarchy[i].boneIndex].prev_position,
-                    &squashMatrix,
-                    &scratch
-                );
+                func_8006B084_6BC84(&arg0->unk488[hierarchy[i].boneIndex].transform.previous, &squashMatrix, &scratch);
                 func_8006B084_6BC84(&scratch, &arg0->unk950, &arg0->bones[hierarchy[i].boneIndex].transform);
             } else {
                 func_8006B084_6BC84(
-                    (Transform3D *)&arg0->unk488[hierarchy[i].boneIndex].prev_position,
+                    &arg0->unk488[hierarchy[i].boneIndex].transform.previous,
                     &arg0->unk950,
                     &arg0->bones[hierarchy[i].boneIndex].transform
                 );
             }
         } else {
             func_8006B084_6BC84(
-                (Transform3D *)&arg0->unk488[hierarchy[i].boneIndex].prev_position,
+                &arg0->unk488[hierarchy[i].boneIndex].transform.previous,
                 &arg0->bones[hierarchy[i].parentBone].transform,
                 &arg0->bones[hierarchy[i].boneIndex].transform
             );
