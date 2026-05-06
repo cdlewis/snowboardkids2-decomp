@@ -646,7 +646,7 @@ void resetBoneAnimation(void *animData, s16 tableIndex, s16 boneIndex, BoneAnima
 s32 advanceIndexedBoneAnimation(void *animData, s16 tableIndex, s16 boneIndex, BoneAnimationStateIndexed *state) {
     u16 *animation_data;
     s16 *frame_data;
-    s16 stack_data[16];
+    Transform3D stack_data;
     u16 idx;
     u16 flags;
     u16 frame_idx;
@@ -699,29 +699,22 @@ s32 advanceIndexedBoneAnimation(void *animData, s16 tableIndex, s16 boneIndex, B
             animation_data[idx * 5 + 1],
             animation_data[idx * 5 + 2],
             (s16)animation_data[idx * 5 + 3] - state->counter,
-            stack_data
+            (s16 *)stack_data.m
         );
-        func_8006BDBC_6C9BC(
-            (BoneAnimationState *)state,
-            (Transform3D *)stack_data,
-            (Transform3D *)state->prev_position
-        );
+        func_8006BDBC_6C9BC((BoneAnimationState *)state, &stack_data, (Transform3D *)state->prev_position);
     }
 
     idx = state->animation_index;
     frame_idx = animation_data[idx * 5 + 4];
-    state->interpolated[0] =
-        state->interpolated[0] + ((frame_data[frame_idx * 3] << 10) - state->interpolated[0]) / state->flags;
+    state->interpolated[0] += ((frame_data[frame_idx * 3] << 10) - state->interpolated[0]) / state->flags;
 
     idx = state->animation_index;
     frame_idx = animation_data[idx * 5 + 4];
-    state->interpolated[1] =
-        state->interpolated[1] + ((frame_data[frame_idx * 3 + 1] << 10) - state->interpolated[1]) / state->flags;
+    state->interpolated[1] += ((frame_data[frame_idx * 3 + 1] << 10) - state->interpolated[1]) / state->flags;
 
     idx = state->animation_index;
     frame_idx = animation_data[idx * 5 + 4];
-    state->interpolated[2] =
-        state->interpolated[2] + ((frame_data[frame_idx * 3 + 2] << 10) - state->interpolated[2]) / state->flags;
+    state->interpolated[2] += ((frame_data[frame_idx * 3 + 2] << 10) - state->interpolated[2]) / state->flags;
 
     state->flags--;
     if ((state->flags & 0xFFFF) != 0) {
