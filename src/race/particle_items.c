@@ -29,18 +29,18 @@ typedef struct {
     void *assetData;              /* Pointer to asset table */
     loadAssetMetadata_arg sprite; /* Sprite metadata for rendering */
     u8 padding[0x2];
-    Func43CA4Unk28 *unk24;  /* Unknown pointer at offset 0x24 */
-    Func43CA4Unk28 *player; /* Target player for the star effect */
-    s32 offsetX;            /* X offset from player position */
-    s32 offsetY;            /* Y offset from player position */
-    s32 offsetZ;            /* Z offset from player position */
-    s16 animFrameIndex;     /* Current animation frame index */
-    s16 startDelay;         /* Timer for initial delay and animation frames */
-    s16 displayTimer;       /* How long to display the orbiting star */
-    s16 alphaPulseDir;      /* Direction of alpha pulse (0=increasing, 1=decreasing) */
-    s16 rotationAngle;      /* Unused in star effect, present for struct compatibility */
-    u8 playSoundFlag;       /* Flag to play star spawn sound */
-    u8 immediateMode;       /* Non-zero to skip expand animation and go straight to orbit */
+    /* 0x24 */ Func43CA4Unk28 *unk24;
+    /* 0x28 */ Func43CA4Unk28 *player;
+    s32 offsetX;        /* X offset from player position */
+    s32 offsetY;        /* Y offset from player position */
+    s32 offsetZ;        /* Z offset from player position */
+    s16 animFrameIndex; /* Current animation frame index */
+    s16 startDelay;     /* Timer for initial delay and animation frames */
+    s16 displayTimer;   /* How long to display the orbiting star */
+    s16 alphaPulseDir;  /* Direction of alpha pulse (0=increasing, 1=decreasing) */
+    s16 rotationAngle;  /* Unused in star effect, present for struct compatibility */
+    u8 playSoundFlag;   /* Flag to play star spawn sound */
+    u8 immediateMode;   /* Non-zero to skip expand animation and go straight to orbit */
 } StarEffectState;
 
 typedef struct {
@@ -77,21 +77,21 @@ typedef struct {
 } ShieldEffectDisplayConfig;
 
 typedef struct {
-    u8 matrix[0x20]; /* 0x00 - matrix data copied via memcpy */
+    /* 0x00 */ u8 matrix[0x20];
     ShieldEffectDisplayConfig *displayConfig;
     void *displayAsset1;
     void *displayAsset2;
     s32 unk2C;
-    s32 unk30;     /* 0x30 */
-    u8 pad34[0x8]; /* 0x34 */
+    /* 0x30 */ s32 unk30;
+    /* 0x34 */ u8 pad34[0x8];
     Player *player;
-    union {
+    /* 0x40 */ union {
         s32 full;
         struct {
             s16 hi;
             s16 lo;
         } half;
-    } scale; /* 0x40 */
+    } scale;
 } ShieldEffectState;
 
 typedef struct {
@@ -172,12 +172,12 @@ typedef struct {
 
 typedef struct {
     u8 _pad0[0x30];
-    u8 unk30[0x14];   /* 0x30 */
-    void *spriteData; /* 0x44 - sprite/asset data buffer */
+    /* 0x30 */ u8 unk30[0x14];
+    /* 0x44 */ void *spriteData;
     u8 _pad48[0x14];
-    u8 unk5C; /* 0x5C - course/level index */
+    /* 0x5C */ u8 unk5C;
     u8 _pad5D[0x19];
-    u8 paused; /* 0x76 - non-zero when paused */
+    /* 0x76 */ u8 paused;
 } EffectTaskState;
 
 typedef struct {
@@ -265,43 +265,43 @@ typedef struct {
 } OrbitStarEffectState;
 
 typedef struct {
-    loadAssetMetadata_arg *unk0; // 0x00
-    Vec3i position;              // 0x04-0x0F
-    u8 *data_ptr;                // 0x10
-    void *index_ptr;             // 0x14
-    u8 unk18;                    // 0x18
-    u8 unk19;                    // 0x19
-    u8 unk1A;                    // 0x1A
-    u8 pad1B;                    // 0x1B
-    u8 pad1C[0x4];               // 0x1C-0x1F
-    s32 unk20;                   // 0x20-0x23
-} BurstParticle;                 // size 0x24
+    /* 0x00 */ loadAssetMetadata_arg *unk0;
+    /* 0x04 */ Vec3i position;
+    /* 0x10 */ u8 *data_ptr;
+    /* 0x14 */ void *index_ptr;
+    /* 0x18 */ u8 unk18;
+    /* 0x19 */ u8 unk19;
+    /* 0x1A */ u8 unk1A;
+    /* 0x1B */ u8 pad1B;
+    /* 0x1C */ u8 pad1C[0x4];
+    /* 0x20 */ s32 unk20;
+} BurstParticle;
 
 typedef struct {
-    BurstParticle particles[6]; // 0x00-0xD7
-    void *assetTable;           // 0xD8
-    s8 particleType;            // 0xDC
-    u8 unkDD;                   // 0xDD
+    /* 0x00 */ BurstParticle particles[6];
+    /* 0xD8 */ void *assetTable;
+    /* 0xDC */ s8 particleType;
+    /* 0xDD */ u8 unkDD;
 } BurstEffectState;
 
 typedef struct {
-    u8 pad0[0x434];        /* 0x00 */
-    s32 sourcePosition[3]; /* 0x434 - warp source position (12 bytes) */
+    /* 0x00 */ u8 pad0[0x434];
+    /* 0x434 */ s32 sourcePosition[3];
 } WarpEffectSource;
 
 typedef struct {
-    Transform3D transform;    /* 0x00 */
-    void *displayData;        /* 0x20 */
-    void *asset1;             /* 0x24 */
-    void *asset2;             /* 0x28 */
-    s32 unk2C;                /* 0x2C */
-    u8 pad30[0xC];            /* 0x30 */
-    WarpEffectSource *source; /* 0x3C */
-    Player *player;           /* 0x40 */
-    s32 delayFrames;          /* 0x44 */
-    s32 scale;                /* 0x48 */
-    s32 height;               /* 0x4C */
-    s32 velocity;             /* 0x50 */
+    /* 0x00 */ Transform3D transform;
+    /* 0x20 */ void *displayData;
+    /* 0x24 */ void *asset1;
+    /* 0x28 */ void *asset2;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 pad30[0xC];
+    /* 0x3C */ WarpEffectSource *source;
+    /* 0x40 */ Player *player;
+    /* 0x44 */ s32 delayFrames;
+    /* 0x48 */ s32 scale;
+    /* 0x4C */ s32 height;
+    /* 0x50 */ s32 velocity;
 } WarpEffectState;
 
 typedef struct {
@@ -317,35 +317,35 @@ typedef struct {
 } Func432D8Arg;
 
 typedef struct {
-    u8 pad0[0x18];              /* 0x00 */
-    s32 unk18;                  /* 0x18 */
-    u8 pad1C[0x4];              /* 0x1C */
-    void *unk20;                /* 0x20 */
-    void *unk24;                /* 0x24 */
-    void *unk28;                /* 0x28 */
-    s32 unk2C;                  /* 0x2C */
-    u8 pad30[0xC];              /* 0x30 */
-    DisplayListObject orbitObj; /* 0x3C */
-    Player *player;             /* 0x78 */
-    s32 fallVelocity;           /* 0x7C */
-    u16 yRotation;              /* 0x80 */
-    u16 orbitAngle;             /* 0x82 */
-    s16 scale;                  /* 0x84 */
+    /* 0x00 */ u8 pad0[0x18];
+    /* 0x18 */ s32 unk18;
+    /* 0x1C */ u8 pad1C[0x4];
+    /* 0x20 */ void *unk20;
+    /* 0x24 */ void *unk24;
+    /* 0x28 */ void *unk28;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 pad30[0xC];
+    /* 0x3C */ DisplayListObject orbitObj;
+    /* 0x78 */ Player *player;
+    /* 0x7C */ s32 fallVelocity;
+    /* 0x80 */ u16 yRotation;
+    /* 0x82 */ u16 orbitAngle;
+    /* 0x84 */ s16 scale;
 } PlayerAuraEffectState;
 
 typedef struct {
-    s32 dataOffset;  /* 0x00 - offset to display data */
-    s32 dataCount;   /* 0x04 - count used for calculating display data pointer */
-    s32 pos[3];      /* 0x08 - zone position/translation */
-    u16 pitch;       /* 0x14 - rotation angle X */
-    u16 yaw;         /* 0x16 - rotation angle Y */
-    s16 xMin;        /* 0x18 - minimum X bound */
-    s16 xMax;        /* 0x1A - maximum X bound */
-    s16 unk1C;       /* 0x1C - unused in update function */
-    s16 yOffset;     /* 0x1E - Y offset for bounds checking */
-    s16 zMin;        /* 0x20 - minimum Z bound */
-    s16 zMax;        /* 0x22 - maximum Z bound */
-} PushZoneDataEntry; /* size: 0x24 */
+    /* 0x00 */ s32 dataOffset;
+    /* 0x04 */ s32 dataCount;
+    /* 0x08 */ s32 pos[3];
+    /* 0x14 */ u16 pitch;
+    /* 0x16 */ u16 yaw;
+    /* 0x18 */ s16 xMin;
+    /* 0x1A */ s16 xMax;
+    /* 0x1C */ s16 unk1C;
+    /* 0x1E */ s16 yOffset;
+    /* 0x20 */ s16 zMin;
+    /* 0x22 */ s16 zMax;
+} PushZoneDataEntry;
 
 typedef struct {
     u8 _pad0[0x5C];
@@ -353,13 +353,13 @@ typedef struct {
 } Func44CB4Allocation;
 
 typedef struct {
-    Transform3D transform; /* 0x00 - zone transform */
-    void *displayData;     /* 0x20 - pointer to display data */
-    void *asset1;          /* 0x24 - uncompressed asset */
-    void *asset2;          /* 0x28 - compressed segment 2 asset */
-    s32 unk2C;             /* 0x2C */
-    u8 pad30[0xC];         /* 0x30 */
-    s16 zoneIndex;         /* 0x3C */
+    /* 0x00 */ Transform3D transform;
+    /* 0x20 */ void *displayData;
+    /* 0x24 */ void *asset1;
+    /* 0x28 */ void *asset2;
+    /* 0x2C */ s32 unk2C;
+    /* 0x30 */ u8 pad30[0xC];
+    /* 0x3C */ s16 zoneIndex;
 } PushZoneState;
 
 typedef struct {
@@ -369,27 +369,27 @@ typedef struct {
 } CompressedAssetEntry;
 
 typedef struct {
-    s8 active;      /* 0x00 - 1 when active, set to 0 when processed */
-    s8 type;        /* 0x01 - 0 for primary item, non-zero for secondary */
-    s16 itemId;     /* 0x02 - item ID to give to the player */
-    Vec3i position; /* 0x04 - world position for player detection */
-} ItemTriggerEntry; /* size: 0x10 */
+    /* 0x00 */ s8 active;
+    /* 0x01 */ s8 type;
+    /* 0x02 */ s16 itemId;
+    /* 0x04 */ Vec3i position;
+} ItemTriggerEntry;
 
 typedef struct {
-    void *matrices;                /* 0x00 - allocated matrix memory for each item */
-    void *vertices;                /* 0x04 - vertex data pointer */
-    ItemTriggerEntry *items;       /* 0x08 - array of item trigger entries */
-    DataTable_19E80 *textureTable; /* 0x0C - texture table for rendering items */
-    s32 *itemData;                 /* 0x10 - loaded item trigger data */
-    s16 courseIndex;               /* 0x14 - course/level index */
-    s16 numItems;                  /* 0x16 - number of item trigger entries */
+    /* 0x00 */ void *matrices;
+    /* 0x04 */ void *vertices;
+    /* 0x08 */ ItemTriggerEntry *items;
+    /* 0x0C */ DataTable_19E80 *textureTable;
+    /* 0x10 */ s32 *itemData;
+    /* 0x14 */ s16 courseIndex;
+    /* 0x16 */ s16 numItems;
 } ItemTriggerTaskState;
 
 struct Func45010Arg {
-    void *matrices;     /* 0x00 */
-    u8 pad4[0x8];       /* 0x04 */
-    void *textureTable; /* 0x0C */
-    void *itemData;     /* 0x10 */
+    /* 0x00 */ void *matrices;
+    /* 0x04 */ u8 pad4[0x8];
+    /* 0x0C */ void *textureTable;
+    /* 0x10 */ void *itemData;
 };
 typedef struct Func45010Arg Func45010Arg;
 
