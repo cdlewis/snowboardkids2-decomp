@@ -2,6 +2,7 @@ Checks: >
   -*,
   readability-redundant-declaration,
   readability-redundant-casting,
+  readability-redundant-parentheses,
   misc-include-cleaner,
 WarningsAsErrors: ""
 HeaderFilterRegex: '^(src|include)\/.*\.h$'
