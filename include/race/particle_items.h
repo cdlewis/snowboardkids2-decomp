@@ -5,8 +5,7 @@
 #include "math/geometry.h"
 
 typedef struct {
-    u8 pad0[0x14];    /* 0x00 */
-    Vec3i position;   /* 0x14 */
+    Transform3D transform; /* 0x00 */
     void *displayData;/* 0x20 */
     void *asset1;     /* 0x24 */
     void *asset2;     /* 0x28 */

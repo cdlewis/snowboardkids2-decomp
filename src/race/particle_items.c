@@ -53,9 +53,7 @@ typedef struct {
 } FallingEffectPlayer;
 
 typedef struct {
-    /* 0x00 */ s16 matrix[3][3];
-    /* 0x12 */ u8 pad12[0x2];
-    /* 0x14 */ Vec3i position;
+    /* 0x00 */ Transform3D transform;
     /* 0x20 */ void *displayData;
     /* 0x24 */ void *asset1;
     /* 0x28 */ void *asset2;
@@ -134,8 +132,7 @@ typedef struct {
 } ExpandStarEffectState;
 
 typedef struct {
-    /* 0x00 */ u8 pad0[0x14];
-    /* 0x14 */ Vec3i position;
+    /* 0x00 */ Transform3D transform;
     /* 0x20 */ void *displayData;
     /* 0x24 */ void *asset1;
     /* 0x28 */ void *asset2;
@@ -148,25 +145,19 @@ typedef struct {
 } GhostEffectState;
 
 typedef struct {
-    /* 0x00 */ u8 pad0[0x14];
-    /* 0x14 */ Vec3i position;
+    /* 0x00 */ Transform3D transform;
     /* 0x20 */ void *displayData;
     /* 0x24 */ void *asset1;
     /* 0x28 */ void *asset2;
     /* 0x2C */ s32 unk2C;
     /* 0x30 */ u8 pad30[0x0C];
     /* 0x3C */ Player *player;
-    /* 0x40 */ s16 rotationMatrix[3][3];
-    /* 0x52 */ u8 pad52[2];
-    /* 0x54 */ s32 unk54;
-    /* 0x58 */ s32 unk58;
-    /* 0x5C */ s32 unk5C;
+    /* 0x40 */ Transform3D localTransform;
     /* 0x60 */ s32 playSound;
 } CrashEffectState;
 
 typedef struct {
-    /* 0x00 */ u8 pad0[0x14];
-    /* 0x14 */ Vec3i position;
+    /* 0x00 */ Transform3D transform;
     /* 0x20 */ void *displayData;
     /* 0x24 */ void *asset1;
     /* 0x28 */ void *asset2;
@@ -299,9 +290,7 @@ typedef struct {
 } WarpEffectSource;
 
 typedef struct {
-    s16 matrix[3][3];         /* 0x00 (0x12 bytes: 9 * s16) */
-    u8 pad12[0x2];            /* 0x12 */
-    Vec3i position;           /* 0x14 */
+    Transform3D transform;    /* 0x00 */
     void *displayData;        /* 0x20 */
     void *asset1;             /* 0x24 */
     void *asset2;             /* 0x28 */
@@ -364,14 +353,13 @@ typedef struct {
 } Func44CB4Allocation;
 
 typedef struct {
-    u8 pad0[0x14];     /* 0x00 - rotation matrix */
-    Vec3i position;    /* 0x14 - zone position/translation */
-    void *displayData; /* 0x20 - pointer to display data */
-    void *asset1;      /* 0x24 - uncompressed asset */
-    void *asset2;      /* 0x28 - compressed segment 2 asset */
-    s32 unk2C;         /* 0x2C */
-    u8 pad30[0xC];     /* 0x30 */
-    s16 zoneIndex;     /* 0x3C */
+    Transform3D transform; /* 0x00 - zone transform */
+    void *displayData;     /* 0x20 - pointer to display data */
+    void *asset1;          /* 0x24 - uncompressed asset */
+    void *asset2;          /* 0x28 - compressed segment 2 asset */
+    s32 unk2C;             /* 0x2C */
+    u8 pad30[0xC];         /* 0x30 */
+    s16 zoneIndex;         /* 0x3C */
 } PushZoneState;
 
 typedef struct {
@@ -514,7 +502,7 @@ extern Gfx *gDisplayListAllocPtr;
 
 void initFallingEffect(FallingEffectState *arg0) {
     getCurrentAllocation();
-    createXRotationMatrix(arg0->matrix, 0x800);
+    createXRotationMatrix(arg0->transform.m, 0x800);
     arg0->displayData = &D_8009A6B0_9B2B0;
     arg0->asset1 = loadAsset_B7E70();
     arg0->asset2 = loadAsset_216290();
@@ -528,9 +516,9 @@ void initFallingEffect(FallingEffectState *arg0) {
 void updateFallingEffect(FallingEffectState *arg0) {
     s32 i;
 
-    arg0->position.x = arg0->player->pos1F0;
-    arg0->position.y = arg0->player->pos1F4;
-    arg0->position.z = arg0->player->pos1F8;
+    arg0->transform.translation.x = arg0->player->pos1F0;
+    arg0->transform.translation.y = arg0->player->pos1F4;
+    arg0->transform.translation.z = arg0->player->pos1F8;
 
     if ((arg0->player->behaviorFlags & 0x20) == 0) {
         setCallback(animateFallingEffectDescent);
@@ -538,7 +526,7 @@ void updateFallingEffect(FallingEffectState *arg0) {
 
     if (arg0->playSound != 0) {
         arg0->playSound = 0;
-        queueSoundAtPosition(&arg0->position, 0xE);
+        queueSoundAtPosition(&arg0->transform.translation, 0xE);
     }
 
     for (i = 0; i < 4; i++) {
@@ -559,8 +547,8 @@ void animateFallingEffectDescent(FallingEffectState *arg0) {
         terminateCurrentTask();
     }
 
-    arg0->matrix[2][1] = -arg0->height;
-    arg0->position.y += 0xFFFF0000;
+    arg0->transform.m[2][1] = -arg0->height;
+    arg0->transform.translation.y += 0xFFFF0000;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
@@ -804,10 +792,10 @@ void initCrashEffect(CrashEffectState *arg0) {
     arg0->asset1 = loadAsset_B7E70();
     arg0->asset2 = loadAsset_216290();
     arg0->unk2C = 0;
-    createYRotationMatrix((Transform3D *)arg0->rotationMatrix, 0xF800);
-    arg0->unk54 = 0;
-    arg0->unk58 = 0;
-    arg0->unk5C = 0;
+    createYRotationMatrix(&arg0->localTransform, 0xF800);
+    arg0->localTransform.translation.x = 0;
+    arg0->localTransform.translation.y = 0;
+    arg0->localTransform.translation.z = 0;
     arg0->playSound = 1;
     setCleanupCallback(cleanupCrashEffect);
     setCallbackWithContinue(updateCrashEffect);
@@ -817,7 +805,7 @@ void updateCrashEffect(CrashEffectState *arg0) {
     Vec3i pos;
     s32 i;
 
-    func_8006B084_6BC84((Transform3D *)arg0->rotationMatrix, &arg0->player->playerModel.transform, (Transform3D *)arg0);
+    func_8006B084_6BC84(&arg0->localTransform, &arg0->player->playerModel.transform, &arg0->transform);
 
     if ((arg0->player->behaviorFlags & 0x80) == 0) {
         pos.x = arg0->player->worldPos.x;
@@ -829,7 +817,7 @@ void updateCrashEffect(CrashEffectState *arg0) {
 
     if (arg0->playSound != 0) {
         arg0->playSound = 0;
-        queueSoundAtPosition(&arg0->position, 0x12);
+        queueSoundAtPosition(&arg0->transform.translation, 0x12);
     }
 
     for (i = 0; i < 4; i++) {
@@ -861,7 +849,7 @@ void initSparkleEffect(SparkleEffectState *arg0) {
     arg0->scale = 0;
     arg0->rotation = 0;
     arg0->opacity = 0xFF;
-    queueSoundAtPosition(&arg0->position, 0x14);
+    queueSoundAtPosition(&arg0->transform.translation, 0x14);
     setCleanupCallback(cleanupSparkleEffect);
     setCallbackWithContinue(updateSparkleEffect);
 }
@@ -888,12 +876,12 @@ void updateSparkleEffect(SparkleEffectState *arg0) {
     }
 
     arg0->rotation += 0x300;
-    createYRotationMatrix((Transform3D *)arg0, arg0->rotation);
+    createYRotationMatrix(&arg0->transform, arg0->rotation);
 
     temp = arg0->scale;
-    scaleMatrix((Transform3D *)arg0, temp, temp, temp);
+    scaleMatrix(&arg0->transform, temp, temp, temp);
 
-    checkStarHitCollisionWithVulnerablePlayers((&arg0->position), arg0->playerIndex, arg0->scale * 0xF0);
+    checkStarHitCollisionWithVulnerablePlayers(&arg0->transform.translation, arg0->playerIndex, arg0->scale * 0xF0);
 
     arg0->alpha = (u8)arg0->opacity;
 
@@ -924,8 +912,8 @@ void fadeOutSparkleEffect(SparkleEffectState *arg0) {
     }
 
     arg0->rotation += 0x300;
-    createYRotationMatrix((Transform3D *)arg0, arg0->rotation);
-    scaleMatrix((Transform3D *)arg0, arg0->scale, arg0->scale, arg0->scale);
+    createYRotationMatrix(&arg0->transform, arg0->rotation);
+    scaleMatrix(&arg0->transform, arg0->scale, arg0->scale, arg0->scale);
     arg0->alpha = (u8)arg0->opacity;
 
     for (i = 0; i < 4; i++) {
@@ -943,7 +931,7 @@ SparkleEffectState *spawnSparkleEffect(void *arg0) {
 
     task = (SparkleEffectState *)scheduleTask(initSparkleEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        memcpy(&task->position, arg0, sizeof(Vec3i));
+        memcpy(&task->transform.translation, arg0, sizeof(Vec3i));
         task->playerIndex = -1;
     }
     return task;
@@ -954,7 +942,7 @@ SparkleEffectState *spawnSparkleEffectWithPlayer(void *arg0, s32 arg1) {
 
     task = (SparkleEffectState *)scheduleTask(&initSparkleEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        memcpy(&task->position, arg0, sizeof(Vec3i));
+        memcpy(&task->transform.translation, arg0, sizeof(Vec3i));
         task->playerIndex = arg1;
     }
     return task;
@@ -986,12 +974,12 @@ void updateLiftEffect(LiftEffectState *state) {
     }
 
     state->rotationAngle += 0x300;
-    createYRotationMatrix((Transform3D *)state, state->rotationAngle);
-    scaleMatrix((Transform3D *)state, state->scaleFactor, state->scaleFactor, state->scaleFactor);
+    createYRotationMatrix(&state->transform, state->rotationAngle);
+    scaleMatrix(&state->transform, state->scaleFactor, state->scaleFactor, state->scaleFactor);
     player = state->player;
-    pos = &state->position;
+    pos = &state->transform.translation;
     memcpy(pos, &player->worldPos, sizeof(Vec3i));
-    state->position.y += 0xFFEC0000;
+    state->transform.translation.y += 0xFFEC0000;
 
     if (state->playSound != 0) {
         queueSoundAtPosition(pos, 0x15);
@@ -1023,10 +1011,10 @@ void fadeOutLiftEffect(LiftEffectState *state) {
     }
 
     state->rotationAngle += 0x12C;
-    createYRotationMatrix((Transform3D *)state, state->rotationAngle);
-    scaleMatrix((Transform3D *)state, state->scaleFactor, state->scaleFactor, state->scaleFactor);
-    memcpy(&state->position, &state->player->worldPos, sizeof(Vec3i));
-    state->position.y += 0xFFEC0000;
+    createYRotationMatrix(&state->transform, state->rotationAngle);
+    scaleMatrix(&state->transform, state->scaleFactor, state->scaleFactor, state->scaleFactor);
+    memcpy(&state->transform.translation, &state->player->worldPos, sizeof(Vec3i));
+    state->transform.translation.y += 0xFFEC0000;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
@@ -1084,11 +1072,11 @@ void updateWarpEffect(WarpEffectState *state) {
         }
     }
 
-    createXRotationMatrix(state->matrix, 0);
+    createXRotationMatrix(state->transform.m, 0);
     scale = (s16)state->scale;
-    scaleMatrix((Transform3D *)state, scale, scale, scale);
-    memcpy(&state->position, state->source->sourcePosition, sizeof(Vec3i));
-    state->position.y += state->height;
+    scaleMatrix(&state->transform, scale, scale, scale);
+    memcpy(&state->transform.translation, state->source->sourcePosition, sizeof(Vec3i));
+    state->transform.translation.y += state->height;
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
@@ -1107,7 +1095,7 @@ void descendWarpEffect(WarpEffectState *state) {
 
         if (state->height == 0x220000) {
             setPlayerBouncedBackState(state->player);
-            queueSoundAtPosition(&state->position, 0x19);
+            queueSoundAtPosition(&state->transform.translation, 0x19);
         }
 
         if (state->height <= 0x10000) {
@@ -1116,8 +1104,8 @@ void descendWarpEffect(WarpEffectState *state) {
         }
     }
 
-    memcpy(&state->position, &state->player->worldPos, sizeof(Vec3i));
-    state->position.y += state->height;
+    memcpy(&state->transform.translation, &state->player->worldPos, sizeof(Vec3i));
+    state->transform.translation.y += state->height;
 
     i = 0;
     do {
@@ -1139,8 +1127,8 @@ void finishWarpEffect(WarpEffectState *state) {
             terminateCurrentTask();
         }
 
-        state->position.x = state->position.x + 0x20000;
-        state->position.y = state->position.y + state->velocity;
+        state->transform.translation.x = state->transform.translation.x + 0x20000;
+        state->transform.translation.y = state->transform.translation.y + state->velocity;
     }
 
     for (i = 0; i < 4; i++) {
@@ -1835,17 +1823,17 @@ void updateGhostEffect(GhostEffectState *arg0) {
 
     allocation = (EffectTaskState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, arg0->rotation);
-    func_8006B084_6BC84(&gIdentityMatrix32, (Transform3D *)((u8 *)arg0->player + 0x3F8), (Transform3D *)arg0);
+    func_8006B084_6BC84(&gIdentityMatrix32, (Transform3D *)((u8 *)arg0->player + 0x3F8), &arg0->transform);
 
     if (arg0->scale == 0x200) {
-        queueSoundAtPosition(&arg0->position, 0x1D);
+        queueSoundAtPosition(&arg0->transform.translation, 0x1D);
     }
 
     if (arg0->scale != 0x2000) {
         arg0->scale += 0x200;
     }
 
-    scaleMatrix((Transform3D *)arg0, arg0->scale, arg0->scale, arg0->scale);
+    scaleMatrix(&arg0->transform, arg0->scale, arg0->scale, arg0->scale);
 
     if (gFrameCounter & 4) {
         arg0->displayData = &D_8009A760_9B360;
@@ -1895,7 +1883,7 @@ void fadeOutGhostEffect(GhostEffectState *arg0) {
         if ((s32)0xFFF80000 >= arg0->velocityY) {
             terminateCurrentTask();
         }
-        arg0->position.y = arg0->position.y + arg0->velocityY;
+        arg0->transform.translation.y = arg0->transform.translation.y + arg0->velocityY;
     }
 
     for (i = 0; i < 4; i++) {
@@ -1926,8 +1914,12 @@ void initPushZone(PushZoneState *arg0) {
     Func44CB4Allocation *allocation;
 
     allocation = getCurrentAllocation();
-    createCombinedRotationMatrix(arg0, gPushZoneData[arg0->zoneIndex].pitch, gPushZoneData[arg0->zoneIndex].yaw);
-    memcpy(&arg0->position, gPushZoneData[arg0->zoneIndex].pos, sizeof(Vec3i));
+    createCombinedRotationMatrix(
+        &arg0->transform,
+        gPushZoneData[arg0->zoneIndex].pitch,
+        gPushZoneData[arg0->zoneIndex].yaw
+    );
+    memcpy(&arg0->transform.translation, gPushZoneData[arg0->zoneIndex].pos, sizeof(Vec3i));
     arg0->displayData =
         (void *)(gPushZoneData[arg0->zoneIndex].dataOffset + (gPushZoneData[arg0->zoneIndex].dataCount << 4));
     arg0->asset1 = loadUncompressedAssetByIndex(allocation->unk5C);
