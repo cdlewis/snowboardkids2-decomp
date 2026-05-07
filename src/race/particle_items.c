@@ -817,7 +817,7 @@ void updateCrashEffect(CrashEffectState *arg0) {
     Vec3i pos;
     s32 i;
 
-    func_8006B084_6BC84((Transform3D *)arg0->rotationMatrix, (Transform3D *)&arg0->player->unk3F8, (Transform3D *)arg0);
+    func_8006B084_6BC84((Transform3D *)arg0->rotationMatrix, &arg0->player->playerModel.transform, (Transform3D *)arg0);
 
     if ((arg0->player->behaviorFlags & 0x80) == 0) {
         pos.x = arg0->player->worldPos.x;
@@ -1379,7 +1379,7 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
 
     gameState = (EffectTaskState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, state->yRotation);
-    func_8006B084_6BC84(&gIdentityMatrix32, (Transform3D *)&state->player->unk3F8, (Transform3D *)state);
+    func_8006B084_6BC84(&gIdentityMatrix32, &state->player->playerModel.transform, (Transform3D *)state);
     scaleMatrix((Transform3D *)state, state->scale, state->scale, state->scale);
 
     state->orbitAngle += 0x300;
@@ -1488,7 +1488,7 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
 
     allocation = (GameState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, state->yRotation);
-    func_8006B084_6BC84(&gIdentityMatrix32, &state->player->unk3F8, &state->primary.transform);
+    func_8006B084_6BC84(&gIdentityMatrix32, &state->player->playerModel.transform, &state->primary.transform);
     scale = state->scale;
     scaleMatrix(&state->primary.transform, scale, scale, scale);
 

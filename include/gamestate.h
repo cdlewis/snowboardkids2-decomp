@@ -105,20 +105,7 @@ typedef struct {
     Vtx *shadowVertices;   /* 0x30 */
     Mtx *shadowMatrix;     /* 0x34 */
     /* 0x38 */ BoneResult boneResults[16];
-    /* 0x3F8 */ Transform3D unk3F8;
-    /* 0x418 */ void *unk418;
-    s32 unk41C;
-    s32 unk420;
-    s32 unk424;
-    u8 padding428[0x4];
-    /* 0x42C */ u8 bossPrimaryR;
-    /* 0x42D */ u8 bossPrimaryG;
-    /* 0x42E */ u8 bossPrimaryB;
-    /* 0x42F */ u8 _pad42F;
-    /* 0x430 */ u8 bossSecondaryR;
-    /* 0x431 */ u8 bossSecondaryG;
-    /* 0x432 */ u8 bossSecondaryB;
-    /* 0x433 */ u8 _pad433;
+    /* 0x3F8 */ DisplayListObject playerModel;
     Vec3i worldPos;
     s32 prevWorldPosX;
     s32 prevWorldPosY;

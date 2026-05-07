@@ -1053,10 +1053,10 @@ s32 initPlayerForRace(Player *player) {
             extra->unk64 = 0;
             extra->assetPtr = (void *)(loadAssetByIndex_953B0(player->characterId, player->boardType) + i * 0x10);
         } else {
-            player->unk418 = &D_8009A550_9B150[0];
-            player->unk41C = (s32)player->unkC;
-            player->unk420 = (s32)player->unk10;
-            player->unk424 = (s32)player->unk14;
+            player->playerModel.displayLists = (DisplayLists *)&D_8009A550_9B150[0];
+            player->playerModel.segment1 = player->unkC;
+            player->playerModel.segment2 = player->unk10;
+            player->playerModel.segment3 = player->unk14;
         }
     }
 
@@ -5082,8 +5082,8 @@ void renderPlayerModel(Player *player) {
     if (player->animFlags & 8) {
         __asm__("");
         tmpMtx1Ptr = &tmpMtx1;
-        memcpy(tmpMtx1Ptr, &player->unk3F8, sizeof(Transform3D));
-        func_8006B084_6BC84(&gIdentityMatrix32, tmpMtx1Ptr, &player->unk3F8);
+        memcpy(tmpMtx1Ptr, &player->playerModel.transform, sizeof(Transform3D));
+        func_8006B084_6BC84(&gIdentityMatrix32, tmpMtx1Ptr, &player->playerModel.transform);
     }
 
     invTimer = player->invincibilityTimer;
@@ -5107,7 +5107,7 @@ void renderPlayerModel(Player *player) {
                 {
                     s32 k;
                     for (k = 0; k < 4; k++) {
-                        enqueueDisplayListObject(k, (DisplayListObject *)&player->unk3F8);
+                        enqueueDisplayListObject(k, &player->playerModel);
                     }
                 }
             } else {
@@ -5124,16 +5124,16 @@ void renderPlayerModel(Player *player) {
             }
         } else {
             if ((((u32)player->behaviorFlags >> 7) & 1) | (snowTrailMask << 16 != 0)) {
-                player->bossPrimaryR = gBossSurfaceColors[surfaceType].primaryR;
-                player->bossPrimaryG = gBossSurfaceColors[surfaceType].primaryG;
-                player->bossPrimaryB = gBossSurfaceColors[surfaceType].primaryB;
-                player->bossSecondaryR = gBossSurfaceColors[surfaceType].secondaryR;
-                player->bossSecondaryG = gBossSurfaceColors[surfaceType].secondaryG;
-                player->bossSecondaryB = gBossSurfaceColors[surfaceType].secondaryB;
+                player->playerModel.light1R = gBossSurfaceColors[surfaceType].primaryR;
+                player->playerModel.light1G = gBossSurfaceColors[surfaceType].primaryG;
+                player->playerModel.light1B = gBossSurfaceColors[surfaceType].primaryB;
+                player->playerModel.light2R = gBossSurfaceColors[surfaceType].secondaryR;
+                player->playerModel.light2G = gBossSurfaceColors[surfaceType].secondaryG;
+                player->playerModel.light2B = gBossSurfaceColors[surfaceType].secondaryB;
                 {
                     s32 k;
                     for (k = 0; k < 4; k++) {
-                        enqueueDisplayListObjectWithLights(k, (DisplayListObject *)&player->unk3F8);
+                        enqueueDisplayListObjectWithLights(k, &player->playerModel);
                     }
                 }
             } else {
@@ -5301,7 +5301,11 @@ void renderPlayerModel(Player *player) {
     if (!(player->animFlags & 0x2000)) {
 
         for (i = 0; i < 4; i++) {
-            transformVector((s16 *)&sSnowTrailCornerOffsets[i], (s16 *)&player->unk3F8, &snowTrailCorners[i]);
+            transformVector(
+                (s16 *)&sSnowTrailCornerOffsets[i],
+                (s16 *)&player->playerModel.transform,
+                &snowTrailCorners[i]
+            );
             trackHeight = getTrackHeightInSector(
                 &gameState->gameData,
                 (

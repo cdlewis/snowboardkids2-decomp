@@ -697,7 +697,7 @@ void initSkiTrailTask(SkiTrailTask *task) {
         dstOffset = 0x48;
         transforms = gSkiTrailOffsetTransformsForward;
         do {
-            transformVector(transforms, (s16 *)&task->player->unk3F8, (u8 *)task + dstOffset);
+            transformVector(transforms, (s16 *)&task->player->playerModel.transform, (u8 *)task + dstOffset);
             skiSlot->skiOffsets[0].x -= task->player->worldPos.x;
             skiSlot->skiOffsets[0].y -= task->player->worldPos.y;
             dstOffset += 0xC;
@@ -711,7 +711,7 @@ void initSkiTrailTask(SkiTrailTask *task) {
         dstOffset = 0x48;
         transforms = gSkiTrailOffsetTransformsBackward;
         do {
-            transformVector(transforms, (s16 *)&task->player->unk3F8, (u8 *)task + dstOffset);
+            transformVector(transforms, (s16 *)&task->player->playerModel.transform, (u8 *)task + dstOffset);
             skiSlot->skiOffsets[0].x -= task->player->worldPos.x;
             skiSlot->skiOffsets[0].y -= task->player->worldPos.y;
             dstOffset += 0xC;
