@@ -131,7 +131,7 @@ void updateJingleTownBoss(Player *arg0) {
 
     alloc = getCurrentAllocation();
     if (arg0->isBossRacer != 0) {
-        calculateAITargetPosition((Player *)arg0);
+        calculateAITargetPosition(arg0);
     } else {
         arg0->inputStickX = gAnalogStickX[arg0->playerIndex] / 4;
         arg0->inputStickY = gAnalogStickY[arg0->playerIndex] / 4;
@@ -295,14 +295,14 @@ s32 jingleTownBossChaseAttackIntroPhase(Player *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     if (gameState->raceIntroState == 0) {
-        setPlayerBehaviorPhase((Player *)arg0, 1);
+        setPlayerBehaviorPhase(arg0, 1);
         return 1;
     }
 
     arg0->velocity.x -= arg0->velocity.x / 8;
     arg0->velocity.z -= arg0->velocity.z / 8;
     arg0->velocity.y += -0x8000;
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
 
     return 0;
 }
@@ -318,12 +318,12 @@ s32 jingleTownBossChaseAttackMainPhase(Player *arg0) {
     gameState = getCurrentAllocation();
 
     if (arg0->animFlags & 0x100000) {
-        setPlayerBehaviorMode((Player *)arg0, 3);
+        setPlayerBehaviorMode(arg0, 3);
         return 1;
     }
 
     if (arg0->animFlags & 0x80000) {
-        setPlayerBehaviorPhase((Player *)arg0, 2);
+        setPlayerBehaviorPhase(arg0, 2);
         return 1;
     }
 
@@ -357,7 +357,7 @@ s32 jingleTownBossChaseAttackMainPhase(Player *arg0) {
     if (!(arg0->animFlags & 1)) {
         temp_s0 = &arg0->headingTransform;
         createYRotationMatrix(temp_s0, arg0->rotY);
-        func_8006BDBC_6C9BC((Transform3D *)&arg0->orientationTransform, temp_s0, &sp10);
+        func_8006BDBC_6C9BC((&arg0->orientationTransform), temp_s0, &sp10);
         temp_s1 = &arg0->velocity;
         transformVector3(temp_s1, &sp10, &sp30);
         sp30.x = 0;
@@ -381,7 +381,7 @@ s32 jingleTownBossChaseAttackMainPhase(Player *arg0) {
     }
 
     arg0->velocity.y -= 0x8000;
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
 
     switch (arg0->behaviorCounter) {
         case 0:
@@ -537,7 +537,7 @@ s32 jingleTownBossChaseAttackExitPhase(Player *arg0) {
     arg0->velocity.x -= arg0->velocity.x / 8;
     arg0->velocity.z -= arg0->velocity.z / 8;
     arg0->velocity.y += -0x8000;
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
     return 0;
 }
 
@@ -570,7 +570,7 @@ s32 jingleTownBossHoverAttackIntroPhase(Player *arg0) {
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
     arg0->velocity.y -= 0x8000;
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (arg0->unkB8C == -1) {
         arg0->behaviorFlags = 0;
@@ -619,7 +619,7 @@ s32 jingleTownBossHoverAttackMainPhase(Player *arg0) {
         arg0->unkB8C--;
     }
 
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
 
     arg0->unk474 += arg0->unk468;
 
@@ -676,7 +676,7 @@ s32 jingleTownBossHoverAttackExitPhase(Player *arg0) {
     if (arg0->unk468 != 0) {
         arg0->unk468 -= 2;
     }
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
     return 0;
 }
 
@@ -696,7 +696,7 @@ void updateJingleTownBossPositionAndTrackCollision(Player *arg0) {
     func_80060CDC_618DC(gameData, newSectorIndex, &arg0->worldPos, 0x187000, &collisionOffset);
     arg0->worldPos.x = arg0->worldPos.x + collisionOffset.x;
     arg0->worldPos.z = arg0->worldPos.z + collisionOffset.z;
-    computePlayerTerrainAlignment((Player *)arg0);
+    computePlayerTerrainAlignment(arg0);
 
     if (arg0->animFlags & 0x10000) {
         arg0->unkBC9 = 0;

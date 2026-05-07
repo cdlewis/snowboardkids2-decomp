@@ -1,9 +1,10 @@
 #pragma once
 
 #include "common.h"
-#include "graphics/camera_transform.h"
+#include "gbi.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
+#include "libaudio.h"
 #include "math/geometry.h"
 
 typedef struct ListNode_5AA90 {
@@ -15,27 +16,27 @@ typedef struct ListNode_5AA90 {
 } ListNode_5AA90;
 
 typedef enum {
-    PRIMARY_ITEM_NONE        = 0,
-    PRIMARY_ITEM_SLAPSTICK   = 1,
-    PRIMARY_ITEM_PARACHUTE   = 2,
+    PRIMARY_ITEM_NONE = 0,
+    PRIMARY_ITEM_SLAPSTICK = 1,
+    PRIMARY_ITEM_PARACHUTE = 2,
     PRIMARY_ITEM_FREEZE_SHOT = 3,
-    PRIMARY_ITEM_SNOWMAN     = 4,
-    PRIMARY_ITEM_BOMB        = 5,
-    PRIMARY_ITEM_WHIRLWIND   = 6,
+    PRIMARY_ITEM_SNOWMAN = 4,
+    PRIMARY_ITEM_BOMB = 5,
+    PRIMARY_ITEM_WHIRLWIND = 6,
 } PrimaryItemId;
 
 typedef enum {
-    SECONDARY_ITEM_NONE           = 0,
-    SECONDARY_ITEM_PAN            = 1,
-    SECONDARY_ITEM_GHOST          = 2,
-    SECONDARY_ITEM_SUPER_GHOST    = 3,
-    SECONDARY_ITEM_SPEED_FAN      = 4,
-    SECONDARY_ITEM_ROCKET         = 5,
-    SECONDARY_ITEM_INVISIBLE      = 6,
-    SECONDARY_ITEM_ROCK           = 7,
-    SECONDARY_ITEM_RAT_FACE       = 8,
+    SECONDARY_ITEM_NONE = 0,
+    SECONDARY_ITEM_PAN = 1,
+    SECONDARY_ITEM_GHOST = 2,
+    SECONDARY_ITEM_SUPER_GHOST = 3,
+    SECONDARY_ITEM_SPEED_FAN = 4,
+    SECONDARY_ITEM_ROCKET = 5,
+    SECONDARY_ITEM_INVISIBLE = 6,
+    SECONDARY_ITEM_ROCK = 7,
+    SECONDARY_ITEM_RAT_FACE = 8,
     SECONDARY_ITEM_SUPER_RAT_FACE = 9,
-    SECONDARY_ITEM_WING           = 10,
+    SECONDARY_ITEM_WING = 10,
 } SecondaryItemId;
 
 typedef struct {
@@ -102,8 +103,8 @@ typedef struct {
     void *unk24;
     void *aiPathData;
     void *unk2C;
-    Vtx *shadowVertices;   /* 0x30 */
-    Mtx *shadowMatrix;     /* 0x34 */
+    Vtx *shadowVertices; /* 0x30 */
+    Mtx *shadowMatrix;   /* 0x34 */
     /* 0x38 */ BoneResult boneResults[16];
     /* 0x3F8 */ DisplayListObject playerModel;
     Vec3i worldPos;

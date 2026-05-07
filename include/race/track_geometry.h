@@ -1,9 +1,7 @@
 #pragma once
 
-#include "ui/level_preview_3d.h"
-#include "story/npc_dialogue.h"
 #include "common.h"
-#include "math/geometry.h"
+#include "story/npc_dialogue.h"
 
 typedef struct Func2E024Arg Func2E024Arg;
 struct Func2E024Arg {

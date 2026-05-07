@@ -4,6 +4,7 @@
 #include "gamestate.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
+#include "os_cont.h"
 #include "system/task_scheduler.h"
 #include "triggers/town_collision.h"
 
@@ -495,8 +496,8 @@ void initStoryMapCameraAtLocation(StoryMapCameraState *camera) {
     memcpy(&camera->orientMatrix, &identityMatrix, sizeof(Transform3D));
     memcpy(camera, &identityMatrix, sizeof(Transform3D));
 
-    camera->cameraX = storyMapLocationCoords[(u8)state->discoveredLocationId].x;
-    camera->cameraZ = storyMapLocationCoords[(u8)state->discoveredLocationId].z;
+    camera->cameraX = storyMapLocationCoords[state->discoveredLocationId].x;
+    camera->cameraZ = storyMapLocationCoords[state->discoveredLocationId].z;
 
     camera->cameraX <<= 16;
     camera->cameraZ <<= 16;

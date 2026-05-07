@@ -645,7 +645,7 @@ void initializeCutsceneSystem(void *romAssetAddr) {
 
         gCutsceneStateTable->allocatedEventCount++;
         entryIndex = allocateStateEntry();
-        itemEntry = (StateEntry *)gCutsceneStateTable;
+        itemEntry = gCutsceneStateTable;
         slotIdxByte = slotIdx << 24;
         itemEntry = (StateEntry *)((u8 *)itemEntry + itemByteOffset);
         itemEntry->items[0].unk6 = 0;

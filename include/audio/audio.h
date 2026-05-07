@@ -13,7 +13,14 @@ void queueSoundAtPosition(Vec3i *position, s16 soundId);
 void queueSoundAtPositionWithDuration(Vec3i *position, u32 soundId, s16 duration);
 void queueSoundAtPositionWithPriority(Vec3i *position, s32 soundId, s16 priority, s16 duration);
 void queueSoundAtPositionWithVolume(Vec3i *position, s32 soundId, f32 volume, s16 priority, s32 duration);
-void queueSoundAtPositionWithVolumeAndFlags(Vec3i *position, s32 soundId, f32 volume, s16 priority, s32 duration, s32 flags);
+void queueSoundAtPositionWithVolumeAndFlags(
+    Vec3i *position,
+    s32 soundId,
+    f32 volume,
+    s16 priority,
+    s32 duration,
+    s32 flags
+);
 void incrementSoundSequence(void);
 void checkMusicLoadRequest(void *arg);
 void loadMusicTrackData(void);
@@ -48,16 +55,16 @@ void playSoundEffectAtPositionWithPriority(
     s32 channelIndex,
     s32 voiceIndex
 );
-void playSoundEffectAtPosition(
+void playSoundEffectAtPosition(s32 soundId, s32 volume, s32 pan, f32 position, s32 priority, s32 channelIndex);
+// Play sound effect on specified channel with voice control
+void playSoundEffectOnChannelWithVoice(
     s32 soundId,
     s32 volume,
     s32 pan,
-    f32 position,
     s32 priority,
-    s32 channelIndex
+    s32 channelIndex,
+    s32 voiceIndex
 );
-// Play sound effect on specified channel with voice control
-void playSoundEffectOnChannelWithVoice(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex, s32 voiceIndex);
 // Play sound effect on specified channel with default voice
 void playSoundEffectOnChannel(s32 soundId, s32 volume, s32 pan, s32 priority, s32 channelIndex);
 void playOrStopSoundEffectOnChannelWithVoice(s32 soundId, s32 volume, s32 priority, s32 channelIndex, s32 voiceIndex);

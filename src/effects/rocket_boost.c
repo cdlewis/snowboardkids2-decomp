@@ -1,6 +1,7 @@
 #include "effects/rocket_boost.h"
 #include "assets.h"
 #include "common.h"
+#include "gbi.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"

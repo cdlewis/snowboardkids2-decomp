@@ -1,8 +1,8 @@
 #ifndef _CUTSCENE_SYS2_H_
 #define _CUTSCENE_SYS2_H_
 
-#include "cutscene/cutscene_manager.h"
 #include "common.h"
+#include "cutscene/cutscene_manager.h"
 
 typedef struct {
     s16 rotation_y;

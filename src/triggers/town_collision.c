@@ -1,5 +1,6 @@
 #include "triggers/town_collision.h"
 #include "gamestate.h"
+#include "math/geometry.h"
 #include "system/task_scheduler.h"
 
 // Defines circular collision zones for town objects (lampposts/stations)

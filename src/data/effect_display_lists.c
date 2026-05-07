@@ -1,3 +1,4 @@
+#include "gbi.h"
 #include "graphics/displaylist.h"
 
 DisplayLists D_80089510_8A110 = { 0x00000000, NULL, NULL, (Gfx *)0x010000A0 };

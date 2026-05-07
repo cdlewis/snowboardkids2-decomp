@@ -1,8 +1,9 @@
 #pragma once
 
 #include "common.h"
-#include "graphics/displaylist.h"
 #include "gamestate.h"
+#include "graphics/displaylist.h"
+#include "math/geometry.h"
 
 s32 getTrackHeightInSector(void *gameData, s32 sectorIndex, void *pos, s32 heightOffset);
 s32 getTrackHeightInSectorWithOffset(void *gameData, u16 sectorIndex, void *pos, s32 unused, s32 heightOffset);

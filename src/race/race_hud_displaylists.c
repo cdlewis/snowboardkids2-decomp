@@ -1,4 +1,5 @@
 #include "common.h"
+#include "gbi.h"
 #include "graphics/displaylist.h"
 
 DisplayLists D_8009A670_9B270 = { 0, (Gfx *)0x01000000, NULL, NULL };

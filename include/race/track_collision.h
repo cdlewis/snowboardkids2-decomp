@@ -22,6 +22,12 @@ void handleOrientedAreaCollision(Vec3i *origin, s32 radialThreshold, s32 depthEx
 s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSectorIndex, void *position);
 Player *
 findVulnerablePlayerNearPositionWithDelta(Vec3i *position, s32 excludePlayerIdx, s32 searchRadius, Vec3i *outDelta);
-s16 getHomingAngleToTarget(Vec3i *pos, s16 facingAngle, s32 excludePlayerIdx, s32 searchRadius, s32 closeRangeThreshold);
+s16 getHomingAngleToTarget(
+    Vec3i *pos,
+    s16 facingAngle,
+    s32 excludePlayerIdx,
+    s32 searchRadius,
+    s32 closeRangeThreshold
+);
 void alignPlayerToTrackSurface(Player *);
 s32 handlePlayerTrackWallCollision(Player *player);

@@ -1,15 +1,14 @@
 #pragma once
 
-#include "ui/options_menu.h"
-#include "race/particle_items.h"
-#include "race/race_hud.h"
-#include "race/track_collision.h"
+#include "common.h"
+#include "gamestate.h"
+#include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_table.h"
-#include "common.h"
-#include "graphics/displaylist.h"
-#include "gamestate.h"
+#include "math/geometry.h"
+#include "race/race_hud.h"
 #include "system/memory_allocator.h"
+#include "ui/options_menu.h"
 
 typedef struct {
     u8 padding[0x14];
@@ -46,14 +45,23 @@ void initSaveSlotScreen(void);
 void func_80003EE0_4AE0(void);
 void initLevelSelectWithDetail(void);
 void initLevelSelectBasic(void);
-void enqueueHudTextLayout(void *fontAsset, void *textData, s16 startX, s16 startY, u8 alpha, u8 transparency, u8 paletteIndex, u8 priority, u8 flags);
+void enqueueHudTextLayout(
+    void *fontAsset,
+    void *textData,
+    s16 startX,
+    s16 startY,
+    u8 alpha,
+    u8 transparency,
+    u8 paletteIndex,
+    u8 priority,
+    u8 flags
+);
 void initCharSelectIcons(void *arg0);
 void collectStoryMapItem(void *arg0);
 void updateStoryMapNpcDialogueTurn(void *arg0);
 void animateNpcTurnToTarget(void *arg0);
 s32 tryStoryMapNpcInteraction(void *arg0);
-void enqueueTexturedBillboardSprite(s32 arg0, TexturedBillboardSprite *arg1);
-void createViewportTransform(void *output, s32 posX, s32 posY, s32 posZ, s32 depthOffset, s32 pitchAngle, s32 yawAngle);
+
 void stopSoundEffectChannel(s32 channelIndex, s32 stoppingSpeed);
 void playFanSoundEffect(s16 fanIndex, s16 volume, s16 pan, s16 channel);
 void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0);
@@ -112,7 +120,7 @@ void setPlayerFrozenState(Player *player);
 void playAttackHitVoice(Player *player);
 void playFinishBoostVoice(Player *player);
 void playStunnedVoice(Player *arg0);
-Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex, s32 searchRadius);
+
 s16 getPlayerTargetTrackAngle(Player *player);
 void spawnHomingProjectile(void *arg0, s32 arg1, void *arg2);
 void setPlayerStarHitState(Player *player, Vec3i *hitPosition);
@@ -128,7 +136,6 @@ s32 getBossHudAssetSize(s32 index);
 void *loadAssetByIndex_5E990(s32 index);
 MemoryAllocatorNode *loadAssetDataDMA(s16 groupIndex, s16 entityIndex);
 MemoryAllocatorNode *loadAssetDataQueuedDMA(s16 groupIndex, s16 entityIndex);
-s32 loadSpriteAsset(SpriteAssetState *arg0, s16 arg1);
 
 enum GameMode {
     GAME_MODE_STORY = 0,

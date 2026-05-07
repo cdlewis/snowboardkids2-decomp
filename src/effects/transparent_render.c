@@ -1,4 +1,5 @@
 #include "assets.h"
+#include "animation/animation_loop.h"
 #include "common.h"
 #include "core/main.h"
 #include "cutscene/cutscene_manager.h"

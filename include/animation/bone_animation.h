@@ -14,7 +14,7 @@ void createBoneRotMatrix(s16 angleX, s16 angleY, s16 angleZ, s16 *matrix);
 
 typedef struct {
     /* 0x00 */ u8 header[8];
-    /* 0x08 */ u32 boneCountOffsets[0];  // Array of offsets to u16 bone count values
+    /* 0x08 */ u32 boneCountOffsets[0]; // Array of offsets to u16 bone count values
 } AnimationBoneCountTable;
 
 s32 getAnimationBoneCount(AnimationBoneCountTable *, s32);

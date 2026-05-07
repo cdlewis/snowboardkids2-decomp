@@ -1,8 +1,9 @@
 #pragma once
 
-#include "ui/level_preview_3d.h"
 #include "common.h"
 #include "core/main.h"
+#include "math/geometry.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct {
     s16 x;

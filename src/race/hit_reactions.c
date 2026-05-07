@@ -4,6 +4,7 @@
 #include "gamestate.h"
 #include "math/geometry.h"
 #include "math/rand.h"
+#include "os_cont.h"
 #include "race/obstacle_sprites.h"
 #include "race/particle_items.h"
 #include "race/race_session.h"

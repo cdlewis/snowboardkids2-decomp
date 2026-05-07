@@ -186,7 +186,7 @@ void computeAIWaypointPosition(Player *player, CourseData *courseData, s16 secto
 
         switch (pathChoice) {
             case -1:
-                waypointIdx = (s16)courseData->waypoints[sectorIdx].alt;
+                waypointIdx = courseData->waypoints[sectorIdx].alt;
                 if ((s8)factorRaw >= 0) {
                     factor = (s8)factorRaw;
                     LERP_X(
@@ -273,7 +273,7 @@ void computeAIWaypointPosition(Player *player, CourseData *courseData, s16 secto
                 }
                 break;
             case 1:
-                waypointIdx = (s16)courseData->waypoints[sectorIdx].alt2;
+                waypointIdx = courseData->waypoints[sectorIdx].alt2;
                 if ((s8)factorRaw >= 0) {
                     factor = (s8)factorRaw;
                     LERP_X(

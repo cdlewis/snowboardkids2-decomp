@@ -1,11 +1,11 @@
 #pragma once
 
 #include "common.h"
-#include "cutscene/cutscene_manager.h"
 #include "graphics/displaylist.h"
 #include "graphics/sprite_rdp.h"
 #include "math/geometry.h"
 #include "text/font_assets.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct {
     s32 posX;              // 0x00

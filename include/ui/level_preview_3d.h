@@ -1,9 +1,10 @@
 #pragma once
 
 #include "animation/bone_animation.h"
-#include "graphics/sprite_table.h"
 #include "common.h"
 #include "graphics/displaylist.h"
+#include "graphics/sprite_table.h"
+#include "math/geometry.h"
 #include "system/memory_allocator.h"
 
 #define MODE_DMA 0

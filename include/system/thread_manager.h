@@ -1,4 +1,5 @@
 #include "common.h"
+#include "os_message.h"
 
 typedef struct viConfig_s ViConfig;
 struct viConfig_s {

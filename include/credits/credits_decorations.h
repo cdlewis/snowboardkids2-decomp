@@ -1,6 +1,5 @@
 #pragma once
 
-#include "graphics/sprite_rdp.h"
 #include "common.h"
 #include "graphics/graphics.h"
 

@@ -1345,8 +1345,8 @@ void matrixToEulerAngles(
         yawMatrix.m[0][0] = cosVal;
     }
 
-    func_8006BDBC_6C9BC((Transform3D *)resultMatrix, &yawMatrix, &tempMatrix);
-    func_8006BDBC_6C9BC((Transform3D *)cameraMatrix, &tempMatrix, resultMatrix);
+    func_8006BDBC_6C9BC(resultMatrix, &yawMatrix, &tempMatrix);
+    func_8006BDBC_6C9BC(cameraMatrix, &tempMatrix, resultMatrix);
 
     *lookAtX = (f32)pitchMatrix.m[2][0];
     *lookAtY = (f32)pitchMatrix.m[2][1];

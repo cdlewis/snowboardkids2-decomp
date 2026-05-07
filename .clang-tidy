@@ -6,6 +6,7 @@ Checks: >
   misc-include-cleaner,
 WarningsAsErrors: ""
 HeaderFilterRegex: '^(src|include)\/.*\.h$'
+ExcludeHeaderFilterRegex: '^include\/hasm\.h$'
 FormatStyle: "file"
 CheckOptions:
   # Require argument names to match exactly (instead of allowing a name to be a prefix/suffix of another)

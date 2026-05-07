@@ -72,12 +72,21 @@ typedef struct {
     /* 0x68 */ void *transparentVertexData;
     /* 0x6C */ s32 transparentFlag;
     /* 0x70 */ u8 pad70[0xC];
-    /* 0x7C */ union { s32 val; s16 halves[2]; } scale;
+    /* 0x7C */ union {
+        s32 val;
+        s16 halves[2];
+    } scale;
     /* 0x80 */ s16 rotationY;
     /* 0x82 */ s8 transparentEnabled;
     /* 0x83 */ s8 overlayAnimState;
-    /* 0x84 */ union { s32 val; s16 halves[2]; } overlayScaleX;
-    /* 0x88 */ union { s32 val; s16 halves[2]; } overlayScaleY;
+    /* 0x84 */ union {
+        s32 val;
+        s16 halves[2];
+    } overlayScaleX;
+    /* 0x88 */ union {
+        s32 val;
+        s16 halves[2];
+    } overlayScaleY;
     /* 0x8C */ s32 oscillationOffset;
     /* 0x90 */ s16 oscillationAngle;
     /* 0x92 */ s8 oscillationEnabled;

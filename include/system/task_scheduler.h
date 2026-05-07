@@ -1,6 +1,4 @@
 #include "common.h"
-#include "gamestate.h"
-#include "system/memory_allocator.h"
 
 typedef struct Node {
     /* 0x00 */ struct Node *prev;

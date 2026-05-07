@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.h"
-#include "gamestate.h"
+#include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 
 typedef struct {

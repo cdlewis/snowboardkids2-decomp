@@ -1,7 +1,5 @@
 #include "common.h"
 #include "data/data_table.h"
-#include "graphics/graphics.h"
-#include "graphics/sprite_rdp.h"
 
 #include "gbi.h"
 

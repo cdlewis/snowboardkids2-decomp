@@ -5,6 +5,8 @@
 #include "graphics/graphics.h"
 
 #include "gbi.h"
+#include "graphics/sprite_rdp.h"
+#include "mbi.h"
 
 extern s32 gFontTextureData;
 extern s32 gFontPaletteBase;

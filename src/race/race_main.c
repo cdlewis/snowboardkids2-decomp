@@ -1643,8 +1643,8 @@ s32 beginPostTrickLaunchStep(Player *player) {
         }
     }
 
-    func_8006BDBC_6C9BC((Transform3D *)&player->orientationTransform, &player->headingTransform, &rotationTemp1);
-    func_8006BDBC_6C9BC((Transform3D *)&player->tiltTransform, &rotationTemp1, &rotationTemp2);
+    func_8006BDBC_6C9BC((&player->orientationTransform), &player->headingTransform, &rotationTemp1);
+    func_8006BDBC_6C9BC((&player->tiltTransform), &rotationTemp1, &rotationTemp2);
     transformVector2(&D_800BAB3C_AA9EC, &rotationTemp2, &launchVelocity);
 
     player->velocity.x += launchVelocity.x;
@@ -2875,7 +2875,7 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     pitchMatrix.m[2][1] = magnitude;
     pitchMatrix.m[2][2] = player->surfaceNormalY;
 
-    func_8006BDBC_6C9BC((Transform3D *)&slopeMatrix, &pitchMatrix, &combinedTransform);
+    func_8006BDBC_6C9BC((&slopeMatrix), &pitchMatrix, &combinedTransform);
     transformVector2(&player->velocity.x, &combinedTransform, &tempVec);
 
     if (tempVec.y < 0) {
@@ -3513,7 +3513,7 @@ s32 updateStunnedRecoveryRespawnPhase(Player *player) {
                 player->sectorIndex =
                     resolveTrackSegmentIndex((TrackSegmentEntry **)trackGeomAlias, player->sectorIndex);
                 pathAngle = getTrackSegmentWaypoints(trackGeomAlias, player->sectorIndex, &waypointStart, &waypointEnd);
-                rotateVectorY(&respawnTrackOffset, (s16)pathAngle, &delta);
+                rotateVectorY(&respawnTrackOffset, pathAngle, &delta);
                 player->worldPos.x = waypointStart.x + delta.x;
                 player->worldPos.z = waypointStart.z + delta.z;
                 findTrackFaceAtPosition(
@@ -5101,7 +5101,7 @@ void renderPlayerModel(Player *player) {
     }
 
     if (!(player->animFlags & 0x800000) || ((player->characterScaleXZ != 0) && ((u16)player->characterScaleY != 0))) {
-        surfaceType = (u8)player->surfaceInfo >> 4;
+        surfaceType = player->surfaceInfo >> 4;
         if (surfaceType == 0) {
             if ((((u32)player->behaviorFlags >> 7) & 1) | (snowTrailMask << 16 != 0)) {
                 {

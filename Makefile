@@ -32,6 +32,7 @@ BUILD_LOG = $(BUILD_DIR)/build.log
 
 S_FILES   = $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 C_FILES   = $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
+H_FILES   = $(shell find include -name '*.h')
 BIN_FILES = $(foreach dir,$(BIN_DIRS),$(wildcard $(dir)/*.bin))
 LIBKMC_S_FILES = $(foreach dir,lib/libkmc,$(wildcard $(dir)/*.s))
 O_FILES := $(shell grep -E 'build\/(asm|assets|src|src\/entrypoint|bin|lib\/libkmc)\/.+\.o' snowboardkids2.ld -o | sort | uniq)
@@ -140,10 +141,10 @@ diff-sxs:
 	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
 format:
-	clang-format -i -style=file $(C_FILES)
+	clang-format -i -style=file $(C_FILES) $(H_FILES)
 
 tidy:
-	clang-tidy --fix-errors --fix $(C_FILES) -- -Isrc $(IINC) $(MACROS)
+	clang-tidy --fix-errors --fix $(C_FILES) $(H_FILES) -- -Isrc $(IINC) $(MACROS)
 
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
 	$(PRINTF) "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"

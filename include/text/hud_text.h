@@ -25,6 +25,36 @@ typedef struct {
 
 void renderHudTextLayout(HudTextLayoutArg *arg0);
 void renderHudTextLayoutCapped(HudTextLayoutCappedArg *arg0);
-void enqueueHudTextLayoutAlphaBlended(void *fontAsset, void *textData, s16 startX, s16 startY, u8 alpha, u8 paletteIndex, u8 priority, u8 flags);
-void enqueueHudTextLayout(void *fontAsset, void *textData, s16 startX, s16 startY, u8 alpha, u8 transparency, u8 paletteIndex, u8 priority, u8 flags);
-void enqueueHudTextLayoutCapped(void *fontAsset, u16 *textData, u16 startX, s16 startY, u8 alpha, u8 transparency, u8 paletteIndex, u8 maxIterations, u8 priority, u8 flags);
+void enqueueHudTextLayoutAlphaBlended(
+    void *fontAsset,
+    void *textData,
+    s16 startX,
+    s16 startY,
+    u8 alpha,
+    u8 paletteIndex,
+    u8 priority,
+    u8 flags
+);
+void enqueueHudTextLayout(
+    void *fontAsset,
+    void *textData,
+    s16 startX,
+    s16 startY,
+    u8 alpha,
+    u8 transparency,
+    u8 paletteIndex,
+    u8 priority,
+    u8 flags
+);
+void enqueueHudTextLayoutCapped(
+    void *fontAsset,
+    u16 *textData,
+    u16 startX,
+    s16 startY,
+    u8 alpha,
+    u8 transparency,
+    u8 paletteIndex,
+    u8 maxIterations,
+    u8 priority,
+    u8 flags
+);

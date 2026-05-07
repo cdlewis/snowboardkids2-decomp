@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "gamestate.h"
+#include "math/geometry.h"
 
 typedef struct AIPlayerParamEntry {
     /* 0x0 */ u8 useChance;

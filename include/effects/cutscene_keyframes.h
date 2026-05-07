@@ -1,10 +1,9 @@
 #pragma once
 
+#include "common.h"
 #include "cutscene/cutscene_manager.h"
 #include "effects/scrolling_texture.h"
-#include "common.h"
 #include "graphics/graphics.h"
-#include "core/main.h"
 
 typedef struct {
     s16 frameCount;
@@ -28,6 +27,6 @@ typedef struct {
     ScreenTransitionState transitionState;
 } CutsceneTaskMemory;
 
-void* __udiv_w_sdiv(void);
+void *__udiv_w_sdiv(void);
 void loadCutsceneOverlay(void);
 void setCutsceneSelection(s16 slotIndex, s16 cutsceneType);

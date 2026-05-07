@@ -7,7 +7,7 @@
     .type x, @function         ;\
     x:                         ;\
         .ent x, 0              ;\
-        .frame $sp, 0, $ra
+    .frame $sp, 0, $ra
 
 #define END(x)                  \
     .size x, . - x             ;\

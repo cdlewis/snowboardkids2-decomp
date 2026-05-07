@@ -65,7 +65,6 @@ typedef struct {
     /* 0x2C */ u8 pad2C[0x20];
 } SpriteAssetState;
 
-
 typedef struct {
     /* 0x00 */ s8 offsetX;
     /* 0x01 */ s8 offsetY;
@@ -100,8 +99,29 @@ void *loadSpriteAssetData(s16 index);
 void releaseNodeMemoryRef(void **ptr);
 void setSpriteAnimation(void *state, s32 arg1, s32 animIndex, s32 arg3);
 s32 updateSpriteAnimation(void *state, s32 arg1);
-void renderOpaqueSprite(void *state, s32 slot, s32 posX, s32 posY, s32 posZ, s32 scaleX, s32 scaleY, s16 renderMode, u8 flipH);
-void renderSprite(void *state, s32 slot, s32 posX, s32 posY, s32 posZ, s32 scaleX, s32 scaleY, s16 renderMode, u8 flipH, u8 alpha);
+void renderOpaqueSprite(
+    void *state,
+    s32 slot,
+    s32 posX,
+    s32 posY,
+    s32 posZ,
+    s32 scaleX,
+    s32 scaleY,
+    s16 renderMode,
+    u8 flipH
+);
+void renderSprite(
+    void *state,
+    s32 slot,
+    s32 posX,
+    s32 posY,
+    s32 posZ,
+    s32 scaleX,
+    s32 scaleY,
+    s16 renderMode,
+    u8 flipH,
+    u8 alpha
+);
 s32 getTableEntryValue(TableLookupContext *ctx);
 void initOscillatingModelTask(void);
 void initOscillatingSpriteTask(void *state);

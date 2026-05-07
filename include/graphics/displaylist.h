@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "data/data_table.h"
-#include "graphics/camera_transform.h"
+#include "gbi.h"
 #include "math/geometry.h"
 
 typedef struct {

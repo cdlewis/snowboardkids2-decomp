@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "gbi.h"
 
 typedef struct {
     s32 x;

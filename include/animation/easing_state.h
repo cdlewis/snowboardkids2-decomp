@@ -1,9 +1,9 @@
 #pragma once
 
 #include "common.h"
-#include "cutscene/cutscene_manager.h"
 #include "cutscene/sys_effect.h"
 #include "graphics/sprite_table.h"
+#include "ui/level_preview_3d.h"
 
 typedef struct {
     /* 0x00 */ SceneModel *parentModel;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "os_pi.h"
 
 typedef struct {
     u32 control_flag;

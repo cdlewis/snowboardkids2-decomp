@@ -3,6 +3,7 @@
 #include "common.h"
 #include "core/main.h"
 #include "graphics/graphics.h"
+#include "math/geometry.h"
 #include "ui/level_preview_3d.h"
 
 typedef struct {

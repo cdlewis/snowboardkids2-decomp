@@ -1,5 +1,6 @@
 #pragma once
 
+#include "math/geometry.h"
 #include "ui/level_preview_3d.h"
 
 typedef struct {
@@ -14,7 +15,7 @@ typedef struct {
     /* 0x34 */ u8 pad34[0x2];
     /* 0x36 */ u8 unk36;
     /* 0x37 */ u8 unk37;
-    /* 0x38 */ u8 padding_38[0x3A-0x38];
+    /* 0x38 */ u8 padding_38[0x3A - 0x38];
     /* 0x3A */ u8 unk3A;
     /* 0x3B */ u8 pad3B[0x1];
     /* 0x3C */ void *callback;

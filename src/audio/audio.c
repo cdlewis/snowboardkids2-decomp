@@ -7,6 +7,7 @@
 #include "os_thread.h"
 #include "race/player.h"
 #include "system/memory_allocator.h"
+#include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
 typedef struct {

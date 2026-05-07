@@ -4,4 +4,11 @@
 #include "cutscene/cutscene_manager.h"
 
 void scheduleRepeatingFanSoundEffect(s16 fanIndex, s16 volume, s16 pan, s16 repeatCount, s16 interval, s16 minInterval);
-void scheduleRepeatingFanSoundAtPosition(s16 fanIndex, s16 volume, s16 repeatCount, s16 pan, s16 interval, CutsceneSlotData *cutsceneSlotData);
+void scheduleRepeatingFanSoundAtPosition(
+    s16 fanIndex,
+    s16 volume,
+    s16 repeatCount,
+    s16 pan,
+    s16 interval,
+    CutsceneSlotData *cutsceneSlotData
+);

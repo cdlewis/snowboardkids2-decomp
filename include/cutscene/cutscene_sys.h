@@ -1,7 +1,7 @@
 #pragma once
 
-#include "cutscene/cutscene_manager.h"
 #include "common.h"
+#include "cutscene/cutscene_manager.h"
 #include "graphics/graphics.h"
 
 typedef struct {

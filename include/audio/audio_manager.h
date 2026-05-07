@@ -1,4 +1,6 @@
 #include "common.h"
+#include "libaudio.h"
+#include "os_thread.h"
 
 typedef struct AudioParams_s {
     u32 syn_output_rate;

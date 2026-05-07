@@ -1,9 +1,10 @@
 #pragma once
 
 #include "common.h"
-#include "graphics/camera_transform.h"
-#include "graphics/displaylist.h"
+#include "gbi.h"
 #include "math/geometry.h"
+#include "os_message.h"
+#include "sptask.h"
 
 typedef struct {
     u8 light1R;

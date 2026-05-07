@@ -1,11 +1,11 @@
 #pragma once
 
-#include "cutscene/cutscene_manager.h"
 #include "common.h"
+#include "cutscene/cutscene_manager.h"
 
 typedef struct {
-    u16 frameCount;   // Number of frames to play the trick effect
-    u16 effectParam;  // Effect parameter (passed to trick effect function)
+    u16 frameCount;  // Number of frames to play the trick effect
+    u16 effectParam; // Effect parameter (passed to trick effect function)
 } cutsceneEffectTrick_exec_arg;
 
 typedef struct {
@@ -17,12 +17,12 @@ typedef struct {
 } cutsceneEffectRocket_exec_arg;
 
 typedef struct {
-    s16 colorIndex;     // color/palette index for the light effect
-    s16 duration;       // display duration in frames
-    s32 positionVec;    // position vector (cast to s32[3] for x,y,z access)
-    s32 unk8;           // unused parameter
-    s32 unkC;           // unused parameter
-    s16 effectMode;     // 0 = direct positioning, 1 = with rotation
+    s16 colorIndex;  // color/palette index for the light effect
+    s16 duration;    // display duration in frames
+    s32 positionVec; // position vector (cast to s32[3] for x,y,z access)
+    s32 unk8;        // unused parameter
+    s32 unkC;        // unused parameter
+    s16 effectMode;  // 0 = direct positioning, 1 = with rotation
 } cutsceneEffectMLight_exec_arg;
 
 typedef struct {
