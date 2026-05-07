@@ -77,7 +77,7 @@ typedef struct {
 } ShieldEffectDisplayConfig;
 
 typedef struct {
-    /* 0x00 */ u8 matrix[0x20];
+    Transform3D matrix;
     ShieldEffectDisplayConfig *displayConfig;
     void *displayAsset1;
     void *displayAsset2;
@@ -187,32 +187,31 @@ typedef struct {
     /* 0xB74 */ s16 storedRotY;
     /* 0xB76 */ u8 _padB76[0x58];
     /* 0xBCE */ u8 flags;
-} UfoAbductionPlayerState;
+} ChairliftPlayerState;
 
 typedef struct {
-    /* 0x00 */ u8 _pad0[0x14];
-    /* 0x14 */ Vec3i unk14;
+    /* 0x00 */ Transform3D transform;
     /* 0x20 */ void *unk20;
     /* 0x24 */ void *unk24;
     /* 0x28 */ void *unk28;
     /* 0x2C */ s32 unk2C;
     /* 0x30 */ u8 _pad30[0xC];
-    /* 0x3C */ DisplayListObject leftWing;
-    /* 0x78 */ DisplayListObject rightWing;
-    /* 0xB4 */ UfoAbductionPlayerState *target;
+    /* 0x3C */ DisplayListObject leftFlipper;
+    /* 0x78 */ DisplayListObject rightFlipper;
+    /* 0xB4 */ ChairliftPlayerState *target;
     /* 0xB8 */ s32 movementOffset;
     /* 0xBC */ s32 fallVelocity;
     /* 0xC0 */ s32 flyAwayDistance;
     /* 0xC4 */ s16 phaseTimer;
     /* 0xC6 */ s16 yRotation;
     /* 0xC8 */ u16 baseRotation;
-    /* 0xCA */ u16 wingOscillationAngle;
-} UfoEffectState;
+    /* 0xCA */ u16 flipperOscillationAngle;
+} ChairliftEffectState;
 
 typedef struct {
     u8 _pad0[0xB4];
     void *target;
-} UfoEffectTaskMem;
+} ChairliftEffectTaskMem;
 
 typedef struct {
     s32 unk0;
@@ -404,15 +403,15 @@ void renderShieldLayer1(ShieldEffectRenderState *);
 void renderShieldLayer2(ShieldEffectRenderState *);
 void renderShieldLayer3(ShieldEffectRenderState *);
 void cleanupFallingEffect(FallingEffectState *);
-void renderUfoEffectWithWings(UfoEffectState *);
-void initUfoEffect(UfoEffectState *);
-void flyInUfoEffect(UfoEffectState *);
-void descendUfoEffect(UfoEffectState *);
-void setupUfoFlyAway(UfoEffectState *);
-void flyAwayUfoEffect(UfoEffectState *);
-void holdUfoEffect(UfoEffectState *);
-void fadeOutUfoEffect(UfoEffectState *);
-void cleanupUfoEffect(void *);
+void renderChairliftWithFlippers(ChairliftEffectState *);
+void initChairliftEffect(ChairliftEffectState *);
+void moveChairliftIntoPosition(ChairliftEffectState *);
+void lowerChairlift(ChairliftEffectState *);
+void setupChairliftDeparture(ChairliftEffectState *);
+void moveChairliftAway(ChairliftEffectState *);
+void holdChairlift(ChairliftEffectState *);
+void fadeOutChairlift(ChairliftEffectState *);
+void cleanupChairliftEffect(void *);
 void cleanupGhostEffect(GhostEffectState *);
 void updateGhostEffect(GhostEffectState *);
 void fadeOutGhostEffect(GhostEffectState *);
@@ -602,7 +601,7 @@ void updateShieldEffect(ShieldEffectState *arg0) {
         arg0->scale.full = scale + 0x400;
         memcpy(arg0, &identityMatrix, sizeof(Transform3D));
         scaleFactor = arg0->scale.half.lo;
-        scaleMatrix((Transform3D *)arg0, scaleFactor, scaleFactor, scaleFactor);
+        scaleMatrix(&arg0->matrix, scaleFactor, scaleFactor, scaleFactor);
     }
 
     effectPos.x = arg0->player->worldPos.x;
@@ -611,7 +610,7 @@ void updateShieldEffect(ShieldEffectState *arg0) {
     effectPos.y = effectPos.y + 0xFFFE0000;
 
     if (checkPositionPlayerCollisionWithKnockback(&effectPos, 0x180000, 0x320000, arg0->player->playerIndex) != 0) {
-        arg0->player->ufoFlags |= 1;
+        arg0->player->chairliftFlags |= 1;
     }
     arg0->unk30 = 0;
 
@@ -2012,40 +2011,36 @@ void spawnPushZone(s16 zoneIndex) {
     }
 }
 
-// Note: I have been unable to trigger this codepath. It does not appear
-// to be a regular item, cutscene action, or the ufo chairlift from starlight
-// highway.
-
-void renderUfoEffectWithWings(UfoEffectState *arg0) {
+void renderChairliftWithFlippers(ChairliftEffectState *arg0) {
     Transform3D matrix;
     s32 sinVal;
     s32 i;
 
-    arg0->wingOscillationAngle = arg0->wingOscillationAngle + 0x100;
-    sinVal = approximateSin((s16)arg0->wingOscillationAngle);
+    arg0->flipperOscillationAngle = arg0->flipperOscillationAngle + 0x100;
+    sinVal = approximateSin((s16)arg0->flipperOscillationAngle);
     createZRotationMatrix(&matrix, (sinVal >> 5) & 0xFFFF);
 
     matrix.translation.x = 0xFFF7490A;
     matrix.translation.y = 0xFFF98007;
     matrix.translation.z = 0xCB326;
-    func_8006B084_6BC84(&matrix, (Transform3D *)arg0, &arg0->leftWing.transform);
+    func_8006B084_6BC84(&matrix, &arg0->transform, &arg0->leftFlipper.transform);
 
-    sinVal = approximateSin(arg0->wingOscillationAngle);
+    sinVal = approximateSin(arg0->flipperOscillationAngle);
     createZRotationMatrix(&matrix, (-(sinVal >> 5)) & 0xFFFF);
 
     matrix.translation.x = 0x8B6F6;
     matrix.translation.y = 0xFFF98007;
     matrix.translation.z = 0xCB326;
-    func_8006B084_6BC84(&matrix, (Transform3D *)arg0, &arg0->rightWing.transform);
+    func_8006B084_6BC84(&matrix, &arg0->transform, &arg0->rightFlipper.transform);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
-        enqueueDisplayListWithFrustumCull(i, &arg0->leftWing);
-        enqueueDisplayListWithFrustumCull(i, &arg0->rightWing);
+        enqueueDisplayListWithFrustumCull(i, &arg0->leftFlipper);
+        enqueueDisplayListWithFrustumCull(i, &arg0->rightFlipper);
     }
 }
 
-void initUfoEffect(UfoEffectState *arg0) {
+void initChairliftEffect(ChairliftEffectState *arg0) {
     Vec3i posOutput;
     Vec3i transformOutput;
     EffectTaskState *allocation;
@@ -2063,55 +2058,55 @@ void initUfoEffect(UfoEffectState *arg0) {
     arg0->unk28 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     arg0->unk2C = 0;
 
-    arg0->leftWing.displayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(allocation->unk5C) + 0x90);
-    arg0->leftWing.segment3 = 0;
-    arg0->leftWing.segment1 = arg0->unk24;
-    arg0->leftWing.segment2 = arg0->unk28;
+    arg0->leftFlipper.displayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(allocation->unk5C) + 0x90);
+    arg0->leftFlipper.segment3 = 0;
+    arg0->leftFlipper.segment1 = arg0->unk24;
+    arg0->leftFlipper.segment2 = arg0->unk28;
 
-    arg0->rightWing.displayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(allocation->unk5C) + 0xA0);
-    arg0->rightWing.segment3 = 0;
-    arg0->rightWing.segment1 = arg0->unk24;
-    arg0->rightWing.segment2 = arg0->unk28;
+    arg0->rightFlipper.displayLists = (DisplayLists *)((u8 *)getSkyDisplayLists3ByIndex(allocation->unk5C) + 0xA0);
+    arg0->rightFlipper.segment3 = 0;
+    arg0->rightFlipper.segment1 = arg0->unk24;
+    arg0->rightFlipper.segment2 = arg0->unk28;
 
     arg0->baseRotation = rotation + item->yawOffset;
-    createYRotationMatrix((Transform3D *)arg0, arg0->baseRotation);
+    createYRotationMatrix(&arg0->transform, arg0->baseRotation);
 
     arg0->yRotation = 0;
-    transformVector2(&D_80090AA0_916A0, arg0, &transformOutput);
+    transformVector2(&D_80090AA0_916A0, &arg0->transform, &transformOutput);
 
-    arg0->unk14.x = item->shortcutPosX + transformOutput.x;
-    arg0->unk14.z = item->shortcutPosZ + transformOutput.z;
+    arg0->transform.translation.x = item->shortcutPosX + transformOutput.x;
+    arg0->transform.translation.z = item->shortcutPosZ + transformOutput.z;
     temp_unk18 = posOutput.y + transformOutput.y;
     arg0->phaseTimer = 0x30;
-    arg0->unk14.y = temp_unk18;
+    arg0->transform.translation.y = temp_unk18;
 
-    setCleanupCallback(cleanupUfoEffect);
-    setCallbackWithContinue(flyInUfoEffect);
+    setCleanupCallback(cleanupChairliftEffect);
+    setCallbackWithContinue(moveChairliftIntoPosition);
 }
 
-void flyInUfoEffect(UfoEffectState *arg0) {
+void moveChairliftIntoPosition(ChairliftEffectState *arg0) {
     EffectTaskState *gameState;
     Vec3i output;
 
     gameState = getCurrentAllocation();
     if (gameState->paused == 0) {
-        transformVector2(&D_80090AAC_916AC, arg0, &output);
-        arg0->unk14.x = arg0->unk14.x + output.x;
-        arg0->unk14.z = arg0->unk14.z + output.z;
-        memcpy(&arg0->target->storedPos, &arg0->unk14, sizeof(Vec3i));
+        transformVector2(&D_80090AAC_916AC, &arg0->transform, &output);
+        arg0->transform.translation.x += output.x;
+        arg0->transform.translation.z += output.z;
+        memcpy(&arg0->target->storedPos, &arg0->transform.translation, sizeof(Vec3i));
         arg0->target->storedRotY = arg0->yRotation;
         if (arg0->phaseTimer != 0) {
             arg0->phaseTimer = arg0->phaseTimer - 1;
         } else {
             arg0->phaseTimer = 0xB4;
-            setCallback(descendUfoEffect);
+            setCallback(lowerChairlift);
         }
     }
 
-    renderUfoEffectWithWings(arg0);
+    renderChairliftWithFlippers(arg0);
 }
 
-void descendUfoEffect(UfoEffectState *arg0) {
+void lowerChairlift(ChairliftEffectState *arg0) {
     EffectTaskState *gameState;
     Vec3i output;
 
@@ -2127,14 +2122,14 @@ void descendUfoEffect(UfoEffectState *arg0) {
         }
     }
 
-    createCombinedRotationMatrix(arg0, arg0->yRotation, arg0->baseRotation);
-    transformVector2(&D_80090AAC_916AC, arg0, &output);
+    createCombinedRotationMatrix(&arg0->transform, arg0->yRotation, arg0->baseRotation);
+    transformVector2(&D_80090AAC_916AC, &arg0->transform, &output);
 
-    arg0->unk14.x = arg0->unk14.x + output.x;
-    arg0->unk14.y = arg0->unk14.y + output.y;
-    arg0->unk14.z = arg0->unk14.z + output.z;
+    arg0->transform.translation.x += output.x;
+    arg0->transform.translation.y += output.y;
+    arg0->transform.translation.z += output.z;
 
-    memcpy(&arg0->target->storedPos, &arg0->unk14, sizeof(Vec3i));
+    memcpy(&arg0->target->storedPos, &arg0->transform.translation, sizeof(Vec3i));
     arg0->target->storedRotY = arg0->yRotation;
 
     {
@@ -2146,21 +2141,21 @@ void descendUfoEffect(UfoEffectState *arg0) {
                 arg0->target->flags |= 8;
             }
         } else {
-            setCallback(setupUfoFlyAway);
+            setCallback(setupChairliftDeparture);
         }
     }
 
 end:
-    renderUfoEffectWithWings(arg0);
+    renderChairliftWithFlippers(arg0);
 }
 
-void setupUfoFlyAway(UfoEffectState *arg0) {
+void setupChairliftDeparture(ChairliftEffectState *arg0) {
     LevelConfig *temp_v0;
-    UfoAbductionPlayerState *temp_a1;
+    ChairliftPlayerState *temp_a1;
     Vec3i output;
     Vec3i input;
     s32 i;
-    s32 temp_unk14;
+    s32 tempSpawnZ;
 
     temp_v0 = getLevelConfig(((EffectTaskState *)getCurrentAllocation())->unk5C);
     temp_a1 = arg0->target;
@@ -2168,15 +2163,15 @@ void setupUfoFlyAway(UfoEffectState *arg0) {
     arg0->yRotation = -0x300;
     arg0->phaseTimer = 0x5A;
     arg0->baseRotation = 0x1000;
-    createCombinedRotationMatrix(arg0, (u16)arg0->yRotation, 0x1000);
-    arg0->unk14.x = temp_v0->spawnPos.x + 0xFFD00000;
-    arg0->unk14.y = temp_v0->spawnPos.y;
-    temp_unk14 = temp_v0->spawnPos.z;
+    createCombinedRotationMatrix(&arg0->transform, (u16)arg0->yRotation, 0x1000);
+    arg0->transform.translation.x = temp_v0->spawnPos.x + 0xFFD00000;
+    arg0->transform.translation.y = temp_v0->spawnPos.y;
+    tempSpawnZ = temp_v0->spawnPos.z;
     i = 0;
     arg0->flyAwayDistance = 0;
     arg0->fallVelocity = 0;
     arg0->movementOffset = 0;
-    arg0->unk14.z = temp_unk14 + 0x200000;
+    arg0->transform.translation.z = tempSpawnZ + 0x200000;
     input.x = 0;
     input.y = 0;
     input.z = 0;
@@ -2185,14 +2180,14 @@ void setupUfoFlyAway(UfoEffectState *arg0) {
         i++;
         input.z += arg0->flyAwayDistance;
     } while (i < 0x5A);
-    transformVector2(&input, arg0, &output);
-    arg0->unk14.x -= output.x;
-    arg0->unk14.y -= output.y;
-    arg0->unk14.z -= output.z;
-    setCallbackWithContinue(flyAwayUfoEffect);
+    transformVector2(&input, &arg0->transform, &output);
+    arg0->transform.translation.x -= output.x;
+    arg0->transform.translation.y -= output.y;
+    arg0->transform.translation.z -= output.z;
+    setCallbackWithContinue(moveChairliftAway);
 }
 
-void flyAwayUfoEffect(UfoEffectState *arg0) {
+void moveChairliftAway(ChairliftEffectState *arg0) {
     EffectTaskState *gameState;
     Vec3i output;
 
@@ -2212,14 +2207,14 @@ void flyAwayUfoEffect(UfoEffectState *arg0) {
         }
     }
 
-    createCombinedRotationMatrix(arg0, arg0->yRotation, arg0->baseRotation);
+    createCombinedRotationMatrix(&arg0->transform, arg0->yRotation, arg0->baseRotation);
 
 skip_rotation:
-    transformVector2(&arg0->movementOffset, arg0, &output);
-    arg0->unk14.x = arg0->unk14.x + output.x;
-    arg0->unk14.y = arg0->unk14.y + output.y;
-    arg0->unk14.z = arg0->unk14.z + output.z;
-    memcpy(arg0->target->storedPos, &arg0->unk14, sizeof(Vec3i));
+    transformVector2(&arg0->movementOffset, &arg0->transform, &output);
+    arg0->transform.translation.x += output.x;
+    arg0->transform.translation.y += output.y;
+    arg0->transform.translation.z += output.z;
+    memcpy(arg0->target->storedPos, &arg0->transform.translation, sizeof(Vec3i));
     arg0->target->storedRotY = arg0->yRotation;
 
     if (arg0->flyAwayDistance != 0) {
@@ -2227,54 +2222,54 @@ skip_rotation:
     } else {
         arg0->phaseTimer = 4;
         arg0->target->flags |= 4;
-        setCallback(holdUfoEffect);
+        setCallback(holdChairlift);
     }
 
 end:
-    renderUfoEffectWithWings(arg0);
+    renderChairliftWithFlippers(arg0);
 }
 
-void holdUfoEffect(UfoEffectState *arg0) {
+void holdChairlift(ChairliftEffectState *arg0) {
     EffectTaskState *gameState = (EffectTaskState *)getCurrentAllocation();
     s32 pad[4];
 
-    if (gameState->paused == 0) {
+    if (!gameState->paused) {
         arg0->phaseTimer--;
         if (arg0->phaseTimer == 0) {
-            setCallback(fadeOutUfoEffect);
+            setCallback(fadeOutChairlift);
         }
-        memcpy(&arg0->target->storedPos, &arg0->unk14, sizeof(Vec3i));
+        memcpy(&arg0->target->storedPos, &arg0->transform.translation, sizeof(Vec3i));
         arg0->target->storedRotY = arg0->yRotation;
     }
 
-    renderUfoEffectWithWings(arg0);
+    renderChairliftWithFlippers(arg0);
 }
 
-void fadeOutUfoEffect(UfoEffectState *arg0) {
+void fadeOutChairlift(ChairliftEffectState *arg0) {
     EffectTaskState *gameState = (EffectTaskState *)getCurrentAllocation();
     s32 pad[4];
 
-    if (gameState->paused == 0) {
+    if (!gameState->paused) {
         arg0->fallVelocity -= 0x8000;
         if (arg0->fallVelocity < (s32)0xFFF00000) {
             terminateCurrentTask();
         }
-        arg0->unk14.y += arg0->fallVelocity;
+        arg0->transform.translation.y += arg0->fallVelocity;
     }
 
-    renderUfoEffectWithWings(arg0);
+    renderChairliftWithFlippers(arg0);
 }
 
-void cleanupUfoEffect(void *arg0) {
+void cleanupChairliftEffect(void *arg0) {
     Func432D8Arg *cleanupArg = (Func432D8Arg *)arg0;
     cleanupArg->unk24 = freeNodeMemory(cleanupArg->unk24);
     cleanupArg->unk28 = freeNodeMemory(cleanupArg->unk28);
 }
 
-void spawnUfoEffect(void *arg0) {
-    UfoEffectTaskMem *task;
+void spawnChairliftEffect(void *arg0) {
+    ChairliftEffectTaskMem *task;
 
-    task = (UfoEffectTaskMem *)scheduleTask(initUfoEffect, 0, 0, 0x32);
+    task = (ChairliftEffectTaskMem *)scheduleTask(initChairliftEffect, 0, 0, 0x32);
     if (task != NULL) {
         task->target = arg0;
     }
@@ -2306,13 +2301,8 @@ void setupItemTriggerEntries(ItemTriggerTaskState *arg0) {
     arg0->vertices = (void *)((u8 *)((GameState *)getCurrentAllocation())->unk44 + 0xF80);
     arg0->items = (ItemTriggerEntry *)((s8 *)arg0->itemData + *arg0->itemData);
     entries = *(ItemTriggerEntry *volatile *)&arg0->items;
-    arg0->numItems = 0;
 
-    if (entries->active >= 0) {
-        do {
-            arg0->numItems++;
-        } while (entries[arg0->numItems].active >= 0);
-    }
+    for (arg0->numItems = 0; entries[arg0->numItems].active >= 0; arg0->numItems++) {}
 
     i = 0;
     arg0->matrices = allocateNodeMemory(arg0->numItems << 6);

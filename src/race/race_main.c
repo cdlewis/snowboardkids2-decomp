@@ -76,7 +76,7 @@ extern s32 gFrameCounter;
 extern void spawnPlayerIndicatorTask(Player *);
 extern void applyCharacterBoardStats(Player *);
 extern void initFlyingSceneryTask(void);
-extern s32 spawnUfoEffect(Player *);
+extern s32 spawnChairliftEffect(Player *);
 extern void schedulePlayerAuraTask(Player *);
 extern s32 normalizeSurfaceType(s32);
 extern void startRumbleEffect(Player *player, s32 effectType);
@@ -3681,7 +3681,7 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
         arg0->unkB8C = 0x1E;
         arg0->leanAnimIndex = 0xFFFF;
         arg0->animFlags |= 0x20;
-        arg0->ufoFlags &= 0xFE;
+        arg0->chairliftFlags &= 0xFE;
         advancePlayerLeanAnimation(arg0, 0xE);
     }
     if (arg0->behaviorStep == 1) {
@@ -3693,7 +3693,7 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
     arg0->velocity.y -= 0x6000;
     decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
-    if (arg0->ufoFlags & 1) {
+    if (arg0->chairliftFlags & 1) {
         arg0->unkB8C = 0;
     }
     if (arg0->unkB8C == 0) {
@@ -4251,12 +4251,12 @@ s32 fallTowardShortcutWarpStep(Player *player) {
                         }
                         break;
                     case 1:
-                        if (spawnUfoEffect(player)) {
+                        if (spawnChairliftEffect(player)) {
                             player->worldPos.x = targetPos.x;
                             player->worldPos.z = targetPos.z;
                             player->behaviorStep = 8;
                             player->unkB8C = 0xE;
-                            player->ufoFlags &= 0xF1;
+                            player->chairliftFlags &= 0xF1;
                             gameState->shortcutGateState = gameState->shortcutGateState & 2;
                         }
                         break;
@@ -4266,7 +4266,7 @@ s32 fallTowardShortcutWarpStep(Player *player) {
                         player->worldPos.z = targetPos.z;
                         player->behaviorStep = 0xF;
                         player->unkB8C = 0xA;
-                        player->ufoFlags &= 0xF1;
+                        player->chairliftFlags &= 0xF1;
                         break;
                 }
             }
@@ -4474,14 +4474,14 @@ s32 handleUfoStoredPositionStep(Player *player) {
     player->worldPos.y = player->storedPosY;
     player->worldPos.z = player->storedPosZ;
     player->pitchAngle = player->storedRotY;
-    flags = player->ufoFlags;
+    flags = player->chairliftFlags;
 
     if (flags & 8) {
-        player->ufoFlags = flags & 0xF7;
+        player->chairliftFlags = flags & 0xF7;
         setViewportFadeValueBySlotIndex(player->playerIndex, 0xFF, 0x10);
     }
 
-    if (player->ufoFlags & 2) {
+    if (player->chairliftFlags & 2) {
         player->rotY = 0x1000;
         player->shortcutLapCount = 0;
         player->sectorIndex = 0;
@@ -4509,7 +4509,7 @@ s32 handleUfoAbductionRecoveryStep(Player *arg0) {
 
     advancePlayerLeanAnimation(arg0, 0);
 
-    if (arg0->ufoFlags & 0x4) {
+    if (arg0->chairliftFlags & 0x4) {
         arg0->unkB8C = 6;
         arg0->behaviorStep = arg0->behaviorStep + 1;
     }

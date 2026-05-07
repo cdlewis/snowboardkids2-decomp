@@ -231,7 +231,7 @@ typedef struct {
     u8 unkBCB;
     u8 surfaceInfo;
     s8 unkBCD;
-    u8 ufoFlags;
+    u8 chairliftFlags;
     u8 slowdownLevel;
     u8 boostState;
     u8 ghostEffectState;
