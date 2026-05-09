@@ -3,14 +3,14 @@
 #include "system/task_scheduler.h"
 
 extern u8 gControllerPollingEnabled;
-extern u8 gMotorInitCompleteMask;
+extern u8 gRumblePakReadyMask;
 
-extern void motorInitAsync(s32);
-extern s32 pollMotorInitAsync(void);
-void updateControllerMotorInit(void);
-void onMotorInitComplete(void);
+extern void requestRumblePakInit(s32);
+extern s32 pollRumblePakInit(void);
+void updateRumblePakCheckTask(void);
+void finishRumblePakCheckTask(void);
 
-void initControllerMotors(void) {
+void initRumblePakCheckTask(void) {
     u8 *ptr;
     s32 i;
 
@@ -18,14 +18,14 @@ void initControllerMotors(void) {
     i = 3;
     ptr += 3;
     gControllerPollingEnabled = 1;
-    gMotorInitCompleteMask = 0;
+    gRumblePakReadyMask = 0;
     for (; i >= 0; i--) {
         *ptr-- = 0;
     }
-    setGameStateHandler(updateControllerMotorInit);
+    setGameStateHandler(updateRumblePakCheckTask);
 }
 
-void updateControllerMotorInit(void) {
+void updateRumblePakCheckTask(void) {
     u8 *allocation;
     s32 i;
     s32 completedCount;
@@ -41,24 +41,24 @@ void updateControllerMotorInit(void) {
         state = allocation[i];
         switch (state) {
             case 0:
-                motorInitAsync(i & 0xFFFF);
+                requestRumblePakInit(i & 0xFFFF);
                 state = 1 << i;
                 savedPtr = &allocation[i];
                 do {
-                    pollResult = pollMotorInitAsync();
+                    pollResult = pollRumblePakInit();
                 } while (pollResult == -1);
                 if (pollResult == 0) {
-                    gMotorInitCompleteMask |= state;
+                    gRumblePakReadyMask |= state;
                     *savedPtr = 2;
                 } else {
                     *savedPtr = 2;
                 }
                 break;
             case 1:
-                pollResult = pollMotorInitAsync();
+                pollResult = pollRumblePakInit();
                 if (pollResult >= 0) {
                     if (pollResult == 0) {
-                        gMotorInitCompleteMask |= state << i;
+                        gRumblePakReadyMask |= state << i;
                         allocation[i] = 2;
                     } else {
                         allocation[i] = 2;
@@ -71,10 +71,10 @@ void updateControllerMotorInit(void) {
         }
     }
     if (completedCount == D_800AFE8C_A71FC->numPlayers) {
-        terminateSchedulerWithCallback(onMotorInitComplete);
+        terminateSchedulerWithCallback(finishRumblePakCheckTask);
     }
 }
 
-void onMotorInitComplete(void) {
+void finishRumblePakCheckTask(void) {
     returnToParentScheduler(1);
 }

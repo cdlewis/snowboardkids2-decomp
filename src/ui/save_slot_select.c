@@ -42,14 +42,14 @@ typedef struct {
     void *unkAB8;
     s16 slideOffset;
     s16 unkABE;
-    s16 selectionY;
-    u16 selectionBaseY;
+    s16 nameEntryCursorY;
+    u16 nameEntryCursorBaseY;
     u16 selectionAnimState;
-    u16 menuState;
-    u8 saveSlotIndex;
-    u8 hasSaveData;
+    u16 saveSlotMenuState;
+    u8 selectedSaveSlot;
+    u8 hasCurrentSaveData;
     u8 eepromOperationStatus;
-    u8 promptMode;
+    u8 mainPromptIndex;
     u8 numValidSlots;
     u8 eepromErrorStatus;
     u8 slotHasData[3];
@@ -57,8 +57,8 @@ typedef struct {
     u8 writeSlotIndexPlusOne;
     u8 menuAnimOffsetX;
     u8 menuChoiceIndex;
-    u8 menuType;
-    u8 menuSelection;
+    u8 saveSlotDialogType;
+    u8 saveSlotDialogSelection;
     u8 savedSlotIndex;
     u8 animDelayCounter;
 } SaveSlotScreenState;
@@ -71,7 +71,7 @@ extern void initSaveSlotItemLabels(void *);
 extern void initSaveSlotNameText(void *);
 extern void initSaveSlotPromptText(void *);
 extern void initSaveSlotSelectionParticles(void *);
-extern void initSaveSlotIconGrid(void *);
+extern void initSaveSlotNameEntryGrid(void *);
 extern void initSaveSlotDeleteArrow(void *);
 extern void initSaveSlotGoldDisplay(void *);
 extern void initSaveSlotConfirmationIndicator(void *);
@@ -86,7 +86,7 @@ void initSaveSlotSelection(void);
 void onSaveSlotSelectionConfirm(void);
 void onSaveSlotSelectionCancel(void);
 void cleanupSaveSlotSelectionAndExit(void);
-void updateSelectionWiggle(void);
+void updateNameEntryCursorWiggle(void);
 void onSaveSlotReadComplete(u16, s32);
 void verifySaveSlotChecksum(void);
 void updateSlotSelectionSlide(void);
@@ -106,18 +106,18 @@ void initSaveSlotScreen(void) {
     setupTaskSchedulerNodes(0x14, 0x14, 0x14, 0, 0, 0, 0, 0);
     clearMemory((s8 *)state, 0xAE0);
 
-    state->menuState = 0x28;
-    state->saveSlotIndex = 3;
+    state->saveSlotMenuState = 0x28;
+    state->selectedSaveSlot = 3;
     state->slideOffset = -0x140;
     state->unkABE = -0x58;
     state->selectionAnimState = 0;
     state->numValidSlots = 0;
-    state->selectionY = -0xE0;
+    state->nameEntryCursorY = -0xE0;
     state->writeSlotIndexPlusOne = 0;
     state->menuChoiceIndex = 0;
     state->menuAnimOffsetX = 0;
-    state->menuType = 0;
-    state->menuSelection = 0;
+    state->saveSlotDialogType = 0;
+    state->saveSlotDialogSelection = 0;
 
     state->unkAA8 = loadCompressedData(&_459310_ROM_START, &font_main_ROM_START, 0x2278);
     state->unkAB4 = loadTextRenderAsset(1);
@@ -182,19 +182,19 @@ eeprom_done:
     }
 
     if (state->eepromErrorStatus != 0) {
-        state->menuState = 0;
+        state->saveSlotMenuState = 0;
     } else {
         scheduleTask(initSaveSlotDeleteArrow, 0, 0, 0x5B);
     }
 
     i = 0;
-    state->hasSaveData = 0;
+    state->hasCurrentSaveData = 0;
     {
         u8 *saveDataPtr = (u8 *)EepromSaveData;
 
         do {
             if (*saveDataPtr != 0) {
-                state->hasSaveData = 1;
+                state->hasCurrentSaveData = 1;
                 goto after_loop;
             }
             i++;
@@ -207,7 +207,7 @@ after_loop:
     scheduleTask(initSaveSlotConfirmationIndicator, 0, 0, 0x5B);
     scheduleTask(initSaveSlotDeleteText, 0, 0, 0x5B);
 
-    if (state->hasSaveData == 1) {
+    if (state->hasCurrentSaveData == 1) {
         statTask = (SaveSlotStatSpritesReturnType *)scheduleTask(initSaveSlotStatSprites, 0, 0, 0x5A);
         statTask->slotIndex = 3;
         state->originalSlotDataFlag = 0;
@@ -227,7 +227,7 @@ after_loop:
 void initSaveSlotSelection(void) {
     SaveSlotScreenState *allocation = (SaveSlotScreenState *)getCurrentAllocation();
     u8 saveSlot = D_800AFE8C_A71FC->previousSaveSlot;
-    allocation->saveSlotIndex = saveSlot;
+    allocation->selectedSaveSlot = saveSlot;
     setGameStateHandler(updateSaveSlotSelectionScreen);
 }
 
@@ -242,12 +242,12 @@ void updateSaveSlotSelectionScreen(void) {
 
     state = (SaveSlotScreenState *)getCurrentAllocation();
 
-    switch (state->menuState) {
+    switch (state->saveSlotMenuState) {
         case 0x28: {
             u16 counter = state->selectionAnimState;
             eepromReadAsync(counter & 0xFF, (u8 *)&state->slotData[counter & 0xFFFF]);
         }
-            state->menuState = 0x29;
+            state->saveSlotMenuState = 0x29;
             break;
         case 0x29:
             taskResult = pollEepromReadAsync();
@@ -278,41 +278,41 @@ void updateSaveSlotSelectionScreen(void) {
             state->selectionAnimState += 1;
             if ((state->selectionAnimState & 0xFFFF) == 3) {
                 state->selectionAnimState = 0;
-                state->menuState = 0;
+                state->saveSlotMenuState = 0;
             } else {
-                state->menuState = 0x28;
+                state->saveSlotMenuState = 0x28;
             }
             break;
         case 0:
             state->slideOffset += 0x20;
             i = 0;
             if ((state->slideOffset << 16) == 0) {
-                if ((state->eepromErrorStatus >= 0x62) && (state->hasSaveData == 0)) {
-                    state->menuState = 0x32;
+                if ((state->eepromErrorStatus >= 0x62) && (state->hasCurrentSaveData == 0)) {
+                    state->saveSlotMenuState = 0x32;
                     if (state->eepromErrorStatus == 0x62) {
-                        state->menuType = 9;
+                        state->saveSlotDialogType = 9;
                     } else {
-                        state->menuType = 8;
+                        state->saveSlotDialogType = 8;
                     }
                 } else {
-                    state->menuState = 0x32;
-                    if (state->hasSaveData == 0) {
-                        state->promptMode = 0;
-                        state->menuType = 0;
+                    state->saveSlotMenuState = 0x32;
+                    if (state->hasCurrentSaveData == 0) {
+                        state->mainPromptIndex = 0;
+                        state->saveSlotDialogType = 0;
                         if (state->numValidSlots != 0) {
-                            state->menuSelection = 1;
+                            state->saveSlotDialogSelection = 1;
                         } else {
                             goto set_ad6_zero;
                         }
                     } else {
-                        state->promptMode = 9;
+                        state->mainPromptIndex = 9;
                         if (D_800AFE8C_A71FC->creditsCompleted != 0) {
-                            state->menuType = 2;
+                            state->saveSlotDialogType = 2;
                         } else {
-                            state->menuType = 1;
+                            state->saveSlotDialogType = 1;
                         }
                     set_ad6_zero:
-                        state->menuSelection = 0;
+                        state->saveSlotDialogSelection = 0;
                     }
                 }
                 scheduleTask(initSaveSlotPromptText, 0, 0, 0x59);
@@ -357,47 +357,47 @@ void updateSaveSlotSelectionScreen(void) {
             }
             break;
         case 1:
-            slotIdx = state->saveSlotIndex;
+            slotIdx = state->selectedSaveSlot;
             if (gControllerInputs & (STICK_UP | CONT_UP)) {
                 if (slotIdx != 0) {
-                    state->saveSlotIndex = slotIdx - 1;
+                    state->selectedSaveSlot = slotIdx - 1;
                 }
             } else if (gControllerInputs & (STICK_DOWN | CONT_DOWN)) {
                 if (slotIdx < 2) {
-                    state->saveSlotIndex = slotIdx + 1;
+                    state->selectedSaveSlot = slotIdx + 1;
                 }
             } else if (gControllerInputs & CONT_A) {
                 playSoundEffect(0x2C);
-                if (state->hasSaveData != 0) {
+                if (state->hasCurrentSaveData != 0) {
                     goto case1_confirm;
                 }
-                if (state->slotHasData[state->saveSlotIndex] != 1) {
-                    state->menuSelection = 0x63;
-                    state->promptMode = 2;
-                    state->menuState = 0x3C;
+                if (state->slotHasData[state->selectedSaveSlot] != 1) {
+                    state->saveSlotDialogSelection = 0x63;
+                    state->mainPromptIndex = 2;
+                    state->saveSlotMenuState = 0x3C;
                 } else {
                 case1_confirm:
-                    state->menuState = 2;
+                    state->saveSlotMenuState = 2;
                     state->selectionAnimState = 0;
                 }
             } else if (gControllerInputs & CONT_B) {
                 playSoundEffect(0x2E);
-                if (state->hasSaveData == 0) {
-                    state->menuState = 0x32;
-                    state->menuType = 0;
-                    state->menuSelection = 1;
-                    state->promptMode = 0;
+                if (state->hasCurrentSaveData == 0) {
+                    state->saveSlotMenuState = 0x32;
+                    state->saveSlotDialogType = 0;
+                    state->saveSlotDialogSelection = 1;
+                    state->mainPromptIndex = 0;
                 } else {
-                    state->promptMode = 9;
+                    state->mainPromptIndex = 9;
                     if (D_800AFE8C_A71FC->creditsCompleted != 0) {
-                        state->menuType = 2;
+                        state->saveSlotDialogType = 2;
                     } else {
-                        state->menuType = 1;
+                        state->saveSlotDialogType = 1;
                     }
-                    state->menuState = 0x32;
+                    state->saveSlotMenuState = 0x32;
                 }
             }
-            if (slotIdx != state->saveSlotIndex) {
+            if (slotIdx != state->selectedSaveSlot) {
                 goto play_cursor_sound;
             }
             break;
@@ -405,50 +405,54 @@ void updateSaveSlotSelectionScreen(void) {
             state->selectionAnimState += 1;
             if ((state->selectionAnimState & 0xFFFF) == 0x11) {
                 state->selectionAnimState = 0;
-                if (state->slotData[state->saveSlotIndex].save_slot_status[0xB] == 1) {
-                    if (state->hasSaveData != 0) {
-                        state->menuState = 3;
+                if (state->slotData[state->selectedSaveSlot].save_slot_status[0xB] == 1) {
+                    if (state->hasCurrentSaveData != 0) {
+                        state->saveSlotMenuState = 3;
                         break;
                     }
                     if (D_800AFE8C_A71FC->gameMode == 0) {
-                        state->menuState = 0x32;
-                        state->menuType = 0xA;
-                        state->promptMode = 0xB;
-                        state->menuSelection = 0;
+                        state->saveSlotMenuState = 0x32;
+                        state->saveSlotDialogType = 0xA;
+                        state->mainPromptIndex = 0xB;
+                        state->saveSlotDialogSelection = 0;
                         break;
                     }
                 }
-                if (state->hasSaveData == 0) {
-                    state->menuType = 0;
+                if (state->hasCurrentSaveData == 0) {
+                    state->saveSlotDialogType = 0;
                 }
-                state->menuState = 3;
+                state->saveSlotMenuState = 3;
             }
             break;
         case 3:
             if (gControllerInputs & CONT_A) {
                 playSoundEffect(0x2C);
-                if (state->hasSaveData == 0) {
-                    D_800AFE8C_A71FC->previousSaveSlot = state->saveSlotIndex;
-                    state->promptMode = 1;
-                    state->menuState = 5;
-                    memcpy(EepromSaveData, (void *)(state->saveSlotIndex * 0x5C + (s32)(u8 *)state + 0x938), 0x5C);
-                    D_800AFE8C_A71FC->gold = state->slotData[state->saveSlotIndex].slotGold;
+                if (state->hasCurrentSaveData == 0) {
+                    D_800AFE8C_A71FC->previousSaveSlot = state->selectedSaveSlot;
+                    state->mainPromptIndex = 1;
+                    state->saveSlotMenuState = 5;
+                    memcpy(EepromSaveData, (void *)(state->selectedSaveSlot * 0x5C + (s32)(u8 *)state + 0x938), 0x5C);
+                    D_800AFE8C_A71FC->gold = state->slotData[state->selectedSaveSlot].slotGold;
                 } else {
-                    D_800AFE8C_A71FC->previousSaveSlot = state->saveSlotIndex;
-                    state->menuState = 0x18;
+                    D_800AFE8C_A71FC->previousSaveSlot = state->selectedSaveSlot;
+                    state->saveSlotMenuState = 0x18;
                     state->animDelayCounter = 3;
-                    state->originalSlotDataFlag = state->slotHasData[state->saveSlotIndex];
-                    memcpy((u8 *)state + 0xA4C, (void *)(state->saveSlotIndex * 0x5C + (s32)(u8 *)state + 0x938), 0x5C);
-                    memcpy((void *)(state->saveSlotIndex * 0x5C + (s32)(u8 *)state + 0x938), EepromSaveData, 0x5C);
-                    state->writeSlotIndexPlusOne = state->saveSlotIndex + 1;
-                    if (state->slotHasData[state->saveSlotIndex] == 0) {
-                        state->slotHasData[state->saveSlotIndex] = 1;
+                    state->originalSlotDataFlag = state->slotHasData[state->selectedSaveSlot];
+                    memcpy(
+                        (u8 *)state + 0xA4C,
+                        (void *)(state->selectedSaveSlot * 0x5C + (s32)(u8 *)state + 0x938),
+                        0x5C
+                    );
+                    memcpy((void *)(state->selectedSaveSlot * 0x5C + (s32)(u8 *)state + 0x938), EepromSaveData, 0x5C);
+                    state->writeSlotIndexPlusOne = state->selectedSaveSlot + 1;
+                    if (state->slotHasData[state->selectedSaveSlot] == 0) {
+                        state->slotHasData[state->selectedSaveSlot] = 1;
                         state->numValidSlots = state->numValidSlots + 1;
                     } else {
                         state->originalSlotDataFlag = 1;
                     }
                     labelsTask = NULL;
-                    eepromWriteAsync(state->saveSlotIndex);
+                    eepromWriteAsync(state->selectedSaveSlot);
                     state->eepromErrorStatus = 0;
                     state->eepromOperationStatus = 0;
                     if (state->originalSlotDataFlag != 0) {
@@ -479,7 +483,7 @@ void updateSaveSlotSelectionScreen(void) {
                         setModelCameraTransform(
                             slotModel,
                             0,
-                            (s16)(state->saveSlotIndex * 0x38 - 0x30),
+                            (s16)(state->selectedSaveSlot * 0x38 - 0x30),
                             -0x78,
                             -0x18,
                             (s16)(s32)state->slideOffset,
@@ -490,27 +494,27 @@ void updateSaveSlotSelectionScreen(void) {
                 }
             } else if (gControllerInputs & CONT_B) {
                 playSoundEffect(0x2E);
-                if (state->menuType == 0xA) {
+                if (state->saveSlotDialogType == 0xA) {
                     D_800AFE8C_A71FC->isStoryMode = 0;
-                    state->menuState = 0x32;
-                    state->promptMode = 0xB;
+                    state->saveSlotMenuState = 0x32;
+                    state->mainPromptIndex = 0xB;
                 } else {
-                    state->menuState = 1;
+                    state->saveSlotMenuState = 1;
                 }
             }
             break;
         case 5:
-            scheduleTask(initSaveSlotIconGrid, 0, 0, 0x5A);
-            state->menuState = 6;
+            scheduleTask(initSaveSlotNameEntryGrid, 0, 0, 0x5A);
+            state->saveSlotMenuState = 6;
             break;
         case 6: {
             u16 counter;
-            counter = state->selectionY + 0x1E;
-            state->selectionY = counter;
+            counter = state->nameEntryCursorY + 0x1E;
+            state->nameEntryCursorY = counter;
             if ((s16)counter >= -0x28) {
-                state->selectionY = -0x28;
-                state->selectionBaseY = state->selectionY;
-                state->menuState = 7;
+                state->nameEntryCursorY = -0x28;
+                state->nameEntryCursorBaseY = state->nameEntryCursorY;
+                state->saveSlotMenuState = 7;
                 state->selectionAnimState = 0;
             }
         } break;
@@ -518,16 +522,16 @@ void updateSaveSlotSelectionScreen(void) {
             state->selectionAnimState += 1;
             if ((state->selectionAnimState & 0xFFFF) == 5) {
                 state->selectionAnimState = 0;
-                state->menuState = 8;
+                state->saveSlotMenuState = 8;
             }
             break;
         case 8:
-            updateSelectionWiggle();
+            updateNameEntryCursorWiggle();
             if (gControllerInputs & CONT_A) {
                 playSoundEffect(0x2C);
-                state->menuState = 9;
+                state->saveSlotMenuState = 9;
                 state->selectionAnimState = 0;
-                state->selectionY = state->selectionBaseY;
+                state->nameEntryCursorY = state->nameEntryCursorBaseY;
             }
             break;
         case 9:
@@ -535,60 +539,60 @@ void updateSaveSlotSelectionScreen(void) {
             state->selectionAnimState += 1;
             if ((state->selectionAnimState & 0xFFFF) == 0x10) {
                 state->selectionAnimState = 0;
-                if (state->menuState == 0xA) {
+                if (state->saveSlotMenuState == 0xA) {
                     state->selectionAnimState = 1;
-                    state->menuState = 0xC;
+                    state->saveSlotMenuState = 0xC;
                 } else {
-                    state->menuState = 0xB;
+                    state->saveSlotMenuState = 0xB;
                 }
             }
             break;
         case 0xB:
-            updateSelectionWiggle();
+            updateNameEntryCursorWiggle();
             if (gControllerInputs & CONT_A) {
                 state->selectionAnimState = 0;
-                state->selectionY = state->selectionBaseY;
+                state->nameEntryCursorY = state->nameEntryCursorBaseY;
                 playSoundEffect(0x2D);
-                state->menuState = 0xA;
+                state->saveSlotMenuState = 0xA;
             }
             break;
         case 0x3C:
             if (gControllerInputs & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
-                state->menuState = 5;
-                state->saveSlotIndex = 4;
+                state->saveSlotMenuState = 5;
+                state->selectedSaveSlot = 4;
             } else if (gControllerInputs & CONT_B) {
                 playSoundEffect(0x2E);
-                if (state->menuSelection != 0x63) {
-                    state->menuState = 0x32;
-                    state->promptMode = 0;
-                    state->saveSlotIndex = state->savedSlotIndex;
+                if (state->saveSlotDialogSelection != 0x63) {
+                    state->saveSlotMenuState = 0x32;
+                    state->mainPromptIndex = 0;
+                    state->selectedSaveSlot = state->savedSlotIndex;
                 } else {
-                    state->menuState = 1;
-                    state->promptMode = 0xA;
+                    state->saveSlotMenuState = 1;
+                    state->mainPromptIndex = 0xA;
                 }
             }
             break;
         case 0x14:
-            eepromWriteAsync(state->saveSlotIndex);
+            eepromWriteAsync(state->selectedSaveSlot);
             updateSlotSelectionSlide();
-            state->menuState = 0x15;
+            state->saveSlotMenuState = 0x15;
             break;
         case 0x18:
             state->animDelayCounter -= 1;
             if (!(state->animDelayCounter & 0xFF)) {
                 playSoundEffect(0xB);
-                state->menuState = 0x15;
-                terminateTasksByTypeAndID(2, (s32)state->saveSlotIndex);
+                state->saveSlotMenuState = 0x15;
+                terminateTasksByTypeAndID(2, (s32)state->selectedSaveSlot);
                 nameTask =
-                    (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotItemIcons, 2, state->saveSlotIndex, 0x5B);
-                labelsTask =
-                    (SaveSlotItemLabelsReturnType *)scheduleTask(initSaveSlotItemLabels, 2, state->saveSlotIndex, 0x5B);
+                    (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotItemIcons, 2, state->selectedSaveSlot, 0x5B);
+                labelsTask = (SaveSlotItemLabelsReturnType *)
+                    scheduleTask(initSaveSlotItemLabels, 2, state->selectedSaveSlot, 0x5B);
                 if (nameTask != NULL) {
-                    nameTask->slotIndex = state->saveSlotIndex;
+                    nameTask->slotIndex = state->selectedSaveSlot;
                 }
                 if (labelsTask != NULL) {
-                    labelsTask->slotIndex = state->saveSlotIndex;
+                    labelsTask->slotIndex = state->selectedSaveSlot;
                 }
                 setViewportOverlayRgbAndEnable(&state->slotModels[3], 0, 0, 0);
             }
@@ -599,7 +603,7 @@ void updateSaveSlotSelectionScreen(void) {
                 if (state->selectionAnimState != 0) {
                     state->eepromErrorStatus += 1;
                     if ((u32)(state->eepromErrorStatus & 0xFF) < 3) {
-                        state->menuState = 0x14;
+                        state->saveSlotMenuState = 0x14;
                     } else {
                         state->eepromErrorStatus = 0;
                         state->eepromOperationStatus = 2;
@@ -611,34 +615,34 @@ void updateSaveSlotSelectionScreen(void) {
             updateSlotSelectionSlide();
             if (state->slideOffset == 0) {
                 if (state->eepromOperationStatus != 0) {
-                    state->menuState = 0x32;
+                    state->saveSlotMenuState = 0x32;
                     if (state->eepromOperationStatus == 1) {
-                        state->promptMode = 8;
+                        state->mainPromptIndex = 8;
                     } else {
-                        state->promptMode = 0xE;
-                        state->slotHasData[state->saveSlotIndex] = state->originalSlotDataFlag;
+                        state->mainPromptIndex = 0xE;
+                        state->slotHasData[state->selectedSaveSlot] = state->originalSlotDataFlag;
                         memcpy(
-                            (void *)(state->saveSlotIndex * 0x5C + (s32)(u8 *)state + 0x938),
+                            (void *)(state->selectedSaveSlot * 0x5C + (s32)(u8 *)state + 0x938),
                             (u8 *)state + 0xA4C,
                             0x5C
                         );
-                        terminateTasksByTypeAndID(2, (s32)state->saveSlotIndex);
-                        slotIdx = state->saveSlotIndex;
+                        terminateTasksByTypeAndID(2, (s32)state->selectedSaveSlot);
+                        slotIdx = state->selectedSaveSlot;
                         labelsTask = NULL;
                         if (state->slotHasData[slotIdx] != 0) {
                             nameTask =
                                 (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotItemIcons, 2, slotIdx, 0x5B);
                             labelsTask = (SaveSlotItemLabelsReturnType *)
-                                scheduleTask(initSaveSlotItemLabels, 2, state->saveSlotIndex, 0x5B);
+                                scheduleTask(initSaveSlotItemLabels, 2, state->selectedSaveSlot, 0x5B);
                         } else {
                             nameTask =
                                 (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotNameText, 2, slotIdx, 0x5B);
                         }
                         if (nameTask != NULL) {
-                            nameTask->slotIndex = state->saveSlotIndex;
+                            nameTask->slotIndex = state->selectedSaveSlot;
                         }
                         if (labelsTask != NULL) {
-                            labelsTask->slotIndex = state->saveSlotIndex;
+                            labelsTask->slotIndex = state->selectedSaveSlot;
                         }
                     }
                     terminateTasksByType(1);
@@ -648,34 +652,34 @@ void updateSaveSlotSelectionScreen(void) {
         case 0x16:
             if (gControllerInputs & CONT_A) {
                 playSoundEffect(0x2C);
-                state->menuState = 0x17;
-                state->promptMode = 7;
+                state->saveSlotMenuState = 0x17;
+                state->mainPromptIndex = 7;
             }
             break;
         case 0x17:
             if (gControllerInputs & CONT_A) {
                 playSoundEffect(0x2D);
-                state->menuState = 0xC;
+                state->saveSlotMenuState = 0xC;
                 state->selectionAnimState = 0;
-                state->saveSlotIndex = 0x63;
+                state->selectedSaveSlot = 0x63;
             } else if (gControllerInputs & CONT_B) {
                 {
                     playSoundEffect(0x2E);
-                    state->promptMode = 9;
-                    state->menuState = 0x32;
+                    state->mainPromptIndex = 9;
+                    state->saveSlotMenuState = 0x32;
                     if (D_800AFE8C_A71FC->creditsCompleted != 0) {
-                        state->menuType = 2;
+                        state->saveSlotDialogType = 2;
                     } else {
-                        state->menuType = 1;
+                        state->saveSlotDialogType = 1;
                     }
                 }
-                state->saveSlotIndex = state->savedSlotIndex;
+                state->selectedSaveSlot = state->savedSlotIndex;
             }
             break;
         case 0x32: {
             s32 maxChoice;
             maxChoice = 6;
-            if (state->menuType == 0xA) {
+            if (state->saveSlotDialogType == 0xA) {
                 maxChoice = 4;
                 state->menuAnimOffsetX += 3;
             } else {
@@ -684,58 +688,58 @@ void updateSaveSlotSelectionScreen(void) {
             state->menuChoiceIndex += 1;
             if ((state->menuChoiceIndex & 0xFF) == maxChoice) {
                 if (state->eepromErrorStatus == 0) {
-                    state->menuState = 0x33;
+                    state->saveSlotMenuState = 0x33;
                 } else if (state->eepromErrorStatus == 0x63) {
-                    state->menuState = 0x36;
+                    state->saveSlotMenuState = 0x36;
                 } else {
-                    state->menuState = 0x35;
+                    state->saveSlotMenuState = 0x35;
                 }
             }
         } break;
         case 0x33: {
             s32 maxChoice;
-            slotIdx = state->menuSelection;
+            slotIdx = state->saveSlotDialogSelection;
             maxChoice = 2;
-            if ((state->menuType == 0xA) | (state->menuType == 2)) {
+            if ((state->saveSlotDialogType == 0xA) | (state->saveSlotDialogType == 2)) {
                 maxChoice = 1;
             }
             if (gControllerInputs & (STICK_UP | CONT_UP)) {
                 if (slotIdx != 0) {
-                    state->menuSelection = slotIdx - 1;
+                    state->saveSlotDialogSelection = slotIdx - 1;
                 }
             } else if ((gControllerInputs & (STICK_DOWN | CONT_DOWN)) && (slotIdx != maxChoice)) {
-                state->menuSelection = slotIdx + 1;
+                state->saveSlotDialogSelection = slotIdx + 1;
             }
-            if (slotIdx != state->menuSelection) {
+            if (slotIdx != state->saveSlotDialogSelection) {
             play_cursor_sound:
                 playSoundEffect(0x2B);
                 break;
             }
             if (gControllerInputs & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
-                state->menuState = 0x34;
+                state->saveSlotMenuState = 0x34;
                 state->selectionAnimState = 0;
             } else if (gControllerInputs & CONT_B) {
                 playSoundEffect(0x2E);
-                if (state->menuType == 0xA) {
-                    state->menuState = 1;
-                    state->promptMode = 0xA;
+                if (state->saveSlotDialogType == 0xA) {
+                    state->saveSlotMenuState = 1;
+                    state->mainPromptIndex = 0xA;
                     state->menuChoiceIndex = 0;
                     state->menuAnimOffsetX = 0;
                 } else if (D_800AFE8C_A71FC->creditsCompleted != 0) {
                     {
-                        u8 oldSlot = state->saveSlotIndex;
-                        state->promptMode = 7;
-                        state->menuState = 0x17;
-                        state->saveSlotIndex = 0x63;
+                        u8 oldSlot = state->selectedSaveSlot;
+                        state->mainPromptIndex = 7;
+                        state->saveSlotMenuState = 0x17;
+                        state->selectedSaveSlot = 0x63;
                         state->menuChoiceIndex = 0;
                         state->menuAnimOffsetX = 0;
                         state->savedSlotIndex = oldSlot;
                     }
                 } else {
-                    state->menuState = 0xC;
-                    state->saveSlotIndex = 0x63;
-                    if (state->hasSaveData == 0) {
+                    state->saveSlotMenuState = 0xC;
+                    state->selectedSaveSlot = 0x63;
+                    if (state->hasCurrentSaveData == 0) {
                         state->selectionAnimState = 0;
                     } else {
                         state->selectionAnimState = 1;
@@ -747,11 +751,11 @@ void updateSaveSlotSelectionScreen(void) {
             state->selectionAnimState += 1;
             if ((state->selectionAnimState & 0xFFFF) == 0x11) {
                 state->selectionAnimState = 0;
-                state->menuState = 0x37;
+                state->saveSlotMenuState = 0x37;
             }
             break;
         case 0x37:
-            if (state->menuType == 0xA) {
+            if (state->saveSlotDialogType == 0xA) {
                 state->menuAnimOffsetX -= 3;
             } else {
                 state->menuAnimOffsetX -= 2;
@@ -759,75 +763,75 @@ void updateSaveSlotSelectionScreen(void) {
             state->menuChoiceIndex -= 1;
             if (!(state->menuChoiceIndex & 0xFF)) {
                 if (state->eepromErrorStatus == 0x62) {
-                    state->menuState = 5;
-                    state->promptMode = 2;
-                    state->saveSlotIndex = 4;
+                    state->saveSlotMenuState = 5;
+                    state->mainPromptIndex = 2;
+                    state->selectedSaveSlot = 4;
                 } else {
-                    state->menuState = 0x38;
+                    state->saveSlotMenuState = 0x38;
                 }
             }
             break;
         case 0x38: {
             u8 oldSlot;
-            if (state->hasSaveData == 0) {
-                if (state->menuType == 0xA) {
-                    state->menuState = 3;
-                    if (state->menuSelection == 0) {
+            if (state->hasCurrentSaveData == 0) {
+                if (state->saveSlotDialogType == 0xA) {
+                    state->saveSlotMenuState = 3;
+                    if (state->saveSlotDialogSelection == 0) {
                         D_800AFE8C_A71FC->isStoryMode = 1;
-                        state->promptMode = 0xC;
+                        state->mainPromptIndex = 0xC;
                     } else {
                         D_800AFE8C_A71FC->isStoryMode = 0;
-                        state->promptMode = 0xD;
+                        state->mainPromptIndex = 0xD;
                     }
                 } else {
-                    if (state->menuSelection == 0) {
-                        oldSlot = state->saveSlotIndex;
-                        state->menuState = 0x3C;
-                        state->promptMode = 2;
+                    if (state->saveSlotDialogSelection == 0) {
+                        oldSlot = state->selectedSaveSlot;
+                        state->saveSlotMenuState = 0x3C;
+                        state->mainPromptIndex = 2;
                         goto set_slot_63_save_old;
                     }
-                    if (state->menuSelection == 1) {
+                    if (state->saveSlotDialogSelection == 1) {
                         if (state->numValidSlots == 0) {
-                            state->menuState = 0x3C;
-                            state->promptMode = 2;
+                            state->saveSlotMenuState = 0x3C;
+                            state->mainPromptIndex = 2;
                         } else {
-                            state->menuState = 1;
-                            state->promptMode = 0xA;
+                            state->saveSlotMenuState = 1;
+                            state->mainPromptIndex = 0xA;
                         }
                     } else {
-                        state->menuState = 0xC;
+                        state->saveSlotMenuState = 0xC;
                         state->selectionAnimState = 0;
-                        state->saveSlotIndex = 0x63;
+                        state->selectedSaveSlot = 0x63;
                     }
                 }
             } else {
-                if (state->menuType == 2) {
-                    if (state->menuSelection == 0) {
+                if (state->saveSlotDialogType == 2) {
+                    if (state->saveSlotDialogSelection == 0) {
                         goto set_state1_acb6;
                     }
                     goto set_acb7_17;
                 }
-                if (state->menuSelection == 0) {
+                if (state->saveSlotDialogSelection == 0) {
                     if (state->eepromErrorStatus == 0) {
                     set_state1_acb6:
-                        state->menuState = 1;
-                        state->promptMode = 6;
+                        state->saveSlotMenuState = 1;
+                        state->mainPromptIndex = 6;
                     } else {
-                        state->menuState = 0x32;
-                        state->menuType = 6;
+                        state->saveSlotMenuState = 0x32;
+                        state->saveSlotDialogType = 6;
                     }
-                } else if (state->menuSelection == 1) {
+                } else if (state->saveSlotDialogSelection == 1) {
                     playSoundEffect(0x2D);
-                    state->menuState = 0xC;
+                    state->saveSlotMenuState = 0xC;
                     state->selectionAnimState = 1;
-                    state->saveSlotIndex = 0x63;
+                    state->selectedSaveSlot = 0x63;
                 } else {
                 set_acb7_17:
-                    oldSlot = state->saveSlotIndex;
-                    state->promptMode = 7;
-                    state->menuState = 0x17;
+                    oldSlot = state->selectedSaveSlot;
+                    state->mainPromptIndex = 7;
+                    state->saveSlotMenuState = 0x17;
                 set_slot_63_save_old:
-                    state->saveSlotIndex = 0x63;
+                    state->selectedSaveSlot = 0x63;
                     state->savedSlotIndex = oldSlot;
                 }
             }
@@ -835,14 +839,14 @@ void updateSaveSlotSelectionScreen(void) {
         case 0x35:
             if (gControllerInputs & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
-                state->menuState = 0x37;
+                state->saveSlotMenuState = 0x37;
             }
             break;
         case 0x36:
             break;
     }
 
-    if (state->menuState == 0xC) {
+    if (state->saveSlotMenuState == 0xC) {
         setViewportFadeValue(NULL, 0xFF, 0x10);
         setGameStateHandler(cleanupSaveSlotSelectionAndExit);
     }
@@ -866,7 +870,7 @@ void cleanupSaveSlotSelectionAndExit(void) {
     allocation->unkAB4 = freeNodeMemory(allocation->unkAB4);
     allocation->unkAB8 = freeNodeMemory(allocation->unkAB8);
 
-    if (allocation->hasSaveData == 0) {
+    if (allocation->hasCurrentSaveData == 0) {
         for (i = 0; i < 3; i++) {
             unlinkNode(&allocation->slotModels[i]);
         }
@@ -895,16 +899,16 @@ void onSaveSlotSelectionCancel(void) {
     returnToParentScheduler(0xFE);
 }
 
-void updateSelectionWiggle(void) {
+void updateNameEntryCursorWiggle(void) {
     SaveSlotScreenState *allocation = (SaveSlotScreenState *)getCurrentAllocation();
     u16 counter = allocation->selectionAnimState;
     u16 temp;
 
     if (counter < 15) {
         if (counter & 1) {
-            allocation->selectionY = allocation->selectionBaseY - 2;
+            allocation->nameEntryCursorY = allocation->nameEntryCursorBaseY - 2;
         } else {
-            allocation->selectionY = allocation->selectionBaseY + 2;
+            allocation->nameEntryCursorY = allocation->nameEntryCursorBaseY + 2;
         }
         counter = allocation->selectionAnimState;
     }
@@ -914,7 +918,7 @@ void updateSelectionWiggle(void) {
     temp &= 0xFFFF;
 
     if (temp == 15) {
-        allocation->selectionY = allocation->selectionBaseY;
+        allocation->nameEntryCursorY = allocation->nameEntryCursorBaseY;
     }
 }
 
@@ -970,8 +974,8 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
                     allocation->numValidSlots++;
                     allocation->slotHasData[slotIndex] = 1;
 
-                    if (allocation->saveSlotIndex >= 3) {
-                        allocation->saveSlotIndex = arg0;
+                    if (allocation->selectedSaveSlot >= 3) {
+                        allocation->selectedSaveSlot = arg0;
                     }
                 } else {
                     allocation->slotHasData[slotIndex] = 0;
@@ -1125,7 +1129,7 @@ void verifySaveSlotChecksum(void) {
     retryCount = 0;
 
     while (retryCount < 3) {
-        eepromReadAsync(allocation->saveSlotIndex, saveBuffer);
+        eepromReadAsync(allocation->selectedSaveSlot, saveBuffer);
 
         do {
             result = pollEepromReadAsync();
@@ -1169,7 +1173,7 @@ void updateSlotSelectionSlide(void) {
     slideOffset = allocation->slideOffset;
 
     if (slideOffset != 0) {
-        slotIndex = allocation->saveSlotIndex;
+        slotIndex = allocation->selectedSaveSlot;
         slideOffset -= 3;
         allocation->slideOffset = slideOffset;
 

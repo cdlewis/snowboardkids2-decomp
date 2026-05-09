@@ -132,7 +132,7 @@ void awaitVersusSaveDataLoad(void);
 void func_800220AC_22CAC(void);
 
 void loadVersusSaveData(void) {
-    createTaskQueue(initControllerMotors, 0x96);
+    createTaskQueue(initRumblePakCheckTask, 0x96);
     setGameStateHandler(awaitVersusSaveDataLoad);
 }
 

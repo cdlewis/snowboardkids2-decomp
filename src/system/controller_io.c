@@ -86,7 +86,7 @@ extern s32 gButtonsPressed[];
 extern s32 gPreviousButtonsPressed[];
 extern s32 gRepeatedButtonInputs[];
 extern s32 gControllerInputs[];
-extern u8 gMotorInitCompleteMask;
+extern u8 gRumblePakReadyMask;
 extern MotorState gMotorState;
 extern s32 gControllerPackFileCount;
 extern s32 gControllerPackFreeBlockCount;
@@ -796,7 +796,7 @@ void motorProcessState(MotorState *arg0) {
                 if (gControllerPollingEnabled != 0) {
                     break;
                 }
-                if (((gMotorInitCompleteMask >> i) & 1) == 0) {
+                if (((gRumblePakReadyMask >> i) & 1) == 0) {
                     break;
                 }
                 if (arg0->intensity[i] == 0) {
@@ -854,11 +854,11 @@ void motorProcessState(MotorState *arg0) {
     }
 }
 
-void startMotorRumble(s32 controllerChannel) {
+void requestControllerRumble(s32 controllerChannel) {
     s32 channel;
     channel = controllerChannel & 0xFFFF;
 
-    if (((s32)gMotorInitCompleteMask >> channel) & 1) {
+    if (((s32)gRumblePakReadyMask >> channel) & 1) {
         gMotorState.intensity[channel] = 1;
     }
 }
@@ -892,7 +892,7 @@ void initMotorStates(void) {
     }
 }
 
-void motorInitAsync(s32 channel) {
+void requestRumblePakInit(s32 channel) {
     s16 temp_v0;
     s32 queueIndex;
     temp_v0 = channel + 0x80;
@@ -908,7 +908,7 @@ void motorInitAsync(s32 channel) {
     D_8008FE8F_90A8F = 1;
 }
 
-void *pollMotorInitAsync(void) {
+void *pollRumblePakInit(void) {
     void *result;
     void *status;
 

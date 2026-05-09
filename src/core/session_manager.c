@@ -108,7 +108,7 @@ void func_80014C3C_1583C(void) {
 }
 
 void loadSaveData(void) {
-    createTaskQueue(initControllerMotors, 0x96);
+    createTaskQueue(initRumblePakCheckTask, 0x96);
     setGameStateHandler(awaitSaveDataLoad);
 }
 

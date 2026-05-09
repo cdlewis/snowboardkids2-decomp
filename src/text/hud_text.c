@@ -317,17 +317,17 @@ u16 D_8008F2B8_8FEB8[] = { 0xFFEC, 0xFFF4, 0x0000, 0x0008, 0x000E, 0x0014 };
 
 s16 D_8008F2C4_8FEC4[] = { 0x000A, 0x000B, 0x000C, 0x000B };
 
-u16 D_8008F2CC_8FECC[] = {
+u16 gLoadSavedDataPromptText[] = {
     0x0015, 0x803C, 0x802E, 0x8031, 0xFFFB, 0x8040, 0x802E, 0x8043, 0x8032,
     0x8031, 0xFFFB, 0x8031, 0x802E, 0x8041, 0x802E, 0x8054, 0xFFFF, 0x0000,
 };
 
-u16 D_8008F2F0_8FEF0[] = {
+u16 gFinishedLoadingPromptText[] = {
     0x000F, 0x8036, 0x803B, 0x8036, 0x8040, 0x8035, 0x8032, 0x8031, 0xFFFB,
     0x8039, 0x803C, 0x802E, 0x8031, 0x8036, 0x803B, 0x8034, 0x8050, 0xFFFF,
 };
 
-u16 D_8008F314_8FF14[] = {
+u16 gStartingNewGamePromptText[] = {
     0x001C, 0x8041, 0x802E, 0x803F, 0x8041, 0x8036, 0x803B, 0x8034, 0xFFFB, 0x803B,
     0x8032, 0x8044, 0xFFFB, 0x8034, 0x802E, 0x803A, 0x8032, 0x8050, 0xFFFF, 0x0000,
 };
@@ -366,7 +366,7 @@ u16 D_8008F43C_9003C[] = {
     0x0017, 0x0018, 0xFFFB, 0x000D, 0x000A, 0x001D, 0x000A, 0xFFFF,
 };
 
-u16 D_8008F44C_9004C[] = {
+u16 gRumblePakAttachPromptText[] = {
     0xA012, 0x8033, 0xFFFB, 0x8046, 0x803C, 0x8042, 0xFFFB, 0x802E, 0x803F, 0x8032, 0xFFFB, 0x8042, 0x8040, 0x8036,
     0x803B, 0x8034, 0xFFFD, 0x8041, 0x8035, 0x8032, 0xFFFB, 0x001B, 0x8042, 0x803A, 0x802F, 0x8039, 0x8032, 0xFFFB,
     0x0019, 0x802E, 0x8038, 0x804E, 0xFFFB, 0xFFFD, 0x803D, 0x8039, 0x8032, 0x802E, 0x8040, 0x8032, 0xFFFB, 0x8040,
@@ -374,7 +374,7 @@ u16 D_8008F44C_9004C[] = {
     0x803C, 0x803B, 0x8041, 0x803F, 0x803C, 0x8039, 0x8039, 0x8032, 0x803F, 0x8050, 0xFFFF, 0x0000,
 };
 
-u16 D_8008F4D4_900D4[] = {
+u16 gRumblePakRemovalWarningText[] = {
     0x0019, 0x8039, 0x8032, 0x802E, 0x8040, 0x8032, 0xFFFB, 0x8031, 0x803C, 0xFFFB, 0x803B, 0x803C, 0x8041, 0xFFFB,
     0x803F, 0x8032, 0x803A, 0x803C, 0x8043, 0x8032, 0xFFFD, 0x8041, 0x8035, 0x8032, 0xFFFB, 0x001B, 0x8042, 0x803A,
     0x802F, 0x8039, 0x8032, 0xFFFB, 0x0019, 0x802E, 0x8038, 0xFFFD, 0x8031, 0x8042, 0x803F, 0x8036, 0x803B, 0x8034,
@@ -450,29 +450,29 @@ u16 D_8008F768_90368[] = {
     0x803C, 0x803F, 0x803A, 0x802E, 0x8039, 0xFFFB, 0x803A, 0x803C, 0x8031, 0x8032, 0x8050, 0xFFFF, 0x0000,
 };
 
-void *D_8008F79C_9039C[] = {
+void *gSaveSlotDialogOptionTexts[] = {
     D_8008F540_90140, D_8008F558_90158, D_8008F57C_9017C, D_8008F5A0_901A0, D_8008F5B8_901B8,
     D_8008F5D8_901D8, D_8008F5A0_901A0, D_8008F5D8_901D8, D_8008F604_90204, D_8008F664_90264,
 };
 
-void *D_8008F7C4_903C4[] = {
+void *gSaveSlotModeOptionTexts[] = {
     D_8008F6D4_902D4,
     D_8008F6E4_902E4,
 };
 
-void *D_8008F7CC_903CC[] = {
-    D_8008F2CC_8FECC,
-    D_8008F2F0_8FEF0,
-    D_8008F314_8FF14,
+void *gSaveSlotMainPromptTexts[] = {
+    gLoadSavedDataPromptText,
+    gFinishedLoadingPromptText,
+    gStartingNewGamePromptText,
 };
 
-s32 D_8008F7D8_903D8 = (s32)D_8008F43C_9003C;
+s32 gDefaultSaveSlotNameText = (s32)D_8008F43C_9003C;
 
-void *D_8008F7DC_903DC = D_8008F44C_9004C;
+void *gRumblePakAttachPromptTextPtr = gRumblePakAttachPromptText;
 
-void *D_8008F7E0_903E0 = D_8008F4D4_900D4;
+void *gRumblePakRemovalWarningTextPtr = gRumblePakRemovalWarningText;
 
-void *unkD_8008F7E4_903E4[] = {
+void *gSaveSlotMenuActionPromptTexts[] = {
     D_8008F370_8FF70,
     D_8008F3AC_8FFAC,
     D_8008F3C4_8FFC4,
@@ -505,8 +505,8 @@ void cleanupSaveSlotConfirmationIndicator(Func34574Arg *arg0);
 void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state);
 void cleanupSaveSlotDeleteArrow(Func34574Arg *arg0);
 void cleanupSaveSlotPromptText(Func34574Arg *arg0);
-void cleanupSaveSlotIconGrid(Func34574Arg *arg0);
-void updateSaveSlotIconGrid(SaveSlotGridState *arg0);
+void cleanupSaveSlotNameEntryGrid(Func34574Arg *arg0);
+void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0);
 void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0);
 void cleanupSaveSlotItemIcons(Func34574Arg *arg0);
 
@@ -615,7 +615,7 @@ void cleanupSaveSlotStatSprites(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-void initSaveSlotIconGrid(SaveSlotGridState *state) {
+void initSaveSlotNameEntryGrid(SaveSlotGridState *state) {
     AllocationStruct *allocation;
     void *spriteSheet;
     s32 i;
@@ -626,7 +626,7 @@ void initSaveSlotIconGrid(SaveSlotGridState *state) {
 
     allocation = getCurrentAllocation();
     spriteSheet = loadCompressedData(&_459310_ROM_START, &font_main_ROM_START, 0x2278);
-    setCleanupCallback(cleanupSaveSlotIconGrid);
+    setCleanupCallback(cleanupSaveSlotNameEntryGrid);
     state->entries = allocateNodeMemory(0x370);
 
     for (i = 0; i < 0x37; i++) {
@@ -649,10 +649,10 @@ void initSaveSlotIconGrid(SaveSlotGridState *state) {
     state->cursorY = allocation->unkAC0 + 0x38;
     state->spriteAsset = spriteSheet;
     state->animFrame = 0x13;
-    setCallback(updateSaveSlotIconGrid);
+    setCallback(updateSaveSlotNameEntryGrid);
 }
 
-void updateSaveSlotIconGrid(SaveSlotGridState *arg0) {
+void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
     AllocationStruct *allocation;
     s32 row;
     s32 rowIndex;
@@ -701,7 +701,7 @@ void updateSaveSlotIconGrid(SaveSlotGridState *arg0) {
     enqueueCallbackBySlotIndex(8U, 1U, renderSpriteFrame, &arg0->cursorX);
 }
 
-void cleanupSaveSlotIconGrid(Func34574Arg *arg0) {
+void cleanupSaveSlotNameEntryGrid(Func34574Arg *arg0) {
     arg0->unk8 = freeNodeMemory(arg0->unk8);
     arg0->unk0 = freeNodeMemory(arg0->unk0);
 }
@@ -856,7 +856,7 @@ void initSaveSlotNameText(SaveSlotNameTextState *arg0) {
     *(volatile s16 *)&arg0->x = -0x26;
     *(volatile s16 *)&arg0->y = -4;
 
-    temp_c = D_8008F7D8_903D8;
+    temp_c = gDefaultSaveSlotNameText;
     temp_10 = arg0->textAsset;
 
     arg0->alpha = 0xFF;
@@ -1069,7 +1069,7 @@ void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
     alloc = getCurrentAllocation();
 
     if ((alloc->unkAC6 < 0x3D) || (alloc->unkAC9 != 0)) {
-        promptText = D_8008F7CC_903CC[alloc->unkACB];
+        promptText = gSaveSlotMainPromptTexts[alloc->unkACB];
         arg0->mainText = promptText;
         centeredX = ((0x120 - getMaxLinePixelWidth(promptText)) / 2) - 0x90;
         arg0->mainTextX = centeredX;
@@ -1088,9 +1088,9 @@ void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
         screenState = alloc->unkAC6;
         if (screenState >= 6) {
             if (screenState >= 0xA) {
-                arg0->hintText = D_8008F7E0_903E0;
+                arg0->hintText = gRumblePakRemovalWarningTextPtr;
             } else {
-                arg0->hintText = D_8008F7DC_903DC;
+                arg0->hintText = gRumblePakAttachPromptTextPtr;
             }
 
             screenState2 = alloc->unkAC6;
@@ -1405,7 +1405,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
 
             enqueueHudTextLayout(
                 state->textAsset,
-                D_8008F79C_9039C[(allocation->unkAD5 * 3) + i],
+                gSaveSlotDialogOptionTexts[(allocation->unkAD5 * 3) + i],
                 -0x40,
                 (s16)((temp + i * 0x180000) >> 16),
                 alphaArg,
@@ -1429,7 +1429,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
 
             enqueueHudTextLayout(
                 state->textAsset,
-                D_8008F7C4_903C4[i],
+                gSaveSlotModeOptionTexts[i],
                 -0x40,
                 (s16)((0xFFF00000 + i * 0x180000) >> 16),
                 alphaArg,
@@ -1449,7 +1449,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
 
         enqueueHudTextLayout(
             state->textAsset,
-            D_8008F79C_9039C[allocation->unkAD5],
+            gSaveSlotDialogOptionTexts[allocation->unkAD5],
             xOffset,
             -0x20,
             0xFF,

@@ -33,7 +33,7 @@ typedef struct {
 
 void initGameSession(void);
 void func_8001452C_1512C(void);
-void initControllerMotors(void);
+void initRumblePakCheckTask(void);
 void initRace(void);
 void playSoundEffect(s32 soundId);
 void initLevelSelectBasicState(void);
