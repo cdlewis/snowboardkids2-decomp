@@ -3,7 +3,6 @@
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "math/rand.h"
-#include "race/race_session.h"
 #include "story/npc_models.h"
 #include "story/rare_event_npcs.h"
 #include "system/task_scheduler.h"

@@ -12,7 +12,6 @@
 #include "math/rand.h"
 #include "race/obstacle_sprites.h"
 #include "race/particle_items.h"
-#include "race/race_session.h"
 #include "race/track_collision.h"
 #include "race/track_height.h"
 #include "system/task_scheduler.h"

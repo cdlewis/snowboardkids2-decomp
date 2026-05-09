@@ -4,7 +4,6 @@
 #include "gamestate.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
-#include "graphics/sprite_table.h"
 #include "math/geometry.h"
 #include "race/race_hud.h"
 #include "system/memory_allocator.h"
