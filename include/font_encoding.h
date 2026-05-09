@@ -19,6 +19,7 @@
  *   - After lowercase: small digits (e.g., "by 8:30" -> small 8)
  *   - After uppercase: big digits (e.g., "LEVEL 1" -> big 1)
  *   - Explicit override: {0B}-{9B} for big, {0s}-{9s} for small
+ *   - Raw encoded word: {0xNNNN}
  *
  * See tools/charmap.txt for the full character mapping.
  */

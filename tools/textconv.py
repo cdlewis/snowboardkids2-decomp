@@ -16,6 +16,7 @@ Digit sizing is context-aware:
     - After uppercase letter: big digit (e.g., "LEVEL 1" -> big 1)
     - Start of string (no preceding letter): small digit
     - Explicit override: {0B}-{9B} for big, {0s}-{9s} for small
+    - Raw 16-bit word: {0xNNNN}
 """
 
 import sys
@@ -95,6 +96,14 @@ def convert_string(text: str, charmap: Dict[str, Tuple[int, int]]) -> List[int]:
 
     while i < len(text):
         c = text[i]
+
+        # Handle raw encoded 16-bit words, used for control codes and custom-width glyphs.
+        raw_word = re.match(r"\{0x([0-9A-Fa-f]{4})\}", text[i:])
+        if raw_word is not None:
+            value = int(raw_word.group(1), 16)
+            result.extend([(value >> 8) & 0xFF, value & 0xFF])
+            i += len(raw_word.group(0))
+            continue
 
         # Handle explicit digit overrides {0B}-{9B} and {0s}-{9s}
         if c == '{' and i + 2 < len(text) and text[i + 2] in 'BSbs' and text[i + 3] == '}':
