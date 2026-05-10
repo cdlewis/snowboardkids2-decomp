@@ -20,8 +20,10 @@
  *   - After uppercase: big digits (e.g., "LEVEL 1" -> big 1)
  *   - Explicit override: {0B}-{9B} for big, {0s}-{9s} for small
  *   - Raw encoded word: {0xNNNN}
+ *   - No auto terminator: _NT("string")
  *
  * See tools/charmap.txt for the full character mapping.
  */
 #define _(str) 0
+#define _NT(str) 0
 #define PAD2 0x00, 0x00

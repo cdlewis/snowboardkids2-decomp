@@ -41,8 +41,7 @@ u16 D_8008F184_8FD84[] = { 0x0040, 0x00E0, 0x0480, 0x0000 };
 
 u8 boardShopChooseBoardToPaintPromptText[] = { _("Which board do you want to paint@") };
 
-u32 D_8008F1D0_8FDD0[] = { 0x00208035, 0x80368030, 0x8035FFFB, 0x80318032, 0x80408036, 0x8034803B,
-                           0xFFFB8031, 0x803CFFFB, 0x8046803C, 0x8042FFFB, 0x8044802E, 0x803B8041 };
+u8 boardShopChooseDesignPromptText[48] = { _NT("Which design do you want") };
 
 struct {
     s32 unk0[2];
@@ -1576,6 +1575,7 @@ void initBoardShopTitleText(BoardShopTitleTextState *arg0) {
 void updateBoardShopTitleText(BoardShopTitleTextUpdateArg *arg0) {
     BoardShopTitleCornersAllocation *allocation = (BoardShopTitleCornersAllocation *)getCurrentAllocation();
     u16 *new_var;
+
     if (allocation->titleCornersVisible != 0) {
         new_var = D_8008F200_8FE00.unkA;
         arg0->textWidth = new_var[allocation->titleCornersVisible];

@@ -231,10 +231,10 @@ def process_file(input_path: str, output_path: str, charmap: Dict[str, Tuple[int
     result = []
     pos = 0
 
-    # Pattern to find _("string") - being careful about escape sequences
+    # Pattern to find _("string") or _NT("string") - being careful about escape sequences
     # We need to handle nested quotes and escapes properly
     # Use negative lookbehind to avoid matching inside identifiers like __asm__(
-    pattern = re.compile(r'(?<![a-zA-Z0-9_])_\("')
+    pattern = re.compile(r'(?<![a-zA-Z0-9_])_(NT)?\("')
 
     while pos < len(content):
         match = pattern.search(content, pos)
@@ -269,6 +269,7 @@ def process_file(input_path: str, output_path: str, charmap: Dict[str, Tuple[int
                 continue
 
         # Find the end of the string
+        append_terminator = match.group(1) != 'NT'
         string_start = match.end()  # Position after opening "
         string_content = []
 
@@ -292,7 +293,7 @@ def process_file(input_path: str, output_path: str, charmap: Dict[str, Tuple[int
         # Convert the string to bytes (auto-append END terminator)
         try:
             bytes_list = convert_string(string_text, charmap)
-            if '\0' in charmap:
+            if append_terminator and '\0' in charmap:
                 high, low = charmap['\0']
                 bytes_list.extend([high, low])
             result.append(format_bytes_as_array(bytes_list))
