@@ -3,6 +3,7 @@
 #include "assets.h"
 #include "common.h"
 #include "data/asset_metadata.h"
+#include "font_encoding.h"
 #include "gamestate.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
@@ -38,9 +39,7 @@ s16 boardIconTargetYPositions[] = { 0xFFC7, 0xFFEF, 0x0017, 0x003F };
 
 u16 D_8008F184_8FD84[] = { 0x0040, 0x00E0, 0x0480, 0x0000 };
 
-s32 D_8008F18C_8FD8C[] = { 0x00208035, 0x80368030, 0x8035FFFB, 0x802F803C, 0x802E803F, 0x8031FFFB,
-                           0x8031803C, 0xFFFB8046, 0x803C8042, 0xFFFB8044, 0x802E803B, 0x8041FFFB,
-                           0x8041803C, 0xFFFB803D, 0x802E8036, 0x803B8041, 0x8054FFFF };
+u8 boardShopChooseBoardToPaintPromptText[] = { _("Which board do you want to paint@") };
 
 u32 D_8008F1D0_8FDD0[] = { 0x00208035, 0x80368030, 0x8035FFFB, 0x80318032, 0x80408036, 0x8034803B,
                            0xFFFB8031, 0x803CFFFB, 0x8046803C, 0x8042FFFB, 0x8044802E, 0x803B8041 };
@@ -50,7 +49,7 @@ struct {
     u16 unk8;
     u16 unkA[1];
 } D_8008F200_8FE00 = {
-    { 0x8054FFFF, 0x8008F18C },
+    { 0x8054FFFF, (s32)boardShopChooseBoardToPaintPromptText },
     0x8008,
     { 0xF1D0 }
 };
@@ -1565,7 +1564,7 @@ void initBoardShopTitleText(BoardShopTitleTextState *arg0) {
     void *textAsset = loadTextRenderAsset(1);
     setCleanupCallback(&cleanupBoardShopTitleText);
     arg0->y = -0x60;
-    arg0->textData = &D_8008F18C_8FD8C;
+    arg0->textData = boardShopChooseBoardToPaintPromptText;
     arg0->primaryColor = 0xFF;
     arg0->secondaryColor = 0xFF;
     arg0->textAsset = textAsset;

@@ -3,6 +3,7 @@
 #include "common.h"
 #include "data/asset_metadata.h"
 #include "data/course_data.h"
+#include "font_encoding.h"
 #include "gamestate.h"
 #include "graphics/clip_text_render.h"
 #include "graphics/displaylist.h"
@@ -172,10 +173,7 @@ struct {
      },
 };
 
-s32 D_8008F110_8FD10[16] = {
-    0x00208035, 0x80368030, 0x8035FFFB, 0x802F803C, 0x802E803F, 0x8031FFFB, 0x8031803C, 0xFFFB8046,
-    0x803C8042, 0xFFFB8044, 0x802E803B, 0x80418054, 0xFFFF0000, 0x00000000, 0x00000000, 0x00000000,
-};
+u8 boardShopChooseBoardPromptText[64] = { _("Which board do you want@") };
 
 void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *);
 void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0);
@@ -1126,7 +1124,7 @@ void initUnlockScreenItemIcons(UnlockScreenItemIconsState *arg0) {
 
     arg0->titleX = -0x68;
     arg0->titleY = -0x60;
-    arg0->titleData = &D_8008F110_8FD10;
+    arg0->titleData = boardShopChooseBoardPromptText;
     arg0->titleAsset = titleAsset;
     arg0->titleAlpha1 = 0xFF;
     arg0->titleAlpha2 = 0xFF;

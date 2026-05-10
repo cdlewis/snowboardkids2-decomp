@@ -4,6 +4,7 @@
 #include "data/asset_metadata.h"
 #include "data/course_data.h"
 #include "data/data_table.h"
+#include "font_encoding.h"
 #include "gamestate.h"
 #include "graphics/clip_text_render.h"
 #include "graphics/displaylist.h"
@@ -95,11 +96,7 @@ Vec3i gIndicatorSpriteOffset = { 0x00000000, 0x00200000, 0x00000000 };
 
 Vec3i D_800907EC_913EC = { 0x001E0000, 0x00000000, 0xFFCE0000 };
 
-s32 D_800907F8_913F8[] = {
-    0xFFFC0005, 0x001D8042, 0x803F803B, 0xFFFB803C, 0x80338033, 0xFFFB8041, 0x80358032, 0xFFFB803D, 0x803C8044,
-    0x8032803F, 0xFFFB802F, 0x80328033, 0x803C803F, 0x8032FFFD, 0x8036803B, 0x80408032, 0x803F8041, 0x8036803B,
-    0x8034FFFB, 0x802EFFFB, 0x8030803C, 0x803B8041, 0x803F803C, 0x80398039, 0x8032803F, 0x8050FFFF,
-};
+u8 controllerInsertPowerWarningText[] = { _("{0xFFFC}{0x0005}Turn off the power before\ninserting a controller.") };
 
 u32 D_80090860_91460[] = {
     0xFFFE0002, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00020002, 0x00000000, 0x03F0FFF0, 0xFFFFFFFF,
@@ -315,7 +312,7 @@ void updatePushStartText(PushStartPromptTask *task) {
 void updatePushStartGraphic(PushStartPromptTask *task) {
     enqueueHudTextLayout(
         task->textAsset,
-        (void *)&D_800907F8_913F8,
+        controllerInsertPowerWarningText,
         -0x68,
         task->yPosition,
         0xFF,
