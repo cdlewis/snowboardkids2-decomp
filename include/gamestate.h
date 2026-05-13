@@ -299,7 +299,7 @@ typedef struct {
     u8 introSkipState;
     u8 PAD_62[0x1];
     u8 shortcutGateState;
-    u8 PAD_6B_2[0x10];
+    u8 rankOrder[0x10];
     u8 finalLapNumber;
     u8 PAD_6B[0x1];
     u8 gamePaused;

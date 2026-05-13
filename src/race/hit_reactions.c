@@ -257,8 +257,8 @@ void processPlayerItemUsage(Player *player) {
                 target = player;
                 if (randA() & 0xFF) {
                     for (result = 0; result < gs->numPlayers; result++) {
-                        if (gs->players[gs->PAD_6B_2[result]].playerIndex != player->playerIndex) {
-                            target = &gs->players[gs->PAD_6B_2[result]];
+                        if (gs->players[gs->rankOrder[result]].playerIndex != player->playerIndex) {
+                            target = &gs->players[gs->rankOrder[result]];
                             if (target->unkBC6 == 0) {
                                 break;
                             }
@@ -297,7 +297,7 @@ void processPlayerItemUsage(Player *player) {
                         i = 0;
                         idxPtr = targetIndices;
                         for (; i < gs->numPlayers; i++) {
-                            playerCount = gs->PAD_6B_2[i];
+                            playerCount = gs->rankOrder[i];
                             if (player->playerIndex != gs->players[playerCount].playerIndex) {
                                 *idxPtr = playerCount;
                                 idxPtr++;
@@ -373,10 +373,10 @@ void processPlayerItemUsage(Player *player) {
                 }
                 delay = 0;
                 for (result = 0; result < (s32)playerCount; result++) {
-                    if (gs->players[gs->PAD_6B_2[result]].playerIndex == player->playerIndex) {
+                    if (gs->players[gs->rankOrder[result]].playerIndex == player->playerIndex) {
                         continue;
                     }
-                    target = &gs->players[gs->PAD_6B_2[result]];
+                    target = &gs->players[gs->rankOrder[result]];
                     if (delay < i) {
                         delay++;
                         continue;
@@ -527,7 +527,7 @@ s32 findPrimaryItemTarget(Player *player) {
         i = player->finishPosition;
         if (i >= 0) {
             for (; i >= 0; i--) {
-                if ((gs->PAD_6B_2[i] + (gs->players))->isBossRacer == 0) {
+                if ((gs->rankOrder[i] + (gs->players))->isBossRacer == 0) {
                     break;
                 }
             }
@@ -571,7 +571,7 @@ s32 shouldUseSecondaryItem(Player *player) {
                     case 1:
                     case 2:
                     case 3:
-                        if ((gs->players[gs->PAD_6B_2[0]].animFlags & 0x100)) {
+                        if ((gs->players[gs->rankOrder[0]].animFlags & 0x100)) {
                             return 0;
                         }
                         if (randA() <

@@ -72,11 +72,6 @@ typedef struct {
     u8 unk5C;
 } GameStatePartial5C;
 
-typedef struct {
-    u8 _pad0[0x64];
-    u8 entry;
-} RankOrderEntryView;
-
 extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 extern AssetMeta D_8009A550_9B150[];
@@ -823,8 +818,8 @@ void updateRacePlayer(Player *player) {
     }
 
     diff = D_800BAA9C_AA94C[player->finishPosition] - player->speedHandicap;
-    refPlayerProgress = (gameState->finalLapNumber - gameState->players[gameState->PAD_6B_2[0]].currentLap) * 8192 +
-                        gameState->players[gameState->PAD_6B_2[0]].raceProgress;
+    refPlayerProgress = (gameState->finalLapNumber - gameState->players[gameState->rankOrder[0]].currentLap) * 8192 +
+                        gameState->players[gameState->rankOrder[0]].raceProgress;
     myProgress = (gameState->finalLapNumber - player->currentLap) * 8192 + player->raceProgress;
 
     if ((myProgress - refPlayerProgress) >= 0x3A9) {
@@ -833,7 +828,7 @@ void updateRacePlayer(Player *player) {
 
     player->animFlags &= 0xFEFFFFFF;
     if ((player->finishPosition == (gameState->numPlayers - 1)) && (player->finishPosition != 0)) {
-        s32 idx = gameState->PAD_6B_2[player->finishPosition - 1];
+        s32 idx = gameState->rankOrder[player->finishPosition - 1];
         refPlayerProgress = (gameState->finalLapNumber - gameState->players[idx].currentLap) * 8192 +
                             gameState->players[idx].raceProgress;
         if ((myProgress - refPlayerProgress) >= 0x751) {
@@ -4907,15 +4902,15 @@ void updateAndRenderRaceCharacters(void) {
 
         {
             register s32 j MIPS_REG_T3;
-            RankOrderEntryView *rankIPtr;
-            RankOrderEntryView *rankJPtr;
+            u8 *rankIPtr;
+            u8 *rankJPtr;
 
             for (i = 0; i < gs->numPlayers - 1; i++) {
                 for (j = i + 1; j < gs->numPlayers; j++) {
-                    rankIPtr = (RankOrderEntryView *)((u8 *)gs + i);
-                    rankI = rankIPtr->entry;
-                    rankJPtr = (RankOrderEntryView *)((u8 *)gs + j);
-                    rankJ = rankJPtr->entry;
+                    rankIPtr = (u8 *)gs + i;
+                    rankI = rankIPtr[0x64];
+                    rankJPtr = (u8 *)gs + j;
+                    rankJ = rankJPtr[0x64];
 
                     if ((gs->players[rankI].unkBC6 < gs->players[rankJ].unkBC6) ||
                         ((gs->players[rankI].unkBC6 == gs->players[rankJ].unkBC6) &&
@@ -4926,8 +4921,8 @@ void updateAndRenderRaceCharacters(void) {
                              ((gs->players[rankI].raceProgress > gs->players[rankJ].raceProgress) ||
                               ((gs->players[rankI].raceProgress == gs->players[rankJ].raceProgress) &&
                                (gs->players[rankI].segmentProgress < gs->players[rankJ].segmentProgress))))))))) {
-                        rankIPtr->entry = rankJ;
-                        rankJPtr->entry = rankI;
+                        rankIPtr[0x64] = rankJ;
+                        rankJPtr[0x64] = rankI;
                     }
                 }
             }
@@ -4968,7 +4963,7 @@ void updateAndRenderRaceCharacters(void) {
         }
 
         for (i = 0; i < gs->numPlayers; i++) {
-            player = &gs->players[gs->PAD_6B_2[i]];
+            player = &gs->players[gs->rankOrder[i]];
             player->finishPosition = i;
 
             if (player->currentLap != gs->finalLapNumber || player->raceProgress != 0 || player->unkBC6 != 0) {
