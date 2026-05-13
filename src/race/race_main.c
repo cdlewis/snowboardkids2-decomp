@@ -539,12 +539,11 @@ void setPlayerBehaviorPhase(Player *player, s32 phase) {
     player->behaviorCounter = 0;
 }
 
-void resetPlayerBehaviorToDefault(void *arg) {
-    BehaviorState *arg0 = arg;
-    arg0->behaviorMode = 1;
-    arg0->behaviorPhase = 0;
-    arg0->behaviorStep = 0;
-    arg0->behaviorCounter = 0;
+void resetPlayerBehaviorToDefault(Player *player) {
+    player->behaviorMode = 1;
+    player->behaviorPhase = 0;
+    player->behaviorStep = 0;
+    player->behaviorCounter = 0;
 }
 
 void applyBoostVelocity(Player *player) {

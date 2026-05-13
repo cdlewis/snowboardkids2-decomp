@@ -20,7 +20,7 @@ typedef struct {
 
 void setPlayerBehaviorMode(Player *player, u8 mode);
 void setPlayerBehaviorPhase(Player *player, s32 phase);
-void resetPlayerBehaviorToDefault(void *arg);
+void resetPlayerBehaviorToDefault(Player *player);
 void initKnockbackBehavior(BehaviorState *arg0);
 void applyClampedVelocityToPosition(Player *player);
 void renderRacerProjectedShadow(Player *player);
