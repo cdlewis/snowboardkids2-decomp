@@ -522,12 +522,14 @@ typedef struct {
 } SuccessMessageDisplayState;
 
 void showGoalBanner(s32 playerIndex);
+void showPlacementAnnouncement(u32 playerIndex, s32 placement);
 void showTrickScoreDisplay(s32 playerIndex, s32 trickScore);
 void initSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0);
 void initShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0);
 void spawnShotCrossScoreDisplayTask(void *arg0);
 void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0);
 void spawnVictorySnowflakes(s16 playerIndex, s16 useSmallSprite);
+void spawnTotalLapDisplayTask(Player *player);
 void initPauseMenuDisplayTask(PauseMenuDisplayState *arg0);
 void spawnShotCrossItemCountDisplayTask(s16 arg0);
 void initBonusGoldDisplayTask(BonusGoldDisplayState *arg0);

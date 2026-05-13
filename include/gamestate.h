@@ -197,10 +197,10 @@ typedef struct {
     s32 unkB8C;
     s32 unkB90;
     u16 sectorIndex;
-    u8 _padB96[0x2];
+    s16 segmentProgress;
     s16 raceProgress;
     s16 boostTimer;
-    s16 shortcutLapCount;
+    u16 shortcutLapCount;
     u16 squashStretchScale;
     u16 characterScaleXZ;
     s16 characterScaleY;
@@ -255,7 +255,7 @@ typedef struct {
     u8 unkBDC;
     u8 speedPenaltyIndex;
     u8 pathFlags; /* Bit 3: shortcut available */
-    u8 rumbleEffectType;
+    s8 rumbleEffectType;
     s8 rumbleCounter;
     u8 rumbleDuration;
     u8 rumbleFrame;

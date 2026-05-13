@@ -1,4 +1,5 @@
 #include "race/race_main.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "animation/bone_animation.h"
 #include "audio/audio.h"
 #include "common.h"
@@ -21,8 +22,15 @@
 #include "race/spray_particles.h"
 #include "race/track_collision.h"
 #include "race/track_height.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/text_elements.h"
+
+#ifdef __clang__
+#define MIPS_REG_T3
+#else
+#define MIPS_REG_T3 __asm__("t3")
+#endif
 
 typedef void (*RaceFinishBehaviorStepHandler)(void *);
 typedef void (*StunnedBehaviorPhaseHandler)(void *);
@@ -64,6 +72,11 @@ typedef struct {
     u8 unk5C;
 } GameStatePartial5C;
 
+typedef struct {
+    u8 _pad0[0x64];
+    u8 entry;
+} RankOrderEntryView;
+
 extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 extern AssetMeta D_8009A550_9B150[];
@@ -81,6 +94,16 @@ extern s32 normalizeSurfaceType(s32);
 extern void startRumbleEffect(Player *player, s32 effectType);
 extern s32 applyVelocityDeadzone(Player *, s32, s32, s32);
 extern BoneHierarchyEntry *getIndexedAnimationDataPtr(void *, s16);
+extern s32 projectPositionOntoTrackSegment(GameDataLayout *trackGeom, u16 sectorIdx, Vec3i *pos);
+extern void updateCrazyJungleBossPositionAndTrackCollision(void);
+extern void renderCrazyJungleBossWithSurfaceColors(Player *player);
+extern void updateBossProximityCheckpoints(Player *player);
+extern void renderGhosts(void);
+extern void renderJingleTownBossWithEffects(Player *player);
+extern void updateJingleTownBossJointPositions(Player *player);
+extern void updateIceLandBossPositionAndTrackCollision(void);
+extern void renderIceLandBossWithSurfaceColors(Player *player);
+extern void updateIceLandBossJointPositions(Player *player);
 
 /* Forward declarations for function pointer tables */
 s32 initPlayerForRace(Player *);
@@ -166,6 +189,9 @@ s32 shortcutSpinDownStep(Player *);
 s32 shortcutPostSpinWaitStep(Player *);
 s32 shortcutLaunchStep(Player *);
 s32 tryFinalizeTrickLanding(Player *);
+void handlePlayerPositionAndTrackCollision(Player *);
+void renderPlayerModel(Player *);
+void updateRacerShadowSamplePositions(Player *);
 void updateTrickFacingAngle(Player *);
 void updateFlipSpinTrickAnimation(Player *);
 void updateTrickRotationTransform(Player *);
@@ -1100,7 +1126,7 @@ s32 initPlayerForRace(Player *player) {
         }
     }
 
-    *(s8 *)&player->rumbleEffectType = -1;
+    player->rumbleEffectType = -1;
     player->rumbleCounter = -1;
     player->rumbleDuration = 0;
     player->rumbleFrame = 0;
@@ -4828,7 +4854,248 @@ u8 getRumbleDuration(Player *player, s32 effectType) {
     return player->rumbleDuration;
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/race_main", updateAndRenderRaceCharacters);
+void updateAndRenderRaceCharacters(void) {
+    GameState *gs;
+    Player *player;
+    s32 i;
+    s32 flags;
+    s32 rankI;
+    s32 rankJ;
+
+    gs = getCurrentAllocation();
+
+    for (i = 0; i < gs->numPlayers; i++) {
+        switch (gs->players[i].flyingAttackState) {
+            case 0:
+                if (gs->gamePaused == 0) {
+                    handlePlayerPositionAndTrackCollision(&gs->players[i]);
+                }
+                renderPlayerModel(&gs->players[i]);
+                updateRacerShadowSamplePositions(&gs->players[i]);
+                break;
+            case 1:
+                if (gs->gamePaused == 0) {
+                    updateCrazyJungleBossPositionAndTrackCollision();
+                }
+                renderCrazyJungleBossWithSurfaceColors(&gs->players[i]);
+                updateBossProximityCheckpoints(&gs->players[i]);
+                break;
+            case 2:
+                if (gs->gamePaused == 0) {
+                    renderGhosts();
+                }
+                renderJingleTownBossWithEffects(&gs->players[i]);
+                updateJingleTownBossJointPositions(&gs->players[i]);
+                break;
+            case 3:
+                if (gs->gamePaused == 0) {
+                    updateIceLandBossPositionAndTrackCollision();
+                }
+                renderIceLandBossWithSurfaceColors(&gs->players[i]);
+                updateIceLandBossJointPositions(&gs->players[i]);
+                break;
+        }
+    }
+
+    if (gs->gamePaused == 0) {
+        for (i = 0; i < gs->numPlayers; i++) {
+            player = &gs->players[i];
+            player->segmentProgress =
+                projectPositionOntoTrackSegment(&gs->gameData, player->sectorIndex, &player->worldPos);
+            player->raceProgress = getTrackSegmentFinishZoneFlag(&gs->gameData, player->sectorIndex);
+        }
+
+        {
+            register s32 j MIPS_REG_T3;
+            RankOrderEntryView *rankIPtr;
+            RankOrderEntryView *rankJPtr;
+
+            for (i = 0; i < gs->numPlayers - 1; i++) {
+                for (j = i + 1; j < gs->numPlayers; j++) {
+                    rankIPtr = (RankOrderEntryView *)((u8 *)gs + i);
+                    rankI = rankIPtr->entry;
+                    rankJPtr = (RankOrderEntryView *)((u8 *)gs + j);
+                    rankJ = rankJPtr->entry;
+
+                    if ((gs->players[rankI].unkBC6 < gs->players[rankJ].unkBC6) ||
+                        ((gs->players[rankI].unkBC6 == gs->players[rankJ].unkBC6) &&
+                         ((gs->players[rankI].currentLap < gs->players[rankJ].currentLap) ||
+                          ((gs->players[rankI].currentLap == gs->players[rankJ].currentLap) &&
+                           ((gs->players[rankI].shortcutLapCount < gs->players[rankJ].shortcutLapCount) ||
+                            ((gs->players[rankI].shortcutLapCount == gs->players[rankJ].shortcutLapCount) &&
+                             ((gs->players[rankI].raceProgress > gs->players[rankJ].raceProgress) ||
+                              ((gs->players[rankI].raceProgress == gs->players[rankJ].raceProgress) &&
+                               (gs->players[rankI].segmentProgress < gs->players[rankJ].segmentProgress))))))))) {
+                        rankIPtr->entry = rankJ;
+                        rankJPtr->entry = rankI;
+                    }
+                }
+            }
+        }
+
+        switch (gs->raceType) {
+            case 2:
+            case 3:
+                flags = gs->players[1].animFlags;
+                if (!(flags & 0x80000)) {
+                    if (flags & 0x100000) {
+                        showPlacementAnnouncement(0, 1);
+                        spawnVictorySnowflakes(0, 0);
+                        gs->players[0].animFlags |= 0x80000;
+                        gs->players[1].animFlags |= 0x80000;
+                    }
+                }
+                break;
+            case 4:
+                if (gs->playerLost != 0) {
+                    flags = gs->players[0].animFlags;
+                    if (!(flags & 0x80000)) {
+                        gs->players[0].animFlags = flags | 0x80000;
+                        showPlacementAnnouncement(0, 3);
+                    }
+                }
+                break;
+            case 5:
+            case 6:
+                if (gs->playerLost != 0) {
+                    flags = gs->players[0].animFlags;
+                    if (!(flags & 0x80000)) {
+                        gs->players[0].animFlags = flags | 0x80000;
+                        showPlacementAnnouncement(0, 3);
+                    }
+                }
+                break;
+        }
+
+        for (i = 0; i < gs->numPlayers; i++) {
+            player = &gs->players[gs->PAD_6B_2[i]];
+            player->finishPosition = i;
+
+            if (player->currentLap != gs->finalLapNumber || player->raceProgress != 0 || player->unkBC6 != 0) {
+                continue;
+            }
+
+            switch (gs->raceType) {
+                default:
+                    break;
+                case 0:
+                    if (player->isBossRacer == 0) {
+                        showPlacementAnnouncement(player->playerIndex, 0);
+                    }
+                    player->animFlags |= 0x80000;
+                    player->unkBC6 = gs->PAD_6B[0];
+                    gs->PAD_6B[0]--;
+                    break;
+                case 1:
+                    if (player->finishPosition == 0) {
+                        if (player->isBossRacer == 0) {
+                            showPlacementAnnouncement(0, 1);
+                            spawnVictorySnowflakes(0, 0);
+                        } else {
+                            showPlacementAnnouncement(0, 2);
+                            gs->players[0].animFlags |= 0x80000;
+                        }
+                    }
+                    player->animFlags |= 0x80000;
+                    player->unkBC6 = gs->PAD_6B[0];
+                    gs->PAD_6B[0]--;
+                    break;
+                case 2:
+                case 3:
+                    if (!(player->animFlags & 0x80000) && player->isBossRacer != 0) {
+                        showPlacementAnnouncement(0, 2);
+                        gs->players[0].animFlags |= 0x80000;
+                        player->animFlags |= 0x80000;
+                    }
+                    break;
+                case 8:
+                    if (player->isBossRacer != 0) {
+                        player->animFlags |= 0x80000;
+                        player->unkBC6 = gs->PAD_6B[0];
+                        gs->PAD_6B[0]--;
+                        break;
+                    }
+                    if (player->finishPosition == 0) {
+                        D_800AFE8C_A71FC->playerBoardIds[0x11 + player->playerIndex]++;
+                        if (D_800AFE8C_A71FC->playerBoardIds[0x11 + player->playerIndex] >= 100) {
+                            D_800AFE8C_A71FC->playerBoardIds[0x11 + player->playerIndex] = 99;
+                        }
+                        showPlacementAnnouncement(player->playerIndex, 1);
+                        if ((s32)gs->unk5D == 1) {
+                            spawnVictorySnowflakes(player->playerIndex, 0);
+                        } else {
+                            spawnVictorySnowflakes(player->playerIndex, 1);
+                        }
+                    } else {
+                        showPlacementAnnouncement(player->playerIndex, 2);
+                    }
+                    spawnTotalLapDisplayTask(player);
+                    player->animFlags |= 0x80000;
+                    player->unkBC6 = gs->PAD_6B[0];
+                    gs->PAD_6B[0]--;
+                    break;
+                case 9:
+                    if (player->isBossRacer != 0) {
+                        player->animFlags |= 0x80000;
+                        player->unkBC6 = gs->PAD_6B[0];
+                        gs->PAD_6B[0]--;
+                        break;
+                    }
+                    if (player->finishPosition == 0) {
+                        showPlacementAnnouncement(player->playerIndex, 1);
+                        if (gs->unk5D == 1) {
+                            spawnVictorySnowflakes(player->playerIndex, 0);
+                        } else {
+                            spawnVictorySnowflakes(player->playerIndex, 1);
+                        }
+                    } else {
+                        showPlacementAnnouncement(player->playerIndex, 2);
+                    }
+                    player->animFlags |= 0x80000;
+                    player->unkBC6 = gs->PAD_6B[0];
+                    gs->PAD_6B[0]--;
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                    if (!(player->animFlags & 0x80000)) {
+                        player->animFlags |= 0x80000;
+                        player->unkBC6 = gs->PAD_6B[0];
+                        gs->PAD_6B[0]--;
+                        showPlacementAnnouncement(player->playerIndex, 0);
+                    }
+                    break;
+            }
+        }
+
+        for (i = 0; i < gs->playerCount; i++) {
+            player = &gs->players[i];
+            if (player->rumbleEffectType != player->rumbleCounter) {
+                player->rumbleCounter = player->rumbleEffectType;
+                player->rumbleFrame = 0;
+            }
+            if (player->rumbleEffectType != -1) {
+                if ((gRumblePatterns[player->rumbleEffectType] >> player->rumbleFrame) & 1) {
+                    requestControllerRumble(player->playerIndex);
+                }
+                player->rumbleFrame++;
+                if ((u8)player->rumbleFrame >= player->rumbleDuration) {
+                    player->rumbleEffectType = -1;
+                    player->rumbleCounter = -1;
+                }
+            }
+        }
+    } else {
+        for (i = 0; i < gs->playerCount; i++) {
+            player = &gs->players[i];
+            player->rumbleEffectType = -1;
+            player->rumbleCounter = -1;
+            player->rumbleDuration = 0;
+            player->rumbleFrame = 0;
+        }
+        resumeMotorStates();
+    }
+}
 
 void handlePlayerPositionAndTrackCollision(Player *player) {
     Vec3i savedPos;

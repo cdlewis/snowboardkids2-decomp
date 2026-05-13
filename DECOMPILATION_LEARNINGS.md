@@ -258,6 +258,22 @@ case 2:
     }
 ```
 
+## Fixed Register Locals with Host Clang Checks
+
+When a match needs a local variable assigned to a specific MIPS temporary register, KMC GCC accepts named registers such as `__asm__("t3")`. Host-side clang syntax checks may reject MIPS register names, so hide the register binding behind a clang-only empty macro:
+
+```c
+#ifdef __clang__
+#define MIPS_REG_T3
+#else
+#define MIPS_REG_T3 __asm__("t3")
+#endif
+
+register s32 j MIPS_REG_T3;
+```
+
+For `updateAndRenderRaceCharacters`, this kept the inner ranking-loop index in `$t3`. A small overlay struct with the ranking entry at offset `0x64` then allowed field-style accesses while preserving the target `t2/t1/t0/a3` allocation.
+
 ## Forcing Hardware `mult` Over Synthetic Multiply (synth_mult)
 
 GCC 2.7.2 decomposes multiply-by-constant into shift/add sequences (synth_mult) when the constant is known at compile time. If the target uses a hardware `mult` instruction, you need to hide the constant from the synth_mult pass.

@@ -16,6 +16,7 @@ void initControllerSubsystem(void);
 void startControllerRead(void);
 
 void processControllerInputs(void);
+void requestControllerRumble(s32 controllerChannel);
 
 void controllerPackReadAsyncStub(void);
 int controllerPackReadPollStub(void);
