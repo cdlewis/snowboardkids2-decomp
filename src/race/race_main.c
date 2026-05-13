@@ -29,6 +29,11 @@ typedef void (*StunnedBehaviorPhaseHandler)(void *);
 typedef void (*PostTrickLandingStepHandler)(void *);
 typedef void (*KnockbackBehaviorPhaseHandler)(void *);
 typedef void (*KnockbackBehaviorStepHandler)(void *);
+
+typedef struct {
+    s16 timer;
+    u16 scale;
+} KnockbackHomingBounceEntry;
 typedef void (*SharpTurnBehaviorStepHandler)(void *);
 typedef void (*DefaultBehaviorPhaseHandler)(void *);
 
@@ -293,12 +298,16 @@ s32 recoverySlideBaseVelocity[3] = { 0x00000000, 0x00000000, 0x00020000 };
 
 s32 respawnTrackOffset[3] = { 0x00000000, 0x00000000, 0xFFE00000 };
 
-s16 knockbackHomingBounceTimers = 0x0028;
-
-u16 knockbackHomingBounceScales = 0x0200;
-u16 D_800BABEE_pad[] = {
-    0x0000, 0x0400, 0x0000, 0x0800, 0x0000, 0x1000, 0x0000, 0x1400,
-    0x0000, 0x0800, 0x0000, 0x1000, 0x0000, 0x1800, 0xFFFF, 0x2000,
+KnockbackHomingBounceEntry knockbackHomingBounceTable[] = {
+    { 0x0028, 0x0200 },
+    { 0x0000, 0x0400 },
+    { 0x0000, 0x0800 },
+    { 0x0000, 0x1000 },
+    { 0x0000, 0x1400 },
+    { 0x0000, 0x0800 },
+    { 0x0000, 0x1000 },
+    { 0x0000, 0x1800 },
+    { 0xFFFF, 0x2000 },
 };
 
 KnockbackBehaviorPhaseHandler knockbackBehaviorPhaseHandlers[] = {
@@ -4004,8 +4013,8 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
     }
 
     if (arg0->unkB8C == 0) {
-        arg0->unkB8C = *(&knockbackHomingBounceTimers + (arg0->behaviorCounter * 2));
-        arg0->squashStretchScale = *(&knockbackHomingBounceScales + (arg0->behaviorCounter * 2));
+        arg0->unkB8C = knockbackHomingBounceTable[arg0->behaviorCounter].timer;
+        arg0->squashStretchScale = knockbackHomingBounceTable[arg0->behaviorCounter].scale;
         arg0->behaviorCounter += 1;
     } else {
         s32 temp_v1;
