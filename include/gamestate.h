@@ -91,6 +91,12 @@ typedef struct {
 } BoneResult;
 
 typedef struct {
+    s8 stickX;
+    s8 stickY;
+    u16 buttons;
+} InputRecord;
+
+typedef struct {
     void *unk0;
     void *unk4;
     void *unk8;
@@ -101,10 +107,10 @@ typedef struct {
     void *unk1C;
     void *unk20;
     void *unk24;
-    void *aiPathData;
-    void *unk2C;
-    Vtx *shadowVertices; /* 0x30 */
-    Mtx *shadowMatrix;   /* 0x34 */
+    /* 0x28 */ void *aiPathData;
+    InputRecord *unk2C;
+    /* 0x30 */ Vtx *shadowVertices;
+    /* 0x34 */ Mtx *shadowMatrix;
     /* 0x38 */ BoneResult boneResults[16];
     /* 0x3F8 */ DisplayListObject playerModel;
     Vec3i worldPos;

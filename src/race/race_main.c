@@ -55,12 +55,6 @@ typedef struct {
 } BodyPartExtra;
 
 typedef struct {
-    s8 stickX;
-    s8 stickY;
-    u16 buttons;
-} InputRecord;
-
-typedef struct {
     u8 _pad0[0x5C];
     u8 unk5C;
 } GameStatePartial5C;
@@ -739,9 +733,9 @@ void updateRacePlayer(Player *player) {
             case 1:
                 if (gameState->raceIntroState == 0) {
                     if (player->inputRecordIndex < D_800BAAAC_AA95C[player->inputRecordSet]) {
-                        player->inputStickX = ((InputRecord *)player->unk2C)[player->inputRecordIndex].stickX;
-                        player->inputStickY = ((InputRecord *)player->unk2C)[player->inputRecordIndex].stickY;
-                        player->inputButtons = ((InputRecord *)player->unk2C)[player->inputRecordIndex].buttons;
+                        player->inputStickX = player->unk2C[player->inputRecordIndex].stickX;
+                        player->inputStickY = player->unk2C[player->inputRecordIndex].stickY;
+                        player->inputButtons = player->unk2C[player->inputRecordIndex].buttons;
                         player->inputRecordIndex++;
                     } else {
                         player->inputStickX = 0;
@@ -754,11 +748,11 @@ void updateRacePlayer(Player *player) {
             case 2:
                 if (gameState->raceIntroState == 0) {
                     if (player->inputRecordIndex < D_800BAAAC_AA95C[player->inputRecordSet]) {
-                        player->inputStickX = ((InputRecord *)player->unk2C)[player->inputRecordIndex].stickX =
+                        player->inputStickX = player->unk2C[player->inputRecordIndex].stickX =
                             gAnalogStickX[player->playerIndex] / 4;
-                        player->inputStickY = ((InputRecord *)player->unk2C)[player->inputRecordIndex].stickY =
+                        player->inputStickY = player->unk2C[player->inputRecordIndex].stickY =
                             gAnalogStickY[player->playerIndex] / 4;
-                        player->inputButtons = ((InputRecord *)player->unk2C)[player->inputRecordIndex].buttons =
+                        player->inputButtons = player->unk2C[player->inputRecordIndex].buttons =
                             gButtonsPressed[player->playerIndex];
                         player->inputRecordIndex++;
                     } else {
