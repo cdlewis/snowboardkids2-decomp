@@ -6,6 +6,7 @@
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 #include "math/rand.h"
+#include "race/race_session.h"
 #include "system/task_scheduler.h"
 
 u8 gCharacterBodyPartAnimTable[] = {
@@ -200,7 +201,7 @@ void loadCharacterBodyParts(Player *player) {
     BoneResult *bodyPart2;
     u8 *lookupTable;
 
-    if (((GameState *)getCurrentAllocation())->raceType == 0xB) {
+    if (((GameState *)getCurrentAllocation())->raceType == RACE_TYPE_INTRO) {
         flags = player->animFlags;
         if (flags & 4) {
             player->animFlags = flags | 8;

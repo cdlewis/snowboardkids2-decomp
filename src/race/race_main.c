@@ -1107,7 +1107,7 @@ s32 initPlayerForRace(Player *player) {
     player->collisionListNode.id = player->playerIndex;
 
     if (player->isBossRacer == 0) {
-        if (gameState->raceType != 0xB || player->playerIndex == 0) {
+        if (gameState->raceType != RACE_TYPE_INTRO || player->playerIndex == 0) {
             spawnChaseCameraTask(player->playerIndex);
             spawnPlayerIndicatorTask(player);
         }
@@ -1126,12 +1126,12 @@ s32 initPlayerForRace(Player *player) {
     player->rumbleDuration = 0;
     player->rumbleFrame = 0;
 
-    if (gameState->raceType == 5) {
+    if (gameState->raceType == RACE_TYPE_SHOOT_CROSS) {
         player->primaryItemId = 7;
         player->primaryItemAmmo = 0x1E;
     }
 
-    if (gameState->raceType != 0xB) {
+    if (gameState->raceType != RACE_TYPE_INTRO) {
         return 1;
     }
 
@@ -1205,7 +1205,7 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
         return 1;
     }
 
-    if (gameState->raceType < 10) {
+    if (gameState->raceType < RACE_TYPE_DEMO) {
         if (arg0->behaviorStep == 0) {
             if (arg0->inputButtonsPressed & 0x4000) {
                 arg0->unkB8C = 0;
@@ -1893,7 +1893,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
         }
     }
 
-    if (state->raceType == 6) {
+    if (state->raceType == RACE_TYPE_X_CROSS) {
         if (player->trickPoints != 0) {
             showTrickPointsDisplay(player->trickPoints);
             addPlayerSkillPoints(player, player->trickPoints);
@@ -2554,31 +2554,31 @@ s32 updateRaceFinishWaitingStep(Player *player) {
     advancePlayerLeanAnimationAuto(player, 0);
     if (gameState->showResultHUD != 0) {
         switch (gameState->raceType) {
-            case 0:
-            case 1:
-            case 8:
-            case 9:
+            case RACE_TYPE_STANDARD:
+            case RACE_TYPE_BOSS_JUNGLE:
+            case RACE_TYPE_BATTLE:
+            case RACE_TYPE_TRAINING:
                 if (player->finishPosition == 0) {
                     playerWon = 1;
                 }
                 break;
-            case 2:
-            case 3:
+            case RACE_TYPE_BOSS_JINGLE:
+            case RACE_TYPE_BOSS_ICE:
                 if (gameState->unk10->unk176C & 0x100000) {
                     playerWon = 1;
                 }
                 break;
-            case 4:
+            case RACE_TYPE_SPEED_CROSS:
                 if (gameState->playerLost == 0) {
                     playerWon = 1;
                 }
                 break;
-            case 5:
+            case RACE_TYPE_SHOOT_CROSS:
                 if ((gameState->playerLost == 0) && (gameState->unk5A == 0x14)) {
                     playerWon = 1;
                 }
                 break;
-            case 6:
+            case RACE_TYPE_X_CROSS:
                 if ((gameState->playerLost == 0) && (player->skillPoints >= 0x12C)) {
                     playerWon = 1;
                 }
@@ -4929,8 +4929,8 @@ void updateAndRenderRaceCharacters(void) {
         }
 
         switch (gs->raceType) {
-            case 2:
-            case 3:
+            case RACE_TYPE_BOSS_JINGLE:
+            case RACE_TYPE_BOSS_ICE:
                 flags = gs->players[1].animFlags;
                 if (!(flags & 0x80000)) {
                     if (flags & 0x100000) {
@@ -4941,7 +4941,7 @@ void updateAndRenderRaceCharacters(void) {
                     }
                 }
                 break;
-            case 4:
+            case RACE_TYPE_SPEED_CROSS:
                 if (gs->playerLost != 0) {
                     flags = gs->players[0].animFlags;
                     if (!(flags & 0x80000)) {
@@ -4950,8 +4950,8 @@ void updateAndRenderRaceCharacters(void) {
                     }
                 }
                 break;
-            case 5:
-            case 6:
+            case RACE_TYPE_SHOOT_CROSS:
+            case RACE_TYPE_X_CROSS:
                 if (gs->playerLost != 0) {
                     flags = gs->players[0].animFlags;
                     if (!(flags & 0x80000)) {
@@ -4973,7 +4973,7 @@ void updateAndRenderRaceCharacters(void) {
             switch (gs->raceType) {
                 default:
                     break;
-                case 0:
+                case RACE_TYPE_STANDARD:
                     if (player->isBossRacer == 0) {
                         showPlacementAnnouncement(player->playerIndex, 0);
                     }
@@ -4981,7 +4981,7 @@ void updateAndRenderRaceCharacters(void) {
                     player->unkBC6 = gs->PAD_6B[0];
                     gs->PAD_6B[0]--;
                     break;
-                case 1:
+                case RACE_TYPE_BOSS_JUNGLE:
                     if (player->finishPosition == 0) {
                         if (player->isBossRacer == 0) {
                             showPlacementAnnouncement(0, 1);
@@ -4995,15 +4995,15 @@ void updateAndRenderRaceCharacters(void) {
                     player->unkBC6 = gs->PAD_6B[0];
                     gs->PAD_6B[0]--;
                     break;
-                case 2:
-                case 3:
+                case RACE_TYPE_BOSS_JINGLE:
+                case RACE_TYPE_BOSS_ICE:
                     if (!(player->animFlags & 0x80000) && player->isBossRacer != 0) {
                         showPlacementAnnouncement(0, 2);
                         gs->players[0].animFlags |= 0x80000;
                         player->animFlags |= 0x80000;
                     }
                     break;
-                case 8:
+                case RACE_TYPE_BATTLE:
                     if (player->isBossRacer != 0) {
                         player->animFlags |= 0x80000;
                         player->unkBC6 = gs->PAD_6B[0];
@@ -5029,7 +5029,7 @@ void updateAndRenderRaceCharacters(void) {
                     player->unkBC6 = gs->PAD_6B[0];
                     gs->PAD_6B[0]--;
                     break;
-                case 9:
+                case RACE_TYPE_TRAINING:
                     if (player->isBossRacer != 0) {
                         player->animFlags |= 0x80000;
                         player->unkBC6 = gs->PAD_6B[0];
@@ -5110,17 +5110,17 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
 
     switch (gs->raceType) {
         default:
-        case 0:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
+        case RACE_TYPE_STANDARD:
+        case RACE_TYPE_SPEED_CROSS:
+        case RACE_TYPE_SHOOT_CROSS:
+        case RACE_TYPE_X_CROSS:
+        case RACE_TYPE_UNUSED_7:
+        case RACE_TYPE_BATTLE:
             handlePlayerToPlayerCollision(player);
             break;
-        case 1:
-        case 2:
-        case 3:
+        case RACE_TYPE_BOSS_JUNGLE:
+        case RACE_TYPE_BOSS_JINGLE:
+        case RACE_TYPE_BOSS_ICE:
             handleCollisionWithTargetPlayer(player);
             break;
     }

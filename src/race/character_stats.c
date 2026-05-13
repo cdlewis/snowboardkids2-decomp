@@ -1,6 +1,7 @@
 #include "race/character_stats.h"
 #include "common.h"
 #include "gamestate.h"
+#include "race/race_session.h"
 #include "system/task_scheduler.h"
 
 // Stats for character+snowboard combinations
@@ -252,7 +253,7 @@ void applyCharacterBoardStats(Player *player) {
     u8 val;
 
     gameState = (GameState *)getCurrentAllocation();
-    if (gameState->raceType == 0xB) {
+    if (gameState->raceType == RACE_TYPE_INTRO) {
         boardStats = &D_80093F7C_94B7C.entry;
         charId = 0;
     } else {
@@ -280,7 +281,7 @@ s32 getCharacterBoardStatParam0(s32 characterId, s32 snowboardId) {
 
     allocation = (GameState *)getCurrentAllocation();
 
-    if (allocation->raceType == 0xB) {
+    if (allocation->raceType == RACE_TYPE_INTRO) {
         // Special mode: use default stats
         boardStats = &D_80093F7C_94B7C.entry;
         characterId = 0;

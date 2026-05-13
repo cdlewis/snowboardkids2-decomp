@@ -512,7 +512,7 @@ void initRaceProgressIndicatorTask(RaceProgressIndicatorInitEntry *arg0) {
     *(void **)&arg0->baseAssetBytes = load_3ECE40();
     arg0->initFlags = 1;
 
-    if (allocation->raceType < 3) {
+    if (allocation->raceType < RACE_TYPE_BOSS_ICE) {
         arg0->x = 0x78;
     } else {
         arg0->x = -4;
@@ -892,13 +892,13 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
     arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
 
     switch (gameState->raceType) {
-        case 5:
+        case RACE_TYPE_SHOOT_CROSS:
             shotCrossScore = gameState->unk5A;
             arg0->x = 0x10;
             arg0->y = -0x48;
             arg0->goldAmount = shotCrossScore * 0x12C;
             break;
-        case 6:
+        case RACE_TYPE_X_CROSS:
             meterValue = gameState->players->skillPoints;
             arg0->x = 0x10;
             arg0->y = -0x48;
@@ -951,8 +951,8 @@ void updateGoldAwardDisplay(GoldAwardDisplayState *arg0) {
         if (alphaVal >= 0x100) {
             arg0->alpha = 0xFF;
             gameMode = gameState->raceType;
-            if (gameMode < 7) {
-                if (gameMode < 5) {
+            if (gameMode < RACE_TYPE_UNUSED_7) {
+                if (gameMode < RACE_TYPE_SHOOT_CROSS) {
                     scheduleTask(initTotalGoldDisplayTask, 1, 0, 0xE6);
                 } else {
                     scheduleTask(initBonusGoldDisplayTask, 1, 0, 0xE6);
@@ -1005,19 +1005,19 @@ void initTotalGoldDisplayTask(TotalGoldDisplayState *arg0) {
     arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
 
     switch (allocation->raceType) {
-        case 5:
+        case RACE_TYPE_SHOOT_CROSS:
             arg0->x = 0x10;
             arg0->y = 8;
             break;
-        case 6:
+        case RACE_TYPE_X_CROSS:
             arg0->x = 0x10;
             arg0->y = 8;
             break;
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
+        case RACE_TYPE_STANDARD:
+        case RACE_TYPE_BOSS_JUNGLE:
+        case RACE_TYPE_BOSS_JINGLE:
+        case RACE_TYPE_BOSS_ICE:
+        case RACE_TYPE_SPEED_CROSS:
         default:
             arg0->x = 0x10;
             arg0->y = -0x10;
@@ -1554,7 +1554,7 @@ void spawnShotCrossItemCountDisplayTask(s16 arg0) {
 void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
-    if (allocation->raceType == 6) {
+    if (allocation->raceType == RACE_TYPE_X_CROSS) {
         arg0->timeRemaining = 0xA8C;
     } else {
         arg0->timeRemaining = 0x1194;
@@ -1660,7 +1660,7 @@ void initBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
     initHudElementState((HudElementState *)arg0);
     arg0->spriteFrame = 0x24;
     arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
-    if (allocation->raceType == 4) {
+    if (allocation->raceType == RACE_TYPE_SPEED_CROSS) {
         arg0->x = 0xC;
         arg0->y = -0x3C;
     } else {
@@ -1694,9 +1694,9 @@ void updateBonusGoldDisplay(BonusGoldDisplayState *arg0) {
     enqueueCallbackBySlotIndex(8, 6, renderTextSpriteWithTransparency, arg0);
 
     var = 0;
-    if (allocation->raceType == 4) {
+    if (allocation->raceType == RACE_TYPE_SPEED_CROSS) {
         var = 0x1388;
-    } else if (allocation->raceType == 6) {
+    } else if (allocation->raceType == RACE_TYPE_X_CROSS) {
         if (allocation->players->skillPoints >= 0x12C) {
             var = 0x1388;
         }
@@ -2135,10 +2135,10 @@ void initRaceHudTasks(void) {
     i = 0;
     do {
         switch (hudState->raceType) {
-            case 0:
-            case 8:
-            case 9:
-            case 10:
+            case RACE_TYPE_STANDARD:
+            case RACE_TYPE_BATTLE:
+            case RACE_TYPE_TRAINING:
+            case RACE_TYPE_DEMO:
                 SCHEDULE_AND_SET(initPlayerFinishPositionTask, 4, i);
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
@@ -2146,41 +2146,41 @@ void initRaceHudTasks(void) {
                 scheduleTask(initRaceProgressIndicatorTask, 0, 1, 0xE6);
                 break;
 
-            case 1:
+            case RACE_TYPE_BOSS_JUNGLE:
                 SCHEDULE_AND_SET(initPlayerFinishPositionTask, 4, i);
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
                 scheduleTask(initRaceProgressIndicatorTask, 0, 1, 0xE6);
                 break;
 
-            case 2:
+            case RACE_TYPE_BOSS_JINGLE:
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
                 SCHEDULE_AND_SET_SHORT(initShotScoreDisplayTask, 60, 0xA);
                 scheduleTask(initRaceProgressIndicatorTask, 0, 1, 0xE6);
                 break;
 
-            case 3:
+            case RACE_TYPE_BOSS_ICE:
                 SCHEDULE_AND_SET(initPlayerItemDisplayTask, 14, i);
                 SCHEDULE_AND_SET(initPlayerLapCounterTask, 18, i);
                 SCHEDULE_AND_SET_SHORT(initShotScoreDisplayTask, 60, 0xB);
                 scheduleTask(initRaceProgressIndicatorTask, 0, 1, 0xE6);
                 break;
 
-            case 4:
+            case RACE_TYPE_SPEED_CROSS:
                 scheduleTask(initRaceTimerDisplay, 0, 1, 0xF0);
                 SCHEDULE_AND_SET(initSecondaryItemDisplayTask, 4, i);
                 scheduleTask(initCrossRaceBadgeTask, 0, 1, 0xF0);
                 break;
 
-            case 5:
+            case RACE_TYPE_SHOOT_CROSS:
                 spawnShotCrossScoreDisplayTask(hudState->players);
                 spawnShotCrossItemCountDisplayTask(0);
                 scheduleTask(initShotCrossCountdownTimerTask, 0, 1, 0xF0);
                 scheduleTask(initCrossRaceBadgeTask, 0, 1, 0xF0);
                 break;
 
-            case 6:
+            case RACE_TYPE_X_CROSS:
                 spawnShotCrossSkillMeterDisplayTask(0);
                 scheduleTask(initCrossRaceBadgeTask, 0, 1, 0xF0);
                 scheduleTask(initShotCrossCountdownTimerTask, 0, 1, 0xF0);

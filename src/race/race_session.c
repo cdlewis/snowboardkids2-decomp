@@ -850,7 +850,7 @@ void initRaceViewports(void) {
         setViewportId(&gs->unk8[i], (u16)(i + 0x64));
         setViewportId(&gs->unkC[i], (u16)(i + 0x64));
 
-        if (gs->raceType == 0xB) {
+        if (gs->raceType == RACE_TYPE_INTRO) {
             setViewportLightColors(i + 0x64, 1, &D_80090774_91374, (ColorData *)&D_8009077C_9137C);
         } else {
             setViewportLightColors(i + 0x64, 1, &levelConfig->lightColors, &levelConfig->fogColors);
@@ -1028,11 +1028,11 @@ void scheduleRaceTasks(void) {
     scheduleCourseTasks(gameState->memoryPoolId, gameState->playerCount);
     initRaceHudTasks();
 
-    if (gameState->raceType == 9) {
+    if (gameState->raceType == RACE_TYPE_TRAINING) {
         scheduleTask(&initStarlightHighwayBuildingTask, 0, 0, 0xC8);
     }
 
-    if (gameState->raceType >= 0xA) {
+    if (gameState->raceType >= RACE_TYPE_DEMO) {
         spawnPushStartPrompt(0, 0x28, 0, 0, 0xC, 6);
     }
 
@@ -1045,11 +1045,11 @@ void awaitRaceAssetsLoaded(void) {
     state = getCurrentAllocation();
 
     if (getPendingDmaCount() == 0) {
-        if (state->raceType < 9) {
+        if (state->raceType < RACE_TYPE_TRAINING) {
             gControllerPollingEnabled = 0;
         }
 
-        if ((state->playerCount == 1) && (state->raceType < 10)) {
+        if ((state->playerCount == 1) && (state->raceType < RACE_TYPE_DEMO)) {
             spawnOrbitCameraTask();
             state->raceIntroState = 2;
             playMusicTrack(7);
@@ -1059,7 +1059,7 @@ void awaitRaceAssetsLoaded(void) {
 
         state->stateDelayTimer = 0x10;
 
-        if (state->raceType != 0xB) {
+        if (state->raceType != RACE_TYPE_INTRO) {
             setViewportFadeValue(0, 0, 0x10);
         } else {
             state->stateDelayTimer = 0;
@@ -1081,14 +1081,14 @@ void waitForFadeAndInitPlayers(void) {
         if (state->raceIntroState == 1) {
             state->raceIntroState = 0;
 
-            if (state->raceType < 0xA) {
+            if (state->raceType < RACE_TYPE_DEMO) {
                 for (i = 0; i < state->playerCount; i++) {
                     schedulePlayerHaloTask(&state->players[i]);
                     state->raceIntroState++;
                 }
             }
 
-            if (state->raceType == 0xB) {
+            if (state->raceType == RACE_TYPE_INTRO) {
                 state->raceIntroState = 1;
             }
 
@@ -1102,10 +1102,10 @@ void waitForFadeAndInitPlayers(void) {
 void awaitPlayersAndPlayRaceMusic(void) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    if ((state->raceIntroState == 0) || (state->raceType == 0xB)) {
+    if ((state->raceIntroState == 0) || (state->raceType == RACE_TYPE_INTRO)) {
         LevelConfig *levelConfig = getLevelConfig(state->memoryPoolId);
 
-        if (state->raceType == 0xB) {
+        if (state->raceType == RACE_TYPE_INTRO) {
             playMusicTrack(0x20);
         } else {
             playMusicTrack(levelConfig->musicTrack);
@@ -1199,9 +1199,9 @@ void handleRaceStateUpdate(void) {
 
     gs = (GameState *)getCurrentAllocation();
 
-    if (gs->raceType == 0xA)
+    if (gs->raceType == RACE_TYPE_DEMO)
         goto handleA;
-    if (gs->raceType == 0xB)
+    if (gs->raceType == RACE_TYPE_INTRO)
         goto handleB;
 
     inputMask = 0;
@@ -1287,7 +1287,7 @@ void handleRaceStateUpdate(void) {
     } else {
         gs->raceFrameCounter++;
         switch (gs->raceType) {
-            case 0:
+            case RACE_TYPE_STANDARD:
                 count = 0;
                 for (i = 0; i < gs->playerCount; i++) {
                     playerFlags = gs->players[i].animFlags & 0x80000;
@@ -1300,7 +1300,7 @@ void handleRaceStateUpdate(void) {
                     return;
                 }
                 break;
-            case 1:
+            case RACE_TYPE_BOSS_JUNGLE:
                 if (gs->players->animFlags & 0x80000) {
                     setMusicFadeOut(0x3C);
                     gs->stateDelayTimer = 0x1E;
@@ -1309,8 +1309,8 @@ void handleRaceStateUpdate(void) {
                     return;
                 }
                 break;
-            case 2:
-            case 3:
+            case RACE_TYPE_BOSS_JINGLE:
+            case RACE_TYPE_BOSS_ICE:
                 if (gs->players->animFlags & 0x80000) {
                     setMusicFadeOut(0x3C);
                     gs->stateDelayTimer = 0x1E;
@@ -1319,7 +1319,7 @@ void handleRaceStateUpdate(void) {
                     return;
                 }
                 break;
-            case 8:
+            case RACE_TYPE_BATTLE:
                 count = 0;
                 for (i = 0; i < gs->playerCount; i++) {
                     playerFlags = gs->players[i].animFlags & 0x80000;
@@ -1333,7 +1333,7 @@ void handleRaceStateUpdate(void) {
                     return;
                 }
                 break;
-            case 9:
+            case RACE_TYPE_TRAINING:
                 count = 0;
                 for (i = 0; i < gs->playerCount; i++) {
                     playerFlags = gs->players[i].animFlags & 0x80000;
@@ -1347,7 +1347,7 @@ void handleRaceStateUpdate(void) {
                     return;
                 }
                 break;
-            case 4:
+            case RACE_TYPE_SPEED_CROSS:
                 if (gs->players->animFlags & 0x80000) {
                     if (gs->playerLost != 0) {
                         gs->showResultHUD = 1;
@@ -1359,7 +1359,7 @@ void handleRaceStateUpdate(void) {
                     return;
                 }
                 break;
-            case 5:
+            case RACE_TYPE_SHOOT_CROSS:
                 if (gs->players->animFlags & 0x80000) {
                     if (gs->playerLost != 0) {
                         gs->showResultHUD = 1;
@@ -1371,7 +1371,7 @@ void handleRaceStateUpdate(void) {
                     return;
                 }
                 break;
-            case 6:
+            case RACE_TYPE_X_CROSS:
                 if (gs->players->animFlags & 0x80000) {
                     if (gs->playerLost != 0) {
                         gs->showResultHUD = 1;

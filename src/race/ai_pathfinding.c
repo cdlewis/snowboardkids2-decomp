@@ -4,6 +4,7 @@
 #include "gamestate.h"
 #include "math/geometry.h"
 #include "math/rand.h"
+#include "race/race_session.h"
 #include "system/task_scheduler.h"
 
 // Macro definitions
@@ -439,7 +440,7 @@ s8 determineAIPathChoice(Player *player) {
     }
 
     // Normal race mode (not race type 9)
-    if (gs->raceType != 9) {
+    if (gs->raceType != RACE_TYPE_TRAINING) {
         if (player->aiShortcutChosen == 0 && (player->pathFlags & PATH_FLAG_SHORTCUT_AVAILABLE)) {
             // Check random shortcut chance based on memory pool
             if ((randA() & 0xFF) < gShortcutChanceByMemoryPool[gs->memoryPoolId]) {
