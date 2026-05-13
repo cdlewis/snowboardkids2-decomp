@@ -173,11 +173,18 @@ void updateRacePlayer(Player *);
 void renderFlyingEnemy(Player *);
 
 Gfx gPlayerShadowRenderSetupDl[] = {
-    { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00200405 } },
-    { .words = { 0xD7000002, 0x80008000 } }, { .words = { 0xE7000000, 0x00000000 } },
-    { .words = { 0xE3001001, 0x00000000 } }, { .words = { 0xE3001201, 0x00003000 } },
-    { .words = { 0xE3000A01, 0x00000000 } }, { .words = { 0xFC121824, 0xFF33FFFF } },
-    { .words = { 0xE200001C, 0x00504DD8 } }, { .words = { 0xDF000000, 0x00000000 } },
+    gsSPClearGeometryMode(
+        G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_SHADING_SMOOTH
+    ),
+    gsSPSetGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
+    gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
+    gsDPPipeSync(),
+    gsDPSetTextureLUT(G_TT_NONE),
+    gsDPSetTextureFilter(G_TF_AVERAGE),
+    gsDPSetCycleType(G_CYC_1CYCLE),
+    gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
+    gsDPSetRenderMode(G_RM_AA_ZB_XLU_DECAL, G_RM_AA_ZB_XLU_DECAL2),
+    gsSPEndDisplayList(),
 };
 
 BehaviorModeHandler D_800BAA80_AA930[] = {
