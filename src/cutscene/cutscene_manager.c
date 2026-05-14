@@ -34,8 +34,8 @@ extern s8 gCutsceneEntryCutFlag;
 extern s16 gCutsceneEntryBufferSlotIndex;
 extern CutsceneFadeAssetNode gCutsceneFadeAssetTable[];
 extern char gDebugFrameFormatString[];
-extern char D_800BAE04_1E7EB4[];
-extern char D_800BAE24_1E7ED4[];
+extern char gTimelineRulerFormat[];
+extern char gTimelineSlotRowFormat[];
 extern CutsceneAssetTable gCutsceneAssetTable[];
 
 extern void initializeCutsceneCommand(void *, void *, s32, s32, s32);
@@ -948,7 +948,7 @@ void renderCutsceneSlotMenu(s32 arg0, s16 arg1) {
  * the slot's asset group, and each visible event is rendered at the column for
  * its frame delta from baseFrame.
  */
-void func_800B3FFC_1E10AC(s32 uiResourceId, s32 baseFrameArg) {
+void renderCutsceneTimelineView(s32 uiResourceId, s32 baseFrameArg) {
     char buffer[0x3C];
     s32 windowEndFrame;
     s32 rowEndFrame;
@@ -976,7 +976,7 @@ void func_800B3FFC_1E10AC(s32 uiResourceId, s32 baseFrameArg) {
     s32 invalidIndex;
 
     baseFrame = baseFrameArg & 0xFFFF;
-    sprintf(buffer, D_800BAE04_1E7EB4, baseFrame, baseFrame + 1, baseFrame + 2, baseFrame + 3, baseFrame + 4);
+    sprintf(buffer, gTimelineRulerFormat, baseFrame, baseFrame + 1, baseFrame + 2, baseFrame + 3, baseFrame + 4);
     func_800BB404(uiResourceId, 0, 2, buffer, 2);
 
     slotIndex = 0;
@@ -990,7 +990,7 @@ void func_800B3FFC_1E10AC(s32 uiResourceId, s32 baseFrameArg) {
         do {
             sprintf(
                 buffer,
-                D_800BAE24_1E7ED4,
+                gTimelineSlotRowFormat,
                 slotIndex,
                 getAssetGroupOrDefault(getCurrentStateEntryItem(slotIndex)->characterId)
             );

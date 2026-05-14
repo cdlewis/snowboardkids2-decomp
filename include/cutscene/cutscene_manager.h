@@ -401,6 +401,7 @@ u16 findStateEntryIndex(u8 slotIndex, u16 frameNumber, s32 findInsertionPoint);
 s32 findEventAtFrame(u8 a0, u16 a1);
 s32 insertCutsceneEvent(u8 slotIndex, u16 frameNumber);
 void reorderCutsceneEvent(u16 eventIndex, u16 oldPreviousIndex, u16 newPreviousIndex);
+void renderCutsceneTimelineView(s32 uiResourceId, s32 baseFrameArg);
 StateEntry *getStateEntry(u16 arg0);
 u16 getMaxCutsceneFrameNumber(void);
 u16 getSlotLastFrameNumber(u8 slotIndex);

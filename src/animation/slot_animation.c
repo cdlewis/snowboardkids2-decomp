@@ -54,8 +54,8 @@ struct {
     { 40,  20  },
 };
 char gDebugFrameFormatString[] = "%5d";
-char D_800BAE04_1E7EB4[32] = " TRK      %5d %5d %5d %5d %5d";
-char D_800BAE24_1E7ED4[44] = " %2d%s----- ----- ----- ----- ----- ";
+char gTimelineRulerFormat[32] = " TRK      %5d %5d %5d %5d %5d";
+char gTimelineSlotRowFormat[44] = " %2d%s----- ----- ----- ----- ----- ";
 
 s16 getSlotMoveDuration(cutsceneSys2Wait_exec_asset *arg0) {
     return arg0->tableRowIndex;
