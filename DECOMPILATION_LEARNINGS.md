@@ -444,3 +444,31 @@ KMC GCC accepts ABI register names without `$` for local register variables. The
 negOne = -1;
 __asm__ volatile("" : "=r"(negOne) : "0"(negOne));
 ```
+
+## Call Argument Register Locals for Delay Slot Scheduling
+
+For func_800B3FFC_1E10AC, the natural command-label placement code reached 99.504% but scheduled `addiu s0,s0,6` into the `getCommandEntryMasked` delay slot. The target needs that add before the call and `addiu s0,s0,4` in the delay slot.
+
+Binding the short-lived command arguments to `a0`/`a1` and tying them through an empty asm together with the computed column value forced the desired schedule:
+
+```c
+#ifdef CC_CHECK
+s32 commandCategory;
+s32 commandType;
+#else
+register s32 commandCategory __asm__("a0");
+register s32 commandType __asm__("a1");
+#endif
+
+commandCategory = entry->commandCategory;
+commandType = entry->commandType;
+spriteIndex = (frameDelta * 6) + 6;
+__asm__ volatile(
+    "" : "=r"(spriteIndex), "=r"(commandCategory), "=r"(commandType)
+    : "0"(spriteIndex), "1"(commandCategory), "2"(commandType)
+);
+cmd = getCommandEntryMasked(commandCategory, commandType);
+spriteIndex += 4;
+```
+
+Declaring the local call prototype with `s32` arguments avoided extra `andi` instructions that appeared when `u8` temporaries were passed through the fixed registers. Keep these register locals narrow and use named ABI registers with a `CC_CHECK` fallback.

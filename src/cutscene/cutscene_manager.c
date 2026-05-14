@@ -34,11 +34,17 @@ extern s8 gCutsceneEntryCutFlag;
 extern s16 gCutsceneEntryBufferSlotIndex;
 extern CutsceneFadeAssetNode gCutsceneFadeAssetTable[];
 extern char gDebugFrameFormatString[];
+extern char D_800BAE04_1E7EB4[];
+extern char D_800BAE24_1E7ED4[];
 extern CutsceneAssetTable gCutsceneAssetTable[];
 
 extern void initializeCutsceneCommand(void *, void *, s32, s32, s32);
 extern void func_800BB2F4(s32, s32, s32);
 
+AssetGroup *getAssetGroupOrDefault(s32 assetIndex);
+void func_800BB404(s32, s32, s32, char *, s32);
+void initAnimatedGhost(s32, s16, s16, void *);
+void *getCommandEntryMasked(s32 categoryIndex, s32 commandIndex);
 void cleanupCutsceneFadeTask(FadeTaskData *task);
 void updateCutsceneFadeTask(FadeTaskData *task);
 
@@ -934,7 +940,109 @@ void renderCutsceneSlotMenu(s32 arg0, s16 arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/cutscene/cutscene_manager", func_800B3FFC_1E10AC);
+/**
+ * Renders the cutscene editor's track/event overview.
+ *
+ * The first row is a five-frame ruler starting at baseFrame. Each following
+ * row represents one cutscene slot: the row label contains the slot index and
+ * the slot's asset group, and each visible event is rendered at the column for
+ * its frame delta from baseFrame.
+ */
+void func_800B3FFC_1E10AC(s32 uiResourceId, s32 baseFrameArg) {
+    char buffer[0x3C];
+    s32 windowEndFrame;
+    s32 rowEndFrame;
+    s32 frameDelta;
+    s32 eventColumn;
+    StateEntry *entry;
+    StateEntry *next;
+    void *commandEntry;
+#ifdef CC_CHECK
+    s32 commandCategory;
+    s32 commandType;
+    s32 baseFrame;
+    s16 rowIndex;
+    s32 slotItemOffset;
+    s32 baseFrameCopy;
+#else
+    register s32 commandCategory __asm__("a0");
+    register s32 commandType __asm__("a1");
+    register s32 baseFrame __asm__("s0");
+    register s16 rowIndex __asm__("s3");
+    register s32 slotItemOffset __asm__("s5");
+    register s32 baseFrameCopy __asm__("s6");
+#endif
+    s32 slotIndex;
+    s32 invalidIndex;
+
+    baseFrame = baseFrameArg & 0xFFFF;
+    sprintf(buffer, D_800BAE04_1E7EB4, baseFrame, baseFrame + 1, baseFrame + 2, baseFrame + 3, baseFrame + 4);
+    func_800BB404(uiResourceId, 0, 2, buffer, 2);
+
+    slotIndex = 0;
+    if (gCutsceneStateTable->slotCount != 0) {
+        baseFrameCopy = baseFrame;
+        windowEndFrame = baseFrameCopy + 6;
+        invalidIndex = 0xFFFF;
+        rowIndex = 3;
+        slotItemOffset = 0x20;
+
+        do {
+            sprintf(
+                buffer,
+                D_800BAE24_1E7ED4,
+                slotIndex,
+                getAssetGroupOrDefault(getCurrentStateEntryItem(slotIndex)->characterId)
+            );
+            initAnimatedGhost(uiResourceId, 0, rowIndex, buffer);
+
+            /* The slot item head points at the first event in this slot's sorted linked list. */
+            entry = getStateEntry(*(u16 *)((u8 *)gCutsceneStateTable + slotItemOffset));
+            if (windowEndFrame >= (s32)entry->frameNumber) {
+                rowEndFrame = baseFrameCopy + 6;
+                frameDelta = (s32)entry->frameNumber - baseFrameCopy;
+                while (1) {
+                    if (frameDelta >= 0) {
+                        commandCategory = entry->commandCategory;
+                        commandType = entry->commandType;
+                        eventColumn = (frameDelta * 6) + 6;
+                        /*
+                         * Keep the command arguments in a0/a1 and force eventColumn to be
+                         * materialized before the call. Without this empty tied asm, KMC
+                         * schedules part of the column calculation into the
+                         * getCommandEntryMasked delay slot instead of the final +4.
+                         */
+                        __asm__ volatile(""
+                                         : "=r"(eventColumn), "=r"(commandCategory), "=r"(commandType)
+                                         : "0"(eventColumn), "1"(commandCategory), "2"(commandType));
+                        commandEntry = getCommandEntryMasked(commandCategory, commandType);
+                        eventColumn += 4;
+                        initAnimatedGhost(uiResourceId, (s16)eventColumn, rowIndex, commandEntry);
+                    }
+                    if (entry->next_index == invalidIndex) {
+                        break;
+                    }
+                    next = getStateEntry(entry->next_index);
+                    /*
+                     * Reload after getStateEntry. The original checks the link again after
+                     * the call, so this redundant-looking test preserves that control flow.
+                     */
+                    if (entry->next_index == invalidIndex) {
+                        break;
+                    }
+                    entry = next;
+                    if (rowEndFrame < (s32)entry->frameNumber) {
+                        break;
+                    }
+                    frameDelta = (s32)entry->frameNumber - baseFrameCopy;
+                }
+            }
+            rowIndex += 1;
+            slotIndex += 1;
+            slotItemOffset += sizeof(StateEntryItem);
+        } while (slotIndex < (s32)gCutsceneStateTable->slotCount);
+    }
+}
 
 u16 getMaxCutsceneFrameNumber(void) {
     u16 maxFrameNumber;
