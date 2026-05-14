@@ -78,6 +78,21 @@ typedef struct {
     /* 0x13 */ u8 overridePaletteCount;
 } ScaledSpriteArg;
 
+typedef struct {
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ SpriteSheetData *spriteData;
+    /* 0x08 */ u16 frameIndex;
+    /* 0x0A */ u16 scaleX;
+    /* 0x0C */ u16 scaleY;
+    /* 0x0E */ s16 rotation;
+    /* 0x10 */ u8 unk10;
+    /* 0x11 */ u8 alpha;
+    /* 0x12 */ u8 tileMode;
+    /* 0x13 */ u8 overridePaletteCount;
+    /* 0x14 */ u8 flipX;
+} FlippedScaledSpriteArg;
+
 void func_80010C98_11898(void *arg0);
 void renderScaledShadedSpriteFrame(ScaledSpriteArg *arg0);
 void renderAlphaBlendedTextSprite(TextRenderArg *arg0);
@@ -85,7 +100,7 @@ void initDefaultFontPalette(void);
 void loadSpriteTexture(s32 textureAddr, u16 width, u16 height, u16 format, s32 paletteMode);
 void renderTintedSprite(TintedSpriteArg *arg0);
 void renderTextSpriteWithTransparency(TextRenderArg *arg0);
-void func_800136E0_142E0(void);
+void func_800136E0_142E0(FlippedScaledSpriteArg *arg0);
 void renderTextSprite(TextRenderArg *arg0);
 typedef struct {
     /* 0x00 */ s16 x;

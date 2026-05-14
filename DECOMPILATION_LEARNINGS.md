@@ -421,3 +421,26 @@ volume = (flags * distance) / denominator;
 ```
 
 Use the `CC_CHECK` guard when fixed MIPS register names are needed in production source; the host-side Clang syntax check does not accept numeric MIPS register names. Keep these locals as narrow as possible, because extending their lifetime can force saved-register spills and shift unrelated loops.
+
+## Fixed Register Locals and Host Syntax Checks
+
+For func_800136E0_142E0, short-lived fixed register locals were needed to keep a branch-delay-slot assignment and a nearby `-1` constant in the target registers:
+
+```c
+#ifdef CC_CHECK
+s32 base;
+s32 temp;
+s32 negOne;
+#else
+register s32 base __asm__("a0");
+register s32 temp __asm__("v0");
+register s32 negOne __asm__("a2");
+#endif
+```
+
+KMC GCC accepts ABI register names without `$` for local register variables. The host-side Clang syntax pass rejects these names, so keep the fixed-register declarations behind `#ifndef CC_CHECK` and provide plain locals for syntax checking. If the target needs a constant materialized at a specific source point, an empty tied asm can pin the assignment schedule without emitting instructions:
+
+```c
+negOne = -1;
+__asm__ volatile("" : "=r"(negOne) : "0"(negOne));
+```

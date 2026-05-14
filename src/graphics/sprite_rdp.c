@@ -1305,7 +1305,185 @@ void renderAlphaBlendedTextSprite(TextRenderArg *sprite) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/graphics/sprite_rdp", func_800136E0_142E0);
+void func_800136E0_142E0(FlippedScaledSpriteArg *arg0) {
+    s32 right;
+    s32 bottom;
+    s32 left;
+    s32 top;
+    s16 clipOffsetX;
+    s16 clipOffsetY;
+    SpriteFrameEntry *paletteBase;
+    u16 paletteMode;
+    u16 format;
+    u16 paletteIndex;
+    SpriteFrameEntry *frameEntry;
+    s16 scaleS;
+    s16 scaleT;
+    s16 heightScale;
+    s16 widthScale;
+    s32 cond;
+    s32 clipVal;
+    s32 tile;
+#ifdef CC_CHECK
+    s32 clipOffsetYBase;
+    s32 clipOffsetYTemp;
+    s32 negOne;
+#else
+    register s32 clipOffsetYBase __asm__("a0");
+    register s32 clipOffsetYTemp __asm__("v0");
+    register s32 negOne __asm__("a2");
+#endif
+
+    frameEntry = arg0->spriteData->frames;
+    paletteBase = &frameEntry[arg0->spriteData->numFrames];
+    frameEntry = &frameEntry[arg0->frameIndex];
+
+    paletteMode = gSpritePaletteModes[frameEntry->paletteTableIndex];
+    format = gSpriteTextureFormats[frameEntry->formatIndex];
+    scaleS = gTileTextureFlipTable[arg0->tileMode * 2];
+    scaleT = gTileTextureFlipTable[arg0->tileMode * 2 + 1];
+
+    if (arg0->overridePaletteCount == 0) {
+        paletteIndex = frameEntry->paletteIndex;
+    } else {
+        paletteIndex = arg0->overridePaletteCount - 1;
+    }
+
+    if (arg0->scaleX > 0x7FFF || arg0->scaleX == 0) {
+        return;
+    }
+
+    if (arg0->scaleY > 0x7FFF || arg0->scaleY == 0) {
+        return;
+    }
+
+    arg0->tileMode = arg0->tileMode & 3;
+    heightScale = (30 << 12) / arg0->scaleY;
+    widthScale = (frameEntry->width << 12) / arg0->scaleX;
+
+    left = (arg0->x * 4) - (widthScale / 2) + (gTextClipAndOffsetData.offsetX * 4);
+    top = (arg0->y * 4) - (heightScale / 2) + (gTextClipAndOffsetData.offsetY * 4);
+    right = left + widthScale;
+    bottom = top + heightScale;
+
+    clipOffsetX = 0;
+    if (scaleS == -1) {
+        clipOffsetX = frameEntry->width * 4 - 4;
+    }
+
+    clipVal = gTextClipAndOffsetData.clipLeft;
+    clipVal *= 4;
+    if (left < clipVal) {
+        clipVal = gTextClipAndOffsetData.clipLeft;
+        clipVal *= 4;
+        if (scaleS == -1) {
+            clipOffsetX -= clipVal - left;
+        } else {
+            clipOffsetX = clipVal - left;
+        }
+        left = gTextClipAndOffsetData.clipLeft * 4;
+    }
+
+    clipOffsetYTemp = -((s32)scaleT == -1);
+    clipOffsetYBase = clipOffsetYTemp & 0x74;
+    __asm("");
+    clipVal = gTextClipAndOffsetData.clipTop;
+    negOne = -1;
+    __asm__ volatile("" : "=r"(negOne) : "0"(negOne));
+    clipVal *= 4;
+    if (top < clipVal) {
+        clipVal = gTextClipAndOffsetData.clipTop;
+        clipVal *= 4;
+        if (scaleT == negOne) {
+            clipOffsetY = clipOffsetYBase - (clipVal - top);
+        } else {
+            clipOffsetY = clipVal - top;
+        }
+        top = gTextClipAndOffsetData.clipTop * 4;
+    } else {
+        clipOffsetY = clipOffsetYBase;
+    }
+
+    cond = (arg0->flipX == 1);
+    clipOffsetY += cond * 0x80;
+
+    if (gTextClipAndOffsetData.clipRight * 4 >= left && (gTextClipAndOffsetData.clipBottom * 4 >= top) &&
+        (left < right) && (top < bottom)) {
+
+        if (gGraphicsMode != 0x100) {
+            gGraphicsMode = 0x100;
+            gCachedPaletteAddr = 0;
+            gCachedTextureAddr = 0;
+            gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
+        }
+
+        gDPPipeSync(gDisplayListAllocPtr++);
+
+        if (arg0->scaleX >= 0x401 || arg0->scaleY >= 0x401) {
+            gSPObjRenderMode(gDisplayListAllocPtr++, G_OBJRM_SHRINKSIZE_1 | G_OBJRM_BILERP | G_OBJRM_ANTIALIAS);
+        } else {
+            gSPObjRenderMode(gDisplayListAllocPtr++, G_OBJRM_BILERP | G_OBJRM_ANTIALIAS);
+        }
+
+        gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
+        gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, arg0->alpha, arg0->alpha, arg0->alpha, 0xFF);
+
+        {
+            s32 textureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
+            if (textureAddr != gCachedTextureAddr) {
+                gCachedTextureAddr = textureAddr;
+                loadSpriteTexture(
+                    (s32)arg0->spriteData + frameEntry->textureOffset,
+                    frameEntry->width,
+                    frameEntry->height,
+                    format,
+                    paletteMode
+                );
+            }
+        }
+
+        {
+            s32 paletteAddr = (s32)&paletteBase[paletteIndex << 1];
+            if (paletteAddr != gCachedPaletteAddr) {
+                gCachedPaletteAddr = paletteAddr;
+                if (paletteIndex == 0xFE) {
+                    if (paletteAddr != (s32)gDefaultFontPalette) {
+                        gCachedPaletteAddr = (s32)gDefaultFontPalette;
+                        if (format == 0) {
+                            gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gDefaultFontPalette);
+                        } else {
+                            gDPLoadTLUT_pal256(gDisplayListAllocPtr++, gDefaultFontPalette);
+                        }
+                    }
+                } else {
+                    gCachedPaletteAddr = 0;
+                    if (format == 0) {
+                        gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, paletteAddr);
+                    } else {
+                        tile = 0;
+                        gDPLoadTLUT_pal256(gDisplayListAllocPtr++, paletteAddr);
+                    }
+                }
+            }
+        }
+
+        gSPTextureRectangle(
+            gDisplayListAllocPtr++,
+            left,
+            top,
+            right,
+            bottom,
+            tile,
+            clipOffsetX << 3,
+            clipOffsetY << 3,
+            scaleS * arg0->scaleX,
+            scaleT * arg0->scaleY
+        );
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+        gDPSetPrimColor(gDisplayListAllocPtr++, tile, tile, 0xFF, 0xFF, 0xFF, 0xFF);
+    }
+}
 
 void loadSpriteTexture(s32 textureAddr, u16 width, u16 height, u16 format, s32 paletteMode) {
     s32 fmt;
