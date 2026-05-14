@@ -105,7 +105,7 @@ s32 initPlayerForRace(Player *);
 void dispatchDefaultBehaviorPhase(BehaviorState *);
 void dispatchStunnedBehaviorPhase(BehaviorState *);
 void dispatchKnockbackBehaviorPhase(Player *);
-void func_800B1544_A13F4(void *);
+s32 func_800B1544_A13F4(Player *);
 s32 updatePlayerGroundedSliding(Player *);
 void dispatchSharpTurnBehaviorStep(BehaviorState *);
 s32 initPostTrickLandingStep(Player *);
@@ -192,6 +192,7 @@ void updateFlipSpinTrickAnimation(Player *);
 void updateTrickRotationTransform(Player *);
 void decayPlayerAirborneAngles(Player *);
 void applyBoostVelocity(Player *);
+s32 shouldInitiateSharpTurn(Player *player, s32 steeringValue);
 void decayPlayerSteeringAngles(Player *);
 void resetTrickScore(Player *);
 void initStunnedAirborneBehavior(Player *);
@@ -1279,7 +1280,279 @@ s32 updatePlayerSlidingConstrained(Player *player) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/race/race_main", func_800B1544_A13F4);
+s32 func_800B1544_A13F4(Player *player) {
+    Vec3i sp10;
+    volatile u8 padding[0xA0];
+    s32 steeringValue;
+    s32 speed;
+    s16 steerTarget;
+    s16 leanAngle;
+    s16 absLean;
+    s32 leanDir;
+    s32 turnRate;
+    s32 scaledTurnRate;
+    s32 denominator;
+    u32 curvature;
+    s32 hypot;
+    s32 compX;
+    s32 compY;
+    s32 sinMul;
+    GameState *gameState;
+    s32 temp;
+    u16 temp2;
+    s64 divResult;
+
+    gameState = getCurrentAllocation();
+
+    if (player->animFlags & 0x80000) {
+        setPlayerBehaviorPhase(player, 7);
+        return 1;
+    }
+
+    if (player->animFlags & 0x20000) {
+        setPlayerBehaviorPhase(player, 6);
+        return 1;
+    }
+
+    if (player->animFlags & 1) {
+        setPlayerBehaviorPhase(player, 1);
+        return 1;
+    }
+
+    speed = isqrt64(
+        (s64)player->velocity.x * player->velocity.x + (s64)player->velocity.y * player->velocity.y +
+        (s64)player->velocity.z * player->velocity.z
+    );
+
+    if (player->inputDisabled != 0) {
+        player->unkBDC = determineAIPathChoice(player);
+        if (player->unkBDC) {
+            setPlayerBehaviorPhase(player, 4);
+            return 1;
+        }
+        if ((speed <= 0x5FFFF && (u8)player->costumeID < 0x10U) ||
+            (gameState->memoryPoolId == 5 && player->sectorIndex == 0 && player->costumeID == 0x11)) {
+            if (isPlayerNearShortcut(player) == 0) {
+                player->unkBDC = 0;
+                setPlayerBehaviorPhase(player, 4);
+                return 1;
+            }
+        }
+    } else {
+        if (player->inputButtons & 0x8000) {
+            setPlayerBehaviorPhase(player, 4);
+            return 1;
+        }
+    }
+
+    if (tryActivateShortcut(player) != 0) {
+        initKnockbackBehavior((BehaviorState *)player);
+        return 1;
+    }
+
+    if (player->inputDisabled == 0) {
+        steerTarget = -player->inputStickX * 0x32;
+        if (player->inputStickX == 7) {
+            if (player->inputStickY < 0) {
+                steerTarget += player->inputStickY * 0x32;
+            }
+        }
+        if (player->inputStickX == -7) {
+            if (player->inputStickY < 0) {
+                steerTarget -= player->inputStickY * 0x32;
+            }
+        }
+    } else {
+        calculateAITargetPosition(player);
+        steerTarget =
+            (computeAngleToPosition(player->aiTarget.x, player->aiTarget.z, player->worldPos.x, player->worldPos.z) -
+             (u16)player->rotY) &
+            0x1FFF;
+
+        if (steerTarget > 0x1000) {
+            steerTarget |= 0xE000;
+        }
+        steerTarget = steerTarget >> 1;
+        if (steerTarget > 700) {
+            steerTarget = 700;
+        }
+        if (steerTarget < -700) {
+            steerTarget = -700;
+        }
+    }
+
+    steerTarget -= player->steeringAngle;
+    temp2 = steerTarget + 7;
+    if (temp2 < 0xFU) {
+        if (steerTarget > 0) {
+            steerTarget = 1;
+        }
+        if (steerTarget < 0) {
+            steerTarget = -1;
+        }
+    } else {
+        temp = steerTarget;
+        if (steerTarget < 0) {
+            temp = steerTarget + 7;
+        }
+        steerTarget = temp >> 3;
+    }
+
+    player->steeringAngle += steerTarget;
+    player->velocity.y -= player->unkAB8;
+    steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
+
+    if (speed > 0x10000) {
+        turnRate = (((s16)(u16)player->steeringAngle / 2) * player->unkAC0) / 125;
+        if (turnRate != 0) {
+            scaledTurnRate = steeringValue;
+            if (scaledTurnRate < 0) {
+                scaledTurnRate = -scaledTurnRate;
+            }
+            denominator = scaledTurnRate + 0x1FF;
+            scaledTurnRate = denominator >> 7;
+            if (scaledTurnRate != 0) {
+                divResult = (s64)(u32)player->unkAC1 * scaledTurnRate * scaledTurnRate / turnRate;
+
+                if (gameState->raceType != 0xB) {
+                    if (divResult > 0x3FFFFFFF) {
+                        divResult = 0x3FFFFFFF;
+                    }
+                    if (divResult < -0x3FFFFFFF) {
+                        divResult = -0x3FFFFFFF;
+                    }
+                }
+                curvature = (u32)divResult;
+
+                if ((curvature - 1) <= 0xFFFFEU) {
+                    curvature = 0x100000;
+                }
+                if ((curvature + 0xFFFFF) <= 0xFFFFEU) {
+                    curvature = 0xFFF00000;
+                }
+
+                if (curvature != 0) {
+                    compX = -curvature;
+                    compY = steeringValue;
+                    if (compY < 0) {
+                        compY = -compY;
+                    }
+
+                    hypot = isqrt64((s64)compX * compX + (s64)compY * compY);
+
+                    if ((s32)curvature > 0) {
+                        compX = ((s64)compX * (s32)curvature) / hypot;
+                        compY = ((s64)compY * (s32)curvature) / hypot;
+                    } else {
+                        compX = ((s64)compX * -(s32)curvature) / (s64)hypot;
+                        compY = ((s64)compY * -(s32)curvature) / (s64)hypot;
+                    }
+
+                    compX += curvature;
+
+                    if (compY > 0) {
+                        steerTarget = -computeAngleToPosition(0, 0, compX, -compY) & 0x1FFF;
+                    } else {
+                        steerTarget = computeAngleToPosition(0, 0, compX, compY) & 0x1FFF;
+                    }
+
+                    steerTarget = steerTarget & 0x1FFF;
+                    if (steerTarget > 0x1000) {
+                        steerTarget |= 0xE000;
+                    }
+                    if (steerTarget > 0x100) {
+                        steerTarget = 0x100;
+                    }
+                    if (steerTarget < -0x100) {
+                        steerTarget = -0x100;
+                    }
+                    player->rotY += steerTarget;
+                }
+            }
+        }
+    } else {
+        player->rotY -= player->inputStickX * 4;
+    }
+
+    sinMul = 0x60;
+    approximateSin(player->steeringAngle);
+    __asm__ volatile("mult $2,%0\n\tmflo $12\n\tsw $12,0x10($sp)" : : "r"(sinMul));
+    approximateCos(player->steeringAngle);
+    __asm__ volatile("mult $2,%0\n\tmflo $13\n\tsw $13,0x18($sp)" : : "r"(sinMul));
+
+    if (!(player->animFlags & 2)) {
+        sp10.x = -sp10.x;
+    }
+    sp10.x -= player->orientationTransform.translation.x;
+    if (sp10.x > 0x6000) {
+        sp10.x = 0x6000;
+    }
+    if (sp10.x < -0x6000) {
+        sp10.x = -0x6000;
+    }
+    player->orientationTransform.translation.x += sp10.x;
+
+    if (shouldInitiateSharpTurn(player, steeringValue) != 0) {
+        setPlayerBehaviorPhase(player, 2);
+    }
+
+    applyBoostVelocity(player);
+
+    if (speed > 0x80000) {
+        speed = 0x80000;
+    }
+    if (player->animFlags & 2) {
+        speed = -speed;
+    }
+
+    speed = (speed * -player->steeringAngle) / 350;
+    speed >>= 9;
+    if (speed >= 0x401) {
+        speed = 0x400;
+    }
+    if (speed < -0x400) {
+        speed = -0x400;
+    }
+
+    speed -= player->rollAngle;
+    if (speed > 0x50) {
+        speed = 0x50;
+    }
+    if (speed < -0x50) {
+        speed = -0x50;
+    }
+
+    player->rollAngle += speed;
+    temp2 = player->rollAngle + 7;
+    if (temp2 < 0xFU) {
+        player->rollAngle = 0;
+    }
+
+    if (player->rollAngle == 0) {
+        advancePlayerLeanAnimationAuto(player, 0);
+    } else {
+        absLean = player->rollAngle;
+        if (player->rollAngle > 0) {
+            if (player->rollAngle >= 0x401) {
+                absLean = 0x400;
+            }
+            leanDir = 2;
+            absLean /= 2;
+            setPlayerLeanAnimation(player, leanDir, absLean);
+        } else {
+            absLean = -absLean;
+            if (absLean >= 0x401) {
+                absLean = 0x400;
+            }
+            leanDir = 1;
+            absLean /= 2;
+            setPlayerLeanAnimation(player, leanDir, absLean);
+        }
+    }
+
+    processPlayerItemUsage(player);
+    return 0;
+}
 
 s32 updatePlayerGroundedSliding(Player *player) {
     s16 currentAngle;

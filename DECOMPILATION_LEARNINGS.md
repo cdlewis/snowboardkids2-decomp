@@ -383,3 +383,18 @@ In func_80060CDC_618DC, this scored 90.279% vs 89.675% for the always-compute al
 Preprocessor macros (`#define ... \`) expand to identical text and produce **identical codegen** to manually inlined code. Use them freely to deduplicate repeated logic without affecting match score — this is purely a readability win. In contrast, `static inline` helpers may or may not be inlined by GCC 2.7.2 and can introduce function-call overhead or shifted register allocation when not inlined.
 
 For func_80060CDC_618DC, factoring four near-identical wall-projection blocks into `WALL_PROJ_BASIC`/`WALL_PROJ_FULL` macros and the push action into `DO_PUSH` produced byte-identical assembly to the unfactored version (89.675% in both cases).
+
+## Narrow Inline ASM for Isolated `mflo` Register Selection
+
+For func_800B1544_A13F4, the natural C expression for the steering sine/cosine scratch values emitted the correct instructions but stored the multiply results via `$2` instead of the target `$12`/`$13`. Local register variables fixed that block, but GCC 2.7.2 treated `$12`/`$13` as reserved for the whole function and shifted earlier multiply temporaries to `$14`/`$15`.
+
+A narrow inline asm block around only the multiply-result stores matched without disturbing the rest of the function:
+
+```c
+approximateSin(player->steeringAngle);
+__asm__ volatile("mult $2,%0\n\tmflo $12\n\tsw $12,0x10($sp)" : : "r"(sinMul));
+approximateCos(player->steeringAngle);
+__asm__ volatile("mult $2,%0\n\tmflo $13\n\tsw $13,0x18($sp)" : : "r"(sinMul));
+```
+
+Use this only as a last-resort register-selection tool after confirming the surrounding C already matches. Prefer a real stack object, such as `Vec3i sp10` plus adjusted padding, so hardcoded stack offsets still correspond to meaningful local storage.
