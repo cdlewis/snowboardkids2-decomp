@@ -141,6 +141,34 @@ typedef struct ViewportNode {
     u8 padding1D0[0x2];
 } ViewportNode;
 
+typedef struct {
+    u8 padding[0x120];
+    s32 cameraRotationMatrix;
+    u8 padding2[0x10];
+    u32 cameraX;
+    u32 cameraY;
+    u32 cameraZ;
+    u8 padding3[0x8];
+    u8 defaultLight1R;
+    u8 defaultLight1G;
+    u8 defaultLight1B;
+    u8 padding4[0xD];
+    u8 defaultLight2R;
+    u8 defaultLight2G;
+    u8 defaultLight2B;
+} ActiveViewportOverlay;
+
+typedef struct {
+    /* 0x0 */ u8 r;
+    /* 0x1 */ u8 g;
+    /* 0x2 */ u8 b;
+    /* 0x3 */ u8 pad;
+    /* 0x4 */ s8 r2;
+    /* 0x5 */ s8 g2;
+    /* 0x6 */ s8 b2;
+    /* 0x7 */ u8 pad2;
+} ColorData;
+
 extern ViewportNode gRootViewport;
 
 // Location of S2Dex code/rodata segments
@@ -196,20 +224,13 @@ s32 getViewportFadeMode(ViewportNode *);
 s32 isObjectCulled(Vec3i *arg0);
 
 void disableViewportOverlay(ViewportNode *arg0);
-void enableViewportDisplayList(void *arg0);
-void disableViewportDisplayList(ViewportNode *arg0);
-void func_8006FEE8_70AE8(ViewportNode *arg0);
-void setViewportOverlayRgbAndEnable(ViewportNode *arg0, s8 r, s8 g, s8 b);
 
-typedef struct {
-    /* 0x0 */ u8 r;
-    /* 0x1 */ u8 g;
-    /* 0x2 */ u8 b;
-    /* 0x3 */ u8 pad;
-    /* 0x4 */ s8 r2;
-    /* 0x5 */ s8 g2;
-    /* 0x6 */ s8 b2;
-    /* 0x7 */ u8 pad2;
-} ColorData;
+void enableViewportDisplayList(void *arg0);
+
+void disableViewportDisplayList(ViewportNode *arg0);
+
+void func_8006FEE8_70AE8(ViewportNode *arg0);
+
+void setViewportOverlayRgbAndEnable(ViewportNode *arg0, s8 r, s8 g, s8 b);
 
 void setViewportLightColors(u16 viewportId, u16 colorCount, ColorData *lightColors, ColorData *ambientColor);

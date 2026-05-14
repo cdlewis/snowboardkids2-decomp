@@ -16,23 +16,6 @@
 USE_OVERLAY(rand);
 
 typedef struct {
-    u8 padding[0x120];
-    s32 cameraRotationMatrix;
-    u8 padding2[0x10];
-    s32 cameraX;
-    s32 cameraY;
-    s32 cameraZ;
-    u8 padding3[0x8];
-    u8 defaultLight1R;
-    u8 defaultLight1G;
-    u8 defaultLight1B;
-    u8 padding4[0xD];
-    u8 defaultLight2R;
-    u8 defaultLight2G;
-    u8 defaultLight2B;
-} ActiveViewportOverlay;
-
-typedef struct {
     /* 0x00 */ s32 vertices;
     /* 0x04 */ s32 posX;
     /* 0x08 */ s32 posY;

@@ -27,22 +27,6 @@ typedef struct {
     s32 unkC;
 } CallbackPoolSlot;
 
-typedef struct {
-    u8 padding[0x134];
-    u32 cameraX;
-    u32 cameraY;
-    u32 cameraZ;
-    u8 pad14C[4];
-    u8 defaultLight1R;
-    u8 defaultLight1G;
-    u8 defaultLight1B;
-    u8 pad14B;
-    u8 pad14C_2[3];
-    u8 defaultLight2R;
-    u8 defaultLight2G;
-    u8 defaultLight2B;
-} ActiveViewportOverlay;
-
 // Screen border overlay region with color
 typedef struct {
     s16 clipLeft;
