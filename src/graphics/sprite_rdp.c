@@ -1305,7 +1305,7 @@ void renderAlphaBlendedTextSprite(TextRenderArg *sprite) {
     }
 }
 
-void func_800136E0_142E0(FlippedScaledSpriteArg *arg0) {
+void renderFlippedScaledSpriteFrame(FlippedScaledSpriteArg *sprite) {
     s32 right;
     s32 bottom;
     s32 left;
@@ -1321,7 +1321,7 @@ void func_800136E0_142E0(FlippedScaledSpriteArg *arg0) {
     s16 scaleT;
     s16 heightScale;
     s16 widthScale;
-    s32 cond;
+    s32 isFlipped;
     s32 clipVal;
     s32 tile;
 #ifdef CC_CHECK
@@ -1334,35 +1334,35 @@ void func_800136E0_142E0(FlippedScaledSpriteArg *arg0) {
     register s32 negOne __asm__("a2");
 #endif
 
-    frameEntry = arg0->spriteData->frames;
-    paletteBase = &frameEntry[arg0->spriteData->numFrames];
-    frameEntry = &frameEntry[arg0->frameIndex];
+    frameEntry = sprite->spriteData->frames;
+    paletteBase = &frameEntry[sprite->spriteData->numFrames];
+    frameEntry = &frameEntry[sprite->frameIndex];
 
     paletteMode = gSpritePaletteModes[frameEntry->paletteTableIndex];
     format = gSpriteTextureFormats[frameEntry->formatIndex];
-    scaleS = gTileTextureFlipTable[arg0->tileMode * 2];
-    scaleT = gTileTextureFlipTable[arg0->tileMode * 2 + 1];
+    scaleS = gTileTextureFlipTable[sprite->tileMode * 2];
+    scaleT = gTileTextureFlipTable[sprite->tileMode * 2 + 1];
 
-    if (arg0->overridePaletteCount == 0) {
+    if (sprite->overridePaletteCount == 0) {
         paletteIndex = frameEntry->paletteIndex;
     } else {
-        paletteIndex = arg0->overridePaletteCount - 1;
+        paletteIndex = sprite->overridePaletteCount - 1;
     }
 
-    if (arg0->scaleX > 0x7FFF || arg0->scaleX == 0) {
+    if (sprite->scaleX > 0x7FFF || sprite->scaleX == 0) {
         return;
     }
 
-    if (arg0->scaleY > 0x7FFF || arg0->scaleY == 0) {
+    if (sprite->scaleY > 0x7FFF || sprite->scaleY == 0) {
         return;
     }
 
-    arg0->tileMode = arg0->tileMode & 3;
-    heightScale = (30 << 12) / arg0->scaleY;
-    widthScale = (frameEntry->width << 12) / arg0->scaleX;
+    sprite->tileMode = sprite->tileMode & 3;
+    heightScale = (30 << 12) / sprite->scaleY;
+    widthScale = (frameEntry->width << 12) / sprite->scaleX;
 
-    left = (arg0->x * 4) - (widthScale / 2) + (gTextClipAndOffsetData.offsetX * 4);
-    top = (arg0->y * 4) - (heightScale / 2) + (gTextClipAndOffsetData.offsetY * 4);
+    left = (sprite->x * 4) - (widthScale / 2) + (gTextClipAndOffsetData.offsetX * 4);
+    top = (sprite->y * 4) - (heightScale / 2) + (gTextClipAndOffsetData.offsetY * 4);
     right = left + widthScale;
     bottom = top + heightScale;
 
@@ -1404,8 +1404,8 @@ void func_800136E0_142E0(FlippedScaledSpriteArg *arg0) {
         clipOffsetY = clipOffsetYBase;
     }
 
-    cond = (arg0->flipX == 1);
-    clipOffsetY += cond * 0x80;
+    isFlipped = (sprite->flipX == 1);
+    clipOffsetY += isFlipped * 0x80;
 
     if (gTextClipAndOffsetData.clipRight * 4 >= left && (gTextClipAndOffsetData.clipBottom * 4 >= top) &&
         (left < right) && (top < bottom)) {
@@ -1419,21 +1419,21 @@ void func_800136E0_142E0(FlippedScaledSpriteArg *arg0) {
 
         gDPPipeSync(gDisplayListAllocPtr++);
 
-        if (arg0->scaleX >= 0x401 || arg0->scaleY >= 0x401) {
+        if (sprite->scaleX >= 0x401 || sprite->scaleY >= 0x401) {
             gSPObjRenderMode(gDisplayListAllocPtr++, G_OBJRM_SHRINKSIZE_1 | G_OBJRM_BILERP | G_OBJRM_ANTIALIAS);
         } else {
             gSPObjRenderMode(gDisplayListAllocPtr++, G_OBJRM_BILERP | G_OBJRM_ANTIALIAS);
         }
 
         gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
-        gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, arg0->alpha, arg0->alpha, arg0->alpha, 0xFF);
+        gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, sprite->alpha, sprite->alpha, sprite->alpha, 0xFF);
 
         {
-            s32 textureAddr = (s32)arg0->spriteData + frameEntry->textureOffset;
+            s32 textureAddr = (s32)sprite->spriteData + frameEntry->textureOffset;
             if (textureAddr != gCachedTextureAddr) {
                 gCachedTextureAddr = textureAddr;
                 loadSpriteTexture(
-                    (s32)arg0->spriteData + frameEntry->textureOffset,
+                    (s32)sprite->spriteData + frameEntry->textureOffset,
                     frameEntry->width,
                     frameEntry->height,
                     format,
@@ -1476,8 +1476,8 @@ void func_800136E0_142E0(FlippedScaledSpriteArg *arg0) {
             tile,
             clipOffsetX << 3,
             clipOffsetY << 3,
-            scaleS * arg0->scaleX,
-            scaleT * arg0->scaleY
+            scaleS * sprite->scaleX,
+            scaleT * sprite->scaleY
         );
         gDPPipeSync(gDisplayListAllocPtr++);
         gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_DECALRGBA, G_CC_DECALRGBA);

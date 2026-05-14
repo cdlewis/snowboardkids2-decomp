@@ -100,7 +100,7 @@ void initDefaultFontPalette(void);
 void loadSpriteTexture(s32 textureAddr, u16 width, u16 height, u16 format, s32 paletteMode);
 void renderTintedSprite(TintedSpriteArg *arg0);
 void renderTextSpriteWithTransparency(TextRenderArg *arg0);
-void func_800136E0_142E0(FlippedScaledSpriteArg *arg0);
+void renderFlippedScaledSpriteFrame(FlippedScaledSpriteArg *sprite);
 void renderTextSprite(TextRenderArg *arg0);
 typedef struct {
     /* 0x00 */ s16 x;

@@ -1302,7 +1302,7 @@ void animateBoardShopBoardIconsSlideIn(BoardShopBoardIconsState *arg0) {
             }
             animatingCount++;
         }
-        enqueueCallbackBySlotIndex(8, 0, func_800136E0_142E0, &arg0->icons[i]);
+        enqueueCallbackBySlotIndex(8, 0, renderFlippedScaledSpriteFrame, &arg0->icons[i]);
     }
 
     if ((animatingCount & 0xFF) == 0) {
@@ -1345,7 +1345,7 @@ void updateBoardShopBoardIconSelection(BoardShopIconSelectionState *arg0) {
             arg0->icons[i].flipX = 0;
             arg0->icons[i].scaleX = 0x400;
         }
-        enqueueCallbackBySlotIndex(8, 0, func_800136E0_142E0, &arg0->icons[i]);
+        enqueueCallbackBySlotIndex(8, 0, renderFlippedScaledSpriteFrame, &arg0->icons[i]);
     }
 
     if (state->shopState == 0x11) {
@@ -1402,7 +1402,7 @@ void blinkBoardShopBoardIconConfirmation(BoardShopIconSelectionState *arg0) {
             arg0->icons[i].alpha = 0x80;
         }
 
-        enqueueCallbackBySlotIndex(8, 0, &func_800136E0_142E0, &arg0->icons[i]);
+        enqueueCallbackBySlotIndex(8, 0, &renderFlippedScaledSpriteFrame, &arg0->icons[i]);
     }
 
     temp = state->unk784[state->selectedIconIndex];
@@ -1437,7 +1437,7 @@ void initBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg
         arg0->portraits[i].x = currentX;
         arg0->portraits[i].spriteIndex = allocation->unk788[allocation->unk784[i]];
         arg0->animationFrameCounters[i] = 0;
-        enqueueCallbackBySlotIndex(8, 0, &func_800136E0_142E0, &arg0->portraits[i]);
+        enqueueCallbackBySlotIndex(8, 0, &renderFlippedScaledSpriteFrame, &arg0->portraits[i]);
         currentX += 0x28;
     }
 
@@ -1459,7 +1459,7 @@ void animateBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *
             arg0->portraits[i].x += 10;
         }
 
-        enqueueCallbackBySlotIndex(8, 0, &func_800136E0_142E0, &arg0->portraits[i]);
+        enqueueCallbackBySlotIndex(8, 0, &renderFlippedScaledSpriteFrame, &arg0->portraits[i]);
     }
 
     if (arg0->animationFrameCounters[0] == 4) {
@@ -1492,7 +1492,7 @@ void animateBoardShopBoardIconsSlideOut(BoardShopBoardIconsSlideOutState *arg0) 
                 }
             }
         }
-        enqueueCallbackBySlotIndex(8, 0, &func_800136E0_142E0, &icons[i]);
+        enqueueCallbackBySlotIndex(8, 0, &renderFlippedScaledSpriteFrame, &icons[i]);
     }
 
     if (arg0->icons[0].y < (-0x88)) {
@@ -1534,7 +1534,7 @@ void initBoardShopSnowflakeSlideIn(BoardShopSnowflakeSpriteState *arg0) {
 }
 
 void queueBoardShopSnowflakeRender(void *arg0) {
-    enqueueCallbackBySlotIndex(8, 0, &func_800136E0_142E0, arg0);
+    enqueueCallbackBySlotIndex(8, 0, &renderFlippedScaledSpriteFrame, arg0);
     setCallback(&animateBoardShopSnowflakeSlideIn);
 }
 
@@ -1548,7 +1548,7 @@ void animateBoardShopSnowflakeSlideIn(BoardShopSnowflakeAnimState *arg0) {
         arg0->y = arg0->y + 0x14;
     }
 
-    enqueueCallbackBySlotIndex(8, 0, &func_800136E0_142E0, arg0);
+    enqueueCallbackBySlotIndex(8, 0, &renderFlippedScaledSpriteFrame, arg0);
 
     if (arg0->frameCounter == 4) {
         terminateCurrentTask();
