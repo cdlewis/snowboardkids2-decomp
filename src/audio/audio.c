@@ -10,6 +10,12 @@
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
+#ifdef CC_CHECK
+#define AUDIO_REG(reg)
+#else
+#define AUDIO_REG(reg) __asm__(reg)
+#endif
+
 typedef struct {
     void *musicBankBuffer;
     void *ptrBank;
@@ -53,13 +59,12 @@ typedef struct {
     /* 0x1E */ u8 isFadingOut;
     /* 0x1F */ u8 unk1F;
     /* 0x20 */ s32 soundSequence;
-    /* 0x24 */ void *soundEffectChannels[0xF];
-    /* 0x60 */ s32 padding3;
+    /* 0x24 */ void *soundEffectChannels[0x10];
     /* 0x64 */ s16 soundEffectIds[0x10];
     /* 0x84 */ s32 renderQueueCount;
     /* 0x88 */ RenderQueueItem renderQueue[32];
     /* 0x408 */ s32 bufferCount;
-    /* 0x40C */ u8 bufferData[8][0x20];
+    /* 0x40C */ Transform3D bufferData[8];
     /* 0x50C */ s8 bufferIds[0x8];
     /* 0x514 */ s32 bufferFlags[8];
     /* 0x534 */ s32 audioInnerDistance;
@@ -682,11 +687,244 @@ void initializeMusicSystem(void) {
     setGameStateHandlerWithContinue(&func_8005628C_56E8C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/audio/audio", func_8005628C_56E8C);
+void func_8005628C_56E8C(void) {
+    s32 i;
+    s32 j;
+    Vec3i delta;
+    Vec3i transformed;
+    volatile u8 pad[16];
+    s32 distance;
+    s32 pan;
+    s32 volume;
+    s32 voiceIndex;
+    s32 d;
+
+    if (getActiveEffectChannelCount() == 0) {
+        gGraphicsManager->soundSequence = 0;
+    }
+
+    for (i = 0; i < 16; i++) {
+        if (gGraphicsManager->soundEffectChannels[i] != 0) {
+            if (getAudioChannelActiveState(gGraphicsManager->soundEffectChannels[i]) == 0) {
+                gGraphicsManager->soundEffectChannels[i] = 0;
+            }
+        }
+    }
+
+    if (gGraphicsManager->bufferCount == 1) {
+        for (i = 0; i < gGraphicsManager->renderQueueCount; i++) {
+            delta.x = gGraphicsManager->renderQueue[i].position.x - gGraphicsManager->bufferData[0].translation.x;
+            delta.y = gGraphicsManager->renderQueue[i].position.y - gGraphicsManager->bufferData[0].translation.y;
+            delta.z = gGraphicsManager->renderQueue[i].position.z - gGraphicsManager->bufferData[0].translation.z;
+            distance = 0x0C800000;
+            if ((((((delta.x < distance) && (delta.x > (-distance))) && (delta.y < distance)) &&
+                  (delta.y > (-distance))) &&
+                 (delta.z < distance)) &&
+                (delta.z > (-distance))) {
+                distance = distance_3d(delta.x, delta.y, delta.z) >> 16;
+            }
+
+            {
+                register s32 innerDistance AUDIO_REG("$4");
+
+                innerDistance = gGraphicsManager->audioInnerDistance;
+                if (distance < innerDistance) {
+                    __asm__("");
+                    transformVector3(&delta, &gGraphicsManager->bufferData[0], &transformed);
+                    j = -atan2Fixed(transformed.x, transformed.z);
+                    j = (j + 0x800) & 0x1FFF;
+                    if (j >= 0x1001) {
+                        j = 0x2000 - j;
+                    }
+
+                    pan = j >> 4;
+                    pan -= 0x80;
+                    pan = (pan * distance) / gGraphicsManager->audioInnerDistance;
+                    pan -= 0x80;
+                    if (gGraphicsManager->renderQueue[i].duration < 0) {
+                        playSoundEffectWithPriorityPanAndVoice(
+                            gGraphicsManager->renderQueue[i].soundId,
+                            gGraphicsManager->renderQueue[i].flags,
+                            pan,
+                            gGraphicsManager->renderQueue[i].priority,
+                            gGraphicsManager->bufferFlags[0]
+                        );
+                    } else if (gGraphicsManager->renderQueue[i].hasVolume) {
+                        playSoundEffectAtPositionWithPriority(
+                            gGraphicsManager->renderQueue[i].soundId,
+                            gGraphicsManager->renderQueue[i].flags,
+                            pan,
+                            gGraphicsManager->renderQueue[i].volume,
+                            gGraphicsManager->renderQueue[i].priority,
+                            gGraphicsManager->renderQueue[i].duration,
+                            gGraphicsManager->bufferFlags[0]
+                        );
+                    } else {
+                        playSoundEffectOnChannelWithVoice(
+                            gGraphicsManager->renderQueue[i].soundId,
+                            gGraphicsManager->renderQueue[i].flags,
+                            pan,
+                            gGraphicsManager->renderQueue[i].priority,
+                            gGraphicsManager->renderQueue[i].duration,
+                            gGraphicsManager->bufferFlags[0]
+                        );
+                    }
+                } else {
+                    register s32 outerDistance AUDIO_REG("$7");
+
+                    outerDistance = gGraphicsManager->audioOuterDistance;
+                    if (distance < outerDistance) {
+                        register s32 flags AUDIO_REG("$3");
+                        register s32 denominator AUDIO_REG("$2");
+
+                        flags = gGraphicsManager->renderQueue[i].flags;
+                        distance = outerDistance - distance;
+                        denominator = outerDistance - innerDistance;
+                        volume = (flags * distance) / denominator;
+                        if (volume != 0) {
+                            transformVector3(&delta, &gGraphicsManager->bufferData[0], &transformed);
+                            j = -atan2Fixed(transformed.x, transformed.z);
+                            j = (j + 0x800) & 0x1FFF;
+                            if (j >= 0x1001) {
+                                j = 0x2000 - j;
+                            }
+
+                            pan = j >> 4;
+                            if (gGraphicsManager->renderQueue[i].duration < 0) {
+                                playSoundEffectWithPriorityPanAndVoice(
+                                    gGraphicsManager->renderQueue[i].soundId,
+                                    volume,
+                                    pan,
+                                    gGraphicsManager->renderQueue[i].priority,
+                                    gGraphicsManager->bufferFlags[0]
+                                );
+                            } else if (gGraphicsManager->renderQueue[i].hasVolume != 0) {
+                                playSoundEffectAtPositionWithPriority(
+                                    gGraphicsManager->renderQueue[i].soundId,
+                                    volume,
+                                    pan,
+                                    gGraphicsManager->renderQueue[i].volume,
+                                    gGraphicsManager->renderQueue[i].priority,
+                                    gGraphicsManager->renderQueue[i].duration,
+                                    gGraphicsManager->bufferFlags[0]
+                                );
+                            } else {
+                                playSoundEffectOnChannelWithVoice(
+                                    gGraphicsManager->renderQueue[i].soundId,
+                                    volume,
+                                    pan,
+                                    gGraphicsManager->renderQueue[i].priority,
+                                    gGraphicsManager->renderQueue[i].duration,
+                                    gGraphicsManager->bufferFlags[0]
+                                );
+                            }
+                        } else if (gGraphicsManager->renderQueue[i].hasVolume) {
+                            stopSoundEffectChannel(gGraphicsManager->renderQueue[i].duration, 0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (gGraphicsManager->bufferCount >= 2) {
+        for (i = 0; i < gGraphicsManager->renderQueueCount; i++) {
+            distance = 0x0C800000;
+            voiceIndex = 0;
+            for (j = 0; j < gGraphicsManager->bufferCount; j++) {
+                delta.x = gGraphicsManager->renderQueue[i].position.x - gGraphicsManager->bufferData[j].translation.x;
+                delta.y = gGraphicsManager->renderQueue[i].position.y - gGraphicsManager->bufferData[j].translation.y;
+                delta.z = gGraphicsManager->renderQueue[i].position.z - gGraphicsManager->bufferData[j].translation.z;
+                if ((((((delta.x < distance) && ((-distance) < delta.x)) && (delta.y < distance)) &&
+                      ((-distance) < delta.y)) &&
+                     (delta.z < distance)) &&
+                    ((-distance) < delta.z)) {
+                    d = isqrt64(((((s64)delta.x) * delta.x) + (((s64)delta.y) * delta.y)) + (((s64)delta.z) * delta.z));
+                    if (d < distance) {
+                        distance = d;
+                        voiceIndex = gGraphicsManager->bufferFlags[j];
+                    }
+                }
+            }
+
+            distance >>= 0x10;
+            if (distance < gGraphicsManager->audioInnerDistance) {
+                if (gGraphicsManager->renderQueue[i].duration < 0) {
+                    playSoundEffectWithPriorityAndVoice(
+                        gGraphicsManager->renderQueue[i].soundId,
+                        gGraphicsManager->renderQueue[i].flags,
+                        gGraphicsManager->renderQueue[i].priority,
+                        voiceIndex
+                    );
+                } else if (gGraphicsManager->renderQueue[i].hasVolume) {
+                    playSoundEffectAtPositionWithPriority(
+                        gGraphicsManager->renderQueue[i].soundId,
+                        gGraphicsManager->renderQueue[i].flags,
+                        0x80,
+                        gGraphicsManager->renderQueue[i].volume,
+                        gGraphicsManager->renderQueue[i].priority,
+                        gGraphicsManager->renderQueue[i].duration,
+                        voiceIndex
+                    );
+                } else {
+                    playOrStopSoundEffectOnChannelWithVoice(
+                        gGraphicsManager->renderQueue[i].soundId,
+                        gGraphicsManager->renderQueue[i].flags,
+                        gGraphicsManager->renderQueue[i].priority,
+                        gGraphicsManager->renderQueue[i].duration,
+                        voiceIndex
+                    );
+                }
+            } else {
+                register s32 outerDistance AUDIO_REG("$5");
+
+                outerDistance = gGraphicsManager->audioOuterDistance;
+                if (distance < outerDistance) {
+                    register s32 flags AUDIO_REG("$3");
+                    register s32 denominator AUDIO_REG("$2");
+
+                    flags = gGraphicsManager->renderQueue[i].flags;
+                    distance = outerDistance - distance;
+                    denominator = outerDistance - gGraphicsManager->audioInnerDistance;
+                    volume = (flags * distance) / denominator;
+                    if (gGraphicsManager->renderQueue[i].duration < 0) {
+                        playSoundEffectWithPriorityAndVoice(
+                            gGraphicsManager->renderQueue[i].soundId,
+                            volume,
+                            gGraphicsManager->renderQueue[i].priority,
+                            voiceIndex
+                        );
+                    } else if (gGraphicsManager->renderQueue[i].hasVolume != 0) {
+                        playSoundEffectAtPositionWithPriority(
+                            gGraphicsManager->renderQueue[i].soundId,
+                            volume,
+                            0x80,
+                            gGraphicsManager->renderQueue[i].volume,
+                            gGraphicsManager->renderQueue[i].priority,
+                            gGraphicsManager->renderQueue[i].duration,
+                            voiceIndex
+                        );
+                    } else {
+                        playOrStopSoundEffectOnChannelWithVoice(
+                            gGraphicsManager->renderQueue[i].soundId,
+                            volume,
+                            gGraphicsManager->renderQueue[i].priority,
+                            gGraphicsManager->renderQueue[i].duration,
+                            voiceIndex
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    gGraphicsManager->renderQueueCount = 0;
+    gGraphicsManager->bufferCount = 0;
+}
 
 void queueAnonymousBufferData(void *source) {
     if (gGraphicsManager->bufferCount < 8) {
-        u8(*dest)[0x20];
+        Transform3D *dest;
 
         gGraphicsManager->bufferIds[gGraphicsManager->bufferCount] = -1;
         dest = &gGraphicsManager->bufferData[gGraphicsManager->bufferCount];
@@ -1239,7 +1477,6 @@ void playSoundEffectAtPosition(s32 soundId, s32 volume, s32 pan, f32 position, s
 }
 
 // Play sound effect on specified channel with voice control
-// Called by non-matching assembly func_8005628C_56E8C
 void playSoundEffectOnChannelWithVoice(
     s32 soundId,
     s32 volume,

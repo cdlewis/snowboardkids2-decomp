@@ -398,3 +398,26 @@ __asm__ volatile("mult $2,%0\n\tmflo $13\n\tsw $13,0x18($sp)" : : "r"(sinMul));
 ```
 
 Use this only as a last-resort register-selection tool after confirming the surrounding C already matches. Prefer a real stack object, such as `Vec3i sp10` plus adjusted padding, so hardcoded stack offsets still correspond to meaningful local storage.
+
+## Short-Lived Register Locals for Division Temporaries
+
+For func_8005628C_56E8C, the natural positional-audio attenuation logic reached 99.868% with only register-allocation differences around `(flags * distance) / (outerDistance - innerDistance)`. Broad function-scope register hints made allocation worse, but block-scoped register locals around only the attenuation expression matched exactly:
+
+```c
+#ifdef CC_CHECK
+#define AUDIO_REG(reg)
+#else
+#define AUDIO_REG(reg) __asm__(reg)
+#endif
+
+register s32 outerDistance AUDIO_REG("$7");
+register s32 flags AUDIO_REG("$3");
+register s32 denominator AUDIO_REG("$2");
+
+outerDistance = gGraphicsManager->audioOuterDistance;
+flags = gGraphicsManager->renderQueue[i].flags;
+denominator = outerDistance - innerDistance;
+volume = (flags * distance) / denominator;
+```
+
+Use the `CC_CHECK` guard when fixed MIPS register names are needed in production source; the host-side Clang syntax check does not accept numeric MIPS register names. Keep these locals as narrow as possible, because extending their lifetime can force saved-register spills and shift unrelated loops.
