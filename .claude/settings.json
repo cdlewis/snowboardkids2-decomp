@@ -45,6 +45,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/block-sha1-edits.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-docs-index.sh"
           }
         ]
       },
@@ -62,6 +66,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/block-sha1-edits.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-docs-index.sh"
           }
         ]
       }
