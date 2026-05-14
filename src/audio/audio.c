@@ -85,7 +85,7 @@ extern OSMesg gfxTaskQueueBuffer;
 extern OSMesg gfxResultQueueBuffer;
 extern OSThread gfxCommThread;
 
-void func_8005628C_56E8C(void);
+void processSpatialAudio(void);
 void *startSoundEffect(s32, s32, s32, s32, s32);
 s32 countChannelsByHandle(u32 handle);
 void *startSongWithSingleFxBank(void *, void *);
@@ -684,10 +684,10 @@ void initializeMusicSystem(void) {
     gGraphicsManager->bufferCount = 0;
     gGraphicsManager->audioOuterDistance = 0xC80;
     initializeGfxCommThread();
-    setGameStateHandlerWithContinue(&func_8005628C_56E8C);
+    setGameStateHandlerWithContinue(&processSpatialAudio);
 }
 
-void func_8005628C_56E8C(void) {
+void processSpatialAudio(void) {
     s32 i;
     s32 j;
     Vec3i delta;

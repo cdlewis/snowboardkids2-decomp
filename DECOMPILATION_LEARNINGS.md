@@ -401,7 +401,7 @@ Use this only as a last-resort register-selection tool after confirming the surr
 
 ## Short-Lived Register Locals for Division Temporaries
 
-For func_8005628C_56E8C, the natural positional-audio attenuation logic reached 99.868% with only register-allocation differences around `(flags * distance) / (outerDistance - innerDistance)`. Broad function-scope register hints made allocation worse, but block-scoped register locals around only the attenuation expression matched exactly:
+For processSpatialAudio, the natural positional-audio attenuation logic reached 99.868% with only register-allocation differences around `(flags * distance) / (outerDistance - innerDistance)`. Broad function-scope register hints made allocation worse, but block-scoped register locals around only the attenuation expression matched exactly:
 
 ```c
 #ifdef CC_CHECK
