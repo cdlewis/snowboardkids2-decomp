@@ -105,7 +105,7 @@ s32 initPlayerForRace(Player *);
 void dispatchDefaultBehaviorPhase(BehaviorState *);
 void dispatchStunnedBehaviorPhase(BehaviorState *);
 void dispatchKnockbackBehaviorPhase(Player *);
-s32 func_800B1544_A13F4(Player *);
+s32 updatePlayerNormalDriving(Player *);
 s32 updatePlayerGroundedSliding(Player *);
 void dispatchSharpTurnBehaviorStep(BehaviorState *);
 s32 initPostTrickLandingStep(Player *);
@@ -242,7 +242,7 @@ s32 gPlayerStartXPositions[] = {
 };
 
 DefaultBehaviorPhaseHandler D_800BAAD4_AA984[] = {
-    (DefaultBehaviorPhaseHandler)func_800B1544_A13F4,
+    (DefaultBehaviorPhaseHandler)updatePlayerNormalDriving,
     (DefaultBehaviorPhaseHandler)updatePlayerGroundedSliding,
     (DefaultBehaviorPhaseHandler)dispatchSharpTurnBehaviorStep,
     (DefaultBehaviorPhaseHandler)initPostTrickLandingStep,
@@ -808,9 +808,9 @@ void updateRacePlayer(Player *player) {
         player->unkBC2--;
     }
 
-    player->unkAB8 = player->unkAB4;
+    player->gravity = player->unkAB4;
     if (player->ghostEffectState != 0) {
-        player->unkAB8 = 0x3000;
+        player->gravity = 0x3000;
     }
 
     player->maxSpeedCap = player->baseMaxSpeed;
@@ -1219,7 +1219,7 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
 
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
-    arg0->velocity.y = arg0->velocity.y - arg0->unkAB8;
+    arg0->velocity.y = arg0->velocity.y - arg0->gravity;
     applyClampedVelocityToPosition(arg0);
     advancePlayerLeanAnimationAuto(arg0, 0);
     return 0;
@@ -1264,7 +1264,7 @@ s32 updatePlayerSlidingConstrained(Player *player) {
     rotatedVelocity.x = 0;
     rotateVectorY(&rotatedVelocity, player->unkBB2, &player->velocity);
 
-    player->velocity.y = player->velocity.y - player->unkAB8;
+    player->velocity.y = player->velocity.y - player->gravity;
     applyClampedVelocityToPosition(player);
 
     if (player->behaviorCounter == 0) {
@@ -1280,8 +1280,8 @@ s32 updatePlayerSlidingConstrained(Player *player) {
     return 0;
 }
 
-s32 func_800B1544_A13F4(Player *player) {
-    Vec3i sp10;
+s32 updatePlayerNormalDriving(Player *player) {
+    Vec3i leanOffset;
     volatile u8 padding[0xA0];
     s32 steeringValue;
     s32 speed;
@@ -1296,7 +1296,7 @@ s32 func_800B1544_A13F4(Player *player) {
     s32 hypot;
     s32 compX;
     s32 compY;
-    s32 sinMul;
+    s32 leanScale;
     GameState *gameState;
     s32 temp;
     u16 temp2;
@@ -1399,11 +1399,11 @@ s32 func_800B1544_A13F4(Player *player) {
     }
 
     player->steeringAngle += steerTarget;
-    player->velocity.y -= player->unkAB8;
-    steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
+    player->velocity.y -= player->gravity;
+    steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->lateralDeadzone);
 
     if (speed > 0x10000) {
-        turnRate = (((s16)(u16)player->steeringAngle / 2) * player->unkAC0) / 125;
+        turnRate = (((s16)(u16)player->steeringAngle / 2) * player->handling) / 125;
         if (turnRate != 0) {
             scaledTurnRate = steeringValue;
             if (scaledTurnRate < 0) {
@@ -1412,7 +1412,7 @@ s32 func_800B1544_A13F4(Player *player) {
             denominator = scaledTurnRate + 0x1FF;
             scaledTurnRate = denominator >> 7;
             if (scaledTurnRate != 0) {
-                divResult = (s64)(u32)player->unkAC1 * scaledTurnRate * scaledTurnRate / turnRate;
+                divResult = (s64)(u32)player->cornering * scaledTurnRate * scaledTurnRate / turnRate;
 
                 if (gameState->raceType != 0xB) {
                     if (divResult > 0x3FFFFFFF) {
@@ -1474,23 +1474,23 @@ s32 func_800B1544_A13F4(Player *player) {
         player->rotY -= player->inputStickX * 4;
     }
 
-    sinMul = 0x60;
+    leanScale = 0x60;
     approximateSin(player->steeringAngle);
-    __asm__ volatile("mult $2,%0\n\tmflo $12\n\tsw $12,0x10($sp)" : : "r"(sinMul));
+    __asm__ volatile("mult $2,%0\n\tmflo $12\n\tsw $12,0x10($sp)" : : "r"(leanScale));
     approximateCos(player->steeringAngle);
-    __asm__ volatile("mult $2,%0\n\tmflo $13\n\tsw $13,0x18($sp)" : : "r"(sinMul));
+    __asm__ volatile("mult $2,%0\n\tmflo $13\n\tsw $13,0x18($sp)" : : "r"(leanScale));
 
     if (!(player->animFlags & 2)) {
-        sp10.x = -sp10.x;
+        leanOffset.x = -leanOffset.x;
     }
-    sp10.x -= player->orientationTransform.translation.x;
-    if (sp10.x > 0x6000) {
-        sp10.x = 0x6000;
+    leanOffset.x -= player->orientationTransform.translation.x;
+    if (leanOffset.x > 0x6000) {
+        leanOffset.x = 0x6000;
     }
-    if (sp10.x < -0x6000) {
-        sp10.x = -0x6000;
+    if (leanOffset.x < -0x6000) {
+        leanOffset.x = -0x6000;
     }
-    player->orientationTransform.translation.x += sp10.x;
+    player->orientationTransform.translation.x += leanOffset.x;
 
     if (shouldInitiateSharpTurn(player, steeringValue) != 0) {
         setPlayerBehaviorPhase(player, 2);
@@ -1600,7 +1600,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
     }
     velocityX = player->velocity.x;
     velocityZ = player->velocity.z;
-    player->velocity.y -= player->unkAB8;
+    player->velocity.y -= player->gravity;
     player->velocity.x = velocityX - (velocityX >> 7);
     player->velocity.z = velocityZ - (velocityZ >> 7);
     if (player->behaviorCounter >= 0xBU) {
@@ -1679,9 +1679,9 @@ s32 updateSharpTurnSlidingStep(Player *player) {
         return 1;
     }
 
-    player->velocity.y = player->velocity.y - player->unkAB8;
+    player->velocity.y = player->velocity.y - player->gravity;
     decayPlayerSteeringAngles(player);
-    applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
+    applyVelocityDeadzone(player, 0x200, 0x200, player->lateralDeadzone);
     applyBoostVelocity(player);
 
     steeringAngle = player->rollAngle;
@@ -1740,9 +1740,9 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
         return 1;
     }
 
-    player->velocity.y = player->velocity.y - player->unkAB8;
+    player->velocity.y = player->velocity.y - player->gravity;
     decayPlayerSteeringAngles(player);
-    applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
+    applyVelocityDeadzone(player, 0x200, 0x200, player->lateralDeadzone);
     applyBoostVelocity(player);
 
     if (advancePlayerLeanAnimation(player, 6) != 0) {
@@ -1778,9 +1778,9 @@ s32 initPostTrickLandingStep(Player *player) {
         return 1;
     }
 
-    player->velocity.y -= player->unkAB8;
+    player->velocity.y -= player->gravity;
     decayPlayerSteeringAngles(player);
-    applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
+    applyVelocityDeadzone(player, 0x200, 0x200, player->lateralDeadzone);
     applyBoostVelocity(player);
 
     behaviorStep = player->behaviorStep;
@@ -1839,9 +1839,9 @@ s32 updatePostTrickSlidingStep(Player *player) {
         return 1;
     }
 
-    player->velocity.y -= player->unkAB8;
+    player->velocity.y -= player->gravity;
     decayPlayerSteeringAngles(player);
-    steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
+    steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->lateralDeadzone);
     applyBoostVelocity(player);
 
     if (!(player->inputButtons & 0x8000)) {
@@ -1882,9 +1882,9 @@ s32 updatePostTrickChargingStep(Player *player) {
         return 1;
     }
 
-    player->velocity.y -= player->unkAB8;
+    player->velocity.y -= player->gravity;
     decayPlayerSteeringAngles(player);
-    steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
+    steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->lateralDeadzone);
     applyBoostVelocity(player);
 
     if (!(player->inputButtons & 0x8000)) {
@@ -1951,7 +1951,7 @@ s32 beginPostTrickLaunchStep(Player *player) {
     transformVector2(&D_800BAB3C_AA9EC, &rotationTemp2, &launchVelocity);
 
     player->velocity.x += launchVelocity.x;
-    player->velocity.y += launchVelocity.y + player->unkAB8;
+    player->velocity.y += launchVelocity.y + player->gravity;
     player->velocity.z += launchVelocity.z;
 
     return 1;
@@ -2057,9 +2057,9 @@ s32 updatePostTrickDescentStep(Player *player) {
             return 1;
         }
     } else {
-        player->velocity.y = player->velocity.y - player->unkAB8;
+        player->velocity.y = player->velocity.y - player->gravity;
         decayPlayerSteeringAngles(player);
-        applyVelocityDeadzone(player, 0x200, 0x200, player->unkAB0);
+        applyVelocityDeadzone(player, 0x200, 0x200, player->lateralDeadzone);
         applyBoostVelocity(player);
         player->behaviorCounter = player->behaviorCounter - 1;
         if (player->behaviorCounter == 0) {
@@ -2207,7 +2207,7 @@ skip_to_end:
 
 void updateTrickAirborneVelocity(Player *player) {
     player->velocity.x = player->velocity.x - (player->velocity.x >> 7);
-    player->velocity.y = player->velocity.y - player->unkAB8;
+    player->velocity.y = player->velocity.y - player->gravity;
     player->velocity.z = player->velocity.z - (player->velocity.z >> 7);
     decayPlayerAirborneAngles(player);
     applyBoostVelocity(player);
@@ -4045,14 +4045,14 @@ s32 updateStunnedBounceFallRecoverPhase(Player *arg0) {
     }
 
     arg0->behaviorFlags = 0x80;
-    arg0->velocity.y = arg0->velocity.y - arg0->unkAB8;
+    arg0->velocity.y = arg0->velocity.y - arg0->gravity;
     decayPlayerSteeringAngles(arg0);
 
     if (arg0->animFlags & 1) {
         arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 7);
         arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 7);
     } else {
-        applyVelocityDeadzone(arg0, 0x200, 0x200, arg0->unkAB0);
+        applyVelocityDeadzone(arg0, 0x200, 0x200, arg0->lateralDeadzone);
     }
 
     applyClampedVelocityToPosition(arg0);

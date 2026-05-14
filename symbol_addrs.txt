@@ -613,6 +613,7 @@ D_80090BD4_917D4 = 0x80090BD4; // rom:0x917D4 size:0xC0
 dispatchDefaultBehaviorPhase = 0x800B12C0; // rom:0xA1170
 updatePlayerFinishWaiting = 0x800B12F0; // rom:0xA11A0
 updatePlayerSlidingConstrained = 0x800B13D4; // rom:0xA1284
+updatePlayerNormalDriving = 0x800B1544; // rom:0xA13F4
 updatePlayerGroundedSliding = 0x800B1DA0; // rom:0xA1C50
 shouldInitiateSharpTurn = 0x800B1F60; // rom:0xA1E10
 dispatchSharpTurnBehaviorStep = 0x800B1FCC; // rom:0xA1E7C

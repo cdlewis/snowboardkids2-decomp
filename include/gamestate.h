@@ -157,12 +157,12 @@ typedef struct {
     /* 0xAA4 */ s32 maxSpeedCap;
     s32 aiLaneWidth;
     s32 speedHandicap;
-    s32 unkAB0;
+    s32 lateralDeadzone;
     s32 unkAB4;
-    s32 unkAB8;
+    s32 gravity;
     s32 unkABC;
-    u8 unkAC0;
-    u8 unkAC1;
+    u8 handling;
+    u8 cornering;
     s16 hitReactionState;
     s16 knockbackAngle;
     u8 padding2b[0x2];

@@ -9,9 +9,9 @@
 // into player physics values (speed, acceleration, handling, etc.)
 typedef struct {
     /* 0x0 */ u8 param0; // -> unkAA0 (scaled by complex formula)
-    /* 0x1 */ u8 param1; // -> unkAC0 (offset +0x19)
-    /* 0x2 */ u8 param2; // -> unkAC1 (offset +1)
-    /* 0x3 */ u8 param3; // -> unkAB0 (scaled, can be overridden to 0xC000)
+    /* 0x1 */ u8 param1; // -> handling (offset +0x19)
+    /* 0x2 */ u8 param2; // -> cornering (offset +1)
+    /* 0x3 */ u8 param3; // -> lateralDeadzone (scaled, can be overridden to 0xC000)
     /* 0x4 */ u8 param4; // -> unkAB4 (scaled)
     /* 0x5 */ u8 param5; // -> unkABC (scaled)
 } CharacterBoardStats;   // size = 0x6
@@ -262,12 +262,12 @@ void applyCharacterBoardStats(Player *player) {
     }
 
     player->baseMaxSpeed = boardStats[charId].param0 * 353894 / 100 + 0xEB333;
-    player->unkAC0 = boardStats[charId].param1 + 0x19;
-    player->unkAC1 = boardStats[charId].param2 + 1;
-    player->unkAB0 = (boardStats[charId].param3 << 15) / 100 + 0x1000;
+    player->handling = boardStats[charId].param1 + 0x19;
+    player->cornering = boardStats[charId].param2 + 1;
+    player->lateralDeadzone = (boardStats[charId].param3 << 15) / 100 + 0x1000;
 
     if (player->isBossRacer != 0) {
-        player->unkAB0 = 0xC000;
+        player->lateralDeadzone = 0xC000;
     }
 
     player->unkAB4 = (boardStats[charId].param4 << 14) / 100 + 0x3000;
