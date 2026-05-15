@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gbi.h"
 #include "math/geometry.h"
 
 typedef struct {

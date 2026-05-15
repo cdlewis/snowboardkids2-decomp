@@ -13,6 +13,7 @@
 #include "levels/starlight_highway.h"
 #include "math/geometry.h"
 #include "math/rand.h"
+#include "mbi.h"
 #include "race/ai_pathfinding.h"
 #include "race/hit_reactions.h"
 #include "race/particle_items.h"
@@ -1330,7 +1331,7 @@ s32 updatePlayerNormalDriving(Player *player) {
             setPlayerBehaviorPhase(player, 4);
             return 1;
         }
-        if ((speed <= 0x5FFFF && (u8)player->costumeID < 0x10U) ||
+        if ((speed <= 0x5FFFF && player->costumeID < 0x10U) ||
             (gameState->memoryPoolId == 5 && player->sectorIndex == 0 && player->costumeID == 0x11)) {
             if (isPlayerNearShortcut(player) == 0) {
                 player->unkBDC = 0;
@@ -5347,7 +5348,7 @@ void updateAndRenderRaceCharacters(void) {
                     requestControllerRumble(player->playerIndex);
                 }
                 player->rumbleFrame++;
-                if ((u8)player->rumbleFrame >= player->rumbleDuration) {
+                if (player->rumbleFrame >= player->rumbleDuration) {
                     player->rumbleEffectType = -1;
                     player->rumbleCounter = -1;
                 }

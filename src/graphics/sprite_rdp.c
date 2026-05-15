@@ -393,7 +393,7 @@ void func_80010C98_11898(CharSelectIconEntry *arg0) {
     s16 dtdy;
     s32 clipVal;
     SpriteFrameEntry *frameEntry;
-    s32 paletteAddr;
+    SpriteFrameEntry *paletteAddr;
 
     frameEntry = arg0->spriteAsset->frames;
     paletteBase = &frameEntry[arg0->spriteAsset->numFrames];
@@ -494,8 +494,8 @@ void func_80010C98_11898(CharSelectIconEntry *arg0) {
         }
 
         if (paletteIndex == 0xFE) {
-            if (gCachedPaletteAddr != (s32)gDefaultFontPalette) {
-                gCachedPaletteAddr = (s32)gDefaultFontPalette;
+            if (gCachedPaletteAddr != (SpriteFrameEntry *)gDefaultFontPalette) {
+                gCachedPaletteAddr = (SpriteFrameEntry *)gDefaultFontPalette;
                 if (format == 0) {
                     gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gDefaultFontPalette);
                 } else {
@@ -503,7 +503,7 @@ void func_80010C98_11898(CharSelectIconEntry *arg0) {
                 }
             }
         } else {
-            paletteAddr = (u32)&paletteBase[paletteIndex << 1];
+            paletteAddr = &paletteBase[paletteIndex << 1];
             if (paletteAddr != gCachedPaletteAddr) {
                 gCachedPaletteAddr = paletteAddr;
                 if (format == 0) {
@@ -531,7 +531,7 @@ void func_80010C98_11898(CharSelectIconEntry *arg0) {
 
         if (arg0->scaleX != 0x400 || arg0->scaleY != arg0->scaleX) {
             {
-                Gfx *_g = (Gfx *)(gDisplayListAllocPtr++);
+                Gfx *_g = (gDisplayListAllocPtr++);
                 _g->words.w0 = 0xE200001C | dsdx;
                 _g->words.w1 = G_RM_AA_TEX_TERR | G_RM_AA_TEX_TERR2;
             }
