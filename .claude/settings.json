@@ -19,6 +19,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/block-ctx-file.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-temp-file.sh"
           }
         ]
       },
@@ -28,6 +32,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/block-ctx-file.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-temp-file.sh"
           }
         ]
       },
@@ -37,6 +45,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/block-ctx-file.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-temp-file.sh"
           },
           {
             "type": "command",
@@ -58,6 +70,10 @@
           {
             "type": "command",
             "command": ".claude/hooks/block-ctx-file.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-temp-file.sh"
           },
           {
             "type": "command",
