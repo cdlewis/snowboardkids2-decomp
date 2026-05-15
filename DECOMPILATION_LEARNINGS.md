@@ -472,3 +472,11 @@ spriteIndex += 4;
 ```
 
 Declaring the local call prototype with `s32` arguments avoided extra `andi` instructions that appeared when `u8` temporaries were passed through the fixed registers. Keep these register locals narrow and use named ABI registers with a `CC_CHECK` fallback.
+
+## Validate Permuter Candidates with the Local Harness
+
+For func_80060CDC_618DC_618DC, decomp-permuter candidates scored differently under the permuter's imported source than under the local `./build.sh` harness. Some candidates that looked better internally regressed badly when compiled through the function directory's actual setup. Always rerun promising permuter output through `./build.sh <candidate>.c` before adopting changes.
+
+## Dead Temporaries Can Improve KMC Scheduling
+
+For func_80060CDC_618DC_618DC, using dead scalar temporaries for equivalent constants or pointer bases changed instruction scheduling without changing semantics. Two useful examples were routing the full-edge push denominator through a dead vertex temporary and caching one face-group pointer in a `TrackFaceGroup *` local before an edge check. These tricks are highly local: the same pointer-temp pattern improved edge 3 but regressed edge 2 and edge 0.
