@@ -55,7 +55,7 @@ void clampPlayerVelocityToMaxSpeed(Player *player) {
     velY = player->velocity.y;
     velZ = player->velocity.z;
 
-    sum = SQUARE(velX) + SQUARE(velY) + SQUARE(velZ);
+    sum = MAGNITUDE_SQ_3D(velX, velY, velZ);
     magnitude = isqrt64(sum);
 
     maxMagnitude = player->maxSpeedCap;

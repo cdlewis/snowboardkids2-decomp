@@ -1203,7 +1203,7 @@ s32 distance_2d(s32 x, s32 y) {
 }
 
 s32 distance_3d(s32 x, s32 y, s32 z) {
-    return isqrt64(SQUARE(x) + SQUARE(y) + SQUARE(z));
+    return isqrt64(MAGNITUDE_SQ_3D(x, y, z));
 }
 
 void computeLookAtMatrix(Vec3i *from, Vec3i *to, Transform3D *out) {
