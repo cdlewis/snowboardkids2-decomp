@@ -1734,7 +1734,7 @@ void enqueueHudTextLayoutCapped(
     }
 }
 
-extern s32 gCachedPaletteAddr;
+extern SpriteFrameEntry *gCachedPaletteAddr;
 extern s32 gCachedTextureAddr;
 extern s16 gGraphicsMode;
 extern Gfx *gDisplayListAllocPtr;
@@ -1755,8 +1755,8 @@ void renderShadedTextSprite(
     s16 top;
     s16 right;
     s16 bottom;
-    s32 paletteBase;
-    s32 paletteAddr;
+    SpriteFrameEntry *paletteBase;
+    SpriteFrameEntry *paletteAddr;
     SpriteFrameEntry *frameEntry;
     Gfx *gfx;
     u32 renderModeCmd;
@@ -1771,7 +1771,7 @@ void renderShadedTextSprite(
 
     frameEntry = spriteData->frames;
     left = (u16)gTextClipAndOffsetData.offsetX + x;
-    paletteBase = (s32)frameEntry + (spriteData->numFrames * 16);
+    paletteBase = &frameEntry[spriteData->numFrames];
     frameEntry = &frameEntry[frameIndex];
     top = (u16)gTextClipAndOffsetData.offsetY + y;
     right = left + frameEntry->width;
@@ -1782,7 +1782,7 @@ void renderShadedTextSprite(
 
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
@@ -1820,12 +1820,12 @@ void renderShadedTextSprite(
         {
             u16 paletteIndex = paletteOverride & 0xFFFF;
             if (paletteIndex == 0xFF) {
-                paletteAddr = (s32)gDefaultFontPalette;
-                if (gCachedPaletteAddr == (s32)gDefaultFontPalette) {
+                paletteAddr = (SpriteFrameEntry *)gDefaultFontPalette;
+                if (gCachedPaletteAddr == (SpriteFrameEntry *)gDefaultFontPalette) {
                     goto skipPalette;
                 }
             } else {
-                paletteAddr = paletteBase + (paletteIndex << 5);
+                paletteAddr = &paletteBase[paletteIndex << 1];
                 if (paletteAddr == gCachedPaletteAddr) {
                     goto skipPalette;
                 }
@@ -1842,7 +1842,7 @@ void renderShadedTextSprite(
             gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x50);
             (gfx + 9)->words.w0 = 0xF0000000;
             gCachedPaletteAddr = paletteAddr;
-            (gfx + 5)->words.w1 = paletteAddr;
+            (gfx + 5)->words.w1 = (s32)paletteAddr;
             (gfx + 6)->words.w1 = 0;
             (gfx + 7)->words.w0 = 0xF5000100;
             (gfx + 8)->words.w1 = 0;

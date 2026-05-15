@@ -21,7 +21,7 @@ Gfx gSpriteRDPSetupDL[] = {
     gsSPEndDisplayList(),
 };
 
-extern s32 gCachedPaletteAddr;
+extern SpriteFrameEntry *gCachedPaletteAddr;
 extern s32 gCachedTextureAddr;
 extern s16 gGraphicsMode;
 extern Gfx *gDisplayListAllocPtr;
@@ -35,8 +35,8 @@ void renderSpriteFrame(SpriteRenderArg *sprite) {
     s32 bottom;
     s32 clipOffsetX;
     s32 clipOffsetY;
-    s32 paletteBase;
-    s32 paletteCacheAddr;
+    SpriteFrameEntry *paletteBase;
+    SpriteFrameEntry *paletteCacheAddr;
     u16 paletteMode;
     u16 format;
     u16 framePaletteIndex;
@@ -48,7 +48,7 @@ void renderSpriteFrame(SpriteRenderArg *sprite) {
     spriteData = sprite->spriteData;
     frameEntry = spriteData->frames;
     left = sprite->x + gTextClipAndOffsetData.offsetX;
-    paletteBase = (s32)frameEntry + (spriteData->numFrames * 0x10);
+    paletteBase = &frameEntry[spriteData->numFrames];
     top = sprite->y + gTextClipAndOffsetData.offsetY;
     frameEntry = &frameEntry[sprite->frameIndex];
     framePaletteIndex = frameEntry->paletteIndex;
@@ -72,7 +72,7 @@ void renderSpriteFrame(SpriteRenderArg *sprite) {
 
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
@@ -88,7 +88,7 @@ void renderSpriteFrame(SpriteRenderArg *sprite) {
             );
         }
 
-        paletteCacheAddr = paletteBase + (framePaletteIndex << 5);
+        paletteCacheAddr = &paletteBase[framePaletteIndex << 1];
         if (paletteCacheAddr != gCachedPaletteAddr) {
             gCachedPaletteAddr = paletteCacheAddr;
             if ((paletteMode & 0xFFFF) == 2) {
@@ -122,8 +122,8 @@ void renderSpriteFrameWithPalette(SpriteRenderArg *sprite) {
     s32 bottom;
     s32 clipOffsetX;
     s32 clipOffsetY;
-    s32 paletteBase;
-    s32 paletteCacheAddr;
+    SpriteFrameEntry *paletteBase;
+    SpriteFrameEntry *paletteCacheAddr;
     u16 paletteMode;
     u16 format;
     u8 paletteIndex;
@@ -135,7 +135,7 @@ void renderSpriteFrameWithPalette(SpriteRenderArg *sprite) {
     spriteData = sprite->spriteData;
     frameEntry = spriteData->frames;
     left = sprite->x + gTextClipAndOffsetData.offsetX;
-    paletteBase = (s32)frameEntry + (spriteData->numFrames * 0x10);
+    paletteBase = &frameEntry[spriteData->numFrames];
     top = sprite->y + gTextClipAndOffsetData.offsetY;
     frameEntry = &frameEntry[sprite->frameIndex];
     paletteIndex = sprite->paletteIndex;
@@ -159,7 +159,7 @@ void renderSpriteFrameWithPalette(SpriteRenderArg *sprite) {
 
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
@@ -175,7 +175,7 @@ void renderSpriteFrameWithPalette(SpriteRenderArg *sprite) {
             );
         }
 
-        paletteCacheAddr = paletteBase + (paletteIndex << 5);
+        paletteCacheAddr = &paletteBase[paletteIndex << 1];
         if (paletteCacheAddr != gCachedPaletteAddr) {
             gCachedPaletteAddr = paletteCacheAddr;
             if ((paletteMode & 0xFFFF) == 2) {
@@ -208,20 +208,20 @@ void renderHalfSizeSpriteFrame(SpriteRenderArg *sprite) {
     s32 top;
     s32 right;
     s32 bottom;
-    s32 paletteCacheAddr;
+    SpriteFrameEntry *paletteCacheAddr;
     u16 paletteMode;
     u16 format;
     u16 framePaletteIndex;
     SpriteSheetData *spriteData;
     SpriteFrameEntry *frameEntry;
-    s32 paletteBase;
+    SpriteFrameEntry *paletteBase;
     s32 clipOffsetX;
 
     clipOffsetY = 0;
     spriteData = sprite->spriteData;
     frameEntry = spriteData->frames;
     left = sprite->x + gTextClipAndOffsetData.offsetX;
-    paletteBase = (s32)frameEntry + (spriteData->numFrames * 16);
+    paletteBase = &frameEntry[spriteData->numFrames];
     frameEntry = frameEntry + sprite->frameIndex;
     framePaletteIndex = frameEntry->paletteIndex;
     top = sprite->y + gTextClipAndOffsetData.offsetY;
@@ -246,7 +246,7 @@ void renderHalfSizeSpriteFrame(SpriteRenderArg *sprite) {
 
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
@@ -262,7 +262,7 @@ void renderHalfSizeSpriteFrame(SpriteRenderArg *sprite) {
             );
         }
 
-        paletteCacheAddr = paletteBase + (framePaletteIndex << 5);
+        paletteCacheAddr = &paletteBase[framePaletteIndex << 1];
         if (paletteCacheAddr != gCachedPaletteAddr) {
             gCachedPaletteAddr = paletteCacheAddr;
             if ((paletteMode & 0xFFFF) == 2) {
@@ -295,20 +295,20 @@ void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *sprite) {
     s32 top;
     s32 right;
     s32 bottom;
-    s32 paletteCacheAddr;
+    SpriteFrameEntry *paletteCacheAddr;
     u16 paletteMode;
     u16 format;
     u8 paletteIndex;
     SpriteSheetData *spriteData;
     SpriteFrameEntry *frameEntry;
-    s32 paletteBase;
+    SpriteFrameEntry *paletteBase;
     s32 clipOffsetX;
 
     clipOffsetY = 0;
     spriteData = sprite->spriteData;
     frameEntry = spriteData->frames;
     left = sprite->x + gTextClipAndOffsetData.offsetX;
-    paletteBase = (s32)frameEntry + (spriteData->numFrames * 16);
+    paletteBase = &frameEntry[spriteData->numFrames];
     frameEntry = frameEntry + sprite->frameIndex;
     paletteIndex = sprite->paletteIndex;
     top = sprite->y + gTextClipAndOffsetData.offsetY;
@@ -333,7 +333,7 @@ void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *sprite) {
 
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
@@ -349,7 +349,7 @@ void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *sprite) {
             );
         }
 
-        paletteCacheAddr = paletteBase + (paletteIndex << 5);
+        paletteCacheAddr = &paletteBase[paletteIndex << 1];
         if (paletteCacheAddr != gCachedPaletteAddr) {
             gCachedPaletteAddr = paletteCacheAddr;
             if ((paletteMode & 0xFFFF) == 2) {
@@ -387,7 +387,7 @@ void renderScaledShadedSpriteFrame(ScaledSpriteArg *sprite) {
     s32 right;
     s32 clipOffsetX;
     s32 clipOffsetY;
-    s32 paletteBase;
+    SpriteFrameEntry *paletteBase;
     u16 paletteMode;
     u16 format;
     u16 paletteIndex;
@@ -397,7 +397,7 @@ void renderScaledShadedSpriteFrame(ScaledSpriteArg *sprite) {
     s32 widthTimes4;
 
     frameEntry = sprite->spriteData->frames;
-    paletteBase = (s32)frameEntry + (sprite->spriteData->numFrames * 0x10);
+    paletteBase = &frameEntry[sprite->spriteData->numFrames];
     frameEntry = &frameEntry[sprite->frameIndex];
 
     paletteMode = gSpritePaletteModes[frameEntry->paletteTableIndex];
@@ -463,7 +463,7 @@ void renderScaledShadedSpriteFrame(ScaledSpriteArg *sprite) {
 
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
@@ -511,8 +511,8 @@ void renderScaledShadedSpriteFrame(ScaledSpriteArg *sprite) {
         {
             u32 palIdx = paletteIndex & 0xFFFF;
             if (palIdx == 0xFE) {
-                if (gCachedPaletteAddr != (s32)gDefaultFontPalette) {
-                    gCachedPaletteAddr = (s32)gDefaultFontPalette;
+                if (gCachedPaletteAddr != (SpriteFrameEntry *)gDefaultFontPalette) {
+                    gCachedPaletteAddr = (SpriteFrameEntry *)gDefaultFontPalette;
                     if (format == 0) {
                         gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gDefaultFontPalette);
                     } else {
@@ -520,7 +520,7 @@ void renderScaledShadedSpriteFrame(ScaledSpriteArg *sprite) {
                     }
                 }
             } else {
-                s32 paletteAddr = paletteBase + (palIdx << 5);
+                SpriteFrameEntry *paletteAddr = &paletteBase[palIdx << 1];
                 if (paletteAddr != gCachedPaletteAddr) {
                     gCachedPaletteAddr = paletteAddr;
                     if (format == 0) {
@@ -650,7 +650,7 @@ void renderScaledAlphaSpriteFrame(FrameSpriteEntry *sprite) {
     if (!(gTextClipAndOffsetData.clipBottom * 4 < top) && (left < right) && (top < bottom)) {
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
@@ -679,8 +679,8 @@ void renderScaledAlphaSpriteFrame(FrameSpriteEntry *sprite) {
         }
 
         if (paletteIndex == 0xFE) {
-            if (gCachedPaletteAddr != (s32)gDefaultFontPalette) {
-                gCachedPaletteAddr = (s32)gDefaultFontPalette;
+            if (gCachedPaletteAddr != (SpriteFrameEntry *)gDefaultFontPalette) {
+                gCachedPaletteAddr = (SpriteFrameEntry *)gDefaultFontPalette;
                 if (format == 0) {
                     gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gDefaultFontPalette);
                 } else {
@@ -688,7 +688,7 @@ void renderScaledAlphaSpriteFrame(FrameSpriteEntry *sprite) {
                 }
             }
         } else {
-            s32 paletteAddr = (u32)&paletteBase[paletteIndex << 1];
+            SpriteFrameEntry *paletteAddr = &paletteBase[paletteIndex << 1];
             if (paletteAddr != gCachedPaletteAddr) {
                 gCachedPaletteAddr = paletteAddr;
                 if (format == 0) {
@@ -727,7 +727,7 @@ void renderTextSprite(TextRenderArg *sprite) {
     s32 bottom;
     s32 clipOffsetY;
     s32 clipOffsetX;
-    s32 paletteBase;
+    SpriteFrameEntry *paletteBase;
     u16 paletteMode;
     u16 format;
     u16 paletteIndex;
@@ -740,7 +740,7 @@ void renderTextSprite(TextRenderArg *sprite) {
     u32 pipeSyncCmd;
 
     frameEntry = sprite->spriteData->frames;
-    paletteBase = (s32)frameEntry + (sprite->spriteData->numFrames * 0x10);
+    paletteBase = &frameEntry[sprite->spriteData->numFrames];
     frameEntry = &frameEntry[sprite->frameIndex];
 
     if (sprite->overridePaletteCount == 0) {
@@ -786,7 +786,7 @@ void renderTextSprite(TextRenderArg *sprite) {
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
             gCachedTextureAddr = 0;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
 
@@ -825,8 +825,8 @@ void renderTextSprite(TextRenderArg *sprite) {
         if (paletteMode == 2) {
             paletteIndex &= 0xFFFF;
             if (paletteIndex == 0xFE) {
-                if (gCachedPaletteAddr != (s32)gDefaultFontPalette) {
-                    gCachedPaletteAddr = (s32)gDefaultFontPalette;
+                if (gCachedPaletteAddr != (SpriteFrameEntry *)gDefaultFontPalette) {
+                    gCachedPaletteAddr = (SpriteFrameEntry *)gDefaultFontPalette;
                     if (format == 0) {
                         gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gDefaultFontPalette);
                     } else {
@@ -834,7 +834,7 @@ void renderTextSprite(TextRenderArg *sprite) {
                     }
                 }
             } else {
-                s32 paletteAddr = paletteBase + (paletteIndex << 5);
+                SpriteFrameEntry *paletteAddr = &paletteBase[paletteIndex << 1];
                 if (paletteAddr != gCachedPaletteAddr) {
                     gCachedPaletteAddr = paletteAddr;
                     if (format == 0) {
@@ -872,7 +872,7 @@ void renderTextSpriteWithTransparency(TextRenderArg *sprite) {
     s32 bottom;
     s32 clipOffsetY;
     s32 clipOffsetX;
-    s32 paletteBase;
+    SpriteFrameEntry *paletteBase;
     u16 paletteMode;
     u16 format;
     u16 paletteIndex;
@@ -888,7 +888,7 @@ void renderTextSpriteWithTransparency(TextRenderArg *sprite) {
     u32 pipeSyncCmd;
 
     frameEntry = sprite->spriteData->frames;
-    paletteBase = (s32)frameEntry + (sprite->spriteData->numFrames * 0x10);
+    paletteBase = &frameEntry[sprite->spriteData->numFrames];
     frameEntry = &frameEntry[sprite->frameIndex];
 
     if (sprite->overridePaletteCount == 0) {
@@ -934,7 +934,7 @@ void renderTextSpriteWithTransparency(TextRenderArg *sprite) {
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
             gCachedTextureAddr = 0;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
 
@@ -984,8 +984,8 @@ void renderTextSpriteWithTransparency(TextRenderArg *sprite) {
         if (paletteMode == 2) {
             paletteIndex &= 0xFFFF;
             if (paletteIndex == 0xFE) {
-                if (gCachedPaletteAddr != (s32)gDefaultFontPalette) {
-                    gCachedPaletteAddr = (s32)gDefaultFontPalette;
+                if (gCachedPaletteAddr != (SpriteFrameEntry *)gDefaultFontPalette) {
+                    gCachedPaletteAddr = (SpriteFrameEntry *)gDefaultFontPalette;
                     if (format == 0) {
                         gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gDefaultFontPalette);
                     } else {
@@ -993,7 +993,7 @@ void renderTextSpriteWithTransparency(TextRenderArg *sprite) {
                     }
                 }
             } else {
-                s32 paletteAddr = paletteBase + (paletteIndex << 5);
+                SpriteFrameEntry *paletteAddr = &paletteBase[paletteIndex << 1];
                 if (paletteAddr != gCachedPaletteAddr) {
                     gCachedPaletteAddr = paletteAddr;
                     if (format == 0) {
@@ -1031,7 +1031,7 @@ void renderTintedSprite(TintedSpriteArg *sprite) {
     s32 bottom;
     s32 clipOffsetY;
     s32 clipOffsetX;
-    s32 paletteBase;
+    SpriteFrameEntry *paletteBase;
     u16 paletteMode;
     u16 format;
     u16 paletteIndex;
@@ -1041,7 +1041,7 @@ void renderTintedSprite(TintedSpriteArg *sprite) {
     s16 scaleT;
 
     frameEntry = sprite->spriteData->frames;
-    paletteBase = (s32)frameEntry + (sprite->spriteData->numFrames * 0x10);
+    paletteBase = &frameEntry[sprite->spriteData->numFrames];
     frameEntry = &frameEntry[sprite->frameIndex];
 
     if (sprite->paletteOverrideCount == 0) {
@@ -1086,7 +1086,7 @@ void renderTintedSprite(TintedSpriteArg *sprite) {
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
             gCachedTextureAddr = 0;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
 
@@ -1127,8 +1127,8 @@ void renderTintedSprite(TintedSpriteArg *sprite) {
 
         if ((paletteMode & 0xFFFF) == 2) {
             if ((paletteIndex & 0xFFFF) == 0xFE) {
-                if (gCachedPaletteAddr != (s32)gDefaultFontPalette) {
-                    gCachedPaletteAddr = (s32)gDefaultFontPalette;
+                if (gCachedPaletteAddr != (SpriteFrameEntry *)gDefaultFontPalette) {
+                    gCachedPaletteAddr = (SpriteFrameEntry *)gDefaultFontPalette;
                     if (format == 0) {
                         gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gDefaultFontPalette);
                     } else {
@@ -1136,7 +1136,7 @@ void renderTintedSprite(TintedSpriteArg *sprite) {
                     }
                 }
             } else {
-                s32 paletteAddr = paletteBase + ((paletteIndex & 0xFFFF) << 5);
+                SpriteFrameEntry *paletteAddr = &paletteBase[(paletteIndex & 0xFFFF) << 1];
                 if (paletteAddr != gCachedPaletteAddr) {
                     gCachedPaletteAddr = paletteAddr;
                     if (format == 0) {
@@ -1173,7 +1173,7 @@ void renderAlphaBlendedTextSprite(TextRenderArg *sprite) {
     s32 top;
     s32 clipOffsetY;
     s32 clipOffsetX;
-    s32 paletteBase;
+    SpriteFrameEntry *paletteBase;
     u16 paletteMode;
     u16 format;
     u16 paletteIndex;
@@ -1183,7 +1183,7 @@ void renderAlphaBlendedTextSprite(TextRenderArg *sprite) {
     s16 scaleT;
 
     frameEntry = sprite->spriteData->frames;
-    paletteBase = (s32)frameEntry + (sprite->spriteData->numFrames * 0x10);
+    paletteBase = &frameEntry[sprite->spriteData->numFrames];
     frameEntry = &frameEntry[sprite->frameIndex];
 
     if (sprite->overridePaletteCount == 0) {
@@ -1228,7 +1228,7 @@ void renderAlphaBlendedTextSprite(TextRenderArg *sprite) {
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
             gCachedTextureAddr = 0;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
 
@@ -1245,8 +1245,8 @@ void renderAlphaBlendedTextSprite(TextRenderArg *sprite) {
 
         if ((paletteMode & 0xFFFF) == 2) {
             if ((paletteIndex & 0xFFFF) == 0xFE) {
-                if (gCachedPaletteAddr != (s32)gDefaultFontPalette) {
-                    gCachedPaletteAddr = (s32)gDefaultFontPalette;
+                if (gCachedPaletteAddr != (SpriteFrameEntry *)gDefaultFontPalette) {
+                    gCachedPaletteAddr = (SpriteFrameEntry *)gDefaultFontPalette;
                     if (format == 0) {
                         gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gDefaultFontPalette);
                     } else {
@@ -1254,11 +1254,11 @@ void renderAlphaBlendedTextSprite(TextRenderArg *sprite) {
                     }
                 }
             } else {
-                gCachedPaletteAddr = 0;
+                gCachedPaletteAddr = NULL;
                 if (format == 0) {
-                    gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, paletteBase + ((paletteIndex & 0xFFFF) << 5));
+                    gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, &paletteBase[(paletteIndex & 0xFFFF) << 1]);
                 } else {
-                    gDPLoadTLUT_pal256(gDisplayListAllocPtr++, paletteBase + ((paletteIndex & 0xFFFF) << 5));
+                    gDPLoadTLUT_pal256(gDisplayListAllocPtr++, &paletteBase[(paletteIndex & 0xFFFF) << 1]);
                 }
             }
         }
@@ -1280,7 +1280,7 @@ void renderAlphaBlendedTextSprite(TextRenderArg *sprite) {
         gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, 0xFF, 0xFF, 0xFF, sprite->alpha);
 
-        gCachedPaletteAddr = (s32)gDefaultFontPalette;
+        gCachedPaletteAddr = (SpriteFrameEntry *)gDefaultFontPalette;
         if (format == 0) {
             gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gDefaultFontPalette);
         } else {
@@ -1412,7 +1412,7 @@ void renderFlippedScaledSpriteFrame(FlippedScaledSpriteArg *sprite) {
 
         if (gGraphicsMode != 0x100) {
             gGraphicsMode = 0x100;
-            gCachedPaletteAddr = 0;
+            gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
@@ -1443,12 +1443,12 @@ void renderFlippedScaledSpriteFrame(FlippedScaledSpriteArg *sprite) {
         }
 
         {
-            s32 paletteAddr = (s32)&paletteBase[paletteIndex << 1];
+            SpriteFrameEntry *paletteAddr = &paletteBase[paletteIndex << 1];
             if (paletteAddr != gCachedPaletteAddr) {
                 gCachedPaletteAddr = paletteAddr;
                 if (paletteIndex == 0xFE) {
-                    if (paletteAddr != (s32)gDefaultFontPalette) {
-                        gCachedPaletteAddr = (s32)gDefaultFontPalette;
+                    if (paletteAddr != (SpriteFrameEntry *)gDefaultFontPalette) {
+                        gCachedPaletteAddr = (SpriteFrameEntry *)gDefaultFontPalette;
                         if (format == 0) {
                             gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, gDefaultFontPalette);
                         } else {
@@ -1456,7 +1456,7 @@ void renderFlippedScaledSpriteFrame(FlippedScaledSpriteArg *sprite) {
                         }
                     }
                 } else {
-                    gCachedPaletteAddr = 0;
+                    gCachedPaletteAddr = NULL;
                     if (format == 0) {
                         gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, paletteAddr);
                     } else {
