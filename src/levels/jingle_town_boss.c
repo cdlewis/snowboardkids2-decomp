@@ -817,11 +817,7 @@ void renderJingleTownBossWithEffects(Player *arg0) {
     }
 
     if (!(arg0->animFlags & 0x10000)) {
-        volume = isqrt64(
-                     (s64)arg0->velocity.x * arg0->velocity.x + (s64)arg0->velocity.y * arg0->velocity.y +
-                     (s64)arg0->velocity.z * arg0->velocity.z
-                 ) >>
-                 12;
+        volume = isqrt64(SQUARE(arg0->velocity.x) + SQUARE(arg0->velocity.y) + SQUARE(arg0->velocity.z)) >> 12;
         if (volume >= 0x81) {
             volume = 0x80;
         }
@@ -831,10 +827,7 @@ void renderJingleTownBossWithEffects(Player *arg0) {
     }
 
     if (!(arg0->animFlags & 1)) {
-        if (isqrt64(
-                (s64)arg0->velocity.x * arg0->velocity.x + (s64)arg0->velocity.y * arg0->velocity.y +
-                (s64)arg0->velocity.z * arg0->velocity.z
-            ) > 0x40000) {
+        if (isqrt64(SQUARE(arg0->velocity.x) + SQUARE(arg0->velocity.y) + SQUARE(arg0->velocity.z)) > 0x40000) {
             s32 temp;
 
             angle = atan2Fixed(-arg0->velocity.x, -arg0->velocity.z);

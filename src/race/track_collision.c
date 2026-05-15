@@ -280,7 +280,7 @@ void alignPlayerToTrackSurface(Player *player) {
             dx = points[2].x - points[0].x;
             dz = points[2].z - points[0].z;
 
-            player->pitchAngle = atan2Fixed(points[0].y - points[2].y, -isqrt64((s64)dx * dx + (s64)dz * dz));
+            player->pitchAngle = atan2Fixed(points[0].y - points[2].y, -isqrt64(SQUARE(dx) + SQUARE(dz)));
             createCombinedRotationMatrix(&player->orientationTransform, player->pitchAngle, player->steeringAngle);
             func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &spE0);
             func_8006B084_6BC84(&player->tiltTransform, &spE0, &spC0);
@@ -349,10 +349,8 @@ void alignPlayerToTrackSurface(Player *player) {
             player->worldPos.y += pushUpOffset;
         }
 
-        magnitude = isqrt64(
-            (s64)player->surfaceNormalX * player->surfaceNormalX +
-            (s64)player->surfaceNormalY * player->surfaceNormalY + (s64)player->surfaceNormalZ * player->surfaceNormalZ
-        );
+        magnitude =
+            isqrt64(SQUARE(player->surfaceNormalX) + SQUARE(player->surfaceNormalY) + SQUARE(player->surfaceNormalZ));
         sign = magnitude >> 31;
         player->surfaceNormalX = (s64)player->surfaceNormalX * 0x2000 / (s64)magnitude;
         player->surfaceNormalY = (s64)player->surfaceNormalY * 0x2000 / (s64)magnitude;
@@ -429,7 +427,7 @@ s32 tryActivateShortcut(Player *player) {
     deltaX = player->worldPos.x - levelItem->shortcutPosX;
     deltaZ = player->worldPos.z - levelItem->shortcutPosZ;
 
-    distSq = (s64)deltaX * deltaX + (s64)deltaZ * deltaZ;
+    distSq = SQUARE(deltaX) + SQUARE(deltaZ);
 
     // Check if player is within activation range (0x2FFFFF in fixed point)
     if (0x2FFFFF < isqrt64(distSq)) {
@@ -465,7 +463,7 @@ s32 isPlayerNearShortcut(Player *player) {
         deltaX = player->worldPos.x - levelItem->shortcutPosX;
         deltaZ = player->worldPos.z - levelItem->shortcutPosZ;
 
-        distSq = (s64)deltaX * deltaX + (s64)deltaZ * deltaZ;
+        distSq = SQUARE(deltaX) + SQUARE(deltaZ);
 
         if (!(0x1FFFFF < isqrt64(distSq))) {
             return 1;
@@ -526,7 +524,7 @@ void handlePlayerToPlayerCollision(Player *player) {
             deltaPos.y < combinedRadius && -combinedRadius < deltaPos.z && deltaPos.z < combinedRadius) {
             s32 dist;
 
-            dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z);
+            dist = isqrt64(SQUARE(deltaPos.x) + SQUARE(deltaPos.y) + SQUARE(deltaPos.z));
 
             if (dist < combinedRadius) {
                 /* Avoid divide by zero */
@@ -624,8 +622,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
             if (negRadius < deltaPos.x && deltaPos.x < combinedRadius && negRadius < deltaPos.y &&
                 deltaPos.y < combinedRadius && negRadius < deltaPos.z && deltaPos.z < combinedRadius) {
 
-                dist =
-                    isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z);
+                dist = isqrt64(SQUARE(deltaPos.x) + SQUARE(deltaPos.y) + SQUARE(deltaPos.z));
 
                 if (dist < combinedRadius) {
                     /* State 1: boxes 4-5 are an active hit zone. */
@@ -656,7 +653,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
 
                     /* State 2: main box hit -> apply knockback if push was significant. */
                     if ((targetPlayer->flyingAttackState == 2) & (boxIndex == 0)) {
-                        dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.z * deltaPos.z);
+                        dist = isqrt64(SQUARE(deltaPos.x) + SQUARE(deltaPos.z));
                         if (dist > 0x30000) {
                             setPlayerCollisionKnockbackState(
                                 player,
@@ -719,7 +716,7 @@ Player *findPlayerNearPosition(Vec3i *position, s32 excludePlayerIndex, s32 sear
             deltaPos.y < combinedRadius && -combinedRadius < deltaPos.z && deltaPos.z < combinedRadius) {
             s32 dist;
 
-            dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z);
+            dist = isqrt64(SQUARE(deltaPos.x) + SQUARE(deltaPos.y) + SQUARE(deltaPos.z));
 
             if (dist < combinedRadius) {
                 u8 playerIndex = node->id;
@@ -752,7 +749,7 @@ s32 isPointInPlayerCollisionSphere(Player *player, Vec3i *point, s32 extraRadius
 
     if (negRadius < delta.x && delta.x < combinedRadius && negRadius < delta.y && delta.y < combinedRadius &&
         negRadius < delta.z && delta.z < combinedRadius) {
-        distSq = (s64)delta.x * delta.x + (s64)delta.y * delta.y + (s64)delta.z * delta.z;
+        distSq = SQUARE(delta.x) + SQUARE(delta.y) + SQUARE(delta.z);
         if (isqrt64(distSq) < combinedRadius) {
             return 1;
         }
@@ -819,7 +816,7 @@ Player *findVulnerablePlayerNearPosition(void *position, s32 excludePlayerIndex,
             deltaPos.y < combinedRadius && -combinedRadius < deltaPos.z && deltaPos.z < combinedRadius) {
             s32 dist;
 
-            dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z);
+            dist = isqrt64(SQUARE(deltaPos.x) + SQUARE(deltaPos.y) + SQUARE(deltaPos.z));
 
             if (dist < combinedRadius) {
                 u8 index = node->id;
@@ -895,7 +892,7 @@ void handleOrientedAreaCollision(Vec3i *origin, s32 radialThreshold, s32 depthEx
         rotateVectorY(&deltaPos, negAngle, &rotatedPos);
 
         /* Compute 2D distance in XY plane */
-        dist = isqrt64((s64)rotatedPos.x * rotatedPos.x + (s64)rotatedPos.y * rotatedPos.y);
+        dist = isqrt64(SQUARE(rotatedPos.x) + SQUARE(rotatedPos.y));
 
         if (dist >= radialThreshold) {
             continue;
@@ -1004,7 +1001,7 @@ s32 checkPositionPlayerCollisionWithKnockback(Vec3i *pos, s32 extraRadius, s32 m
         }
 
         /* 2D distance check (xz plane only) */
-        dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.z * deltaPos.z);
+        dist = isqrt64(SQUARE(deltaPos.x) + SQUARE(deltaPos.z));
 
         if (dist >= combinedRadius) {
             continue;
@@ -1031,7 +1028,7 @@ s32 checkPositionPlayerCollisionWithKnockback(Vec3i *pos, s32 extraRadius, s32 m
         targetPlayer->worldPos.z += deltaPos.z;
 
         /* Check if push was significant enough for knockback */
-        dist = isqrt64((s64)deltaPos.x * deltaPos.x + (s64)deltaPos.z * deltaPos.z);
+        dist = isqrt64(SQUARE(deltaPos.x) + SQUARE(deltaPos.z));
 
         if (dist > 0x30000) {
             setPlayerCollisionKnockbackState(
@@ -1105,7 +1102,7 @@ s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeig
                 goto next;
             }
 
-            dist = isqrt64(((s64)deltaPos.x * deltaPos.x) + ((s64)deltaPos.z * deltaPos.z));
+            dist = isqrt64(SQUARE(deltaPos.x) + SQUARE(deltaPos.z));
 
             if (dist >= combinedRadius) {
                 goto next;
@@ -1127,7 +1124,7 @@ s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeig
             targetPlayer->worldPos.x += deltaPos.x;
             targetPlayer->worldPos.z += deltaPos.z;
 
-            dist = isqrt64(((s64)deltaPos.x * deltaPos.x) + ((s64)deltaPos.z * deltaPos.z));
+            dist = isqrt64(SQUARE(deltaPos.x) + SQUARE(deltaPos.z));
 
             if (dist > 0x40000) {
                 deltaPos.y = 0;
@@ -1193,9 +1190,7 @@ s16 getHomingAngleToTarget(
                 angleDiff = (angleDiff - facingAngle) & 0x1FFF;
 
                 if ((angleDiff - 0x800) >= 0x1001U) {
-                    s32 dist = isqrt64(
-                        (s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z
-                    );
+                    s32 dist = isqrt64(SQUARE(deltaPos.x) + SQUARE(deltaPos.y) + SQUARE(deltaPos.z));
 
                     if (dist < searchRadius) {
                         if (dist <= 0x13FFFFF) {
@@ -1275,9 +1270,7 @@ s32 checkStarHitCollisionWithVulnerablePlayers(Vec3i *pos, s32 excludePlayerIdx,
                         deltaPos.y < combinedRadius && -combinedRadius < deltaPos.z && deltaPos.z < combinedRadius) {
                         s32 dist;
 
-                        dist = isqrt64(
-                            (s64)deltaPos.x * deltaPos.x + (s64)deltaPos.y * deltaPos.y + (s64)deltaPos.z * deltaPos.z
-                        );
+                        dist = isqrt64(SQUARE(deltaPos.x) + SQUARE(deltaPos.y) + SQUARE(deltaPos.z));
 
                         if (dist < combinedRadius) {
                             u8 index = node->id;
@@ -1372,7 +1365,7 @@ s32 isPlayerInRangeAndPull(Vec3i *arg0, s32 arg1, Player *arg2) {
     if (negRadius < localVec.x && localVec.x < combinedRadius && negRadius < localVec.y &&
         localVec.y < combinedRadius && negRadius < localVec.z && localVec.z < combinedRadius) {
 
-        dist = isqrt64((s64)localVec.x * localVec.x + (s64)localVec.y * localVec.y + (s64)localVec.z * localVec.z);
+        dist = isqrt64(SQUARE(localVec.x) + SQUARE(localVec.y) + SQUARE(localVec.z));
 
         if (dist < combinedRadius) {
             if (dist == 0) {
@@ -1484,8 +1477,7 @@ void computePlayerTerrainAlignment(Player *player) {
     samplePoints[1].y -= samplePoints[0].y;
     samplePoints[1].z -= samplePoints[0].z;
 
-    sampleDistSq = (s64)samplePoints[1].x * samplePoints[1].x + (s64)samplePoints[1].y * samplePoints[1].y +
-                   (s64)samplePoints[1].z * samplePoints[1].z;
+    sampleDistSq = SQUARE(samplePoints[1].x) + SQUARE(samplePoints[1].y) + SQUARE(samplePoints[1].z);
     length = isqrt64(sampleDistSq);
 
     samplePoints[1].x = (s32)(((s64)samplePoints[1].x * 0x2000) / length);
@@ -1496,10 +1488,7 @@ void computePlayerTerrainAlignment(Player *player) {
     samplePoints[2].y -= samplePoints[0].y;
     samplePoints[2].z -= samplePoints[0].z;
 
-    length = isqrt64(
-        (s64)samplePoints[2].x * samplePoints[2].x + (s64)samplePoints[2].y * samplePoints[2].y +
-        (s64)samplePoints[2].z * samplePoints[2].z
-    );
+    length = isqrt64(SQUARE(samplePoints[2].x) + SQUARE(samplePoints[2].y) + SQUARE(samplePoints[2].z));
 
     samplePoints[2].x = (s32)(((s64)samplePoints[2].x * 0x2000) / length);
     samplePoints[2].y = (s32)(((s64)samplePoints[2].y * 0x2000) / length);
@@ -1509,7 +1498,7 @@ void computePlayerTerrainAlignment(Player *player) {
     normal.y = samplePoints[2].z * samplePoints[1].x - samplePoints[2].x * samplePoints[1].z;
     normal.z = samplePoints[2].x * samplePoints[1].y - samplePoints[2].y * samplePoints[1].x;
 
-    length = isqrt64((s64)normal.x * normal.x + (s64)normal.y * normal.y + (s64)normal.z * normal.z);
+    length = isqrt64(SQUARE(normal.x) + SQUARE(normal.y) + SQUARE(normal.z));
 
     normal.x = (s32)(((s64)normal.x * 0x2000) / length);
     normal.y = (s32)(((s64)normal.y * 0x2000) / length);
@@ -1520,7 +1509,7 @@ void computePlayerTerrainAlignment(Player *player) {
     pitchAngle = atan2Fixed(rotatedNormal.z, -rotatedNormal.y);
     player->pitchAngle = (-pitchAngle) & 0x1FFF;
 
-    length = isqrt64((s64)rotatedNormal.y * rotatedNormal.y + (s64)rotatedNormal.z * rotatedNormal.z);
+    length = isqrt64(SQUARE(rotatedNormal.y) + SQUARE(rotatedNormal.z));
 
     rollAngle = atan2Fixed(-rotatedNormal.x, -length);
     player->rollAngle = (-rollAngle) & 0x1FFF;

@@ -1439,7 +1439,7 @@ s32 updatePlayerNormalDriving(Player *player) {
                         compY = -compY;
                     }
 
-                    hypot = isqrt64((s64)compX * compX + (s64)compY * compY);
+                    hypot = isqrt64(SQUARE(compX) + SQUARE(compY));
 
                     if ((s32)curvature > 0) {
                         compX = ((s64)compX * (s32)curvature) / hypot;
@@ -4128,7 +4128,7 @@ s32 updateKnockbackAirbornePhase(Player *arg0) {
         knockbackVelZ = arg0->knockbackVelocity.z;
         arg0->behaviorStep = step + 1;
         arg0->velocity.z = knockbackVelZ;
-        horizontalSpeed = isqrt64((s64)arg0->velocity.x * arg0->velocity.x + (s64)knockbackVelZ * knockbackVelZ);
+        horizontalSpeed = isqrt64(SQUARE(arg0->velocity.x) + SQUARE(knockbackVelZ));
         if (horizontalSpeed > 0x60000) {
             arg0->velocity.x = (s64)arg0->velocity.x * 0x60000 / horizontalSpeed;
             arg0->velocity.z = (s64)arg0->velocity.z * 0x60000 / horizontalSpeed;

@@ -1196,14 +1196,14 @@ approx_path:
 }
 
 s32 distance_2d(s32 x, s32 y) {
-    s64 x2 = (s64)x * x;
-    s64 y2 = (s64)y * y;
+    s64 x2 = SQUARE(x);
+    s64 y2 = SQUARE(y);
 
     return isqrt64(x2 + y2);
 }
 
 s32 distance_3d(s32 x, s32 y, s32 z) {
-    return isqrt64((s64)x * x + (s64)y * y + (s64)z * z);
+    return isqrt64(SQUARE(x) + SQUARE(y) + SQUARE(z));
 }
 
 void computeLookAtMatrix(Vec3i *from, Vec3i *to, Transform3D *out) {

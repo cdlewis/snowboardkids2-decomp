@@ -7,8 +7,6 @@
 #include "race/track_height.h"
 #include "system/task_scheduler.h"
 
-#define SQUARE(x) (s64) x *x
-
 typedef struct {
     s16 duration; /* 0x00 */
     s16 pad02;    /* 0x02 */
