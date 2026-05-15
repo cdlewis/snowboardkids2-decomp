@@ -93,7 +93,20 @@ typedef struct {
     /* 0x14 */ u8 flipX;
 } FlippedScaledSpriteArg;
 
-void func_80010C98_11898(void *arg0);
+typedef struct {
+    /* 0x00 */ s16 baseY;
+    /* 0x02 */ s16 x;
+    /* 0x04 */ SpriteSheetData *spriteAsset;
+    /* 0x08 */ u16 spriteIndex;
+    /* 0x0A */ u16 scaleX;
+    /* 0x0C */ u16 scaleY;
+    /* 0x0E */ s16 currentY;
+    /* 0x10 */ s16 unk10;
+    /* 0x12 */ u8 padding;
+    /* 0x13 */ u8 maxItems;
+} CharSelectIconEntry;
+
+void func_80010C98_11898(CharSelectIconEntry *arg0);
 void renderScaledShadedSpriteFrame(ScaledSpriteArg *arg0);
 void renderAlphaBlendedTextSprite(TextRenderArg *arg0);
 void initDefaultFontPalette(void);

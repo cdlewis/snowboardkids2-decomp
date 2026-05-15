@@ -79,19 +79,6 @@ typedef struct {
 } SelectionMenuState;
 
 typedef struct {
-    s16 baseY;
-    s16 x;
-    void *spriteAsset;
-    s16 spriteIndex;
-    s16 scaleX;
-    s16 scaleY;
-    s16 currentY;
-    s16 unk10;
-    u8 padding;
-    u8 maxItems;
-} CharSelectIconEntry;
-
-typedef struct {
     CharSelectIconEntry entries[3];
     u8 padding[0x16];
     u8 playerIndex;
@@ -1048,7 +1035,7 @@ void initCharSelectIcons(CharSelectIconsState *state) {
         iconEntry->padding = 0;
         iconEntry->scaleX = scaleX;
         iconEntry->scaleY = scaleY;
-        iconEntry->spriteAsset = spriteAsset;
+        iconEntry->spriteAsset = (SpriteSheetData *)spriteAsset;
         iconEntry->currentY = 0;
         iconEntry->maxItems = (s8)(tableVal + 1);
         xPos += xIncrement;
