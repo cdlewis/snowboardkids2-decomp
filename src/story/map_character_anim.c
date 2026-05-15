@@ -92,7 +92,7 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
 
         x = camera->cameraX;
         z = camera->cameraZ;
-        camera->orbitRadius = isqrt64(SQUARE(x) + SQUARE(z));
+        camera->orbitRadius = isqrt64(MAGNITUDE_SQ_2D(x, z));
 
         camera->targetAngle = 0;
         camera->viewAngle = 0;
@@ -233,7 +233,7 @@ void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera) {
             state->unk426 = absMoveZ;
         }
 
-        camera->orbitRadius = isqrt64(SQUARE(pos.x) + SQUARE(pos.z));
+        camera->orbitRadius = isqrt64(MAGNITUDE_SQ_2D(pos.x, pos.z));
 
         temp_v1 =
             ((moveX * (savedPos.z >> 8)) / (camera->orbitRadius >> 8) +
@@ -255,12 +255,12 @@ void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera) {
         state->animState = 0;
     }
 
-    if ((isqrt64(SQUARE(pos.x) + SQUARE(pos.z)) - 0x240000) > 0x640000U) {
+    if ((isqrt64(MAGNITUDE_SQ_2D(pos.x, pos.z)) - 0x240000) > 0x640000U) {
         if (stickX) {
             memcpy(&savedPos, &camera->cameraX, sizeof(Vec3i));
             memcpy(&pos, &savedPos, sizeof(Vec3i));
 
-            camera->orbitRadius = isqrt64(SQUARE(pos.x) + SQUARE(pos.z));
+            camera->orbitRadius = isqrt64(MAGNITUDE_SQ_2D(pos.x, pos.z));
 
             temp_v1 = ((moveX * (savedPos.z >> 8)) / (camera->orbitRadius >> 8));
             pos.x += (temp_v1 << 16);
@@ -297,7 +297,7 @@ void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera) {
 
     memcpy(&camera->cameraX, &pos, sizeof(Vec3i));
     camera->orbitAngle = atan2Fixed(pos.x, pos.z);
-    camera->orbitRadius = isqrt64(SQUARE(pos.x) + SQUARE(pos.z));
+    camera->orbitRadius = isqrt64(MAGNITUDE_SQ_2D(pos.x, pos.z));
 
     if (camera->targetAngle != camera->viewAngle) {
         absDiff = __abs(camera->targetAngle - camera->viewAngle);
@@ -414,7 +414,7 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
     camera->viewAngle = masked;
     camera->targetAngle = masked;
 
-    camera->travelDistance = isqrt64(SQUARE(targetX) + SQUARE(targetZ));
+    camera->travelDistance = isqrt64(MAGNITUDE_SQ_2D(targetX, targetZ));
 
     setViewportFadeValue(NULL, 0xFF, 0x10);
 
@@ -557,7 +557,7 @@ void approachStoryMapOrigin(StoryMapCameraState *camera) {
 
     x = camera->cameraX;
     z = camera->cameraZ;
-    sumSquares = SQUARE(x) + SQUARE(z);
+    sumSquares = MAGNITUDE_SQ_2D(x, z);
     distance = isqrt64(sumSquares);
 
     if (distance <= 0x880000) {

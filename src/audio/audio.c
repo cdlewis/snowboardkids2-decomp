@@ -839,7 +839,7 @@ void processSpatialAudio(void) {
                       ((-distance) < delta.y)) &&
                      (delta.z < distance)) &&
                     ((-distance) < delta.z)) {
-                    d = isqrt64(SQUARE(delta.x) + SQUARE(delta.y) + SQUARE(delta.z));
+                    d = isqrt64(MAGNITUDE_SQ_3D(delta.x, delta.y, delta.z));
                     if (d < distance) {
                         distance = d;
                         voiceIndex = gGraphicsManager->bufferFlags[j];

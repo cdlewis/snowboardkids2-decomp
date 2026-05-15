@@ -332,7 +332,7 @@ void updateChaseCamera(ChaseCameraState *camera) {
     diffX = camera->x - gs->players[camera->playerIdx].worldPos.x;
     diffZ = camera->z - gs->players[camera->playerIdx].worldPos.z;
 
-    dist = isqrt64(SQUARE(diffX) + SQUARE(diffZ));
+    dist = isqrt64(MAGNITUDE_SQ_2D(diffX, diffZ));
 
     targetDist = camera->height;
     if (dist < targetDist) {
@@ -351,7 +351,7 @@ void updateChaseCamera(ChaseCameraState *camera) {
     diffY = camera->y - gs->players[camera->playerIdx].worldPos.y;
     diffZ = camera->z - gs->players[camera->playerIdx].worldPos.z;
 
-    dist = isqrt64(SQUARE(diffX) + SQUARE(diffY) + SQUARE(diffZ));
+    dist = isqrt64(MAGNITUDE_SQ_3D(diffX, diffY, diffZ));
 
     maxDist = camera->distance + 0x10000;
     if (maxDist < dist) {
