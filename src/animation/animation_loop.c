@@ -6,14 +6,68 @@
 #include "os_cont.h"
 #include "system/task_scheduler.h"
 
+#define DIFFY_ALGO(x)                                          \
+    s32 absStep;                                               \
+    s32 diff;                                                  \
+    posStep = arg0->pos##x##Step;                              \
+    diff = (arg0->pos##x##Target - arg0->pos##x##Current) / 6; \
+    absFrac = (diff > 0) ? (diff) : (-diff);                   \
+    absStep = (posStep > 0) ? (posStep) : (-posStep);          \
+    if (absStep < absFrac) {                                   \
+        diff = posStep;                                        \
+    }                                                          \
+    arg0->pos##x##Current += diff;
+
+#define DIFFY_ROT_ALGO(x)                          \
+    s32 absStep;                                   \
+    s32 step;                                      \
+    s32 wrapTemp;                                  \
+    s16 target = arg0->rot##x##Target;             \
+    s16 current = arg0->rot##x##Current;           \
+    s32 diff = target - current;                   \
+                                                   \
+    if (diff >= 0x1001) {                          \
+        wrapTemp = arg0->rot##x##Current + 0x2000; \
+        diff = target - wrapTemp;                  \
+    } else if (diff < (-0x1000)) {                 \
+        wrapTemp = arg0->rot##x##Current - 0x2000; \
+        diff = target - wrapTemp;                  \
+    }                                              \
+    diff = diff / 8;                               \
+    step = arg0->rot##x##Step;                     \
+    absFrac = (diff > 0) ? (diff) : (-diff);       \
+    absStep = (step > 0) ? (step) : (-step);       \
+    if (absStep < absFrac) {                       \
+        diff = step;                               \
+    }                                              \
+    absStep = step;                                \
+    absFrac = (diff > 0) ? (diff) : (-diff);       \
+    if (absStep < 0) {                             \
+        absStep += 0x1F;                           \
+    }                                              \
+    absStep >>= 5;                                 \
+    if (absStep < 0) {                             \
+        absStep = -absStep;                        \
+    }                                              \
+    if (absFrac >= absStep) {                      \
+        arg0->rot##x##Current += diff;             \
+    }
+
+extern s32 gControllerInputs[];
+extern s32 gButtonsPressed[];
+extern s8 D_800AB04B;
+extern s8 gAnalogStickY;
+extern u8 gAnalogStickX;
+extern u16 D_8009ADE0_9B9E0;
+
+void initAnimationLoopState(CutsceneCameraState *, u16);
+
 void setAnimationLoopMode(CutsceneCameraState *arg0, s8 mode) {
     arg0->inputMode = mode;
 }
 
-void initAnimationLoopState(CutsceneCameraState *, u16);
-
 void *createAnimationLoopState(u16 nodeId) {
-    CutsceneCameraState *state = allocateNodeMemory(0x74);
+    CutsceneCameraState *state = allocateNodeMemory(sizeof(CutsceneCameraState));
     initAnimationLoopState(state, nodeId);
     return state;
 }
@@ -88,13 +142,6 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
     queueAnonymousBufferData(temp_s0);
     setViewportTransformById(arg0->nodeId, temp_s0);
 }
-
-extern s32 gControllerInputs[];
-extern s32 gButtonsPressed[];
-extern s8 D_800AB04B;
-extern s8 gAnalogStickY;
-extern u8 gAnalogStickX;
-extern u16 D_8009ADE0_9B9E0;
 
 void handleAnimationLoopDebugInput(CutsceneCameraState *arg0) {
     s8 mode = arg0->inputMode;
@@ -299,53 +346,6 @@ void initCameraShake(CutsceneCameraShakeState *cameraShake, s32 amplitude, s16 d
     cameraShake->shakeAmplitude = amplitude;
     cameraShake->shakeDuration = duration;
 }
-
-#define DIFFY_ALGO(x)                                          \
-    s32 absStep;                                               \
-    s32 diff;                                                  \
-    posStep = arg0->pos##x##Step;                              \
-    diff = (arg0->pos##x##Target - arg0->pos##x##Current) / 6; \
-    absFrac = (diff > 0) ? (diff) : (-diff);                   \
-    absStep = (posStep > 0) ? (posStep) : (-posStep);          \
-    if (absStep < absFrac) {                                   \
-        diff = posStep;                                        \
-    }                                                          \
-    arg0->pos##x##Current += diff;
-
-#define DIFFY_ROT_ALGO(x)                          \
-    s32 absStep;                                   \
-    s32 step;                                      \
-    s32 wrapTemp;                                  \
-    s16 target = arg0->rot##x##Target;             \
-    s16 current = arg0->rot##x##Current;           \
-    s32 diff = target - current;                   \
-                                                   \
-    if (diff >= 0x1001) {                          \
-        wrapTemp = arg0->rot##x##Current + 0x2000; \
-        diff = target - wrapTemp;                  \
-    } else if (diff < (-0x1000)) {                 \
-        wrapTemp = arg0->rot##x##Current - 0x2000; \
-        diff = target - wrapTemp;                  \
-    }                                              \
-    diff = diff / 8;                               \
-    step = arg0->rot##x##Step;                     \
-    absFrac = (diff > 0) ? (diff) : (-diff);       \
-    absStep = (step > 0) ? (step) : (-step);       \
-    if (absStep < absFrac) {                       \
-        diff = step;                               \
-    }                                              \
-    absStep = step;                                \
-    absFrac = (diff > 0) ? (diff) : (-diff);       \
-    if (absStep < 0) {                             \
-        absStep += 0x1F;                           \
-    }                                              \
-    absStep >>= 5;                                 \
-    if (absStep < 0) {                             \
-        absStep = -absStep;                        \
-    }                                              \
-    if (absFrac >= absStep) {                      \
-        arg0->rot##x##Current += diff;             \
-    }
 
 s16 advanceCameraAnimation(CutsceneCameraState *arg0) {
     s32 step;

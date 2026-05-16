@@ -27,7 +27,6 @@ typedef struct {
     s32 unkC;
 } CallbackPoolSlot;
 
-
 // Screen border overlay region with color
 typedef struct {
     s16 clipLeft;
