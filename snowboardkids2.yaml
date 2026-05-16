@@ -429,7 +429,7 @@ segments:
           use_src_path: True,
           name: rsp/f3dex2,
         }
-      - [0x9E640, rodata] # no idea what this is
+      - [0x9E640, .rodata, graphics/f3dex2_config]
       - [0x9E8E0, .rodata, effects/cutscene_keyframes]
       - [0x9E910, .rodata, graphics/tiled_texture]
       - [0x9E938, .rodata, animation/oscillating_sprite]
