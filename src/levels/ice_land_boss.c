@@ -373,7 +373,7 @@ Vec3i D_800BCA64[] = {
     { 0x000C0000, 0x00000000, 0xFFF40000 },
 };
 
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 extern BossSurfaceColor gBossSurfaceColors[];
 extern s32 gControllerInputs[];
 
@@ -973,7 +973,7 @@ s32 iceLandBossHoverAttackPhase(Player *arg0) {
     applyClampedVelocityToPosition(arg0);
     advancePlayerLeanAnimationAuto(arg0, 5);
 
-    if ((D_8009ADE0_9B9E0 & 0xF) == 0) {
+    if ((gGlobalFrameCounter & 0xF) == 0) {
         spawnBossHomingProjectileVariant2Task(arg0);
     }
 

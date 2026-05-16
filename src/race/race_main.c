@@ -76,7 +76,7 @@ typedef struct {
 extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 extern AssetMeta D_8009A550_9B150[];
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
 extern s32 gButtonsPressed[];
@@ -998,7 +998,7 @@ void updateRacePlayer(Player *player) {
         }
     }
 
-    if (gameState->raceIntroState == 0 && !(D_8009ADE0_9B9E0 & 3)) {
+    if (gameState->raceIntroState == 0 && !(gGlobalFrameCounter & 3)) {
         if (player->costumeID == 0xE) {
             addPlayerRaceGold(player, 1);
         }

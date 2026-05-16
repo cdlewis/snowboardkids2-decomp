@@ -178,7 +178,7 @@ typedef struct {
     u8 unk76;
 } Alloc_CharacterAttackEffect;
 
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 
 void loadFirstSprayParticle(SprayEffectTask *);
 void cleanupSprayEffect(void **);
@@ -494,7 +494,7 @@ void spawnPlayerCharacterTrailParticle(Player *arg0, s32 arg1) {
         return;
     }
 
-    if (D_8009ADE0_9B9E0 & 1) {
+    if (gGlobalFrameCounter & 1) {
         return;
     }
 

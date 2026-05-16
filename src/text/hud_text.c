@@ -296,7 +296,7 @@ typedef struct {
     /* 0x49 */ u8 animToggle;
 } SelectionParticleUpdateState;
 
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 extern char gIntegerFormatString[];
 extern char D_8009E48C_9F08C[];
 
@@ -634,7 +634,7 @@ void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
         arg0->cursorY = allocation->unkAC0 + 0x38;
     }
 
-    if (!(D_8009ADE0_9B9E0 & 7)) {
+    if (!(gGlobalFrameCounter & 7)) {
         animFrame = arg0->animFrame + 1;
         arg0->animFrame = animFrame;
         if ((u32)(animFrame & 0xFFFF) >= 0x15U) {

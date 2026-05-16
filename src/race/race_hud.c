@@ -744,7 +744,7 @@ extern void *D_80095930_96530;
 extern Gfx D_8009A780_9B380[];
 extern s32 gLookAtPtr;
 extern s32 gFrameCounter;
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 extern void *D_80094DD0_959D0;
@@ -1956,7 +1956,7 @@ void updateGoldCoinsTask(GoldCoinUpdateState *arg0) {
     Player *player;
     s16 timer;
 
-    if (D_8009ADE0_9B9E0 & 1) {
+    if (gGlobalFrameCounter & 1) {
         arg0->animationFrame = arg0->animationFrame + 1;
     }
 
@@ -2698,7 +2698,7 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
     }
 
     itemBox->matrix.translation.y = itemBox->baseY;
-    sinResult = approximateSin((D_8009ADE0_9B9E0 << 8) & 0x1F00);
+    sinResult = approximateSin((gGlobalFrameCounter << 8) & 0x1F00);
     i = 0;
     itemBox->matrix.translation.y += 0x200000 + (sinResult << 5);
 
@@ -3432,7 +3432,7 @@ void updateHomingProjectileMovement(HomingProjectileUpdateArg *arg0) {
             setCallback(&updateHomingProjectileImpact);
         }
 
-        if (D_8009ADE0_9B9E0 & 1) {
+        if (gGlobalFrameCounter & 1) {
             arg0->animFrame = arg0->animFrame + 1;
             if ((s16)arg0->animFrame >= 6) {
                 arg0->animFrame = 0;
@@ -3469,7 +3469,7 @@ void updateHomingProjectileImpact(HomingProjectileImpactArg *arg0) {
         terminateCurrentTask();
     }
 
-    if (D_8009ADE0_9B9E0 & 1) {
+    if (gGlobalFrameCounter & 1) {
         arg0->animFrame++;
         if (arg0->animFrame >= 6) {
             arg0->animFrame = 0;

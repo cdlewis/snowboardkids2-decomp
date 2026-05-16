@@ -93,7 +93,7 @@ typedef struct {
 extern s32 gFirstPlaceGoldReward[];
 extern s32 gSecondPlaceGoldReward[];
 extern s32 gThirdPlaceGoldReward[];
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 
 // const char definitions appear later to keep the rodata gods happy
 const char sTimerFormatLow[];
@@ -1311,7 +1311,7 @@ void cleanupVictorySnowflake(VictorySnowflakeState *state) {
 void conditionalSpawnVictorySnowflake(VictorySnowflakeSpawnArgs *args) {
     VictorySnowflakeTaskState *task;
 
-    if (D_8009ADE0_9B9E0 & 1) {
+    if (gGlobalFrameCounter & 1) {
         task = scheduleTask(initVictorySnowflake, 2, 0, 0xE6);
         if (task != NULL) {
             task->playerIndex = args->playerIndex;

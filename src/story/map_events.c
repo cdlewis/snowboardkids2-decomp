@@ -54,7 +54,7 @@ u8 gStoryMapRegularEventTypes[30][8] = {
 
 u8 gStoryMapRegularEventTypesPad[4] = { 0x04, 0x05, 0x08, 0x07 };
 
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 
 void nullRandomEventCallback(void);
 
@@ -210,7 +210,7 @@ void initStoryMapRandomEvent(u8 *eventTypeOut) {
         goto check_event;
     }
 
-    eventTypeIndex = gStoryMapRegularEventTypes[D_800AFE8C_A71FC->playerBoardIds[0]][D_8009ADE0_9B9E0 & 7];
+    eventTypeIndex = gStoryMapRegularEventTypes[D_800AFE8C_A71FC->playerBoardIds[0]][gGlobalFrameCounter & 7];
     if (eventTypeIndex != 0) {
         regularTask = scheduleTask(initStoryMapItem, 0, 0, 0x5B);
         regularTask->eventTypeIndex = eventTypeIndex - 1;

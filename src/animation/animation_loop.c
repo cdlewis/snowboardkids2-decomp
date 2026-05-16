@@ -55,10 +55,10 @@
 
 extern s32 gControllerInputs[];
 extern s32 gButtonsPressed[];
-extern s8 D_800AB04B;
+extern s8 gDebugCameraBaseStep;
 extern s8 gAnalogStickY;
 extern u8 gAnalogStickX;
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 
 void initAnimationLoopState(CutsceneCameraState *, u16);
 
@@ -154,7 +154,7 @@ void handleAnimationLoopDebugInput(CutsceneCameraState *arg0) {
                 arg0->posXCurrent = 0;
             } else {
                 temp = arg0->posXCurrent;
-                temp += D_800AB04B << 12;
+                temp += gDebugCameraBaseStep << 12;
                 arg0->posXCurrent = temp;
             }
 
@@ -184,11 +184,11 @@ void handleAnimationLoopDebugInput(CutsceneCameraState *arg0) {
                 arg0->posXCurrent = 0;
             } else if (gButtonsPressed[3] & R_TRIG) {
                 temp = arg0->posXCurrent;
-                temp += D_800AB04B << 16;
+                temp += gDebugCameraBaseStep << 16;
                 arg0->posXCurrent = temp;
             } else {
                 temp = arg0->posXCurrent;
-                temp += D_800AB04B << 12;
+                temp += gDebugCameraBaseStep << 12;
                 arg0->posXCurrent = temp;
             }
 
@@ -403,7 +403,7 @@ s16 advanceCameraAnimation(CutsceneCameraState *arg0) {
         result = 1;
     }
     if (arg0->shakeDuration > 0) {
-        if (D_8009ADE0_9B9E0 & 1) {
+        if (gGlobalFrameCounter & 1) {
             arg0->posYOffset = arg0->shakeAmplitude;
         } else {
             arg0->posYOffset = -arg0->shakeAmplitude;

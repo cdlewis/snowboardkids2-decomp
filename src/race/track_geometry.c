@@ -19,7 +19,7 @@ void updateStoryMapRareEventSkating(Func2E024Arg *);
 void updateStoryMapRareEventSnowman(Func2E024Arg *);
 void updateStoryMapRareEventCheering(Func2E024Arg *);
 
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 
 u16 gNpcCollisionRadii[] = {
     0x000F, 0x000F, 0x0013, 0x0013, 0x0013, 0x000F, 0x000F, 0x000F, 0x0013, 0x0000, 0x0002, 0x0304, 0x0506, 0x0907,
@@ -210,7 +210,7 @@ void updateStoryMapRareEventIdle(Func2E024Arg *arg0) {
         if (arg0->timer[0] == 0) {
             temp_a0 = randB() & 0x1F;
             arg0->timer[1] = (u8)temp_a0 + 0x18;
-            if (D_8009ADE0_9B9E0 & 1) {
+            if (gGlobalFrameCounter & 1) {
                 arg0->elements[0].unk44 = 0x290000;
                 spawnSpriteEffectEx(
                     arg0->elements[0].model,

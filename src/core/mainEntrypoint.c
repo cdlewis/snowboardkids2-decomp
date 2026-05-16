@@ -14,7 +14,7 @@
 
 extern OSMesg mainMessageQueueBuffer[32];
 extern OSMesgQueue mainMessageQueue;
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 extern u8 gControllerPollingEnabled;
 extern void D_800A32D0_A3ED0;
 
@@ -77,7 +77,7 @@ void mainThreadEntrypoint(void *arg) {
         if (isPaused == FALSE) {
             processControllerInputs();
             startControllerRead();
-            D_8009ADE0_9B9E0++;
+            gGlobalFrameCounter++;
             cleanupUnusedNodes();
             runTaskSchedulers();
             motorUpdate();

@@ -252,7 +252,7 @@ extern const char D_8009DF28_9EB28[];
 extern const char D_8009DF2C_9EB2C[];
 extern const char D_8009DF30_9EB30[];
 extern const char D_8009DF34_9EB34[];
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 extern s32 gControllerInputs;
 
 void setupGalleryMenuState(void);
@@ -1202,7 +1202,7 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                             break;
 
                         case 3:
-                            if (D_8009ADE0_9B9E0 & 8) {
+                            if (gGlobalFrameCounter & 8) {
                                 alloc->unkB50 = 0x30;
                             } else {
                                 alloc->unkB50 = 0x31;

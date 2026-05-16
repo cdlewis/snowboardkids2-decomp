@@ -197,7 +197,7 @@ typedef struct {
 } D_800AFE8C_type_202A0;
 
 extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
-extern u16 D_8009ADE0_9B9E0;
+extern u16 gGlobalFrameCounter;
 
 extern void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *);
 
@@ -1083,7 +1083,7 @@ void renderUnlockNotification(UnlockNotificationState *state) {
 
     if (D_800AFE8C_A71FC->gameMode == 0) {
         if (EepromSaveData->save_slot_status[0] == 5) {
-            if ((D_8009ADE0_9B9E0 & 7) == 0) {
+            if ((gGlobalFrameCounter & 7) == 0) {
                 nextFrame = state->frameIndex + 1;
                 state->frameIndex = nextFrame;
                 if (nextFrame < 0x15) {
