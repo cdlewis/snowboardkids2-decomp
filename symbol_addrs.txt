@@ -803,6 +803,7 @@ gFirstPlaceGoldReward = 0x80090460; // rom:0x91060
 gSecondPlaceGoldReward = 0x800904A0; // rom:0x910A0
 gThirdPlaceGoldReward = 0x800904E0; // rom:0x910E0
 gIntegerFormatString = 0x8009E488; // rom:0x9F088
+gGoldFormatString7d = 0x8009E48C; // rom:0x9F08C
 sGoldFormatShort = 0x8009E870; // rom:0x9F470
 sGoldFormatLong = 0x8009E878; // rom:0x9F478
 sTrickPointsFormat = 0x8009E924; // rom:0x9F524

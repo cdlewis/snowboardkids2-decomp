@@ -296,9 +296,26 @@ typedef struct {
     /* 0x49 */ u8 animToggle;
 } SelectionParticleUpdateState;
 
-extern u16 gGlobalFrameCounter;
-extern char gIntegerFormatString[];
-extern char D_8009E48C_9F08C[];
+typedef struct {
+    /* 0x000 */ u8 pad0[0x948];
+    /* 0x948 */ SaveSlotSaveData slots[3];
+    /* 0xA5C */ u8 globalItemFlags[15];
+    /* 0xA6B */ u8 padA6B[0x59];
+    /* 0xAC4 */ u16 unkAC4;
+    /* 0xAC6 */ u16 unkAC6;
+    /* 0xAC8 */ u8 unkAC8;
+} ItemIconsAllocation;
+
+typedef struct {
+    s16 x;
+    s16 y;
+    /* 0x04 */ void *spriteData;
+    /* 0x08 */ s16 frameIndex;
+    /* 0x0A */ s16 alpha;
+    /* 0x0C */ u8 tileMode;
+    /* 0x0D */ u8 paletteIndex;
+    /* 0x0E */ u8 transparency;
+} TextElementState;
 
 u16 D_8008F210_8FE10[] = {
     0x0000, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0002, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0000, 0x0000,
@@ -453,6 +470,18 @@ void cleanupSaveSlotNameEntryGrid(Func34574Arg *arg0);
 void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0);
 void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0);
 void cleanupSaveSlotItemIcons(Func34574Arg *arg0);
+void initHudElementState(TextElementState *arg0);
+
+extern SpriteFrameEntry *gCachedPaletteAddr;
+extern s32 gCachedTextureAddr;
+extern s16 gGraphicsMode;
+extern Gfx *gDisplayListAllocPtr;
+extern u16 gDefaultFontPalette[];
+extern TextClipAndOffsetData gTextClipAndOffsetData;
+extern Gfx gSpriteRDPSetupDL[];
+extern u16 gGlobalFrameCounter;
+extern char gIntegerFormatString[];
+extern char gGoldFormatString7d[];
 
 void initSaveSlotStatSprites(SaveSlotStatSpritesState *state) {
     void *spriteSheet;
@@ -676,16 +705,6 @@ void initSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
     arg0->animFrame = 0;
     setCallback(updateSaveSlotItemIcons);
 }
-
-typedef struct {
-    /* 0x000 */ u8 pad0[0x948];
-    /* 0x948 */ SaveSlotSaveData slots[3];
-    /* 0xA5C */ u8 globalItemFlags[15];
-    /* 0xA6B */ u8 padA6B[0x59];
-    /* 0xAC4 */ u16 unkAC4;
-    /* 0xAC6 */ u16 unkAC6;
-    /* 0xAC8 */ u8 unkAC8;
-} ItemIconsAllocation;
 
 void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
     ItemIconsAllocation *allocation;
@@ -1159,7 +1178,7 @@ void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state) {
             state->animFrames[i] = 0;
         }
 
-        sprintf((char *)&state->textBuffers[i], D_8009E48C_9F08C, allocation->slots[i].gold);
+        sprintf((char *)&state->textBuffers[i], gGoldFormatString7d, allocation->slots[i].gold);
 
         if (allocation->unkAC6 != 0x18 || allocation->unkAC8 != i) {
             enqueueCallbackBySlotIndex(i + 9, 7, renderTextColored, &state->text[i]);
@@ -1475,19 +1494,6 @@ void cleanupSaveSlotDeleteArrow(Func34574Arg *arg0) {
     arg0->unk4 = freeNodeMemory(arg0->unk4);
 }
 
-typedef struct {
-    s16 x;
-    s16 y;
-    /* 0x04 */ void *spriteData;
-    /* 0x08 */ s16 frameIndex;
-    /* 0x0A */ s16 alpha;
-    /* 0x0C */ u8 tileMode;
-    /* 0x0D */ u8 paletteIndex;
-    /* 0x0E */ u8 transparency;
-} TextElementState;
-
-extern void initHudElementState(TextElementState *arg0);
-
 void enqueueHudTextLayout(
     void *fontAsset,
     void *textData,
@@ -1733,14 +1739,6 @@ void enqueueHudTextLayoutCapped(
         iterationCount++;
     }
 }
-
-extern SpriteFrameEntry *gCachedPaletteAddr;
-extern s32 gCachedTextureAddr;
-extern s16 gGraphicsMode;
-extern Gfx *gDisplayListAllocPtr;
-extern u16 gDefaultFontPalette[];
-extern TextClipAndOffsetData gTextClipAndOffsetData;
-extern Gfx gSpriteRDPSetupDL[];
 
 void renderShadedTextSprite(
     s32 x,

@@ -1194,4 +1194,4 @@ const char D_8009E480_9F080[] = "%5dG";
 
 const char gIntegerFormatString[] = "%d";
 
-const char D_8009E48C_9F08C[] = "%7d";
+const char gGoldFormatString7d[] = "%7d";
