@@ -174,13 +174,9 @@ typedef struct {
 } SaveSlotGoldText;
 
 typedef struct {
-    /* 0x00 */ u8 data[0xA];
-} SaveSlotGoldTextBuffer;
-
-typedef struct {
     /* 0x00 */ SaveSlotGoldIcon icons[4];
     /* 0x50 */ SaveSlotGoldText text[4];
-    /* 0x80 */ SaveSlotGoldTextBuffer textBuffers[4];
+    /* 0x80 */ u8 textBuffers[4][10];
     /* 0xA8 */ u8 animFrames[4];
 } SaveSlotGoldDisplayState;
 
