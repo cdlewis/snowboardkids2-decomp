@@ -10,6 +10,7 @@
 #include "graphics/sprite_rdp.h"
 #include "gs2dex.h"
 #include "race/race_session.h"
+#include "story/shop_ui.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
 #include "text/font_render.h"
@@ -421,8 +422,6 @@ extern u16 gDefaultFontPalette[];
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 extern Gfx gSpriteRDPSetupDL[];
 extern u16 gGlobalFrameCounter;
-extern char gIntegerFormatString[];
-extern char gGoldFormatString7d[];
 
 void initSaveSlotStatSprites(SaveSlotStatSpritesState *state) {
     void *spriteSheet;

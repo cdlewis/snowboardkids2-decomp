@@ -60,6 +60,10 @@ typedef struct {
     s8 animationCounter;
 } UnlockScreenScrollArrowsState;
 
+extern const char gIntegerFormatString[];
+
+extern const char gGoldFormatString7d[];
+
 void initUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arg0);
 void initStoryMapShopItemPriceDisplay(SpriteDisplayState *arg0);
 void initStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
