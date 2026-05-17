@@ -395,6 +395,7 @@ gSpriteRDPSetupDL = 0x8008D3D0; // rom:0x8DFD0 size:0x50
 gCachedPaletteAddr = 0x800A8A80; // size:0x4
 gCachedTextureAddr = 0x800AFCD0; // size:0x4
 renderSpriteFrameWithPalette = 0x80010240; // rom:0x10E40
+renderCharSelectIconSprite = 0x80010C98; // rom:0x11898
 renderScaledAlphaSpriteFrame = 0x80011924; // rom:0x12524
 renderFlippedScaledSpriteFrame = 0x800136E0; // rom:0x142E0
 renderTextSprite = 0x80012004; // rom:0x12C04

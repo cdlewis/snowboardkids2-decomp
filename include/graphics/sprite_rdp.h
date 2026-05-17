@@ -101,12 +101,12 @@ typedef struct {
     /* 0x0A */ u16 scaleX;
     /* 0x0C */ u16 scaleY;
     /* 0x0E */ s16 currentY;
-    /* 0x10 */ s16 unk10;
-    /* 0x12 */ u8 padding;
-    /* 0x13 */ u8 maxItems;
+    /* 0x10 */ s16 textureHeight;
+    /* 0x12 */ u8 tileMode;
+    /* 0x13 */ u8 overridePaletteCount;
 } CharSelectIconEntry;
 
-void func_80010C98_11898(CharSelectIconEntry *arg0);
+void renderCharSelectIconSprite(CharSelectIconEntry *sprite);
 void renderScaledShadedSpriteFrame(ScaledSpriteArg *arg0);
 void renderAlphaBlendedTextSprite(TextRenderArg *arg0);
 void initDefaultFontPalette(void);

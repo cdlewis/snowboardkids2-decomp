@@ -376,7 +376,7 @@ void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *sprite) {
     }
 }
 
-void func_80010C98_11898(CharSelectIconEntry *arg0) {
+void renderCharSelectIconSprite(CharSelectIconEntry *sprite) {
     SpriteFrameEntry *paletteBase;
     u16 paletteMode;
     s32 right;
@@ -395,37 +395,37 @@ void func_80010C98_11898(CharSelectIconEntry *arg0) {
     SpriteFrameEntry *frameEntry;
     SpriteFrameEntry *paletteAddr;
 
-    frameEntry = arg0->spriteAsset->frames;
-    paletteBase = &frameEntry[arg0->spriteAsset->numFrames];
-    frameEntry = &frameEntry[arg0->spriteIndex];
+    frameEntry = sprite->spriteAsset->frames;
+    paletteBase = &frameEntry[sprite->spriteAsset->numFrames];
+    frameEntry = &frameEntry[sprite->spriteIndex];
     paletteMode = gSpritePaletteModes[frameEntry->paletteTableIndex];
     format = gSpriteTextureFormats[frameEntry->formatIndex];
-    scaleS = gTileTextureFlipTable[arg0->padding * 2];
-    scaleT = gTileTextureFlipTable[arg0->padding * 2 + 1];
+    scaleS = gTileTextureFlipTable[sprite->tileMode * 2];
+    scaleT = gTileTextureFlipTable[sprite->tileMode * 2 + 1];
 
-    if (arg0->maxItems == 0) {
+    if (sprite->overridePaletteCount == 0) {
         paletteIndex = frameEntry->paletteIndex;
     } else {
-        paletteIndex = arg0->maxItems - 1;
+        paletteIndex = sprite->overridePaletteCount - 1;
     }
 
-    if ((arg0->scaleX > 0x7FFFU) || (arg0->scaleX == 0)) {
+    if ((sprite->scaleX > 0x7FFFU) || (sprite->scaleX == 0)) {
         return;
     }
-    if ((arg0->scaleY > 0x7FFFU) || (arg0->scaleY == 0)) {
+    if ((sprite->scaleY > 0x7FFFU) || (sprite->scaleY == 0)) {
         return;
     }
 
-    arg0->padding &= 3;
+    sprite->tileMode &= 3;
 
-    right = left + (s16)(((u16)arg0->currentY << 12) / arg0->scaleX);
-    bottom = top + (s16)(((u16)arg0->unk10 << 12) / arg0->scaleY);
+    right = left + (s16)(((u16)sprite->currentY << 12) / sprite->scaleX);
+    bottom = top + (s16)(((u16)sprite->textureHeight << 12) / sprite->scaleY);
 
-    dsdx = ((u16)arg0->currentY << 12) / arg0->scaleX;
-    dtdy = ((u16)arg0->unk10 << 12) / arg0->scaleY;
+    dsdx = ((u16)sprite->currentY << 12) / sprite->scaleX;
+    dtdy = ((u16)sprite->textureHeight << 12) / sprite->scaleY;
 
-    left = (gTextClipAndOffsetData.offsetX + arg0->baseY) * 4;
-    top = (gTextClipAndOffsetData.offsetY + arg0->x) * 4;
+    left = (gTextClipAndOffsetData.offsetX + sprite->baseY) * 4;
+    top = (gTextClipAndOffsetData.offsetY + sprite->x) * 4;
     right = left + dsdx;
     bottom = top + dtdy;
 
@@ -478,14 +478,14 @@ void func_80010C98_11898(CharSelectIconEntry *arg0) {
 
         gDPPipeSync(gDisplayListAllocPtr++);
 
-        if (arg0->scaleX != 0x400 || arg0->scaleY != arg0->scaleX) {
+        if (sprite->scaleX != 0x400 || sprite->scaleY != sprite->scaleX) {
             gDPSetRenderMode(gDisplayListAllocPtr++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
         }
 
-        if ((s32)arg0->spriteAsset + frameEntry->textureOffset != gCachedTextureAddr) {
-            gCachedTextureAddr = (s32)arg0->spriteAsset + frameEntry->textureOffset;
+        if ((s32)sprite->spriteAsset + frameEntry->textureOffset != gCachedTextureAddr) {
+            gCachedTextureAddr = (s32)sprite->spriteAsset + frameEntry->textureOffset;
             loadSpriteTexture(
-                (s32)arg0->spriteAsset + frameEntry->textureOffset,
+                (s32)sprite->spriteAsset + frameEntry->textureOffset,
                 frameEntry->width,
                 frameEntry->height,
                 format,
@@ -523,13 +523,13 @@ void func_80010C98_11898(CharSelectIconEntry *arg0) {
             G_TX_RENDERTILE,
             clipOffsetX * 8,
             (clipOffsetY * 8) & 0xFFF8,
-            scaleS * arg0->scaleX,
-            scaleT * arg0->scaleY
+            scaleS * sprite->scaleX,
+            scaleT * sprite->scaleY
         );
 
         gDPPipeSync(gDisplayListAllocPtr++);
 
-        if (arg0->scaleX != 0x400 || arg0->scaleY != arg0->scaleX) {
+        if (sprite->scaleX != 0x400 || sprite->scaleY != sprite->scaleX) {
             {
                 Gfx *_g = (gDisplayListAllocPtr++);
                 _g->words.w0 = 0xE200001C | dsdx;

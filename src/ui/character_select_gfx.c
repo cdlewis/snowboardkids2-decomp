@@ -1032,15 +1032,15 @@ void initCharSelectIcons(CharSelectIconsState *state) {
         // Read maxItems from byte table (every 2nd byte)
         tableVal = tablePtr[1];
         tablePtr += 2;
-        iconEntry->padding = 0;
+        iconEntry->tileMode = 0;
         iconEntry->scaleX = scaleX;
         iconEntry->scaleY = scaleY;
         iconEntry->spriteAsset = (SpriteSheetData *)spriteAsset;
         iconEntry->currentY = 0;
-        iconEntry->maxItems = (s8)(tableVal + 1);
+        iconEntry->overridePaletteCount = (s8)(tableVal + 1);
         xPos += xIncrement;
         i++;
-        iconEntry->unk10 = tableEntry.height;
+        iconEntry->textureHeight = tableEntry.height;
         iconEntry++;
     } while (i < 3);
 
@@ -1110,7 +1110,7 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
 
     // Render all 3 icon slots
     for (i = 0; i < 3; i++) {
-        enqueueCallbackBySlotIndex(arg0->playerIndex + 8, 0, func_80010C98_11898, &arg0->entries[i]);
+        enqueueCallbackBySlotIndex(arg0->playerIndex + 8, 0, renderCharSelectIconSprite, &arg0->entries[i]);
     }
 
     // If character selection is confirmed, skip animation
@@ -1136,7 +1136,7 @@ void updateCharSelectIconTargets(CharSelectIconTargetState *arg0) {
         tableIndex = charSelectItemData[((u8)(paletteIndex + charIndex * 3)) * 3 + i];
         entry = &arg0->entries[i];
         entry->currentY = *(s16 *)(D_8008DDEC_8E9EC + tableIndex * 2 + 22);
-        enqueueCallbackBySlotIndex(arg0->playerIndex + 8, 0, func_80010C98_11898, entry);
+        enqueueCallbackBySlotIndex(arg0->playerIndex + 8, 0, renderCharSelectIconSprite, entry);
         i++;
     } while (i < 3);
 }
