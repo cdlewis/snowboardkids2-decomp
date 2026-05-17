@@ -92,7 +92,7 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ u8 pad0[0xABC];
-    /* 0xABC */ u16 unkABC;
+    /* 0xABC */ s16 unkABC;
     /* 0xABE */ u16 unkABE;
     /* 0xAC0 */ u16 unkAC0;
     /* 0xAC2 */ u16 unkAC2;
@@ -182,11 +182,6 @@ typedef struct {
     /* 0x80 */ SaveSlotGoldTextBuffer textBuffers[4];
     /* 0xA8 */ u8 animFrames[4];
 } SaveSlotGoldDisplayState;
-
-typedef struct {
-    /* 0x000 */ u8 pad0[0xABC];
-    /* 0xABC */ s16 unkABC;
-} Func34BD8AllocationStruct;
 
 typedef struct {
     /* 0x00 */ s16 x;
@@ -1200,12 +1195,12 @@ void initSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
 }
 
 void updateSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
-    Func34BD8AllocationStruct *allocation;
+    AllocationStruct *allocation;
     unsigned int new_var;
     s16 baseX;
     s32 i;
 
-    allocation = (Func34BD8AllocationStruct *)getCurrentAllocation();
+    allocation = (AllocationStruct *)getCurrentAllocation();
 
     if (allocation->unkABC != 0) {
         baseX = allocation->unkABC;
