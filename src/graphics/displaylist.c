@@ -229,6 +229,69 @@ u16 findTrackSector(void *arg0, u16 sectorIndex, void *arg2) {
     return currentSector & 0xFFFF;
 }
 
+#define TRACK_WALL_VERTEX_X(trackGeom, sectorIndex, vertexField)                               \
+    (((TrackGeometryFaceData *)trackGeom)                                                      \
+         ->vertices[((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].vertexField] \
+         .x                                                                                    \
+     << 16)
+
+#define TRACK_WALL_VERTEX_Z(trackGeom, sectorIndex, vertexField)                               \
+    (((TrackGeometryFaceData *)trackGeom)                                                      \
+         ->vertices[((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].vertexField] \
+         .z                                                                                    \
+     << 16)
+
+#define RESOLVE_TRACK_SIDE_WALL(neighborField, startX, startZ, endX, endZ)                        \
+    if (((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].neighborField < 0) {        \
+        dx = (endX) - (startX);                                                                   \
+        dz = (endZ) - (startZ);                                                                   \
+        relX = workPos.x - (startX);                                                              \
+        zTemp = workPos.z;                                                                        \
+        relZ = zTemp - (startZ);                                                                  \
+        wallLen = isqrt64((((s64)dx) * dx) + (((s64)dz) * dz));                                   \
+        dzNorm = (s32)((((s64)dz) * 0x2000) / wallLen);                                           \
+        dxNorm = (s32)((((s64)dx) * 0x2000) / wallLen);                                           \
+        dz = -dzNorm;                                                                             \
+        dx = (s32)(((((s64)relX) * dz) + (((s64)relZ) * dxNorm)) / 0x2000);                       \
+        if ((-collisionRadius) < dx) {                                                            \
+            dx = (-collisionRadius) - dx;                                                         \
+            result = ((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].neighborField; \
+            hitWall = 1;                                                                          \
+            workPos.x += (((s64)dx) * dz) / 0x2000;                                               \
+            workPos.z += (((s64)dx) * dxNorm) / 0x2000;                                           \
+            sectorIndex = findTrackSector(trackGeom, sectorIndex, &workPos);                      \
+        }                                                                                         \
+    }
+
+#define TRACK_WALL_ENDPOINT_COLLIDES()                           \
+    if (dz < 0) {                                                \
+        endpointDistSq = ((s64)dz) * dz;                         \
+    } else {                                                     \
+        endpointDistSq = ((s64)(wallLen - dz)) * (wallLen - dz); \
+    }                                                            \
+    perpDistSq = ((s64)dx) * dx;                                 \
+    TRACK_WALL_REGISTER_CLOBBER();                               \
+    collisionDistSq = endpointDistSq + perpDistSq;               \
+    __asm__ volatile("");                                        \
+    if (collisionDistSq < (((s64)collisionRadius) * collisionRadius))
+
+#ifdef CC_CHECK
+#define TRACK_WALL_REGISTER_CLOBBER()
+#else
+#define TRACK_WALL_REGISTER_CLOBBER() \
+    __asm__ volatile("" : : : "t0", "t1", "t2", "t3", "t4", "t5", "t8", "t9", "s0", "s1")
+#endif
+
+#define APPLY_TRACK_DIAGONAL_WALL_PUSH(neighborField, groupOffset, groupIdx, scaleTemp, xDivisor, zDivisor)           \
+    dx = (-collisionRadius) - dx;                                                                                     \
+    result =                                                                                                          \
+        ((TrackFaceGroup *)((groupOffset) + ((s32)((TrackGeometryFaceData *)trackGeom)->faceGroups)))->neighborField; \
+    scaleTemp = 0x2000;                                                                                               \
+    hitWall = 1;                                                                                                      \
+    workPos.x += (((s64)dx) * temp_s7) / (xDivisor);                                                                  \
+    workPos.z += (((s64)dx) * totalDistSq) / (zDivisor);                                                              \
+    sectorIndex = findTrackSector(trackGeom, groupIdx, &workPos)
+
 s32 resolveTrackWallCollision(
     void *trackGeom,
     u16 sectorIndex,
@@ -281,78 +344,16 @@ s32 resolveTrackWallCollision(
     result = 0;
     do {
         hitWall = 0;
-        v2x = ((TrackGeometryFaceData *)trackGeom)
-                  ->vertices[((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].vertexIdx2]
-                  .x
-              << 16;
-        v2z = ((TrackGeometryFaceData *)trackGeom)
-                  ->vertices[((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].vertexIdx2]
-                  .z
-              << 16;
-        v3x = ((TrackGeometryFaceData *)trackGeom)
-                  ->vertices[((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].vertexIdx3]
-                  .x
-              << 16;
-        v3z = ((TrackGeometryFaceData *)trackGeom)
-                  ->vertices[((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].vertexIdx3]
-                  .z
-              << 16;
-        if (((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].neighbor1 < 0) {
-            dx = v3x - v2x;
-            dz = v3z - v2z;
-            relX = workPos.x - v2x;
-            zTemp = workPos.z;
-            relZ = zTemp - v2z;
-            wallLen = isqrt64((((s64)dx) * dx) + (((s64)dz) * dz));
-            dzNorm = (s32)((((s64)dz) * 0x2000) / wallLen);
-            dxNorm = (s32)((((s64)dx) * 0x2000) / wallLen);
-            dz = -dzNorm;
-            dx = (s32)(((((s64)relX) * dz) + (((s64)relZ) * dxNorm)) / 0x2000);
-            if ((-collisionRadius) < dx) {
-                dx = (-collisionRadius) - dx;
-                result = ((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].neighbor1;
-                hitWall = 1;
-                workPos.x += (((s64)dx) * dz) / 0x2000;
-                workPos.z += (((s64)dx) * dxNorm) / 0x2000;
-                sectorIndex = findTrackSector(trackGeom, sectorIndex, &workPos);
-            }
-        }
-        v0x = ((TrackGeometryFaceData *)trackGeom)
-                  ->vertices[((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].vertexIdx0]
-                  .x
-              << 16;
-        v0z = ((TrackGeometryFaceData *)trackGeom)
-                  ->vertices[((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].vertexIdx0]
-                  .z
-              << 16;
-        v1x = ((TrackGeometryFaceData *)trackGeom)
-                  ->vertices[((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].vertexIdx1]
-                  .x
-              << 16;
-        v1z = ((TrackGeometryFaceData *)trackGeom)
-                  ->vertices[((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].vertexIdx1]
-                  .z
-              << 16;
-        if (((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].neighbor0 < 0) {
-            dx = v0x - v1x;
-            dz = v0z - v1z;
-            relX = workPos.x - v1x;
-            zTemp = workPos.z;
-            relZ = zTemp - v1z;
-            wallLen = isqrt64((((s64)dx) * dx) + (((s64)dz) * dz));
-            dzNorm = (s32)((((s64)dz) * 0x2000) / wallLen);
-            dxNorm = (s32)((((s64)dx) * 0x2000) / wallLen);
-            dz = -dzNorm;
-            dx = (s32)(((((s64)relX) * dz) + (((s64)relZ) * dxNorm)) / 0x2000);
-            if ((-collisionRadius) < dx) {
-                dx = (-collisionRadius) - dx;
-                result = ((TrackGeometryFaceData *)trackGeom)->faceGroups[sectorIndex].neighbor0;
-                hitWall = 1;
-                workPos.x += (((s64)dx) * dz) / 0x2000;
-                workPos.z += (((s64)dx) * dxNorm) / 0x2000;
-                sectorIndex = findTrackSector(trackGeom, sectorIndex, &workPos);
-            }
-        }
+        v2x = TRACK_WALL_VERTEX_X(trackGeom, sectorIndex, vertexIdx2);
+        v2z = TRACK_WALL_VERTEX_Z(trackGeom, sectorIndex, vertexIdx2);
+        v3x = TRACK_WALL_VERTEX_X(trackGeom, sectorIndex, vertexIdx3);
+        v3z = TRACK_WALL_VERTEX_Z(trackGeom, sectorIndex, vertexIdx3);
+        RESOLVE_TRACK_SIDE_WALL(neighbor1, v2x, v2z, v3x, v3z);
+        v0x = TRACK_WALL_VERTEX_X(trackGeom, sectorIndex, vertexIdx0);
+        v0z = TRACK_WALL_VERTEX_Z(trackGeom, sectorIndex, vertexIdx0);
+        v1x = TRACK_WALL_VERTEX_X(trackGeom, sectorIndex, vertexIdx1);
+        v1z = TRACK_WALL_VERTEX_Z(trackGeom, sectorIndex, vertexIdx1);
+        RESOLVE_TRACK_SIDE_WALL(neighbor0, v1x, v1z, v0x, v0z);
         {
             TrackFaceGroup *new_var3;
             s32 groupIdx2;
@@ -381,37 +382,24 @@ s32 resolveTrackWallCollision(
                 if ((-collisionRadius) < dx) {
                     do {
                         if (((dz > 0) && (dz < wallLen)) || (dx >= 0)) {
-                            dx = (-collisionRadius) - dx;
-                            result = ((TrackFaceGroup *)(groupOffset2 +
-                                                         ((s32)((TrackGeometryFaceData *)trackGeom)->faceGroups)))
-                                         ->neighbor2;
-                            hitWall = 1;
-                            new_var = 0x2000;
-                            workPos.x += (((s64)dx) * temp_s7) / 0x2000;
-                            workPos.z += (((s64)dx) * totalDistSq) / new_var;
-                            sectorIndex = findTrackSector(trackGeom, groupIdx2, &workPos);
+                            APPLY_TRACK_DIAGONAL_WALL_PUSH(
+                                neighbor2,
+                                groupOffset2,
+                                groupIdx2,
+                                new_var,
+                                0x2000,
+                                new_var
+                            );
                         } else {
-                            if (dz < 0) {
-                                endpointDistSq = ((s64)dz) * dz;
-                            } else {
-                                endpointDistSq = ((s64)(wallLen - dz)) * (wallLen - dz);
-                            }
-                            perpDistSq = ((s64)dx) * dx;
-#ifndef CC_CHECK
-                            __asm__ volatile("" : : : "t0", "t1", "t2", "t3", "t4", "t5", "t8", "t9", "s0", "s1");
-#endif
-                            collisionDistSq = endpointDistSq + perpDistSq;
-                            __asm__ volatile("");
-                            if (collisionDistSq < (((s64)collisionRadius) * collisionRadius)) {
-                                dx = (-collisionRadius) - dx;
-                                result = ((TrackFaceGroup *)(groupOffset2 +
-                                                             ((s32)((TrackGeometryFaceData *)trackGeom)->faceGroups)))
-                                             ->neighbor2;
-                                hitWall = 1;
-                                new_var = 0x2000;
-                                workPos.x += (((s64)dx) * temp_s7) / 0x2000;
-                                workPos.z += (((s64)dx) * totalDistSq) / new_var;
-                                sectorIndex = findTrackSector(trackGeom, groupIdx2, &workPos);
+                            TRACK_WALL_ENDPOINT_COLLIDES() {
+                                APPLY_TRACK_DIAGONAL_WALL_PUSH(
+                                    neighbor2,
+                                    groupOffset2,
+                                    groupIdx2,
+                                    new_var,
+                                    0x2000,
+                                    new_var
+                                );
                             }
                         }
                     } while (0);
@@ -442,37 +430,24 @@ s32 resolveTrackWallCollision(
                     dx = (s32)(((((s64)relX) * temp_s7) + (((s64)relZ) * totalDistSq)) / 0x2000);
                     if ((-collisionRadius) < dx) {
                         if (((dz > 0) && (dz < wallLen)) || (dx >= 0)) {
-                            dx = (-collisionRadius) - dx;
-                            result = ((TrackFaceGroup *)(groupOffset3 +
-                                                         ((s32)((TrackGeometryFaceData *)trackGeom)->faceGroups)))
-                                         ->neighbor3;
-                            new_var6 = 0x2000;
-                            hitWall = 1;
-                            workPos.x += (((s64)dx) * temp_s7) / new_var6;
-                            workPos.z += (((s64)dx) * totalDistSq) / 0x2000;
-                            sectorIndex = findTrackSector(trackGeom, groupIdx3, &workPos);
+                            APPLY_TRACK_DIAGONAL_WALL_PUSH(
+                                neighbor3,
+                                groupOffset3,
+                                groupIdx3,
+                                new_var6,
+                                new_var6,
+                                0x2000
+                            );
                         } else {
-                            if (dz < 0) {
-                                endpointDistSq = ((s64)dz) * dz;
-                            } else {
-                                endpointDistSq = ((s64)(wallLen - dz)) * (wallLen - dz);
-                            }
-                            perpDistSq = ((s64)dx) * dx;
-#ifndef CC_CHECK
-                            __asm__ volatile("" : : : "t0", "t1", "t2", "t3", "t4", "t5", "t8", "t9", "s0", "s1");
-#endif
-                            collisionDistSq = endpointDistSq + perpDistSq;
-                            __asm__ volatile("");
-                            if (collisionDistSq < (((s64)collisionRadius) * collisionRadius)) {
-                                dx = (-collisionRadius) - dx;
-                                result = ((TrackFaceGroup *)(groupOffset3 +
-                                                             ((s32)((TrackGeometryFaceData *)trackGeom)->faceGroups)))
-                                             ->neighbor3;
-                                new_var6 = 0x2000;
-                                hitWall = 1;
-                                workPos.x += (((s64)dx) * temp_s7) / new_var6;
-                                workPos.z += (((s64)dx) * totalDistSq) / 0x2000;
-                                sectorIndex = findTrackSector(trackGeom, groupIdx3, &workPos);
+                            TRACK_WALL_ENDPOINT_COLLIDES() {
+                                APPLY_TRACK_DIAGONAL_WALL_PUSH(
+                                    neighbor3,
+                                    groupOffset3,
+                                    groupIdx3,
+                                    new_var6,
+                                    new_var6,
+                                    0x2000
+                                );
                             }
                         }
                     }
@@ -487,6 +462,13 @@ s32 resolveTrackWallCollision(
     pushOffset->z = workPos.z - ((Vec3i *)position)->z;
     return result;
 }
+
+#undef TRACK_WALL_VERTEX_X
+#undef TRACK_WALL_VERTEX_Z
+#undef RESOLVE_TRACK_SIDE_WALL
+#undef TRACK_WALL_ENDPOINT_COLLIDES
+#undef TRACK_WALL_REGISTER_CLOBBER
+#undef APPLY_TRACK_DIAGONAL_WALL_PUSH
 
 s32 getTrackHeightAtPosition(void *trackGeom_void, u16 groupIdx, void *pos_void) {
     TrackGeometryFaceData *trackGeom = (TrackGeometryFaceData *)trackGeom_void;
