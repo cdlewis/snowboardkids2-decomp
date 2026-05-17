@@ -13,7 +13,7 @@
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
-#include "text/hud_text.h"
+#include "text/text_layout.h"
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
 
@@ -1279,7 +1279,7 @@ void renderMinigameDescText(MinigameDescTextState *state) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->menuState == 8) {
-        enqueueHudTextLayout(
+        enqueueTextLayout(
             state->textRenderAsset,
             state->textString,
             state->x,
@@ -1392,7 +1392,7 @@ void updatePrizeDisplay(PrizeDisplayState *state) {
 
     if ((u32)(allocation->menuState - 2) < 2) {
         renderTiledSprite3x3(state->backgroundAsset, -0x40, -0x8, 8, 4, 0, 0x60, 0xC0, 8, 0);
-        enqueueCallbackBySlotIndex(8, 1, renderHudTextLayout, &state->titleX);
+        enqueueCallbackBySlotIndex(8, 1, renderTextLayout, &state->titleX);
 
         spriteEntry = state->spriteEntries;
         for (i = 0; i < 2; i++) {
@@ -1400,7 +1400,7 @@ void updatePrizeDisplay(PrizeDisplayState *state) {
         }
 
         state->prizeCount = allocation->unkB46;
-        enqueueCallbackBySlotIndex(8, 1, renderHudTextLayout, &state->counterX);
+        enqueueCallbackBySlotIndex(8, 1, renderTextLayout, &state->counterX);
     }
 }
 

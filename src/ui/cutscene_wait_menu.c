@@ -146,7 +146,7 @@ void updateCutsceneWaitMenu(DC90TaskStruct *arg0) {
         arg0->renderPosX = arg0->unk2C;
         temp16 = arg0->unk30;
         arg0->renderPosY = temp16;
-        enqueueHudTextLayout(
+        enqueueTextLayout(
             arg0->currentSprite,
             arg0->unk18,
             arg0->renderPosX,

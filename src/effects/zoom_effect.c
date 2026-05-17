@@ -10,7 +10,7 @@
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
-#include "text/hud_text.h"
+#include "text/text_layout.h"
 #include "ui/level_preview_3d.h"
 
 extern struct {
@@ -348,7 +348,7 @@ state_done:
         } else {
             arg0->unkB0 = 0;
         }
-        enqueueCallbackBySlotIndex(1, 0, &renderHudTextLayoutCapped, &arg0->unk8C);
+        enqueueCallbackBySlotIndex(1, 0, &renderTextLayoutCapped, &arg0->unk8C);
     }
 
     if (renderSlots != 0) {

@@ -512,12 +512,12 @@ menu_body: {
 }
     halfWidth = getMaxLinePixelWidth(textEntry) / 2;
     halfWidth = -halfWidth;
-    enqueueHudTextLayout(arg0->textRenderer, textEntry, halfWidth, -0x48, 0xFF, arg0->pad4[1], 5, 2, 0);
+    enqueueTextLayout(arg0->textRenderer, textEntry, halfWidth, -0x48, 0xFF, arg0->pad4[1], 5, 2, 0);
     entry = getMenuOptionEntry(arg0, arg0->selectedOption);
     textEntry = getTable2DEntry(arg0->textTable, entry->textRow, 0);
     halfWidth = (new_var = getMaxLinePixelWidth(textEntry) / 2);
     halfWidth = -halfWidth;
-    enqueueHudTextLayout(arg0->textRenderer, textEntry, halfWidth, 0x30, 0xFF, arg0->pad4[1], 5, 2, 0);
+    enqueueTextLayout(arg0->textRenderer, textEntry, halfWidth, 0x30, 0xFF, arg0->pad4[1], 5, 2, 0);
     for (i = 0; i < getMenuOptionCount(arg0); i++) {
         entry = getMenuOptionEntry(arg0, i);
         if (arg0->animTimers[i] == 0) {
@@ -1218,7 +1218,7 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                     tableArg1 = 0xC;
                     tableArg2 = 0;
                 }
-                enqueueHudTextLayout(
+                enqueueTextLayout(
                     alloc->unk8,
                     getTable2DEntry(alloc->unkC, tableArg1, tableArg2),
                     -0x68,

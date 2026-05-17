@@ -310,7 +310,7 @@ void updatePushStartText(PushStartPromptTask *task) {
 }
 
 void updatePushStartGraphic(PushStartPromptTask *task) {
-    enqueueHudTextLayout(
+    enqueueTextLayout(
         task->textAsset,
         controllerInsertPowerWarningText,
         -0x68,

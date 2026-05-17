@@ -164,7 +164,7 @@ void updateStoryMapCameraFreeRoam(void *);
 extern s32 gControllerInputs;
 extern s32 renderTextSprite;
 extern void renderScaledShadedSpriteFrame(void *);
-extern void renderHudTextLayout(void *);
+extern void renderTextLayout(void *);
 
 // Data definitions
 D_8008F810_90410_item D_8008F810_90410[0xC] = {
@@ -502,7 +502,7 @@ void updateStoryMapLocationMarker(StoryMapLocationMarkerState *arg0) {
             height = 272;
             arg0->unk50 = screenX - (((sp28 + (width / 2))));
             arg0->unk52 = screenY - (((sp2A + (height / 2))));
-            enqueueCallbackBySlotIndex(8, temp_s5 + 1, &renderHudTextLayout, &arg0->unk50);
+            enqueueCallbackBySlotIndex(8, temp_s5 + 1, &renderTextLayout, &arg0->unk50);
         }
 
         if (!allocation->locationDiscovered) {

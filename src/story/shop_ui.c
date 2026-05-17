@@ -14,7 +14,7 @@
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
-#include "text/hud_text.h"
+#include "text/text_layout.h"
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
 
@@ -1143,7 +1143,7 @@ void drawUnlockScreenItemIcons(void *untypedArg0) {
     if (alloc->unk5D8 != 0) {
         for (i = 0; i < 4; i++) {
             enqueueCallbackBySlotIndex(8, 0, &renderSpriteFrame, &arg0->items[i]);
-            enqueueCallbackBySlotIndex(8, 1, &renderHudTextLayout, &arg0->titleX);
+            enqueueCallbackBySlotIndex(8, 1, &renderTextLayout, &arg0->titleX);
         }
     }
 }

@@ -10,7 +10,7 @@ typedef struct {
     /* 0x0C */ u16 shade;
     /* 0x0E */ u16 textAlpha;
     /* 0x10 */ u8 paletteIndex;
-} HudTextLayoutArg;
+} TextLayoutArg;
 
 typedef struct {
     /* 0x00 */ s16 startX;
@@ -21,11 +21,11 @@ typedef struct {
     /* 0x0E */ u16 textAlpha;
     /* 0x10 */ u8 paletteIndex;
     /* 0x11 */ u8 maxIterations;
-} HudTextLayoutCappedArg;
+} TextLayoutCappedArg;
 
-void renderHudTextLayout(HudTextLayoutArg *arg0);
-void renderHudTextLayoutCapped(HudTextLayoutCappedArg *arg0);
-void enqueueHudTextLayoutAlphaBlended(
+void renderTextLayout(TextLayoutArg *arg0);
+void renderTextLayoutCapped(TextLayoutCappedArg *arg0);
+void enqueueTextLayoutAlphaBlended(
     void *fontAsset,
     void *textData,
     s16 startX,
@@ -35,7 +35,7 @@ void enqueueHudTextLayoutAlphaBlended(
     u8 priority,
     u8 flags
 );
-void enqueueHudTextLayout(
+void enqueueTextLayout(
     void *fontAsset,
     void *textData,
     s16 startX,
@@ -46,7 +46,7 @@ void enqueueHudTextLayout(
     u8 priority,
     u8 flags
 );
-void enqueueHudTextLayoutCapped(
+void enqueueTextLayoutCapped(
     void *fontAsset,
     u16 *textData,
     u16 startX,

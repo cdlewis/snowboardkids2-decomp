@@ -3,7 +3,7 @@
 #include "graphics/graphics.h"
 #include "graphics/palette.h"
 #include "graphics/sprite_rdp.h"
-#include "text/hud_text.h"
+#include "text/text_layout.h"
 
 typedef struct {
     u16 frame;
@@ -253,7 +253,7 @@ void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
             if (s->textData[i] == NULL) {
                 break;
             }
-            enqueueHudTextLayout(
+            enqueueTextLayout(
                 s->textAsset,
                 s->textData[i],
                 s->textXOffset[i],

@@ -16,7 +16,7 @@
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
 #include "text/font_render.h"
-#include "text/hud_text.h"
+#include "text/text_layout.h"
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
 
@@ -1580,7 +1580,7 @@ void updateBoardShopTitleText(BoardShopTitleTextUpdateArg *arg0) {
         new_var = D_8008F200_8FE00.unkA;
         arg0->textWidth = new_var[allocation->titleCornersVisible];
         // this makes no sense but it matches
-        new_var = (void *)&renderHudTextLayout;
+        new_var = (void *)&renderTextLayout;
         arg0->textData = D_8008F200_8FE00.unk0[allocation->titleCornersVisible];
         enqueueCallbackBySlotIndex(9, 7, new_var, arg0);
     }

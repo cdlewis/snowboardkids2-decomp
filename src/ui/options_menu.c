@@ -8,7 +8,7 @@
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
-#include "text/hud_text.h"
+#include "text/text_layout.h"
 
 #define ARG0 ((OptionsMenuToggleState *)arg0)
 
@@ -127,7 +127,7 @@ void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
 void updateOptionsMenuTitle(u8 *arg0) {
     s32 i;
 
-    enqueueCallbackBySlotIndex(8, 0, renderHudTextLayout, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderTextLayout, arg0);
 
     for (i = 0; i < 2; i++) {
         enqueueCallbackBySlotIndex(8, 0, renderTextSprite, arg0 + 0x14 + i * 0x10);
@@ -231,7 +231,7 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
 
         enqueueCallbackBySlotIndex(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
 
-        enqueueHudTextLayoutAlphaBlended(
+        enqueueTextLayoutAlphaBlended(
             arg0->textRenderAsset,
             arg0->labelEntries[i].textData,
             arg0->labelEntries[i].x,
@@ -324,7 +324,7 @@ void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
 
             enqueueCallbackBySlotIndex(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
 
-            enqueueHudTextLayoutAlphaBlended(
+            enqueueTextLayoutAlphaBlended(
                 arg0->textRenderAsset,
                 arg0->textEntries[i].textData,
                 arg0->textEntries[i].x,

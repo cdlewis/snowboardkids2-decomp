@@ -44,7 +44,7 @@ void initSaveSlotScreen(void);
 void func_80003EE0_4AE0(void);
 void initLevelSelectWithDetail(void);
 void initLevelSelectBasic(void);
-void enqueueHudTextLayout(
+void enqueueTextLayout(
     void *fontAsset,
     void *textData,
     s16 startX,
