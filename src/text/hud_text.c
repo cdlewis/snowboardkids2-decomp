@@ -15,27 +15,6 @@
 #include "text/font_render.h"
 
 typedef struct {
-    /* 0x000 */ u8 pad0[0xABC];
-    /* 0xABC */ u16 unkABC;
-    /* 0xABE */ u16 unkABE;
-    /* 0xAC0 */ u16 unkAC0;
-    /* 0xAC2 */ u16 unkAC2;
-    /* 0xAC4 */ u16 unkAC4;
-    /* 0xAC6 */ u16 unkAC6;
-    /* 0xAC8 */ u8 unkAC8;
-    /* 0xAC9 */ u8 unkAC9;
-    /* 0xACA */ u8 unkACA;
-    /* 0xACB */ u8 unkACB;
-    /* 0xACC */ u8 unkACC;
-    /* 0xACD */ u8 unkACD;
-    /* 0xACE */ u8 padACE[0x5];
-    /* 0xAD3 */ u8 unkAD3;
-    /* 0xAD4 */ u8 unkAD4;
-    /* 0xAD5 */ u8 unkAD5;
-    /* 0xAD6 */ u8 unkAD6;
-} DeleteTextAllocationStruct;
-
-typedef struct {
     /* 0x00 */ void *spriteAsset;
     /* 0x04 */ void *textAsset;
     /* 0x08 */ s16 offsetX;
@@ -72,15 +51,15 @@ typedef struct {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
     /* 0x04 */ void *spriteSheet;
-    /* 0x08 */ u16 spriteIndex;
-    /* 0x0A */ u16 alpha;
+    /* 0x08 */ s16 spriteIndex;
+    /* 0x0A */ s16 alpha;
     /* 0x0C */ u8 tileMode;
     /* 0x0D */ u8 paletteOverride;
     /* 0x0E */ u8 padE[2];
-} SaveSlotStatSprite; // size 0x10
+} SaveSlotSpriteEntry; // size 0x10
 
 typedef struct {
-    /* 0x00 */ SaveSlotStatSprite entries[13];
+    /* 0x00 */ SaveSlotSpriteEntry entries[13];
     /* 0xD0 */ u8 slotIndex;
 } SaveSlotStatSpritesState;
 
@@ -123,7 +102,12 @@ typedef struct {
     /* 0xAC9 */ u8 unkAC9;
     /* 0xACA */ u8 unkACA;
     /* 0xACB */ u8 unkACB;
-    /* 0xACC */ u8 padACC[0xA];
+    /* 0xACC */ u8 unkACC;
+    /* 0xACD */ u8 unkACD;
+    /* 0xACE */ u8 padACE[0x5];
+    /* 0xAD3 */ u8 unkAD3;
+    /* 0xAD4 */ u8 unkAD4;
+    /* 0xAD5 */ u8 unkAD5;
     /* 0xAD6 */ u8 unkAD6;
 } AllocationStruct;
 
@@ -131,7 +115,7 @@ typedef struct {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
     /* 0x04 */ void *spriteAsset;
-    /* 0x08 */ s16 frameIndex;
+    /* 0x08 */ u16 frameIndex;
     /* 0x0A */ u8 frameDelay;
     /* 0x0B */ u8 padB;
 } SaveSlotSelectionParticle;
@@ -144,18 +128,7 @@ typedef struct {
 } SaveSlotSelectionParticlesState;
 
 typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteSheet;
-    /* 0x08 */ s16 spriteIndex;
-    /* 0x0A */ s16 alpha;
-    /* 0x0C */ u8 paletteIndex;
-    /* 0x0D */ u8 overridePaletteCount;
-    /* 0x0E */ u8 padE[2];
-} SaveSlotGridEntry;
-
-typedef struct {
-    /* 0x00 */ SaveSlotGridEntry *entries;
+    /* 0x00 */ SaveSlotSpriteEntry *entries;
     /* 0x04 */ s16 cursorX;
     /* 0x06 */ s16 cursorY;
     /* 0x08 */ void *spriteAsset;
@@ -218,24 +191,13 @@ typedef struct {
 typedef struct {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteSheet;
-    /* 0x08 */ s16 spriteIndex;
-    /* 0x0A */ s16 alpha;
-    /* 0x0C */ u8 unkC;
-    /* 0x0D */ u8 highlightTint;
-    /* 0x0E */ u8 padE[2];
-} SaveSlotItemIcon;
-
-typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
     /* 0x04 */ s16 highlightTint;
     /* 0x06 */ s16 alpha;
     /* 0x08 */ char *text;
 } SaveSlotNumberLabelText;
 
 typedef struct {
-    /* 0x00 */ SaveSlotItemIcon sprites[6];
+    /* 0x00 */ SaveSlotSpriteEntry sprites[6];
     /* 0x60 */ SaveSlotNumberLabelText texts[9];
     /* 0xCC */ char textBuffers[9][4];
     /* 0xF0 */ u8 slotIndex;
@@ -257,7 +219,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ void *spriteSheet;
-    /* 0x04 */ SaveSlotItemIcon *icons;
+    /* 0x04 */ SaveSlotSpriteEntry *icons;
     /* 0x08 */ u8 pad8[0x14];
     /* 0x1C */ u8 slotIndex;
     /* 0x1D */ u8 animFrame;
@@ -279,22 +241,6 @@ typedef struct {
     /* 0x1D */ u8 unk1D;
     /* 0x1E */ u8 slotFlags;
 } SaveSlotNameTextState;
-
-typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteAsset;
-    /* 0x08 */ u16 frameIndex;
-    /* 0x0A */ u8 frameDelay;
-    /* 0x0B */ u8 padB;
-} SelectionParticleUpdateEntry;
-
-typedef struct {
-    /* 0x00 */ SelectionParticleUpdateEntry entries[4];
-    /* 0x30 */ u8 pad30[0x18];
-    /* 0x48 */ u8 isRightSide;
-    /* 0x49 */ u8 animToggle;
-} SelectionParticleUpdateState;
 
 typedef struct {
     /* 0x000 */ u8 pad0[0x948];
@@ -455,12 +401,13 @@ void updateSaveSlotNameText(Func34ADCArg *arg0);
 void cleanupSaveSlotNameText(Func34574Arg *arg0);
 void cleanupSaveSlotGoldDisplay(Func34574Arg *arg0);
 void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *);
-void updateSaveSlotSelectionParticles(SelectionParticleUpdateState *arg0);
+void updateSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *arg0);
 void cleanupSaveSlotSelectionParticles(Func34574Arg *arg0);
-void updateSaveSlotItemIcons(SaveSlotItemIconsState *);
-void cleanupSaveSlotDeleteText(SaveSlotDeleteTextState *arg0);
 void updateSaveSlotStatSprites(SaveSlotStatSpritesState *arg0);
 void cleanupSaveSlotStatSprites(Func34574Arg *arg0);
+void updateSaveSlotItemIcons(SaveSlotItemIconsState *);
+void cleanupSaveSlotDeleteText(SaveSlotDeleteTextState *arg0);
+void cleanupSaveSlotItemIcons(Func34574Arg *arg0);
 void renderSaveSlotConfirmationIndicator(void *arg0);
 void cleanupSaveSlotConfirmationIndicator(Func34574Arg *arg0);
 void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state);
@@ -469,7 +416,6 @@ void cleanupSaveSlotPromptText(Func34574Arg *arg0);
 void cleanupSaveSlotNameEntryGrid(Func34574Arg *arg0);
 void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0);
 void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0);
-void cleanupSaveSlotItemIcons(Func34574Arg *arg0);
 void initHudElementState(TextElementState *arg0);
 
 extern SpriteFrameEntry *gCachedPaletteAddr;
@@ -605,7 +551,7 @@ void initSaveSlotNameEntryGrid(SaveSlotGridState *state) {
     for (i = 0; i < 0x37; i++) {
         state->entries[i].spriteSheet = spriteSheet;
         state->entries[i].alpha = 0xFF;
-        state->entries[i].overridePaletteCount = 0;
+        state->entries[i].paletteOverride = 0;
     }
 
     entryIndex = 0;
@@ -613,7 +559,7 @@ void initSaveSlotNameEntryGrid(SaveSlotGridState *state) {
         spriteIndex = D_8008F22C_8FE2C[k];
         for (j = 0; j < D_8008F22C_8FE2C[k + 1]; j++) {
             state->entries[(u16)entryIndex].spriteIndex = spriteIndex;
-            state->entries[(u16)entryIndex].paletteIndex = D_8008F22C_8FE2C[k + 2];
+            state->entries[(u16)entryIndex].tileMode = D_8008F22C_8FE2C[k + 2];
             entryIndex++;
         }
     }
@@ -686,7 +632,7 @@ void initSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
     u8 *new_var;
 
     allocation = (u8 *)getCurrentAllocation();
-    arg0->icons = (SaveSlotItemIcon *)allocateNodeMemory(0xF0);
+    arg0->icons = (SaveSlotSpriteEntry *)allocateNodeMemory(0xF0);
     arg0->spriteSheet = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
     arg0->unk1E = *(allocation + arg0->slotIndex + 0xACE);
     setCleanupCallback(cleanupSaveSlotItemIcons);
@@ -698,8 +644,8 @@ void initSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
         arg0->icons[i].spriteSheet = arg0->spriteSheet;
         arg0->icons[i].spriteIndex = 5;
         arg0->icons[i].alpha = 0xFF;
-        arg0->icons[i].highlightTint = 0;
-        arg0->icons[i].unkC = 0;
+        arg0->icons[i].paletteOverride = 0;
+        arg0->icons[i].tileMode = 0;
     }
 
     arg0->animFrame = 0;
@@ -784,10 +730,10 @@ void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
             arg0->icons[i].x = (i * 15) - 0x72;
         }
 
-        arg0->icons[i].highlightTint = 0;
+        arg0->icons[i].paletteOverride = 0;
 
         if (allocation->unkAC6 == 2 && arg0->slotIndex == allocation->unkAC8 && (allocation->unkAC4 & 1)) {
-            arg0->icons[i].highlightTint = 0xFF;
+            arg0->icons[i].paletteOverride = 0xFF;
         }
 
         enqueueCallbackBySlotIndex(arg0->slotIndex + 9, 0, renderTextSprite, &arg0->icons[i]);
@@ -890,8 +836,8 @@ void initSaveSlotItemLabels(SaveSlotNumberLabelsState *arg0) {
             arg0->sprites[i - 9].spriteSheet = spriteSheet;
             arg0->sprites[i - 9].spriteIndex = i + 4;
             arg0->sprites[i - 9].alpha = 0xFF;
-            arg0->sprites[i - 9].highlightTint = 0;
-            arg0->sprites[i - 9].unkC = 0;
+            arg0->sprites[i - 9].paletteOverride = 0;
+            arg0->sprites[i - 9].tileMode = 0;
         }
     }
 
@@ -968,14 +914,14 @@ void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
         if (i < 9) {
             arg0->texts[i].highlightTint = 0;
         } else {
-            arg0->sprites[i - 9].highlightTint = 0;
+            arg0->sprites[i - 9].paletteOverride = 0;
         }
 
         if (((allocation->unkAC6 == 2) && (arg0->slotIndex == allocation->unkAC8)) && (allocation->unkAC4 & 1)) {
             if (i < 9) {
                 arg0->texts[i].highlightTint = 0xFF;
             } else {
-                arg0->sprites[i - 9].highlightTint = 0xFF;
+                arg0->sprites[i - 9].paletteOverride = 0xFF;
             }
         }
 
@@ -1253,7 +1199,7 @@ void initSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
     setCallback(updateSaveSlotSelectionParticles);
 }
 
-void updateSaveSlotSelectionParticles(SelectionParticleUpdateState *state) {
+void updateSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
     Func34BD8AllocationStruct *allocation;
     unsigned int new_var;
     s16 baseX;
@@ -1305,7 +1251,7 @@ void initSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
 }
 
 void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
-    DeleteTextAllocationStruct *allocation;
+    AllocationStruct *allocation;
     s16 offsetX;
     s16 offsetY;
     s32 loopCount;
@@ -1314,7 +1260,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
     s32 flagArg;
     s32 temp;
 
-    allocation = (DeleteTextAllocationStruct *)getCurrentAllocation();
+    allocation = (AllocationStruct *)getCurrentAllocation();
 
     if (allocation->unkAC6 < 0x32) {
         return;
