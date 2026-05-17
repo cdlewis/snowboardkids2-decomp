@@ -1,7 +1,6 @@
 #include "text/text_layout.h"
 #include "common.h"
 #include "gbi.h"
-#include "graphics/clip_text_render.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "gs2dex.h"
@@ -70,7 +69,7 @@ void enqueueTextLayout(
                 width = 12;
             }
 
-            elem = advanceLinearAlloc(16);
+            elem = advanceLinearAlloc(sizeof(TextElementState));
             if (elem != NULL) {
                 initHudElementState(elem);
                 elem->transparency = transparency;
@@ -255,7 +254,7 @@ void enqueueTextLayoutCapped(
             if (width == 0) {
                 width = 0xC;
             }
-            elem = advanceLinearAlloc(0x10);
+            elem = advanceLinearAlloc(sizeof(TextElementState));
             if (elem != NULL) {
                 initHudElementState(elem);
                 elem->transparency = transparency;
@@ -505,7 +504,7 @@ void enqueueTextLayoutAlphaBlended(
                 width = 12;
             }
 
-            elem = advanceLinearAlloc(16);
+            elem = advanceLinearAlloc(sizeof(TextElementState));
             if (elem != NULL) {
                 initHudElementState(elem);
                 elem->alpha = alpha;

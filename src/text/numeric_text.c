@@ -38,7 +38,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
     }
 
     if (z == 0xFF) {
-        elem12 = advanceLinearAlloc(count * 0xC);
+        elem12 = advanceLinearAlloc(count * sizeof(SpriteRenderArg));
         for (i = 0; text[i] != NULL; i++) {
             switch (text[i]) {
                 case 1:
@@ -109,7 +109,7 @@ void drawNumericString(u8 *text, s16 x, s16 y, s16 z, s32 texture, u16 priority,
             }
         }
     } else {
-        elem16 = advanceLinearAlloc(count * 0x10);
+        elem16 = advanceLinearAlloc(count * sizeof(TextElement16));
         for (i = 0; i < count; i++) {
             elem16[i].unkC = 0;
             elem16[i].palette = 0;
