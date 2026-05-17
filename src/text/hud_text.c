@@ -259,11 +259,11 @@ typedef struct {
     /* 0x0E */ u8 transparency;
 } TextElementState;
 
-u16 D_8008F210_8FE10[] = {
+u16 gStatSpriteIndexTable[] = {
     0x0000, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0002, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0000, 0x0000,
 };
 
-u16 D_8008F22C_8FE2C[] = {
+u16 gNameEntryGridSpriteTable[] = {
     0x0006, 0x0001, 0x0000, 0x0007, 0x0009, 0x0000, 0x0006, 0x0001, 0x0001, 0x0008, 0x0001, 0x0000, 0x0009,
     0x0009, 0x0000, 0x0008, 0x0001, 0x0001, 0x0008, 0x0001, 0x0000, 0x0009, 0x0009, 0x0000, 0x0008, 0x0001,
     0x0001, 0x0008, 0x0001, 0x0000, 0x0009, 0x0009, 0x0000, 0x0008, 0x0001, 0x0001, 0x0006, 0x0001, 0x0002,
@@ -271,11 +271,11 @@ u16 D_8008F22C_8FE2C[] = {
     0x0000, 0x0000, 0xFF88, 0xFFB0, 0xFF88, 0xFFA8, 0xFF88, 0xFF88, 0xFFA0, 0xFFB0, 0xFFA0, 0x0000,
 };
 
-u16 D_8008F2AC_8FEAC[] = { 0xFFFC, 0x0003, 0xFFFD, 0x0002, 0x0002, 0xFFFE };
+u16 gSelectionParticleXOffsets[] = { 0xFFFC, 0x0003, 0xFFFD, 0x0002, 0x0002, 0xFFFE };
 
-u16 D_8008F2B8_8FEB8[] = { 0xFFEC, 0xFFF4, 0x0000, 0x0008, 0x000E, 0x0014 };
+u16 gSelectionParticleYOffsets[] = { 0xFFEC, 0xFFF4, 0x0000, 0x0008, 0x000E, 0x0014 };
 
-s16 D_8008F2C4_8FEC4[] = { 0x000A, 0x000B, 0x000C, 0x000B };
+s16 gDeleteArrowAnimFrames[] = { 0x000A, 0x000B, 0x000C, 0x000B };
 
 u8 gSaveSlotLoadSavedDataStatusText[] = { _("Load saved data@") };
 
@@ -480,7 +480,7 @@ void updateSaveSlotStatSprites(SaveSlotStatSpritesState *arg0) {
 
     halfStep = step / 2;
     three = 3;
-    baseTable = D_8008F210_8FE10;
+    baseTable = gStatSpriteIndexTable;
 
     do {
         if (i == 7) {
@@ -549,11 +549,11 @@ void initSaveSlotNameEntryGrid(SaveSlotGridState *state) {
     }
 
     entryIndex = 0;
-    for (k = 0; D_8008F22C_8FE2C[k] != 0xFFFF; k += 3) {
-        spriteIndex = D_8008F22C_8FE2C[k];
-        for (j = 0; j < D_8008F22C_8FE2C[k + 1]; j++) {
+    for (k = 0; gNameEntryGridSpriteTable[k] != 0xFFFF; k += 3) {
+        spriteIndex = gNameEntryGridSpriteTable[k];
+        for (j = 0; j < gNameEntryGridSpriteTable[k + 1]; j++) {
             state->entries[(u16)entryIndex].spriteIndex = spriteIndex;
-            state->entries[(u16)entryIndex].tileMode = D_8008F22C_8FE2C[k + 2];
+            state->entries[(u16)entryIndex].tileMode = gNameEntryGridSpriteTable[k + 2];
             entryIndex++;
         }
     }
@@ -1183,8 +1183,8 @@ void initSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
     }
 
     for (i = 0; i < 4; i++) {
-        state->entries[i].x = xOffset + D_8008F2AC_8FEAC[i];
-        state->entries[i].y = yOffset + D_8008F2B8_8FEB8[i];
+        state->entries[i].x = xOffset + gSelectionParticleXOffsets[i];
+        state->entries[i].y = yOffset + gSelectionParticleYOffsets[i];
         state->entries[i].frameIndex = (i % 8) + 0x10;
         state->entries[i].frameDelay = 0x12;
         state->entries[i].spriteAsset = snowflakeAsset;
@@ -1211,7 +1211,7 @@ void updateSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
         state->animToggle = (u8)((state->animToggle + 1) & 1);
 
         for (i = 0; i < 4; i++) {
-            state->entries[i].x = baseX + D_8008F2AC_8FEAC[i];
+            state->entries[i].x = baseX + gSelectionParticleXOffsets[i];
 
             if (state->animToggle == 0) {
                 state->entries[i].frameIndex++;
@@ -1416,7 +1416,7 @@ void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state) {
             if (state->animDelay == 0) {
                 state->animIndex++;
                 state->animIndex &= 3;
-                state->frameIndex = D_8008F2C4_8FEC4[state->animIndex];
+                state->frameIndex = gDeleteArrowAnimFrames[state->animIndex];
             }
         } else {
             state->animDelay = 0;
