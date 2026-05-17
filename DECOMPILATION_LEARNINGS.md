@@ -480,3 +480,17 @@ For func_80060CDC_618DC_618DC, decomp-permuter candidates scored differently und
 ## Dead Temporaries Can Improve KMC Scheduling
 
 For func_80060CDC_618DC_618DC, using dead scalar temporaries for equivalent constants or pointer bases changed instruction scheduling without changing semantics. Two useful examples were routing the full-edge push denominator through a dead vertex temporary and caching one face-group pointer in a `TrackFaceGroup *` local before an edge check. These tricks are highly local: the same pointer-temp pattern improved edge 3 but regressed edge 2 and edge 0.
+
+## Void Public APIs Can Still Need Direct Casts
+
+For func_80060CDC_618DC_618DC, the public prototype needs to stay `void *` because callers pass several layout-compatible track data pointers that are not typed as `TrackGeometryFaceData *`. Adding typed local aliases inside the matched function shifted the stack slots for saved arguments and regressed the match. Direct casts at each dereference preserved the original stack layout while keeping field accesses typed.
+
+The final endpoint distance check also needed a no-code clobber barrier after `perpDistSq = ((s64)dx) * dx`:
+
+```c
+#ifndef CC_CHECK
+__asm__ volatile("" : : : "t0", "t1", "t2", "t3", "t4", "t5", "t8", "t9", "s0", "s1");
+#endif
+```
+
+This forced KMC GCC to keep the 64-bit product in `t6/t7` and emit the spill pattern expected by the target. A real inline store duplicated the spill; the empty clobber was enough.

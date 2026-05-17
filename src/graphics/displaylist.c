@@ -229,7 +229,258 @@ u16 findTrackSector(void *arg0, u16 sectorIndex, void *arg2) {
     return currentSector & 0xFFFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/graphics/displaylist", func_80060CDC_618DC);
+s32 func_80060CDC_618DC(void *arg0, u16 groupIdx, void *arg2, s32 arg3, Vec3i *arg4) {
+    int new_var6;
+    Vec3i workPos;
+    s32 v0x;
+    s64 new_var4;
+    s32 v2x;
+    s32 v3x;
+    s32 v0z;
+    s32 v1z;
+    s32 v2z;
+    s32 v3z;
+    s32 v1x;
+    s64 new_var5;
+    s32 dz;
+    s32 dx;
+    s32 wallLen;
+    s32 relX;
+#ifdef CC_CHECK
+    s32 relZ;
+    s32 zTemp;
+#else
+    register s32 relZ __asm__("$23");
+    register s32 zTemp __asm__("$3");
+#endif
+    s16 dzNorm;
+    s16 dxNorm;
+    s32 temp_s7;
+    s16 iterations;
+    u16 hitWall;
+    s32 result;
+#ifdef CC_CHECK
+    s64 endpointDistSq;
+#else
+    register s64 endpointDistSq __asm__("$2");
+#endif
+    s64 perpDistSq;
+    s64 collisionDistSq;
+    s64 totalDistSq;
+    s32 cond;
+
+    workPos.x = ((Vec3i *)arg2)->x;
+    workPos.z = ((Vec3i *)arg2)->z;
+    iterations = 0;
+    result = 0;
+    do {
+        hitWall = 0;
+        v2x = ((TrackGeometryFaceData *)arg0)
+                  ->vertices[((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].vertexIdx2]
+                  .x
+              << 16;
+        v2z = ((TrackGeometryFaceData *)arg0)
+                  ->vertices[((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].vertexIdx2]
+                  .z
+              << 16;
+        v3x = ((TrackGeometryFaceData *)arg0)
+                  ->vertices[((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].vertexIdx3]
+                  .x
+              << 16;
+        v3z = ((TrackGeometryFaceData *)arg0)
+                  ->vertices[((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].vertexIdx3]
+                  .z
+              << 16;
+        if (((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].neighbor1 < 0) {
+            dx = v3x - v2x;
+            dz = v3z - v2z;
+            relX = workPos.x - v2x;
+            zTemp = workPos.z;
+            relZ = zTemp - v2z;
+            wallLen = isqrt64((((s64)dx) * dx) + (((s64)dz) * dz));
+            dzNorm = (s32)((((s64)dz) * 0x2000) / wallLen);
+            dxNorm = (s32)((((s64)dx) * 0x2000) / wallLen);
+            dz = -dzNorm;
+            dx = (s32)(((((s64)relX) * dz) + (((s64)relZ) * dxNorm)) / 0x2000);
+            if ((-arg3) < dx) {
+                dx = (-arg3) - dx;
+                result = ((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].neighbor1;
+                hitWall = 1;
+                workPos.x += (((s64)dx) * dz) / 0x2000;
+                workPos.z += (((s64)dx) * dxNorm) / 0x2000;
+                groupIdx = findTrackSector(arg0, groupIdx, &workPos);
+            }
+        }
+        v0x = ((TrackGeometryFaceData *)arg0)
+                  ->vertices[((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].vertexIdx0]
+                  .x
+              << 16;
+        v0z = ((TrackGeometryFaceData *)arg0)
+                  ->vertices[((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].vertexIdx0]
+                  .z
+              << 16;
+        v1x = ((TrackGeometryFaceData *)arg0)
+                  ->vertices[((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].vertexIdx1]
+                  .x
+              << 16;
+        v1z = ((TrackGeometryFaceData *)arg0)
+                  ->vertices[((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].vertexIdx1]
+                  .z
+              << 16;
+        if (((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].neighbor0 < 0) {
+            dx = v0x - v1x;
+            dz = v0z - v1z;
+            relX = workPos.x - v1x;
+            zTemp = workPos.z;
+            relZ = zTemp - v1z;
+            wallLen = isqrt64((((s64)dx) * dx) + (((s64)dz) * dz));
+            dzNorm = (s32)((((s64)dz) * 0x2000) / wallLen);
+            dxNorm = (s32)((((s64)dx) * 0x2000) / wallLen);
+            dz = -dzNorm;
+            dx = (s32)(((((s64)relX) * dz) + (((s64)relZ) * dxNorm)) / 0x2000);
+            if ((-arg3) < dx) {
+                dx = (-arg3) - dx;
+                result = ((TrackGeometryFaceData *)arg0)->faceGroups[groupIdx].neighbor0;
+                hitWall = 1;
+                workPos.x += (((s64)dx) * dz) / 0x2000;
+                workPos.z += (((s64)dx) * dxNorm) / 0x2000;
+                groupIdx = findTrackSector(arg0, groupIdx, &workPos);
+            }
+        }
+        {
+            TrackFaceGroup *new_var3;
+            s32 groupIdx2;
+            s32 groupOffset2;
+            int new_var;
+
+            groupIdx2 = groupIdx;
+            new_var3 = ((TrackGeometryFaceData *)arg0)->faceGroups;
+            groupOffset2 = ((groupIdx2 << 3) + groupIdx2) << 2;
+            if (((TrackFaceGroup *)(groupOffset2 + ((s32)new_var3)))->neighbor2 < 0) {
+                dx = v1x - v3x;
+                dz = v1z - v3z;
+                relX = workPos.x - v3x;
+                zTemp = workPos.z;
+                cond = zTemp - v3z;
+                relZ = cond;
+                wallLen = isqrt64((((s64)dx) * dx) + (((s64)dz) * dz));
+                dzNorm = (s32)((((s64)dz) * 0x2000) / wallLen);
+                dxNorm = (s32)((2 * (((s64)dx) * 4096)) / wallLen);
+                new_var5 = (s64)relX;
+                totalDistSq = dxNorm;
+                dz = dzNorm;
+                temp_s7 = -dzNorm;
+                dz = (s32)(((new_var5 * dxNorm) + (((s64)relZ) * dzNorm)) / 0x2000);
+                dx = (s32)(((((s64)relX) * temp_s7) + (((s64)relZ) * totalDistSq)) / 0x2000);
+                if ((-arg3) < dx) {
+                    do {
+                        if (((dz > 0) && (dz < wallLen)) || (dx >= 0)) {
+                            dx = (-arg3) - dx;
+                            result =
+                                ((TrackFaceGroup *)(groupOffset2 + ((s32)((TrackGeometryFaceData *)arg0)->faceGroups)))
+                                    ->neighbor2;
+                            hitWall = 1;
+                            new_var = 0x2000;
+                            workPos.x += (((s64)dx) * temp_s7) / 0x2000;
+                            workPos.z += (((s64)dx) * totalDistSq) / new_var;
+                            groupIdx = findTrackSector(arg0, groupIdx2, &workPos);
+                        } else {
+                            if (dz < 0) {
+                                endpointDistSq = ((s64)dz) * dz;
+                            } else {
+                                endpointDistSq = ((s64)(wallLen - dz)) * (wallLen - dz);
+                            }
+                            perpDistSq = ((s64)dx) * dx;
+#ifndef CC_CHECK
+                            __asm__ volatile("" : : : "t0", "t1", "t2", "t3", "t4", "t5", "t8", "t9", "s0", "s1");
+#endif
+                            collisionDistSq = endpointDistSq + perpDistSq;
+                            __asm__ volatile("");
+                            if (collisionDistSq < (((s64)arg3) * arg3)) {
+                                dx = (-arg3) - dx;
+                                result = ((TrackFaceGroup *)(groupOffset2 +
+                                                             ((s32)((TrackGeometryFaceData *)arg0)->faceGroups)))
+                                             ->neighbor2;
+                                hitWall = 1;
+                                new_var = 0x2000;
+                                workPos.x += (((s64)dx) * temp_s7) / 0x2000;
+                                workPos.z += (((s64)dx) * totalDistSq) / new_var;
+                                groupIdx = findTrackSector(arg0, groupIdx2, &workPos);
+                            }
+                        }
+                    } while (0);
+                }
+            }
+            {
+                TrackFaceGroup *new_var2;
+                s32 groupIdx3;
+                s32 groupOffset3;
+
+                groupIdx3 = groupIdx;
+                new_var2 = ((TrackGeometryFaceData *)arg0)->faceGroups;
+                groupOffset3 = ((groupIdx3 << 3) + groupIdx3) << 2;
+                if (((TrackFaceGroup *)(groupOffset3 + ((s32)new_var2)))->neighbor3 < 0) {
+                    dx = v2x - v0x;
+                    dz = v2z - v0z;
+                    relX = workPos.x - v0x;
+                    zTemp = workPos.z;
+                    relZ = zTemp - v0z;
+                    wallLen = isqrt64((((s64)dx) * dx) + (((s64)dz) * dz));
+                    dzNorm = (s32)((((s64)dz) * 0x2000) / wallLen);
+                    dxNorm = (s32)((((s64)dx) * 0x2000) / wallLen);
+                    new_var4 = (s64)relX;
+                    totalDistSq = dxNorm;
+                    dz = dzNorm;
+                    temp_s7 = -dzNorm;
+                    dz = (s32)(((new_var4 * dxNorm) + (((s64)relZ) * dzNorm)) / 0x2000);
+                    dx = (s32)(((((s64)relX) * temp_s7) + (((s64)relZ) * totalDistSq)) / 0x2000);
+                    if ((-arg3) < dx) {
+                        if (((dz > 0) && (dz < wallLen)) || (dx >= 0)) {
+                            dx = (-arg3) - dx;
+                            result =
+                                ((TrackFaceGroup *)(groupOffset3 + ((s32)((TrackGeometryFaceData *)arg0)->faceGroups)))
+                                    ->neighbor3;
+                            new_var6 = 0x2000;
+                            hitWall = 1;
+                            workPos.x += (((s64)dx) * temp_s7) / new_var6;
+                            workPos.z += (((s64)dx) * totalDistSq) / 0x2000;
+                            groupIdx = findTrackSector(arg0, groupIdx3, &workPos);
+                        } else {
+                            if (dz < 0) {
+                                endpointDistSq = ((s64)dz) * dz;
+                            } else {
+                                endpointDistSq = ((s64)(wallLen - dz)) * (wallLen - dz);
+                            }
+                            perpDistSq = ((s64)dx) * dx;
+#ifndef CC_CHECK
+                            __asm__ volatile("" : : : "t0", "t1", "t2", "t3", "t4", "t5", "t8", "t9", "s0", "s1");
+#endif
+                            collisionDistSq = endpointDistSq + perpDistSq;
+                            __asm__ volatile("");
+                            if (collisionDistSq < (((s64)arg3) * arg3)) {
+                                dx = (-arg3) - dx;
+                                result = ((TrackFaceGroup *)(groupOffset3 +
+                                                             ((s32)((TrackGeometryFaceData *)arg0)->faceGroups)))
+                                             ->neighbor3;
+                                new_var6 = 0x2000;
+                                hitWall = 1;
+                                workPos.x += (((s64)dx) * temp_s7) / new_var6;
+                                workPos.z += (((s64)dx) * totalDistSq) / 0x2000;
+                                groupIdx = findTrackSector(arg0, groupIdx3, &workPos);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        iterations++;
+        cond = (hitWall != 1) || (iterations == 2);
+    } while (!cond);
+
+    arg4->x = workPos.x - ((Vec3i *)arg2)->x;
+    arg4->z = workPos.z - ((Vec3i *)arg2)->z;
+    return result;
+}
 
 s32 getTrackHeightAtPosition(void *trackGeom_void, u16 groupIdx, void *pos_void) {
     TrackGeometryFaceData *trackGeom = (TrackGeometryFaceData *)trackGeom_void;
