@@ -3419,7 +3419,7 @@ void updateHomingProjectileMovement(HomingProjectileUpdateArg *arg0) {
 
         arg0->sectorIndex = findTrackSector(temp_s0, arg0->sectorIndex, s2);
 
-        func_80060CDC_618DC(temp_s0, arg0->sectorIndex, s2, 0x100000, &sp);
+        resolveTrackWallCollision(temp_s0, arg0->sectorIndex, s2, 0x100000, &sp);
 
         arg0->posX = arg0->posX + sp.x;
         arg0->posZ = arg0->posZ + sp.z;
@@ -3574,7 +3574,7 @@ void updatePanelProjectileMovement(PanelProjectileUpdateArg *arg0) {
         temp_s0 = &s0->unk30;
         s2 = &arg0->position;
         arg0->sectorIndex = findTrackSector(temp_s0, arg0->sectorIndex, s2);
-        func_80060CDC_618DC(temp_s0, arg0->sectorIndex, s2, 0x100000, &sp);
+        resolveTrackWallCollision(temp_s0, arg0->sectorIndex, s2, 0x100000, &sp);
         arg0->position.x = arg0->position.x + sp.x;
         arg0->position.z = arg0->position.z + sp.z;
         sp.y = getTrackHeightAtPosition(temp_s0, arg0->sectorIndex, s2);
@@ -3723,7 +3723,7 @@ void updateItemHomingProjectileMovement(ItemHomingProjectileMoveArg *arg0) {
         tempU16 = findTrackSector(allocPlus30, arg0->sectorIndex, argPlus8);
         arg0->sectorIndex = tempU16;
 
-        func_80060CDC_618DC(allocPlus30, tempU16, argPlus8, 0x100000, &sp18);
+        resolveTrackWallCollision(allocPlus30, tempU16, argPlus8, 0x100000, &sp18);
 
         arg0->posX = arg0->posX + sp18.x;
         arg0->posZ = arg0->posZ + sp18.z;
@@ -3896,7 +3896,7 @@ void updateBossHomingProjectile(BossHomingProjectile *projectile) {
 
     projectile->sectorIndex = findTrackSector(&gameState->unk30, projectile->sectorIndex, position);
 
-    func_80060CDC_618DC(&gameState->unk30, projectile->sectorIndex, position, 0x100000, &groundOffset);
+    resolveTrackWallCollision(&gameState->unk30, projectile->sectorIndex, position, 0x100000, &groundOffset);
 
     projectile->position.x += groundOffset.x;
     projectile->position.z += groundOffset.z;
@@ -4056,7 +4056,7 @@ void updateBossHomingProjectileVariant1(BossHomingProjectileVariant1UpdateArg *a
 
         arg0->displayListState.unk30 = findTrackSector(s0, arg0->displayListState.unk30, s2);
 
-        func_80060CDC_618DC(s0, arg0->displayListState.unk30, s2, 0x100000, &sp);
+        resolveTrackWallCollision(s0, arg0->displayListState.unk30, s2, 0x100000, &sp);
 
         arg0->displayListState.position.x += sp.x;
         arg0->displayListState.position.z += sp.z;
@@ -4199,7 +4199,7 @@ void updateBossHomingProjectileVariant2(BossHomingProjectileVariant2UpdateArg *a
 
     arg0->sectorIndex = findTrackSector(s0->unk30, arg0->sectorIndex, s2);
 
-    func_80060CDC_618DC(s0->unk30, arg0->sectorIndex, s2, 0x100000, &sp);
+    resolveTrackWallCollision(s0->unk30, arg0->sectorIndex, s2, 0x100000, &sp);
 
     arg0->position.x += sp.x;
     arg0->position.z += sp.z;

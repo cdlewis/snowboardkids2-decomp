@@ -113,7 +113,7 @@ s32 handlePlayerTrackWallCollision(Player *player) {
                 if (stunCounter < 10U) {
                     player->stunCollisionCounter = stunCounter + 1;
                 }
-                collisionResult = func_80060CDC_618DC(
+                collisionResult = resolveTrackWallCollision(
                     &gameState->gameData,
                     sectorIdx,
                     &samplePoints[0],
@@ -123,7 +123,7 @@ s32 handlePlayerTrackWallCollision(Player *player) {
                 player->animFlags &= ~0x20;
             } else {
                 player->stunCollisionCounter = 0;
-                collisionResult = func_80060CDC_618DC(
+                collisionResult = resolveTrackWallCollision(
                     &gameState->gameData,
                     sectorIdx,
                     &samplePoints[0],
@@ -156,7 +156,7 @@ s32 handlePlayerTrackWallCollision(Player *player) {
                 }
             }
         } else {
-            collisionResult = func_80060CDC_618DC(
+            collisionResult = resolveTrackWallCollision(
                 &gameState->gameData,
                 sectorIdx,
                 &samplePoints[i],

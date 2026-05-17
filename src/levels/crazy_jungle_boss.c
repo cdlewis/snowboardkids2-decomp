@@ -676,7 +676,7 @@ void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
     gameData = &gameState->gameData;
     newSectorIndex = getOrUpdatePlayerSectorIndex(arg0, gameData, arg0->sectorIndex, &arg0->unk434);
     arg0->sectorIndex = newSectorIndex;
-    func_80060CDC_618DC(gameData, newSectorIndex, &arg0->unk434, 0x187000, &collisionOffset);
+    resolveTrackWallCollision(gameData, newSectorIndex, &arg0->unk434, 0x187000, &collisionOffset);
     arg0->unk434.x = arg0->unk434.x + collisionOffset.x;
     arg0->unk434.z = arg0->unk434.z + collisionOffset.z;
     computePlayerTerrainAlignment((Player *)arg0);

@@ -693,7 +693,7 @@ void updateJingleTownBossPositionAndTrackCollision(Player *arg0) {
     gameData = &gameState->gameData;
     newSectorIndex = getOrUpdatePlayerSectorIndex(arg0, gameData, arg0->sectorIndex, &arg0->worldPos);
     arg0->sectorIndex = newSectorIndex;
-    func_80060CDC_618DC(gameData, newSectorIndex, &arg0->worldPos, 0x187000, &collisionOffset);
+    resolveTrackWallCollision(gameData, newSectorIndex, &arg0->worldPos, 0x187000, &collisionOffset);
     arg0->worldPos.x = arg0->worldPos.x + collisionOffset.x;
     arg0->worldPos.z = arg0->worldPos.z + collisionOffset.z;
     computePlayerTerrainAlignment(arg0);

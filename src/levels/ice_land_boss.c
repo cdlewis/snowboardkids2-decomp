@@ -1030,7 +1030,7 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     gameData = &gameState->gameData;
     newSectorIndex = getOrUpdatePlayerSectorIndex(boss, gameData, boss->sectorIndex, &boss->unk434);
     boss->sectorIndex = newSectorIndex;
-    func_80060CDC_618DC(gameData, newSectorIndex, &boss->unk434, 0x187000, &collisionOffset);
+    resolveTrackWallCollision(gameData, newSectorIndex, &boss->unk434, 0x187000, &collisionOffset);
     boss->unk434.x = boss->unk434.x + collisionOffset.x;
     boss->unk434.z = boss->unk434.z + collisionOffset.z;
     computePlayerTerrainAlignment((Player *)boss);
