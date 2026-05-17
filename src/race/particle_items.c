@@ -482,7 +482,6 @@ Gfx D_8009A780_9B380[] = {
 
 extern s32 gFrameCounter;
 extern s8 starAnimFrameDurations[];
-extern s8 starAnimFrameIndices[];
 extern s32 D_80090964_91564;
 extern s32 D_80090974_91574;
 extern s32 D_8009093C_9153C;
@@ -1156,7 +1155,7 @@ void updateStarEffectAnimation(StarEffectState *arg0) {
     s32 stride = 2;
     arg0->startDelay--; /* startDelay is reused as frameTimer after initialization */
     if ((arg0->startDelay << 0x10) == 0) {
-        loadAssetMetadata(&arg0->sprite, arg0->assetData, starAnimFrameIndices[arg0->animFrameIndex * stride]);
+        loadAssetMetadata(&arg0->sprite, arg0->assetData, starAnimFrameDurations[arg0->animFrameIndex * stride + 1]);
         arg0->startDelay = starAnimFrameDurations[arg0->animFrameIndex * stride];
         arg0->animFrameIndex++;
         if (starAnimFrameDurations[arg0->animFrameIndex * stride] == 0) {

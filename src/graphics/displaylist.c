@@ -272,7 +272,6 @@ u16 findTrackSector(void *arg0, u16 sectorIndex, void *arg2) {
     perpDistSq = ((s64)dx) * dx;                                 \
     TRACK_WALL_REGISTER_CLOBBER();                               \
     collisionDistSq = endpointDistSq + perpDistSq;               \
-    __asm__ volatile("");                                        \
     if (collisionDistSq < (((s64)collisionRadius) * collisionRadius))
 
 #ifdef CC_CHECK
