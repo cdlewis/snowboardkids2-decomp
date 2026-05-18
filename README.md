@@ -16,34 +16,43 @@ A matching decompilation of the greatest N64 game ever made, [Snowboard Kids 2](
 Clone this repository, including its submodules:
 
 ```
-git clone --recurse-submodules -j8 git@github.com:cdlewis/snowboardkids2-decomp.git
+git clone --recurse-submodules -j8 https://github.com/cdlewis/snowboardkids2-decomp.git
 ```
 
 # Dependencies
 
-This project has been tested on Ubuntu (x86). Your milege may vary on other systems.
+This project has been tested on Debian/Ubuntu (x86) and macOS. Your mileage may vary on other systems.
 
 System packages:
 
 * make
 * git
-* docker
 * python3
 * pip3
 * binutils-mips-linux-gnu
 
-Build tools:
+On Debian/Ubuntu:
+```sh
+sudo apt install make git python3 pip3 binutils-mips-linux-gnu
+```
+
+On macOS using homebrew. Note that calls below to `make` should use `gmake` instead to run the homebrew version.
+```sh
+brew install make tehzz/n64-dev/mips64-elf-binutils
+```
+
+Install toolchain:
 
 ```bash
 make setup
 ```
 
-Build Python dependencies:
+Install Python dependencies in virtual environment:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python3 -m pip install -U -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
 ## Building
@@ -66,6 +75,7 @@ Articles
 ========
 
 If you're interested in learning more about decompilation and Snowboard Kids 2, the following articles might be of interest:
+* [Snowboard Kids 2 is 100% Decompiled](http://blog.chrislewis.au/snowboard-kids-2-is-100-decompiled/)
 * [The Long Tail of LLM-Assisted Decompilation](https://blog.chrislewis.au/the-long-tail-of-llm-assisted-decompilation/)
 * [Finding Jingle Town: Debugging an N64 Game without Symbols](https://blog.chrislewis.au/finding-jingle-town-debugging-an-n64-game-without-symbols/)
 * [The Unexpected Effectiveness of One-Shot Decompilation with Claude](https://blog.chrislewis.au/the-unexpected-effectiveness-of-one-shot-decompilation-with-claude/)
@@ -78,7 +88,7 @@ Contributions are most welcome! There are a variety of other ways you can assist
 * Fix compiler warnings
 * Clean up code: you'll see plenty of hastily decopmiled functions that use pointer arithmatic rather than propre struct access. We need help cleaning up these functions.
 * Document code: some functions/variables have useful names (rather than func_XXX or D_XXX) but most don't. Some that do are incorrectly named. We need lots of help investigating and documenting what all these functions do.
-* Get project builds working on Windows and Mac. Currently the build is only verified as working on Linux which limits who can contribute.
+* Support building the project on more platforms such as Windows or ARM Linux. Currently the build is only verified as working on Linux (x86) and macOS which limits who can contribute.
 
 If you have any additional questions, please reach out on Discord (linked in the header). However please note that, since this is a clean room decompilation, we cannot accept contributions based on leaked source code or from those with proprietary knowledge about the game or related subjects.
 
