@@ -7,7 +7,7 @@ Snowboard Kids 2
 
 ![box art](Snowboard_Kids_2_cover.jpg)
 
-A work-in-progress matching decompilation of the greatest N64 game ever made, [Snowboard Kids 2](https://en.wikipedia.org/wiki/Snowboard_Kids_2).
+A matching decompilation of the greatest N64 game ever made, [Snowboard Kids 2](https://en.wikipedia.org/wiki/Snowboard_Kids_2).
 
 **This repository does not contain any game assets or assembly whatsoever. An existing copy of the game is required. This project is not a port, to PC or any other platform. It takes a Nintendo 64 rom, extracts assets from it, and combines them with C code we reverse-engineered from the rom, to produce an identical rom. It is explicitly a non-goal for this project to be used for any commercial purpose.**
 
@@ -73,9 +73,7 @@ If you're interested in learning more about decompilation and Snowboard Kids 2, 
 
 Contributing
 ============
-Contributions are most welcome! You can find a list of unmatched functions [here](https://chrislewis.au/snowboardkids2-decomp/). A URL to the decomp.me scratch as well as the current match percentage are included where appropriate.
-
-If you're not comfortable with that there are a variety of other ways you can assist:
+Contributions are most welcome! There are a variety of other ways you can assist:
 
 * Fix compiler warnings
 * Clean up code: you'll see plenty of hastily decopmiled functions that use pointer arithmatic rather than propre struct access. We need help cleaning up these functions.
