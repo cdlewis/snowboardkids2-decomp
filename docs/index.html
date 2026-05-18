@@ -3,13 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Snowboard Kids 2 — Remaining Functions</title>
-    <meta property="og:title" content="Snowboard Kids 2 — 1 FUNCTION Left" />
-    <meta property="og:description" content="Snowboard Kids 2 matching decompilation progress tracker" />
-    <meta property="og:image" content="https://chrislewis.au/snowboardkids2-decomp/og.png" />
+    <title>Snowboard Kids 2 - Fully Matched</title>
+    <meta property="og:title" content="Snowboard Kids 2 - Fully Matched" />
+    <meta
+      property="og:description"
+      content="Snowboard Kids 2 is now a fully matched N64 decompilation project."
+    />
+    <meta property="og:image" content="og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,7 +21,6 @@
     <style>
       :root {
         --ice-deep: #0b2a4a;
-        --ice-light: #a9e0f5;
         --snow: #f4f8ff;
         --sun: #ffd23f;
         --sunset: #ff7f2a;
@@ -46,9 +47,9 @@
 
       body {
         background:
-          radial-gradient(ellipse at 20% 0%, #3a8fc4 0%, transparent 55%),
-          radial-gradient(ellipse at 80% 10%, #ff9d5a 0%, transparent 45%),
-          linear-gradient(180deg, #1b5a8a 0%, #0b2a4a 40%, #0a0f1f 100%);
+          radial-gradient(ellipse at 18% 0%, #3a8fc4 0%, transparent 54%),
+          radial-gradient(ellipse at 82% 10%, #ff9d5a 0%, transparent 45%),
+          linear-gradient(180deg, #1b5a8a 0%, #0b2a4a 42%, #0a0f1f 100%);
         min-height: 100vh;
         position: relative;
       }
@@ -76,27 +77,6 @@
         z-index: 1;
       }
 
-      @keyframes snow {
-        0% {
-          background-position:
-            0 0,
-            0 0,
-            0 0,
-            0 0,
-            0 0,
-            0 0;
-        }
-        100% {
-          background-position:
-            0 500px,
-            0 350px,
-            0 600px,
-            0 400px,
-            0 450px,
-            0 300px;
-        }
-      }
-
       body::after {
         content: "";
         position: fixed;
@@ -116,18 +96,16 @@
 
       header {
         text-align: center;
-        padding: 72px 24px 56px;
+        padding: 72px 24px 40px;
       }
 
-      /* ---------- Title ---------- */
       .title {
+        display: inline-block;
         font-family: "Titan One", "Lilita One", sans-serif;
-        font-weight: 400;
-        line-height: 0.95;
         font-style: italic;
-        letter-spacing: -0.02em;
-        text-transform: uppercase;
-        -webkit-text-stroke: 2px var(--ink);
+        font-weight: 400;
+        letter-spacing: 0;
+        line-height: 0.95;
         text-shadow:
           4px 4px 0 var(--cherry),
           5px 5px 0 var(--cherry),
@@ -136,27 +114,25 @@
           8px 8px 0 var(--ink),
           14px 14px 0 rgba(0, 0, 0, 0.45),
           22px 22px 30px rgba(0, 0, 0, 0.4);
-        display: inline-block;
+        text-transform: uppercase;
+        -webkit-text-stroke: 2px var(--ink);
+      }
+
+      .line1,
+      .line2 {
+        display: block;
       }
 
       .line1 {
-        font-size: clamp(40px, 6.5vw, 110px);
         color: var(--snow);
-        display: block;
-      }
-      .line2 {
-        font-size: clamp(28px, 4.8vw, 78px);
-        color: var(--sun);
-        display: block;
-        transform: rotate(0deg) translateY(6px);
-        margin-top: 16px;
-        margin-bottom: 8px;
+        font-size: clamp(40px, 6.5vw, 110px);
       }
 
-      .line1 span,
-      .line2 span {
-        display: inline-block;
-        transition: transform 0.3s ease;
+      .line2 {
+        color: var(--sun);
+        font-size: clamp(34px, 5.5vw, 88px);
+        margin-top: 16px;
+        transform: translateY(6px);
       }
 
       .word {
@@ -164,137 +140,109 @@
         margin: 0 0.18em;
       }
 
-      /* ---------- Leaderboard ---------- */
+      .word span {
+        display: inline-block;
+      }
+
       main {
-        max-width: 1100px;
         margin: 0 auto;
+        max-width: 880px;
         padding: 0 32px 120px;
       }
 
-      .board {
+      .placeholder {
         background: var(--paper);
         border: 4px solid var(--ink);
         border-radius: 18px;
         box-shadow: 10px 10px 0 var(--ink);
-        overflow: hidden;
         color: var(--ink);
+        overflow: hidden;
       }
 
-      .board-row {
-        display: grid;
-        grid-template-columns: 1fr 160px 220px 140px;
+      .status-bar {
         align-items: center;
-        gap: 20px;
-        padding: 18px 24px;
-        border-bottom: 2px dashed rgba(10, 15, 31, 0.15);
-        transition: background 0.15s ease;
-      }
-      .board-row:last-child {
-        border-bottom: none;
-      }
-      .board-row:hover {
-        background: rgba(255, 210, 63, 0.35);
-      }
-
-      .board-row.head {
         background: var(--ink);
         color: var(--sun);
+        display: flex;
         font-family: "Lilita One", sans-serif;
-        text-transform: uppercase;
+        font-size: 13px;
+        justify-content: space-between;
         letter-spacing: 0.15em;
-        font-size: 13px;
         padding: 14px 24px;
-      }
-      .board-row.head:hover {
-        background: var(--ink);
-      }
-
-      .fn-name {
-        font-family: "JetBrains Mono", monospace;
-        font-weight: 600;
-        font-size: 15px;
-        color: var(--ink);
-        word-break: break-all;
-      }
-
-      .author-name {
-        font-family: "Fredoka", system-ui, sans-serif;
-        font-weight: 600;
-        font-size: 14px;
-        color: var(--ice-deep);
-      }
-
-      .match-bar {
-        position: relative;
-        height: 22px;
-        background: rgba(10, 15, 31, 0.08);
-        border: 2px solid var(--ink);
-        border-radius: 999px;
-        overflow: hidden;
-      }
-      .match-fill {
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          var(--cherry),
-          var(--sunset),
-          var(--sun),
-          var(--mint)
-        );
-        border-right: 2px solid var(--ink);
-        transition: width 0.6s ease;
-      }
-      .match-num {
-        font-family: "JetBrains Mono", monospace;
-        font-weight: 600;
-        font-size: 13px;
-        margin-top: 4px;
-        color: var(--ink);
-        text-align: right;
-      }
-
-      .scratch-btn {
-        font-family: "Lilita One", sans-serif;
-        font-size: 13px;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
-        padding: 10px 18px;
-        border: 3px solid var(--ink);
-        border-radius: 10px;
-        background: var(--sunset);
-        color: var(--ink);
-        text-decoration: none;
+      }
+
+      .completion {
+        display: grid;
+        gap: 24px;
+        padding: 34px 32px 30px;
         text-align: center;
-        box-shadow: 4px 4px 0 var(--ink);
-        transition: all 0.15s ease;
-        display: inline-block;
-        white-space: nowrap;
       }
-      .scratch-btn:hover {
-        transform: translate(-2px, -2px);
+
+      .badge {
+        align-items: center;
+        background: var(--mint);
+        border: 4px solid var(--ink);
+        border-radius: 999px;
         box-shadow: 6px 6px 0 var(--ink);
-        background: var(--sun);
+        display: inline-flex;
+        font-family: "Lilita One", sans-serif;
+        font-size: clamp(36px, 8vw, 82px);
+        height: clamp(118px, 20vw, 180px);
+        justify-content: center;
+        justify-self: center;
+        letter-spacing: 0;
+        min-width: clamp(118px, 20vw, 180px);
+        padding: 0 28px;
+        text-transform: uppercase;
       }
-      .scratch-btn:active {
-        transform: translate(2px, 2px);
-        box-shadow: 1px 1px 0 var(--ink);
+
+      .message {
+        font-size: clamp(24px, 4vw, 42px);
+        font-weight: 700;
+        line-height: 1.05;
+      }
+
+      .subtext {
+        color: #27445f;
+        font-size: 18px;
+        line-height: 1.45;
+        margin: 0 auto;
+        max-width: 620px;
+      }
+
+      .generated {
+        border-top: 2px dashed rgba(10, 15, 31, 0.18);
+        color: #68778a;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        padding: 12px 24px;
+        text-align: center;
       }
 
       @media (max-width: 780px) {
-        .board-row {
-          grid-template-columns: 1fr;
-          gap: 8px;
+        header {
+          padding-top: 48px;
         }
-        .board-row.head {
-          display: none;
+
+        main {
+          padding: 0 20px 80px;
         }
-        .scratch-btn {
-          width: 100%;
-        }
+
         .title {
           text-shadow:
             2px 2px 0 var(--ink),
             2px 2px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .status-bar {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .completion {
+          padding: 28px 22px 26px;
         }
       }
     </style>
@@ -303,36 +251,45 @@
     <header>
       <h1 class="title">
         <span class="line1">
-          <span class="word w1"
+          <span class="word"
             ><span>S</span><span>N</span><span>O</span><span>W</span
             ><span>B</span><span>O</span><span>A</span><span>R</span
             ><span>D</span></span
           >
-          <span class="word w2"
+          <span class="word"
             ><span>K</span><span>I</span><span>D</span><span>S</span
             ><span>&nbsp;&nbsp;</span><span>2</span></span
           >
         </span>
-        <span class="line2"><span class="word w1"><span>1</span></span><span class="word w2"><span>F</span><span>U</span><span>N</span><span>C</span><span>T</span><span>I</span><span>O</span><span>N</span></span><span class="word w3"><span>L</span><span>E</span><span>F</span><span>T</span></span></span>
+        <span class="line2">
+          <span class="word"
+            ><span>F</span><span>U</span><span>L</span><span>L</span
+            ><span>Y</span></span
+          >
+          <span class="word"
+            ><span>M</span><span>A</span><span>T</span><span>C</span
+            ><span>H</span><span>E</span><span>D</span></span
+          >
+        </span>
       </h1>
     </header>
 
     <main>
-      <div class="board">
-<div class="board-row head">
-          <div>Function</div>
-          <div>Best Match By</div>
-          <div>Match</div>
-          <div style="text-align:center">Scratch</div>
+      <section class="placeholder" aria-label="Project completion status">
+        <div class="status-bar">
+          <span>Decompilation Status</span>
+          <span>100%</span>
         </div>
-        <div class="board-row">
-          <div><div class="fn-name">func_80060CDC_618DC</div></div>
-          <div><div class="author-name">cdlewis</div></div>
-          <div><div class="match-bar"><div class="match-fill" style="width:98.6%"></div></div><div class="match-num">98.62%</div></div>
-          <div><a class="scratch-btn" href="https://decomp.me/scratch/rRUTa" target="_blank" rel="noopener">decomp.me ▸</a></div>
+        <div class="completion">
+          <div class="badge">Done</div>
+          <p class="message">The leaderboard has retired.</p>
+          <p class="subtext">
+            Snowboard Kids 2 is now fully matched, so there are no remaining
+            functions to rank.
+          </p>
         </div>
-<div style="text-align:center;padding:12px 24px;font-size:11px;color:#999;font-family:JetBrains Mono,monospace">Generated 2026-05-15 09:53</div>
-      </div>
+        <div class="generated">Generated 2026-05-18 01:47</div>
+      </section>
     </main>
   </body>
 </html>
