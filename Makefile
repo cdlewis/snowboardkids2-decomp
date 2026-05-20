@@ -1,11 +1,14 @@
-MAKEFLAGS += -j$(shell nproc)
-
 BASENAME  = snowboardkids2
 
 ifndef QUIET
   PRINTF = @printf
 else
   PRINTF = @true
+endif
+
+VERBOSE ?= 0
+ifeq ($(VERBOSE),0)
+  V := @
 endif
 
 # Colours
@@ -40,7 +43,31 @@ O_FILES := $(shell grep -E 'build\/(asm|assets|src|src\/entrypoint|bin|lib\/libk
 
 # Tools
 
-CROSS = mips-linux-gnu-
+find-command = $(shell which $(1) 2>/dev/null)
+
+# try to auto-detect MIPS cross toolchain
+ifneq      ($(call find-command,mips-linux-gnu-ld),)
+  CROSS := mips-linux-gnu-
+else ifneq ($(call find-command,mips64-linux-gnu-ld),)
+  CROSS := mips64-linux-gnu-
+else ifneq ($(call find-command,mips64-elf-ld),)
+  CROSS := mips64-elf-
+else
+  $(error Unable to detect a suitable MIPS toolchain installed.)
+endif
+
+# Prefer cross toolchain C preprocessor or clang if installed on the system
+ifneq (,$(call find-command,$(CROSS)clang))
+  CPP      := $(CROSS)cpp
+  CPPFLAGS := -P
+else ifneq (,$(call find-command,clang))
+  CPP      := clang
+  CPPFLAGS := -E -P -x c
+else
+  CPP      := cpp
+  CPPFLAGS := -P
+endif
+
 AS = $(CROSS)as
 LD = $(CROSS)ld
 OBJDUMP = $(CROSS)objdump
@@ -48,8 +75,6 @@ OBJCOPY = $(CROSS)objcopy
 PYTHON = python3
 SPLAT = $(PYTHON) -m splat split
 N64CRC = $(TOOLS_DIR)/n64crc.py
-CPP := $(CROSS)cpp
-ICONV := iconv --from-code=UTF-8 --to-code=Shift-JIS
 
 COMPILER_DIR = tools/gcc_kmc
 CC := COMPILER_PATH=$(COMPILER_DIR) $(COMPILER_DIR)/gcc
@@ -111,14 +136,14 @@ nonmatching: dirs no_verify
 
 dirs:
 	$(foreach dir,$(ASM_DIRS) $(BIN_DIRS),$(shell mkdir -p $(BUILD_DIR)/$(dir)))
-	@rm -f $(BUILD_LOG)
+	$(V)rm -f $(BUILD_LOG)
 
 verify: $(TARGET).z64
-	@shasum --check $(BASENAME).sha1
+	$(V)shasum --check $(BASENAME).sha1
 
 no_verify: $(TARGET).z64
 	@echo "Skipping SHA1SUM check (DEBUG=$(DEBUG) or NON_MATCHING=$(NON_MATCHING)), updating CRC"
-	@$(PYTHON) $(N64CRC) $(TARGET).z64
+	$(V)$(PYTHON) $(N64CRC) $(TARGET).z64
 
 extract:
 	$(SPLAT) $(BASENAME).yaml
@@ -136,10 +161,10 @@ clean-libmus:
 	rm -r lib/libmus/build
 
 diff-line:
-	@(diff --old-line-format='OLD: %L' --new-line-format='NEW: %L' <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
+	$(V)(diff --old-line-format='OLD: %L' --new-line-format='NEW: %L' <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
 diff-sxs:
-	@(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
+	$(V)(diff -y <(xxd snowboardkids2.z64) <(xxd build/snowboardkids2.z64) || true) > romdiff
 
 format:
 	clang-format -i -style=file $(C_FILES) $(FORMAT_H_FILES)
@@ -149,7 +174,7 @@ tidy:
 
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
 	$(PRINTF) "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
-	@$(LD) $(LD_FLAGS) $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) -o $@
+	$(V)$(LD) $(LD_FLAGS) $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) -o $@
 
 # Per-file optimization overrides
 $(BUILD_DIR)/src/graphics/tiled_sprite_grid.o: OPT_FLAGS := -O0
@@ -159,26 +184,23 @@ CHARMAP = $(TOOLS_DIR)/charmap.txt
 
 $(BUILD_DIR)/src/%.o: src/%.c $(CHARMAP)
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(GREEN)   c    $(NO_COL)]  src/$*.c\n"; \
-	$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
-	@$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
-	$(OBJDUMP_CMD)
+	$(PRINTF) "[$(GREEN)   c    $(NO_COL)]  src/$*.c\n"
+	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
+	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
 
 $(BUILD_DIR)/%.o: %.s
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(GREEN)   as   $(NO_COL)]  $<\n"; \
-	cpp -P -I include -I $(BUILD_DIR)/$(dir $*) $< | \
-		$(ICONV) | \
+	$(PRINTF) "[$(GREEN)   as   $(NO_COL)]  $<\n"
+	$(V)$(CPP) $(CPPFLAGS) -I include -I $(BUILD_DIR)/$(dir $*) $< | \
 		$(AS) $(ASFLAGS) -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) -o $@
-	$(OBJDUMP_CMD)
 
 $(BUILD_DIR)/lib/libgultra_rom.a: $(LIBULTRA)
 	@mkdir -p $$(dirname $@)
-	@cp $< $@
+	$(V)cp $< $@
 
 $(BUILD_DIR)/lib/libmus.a: $(LIBMUS)
 	@mkdir -p $$(dirname $@)
-	@cp $< $@
+	$(V)cp $< $@
 
 LIBULTRA_FLAGS = VERSION=J TARGET=libgultra_rom COMPARE=0 MODERN_LD=1 GBIDEFINE="DF3DEX_GBI_2=1"
 $(LIBULTRA):
@@ -191,22 +213,22 @@ $(LIBMUS):
 
 $(BUILD_DIR)/%.o: %.bin
 	$(PRINTF) "[$(PINK) linker $(NO_COL)]  $<\n"
-	@$(LD) -r -b binary -o $(BUILD_DIR)/$(basename $<).o $<
+	$(V)$(LD) -r -b binary -o $(BUILD_DIR)/$(basename $<).o $<
 
 $(TARGET).bin: $(TARGET).elf
 	$(PRINTF) "[$(CYAN) objcpy $(NO_COL)]  $<\n"
-	@$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
+	$(V)$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
 
 $(TARGET).z64: $(TARGET).bin
-	@cp $< $@
+	$(V)cp $< $@
 
 $(BUILD_DIR)/src/%_annotated.s: src/%.c
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(CYAN) annot  $(NO_COL)]  Generating annotated assembly for $<\n"
 	@# Compile with debug info to temporary object file
-	@$(CC) $(CFLAGS) -g -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -c -o $(BUILD_DIR)/src/$*_temp.o $<
+	$(V)$(CC) $(CFLAGS) -g -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -c -o $(BUILD_DIR)/src/$*_temp.o $<
 	@# Generate disassembly with line numbers
-	@$(OBJDUMP) -d --line-numbers --reloc --source $(BUILD_DIR)/src/$*_temp.o > $@
+	$(V)$(OBJDUMP) -d --line-numbers --reloc --source $(BUILD_DIR)/src/$*_temp.o > $@
 	@# Clean up temp file
 	@rm -f $(BUILD_DIR)/src/$*_temp.o
 	@echo "    Generated: $@"
