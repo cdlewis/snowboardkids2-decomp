@@ -172,10 +172,10 @@ s32 tryActivateFinishBoost(Player *arg0) {
 }
 
 s32 tryActivateGhostEffect(Player *player) {
-    if (player->ghostEffectState == 0) {
+    if (player->featherItemActive == 0) {
         if (spawnGhostEffect(player) != NULL) {
-            player->ghostEffectState = 1;
-            player->ghostEffectTimer = 300;
+            player->featherItemActive = 1;
+            player->featherItemTimer = 300;
             return 1;
         }
     }

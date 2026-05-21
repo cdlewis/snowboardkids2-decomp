@@ -809,8 +809,8 @@ void updateRacePlayer(Player *player) {
         player->unkBC2--;
     }
 
-    player->gravity = player->unkAB4;
-    if (player->ghostEffectState != 0) {
+    player->gravity = player->baseGravity;
+    if (player->featherItemActive != 0) {
         player->gravity = 0x3000;
     }
 
@@ -894,7 +894,7 @@ void updateRacePlayer(Player *player) {
         if (player->hitReactionState != 0) {
             player->behaviorMode = 2;
             player->boostTimer = 0;
-            player->ghostEffectTimer = 0;
+            player->featherItemTimer = 0;
             player->invincibilityTimer = 0;
 
             switch (player->hitReactionState) {
@@ -984,9 +984,8 @@ void updateRacePlayer(Player *player) {
         }
     } else {
         player->boostTimer = 0;
-        player->ghostEffectTimer = 0;
+        player->featherItemTimer = 0;
     }
-
     {
         u16 invTimerLocal = player->invincibilityTimer;
         player->hitReactionState = 0;
@@ -3249,7 +3248,7 @@ void initStunnedAirborneBehavior(Player *player) {
     player->behaviorStep = 0;
     player->behaviorCounter = 0;
     player->boostTimer = 0;
-    player->ghostEffectTimer = 0;
+    player->featherItemTimer = 0;
     player->invincibilityTimer = 0;
     player->animFlags = player->animFlags & 0xFFFF2FFF;
     playStunnedVoice(player);

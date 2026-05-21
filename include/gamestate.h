@@ -158,7 +158,7 @@ typedef struct {
     s32 aiLaneWidth;
     s32 speedHandicap;
     s32 lateralDeadzone;
-    s32 unkAB4;
+    s32 baseGravity;
     s32 gravity;
     s32 unkABC;
     u8 handling;
@@ -205,7 +205,7 @@ typedef struct {
     u16 characterScaleXZ;
     s16 characterScaleY;
     u16 invincibilityTimer;
-    s16 ghostEffectTimer;
+    s16 featherItemTimer;
     u16 inputRecordIndex;
     s16 trickPoints;
     s16 trickScore;
@@ -241,7 +241,7 @@ typedef struct {
     u8 chairliftFlags;
     u8 slowdownLevel;
     u8 boostState;
-    u8 ghostEffectState;
+    u8 featherItemActive;
     u8 primaryItemId;
     u8 primaryItemAmmo;
     u8 secondaryItemId;

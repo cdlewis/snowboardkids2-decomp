@@ -1847,24 +1847,24 @@ void updateGhostEffect(GhostEffectState *arg0) {
 
     player = arg0->player;
     if (player->animFlags & 0x80000) {
-        player->ghostEffectTimer = 0;
+        player->featherItemTimer = 0;
     }
 
     temp_player = arg0->player;
-    count = temp_player->ghostEffectTimer;
+    count = temp_player->featherItemTimer;
     if (count != 0) {
         if (allocation->paused == 0) {
-            temp_player->ghostEffectTimer = count - 1;
+            temp_player->featherItemTimer = count - 1;
             player = arg0->player;
-            new_count = player->ghostEffectTimer;
+            new_count = player->featherItemTimer;
             if (new_count == 0) {
                 if (player->costumeID == 0x11) {
-                    player->ghostEffectTimer = new_count + 1;
+                    player->featherItemTimer = new_count + 1;
                 }
             }
         }
     } else {
-        temp_player->ghostEffectState = 0;
+        temp_player->featherItemActive = 0;
         arg0->velocityY = 0x40000;
         setCallback(fadeOutGhostEffect);
     }

@@ -12,7 +12,7 @@ typedef struct {
     /* 0x1 */ u8 param1; // -> handling (offset +0x19)
     /* 0x2 */ u8 param2; // -> cornering (offset +1)
     /* 0x3 */ u8 param3; // -> lateralDeadzone (scaled, can be overridden to 0xC000)
-    /* 0x4 */ u8 param4; // -> unkAB4 (scaled)
+    /* 0x4 */ u8 param4; // -> baseGravity (scaled)
     /* 0x5 */ u8 param5; // -> unkABC (scaled)
 } CharacterBoardStats;   // size = 0x6
 
@@ -270,7 +270,7 @@ void applyCharacterBoardStats(Player *player) {
         player->lateralDeadzone = 0xC000;
     }
 
-    player->unkAB4 = (boardStats[charId].param4 << 14) / 100 + 0x3000;
+    player->baseGravity = (boardStats[charId].param4 << 14) / 100 + 0x3000;
     player->unkABC = (boardStats[charId].param5 << 17) / 100 + 0x28000;
 }
 
