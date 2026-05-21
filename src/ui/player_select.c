@@ -39,7 +39,7 @@ void handlePlayerCountSelectInput(void);
 void exitPlayerCountSelect(void);
 void onPlayerCountProceed(void);
 void onPlayerCountCancel(void);
-void func_80022304_22F04(void);
+void awaitPlayerCountSelectFadeIn(void);
 
 void initPlayerCountSelectState(void) {
     PlayerCountSelectState *state;
@@ -78,10 +78,10 @@ void initPlayerCountSelectState(void) {
     state->assetData2 = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     scheduleTask(&initPlayerCountSelectSprites, 0, 0, 0x5A);
     scheduleTask(&initCharacterReadyIndicator, 0, 0, 0x5A);
-    setGameStateHandler(func_80022304_22F04);
+    setGameStateHandler(awaitPlayerCountSelectFadeIn);
 }
 
-void func_80022304_22F04(void) {
+void awaitPlayerCountSelectFadeIn(void) {
     PlayerCountSelectState *state;
     s32 result;
     u8 *task;
@@ -120,7 +120,7 @@ void handlePlayerCountSelectInput(void) {
                 playSoundEffect(0x2E);
                 state->menuState = 0xA;
             } else {
-                if (inputs & 0x40100) {
+                if (inputs & (STICK_RIGHT | R_JPAD)) {
                     if (state->playerCount.selectedPlayerIndex < (state->connectedControllerCount - 1)) {
                         state->playerCount.selectedPlayerIndex = state->playerCount.selectedPlayerIndex + 1;
                         playSoundEffectOnChannelNoPriority(0x2B, 0);
