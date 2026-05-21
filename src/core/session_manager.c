@@ -47,8 +47,8 @@ void initStoryMode(void) {
     data->unk2 = 0;
     data->unk0 = 0;
     D_800AB1C8_A2538 = 0;
-    D_800AFE8C_A71FC->numPlayers = 1;
-    D_800AFE8C_A71FC->playerBoardIds[0] = 0;
+    gGameSessionContext->numPlayers = 1;
+    gGameSessionContext->playerBoardIds[0] = 0;
     setStoryMapCameraMode(0);
     setGameStateHandlerWithContinue(loadSaveSlotScreen);
 }
@@ -119,7 +119,7 @@ void awaitSaveDataLoad(void) {
 }
 
 void loadPreRaceCutscene(void) {
-    setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 0);
+    setCutsceneSelection(gGameSessionContext->saveSlotIndex, 0);
     createTaskQueue(loadCutsceneOverlay, 0x96);
     setGameStateHandler(awaitPreRaceCutscene);
 }
@@ -155,10 +155,10 @@ void awaitRaceResult(void) {
             }
 
             if ((result == 3) | (result == 5)) {
-                *(eepromBase + D_800AFE8C_A71FC->saveSlotIndex + 0x10) = 1;
+                *(eepromBase + gGameSessionContext->saveSlotIndex + 0x10) = 1;
                 processRaceUnlocks(result);
             } else {
-                temp = eepromBase + D_800AFE8C_A71FC->saveSlotIndex;
+                temp = eepromBase + gGameSessionContext->saveSlotIndex;
                 if (*(temp + 0x10) != 1) {
                     *(temp + 0x10) = 4;
                 }
@@ -176,10 +176,10 @@ void awaitRaceResult(void) {
                 goto set_handler_b70;
             }
             if ((result == 3) || (gDebugUnlockEnabled != 0)) {
-                saveSlotIndex = D_800AFE8C_A71FC->saveSlotIndex;
+                saveSlotIndex = gGameSessionContext->saveSlotIndex;
                 slotIndexInt = saveSlotIndex;
                 if (((slotIndexInt == 2) | (slotIndexInt == 6)) || (slotIndexInt == 10)) {
-                    D_800AFE8C_A71FC->saveSlotIndex = saveSlotIndex + 1;
+                    gGameSessionContext->saveSlotIndex = saveSlotIndex + 1;
                     handler = loadPreRaceCutscene;
                 } else {
                     handler = loadPostRaceCutscene;
@@ -197,7 +197,7 @@ void awaitRaceResult(void) {
 }
 
 void loadPostRaceCutscene(void) {
-    setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 1);
+    setCutsceneSelection(gGameSessionContext->saveSlotIndex, 1);
     createTaskQueue(loadCutsceneOverlay, 0x64);
     setGameStateHandler(awaitPostRaceCutscene);
 }
@@ -208,11 +208,11 @@ void awaitPostRaceCutscene(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
         if (gStoryCompleted != 0) {
             handler = loadStoryCompleteCutscene;
-        } else if (D_800AFE8C_A71FC->saveSlotIndex == 0xB) {
+        } else if (gGameSessionContext->saveSlotIndex == 0xB) {
             handler = loadCreditsSequence;
         } else {
             handler = loadStoryMapScreen;
-            if (D_800AFE8C_A71FC->pendingUnlockCutscene != 0) {
+            if (gGameSessionContext->pendingUnlockCutscene != 0) {
                 handler = loadUnlockCutscene;
             }
         }
@@ -233,14 +233,14 @@ void awaitStoryCompleteCutscene(void) {
 }
 
 void loadUnlockCutscene(void) {
-    setCutsceneSelection(D_800AFE8C_A71FC->pendingUnlockCutscene, 2);
+    setCutsceneSelection(gGameSessionContext->pendingUnlockCutscene, 2);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
     setGameStateHandler(awaitUnlockCutscene);
 }
 
 void awaitUnlockCutscene(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
-        D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
+        gGameSessionContext->pendingUnlockCutscene = 0;
         setGameStateHandler(loadStoryMapScreen);
     }
 }
@@ -252,8 +252,8 @@ void loadCreditsSequence(void) {
 
 void awaitCreditsSequence(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
-        if (D_800AFE8C_A71FC->pendingUnlockCutscene == 8) {
-            D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
+        if (gGameSessionContext->pendingUnlockCutscene == 8) {
+            gGameSessionContext->pendingUnlockCutscene = 0;
             EepromSaveData->unk51 = 1;
         }
         setGameStateHandler(loadPostCreditsSaveScreen);
@@ -261,7 +261,7 @@ void awaitCreditsSequence(void) {
 }
 
 void loadPostCreditsSaveScreen(void) {
-    D_800AFE8C_A71FC->creditsCompleted = 1;
+    gGameSessionContext->creditsCompleted = 1;
     createTaskQueue(initSaveSlotScreen, 0x96);
     setGameStateHandler(awaitPostCreditsSaveScreen);
 }

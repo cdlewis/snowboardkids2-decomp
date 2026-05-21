@@ -5284,9 +5284,9 @@ void updateAndRenderRaceCharacters(void) {
                         break;
                     }
                     if (player->finishPosition == 0) {
-                        D_800AFE8C_A71FC->playerBoardIds[0x11 + player->playerIndex]++;
-                        if (D_800AFE8C_A71FC->playerBoardIds[0x11 + player->playerIndex] >= 100) {
-                            D_800AFE8C_A71FC->playerBoardIds[0x11 + player->playerIndex] = 99;
+                        gGameSessionContext->playerBoardIds[0x11 + player->playerIndex]++;
+                        if (gGameSessionContext->playerBoardIds[0x11 + player->playerIndex] >= 100) {
+                            gGameSessionContext->playerBoardIds[0x11 + player->playerIndex] = 99;
                         }
                         showPlacementAnnouncement(player->playerIndex, 1);
                         if ((s32)gs->unk5D == 1) {

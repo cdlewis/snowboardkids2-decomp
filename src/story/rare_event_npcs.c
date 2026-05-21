@@ -511,8 +511,8 @@ void updateRareEventNpcDialogueSequence(Func2E024Arg *arg0) {
                         configureRareEventSpriteEffect((StoryMapRareEventState *)arg0, i);
                     }
                     arg0->elements[i].unk37 = 0;
-                    soundId =
-                        rareEventDialogueSoundTable[arg0->rareEventType][(D_800AFE8C_A71FC->playerBoardIds[0] * 2) + i];
+                    soundId = rareEventDialogueSoundTable[arg0->rareEventType]
+                                                         [(gGameSessionContext->playerBoardIds[0] * 2) + i];
                     if (soundId != 0) {
                         playSoundEffectOnChannelNoPriority(soundId, i + 1);
                     }
@@ -686,7 +686,7 @@ void configureRareEventSpriteEffect(StoryMapRareEventState *rareEvent, s32 npcIn
     eventType = rareEvent->eventTypeIndex;
 
     if ((eventType == 1) & (npcIndex == 0)) {
-        if (D_800AFE8C_A71FC->playerBoardIds[0] == 3) {
+        if (gGameSessionContext->playerBoardIds[0] == 3) {
             npc = &rareEvent->npcs[npcIndex];
             npc->spriteEffectParams = D_8008ED00_8F900;
             rareEvent->npcs[0].spriteEffectPosY = 0x300000;
@@ -707,7 +707,7 @@ void configureRareEventSpriteEffect(StoryMapRareEventState *rareEvent, s32 npcIn
     }
 
     if ((rareEvent->eventTypeIndex == 6) & (npcIndex == 1)) {
-        if (D_800AFE8C_A71FC->playerBoardIds[0] == 3) {
+        if (gGameSessionContext->playerBoardIds[0] == 3) {
             offset = npcIndex * 0x64;
             ((StoryMapRareEventNpc *)((u8 *)rareEvent + offset))->spriteEffectParams = D_8008ECF0_8F8F0;
         }

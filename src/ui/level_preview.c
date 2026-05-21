@@ -196,7 +196,7 @@ typedef struct {
     u8 unk7;
 } D_800AFE8C_type_202A0;
 
-extern D_800AFE8C_type_202A0 *D_800AFE8C_A71FC;
+extern D_800AFE8C_type_202A0 *gGameSessionContext;
 extern u16 gGlobalFrameCounter;
 
 extern void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *);
@@ -976,7 +976,7 @@ void renderCharacterSelectDisplay(CharacterSelectDisplayState *state) {
         enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &state->iconEntries[i]);
     }
 
-    if (D_800AFE8C_A71FC->gameMode == 0) {
+    if (gGameSessionContext->gameMode == 0) {
         selectedChar = allocation->unkB33[allocation->unkB2C];
         temp_a0 = selectedChar & 0xFF;
         if (temp_a0 == 3 || temp_a0 == 7 || temp_a0 == 11) {
@@ -1001,8 +1001,8 @@ void renderCharacterSelectDisplay(CharacterSelectDisplayState *state) {
     }
 
     if (allocation->unkB45 == 0) {
-        if (D_800AFE8C_A71FC->gameMode == 1 ||
-            (D_800AFE8C_A71FC->gameMode == 0 && EepromSaveData->save_slot_status[0] != 5)) {
+        if (gGameSessionContext->gameMode == 1 ||
+            (gGameSessionContext->gameMode == 0 && EepromSaveData->save_slot_status[0] != 5)) {
             if (allocation->menuState == 0) {
                 state->animTimer++;
                 if (state->animTimer < 0x11) {
@@ -1081,7 +1081,7 @@ void renderUnlockNotification(UnlockNotificationState *state) {
 
     enqueueCallbackBySlotIndex(0xA, 0, renderTiledTextureMap, state);
 
-    if (D_800AFE8C_A71FC->gameMode == 0) {
+    if (gGameSessionContext->gameMode == 0) {
         if (EepromSaveData->save_slot_status[0] == 5) {
             if ((gGlobalFrameCounter & 7) == 0) {
                 nextFrame = state->frameIndex + 1;
@@ -1111,10 +1111,10 @@ void initMenuCharacterModel(MenuCharacterModelState *state) {
     allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->unkB45 != 0) {
-        s32 idx = D_800AFE8C_A71FC->unk7 * 2;
-        animIndex = characterIdleAnimationIndices[D_800AFE8C_A71FC->unk7];
-        modelIndex = characterModelIndices[D_800AFE8C_A71FC->unk7];
-        assetPairIndex = characterAssetPairIndices[D_800AFE8C_A71FC->unk7];
+        s32 idx = gGameSessionContext->unk7 * 2;
+        animIndex = characterIdleAnimationIndices[gGameSessionContext->unk7];
+        modelIndex = characterModelIndices[gGameSessionContext->unk7];
+        assetPairIndex = characterAssetPairIndices[gGameSessionContext->unk7];
         state->animationIndex = animIndex;
     } else {
         modelIndex = 0x3A;
@@ -1152,7 +1152,7 @@ void setupMenuCharacterModel(MenuCharacterModelState *state) {
     Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
 
     if (allocation->unkB45 != 0) {
-        if (D_800AFE8C_A71FC->unk7 == 0xC) {
+        if (gGameSessionContext->unk7 == 0xC) {
             scaleMatrix((&state->transform), 0x1000, 0x1000, 0x1000);
         }
     }
@@ -1199,9 +1199,9 @@ void setMenuCharacterAnimation(u8 animationType, MenuCharacterModelState *state)
     allocation->unkB47 = 0;
 
     if (animationType == 2) {
-        state->animationIndex = characterIdleAnimationIndices[D_800AFE8C_A71FC->unk7];
+        state->animationIndex = characterIdleAnimationIndices[gGameSessionContext->unk7];
     } else {
-        state->animationIndex = characterActionAnimationIndices[D_800AFE8C_A71FC->unk7];
+        state->animationIndex = characterActionAnimationIndices[gGameSessionContext->unk7];
     }
 
     setModelAnimation(state->model, state->animationIndex);
@@ -1212,13 +1212,13 @@ void handleMenuCharacterAnimationEnd(MenuCharacterModelState *state) {
 
     getCurrentAllocation();
 
-    if (D_800AFE8C_A71FC->unk7 == 0xD) {
+    if (gGameSessionContext->unk7 == 0xD) {
         currentAnimation = state->animationIndex;
         if (currentAnimation == 0xD) {
             state->animationIndex = currentAnimation + 1;
             setModelAnimation(state->model, (s16)(currentAnimation + 1));
         }
-    } else if (D_800AFE8C_A71FC->unk7 == 0xE) {
+    } else if (gGameSessionContext->unk7 == 0xE) {
         currentAnimation = state->animationIndex;
         if (currentAnimation == 1) {
             state->animationIndex = 2;
@@ -1263,7 +1263,7 @@ void initMinigameDescText(MinigameDescTextState *state) {
     setCleanupCallback(&cleanupMinigameDescText);
 
     state->priority = 5;
-    globalState = D_800AFE8C_A71FC;
+    globalState = gGameSessionContext;
     state->x = -0x50;
     state->y = -0x10;
     state->color1.asS16 = 0xFF;

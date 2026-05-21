@@ -111,7 +111,7 @@ void sortPlayersByCharacterRank(void) {
     u8 swapTemp;
 
     allocation = (LocalGameState *)getCurrentAllocation();
-    numPlayers = D_800AFE8C_A71FC->numPlayers;
+    numPlayers = gGameSessionContext->numPlayers;
 
     for (playerIndex = 0; playerIndex < numPlayers; playerIndex++) {
         i = 0;
@@ -162,7 +162,7 @@ void positionCharacterSelectSprite(CharacterSelectSprite *arg0, u8 arg1) {
     }
 
     count = 0;
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         if (allocation->selectedCharacter[arg1] == allocation->selectedCharacter[i]) {
             count++;
         }
@@ -291,7 +291,7 @@ void checkCharacterPreviewState(CharacterPreviewState *arg0) {
     }
 
     if (arg0->displayMode == 0) {
-        ptr = D_800AFE8C_A71FC;
+        ptr = gGameSessionContext;
         count = ptr->numPlayers;
         if (count > 0) {
             i = 0;
@@ -304,7 +304,7 @@ void checkCharacterPreviewState(CharacterPreviewState *arg0) {
                         return;
                     }
                 }
-                ptr = D_800AFE8C_A71FC;
+                ptr = gGameSessionContext;
                 i++;
             } while (i < ptr->numPlayers);
         }
@@ -347,7 +347,7 @@ void animateCharacterPreview(CharacterPreviewState *arg0) {
 
     updateModelGeometry(arg0->model);
 
-    ptr = D_800AFE8C_A71FC;
+    ptr = gGameSessionContext;
     count = ptr->numPlayers;
     i = 0;
     if (count > 0) {
@@ -367,7 +367,7 @@ void animateCharacterPreview(CharacterPreviewState *arg0) {
         } while (i < localCount);
     }
 
-    if (i == D_800AFE8C_A71FC->numPlayers) {
+    if (i == gGameSessionContext->numPlayers) {
         arg0->animationState = 3;
         setModelAnimation(arg0->model, 3);
         index = arg0->characterIndex;
@@ -407,7 +407,7 @@ void initCharacterSelectSprites(CharacterSelectSprites *arg0) {
     getCurrentAllocation();
     allocation = loadCompressedData(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         arg0->sprites[i].spriteData = allocation;
         arg0->sprites[i].scale = 0xFF;
         arg0->sprites[i].alpha = 0;
@@ -428,7 +428,7 @@ void updateCharacterSelectSprites(CharacterSelectSprites *arg0) {
     allocation = (func_800B0A54_allocation *)getCurrentAllocation();
     sortPlayersByCharacterRank();
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         positionCharacterSelectSprite(&arg0->sprites[i], i);
         state = allocation->playerSlotState[i];
 

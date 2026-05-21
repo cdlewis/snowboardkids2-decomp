@@ -105,14 +105,14 @@ void updateOptionsMenu(void) {
 
                 } else {
                     if (curIndex == 0) {
-                        D_800AFE8C_A71FC->optionToggle1 = (D_800AFE8C_A71FC->optionToggle1 + 1) & 1;
+                        gGameSessionContext->optionToggle1 = (gGameSessionContext->optionToggle1 + 1) & 1;
                     } else if (curIndex == 1) {
-                        D_800AFE8C_A71FC->optionToggle2 = (D_800AFE8C_A71FC->optionToggle2 + 1) & 1;
+                        gGameSessionContext->optionToggle2 = (gGameSessionContext->optionToggle2 + 1) & 1;
                     } else if (curIndex == 2) {
-                        D_800AFE8C_A71FC->customLapEnabled = (D_800AFE8C_A71FC->customLapEnabled + 1) & 1;
-                        if (D_800AFE8C_A71FC->customLapEnabled == 0) {
-                            D_800AFE8C_A71FC->customLapCount = 3;
-                            D_800AFE8C_A71FC->playerBoardIds[0x10] = 3;
+                        gGameSessionContext->customLapEnabled = (gGameSessionContext->customLapEnabled + 1) & 1;
+                        if (gGameSessionContext->customLapEnabled == 0) {
+                            gGameSessionContext->customLapCount = 3;
+                            gGameSessionContext->playerBoardIds[0x10] = 3;
                         }
                     }
                     playSoundEffect(0x2B);

@@ -213,23 +213,23 @@ void cleanupTitleAndTransition(void) {
     menuSelection = state->menuSelection;
 
     if (menuSelection == 3) {
-        D_800AFE8C_A71FC->gameMode = 0xFF;
+        gGameSessionContext->gameMode = 0xFF;
     } else {
         menuMode = state->menuMode;
         if (menuMode == 1) {
-            D_800AFE8C_A71FC->gameMode = menuSelection;
-            D_800AFE8C_A71FC->saveSlotIndex = 0;
+            gGameSessionContext->gameMode = menuSelection;
+            gGameSessionContext->saveSlotIndex = 0;
         } else if (menuSelection == 1) {
             gTitleExitMode = 2;
         } else {
             gTitleExitMode = 3;
-            D_800AFE8C_A71FC->gameMode = 0xFE;
+            gGameSessionContext->gameMode = 0xFE;
         }
     }
 
     if (state->frameCounter == 0x384) {
-        D_800AFE8C_A71FC->gameMode = 0;
-        D_800AFE8C_A71FC->saveSlotIndex = 0;
+        gGameSessionContext->gameMode = 0;
+        gGameSessionContext->saveSlotIndex = 0;
         gTitleExitMode = 4;
     }
 
@@ -459,16 +459,16 @@ void initTitleScreen(void) {
     state->menuGraphicsData = dmaResult;
     state->frameCounter = 0;
 
-    if (D_800AFE8C_A71FC->gameMode == 0xFE) {
+    if (gGameSessionContext->gameMode == 0xFE) {
         state->menuSelection = 2;
-    } else if (D_800AFE8C_A71FC->saveSlotIndex == 0xF) {
+    } else if (gGameSessionContext->saveSlotIndex == 0xF) {
         state->menuSelection = 1;
     }
 
     resetSaveDataToDefaults();
 
     for (i = 0; i < 4; i++) {
-        D_800AFE8C_A71FC->playerBoardIds[0x11 + i] = 0;
+        gGameSessionContext->playerBoardIds[0x11 + i] = 0;
     }
 
     gTitleInitialized = 0;

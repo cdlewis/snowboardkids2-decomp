@@ -60,14 +60,14 @@ void handleGameStateComplete(void) {
 
     locationIndex = storyMapLocationIndex;
     if (locationIndex == 3 || locationIndex == 9 || locationIndex == 6) {
-        state->previousSaveSlot = D_800AFE8C_A71FC->saveSlotIndex;
+        state->previousSaveSlot = gGameSessionContext->saveSlotIndex;
 
         if (storyMapLocationIndex == 3) {
-            D_800AFE8C_A71FC->saveSlotIndex = 0xD;
+            gGameSessionContext->saveSlotIndex = 0xD;
         } else if (storyMapLocationIndex == 9) {
-            D_800AFE8C_A71FC->saveSlotIndex = 0xC;
+            gGameSessionContext->saveSlotIndex = 0xC;
         } else {
-            D_800AFE8C_A71FC->saveSlotIndex = 0xE;
+            gGameSessionContext->saveSlotIndex = 0xE;
         }
 
         createTaskQueue(initStoryModeRace, 100);
@@ -108,8 +108,8 @@ void handleStoryMapLocationComplete(void) {
         } else if (result == 0xFF && state->fromGameState == 0) {
             terminateSchedulerWithCallback(onStoryMapExitBack);
         } else {
-            if (D_800AFE8C_A71FC->saveSlotIndex >= 0xC) {
-                D_800AFE8C_A71FC->saveSlotIndex = state->previousSaveSlot;
+            if (gGameSessionContext->saveSlotIndex >= 0xC) {
+                gGameSessionContext->saveSlotIndex = state->previousSaveSlot;
             }
             createTaskQueue(initializeGameState, 0x64);
             setGameStateHandler(handleGameStateComplete);

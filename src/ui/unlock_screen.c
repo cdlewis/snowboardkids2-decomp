@@ -270,7 +270,7 @@ void updateUnlockScreen(void) {
                     state->statePhase = 8;
                     playSoundEffectOnChannelNoPriority(0xEE, 1);
                     state->transitionState = 3;
-                } else if (D_800AFE8C_A71FC->gold >= D_8008D960_8E560[itemId & 0xFF]) {
+                } else if (gGameSessionContext->gold >= D_8008D960_8E560[itemId & 0xFF]) {
                     sound = 0x2C;
                     channel = 0;
                     state->statePhase = 3;

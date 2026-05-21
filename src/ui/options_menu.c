@@ -160,11 +160,11 @@ void initOptionsMenuToggles(void *arg0) {
         ARG0->iconEntries[i].unkC = 0;
 
         if (i < 2) {
-            optionValue = D_800AFE8C_A71FC->optionToggle1;
+            optionValue = gGameSessionContext->optionToggle1;
         } else if (i < 4) {
-            optionValue = D_800AFE8C_A71FC->optionToggle2;
+            optionValue = gGameSessionContext->optionToggle2;
         } else {
-            optionValue = (D_800AFE8C_A71FC->customLapEnabled + 1) & 1;
+            optionValue = (gGameSessionContext->customLapEnabled + 1) & 1;
         }
         column = i & 1;
         ARG0->iconEntries[i].displayFlags = ((optionValue + column) & 1) | 2;
@@ -203,11 +203,11 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
 
     for (i = 0; i < 6; i++) {
         if (i < 2) {
-            optionValue = D_800AFE8C_A71FC->optionToggle1;
+            optionValue = gGameSessionContext->optionToggle1;
         } else if (i < 4) {
-            optionValue = D_800AFE8C_A71FC->optionToggle2;
+            optionValue = gGameSessionContext->optionToggle2;
         } else {
-            optionValue = (D_800AFE8C_A71FC->customLapEnabled + 1) & 1;
+            optionValue = (gGameSessionContext->customLapEnabled + 1) & 1;
         }
 
         arg0->iconEntries[i].displayFlags = ((optionValue + (i & 1)) & 1) | 2;

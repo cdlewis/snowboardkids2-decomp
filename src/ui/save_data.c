@@ -5,19 +5,19 @@
 void processRaceUnlocks(s16 raceResult) {
     u8 saveSlot;
 
-    saveSlot = D_800AFE8C_A71FC->saveSlotIndex;
+    saveSlot = gGameSessionContext->saveSlotIndex;
     if (saveSlot == 0xB) {
         EepromSaveData->setting_4E = 1;
         tryAddUnlockedBoardId(0xF);
     }
 
-    saveSlot = D_800AFE8C_A71FC->saveSlotIndex;
+    saveSlot = gGameSessionContext->saveSlotIndex;
     if (saveSlot == 0xE) {
         EepromSaveData->setting_4F = 1;
         tryAddUnlockedBoardId(0xD);
     }
 
-    saveSlot = D_800AFE8C_A71FC->saveSlotIndex;
+    saveSlot = gGameSessionContext->saveSlotIndex;
     if (saveSlot == 0xD) {
         if (raceResult == 7) {
             EepromSaveData->setting_50 = 1;
@@ -25,58 +25,58 @@ void processRaceUnlocks(s16 raceResult) {
         }
     }
 
-    if (D_800AFE8C_A71FC->isStoryMode != 0) {
-        if (D_800AFE8C_A71FC->saveSlotIndex == 1) {
+    if (gGameSessionContext->isStoryMode != 0) {
+        if (gGameSessionContext->saveSlotIndex == 1) {
             if (tryAddUnlockedCutsceneId(0xA) & 0xFF) {
-                D_800AFE8C_A71FC->pendingUnlockCutscene = 2;
+                gGameSessionContext->pendingUnlockCutscene = 2;
             }
         }
 
-        if (D_800AFE8C_A71FC->saveSlotIndex == 3) {
+        if (gGameSessionContext->saveSlotIndex == 3) {
             if (tryAddUnlockedCutsceneId(0xB) & 0xFF) {
-                D_800AFE8C_A71FC->pendingUnlockCutscene = 3;
+                gGameSessionContext->pendingUnlockCutscene = 3;
             }
         }
 
-        if (D_800AFE8C_A71FC->saveSlotIndex == 9) {
+        if (gGameSessionContext->saveSlotIndex == 9) {
             if (tryAddUnlockedCutsceneId(0xC) & 0xFF) {
-                D_800AFE8C_A71FC->pendingUnlockCutscene = 4;
+                gGameSessionContext->pendingUnlockCutscene = 4;
             }
         }
 
-        if (D_800AFE8C_A71FC->saveSlotIndex == 5) {
+        if (gGameSessionContext->saveSlotIndex == 5) {
             if (tryAddUnlockedCutsceneId(0xE) & 0xFF) {
-                D_800AFE8C_A71FC->pendingUnlockCutscene = 6;
+                gGameSessionContext->pendingUnlockCutscene = 6;
             }
         }
 
-        if (D_800AFE8C_A71FC->saveSlotIndex == 8) {
+        if (gGameSessionContext->saveSlotIndex == 8) {
             if (tryAddUnlockedCutsceneId(0xF) & 0xFF) {
-                D_800AFE8C_A71FC->pendingUnlockCutscene = 7;
+                gGameSessionContext->pendingUnlockCutscene = 7;
             }
         }
 
-        if (D_800AFE8C_A71FC->saveSlotIndex == 0xB) {
+        if (gGameSessionContext->saveSlotIndex == 0xB) {
             if (tryAddUnlockedCutsceneId(0x10) & 0xFF) {
-                D_800AFE8C_A71FC->pendingUnlockCutscene = 8;
+                gGameSessionContext->pendingUnlockCutscene = 8;
             }
         }
 
-        if (D_800AFE8C_A71FC->saveSlotIndex == 0) {
+        if (gGameSessionContext->saveSlotIndex == 0) {
             if (tryAddUnlockedCutsceneId(0xD) & 0xFF) {
-                D_800AFE8C_A71FC->pendingUnlockCutscene = 5;
+                gGameSessionContext->pendingUnlockCutscene = 5;
             }
         }
 
-        if (D_800AFE8C_A71FC->saveSlotIndex == 4) {
+        if (gGameSessionContext->saveSlotIndex == 4) {
             if (tryAddUnlockedCutsceneId(9) & 0xFF) {
-                D_800AFE8C_A71FC->pendingUnlockCutscene = 1;
+                gGameSessionContext->pendingUnlockCutscene = 1;
             }
         }
 
-        if (D_800AFE8C_A71FC->saveSlotIndex == 7) {
+        if (gGameSessionContext->saveSlotIndex == 7) {
             if (tryAddUnlockedCutsceneId(0x11) & 0xFF) {
-                D_800AFE8C_A71FC->pendingUnlockCutscene = 9;
+                gGameSessionContext->pendingUnlockCutscene = 9;
             }
         }
     }

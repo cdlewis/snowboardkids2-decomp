@@ -18,4 +18,4 @@ typedef struct {
     u8 creditsCompleted;
 } GameSessionContext;
 
-extern GameSessionContext *D_800AFE8C_A71FC;
+extern GameSessionContext *gGameSessionContext;

@@ -1257,12 +1257,12 @@ void prepareStoryMapNpcDialogue(void *ptr) {
         state->elements[i].unk56 = state->elements[i].animState;
         state->elements[i].unk5F = getAnimationIndex(state->elements[i].model);
 
-        if (((state->rareEventType == 1) & (i == 0)) && D_800AFE8C_A71FC->playerBoardIds[0] == 3) {
+        if (((state->rareEventType == 1) & (i == 0)) && gGameSessionContext->playerBoardIds[0] == 3) {
             setAnimationIndex(state->elements[i].model, -1);
             state->elements[i].unk48 = 0;
             state->elements[i].unk40 = 0;
             state->elements[i].unk44 = 0x240000;
-        } else if (((state->rareEventType == 6) & (i == 1)) && D_800AFE8C_A71FC->playerBoardIds[0] == 3) {
+        } else if (((state->rareEventType == 6) & (i == 1)) && gGameSessionContext->playerBoardIds[0] == 3) {
             setAnimationIndex(state->elements[i].model, -1);
         } else {
             setAnimationIndex(state->elements[i].model, dialogueNpcAnimations[state->rareEventType * 2 + i]);
@@ -1281,19 +1281,19 @@ void prepareStoryMapNpcDialogue(void *ptr) {
 }
 
 s32 getPlayerGold(void) {
-    return D_800AFE8C_A71FC->gold;
+    return gGameSessionContext->gold;
 }
 
 void addPlayerGold(s32 amount) {
     s32 maxGold = 0x98967F;
 
-    D_800AFE8C_A71FC->gold += amount;
+    gGameSessionContext->gold += amount;
 
-    if (D_800AFE8C_A71FC->gold > maxGold) {
-        D_800AFE8C_A71FC->gold = maxGold;
+    if (gGameSessionContext->gold > maxGold) {
+        gGameSessionContext->gold = maxGold;
     }
 
-    if (D_800AFE8C_A71FC->gold < 0) {
-        D_800AFE8C_A71FC->gold = 0;
+    if (gGameSessionContext->gold < 0) {
+        gGameSessionContext->gold = 0;
     }
 }

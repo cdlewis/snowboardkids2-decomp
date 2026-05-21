@@ -204,7 +204,7 @@ void awaitStoryModeCharacterSelect(void) {
 
 void awaitFadeLoadPreRaceCutscene(void) {
     if (getViewportFadeMode(0) == 0) {
-        setCutsceneSelection(D_800AFE8C_A71FC->saveSlotIndex, 0);
+        setCutsceneSelection(gGameSessionContext->saveSlotIndex, 0);
         createTaskQueue(&loadCutsceneOverlay, 150);
         setGameStateHandler(&awaitStoryModePreRaceCutscene);
     }
@@ -234,13 +234,13 @@ void awaitStoryModeRaceResult(void) {
 
     if (raceResult >= 3) {
         if (raceResult == 5 || raceResult >= 7) {
-            saveSlotIndex = D_800AFE8C_A71FC->saveSlotIndex;
+            saveSlotIndex = gGameSessionContext->saveSlotIndex;
             do {
                 EepromSaveData->save_slot_status[saveSlotIndex] = 1;
             } while (0);
             processRaceUnlocks(raceResult);
         } else {
-            gameState = D_800AFE8C_A71FC;
+            gameState = gGameSessionContext;
             saveSlotIndex = gameState->saveSlotIndex;
             if (EepromSaveData->save_slot_status[saveSlotIndex] != 1) {
                 EepromSaveData->save_slot_status[saveSlotIndex] = 4;
@@ -255,7 +255,7 @@ void awaitStoryModeRaceResult(void) {
         return;
     }
 
-    if (D_800AFE8C_A71FC->pendingUnlockCutscene != 0) {
+    if (gGameSessionContext->pendingUnlockCutscene != 0) {
         setGameStateHandler(loadStoryModeUnlockCutscene);
         return;
     }
@@ -264,14 +264,14 @@ void awaitStoryModeRaceResult(void) {
 }
 
 void loadStoryModeUnlockCutscene(void) {
-    setCutsceneSelection(D_800AFE8C_A71FC->pendingUnlockCutscene, 2);
+    setCutsceneSelection(gGameSessionContext->pendingUnlockCutscene, 2);
     createTaskQueue(&loadCutsceneOverlay, 0x64);
     setGameStateHandler(&awaitStoryModeUnlockCutscene);
 }
 
 void awaitStoryModeUnlockCutscene(void) {
     if ((getSchedulerReturnValue() << 0x10) != 0) {
-        D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
+        gGameSessionContext->pendingUnlockCutscene = 0;
         terminateSchedulerWithCallback(&onStoryModeRaceCancelled);
     }
 }
@@ -541,7 +541,7 @@ void updateBoardShop(void) {
                 state->delayTimer = 0;
                 setModelCameraTransform(&state->tertiaryViewport, 0, 0, -0x98, -0x70, 0x97, 0x6F);
             } else if (*gControllerInputs & (A_BUTTON | START_BUTTON)) {
-                if (D_800AFE8C_A71FC->gold >=
+                if (gGameSessionContext->gold >=
                     (s32)(u16)boardShopPrices[state->boardIndexMap[state->boardDisplayIndices[state->selectedSlot]]]) {
                     playSoundEffectOnChannelNoPriority(0x2C, 0);
                     state->shopState = 0x14;

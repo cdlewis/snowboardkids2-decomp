@@ -745,14 +745,15 @@ void updateStoryMapNpcDialogueTurn(RareEventNpc *npc) {
             if (savedAngle == 0x30 && npc->animFrameComplete != 0) {
                 u16 dialogueIndex;
                 npc->animSequencePtr =
-                    (u16 *)sStoryMapNpcDialogueTable.dialogueTable[npc->npcIndex][D_800AFE8C_A71FC->playerBoardIds[0]];
+                    (u16 *)
+                        sStoryMapNpcDialogueTable.dialogueTable[npc->npcIndex][gGameSessionContext->playerBoardIds[0]];
                 dialogueIndex = npc->animSequencePtr[0];
                 npc->animFrameComplete = 0;
                 npc->animFrame = dialogueIndex;
                 npc->animSequencePtr += 1;
                 state = 4;
                 playSoundEffectOnChannelNoPriority(
-                    sNpcInteractionSoundIds[npc->npcIndex][D_800AFE8C_A71FC->playerBoardIds[0]],
+                    sNpcInteractionSoundIds[npc->npcIndex][gGameSessionContext->playerBoardIds[0]],
                     1
                 );
                 initStoryMapNpcSpecialDialogue((Func8002A390Arg *)npc);

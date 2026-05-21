@@ -214,7 +214,7 @@ after_loop:
         initViewportNode(&state->slotModels[3], NULL, 0xC, 6, 0);
         setViewportId(&state->slotModels[3], 0xD);
         setModelCameraTransform(&state->slotModels[3], -0x140, -0x30, -0xA0, -0x18, 0xA0, 0x18);
-        EepromSaveData->slotGold = D_800AFE8C_A71FC->gold;
+        EepromSaveData->slotGold = gGameSessionContext->gold;
         handler = initSaveSlotSelection;
     } else {
         handler = updateSaveSlotSelectionScreen;
@@ -226,7 +226,7 @@ after_loop:
 
 void initSaveSlotSelection(void) {
     SaveSlotScreenState *allocation = (SaveSlotScreenState *)getCurrentAllocation();
-    u8 saveSlot = D_800AFE8C_A71FC->previousSaveSlot;
+    u8 saveSlot = gGameSessionContext->previousSaveSlot;
     allocation->selectedSaveSlot = saveSlot;
     setGameStateHandler(updateSaveSlotSelectionScreen);
 }
@@ -306,7 +306,7 @@ void updateSaveSlotSelectionScreen(void) {
                         }
                     } else {
                         state->mainPromptIndex = 9;
-                        if (D_800AFE8C_A71FC->creditsCompleted != 0) {
+                        if (gGameSessionContext->creditsCompleted != 0) {
                             state->saveSlotDialogType = 2;
                         } else {
                             state->saveSlotDialogType = 1;
@@ -389,7 +389,7 @@ void updateSaveSlotSelectionScreen(void) {
                     state->mainPromptIndex = 0;
                 } else {
                     state->mainPromptIndex = 9;
-                    if (D_800AFE8C_A71FC->creditsCompleted != 0) {
+                    if (gGameSessionContext->creditsCompleted != 0) {
                         state->saveSlotDialogType = 2;
                     } else {
                         state->saveSlotDialogType = 1;
@@ -410,7 +410,7 @@ void updateSaveSlotSelectionScreen(void) {
                         state->saveSlotMenuState = 3;
                         break;
                     }
-                    if (D_800AFE8C_A71FC->gameMode == 0) {
+                    if (gGameSessionContext->gameMode == 0) {
                         state->saveSlotMenuState = 0x32;
                         state->saveSlotDialogType = 0xA;
                         state->mainPromptIndex = 0xB;
@@ -428,13 +428,13 @@ void updateSaveSlotSelectionScreen(void) {
             if (gControllerInputs & CONT_A) {
                 playSoundEffect(0x2C);
                 if (state->hasCurrentSaveData == 0) {
-                    D_800AFE8C_A71FC->previousSaveSlot = state->selectedSaveSlot;
+                    gGameSessionContext->previousSaveSlot = state->selectedSaveSlot;
                     state->mainPromptIndex = 1;
                     state->saveSlotMenuState = 5;
                     memcpy(EepromSaveData, (void *)(state->selectedSaveSlot * 0x5C + (s32)(u8 *)state + 0x938), 0x5C);
-                    D_800AFE8C_A71FC->gold = state->slotData[state->selectedSaveSlot].slotGold;
+                    gGameSessionContext->gold = state->slotData[state->selectedSaveSlot].slotGold;
                 } else {
-                    D_800AFE8C_A71FC->previousSaveSlot = state->selectedSaveSlot;
+                    gGameSessionContext->previousSaveSlot = state->selectedSaveSlot;
                     state->saveSlotMenuState = 0x18;
                     state->animDelayCounter = 3;
                     state->originalSlotDataFlag = state->slotHasData[state->selectedSaveSlot];
@@ -495,7 +495,7 @@ void updateSaveSlotSelectionScreen(void) {
             } else if (gControllerInputs & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->saveSlotDialogType == 0xA) {
-                    D_800AFE8C_A71FC->isStoryMode = 0;
+                    gGameSessionContext->isStoryMode = 0;
                     state->saveSlotMenuState = 0x32;
                     state->mainPromptIndex = 0xB;
                 } else {
@@ -667,7 +667,7 @@ void updateSaveSlotSelectionScreen(void) {
                     playSoundEffect(0x2E);
                     state->mainPromptIndex = 9;
                     state->saveSlotMenuState = 0x32;
-                    if (D_800AFE8C_A71FC->creditsCompleted != 0) {
+                    if (gGameSessionContext->creditsCompleted != 0) {
                         state->saveSlotDialogType = 2;
                     } else {
                         state->saveSlotDialogType = 1;
@@ -726,7 +726,7 @@ void updateSaveSlotSelectionScreen(void) {
                     state->mainPromptIndex = 0xA;
                     state->menuChoiceIndex = 0;
                     state->menuAnimOffsetX = 0;
-                } else if (D_800AFE8C_A71FC->creditsCompleted != 0) {
+                } else if (gGameSessionContext->creditsCompleted != 0) {
                     {
                         u8 oldSlot = state->selectedSaveSlot;
                         state->mainPromptIndex = 7;
@@ -777,10 +777,10 @@ void updateSaveSlotSelectionScreen(void) {
                 if (state->saveSlotDialogType == 0xA) {
                     state->saveSlotMenuState = 3;
                     if (state->saveSlotDialogSelection == 0) {
-                        D_800AFE8C_A71FC->isStoryMode = 1;
+                        gGameSessionContext->isStoryMode = 1;
                         state->mainPromptIndex = 0xC;
                     } else {
-                        D_800AFE8C_A71FC->isStoryMode = 0;
+                        gGameSessionContext->isStoryMode = 0;
                         state->mainPromptIndex = 0xD;
                     }
                 } else {

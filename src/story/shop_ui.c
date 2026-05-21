@@ -146,7 +146,7 @@ typedef struct {
 
 extern s32 gButtonsPressed[];
 extern s32 gControllerInputs[4];
-extern s32 *D_800AFE8C_A71FC;
+extern s32 *gGameSessionContext;
 extern s16 D_8008F0C6_8FCC6[];
 // Cast to u8* to access EEPROM save data as raw bytes for offset-based access
 extern u8 *EepromSaveData;
@@ -884,7 +884,7 @@ void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     s8 paletteIndex;
     s32 space;
 
-    if (*D_800AFE8C_A71FC < 100) {
+    if (*gGameSessionContext < 100) {
         paletteIndex = 1;
         i = 6;
         do {
@@ -898,7 +898,7 @@ void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
         } while (--i >= 0);
     }
 
-    sprintf(arg0->goldAmountBuffer, "%7d", *D_800AFE8C_A71FC);
+    sprintf(arg0->goldAmountBuffer, "%7d", *gGameSessionContext);
 
     i = 0;
     space = ' ';
@@ -966,7 +966,7 @@ void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0)
     price = D_8008F070_8FC70[itemValue & 0x1F];
 
     paletteIndex = 1;
-    if (*D_800AFE8C_A71FC < price) {
+    if (*gGameSessionContext < price) {
         i = 5;
         do {
             arg0->digits[i].paletteIndex = paletteIndex;

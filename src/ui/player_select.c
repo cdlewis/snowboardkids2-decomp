@@ -61,7 +61,7 @@ void initPlayerCountSelectState(void) {
             state->connectedControllerCount = state->connectedControllerCount + 1;
         }
     }
-    temp = D_800AFE8C_A71FC->numPlayers;
+    temp = gGameSessionContext->numPlayers;
     if (temp != 0) {
         state->playerCount.selectedPlayerIndex = temp - 1;
     } else {
@@ -192,9 +192,9 @@ void exitPlayerCountSelect(void) {
         state->assetData2 = freeNodeMemory(state->assetData2);
         if (state->menuResult == 1) {
             terminateSchedulerWithCallback(onPlayerCountProceed);
-            D_800AFE8C_A71FC->numPlayers = state->playerCount.bytes.selectedPlayerIndexLo + 1;
-            for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-                D_800AFE8C_A71FC->playerBoardIds[i] = gPlayerSlotDefaults[i];
+            gGameSessionContext->numPlayers = state->playerCount.bytes.selectedPlayerIndexLo + 1;
+            for (i = 0; i < gGameSessionContext->numPlayers; i++) {
+                gGameSessionContext->playerBoardIds[i] = gPlayerSlotDefaults[i];
             }
         } else {
             terminateSchedulerWithCallback(onPlayerCountCancel);

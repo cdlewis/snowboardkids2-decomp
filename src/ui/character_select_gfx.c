@@ -355,7 +355,7 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     func_8006B084_6BC84(rotMatPtr, posMatPtr, sp10Ptr);
     func_8006B084_6BC84(sp10Ptr, (Transform3D *)(gameState + ((arg0->playerIndex << 5) + 0x17F8)), (Transform3D *)arg0);
 
-    globalPtr = (u8 *)D_800AFE8C_A71FC;
+    globalPtr = (u8 *)gGameSessionContext;
     charIndex = *(globalPtr + arg0->playerIndex + 0xD);
     arg0->charPaletteIndex = charIndex;
     paletteIndex = EepromSaveData->character_or_settings[charIndex] - 1;
@@ -471,7 +471,7 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     offset = arg0->playerIndex << 5;
     memcpy(&arg0->worldMatrix, (u8 *)(offset + (s32)base + 0x17F8), sizeof(Transform3D));
 
-    targetX = ((s32 *)&D_8008DD2C_8E92C)[(D_800AFE8C_A71FC->numPlayers * 2) + state->unk18C0[arg0->playerIndex]];
+    targetX = ((s32 *)&D_8008DD2C_8E92C)[(gGameSessionContext->numPlayers * 2) + state->unk18C0[arg0->playerIndex]];
     arg0->worldMatrix.translation.x = targetX;
     arg0->targetX = targetX;
 
@@ -633,8 +633,9 @@ void updateCharSelectSecondarySlide(CharSelectSecondarySlot *slot) {
     state = (GameState *)getCurrentAllocation();
 
     localMatrixPtr = &localMatrix;
-    targetX =
-        ((s32 *)&D_8008DD2C_8E92C)[(D_800AFE8C_A71FC->numPlayers * 2) + ((state->unk18C0[slot->playerIndex] + 1) & 1)];
+    targetX = ((
+        s32 *
+    )&D_8008DD2C_8E92C)[(gGameSessionContext->numPlayers * 2) + ((state->unk18C0[slot->playerIndex] + 1) & 1)];
 
     xStep = (targetX < 0) ? -0x100000 : 0x100000;
 
@@ -673,7 +674,7 @@ void initCharSelectBoardModel(CharSelectBoardPreview *arg0) {
     state = (GameState *)getCurrentAllocation();
     playerIdx = arg0->playerIndex;
 
-    boardType = D_800AFE8C_A71FC->playerBoardIds[playerIdx];
+    boardType = gGameSessionContext->playerBoardIds[playerIdx];
     if (boardType == 7) {
         arg0->model =
             createSceneModelEx(0x39, (void *)state + (playerIdx * 0x1D8), state->PAD_22[playerIdx], -1, -1, -1);
@@ -721,7 +722,7 @@ void initCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
 
     applyTransformToModel(arg0->model, localPtr);
 
-    if (D_800AFE8C_A71FC->playerBoardIds[arg0->playerIndex] == 7) {
+    if (gGameSessionContext->playerBoardIds[arg0->playerIndex] == 7) {
         setModelAnimation(arg0->model, 4);
     } else {
         setModelAnimation(arg0->model, 0x90);
@@ -795,7 +796,7 @@ void recreateCharSelectBoardModel(CharSelectBoardPreview *arg0) {
     alloc = (u8 *)getCurrentAllocation();
     playerIdx = arg0->playerIndex;
 
-    sessionPtr = (u8 *)D_800AFE8C_A71FC;
+    sessionPtr = (u8 *)gGameSessionContext;
     sessionPtr = sessionPtr + playerIdx;
     boardType = sessionPtr[9];
 
@@ -813,7 +814,7 @@ void recreateCharSelectBoardModelForSlideIn(CharSelectBoardPreview *arg0) {
     u32 boardType;
 
     state = (GameState *)getCurrentAllocation();
-    boardType = D_800AFE8C_A71FC->playerBoardIds[arg0->playerIndex];
+    boardType = gGameSessionContext->playerBoardIds[arg0->playerIndex];
     if (boardType == 7) {
         arg0->model = createSceneModelEx(
             0x39,
@@ -846,14 +847,14 @@ void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
 
     playerIdx = preview->playerIndex;
     preview->transform.translation.x =
-        ((s32 *)&D_8008DD2C_8E92C)[D_800AFE8C_A71FC->numPlayers * 2 + state->unk18C0[playerIdx]];
+        ((s32 *)&D_8008DD2C_8E92C)[gGameSessionContext->numPlayers * 2 + state->unk18C0[playerIdx]];
     preview->transform.translation.z = 0;
     preview->transform.translation.y = 0xFFF00000;
     preview->unk20_u.targetX = preview->transform.translation.x;
 
     applyTransformToModel(preview->model, &preview->transform);
 
-    if (D_800AFE8C_A71FC->playerBoardIds[preview->playerIndex] == 7) {
+    if (gGameSessionContext->playerBoardIds[preview->playerIndex] == 7) {
         setModelAnimation(preview->model, 4);
     } else {
         setModelAnimation(preview->model, 0x90);
@@ -915,7 +916,7 @@ void initCharSelectBoardModelForSlideOut(CharSelectBoardPreview *arg0) {
 
     alloc = (u8 *)getCurrentAllocation();
     playerIndex = arg0->playerIndex;
-    boardType = D_800AFE8C_A71FC->playerBoardIds[playerIndex];
+    boardType = gGameSessionContext->playerBoardIds[playerIndex];
 
     if (boardType != 7) {
         arg0->model =
@@ -938,7 +939,7 @@ void initCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
 
     applyTransformToModel(preview->model, &preview->transform);
 
-    base = (u8 *)D_800AFE8C_A71FC;
+    base = (u8 *)gGameSessionContext;
     if (*(base + preview->playerIndex + 9) == 7) {
         setModelAnimation(preview->model, 4);
     } else {
@@ -959,7 +960,7 @@ void updateCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
 
     target = ((
         s32 *
-    )&D_8008DD2C_8E92C)[D_800AFE8C_A71FC->numPlayers * 2 + (((state + preview->playerIndex)[0x18C0] + 1) & 1)];
+    )&D_8008DD2C_8E92C)[gGameSessionContext->numPlayers * 2 + (((state + preview->playerIndex)[0x18C0] + 1) & 1)];
 
     preview->transform.translation.x += ((target >> 31) & slideMask) | slideStep;
 
@@ -1002,7 +1003,7 @@ void initCharSelectIcons(CharSelectIconsState *state) {
     setCleanupCallback(cleanupCharSelectIcons);
     getTableEntryByU16Index(spriteAsset, ICON_TABLE_INDEX, &tableEntry);
 
-    numPlayers = D_800AFE8C_A71FC->numPlayers;
+    numPlayers = gGameSessionContext->numPlayers;
 
     yPos = D_8008DDE6_8E9E6[numPlayers].y;
     xTemp = D_8008DDE6_8E9E6[numPlayers].x;
@@ -1164,7 +1165,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
     setCleanupCallback(cleanupCharSelectIconHideAsset);
 
-    numPlayers = D_800AFE8C_A71FC->numPlayers;
+    numPlayers = gGameSessionContext->numPlayers;
     iconBaseIndex = 0xC;
     if (numPlayers == 1) {
         iconBaseIndex = 0x11;
@@ -1185,7 +1186,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
         u8 tableValue;
         s32 tableOffset;
 
-        session = D_800AFE8C_A71FC;
+        session = gGameSessionContext;
         entry->x = x;
         entry->y = y;
 
@@ -1195,7 +1196,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
 
         entry->spriteIndex = iconBaseIndex + (tableValue - 1) / 2;
 
-        session = D_800AFE8C_A71FC;
+        session = gGameSessionContext;
         charIndex = session->playerBoardIds[4 + state->playerIndex];
         tableOffset = charIndex * 3 + i;
         tableValue = *(u8 *)(tableOffset + (s32)itemIconTable);
@@ -1231,7 +1232,7 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
 
     if (state->unk1898[arg0->playerIndex] == 3) {
         iconIndex = 0xD;
-        if (D_800AFE8C_A71FC->numPlayers == 1) {
+        if (gGameSessionContext->numPlayers == 1) {
             iconIndex = 0x12;
         }
 
@@ -1283,7 +1284,7 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
     if (charSelectState < 3) {
         // Icon base index depends on player count (different layouts for 1P vs 2P+)
         iconBaseIndex = 0xC;
-        if (D_800AFE8C_A71FC->numPlayers == 1) {
+        if (gGameSessionContext->numPlayers == 1) {
             iconBaseIndex = 0x11;
         }
 
@@ -1323,7 +1324,7 @@ void showCharSelectIcons(CharSelectIconHideState *arg0) {
     state = (GameState *)getCurrentAllocation();
 
     iconBaseIndex = 0xC;
-    if (D_800AFE8C_A71FC->numPlayers == 1) {
+    if (gGameSessionContext->numPlayers == 1) {
         iconBaseIndex = 0x11;
     }
 
@@ -1346,7 +1347,7 @@ loop:
 
     if (state->unk1898[arg0->playerIndex] == 3) {
         iconBaseIndex = 0xD;
-        if (D_800AFE8C_A71FC->numPlayers == 1) {
+        if (gGameSessionContext->numPlayers == 1) {
             iconBaseIndex = 0x12;
         }
 
@@ -1382,20 +1383,20 @@ void initCharSelectMenu(SelectionMenuState *arg0) {
     setCleanupCallback(cleanupCharSelectMenu);
 
     spriteIndexBase = 8;
-    if (D_800AFE8C_A71FC->numPlayers == 1) {
+    if (gGameSessionContext->numPlayers == 1) {
         spriteIndexBase = 5;
     }
 
     arg0->numEntries = 3;
 
-    if (D_800AFE8C_A71FC->gameMode == 0) {
+    if (gGameSessionContext->gameMode == 0) {
         x = charSelectIconPositions[0].x;
         y = charSelectIconPositions[0].y;
         xIncrement = charSelectIconPositions[0].z;
         spriteIndexBase = 6;
         arg0->numEntries = 2;
     } else {
-        s32 index = D_800AFE8C_A71FC->numPlayers;
+        s32 index = gGameSessionContext->numPlayers;
         x = D_8008DD2C_8E92C.unk22[index].x;
         y = D_8008DD2C_8E92C.unk22[index].y;
         xIncrement = D_8008DD2C_8E92C.unk22[index].z;
@@ -1527,7 +1528,7 @@ void initCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
     setCleanupCallback(cleanupCharSelectPlayerLabels);
 
     i = 0;
-    index = D_800AFE8C_A71FC->numPlayers;
+    index = gGameSessionContext->numPlayers;
     x = *(u16 *)(charSelectItemData + index * 6 + 50);
     increment = *(s16 *)(charSelectItemData + index * 6 + 54);
     y = *(u16 *)(charSelectItemData + index * 6 + 52);
@@ -1551,7 +1552,7 @@ void updateCharSelectPlayerLabels(PlayerLabelSpritesState *arg0) {
     func_80027348_entry *ptr;
 
     i = 0;
-    if (i < (D_800AFE8C_A71FC)->numPlayers) {
+    if (i < (gGameSessionContext)->numPlayers) {
         j = 0;
         do {
             index = i + 8;
@@ -1563,7 +1564,7 @@ void updateCharSelectPlayerLabels(PlayerLabelSpritesState *arg0) {
             } while (j < 3);
             i++;
             j = 0;
-        } while (i < (D_800AFE8C_A71FC)->numPlayers);
+        } while (i < (gGameSessionContext)->numPlayers);
     }
 }
 
@@ -1594,7 +1595,7 @@ void initCharSelectArrows(SelectionArrowsState *state) {
     arrowAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectArrows);
 
-    numPlayers = D_800AFE8C_A71FC->numPlayers;
+    numPlayers = gGameSessionContext->numPlayers;
     // Load arrow position data from table: xBase, y, xInc at offsets 2, 4, 6
     xBase = *(u16 *)(D_8008DE18_8EA18 + numPlayers * 6 + 2);
     y = *(u16 *)(D_8008DE18_8EA18 + numPlayers * 6 + 4);
@@ -1622,7 +1623,7 @@ void initCharSelectArrows(SelectionArrowsState *state) {
             } while (arrowIdx < 2);
             state->blinkTimers[playerIdx] = 0;
             playerIdx++;
-        } while (playerIdx < D_800AFE8C_A71FC->numPlayers);
+        } while (playerIdx < gGameSessionContext->numPlayers);
     }
 
     setCallback(updateCharSelectArrows);
@@ -1642,11 +1643,11 @@ void updateCharSelectArrows(SelectionArrowsState *state) {
 
     gameState = (BoardSelectGameState *)getCurrentAllocation();
     showArrows = 1;
-    for (playerIdx = 0; playerIdx < D_800AFE8C_A71FC->numPlayers; playerIdx++) {
+    for (playerIdx = 0; playerIdx < gGameSessionContext->numPlayers; playerIdx++) {
         playerState = gameState->unk1898[playerIdx];
         blinkTimer = 2;
         if (((u32)(playerState - 3)) < 8U) {
-            numPlayers = D_800AFE8C_A71FC->numPlayers;
+            numPlayers = gGameSessionContext->numPlayers;
             yPos = *((u16 *)((D_8008DE18_8EA18 + (numPlayers * 6)) + 4));
             if (playerState >= 6U) {
                 yPos += *((u16 *)((D_8008DE18_8EA18 + (numPlayers * blinkTimer)) + 0x1E));
@@ -1720,7 +1721,7 @@ void initBoardSelectArrows(SelectionArrowsState *state) {
     arrowAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupBoardSelectArrows);
 
-    numPlayers = D_800AFE8C_A71FC->numPlayers;
+    numPlayers = gGameSessionContext->numPlayers;
     unused = numPlayers * 3;
     xBase = *(s16 *)(D_8008DE18_8EA18 + numPlayers * 6 + 34);
     y = *(s16 *)(D_8008DE18_8EA18 + numPlayers * 6 + 36);
@@ -1747,7 +1748,7 @@ void initBoardSelectArrows(SelectionArrowsState *state) {
                 x += xOffset;
             } while (arrowIdx < 2);
             playerIdx++;
-        } while (playerIdx < D_800AFE8C_A71FC->numPlayers);
+        } while (playerIdx < gGameSessionContext->numPlayers);
     }
 
     setCallback(updateBoardSelectArrows);
@@ -1763,7 +1764,7 @@ void updateBoardSelectArrows(SelectionArrowsState *state) {
 
     gameState = (GameState *)getCurrentAllocation();
 
-    for (playerIdx = 0; playerIdx < D_800AFE8C_A71FC->numPlayers; playerIdx++) {
+    for (playerIdx = 0; playerIdx < gGameSessionContext->numPlayers; playerIdx++) {
         gameStateValue = gameState->unk1898[playerIdx];
 
         if ((u32)(gameStateValue - 0xF) < 3U) {
@@ -1840,25 +1841,25 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupBoardSelectCharNames);
 
-    xPos = D_8008DE54_8EA54[D_800AFE8C_A71FC->numPlayers].x;
-    yPos = D_8008DE54_8EA54[D_800AFE8C_A71FC->numPlayers].y;
+    xPos = D_8008DE54_8EA54[gGameSessionContext->numPlayers].x;
+    yPos = D_8008DE54_8EA54[gGameSessionContext->numPlayers].y;
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         selectionState = gameState->unk18A8[i];
         if (selectionState == 3) {
-            numPlayers = D_800AFE8C_A71FC->numPlayers;
+            numPlayers = gGameSessionContext->numPlayers;
             if (numPlayers == 1) {
                 xPos += 0x18;
-                spriteIdx = D_800AFE8C_A71FC->playerBoardIds[i + 4] + 0x30;
+                spriteIdx = gGameSessionContext->playerBoardIds[i + 4] + 0x30;
             } else {
-                charIndex = D_800AFE8C_A71FC->playerBoardIds[i + 4];
+                charIndex = gGameSessionContext->playerBoardIds[i + 4];
                 spriteIdx = charIndex + 0x23;
                 xPos = *((u16 *)&D_8008DE9C_8EA9C + numPlayers * 2) - ((u16 *)&D_8008DE64_8EA64[22])[charIndex];
             }
             sprites[i].spriteIndex = spriteIdx;
         } else {
             spriteIdx = 0x1D;
-            if (D_800AFE8C_A71FC->numPlayers == 1) {
+            if (gGameSessionContext->numPlayers == 1) {
                 spriteIdx = 0x36;
             }
             sprites[i].spriteIndex = selectionState + spriteIdx;
@@ -1886,14 +1887,14 @@ void updateBoardSelectCharNames(CharacterNameSprite *sprites) {
 
     gameState = (BoardSelectGameState *)getCurrentAllocation();
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         selectionState = gameState->unk1898[i];
         if (selectionState != 4) {
             yPos = selectionState - 3;
             if (((u32)yPos) >= 8) {
-                numPlayers = D_800AFE8C_A71FC->numPlayers;
+                numPlayers = gGameSessionContext->numPlayers;
                 xPos = ((s16 *)D_8008DE54_8EA54)[numPlayers * 2];
-                boardId = D_800AFE8C_A71FC->playerBoardIds[i + 4];
+                boardId = gGameSessionContext->playerBoardIds[i + 4];
                 yPos = ((s16 *)D_8008DE54_8EA54)[(numPlayers * 2) + 1];
                 if (((u8)boardId) >= 9) {
                     if (numPlayers == 1) {
@@ -1912,7 +1913,7 @@ void updateBoardSelectCharNames(CharacterNameSprite *sprites) {
                     sprites[i].spriteIndex = spriteIdx + gameState->unk18A8[i];
                 }
             } else {
-                numPlayers = D_800AFE8C_A71FC->numPlayers;
+                numPlayers = gGameSessionContext->numPlayers;
                 xPos = ((s16 *)D_8008DE64_8EA64)[numPlayers * 2];
                 yPos = ((s16 *)D_8008DE64_8EA64)[(numPlayers * 2) + 1];
                 sprites[i].spriteIndex = gameState->unk18A8[i] + 0x1D;
@@ -1953,7 +1954,7 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
     spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectNameSprites);
 
-    gameConfig = D_800AFE8C_A71FC;
+    gameConfig = gGameSessionContext;
     numPlayers = gameConfig->numPlayers;
     xPos = D_8008DE9C_8EA9C[numPlayers].x;
     yPos = D_8008DE9C_8EA9C[numPlayers].y;
@@ -1975,7 +1976,7 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
             }
             entry->blinkState = 0;
             entry->unkC = 0;
-            gameConfig = D_800AFE8C_A71FC;
+            gameConfig = gGameSessionContext;
             entry->x = xPos;
             entry->y = yPos;
             entry->alpha = const_ff;
@@ -1986,12 +1987,12 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
         } while (i < gameConfig->numPlayers);
     }
 
-    if (D_800AFE8C_A71FC->numPlayers == 1) {
+    if (gGameSessionContext->numPlayers == 1) {
         state->singlePlayerX = 0x38;
         state->singlePlayerY = -0x58;
         state->singlePlayerAsset = spriteAsset;
         state->singlePlayerSpriteIndex = 0x42;
-        if (D_800AFE8C_A71FC->playerBoardIds[4] >= 9) {
+        if (gGameSessionContext->playerBoardIds[4] >= 9) {
             state->singlePlayerX = 0x50;
         }
     }
@@ -2014,19 +2015,19 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
 
     gameState = (BoardSelectGameState *)getCurrentAllocation();
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         selectionState = gameState->unk1898[i];
         if ((selectionState < 3 | selectionState == 0xA) || (selectionState == 6 | selectionState >= 0xB)) {
             stateOffset = selectionState - 3;
             if (stateOffset >= 8) {
-                tempPos = D_800AFE8C_A71FC->numPlayers;
+                tempPos = gGameSessionContext->numPlayers;
                 tempPos2 = ((u16 *)D_8008DE9C_8EA9C)[tempPos * 2];
                 yPos = ((u16 *)D_8008DE9C_8EA9C)[tempPos * 2 + 1];
                 if (tempPos == 1) {
                     xPos = tempPos2;
                     spriteIdx = gameState->unk18B0[i] + 0x43;
                 } else {
-                    if (D_800AFE8C_A71FC->playerBoardIds[i + 4] < 9) {
+                    if (gGameSessionContext->playerBoardIds[i + 4] < 9) {
                         xPos = tempPos2;
                         spriteIdx = gameState->unk18B0[i] + 0x24;
                     } else {
@@ -2035,10 +2036,10 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
                     }
                 }
             } else {
-                tempPos = ((u16 *)&D_8008DEAC_8EAAC)[D_800AFE8C_A71FC->numPlayers * 2];
-                yPos = ((u16 *)&D_8008DEAC_8EAAC)[D_800AFE8C_A71FC->numPlayers * 2 + 1];
+                tempPos = ((u16 *)&D_8008DEAC_8EAAC)[gGameSessionContext->numPlayers * 2];
+                yPos = ((u16 *)&D_8008DEAC_8EAAC)[gGameSessionContext->numPlayers * 2 + 1];
                 if (gameState->unk18A8[i] == 3) {
-                    xPos = ((u16 *)D_8008DE64_8EA64)[D_800AFE8C_A71FC->numPlayers * 2];
+                    xPos = ((u16 *)D_8008DE64_8EA64)[gGameSessionContext->numPlayers * 2];
                     spriteIdx = gameState->unk18B0[i] + 0x2C;
                 } else {
                     xPos = tempPos;
@@ -2054,7 +2055,7 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
                 arg0->entries[i].blinkState = 0;
             }
             if (yPos == -0x58) {
-                if (D_800AFE8C_A71FC->playerBoardIds[i + 4] < 9) {
+                if (gGameSessionContext->playerBoardIds[i + 4] < 9) {
                     enqueueCallbackBySlotIndex(i + 0xC, 0, renderTextSprite, &arg0->entries[i]);
                     arg0->singlePlayerX = 0x38;
                     enqueueCallbackBySlotIndex(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerX);
@@ -2087,7 +2088,7 @@ void initCharSelectPlayerNumbers(SimpleSpriteEntry *arg0) {
     dmaResult = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
     setCleanupCallback(cleanupCharSelectPlayerNumbers);
 
-    global = D_800AFE8C_A71FC;
+    global = gGameSessionContext;
     count = global->numPlayers;
     spriteOffset = (count >= 3) * 8;
     x = playerNumberPositions[count].x;
@@ -2115,7 +2116,7 @@ void updateCharSelectPlayerNumbers(u8 *arg0) {
     u8 *ptr;
     s32 count;
 
-    count = D_800AFE8C_A71FC->numPlayers;
+    count = gGameSessionContext->numPlayers;
     if (count > 0) {
         i = 0;
         ptr = arg0;
@@ -2123,7 +2124,7 @@ void updateCharSelectPlayerNumbers(u8 *arg0) {
             enqueueCallbackBySlotIndex((u16)(i + 0xC), 0, renderSpriteFrame, ptr);
             i++;
             ptr += 0xC;
-        } while (i < D_800AFE8C_A71FC->numPlayers);
+        } while (i < gGameSessionContext->numPlayers);
     }
 }
 
@@ -2167,7 +2168,7 @@ void initCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
 
     dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
 
-    loopCount = (D_800AFE8C_A71FC->numPlayers == 2) ? 3 : 2;
+    loopCount = (gGameSessionContext->numPlayers == 2) ? 3 : 2;
 
     for (i = 0; i < loopCount; i++) {
         arg0[i].asset = dmaResult;
@@ -2205,7 +2206,7 @@ void setupCharSelectP2NamePositions(volatile P2NameSpriteEntry *arg0) {
     dummyPtr = &dummy;
 
     xBase = -0x38;
-    if (D_800AFE8C_A71FC->numPlayers == 2) {
+    if (gGameSessionContext->numPlayers == 2) {
         xBase = -0x58;
         yBase = -0x64;
         xIncrement = 0;
@@ -2256,7 +2257,7 @@ void animateCharSelectP2NameReveal(P2NameAnimationState *arg0) {
     (void)pad;
     state = (GameState *)getCurrentAllocation();
     minY = -0x10;
-    if (D_800AFE8C_A71FC->numPlayers == 2) {
+    if (gGameSessionContext->numPlayers == 2) {
         minY = -0x14;
         yIncrement = 0x14;
         loopCount = 3;
@@ -2295,7 +2296,7 @@ void animateCharSelectP2NameHide(P2NameHideState *arg0) {
     s16 increment;
     allocation = (u8 *)getCurrentAllocation();
     target = -0x5C;
-    if (D_800AFE8C_A71FC->numPlayers == 2) {
+    if (gGameSessionContext->numPlayers == 2) {
         target = -0x64;
         var_v0 = 3;
         increment = -0x14;
@@ -2335,8 +2336,8 @@ void initCharSelectStats(CharSelectStatsState *arg0) {
     textAsset = loadTextRenderAsset(0);
     setCleanupCallback(cleanupCharSelectStats);
 
-    spacing = D_8008DEAC_8EAAC.unk22[D_800AFE8C_A71FC->numPlayers * 3];
-    gameState = D_800AFE8C_A71FC;
+    spacing = D_8008DEAC_8EAAC.unk22[gGameSessionContext->numPlayers * 3];
+    gameState = gGameSessionContext;
     arg0->spriteEntries[0].spriteData = textAsset;
 
     for (i = 0; i < 3; i++) {
@@ -2381,7 +2382,7 @@ void updateCharSelectStats(CharSelectStatsState *arg0) {
 
         for (; i < 3; i++) {
             sprintf(arg0->charBufs[i], "%2d", charSelectItemData[tableOffset + i]);
-            if (D_800AFE8C_A71FC->numPlayers == 1) {
+            if (gGameSessionContext->numPlayers == 1) {
                 for (j = 0; j < 2; j++) {
                     charByte = arg0->charBufs[i][j];
                     if (charByte != 0x20) {

@@ -106,7 +106,7 @@ void initSplitScreen2P(ViewportNode *viewports, s32 baseSlotIndex, u8 priority, 
     ViewportNode *firstViewport;
 
     firstViewport = viewports;
-    for (playerIndex = 0; playerIndex < D_800AFE8C_A71FC->numPlayers; playerIndex++) {
+    for (playerIndex = 0; playerIndex < gGameSessionContext->numPlayers; playerIndex++) {
         if (isSecondary == 0) {
             initViewportNode(viewports, 0, ((baseSlotIndex & 0xFF) + playerIndex) & 0xFFFF, priority & 0xFF, 1);
         } else {
@@ -139,7 +139,7 @@ void initSplitScreen3P4P(ViewportNode *viewports, s32 baseSlotIndex, u8 priority
     ViewportNode *firstViewport;
 
     firstViewport = viewports;
-    for (playerIndex = 0; playerIndex < D_800AFE8C_A71FC->numPlayers; playerIndex++) {
+    for (playerIndex = 0; playerIndex < gGameSessionContext->numPlayers; playerIndex++) {
         if (isSecondary == 0) {
             initViewportNode(viewports, 0, ((baseSlotIndex & 0xFF) + playerIndex) & 0xFFFF, priority & 0xFF, 1);
         } else {
@@ -156,7 +156,7 @@ void initSplitScreen3P4P(ViewportNode *viewports, s32 baseSlotIndex, u8 priority
         viewports++;
     }
 
-    switch (D_800AFE8C_A71FC->numPlayers) {
+    switch (gGameSessionContext->numPlayers) {
         case 3:
             setModelCameraTransform(firstViewport, -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
             setViewportScale(firstViewport, 0.5f, 0.5f);
@@ -203,14 +203,14 @@ void initStoryMapRandomEvent(u8 *eventTypeOut) {
 
     if ((randA() & 7) == 7) {
         randomIndex = randB();
-        *eventTypeOut = gStoryMapRareEventTypes[D_800AFE8C_A71FC->playerBoardIds[0]][randomIndex % 10] - 1;
+        *eventTypeOut = gStoryMapRareEventTypes[gGameSessionContext->playerBoardIds[0]][randomIndex % 10] - 1;
         rareTask = scheduleTask(initStoryMapRareEvent, 0, 0, 0x5B);
         rareTask->eventTypeIndex = *eventTypeOut;
         state->rareEventType = *eventTypeOut;
         goto check_event;
     }
 
-    eventTypeIndex = gStoryMapRegularEventTypes[D_800AFE8C_A71FC->playerBoardIds[0]][gGlobalFrameCounter & 7];
+    eventTypeIndex = gStoryMapRegularEventTypes[gGameSessionContext->playerBoardIds[0]][gGlobalFrameCounter & 7];
     if (eventTypeIndex != 0) {
         regularTask = scheduleTask(initStoryMapItem, 0, 0, 0x5B);
         regularTask->eventTypeIndex = eventTypeIndex - 1;

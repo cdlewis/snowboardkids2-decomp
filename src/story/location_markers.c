@@ -808,11 +808,11 @@ void updateStoryMapDialogueTurn(void *arg0) {
             if (allocation->dialogueTurnState == 5) {
                 if (allocation->numEntries == 1) {
                     state->dialogueScript =
-                        D_8008FACC_906CC[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->activeNpcIndex];
-                    soundId = D_8008F9F0_905F0[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->activeNpcIndex];
+                        D_8008FACC_906CC[gGameSessionContext->playerBoardIds[0]][allocation->activeNpcIndex];
+                    soundId = D_8008F9F0_905F0[gGameSessionContext->playerBoardIds[0]][allocation->activeNpcIndex];
                 } else {
                     state->dialogueScript = D_8008FC54_90854[allocation->dialogueLineIndex];
-                    soundId = D_8008FC74_90874[D_800AFE8C_A71FC->playerBoardIds[0]][allocation->dialogueLineIndex];
+                    soundId = D_8008FC74_90874[gGameSessionContext->playerBoardIds[0]][allocation->dialogueLineIndex];
                 }
 
                 playSoundEffectOnChannelNoPriority(soundId, 0);
@@ -879,7 +879,7 @@ void setupStoryMapCharacterDialogue(StoryMapDialogueState *state) {
 
     if (allocation->activeNpcIndex == 3 && allocation->unk42D == 8) {
         state->dialogueScript = D_8008FAC0_906C0;
-        playSoundEffectOnChannelNoPriority(D_8008FD10_90910[D_800AFE8C_A71FC->playerBoardIds[0]], 0);
-        allocation->dialogueResult = D_8008FD1C_9091C[D_800AFE8C_A71FC->playerBoardIds[0]];
+        playSoundEffectOnChannelNoPriority(D_8008FD10_90910[gGameSessionContext->playerBoardIds[0]], 0);
+        allocation->dialogueResult = D_8008FD1C_9091C[gGameSessionContext->playerBoardIds[0]];
     }
 }

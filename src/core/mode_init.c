@@ -35,7 +35,7 @@ void resetGameSession(void);
 void initGameSession(void) {
     u8 allocation;
 
-    D_800AFE8C_A71FC = allocateMemoryNode(0, 0x28, &allocation);
+    gGameSessionContext = allocateMemoryNode(0, 0x28, &allocation);
     EepromSaveData = allocateMemoryNode(0, 0x5C, &allocation);
     gDebugUnlockEnabled = 0;
     initOptionsDefaults();
@@ -72,14 +72,14 @@ void waitForLogoScreen(void) {
 }
 
 void startDemoRace(void) {
-    D_800AFE8C_A71FC->gameMode = 3;
+    gGameSessionContext->gameMode = 3;
     createTaskQueue(initRace, 0x96);
     setGameStateHandler(waitForDemoRace);
 }
 
 void waitForDemoRace(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
-        D_800AFE8C_A71FC->gameMode = 0;
+        gGameSessionContext->gameMode = 0;
         setGameStateHandler(func_80014660_15260);
     }
 }
@@ -97,7 +97,7 @@ void func_80014690_15290(void) {
     }
 
     if (result == 4) {
-        GameSessionContext *ptr = D_800AFE8C_A71FC;
+        GameSessionContext *ptr = gGameSessionContext;
         u8 val = ptr->unk5;
 
         if (val >= 3) {
@@ -116,22 +116,22 @@ void func_80014690_15290(void) {
 }
 
 void startAttractRace(void) {
-    D_800AFE8C_A71FC->gameMode = 2;
+    gGameSessionContext->gameMode = 2;
     createTaskQueue(initRace, 100);
     setGameStateHandler(waitForAttractRace);
 }
 
 void waitForAttractRace(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
-        D_800AFE8C_A71FC->unk5 = (D_800AFE8C_A71FC->unk5 + 1) % 3;
-        D_800AFE8C_A71FC->unk5 |= 0xF0;
+        gGameSessionContext->unk5 = (gGameSessionContext->unk5 + 1) % 3;
+        gGameSessionContext->unk5 |= 0xF0;
         setGameStateHandler(func_80014660_15260);
     }
 }
 
 void startBattleRace(void) {
-    D_800AFE8C_A71FC->gameMode = 0;
-    D_800AFE8C_A71FC->saveSlotIndex = 0xF;
+    gGameSessionContext->gameMode = 0;
+    gGameSessionContext->saveSlotIndex = 0xF;
     createTaskQueue(initRace, 100);
     setGameStateHandler(waitForBattleRace);
 }
@@ -162,7 +162,7 @@ void waitForOptionsMenu(void) {
 }
 
 void startSelectedGameMode(void) {
-    u8 val = D_800AFE8C_A71FC->gameMode;
+    u8 val = gGameSessionContext->gameMode;
 
     if (val == 0xFF) {
         createRootTaskScheduler(__udiv_w_sdiv(), 0xC8);
@@ -174,38 +174,38 @@ void startSelectedGameMode(void) {
 }
 
 void initOptionsDefaults(void) {
-    D_800AFE8C_A71FC->optionToggle1 = 0;
-    D_800AFE8C_A71FC->optionToggle2 = 0;
-    D_800AFE8C_A71FC->customLapEnabled = 0;
-    D_800AFE8C_A71FC->customLapCount = 3;
+    gGameSessionContext->optionToggle1 = 0;
+    gGameSessionContext->optionToggle2 = 0;
+    gGameSessionContext->customLapEnabled = 0;
+    gGameSessionContext->customLapCount = 3;
 }
 
 void resetGameSession(void) {
     s32 i;
 
-    D_800AFE8C_A71FC->gameMode = 0;
-    D_800AFE8C_A71FC->saveSlotIndex = 0;
+    gGameSessionContext->gameMode = 0;
+    gGameSessionContext->saveSlotIndex = 0;
 
-    if (D_800AFE8C_A71FC->customLapEnabled == 1) {
-        D_800AFE8C_A71FC->playerBoardIds[0x10] = D_800AFE8C_A71FC->customLapCount;
+    if (gGameSessionContext->customLapEnabled == 1) {
+        gGameSessionContext->playerBoardIds[0x10] = gGameSessionContext->customLapCount;
     } else {
-        D_800AFE8C_A71FC->playerBoardIds[0x10] = 3;
+        gGameSessionContext->playerBoardIds[0x10] = 3;
     }
 
-    D_800AFE8C_A71FC->numPlayers = 0;
-    D_800AFE8C_A71FC->gold = 0;
+    gGameSessionContext->numPlayers = 0;
+    gGameSessionContext->gold = 0;
 
     for (i = 0; i < 4; i++) {
-        D_800AFE8C_A71FC->playerBoardIds[i] = 0;
-        D_800AFE8C_A71FC->playerBoardIds[i + 4] = 0;
-        D_800AFE8C_A71FC->playerBoardIds[i + 0xC] = 0;
-        D_800AFE8C_A71FC->playerBoardIds[i + 8] = 0;
-        D_800AFE8C_A71FC->playerBoardIds[i + 0x11] = 0;
+        gGameSessionContext->playerBoardIds[i] = 0;
+        gGameSessionContext->playerBoardIds[i + 4] = 0;
+        gGameSessionContext->playerBoardIds[i + 0xC] = 0;
+        gGameSessionContext->playerBoardIds[i + 8] = 0;
+        gGameSessionContext->playerBoardIds[i + 0x11] = 0;
     }
 
-    D_800AFE8C_A71FC->previousSaveSlot = 0;
-    D_800AFE8C_A71FC->unk5 = 0;
-    D_800AFE8C_A71FC->pendingUnlockCutscene = 0;
-    D_800AFE8C_A71FC->isStoryMode = 0;
-    D_800AFE8C_A71FC->creditsCompleted = 0;
+    gGameSessionContext->previousSaveSlot = 0;
+    gGameSessionContext->unk5 = 0;
+    gGameSessionContext->pendingUnlockCutscene = 0;
+    gGameSessionContext->isStoryMode = 0;
+    gGameSessionContext->creditsCompleted = 0;
 }

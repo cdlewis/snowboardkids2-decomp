@@ -87,11 +87,11 @@ void initStoryMap(void) {
     setViewportTransformById(state->viewport0.id, &sp20);
     osViExtendVStart(0);
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         state->playerArrived[i] = 0;
         state->selectionState[i] = 0;
         state->playerAtLocation[i] = 0;
-        state->locationIds[i] = storyMapLocationOrder2[D_800AFE8C_A71FC->playerBoardIds[i]];
+        state->locationIds[i] = storyMapLocationOrder2[gGameSessionContext->playerBoardIds[i]];
         state->playerCountAtLocation[i] = 0;
         for (j = 0; j < i + 1; j++) {
             if (state->locationIds[i] == state->locationIds[j]) {
@@ -110,7 +110,7 @@ void initStoryMap(void) {
     state->locationBlocked[7] = 0;
     state->locationBlocked[8] = 0;
 
-    if (D_800AFE8C_A71FC->gameMode == 0) {
+    if (gGameSessionContext->gameMode == 0) {
         state->locationBlocked[8] = -1;
         state->locationBlocked[4] = -1;
         state->locationBlocked[3] = -1;
@@ -142,8 +142,8 @@ void initStoryMap(void) {
     scheduleTask(initCharacterSelectSprites, 1, 0, 0x5A);
     scheduleTask(initCharacterSelectTextureDataLoad, 1, 0, 0x5A);
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        state->characterIds[i] = D_800AFE8C_A71FC->playerBoardIds[i];
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
+        state->characterIds[i] = gGameSessionContext->playerBoardIds[i];
     }
 
     setGameStateHandler(storyMapInitFadeIn);
@@ -188,7 +188,7 @@ void storyMapHandlePlayerInput(void) {
     diagonal = 0;
     allConfirmed = 0;
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         switch (state->selectionState[i]) {
             case 0:
                 vDir = 0;
@@ -250,7 +250,7 @@ void storyMapHandlePlayerInput(void) {
                 state->locationIds[i] = (s8)currentLoc;
 
                 if (state->playerCountAtLocation[i] == 0) {
-                    for (j = 0; j < D_800AFE8C_A71FC->numPlayers; j++) {
+                    for (j = 0; j < gGameSessionContext->numPlayers; j++) {
                         if ((s8)currentLoc == state->locationIds[j]) {
                             state->playerCountAtLocation[i]++;
                         }
@@ -258,7 +258,7 @@ void storyMapHandlePlayerInput(void) {
                 }
 
                 if (gControllerInputs[i] & CONT_A) {
-                    D_800AFE8C_A71FC->playerBoardIds[i] = storyMapLocationOrder1[state->locationIds[i]];
+                    gGameSessionContext->playerBoardIds[i] = storyMapLocationOrder1[state->locationIds[i]];
                     state->selectionState[i] = 10;
                     state->playerAtLocation[i] = 0;
                     state->animTimer[i] = 0;
@@ -266,8 +266,8 @@ void storyMapHandlePlayerInput(void) {
                 } else if (gControllerInputs[i] & CONT_B) {
                     s32 k;
                     playSoundEffect(0x2E);
-                    for (k = 0; k < D_800AFE8C_A71FC->numPlayers; k++) {
-                        D_800AFE8C_A71FC->playerBoardIds[k] = state->characterIds[k];
+                    for (k = 0; k < gGameSessionContext->numPlayers; k++) {
+                        gGameSessionContext->playerBoardIds[k] = state->characterIds[k];
                         if (gTitleInitialized != 0) {
                             state->selectionState[i] = 4;
                         } else {
@@ -275,7 +275,7 @@ void storyMapHandlePlayerInput(void) {
                         }
                     }
                     scheduleTask(&initPlayer2CharacterSelectIndicator, 0, 0, 0x5B);
-                    i = D_800AFE8C_A71FC->numPlayers;
+                    i = gGameSessionContext->numPlayers;
                 }
                 break;
 
@@ -295,12 +295,12 @@ void storyMapHandlePlayerInput(void) {
                         );
                     }
                 }
-                if (i == D_800AFE8C_A71FC->numPlayers - 1) {
-                    for (j = 0, count = 0; j < D_800AFE8C_A71FC->numPlayers; j++) {
+                if (i == gGameSessionContext->numPlayers - 1) {
+                    for (j = 0, count = 0; j < gGameSessionContext->numPlayers; j++) {
                         count += (state->selectionState[j] == 1);
                     }
-                    if (count == D_800AFE8C_A71FC->numPlayers) {
-                        for (j = 0; j < D_800AFE8C_A71FC->numPlayers; j++) {
+                    if (count == gGameSessionContext->numPlayers) {
+                        for (j = 0; j < gGameSessionContext->numPlayers; j++) {
                             state->selectionState[j] = 3;
                             scheduleTask(&initPlayer3CharacterSelectIndicator, 0, 0, 0x5B);
                         }
@@ -310,7 +310,7 @@ void storyMapHandlePlayerInput(void) {
 
             case 2:
                 if (gControllerInputs[i] & CONT_A) {
-                    i = D_800AFE8C_A71FC->numPlayers;
+                    i = gGameSessionContext->numPlayers;
                     confirmed = 1;
                 } else if (gControllerInputs[i] & CONT_B) {
 #ifdef CC_CHECK
@@ -319,10 +319,10 @@ void storyMapHandlePlayerInput(void) {
                     register s32 k __asm__("$4");
 #endif
                     playSoundEffect(0x2E);
-                    for (k = 0; k < D_800AFE8C_A71FC->numPlayers; k++) {
+                    for (k = 0; k < gGameSessionContext->numPlayers; k++) {
                         state->selectionState[k] = 0;
                     }
-                    i = D_800AFE8C_A71FC->numPlayers;
+                    i = gGameSessionContext->numPlayers;
                 }
                 break;
 
@@ -347,23 +347,23 @@ void storyMapHandlePlayerInput(void) {
                     register s32 k __asm__("$4");
 #endif
                     playSoundEffectOnChannelNoPriority(0x2E, i);
-                    for (k = 0; k < D_800AFE8C_A71FC->numPlayers; k++) {
+                    for (k = 0; k < gGameSessionContext->numPlayers; k++) {
                         if (i == k) {
                             state->selectionState[i] = 0;
                         } else {
                             state->selectionState[k] = 1;
                         }
                     }
-                    i = D_800AFE8C_A71FC->numPlayers;
+                    i = gGameSessionContext->numPlayers;
                 } else if (gControllerInputs[i] & CONT_A) {
                     allConfirmed = 1;
-                    i = D_800AFE8C_A71FC->numPlayers;
+                    i = gGameSessionContext->numPlayers;
                     playSoundEffect(0x2D);
                 }
                 break;
 
             case 4:
-                i = D_800AFE8C_A71FC->numPlayers;
+                i = gGameSessionContext->numPlayers;
                 confirmed = 1;
                 break;
 
@@ -384,9 +384,9 @@ void storyMapHandlePlayerInput(void) {
             fadeSpeed = 8;
         } else {
             fadeSpeed = 0xE;
-            for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-                if (state->characterIds[i] != D_800AFE8C_A71FC->playerBoardIds[i]) {
-                    D_800AFE8C_A71FC->playerBoardIds[0xC + i] = 0;
+            for (i = 0; i < gGameSessionContext->numPlayers; i++) {
+                if (state->characterIds[i] != gGameSessionContext->playerBoardIds[i]) {
+                    gGameSessionContext->playerBoardIds[0xC + i] = 0;
                 }
             }
         }
@@ -426,7 +426,7 @@ void onStoryMapNormalExit(void) {
     s32 exitCode;
 
     exitCode = 1;
-    if ((D_800AFE8C_A71FC->gameMode == 0) && (EepromSaveData->save_slot_status[0] == 5)) {
+    if ((gGameSessionContext->gameMode == 0) && (EepromSaveData->save_slot_status[0] == 5)) {
         exitCode = 0x44;
     }
     returnToParentScheduler(exitCode);
@@ -445,7 +445,7 @@ void storyMapClearLocationArrivalsIfNoActivePlayers(void) {
     for (locationIdx = 0; locationIdx < 9; locationIdx++) {
         activePlayerCount = 0;
 
-        for (playerIdx = 0; playerIdx < D_800AFE8C_A71FC->numPlayers; playerIdx++) {
+        for (playerIdx = 0; playerIdx < gGameSessionContext->numPlayers; playerIdx++) {
             if (state->playerSlotState[playerIdx] == 1 || state->playerSlotState[playerIdx] == 3) {
                 activePlayerCount++;
             }

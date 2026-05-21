@@ -1084,7 +1084,7 @@ void initTotalLapDisplayTask(TotalLapDisplayState *state) {
     state->alpha = 0;
     state->spriteAsset = loadAsset_34CB50();
     initHudElementState((HudElementState *)state);
-    global = D_800AFE8C_A71FC;
+    global = gGameSessionContext;
     state->spriteIndex = 0x16;
     state->x = 0;
 
@@ -1115,10 +1115,10 @@ void updateTotalLapDisplay(TotalLapDisplayState *state) {
 
     player = state->player;
     if (player->finishPosition == 0 && (gFrameCounter & 1)) {
-        lapCount = D_800AFE8C_A71FC->playerBoardIds[player->playerIndex + 0x11];
+        lapCount = gGameSessionContext->playerBoardIds[player->playerIndex + 0x11];
         sprintf(buffer, D_8009E89C_9F49C, lapCount);
     } else {
-        lapCount = D_800AFE8C_A71FC->playerBoardIds[state->player->playerIndex + 0x11];
+        lapCount = gGameSessionContext->playerBoardIds[state->player->playerIndex + 0x11];
         sprintf(buffer, D_8009E8A0_9F4A0, lapCount);
     }
 

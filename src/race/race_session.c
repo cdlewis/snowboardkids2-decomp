@@ -376,7 +376,7 @@ IntroFrameData2 sIntroCameraEvents[] = {
 extern s8 gControllerPollingEnabled;
 extern u8 gRaceResultCode;
 extern s32 gControllerInputs[4];
-extern SessionConfig *D_800AFE8C_A71FC;
+extern SessionConfig *gGameSessionContext;
 
 void initRaceViewports(void);
 void func_80040420_41020(void);
@@ -441,19 +441,19 @@ void initRace(void) {
     raceState->battleScoreLimit = 0;
     raceState->unk58 = 0x7FFF;
 
-    switch (D_800AFE8C_A71FC->gameMode) {
+    switch (gGameSessionContext->gameMode) {
         case GAME_MODE_STORY:
-            raceState->currentLevel = D_800AFE8C_A71FC->currentLevel;
-            raceState->lapCount = D_800AFE8C_A71FC->lapCount - 1;
-            raceState->isExpertMode = D_800AFE8C_A71FC->isExpertMode;
+            raceState->currentLevel = gGameSessionContext->currentLevel;
+            raceState->lapCount = gGameSessionContext->lapCount - 1;
+            raceState->isExpertMode = gGameSessionContext->isExpertMode;
 
             switch (raceState->currentLevel) {
                 case LINDAS_CASTLE:
                 case WENDYS_HOUSE:
                 case CRAZY_JUNGLE:
                 default:
-                    raceState->humanPlayerCount = D_800AFE8C_A71FC->numPlayers;
-                    raceState->activePlayerCount = D_800AFE8C_A71FC->numPlayers;
+                    raceState->humanPlayerCount = gGameSessionContext->numPlayers;
+                    raceState->activePlayerCount = gGameSessionContext->numPlayers;
                     raceState->totalRacers = 4;
                     if (raceState->isExpertMode != 0) {
                         raceState->battleTimeLimit = 1;
@@ -512,21 +512,21 @@ void initRace(void) {
             }
             break;
         case GAME_MODE_BATTLE:
-            raceState->currentLevel = D_800AFE8C_A71FC->currentLevel;
-            raceState->lapCount = D_800AFE8C_A71FC->lapCount - 1;
+            raceState->currentLevel = gGameSessionContext->currentLevel;
+            raceState->lapCount = gGameSessionContext->lapCount - 1;
             raceState->raceType = RACE_TYPE_BATTLE;
-            raceState->humanPlayerCount = D_800AFE8C_A71FC->numPlayers;
-            raceState->activePlayerCount = D_800AFE8C_A71FC->numPlayers;
+            raceState->humanPlayerCount = gGameSessionContext->numPlayers;
+            raceState->activePlayerCount = gGameSessionContext->numPlayers;
             raceState->totalRacers = 4;
             raceState->disableItems = 1;
-            raceState->battleTimeLimit = D_800AFE8C_A71FC->battleTimeLimit;
-            raceState->battleScoreLimit = D_800AFE8C_A71FC->battleScoreLimit;
+            raceState->battleTimeLimit = gGameSessionContext->battleTimeLimit;
+            raceState->battleScoreLimit = gGameSessionContext->battleScoreLimit;
             break;
 
         case GAME_MODE_DEMO:
             initRand();
             raceState->raceType = RACE_TYPE_DEMO;
-            raceState->demoMode = D_800AFE8C_A71FC->demoIndex;
+            raceState->demoMode = gGameSessionContext->demoIndex;
 
             switch (raceState->demoMode) {
                 case 0:
@@ -607,10 +607,10 @@ void initRace(void) {
 
     if (raceState->raceType < RACE_TYPE_TRAINING) {
         for (i = 0; i < raceState->activePlayerCount; i++) {
-            raceState->racers[i].characterId = D_800AFE8C_A71FC->characterIDs[i];
-            raceState->racers[i].boardType = D_800AFE8C_A71FC->boardTypes[i];
-            raceState->racers[i].costumeID = D_800AFE8C_A71FC->costumeIDs[i];
-            raceState->racers[i].colorSlot = D_800AFE8C_A71FC->colorSlots[i];
+            raceState->racers[i].characterId = gGameSessionContext->characterIDs[i];
+            raceState->racers[i].boardType = gGameSessionContext->boardTypes[i];
+            raceState->racers[i].costumeID = gGameSessionContext->costumeIDs[i];
+            raceState->racers[i].colorSlot = gGameSessionContext->colorSlots[i];
         }
     }
 
@@ -621,7 +621,7 @@ void initRace(void) {
         raceState->racers[i].inputDisabled = 1;
     }
 
-    switch (D_800AFE8C_A71FC->gameMode) {
+    switch (gGameSessionContext->gameMode) {
         case GAME_MODE_STORY:
             switch (raceState->currentLevel) {
                 case CRAZY_JUNGLE_BOSS:

@@ -37,7 +37,7 @@ void updateRumblePakCheckTask(void) {
 
     allocation = (u8 *)getCurrentAllocation();
     completedCount = 0;
-    for (i = 0; i < (s32)D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < (s32)gGameSessionContext->numPlayers; i++) {
         state = allocation[i];
         switch (state) {
             case 0:
@@ -70,7 +70,7 @@ void updateRumblePakCheckTask(void) {
                 break;
         }
     }
-    if (completedCount == D_800AFE8C_A71FC->numPlayers) {
+    if (completedCount == gGameSessionContext->numPlayers) {
         terminateSchedulerWithCallback(finishRumblePakCheckTask);
     }
 }

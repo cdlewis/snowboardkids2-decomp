@@ -278,7 +278,7 @@ void initCharacterSelectScreen(void) {
     state = (CharacterSelectState *)allocateTaskMemory(0x18E0);
     setupTaskSchedulerNodes(0x30, 8, 4, 8, 0, 0, 0, 0);
 
-    if (D_800AFE8C_A71FC->gameMode != 0) {
+    if (gGameSessionContext->gameMode != 0) {
         state->maxMenuOption = 3;
     } else {
         state->maxMenuOption = 2;
@@ -298,7 +298,7 @@ void initCharacterSelectScreen(void) {
 
     initMenuCameraNode(&state->cameraNode, 7, 1, 1);
 
-    switch (D_800AFE8C_A71FC->numPlayers) {
+    switch (gGameSessionContext->numPlayers) {
         case 1:
             initMenuCameraNode(&state->playerViewports[0], 0, 10, 0);
             initMenuCameraNode(&state->modelViewports[0], 8, 8, 1);
@@ -321,15 +321,15 @@ void initCharacterSelectScreen(void) {
 
     setViewportFadeValue(NULL, 0xFF, 0);
 
-    if (D_800AFE8C_A71FC->numPlayers == 1) {
+    if (gGameSessionContext->numPlayers == 1) {
         createViewportTransform(&transform, 0, 0, 0x540000, 0, 0, 0);
-    } else if (D_800AFE8C_A71FC->numPlayers == 2) {
+    } else if (gGameSessionContext->numPlayers == 2) {
         createViewportTransform(&transform, 0, 0, 0x480000, 0, 0, 0);
     } else {
         createViewportTransform(&transform, 0, 0, 0x380000, 0, 0, 0);
     }
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         setViewportTransformById(state->playerViewports[i].id, &transform);
     }
 
@@ -341,17 +341,17 @@ void initCharacterSelectScreen(void) {
         state->hasSecretCharacters = 1;
     }
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-        if (D_800AFE8C_A71FC->playerBoardIds[4 + i] < 9) {
-            state->charRow[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] / 3;
-            state->charCol[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] % 3;
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
+        if (gGameSessionContext->playerBoardIds[4 + i] < 9) {
+            state->charRow[i] = gGameSessionContext->playerBoardIds[4 + i] / 3;
+            state->charCol[i] = gGameSessionContext->playerBoardIds[4 + i] % 3;
         } else {
             state->charRow[i] = 3;
-            state->charCol[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] - 9;
+            state->charCol[i] = gGameSessionContext->playerBoardIds[4 + i] - 9;
         }
         state->savedCharRow[i] = state->charRow[i];
         state->savedCharCol[i] = state->charCol[i];
-        boardId = D_800AFE8C_A71FC->playerBoardIds[12 + i];
+        boardId = gGameSessionContext->playerBoardIds[12 + i];
         state->boardId[i] = boardId;
         state->savedBoardId[i] = boardId;
         task = (CharSelectTaskNode *)scheduleTask(initCharSelectBoardModel, 0, 0, 0x5A);
@@ -402,7 +402,7 @@ void scheduleCharacterSelectTasks(void) {
         return;
     }
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         task = (CharSelectTaskNode *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
         if (task != NULL) {
             task->unk52 = i;
@@ -438,7 +438,7 @@ void updateCharacterSelect(void) {
 
     cancelCount = 0;
     confirmedCount = 0;
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         prevCursorIdx = state->cursorIndices[i];
         switch (state->menuStates[i]) {
             case 0:
@@ -460,7 +460,7 @@ void updateCharacterSelect(void) {
                     playSoundEffectOnChannelNoPriority(0x2C, i);
                 } else if (gControllerInputs[i] & 0x4000) {
                     playSoundEffect(0x2E);
-                    for (j = 0; j < D_800AFE8C_A71FC->numPlayers; j++) {
+                    for (j = 0; j < gGameSessionContext->numPlayers; j++) {
                         state->menuStates[j] = 0x14;
                     }
 
@@ -526,12 +526,12 @@ void updateCharacterSelect(void) {
                         &charSelectNormalLight,
                         (ColorData *)(&charSelectNormalAmbient)
                     );
-                    if (D_800AFE8C_A71FC->playerBoardIds[4 + i] < 9) {
-                        state->charRow[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] / 3;
-                        state->charCol[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] % 3;
+                    if (gGameSessionContext->playerBoardIds[4 + i] < 9) {
+                        state->charRow[i] = gGameSessionContext->playerBoardIds[4 + i] / 3;
+                        state->charCol[i] = gGameSessionContext->playerBoardIds[4 + i] % 3;
                     } else {
                         state->charRow[i] = 3;
-                        state->charCol[i] = D_800AFE8C_A71FC->playerBoardIds[4 + i] - 9;
+                        state->charCol[i] = gGameSessionContext->playerBoardIds[4 + i] - 9;
                     }
                     break;
                 }
@@ -729,9 +729,9 @@ void updateCharacterSelect(void) {
                         state->frameCounters[i] = 0;
                         state->menuStates[i] = 6;
                         playSoundEffectOnChannelNoPriority(0x2C, i);
-                        D_800AFE8C_A71FC->playerBoardIds[4 + i] = unlockedSlots[state->unlockedSlotIndex[i]];
-                        D_800AFE8C_A71FC->playerBoardIds[8 + i] =
-                            EepromSaveData->character_or_settings[D_800AFE8C_A71FC->playerBoardIds[4 + i]] - 1;
+                        gGameSessionContext->playerBoardIds[4 + i] = unlockedSlots[state->unlockedSlotIndex[i]];
+                        gGameSessionContext->playerBoardIds[8 + i] =
+                            EepromSaveData->character_or_settings[gGameSessionContext->playerBoardIds[4 + i]] - 1;
                     }
                     break;
                 }
@@ -744,7 +744,7 @@ void updateCharacterSelect(void) {
                     state->cursorIndices[i] = state->maxMenuOption - 2;
                     state->animAngles[i] = 0;
                     createYRotationMatrix(&state->pad17F8[i], 0);
-                    state->boardId[i] = D_800AFE8C_A71FC->playerBoardIds[12 + i];
+                    state->boardId[i] = gGameSessionContext->playerBoardIds[12 + i];
                     state->iconDisplayState[i] = 0;
                     break;
                 }
@@ -769,7 +769,7 @@ void updateCharacterSelect(void) {
                     }
                 } else if (gControllerInputs[i] & 0x8000) {
                     state->menuStates[i] = 0x11;
-                    D_800AFE8C_A71FC->playerBoardIds[12 + i] = state->boardId[i];
+                    gGameSessionContext->playerBoardIds[12 + i] = state->boardId[i];
                     state->frameCounters[i] = 0;
                     playSoundEffectOnChannelNoPriority(0x2C, i);
                     playSoundEffect(boardConfirmSoundIds[state->boardId[i]]);
@@ -816,7 +816,7 @@ void updateCharacterSelect(void) {
                 break;
 
             case 25:
-                if (D_800AFE8C_A71FC->numPlayers >= 2) {
+                if (gGameSessionContext->numPlayers >= 2) {
                     state->menuStates[i] = 0x1A;
                 } else {
                     state->menuStates[i] = 0x1B;
@@ -825,7 +825,7 @@ void updateCharacterSelect(void) {
                 break;
 
             case 27:
-                if (gControllerInputs[i] & 0x4000 && D_800AFE8C_A71FC->numPlayers != 1) {
+                if (gControllerInputs[i] & 0x4000 && gGameSessionContext->numPlayers != 1) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
                     state->menuStates[i] = 0x1E;
                 } else {
@@ -845,19 +845,19 @@ void updateCharacterSelect(void) {
         }
     }
 
-    if (confirmedCount == D_800AFE8C_A71FC->numPlayers) {
+    if (confirmedCount == gGameSessionContext->numPlayers) {
         setMusicFadeOut(0xA);
         state->frameCounters[0] = 0x63;
         setGameStateHandler(cleanupCharacterSelect);
         setViewportFadeValue(0, 0xFF, 8);
         return;
     }
-    if (cancelCount == D_800AFE8C_A71FC->numPlayers) {
+    if (cancelCount == gGameSessionContext->numPlayers) {
         setMusicFadeOut(0xA);
         state->frameCounters[0] = 0;
-        for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
-            D_800AFE8C_A71FC->playerBoardIds[8 + i] =
-                EepromSaveData->character_or_settings[D_800AFE8C_A71FC->playerBoardIds[4 + i]] - 1;
+        for (i = 0; i < gGameSessionContext->numPlayers; i++) {
+            gGameSessionContext->playerBoardIds[8 + i] =
+                EepromSaveData->character_or_settings[gGameSessionContext->playerBoardIds[4 + i]] - 1;
         }
 
         setGameStateHandler(cleanupCharacterSelect);
@@ -875,7 +875,7 @@ void cleanupCharacterSelect(void) {
 
     unlinkNode(&state->cameraNode);
 
-    for (i = 0; i < D_800AFE8C_A71FC->numPlayers; i++) {
+    for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         unlinkNode(&state->playerViewports[i]);
         unlinkNode(&state->modelViewports[i]);
         unlinkNode(&state->iconViewports[i]);

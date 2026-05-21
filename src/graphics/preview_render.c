@@ -1206,7 +1206,7 @@ void updateBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0) {
     s32 i;
     s32 colorStyle;
 
-    if (D_800AFE8C_A71FC->gold < 100) {
+    if (gGameSessionContext->gold < 100) {
         colorStyle = 1;
         i = 6;
         do {
@@ -1220,7 +1220,7 @@ void updateBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0) {
         } while (--i >= 0);
     }
 
-    sprintf(arg0->goldString, D_8009E47C_9F07C, D_800AFE8C_A71FC->gold);
+    sprintf(arg0->goldString, D_8009E47C_9F07C, gGameSessionContext->gold);
 
     i = 0;
     space = 0x20;

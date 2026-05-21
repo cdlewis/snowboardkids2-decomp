@@ -4245,6 +4245,7 @@ paletteFadeSpeeds = 0x800B0F90; // size:0x8 rom:0x1DD130
 overlayFadeSpeeds = 0x800B0F98; // rom:0x1DD138
 textFadeSpeeds = 0x800B0FA0; // rom:0x1DD140
 gGlobalFrameCounter = 0x8009ADE0; // rom:0x9B9E0
+gGameSessionContext = 0x800AFE8C; // size:0x4
 gSaveSlotStatSpriteTable = 0x8008F210; // rom:0x8FE10
 gSaveSlotSelectionParticleXOffsets = 0x8008F2AC; // rom:0x8FEAC
 gSaveSlotSelectionParticleYOffsets = 0x8008F2B8; // rom:0x8FEB8
