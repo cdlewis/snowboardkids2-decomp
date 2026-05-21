@@ -8,132 +8,143 @@
 #include "ui/save_data.h"
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
+    s16 x;
+    s16 y;
+    s16 frameIndex;
     s16 pad6;
-} E090_DataEntry;
+} FootprintSpritePlacement;
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s8 unk12;
-    s8 unk13;
-    s8 unk14;
+    s16 x;
+    s16 y;
+    s32 spriteData;
+    s16 frameIndex;
+    s16 scaleX;
+    s16 scaleY;
+    s16 rotation;
+    s16 shade;
+    s8 tileMode;
+    s8 overridePaletteCount;
+    s8 alpha;
     u8 pad15[3];
-} E090_InnerStruct;
+} LogoSplashFootprintSprite;
 
 typedef struct {
     u8 pad0[0x10];
-    s16 unk10;
-    s16 unk12;
+    s16 clipX;
+    s16 clipY;
     u8 pad14[0x18];
-} E090_SubStruct;
+} LogoSplashTileMapState;
+
+typedef enum {
+    LOGO_SPLASH_STATE_INIT_RENDER_STATE,
+    LOGO_SPLASH_STATE_START_ATLUS_LOGO,
+    LOGO_SPLASH_STATE_UPDATE_ATLUS_LOGO,
+    LOGO_SPLASH_STATE_START_RACDYM_LOGO,
+    LOGO_SPLASH_STATE_UPDATE_RACDYM_FADE_IN,
+    LOGO_SPLASH_STATE_UPDATE_FOOTPRINT_REVEAL,
+    LOGO_SPLASH_STATE_UPDATE_RACDYM_FADE_OUT,
+    LOGO_SPLASH_STATE_CLEANUP,
+} LogoSplashStateId;
 
 typedef struct {
     s8 state;
-    s8 visibleLetterCount;
+    s8 visibleFootprintCount;
     s16 frameTimer;
     u8 pad4[0x4];
-    ViewportNode unk8;
-    void *unk1E0;
-    void *unk1E4;
-    void *unk1E8;
-    E090_SubStruct unk1EC;
-    E090_SubStruct unk218;
-    E090_InnerStruct unk244[6];
-    s32 unk2D4[6];
-} E090_struct;
+    ViewportNode viewport;
+    void *atlusLogoTileMap;
+    void *racdymLogoTileMap;
+    void *racdymFootprintSprites;
+    LogoSplashTileMapState atlusLogoTileMapState;
+    LogoSplashTileMapState racdymLogoTileMapState;
+    LogoSplashFootprintSprite footprintSprites[6];
+    s32 footprintAlphaTimers[6];
+} LogoSplashState;
 
-void transitionFromLogoScreen(void);
-void loadLogoScreenAssets(void);
-void updateLogoScreen(void);
+void finishLogoSplash(void);
+void loadLogoSplashAssets(void);
+void updateLogoSplash(void);
 
-E090_DataEntry D_8008CE10_8DA10[] = {
-    { (s16)0xFF78, 0x0058,      0x0000, 0x0000 },
-    { (s16)0xFFA8, 0x0050,      0x0001, 0x0000 },
-    { (s16)0xFFA0, 0x0020,      0x0002, 0x0000 },
-    { (s16)0xFFC0, 0x0008,      0x0003, 0x0000 },
-    { (s16)0xFFB8, (s16)0xFFC8, 0x0004, 0x0000 },
-    { (s16)0xFFE8, (s16)0xFFA8, 0x0005, 0x0000 },
+FootprintSpritePlacement racdymFootprintPlacements[] = {
+    { (s16)0xFF78, 0x0058,      0x0000 },
+    { (s16)0xFFA8, 0x0050,      0x0001 },
+    { (s16)0xFFA0, 0x0020,      0x0002 },
+    { (s16)0xFFC0, 0x0008,      0x0003 },
+    { (s16)0xFFB8, (s16)0xFFC8, 0x0004 },
+    { (s16)0xFFE8, (s16)0xFFA8, 0x0005 },
 };
 
-void initLogoNodeFadeIn(E090_struct *arg0) {
-    setViewportEnvColor(&arg0->unk8, 0, 0, 0);
-    setViewportFadeValue(&arg0->unk8, 0xFF, 0xF);
+void beginLogoSplashFadeOut(LogoSplashState *arg0) {
+    setViewportEnvColor(&arg0->viewport, 0, 0, 0);
+    setViewportFadeValue(&arg0->viewport, 0xFF, 0xF);
 }
 
-void initLogoNodeFadeOut(E090_struct *arg0) {
-    setViewportEnvColor(&arg0->unk8, 0, 0, 0);
-    setViewportFadeValue(&arg0->unk8, 0, 0xF);
+void beginLogoSplashFadeIn(LogoSplashState *arg0) {
+    setViewportEnvColor(&arg0->viewport, 0, 0, 0);
+    setViewportFadeValue(&arg0->viewport, 0, 0xF);
 }
 
-void initLogoScreenElements(E090_struct *arg0) {
+void initLogoSplashRenderState(LogoSplashState *arg0) {
     s32 i;
 
-    initScrollingTileMapState(&arg0->unk1EC, (s32)arg0->unk1E0);
-    initScrollingTileMapState(&arg0->unk218, (s32)arg0->unk1E4);
+    initScrollingTileMapState(&arg0->atlusLogoTileMapState, (s32)arg0->atlusLogoTileMap);
+    initScrollingTileMapState(&arg0->racdymLogoTileMapState, (s32)arg0->racdymLogoTileMap);
 
-    arg0->unk1EC.unk10 = 0;
-    arg0->unk1EC.unk12 = 0;
-    arg0->unk218.unk10 = 0;
-    arg0->unk218.unk12 = 0;
+    arg0->atlusLogoTileMapState.clipX = 0;
+    arg0->atlusLogoTileMapState.clipY = 0;
+    arg0->racdymLogoTileMapState.clipX = 0;
+    arg0->racdymLogoTileMapState.clipY = 0;
 
     for (i = 0; i < 6; i++) {
-        arg0->unk244[i].unk0 = D_8008CE10_8DA10[i].unk0;
-        arg0->unk244[i].unk2 = D_8008CE10_8DA10[i].unk2;
-        arg0->unk244[i].unk4 = (s32)arg0->unk1E8;
-        arg0->unk244[i].unk8 = D_8008CE10_8DA10[i].unk4;
-        arg0->unk244[i].unkA = 0x400;
-        arg0->unk244[i].unkC = 0x400;
-        arg0->unk244[i].unkE = 0;
-        arg0->unk244[i].unk10 = 0xFF;
-        arg0->unk244[i].unk12 = 0;
-        arg0->unk244[i].unk13 = 0;
-        arg0->unk244[i].unk14 = 0;
-        arg0->unk2D4[i] = 0;
+        arg0->footprintSprites[i].x = racdymFootprintPlacements[i].x;
+        arg0->footprintSprites[i].y = racdymFootprintPlacements[i].y;
+        arg0->footprintSprites[i].spriteData = (s32)arg0->racdymFootprintSprites;
+        arg0->footprintSprites[i].frameIndex = racdymFootprintPlacements[i].frameIndex;
+        arg0->footprintSprites[i].scaleX = 0x400;
+        arg0->footprintSprites[i].scaleY = 0x400;
+        arg0->footprintSprites[i].rotation = 0;
+        arg0->footprintSprites[i].shade = 0xFF;
+        arg0->footprintSprites[i].tileMode = 0;
+        arg0->footprintSprites[i].overridePaletteCount = 0;
+        arg0->footprintSprites[i].alpha = 0;
+        arg0->footprintAlphaTimers[i] = 0;
     }
 
-    arg0->state = 1;
+    arg0->state = LOGO_SPLASH_STATE_START_ATLUS_LOGO;
 }
 
-void initLogoDisplaySequence(E090_struct *arg0) {
-    initLogoNodeFadeOut(arg0);
+void startAtlusLogoSequence(LogoSplashState *arg0) {
+    beginLogoSplashFadeIn(arg0);
     arg0->frameTimer = 100;
-    arg0->state = 2;
+    arg0->state = LOGO_SPLASH_STATE_UPDATE_ATLUS_LOGO;
 }
 
-void updateLogoDisplayFade(E090_struct *arg0) {
+void updateAtlusLogoSequence(LogoSplashState *arg0) {
     arg0->frameTimer--;
     if (arg0->frameTimer == 15) {
-        initLogoNodeFadeIn(arg0);
+        beginLogoSplashFadeOut(arg0);
     } else if (arg0->frameTimer == 0) {
-        initLogoNodeFadeOut(arg0);
-        arg0->state = 3;
+        beginLogoSplashFadeIn(arg0);
+        arg0->state = LOGO_SPLASH_STATE_START_RACDYM_LOGO;
     }
 }
 
-void initTitleTextSequence(E090_struct *arg0) {
-    initLogoNodeFadeOut(arg0);
+void startRacdymLogoSequence(LogoSplashState *arg0) {
+    beginLogoSplashFadeIn(arg0);
     arg0->frameTimer = 100;
-    arg0->state = 4;
+    arg0->state = LOGO_SPLASH_STATE_UPDATE_RACDYM_FADE_IN;
 }
 
-void updateTitleTextDelay(E090_struct *arg0) {
+void updateRacdymLogoFadeIn(LogoSplashState *arg0) {
     arg0->frameTimer--;
     if (arg0->frameTimer == 0x50) {
-        arg0->state = 5;
-        arg0->visibleLetterCount++;
+        arg0->state = LOGO_SPLASH_STATE_UPDATE_FOOTPRINT_REVEAL;
+        arg0->visibleFootprintCount++;
     }
 }
 
-void updateTitleLetterReveal(E090_struct *arg0) {
+void updateRacdymFootprintReveal(LogoSplashState *arg0) {
     s16 temp = arg0->frameTimer - 0x29;
     arg0->frameTimer--;
     switch (temp) {
@@ -142,115 +153,117 @@ void updateTitleLetterReveal(E090_struct *arg0) {
         case 23:
         case 29:
         case 35:
-            arg0->visibleLetterCount++;
+            arg0->visibleFootprintCount++;
             break;
         case 0:
-            arg0->state = 6;
+            arg0->state = LOGO_SPLASH_STATE_UPDATE_RACDYM_FADE_OUT;
             break;
     }
 }
 
-void updateTitleFinalFadeIn(E090_struct *arg0) {
+void updateRacdymLogoFadeOut(LogoSplashState *arg0) {
     arg0->frameTimer--;
     if (arg0->frameTimer == 15) {
-        initLogoNodeFadeIn(arg0);
+        beginLogoSplashFadeOut(arg0);
     } else if (arg0->frameTimer == 0) {
-        arg0->state = 7;
+        arg0->state = LOGO_SPLASH_STATE_CLEANUP;
     }
 }
 
-void cleanupLogoScreen(E090_struct *arg0) {
-    arg0->unk1E0 = freeNodeMemory(arg0->unk1E0);
-    arg0->unk1E4 = freeNodeMemory(arg0->unk1E4);
-    arg0->unk1E8 = freeNodeMemory(arg0->unk1E8);
-    unlinkNode(&arg0->unk8);
-    terminateSchedulerWithCallback(transitionFromLogoScreen);
+void cleanupLogoSplash(LogoSplashState *arg0) {
+    arg0->atlusLogoTileMap = freeNodeMemory(arg0->atlusLogoTileMap);
+    arg0->racdymLogoTileMap = freeNodeMemory(arg0->racdymLogoTileMap);
+    arg0->racdymFootprintSprites = freeNodeMemory(arg0->racdymFootprintSprites);
+    unlinkNode(&arg0->viewport);
+    terminateSchedulerWithCallback(finishLogoSplash);
 }
 
-void initLogoScreen(void) {
-    setGameStateHandler(loadLogoScreenAssets);
+void initLogoSplash(void) {
+    setGameStateHandler(loadLogoSplashAssets);
 }
 
-void loadLogoScreenAssets(void) {
-    E090_struct *logoScreen;
+void loadLogoSplashAssets(void) {
+    LogoSplashState *logoScreen;
     ViewportNode *node;
     u8 nodeParams[0x20];
 
-    logoScreen = (E090_struct *)allocateTaskMemory(0x2F0);
-    logoScreen->state = 0;
+    logoScreen = (LogoSplashState *)allocateTaskMemory(0x2F0);
+    logoScreen->state = LOGO_SPLASH_STATE_INIT_RENDER_STATE;
     logoScreen->frameTimer = 0;
-    logoScreen->visibleLetterCount = 0;
-    logoScreen->unk1E0 = loadCompressedData(&_67AB10_ROM_START, &_67AB10_ROM_END, 0x6350);
-    logoScreen->unk1E4 = loadCompressedData(&_67BEB0_ROM_START, &_67BEB0_ROM_END, 0x4320);
-    logoScreen->unk1E8 = loadCompressedData(&_67DB80_ROM_START, &_67DB80_ROM_END, 0x1A68);
+    logoScreen->visibleFootprintCount = 0;
+    logoScreen->atlusLogoTileMap = loadCompressedData(&atlusLogoTileMap_ROM_START, &atlusLogoTileMap_ROM_END, 0x6350);
+    logoScreen->racdymLogoTileMap =
+        loadCompressedData(&racdymLogoTileMap_ROM_START, &racdymLogoTileMap_ROM_END, 0x4320);
+    logoScreen->racdymFootprintSprites =
+        loadCompressedData(&racdymFootprintSprites_ROM_START, &racdymFootprintSprites_ROM_END, 0x1A68);
 
-    node = &logoScreen->unk8;
+    node = &logoScreen->viewport;
     initViewportNode(node, 0, 0, 10, 0);
     setViewportScale(node, 1.0f, 1.0f);
     setModelCameraTransform(node, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     setViewportId(node, 1);
     createViewportTransform(&nodeParams, 0, 0, 0x01000000, 0, 0, 0);
-    setViewportTransformById(logoScreen->unk8.id, &nodeParams);
+    setViewportTransformById(logoScreen->viewport.id, &nodeParams);
     setViewportEnvColor(node, 0, 0, 0);
     setViewportFadeValue(node, 0xFF, 0);
-    setGameStateHandler(updateLogoScreen);
+    setGameStateHandler(updateLogoSplash);
 }
 
-void updateLogoScreen(void) {
-    E090_struct *logoScreen = getCurrentAllocation();
+void updateLogoSplash(void) {
+    LogoSplashState *logoScreen = getCurrentAllocation();
     s8 state;
     s32 i;
 
     state = logoScreen->state;
     switch (state) {
-        case 0:
-            initLogoScreenElements(logoScreen);
+        case LOGO_SPLASH_STATE_INIT_RENDER_STATE:
+            initLogoSplashRenderState(logoScreen);
             break;
-        case 1:
-            initLogoDisplaySequence(logoScreen);
+        case LOGO_SPLASH_STATE_START_ATLUS_LOGO:
+            startAtlusLogoSequence(logoScreen);
             break;
-        case 2:
-            updateLogoDisplayFade(logoScreen);
+        case LOGO_SPLASH_STATE_UPDATE_ATLUS_LOGO:
+            updateAtlusLogoSequence(logoScreen);
             break;
-        case 3:
-            initTitleTextSequence(logoScreen);
+        case LOGO_SPLASH_STATE_START_RACDYM_LOGO:
+            startRacdymLogoSequence(logoScreen);
             break;
-        case 4:
-            updateTitleTextDelay(logoScreen);
+        case LOGO_SPLASH_STATE_UPDATE_RACDYM_FADE_IN:
+            updateRacdymLogoFadeIn(logoScreen);
             break;
-        case 5:
-            updateTitleLetterReveal(logoScreen);
+        case LOGO_SPLASH_STATE_UPDATE_FOOTPRINT_REVEAL:
+            updateRacdymFootprintReveal(logoScreen);
             break;
-        case 6:
-            updateTitleFinalFadeIn(logoScreen);
+        case LOGO_SPLASH_STATE_UPDATE_RACDYM_FADE_OUT:
+            updateRacdymLogoFadeOut(logoScreen);
             break;
-        case 7:
+        case LOGO_SPLASH_STATE_CLEANUP:
         default:
-            cleanupLogoScreen(logoScreen);
+            cleanupLogoSplash(logoScreen);
             return;
     }
 
     state = logoScreen->state;
-    if (state == 2) {
-        enqueueCallbackBySlotIndex(0, 4, renderScrollingTileMap, &logoScreen->unk1EC);
+    if (state == LOGO_SPLASH_STATE_UPDATE_ATLUS_LOGO) {
+        enqueueCallbackBySlotIndex(0, 4, renderTiledTextureMap, &logoScreen->atlusLogoTileMapState);
     } else if (state >= 2) {
-        if (state < 7) {
-            if (state >= 4) {
-                enqueueCallbackBySlotIndex(0, 4, renderScrollingTileMap, &logoScreen->unk218);
+        if (state < LOGO_SPLASH_STATE_CLEANUP) {
+            if (state >= LOGO_SPLASH_STATE_UPDATE_RACDYM_FADE_IN) {
+                enqueueCallbackBySlotIndex(0, 4, renderTiledTextureMap, &logoScreen->racdymLogoTileMapState);
 
-                for (i = 0; i < logoScreen->visibleLetterCount; i++) {
-                    logoScreen->unk2D4[i] += 0x330000;
-                    if (logoScreen->unk2D4[i] > 0xFFFFFF) {
-                        logoScreen->unk2D4[i] = 0xFF0000;
+                for (i = 0; i < logoScreen->visibleFootprintCount; i++) {
+                    logoScreen->footprintAlphaTimers[i] += 0x330000;
+                    if (logoScreen->footprintAlphaTimers[i] > 0xFFFFFF) {
+                        logoScreen->footprintAlphaTimers[i] = 0xFF0000;
                     }
-                    logoScreen->unk244[i].unk14 = (s8)(logoScreen->unk2D4[i] >> 16);
-                    enqueueCallbackBySlotIndex(0, 3, renderScaledAlphaSpriteFrame, &logoScreen->unk244[i]);
+                    logoScreen->footprintSprites[i].alpha = (s8)(logoScreen->footprintAlphaTimers[i] >> 16);
+                    enqueueCallbackBySlotIndex(0, 3, renderScaledAlphaSpriteFrame, &logoScreen->footprintSprites[i]);
                 }
             }
         }
     }
 }
 
-void transitionFromLogoScreen(void) {
+void finishLogoSplash(void) {
     returnToParentScheduler(1);
 }

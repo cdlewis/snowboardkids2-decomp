@@ -85,7 +85,7 @@ void spawnItemTriggerTask(s16 arg0);
 void spawnConfettiEffectForAllPlayers(void);
 PlayerFlashEffectState *spawnPlayerFlashEffect(Player *player);
 void initTitleScreen(void);
-void initLogoScreen(void);
+void initLogoSplash(void);
 void initVersusMode(void);
 void initOptionsMenu(void);
 void eepromReadAsync(s32 slotIndex, void *buffer);

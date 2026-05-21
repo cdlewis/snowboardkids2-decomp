@@ -27,6 +27,6 @@ void processRaceUnlocks(s16 raceResult);
 s32 areCharacterPalettesUnlocked(s32 count);
 s32 tryAddUnlockedCutsceneId(u8 cutsceneId);
 void tryAddUnlockedBoardId(u8 boardId);
-void renderScrollingTileMap(void *);
+void renderTiledTextureMap(void *);
 void initScrollingTileMapState(void *, s32);
 void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData);

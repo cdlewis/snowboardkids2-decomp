@@ -1079,7 +1079,7 @@ void initUnlockNotificationSprite(UnlockNotificationState *state) {
 void renderUnlockNotification(UnlockNotificationState *state) {
     u16 nextFrame;
 
-    enqueueCallbackBySlotIndex(0xA, 0, renderScrollingTileMap, state);
+    enqueueCallbackBySlotIndex(0xA, 0, renderTiledTextureMap, state);
 
     if (D_800AFE8C_A71FC->gameMode == 0) {
         if (EepromSaveData->save_slot_status[0] == 5) {
@@ -1246,7 +1246,7 @@ void updateMenuBackgroundEffect(MenuTiledBackgroundState *state) {
         state->scrollY++;
         state->scrollX &= 0x3FF;
         state->scrollY &= 0x3FF;
-        enqueueCallbackBySlotIndex(0xB, 0, renderScrollingTileMap, state);
+        enqueueCallbackBySlotIndex(0xB, 0, renderTiledTextureMap, state);
     }
 }
 

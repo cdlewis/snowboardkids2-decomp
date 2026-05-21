@@ -898,7 +898,7 @@ void initBoardShopBackgroundRenderState(BoardShopBackgroundState *state) {
 }
 
 void enqueueBoardShopBackgroundRender(void *state) {
-    enqueueCallbackBySlotIndex(9, 0, &renderScrollingTileMap, state);
+    enqueueCallbackBySlotIndex(9, 0, &renderTiledTextureMap, state);
 }
 
 void cleanupBoardShopBackground(BoardShopBackgroundState *state) {

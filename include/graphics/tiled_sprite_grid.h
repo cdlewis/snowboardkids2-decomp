@@ -44,5 +44,5 @@ typedef struct {
     /* 0x28 */ PaletteChunk32 *paletteData;
 } TileMapScrollRenderState;
 
-void renderScrollingTileMap(TileMapScrollRenderState *state);
+void renderTiledTextureMap(TileMapScrollRenderState *state);
 void initScrollingTileMapState(TileMapScrollRenderState *state, TileMapTextureAsset *asset);

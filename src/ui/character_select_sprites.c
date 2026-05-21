@@ -524,7 +524,7 @@ void initCharacterSelectTextureRenderState(TextureDataTaskState *arg0) {
 }
 
 void enqueueCharacterSelectTextureRender(void *arg0) {
-    enqueueCallbackBySlotIndex(9, 0, renderScrollingTileMap, arg0);
+    enqueueCallbackBySlotIndex(9, 0, renderTiledTextureMap, arg0);
 }
 
 void initPlayer3CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {

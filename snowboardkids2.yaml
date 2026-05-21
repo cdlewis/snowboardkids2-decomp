@@ -3882,17 +3882,17 @@ segments:
     vram: 0
     start: 0x677F60
 
-  - name: _67AB10
+  - name: atlusLogoTileMap
     type: bin
     vram: 0
     start: 0x67AB10
 
-  - name: _67BEB0
+  - name: racdymLogoTileMap
     type: bin
     vram: 0
     start: 0x67BEB0
 
-  - name: _67DB80
+  - name: racdymFootprintSprites
     type: bin
     vram: 0
     start: 0x67DB80

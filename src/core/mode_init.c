@@ -61,7 +61,7 @@ void func_8001452C_1512C(void) {
 }
 
 void startLogoScreen(void) {
-    createTaskQueue(initLogoScreen, 0x64);
+    createTaskQueue(initLogoSplash, 0x64);
     setGameStateHandler(waitForLogoScreen);
 }
 

@@ -492,7 +492,7 @@ void renderGalleryMenu(GalleryMenuState *arg0) {
     setModelHeight(arg0->menuModel, menuTransform.ty);
     clearModelRotation(arg0->menuModel);
     updateModelGeometry(arg0->menuModel);
-    enqueueCallbackBySlotIndex(1, 4, renderScrollingTileMap, arg0->pad5C8);
+    enqueueCallbackBySlotIndex(1, 4, renderTiledTextureMap, arg0->pad5C8);
     menuState = arg0->menuState;
     if (menuState <= 0) {
         goto menu_end;
@@ -1230,7 +1230,7 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                     3
                 );
             }
-            enqueueCallbackBySlotIndex(2, 3, renderScrollingTileMap, alloc->unk5F8);
+            enqueueCallbackBySlotIndex(2, 3, renderTiledTextureMap, alloc->unk5F8);
         }
     }
 }

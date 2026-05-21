@@ -10,7 +10,7 @@ extern Gfx gSpriteRDPSetupDL[];
 extern s16 gTileTextureFlipTable[];
 extern TextClipAndOffsetData gTextClipAndOffsetData;
 
-void renderScrollingTileMap(TileMapScrollRenderState *state) {
+void renderTiledTextureMap(TileMapScrollRenderState *state) {
     s16 xStart;
     s16 yStart;
     s16 clipLeft;

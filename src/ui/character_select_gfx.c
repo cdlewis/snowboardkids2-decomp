@@ -2422,7 +2422,7 @@ void updateCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state) {
     state->scrollY++;
     state->scrollX &= 0x3FF;
     state->scrollY &= 0x3FF;
-    enqueueCallbackBySlotIndex(7, 0, renderScrollingTileMap, state);
+    enqueueCallbackBySlotIndex(7, 0, renderTiledTextureMap, state);
 }
 
 void cleanupCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state) {

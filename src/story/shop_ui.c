@@ -608,7 +608,7 @@ void initStoryMapShopBackgroundRenderState(StoryMapShopBackgroundState *state) {
 }
 
 void enqueueStoryMapShopBackgroundRender(void *state) {
-    enqueueCallbackBySlotIndex(1, 0, renderScrollingTileMap, state);
+    enqueueCallbackBySlotIndex(1, 0, renderTiledTextureMap, state);
 }
 
 void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *state) {

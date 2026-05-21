@@ -45,7 +45,7 @@ void cleanupTitleLogoTask(TitleLogoTask *arg0) {
 }
 
 void enqueueTitleLogoRender(TitleLogoTask *arg0) {
-    enqueueCallbackBySlotIndex(8, 0, renderScrollingTileMap, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderTiledTextureMap, arg0);
 }
 
 void initTitleLogoRenderState(TitleLogoTask *arg0) {
