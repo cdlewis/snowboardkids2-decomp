@@ -60,11 +60,11 @@ extern u8 storyMapLocationIndex;
 extern s32 gControllerInputs[4];
 
 USE_ASSET(_4237C0);
-USE_ASSET(_426EF0);
+USE_ASSET(playerCountSelectSprites);
 USE_ASSET(_4488E0);
 USE_ASSET(_4547D0);
 USE_ASSET(_419C60);
-USE_ASSET(_41A1D0);
+USE_ASSET(okPromptSprites);
 USE_ASSET(digit_sprite);
 USE_ASSET(_3F6BB0);
 USE_ASSET(_3F6670);
@@ -304,10 +304,10 @@ void initBoardShopDisplay(void) {
     createViewportTransform(&viewportTransform, 0, 0, 0x580000, 0, 0, 0);
     setViewportTransformById(state->mainViewport.id, &viewportTransform);
     setViewportTransformById(state->secondaryViewport.id, &viewportTransform);
-    state->assetSlot0 = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    state->assetSlot0 = loadCompressedData(&_4237C0_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
     state->assetSlot1 = loadCompressedData(&_4488E0_ROM_START, &_4488E0_ROM_END, 0x14410);
     state->assetSlot2 = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
-    state->assetSlot3 = loadCompressedData(&_419C60_ROM_START, &_41A1D0_ROM_START, 0x1548);
+    state->assetSlot3 = loadCompressedData(&_419C60_ROM_START, &okPromptSprites_ROM_START, 0x1548);
     state->assetSlot4 = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
     state->assetSlot5 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     state->textRenderAsset = loadTextRenderAsset(1);

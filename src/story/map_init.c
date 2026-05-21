@@ -14,7 +14,7 @@
 
 USE_OVERLAY(_1DA660)
 USE_OVERLAY(_41AD80)
-USE_OVERLAY(_41A1D0)
+USE_OVERLAY(okPromptSprites)
 
 typedef struct {
     u8 pad[0x24];
@@ -137,7 +137,7 @@ void initStoryMap(void) {
     } while (i < 9);
 
     scheduleTask(initCharacterSelectBoardTask, 1, 0, 0x5A);
-    state->portraitAsset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    state->portraitAsset = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
     state->imageAsset = loadCompressedData(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
     scheduleTask(initCharacterSelectSprites, 1, 0, 0x5A);
     scheduleTask(initCharacterSelectTextureDataLoad, 1, 0, 0x5A);

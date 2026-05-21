@@ -80,7 +80,7 @@ void onCharacterSelectProceed(void);
 void onCharacterSelectCancel(void);
 
 USE_ASSET(_4237C0);
-USE_ASSET(_426EF0);
+USE_ASSET(playerCountSelectSprites);
 USE_ASSET(tiledSnowmanAsset);
 USE_ASSET(_459310);
 
@@ -333,7 +333,7 @@ void initCharacterSelectScreen(void) {
         setViewportTransformById(state->playerViewports[i].id, &transform);
     }
 
-    state->mainAssets = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    state->mainAssets = loadCompressedData(&_4237C0_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
     state->iconAssets = loadCompressedData(&tiledSnowmanAsset_ROM_START, &_459310_ROM_START, 0xAE0);
 
     state->hasSecretCharacters = 0;

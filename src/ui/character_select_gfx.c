@@ -1162,7 +1162,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
 
     (void)pad;
 
-    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
     setCleanupCallback(cleanupCharSelectIconHideAsset);
 
     numPlayers = gGameSessionContext->numPlayers;
@@ -2085,7 +2085,7 @@ void initCharSelectPlayerNumbers(SimpleSpriteEntry *arg0) {
     volatile SimpleSpriteEntry *ptr;
     s32 pad[4];
 
-    dmaResult = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    dmaResult = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
     setCleanupCallback(cleanupCharSelectPlayerNumbers);
 
     global = gGameSessionContext;

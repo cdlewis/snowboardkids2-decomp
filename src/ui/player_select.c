@@ -12,7 +12,11 @@
 
 USE_OVERLAY(_1DB7A0);
 
-extern volatile s32 gControllerInputs;
+typedef enum {
+    PLAYER_COUNT_RESULT_NONE = 0,
+    PLAYER_COUNT_RESULT_PROCEED = 1,
+    PLAYER_COUNT_RESULT_CANCEL = 0x63,
+} PlayerCountMenuResult;
 
 typedef struct {
     ViewportNode node;
@@ -33,7 +37,9 @@ typedef struct {
 
 u8 gPlayerSlotDefaults[] = { 0x00, 0x02, 0x05, 0x01, 0x00, 0x00, 0x00, 0x00,
                              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
 extern u8 gConnectedControllerMask;
+extern volatile s32 gControllerInputs;
 
 void handlePlayerCountSelectInput(void);
 void exitPlayerCountSelect(void);
@@ -47,37 +53,46 @@ void initPlayerCountSelectState(void) {
     u8 temp;
     u8 numControllers;
 
-    state = allocateTaskMemory(0x1E8);
+    state = allocateTaskMemory(sizeof(PlayerCountSelectState));
 
     LOAD_OVERLAY(_1DB7A0);
 
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     state->frameCounter = 0;
-    state->menuResult = 0;
+    state->menuResult = PLAYER_COUNT_RESULT_NONE;
     state->connectedControllerCount = 0;
-    state->menuState = 0;
+    state->menuState = PLAYER_COUNT_MENU_SELECTING;
+
     for (i = 0; i < 4; i++) {
         if ((gConnectedControllerMask >> i) & 1) {
             state->connectedControllerCount = state->connectedControllerCount + 1;
         }
     }
+
     temp = gGameSessionContext->numPlayers;
     if (temp != 0) {
         state->playerCount.selectedPlayerIndex = temp - 1;
     } else {
         state->playerCount.selectedPlayerIndex = 0;
     }
+
     numControllers = state->connectedControllerCount;
     if (numControllers < state->playerCount.selectedPlayerIndex + 1) {
         state->playerCount.selectedPlayerIndex = numControllers - 1;
     }
+
     initMenuCameraNode(&state->node, 8, 0xA, 1);
+
     setViewportFadeValue(&state->node, 0xFF, 0);
     setViewportFadeValue(&state->node, 0, 0x10);
-    state->assetData1 = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
-    state->assetData2 = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+
+    state->assetData1 =
+        loadCompressedData(&playerCountSelectSprites_ROM_START, &playerCountSelectSprites_ROM_END, 0xEEE8);
+    state->assetData2 = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
+
     scheduleTask(&initPlayerCountSelectSprites, 0, 0, 0x5A);
     scheduleTask(&initCharacterReadyIndicator, 0, 0, 0x5A);
+
     setGameStateHandler(awaitPlayerCountSelectFadeIn);
 }
 
@@ -114,11 +129,11 @@ void handlePlayerCountSelectInput(void) {
     state = (PlayerCountSelectState *)getCurrentAllocation();
 
     switch (state->menuState) {
-        case 0:
+        case PLAYER_COUNT_MENU_SELECTING:
             inputs = gControllerInputs;
             if (inputs & B_BUTTON) {
                 playSoundEffect(0x2E);
-                state->menuState = 0xA;
+                state->menuState = PLAYER_COUNT_MENU_CANCEL_OK;
             } else {
                 if (inputs & (STICK_RIGHT | R_JPAD)) {
                     if (state->playerCount.selectedPlayerIndex < (state->connectedControllerCount - 1)) {
@@ -127,6 +142,7 @@ void handlePlayerCountSelectInput(void) {
                         break;
                     }
                 }
+
                 if (gControllerInputs & (STICK_LEFT | CONT_LEFT)) {
                     if (state->playerCount.selectedPlayerIndex != 0) {
                         state->playerCount.selectedPlayerIndex = state->playerCount.selectedPlayerIndex - 1;
@@ -134,48 +150,51 @@ void handlePlayerCountSelectInput(void) {
                         break;
                     }
                 }
+
                 if (gControllerInputs & A_BUTTON) {
-                    state->menuState = 1;
+                    state->menuState = PLAYER_COUNT_MENU_CONFIRM_WAIT;
                     state->frameCounter = 0;
                     playSoundEffectOnChannelNoPriority(0x2C, 0);
                 }
             }
             break;
-        case 1:
+        case PLAYER_COUNT_MENU_CONFIRM_WAIT:
             state->frameCounter = state->frameCounter + 1;
             if ((u16)state->frameCounter == 0x11) {
                 state->frameCounter = 0;
-                state->menuState = 2;
+                state->menuState = PLAYER_COUNT_MENU_CONFIRM_OK;
             }
             break;
-        case 2:
+        case PLAYER_COUNT_MENU_CONFIRM_OK:
             inputs = gControllerInputs;
             if (inputs & B_BUTTON) {
                 goto common_exit;
             } else if (inputs & A_BUTTON) {
-                state->menuResult = 1;
+                state->menuResult = PLAYER_COUNT_RESULT_PROCEED;
                 playSoundEffectOnChannelNoPriority(0x2D, 0);
             }
             break;
-        case 0xA:
+        case PLAYER_COUNT_MENU_CANCEL_OK:
             inputs = gControllerInputs;
             if (inputs & B_BUTTON) {
             common_exit:
                 playSoundEffect(0x2E);
-                state->menuState = 0;
+                state->menuState = PLAYER_COUNT_MENU_SELECTING;
             } else if (inputs & A_BUTTON) {
-                state->menuResult = 0x63;
+                state->menuResult = PLAYER_COUNT_RESULT_CANCEL;
             }
             break;
     }
 
-    if (state->menuResult != 0) {
+    if (state->menuResult != PLAYER_COUNT_RESULT_NONE) {
         setMusicFadeOut(0xA);
-        if (state->menuResult == 0x63) {
-            setViewportFadeValue((ViewportNode *)state, 0xFF, 8);
+
+        if (state->menuResult == PLAYER_COUNT_RESULT_CANCEL) {
+            setViewportFadeValue(&state->node, 0xFF, 8);
         } else {
-            setViewportFadeValue((ViewportNode *)state, 0xFF, 0x10);
+            setViewportFadeValue(&state->node, 0xFF, 0x10);
         }
+
         setGameStateHandler(&exitPlayerCountSelect);
     }
 }
@@ -187,10 +206,13 @@ void exitPlayerCountSelect(void) {
     state = (PlayerCountSelectState *)getCurrentAllocation();
     if (getViewportFadeMode(&state->node) == 0) {
         terminateAllTasks();
+
         unlinkNode(&state->node);
+
         state->assetData1 = freeNodeMemory(state->assetData1);
         state->assetData2 = freeNodeMemory(state->assetData2);
-        if (state->menuResult == 1) {
+
+        if (state->menuResult == PLAYER_COUNT_RESULT_PROCEED) {
             terminateSchedulerWithCallback(onPlayerCountProceed);
             gGameSessionContext->numPlayers = state->playerCount.bytes.selectedPlayerIndexLo + 1;
             for (i = 0; i < gGameSessionContext->numPlayers; i++) {

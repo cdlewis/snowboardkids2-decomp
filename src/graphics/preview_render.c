@@ -1156,7 +1156,7 @@ void cleanupBoardShopColumnSelectorArrow(void *arg0) {
 }
 
 void initBoardShopExitOverlay(SpriteDisplayState *arg0) {
-    void *overlayAsset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    void *overlayAsset = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
     setCleanupCallback(&cleanupBoardShopExitOverlay);
     arg0->x = -0x2C;
     arg0->y = -0x14;

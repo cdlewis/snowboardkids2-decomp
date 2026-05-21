@@ -405,7 +405,7 @@ void initCharacterSelectSprites(CharacterSelectSprites *arg0) {
     void *allocation;
 
     getCurrentAllocation();
-    allocation = loadCompressedData(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);
+    allocation = loadCompressedData(&okPromptSprites_ROM_START, &_41AD80_ROM_START, 0x1B48);
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         arg0->sprites[i].spriteData = allocation;
@@ -530,7 +530,7 @@ void enqueueCharacterSelectTextureRender(void *arg0) {
 void initPlayer3CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
     void *temp;
     getCurrentAllocation();
-    temp = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    temp = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
     arg0->xOffset = -44;
     arg0->yOffset = -20;
     arg0->frameIndex = 13;
@@ -555,7 +555,7 @@ void cleanupCharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
 void initPlayer2CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
     void *temp;
     getCurrentAllocation();
-    temp = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    temp = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
     arg0->xOffset = -76;
     arg0->yOffset = -8;
     arg0->frameIndex = 12;

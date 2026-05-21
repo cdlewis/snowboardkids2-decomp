@@ -2617,7 +2617,7 @@ segments:
     vram: 0
     start: 0x419C60
 
-  - name: _41A1D0
+  - name: okPromptSprites
     type: bin
     vram: 0
     start: 0x41A1D0
@@ -2637,7 +2637,7 @@ segments:
     vram: 0
     start: 0x4237C0
 
-  - name: _426EF0
+  - name: playerCountSelectSprites
     type: bin
     vram: 0
     start: 0x426EF0

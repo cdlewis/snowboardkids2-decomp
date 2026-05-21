@@ -350,7 +350,7 @@ void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
     s32 xPos;
 
     getCurrentAllocation();
-    cursorSpriteAsset = loadCompressedData(&_4237C0_ROM_START, &_426EF0_ROM_START, 0x8A08);
+    cursorSpriteAsset = loadCompressedData(&_4237C0_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
     setCleanupCallback(cleanupOptionsMenuCursors);
 
     i = 0;

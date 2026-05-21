@@ -1032,7 +1032,7 @@ void cleanupCharacterSelectionIcons(CharacterSelectionIconState *state) {
 }
 
 void initConfirmationIndicator(ConfirmationIndicatorState *state) {
-    void *asset = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    void *asset = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
 
     setCleanupCallback(&cleanupConfirmationIndicator);
 

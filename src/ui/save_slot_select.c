@@ -122,7 +122,7 @@ void initSaveSlotScreen(void) {
     state->unkAA8 = loadCompressedData(&_459310_ROM_START, &font_main_ROM_START, 0x2278);
     state->unkAB4 = loadTextRenderAsset(1);
     state->unkAB8 = loadCompressedData(&_3F6670_ROM_START, &digit_sprite_ROM_START, 0x388);
-    state->unkAAC = loadCompressedData(&_41A1D0_ROM_START, &_41AD80_ROM_START, 0x1B48);
+    state->unkAAC = loadCompressedData(&okPromptSprites_ROM_START, &_41AD80_ROM_START, 0x1B48);
     state->unkAB0 = loadCompressedData(&_4547D0_ROM_START, &tiledSnowmanAsset_ROM_START, 0x9488);
 
     initMenuCameraNode((ViewportNode *)state, 8, 0xA, 1);

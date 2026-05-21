@@ -39,7 +39,7 @@ void initPlayerSelectSprites(PlayerSelectState *state) {
     volatile PlayerSelectSprite *sprite;
 
     allocation = getCurrentAllocation();
-    spriteData = loadCompressedData(&_426EF0_ROM_START, &_42F1D0_ROM_START, 0xEEE8);
+    spriteData = loadCompressedData(&playerCountSelectSprites_ROM_START, &playerCountSelectSprites_ROM_END, 0xEEE8);
     setCleanupCallback(cleanupPlayerSelectTask);
 
     i = 0;
@@ -179,7 +179,7 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
                 } while (i < 2);
             }
 
-            if (allocation->unk1E6 == 1) {
+            if (allocation->unk1E6 == PLAYER_COUNT_MENU_CONFIRM_WAIT) {
                 s32 slot;
                 slot = state->slotIndex;
                 state->unk2C = 4;
@@ -212,7 +212,7 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
                     i++;
                 } while (i < 2);
             }
-            if (allocation->unk1E6 == 0) {
+            if (allocation->unk1E6 == PLAYER_COUNT_MENU_SELECTING) {
                 state->unk2C = 3;
             }
             break;
@@ -235,7 +235,7 @@ void initPlayerCountSelectSprites(PlayerSelectSpriteTask *arg0) {
     s16 x, y;
 
     getCurrentAllocation();
-    spriteData = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
+    spriteData = loadCompressedData(&playerCountSelectSprites_ROM_START, &playerCountSelectSprites_ROM_END, 0xEEE8);
     setCleanupCallback(cleanupPlayerCountSelectSprites);
 
     for (i = 0; i < 4; i++) {
@@ -269,7 +269,7 @@ void initPlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
     void *spriteData;
 
     getCurrentAllocation();
-    spriteData = loadCompressedData(&_426EF0_ROM_START, &_426EF0_ROM_END, 0xEEE8);
+    spriteData = loadCompressedData(&playerCountSelectSprites_ROM_START, &playerCountSelectSprites_ROM_END, 0xEEE8);
     setCleanupCallback(cleanupPlayerCountHeaderSprite);
     arg0->x = -96;
     arg0->y = -80;
@@ -281,7 +281,7 @@ void initPlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
 void updatePlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
     GameState *allocation = getCurrentAllocation();
 
-    if (allocation->unk1E6 == 10) {
+    if (allocation->unk1E6 == PLAYER_COUNT_MENU_CANCEL_OK) {
         arg0->x = -80;
         arg0->frameIndex = 7;
     } else {
@@ -299,7 +299,7 @@ void initPlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
     void *temp;
 
     getCurrentAllocation();
-    temp = loadCompressedData(&_426EF0_ROM_START, &_42F1D0_ROM_START, 0xEEE8);
+    temp = loadCompressedData(&playerCountSelectSprites_ROM_START, &playerCountSelectSprites_ROM_END, 0xEEE8);
     setCleanupCallback(cleanupPlayerCountHeaderSprite);
     arg0->spriteData = temp;
     setCallback(updatePlayerIndicatorSprite);
@@ -322,7 +322,7 @@ void cleanupPlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
 void initCharacterReadyIndicator(PlayerSelectSpriteTask *arg0) {
     void *temp;
 
-    temp = loadCompressedData(&_41A1D0_ROM_START, &_41A1D0_ROM_END, 0x1B48);
+    temp = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
     setCleanupCallback(cleanupCharacterReadyIndicator);
     arg0->x = -0x2C;
     arg0->y = -0x14;
@@ -334,7 +334,7 @@ void initCharacterReadyIndicator(PlayerSelectSpriteTask *arg0) {
 void updateCharacterReadyIndicator(void *arg0) {
     GameState *allocation = getCurrentAllocation();
 
-    if (allocation->unk1E6 == 2) {
+    if (allocation->unk1E6 == PLAYER_COUNT_MENU_CONFIRM_OK) {
         enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, arg0);
     }
 }

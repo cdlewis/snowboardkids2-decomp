@@ -2,6 +2,13 @@
 
 #include "common.h"
 
+typedef enum {
+    PLAYER_COUNT_MENU_SELECTING = 0,
+    PLAYER_COUNT_MENU_CONFIRM_WAIT = 1,
+    PLAYER_COUNT_MENU_CONFIRM_OK = 2,
+    PLAYER_COUNT_MENU_CANCEL_OK = 10,
+} PlayerCountMenuState;
+
 typedef struct {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
