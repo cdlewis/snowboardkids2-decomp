@@ -156,7 +156,7 @@ typedef struct {
     u8 defaultLight2R;
     u8 defaultLight2G;
     u8 defaultLight2B;
-} ActiveViewportOverlay;
+} ActiveViewportState;
 
 typedef struct {
     /* 0x0 */ u8 r;

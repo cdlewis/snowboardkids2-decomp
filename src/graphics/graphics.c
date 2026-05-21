@@ -182,7 +182,7 @@ extern u8 gDisplayFramePending;
 extern void *gGraphicsArenaPtrs[];
 extern void *gGraphicsArena0;
 extern s32 gFrameCounter;
-extern ActiveViewportOverlay *gActiveViewport;
+extern ActiveViewportState *gActiveViewport;
 extern void *gDramStack;
 extern void *gOutputBuffer;
 extern void *gYieldBuffer;
@@ -459,7 +459,7 @@ void renderFrame(u32 viScanline) {
     if (node != NULL) {
         for (node = rootNode; node != NULL; node = node->list3_next) {
             // Future cleanup: ActiveViewport is probably just ViewportNode
-            gActiveViewport = (ActiveViewportOverlay *)node;
+            gActiveViewport = (ActiveViewportState *)node;
 
             if (!isRegionAllocSpaceLow() && node->clipLeft < node->clipRight && node->clipTop < node->clipBottom) {
 

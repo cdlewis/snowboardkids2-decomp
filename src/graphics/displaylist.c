@@ -124,7 +124,7 @@ typedef struct {
 } FontSystemInitData;
 
 extern s32 gLookAtPtr;
-extern ActiveViewportOverlay *gActiveViewport;
+extern ActiveViewportState *gActiveViewport;
 extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 extern void *D_800A2D40_A3940;
