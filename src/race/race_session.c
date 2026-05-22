@@ -21,18 +21,22 @@
 #include "system/task_scheduler.h"
 #include "text/text_elements.h"
 
-#define SET_PLAYER_CAMERA_PERSPECTIVE(gs, idx, aspect_val)                        \
-    do {                                                                          \
-        fov = 70.0f;                                                              \
-        aspect = (aspect_val);                                                    \
-        near = 20.0f;                                                             \
-        far = 10000.0f;                                                           \
-        if ((gs)->memoryPoolId != 0xB) {                                          \
-            setViewportPerspective(&(gs)->unk8[idx], fov, aspect, near, 3000.0f); \
-        } else {                                                                  \
-            setViewportPerspective(&(gs)->unk8[idx], fov, aspect, near, 2000.0f); \
-        }                                                                         \
-        setViewportPerspective(&(gs)->unkC[idx], fov, aspect, near, far);         \
+#define RACE_VIEWPORT_FAR_PLANE 3800.0f
+#define MULTIPLAYER_RACE_VIEW_FAR_PLANE 3000.0f
+#define BOSS_RACE_VIEW_FAR_PLANE 2000.0f
+
+#define SET_PLAYER_CAMERA_PERSPECTIVE(gs, idx, aspect_val)                                                \
+    do {                                                                                                  \
+        fov = 70.0f;                                                                                      \
+        aspect = (aspect_val);                                                                            \
+        near = 20.0f;                                                                                     \
+        far = 10000.0f;                                                                                   \
+        if ((gs)->memoryPoolId != 0xB) {                                                                  \
+            setViewportPerspective(&(gs)->unk8[idx], fov, aspect, near, MULTIPLAYER_RACE_VIEW_FAR_PLANE); \
+        } else {                                                                                          \
+            setViewportPerspective(&(gs)->unk8[idx], fov, aspect, near, BOSS_RACE_VIEW_FAR_PLANE);        \
+        }                                                                                                 \
+        setViewportPerspective(&(gs)->unkC[idx], fov, aspect, near, far);                                 \
     } while (0)
 
 USE_OVERLAY(race);
@@ -887,12 +891,12 @@ void initRaceViewports(void) {
                 near = 70.0f;
                 aspect = 4.0f / 3.0f;
                 fov = 20.0f;
-                setViewportPerspective(gs->unk8, near, aspect, fov, 3800.0f);
+                setViewportPerspective(gs->unk8, near, aspect, fov, RACE_VIEWPORT_FAR_PLANE);
             } else {
                 near = 70.0f;
                 aspect = 4.0f / 3.0f;
                 fov = 20.0f;
-                setViewportPerspective(gs->unk8, near, aspect, fov, 2000.0f);
+                setViewportPerspective(gs->unk8, near, aspect, fov, BOSS_RACE_VIEW_FAR_PLANE);
             }
             setViewportPerspective(gs->unkC, near, aspect, fov, 10000.0f);
             break;
@@ -918,9 +922,15 @@ void initRaceViewports(void) {
                     far = 10000.0f;
                     new_var = far;
                     if (gs->memoryPoolId != 0xB) {
-                        setViewportPerspective(&gs->unk8[playerIdx], fov, aspect, near, 3000.0f);
+                        setViewportPerspective(
+                            &gs->unk8[playerIdx],
+                            fov,
+                            aspect,
+                            near,
+                            MULTIPLAYER_RACE_VIEW_FAR_PLANE
+                        );
                     } else {
-                        setViewportPerspective(&gs->unk8[playerIdx], fov, aspect, near, 2000.0f);
+                        setViewportPerspective(&gs->unk8[playerIdx], fov, aspect, near, BOSS_RACE_VIEW_FAR_PLANE);
                     }
                     setViewportPerspective(&gs->unkC[playerIdx], fov, aspect, near, new_var);
                 } while (0);

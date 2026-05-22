@@ -729,7 +729,10 @@ void renderFrame(u32 viScanline) {
                             G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION
                         );
 
-                        gSPFogPosition(gDisplayListAllocPtr++, node->fogMin, node->fogMax);
+                        // gSPFogPosition uses normalized depth positions, not world units.
+                        // 0 maps to the near plane and 1000 maps to the current projection far plane.
+                        // The world-space fog distance therefore depends on the viewport farPlane.
+                        gSPFogPosition(gDisplayListAllocPtr++, node->fogStartPermille, node->fogEndPermille);
                         gDPSetFogColor(gDisplayListAllocPtr++, node->fogR, node->fogG, node->fogB, node->fogA);
                     } else {
                         goto bail;
@@ -1135,11 +1138,11 @@ void initViewportNode(ViewportNode *arg0, ViewportNode *arg1, s32 arg2, s32 arg3
     memcpy(&arg0->modelingMatrix, &identityMatrix, sizeof(Transform3D));
     guPerspective(&arg0->perspectiveMatrix, &arg0->perspNorm, 30.0f, 1.3333334f, 20.0f, 2000.0f, 1.0f);
     arg0->fogA = 0xFF;
-    arg0->fogMin = 0x3DE;
+    arg0->fogStartPermille = 0x3DE;
     arg0->fogB = 0;
     arg0->fogG = 0;
     arg0->fogR = 0;
-    arg0->fogMax = 0x3E6;
+    arg0->fogEndPermille = 0x3E6;
     arg0->envR = 0;
     arg0->envG = 0;
     arg0->envB = 0;
@@ -1244,15 +1247,15 @@ void setViewportEnvColor(ViewportNode *node, u8 r, u8 g, u8 b) {
     node->envB = b;
 }
 
-void setViewportFogById(u16 viewportId, s16 fogMin, s16 fogMax, u8 fogR, u8 fogG, u8 fogB) {
+void setViewportFogById(u16 viewportId, s16 fogStartPermille, s16 fogEndPermille, u8 fogR, u8 fogG, u8 fogB) {
     ViewportNode *node;
 
     node = gRootViewport.unk8.list2_next;
 
     while (node != NULL) {
         if (node->id == viewportId) {
-            node->fogMin = fogMin;
-            node->fogMax = fogMax;
+            node->fogStartPermille = fogStartPermille;
+            node->fogEndPermille = fogEndPermille;
             node->fogR = fogR;
             node->fogG = fogG;
             node->fogB = fogB;
@@ -1375,16 +1378,16 @@ void enqueueViewportCallbackById(u16 viewportId, u8 poolIndex, void *callback, v
 }
 
 s32 isObjectCulled(Vec3i *arg0) {
-    if (gActiveViewport->cameraX - arg0->x + 0x0FEA0000 > 0x1FD40000) {
+    if (gActiveViewport->cameraX - arg0->x + RACE_CULL_BOX_HALF_EXTENT_FIXED > RACE_CULL_BOX_FULL_EXTENT_FIXED) {
         return TRUE;
     }
 
-    if (gActiveViewport->cameraY - arg0->y + 0x0FEA0000 > 0x1FD40000) {
+    if (gActiveViewport->cameraY - arg0->y + RACE_CULL_BOX_HALF_EXTENT_FIXED > RACE_CULL_BOX_FULL_EXTENT_FIXED) {
         return TRUE;
     }
 
     // compiler nonsense
     if (((!arg0) && (!arg0)) && (!arg0)) {}
 
-    return gActiveViewport->cameraZ - arg0->z + 0x0FEA0000 > 0x1FD40000;
+    return gActiveViewport->cameraZ - arg0->z + RACE_CULL_BOX_HALF_EXTENT_FIXED > RACE_CULL_BOX_FULL_EXTENT_FIXED;
 }

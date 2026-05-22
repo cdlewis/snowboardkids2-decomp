@@ -6,6 +6,13 @@
 #include "os_message.h"
 #include "sptask.h"
 
+// Object culling is an axis-aligned box around the active viewport
+// translation, not a spherical/radial draw-distance check.
+// The half-extent offset converts a signed range check into an unsigned comparison:
+//   (u32)(camera - object + HALF_EXTENT) > FULL_EXTENT  ⟺  |camera - object| > HALF_EXTENT
+#define RACE_CULL_BOX_HALF_EXTENT_FIXED 0x0FEA0000
+#define RACE_CULL_BOX_FULL_EXTENT_FIXED 0x1FD40000
+
 typedef struct {
     u8 light1R;
     u8 light1G;
@@ -131,8 +138,8 @@ typedef struct ViewportNode {
     u8 padding140[6];
     ViewportNode_ColorData unk148[1];
     u8 padding158[0x70];
-    s16 fogMin;
-    s16 fogMax;
+    s16 fogStartPermille;
+    s16 fogEndPermille;
     u8 fogR;
     u8 fogG;
     u8 fogB;
@@ -195,7 +202,7 @@ void handleFrameBufferComplete(s32 bufferIndex);
 
 void setViewportEnvColor(ViewportNode *node, u8 r, u8 g, u8 b);
 
-void setViewportFogById(u16 viewportId, s16 fogMin, s16 fogMax, u8 fogR, u8 fogG, u8 fogB);
+void setViewportFogById(u16 viewportId, s16 fogStartPermille, s16 fogEndPermille, u8 fogR, u8 fogG, u8 fogB);
 
 void setViewportScale(ViewportNode *arg0, f32 scaleX, f32 scaleY);
 
