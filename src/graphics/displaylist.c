@@ -75,6 +75,17 @@
     workPos.z += (((s64)dx) * totalDistSq) / (zDivisor);                                                              \
     sectorIndex = findTrackSector(trackGeom, groupIdx, &workPos)
 
+#define CULL_SPRITE(s)                                                              \
+    if ((u32)((gActiveViewport->cameraX - (s)->posX) + 0x0FEA0000) > 0x1FD40000U) { \
+        return;                                                                     \
+    }                                                                               \
+    if ((u32)((gActiveViewport->cameraZ - (s)->posZ) + 0x0FEA0000) > 0x1FD40000U) { \
+        return;                                                                     \
+    }                                                                               \
+    if ((u32)((gActiveViewport->cameraY - (s)->posY) + 0x0FEA0000) > 0x1FD40000U) { \
+        return;                                                                     \
+    }
+
 USE_OVERLAY(rand);
 
 typedef struct {
@@ -2127,15 +2138,7 @@ void enqueueCameraRelativeDisplayList(s32 arg0, DisplayListObject *arg1) {
 }
 
 void renderTexturedBillboardSprite(TexturedSpriteState *state) {
-    if ((u32)((gActiveViewport->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
-    if ((u32)((gActiveViewport->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
-    if ((u32)((gActiveViewport->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
+    CULL_SPRITE(state);
 
     if (state->matrix == NULL) {
         state->matrix = arenaAlloc16(0x40);
@@ -2209,15 +2212,7 @@ void enqueueTexturedBillboardSprite(s32 arg0, TexturedBillboardSprite *arg1) {
 }
 
 void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
-    if ((u32)((gActiveViewport->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
-    if ((u32)((gActiveViewport->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
-    if ((u32)((gActiveViewport->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
+    CULL_SPRITE(state);
 
     if (state->matrix == NULL) {
         state->matrix = arenaAlloc16(0x40);
@@ -2290,15 +2285,7 @@ void enqueueRotatedBillboardSprite(s32 arg0, MatrixEntry_202A0 *arg1) {
 }
 
 void renderTexturedBillboardSpriteTile(TexturedSpriteState *state) {
-    if ((u32)((gActiveViewport->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
-    if ((u32)((gActiveViewport->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
-    if ((u32)((gActiveViewport->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
+    CULL_SPRITE(state);
 
     if (state->matrix == NULL) {
         state->matrix = arenaAlloc16(0x40);
@@ -2380,15 +2367,7 @@ void enqueueTexturedBillboardSpriteTile(u16 arg0, TexturedBillboardSprite *arg1)
 }
 
 void renderAlphaBillboardSprite(AlphaSpriteState *state) {
-    if ((u32)((gActiveViewport->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
-    if ((u32)((gActiveViewport->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
-    if ((u32)((gActiveViewport->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
+    CULL_SPRITE(state);
 
     if (state->matrix == NULL) {
         state->matrix = arenaAlloc16(0x40);
@@ -2471,16 +2450,7 @@ void enqueueAlphaBillboardSprite(s32 arg0, loadAssetMetadata_arg *arg1) {
 }
 
 void renderAlphaSprite(AlphaSpriteState *state) {
-    // Frustum culling - check if sprite is within view distance
-    if ((u32)((gActiveViewport->cameraX - state->posX) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
-    if ((u32)((gActiveViewport->cameraZ - state->posZ) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
-    if ((u32)((gActiveViewport->cameraY - state->posY) + 0x0FEA0000) > 0x1FD40000U) {
-        return;
-    }
+    CULL_SPRITE(state);
 
     if (state->matrix == NULL) {
         state->matrix = arenaAlloc16(0x40);
