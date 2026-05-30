@@ -86,7 +86,7 @@ Contributing
 Contributions are most welcome! There are a variety of other ways you can assist:
 
 * Fix compiler warnings
-* Clean up code: you'll see plenty of hastily decopmiled functions that use pointer arithmatic rather than propre struct access. We need help cleaning up these functions.
+* Clean up code: you'll see plenty of hastily decompiled functions that use pointer arithmatic rather than propre struct access. We need help cleaning up these functions.
 * Document code: some functions/variables have useful names (rather than func_XXX or D_XXX) but most don't. Some that do are incorrectly named. We need lots of help investigating and documenting what all these functions do.
 * Support building the project on more platforms such as Windows or ARM Linux. Currently the build is only verified as working on Linux (x86) and macOS which limits who can contribute.
 
