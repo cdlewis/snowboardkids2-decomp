@@ -3,6 +3,7 @@
 #include "graphics/graphics.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
+#include "ui/player_select.h"
 
 typedef struct {
     s16 unk0;

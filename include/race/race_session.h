@@ -36,7 +36,6 @@ void initRumblePakCheckTask(void);
 void initRace(void);
 void playSoundEffect(s32 soundId);
 void initLevelSelectBasicState(void);
-void initPlayerCountSelectState(void);
 void initCharacterSelectScreen(void);
 void initStoryMapState(void);
 void storyMapLocationTextTask(func_80019CD0_1A8D0_arg *arg0);

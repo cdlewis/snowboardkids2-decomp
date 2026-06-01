@@ -1,3 +1,4 @@
+#include "ui/player_select.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "assets.h"
 #include "audio/audio.h"
@@ -11,29 +12,6 @@
 #include "ui/player_select_sprites.h"
 
 USE_OVERLAY(_1DB7A0);
-
-typedef enum {
-    PLAYER_COUNT_RESULT_NONE = 0,
-    PLAYER_COUNT_RESULT_PROCEED = 1,
-    PLAYER_COUNT_RESULT_CANCEL = 0x63,
-} PlayerCountMenuResult;
-
-typedef struct {
-    ViewportNode node;
-    void *assetData1;
-    void *assetData2;
-    s16 frameCounter;
-    union {
-        u16 selectedPlayerIndex;
-        struct {
-            u8 selectedPlayerIndexHi;
-            u8 selectedPlayerIndexLo;
-        } bytes;
-    } playerCount;
-    u8 connectedControllerCount;
-    u8 menuResult;
-    u8 menuState;
-} PlayerCountSelectState;
 
 u8 gPlayerSlotDefaults[] = { 0x00, 0x02, 0x05, 0x01, 0x00, 0x00, 0x00, 0x00,
                              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };

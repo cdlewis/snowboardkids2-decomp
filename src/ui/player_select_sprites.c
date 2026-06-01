@@ -4,33 +4,17 @@
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "system/task_scheduler.h"
-
-typedef struct {
-    u8 hi;
-    u8 lo;
-} U16Bytes;
-
-typedef struct {
-    /* 0x000 */ u8 pad0[0x1E0];
-    /* 0x1E0 */ u16 unk1E0;
-    /* 0x1E2 */ union {
-        u16 val;
-        U16Bytes bytes;
-    } unk1E2;
-    /* 0x1E4 */ u8 pad1[2];
-    /* 0x1E6 */ u8 unk1E6;
-} PlayerSelectAllocation;
+#include "ui/player_select.h"
 
 u16 D_800B09A0_1DC080[] = { 0x0000, 0x0001, 0x0002, 0x0001 };
 s16 gPlayerCountOptionPositions[] = { 0xFFC0, 0x0020, 0x0000, 0x0020, 0xFF98, 0x0040, 0x0028, 0x0040 };
 s16 D_800B09B8_1DC098[] = { 0xFFD7, 0x0024, 0xFFD7, 0x0024, 0xFFC8, 0x0026,
                             0xFFD8, 0x0024, 0x0000, 0x0000, 0x0000, 0x0000 };
 
-void updatePlayerSelectAnim(PlayerSelectState *);
 void cleanupPlayerSelectTask(PlayerSelectSpriteTask *);
 
 void initPlayerSelectSprites(PlayerSelectState *state) {
-    PlayerSelectAllocation *allocation;
+    PlayerCountSelectState *allocation;
     void *spriteData;
     s32 i;
     s32 yPos;
@@ -73,7 +57,7 @@ void initPlayerSelectSprites(PlayerSelectState *state) {
     state->unk2C = 0;
     state->unk2D = 0;
     {
-        u16 playerIdx = allocation->unk1E2.val;
+        u16 playerIdx = allocation->playerCount.selectedPlayerIndex;
         state->animState = 0;
         state->animCounter = 0;
         state->playerIndex = playerIdx;
@@ -83,7 +67,7 @@ void initPlayerSelectSprites(PlayerSelectState *state) {
 }
 
 void updatePlayerSelectAnim(PlayerSelectState *state) {
-    PlayerSelectAllocation *allocation;
+    PlayerCountSelectState *allocation;
     s32 i;
     volatile PlayerSelectSprite *vsprite;
 
@@ -100,7 +84,7 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
             break;
 
         case 1:
-            if (getViewportFadeMode((ViewportNode *)allocation) == 0) {
+            if (getViewportFadeMode(&allocation->node) == 0) {
                 state->unk2C = 2;
             }
             break;
@@ -113,8 +97,8 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
             break;
 
         case 3:
-            if (allocation->unk1E2.val != state->playerIndex) {
-                state->playerIndex = allocation->unk1E2.val;
+            if (allocation->playerCount.selectedPlayerIndex != state->playerIndex) {
+                state->playerIndex = allocation->playerCount.selectedPlayerIndex;
                 state->animState = 0;
                 state->animCounter = 0;
             } else {
@@ -125,7 +109,7 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
             }
 
             i = 0;
-            if (allocation->unk1E2.val != state->slotIndex) {
+            if (allocation->playerCount.selectedPlayerIndex != state->slotIndex) {
                 s16 scaleConst = 0x500;
                 s16 alphaConst = 0x80;
                 s32 divConst = 0x8000;
@@ -179,11 +163,11 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
                 } while (i < 2);
             }
 
-            if (allocation->unk1E6 == PLAYER_COUNT_MENU_CONFIRM_WAIT) {
+            if (allocation->menuState == PLAYER_COUNT_MENU_CONFIRM_WAIT) {
                 s32 slot;
                 slot = state->slotIndex;
                 state->unk2C = 4;
-                if (slot == allocation->unk1E2.bytes.lo) {
+                if (slot == allocation->playerCount.bytes.selectedPlayerIndexLo) {
                     PlayerSelectSprite *sprite;
                     s32 frameBase;
                     s32 offset;
@@ -201,10 +185,10 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
             break;
 
         case 4:
-            if (state->slotIndex == allocation->unk1E2.val) {
+            if (state->slotIndex == allocation->playerCount.selectedPlayerIndex) {
                 i = 0;
                 do {
-                    if (allocation->unk1E0 & 1) {
+                    if (allocation->frameCounter & 1) {
                         state->sprites[i].unk13 = 0xFF;
                     } else {
                         state->sprites[i].unk13 = 0;
@@ -212,7 +196,7 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
                     i++;
                 } while (i < 2);
             }
-            if (allocation->unk1E6 == PLAYER_COUNT_MENU_SELECTING) {
+            if (allocation->menuState == PLAYER_COUNT_MENU_SELECTING) {
                 state->unk2C = 3;
             }
             break;
@@ -279,9 +263,9 @@ void initPlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
 }
 
 void updatePlayerCountHeaderSprite(PlayerSelectSpriteTask *arg0) {
-    GameState *allocation = getCurrentAllocation();
+    PlayerCountSelectState *allocation = getCurrentAllocation();
 
-    if (allocation->unk1E6 == PLAYER_COUNT_MENU_CANCEL_OK) {
+    if (allocation->menuState == PLAYER_COUNT_MENU_CANCEL_OK) {
         arg0->x = -80;
         arg0->frameIndex = 7;
     } else {
@@ -306,11 +290,11 @@ void initPlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
 }
 
 void updatePlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
-    PlayerSelectAllocation *allocation = getCurrentAllocation();
+    PlayerCountSelectState *allocation = getCurrentAllocation();
 
-    arg0->x = D_800B09B8_1DC098[allocation->unk1E2.val * 2];
-    arg0->y = D_800B09B8_1DC098[allocation->unk1E2.val * 2 + 1];
-    arg0->frameIndex = allocation->unk1E2.val + 2;
+    arg0->x = D_800B09B8_1DC098[allocation->playerCount.selectedPlayerIndex * 2];
+    arg0->y = D_800B09B8_1DC098[allocation->playerCount.selectedPlayerIndex * 2 + 1];
+    arg0->frameIndex = allocation->playerCount.selectedPlayerIndex + 2;
 
     enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, arg0);
 }
@@ -332,9 +316,9 @@ void initCharacterReadyIndicator(PlayerSelectSpriteTask *arg0) {
 }
 
 void updateCharacterReadyIndicator(void *arg0) {
-    GameState *allocation = getCurrentAllocation();
+    PlayerCountSelectState *allocation = getCurrentAllocation();
 
-    if (allocation->unk1E6 == PLAYER_COUNT_MENU_CONFIRM_OK) {
+    if (allocation->menuState == PLAYER_COUNT_MENU_CONFIRM_OK) {
         enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, arg0);
     }
 }

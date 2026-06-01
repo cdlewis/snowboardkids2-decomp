@@ -2,13 +2,6 @@
 
 #include "common.h"
 
-typedef enum {
-    PLAYER_COUNT_MENU_SELECTING = 0,
-    PLAYER_COUNT_MENU_CONFIRM_WAIT = 1,
-    PLAYER_COUNT_MENU_CONFIRM_OK = 2,
-    PLAYER_COUNT_MENU_CANCEL_OK = 10,
-} PlayerCountMenuState;
-
 typedef struct {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
@@ -20,7 +13,7 @@ typedef struct {
     /* 0x10 */ s16 alpha;
     /* 0x12 */ u8 unk12;
     /* 0x13 */ u8 unk13;
-} PlayerSelectSprite; // size 0x14
+} PlayerSelectSprite;
 
 typedef struct {
     /* 0x00 */ PlayerSelectSprite sprites[2];
@@ -30,7 +23,7 @@ typedef struct {
     /* 0x2B */ u8 slotIndex;
     /* 0x2C */ u8 unk2C;
     /* 0x2D */ u8 unk2D;
-} PlayerSelectState; // size 0x2E
+} PlayerSelectState;
 
 typedef struct {
     /* 0x00 */ s16 x;
@@ -41,7 +34,7 @@ typedef struct {
     /* 0x0C */ u8 slotIndex;
     /* 0x0D */ u8 playerIndex;
     /* 0x0E */ char pad[2];
-} PlayerSelectSpriteTask; // size 0x10
+} PlayerSelectSpriteTask;
 
 void initPlayerSelectSprites(PlayerSelectState *state);
 void enqueuePlayerSelectSpritesRender(PlayerSelectSpriteTask *arg0);
@@ -56,3 +49,4 @@ void initCharacterReadyIndicator(PlayerSelectSpriteTask *arg0);
 void updateCharacterReadyIndicator(void *arg0);
 void cleanupCharacterReadyIndicator(PlayerSelectSpriteTask *arg0);
 void initPlayerCountSelectSprites(PlayerSelectSpriteTask *arg0);
+void updatePlayerSelectAnim(PlayerSelectState *);
