@@ -8,8 +8,8 @@
 
 u16 D_800B09A0_1DC080[] = { 0x0000, 0x0001, 0x0002, 0x0001 };
 s16 gPlayerCountOptionPositions[] = { 0xFFC0, 0x0020, 0x0000, 0x0020, 0xFF98, 0x0040, 0x0028, 0x0040 };
-s16 D_800B09B8_1DC098[] = { 0xFFD7, 0x0024, 0xFFD7, 0x0024, 0xFFC8, 0x0026,
-                            0xFFD8, 0x0024, 0x0000, 0x0000, 0x0000, 0x0000 };
+s16 gPlayerCountIndicatorPositions[] = { 0xFFD7, 0x0024, 0xFFD7, 0x0024, 0xFFC8, 0x0026,
+                                         0xFFD8, 0x0024, 0x0000, 0x0000, 0x0000, 0x0000 };
 
 void cleanupPlayerSelectTask(PlayerSelectSpriteTask *);
 
@@ -292,8 +292,8 @@ void initPlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
 void updatePlayerIndicatorSprite(PlayerSelectSpriteTask *arg0) {
     PlayerCountSelectState *allocation = getCurrentAllocation();
 
-    arg0->x = D_800B09B8_1DC098[allocation->playerCount.selectedPlayerIndex * 2];
-    arg0->y = D_800B09B8_1DC098[allocation->playerCount.selectedPlayerIndex * 2 + 1];
+    arg0->x = gPlayerCountIndicatorPositions[allocation->playerCount.selectedPlayerIndex * 2];
+    arg0->y = gPlayerCountIndicatorPositions[allocation->playerCount.selectedPlayerIndex * 2 + 1];
     arg0->frameIndex = allocation->playerCount.selectedPlayerIndex + 2;
 
     enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, arg0);
