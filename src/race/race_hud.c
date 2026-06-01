@@ -296,28 +296,6 @@ typedef struct {
 } SkyRenderTaskCleanupArg;
 
 typedef struct {
-    u8 _pad0[0x20];
-    s32 displayListData1;
-    void *skyAsset1;
-    void *skyAsset2;
-    s32 unk2C;
-    u8 _pad30[0xC];
-    u8 courseFogTransform[0x20];
-    s32 displayListData2;
-    void *skyAsset1Copy;
-    void *skyAsset2Copy;
-    s32 unk68;
-    u8 _pad6C[0xC];
-    u8 defaultFogTransform[0x20];
-    void *unk98;
-    void *unk9C;
-    void *unkA0;
-    s32 unkA4;
-    u8 _padA8[0xC];
-    s16 skyType;
-} SkyRenderTaskState;
-
-typedef struct {
     u8 _pad[0x30];
     u8 unk30[0x2C];
     u8 unk5C;
@@ -924,21 +902,21 @@ void updateGoldCoinsTask(GoldCoinUpdateState *arg0);
 void initSkyRenderTask(SkyRenderTaskState *state) {
     Transform3D *identity = &identityMatrix;
 
-    memcpy(state, identity, sizeof(Transform3D));
+    memcpy(&state->transform, identity, sizeof(Transform3D));
 
     state->displayListData1 = getSkyDisplayLists1ByIndex(state->skyType);
     state->skyAsset1 = loadUncompressedAssetByIndex(state->skyType);
     state->skyAsset2 = loadCompressedSegment2AssetByIndex(state->skyType);
     state->unk2C = 0;
 
-    memcpy(state->courseFogTransform, identity, sizeof(Transform3D));
+    memcpy(&state->courseFogTransform, identity, sizeof(Transform3D));
 
     state->displayListData2 = getSkyDisplayLists2ByIndex(state->skyType);
     state->unk68 = 0;
     state->skyAsset1Copy = state->skyAsset1;
     state->skyAsset2Copy = state->skyAsset2;
 
-    memcpy(state->defaultFogTransform, identity, sizeof(Transform3D));
+    memcpy(&state->defaultFogTransform, identity, sizeof(Transform3D));
 
     state->unk98 = &D_80094DD0_959D0;
     state->unkA4 = 0;
