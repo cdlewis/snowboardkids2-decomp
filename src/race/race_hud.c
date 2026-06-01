@@ -296,11 +296,6 @@ typedef struct {
 } SkyRenderTaskCleanupArg;
 
 typedef struct {
-    u8 _pad[0xB4];
-    s16 skyType;
-} ScheduledTask;
-
-typedef struct {
     u8 _pad0[0x20];
     s32 displayListData1;
     void *skyAsset1;
@@ -873,7 +868,7 @@ void updateItemBoxBurstFrame(ItemBoxBurstEffectState *state);
 void cleanupItemBoxBurstEffect(ItemBoxBurstEffectState *arg0);
 void cleanupItemHomingProjectileTask(func_8004B264_4BE64_arg *arg0);
 void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *);
-void dispatchSkyRenderCallback(ScheduledTask *);
+void dispatchSkyRenderCallback(SkyRenderTaskState *);
 void updateItemHomingProjectileMovement(ItemHomingProjectileMoveArg *);
 void renderSceneAnimationTask(SceneAnimationTaskNew *arg0);
 void cleanupBossHomingProjectileTask(BossHomingProjectileTask *);
@@ -954,7 +949,7 @@ void initSkyRenderTask(SkyRenderTaskState *state) {
     setCallback(&dispatchSkyRenderCallback);
 }
 
-void dispatchSkyRenderCallback(ScheduledTask *task) {
+void dispatchSkyRenderCallback(SkyRenderTaskState *task) {
     if (task->skyType == 1) {
         if ((getRenderContext() & 0xFF) == 0x37) {
             setCallbackWithContinue(renderSkyDisplayListsWithCourseFog);
@@ -1046,7 +1041,7 @@ void cleanupSkyRenderTask(SkyRenderTaskCleanupArg *state) {
 }
 
 void scheduleSkyRenderTask(s32 skyType) {
-    ScheduledTask *task = scheduleTask(initSkyRenderTask, 0, 0, 0xD2);
+    SkyRenderTaskState *task = scheduleTask(initSkyRenderTask, 0, 0, 0xD2);
     if (task != NULL) {
         task->skyType = skyType;
     }
