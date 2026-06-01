@@ -341,7 +341,7 @@ void updateSaveSlotSelectionScreen(void) {
                         xPos = (u16)state->slideOffset;
                     }
                     setModelCameraTransform(
-                        (u8 *)state + slotOffset,
+                        (ViewportNode *)((u8 *)state + slotOffset),
                         xPos,
                         (s16)(yPos >> 16),
                         -0xA0,

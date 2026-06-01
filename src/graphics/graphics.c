@@ -1037,8 +1037,7 @@ void updateViewportBounds(void) {
     }
 }
 
-void setModelCameraTransform(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6) {
-    ViewportNode *node = (ViewportNode *)arg0;
+void setModelCameraTransform(ViewportNode *node, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6) {
     node->originX = arg1;
     node->originY = arg2;
     node->viewportLeft = arg3;

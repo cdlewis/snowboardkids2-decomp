@@ -220,7 +220,7 @@ void initViewportNode(ViewportNode *node, ViewportNode *parent, s32 slotIndex, s
 
 void setViewportPerspective(ViewportNode *node, f32 fov, f32 aspect, f32 near, f32 far);
 
-void setModelCameraTransform(void *, s16, s16, s16, s16, s16, s16);
+void setModelCameraTransform(ViewportNode *, s16, s16, s16, s16, s16, s16);
 
 void unlinkNode(ViewportNode *player);
 

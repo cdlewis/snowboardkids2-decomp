@@ -393,7 +393,7 @@ void initSceneRenderNode(
     initViewportNode(&node->base, NULL, slotIndex, priority, 1);
     setViewportScale(&node->base, 1.0f, 1.0f);
     setViewportId(&node->base, sceneId);
-    setModelCameraTransform(node, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    setModelCameraTransform(&node->base, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     setViewportPerspective(&node->base, 40.0f, 1.3333334f, 10.0f, 10000.0f);
 
     node->lightColor.r2 = 0;

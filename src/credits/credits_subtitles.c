@@ -56,8 +56,9 @@ typedef struct {
     u8 _pad0[0x2];
     s16 unk2;
     u8 _pad4[0x3B4];
-    u8 unk3B8[0x1D8];
-    u8 unk590[0x3CC];
+    ViewportNode unk3B8;
+    ViewportNode unk590;
+    u8 _pad768[0x1F4];
     s32 unk95C;
     void *unk960;
     Table_B934 *unk964;
