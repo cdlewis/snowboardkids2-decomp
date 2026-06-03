@@ -4,21 +4,21 @@
 #include "math/geometry.h"
 
 typedef struct {
-    s16 unk0[17];
-    Vec3s unk22[5];
+    s16 carouselXPositions[17];
+    Vec3s menuPositions[5];
 } CharSelectModelPositions;
 
 typedef struct {
     Vec3s positions;
     Vec3s yIncrements[4];
-    s16 unk1E;
+    s16 iconYIncrement;
 } CharSelectIconPositions;
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2[48];
-    s16 unkBE[13];
+    u8 numStats;
+    u8 numColumns;
+    u8 itemStats[48];
+    s16 iconTargetY[13];
 } CharSelectItemData;
 
 typedef struct {
@@ -27,26 +27,26 @@ typedef struct {
 } PlayerNumberPositions;
 
 typedef struct {
-    s16 unk0[11];
+    s16 iconPositions[11];
     s16 D_8008DE02[11];
 } CharSelectStatsPositions;
 
 typedef struct {
-    u8 unk0[2];
-    s16 unk2[2];
-    s8 unk6[28];
+    u8 arrowSpriteIndices[2];
+    s16 arrowSpriteOffsets[2];
+    s8 arrowOffsets[28];
     s16 arrowPositions[13];
 } CharSelectArrowData;
 
 typedef struct {
-    s16 unk0[11];
-    u16 unk16[17];
+    s16 boardPositions[11];
+    u16 boardWidths[17];
 } CharSelectBoardData;
 
 typedef struct {
-    s16 unk0[1];
-    s16 unk2[16];
-    s16 unk22[17];
+    s16 statSpacing[1];
+    s16 statPositions[16];
+    s16 namePositions[17];
 } CharSelectAnimData;
 
 s32 countUnlockedSlotsInCategory(u8 category);

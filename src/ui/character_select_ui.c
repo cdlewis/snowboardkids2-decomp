@@ -15,12 +15,12 @@ typedef struct {
     ViewportNode modelViewports[4];
     ViewportNode iconViewports[4];
     ViewportNode cameraNode;
-    Transform3D pad17F8[4];
+    Transform3D characterRotations[4];
     void *mainAssets;
     void *iconAssets;
-    u16 animAngles[4];
-    s16 zoomValues[4];
-    u8 pad1890[8];
+    u16 carouselAngles[4];
+    s16 previewSpinAngles[4];
+    u8 unused1890[8];
     u16 menuStates[4];
     u16 frameCounters[4];
     u8 charRow[4];
@@ -41,17 +41,17 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x24];
-    u8 unk24;
+    u8 iconHidePlayerIndex;
     u8 pad25[3];
-    u8 unk28;
+    u8 boardModelPlayerIndex;
     u8 pad29[0xB];
-    u8 unk34;
+    u8 menuPlayerIndex;
     u8 pad35[0x1D];
-    u8 unk52;
+    u8 iconsPlayerIndex;
     u8 pad53[0x22];
-    u8 unk75;
+    u8 statsPlayerIndex;
     u8 pad76[0x2B];
-    u8 unkA1;
+    u8 previewModelPlayerIndex;
 } CharSelectTaskNode;
 
 extern s32 gControllerInputs[4];
@@ -79,6 +79,24 @@ void cleanupCharacterSelect(void);
 void onCharacterSelectProceed(void);
 void onCharacterSelectCancel(void);
 
+#define CHAR_SELECT_MENU_NAV 0
+#define CHAR_SELECT_MENU_ROTATING 1
+#define CHAR_SELECT_MENU_CONFIRMING 2
+#define CHAR_SELECT_CHAR_ROW_BROWSE 3
+#define CHAR_SELECT_CHAR_ROW_SLIDE 4
+#define CHAR_SELECT_CHAR_ROW_FLASH 5
+#define CHAR_SELECT_CHAR_CONFIRMED 6
+#define CHAR_SELECT_CHAR_VARIANT_SLIDE 9
+#define CHAR_SELECT_CHAR_VARIANT_BROWSE 10
+#define CHAR_SELECT_BOARD_BROWSE 15
+#define CHAR_SELECT_BOARD_SLIDE 16
+#define CHAR_SELECT_BOARD_FLASH 17
+#define CHAR_SELECT_CANCEL_EXIT 20
+#define CHAR_SELECT_READY_CONFIRM 25
+#define CHAR_SELECT_P2_NAME_REVEAL 26
+#define CHAR_SELECT_READY_WAIT 27
+#define CHAR_SELECT_P2_CANCEL 30
+
 USE_ASSET(_4237C0);
 USE_ASSET(playerCountSelectSprites);
 USE_ASSET(tiledSnowmanAsset);
@@ -98,7 +116,7 @@ u16 boardConfirmSoundIds[] = {
     0x0050, 0x5000, 0x5050, 0x5000, 0xFFFF, 0xFF00, 0x0050, 0x5000, 0x7F7F, 0x7F00, 0xFFFF, 0xFF00,
 };
 
-CharSelectModelPositions D_8008DD2C_8E92C = {
+CharSelectModelPositions charSelectModelPositions = {
     {
      0x0050, 0x5000,
      (s16)0xFFFF,
@@ -163,7 +181,7 @@ PlayerNumberPositions playerNumberPositions = {
     { (s16)0xFFD4, (s16)0xFFC0, (s16)0xFFD4 },
 };
 
-CharSelectStatsPositions D_8008DDEC_8E9EC = {
+CharSelectStatsPositions charSelectStatsPositions = {
     {
      (s16)0xFFA0,
      (s16)0xFFC8,
@@ -183,7 +201,7 @@ CharSelectStatsPositions D_8008DDEC_8E9EC = {
      0x0070, },
 };
 
-CharSelectArrowData D_8008DE18_8EA18 = {
+CharSelectArrowData charSelectArrowDataTable = {
     { 0x00, 0x04 },
     { 0x0005, 0x0006 },
     {
@@ -203,11 +221,11 @@ CharSelectArrowData D_8008DE18_8EA18 = {
      },
 };
 
-s16 D_8008DE54_8EA54[] = {
+s16 charSelectNamePositions[] = {
     0x0000, 0x0030, (s16)0xFFE8, (s16)0xFFA8, 0x0030, (s16)0xFFD4, (s16)0xFFF0, (s16)0xFFD4,
 };
 
-CharSelectBoardData D_8008DE64_8EA64 = {
+CharSelectBoardData charSelectBoardDataTable = {
     {
      (s16)0xFFF0,
      (s16)0xFFD4,
@@ -232,11 +250,11 @@ CharSelectBoardData D_8008DE64_8EA64 = {
      0x003B, },
 };
 
-s16 D_8008DE9C_8EA9C[] = {
+s16 charSelectNameSpritePositions[] = {
     0x0032, 0x0000, 0x0068, (s16)0xFFA8, 0x0070, (s16)0xFFD4, 0x0030, (s16)0xFFD4,
 };
 
-CharSelectAnimData D_8008DEAC_8EAAC = {
+CharSelectAnimData charSelectAnimDataTable = {
     { 0x0030 },
     {
      (s16)0xFFD4,
@@ -285,14 +303,14 @@ void initCharacterSelectScreen(void) {
     }
 
     for (i = 0; i < 4; i++) {
-        state->menuStates[i] = 0;
+        state->menuStates[i] = CHAR_SELECT_MENU_NAV;
         state->unlockedSlotIndex[i] = 0;
         state->frameCounters[i] = 0;
-        state->zoomValues[i] = 0x800;
+        state->previewSpinAngles[i] = 0x800;
         state->iconDisplayState[i] = 0;
         memcpy((void *)((s32)state + i * 0x20 + 0x17F8), &identityMatrix, sizeof(Transform3D));
         *(s32 *)((s32)state + i * 0x20 + 0x1814) = (s32)0xFFEA0000;
-        state->animAngles[i] = 0;
+        state->carouselAngles[i] = 0;
         state->cursorIndices[i] = (s8)(state->maxMenuOption - 2);
     }
 
@@ -355,17 +373,17 @@ void initCharacterSelectScreen(void) {
         state->boardId[i] = boardId;
         state->savedBoardId[i] = boardId;
         task = (CharSelectTaskNode *)scheduleTask(initCharSelectBoardModel, 0, 0, 0x5A);
-        task->unk28 = i;
+        task->boardModelPlayerIndex = i;
         task = (CharSelectTaskNode *)scheduleTask(initCharSelectPreviewModel, 0, 0, 0x5A);
-        task->unkA1 = i;
+        task->previewModelPlayerIndex = i;
         task = (CharSelectTaskNode *)scheduleTask(initCharSelectMenu, 0, 0, 0x5A);
-        task->unk34 = i;
+        task->menuPlayerIndex = i;
         task = (CharSelectTaskNode *)scheduleTask(initCharSelectIconHideSprites, 0, 0, 0x5A);
-        task->unk24 = i;
+        task->iconHidePlayerIndex = i;
         task = (CharSelectTaskNode *)scheduleTask(initCharSelectStats, 0, 0, 0x5A);
-        task->unk75 = i;
+        task->statsPlayerIndex = i;
         task = (CharSelectTaskNode *)scheduleTask(initCharSelectPlayer2NameSprites, 0, 0, 0x5A);
-        task->unk24 = i;
+        task->iconHidePlayerIndex = i;
     }
 
     scheduleTask(initCharSelectPlayerLabels, 0, 0, 0x5A);
@@ -405,7 +423,7 @@ void scheduleCharacterSelectTasks(void) {
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         task = (CharSelectTaskNode *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
         if (task != NULL) {
-            task->unk52 = i;
+            task->iconsPlayerIndex = i;
         }
     }
 
@@ -441,7 +459,7 @@ void updateCharacterSelect(void) {
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         prevCursorIdx = state->cursorIndices[i];
         switch (state->menuStates[i]) {
-            case 0:
+            case CHAR_SELECT_MENU_NAV:
                 if (gControllerInputs[i] & 0x40100) {
                     if (state->cursorIndices[i] < (state->maxMenuOption - 1)) {
                         state->cursorIndices[i]++;
@@ -452,16 +470,16 @@ void updateCharacterSelect(void) {
                     }
                 }
                 if (prevCursorIdx != state->cursorIndices[i]) {
-                    state->menuStates[i] = 1;
+                    state->menuStates[i] = CHAR_SELECT_MENU_ROTATING;
                     state->prevCursorIndex[i] = prevCursorIdx;
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                 } else if (gControllerInputs[i] & 0x8000) {
-                    state->menuStates[i] = 2;
+                    state->menuStates[i] = CHAR_SELECT_MENU_CONFIRMING;
                     playSoundEffectOnChannelNoPriority(0x2C, i);
                 } else if (gControllerInputs[i] & 0x4000) {
                     playSoundEffect(0x2E);
                     for (j = 0; j < gGameSessionContext->numPlayers; j++) {
-                        state->menuStates[j] = 0x14;
+                        state->menuStates[j] = CHAR_SELECT_CANCEL_EXIT;
                     }
 
                     i = j;
@@ -469,7 +487,7 @@ void updateCharacterSelect(void) {
 
                 break;
 
-            case 1:
+            case CHAR_SELECT_MENU_ROTATING:
                 if (state->cursorIndices[i] == (state->maxMenuOption - 1)) {
                     rotDir = -0x200;
                 } else if (state->cursorIndices[i] == (state->maxMenuOption - 3)) {
@@ -478,20 +496,21 @@ void updateCharacterSelect(void) {
                     rotDir = (state->prevCursorIndex[i] == (state->maxMenuOption - 1)) ? 0x200 : -0x200;
                 }
 
-                state->animAngles[i] = (state->animAngles[i] + rotDir) & 0x1FFF;
-                if (state->animAngles[i] == 0x1800 || state->animAngles[i] == 0x800 || state->animAngles[i] == 0) {
-                    state->menuStates[i] = 0;
+                state->carouselAngles[i] = (state->carouselAngles[i] + rotDir) & 0x1FFF;
+                if (state->carouselAngles[i] == 0x1800 || state->carouselAngles[i] == 0x800 ||
+                    state->carouselAngles[i] == 0) {
+                    state->menuStates[i] = CHAR_SELECT_MENU_NAV;
                 }
-                createYRotationMatrix(&state->pad17F8[i], state->animAngles[i]);
+                createYRotationMatrix(&state->characterRotations[i], state->carouselAngles[i]);
                 break;
 
-            case 2:
+            case CHAR_SELECT_MENU_CONFIRMING:
                 state->frameCounters[i]++;
                 if (state->frameCounters[i] != 0x10) {
                     break;
                 }
 
-                state->menuStates[i] = 3;
+                state->menuStates[i] = CHAR_SELECT_CHAR_ROW_BROWSE;
                 state->frameCounters[i] = 0;
                 if (state->cursorIndices[i] == (state->maxMenuOption - 1)) {
                     setViewportLightColors(
@@ -502,24 +521,24 @@ void updateCharacterSelect(void) {
                     );
                     terminateTasksByTypeAndID(1, i & 0xFF);
                 } else if (state->cursorIndices[i] == (state->maxMenuOption - 3)) {
-                    state->menuStates[i] = 0xF;
+                    state->menuStates[i] = CHAR_SELECT_BOARD_BROWSE;
                     state->iconDisplayState[i] = 1;
                 } else if (state->cursorIndices[i] == (state->maxMenuOption - 2)) {
-                    state->menuStates[i] = 0x19;
+                    state->menuStates[i] = CHAR_SELECT_READY_CONFIRM;
                 }
                 break;
 
-            case 3:
+            case CHAR_SELECT_CHAR_ROW_BROWSE:
                 if (gControllerInputs[i] & 0x4000) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
-                    state->menuStates[i] = 0;
+                    state->menuStates[i] = CHAR_SELECT_MENU_NAV;
                     task = (CharSelectTaskNode *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
                     if (task != 0) {
-                        task->unk52 = i;
+                        task->iconsPlayerIndex = i;
                     }
                     state->cursorIndices[i] = state->maxMenuOption - 2;
-                    state->animAngles[i] = 0;
-                    createYRotationMatrix(&state->pad17F8[i], 0);
+                    state->carouselAngles[i] = 0;
+                    createYRotationMatrix(&state->characterRotations[i], 0);
                     setViewportLightColors(
                         state->playerViewports[i].id,
                         1,
@@ -552,7 +571,7 @@ void updateCharacterSelect(void) {
                 }
 
                 if (prevCharRow != state->charRow[i]) {
-                    state->menuStates[i] = 4;
+                    state->menuStates[i] = CHAR_SELECT_CHAR_ROW_SLIDE;
                     state->slideState[i] = 0;
                     state->savedCharRow[i] = prevCharRow;
                     state->savedCharCol[i] = state->charCol[i];
@@ -569,38 +588,38 @@ void updateCharacterSelect(void) {
 
                     secTask = (CharSelectTaskNode *)scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
                     if (secTask != 0) {
-                        secTask->unkA1 = i;
+                        secTask->previewModelPlayerIndex = i;
                     }
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                 } else if (gControllerInputs[i] & 0x8000) {
                     state->frameCounters[i] = 0;
                     state->unlockedSlotIndex[i] = 0;
-                    state->menuStates[i] = 5;
+                    state->menuStates[i] = CHAR_SELECT_CHAR_ROW_FLASH;
                     playSoundEffectOnChannelNoPriority(0x2C, i);
                     playSoundEffect(charRowConfirmSoundIds[state->charRow[i]]);
                 }
                 break;
 
-            case 4:
+            case CHAR_SELECT_CHAR_ROW_SLIDE:
 
-            case 9:
+            case CHAR_SELECT_CHAR_VARIANT_SLIDE:
                 if (state->slideState[i] != 2) {
                     break;
                 }
 
                 state->slideState[i] = 0;
-                if (state->menuStates[i] == 4) {
-                    state->menuStates[i] = 3;
+                if (state->menuStates[i] == CHAR_SELECT_CHAR_ROW_SLIDE) {
+                    state->menuStates[i] = CHAR_SELECT_CHAR_ROW_BROWSE;
                 } else {
-                    state->menuStates[i] = 10;
+                    state->menuStates[i] = CHAR_SELECT_CHAR_VARIANT_BROWSE;
                 }
                 break;
 
-            case 5:
+            case CHAR_SELECT_CHAR_ROW_FLASH:
 
-            case 6:
+            case CHAR_SELECT_CHAR_CONFIRMED:
                 state->frameCounters[i]++;
-                if (state->menuStates[i] == 6) {
+                if (state->menuStates[i] == CHAR_SELECT_CHAR_CONFIRMED) {
                     if (state->frameCounters[i] & 1) {
                         state->iconDisplayState[i] = 2;
                     } else {
@@ -614,8 +633,8 @@ void updateCharacterSelect(void) {
 
                 state->frameCounters[i] = 0;
                 state->iconDisplayState[i] = 0;
-                if (state->menuStates[i] == 5) {
-                    state->menuStates[i] = 10;
+                if (state->menuStates[i] == CHAR_SELECT_CHAR_ROW_FLASH) {
+                    state->menuStates[i] = CHAR_SELECT_CHAR_VARIANT_BROWSE;
                     if (state->charRow[i] == 3) {
                         limit = 9;
                     } else {
@@ -646,14 +665,14 @@ void updateCharacterSelect(void) {
 
                     task = (CharSelectTaskNode *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
                     if (task != 0) {
-                        task->unk52 = i;
+                        task->iconsPlayerIndex = i;
                         break;
                     }
                 } else {
-                    state->menuStates[i] = 0;
+                    state->menuStates[i] = CHAR_SELECT_MENU_NAV;
                     state->cursorIndices[i] = state->maxMenuOption - 2;
-                    state->animAngles[i] = 0;
-                    createYRotationMatrix(&state->pad17F8[i], 0);
+                    state->carouselAngles[i] = 0;
+                    createYRotationMatrix(&state->characterRotations[i], 0);
                     setViewportLightColors(
                         state->playerViewports[i].id,
                         1,
@@ -663,10 +682,10 @@ void updateCharacterSelect(void) {
                 }
                 break;
 
-            case 10:
+            case CHAR_SELECT_CHAR_VARIANT_BROWSE:
                 if (gControllerInputs[i] & 0x4000) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
-                    state->menuStates[i] = 3;
+                    state->menuStates[i] = CHAR_SELECT_CHAR_ROW_BROWSE;
                     terminateTasksByTypeAndID(1, i & 0xFF);
                     break;
                 }
@@ -709,7 +728,7 @@ void updateCharacterSelect(void) {
                 }
 
                 if (prevSlotIdx != state->unlockedSlotIndex[i]) {
-                    state->menuStates[i] = 9;
+                    state->menuStates[i] = CHAR_SELECT_CHAR_VARIANT_SLIDE;
                     state->slideState[i] = 0;
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                     state->savedCharRow[i] = state->charRow[i];
@@ -721,13 +740,13 @@ void updateCharacterSelect(void) {
                     }
                     secTask = (CharSelectTaskNode *)scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
                     if (secTask != 0) {
-                        secTask->unkA1 = i;
+                        secTask->previewModelPlayerIndex = i;
                         break;
                     }
                 } else {
                     if (gControllerInputs[i] & 0x8000) {
                         state->frameCounters[i] = 0;
-                        state->menuStates[i] = 6;
+                        state->menuStates[i] = CHAR_SELECT_CHAR_CONFIRMED;
                         playSoundEffectOnChannelNoPriority(0x2C, i);
                         gGameSessionContext->playerBoardIds[4 + i] = unlockedSlots[state->unlockedSlotIndex[i]];
                         gGameSessionContext->playerBoardIds[8 + i] =
@@ -737,13 +756,13 @@ void updateCharacterSelect(void) {
                 }
                 break;
 
-            case 15:
+            case CHAR_SELECT_BOARD_BROWSE:
                 if (gControllerInputs[i] & 0x4000) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
-                    state->menuStates[i] = 0;
+                    state->menuStates[i] = CHAR_SELECT_MENU_NAV;
                     state->cursorIndices[i] = state->maxMenuOption - 2;
-                    state->animAngles[i] = 0;
-                    createYRotationMatrix(&state->pad17F8[i], 0);
+                    state->carouselAngles[i] = 0;
+                    createYRotationMatrix(&state->characterRotations[i], 0);
                     state->boardId[i] = gGameSessionContext->playerBoardIds[12 + i];
                     state->iconDisplayState[i] = 0;
                     break;
@@ -758,17 +777,17 @@ void updateCharacterSelect(void) {
                 }
                 state->boardId[i] = state->boardId[i] & 3;
                 if (prevBoardId != state->boardId[i]) {
-                    state->menuStates[i] = 0x10;
+                    state->menuStates[i] = CHAR_SELECT_BOARD_SLIDE;
                     state->slideState[i] = 0;
                     state->savedBoardId[i] = prevBoardId;
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                     boardTask = (CharSelectTaskNode *)scheduleTask(&initCharSelectBoardModelForSlideOut, 3, i, 0x59);
                     if (boardTask != 0) {
-                        boardTask->unk28 = i;
+                        boardTask->boardModelPlayerIndex = i;
                         break;
                     }
                 } else if (gControllerInputs[i] & 0x8000) {
-                    state->menuStates[i] = 0x11;
+                    state->menuStates[i] = CHAR_SELECT_BOARD_FLASH;
                     gGameSessionContext->playerBoardIds[12 + i] = state->boardId[i];
                     state->frameCounters[i] = 0;
                     playSoundEffectOnChannelNoPriority(0x2C, i);
@@ -776,15 +795,15 @@ void updateCharacterSelect(void) {
                 }
                 break;
 
-            case 16:
+            case CHAR_SELECT_BOARD_SLIDE:
                 if (state->slideState[i] != 2) {
                     break;
                 }
                 state->slideState[i] = 0;
-                state->menuStates[i] = 0xF;
+                state->menuStates[i] = CHAR_SELECT_BOARD_BROWSE;
                 break;
 
-            case 17:
+            case CHAR_SELECT_BOARD_FLASH:
                 state->frameCounters[i]++;
                 if (state->frameCounters[i] & 1) {
                     setViewportLightColors(
@@ -803,45 +822,45 @@ void updateCharacterSelect(void) {
                 }
                 if (state->frameCounters[i] == 0x10) {
                     state->frameCounters[i] = 0;
-                    state->menuStates[i] = 0;
+                    state->menuStates[i] = CHAR_SELECT_MENU_NAV;
                     state->cursorIndices[i] = state->maxMenuOption - 2;
                     state->iconDisplayState[i] = 0;
-                    state->animAngles[i] = 0;
-                    createYRotationMatrix(&state->pad17F8[i], 0);
+                    state->carouselAngles[i] = 0;
+                    createYRotationMatrix(&state->characterRotations[i], 0);
                 }
                 break;
 
-            case 20:
+            case CHAR_SELECT_CANCEL_EXIT:
                 confirmedCount++;
                 break;
 
-            case 25:
+            case CHAR_SELECT_READY_CONFIRM:
                 if (gGameSessionContext->numPlayers >= 2) {
-                    state->menuStates[i] = 0x1A;
+                    state->menuStates[i] = CHAR_SELECT_P2_NAME_REVEAL;
                 } else {
-                    state->menuStates[i] = 0x1B;
+                    state->menuStates[i] = CHAR_SELECT_READY_WAIT;
                     cancelCount++;
                 }
                 break;
 
-            case 27:
+            case CHAR_SELECT_READY_WAIT:
                 if (gControllerInputs[i] & 0x4000 && gGameSessionContext->numPlayers != 1) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
-                    state->menuStates[i] = 0x1E;
+                    state->menuStates[i] = CHAR_SELECT_P2_CANCEL;
                 } else {
                     cancelCount++;
                 }
                 break;
 
-            case 30:
+            case CHAR_SELECT_P2_CANCEL:
                 break;
         }
 
-        if (state->cursorIndices[i] == (state->maxMenuOption - 1) && state->menuStates[i] != 1 &&
-            state->menuStates[i] != 6) {
-            state->zoomValues[i] = (state->zoomValues[i] + 0x28) & 0x1FFF;
+        if (state->cursorIndices[i] == (state->maxMenuOption - 1) &&
+            state->menuStates[i] != CHAR_SELECT_MENU_ROTATING && state->menuStates[i] != CHAR_SELECT_CHAR_CONFIRMED) {
+            state->previewSpinAngles[i] = (state->previewSpinAngles[i] + 0x28) & 0x1FFF;
         } else {
-            state->zoomValues[i] = 0x800;
+            state->previewSpinAngles[i] = 0x800;
         }
     }
 
