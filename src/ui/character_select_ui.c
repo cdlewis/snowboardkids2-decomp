@@ -460,11 +460,11 @@ void updateCharacterSelect(void) {
         prevCursorIdx = state->cursorIndices[i];
         switch (state->menuStates[i]) {
             case CHAR_SELECT_MENU_NAV:
-                if (gControllerInputs[i] & 0x40100) {
+                if (gControllerInputs[i] & (STICK_RIGHT | CONT_RIGHT)) {
                     if (state->cursorIndices[i] < (state->maxMenuOption - 1)) {
                         state->cursorIndices[i]++;
                     }
-                } else if (gControllerInputs[i] & 0x80200) {
+                } else if (gControllerInputs[i] & (STICK_LEFT | CONT_LEFT)) {
                     if (state->cursorIndices[i] > 0) {
                         state->cursorIndices[i]--;
                     }
@@ -473,10 +473,10 @@ void updateCharacterSelect(void) {
                     state->menuStates[i] = CHAR_SELECT_MENU_ROTATING;
                     state->prevCursorIndex[i] = prevCursorIdx;
                     playSoundEffectOnChannelNoPriority(0x2B, i);
-                } else if (gControllerInputs[i] & 0x8000) {
+                } else if (gControllerInputs[i] & CONT_A) {
                     state->menuStates[i] = CHAR_SELECT_MENU_CONFIRMING;
                     playSoundEffectOnChannelNoPriority(0x2C, i);
-                } else if (gControllerInputs[i] & 0x4000) {
+                } else if (gControllerInputs[i] & CONT_B) {
                     playSoundEffect(0x2E);
                     for (j = 0; j < gGameSessionContext->numPlayers; j++) {
                         state->menuStates[j] = CHAR_SELECT_CANCEL_EXIT;
@@ -529,7 +529,7 @@ void updateCharacterSelect(void) {
                 break;
 
             case CHAR_SELECT_CHAR_ROW_BROWSE:
-                if (gControllerInputs[i] & 0x4000) {
+                if (gControllerInputs[i] & CONT_B) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
                     state->menuStates[i] = CHAR_SELECT_MENU_NAV;
                     task = (CharSelectTaskNode *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
@@ -556,13 +556,13 @@ void updateCharacterSelect(void) {
                 }
 
                 prevCharRow = state->charRow[i];
-                if (gControllerInputs[i] & 0x40100) {
+                if (gControllerInputs[i] & (STICK_RIGHT | CONT_RIGHT)) {
                     state->charRow[i]++;
                     if ((state->hasSecretCharacters + 2) < (state->charRow[i] & 0xFF)) {
                         state->charRow[i] = 0;
                     }
                     state->scrollDirection[i] = 0;
-                } else if (gControllerInputs[i] & 0x80200) {
+                } else if (gControllerInputs[i] & (STICK_LEFT | CONT_LEFT)) {
                     state->charRow[i]--;
                     if ((state->hasSecretCharacters + 2) < (state->charRow[i] & 0xFF)) {
                         state->charRow[i] = state->hasSecretCharacters + 2;
@@ -591,7 +591,7 @@ void updateCharacterSelect(void) {
                         secTask->previewModelPlayerIndex = i;
                     }
                     playSoundEffectOnChannelNoPriority(0x2B, i);
-                } else if (gControllerInputs[i] & 0x8000) {
+                } else if (gControllerInputs[i] & CONT_A) {
                     state->frameCounters[i] = 0;
                     state->unlockedSlotIndex[i] = 0;
                     state->menuStates[i] = CHAR_SELECT_CHAR_ROW_FLASH;
@@ -683,7 +683,7 @@ void updateCharacterSelect(void) {
                 break;
 
             case CHAR_SELECT_CHAR_VARIANT_BROWSE:
-                if (gControllerInputs[i] & 0x4000) {
+                if (gControllerInputs[i] & CONT_B) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
                     state->menuStates[i] = CHAR_SELECT_CHAR_ROW_BROWSE;
                     terminateTasksByTypeAndID(1, i & 0xFF);
@@ -706,13 +706,13 @@ void updateCharacterSelect(void) {
                 }
 
                 j = countUnlockedSlotsInCategory(state->charRow[i]);
-                if (gControllerInputs[i] & 0x40100) {
+                if (gControllerInputs[i] & (STICK_RIGHT | CONT_RIGHT)) {
                     state->unlockedSlotIndex[i]++;
                     if (j - 1 < state->unlockedSlotIndex[i]) {
                         state->unlockedSlotIndex[i] = 0;
                     }
                     state->scrollDirection[i] = 0;
-                } else if (gControllerInputs[i] & 0x80200) {
+                } else if (gControllerInputs[i] & (STICK_LEFT | CONT_LEFT)) {
                     state->unlockedSlotIndex[i]--;
                     if (state->unlockedSlotIndex[i] < 0) {
                         state->unlockedSlotIndex[i] = j - 1;
@@ -744,7 +744,7 @@ void updateCharacterSelect(void) {
                         break;
                     }
                 } else {
-                    if (gControllerInputs[i] & 0x8000) {
+                    if (gControllerInputs[i] & CONT_A) {
                         state->frameCounters[i] = 0;
                         state->menuStates[i] = CHAR_SELECT_CHAR_CONFIRMED;
                         playSoundEffectOnChannelNoPriority(0x2C, i);
@@ -757,7 +757,7 @@ void updateCharacterSelect(void) {
                 break;
 
             case CHAR_SELECT_BOARD_BROWSE:
-                if (gControllerInputs[i] & 0x4000) {
+                if (gControllerInputs[i] & CONT_B) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
                     state->menuStates[i] = CHAR_SELECT_MENU_NAV;
                     state->cursorIndices[i] = state->maxMenuOption - 2;
@@ -768,10 +768,10 @@ void updateCharacterSelect(void) {
                     break;
                 }
                 prevBoardId = state->boardId[i];
-                if (gControllerInputs[i] & 0x40100) {
+                if (gControllerInputs[i] & (STICK_RIGHT | CONT_RIGHT)) {
                     state->boardId[i]++;
                     state->scrollDirection[i] = 0;
-                } else if (gControllerInputs[i] & 0x80200) {
+                } else if (gControllerInputs[i] & (STICK_LEFT | CONT_LEFT)) {
                     state->boardId[i]--;
                     state->scrollDirection[i] = 1;
                 }
@@ -786,7 +786,7 @@ void updateCharacterSelect(void) {
                         boardTask->boardModelPlayerIndex = i;
                         break;
                     }
-                } else if (gControllerInputs[i] & 0x8000) {
+                } else if (gControllerInputs[i] & CONT_A) {
                     state->menuStates[i] = CHAR_SELECT_BOARD_FLASH;
                     gGameSessionContext->playerBoardIds[12 + i] = state->boardId[i];
                     state->frameCounters[i] = 0;
@@ -844,7 +844,7 @@ void updateCharacterSelect(void) {
                 break;
 
             case CHAR_SELECT_READY_WAIT:
-                if (gControllerInputs[i] & 0x4000 && gGameSessionContext->numPlayers != 1) {
+                if (gControllerInputs[i] & CONT_B && gGameSessionContext->numPlayers != 1) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
                     state->menuStates[i] = CHAR_SELECT_P2_CANCEL;
                 } else {
