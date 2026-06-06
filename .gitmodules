@@ -1,15 +1,15 @@
 [submodule "lib/ultralib"]
 	path = lib/ultralib
-	url = git@github.com:cdlewis/ultralib.git
+	url = https://github.com/cdlewis/ultralib.git
 [submodule "lib/libmus"]
 	path = lib/libmus
-	url = git@github.com:cdlewis/libmus.git
+	url = https://github.com/cdlewis/libmus.git
 [submodule "tools/asm-differ"]
 	path = tools/asm-differ
-	url = git@github.com:simonlindholm/asm-differ.git
+	url = https://github.com/simonlindholm/asm-differ.git
 [submodule "tools/decomp-permuter"]
 	path = tools/decomp-permuter
-	url = git@github.com:simonlindholm/decomp-permuter.git
+	url = https://github.com/simonlindholm/decomp-permuter.git
 [submodule "lib/f3dex2"]
 	path = lib/f3dex2
-	url = git@github.com:Mr-Wiseguy/f3dex2.git
+	url = https://github.com/Mr-Wiseguy/f3dex2.git
