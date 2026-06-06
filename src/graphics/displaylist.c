@@ -1589,10 +1589,7 @@ void renderMultiPartOpaqueDisplayLists(DisplayListObject *displayObjects) {
         currentObject = &displayObjects[i];
         if (currentObject->displayLists->opaqueDisplayList != NULL) {
             setupMultiPartObjectRenderState(displayObjects, i);
-            displayListCmd = gDisplayListAllocPtr;
-            displayListCmd->words.w0 = 0xDE000000;
-            displayListCmd->words.w1 = (u32)currentObject->displayLists->opaqueDisplayList;
-            gDisplayListAllocPtr = displayListCmd + 1;
+            gSPDisplayList(gDisplayListAllocPtr++, currentObject->displayLists->opaqueDisplayList);
         }
     }
 }
@@ -1613,10 +1610,7 @@ void renderMultiPartTransparentDisplayLists(DisplayListObject *displayObjects) {
         do {
             if (currentObject[i].displayLists->transparentDisplayList != NULL) {
                 setupMultiPartObjectRenderState(displayObjects, i);
-                displayListCmd = gDisplayListAllocPtr;
-                displayListCmd->words.w0 = 0xDE000000;
-                displayListCmd->words.w1 = (u32)currentObject[i].displayLists->transparentDisplayList;
-                gDisplayListAllocPtr = displayListCmd + 1;
+                gSPDisplayList(gDisplayListAllocPtr++, currentObject[i].displayLists->transparentDisplayList);
             }
             i++;
             objectCount = displayObjects->numParts;
@@ -1640,10 +1634,7 @@ void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects) {
         do {
             if (currentObject[i].displayLists->overlayDisplayList != NULL) {
                 setupMultiPartObjectRenderState(displayObjects, i);
-                displayListCmd = gDisplayListAllocPtr;
-                displayListCmd->words.w0 = 0xDE000000;
-                displayListCmd->words.w1 = (u32)currentObject[i].displayLists->overlayDisplayList;
-                gDisplayListAllocPtr = displayListCmd + 1;
+                gSPDisplayList(gDisplayListAllocPtr++, currentObject[i].displayLists->overlayDisplayList);
             }
             i++;
             objectCount = displayObjects->numParts;
@@ -1876,10 +1867,7 @@ void renderMultiPartOpaqueDisplayListsWithLights(DisplayListObject *displayObjec
         do {
             if (currentObject[i].displayLists->opaqueDisplayList != NULL) {
                 setupMultiPartObjectRenderState(displayObjects, i);
-                displayListCmd = gDisplayListAllocPtr;
-                displayListCmd->words.w0 = 0xDE000000;
-                displayListCmd->words.w1 = (u32)currentObject[i].displayLists->opaqueDisplayList;
-                gDisplayListAllocPtr = displayListCmd + 1;
+                gSPDisplayList(gDisplayListAllocPtr++, currentObject[i].displayLists->opaqueDisplayList);
             }
             i += 1;
         } while (i < (s32)displayObjects->numParts);
@@ -1928,10 +1916,7 @@ void renderMultiPartTransparentDisplayListsWithLights(DisplayListObject *display
         do {
             if (currentObject[i].displayLists->transparentDisplayList != NULL) {
                 setupMultiPartObjectRenderState(displayObjects, i);
-                displayListCmd = gDisplayListAllocPtr;
-                displayListCmd->words.w0 = 0xDE000000;
-                displayListCmd->words.w1 = (u32)currentObject[i].displayLists->transparentDisplayList;
-                gDisplayListAllocPtr = displayListCmd + 1;
+                gSPDisplayList(gDisplayListAllocPtr++, currentObject[i].displayLists->transparentDisplayList);
             }
             i += 1;
         } while (i < (s32)displayObjects->numParts);
@@ -1980,10 +1965,7 @@ void renderMultiPartOverlayDisplayListsWithLights(DisplayListObject *displayObje
         do {
             if (currentObject[i].displayLists->overlayDisplayList != NULL) {
                 setupMultiPartObjectRenderState(displayObjects, i);
-                displayListCmd = gDisplayListAllocPtr;
-                displayListCmd->words.w0 = 0xDE000000;
-                displayListCmd->words.w1 = (u32)currentObject[i].displayLists->overlayDisplayList;
-                gDisplayListAllocPtr = displayListCmd + 1;
+                gSPDisplayList(gDisplayListAllocPtr++, currentObject[i].displayLists->overlayDisplayList);
             }
             i += 1;
         } while (i < (s32)displayObjects->numParts);
