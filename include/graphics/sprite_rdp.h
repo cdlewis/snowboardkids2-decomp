@@ -3,15 +3,6 @@
 #include "common.h"
 
 typedef struct {
-    /* 0x00 */ s16 clipLeft;
-    /* 0x02 */ s16 clipTop;
-    /* 0x04 */ s16 clipRight;
-    /* 0x06 */ s16 clipBottom;
-    /* 0x08 */ s16 offsetX;
-    /* 0x0A */ s16 offsetY;
-} TextClipAndOffsetData;
-
-typedef struct {
     /* 0x00 */ s32 textureOffset;
     /* 0x04 */ u16 paletteIndex;
     /* 0x06 */ u16 width;

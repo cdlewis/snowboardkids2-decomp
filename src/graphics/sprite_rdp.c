@@ -1,6 +1,7 @@
 #include "graphics/sprite_rdp.h"
 #include "common.h"
 #include "gbi.h"
+#include "graphics/graphics.h"
 #include "gs2dex.h"
 
 u16 gSpritePaletteModes[] = { 0x0002, 0x0000, 0x0003, 0x0004 };
@@ -26,7 +27,6 @@ extern s32 gCachedTextureAddr;
 extern s16 gGraphicsMode;
 extern Gfx *gDisplayListAllocPtr;
 extern u16 gDefaultFontPalette[];
-extern TextClipAndOffsetData gTextClipAndOffsetData;
 
 void renderSpriteFrame(SpriteRenderArg *sprite) {
     s32 left;

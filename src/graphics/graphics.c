@@ -11,47 +11,11 @@
 #include "system/thread_manager.h"
 #include "ucode.h"
 
-#define BUFFER_SIZE 0x10000
 #define MEMORY_HEAP_SIZE 0x200000
 #define gMemoryHeapEnd (gMemoryHeapBase + MEMORY_HEAP_SIZE)
 
 // Array view of arena regions [gLinearArenaRegions, gLinearArenaBuffer]
 #define gLinearArenaRegionsArray ((s32 *)&gLinearArenaRegions)
-
-// gCallbackEntrySegment overlaps with the lower 2 bytes of gCurrentDoubleBufferIndex
-#define gCallbackEntrySegment (*(u16 *)((u8 *)&gCurrentDoubleBufferIndex + 2))
-
-typedef struct {
-    u8 padding[0x8];
-    CallbackEntry *unk8;
-    s32 unkC;
-} CallbackPoolSlot;
-
-// Screen border overlay region with color
-typedef struct {
-    s16 clipLeft;
-    s16 clipTop;
-    s16 clipRight;
-    s16 clipBottom;
-    u8 displayFlags;
-    u8 overlayR;
-    u8 overlayG;
-    u8 overlayB;
-    u8 envR;
-    u8 envG;
-    u8 envB;
-    u8 envA;
-} BorderData;
-
-// Text rendering clip region and offset
-typedef struct {
-    s16 clipLeft;
-    s16 clipTop;
-    s16 clipRight;
-    s16 clipBottom;
-    s16 offsetX;
-    s16 offsetY;
-} TextClipAndOffsetData;
 
 // Data segment definitions
 
@@ -172,35 +136,18 @@ extern Gfx *gDisplayListAllocPtr;
 extern void *gArenaBasePtr;
 extern void *gLinearAllocPtr;
 extern void *gLinearAllocEnd;
-extern s32 gFrameBufferFlags[];
-extern s32 gFrameBufferCounters[];
-extern s32 gBufferedFrameCounter;
 extern void *gGraphicsArenaCurr;
 extern u32 gGraphicsArenaEnd;
 extern void *gLinearArenaBuffer;
-extern u8 gDisplayFramePending;
 extern void *gGraphicsArenaPtrs[];
 extern void *gGraphicsArena0;
-extern s32 gFrameCounter;
-extern ActiveViewportState *gActiveViewport;
 extern void *gDramStack;
 extern void *gOutputBuffer;
 extern void *gYieldBuffer;
 extern ViewportNode *gLastViewportInGroup;
-extern s32 gCallbackCounter;
-extern s16 gCurrentPoolIndex;
-extern s16 gGraphicsMode;
 extern s16 gTextureEnabled;
-extern OSMesgQueue mainMessageQueue;
 extern void *gLookAtPtr;
-extern TextClipAndOffsetData gTextClipAndOffsetData;
 
-void selectGraphicsArena(s32);
-void linearAllocSelectRegion(s32);
-void updateViewportBounds(void);
-void initViewportCallbackPool(ViewportNode *);
-s32 isRegionAllocSpaceLow(void);
-void resetLinearAllocator(void);
 void restoreViewportOffsets(void);
 void initGraphicsSystem(void);
 void initGraphicsArenas(void);

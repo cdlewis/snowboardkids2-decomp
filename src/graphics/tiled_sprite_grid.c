@@ -8,7 +8,6 @@
 extern Gfx *gDisplayListAllocPtr;
 extern Gfx gSpriteRDPSetupDL[];
 extern s16 gTileTextureFlipTable[];
-extern TextClipAndOffsetData gTextClipAndOffsetData;
 
 void renderTiledTextureMap(TileMapScrollRenderState *state) {
     s16 xStart;

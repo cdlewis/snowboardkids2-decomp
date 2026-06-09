@@ -17,7 +17,6 @@ typedef struct {
 extern s16 gGraphicsMode;
 extern Gfx *gDisplayListAllocPtr;
 extern s32 gFrameCounter;
-extern TextClipAndOffsetData gTextClipAndOffsetData;
 extern s16 gTextureEnabled;
 
 void drawColorRectFill(ColorRect *rect);

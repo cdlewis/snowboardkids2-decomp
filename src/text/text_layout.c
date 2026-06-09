@@ -25,7 +25,6 @@ extern s32 gCachedTextureAddr;
 extern s16 gGraphicsMode;
 extern Gfx *gDisplayListAllocPtr;
 extern u16 gDefaultFontPalette[];
-extern TextClipAndOffsetData gTextClipAndOffsetData;
 extern Gfx gSpriteRDPSetupDL[];
 
 void enqueueTextLayout(

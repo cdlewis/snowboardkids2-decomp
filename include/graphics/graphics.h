@@ -13,6 +13,11 @@
 #define RACE_CULL_BOX_HALF_EXTENT_FIXED 0x0FEA0000
 #define RACE_CULL_BOX_FULL_EXTENT_FIXED 0x1FD40000
 
+#define BUFFER_SIZE 0x10000
+
+// gCallbackEntrySegment overlaps with the lower 2 bytes of gCurrentDoubleBufferIndex
+#define gCallbackEntrySegment (*(u16 *)((u8 *)&gCurrentDoubleBufferIndex + 2))
+
 typedef struct {
     u8 light1R;
     u8 light1G;
@@ -36,6 +41,12 @@ typedef struct CallbackEntry {
     u8 _padC[3];
     u8 poolIndex;
 } CallbackEntry;
+
+typedef struct {
+    u8 padding[0x8];
+    CallbackEntry *unk8;
+    s32 unkC;
+} CallbackPoolSlot;
 
 /* RSP task message sent to the scheduler for each viewport group */
 typedef struct {
@@ -76,6 +87,30 @@ typedef struct {
     u64 *ucode;
     u64 *ucode_data;
 } UcodeEntry;
+
+typedef struct {
+    s16 clipLeft;
+    s16 clipTop;
+    s16 clipRight;
+    s16 clipBottom;
+    u8 displayFlags;
+    u8 overlayR;
+    u8 overlayG;
+    u8 overlayB;
+    u8 envR;
+    u8 envG;
+    u8 envB;
+    u8 envA;
+} BorderData;
+
+typedef struct {
+    /* 0x00 */ s16 clipLeft;
+    /* 0x02 */ s16 clipTop;
+    /* 0x04 */ s16 clipRight;
+    /* 0x06 */ s16 clipBottom;
+    /* 0x08 */ s16 offsetX;
+    /* 0x0A */ s16 offsetY;
+} TextClipAndOffsetData;
 
 typedef struct ViewportNode {
     /* 0x00 */ union {
@@ -177,12 +212,43 @@ typedef struct {
 } ColorData;
 
 extern ViewportNode gRootViewport;
+extern s32 gCurrentDoubleBufferIndex;
+extern s32 gCurrentDisplayBufferIndex;
+extern s32 gFrameSkipCounter;
+extern u32 __additional_scanline_0;
+extern u8 gNeedsDisplayListInit;
+extern u8 gDisplayFramePending;
+extern s32 gFrameBufferFlags[];
+extern s32 gFrameBufferCounters[];
+extern s32 gFrameCounter;
+extern s32 gBufferedFrameCounter;
+extern ActiveViewportState *gActiveViewport;
+extern s16 gGraphicsMode;
+extern s16 gCurrentPoolIndex;
+extern s32 gCallbackCounter;
+extern TextClipAndOffsetData gTextClipAndOffsetData;
+extern OSMesgQueue mainMessageQueue;
+extern Gfx gInitDisplayList[];
+extern Gfx gDefaultRenderDisplayList[];
+extern Gfx gFadeOverlayDisplayList[];
 
 // Location of S2Dex code/rodata segments
 extern u64 gspS2DEX_fifoTextStart[];
 extern u64 gspS2DEX_fifoDataStart[];
 
 extern UcodeEntry microcodeGroups[];
+
+void selectGraphicsArena(s32 index);
+
+void linearAllocSelectRegion(s32 index);
+
+void initViewportCallbackPool(ViewportNode *node);
+
+s32 isRegionAllocSpaceLow(void);
+
+void resetLinearAllocator(void);
+
+void updateViewportBounds(void);
 
 void setViewportFadeValue(ViewportNode *node, u8 fadeValue, u8 fadeMode);
 

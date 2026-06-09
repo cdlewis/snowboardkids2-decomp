@@ -16,7 +16,6 @@ extern Gfx *gDisplayListAllocPtr;
 extern s16 gGraphicsMode;
 extern s8 gCurrentPaletteId;
 extern s16 gTextureEnabled[];
-extern TextClipAndOffsetData gTextClipAndOffsetData;
 
 Gfx gFontDisplayListSetup[] = {
     gsDPPipeSync(),
