@@ -1044,6 +1044,7 @@ gTitleCharacterAnimSequences = 0x8008D534; // rom:0x8E134
 returnToMainMenu = 0x80015218; // rom:0x15E18
 getStoryMapCameraMode = 0x8001523C; // rom:0x15E3C
 setStoryMapCameraMode = 0x80015248; // rom:0x15E48
+gStoryMapCameraMode = 0x8009F200;
 clearMemory = 0x800154A8; // rom:0x160A8
 gCurrentBgmId = 0x8008CE40; // rom:0x8DA40
 gMenuOptionLayout_Type0 = 0x8008CE44; // rom:0x8DA44

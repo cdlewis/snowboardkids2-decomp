@@ -16,7 +16,7 @@ typedef struct {
 extern u8 D_800AB1C8_A2538;
 extern u8 gStoryCompleted;
 extern u8 gDebugUnlockEnabled;
-extern u8 D_8009F200_9FDF0;
+extern u8 gStoryMapCameraMode;
 
 void returnToMainMenu(void);
 void loadSaveSlotScreen(void);
@@ -277,11 +277,11 @@ void returnToMainMenu(void) {
 }
 
 u8 getStoryMapCameraMode(void) {
-    return D_8009F200_9FDF0;
+    return gStoryMapCameraMode;
 }
 
 void setStoryMapCameraMode(s32 arg0) {
-    D_8009F200_9FDF0 = arg0;
+    gStoryMapCameraMode = arg0;
 }
 
 void updateStorySlotUnlockStatus(void) {
