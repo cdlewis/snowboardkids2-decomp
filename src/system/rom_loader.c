@@ -28,18 +28,18 @@ s32 gPendingDmaCount = 0;
 extern s32 gDmaQueueIndex;
 extern s32 gDmaRequestCount;
 extern DmaTransferEntry *gDmaQueue;
-extern DmaTransferEntry *D_800A2108_A2CF8;
+extern DmaTransferEntry *D_800A2108_A2CE8;
 extern u8 *gDmaCompressionBuffer;
 
-extern OSMesgQueue D_800A2110_A2D00;
+extern OSMesgQueue D_800A2110_A2CF0;
 extern OSMesgQueue gDmaMsgQueue;
 extern OSMesgQueue gPiDmaMsgQueue;
-extern OSMesgQueue *D_800A2150_A2D40[];
-extern OSMesg D_800A2128_A2D18[];
+extern OSMesgQueue *D_800A2150_A2D30[];
+extern OSMesg D_800A2128_A2D08[];
 extern OSMesg gPiDmaMsgBuf[];
-extern u8 D_800A2168_A2D58[];
+extern u8 D_800A2168_A2D48[];
 
-extern OSThread D_800A1DC0_A29B0;
+extern OSThread D_800A1DC0_A29A0;
 extern char piManagerThreadStack[0x8]; // this size seems wrong
 
 void piDmaHandlerThread(void *);
@@ -49,17 +49,17 @@ void initPiManager(void) {
 
     gDmaQueueIndex = 0;
     gDmaRequestCount = 0;
-    D_800A2108_A2CF8 = allocateMemoryNode(0, 0x168, &flag);
+    D_800A2108_A2CE8 = allocateMemoryNode(0, 0x168, &flag);
     gDmaQueue = allocateMemoryNode(0, 0x730, &flag);
     gDmaCompressionBuffer = allocateMemoryNode(0, 0x1000, &flag);
 
-    osCreatePiManager(150, (OSMesgQueue *)D_800A2150_A2D40, (OSMesg *)D_800A2168_A2D58, 200);
-    osCreateMesgQueue(&D_800A2110_A2D00, D_800A2128_A2D18, 1);
+    osCreatePiManager(150, (OSMesgQueue *)D_800A2150_A2D30, (OSMesg *)D_800A2168_A2D48, 200);
+    osCreateMesgQueue(&D_800A2110_A2CF0, D_800A2128_A2D08, 1);
     osCreateMesgQueue(&gPiDmaMsgQueue, gPiDmaMsgBuf, 1);
-    osCreateMesgQueue(&gDmaMsgQueue, (OSMesg *)D_800A2108_A2CF8, 90);
+    osCreateMesgQueue(&gDmaMsgQueue, (OSMesg *)D_800A2108_A2CE8, 90);
 
     osCreateThread(
-        &D_800A1DC0_A29B0,
+        &D_800A1DC0_A29A0,
         7,
         piDmaHandlerThread,
         0,
@@ -67,7 +67,7 @@ void initPiManager(void) {
         1
     );
 
-    osStartThread(&D_800A1DC0_A29B0);
+    osStartThread(&D_800A1DC0_A29A0);
 }
 
 void piDmaHandlerThread(void *arg __attribute__((unused))) {
@@ -105,8 +105,8 @@ void piDmaHandlerThread(void *arg __attribute__((unused))) {
                     copySize = 0x1000;
                 }
 
-                osPiStartDma(&dmaMsg, OS_MESG_PRI_NORMAL, OS_READ, devAddr, dramAddr, copySize, &D_800A2110_A2D00);
-                osRecvMesg(&D_800A2110_A2D00, &dummyMesg, OS_MESG_BLOCK);
+                osPiStartDma(&dmaMsg, OS_MESG_PRI_NORMAL, OS_READ, devAddr, dramAddr, copySize, &D_800A2110_A2CF0);
+                osRecvMesg(&D_800A2110_A2CF0, &dummyMesg, OS_MESG_BLOCK);
 
                 devAddr += copySize;
                 size -= copySize;
@@ -133,9 +133,9 @@ void piDmaHandlerThread(void *arg __attribute__((unused))) {
                     devAddr,
                     gDmaCompressionBuffer,
                     copySize,
-                    &D_800A2110_A2D00
+                    &D_800A2110_A2CF0
                 );
-                osRecvMesg(&D_800A2110_A2D00, &dummyMesg, 1);
+                osRecvMesg(&D_800A2110_A2CF0, &dummyMesg, 1);
 
                 srcOffset = 0;
                 if (copySize > 0) {

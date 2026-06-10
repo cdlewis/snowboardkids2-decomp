@@ -13,6 +13,8 @@
 extern u8 gTitleInitialized;
 extern u8 storyMapLocationIndex;
 
+u8 gStoryMapCameraMode __attribute__((section(".bss")));
+
 void handleGameStateComplete(void);
 void handleStoryMapLocationComplete(void);
 void awaitIntroCutsceneComplete(void);

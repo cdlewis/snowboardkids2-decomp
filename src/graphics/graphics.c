@@ -126,7 +126,7 @@ UcodeEntry microcodeGroups[] = {
 u8 gNeedsDisplayListInit = 1;
 
 extern void *gDisplayBufferMsgs;
-extern s32 D_800A35C8_A41B8[];
+extern s32 D_800A35C8_A41A8[];
 extern s16 gViewportOriginY;
 extern s16 gViewportOriginX;
 extern CallbackPoolSlot *gViewportCallbackPools[];
@@ -912,7 +912,7 @@ void initGraphicsSystem(void) {
     restoreViewportOffsets();
 
     i = 0x10;
-    ptr = &D_800A35C8_A41B8[0];
+    ptr = &D_800A35C8_A41A8[0];
     do {
         *ptr = 0;
         i--;

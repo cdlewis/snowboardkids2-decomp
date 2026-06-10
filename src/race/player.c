@@ -195,7 +195,7 @@ extern ALPlayer plr_player;
 extern u16 mus_master_volume_effects;
 extern u16 mus_master_volume_songs;
 extern u32 __muscontrol_flag;
-extern fx_t *D_800A64F4_A70E4;
+extern fx_t *D_800A64F4_A70D4;
 extern s32 *gDefaultSoundEffectPriorityTable;
 extern ALHeap audio_heap;
 // FIFO command queue variables (ring buffer)
@@ -727,7 +727,7 @@ s32 MusInitialize(musConfig *config) {
 
     max_channels = config->channels;
 
-    D_800A64F4_A70E4 = config->sched;
+    D_800A64F4_A70D4 = config->sched;
     gDefaultSoundEffectPriorityTable = (s32 *)config->default_fxbank;
 
     if (osTvType == OS_TV_PAL) {
@@ -2080,7 +2080,7 @@ u32 __MusIntStartEffect(channel_t *cp, s32 number, s32 volume, s32 pan, s32 prio
     cp->handle = handle;
     cp->priority = priority;
     mus_current_handle = handle + 1;
-    fx_data = D_800A64F4_A70E4[number].fxdata;
+    fx_data = D_800A64F4_A70D4[number].fxdata;
     cp->pbase = fx_data;
     cp->pdata = fx_data;
     return cp->handle;
