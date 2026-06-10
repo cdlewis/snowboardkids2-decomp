@@ -70,23 +70,28 @@ typedef struct {
 extern AMAudioMgr gAudioManager;
 extern Acmd *gAudioCmdBuffers[];
 extern ALGlobals __libmus_alglobals;
-extern AudioNode *D_800A6468_A7048;
-extern AudioNode *gActiveListHead;
-extern AudioNode *gAudioNodePool;
-extern OSIoMesg *gAudioDmaMessages;
-extern OSMesgQueue gAudioMsgQueue;
-extern OSPiHandle *gCartRomHandle;
-extern OSPiHandle *gDriveRomHandle;
-extern s32 D_800A6474_A7054;
 extern s32 __muscontrol_flag;
-extern s32 gAudioBufferPadding;
-extern s32 gAudioBufferSize;
-extern s32 gAudioRspCmdCount;
-extern u32 gMaxVoices;
-extern u32 gMinAudioFrameSize;
-extern u8 gDriveRomInitialized;
-extern void **gAudioMsgBuffer;
 
+// bss
+u8 gDriveRomInitialized __attribute__((section(".bss")));
+AudioNode *gActiveListHead __attribute__((section(".bss")));
+AudioNode *D_800A6468_A7048 __attribute__((section(".bss")));
+u32 gMinAudioFrameSize __attribute__((section(".bss")));
+s32 gAudioBufferSize __attribute__((section(".bss")));
+s32 D_800A6474_A7054 __attribute__((section(".bss")));
+s32 gAudioRspCmdCount __attribute__((section(".bss")));
+static s32 D_800A647C_A705C __attribute__((section(".bss")));
+OSMesgQueue gAudioMsgQueue __attribute__((section(".bss")));
+AudioNode *gAudioNodePool __attribute__((section(".bss")));
+OSIoMesg *gAudioDmaMessages __attribute__((section(".bss")));
+void **gAudioMsgBuffer __attribute__((section(".bss")));
+u32 gMaxVoices __attribute__((section(".bss")));
+s32 gAudioBufferPadding __attribute__((section(".bss")));
+OSPiHandle *gCartRomHandle __attribute__((section(".bss")));
+OSPiHandle *gDriveRomHandle __attribute__((section(".bss")));
+static u8 D_800A64B4_A7094[0xC] __attribute__((section(".bss")));
+
+// data
 u32 gCurrentFrame = 0;
 u32 D_8009B034_9BC34 = 0;
 s32 gAudioCmdBufferToggle = 0;
