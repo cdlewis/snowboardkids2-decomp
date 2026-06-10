@@ -175,34 +175,37 @@ typedef struct {
 typedef u8 *(*player_command_func)(channel_t *, u8 *);
 
 extern ALGlobals __libmus_alglobals;
-extern ALVoice *mus_voices;
 extern s32 ChangeCustomEffect(s32);
-extern ALMicroTime mus_next_frame_time;
-extern fx_header_t *libmus_fxheader_current;
-extern fx_header_t *libmus_fxheader_single;
 
 // bss
-extern s32 mus_vsyncs_per_second;
-extern channel_t *mus_channels;
-extern s32 max_channels;
-extern s32 mus_songfxchange_flag;
-
 extern LIBMUScb_marker marker_callback;
-extern s32 mus_last_fxtype;
-extern s32 mus_current_handle;
-extern s32 mus_random_seed;
-extern ALPlayer plr_player;
-extern u16 mus_master_volume_effects;
-extern u16 mus_master_volume_songs;
+
+ALPlayer plr_player __attribute__((section(".bss")));
+static s32 D_800A64E4_A70C4 __attribute__((section(".bss")));
+ALHeap audio_heap __attribute__((section(".bss")));
+s32 max_channels __attribute__((section(".bss")));
+ALVoice *mus_voices __attribute__((section(".bss")));
+channel_t *mus_channels __attribute__((section(".bss")));
+fx_t *D_800A64F4_A70D4 __attribute__((section(".bss")));
+s32 *gDefaultSoundEffectPriorityTable __attribute__((section(".bss")));
+s32 mus_vsyncs_per_second __attribute__((section(".bss")));
+ALMicroTime mus_next_frame_time __attribute__((section(".bss")));
+u16 mus_master_volume_effects __attribute__((section(".bss")));
+u16 mus_master_volume_songs __attribute__((section(".bss")));
+s32 mus_current_handle __attribute__((section(".bss")));
+s32 mus_random_seed __attribute__((section(".bss")));
+fx_header_t *libmus_fxheader_single __attribute__((section(".bss")));
+fx_header_t *libmus_fxheader_current __attribute__((section(".bss")));
+s32 mus_songfxchange_flag __attribute__((section(".bss")));
+s32 mus_last_fxtype __attribute__((section(".bss")));
+
 extern u32 __muscontrol_flag;
-extern fx_t *D_800A64F4_A70D4;
-extern s32 *gDefaultSoundEffectPriorityTable;
-extern ALHeap audio_heap;
+
 // FIFO command queue variables (ring buffer)
-extern s32 gFifoReadIdx;    // fifo_start (read index)
-extern s32 gFifoWriteIdx;   // fifo_current (write index)
-extern s32 gFifoCapacity;   // fifo_limit (capacity)
-extern fifo_t *gFifoBuffer; // fifo_addr (buffer)
+s32 gFifoReadIdx __attribute__((section(".bss")));    // fifo_start (read index)
+s32 gFifoWriteIdx __attribute__((section(".bss")));   // fifo_current (write index)
+s32 gFifoCapacity __attribute__((section(".bss")));   // fifo_limit (capacity)
+fifo_t *gFifoBuffer __attribute__((section(".bss"))); // fifo_addr (buffer)
 
 void __MusIntFifoProcess(void);
 void flushPendingVoice(channel_t *cp, int x);
