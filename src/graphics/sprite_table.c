@@ -30,10 +30,10 @@ typedef struct {
 typedef void (*SetupAndEnqueueSprite_t)(SpriteState *, s32, s32, s32, s32, s32, s32, s16, u8, u8, s32);
 
 extern s32 D_8008C920_8D520[];
-extern OutputStruct_19E80 gCachedSpriteTextureEntry;
-extern s16 gGraphicsMode;
 extern s32 gLookAtPtr;
 extern Gfx *gDisplayListAllocPtr;
+
+OutputStruct_19E80 gCachedSpriteTextureEntry __attribute__((section(".bss")));
 
 void setupAndEnqueueSprite(
     SpriteState *state,

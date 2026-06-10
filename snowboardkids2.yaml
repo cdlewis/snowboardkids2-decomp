@@ -489,7 +489,8 @@ segments:
       - [0x9FD60, lib, libgultra_rom, epirawread, .rodata]
       - [0x9FD80, lib, libgultra_rom, xldtob, .rodata]
 
-      - { start: 0x9FDF0, type: bss, vram: 0x8009F1F0, name: A02E0 }
+      - { start: 0x9FDF0, type: .bss, vram: 0x8009F1F0, name: graphics/sprite_table }
+      - { type: bss, vram: 0x8009F200, name: A02E0 }
       - {
           type: lib,
           vram: 0x800A6530,

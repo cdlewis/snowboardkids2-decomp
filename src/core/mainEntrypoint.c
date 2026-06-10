@@ -16,7 +16,7 @@ extern OSMesg mainMessageQueueBuffer[32];
 extern OSMesgQueue mainMessageQueue;
 extern u16 gGlobalFrameCounter;
 extern u8 gControllerPollingEnabled;
-extern void D_800A32D0_A3ED0;
+extern void D_800A32D0_A3EC0;
 
 void mainThreadEntrypoint(void *arg) {
     u16 message;
@@ -40,7 +40,7 @@ void mainThreadEntrypoint(void *arg) {
 
     osCreateMesgQueue(&mainMessageQueue, mainMessageQueueBuffer, 0x20);
 
-    addViConfig(&D_800A32D0_A3ED0, &mainMessageQueue, 2);
+    addViConfig(&D_800A32D0_A3EC0, &mainMessageQueue, 2);
     createRootTaskScheduler(&initializeOverlaySystem, 0x64);
     createRootTaskScheduler(&allocateAudioResources, 0xFA);
 

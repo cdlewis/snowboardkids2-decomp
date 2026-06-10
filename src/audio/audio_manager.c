@@ -70,14 +70,14 @@ typedef struct {
 extern AMAudioMgr gAudioManager;
 extern Acmd *gAudioCmdBuffers[];
 extern ALGlobals __libmus_alglobals;
-extern AudioNode *D_800A6468_A7068;
+extern AudioNode *D_800A6468_A7058;
 extern AudioNode *gActiveListHead;
 extern AudioNode *gAudioNodePool;
 extern OSIoMesg *gAudioDmaMessages;
 extern OSMesgQueue gAudioMsgQueue;
 extern OSPiHandle *gCartRomHandle;
 extern OSPiHandle *gDriveRomHandle;
-extern s32 D_800A6474_A7074;
+extern s32 D_800A6474_A7064;
 extern s32 __muscontrol_flag;
 extern s32 gAudioBufferPadding;
 extern s32 gAudioBufferSize;
@@ -162,7 +162,7 @@ void initAudioManager(
     }
 
     gMinAudioFrameSize = gAudioBufferSize - 0x10;
-    D_800A6474_A7074 = gAudioBufferSize + gAudioBufferPadding + 0x10;
+    D_800A6474_A7064 = gAudioBufferSize + gAudioBufferPadding + 0x10;
 
     CustomInit(&__libmus_alglobals, config);
 
@@ -186,7 +186,7 @@ void initAudioManager(
         gAudioManager.audioInfo[i]->unk50 = 9;
         gAudioManager.audioInfo[i]->unk54 = gAudioManager.audioInfo[i];
         gAudioManager.audioInfo[i]->outputBuffer =
-            (s16 *)alHeapDBAlloc(0, 0, config->heap, 1, sizeof(s32) * D_800A6474_A7074);
+            (s16 *)alHeapDBAlloc(0, 0, config->heap, 1, sizeof(s32) * D_800A6474_A7064);
     }
 
     osCreateMesgQueue(&gAudioManager.audioFrameMsgQ, (OSMesg *)&gAudioManager.audioFrameMsgBuf, 8);
@@ -342,13 +342,13 @@ s32 loadAudioDataWithCache(s32 romAddr, s32 requestSize) {
         previousNode = currentNode;
     }
 
-    currentNode = *((AudioNode **)(s32)(&D_800A6468_A7068));
+    currentNode = *((AudioNode **)(s32)(&D_800A6468_A7058));
     if (currentNode == NULL) {
         return osVirtualToPhysical((void *)gActiveListHead);
     }
 
     tempValue = (s32)currentNode->l.next;
-    *((AudioNode **)(s32)(&D_800A6468_A7068)) = (AudioNode *)tempValue;
+    *((AudioNode **)(s32)(&D_800A6468_A7058)) = (AudioNode *)tempValue;
     alUnlink((ALLink *)currentNode);
 
     if (previousNode != NULL) {
@@ -400,7 +400,7 @@ void *initAudioDriveAndGetLoader(void *arg0) {
         AudioNode *value = gAudioNodePool;
         gActiveListHead = (AudioNode *)0;
         handle[0] = TRUE;
-        D_800A6468_A7068 = value;
+        D_800A6468_A7058 = value;
     }
     *(u8 **)arg0 = handle;
     return &loadAudioDataWithCache;

@@ -249,9 +249,9 @@ extern Vec3i gParallaxOffset;
 extern s32 gParallaxFrameCounter;
 extern s16 gParallaxWobbleAngle;
 extern s32 gParallaxReverseDirection;
-extern s32 D_8009F230_9FE30;
-extern s32 D_8009F234_9FE34;
-extern s16 D_8009F238_9FE38;
+extern s32 D_8009F230_9FE20;
+extern s32 D_8009F234_9FE24;
+extern s16 D_8009F238_9FE28;
 extern s16 gStoryMapItemWaypointCounts[];
 
 s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle);
@@ -438,7 +438,7 @@ s32 updateStoryMapNpcBehavior(Func8002A390Arg *s0) {
                 memcpy(&sp10, s2, sizeof(Vec3i));
                 s0->prevState = s0->state;
                 s0->state = 2;
-                s0->currentAngle = computeAngleToPosition(D_8009F230_9FE30, D_8009F234_9FE34, sp10.x, sp10.z);
+                s0->currentAngle = computeAngleToPosition(D_8009F230_9FE20, D_8009F234_9FE24, sp10.x, sp10.z);
                 break;
             }
             memcpy(s2, &sp10, sizeof(Vec3i));
@@ -448,7 +448,7 @@ s32 updateStoryMapNpcBehavior(Func8002A390Arg *s0) {
             }
             s0->targetAngle = a2;
             createYRotationMatrix(&s0->matrix, a2 & 0x1FFF);
-            if (distance_2d(sp10.x - D_8009F230_9FE30, sp10.z - D_8009F234_9FE34) > 0x100000) {
+            if (distance_2d(sp10.x - D_8009F230_9FE20, sp10.z - D_8009F234_9FE24) > 0x100000) {
                 s0->prevState = s0->state;
                 s0->state = 2;
                 s0->currentAngle = computeAngleToPosition(s3->unk3EC, s3->unk3F0, sp10.x, s1->z);
@@ -467,22 +467,22 @@ s32 updateStoryMapNpcBehavior(Func8002A390Arg *s0) {
             } else {
                 s0->animFrame = s0->animSpeed;
             }
-            if (isNpcFacingPlayer(D_8009F230_9FE30, D_8009F234_9FE34, D_8009F238_9FE38) != 0) {
+            if (isNpcFacingPlayer(D_8009F230_9FE20, D_8009F234_9FE24, D_8009F238_9FE28) != 0) {
                 return s4;
             }
             s0->prevState = s0->state;
             s0->animFrame = s0->animSpeed;
-            if (D_8009F230_9FE30 == s0->matrix.translation.x) {
-                if (D_8009F234_9FE34 == s0->matrix.translation.z) {
+            if (D_8009F230_9FE20 == s0->matrix.translation.x) {
+                if (D_8009F234_9FE24 == s0->matrix.translation.z) {
                     s0->state = 0;
-                    s0->currentAngle = D_8009F238_9FE38;
+                    s0->currentAngle = D_8009F238_9FE28;
                     break;
                 }
             }
             s0->state = 3;
             s0->currentAngle = computeAngleToPosition(
-                D_8009F230_9FE30,
-                D_8009F234_9FE34,
+                D_8009F230_9FE20,
+                D_8009F234_9FE24,
                 s0->matrix.translation.x,
                 s0->matrix.translation.z
             );
@@ -510,9 +510,9 @@ s32 updateStoryMapNpcBehavior(Func8002A390Arg *s0) {
             s0->targetAngle = a2;
             createYRotationMatrix(&s0->matrix, a2 & 0x1FFF);
             if (isNpcFacingPlayer(sp10.x, sp10.z, s0->currentAngle) == 0) {
-                if (distance_2d(sp10.x - D_8009F230_9FE30, sp10.z - D_8009F234_9FE34) <= 0xBFFF) {
+                if (distance_2d(sp10.x - D_8009F230_9FE20, sp10.z - D_8009F234_9FE24) <= 0xBFFF) {
                     s4 = 1;
-                    s0->currentAngle = D_8009F238_9FE38;
+                    s0->currentAngle = D_8009F238_9FE28;
                 }
             } else {
                 s0->prevState = s0->state;
@@ -530,8 +530,8 @@ s32 updateStoryMapNpcBehavior(Func8002A390Arg *s0) {
             s0->state = 3;
             s0->animFrame = s0->animSpeed;
             s0->currentAngle = computeAngleToPosition(
-                D_8009F230_9FE30,
-                D_8009F234_9FE34,
+                D_8009F230_9FE20,
+                D_8009F234_9FE24,
                 s0->matrix.translation.x,
                 s0->matrix.translation.z
             );
