@@ -38,10 +38,14 @@ typedef struct gActiveScheduler_type {
     /* 0x4C */ s16 childSchedulerCount;
 } gActiveScheduler_type;
 
-extern gActiveScheduler_type gSchedulerPool[16];
-extern gActiveScheduler_type gSchedulerListSentinel;
-extern gActiveScheduler_type *gFreeSchedulerList;
-extern gActiveScheduler_type *gActiveSchedulerList;
+gActiveScheduler_type gSchedulerPool[16] BSS = { 0 };
+gActiveScheduler_type gSchedulerListSentinel BSS = { 0 };
+gActiveScheduler_type *gFreeSchedulerList BSS = NULL;
+
+// The original BSS labels split one scheduler-sized sentinel node:
+// gSchedulerListSentinel is prev at +0x00, gActiveSchedulerList is next at +0x04.
+#define gActiveSchedulerList (gSchedulerListSentinel.next)
+
 extern s32 gFrameCounter;
 extern s32 gBufferedFrameCounter;
 

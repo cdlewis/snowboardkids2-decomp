@@ -13,7 +13,6 @@
 
 #define MEMORY_HEAP_SIZE 0x200000
 #define gMemoryHeapEnd (gMemoryHeapBase + MEMORY_HEAP_SIZE)
-#define BSS __attribute__((section(".bss")))
 
 // Array view of arena regions [gLinearArenaRegions, gLinearArenaBuffer]
 #define gLinearArenaRegionsArray ((s32 *)&gLinearArenaRegions)

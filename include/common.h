@@ -10,6 +10,7 @@ void *memcpy(void *, const void *, size_t);
 #define SQUARE(x) ((s64)(x) * (x))
 #define MAGNITUDE_SQ_2D(x, y) (SQUARE(x) + SQUARE(y))
 #define MAGNITUDE_SQ_3D(x, y, z) (SQUARE(x) + SQUARE(y) + SQUARE(z))
+#define BSS __attribute__((section(".bss")))
 
 #define STICK_RIGHT 0x40000
 #define STICK_LEFT 0x80000
