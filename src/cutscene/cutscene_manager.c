@@ -27,7 +27,7 @@ extern StateEntry *gControllerPakTransferPointer;
 extern StateEntry *gControllerPakStateTablePointer;
 extern s32 gButtonsPressed[];
 extern StateEntry gCutsceneEntryBuffer[];
-extern u8 D_800BAF06_1E7FB6;
+extern u8 gCutsceneEntryBufferCommandCategory;
 extern u8 gCutsceneEntryCopyFlag;
 extern s16 gCutsceneEntryBufferFrameNumber;
 extern s8 gCutsceneEntryCutFlag;
@@ -1227,7 +1227,7 @@ void pasteCutsceneEntryToSlot(u8 slotIndex, u16 frameNumber) {
     srcEntry = gCutsceneEntryBuffer;
     categorySkip = (-((~getCurrentStateEntryItem(slotIndex)->characterId) != 0)) | 1;
 
-    if (gCutsceneEntryCopyFlag != 0 && getCategorySkipValue(D_800BAF06_1E7FB6) != categorySkip) {
+    if (gCutsceneEntryCopyFlag != 0 && getCategorySkipValue(gCutsceneEntryBufferCommandCategory) != categorySkip) {
         s32 eventIndex = findEventAtFrame(slotIndex, frameNumber);
         if ((eventIndex & 0xFFFF) == 0xFFFF) {
             eventIndex = insertCutsceneEvent(slotIndex, frameNumber);
