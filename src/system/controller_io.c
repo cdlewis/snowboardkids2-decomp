@@ -94,7 +94,6 @@ extern OSPfs controllerPacks[];
 extern PfsNote gControllerPackFileNote;
 extern s32 gControllerPackFileNumbers[];
 extern s32 D_8009F630_A0210;
-extern OSThread D_800A1DC0_A29A0;
 extern Entry D_800A1C20_A2820[];
 
 void initControllerSubsystem(void) {
