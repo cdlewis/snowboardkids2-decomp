@@ -25,22 +25,26 @@ typedef struct {
 s32 gPendingDmaCount = 0;
 
 // Bss
-extern s32 gDmaQueueIndex;
-extern s32 gDmaRequestCount;
-extern DmaTransferEntry *gDmaQueue;
-extern OSMesg *gDmaMsgBuf;
-extern u8 *gDmaCompressionBuffer;
-
-extern OSMesgQueue gDmaIoMsgQueue;
-extern OSMesgQueue gDmaMsgQueue;
-extern OSMesgQueue gPiDmaMsgQueue;
-extern OSMesgQueue gPiManagerMsgQueue;
-extern OSMesg gDmaIoMsgBuf[];
-extern OSMesg gPiDmaMsgBuf[];
-extern OSMesg gPiManagerMsgBuf[];
-
-extern OSThread gPiDmaThread;
-extern char piManagerThreadStack[0x8]; // this size seems wrong
+OSThread gPiDmaThread BSS = { 0 };
+static u8 gPiDmaThreadPadding[0x140] BSS = { 0 };
+char piManagerThreadStack[0x8] BSS = { 0 };
+static u8 piManagerThreadStackPadding[0x38] BSS = { 0 };
+OSMesgQueue gDmaMsgQueue BSS = { 0 };
+OSMesg *gDmaMsgBuf BSS = NULL;
+static u8 gDmaMsgBufPadding[0x4] BSS = { 0 };
+OSMesgQueue gDmaIoMsgQueue BSS = { 0 };
+OSMesg gDmaIoMsgBuf[1] BSS = { 0 };
+static u8 gDmaIoMsgBufPadding[0x4] BSS = { 0 };
+OSMesgQueue gPiDmaMsgQueue BSS = { 0 };
+OSMesg gPiDmaMsgBuf[1] BSS = { 0 };
+static u8 gPiDmaMsgBufPadding[0x4] BSS = { 0 };
+OSMesgQueue gPiManagerMsgQueue BSS = { 0 };
+OSMesg gPiManagerMsgBuf[200] BSS = { 0 };
+s32 gDmaQueueIndex BSS = 0;
+DmaTransferEntry *gDmaQueue BSS = NULL;
+s32 gDmaRequestCount BSS = 0;
+u8 *gDmaCompressionBuffer BSS = NULL;
+static u8 gDmaCompressionBufferPadding[0x8] BSS = { 0 };
 
 void piDmaHandlerThread(void *);
 
