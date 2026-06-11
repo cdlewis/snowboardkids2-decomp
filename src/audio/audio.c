@@ -29,7 +29,6 @@ typedef struct {
     f32 position;
     s32 voiceIndex;
     s32 unk2C;
-    s32 unk30;
 } AudioCommand;
 
 typedef struct {
@@ -77,13 +76,14 @@ typedef struct {
     s32 size;
 } AudioDataSegment;
 
-extern AudioCommand gAudioCommand;
-extern SoundManager *gSoundManager;
-extern OSMesgQueue audioCommandQueue;
-extern OSMesgQueue audioResultQueue;
-extern OSMesg audioCommandQueueBuffer;
-extern OSMesg audioResultQueueBuffer;
-extern OSThread audioCommandThread;
+SoundManager *gSoundManager BSS;
+OSThread audioCommandThread BSS;
+char audioCommandThreadStack[0x188] BSS;
+OSMesgQueue audioCommandQueue BSS;
+OSMesg audioCommandQueueBuffer[2] BSS;
+OSMesgQueue audioResultQueue BSS;
+OSMesg audioResultQueueBuffer[2] BSS;
+AudioCommand gAudioCommand BSS;
 
 void processSpatialAudio(void);
 void *startSoundEffect(s32, s32, s32, s32, s32);
@@ -1237,10 +1237,17 @@ void setMusicFadeOut(s32 fadeOutDuration) {
 
 void initializeAudioCommandThread(void) {
     OSMesgQueue *queue = &audioCommandQueue;
-    osCreateMesgQueue(queue, &audioCommandQueueBuffer, OS_MESG_BLOCK);
+    osCreateMesgQueue(queue, audioCommandQueueBuffer, OS_MESG_BLOCK);
     queue = &audioResultQueue;
-    osCreateMesgQueue(queue, &audioResultQueueBuffer, OS_MESG_BLOCK);
-    osCreateThread(&audioCommandThread, 0xB, audioCommandThreadFunc, 0, &audioCommandQueue, 6);
+    osCreateMesgQueue(queue, audioResultQueueBuffer, OS_MESG_BLOCK);
+    osCreateThread(
+        &audioCommandThread,
+        0xB,
+        audioCommandThreadFunc,
+        0,
+        audioCommandThreadStack + sizeof(audioCommandThreadStack),
+        6
+    );
     osStartThread(&audioCommandThread);
 }
 
