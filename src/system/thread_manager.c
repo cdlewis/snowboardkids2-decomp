@@ -36,33 +36,33 @@ int gPrenmiReceived = 0;
 int gPrenmiCountdown = 0x1E;
 
 // bss
-extern OSThread viThread;
-extern OSThread schedThread;
-extern OSThread audioThread;
-extern OSThread displayThread;
-extern OSMesg audioSpDoneQueueMsgs;
-extern OSMesg viQueueMsgs;
-extern OSMesg schedQueueMsgs;
-extern OSMesg audioTaskQueueMsgs;
-extern OSMesg displayQueueMsgs;
-extern OSMesg dpDoneQueueMsgs;
-extern OSMesg displaySpDoneQueueMsgs;
-extern OSMesg displayViFrameQueueMsgs;
-extern char viThreadStack[0x180];
-extern char schedThreadStack[0x180];
-extern char audioThreadStack[0x180];
-extern char displayThreadStack[0x180];
-extern s16 frameCounter;
-extern s16 bootBlackoutFrames;
-extern ViConfig *currentViConfig;
-extern OSMesgQueue viEventQueue;
-extern OSMesgQueue schedQueue;
-extern OSMesgQueue audioTaskQueue;
-extern OSMesgQueue displayQueue;
-extern OSMesgQueue dpDoneQueue;
-extern OSMesgQueue displaySpDoneQueue;
-extern OSMesgQueue audioSpDoneQueue;
-extern OSMesgQueue displayViFrameQueue;
+OSThread viThread __attribute__((section(".bss")));
+char viThreadStack[0x180] __attribute__((section(".bss")));
+OSThread schedThread __attribute__((section(".bss")));
+char schedThreadStack[0x180] __attribute__((section(".bss")));
+OSThread displayThread __attribute__((section(".bss")));
+char displayThreadStack[0x180] __attribute__((section(".bss")));
+OSThread audioThread __attribute__((section(".bss")));
+char audioThreadStack[0x180] __attribute__((section(".bss")));
+OSMesgQueue viEventQueue __attribute__((section(".bss")));
+OSMesg viQueueMsgs[4] __attribute__((section(".bss")));
+OSMesgQueue schedQueue __attribute__((section(".bss")));
+OSMesg schedQueueMsgs[8] __attribute__((section(".bss")));
+OSMesgQueue audioTaskQueue __attribute__((section(".bss")));
+OSMesg audioTaskQueueMsgs[8] __attribute__((section(".bss")));
+OSMesgQueue displayQueue __attribute__((section(".bss")));
+OSMesg displayQueueMsgs[0x20] __attribute__((section(".bss")));
+OSMesgQueue dpDoneQueue __attribute__((section(".bss")));
+OSMesg dpDoneQueueMsgs[4] __attribute__((section(".bss")));
+OSMesgQueue displaySpDoneQueue __attribute__((section(".bss")));
+OSMesg displaySpDoneQueueMsgs[4] __attribute__((section(".bss")));
+OSMesgQueue audioSpDoneQueue __attribute__((section(".bss")));
+OSMesg audioSpDoneQueueMsgs[4] __attribute__((section(".bss")));
+OSMesgQueue displayViFrameQueue __attribute__((section(".bss")));
+OSMesg displayViFrameQueueMsgs[1] __attribute__((section(".bss")));
+ViConfig *currentViConfig __attribute__((section(".bss")));
+s16 frameCounter __attribute__((section(".bss")));
+s16 bootBlackoutFrames __attribute__((section(".bss")));
 
 // Function declarations (static - internal use only)
 
@@ -80,26 +80,26 @@ void initThreadManager(s32 viMode) {
     frameCounter = 0;
     bootBlackoutFrames = 0x1E;
     currentViConfig = NULL;
-    osCreateMesgQueue(&viEventQueue, &viQueueMsgs, 4);
+    osCreateMesgQueue(&viEventQueue, viQueueMsgs, 4);
     osViSetEvent(&viEventQueue, &viRetraceMsg, 1U);
     osSetEventMesg(OS_EVENT_PRENMI, &viEventQueue, &prenmiMsg);
 
     osCreateThread(&viThread, 4, viThreadEntry, 0, viThreadStack + sizeof(viThreadStack), 9);
 
-    osCreateMesgQueue(&schedQueue, &schedQueueMsgs, 8);
+    osCreateMesgQueue(&schedQueue, schedQueueMsgs, 8);
 
     osSetEventMesg(OS_EVENT_SP, &schedQueue, &spTaskDoneMsg);
     osCreateThread(&schedThread, 0xA, schedThreadEntry, 0, schedThreadStack + sizeof(schedThreadStack), 8);
-    osCreateMesgQueue(&displaySpDoneQueue, &displaySpDoneQueueMsgs, 4);
+    osCreateMesgQueue(&displaySpDoneQueue, displaySpDoneQueueMsgs, 4);
 
-    osCreateMesgQueue(&displayQueue, &displayQueueMsgs, 0x20);
-    osCreateMesgQueue(&dpDoneQueue, &dpDoneQueueMsgs, 4);
+    osCreateMesgQueue(&displayQueue, displayQueueMsgs, 0x20);
+    osCreateMesgQueue(&dpDoneQueue, dpDoneQueueMsgs, 4);
     osSetEventMesg(OS_EVENT_DP, &dpDoneQueue, &dpDoneMsg);
-    osCreateMesgQueue(&displayViFrameQueue, &displayViFrameQueueMsgs, 1);
+    osCreateMesgQueue(&displayViFrameQueue, displayViFrameQueueMsgs, 1);
     osCreateThread(&displayThread, 5, displayThreadEntry, 0, displayThreadStack + sizeof(displayThreadStack), 4);
 
-    osCreateMesgQueue(&audioSpDoneQueue, &audioSpDoneQueueMsgs, 4);
-    osCreateMesgQueue(&audioTaskQueue, &audioTaskQueueMsgs, 8);
+    osCreateMesgQueue(&audioSpDoneQueue, audioSpDoneQueueMsgs, 4);
+    osCreateMesgQueue(&audioTaskQueue, audioTaskQueueMsgs, 8);
     osCreateThread(&audioThread, 9, audioThreadEntry, 0, audioThreadStack + sizeof(audioThreadStack), 7);
 
     osStartThread(&viThread);
