@@ -1902,7 +1902,20 @@ restoreViewportOffsets = 0x8006F6F4; // rom:0x702F4
 initGraphicsSystem = 0x8006F718; // rom:0x70318
 
 gConnectedControllerMask = 0x800A9018;
-D_800A1C08_A2808 = 0x800A1C08; // size:0x18
+gControllerPackAllocationSize = 0x8009F630; // size:0x4
+gControllerStatuses = 0x8009F660; // size:0x10
+gControllerServiceThread = 0x8009F670; // size:0x21B0
+gControllerCommandQueue = 0x800A1820; // size:0x18
+gControllerCommandQueueMsgs = 0x800A1838; // size:0x30
+gControllerReadDoneQueue = 0x800A1868; // size:0x18
+gControllerReadDoneMsg = 0x800A1880; // size:0x8
+gControllerIoResultQueue = 0x800A1888; // size:0x18
+gControllerIoResultMsg = 0x800A18A0; // size:0x8
+gRumbleInitResultQueue = 0x800A18A8; // size:0x18
+gRumbleInitResultMsg = 0x800A18C0; // size:0x8
+gRumblePakPfs = 0x800A1A68; // size:0x1A0
+gControllerPads = 0x800A1C08; // size:0x18
+gControllerCommandBuffer = 0x800A1C20; // type:u32 size:0x78
 
 queueDirectDmaTransfer = 0x8003BB68;
 
@@ -2280,8 +2293,6 @@ gPiManagerMsgBuf = 0x800A2168; // rom:0xA2D48 segment:main size:0x320
 dmaStub = 0x8003BC58; // rom:0x3C858
 dmaLoadAndInvalidate = 0x8003BC60;
 drawNumericString = 0x8003BD60; // rom:0x3C960
-
-D_800A1C20_A2820 = 0x800A1C20; // type:u32 size:0x78
 
 checkTrickLocationDiscovery = 0x80019AC8;
 initTrickDiscoveryTrigger = 0x80019A80;

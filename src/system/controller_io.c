@@ -63,22 +63,22 @@ u32 D_8008FE90 = 0;
 u8 gButtonRepeatCounter[12] = { 0 };
 
 // Bss
-extern OSMesgQueue D_800A1820_A2400;
-extern OSMesgQueue D_800A1868_A2448;
-extern OSMesgQueue D_800A1888_A2468;
-extern OSMesgQueue D_800A18A8_A2488;
+extern OSMesgQueue gControllerCommandQueue;
+extern OSMesgQueue gControllerReadDoneQueue;
+extern OSMesgQueue gControllerIoResultQueue;
+extern OSMesgQueue gRumbleInitResultQueue;
 extern OSMesgQueue mainStack;
-extern OSPfs D_800A1A68_A2648[];
-extern OSContPad D_800A1C08_A2808[];
-extern s32 D_800A1880_A2460;
-extern s32 D_800A18A0_A2480;
-extern s32 D_800A18C0_A24A0;
+extern OSPfs gRumblePakPfs[];
+extern OSContPad gControllerPads[];
+extern s32 gControllerReadDoneMsg;
+extern s32 gControllerIoResultMsg;
+extern s32 gRumbleInitResultMsg;
 extern s32 D_800A8D10_A0080;
 extern u8 gConnectedControllerMask;
 extern u8 gControllerPollingEnabled;
-extern OSContStatus D_8009F660_A0240;
-extern OSThread D_8009F670_A0250;
-extern s32 D_800A1838_A2418;
+extern OSContStatus gControllerStatuses;
+extern OSThread gControllerServiceThread;
+extern s32 gControllerCommandQueueMsgs;
 extern u8 gControllerReadPending;
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
@@ -93,8 +93,8 @@ extern s32 gControllerPackFreeBlockCount;
 extern OSPfs controllerPacks[];
 extern PfsNote gControllerPackFileNote;
 extern s32 gControllerPackFileNumbers[];
-extern s32 D_8009F630_A0210;
-extern Entry D_800A1C20_A2820[];
+extern s32 gControllerPackAllocationSize;
+extern Entry gControllerCommandBuffer[];
 
 void initControllerSubsystem(void) {
     s32 result;
@@ -102,14 +102,14 @@ void initControllerSubsystem(void) {
     u8 controller_status;
 
     osCreateMesgQueue(&mainStack, (OSMesg)&D_800A8D10_A0080, 1);
-    osCreateMesgQueue(&D_800A1820_A2400, (OSMesg)&D_800A1838_A2418, 0xC);
-    osCreateMesgQueue(&D_800A1868_A2448, (OSMesg)&D_800A1880_A2460, 1);
-    osCreateMesgQueue(&D_800A1888_A2468, (OSMesg)&D_800A18A0_A2480, 1);
-    osCreateMesgQueue(&D_800A18A8_A2488, (OSMesg)&D_800A18C0_A24A0, 1);
+    osCreateMesgQueue(&gControllerCommandQueue, (OSMesg)&gControllerCommandQueueMsgs, 0xC);
+    osCreateMesgQueue(&gControllerReadDoneQueue, (OSMesg)&gControllerReadDoneMsg, 1);
+    osCreateMesgQueue(&gControllerIoResultQueue, (OSMesg)&gControllerIoResultMsg, 1);
+    osCreateMesgQueue(&gRumbleInitResultQueue, (OSMesg)&gRumbleInitResultMsg, 1);
     osSetEventMesg(5, &mainStack, (OSMesg)1);
 
     for (i = 0; i < 4; i++) {
-        result = osContInit(&mainStack, &gControllerPresentMask, &D_8009F660_A0240);
+        result = osContInit(&mainStack, &gControllerPresentMask, &gControllerStatuses);
         gConnectedControllerMask = 0;
         if (result == 0) {
             controller_status = gControllerPresentMask;
@@ -123,16 +123,16 @@ void initControllerSubsystem(void) {
             }
 
             for (i = 0; i < 4; i++) {
-                D_800A1C08_A2808[i].button = 0;
-                D_800A1C08_A2808[i].stick_x = 0;
-                D_800A1C08_A2808[i].stick_y = 0;
+                gControllerPads[i].button = 0;
+                gControllerPads[i].stick_x = 0;
+                gControllerPads[i].stick_y = 0;
             }
 
             gControllerReadPending = 0;
             initMotorStates();
             gControllerPollingEnabled = 1;
-            osCreateThread(&D_8009F670_A0250, 6, &controllerServiceThread, 0, &D_800A1820_A2400, 3);
-            osStartThread(&D_8009F670_A0250);
+            osCreateThread(&gControllerServiceThread, 6, &controllerServiceThread, 0, &gControllerCommandQueue, 3);
+            osStartThread(&gControllerServiceThread);
             return;
         }
 
@@ -152,15 +152,15 @@ void controllerServiceThread(void *arg0) {
 
     msg = NULL;
     while (TRUE) {
-        osRecvMesg(&D_800A1820_A2400, (OSMesg *)(&msg), 1);
+        osRecvMesg(&gControllerCommandQueue, (OSMesg *)(&msg), 1);
         cmd = msg->command;
 
         switch (cmd & 0x1F0) {
             case 0x10:
                 osContStartReadData(&mainStack);
                 osRecvMesg(&mainStack, &mesg2, 1);
-                osContGetReadData(D_800A1C08_A2808);
-                osSendMesg(&D_800A1868_A2448, (OSMesg)1, 0);
+                osContGetReadData(gControllerPads);
+                osSendMesg(&gControllerReadDoneQueue, (OSMesg)1, 0);
                 continue;
 
             case 0x20:
@@ -194,15 +194,15 @@ void controllerServiceThread(void *arg0) {
             case 0x80:
                 motorState = msg->arg;
                 channel = cmd & 3;
-                motorState->status[msg->command & 3] = osMotorInit(&mainStack, &D_800A1A68_A2648[channel], channel);
-                osSendMesg(&D_800A18A8_A2488, (OSMesg)motorState->status[msg->command & 3], 0);
+                motorState->status[msg->command & 3] = osMotorInit(&mainStack, &gRumblePakPfs[channel], channel);
+                osSendMesg(&gRumbleInitResultQueue, (OSMesg)motorState->status[msg->command & 3], 0);
                 continue;
 
             case 0x90:
                 motorState = msg->arg;
                 queue = &mainStack;
                 channel = cmd & 3;
-                motorState->status[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2648[channel], channel);
+                motorState->status[msg->command & 3] = osMotorInit(queue, &gRumblePakPfs[channel], channel);
                 continue;
 
             case 0xA0:
@@ -210,21 +210,21 @@ void controllerServiceThread(void *arg0) {
                 channel = cmd & 3;
                 if (motorState->status[channel] != 0) {
                     queue = &mainStack;
-                    motorState->status[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2648[channel], channel);
+                    motorState->status[msg->command & 3] = osMotorInit(queue, &gRumblePakPfs[channel], channel);
                     continue;
                 }
-                (*motorState).status[msg->command & 3] = osMotorStart(&D_800A1A68_A2648[channel]);
+                (*motorState).status[msg->command & 3] = osMotorStart(&gRumblePakPfs[channel]);
                 continue;
 
             case 0xB0:
                 motorState = msg->arg;
                 channel = cmd & 3;
                 if (motorState->status[channel] == 0) {
-                    motorState->status[msg->command & 3] = osMotorStop(&D_800A1A68_A2648[channel]);
+                    motorState->status[msg->command & 3] = osMotorStop(&gRumblePakPfs[channel]);
                     continue;
                 }
                 queue = &mainStack;
-                motorState->status[msg->command & 3] = osMotorInit(queue, &D_800A1A68_A2648[channel], channel);
+                motorState->status[msg->command & 3] = osMotorInit(queue, &gRumblePakPfs[channel], channel);
                 continue;
 
             case 0xD0:
@@ -252,8 +252,8 @@ void startControllerRead(void) {
 
     if ((D_8008FE8F_90A8F == 0) && (gControllerReadPending == 0) && (gControllerPresentMask != 0)) {
         temp_a1 = D_8008FE8C_90A8C;
-        D_800A1C20_A2820[temp_a1].command = 0x10;
-        osSendMesg(&D_800A1820_A2400, (OSMesg *)&D_800A1C20_A2820[temp_a1], 1);
+        gControllerCommandBuffer[temp_a1].command = 0x10;
+        osSendMesg(&gControllerCommandQueue, (OSMesg *)&gControllerCommandBuffer[temp_a1], 1);
         temp_v0 = (u16)D_8008FE8C_90A8C + 1;
         D_8008FE8C_90A8C = temp_v0;
         if (temp_v0 >= 0xF) {
@@ -269,14 +269,14 @@ void processControllerInputs(void) {
     s16 stickVal;
 
     receivedMsg = NULL;
-    if (osRecvMesg(&D_800A1868_A2448, (OSMesg *)&receivedMsg, 0) == 0) {
+    if (osRecvMesg(&gControllerReadDoneQueue, (OSMesg *)&receivedMsg, 0) == 0) {
         i = 0;
         while ((u16)i < 4) {
             if (!((gControllerPresentMask >> (u16)i) & 1))
                 goto next;
-            if (D_800A1C08_A2808[(u16)i].errno != 0)
+            if (gControllerPads[(u16)i].errno != 0)
                 goto next;
-            stickVal = D_800A1C08_A2808[(u16)i].stick_x;
+            stickVal = gControllerPads[(u16)i].stick_x;
             if (stickVal > 0) {
                 if (stickVal < 8) {
                     stickVal = 0;
@@ -301,7 +301,7 @@ void processControllerInputs(void) {
                 }
                 gAnalogStickX[(u16)i] = -stickVal;
             }
-            stickVal = D_800A1C08_A2808[(u16)i].stick_y;
+            stickVal = gControllerPads[(u16)i].stick_y;
             if (stickVal > 0) {
                 if (stickVal < 8) {
                     stickVal = 0;
@@ -328,7 +328,7 @@ void processControllerInputs(void) {
             }
             gPreviousButtonsPressed[(u16)i] = gButtonsPressed[(u16)i];
             gButtonsPressed[(u16)i] = 0;
-            gButtonsPressed[(u16)i] = D_800A1C08_A2808[(u16)i].button;
+            gButtonsPressed[(u16)i] = gControllerPads[(u16)i].button;
             if (gPreviousButtonsPressed[(u16)i] & STICK_RIGHT) {
                 if (gAnalogStickX[(u16)i] >= 11) {
                     gButtonsPressed[(u16)i] |= STICK_RIGHT;
@@ -425,7 +425,7 @@ void initControllerPack(s32 channel) {
         controllerPackStatus = osPfsInitPak(mainStackLocal, selectedPack, controllerPortNumber);
     }
 
-    osSendMesg(&D_800A1888_A2468, (OSMesg *)controllerPackStatus, OS_MESG_BLOCK);
+    osSendMesg(&gControllerIoResultQueue, (OSMesg *)controllerPackStatus, OS_MESG_BLOCK);
 }
 
 void controllerPackReadAsyncStub(void) {
@@ -523,7 +523,7 @@ void controllerPackReadFile(u16 channel, ControllerPackFileRequest *request) {
         }
     }
 
-    osSendMesg(&D_800A1888_A2468, (OSMesg)err, OS_MESG_BLOCK);
+    osSendMesg(&gControllerIoResultQueue, (OSMesg)err, OS_MESG_BLOCK);
 }
 
 void controllerPackWriteAsyncStub(void) {
@@ -563,7 +563,7 @@ void controllerPackWriteFile(u16 channel, ControllerPackFileRequest *request) {
             reqPages = pages;
         }
 
-        D_8009F630_A0210 = (reqPages & 0xFFFF) << 8;
+        gControllerPackAllocationSize = (reqPages & 0xFFFF) << 8;
         __asm__("");
         gControllerPackFileNote.gameCode = request->gameCode;
         gControllerPackFileNote.companyCode = request->companyCode;
@@ -604,7 +604,7 @@ void controllerPackWriteFile(u16 channel, ControllerPackFileRequest *request) {
                     gControllerPackFileNote.gameCode,
                     gControllerPackFileNote.gameName,
                     gControllerPackFileNote.extName,
-                    D_8009F630_A0210,
+                    gControllerPackAllocationSize,
                     &gControllerPackFileNumbers[channel & 0xFFFF]
                 );
             }
@@ -634,7 +634,7 @@ void controllerPackWriteFile(u16 channel, ControllerPackFileRequest *request) {
         }
     }
 
-    osSendMesg(&D_800A1888_A2468, (OSMesg)err, 1);
+    osSendMesg(&gControllerIoResultQueue, (OSMesg)err, 1);
 }
 
 void controllerPackListFilesAsyncStub(void) {
@@ -682,7 +682,7 @@ void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders)
         } while (fileIndex < 16);
         err = 0;
     }
-    osSendMesg(&D_800A1888_A2468, (OSMesg)err, 1);
+    osSendMesg(&gControllerIoResultQueue, (OSMesg)err, 1);
 }
 
 void controllerPackDeleteFileAsyncStub(void) {
@@ -715,7 +715,7 @@ void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[
         }
     }
 
-    osSendMesg(&D_800A1888_A2468, (void *)err, OS_MESG_BLOCK);
+    osSendMesg(&gControllerIoResultQueue, (void *)err, OS_MESG_BLOCK);
 }
 
 void controllerPackDeleteFileFromHeaderAsyncStub(void) {
@@ -746,7 +746,7 @@ void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHead
         }
     }
 
-    osSendMesg(&D_800A1888_A2468, (void *)err, OS_MESG_BLOCK);
+    osSendMesg(&gControllerIoResultQueue, (void *)err, OS_MESG_BLOCK);
 }
 
 void controllerPackReadStatusAsyncStub(void) {
@@ -775,7 +775,7 @@ void controllerPackReadStatus(s32 arg0) {
         }
     }
 
-    osSendMesg(&D_800A1888_A2468, (OSMesg *)err, OS_MESG_BLOCK);
+    osSendMesg(&gControllerIoResultQueue, (OSMesg *)err, OS_MESG_BLOCK);
 }
 
 void motorUpdateStub(void) {
@@ -800,9 +800,13 @@ void motorProcessState(MotorState *arg0) {
                 }
                 if (arg0->intensity[i] == 0) {
                     if (arg0->duration[i] != 0) {
-                        D_800A1C20_A2820[D_8008FE8C_90A8C].command = i + 0xB0;
-                        D_800A1C20_A2820[D_8008FE8C_90A8C].arg = arg0;
-                        osSendMesg(&D_800A1820_A2400, (OSMesg *)&D_800A1C20_A2820[D_8008FE8C_90A8C], OS_MESG_BLOCK);
+                        gControllerCommandBuffer[D_8008FE8C_90A8C].command = i + 0xB0;
+                        gControllerCommandBuffer[D_8008FE8C_90A8C].arg = arg0;
+                        osSendMesg(
+                            &gControllerCommandQueue,
+                            (OSMesg *)&gControllerCommandBuffer[D_8008FE8C_90A8C],
+                            OS_MESG_BLOCK
+                        );
                         temp_v0 = (u16)D_8008FE8C_90A8C + 1;
                         D_8008FE8C_90A8C = temp_v0;
                         if (temp_v0 >= 0xF) {
@@ -811,9 +815,13 @@ void motorProcessState(MotorState *arg0) {
                         arg0->duration[i]--;
                     }
                 } else {
-                    D_800A1C20_A2820[D_8008FE8C_90A8C].command = i + 0xA0;
-                    D_800A1C20_A2820[D_8008FE8C_90A8C].arg = arg0;
-                    osSendMesg(&D_800A1820_A2400, (OSMesg *)&D_800A1C20_A2820[D_8008FE8C_90A8C], OS_MESG_BLOCK);
+                    gControllerCommandBuffer[D_8008FE8C_90A8C].command = i + 0xA0;
+                    gControllerCommandBuffer[D_8008FE8C_90A8C].arg = arg0;
+                    osSendMesg(
+                        &gControllerCommandQueue,
+                        (OSMesg *)&gControllerCommandBuffer[D_8008FE8C_90A8C],
+                        OS_MESG_BLOCK
+                    );
                     temp_v0 = (u16)D_8008FE8C_90A8C + 1;
                     D_8008FE8C_90A8C = temp_v0;
                     if (temp_v0 >= 0xF) {
@@ -824,9 +832,13 @@ void motorProcessState(MotorState *arg0) {
                 arg0->intensity[i] = 0;
                 break;
             case 1:
-                D_800A1C20_A2820[D_8008FE8C_90A8C].command = i + 0x90;
-                D_800A1C20_A2820[D_8008FE8C_90A8C].arg = arg0;
-                osSendMesg(&D_800A1820_A2400, (OSMesg *)&D_800A1C20_A2820[D_8008FE8C_90A8C], OS_MESG_BLOCK);
+                gControllerCommandBuffer[D_8008FE8C_90A8C].command = i + 0x90;
+                gControllerCommandBuffer[D_8008FE8C_90A8C].arg = arg0;
+                osSendMesg(
+                    &gControllerCommandQueue,
+                    (OSMesg *)&gControllerCommandBuffer[D_8008FE8C_90A8C],
+                    OS_MESG_BLOCK
+                );
                 temp_v0 = (u16)D_8008FE8C_90A8C + 1;
                 D_8008FE8C_90A8C = temp_v0;
                 if (temp_v0 >= 0xF) {
@@ -836,9 +848,13 @@ void motorProcessState(MotorState *arg0) {
                 arg0->state[i] = 2;
                 break;
             case 2:
-                D_800A1C20_A2820[D_8008FE8C_90A8C].command = i + 0xB0;
-                D_800A1C20_A2820[D_8008FE8C_90A8C].arg = arg0;
-                osSendMesg(&D_800A1820_A2400, (OSMesg *)&D_800A1C20_A2820[D_8008FE8C_90A8C], OS_MESG_BLOCK);
+                gControllerCommandBuffer[D_8008FE8C_90A8C].command = i + 0xB0;
+                gControllerCommandBuffer[D_8008FE8C_90A8C].arg = arg0;
+                osSendMesg(
+                    &gControllerCommandQueue,
+                    (OSMesg *)&gControllerCommandBuffer[D_8008FE8C_90A8C],
+                    OS_MESG_BLOCK
+                );
                 temp_v0 = (u16)D_8008FE8C_90A8C + 1;
                 D_8008FE8C_90A8C = temp_v0;
                 if (temp_v0 >= 0xF) {
@@ -896,9 +912,9 @@ void requestRumblePakInit(s32 channel) {
     s32 queueIndex;
     temp_v0 = channel + 0x80;
     queueIndex = D_8008FE8C_90A8C;
-    D_800A1C20_A2820[queueIndex].arg = &gMotorState;
-    D_800A1C20_A2820[queueIndex].command = temp_v0;
-    osSendMesg(&D_800A1820_A2400, (OSMesg *)(&D_800A1C20_A2820[queueIndex]), OS_MESG_BLOCK);
+    gControllerCommandBuffer[queueIndex].arg = &gMotorState;
+    gControllerCommandBuffer[queueIndex].command = temp_v0;
+    osSendMesg(&gControllerCommandQueue, (OSMesg *)(&gControllerCommandBuffer[queueIndex]), OS_MESG_BLOCK);
     temp_v0 = ((u16)D_8008FE8C_90A8C) + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
@@ -913,7 +929,7 @@ void *pollRumblePakInit(void) {
 
     result = NULL;
     status = (void *)-1;
-    if (osRecvMesg(&D_800A18A8_A2488, &result, OS_MESG_NOBLOCK) == 0) {
+    if (osRecvMesg(&gRumbleInitResultQueue, &result, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
         status = result;
     }
@@ -926,8 +942,8 @@ void eepromProbeAsync(void) {
 
     D_8008FE8F_90A8F = 1;
     queueIndex = D_8008FE8C_90A8C;
-    D_800A1C20_A2820[queueIndex].command = 0xD0;
-    osSendMesg(&D_800A1820_A2400, (OSMesg *)&D_800A1C20_A2820[queueIndex], OS_MESG_BLOCK);
+    gControllerCommandBuffer[queueIndex].command = 0xD0;
+    osSendMesg(&gControllerCommandQueue, (OSMesg *)&gControllerCommandBuffer[queueIndex], OS_MESG_BLOCK);
     temp_v0 = (u16)D_8008FE8C_90A8C + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
@@ -941,7 +957,7 @@ void *pollEepromProbeAsync(void) {
 
     result = NULL;
     status = (void *)-1;
-    if (osRecvMesg(&D_800A1888_A2468, &result, OS_MESG_NOBLOCK) == 0) {
+    if (osRecvMesg(&gControllerIoResultQueue, &result, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
         status = result;
     }
@@ -949,7 +965,7 @@ void *pollEepromProbeAsync(void) {
 }
 
 void eepromProbe(void) {
-    osSendMesg(&D_800A1888_A2468, (OSMesg *)osEepromProbe(&mainStack), OS_MESG_BLOCK);
+    osSendMesg(&gControllerIoResultQueue, (OSMesg *)osEepromProbe(&mainStack), OS_MESG_BLOCK);
 }
 
 void eepromReadAsync(s32 slotIndex, void *buffer) {
@@ -958,9 +974,9 @@ void eepromReadAsync(s32 slotIndex, void *buffer) {
 
     D_8008FE8F_90A8F = 1;
     queueIndex = D_8008FE8C_90A8C;
-    D_800A1C20_A2820[queueIndex].arg = buffer;
-    D_800A1C20_A2820[queueIndex].command = (slotIndex & 0xFF) + 0xE0;
-    osSendMesg(&D_800A1820_A2400, (OSMesg *)&D_800A1C20_A2820[queueIndex], OS_MESG_BLOCK);
+    gControllerCommandBuffer[queueIndex].arg = buffer;
+    gControllerCommandBuffer[queueIndex].command = (slotIndex & 0xFF) + 0xE0;
+    osSendMesg(&gControllerCommandQueue, (OSMesg *)&gControllerCommandBuffer[queueIndex], OS_MESG_BLOCK);
     temp_v0 = (u16)D_8008FE8C_90A8C + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
@@ -974,7 +990,7 @@ void *pollEepromReadAsync(void) {
 
     result = NULL;
     status = (void *)-1;
-    if (osRecvMesg(&D_800A1888_A2468, &result, OS_MESG_NOBLOCK) == 0) {
+    if (osRecvMesg(&gControllerIoResultQueue, &result, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
         status = result;
     }
@@ -983,7 +999,11 @@ void *pollEepromReadAsync(void) {
 
 void eepromRead(s32 slotIndex, u8 *buffer) {
     u8 blockAddress = ((slotIndex & 0xFF) * 0x10) & 0xF0;
-    osSendMesg(&D_800A1888_A2468, (OSMesg *)osEepromLongRead(&mainStack, blockAddress, buffer, 0x58), OS_MESG_BLOCK);
+    osSendMesg(
+        &gControllerIoResultQueue,
+        (OSMesg *)osEepromLongRead(&mainStack, blockAddress, buffer, 0x58),
+        OS_MESG_BLOCK
+    );
 }
 
 void eepromWriteAsync(s32 slotIndex) {
@@ -992,8 +1012,8 @@ void eepromWriteAsync(s32 slotIndex) {
 
     D_8008FE8F_90A8F = 1;
     queueIndex = D_8008FE8C_90A8C;
-    D_800A1C20_A2820[queueIndex].command = (slotIndex & 0xFF) + 0xF0;
-    osSendMesg(&D_800A1820_A2400, &D_800A1C20_A2820[queueIndex], OS_MESG_BLOCK);
+    gControllerCommandBuffer[queueIndex].command = (slotIndex & 0xFF) + 0xF0;
+    osSendMesg(&gControllerCommandQueue, &gControllerCommandBuffer[queueIndex], OS_MESG_BLOCK);
     temp_v0 = (u16)D_8008FE8C_90A8C + 1;
     D_8008FE8C_90A8C = temp_v0;
     if (temp_v0 >= 0xF) {
@@ -1007,7 +1027,7 @@ void *pollEepromWriteAsync(void) {
 
     result = NULL;
     status = (void *)-1;
-    if (osRecvMesg(&D_800A1888_A2468, &result, OS_MESG_NOBLOCK) == 0) {
+    if (osRecvMesg(&gControllerIoResultQueue, &result, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
         status = result;
     }
@@ -1040,7 +1060,7 @@ void eepromWrite(s32 slotIndex) {
     i = result;
     EepromSaveData->checksum = checksum;
     result = osEepromLongWrite(&mainStack, i & 0xF0, (u8 *)EepromSaveData, dataSize);
-    osSendMesg(&D_800A1888_A2468, (OSMesg)result, 1);
+    osSendMesg(&gControllerIoResultQueue, (OSMesg)result, 1);
 }
 
 void eepromWriteAllAsync(void *buffer) {
@@ -1051,10 +1071,10 @@ void eepromWriteAllAsync(void *buffer) {
     queueIndex = D_8008FE8C_90A8C;
     queueIndexCopy = queueIndex;
     D_8008FE8F_90A8F = 1;
-    D_800A1C20_A2820[queueIndex].command = 0x140;
-    D_800A1C20_A2820[queueIndexCopy].arg = buffer;
+    gControllerCommandBuffer[queueIndex].command = 0x140;
+    gControllerCommandBuffer[queueIndexCopy].arg = buffer;
 
-    osSendMesg(&D_800A1820_A2400, &D_800A1C20_A2820[queueIndex], OS_MESG_BLOCK);
+    osSendMesg(&gControllerCommandQueue, &gControllerCommandBuffer[queueIndex], OS_MESG_BLOCK);
 
     queueIndex = D_8008FE8C_90A8C + 1;
     D_8008FE8C_90A8C = queueIndex;
@@ -1070,7 +1090,7 @@ void *pollEepromWriteAllAsync(void) {
 
     result = NULL;
     status = (void *)-1;
-    if (osRecvMesg(&D_800A1888_A2468, &result, OS_MESG_NOBLOCK) == 0) {
+    if (osRecvMesg(&gControllerIoResultQueue, &result, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
         status = result;
     }
@@ -1078,5 +1098,5 @@ void *pollEepromWriteAllAsync(void) {
 }
 
 void eepromWriteAll(u8 *buffer) {
-    osSendMesg(&D_800A1888_A2468, (OSMesg *)osEepromLongWrite(&mainStack, 0, buffer, 0x200), OS_MESG_BLOCK);
+    osSendMesg(&gControllerIoResultQueue, (OSMesg *)osEepromLongWrite(&mainStack, 0, buffer, 0x200), OS_MESG_BLOCK);
 }
