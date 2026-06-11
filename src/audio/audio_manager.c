@@ -73,6 +73,7 @@ extern ALGlobals __libmus_alglobals;
 extern s32 __muscontrol_flag;
 
 // bss
+char gAudioManagerStack[0x2000] __attribute__((section(".bss")));
 u8 gDriveRomInitialized __attribute__((section(".bss")));
 AudioNode *gActiveListHead __attribute__((section(".bss")));
 AudioNode *D_800A6468_A7048 __attribute__((section(".bss")));
@@ -199,7 +200,14 @@ void initAudioManager(
     osCreateMesgQueue(&gAudioMsgQueue, (OSMesg *)gAudioMsgBuffer, maxChannels * 2);
 
     if (!gAudioThreadCreated) {
-        osCreateThread(&gAudioManager.thread, 3, audioManagerThread, 0, &gDriveRomInitialized, id);
+        osCreateThread(
+            &gAudioManager.thread,
+            3,
+            audioManagerThread,
+            0,
+            gAudioManagerStack + sizeof(gAudioManagerStack),
+            id
+        );
     }
 
     osStartThread(&gAudioManager.thread);

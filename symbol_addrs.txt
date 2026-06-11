@@ -2055,7 +2055,7 @@ handleAudioUnderrun = 0x80071294;
 gCartRomHandle = 0x800A64AC;
 gDriveRomHandle = 0x800A64B0;
 gDriveRomInitialized = 0x800A6460;
-gAudioManagerStack = 0x800A445C;
+gAudioManagerStack = 0x800A4460;
 gAudioManager = 0x800A8D98; // type:u8 size:0x230
 
 processAudioNodeList = 0x80071518;

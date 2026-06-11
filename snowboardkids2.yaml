@@ -492,7 +492,7 @@ segments:
       - { start: 0x9FDF0, type: .bss, vram: 0x8009F1F0, name: graphics/sprite_table }
       - { type: .bss, vram: 0x8009F200, name: story/map_state }
       - { type: bss, vram: 0x8009F210, name: A02E0 }
-      - { type: .bss, vram: 0x800A6460, name: audio/audio_manager }
+      - { type: .bss, vram: 0x800A4460, name: audio/audio_manager }
       - { type: .bss, vram: 0x800A64C0, name: race/player }
       - {
           type: lib,
