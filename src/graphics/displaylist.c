@@ -134,17 +134,16 @@ typedef struct {
     DataTable_19E80 *fontDataTable;
 } FontSystemInitData;
 
+void *gCachedDisplayListSegment1 __attribute__((section(".bss")));
+void *gCachedDisplayListSegment2 __attribute__((section(".bss")));
+void *gCachedDisplayListSegment3 __attribute__((section(".bss")));
+u32 gCachedSpriteTextureData __attribute__((section(".bss")));
+u32 gCachedSpritePaletteData __attribute__((section(".bss")));
+u8 gCachedSpriteAlpha __attribute__((section(".bss")));
+
 extern s32 gLookAtPtr;
-extern ActiveViewportState *gActiveViewport;
 extern Gfx *gDisplayListAllocPtr;
-extern s16 gGraphicsMode;
-extern void *gCachedDisplayListSegment1;
-extern void *gCachedDisplayListSegment2;
-extern void *gCachedDisplayListSegment3;
 extern Gfx D_8009A780_9B380[];
-extern u32 gCachedSpriteTextureData;
-extern u32 gCachedSpritePaletteData;
-extern u8 gCachedSpriteAlpha;
 
 Gfx gAlphaSpriteSetupDL[] = {
     gsSPClearGeometryMode(
