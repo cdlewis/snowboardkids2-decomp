@@ -13,6 +13,7 @@
 
 #define MEMORY_HEAP_SIZE 0x200000
 #define gMemoryHeapEnd (gMemoryHeapBase + MEMORY_HEAP_SIZE)
+#define BSS __attribute__((section(".bss")))
 
 // Array view of arena regions [gLinearArenaRegions, gLinearArenaBuffer]
 #define gLinearArenaRegionsArray ((s32 *)&gLinearArenaRegions)
@@ -125,28 +126,33 @@ UcodeEntry microcodeGroups[] = {
 
 u8 gNeedsDisplayListInit = 1;
 
-extern void *gDisplayBufferMsgs;
-extern s32 D_800A35C8_A41A8[];
 extern s16 gViewportOriginY;
 extern s16 gViewportOriginX;
-extern CallbackPoolSlot *gViewportCallbackPools[];
-extern s32 gRegionAllocEnd;
-extern void **gLinearArenaRegions;
 extern Gfx *gDisplayListAllocPtr;
-extern void *gArenaBasePtr;
-extern void *gLinearAllocPtr;
-extern void *gLinearAllocEnd;
-extern void *gGraphicsArenaCurr;
-extern u32 gGraphicsArenaEnd;
-extern void *gLinearArenaBuffer;
-extern void *gGraphicsArenaPtrs[];
-extern void *gGraphicsArena0;
-extern void *gDramStack;
-extern void *gOutputBuffer;
-extern void *gYieldBuffer;
-extern ViewportNode *gLastViewportInGroup;
 extern s16 gTextureEnabled;
 extern void *gLookAtPtr;
+
+void *gDramStack BSS = 0;
+void *gOutputBuffer BSS = 0;
+void *gYieldBuffer BSS = 0;
+u8 D_800A336C_9FDFC[4] BSS = { 0 };
+ViewportNode gRootViewport BSS = { 0 };
+s32 gFrameBufferFlags[2] BSS = { 0 };
+s32 gFrameBufferCounters[2] BSS = { 0 };
+s32 gRegionAllocEnd BSS = 0;
+void *gGraphicsArenaPtrs[1] BSS = { 0 };
+void *gGraphicsArena0 BSS = 0;
+void *gGraphicsArenaCurr BSS = 0;
+u32 gGraphicsArenaEnd BSS = 0;
+u8 gDisplayFramePending BSS = 0;
+void *gDisplayBufferMsgs BSS = 0;
+void *gArenaBasePtr BSS = 0;
+void *gLinearAllocPtr BSS = 0;
+void *gLinearAllocEnd BSS = 0;
+void **gLinearArenaRegions BSS = 0;
+void *gLinearArenaBuffer BSS = 0;
+CallbackPoolSlot *gViewportCallbackPools[0x10] BSS = { 0 };
+s32 D_800A35C8_A0058[2] BSS = { 0 };
 
 void restoreViewportOffsets(void);
 void initGraphicsSystem(void);
@@ -912,7 +918,7 @@ void initGraphicsSystem(void) {
     restoreViewportOffsets();
 
     i = 0x10;
-    ptr = &D_800A35C8_A41A8[0];
+    ptr = &D_800A35C8_A0058[0];
     do {
         *ptr = 0;
         i--;
