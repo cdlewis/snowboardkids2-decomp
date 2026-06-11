@@ -244,14 +244,17 @@ StoryMapNpcDialogueConfig sStoryMapNpcDialogueTable = {
      },
 };
 
-extern ParallaxScreenHistory gParallaxScreenHistory;
+// Bss
+s32 gStoryMapNpcHomeX BSS = 0;
+s32 gStoryMapNpcHomeZ BSS = 0;
+s16 gStoryMapNpcHomeFacingAngle BSS = 0;
+static u8 sStoryMapNpcHomePadding[4] BSS = { 0 };
+ParallaxScreenHistory gParallaxScreenHistory BSS = { 0 };
+
 extern Vec3i gParallaxOffset;
 extern s32 gParallaxFrameCounter;
 extern s16 gParallaxWobbleAngle;
 extern s32 gParallaxReverseDirection;
-extern s32 gStoryMapNpcHomeX;
-extern s32 gStoryMapNpcHomeZ;
-extern s16 gStoryMapNpcHomeFacingAngle;
 extern s16 gStoryMapItemWaypointCounts[];
 
 s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle);

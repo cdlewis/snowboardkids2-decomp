@@ -36,7 +36,6 @@ typedef struct {
     u8 initialSoundDelay;
 } TitleState;
 
-extern u8 gTitleExitMode;
 extern s32 gControllerInputs;
 extern s32 gButtonsPressed;
 extern u8 gDebugUnlockEnabled;
@@ -55,6 +54,11 @@ void checkUnlockAllCheatCode(void);
 void unlockAllContent(void);
 void unlockPartialContent(void);
 void handleTitleMenuInput(void);
+
+u8 gTitleExitMode BSS = 0;
+static u8 sTitleScreenBssPadding0[0xC] BSS = { 0 };
+s16 storyMapExitCode BSS = 0;
+static u8 sTitleScreenBssPadding1[0xC] BSS = { 0 };
 
 s32 gTitleCameraSettings[64] = {
     0xF8BE0000, 0x1F2B07B8, 0x1F0001CC, 0xE1CF07ED, 0xF8F90000, 0xFF6D2B6E, 0x003D9000, 0xFFDDCF14,
