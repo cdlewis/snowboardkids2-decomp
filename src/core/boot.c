@@ -4,21 +4,29 @@
 #include "os_thread.h"
 
 void idleThreadEntrypoint(void *);
-extern OSThread idleThread;
-extern OSThread mainThread;
-extern void *mainStack;
+OSThread idleThread BSS;
+static u8 idleThreadStack[0x180] BSS;
+OSThread mainThread BSS;
+extern u8 mainStack[0x820];
 
 #define IDLE_THREAD_ID 1
 #define MAIN_THREAD_ID 2
 
 void mainproc(void) {
     osInitialize();
-    osCreateThread(&idleThread, IDLE_THREAD_ID, idleThreadEntrypoint, NULL, &mainThread, 2);
+    osCreateThread(
+        &idleThread,
+        IDLE_THREAD_ID,
+        idleThreadEntrypoint,
+        NULL,
+        idleThreadStack + sizeof(idleThreadStack),
+        2
+    );
     osStartThread(&idleThread);
 }
 
 void idleThreadEntrypoint(void *arg /* NULL */) {
-    osCreateThread(&mainThread, MAIN_THREAD_ID, mainThreadEntrypoint, arg, &mainStack, 2);
+    osCreateThread(&mainThread, MAIN_THREAD_ID, mainThreadEntrypoint, arg, mainStack, 2);
     osStartThread(&mainThread);
     osSetThreadPri(NULL, OS_PRIORITY_IDLE);
 
