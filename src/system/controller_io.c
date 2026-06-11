@@ -63,23 +63,34 @@ u32 D_8008FE90 = 0;
 u8 gButtonRepeatCounter[12] = { 0 };
 
 // Bss
-extern OSMesgQueue gControllerCommandQueue;
-extern OSMesgQueue gControllerReadDoneQueue;
-extern OSMesgQueue gControllerIoResultQueue;
-extern OSMesgQueue gRumbleInitResultQueue;
+s32 gControllerPackAllocationSize BSS = 0;
+PfsNote gControllerPackFileNote BSS = { 0 };
+s32 gControllerPackFileNumbers[4] BSS = { 0 };
+OSContStatus gControllerStatuses[4] BSS = { 0 };
+OSThread gControllerServiceThread BSS = { 0 };
+static u8 gControllerServiceThreadStack[0x2000] BSS = { 0 };
+OSMesgQueue gControllerCommandQueue BSS = { 0 };
+OSMesg gControllerCommandQueueMsgs[12] BSS = { 0 };
+OSMesgQueue gControllerReadDoneQueue BSS = { 0 };
+OSMesg gControllerReadDoneMsg BSS = 0;
+static s32 D_800A1884_A2484 BSS = 0;
+OSMesgQueue gControllerIoResultQueue BSS = { 0 };
+OSMesg gControllerIoResultMsg BSS = 0;
+static s32 D_800A18A4_A24A4 BSS = 0;
+OSMesgQueue gRumbleInitResultQueue BSS = { 0 };
+OSMesg gRumbleInitResultMsg BSS = 0;
+static s32 D_800A18C4_A24C4 BSS = 0;
+OSPfs controllerPacks[4] BSS = { 0 };
+OSPfs gRumblePakPfs[4] BSS = { 0 };
+OSContPad gControllerPads[4] BSS = { 0 };
+Entry gControllerCommandBuffer[15] BSS = { 0 };
+u8 gControllerReadPending BSS = 0;
+static u8 D_800A1C9C_A289C[0x124] BSS = { 0 };
+
 extern OSMesgQueue mainStack;
-extern OSPfs gRumblePakPfs[];
-extern OSContPad gControllerPads[];
-extern s32 gControllerReadDoneMsg;
-extern s32 gControllerIoResultMsg;
-extern s32 gRumbleInitResultMsg;
 extern s32 D_800A8D10_A0080;
 extern u8 gConnectedControllerMask;
 extern u8 gControllerPollingEnabled;
-extern OSContStatus gControllerStatuses;
-extern OSThread gControllerServiceThread;
-extern s32 gControllerCommandQueueMsgs;
-extern u8 gControllerReadPending;
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
 extern s32 gButtonsPressed[];
@@ -90,11 +101,6 @@ extern u8 gRumblePakReadyMask;
 extern MotorState gMotorState;
 extern s32 gControllerPackFileCount;
 extern s32 gControllerPackFreeBlockCount;
-extern OSPfs controllerPacks[];
-extern PfsNote gControllerPackFileNote;
-extern s32 gControllerPackFileNumbers[];
-extern s32 gControllerPackAllocationSize;
-extern Entry gControllerCommandBuffer[];
 
 void initControllerSubsystem(void) {
     s32 result;
@@ -109,7 +115,7 @@ void initControllerSubsystem(void) {
     osSetEventMesg(5, &mainStack, (OSMesg)1);
 
     for (i = 0; i < 4; i++) {
-        result = osContInit(&mainStack, &gControllerPresentMask, &gControllerStatuses);
+        result = osContInit(&mainStack, &gControllerPresentMask, gControllerStatuses);
         gConnectedControllerMask = 0;
         if (result == 0) {
             controller_status = gControllerPresentMask;
