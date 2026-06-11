@@ -1,20 +1,17 @@
 #include "text/font_assets.h"
-
 #include "common.h"
 #include "data/data_table.h"
 #include "graphics/graphics.h"
-
 #include "gbi.h"
 #include "graphics/sprite_rdp.h"
 #include "mbi.h"
 
-extern s32 gFontTextureData;
-extern s32 gFontPaletteBase;
-extern u16 gDefaultFontPalette[];
+s32 gFontTextureData __attribute__((section(".bss")));
+s32 gFontPaletteBase __attribute__((section(".bss")));
+s8 gCurrentPaletteId __attribute__((section(".bss")));
 
+extern u16 gDefaultFontPalette[];
 extern Gfx *gDisplayListAllocPtr;
-extern s16 gGraphicsMode;
-extern s8 gCurrentPaletteId;
 extern s16 gTextureEnabled[];
 
 Gfx gFontDisplayListSetup[] = {
