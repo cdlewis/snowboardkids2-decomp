@@ -377,8 +377,9 @@ IntroFrameData2 sIntroCameraEvents[] = {
 };
 
 // Bss
+u8 gRaceResultCode __attribute__((section(".bss"))) = 0;
+
 extern s8 gControllerPollingEnabled;
-extern u8 gRaceResultCode;
 extern s32 gControllerInputs[4];
 extern SessionConfig *gGameSessionContext;
 
