@@ -494,8 +494,8 @@ playMusicTrackWithVoice = 0x800574E0; // rom:0x580E0
 playMusicTrackWithFadeIn = 0x80057514; // rom:0x58114
 setMusicVolumeFade = 0x80057550; // rom:0x58150
 setMusicFadeOut = 0x80057564; // rom:0x58164
-initializeGfxCommThread = 0x8005758C; // rom:0x5818C
-gfxCommThreadFunc = 0x80057614; // rom:0x58214
+initializeAudioCommandThread = 0x8005758C; // rom:0x5818C
+audioCommandThreadFunc = 0x80057614; // rom:0x58214
 sendStopAudioChannelsCommand = 0x80057870; // rom:0x58470
 getAudioChannelActiveState = 0x80057A34; // rom:0x58634
 getActiveEffectChannelCount = 0x80057A7C; // rom:0x5867C
@@ -1906,15 +1906,15 @@ D_800A1C08_A2808 = 0x800A1C08; // size:0x18
 
 queueDirectDmaTransfer = 0x8003BB68;
 
-gfxResultQueue = 0x800A2CF0;
-gfxTaskQueue = 0x800A2CD0;
-gfxTaskQueueBuffer = 0x800A2CE8; // size:0x8
-gfxResultQueueBuffer = 0x800A2D08; // size:0x8
-gfxCommThread = 0x800A2998; // size:0x338
+audioResultQueue = 0x800A2CF0;
+audioCommandQueue = 0x800A2CD0;
+audioCommandQueueBuffer = 0x800A2CE8; // size:0x8
+audioResultQueueBuffer = 0x800A2D08; // size:0x8
+audioCommandThread = 0x800A2998; // size:0x338
 
-gGraphicsManager = 0x800A2990;
+gSoundManager = 0x800A2990;
 
-gGraphicsCommand = 0x800A2D10; // size:0x30
+gAudioCommand = 0x800A2D10; // size:0x30
 gCachedDisplayListSegment1 = 0x800A2D40; // size:0x4
 gCachedDisplayListSegment2 = 0x800A2D44; // size:0x4
 gCachedDisplayListSegment3 = 0x800A2D48; // size:0x4

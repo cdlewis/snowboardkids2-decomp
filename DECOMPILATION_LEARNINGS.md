@@ -414,8 +414,8 @@ register s32 outerDistance AUDIO_REG("$7");
 register s32 flags AUDIO_REG("$3");
 register s32 denominator AUDIO_REG("$2");
 
-outerDistance = gGraphicsManager->audioOuterDistance;
-flags = gGraphicsManager->renderQueue[i].flags;
+outerDistance = gSoundManager->audioOuterDistance;
+flags = gSoundManager->renderQueue[i].flags;
 denominator = outerDistance - innerDistance;
 volume = (flags * distance) / denominator;
 ```

@@ -30,7 +30,7 @@ typedef struct {
     s32 voiceIndex;
     s32 unk2C;
     s32 unk30;
-} GraphicsCommand;
+} AudioCommand;
 
 typedef struct {
     s16 soundId;
@@ -69,21 +69,21 @@ typedef struct {
     /* 0x514 */ s32 bufferFlags[8];
     /* 0x534 */ s32 audioInnerDistance;
     /* 0x538 */ s32 audioOuterDistance;
-} GraphicsManager;
+} SoundManager;
 
 typedef struct {
     void *start;
     void *end;
     s32 size;
-} GraphicsDataSegment;
+} AudioDataSegment;
 
-extern GraphicsCommand gGraphicsCommand;
-extern GraphicsManager *gGraphicsManager;
-extern OSMesgQueue gfxTaskQueue;
-extern OSMesgQueue gfxResultQueue;
-extern OSMesg gfxTaskQueueBuffer;
-extern OSMesg gfxResultQueueBuffer;
-extern OSThread gfxCommThread;
+extern AudioCommand gAudioCommand;
+extern SoundManager *gSoundManager;
+extern OSMesgQueue audioCommandQueue;
+extern OSMesgQueue audioResultQueue;
+extern OSMesg audioCommandQueueBuffer;
+extern OSMesg audioResultQueueBuffer;
+extern OSThread audioCommandThread;
 
 void processSpatialAudio(void);
 void *startSoundEffect(s32, s32, s32, s32, s32);
@@ -532,7 +532,7 @@ u32 D_80093308_93F08[302] = {
 };
 u32 D_800937C0_943C0[10] = { 0x00000064, 0x00000064, 0x00000064, 0x00000064, 0x00000064,
                              0x00000064, 0x00000064, 0x00000064, 0x00000064, 0x00000064 };
-GraphicsDataSegment D_800937E8_943E8[33] = {
+AudioDataSegment D_800937E8_943E8[33] = {
     { &_68B4A0_ROM_START, &_68B4A0_ROM_END, 0x00004006 },
     { &_6848B0_ROM_START, &_6848B0_ROM_END, 0x00004DDA },
     { &_686740_ROM_START, &_686740_ROM_END, 0x00000940 },
@@ -567,7 +567,7 @@ GraphicsDataSegment D_800937E8_943E8[33] = {
     { &_6A6510_ROM_START, &_6A6510_ROM_END, 0x00001BD0 },
     { &_6A7210_ROM_START, &_6A7210_ROM_END, 0x0000284E }
 };
-GraphicsDataSegment D_80093974_94574[33] = {
+AudioDataSegment D_80093974_94574[33] = {
     { &_6B6410_ROM_START, &_6B6410_ROM_END, 0x000035BC },
     { &_6B6410_ROM_START, &_6B6410_ROM_END, 0x000035BC },
     { &_6B6410_ROM_START, &_6B6410_ROM_END, 0x000035BC },
@@ -631,16 +631,16 @@ u8 _audio_pad_947AF = 0;
 void allocateAudioResources(void) {
     u8 sp10;
 
-    gGraphicsManager = allocateTaskMemory(0x53C);
-    gGraphicsManager->ptrBank = loadCompressedData(&_6A83F0_ROM_START, &_6A83F0_ROM_END, 0xCFD8);
-    gGraphicsManager->musicBankBuffer = allocateMemoryNode(0, 0x9000, &sp10);
-    gGraphicsManager->musicDataBuffer = allocateMemoryNode(0, 0x8000, &sp10);
+    gSoundManager = allocateTaskMemory(0x53C);
+    gSoundManager->ptrBank = loadCompressedData(&_6A83F0_ROM_START, &_6A83F0_ROM_END, 0xCFD8);
+    gSoundManager->musicBankBuffer = allocateMemoryNode(0, 0x9000, &sp10);
+    gSoundManager->musicDataBuffer = allocateMemoryNode(0, 0x8000, &sp10);
     setGameStateHandlerWithContinue(&initializeMusicSystem);
 }
 
 void initializeMusicSystem(void) {
     musConfig config;
-    GraphicsManager *mgr;
+    SoundManager *mgr;
     u16 negativeOne;
     void *newNode;
     s32 i;
@@ -653,7 +653,7 @@ void initializeMusicSystem(void) {
     newNode = allocateMemoryNode(0, 0x37A20, &alreadyAllocated);
     config.heap = newNode;
     config.heap_length = 0x37A20;
-    mgr = gGraphicsManager;
+    mgr = gSoundManager;
     config.fifo_length = 0x40;
     config.ptr = mgr->ptrBank;
     config.wbk = (u8 *)&wavetables_ROM_START;
@@ -669,21 +669,21 @@ void initializeMusicSystem(void) {
 
     D_80093BA5_947A5 = 1;
     negativeOne = -1;
-    gGraphicsManager->musicFadeState = 0;
-    gGraphicsManager->pendingMusicId = negativeOne;
-    gGraphicsManager->currentMusicId = 0xFFFF;
-    gGraphicsManager->musicFadeOutDuration = 0;
+    gSoundManager->musicFadeState = 0;
+    gSoundManager->pendingMusicId = negativeOne;
+    gSoundManager->currentMusicId = 0xFFFF;
+    gSoundManager->musicFadeOutDuration = 0;
     scheduleTask(checkMusicLoadRequest, 0, 0, 0x64);
-    gGraphicsManager->soundSequence = 0;
+    gSoundManager->soundSequence = 0;
     for (i = 0xF; i >= 0; i--) {
-        gGraphicsManager->soundEffectChannels[i] = 0;
+        gSoundManager->soundEffectChannels[i] = 0;
     }
 
-    gGraphicsManager->audioInnerDistance = 0x20;
-    gGraphicsManager->renderQueueCount = 0;
-    gGraphicsManager->bufferCount = 0;
-    gGraphicsManager->audioOuterDistance = 0xC80;
-    initializeGfxCommThread();
+    gSoundManager->audioInnerDistance = 0x20;
+    gSoundManager->renderQueueCount = 0;
+    gSoundManager->bufferCount = 0;
+    gSoundManager->audioOuterDistance = 0xC80;
+    initializeAudioCommandThread();
     setGameStateHandlerWithContinue(&processSpatialAudio);
 }
 
@@ -700,22 +700,22 @@ void processSpatialAudio(void) {
     s32 d;
 
     if (getActiveEffectChannelCount() == 0) {
-        gGraphicsManager->soundSequence = 0;
+        gSoundManager->soundSequence = 0;
     }
 
     for (i = 0; i < 16; i++) {
-        if (gGraphicsManager->soundEffectChannels[i] != 0) {
-            if (getAudioChannelActiveState(gGraphicsManager->soundEffectChannels[i]) == 0) {
-                gGraphicsManager->soundEffectChannels[i] = 0;
+        if (gSoundManager->soundEffectChannels[i] != 0) {
+            if (getAudioChannelActiveState(gSoundManager->soundEffectChannels[i]) == 0) {
+                gSoundManager->soundEffectChannels[i] = 0;
             }
         }
     }
 
-    if (gGraphicsManager->bufferCount == 1) {
-        for (i = 0; i < gGraphicsManager->renderQueueCount; i++) {
-            delta.x = gGraphicsManager->renderQueue[i].position.x - gGraphicsManager->bufferData[0].translation.x;
-            delta.y = gGraphicsManager->renderQueue[i].position.y - gGraphicsManager->bufferData[0].translation.y;
-            delta.z = gGraphicsManager->renderQueue[i].position.z - gGraphicsManager->bufferData[0].translation.z;
+    if (gSoundManager->bufferCount == 1) {
+        for (i = 0; i < gSoundManager->renderQueueCount; i++) {
+            delta.x = gSoundManager->renderQueue[i].position.x - gSoundManager->bufferData[0].translation.x;
+            delta.y = gSoundManager->renderQueue[i].position.y - gSoundManager->bufferData[0].translation.y;
+            delta.z = gSoundManager->renderQueue[i].position.z - gSoundManager->bufferData[0].translation.z;
             distance = 0x0C800000;
             if ((((((delta.x < distance) && (delta.x > (-distance))) && (delta.y < distance)) &&
                   (delta.y > (-distance))) &&
@@ -727,10 +727,10 @@ void processSpatialAudio(void) {
             {
                 register s32 innerDistance AUDIO_REG("$4");
 
-                innerDistance = gGraphicsManager->audioInnerDistance;
+                innerDistance = gSoundManager->audioInnerDistance;
                 if (distance < innerDistance) {
                     __asm__("");
-                    transformVector3(&delta, &gGraphicsManager->bufferData[0], &transformed);
+                    transformVector3(&delta, &gSoundManager->bufferData[0], &transformed);
                     j = -atan2Fixed(transformed.x, transformed.z);
                     j = (j + 0x800) & 0x1FFF;
                     if (j >= 0x1001) {
@@ -739,50 +739,50 @@ void processSpatialAudio(void) {
 
                     pan = j >> 4;
                     pan -= 0x80;
-                    pan = (pan * distance) / gGraphicsManager->audioInnerDistance;
+                    pan = (pan * distance) / gSoundManager->audioInnerDistance;
                     pan -= 0x80;
-                    if (gGraphicsManager->renderQueue[i].duration < 0) {
+                    if (gSoundManager->renderQueue[i].duration < 0) {
                         playSoundEffectWithPriorityPanAndVoice(
-                            gGraphicsManager->renderQueue[i].soundId,
-                            gGraphicsManager->renderQueue[i].flags,
+                            gSoundManager->renderQueue[i].soundId,
+                            gSoundManager->renderQueue[i].flags,
                             pan,
-                            gGraphicsManager->renderQueue[i].priority,
-                            gGraphicsManager->bufferFlags[0]
+                            gSoundManager->renderQueue[i].priority,
+                            gSoundManager->bufferFlags[0]
                         );
-                    } else if (gGraphicsManager->renderQueue[i].hasVolume) {
+                    } else if (gSoundManager->renderQueue[i].hasVolume) {
                         playSoundEffectAtPositionWithPriority(
-                            gGraphicsManager->renderQueue[i].soundId,
-                            gGraphicsManager->renderQueue[i].flags,
+                            gSoundManager->renderQueue[i].soundId,
+                            gSoundManager->renderQueue[i].flags,
                             pan,
-                            gGraphicsManager->renderQueue[i].volume,
-                            gGraphicsManager->renderQueue[i].priority,
-                            gGraphicsManager->renderQueue[i].duration,
-                            gGraphicsManager->bufferFlags[0]
+                            gSoundManager->renderQueue[i].volume,
+                            gSoundManager->renderQueue[i].priority,
+                            gSoundManager->renderQueue[i].duration,
+                            gSoundManager->bufferFlags[0]
                         );
                     } else {
                         playSoundEffectOnChannelWithVoice(
-                            gGraphicsManager->renderQueue[i].soundId,
-                            gGraphicsManager->renderQueue[i].flags,
+                            gSoundManager->renderQueue[i].soundId,
+                            gSoundManager->renderQueue[i].flags,
                             pan,
-                            gGraphicsManager->renderQueue[i].priority,
-                            gGraphicsManager->renderQueue[i].duration,
-                            gGraphicsManager->bufferFlags[0]
+                            gSoundManager->renderQueue[i].priority,
+                            gSoundManager->renderQueue[i].duration,
+                            gSoundManager->bufferFlags[0]
                         );
                     }
                 } else {
                     register s32 outerDistance AUDIO_REG("$7");
 
-                    outerDistance = gGraphicsManager->audioOuterDistance;
+                    outerDistance = gSoundManager->audioOuterDistance;
                     if (distance < outerDistance) {
                         register s32 flags AUDIO_REG("$3");
                         register s32 denominator AUDIO_REG("$2");
 
-                        flags = gGraphicsManager->renderQueue[i].flags;
+                        flags = gSoundManager->renderQueue[i].flags;
                         distance = outerDistance - distance;
                         denominator = outerDistance - innerDistance;
                         volume = (flags * distance) / denominator;
                         if (volume != 0) {
-                            transformVector3(&delta, &gGraphicsManager->bufferData[0], &transformed);
+                            transformVector3(&delta, &gSoundManager->bufferData[0], &transformed);
                             j = -atan2Fixed(transformed.x, transformed.z);
                             j = (j + 0x800) & 0x1FFF;
                             if (j >= 0x1001) {
@@ -790,36 +790,36 @@ void processSpatialAudio(void) {
                             }
 
                             pan = j >> 4;
-                            if (gGraphicsManager->renderQueue[i].duration < 0) {
+                            if (gSoundManager->renderQueue[i].duration < 0) {
                                 playSoundEffectWithPriorityPanAndVoice(
-                                    gGraphicsManager->renderQueue[i].soundId,
+                                    gSoundManager->renderQueue[i].soundId,
                                     volume,
                                     pan,
-                                    gGraphicsManager->renderQueue[i].priority,
-                                    gGraphicsManager->bufferFlags[0]
+                                    gSoundManager->renderQueue[i].priority,
+                                    gSoundManager->bufferFlags[0]
                                 );
-                            } else if (gGraphicsManager->renderQueue[i].hasVolume != 0) {
+                            } else if (gSoundManager->renderQueue[i].hasVolume != 0) {
                                 playSoundEffectAtPositionWithPriority(
-                                    gGraphicsManager->renderQueue[i].soundId,
+                                    gSoundManager->renderQueue[i].soundId,
                                     volume,
                                     pan,
-                                    gGraphicsManager->renderQueue[i].volume,
-                                    gGraphicsManager->renderQueue[i].priority,
-                                    gGraphicsManager->renderQueue[i].duration,
-                                    gGraphicsManager->bufferFlags[0]
+                                    gSoundManager->renderQueue[i].volume,
+                                    gSoundManager->renderQueue[i].priority,
+                                    gSoundManager->renderQueue[i].duration,
+                                    gSoundManager->bufferFlags[0]
                                 );
                             } else {
                                 playSoundEffectOnChannelWithVoice(
-                                    gGraphicsManager->renderQueue[i].soundId,
+                                    gSoundManager->renderQueue[i].soundId,
                                     volume,
                                     pan,
-                                    gGraphicsManager->renderQueue[i].priority,
-                                    gGraphicsManager->renderQueue[i].duration,
-                                    gGraphicsManager->bufferFlags[0]
+                                    gSoundManager->renderQueue[i].priority,
+                                    gSoundManager->renderQueue[i].duration,
+                                    gSoundManager->bufferFlags[0]
                                 );
                             }
-                        } else if (gGraphicsManager->renderQueue[i].hasVolume) {
-                            stopSoundEffectChannel(gGraphicsManager->renderQueue[i].duration, 0);
+                        } else if (gSoundManager->renderQueue[i].hasVolume) {
+                            stopSoundEffectChannel(gSoundManager->renderQueue[i].duration, 0);
                         }
                     }
                 }
@@ -827,14 +827,14 @@ void processSpatialAudio(void) {
         }
     }
 
-    if (gGraphicsManager->bufferCount >= 2) {
-        for (i = 0; i < gGraphicsManager->renderQueueCount; i++) {
+    if (gSoundManager->bufferCount >= 2) {
+        for (i = 0; i < gSoundManager->renderQueueCount; i++) {
             distance = 0x0C800000;
             voiceIndex = 0;
-            for (j = 0; j < gGraphicsManager->bufferCount; j++) {
-                delta.x = gGraphicsManager->renderQueue[i].position.x - gGraphicsManager->bufferData[j].translation.x;
-                delta.y = gGraphicsManager->renderQueue[i].position.y - gGraphicsManager->bufferData[j].translation.y;
-                delta.z = gGraphicsManager->renderQueue[i].position.z - gGraphicsManager->bufferData[j].translation.z;
+            for (j = 0; j < gSoundManager->bufferCount; j++) {
+                delta.x = gSoundManager->renderQueue[i].position.x - gSoundManager->bufferData[j].translation.x;
+                delta.y = gSoundManager->renderQueue[i].position.y - gSoundManager->bufferData[j].translation.y;
+                delta.z = gSoundManager->renderQueue[i].position.z - gSoundManager->bufferData[j].translation.z;
                 if ((((((delta.x < distance) && ((-distance) < delta.x)) && (delta.y < distance)) &&
                       ((-distance) < delta.y)) &&
                      (delta.z < distance)) &&
@@ -842,74 +842,74 @@ void processSpatialAudio(void) {
                     d = isqrt64(MAGNITUDE_SQ_3D(delta.x, delta.y, delta.z));
                     if (d < distance) {
                         distance = d;
-                        voiceIndex = gGraphicsManager->bufferFlags[j];
+                        voiceIndex = gSoundManager->bufferFlags[j];
                     }
                 }
             }
 
             distance >>= 0x10;
-            if (distance < gGraphicsManager->audioInnerDistance) {
-                if (gGraphicsManager->renderQueue[i].duration < 0) {
+            if (distance < gSoundManager->audioInnerDistance) {
+                if (gSoundManager->renderQueue[i].duration < 0) {
                     playSoundEffectWithPriorityAndVoice(
-                        gGraphicsManager->renderQueue[i].soundId,
-                        gGraphicsManager->renderQueue[i].flags,
-                        gGraphicsManager->renderQueue[i].priority,
+                        gSoundManager->renderQueue[i].soundId,
+                        gSoundManager->renderQueue[i].flags,
+                        gSoundManager->renderQueue[i].priority,
                         voiceIndex
                     );
-                } else if (gGraphicsManager->renderQueue[i].hasVolume) {
+                } else if (gSoundManager->renderQueue[i].hasVolume) {
                     playSoundEffectAtPositionWithPriority(
-                        gGraphicsManager->renderQueue[i].soundId,
-                        gGraphicsManager->renderQueue[i].flags,
+                        gSoundManager->renderQueue[i].soundId,
+                        gSoundManager->renderQueue[i].flags,
                         0x80,
-                        gGraphicsManager->renderQueue[i].volume,
-                        gGraphicsManager->renderQueue[i].priority,
-                        gGraphicsManager->renderQueue[i].duration,
+                        gSoundManager->renderQueue[i].volume,
+                        gSoundManager->renderQueue[i].priority,
+                        gSoundManager->renderQueue[i].duration,
                         voiceIndex
                     );
                 } else {
                     playOrStopSoundEffectOnChannelWithVoice(
-                        gGraphicsManager->renderQueue[i].soundId,
-                        gGraphicsManager->renderQueue[i].flags,
-                        gGraphicsManager->renderQueue[i].priority,
-                        gGraphicsManager->renderQueue[i].duration,
+                        gSoundManager->renderQueue[i].soundId,
+                        gSoundManager->renderQueue[i].flags,
+                        gSoundManager->renderQueue[i].priority,
+                        gSoundManager->renderQueue[i].duration,
                         voiceIndex
                     );
                 }
             } else {
                 register s32 outerDistance AUDIO_REG("$5");
 
-                outerDistance = gGraphicsManager->audioOuterDistance;
+                outerDistance = gSoundManager->audioOuterDistance;
                 if (distance < outerDistance) {
                     register s32 flags AUDIO_REG("$3");
                     register s32 denominator AUDIO_REG("$2");
 
-                    flags = gGraphicsManager->renderQueue[i].flags;
+                    flags = gSoundManager->renderQueue[i].flags;
                     distance = outerDistance - distance;
-                    denominator = outerDistance - gGraphicsManager->audioInnerDistance;
+                    denominator = outerDistance - gSoundManager->audioInnerDistance;
                     volume = (flags * distance) / denominator;
-                    if (gGraphicsManager->renderQueue[i].duration < 0) {
+                    if (gSoundManager->renderQueue[i].duration < 0) {
                         playSoundEffectWithPriorityAndVoice(
-                            gGraphicsManager->renderQueue[i].soundId,
+                            gSoundManager->renderQueue[i].soundId,
                             volume,
-                            gGraphicsManager->renderQueue[i].priority,
+                            gSoundManager->renderQueue[i].priority,
                             voiceIndex
                         );
-                    } else if (gGraphicsManager->renderQueue[i].hasVolume != 0) {
+                    } else if (gSoundManager->renderQueue[i].hasVolume != 0) {
                         playSoundEffectAtPositionWithPriority(
-                            gGraphicsManager->renderQueue[i].soundId,
+                            gSoundManager->renderQueue[i].soundId,
                             volume,
                             0x80,
-                            gGraphicsManager->renderQueue[i].volume,
-                            gGraphicsManager->renderQueue[i].priority,
-                            gGraphicsManager->renderQueue[i].duration,
+                            gSoundManager->renderQueue[i].volume,
+                            gSoundManager->renderQueue[i].priority,
+                            gSoundManager->renderQueue[i].duration,
                             voiceIndex
                         );
                     } else {
                         playOrStopSoundEffectOnChannelWithVoice(
-                            gGraphicsManager->renderQueue[i].soundId,
+                            gSoundManager->renderQueue[i].soundId,
                             volume,
-                            gGraphicsManager->renderQueue[i].priority,
-                            gGraphicsManager->renderQueue[i].duration,
+                            gSoundManager->renderQueue[i].priority,
+                            gSoundManager->renderQueue[i].duration,
                             voiceIndex
                         );
                     }
@@ -918,49 +918,49 @@ void processSpatialAudio(void) {
         }
     }
 
-    gGraphicsManager->renderQueueCount = 0;
-    gGraphicsManager->bufferCount = 0;
+    gSoundManager->renderQueueCount = 0;
+    gSoundManager->bufferCount = 0;
 }
 
 void queueAnonymousBufferData(void *source) {
-    if (gGraphicsManager->bufferCount < 8) {
+    if (gSoundManager->bufferCount < 8) {
         Transform3D *dest;
 
-        gGraphicsManager->bufferIds[gGraphicsManager->bufferCount] = -1;
-        dest = &gGraphicsManager->bufferData[gGraphicsManager->bufferCount];
+        gSoundManager->bufferIds[gSoundManager->bufferCount] = -1;
+        dest = &gSoundManager->bufferData[gSoundManager->bufferCount];
         dest++;
         dest--;
 
         memcpy(dest, source, sizeof(Transform3D));
 
-        gGraphicsManager->bufferFlags[gGraphicsManager->bufferCount] = 0;
-        gGraphicsManager->bufferCount++;
+        gSoundManager->bufferFlags[gSoundManager->bufferCount] = 0;
+        gSoundManager->bufferCount++;
     }
 }
 
 void setAudioDistanceLimits(s32 innerDistance, s32 outerDistance) {
-    gGraphicsManager->audioOuterDistance = outerDistance;
-    gGraphicsManager->audioInnerDistance = innerDistance;
+    gSoundManager->audioOuterDistance = outerDistance;
+    gSoundManager->audioInnerDistance = innerDistance;
 }
 
 void queueBufferDataNoFlags(u8 *source, s8 bufferId) {
     s32 i;
     void *dest;
 
-    for (i = 0; i < gGraphicsManager->bufferCount; i++) {
-        if (gGraphicsManager->bufferIds[i] == bufferId) {
-            dest = (void *)((i << 5) + (s32)gGraphicsManager + 0x40C);
+    for (i = 0; i < gSoundManager->bufferCount; i++) {
+        if (gSoundManager->bufferIds[i] == bufferId) {
+            dest = (void *)((i << 5) + (s32)gSoundManager + 0x40C);
             memcpy(dest, source, sizeof(Transform3D));
             return;
         }
     }
 
-    if (gGraphicsManager->bufferCount < 8) {
-        gGraphicsManager->bufferIds[gGraphicsManager->bufferCount] = bufferId;
-        dest = (void *)((gGraphicsManager->bufferCount << 5) + (s32)gGraphicsManager + 0x40C);
+    if (gSoundManager->bufferCount < 8) {
+        gSoundManager->bufferIds[gSoundManager->bufferCount] = bufferId;
+        dest = (void *)((gSoundManager->bufferCount << 5) + (s32)gSoundManager + 0x40C);
         memcpy(dest, source, sizeof(Transform3D));
-        gGraphicsManager->bufferFlags[gGraphicsManager->bufferCount] = 0;
-        gGraphicsManager->bufferCount++;
+        gSoundManager->bufferFlags[gSoundManager->bufferCount] = 0;
+        gSoundManager->bufferCount++;
     }
 }
 
@@ -971,85 +971,85 @@ void setBufferData(void *source, u8 arg1, s32 arg2) {
 
     // Search for existing buffer
     id = arg2;
-    for (i = 0; i < gGraphicsManager->bufferCount; i++) {
-        if (gGraphicsManager->bufferIds[i] == id) {
-            bufferPtr = (void *)((i << 5) + (s32)gGraphicsManager + 0x40C);
+    for (i = 0; i < gSoundManager->bufferCount; i++) {
+        if (gSoundManager->bufferIds[i] == id) {
+            bufferPtr = (void *)((i << 5) + (s32)gSoundManager + 0x40C);
             memcpy(bufferPtr, source, sizeof(Transform3D));
             return;
         }
     }
 
     // Add new buffer if space available
-    if (gGraphicsManager->bufferCount < 8) {
-        gGraphicsManager->bufferIds[gGraphicsManager->bufferCount] = id;
+    if (gSoundManager->bufferCount < 8) {
+        gSoundManager->bufferIds[gSoundManager->bufferCount] = id;
 
-        bufferPtr = (void *)(((gGraphicsManager->bufferCount) << 5) + (s32)gGraphicsManager + 0x40C);
+        bufferPtr = (void *)(((gSoundManager->bufferCount) << 5) + (s32)gSoundManager + 0x40C);
 
         memcpy(bufferPtr, source, sizeof(Transform3D));
 
-        gGraphicsManager->bufferFlags[gGraphicsManager->bufferCount] = arg1;
-        gGraphicsManager->bufferCount++;
+        gSoundManager->bufferFlags[gSoundManager->bufferCount] = arg1;
+        gSoundManager->bufferCount++;
     }
 }
 
 void queueSoundAtPosition(Vec3i *position, s16 soundId) {
-    s32 index = gGraphicsManager->renderQueueCount;
+    s32 index = gSoundManager->renderQueueCount;
     if (index < 0x20) {
-        RenderQueueItem *renderQueue = gGraphicsManager->renderQueue;
+        RenderQueueItem *renderQueue = gSoundManager->renderQueue;
         memcpy(&renderQueue[index].position, position, sizeof(Vec3i));
         index = soundId;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].soundId = index;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].duration = -1;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].priority = 4;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].hasVolume = 0;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
-        gGraphicsManager->renderQueueCount++;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].soundId = index;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].duration = -1;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].priority = 4;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].hasVolume = 0;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].flags = 0x80;
+        gSoundManager->renderQueueCount++;
     }
 }
 
 void queueSoundAtPositionWithDuration(Vec3i *position, u32 soundId, s16 duration) {
-    if (gGraphicsManager->renderQueueCount < 0x20) {
-        RenderQueueItem *renderQueue = gGraphicsManager->renderQueue;
+    if (gSoundManager->renderQueueCount < 0x20) {
+        RenderQueueItem *renderQueue = gSoundManager->renderQueue;
 
-        memcpy(&renderQueue[gGraphicsManager->renderQueueCount].position, position, sizeof(Vec3i));
+        memcpy(&renderQueue[gSoundManager->renderQueueCount].position, position, sizeof(Vec3i));
 
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].soundId = soundId;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].duration = duration;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].priority = 4;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].hasVolume = 0;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
-        gGraphicsManager->renderQueueCount++;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].soundId = soundId;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].duration = duration;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].priority = 4;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].hasVolume = 0;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].flags = 0x80;
+        gSoundManager->renderQueueCount++;
     }
 }
 
 void queueSoundAtPositionWithPriority(Vec3i *position, s32 soundId, s16 priority, s16 duration) {
     RenderQueueItem *renderQueue;
-    s32 index = gGraphicsManager->renderQueueCount;
+    s32 index = gSoundManager->renderQueueCount;
     if (index < 0x20) {
-        renderQueue = gGraphicsManager->renderQueue;
+        renderQueue = gSoundManager->renderQueue;
         memcpy(&renderQueue[index].position, position, sizeof(Vec3i));
         index = soundId;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].soundId = index;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].duration = duration;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].priority = priority;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].hasVolume = 0;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
-        gGraphicsManager->renderQueueCount += 1;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].soundId = index;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].duration = duration;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].priority = priority;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].hasVolume = 0;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].flags = 0x80;
+        gSoundManager->renderQueueCount += 1;
     }
 }
 
 void queueSoundAtPositionWithVolume(Vec3i *position, s32 soundId, f32 volume, s16 priority, s32 duration) {
     RenderQueueItem(*dest)[32];
-    if (gGraphicsManager->renderQueueCount < 0x20) {
-        dest = &gGraphicsManager->renderQueue;
-        memcpy(&(*dest)[gGraphicsManager->renderQueueCount].position, position, sizeof(Vec3i));
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].soundId = soundId;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].duration = (s16)duration;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].priority = priority;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].hasVolume = 1;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].volume = volume;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = 0x80;
-        gGraphicsManager->renderQueueCount++;
+    if (gSoundManager->renderQueueCount < 0x20) {
+        dest = &gSoundManager->renderQueue;
+        memcpy(&(*dest)[gSoundManager->renderQueueCount].position, position, sizeof(Vec3i));
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].soundId = soundId;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].duration = (s16)duration;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].priority = priority;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].hasVolume = 1;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].volume = volume;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].flags = 0x80;
+        gSoundManager->renderQueueCount++;
     }
 }
 
@@ -1061,46 +1061,46 @@ void queueSoundAtPositionWithVolumeAndFlags(
     s32 duration,
     s32 flags
 ) {
-    s32 index = gGraphicsManager->renderQueueCount;
+    s32 index = gSoundManager->renderQueueCount;
     if (index < 0x20) {
-        RenderQueueItem *renderQueue = gGraphicsManager->renderQueue;
+        RenderQueueItem *renderQueue = gSoundManager->renderQueue;
         memcpy(&renderQueue[index].position, position, sizeof(Vec3i));
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].soundId = soundId;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].duration = (s16)duration;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].priority = priority;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].hasVolume = 1;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].volume = volume;
-        gGraphicsManager->renderQueue[gGraphicsManager->renderQueueCount].flags = (s16)flags;
-        gGraphicsManager->renderQueueCount++;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].soundId = soundId;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].duration = (s16)duration;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].priority = priority;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].hasVolume = 1;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].volume = volume;
+        gSoundManager->renderQueue[gSoundManager->renderQueueCount].flags = (s16)flags;
+        gSoundManager->renderQueueCount++;
     }
 }
 
 void incrementSoundSequence(void) {
-    gGraphicsManager->soundSequence = (s32)((gGraphicsManager->soundSequence + 1) & 0xFFFFFF);
+    gSoundManager->soundSequence = (s32)((gSoundManager->soundSequence + 1) & 0xFFFFFF);
 }
 
 void checkMusicLoadRequest(void *arg) {
     setCleanupCallback(checkMusicLoadRequest);
-    if (gGraphicsManager->musicFadeState != 0) {
+    if (gSoundManager->musicFadeState != 0) {
         setCallback(&loadMusicTrackData);
     }
 }
 
 void loadMusicTrackData(void) {
-    gGraphicsManager->currentMusicId = gGraphicsManager->pendingMusicId;
+    gSoundManager->currentMusicId = gSoundManager->pendingMusicId;
 
     loadDataSegment(
-        D_800937E8_943E8[gGraphicsManager->currentMusicId].start,
-        D_800937E8_943E8[gGraphicsManager->currentMusicId].end,
-        D_800937E8_943E8[gGraphicsManager->currentMusicId].size,
-        gGraphicsManager->musicBankBuffer
+        D_800937E8_943E8[gSoundManager->currentMusicId].start,
+        D_800937E8_943E8[gSoundManager->currentMusicId].end,
+        D_800937E8_943E8[gSoundManager->currentMusicId].size,
+        gSoundManager->musicBankBuffer
     );
 
     loadDataSegment(
-        D_80093974_94574[gGraphicsManager->currentMusicId].start,
-        D_80093974_94574[gGraphicsManager->currentMusicId].end,
-        D_80093974_94574[gGraphicsManager->currentMusicId].size,
-        gGraphicsManager->musicDataBuffer
+        D_80093974_94574[gSoundManager->currentMusicId].start,
+        D_80093974_94574[gSoundManager->currentMusicId].end,
+        D_80093974_94574[gSoundManager->currentMusicId].size,
+        gSoundManager->musicDataBuffer
     );
 
     setCallback(&initializeMusicPtrBank);
@@ -1108,8 +1108,8 @@ void loadMusicTrackData(void) {
 
 void initializeMusicPtrBank(void) {
     initializeMusicPtrBankAsync(
-        gGraphicsManager->musicDataBuffer,
-        (void *)D_80093B00_94700[gGraphicsManager->currentMusicId]
+        gSoundManager->musicDataBuffer,
+        (void *)D_80093B00_94700[gSoundManager->currentMusicId]
     );
     setCallback(&startMusicPlaybackWithFadeIn);
 }
@@ -1118,21 +1118,21 @@ void startMusicPlaybackWithFadeIn(void) {
     s16 initialVolume;
     void *audioChannel;
 
-    if ((u16)gGraphicsManager->pendingMusicId != gGraphicsManager->currentMusicId) {
+    if ((u16)gSoundManager->pendingMusicId != gSoundManager->currentMusicId) {
         setCallbackWithContinue(checkMusicLoadRequest);
-    } else if (gGraphicsManager->musicFadeState == 2) {
+    } else if (gSoundManager->musicFadeState == 2) {
         audioChannel = startMusicPlaybackWithVoice(
-            gGraphicsManager->musicDataBuffer,
-            gGraphicsManager->musicBankBuffer,
-            (u8)gGraphicsManager->musicVoiceIndex
+            gSoundManager->musicDataBuffer,
+            gSoundManager->musicBankBuffer,
+            (u8)gSoundManager->musicVoiceIndex
         );
-        gGraphicsManager->currentAudioChannel = audioChannel;
+        gSoundManager->currentAudioChannel = audioChannel;
         if (audioChannel != 0) {
-            initialVolume = gGraphicsManager->currentMusicVolume;
+            initialVolume = gSoundManager->currentMusicVolume;
             if (initialVolume != 0x80) {
                 setAudioChannelVolume(audioChannel, initialVolume);
             }
-            gGraphicsManager->isFadingOut = 0;
+            gSoundManager->isFadingOut = 0;
             setCallbackWithContinue(updateMusicVolumeFadeIn);
         }
     }
@@ -1141,48 +1141,48 @@ void startMusicPlaybackWithFadeIn(void) {
 void updateMusicVolumeFadeIn(void *arg) {
     s16 targetVolume;
 
-    targetVolume = gGraphicsManager->targetMusicVolume;
-    if (gGraphicsManager->currentMusicVolume != targetVolume) {
-        if ((u16)gGraphicsManager->fadeCounter != 0) {
-            gGraphicsManager->currentMusicVolume =
-                gGraphicsManager->currentMusicVolume +
-                ((s32)(targetVolume - gGraphicsManager->currentMusicVolume) / (s32)(u16)gGraphicsManager->fadeCounter);
-            setAudioChannelVolume(gGraphicsManager->currentAudioChannel, (s32)gGraphicsManager->currentMusicVolume);
-            gGraphicsManager->fadeCounter = (u16)gGraphicsManager->fadeCounter - 1;
+    targetVolume = gSoundManager->targetMusicVolume;
+    if (gSoundManager->currentMusicVolume != targetVolume) {
+        if ((u16)gSoundManager->fadeCounter != 0) {
+            gSoundManager->currentMusicVolume =
+                gSoundManager->currentMusicVolume +
+                ((s32)(targetVolume - gSoundManager->currentMusicVolume) / (s32)(u16)gSoundManager->fadeCounter);
+            setAudioChannelVolume(gSoundManager->currentAudioChannel, (s32)gSoundManager->currentMusicVolume);
+            gSoundManager->fadeCounter = (u16)gSoundManager->fadeCounter - 1;
         } else {
-            gGraphicsManager->currentMusicVolume = targetVolume;
-            setAudioChannelVolume(gGraphicsManager->currentAudioChannel, (s32)targetVolume);
+            gSoundManager->currentMusicVolume = targetVolume;
+            setAudioChannelVolume(gSoundManager->currentAudioChannel, (s32)targetVolume);
         }
     }
 
-    if ((u16)gGraphicsManager->pendingMusicId != gGraphicsManager->currentMusicId) {
-        gGraphicsManager->isFadingOut = 1;
-        stopAudioChannelWithSpeed(gGraphicsManager->currentAudioChannel, 8);
+    if ((u16)gSoundManager->pendingMusicId != gSoundManager->currentMusicId) {
+        gSoundManager->isFadingOut = 1;
+        stopAudioChannelWithSpeed(gSoundManager->currentAudioChannel, 8);
         setCallbackWithContinue(handleMusicFadeOutTransition);
     } else {
-        if (gGraphicsManager->musicFadeState == 0) {
-            gGraphicsManager->isFadingOut = 1;
+        if (gSoundManager->musicFadeState == 0) {
+            gSoundManager->isFadingOut = 1;
             stopAudioChannelWithSpeed(
-                gGraphicsManager->currentAudioChannel,
-                (s32)(u16)gGraphicsManager->musicFadeOutDuration
+                gSoundManager->currentAudioChannel,
+                (s32)(u16)gSoundManager->musicFadeOutDuration
             );
             setCallbackWithContinue(handleMusicFadeOutTransition);
         }
-        if (getAudioChannelActiveState(gGraphicsManager->currentAudioChannel) == NULL) {
-            gGraphicsManager->musicFadeState = 0;
+        if (getAudioChannelActiveState(gSoundManager->currentAudioChannel) == NULL) {
+            gSoundManager->musicFadeState = 0;
             setCallbackWithContinue(checkNoActiveAudioChannels);
         }
     }
 }
 
 void handleMusicFadeOutTransition(void) {
-    if (getAudioChannelActiveState(gGraphicsManager->currentAudioChannel) == 0) {
+    if (getAudioChannelActiveState(gSoundManager->currentAudioChannel) == 0) {
         setCallbackWithContinue(&checkNoActiveAudioChannels);
         return;
     }
-    if ((gGraphicsManager->musicFadeState != 0) && (gGraphicsManager->isFadingOut == 0)) {
-        gGraphicsManager->isFadingOut = 1;
-        stopAudioChannelWithSpeed(gGraphicsManager->currentAudioChannel, 8);
+    if ((gSoundManager->musicFadeState != 0) && (gSoundManager->isFadingOut == 0)) {
+        gSoundManager->isFadingOut = 1;
+        stopAudioChannelWithSpeed(gSoundManager->currentAudioChannel, 8);
     }
 }
 
@@ -1193,35 +1193,35 @@ void checkNoActiveAudioChannels(void) {
 }
 
 void playMusicTrack(s32 musicTrackId) {
-    gGraphicsManager->musicFadeState = 2;
-    gGraphicsManager->pendingMusicId = musicTrackId;
-    gGraphicsManager->currentMusicVolume = 0x80;
-    gGraphicsManager->targetMusicVolume = 0x80;
-    gGraphicsManager->fadeCounter = 0;
-    gGraphicsManager->musicVoiceIndex = (s8)gMusicTrackVoiceMap[musicTrackId];
+    gSoundManager->musicFadeState = 2;
+    gSoundManager->pendingMusicId = musicTrackId;
+    gSoundManager->currentMusicVolume = 0x80;
+    gSoundManager->targetMusicVolume = 0x80;
+    gSoundManager->fadeCounter = 0;
+    gSoundManager->musicVoiceIndex = (s8)gMusicTrackVoiceMap[musicTrackId];
 }
 
 void playMusicTrackWithVoice(s16 musicTrackId, s8 voiceIndex) {
-    gGraphicsManager->musicFadeState = 2;
-    gGraphicsManager->pendingMusicId = musicTrackId;
-    gGraphicsManager->currentMusicVolume = 0x80;
-    gGraphicsManager->targetMusicVolume = 0x80;
-    gGraphicsManager->fadeCounter = 0;
-    gGraphicsManager->musicVoiceIndex = voiceIndex;
+    gSoundManager->musicFadeState = 2;
+    gSoundManager->pendingMusicId = musicTrackId;
+    gSoundManager->currentMusicVolume = 0x80;
+    gSoundManager->targetMusicVolume = 0x80;
+    gSoundManager->fadeCounter = 0;
+    gSoundManager->musicVoiceIndex = voiceIndex;
 }
 
 void playMusicTrackWithFadeIn(u32 musicTrackId, u16 targetVolume, u16 fadeDuration) {
-    gGraphicsManager->musicFadeState = 2;
-    gGraphicsManager->pendingMusicId = musicTrackId;
-    gGraphicsManager->currentMusicVolume = 0;
-    gGraphicsManager->targetMusicVolume = targetVolume;
-    gGraphicsManager->fadeCounter = fadeDuration;
-    gGraphicsManager->musicVoiceIndex = gMusicTrackVoiceMap[musicTrackId];
+    gSoundManager->musicFadeState = 2;
+    gSoundManager->pendingMusicId = musicTrackId;
+    gSoundManager->currentMusicVolume = 0;
+    gSoundManager->targetMusicVolume = targetVolume;
+    gSoundManager->fadeCounter = fadeDuration;
+    gSoundManager->musicVoiceIndex = gMusicTrackVoiceMap[musicTrackId];
 }
 
 void setMusicVolumeFade(u16 targetVolume, u16 fadeDuration) {
-    gGraphicsManager->targetMusicVolume = targetVolume;
-    gGraphicsManager->fadeCounter = fadeDuration;
+    gSoundManager->targetMusicVolume = targetVolume;
+    gSoundManager->fadeCounter = fadeDuration;
 }
 
 void setMusicFadeOut(s32 fadeOutDuration) {
@@ -1231,25 +1231,25 @@ void setMusicFadeOut(s32 fadeOutDuration) {
     if (fadeOutDuration < 8) {
         duration = 8;
     }
-    gGraphicsManager->musicFadeState = 0;
-    gGraphicsManager->musicFadeOutDuration = duration;
+    gSoundManager->musicFadeState = 0;
+    gSoundManager->musicFadeOutDuration = duration;
 }
 
-void initializeGfxCommThread(void) {
-    OSMesgQueue *queue = &gfxTaskQueue;
-    osCreateMesgQueue(queue, &gfxTaskQueueBuffer, OS_MESG_BLOCK);
-    queue = &gfxResultQueue;
-    osCreateMesgQueue(queue, &gfxResultQueueBuffer, OS_MESG_BLOCK);
-    osCreateThread(&gfxCommThread, 0xB, gfxCommThreadFunc, 0, &gfxTaskQueue, 6);
-    osStartThread(&gfxCommThread);
+void initializeAudioCommandThread(void) {
+    OSMesgQueue *queue = &audioCommandQueue;
+    osCreateMesgQueue(queue, &audioCommandQueueBuffer, OS_MESG_BLOCK);
+    queue = &audioResultQueue;
+    osCreateMesgQueue(queue, &audioResultQueueBuffer, OS_MESG_BLOCK);
+    osCreateThread(&audioCommandThread, 0xB, audioCommandThreadFunc, 0, &audioCommandQueue, 6);
+    osStartThread(&audioCommandThread);
 }
 
-void gfxCommThreadFunc(void *arg0) {
+void audioCommandThreadFunc(void *arg0) {
     void *message;
     void *result;
 
     while (TRUE) {
-        osRecvMesg(&gfxTaskQueue, &message, 1);
+        osRecvMesg(&audioCommandQueue, &message, 1);
         if ((u32)message < 0xF) {
             switch ((s32)message) {
                 case 0:
@@ -1257,81 +1257,80 @@ void gfxCommThreadFunc(void *arg0) {
                     break;
                 case 1:
                     result = startSoundEffect(
-                        gGraphicsCommand.soundId,
-                        gGraphicsCommand.volume,
-                        gGraphicsCommand.pan,
+                        gAudioCommand.soundId,
+                        gAudioCommand.volume,
+                        gAudioCommand.pan,
                         0,
-                        gGraphicsCommand.soundSequence
+                        gAudioCommand.soundSequence
                     );
-                    if (gGraphicsCommand.voiceIndex != 0) {
-                        setReverbScaleByHandle(result, gGraphicsCommand.voiceIndex);
+                    if (gAudioCommand.voiceIndex != 0) {
+                        setReverbScaleByHandle(result, gAudioCommand.voiceIndex);
                     }
                     break;
                 case 2:
-                    stopChannelsByHandle((u32)gGraphicsCommand.audioChannel, 0);
+                    stopChannelsByHandle((u32)gAudioCommand.audioChannel, 0);
                     result = startSoundEffect(
-                        gGraphicsCommand.soundId,
-                        gGraphicsCommand.volume,
-                        gGraphicsCommand.pan,
+                        gAudioCommand.soundId,
+                        gAudioCommand.volume,
+                        gAudioCommand.pan,
                         0,
-                        gGraphicsCommand.soundSequence
+                        gAudioCommand.soundSequence
                     );
-                    if (gGraphicsCommand.voiceIndex != 0) {
-                        setReverbScaleByHandle(result, gGraphicsCommand.voiceIndex);
+                    if (gAudioCommand.voiceIndex != 0) {
+                        setReverbScaleByHandle(result, gAudioCommand.voiceIndex);
                     }
                     break;
                 case 3:
-                    result = (void *)stopChannelsByHandle((u32)gGraphicsCommand.audioChannel, 0);
+                    result = (void *)stopChannelsByHandle((u32)gAudioCommand.audioChannel, 0);
                     break;
                 case 4:
-                    stopChannelsByHandle((u32)gGraphicsCommand.audioChannel, 0);
+                    stopChannelsByHandle((u32)gAudioCommand.audioChannel, 0);
                     result = startSoundEffect(
-                        gGraphicsCommand.soundId,
-                        gGraphicsCommand.volume,
-                        gGraphicsCommand.pan,
+                        gAudioCommand.soundId,
+                        gAudioCommand.volume,
+                        gAudioCommand.pan,
                         0,
-                        gGraphicsCommand.soundSequence
+                        gAudioCommand.soundSequence
                     );
-                    setFrequencyOffsetByHandle(result, gGraphicsCommand.position);
-                    if (gGraphicsCommand.voiceIndex != 0) {
-                        setReverbScaleByHandle(result, gGraphicsCommand.voiceIndex);
+                    setFrequencyOffsetByHandle(result, gAudioCommand.position);
+                    if (gAudioCommand.voiceIndex != 0) {
+                        setReverbScaleByHandle(result, gAudioCommand.voiceIndex);
                     }
                     break;
                 case 5:
-                    setVolumeScaleByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.volume);
-                    setPanScaleByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.pan);
-                    setFrequencyOffsetByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.position);
-                    if (gGraphicsCommand.voiceIndex != 0) {
-                        setReverbScaleByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.voiceIndex);
+                    setVolumeScaleByHandle(gAudioCommand.audioChannel, gAudioCommand.volume);
+                    setPanScaleByHandle(gAudioCommand.audioChannel, gAudioCommand.pan);
+                    setFrequencyOffsetByHandle(gAudioCommand.audioChannel, gAudioCommand.position);
+                    if (gAudioCommand.voiceIndex != 0) {
+                        setReverbScaleByHandle(gAudioCommand.audioChannel, gAudioCommand.voiceIndex);
                     }
                     break;
                 case 6:
-                    stopChannelsByFlags(1, gGraphicsCommand.stoppingSpeed);
+                    stopChannelsByFlags(1, gAudioCommand.stoppingSpeed);
                     break;
                 case 7:
-                    result = (void *)
-                        stopChannelsByHandle((u32)gGraphicsCommand.audioChannel, gGraphicsCommand.stoppingSpeed);
+                    result = (void *)stopChannelsByHandle((u32)gAudioCommand.audioChannel, gAudioCommand.stoppingSpeed);
                     break;
                 case 8:
                     result = (void *)getActiveChannelCount(1);
                     break;
                 case 9:
-                    result = (void *)countChannelsByHandle((u32)gGraphicsCommand.audioChannel);
+                    result = (void *)countChannelsByHandle((u32)gAudioCommand.audioChannel);
                     break;
                 case 10:
-                    initMusicPtrBank(gGraphicsCommand.ptrBank, gGraphicsCommand.waveBank);
+                    initMusicPtrBank(gAudioCommand.ptrBank, gAudioCommand.waveBank);
                     break;
                 case 11:
-                    result = startSongWithSingleFxBank(gGraphicsCommand.ptrBank, gGraphicsCommand.musicBankBuffer);
-                    if (gGraphicsCommand.voiceIndex != 0) {
-                        setReverbScaleByHandle(result, gGraphicsCommand.voiceIndex);
+                    result = startSongWithSingleFxBank(gAudioCommand.ptrBank, gAudioCommand.musicBankBuffer);
+                    if (gAudioCommand.voiceIndex != 0) {
+                        setReverbScaleByHandle(result, gAudioCommand.voiceIndex);
                     }
                     break;
                 case 12:
-                    setVolumeScaleByHandle(gGraphicsCommand.audioChannel, gGraphicsCommand.volume);
+                    setVolumeScaleByHandle(gAudioCommand.audioChannel, gAudioCommand.volume);
                     break;
                 case 13:
-                    stopChannelsByFlags(3, gGraphicsCommand.stoppingSpeed);
+                    stopChannelsByFlags(3, gAudioCommand.stoppingSpeed);
                     break;
                 case 14:
                     result = (void *)getActiveChannelCount(2);
@@ -1339,7 +1338,7 @@ void gfxCommThreadFunc(void *arg0) {
             }
         }
 
-        osSendMesg(&gfxResultQueue, result, OS_MESG_BLOCK);
+        osSendMesg(&audioResultQueue, result, OS_MESG_BLOCK);
     }
 }
 
@@ -1348,38 +1347,38 @@ void sendStopAudioChannelsCommand(s32 stoppingSpeed) {
 
     if ((D_80093BA5_947A5 != NULL) && (D_80093BA6_947A6 == NULL)) {
         D_80093BA6_947A6++;
-        gGraphicsCommand.stoppingSpeed = stoppingSpeed;
-        osSendMesg(&gfxTaskQueue, (OSMesg *)0xD, OS_MESG_BLOCK);
-        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+        gAudioCommand.stoppingSpeed = stoppingSpeed;
+        osSendMesg(&audioCommandQueue, (OSMesg *)0xD, OS_MESG_BLOCK);
+        osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
     }
 }
 
 void stopAudioChannelWithSpeed(void *audioChannel, s32 stoppingSpeed) {
     void *result;
 
-    gGraphicsCommand.audioChannel = audioChannel;
-    gGraphicsCommand.stoppingSpeed = stoppingSpeed;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)7, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &result, OS_MESG_BLOCK);
+    gAudioCommand.audioChannel = audioChannel;
+    gAudioCommand.stoppingSpeed = stoppingSpeed;
+    osSendMesg(&audioCommandQueue, (OSMesg *)7, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &result, OS_MESG_BLOCK);
 }
 
 void setAudioChannelVolume(void *audioChannel, s32 volume) {
     void *message;
 
-    gGraphicsCommand.audioChannel = audioChannel;
-    gGraphicsCommand.volume = volume;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)0xC, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+    gAudioCommand.audioChannel = audioChannel;
+    gAudioCommand.volume = volume;
+    osSendMesg(&audioCommandQueue, (OSMesg *)0xC, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
 }
 
 void *startMusicPlaybackWithVoice(void *musicDataBuffer, void *musicBankBuffer, s32 voiceIndex) {
     void *musicHandle;
 
-    gGraphicsCommand.ptrBank = musicDataBuffer;
-    gGraphicsCommand.musicBankBuffer = musicBankBuffer;
-    gGraphicsCommand.voiceIndex = voiceIndex;
-    osSendMesg(&gfxTaskQueue, (void *)0xB, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &musicHandle, OS_MESG_BLOCK);
+    gAudioCommand.ptrBank = musicDataBuffer;
+    gAudioCommand.musicBankBuffer = musicBankBuffer;
+    gAudioCommand.voiceIndex = voiceIndex;
+    osSendMesg(&audioCommandQueue, (void *)0xB, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &musicHandle, OS_MESG_BLOCK);
     return musicHandle;
 }
 
@@ -1390,26 +1389,26 @@ void *startMusicPlayback(void *musicDataBuffer, void *musicBankBuffer) {
 void initializeMusicPtrBankAsync(void *ptrBank, void *waveBank) {
     void *message;
 
-    gGraphicsCommand.ptrBank = ptrBank;
-    gGraphicsCommand.waveBank = waveBank;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)0xA, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+    gAudioCommand.ptrBank = ptrBank;
+    gAudioCommand.waveBank = waveBank;
+    osSendMesg(&audioCommandQueue, (OSMesg *)0xA, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
 }
 
 void *getAudioChannelActiveState(void *audioChannel) {
     void *message;
 
-    gGraphicsCommand.audioChannel = audioChannel;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)9, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+    gAudioCommand.audioChannel = audioChannel;
+    osSendMesg(&audioCommandQueue, (OSMesg *)9, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
     return message;
 }
 
 void *getActiveEffectChannelCount(void) {
     void *channelCount;
 
-    osSendMesg(&gfxTaskQueue, (OSMesg *)8, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &channelCount, OS_MESG_BLOCK);
+    osSendMesg(&audioCommandQueue, (OSMesg *)8, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &channelCount, OS_MESG_BLOCK);
     return channelCount;
 }
 
@@ -1417,21 +1416,21 @@ void stopSoundEffectChannel(s32 channelIndex, s32 stoppingSpeed) {
     void *channel;
     OSMesg message;
 
-    channel = gGraphicsManager->soundEffectChannels[channelIndex];
-    gGraphicsCommand.stoppingSpeed = stoppingSpeed;
-    gGraphicsCommand.audioChannel = channel;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)7, 1);
-    osRecvMesg(&gfxResultQueue, &message, 1);
+    channel = gSoundManager->soundEffectChannels[channelIndex];
+    gAudioCommand.stoppingSpeed = stoppingSpeed;
+    gAudioCommand.audioChannel = channel;
+    osSendMesg(&audioCommandQueue, (OSMesg *)7, 1);
+    osRecvMesg(&audioResultQueue, &message, 1);
 }
 
 void stopAllSoundEffectsAndClearQueues(s32 stoppingSpeed) {
     void *message;
 
-    gGraphicsCommand.stoppingSpeed = stoppingSpeed;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)6, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
-    gGraphicsManager->renderQueueCount = 0;
-    gGraphicsManager->bufferCount = 0;
+    gAudioCommand.stoppingSpeed = stoppingSpeed;
+    osSendMesg(&audioCommandQueue, (OSMesg *)6, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
+    gSoundManager->renderQueueCount = 0;
+    gSoundManager->bufferCount = 0;
 }
 
 void playSoundEffectAtPositionWithPriority(
@@ -1445,30 +1444,30 @@ void playSoundEffectAtPositionWithPriority(
 ) {
     void *message;
 
-    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[channelIndex];
+    gAudioCommand.audioChannel = gSoundManager->soundEffectChannels[channelIndex];
     if (volume > 0) {
-        gGraphicsCommand.pan = pan;
-        gGraphicsCommand.volume = volume;
-        gGraphicsCommand.position = position;
-        gGraphicsCommand.voiceIndex = voiceIndex;
+        gAudioCommand.pan = pan;
+        gAudioCommand.volume = volume;
+        gAudioCommand.position = position;
+        gAudioCommand.voiceIndex = voiceIndex;
 
-        if (gGraphicsManager->soundEffectChannels[channelIndex] == 0 ||
-            gGraphicsManager->soundEffectIds[channelIndex] != soundId) {
-            gGraphicsCommand.soundId = soundId;
-            gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (priority << 0x18);
-            osSendMesg(&gfxTaskQueue, (void *)4, 1);
-            osRecvMesg(&gfxResultQueue, &message, 1);
-            gGraphicsManager->soundEffectChannels[channelIndex] = message;
-            gGraphicsManager->soundEffectIds[channelIndex] = (s16)soundId;
+        if (gSoundManager->soundEffectChannels[channelIndex] == 0 ||
+            gSoundManager->soundEffectIds[channelIndex] != soundId) {
+            gAudioCommand.soundId = soundId;
+            gAudioCommand.soundSequence = gSoundManager->soundSequence + (priority << 0x18);
+            osSendMesg(&audioCommandQueue, (void *)4, 1);
+            osRecvMesg(&audioResultQueue, &message, 1);
+            gSoundManager->soundEffectChannels[channelIndex] = message;
+            gSoundManager->soundEffectIds[channelIndex] = (s16)soundId;
             incrementSoundSequence();
             return;
         }
 
-        osSendMesg(&gfxTaskQueue, (OSMesg *)5, OS_MESG_BLOCK);
-        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+        osSendMesg(&audioCommandQueue, (OSMesg *)5, OS_MESG_BLOCK);
+        osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
     } else {
-        osSendMesg(&gfxTaskQueue, (OSMesg *)3, OS_MESG_BLOCK);
-        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+        osSendMesg(&audioCommandQueue, (OSMesg *)3, OS_MESG_BLOCK);
+        osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
     }
 }
 
@@ -1487,22 +1486,22 @@ void playSoundEffectOnChannelWithVoice(
 ) {
     void *message;
 
-    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[channelIndex];
+    gAudioCommand.audioChannel = gSoundManager->soundEffectChannels[channelIndex];
     if (volume > 0) {
-        gGraphicsCommand.soundId = soundId;
-        gGraphicsCommand.volume = volume;
-        gGraphicsCommand.pan = pan;
-        gGraphicsCommand.voiceIndex = voiceIndex;
-        gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (priority << 0x18);
-        osSendMesg(&gfxTaskQueue, (void *)2, OS_MESG_BLOCK);
-        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
-        gGraphicsManager->soundEffectChannels[channelIndex] = message;
-        gGraphicsManager->soundEffectIds[channelIndex] = (s16)soundId;
+        gAudioCommand.soundId = soundId;
+        gAudioCommand.volume = volume;
+        gAudioCommand.pan = pan;
+        gAudioCommand.voiceIndex = voiceIndex;
+        gAudioCommand.soundSequence = gSoundManager->soundSequence + (priority << 0x18);
+        osSendMesg(&audioCommandQueue, (void *)2, OS_MESG_BLOCK);
+        osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
+        gSoundManager->soundEffectChannels[channelIndex] = message;
+        gSoundManager->soundEffectIds[channelIndex] = (s16)soundId;
         incrementSoundSequence();
         return;
     }
-    osSendMesg(&gfxTaskQueue, (void *)3, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+    osSendMesg(&audioCommandQueue, (void *)3, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
 }
 
 // Play sound effect on specified channel with default voice
@@ -1514,25 +1513,25 @@ void playOrStopSoundEffectOnChannelWithVoice(s32 soundId, s32 volume, s32 priori
     void *message;
     s32 soundSequence;
 
-    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[channelIndex];
+    gAudioCommand.audioChannel = gSoundManager->soundEffectChannels[channelIndex];
 
     if (volume > 0) {
-        gGraphicsCommand.soundId = soundId;
-        gGraphicsCommand.volume = volume;
-        gGraphicsCommand.pan = 0x80;
-        soundSequence = gGraphicsManager->soundSequence;
-        gGraphicsCommand.voiceIndex = voiceIndex;
-        gGraphicsCommand.soundSequence = soundSequence + (priority << 0x18);
-        osSendMesg(&gfxTaskQueue, (void *)2, 1);
-        osRecvMesg(&gfxResultQueue, &message, 1);
-        gGraphicsManager->soundEffectChannels[channelIndex] = message;
-        gGraphicsManager->soundEffectIds[channelIndex] = (s16)soundId;
+        gAudioCommand.soundId = soundId;
+        gAudioCommand.volume = volume;
+        gAudioCommand.pan = 0x80;
+        soundSequence = gSoundManager->soundSequence;
+        gAudioCommand.voiceIndex = voiceIndex;
+        gAudioCommand.soundSequence = soundSequence + (priority << 0x18);
+        osSendMesg(&audioCommandQueue, (void *)2, 1);
+        osRecvMesg(&audioResultQueue, &message, 1);
+        gSoundManager->soundEffectChannels[channelIndex] = message;
+        gSoundManager->soundEffectIds[channelIndex] = (s16)soundId;
         incrementSoundSequence();
         return;
     }
 
-    osSendMesg(&gfxTaskQueue, (void *)3, 1);
-    osRecvMesg(&gfxResultQueue, &message, 1);
+    osSendMesg(&audioCommandQueue, (void *)3, 1);
+    osRecvMesg(&audioResultQueue, &message, 1);
 }
 
 void playOrStopSoundEffectOnChannel(s32 soundId, s32 volume, s32 priority, s32 channelIndex) {
@@ -1542,22 +1541,22 @@ void playOrStopSoundEffectOnChannel(s32 soundId, s32 volume, s32 priority, s32 c
 void playOrStopSoundEffectNoPriorityWithVoice(s32 soundId, s32 volume, s32 channelIndex, s32 voiceIndex) {
     void *message;
 
-    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[channelIndex];
+    gAudioCommand.audioChannel = gSoundManager->soundEffectChannels[channelIndex];
     if (volume > 0) {
-        gGraphicsCommand.soundId = soundId;
-        gGraphicsCommand.volume = volume;
-        gGraphicsCommand.pan = 0x80;
-        gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence;
-        gGraphicsCommand.voiceIndex = voiceIndex;
-        osSendMesg(&gfxTaskQueue, (void *)2, OS_MESG_BLOCK);
-        osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
-        gGraphicsManager->soundEffectChannels[channelIndex] = message;
-        gGraphicsManager->soundEffectIds[channelIndex] = (s16)soundId;
+        gAudioCommand.soundId = soundId;
+        gAudioCommand.volume = volume;
+        gAudioCommand.pan = 0x80;
+        gAudioCommand.soundSequence = gSoundManager->soundSequence;
+        gAudioCommand.voiceIndex = voiceIndex;
+        osSendMesg(&audioCommandQueue, (void *)2, OS_MESG_BLOCK);
+        osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
+        gSoundManager->soundEffectChannels[channelIndex] = message;
+        gSoundManager->soundEffectIds[channelIndex] = (s16)soundId;
         incrementSoundSequence();
         return;
     }
-    osSendMesg(&gfxTaskQueue, (void *)3, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+    osSendMesg(&audioCommandQueue, (void *)3, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
 }
 
 void playOrStopSoundEffectNoPriority(s32 soundId, s32 volume, s32 channelIndex) {
@@ -1567,16 +1566,16 @@ void playOrStopSoundEffectNoPriority(s32 soundId, s32 volume, s32 channelIndex) 
 void playSoundEffectOnChannelWithPriorityAndVoice(s32 soundId, s32 priority, s32 channelIndex, s32 voiceIndex) {
     void *message;
 
-    gGraphicsCommand.soundId = soundId;
-    gGraphicsCommand.volume = 0x80;
-    gGraphicsCommand.pan = 0x80;
-    gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (priority << 0x18);
-    gGraphicsCommand.audioChannel = gGraphicsManager->soundEffectChannels[channelIndex];
-    gGraphicsCommand.voiceIndex = voiceIndex;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)2, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
-    gGraphicsManager->soundEffectChannels[channelIndex] = message;
-    gGraphicsManager->soundEffectIds[channelIndex] = (s16)soundId;
+    gAudioCommand.soundId = soundId;
+    gAudioCommand.volume = 0x80;
+    gAudioCommand.pan = 0x80;
+    gAudioCommand.soundSequence = gSoundManager->soundSequence + (priority << 0x18);
+    gAudioCommand.audioChannel = gSoundManager->soundEffectChannels[channelIndex];
+    gAudioCommand.voiceIndex = voiceIndex;
+    osSendMesg(&audioCommandQueue, (OSMesg *)2, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
+    gSoundManager->soundEffectChannels[channelIndex] = message;
+    gSoundManager->soundEffectIds[channelIndex] = (s16)soundId;
     incrementSoundSequence();
 }
 
@@ -1585,24 +1584,24 @@ void playSoundEffectOnChannelWithPriority(s32 soundId, s32 priority, s32 channel
 }
 
 void playSoundEffectOnChannelNoPriorityWithVoice(s32 soundId, s32 channelIndex, s32 voiceIndex) {
-    GraphicsManager *mgr;
+    SoundManager *mgr;
     void *newChannel;
     void *existingChannel;
 
-    mgr = gGraphicsManager;
-    gGraphicsCommand.soundId = soundId;
-    gGraphicsCommand.volume = 0x80;
-    gGraphicsCommand.pan = 0x80;
-    gGraphicsCommand.soundSequence = mgr->soundSequence;
+    mgr = gSoundManager;
+    gAudioCommand.soundId = soundId;
+    gAudioCommand.volume = 0x80;
+    gAudioCommand.pan = 0x80;
+    gAudioCommand.soundSequence = mgr->soundSequence;
     existingChannel = mgr->soundEffectChannels[channelIndex];
-    gGraphicsCommand.voiceIndex = voiceIndex;
-    gGraphicsCommand.audioChannel = existingChannel;
+    gAudioCommand.voiceIndex = voiceIndex;
+    gAudioCommand.audioChannel = existingChannel;
 
-    osSendMesg(&gfxTaskQueue, (OSMesg *)2, 1);
-    osRecvMesg(&gfxResultQueue, (OSMesg *)&newChannel, 1);
+    osSendMesg(&audioCommandQueue, (OSMesg *)2, 1);
+    osRecvMesg(&audioResultQueue, (OSMesg *)&newChannel, 1);
 
-    gGraphicsManager->soundEffectChannels[channelIndex] = newChannel;
-    gGraphicsManager->soundEffectIds[channelIndex] = soundId;
+    gSoundManager->soundEffectChannels[channelIndex] = newChannel;
+    gSoundManager->soundEffectIds[channelIndex] = soundId;
 
     incrementSoundSequence();
 }
@@ -1614,13 +1613,13 @@ void playSoundEffectOnChannelNoPriority(s32 soundId, s32 channelIndex) {
 void playSoundEffectWithPriorityAndVoice(s32 soundId, s32 volume, s32 priority, s32 voiceIndex) {
     void *message;
 
-    gGraphicsCommand.soundId = soundId;
-    gGraphicsCommand.volume = volume;
-    gGraphicsCommand.pan = 0x80;
-    gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (priority << 0x18);
-    gGraphicsCommand.voiceIndex = voiceIndex;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+    gAudioCommand.soundId = soundId;
+    gAudioCommand.volume = volume;
+    gAudioCommand.pan = 0x80;
+    gAudioCommand.soundSequence = gSoundManager->soundSequence + (priority << 0x18);
+    gAudioCommand.voiceIndex = voiceIndex;
+    osSendMesg(&audioCommandQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
@@ -1631,13 +1630,13 @@ void playSoundEffectWithPriority(s32 soundId, s32 volume, s32 priority) {
 void playSoundEffectWithPriorityPanAndVoice(s32 soundId, s32 volume, s32 pan, s32 priority, s32 voiceIndex) {
     void *message;
 
-    gGraphicsCommand.soundId = soundId;
-    gGraphicsCommand.volume = volume;
-    gGraphicsCommand.pan = pan;
-    gGraphicsCommand.soundSequence = gGraphicsManager->soundSequence + (priority << 0x18);
-    gGraphicsCommand.voiceIndex = voiceIndex;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+    gAudioCommand.soundId = soundId;
+    gAudioCommand.volume = volume;
+    gAudioCommand.pan = pan;
+    gAudioCommand.soundSequence = gSoundManager->soundSequence + (priority << 0x18);
+    gAudioCommand.voiceIndex = voiceIndex;
+    osSendMesg(&audioCommandQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
@@ -1649,15 +1648,15 @@ void playSoundEffectWithVolumePanAndVoice(s32 soundId, s32 volume, s32 pan, s32 
     s32 *new_var;
     void *message;
     s32 new_var2;
-    gGraphicsCommand.soundId = soundId;
-    gGraphicsCommand.volume = volume;
-    gGraphicsCommand.pan = pan;
-    new_var = &gGraphicsManager->soundSequence;
+    gAudioCommand.soundId = soundId;
+    gAudioCommand.volume = volume;
+    gAudioCommand.pan = pan;
+    new_var = &gSoundManager->soundSequence;
     new_var2 = *new_var;
-    gGraphicsCommand.voiceIndex = voiceIndex;
-    gGraphicsCommand.soundSequence = new_var2;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, &message, OS_MESG_BLOCK);
+    gAudioCommand.voiceIndex = voiceIndex;
+    gAudioCommand.soundSequence = new_var2;
+    osSendMesg(&audioCommandQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
@@ -1669,15 +1668,15 @@ void playSoundEffectWithVolumeAndVoice(s32 soundId, s32 volume, s32 voiceIndex) 
     void *sp10;
     s32 *new_var;
     s32 new_var2;
-    gGraphicsCommand.soundId = soundId;
-    gGraphicsCommand.volume = volume;
-    gGraphicsCommand.pan = 0x80;
-    new_var = &gGraphicsManager->soundSequence;
+    gAudioCommand.soundId = soundId;
+    gAudioCommand.volume = volume;
+    gAudioCommand.pan = 0x80;
+    new_var = &gSoundManager->soundSequence;
     new_var2 = *new_var;
-    gGraphicsCommand.voiceIndex = voiceIndex;
-    gGraphicsCommand.soundSequence = new_var2;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, (OSMesg *)(&sp10), OS_MESG_BLOCK);
+    gAudioCommand.voiceIndex = voiceIndex;
+    gAudioCommand.soundSequence = new_var2;
+    osSendMesg(&audioCommandQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, (OSMesg *)(&sp10), OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
@@ -1689,15 +1688,15 @@ void playSoundEffectWithPriorityAndVoiceDefaultVolume(s32 soundId, s32 priority,
     s32 v0;
     s32 mesg;
 
-    gGraphicsCommand.soundId = soundId;
-    gGraphicsCommand.volume = 0x80;
-    gGraphicsCommand.pan = 0x80;
-    v0 = *(s32 *)((s32)gGraphicsManager + 0x20);
-    gGraphicsCommand.voiceIndex = voiceIndex;
-    gGraphicsCommand.soundSequence = v0 + (priority << 24);
+    gAudioCommand.soundId = soundId;
+    gAudioCommand.volume = 0x80;
+    gAudioCommand.pan = 0x80;
+    v0 = *(s32 *)((s32)gSoundManager + 0x20);
+    gAudioCommand.voiceIndex = voiceIndex;
+    gAudioCommand.soundSequence = v0 + (priority << 24);
 
-    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, (OSMesg *)&mesg, OS_MESG_BLOCK);
+    osSendMesg(&audioCommandQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, (OSMesg *)&mesg, OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
@@ -1710,14 +1709,14 @@ void playSoundEffectWithVoice(s32 soundId, s32 voiceIndex) {
     s32 *new_var;
     void *sp10;
 
-    gGraphicsCommand.soundId = soundId;
-    gGraphicsCommand.volume = 0x80;
-    gGraphicsCommand.pan = 0x80;
-    new_var2 = *(new_var = &gGraphicsManager->soundSequence);
-    gGraphicsCommand.voiceIndex = voiceIndex;
-    gGraphicsCommand.soundSequence = new_var2;
-    osSendMesg(&gfxTaskQueue, (OSMesg *)1, OS_MESG_BLOCK);
-    osRecvMesg(&gfxResultQueue, (OSMesg *)(&sp10), OS_MESG_BLOCK);
+    gAudioCommand.soundId = soundId;
+    gAudioCommand.volume = 0x80;
+    gAudioCommand.pan = 0x80;
+    new_var2 = *(new_var = &gSoundManager->soundSequence);
+    gAudioCommand.voiceIndex = voiceIndex;
+    gAudioCommand.soundSequence = new_var2;
+    osSendMesg(&audioCommandQueue, (OSMesg *)1, OS_MESG_BLOCK);
+    osRecvMesg(&audioResultQueue, (OSMesg *)(&sp10), OS_MESG_BLOCK);
     incrementSoundSequence();
 }
 
@@ -1729,8 +1728,8 @@ void *getActiveAudioChannelCount(void) {
     void *channelCount;
 
     if (D_80093BA5_947A5 != 0) {
-        osSendMesg(&gfxTaskQueue, 0, OS_MESG_BLOCK);
-        osRecvMesg(&gfxResultQueue, &channelCount, OS_MESG_BLOCK);
+        osSendMesg(&audioCommandQueue, 0, OS_MESG_BLOCK);
+        osRecvMesg(&audioResultQueue, &channelCount, OS_MESG_BLOCK);
         return channelCount;
     }
 
@@ -1741,8 +1740,8 @@ void *getActiveSongChannelCount(void) {
     void *channelCount;
 
     if (D_80093BA5_947A5 != NULL) {
-        osSendMesg(&gfxTaskQueue, (OSMesg *)0xE, OS_MESG_BLOCK);
-        osRecvMesg(&gfxResultQueue, &channelCount, OS_MESG_BLOCK);
+        osSendMesg(&audioCommandQueue, (OSMesg *)0xE, OS_MESG_BLOCK);
+        osRecvMesg(&audioResultQueue, &channelCount, OS_MESG_BLOCK);
 
         return channelCount;
     }
