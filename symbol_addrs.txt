@@ -23,6 +23,9 @@ __MusIntGetNewNote = 0x8007335C; // rom:0x73F5C
 
 gParallaxScreenHistory = 0x8009F240; // size:0x3F0
 gParallaxOffset = 0x800AFF20;
+gStoryMapNpcHomeX = 0x8009F230; // size:0x4
+gStoryMapNpcHomeZ = 0x8009F234; // size:0x4
+gStoryMapNpcHomeFacingAngle = 0x8009F238; // size:0x8
 
 D_80090AB8_916B8 = 0x80090AB8; // size:0x38 rom:0x916B8
 
