@@ -12,11 +12,11 @@
 #include "system/task_scheduler.h"
 #include "system/thread_manager.h"
 
-extern OSMesg mainMessageQueueBuffer[32];
-extern OSMesgQueue mainMessageQueue;
+ViConfig mainViConfig __attribute__((section(".bss")));
+OSMesg mainMessageQueueBuffer[32] __attribute__((section(".bss")));
+
 extern u16 gGlobalFrameCounter;
 extern u8 gControllerPollingEnabled;
-extern void D_800A32D0_A3EB0;
 
 void mainThreadEntrypoint(void *arg) {
     u16 message;
@@ -40,7 +40,7 @@ void mainThreadEntrypoint(void *arg) {
 
     osCreateMesgQueue(&mainMessageQueue, mainMessageQueueBuffer, 0x20);
 
-    addViConfig(&D_800A32D0_A3EB0, &mainMessageQueue, 2);
+    addViConfig(&mainViConfig, &mainMessageQueue, 2);
     createRootTaskScheduler(&initializeOverlaySystem, 0x64);
     createRootTaskScheduler(&allocateAudioResources, 0xFA);
 

@@ -2331,6 +2331,7 @@ bootBlackoutFrames = 0x800A445A;
 
 initThreadManager = 0x800701B0;
 
+mainViConfig = 0x800A32D0; // rom:0x9FDF0
 mainMessageQueue = 0x800AB1B0;
 mainMessageQueueBuffer = 0x800A32E0;
 
