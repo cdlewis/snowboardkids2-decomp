@@ -1915,6 +1915,12 @@ gfxCommThread = 0x800A2998; // size:0x338
 gGraphicsManager = 0x800A2990;
 
 gGraphicsCommand = 0x800A2D10; // size:0x30
+gCachedDisplayListSegment1 = 0x800A2D40; // size:0x4
+gCachedDisplayListSegment2 = 0x800A2D44; // size:0x4
+gCachedDisplayListSegment3 = 0x800A2D48; // size:0x4
+gCachedSpriteTextureData = 0x800A2D4C; // size:0x4
+gCachedSpritePaletteData = 0x800A2D50; // size:0x4
+gCachedSpriteAlpha = 0x800A2D54; // size:0xC
 stopSoundEffectChannel = 0x80057ABC; // rom:0x586BC
 stopAudioChannelWithSpeed = 0x800578DC; // rom:0x584DC
 
@@ -3892,9 +3898,6 @@ findTrackFaceAtPosition = 0x80062918; // rom:0x63518
 getTrackSegmentWaypoints = 0x80062B1C; // rom:0x6371C
 resolveTrackSegmentIndex = 0x80062C98; // rom:0x63898
 normalizeSurfaceType = 0x80062CD0; // rom:0x638D0
-gCachedSegment1 = 0x800A2D40; // rom:0xA3940
-gCachedSegment2 = 0x800A2D44; // rom:0xA3944
-gCachedSegment3 = 0x800A2D48; // rom:0xA3948
 prepareDisplayListRenderState = 0x80062CF0; // rom:0x638F0
 renderOpaqueDisplayList = 0x8006300C; // rom:0x63C0C
 renderTransparentDisplayList = 0x80063058; // rom:0x63C58

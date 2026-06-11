@@ -1,8 +1,8 @@
 #include "text/font_assets.h"
 #include "common.h"
 #include "data/data_table.h"
-#include "graphics/graphics.h"
 #include "gbi.h"
+#include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "mbi.h"
 
