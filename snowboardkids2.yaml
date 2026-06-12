@@ -550,7 +550,7 @@ segments:
         }
       - { type: bss, vram: 0x800A8A80, name: A8A80 }
       - { type: bss, vram: 0x800AFF10, name: system/controller_io }
-      - { type: bss, vram: 0x800AFF20, name: AFF20 }
+      - { type: bss, vram: 0x800AFF20, name: story/rare_events }
 
   - name: buffers
     type: code
