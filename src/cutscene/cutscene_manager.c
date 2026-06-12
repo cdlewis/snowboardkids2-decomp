@@ -21,17 +21,19 @@ typedef struct {
     s32 unk8;
 } SaveDataBuffer;
 
-extern StateEntry *gCutsceneStateTable;
-extern s32 gCutsceneStateTableSize;
+u8 gCutsceneEntryCopyFlag __attribute__((section(".bss"))) = 0;
+s16 gCutsceneEntryBufferFrameNumber __attribute__((section(".bss"))) = 0;
+s8 gCutsceneEntryCutFlag __attribute__((section(".bss"))) = 0;
+s32 gCutsceneStateTableSize __attribute__((section(".bss"))) = 0;
+StateEntry *gCutsceneStateTable __attribute__((section(".bss"))) = NULL;
+s16 gCutsceneEntryBufferSlotIndex __attribute__((section(".bss"))) = 0;
+static u8 sCutsceneEntryBufferPadding[4] __attribute__((section(".bss"), aligned(1))) = { 0 };
+StateEntry gCutsceneEntryBuffer[1] __attribute__((section(".bss"), aligned(1))) = { 0 };
+s8 gStopFanSoundTasks __attribute__((section(".bss"))) = 0;
+
 extern StateEntry *gControllerPakTransferPointer;
 extern StateEntry *gControllerPakStateTablePointer;
 extern s32 gButtonsPressed[];
-extern StateEntry gCutsceneEntryBuffer[];
-extern u8 gCutsceneEntryBufferCommandCategory;
-extern u8 gCutsceneEntryCopyFlag;
-extern s16 gCutsceneEntryBufferFrameNumber;
-extern s8 gCutsceneEntryCutFlag;
-extern s16 gCutsceneEntryBufferSlotIndex;
 extern CutsceneFadeAssetNode gCutsceneFadeAssetTable[];
 extern char gDebugFrameFormatString[];
 extern char gTimelineRulerFormat[];
@@ -1227,7 +1229,7 @@ void pasteCutsceneEntryToSlot(u8 slotIndex, u16 frameNumber) {
     srcEntry = gCutsceneEntryBuffer;
     categorySkip = (-((~getCurrentStateEntryItem(slotIndex)->characterId) != 0)) | 1;
 
-    if (gCutsceneEntryCopyFlag != 0 && getCategorySkipValue(gCutsceneEntryBufferCommandCategory) != categorySkip) {
+    if (gCutsceneEntryCopyFlag != 0 && getCategorySkipValue(gCutsceneEntryBuffer[0].commandCategory) != categorySkip) {
         s32 eventIndex = findEventAtFrame(slotIndex, frameNumber);
         if ((eventIndex & 0xFFFF) == 0xFFFF) {
             eventIndex = insertCutsceneEvent(slotIndex, frameNumber);
