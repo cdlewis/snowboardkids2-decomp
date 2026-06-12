@@ -87,8 +87,8 @@ Entry gControllerCommandBuffer[15] BSS = { 0 };
 u8 gControllerReadPending BSS = 0;
 static u8 D_800A1C9C_A289C[0x124] BSS = { 0 };
 
-extern OSMesgQueue mainStack;
-extern s32 D_800A8D10_A0080;
+extern OSMesgQueue gSerialEventQueue;
+extern OSMesg gSerialEventQueueMsg;
 extern u8 gConnectedControllerMask;
 extern u8 gControllerPollingEnabled;
 extern s8 gAnalogStickX[];
@@ -107,15 +107,15 @@ void initControllerSubsystem(void) {
     s32 i;
     u8 controller_status;
 
-    osCreateMesgQueue(&mainStack, (OSMesg)&D_800A8D10_A0080, 1);
+    osCreateMesgQueue(&gSerialEventQueue, &gSerialEventQueueMsg, 1);
     osCreateMesgQueue(&gControllerCommandQueue, (OSMesg)&gControllerCommandQueueMsgs, 0xC);
     osCreateMesgQueue(&gControllerReadDoneQueue, (OSMesg)&gControllerReadDoneMsg, 1);
     osCreateMesgQueue(&gControllerIoResultQueue, (OSMesg)&gControllerIoResultMsg, 1);
     osCreateMesgQueue(&gRumbleInitResultQueue, (OSMesg)&gRumbleInitResultMsg, 1);
-    osSetEventMesg(5, &mainStack, (OSMesg)1);
+    osSetEventMesg(5, &gSerialEventQueue, (OSMesg)1);
 
     for (i = 0; i < 4; i++) {
-        result = osContInit(&mainStack, &gControllerPresentMask, gControllerStatuses);
+        result = osContInit(&gSerialEventQueue, &gControllerPresentMask, gControllerStatuses);
         gConnectedControllerMask = 0;
         if (result == 0) {
             controller_status = gControllerPresentMask;
@@ -163,8 +163,8 @@ void controllerServiceThread(void *arg0) {
 
         switch (cmd & 0x1F0) {
             case 0x10:
-                osContStartReadData(&mainStack);
-                osRecvMesg(&mainStack, &mesg2, 1);
+                osContStartReadData(&gSerialEventQueue);
+                osRecvMesg(&gSerialEventQueue, &mesg2, 1);
                 osContGetReadData(gControllerPads);
                 osSendMesg(&gControllerReadDoneQueue, (OSMesg)1, 0);
                 continue;
@@ -200,13 +200,14 @@ void controllerServiceThread(void *arg0) {
             case 0x80:
                 motorState = msg->arg;
                 channel = cmd & 3;
-                motorState->status[msg->command & 3] = osMotorInit(&mainStack, &gRumblePakPfs[channel], channel);
+                motorState->status[msg->command & 3] =
+                    osMotorInit(&gSerialEventQueue, &gRumblePakPfs[channel], channel);
                 osSendMesg(&gRumbleInitResultQueue, (OSMesg)motorState->status[msg->command & 3], 0);
                 continue;
 
             case 0x90:
                 motorState = msg->arg;
-                queue = &mainStack;
+                queue = &gSerialEventQueue;
                 channel = cmd & 3;
                 motorState->status[msg->command & 3] = osMotorInit(queue, &gRumblePakPfs[channel], channel);
                 continue;
@@ -215,7 +216,7 @@ void controllerServiceThread(void *arg0) {
                 motorState = msg->arg;
                 channel = cmd & 3;
                 if (motorState->status[channel] != 0) {
-                    queue = &mainStack;
+                    queue = &gSerialEventQueue;
                     motorState->status[msg->command & 3] = osMotorInit(queue, &gRumblePakPfs[channel], channel);
                     continue;
                 }
@@ -229,7 +230,7 @@ void controllerServiceThread(void *arg0) {
                     motorState->status[msg->command & 3] = osMotorStop(&gRumblePakPfs[channel]);
                     continue;
                 }
-                queue = &mainStack;
+                queue = &gSerialEventQueue;
                 motorState->status[msg->command & 3] = osMotorInit(queue, &gRumblePakPfs[channel], channel);
                 continue;
 
@@ -416,19 +417,19 @@ int controllerPackInitPollStub(void) {
 }
 
 void initControllerPack(s32 channel) {
-    OSMesgQueue *mainStackLocal;
+    OSMesgQueue *serialEventQueueLocal;
     OSPfs *selectedPack;
     s32 controllerPortNumber;
     s32 controllerPackStatus;
-    mainStackLocal = &mainStack;
+    serialEventQueueLocal = &gSerialEventQueue;
 
     controllerPortNumber = channel & 0xFFFF;
     selectedPack = &controllerPacks[controllerPortNumber];
 
-    controllerPackStatus = osPfsInitPak(mainStackLocal, selectedPack, controllerPortNumber);
+    controllerPackStatus = osPfsInitPak(serialEventQueueLocal, selectedPack, controllerPortNumber);
 
     if (controllerPackStatus == PFS_ERR_NEW_PACK) {
-        controllerPackStatus = osPfsInitPak(mainStackLocal, selectedPack, controllerPortNumber);
+        controllerPackStatus = osPfsInitPak(serialEventQueueLocal, selectedPack, controllerPortNumber);
     }
 
     osSendMesg(&gControllerIoResultQueue, (OSMesg *)controllerPackStatus, OS_MESG_BLOCK);
@@ -456,7 +457,7 @@ void controllerPackReadFile(u16 channel, ControllerPackFileRequest *request) {
     s32 *fileNo;
     s32 i;
 
-    mainQueue = &mainStack;
+    mainQueue = &gSerialEventQueue;
     err = osPfsInitPak(mainQueue, &controllerPacks[channel], channel);
 
     if (err == 2) {
@@ -554,7 +555,7 @@ void controllerPackWriteFile(u16 channel, ControllerPackFileRequest *request) {
     s32 *fileNo;
     s32 i;
 
-    mainQueue = &mainStack;
+    mainQueue = &gSerialEventQueue;
     err = osPfsInitPak(mainQueue, &controllerPacks[channel & 0xFFFF], channel & 0xFFFF);
 
     if (err == PFS_ERR_NEW_PACK) {
@@ -660,7 +661,7 @@ void controllerPackListFiles(s32 channel, controllerPackFileHeader *fileHeaders)
     s32 packsOffset;
 
     controllerPort = channel & 0xFFFF;
-    err = osPfsInitPak(&mainStack, &controllerPacks[controllerPort], controllerPort);
+    err = osPfsInitPak(&gSerialEventQueue, &controllerPacks[controllerPort], controllerPort);
     if (err == 0) {
         fileIndex = 0;
         packsOffset = (s32)&controllerPacks[controllerPort] - (s32)controllerPacks;
@@ -708,7 +709,7 @@ void controllerPackDeleteFile(s32 arg0, s32 arg1, controllerPackFileHeader arg2[
     new_var = arg1 & 0xFFFF;
     selectedPack = &controllerPacks[controllerID];
 
-    err = osPfsInitPak(&mainStack, selectedPack, controllerID);
+    err = osPfsInitPak(&gSerialEventQueue, selectedPack, controllerID);
     if (!err) {
         // some kind of 2D array lookup?
         header = ((void *)(((controllerID * 0x10) + new_var) * 0x24)) + ((u32)arg2);
@@ -736,7 +737,7 @@ void controllerPackDeleteFileFromHeader(s32 selectedPack, controllerPackFileHead
     s32 err;
 
     selectedControllerPack = &controllerPacks[(u16)selectedPack];
-    err = osPfsInitPak(&mainStack, selectedControllerPack, (u16)selectedPack);
+    err = osPfsInitPak(&gSerialEventQueue, selectedControllerPack, (u16)selectedPack);
     if (!err) {
         err = osPfsDeleteFile(
             selectedControllerPack,
@@ -768,7 +769,7 @@ void controllerPackReadStatus(s32 arg0) {
     s32 err;
 
     temp_a2 = arg0 & 0xFFFF;
-    err = osPfsInitPak(&mainStack, &controllerPacks[temp_a2], temp_a2);
+    err = osPfsInitPak(&gSerialEventQueue, &controllerPacks[temp_a2], temp_a2);
     if (err == 0) {
         err = osPfsFreeBlocks(controllerPacks, &gControllerPackFreeBlockCount);
         if (err == 0) {
@@ -971,7 +972,7 @@ void *pollEepromProbeAsync(void) {
 }
 
 void eepromProbe(void) {
-    osSendMesg(&gControllerIoResultQueue, (OSMesg *)osEepromProbe(&mainStack), OS_MESG_BLOCK);
+    osSendMesg(&gControllerIoResultQueue, (OSMesg *)osEepromProbe(&gSerialEventQueue), OS_MESG_BLOCK);
 }
 
 void eepromReadAsync(s32 slotIndex, void *buffer) {
@@ -1007,7 +1008,7 @@ void eepromRead(s32 slotIndex, u8 *buffer) {
     u8 blockAddress = ((slotIndex & 0xFF) * 0x10) & 0xF0;
     osSendMesg(
         &gControllerIoResultQueue,
-        (OSMesg *)osEepromLongRead(&mainStack, blockAddress, buffer, 0x58),
+        (OSMesg *)osEepromLongRead(&gSerialEventQueue, blockAddress, buffer, 0x58),
         OS_MESG_BLOCK
     );
 }
@@ -1065,7 +1066,7 @@ void eepromWrite(s32 slotIndex) {
     result = result << shiftAmount;
     i = result;
     EepromSaveData->checksum = checksum;
-    result = osEepromLongWrite(&mainStack, i & 0xF0, (u8 *)EepromSaveData, dataSize);
+    result = osEepromLongWrite(&gSerialEventQueue, i & 0xF0, (u8 *)EepromSaveData, dataSize);
     osSendMesg(&gControllerIoResultQueue, (OSMesg)result, 1);
 }
 
@@ -1104,5 +1105,9 @@ void *pollEepromWriteAllAsync(void) {
 }
 
 void eepromWriteAll(u8 *buffer) {
-    osSendMesg(&gControllerIoResultQueue, (OSMesg *)osEepromLongWrite(&mainStack, 0, buffer, 0x200), OS_MESG_BLOCK);
+    osSendMesg(
+        &gControllerIoResultQueue,
+        (OSMesg *)osEepromLongWrite(&gSerialEventQueue, 0, buffer, 0x200),
+        OS_MESG_BLOCK
+    );
 }
