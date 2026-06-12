@@ -1,6 +1,9 @@
 #include "math/rand.h"
 #include "common.h"
 
+s32 gRandIndexA BSS;
+s32 gRandIndexB BSS;
+
 // Very basic random number generator that just walks through a pre-shuffled table in order.
 // The S-box provides good distribution of values, but the sequence is completely predictable.
 
