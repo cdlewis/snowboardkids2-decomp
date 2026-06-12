@@ -1904,7 +1904,7 @@ getSchedulerReturnValue = 0x80069810; // rom:0x6A410
 restoreViewportOffsets = 0x8006F6F4; // rom:0x702F4
 initGraphicsSystem = 0x8006F718; // rom:0x70318
 
-gConnectedControllerMask = 0x800A9018;
+gConnectedControllerMask = 0x800A9018; // size:0x1
 gControllerPackAllocationSize = 0x8009F630; // size:0x4
 gControllerStatuses = 0x8009F660; // size:0x10
 gControllerServiceThread = 0x8009F670; // size:0x21B0
@@ -2405,7 +2405,7 @@ controllerPackDeleteFileFromHeaderPollStub = 0x8003AACC; // rom:0x3B6CC
 osViModeTable = 0x8009BE70; // defined:true
 
 entrypoint = 0x80000400;
-gMainThreadStackTop = 0x800AB020;
+bootStackTop = 0x800AB020;
 bootproc = 0x80055FB0;
 
 // insanely speculative

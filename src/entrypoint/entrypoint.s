@@ -19,7 +19,7 @@ LEAF(entrypoint)
 
 .enter_program:
   LA($t2, mainproc)
-  LA($sp, gMainThreadStackTop)
+  LA($sp, bootStackTop)
 
   jr      $t2
 END(entrypoint)
