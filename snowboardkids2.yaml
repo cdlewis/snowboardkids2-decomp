@@ -489,7 +489,7 @@ segments:
       - [0x9FD60, lib, libgultra_rom, epirawread, .rodata]
       - [0x9FD80, lib, libgultra_rom, xldtob, .rodata]
 
-      - { start: 0x9FDF0, type: .bss, vram: 0x8009F1F0, name: graphics/sprite_table }
+      - { type: .bss, vram: 0x8009F1F0, name: graphics/sprite_table, start: 0x9FDF0}
       - { type: .bss, vram: 0x8009F200, name: story/map_state }
       - { type: .bss, vram: 0x8009F210, name: ui/title_screen }
       - { type: .bss, vram: 0x8009F230, name: story/rare_events }
@@ -549,6 +549,8 @@ segments:
           section: .bss,
         }
       - { type: bss, vram: 0x800A8A80, name: A8A80 }
+      - { type: bss, vram: 0x800AFF10, name: system/controller_io }
+      - { type: bss, vram: 0x800AFF20, name: AFF20 }
 
   - name: buffers
     type: code
