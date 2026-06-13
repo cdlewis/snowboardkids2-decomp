@@ -203,7 +203,7 @@ void loadLogoSplashAssets(void) {
     setModelCameraTransform(node, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     setViewportId(node, 1);
     createViewportTransform(&nodeParams, 0, 0, 0x01000000, 0, 0, 0);
-    setViewportTransformById(logoScreen->viewport.id, &nodeParams);
+    setViewportTransformById(logoScreen->viewport.viewportId, &nodeParams);
     setViewportEnvColor(node, 0, 0, 0);
     setViewportFadeValue(node, 0xFF, 0);
     setGameStateHandler(updateLogoSplash);

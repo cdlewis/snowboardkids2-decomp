@@ -84,7 +84,7 @@ void initStoryMap(void) {
     initMenuCameraNode(&state->viewport2, 9, 5, 1);
     setViewportFadeValue(NULL, 0xFF, 0);
     createViewportTransform(&sp20, 0, 0x80000, 0x60000, 0, 0, 0);
-    setViewportTransformById(state->viewport0.id, &sp20);
+    setViewportTransformById(state->viewport0.viewportId, &sp20);
     osViExtendVStart(0);
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {

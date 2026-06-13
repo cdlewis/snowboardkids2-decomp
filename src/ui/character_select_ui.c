@@ -348,7 +348,7 @@ void initCharacterSelectScreen(void) {
     }
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
-        setViewportTransformById(state->playerViewports[i].id, &transform);
+        setViewportTransformById(state->playerViewports[i].viewportId, &transform);
     }
 
     state->mainAssets = loadCompressedData(&_4237C0_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
@@ -514,7 +514,7 @@ void updateCharacterSelect(void) {
                 state->frameCounters[i] = 0;
                 if (state->cursorIndices[i] == (state->maxMenuOption - 1)) {
                     setViewportLightColors(
-                        state->playerViewports[i].id,
+                        state->playerViewports[i].viewportId,
                         1,
                         &charSelectDimLight,
                         (ColorData *)charSelectDimAmbientStr
@@ -540,7 +540,7 @@ void updateCharacterSelect(void) {
                     state->carouselAngles[i] = 0;
                     createYRotationMatrix(&state->characterRotations[i], 0);
                     setViewportLightColors(
-                        state->playerViewports[i].id,
+                        state->playerViewports[i].viewportId,
                         1,
                         &charSelectNormalLight,
                         (ColorData *)(&charSelectNormalAmbient)
@@ -674,7 +674,7 @@ void updateCharacterSelect(void) {
                     state->carouselAngles[i] = 0;
                     createYRotationMatrix(&state->characterRotations[i], 0);
                     setViewportLightColors(
-                        state->playerViewports[i].id,
+                        state->playerViewports[i].viewportId,
                         1,
                         &charSelectNormalLight,
                         (ColorData *)(&charSelectNormalAmbient)
@@ -807,14 +807,14 @@ void updateCharacterSelect(void) {
                 state->frameCounters[i]++;
                 if (state->frameCounters[i] & 1) {
                     setViewportLightColors(
-                        state->playerViewports[i].id,
+                        state->playerViewports[i].viewportId,
                         1,
                         &charSelectFlashLight,
                         (ColorData *)(&charSelectFlashAmbient)
                     );
                 } else {
                     setViewportLightColors(
-                        state->playerViewports[i].id,
+                        state->playerViewports[i].viewportId,
                         1,
                         &charSelectNormalLight,
                         (ColorData *)(&charSelectNormalAmbient)

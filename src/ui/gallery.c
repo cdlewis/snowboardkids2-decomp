@@ -477,7 +477,7 @@ void renderGalleryMenu(GalleryMenuState *arg0) {
         arg0->bgmFadeTimer = arg0->bgmFadeTimer - 1;
     }
     createViewportTransform(&viewportTransform, 0, 0, *gViewerInitPosition, 0, 0, 0);
-    setViewportTransformById(arg0->menuViewport.id, &viewportTransform);
+    setViewportTransformById(arg0->menuViewport.viewportId, &viewportTransform);
     createYRotationMatrix(
         (Transform3D *)&menuTransform,
         (computeAngleToPosition(gViewerDefaultPosX, gViewerDefaultPosZ, viewportTransform.tx, viewportTransform.tz) +
@@ -906,7 +906,7 @@ void setupGalleryMenuState(void) {
     setModelCameraTransform(&alloc->menuViewport, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     setViewportPerspective(&alloc->menuViewport, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     createViewportTransform(&viewportTransform, 0, 0, 0x01400000, 0, 0, 0);
-    setViewportTransformById(alloc->menuViewport.id, &viewportTransform);
+    setViewportTransformById(alloc->menuViewport.viewportId, &viewportTransform);
     initViewportNode(&alloc->overlayViewport, 0, 1, 0xA, 0);
     setViewportScale(&alloc->overlayViewport, 1.0f, 1.0f);
     setViewportId(&alloc->overlayViewport, 1);
@@ -943,7 +943,7 @@ void setupGalleryMenuState(void) {
     alloc->ambientColor[0] = 0xD2;
     alloc->ambientColor[1] = 0xD2;
     alloc->ambientColor[2] = 0xD2;
-    setViewportLightColors(alloc->menuViewport.id, 3, alloc->lightColors, (ColorData *)alloc->ambientColor);
+    setViewportLightColors(alloc->menuViewport.viewportId, 3, alloc->lightColors, (ColorData *)alloc->ambientColor);
     playBgmTrack(alloc, gCurrentBgmId[0]);
     setGameStateHandler(updateGalleryMenu);
 }

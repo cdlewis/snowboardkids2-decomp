@@ -101,14 +101,14 @@ void initCutsceneManager(CutsceneManager *manager, ViewportNode *sceneNode, void
         initSlotData(&manager->slots[i].slotData);
     }
 
-    manager->sceneContext = createAnimationLoopState(sceneNode->id);
+    manager->sceneContext = createAnimationLoopState(sceneNode->viewportId);
 
     if (needsVisibility) {
         scheduleDualAssetGroupLoad(manager, 0, 0x8000, 1, 0x10000);
         setAnimationLoopMode(manager->sceneContext, 1);
     }
 
-    initSceneRenderNode(&manager->unkFF8, 2, 0xC, sceneNode->id, 0, 2, 0);
+    initSceneRenderNode(&manager->unkFF8, 2, 0xC, sceneNode->viewportId, 0, 2, 0);
     clearAuxRenderEnabled(&manager->unkFF8);
 
     manager->shadowModel = shadowModel;
@@ -251,7 +251,7 @@ s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
     if (cutsceneManager->showDebugInfo) {
         sprintf((char *)cutsceneManager->debugText, gDebugFrameFormatString, cutsceneManager->currentFrame);
         enqueueCallbackBySlotIndex(
-            cutsceneManager->uiResource->slot_index,
+            cutsceneManager->uiResource->callbackSlotIndex,
             6,
             &renderTextPalette,
             &cutsceneManager->textX

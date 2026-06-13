@@ -311,11 +311,11 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
 }
 
 void enqueueAuxBufferRender(AuxBufferContext *ctx) {
-    enqueueCallbackBySlotIndex(ctx->node->slot_index, 7, buildAuxBufferDisplayList, ctx);
+    enqueueCallbackBySlotIndex(ctx->node->callbackSlotIndex, 7, buildAuxBufferDisplayList, ctx);
 }
 
 void enqueueAuxBufferSetup(AuxBufferContext *ctx) {
-    enqueueCallbackBySlotIndex(ctx->node->slot_index, 0, setColorImageToAuxBuffer, ctx);
+    enqueueCallbackBySlotIndex(ctx->node->callbackSlotIndex, 0, setColorImageToAuxBuffer, ctx);
 }
 
 void setAuxRenderEnabled(Func8000C268Arg *arg0) {
@@ -406,7 +406,7 @@ void initSceneRenderNode(
     node->ambientColor.g = 0;
     node->ambientColor.b = 0;
 
-    setViewportLightColors(node->base.id, 1, &node->lightColor, &node->ambientColor);
+    setViewportLightColors(node->base.viewportId, 1, &node->lightColor, &node->ambientColor);
 
     node->renderFlags = 0;
     node->renderMode = renderMode;

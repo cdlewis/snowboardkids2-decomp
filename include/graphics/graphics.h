@@ -124,9 +124,9 @@ typedef struct ViewportNode {
     } unk8;
     /* 0x0C */ struct ViewportNode *list2_prev;
     /* 0x10 */ struct ViewportNode *list3_next;
-    /* 0x14 */ s8 unk14;
-    /* 0x15 */ u8 priority;
-    /* 0x16 */ u16 slot_index;
+    /* 0x14 */ s8 renderOrder;
+    /* 0x15 */ u8 viewportFlags;
+    /* 0x16 */ u16 callbackSlotIndex;
     /* 0x18 */ CallbackEntry pool[7];
     /* 0x88 */ void *unk88;
     /* 0x8C */ u8 padding8C[0xC];
@@ -164,11 +164,11 @@ typedef struct ViewportNode {
     /* 0xD4 */ s16 unkD4;
     /* 0xD6 */ s16 unkD6;
     /* 0xD8 */ u16 perspNorm;
-    /* 0xDA */ u16 id;
+    /* 0xDA */ u16 viewportId;
     /* 0xDC */ s16 unkDC;
     /* 0xDE */ s16 unkDE;
-    /* 0xE0 */ Mtx perspectiveMatrix;
-    Transform3D modelingMatrix;
+    /* 0xE0 */ Mtx projectionMatrix;
+    Transform3D viewTransform;
     u16 numLights;
     u8 padding140[6];
     ViewportNode_ColorData unk148[1];
@@ -276,13 +276,13 @@ void renderFrame(u32);
 
 void initDisplayBuffers(void);
 
-void func_8006FEF8_70AF8(ViewportNode *node, u16 id);
+void func_8006FEF8_70AF8(ViewportNode *node, u16 viewportId);
 
-void setViewportId(ViewportNode *node, u16 id);
+void setViewportId(ViewportNode *node, u16 viewportId);
 
 void setViewportTransformById(u16 viewportId, void *transformMatrix);
 
-void initViewportNode(ViewportNode *node, ViewportNode *parent, s32 slotIndex, s32 priority, s32 flags);
+void initViewportNode(ViewportNode *node, ViewportNode *parent, s32 slotIndex, s32 renderOrder, s32 viewportFlags);
 
 void setViewportPerspective(ViewportNode *node, f32 fov, f32 aspect, f32 near, f32 far);
 

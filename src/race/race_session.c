@@ -25,18 +25,24 @@
 #define MULTIPLAYER_RACE_VIEW_FAR_PLANE 3000.0f
 #define BOSS_RACE_VIEW_FAR_PLANE 2000.0f
 
-#define SET_PLAYER_CAMERA_PERSPECTIVE(gs, idx, aspect_val)                                                \
-    do {                                                                                                  \
-        fov = 70.0f;                                                                                      \
-        aspect = (aspect_val);                                                                            \
-        near = 20.0f;                                                                                     \
-        far = 10000.0f;                                                                                   \
-        if ((gs)->memoryPoolId != 0xB) {                                                                  \
-            setViewportPerspective(&(gs)->unk8[idx], fov, aspect, near, MULTIPLAYER_RACE_VIEW_FAR_PLANE); \
-        } else {                                                                                          \
-            setViewportPerspective(&(gs)->unk8[idx], fov, aspect, near, BOSS_RACE_VIEW_FAR_PLANE);        \
-        }                                                                                                 \
-        setViewportPerspective(&(gs)->unkC[idx], fov, aspect, near, far);                                 \
+#define SET_PLAYER_CAMERA_PERSPECTIVE(gs, idx, aspect_val)                                                          \
+    do {                                                                                                            \
+        fov = 70.0f;                                                                                                \
+        aspect = (aspect_val);                                                                                      \
+        near = 20.0f;                                                                                               \
+        far = 10000.0f;                                                                                             \
+        if ((gs)->memoryPoolId != 0xB) {                                                                            \
+            setViewportPerspective(                                                                                 \
+                &(gs)->playerCameraViewports[idx],                                                                  \
+                fov,                                                                                                \
+                aspect,                                                                                             \
+                near,                                                                                               \
+                MULTIPLAYER_RACE_VIEW_FAR_PLANE                                                                     \
+            );                                                                                                      \
+        } else {                                                                                                    \
+            setViewportPerspective(&(gs)->playerCameraViewports[idx], fov, aspect, near, BOSS_RACE_VIEW_FAR_PLANE); \
+        }                                                                                                           \
+        setViewportPerspective(&(gs)->playerRootViewports[idx], fov, aspect, near, far);                            \
     } while (0)
 
 USE_OVERLAY(race);
@@ -56,10 +62,10 @@ USE_OVERLAY(levels_snowboard_street_speed_cross);
 USE_OVERLAY(levels_training)
 
 typedef struct {
-    ViewportNode *audioPlayer0;
-    ViewportNode *unk4;
-    ViewportNode *unk8;
-    ViewportNode *unkC;
+    ViewportNode *audioViewport;
+    ViewportNode *playerOverlayViewports;
+    ViewportNode *playerCameraViewports;
+    ViewportNode *playerRootViewports;
     u8 padding[0x5C - 0x10];
     u8 memoryPoolId;
     u8 numPlayers;
@@ -88,9 +94,9 @@ typedef struct {
 
 typedef struct {
     void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
+    void *playerOverlayViewports;
+    void *playerCameraViewports;
+    void *playerRootViewports;
     Player *racers;
     void *introAnimationData;
     u8 pad18[64];
@@ -591,9 +597,9 @@ void initRace(void) {
     }
 
     raceState->unk0 = allocateNodeMemory(0x1D8);
-    raceState->unk4 = allocateNodeMemory(472 * raceState->humanPlayerCount);
-    raceState->unk8 = allocateNodeMemory(472 * raceState->humanPlayerCount);
-    raceState->unkC = allocateNodeMemory(472 * raceState->humanPlayerCount);
+    raceState->playerOverlayViewports = allocateNodeMemory(472 * raceState->humanPlayerCount);
+    raceState->playerCameraViewports = allocateNodeMemory(472 * raceState->humanPlayerCount);
+    raceState->playerRootViewports = allocateNodeMemory(472 * raceState->humanPlayerCount);
     raceState->racers = allocateNodeMemory(sizeof(Player) * raceState->totalRacers);
 
     for (i = 0; i < raceState->totalRacers; i++) {
@@ -845,15 +851,15 @@ void initRaceViewports(void) {
     gs = (GameState_temp *)getCurrentAllocation();
     levelConfig = getLevelConfig(gs->memoryPoolId);
     setAudioDistanceLimits(0x60, 0x1400);
-    initViewportNode(gs->audioPlayer0, 0, 0xC, 0x1E, 0);
-    setModelCameraTransform(gs->audioPlayer0, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
+    initViewportNode(gs->audioViewport, 0, 0xC, 0x1E, 0);
+    setModelCameraTransform(gs->audioViewport, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
 
     for (i = 0; i < gs->numPlayers; i++) {
-        initViewportNode(&gs->unkC[i], 0, (u16)(i + 4), 5, 1);
-        initViewportNode(&gs->unk8[i], &gs->unkC[i], (u16)i, 0xA, 1);
-        initViewportNode(&gs->unk4[i], &gs->unk8[i], (u16)(i + 8), 0x14, 0);
-        setViewportId(&gs->unk8[i], (u16)(i + 0x64));
-        setViewportId(&gs->unkC[i], (u16)(i + 0x64));
+        initViewportNode(&gs->playerRootViewports[i], 0, (u16)(i + 4), 5, 1);
+        initViewportNode(&gs->playerCameraViewports[i], &gs->playerRootViewports[i], (u16)i, 0xA, 1);
+        initViewportNode(&gs->playerOverlayViewports[i], &gs->playerCameraViewports[i], (u16)(i + 8), 0x14, 0);
+        setViewportId(&gs->playerCameraViewports[i], (u16)(i + 0x64));
+        setViewportId(&gs->playerRootViewports[i], (u16)(i + 0x64));
 
         if (gs->raceType == RACE_TYPE_INTRO) {
             setViewportLightColors(i + 0x64, 1, &D_80090774_91374, (ColorData *)&D_8009077C_9137C);
@@ -884,35 +890,35 @@ void initRaceViewports(void) {
 
     switch (gs->numPlayers) {
         case 1:
-            setModelCameraTransform(gs->unkC, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
-            setModelCameraTransform(gs->unk8, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
-            setModelCameraTransform(gs->unk4, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
+            setModelCameraTransform(gs->playerRootViewports, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
+            setModelCameraTransform(gs->playerCameraViewports, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
+            setModelCameraTransform(gs->playerOverlayViewports, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
 
             if (gs->memoryPoolId != 0xB) {
                 near = 70.0f;
                 aspect = 4.0f / 3.0f;
                 fov = 20.0f;
-                setViewportPerspective(gs->unk8, near, aspect, fov, RACE_VIEWPORT_FAR_PLANE);
+                setViewportPerspective(gs->playerCameraViewports, near, aspect, fov, RACE_VIEWPORT_FAR_PLANE);
             } else {
                 near = 70.0f;
                 aspect = 4.0f / 3.0f;
                 fov = 20.0f;
-                setViewportPerspective(gs->unk8, near, aspect, fov, BOSS_RACE_VIEW_FAR_PLANE);
+                setViewportPerspective(gs->playerCameraViewports, near, aspect, fov, BOSS_RACE_VIEW_FAR_PLANE);
             }
-            setViewportPerspective(gs->unkC, near, aspect, fov, 10000.0f);
+            setViewportPerspective(gs->playerRootViewports, near, aspect, fov, 10000.0f);
             break;
 
         case 2:
             osViExtendVStart(1);
 
-            setModelCameraTransform(&gs->unkC[0], 0, -0x35, -0xA0, -0x34, 0xA0, 0x34);
-            setModelCameraTransform(&gs->unkC[1], 0, 0x35, -0xA0, -0x34, 0xA0, 0x34);
+            setModelCameraTransform(&gs->playerRootViewports[0], 0, -0x35, -0xA0, -0x34, 0xA0, 0x34);
+            setModelCameraTransform(&gs->playerRootViewports[1], 0, 0x35, -0xA0, -0x34, 0xA0, 0x34);
 
             for (playerIdx = 0, i = 0; i < 2; i++, playerIdx++) {
-                setModelCameraTransform(&gs->unk8[playerIdx], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
-                setModelCameraTransform(&gs->unk4[playerIdx], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
-                setViewportScale(&gs->unk8[playerIdx], 1.0f, 0.5f);
-                setViewportScale(&gs->unkC[playerIdx], 1.0f, 0.5f);
+                setModelCameraTransform(&gs->playerCameraViewports[playerIdx], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
+                setModelCameraTransform(&gs->playerOverlayViewports[playerIdx], 0, 0, -0xA0, -0x34, 0xA0, 0x34);
+                setViewportScale(&gs->playerCameraViewports[playerIdx], 1.0f, 0.5f);
+                setViewportScale(&gs->playerRootViewports[playerIdx], 1.0f, 0.5f);
 
                 // SET_PLAYER_CAMERA_PERSPECTIVE should probably work here but it doesn't because
                 // the copy of far to new_var is essential here but breaks the 3 and 4 cases.
@@ -924,16 +930,22 @@ void initRaceViewports(void) {
                     new_var = far;
                     if (gs->memoryPoolId != 0xB) {
                         setViewportPerspective(
-                            &gs->unk8[playerIdx],
+                            &gs->playerCameraViewports[playerIdx],
                             fov,
                             aspect,
                             near,
                             MULTIPLAYER_RACE_VIEW_FAR_PLANE
                         );
                     } else {
-                        setViewportPerspective(&gs->unk8[playerIdx], fov, aspect, near, BOSS_RACE_VIEW_FAR_PLANE);
+                        setViewportPerspective(
+                            &gs->playerCameraViewports[playerIdx],
+                            fov,
+                            aspect,
+                            near,
+                            BOSS_RACE_VIEW_FAR_PLANE
+                        );
                     }
-                    setViewportPerspective(&gs->unkC[playerIdx], fov, aspect, near, new_var);
+                    setViewportPerspective(&gs->playerRootViewports[playerIdx], fov, aspect, near, new_var);
                 } while (0);
             }
 
@@ -942,16 +954,16 @@ void initRaceViewports(void) {
         case 3:
             osViExtendVStart(1);
 
-            setModelCameraTransform(&gs->unkC[0], -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
-            setModelCameraTransform(&gs->unkC[1], -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
-            setModelCameraTransform(&gs->unkC[2], 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->playerRootViewports[0], -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->playerRootViewports[1], -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->playerRootViewports[2], 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
 
             for (playerIdx = 0, i = 0; i < 3; i++, playerIdx++) {
-                setModelCameraTransform(&gs->unk8[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
+                setModelCameraTransform(&gs->playerCameraViewports[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
                 new_var = 0.5f;
-                setModelCameraTransform(&gs->unk4[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
-                setViewportScale(&gs->unk8[playerIdx], 0.5f, 0.5f);
-                setViewportScale(&gs->unkC[playerIdx], 0.5f, new_var);
+                setModelCameraTransform(&gs->playerOverlayViewports[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
+                setViewportScale(&gs->playerCameraViewports[playerIdx], 0.5f, 0.5f);
+                setViewportScale(&gs->playerRootViewports[playerIdx], 0.5f, new_var);
 
                 SET_PLAYER_CAMERA_PERSPECTIVE(gs, playerIdx, (4.0f / 3.0f));
             }
@@ -961,16 +973,16 @@ void initRaceViewports(void) {
         case 4:
             osViExtendVStart(1);
 
-            setModelCameraTransform(&gs->unkC[0], -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
-            setModelCameraTransform(&gs->unkC[1], -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
-            setModelCameraTransform(&gs->unkC[2], 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
-            setModelCameraTransform(&gs->unkC[3], 0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->playerRootViewports[0], -0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->playerRootViewports[1], -0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->playerRootViewports[2], 0x49, -0x35, -0x48, -0x34, 0x48, 0x34);
+            setModelCameraTransform(&gs->playerRootViewports[3], 0x49, 0x35, -0x48, -0x34, 0x48, 0x34);
 
             for (playerIdx = 0, i = 0; i < 4; i++, playerIdx++) {
-                setModelCameraTransform(&gs->unk8[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
-                setModelCameraTransform(&gs->unk4[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
-                setViewportScale(&gs->unk8[playerIdx], 0.5f, 0.5f);
-                setViewportScale(&gs->unkC[playerIdx], 0.5f, 0.5f);
+                setModelCameraTransform(&gs->playerCameraViewports[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
+                setModelCameraTransform(&gs->playerOverlayViewports[playerIdx], 0, 0, -0x48, -0x34, 0x48, 0x34);
+                setViewportScale(&gs->playerCameraViewports[playerIdx], 0.5f, 0.5f);
+                setViewportScale(&gs->playerRootViewports[playerIdx], 0.5f, 0.5f);
 
                 SET_PLAYER_CAMERA_PERSPECTIVE(gs, playerIdx, (4.0f / 3.0f));
             }
@@ -1934,28 +1946,28 @@ void cleanupGameSession(void) {
     terminateAllTasks();
 
     for (i = 0; i < gameState->unk5D; i++) {
-        unlinkNode(gameState->unk4 + i);
+        unlinkNode(gameState->playerOverlayViewports + i);
     }
 
     for (i = 0; i < gameState->unk5D; i++) {
-        unlinkNode(gameState->unk8 + i);
+        unlinkNode(gameState->playerCameraViewports + i);
     }
 
     for (i = 0; i < gameState->unk5D; i++) {
-        unlinkNode(gameState->unkC + i);
+        unlinkNode(gameState->playerRootViewports + i);
     }
 
     for (i = 0; i < gameState->numPlayers; i++) {
         freePlayerCharacterAssets(gameState->players + i);
     }
 
-    unlinkNode(gameState->audioPlayer0);
+    unlinkNode(gameState->audioViewport);
 
     freeNodeMemory(gameState->players);
-    freeNodeMemory(gameState->audioPlayer0);
-    freeNodeMemory(gameState->unk4);
-    freeNodeMemory(gameState->unk8);
-    freeNodeMemory(gameState->unkC);
+    freeNodeMemory(gameState->audioViewport);
+    freeNodeMemory(gameState->playerOverlayViewports);
+    freeNodeMemory(gameState->playerCameraViewports);
+    freeNodeMemory(gameState->playerRootViewports);
     freeNodeMemory(gameState->gameData.dataStart);
     freeNodeMemory(gameState->unk18);
     freeNodeMemory(gameState->unk1C);

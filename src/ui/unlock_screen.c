@@ -90,7 +90,7 @@ void initUnlockScreen(void) {
     initMenuCameraNode((ViewportNode *)&state->cameraNode1, 8, 15, 1);
     initMenuCameraNode((ViewportNode *)&state->cameraNode2, 1, 8, 1);
     createViewportTransform(lightBuffer, 0, 0, 0x600000, 0, 0, 0);
-    setViewportTransformById(((ViewportNode *)state)->id, lightBuffer);
+    setViewportTransformById(((ViewportNode *)state)->viewportId, lightBuffer);
     setViewportFadeValue(NULL, 0xFF, 0);
     memcpy(state->rotationMatrix, &identityMatrix, sizeof(Transform3D));
     state->rotationAngle = 0;

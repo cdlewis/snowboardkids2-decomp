@@ -137,7 +137,7 @@ void initSceneLighting(CreditsState *arg0) {
     arg0->unkE44[2].b2 = 0;
     ((ColorData *)&arg0->paddingE5C[0])->g = 0x90;
 
-    setViewportLightColors(arg0->unk768.id, 3, &arg0->unkE44[0], (ColorData *)&arg0->paddingE5C[0]);
+    setViewportLightColors(arg0->unk768.viewportId, 3, &arg0->unkE44[0], (ColorData *)&arg0->paddingE5C[0]);
 }
 
 void func_80003EE0_4AE0(void) {
@@ -192,7 +192,7 @@ void func_80003EE0_4AE0(void) {
     setViewportId(&taskMemory->unk768, 1);
     setViewportPerspective(&taskMemory->unk768, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     createViewportTransform(buffer, 0, 0, 0x01400000, 0, 0, 0);
-    setViewportTransformById(taskMemory->unk768.id, buffer);
+    setViewportTransformById(taskMemory->unk768.viewportId, buffer);
     setViewportEnvColor(&taskMemory->unk8, 0, 0, 0);
     setViewportFadeValue(&taskMemory->unk8, 0, 0);
     setViewportFadeValue(&taskMemory->unk1E0, 0, 0);
@@ -343,7 +343,7 @@ void initCreditsCharacter(CreditsCharacter *character) {
         );
     }
 
-    setViewportTransformById(creditsState->unk768.id, cameraTransform);
+    setViewportTransformById(creditsState->unk768.viewportId, cameraTransform);
 
     setCleanupCallback(cleanupCreditsCharacter);
     setCallback(updateCreditsCharacter);

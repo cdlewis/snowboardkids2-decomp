@@ -91,12 +91,12 @@ void initMenuCameraNode(ViewportNode *node, s32 slotIndex, s32 priority, s32 isS
     setViewportId(node, ((slotIndex & 0xFF) + 1));
     setModelCameraTransform(node, 0, 0, -0x98, -0x70, 0x97, 0x6F);
     setViewportPerspective(node, 50.0f, 1.3333334f, 10.0f, 4000.0f);
-    setViewportFogById(node->id, 0x3D4, 0x3E6, 0x64, 0x64, 0x64);
+    setViewportFogById(node->viewportId, 0x3D4, 0x3E6, 0x64, 0x64, 0x64);
     createViewportTransform(&lightSettings, 0, 0, 0x200000, 0, 0, 0);
-    setViewportTransformById(node->id, &lightSettings);
+    setViewportTransformById(node->viewportId, &lightSettings);
     setViewportEnvColor(node, 0, 0, 0);
     setViewportFadeValue(node, 0, 0);
-    setViewportLightColors(node->id, 1, &gMenuLightColor, &gMenuAmbientColor);
+    setViewportLightColors(node->viewportId, 1, &gMenuLightColor, &gMenuAmbientColor);
 }
 
 void initSplitScreen2P(ViewportNode *viewports, s32 baseSlotIndex, u8 priority, u8 isSecondary) {
@@ -115,7 +115,7 @@ void initSplitScreen2P(ViewportNode *viewports, s32 baseSlotIndex, u8 priority, 
         viewportId = (baseSlotIndex & 0xFF) + playerIndex + 1;
         setViewportId(viewports, viewportId);
         createViewportTransform(&transform, 0, 0, 0x200000, 0, 0, 0);
-        setViewportTransformById(viewports->id, &transform);
+        setViewportTransformById(viewports->viewportId, &transform);
         setViewportLightColors(viewportId, 1, &gMenuLightColor, &gMenuAmbientColor);
         setViewportFogById(viewportId, 0x3E3, 0x3E7, 100, 100, 100);
         setViewportEnvColor(viewports, 0, 0, 0);
@@ -148,7 +148,7 @@ void initSplitScreen3P4P(ViewportNode *viewports, s32 baseSlotIndex, u8 priority
         viewportId = (baseSlotIndex & 0xFF) + playerIndex + 1;
         setViewportId(viewports, viewportId);
         createViewportTransform(&transform, 0, 0, 0x200000, 0, 0, 0);
-        setViewportTransformById(viewports->id, &transform);
+        setViewportTransformById(viewports->viewportId, &transform);
         setViewportLightColors(viewportId, 1, &gMenuLightColor, &gMenuAmbientColor);
         setViewportFogById(viewportId, 0x3E3, 0x3E7, 100, 100, 100);
         setViewportEnvColor(viewports, 0, 0, 0);

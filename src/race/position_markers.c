@@ -405,7 +405,7 @@ void setupConfettiParticles(ConfettiEffectTask *task) {
             i++;
         } while (i < task->particleCount);
     }
-    memcpy(&task->lastCameraPos, &task->cameraNode->modelingMatrix.translation, sizeof(Vec3i));
+    memcpy(&task->lastCameraPos, &task->cameraNode->viewTransform.translation, sizeof(Vec3i));
     setCallbackWithContinue(&updateConfettiParticles);
 }
 
@@ -437,21 +437,21 @@ void updateConfettiParticles(ConfettiEffectTask *task) {
                     task->particles[i].velocity.y = 0xFFFC0000 - ((randA() & 0xFF) << 8);
                 }
             }
-            task->particles[i].worldPos.x -= task->cameraNode->modelingMatrix.translation.x - task->lastCameraPos.x;
+            task->particles[i].worldPos.x -= task->cameraNode->viewTransform.translation.x - task->lastCameraPos.x;
             task->particles[i].worldPos.x &= mask;
-            task->particles[i].worldPos.z -= task->cameraNode->modelingMatrix.translation.z - task->lastCameraPos.z;
+            task->particles[i].worldPos.z -= task->cameraNode->viewTransform.translation.z - task->lastCameraPos.z;
             task->particles[i].worldPos.z &= mask;
             task->particles[i].sprite.position.x =
-                task->particles[i].worldPos.x + (task->cameraNode->modelingMatrix.translation.x + cameraOffset);
+                task->particles[i].worldPos.x + (task->cameraNode->viewTransform.translation.x + cameraOffset);
             task->particles[i].sprite.position.y =
-                task->particles[i].worldPos.y + (task->cameraNode->modelingMatrix.translation.y + cameraOffset);
+                task->particles[i].worldPos.y + (task->cameraNode->viewTransform.translation.y + cameraOffset);
             task->particles[i].sprite.position.z =
-                task->particles[i].worldPos.z + (task->cameraNode->modelingMatrix.translation.z + cameraOffset);
+                task->particles[i].worldPos.z + (task->cameraNode->viewTransform.translation.z + cameraOffset);
             enqueueTexturedBillboardSprite(task->frameCounter, (TexturedBillboardSprite *)&task->particles[i]);
             i++;
         } while (i < task->particleCount);
     }
-    memcpy(&task->lastCameraPos, &task->cameraNode->modelingMatrix.translation, sizeof(Vec3i));
+    memcpy(&task->lastCameraPos, &task->cameraNode->viewTransform.translation, sizeof(Vec3i));
 }
 
 void cleanupConfettiEffect(ConfettiEffectTask *task) {
@@ -469,7 +469,7 @@ void spawnConfettiEffectForAllPlayers(void) {
         task = (ConfettiEffectTask *)scheduleTask(&initConfettiEffect, 0, 0, 0xF0);
         if (task != NULL) {
             task->frameCounter = i;
-            task->cameraNode = &gameState->unk8[(s16)i];
+            task->cameraNode = &gameState->playerCameraViewports[(s16)i];
             switch (gameState->unk5D) {
                 case 1:
                     task->particleCount = 0x64;

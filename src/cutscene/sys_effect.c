@@ -34,7 +34,7 @@ void cutsceneEffectDisp_exec(cutsceneEffectDisp_exec_arg *arg0, CutsceneManager 
     uiResource = arg1->uiResource;
     posX = arg0->posX;
     posY = arg0->posY;
-    slotIdx = uiResource->slot_index;
+    slotIdx = uiResource->callbackSlotIndex;
 
     slots = (CutsceneSlot *)arg1;
 

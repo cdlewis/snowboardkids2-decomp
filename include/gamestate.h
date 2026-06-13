@@ -267,10 +267,10 @@ typedef struct {
 } Player;
 
 typedef struct {
-    /* 0x0 */ ViewportNode *audioPlayer0;
-    ViewportNode *unk4;
-    ViewportNode *unk8;
-    ViewportNode *unkC;
+    /* 0x0 */ ViewportNode *audioViewport;
+    ViewportNode *playerOverlayViewports;
+    ViewportNode *playerCameraViewports;
+    ViewportNode *playerRootViewports;
     Player *players;
     void *introAnimationData;
     void *unk18;

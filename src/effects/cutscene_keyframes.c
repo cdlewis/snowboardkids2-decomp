@@ -80,7 +80,7 @@ void initCutsceneRenderer(void) {
     createViewportTransform(lightBuffer, 0, 0, 0x01000000, 0, 0, 0);
 
     overlayNodePtr = &s.taskMemory->overlayNode;
-    setViewportTransformById(s.taskMemory->sceneNode.id, lightBuffer);
+    setViewportTransformById(s.taskMemory->sceneNode.viewportId, lightBuffer);
     setViewportFadeValue(NULL, 0, 0);
 
     nodePtr = overlayNodePtr;
