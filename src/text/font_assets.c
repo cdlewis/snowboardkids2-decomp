@@ -6,9 +6,9 @@
 #include "graphics/sprite_rdp.h"
 #include "mbi.h"
 
-s32 gFontTextureData __attribute__((section(".bss")));
-s32 gFontPaletteBase __attribute__((section(".bss")));
-s8 gCurrentPaletteId __attribute__((section(".bss")));
+static s32 gFontTextureData;
+static s32 gFontPaletteBase;
+static s8 gCurrentPaletteId;
 
 extern u16 gDefaultFontPalette[];
 extern Gfx *gDisplayListAllocPtr;

@@ -33,7 +33,7 @@ extern s32 D_8008C920_8D520[];
 extern s32 gLookAtPtr;
 extern Gfx *gDisplayListAllocPtr;
 
-OutputStruct_19E80 gCachedSpriteTextureEntry __attribute__((section(".bss")));
+static OutputStruct_19E80 gCachedSpriteTextureEntry;
 
 void setupAndEnqueueSprite(
     SpriteState *state,

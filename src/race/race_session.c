@@ -383,7 +383,7 @@ IntroFrameData2 sIntroCameraEvents[] = {
 };
 
 // Bss
-u8 gRaceResultCode __attribute__((section(".bss"))) = 0;
+static u8 gRaceResultCode;
 
 extern s8 gControllerPollingEnabled;
 extern s32 gControllerInputs[4];
