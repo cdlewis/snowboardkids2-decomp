@@ -3,6 +3,7 @@
 #include "common.h"
 #include "gbi.h"
 #include "graphics/displaylist.h"
+#include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"

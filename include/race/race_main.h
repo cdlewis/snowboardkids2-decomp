@@ -4,18 +4,18 @@
 #include "gamestate.h"
 
 typedef struct {
-    u8 _pad0[0xB84];
-    s32 animFlags;
-    u8 _padB88[0x12]; // 0xB88 to 0xB9A
-    s16 boostTimer;
-    u8 _padB9C[0x8]; // 0xB9C to 0xBA4
-    s16 invincibilityTimer;
-    s16 featherItemTimer;
-    u8 _padBA8[0x15]; // 0xBA8 to 0xBBD
-    u8 behaviorMode;
-    u8 behaviorPhase;
-    u8 behaviorStep;
-    u8 behaviorCounter;
+    /* 0x000 */ u8 _pad0[0xB84];
+    /* 0xB84 */ s32 animFlags;
+    /* 0xB88 */ u8 _padB88[0x12];
+    /* 0xB9A */ s16 boostTimer;
+    /* 0xB9C */ u8 _padB9C[0x8];
+    /* 0xBA4 */ s16 invincibilityTimer;
+    /* 0xBA6 */ s16 featherItemTimer;
+    /* 0xBA8 */ u8 _padBA8[0x15];
+    /* 0xBBD */ u8 behaviorMode;
+    /* 0xBBE */ u8 behaviorPhase;
+    /* 0xBBF */ u8 behaviorStep;
+    /* 0xBC0 */ u8 behaviorCounter;
 } BehaviorState;
 
 void setPlayerBehaviorMode(Player *player, u8 mode);

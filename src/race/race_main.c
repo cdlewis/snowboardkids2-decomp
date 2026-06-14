@@ -40,8 +40,8 @@ typedef void (*KnockbackBehaviorPhaseHandler)(void *);
 typedef void (*KnockbackBehaviorStepHandler)(void *);
 
 typedef struct {
-    s16 timer;
-    u16 scale;
+    /* 0x00 */ s16 timer;
+    /* 0x02 */ u16 scale;
 } KnockbackHomingBounceEntry;
 typedef void (*SharpTurnBehaviorStepHandler)(void *);
 typedef void (*DefaultBehaviorPhaseHandler)(void *);
@@ -49,28 +49,28 @@ typedef void (*DefaultBehaviorPhaseHandler)(void *);
 typedef s32 (*BehaviorModeHandler)(Player *);
 
 typedef struct {
-    u8 primaryR;
-    u8 primaryG;
-    u8 primaryB;
-    u8 pad1;
-    u8 secondaryR;
-    u8 secondaryG;
-    u8 secondaryB;
-    u8 pad2;
+    /* 0x00 */ u8 primaryR;
+    /* 0x01 */ u8 primaryG;
+    /* 0x02 */ u8 primaryB;
+    /* 0x03 */ u8 pad1;
+    /* 0x04 */ u8 secondaryR;
+    /* 0x05 */ u8 secondaryG;
+    /* 0x06 */ u8 secondaryB;
+    /* 0x07 */ u8 pad2;
 } BossSurfaceColor;
 
 /* Overlay at offset 0x38 of each 0x3C-stride body part slot in Player */
 typedef struct {
-    Transform3D mtx;
-    void *assetPtr;
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
+    /* 0x00 */ Transform3D mtx;
+    /* 0x20 */ void *assetPtr;
+    /* 0x24 */ s32 unk5C;
+    /* 0x28 */ s32 unk60;
+    /* 0x2C */ s32 unk64;
 } BodyPartExtra;
 
 typedef struct {
-    u8 _pad0[0x5C];
-    u8 unk5C;
+    /* 0x00 */ u8 _pad0[0x5C];
+    /* 0x5C */ u8 unk5C;
 } GameStatePartial5C;
 
 extern Gfx *gDisplayListAllocPtr;
@@ -2796,22 +2796,22 @@ s32 updateRaceFinishSlowingDownStep(Player *player) {
 }
 
 typedef struct {
-    u8 pad[0x176C];
-    s32 unk176C;
+    /* 0x0000 */ u8 pad[0x176C];
+    /* 0x176C */ s32 unk176C;
 } GameStateUnk10;
 
 typedef struct {
-    u8 pad[0x10];
-    GameStateUnk10 *unk10;
-    u8 pad2[0x44];
-    u8 unk58;
-    u8 unk59;
-    u8 unk5A;
-    u8 pad3[0x1F];
-    u8 raceType;
-    u8 showResultHUD;
-    u8 unk7C;
-    u8 playerLost;
+    /* 0x00 */ u8 pad[0x10];
+    /* 0x10 */ GameStateUnk10 *unk10;
+    /* 0x14 */ u8 pad2[0x44];
+    /* 0x58 */ u8 unk58;
+    /* 0x59 */ u8 unk59;
+    /* 0x5A */ u8 unk5A;
+    /* 0x5B */ u8 pad3[0x1F];
+    /* 0x7A */ u8 raceType;
+    /* 0x7B */ u8 showResultHUD;
+    /* 0x7C */ u8 unk7C;
+    /* 0x7D */ u8 playerLost;
 } GameStateLocal;
 
 s32 updateRaceFinishWaitingStep(Player *player) {
@@ -4900,8 +4900,8 @@ s32 spinRampUpStep(Player *arg0) {
 }
 
 typedef struct {
-    u8 _pad0[0x63];
-    u8 shortcutGateState; // 0x63
+    /* 0x00 */ u8 _pad0[0x63];
+    /* 0x63 */ u8 shortcutGateState;
 } MaintainMaxSpinStep_alloc;
 
 s32 maintainMaxSpinStep(Player *arg0) {
@@ -4936,8 +4936,8 @@ s32 maintainMaxSpinStep(Player *arg0) {
 }
 
 typedef struct {
-    u8 _pad0[0x81];
-    u8 shortcutWarpPlayerCount; // 0x81 - Number of players in shortcut warp sequence
+    /* 0x00 */ u8 _pad0[0x81];
+    /* 0x81 */ u8 shortcutWarpPlayerCount; // Number of players in shortcut warp sequence
 } SpinRampDownStep_alloc;
 
 s32 spinRampDownStep(Player *player) {
@@ -4972,8 +4972,8 @@ s32 spinRampDownStep(Player *player) {
 }
 
 typedef struct {
-    u8 _pad0[0x80];
-    u8 fadeInPlayerCount; // 0x80 - Number of players in fade-in wait phase
+    /* 0x00 */ u8 _pad0[0x80];
+    /* 0x80 */ u8 fadeInPlayerCount; // Number of players in fade-in wait phase
 } SpinFadeInWaitStep_alloc;
 
 s32 spinFadeInWaitStep(Player *player) {

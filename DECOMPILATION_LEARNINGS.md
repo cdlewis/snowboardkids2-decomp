@@ -494,3 +494,7 @@ __asm__ volatile("" : : : "t0", "t1", "t2", "t3", "t4", "t5", "t8", "t9", "s0", 
 ```
 
 This forced KMC GCC to keep the 64-bit product in `t6/t7` and emit the spill pattern expected by the target. A real inline store duplicated the spill; the empty clobber was enough.
+
+## Prefer Explicit Overlay Layouts in race_hud.c
+
+While consolidating `race_hud.c` callback state structs, anonymous union/struct overlays were not a useful way to expose alternate field names for the same allocation: the syntax-check path did not expose members reliably, and the struct-offset formatter treated anonymous overlay fields like sequential storage. Use one explicit canonical layout instead, then access existing fields by their stable names or cast only at API boundaries that require a different view.
