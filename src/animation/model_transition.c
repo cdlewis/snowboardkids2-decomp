@@ -24,7 +24,6 @@ typedef struct {
     /* 0x44 */ TransitionEffectFrame *frameBuffer;
 } ModelTransitionEffectState;
 
-extern s16 gGraphicsMode;
 extern Gfx *gDisplayListAllocPtr;
 
 void setupModelTransitionVariant(ModelTransitionEffectState *);

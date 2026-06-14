@@ -159,7 +159,6 @@ void updateSceneRenderTask(SceneRenderTaskCtx *ctx);
 void cleanupSceneRenderTask(SceneRenderTaskData *task);
 
 extern Gfx *volatile gDisplayListAllocPtr;
-extern s32 gCurrentDisplayBufferIndex;
 
 Gfx D_8008CCE0_8D8E0[] = {
     { .words = { 0x00000000, 0x010000A0 } },

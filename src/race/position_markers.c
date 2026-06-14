@@ -89,7 +89,6 @@ void setupConfettiParticles(ConfettiEffectTask *task);
 void updateConfettiParticles(ConfettiEffectTask *task);
 void cleanupConfettiEffect(ConfettiEffectTask *task);
 
-extern s32 gFrameCounter;
 extern u8 gConnectedControllerMask;
 
 Vec3i gIndicatorSpriteOffset = { 0x00000000, 0x00200000, 0x00000000 };

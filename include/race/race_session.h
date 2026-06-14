@@ -5,7 +5,6 @@
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
-#include "race/race_hud.h"
 #include "system/memory_allocator.h"
 #include "ui/options_menu.h"
 

@@ -7,6 +7,7 @@
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "os_cont.h"
+#include "race/race_hud.h"
 #include "race/race_session.h"
 #include "story/map_events.h"
 #include "system/rom_loader.h"
@@ -62,7 +63,6 @@ typedef enum {
 } MenuState;
 
 extern s32 gControllerInputs[];
-extern s32 gFrameCounter;
 
 u8 gLevelWorldTable[] = {
     0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

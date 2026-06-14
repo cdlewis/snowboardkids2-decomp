@@ -74,13 +74,13 @@ typedef struct {
 } GameStatePartial5C;
 
 extern Gfx *gDisplayListAllocPtr;
-extern s16 gGraphicsMode;
+
 extern AssetMeta D_8009A550_9B150[];
 extern u16 gGlobalFrameCounter;
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
 extern s32 gButtonsPressed[];
-extern s32 gFrameCounter;
+
 extern void spawnPlayerIndicatorTask(Player *);
 extern void applyCharacterBoardStats(Player *);
 extern void initFlyingSceneryTask(void);

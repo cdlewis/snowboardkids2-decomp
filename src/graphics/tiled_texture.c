@@ -8,7 +8,6 @@
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-extern s16 gGraphicsMode;
 extern Gfx *gDisplayListAllocPtr;
 
 u32 D_800885D0_891D0[] = { 0x00000000, 0x00000000, 0x010005F0, 0x00000000 };

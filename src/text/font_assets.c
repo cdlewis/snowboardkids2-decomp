@@ -3,7 +3,6 @@
 #include "data/data_table.h"
 #include "gbi.h"
 #include "graphics/graphics.h"
-#include "graphics/sprite_rdp.h"
 #include "mbi.h"
 
 static s32 gFontTextureData;

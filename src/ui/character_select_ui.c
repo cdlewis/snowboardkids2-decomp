@@ -5,6 +5,7 @@
 #include "common.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
+#include "os_cont.h"
 #include "race/race_session.h"
 #include "story/map_events.h"
 #include "system/rom_loader.h"

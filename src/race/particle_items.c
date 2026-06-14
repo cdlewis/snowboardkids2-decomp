@@ -480,7 +480,6 @@ Gfx D_8009A780_9B380[] = {
     { .words = { 0xE3001001, 0x00008000 } }, { .words = { 0xDF000000, 0x00000000 } },
 };
 
-extern s32 gFrameCounter;
 extern s8 starAnimFrameDurations[];
 extern s32 D_80090964_91564;
 extern s32 D_80090974_91574;
@@ -495,7 +494,7 @@ extern Vec3i D_800908E0_914E0[];
 extern PushZoneDataEntry gPushZoneData[];
 extern CompressedAssetEntry D_80090AB8_916B8[];
 extern s32 gLookAtPtr;
-extern s16 gGraphicsMode;
+
 extern Gfx *gDisplayListAllocPtr;
 
 void initFallingEffect(FallingEffectState *arg0) {

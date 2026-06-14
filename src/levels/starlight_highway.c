@@ -13,9 +13,7 @@
 #include "race/track_collision.h"
 #include "system/task_scheduler.h"
 
-extern s32 gFrameCounter;
 extern Gfx *gDisplayListAllocPtr;
-extern s16 gGraphicsMode;
 
 typedef struct {
     u8 _pad[0x80];

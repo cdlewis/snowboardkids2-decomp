@@ -24,7 +24,7 @@ Gfx gSpriteRDPSetupDL[] = {
 
 extern SpriteFrameEntry *gCachedPaletteAddr;
 extern s32 gCachedTextureAddr;
-extern s16 gGraphicsMode;
+
 extern Gfx *gDisplayListAllocPtr;
 extern u16 gDefaultFontPalette[];
 

@@ -7,8 +7,6 @@
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-extern s32 gFrameCounter;
-
 DisplayLists D_80088670_89270 = { 0, (Gfx *)0x010001E8, NULL, NULL };
 DisplayLists D_80088680_89280 = { 0, NULL, (Gfx *)0x01000390, NULL };
 DisplayLists D_80088690_89290 = { 0, NULL, NULL, (Gfx *)0x01000540 };

@@ -14,9 +14,8 @@ typedef struct {
     /* 0x0A */ u8 blue;
 } ColorRect;
 
-extern s16 gGraphicsMode;
 extern Gfx *gDisplayListAllocPtr;
-extern s32 gFrameCounter;
+
 extern s16 gTextureEnabled;
 
 void drawColorRectFill(ColorRect *rect);

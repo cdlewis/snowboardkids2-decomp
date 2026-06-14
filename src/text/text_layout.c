@@ -22,7 +22,7 @@ void renderShadedTextSprite(s32, s32, u16, u16, u16, u16, SpriteSheetData *);
 
 extern SpriteFrameEntry *gCachedPaletteAddr;
 extern s32 gCachedTextureAddr;
-extern s16 gGraphicsMode;
+
 extern Gfx *gDisplayListAllocPtr;
 extern u16 gDefaultFontPalette[];
 extern Gfx gSpriteRDPSetupDL[];

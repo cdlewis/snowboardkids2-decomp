@@ -16,8 +16,6 @@
 #include "race/track_geometry.h"
 #include "system/task_scheduler.h"
 
-extern s32 gFrameCounter;
-
 #define SECONDS_TO_TICKS(s) ((s) * 30)
 
 #define SCHEDULE_AND_SET(func, offset, value)        \

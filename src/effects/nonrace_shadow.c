@@ -8,7 +8,6 @@
 #include "ui/level_preview_3d.h"
 
 extern Gfx *gDisplayListAllocPtr;
-extern s16 gGraphicsMode;
 
 u32 g_NonRaceShadowTex[];
 
