@@ -425,8 +425,10 @@ typedef struct {
     u8 charSelectFrameCounters[8];
     u8 charSelectCharRow[8];
     u8 charSelectCharCol[8];
-    u8 PAD_22[0x8];
-    u8 charSelectScrollDirection[8];
+    u8 charSelectBoardIds[4];
+    u8 charSelectSavedBoardIds[4];
+    u8 charSelectScrollDirection[4];
+    u8 charSelectSlideState[4];
     u8 iconDisplayState[4];
     u8 charSelectMaxMenuOption;
     u8 PAD_23[0x5];

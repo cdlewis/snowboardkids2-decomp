@@ -47,7 +47,7 @@ typedef struct {
     Transform3D transform;
     union {
         SceneModel *unk20;
-        s32 targetX;
+        s32 slideTargetX;
         s16 unk20_s16;
     } unk20_u;
     u8 playerIndex;
@@ -371,7 +371,7 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     arg0->ambientR = 0x80;
     arg0->ambientG = 0x80;
     arg0->ambientB = 0x80;
-    arg0->selectionState = *(gameState + arg0->playerIndex + 0x18C8);
+    arg0->selectionState = ((GameState *)gameState)->iconDisplayState[arg0->playerIndex];
 
     setCleanupCallback(cleanupCharSelectPreviewAssets);
     setCallback(updateCharSelectPreviewModel);
@@ -407,7 +407,7 @@ void updateCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
 
     if (state->charSelectCursorIndices[arg0->playerIndex] == state->charSelectMaxMenuOption - 1) {
         val = state->charSelectMenuStates[arg0->playerIndex];
-        if (val != 1) {
+        if (val != CHAR_SELECT_MENU_ROTATING) {
             rotation = state->charSelectPreviewAngles[arg0->playerIndex];
             createYRotationMatrix(&arg0->positionMatrix, rotation);
             goto after_rotation;
@@ -422,7 +422,7 @@ after_rotation:
     func_8006B084_6BC84(&sp10, &state->charSelectRotations[arg0->playerIndex], (Transform3D *)arg0);
 
     val = state->charSelectMenuStates[arg0->playerIndex];
-    if (val == 4 || val == 9) {
+    if (val == CHAR_SELECT_CHAR_ROW_SLIDE || val == CHAR_SELECT_CHAR_VARIANT_SLIDE) {
         arg0->animationAsset = freeNodeMemory(arg0->animationAsset);
         arg0->skeletonAsset = freeNodeMemory(arg0->skeletonAsset);
         arg0->paletteAsset = freeNodeMemory(arg0->paletteAsset);
@@ -528,7 +528,7 @@ void updateCharSelectSlide(CharSelectSlideState *arg0) {
     enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
 
     if (arg0->worldMatrix.translation.x == 0) {
-        state->charSelectScrollDirection[arg0->playerIndex + 4]++;
+        state->charSelectSlideState[arg0->playerIndex]++;
         setCallbackWithContinue(updateCharSelectPostSlide);
     }
 }
@@ -555,7 +555,7 @@ void updateCharSelectPostSlide(CharSelectSlideState *arg0) {
     enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
 
     val = base->charSelectMenuStates[arg0->playerIndex];
-    if (val != 4 && val != 9) {
+    if (val != CHAR_SELECT_CHAR_ROW_SLIDE && val != CHAR_SELECT_CHAR_VARIANT_SLIDE) {
         setCallback(updateCharSelectPreviewModel);
     }
 }
@@ -651,7 +651,7 @@ void updateCharSelectSecondarySlide(CharSelectSecondarySlot *slot) {
     func_8006B084_6BC84(localMatrixPtr, &slot->worldMatrix, (Transform3D *)slot);
 
     if (slot->worldMatrix.translation.x == targetX) {
-        state->charSelectScrollDirection[slot->playerIndex + 4]++;
+        state->charSelectSlideState[slot->playerIndex]++;
         terminateCurrentTask();
     } else {
         enqueueDisplayListObject(slot->playerIndex, (DisplayListObject *)slot);
@@ -675,12 +675,25 @@ void initCharSelectBoardModel(CharSelectBoardPreview *arg0) {
     playerIdx = arg0->playerIndex;
 
     boardType = gGameSessionContext->playerBoardIds[playerIdx];
+    // Normal board preview model: current board id/model bank.
     if (boardType == 7) {
-        arg0->model =
-            createSceneModelEx(0x39, (void *)state + (playerIdx * 0x1D8), state->PAD_22[playerIdx], -1, -1, -1);
+        arg0->model = createSceneModelEx(
+            0x39,
+            (void *)state + (playerIdx * 0x1D8),
+            state->charSelectBoardIds[playerIdx],
+            -1,
+            -1,
+            -1
+        );
     } else {
-        arg0->model =
-            createSceneModelEx(boardType, (void *)state + (playerIdx * 0x1D8), state->PAD_22[playerIdx], -1, -1, -1);
+        arg0->model = createSceneModelEx(
+            boardType,
+            (void *)state + (playerIdx * 0x1D8),
+            state->charSelectBoardIds[playerIdx],
+            -1,
+            -1,
+            -1
+        );
     }
 
     memcpy(&arg0->transform, &identityMatrix, sizeof(Transform3D));
@@ -757,7 +770,7 @@ void updateCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
     updateModelGeometry(arg0->model);
 
     val = state->charSelectMenuStates[arg0->playerIndex];
-    if (val == 0x10) {
+    if (val == CHAR_SELECT_BOARD_SLIDE) {
         destroySceneModel(arg0->model);
         setCallback(recreateCharSelectBoardModelForSlideIn);
     }
@@ -774,14 +787,15 @@ void dispatchCharSelectBoardState(CharSelectBoardPreview *arg0) {
 
     boardState = *(statePtr + arg0->playerIndex + (0x1898 / 2));
 
-    if (boardState == 0x10) {
+    // Menu state/model lifetime bridge for board preview task transitions.
+    if (boardState == CHAR_SELECT_BOARD_SLIDE) {
         destroySceneModel(arg0->model);
         setCallback(recreateCharSelectBoardModelForSlideIn);
-    } else if (boardState == 0) {
+    } else if (boardState == CHAR_SELECT_MENU_NAV) {
         arg0->transform.translation.x = 0xFFEA0000;
         destroySceneModel(arg0->model);
         setCallback(recreateCharSelectBoardModel);
-    } else if (boardState == 0x11) {
+    } else if (boardState == CHAR_SELECT_BOARD_FLASH) {
         arg0->transform.translation.x = 0xFFEA0000;
         setCallback(updateCharSelectBoardPreview);
     }
@@ -801,10 +815,23 @@ void recreateCharSelectBoardModel(CharSelectBoardPreview *arg0) {
     boardType = sessionPtr[9];
 
     if (boardType != 7) {
-        arg0->model =
-            createSceneModelEx(boardType, alloc + (playerIdx * 0x1D8), (alloc + playerIdx)[0x18B8], -1, -1, -1);
+        arg0->model = createSceneModelEx(
+            boardType,
+            alloc + (playerIdx * 0x1D8),
+            ((GameState *)alloc)->charSelectBoardIds[playerIdx],
+            -1,
+            -1,
+            -1
+        );
     } else {
-        arg0->model = createSceneModelEx(0x39, alloc + (playerIdx * 0x1D8), (alloc + playerIdx)[0x18B8], -1, -1, -1);
+        arg0->model = createSceneModelEx(
+            0x39,
+            alloc + (playerIdx * 0x1D8),
+            ((GameState *)alloc)->charSelectBoardIds[playerIdx],
+            -1,
+            -1,
+            -1
+        );
     }
     setCallback(initCharSelectBoardPreview);
 }
@@ -819,7 +846,7 @@ void recreateCharSelectBoardModelForSlideIn(CharSelectBoardPreview *arg0) {
         arg0->model = createSceneModelEx(
             0x39,
             (u8 *)state + (arg0->playerIndex * 0x1D8),
-            state->PAD_22[arg0->playerIndex],
+            state->charSelectBoardIds[arg0->playerIndex],
             -1,
             -1,
             -1
@@ -828,7 +855,7 @@ void recreateCharSelectBoardModelForSlideIn(CharSelectBoardPreview *arg0) {
         arg0->model = createSceneModelEx(
             boardType,
             (u8 *)state + (arg0->playerIndex * 0x1D8),
-            state->PAD_22[arg0->playerIndex],
+            state->charSelectBoardIds[arg0->playerIndex],
             -1,
             -1,
             -1
@@ -851,7 +878,8 @@ void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
     )&charSelectModelPositions)[gGameSessionContext->numPlayers * 2 + state->charSelectScrollDirection[playerIdx]];
     preview->transform.translation.z = 0;
     preview->transform.translation.y = 0xFFF00000;
-    preview->unk20_u.targetX = preview->transform.translation.x;
+    // Incoming board slide model starts offscreen and moves back to center.
+    preview->unk20_u.slideTargetX = preview->transform.translation.x;
 
     applyTransformToModel(preview->model, &preview->transform);
 
@@ -866,14 +894,13 @@ void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
 }
 
 void updateCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
-    u8 *state;
+    GameState *state;
     s32 targetX;
     s32 slideStep;
-    u8 *statePtr;
 
-    state = (u8 *)getCurrentAllocation();
+    state = (GameState *)getCurrentAllocation();
 
-    targetX = preview->unk20_u.targetX;
+    targetX = preview->unk20_u.slideTargetX;
 
     slideStep = (-(0 < targetX) & 0xFFF00000) | 0x100000;
 
@@ -884,8 +911,7 @@ void updateCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
     updateModelGeometry(preview->model);
 
     if (preview->transform.translation.x == 0) {
-        statePtr = state + preview->playerIndex;
-        statePtr[0x18C4]++;
+        state->charSelectSlideState[preview->playerIndex]++;
         setCallbackWithContinue(waitForCharSelectBoardState);
     }
 }
@@ -901,7 +927,7 @@ void waitForCharSelectBoardState(CharSelectBoardPreview *preview) {
 
     boardState = *(state + preview->playerIndex + (0x1898 / 2));
 
-    if (boardState != 0x10) {
+    if (boardState != CHAR_SELECT_BOARD_SLIDE) {
         setCallback(dispatchCharSelectBoardState);
     }
 }
@@ -919,12 +945,25 @@ void initCharSelectBoardModelForSlideOut(CharSelectBoardPreview *arg0) {
     playerIndex = arg0->playerIndex;
     boardType = gGameSessionContext->playerBoardIds[playerIndex];
 
+    // Outgoing board slide model keeps the previous board/model bank alive.
     if (boardType != 7) {
-        arg0->model =
-            createSceneModelEx(boardType, alloc + (playerIndex * 0x1D8), (alloc + playerIndex)[0x18BC], -1, -1, -1);
+        arg0->model = createSceneModelEx(
+            boardType,
+            alloc + (playerIndex * 0x1D8),
+            ((GameState *)alloc)->charSelectSavedBoardIds[playerIndex],
+            -1,
+            -1,
+            -1
+        );
     } else {
-        arg0->model =
-            createSceneModelEx(0x39, alloc + (playerIndex * 0x1D8), (alloc + playerIndex)[0x18BC], -1, -1, -1);
+        arg0->model = createSceneModelEx(
+            0x39,
+            alloc + (playerIndex * 0x1D8),
+            ((GameState *)alloc)->charSelectSavedBoardIds[playerIndex],
+            -1,
+            -1,
+            -1
+        );
     }
     memcpy(&arg0->transform, &identityMatrix, sizeof(Transform3D));
     arg0->transform.translation.x = 0;
@@ -960,7 +999,8 @@ void updateCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
     state = (u8 *)getCurrentAllocation();
 
     target = ((s32 *)&charSelectModelPositions)
-        [gGameSessionContext->numPlayers * 2 + (((state + preview->playerIndex)[0x18C0] + 1) & 1)];
+        [gGameSessionContext->numPlayers * 2 +
+         ((((GameState *)state)->charSelectScrollDirection[preview->playerIndex] + 1) & 1)];
 
     preview->transform.translation.x += ((target >> 31) & slideMask) | slideStep;
 
@@ -969,7 +1009,7 @@ void updateCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
     updateModelGeometry(preview->model);
 
     if (preview->transform.translation.x == target) {
-        (state + preview->playerIndex)[0x18C4]++;
+        ((GameState *)state)->charSelectSlideState[preview->playerIndex]++;
         terminateCurrentTask();
     }
 }
@@ -1115,7 +1155,7 @@ void animateCharSelectIconReveal(CharSelectIconsState *arg0) {
     }
 
     // If character selection is confirmed, skip animation
-    if (state->charSelectMenuStates[arg0->playerIndex] == 9) {
+    if (state->charSelectMenuStates[arg0->playerIndex] == CHAR_SELECT_CHAR_VARIANT_SLIDE) {
         setCallback(updateCharSelectIconTargets);
     }
 }
@@ -1230,7 +1270,7 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
         i++;
     } while (i < 3);
 
-    if (state->charSelectMenuStates[arg0->playerIndex] == 3) {
+    if (state->charSelectMenuStates[arg0->playerIndex] == CHAR_SELECT_CHAR_ROW_BROWSE) {
         iconIndex = 0xD;
         if (gGameSessionContext->numPlayers == 1) {
             iconIndex = 0x12;
@@ -1274,7 +1314,7 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
     charSelectState = state->charSelectMenuStates[arg0->playerIndex];
 
     // If character selection is confirmed, transition to showing the icons
-    if (charSelectState == 0xA) {
+    if (charSelectState == CHAR_SELECT_CHAR_VARIANT_BROWSE) {
         setCallback(showCharSelectIcons);
         return;
     }
@@ -1345,7 +1385,7 @@ loop:
     if (i < 3)
         goto loop;
 
-    if (state->charSelectMenuStates[arg0->playerIndex] == 3) {
+    if (state->charSelectMenuStates[arg0->playerIndex] == CHAR_SELECT_CHAR_ROW_BROWSE) {
         iconBaseIndex = 0xD;
         if (gGameSessionContext->numPlayers == 1) {
             iconBaseIndex = 0x12;
@@ -1445,7 +1485,7 @@ void updateCharSelectMenu(SelectionMenuState *menu) {
         entries = menu->entries;
         do {
             if (state->charSelectCursorIndices[menu->playerIndex] == entryIndex) {
-                if (state->charSelectMenuStates[menu->playerIndex] == 0) {
+                if (state->charSelectMenuStates[menu->playerIndex] == CHAR_SELECT_MENU_NAV) {
                     blinkCounter = menu->blinkTimers[entryIndex] + 1;
                     blinkPhase = blinkCounter & 0xFF;
                     menu->blinkTimers[entryIndex] = blinkCounter;
@@ -1468,7 +1508,7 @@ void updateCharSelectMenu(SelectionMenuState *menu) {
         } while (entryIndex < (s32)menu->numEntries);
     }
 
-    if (state->charSelectMenuStates[menu->playerIndex] == 2) {
+    if (state->charSelectMenuStates[menu->playerIndex] == CHAR_SELECT_MENU_CONFIRMING) {
         setCallbackWithContinue(updateCharSelectMenuConfirm);
     }
 }
@@ -1646,7 +1686,8 @@ void updateCharSelectArrows(SelectionArrowsState *state) {
     for (playerIdx = 0; playerIdx < gGameSessionContext->numPlayers; playerIdx++) {
         playerState = gameState->charSelectMenuStates[playerIdx];
         blinkTimer = 2;
-        if (((u32)(playerState - 3)) < 8U) {
+        if (((u32)(playerState - CHAR_SELECT_CHAR_ROW_BROWSE)) <
+            (CHAR_SELECT_CHAR_VARIANT_BROWSE - CHAR_SELECT_CHAR_ROW_BROWSE + 1)) {
             numPlayers = gGameSessionContext->numPlayers;
             yPos = *((u16 *)((charSelectArrowDataTable + (numPlayers * 6)) + 4));
             if (playerState >= 6U) {
@@ -1658,7 +1699,8 @@ void updateCharSelectArrows(SelectionArrowsState *state) {
             for (arrowIdx = 0; arrowIdx < 2; arrowIdx++) {
                 state->entries[entryStartIdx + arrowIdx].y = yPos;
                 playerState = gameState->charSelectMenuStates[playerIdx];
-                canBlink = (playerState != 4) & (playerState != 9);
+                canBlink =
+                    (playerState != CHAR_SELECT_CHAR_ROW_SLIDE) & (playerState != CHAR_SELECT_CHAR_VARIANT_SLIDE);
                 if (canBlink == 0) {
                     goto hide_arrow;
                 }
@@ -1767,7 +1809,8 @@ void updateBoardSelectArrows(SelectionArrowsState *state) {
     for (playerIdx = 0; playerIdx < gGameSessionContext->numPlayers; playerIdx++) {
         gameStateValue = gameState->charSelectMenuStates[playerIdx];
 
-        if ((u32)(gameStateValue - 0xF) < 3U) {
+        if ((u32)(gameStateValue - CHAR_SELECT_BOARD_BROWSE) <
+            (CHAR_SELECT_BOARD_FLASH - CHAR_SELECT_BOARD_BROWSE + 1)) {
             // Show arrows
             state->blinkTimers[playerIdx]++;
             entryStartIdx = playerIdx * 2;
@@ -1775,7 +1818,7 @@ void updateBoardSelectArrows(SelectionArrowsState *state) {
             for (arrowIdx = 0; arrowIdx < 2; arrowIdx++) {
                 gameStateValue = gameState->charSelectMenuStates[playerIdx];
 
-                if (gameStateValue == 0x10) {
+                if (gameStateValue == CHAR_SELECT_BOARD_SLIDE) {
                     goto hide_arrow;
                 }
 
@@ -1846,7 +1889,7 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         selectionState = gameState->charSelectCharRow[i];
-        if (selectionState == 3) {
+        if (selectionState == CHAR_SELECT_CHAR_ROW_BROWSE) {
             numPlayers = gGameSessionContext->numPlayers;
             if (numPlayers == 1) {
                 xPos += 0x18;
@@ -1890,8 +1933,8 @@ void updateBoardSelectCharNames(CharacterNameSprite *sprites) {
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         selectionState = gameState->charSelectMenuStates[i];
-        if (selectionState != 4) {
-            yPos = selectionState - 3;
+        if (selectionState != CHAR_SELECT_CHAR_ROW_SLIDE) {
+            yPos = selectionState - CHAR_SELECT_CHAR_ROW_BROWSE;
             if (((u32)yPos) >= 8) {
                 numPlayers = gGameSessionContext->numPlayers;
                 xPos = ((s16 *)charSelectNamePositions)[numPlayers * 2];
@@ -1922,7 +1965,9 @@ void updateBoardSelectCharNames(CharacterNameSprite *sprites) {
             }
             sprites[i].x = xPos;
             sprites[i].y = yPos;
-            if ((((u32)(gameState->charSelectMenuStates[i] - 5)) < 2) && (gameState->charSelectFrameCounters[i] & 1)) {
+            if ((((u32)(gameState->charSelectMenuStates[i] - CHAR_SELECT_CHAR_ROW_FLASH)) <
+                 (CHAR_SELECT_CHAR_CONFIRMED - CHAR_SELECT_CHAR_ROW_FLASH + 1)) &&
+                (gameState->charSelectFrameCounters[i] & 1)) {
                 sprites[i].blinkState = 0xFF;
             } else {
                 sprites[i].blinkState = 0;
@@ -2019,8 +2064,9 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         selectionState = gameState->charSelectMenuStates[i];
-        if ((selectionState < 3 | selectionState == 0xA) || (selectionState == 6 | selectionState >= 0xB)) {
-            stateOffset = selectionState - 3;
+        if ((selectionState < CHAR_SELECT_CHAR_ROW_BROWSE | selectionState == CHAR_SELECT_CHAR_VARIANT_BROWSE) ||
+            (selectionState == CHAR_SELECT_CHAR_CONFIRMED | selectionState >= 0xB)) {
+            stateOffset = selectionState - CHAR_SELECT_CHAR_ROW_BROWSE;
             if (stateOffset >= 8) {
                 tempPos = gGameSessionContext->numPlayers;
                 tempPos2 = ((u16 *)charSelectNameSpritePositions)[tempPos * 2];
@@ -2051,7 +2097,8 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
             arg0->entries[i].x = xPos;
             arg0->entries[i].y = yPos;
             arg0->entries[i].spriteIndex = spriteIdx;
-            if (gameState->charSelectMenuStates[i] == 6 && (gameState->charSelectFrameCounters[i] & 1)) {
+            if (gameState->charSelectMenuStates[i] == CHAR_SELECT_CHAR_CONFIRMED &&
+                (gameState->charSelectFrameCounters[i] & 1)) {
                 arg0->entries[i].blinkState = 0xFF;
             } else {
                 arg0->entries[i].blinkState = 0;
@@ -2153,7 +2200,7 @@ void initCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
 void updateCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
     GameState *state = getCurrentAllocation();
 
-    if (state->charSelectMenuStates[0] == 3) {
+    if (state->charSelectMenuStates[0] == CHAR_SELECT_CHAR_ROW_BROWSE) {
         arg0->spriteIndex = state->charSelectCharRow[0] + 0x16;
         enqueueCallbackBySlotIndex(0xC, 0, renderSpriteFrame, arg0);
     }
@@ -2183,7 +2230,7 @@ void initCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
 void waitForCharSelectP2NameReveal(P2NameRevealState *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    if (state->charSelectMenuStates[arg0->playerIndex] == 0x1A) {
+    if (state->charSelectMenuStates[arg0->playerIndex] == CHAR_SELECT_P2_NAME_REVEAL) {
         setCallbackWithContinue(setupCharSelectP2NamePositions);
     }
 }
@@ -2267,7 +2314,7 @@ void animateCharSelectP2NameReveal(P2NameAnimationState *arg0) {
         yIncrement = 0x13;
         loopCount = 2;
     }
-    yIncrement &= -(state->charSelectMenuStates[arg0->playerIndex] == 0x1A);
+    yIncrement &= -(state->charSelectMenuStates[arg0->playerIndex] == CHAR_SELECT_P2_NAME_REVEAL);
     i = 0;
     if (((s32)(loopCount & 0xFF)) > 0) {
         new_var = loopCount & 0xFF;
@@ -2280,11 +2327,11 @@ void animateCharSelectP2NameReveal(P2NameAnimationState *arg0) {
         } while (i < ((s32)new_var));
     }
     val = state->charSelectMenuStates[arg0->playerIndex];
-    if (val == 0x1A) {
+    if (val == CHAR_SELECT_P2_NAME_REVEAL) {
         if (arg0->entries[0].y == minY) {
-            state->charSelectMenuStates[arg0->playerIndex] = 0x1B;
+            state->charSelectMenuStates[arg0->playerIndex] = CHAR_SELECT_READY_WAIT;
         }
-    } else if (val == 0x1E) {
+    } else if (val == CHAR_SELECT_P2_CANCEL) {
         setCallback(animateCharSelectP2NameHide);
     }
 }
@@ -2380,7 +2427,8 @@ void updateCharSelectStats(CharSelectStatsState *arg0) {
     charMul = charIndex * 3;
     tableBase = paletteIndex + charMul;
 
-    if ((u32)(gameState->charSelectMenuStates[playerIndex] - 3) >= 2U) {
+    if ((u32)(gameState->charSelectMenuStates[playerIndex] - CHAR_SELECT_CHAR_ROW_BROWSE) >=
+        (CHAR_SELECT_CHAR_ROW_SLIDE - CHAR_SELECT_CHAR_ROW_BROWSE + 1)) {
         i = 0;
         tableOffset = tableBase * 3;
 
@@ -2469,8 +2517,7 @@ void updateCharSelectPreviewLighting(CharSelectPreviewModel *arg0, u8 arg1) {
     u8 val;
 
     allocation = getCurrentAllocation();
-    allocation += arg1;
-    byte = allocation[0x18C8];
+    byte = ((GameState *)allocation)->iconDisplayState[arg1];
 
     if (byte == 1) {
         val = 0x50;
