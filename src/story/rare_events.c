@@ -2,10 +2,10 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "audio/audio.h"
 #include "common.h"
+#include "common_bss.h"
 #include "gamestate.h"
 #include "math/geometry.h"
 #include "story/npc_dialogue.h"
-#include "story/parallax_state.h"
 #include "system/task_scheduler.h"
 #include "triggers/town_collision.h"
 

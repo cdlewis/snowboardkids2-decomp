@@ -2,6 +2,7 @@
 #define CONTROLLER_IO_H
 
 #include "common.h"
+#include "common_bss.h"
 
 typedef struct {
     s32 fileSize;
@@ -14,8 +15,6 @@ typedef struct {
 
 void initControllerSubsystem(void);
 void startControllerRead(void);
-
-extern s32 gControllerInputs[4];
 
 void processControllerInputs(void);
 void requestControllerRumble(s32 controllerChannel);

@@ -23,7 +23,6 @@ CutsceneState gCutsceneState = { .slotIndex = 0,
                                  .typeSelection = { .half = { .lower = 0, .upper = 2 } } };
 
 extern s16 gCutsceneSlotIndex;
-extern s16 gCutsceneType;
 extern s32 gButtonsPressed;
 
 void awaitCutsceneTransitionComplete(void);
