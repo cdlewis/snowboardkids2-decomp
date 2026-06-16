@@ -2,6 +2,7 @@
 #define _232F0_H
 
 #include "math/geometry.h"
+#include "ui/level_preview_3d.h"
 
 #define CHAR_SELECT_MENU_NAV 0
 #define CHAR_SELECT_MENU_ROTATING 1
@@ -67,7 +68,52 @@ typedef struct {
     s16 namePositions[17];
 } CharSelectAnimData;
 
+typedef struct {
+    u8 pad0[0x20];
+    void *modelAsset;
+    void *animationAsset;
+    void *skeletonAsset;
+    void *paletteAsset;
+    u8 pad30[4];
+    u8 lightR;
+    u8 lightG;
+    u8 lightB;
+    u8 pad37;
+    u8 ambientR;
+    u8 ambientG;
+    u8 ambientB;
+    u8 pad3B;
+    Transform3D rotationMatrix;
+    Transform3D positionMatrix;
+    Transform3D worldMatrix;
+    s32 targetX;
+    u8 selectionState;
+    u8 playerIndex;
+    u8 charPaletteIndex;
+} CharSelectPreviewModel;
+
+typedef struct {
+    SceneModel *model;
+    Transform3D transform;
+    union {
+        SceneModel *unk20;
+        s32 slideTargetX;
+        s32 targetX;
+        s16 unk20_s16;
+    } unk20_u;
+    u8 playerIndex;
+} CharSelectBoardPreview;
+
 s32 countUnlockedSlotsInCategory(u8 category);
 void initCharacterSelectScreen(void);
+void initCharSelectSlidePosition(CharSelectPreviewModel *);
+void reloadCharSelectPreviewAssets(CharSelectPreviewModel *);
+void updateCharSelectPreviewLighting(CharSelectPreviewModel *, u8);
+void recreateCharSelectBoardModelForSlideIn(CharSelectBoardPreview *);
+void updateCharSelectPreviewModel(CharSelectPreviewModel *);
+void updateCharSelectBoardPreview(CharSelectBoardPreview *);
+void cleanupCharSelectPreviewAssets(CharSelectPreviewModel *);
+void cleanupCharSelectBoardModel(CharSelectBoardPreview *);
+SceneModel *cleanupSceneModelHolder(SceneModel **);
 
 #endif

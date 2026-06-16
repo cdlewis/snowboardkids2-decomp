@@ -39,21 +39,6 @@ typedef struct {
 } CharSelectTiledBackgroundState;
 
 typedef struct {
-    SceneModel *model;
-} SceneModelHolder;
-
-typedef struct {
-    SceneModel *model;
-    Transform3D transform;
-    union {
-        SceneModel *unk20;
-        s32 slideTargetX;
-        s16 unk20_s16;
-    } unk20_u;
-    u8 playerIndex;
-} CharSelectBoardPreview;
-
-typedef struct {
     s16 x;
     s16 y;
     void *asset;
@@ -152,30 +137,6 @@ typedef struct {
     u8 pad9C[0x5];
     u8 playerIndex; // offset 0xA1
 } CharSelectSecondarySlot;
-
-typedef struct {
-    u8 pad0[0x20];
-    void *modelAsset;
-    void *animationAsset;
-    void *skeletonAsset;
-    void *paletteAsset;
-    u8 pad30[4];
-    u8 lightR;
-    u8 lightG;
-    u8 lightB;
-    u8 pad37;
-    u8 ambientR;
-    u8 ambientG;
-    u8 ambientB;
-    u8 pad3B;
-    Transform3D rotationMatrix;
-    Transform3D positionMatrix;
-    Transform3D worldMatrix;
-    s32 targetX;
-    u8 selectionState;
-    u8 playerIndex;
-    u8 charPaletteIndex;
-} CharSelectPreviewModel;
 
 typedef struct {
     SelectionEntry entries[8];
@@ -291,7 +252,7 @@ void initCharSelectBoardSlideIn(CharSelectBoardPreview *);
 void waitForCharSelectBoardState(CharSelectBoardPreview *);
 void updateCharSelectBoardSlideIn(CharSelectBoardPreview *);
 void initCharSelectBoardSlideOut(CharSelectBoardPreview *);
-SceneModel *cleanupSceneModelHolder(SceneModelHolder *arg0);
+SceneModel *cleanupSceneModelHolder(SceneModel **arg0);
 void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *);
 void updateCharSelectPlayerLabels(PlayerLabelSpritesState *);
 void updateCharSelectArrows(SelectionArrowsState *);
@@ -1014,8 +975,8 @@ void updateCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
     }
 }
 
-SceneModel *cleanupSceneModelHolder(SceneModelHolder *arg0) {
-    return destroySceneModel(arg0->model);
+SceneModel *cleanupSceneModelHolder(SceneModel **arg0) {
+    return destroySceneModel(*arg0);
 }
 
 #define ICON_TABLE_INDEX 0xB
