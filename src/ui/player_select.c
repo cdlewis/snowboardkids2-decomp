@@ -7,6 +7,7 @@
 #include "os_cont.h"
 #include "race/race_main.h"
 #include "story/map_events.h"
+#include "system/controller_io.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "ui/player_select_sprites.h"
@@ -17,7 +18,6 @@ u8 gPlayerSlotDefaults[] = { 0x00, 0x02, 0x05, 0x01, 0x00, 0x00, 0x00, 0x00,
                              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 extern u8 gConnectedControllerMask;
-extern volatile s32 gControllerInputs;
 
 void handlePlayerCountSelectInput(void);
 void exitPlayerCountSelect(void);
@@ -108,7 +108,7 @@ void handlePlayerCountSelectInput(void) {
 
     switch (state->menuState) {
         case PLAYER_COUNT_MENU_SELECTING:
-            inputs = gControllerInputs;
+            inputs = gControllerInputs[0];
             if (inputs & B_BUTTON) {
                 playSoundEffect(0x2E);
                 state->menuState = PLAYER_COUNT_MENU_CANCEL_OK;
@@ -121,7 +121,7 @@ void handlePlayerCountSelectInput(void) {
                     }
                 }
 
-                if (gControllerInputs & (STICK_LEFT | CONT_LEFT)) {
+                if (gControllerInputs[0] & (STICK_LEFT | CONT_LEFT)) {
                     if (state->playerCount.selectedPlayerIndex != 0) {
                         state->playerCount.selectedPlayerIndex = state->playerCount.selectedPlayerIndex - 1;
                         playSoundEffectOnChannelNoPriority(0x2B, 0);
@@ -129,7 +129,7 @@ void handlePlayerCountSelectInput(void) {
                     }
                 }
 
-                if (gControllerInputs & A_BUTTON) {
+                if (gControllerInputs[0] & A_BUTTON) {
                     state->menuState = PLAYER_COUNT_MENU_CONFIRM_WAIT;
                     state->frameCounter = 0;
                     playSoundEffectOnChannelNoPriority(0x2C, 0);
@@ -144,7 +144,7 @@ void handlePlayerCountSelectInput(void) {
             }
             break;
         case PLAYER_COUNT_MENU_CONFIRM_OK:
-            inputs = gControllerInputs;
+            inputs = gControllerInputs[0];
             if (inputs & B_BUTTON) {
                 goto common_exit;
             } else if (inputs & A_BUTTON) {
@@ -153,7 +153,7 @@ void handlePlayerCountSelectInput(void) {
             }
             break;
         case PLAYER_COUNT_MENU_CANCEL_OK:
-            inputs = gControllerInputs;
+            inputs = gControllerInputs[0];
             if (inputs & B_BUTTON) {
             common_exit:
                 playSoundEffect(0x2E);

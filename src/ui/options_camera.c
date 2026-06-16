@@ -6,6 +6,7 @@
 #include "os_cont.h"
 #include "race/race_session.h"
 #include "story/map_events.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 #include "ui/options_menu.h"
@@ -20,8 +21,6 @@ typedef struct {
     /* 0x1E8 */ u8 itemValues[4];
     /* 0x1EC */ u8 selectedIndex;
 } MenuAllocation;
-
-extern s32 gControllerInputs;
 
 void updateOptionsMenu(void);
 void onOptionsMenuFadeInComplete(void);
@@ -74,11 +73,11 @@ void updateOptionsMenu(void) {
         case 0:
             prevIndex = state->selectedIndex;
             prevCompare = prevIndex;
-            if (gControllerInputs & (STICK_UP | U_JPAD)) {
+            if (gControllerInputs[0] & (STICK_UP | U_JPAD)) {
                 if (state->selectedIndex != 0) {
                     state->selectedIndex--;
                 }
-            } else if (gControllerInputs & (STICK_DOWN | D_JPAD)) {
+            } else if (gControllerInputs[0] & (STICK_DOWN | D_JPAD)) {
                 if (state->selectedIndex != 3) {
                     state->selectedIndex++;
                 }
@@ -91,7 +90,7 @@ void updateOptionsMenu(void) {
                 break;
             }
 
-            if (gControllerInputs & (A_BUTTON | START_BUTTON)) {
+            if (gControllerInputs[0] & (A_BUTTON | START_BUTTON)) {
                 if (curIndex == 3) {
                     playSoundEffect(0x2C);
                     state->menuState = 1;
@@ -99,7 +98,7 @@ void updateOptionsMenu(void) {
                 }
             }
 
-            if (gControllerInputs & (STICK_LEFT | STICK_RIGHT | L_JPAD | R_JPAD | A_BUTTON)) {
+            if (gControllerInputs[0] & (STICK_LEFT | STICK_RIGHT | L_JPAD | R_JPAD | A_BUTTON)) {
                 curIndex = state->selectedIndex;
                 if (curIndex == 3) {
 
@@ -117,7 +116,7 @@ void updateOptionsMenu(void) {
                     }
                     playSoundEffect(0x2B);
                 }
-            } else if (gControllerInputs & B_BUTTON) {
+            } else if (gControllerInputs[0] & B_BUTTON) {
                 playSoundEffect(0x2E);
                 shouldExit = 1;
             }

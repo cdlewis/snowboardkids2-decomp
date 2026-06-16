@@ -9,6 +9,7 @@
 #include "math/geometry.h"
 #include "os_cont.h"
 #include "story/rare_events.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 
@@ -161,7 +162,6 @@ void setupStoryMapCharacterDialogue(StoryMapDialogueState *);
 void updateStoryMapCameraFreeRoam(void *);
 
 // Global variables and externs
-extern s32 gControllerInputs;
 extern s32 renderTextSprite;
 extern void renderScaledShadedSpriteFrame(void *);
 extern void renderTextLayout(void *);
@@ -693,7 +693,7 @@ s32 checkStoryMapLocationSelection(StoryMapPlayerState *player) {
             data.distances[i] = deltaX;
 
             if (deltaX <= 0x37FFFF) {
-                if (gControllerInputs & A_BUTTON) {
+                if (gControllerInputs[0] & A_BUTTON) {
                     allocation->dialogueTurnState = 0x11;
                 }
             }

@@ -4,6 +4,7 @@
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "os_cont.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 
 #define DIFFY_ALGO(x)                                          \
@@ -53,7 +54,6 @@
         arg0->rot##x##Current += diff;             \
     }
 
-extern s32 gControllerInputs[];
 extern s32 gButtonsPressed[];
 extern s8 gDebugCameraBaseStep;
 extern s8 gAnalogStickY;

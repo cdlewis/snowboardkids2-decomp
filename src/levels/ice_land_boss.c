@@ -17,6 +17,7 @@
 #include "race/spray_particles.h"
 #include "race/track_collision.h"
 #include "race/track_height.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/text_elements.h"
 
@@ -375,7 +376,6 @@ Vec3i D_800BCA64[] = {
 
 extern u16 gGlobalFrameCounter;
 extern BossSurfaceColor gBossSurfaceColors[];
-extern s32 gControllerInputs[];
 
 void updateIceLandBoss(IceBossArg *boss) {
     Transform3D rotationMatrix;

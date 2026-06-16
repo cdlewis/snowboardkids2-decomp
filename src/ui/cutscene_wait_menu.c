@@ -5,10 +5,9 @@
 #include "data/course_data.h"
 #include "os_cont.h"
 #include "race/race_session.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
-
-extern s32 gControllerInputs;
 
 extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 
@@ -62,7 +61,7 @@ void *handleMenuSelection(DC90TaskStruct *arg0) {
     } else {
         arg0->unk18 = temp_v0;
     }
-    if (gControllerInputs & A_BUTTON) {
+    if (gControllerInputs[0] & A_BUTTON) {
         playSoundEffect(45);
         arg0->state = 4;
     }

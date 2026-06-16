@@ -10,6 +10,7 @@
 #include "race/race_hud.h"
 #include "race/race_session.h"
 #include "story/map_events.h"
+#include "system/controller_io.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
@@ -61,8 +62,6 @@ typedef enum {
     MENU_STATE_DETAIL = 8,       // In detail view, can confirm or back out
     MENU_STATE_DETAIL_CLOSE = 9, // Closing detail view animation
 } MenuState;
-
-extern s32 gControllerInputs[];
 
 u8 gLevelWorldTable[] = {
     0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

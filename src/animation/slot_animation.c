@@ -7,6 +7,7 @@
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "os_cont.h"
+#include "system/controller_io.h"
 #include "ui/level_preview_3d.h"
 
 // Slot animation modes
@@ -30,7 +31,6 @@
 extern s8 gAnalogStickY;
 extern s8 gAnalogStickX;
 extern s32 gButtonsPressed;
-extern s32 gControllerInputs;
 
 s16 gCharacterEffectSpawnPoints[24] = {
     6, 0, 0, 0, 12, 0, 6, 0, 0, 0, -12, 0, -6, 0, 0, 0, 12, 0, -6, 0, 0, 0, -12, 0,
@@ -262,7 +262,7 @@ void handleSlotDebugInput(CutsceneSlotData *slot, CutsceneCameraState *camera) {
     s16 *pRotZ;
 
     // L+R+Z: Flip rotation 180 degrees
-    if (((gButtonsPressed & (L_TRIG + R_TRIG)) == (L_TRIG + R_TRIG)) && (gControllerInputs & Z_TRIG)) {
+    if (((gButtonsPressed & (L_TRIG + R_TRIG)) == (L_TRIG + R_TRIG)) && (gControllerInputs[0] & Z_TRIG)) {
         flippedAngle = (slot->rotY + 0x800) & 0x1FFF;
         slot->rotY = flippedAngle;
         slot->rotYTarget = flippedAngle;

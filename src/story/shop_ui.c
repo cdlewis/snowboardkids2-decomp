@@ -12,6 +12,7 @@
 #include "math/geometry.h"
 #include "os_cont.h"
 #include "race/race_session.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
 #include "text/text_layout.h"
@@ -145,7 +146,6 @@ typedef struct {
 } ShopFairyGameState;
 
 extern s32 gButtonsPressed[];
-extern s32 gControllerInputs[4];
 extern s32 *gGameSessionContext;
 extern s16 D_8008F0C6_8FCC6[];
 // Cast to u8* to access EEPROM save data as raw bytes for offset-based access

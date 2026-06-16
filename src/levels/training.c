@@ -6,11 +6,11 @@
 #include "gamestate.h"
 #include "os_cont.h"
 #include "race/race_session.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 
 extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
-extern s32 gControllerInputs;
 
 /* Data segment - forward declarations */
 u8 trainingStartAndJumpPromptText[176];
@@ -410,7 +410,7 @@ void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *
         s0_var
     );
 
-    if (gControllerInputs & A_BUTTON) {
+    if (gControllerInputs[0] & A_BUTTON) {
         temp_v0 = arg0->messageIndex + 1;
         arg0->messageIndex = temp_v0;
         table_ptr = s_trainingPanelMessageTables[arg0->panelIndex];

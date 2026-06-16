@@ -5,6 +5,7 @@
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "os_cont.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "triggers/town_collision.h"
 
@@ -41,7 +42,6 @@ extern u8 storyMapLocationIndex;
 extern CoordPair storyMapLocationCoords[];
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
-extern s32 gControllerInputs[];
 
 void initStoryMapCamera(StoryMapCameraState *arg0);
 void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera);

@@ -10,6 +10,7 @@
 #include "math/geometry.h"
 #include "os_cont.h"
 #include "race/race_session.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
 #include "text/font_render.h"
@@ -253,7 +254,6 @@ extern const char D_8009DF2C_9EB2C[];
 extern const char D_8009DF30_9EB30[];
 extern const char D_8009DF34_9EB34[];
 extern u16 gGlobalFrameCounter;
-extern s32 gControllerInputs;
 
 void setupGalleryMenuState(void);
 void updateGalleryMenu(void);
@@ -611,7 +611,7 @@ void handleGalleryMenuInput(GalleryMenuState *arg0) {
     s32 sound;
     s32 sel2;
 
-    inputs = gControllerInputs;
+    inputs = gControllerInputs[0];
     selection = arg0->selectedOption;
 
     // B button - exit
@@ -1261,7 +1261,7 @@ void handleViewerGridNavigation_TwoPage(FD98_struct *arg0) {
     s8 temp;
     u8 val;
 
-    inputs = gControllerInputs;
+    inputs = gControllerInputs[0];
 
     if (inputs & 0x80200) {
         if (arg0->cursorIndex == 0) {
@@ -1321,7 +1321,7 @@ void handleViewerGridNavigation_TwoColumn(FD98_struct *arg0) {
     s8 temp2;
     s8 newVal;
 
-    inputs = gControllerInputs;
+    inputs = gControllerInputs[0];
 
     if (inputs & 0x80200) {
         s8 temp = arg0->cursorIndex;
@@ -1380,7 +1380,7 @@ void handleViewerGridNavigation_TwoColumn(FD98_struct *arg0) {
 void handleViewerGridNavigation_SingleRow(FD98_struct *arg0) {
     s32 inputs;
 
-    inputs = gControllerInputs;
+    inputs = gControllerInputs[0];
 
     if (inputs & 0x80200) {
         if (arg0->cursorIndex == 0) {
@@ -1425,7 +1425,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
     entry = &gGalleryCategories[alloc->selectedOption].items[arg0->cursorIndex];
     memcpy(sp30_ptr, D_8009DF6C_9EB6C, sizeof(Vec3i));
 
-    if (gControllerInputs & CONT_A) {
+    if (gControllerInputs[0] & CONT_A) {
         if (isGalleryItemUnlocked(arg0->cursorIndex)) {
             playBgmTrack(alloc, entry->numExtra);
             if (alloc->menuModel->unk16 != 0x92) {
@@ -1450,7 +1450,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         return;
     }
 
-    if (gControllerInputs & (STICK_LEFT | CONT_LEFT)) {
+    if (gControllerInputs[0] & (STICK_LEFT | CONT_LEFT)) {
         s8 temp_v0 = arg0->cursorIndex;
         s8 temp_v1 = temp_v0;
         if (temp_v0 == 0) {
@@ -1462,7 +1462,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         return;
     }
 
-    if (gControllerInputs & (STICK_RIGHT | CONT_RIGHT)) {
+    if (gControllerInputs[0] & (STICK_RIGHT | CONT_RIGHT)) {
         s8 temp = arg0->cursorIndex;
         if (temp == 0x1A) {
             arg0->cursorIndex = 0;
@@ -1473,7 +1473,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         return;
     }
 
-    if (gControllerInputs & (STICK_UP | CONT_UP)) {
+    if (gControllerInputs[0] & (STICK_UP | CONT_UP)) {
         u8 val = arg0->cursorIndex;
         s8 temp = val - 9;
         if ((u8)temp < 0x12u) {
@@ -1487,7 +1487,7 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         return;
     }
 
-    if (gControllerInputs & (STICK_DOWN | CONT_DOWN)) {
+    if (gControllerInputs[0] & (STICK_DOWN | CONT_DOWN)) {
         u8 val = arg0->cursorIndex;
         if (val < 0x12u) {
             arg0->cursorIndex = val + 9;
@@ -1505,7 +1505,7 @@ void handleViewerGridNavigation_Prize(FD98_struct *arg0) {
     s8 temp;
     u8 val;
 
-    inputs = gControllerInputs;
+    inputs = gControllerInputs[0];
 
     if (inputs & 0x80200) {
         if (arg0->cursorIndex == 0) {
@@ -1576,7 +1576,7 @@ void handleViewerInput(FD98_struct *arg0) {
     s32 sound;
 
     alloc = getCurrentAllocation();
-    inputs = gControllerInputs;
+    inputs = gControllerInputs[0];
 
     if (inputs & B_BUTTON) {
         setMenuAnimation((GalleryMenuState *)alloc, 0x90, 0x90, -1, -1);

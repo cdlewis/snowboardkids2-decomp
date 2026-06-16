@@ -1,4 +1,5 @@
 #include "story/race_state_machine.h"
+#include "system/controller_io.h"
 
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
@@ -57,7 +58,6 @@ s16 boardShopPrices[] = { 0x0064, 0x0064, 0x0064, 0x00FA, 0x00FA, 0x012C, 0x012C
 
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 storyMapLocationIndex;
-extern s32 gControllerInputs[4];
 
 USE_ASSET(_4237C0);
 USE_ASSET(playerCountSelectSprites);

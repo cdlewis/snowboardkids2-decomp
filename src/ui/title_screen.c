@@ -36,7 +36,6 @@ typedef struct {
     u8 initialSoundDelay;
 } TitleState;
 
-extern s32 gControllerInputs;
 extern s32 gButtonsPressed;
 extern u8 gDebugUnlockEnabled;
 extern s8 gTitleInitialized;
@@ -290,10 +289,10 @@ void handleTitleMenuInput(void) {
         }
     }
 
-    input = gControllerInputs;
+    input = gControllerInputs[0];
 
     if ((input & L_TRIG) != 0) {
-        if (((&gControllerInputs)[3] & R_TRIG) != 0) {
+        if (((&gControllerInputs[0])[3] & R_TRIG) != 0) {
             goto end;
         }
     }
@@ -336,7 +335,7 @@ case_0:
         }
     }
 
-    if ((gControllerInputs & (A_BUTTON | START_BUTTON)) != 0) {
+    if ((gControllerInputs[0] & (A_BUTTON | START_BUTTON)) != 0) {
         playSoundEffectOnChannelNoPriority(0x2C, 1);
         if (state->menuSelection == 0) {
             state->menuMode = 1;
@@ -383,7 +382,7 @@ case1_done_nav:
         playSoundEffectOnChannelNoPriority(0x2B, 1);
     }
 
-    temp = gControllerInputs;
+    temp = gControllerInputs[0];
 
     if ((temp & B_BUTTON) != 0) {
         playSoundEffect(0x2E);

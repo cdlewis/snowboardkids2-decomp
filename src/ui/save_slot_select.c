@@ -79,7 +79,6 @@ extern void initSaveSlotDeleteText(void *);
 
 extern void eepromWriteAsync(s32 slotIndex);
 extern s32 pollEepromWriteAsync(void);
-extern s32 gControllerInputs;
 
 void updateSaveSlotSelectionScreen(void);
 void initSaveSlotSelection(void);
@@ -358,15 +357,15 @@ void updateSaveSlotSelectionScreen(void) {
             break;
         case 1:
             slotIdx = state->selectedSaveSlot;
-            if (gControllerInputs & (STICK_UP | CONT_UP)) {
+            if (gControllerInputs[0] & (STICK_UP | CONT_UP)) {
                 if (slotIdx != 0) {
                     state->selectedSaveSlot = slotIdx - 1;
                 }
-            } else if (gControllerInputs & (STICK_DOWN | CONT_DOWN)) {
+            } else if (gControllerInputs[0] & (STICK_DOWN | CONT_DOWN)) {
                 if (slotIdx < 2) {
                     state->selectedSaveSlot = slotIdx + 1;
                 }
-            } else if (gControllerInputs & CONT_A) {
+            } else if (gControllerInputs[0] & CONT_A) {
                 playSoundEffect(0x2C);
                 if (state->hasCurrentSaveData != 0) {
                     goto case1_confirm;
@@ -380,7 +379,7 @@ void updateSaveSlotSelectionScreen(void) {
                     state->saveSlotMenuState = 2;
                     state->selectionAnimState = 0;
                 }
-            } else if (gControllerInputs & CONT_B) {
+            } else if (gControllerInputs[0] & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->hasCurrentSaveData == 0) {
                     state->saveSlotMenuState = 0x32;
@@ -425,7 +424,7 @@ void updateSaveSlotSelectionScreen(void) {
             }
             break;
         case 3:
-            if (gControllerInputs & CONT_A) {
+            if (gControllerInputs[0] & CONT_A) {
                 playSoundEffect(0x2C);
                 if (state->hasCurrentSaveData == 0) {
                     gGameSessionContext->previousSaveSlot = state->selectedSaveSlot;
@@ -492,7 +491,7 @@ void updateSaveSlotSelectionScreen(void) {
                         disableViewportOverlay(slotModel);
                     }
                 }
-            } else if (gControllerInputs & CONT_B) {
+            } else if (gControllerInputs[0] & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->saveSlotDialogType == 0xA) {
                     gGameSessionContext->isStoryMode = 0;
@@ -527,7 +526,7 @@ void updateSaveSlotSelectionScreen(void) {
             break;
         case 8:
             updateNameEntryCursorWiggle();
-            if (gControllerInputs & CONT_A) {
+            if (gControllerInputs[0] & CONT_A) {
                 playSoundEffect(0x2C);
                 state->saveSlotMenuState = 9;
                 state->selectionAnimState = 0;
@@ -549,7 +548,7 @@ void updateSaveSlotSelectionScreen(void) {
             break;
         case 0xB:
             updateNameEntryCursorWiggle();
-            if (gControllerInputs & CONT_A) {
+            if (gControllerInputs[0] & CONT_A) {
                 state->selectionAnimState = 0;
                 state->nameEntryCursorY = state->nameEntryCursorBaseY;
                 playSoundEffect(0x2D);
@@ -557,11 +556,11 @@ void updateSaveSlotSelectionScreen(void) {
             }
             break;
         case 0x3C:
-            if (gControllerInputs & (CONT_A | CONT_START)) {
+            if (gControllerInputs[0] & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
                 state->saveSlotMenuState = 5;
                 state->selectedSaveSlot = 4;
-            } else if (gControllerInputs & CONT_B) {
+            } else if (gControllerInputs[0] & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->saveSlotDialogSelection != 0x63) {
                     state->saveSlotMenuState = 0x32;
@@ -650,19 +649,19 @@ void updateSaveSlotSelectionScreen(void) {
             }
             break;
         case 0x16:
-            if (gControllerInputs & CONT_A) {
+            if (gControllerInputs[0] & CONT_A) {
                 playSoundEffect(0x2C);
                 state->saveSlotMenuState = 0x17;
                 state->mainPromptIndex = 7;
             }
             break;
         case 0x17:
-            if (gControllerInputs & CONT_A) {
+            if (gControllerInputs[0] & CONT_A) {
                 playSoundEffect(0x2D);
                 state->saveSlotMenuState = 0xC;
                 state->selectionAnimState = 0;
                 state->selectedSaveSlot = 0x63;
-            } else if (gControllerInputs & CONT_B) {
+            } else if (gControllerInputs[0] & CONT_B) {
                 {
                     playSoundEffect(0x2E);
                     state->mainPromptIndex = 9;
@@ -703,11 +702,11 @@ void updateSaveSlotSelectionScreen(void) {
             if ((state->saveSlotDialogType == 0xA) | (state->saveSlotDialogType == 2)) {
                 maxChoice = 1;
             }
-            if (gControllerInputs & (STICK_UP | CONT_UP)) {
+            if (gControllerInputs[0] & (STICK_UP | CONT_UP)) {
                 if (slotIdx != 0) {
                     state->saveSlotDialogSelection = slotIdx - 1;
                 }
-            } else if ((gControllerInputs & (STICK_DOWN | CONT_DOWN)) && (slotIdx != maxChoice)) {
+            } else if ((gControllerInputs[0] & (STICK_DOWN | CONT_DOWN)) && (slotIdx != maxChoice)) {
                 state->saveSlotDialogSelection = slotIdx + 1;
             }
             if (slotIdx != state->saveSlotDialogSelection) {
@@ -715,11 +714,11 @@ void updateSaveSlotSelectionScreen(void) {
                 playSoundEffect(0x2B);
                 break;
             }
-            if (gControllerInputs & (CONT_A | CONT_START)) {
+            if (gControllerInputs[0] & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
                 state->saveSlotMenuState = 0x34;
                 state->selectionAnimState = 0;
-            } else if (gControllerInputs & CONT_B) {
+            } else if (gControllerInputs[0] & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->saveSlotDialogType == 0xA) {
                     state->saveSlotMenuState = 1;
@@ -837,7 +836,7 @@ void updateSaveSlotSelectionScreen(void) {
             }
         } break;
         case 0x35:
-            if (gControllerInputs & (CONT_A | CONT_START)) {
+            if (gControllerInputs[0] & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
                 state->saveSlotMenuState = 0x37;
             }

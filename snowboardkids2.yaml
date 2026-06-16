@@ -549,6 +549,7 @@ segments:
           section: .bss,
         }
       - { type: bss, vram: 0x800A8A80, name: A8A80 }
+      - { type: .bss, vram: 0x800AFF10, name: system/controller_inputs }
       - { type: .bss, vram: 0x800AFF20, name: story/parallax_state }
 
   - name: buffers

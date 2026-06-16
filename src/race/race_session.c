@@ -386,7 +386,6 @@ IntroFrameData2 sIntroCameraEvents[] = {
 static u8 gRaceResultCode;
 
 extern s8 gControllerPollingEnabled;
-extern s32 gControllerInputs[4];
 extern SessionConfig *gGameSessionContext;
 
 void initRaceViewports(void);

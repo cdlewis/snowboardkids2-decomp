@@ -4,8 +4,7 @@
 #include "effects/fan_sound_3d.h"
 #include "os_cont.h"
 #include "race/race_session.h"
-
-extern s32 gControllerInputs[4];
+#include "system/controller_io.h"
 
 void debugHandleFanSoundInput(void) {
     s32 input = gControllerInputs[0x3];

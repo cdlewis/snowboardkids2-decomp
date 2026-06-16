@@ -3,14 +3,13 @@
 #include "os_cont.h"
 #include "race/race_session.h"
 #include "story/map_events.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 
 typedef struct {
     ViewportNode unk0;
     u16 waitCounter;
 } StoryMapExtraIntroAllocation;
-
-extern s32 gControllerInputs;
 
 void awaitStoryMapExtraIntro(void);
 void onStoryMapExtraIntroComplete(void);
@@ -31,7 +30,7 @@ void awaitStoryMapExtraIntro(void) {
     allocation->waitCounter = allocation->waitCounter + 1;
     __asm__ volatile("" ::: "memory");
 
-    if (gControllerInputs & A_BUTTON) {
+    if (gControllerInputs[0] & A_BUTTON) {
         allocation->waitCounter = 60;
     }
 

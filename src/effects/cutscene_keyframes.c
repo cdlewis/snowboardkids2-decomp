@@ -9,6 +9,7 @@
 #include "os_cont.h"
 #include "os_vi.h"
 #include "race/race_session.h"
+#include "system/controller_io.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
@@ -23,7 +24,6 @@ CutsceneState gCutsceneState = { .slotIndex = 0,
 
 extern s16 gCutsceneSlotIndex;
 extern s16 gCutsceneType;
-extern s32 gControllerInputs;
 extern s32 gButtonsPressed;
 
 void awaitCutsceneTransitionComplete(void);
@@ -208,7 +208,7 @@ void updateCutscenePlayback(void) {
             if (processCutsceneFrame(&state->cutsceneData.cutsceneManager) == 0) {
                 state->playbackState = CUTSCENE_STATE_TERMINATE_TASKS;
             }
-            if (gControllerInputs & START_BUTTON) {
+            if (gControllerInputs[0] & START_BUTTON) {
                 state->playbackState = CUTSCENE_STATE_SKIP_START;
             }
             break;

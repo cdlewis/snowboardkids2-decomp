@@ -8,6 +8,7 @@
 #include "race/track_geometry.h"
 #include "story/map_events.h"
 #include "story/shop_ui.h"
+#include "system/controller_io.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
@@ -42,7 +43,6 @@ typedef struct {
     s8 slotPosition;
 } ItemCardTaskState;
 
-extern s32 gControllerInputs;
 extern s32 storyMapLocationNames[];
 
 extern void initStoryMapShopFairyModel(void *);
@@ -204,7 +204,7 @@ void unlockScreenAwaitUserDismiss(void) {
         return;
     }
 
-    if (gControllerInputs & (CONT_A | CONT_B | CONT_START)) {
+    if (gControllerInputs[0] & (CONT_A | CONT_B | CONT_START)) {
         playSoundEffectOnChannelNoPriority(0xED, 1);
         state->transitionState = 2;
         setViewportFadeValue(0, 0xFF, 0x10);
@@ -226,7 +226,7 @@ void updateUnlockScreen(void) {
     switch (state->statePhase) {
         case 1:
             prevCursor = state->cursorIndex;
-            if (gControllerInputs & (STICK_LEFT | CONT_LEFT)) {
+            if (gControllerInputs[0] & (STICK_LEFT | CONT_LEFT)) {
                 state->cursorIndex = prevCursor - 1;
                 state->scrollDirection = 1;
                 if (state->cursorIndex < 0) {
@@ -237,7 +237,7 @@ void updateUnlockScreen(void) {
                         state->cursorIndex = state->unlockCount - 1;
                     }
                 }
-            } else if (gControllerInputs & (STICK_RIGHT | CONT_RIGHT)) {
+            } else if (gControllerInputs[0] & (STICK_RIGHT | CONT_RIGHT)) {
                 state->cursorIndex = prevCursor + 1;
                 state->scrollDirection = 2;
                 if (state->cursorIndex == state->unlockCount) {
@@ -265,7 +265,7 @@ void updateUnlockScreen(void) {
                 state->rotationAngle = 0;
             }
 
-            if (gControllerInputs & CONT_A) {
+            if (gControllerInputs[0] & CONT_A) {
                 if ((itemId & 0xFF) >= 0x80) {
                     state->statePhase = 8;
                     playSoundEffectOnChannelNoPriority(0xEE, 1);
@@ -283,7 +283,7 @@ void updateUnlockScreen(void) {
                     state->transitionState = 3;
                     state->statePhase = 7;
                 }
-            } else if (gControllerInputs & CONT_B) {
+            } else if (gControllerInputs[0] & CONT_B) {
                 exitFlag = 1;
                 state->statePhase = 9;
                 state->unk5D8 = 0;
@@ -319,10 +319,10 @@ void updateUnlockScreen(void) {
             break;
 
         case 4:
-            if (gControllerInputs & CONT_B) {
+            if (gControllerInputs[0] & CONT_B) {
                 playSoundEffectOnChannelNoPriority(0x2E, 0);
                 state->statePhase = 1;
-            } else if (gControllerInputs & CONT_A) {
+            } else if (gControllerInputs[0] & CONT_A) {
                 playSoundEffectOnChannelNoPriority(0xEB, 1);
                 state->transitionState = 1;
                 state->statePhase = 5;

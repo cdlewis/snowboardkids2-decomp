@@ -15,6 +15,8 @@ typedef struct {
 void initControllerSubsystem(void);
 void startControllerRead(void);
 
+extern s32 gControllerInputs[4];
+
 void processControllerInputs(void);
 void requestControllerRumble(s32 controllerChannel);
 

@@ -8,6 +8,7 @@
 #include "graphics/sprite_table.h"
 #include "os_cont.h"
 #include "race/race_session.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 #include "text/text_layout.h"
@@ -17,7 +18,6 @@ extern struct {
     s16 x;
     s16 y;
 } gWipeOffset[];
-extern s32 gControllerInputs;
 
 void cleanupCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0);
 
@@ -194,7 +194,7 @@ void *processCutsceneCommandSequence(cutsceneSys2Wait_exec_asset *ctx) {
     }
 
     if (*(s8 *)((u8 *)ctx->cutsceneManager + 0xFF7) != 0) {
-        if (gControllerInputs & A_BUTTON) {
+        if (gControllerInputs[0] & A_BUTTON) {
             if (ctx->commandOffset != 0x64) {
                 ctx->commandOffset = 0x64;
             } else {

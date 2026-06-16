@@ -8,6 +8,7 @@
 #include "os_cont.h"
 #include "os_vi.h"
 #include "story/map_events.h"
+#include "system/controller_io.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "ui/character_select_sprites.h"
@@ -48,7 +49,6 @@ s16 storyMapLocationSpriteIds[] = { 0x0126, 0x0122, 0x0124, 0x0128, 0x0129, 0x01
 u8 storyMapLocationConfig[] = { 0x0A, 0x0A, 0x0F, 0x0A, 0x19, 0x0A, 0x0D, 0x0A, 0x19, 0x00, 0x00, 0x00 };
 s16 storyMapLocationOrder3[] = { 0x0000, 0x0002, 0x0004, 0x0008, 0x0007, 0x0003, 0x0005, 0x0001, 0x0006, 0x0000 };
 
-extern s32 gControllerInputs[];
 extern u8 gTitleInitialized;
 
 void storyMapHandlePlayerInput(void);

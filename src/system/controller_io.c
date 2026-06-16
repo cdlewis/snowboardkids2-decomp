@@ -96,7 +96,6 @@ extern s8 gAnalogStickY[];
 extern s32 gButtonsPressed[];
 extern s32 gPreviousButtonsPressed[];
 extern s32 gRepeatedButtonInputs[];
-extern s32 gControllerInputs[];
 extern u8 gRumblePakReadyMask;
 extern MotorState gMotorState;
 extern s32 gControllerPackFileCount;
