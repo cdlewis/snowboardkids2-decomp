@@ -19,7 +19,7 @@ typedef struct {
     Vec3i pos;
     u8 padding1[0x10];
     void *assetData;
-    /* 0x24 */ Vec3i vel; 
+    /* 0x24 */ Vec3i vel;
     /* 0x30 */ Vec3i unk30;
     s32 unk3C;
     u16 unk40;

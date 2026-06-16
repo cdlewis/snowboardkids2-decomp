@@ -5,6 +5,7 @@
 #include "gamestate.h"
 #include "math/geometry.h"
 #include "story/npc_dialogue.h"
+#include "story/parallax_state.h"
 #include "system/task_scheduler.h"
 #include "triggers/town_collision.h"
 
@@ -249,7 +250,6 @@ s16 gStoryMapNpcHomeFacingAngle BSS = 0;
 static u8 sStoryMapNpcHomePadding[4] BSS = { 0 };
 ParallaxScreenHistory gParallaxScreenHistory BSS = { 0 };
 
-extern Vec3i gParallaxOffset;
 extern s32 gParallaxFrameCounter;
 extern s16 gParallaxWobbleAngle;
 extern s32 gParallaxReverseDirection;
