@@ -19,10 +19,8 @@ typedef struct {
     Vec3i pos;
     u8 padding1[0x10];
     void *assetData;
-    Vec3i vel; /* 0x24 */
-    /* 0x30 */ s32 unk30;
-    /* 0x34 */ s32 unk34;
-    /* 0x38 */ s32 unk38;
+    /* 0x24 */ Vec3i vel; 
+    /* 0x30 */ Vec3i unk30;
     s32 unk3C;
     u16 unk40;
     s16 ownerPlayerIdx;
@@ -1653,7 +1651,7 @@ void loadPlayerGuidedStarProjectile(Struct_52880 *arg0) {
     arg0->vel.z = arg0->pos.z - arg0->vel.z;
     if ((!alloc->unk10[*playerIdxPtr].sectorIndex) && (!alloc->unk10[*playerIdxPtr].sectorIndex)) {}
     players = alloc->unk10;
-    memcpy(&arg0->unk30, players[*playerIdxPtr].velocity, 12);
+    memcpy(&arg0->unk30, players[*playerIdxPtr].velocity, sizeof(Vec3i));
     queueSoundAtPosition(position, 0x23);
     setCallbackWithContinue(updatePlayerGuidedStarProjectile);
 }
@@ -1673,9 +1671,9 @@ void updatePlayerGuidedStarProjectile(Struct_52880 *arg0) {
 
         s1 = &alloc->unk30;
         arg0->vel.y -= 0x8000;
-        arg0->pos.x += arg0->vel.x + arg0->unk30;
-        arg0->pos.y += arg0->vel.y + arg0->unk34;
-        arg0->pos.z += arg0->vel.z + arg0->unk38;
+        arg0->pos.x += arg0->vel.x + arg0->unk30.x;
+        arg0->pos.y += arg0->vel.y + arg0->unk30.y;
+        arg0->pos.z += arg0->vel.z + arg0->unk30.z;
 
         arg0->unk40 = findTrackSector(s1, arg0->unk40, &arg0->pos);
         resolveTrackWallCollision(s1, arg0->unk40, &arg0->pos, 0x80000, &sp18);

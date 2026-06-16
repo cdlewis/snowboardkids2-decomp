@@ -31,9 +31,7 @@ typedef struct {
     u8 pad30[0xC];
     s16 matrix3C[9];
     u8 pad4E[2];
-    s32 posX;
-    s32 posY;
-    s32 posZ;
+    Vec3i position;
     WaypointEntry *waypoints;
     u8 pad60[4];
     s16 angleX;
@@ -108,15 +106,15 @@ void initIceLandMovingPlatform(IceLandMovingPlatformTask *platform) {
     platform->currentWaypointIndex = 0;
     platform->unk2C = 0;
     platform->pad6C = 0;
-    memcpy(&platform->posX, &(platform->waypoints - (-platform->currentWaypointIndex))->x, 12);
+    memcpy(&platform->position, &(platform->waypoints - (-platform->currentWaypointIndex))->x, sizeof(Vec3i));
     platform->currentWaypointIndex++;
     waypoints = platform->waypoints;
     platform->angleX = 0;
     angle = computeAngleToPosition(
         waypoints[platform->currentWaypointIndex].x,
         waypoints[platform->currentWaypointIndex].z,
-        platform->posX,
-        platform->posZ
+        platform->position.x,
+        platform->position.z
     );
     platform->angleY = angle & 0x1FFF;
     createYRotationMatrix(&platform->transform, platform->angleY);
@@ -181,14 +179,14 @@ void updateIceLandMovingPlatform(IceLandMovingPlatformTask *platform) {
 
         transformVector2(gIceLandPlatformForwardVec, matrix, &sp.movement);
 
-        platform->posX = platform->posX + sp.movement.x;
-        platform->posY = platform->posY + sp.movement.y;
-        platform->posZ = platform->posZ + sp.movement.z;
+        platform->position.x += sp.movement.x;
+        platform->position.y += sp.movement.y;
+        platform->position.z += sp.movement.z;
 
         distanceToWaypoint = distance_3d(
-            platform->posX - platform->waypoints[platform->currentWaypointIndex].x,
-            platform->posY - platform->waypoints[platform->currentWaypointIndex].y,
-            platform->posZ - platform->waypoints[platform->currentWaypointIndex].z
+            platform->position.x - platform->waypoints[platform->currentWaypointIndex].x,
+            platform->position.y - platform->waypoints[platform->currentWaypointIndex].y,
+            platform->position.z - platform->waypoints[platform->currentWaypointIndex].z
         );
 
         if (distanceToWaypoint <= 0x60000) {
@@ -200,7 +198,7 @@ void updateIceLandMovingPlatform(IceLandMovingPlatformTask *platform) {
         }
     }
 
-    memcpy(&platform->transform.translation, &platform->posX, sizeof(Vec3i));
+    memcpy(&platform->transform.translation, &platform->position, sizeof(Vec3i));
     platform->transform.translation.y += 0x280000;
 
     playerIndex = 0;

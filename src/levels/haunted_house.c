@@ -63,9 +63,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ void *spriteAsset;
     /* 0x04 */ void *spriteMetadata;
-    /* 0x08 */ s32 currentX;
-    /* 0x0C */ s32 currentY;
-    /* 0x10 */ s32 currentZ;
+    /* 0x08 */ Vec3i position;
     /* 0x14 */ u8 pad14[0xA];
     /* 0x1E */ u8 alpha;
     /* 0x1F */ s8 pad1F[0x5];
@@ -602,10 +600,10 @@ void initFloatingBillboard(FloatingBillboard *billboard) {
     billboard->spriteAsset = loadSpriteAssetByIndex(9);
     billboard->spriteMetadata = &g_FloatingBillboardSpriteMetadata;
     billboard->alpha = 0xFF;
-    memcpy(&billboard->currentX, &g_FloatingBillboardInitialPos, 12);
-    initialY = billboard->currentY + billboard->yOffset;
+    memcpy(&billboard->position, &g_FloatingBillboardInitialPos, sizeof(Vec3i));
+    initialY = billboard->position.y + billboard->yOffset;
     billboard->lifetime = 0xB4;
-    billboard->currentY = initialY;
+    billboard->position.y = initialY;
     setCleanupCallback(freeFloatingBillboard);
     setCallbackWithContinue(updateFloatingBillboard);
 }
@@ -631,13 +629,13 @@ void updateFloatingBillboard(FloatingBillboard *arg0) {
             return;
         }
 
-        ptr8 = &arg0->currentX;
+        ptr8 = &arg0->position.x;
         *ptr8 += (g_FloatingBillboardTarget.x - *ptr8) / arg0->lifetime;
 
-        ptrC = &arg0->currentY;
+        ptrC = &arg0->position.y;
         *ptrC += (g_FloatingBillboardTarget.y - (*ptrC + arg0->yOffset)) / arg0->lifetime;
 
-        ptr10 = &arg0->currentZ;
+        ptr10 = &arg0->position.z;
         *ptr10 += (g_FloatingBillboardTarget.z - *ptr10) / arg0->lifetime;
     }
 
