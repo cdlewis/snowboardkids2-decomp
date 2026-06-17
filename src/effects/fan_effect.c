@@ -142,7 +142,7 @@ static void updateFanEffectGrow(FanEffectState *arg0) {
 
     displayListData = (void *)((u8 *)(*arg0->displayList) + 0x3C0);
 
-    func_8006B084_6BC84(&gIdentityMatrix32, displayListData, (Transform3D *)arg0);
+    composeTransform3D(&gIdentityMatrix32, displayListData, (Transform3D *)arg0);
 
     scaleMatrix((Transform3D *)arg0, arg0->scale, arg0->scale, arg0->scale);
 
@@ -155,7 +155,7 @@ static void updateFanEffectGrow(FanEffectState *arg0) {
     sp10.translation.x = 0;
     sp10.translation.z = 0xFFEA0000;
 
-    func_8006B084_6BC84(&sp10, (Transform3D *)arg0, (Transform3D *)arg0->transform);
+    composeTransform3D(&sp10, (Transform3D *)arg0, (Transform3D *)arg0->transform);
 
     enqueueDisplayListObject(0, (DisplayListObject *)arg0);
     enqueueDisplayListObject(0, (DisplayListObject *)&arg0->transform);
@@ -190,7 +190,7 @@ static void updateFanEffectFade(FanEffectState *fadeState) {
     rotationMatrix.translation.x = 0;
     rotationMatrix.translation.z = 0xFFEA0000;
 
-    func_8006B084_6BC84(&rotationMatrix, (Transform3D *)fadeState, (Transform3D *)fadeState->transform);
+    composeTransform3D(&rotationMatrix, (Transform3D *)fadeState, (Transform3D *)fadeState->transform);
     enqueueDisplayListObject(0, (DisplayListObject *)fadeState);
     enqueueDisplayListObject(0, (DisplayListObject *)&fadeState->transform);
 }

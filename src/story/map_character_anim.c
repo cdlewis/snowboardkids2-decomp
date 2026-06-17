@@ -328,7 +328,7 @@ void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera) {
     }
 
     createYRotationMatrix((Transform3D *)&camera->orientMatrix, (u16)camera->orbitAngle);
-    func_8006B084_6BC84((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, &combinedMatrix);
+    composeTransform3D((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, &combinedMatrix);
 
     state->unk3EC = camera->cameraX;
     state->unk3F0 = camera->cameraZ;
@@ -420,7 +420,7 @@ void startStoryMapCameraTravel(StoryMapCameraState *camera) {
 
     createYRotationMatrix((Transform3D *)camera, (camera->viewAngle - camera->orbitAngle) & 0xFFFF);
 
-    func_8006B084_6BC84((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, (Transform3D *)sp10);
+    composeTransform3D((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, (Transform3D *)sp10);
 
     memcpy(&state->unk3B0, sp10, sizeof(Transform3D));
 
@@ -459,7 +459,7 @@ void updateStoryMapCameraTravel(StoryMapCameraState *camera) {
     createYRotationMatrix((Transform3D *)&camera->orientMatrix, (u16)angle);
     createYRotationMatrix((Transform3D *)camera, (u16)(camera->viewAngle - angle));
 
-    func_8006B084_6BC84((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, &localMatrix);
+    composeTransform3D((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, &localMatrix);
 
     memcpy(&state->unk3B0, &localMatrix, sizeof(Transform3D));
 
@@ -544,7 +544,7 @@ void approachStoryMapOrigin(StoryMapCameraState *camera) {
     cosVal = approximateCos(camera->orbitAngle);
     camera->cameraZ = camera->cameraZ + (cosVal << 4);
 
-    func_8006B084_6BC84((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, &localMatrix);
+    composeTransform3D((Transform3D *)camera, (Transform3D *)&camera->orientMatrix, &localMatrix);
 
     state->unk3EC = camera->cameraX;
     state->unk3F0 = camera->cameraZ;
@@ -600,7 +600,7 @@ void updateStoryMapCameraOrbit(StoryMapCameraState *camera) {
 
     orientMatrixPtr = (Transform3D *)&camera->orientMatrix;
     createYRotationMatrix(orientMatrixPtr, camera->orbitAngle);
-    func_8006B084_6BC84((Transform3D *)camera, orientMatrixPtr, (Transform3D *)combinedMatrix);
+    composeTransform3D((Transform3D *)camera, orientMatrixPtr, (Transform3D *)combinedMatrix);
 
     state->unk3EC = camera->cameraX;
     state->unk3F0 = camera->cameraZ;

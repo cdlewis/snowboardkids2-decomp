@@ -1031,8 +1031,8 @@ void updateRacePlayer(Player *player) {
     createCombinedRotationMatrix(&player->orientationTransform, player->pitchAngle, player->steeringAngle);
     createYRotationMatrix(&player->headingTransform, player->rotY);
 
-    func_8006B084_6BC84(&player->tiltTransform, &player->orientationTransform, &combinedTransform);
-    func_8006B084_6BC84(&combinedTransform, &player->headingTransform, &fullTransform);
+    composeTransform3D(&player->tiltTransform, &player->orientationTransform, &combinedTransform);
+    composeTransform3D(&combinedTransform, &player->headingTransform, &fullTransform);
 
     fullTransform.translation.x -= player->headingTransform.translation.x;
     fullTransform.translation.y -= player->headingTransform.translation.y;
@@ -3014,7 +3014,7 @@ void updateTrickRotationTransform(Player *player) {
     rotationMatrix.translation.y = 0x100000;
     rotationMatrix.translation.z = 0;
 
-    func_8006B084_6BC84(temp, &rotationMatrix, &player->unk9D0);
+    composeTransform3D(temp, &rotationMatrix, &player->unk9D0);
 
     player->animFlags |= 0x800;
 }
@@ -5555,23 +5555,23 @@ void renderPlayerModel(Player *player) {
     animData = getIndexedAnimationDataPtr(player->unk0, player->leanAnimIndex);
 
     if (player->animFlags & 8) {
-        func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &player->unk9F0);
-        func_8006B084_6BC84(&player->tiltTransform, &player->unk9F0, &tmpMtx1);
+        composeTransform3D(&player->orientationTransform, &player->headingTransform, &player->unk9F0);
+        composeTransform3D(&player->tiltTransform, &player->unk9F0, &tmpMtx1);
         createYRotationMatrix(&gIdentityMatrix32, 0x1000);
         if (player->animFlags & 0x800) {
-            func_8006B084_6BC84(&gIdentityMatrix32, &tmpMtx1, &tmpMtx2);
-            func_8006B084_6BC84(&player->unk9D0, &tmpMtx2, &player->unk950);
+            composeTransform3D(&gIdentityMatrix32, &tmpMtx1, &tmpMtx2);
+            composeTransform3D(&player->unk9D0, &tmpMtx2, &player->unk950);
         } else {
-            func_8006B084_6BC84(&gIdentityMatrix32, &tmpMtx1, &player->unk950);
+            composeTransform3D(&gIdentityMatrix32, &tmpMtx1, &player->unk950);
         }
     } else {
         mtxDst = &player->unk9F0;
-        func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, mtxDst);
+        composeTransform3D(&player->orientationTransform, &player->headingTransform, mtxDst);
         if (player->animFlags & 0x800) {
-            func_8006B084_6BC84(&player->tiltTransform, mtxDst, &tmpMtx1);
-            func_8006B084_6BC84(&player->unk9D0, &tmpMtx1, &player->unk950);
+            composeTransform3D(&player->tiltTransform, mtxDst, &tmpMtx1);
+            composeTransform3D(&player->unk9D0, &tmpMtx1, &player->unk950);
         } else {
-            func_8006B084_6BC84(&player->tiltTransform, mtxDst, &player->unk950);
+            composeTransform3D(&player->tiltTransform, mtxDst, &player->unk950);
         }
     }
 
@@ -5606,16 +5606,16 @@ void renderPlayerModel(Player *player) {
                         player->characterScaleXZ
                     );
                 }
-                func_8006B084_6BC84(tmpMtx1Ptr, &player->unk950, &player->boneResults[animData[i].boneIndex].mtx);
+                composeTransform3D(tmpMtx1Ptr, &player->unk950, &player->boneResults[animData[i].boneIndex].mtx);
             } else {
-                func_8006B084_6BC84(
+                composeTransform3D(
                     &player->unk488[animData[i].boneIndex].transform.previous,
                     &player->unk950,
                     &player->boneResults[animData[i].boneIndex].mtx
                 );
             }
         } else {
-            func_8006B084_6BC84(
+            composeTransform3D(
                 &player->unk488[animData[i].boneIndex].transform.previous,
                 &player->boneResults[animData[i].parentBone].mtx,
                 &player->boneResults[animData[i].boneIndex].mtx
@@ -5627,7 +5627,7 @@ void renderPlayerModel(Player *player) {
         __asm__("");
         tmpMtx1Ptr = &tmpMtx1;
         memcpy(tmpMtx1Ptr, &player->playerModel.transform, sizeof(Transform3D));
-        func_8006B084_6BC84(&gIdentityMatrix32, tmpMtx1Ptr, &player->playerModel.transform);
+        composeTransform3D(&gIdentityMatrix32, tmpMtx1Ptr, &player->playerModel.transform);
     }
 
     invTimer = player->invincibilityTimer;

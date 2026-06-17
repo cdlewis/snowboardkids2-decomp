@@ -57,7 +57,7 @@ void func_mulMatrix3x3T(Transform3D *, Transform3D *, Transform3D *);
 // Multiplies two Transform3D structures: arg2 = arg0 * arg1
 // Combines rotation matrices (s2.13 fixed-point) and transforms translation.
 // Used for composing hierarchical transforms in animation and camera systems.
-void func_8006B084_6BC84(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2);
+void composeTransform3D(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2);
 
 void createCombinedRotationMatrix(void *, u16, u16);
 

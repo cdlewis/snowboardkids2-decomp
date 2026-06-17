@@ -206,8 +206,8 @@ void updateJingleTownBoss(Player *arg0) {
     createCombinedRotationMatrix(&arg0->orientationTransform, arg0->pitchAngle, arg0->steeringAngle);
     createYRotationMatrix(&arg0->headingTransform, arg0->rotY);
 
-    func_8006B084_6BC84(&arg0->tiltTransform, &arg0->orientationTransform, &sp10);
-    func_8006B084_6BC84(&sp10, &arg0->headingTransform, &sp30);
+    composeTransform3D(&arg0->tiltTransform, &arg0->orientationTransform, &sp10);
+    composeTransform3D(&sp10, &arg0->headingTransform, &sp30);
 
     sp30.translation.x -= arg0->headingTransform.translation.x;
     sp30.translation.y -= arg0->headingTransform.translation.y;
@@ -714,15 +714,15 @@ void updateJingleTownBossModelTransforms(Player *arg0) {
     s32 sp70[4];
 
     // Combine rotation matrices: unk990 (Z rotation) * unk970 (Y rotation) = unk9F0
-    func_8006B084_6BC84(&arg0->orientationTransform, &arg0->headingTransform, &arg0->unk9F0);
+    composeTransform3D(&arg0->orientationTransform, &arg0->headingTransform, &arg0->unk9F0);
     // Combine with unk9B0 (X rotation) to get base transform (unk950)
-    func_8006B084_6BC84(&arg0->tiltTransform, &arg0->unk9F0, &arg0->unk950);
+    composeTransform3D(&arg0->tiltTransform, &arg0->unk9F0, &arg0->unk950);
 
     if (arg0->behaviorFlags & 0x10) {
         // Apply vertical scale transformation during intro animation
         memcpy(&scaledMatrix, &identityMatrix, sizeof(Transform3D));
         scaledMatrix.m[1][1] = arg0->squashStretchScale;
-        func_8006B084_6BC84(&scaledMatrix, &arg0->unk950, &arg0->boneResults[0].mtx);
+        composeTransform3D(&scaledMatrix, &arg0->unk950, &arg0->boneResults[0].mtx);
     } else {
         memcpy(&arg0->boneResults[0].mtx, &arg0->unk950, sizeof(Transform3D));
     }
@@ -739,7 +739,7 @@ void updateJingleTownBossModelTransforms(Player *arg0) {
     }
 
     // Apply rotation/offset to ground transform to get flying transform
-    func_8006B084_6BC84(&pitchYawMatrix, &arg0->boneResults[0].mtx, &arg0->boneResults[1].mtx);
+    composeTransform3D(&pitchYawMatrix, &arg0->boneResults[0].mtx, &arg0->boneResults[1].mtx);
 
     // Add hover height offset to flying transform
     arg0->boneResults[1].mtx.translation.y = arg0->boneResults[1].mtx.translation.y + arg0->unk474;
@@ -749,7 +749,7 @@ void updateJingleTownBossModelTransforms(Player *arg0) {
     gScaleMatrix.translation.y = 0x140000;
     gScaleMatrix.translation.z = 0;
 
-    func_8006B084_6BC84(&gScaleMatrix, &arg0->boneResults[1].mtx, &arg0->boneResults[2].mtx);
+    composeTransform3D(&gScaleMatrix, &arg0->boneResults[1].mtx, &arg0->boneResults[2].mtx);
 }
 
 void renderJingleTownBossWithEffects(Player *arg0) {

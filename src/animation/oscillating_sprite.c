@@ -89,7 +89,7 @@ void updateQuadDisplayList(QuadDisplayListState *state) {
     applyRotation:
         memcpy(&rotationMatrix.translation, &D_8008C120_8CD20[i], sizeof(Vec3i));
         element = &state->elements[i];
-        func_8006B084_6BC84(&rotationMatrix, &state->model->matrix18, (Transform3D *)element);
+        composeTransform3D(&rotationMatrix, &state->model->matrix18, (Transform3D *)element);
         enqueueModelDisplayList(state->model, (DisplayListObject *)element);
     }
 }
@@ -184,7 +184,7 @@ void updateRotationController(RotationControllerState *state) {
     rotationMatrix.translation.y = 0x100000;
     rotationMatrix.translation.z = 0;
 
-    func_8006B084_6BC84(&gScaleMatrix, &rotationMatrix, &state->model->unkF0);
+    composeTransform3D(&gScaleMatrix, &rotationMatrix, &state->model->unkF0);
 }
 
 void cleanupRotationController(void) {

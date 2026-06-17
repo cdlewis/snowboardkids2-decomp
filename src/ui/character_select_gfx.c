@@ -10,154 +10,10 @@
 #include "graphics/sprite_rdp.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
-#include "text/font_assets.h"
 #include "text/font_render.h"
 #include "ui/character_select_ui.h"
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
-
-typedef struct {
-    u8 pad0[0x1898];
-    u16 charSelectMenuStates[4];
-    u16 charSelectFrameCounters[4];
-    u8 charSelectCharRow[8];
-    u8 charSelectCharCol[8];
-} BoardSelectGameState;
-
-typedef struct {
-    u8 padding[0x24];
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-} func_8002494C_arg;
-
-typedef struct {
-    u16 scrollX;
-    u16 scrollY;
-    u8 padding[0x28];
-    void *tiledBackgroundAsset;
-} CharSelectTiledBackgroundState;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    void *asset;
-    s16 spriteIndex;
-} SimpleSpriteEntry;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    void *asset;
-    s16 spriteIndex;
-    s16 alpha;
-    u8 unkC;
-    u8 blinkState;
-    u8 paddingE[2];
-} SelectionEntry;
-
-typedef struct {
-    SelectionEntry entries[3];
-    u8 blinkTimers[3];
-    u8 numEntries;
-    u8 playerIndex;
-} SelectionMenuState;
-
-typedef struct {
-    CharSelectIconEntry entries[3];
-    u8 padding[0x16];
-    u8 playerIndex;
-} CharSelectIconTargetState;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    void *asset;
-    s16 spriteIndex;
-    s16 scaleX;
-    s16 scaleY;
-    s16 rotation;
-    s16 alpha;
-    u8 unk12;
-    u8 unk13;
-    u8 unk14;
-} ScaledSpriteEntry;
-
-typedef struct {
-    u8 padding[0x24];
-    u8 playerIndex;
-} P2NameRevealState;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    void *asset;
-    s16 spriteIndex;
-    u8 paletteIndex;
-} P2NameSpriteEntry;
-
-typedef P2NameSpriteEntry func_80027348_entry;
-
-typedef struct {
-    P2NameSpriteEntry entries[3];
-    u8 playerIndex;
-} P2NameAnimationState;
-
-typedef P2NameAnimationState CharSelectIconHideState;
-
-typedef struct {
-    CharSelectIconEntry entries[3];
-    u8 padding[0x14];
-    u8 numVisibleIcons;
-    u8 revealCounter;
-    u8 playerIndex;
-    u8 delayTimer;
-} CharSelectIconsState;
-
-typedef struct {
-    u8 pad0[0x3C];
-    Transform3D rotationMatrix;
-    Transform3D positionMatrix;
-    Transform3D worldMatrix;
-    s32 targetX;
-    u8 padA0;
-    u8 playerIndex;
-} CharSelectSlideState;
-
-typedef struct {
-    u8 pad0[0x20];
-    void *modelAsset;
-    void *animationAsset;
-    void *skeletonAsset;
-    void *paletteAsset;
-    u8 pad30[0xC];
-    Transform3D rotationMatrix; // offset 0x3C
-    Transform3D positionMatrix; // offset 0x5C
-    Transform3D worldMatrix;    // offset 0x7C
-    u8 pad9C[0x5];
-    u8 playerIndex; // offset 0xA1
-} CharSelectSecondarySlot;
-
-typedef struct {
-    SelectionEntry entries[8];
-    u8 blinkTimers[4];
-} SelectionArrowsState;
-
-typedef struct {
-    P2NameSpriteEntry entries[3];
-    u8 playerIndex;
-} P2NameHideState;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    void *asset;
-    s16 spriteIndex;
-    s16 alpha;
-    u8 layerDepth;
-    u8 blinkState;
-    u8 paddingE[2];
-} CharacterNameSprite;
 
 typedef struct CharSelectNamePosition {
     s16 x;
@@ -165,48 +21,6 @@ typedef struct CharSelectNamePosition {
 } CharSelectNamePosition;
 
 extern CharSelectNamePosition charSelectNamePositions[];
-
-typedef struct {
-    SelectionEntry entries[4];
-    s16 singlePlayerX;
-    s16 singlePlayerY;
-    void *singlePlayerAsset;
-    s16 singlePlayerSpriteIndex;
-} CharSelectNameSpritesState;
-
-typedef struct {
-    u16 x;
-    u16 y;
-} Vec2_u16;
-
-typedef struct {
-    u16 x;
-    u16 y;
-    s16 inc;
-} PositionConfig_DDBE;
-
-typedef struct {
-    u16 y;
-    u16 x;
-    u16 inc;
-} PositionConfig_DDE6;
-
-typedef struct {
-    u16 x;
-    u16 y;
-    u16 inc;
-} PositionConfig_DE1A;
-
-typedef struct {
-    func_80027348_entry entries[3];
-} PlayerLabelSpritesState;
-
-typedef struct {
-    SpriteRenderArg spriteEntries[6];
-    TextData textEntries[3];
-    char charBufs[3][3];
-    u8 playerIndex;
-} CharSelectStatsState;
 
 extern Vec2_u16 playerNumberPositions[];
 extern PositionConfig_DDE6 D_8008DDE6_8E9E6[];
@@ -219,62 +33,6 @@ extern struct {
 extern CharSelectModelPositions charSelectModelPositions;
 extern Vec3s charSelectIconPositions[];
 extern CharSelectAnimData charSelectAnimDataTable;
-
-void animateCharSelectIconReveal(CharSelectIconsState *);
-void cleanupCharSelectIcons(SimpleSpriteEntry *);
-void updateCharSelectIconsDelay(CharSelectIconsState *);
-void updateCharSelectIconTargets(CharSelectIconTargetState *);
-void updateCharSelectBoardSlideOut(CharSelectBoardPreview *);
-void updateCharSelectBoardPreview(CharSelectBoardPreview *);
-void updateCharSelectNameSprites(CharSelectNameSpritesState *);
-void cleanupCharSelectNameSprites(SimpleSpriteEntry *);
-void updateBoardSelectArrows(SelectionArrowsState *);
-void cleanupBoardSelectArrows(SimpleSpriteEntry *);
-void updateCharSelectMenu(SelectionMenuState *);
-void cleanupCharSelectMenu(SimpleSpriteEntry *);
-void updateCharSelectPreviewModel(CharSelectPreviewModel *);
-void reloadCharSelectPreviewAssets(CharSelectPreviewModel *);
-void initCharSelectSlidePosition(CharSelectPreviewModel *);
-void cleanupCharSelectPreviewAssets(CharSelectPreviewModel *);
-void updateCharSelectPreviewLighting(CharSelectPreviewModel *, u8);
-void animateCharSelectP2NameReveal(P2NameAnimationState *);
-void animateCharSelectP2NameHide(P2NameHideState *);
-void func_800269C8_275C8(void *);
-void cleanupBoardSelectCharNames(SimpleSpriteEntry *);
-void initCharSelectIconHideSprites(CharSelectIconHideState *);
-void updateCharSelectIconsLockedState(CharSelectIconHideState *);
-void showCharSelectIcons(CharSelectIconHideState *);
-void updateCharSelectSecondarySlide(CharSelectSecondarySlot *);
-void cleanupCharSelectSecondaryAssets(func_8002494C_arg *);
-void recreateCharSelectBoardModel(CharSelectBoardPreview *);
-void recreateCharSelectBoardModelForSlideIn(CharSelectBoardPreview *);
-void initCharSelectBoardSlideIn(CharSelectBoardPreview *);
-void waitForCharSelectBoardState(CharSelectBoardPreview *);
-void updateCharSelectBoardSlideIn(CharSelectBoardPreview *);
-void initCharSelectBoardSlideOut(CharSelectBoardPreview *);
-SceneModel *cleanupSceneModelHolder(SceneModel **arg0);
-void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *);
-void updateCharSelectPlayerLabels(PlayerLabelSpritesState *);
-void updateCharSelectArrows(SelectionArrowsState *);
-void initCharSelectBoardPreview(CharSelectBoardPreview *);
-void cleanupCharSelectBoardModel(CharSelectBoardPreview *);
-void cleanupCharSelectArrows(SimpleSpriteEntry *);
-void updateCharSelectPlayerNumbers(u8 *);
-void cleanupCharSelectPlayerNumbers(SimpleSpriteEntry *);
-void updateCharSelectPlayer1NameSprite(SimpleSpriteEntry *);
-void cleanupCharSelectPlayer1NameSprite(SimpleSpriteEntry *);
-void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0);
-void waitForCharSelectP2NameReveal(P2NameRevealState *arg0);
-void setupCharSelectP2NamePositions(volatile P2NameSpriteEntry *arg0);
-void cleanupCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state);
-void setupCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state);
-void updateCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state);
-void renderCharSelectScaledSprite(void *);
-void cleanupCharSelectScaledSprite(ScaledSpriteEntry *);
-void updateCharSelectPostSlide(CharSelectSlideState *);
-void updateCharSelectSlide(CharSelectSlideState *);
-void hideCharSelectIcons(CharSelectIconHideState *);
-void cleanupCharSelectIconHideAsset(SimpleSpriteEntry *);
 
 void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     Transform3D sp10;
@@ -298,7 +56,7 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     memcpy(sp10Ptr, &sp30, sizeof(Transform3D));
     createRotationMatrixYX(sp10Ptr, 0x1000, 0x800);
     createZRotationMatrix(&sp30, 0x1F00);
-    func_8006B084_6BC84(sp10Ptr, &sp30, rotMatPtr);
+    composeTransform3D(sp10Ptr, &sp30, rotMatPtr);
 
     sinCosResult = -(approximateSin(0x1800) * 0x1600);
     if (sinCosResult < 0) {
@@ -313,8 +71,8 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     arg0->positionMatrix.translation.z = (sinCosResult >> 0xD) << 8;
     memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, sizeof(Vec3i));
 
-    func_8006B084_6BC84(rotMatPtr, posMatPtr, sp10Ptr);
-    func_8006B084_6BC84(sp10Ptr, (Transform3D *)(gameState + ((arg0->playerIndex << 5) + 0x17F8)), (Transform3D *)arg0);
+    composeTransform3D(rotMatPtr, posMatPtr, sp10Ptr);
+    composeTransform3D(sp10Ptr, (Transform3D *)(gameState + ((arg0->playerIndex << 5) + 0x17F8)), (Transform3D *)arg0);
 
     globalPtr = (u8 *)gGameSessionContext;
     charIndex = *(globalPtr + arg0->playerIndex + 0xD);
@@ -379,8 +137,8 @@ void updateCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     createYRotationMatrix(&arg0->positionMatrix, (0x2000 - rotation) & 0xFFFF);
 
 after_rotation:
-    func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, &sp10);
-    func_8006B084_6BC84(&sp10, &state->charSelectRotations[arg0->playerIndex], (Transform3D *)arg0);
+    composeTransform3D(&arg0->rotationMatrix, &arg0->positionMatrix, &sp10);
+    composeTransform3D(&sp10, &state->charSelectRotations[arg0->playerIndex], (Transform3D *)arg0);
 
     val = state->charSelectMenuStates[arg0->playerIndex];
     if (val == CHAR_SELECT_CHAR_ROW_SLIDE || val == CHAR_SELECT_CHAR_VARIANT_SLIDE) {
@@ -456,8 +214,8 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     rotation = state->charSelectPreviewAngles[arg0->playerIndex];
     createYRotationMatrix(&arg0->positionMatrix, rotation);
 
-    func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
-    func_8006B084_6BC84(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
+    composeTransform3D(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
+    composeTransform3D(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
 
     setCallback(updateCharSelectSlide);
 }
@@ -483,8 +241,8 @@ void updateCharSelectSlide(CharSelectSlideState *arg0) {
     rotation = state->charSelectPreviewAngles[arg0->playerIndex];
     createYRotationMatrix(&arg0->positionMatrix, rotation);
 
-    func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
-    func_8006B084_6BC84(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
+    composeTransform3D(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
+    composeTransform3D(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
 
     enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
 
@@ -510,8 +268,8 @@ void updateCharSelectPostSlide(CharSelectSlideState *arg0) {
     rotation = base->charSelectPreviewAngles[arg0->playerIndex];
     createYRotationMatrix(&arg0->positionMatrix, rotation);
 
-    func_8006B084_6BC84(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
-    func_8006B084_6BC84(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
+    composeTransform3D(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
+    composeTransform3D(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
 
     enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
 
@@ -562,11 +320,11 @@ void initCharSelectSecondarySlot(CharSelectSecondarySlot *arg0) {
 
     createRotationMatrixYX(localMatrix1Ptr, 0x1000, 0x800);
     createZRotationMatrix(localMatrix2Ptr, 0x1F00);
-    func_8006B084_6BC84(localMatrix1Ptr, localMatrix2Ptr, rotMatrixPtr);
+    composeTransform3D(localMatrix1Ptr, localMatrix2Ptr, rotMatrixPtr);
 
     createYRotationMatrix(posMatrixPtr, state->charSelectPreviewAngles[arg0->playerIndex]);
-    func_8006B084_6BC84(rotMatrixPtr, posMatrixPtr, localMatrix3Ptr);
-    func_8006B084_6BC84(localMatrix3Ptr, worldMatrixPtr, (Transform3D *)arg0);
+    composeTransform3D(rotMatrixPtr, posMatrixPtr, localMatrix3Ptr);
+    composeTransform3D(localMatrix3Ptr, worldMatrixPtr, (Transform3D *)arg0);
 
     charIndex = state->charSelectCharRow[arg0->playerIndex + 4];
     assetIndex = state->charSelectCharCol[arg0->playerIndex + 4];
@@ -608,8 +366,8 @@ void updateCharSelectSecondarySlide(CharSelectSecondarySlot *slot) {
     posMatrixPtr = &slot->positionMatrix;
     createYRotationMatrix(posMatrixPtr, state->charSelectPreviewAngles[slot->playerIndex]);
 
-    func_8006B084_6BC84(&slot->rotationMatrix, posMatrixPtr, localMatrixPtr);
-    func_8006B084_6BC84(localMatrixPtr, &slot->worldMatrix, (Transform3D *)slot);
+    composeTransform3D(&slot->rotationMatrix, posMatrixPtr, localMatrixPtr);
+    composeTransform3D(localMatrixPtr, &slot->worldMatrix, (Transform3D *)slot);
 
     if (slot->worldMatrix.translation.x == targetX) {
         state->charSelectSlideState[slot->playerIndex]++;
@@ -692,7 +450,7 @@ void initCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
     rotation = state->charSelectCarouselAngles[arg0->playerIndex];
     createYRotationMatrix(transformPtr, 0x2000 - rotation);
 
-    func_8006B084_6BC84(transformPtr, &state->charSelectRotations[arg0->playerIndex], localPtr);
+    composeTransform3D(transformPtr, &state->charSelectRotations[arg0->playerIndex], localPtr);
 
     applyTransformToModel(arg0->model, localPtr);
 
@@ -723,7 +481,7 @@ void updateCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
     rotation = state->charSelectCarouselAngles[arg0->playerIndex];
     createYRotationMatrix(transformPtr, 0x2000 - rotation);
 
-    func_8006B084_6BC84(transformPtr, &state->charSelectRotations[arg0->playerIndex], localPtr);
+    composeTransform3D(transformPtr, &state->charSelectRotations[arg0->playerIndex], localPtr);
 
     applyTransformToModel(arg0->model, localPtr);
 

@@ -344,7 +344,7 @@ void initStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     memcpy(rotationYXPtr, rotationZPtr, sizeof(Transform3D));
     createRotationMatrixYX(rotationYXPtr, 0x1000, 0x800);
     createZRotationMatrix(rotationZPtr, 0x1F00);
-    func_8006B084_6BC84(rotationYXPtr, rotationZPtr, cardTransform);
+    composeTransform3D(rotationYXPtr, rotationZPtr, cardTransform);
 
     if (state->unk5C9 != 1) {
         card->transform.translation.x = 0x200000 - ((2 - card->slotPosition) << 21);
@@ -512,7 +512,7 @@ void initSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     memcpy(rotationYXPtr, &rotationZ, sizeof(Transform3D));
     createRotationMatrixYX(&rotationYX, 0x1000, 0x800);
     createZRotationMatrix(&rotationZ, 0x1F00);
-    func_8006B084_6BC84(&rotationYX, &rotationZ, cardTransform);
+    composeTransform3D(&rotationYX, &rotationZ, cardTransform);
     card->updateCounter = 0;
     card->displayList.displayLists = NULL;
     card->displayList.segment1 = NULL;

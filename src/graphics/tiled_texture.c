@@ -431,7 +431,7 @@ void updateRotatingLogoState(RotatingLogoState *state) {
     }
 
     createYRotationMatrix(&rotationMatrix, 0x400);
-    func_8006B084_6BC84(&rotationMatrix, &state->model->matrix18, &state->opaqueMatrix);
+    composeTransform3D(&rotationMatrix, &state->model->matrix18, &state->opaqueMatrix);
     memcpy(&state->opaqueMatrix.translation, &state->model->matrix18.translation, sizeof(Vec3i));
 
     state->opaqueMatrix.translation.y += state->oscillationOffset;
@@ -447,7 +447,7 @@ void updateRotatingLogoState(RotatingLogoState *state) {
         state->rotationY -= 0xF;
         tempAngle = state->rotationY;
         createYRotationMatrix(&transparentMatrix, tempAngle);
-        func_8006B084_6BC84(&transparentMatrix, &state->model->matrix18, &state->transparentMatrix);
+        composeTransform3D(&transparentMatrix, &state->model->matrix18, &state->transparentMatrix);
 
         state->transparentMatrix.translation.y += 0x166666;
         state->transparentMatrix.translation.y += state->oscillationOffset;

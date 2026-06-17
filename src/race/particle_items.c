@@ -802,7 +802,7 @@ void updateCrashEffect(CrashEffectState *arg0) {
     Vec3i pos;
     s32 i;
 
-    func_8006B084_6BC84(&arg0->localTransform, &arg0->player->playerModel.transform, &arg0->transform);
+    composeTransform3D(&arg0->localTransform, &arg0->player->playerModel.transform, &arg0->transform);
 
     if ((arg0->player->behaviorFlags & 0x80) == 0) {
         pos.x = arg0->player->worldPos.x;
@@ -1364,7 +1364,7 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
 
     gameState = (EffectTaskState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, state->yRotation);
-    func_8006B084_6BC84(&gIdentityMatrix32, &state->player->playerModel.transform, (Transform3D *)state);
+    composeTransform3D(&gIdentityMatrix32, &state->player->playerModel.transform, (Transform3D *)state);
     scaleMatrix((Transform3D *)state, state->scale, state->scale, state->scale);
 
     state->orbitAngle += 0x300;
@@ -1374,7 +1374,7 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
     matrix.translation.y = 0xBB333;
     matrix.translation.z = 0xFFEA0000;
 
-    func_8006B084_6BC84(&matrix, (Transform3D *)state, &state->orbitObj.transform);
+    composeTransform3D(&matrix, (Transform3D *)state, &state->orbitObj.transform);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)state);
@@ -1420,7 +1420,7 @@ void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state) {
         matrix.translation.x = 0;
         matrix.translation.y = 0xBB333;
         matrix.translation.z = 0xFFEA0000;
-        func_8006B084_6BC84(&matrix, (Transform3D *)state, &state->orbitObj.transform);
+        composeTransform3D(&matrix, (Transform3D *)state, &state->orbitObj.transform);
     }
 
     for (i = 0; i < 4; i++) {
@@ -1473,7 +1473,7 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
 
     allocation = (GameState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, state->yRotation);
-    func_8006B084_6BC84(&gIdentityMatrix32, &state->player->playerModel.transform, &state->primary.transform);
+    composeTransform3D(&gIdentityMatrix32, &state->player->playerModel.transform, &state->primary.transform);
     scale = state->scale;
     scaleMatrix(&state->primary.transform, scale, scale, scale);
 
@@ -1481,7 +1481,7 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
     gScaleMatrix.translation.y = 0x9CCCC;
     gScaleMatrix.translation.z = 0xFFE44CCD;
     ptr = (s32 *)&gScaleMatrix.translation;
-    func_8006B084_6BC84((Transform3D *)(ptr - 5), &state->primary.transform, &state->secondary.transform);
+    composeTransform3D((Transform3D *)(ptr - 5), &state->primary.transform, &state->secondary.transform);
 
     if (gFrameCounter & 1) {
         state->secondary.displayLists = (DisplayLists *)&D_8009A740_9B340;
@@ -1820,7 +1820,7 @@ void updateGhostEffect(GhostEffectState *arg0) {
 
     allocation = (EffectTaskState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, arg0->rotation);
-    func_8006B084_6BC84(&gIdentityMatrix32, (Transform3D *)((u8 *)arg0->player + 0x3F8), &arg0->transform);
+    composeTransform3D(&gIdentityMatrix32, (Transform3D *)((u8 *)arg0->player + 0x3F8), &arg0->transform);
 
     if (arg0->scale == 0x200) {
         queueSoundAtPosition(&arg0->transform.translation, 0x1D);
@@ -2021,7 +2021,7 @@ void renderChairliftWithFlippers(ChairliftEffectState *arg0) {
     matrix.translation.x = 0xFFF7490A;
     matrix.translation.y = 0xFFF98007;
     matrix.translation.z = 0xCB326;
-    func_8006B084_6BC84(&matrix, &arg0->transform, &arg0->leftFlipper.transform);
+    composeTransform3D(&matrix, &arg0->transform, &arg0->leftFlipper.transform);
 
     sinVal = approximateSin(arg0->flipperOscillationAngle);
     createZRotationMatrix(&matrix, (-(sinVal >> 5)) & 0xFFFF);
@@ -2029,7 +2029,7 @@ void renderChairliftWithFlippers(ChairliftEffectState *arg0) {
     matrix.translation.x = 0x8B6F6;
     matrix.translation.y = 0xFFF98007;
     matrix.translation.z = 0xCB326;
-    func_8006B084_6BC84(&matrix, &arg0->transform, &arg0->rightFlipper.transform);
+    composeTransform3D(&matrix, &arg0->transform, &arg0->rightFlipper.transform);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);

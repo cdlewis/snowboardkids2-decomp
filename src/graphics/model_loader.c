@@ -506,7 +506,7 @@ void updateSceneRenderTask(SceneRenderTaskCtx *ctx) {
             case 1:
                 createZRotationMatrix(rotMatrix, nodeB->rotationAngle);
                 memcpy(tempMatrix, ctx->node->baseTransform, sizeof(Transform3D));
-                func_8006B084_6BC84(rotMatrix, tempMatrix, &ctx->rotatedTransform);
+                composeTransform3D(rotMatrix, tempMatrix, &ctx->rotatedTransform);
                 memcpy(&ctx->rotatedTransform.translation, &ctx->node->posX, sizeof(Vec3i));
                 nodeA = ctx->node;
                 scaleFactor = (s16)((s64)(nodeA->scale >> 8) * 0x2000 >> 8);

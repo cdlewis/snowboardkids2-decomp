@@ -333,8 +333,8 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     createCombinedRotationMatrix(&arg0->unk990, arg0->unkA8E, arg0->unkA90);
     createYRotationMatrix(&arg0->unk970, arg0->unkA94);
 
-    func_8006B084_6BC84(&arg0->unk9B0, &arg0->unk990, &sp10);
-    func_8006B084_6BC84(&sp10, &arg0->unk970, &sp30);
+    composeTransform3D(&arg0->unk9B0, &arg0->unk990, &sp10);
+    composeTransform3D(&sp10, &arg0->unk970, &sp30);
 
     sp30.translation.x -= arg0->unk970.translation.x;
     sp30.translation.y -= arg0->unk970.translation.y;
@@ -697,25 +697,25 @@ void updateCrazyJungleBossLeanBoneTransforms(Arg0Struct *arg0) {
     s32 i;
 
     hierarchy = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
-    func_8006B084_6BC84(&arg0->unk990, &arg0->unk970, &arg0->scratch9F0);
-    func_8006B084_6BC84(&arg0->unk9B0, &arg0->scratch9F0, &arg0->unk950);
+    composeTransform3D(&arg0->unk990, &arg0->unk970, &arg0->scratch9F0);
+    composeTransform3D(&arg0->unk9B0, &arg0->scratch9F0, &arg0->unk950);
 
     for (i = 0; i < arg0->boneCount; i++) {
         if (hierarchy[i].parentBone == 0xFF) {
             if (arg0->behaviorFlags & 0x10) {
                 memcpy(&squashMatrix, &identityMatrix, sizeof(Transform3D));
                 squashMatrix.m[1][1] = arg0->squashStretchScale;
-                func_8006B084_6BC84(&arg0->unk488[hierarchy[i].boneIndex].transform.previous, &squashMatrix, &scratch);
-                func_8006B084_6BC84(&scratch, &arg0->unk950, &arg0->bones[hierarchy[i].boneIndex].transform);
+                composeTransform3D(&arg0->unk488[hierarchy[i].boneIndex].transform.previous, &squashMatrix, &scratch);
+                composeTransform3D(&scratch, &arg0->unk950, &arg0->bones[hierarchy[i].boneIndex].transform);
             } else {
-                func_8006B084_6BC84(
+                composeTransform3D(
                     &arg0->unk488[hierarchy[i].boneIndex].transform.previous,
                     &arg0->unk950,
                     &arg0->bones[hierarchy[i].boneIndex].transform
                 );
             }
         } else {
-            func_8006B084_6BC84(
+            composeTransform3D(
                 &arg0->unk488[hierarchy[i].boneIndex].transform.previous,
                 &arg0->bones[hierarchy[i].parentBone].transform,
                 &arg0->bones[hierarchy[i].boneIndex].transform

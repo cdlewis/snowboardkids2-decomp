@@ -2490,7 +2490,7 @@ void updateModelGeometry(SceneModel *arg0) {
     s32 shadowSizeZ;
 
     assetGroup = &gameAssets[arg0->index];
-    func_8006B084_6BC84(&arg0->unkF0, &arg0->matrix18, &worldMatrix);
+    composeTransform3D(&arg0->unkF0, &arg0->matrix18, &worldMatrix);
 
     if (arg0->animationBoneData != NULL) {
         if (arg0->unk16 == -1) {
@@ -2505,14 +2505,14 @@ void updateModelGeometry(SceneModel *arg0) {
             u8 parent = animData->parentBone;
             if (parent == 0xFF) {
                 u8 bone = animData->boneIndex;
-                func_8006B084_6BC84(
+                composeTransform3D(
                     &arg0->boneAnimationStates[bone].transform.previous,
                     &worldMatrix,
                     &((DisplayListObject *)arg0->boneDisplayObjects)[bone].transform
                 );
             } else {
                 u8 bone = animData->boneIndex;
-                func_8006B084_6BC84(
+                composeTransform3D(
                     &arg0->boneAnimationStates[bone].transform.previous,
                     &((DisplayListObject *)arg0->boneDisplayObjects)[parent].transform,
                     &((DisplayListObject *)arg0->boneDisplayObjects)[bone].transform

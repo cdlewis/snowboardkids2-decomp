@@ -496,7 +496,7 @@ void scaleMatrix(Transform3D *matrix, s16 scaleX, s16 scaleY, s16 scaleZ) {
  * Used for composing hierarchical transforms in skeletal animation,
  * camera systems, and object positioning.
  */
-void func_8006B084_6BC84(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2) {
+void composeTransform3D(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2) {
     s32 i, j;
     s32 sum;
     s16 *dest;
@@ -1023,12 +1023,12 @@ void createViewportTransform(
     xRotation.translation.z = 0;
     xRotation.translation.y = 0;
     xRotation.translation.x = 0;
-    func_8006B084_6BC84(&xRotation, &yRotation, &combined);
+    composeTransform3D(&xRotation, &yRotation, &combined);
     gScaleMatrix.translation.x = 0;
     gScaleMatrix.translation.y = 0;
     gScaleMatrix.translation.z = depthOffset;
     tempTransformPtr = (s32 *)&gScaleMatrix.translation;
-    func_8006B084_6BC84((Transform3D *)(tempTransformPtr - 5), &combined, output);
+    composeTransform3D((Transform3D *)(tempTransformPtr - 5), &combined, output);
 }
 
 /**

@@ -32,7 +32,7 @@ void updateRocketEffect(RocketEffectUpdateData *arg0) {
     s32 pad[8];
 
     createYRotationMatrix(&gIdentityMatrix32, arg0->yAngle);
-    func_8006B084_6BC84(
+    composeTransform3D(
         &gIdentityMatrix32,
         (Transform3D *)&arg0->sceneModel->boneDisplayObjects->unk3C0,
         &arg0->body.transform
@@ -43,7 +43,7 @@ void updateRocketEffect(RocketEffectUpdateData *arg0) {
     gScaleMatrix.translation.y = 0x9CCCC;
     gScaleMatrix.translation.z = 0xFFE44CCD;
 
-    func_8006B084_6BC84(&gScaleMatrix, &arg0->body.transform, &arg0->flame.transform);
+    composeTransform3D(&gScaleMatrix, &arg0->body.transform, &arg0->flame.transform);
 
     if (gFrameCounter & 1) {
         arg0->flame.displayLists = &D_80088680_89280;

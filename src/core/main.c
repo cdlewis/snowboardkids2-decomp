@@ -1027,7 +1027,7 @@ void updateSwingingModelTask(func_80000C2C_182C_arg *arg0) {
 
     createYRotationMatrix(&yRotMatrix, subEntry->unk16);
     createZRotationMatrix(&zRotMatrix, arg0->unk44);
-    func_8006B084_6BC84(&zRotMatrix, &yRotMatrix, &arg0->unk8);
+    composeTransform3D(&zRotMatrix, &yRotMatrix, &arg0->unk8);
 
     arg0->unk8.translation.x = subEntry->unk8;
     arg0->unk8.translation.y = subEntry->unkC;

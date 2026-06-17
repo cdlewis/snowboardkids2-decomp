@@ -206,8 +206,8 @@ s32 setupSlotTransform(CutsceneSlotData *slot) {
     createZRotationMatrix(&rotZ, zRot & 0xFFFF);
     createYRotationMatrix(&rotY, (u16)slot->rotY);
     createXRotationMatrix(rotX.m, (u16)slot->rotX);
-    func_8006B084_6BC84(&rotZ, &rotY, &tempXYZ);
-    func_8006B084_6BC84(&rotX, &tempXYZ, &tempYZ);
+    composeTransform3D(&rotZ, &rotY, &tempXYZ);
+    composeTransform3D(&rotX, &tempXYZ, &tempYZ);
 
     scaleX = slot->scaleCurrentX;
     pScale = &scaleMat;
@@ -233,7 +233,7 @@ skip3:
     sz = (s16)((scaleZ << 0xD) >> 0x10);
 
     scaleMatrix(pScale, sx, sy, sz);
-    func_8006B084_6BC84(pScale, &tempYZ, &slot->transform);
+    composeTransform3D(pScale, &tempYZ, &slot->transform);
 
     retval = slot->unk20_u.unk20_s32;
     slot->transform.translation.x = retval;

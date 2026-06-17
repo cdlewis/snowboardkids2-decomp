@@ -327,7 +327,7 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     memcpy(&offsetTransform, &identityMatrix, sizeof(Transform3D));
     offsetTransform.translation.z = state->cameraDistance;
 
-    func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
+    composeTransform3D(&offsetTransform, &lookAtTransform, &cameraTransform);
     setViewportTransformById(allocation->unk48A, &cameraTransform);
     setCallback(updateLevelPreviewCharacterAndCamera);
 }
@@ -461,7 +461,7 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
     computeLookAtMatrix((Vec3i *)targetPtr, (Vec3i *)state, &lookAtTransform);
     memcpy(&offsetTransform, &identityMatrix, sizeof(Transform3D));
     offsetTransform.translation.z = state->cameraDistance;
-    func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
+    composeTransform3D(&offsetTransform, &lookAtTransform, &cameraTransform);
     setViewportTransformById(allocation->unk48A, &cameraTransform);
     timerLimit = &sLevelPreviewDurations[allocation->unkB33[allocation->unkB2C]];
     timer = state->frameTimer;
@@ -526,11 +526,7 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
     offsetTransform.unk1C = state->cameraDistance;
 
-    func_8006B084_6BC84(
-        (Transform3D *)&offsetTransform,
-        (Transform3D *)lookAtTransform,
-        (Transform3D *)cameraTransform
-    );
+    composeTransform3D((Transform3D *)&offsetTransform, (Transform3D *)lookAtTransform, (Transform3D *)cameraTransform);
 
     setViewportTransformById(allocation->unk48A, cameraTransform);
 
@@ -667,7 +663,7 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
     computeLookAtMatrix((Vec3i *)targetPtr, (Vec3i *)state, &lookAtTransform);
     memcpy(&offsetTransform, &identityMatrix, sizeof(Transform3D));
     offsetTransform.translation.z = state->cameraDistance;
-    func_8006B084_6BC84(&offsetTransform, &lookAtTransform, &cameraTransform);
+    composeTransform3D(&offsetTransform, &lookAtTransform, &cameraTransform);
     setViewportTransformById(allocation->unk48A, &cameraTransform);
     if (state->currentWaypoint == characterStartWaypoints[allocation->unkB33[allocation->unkB2C]] - 1) {
         state->frameTimer = 0;

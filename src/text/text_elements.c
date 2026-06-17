@@ -477,8 +477,8 @@ void updateOrbitCamera(OrbitCameraState *camera) {
     }
     createYRotationMatrix(&rotationMatrix, (currentAngle + 0x1000) & 0xFFFF);
     memcpy(&rotationMatrix.translation, &identityMatrix.translation, sizeof(Vec3i));
-    func_8006B084_6BC84(cameraMatrixPtr, &rotationMatrix, &tempMatrix);
-    func_8006B084_6BC84(&tempMatrix, (Transform3D *)(allocation->playerData + 0x950), cameraMatrixPtr);
+    composeTransform3D(cameraMatrixPtr, &rotationMatrix, &tempMatrix);
+    composeTransform3D(&tempMatrix, (Transform3D *)(allocation->playerData + 0x950), cameraMatrixPtr);
     transformVector2(&D_8008FEB0_90AB0, allocation->playerData + 0x950, &translationOffset);
     cameraMatrix.translation.x = cameraMatrix.translation.x + translationOffset.x;
     cameraMatrix.translation.y = cameraMatrix.translation.y + translationOffset.y;

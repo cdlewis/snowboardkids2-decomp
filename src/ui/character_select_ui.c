@@ -58,20 +58,6 @@ typedef struct {
 
 extern void initBoardSelectArrows(void);
 extern void initBoardSelectCharNames(void);
-extern void initCharSelectArrows(void);
-extern void initCharSelectBackgroundEffect(void);
-extern void initCharSelectBoardModel(void);
-extern void initCharSelectBoardModelForSlideOut(void);
-extern void initCharSelectIconHideSprites(void);
-extern void initCharSelectMenu(void);
-extern void initCharSelectNameSprites(void);
-extern void initCharSelectPlayer2NameSprites(void);
-extern void initCharSelectPlayerLabels(void);
-extern void initCharSelectPlayerNumbers(void);
-extern void initCharSelectPreviewModel(void);
-extern void initCharSelectSecondarySlot(void);
-extern void initCharSelectStats(void);
-
 void awaitCharacterSelectLoad(void);
 void scheduleCharacterSelectTasks(void);
 void updateCharacterSelect(void);

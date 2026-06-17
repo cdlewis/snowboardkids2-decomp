@@ -53,7 +53,6 @@ void enqueueTextLayout(
     u8 priority,
     u8 flags
 );
-void initCharSelectIcons(void *arg0);
 void collectStoryMapItem(void *arg0);
 void updateStoryMapNpcDialogueTurn(void *arg0);
 void animateNpcTurnToTarget(void *arg0);

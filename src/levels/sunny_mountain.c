@@ -196,7 +196,7 @@ void updateSunnyMountainChairLiftMovement(SunnyMountainChairLiftTask *taskState)
             } else {
                 createCombinedRotationMatrix(&taskState->chairMatrices[j], -taskState->rotationAngle & 0xFFFF, 0x1000);
             }
-            func_8006B084_6BC84(
+            composeTransform3D(
                 &taskState->chairMatrices[j],
                 &taskState->mainMatrix,
                 (Transform3D *)(taskState->displayObjects + displayObjectOffset)

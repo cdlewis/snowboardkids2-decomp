@@ -632,7 +632,7 @@ void initStoryMapRareEventSledding(Func2E024Arg *arg0) {
             &worldMatrix,
             atan2Fixed(worldMatrix.translation.x, angle = worldMatrix.translation.z) & 0xFFFF
         );
-        func_8006B084_6BC84(&localMatrix, new_var, &arg0->elements[i].matrix);
+        composeTransform3D(&localMatrix, new_var, &arg0->elements[i].matrix);
         setupStoryMapNpcModel(&arg0->elements[i]);
         allocation->npcPosX[i] = arg0->elements[i].matrix.translation.x;
         allocation->npcPosZ[i] = arg0->elements[i].matrix.translation.z;
@@ -708,7 +708,7 @@ void updateStoryMapRareEventSledding(Func2E024Arg *arg0) {
             facingAngle = atan2Fixed(element->matrix.translation.x, element->matrix.translation.z);
             createYRotationMatrix(&worldMatrix, facingAngle & 0xFFFF);
             memcpy(&worldMatrix.translation, &element->matrix.translation, sizeof(Vec3i));
-            func_8006B084_6BC84(&localMatrix, &worldMatrix, &element->matrix);
+            composeTransform3D(&localMatrix, &worldMatrix, &element->matrix);
             updateStoryMapNpcModel(element);
             gameState->npcPosX[i] = element->matrix.translation.x;
             gameState->npcPosZ[i] = element->matrix.translation.z;
@@ -1148,7 +1148,7 @@ void initStoryMapRareEventSkating(Func2E024Arg *arg0) {
         createYRotationMatrix(&localMatrix, arg0->elements[i].rotation);
         angle = atan2Fixed(worldMatrix.translation.x, worldMatrix.translation.z);
         createYRotationMatrix(&worldMatrix, angle & 0xFFFF);
-        func_8006B084_6BC84(&localMatrix, worldMatrixPtr, &arg0->elements[i].matrix);
+        composeTransform3D(&localMatrix, worldMatrixPtr, &arg0->elements[i].matrix);
         setupStoryMapNpcModel(&arg0->elements[i]);
         gameState->npcPosX[i] = arg0->elements[i].matrix.translation.x;
         gameState->npcPosZ[i] = arg0->elements[i].matrix.translation.z;
@@ -1236,7 +1236,7 @@ void updateStoryMapRareEventSkating(Func2E024Arg *arg0) {
             facingAngle = atan2Fixed(element->matrix.translation.x, element->matrix.translation.z);
             createYRotationMatrix(&worldMatrix, facingAngle & 0xFFFF);
             memcpy(&worldMatrix.translation, &element->matrix.translation, sizeof(Vec3i));
-            func_8006B084_6BC84(&localMatrix, &worldMatrix, &element->matrix);
+            composeTransform3D(&localMatrix, &worldMatrix, &element->matrix);
             updateStoryMapNpcModel(element);
             gameState->npcPosX[i] = element->matrix.translation.x;
             gameState->npcPosZ[i] = element->matrix.translation.z;

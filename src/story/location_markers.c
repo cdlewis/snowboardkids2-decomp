@@ -774,7 +774,7 @@ void updateStoryMapDialogueTurn(void *arg0) {
             createYRotationMatrix(&state->worldMatrix, state->pitchAngle);
             switchState = 2;
 
-            func_8006B084_6BC84(&state->localMatrix, &state->worldMatrix, &tempMatrix);
+            composeTransform3D(&state->localMatrix, &state->worldMatrix, &tempMatrix);
             memcpy(&allocation->characterTransform, &tempMatrix, sizeof(Transform3D));
             break;
 
@@ -800,7 +800,7 @@ void updateStoryMapDialogueTurn(void *arg0) {
 
             createYRotationMatrix(&state->localMatrix, state->yawAngle & 0x1FFF);
             createYRotationMatrix(&state->worldMatrix, state->pitchAngle);
-            func_8006B084_6BC84(&state->localMatrix, &state->worldMatrix, &tempMatrix);
+            composeTransform3D(&state->localMatrix, &state->worldMatrix, &tempMatrix);
             memcpy(&allocation->characterTransform, &tempMatrix, sizeof(Transform3D));
             break;
 

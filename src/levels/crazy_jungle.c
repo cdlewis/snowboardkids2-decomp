@@ -115,14 +115,14 @@ void renderFallingRockHazard(FallingRockHazard *rock) {
     s32 i;
 
     memcpy(&gScaleMatrix.translation, &rock->renderOffset, sizeof(Vec3i));
-    func_8006B084_6BC84(&gScaleMatrix, &rock->rotationMatrix, &rock->node1.transform);
+    composeTransform3D(&gScaleMatrix, &rock->rotationMatrix, &rock->node1.transform);
     createXRotationMatrix(matrix.m, rock->xRotation);
 
     matrix.translation.y = 0x3b333;
     matrix.translation.x = 0;
     matrix.translation.z = 0x170000;
 
-    func_8006B084_6BC84(&matrix, &rock->node1.transform, &rock->node2.transform);
+    composeTransform3D(&matrix, &rock->node1.transform, &rock->node2.transform);
 
     for (i = 0; i < 4; i++) {
         enqueueDisplayListWithFrustumCull(i, &rock->node1);

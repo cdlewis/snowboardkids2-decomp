@@ -165,7 +165,7 @@ void updateStretchingModelTask(StretchingModelTaskState *arg0) {
     createZRotationMatrix(sp10Ptr, rotationOffset);
     scaleMatrix(sp10Ptr, 0x2000, stretchScale, 0x2000);
     outputMatrix = arg0->transformMatrix;
-    func_8006B084_6BC84(sp10Ptr, &((PulsingIndicatorOwner *)arg0->owner)->transformMatrix, outputMatrix);
+    composeTransform3D(sp10Ptr, &((PulsingIndicatorOwner *)arg0->owner)->transformMatrix, outputMatrix);
     arg0->unk1C = (s32)(arg0->unk1C + 0x33333);
     enqueueModelDisplayList(arg0->owner, outputMatrix);
     arg0->rotationAngle = (s16)(((u16)arg0->rotationAngle + 0xB6) & 0x1FFF);

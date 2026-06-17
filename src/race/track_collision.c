@@ -94,8 +94,8 @@ s32 handlePlayerTrackWallCollision(Player *player) {
 
     result = 0;
     gameState = (GameState *)getCurrentAllocation();
-    func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &groundTransform);
-    func_8006B084_6BC84(&player->tiltTransform, &groundTransform, &combinedTransform);
+    composeTransform3D(&player->orientationTransform, &player->headingTransform, &groundTransform);
+    composeTransform3D(&player->tiltTransform, &groundTransform, &combinedTransform);
 
     i = 0;
     do {
@@ -219,8 +219,8 @@ void alignPlayerToTrackSurface(Player *player) {
     s32 dz;
 
     allocation = getCurrentAllocation();
-    func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &spE0);
-    func_8006B084_6BC84(&player->tiltTransform, &spE0, &spC0);
+    composeTransform3D(&player->orientationTransform, &player->headingTransform, &spE0);
+    composeTransform3D(&player->tiltTransform, &spE0, &spC0);
 
     if (player->animFlags & 0x40) {
         player->animFlags &= ~0x40;
@@ -240,7 +240,7 @@ void alignPlayerToTrackSurface(Player *player) {
             player->rollAngle -= 0x2000;
         }
         createZRotationMatrix(&player->tiltTransform, (u16)player->rollAngle);
-        func_8006B084_6BC84(&player->tiltTransform, &spE0, &spC0);
+        composeTransform3D(&player->tiltTransform, &spE0, &spC0);
     }
 
     pushUpOffset = 0;
@@ -282,8 +282,8 @@ void alignPlayerToTrackSurface(Player *player) {
 
             player->pitchAngle = atan2Fixed(points[0].y - points[2].y, -isqrt64(MAGNITUDE_SQ_2D(dx, dz)));
             createCombinedRotationMatrix(&player->orientationTransform, player->pitchAngle, player->steeringAngle);
-            func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &spE0);
-            func_8006B084_6BC84(&player->tiltTransform, &spE0, &spC0);
+            composeTransform3D(&player->orientationTransform, &player->headingTransform, &spE0);
+            composeTransform3D(&player->tiltTransform, &spE0, &spC0);
             if (player->pitchAngle == prevPitchAngle) {
                 break;
             }
@@ -1441,8 +1441,8 @@ void computePlayerTerrainAlignment(Player *player) {
 
     createYRotationMatrix(&player->headingTransform, player->rotY);
 
-    func_8006B084_6BC84(&player->orientationTransform, &player->headingTransform, &headingOrientationMatrix);
-    func_8006B084_6BC84(&player->tiltTransform, &headingOrientationMatrix, &combinedMatrix);
+    composeTransform3D(&player->orientationTransform, &player->headingTransform, &headingOrientationMatrix);
+    composeTransform3D(&player->tiltTransform, &headingOrientationMatrix, &combinedMatrix);
 
     attackState = player->flyingAttackState;
 

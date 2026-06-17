@@ -127,7 +127,7 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
     sp70.translation.y = 0;
     sp70.translation.z = 0;
 
-    func_8006B084_6BC84(&gScaleMatrix, &sp70, &sp30);
+    composeTransform3D(&gScaleMatrix, &sp70, &sp30);
 
     createXRotationMatrix(sp50.m, arg0->rotXCurrent);
 
@@ -135,7 +135,7 @@ void finalizeAnimationLoop(AnimationLoopArg *arg0) {
     sp50.translation.y = 0;
     sp50.translation.z = 0;
 
-    func_8006B084_6BC84(&sp50, &sp30, &sp10);
+    composeTransform3D(&sp50, &sp30, &sp10);
 
     temp_s0 = &sp10;
     memcpy(arg0, temp_s0, sizeof(Transform3D));

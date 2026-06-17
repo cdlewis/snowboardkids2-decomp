@@ -485,8 +485,8 @@ void updateBobbingModelTask(BobbingModelState *state) {
     rotationMatrix.translation.y = 0x499999;
     rotationMatrix.translation.z = 0;
 
-    func_8006B084_6BC84(&rotationMatrix, &state->model->unkF0, &combinedMatrix);
-    func_8006B084_6BC84(&combinedMatrix, &state->model->matrix18, &state->displayObject.transform);
+    composeTransform3D(&rotationMatrix, &state->model->unkF0, &combinedMatrix);
+    composeTransform3D(&combinedMatrix, &state->model->matrix18, &state->displayObject.transform);
     enqueueModelDisplayList(state->model, &state->displayObject);
 }
 
