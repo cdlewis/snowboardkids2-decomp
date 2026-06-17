@@ -95,16 +95,21 @@ typedef struct {
 } func_80002B50_3750_arg;
 
 typedef struct {
-    void *unk124;
-    u8 padding[0xC];
-    void *unk134;
-    s16 unk138;
-    s8 unk13A;
-    s8 unk13B;
-    u8 padding2[0x18];
-    s16 unk154;
-    s16 unk156;
-} SceneModelPadding4Fields;
+    void *unk0;
+    Vec3i shadowPosition;
+    void *unk10;
+    s16 unk14;
+    s8 unk16;
+    s8 unk17;
+    void *unk18;
+    void *unk1C;
+    void (*callback)(void *);
+    void (*cleanupCallback)(void *);
+    s32 shadowSizeX;
+    s32 shadowSizeZ;
+    s16 unk30;
+    s16 unk32;
+} SceneModelShadowSprite;
 
 typedef struct {
     DisplayListObject *boneDisplayObjects;
@@ -152,7 +157,7 @@ typedef struct {
     void *unk118;
     void *soundData;
     void *unk120;
-    u8 padding4[0x34];
+    SceneModelShadowSprite shadowSprite;
     s32 height;
     s8 renderEnabled;
 } SceneModel;

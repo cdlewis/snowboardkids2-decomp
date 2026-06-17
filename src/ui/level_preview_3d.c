@@ -112,7 +112,7 @@ extern void initOrbitalSpriteRing(void *arg0);
 extern void initModelTransitionEffect(void *arg0);
 extern void initModelScaleAnimation(void *arg0);
 extern s32 getIndexedAnimationDataPtr(void *, s16);
-extern void enqueueTranslucentSprite(u16, u8 *);
+extern void enqueueTranslucentSprite(u16, SceneModelShadowSprite *);
 extern void renderNonRaceShadow(void);
 
 s32 D_80089530[4] = { 0x00000000, 0x010000D0, 0x00000000, 0x00000000 };
@@ -2038,7 +2038,6 @@ createSceneModelEx(s32 assetGroupIndex, void *allocation, s8 assetPairIndex, s8 
 
 #define ent ((SceneModel *)entity)
 #define assetBytes ((AssetGroupByteView *)assetEntry)
-#define entPadding4 ((SceneModelPadding4Fields *)ent->padding4)
 
 void initializeGameEntity(
     void *entity,
@@ -2213,18 +2212,17 @@ void initializeGameEntity(
     ent->height = 0;
 
     ent->unk120 = loadCompressedData(&GHOST_SOUND_SEQUENCE_DATA_ROM_END, &GHOST_COMPRESSED_DATA_ROM_START, 0x238);
-    entPadding4->unk124 = gDefaultEntityData8C938;
-    entPadding4->unk13A = 0x50;
-    entPadding4->unk154 = 0;
-    entPadding4->unk156 = 0;
-    entPadding4->unk138 = 0;
-    entPadding4->unk13B = 0;
-    entPadding4->unk134 = ent->unk120;
+    ent->shadowSprite.unk0 = gDefaultEntityData8C938;
+    ent->shadowSprite.unk16 = 0x50;
+    ent->shadowSprite.unk30 = 0;
+    ent->shadowSprite.unk32 = 0;
+    ent->shadowSprite.unk14 = 0;
+    ent->shadowSprite.unk17 = 0;
+    ent->shadowSprite.unk10 = ent->unk120;
 }
 
 #undef ent
 #undef assetBytes
-#undef entPadding4
 
 SceneModel *destroySceneModel(SceneModel *arg0) {
     cleanupSceneModel(arg0);
@@ -2576,7 +2574,11 @@ void updateModelGeometry(SceneModel *arg0) {
             if (arg0->renderEnabled != 0) {
                 shadowScale = (arg0->unk4F << 0xD) / 5;
                 if (arg0->boneDisplayObjects != NULL && hasModelGraphicsData(arg0) == 0) {
-                    memcpy(&arg0->padding4[4], &arg0->boneDisplayObjects[0].transform.translation.x, 0xCU);
+                    memcpy(
+                        &arg0->shadowSprite.shadowPosition,
+                        &arg0->boneDisplayObjects[0].transform.translation.x,
+                        0xCU
+                    );
                     scaleX = distance_3d(
                         (s32)arg0->boneDisplayObjects[0].transform.m[0][0],
                         (s32)arg0->boneDisplayObjects[0].transform.m[1][0],
@@ -2588,7 +2590,7 @@ void updateModelGeometry(SceneModel *arg0) {
                         (s32)arg0->boneDisplayObjects[0].transform.m[2][2]
                     );
                 } else {
-                    memcpy(&arg0->padding4[4], &arg0->matrix18.translation.x, 0xCU);
+                    memcpy(&arg0->shadowSprite.shadowPosition, &arg0->matrix18.translation, sizeof(Vec3i));
                     scaleX = distance_3d(
                         (s32)arg0->matrix18.m[0][0],
                         (s32)arg0->matrix18.m[1][0],
@@ -2601,17 +2603,17 @@ void updateModelGeometry(SceneModel *arg0) {
                     );
                 }
                 shadowSizeX = scaleX * shadowScale;
-                *(s32 *)&arg0->padding4[8] = arg0->height;
+                arg0->shadowSprite.shadowPosition.y = arg0->height;
                 if (shadowSizeX < 0) {
                     shadowSizeX += 0x1FFF;
                 }
                 shadowSizeZ = scaleZ * shadowScale;
-                *(s32 *)&arg0->padding4[0x28] = shadowSizeX >> 0xD;
+                arg0->shadowSprite.shadowSizeX = shadowSizeX >> 0xD;
                 if (shadowSizeZ < 0) {
                     shadowSizeZ += 0x1FFF;
                 }
-                *(s32 *)&arg0->padding4[0x2C] = shadowSizeZ >> 0xD;
-                enqueueTranslucentSprite(arg0->unk10->unk16, arg0->padding4);
+                arg0->shadowSprite.shadowSizeZ = shadowSizeZ >> 0xD;
+                enqueueTranslucentSprite(arg0->unk10->unk16, &arg0->shadowSprite);
                 return;
             }
             enqueueCallbackBySlotIndex(arg0->unk10->unk16, 1U, &renderNonRaceShadow, arg0);
