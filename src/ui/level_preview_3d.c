@@ -21,7 +21,7 @@ typedef struct {
     /* 0x28 */ TableEntry_19E80 *index_ptr;
     s8 tableField1;
     s8 tableField2;
-} AssetSlotTableData;
+} DisplayAssetTableData;
 
 typedef struct {
     u8 padding[0x3C];
@@ -1795,7 +1795,7 @@ void setModelHeight(SceneModel *arg0, s32 height) {
     arg0->height = height;
 }
 
-void disableEntityRendering(GameEntity *arg0) {
+void disableEntityRendering(SceneModel *arg0) {
     arg0->renderEnabled = 0;
 }
 
@@ -2000,7 +2000,7 @@ void *loadAssetGroupCompressedData(SceneModel *arg0) {
 }
 
 s32 hasModelGraphicsData(SceneModel *model) {
-    return model->boneDisplayObjects->graphicsData != 0;
+    return model->boneDisplayObjects[16].displayLists != NULL;
 }
 
 s32 isAssetGroupEmpty(s16 assetIndex) {
@@ -2036,8 +2036,9 @@ createSceneModelEx(s32 assetGroupIndex, void *allocation, s8 assetPairIndex, s8 
     return obj;
 }
 
-#define ent ((GameEntity *)entity)
+#define ent ((SceneModel *)entity)
 #define assetBytes ((AssetGroupByteView *)assetEntry)
+#define entPadding4 ((SceneModelPadding4Fields *)ent->padding4)
 
 void initializeGameEntity(
     void *entity,
@@ -2050,7 +2051,7 @@ void initializeGameEntity(
 ) {
     AssetGroup *assetEntry;
     s32 i;
-    AssetSlot *slot;
+    DisplayListObject *slot;
     void *asset1;
     void *asset2;
     ItemAssetEntry *itemEntry;
@@ -2059,10 +2060,10 @@ void initializeGameEntity(
     assetEntry = &gameAssets[assetGroupIndex];
 
     ent->boneDisplayObjects = allocateNodeMemory(0x780);
-    ent->unk0C = assetGroupIndex;
+    ent->index = assetGroupIndex;
     ent->unk14 = -1;
     ent->unk16 = -1;
-    ent->unk0E = assetEntry->numAssets;
+    ent->assetCount = assetEntry->numAssets;
     ent->unk3A = -1;
     ent->unk38 = -1;
     ent->unk8E = -1;
@@ -2072,7 +2073,7 @@ void initializeGameEntity(
     ent->unk48 = 0;
     ent->unk95 = 0;
 
-    memcpy(&ent->asset2TransformationMatrix, &identityMatrix, sizeof(Transform3D));
+    memcpy(&ent->unkF0, &identityMatrix, sizeof(Transform3D));
 
     ent->partDisplayFlags = -1;
     ent->alpha = 0xFF;
@@ -2080,8 +2081,8 @@ void initializeGameEntity(
     ent->shadowEnabled = 0;
 
     for (i = 0; i < SCENE_MODEL_BONE_SLOT_COUNT; i++) {
-        ent->boneDisplayObjects[i].unk20 = ent->boneDisplayObjects[i].asset1 = ent->boneDisplayObjects[i].asset2 =
-            ent->boneDisplayObjects[i].asset3 = NULL;
+        ent->boneDisplayObjects[i].displayLists = ent->boneDisplayObjects[i].segment1 =
+            ent->boneDisplayObjects[i].segment2 = ent->boneDisplayObjects[i].segment3 = NULL;
     }
 
     if (assetEntry->displayListStart != NULL) {
@@ -2093,11 +2094,11 @@ void initializeGameEntity(
         );
 
         for (i = 0; i < assetEntry->numAssets; i++) {
-            i[ent->boneDisplayObjects].unk20 = &assetEntry->unk1C[i];
-            i[ent->boneDisplayObjects].asset1 = asset1;
-            i[ent->boneDisplayObjects].asset2 = asset2;
+            i[ent->boneDisplayObjects].displayLists = (DisplayLists *)&assetEntry->unk1C[i];
+            i[ent->boneDisplayObjects].segment1 = asset1;
+            i[ent->boneDisplayObjects].segment2 = asset2;
             memcpy(
-                (void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->boneDisplayObjects),
+                (void *)(i * (s32)sizeof(DisplayListObject) + (s32)ent->boneDisplayObjects),
                 &identityMatrix,
                 sizeof(Transform3D)
             );
@@ -2107,12 +2108,12 @@ void initializeGameEntity(
         asset2 = loadAssetByIndex_95200(assetEntry->assetGroupIndex, assetPairIndex);
 
         for (i = 0; i < assetEntry->numAssets; i++) {
-            i[ent->boneDisplayObjects].unk20 =
-                (void *)&loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
-            i[ent->boneDisplayObjects].asset1 = asset1;
-            i[ent->boneDisplayObjects].asset2 = asset2;
+            i[ent->boneDisplayObjects].displayLists =
+                (DisplayLists *)&loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
+            i[ent->boneDisplayObjects].segment1 = asset1;
+            i[ent->boneDisplayObjects].segment2 = asset2;
             memcpy(
-                (void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->boneDisplayObjects),
+                (void *)(i * (s32)sizeof(DisplayListObject) + (s32)ent->boneDisplayObjects),
                 &identityMatrix,
                 sizeof(Transform3D)
             );
@@ -2141,28 +2142,28 @@ void initializeGameEntity(
     }
 
     if (param5 != -1) {
-        ent->boneDisplayObjects[16].unk20 = loadAssetByIndex_95728(param5);
-        ent->boneDisplayObjects[16].asset1 = loadAssetByIndex_95500(param5);
-        ent->boneDisplayObjects[16].asset2 = loadAssetByIndex_95590(param5);
-        ent->boneDisplayObjects[16].asset3 = loadAssetByIndex_95668(param6);
+        ent->boneDisplayObjects[16].displayLists = loadAssetByIndex_95728(param5);
+        ent->boneDisplayObjects[16].segment1 = loadAssetByIndex_95500(param5);
+        ent->boneDisplayObjects[16].segment2 = loadAssetByIndex_95590(param5);
+        ent->boneDisplayObjects[16].segment3 = loadAssetByIndex_95668(param6);
 
-        memcpy(&ent->boneDisplayObjects[16].transformationMatrix, &identityMatrix, sizeof(Transform3D));
+        memcpy(&ent->boneDisplayObjects[16].transform, &identityMatrix, sizeof(Transform3D));
     }
 
     if (yetAnotherAssetIndex != -1 && yetAnotherAssetIndex < itemAssetCount) {
         itemEntry = &itemAssetTable[yetAnotherAssetIndex];
 
-        ent->boneDisplayObjects[17].unk20 = itemEntry->unk14;
-        ent->boneDisplayObjects[17].asset1 =
+        ent->boneDisplayObjects[17].displayLists = itemEntry->unk14;
+        ent->boneDisplayObjects[17].segment1 =
             loadUncompressedData(itemEntry->displayListStart, itemEntry->displayListEnd);
-        ent->boneDisplayObjects[17].asset2 = loadCompressedData(
+        ent->boneDisplayObjects[17].segment2 = loadCompressedData(
             itemEntry->compressedDataStart,
             itemEntry->compressedDataEnd,
             itemEntry->decompressedSize
         );
-        ent->boneDisplayObjects[17].asset3 = NULL;
+        ent->boneDisplayObjects[17].segment3 = NULL;
 
-        memcpy(&ent->boneDisplayObjects[17].transformationMatrix, &identityMatrix, sizeof(Transform3D));
+        memcpy(&ent->boneDisplayObjects[17].transform, &identityMatrix, sizeof(Transform3D));
     }
 
     if (assetEntry->initCallback != NULL) {
@@ -2177,25 +2178,25 @@ void initializeGameEntity(
 
     ent->animationDisplayLists = NULL;
 
-    slot->asset3 = NULL;
-    slot->asset2 = NULL;
-    slot->asset1 = NULL;
+    slot->segment3 = NULL;
+    slot->segment2 = NULL;
+    slot->segment1 = NULL;
 
     ent->animationIndex = -1;
     ent->animationDataTable = NULL;
 
     if (assetEntry->Assets != NULL && assetPairIndex < assetEntry->count) {
-        ent->animationDataTable = &assetEntry->Assets[assetPairIndex];
+        ent->animationDataTable = (ModelAnimationData *)&assetEntry->Assets[assetPairIndex];
     }
 
-    ent->specialAnimationDisplayObject->asset1 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 0);
-    ent->specialAnimationDisplayObject->asset2 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 1);
+    ent->specialAnimationDisplayObject->segment1 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 0);
+    ent->specialAnimationDisplayObject->segment2 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 1);
     ent->animationDisplayLists = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
-    ent->specialAnimationDisplayObject->unk20 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
+    ent->specialAnimationDisplayObject->displayLists = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
 
     ent->unk10 = param3;
 
-    memcpy(&ent->transformationMatrix, &identityMatrix, sizeof(Transform3D));
+    memcpy(&ent->matrix18, &identityMatrix, sizeof(Transform3D));
 
     ent->isDestroyed = 0;
     ent->displayEnabled = 1;
@@ -2212,17 +2213,18 @@ void initializeGameEntity(
     ent->height = 0;
 
     ent->unk120 = loadCompressedData(&GHOST_SOUND_SEQUENCE_DATA_ROM_END, &GHOST_COMPRESSED_DATA_ROM_START, 0x238);
-    ent->unk124 = gDefaultEntityData8C938;
-    ent->unk13A = 0x50;
-    ent->unk154 = 0;
-    ent->unk156 = 0;
-    ent->unk138 = 0;
-    ent->unk13B = 0;
-    ent->unk134 = ent->unk120;
+    entPadding4->unk124 = gDefaultEntityData8C938;
+    entPadding4->unk13A = 0x50;
+    entPadding4->unk154 = 0;
+    entPadding4->unk156 = 0;
+    entPadding4->unk138 = 0;
+    entPadding4->unk13B = 0;
+    entPadding4->unk134 = ent->unk120;
 }
 
 #undef ent
 #undef assetBytes
+#undef entPadding4
 
 SceneModel *destroySceneModel(SceneModel *arg0) {
     cleanupSceneModel(arg0);
@@ -2230,10 +2232,10 @@ SceneModel *destroySceneModel(SceneModel *arg0) {
 }
 
 void *cleanupSceneModel(SceneModel *model) {
-    SceneModelAnimationDisplayObjectSlot *slotData;
-    SceneModel_unk0 *modelData;
+    DisplayListObject *slotData;
+    DisplayListObject *modelData;
     void *freedSlot;
-    SceneModel_unk0 *modelData2;
+    DisplayListObject *modelData2;
 
     if (model == 0) {
         return 0;
@@ -2241,30 +2243,30 @@ void *cleanupSceneModel(SceneModel *model) {
 
     model->isDestroyed = 1;
     model->unk120 = freeNodeMemory(model->unk120);
-    model->unk11C = freeNodeMemory(model->unk11C);
+    model->soundData = freeNodeMemory(model->soundData);
     model->unk118 = freeSpriteEffectTextureData(model->unk118);
     model->unk114 = freeSpriteEffectModelData(model->unk114);
     releaseNodeMemoryRef((void **)&model->unkA4);
 
     slotData = model->specialAnimationDisplayObject;
-    slotData->unk24 = freeNodeMemory(slotData->unk24);
-    slotData->unk28 = freeNodeMemory(slotData->unk28);
+    slotData->segment1 = freeNodeMemory(slotData->segment1);
+    slotData->segment2 = freeNodeMemory(slotData->segment2);
     freedSlot = freeNodeMemory(model->specialAnimationDisplayObject);
 
-    modelData = model->boneDisplayObjects;
+    modelData = &model->boneDisplayObjects[17];
     model->specialAnimationDisplayObject = freedSlot;
-    modelData->unk420 = freeNodeMemory(modelData->unk420);
-    modelData->unk424 = freeNodeMemory(modelData->unk424);
+    modelData->segment1 = freeNodeMemory(modelData->segment1);
+    modelData->segment2 = freeNodeMemory(modelData->segment2);
 
-    modelData2 = model->boneDisplayObjects;
-    modelData2->unk3E4 = freeNodeMemory(modelData2->unk3E4);
-    modelData2->unk3E8 = freeNodeMemory(modelData2->unk3E8);
-    modelData2->unk3EC = freeNodeMemory(modelData2->unk3EC);
+    modelData2 = &model->boneDisplayObjects[16];
+    modelData2->segment1 = freeNodeMemory(modelData2->segment1);
+    modelData2->segment2 = freeNodeMemory(modelData2->segment2);
+    modelData2->segment3 = freeNodeMemory(modelData2->segment3);
 
     model->boneAnimationStates = freeNodeMemory(model->boneAnimationStates);
     model->animationBoneData = freeNodeMemory(model->animationBoneData);
-    model->boneDisplayObjects->unk24 = freeNodeMemory(model->boneDisplayObjects->unk24);
-    model->boneDisplayObjects->unk28 = freeNodeMemory(model->boneDisplayObjects->unk28);
+    model->boneDisplayObjects[0].segment1 = freeNodeMemory(model->boneDisplayObjects[0].segment1);
+    model->boneDisplayObjects[0].segment2 = freeNodeMemory(model->boneDisplayObjects[0].segment2);
     model->boneDisplayObjects = freeNodeMemory(model->boneDisplayObjects);
 
     return model;
@@ -2272,7 +2274,7 @@ void *cleanupSceneModel(SceneModel *model) {
 
 void enqueueModelDisplayListByIndex(func_80002B50_3750_arg *model, s16 index) {
     if (index < model->unkE) {
-        enqueueDisplayListObject(model->unk10->unk16, (void *)model->unk0 + (index * 0x3C));
+        enqueueDisplayListObject(model->unk10->unk16, &((DisplayListObject *)model->unk0)[index]);
     }
 }
 
@@ -2508,14 +2510,14 @@ void updateModelGeometry(SceneModel *arg0) {
                 composeTransform3D(
                     &arg0->boneAnimationStates[bone].transform.previous,
                     &worldMatrix,
-                    &((DisplayListObject *)arg0->boneDisplayObjects)[bone].transform
+                    &arg0->boneDisplayObjects[bone].transform
                 );
             } else {
                 u8 bone = animData->boneIndex;
                 composeTransform3D(
                     &arg0->boneAnimationStates[bone].transform.previous,
-                    &((DisplayListObject *)arg0->boneDisplayObjects)[parent].transform,
-                    &((DisplayListObject *)arg0->boneDisplayObjects)[bone].transform
+                    &arg0->boneDisplayObjects[parent].transform,
+                    &arg0->boneDisplayObjects[bone].transform
                 );
             }
         }
@@ -2524,10 +2526,10 @@ void updateModelGeometry(SceneModel *arg0) {
         i = 0;
         boneOffset = 0;
         do {
-            memcpy((void *)(boneOffset + (s32)arg0->boneDisplayObjects), &worldMatrix, 0x20U);
+            memcpy((void *)(boneOffset + (s32)arg0->boneDisplayObjects), &worldMatrix, sizeof(Transform3D));
             ((DisplayListObject *)(boneOffset + (s32)arg0->boneDisplayObjects))->transform.translation.y += arg0->unk44;
             i++;
-            boneOffset += 0x3C;
+            boneOffset += sizeof(DisplayListObject);
         } while (i < boneCount);
     }
 
@@ -2566,7 +2568,7 @@ void updateModelGeometry(SceneModel *arg0) {
                         }
                     }
                 }
-                byteOffset += 0x3C;
+                byteOffset += sizeof(DisplayListObject);
                 i++;
             } while (i < boneCount);
         }
@@ -2574,20 +2576,16 @@ void updateModelGeometry(SceneModel *arg0) {
             if (arg0->renderEnabled != 0) {
                 shadowScale = (arg0->unk4F << 0xD) / 5;
                 if (arg0->boneDisplayObjects != NULL && hasModelGraphicsData(arg0) == 0) {
-                    memcpy(
-                        &arg0->padding4[4],
-                        &((DisplayListObject *)arg0->boneDisplayObjects)->transform.translation.x,
-                        0xCU
-                    );
+                    memcpy(&arg0->padding4[4], &arg0->boneDisplayObjects[0].transform.translation.x, 0xCU);
                     scaleX = distance_3d(
-                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[0][0],
-                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[1][0],
-                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[2][0]
+                        (s32)arg0->boneDisplayObjects[0].transform.m[0][0],
+                        (s32)arg0->boneDisplayObjects[0].transform.m[1][0],
+                        (s32)arg0->boneDisplayObjects[0].transform.m[2][0]
                     );
                     scaleZ = distance_3d(
-                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[0][2],
-                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[1][2],
-                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[2][2]
+                        (s32)arg0->boneDisplayObjects[0].transform.m[0][2],
+                        (s32)arg0->boneDisplayObjects[0].transform.m[1][2],
+                        (s32)arg0->boneDisplayObjects[0].transform.m[2][2]
                     );
                 } else {
                     memcpy(&arg0->padding4[4], &arg0->matrix18.translation.x, 0xCU);
@@ -2654,7 +2652,7 @@ s32 getModelDisplayDataOffset(SceneModel *model) {
     return 0x90;
 }
 
-void loadAssetSlotTableEntry(AssetSlotTableData *slot, DataTable_19E80 *table, s32 entryIndex) {
+void loadAssetSlotTableEntry(DisplayAssetTableData *slot, DataTable_19E80 *table, s32 entryIndex) {
     OutputStruct_19E80 result;
 
     getTableEntryByU16Index(table, (s16)entryIndex, &result);

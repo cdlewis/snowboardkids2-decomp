@@ -95,38 +95,23 @@ typedef struct {
 } func_80002B50_3750_arg;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    u8 padding[0x14];
-    void *unk24;
-    void *unk28;
-    s32 unk2C;
-    u8 padding2[0x390];
-    s16 unk3C0[0x10];
-    s32 graphicsData;
-    void *unk3E4;
-    void *unk3E8;
-    void *unk3EC;
-    u8 padding3[0x2D];
-    void *unk420;
-    void *unk424;
-} SceneModel_unk0;
+    void *unk124;
+    u8 padding[0xC];
+    void *unk134;
+    s16 unk138;
+    s8 unk13A;
+    s8 unk13B;
+    u8 padding2[0x18];
+    s16 unk154;
+    s16 unk156;
+} SceneModelPadding4Fields;
 
 typedef struct {
-    u8 padding[0x20];
-    void *displayLists;
-    void *unk24;
-    void *unk28;
-} SceneModelAnimationDisplayObjectSlot;
-
-typedef struct {
-    SceneModel_unk0 *boneDisplayObjects;
+    DisplayListObject *boneDisplayObjects;
     BoneAnimationState *boneAnimationStates;
     void *animationBoneData;
     /* 0xC */ s16 index;
-    u8 paddingE[2];
+    s16 assetCount;
     struct {
         u8 padding[0x16];
         u16 unk16;
@@ -157,7 +142,7 @@ typedef struct {
     s8 unk95;
     u8 alpha;
     s8 shadowEnabled;
-    SceneModelAnimationDisplayObjectSlot *specialAnimationDisplayObject;
+    DisplayListObject *specialAnimationDisplayObject;
     ModelAnimationData *animationDataTable;
     void *animationDisplayLists;
     SpriteAssetState unkA4;
@@ -165,7 +150,7 @@ typedef struct {
     s32 partDisplayFlags;
     void *unk114;
     void *unk118;
-    void *unk11C;
+    void *soundData;
     void *unk120;
     u8 padding4[0x34];
     s32 height;
@@ -190,70 +175,6 @@ void setModelPendingDestroy(SceneModel *arg0);
 void clearModelPendingDestroy(SceneModel *arg0);
 s8 getAnimationIndex(SceneModel *arg0);
 void setModelHeight(SceneModel *arg0, s32 height);
-
-typedef struct {
-    u8 transformationMatrix[0x20];
-    void *unk20;
-    void *asset1;
-    void *asset2;
-    void *asset3;
-    u8 padding2[0xC];
-} AssetSlot;
-
-typedef struct {
-    AssetSlot *boneDisplayObjects;
-    AssetSlot *boneAnimationStates;
-    AssetSlot *animationBoneData;
-    s16 unk0C;
-    s16 unk0E;
-    void *unk10;
-    s16 unk14;
-    s16 unk16;
-    u8 transformationMatrix[0x20];
-    s16 unk38;
-    s16 unk3A;
-    u8 isDestroyed;
-    u8 actionMode;
-    u8 unk3E;
-    u8 displayEnabled;
-    u32 unk40;
-    s32 unk44;
-    u32 unk48;
-    s16 unk4C;
-    u8 unk4E;
-    u8 unk4F;
-    u8 padding3[0x38];
-    u8 unk88;
-    u8 unk89;
-    u8 padding4[4];
-    s16 unk8E;
-    u8 padding5[4];
-    s8 animationIndex;
-    u8 unk95;
-    u8 alpha;
-    u8 shadowEnabled;
-    AssetSlot *specialAnimationDisplayObject;
-    void *animationDataTable;
-    void *animationDisplayLists;
-    SpriteAssetState unkA4;
-    u8 asset2TransformationMatrix[0x20];
-    u32 partDisplayFlags;
-    void *unk114;
-    void *unk118;
-    void *soundData;
-    void *unk120;
-    void *unk124;
-    u8 padding6[0xC];
-    void *unk134;
-    s16 unk138;
-    u8 unk13A;
-    u8 unk13B;
-    u8 padding7[0x18];
-    s16 unk154;
-    s16 unk156;
-    u32 height;
-    u8 renderEnabled;
-} GameEntity;
 
 typedef struct {
     Transform3D unk0;
@@ -283,7 +204,7 @@ void setAnimationIndex(SceneModel *arg0, s8 arg1);
 s8 getModelAnimationCount(SceneModel *arg0);
 void clearModelAnimationState(SceneModel *model);
 
-void disableEntityRendering(GameEntity *arg0);
+void disableEntityRendering(SceneModel *arg0);
 void enableEntityRendering(SceneModel *arg0);
 void enableModelShadow(SceneModel *arg0);
 void disableModelShadow(SceneModel *arg0);
