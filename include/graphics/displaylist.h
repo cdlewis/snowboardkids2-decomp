@@ -22,7 +22,7 @@ typedef struct {
     /* 0x34 */ u8 light1R;
     /* 0x35 */ u8 light1G;
     /* 0x36 */ u8 light1B;
-    /* 0x37 */ u8 numParts;
+    /* 0x37 */ u8 numParts; // For multi-part display-list roots only. Not valid as SceneModel bone count.
     /* 0x38 */ u8 light2R;
     /* 0x39 */ u8 light2G;
     /* 0x3A */ u8 light2B;

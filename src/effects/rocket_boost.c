@@ -32,7 +32,11 @@ void updateRocketEffect(RocketEffectUpdateData *arg0) {
     s32 pad[8];
 
     createYRotationMatrix(&gIdentityMatrix32, arg0->yAngle);
-    func_8006B084_6BC84(&gIdentityMatrix32, (Transform3D *)&arg0->sceneModel->unk0->unk3C0, &arg0->body.transform);
+    func_8006B084_6BC84(
+        &gIdentityMatrix32,
+        (Transform3D *)&arg0->sceneModel->boneDisplayObjects->unk3C0,
+        &arg0->body.transform
+    );
     scaleMatrix(&arg0->body.transform, arg0->scale, arg0->scale, arg0->scale);
 
     gScaleMatrix.translation.x = 0;

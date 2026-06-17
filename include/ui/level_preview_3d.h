@@ -10,6 +10,8 @@
 #define MODE_DMA 0
 #define MODE_QUEUED_DMA 1
 #define MODE_DIRECT_FETCH 2
+#define SCENE_MODEL_BONE_SLOT_COUNT 32
+#define SCENE_MODEL_MAX_ANIMATED_BONES 31
 
 typedef struct {
     void *displayListStart;
@@ -117,12 +119,12 @@ typedef struct {
     void *displayLists;
     void *unk24;
     void *unk28;
-} SceneModel_unk98;
+} SceneModelAnimationDisplayObjectSlot;
 
 typedef struct {
-    SceneModel_unk0 *unk0;
-    BoneAnimationState *unk4;
-    void *unk8;
+    SceneModel_unk0 *boneDisplayObjects;
+    BoneAnimationState *boneAnimationStates;
+    void *animationBoneData;
     /* 0xC */ s16 index;
     u8 paddingE[2];
     struct {
@@ -155,9 +157,9 @@ typedef struct {
     s8 unk95;
     u8 alpha;
     s8 shadowEnabled;
-    SceneModel_unk98 *unk98;
-    ModelAnimationData *unk9C;
-    void *unkA0;
+    SceneModelAnimationDisplayObjectSlot *specialAnimationDisplayObject;
+    ModelAnimationData *animationDataTable;
+    void *animationDisplayLists;
     SpriteAssetState unkA4;
     Transform3D unkF0;
     s32 partDisplayFlags;
@@ -199,9 +201,9 @@ typedef struct {
 } AssetSlot;
 
 typedef struct {
-    AssetSlot *unk00;
-    AssetSlot *unk04;
-    AssetSlot *unk08;
+    AssetSlot *boneDisplayObjects;
+    AssetSlot *boneAnimationStates;
+    AssetSlot *animationBoneData;
     s16 unk0C;
     s16 unk0E;
     void *unk10;
@@ -230,9 +232,9 @@ typedef struct {
     u8 unk95;
     u8 alpha;
     u8 shadowEnabled;
-    AssetSlot *unk98;
-    void *unk9C;
-    void *unkA0;
+    AssetSlot *specialAnimationDisplayObject;
+    void *animationDataTable;
+    void *animationDisplayLists;
     SpriteAssetState unkA4;
     u8 asset2TransformationMatrix[0x20];
     u32 partDisplayFlags;

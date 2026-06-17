@@ -1906,7 +1906,7 @@ s8 getAnimationIndex(SceneModel *arg0) {
 s8 getModelAnimationCount(SceneModel *arg0) {
     ModelAnimationData *animData;
 
-    animData = arg0->unk9C;
+    animData = arg0->animationDataTable;
     if (animData != NULL) {
         return animData->animationCount;
     }
@@ -2000,7 +2000,7 @@ void *loadAssetGroupCompressedData(SceneModel *arg0) {
 }
 
 s32 hasModelGraphicsData(SceneModel *model) {
-    return model->unk0->graphicsData != 0;
+    return model->boneDisplayObjects->graphicsData != 0;
 }
 
 s32 isAssetGroupEmpty(s16 assetIndex) {
@@ -2058,7 +2058,7 @@ void initializeGameEntity(
 
     assetEntry = &gameAssets[assetGroupIndex];
 
-    ent->unk00 = allocateNodeMemory(0x780);
+    ent->boneDisplayObjects = allocateNodeMemory(0x780);
     ent->unk0C = assetGroupIndex;
     ent->unk14 = -1;
     ent->unk16 = -1;
@@ -2079,8 +2079,9 @@ void initializeGameEntity(
     ent->unk4C = yetAnotherAssetIndex;
     ent->shadowEnabled = 0;
 
-    for (i = 0; i < 0x20; i++) {
-        ent->unk00[i].unk20 = ent->unk00[i].asset1 = ent->unk00[i].asset2 = ent->unk00[i].asset3 = NULL;
+    for (i = 0; i < SCENE_MODEL_BONE_SLOT_COUNT; i++) {
+        ent->boneDisplayObjects[i].unk20 = ent->boneDisplayObjects[i].asset1 = ent->boneDisplayObjects[i].asset2 =
+            ent->boneDisplayObjects[i].asset3 = NULL;
     }
 
     if (assetEntry->displayListStart != NULL) {
@@ -2092,66 +2093,76 @@ void initializeGameEntity(
         );
 
         for (i = 0; i < assetEntry->numAssets; i++) {
-            i[ent->unk00].unk20 = &assetEntry->unk1C[i];
-            i[ent->unk00].asset1 = asset1;
-            i[ent->unk00].asset2 = asset2;
-            memcpy((void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->unk00), &identityMatrix, sizeof(Transform3D));
+            i[ent->boneDisplayObjects].unk20 = &assetEntry->unk1C[i];
+            i[ent->boneDisplayObjects].asset1 = asset1;
+            i[ent->boneDisplayObjects].asset2 = asset2;
+            memcpy(
+                (void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->boneDisplayObjects),
+                &identityMatrix,
+                sizeof(Transform3D)
+            );
         }
     } else if (assetEntry->assetGroupIndex != -1) {
         asset1 = loadAssetByIndex_94F90(assetEntry->assetGroupIndex, assetPairIndex);
         asset2 = loadAssetByIndex_95200(assetEntry->assetGroupIndex, assetPairIndex);
 
         for (i = 0; i < assetEntry->numAssets; i++) {
-            i[ent->unk00].unk20 = (void *)&loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
-            i[ent->unk00].asset1 = asset1;
-            i[ent->unk00].asset2 = asset2;
-            memcpy((void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->unk00), &identityMatrix, sizeof(Transform3D));
+            i[ent->boneDisplayObjects].unk20 =
+                (void *)&loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
+            i[ent->boneDisplayObjects].asset1 = asset1;
+            i[ent->boneDisplayObjects].asset2 = asset2;
+            memcpy(
+                (void *)(i * (s32)sizeof(AssetSlot) + (s32)ent->boneDisplayObjects),
+                &identityMatrix,
+                sizeof(Transform3D)
+            );
         }
     }
 
     if (assetEntry->padding) {
         if (assetBytes->anotherAssetIndex == -1) {
-            ent->unk08 = loadCompressedData(
+            ent->animationBoneData = loadCompressedData(
                 assetEntry->animationDataStart,
                 assetEntry->animationDataEnd,
                 assetEntry->animationDataSize
             );
-            ent->unk04 = allocateNodeMemory(0x980);
+            ent->boneAnimationStates = allocateNodeMemory(0x980);
         } else {
             playSoundEffect(0);
         }
     } else {
         if (assetBytes->anotherAssetIndex != -1) {
-            ent->unk08 = loadAssetByIndex_953E0(assetBytes->anotherAssetIndex);
-            ent->unk04 = allocateNodeMemory(0x980);
+            ent->animationBoneData = loadAssetByIndex_953E0(assetBytes->anotherAssetIndex);
+            ent->boneAnimationStates = allocateNodeMemory(0x980);
         } else {
-            ent->unk08 = NULL;
-            ent->unk04 = NULL;
+            ent->animationBoneData = NULL;
+            ent->boneAnimationStates = NULL;
         }
     }
 
     if (param5 != -1) {
-        ent->unk00[16].unk20 = loadAssetByIndex_95728(param5);
-        ent->unk00[16].asset1 = loadAssetByIndex_95500(param5);
-        ent->unk00[16].asset2 = loadAssetByIndex_95590(param5);
-        ent->unk00[16].asset3 = loadAssetByIndex_95668(param6);
+        ent->boneDisplayObjects[16].unk20 = loadAssetByIndex_95728(param5);
+        ent->boneDisplayObjects[16].asset1 = loadAssetByIndex_95500(param5);
+        ent->boneDisplayObjects[16].asset2 = loadAssetByIndex_95590(param5);
+        ent->boneDisplayObjects[16].asset3 = loadAssetByIndex_95668(param6);
 
-        memcpy(&ent->unk00[16].transformationMatrix, &identityMatrix, sizeof(Transform3D));
+        memcpy(&ent->boneDisplayObjects[16].transformationMatrix, &identityMatrix, sizeof(Transform3D));
     }
 
     if (yetAnotherAssetIndex != -1 && yetAnotherAssetIndex < itemAssetCount) {
         itemEntry = &itemAssetTable[yetAnotherAssetIndex];
 
-        ent->unk00[17].unk20 = itemEntry->unk14;
-        ent->unk00[17].asset1 = loadUncompressedData(itemEntry->displayListStart, itemEntry->displayListEnd);
-        ent->unk00[17].asset2 = loadCompressedData(
+        ent->boneDisplayObjects[17].unk20 = itemEntry->unk14;
+        ent->boneDisplayObjects[17].asset1 =
+            loadUncompressedData(itemEntry->displayListStart, itemEntry->displayListEnd);
+        ent->boneDisplayObjects[17].asset2 = loadCompressedData(
             itemEntry->compressedDataStart,
             itemEntry->compressedDataEnd,
             itemEntry->decompressedSize
         );
-        ent->unk00[17].asset3 = NULL;
+        ent->boneDisplayObjects[17].asset3 = NULL;
 
-        memcpy(&ent->unk00[17].transformationMatrix, &identityMatrix, sizeof(Transform3D));
+        memcpy(&ent->boneDisplayObjects[17].transformationMatrix, &identityMatrix, sizeof(Transform3D));
     }
 
     if (assetEntry->initCallback != NULL) {
@@ -2161,26 +2172,26 @@ void initializeGameEntity(
         }
     }
 
-    ent->unk98 = allocateNodeMemory(0x3C);
-    slot = ent->unk98;
+    ent->specialAnimationDisplayObject = allocateNodeMemory(0x3C);
+    slot = ent->specialAnimationDisplayObject;
 
-    ent->unkA0 = NULL;
+    ent->animationDisplayLists = NULL;
 
     slot->asset3 = NULL;
     slot->asset2 = NULL;
     slot->asset1 = NULL;
 
     ent->animationIndex = -1;
-    ent->unk9C = NULL;
+    ent->animationDataTable = NULL;
 
     if (assetEntry->Assets != NULL && assetPairIndex < assetEntry->count) {
-        ent->unk9C = &assetEntry->Assets[assetPairIndex];
+        ent->animationDataTable = &assetEntry->Assets[assetPairIndex];
     }
 
-    ent->unk98->asset1 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 0);
-    ent->unk98->asset2 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 1);
-    ent->unkA0 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
-    ent->unk98->unk20 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
+    ent->specialAnimationDisplayObject->asset1 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 0);
+    ent->specialAnimationDisplayObject->asset2 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 1);
+    ent->animationDisplayLists = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
+    ent->specialAnimationDisplayObject->unk20 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
 
     ent->unk10 = param3;
 
@@ -2219,7 +2230,7 @@ SceneModel *destroySceneModel(SceneModel *arg0) {
 }
 
 void *cleanupSceneModel(SceneModel *model) {
-    SceneModel_unk98 *slotData;
+    SceneModelAnimationDisplayObjectSlot *slotData;
     SceneModel_unk0 *modelData;
     void *freedSlot;
     SceneModel_unk0 *modelData2;
@@ -2235,26 +2246,26 @@ void *cleanupSceneModel(SceneModel *model) {
     model->unk114 = freeSpriteEffectModelData(model->unk114);
     releaseNodeMemoryRef((void **)&model->unkA4);
 
-    slotData = model->unk98;
+    slotData = model->specialAnimationDisplayObject;
     slotData->unk24 = freeNodeMemory(slotData->unk24);
     slotData->unk28 = freeNodeMemory(slotData->unk28);
-    freedSlot = freeNodeMemory(model->unk98);
+    freedSlot = freeNodeMemory(model->specialAnimationDisplayObject);
 
-    modelData = model->unk0;
-    model->unk98 = freedSlot;
+    modelData = model->boneDisplayObjects;
+    model->specialAnimationDisplayObject = freedSlot;
     modelData->unk420 = freeNodeMemory(modelData->unk420);
     modelData->unk424 = freeNodeMemory(modelData->unk424);
 
-    modelData2 = model->unk0;
+    modelData2 = model->boneDisplayObjects;
     modelData2->unk3E4 = freeNodeMemory(modelData2->unk3E4);
     modelData2->unk3E8 = freeNodeMemory(modelData2->unk3E8);
     modelData2->unk3EC = freeNodeMemory(modelData2->unk3EC);
 
-    model->unk4 = freeNodeMemory(model->unk4);
-    model->unk8 = freeNodeMemory(model->unk8);
-    model->unk0->unk24 = freeNodeMemory(model->unk0->unk24);
-    model->unk0->unk28 = freeNodeMemory(model->unk0->unk28);
-    model->unk0 = freeNodeMemory(model->unk0);
+    model->boneAnimationStates = freeNodeMemory(model->boneAnimationStates);
+    model->animationBoneData = freeNodeMemory(model->animationBoneData);
+    model->boneDisplayObjects->unk24 = freeNodeMemory(model->boneDisplayObjects->unk24);
+    model->boneDisplayObjects->unk28 = freeNodeMemory(model->boneDisplayObjects->unk28);
+    model->boneDisplayObjects = freeNodeMemory(model->boneDisplayObjects);
 
     return model;
 }
@@ -2294,7 +2305,7 @@ void setModelAnimationEx(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short ar
         arg0->unk89 |= 2;
     }
 
-    if (arg0->unk8) {
+    if (arg0->animationBoneData) {
         s16 temp_v0 = (local_arg1 < entity->padding) ? -1 : 0;
         var_t0 = local_arg1 & temp_v0;
         temp_v0 = var_t0;
@@ -2347,9 +2358,9 @@ void setModelAnimationEx(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short ar
 
             {
                 s32 i;
-                s32 count = getAnimationBoneCount(arg0->unk8, var_a1);
+                s32 count = getAnimationBoneCount(arg0->animationBoneData, var_a1);
                 for (i = 0; i < count; i++) {
-                    initBoneAnimationState(arg0->unk8, var_a1, (s16)i, arg0->unk4 + i);
+                    initBoneAnimationState(arg0->animationBoneData, var_a1, (s16)i, arg0->boneAnimationStates + i);
                 }
             }
 
@@ -2380,7 +2391,7 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
 
     temp = arg0->unk16;
 
-    if (arg0->unk8 == 0) {
+    if (arg0->animationBoneData == 0) {
         return 0;
     }
 
@@ -2391,20 +2402,20 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
     arg0->unk8C++;
     if (arg0->unk3E != 0) {
         temp = (arg0->unk3A != -1) ? arg0->unk3A : arg0->unk16;
-        s3 = getAnimationBoneCount(arg0->unk8, temp);
-        if (s3 >= 32) {
-            s3 = 31;
+        s3 = getAnimationBoneCount(arg0->animationBoneData, temp);
+        if (s3 >= SCENE_MODEL_BONE_SLOT_COUNT) {
+            s3 = SCENE_MODEL_MAX_ANIMATED_BONES;
         }
 
         if (arg1 == -1) {
             for (i = 0; i < s3; i++) {
-                s4 |= advanceBoneAnimation(arg0->unk8, temp, (s16)i, &arg0->unk4[i]);
+                s4 |= advanceBoneAnimation(arg0->animationBoneData, temp, (s16)i, &arg0->boneAnimationStates[i]);
                 s6 |= 1 << i;
                 arg0->unk90 |= s4 << i;
             }
         } else {
             for (i = 0; i < s3; i++) {
-                interpolateBoneAnimation(&arg0->unk4[i], arg1 & 0xFFFF);
+                interpolateBoneAnimation(&arg0->boneAnimationStates[i], arg1 & 0xFFFF);
             }
         }
     } else if (arg0->unk38 != -1) {
@@ -2413,9 +2424,9 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
         arg0->unk3E = -1;
         arg0->unk38 = -1;
 
-        s3 = getAnimationBoneCount(arg0->unk8, arg0->unk16);
+        s3 = getAnimationBoneCount(arg0->animationBoneData, arg0->unk16);
         for (i = 0; i < s3; i++) {
-            initBoneAnimationState(arg0->unk8, arg0->unk16, (s16)i, &arg0->unk4[i]);
+            initBoneAnimationState(arg0->animationBoneData, arg0->unk16, (s16)i, &arg0->boneAnimationStates[i]);
         }
     }
 
@@ -2481,40 +2492,40 @@ void updateModelGeometry(SceneModel *arg0) {
     assetGroup = &gameAssets[arg0->index];
     func_8006B084_6BC84(&arg0->unkF0, &arg0->matrix18, &worldMatrix);
 
-    if (arg0->unk8 != NULL) {
+    if (arg0->animationBoneData != NULL) {
         if (arg0->unk16 == -1) {
             return;
         }
-        animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk8, arg0->unk16);
-        boneCount = getAnimationBoneCount((AnimationBoneCountTable *)arg0->unk8, (s32)arg0->unk16);
-        if (boneCount >= 0x20) {
-            boneCount = 0x1F;
+        animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->animationBoneData, arg0->unk16);
+        boneCount = getAnimationBoneCount((AnimationBoneCountTable *)arg0->animationBoneData, (s32)arg0->unk16);
+        if (boneCount >= SCENE_MODEL_BONE_SLOT_COUNT) {
+            boneCount = SCENE_MODEL_MAX_ANIMATED_BONES;
         }
         for (i = 0; i < boneCount; i++, animData++) {
             u8 parent = animData->parentBone;
             if (parent == 0xFF) {
                 u8 bone = animData->boneIndex;
                 func_8006B084_6BC84(
-                    &arg0->unk4[bone].transform.previous,
+                    &arg0->boneAnimationStates[bone].transform.previous,
                     &worldMatrix,
-                    &((DisplayListObject *)arg0->unk0)[bone].transform
+                    &((DisplayListObject *)arg0->boneDisplayObjects)[bone].transform
                 );
             } else {
                 u8 bone = animData->boneIndex;
                 func_8006B084_6BC84(
-                    &arg0->unk4[bone].transform.previous,
-                    &((DisplayListObject *)arg0->unk0)[parent].transform,
-                    &((DisplayListObject *)arg0->unk0)[bone].transform
+                    &arg0->boneAnimationStates[bone].transform.previous,
+                    &((DisplayListObject *)arg0->boneDisplayObjects)[parent].transform,
+                    &((DisplayListObject *)arg0->boneDisplayObjects)[bone].transform
                 );
             }
         }
     } else {
-        boneCount = 0x20;
+        boneCount = SCENE_MODEL_BONE_SLOT_COUNT;
         i = 0;
         boneOffset = 0;
         do {
-            memcpy((void *)(boneOffset + (s32)arg0->unk0), &worldMatrix, 0x20U);
-            ((DisplayListObject *)(boneOffset + (s32)arg0->unk0))->transform.translation.y += arg0->unk44;
+            memcpy((void *)(boneOffset + (s32)arg0->boneDisplayObjects), &worldMatrix, 0x20U);
+            ((DisplayListObject *)(boneOffset + (s32)arg0->boneDisplayObjects))->transform.translation.y += arg0->unk44;
             i++;
             boneOffset += 0x3C;
         } while (i < boneCount);
@@ -2527,7 +2538,7 @@ void updateModelGeometry(SceneModel *arg0) {
             one = 1;
             byteOffset = 0;
             do {
-                boneTransform = (DisplayListObject *)((u8 *)arg0->unk0 + byteOffset);
+                boneTransform = (DisplayListObject *)((u8 *)arg0->boneDisplayObjects + byteOffset);
                 shouldDisplay = 1;
                 if (boneTransform->displayLists != NULL) {
                     if (i != 8) {
@@ -2536,10 +2547,11 @@ void updateModelGeometry(SceneModel *arg0) {
                         }
                     } else {
                         s8 animIdx = arg0->animationIndex;
-                        if ((animIdx != -1) && (arg0->unk9C != NULL)) {
-                            arg0->unk98->displayLists = (void *)((s32)arg0->unkA0 + (animIdx * 0x10));
-                            memcpy(arg0->unk98, boneTransform, 0x20U);
-                            boneTransform = (DisplayListObject *)arg0->unk98;
+                        if ((animIdx != -1) && (arg0->animationDataTable != NULL)) {
+                            arg0->specialAnimationDisplayObject->displayLists =
+                                (void *)((s32)arg0->animationDisplayLists + (animIdx * 0x10));
+                            memcpy(arg0->specialAnimationDisplayObject, boneTransform, 0x20U);
+                            boneTransform = (DisplayListObject *)arg0->specialAnimationDisplayObject;
                         }
                     }
                     if ((shouldDisplay != 0) && (arg0->partDisplayFlags & (one << i))) {
@@ -2561,17 +2573,21 @@ void updateModelGeometry(SceneModel *arg0) {
         if (arg0->shadowEnabled == 0) {
             if (arg0->renderEnabled != 0) {
                 shadowScale = (arg0->unk4F << 0xD) / 5;
-                if (arg0->unk0 != NULL && hasModelGraphicsData(arg0) == 0) {
-                    memcpy(&arg0->padding4[4], &((DisplayListObject *)arg0->unk0)->transform.translation.x, 0xCU);
+                if (arg0->boneDisplayObjects != NULL && hasModelGraphicsData(arg0) == 0) {
+                    memcpy(
+                        &arg0->padding4[4],
+                        &((DisplayListObject *)arg0->boneDisplayObjects)->transform.translation.x,
+                        0xCU
+                    );
                     scaleX = distance_3d(
-                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[0][0],
-                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[1][0],
-                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[2][0]
+                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[0][0],
+                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[1][0],
+                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[2][0]
                     );
                     scaleZ = distance_3d(
-                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[0][2],
-                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[1][2],
-                        (s32)((DisplayListObject *)arg0->unk0)->transform.m[2][2]
+                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[0][2],
+                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[1][2],
+                        (s32)((DisplayListObject *)arg0->boneDisplayObjects)->transform.m[2][2]
                     );
                 } else {
                     memcpy(&arg0->padding4[4], &arg0->matrix18.translation.x, 0xCU);

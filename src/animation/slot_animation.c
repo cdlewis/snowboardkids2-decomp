@@ -951,7 +951,11 @@ s32 spawnCutsceneMovementEffects(CutsceneSlotData *arg0, SceneModel *arg1) {
         } else {
             do {
                 for (i = 0; i < 4; i++) {
-                    transformVector(&gCharacterEffectSpawnPoints[i * 6], arg1->unk0->unk3C0, &transformedVecs[i]);
+                    transformVector(
+                        &gCharacterEffectSpawnPoints[i * 6],
+                        arg1->boneDisplayObjects->unk3C0,
+                        &transformedVecs[i]
+                    );
                 }
             } while (0);
         }
