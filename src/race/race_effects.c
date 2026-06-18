@@ -1473,14 +1473,14 @@ void initShotCrossItemCountDisplayTask(CrossHudCounterDisplayState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
     arg0->cachedValue = allocation->shootCrossTargetsHit;
-    arg0->spriteAsset = loadShootCrossSprites();
-    arg0->spriteIndex = 1;
+    arg0->sprite.spriteData = loadShootCrossSprites();
+    arg0->sprite.frameIndex = 1;
     if (arg0->layoutMode == 0) {
-        arg0->x = 0x68;
-        arg0->y = -0x60;
+        arg0->sprite.x = 0x68;
+        arg0->sprite.y = -0x60;
     } else {
-        arg0->x = -0x48;
-        arg0->y = -0x38;
+        arg0->sprite.x = -0x48;
+        arg0->sprite.y = -0x38;
     }
     arg0->flashCounter = 0;
     arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
@@ -1493,7 +1493,7 @@ void updateShotCrossItemCountDisplay(CrossHudCounterDisplayState *arg0) {
     GameState *allocation;
 
     allocation = getCurrentAllocation();
-    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->x);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->sprite);
 
     if (arg0->cachedValue != allocation->shootCrossTargetsHit) {
         arg0->flashCounter = 9;
@@ -1510,11 +1510,11 @@ void updateShotCrossItemCountDisplay(CrossHudCounterDisplayState *arg0) {
         arg0->flashCounter--;
     }
 
-    drawNumericString(buffer, arg0->x + 0x10, arg0->y + 0x10, 0xFF, arg0->digitAsset, 8, 1);
+    drawNumericString(buffer, arg0->sprite.x + 0x10, arg0->sprite.y + 0x10, 0xFF, arg0->digitAsset, 8, 1);
 }
 
 void cleanupShotCrossItemCountDisplayTask(CrossHudCounterDisplayState *arg0) {
-    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->sprite.spriteData = freeNodeMemory(arg0->sprite.spriteData);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
@@ -1951,14 +1951,14 @@ void initShotCrossSkillMeterDisplayTask(CrossHudCounterDisplayState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
     arg0->cachedValue = allocation->players->skillPoints;
-    arg0->spriteAsset = loadTrickCrossSprites();
-    arg0->spriteIndex = 3;
+    arg0->sprite.spriteData = loadTrickCrossSprites();
+    arg0->sprite.frameIndex = 3;
     if (arg0->layoutMode == 0) {
-        arg0->x = -0x10;
-        arg0->y = -0x60;
+        arg0->sprite.x = -0x10;
+        arg0->sprite.y = -0x60;
     } else {
-        arg0->x = -0x48;
-        arg0->y = -0x30;
+        arg0->sprite.x = -0x48;
+        arg0->sprite.y = -0x30;
     }
     arg0->flashCounter = 0;
     arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
@@ -1975,7 +1975,7 @@ void updateShotCrossSkillMeterDisplay(CrossHudCounterDisplayState *arg0) {
     s32 x;
 
     allocation = (GameState *)getCurrentAllocation();
-    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->x);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->sprite);
 
     if (arg0->cachedValue != allocation->players->skillPoints) {
         arg0->flashCounter = 9;
@@ -2010,12 +2010,12 @@ void updateShotCrossSkillMeterDisplay(CrossHudCounterDisplayState *arg0) {
         arg0->flashCounter = temp - 1;
     }
 
-    x = arg0->x + 0x10;
-    drawNumericString(buf, x - (strLen << 2), arg0->y + 8, 0xFF, arg0->digitAsset, 8, 1);
+    x = arg0->sprite.x + 0x10;
+    drawNumericString(buf, x - (strLen << 2), arg0->sprite.y + 8, 0xFF, arg0->digitAsset, 8, 1);
 }
 
 void cleanupShotCrossSkillMeterDisplayTask(CrossHudCounterDisplayState *arg0) {
-    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->sprite.spriteData = freeNodeMemory(arg0->sprite.spriteData);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 

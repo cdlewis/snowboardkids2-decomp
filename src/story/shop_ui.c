@@ -106,12 +106,7 @@ typedef struct {
 
 typedef struct {
     SpriteDisplayState digits[7];
-    s16 goldIconX;
-    s16 goldIconY;
-    void *goldIconAsset;
-    s16 unk5C;
-    s8 unk5E;
-    char pad5F;
+    SpriteRenderArg goldIcon;
     char goldAmountBuffer[8];
 } StoryMapShopGoldDisplayState;
 
@@ -870,11 +865,11 @@ void initStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
         arg0->digits[i].asset = digitSpriteAsset;
     }
 
-    arg0->goldIconX = 0x38;
-    arg0->goldIconY = 0x58;
-    arg0->unk5C = 0;
-    arg0->unk5E = 0;
-    arg0->goldIconAsset = goldIconAsset;
+    arg0->goldIcon.x = 0x38;
+    arg0->goldIcon.y = 0x58;
+    arg0->goldIcon.frameIndex = 0;
+    arg0->goldIcon.paletteIndex = 0;
+    arg0->goldIcon.spriteData = goldIconAsset;
     setCallback(&updateStoryMapShopGoldDisplay);
 }
 
@@ -912,12 +907,12 @@ void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
         digit++;
     } while (++i < 7);
 
-    enqueueCallbackBySlotIndex(8, 0, &renderSpriteFrameWithPalette, &arg0->goldIconX);
+    enqueueCallbackBySlotIndex(8, 0, &renderSpriteFrameWithPalette, &arg0->goldIcon);
 }
 
 void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     arg0->digits[0].asset = freeNodeMemory(arg0->digits[0].asset);
-    arg0->goldIconAsset = freeNodeMemory(arg0->goldIconAsset);
+    arg0->goldIcon.spriteData = freeNodeMemory(arg0->goldIcon.spriteData);
 }
 
 void initStoryMapShopItemPriceDisplay(SpriteDisplayState *arg0) {
@@ -1008,11 +1003,11 @@ void initStoryMapShopItemStatsDisplay(ItemStatsDisplay *display) {
     setCleanupCallback(cleanupStoryMapShopItemStatsDisplay);
 
     display->progressBarX = -0x24;
-    display->priceLabelX = -0x24;
-    display->priceLabelY = 0x1C;
+    display->priceLabelSprite.x = -0x24;
+    display->priceLabelSprite.y = 0x1C;
     display->progressBarY = 0;
-    display->spriteAsset = spriteAsset;
-    display->priceSpriteIndex = 4;
+    display->priceLabelSprite.spriteData = spriteAsset;
+    display->priceLabelSprite.frameIndex = 4;
 
     for (i = 0; i < 3; i++) {
         display->statLabels[i].y = 0x1C + (i * 8);
@@ -1053,7 +1048,7 @@ void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
         currentItem = state->unk5CA[state->unk5C8];
         isValidItem = (u32)currentItem < 0x80U;
         if (isValidItem != 0) {
-            enqueueCallbackBySlotIndex(8U, 1U, &renderSpriteFrame, &arg0->priceLabelX);
+            enqueueCallbackBySlotIndex(8U, 1U, &renderSpriteFrame, &arg0->priceLabelSprite);
         }
         if (state->unk5C5 != 2) {
             if (isValidItem != 0) {
@@ -1077,7 +1072,7 @@ void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
 
 void cleanupStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
     arg0->progressBarAsset = freeNodeMemory(arg0->progressBarAsset);
-    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->priceLabelSprite.spriteData = freeNodeMemory(arg0->priceLabelSprite.spriteData);
 }
 
 void initStoryMapShopSoldOutLabel(SpriteDisplayState *arg0) {

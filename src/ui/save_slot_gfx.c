@@ -128,10 +128,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ SaveSlotSpriteEntry *entries;
-    /* 0x04 */ s16 cursorX;
-    /* 0x06 */ s16 cursorY;
-    /* 0x08 */ void *spriteAsset;
-    /* 0x0C */ u16 animFrame;
+    /* 0x04 */ SpriteRenderArg cursorSprite;
 } SaveSlotGridState;
 
 typedef struct {
@@ -532,10 +529,10 @@ void initSaveSlotNameEntryGrid(SaveSlotGridState *state) {
         }
     }
 
-    state->cursorX = allocation->unkABE + 0x98;
-    state->cursorY = allocation->unkAC0 + 0x38;
-    state->spriteAsset = spriteSheet;
-    state->animFrame = 0x13;
+    state->cursorSprite.x = allocation->unkABE + 0x98;
+    state->cursorSprite.y = allocation->unkAC0 + 0x38;
+    state->cursorSprite.spriteData = spriteSheet;
+    state->cursorSprite.frameIndex = 0x13;
     setCallback(updateSaveSlotNameEntryGrid);
 }
 
@@ -572,20 +569,20 @@ void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
 
     screenState = allocation->unkAC6;
     if ((screenState == 8) | (screenState == 0xB)) {
-        arg0->cursorY = allocation->unkAC2 + 0x38;
+        arg0->cursorSprite.y = allocation->unkAC2 + 0x38;
     } else {
-        arg0->cursorY = allocation->unkAC0 + 0x38;
+        arg0->cursorSprite.y = allocation->unkAC0 + 0x38;
     }
 
     if (!(gGlobalFrameCounter & 7)) {
-        animFrame = arg0->animFrame + 1;
-        arg0->animFrame = animFrame;
+        animFrame = arg0->cursorSprite.frameIndex + 1;
+        arg0->cursorSprite.frameIndex = animFrame;
         if ((u32)(animFrame & 0xFFFF) >= 0x15U) {
-            arg0->animFrame = 0x13U;
+            arg0->cursorSprite.frameIndex = 0x13U;
         }
     }
 
-    enqueueCallbackBySlotIndex(8U, 1U, renderSpriteFrame, &arg0->cursorX);
+    enqueueCallbackBySlotIndex(8U, 1U, renderSpriteFrame, &arg0->cursorSprite);
 }
 
 void cleanupSaveSlotNameEntryGrid(SaveSlotCleanupArg *arg0) {

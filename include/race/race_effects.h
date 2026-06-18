@@ -365,11 +365,7 @@ typedef struct {
 
 typedef struct {
     void *digitAsset;
-    s16 x;
-    s16 y;
-    void *spriteAsset;
-    s16 spriteIndex;
-    u8 padE[0x2];
+    SpriteRenderArg sprite;
     s16 flashCounter;
     s16 cachedValue;
     s16 layoutMode;

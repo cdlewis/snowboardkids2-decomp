@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "graphics/sprite_rdp.h"
 
 typedef struct {
     s16 x;
@@ -12,11 +13,7 @@ typedef struct {
 
 typedef struct {
     void *progressBarAsset;
-    s16 priceLabelX;
-    s16 priceLabelY;
-    void *spriteAsset;
-    s16 priceSpriteIndex;
-    s16 unk0E;
+    SpriteRenderArg priceLabelSprite;
     StatTextLabel statLabels[3];
     s16 progressBarX;
     s16 progressBarY;
