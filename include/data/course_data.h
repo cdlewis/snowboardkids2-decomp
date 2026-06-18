@@ -1,3 +1,5 @@
+#pragma once
+
 #include "common.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"

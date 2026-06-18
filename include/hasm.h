@@ -1,5 +1,4 @@
-#ifndef HASM_H
-#define HASM_H
+#pragma once
 
 #define LEAF(x)                 \
     .align 2                   ;\
@@ -49,5 +48,3 @@
 #define LA(dst, address) \
     lui         dst, %hi(address); \
     addiu       dst, dst, %lo(address)
-
-#endif

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "common.h"
 #include "libaudio.h"
 #include "os_thread.h"

@@ -1,5 +1,4 @@
-#ifndef _1DC900_H_
-#define _1DC900_H_
+#pragma once
 
 #include "animation/easing_state.h"
 #include "data/data_table.h"
@@ -53,5 +52,3 @@ typedef struct {
 
 void initCreditsScrollingTextEffects(void *state);
 void updateCreditsScrollingTextEffects(CreditsScrollerState *s);
-
-#endif

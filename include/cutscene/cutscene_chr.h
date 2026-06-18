@@ -1,3 +1,5 @@
+#pragma once
+
 #include "common.h"
 #include "cutscene/cutscene_manager.h"
 

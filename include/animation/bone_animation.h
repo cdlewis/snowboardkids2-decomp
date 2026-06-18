@@ -1,3 +1,5 @@
+#pragma once
+
 #include "common.h"
 #include "gamestate.h"
 #include "math/geometry.h"

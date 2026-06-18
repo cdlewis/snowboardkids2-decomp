@@ -1,3 +1,5 @@
+#pragma once
+
 #include "common.h"
 
 #define SCREEN_WIDTH 320

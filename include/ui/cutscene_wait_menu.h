@@ -1,5 +1,4 @@
-#ifndef DC90_H
-#define DC90_H
+#pragma once
 
 #include "common.h"
 
@@ -39,5 +38,3 @@ typedef struct {
 } DC90TaskStruct;
 
 void initCutsceneWaitMenu(DC90TaskStruct *arg0);
-
-#endif

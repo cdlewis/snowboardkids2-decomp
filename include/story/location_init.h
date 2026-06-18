@@ -1,6 +1,3 @@
-#ifndef _199C0_H_
-#define _199C0_H_
+#pragma once
 
 void initStoryMapLocation(void);
-
-#endif

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "common.h"
 #include "data/data_table.h"
 

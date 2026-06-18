@@ -1,3 +1,5 @@
+#pragma once
+
 #include "common.h"
 #include "triggers/event_trigger.h"
 

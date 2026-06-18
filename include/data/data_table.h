@@ -1,5 +1,4 @@
-#ifndef _19E80_H_
-#define _19E80_H_
+#pragma once
 
 #include "common.h"
 
@@ -27,5 +26,3 @@ typedef struct {
 void getTableEntryByU16Index(DataTable_19E80 *, u16, OutputStruct_19E80 *);
 
 void getTableEntryByIndex(DataTable_19E80 *table, u32 entry_index, u8 sub_index, OutputStruct_19E80 *output);
-
-#endif

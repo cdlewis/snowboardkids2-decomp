@@ -1,5 +1,4 @@
-#ifndef _19AB0_H_
-#define _19AB0_H_
+#pragma once
 
 #include "common.h"
 
@@ -12,5 +11,3 @@ typedef struct {
 } StoryMapStateData;
 
 void initStoryMapState(void);
-
-#endif

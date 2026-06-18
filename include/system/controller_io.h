@@ -1,5 +1,4 @@
-#ifndef CONTROLLER_IO_H
-#define CONTROLLER_IO_H
+#pragma once
 
 #include "common.h"
 #include "common_bss.h"
@@ -30,5 +29,3 @@ void motorUpdate(void);
 void *pollEepromWriteAllAsync(void);
 void eepromProbeAsync(void);
 void *pollEepromProbeAsync(void);
-
-#endif // CONTROLLER_IO_H

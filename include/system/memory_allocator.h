@@ -1,5 +1,4 @@
-#ifndef _MEMORY_ALLOCATOR_H_
-#define _MEMORY_ALLOCATOR_H_
+#pragma once
 
 #include "common.h"
 
@@ -27,5 +26,3 @@ void *decrementNodeRefCount(void *node);
 void unlockNodeWithInterruptDisable(s32 *);
 void initializeMemoryAllocatorRegion(void);
 void cleanupUnusedNodes(void);
-
-#endif

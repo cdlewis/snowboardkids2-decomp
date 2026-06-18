@@ -1,3 +1,5 @@
+#pragma once
+
 #include "common.h"
 
 #define PHONE_EVENT_ID 6
