@@ -891,7 +891,7 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
 
     switch (gameState->raceType) {
         case RACE_TYPE_SHOOT_CROSS:
-            shotCrossScore = gameState->unk5A;
+            shotCrossScore = gameState->shootCrossTargetsHit;
             arg0->x = 0x10;
             arg0->y = -0x48;
             arg0->goldAmount = shotCrossScore * 0x12C;
@@ -1451,14 +1451,14 @@ void cleanupShotScoreDisplayTask(ShotScoreDisplayState *arg0) {
 
 void initShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
     getCurrentAllocation();
-    arg0->spriteAsset = loadAsset_34F9A0();
-    arg0->spriteIndex = 2;
-    arg0->spriteX = -0x88;
-    arg0->spriteY = -0x60;
-    arg0->spriteCount = 3;
-    arg0->hudX = -0x84;
-    arg0->hudY = -0x54;
-    arg0->spriteAssetCopy = arg0->spriteAsset;
+    arg0->ammoPanel.spriteData = loadShootCrossSprites();
+    arg0->ammoPanel.frameIndex = 2;
+    arg0->ammoPanel.x = -0x88;
+    arg0->ammoPanel.y = -0x60;
+    arg0->ammoIcon.frameIndex = 3;
+    arg0->ammoIcon.x = -0x84;
+    arg0->ammoIcon.y = -0x54;
+    arg0->ammoIcon.spriteData = arg0->ammoPanel.spriteData;
     arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
     setCleanupCallback(cleanupShotCrossScoreDisplayTask);
     setCallback(updateShotCrossScoreDisplay);
@@ -1469,12 +1469,12 @@ void updateShotCrossScoreDisplay(ShotCrossScoreDisplayState *arg0) {
 
     sprintf(buf, D_8009E8A8_9F4A8, arg0->player->primaryItemAmmo);
     drawNumericString(buf, -0x70, -0x54, 0xFF, arg0->digitAsset, arg0->player->playerIndex + 8, 0);
-    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
-    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->hudX);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->ammoPanel);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->ammoIcon);
 }
 
 void cleanupShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
-    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+    arg0->ammoPanel.spriteData = freeNodeMemory(arg0->ammoPanel.spriteData);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
@@ -1487,13 +1487,13 @@ void spawnShotCrossScoreDisplayTask(void *arg0) {
     }
 }
 
-void initShotCrossItemCountDisplayTask(ShotCrossItemCountDisplayState *arg0) {
+void initShotCrossItemCountDisplayTask(CrossHudCounterDisplayState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
-    arg0->cachedItemCount = allocation->unk5A;
-    arg0->spriteAsset = loadAsset_34F9A0();
+    arg0->cachedValue = allocation->shootCrossTargetsHit;
+    arg0->spriteAsset = loadShootCrossSprites();
     arg0->spriteIndex = 1;
-    if (arg0->displayMode == 0) {
+    if (arg0->layoutMode == 0) {
         arg0->x = 0x68;
         arg0->y = -0x60;
     } else {
@@ -1506,22 +1506,22 @@ void initShotCrossItemCountDisplayTask(ShotCrossItemCountDisplayState *arg0) {
     setCallback(updateShotCrossItemCountDisplay);
 }
 
-void updateShotCrossItemCountDisplay(ShotCrossItemCountDisplayState *arg0) {
+void updateShotCrossItemCountDisplay(CrossHudCounterDisplayState *arg0) {
     char buffer[0x10];
     GameState *allocation;
 
     allocation = getCurrentAllocation();
     enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->x);
 
-    if (arg0->cachedItemCount != allocation->unk5A) {
+    if (arg0->cachedValue != allocation->shootCrossTargetsHit) {
         arg0->flashCounter = 9;
-        arg0->cachedItemCount = allocation->unk5A;
+        arg0->cachedValue = allocation->shootCrossTargetsHit;
     }
 
     if (arg0->flashCounter & 1) {
-        sprintf(buffer, D_8009E89C_9F49C, allocation->unk5A);
+        sprintf(buffer, D_8009E89C_9F49C, allocation->shootCrossTargetsHit);
     } else {
-        sprintf(buffer, D_8009E8A0_9F4A0, allocation->unk5A);
+        sprintf(buffer, D_8009E8A0_9F4A0, allocation->shootCrossTargetsHit);
     }
 
     if (arg0->flashCounter != 0) {
@@ -1531,13 +1531,13 @@ void updateShotCrossItemCountDisplay(ShotCrossItemCountDisplayState *arg0) {
     drawNumericString(buffer, arg0->x + 0x10, arg0->y + 0x10, 0xFF, arg0->digitAsset, 8, 1);
 }
 
-void cleanupShotCrossItemCountDisplayTask(ShotCrossItemCountDisplayState *arg0) {
+void cleanupShotCrossItemCountDisplayTask(CrossHudCounterDisplayState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
 void spawnShotCrossItemCountDisplayTask(s16 arg0) {
-    ShotCrossItemCountDisplayState *task;
+    CrossHudCounterDisplayState *task;
 
     if (arg0 == 0) {
         task = scheduleTask(initShotCrossItemCountDisplayTask, 0, 1, 0xE6);
@@ -1545,7 +1545,7 @@ void spawnShotCrossItemCountDisplayTask(s16 arg0) {
         task = scheduleTask(initShotCrossItemCountDisplayTask, 1, 1, 0xE6);
     }
     if (task != NULL) {
-        task->displayMode = arg0;
+        task->layoutMode = arg0;
     }
 }
 
@@ -1698,7 +1698,7 @@ void updateBonusGoldDisplay(BonusGoldDisplayState *arg0) {
         if (allocation->players->skillPoints >= 0x12C) {
             var = 0x1388;
         }
-    } else if (allocation->unk5A == 0x14) {
+    } else if (allocation->shootCrossTargetsHit == 0x14) {
         var = 0x2710;
         if (allocation->players->primaryItemAmmo == 0xA) {
             var = 0x4E20;
@@ -1889,7 +1889,7 @@ void cleanupSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
 
 void initTrickPointsDisplayTask(TrickPointsDisplayState *state) {
     getCurrentAllocation();
-    state->spriteAsset = loadAsset_3505F0();
+    state->spriteAsset = loadTrickCrossSprites();
     state->y = -0x20;
     state->spriteFrame = 2;
     state->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
@@ -1965,13 +1965,13 @@ void showTrickPointsDisplay(s32 arg0) {
     }
 }
 
-void initShotCrossSkillMeterDisplayTask(ShotCrossItemCountDisplayState *arg0) {
+void initShotCrossSkillMeterDisplayTask(CrossHudCounterDisplayState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
-    arg0->cachedItemCount = allocation->players->skillPoints;
-    arg0->spriteAsset = loadAsset_3505F0();
+    arg0->cachedValue = allocation->players->skillPoints;
+    arg0->spriteAsset = loadTrickCrossSprites();
     arg0->spriteIndex = 3;
-    if (arg0->displayMode == 0) {
+    if (arg0->layoutMode == 0) {
         arg0->x = -0x10;
         arg0->y = -0x60;
     } else {
@@ -1984,7 +1984,7 @@ void initShotCrossSkillMeterDisplayTask(ShotCrossItemCountDisplayState *arg0) {
     setCallback(updateShotCrossSkillMeterDisplay);
 }
 
-void updateShotCrossSkillMeterDisplay(ShotCrossItemCountDisplayState *arg0) {
+void updateShotCrossSkillMeterDisplay(CrossHudCounterDisplayState *arg0) {
     GameState *allocation;
     s32 strLen;
     char buf[16];
@@ -1995,9 +1995,9 @@ void updateShotCrossSkillMeterDisplay(ShotCrossItemCountDisplayState *arg0) {
     allocation = (GameState *)getCurrentAllocation();
     enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->x);
 
-    if (arg0->cachedItemCount != allocation->players->skillPoints) {
+    if (arg0->cachedValue != allocation->players->skillPoints) {
         arg0->flashCounter = 9;
-        arg0->cachedItemCount = allocation->players->skillPoints;
+        arg0->cachedValue = allocation->players->skillPoints;
     }
 
     if (arg0->flashCounter & 1) {
@@ -2032,13 +2032,13 @@ void updateShotCrossSkillMeterDisplay(ShotCrossItemCountDisplayState *arg0) {
     drawNumericString(buf, x - (strLen << 2), arg0->y + 8, 0xFF, arg0->digitAsset, 8, 1);
 }
 
-void cleanupShotCrossSkillMeterDisplayTask(ShotCrossItemCountDisplayState *arg0) {
+void cleanupShotCrossSkillMeterDisplayTask(CrossHudCounterDisplayState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
 void spawnShotCrossSkillMeterDisplayTask(s16 arg0) {
-    ShotCrossItemCountDisplayState *task;
+    CrossHudCounterDisplayState *task;
 
     if (arg0 == 0) {
         task = scheduleTask(initShotCrossSkillMeterDisplayTask, 0, 1, 0xE6);
@@ -2046,7 +2046,7 @@ void spawnShotCrossSkillMeterDisplayTask(s16 arg0) {
         task = scheduleTask(initShotCrossSkillMeterDisplayTask, 1, 1, 0xE6);
     }
     if (task != NULL) {
-        task->displayMode = arg0;
+        task->layoutMode = arg0;
     }
 }
 
@@ -2055,17 +2055,17 @@ void initCrossRaceBadgeTask(CrossRaceBadgeState *arg0) {
 
     switch (allocation->raceType) {
         case RACE_TYPE_SPEED_CROSS:
-            arg0->mainSpriteAsset = loadAsset_350140();
+            arg0->mainSpriteAsset = loadSpeedCrossSprites();
             arg0->mainSpriteFrame = 0;
             arg0->bgSpriteFrame = 1;
             break;
         case RACE_TYPE_SHOOT_CROSS:
-            arg0->mainSpriteAsset = loadAsset_34F9A0();
+            arg0->mainSpriteAsset = loadShootCrossSprites();
             arg0->mainSpriteFrame = 4;
             arg0->bgSpriteFrame = 5;
             break;
         case RACE_TYPE_X_CROSS: // X_CROSS
-            arg0->mainSpriteAsset = loadAsset_3505F0();
+            arg0->mainSpriteAsset = loadTrickCrossSprites();
             arg0->mainSpriteFrame = 0;
             arg0->bgSpriteFrame = 1;
             break;

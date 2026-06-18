@@ -289,7 +289,7 @@ typedef struct {
     u8 unk56;
     u8 unk57;
     u16 shortcutActivationCounter;
-    u8 unk5A;
+    u8 shootCrossTargetsHit;
     u8 availableHomingProjectileSlots;
     u8 memoryPoolId;
     u8 unk5D;

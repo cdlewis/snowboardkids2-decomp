@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "gamestate.h"
+#include "graphics/sprite_rdp.h"
 #include "text/font_assets.h"
 
 typedef struct {
@@ -351,16 +352,8 @@ typedef struct {
 } PlayerItemDisplayState;
 
 typedef struct {
-    s16 spriteX;
-    s16 spriteY;
-    void *spriteAsset;
-    s16 spriteIndex;
-    u8 padA[0x2];
-    s16 hudX;
-    s16 hudY;
-    void *spriteAssetCopy;
-    s16 spriteCount;
-    u8 pad16[0x2];
+    SpriteRenderArg ammoPanel;
+    SpriteRenderArg ammoIcon;
     void *digitAsset;
     Player *player;
 } ShotCrossScoreDisplayState;
@@ -373,9 +366,9 @@ typedef struct {
     s16 spriteIndex;
     u8 padE[0x2];
     s16 flashCounter;
-    s16 cachedItemCount;
-    s16 displayMode;
-} ShotCrossItemCountDisplayState;
+    s16 cachedValue;
+    s16 layoutMode;
+} CrossHudCounterDisplayState;
 
 typedef struct {
     s16 x;
@@ -597,8 +590,8 @@ void updateShotScoreDisplay(ShotScoreDisplayState *);
 void cleanupShotScoreDisplayTask(ShotScoreDisplayState *);
 void updateShotCrossScoreDisplay(ShotCrossScoreDisplayState *arg0);
 void cleanupShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0);
-void updateShotCrossItemCountDisplay(ShotCrossItemCountDisplayState *arg0);
-void cleanupShotCrossItemCountDisplayTask(ShotCrossItemCountDisplayState *arg0);
+void updateShotCrossItemCountDisplay(CrossHudCounterDisplayState *arg0);
+void cleanupShotCrossItemCountDisplayTask(CrossHudCounterDisplayState *arg0);
 void updateSuccessMessageDisplay(SuccessMessageDisplayState *);
 void cleanupSuccessMessageDisplayTask(ShotCrossCountdownTimerState *);
 void updateRaceTimerDisplay(RaceTimerState *arg0);
@@ -610,5 +603,5 @@ void updateTrickPointsSlideIn(TrickPointsDisplayState *state);
 void renderTrickPointsDisplay(TrickPointsDisplayState *state);
 void updateTrickPointsSlideOut(TrickPointsDisplayState *state);
 void updateTrickPointsHold(TrickPointsDisplayState *state);
-void updateShotCrossSkillMeterDisplay(ShotCrossItemCountDisplayState *);
-void cleanupShotCrossSkillMeterDisplayTask(ShotCrossItemCountDisplayState *);
+void updateShotCrossSkillMeterDisplay(CrossHudCounterDisplayState *);
+void cleanupShotCrossSkillMeterDisplayTask(CrossHudCounterDisplayState *);

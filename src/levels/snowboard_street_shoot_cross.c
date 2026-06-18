@@ -85,7 +85,7 @@ Vtx D_800BBBB0_AD630[4] = {
 };
 
 void initShootCrossTargets(ShootCrossTargets *arg0) {
-    arg0->spriteAsset = loadAsset_34F9A0();
+    arg0->spriteAsset = loadShootCrossSprites();
     arg0->targetPositionData = loadCompressedData(&_4060A0_ROM_START, &_4060A0_ROM_END, 0x160);
     arg0->transformMatrices = NULL;
     setCleanupCallback(cleanupShootCrossTargets);

@@ -306,16 +306,16 @@ void *loadAsset_34CB50(void) {
     return loadCompressedData(&_34CB50_ROM_START, &_34CB50_ROM_END, 0x5E28);
 }
 
-void *loadAsset_34F9A0(void) {
-    return loadCompressedData(&_34F9A0_ROM_START, &_34F9A0_ROM_END, 0xE08);
+void *loadShootCrossSprites(void) {
+    return loadCompressedData(&shootCrossSprites_ROM_START, &shootCrossSprites_ROM_END, 0xE08);
 }
 
-void *loadAsset_350140(void) {
-    return loadCompressedData(&_350140_ROM_START, &_350140_ROM_END, 0x868);
+void *loadSpeedCrossSprites(void) {
+    return loadCompressedData(&speedCrossSprites_ROM_START, &speedCrossSprites_ROM_END, 0x868);
 }
 
-void *loadAsset_3505F0(void) {
-    return loadCompressedData(&_3505F0_ROM_START, &_3505F0_ROM_END, 0xA88);
+void *loadTrickCrossSprites(void) {
+    return loadCompressedData(&trickCrossSprites_ROM_START, &trickCrossSprites_ROM_END, 0xA88);
 }
 
 void *loadAsset_34F7E0(void) {

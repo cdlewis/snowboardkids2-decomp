@@ -101,7 +101,7 @@ typedef struct {
     void *introAnimationData;
     u8 pad18[64];
     u16 unk58;
-    u8 unk5A;
+    u8 shootCrossTargetsHit;
     u8 frameDelay;
     /* 0x5C */ u8 currentLevel;
     /* 0x5D */ u8 humanPlayerCount;
@@ -1644,7 +1644,7 @@ void handleShotCrossGameResult(void) {
         terminateTasksByTypeAndID(0, 1);
         spawnShotCrossItemCountDisplayTask(1);
 
-        itemsCollected = state->unk5A;
+        itemsCollected = state->shootCrossTargetsHit;
         score = itemsCollected * 300;
 
         if (itemsCollected == 0x14) {

@@ -1946,17 +1946,17 @@ segments:
     vram: 0
     start: 0x34F7E0
 
-  - name: _34F9A0
+  - name: shootCrossSprites
     type: bin
     vram: 0
     start: 0x34F9A0
 
-  - name: _350140
+  - name: speedCrossSprites
     type: bin
     vram: 0
     start: 0x350140
 
-  - name: _3505F0
+  - name: trickCrossSprites
     type: bin
     vram: 0
     start: 0x3505F0

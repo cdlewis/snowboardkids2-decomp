@@ -2806,7 +2806,7 @@ typedef struct {
     /* 0x14 */ u8 pad2[0x44];
     /* 0x58 */ u8 unk58;
     /* 0x59 */ u8 unk59;
-    /* 0x5A */ u8 unk5A;
+    /* 0x5A */ u8 shootCrossTargetsHit;
     /* 0x5B */ u8 pad3[0x1F];
     /* 0x7A */ u8 raceType;
     /* 0x7B */ u8 showResultHUD;
@@ -2847,7 +2847,7 @@ s32 updateRaceFinishWaitingStep(Player *player) {
                 }
                 break;
             case RACE_TYPE_SHOOT_CROSS:
-                if ((gameState->playerLost == 0) && (gameState->unk5A == 0x14)) {
+                if ((gameState->playerLost == 0) && (gameState->shootCrossTargetsHit == 0x14)) {
                     playerWon = 1;
                 }
                 break;
