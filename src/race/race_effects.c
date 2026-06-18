@@ -83,34 +83,16 @@ typedef struct {
     void *players;
 } SecondaryItemAllocation;
 
-typedef struct {
-    u8 pad[0x54];
-    s32 elapsedTicks;
-} SkillGameTimerAllocation;
-
 extern s32 gFirstPlaceGoldReward[];
 extern s32 gSecondPlaceGoldReward[];
 extern s32 gThirdPlaceGoldReward[];
 extern u16 gGlobalFrameCounter;
 
 // const char definitions appear later to keep the rodata gods happy
-const char sTimerFormatLow[];
-const char sTimerFormatNormal[];
 const char D_8009E868_9F468[];
 const char sGoldFormatShort[];
 const char sGoldFormatLong[];
-const char D_8009E89C_9F49C[];
-const char D_8009E8A0_9F4A0[];
-const char D_8009E8A8_9F4A8[];
-const char D_8009E928_9F528[];
 const char D_8009E894_9F494[];
-const char D_8009E8D4_9F4D4[];
-const char D_8009E8E0_9F4E0[];
-const char D_8009E8EC_9F4EC[];
-const char D_8009E8F8_9F4F8[];
-const char D_8009E904_9F504[];
-const char D_8009E914_9F514[];
-const char sTrickPointsFormat[];
 
 const char D_8009E868_9F468[] = "%d\a/\x04%d";
 
@@ -1114,10 +1096,10 @@ void updateTotalLapDisplay(TotalLapDisplayState *state) {
     player = state->player;
     if (player->finishPosition == 0 && (gFrameCounter & 1)) {
         lapCount = gGameSessionContext->playerBoardIds[player->playerIndex + 0x11];
-        sprintf(buffer, D_8009E89C_9F49C, lapCount);
+        sprintf(buffer, sTwoDigitFormat, lapCount);
     } else {
         lapCount = gGameSessionContext->playerBoardIds[state->player->playerIndex + 0x11];
-        sprintf(buffer, D_8009E8A0_9F4A0, lapCount);
+        sprintf(buffer, sTwoDigitHighlightFormat, lapCount);
     }
 
     state->unkE = (u8)state->alpha;
@@ -1467,7 +1449,7 @@ void initShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
 void updateShotCrossScoreDisplay(ShotCrossScoreDisplayState *arg0) {
     char buf[16];
 
-    sprintf(buf, D_8009E8A8_9F4A8, arg0->player->primaryItemAmmo);
+    sprintf(buf, sIntegerFormat, arg0->player->primaryItemAmmo);
     drawNumericString(buf, -0x70, -0x54, 0xFF, arg0->digitAsset, arg0->player->playerIndex + 8, 0);
     enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->ammoPanel);
     enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->ammoIcon);
@@ -1519,9 +1501,9 @@ void updateShotCrossItemCountDisplay(CrossHudCounterDisplayState *arg0) {
     }
 
     if (arg0->flashCounter & 1) {
-        sprintf(buffer, D_8009E89C_9F49C, allocation->shootCrossTargetsHit);
+        sprintf(buffer, sTwoDigitFormat, allocation->shootCrossTargetsHit);
     } else {
-        sprintf(buffer, D_8009E8A0_9F4A0, allocation->shootCrossTargetsHit);
+        sprintf(buffer, sTwoDigitHighlightFormat, allocation->shootCrossTargetsHit);
     }
 
     if (arg0->flashCounter != 0) {
@@ -1577,7 +1559,7 @@ void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0) {
 
     allocation = getCurrentAllocation();
 
-    if (allocation->unk79 == 0 && allocation->unk76 == 0) {
+    if (allocation->activeRaceEffectCount == 0 && allocation->raceUpdatePaused == 0) {
         PlayerInfo *player = allocation->timeRemaining;
         if ((player->animFlags & 0x80000) == 0) {
             if (arg0->timeRemaining != 0) {
@@ -1747,10 +1729,10 @@ void updateRaceTimerDisplay(RaceTimerState *arg0) {
 
     alloc = (Allocation *)getCurrentAllocation();
 
-    if (alloc->unk79 != 0) {
+    if (alloc->activeRaceEffectCount != 0) {
         goto check_time_flag;
     }
-    if (alloc->unk76 != 0) {
+    if (alloc->raceUpdatePaused != 0) {
         goto check_time_flag;
     }
     if (alloc->timeRemaining->animFlags & 0x80000) {
@@ -1774,10 +1756,10 @@ set_7E:
     if (arg0->elapsedTicks > 0x4309E) {
         goto after_7E;
     }
-    alloc->unk7E = 1;
+    alloc->raceTimerHoldFlag = 1;
 
 after_7E:
-    alloc->unk54 = arg0->elapsedTicks;
+    alloc->raceTimerElapsedTicks = arg0->elapsedTicks;
 
     minutes = arg0->elapsedTicks / 32400;
     seconds = (arg0->elapsedTicks % 32400) / 540;
@@ -1789,15 +1771,15 @@ after_7E:
 
     if (arg0->elapsedTicks > 0x431AB) {
         if (arg0->blinkCounter < 0x14) {
-            sprintf(sp20, D_8009E8D4_9F4D4, minutes, seconds);
+            sprintf(sp20, sSpeedCrossTimerBlinkColonFormat, minutes, seconds);
         } else {
-            sprintf(sp20, D_8009E8E0_9F4E0, minutes, seconds);
+            sprintf(sp20, sSpeedCrossTimerBlinkSpaceFormat, minutes, seconds);
         }
     } else {
         if (arg0->blinkCounter < 0x14) {
-            sprintf(sp20, D_8009E8EC_9F4EC, minutes, seconds);
+            sprintf(sp20, sSpeedCrossTimerNormalColonFormat, minutes, seconds);
         } else {
-            sprintf(sp20, D_8009E8F8_9F4F8, minutes, seconds);
+            sprintf(sp20, sSpeedCrossTimerNormalSpaceFormat, minutes, seconds);
         }
     }
 
@@ -1871,10 +1853,10 @@ void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     }
 
     if (arg0->timeRemaining < 0x14) {
-        timeFormat = D_8009E904_9F504;
+        timeFormat = sSkillGameResultTimerColonFormat;
         sprintf(timeString, timeFormat, minutes, seconds, frames);
     } else {
-        timeFormat = D_8009E914_9F514;
+        timeFormat = sSkillGameResultTimerSpaceFormat;
         sprintf(timeString, timeFormat, minutes, seconds, frames);
     }
 
@@ -2001,7 +1983,7 @@ void updateShotCrossSkillMeterDisplay(CrossHudCounterDisplayState *arg0) {
     }
 
     if (arg0->flashCounter & 1) {
-        sprintf(buf, D_8009E8A8_9F4A8, allocation->players->skillPoints);
+        sprintf(buf, sIntegerFormat, allocation->players->skillPoints);
         strLen = 0;
         ptr = buf;
         if (*ptr != 0) {
@@ -2011,7 +1993,7 @@ void updateShotCrossSkillMeterDisplay(CrossHudCounterDisplayState *arg0) {
             } while (*ptr != 0);
         }
     } else {
-        sprintf(buf, D_8009E928_9F528, allocation->players->skillPoints);
+        sprintf(buf, sTrickPointsHighlightFormat, allocation->players->skillPoints);
         strLen = 0;
         ptr = buf;
         if (*ptr != 0) {
@@ -2091,31 +2073,31 @@ void cleanupCrossRaceBadgeTask(void *arg0) {
 
 const char D_8009E894_9F494[] = "\x02%dG";
 
-const char D_8009E89C_9F49C[] = "%2d";
+const char sTwoDigitFormat[] = "%2d";
 
-const char D_8009E8A0_9F4A0[] = "\x02%2d";
+const char sTwoDigitHighlightFormat[] = "\x02%2d";
 
-const char D_8009E8A8_9F4A8[] = "%d";
+const char sIntegerFormat[] = "%d";
 
 const char sTimerFormatLow[] = "\x01%2.2d'%2.2d\"%2.2d";
 
 const char sTimerFormatNormal[] = "\x03%2.2d'%2.2d\"%2.2d";
 
-const char D_8009E8D4_9F4D4[] = "\x01%d:%2.2d";
+const char sSpeedCrossTimerBlinkColonFormat[] = "\x01%d:%2.2d";
 
-const char D_8009E8E0_9F4E0[] = "\x01%d %2.2d";
+const char sSpeedCrossTimerBlinkSpaceFormat[] = "\x01%d %2.2d";
 
-const char D_8009E8EC_9F4EC[] = "\x03%d:%2.2d";
+const char sSpeedCrossTimerNormalColonFormat[] = "\x03%d:%2.2d";
 
-const char D_8009E8F8_9F4F8[] = "\x03%d %2.2d";
+const char sSpeedCrossTimerNormalSpaceFormat[] = "\x03%d %2.2d";
 
-const char D_8009E904_9F504[] = "\x03%d:%2.2d %2.2d";
+const char sSkillGameResultTimerColonFormat[] = "\x03%d:%2.2d %2.2d";
 
-const char D_8009E914_9F514[] = "\x03%d %2.2d %2.2d";
+const char sSkillGameResultTimerSpaceFormat[] = "\x03%d %2.2d %2.2d";
 
 const char sTrickPointsFormat[] = "\x04%d";
 
-const char D_8009E928_9F528[] = "\x02%d";
+const char sTrickPointsHighlightFormat[] = "\x02%d";
 
 void initRaceHudTasks(void) {
     RaceHudInitState *hudState;

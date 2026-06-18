@@ -63,7 +63,7 @@ typedef struct {
     Unk10Element_52880 *unk10;
     u8 padding2[0x1C];
     u8 unk30[0x46];
-    u8 unk76;
+    u8 raceUpdatePaused;
     u8 padding3[0xF];
     u8 unk86;
 } Alloc_55650;
@@ -287,7 +287,7 @@ void updateSlapstickProjectile(Struct_52880 *arg0) {
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
 
         spawnSprayEffect(&arg0->pos, &arg0->vel, 2);
 
@@ -502,7 +502,7 @@ void updateParachuteProjectile(Struct_52880 *arg0) {
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
 
         spawnSprayEffect(&arg0->pos, &arg0->vel, 3);
 
@@ -721,7 +721,7 @@ void updateFryingPanProjectile(Struct_52880 *arg0) {
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
 
         spawnSprayEffect(&arg0->pos, &arg0->vel, 4);
 
@@ -953,7 +953,7 @@ void updateSnowmanProjectile(Struct_52880 *arg0) {
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
         spawnSprayEffect(&arg0->pos, (&arg0->vel), 5);
 
         arg0->vel.y += 0xFFFC0000;
@@ -1172,7 +1172,7 @@ void updateStarProjectile(Struct_52880 *arg0) {
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
 
         spawnSprayEffect(&arg0->pos, &arg0->vel, 6);
 
@@ -1384,7 +1384,7 @@ void updateHomingPanelProjectile(Struct_52880 *arg0) {
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
 
         spawnSprayEffect(&arg0->pos, (&arg0->vel), 7);
 
@@ -1542,7 +1542,7 @@ void updateFallingStarProjectile(Struct_52880 *projectile) {
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
         spawnSprayEffect(&projectile->pos, &projectile->vel, 6);
 
         projectile->vel.y -= 0x3000;
@@ -1666,7 +1666,7 @@ void updatePlayerGuidedStarProjectile(Struct_52880 *arg0) {
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
         spawnSprayEffect(&arg0->pos, (&arg0->vel), 6);
 
         s1 = &alloc->unk30;
@@ -1869,7 +1869,7 @@ void updateRandomEffectProjectile(RandomEffectProjectileUpdate *arg0) {
 
     alloc = (Alloc_55650 *)getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
 
         spawnSprayEffect(&arg0->pos, &arg0->unk24, 0x6A);
 
@@ -2040,7 +2040,7 @@ void updateGhostTargetProjectile(Struct_52880 *arg0) {
 
     s3 = (Alloc_55650 *)getCurrentAllocation();
 
-    if (s3->unk76 != 0) {
+    if (s3->raceUpdatePaused != 0) {
         goto skip_main;
     }
 
@@ -2186,7 +2186,7 @@ void updateShrinkProjectile(Struct_52880 *arg0) {
 
     alloc = getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
         vel = &arg0->vel;
         spawnSprayEffect(&arg0->pos, vel, 4);
         arg0->vel.y += 0xFFFC0000;

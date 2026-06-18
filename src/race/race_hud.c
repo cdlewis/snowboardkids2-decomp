@@ -44,7 +44,7 @@ typedef struct {
     /* 0x00 */ u8 padding[0x5B];
     /* 0x5B */ u8 availableHomingProjectileSlots;
     /* 0x5C */ u8 padding2[0x1A];
-    /* 0x76 */ u8 unk76;
+    /* 0x76 */ u8 raceUpdatePaused;
 } allocation_46080;
 
 typedef struct {
@@ -164,7 +164,7 @@ typedef struct {
     /* 0x30 */ u8 unk30[0x2C];
     /* 0x5C */ u8 unk5C;
     /* 0x5D */ u8 _pad5D[0x19];
-    /* 0x76 */ u8 unk76;
+    /* 0x76 */ u8 raceUpdatePaused;
 } GameState_46080;
 
 typedef struct {
@@ -246,9 +246,9 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 _pad[0x76];
-    /* 0x76 */ u8 unk76;
+    /* 0x76 */ u8 raceUpdatePaused;
     /* 0x77 */ u8 _pad2[2];
-    /* 0x79 */ u8 unk79;
+    /* 0x79 */ u8 activeRaceEffectCount;
 } Allocation_47D1C;
 
 typedef struct {
@@ -337,7 +337,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 _pad0[0x76];
-    /* 0x76 */ u8 unk76;
+    /* 0x76 */ u8 raceUpdatePaused;
 } AllocationData;
 
 typedef struct {
@@ -1478,7 +1478,7 @@ void updateFlyingSceneryHorizontalStep(FlyingSceneryState *state) {
 
     allocation = (Allocation_47D1C *)getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->raceUpdatePaused == 0) {
         transformVector2(D_80090B98_91798, state, &movement);
 
         state->displayListObject.transform.translation.x += movement.x;
@@ -1504,7 +1504,7 @@ void updateFlyingSceneryVerticalStep(FlyingSceneryState *state) {
 
     allocation = (Allocation_47D1C *)getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->raceUpdatePaused == 0) {
         transformVector2(D_80090BA4_917A4, state, &movement);
 
         state->displayListObject.transform.translation.x += movement.x;
@@ -1546,7 +1546,7 @@ void updateFlyingSceneryAscendingStep(FlyingSceneryState *state) {
     s32 i;
     Vec3i tempVec;
 
-    if (allocation->unk76 == 0) {
+    if (allocation->raceUpdatePaused == 0) {
         transformVector2(D_80090BA4_917A4, &state->displayListObject.transform, &tempVec);
         state->displayListObject.transform.translation.x += tempVec.x;
         state->displayListObject.transform.translation.y += tempVec.y;
@@ -1573,7 +1573,7 @@ void updateFlyingSceneryGlidingStep(FlyingSceneryState *state) {
     allocation = getCurrentAllocation();
     i = 0;
 
-    if (allocation->unk76 == 0) {
+    if (allocation->raceUpdatePaused == 0) {
         transformVector2(D_80090B98_91798, state, &vec);
 
         state->displayListObject.transform.translation.x += vec.x;
@@ -1604,7 +1604,7 @@ void updateFlyingSceneryTurningStep(FlyingSceneryState *state) {
 
     allocation = getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->raceUpdatePaused == 0) {
         rotation = state->rotationAngle;
         angle = rotation + 0x1080;
         state->rotationAngle = rotation + 0x80;
@@ -1633,7 +1633,7 @@ void updateFlyingSceneryReturnGlideStep(FlyingSceneryState *state) {
 
     allocation = (Allocation_47D1C *)getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->raceUpdatePaused == 0) {
         createYRotationMatrix(&state->displayListObject.transform, 0);
         transformVector2(D_80090B98_91798, state, &vec);
 
@@ -2151,7 +2151,7 @@ void updatePlayerHaloRising(PlayerHaloState *state) {
 
     allocation = (Allocation_47D1C *)getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->raceUpdatePaused == 0) {
         state->animationAngle += 0x40;
         if (state->animationAngle == 0x800) {
             state->frameTimer = 0;
@@ -2214,7 +2214,7 @@ void updatePlayerHaloAnimating(PlayerHaloState *state) {
 
         if (state->frameTimer == -1) {
             allocation = (Allocation_47D1C *)getCurrentAllocation();
-            allocation->unk79 = allocation->unk79 - 1;
+            allocation->activeRaceEffectCount = allocation->activeRaceEffectCount - 1;
             setCallback(updatePlayerHaloDescending);
         }
 
@@ -2266,7 +2266,7 @@ void updatePlayerHaloDescending(PlayerHaloState *state) {
 
     allocation = (Allocation_47D1C *)getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->raceUpdatePaused == 0) {
         state->animationAngle -= 0x40;
         if (state->animationAngle == 0) {
             terminateCurrentTask();
@@ -3206,7 +3206,7 @@ void updateHomingProjectileMovement(HomingProjectileState *arg0) {
     s32 i;
 
     s0 = (GameState_46080 *)getCurrentAllocation();
-    if (s0->unk76 == 0) {
+    if (s0->raceUpdatePaused == 0) {
         arg0->metadata.position.x += arg0->vel.x;
         arg0->metadata.position.y += arg0->vel.y;
         arg0->metadata.position.z += arg0->vel.z;
@@ -3347,7 +3347,7 @@ void updatePanelProjectileMovement(PanelProjectileState *arg0) {
     s32 i;
 
     s0 = (GameState_46080 *)getCurrentAllocation();
-    if (s0->unk76 == 0) {
+    if (s0->raceUpdatePaused == 0) {
         if (arg0->initFlag != 0) {
             arg0->initFlag = 0;
         } else {
@@ -3405,7 +3405,7 @@ void updatePanelProjectileImpact(PanelProjectileState *arg0) {
 
     alloc = (allocation_46080 *)getCurrentAllocation();
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
         if (alloc->availableHomingProjectileSlots < 10) {
             if (arg0->timer < 0x1194) {
                 if (arg0->timer >= 0x1F) {
@@ -3508,7 +3508,7 @@ void updateItemHomingProjectileMovement(ItemHomingProjectileState *arg0) {
     allocation = (GameState_46080 *)getCurrentAllocation();
     i = 0;
 
-    if (allocation->unk76 == 0) {
+    if (allocation->raceUpdatePaused == 0) {
         allocPlus30 = &allocation->unk30;
 
         arg0->pos.x += arg0->vel.x;
@@ -3549,7 +3549,7 @@ void updateItemHomingProjectileImpact(ItemHomingProjectileState *arg0) {
 
     allocation = (allocation_46080 *)getCurrentAllocation();
 
-    if (allocation->unk76 == 0) {
+    if (allocation->raceUpdatePaused == 0) {
         arg0->impactTimer--;
     }
 
@@ -3680,7 +3680,7 @@ void updateBossHomingProjectile(BossProjectileState *projectile) {
 
     gameState = getCurrentAllocation();
 
-    if (gameState->unk76 != 0) {
+    if (gameState->raceUpdatePaused != 0) {
         gameState = NULL;
         goto exit_loop;
     }
@@ -3841,7 +3841,7 @@ void updateBossHomingProjectileVariant1(BossProjectileVariant1State *arg0) {
 
     alloc = (GameState_46080 *)getCurrentAllocation();
 
-    if (alloc->unk76 != 0) {
+    if (alloc->raceUpdatePaused != 0) {
         s0 = NULL;
     } else {
         s0 = &alloc->unk30;
@@ -3983,7 +3983,7 @@ void updateBossHomingProjectileVariant2(BossProjectileState *arg0) {
 
     s0 = getCurrentAllocation();
 
-    if (s0->unk76 != 0) {
+    if (s0->raceUpdatePaused != 0) {
         i = 0;
         goto exit_loop;
     }

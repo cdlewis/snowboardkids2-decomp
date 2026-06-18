@@ -24,15 +24,20 @@ typedef struct {
     u8 pad0[0x10];
     PlayerInfo *timeRemaining;
     u8 pad14[0x40];
-    s32 unk54;
+    s32 raceTimerElapsedTicks;
     u8 pad58[0x1E];
-    u8 unk76;
+    u8 raceUpdatePaused;
     u8 pad77[0x2];
-    u8 unk79;
+    u8 activeRaceEffectCount;
     u8 pad7A[0x3];
     u8 timerExpired;
-    u8 unk7E;
+    u8 raceTimerHoldFlag;
 } Allocation;
+
+typedef struct {
+    u8 pad0[0x54];
+    s32 elapsedTicks;
+} SkillGameTimerAllocation;
 
 typedef struct {
     s16 x;
@@ -513,6 +518,20 @@ typedef struct {
     u8 padA[0x2];
     s16 flashState;
 } SuccessMessageDisplayState;
+
+extern const char sTwoDigitFormat[];
+extern const char sTwoDigitHighlightFormat[];
+extern const char sIntegerFormat[];
+extern const char sTimerFormatLow[];
+extern const char sTimerFormatNormal[];
+extern const char sSpeedCrossTimerBlinkColonFormat[];
+extern const char sSpeedCrossTimerBlinkSpaceFormat[];
+extern const char sSpeedCrossTimerNormalColonFormat[];
+extern const char sSpeedCrossTimerNormalSpaceFormat[];
+extern const char sSkillGameResultTimerColonFormat[];
+extern const char sSkillGameResultTimerSpaceFormat[];
+extern const char sTrickPointsFormat[];
+extern const char sTrickPointsHighlightFormat[];
 
 void showGoalBanner(s32 playerIndex);
 void showPlacementAnnouncement(u32 playerIndex, s32 placement);

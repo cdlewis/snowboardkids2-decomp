@@ -175,7 +175,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0x76];
-    u8 unk76;
+    u8 raceUpdatePaused;
 } Alloc_CharacterAttackEffect;
 
 extern u16 gGlobalFrameCounter;
@@ -877,7 +877,7 @@ void updateCharacterAttackEffect(CharacterAttackEffectState *arg0) {
     alloc = (Alloc_CharacterAttackEffect *)getCurrentAllocation();
     j = 0;
 
-    if (alloc->unk76 != 0) {
+    if (alloc->raceUpdatePaused != 0) {
         goto render;
     }
 

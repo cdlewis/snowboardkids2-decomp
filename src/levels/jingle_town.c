@@ -20,7 +20,7 @@ typedef struct {
     u8 _pad34[0x28];
     u8 unk5C;
     u8 _pad5D[0x19];
-    u8 unk76;
+    u8 raceUpdatePaused;
 } B4240AllocationStruct;
 
 typedef struct {
@@ -160,7 +160,7 @@ void handleTrainIdleState(JingleTownTrain *arg0) {
         setCallback(callback);
     }
 
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
         arg0->waitTimer--;
         pullPlayersToTrain(arg0);
     }
@@ -177,7 +177,7 @@ void handleTrainHopBehavior(JingleTownTrain *arg0) {
     s16 newRotation;
     u16 newUnk56;
     alloc = getCurrentAllocation();
-    angleDiff = alloc->unk76;
+    angleDiff = alloc->raceUpdatePaused;
     if (angleDiff == 0) {
         angleDiff = computeAngleToPosition(
             gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].x,
@@ -236,7 +236,7 @@ void handleTrainJumpBehavior(JingleTownTrain *arg0) {
     s32 *posPtr;
 
     alloc = getCurrentAllocation();
-    if (alloc->unk76 == 0) {
+    if (alloc->raceUpdatePaused == 0) {
         // Compute angle to target waypoint and clamp to [-128, 128] degrees
         angleDiff = (computeAngleToPosition(
                          gTrainWaypointData[arg0->trainIndex].waypoints[arg0->waypointIndex].x,
