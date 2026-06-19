@@ -134,12 +134,12 @@ typedef struct {
     /* 0x4D0 */ u8 padding_4D0[0x458];
     /* 0x928 */ Transform3D unk928;
     /* 0x948 */ u8 padding_948[0x8];
-    /* 0x950 */ Transform3D unk950;
+    /* 0x950 */ Transform3D modelTransform;
     Transform3D headingTransform;
     Transform3D orientationTransform;
     /* 0x9B0 */ Transform3D tiltTransform;
     /* 0x9D0 */ Transform3D unk9D0;
-    /* 0x9F0 */ Transform3D unk9F0;
+    /* 0x9F0 */ Transform3D orientationHeadingTransform;
     /* 0xA10 */ Vec3i shadowSamplePositions[9];
     /* 0xA7C */ Vec3i aiTarget;
     u8 _padA88[0x4];
@@ -155,12 +155,12 @@ typedef struct {
     s16 unkA9E;
     s32 baseMaxSpeed;
     /* 0xAA4 */ s32 maxSpeedCap;
-    s32 aiLaneWidth;
+    s32 smoothedSpeedCap;
     s32 speedHandicap;
     s32 lateralDeadzone;
     s32 baseGravity;
     s32 gravity;
-    s32 unkABC;
+    s32 baseAcceleration;
     u8 handling;
     u8 cornering;
     s16 hitReactionState;
@@ -233,9 +233,9 @@ typedef struct {
     u8 unkBC6;
     u8 isBossRacer;
     u8 stunCollisionCounter; /* increments during stunned state for increasing wall collision threshold */
-    u8 unkBC9;
-    u8 unkBCA;
-    u8 unkBCB;
+    u8 trackFaceType;
+    u8 trackFaceSubtype;
+    u8 trackFaceType1Timer;
     u8 surfaceInfo;
     s8 unkBCD;
     u8 chairliftFlags;

@@ -16,7 +16,7 @@
 
 typedef struct {
     u8 _pad0[0x9F0];
-    s16 unk9F0[3];
+    s16 orientationHeadingTransform[3];
     u8 _pad9F6[0x1C5];
     u8 unkBBB;
     u8 _padBBC[0x13];
@@ -31,9 +31,7 @@ typedef struct {
     u8 padding[0x2];
     /* 0x24 */ Func43CA4Unk28 *unk24;
     /* 0x28 */ Func43CA4Unk28 *player;
-    s32 offsetX;        /* X offset from player position */
-    s32 offsetY;        /* Y offset from player position */
-    s32 offsetZ;        /* Z offset from player position */
+    Vec3i offset;       /* Offset from player position */
     s16 animFrameIndex; /* Current animation frame index */
     s16 startDelay;     /* Timer for initial delay and animation frames */
     s16 displayTimer;   /* How long to display the orbiting star */
@@ -1193,9 +1191,9 @@ void updateStarEffect(StarEffectState *state) {
         state->alphaPulseDir = 0;
         state->sprite.alpha = 0;
         assetTable = effectTask->spriteData;
-        state->offsetY = 0x200000;
-        state->offsetX = 0;
-        state->offsetZ = 0;
+        state->offset.y = 0x200000;
+        state->offset.x = 0;
+        state->offset.z = 0;
         state->animFrameIndex = 0;
         state->playSoundFlag = 1;
         state->sprite.assetTemplate = (void *)((u8 *)assetTable + 0xF00);
@@ -1210,8 +1208,8 @@ void updateStarEffect(StarEffectState *state) {
                 state->displayTimer = 0x12C;
             }
 
-            state->offsetX = 0x140000;
-            state->offsetY = 0x190000;
+            state->offset.x = 0x140000;
+            state->offset.y = 0x190000;
             setCallbackWithContinue(orbitStarEffect);
         } else {
             setCallbackWithContinue(expandStarEffect);
@@ -1234,7 +1232,7 @@ void expandStarEffect(ExpandStarEffectState *arg0) {
             setCallback(contractStarEffect);
         }
 
-        transformVector(arg0->unk2C, arg0->unk24->unk9F0, &arg0->sprite.position);
+        transformVector(arg0->unk2C, arg0->unk24->orientationHeadingTransform, &arg0->sprite.position);
 
         if (arg0->playSoundFlag != 0) {
             arg0->playSoundFlag = 0;
@@ -1256,15 +1254,15 @@ void contractStarEffect(StarEffectState *state) {
     gameState = (EffectTaskState *)getCurrentAllocation();
     if (gameState->paused == 0) {
         updateStarEffectAnimation(state);
-        transformVector((s16 *)&state->offsetX, state->unk24->unk9F0, &state->sprite.position);
+        transformVector((s16 *)&state->offset, state->unk24->orientationHeadingTransform, &state->sprite.position);
 
         if (state->sprite.alpha == 0x40) {
             if (state->player->flyingAttackState != 0) {
-                state->offsetX = 0x300000;
-                state->offsetY = 0x300000;
+                state->offset.x = 0x300000;
+                state->offset.y = 0x300000;
             } else {
-                state->offsetX = 0x140000;
-                state->offsetY = 0x190000;
+                state->offset.x = 0x140000;
+                state->offset.y = 0x190000;
             }
 
             if (state->player->unkBBB == 0xC) {
@@ -1295,7 +1293,7 @@ void orbitStarEffect(OrbitStarEffectState *arg0) {
         updateStarEffectAnimation((StarEffectState *)arg0);
         arg0->rotationAngle += 0x100;
         rotateVectorY(arg0->orbitOffset, arg0->rotationAngle, &rotated);
-        transformVector((s16 *)&rotated, arg0->player->unk9F0, &arg0->sprite.position);
+        transformVector((s16 *)&rotated, arg0->player->orientationHeadingTransform, &arg0->sprite.position);
         if (arg0->playSoundFlag != 0) {
             arg0->playSoundFlag = 0;
             queueSoundAtPosition(&arg0->sprite.position, 0x1A);
@@ -1497,7 +1495,7 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
     }
 
     player = state->player;
-    if (player->unkBC9 == 3) {
+    if (player->trackFaceType == 3) {
         if (player->boostTimer != 0) {
             if (player->boostTimer < 0x3C) {
                 player->boostTimer = 0x3C;
@@ -1664,7 +1662,7 @@ void animateGoldStealApproach(GoldStealEffectState *arg0) {
         }
     }
 
-    transformVector((s16 *)&arg0->unk2C, arg0->recipientPlayer->unk9F0, &arg0->position);
+    transformVector((s16 *)&arg0->unk2C, arg0->recipientPlayer->orientationHeadingTransform, &arg0->position);
 
     if (arg0->unk4C != 0) {
         arg0->unk4C = 0;
@@ -1693,7 +1691,7 @@ void animateGoldStealLoop(GoldStealEffectState *arg0) {
         }
     }
 
-    transformVector((s16 *)&arg0->unk2C, arg0->recipientPlayer->unk9F0, &arg0->position);
+    transformVector((s16 *)&arg0->unk2C, arg0->recipientPlayer->orientationHeadingTransform, &arg0->position);
 
     for (i = 0; i < 4; i++) {
         enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
@@ -1734,7 +1732,7 @@ void animateGoldStealTransfer(GoldStealEffectState *arg0) {
     }
 
 transform_and_loop:
-    transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->unk9F0, &arg0->position);
+    transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->orientationHeadingTransform, &arg0->position);
 
     if (arg0->swingAngle == 0x80) {
         queueSoundAtPosition(&arg0->position, 0x1C);
@@ -1759,7 +1757,7 @@ void animateGoldStealRetreat(GoldStealEffectState *arg0) {
         }
     }
 
-    transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->unk9F0, &arg0->position);
+    transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->orientationHeadingTransform, &arg0->position);
 
     for (i = 0; i < 4; i++) {
         enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);
@@ -1777,7 +1775,7 @@ void animateGoldStealFinish(GoldStealEffectState *arg0) {
         }
     }
 
-    transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->unk9F0, &arg0->position);
+    transformVector((s16 *)&arg0->unk2C, arg0->victimPlayer->orientationHeadingTransform, &arg0->position);
 
     for (i = 0; i < 4; i++) {
         enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->unk4);

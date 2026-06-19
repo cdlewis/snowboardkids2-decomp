@@ -23,7 +23,7 @@ typedef struct {
 
 typedef struct {
     u8 _pad[0x9F0];
-    s16 unk9F0;
+    s16 orientationHeadingTransform;
     u8 _pad2[0x1C6];
     u8 unkBB8;
     u8 _pad3[0x25];
@@ -136,7 +136,7 @@ void updateRacePlayerIndicatorSprite(PlayerIndicatorSpriteTask *arg0) {
     } else {
         arg0->unk38 = 6;
     }
-    transformVector((s16 *)&gIndicatorSpriteOffset, &arg0->unk24->unk9F0, &arg0->unk4.unk4);
+    transformVector((s16 *)&gIndicatorSpriteOffset, &arg0->unk24->orientationHeadingTransform, &arg0->unk4.unk4);
     temp_s0 = &arg0->unk4;
     if (arg0->unk24->pathFlags >= 2 && (gFrameCounter & 1)) {
         loadAssetMetadataByIndex(temp_s0, arg0->unk0, 0x60, 0x14);

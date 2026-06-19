@@ -420,7 +420,7 @@ void processPlayerItemUsage(Player *player) {
         }
     }
 
-    if (player->unkBC9 == 3) {
+    if (player->trackFaceType == 3) {
         tryActivateFinishBoost(player);
     }
     if (!(player->animFlags & 0x80000)) {

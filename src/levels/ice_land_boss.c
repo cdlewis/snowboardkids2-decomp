@@ -76,8 +76,8 @@ typedef struct {
     u8 behaviorStep;
     u8 behaviorCounter;
     u8 _padBC1[0xBC9 - 0xBC1];
-    u8 unkBC9;
-    u8 unkBCA;
+    u8 trackFaceType;
+    u8 trackFaceSubtype;
     u8 _padBCB[1];
     u8 surfaceInfo;
     u8 _padBCD[0xBDB - 0xBCD];
@@ -153,7 +153,7 @@ typedef struct {
     s32 unkAB0;
     s32 unkAB4;
     s32 unkAB8;
-    s32 unkABC;
+    s32 baseAcceleration;
     u8 unkAC0;
     u8 unkAC1;
     s16 unkAC2;
@@ -1036,11 +1036,11 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     computePlayerTerrainAlignment((Player *)boss);
 
     if (boss->bossFlags & 0x10000) {
-        boss->unkBC9 = 0;
+        boss->trackFaceType = 0;
     } else {
-        findTrackFaceInSector(gameData, boss->sectorIndex, &boss->unk434, &boss->unkBC9, &boss->surfaceInfo);
-        boss->unkBCA = boss->unkBC9 >> 4;
-        boss->unkBC9 = boss->unkBC9 & 0xF;
+        findTrackFaceInSector(gameData, boss->sectorIndex, &boss->unk434, &boss->trackFaceType, &boss->surfaceInfo);
+        boss->trackFaceSubtype = boss->trackFaceType >> 4;
+        boss->trackFaceType = boss->trackFaceType & 0xF;
     }
 }
 
@@ -1055,8 +1055,8 @@ void updateIceLandBossLeanBoneTransforms(Player *arg0) {
     Transform3D *temp;
 
     hierarchy = getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
-    composeTransform3D(&arg0->orientationTransform, &arg0->headingTransform, &arg0->unk9F0);
-    composeTransform3D(&arg0->tiltTransform, &arg0->unk9F0, &arg0->unk950);
+    composeTransform3D(&arg0->orientationTransform, &arg0->headingTransform, &arg0->orientationHeadingTransform);
+    composeTransform3D(&arg0->tiltTransform, &arg0->orientationHeadingTransform, &arg0->modelTransform);
 
     for (i = 0; i < arg0->leanBoneCount; i++) {
         if (hierarchy[i].parentBone == 0xFF) {
@@ -1064,11 +1064,11 @@ void updateIceLandBossLeanBoneTransforms(Player *arg0) {
                 memcpy(&squashMatrix, &identityMatrix, sizeof(Transform3D));
                 squashMatrix.m[1][1] = arg0->squashStretchScale;
                 composeTransform3D(&arg0->unk488[hierarchy[i].boneIndex].transform.previous, &squashMatrix, &scratch);
-                composeTransform3D(&scratch, &arg0->unk950, &arg0->boneResults[hierarchy[i].boneIndex].mtx);
+                composeTransform3D(&scratch, &arg0->modelTransform, &arg0->boneResults[hierarchy[i].boneIndex].mtx);
             } else {
                 composeTransform3D(
                     &arg0->unk488[hierarchy[i].boneIndex].transform.previous,
-                    &arg0->unk950,
+                    &arg0->modelTransform,
                     &arg0->boneResults[hierarchy[i].boneIndex].mtx
                 );
             }

@@ -8,12 +8,12 @@
 // Each entry contains 6 performance parameters that get scaled/transformed
 // into player physics values (speed, acceleration, handling, etc.)
 typedef struct {
-    /* 0x0 */ u8 param0; // -> unkAA0 (scaled by complex formula)
+    /* 0x0 */ u8 param0; // -> baseMaxSpeed (scaled by complex formula)
     /* 0x1 */ u8 param1; // -> handling (offset +0x19)
     /* 0x2 */ u8 param2; // -> cornering (offset +1)
     /* 0x3 */ u8 param3; // -> lateralDeadzone (scaled, can be overridden to 0xC000)
     /* 0x4 */ u8 param4; // -> baseGravity (scaled)
-    /* 0x5 */ u8 param5; // -> unkABC (scaled)
+    /* 0x5 */ u8 param5; // -> baseAcceleration (scaled)
 } CharacterBoardStats;   // size = 0x6
 
 // Performance stats table: [18 snowboards][9 characters]
@@ -271,7 +271,7 @@ void applyCharacterBoardStats(Player *player) {
     }
 
     player->baseGravity = (boardStats[charId].param4 << 14) / 100 + 0x3000;
-    player->unkABC = (boardStats[charId].param5 << 17) / 100 + 0x28000;
+    player->baseAcceleration = (boardStats[charId].param5 << 17) / 100 + 0x28000;
 }
 
 s32 getCharacterBoardStatParam0(s32 characterId, s32 snowboardId) {

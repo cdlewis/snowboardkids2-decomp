@@ -64,7 +64,7 @@ typedef struct {
     u8 pad0[0x434];
     Vec3i worldPos; /* 0x434 */
     u8 pad1[0xBCA - 0x440];
-    u8 unkBCA; /* 0xBCA */
+    u8 trackFaceSubtype; /* 0xBCA */
     u8 pad2[0x101C - 0xBCB];
     Vec3i unk101C; /* 0x101C */
     u8 pad3[0x1C04 - 0x1028];
@@ -426,7 +426,7 @@ void updateChaseCamera(ChaseCameraState *camera) {
     if (gs->players == gs->players) {}
     memcpy(temp, (void *)(camera->playerIdx * (s32)sizeof(Player) + (s32)gs->players + 0x434), sizeof(Vec3i));
 
-    if (gs->players[camera->viewportIdx].unkBCA == 0) {
+    if (gs->players[camera->viewportIdx].trackFaceSubtype == 0) {
         queueBufferDataNoFlags((u8 *)&camera->lookAtMatrix, (s8)camera->viewportIdx);
     } else {
         setBufferData(&camera->lookAtMatrix, 0x30, (s32)(s8)camera->viewportIdx);
@@ -571,7 +571,7 @@ void updateScriptedCamera(ScriptedCameraState *camera) {
     computeLookAtMatrix((Vec3i *)camera, (Vec3i *)&camera->targetX, (Transform3D *)cameraMatrix);
     setViewportTransformById(0x64, cameraMatrix);
 
-    if (allocation->players->unkBCA == 0) {
+    if (allocation->players->trackFaceSubtype == 0) {
         queueBufferDataNoFlags(cameraMatrix, 0);
     } else {
         setBufferData(cameraMatrix, 0x30, 0);

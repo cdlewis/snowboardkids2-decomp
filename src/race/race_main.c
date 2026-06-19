@@ -587,10 +587,10 @@ void applyBoostVelocity(Player *player) {
     switch (player->boostState) {
         case 1:
         case 7:
-            if (player->unkBC9 == 3) {
-                transformVector2(gameState->unk48 + 0x1D4, player->unk9F0.m[0], &result);
+            if (player->trackFaceType == 3) {
+                transformVector2(gameState->unk48 + 0x1D4, player->orientationHeadingTransform.m[0], &result);
             } else {
-                transformVector2(gameState->unk48 + 0xB4, player->unk9F0.m[0], &result);
+                transformVector2(gameState->unk48 + 0xB4, player->orientationHeadingTransform.m[0], &result);
             }
             player->velocity.x += result.x;
             player->velocity.y += result.y;
@@ -598,10 +598,10 @@ void applyBoostVelocity(Player *player) {
             break;
         case 2:
         case 8:
-            if (player->unkBC9 == 3) {
-                transformVector2(gameState->unk48 + 0x1E0, player->unk9F0.m[0], &result);
+            if (player->trackFaceType == 3) {
+                transformVector2(gameState->unk48 + 0x1E0, player->orientationHeadingTransform.m[0], &result);
             } else {
-                transformVector2(gameState->unk48 + 0xC0, player->unk9F0.m[0], &result);
+                transformVector2(gameState->unk48 + 0xC0, player->orientationHeadingTransform.m[0], &result);
             }
             player->velocity.x += result.x;
             player->velocity.y += result.y;
@@ -610,7 +610,7 @@ void applyBoostVelocity(Player *player) {
         case 5: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->unk48 + 0xCC, player->unk9F0.m[0], &result);
+            transformVector2(gameState->unk48 + 0xCC, player->orientationHeadingTransform.m[0], &result);
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
@@ -622,7 +622,7 @@ void applyBoostVelocity(Player *player) {
         case 6: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->unk48 + 0xD8, player->unk9F0.m[0], &result);
+            transformVector2(gameState->unk48 + 0xD8, player->orientationHeadingTransform.m[0], &result);
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
@@ -877,7 +877,7 @@ void updateRacePlayer(Player *player) {
         player->maxSpeedCap -= (player->maxSpeedCap >> 2);
     }
 
-    diff = player->maxSpeedCap - player->aiLaneWidth;
+    diff = player->maxSpeedCap - player->smoothedSpeedCap;
     if (diff >= 0x1001) {
         diff = 0x1000;
     }
@@ -885,9 +885,9 @@ void updateRacePlayer(Player *player) {
         diff = -0x600;
     }
 
-    player->aiLaneWidth += diff;
-    if (player->boostState >= 5 && player->aiLaneWidth < player->maxSpeedCap) {
-        player->aiLaneWidth = player->maxSpeedCap;
+    player->smoothedSpeedCap += diff;
+    if (player->boostState >= 5 && player->smoothedSpeedCap < player->maxSpeedCap) {
+        player->smoothedSpeedCap = player->maxSpeedCap;
     }
 
     if (player->behaviorMode != 3) {
@@ -1924,7 +1924,7 @@ s32 beginPostTrickLaunchStep(Player *player) {
 
     player->behaviorCounter = 3;
     player->behaviorStep++;
-    D_800BAB40_AA9F0 = player->unkB8C + player->unkABC;
+    D_800BAB40_AA9F0 = player->unkB8C + player->baseAcceleration;
 
     if (*(volatile s32 *)&player->animFlags & 2) {
         D_800BAB44_AA9F4 = 0xFFFE0000;
@@ -3127,7 +3127,7 @@ void decayPlayerAirborneAngles(Player *player) {
     }
     result = savedAngle + decayAmount;
 
-    // Decay unk990.translation.x (tilt offset)
+    // Decay the orientation transform's lateral tilt offset.
     tiltOffset = player->orientationTransform.translation.x;
     player->steeringAngle = result;
     tiltDecay = -tiltOffset, savedTilt = tiltOffset;
@@ -3300,7 +3300,7 @@ s32 updateStunnedAirbornePhase(Player *player) {
     decayPlayerAirborneAngles(player);
     applyClampedVelocityToPosition(player);
     if (advancePlayerLeanAnimation(player, 8) != 0) {
-        player->aiLaneWidth = player->aiLaneWidth / 2;
+        player->smoothedSpeedCap = player->smoothedSpeedCap / 2;
         resetPlayerBehaviorToDefault(player);
     }
     setPlayerBodyPartAnimState(player, 3, 0);
@@ -3353,7 +3353,7 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
     decayPlayerAirborneAngles(player);
     applyClampedVelocityToPosition(player);
     if (advancePlayerLeanAnimation(player, 7) != 0) {
-        player->aiLaneWidth = player->aiLaneWidth / 2;
+        player->smoothedSpeedCap = player->smoothedSpeedCap / 2;
         resetPlayerBehaviorToDefault(player);
     }
     setPlayerBodyPartAnimState(player, 3, 0);
@@ -3572,7 +3572,7 @@ s32 updateEdgeFallRecoveryGetUpPhase(Player *arg0) {
     applyClampedVelocityToPosition(arg0);
     advancePlayerLeanAnimationAuto(arg0, 0xC);
 
-    if (arg0->unkBC9 != 1) {
+    if (arg0->trackFaceType != 1) {
         if (!(arg0->animFlags & 1)) {
             arg0->unkB8C++;
             if (arg0->unkB8C >= 0xB) {
@@ -5498,31 +5498,31 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
         (TrackGeometryFaceData *)&gs->gameData,
         player->sectorIndex,
         &player->worldPos,
-        &player->unkBC9,
+        &player->trackFaceType,
         &player->surfaceInfo
     );
 
-    player->unkBCA = player->unkBC9 >> 4;
-    player->unkBC9 &= 0xF;
+    player->trackFaceSubtype = player->trackFaceType >> 4;
+    player->trackFaceType &= 0xF;
 
     if (player->animFlags & 0x10000) {
-        player->unkBC9 = 0;
+        player->trackFaceType = 0;
     } else if (player->animFlags & 0x20000) {
-        player->unkBC9 = 0;
+        player->trackFaceType = 0;
         player->surfaceInfo &= 0xF0;
     }
 
-    if (player->unkBC9 == 1) {
-        if ((player->unkBCB & 0xFF) == 3) {
+    if (player->trackFaceType == 1) {
+        if ((player->trackFaceType1Timer & 0xFF) == 3) {
             setPlayerState80(player);
         } else {
-            player->unkBCB++;
+            player->trackFaceType1Timer++;
         }
     } else {
-        player->unkBCB = 0;
+        player->trackFaceType1Timer = 0;
     }
 
-    if (player->unkBC9 == 2) {
+    if (player->trackFaceType == 2) {
         setPlayerState100(player);
     }
 }
@@ -5555,42 +5555,46 @@ void renderPlayerModel(Player *player) {
     animData = getIndexedAnimationDataPtr(player->unk0, player->leanAnimIndex);
 
     if (player->animFlags & 8) {
-        composeTransform3D(&player->orientationTransform, &player->headingTransform, &player->unk9F0);
-        composeTransform3D(&player->tiltTransform, &player->unk9F0, &tmpMtx1);
+        composeTransform3D(
+            &player->orientationTransform,
+            &player->headingTransform,
+            &player->orientationHeadingTransform
+        );
+        composeTransform3D(&player->tiltTransform, &player->orientationHeadingTransform, &tmpMtx1);
         createYRotationMatrix(&gIdentityMatrix32, 0x1000);
         if (player->animFlags & 0x800) {
             composeTransform3D(&gIdentityMatrix32, &tmpMtx1, &tmpMtx2);
-            composeTransform3D(&player->unk9D0, &tmpMtx2, &player->unk950);
+            composeTransform3D(&player->unk9D0, &tmpMtx2, &player->modelTransform);
         } else {
-            composeTransform3D(&gIdentityMatrix32, &tmpMtx1, &player->unk950);
+            composeTransform3D(&gIdentityMatrix32, &tmpMtx1, &player->modelTransform);
         }
     } else {
-        mtxDst = &player->unk9F0;
+        mtxDst = &player->orientationHeadingTransform;
         composeTransform3D(&player->orientationTransform, &player->headingTransform, mtxDst);
         if (player->animFlags & 0x800) {
             composeTransform3D(&player->tiltTransform, mtxDst, &tmpMtx1);
-            composeTransform3D(&player->unk9D0, &tmpMtx1, &player->unk950);
+            composeTransform3D(&player->unk9D0, &tmpMtx1, &player->modelTransform);
         } else {
-            composeTransform3D(&player->tiltTransform, mtxDst, &player->unk950);
+            composeTransform3D(&player->tiltTransform, mtxDst, &player->modelTransform);
         }
     }
 
     if (player->behaviorFlags & 0x10) {
-        tmp = player->unk950.m[1][0] * player->squashStretchScale;
+        tmp = player->modelTransform.m[1][0] * player->squashStretchScale;
         if (tmp < 0) {
             tmp += 0x1FFF;
         }
-        player->unk950.m[1][0] = tmp >> 13;
-        diff = player->unk950.m[1][1] * player->squashStretchScale;
+        player->modelTransform.m[1][0] = tmp >> 13;
+        diff = player->modelTransform.m[1][1] * player->squashStretchScale;
         if (diff < 0) {
             diff += 0x1FFF;
         }
-        player->unk950.m[1][1] = diff >> 13;
-        trackHeight = player->unk950.m[1][2] * player->squashStretchScale;
+        player->modelTransform.m[1][1] = diff >> 13;
+        trackHeight = player->modelTransform.m[1][2] * player->squashStretchScale;
         if (trackHeight < 0) {
             trackHeight += 0x1FFF;
         }
-        player->unk950.m[1][2] = trackHeight >> 13;
+        player->modelTransform.m[1][2] = trackHeight >> 13;
     }
 
     for (i = 0; i < player->leanBoneCount; i++) {
@@ -5606,11 +5610,15 @@ void renderPlayerModel(Player *player) {
                         player->characterScaleXZ
                     );
                 }
-                composeTransform3D(tmpMtx1Ptr, &player->unk950, &player->boneResults[animData[i].boneIndex].mtx);
+                composeTransform3D(
+                    tmpMtx1Ptr,
+                    &player->modelTransform,
+                    &player->boneResults[animData[i].boneIndex].mtx
+                );
             } else {
                 composeTransform3D(
                     &player->unk488[animData[i].boneIndex].transform.previous,
-                    &player->unk950,
+                    &player->modelTransform,
                     &player->boneResults[animData[i].boneIndex].mtx
                 );
             }

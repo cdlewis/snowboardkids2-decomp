@@ -42,7 +42,7 @@ typedef struct {
     u8 padding_440_44C[0xC];
     s32 velocity[3];
     u8 padding_458_950[0x4F8];
-    s16 unk950;
+    s16 modelTransform;
     u8 padding2[0x242];
     u16 sectorIndex;
     u8 padding3[0x43];
@@ -243,10 +243,10 @@ void launchSlapstickProjectile(Struct_52880 *arg0) {
     alloc = getCurrentAllocation();
 
     playerIdx = arg0->ownerPlayerIdx;
-    transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
+    transformVector(alloc->unk48, &alloc->unk10[playerIdx].modelTransform, &arg0->pos);
 
     playerIdx = arg0->ownerPlayerIdx;
-    transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->vel);
+    transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].modelTransform, &arg0->vel);
 
     posX = arg0->pos.x;
     originX = arg0->vel.x;
@@ -458,10 +458,10 @@ void launchParachuteProjectile(Struct_52880 *arg0) {
     alloc = getCurrentAllocation();
 
     playerIdx = arg0->ownerPlayerIdx;
-    transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
+    transformVector(alloc->unk48, &alloc->unk10[playerIdx].modelTransform, &arg0->pos);
 
     playerIdx = arg0->ownerPlayerIdx;
-    transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->vel);
+    transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].modelTransform, &arg0->vel);
 
     temp_v0 = arg0->pos.x;
     temp_a2 = arg0->vel.x;
@@ -671,10 +671,10 @@ void launchFryingPanProjectile(Struct_52880 *arg0) {
     playerIdx = arg0->ownerPlayerIdx;
 
     if (alloc->unk10[playerIdx].flyingAttackState == 0) {
-        transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
+        transformVector(alloc->unk48, &alloc->unk10[playerIdx].modelTransform, &arg0->pos);
 
         playerIdx = arg0->ownerPlayerIdx;
-        transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->vel);
+        transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].modelTransform, &arg0->vel);
     } else {
         transformVector(&alloc->unk48[48], &alloc->unk10[playerIdx].unk74, &arg0->pos);
 
@@ -893,10 +893,10 @@ void launchSnowmanProjectile(Struct_52880 *arg0) {
     playerIdx = arg0->ownerPlayerIdx;
 
     if (alloc->unk10[playerIdx].flyingAttackState == 0) {
-        transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
+        transformVector(alloc->unk48, &alloc->unk10[playerIdx].modelTransform, &arg0->pos);
 
         playerIdx = arg0->ownerPlayerIdx;
-        transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->vel);
+        transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].modelTransform, &arg0->vel);
     } else {
         transformVector(&alloc->unk48[48], &alloc->unk10[playerIdx].unk74, &arg0->pos);
 
@@ -1339,10 +1339,10 @@ void launchHomingPanelProjectile(Struct_52880 *arg0) {
     alloc = getCurrentAllocation();
 
     playerIdx = arg0->ownerPlayerIdx;
-    transformVector(alloc->unk48, &alloc->unk10[playerIdx].unk950, &arg0->pos);
+    transformVector(alloc->unk48, &alloc->unk10[playerIdx].modelTransform, &arg0->pos);
 
     playerIdx = arg0->ownerPlayerIdx;
-    transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].unk950, &arg0->vel);
+    transformVector(&alloc->unk48[6], &alloc->unk10[playerIdx].modelTransform, &arg0->vel);
 
     temp_v0 = arg0->pos.x;
     temp_a2 = arg0->vel.x;
@@ -2000,10 +2000,10 @@ void launchGhostTargetProjectile(Struct_52880 *arg0) {
     alloc = getCurrentAllocation();
 
     index = arg0->ownerPlayerIdx;
-    transformVector(alloc->unk48, &alloc->unk10[index].unk950, &arg0->pos);
+    transformVector(alloc->unk48, &alloc->unk10[index].modelTransform, &arg0->pos);
 
     index = arg0->ownerPlayerIdx;
-    transformVector(&alloc->unk48[6], &alloc->unk10[index].unk950, &arg0->vel);
+    transformVector(&alloc->unk48[6], &alloc->unk10[index].modelTransform, &arg0->vel);
 
     arg0->vel.x = arg0->pos.x - arg0->vel.x;
     arg0->vel.y = arg0->pos.y - arg0->vel.y;

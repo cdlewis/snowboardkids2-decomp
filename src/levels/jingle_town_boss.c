@@ -166,14 +166,14 @@ void updateJingleTownBoss(Player *arg0) {
         arg0->maxSpeedCap = arg0->maxSpeedCap - (arg0->maxSpeedCap >> 2);
     }
 
-    speedDelta = arg0->maxSpeedCap - arg0->aiLaneWidth;
+    speedDelta = arg0->maxSpeedCap - arg0->smoothedSpeedCap;
     if (speedDelta >= 0x101) {
         speedDelta = 0x100;
     }
     if (speedDelta < -0x80) {
         speedDelta = -0x80;
     }
-    arg0->aiLaneWidth = arg0->aiLaneWidth + speedDelta;
+    arg0->smoothedSpeedCap = arg0->smoothedSpeedCap + speedDelta;
 
     arg0->animFlags &= 0xFFFBFFFF;
 
@@ -699,11 +699,11 @@ void updateJingleTownBossPositionAndTrackCollision(Player *arg0) {
     computePlayerTerrainAlignment(arg0);
 
     if (arg0->animFlags & 0x10000) {
-        arg0->unkBC9 = 0;
+        arg0->trackFaceType = 0;
     } else {
-        findTrackFaceInSector(gameData, arg0->sectorIndex, &arg0->worldPos, &arg0->unkBC9, &arg0->surfaceInfo);
-        arg0->unkBCA = arg0->unkBC9 >> 4;
-        arg0->unkBC9 = arg0->unkBC9 & 0xF;
+        findTrackFaceInSector(gameData, arg0->sectorIndex, &arg0->worldPos, &arg0->trackFaceType, &arg0->surfaceInfo);
+        arg0->trackFaceSubtype = arg0->trackFaceType >> 4;
+        arg0->trackFaceType = arg0->trackFaceType & 0xF;
     }
 }
 
@@ -713,18 +713,18 @@ void updateJingleTownBossModelTransforms(Player *arg0) {
     Transform3D pitchYawMatrix;
     s32 sp70[4];
 
-    // Combine rotation matrices: unk990 (Z rotation) * unk970 (Y rotation) = unk9F0
-    composeTransform3D(&arg0->orientationTransform, &arg0->headingTransform, &arg0->unk9F0);
-    // Combine with unk9B0 (X rotation) to get base transform (unk950)
-    composeTransform3D(&arg0->tiltTransform, &arg0->unk9F0, &arg0->unk950);
+    // Combine orientation and heading into the movement/render basis.
+    composeTransform3D(&arg0->orientationTransform, &arg0->headingTransform, &arg0->orientationHeadingTransform);
+    // Apply tilt to produce the model transform.
+    composeTransform3D(&arg0->tiltTransform, &arg0->orientationHeadingTransform, &arg0->modelTransform);
 
     if (arg0->behaviorFlags & 0x10) {
         // Apply vertical scale transformation during intro animation
         memcpy(&scaledMatrix, &identityMatrix, sizeof(Transform3D));
         scaledMatrix.m[1][1] = arg0->squashStretchScale;
-        composeTransform3D(&scaledMatrix, &arg0->unk950, &arg0->boneResults[0].mtx);
+        composeTransform3D(&scaledMatrix, &arg0->modelTransform, &arg0->boneResults[0].mtx);
     } else {
-        memcpy(&arg0->boneResults[0].mtx, &arg0->unk950, sizeof(Transform3D));
+        memcpy(&arg0->boneResults[0].mtx, &arg0->modelTransform, sizeof(Transform3D));
     }
 
     // Create pitch and yaw rotation matrix for the flying/floating transform

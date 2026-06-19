@@ -416,7 +416,7 @@ s8 determineAIPathChoice(Player *player) {
             ((s64)(-((s16)normalizedDirZ)) * playerToStartX) + ((s64)((s16)normalizedDirX) * playerToStartZ);
         trackLength = -((s32)(lateralDistance / LATERAL_OFFSET_SCALE));
 
-        if (trackLength < (player->aiLaneWidth * LANE_WIDTH_MULTIPLIER)) {
+        if (trackLength < (player->smoothedSpeedCap * LANE_WIDTH_MULTIPLIER)) {
             return ((AIPathPreference *)player->aiPathData)[player->sectorIndex].pathPreference;
         }
     }
