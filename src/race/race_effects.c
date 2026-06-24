@@ -193,7 +193,7 @@ else_branch:
     state->secondaryItemX = 0;
     state->secondaryItemY = -0x30;
     state->secondaryItemAsset = state->primaryItemAsset =
-        loadCompressedData(&_3F58E0_ROM_START, &_3F58E0_ROM_END, 0xB08);
+        loadCompressedData(&playerItemIconMultiplayerAsset_ROM_START, &playerItemIconMultiplayerAsset_ROM_END, 0xB08);
     state->unk28 = 0;
     state->charDisplayPtr = &state->charDisplayValue;
     state->charDisplayX = state->primaryItemX + 8;

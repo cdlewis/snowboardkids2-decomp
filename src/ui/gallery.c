@@ -809,7 +809,8 @@ void setupGalleryMenuState(void) {
     alloc->viewerComplete = 0;
     alloc->animTimer = -1;
     alloc->isExiting = 0;
-    alloc->tiledTextureData1 = loadCompressedData(&_67FB80_ROM_START, &_67FB80_ROM_END, 0xC010);
+    alloc->tiledTextureData1 =
+        loadCompressedData(&galleryBackgroundAsset_ROM_START, &galleryBackgroundAsset_ROM_END, 0xC010);
     alloc->textRenderer = loadTextRenderAsset(1);
     alloc->textTable = loadDmaAsset(4);
     alloc->spriteAsset = loadSpriteAssetData(8);

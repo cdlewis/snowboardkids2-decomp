@@ -25,14 +25,14 @@ void spawnTrickBurstEffect(u16 renderLayer, void *transformMatrix, s16 colorInde
 
 void initTrickBurstEffect(TrickBurstEffectTask *task) {
     setCleanupCallback(cleanupTrickBurstEffect);
-    task->base.segment1 = loadUncompressedData(&_2151D0_ROM_START, &_2151D0_ROM_END);
-    task->base.segment2 = loadCompressedData(&_663BE0_ROM_START, &_663BE0_ROM_END, 0x200);
+    task->base.segment1 = loadUncompressedData(&tiledTextureSegment1_ROM_START, &tiledTextureSegment1_ROM_END);
+    task->base.segment2 = loadCompressedData(&tiledTextureSegment2_ROM_START, &tiledTextureSegment2_ROM_END, 0x200);
     task->base.displayLists = &D_80089520;
     task->unk50 = 1;
     task->alpha = 0x800000;
     task->base.segment3 = 0;
     task->base.envColorAlpha = 0x80;
-    task->vertexData = loadCompressedData(&_6637B0_ROM_START, &_6637B0_ROM_END, 0x858);
+    task->vertexData = loadCompressedData(&tiledTextureTable_ROM_START, &tiledTextureTable_ROM_END, 0x858);
     task->scrollUUnion.scrollU = 0;
     task->scrollVUnion.scrollV = 0;
     task->scrollUSpeed = 0;

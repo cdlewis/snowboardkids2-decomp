@@ -202,26 +202,30 @@ void initScrollingTextureEffectTask(ScrollingTextureState *arg0) {
     setCleanupCallback(&cleanupScrollingTextureEffectTask);
 
     if (arg0->unk58 == 0) {
-        arg0->base.segment1 = loadUncompressedData(&_215120_ROM_START, &_215120_ROM_END);
-        arg0->base.segment2 = loadCompressedData(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
+        arg0->base.segment1 =
+            loadUncompressedData(&scrollingTextureSegment1_ROM_START, &scrollingTextureSegment1_ROM_END);
+        arg0->base.segment2 =
+            loadCompressedData(&scrollingTextureSegment2_ROM_START, &scrollingTextureSegment2_ROM_END, 0x200);
         arg0->base.segment3 = 0;
         arg0->base.displayLists = &D_80089510_8A110;
         arg0->paletteIndex = 0;
     } else if (arg0->unk58 != 1) {
-        arg0->base.segment1 = loadUncompressedData(&_215120_ROM_START, &_215120_ROM_END);
-        arg0->base.segment2 = loadCompressedData(&_6636F0_ROM_START, &_6636F0_ROM_END, 0x200);
+        arg0->base.segment1 =
+            loadUncompressedData(&scrollingTextureSegment1_ROM_START, &scrollingTextureSegment1_ROM_END);
+        arg0->base.segment2 =
+            loadCompressedData(&scrollingTextureSegment2_ROM_START, &scrollingTextureSegment2_ROM_END, 0x200);
         arg0->base.segment3 = 0;
         arg0->base.displayLists = &D_80089510_8A110;
         arg0->paletteIndex = 0;
     } else {
-        arg0->base.segment1 = loadUncompressedData(&_2151D0_ROM_START, &_2151D0_ROM_END);
-        arg0->base.segment2 = loadCompressedData(&_663BE0_ROM_START, &_663BE0_ROM_END, 0x200);
+        arg0->base.segment1 = loadUncompressedData(&tiledTextureSegment1_ROM_START, &tiledTextureSegment1_ROM_END);
+        arg0->base.segment2 = loadCompressedData(&tiledTextureSegment2_ROM_START, &tiledTextureSegment2_ROM_END, 0x200);
         arg0->base.displayLists = &D_80089520;
         arg0->base.segment3 = 0;
         arg0->paletteIndex = 1;
     }
 
-    arg0->textureTable = loadCompressedData(&_6637B0_ROM_START, &_6637B0_ROM_END, 0x858);
+    arg0->textureTable = loadCompressedData(&tiledTextureTable_ROM_START, &tiledTextureTable_ROM_END, 0x858);
     arg0->tileScrollU = 0;
     arg0->tileScrollV = 0;
     arg0->unk48 = 0;

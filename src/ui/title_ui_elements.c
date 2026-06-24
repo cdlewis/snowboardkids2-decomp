@@ -66,7 +66,7 @@ void initControllerSlotDisplay(ControllerSlotState *state) {
     void *spriteAsset;
 
     gameState = (GameState *)getCurrentAllocation();
-    spriteAsset = loadCompressedData(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
+    spriteAsset = loadCompressedData(&titleScreenSprites_ROM_START, &titleScreenSprites_ROM_END, 0x2238);
     setCleanupCallback(cleanupControllerSlotDisplay);
 
     for (i = 0; i < gameState->unk3BC; i++) {
@@ -158,7 +158,7 @@ void cleanupControllerSlotDisplay(void **arg0) {
 void func_80016728_17328(Struct16728 *arg0) {
     void *dmaResult;
 
-    dmaResult = loadCompressedData(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
+    dmaResult = loadCompressedData(&titleScreenSprites_ROM_START, &titleScreenSprites_ROM_END, 0x2238);
     setCleanupCallback(cleanupPressStartPrompt);
     arg0->unk0 = 0x58;
     arg0->unk2 = 0x30;
