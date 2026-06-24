@@ -4148,182 +4148,182 @@ segments:
     vram: 0
     start: 0x684630
 
-  - name: _6848B0
+  - name: MUSIC_BANK_UNUSED_01
     type: bin
     vram: 0
     start: 0x6848B0
 
-  - name: _686740
+  - name: MUSIC_BANK_CHARACTER_SELECT
     type: bin
     vram: 0
     start: 0x686740
 
-  - name: _686D40
+  - name: MUSIC_BANK_STORY_INTRO
     type: bin
     vram: 0
     start: 0x686D40
 
-  - name: _687070
+  - name: MUSIC_BANK_STORY_OVERWORLD
     type: bin
     vram: 0
     start: 0x687070
 
-  - name: _6884D0
+  - name: MUSIC_BANK_GALLERY
     type: bin
     vram: 0
     start: 0x6884D0
 
-  - name: _688950
+  - name: MUSIC_BANK_OPTIONS_MENU
     type: bin
     vram: 0
     start: 0x688950
 
-  - name: _688C40
+  - name: MUSIC_BANK_RACE_INTRO
     type: bin
     vram: 0
     start: 0x688C40
 
-  - name: _688F30
+  - name: MUSIC_BANK_RESULT_WIN
     type: bin
     vram: 0
     start: 0x688F30
 
-  - name: _689220
+  - name: MUSIC_BANK_RESULT_LOSE
     type: bin
     vram: 0
     start: 0x689220
 
-  - name: _689460
+  - name: MUSIC_BANK_RESULT_AWARD
     type: bin
     vram: 0
     start: 0x689460
 
-  - name: _6897C0
+  - name: MUSIC_BANK_CREDITS
     type: bin
     vram: 0
     start: 0x6897C0
 
-  - name: _68B4A0
+  - name: MUSIC_BANK_COURSE_SUNNY_MOUNTAIN
     type: bin
     vram: 0
     start: 0x68B4A0
 
-  - name: _68D260
+  - name: MUSIC_BANK_COURSE_SPEED_CROSS
     type: bin
     vram: 0
     start: 0x68D260
 
-  - name: _68F7F0
+  - name: MUSIC_BANK_COURSE_WENDYS_HOUSE
     type: bin
     vram: 0
     start: 0x68F7F0
 
-  - name: _691680
+  - name: MUSIC_BANK_COURSE_LINDAS_CASTLE
     type: bin
     vram: 0
     start: 0x691680
 
-  - name: _693CE0
+  - name: MUSIC_BANK_COURSE_CRAZY_JUNGLE
     type: bin
     vram: 0
     start: 0x693CE0
 
-  - name: _6951A0
+  - name: MUSIC_BANK_COURSE_JINGLE_TOWN
     type: bin
     vram: 0
     start: 0x6951A0
 
-  - name: _696A60
+  - name: MUSIC_BANK_COURSE_STARLIGHT_HIGHWAY
     type: bin
     vram: 0
     start: 0x696A60
 
-  - name: _6989D0
+  - name: MUSIC_BANK_COURSE_TURTLE_ISLAND
     type: bin
     vram: 0
     start: 0x6989D0
 
-  - name: _699E00
+  - name: MUSIC_BANK_COURSE_X_CROSS
     type: bin
     vram: 0
     start: 0x699E00
 
-  - name: _69D1D0
+  - name: MUSIC_BANK_COURSE_HAUNTED_HOUSE
     type: bin
     vram: 0
     start: 0x69D1D0
 
-  - name: _69E750
+  - name: MUSIC_BANK_COURSE_ICE_LAND
     type: bin
     vram: 0
     start: 0x69E750
 
-  - name: _69FFA0
+  - name: MUSIC_BANK_COURSE_ICE_LAND_BOSS
     type: bin
     vram: 0
     start: 0x69FFA0
 
-  - name: _6A1650
+  - name: MUSIC_BANK_UNUSED_18
     type: bin
     vram: 0
     start: 0x6A1650
 
-  - name: _6A2150
+  - name: MUSIC_BANK_STORY_MAP
     type: bin
     vram: 0
     start: 0x6A2150
 
-  - name: _6A37D0
+  - name: MUSIC_BANK_UNUSED_1A
     type: bin
     vram: 0
     start: 0x6A37D0
 
-  - name: _6A3E30
+  - name: MUSIC_BANK_UNUSED_1B
     type: bin
     vram: 0
     start: 0x6A3E30
 
-  - name: _6A4780
+  - name: MUSIC_BANK_TITLE_SCREEN
     type: bin
     vram: 0
     start: 0x6A4780
 
-  - name: _6A4FF0
+  - name: MUSIC_BANK_UNUSED_1D
     type: bin
     vram: 0
     start: 0x6A4FF0
 
-  - name: _6A5E20
+  - name: MUSIC_BANK_UNUSED_1E
     type: bin
     vram: 0
     start: 0x6A5E20
 
-  - name: _6A6510
+  - name: MUSIC_BANK_COURSE_BOSS
     type: bin
     vram: 0
     start: 0x6A6510
 
-  - name: _6A7210
+  - name: MUSIC_BANK_RACE_DEMO
     type: bin
     vram: 0
     start: 0x6A7210
 
-  - name: _6A83F0
+  - name: AUDIO_PTR_BANK
     type: bin
     vram: 0
     start: 0x6A83F0
 
-  - name: _6B6410
+  - name: MUSIC_SONG_DATA_A
     type: bin
     vram: 0
     start: 0x6B6410
 
-  - name: _6BA350
+  - name: MUSIC_SONG_DATA_B
     type: bin
     vram: 0
     start: 0x6BA350
 
-  - name: _6C03F0
+  - name: MUSIC_SONG_DATA_C
     type: bin
     vram: 0
     start: 0x6C03F0
@@ -4333,17 +4333,17 @@ segments:
     vram: 0
     start: 0x6C6300
 
-  - name: _8E6B50
+  - name: MUSIC_PTR_BANK_A
     type: bin
     vram: 0
     start: 0x8E6B50
 
-  - name: _B19320
+  - name: MUSIC_PTR_BANK_C
     type: bin
     vram: 0
     start: 0xB19320
 
-  - name: _C54370
+  - name: MUSIC_PTR_BANK_B
     type: bin
     vram: 0
     start: 0xC54370
