@@ -47,12 +47,12 @@ typedef struct {
 } CreditsModelPosition;
 
 static asset D_8008BFA0_8CBA0[6] = {
-    { &_619E10_ROM_START, &_619E10_ROM_END, 0x9578 },
-    { &_621390_ROM_START, &_621390_ROM_END, 0x9578 },
-    { &_6280F0_ROM_START, &_6280F0_ROM_END, 0x9578 },
-    { &_62F2F0_ROM_START, &_62F2F0_ROM_END, 0x9578 },
-    { &_635AB0_ROM_START, &_635AB0_ROM_END, 0x9578 },
-    { &_63C9F0_ROM_START, &_63C9F0_ROM_END, 0x9578 },
+    { &CREDITS_TEXT_PALETTE_DATA_00_ROM_START, &CREDITS_TEXT_PALETTE_DATA_00_ROM_END, 0x9578 },
+    { &CREDITS_TEXT_PALETTE_DATA_01_ROM_START, &CREDITS_TEXT_PALETTE_DATA_01_ROM_END, 0x9578 },
+    { &CREDITS_TEXT_PALETTE_DATA_02_ROM_START, &CREDITS_TEXT_PALETTE_DATA_02_ROM_END, 0x9578 },
+    { &CREDITS_TEXT_PALETTE_DATA_03_ROM_START, &CREDITS_TEXT_PALETTE_DATA_03_ROM_END, 0x9578 },
+    { &CREDITS_TEXT_PALETTE_DATA_04_ROM_START, &CREDITS_TEXT_PALETTE_DATA_04_ROM_END, 0x9578 },
+    { &CREDITS_TEXT_PALETTE_DATA_05_ROM_START, &CREDITS_TEXT_PALETTE_DATA_05_ROM_END, 0x9578 },
 };
 
 s32 padding[2] = { 0, 0 };
@@ -164,7 +164,7 @@ void func_80003EE0_4AE0(void) {
     taskMemory->unk968 = loadDmaAsset(3);
     taskMemory->cornerDecorationAsset =
         loadCompressedData(&cornerDecorationAsset_ROM_START, &cornerDecorationAsset_ROM_END, 0x2448);
-    taskMemory->unk95C = loadCompressedData(&_49BA20_ROM_START, &_49BA20_ROM_END, 0x2B0);
+    taskMemory->unk95C = loadCompressedData(&CREDITS_SUBTITLE_DATA_ROM_START, &CREDITS_SUBTITLE_DATA_ROM_END, 0x2B0);
 
     for (i = 0; i < 6; i++) {
         taskMemory->unk9B8[i] =
