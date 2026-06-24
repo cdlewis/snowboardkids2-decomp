@@ -12,7 +12,7 @@
 #include "system/task_scheduler.h"
 #include "ui/player_select_sprites.h"
 
-USE_OVERLAY(_1DB7A0);
+USE_OVERLAY(PLAYER_SELECT_SPRITES_OVERLAY);
 
 u8 gPlayerSlotDefaults[] = { 0x00, 0x02, 0x05, 0x01, 0x00, 0x00, 0x00, 0x00,
                              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -33,7 +33,7 @@ void initPlayerCountSelectState(void) {
 
     state = allocateTaskMemory(sizeof(PlayerCountSelectState));
 
-    LOAD_OVERLAY(_1DB7A0);
+    LOAD_OVERLAY(PLAYER_SELECT_SPRITES_OVERLAY);
 
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
     state->frameCounter = 0;

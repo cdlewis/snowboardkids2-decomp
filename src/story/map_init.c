@@ -13,7 +13,7 @@
 #include "system/task_scheduler.h"
 #include "ui/character_select_sprites.h"
 
-USE_OVERLAY(_1DA660)
+USE_OVERLAY(CHARACTER_SELECT_SPRITES_OVERLAY)
 USE_OVERLAY(characterSelectBoardTexture)
 USE_OVERLAY(okPromptSprites)
 
@@ -62,7 +62,7 @@ void storyMapClearLocationArrivalsIfNoActivePlayers(void);
 void storyMapRevertBlockedLocationIndex(s8 *);
 
 void loadOverlay_1BBA0(void) {
-    LOAD_OVERLAY(_1DA660)
+    LOAD_OVERLAY(CHARACTER_SELECT_SPRITES_OVERLAY)
     setGameStateHandler(&initStoryMap);
 }
 

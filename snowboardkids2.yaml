@@ -1090,7 +1090,7 @@ segments:
     vram: 0
     start: 0x1DA4F0
 
-  - name: _1DA660
+  - name: CHARACTER_SELECT_SPRITES_OVERLAY
     type: code
     vram: 0x800B00C0
     start: 0x1DA660
@@ -1100,7 +1100,7 @@ segments:
       - [0x1DA660, c, ui/character_select_sprites]
       - [0x1DB6E0, .data, ui/character_select_sprites]
 
-  - name: _1DB7A0
+  - name: PLAYER_SELECT_SPRITES_OVERLAY
     type: code
     vram: 0x800B00C0
     start: 0x1DB7A0
