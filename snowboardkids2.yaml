@@ -2156,57 +2156,57 @@ segments:
     vram: 0
     start: 0x39E710
 
-  - name: _3A0F70
+  - name: SLASH_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3A0F70
 
-  - name: _3A89C0
+  - name: NANCY_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3A89C0
 
-  - name: _3B0D30
+  - name: JAM_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3B0D30
 
-  - name: _3B8900
+  - name: LINDA_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3B8900
 
-  - name: _3C0470
+  - name: TOMMY_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3C0470
 
-  - name: _3C8BC0
+  - name: WENDY_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3C8BC0
 
-  - name: _3D0C20
+  - name: BLACK_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3D0C20
 
-  - name: _3D9A90
+  - name: PEN_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3D9A90
 
-  - name: _3E13F0
+  - name: DOG_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3E13F0
 
-  - name: _3E9B20
+  - name: DINOS_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3E9B20
 
-  - name: _3EADF0
+  - name: ROBO_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3EADF0
@@ -2216,57 +2216,57 @@ segments:
     vram: 0
     start: 0x3ECE40
 
-  - name: _3F2980
+  - name: SLASH_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F2980
 
-  - name: _3F2AE0
+  - name: NANCY_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F2AE0
 
-  - name: _3F2C40
+  - name: JAM_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F2C40
 
-  - name: _3F2DA0
+  - name: LINDA_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F2DA0
 
-  - name: _3F2F00
+  - name: TOMMY_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F2F00
 
-  - name: _3F3060
+  - name: WENDY_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F3060
 
-  - name: _3F31B0
+  - name: BLACK_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F31B0
 
-  - name: _3F3320
+  - name: PEN_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F3320
 
-  - name: _3F3450
+  - name: DOG_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F3450
 
-  - name: _3F3580
+  - name: DINOS_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F3580
 
-  - name: _3F37C0
+  - name: SNOW_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F37C0
