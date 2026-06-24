@@ -805,187 +805,187 @@ segments:
     vram: 0
     start: 0x165720
 
-  - name: _16D920
+  - name: SLASH_BOARD0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x16D920
 
-  - name: _170780
+  - name: SLASH_BOARD1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x170780
 
-  - name: _1734B0
+  - name: SLASH_BOARD2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1734B0
 
-  - name: _1768E0
+  - name: SLASH_BOARD3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1768E0
 
-  - name: _1793A0
+  - name: NANCY_BOARD0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1793A0
 
-  - name: _17BE20
+  - name: NANCY_BOARD1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x17BE20
 
-  - name: _17EA60
+  - name: NANCY_BOARD2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x17EA60
 
-  - name: _1817F0
+  - name: NANCY_BOARD3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1817F0
 
-  - name: _184050
+  - name: JAM_BOARD0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x184050
 
-  - name: _186B10
+  - name: JAM_BOARD1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x186B10
 
-  - name: _189C20
+  - name: JAM_BOARD2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x189C20
 
-  - name: _18C490
+  - name: JAM_BOARD3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x18C490
 
-  - name: _18F2B0
+  - name: LINDA_BOARD0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x18F2B0
 
-  - name: _191EA0
+  - name: LINDA_BOARD1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x191EA0
 
-  - name: _194840
+  - name: LINDA_BOARD2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x194840
 
-  - name: _197300
+  - name: LINDA_BOARD3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x197300
 
-  - name: _199A90
+  - name: TOMMY_BOARD0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x199A90
 
-  - name: _19CCF0
+  - name: TOMMY_BOARD1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x19CCF0
 
-  - name: _1A0190
+  - name: TOMMY_BOARD2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1A0190
 
-  - name: _1A35C0
+  - name: TOMMY_BOARD3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1A35C0
 
-  - name: _1A6B00
+  - name: WENDY_BOARD0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1A6B00
 
-  - name: _1A9B70
+  - name: WENDY_BOARD1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1A9B70
 
-  - name: _1ACCA0
+  - name: WENDY_BOARD2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1ACCA0
 
-  - name: _1AFBA0
+  - name: WENDY_BOARD3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1AFBA0
 
-  - name: _1B26E0
+  - name: BLACK_BOARD0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1B26E0
 
-  - name: _1B5A40
+  - name: BLACK_BOARD1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1B5A40
 
-  - name: _1B8DE0
+  - name: BLACK_BOARD2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1B8DE0
 
-  - name: _1BC420
+  - name: BLACK_BOARD3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1BC420
 
-  - name: _1BF7B0
+  - name: PEN_BOARD0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1BF7B0
 
-  - name: _1C1B20
+  - name: PEN_BOARD1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1C1B20
 
-  - name: _1C4240
+  - name: PEN_BOARD2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1C4240
 
-  - name: _1C6520
+  - name: PEN_BOARD3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1C6520
 
-  - name: _1C87D0
+  - name: DOG_BOARD0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1C87D0
 
-  - name: _1CB5C0
+  - name: DOG_BOARD1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1CB5C0
 
-  - name: _1CE250
+  - name: DOG_BOARD2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1CE250
 
-  - name: _1D0CC0
+  - name: DOG_BOARD3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D0CC0
 
-  - name: _1D3FF0
+  - name: DINOS_BOARD_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D3FF0
@@ -995,7 +995,7 @@ segments:
     vram: 0
     start: 0x1D54C0
 
-  - name: _1D59D0
+  - name: ROBO_BOARD_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D59D0
@@ -1961,187 +1961,187 @@ segments:
     vram: 0
     start: 0x3505F0
 
-  - name: _350C70
+  - name: SLASH_BOARD0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x350C70
 
-  - name: _352A40
+  - name: SLASH_BOARD1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x352A40
 
-  - name: _354A80
+  - name: SLASH_BOARD2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x354A80
 
-  - name: _356F50
+  - name: SLASH_BOARD3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x356F50
 
-  - name: _358E80
+  - name: NANCY_BOARD0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x358E80
 
-  - name: _35AC60
+  - name: NANCY_BOARD1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x35AC60
 
-  - name: _35CA40
+  - name: NANCY_BOARD2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x35CA40
 
-  - name: _35E810
+  - name: NANCY_BOARD3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x35E810
 
-  - name: _360460
+  - name: JAM_BOARD0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x360460
 
-  - name: _3622B0
+  - name: JAM_BOARD1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3622B0
 
-  - name: _364550
+  - name: JAM_BOARD2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x364550
 
-  - name: _366550
+  - name: JAM_BOARD3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x366550
 
-  - name: _3686A0
+  - name: LINDA_BOARD0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3686A0
 
-  - name: _36A3E0
+  - name: LINDA_BOARD1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x36A3E0
 
-  - name: _36C090
+  - name: LINDA_BOARD2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x36C090
 
-  - name: _36DE80
+  - name: LINDA_BOARD3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x36DE80
 
-  - name: _36F920
+  - name: TOMMY_BOARD0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x36F920
 
-  - name: _372800
+  - name: TOMMY_BOARD1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x372800
 
-  - name: _3757D0
+  - name: TOMMY_BOARD2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3757D0
 
-  - name: _378850
+  - name: TOMMY_BOARD3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x378850
 
-  - name: _37B1E0
+  - name: WENDY_BOARD0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x37B1E0
 
-  - name: _37D270
+  - name: WENDY_BOARD1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x37D270
 
-  - name: _37F6D0
+  - name: WENDY_BOARD2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x37F6D0
 
-  - name: _381CD0
+  - name: WENDY_BOARD3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x381CD0
 
-  - name: _383E00
+  - name: BLACK_BOARD0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x383E00
 
-  - name: _3860C0
+  - name: BLACK_BOARD1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3860C0
 
-  - name: _388430
+  - name: BLACK_BOARD2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x388430
 
-  - name: _38AC10
+  - name: BLACK_BOARD3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x38AC10
 
-  - name: _38CF10
+  - name: PEN_BOARD0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x38CF10
 
-  - name: _38EA50
+  - name: PEN_BOARD1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x38EA50
 
-  - name: _390C10
+  - name: PEN_BOARD2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x390C10
 
-  - name: _392790
+  - name: PEN_BOARD3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x392790
 
-  - name: _3942D0
+  - name: DOG_BOARD0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3942D0
 
-  - name: _3967C0
+  - name: DOG_BOARD1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3967C0
 
-  - name: _398960
+  - name: DOG_BOARD2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x398960
 
-  - name: _39AC40
+  - name: DOG_BOARD3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x39AC40
 
-  - name: _39D100
+  - name: DINOS_BOARD_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x39D100
@@ -2151,7 +2151,7 @@ segments:
     vram: 0
     start: 0x39E030
 
-  - name: _39E710
+  - name: ROBO_BOARD_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x39E710
