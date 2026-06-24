@@ -2544,7 +2544,7 @@ void initializeOverlaySystem(void) {
 
     temp_s0 = (void **)allocateTaskMemory(4);
     LOAD_OVERLAY(rand)
-    *temp_s0 = loadCompressedData(&_215D70_ROM_START, &_215D70_ROM_END, 0x918);
+    *temp_s0 = loadCompressedData(&FONT_DATA_TABLE_ROM_START, &FONT_DATA_TABLE_ROM_END, 0x918);
     setGameStateHandler(&initializeFontSystemAndTransitionToMainMenu);
 }
 

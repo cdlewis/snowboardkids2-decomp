@@ -1617,7 +1617,7 @@ segments:
     vram: 0
     start: 0x215A60
 
-  - name: _215D70
+  - name: FONT_DATA_TABLE
     type: bin
     vram: 0
     start: 0x215D70

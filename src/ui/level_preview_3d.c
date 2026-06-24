@@ -103,7 +103,6 @@ extern s32 D_80088E40;
 extern s32 D_80088E60;
 extern s32 D_80088E80;
 extern s32 D_80088F00;
-extern u8 D_215D70[];
 extern void initDriftingParticle(void *arg0);
 extern void initTrailingParticle(void *arg0);
 extern void initSteppedMatrixController(void *arg0);
