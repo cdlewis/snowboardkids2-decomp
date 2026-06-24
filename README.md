@@ -93,6 +93,20 @@ Contributions are most welcome! There are a variety of other ways you can assist
 
 If you have any additional questions, please reach out on Discord (linked in the header). However please note that, since this is a clean room decompilation, we cannot accept contributions based on leaked source code or from those with proprietary knowledge about the game or related subjects.
 
-Acknowledgements
-================
-This project wouldn’t be possible without the collective knowledge, tools, and support of the broader decompilation community. Huge thanks to contributors of other N64 decomp projects, the teams behind [decomp.me](https://decomp.me/) and [decomp.dev](https://decomp.dev/), and the incredibly helpful discussions happening on Discord. These resources have been invaluable for solving problems, speeding up setup, and staying motivated throughout the process.
+Credits
+=======
+
+This project would not have been possible without all the amazing folks on the [N64 Decomp Discord Community](https://discord.gg/DuYH3Fh). In particular I would like to thank:
+
+- [Bl00D4NGEL](https://github.com/Bl00D4NGEL)
+- [inspectredc](https://github.com/inspectredc)
+- [SlaveOfIDO](https://github.com/SlaveOfIDO)
+- [queueRAM](https://github.com/queueRAM)
+
+For all their help answering questions, solving problems and contributing matches.
+
+The decomp community has some amazing platforms and tools. I am grateful to the maintainers of [decomp.me](https://decomp.me/), [decomp.dev](https://decomp.dev/), [Splat](https://github.com/ethteck/splat) and [decomp-permuter](https://github.com/simonlindholm/decomp-permuter) for building amazing tools.
+
+
+
+I would 
