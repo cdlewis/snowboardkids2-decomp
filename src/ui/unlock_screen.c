@@ -98,7 +98,8 @@ void initUnlockScreen(void) {
     state->backgroundAsset = loadCompressedData(&okPromptSprites_ROM_START, &_41AD80_ROM_START, 0x1B48);
     state->itemIconAsset = loadCompressedData(&_42F1D0_ROM_START, &levelSelectPortraits_ROM_START, 0x14410);
     state->digitSpriteAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
-    state->goldIconAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    state->goldIconAsset =
+        loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     state->itemLabelAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     scheduleTask(initStoryMapShopFairyModel, 0, 0, 0x5A);
     unlockResult = getLockedShopItemIndices(state->itemSlots);

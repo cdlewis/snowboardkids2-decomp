@@ -66,7 +66,7 @@ USE_ASSET(snowflakeSprite);
 USE_ASSET(_419C60);
 USE_ASSET(okPromptSprites);
 USE_ASSET(digit_sprite);
-USE_ASSET(_3F6BB0);
+USE_ASSET(COSTUME_SLOT_00_COMPRESSED_DATA);
 USE_ASSET(_3F6670);
 
 void awaitFadeLoadCharacterSelect(void);
@@ -308,7 +308,7 @@ void initBoardShopDisplay(void) {
     state->assetSlot1 = loadCompressedData(&previewBackgroundAsset_ROM_START, &previewBackgroundAsset_ROM_END, 0x14410);
     state->assetSlot2 = loadCompressedData(&snowflakeSprite_ROM_START, &snowflakeSprite_ROM_END, 0x9488);
     state->assetSlot3 = loadCompressedData(&_419C60_ROM_START, &okPromptSprites_ROM_START, 0x1548);
-    state->assetSlot4 = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    state->assetSlot4 = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     state->assetSlot5 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     state->textRenderAsset = loadTextRenderAsset(1);
     i = 3;

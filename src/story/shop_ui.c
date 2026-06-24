@@ -856,7 +856,7 @@ void initStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     s32 i;
     s32 *new_var;
 
-    digitSpriteAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    digitSpriteAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     goldIconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
     setCleanupCallback(&cleanupStoryMapShopGoldDisplay);
     for (i = 0; i < 7; i++) {
@@ -921,7 +921,7 @@ void initStoryMapShopItemPriceDisplay(SpriteDisplayState *arg0) {
     s32 y;
     s16 x;
 
-    digitSpriteAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    digitSpriteAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     setCleanupCallback(cleanupStoryMapShopItemPriceDisplay);
 
     i = 0;

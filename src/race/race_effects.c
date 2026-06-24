@@ -308,7 +308,8 @@ void initPlayerLapCounterTask(LapCounterState *state) {
         state->spriteIndex = 0;
         state->digitX1 = ((u16)state->x) + 0x1C;
         state->digitY1 = state->y;
-        state->digitsAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+        state->digitsAsset =
+            loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
         state->digitX2 = ((u16)state->digitX1) + 8;
         state->unk16 = 1;
         state->unk20 = 1;
@@ -404,7 +405,7 @@ void initPlayerGoldDisplayTask(GoldDisplayState *state) {
             state->y = 0x20;
         }
     }
-    state->digitsTexture = loadCompressedData(digitsRomStart, &_3F6BB0_ROM_START, 0x508);
+    state->digitsTexture = loadCompressedData(digitsRomStart, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     state->iconX = state->x + 0x28;
     state->iconY = state->y;
     state->iconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
@@ -749,7 +750,8 @@ void initTrickScoreDisplayTask(TrickScoreDisplayState *state) {
     if (state->useGoldFormat == 0) {
         state->yPos = -0x20;
         state->spriteFrame = 0xF;
-        state->digitsTexture = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+        state->digitsTexture =
+            loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
         sprintf(state->scoreText, D_8009E884_9F484, state->score);
     } else {
         state->yPos = -0x18;
@@ -873,7 +875,7 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
     arg0->spriteAsset = loadAsset_34CB50();
     initHudElementState((HudElementState *)arg0);
     arg0->spriteIndex = 0x14;
-    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
 
     switch (gameState->raceType) {
         case RACE_TYPE_SHOOT_CROSS:
@@ -986,7 +988,7 @@ void initTotalGoldDisplayTask(TotalGoldDisplayState *arg0) {
     arg0->spriteAsset = loadAsset_34CB50();
     initHudElementState((HudElementState *)arg0);
     arg0->spriteIndex = 0x15;
-    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
 
     switch (allocation->raceType) {
         case RACE_TYPE_SHOOT_CROSS:
@@ -1077,7 +1079,7 @@ void initTotalLapDisplayTask(TotalLapDisplayState *state) {
     }
 
     state->y = 0x10;
-    state->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    state->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     setCleanupCallback(cleanupTotalLapDisplayTask);
     setCallback(updateTotalLapDisplay);
 }
@@ -1445,7 +1447,7 @@ void initShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
     arg0->ammoIcon.x = -0x84;
     arg0->ammoIcon.y = -0x54;
     arg0->ammoIcon.spriteData = arg0->ammoPanel.spriteData;
-    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     setCleanupCallback(cleanupShotCrossScoreDisplayTask);
     setCallback(updateShotCrossScoreDisplay);
 }
@@ -1487,7 +1489,7 @@ void initShotCrossItemCountDisplayTask(CrossHudCounterDisplayState *arg0) {
         arg0->sprite.y = -0x38;
     }
     arg0->flashCounter = 0;
-    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     setCleanupCallback(cleanupShotCrossItemCountDisplayTask);
     setCallback(updateShotCrossItemCountDisplay);
 }
@@ -1543,7 +1545,7 @@ void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
     } else {
         arg0->timeRemaining = 0x1194;
     }
-    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     arg0->spriteAsset = loadAsset_34CB50();
     arg0->spriteIndex = 0x23;
     arg0->x = 0x68;
@@ -1643,7 +1645,7 @@ void initBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
     arg0->spriteAsset = loadAsset_34CB50();
     initHudElementState((HudElementState *)arg0);
     arg0->spriteFrame = 0x24;
-    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     if (allocation->raceType == RACE_TYPE_SPEED_CROSS) {
         arg0->x = 0xC;
         arg0->y = -0x3C;
@@ -1715,7 +1717,7 @@ void cleanupBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
 
 void initRaceTimerDisplay(RaceTimerState *arg0) {
     arg0->elapsedTicks = 0x4293C;
-    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     arg0->spriteAsset = loadAsset_34CB50();
     arg0->spriteIndex = 0x23;
     arg0->x = 0x68;
@@ -1824,7 +1826,7 @@ void cleanupSecondaryItemDisplayTask(SecondaryItemDisplayState *state) {
 }
 
 void initSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
-    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     arg0->spriteAsset = loadAsset_34CB50();
     arg0->spriteIndex = 0x23;
     arg0->x = -0x4C;
@@ -1878,7 +1880,7 @@ void initTrickPointsDisplayTask(TrickPointsDisplayState *state) {
     state->spriteAsset = loadTrickCrossSprites();
     state->y = -0x20;
     state->spriteFrame = 2;
-    state->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    state->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     sprintf(state->scoreText, sTrickPointsFormat, state->score);
     state->animAngle = 0;
     state->holdTimer = 0x1E;
@@ -1965,7 +1967,7 @@ void initShotCrossSkillMeterDisplayTask(CrossHudCounterDisplayState *arg0) {
         arg0->sprite.y = -0x30;
     }
     arg0->flashCounter = 0;
-    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
+    arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     setCleanupCallback(cleanupShotCrossSkillMeterDisplayTask);
     setCallback(updateShotCrossSkillMeterDisplay);
 }

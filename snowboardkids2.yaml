@@ -1000,92 +1000,92 @@ segments:
     vram: 0
     start: 0x1D59D0
 
-  - name: _1D8E50
+  - name: COSTUME_SLOT_00_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D8E50
 
-  - name: _1D8FB0
+  - name: COSTUME_SLOT_01_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D8FB0
 
-  - name: _1D9110
+  - name: COSTUME_SLOT_02_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D9110
 
-  - name: _1D9270
+  - name: COSTUME_SLOT_03_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D9270
 
-  - name: _1D93E0
+  - name: COSTUME_SLOT_04_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D93E0
 
-  - name: _1D9550
+  - name: COSTUME_SLOT_05_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D9550
 
-  - name: _1D96C0
+  - name: COSTUME_SLOT_06_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D96C0
 
-  - name: _1D9810
+  - name: COSTUME_SLOT_07_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D9810
 
-  - name: _1D9960
+  - name: COSTUME_SLOT_08_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D9960
 
-  - name: _1D9AB0
+  - name: COSTUME_SLOT_09_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D9AB0
 
-  - name: _1D9C20
+  - name: COSTUME_SLOT_10_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D9C20
 
-  - name: _1D9D60
+  - name: COSTUME_SLOT_11_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D9D60
 
-  - name: _1D9EB0
+  - name: COSTUME_SLOT_12_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D9EB0
 
-  - name: _1D9FD0
+  - name: COSTUME_SLOT_13_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1D9FD0
 
-  - name: _1DA0E0
+  - name: COSTUME_SLOT_14_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1DA0E0
 
-  - name: _1DA1F0
+  - name: COSTUME_SLOT_15_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1DA1F0
 
-  - name: _1DA3A0
+  - name: COSTUME_SLOT_16_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1DA3A0
 
-  - name: _1DA4F0
+  - name: COSTUME_SLOT_17_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1DA4F0
@@ -2308,172 +2308,172 @@ segments:
     vram: 0
     start: 0x3F6950
 
-  - name: _3F6BB0
+  - name: COSTUME_SLOT_00_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F6BB0
 
-  - name: _3F6D90
+  - name: COSTUME_SLOT_01_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F6D90
 
-  - name: _3F6F90
+  - name: COSTUME_SLOT_02_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F6F90
 
-  - name: _3F71B0
+  - name: COSTUME_SLOT_03_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F71B0
 
-  - name: _3F73B0
+  - name: COSTUME_SLOT_04_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F73B0
 
-  - name: _3F75B0
+  - name: COSTUME_SLOT_05_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F75B0
 
-  - name: _3F77B0
+  - name: COSTUME_SLOT_06_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F77B0
 
-  - name: _3F7980
+  - name: COSTUME_SLOT_07_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F7980
 
-  - name: _3F7B50
+  - name: COSTUME_SLOT_08_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F7B50
 
-  - name: _3F7D20
+  - name: COSTUME_SLOT_09_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F7D20
 
-  - name: _3F80C0
+  - name: COSTUME_SLOT_10_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F80C0
 
-  - name: _3F86A0
+  - name: COSTUME_SLOT_11_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F86A0
 
-  - name: _3F8B90
+  - name: COSTUME_SLOT_12_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F8B90
 
-  - name: _3F9110
+  - name: COSTUME_SLOT_13_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F9110
 
-  - name: _3F9710
+  - name: COSTUME_SLOT_14_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F9710
 
-  - name: _3F9B90
+  - name: COSTUME_SLOT_15_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3F9B90
 
-  - name: _3FA1A0
+  - name: COSTUME_SLOT_16_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3FA1A0
 
-  - name: _3FA830
+  - name: COSTUME_SLOT_17_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3FA830
 
-  - name: _3FAE90
+  - name: PALETTE_00
     type: bin
     vram: 0
     start: 0x3FAE90
 
-  - name: _3FB1F0
+  - name: PALETTE_01
     type: bin
     vram: 0
     start: 0x3FB1F0
 
-  - name: _3FB470
+  - name: PALETTE_02
     type: bin
     vram: 0
     start: 0x3FB470
 
-  - name: _3FB8D0
+  - name: PALETTE_03
     type: bin
     vram: 0
     start: 0x3FB8D0
 
-  - name: _3FBCF0
+  - name: PALETTE_04
     type: bin
     vram: 0
     start: 0x3FBCF0
 
-  - name: _3FC200
+  - name: PALETTE_05
     type: bin
     vram: 0
     start: 0x3FC200
 
-  - name: _3FC540
+  - name: PALETTE_06
     type: bin
     vram: 0
     start: 0x3FC540
 
-  - name: _3FCB80
+  - name: PALETTE_07
     type: bin
     vram: 0
     start: 0x3FCB80
 
-  - name: _3FD0B0
+  - name: PALETTE_08
     type: bin
     vram: 0
     start: 0x3FD0B0
 
-  - name: _3FD4F0
+  - name: PALETTE_09
     type: bin
     vram: 0
     start: 0x3FD4F0
 
-  - name: _3FD770
+  - name: PALETTE_10
     type: bin
     vram: 0
     start: 0x3FD770
 
-  - name: _3FDBB0
+  - name: PALETTE_11
     type: bin
     vram: 0
     start: 0x3FDBB0
 
-  - name: _3FE0C0
+  - name: PALETTE_12
     type: bin
     vram: 0
     start: 0x3FE0C0
 
-  - name: _3FE3A0
+  - name: PALETTE_13
     type: bin
     vram: 0
     start: 0x3FE3A0
 
-  - name: _3FE880
+  - name: PALETTE_14
     type: bin
     vram: 0
     start: 0x3FE880
 
-  - name: _3FECA0
+  - name: PALETTE_15
     type: bin
     vram: 0
     start: 0x3FECA0
@@ -2483,162 +2483,162 @@ segments:
     vram: 0
     start: 0x3FF010
 
-  - name: _3FF910
+  - name: SUNNY_MOUNTAIN_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x3FF910
 
-  - name: _3FFC00
+  - name: SUNNY_MOUNTAIN_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x3FFC00
 
-  - name: _3FFD30
+  - name: TURTLE_ISLAND_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x3FFD30
 
-  - name: _400240
+  - name: TURTLE_ISLAND_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x400240
 
-  - name: _4003D0
+  - name: JINGLE_TOWN_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x4003D0
 
-  - name: _4008F0
+  - name: JINGLE_TOWN_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x4008F0
 
-  - name: _400A80
+  - name: JINGLE_TOWN_BOSS_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x400A80
 
-  - name: _400F90
+  - name: JINGLE_TOWN_BOSS_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x400F90
 
-  - name: _401120
+  - name: WENDYS_HOUSE_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x401120
 
-  - name: _4015B0
+  - name: WENDYS_HOUSE_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x4015B0
 
-  - name: _401770
+  - name: LINDAS_CASTLE_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x401770
 
-  - name: _401CC0
+  - name: LINDAS_CASTLE_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x401CC0
 
-  - name: _401E60
+  - name: CRAZY_JUNGLE_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x401E60
 
-  - name: _4023D0
+  - name: CRAZY_JUNGLE_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x4023D0
 
-  - name: _402570
+  - name: CRAZY_JUNGLE_BOSS_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x402570
 
-  - name: _402AA0
+  - name: CRAZY_JUNGLE_BOSS_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x402AA0
 
-  - name: _402CB0
+  - name: STARLIGHT_HIGHWAY_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x402CB0
 
-  - name: _403240
+  - name: STARLIGHT_HIGHWAY_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x403240
 
-  - name: _403440
+  - name: HAUNTED_HOUSE_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x403440
 
-  - name: _403980
+  - name: HAUNTED_HOUSE_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x403980
 
-  - name: _403B60
+  - name: ICE_LAND_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x403B60
 
-  - name: _404110
+  - name: ICE_LAND_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x404110
 
-  - name: _404310
+  - name: ICE_LAND_BOSS_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x404310
 
-  - name: _4048D0
+  - name: ICE_LAND_BOSS_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x4048D0
 
-  - name: _404B30
+  - name: SNOWBOARD_STREET_SPEED_CROSS_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x404B30
 
-  - name: _404FF0
+  - name: SNOWBOARD_STREET_SPEED_CROSS_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x404FF0
 
-  - name: _4051B0
+  - name: SNOWBOARD_STREET_SHOT_CROSS_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x4051B0
 
-  - name: _405670
+  - name: SNOWBOARD_STREET_SHOT_CROSS_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x405670
 
-  - name: _4057E0
+  - name: X_CROSS_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x4057E0
 
-  - name: _405AB0
+  - name: X_CROSS_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x405AB0
 
-  - name: _405BE0
+  - name: TRAINING_GOLD_COIN_DATA
     type: bin
     vram: 0
     start: 0x405BE0
 
-  - name: _405F60
+  - name: TRAINING_ITEM_BOX_DATA
     type: bin
     vram: 0
     start: 0x405F60
