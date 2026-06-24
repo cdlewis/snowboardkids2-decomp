@@ -1111,7 +1111,7 @@ segments:
       - [0x1DC080, .data, ui/player_select_sprites]
       - [0x1DC0B0, .rodata, ui/player_select_sprites]
 
-  - name: _1DC0D0
+  - name: characterSelectPrimaryTexture
     type: bin
     vram: 0
     start: 0x1DC0D0
@@ -2298,7 +2298,7 @@ segments:
     vram: 0
     start: 0x3F65C0
 
-  - name: _3F6670
+  - name: goldIconSprite
     type: bin
     vram: 0
     start: 0x3F6670
@@ -2848,7 +2848,7 @@ segments:
     vram: 0
     start: 0x_4196E0
 
-  - name: _419C60
+  - name: uiCornerSprites
     type: bin
     vram: 0
     start: 0x419C60
@@ -2858,17 +2858,17 @@ segments:
     vram: 0
     start: 0x41A1D0
 
-  - name: _41AD80
+  - name: characterSelectBoardTexture
     type: bin
     vram: 0
     start: 0x41AD80
 
-  - name: _422C60
+  - name: characterSelectSecondaryTexture
     type: bin
     vram: 0
     start: 0x422C60
 
-  - name: _4237C0
+  - name: menuUiSprites
     type: bin
     vram: 0
     start: 0x4237C0
@@ -2878,7 +2878,7 @@ segments:
     vram: 0
     start: 0x426EF0
 
-  - name: _42F1D0
+  - name: shopBackgroundAsset
     type: bin
     vram: 0
     start: 0x42F1D0
@@ -2888,7 +2888,7 @@ segments:
     vram: 0
     start: 0x43A000
 
-  - name: _43F050
+  - name: levelPreviewImageAsset
     type: bin
     vram: 0
     start: 0x43F050
@@ -2908,7 +2908,7 @@ segments:
     vram: 0
     start: 0x458E30
 
-  - name: _459310
+  - name: uiFontSpriteSheet
     type: bin
     vram: 0
     start: 0x459310
@@ -2918,7 +2918,7 @@ segments:
     vram: 0
     start: 0x459E00
 
-  - name: _45A890
+  - name: locationMarkerSprite
     type: bin
     vram: 0
     start: 0x45A890
@@ -4143,7 +4143,7 @@ segments:
     vram: 0
     start: 0x67FB80
 
-  - name: _684630
+  - name: galleryOverlayTexture
     type: bin
     vram: 0
     start: 0x684630

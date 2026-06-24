@@ -363,7 +363,7 @@ void initDiscoveryLocationMarker(StoryMapLocationMarkerState *arg0) {
     void *temp_value;
     s32 i;
 
-    resource = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
+    resource = loadCompressedData(&locationMarkerSprite_ROM_START, &locationMarkerSprite_ROM_END, 0x3108);
     temp_value = loadTextRenderAsset(1);
 
     setCleanupCallback(&cleanupDiscoveryLocationMarker);
@@ -522,7 +522,7 @@ void cleanupDiscoveryLocationMarker(void *untypedArg) {
 void initTownExitMarker(StoryMapSpecialLocationMarkerState *arg0) {
     void *resource;
 
-    resource = loadCompressedData(&_45A890_ROM_START, &_45A890_ROM_END, 0x3108);
+    resource = loadCompressedData(&locationMarkerSprite_ROM_START, &locationMarkerSprite_ROM_END, 0x3108);
     setCleanupCallback(&cleanupTownExitMarker);
     arg0->unk8 = 8;
     arg0->unkA = 0xFF;

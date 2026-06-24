@@ -592,7 +592,7 @@ void destroySlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
 }
 
 void loadStoryMapShopBackground(StoryMapShopBackgroundState *state) {
-    state->backgroundAsset = loadCompressedData(&_42F1D0_ROM_START, &_42F1D0_ROM_END, 0x14410);
+    state->backgroundAsset = loadCompressedData(&shopBackgroundAsset_ROM_START, &shopBackgroundAsset_ROM_END, 0x14410);
     setCleanupCallback(&cleanupStoryMapShopBackground);
     setCallback(&initStoryMapShopBackgroundRenderState);
 }
@@ -612,7 +612,7 @@ void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *state) {
 
 void initUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *state) {
     s32 i;
-    void *asset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    void *asset = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
 
     setCleanupCallback(&cleanupUnlockScreenScrollArrows);
 
@@ -693,7 +693,7 @@ void initStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
     u8 itemValue;
 
     state = getCurrentAllocation();
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupStoryMapShopItemIcon);
 
     iconState->y = -0x18;
@@ -764,7 +764,7 @@ void initStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
     u8 itemValue;
 
     state = (GameState *)getCurrentAllocation();
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupStoryMapShopItemStatLabel);
 
     arg0->y = -0x18;
@@ -857,7 +857,7 @@ void initStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     s32 *new_var;
 
     digitSpriteAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
-    goldIconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    goldIconAsset = loadCompressedData(&goldIconSprite_ROM_START, &goldIconSprite_ROM_END, 0x388);
     setCleanupCallback(&cleanupStoryMapShopGoldDisplay);
     for (i = 0; i < 7; i++) {
         arg0->digits[i].x = 0x48 + (i * 8);
@@ -999,7 +999,7 @@ void initStoryMapShopItemStatsDisplay(ItemStatsDisplay *display) {
 
     getCurrentAllocation();
     display->progressBarAsset = loadAsset_34F7E0();
-    spriteAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    spriteAsset = loadCompressedData(&uiCornerSprites_ROM_START, &uiCornerSprites_ROM_END, 0x1548);
     setCleanupCallback(cleanupStoryMapShopItemStatsDisplay);
 
     display->progressBarX = -0x24;
@@ -1076,7 +1076,7 @@ void cleanupStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
 }
 
 void initStoryMapShopSoldOutLabel(SpriteDisplayState *arg0) {
-    void *temp_s1 = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    void *temp_s1 = loadCompressedData(&uiCornerSprites_ROM_START, &uiCornerSprites_ROM_END, 0x1548);
 
     setCleanupCallback(&cleanupStoryMapShopSoldOutLabel);
 
@@ -1106,7 +1106,7 @@ void initUnlockScreenItemIcons(UnlockScreenItemIconsState *arg0) {
     void *titleAsset;
     s32 i;
 
-    iconAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    iconAsset = loadCompressedData(&uiCornerSprites_ROM_START, &uiCornerSprites_ROM_END, 0x1548);
     titleAsset = loadTextRenderAsset(1);
     setCleanupCallback(&cleanupUnlockScreenItemIcons);
 

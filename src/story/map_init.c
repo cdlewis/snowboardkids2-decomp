@@ -14,7 +14,7 @@
 #include "ui/character_select_sprites.h"
 
 USE_OVERLAY(_1DA660)
-USE_OVERLAY(_41AD80)
+USE_OVERLAY(characterSelectBoardTexture)
 USE_OVERLAY(okPromptSprites)
 
 typedef struct {
@@ -138,7 +138,8 @@ void initStoryMap(void) {
 
     scheduleTask(initCharacterSelectBoardTask, 1, 0, 0x5A);
     state->portraitAsset = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
-    state->imageAsset = loadCompressedData(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
+    state->imageAsset =
+        loadCompressedData(&characterSelectBoardTexture_ROM_START, &characterSelectBoardTexture_ROM_END, 0x13FF0);
     scheduleTask(initCharacterSelectSprites, 1, 0, 0x5A);
     scheduleTask(initCharacterSelectTextureDataLoad, 1, 0, 0x5A);
 

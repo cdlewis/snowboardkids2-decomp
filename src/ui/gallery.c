@@ -814,7 +814,8 @@ void setupGalleryMenuState(void) {
     alloc->textRenderer = loadTextRenderAsset(1);
     alloc->textTable = loadDmaAsset(4);
     alloc->spriteAsset = loadSpriteAssetData(8);
-    alloc->tiledTextureData2 = loadCompressedData(&_684630_ROM_START, &MUSIC_BANK_UNUSED_01_ROM_START, 0xD00);
+    alloc->tiledTextureData2 =
+        loadCompressedData(&galleryOverlayTexture_ROM_START, &MUSIC_BANK_UNUSED_01_ROM_START, 0xD00);
     for (i = 0; i < 6; i++) {
         alloc->iconSlots[i].posX = 0;
         alloc->iconSlots[i].posY = 0;

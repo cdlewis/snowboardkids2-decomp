@@ -118,7 +118,7 @@ void initLevelSelectState(void) {
     state->loadStartFrame = 0;
 
     state->portraitAsset = loadCompressedData(&levelSelectPortraits_ROM_START, &levelSelectPortraits_ROM_END, 0xB198);
-    state->imageAsset = loadCompressedData(&_43F050_ROM_START, &_43F050_ROM_END, 0x14010);
+    state->imageAsset = loadCompressedData(&levelPreviewImageAsset_ROM_START, &levelPreviewImageAsset_ROM_END, 0x14010);
     state->tiledBackgroundAsset = loadCompressedData(&tiledSnowmanAsset_ROM_START, &tiledSnowmanAsset_ROM_END, 0xAE0);
     state->textRenderAsset = loadTextRenderAsset(1);
     state->uiAsset = loadAsset_34F7E0();

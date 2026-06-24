@@ -408,7 +408,7 @@ void initPlayerGoldDisplayTask(GoldDisplayState *state) {
     state->digitsTexture = loadCompressedData(digitsRomStart, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     state->iconX = state->x + 0x28;
     state->iconY = state->y;
-    state->iconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    state->iconAsset = loadCompressedData(&goldIconSprite_ROM_START, &goldIconSprite_ROM_END, 0x388);
     goto common;
 
 multiplayer_setup:
@@ -420,7 +420,7 @@ multiplayer:
     state->textPtr = state->goldTextBuffer;
     state->iconX = state->textX + 0x28;
     state->iconY = state->textY;
-    state->iconAsset = loadCompressedData(&_3F6670_ROM_START, &digit_sprite_ROM_START, 0x388);
+    state->iconAsset = loadCompressedData(&goldIconSprite_ROM_START, &digit_sprite_ROM_START, 0x388);
 
 common:
     state->animCounter = 0;

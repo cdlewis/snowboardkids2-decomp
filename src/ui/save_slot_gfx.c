@@ -399,7 +399,7 @@ void initSaveSlotStatSprites(SaveSlotStatSpritesState *state) {
     s32 i;
 
     getCurrentAllocation();
-    spriteSheet = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    spriteSheet = loadCompressedData(&uiFontSpriteSheet_ROM_START, &uiFontSpriteSheet_ROM_END, 0x2278);
     setCleanupCallback(cleanupSaveSlotStatSprites);
 
     for (i = 12; i >= 0; i--) {
@@ -509,7 +509,7 @@ void initSaveSlotNameEntryGrid(SaveSlotGridState *state) {
     s32 k;
 
     allocation = getCurrentAllocation();
-    spriteSheet = loadCompressedData(&_459310_ROM_START, &font_main_ROM_START, 0x2278);
+    spriteSheet = loadCompressedData(&uiFontSpriteSheet_ROM_START, &font_main_ROM_START, 0x2278);
     setCleanupCallback(cleanupSaveSlotNameEntryGrid);
     state->entries = allocateNodeMemory(0x370);
 
@@ -598,7 +598,7 @@ void initSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
 
     allocation = (u8 *)getCurrentAllocation();
     arg0->icons = (SaveSlotSpriteEntry *)allocateNodeMemory(0xF0);
-    arg0->spriteSheet = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    arg0->spriteSheet = loadCompressedData(&uiFontSpriteSheet_ROM_START, &uiFontSpriteSheet_ROM_END, 0x2278);
     arg0->unk1E = *(allocation + arg0->slotIndex + 0xACE);
     setCleanupCallback(cleanupSaveSlotItemIcons);
 
@@ -781,7 +781,7 @@ void initSaveSlotItemLabels(SaveSlotNumberLabelsState *arg0) {
     char *numberBuffer;
 
     saveData = (NumberLabelsAllocation *)getCurrentAllocation();
-    spriteSheet = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    spriteSheet = loadCompressedData(&uiFontSpriteSheet_ROM_START, &uiFontSpriteSheet_ROM_END, 0x2278);
     setCleanupCallback(cleanupSaveSlotNumberLabels);
 
     for (i = 0; i < 15; i++) {
@@ -1008,7 +1008,7 @@ void initSaveSlotGoldDisplay(SaveSlotGoldDisplayState *arg0) {
     void *goldIconAsset;
     s32 i;
 
-    goldIconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    goldIconAsset = loadCompressedData(&goldIconSprite_ROM_START, &goldIconSprite_ROM_END, 0x388);
     setCleanupCallback(cleanupSaveSlotGoldDisplay);
 
     for (i = 0; i < 4; i++) {
@@ -1343,7 +1343,7 @@ void cleanupSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
 void initSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state) {
     void *spriteAsset;
 
-    spriteAsset = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    spriteAsset = loadCompressedData(&uiFontSpriteSheet_ROM_START, &uiFontSpriteSheet_ROM_END, 0x2278);
     setCleanupCallback(cleanupSaveSlotDeleteArrow);
 
     state->x = -0x52;

@@ -758,7 +758,7 @@ void initCharSelectIcons(CharSelectIconsState *state) {
 
     (void)pad;
 
-    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    spriteAsset = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectIcons);
     getTableEntryByU16Index(spriteAsset, ICON_TABLE_INDEX, &tableEntry);
 
@@ -921,7 +921,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
 
     (void)pad;
 
-    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
+    spriteAsset = loadCompressedData(&menuUiSprites_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
     setCleanupCallback(cleanupCharSelectIconHideAsset);
 
     numPlayers = gGameSessionContext->numPlayers;
@@ -1138,7 +1138,7 @@ void initCharSelectMenu(SelectionMenuState *arg0) {
 
     (void)pad;
 
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectMenu);
 
     spriteIndexBase = 8;
@@ -1283,7 +1283,7 @@ void initCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
     s32 increment;
     u16 y;
 
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectPlayerLabels);
 
     i = 0;
@@ -1351,7 +1351,7 @@ void initCharSelectArrows(SelectionArrowsState *state) {
     (void)pad;
 
     getCurrentAllocation();
-    arrowAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    arrowAsset = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectArrows);
 
     numPlayers = gGameSessionContext->numPlayers;
@@ -1479,7 +1479,7 @@ void initBoardSelectArrows(SelectionArrowsState *state) {
     (void)pad;
 
     getCurrentAllocation();
-    arrowAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    arrowAsset = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupBoardSelectArrows);
 
     numPlayers = gGameSessionContext->numPlayers;
@@ -1600,7 +1600,7 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
     s32 pad[2];
 
     gameState = (BoardSelectGameState *)getCurrentAllocation();
-    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    spriteAsset = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupBoardSelectCharNames);
 
     xPos = charSelectNamePositions[gGameSessionContext->numPlayers].x;
@@ -1717,7 +1717,7 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
     (void)pad;
 
     gameState = (u8 *)getCurrentAllocation();
-    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    spriteAsset = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectNameSprites);
 
     gameConfig = gGameSessionContext;
@@ -1905,7 +1905,7 @@ void initCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
     void *dmaResult;
 
     state = getCurrentAllocation();
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectPlayer1NameSprite);
 
     arg0->x = -0x20;
@@ -1934,7 +1934,7 @@ void initCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
     s32 loopCount;
     s32 i;
 
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
 
     loopCount = (gGameSessionContext->numPlayers == 2) ? 3 : 2;
 
@@ -2204,7 +2204,7 @@ void cleanupCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state) {
 void initCharSelectScaledSprite(ScaledSpriteEntry *arg0) {
     void *dmaResult;
 
-    dmaResult = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    dmaResult = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectScaledSprite);
 
     arg0->spriteIndex = 6;

@@ -65,10 +65,10 @@ void cleanupCharacterSelect(void);
 void onCharacterSelectProceed(void);
 void onCharacterSelectCancel(void);
 
-USE_ASSET(_4237C0);
+USE_ASSET(menuUiSprites);
 USE_ASSET(playerCountSelectSprites);
 USE_ASSET(tiledSnowmanAsset);
-USE_ASSET(_459310);
+USE_ASSET(uiFontSpriteSheet);
 
 ColorData charSelectDimLight = { 0x50, 0x50, 0x50, 0x00, 0x00, 0x50, 0x50, 0x00 };
 char charSelectDimAmbientStr[] = "PPP";
@@ -319,8 +319,8 @@ void initCharacterSelectScreen(void) {
         setViewportTransformById(state->playerViewports[i].viewportId, &transform);
     }
 
-    state->mainAssets = loadCompressedData(&_4237C0_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
-    state->iconAssets = loadCompressedData(&tiledSnowmanAsset_ROM_START, &_459310_ROM_START, 0xAE0);
+    state->mainAssets = loadCompressedData(&menuUiSprites_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
+    state->iconAssets = loadCompressedData(&tiledSnowmanAsset_ROM_START, &uiFontSpriteSheet_ROM_START, 0xAE0);
 
     state->hasSecretCharacters = 0;
     if (countUnlockedSlotsInCategory(3) != 0) {

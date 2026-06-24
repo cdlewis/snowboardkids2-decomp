@@ -1712,7 +1712,7 @@ void cleanupFlyingSceneryTask(DualAssetCleanupState *arg0) {
 void initGoldCoinsTask(GoldCoinsTaskState *arg0) {
     s16 courseIndex;
 
-    arg0->unkC = loadCompressedData(&_3F6670_ROM_START, &digit_sprite_ROM_START, 0x388);
+    arg0->unkC = loadCompressedData(&goldIconSprite_ROM_START, &digit_sprite_ROM_START, 0x388);
 
     courseIndex = arg0->courseIndex;
 
@@ -3191,7 +3191,7 @@ void scheduleCourseTasks(s32 courseId, s32 playerCount) {
 }
 
 void initHomingProjectileTask(void **arg0) {
-    *arg0 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    *arg0 = loadCompressedData(&goldIconSprite_ROM_START, &goldIconSprite_ROM_END, 0x388);
     setCleanupCallback(&cleanupHomingProjectileTask);
     setCallbackWithContinue(&initHomingProjectileMovement);
 }

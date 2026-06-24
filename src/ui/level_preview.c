@@ -908,7 +908,7 @@ void initCharacterSelectDisplay(CharacterSelectDisplayState *state) {
     s32 row;
 
     portraitAsset = loadCompressedData(&levelSelectPortraits_ROM_START, &levelSelectPortraits_ROM_END, 0xB198);
-    fontAsset = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    fontAsset = loadCompressedData(&uiFontSpriteSheet_ROM_START, &uiFontSpriteSheet_ROM_END, 0x2278);
     setCleanupCallback(cleanupCharacterSelectionIcons);
 
     for (i = 0; i < 10; i++) {
@@ -1055,8 +1055,8 @@ void cleanupConfirmationIndicator(ConfirmationIndicatorState *state) {
 void initUnlockNotification(UnlockNotificationState *state) {
     void *spriteSheet;
 
-    state->imageAsset = loadCompressedData(&_43F050_ROM_START, &_43F050_ROM_END, 0x14010);
-    spriteSheet = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
+    state->imageAsset = loadCompressedData(&levelPreviewImageAsset_ROM_START, &levelPreviewImageAsset_ROM_END, 0x14010);
+    spriteSheet = loadCompressedData(&uiFontSpriteSheet_ROM_START, &uiFontSpriteSheet_ROM_END, 0x2278);
     setCleanupCallback(&cleanupUnlockNotification);
 
     state->x = 0x40;
@@ -1311,7 +1311,7 @@ void initPrizeDisplay(PrizeDisplayState *arg0) {
     allocation = (Allocation_202A0 *)getCurrentAllocation();
     textRenderAsset = loadTextRenderAsset(1);
     arg0->backgroundAsset = loadAsset_34F7E0();
-    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    spriteAsset = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupPrizeDisplay);
     titleText = (u16 *)&prizeTitleText;
     arg0->animationTimer = 0;

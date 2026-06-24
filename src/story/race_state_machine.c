@@ -59,15 +59,15 @@ s16 boardShopPrices[] = { 0x0064, 0x0064, 0x0064, 0x00FA, 0x00FA, 0x012C, 0x012C
 extern D_8008D7FC_8E3FC_item D_8008D7FC_8E3FC[];
 extern u8 storyMapLocationIndex;
 
-USE_ASSET(_4237C0);
+USE_ASSET(menuUiSprites);
 USE_ASSET(playerCountSelectSprites);
 USE_ASSET(previewBackgroundAsset);
 USE_ASSET(snowflakeSprite);
-USE_ASSET(_419C60);
+USE_ASSET(uiCornerSprites);
 USE_ASSET(okPromptSprites);
 USE_ASSET(digit_sprite);
 USE_ASSET(COSTUME_SLOT_00_COMPRESSED_DATA);
-USE_ASSET(_3F6670);
+USE_ASSET(goldIconSprite);
 
 void awaitFadeLoadCharacterSelect(void);
 void awaitFadeLoadBoardShop(void);
@@ -304,12 +304,12 @@ void initBoardShopDisplay(void) {
     createViewportTransform(&viewportTransform, 0, 0, 0x580000, 0, 0, 0);
     setViewportTransformById(state->mainViewport.viewportId, &viewportTransform);
     setViewportTransformById(state->secondaryViewport.viewportId, &viewportTransform);
-    state->assetSlot0 = loadCompressedData(&_4237C0_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
+    state->assetSlot0 = loadCompressedData(&menuUiSprites_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
     state->assetSlot1 = loadCompressedData(&previewBackgroundAsset_ROM_START, &previewBackgroundAsset_ROM_END, 0x14410);
     state->assetSlot2 = loadCompressedData(&snowflakeSprite_ROM_START, &snowflakeSprite_ROM_END, 0x9488);
-    state->assetSlot3 = loadCompressedData(&_419C60_ROM_START, &okPromptSprites_ROM_START, 0x1548);
+    state->assetSlot3 = loadCompressedData(&uiCornerSprites_ROM_START, &okPromptSprites_ROM_START, 0x1548);
     state->assetSlot4 = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
-    state->assetSlot5 = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    state->assetSlot5 = loadCompressedData(&goldIconSprite_ROM_START, &goldIconSprite_ROM_END, 0x388);
     state->textRenderAsset = loadTextRenderAsset(1);
     i = 3;
     ptr = (u8 *)state + 3;

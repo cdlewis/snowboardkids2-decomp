@@ -935,7 +935,7 @@ void initBoardShopComparisonIcons(BoardShopComparisonIconsState *arg0) {
     s32 i;
     void *spriteAsset;
 
-    spriteAsset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    spriteAsset = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(&cleanupBoardShopComparisonIcons);
 
     for (i = 0; i < 2; i++) {
@@ -1052,7 +1052,7 @@ void initBoardShopRowSelectorArrow(BoardShopRowSelectorArrowState *arg0) {
     void *asset;
 
     getCurrentAllocation();
-    asset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    asset = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(&cleanupBoardShopRowSelectorArrow);
     arg0->x = -0x1C;
     arg0->y = -0x18;
@@ -1108,7 +1108,7 @@ void initBoardShopColumnSelectorArrow(BoardShopColumnSelectorArrowState *arg0) {
     void *asset;
 
     getCurrentAllocation();
-    asset = loadCompressedData(&_4237C0_ROM_START, &_4237C0_ROM_END, 0x8A08);
+    asset = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(&cleanupBoardShopColumnSelectorArrow);
     arg0->x = -8;
     arg0->y = 8;
@@ -1181,7 +1181,7 @@ void cleanupBoardShopExitOverlay(SpriteDisplayState *arg0) {
 
 void initBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0) {
     void *digitAsset = loadCompressedData(&digit_sprite_ROM_START, &digit_sprite_ROM_END, 0x508);
-    void *iconAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    void *iconAsset = loadCompressedData(&goldIconSprite_ROM_START, &goldIconSprite_ROM_END, 0x388);
     s32 i;
 
     setCleanupCallback(&cleanupBoardShopGoldDisplay);
@@ -1593,7 +1593,7 @@ void cleanupBoardShopTitleText(BoardShopTitleTextCleanupArg *arg0) {
 
 void initBoardShopTitleCorners(BoardShopTitleCornerState *arg0) {
     s32 i;
-    void *cornerAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    void *cornerAsset = loadCompressedData(&uiCornerSprites_ROM_START, &uiCornerSprites_ROM_END, 0x1548);
     setCleanupCallback(&cleanupBoardShopTitleCorners);
 
     for (i = 0; i < 4; i++) {

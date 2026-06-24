@@ -405,7 +405,7 @@ void initCharacterSelectSprites(CharacterSelectSprites *arg0) {
     void *allocation;
 
     getCurrentAllocation();
-    allocation = loadCompressedData(&okPromptSprites_ROM_START, &_41AD80_ROM_START, 0x1B48);
+    allocation = loadCompressedData(&okPromptSprites_ROM_START, &characterSelectBoardTexture_ROM_START, 0x1B48);
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         arg0->sprites[i].spriteData = allocation;
@@ -513,7 +513,8 @@ void cleanupCharacterSelectTextureData(TextureDataTaskState *arg0) {
 }
 
 void initCharacterSelectTextureDataLoad(TextureDataTaskState *arg0) {
-    arg0->textureData = loadCompressedData(&_41AD80_ROM_START, &_41AD80_ROM_END, 0x13FF0);
+    arg0->textureData =
+        loadCompressedData(&characterSelectBoardTexture_ROM_START, &characterSelectBoardTexture_ROM_END, 0x13FF0);
     setCleanupCallback(cleanupCharacterSelectTextureData);
     setCallback(initCharacterSelectTextureRenderState);
 }
@@ -581,8 +582,9 @@ void initCharacterSelectBoardTask(CharacterSelectBoardTask *arg0) {
     void *texture1;
     void *texture2;
 
-    texture1 = loadUncompressedData(&_1DC0D0_ROM_START, &_1DC0D0_ROM_END);
-    texture2 = loadUncompressedData(&_422C60_ROM_START, &_422C60_ROM_END);
+    texture1 = loadUncompressedData(&characterSelectPrimaryTexture_ROM_START, &characterSelectPrimaryTexture_ROM_END);
+    texture2 =
+        loadUncompressedData(&characterSelectSecondaryTexture_ROM_START, &characterSelectSecondaryTexture_ROM_END);
     setCleanupCallback(cleanupCharacterSelectBoardTask);
 
     memcpy(arg0, &identityMatrix, sizeof(Transform3D));

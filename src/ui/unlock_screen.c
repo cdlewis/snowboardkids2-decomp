@@ -94,13 +94,14 @@ void initUnlockScreen(void) {
     setViewportFadeValue(NULL, 0xFF, 0);
     memcpy(state->rotationMatrix, &identityMatrix, sizeof(Transform3D));
     state->rotationAngle = 0;
-    state->arrowSpriteAsset = loadCompressedData(&_4237C0_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
-    state->backgroundAsset = loadCompressedData(&okPromptSprites_ROM_START, &_41AD80_ROM_START, 0x1B48);
-    state->itemIconAsset = loadCompressedData(&_42F1D0_ROM_START, &levelSelectPortraits_ROM_START, 0x14410);
-    state->digitSpriteAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
+    state->arrowSpriteAsset = loadCompressedData(&menuUiSprites_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
+    state->backgroundAsset =
+        loadCompressedData(&okPromptSprites_ROM_START, &characterSelectBoardTexture_ROM_START, 0x1B48);
+    state->itemIconAsset = loadCompressedData(&shopBackgroundAsset_ROM_START, &levelSelectPortraits_ROM_START, 0x14410);
+    state->digitSpriteAsset = loadCompressedData(&uiCornerSprites_ROM_START, &uiCornerSprites_ROM_END, 0x1548);
     state->goldIconAsset =
         loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
-    state->itemLabelAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);
+    state->itemLabelAsset = loadCompressedData(&goldIconSprite_ROM_START, &goldIconSprite_ROM_END, 0x388);
     scheduleTask(initStoryMapShopFairyModel, 0, 0, 0x5A);
     unlockResult = getLockedShopItemIndices(state->itemSlots);
     __asm__("" : "=r"(count) : "0"(unlockResult & 0xFF));

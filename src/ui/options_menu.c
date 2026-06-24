@@ -146,7 +146,7 @@ void initOptionsMenuToggles(void *arg0) {
     u8 optionValue;
 
     getCurrentAllocation();
-    spriteAsset = loadCompressedData(&optionsMenuSprites_ROM_START, &_419C60_ROM_START, 0xBB8);
+    spriteAsset = loadCompressedData(&optionsMenuSprites_ROM_START, &uiCornerSprites_ROM_START, 0xBB8);
     ARG0->textRenderAsset = loadTextRenderAsset(1);
     setCleanupCallback(cleanupOptionsMenuToggles);
 
@@ -350,7 +350,7 @@ void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
     s32 xPos;
 
     getCurrentAllocation();
-    cursorSpriteAsset = loadCompressedData(&_4237C0_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
+    cursorSpriteAsset = loadCompressedData(&menuUiSprites_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
     setCleanupCallback(cleanupOptionsMenuCursors);
 
     i = 0;
