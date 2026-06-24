@@ -75,6 +75,7 @@ Articles
 ========
 
 If you're interested in learning more about decompilation and Snowboard Kids 2, the following articles might be of interest:
+* [Snowboard Kids 2 is Recompiled](https://blog.chrislewis.au/snowboard-kids-2-is-recompiled/)
 * [Snowboard Kids 2 is 100% Decompiled](http://blog.chrislewis.au/snowboard-kids-2-is-100-decompiled/)
 * [The Long Tail of LLM-Assisted Decompilation](https://blog.chrislewis.au/the-long-tail-of-llm-assisted-decompilation/)
 * [Finding Jingle Town: Debugging an N64 Game without Symbols](https://blog.chrislewis.au/finding-jingle-town-debugging-an-n64-game-without-symbols/)
