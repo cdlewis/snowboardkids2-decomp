@@ -2668,82 +2668,82 @@ segments:
     vram: 0
     start: 0x406BD0
 
-  - name: _406F00
+  - name: BOSS_HUD_ASSET_00
     type: bin
     vram: 0
     start: 0x406F00
 
-  - name: _407160
+  - name: BOSS_HUD_ASSET_01
     type: bin
     vram: 0
     start: 0x407160
 
-  - name: _407490
+  - name: BOSS_HUD_ASSET_02
     type: bin
     vram: 0
     start: 0x407490
 
-  - name: _407860
+  - name: BOSS_HUD_ASSET_03
     type: bin
     vram: 0
     start: 0x407860
 
-  - name: _407C10
+  - name: BOSS_HUD_ASSET_04
     type: bin
     vram: 0
     start: 0x407C10
 
-  - name: _407FD0
+  - name: BOSS_HUD_ASSET_05
     type: bin
     vram: 0
     start: 0x407FD0
 
-  - name: _408440
+  - name: BOSS_HUD_ASSET_06
     type: bin
     vram: 0
     start: 0x408440
 
-  - name: _408830
+  - name: BOSS_HUD_ASSET_07
     type: bin
     vram: 0
     start: 0x408830
 
-  - name: _408C00
+  - name: BOSS_HUD_ASSET_08
     type: bin
     vram: 0
     start: 0x408C00
 
-  - name: _409010
+  - name: BOSS_HUD_ASSET_09
     type: bin
     vram: 0
     start: 0x409010
 
-  - name: _4093D0
+  - name: BOSS_HUD_ASSET_10
     type: bin
     vram: 0
     start: 0x4093D0
 
-  - name: _409770
+  - name: BOSS_HUD_ASSET_11
     type: bin
     vram: 0
     start: 0x409770
 
-  - name: _409B20
+  - name: BOSS_HUD_ASSET_12
     type: bin
     vram: 0
     start: 0x409B20
 
-  - name: _409E10
+  - name: BOSS_HUD_ASSET_13
     type: bin
     vram: 0
     start: 0x409E10
 
-  - name: _40A140
+  - name: BOSS_HUD_ASSET_14
     type: bin
     vram: 0
     start: 0x40A140
 
-  - name: _40A370
+  - name: BOSS_HUD_ASSET_15
     type: bin
     vram: 0
     start: 0x40A370
@@ -2763,57 +2763,57 @@ segments:
     vram: 0
     start: 0x40A760
 
-  - name: _40A930
+  - name: GHOST_INPUT_RECORD_00
     type: bin
     vram: 0
     start: 0x40A930
 
-  - name: _40AC00
+  - name: GHOST_INPUT_RECORD_01
     type: bin
     vram: 0
     start: 0x40AC00
 
-  - name: _40AF90
+  - name: GHOST_INPUT_RECORD_02
     type: bin
     vram: 0
     start: 0x40AF90
 
-  - name: _40B220
+  - name: GHOST_INPUT_RECORD_03
     type: bin
     vram: 0
     start: 0x40B220
 
-  - name: _40B4D0
+  - name: GHOST_INPUT_RECORD_04
     type: bin
     vram: 0
     start: 0x40B4D0
 
-  - name: _40B730
+  - name: GHOST_INPUT_RECORD_05
     type: bin
     vram: 0
     start: 0x40B730
 
-  - name: _40BA40
+  - name: GHOST_INPUT_RECORD_06
     type: bin
     vram: 0
     start: 0x40BA40
 
-  - name: _40BCF0
+  - name: GHOST_INPUT_RECORD_07
     type: bin
     vram: 0
     start: 0x40BCF0
 
-  - name: _40C690
+  - name: GHOST_INPUT_RECORD_08
     type: bin
     vram: 0
     start: 0x40C690
 
-  - name: _40CF20
+  - name: GHOST_INPUT_RECORD_09
     type: bin
     vram: 0
     start: 0x40CF20
 
-  - name: _40D7C0
+  - name: GHOST_INPUT_RECORD_10
     type: bin
     vram: 0
     start: 0x40D7C0
@@ -3650,207 +3650,207 @@ segments:
     vram: 0
     start: 0x5BDB20
 
-  - name: _5C4040
+  - name: CUTSCENE_SUNNY_MOUNTAIN_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5C4040
 
-  - name: _5C6450
+  - name: CUTSCENE_SUNNY_MOUNTAIN_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5C6450
 
-  - name: _5C8110
+  - name: CUTSCENE_TURTLE_ISLAND_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5C8110
 
-  - name: _5CA830
+  - name: CUTSCENE_TURTLE_ISLAND_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5CA830
 
-  - name: _5CCA40
+  - name: CUTSCENE_JINGLE_TOWN_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5CCA40
 
-  - name: _5CEEC0
+  - name: CUTSCENE_JINGLE_TOWN_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5CEEC0
 
-  - name: _5D1350
+  - name: CUTSCENE_JINGLE_TOWN_BOSS_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5D1350
 
-  - name: _5D3500
+  - name: CUTSCENE_WENDYS_HOUSE_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5D3500
 
-  - name: _5D5960
+  - name: CUTSCENE_WENDYS_HOUSE_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5D5960
 
-  - name: _5D7DD0
+  - name: CUTSCENE_LINDAS_CASTLE_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5D7DD0
 
-  - name: _5DA5C0
+  - name: CUTSCENE_LINDAS_CASTLE_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5DA5C0
 
-  - name: _5DCA00
+  - name: CUTSCENE_CRAZY_JUNGLE_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5DCA00
 
-  - name: _5DF040
+  - name: CUTSCENE_CRAZY_JUNGLE_INTRO_FRAME_1
     type: bin
     vram: 0
     start: 0x5DF040
 
-  - name: _5E0A70
+  - name: CUTSCENE_CRAZY_JUNGLE_INTRO_FRAME_2
     type: bin
     vram: 0
     start: 0x5E0A70
 
-  - name: _5E2520
+  - name: CUTSCENE_CRAZY_JUNGLE_INTRO_FRAME_3
     type: bin
     vram: 0
     start: 0x5E2520
 
-  - name: _5E4A50
+  - name: CUTSCENE_CRAZY_JUNGLE_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5E4A50
 
-  - name: _5E6D10
+  - name: CUTSCENE_CRAZY_JUNGLE_BOSS_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5E6D10
 
-  - name: _5E9130
+  - name: CUTSCENE_STARLIGHT_HIGHWAY_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5E9130
 
-  - name: _5EB590
+  - name: CUTSCENE_STARLIGHT_HIGHWAY_INTRO_FRAME_1
     type: bin
     vram: 0
     start: 0x5EB590
 
-  - name: _5ED030
+  - name: CUTSCENE_STARLIGHT_HIGHWAY_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5ED030
 
-  - name: _5EEE90
+  - name: CUTSCENE_HAUNTED_HOUSE_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5EEE90
 
-  - name: _5F15F0
+  - name: CUTSCENE_HAUNTED_HOUSE_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5F15F0
 
-  - name: _5F3D30
+  - name: CUTSCENE_ICE_LAND_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5F3D30
 
-  - name: _5F62C0
+  - name: CUTSCENE_ICE_LAND_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5F62C0
 
-  - name: _5F8140
+  - name: CUTSCENE_ICE_LAND_BOSS_WIN_FRAME_0
     type: bin
     vram: 0
     start: 0x5F8140
 
-  - name: _5FAB50
+  - name: CUTSCENE_SNOWBOARD_STREET_SPEED_CROSS_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5FAB50
 
-  - name: _5FCFB0
+  - name: CUTSCENE_SNOWBOARD_STREET_SHOT_CROSS_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5FCFB0
 
-  - name: _5FF220
+  - name: CUTSCENE_X_CROSS_INTRO_FRAME_0
     type: bin
     vram: 0
     start: 0x5FF220
 
-  - name: _6013B0
+  - name: CUTSCENE_SUNNY_MOUNTAIN_LOSE_FRAME_0
     type: bin
     vram: 0
     start: 0x6013B0
 
-  - name: _6034D0
+  - name: CUTSCENE_SUNNY_MOUNTAIN_LOSE_FRAME_1
     type: bin
     vram: 0
     start: 0x6034D0
 
-  - name: _605840
+  - name: CUTSCENE_SUNNY_MOUNTAIN_LOSE_FRAME_2
     type: bin
     vram: 0
     start: 0x605840
 
-  - name: _607BF0
+  - name: CUTSCENE_ICE_LAND_LOSE_FRAME_0
     type: bin
     vram: 0
     start: 0x607BF0
 
-  - name: _6099A0
+  - name: CUTSCENE_TURTLE_ISLAND_LOSE_FRAME_0
     type: bin
     vram: 0
     start: 0x6099A0
 
-  - name: _60B690
+  - name: CUTSCENE_JINGLE_TOWN_LOSE_FRAME_0
     type: bin
     vram: 0
     start: 0x60B690
 
-  - name: _60D380
+  - name: CUTSCENE_JINGLE_TOWN_BOSS_LOSE_FRAME_0
     type: bin
     vram: 0
     start: 0x60D380
 
-  - name: _60F070
+  - name: CUTSCENE_WENDYS_HOUSE_LOSE_FRAME_0
     type: bin
     vram: 0
     start: 0x60F070
 
-  - name: _610D60
+  - name: CUTSCENE_LINDAS_CASTLE_LOSE_FRAME_0
     type: bin
     vram: 0
     start: 0x610D60
 
-  - name: _612A50
+  - name: CUTSCENE_CRAZY_JUNGLE_LOSE_FRAME_0
     type: bin
     vram: 0
     start: 0x612A50
 
-  - name: _614740
+  - name: CUTSCENE_CRAZY_JUNGLE_BOSS_LOSE_FRAME_0
     type: bin
     vram: 0
     start: 0x614740
 
-  - name: _616430
+  - name: CUTSCENE_STARLIGHT_HIGHWAY_LOSE_FRAME_0
     type: bin
     vram: 0
     start: 0x616430
 
-  - name: _618120
+  - name: CUTSCENE_HAUNTED_HOUSE_LOSE_FRAME_0
     type: bin
     vram: 0
     start: 0x618120
@@ -3943,62 +3943,62 @@ segments:
 
   - [0x64EFD0, bin]
 
-  - name: _64F190
+  - name: CUTSCENE_FADE_SUNNY_MOUNTAIN
     type: bin
     vram: 0
     start: 0x64F190
 
-  - name: _650AD0
+  - name: CUTSCENE_FADE_TURTLE_ISLAND
     type: bin
     vram: 0
     start: 0x650AD0
 
-  - name: _652620
+  - name: CUTSCENE_FADE_JINGLE_TOWN
     type: bin
     vram: 0
     start: 0x652620
 
-  - name: _654050
+  - name: CUTSCENE_FADE_WENDYS_HOUSE
     type: bin
     vram: 0
     start: 0x654050
 
-  - name: _655BF0
+  - name: CUTSCENE_FADE_LINDAS_CASTLE
     type: bin
     vram: 0
     start: 0x655BF0
 
-  - name: _657610
+  - name: CUTSCENE_FADE_CRAZY_JUNGLE
     type: bin
     vram: 0
     start: 0x657610
 
-  - name: _6592F0
+  - name: CUTSCENE_FADE_STARLIGHT_HIGHWAY
     type: bin
     vram: 0
     start: 0x6592F0
 
-  - name: _65AC00
+  - name: CUTSCENE_FADE_HAUNTED_HOUSE
     type: bin
     vram: 0
     start: 0x65AC00
 
-  - name: _65C5C0
+  - name: CUTSCENE_FADE_ICE_LAND
     type: bin
     vram: 0
     start: 0x65C5C0
 
-  - name: _65DFD0
+  - name: CUTSCENE_FADE_SNOWBOARD_STREET_SPEED_CROSS
     type: bin
     vram: 0
     start: 0x65DFD0
 
-  - name: _65F910
+  - name: CUTSCENE_FADE_SNOWBOARD_STREET_SHOT_CROSS
     type: bin
     vram: 0
     start: 0x65F910
 
-  - name: _6613B0
+  - name: CUTSCENE_FADE_X_CROSS
     type: bin
     vram: 0
     start: 0x6613B0
