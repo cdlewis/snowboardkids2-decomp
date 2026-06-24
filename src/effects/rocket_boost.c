@@ -17,8 +17,8 @@ void cleanupRocketEffect(RocketEffectUpdateData *data);
 
 void initRocketEffect(RocketEffectUpdateData *data) {
     data->body.displayLists = &D_80088670_89270;
-    data->body.segment1 = loadUncompressedData(&_1FB8B0_ROM_START, &_1FB8B0_ROM_END);
-    data->body.segment2 = loadCompressedData(&_4CA440_ROM_START, &_4CA440_ROM_END, 0xE90);
+    data->body.segment1 = loadUncompressedData(&rocketEffectSegment1_ROM_START, &rocketEffectSegment1_ROM_END);
+    data->body.segment2 = loadCompressedData(&rocketEffectSegment2_ROM_START, &rocketEffectSegment2_ROM_END, 0xE90);
     data->body.segment3 = NULL;
     data->flame.segment3 = NULL;
     data->scale = 0x200;

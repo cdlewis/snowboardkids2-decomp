@@ -1140,7 +1140,7 @@ void initSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
     s16 yOffset;
 
     allocation = getCurrentAllocation();
-    snowflakeAsset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    snowflakeAsset = loadCompressedData(&snowflakeSprite_ROM_START, &snowflakeSprite_ROM_END, 0x9488);
     setCleanupCallback(cleanupSaveSlotSelectionParticles);
 
     state->animToggle = 0;

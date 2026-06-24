@@ -303,7 +303,7 @@ void *loadAsset_216290(void) {
 }
 
 void *loadAsset_34CB50(void) {
-    return loadCompressedData(&_34CB50_ROM_START, &_34CB50_ROM_END, 0x5E28);
+    return loadCompressedData(&hudSpriteAsset_ROM_START, &hudSpriteAsset_ROM_END, 0x5E28);
 }
 
 void *loadShootCrossSprites(void) {

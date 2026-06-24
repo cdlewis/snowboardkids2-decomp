@@ -238,8 +238,10 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
 
 void initModelTransitionEffect(ModelTransitionEffectState *state) {
     setCleanupCallback(&cleanupModelTransitionEffect);
-    state->animationTable = loadCompressedData(&_646CD0_ROM_START, &_646CD0_ROM_END, 0xE8);
-    state->frameBuffer = loadCompressedData(&_49B500_ROM_START, &_49B500_ROM_END, 0xC00);
+    state->animationTable =
+        loadCompressedData(&modelTransitionAnimationTable_ROM_START, &modelTransitionAnimationTable_ROM_END, 0xE8);
+    state->frameBuffer =
+        loadCompressedData(&modelTransitionFrameBuffer_ROM_START, &modelTransitionFrameBuffer_ROM_END, 0xC00);
     if (state->model->index == 0x3E) {
         state->effectVariant = 0;
     } else {

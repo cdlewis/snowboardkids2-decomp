@@ -116,9 +116,9 @@ static void initFanEffectTask(FanEffectTaskState *taskState) {
     StateEntry **uncompressedAssetPtr;
 
     taskState->unk20 = &D_80088650;
-    taskState->unk24 = loadUncompressedData(&_1FB4E0_ROM_START, &_1FB4E0_ROM_END);
+    taskState->unk24 = loadUncompressedData(&fanEffectSegment1_ROM_START, &fanEffectSegment1_ROM_END);
 
-    taskState->unk28 = loadCompressedData(&_4C9E70_ROM_START, &_4C9E70_ROM_END, 0xA10);
+    taskState->unk28 = loadCompressedData(&fanEffectSegment2_ROM_START, &fanEffectSegment2_ROM_END, 0xA10);
     uncompressedAssetPtr = &taskState->unk24;
 
     taskState->unk5C = &D_80088660;

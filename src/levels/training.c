@@ -186,7 +186,7 @@ void initTrainingInstructionTask(TrainingInstructionState *arg0) {
     getCurrentAllocation();
     arg0->textRenderContext = loadTextRenderAsset(1);
     arg0->uiAsset = loadAsset_34F7E0();
-    arg0->messageData = loadCompressedData(&_40E1C0_ROM_START, &_40E1C0_ROM_END, 0x1130);
+    arg0->messageData = loadCompressedData(&trainingMessageData_ROM_START, &trainingMessageData_ROM_END, 0x1130);
     arg0->panelIndex = 0;
     setCleanupCallback(cleanupTrainingInstructionTask);
     setCallback(checkTrainingInstructionCheckpoint);

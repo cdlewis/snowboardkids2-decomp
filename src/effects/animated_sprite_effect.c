@@ -37,8 +37,8 @@ void cleanupSpriteEffectTask(SpriteEffectTask *task);
 void initSpriteEffectTask(SpriteEffectTask *task) {
     void *textureData;
 
-    task->modelData = loadCompressedData(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
-    textureData = loadCompressedData(&_49B420_ROM_START, &_49B420_ROM_END, 0x240);
+    task->modelData = loadCompressedData(&spriteEffectModelData_ROM_START, &spriteEffectModelData_ROM_END, 0xF18);
+    textureData = loadCompressedData(&spriteEffectTextureData_ROM_START, &spriteEffectTextureData_ROM_END, 0x240);
     task->textureData = textureData;
     task->sprite1.assetTemplate = (loadAssetMetadata_arg *)((u8 *)textureData + (task->textureIndex << 6));
     task->sprite1.alpha = (randA() & 0x1F) + 0x70;
@@ -94,11 +94,11 @@ void scheduleSpriteEffectTask(void *startPos, void *endPos, Vec3i *velocity, s32
 }
 
 void *loadSpriteEffectModelData(void) {
-    return loadCompressedData(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
+    return loadCompressedData(&spriteEffectModelData_ROM_START, &spriteEffectModelData_ROM_END, 0xF18);
 }
 
 void *loadSpriteEffectTextureData(void) {
-    return loadCompressedData(&_49B420_ROM_START, &_49B420_ROM_END, 0x240);
+    return loadCompressedData(&spriteEffectTextureData_ROM_START, &spriteEffectTextureData_ROM_END, 0x240);
 }
 
 void *freeSpriteEffectModelData(void *data) {

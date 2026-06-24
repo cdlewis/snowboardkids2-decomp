@@ -3464,7 +3464,7 @@ void spawnPanelProjectile(s32 arg0) {
 }
 
 void initItemHomingProjectileTask(void **arg0) {
-    *arg0 = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    *arg0 = loadCompressedData(&playerItemIconAsset_ROM_START, &playerItemIconAsset_ROM_END, 0x2608);
     setCleanupCallback(&cleanupItemHomingProjectileTask);
     setCallbackWithContinue(&initItemHomingProjectileMovement);
 }

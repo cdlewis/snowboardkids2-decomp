@@ -575,7 +575,8 @@ void initRace(void) {
                 case 0:
                 case 1:
                     raceState->humanPlayerCount = 1;
-                    raceState->introAnimationData = loadCompressedData(&_40E870_ROM_START, &_40E870_ROM_END, 0xB8E0);
+                    raceState->introAnimationData =
+                        loadCompressedData(&introAnimationData_ROM_START, &introAnimationData_ROM_END, 0xB8E0);
                     break;
             }
             break;
@@ -997,7 +998,7 @@ void loadRaceGameData(void) {
 
     gameState = (GameState *)getCurrentAllocation();
     gameState->gameData.dataStart = loadCourseDataByIndex(gameState->memoryPoolId);
-    gameState->unk28 = loadCompressedData(&_3FF010_ROM_START, &_3FF010_ROM_END, 0x16E0);
+    gameState->unk28 = loadCompressedData(&raceGameDataLayout_ROM_START, &raceGameDataLayout_ROM_END, 0x16E0);
     setGameStateHandlerWithContinue(&parseRaceAssetData);
 }
 
@@ -1029,7 +1030,7 @@ void loadPlayerAssets(void) {
         } while (i < gs->numPlayers);
     }
 
-    gs->unk18 = loadCompressedData(&_34CB50_ROM_START, &_34CB50_ROM_END, 0x5E28);
+    gs->unk18 = loadCompressedData(&hudSpriteAsset_ROM_START, &hudSpriteAsset_ROM_END, 0x5E28);
     gs->unk1C = loadAsset_B7E70();
     gs->unk20 = loadAsset_216290();
 

@@ -123,7 +123,8 @@ void initTrickSpriteEffectTask(TrickSpriteEffectInitState *);
 void initTrickSpriteEffectTask(TrickSpriteEffectInitState *initState) {
     s32 i;
 
-    initState->modelData = loadCompressedData(&_646DF0_ROM_START, &_646DF0_ROM_END, 0x1188);
+    initState->modelData =
+        loadCompressedData(&trickSpriteEffectModelData_ROM_START, &trickSpriteEffectModelData_ROM_END, 0x1188);
     initState->vertexData = (s32 *)&gTrickSpriteEffectVertexData;
     initState->alpha = 0xFF;
 

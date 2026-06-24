@@ -467,7 +467,7 @@ void initBoardShopSnowParticles(SnowParticleState *arg0) {
     s32 randOffset;
 
     state = getCurrentAllocation();
-    snowflakeSprite = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    snowflakeSprite = loadCompressedData(&snowflakeSprite_ROM_START, &snowflakeSprite_ROM_END, 0x9488);
     arg0->particles = allocateNodeMemory(0xF0);
     setCleanupCallback(cleanupBoardShopSnowParticles);
 
@@ -887,7 +887,8 @@ void cleanupBoardShopShopkeeper(BoardShopShopkeeperState *arg0) {
 }
 
 void loadBoardShopBackground(BoardShopBackgroundState *state) {
-    state->backgroundAsset = loadCompressedData(&_4488E0_ROM_START, &_4488E0_ROM_END, 0x14410);
+    state->backgroundAsset =
+        loadCompressedData(&previewBackgroundAsset_ROM_START, &previewBackgroundAsset_ROM_END, 0x14410);
     setCleanupCallback(&cleanupBoardShopBackground);
     setCallback(&initBoardShopBackgroundRenderState);
 }
@@ -1249,7 +1250,7 @@ void initBoardShopBoardIcons(BoardShopBoardIconsState *arg0) {
     u8 boardIndex;
 
     state = getCurrentAllocation();
-    spriteAsset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    spriteAsset = loadCompressedData(&snowflakeSprite_ROM_START, &snowflakeSprite_ROM_END, 0x9488);
 
     for (i = 0; i < 4; i++) {
         arg0->icons[i].x = 0x60;
@@ -1509,7 +1510,7 @@ void initBoardShopSnowflakeSlideIn(BoardShopSnowflakeSpriteState *arg0) {
     void *snowflakeAsset;
     BoardShopScreenAllocation *allocation = getCurrentAllocation();
 
-    snowflakeAsset = loadCompressedData(&_4547D0_ROM_START, &_4547D0_ROM_END, 0x9488);
+    snowflakeAsset = loadCompressedData(&snowflakeSprite_ROM_START, &snowflakeSprite_ROM_END, 0x9488);
 
     arg0->x = 0x60;
     arg0->spriteIndex = allocation->unk788[allocation->scrollOutBoardIndex];

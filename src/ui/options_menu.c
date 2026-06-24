@@ -94,7 +94,7 @@ void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
     void *spriteAsset;
 
     textAsset = loadTextRenderAsset(1);
-    spriteAsset = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
+    spriteAsset = loadCompressedData(&optionsMenuSprites_ROM_START, &optionsMenuSprites_ROM_END, 0xBB8);
     setCleanupCallback(cleanupOptionsMenuTitle);
 
     arg0->titleText.x = -0x50;
@@ -146,7 +146,7 @@ void initOptionsMenuToggles(void *arg0) {
     u8 optionValue;
 
     getCurrentAllocation();
-    spriteAsset = loadCompressedData(&_4196E0_ROM_START, &_419C60_ROM_START, 0xBB8);
+    spriteAsset = loadCompressedData(&optionsMenuSprites_ROM_START, &_419C60_ROM_START, 0xBB8);
     ARG0->textRenderAsset = loadTextRenderAsset(1);
     setCleanupCallback(cleanupOptionsMenuToggles);
 
@@ -261,7 +261,7 @@ void initOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
     u8 textStyle;
 
     getCurrentAllocation();
-    spriteAsset = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
+    spriteAsset = loadCompressedData(&optionsMenuSprites_ROM_START, &optionsMenuSprites_ROM_END, 0xBB8);
     arg0->textRenderAsset = loadTextRenderAsset(1);
     setCleanupCallback(cleanupOptionsMenuLabels);
 

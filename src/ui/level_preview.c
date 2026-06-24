@@ -771,7 +771,7 @@ s32 sampleMaxSurroundingTerrainHeight(LevelPreviewCharacterState *state) {
 
 void initLevelPreviewPortraits(LevelPreviewPortraitState *state) {
     s32 pad[4];
-    state->portraitAsset = loadCompressedData(&_43A000_ROM_START, &_43A000_ROM_END, 0xB198);
+    state->portraitAsset = loadCompressedData(&levelSelectPortraits_ROM_START, &levelSelectPortraits_ROM_END, 0xB198);
     setCleanupCallback(&cleanupLevelPreviewPortraits);
     setCallback(&initLevelPreviewPortraitDisplay);
 }
@@ -907,7 +907,7 @@ void initCharacterSelectDisplay(CharacterSelectDisplayState *state) {
     s32 i;
     s32 row;
 
-    portraitAsset = loadCompressedData(&_43A000_ROM_START, &_43A000_ROM_END, 0xB198);
+    portraitAsset = loadCompressedData(&levelSelectPortraits_ROM_START, &levelSelectPortraits_ROM_END, 0xB198);
     fontAsset = loadCompressedData(&_459310_ROM_START, &_459310_ROM_END, 0x2278);
     setCleanupCallback(cleanupCharacterSelectionIcons);
 

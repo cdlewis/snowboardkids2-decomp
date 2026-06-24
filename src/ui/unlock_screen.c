@@ -96,7 +96,7 @@ void initUnlockScreen(void) {
     state->rotationAngle = 0;
     state->arrowSpriteAsset = loadCompressedData(&_4237C0_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
     state->backgroundAsset = loadCompressedData(&okPromptSprites_ROM_START, &_41AD80_ROM_START, 0x1B48);
-    state->itemIconAsset = loadCompressedData(&_42F1D0_ROM_START, &_43A000_ROM_START, 0x14410);
+    state->itemIconAsset = loadCompressedData(&_42F1D0_ROM_START, &levelSelectPortraits_ROM_START, 0x14410);
     state->digitSpriteAsset = loadCompressedData(&_419C60_ROM_START, &_419C60_ROM_END, 0x1548);
     state->goldIconAsset = loadCompressedData(&digit_sprite_ROM_START, &_3F6BB0_ROM_START, 0x508);
     state->itemLabelAsset = loadCompressedData(&_3F6670_ROM_START, &_3F6670_ROM_END, 0x388);

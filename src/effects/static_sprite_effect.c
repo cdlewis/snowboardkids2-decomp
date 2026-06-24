@@ -52,7 +52,7 @@ void updateStaticSpriteEffectTask(StaticSpriteEffectTaskData *);
 void cleanupStaticSpriteEffectTask(void **);
 
 void initStaticSpriteEffectTask(StaticSpriteEffectTaskData *arg0) {
-    arg0->modelData = loadCompressedData(&_647F90_ROM_START, &_647F90_ROM_END, 0xF18);
+    arg0->modelData = loadCompressedData(&spriteEffectModelData_ROM_START, &spriteEffectModelData_ROM_END, 0xF18);
     arg0->sprite1.assetTemplate = (loadAssetMetadata_arg *)&staticSpriteEffectTexture;
     arg0->sprite1.alpha = (randA() & 0x1F) + 0x70;
     arg0->frameCounter = 0;

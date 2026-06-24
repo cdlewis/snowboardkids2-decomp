@@ -55,7 +55,7 @@ void initTitleLogoRenderState(TitleLogoTask *arg0) {
 }
 
 void loadTitleLogoAsset(TitleLogoTask *arg0) {
-    arg0->assetData = loadCompressedData(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
+    arg0->assetData = loadCompressedData(&titleLogo_ROM_START, &titleLogo_ROM_END, 0x7B50);
     setCleanupCallback(cleanupTitleLogoTask);
     setCallback(initTitleLogoRenderState);
 }

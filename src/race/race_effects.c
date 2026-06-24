@@ -126,7 +126,7 @@ void initPlayerFinishPositionTask(FinishPositionDisplayState *arg0) {
             if (state->playerCount == 2) {
                 arg0->y = 0x10;
             }
-            romStart = &_3F3940_ROM_START;
+            romStart = &playerFinishPositionAsset_ROM_START;
             romEnd = &_3F3D10_ROM_START;
             size = 0x888;
             goto dma_and_callbacks;
@@ -134,7 +134,7 @@ void initPlayerFinishPositionTask(FinishPositionDisplayState *arg0) {
     }
 
     romStart = &_3F3D10_ROM_START;
-    romEnd = &_3F3EF0_ROM_START;
+    romEnd = &playerItemIconAsset_ROM_START;
     size = 0x288;
     arg0->x = -0x44;
     arg0->y = 0x20;
@@ -181,7 +181,7 @@ void initPlayerItemDisplayTask(PlayerItemDisplayState *state) {
         state->secondaryItemY = -0x30;
     }
     state->secondaryItemAsset = state->primaryItemAsset =
-        loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+        loadCompressedData(&playerItemIconAsset_ROM_START, &playerItemIconAsset_ROM_END, 0x2608);
     state->itemCountX = state->primaryItemX + 0x18;
     state->itemCountY = state->primaryItemY + 0x10;
     state->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &digit_sprite_ROM_END, 0x508);
@@ -198,7 +198,7 @@ else_branch:
     state->charDisplayPtr = &state->charDisplayValue;
     state->charDisplayX = state->primaryItemX + 8;
     state->charDisplayY = state->primaryItemY + 8;
-    state->digitAsset = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    state->digitAsset = loadCompressedData(&playerItemIconAsset_ROM_START, &playerItemIconAsset_ROM_END, 0x2608);
     state->charDisplayFlag = 0;
 
 callbacks:
@@ -304,7 +304,7 @@ void initPlayerLapCounterTask(LapCounterState *state) {
     if (allocation->numPlayers == 1) {
         state->x = -0x88;
         state->y = -0x60;
-        state->lapIconAsset = loadCompressedData(&_3F6420_ROM_START, &_3F6420_ROM_END, 0x168);
+        state->lapIconAsset = loadCompressedData(&lapCounterIconAsset_ROM_START, &lapCounterIconAsset_ROM_END, 0x168);
         state->spriteIndex = 0;
         state->digitX1 = ((u16)state->x) + 0x1C;
         state->digitY1 = state->y;
@@ -336,7 +336,11 @@ void initPlayerLapCounterTask(LapCounterState *state) {
             state->textY = ((u16)state->y) + 8;
         }
         textBuffer = state->lapTextBuffer;
-        state->lapIconAsset = loadCompressedData(&_3F65C0_ROM_START, &_3F65C0_ROM_END, 0x98);
+        state->lapIconAsset = loadCompressedData(
+            &lapCounterMultiplayerIconAsset_ROM_START,
+            &lapCounterMultiplayerIconAsset_ROM_END,
+            0x98
+        );
         state->spriteIndex = 0;
         state->digitsAsset = 0;
         sprintf(textBuffer, D_8009E868_9F468, 1, allocation->totalLaps + 1);
@@ -836,7 +840,7 @@ void initSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     arg0->player = state->players;
-    arg0->asset = loadCompressedData(&_3F3940_ROM_START, &_3F3940_ROM_END, 0x888);
+    arg0->asset = loadCompressedData(&playerFinishPositionAsset_ROM_START, &playerFinishPositionAsset_ROM_END, 0x888);
     arg0->x = -0x48;
     arg0->y = -0x38;
     setCleanupCallback(&cleanupSpeedCrossFinishPositionTask);
@@ -1800,7 +1804,7 @@ void initSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0) {
     arg0->itemX = -0x10;
     arg0->itemY = -0x60;
     arg0->player = (Player *)((u8 *)base + index * 3048);
-    arg0->spriteAsset = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    arg0->spriteAsset = loadCompressedData(&playerItemIconAsset_ROM_START, &playerItemIconAsset_ROM_END, 0x2608);
     setCallbackWithContinue(updateSecondaryItemDisplay);
     setCleanupCallback(cleanupSecondaryItemDisplayTask);
 }

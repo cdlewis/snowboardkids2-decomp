@@ -36,7 +36,7 @@ void initOptionsMenu(void) {
     initMenuCameraNode((ViewportNode *)allocation, 8, 0xF, 1);
     setViewportFadeValue(0, 0xFF, 0);
     setViewportFadeValue(0, 0, 0x10);
-    allocation->assetData = loadCompressedData(&_4196E0_ROM_START, &_4196E0_ROM_END, 0xBB8);
+    allocation->assetData = loadCompressedData(&optionsMenuSprites_ROM_START, &optionsMenuSprites_ROM_END, 0xBB8);
     allocation->graphicsData = loadTextRenderAsset(1);
     allocation->frameCounter = 0;
     allocation->menuState = 0;

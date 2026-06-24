@@ -2274,7 +2274,7 @@ void spawnChairliftEffect(void *arg0) {
 void initItemTriggerTask(ItemTriggerTaskState *arg0) {
     s16 idx;
 
-    arg0->textureTable = loadCompressedData(&_3F3EF0_ROM_START, &_3F3EF0_ROM_END, 0x2608);
+    arg0->textureTable = loadCompressedData(&playerItemIconAsset_ROM_START, &playerItemIconAsset_ROM_END, 0x2608);
     idx = arg0->courseIndex;
     arg0->itemData = loadCompressedData(
         D_80090AB8_916B8[idx].romStart,

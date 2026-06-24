@@ -1362,12 +1362,12 @@ segments:
     vram: 0
     start: 0x1FB040
 
-  - name: _1FB4E0
+  - name: fanEffectSegment1
     type: bin
     vram: 0
     start: 0x1FB4E0
 
-  - name: _1FB8B0
+  - name: rocketEffectSegment1
     type: bin
     vram: 0
     start: 0x1FB8B0
@@ -1936,7 +1936,7 @@ segments:
     vram: 0
     start: 0x34CAB0
 
-  - name: _34CB50
+  - name: hudSpriteAsset
     type: bin
     vram: 0
     start: 0x34CB50
@@ -2271,14 +2271,14 @@ segments:
     vram: 0
     start: 0x3F37C0
 
-  - name: _3F3940
+  - name: playerFinishPositionAsset
     type: bin
     vram: 0
     start: 0x3F3940
 
   - [0x3F3D10, bin]
 
-  - name: _3F3EF0
+  - name: playerItemIconAsset
     type: bin
     vram: 0
     start: 0x3F3EF0
@@ -2288,12 +2288,12 @@ segments:
     vram: 0
     start: 0x3F58E0
 
-  - name: _3F6420
+  - name: lapCounterIconAsset
     type: bin
     vram: 0
     start: 0x3F6420
 
-  - name: _3F65C0
+  - name: lapCounterMultiplayerIconAsset
     type: bin
     vram: 0
     start: 0x3F65C0
@@ -2478,7 +2478,7 @@ segments:
     vram: 0
     start: 0x3FECA0
 
-  - name: _3FF010
+  - name: raceGameDataLayout
     type: bin
     vram: 0
     start: 0x3FF010
@@ -2643,7 +2643,7 @@ segments:
     vram: 0
     start: 0x405F60
 
-  - name: _4060A0
+  - name: targetPositionData
     type: bin
     vram: 0
     start: 0x4060A0
@@ -2818,14 +2818,17 @@ segments:
     vram: 0
     start: 0x40D7C0
 
-  - name: _40E1C0
+  - name: trainingMessageData
     type: bin
     vram: 0
     start: 0x40E1C0
 
-  - [0x40E870, bin]
+  - name: introAnimationData
+    type: bin
+    vram: 0
+    start: 0x40E870
 
-  - name: _414CF0
+  - name: titleLogo
     type: bin
     vram: 0
     start: 0x414CF0
@@ -2840,7 +2843,7 @@ segments:
     vram: 0
     start: 0x419440
 
-  - name: _4196E0
+  - name: optionsMenuSprites
     type: bin
     vram: 0
     start: 0x_4196E0
@@ -2880,7 +2883,7 @@ segments:
     vram: 0
     start: 0x42F1D0
 
-  - name: _43A000
+  - name: levelSelectPortraits
     type: bin
     vram: 0
     start: 0x43A000
@@ -2890,12 +2893,12 @@ segments:
     vram: 0
     start: 0x43F050
 
-  - name: _4488E0
+  - name: previewBackgroundAsset
     type: bin
     vram: 0
     start: 0x4488E0
 
-  - name: _4547D0
+  - name: snowflakeSprite
     type: bin
     vram: 0
     start: 0x4547D0
@@ -3010,12 +3013,12 @@ segments:
     vram: 0
     start: 0x4998E0
 
-  - name: _49B420
+  - name: spriteEffectTextureData
     type: bin
     vram: 0
     start: 0x49B420
 
-  - name: _49B500
+  - name: modelTransitionFrameBuffer
     type: bin
     vram: 0
     start: 0x49B500
@@ -3247,12 +3250,12 @@ segments:
     vram: 0
     start: 0x4C9310
 
-  - name: _4C9E70
+  - name: fanEffectSegment2
     type: bin
     vram: 0
     start: 0x4C9E70
 
-  - name: _4CA440
+  - name: rocketEffectSegment2
     type: bin
     vram: 0
     start: 0x4CA440
@@ -3899,12 +3902,12 @@ segments:
     vram: 0
     start: 0x646910
 
-  - name: _646CD0
+  - name: modelTransitionAnimationTable
     type: bin
     vram: 0
     start: 0x646CD0
 
-  - name: _646DF0
+  - name: trickSpriteEffectModelData
     type: bin
     vram: 0
     start: 0x646DF0
@@ -3916,7 +3919,7 @@ segments:
 
   - [0x647930, bin]
 
-  - name: _647F90
+  - name: spriteEffectModelData
     type: bin
     vram: 0
     start: 0x647F90
@@ -4130,7 +4133,7 @@ segments:
     vram: 0
     start: 0x67DB80
 
-  - name: _67E860
+  - name: cornerDecorationAsset
     type: bin
     vram: 0
     start: 0x67E860

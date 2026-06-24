@@ -162,7 +162,8 @@ void func_80003EE0_4AE0(void) {
     taskMemory->unk964 = loadDmaAsset(1);
 
     taskMemory->unk968 = loadDmaAsset(3);
-    taskMemory->cornerDecorationAsset = loadCompressedData(&_67E860_ROM_START, &_67E860_ROM_END, 0x2448);
+    taskMemory->cornerDecorationAsset =
+        loadCompressedData(&cornerDecorationAsset_ROM_START, &cornerDecorationAsset_ROM_END, 0x2448);
     taskMemory->unk95C = loadCompressedData(&_49BA20_ROM_START, &_49BA20_ROM_END, 0x2B0);
 
     for (i = 0; i < 6; i++) {

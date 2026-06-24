@@ -450,7 +450,7 @@ void initTitleScreen(void) {
     initMenuCameraNode(node2, 0, 8, 0);
     setViewportPerspective(node2, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     setViewportTransformById(node2->viewportId, &gTitleCameraSettings);
-    state->titleLogoData = loadCompressedData(&_414CF0_ROM_START, &_414CF0_ROM_END, 0x7B50);
+    state->titleLogoData = loadCompressedData(&titleLogo_ROM_START, &titleLogo_ROM_END, 0x7B50);
     dmaResult = loadCompressedData(&_418520_ROM_START, &_418520_ROM_END, 0x2238);
     state->menuSelection = 0;
     state->menuOptionCount = 0;
