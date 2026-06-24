@@ -1165,7 +1165,7 @@ segments:
       - { type: .bss, vram: 0x800BAF08, name: effects/fan_sound_3d }
 
   # This appears to be dead code. Possibly an overlay
-  - name: _1E7F60
+  - name: UNUSED_CODE_BLOCK
     type: bin
     vram: 0
     start: 0x1E7F60
@@ -1295,7 +1295,7 @@ segments:
     vram: 0
     start: 0x1EEC10
 
-  - name: _1EEDF0
+  - name: UNUSED_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EEDF0
@@ -3178,7 +3178,7 @@ segments:
     vram: 0
     start: 0x4A73F0
 
-  - name: _4A7600
+  - name: UNUSED_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A7600
@@ -3595,7 +3595,7 @@ segments:
     vram: 0
     start: 0x5A9D70
 
-  - name: _5AD1C0
+  - name: UNUSED_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5AD1C0
