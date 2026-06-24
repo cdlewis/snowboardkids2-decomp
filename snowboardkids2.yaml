@@ -4008,12 +4008,12 @@ segments:
     vram: 0
     start: 0x663010
 
-  - name: _663330
+  - name: CUTSCENE_SCENE_RENDER_TEXTURE_1
     type: bin
     vram: 0
     start: 0x663330
 
-  - name: _6633B0
+  - name: CUTSCENE_SCENE_RENDER_TEXTURE_2
     type: bin
     vram: 0
     start: 0x6633B0
