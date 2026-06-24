@@ -1557,12 +1557,12 @@ segments:
     vram: 0
     start: 0x214B70
 
-  - name: _214E70
+  - name: CUTSCENE_SCENE_RENDER_VERTEX_DATA_1
     type: bin
     vram: 0
     start: 0x214E70
 
-  - name: _214F20
+  - name: CUTSCENE_SCENE_RENDER_VERTEX_DATA_2
     type: bin
     vram: 0
     start: 0x214F20
@@ -2838,7 +2838,7 @@ segments:
     vram: 0
     start: 0x418520
 
-  - name: _419440
+  - name: gameStateInitUncompressedData
     type: bin
     vram: 0
     start: 0x419440

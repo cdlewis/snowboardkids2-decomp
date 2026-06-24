@@ -206,15 +206,15 @@ Gfx D_8008CD20_8D920[] = {
 };
 
 AssetDataBlock D_8008CD98_8D998 = {
-    .vertStart1 = &_214E70_ROM_START,
-    .vertEnd1 = &_214E70_ROM_END,
+    .vertStart1 = &CUTSCENE_SCENE_RENDER_VERTEX_DATA_1_ROM_START,
+    .vertEnd1 = &CUTSCENE_SCENE_RENDER_VERTEX_DATA_1_ROM_END,
     .compStart1 = &_663330_ROM_START,
     .compEnd1 = &_663330_ROM_END,
     .compSize1 = 0x0180,
     .pad12 = 0x0001,
     .dispList1 = D_8008CCE0_8D8E0,
-    .vertStart2 = &_214F20_ROM_START,
-    .vertEnd2 = &_214F20_ROM_END,
+    .vertStart2 = &CUTSCENE_SCENE_RENDER_VERTEX_DATA_2_ROM_START,
+    .vertEnd2 = &CUTSCENE_SCENE_RENDER_VERTEX_DATA_2_ROM_END,
     .compStart2 = &_6633B0_ROM_START,
     .compEnd2 = &_6633B0_ROM_END,
     .compSize2 = 0x0120,

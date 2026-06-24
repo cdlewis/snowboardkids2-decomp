@@ -63,7 +63,8 @@ void initializeGameState(void) {
     scheduleTask(&initClocktowerDiscoveryTrigger, 0, 0, 0x64);
     scheduleTask(&initTownExitTrigger, 0, 0, 0x64);
     scheduleTask(&initDiscoveryDisplaySystem, 0, 0, 0x64);
-    temp_s0->unk3E4 = loadUncompressedData(&_419440_ROM_START, &_419440_ROM_END);
+    temp_s0->unk3E4 =
+        loadUncompressedData(&gameStateInitUncompressedData_ROM_START, &gameStateInitUncompressedData_ROM_END);
     temp_s0->unk3DC = loadCompressedData(&locationMarkerSprite_ROM_START, &locationMarkerSprite_ROM_END, 0x3108);
     temp_s0->unk3E0 = loadTextRenderAsset(1);
     setViewportFadeValue(NULL, 0xFF, 0);
