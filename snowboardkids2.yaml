@@ -725,7 +725,7 @@ segments:
       - [0xB74F0, c, levels/crazy_jungle]
       - [0xB7DD0, .data, levels/crazy_jungle]
 
-  - name: _B7E70
+  - name: PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS
     type: bin
     vram: 0
     start: 0xB7E70
@@ -1622,7 +1622,7 @@ segments:
     vram: 0
     start: 0x215D70
 
-  - name: _216290
+  - name: PARTICLE_EFFECT_COMPRESSED_GRAPHICS
     type: bin
     vram: 0
     start: 0x216290
@@ -1941,7 +1941,7 @@ segments:
     vram: 0
     start: 0x34CB50
 
-  - name: _34F7E0
+  - name: UI_MENUS_GRAPHICS
     type: bin
     vram: 0
     start: 0x34F7E0
@@ -2211,7 +2211,7 @@ segments:
     vram: 0
     start: 0x3EADF0
 
-  - name: _3ECE40
+  - name: ITEM_SPRITE_METADATA
     type: bin
     vram: 0
     start: 0x3ECE40
@@ -2748,17 +2748,17 @@ segments:
     vram: 0
     start: 0x40A370
 
-  - name: _40A450
+  - name: CRAZY_JUNGLE_BOSS_HUD_ASSET
     type: bin
     vram: 0
     start: 0x40A450
 
-  - name: _40A590
+  - name: JINGLE_TOWN_BOSS_HUD_ASSET
     type: bin
     vram: 0
     start: 0x40A590
 
-  - name: _40A760
+  - name: ICE_LAND_BOSS_HUD_ASSET
     type: bin
     vram: 0
     start: 0x40A760

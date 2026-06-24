@@ -2082,7 +2082,7 @@ s32 loadAssetByIndex_953B0(s16 groupIndex, s16 pairIndex) {
 }
 
 void *load_3ECE40(void) {
-    return loadCompressedData(&_3ECE40_ROM_START, &_3ECE40_ROM_END, 0xA518);
+    return loadCompressedData(&ITEM_SPRITE_METADATA_ROM_START, &ITEM_SPRITE_METADATA_ROM_END, 0xA518);
 }
 
 void *loadAssetByIndex_95470(s32 index) {
@@ -2132,11 +2132,11 @@ void *loadBossHudAssetByRaceType(s32 index) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     if (state->raceType == RACE_TYPE_BOSS_JUNGLE) {
-        return loadCompressedData(&_40A450_ROM_START, &_40A450_ROM_END, 0x250);
+        return loadCompressedData(&CRAZY_JUNGLE_BOSS_HUD_ASSET_ROM_START, &CRAZY_JUNGLE_BOSS_HUD_ASSET_ROM_END, 0x250);
     } else if (state->raceType == RACE_TYPE_BOSS_JINGLE) {
-        return loadCompressedData(&_40A590_ROM_START, &_40A590_ROM_END, 0x260);
+        return loadCompressedData(&JINGLE_TOWN_BOSS_HUD_ASSET_ROM_START, &JINGLE_TOWN_BOSS_HUD_ASSET_ROM_END, 0x260);
     } else if (state->raceType == RACE_TYPE_BOSS_ICE) {
-        return loadCompressedData(&_40A760_ROM_START, &_40A760_ROM_END, 0x270);
+        return loadCompressedData(&ICE_LAND_BOSS_HUD_ASSET_ROM_START, &ICE_LAND_BOSS_HUD_ASSET_ROM_END, 0x270);
     } else {
         return loadCompressedData(
             gBossHudAssetTable[index].start,

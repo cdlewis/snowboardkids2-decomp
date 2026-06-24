@@ -321,11 +321,18 @@ LevelDisplayLists *getSkyDisplayLists3ByIndex(s32 index) {
 }
 
 void *loadAsset_B7E70(void) {
-    return loadUncompressedData(&_B7E70_ROM_START, &_B7E70_ROM_END);
+    return loadUncompressedData(
+        &PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_ROM_START,
+        &PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_ROM_END
+    );
 }
 
 void *loadAsset_216290(void) {
-    return loadCompressedData(&_216290_ROM_START, &_216290_ROM_END, 0x5740);
+    return loadCompressedData(
+        &PARTICLE_EFFECT_COMPRESSED_GRAPHICS_ROM_START,
+        &PARTICLE_EFFECT_COMPRESSED_GRAPHICS_ROM_END,
+        0x5740
+    );
 }
 
 void *loadAsset_34CB50(void) {
@@ -345,5 +352,5 @@ void *loadTrickCrossSprites(void) {
 }
 
 void *loadAsset_34F7E0(void) {
-    return loadCompressedData(&_34F7E0_ROM_START, &_34F7E0_ROM_END, 0x438);
+    return loadCompressedData(&UI_MENUS_GRAPHICS_ROM_START, &UI_MENUS_GRAPHICS_ROM_END, 0x438);
 }
