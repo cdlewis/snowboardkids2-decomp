@@ -277,7 +277,7 @@ void initCameraRotationTask(CameraRotationTaskState *);
 typedef struct {
     SceneModel *model;
     u8 transformMatrix[0x20];
-    void *materialData;
+    DisplayLists *displayLists;
     void *displayList;
     void *vertexData;
     s32 renderFlags;

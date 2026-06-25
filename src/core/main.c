@@ -2,6 +2,7 @@
 
 #include "assets.h"
 #include "common.h"
+#include "data/model_display_lists.h"
 #include "data/shared_model_part_display_lists.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
@@ -216,52 +217,20 @@ void initAnimatedModelTask(AnimatedModelTaskState *arg0);
 void initSpriteSpawnerTask(func_80000C2C_182C_arg *arg0);
 void initStaticModelTask(StaticModelTaskArg *arg0);
 
-extern s32 D_80088410;
-extern s32 D_80088400;
-extern s32 D_80088420;
-extern s32 D_80088430;
-extern s32 D_80088440;
-extern s32 D_80088470;
-extern s32 D_80088480;
-extern s32 D_80088490;
-extern s32 D_800884A0;
-extern s32 D_800884B0;
-extern s32 D_80088500;
-extern s32 D_800884F0;
-extern s32 D_80088510;
-extern s32 D_80088550;
-extern s32 D_80088540;
-extern s32 D_80088450;
-extern s32 D_800883F0;
-extern s32 D_80088580;
-extern s32 D_80088590;
-extern s32 D_800885A0;
-extern s32 D_800885B0;
-extern s32 D_80088180;
-extern s32 D_80088150;
 extern s32 D_80088600;
-extern s32 D_800884D0;
-extern s32 D_800884E0;
-extern s32 D_80088560;
-extern s32 D_80088570;
 extern s32 D_80088620;
-extern s32 D_800881B0;
-extern s32 D_800881C0;
-extern s32 D_80088520;
-extern s32 D_80088530;
-extern s32 D_800882F0;
 extern u32 D_80088610_89210;
 
 ModelEntityTaskConfig D_80088F20_89B20[] = {
     { .unk0 = initRotatingModelTask,
-     .unk4 = &D_80088410,
+     .unk4 = &gTownRotatingModel0DisplayLists,
      .unk8 = 0xFF8A0000,
      .unkC = 0x00390000,
      .unk10 = 0xFF8A0000,
      .unk14 = -1,
      .unk16 = -64 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = &D_80088400,
+     .unk4 = &gTownSwingingModel0DisplayLists,
      .unk8 = 0xFF2E0000,
      .unkC = 0x00410000,
      .unk10 = 0xFFC80000,
@@ -270,7 +239,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000020,
      .unk1C = 0x000001C7 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = &D_80088420,
+     .unk4 = &gTownSwingingModel1DisplayLists,
      .unk8 = 0x002E0000,
      .unkC = 0x00330000,
      .unk10 = 0xFF590000,
@@ -279,7 +248,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000010,
      .unk1C = 0x000000E3 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = &D_80088430,
+     .unk4 = &gTownSwingingModel2DisplayLists,
      .unk8 = 0x00AD0000,
      .unkC = 0x00390000,
      .unk10 = 0xFFAF0000,
@@ -288,7 +257,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000010,
      .unk1C = 0x000000E3 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = &D_80088440,
+     .unk4 = &gTownSwingingModel3DisplayLists,
      .unk8 = 0x00BE0000,
      .unkC = 0x00390000,
      .unk10 = 0xFFF00000,
@@ -297,14 +266,14 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = -16,
      .unk1C = 0x000000E3 },
     { .unk0 = initRotatingModelTask,
-     .unk4 = &D_80088480,
+     .unk4 = &gTownRotatingModel1DisplayLists,
      .unk8 = 0xFF8A0000,
      .unkC = 0x00390000,
      .unk10 = 0xFF8A0000,
      .unk14 = -1,
      .unk16 = -64 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = &D_80088470,
+     .unk4 = &gTownSwingingModel4DisplayLists,
      .unk8 = 0xFF2E0000,
      .unkC = 0x00410000,
      .unk10 = 0xFFC80000,
@@ -313,7 +282,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000020,
      .unk1C = 0x000001C7 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = &D_80088490,
+     .unk4 = &gTownSwingingModel5DisplayLists,
      .unk8 = 0x002E0000,
      .unkC = 0x00330000,
      .unk10 = 0xFF590000,
@@ -322,7 +291,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000010,
      .unk1C = 0x000000E3 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = &D_800884A0,
+     .unk4 = &gTownSwingingModel6DisplayLists,
      .unk8 = 0x00AD0000,
      .unkC = 0x00390000,
      .unk10 = 0xFFAF0000,
@@ -331,7 +300,7 @@ ModelEntityTaskConfig D_80088F20_89B20[] = {
      .unk18 = 0x00000010,
      .unk1C = 0x000000E3 },
     { .unk0 = initSwingingModelTask,
-     .unk4 = &D_800884B0,
+     .unk4 = &gTownSwingingModel7PartDisplayLists,
      .unk8 = 0x00BE0000,
      .unkC = 0x00390000,
      .unk10 = 0xFFF00000,
@@ -355,20 +324,28 @@ ModelEntityTaskConfig D_80089088_89C88[] = {
 };
 
 ModelEntityTaskConfig D_800890AC_89CAC[] = {
-    { .unk0 = initAnimatedModelTask, .unk4 = &D_80088500, .unk14 = 0, .unk16 = 4, .unk1C = 0x00000004 },
-    { .unk0 = initAnimatedModelTask, .unk4 = &D_800884F0, .unk14 = 0, .unk16 = 4, .unk1C = 0x00000008 },
+    { .unk0 = initAnimatedModelTask,
+     .unk4 = &gJungleAnimatedModel1DisplayLists,
+     .unk14 = 0,
+     .unk16 = 4,
+     .unk1C = 0x00000004 },
+    { .unk0 = initAnimatedModelTask,
+     .unk4 = &gJungleAnimatedModel0DisplayLists,
+     .unk14 = 0,
+     .unk16 = 4,
+     .unk1C = 0x00000008 },
     { .unk0 = initSpriteSpawnerTask,
      .unk8 = 0x00570000,
      .unkC = 0x00020000,
      .unk10 = 0xFF470000,
      .unk16 = 4,
      .unk1C = 0x00010000 },
-    { .unk0 = initStaticModelTask, .unk4 = &D_80088510 }
+    { .unk0 = initStaticModelTask, .unk4 = &gJungleStaticModelDisplayLists }
 };
 
 ModelEntityTaskConfig D_8008913C_89D3C[] = {
-    { .unk0 = initAnimatedModelTask, .unk4 = &D_80088550, .unk16 = 4, .unk1C = 0x00000004 },
-    { .unk0 = initAnimatedModelTask, .unk4 = &D_80088540, .unk16 = 4, .unk1C = 0x00000008 },
+    { .unk0 = initAnimatedModelTask, .unk4 = &gJungle2AnimatedModel1DisplayLists, .unk16 = 4, .unk1C = 0x00000004 },
+    { .unk0 = initAnimatedModelTask, .unk4 = &gJungle2AnimatedModel0DisplayLists, .unk16 = 4, .unk1C = 0x00000008 },
     { .unk0 = initSpriteSpawnerTask,
      .unk8 = 0x00570000,
      .unkC = 0x00020000,
@@ -384,9 +361,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x0000E180,
-     .unk1C = &D_800883F0,
+     .unk1C = &gTownPrimaryDisplayLists,
      .unk20 = 0x00010000,
-     .unk24 = &D_80088450,
+     .unk24 = &gTownSecondaryPartDisplayLists,
      .unk28 = 0x00010000,
      .taskConfigs = D_80088F20_89B20,
      .taskCount = 5,
@@ -405,9 +382,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x0000E180,
-     .unk1C = &D_800883F0,
+     .unk1C = &gTownPrimaryDisplayLists,
      .unk20 = 0x00010000,
-     .unk24 = &D_80088450,
+     .unk24 = &gTownSecondaryPartDisplayLists,
      .unk28 = 0x00010000,
      .taskConfigs = D_80088F20_89B20,
      .taskCount = 5,
@@ -426,9 +403,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&YAMA_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&YAMA_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00003FE0,
-     .unk1C = &D_80088580,
+     .unk1C = &gYamaPrimaryDisplayLists,
      .unk20 = 0x00010000,
-     .unk24 = &D_80088590,
+     .unk24 = &gYamaSecondaryDisplayLists,
      .unk28 = 0x00010000,
      .taskConfigs = D_80089088_89C88,
      .taskCount = 1,
@@ -447,9 +424,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&YAMA_Y_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&YAMA_Y_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00003B30,
-     .unk1C = &D_800885A0,
+     .unk1C = &gYamaYPrimaryDisplayLists,
      .unk20 = 0x00010000,
-     .unk24 = &D_800885B0,
+     .unk24 = &gYamaYSecondaryDisplayLists,
      .unk28 = 0x00010000,
      .taskConfigs = D_80089088_89C88,
      .taskCount = 1,
@@ -468,7 +445,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&LINDA_P_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&LINDA_P_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000014A0,
-     .unk1C = &D_80088180,
+     .unk1C = &gLindaPDisplayLists,
      .unk20 = 0x00010000,
      .taskConfigs = NULL,
      .unk32 = 0xFFFF,
@@ -486,7 +463,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&LINDA_B_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&LINDA_B_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00001680,
-     .unk1C = &D_80088150,
+     .unk1C = &gLindaBDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = 0,
      .unk28 = 0,
@@ -528,9 +505,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x0000E180,
-     .unk1C = &D_800883F0,
+     .unk1C = &gTownPrimaryDisplayLists,
      .unk20 = 0x00010000,
-     .unk24 = &D_80088450,
+     .unk24 = &gTownSecondaryPartDisplayLists,
      .unk28 = 0x00010000,
      .taskConfigs = NULL,
      .taskCount = 0,
@@ -549,9 +526,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&JUNGLE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&JUNGLE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000021D0,
-     .unk1C = &D_800884D0,
+     .unk1C = &gJunglePrimaryDisplayLists,
      .unk20 = 0x00010000,
-     .unk24 = &D_800884E0,
+     .unk24 = &gJungleSecondaryDisplayLists,
      .unk28 = 0x00010000,
      .taskConfigs = D_800890AC_89CAC,
      .taskCount = 4,
@@ -570,9 +547,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&SPACE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&SPACE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000036D0,
-     .unk1C = &D_80088560,
+     .unk1C = &gSpacePrimaryDisplayLists,
      .unk20 = 0x00010000,
-     .unk24 = &D_80088570,
+     .unk24 = &gSpaceSecondaryDisplayLists,
      .unk28 = 0x00010000,
      .taskConfigs = NULL,
      .taskCount = 0,
@@ -611,9 +588,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&OTHER_HAUNTED_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&OTHER_HAUNTED_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x000024B0,
-     .unk1C = &D_800881B0,
+     .unk1C = &gOtherHauntedPrimaryDisplayLists,
      .unk20 = 0x00010000,
-     .unk24 = &D_800881C0,
+     .unk24 = &gOtherHauntedSecondaryPartDisplayLists,
      .unk28 = 0x00010000,
      .taskConfigs = NULL,
      .taskCount = 0,
@@ -632,9 +609,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .compressedDataStart = (void *)&JUNGLE2_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&JUNGLE2_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x00002EC0,
-     .unk1C = &D_80088520,
+     .unk1C = &gJungle2PrimaryDisplayLists,
      .unk20 = 0x00010000,
-     .unk24 = &D_80088530,
+     .unk24 = &gJungle2SecondaryDisplayLists,
      .unk28 = 0x00010000,
      .taskConfigs = D_8008913C_89D3C,
      .taskCount = 3,

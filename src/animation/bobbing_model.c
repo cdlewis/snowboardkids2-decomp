@@ -1,4 +1,5 @@
 #include "common.h"
+#include "data/model_display_lists.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
@@ -10,394 +11,154 @@ typedef struct {
     u16 rotationAngle;
     s16 tiltAngle;
     s8 bobbingEnabled;
-    u8 _pad45[3];
     s32 verticalOffset;
     s32 verticalVelocity;
 } BobbingModelState;
 
-u32 D_80088130[] = {
-    0x00000000,
-    0x01000180,
-    0x00000000,
-    0x00000000,
+DisplayLists gLtbl3DisplayLists = { 0x00000000, (Gfx *)0x01000180, NULL, NULL };
+
+DisplayLists gLtbl2DisplayLists = { 0x00000000, (Gfx *)0x010003B0, (Gfx *)0x010003C0, NULL };
+
+DisplayLists gLindaBDisplayLists = { 0x00000000, (Gfx *)0x01000480, (Gfx *)0x01000490, NULL };
+
+DisplayLists gLtbl1DisplayLists = { 0x00000000, (Gfx *)0x01000180, NULL, NULL };
+
+DisplayLists gLtbl0DisplayLists = { 0x00000000, (Gfx *)0x010002E0, (Gfx *)0x010002F0, NULL };
+
+DisplayLists gLindaPDisplayLists = { 0x00000000, (Gfx *)0x01000488, (Gfx *)0x01000498, NULL };
+
+DisplayLists gDoorDisplayLists = { 0x00000000, (Gfx *)0x010005A0, (Gfx *)0x010005B0, NULL };
+
+DisplayLists gBomb2DisplayLists = { 0x00000000, (Gfx *)0x01000268, NULL, NULL };
+
+DisplayLists gOtherHauntedPrimaryDisplayLists = { 0x00000000, (Gfx *)0x01000560, (Gfx *)0x01000570, NULL };
+
+DisplayLists gOtherHauntedSecondaryPartDisplayLists[2] = {
+    { 0x00000000, (Gfx *)0x010007C0, NULL, NULL },
+    { 0x00000000, (Gfx *)0x01000838, NULL, NULL }
 };
 
-u32 D_80088140[] = {
-    0x00000000,
-    0x010003B0,
-    0x010003C0,
-    0x00000000,
+DisplayLists gHauntedDisplayLists = { 0x00000000, (Gfx *)0x01000210, NULL, NULL };
+
+DisplayLists gMroboPartDisplayLists[10] = {
+    { 0x00000000, (Gfx *)0x01000000, NULL,              NULL },
+    { 0x00000000, (Gfx *)0x010002A8, NULL,              NULL },
+    { 0x00000000, (Gfx *)0x010004F8, NULL,              NULL },
+    { 0x00000000, (Gfx *)0x010008B8, NULL,              NULL },
+    { 0x00000000, (Gfx *)0x01000B10, NULL,              NULL },
+    { 0x00000000, (Gfx *)0x01000ED0, (Gfx *)0x01001320, NULL },
+    { 0x00000000, (Gfx *)0x01001408, NULL,              NULL },
+    { 0x00000000, (Gfx *)0x01001540, NULL,              NULL },
+    { 0x00000000, (Gfx *)0x01001728, NULL,              NULL },
+    { 0x00000000, (Gfx *)0x01001860, NULL,              NULL }
 };
 
-u32 D_80088150[] = {
-    0x00000000,
-    0x01000480,
-    0x01000490,
-    0x00000000,
+DisplayLists gBurgDisplayLists = { 0x00000000, (Gfx *)0x01000180, NULL, NULL };
+
+DisplayLists gHeliDisplayLists = { 0x00000000, (Gfx *)0x01000760, NULL, NULL };
+
+DisplayLists gBobbingModelOverlayDisplayLists = { 0x00000000, NULL, (Gfx *)0x01000888, NULL };
+
+DisplayLists gUsagiDisplayLists = { 0x00000000, (Gfx *)0x01000270, NULL, NULL };
+
+DisplayLists gPbox0DisplayLists = { 0x00000000, (Gfx *)0x01000140, NULL, NULL };
+
+DisplayLists gPbox1DisplayLists = { 0x00000000, (Gfx *)0x01000140, NULL, NULL };
+
+DisplayLists gItem1DisplayLists = { 0x00000000, (Gfx *)0x01000140, NULL, NULL };
+
+DisplayLists gItemDebrisDisplayLists = { 0x00000000, (Gfx *)0x01000140, NULL, NULL };
+
+DisplayLists gDishDisplayLists = { 0x00000000, (Gfx *)0x010001A8, NULL, NULL };
+
+DisplayLists gTutumDisplayLists = { 0x00000000, (Gfx *)0x010001E0, NULL, NULL };
+
+DisplayLists gTableDisplayLists = { 0x00000000, (Gfx *)0x01000238, (Gfx *)0x01000248, NULL };
+
+DisplayLists gRadioDisplayLists = { 0x00000000, (Gfx *)0x010002A8, (Gfx *)0x010002B8, NULL };
+
+DisplayLists gPotDisplayLists = { 0x00000000, (Gfx *)0x01000398, (Gfx *)0x010003A8, NULL };
+
+DisplayLists gCupDisplayLists = { 0x00000000, (Gfx *)0x01000418, (Gfx *)0x01000428, NULL };
+
+DisplayLists gChairPartDisplayLists[3] = {
+    { 0x00000000, (Gfx *)0x010001C8, NULL, NULL              },
+    { 0x00000000, NULL,              NULL, (Gfx *)0x01000000 },
+    { 0x00000000, NULL,              NULL, (Gfx *)0x010001E8 }
 };
 
-u32 D_80088160[] = {
-    0x00000000,
-    0x01000180,
-    0x00000000,
-    0x00000000,
+DisplayLists gSnow3PartDisplayLists[3] = {
+    { 0x00000000, NULL, NULL, (Gfx *)0x01000000 },
+    { 0x00000000, NULL, NULL, (Gfx *)0x010001E0 },
+    { 0x00000000, NULL, NULL, (Gfx *)0x010003C0 }
 };
 
-u32 D_80088170[] = {
-    0x00000000,
-    0x010002E0,
-    0x010002F0,
-    0x00000000,
+DisplayLists gSnow2PartDisplayLists[2] = {
+    { 0x00000000, (Gfx *)0x01000000, NULL, NULL },
+    { 0x00000000, (Gfx *)0x010001E8, NULL, NULL }
 };
 
-u32 D_80088180[] = {
-    0x00000000,
-    0x01000488,
-    0x01000498,
-    0x00000000,
+DisplayLists gTownPrimaryDisplayLists = { 0x00000000, (Gfx *)0x01001A40, (Gfx *)0x01001A50, NULL };
+
+DisplayLists gTownSwingingModel0DisplayLists = { 0x00000000, NULL, (Gfx *)0x01001B40, NULL };
+
+DisplayLists gTownRotatingModel0DisplayLists = { 0x00000000, NULL, (Gfx *)0x01001CA0, NULL };
+
+DisplayLists gTownSwingingModel1DisplayLists = { 0x00000000, NULL, (Gfx *)0x01001D90, NULL };
+
+DisplayLists gTownSwingingModel2DisplayLists = { 0x00000000, NULL, (Gfx *)0x01001E80, NULL };
+
+DisplayLists gTownSwingingModel3DisplayLists = { 0x00000000, NULL, (Gfx *)0x01001F70, NULL };
+
+DisplayLists gTownSecondaryPartDisplayLists[2] = {
+    { 0x00000000, (Gfx *)0x01002248, NULL,              NULL },
+    { 0x00000000, (Gfx *)0x010020D8, (Gfx *)0x01002130, NULL }
 };
 
-u32 D_80088190[] = {
-    0x00000000,
-    0x010005A0,
-    0x010005B0,
-    0x00000000,
+DisplayLists gTownSwingingModel4DisplayLists = { 0x00000000, NULL, (Gfx *)0x01002268, NULL };
+
+DisplayLists gTownRotatingModel1DisplayLists = { 0x00000000, NULL, (Gfx *)0x010023C8, NULL };
+
+DisplayLists gTownSwingingModel5DisplayLists = { 0x00000000, NULL, (Gfx *)0x010024B8, NULL };
+
+DisplayLists gTownSwingingModel6DisplayLists = { 0x00000000, NULL, (Gfx *)0x010025A8, NULL };
+
+DisplayLists gTownSwingingModel7PartDisplayLists[2] = {
+    { 0x00000000, NULL,              (Gfx *)0x01002698, NULL },
+    { 0x00000000, (Gfx *)0x01002968, NULL,              NULL }
 };
 
-u32 D_800881A0[] = {
-    0x00000000,
-    0x01000268,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gJunglePrimaryDisplayLists = { 0x00000000, (Gfx *)0x01000658, (Gfx *)0x01000668, NULL };
 
-u32 D_800881B0[] = {
-    0x00000000,
-    0x01000560,
-    0x01000570,
-    0x00000000,
-};
+DisplayLists gJungleSecondaryDisplayLists = { 0x00000000, (Gfx *)0x010008F8, NULL, NULL };
 
-u32 D_800881C0[] = {
-    0x00000000, 0x010007C0, 0x00000000, 0x00000000, 0x00000000, 0x01000838, 0x00000000, 0x00000000,
-};
+DisplayLists gJungleAnimatedModel0DisplayLists = { 0x00000000, (Gfx *)0x01000978, NULL, NULL };
 
-u32 D_800881E0[] = {
-    0x00000000,
-    0x01000210,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gJungleAnimatedModel1DisplayLists = { 0x00000000, (Gfx *)0x01000A10, NULL, NULL };
 
-u32 D_800881F0[] = {
-    0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010002A8, 0x00000000, 0x00000000,
-    0x00000000, 0x010004F8, 0x00000000, 0x00000000, 0x00000000, 0x010008B8, 0x00000000, 0x00000000,
-    0x00000000, 0x01000B10, 0x00000000, 0x00000000, 0x00000000, 0x01000ED0, 0x01001320, 0x00000000,
-    0x00000000, 0x01001408, 0x00000000, 0x00000000, 0x00000000, 0x01001540, 0x00000000, 0x00000000,
-    0x00000000, 0x01001728, 0x00000000, 0x00000000, 0x00000000, 0x01001860, 0x00000000, 0x00000000,
-};
+DisplayLists gJungleStaticModelDisplayLists = { 0x00000000, NULL, NULL, (Gfx *)0x01000B30 };
 
-u32 D_80088290[] = {
-    0x00000000,
-    0x01000180,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gJungle2PrimaryDisplayLists = { 0x00000000, (Gfx *)0x01000890, (Gfx *)0x010008A0, NULL };
 
-u32 D_800882A0[] = {
-    0x00000000,
-    0x01000760,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gJungle2SecondaryDisplayLists = { 0x00000000, (Gfx *)0x01000C38, NULL, NULL };
 
-u32 D_800882B0_88EB0[] = {
-    0x00000000,
-    0x00000000,
-    0x01000888,
-    0x00000000,
-};
+DisplayLists gJungle2AnimatedModel0DisplayLists = { 0x00000000, (Gfx *)0x01000CB8, NULL, NULL };
 
-u32 D_800882C0[] = {
-    0x00000000,
-    0x01000270,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gJungle2AnimatedModel1DisplayLists = { 0x00000000, (Gfx *)0x01000D50, NULL, NULL };
 
-u32 D_800882D0[] = {
-    0x00000000,
-    0x01000140,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gSpacePrimaryDisplayLists = { 0x00000000, (Gfx *)0x01000910, (Gfx *)0x01000920, NULL };
 
-u32 D_800882E0[] = {
-    0x00000000,
-    0x01000140,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gSpaceSecondaryDisplayLists = { 0x00000000, (Gfx *)0x01000D18, NULL, NULL };
 
-u32 D_800882F0[] = {
-    0x00000000,
-    0x01000140,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gYamaPrimaryDisplayLists = { 0x00000000, (Gfx *)0x01000DD0, (Gfx *)0x01000DE0, NULL };
 
-u32 D_80088300[] = {
-    0x00000000,
-    0x01000140,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gYamaSecondaryDisplayLists = { 0x00000000, (Gfx *)0x010010A0, NULL, NULL };
 
-u32 D_80088310[] = {
-    0x00000000,
-    0x010001A8,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gYamaYPrimaryDisplayLists = { 0x00000000, (Gfx *)0x01000D10, (Gfx *)0x01000D20, NULL };
 
-u32 D_80088320[] = {
-    0x00000000,
-    0x010001E0,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gYamaYSecondaryDisplayLists = { 0x00000000, (Gfx *)0x01000F50, NULL, NULL };
 
-u32 D_80088330[] = {
-    0x00000000,
-    0x01000238,
-    0x01000248,
-    0x00000000,
-};
-
-u32 D_80088340[] = {
-    0x00000000,
-    0x010002A8,
-    0x010002B8,
-    0x00000000,
-};
-
-u32 D_80088350[] = {
-    0x00000000,
-    0x01000398,
-    0x010003A8,
-    0x00000000,
-};
-
-u32 D_80088360[] = {
-    0x00000000,
-    0x01000418,
-    0x01000428,
-    0x00000000,
-};
-
-u32 D_80088370[] = {
-    0x00000000, 0x010001C8, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
-    0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010001E8,
-};
-
-u32 D_800883A0[] = {
-    0x00000000, 0x00000000, 0x00000000, 0x01000000, 0x00000000, 0x00000000,
-    0x00000000, 0x010001E0, 0x00000000, 0x00000000, 0x00000000, 0x010003C0,
-};
-
-u32 D_800883D0[] = {
-    0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010001E8, 0x00000000, 0x00000000,
-};
-
-u32 D_800883F0[] = {
-    0x00000000,
-    0x01001A40,
-    0x01001A50,
-    0x00000000,
-};
-
-u32 D_80088400[] = {
-    0x00000000,
-    0x00000000,
-    0x01001B40,
-    0x00000000,
-};
-
-u32 D_80088410[] = {
-    0x00000000,
-    0x00000000,
-    0x01001CA0,
-    0x00000000,
-};
-
-u32 D_80088420[] = {
-    0x00000000,
-    0x00000000,
-    0x01001D90,
-    0x00000000,
-};
-
-u32 D_80088430[] = {
-    0x00000000,
-    0x00000000,
-    0x01001E80,
-    0x00000000,
-};
-
-u32 D_80088440[] = {
-    0x00000000,
-    0x00000000,
-    0x01001F70,
-    0x00000000,
-};
-
-u32 D_80088450[] = {
-    0x00000000, 0x01002248, 0x00000000, 0x00000000, 0x00000000, 0x010020D8, 0x01002130, 0x00000000,
-};
-
-u32 D_80088470[] = {
-    0x00000000,
-    0x00000000,
-    0x01002268,
-    0x00000000,
-};
-
-u32 D_80088480[] = {
-    0x00000000,
-    0x00000000,
-    0x010023C8,
-    0x00000000,
-};
-
-u32 D_80088490[] = {
-    0x00000000,
-    0x00000000,
-    0x010024B8,
-    0x00000000,
-};
-
-u32 D_800884A0[] = {
-    0x00000000,
-    0x00000000,
-    0x010025A8,
-    0x00000000,
-};
-
-u32 D_800884B0[] = {
-    0x00000000, 0x00000000, 0x01002698, 0x00000000, 0x00000000, 0x01002968, 0x00000000, 0x00000000,
-};
-
-u32 D_800884D0[] = {
-    0x00000000,
-    0x01000658,
-    0x01000668,
-    0x00000000,
-};
-
-u32 D_800884E0[] = {
-    0x00000000,
-    0x010008F8,
-    0x00000000,
-    0x00000000,
-};
-
-u32 D_800884F0[] = {
-    0x00000000,
-    0x01000978,
-    0x00000000,
-    0x00000000,
-};
-
-u32 D_80088500[] = {
-    0x00000000,
-    0x01000A10,
-    0x00000000,
-    0x00000000,
-};
-
-u32 D_80088510[] = {
-    0x00000000,
-    0x00000000,
-    0x00000000,
-    0x01000B30,
-};
-
-u32 D_80088520[] = {
-    0x00000000,
-    0x01000890,
-    0x010008A0,
-    0x00000000,
-};
-
-u32 D_80088530[] = {
-    0x00000000,
-    0x01000C38,
-    0x00000000,
-    0x00000000,
-};
-
-u32 D_80088540[] = {
-    0x00000000,
-    0x01000CB8,
-    0x00000000,
-    0x00000000,
-};
-
-u32 D_80088550[] = {
-    0x00000000,
-    0x01000D50,
-    0x00000000,
-    0x00000000,
-};
-
-u32 D_80088560[] = {
-    0x00000000,
-    0x01000910,
-    0x01000920,
-    0x00000000,
-};
-
-u32 D_80088570[] = {
-    0x00000000,
-    0x01000D18,
-    0x00000000,
-    0x00000000,
-};
-
-u32 D_80088580[] = {
-    0x00000000,
-    0x01000DD0,
-    0x01000DE0,
-    0x00000000,
-};
-
-u32 D_80088590[] = {
-    0x00000000,
-    0x010010A0,
-    0x00000000,
-    0x00000000,
-};
-
-u32 D_800885A0[] = {
-    0x00000000,
-    0x01000D10,
-    0x01000D20,
-    0x00000000,
-};
-
-u32 D_800885B0[] = {
-    0x00000000,
-    0x01000F50,
-    0x00000000,
-    0x00000000,
-};
-
-u32 D_800885C0[] = {
-    0x00000001,
-    0x010004E8,
-    0x00000000,
-    0x00000000,
-};
+DisplayLists gUfoDisplayLists = { 0x00000001, (Gfx *)0x010004E8, NULL, NULL };
 
 void updateBobbingModelTask(BobbingModelState *);
 void cleanupBobbingModelTask(BobbingModelTaskState *);
@@ -408,7 +169,7 @@ void initBobbingModelTask(BobbingModelTaskState *state) {
     memcpy(state->transformMatrix, &identityMatrix, sizeof(Transform3D));
     state->displayList = loadAssetGroupDisplayList(state->model);
     state->vertexData = loadAssetGroupCompressedData(state->model);
-    state->materialData = &D_800882B0_88EB0;
+    state->displayLists = &gBobbingModelOverlayDisplayLists;
     state->renderFlags = 0;
     state->bobbingEnabled = 0;
     state->verticalOffset = 0;
