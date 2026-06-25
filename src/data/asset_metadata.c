@@ -55,14 +55,14 @@ DisplayLists gWendyBoard2PrimaryPartDisplayLists[];
 DisplayLists gWendyBoard2SecondaryPartDisplayLists[];
 DisplayLists gWendyBoard3PrimaryPartDisplayLists[];
 DisplayLists gWendyBoard3SecondaryPartDisplayLists[];
-DisplayLists gBlackBoard0PrimaryPartDisplayLists[];
-DisplayLists gBlackBoard0SecondaryPartDisplayLists[];
-DisplayLists gBlackBoard1PrimaryPartDisplayLists[];
-DisplayLists gBlackBoard1SecondaryPartDisplayLists[];
-DisplayLists gBlackBoard2PrimaryPartDisplayLists[];
-DisplayLists gBlackBoard2SecondaryPartDisplayLists[];
-DisplayLists gBlackBoard3PrimaryPartDisplayLists[];
-DisplayLists gBlackBoard3SecondaryPartDisplayLists[];
+DisplayLists gDamienBoard0PrimaryPartDisplayLists[];
+DisplayLists gDamienBoard0SecondaryPartDisplayLists[];
+DisplayLists gDamienBoard1PrimaryPartDisplayLists[];
+DisplayLists gDamienBoard1SecondaryPartDisplayLists[];
+DisplayLists gDamienBoard2PrimaryPartDisplayLists[];
+DisplayLists gDamienBoard2SecondaryPartDisplayLists[];
+DisplayLists gDamienBoard3PrimaryPartDisplayLists[];
+DisplayLists gDamienBoard3SecondaryPartDisplayLists[];
 DisplayLists gPenBoard0PrimaryPartDisplayLists[];
 DisplayLists gPenBoard0SecondaryPartDisplayLists[];
 DisplayLists gPenBoard1PrimaryPartDisplayLists[];
@@ -126,11 +126,11 @@ AssetMeta gWendyBoardDisplayListAssets[] = {
     { &WENDY_BOARD3_DISPLAY_LIST_ROM_START, &WENDY_BOARD3_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta gBlackBoardDisplayListAssets[] = {
-    { &BLACK_BOARD0_DISPLAY_LIST_ROM_START, &BLACK_BOARD0_DISPLAY_LIST_ROM_END },
-    { &BLACK_BOARD1_DISPLAY_LIST_ROM_START, &BLACK_BOARD1_DISPLAY_LIST_ROM_END },
-    { &BLACK_BOARD2_DISPLAY_LIST_ROM_START, &BLACK_BOARD2_DISPLAY_LIST_ROM_END },
-    { &BLACK_BOARD3_DISPLAY_LIST_ROM_START, &BLACK_BOARD3_DISPLAY_LIST_ROM_END },
+AssetMeta gDamienBoardDisplayListAssets[] = {
+    { &DAMIEN_BOARD0_DISPLAY_LIST_ROM_START, &DAMIEN_BOARD0_DISPLAY_LIST_ROM_END },
+    { &DAMIEN_BOARD1_DISPLAY_LIST_ROM_START, &DAMIEN_BOARD1_DISPLAY_LIST_ROM_END },
+    { &DAMIEN_BOARD2_DISPLAY_LIST_ROM_START, &DAMIEN_BOARD2_DISPLAY_LIST_ROM_END },
+    { &DAMIEN_BOARD3_DISPLAY_LIST_ROM_START, &DAMIEN_BOARD3_DISPLAY_LIST_ROM_END },
 };
 
 AssetMeta gPenBoardDisplayListAssets[] = {
@@ -169,10 +169,10 @@ AssetMeta gRoboBoardDisplayListAssets[] = {
 };
 
 AssetMeta *gCharacterBoardDisplayListTables[] = {
-    gSlashBoardDisplayListAssets, gNancyBoardDisplayListAssets, gJamBoardDisplayListAssets,
-    gLindaBoardDisplayListAssets, gTommyBoardDisplayListAssets, gWendyBoardDisplayListAssets,
-    gBlackBoardDisplayListAssets, gPenBoardDisplayListAssets,   gDogBoardDisplayListAssets,
-    gDinosBoardDisplayListAssets, gSnowBoardDisplayListAssets,  gRoboBoardDisplayListAssets,
+    gSlashBoardDisplayListAssets,  gNancyBoardDisplayListAssets, gJamBoardDisplayListAssets,
+    gLindaBoardDisplayListAssets,  gTommyBoardDisplayListAssets, gWendyBoardDisplayListAssets,
+    gDamienBoardDisplayListAssets, gPenBoardDisplayListAssets,   gDogBoardDisplayListAssets,
+    gDinosBoardDisplayListAssets,  gSnowBoardDisplayListAssets,  gRoboBoardDisplayListAssets,
 };
 
 CompressedAssetMeta gSlashBoardCompressedDataAssets[] = {
@@ -217,11 +217,11 @@ CompressedAssetMeta gWendyBoardCompressedDataAssets[] = {
     { &WENDY_BOARD3_COMPRESSED_DATA_ROM_START, &WENDY_BOARD3_COMPRESSED_DATA_ROM_END, 0x4C40 },
 };
 
-CompressedAssetMeta gBlackBoardCompressedDataAssets[] = {
-    { &BLACK_BOARD0_COMPRESSED_DATA_ROM_START, &BLACK_BOARD0_COMPRESSED_DATA_ROM_END, 0x4EE0 },
-    { &BLACK_BOARD1_COMPRESSED_DATA_ROM_START, &BLACK_BOARD1_COMPRESSED_DATA_ROM_END, 0x5070 },
-    { &BLACK_BOARD2_COMPRESSED_DATA_ROM_START, &BLACK_BOARD2_COMPRESSED_DATA_ROM_END, 0x5670 },
-    { &BLACK_BOARD3_COMPRESSED_DATA_ROM_START, &BLACK_BOARD3_COMPRESSED_DATA_ROM_END, 0x4F60 },
+CompressedAssetMeta gDamienBoardCompressedDataAssets[] = {
+    { &DAMIEN_BOARD0_COMPRESSED_DATA_ROM_START, &DAMIEN_BOARD0_COMPRESSED_DATA_ROM_END, 0x4EE0 },
+    { &DAMIEN_BOARD1_COMPRESSED_DATA_ROM_START, &DAMIEN_BOARD1_COMPRESSED_DATA_ROM_END, 0x5070 },
+    { &DAMIEN_BOARD2_COMPRESSED_DATA_ROM_START, &DAMIEN_BOARD2_COMPRESSED_DATA_ROM_END, 0x5670 },
+    { &DAMIEN_BOARD3_COMPRESSED_DATA_ROM_START, &DAMIEN_BOARD3_COMPRESSED_DATA_ROM_END, 0x4F60 },
 };
 
 CompressedAssetMeta gPenBoardCompressedDataAssets[] = {
@@ -260,10 +260,10 @@ CompressedAssetMeta gRoboBoardCompressedDataAssets[] = {
 };
 
 CompressedAssetMeta *gCharacterBoardCompressedDataTables[] = {
-    gSlashBoardCompressedDataAssets, gNancyBoardCompressedDataAssets, gJamBoardCompressedDataAssets,
-    gLindaBoardCompressedDataAssets, gTommyBoardCompressedDataAssets, gWendyBoardCompressedDataAssets,
-    gBlackBoardCompressedDataAssets, gPenBoardCompressedDataAssets,   gDogBoardCompressedDataAssets,
-    gDinosBoardCompressedDataAssets, gSnowBoardCompressedDataAssets,  gRoboBoardCompressedDataAssets,
+    gSlashBoardCompressedDataAssets,  gNancyBoardCompressedDataAssets, gJamBoardCompressedDataAssets,
+    gLindaBoardCompressedDataAssets,  gTommyBoardCompressedDataAssets, gWendyBoardCompressedDataAssets,
+    gDamienBoardCompressedDataAssets, gPenBoardCompressedDataAssets,   gDogBoardCompressedDataAssets,
+    gDinosBoardCompressedDataAssets,  gSnowBoardCompressedDataAssets,  gRoboBoardCompressedDataAssets,
 };
 
 DisplayLists *gSlashBoardPrimaryPartDisplayListTables[] = {
@@ -350,18 +350,18 @@ DisplayLists *gWendyBoardSecondaryPartDisplayListTables[] = {
     gWendyBoard3SecondaryPartDisplayLists,
 };
 
-DisplayLists *gBlackBoardPrimaryPartDisplayListTables[] = {
-    gBlackBoard0PrimaryPartDisplayLists,
-    gBlackBoard1PrimaryPartDisplayLists,
-    gBlackBoard2PrimaryPartDisplayLists,
-    gBlackBoard3PrimaryPartDisplayLists,
+DisplayLists *gDamienBoardPrimaryPartDisplayListTables[] = {
+    gDamienBoard0PrimaryPartDisplayLists,
+    gDamienBoard1PrimaryPartDisplayLists,
+    gDamienBoard2PrimaryPartDisplayLists,
+    gDamienBoard3PrimaryPartDisplayLists,
 };
 
-DisplayLists *gBlackBoardSecondaryPartDisplayListTables[] = {
-    gBlackBoard0SecondaryPartDisplayLists,
-    gBlackBoard1SecondaryPartDisplayLists,
-    gBlackBoard2SecondaryPartDisplayLists,
-    gBlackBoard3SecondaryPartDisplayLists,
+DisplayLists *gDamienBoardSecondaryPartDisplayListTables[] = {
+    gDamienBoard0SecondaryPartDisplayLists,
+    gDamienBoard1SecondaryPartDisplayLists,
+    gDamienBoard2SecondaryPartDisplayLists,
+    gDamienBoard3SecondaryPartDisplayLists,
 };
 
 DisplayLists *gPenBoardPrimaryPartDisplayListTables[] = {
@@ -414,51 +414,57 @@ DisplayLists *gRoboBoardPartDisplayListTables[] = {
 };
 
 DisplayLists **gCharacterBoardPartDisplayListTables[] = {
-    gSlashBoardPrimaryPartDisplayListTables, gNancyBoardPrimaryPartDisplayListTables,
-    gJamBoardPrimaryPartDisplayListTables,   gLindaBoardPrimaryPartDisplayListTables,
-    gTommyBoardPrimaryPartDisplayListTables, gWendyBoardPrimaryPartDisplayListTables,
-    gBlackBoardPrimaryPartDisplayListTables, gPenBoardPrimaryPartDisplayListTables,
-    gDogBoardPrimaryPartDisplayListTables,   gDinosBoardPartDisplayListTables,
-    gSnowBoardPartDisplayListTables,         gRoboBoardPartDisplayListTables,
+    gSlashBoardPrimaryPartDisplayListTables,  gNancyBoardPrimaryPartDisplayListTables,
+    gJamBoardPrimaryPartDisplayListTables,    gLindaBoardPrimaryPartDisplayListTables,
+    gTommyBoardPrimaryPartDisplayListTables,  gWendyBoardPrimaryPartDisplayListTables,
+    gDamienBoardPrimaryPartDisplayListTables, gPenBoardPrimaryPartDisplayListTables,
+    gDogBoardPrimaryPartDisplayListTables,    gDinosBoardPartDisplayListTables,
+    gSnowBoardPartDisplayListTables,          gRoboBoardPartDisplayListTables,
 };
 
 DisplayLists **gCharacterBoardSecondaryPartDisplayListTables[] = {
-    gSlashBoardSecondaryPartDisplayListTables, gNancyBoardSecondaryPartDisplayListTables,
-    gJamBoardSecondaryPartDisplayListTables,   gLindaBoardSecondaryPartDisplayListTables,
-    gTommyBoardSecondaryPartDisplayListTables, gWendyBoardSecondaryPartDisplayListTables,
-    gBlackBoardSecondaryPartDisplayListTables, gPenBoardSecondaryPartDisplayListTables,
-    gDogBoardSecondaryPartDisplayListTables,   gDinosBoardPartDisplayListTables,
-    gSnowBoardPartDisplayListTables,           gRoboBoardPartDisplayListTables,
+    gSlashBoardSecondaryPartDisplayListTables,
+    gNancyBoardSecondaryPartDisplayListTables,
+    gJamBoardSecondaryPartDisplayListTables,
+    gLindaBoardSecondaryPartDisplayListTables,
+    gTommyBoardSecondaryPartDisplayListTables,
+    gWendyBoardSecondaryPartDisplayListTables,
+    gDamienBoardSecondaryPartDisplayListTables,
+    gPenBoardSecondaryPartDisplayListTables,
+    gDogBoardSecondaryPartDisplayListTables,
+    gDinosBoardPartDisplayListTables,
+    gSnowBoardPartDisplayListTables,
+    gRoboBoardPartDisplayListTables,
 };
 
 CompressedAssetMeta gCharacterRaceAnimationAssets[] = {
-    { &SLASH_RACE_ANIMATION_DATA_ROM_START, &SLASH_RACE_ANIMATION_DATA_ROM_END, 0xAAFA },
-    { &NANCY_RACE_ANIMATION_DATA_ROM_START, &NANCY_RACE_ANIMATION_DATA_ROM_END, 0xB03C },
-    { &JAM_RACE_ANIMATION_DATA_ROM_START,   &JAM_RACE_ANIMATION_DATA_ROM_END,   0xB078 },
-    { &LINDA_RACE_ANIMATION_DATA_ROM_START, &LINDA_RACE_ANIMATION_DATA_ROM_END, 0xB4B6 },
-    { &TOMMY_RACE_ANIMATION_DATA_ROM_START, &TOMMY_RACE_ANIMATION_DATA_ROM_END, 0xC2D4 },
-    { &WENDY_RACE_ANIMATION_DATA_ROM_START, &WENDY_RACE_ANIMATION_DATA_ROM_END, 0xB79E },
-    { &BLACK_RACE_ANIMATION_DATA_ROM_START, &BLACK_RACE_ANIMATION_DATA_ROM_END, 0xCA78 },
-    { &PEN_RACE_ANIMATION_DATA_ROM_START,   &PEN_RACE_ANIMATION_DATA_ROM_END,   0xB678 },
-    { &DOG_RACE_ANIMATION_DATA_ROM_START,   &DOG_RACE_ANIMATION_DATA_ROM_END,   0xBE9A },
-    { &DINOS_RACE_ANIMATION_DATA_ROM_START, &DINOS_RACE_ANIMATION_DATA_ROM_END, 0x1DD0 },
-    { &SLASH_RACE_ANIMATION_DATA_ROM_START, &SLASH_RACE_ANIMATION_DATA_ROM_END, 0xAAFA },
-    { &ROBO_RACE_ANIMATION_DATA_ROM_START,  &ROBO_RACE_ANIMATION_DATA_ROM_END,  0x3094 },
+    { &SLASH_RACE_ANIMATION_DATA_ROM_START,  &SLASH_RACE_ANIMATION_DATA_ROM_END,  0xAAFA },
+    { &NANCY_RACE_ANIMATION_DATA_ROM_START,  &NANCY_RACE_ANIMATION_DATA_ROM_END,  0xB03C },
+    { &JAM_RACE_ANIMATION_DATA_ROM_START,    &JAM_RACE_ANIMATION_DATA_ROM_END,    0xB078 },
+    { &LINDA_RACE_ANIMATION_DATA_ROM_START,  &LINDA_RACE_ANIMATION_DATA_ROM_END,  0xB4B6 },
+    { &TOMMY_RACE_ANIMATION_DATA_ROM_START,  &TOMMY_RACE_ANIMATION_DATA_ROM_END,  0xC2D4 },
+    { &WENDY_RACE_ANIMATION_DATA_ROM_START,  &WENDY_RACE_ANIMATION_DATA_ROM_END,  0xB79E },
+    { &DAMIEN_RACE_ANIMATION_DATA_ROM_START, &DAMIEN_RACE_ANIMATION_DATA_ROM_END, 0xCA78 },
+    { &PEN_RACE_ANIMATION_DATA_ROM_START,    &PEN_RACE_ANIMATION_DATA_ROM_END,    0xB678 },
+    { &DOG_RACE_ANIMATION_DATA_ROM_START,    &DOG_RACE_ANIMATION_DATA_ROM_END,    0xBE9A },
+    { &DINOS_RACE_ANIMATION_DATA_ROM_START,  &DINOS_RACE_ANIMATION_DATA_ROM_END,  0x1DD0 },
+    { &SLASH_RACE_ANIMATION_DATA_ROM_START,  &SLASH_RACE_ANIMATION_DATA_ROM_END,  0xAAFA },
+    { &ROBO_RACE_ANIMATION_DATA_ROM_START,   &ROBO_RACE_ANIMATION_DATA_ROM_END,   0x3094 },
 };
 
 CompressedAssetMeta gCharacterFaceIconAssets[] = {
-    { &SLASH_FACE_ICON_ROM_START, &SLASH_FACE_ICON_ROM_END, 0x1F8 },
-    { &NANCY_FACE_ICON_ROM_START, &NANCY_FACE_ICON_ROM_END, 0x1F8 },
-    { &JAM_FACE_ICON_ROM_START,   &JAM_FACE_ICON_ROM_END,   0x1F8 },
-    { &LINDA_FACE_ICON_ROM_START, &LINDA_FACE_ICON_ROM_END, 0x1F8 },
-    { &TOMMY_FACE_ICON_ROM_START, &TOMMY_FACE_ICON_ROM_END, 0x1F8 },
-    { &WENDY_FACE_ICON_ROM_START, &WENDY_FACE_ICON_ROM_END, 0x1F8 },
-    { &BLACK_FACE_ICON_ROM_START, &BLACK_FACE_ICON_ROM_END, 0x1F8 },
-    { &PEN_FACE_ICON_ROM_START,   &PEN_FACE_ICON_ROM_END,   0x1F8 },
-    { &DOG_FACE_ICON_ROM_START,   &DOG_FACE_ICON_ROM_END,   0x1F8 },
-    { &DINOS_FACE_ICON_ROM_START, &DINOS_FACE_ICON_ROM_END, 0x2A8 },
-    { &SNOW_FACE_ICON_ROM_START,  &SNOW_FACE_ICON_ROM_END,  0x210 },
-    { &BLACK_FACE_ICON_ROM_START, &BLACK_FACE_ICON_ROM_END, 0x1F8 },
+    { &SLASH_FACE_ICON_ROM_START,  &SLASH_FACE_ICON_ROM_END,  0x1F8 },
+    { &NANCY_FACE_ICON_ROM_START,  &NANCY_FACE_ICON_ROM_END,  0x1F8 },
+    { &JAM_FACE_ICON_ROM_START,    &JAM_FACE_ICON_ROM_END,    0x1F8 },
+    { &LINDA_FACE_ICON_ROM_START,  &LINDA_FACE_ICON_ROM_END,  0x1F8 },
+    { &TOMMY_FACE_ICON_ROM_START,  &TOMMY_FACE_ICON_ROM_END,  0x1F8 },
+    { &WENDY_FACE_ICON_ROM_START,  &WENDY_FACE_ICON_ROM_END,  0x1F8 },
+    { &DAMIEN_FACE_ICON_ROM_START, &DAMIEN_FACE_ICON_ROM_END, 0x1F8 },
+    { &PEN_FACE_ICON_ROM_START,    &PEN_FACE_ICON_ROM_END,    0x1F8 },
+    { &DOG_FACE_ICON_ROM_START,    &DOG_FACE_ICON_ROM_END,    0x1F8 },
+    { &DINOS_FACE_ICON_ROM_START,  &DINOS_FACE_ICON_ROM_END,  0x2A8 },
+    { &SNOW_FACE_ICON_ROM_START,   &SNOW_FACE_ICON_ROM_END,   0x210 },
+    { &DAMIEN_FACE_ICON_ROM_START, &DAMIEN_FACE_ICON_ROM_END, 0x1F8 },
 };
 
 AssetMeta gCostumeSlotDisplayListAssets[] = {
@@ -1993,7 +1999,7 @@ DisplayLists gWendyBoard3SecondaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x01002B00, NULL,              NULL }
 };
 
-DisplayLists gBlackBoard0PrimaryPartDisplayLists[16] = {
+DisplayLists gDamienBoard0PrimaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x01000000, NULL,              NULL },
     { 0x00000000, (Gfx *)0x010000B8, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01000170, NULL,              NULL },
@@ -2012,7 +2018,7 @@ DisplayLists gBlackBoard0PrimaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x010012D8, NULL,              NULL }
 };
 
-DisplayLists gBlackBoard0SecondaryPartDisplayLists[16] = {
+DisplayLists gDamienBoard0SecondaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x01002F20, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01002F60, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01002FA0, NULL,              NULL },
@@ -2031,7 +2037,7 @@ DisplayLists gBlackBoard0SecondaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x01003320, NULL,              NULL }
 };
 
-DisplayLists gBlackBoard1PrimaryPartDisplayLists[16] = {
+DisplayLists gDamienBoard1PrimaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x01000000, NULL,              NULL },
     { 0x00000000, (Gfx *)0x010000B8, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01000170, NULL,              NULL },
@@ -2050,7 +2056,7 @@ DisplayLists gBlackBoard1PrimaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x010012D8, NULL,              NULL }
 };
 
-DisplayLists gBlackBoard1SecondaryPartDisplayLists[16] = {
+DisplayLists gDamienBoard1SecondaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x01002F58, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01002F98, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01002FD8, NULL,              NULL },
@@ -2069,7 +2075,7 @@ DisplayLists gBlackBoard1SecondaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x01003358, NULL,              NULL }
 };
 
-DisplayLists gBlackBoard2PrimaryPartDisplayLists[16] = {
+DisplayLists gDamienBoard2PrimaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x01000000, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01000150, NULL,              NULL },
     { 0x00000000, (Gfx *)0x010001F8, NULL,              NULL },
@@ -2088,7 +2094,7 @@ DisplayLists gBlackBoard2PrimaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x01001388, NULL,              NULL }
 };
 
-DisplayLists gBlackBoard2SecondaryPartDisplayLists[16] = {
+DisplayLists gDamienBoard2SecondaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x010031F8, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01003238, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01003278, NULL,              NULL },
@@ -2107,7 +2113,7 @@ DisplayLists gBlackBoard2SecondaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x010035F8, NULL,              NULL }
 };
 
-DisplayLists gBlackBoard3PrimaryPartDisplayLists[16] = {
+DisplayLists gDamienBoard3PrimaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x01000000, NULL,              NULL },
     { 0x00000000, (Gfx *)0x010000B8, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01000170, NULL,              NULL },
@@ -2126,7 +2132,7 @@ DisplayLists gBlackBoard3PrimaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x010012D8, NULL,              NULL }
 };
 
-DisplayLists gBlackBoard3SecondaryPartDisplayLists[16] = {
+DisplayLists gDamienBoard3SecondaryPartDisplayLists[16] = {
     { 0x00000000, (Gfx *)0x01002F48, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01002F88, NULL,              NULL },
     { 0x00000000, (Gfx *)0x01002FC8, NULL,              NULL },

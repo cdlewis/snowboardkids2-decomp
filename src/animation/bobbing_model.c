@@ -15,19 +15,19 @@ typedef struct {
     s32 verticalVelocity;
 } BobbingModelState;
 
-DisplayLists gLtbl3DisplayLists = { 0x00000000, (Gfx *)0x01000180, NULL, NULL };
+DisplayLists gTable3DisplayLists = { 0x00000000, (Gfx *)0x01000180, NULL, NULL };
 
-DisplayLists gLtbl2DisplayLists = { 0x00000000, (Gfx *)0x010003B0, (Gfx *)0x010003C0, NULL };
+DisplayLists gTable2DisplayLists = { 0x00000000, (Gfx *)0x010003B0, (Gfx *)0x010003C0, NULL };
 
 DisplayLists gLindaBDisplayLists = { 0x00000000, (Gfx *)0x01000480, (Gfx *)0x01000490, NULL };
 
-DisplayLists gLtbl1DisplayLists = { 0x00000000, (Gfx *)0x01000180, NULL, NULL };
+DisplayLists gTable1DisplayLists = { 0x00000000, (Gfx *)0x01000180, NULL, NULL };
 
-DisplayLists gLtbl0DisplayLists = { 0x00000000, (Gfx *)0x010002E0, (Gfx *)0x010002F0, NULL };
+DisplayLists gTable0DisplayLists = { 0x00000000, (Gfx *)0x010002E0, (Gfx *)0x010002F0, NULL };
 
 DisplayLists gLindaPDisplayLists = { 0x00000000, (Gfx *)0x01000488, (Gfx *)0x01000498, NULL };
 
-DisplayLists gDoorDisplayLists = { 0x00000000, (Gfx *)0x010005A0, (Gfx *)0x010005B0, NULL };
+DisplayLists gHauntedHouseDoorDisplayLists = { 0x00000000, (Gfx *)0x010005A0, (Gfx *)0x010005B0, NULL };
 
 DisplayLists gBomb2DisplayLists = { 0x00000000, (Gfx *)0x01000268, NULL, NULL };
 
@@ -53,17 +53,17 @@ DisplayLists gMroboPartDisplayLists[10] = {
     { 0x00000000, (Gfx *)0x01001860, NULL,              NULL }
 };
 
-DisplayLists gBurgDisplayLists = { 0x00000000, (Gfx *)0x01000180, NULL, NULL };
+DisplayLists gHamburgerDisplayLists = { 0x00000000, (Gfx *)0x01000180, NULL, NULL };
 
-DisplayLists gHeliDisplayLists = { 0x00000000, (Gfx *)0x01000760, NULL, NULL };
+DisplayLists gHelicopterDisplayLists = { 0x00000000, (Gfx *)0x01000760, NULL, NULL };
 
 DisplayLists gBobbingModelOverlayDisplayLists = { 0x00000000, NULL, (Gfx *)0x01000888, NULL };
 
-DisplayLists gUsagiDisplayLists = { 0x00000000, (Gfx *)0x01000270, NULL, NULL };
+DisplayLists gBunnyDisplayLists = { 0x00000000, (Gfx *)0x01000270, NULL, NULL };
 
-DisplayLists gPbox0DisplayLists = { 0x00000000, (Gfx *)0x01000140, NULL, NULL };
+DisplayLists gPresentRedDisplayLists = { 0x00000000, (Gfx *)0x01000140, NULL, NULL };
 
-DisplayLists gPbox1DisplayLists = { 0x00000000, (Gfx *)0x01000140, NULL, NULL };
+DisplayLists gPresentBlueDisplayLists = { 0x00000000, (Gfx *)0x01000140, NULL, NULL };
 
 DisplayLists gItem1DisplayLists = { 0x00000000, (Gfx *)0x01000140, NULL, NULL };
 

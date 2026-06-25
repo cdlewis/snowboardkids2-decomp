@@ -191,7 +191,7 @@ DisplayLists gWendySharedModel3PartDisplayLists[2] = {
     { 0x00000000, (Gfx *)0x010003A8, (Gfx *)0x01000548, NULL }
 };
 
-DisplayLists gBlackSharedModelPartDisplayLists[8] = {
+DisplayLists gDamienSharedModelPartDisplayLists[8] = {
     { 0x00000000, (Gfx *)0x01000000, (Gfx *)0x010002B0, NULL },
     { 0x00000000, (Gfx *)0x010003A8, (Gfx *)0x010006C0, NULL },
     { 0x00000000, (Gfx *)0x010007B8, (Gfx *)0x01000AD0, NULL },

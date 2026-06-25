@@ -925,22 +925,22 @@ segments:
     vram: 0
     start: 0x1AFBA0
 
-  - name: BLACK_BOARD0_DISPLAY_LIST
+  - name: DAMIEN_BOARD0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1B26E0
 
-  - name: BLACK_BOARD1_DISPLAY_LIST
+  - name: DAMIEN_BOARD1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1B5A40
 
-  - name: BLACK_BOARD2_DISPLAY_LIST
+  - name: DAMIEN_BOARD2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1B8DE0
 
-  - name: BLACK_BOARD3_DISPLAY_LIST
+  - name: DAMIEN_BOARD3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1BC420
@@ -1170,12 +1170,12 @@ segments:
     vram: 0
     start: 0x1E7F60
 
-  - name: LTBL3_DISPLAY_LIST
+  - name: TABLE3_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E8900
 
-  - name: LTBL2_DISPLAY_LIST
+  - name: TABLE2_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E8A90
@@ -1185,12 +1185,12 @@ segments:
     vram: 0
     start: 0x1E8E60
 
-  - name: LTBL1_DISPLAY_LIST
+  - name: TABLE1_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E9300
 
-  - name: LTBL0_DISPLAY_LIST
+  - name: TABLE0_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E9490
@@ -1200,7 +1200,7 @@ segments:
     vram: 0
     start: 0x1E9790
 
-  - name: DOOR_DISPLAY_LIST
+  - name: HAUNTED_HOUSE_DOOR_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1E9C40
@@ -1225,27 +1225,27 @@ segments:
     vram: 0
     start: 0x1EAEF0
 
-  - name: BURG_DISPLAY_LIST
+  - name: HAMBURGER_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1EC940
 
-  - name: HELI_DISPLAY_LIST
+  - name: HELICOPTER_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1ECAD0
 
-  - name: USAGI_DISPLAY_LIST
+  - name: BUNNY_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1ED370
 
-  - name: PBOX0_DISPLAY_LIST
+  - name: PRESENT_RED_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1ED5F0
 
-  - name: PBOX1_DISPLAY_LIST
+  - name: PRESENT_BLUE_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1ED740
@@ -1372,17 +1372,17 @@ segments:
     vram: 0
     start: 0x1FB8B0
 
-  - name: NEWS_DISPLAY_LIST
+  - name: NEWSPAPER_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FBE00
 
-  - name: POST_DISPLAY_LIST
+  - name: POSTBOX_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FBF30
 
-  - name: POSP_DISPLAY_LIST
+  - name: POSTBOX_WITH_NEWSPAPER_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FC140
@@ -1392,7 +1392,7 @@ segments:
     vram: 0
     start: 0x1FC370
 
-  - name: KANI_DISPLAY_LIST
+  - name: CRAB_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FC700
@@ -1402,12 +1402,12 @@ segments:
     vram: 0
     start: 0x1FC9A0
 
-  - name: ABOXL_DISPLAY_LIST
+  - name: CHEST_CLOSED_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FCBA0
 
-  - name: ABOXO_DISPLAY_LIST
+  - name: CHEST_OPEN_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x1FCE20
@@ -1547,7 +1547,7 @@ segments:
     vram: 0
     start: 0x2125A0
 
-  - name: BLACK_DISPLAY_LIST
+  - name: DAMIEN_DISPLAY_LIST
     type: bin
     vram: 0
     start: 0x212CF0
@@ -2081,22 +2081,22 @@ segments:
     vram: 0
     start: 0x381CD0
 
-  - name: BLACK_BOARD0_COMPRESSED_DATA
+  - name: DAMIEN_BOARD0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x383E00
 
-  - name: BLACK_BOARD1_COMPRESSED_DATA
+  - name: DAMIEN_BOARD1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x3860C0
 
-  - name: BLACK_BOARD2_COMPRESSED_DATA
+  - name: DAMIEN_BOARD2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x388430
 
-  - name: BLACK_BOARD3_COMPRESSED_DATA
+  - name: DAMIEN_BOARD3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x38AC10
@@ -2186,7 +2186,7 @@ segments:
     vram: 0
     start: 0x3C8BC0
 
-  - name: BLACK_RACE_ANIMATION_DATA
+  - name: DAMIEN_RACE_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x3D0C20
@@ -2246,7 +2246,7 @@ segments:
     vram: 0
     start: 0x3F3060
 
-  - name: BLACK_FACE_ICON
+  - name: DAMIEN_FACE_ICON
     type: bin
     vram: 0
     start: 0x3F31B0
@@ -2953,7 +2953,7 @@ segments:
     vram: 0
     start: 0x4666C0
 
-  - name: BLACKS_ANIMATION_DATA
+  - name: DAMIENS_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x46A0E0
@@ -2998,7 +2998,7 @@ segments:
     vram: 0
     start: 0x48E8F0
 
-  - name: BLACKN_ANIMATION_DATA
+  - name: DAMIENN_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x4937A0
@@ -3053,12 +3053,12 @@ segments:
     vram: 0
     start: 0x49CCA0
 
-  - name: LTBL3_COMPRESSED_DATA
+  - name: TABLE3_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x49D710
 
-  - name: LTBL2_COMPRESSED_DATA
+  - name: TABLE2_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x49D8F0
@@ -3068,12 +3068,12 @@ segments:
     vram: 0
     start: 0x49E2E0
 
-  - name: LTBL1_COMPRESSED_DATA
+  - name: TABLE1_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x49F0D0
 
-  - name: LTBL0_COMPRESSED_DATA
+  - name: TABLE0_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x49F270
@@ -3083,7 +3083,7 @@ segments:
     vram: 0
     start: 0x49FA20
 
-  - name: DOOR_COMPRESSED_DATA
+  - name: HAUNTED_HOUSE_DOOR_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A0670
@@ -3108,27 +3108,27 @@ segments:
     vram: 0
     start: 0x4A2BC0
 
-  - name: BURG_COMPRESSED_DATA
+  - name: HAMBURGER_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A3E80
 
-  - name: HELI_COMPRESSED_DATA
+  - name: HELICOPTER_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A4260
 
-  - name: USAGI_COMPRESSED_DATA
+  - name: BUNNY_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A51C0
 
-  - name: PBOX0_COMPRESSED_DATA
+  - name: PRESENT_RED_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A5460
 
-  - name: PBOX1_COMPRESSED_DATA
+  - name: PRESENT_BLUE_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4A5650
@@ -3260,17 +3260,17 @@ segments:
     vram: 0
     start: 0x4CA440
 
-  - name: NEWS_COMPRESSED_DATA
+  - name: NEWSPAPER_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CAD30
 
-  - name: POST_COMPRESSED_DATA
+  - name: POSTBOX_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CB1E0
 
-  - name: POSP_COMPRESSED_DATA
+  - name: POSTBOX_WITH_NEWSPAPER_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CB700
@@ -3280,7 +3280,7 @@ segments:
     vram: 0
     start: 0x4CBCF0
 
-  - name: KANI_COMPRESSED_DATA
+  - name: CRAB_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CCA00
@@ -3290,12 +3290,12 @@ segments:
     vram: 0
     start: 0x4CCE20
 
-  - name: ABOXL_COMPRESSED_DATA
+  - name: CHEST_CLOSED_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CD980
 
-  - name: ABOXO_COMPRESSED_DATA
+  - name: CHEST_OPEN_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4CDCB0
@@ -3435,7 +3435,7 @@ segments:
     vram: 0
     start: 0x4E54E0
 
-  - name: BLACK_COMPRESSED_DATA
+  - name: DAMIEN_COMPRESSED_DATA
     type: bin
     vram: 0
     start: 0x4E5FC0
@@ -3575,22 +3575,22 @@ segments:
     vram: 0
     start: 0x590790
 
-  - name: BLACK_ANIMATION_DATA
+  - name: DAMIEN_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5944E0
 
-  - name: BLACK2_ANIMATION_DATA
+  - name: DAMIEN2_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x59C0A0
 
-  - name: BLACK3_ANIMATION_DATA
+  - name: DAMIEN3_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x59EF90
 
-  - name: BLACKO_ANIMATION_DATA
+  - name: DAMIENO_ANIMATION_DATA
     type: bin
     vram: 0
     start: 0x5A9D70

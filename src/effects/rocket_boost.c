@@ -11,7 +11,7 @@
 DisplayLists D_80088670_89270 = { 0, (Gfx *)0x010001E8, NULL, NULL };
 DisplayLists D_80088680_89280 = { 0, NULL, (Gfx *)0x01000390, NULL };
 DisplayLists D_80088690_89290 = { 0, NULL, NULL, (Gfx *)0x01000540 };
-DisplayLists D_800886A0 = { 0, (Gfx *)0x01000118, NULL, NULL };
+DisplayLists gNewspaperDisplayLists = { 0, (Gfx *)0x01000118, NULL, NULL };
 
 void cleanupRocketEffect(RocketEffectUpdateData *data);
 

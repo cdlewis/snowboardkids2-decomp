@@ -31,5 +31,5 @@ extern DisplayLists gWendySharedModel0PartDisplayLists[3];
 extern DisplayLists gWendySharedModel1PartDisplayLists[2];
 extern DisplayLists gWendySharedModel2PartDisplayLists[2];
 extern DisplayLists gWendySharedModel3PartDisplayLists[2];
-extern DisplayLists gBlackSharedModelPartDisplayLists[8];
+extern DisplayLists gDamienSharedModelPartDisplayLists[8];
 extern DisplayLists gPenSharedModelPartDisplayLists[2];

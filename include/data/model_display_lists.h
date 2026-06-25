@@ -2,24 +2,24 @@
 
 #include "graphics/displaylist.h"
 
-extern DisplayLists gLtbl3DisplayLists;
-extern DisplayLists gLtbl2DisplayLists;
+extern DisplayLists gTable3DisplayLists;
+extern DisplayLists gTable2DisplayLists;
 extern DisplayLists gLindaBDisplayLists;
-extern DisplayLists gLtbl1DisplayLists;
-extern DisplayLists gLtbl0DisplayLists;
+extern DisplayLists gTable1DisplayLists;
+extern DisplayLists gTable0DisplayLists;
 extern DisplayLists gLindaPDisplayLists;
-extern DisplayLists gDoorDisplayLists;
+extern DisplayLists gHauntedHouseDoorDisplayLists;
 extern DisplayLists gBomb2DisplayLists;
 extern DisplayLists gOtherHauntedPrimaryDisplayLists;
 extern DisplayLists gOtherHauntedSecondaryPartDisplayLists[2];
 extern DisplayLists gHauntedDisplayLists;
 extern DisplayLists gMroboPartDisplayLists[10];
-extern DisplayLists gBurgDisplayLists;
-extern DisplayLists gHeliDisplayLists;
+extern DisplayLists gHamburgerDisplayLists;
+extern DisplayLists gHelicopterDisplayLists;
 extern DisplayLists gBobbingModelOverlayDisplayLists;
-extern DisplayLists gUsagiDisplayLists;
-extern DisplayLists gPbox0DisplayLists;
-extern DisplayLists gPbox1DisplayLists;
+extern DisplayLists gBunnyDisplayLists;
+extern DisplayLists gPresentRedDisplayLists;
+extern DisplayLists gPresentBlueDisplayLists;
 extern DisplayLists gItem1DisplayLists;
 extern DisplayLists gItemDebrisDisplayLists;
 extern DisplayLists gDishDisplayLists;
