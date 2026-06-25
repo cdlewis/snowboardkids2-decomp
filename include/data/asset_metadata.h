@@ -1,5 +1,6 @@
 #pragma once
 
+#include "graphics/displaylist.h"
 #include "system/memory_allocator.h"
 
 typedef struct {
@@ -12,13 +13,6 @@ typedef struct {
     void *end;
     s32 uncompressedSize;
 } CompressedAssetMeta;
-
-typedef struct {
-    void *asset1;
-    void *asset2;
-    void *asset3;
-    void *asset4;
-} UnknownAssetStruct;
 
 extern s32 D_80094CC0_958C0[4];
 extern s32 D_80094CD0_958D0[4];
@@ -69,8 +63,8 @@ extern s32 D_80095A10_96610[36];
 void *load_3ECE40(void);
 void *loadAssetByIndex_94F90(s16 groupIndex, s16 pairIndex);
 void *loadAssetByIndex_95200(s16 groupIndex, s16 pairIndex);
-UnknownAssetStruct *loadAssetByIndex_95380(s16 groupIndex, s16 pairIndex);
-s32 loadAssetByIndex_953B0(s16 groupIndex, s16 pairIndex);
+DisplayLists *loadAssetByIndex_95380(s16 groupIndex, s16 pairIndex);
+DisplayLists *loadAssetByIndex_953B0(s16 groupIndex, s16 pairIndex);
 void *loadAssetByIndex_95470(s32 index);
 void *loadAssetByIndex_95500(s16 index);
 void *loadAssetByIndex_95590(s16 index);

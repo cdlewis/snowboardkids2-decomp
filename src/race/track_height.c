@@ -208,8 +208,10 @@ void loadCharacterBodyParts(Player *player) {
             partIndex = 0;
             bodyPart = (BoneResult *)player;
             do {
-                *(s32 *)((u8 *)bodyPart + 0x58) = (s32)loadAssetByIndex_95380(player->characterId, player->boardType) +
-                                                  gBodyPartRemapTable[partIndex] * 0x10;
+                *(s32 *)((u8 *)bodyPart + 0x58) = (s32)&loadAssetByIndex_95380(
+                    player->characterId,
+                    player->boardType
+                )[gBodyPartRemapTable[partIndex]];
                 partIndex++;
                 bodyPart++;
             } while (partIndex < 0x10);
@@ -219,7 +221,7 @@ void loadCharacterBodyParts(Player *player) {
             bodyPart = (BoneResult *)player;
             do {
                 *(s32 *)((u8 *)bodyPart + 0x58) =
-                    (s32)loadAssetByIndex_95380(player->characterId, player->boardType) + partIndex * 0x10;
+                    (s32)&loadAssetByIndex_95380(player->characterId, player->boardType)[partIndex];
                 bodyPart++;
             } while (++partIndex < 0x10);
         }
@@ -230,8 +232,10 @@ void loadCharacterBodyParts(Player *player) {
             partIndex = 0;
             bodyPart2 = (BoneResult *)player;
             do {
-                *(s32 *)((u8 *)bodyPart2 + 0x58) = loadAssetByIndex_953B0(player->characterId, player->boardType) +
-                                                   gBodyPartRemapTable[partIndex] * 0x10;
+                *(s32 *)((u8 *)bodyPart2 + 0x58) = (s32)&loadAssetByIndex_953B0(
+                    player->characterId,
+                    player->boardType
+                )[gBodyPartRemapTable[partIndex]];
                 partIndex++;
                 bodyPart2++;
             } while (partIndex < 0x10);
@@ -241,7 +245,7 @@ void loadCharacterBodyParts(Player *player) {
             bodyPart2 = (BoneResult *)player;
             do {
                 *(s32 *)((u8 *)bodyPart2 + 0x58) =
-                    loadAssetByIndex_953B0(player->characterId, player->boardType) + partIndex * 0x10;
+                    (s32)&loadAssetByIndex_953B0(player->characterId, player->boardType)[partIndex];
                 bodyPart2++;
             } while (++partIndex < 0x10);
         }

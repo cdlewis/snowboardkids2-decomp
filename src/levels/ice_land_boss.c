@@ -490,7 +490,6 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     GameState *gameState;
     s32 i;
     u16 trackIdx;
-    s32 assetOffset;
 
     gameState = getCurrentAllocation();
 
@@ -522,9 +521,8 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
         memcpy(&extra->unk38, &identityMatrix, sizeof(Transform3D));
         extra->unk5C = (s32)arg0->unk0_3C[0].unk4;
         extra->unk60 = (s32)arg0->unk0_3C[0].unk8;
-        assetOffset = i * 0x10;
         extra->unk64 = 0;
-        extra->unk58 = (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + assetOffset);
+        extra->unk58 = (void *)(&loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex)[i]);
     }
 
     // Initialize bone animation state
@@ -572,7 +570,7 @@ void setIceBossFlyingMode(Player *arg0) {
 
     for (i = 0; i < 12; i++) {
         *(void **)((u8 *)elements + i * 0x3C + 0x58) =
-            (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardType) + i * 16 + 0xC0);
+            (void *)((s32)loadAssetByIndex_953B0(arg0->characterId, arg0->boardType) + i * 16 + 0xC0);
     }
 
     arg0->collisionRadius = 0x100000;

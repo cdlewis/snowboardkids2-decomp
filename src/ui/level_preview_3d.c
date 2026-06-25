@@ -2107,7 +2107,7 @@ void initializeGameEntity(
 
         for (i = 0; i < assetEntry->numAssets; i++) {
             i[ent->boneDisplayObjects].displayLists =
-                (DisplayLists *)&loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
+                &loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
             i[ent->boneDisplayObjects].segment1 = asset1;
             i[ent->boneDisplayObjects].segment2 = asset2;
             memcpy(

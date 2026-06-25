@@ -260,7 +260,7 @@ s32 initJingleTownBoss(Player *arg0) {
         dispObj->param1 = (s32)arg0->unk4;
         dispObj->param2 = (s32)arg0->unk8;
         dispObj->param3 = 0;
-        dispObj->assetPointer = (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardType) + i * 0x10);
+        dispObj->assetPointer = (void *)((s32)loadAssetByIndex_953B0(arg0->characterId, arg0->boardType) + i * 0x10);
     }
 
     arg0->behaviorMode = 1;

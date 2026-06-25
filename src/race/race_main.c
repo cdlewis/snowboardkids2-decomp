@@ -1082,7 +1082,7 @@ s32 initPlayerForRace(Player *player) {
             extra->unk5C = (s32)player->unk4;
             extra->unk60 = (s32)player->unk8;
             extra->unk64 = 0;
-            extra->assetPtr = (void *)(loadAssetByIndex_953B0(player->characterId, player->boardType) + i * 0x10);
+            extra->assetPtr = (void *)(&loadAssetByIndex_953B0(player->characterId, player->boardType)[i]);
         } else {
             player->playerModel.displayLists = (DisplayLists *)&D_8009A550_9B150[0];
             player->playerModel.segment1 = player->unkC;

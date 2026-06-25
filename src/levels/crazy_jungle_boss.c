@@ -382,7 +382,6 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     GameState *gameState;
     s32 i;
     u16 trackIdx;
-    s32 assetOffset;
     u8 *elem;
 
     gameState = getCurrentAllocation();
@@ -421,8 +420,7 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
         *(s32 *)(elem + 0x5C) = *(s32 *)((u8 *)arg0 + 4);
         *(s32 *)(elem + 0x60) = *(s32 *)((u8 *)arg0 + 8);
         *(s32 *)(elem + 0x64) = 0;
-        assetOffset = i * 0x10;
-        *(void **)(elem + 0x58) = (void *)(loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex) + assetOffset);
+        *(void **)(elem + 0x58) = (void *)(&loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex)[i]);
     }
 
     arg0->leanAnimIndex = 0;
