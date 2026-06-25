@@ -4,6 +4,7 @@
 #include "audio/audio.h"
 #include "data/asset_metadata.h"
 #include "data/data_table.h"
+#include "data/shared_model_part_display_lists.h"
 #include "effects/animated_sprite_effect.h"
 #include "gamestate.h"
 #include "graphics/displaylist.h"
@@ -74,35 +75,6 @@ extern s32 D_800886C0;
 extern s32 D_800886D0;
 extern s32 D_800886F0;
 extern s32 D_80088710;
-extern s32 D_80088730;
-extern s32 D_80088740;
-extern s32 D_80088750;
-extern DisplayLists gSlashSharedModel0PartDisplayLists[];
-extern DisplayLists gSlashSharedModel1PartDisplayLists[];
-extern DisplayLists gSlashSharedModel2PartDisplayLists[];
-extern DisplayLists gSlashSharedModel3PartDisplayLists[];
-extern DisplayLists gNancySharedModel0PartDisplayLists[];
-extern DisplayLists gNancySharedModel1PartDisplayLists[];
-extern DisplayLists gNancySharedModel2PartDisplayLists[];
-extern DisplayLists gNancySharedModel3PartDisplayLists[];
-extern DisplayLists gJamSharedModel0PartDisplayLists[];
-extern DisplayLists gJamSharedModel1PartDisplayLists[];
-extern DisplayLists gJamSharedModel2PartDisplayLists[];
-extern DisplayLists gJamSharedModel3PartDisplayLists[];
-extern DisplayLists gLindaSharedModel0PartDisplayLists[];
-extern DisplayLists gLindaSharedModel1PartDisplayLists[];
-extern DisplayLists gLindaSharedModel2PartDisplayLists[];
-extern DisplayLists gLindaSharedModel3PartDisplayLists[];
-extern DisplayLists gTommySharedModel0PartDisplayLists[];
-extern DisplayLists gTommySharedModel1PartDisplayLists[];
-extern DisplayLists gTommySharedModel2PartDisplayLists[];
-extern DisplayLists gTommySharedModel3PartDisplayLists[];
-extern DisplayLists gWendySharedModel0PartDisplayLists[];
-extern DisplayLists gWendySharedModel1PartDisplayLists[];
-extern DisplayLists gWendySharedModel2PartDisplayLists[];
-extern DisplayLists gWendySharedModel3PartDisplayLists[];
-extern DisplayLists gBlackSharedModelPartDisplayLists[];
-extern DisplayLists gPenSharedModelPartDisplayLists[];
 extern void initDriftingParticle(void *arg0);
 extern void initTrailingParticle(void *arg0);
 extern void initSteppedMatrixController(void *arg0);
