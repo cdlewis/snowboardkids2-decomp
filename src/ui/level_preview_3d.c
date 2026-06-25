@@ -77,32 +77,32 @@ extern s32 D_80088710;
 extern s32 D_80088730;
 extern s32 D_80088740;
 extern s32 D_80088750;
-extern s32 D_80088770;
-extern s32 D_800887D0;
-extern s32 D_80088830;
-extern s32 D_80088890;
-extern s32 D_800888F0;
-extern s32 D_80088940;
-extern s32 D_80088990;
-extern s32 D_800889E0;
-extern s32 D_80088A30;
-extern s32 D_80088A80;
-extern s32 D_80088AD0;
-extern s32 D_80088B20;
-extern s32 D_80088B70;
-extern s32 D_80088BC0;
-extern s32 D_80088C10;
-extern s32 D_80088C60;
-extern s32 D_80088CB0;
-extern s32 D_80088D00;
-extern s32 D_80088D50;
-extern s32 D_80088DA0;
-extern s32 D_80088DF0;
-extern s32 D_80088E20;
-extern s32 D_80088E40;
-extern s32 D_80088E60;
-extern s32 D_80088E80;
-extern s32 D_80088F00;
+extern DisplayLists gSlashSharedModel0PartDisplayLists[];
+extern DisplayLists gSlashSharedModel1PartDisplayLists[];
+extern DisplayLists gSlashSharedModel2PartDisplayLists[];
+extern DisplayLists gSlashSharedModel3PartDisplayLists[];
+extern DisplayLists gNancySharedModel0PartDisplayLists[];
+extern DisplayLists gNancySharedModel1PartDisplayLists[];
+extern DisplayLists gNancySharedModel2PartDisplayLists[];
+extern DisplayLists gNancySharedModel3PartDisplayLists[];
+extern DisplayLists gJamSharedModel0PartDisplayLists[];
+extern DisplayLists gJamSharedModel1PartDisplayLists[];
+extern DisplayLists gJamSharedModel2PartDisplayLists[];
+extern DisplayLists gJamSharedModel3PartDisplayLists[];
+extern DisplayLists gLindaSharedModel0PartDisplayLists[];
+extern DisplayLists gLindaSharedModel1PartDisplayLists[];
+extern DisplayLists gLindaSharedModel2PartDisplayLists[];
+extern DisplayLists gLindaSharedModel3PartDisplayLists[];
+extern DisplayLists gTommySharedModel0PartDisplayLists[];
+extern DisplayLists gTommySharedModel1PartDisplayLists[];
+extern DisplayLists gTommySharedModel2PartDisplayLists[];
+extern DisplayLists gTommySharedModel3PartDisplayLists[];
+extern DisplayLists gWendySharedModel0PartDisplayLists[];
+extern DisplayLists gWendySharedModel1PartDisplayLists[];
+extern DisplayLists gWendySharedModel2PartDisplayLists[];
+extern DisplayLists gWendySharedModel3PartDisplayLists[];
+extern DisplayLists gBlackSharedModelPartDisplayLists[];
+extern DisplayLists gPenSharedModelPartDisplayLists[];
 extern void initDriftingParticle(void *arg0);
 extern void initTrailingParticle(void *arg0);
 extern void initSteppedMatrixController(void *arg0);
@@ -233,22 +233,22 @@ ItemAssetEntry SLASH_ASSETS[4] = {
      (void *)&SLASH1_DISPLAY_LIST_ROM_END,
      (void *)&SLASH1_COMPRESSED_DATA_ROM_START,
      (void *)&SLASH1_COMPRESSED_DATA_ROM_END,
-     0x3DE00006, (void *)&D_80088770 },
+     0x3DE00006, (void *)gSlashSharedModel0PartDisplayLists },
     { (void *)&SLASH2_DISPLAY_LIST_ROM_START,
      (void *)&SLASH2_DISPLAY_LIST_ROM_END,
      (void *)&SLASH2_COMPRESSED_DATA_ROM_START,
      (void *)&SLASH2_COMPRESSED_DATA_ROM_END,
-     0x3AD00006, (void *)&D_800887D0 },
+     0x3AD00006, (void *)gSlashSharedModel1PartDisplayLists },
     { (void *)&SLASH3_DISPLAY_LIST_ROM_START,
      (void *)&SLASH3_DISPLAY_LIST_ROM_END,
      (void *)&SLASH3_COMPRESSED_DATA_ROM_START,
      (void *)&SLASH3_COMPRESSED_DATA_ROM_END,
-     0x4D900006, (void *)&D_80088830 },
+     0x4D900006, (void *)gSlashSharedModel2PartDisplayLists },
     { (void *)&SLASH4_DISPLAY_LIST_ROM_START,
      (void *)&SLASH4_DISPLAY_LIST_ROM_END,
      (void *)&SLASH4_COMPRESSED_DATA_ROM_START,
      (void *)&SLASH4_COMPRESSED_DATA_ROM_END,
-     0x3F600006, (void *)&D_80088890 },
+     0x3F600006, (void *)gSlashSharedModel3PartDisplayLists },
 };
 
 ItemAssetEntry NANCY_ASSETS[4] = {
@@ -256,22 +256,22 @@ ItemAssetEntry NANCY_ASSETS[4] = {
      (void *)&NANCY1_DISPLAY_LIST_ROM_END,
      (void *)&NANCY1_COMPRESSED_DATA_ROM_START,
      (void *)&NANCY1_COMPRESSED_DATA_ROM_END,
-     0x2F200005, (void *)&D_800888F0 },
+     0x2F200005, (void *)gNancySharedModel0PartDisplayLists },
     { (void *)&NANCY2_DISPLAY_LIST_ROM_START,
      (void *)&NANCY2_DISPLAY_LIST_ROM_END,
      (void *)&NANCY2_COMPRESSED_DATA_ROM_START,
      (void *)&NANCY2_COMPRESSED_DATA_ROM_END,
-     0x27F00005, (void *)&D_80088940 },
+     0x27F00005, (void *)gNancySharedModel1PartDisplayLists },
     { (void *)&NANCY3_DISPLAY_LIST_ROM_START,
      (void *)&NANCY3_DISPLAY_LIST_ROM_END,
      (void *)&NANCY3_COMPRESSED_DATA_ROM_START,
      (void *)&NANCY3_COMPRESSED_DATA_ROM_END,
-     0x28900005, (void *)&D_80088990 },
+     0x28900005, (void *)gNancySharedModel2PartDisplayLists },
     { (void *)&NANCY4_DISPLAY_LIST_ROM_START,
      (void *)&NANCY4_DISPLAY_LIST_ROM_END,
      (void *)&NANCY4_COMPRESSED_DATA_ROM_START,
      (void *)&NANCY4_COMPRESSED_DATA_ROM_END,
-     0x2C000005, (void *)&D_800889E0 },
+     0x2C000005, (void *)gNancySharedModel3PartDisplayLists },
 };
 
 ItemAssetEntry JAM_ASSETS[4] = {
@@ -279,22 +279,22 @@ ItemAssetEntry JAM_ASSETS[4] = {
      (void *)&JAM1_DISPLAY_LIST_ROM_END,
      (void *)&JAM1_COMPRESSED_DATA_ROM_START,
      (void *)&JAM1_COMPRESSED_DATA_ROM_END,
-     0x2B000005, (void *)&D_80088A30 },
+     0x2B000005, (void *)gJamSharedModel0PartDisplayLists },
     { (void *)&JAM2_DISPLAY_LIST_ROM_START,
      (void *)&JAM2_DISPLAY_LIST_ROM_END,
      (void *)&JAM2_COMPRESSED_DATA_ROM_START,
      (void *)&JAM2_COMPRESSED_DATA_ROM_END,
-     0x2FE00005, (void *)&D_80088A80 },
+     0x2FE00005, (void *)gJamSharedModel1PartDisplayLists },
     { (void *)&JAM3_DISPLAY_LIST_ROM_START,
      (void *)&JAM3_DISPLAY_LIST_ROM_END,
      (void *)&JAM3_COMPRESSED_DATA_ROM_START,
      (void *)&JAM3_COMPRESSED_DATA_ROM_END,
-     0x2B800005, (void *)&D_80088AD0 },
+     0x2B800005, (void *)gJamSharedModel2PartDisplayLists },
     { (void *)&JAM4_DISPLAY_LIST_ROM_START,
      (void *)&JAM4_DISPLAY_LIST_ROM_END,
      (void *)&JAM4_COMPRESSED_DATA_ROM_START,
      (void *)&JAM4_COMPRESSED_DATA_ROM_END,
-     0x40500005, (void *)&D_80088B20 },
+     0x40500005, (void *)gJamSharedModel3PartDisplayLists },
 };
 
 ItemAssetEntry LINDA_ASSETS[4] = {
@@ -302,22 +302,22 @@ ItemAssetEntry LINDA_ASSETS[4] = {
      (void *)&LINDA_DISPLAY_LIST_0_ROM_END,
      (void *)&LINDA_COMPRESSED_DATA_0_ROM_START,
      (void *)&LINDA_COMPRESSED_DATA_0_ROM_END,
-     0x27F00005, (void *)&D_80088B70 },
+     0x27F00005, (void *)gLindaSharedModel0PartDisplayLists },
     { (void *)&LINDA_DISPLAY_LIST_1_ROM_START,
      (void *)&LINDA_DISPLAY_LIST_1_ROM_END,
      (void *)&LINDA_COMPRESSED_DATA_1_ROM_START,
      (void *)&LINDA_COMPRESSED_DATA_1_ROM_END,
-     0x27F00005, (void *)&D_80088BC0 },
+     0x27F00005, (void *)gLindaSharedModel1PartDisplayLists },
     { (void *)&LINDA_DISPLAY_LIST_2_ROM_START,
      (void *)&LINDA_DISPLAY_LIST_2_ROM_END,
      (void *)&LINDA_COMPRESSED_DATA_2_ROM_START,
      (void *)&LINDA_COMPRESSED_DATA_2_ROM_END,
-     0x27500005, (void *)&D_80088C10 },
+     0x27500005, (void *)gLindaSharedModel2PartDisplayLists },
     { (void *)&LINDA_DISPLAY_LIST_3_ROM_START,
      (void *)&LINDA_DISPLAY_LIST_3_ROM_END,
      (void *)&LINDA_COMPRESSED_DATA_3_ROM_START,
      (void *)&LINDA_COMPRESSED_DATA_3_ROM_END,
-     0x25C00005, (void *)&D_80088C60 },
+     0x25C00005, (void *)gLindaSharedModel3PartDisplayLists },
 };
 
 ItemAssetEntry TOMMY_ASSETS[4] = {
@@ -325,22 +325,22 @@ ItemAssetEntry TOMMY_ASSETS[4] = {
      (void *)&TOMMY_DISPLAY_LIST_0_ROM_END,
      (void *)&TOMMY_COMPRESSED_DATA_0_ROM_START,
      (void *)&TOMMY_COMPRESSED_DATA_0_ROM_END,
-     0x4D000005, (void *)&D_80088CB0 },
+     0x4D000005, (void *)gTommySharedModel0PartDisplayLists },
     { (void *)&TOMMY_DISPLAY_LIST_1_ROM_START,
      (void *)&TOMMY_DISPLAY_LIST_1_ROM_END,
      (void *)&TOMMY_COMPRESSED_DATA_1_ROM_START,
      (void *)&TOMMY_COMPRESSED_DATA_1_ROM_END,
-     0x50200005, (void *)&D_80088D00 },
+     0x50200005, (void *)gTommySharedModel1PartDisplayLists },
     { (void *)&TOMMY_DISPLAY_LIST_2_ROM_START,
      (void *)&TOMMY_DISPLAY_LIST_2_ROM_END,
      (void *)&TOMMY_COMPRESSED_DATA_2_ROM_START,
      (void *)&TOMMY_COMPRESSED_DATA_2_ROM_END,
-     0x4E400005, (void *)&D_80088D50 },
+     0x4E400005, (void *)gTommySharedModel2PartDisplayLists },
     { (void *)&TOMMY_DISPLAY_LIST_3_ROM_START,
      (void *)&TOMMY_DISPLAY_LIST_3_ROM_END,
      (void *)&TOMMY_COMPRESSED_DATA_3_ROM_START,
      (void *)&TOMMY_COMPRESSED_DATA_3_ROM_END,
-     0x48D00005, (void *)&D_80088DA0 },
+     0x48D00005, (void *)gTommySharedModel3PartDisplayLists },
 };
 
 ItemAssetEntry WENDY_ASSETS[4] = {
@@ -348,22 +348,22 @@ ItemAssetEntry WENDY_ASSETS[4] = {
      (void *)&WENDY_DISPLAY_LIST_0_ROM_END,
      (void *)&WENDY_COMPRESSED_DATA_0_ROM_START,
      (void *)&WENDY_COMPRESSED_DATA_0_ROM_END,
-     0x27A00003, (void *)&D_80088DF0 },
+     0x27A00003, (void *)gWendySharedModel0PartDisplayLists },
     { (void *)&WENDY_DISPLAY_LIST_1_ROM_START,
      (void *)&WENDY_DISPLAY_LIST_1_ROM_END,
      (void *)&WENDY_COMPRESSED_DATA_1_ROM_START,
      (void *)&WENDY_COMPRESSED_DATA_1_ROM_END,
-     0x1AC00002, (void *)&D_80088E20 },
+     0x1AC00002, (void *)gWendySharedModel1PartDisplayLists },
     { (void *)&WENDY_DISPLAY_LIST_2_ROM_START,
      (void *)&WENDY_DISPLAY_LIST_2_ROM_END,
      (void *)&WENDY_COMPRESSED_DATA_2_ROM_START,
      (void *)&WENDY_COMPRESSED_DATA_2_ROM_END,
-     0x1AE00002, (void *)&D_80088E40 },
+     0x1AE00002, (void *)gWendySharedModel2PartDisplayLists },
     { (void *)&WENDY_DISPLAY_LIST_3_ROM_START,
      (void *)&WENDY_DISPLAY_LIST_3_ROM_END,
      (void *)&WENDY_COMPRESSED_DATA_3_ROM_START,
      (void *)&WENDY_COMPRESSED_DATA_3_ROM_END,
-     0x1D000002, (void *)&D_80088E60 },
+     0x1D000002, (void *)gWendySharedModel3PartDisplayLists },
 };
 
 ItemAssetEntry BLACK_ASSETS[4] = {
@@ -371,22 +371,22 @@ ItemAssetEntry BLACK_ASSETS[4] = {
      (void *)&BLACK_DISPLAY_LIST_ROM_END,
      (void *)&BLACK_COMPRESSED_DATA_ROM_START,
      (void *)&BLACK_COMPRESSED_DATA_ROM_END,
-     0x3DE00008, (void *)&D_80088E80 },
+     0x3DE00008, (void *)gBlackSharedModelPartDisplayLists },
     { (void *)&BLACK_DISPLAY_LIST_ROM_START,
      (void *)&BLACK_DISPLAY_LIST_ROM_END,
      (void *)&BLACK_COMPRESSED_DATA_ROM_START,
      (void *)&BLACK_COMPRESSED_DATA_ROM_END,
-     0x3DE00008, (void *)&D_80088E80 },
+     0x3DE00008, (void *)gBlackSharedModelPartDisplayLists },
     { (void *)&BLACK_DISPLAY_LIST_ROM_START,
      (void *)&BLACK_DISPLAY_LIST_ROM_END,
      (void *)&BLACK_COMPRESSED_DATA_ROM_START,
      (void *)&BLACK_COMPRESSED_DATA_ROM_END,
-     0x3DE00008, (void *)&D_80088E80 },
+     0x3DE00008, (void *)gBlackSharedModelPartDisplayLists },
     { (void *)&BLACK_DISPLAY_LIST_ROM_START,
      (void *)&BLACK_DISPLAY_LIST_ROM_END,
      (void *)&BLACK_COMPRESSED_DATA_ROM_START,
      (void *)&BLACK_COMPRESSED_DATA_ROM_END,
-     0x3DE00008, (void *)&D_80088E80 },
+     0x3DE00008, (void *)gBlackSharedModelPartDisplayLists },
 };
 
 ItemAssetEntry PEN_ASSETS[4] = {
@@ -394,22 +394,22 @@ ItemAssetEntry PEN_ASSETS[4] = {
      (void *)&PEN_DISPLAY_LIST_ROM_END,
      (void *)&PEN_COMPRESSED_DATA_ROM_START,
      (void *)&PEN_COMPRESSED_DATA_ROM_END,
-     0x09800001, (void *)&D_80088F00 },
+     0x09800001, (void *)gPenSharedModelPartDisplayLists },
     { (void *)&PEN_DISPLAY_LIST_ROM_START,
      (void *)&PEN_DISPLAY_LIST_ROM_END,
      (void *)&PEN_COMPRESSED_DATA_ROM_START,
      (void *)&PEN_COMPRESSED_DATA_ROM_END,
-     0x09800001, (void *)&D_80088F00 },
+     0x09800001, (void *)gPenSharedModelPartDisplayLists },
     { (void *)&PEN_DISPLAY_LIST_ROM_START,
      (void *)&PEN_DISPLAY_LIST_ROM_END,
      (void *)&PEN_COMPRESSED_DATA_ROM_START,
      (void *)&PEN_COMPRESSED_DATA_ROM_END,
-     0x09800001, (void *)&D_80088F00 },
+     0x09800001, (void *)gPenSharedModelPartDisplayLists },
     { (void *)&PEN_DISPLAY_LIST_ROM_START,
      (void *)&PEN_DISPLAY_LIST_ROM_END,
      (void *)&PEN_COMPRESSED_DATA_ROM_START,
      (void *)&PEN_COMPRESSED_DATA_ROM_END,
-     0x09800001, (void *)&D_80088F00 },
+     0x09800001, (void *)gPenSharedModelPartDisplayLists },
 };
 
 AssetGroup gameAssets[] = {

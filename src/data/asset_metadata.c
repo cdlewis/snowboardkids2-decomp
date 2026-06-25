@@ -7,421 +7,431 @@
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-s32 D_80095AA0_966A0[];
-s32 D_80095BA0_967A0[];
-s32 D_80095CA0_968A0[];
-s32 D_80095DA0_969A0[];
-s32 D_80095EA0_96AA0[];
-s32 D_80095FA0_96BA0[];
-s32 D_800960A0_96CA0[];
-s32 D_800961A0_96DA0[];
-s32 D_800962A0_96EA0[];
-s32 D_800963A0_96FA0[];
-s32 D_800964A0_970A0[];
-s32 D_800965A0_971A0[];
-s32 D_800966A0_972A0[];
-s32 D_800967A0_973A0[];
-s32 D_800968A0_974A0[];
-s32 D_800969A0_975A0[];
-s32 D_80096AA0_976A0[];
-s32 D_80096BA0_977A0[];
-s32 D_80096CA0_978A0[];
-s32 D_80096DA0_979A0[];
-s32 D_80096EA0_97AA0[];
-s32 D_80096FA0_97BA0[];
-s32 D_800970A0_97CA0[];
-s32 D_800971A0_97DA0[];
-s32 D_800972A0_97EA0[];
-s32 D_800973A0_97FA0[];
-s32 D_800974A0_980A0[];
-s32 D_800975A0_981A0[];
-s32 D_800976A0_982A0[];
-s32 D_800977A0_983A0[];
-s32 D_800978A0_984A0[];
-s32 D_800979A0_985A0[];
-s32 D_80097AA0_986A0[];
-s32 D_80097BA0_987A0[];
-s32 D_80097CA0_988A0[];
-s32 D_80097DA0_989A0[];
-s32 D_80097EA0_98AA0[];
-s32 D_80097FA0_98BA0[];
-s32 D_800980A0_98CA0[];
-s32 D_800981A0_98DA0[];
-s32 D_800982A0_98EA0[];
-s32 D_800983A0_98FA0[];
-s32 D_800984A0_990A0[];
-s32 D_800985A0_991A0[];
-s32 D_800986A0_992A0[];
-s32 D_800987A0_993A0[];
-s32 D_800988A0_994A0[];
-s32 D_800989A0_995A0[];
-s32 D_80098AA0_996A0[];
-s32 D_80098BA0_997A0[];
-s32 D_80098CA0_998A0[];
-s32 D_80098DA0_999A0[];
-s32 D_80098EA0_99AA0[];
-s32 D_80098FA0_99BA0[];
-s32 D_800990A0_99CA0[];
-s32 D_800991A0_99DA0[];
-s32 D_800992A0_99EA0[];
-s32 D_800993A0_99FA0[];
-s32 D_800994A0_9A0A0[];
-s32 D_800995A0_9A1A0[];
-s32 D_800996A0_9A2A0[];
-s32 D_800997A0_9A3A0[];
-s32 D_800998A0_9A4A0[];
-s32 D_800999A0_9A5A0[];
-s32 D_80099AA0_9A6A0[];
-s32 D_80099BA0_9A7A0[];
-s32 D_80099CA0_9A8A0[];
-s32 D_80099DA0_9A9A0[];
-s32 D_80099EA0_9AAA0[];
-s32 D_80099FA0_9ABA0[];
-AssetMeta D_8009A0A0_9ACA0[];
-AssetMeta D_8009A1A0_9ADA0[];
-AssetMeta D_8009A2A0_9AEA0[];
-AssetMeta D_8009A3A0_9AFA0[];
-AssetMeta D_8009A3D0_9AFD0[];
+s32 gSlashBoard0PrimaryPartDisplayLists[];
+s32 gSlashBoard0SecondaryPartDisplayLists[];
+s32 gSlashBoard1PrimaryPartDisplayLists[];
+s32 gSlashBoard1SecondaryPartDisplayLists[];
+s32 gSlashBoard2PrimaryPartDisplayLists[];
+s32 gSlashBoard2SecondaryPartDisplayLists[];
+s32 gSlashBoard3PrimaryPartDisplayLists[];
+s32 gSlashBoard3SecondaryPartDisplayLists[];
+s32 gNancyBoard0PrimaryPartDisplayLists[];
+s32 gNancyBoard0SecondaryPartDisplayLists[];
+s32 gNancyBoard1PrimaryPartDisplayLists[];
+s32 gNancyBoard1SecondaryPartDisplayLists[];
+s32 gNancyBoard2PrimaryPartDisplayLists[];
+s32 gNancyBoard2SecondaryPartDisplayLists[];
+s32 gNancyBoard3PrimaryPartDisplayLists[];
+s32 gNancyBoard3SecondaryPartDisplayLists[];
+s32 gJamBoard0PrimaryPartDisplayLists[];
+s32 gJamBoard0SecondaryPartDisplayLists[];
+s32 gJamBoard1PrimaryPartDisplayLists[];
+s32 gJamBoard1SecondaryPartDisplayLists[];
+s32 gJamBoard2PrimaryPartDisplayLists[];
+s32 gJamBoard2SecondaryPartDisplayLists[];
+s32 gJamBoard3PrimaryPartDisplayLists[];
+s32 gJamBoard3SecondaryPartDisplayLists[];
+s32 gLindaBoard0PrimaryPartDisplayLists[];
+s32 gLindaBoard0SecondaryPartDisplayLists[];
+s32 gLindaBoard1PrimaryPartDisplayLists[];
+s32 gLindaBoard1SecondaryPartDisplayLists[];
+s32 gLindaBoard2PrimaryPartDisplayLists[];
+s32 gLindaBoard2SecondaryPartDisplayLists[];
+s32 gLindaBoard3PrimaryPartDisplayLists[];
+s32 gLindaBoard3SecondaryPartDisplayLists[];
+s32 gTommyBoard0PrimaryPartDisplayLists[];
+s32 gTommyBoard0SecondaryPartDisplayLists[];
+s32 gTommyBoard1PrimaryPartDisplayLists[];
+s32 gTommyBoard1SecondaryPartDisplayLists[];
+s32 gTommyBoard2PrimaryPartDisplayLists[];
+s32 gTommyBoard2SecondaryPartDisplayLists[];
+s32 gTommyBoard3PrimaryPartDisplayLists[];
+s32 gTommyBoard3SecondaryPartDisplayLists[];
+s32 gWendyBoard0PrimaryPartDisplayLists[];
+s32 gWendyBoard0SecondaryPartDisplayLists[];
+s32 gWendyBoard1PrimaryPartDisplayLists[];
+s32 gWendyBoard1SecondaryPartDisplayLists[];
+s32 gWendyBoard2PrimaryPartDisplayLists[];
+s32 gWendyBoard2SecondaryPartDisplayLists[];
+s32 gWendyBoard3PrimaryPartDisplayLists[];
+s32 gWendyBoard3SecondaryPartDisplayLists[];
+s32 gBlackBoard0PrimaryPartDisplayLists[];
+s32 gBlackBoard0SecondaryPartDisplayLists[];
+s32 gBlackBoard1PrimaryPartDisplayLists[];
+s32 gBlackBoard1SecondaryPartDisplayLists[];
+s32 gBlackBoard2PrimaryPartDisplayLists[];
+s32 gBlackBoard2SecondaryPartDisplayLists[];
+s32 gBlackBoard3PrimaryPartDisplayLists[];
+s32 gBlackBoard3SecondaryPartDisplayLists[];
+s32 gPenBoard0PrimaryPartDisplayLists[];
+s32 gPenBoard0SecondaryPartDisplayLists[];
+s32 gPenBoard1PrimaryPartDisplayLists[];
+s32 gPenBoard1SecondaryPartDisplayLists[];
+s32 gPenBoard2PrimaryPartDisplayLists[];
+s32 gPenBoard2SecondaryPartDisplayLists[];
+s32 gPenBoard3PrimaryPartDisplayLists[];
+s32 gPenBoard3SecondaryPartDisplayLists[];
+s32 gDogBoard0PrimaryPartDisplayLists[];
+s32 gDogBoard0SecondaryPartDisplayLists[];
+s32 gDogBoard1PrimaryPartDisplayLists[];
+s32 gDogBoard1SecondaryPartDisplayLists[];
+s32 gDogBoard2PrimaryPartDisplayLists[];
+s32 gDogBoard2SecondaryPartDisplayLists[];
+AssetMeta gDogBoard3PrimaryPartDisplayLists[];
+AssetMeta gDogBoard3SecondaryPartDisplayLists[];
+AssetMeta gDinosBoardPrimaryPartDisplayLists[];
+AssetMeta gSnowBoardPrimaryPartDisplayLists[];
+AssetMeta gRoboBoardPrimaryPartDisplayLists[];
 AssetMeta D_8009A550_9B150[];
 
-AssetMeta D_80094210_94E10[] = {
+AssetMeta gSlashBoardDisplayListAssets[] = {
     { &SLASH_BOARD0_DISPLAY_LIST_ROM_START, &SLASH_BOARD0_DISPLAY_LIST_ROM_END },
     { &SLASH_BOARD1_DISPLAY_LIST_ROM_START, &SLASH_BOARD1_DISPLAY_LIST_ROM_END },
     { &SLASH_BOARD2_DISPLAY_LIST_ROM_START, &SLASH_BOARD2_DISPLAY_LIST_ROM_END },
     { &SLASH_BOARD3_DISPLAY_LIST_ROM_START, &SLASH_BOARD3_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta D_80094230_94E30[] = {
+AssetMeta gNancyBoardDisplayListAssets[] = {
     { &NANCY_BOARD0_DISPLAY_LIST_ROM_START, &NANCY_BOARD0_DISPLAY_LIST_ROM_END },
     { &NANCY_BOARD1_DISPLAY_LIST_ROM_START, &NANCY_BOARD1_DISPLAY_LIST_ROM_END },
     { &NANCY_BOARD2_DISPLAY_LIST_ROM_START, &NANCY_BOARD2_DISPLAY_LIST_ROM_END },
     { &NANCY_BOARD3_DISPLAY_LIST_ROM_START, &NANCY_BOARD3_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta D_80094250_94E50[] = {
+AssetMeta gJamBoardDisplayListAssets[] = {
     { &JAM_BOARD0_DISPLAY_LIST_ROM_START, &JAM_BOARD0_DISPLAY_LIST_ROM_END },
     { &JAM_BOARD1_DISPLAY_LIST_ROM_START, &JAM_BOARD1_DISPLAY_LIST_ROM_END },
     { &JAM_BOARD2_DISPLAY_LIST_ROM_START, &JAM_BOARD2_DISPLAY_LIST_ROM_END },
     { &JAM_BOARD3_DISPLAY_LIST_ROM_START, &JAM_BOARD3_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta D_80094270_94E70[] = {
+AssetMeta gLindaBoardDisplayListAssets[] = {
     { &LINDA_BOARD0_DISPLAY_LIST_ROM_START, &LINDA_BOARD0_DISPLAY_LIST_ROM_END },
     { &LINDA_BOARD1_DISPLAY_LIST_ROM_START, &LINDA_BOARD1_DISPLAY_LIST_ROM_END },
     { &LINDA_BOARD2_DISPLAY_LIST_ROM_START, &LINDA_BOARD2_DISPLAY_LIST_ROM_END },
     { &LINDA_BOARD3_DISPLAY_LIST_ROM_START, &LINDA_BOARD3_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta D_80094290_94E90[] = {
+AssetMeta gTommyBoardDisplayListAssets[] = {
     { &TOMMY_BOARD0_DISPLAY_LIST_ROM_START, &TOMMY_BOARD0_DISPLAY_LIST_ROM_END },
     { &TOMMY_BOARD1_DISPLAY_LIST_ROM_START, &TOMMY_BOARD1_DISPLAY_LIST_ROM_END },
     { &TOMMY_BOARD2_DISPLAY_LIST_ROM_START, &TOMMY_BOARD2_DISPLAY_LIST_ROM_END },
     { &TOMMY_BOARD3_DISPLAY_LIST_ROM_START, &TOMMY_BOARD3_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta D_800942B0_94EB0[] = {
+AssetMeta gWendyBoardDisplayListAssets[] = {
     { &WENDY_BOARD0_DISPLAY_LIST_ROM_START, &WENDY_BOARD0_DISPLAY_LIST_ROM_END },
     { &WENDY_BOARD1_DISPLAY_LIST_ROM_START, &WENDY_BOARD1_DISPLAY_LIST_ROM_END },
     { &WENDY_BOARD2_DISPLAY_LIST_ROM_START, &WENDY_BOARD2_DISPLAY_LIST_ROM_END },
     { &WENDY_BOARD3_DISPLAY_LIST_ROM_START, &WENDY_BOARD3_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta D_800942D0_94ED0[] = {
+AssetMeta gBlackBoardDisplayListAssets[] = {
     { &BLACK_BOARD0_DISPLAY_LIST_ROM_START, &BLACK_BOARD0_DISPLAY_LIST_ROM_END },
     { &BLACK_BOARD1_DISPLAY_LIST_ROM_START, &BLACK_BOARD1_DISPLAY_LIST_ROM_END },
     { &BLACK_BOARD2_DISPLAY_LIST_ROM_START, &BLACK_BOARD2_DISPLAY_LIST_ROM_END },
     { &BLACK_BOARD3_DISPLAY_LIST_ROM_START, &BLACK_BOARD3_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta D_800942F0_94EF0[] = {
+AssetMeta gPenBoardDisplayListAssets[] = {
     { &PEN_BOARD0_DISPLAY_LIST_ROM_START, &PEN_BOARD0_DISPLAY_LIST_ROM_END },
     { &PEN_BOARD1_DISPLAY_LIST_ROM_START, &PEN_BOARD1_DISPLAY_LIST_ROM_END },
     { &PEN_BOARD2_DISPLAY_LIST_ROM_START, &PEN_BOARD2_DISPLAY_LIST_ROM_END },
     { &PEN_BOARD3_DISPLAY_LIST_ROM_START, &PEN_BOARD3_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta D_80094310_94F10[] = {
+AssetMeta gDogBoardDisplayListAssets[] = {
     { &DOG_BOARD0_DISPLAY_LIST_ROM_START, &DOG_BOARD0_DISPLAY_LIST_ROM_END },
     { &DOG_BOARD1_DISPLAY_LIST_ROM_START, &DOG_BOARD1_DISPLAY_LIST_ROM_END },
     { &DOG_BOARD2_DISPLAY_LIST_ROM_START, &DOG_BOARD2_DISPLAY_LIST_ROM_END },
     { &DOG_BOARD3_DISPLAY_LIST_ROM_START, &DOG_BOARD3_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta D_80094330_94F30[] = {
+AssetMeta gDinosBoardDisplayListAssets[] = {
     { &DINOS_BOARD_DISPLAY_LIST_ROM_START, &DINOS_BOARD_DISPLAY_LIST_ROM_END },
     { &DINOS_BOARD_DISPLAY_LIST_ROM_START, &DINOS_BOARD_DISPLAY_LIST_ROM_END },
     { &DINOS_BOARD_DISPLAY_LIST_ROM_START, &DINOS_BOARD_DISPLAY_LIST_ROM_END },
     { &DINOS_BOARD_DISPLAY_LIST_ROM_START, &DINOS_BOARD_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta D_80094350_94F50[] = {
+AssetMeta gSnowBoardDisplayListAssets[] = {
     { &SNOW4_DISPLAY_LIST_ROM_START, &SNOW4_DISPLAY_LIST_ROM_END },
     { &SNOW4_DISPLAY_LIST_ROM_START, &SNOW4_DISPLAY_LIST_ROM_END },
     { &SNOW4_DISPLAY_LIST_ROM_START, &SNOW4_DISPLAY_LIST_ROM_END },
     { &SNOW4_DISPLAY_LIST_ROM_START, &SNOW4_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta D_80094370_94F70[] = {
+AssetMeta gRoboBoardDisplayListAssets[] = {
     { &ROBO_BOARD_DISPLAY_LIST_ROM_START, &ROBO_BOARD_DISPLAY_LIST_ROM_END },
     { &ROBO_BOARD_DISPLAY_LIST_ROM_START, &ROBO_BOARD_DISPLAY_LIST_ROM_END },
     { &ROBO_BOARD_DISPLAY_LIST_ROM_START, &ROBO_BOARD_DISPLAY_LIST_ROM_END },
     { &ROBO_BOARD_DISPLAY_LIST_ROM_START, &ROBO_BOARD_DISPLAY_LIST_ROM_END },
 };
 
-AssetMeta *D_80094390_94F90[] = {
-    D_80094210_94E10, D_80094230_94E30, D_80094250_94E50, D_80094270_94E70, D_80094290_94E90, D_800942B0_94EB0,
-    D_800942D0_94ED0, D_800942F0_94EF0, D_80094310_94F10, D_80094330_94F30, D_80094350_94F50, D_80094370_94F70,
+AssetMeta *gCharacterBoardDisplayListTables[] = {
+    gSlashBoardDisplayListAssets, gNancyBoardDisplayListAssets, gJamBoardDisplayListAssets,
+    gLindaBoardDisplayListAssets, gTommyBoardDisplayListAssets, gWendyBoardDisplayListAssets,
+    gBlackBoardDisplayListAssets, gPenBoardDisplayListAssets,   gDogBoardDisplayListAssets,
+    gDinosBoardDisplayListAssets, gSnowBoardDisplayListAssets,  gRoboBoardDisplayListAssets,
 };
 
-CompressedAssetMeta D_800943C0_94FC0[] = {
+CompressedAssetMeta gSlashBoardCompressedDataAssets[] = {
     { &SLASH_BOARD0_COMPRESSED_DATA_ROM_START, &SLASH_BOARD0_COMPRESSED_DATA_ROM_END, 0x45A0 },
     { &SLASH_BOARD1_COMPRESSED_DATA_ROM_START, &SLASH_BOARD1_COMPRESSED_DATA_ROM_END, 0x4870 },
     { &SLASH_BOARD2_COMPRESSED_DATA_ROM_START, &SLASH_BOARD2_COMPRESSED_DATA_ROM_END, 0x54D0 },
     { &SLASH_BOARD3_COMPRESSED_DATA_ROM_START, &SLASH_BOARD3_COMPRESSED_DATA_ROM_END, 0x48E0 },
 };
 
-CompressedAssetMeta D_800943F0_94FF0[] = {
+CompressedAssetMeta gNancyBoardCompressedDataAssets[] = {
     { &NANCY_BOARD0_COMPRESSED_DATA_ROM_START, &NANCY_BOARD0_COMPRESSED_DATA_ROM_END, 0x42A0 },
     { &NANCY_BOARD1_COMPRESSED_DATA_ROM_START, &NANCY_BOARD1_COMPRESSED_DATA_ROM_END, 0x43F0 },
     { &NANCY_BOARD2_COMPRESSED_DATA_ROM_START, &NANCY_BOARD2_COMPRESSED_DATA_ROM_END, 0x43E0 },
     { &NANCY_BOARD3_COMPRESSED_DATA_ROM_START, &NANCY_BOARD3_COMPRESSED_DATA_ROM_END, 0x4120 },
 };
 
-CompressedAssetMeta D_80094420_95020[] = {
+CompressedAssetMeta gJamBoardCompressedDataAssets[] = {
     { &JAM_BOARD0_COMPRESSED_DATA_ROM_START, &JAM_BOARD0_COMPRESSED_DATA_ROM_END, 0x4300 },
     { &JAM_BOARD1_COMPRESSED_DATA_ROM_START, &JAM_BOARD1_COMPRESSED_DATA_ROM_END, 0x4D10 },
     { &JAM_BOARD2_COMPRESSED_DATA_ROM_START, &JAM_BOARD2_COMPRESSED_DATA_ROM_END, 0x4640 },
     { &JAM_BOARD3_COMPRESSED_DATA_ROM_START, &JAM_BOARD3_COMPRESSED_DATA_ROM_END, 0x49C0 },
 };
 
-CompressedAssetMeta D_80094450_95050[] = {
+CompressedAssetMeta gLindaBoardCompressedDataAssets[] = {
     { &LINDA_BOARD0_COMPRESSED_DATA_ROM_START, &LINDA_BOARD0_COMPRESSED_DATA_ROM_END, 0x4360 },
     { &LINDA_BOARD1_COMPRESSED_DATA_ROM_START, &LINDA_BOARD1_COMPRESSED_DATA_ROM_END, 0x4160 },
     { &LINDA_BOARD2_COMPRESSED_DATA_ROM_START, &LINDA_BOARD2_COMPRESSED_DATA_ROM_END, 0x45F0 },
     { &LINDA_BOARD3_COMPRESSED_DATA_ROM_START, &LINDA_BOARD3_COMPRESSED_DATA_ROM_END, 0x3E40 },
 };
 
-CompressedAssetMeta D_80094480_95080[] = {
+CompressedAssetMeta gTommyBoardCompressedDataAssets[] = {
     { &TOMMY_BOARD0_COMPRESSED_DATA_ROM_START, &TOMMY_BOARD0_COMPRESSED_DATA_ROM_END, 0x5CB0 },
     { &TOMMY_BOARD1_COMPRESSED_DATA_ROM_START, &TOMMY_BOARD1_COMPRESSED_DATA_ROM_END, 0x66D0 },
     { &TOMMY_BOARD2_COMPRESSED_DATA_ROM_START, &TOMMY_BOARD2_COMPRESSED_DATA_ROM_END, 0x6850 },
     { &TOMMY_BOARD3_COMPRESSED_DATA_ROM_START, &TOMMY_BOARD3_COMPRESSED_DATA_ROM_END, 0x5160 },
 };
 
-CompressedAssetMeta D_800944B0_950B0[] = {
+CompressedAssetMeta gWendyBoardCompressedDataAssets[] = {
     { &WENDY_BOARD0_COMPRESSED_DATA_ROM_START, &WENDY_BOARD0_COMPRESSED_DATA_ROM_END, 0x4710 },
     { &WENDY_BOARD1_COMPRESSED_DATA_ROM_START, &WENDY_BOARD1_COMPRESSED_DATA_ROM_END, 0x4F60 },
     { &WENDY_BOARD2_COMPRESSED_DATA_ROM_START, &WENDY_BOARD2_COMPRESSED_DATA_ROM_END, 0x5550 },
     { &WENDY_BOARD3_COMPRESSED_DATA_ROM_START, &WENDY_BOARD3_COMPRESSED_DATA_ROM_END, 0x4C40 },
 };
 
-CompressedAssetMeta D_800944E0_950E0[] = {
+CompressedAssetMeta gBlackBoardCompressedDataAssets[] = {
     { &BLACK_BOARD0_COMPRESSED_DATA_ROM_START, &BLACK_BOARD0_COMPRESSED_DATA_ROM_END, 0x4EE0 },
     { &BLACK_BOARD1_COMPRESSED_DATA_ROM_START, &BLACK_BOARD1_COMPRESSED_DATA_ROM_END, 0x5070 },
     { &BLACK_BOARD2_COMPRESSED_DATA_ROM_START, &BLACK_BOARD2_COMPRESSED_DATA_ROM_END, 0x5670 },
     { &BLACK_BOARD3_COMPRESSED_DATA_ROM_START, &BLACK_BOARD3_COMPRESSED_DATA_ROM_END, 0x4F60 },
 };
 
-CompressedAssetMeta D_80094510_95110[] = {
+CompressedAssetMeta gPenBoardCompressedDataAssets[] = {
     { &PEN_BOARD0_COMPRESSED_DATA_ROM_START, &PEN_BOARD0_COMPRESSED_DATA_ROM_END, 0x4450 },
     { &PEN_BOARD1_COMPRESSED_DATA_ROM_START, &PEN_BOARD1_COMPRESSED_DATA_ROM_END, 0x5350 },
     { &PEN_BOARD2_COMPRESSED_DATA_ROM_START, &PEN_BOARD2_COMPRESSED_DATA_ROM_END, 0x4490 },
     { &PEN_BOARD3_COMPRESSED_DATA_ROM_START, &PEN_BOARD3_COMPRESSED_DATA_ROM_END, 0x4420 },
 };
 
-CompressedAssetMeta D_80094540_95140[] = {
+CompressedAssetMeta gDogBoardCompressedDataAssets[] = {
     { &DOG_BOARD0_COMPRESSED_DATA_ROM_START, &DOG_BOARD0_COMPRESSED_DATA_ROM_END, 0x4BE0 },
     { &DOG_BOARD1_COMPRESSED_DATA_ROM_START, &DOG_BOARD1_COMPRESSED_DATA_ROM_END, 0x47C0 },
     { &DOG_BOARD2_COMPRESSED_DATA_ROM_START, &DOG_BOARD2_COMPRESSED_DATA_ROM_END, 0x48A0 },
     { &DOG_BOARD3_COMPRESSED_DATA_ROM_START, &DOG_BOARD3_COMPRESSED_DATA_ROM_END, 0x4DD0 },
 };
 
-CompressedAssetMeta D_80094570_95170[] = {
+CompressedAssetMeta gDinosBoardCompressedDataAssets[] = {
     { &DINOS_BOARD_COMPRESSED_DATA_ROM_START, &DINOS_BOARD_COMPRESSED_DATA_ROM_END, 0x1D80 },
     { &DINOS_BOARD_COMPRESSED_DATA_ROM_START, &DINOS_BOARD_COMPRESSED_DATA_ROM_END, 0x1D80 },
     { &DINOS_BOARD_COMPRESSED_DATA_ROM_START, &DINOS_BOARD_COMPRESSED_DATA_ROM_END, 0x1D80 },
     { &DINOS_BOARD_COMPRESSED_DATA_ROM_START, &DINOS_BOARD_COMPRESSED_DATA_ROM_END, 0x1D80 },
 };
 
-CompressedAssetMeta D_800945A0_951A0[] = {
+CompressedAssetMeta gSnowBoardCompressedDataAssets[] = {
     { &SNOW4_COMPRESSED_DATA_ROM_START, &SNOW4_COMPRESSED_DATA_ROM_END, 0xD50 },
     { &SNOW4_COMPRESSED_DATA_ROM_START, &SNOW4_COMPRESSED_DATA_ROM_END, 0xD50 },
     { &SNOW4_COMPRESSED_DATA_ROM_START, &SNOW4_COMPRESSED_DATA_ROM_END, 0xD50 },
     { &SNOW4_COMPRESSED_DATA_ROM_START, &SNOW4_COMPRESSED_DATA_ROM_END, 0xD50 },
 };
 
-CompressedAssetMeta D_800945D0_951D0[] = {
+CompressedAssetMeta gRoboBoardCompressedDataAssets[] = {
     { &ROBO_BOARD_COMPRESSED_DATA_ROM_START, &ROBO_BOARD_COMPRESSED_DATA_ROM_END, 0x5280 },
     { &ROBO_BOARD_COMPRESSED_DATA_ROM_START, &ROBO_BOARD_COMPRESSED_DATA_ROM_END, 0x5280 },
     { &ROBO_BOARD_COMPRESSED_DATA_ROM_START, &ROBO_BOARD_COMPRESSED_DATA_ROM_END, 0x5280 },
     { &ROBO_BOARD_COMPRESSED_DATA_ROM_START, &ROBO_BOARD_COMPRESSED_DATA_ROM_END, 0x5280 },
 };
 
-CompressedAssetMeta *D_80094600_95200[] = {
-    D_800943C0_94FC0, D_800943F0_94FF0, D_80094420_95020, D_80094450_95050, D_80094480_95080, D_800944B0_950B0,
-    D_800944E0_950E0, D_80094510_95110, D_80094540_95140, D_80094570_95170, D_800945A0_951A0, D_800945D0_951D0,
+CompressedAssetMeta *gCharacterBoardCompressedDataTables[] = {
+    gSlashBoardCompressedDataAssets, gNancyBoardCompressedDataAssets, gJamBoardCompressedDataAssets,
+    gLindaBoardCompressedDataAssets, gTommyBoardCompressedDataAssets, gWendyBoardCompressedDataAssets,
+    gBlackBoardCompressedDataAssets, gPenBoardCompressedDataAssets,   gDogBoardCompressedDataAssets,
+    gDinosBoardCompressedDataAssets, gSnowBoardCompressedDataAssets,  gRoboBoardCompressedDataAssets,
 };
 
-s32 *D_80094630_95230[] = {
-    D_80095AA0_966A0,
-    D_80095CA0_968A0,
-    D_80095EA0_96AA0,
-    D_800960A0_96CA0,
+s32 *gSlashBoardPrimaryPartDisplayListTables[] = {
+    gSlashBoard0PrimaryPartDisplayLists,
+    gSlashBoard1PrimaryPartDisplayLists,
+    gSlashBoard2PrimaryPartDisplayLists,
+    gSlashBoard3PrimaryPartDisplayLists,
 };
 
-s32 *D_80094640_95240[] = {
-    D_80095BA0_967A0,
-    D_80095DA0_969A0,
-    D_80095FA0_96BA0,
-    D_800961A0_96DA0,
+s32 *gSlashBoardSecondaryPartDisplayListTables[] = {
+    gSlashBoard0SecondaryPartDisplayLists,
+    gSlashBoard1SecondaryPartDisplayLists,
+    gSlashBoard2SecondaryPartDisplayLists,
+    gSlashBoard3SecondaryPartDisplayLists,
 };
 
-s32 *D_80094650_95250[] = {
-    D_800962A0_96EA0,
-    D_800964A0_970A0,
-    D_800966A0_972A0,
-    D_800968A0_974A0,
+s32 *gNancyBoardPrimaryPartDisplayListTables[] = {
+    gNancyBoard0PrimaryPartDisplayLists,
+    gNancyBoard1PrimaryPartDisplayLists,
+    gNancyBoard2PrimaryPartDisplayLists,
+    gNancyBoard3PrimaryPartDisplayLists,
 };
 
-s32 *D_80094660_95260[] = {
-    D_800963A0_96FA0,
-    D_800965A0_971A0,
-    D_800967A0_973A0,
-    D_800969A0_975A0,
+s32 *gNancyBoardSecondaryPartDisplayListTables[] = {
+    gNancyBoard0SecondaryPartDisplayLists,
+    gNancyBoard1SecondaryPartDisplayLists,
+    gNancyBoard2SecondaryPartDisplayLists,
+    gNancyBoard3SecondaryPartDisplayLists,
 };
 
-s32 *D_80094670_95270[] = {
-    D_80096AA0_976A0,
-    D_80096CA0_978A0,
-    D_80096EA0_97AA0,
-    D_800970A0_97CA0,
+s32 *gJamBoardPrimaryPartDisplayListTables[] = {
+    gJamBoard0PrimaryPartDisplayLists,
+    gJamBoard1PrimaryPartDisplayLists,
+    gJamBoard2PrimaryPartDisplayLists,
+    gJamBoard3PrimaryPartDisplayLists,
 };
 
-s32 *D_80094680_95280[] = {
-    D_80096BA0_977A0,
-    D_80096DA0_979A0,
-    D_80096FA0_97BA0,
-    D_800971A0_97DA0,
+s32 *gJamBoardSecondaryPartDisplayListTables[] = {
+    gJamBoard0SecondaryPartDisplayLists,
+    gJamBoard1SecondaryPartDisplayLists,
+    gJamBoard2SecondaryPartDisplayLists,
+    gJamBoard3SecondaryPartDisplayLists,
 };
 
-s32 *D_80094690_95290[] = {
-    D_800972A0_97EA0,
-    D_800974A0_980A0,
-    D_800976A0_982A0,
-    D_800978A0_984A0,
+s32 *gLindaBoardPrimaryPartDisplayListTables[] = {
+    gLindaBoard0PrimaryPartDisplayLists,
+    gLindaBoard1PrimaryPartDisplayLists,
+    gLindaBoard2PrimaryPartDisplayLists,
+    gLindaBoard3PrimaryPartDisplayLists,
 };
 
-s32 *D_800946A0_952A0[] = {
-    D_800973A0_97FA0,
-    D_800975A0_981A0,
-    D_800977A0_983A0,
-    D_800979A0_985A0,
+s32 *gLindaBoardSecondaryPartDisplayListTables[] = {
+    gLindaBoard0SecondaryPartDisplayLists,
+    gLindaBoard1SecondaryPartDisplayLists,
+    gLindaBoard2SecondaryPartDisplayLists,
+    gLindaBoard3SecondaryPartDisplayLists,
 };
 
-s32 *D_800946B0_952B0[] = {
-    D_80097AA0_986A0,
-    D_80097CA0_988A0,
-    D_80097EA0_98AA0,
-    D_800980A0_98CA0,
+s32 *gTommyBoardPrimaryPartDisplayListTables[] = {
+    gTommyBoard0PrimaryPartDisplayLists,
+    gTommyBoard1PrimaryPartDisplayLists,
+    gTommyBoard2PrimaryPartDisplayLists,
+    gTommyBoard3PrimaryPartDisplayLists,
 };
 
-s32 *D_800946C0_952C0[] = {
-    D_80097BA0_987A0,
-    D_80097DA0_989A0,
-    D_80097FA0_98BA0,
-    D_800981A0_98DA0,
+s32 *gTommyBoardSecondaryPartDisplayListTables[] = {
+    gTommyBoard0SecondaryPartDisplayLists,
+    gTommyBoard1SecondaryPartDisplayLists,
+    gTommyBoard2SecondaryPartDisplayLists,
+    gTommyBoard3SecondaryPartDisplayLists,
 };
 
-s32 *D_800946D0_952D0[] = {
-    D_800982A0_98EA0,
-    D_800984A0_990A0,
-    D_800986A0_992A0,
-    D_800988A0_994A0,
+s32 *gWendyBoardPrimaryPartDisplayListTables[] = {
+    gWendyBoard0PrimaryPartDisplayLists,
+    gWendyBoard1PrimaryPartDisplayLists,
+    gWendyBoard2PrimaryPartDisplayLists,
+    gWendyBoard3PrimaryPartDisplayLists,
 };
 
-s32 *D_800946E0_952E0[] = {
-    D_800983A0_98FA0,
-    D_800985A0_991A0,
-    D_800987A0_993A0,
-    D_800989A0_995A0,
+s32 *gWendyBoardSecondaryPartDisplayListTables[] = {
+    gWendyBoard0SecondaryPartDisplayLists,
+    gWendyBoard1SecondaryPartDisplayLists,
+    gWendyBoard2SecondaryPartDisplayLists,
+    gWendyBoard3SecondaryPartDisplayLists,
 };
 
-s32 *D_800946F0_952F0[] = {
-    D_80098AA0_996A0,
-    D_80098CA0_998A0,
-    D_80098EA0_99AA0,
-    D_800990A0_99CA0,
+s32 *gBlackBoardPrimaryPartDisplayListTables[] = {
+    gBlackBoard0PrimaryPartDisplayLists,
+    gBlackBoard1PrimaryPartDisplayLists,
+    gBlackBoard2PrimaryPartDisplayLists,
+    gBlackBoard3PrimaryPartDisplayLists,
 };
 
-s32 *D_80094700_95300[] = {
-    D_80098BA0_997A0,
-    D_80098DA0_999A0,
-    D_80098FA0_99BA0,
-    D_800991A0_99DA0,
+s32 *gBlackBoardSecondaryPartDisplayListTables[] = {
+    gBlackBoard0SecondaryPartDisplayLists,
+    gBlackBoard1SecondaryPartDisplayLists,
+    gBlackBoard2SecondaryPartDisplayLists,
+    gBlackBoard3SecondaryPartDisplayLists,
 };
 
-s32 *D_80094710_95310[] = {
-    D_800992A0_99EA0,
-    D_800994A0_9A0A0,
-    D_800996A0_9A2A0,
-    D_800998A0_9A4A0,
+s32 *gPenBoardPrimaryPartDisplayListTables[] = {
+    gPenBoard0PrimaryPartDisplayLists,
+    gPenBoard1PrimaryPartDisplayLists,
+    gPenBoard2PrimaryPartDisplayLists,
+    gPenBoard3PrimaryPartDisplayLists,
 };
 
-s32 *D_80094720_95320[] = {
-    D_800993A0_99FA0,
-    D_800995A0_9A1A0,
-    D_800997A0_9A3A0,
-    D_800999A0_9A5A0,
+s32 *gPenBoardSecondaryPartDisplayListTables[] = {
+    gPenBoard0SecondaryPartDisplayLists,
+    gPenBoard1SecondaryPartDisplayLists,
+    gPenBoard2SecondaryPartDisplayLists,
+    gPenBoard3SecondaryPartDisplayLists,
 };
 
-s32 *D_80094730_95330[] = {
-    (s32 *)D_80099AA0_9A6A0,
-    (s32 *)D_80099CA0_9A8A0,
-    (s32 *)D_80099EA0_9AAA0,
-    (s32 *)D_8009A0A0_9ACA0,
+s32 *gDogBoardPrimaryPartDisplayListTables[] = {
+    (s32 *)gDogBoard0PrimaryPartDisplayLists,
+    (s32 *)gDogBoard1PrimaryPartDisplayLists,
+    (s32 *)gDogBoard2PrimaryPartDisplayLists,
+    (s32 *)gDogBoard3PrimaryPartDisplayLists,
 };
 
-s32 *D_80094740_95340[] = {
-    (s32 *)D_80099BA0_9A7A0,
-    (s32 *)D_80099DA0_9A9A0,
-    (s32 *)D_80099FA0_9ABA0,
-    (s32 *)D_8009A1A0_9ADA0,
+s32 *gDogBoardSecondaryPartDisplayListTables[] = {
+    (s32 *)gDogBoard0SecondaryPartDisplayLists,
+    (s32 *)gDogBoard1SecondaryPartDisplayLists,
+    (s32 *)gDogBoard2SecondaryPartDisplayLists,
+    (s32 *)gDogBoard3SecondaryPartDisplayLists,
 };
 
-s32 *D_80094750_95350[] = {
-    (s32 *)D_8009A2A0_9AEA0,
-    (s32 *)D_8009A2A0_9AEA0,
-    (s32 *)D_8009A2A0_9AEA0,
-    (s32 *)D_8009A2A0_9AEA0,
+s32 *gDinosBoardPartDisplayListTables[] = {
+    (s32 *)gDinosBoardPrimaryPartDisplayLists,
+    (s32 *)gDinosBoardPrimaryPartDisplayLists,
+    (s32 *)gDinosBoardPrimaryPartDisplayLists,
+    (s32 *)gDinosBoardPrimaryPartDisplayLists,
 };
 
-s32 *D_80094760_95360[] = {
-    (s32 *)D_8009A3A0_9AFA0,
-    (s32 *)D_8009A3A0_9AFA0,
-    (s32 *)D_8009A3A0_9AFA0,
-    (s32 *)D_8009A3A0_9AFA0,
+s32 *gSnowBoardPartDisplayListTables[] = {
+    (s32 *)gSnowBoardPrimaryPartDisplayLists,
+    (s32 *)gSnowBoardPrimaryPartDisplayLists,
+    (s32 *)gSnowBoardPrimaryPartDisplayLists,
+    (s32 *)gSnowBoardPrimaryPartDisplayLists,
 };
 
-s32 *D_80094770_95370[] = {
-    (s32 *)D_8009A3D0_9AFD0,
-    (s32 *)D_8009A3D0_9AFD0,
-    (s32 *)D_8009A3D0_9AFD0,
-    (s32 *)D_8009A3D0_9AFD0,
+s32 *gRoboBoardPartDisplayListTables[] = {
+    (s32 *)gRoboBoardPrimaryPartDisplayLists,
+    (s32 *)gRoboBoardPrimaryPartDisplayLists,
+    (s32 *)gRoboBoardPrimaryPartDisplayLists,
+    (s32 *)gRoboBoardPrimaryPartDisplayLists,
 };
 
-s32 *D_80094780_95380[] = {
-    (s32 *)D_80094630_95230, (s32 *)D_80094650_95250, (s32 *)D_80094670_95270, (s32 *)D_80094690_95290,
-    (s32 *)D_800946B0_952B0, (s32 *)D_800946D0_952D0, (s32 *)D_800946F0_952F0, (s32 *)D_80094710_95310,
-    (s32 *)D_80094730_95330, (s32 *)D_80094750_95350, (s32 *)D_80094760_95360, (s32 *)D_80094770_95370,
+s32 *gCharacterBoardPartDisplayListTables[] = {
+    (s32 *)gSlashBoardPrimaryPartDisplayListTables, (s32 *)gNancyBoardPrimaryPartDisplayListTables,
+    (s32 *)gJamBoardPrimaryPartDisplayListTables,   (s32 *)gLindaBoardPrimaryPartDisplayListTables,
+    (s32 *)gTommyBoardPrimaryPartDisplayListTables, (s32 *)gWendyBoardPrimaryPartDisplayListTables,
+    (s32 *)gBlackBoardPrimaryPartDisplayListTables, (s32 *)gPenBoardPrimaryPartDisplayListTables,
+    (s32 *)gDogBoardPrimaryPartDisplayListTables,   (s32 *)gDinosBoardPartDisplayListTables,
+    (s32 *)gSnowBoardPartDisplayListTables,         (s32 *)gRoboBoardPartDisplayListTables,
 };
 
-s32 *D_800947B0_953B0[] = {
-    (s32 *)D_80094640_95240, (s32 *)D_80094660_95260, (s32 *)D_80094680_95280, (s32 *)D_800946A0_952A0,
-    (s32 *)D_800946C0_952C0, (s32 *)D_800946E0_952E0, (s32 *)D_80094700_95300, (s32 *)D_80094720_95320,
-    (s32 *)D_80094740_95340, (s32 *)D_80094750_95350, (s32 *)D_80094760_95360, (s32 *)D_80094770_95370,
+s32 *gCharacterBoardSecondaryPartDisplayListTables[] = {
+    (s32 *)gSlashBoardSecondaryPartDisplayListTables, (s32 *)gNancyBoardSecondaryPartDisplayListTables,
+    (s32 *)gJamBoardSecondaryPartDisplayListTables,   (s32 *)gLindaBoardSecondaryPartDisplayListTables,
+    (s32 *)gTommyBoardSecondaryPartDisplayListTables, (s32 *)gWendyBoardSecondaryPartDisplayListTables,
+    (s32 *)gBlackBoardSecondaryPartDisplayListTables, (s32 *)gPenBoardSecondaryPartDisplayListTables,
+    (s32 *)gDogBoardSecondaryPartDisplayListTables,   (s32 *)gDinosBoardPartDisplayListTables,
+    (s32 *)gSnowBoardPartDisplayListTables,           (s32 *)gRoboBoardPartDisplayListTables,
 };
 
-CompressedAssetMeta D_800947E0_953E0[] = {
+CompressedAssetMeta gCharacterRaceAnimationAssets[] = {
     { &SLASH_RACE_ANIMATION_DATA_ROM_START, &SLASH_RACE_ANIMATION_DATA_ROM_END, 0xAAFA },
     { &NANCY_RACE_ANIMATION_DATA_ROM_START, &NANCY_RACE_ANIMATION_DATA_ROM_END, 0xB03C },
     { &JAM_RACE_ANIMATION_DATA_ROM_START,   &JAM_RACE_ANIMATION_DATA_ROM_END,   0xB078 },
@@ -436,7 +446,7 @@ CompressedAssetMeta D_800947E0_953E0[] = {
     { &ROBO_RACE_ANIMATION_DATA_ROM_START,  &ROBO_RACE_ANIMATION_DATA_ROM_END,  0x3094 },
 };
 
-CompressedAssetMeta D_80094870_95470[] = {
+CompressedAssetMeta gCharacterFaceIconAssets[] = {
     { &SLASH_FACE_ICON_ROM_START, &SLASH_FACE_ICON_ROM_END, 0x1F8 },
     { &NANCY_FACE_ICON_ROM_START, &NANCY_FACE_ICON_ROM_END, 0x1F8 },
     { &JAM_FACE_ICON_ROM_START,   &JAM_FACE_ICON_ROM_END,   0x1F8 },
@@ -451,7 +461,7 @@ CompressedAssetMeta D_80094870_95470[] = {
     { &BLACK_FACE_ICON_ROM_START, &BLACK_FACE_ICON_ROM_END, 0x1F8 },
 };
 
-AssetMeta D_80094900_95500[] = {
+AssetMeta gCostumeSlotDisplayListAssets[] = {
     { &COSTUME_SLOT_00_DISPLAY_LIST_ROM_START, &COSTUME_SLOT_00_DISPLAY_LIST_ROM_END },
     { &COSTUME_SLOT_01_DISPLAY_LIST_ROM_START, &COSTUME_SLOT_01_DISPLAY_LIST_ROM_END },
     { &COSTUME_SLOT_02_DISPLAY_LIST_ROM_START, &COSTUME_SLOT_02_DISPLAY_LIST_ROM_END },
@@ -472,7 +482,7 @@ AssetMeta D_80094900_95500[] = {
     { &COSTUME_SLOT_17_DISPLAY_LIST_ROM_START, &COSTUME_SLOT_17_DISPLAY_LIST_ROM_END },
 };
 
-CompressedAssetMeta D_80094990_95590[] = {
+CompressedAssetMeta gCostumeSlotCompressedDataAssets[] = {
     { &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_END, 0x320 },
     { &COSTUME_SLOT_01_COMPRESSED_DATA_ROM_START, &COSTUME_SLOT_01_COMPRESSED_DATA_ROM_END, 0x300 },
     { &COSTUME_SLOT_02_COMPRESSED_DATA_ROM_START, &COSTUME_SLOT_02_COMPRESSED_DATA_ROM_END, 0x300 },
@@ -493,7 +503,7 @@ CompressedAssetMeta D_80094990_95590[] = {
     { &COSTUME_SLOT_17_COMPRESSED_DATA_ROM_START, &COSTUME_SLOT_17_COMPRESSED_DATA_ROM_END, 0xBA0 }
 };
 
-CompressedAssetMeta D_80094A68_95668[] = {
+CompressedAssetMeta gCostumePaletteAssets[] = {
     { &PALETTE_00_ROM_START, &PALETTE_00_ROM_END, 0x820 },
     { &PALETTE_01_ROM_START, &PALETTE_01_ROM_END, 0x820 },
     { &PALETTE_02_ROM_START, &PALETTE_02_ROM_END, 0x820 },
@@ -512,7 +522,7 @@ CompressedAssetMeta D_80094A68_95668[] = {
     { &PALETTE_15_ROM_START, &PALETTE_15_ROM_END, 0x820 },
 };
 
-AssetMeta *D_80094B28_95728[] = {
+AssetMeta *gCostumeSlotDisplayListTable[] = {
     &D_8009A550_9B150[0],  &D_8009A550_9B150[2],  &D_8009A550_9B150[4],  &D_8009A550_9B150[6],  &D_8009A550_9B150[8],
     &D_8009A550_9B150[10], &D_8009A550_9B150[12], &D_8009A550_9B150[14], &D_8009A550_9B150[16], &D_8009A550_9B150[18],
     &D_8009A550_9B150[20], &D_8009A550_9B150[22], &D_8009A550_9B150[24], &D_8009A550_9B150[26], &D_8009A550_9B150[28],
@@ -538,7 +548,7 @@ CompressedAssetMeta gBossHudAssetTable[] = {
     { &BOSS_HUD_ASSET_15_ROM_START, &BOSS_HUD_ASSET_15_ROM_END, 0x100 },
 };
 
-CompressedAssetMeta D_80094C30_95830[] = {
+CompressedAssetMeta gGhostInputRecordAssets[] = {
     { &GHOST_INPUT_RECORD_00_ROM_START, &GHOST_INPUT_RECORD_00_ROM_END, 0xE10  },
     { &GHOST_INPUT_RECORD_01_ROM_START, &GHOST_INPUT_RECORD_01_ROM_END, 0xE10  },
     { &GHOST_INPUT_RECORD_02_ROM_START, &GHOST_INPUT_RECORD_02_ROM_END, 0xE10  },
@@ -1071,7 +1081,7 @@ s32 D_80095A10_96610[] = {
     0x00000000, 0x00000000, 0x01008098, 0x00000000, 0x00000000, 0x00000000, 0x01008148, 0x00000000, 0x00000000,
 };
 
-s32 D_80095AA0_966A0[] = {
+s32 gSlashBoard0PrimaryPartDisplayLists[] = {
     0x00000000, 0x010018A0, 0x00000000, 0x00000000, 0x00000000, 0x01001928, 0x00000000, 0x00000000,
     0x00000000, 0x010019E0, 0x00000000, 0x00000000, 0x00000000, 0x01001B58, 0x00000000, 0x00000000,
     0x00000000, 0x01001C88, 0x00000000, 0x00000000, 0x00000000, 0x01001D40, 0x00000000, 0x00000000,
@@ -1082,7 +1092,7 @@ s32 D_80095AA0_966A0[] = {
     0x00000000, 0x01002848, 0x00000000, 0x00000000, 0x00000000, 0x010028F0, 0x00000000, 0x00000000,
 };
 
-s32 D_80095BA0_967A0[] = {
+s32 gSlashBoard0SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002A18, 0x00000000, 0x00000000, 0x00000000, 0x01002A58, 0x00000000, 0x00000000,
     0x00000000, 0x01002A98, 0x00000000, 0x00000000, 0x00000000, 0x01002AD8, 0x00000000, 0x00000000,
     0x00000000, 0x01002B18, 0x00000000, 0x00000000, 0x00000000, 0x01002B58, 0x00000000, 0x00000000,
@@ -1093,7 +1103,7 @@ s32 D_80095BA0_967A0[] = {
     0x00000000, 0x01002DD8, 0x00000000, 0x00000000, 0x00000000, 0x01002E18, 0x00000000, 0x00000000,
 };
 
-s32 D_80095CA0_968A0[] = {
+s32 gSlashBoard1PrimaryPartDisplayLists[] = {
     0x00000000, 0x01001720, 0x00000000, 0x00000000, 0x00000000, 0x010017A8, 0x00000000, 0x00000000,
     0x00000000, 0x010018A0, 0x00000000, 0x00000000, 0x00000000, 0x01001998, 0x00000000, 0x00000000,
     0x00000000, 0x01001AC8, 0x00000000, 0x00000000, 0x00000000, 0x01001BC0, 0x00000000, 0x00000000,
@@ -1104,7 +1114,7 @@ s32 D_80095CA0_968A0[] = {
     0x00000000, 0x01002718, 0x00000000, 0x00000000, 0x00000000, 0x010027C0, 0x00000000, 0x00000000,
 };
 
-s32 D_80095DA0_969A0[] = {
+s32 gSlashBoard1SecondaryPartDisplayLists[] = {
     0x00000000, 0x010028F0, 0x00000000, 0x00000000, 0x00000000, 0x01002930, 0x00000000, 0x00000000,
     0x00000000, 0x01002970, 0x00000000, 0x00000000, 0x00000000, 0x010029B0, 0x00000000, 0x00000000,
     0x00000000, 0x010029F0, 0x00000000, 0x00000000, 0x00000000, 0x01002A30, 0x00000000, 0x00000000,
@@ -1115,7 +1125,7 @@ s32 D_80095DA0_969A0[] = {
     0x00000000, 0x01002CB0, 0x00000000, 0x00000000, 0x00000000, 0x01002CF0, 0x00000000, 0x00000000,
 };
 
-s32 D_80095EA0_96AA0[] = {
+s32 gSlashBoard2PrimaryPartDisplayLists[] = {
     0x00000000, 0x01001AC0, 0x00000000, 0x00000000, 0x00000000, 0x01001B48, 0x00000000, 0x00000000,
     0x00000000, 0x01001C00, 0x00000000, 0x00000000, 0x00000000, 0x01001CE8, 0x00000000, 0x00000000,
     0x00000000, 0x01001E18, 0x00000000, 0x00000000, 0x00000000, 0x01001ED0, 0x00000000, 0x00000000,
@@ -1126,7 +1136,7 @@ s32 D_80095EA0_96AA0[] = {
     0x00000000, 0x01002C80, 0x00000000, 0x00000000, 0x00000000, 0x01002DF8, 0x00000000, 0x00000000,
 };
 
-s32 D_80095FA0_96BA0[] = {
+s32 gSlashBoard2SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002FB0, 0x00000000, 0x00000000, 0x00000000, 0x01002FF0, 0x00000000, 0x00000000,
     0x00000000, 0x01003030, 0x00000000, 0x00000000, 0x00000000, 0x01003070, 0x00000000, 0x00000000,
     0x00000000, 0x010030B0, 0x00000000, 0x00000000, 0x00000000, 0x010030F0, 0x00000000, 0x00000000,
@@ -1137,7 +1147,7 @@ s32 D_80095FA0_96BA0[] = {
     0x00000000, 0x010033B0, 0x00000000, 0x00000000, 0x00000000, 0x010033F0, 0x00000000, 0x00000000,
 };
 
-s32 D_800960A0_96CA0[] = {
+s32 gSlashBoard3PrimaryPartDisplayLists[] = {
     0x00000000, 0x01001688, 0x00000000, 0x00000000, 0x00000000, 0x01001710, 0x00000000, 0x00000000,
     0x00000000, 0x010017C8, 0x00000000, 0x00000000, 0x00000000, 0x010018B8, 0x00000000, 0x00000000,
     0x00000000, 0x01001968, 0x00000000, 0x00000000, 0x00000000, 0x01001A20, 0x00000000, 0x00000000,
@@ -1148,7 +1158,7 @@ s32 D_800960A0_96CA0[] = {
     0x00000000, 0x01002490, 0x00000000, 0x00000000, 0x00000000, 0x01002548, 0x00000000, 0x00000000,
 };
 
-s32 D_800961A0_96DA0[] = {
+s32 gSlashBoard3SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002680, 0x00000000, 0x00000000, 0x00000000, 0x010026C0, 0x00000000, 0x00000000,
     0x00000000, 0x01002700, 0x00000000, 0x00000000, 0x00000000, 0x01002740, 0x00000000, 0x00000000,
     0x00000000, 0x01002780, 0x00000000, 0x00000000, 0x00000000, 0x010027C0, 0x00000000, 0x00000000,
@@ -1159,7 +1169,7 @@ s32 D_800961A0_96DA0[] = {
     0x00000000, 0x01002A40, 0x00000000, 0x00000000, 0x00000000, 0x01002A80, 0x00000000, 0x00000000,
 };
 
-s32 D_800962A0_96EA0[] = {
+s32 gNancyBoard0PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000070, 0x00000000, 0x00000000,
     0x00000000, 0x01000128, 0x00000000, 0x00000000, 0x00000000, 0x01000238, 0x00000000, 0x00000000,
     0x00000000, 0x010003A0, 0x00000000, 0x00000000, 0x00000000, 0x01000458, 0x00000000, 0x00000000,
@@ -1170,7 +1180,7 @@ s32 D_800962A0_96EA0[] = {
     0x00000000, 0x01000E70, 0x00000000, 0x00000000, 0x00000000, 0x01000F30, 0x00000000, 0x00000000,
 };
 
-s32 D_800963A0_96FA0[] = {
+s32 gNancyBoard0SecondaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010026B8, 0x00000000, 0x00000000,
     0x00000000, 0x010026F8, 0x00000000, 0x00000000, 0x00000000, 0x01002738, 0x00000000, 0x00000000,
     0x00000000, 0x01002778, 0x00000000, 0x00000000, 0x00000000, 0x010027B8, 0x00000000, 0x00000000,
@@ -1181,7 +1191,7 @@ s32 D_800963A0_96FA0[] = {
     0x00000000, 0x010029F8, 0x00000000, 0x00000000, 0x00000000, 0x01002A38, 0x00000000, 0x00000000,
 };
 
-s32 D_800964A0_970A0[] = {
+s32 gNancyBoard1PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000C8, 0x00000000, 0x00000000,
     0x00000000, 0x01000178, 0x00000000, 0x00000000, 0x00000000, 0x01000258, 0x00000000, 0x00000000,
     0x00000000, 0x010003F0, 0x00000000, 0x00000000, 0x00000000, 0x010004A0, 0x00000000, 0x00000000,
@@ -1192,7 +1202,7 @@ s32 D_800964A0_970A0[] = {
     0x00000000, 0x01000E88, 0x00000000, 0x00000000, 0x00000000, 0x01000F30, 0x00000000, 0x00000000,
 };
 
-s32 D_800965A0_971A0[] = {
+s32 gNancyBoard1SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002840, 0x00000000, 0x00000000, 0x00000000, 0x01002880, 0x00000000, 0x00000000,
     0x00000000, 0x010028C0, 0x00000000, 0x00000000, 0x00000000, 0x01002900, 0x00000000, 0x00000000,
     0x00000000, 0x01002940, 0x00000000, 0x00000000, 0x00000000, 0x01002980, 0x00000000, 0x00000000,
@@ -1203,7 +1213,7 @@ s32 D_800965A0_971A0[] = {
     0x00000000, 0x01002BC0, 0x00000000, 0x00000000, 0x00000000, 0x01002C00, 0x00000000, 0x00000000,
 };
 
-s32 D_800966A0_972A0[] = {
+s32 gNancyBoard2PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000148, 0x00000000, 0x00000000,
     0x00000000, 0x01000200, 0x00000000, 0x00000000, 0x00000000, 0x010002E0, 0x00000000, 0x00000000,
     0x00000000, 0x01000468, 0x00000000, 0x00000000, 0x00000000, 0x01000520, 0x00000000, 0x00000000,
@@ -1214,7 +1224,7 @@ s32 D_800966A0_972A0[] = {
     0x00000000, 0x01000EF0, 0x00000000, 0x00000000, 0x00000000, 0x01000FC8, 0x00000000, 0x00000000,
 };
 
-s32 D_800967A0_973A0[] = {
+s32 gNancyBoard2SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002990, 0x00000000, 0x00000000, 0x00000000, 0x010029D0, 0x00000000, 0x00000000,
     0x00000000, 0x01002A10, 0x00000000, 0x00000000, 0x00000000, 0x01002A50, 0x00000000, 0x00000000,
     0x00000000, 0x01002A90, 0x00000000, 0x00000000, 0x00000000, 0x01002AD0, 0x00000000, 0x00000000,
@@ -1225,7 +1235,7 @@ s32 D_800967A0_973A0[] = {
     0x00000000, 0x01002D10, 0x00000000, 0x00000000, 0x00000000, 0x01002D50, 0x00000000, 0x00000000,
 };
 
-s32 D_800968A0_974A0[] = {
+s32 gNancyBoard3PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000E8, 0x00000000, 0x00000000,
     0x00000000, 0x010001A0, 0x00000000, 0x00000000, 0x00000000, 0x01000290, 0x00000000, 0x00000000,
     0x00000000, 0x01000368, 0x00000000, 0x00000000, 0x00000000, 0x01000420, 0x00000000, 0x00000000,
@@ -1236,7 +1246,7 @@ s32 D_800968A0_974A0[] = {
     0x00000000, 0x01000D00, 0x00000000, 0x00000000, 0x00000000, 0x01000DB0, 0x00000000, 0x00000000,
 };
 
-s32 D_800969A0_975A0[] = {
+s32 gNancyBoard3SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002458, 0x00000000, 0x00000000, 0x00000000, 0x01002498, 0x00000000, 0x00000000,
     0x00000000, 0x010024D8, 0x00000000, 0x00000000, 0x00000000, 0x01002518, 0x00000000, 0x00000000,
     0x00000000, 0x01002558, 0x00000000, 0x00000000, 0x00000000, 0x01002598, 0x00000000, 0x00000000,
@@ -1247,7 +1257,7 @@ s32 D_800969A0_975A0[] = {
     0x00000000, 0x010027D8, 0x00000000, 0x00000000, 0x00000000, 0x01002818, 0x00000000, 0x00000000,
 };
 
-s32 D_80096AA0_976A0[] = {
+s32 gJamBoard0PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000088, 0x00000000, 0x00000000,
     0x00000000, 0x01000140, 0x00000000, 0x00000000, 0x00000000, 0x01000238, 0x00000000, 0x00000000,
     0x00000000, 0x01000398, 0x00000000, 0x00000000, 0x00000000, 0x01000450, 0x00000000, 0x00000000,
@@ -1258,7 +1268,7 @@ s32 D_80096AA0_976A0[] = {
     0x00000000, 0x01000EF0, 0x00000000, 0x00000000, 0x00000000, 0x01000F98, 0x00000000, 0x00000000,
 };
 
-s32 D_80096BA0_977A0[] = {
+s32 gJamBoard0SecondaryPartDisplayLists[] = {
     0x00000000, 0x010026B8, 0x00000000, 0x00000000, 0x00000000, 0x010026F8, 0x00000000, 0x00000000,
     0x00000000, 0x01002738, 0x00000000, 0x00000000, 0x00000000, 0x01002778, 0x00000000, 0x00000000,
     0x00000000, 0x010027B8, 0x00000000, 0x00000000, 0x00000000, 0x010027F8, 0x00000000, 0x00000000,
@@ -1269,7 +1279,7 @@ s32 D_80096BA0_977A0[] = {
     0x00000000, 0x01002A38, 0x00000000, 0x00000000, 0x00000000, 0x01002A78, 0x00000000, 0x00000000,
 };
 
-s32 D_80096CA0_978A0[] = {
+s32 gJamBoard1PrimaryPartDisplayLists[] = {
     0x00000000, 0x01001838, 0x00000000, 0x00000000, 0x00000000, 0x010018C0, 0x00000000, 0x00000000,
     0x00000000, 0x010019B8, 0x00000000, 0x00000000, 0x00000000, 0x01001B28, 0x00000000, 0x00000000,
     0x00000000, 0x01001C58, 0x00000000, 0x00000000, 0x00000000, 0x01001D50, 0x00000000, 0x00000000,
@@ -1280,7 +1290,7 @@ s32 D_80096CA0_978A0[] = {
     0x00000000, 0x01002A88, 0x00000000, 0x00000000, 0x00000000, 0x01002B30, 0x00000000, 0x00000000,
 };
 
-s32 D_80096DA0_979A0[] = {
+s32 gJamBoard1SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002CC8, 0x00000000, 0x00000000, 0x00000000, 0x01002D08, 0x00000000, 0x00000000,
     0x00000000, 0x01002D48, 0x00000000, 0x00000000, 0x00000000, 0x01002D88, 0x00000000, 0x00000000,
     0x00000000, 0x01002DC8, 0x00000000, 0x00000000, 0x00000000, 0x01002E08, 0x00000000, 0x00000000,
@@ -1291,7 +1301,7 @@ s32 D_80096DA0_979A0[] = {
     0x00000000, 0x01003088, 0x00000000, 0x00000000, 0x00000000, 0x010030C8, 0x00000000, 0x00000000,
 };
 
-s32 D_80096EA0_97AA0[] = {
+s32 gJamBoard2PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000088, 0x00000000, 0x00000000,
     0x00000000, 0x01000140, 0x00000000, 0x00000000, 0x00000000, 0x01000228, 0x00000000, 0x00000000,
     0x00000000, 0x010002E8, 0x00000000, 0x00000000, 0x00000000, 0x010003A0, 0x00000000, 0x00000000,
@@ -1302,7 +1312,7 @@ s32 D_80096EA0_97AA0[] = {
     0x00000000, 0x01000DE0, 0x00000000, 0x00000000, 0x00000000, 0x01000E88, 0x00000000, 0x00000000,
 };
 
-s32 D_80096FA0_97BA0[] = {
+s32 gJamBoard2SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002470, 0x00000000, 0x00000000, 0x00000000, 0x010024B0, 0x00000000, 0x00000000,
     0x00000000, 0x010024F0, 0x00000000, 0x00000000, 0x00000000, 0x01002530, 0x00000000, 0x00000000,
     0x00000000, 0x01002570, 0x00000000, 0x00000000, 0x00000000, 0x010025B0, 0x00000000, 0x00000000,
@@ -1313,7 +1323,7 @@ s32 D_80096FA0_97BA0[] = {
     0x00000000, 0x010027F0, 0x00000000, 0x00000000, 0x00000000, 0x01002830, 0x00000000, 0x00000000,
 };
 
-s32 D_800970A0_97CA0[] = {
+s32 gJamBoard3PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000088, 0x00000000, 0x00000000,
     0x00000000, 0x01000140, 0x00000000, 0x00000000, 0x00000000, 0x01000230, 0x00000000, 0x00000000,
     0x00000000, 0x010002F0, 0x00000000, 0x00000000, 0x00000000, 0x010003A8, 0x00000000, 0x00000000,
@@ -1324,7 +1334,7 @@ s32 D_800970A0_97CA0[] = {
     0x00000000, 0x01000F48, 0x00000000, 0x00000000, 0x00000000, 0x01001010, 0x00000000, 0x00000000,
 };
 
-s32 D_800971A0_97DA0[] = {
+s32 gJamBoard3SecondaryPartDisplayLists[] = {
     0x00000000, 0x010029E0, 0x00000000, 0x00000000, 0x00000000, 0x01002A20, 0x00000000, 0x00000000,
     0x00000000, 0x01002A60, 0x00000000, 0x00000000, 0x00000000, 0x01002AA0, 0x00000000, 0x00000000,
     0x00000000, 0x01002AE0, 0x00000000, 0x00000000, 0x00000000, 0x01002B20, 0x00000000, 0x00000000,
@@ -1335,7 +1345,7 @@ s32 D_800971A0_97DA0[] = {
     0x00000000, 0x01002DA0, 0x00000000, 0x00000000, 0x00000000, 0x01002DE0, 0x00000000, 0x00000000,
 };
 
-s32 D_800972A0_97EA0[] = {
+s32 gLindaBoard0PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000E8, 0x00000000, 0x00000000,
     0x00000000, 0x010001B8, 0x00000000, 0x00000000, 0x00000000, 0x010002B0, 0x00000000, 0x00000000,
     0x00000000, 0x01000468, 0x00000000, 0x00000000, 0x00000000, 0x01000538, 0x00000000, 0x00000000,
@@ -1346,7 +1356,7 @@ s32 D_800972A0_97EA0[] = {
     0x00000000, 0x01000EB8, 0x00000000, 0x00000000, 0x00000000, 0x01000F78, 0x00000000, 0x00000000,
 };
 
-s32 D_800973A0_97FA0[] = {
+s32 gLindaBoard0SecondaryPartDisplayLists[] = {
     0x00000000, 0x010027F0, 0x00000000, 0x00000000, 0x00000000, 0x01002830, 0x00000000, 0x00000000,
     0x00000000, 0x01002870, 0x00000000, 0x00000000, 0x00000000, 0x010028B0, 0x00000000, 0x00000000,
     0x00000000, 0x010028F0, 0x00000000, 0x00000000, 0x00000000, 0x01002930, 0x00000000, 0x00000000,
@@ -1357,7 +1367,7 @@ s32 D_800973A0_97FA0[] = {
     0x00000000, 0x01002B70, 0x00000000, 0x00000000, 0x00000000, 0x01002BB0, 0x00000000, 0x00000000,
 };
 
-s32 D_800974A0_980A0[] = {
+s32 gLindaBoard1PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000C8, 0x00000000, 0x00000000,
     0x00000000, 0x01000178, 0x00000000, 0x00000000, 0x00000000, 0x01000248, 0x00000000, 0x00000000,
     0x00000000, 0x01000350, 0x00000000, 0x00000000, 0x00000000, 0x01000400, 0x00000000, 0x00000000,
@@ -1368,7 +1378,7 @@ s32 D_800974A0_980A0[] = {
     0x00000000, 0x01000D28, 0x00000000, 0x00000000, 0x00000000, 0x01000DE8, 0x00000000, 0x00000000,
 };
 
-s32 D_800975A0_981A0[] = {
+s32 gLindaBoard1SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002598, 0x00000000, 0x00000000, 0x00000000, 0x010025D8, 0x00000000, 0x00000000,
     0x00000000, 0x01002618, 0x00000000, 0x00000000, 0x00000000, 0x01002658, 0x00000000, 0x00000000,
     0x00000000, 0x01002698, 0x00000000, 0x00000000, 0x00000000, 0x010026D8, 0x00000000, 0x00000000,
@@ -1379,7 +1389,7 @@ s32 D_800975A0_981A0[] = {
     0x00000000, 0x01002918, 0x00000000, 0x00000000, 0x00000000, 0x01002958, 0x00000000, 0x00000000,
 };
 
-s32 D_800976A0_982A0[] = {
+s32 gLindaBoard2PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000C8, 0x00000000, 0x00000000,
     0x00000000, 0x01000178, 0x00000000, 0x00000000, 0x00000000, 0x01000228, 0x00000000, 0x00000000,
     0x00000000, 0x01000308, 0x00000000, 0x00000000, 0x00000000, 0x010003B8, 0x00000000, 0x00000000,
@@ -1390,7 +1400,7 @@ s32 D_800976A0_982A0[] = {
     0x00000000, 0x01000D60, 0x00000000, 0x00000000, 0x00000000, 0x01000E08, 0x00000000, 0x00000000,
 };
 
-s32 D_800977A0_983A0[] = {
+s32 gLindaBoard2SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002678, 0x00000000, 0x00000000, 0x00000000, 0x010026B8, 0x00000000, 0x00000000,
     0x00000000, 0x010026F8, 0x00000000, 0x00000000, 0x00000000, 0x01002738, 0x00000000, 0x00000000,
     0x00000000, 0x01002778, 0x00000000, 0x00000000, 0x00000000, 0x010027B8, 0x00000000, 0x00000000,
@@ -1401,7 +1411,7 @@ s32 D_800977A0_983A0[] = {
     0x00000000, 0x01002A38, 0x00000000, 0x00000000, 0x00000000, 0x01002A78, 0x00000000, 0x00000000,
 };
 
-s32 D_800978A0_984A0[] = {
+s32 gLindaBoard3PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000F8, 0x00000000, 0x00000000,
     0x00000000, 0x010001A8, 0x00000000, 0x00000000, 0x00000000, 0x01000260, 0x00000000, 0x00000000,
     0x00000000, 0x01000338, 0x00000000, 0x00000000, 0x00000000, 0x010003E8, 0x00000000, 0x00000000,
@@ -1412,7 +1422,7 @@ s32 D_800978A0_984A0[] = {
     0x00000000, 0x01000C58, 0x00000000, 0x00000000, 0x00000000, 0x01000CF8, 0x00000000, 0x00000000,
 };
 
-s32 D_800979A0_985A0[] = {
+s32 gLindaBoard3SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002390, 0x00000000, 0x00000000, 0x00000000, 0x010023D0, 0x00000000, 0x00000000,
     0x00000000, 0x01002410, 0x00000000, 0x00000000, 0x00000000, 0x01002450, 0x00000000, 0x00000000,
     0x00000000, 0x01002490, 0x00000000, 0x00000000, 0x00000000, 0x010024D0, 0x00000000, 0x00000000,
@@ -1423,7 +1433,7 @@ s32 D_800979A0_985A0[] = {
     0x00000000, 0x01002710, 0x00000000, 0x00000000, 0x00000000, 0x01002750, 0x00000000, 0x00000000,
 };
 
-s32 D_80097AA0_986A0[] = {
+s32 gTommyBoard0PrimaryPartDisplayLists[] = {
     0x00000000, 0x01001A98, 0x00000000, 0x00000000, 0x00000000, 0x01001B08, 0x00000000, 0x00000000,
     0x00000000, 0x01001BE8, 0x00000000, 0x00000000, 0x00000000, 0x01001CB0, 0x00000000, 0x00000000,
     0x00000000, 0x01001E28, 0x00000000, 0x00000000, 0x00000000, 0x01001F08, 0x00000000, 0x00000000,
@@ -1434,7 +1444,7 @@ s32 D_80097AA0_986A0[] = {
     0x00000000, 0x01002BE0, 0x00000000, 0x00000000, 0x00000000, 0x01002CF8, 0x00000000, 0x00000000,
 };
 
-s32 D_80097BA0_987A0[] = {
+s32 gTommyBoard0SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002E18, 0x00000000, 0x00000000, 0x00000000, 0x01002E58, 0x00000000, 0x00000000,
     0x00000000, 0x01002E98, 0x00000000, 0x00000000, 0x00000000, 0x01002ED8, 0x00000000, 0x00000000,
     0x00000000, 0x01002F18, 0x00000000, 0x00000000, 0x00000000, 0x01002F58, 0x00000000, 0x00000000,
@@ -1445,7 +1455,7 @@ s32 D_80097BA0_987A0[] = {
     0x00000000, 0x010031D8, 0x00000000, 0x00000000, 0x00000000, 0x01003218, 0x00000000, 0x00000000,
 };
 
-s32 D_80097CA0_988A0[] = {
+s32 gTommyBoard1PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000070, 0x00000000, 0x00000000,
     0x00000000, 0x01000130, 0x00000000, 0x00000000, 0x00000000, 0x01000220, 0x00000000, 0x00000000,
     0x00000000, 0x01000398, 0x00000000, 0x00000000, 0x00000000, 0x01000458, 0x00000000, 0x00000000,
@@ -1456,7 +1466,7 @@ s32 D_80097CA0_988A0[] = {
     0x00000000, 0x01001280, 0x00000000, 0x00000000, 0x00000000, 0x01001328, 0x00000000, 0x00000000,
 };
 
-s32 D_80097DA0_989A0[] = {
+s32 gTommyBoard1SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002FA0, 0x00000000, 0x00000000, 0x00000000, 0x01002FE0, 0x00000000, 0x00000000,
     0x00000000, 0x01003020, 0x00000000, 0x00000000, 0x00000000, 0x01003060, 0x00000000, 0x00000000,
     0x00000000, 0x010030A0, 0x00000000, 0x00000000, 0x00000000, 0x010030E0, 0x00000000, 0x00000000,
@@ -1467,7 +1477,7 @@ s32 D_80097DA0_989A0[] = {
     0x00000000, 0x01003420, 0x00000000, 0x00000000, 0x00000000, 0x01003460, 0x00000000, 0x00000000,
 };
 
-s32 D_80097EA0_98AA0[] = {
+s32 gTommyBoard2PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000070, 0x00000000, 0x00000000,
     0x00000000, 0x01000150, 0x00000000, 0x00000000, 0x00000000, 0x01000298, 0x00000000, 0x00000000,
     0x00000000, 0x01000400, 0x00000000, 0x00000000, 0x00000000, 0x010004E0, 0x00000000, 0x00000000,
@@ -1478,7 +1488,7 @@ s32 D_80097EA0_98AA0[] = {
     0x00000000, 0x01001200, 0x00000000, 0x00000000, 0x00000000, 0x010012A8, 0x00000000, 0x00000000,
 };
 
-s32 D_80097FA0_98BA0[] = {
+s32 gTommyBoard2SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002FE8, 0x00000000, 0x00000000, 0x00000000, 0x01003028, 0x00000000, 0x00000000,
     0x00000000, 0x01003068, 0x00000000, 0x00000000, 0x00000000, 0x010030A8, 0x00000000, 0x00000000,
     0x00000000, 0x010030E8, 0x00000000, 0x00000000, 0x00000000, 0x01003128, 0x00000000, 0x00000000,
@@ -1489,7 +1499,7 @@ s32 D_80097FA0_98BA0[] = {
     0x00000000, 0x010033A8, 0x00000000, 0x00000000, 0x00000000, 0x010033E8, 0x00000000, 0x00000000,
 };
 
-s32 D_800980A0_98CA0[] = {
+s32 gTommyBoard3PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000070, 0x00000000, 0x00000000,
     0x00000000, 0x010001E8, 0x00000000, 0x00000000, 0x00000000, 0x01000340, 0x00000000, 0x00000000,
     0x00000000, 0x010004A8, 0x00000000, 0x00000000, 0x00000000, 0x01000620, 0x00000000, 0x00000000,
@@ -1500,7 +1510,7 @@ s32 D_800980A0_98CA0[] = {
     0x00000000, 0x01001318, 0x00000000, 0x00000000, 0x00000000, 0x01001430, 0x00000000, 0x00000000,
 };
 
-s32 D_800981A0_98DA0[] = {
+s32 gTommyBoard3SecondaryPartDisplayLists[] = {
     0x00000000, 0x010030F8, 0x00000000, 0x00000000, 0x00000000, 0x01003138, 0x00000000, 0x00000000,
     0x00000000, 0x01003178, 0x00000000, 0x00000000, 0x00000000, 0x010031B8, 0x00000000, 0x00000000,
     0x00000000, 0x010031F8, 0x00000000, 0x00000000, 0x00000000, 0x01003238, 0x00000000, 0x00000000,
@@ -1511,7 +1521,7 @@ s32 D_800981A0_98DA0[] = {
     0x00000000, 0x010034B8, 0x00000000, 0x00000000, 0x00000000, 0x010034F8, 0x00000000, 0x00000000,
 };
 
-s32 D_800982A0_98EA0[] = {
+s32 gWendyBoard0PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000B8, 0x00000000, 0x00000000,
     0x00000000, 0x01000178, 0x00000000, 0x00000000, 0x00000000, 0x010002E0, 0x00000000, 0x00000000,
     0x00000000, 0x01000448, 0x00000000, 0x00000000, 0x00000000, 0x01000508, 0x00000000, 0x00000000,
@@ -1522,7 +1532,7 @@ s32 D_800982A0_98EA0[] = {
     0x00000000, 0x01001040, 0x00000000, 0x00000000, 0x00000000, 0x01001170, 0x00000000, 0x00000000,
 };
 
-s32 D_800983A0_98FA0[] = {
+s32 gWendyBoard0SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002C30, 0x00000000, 0x00000000, 0x00000000, 0x01002C70, 0x00000000, 0x00000000,
     0x00000000, 0x01002CB0, 0x00000000, 0x00000000, 0x00000000, 0x01002CF0, 0x00000000, 0x00000000,
     0x00000000, 0x01002D30, 0x00000000, 0x00000000, 0x00000000, 0x01002D70, 0x00000000, 0x00000000,
@@ -1533,7 +1543,7 @@ s32 D_800983A0_98FA0[] = {
     0x00000000, 0x01002FF0, 0x00000000, 0x00000000, 0x00000000, 0x01003030, 0x00000000, 0x00000000,
 };
 
-s32 D_800984A0_990A0[] = {
+s32 gWendyBoard1PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000B8, 0x00000000, 0x00000000,
     0x00000000, 0x01000228, 0x00000000, 0x00000000, 0x00000000, 0x010002D8, 0x00000000, 0x00000000,
     0x00000000, 0x01000440, 0x00000000, 0x00000000, 0x00000000, 0x010005B0, 0x00000000, 0x00000000,
@@ -1544,7 +1554,7 @@ s32 D_800984A0_990A0[] = {
     0x00000000, 0x01001060, 0x00000000, 0x00000000, 0x00000000, 0x01001178, 0x00000000, 0x00000000,
 };
 
-s32 D_800985A0_991A0[] = {
+s32 gWendyBoard1SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002CF0, 0x00000000, 0x00000000, 0x00000000, 0x01002D30, 0x00000000, 0x00000000,
     0x00000000, 0x01002D70, 0x00000000, 0x00000000, 0x00000000, 0x01002DB0, 0x00000000, 0x00000000,
     0x00000000, 0x01002DF0, 0x00000000, 0x00000000, 0x00000000, 0x01002E30, 0x00000000, 0x00000000,
@@ -1555,7 +1565,7 @@ s32 D_800985A0_991A0[] = {
     0x00000000, 0x010030B0, 0x00000000, 0x00000000, 0x00000000, 0x010030F0, 0x00000000, 0x00000000,
 };
 
-s32 D_800986A0_992A0[] = {
+s32 gWendyBoard2PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000070, 0x00000000, 0x00000000,
     0x00000000, 0x01000118, 0x00000000, 0x00000000, 0x00000000, 0x01000258, 0x00000000, 0x00000000,
     0x00000000, 0x01000340, 0x00000000, 0x00000000, 0x00000000, 0x010003E8, 0x00000000, 0x00000000,
@@ -1566,7 +1576,7 @@ s32 D_800986A0_992A0[] = {
     0x00000000, 0x01000F18, 0x00000000, 0x00000000, 0x00000000, 0x01001048, 0x00000000, 0x00000000,
 };
 
-s32 D_800987A0_993A0[] = {
+s32 gWendyBoard2SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002A80, 0x00000000, 0x00000000, 0x00000000, 0x01002AC0, 0x00000000, 0x00000000,
     0x00000000, 0x01002B00, 0x00000000, 0x00000000, 0x00000000, 0x01002B40, 0x00000000, 0x00000000,
     0x00000000, 0x01002B80, 0x00000000, 0x00000000, 0x00000000, 0x01002BC0, 0x00000000, 0x00000000,
@@ -1577,7 +1587,7 @@ s32 D_800987A0_993A0[] = {
     0x00000000, 0x01002E80, 0x00000000, 0x00000000, 0x00000000, 0x01002EC0, 0x00000000, 0x00000000,
 };
 
-s32 D_800988A0_994A0[] = {
+s32 gWendyBoard3PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000B8, 0x00000000, 0x00000000,
     0x00000000, 0x01000190, 0x00000000, 0x00000000, 0x00000000, 0x01000290, 0x00000000, 0x00000000,
     0x00000000, 0x01000390, 0x00000000, 0x00000000, 0x00000000, 0x01000468, 0x00000000, 0x00000000,
@@ -1588,7 +1598,7 @@ s32 D_800988A0_994A0[] = {
     0x00000000, 0x01000E50, 0x00000000, 0x00000000, 0x00000000, 0x01000EF8, 0x00000000, 0x00000000,
 };
 
-s32 D_800989A0_995A0[] = {
+s32 gWendyBoard3SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002700, 0x00000000, 0x00000000, 0x00000000, 0x01002740, 0x00000000, 0x00000000,
     0x00000000, 0x01002780, 0x00000000, 0x00000000, 0x00000000, 0x010027C0, 0x00000000, 0x00000000,
     0x00000000, 0x01002800, 0x00000000, 0x00000000, 0x00000000, 0x01002840, 0x00000000, 0x00000000,
@@ -1599,7 +1609,7 @@ s32 D_800989A0_995A0[] = {
     0x00000000, 0x01002AC0, 0x00000000, 0x00000000, 0x00000000, 0x01002B00, 0x00000000, 0x00000000,
 };
 
-s32 D_80098AA0_996A0[] = {
+s32 gBlackBoard0PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000B8, 0x00000000, 0x00000000,
     0x00000000, 0x01000170, 0x00000000, 0x00000000, 0x00000000, 0x01000328, 0x00000000, 0x00000000,
     0x00000000, 0x01000488, 0x00000000, 0x00000000, 0x00000000, 0x01000540, 0x00000000, 0x00000000,
@@ -1610,7 +1620,7 @@ s32 D_80098AA0_996A0[] = {
     0x00000000, 0x01001230, 0x00000000, 0x00000000, 0x00000000, 0x010012D8, 0x00000000, 0x00000000,
 };
 
-s32 D_80098BA0_997A0[] = {
+s32 gBlackBoard0SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002F20, 0x00000000, 0x00000000, 0x00000000, 0x01002F60, 0x00000000, 0x00000000,
     0x00000000, 0x01002FA0, 0x00000000, 0x00000000, 0x00000000, 0x01002FE0, 0x00000000, 0x00000000,
     0x00000000, 0x01003020, 0x00000000, 0x00000000, 0x00000000, 0x01003060, 0x00000000, 0x00000000,
@@ -1621,7 +1631,7 @@ s32 D_80098BA0_997A0[] = {
     0x00000000, 0x010032E0, 0x00000000, 0x00000000, 0x00000000, 0x01003320, 0x00000000, 0x00000000,
 };
 
-s32 D_80098CA0_998A0[] = {
+s32 gBlackBoard1PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000B8, 0x00000000, 0x00000000,
     0x00000000, 0x01000170, 0x00000000, 0x00000000, 0x00000000, 0x01000328, 0x00000000, 0x00000000,
     0x00000000, 0x01000488, 0x00000000, 0x00000000, 0x00000000, 0x01000540, 0x00000000, 0x00000000,
@@ -1632,7 +1642,7 @@ s32 D_80098CA0_998A0[] = {
     0x00000000, 0x01001230, 0x00000000, 0x00000000, 0x00000000, 0x010012D8, 0x00000000, 0x00000000,
 };
 
-s32 D_80098DA0_999A0[] = {
+s32 gBlackBoard1SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002F58, 0x00000000, 0x00000000, 0x00000000, 0x01002F98, 0x00000000, 0x00000000,
     0x00000000, 0x01002FD8, 0x00000000, 0x00000000, 0x00000000, 0x01003018, 0x00000000, 0x00000000,
     0x00000000, 0x01003058, 0x00000000, 0x00000000, 0x00000000, 0x01003098, 0x00000000, 0x00000000,
@@ -1643,7 +1653,7 @@ s32 D_80098DA0_999A0[] = {
     0x00000000, 0x01003318, 0x00000000, 0x00000000, 0x00000000, 0x01003358, 0x00000000, 0x00000000,
 };
 
-s32 D_80098EA0_99AA0[] = {
+s32 gBlackBoard2PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000150, 0x00000000, 0x00000000,
     0x00000000, 0x010001F8, 0x00000000, 0x00000000, 0x00000000, 0x01000350, 0x00000000, 0x00000000,
     0x00000000, 0x01000480, 0x00000000, 0x00000000, 0x00000000, 0x01000528, 0x00000000, 0x00000000,
@@ -1654,7 +1664,7 @@ s32 D_80098EA0_99AA0[] = {
     0x00000000, 0x010012E0, 0x00000000, 0x00000000, 0x00000000, 0x01001388, 0x00000000, 0x00000000,
 };
 
-s32 D_80098FA0_99BA0[] = {
+s32 gBlackBoard2SecondaryPartDisplayLists[] = {
     0x00000000, 0x010031F8, 0x00000000, 0x00000000, 0x00000000, 0x01003238, 0x00000000, 0x00000000,
     0x00000000, 0x01003278, 0x00000000, 0x00000000, 0x00000000, 0x010032B8, 0x00000000, 0x00000000,
     0x00000000, 0x010032F8, 0x00000000, 0x00000000, 0x00000000, 0x01003338, 0x00000000, 0x00000000,
@@ -1665,7 +1675,7 @@ s32 D_80098FA0_99BA0[] = {
     0x00000000, 0x010035B8, 0x00000000, 0x00000000, 0x00000000, 0x010035F8, 0x00000000, 0x00000000,
 };
 
-s32 D_800990A0_99CA0[] = {
+s32 gBlackBoard3PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x010000B8, 0x00000000, 0x00000000,
     0x00000000, 0x01000170, 0x00000000, 0x00000000, 0x00000000, 0x01000328, 0x00000000, 0x00000000,
     0x00000000, 0x01000488, 0x00000000, 0x00000000, 0x00000000, 0x01000540, 0x00000000, 0x00000000,
@@ -1676,7 +1686,7 @@ s32 D_800990A0_99CA0[] = {
     0x00000000, 0x01001230, 0x00000000, 0x00000000, 0x00000000, 0x010012D8, 0x00000000, 0x00000000,
 };
 
-s32 D_800991A0_99DA0[] = {
+s32 gBlackBoard3SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002F48, 0x00000000, 0x00000000, 0x00000000, 0x01002F88, 0x00000000, 0x00000000,
     0x00000000, 0x01002FC8, 0x00000000, 0x00000000, 0x00000000, 0x01003008, 0x00000000, 0x00000000,
     0x00000000, 0x01003048, 0x00000000, 0x00000000, 0x00000000, 0x01003088, 0x00000000, 0x00000000,
@@ -1687,7 +1697,7 @@ s32 D_800991A0_99DA0[] = {
     0x00000000, 0x01003308, 0x00000000, 0x00000000, 0x00000000, 0x01003348, 0x00000000, 0x00000000,
 };
 
-s32 D_800992A0_99EA0[] = {
+s32 gPenBoard0PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000068, 0x00000000, 0x00000000,
     0x00000000, 0x010000D0, 0x00000000, 0x00000000, 0x00000000, 0x01000160, 0x00000000, 0x00000000,
     0x00000000, 0x01000228, 0x00000000, 0x00000000, 0x00000000, 0x01000290, 0x00000000, 0x00000000,
@@ -1698,7 +1708,7 @@ s32 D_800992A0_99EA0[] = {
     0x00000000, 0x01000C28, 0x00000000, 0x00000000, 0x00000000, 0x01000D00, 0x00000000, 0x00000000,
 };
 
-s32 D_800993A0_99FA0[] = {
+s32 gPenBoard0SecondaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000068, 0x00000000, 0x00000000,
     0x00000000, 0x01002038, 0x00000000, 0x00000000, 0x00000000, 0x01002078, 0x00000000, 0x00000000,
     0x00000000, 0x01000228, 0x00000000, 0x00000000, 0x00000000, 0x010020B8, 0x00000000, 0x00000000,
@@ -1709,7 +1719,7 @@ s32 D_800993A0_99FA0[] = {
     0x00000000, 0x010022E8, 0x00000000, 0x00000000, 0x00000000, 0x01002328, 0x00000000, 0x00000000,
 };
 
-s32 D_800994A0_9A0A0[] = {
+s32 gPenBoard1PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000068, 0x00000000, 0x00000000,
     0x00000000, 0x010000D0, 0x00000000, 0x00000000, 0x00000000, 0x01000160, 0x00000000, 0x00000000,
     0x00000000, 0x01000228, 0x00000000, 0x00000000, 0x00000000, 0x01000290, 0x00000000, 0x00000000,
@@ -1720,7 +1730,7 @@ s32 D_800994A0_9A0A0[] = {
     0x00000000, 0x01000DB8, 0x00000000, 0x00000000, 0x00000000, 0x01000E90, 0x00000000, 0x00000000,
 };
 
-s32 D_800995A0_9A1A0[] = {
+s32 gPenBoard1SecondaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000068, 0x00000000, 0x00000000,
     0x00000000, 0x010023B0, 0x00000000, 0x00000000, 0x00000000, 0x010023F0, 0x00000000, 0x00000000,
     0x00000000, 0x01000228, 0x00000000, 0x00000000, 0x00000000, 0x01002430, 0x00000000, 0x00000000,
@@ -1731,7 +1741,7 @@ s32 D_800995A0_9A1A0[] = {
     0x00000000, 0x010026A0, 0x00000000, 0x00000000, 0x00000000, 0x010026E0, 0x00000000, 0x00000000,
 };
 
-s32 D_800996A0_9A2A0[] = {
+s32 gPenBoard2PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000068, 0x00000000, 0x00000000,
     0x00000000, 0x010000D0, 0x00000000, 0x00000000, 0x00000000, 0x01000160, 0x00000000, 0x00000000,
     0x00000000, 0x01000228, 0x00000000, 0x00000000, 0x00000000, 0x01000290, 0x00000000, 0x00000000,
@@ -1742,7 +1752,7 @@ s32 D_800996A0_9A2A0[] = {
     0x00000000, 0x01000BF0, 0x00000000, 0x00000000, 0x00000000, 0x01000CC8, 0x00000000, 0x00000000,
 };
 
-s32 D_800997A0_9A3A0[] = {
+s32 gPenBoard2SecondaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000068, 0x00000000, 0x00000000,
     0x00000000, 0x01001FB0, 0x00000000, 0x00000000, 0x00000000, 0x01001FF0, 0x00000000, 0x00000000,
     0x00000000, 0x01000228, 0x00000000, 0x00000000, 0x00000000, 0x01002030, 0x00000000, 0x00000000,
@@ -1753,7 +1763,7 @@ s32 D_800997A0_9A3A0[] = {
     0x00000000, 0x01002260, 0x00000000, 0x00000000, 0x00000000, 0x010022A0, 0x00000000, 0x00000000,
 };
 
-s32 D_800998A0_9A4A0[] = {
+s32 gPenBoard3PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000068, 0x00000000, 0x00000000,
     0x00000000, 0x010000D0, 0x00000000, 0x00000000, 0x00000000, 0x01000160, 0x00000000, 0x00000000,
     0x00000000, 0x01000228, 0x00000000, 0x00000000, 0x00000000, 0x01000290, 0x00000000, 0x00000000,
@@ -1764,7 +1774,7 @@ s32 D_800998A0_9A4A0[] = {
     0x00000000, 0x01000BE0, 0x00000000, 0x00000000, 0x00000000, 0x01000CB8, 0x00000000, 0x00000000,
 };
 
-s32 D_800999A0_9A5A0[] = {
+s32 gPenBoard3SecondaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000068, 0x00000000, 0x00000000,
     0x00000000, 0x01001F80, 0x00000000, 0x00000000, 0x00000000, 0x01001FC0, 0x00000000, 0x00000000,
     0x00000000, 0x01000228, 0x00000000, 0x00000000, 0x00000000, 0x01002000, 0x00000000, 0x00000000,
@@ -1775,7 +1785,7 @@ s32 D_800999A0_9A5A0[] = {
     0x00000000, 0x01002230, 0x00000000, 0x00000000, 0x00000000, 0x01002270, 0x00000000, 0x00000000,
 };
 
-s32 D_80099AA0_9A6A0[] = {
+s32 gDogBoard0PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000070, 0x00000000, 0x00000000,
     0x00000000, 0x01000150, 0x00000000, 0x00000000, 0x00000000, 0x01000208, 0x00000000, 0x00000000,
     0x00000000, 0x01000370, 0x00000000, 0x00000000, 0x00000000, 0x01000450, 0x00000000, 0x00000000,
@@ -1786,7 +1796,7 @@ s32 D_80099AA0_9A6A0[] = {
     0x00000000, 0x01000F58, 0x00000000, 0x00000000, 0x00000000, 0x01001000, 0x00000000, 0x00000000,
 };
 
-s32 D_80099BA0_9A7A0[] = {
+s32 gDogBoard0SecondaryPartDisplayLists[] = {
     0x00000000, 0x010029A8, 0x00000000, 0x00000000, 0x00000000, 0x010029E8, 0x00000000, 0x00000000,
     0x00000000, 0x01002A28, 0x00000000, 0x00000000, 0x00000000, 0x01002A68, 0x00000000, 0x00000000,
     0x00000000, 0x01002AA8, 0x00000000, 0x00000000, 0x00000000, 0x01002AE8, 0x00000000, 0x00000000,
@@ -1797,7 +1807,7 @@ s32 D_80099BA0_9A7A0[] = {
     0x00000000, 0x01002D68, 0x00000000, 0x00000000, 0x00000000, 0x01002DA8, 0x00000000, 0x00000000,
 };
 
-s32 D_80099CA0_9A8A0[] = {
+s32 gDogBoard1PrimaryPartDisplayLists[] = {
     0x00000000, 0x010018D0, 0x00000000, 0x00000000, 0x00000000, 0x01001940, 0x00000000, 0x00000000,
     0x00000000, 0x01001A18, 0x00000000, 0x00000000, 0x00000000, 0x01001AC8, 0x00000000, 0x00000000,
     0x00000000, 0x01001C20, 0x00000000, 0x00000000, 0x00000000, 0x01001CF8, 0x00000000, 0x00000000,
@@ -1808,7 +1818,7 @@ s32 D_80099CA0_9A8A0[] = {
     0x00000000, 0x010026E0, 0x00000000, 0x00000000, 0x00000000, 0x01002788, 0x00000000, 0x00000000,
 };
 
-s32 D_80099DA0_9A9A0[] = {
+s32 gDogBoard1SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002848, 0x00000000, 0x00000000, 0x00000000, 0x01002888, 0x00000000, 0x00000000,
     0x00000000, 0x010028C8, 0x00000000, 0x00000000, 0x00000000, 0x01002908, 0x00000000, 0x00000000,
     0x00000000, 0x01002948, 0x00000000, 0x00000000, 0x00000000, 0x01002988, 0x00000000, 0x00000000,
@@ -1819,7 +1829,7 @@ s32 D_80099DA0_9A9A0[] = {
     0x00000000, 0x01002C08, 0x00000000, 0x00000000, 0x00000000, 0x01002C48, 0x00000000, 0x00000000,
 };
 
-s32 D_80099EA0_9AAA0[] = {
+s32 gDogBoard2PrimaryPartDisplayLists[] = {
     0x00000000, 0x01000000, 0x00000000, 0x00000000, 0x00000000, 0x01000070, 0x00000000, 0x00000000,
     0x00000000, 0x01000148, 0x00000000, 0x00000000, 0x00000000, 0x010001F8, 0x00000000, 0x00000000,
     0x00000000, 0x010002C0, 0x00000000, 0x00000000, 0x00000000, 0x01000398, 0x00000000, 0x00000000,
@@ -1830,7 +1840,7 @@ s32 D_80099EA0_9AAA0[] = {
     0x00000000, 0x01000D68, 0x00000000, 0x00000000, 0x00000000, 0x01000E10, 0x00000000, 0x00000000,
 };
 
-s32 D_80099FA0_9ABA0[] = {
+s32 gDogBoard2SecondaryPartDisplayLists[] = {
     0x00000000, 0x01002630, 0x00000000, 0x00000000, 0x00000000, 0x01002670, 0x00000000, 0x00000000,
     0x00000000, 0x010026B0, 0x00000000, 0x00000000, 0x00000000, 0x010026F0, 0x00000000, 0x00000000,
     0x00000000, 0x01002730, 0x00000000, 0x00000000, 0x00000000, 0x01002770, 0x00000000, 0x00000000,
@@ -1841,7 +1851,7 @@ s32 D_80099FA0_9ABA0[] = {
     0x00000000, 0x010029F0, 0x00000000, 0x00000000, 0x00000000, 0x01002A30, 0x00000000, 0x00000000,
 };
 
-AssetMeta D_8009A0A0_9ACA0[] = {
+AssetMeta gDogBoard3PrimaryPartDisplayLists[] = {
     { (void *)0x00000000, (void *)0x01000000 },
     { (void *)0x00000000, (void *)0x00000000 },
     { (void *)0x00000000, (void *)0x01000070 },
@@ -1876,7 +1886,7 @@ AssetMeta D_8009A0A0_9ACA0[] = {
     { (void *)0x00000000, (void *)0x00000000 },
 };
 
-AssetMeta D_8009A1A0_9ADA0[] = {
+AssetMeta gDogBoard3SecondaryPartDisplayLists[] = {
     { (void *)0x00000000, (void *)0x01002F28 },
     { (void *)0x00000000, (void *)0x00000000 },
     { (void *)0x00000000, (void *)0x01002F68 },
@@ -1911,7 +1921,7 @@ AssetMeta D_8009A1A0_9ADA0[] = {
     { (void *)0x00000000, (void *)0x00000000 },
 };
 
-AssetMeta D_8009A2A0_9AEA0[] = {
+AssetMeta gDinosBoardPrimaryPartDisplayLists[] = {
     { (void *)0x00000000, (void *)0x01000000 },
     { (void *)0x01000178, (void *)0x00000000 },
     { (void *)0x00000000, (void *)0x01000290 },
@@ -1946,7 +1956,7 @@ AssetMeta D_8009A2A0_9AEA0[] = {
     { (void *)0x00000000, (void *)0x00000000 },
 };
 
-AssetMeta D_8009A3A0_9AFA0[] = {
+AssetMeta gSnowBoardPrimaryPartDisplayLists[] = {
     { (void *)0x00000000, (void *)0x01000000 },
     { (void *)0x00000000, (void *)0x00000000 },
     { (void *)0x00000000, (void *)0x010001E8 },
@@ -1955,7 +1965,7 @@ AssetMeta D_8009A3A0_9AFA0[] = {
     { (void *)0x00000000, (void *)0x00000000 },
 };
 
-AssetMeta D_8009A3D0_9AFD0[] = {
+AssetMeta gRoboBoardPrimaryPartDisplayLists[] = {
     { (void *)0x00000000, (void *)0x01000000 },
     { (void *)0x00000000, (void *)0x00000000 },
     { (void *)0x00000000, (void *)0x010003E0 },
@@ -2046,12 +2056,12 @@ AssetMeta D_8009A550_9B150[] = {
 };
 
 void *loadAssetByIndex_94F90(s16 groupIndex, s16 pairIndex) {
-    AssetMeta *assetArray = D_80094390_94F90[groupIndex];
+    AssetMeta *assetArray = gCharacterBoardDisplayListTables[groupIndex];
     return loadUncompressedData(assetArray[pairIndex].start, assetArray[pairIndex].end);
 }
 
 void *loadAssetByIndex_95200(s16 groupIndex, s16 pairIndex) {
-    CompressedAssetMeta *assetArray = D_80094600_95200[groupIndex];
+    CompressedAssetMeta *assetArray = gCharacterBoardCompressedDataTables[groupIndex];
     return loadCompressedData(
         assetArray[pairIndex].start,
         assetArray[pairIndex].end,
@@ -2064,20 +2074,20 @@ void *loadAssetByIndex_953E0(s16 index) {
         return NULL;
     } else {
         return loadCompressedData(
-            D_800947E0_953E0[index].start,
-            D_800947E0_953E0[index].end,
-            D_800947E0_953E0[index].uncompressedSize
+            gCharacterRaceAnimationAssets[index].start,
+            gCharacterRaceAnimationAssets[index].end,
+            gCharacterRaceAnimationAssets[index].uncompressedSize
         );
     }
 }
 
 UnknownAssetStruct *loadAssetByIndex_95380(s16 groupIndex, s16 pairIndex) {
-    s32 *group = D_80094780_95380[groupIndex];
+    s32 *group = gCharacterBoardPartDisplayListTables[groupIndex];
     return (UnknownAssetStruct *)group[pairIndex];
 }
 
 s32 loadAssetByIndex_953B0(s16 groupIndex, s16 pairIndex) {
-    s32 *group = D_800947B0_953B0[groupIndex];
+    s32 *group = gCharacterBoardSecondaryPartDisplayListTables[groupIndex];
     return group[pairIndex];
 }
 
@@ -2087,21 +2097,21 @@ void *load_3ECE40(void) {
 
 void *loadAssetByIndex_95470(s32 index) {
     return loadCompressedData(
-        D_80094870_95470[index].start,
-        D_80094870_95470[index].end,
-        D_80094870_95470[index].uncompressedSize
+        gCharacterFaceIconAssets[index].start,
+        gCharacterFaceIconAssets[index].end,
+        gCharacterFaceIconAssets[index].uncompressedSize
     );
 }
 
 void *loadAssetByIndex_95500(s16 index) {
-    return loadUncompressedData(D_80094900_95500[index].start, D_80094900_95500[index].end);
+    return loadUncompressedData(gCostumeSlotDisplayListAssets[index].start, gCostumeSlotDisplayListAssets[index].end);
 }
 
 void *loadAssetByIndex_95590(s16 index) {
     return loadCompressedData(
-        D_80094990_95590[index].start,
-        D_80094990_95590[index].end,
-        D_80094990_95590[index].uncompressedSize
+        gCostumeSlotCompressedDataAssets[index].start,
+        gCostumeSlotCompressedDataAssets[index].end,
+        gCostumeSlotCompressedDataAssets[index].uncompressedSize
     );
 }
 
@@ -2118,14 +2128,14 @@ void *loadAssetByIndex_95668(s16 index) {
     }
 
     return loadCompressedData(
-        D_80094A68_95668[clamped_index].start,
-        D_80094A68_95668[clamped_index].end,
-        D_80094A68_95668[clamped_index].uncompressedSize
+        gCostumePaletteAssets[clamped_index].start,
+        gCostumePaletteAssets[clamped_index].end,
+        gCostumePaletteAssets[clamped_index].uncompressedSize
     );
 }
 
 void *loadAssetByIndex_95728(s16 index) {
-    return D_80094B28_95728[index];
+    return gCostumeSlotDisplayListTable[index];
 }
 
 void *loadBossHudAssetByRaceType(s32 index) {
@@ -2166,9 +2176,9 @@ s32 getBossHudAssetSize(s32 index) {
 
 void *loadAssetByIndex_5E990(s32 index) {
     return loadCompressedData(
-        D_80094C30_95830[index].start,
-        D_80094C30_95830[index].end,
-        D_80094C30_95830[index].uncompressedSize
+        gGhostInputRecordAssets[index].start,
+        gGhostInputRecordAssets[index].end,
+        gGhostInputRecordAssets[index].uncompressedSize
     );
 }
 
