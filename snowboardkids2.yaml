@@ -5,6 +5,7 @@ options:
   target_path: snowboardkids2.z64
   elf_path: build/snowboardkids2.elf
   base_path: .
+  extensions_path: tools/splat_ext
   platform: n64
   compiler: KMC
   ld_script_path: snowboardkids2.ld
@@ -806,287 +807,287 @@ segments:
     start: 0x165720
 
   - name: SLASH_BOARD0_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x16D920
 
   - name: SLASH_BOARD1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x170780
 
   - name: SLASH_BOARD2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1734B0
 
   - name: SLASH_BOARD3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1768E0
 
   - name: NANCY_BOARD0_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1793A0
 
   - name: NANCY_BOARD1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x17BE20
 
   - name: NANCY_BOARD2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x17EA60
 
   - name: NANCY_BOARD3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1817F0
 
   - name: JAM_BOARD0_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x184050
 
   - name: JAM_BOARD1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x186B10
 
   - name: JAM_BOARD2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x189C20
 
   - name: JAM_BOARD3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x18C490
 
   - name: LINDA_BOARD0_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x18F2B0
 
   - name: LINDA_BOARD1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x191EA0
 
   - name: LINDA_BOARD2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x194840
 
   - name: LINDA_BOARD3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x197300
 
   - name: TOMMY_BOARD0_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x199A90
 
   - name: TOMMY_BOARD1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x19CCF0
 
   - name: TOMMY_BOARD2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1A0190
 
   - name: TOMMY_BOARD3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1A35C0
 
   - name: WENDY_BOARD0_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1A6B00
 
   - name: WENDY_BOARD1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1A9B70
 
   - name: WENDY_BOARD2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1ACCA0
 
   - name: WENDY_BOARD3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1AFBA0
 
   - name: DAMIEN_BOARD0_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1B26E0
 
   - name: DAMIEN_BOARD1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1B5A40
 
   - name: DAMIEN_BOARD2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1B8DE0
 
   - name: DAMIEN_BOARD3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1BC420
 
   - name: PEN_BOARD0_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1BF7B0
 
   - name: PEN_BOARD1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1C1B20
 
   - name: PEN_BOARD2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1C4240
 
   - name: PEN_BOARD3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1C6520
 
   - name: DOG_BOARD0_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1C87D0
 
   - name: DOG_BOARD1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1CB5C0
 
   - name: DOG_BOARD2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1CE250
 
   - name: DOG_BOARD3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D0CC0
 
   - name: DINOS_BOARD_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D3FF0
 
   - name: SNOW4_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D54C0
 
   - name: ROBO_BOARD_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D59D0
 
   - name: COSTUME_SLOT_00_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D8E50
 
   - name: COSTUME_SLOT_01_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D8FB0
 
   - name: COSTUME_SLOT_02_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D9110
 
   - name: COSTUME_SLOT_03_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D9270
 
   - name: COSTUME_SLOT_04_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D93E0
 
   - name: COSTUME_SLOT_05_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D9550
 
   - name: COSTUME_SLOT_06_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D96C0
 
   - name: COSTUME_SLOT_07_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D9810
 
   - name: COSTUME_SLOT_08_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D9960
 
   - name: COSTUME_SLOT_09_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D9AB0
 
   - name: COSTUME_SLOT_10_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D9C20
 
   - name: COSTUME_SLOT_11_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D9D60
 
   - name: COSTUME_SLOT_12_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D9EB0
 
   - name: COSTUME_SLOT_13_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1D9FD0
 
   - name: COSTUME_SLOT_14_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1DA0E0
 
   - name: COSTUME_SLOT_15_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1DA1F0
 
   - name: COSTUME_SLOT_16_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1DA3A0
 
   - name: COSTUME_SLOT_17_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1DA4F0
 
@@ -1171,194 +1172,194 @@ segments:
     start: 0x1E7F60
 
   - name: TABLE3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1E8900
 
   - name: TABLE2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1E8A90
 
   - name: LINDA_B_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1E8E60
 
   - name: TABLE1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1E9300
 
   - name: TABLE0_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1E9490
 
   - name: LINDA_P_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1E9790
 
   - name: HAUNTED_HOUSE_DOOR_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1E9C40
 
   - name: BOMB2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EA200
 
   - name: OTHER_HAUNTED_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EA480
 
   - name: HAUNTED_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EACD0
 
   - name: MROBO_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EAEF0
 
   - name: HAMBURGER_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EC940
 
   - name: HELICOPTER_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1ECAD0
 
   - name: BUNNY_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1ED370
 
   - name: PRESENT_RED_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1ED5F0
 
   - name: PRESENT_BLUE_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1ED740
 
   - name: ITEM_1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1ED890
 
   - name: ITEM_DEBRIS_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1ED9E0
 
   - name: DISH_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EDB30
 
   - name: TUTUM_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EDCF0
 
   - name: TABLE_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EDEE0
 
   - name: RADIO_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EE140
 
   - name: POT_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EE410
 
   - name: CUP_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EE7D0
 
   - name: CHAIR_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EEC10
 
   - name: UNUSED_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EEDF0
 
   - name: SNOW3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EF1C0
 
   - name: SNOW2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EF780
 
   - name: TOWN_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1EFB50
 
   - [0x1F1DB0, bin]
 
   - name: JUNGLE_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1F4730
 
   - name: JUNGLE2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1F5270
 
   - name: SPACE_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1F5FD0
 
   - name: YAMA_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1F6D00
 
   - name: YAMA_Y_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1F7DB0
 
   - name: UFO_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1F8D10
 
   - name: WENDY_H_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1F94F0
 
   - name: ISLAND_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FA080
 
   - name: BUS_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FB040
 
@@ -1373,187 +1374,187 @@ segments:
     start: 0x1FB8B0
 
   - name: NEWSPAPER_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FBE00
 
   - name: POSTBOX_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FBF30
 
   - name: POSTBOX_WITH_NEWSPAPER_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FC140
 
   - name: CAKE_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FC370
 
   - name: CRAB_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FC700
 
   - name: CAKEE_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FC9A0
 
   - name: CHEST_CLOSED_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FCBA0
 
   - name: CHEST_OPEN_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FCE20
 
   - name: KEYO_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FD350
 
   - name: KEYL_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FD500
 
   - name: NEZU_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FD6B0
 
   - name: SLASH1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FDA30
 
   - name: SLASH2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x1FEEE0
 
   - name: SLASH3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x200580
 
   - name: SLASH4_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x202550
 
   - name: NANCY1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x203C30
 
   - name: NANCY2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x204980
 
   - name: NANCY3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x205510
 
   - name: NANCY4_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x206080
 
   - name: JAM1_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x206C10
 
   - name: JAM2_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x207A30
 
   - name: JAM3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x208AC0
 
   - name: JAM4_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x209A40
 
   - name: LINDA_DISPLAY_LIST_0
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x20B0B0
 
   - name: LINDA_DISPLAY_LIST_1
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x20BB50
 
   - name: LINDA_DISPLAY_LIST_2
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x20C5F0
 
   - name: LINDA_DISPLAY_LIST_3
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x20D040
 
   - name: TOMMY_DISPLAY_LIST_0
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x20DAE0
 
   - name: TOMMY_DISPLAY_LIST_1
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x20E850
 
   - name: TOMMY_DISPLAY_LIST_2
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x20F730
 
   - name: TOMMY_DISPLAY_LIST_3
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x210390
 
   - name: WENDY_DISPLAY_LIST_0
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x2110E0
 
   - name: WENDY_DISPLAY_LIST_1
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x211920
 
   - name: WENDY_DISPLAY_LIST_2
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x211F40
 
   - name: WENDY_DISPLAY_LIST_3
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x2125A0
 
   - name: DAMIEN_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x212CF0
 
   - name: PEN_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x214B70
 
@@ -1568,7 +1569,7 @@ segments:
     start: 0x214F20
 
   - name: ITEM_0_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x214FC0
 
@@ -1583,37 +1584,37 @@ segments:
     start: 0x2151D0
 
   - name: ITEM_3_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x215280
 
   - name: ITEM_17_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x215360
 
   - name: ITEM_4_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x215440
 
   - name: ITEM_7_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x215550
 
   - name: ITEM_9_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x215700
 
   - name: ITEM_10_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x2158B0
 
   - name: ITEM_18_DISPLAY_LIST
-    type: bin
+    type: gfxbundle
     vram: 0
     start: 0x215A60
 

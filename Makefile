@@ -188,6 +188,12 @@ $(BUILD_DIR)/src/%.o: src/%.c $(CHARMAP)
 	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
 	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
 
+$(BUILD_DIR)/assets/gfxbin/%.o: assets/gfxbin/%.s
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN)  gfx   $(NO_COL)]  $<\n"
+	$(V)$(CPP) $(CPPFLAGS) -I include -I $(BUILD_DIR)/assets/gfxbin $< | \
+		$(AS) $(ASFLAGS) -I assets/gfxbin -I $(BUILD_DIR)/assets/gfxbin -o $@
+
 $(BUILD_DIR)/%.o: %.s
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(GREEN)   as   $(NO_COL)]  $<\n"
