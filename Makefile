@@ -181,6 +181,8 @@ $(BUILD_DIR)/src/graphics/tiled_sprite_grid.o: OPT_FLAGS := -O0
 
 TEXTCONV = $(PYTHON) $(TOOLS_DIR)/textconv.py
 CHARMAP = $(TOOLS_DIR)/charmap.txt
+MODELPAYLOAD_PACK = $(PYTHON) $(TOOLS_DIR)/modelpayload_pack.py
+MODELPAYLOAD_SOURCES := $(shell find assets/modelpayload -type f 2>/dev/null)
 
 $(BUILD_DIR)/src/%.o: src/%.c $(CHARMAP)
 	@mkdir -p $(shell dirname $@)
@@ -193,6 +195,12 @@ $(BUILD_DIR)/assets/gfxbin/%.o: assets/gfxbin/%.s
 	$(PRINTF) "[$(GREEN)  gfx   $(NO_COL)]  $<\n"
 	$(V)$(CPP) $(CPPFLAGS) -I include -I $(BUILD_DIR)/assets/gfxbin $< | \
 		$(AS) $(ASFLAGS) -I assets/gfxbin -I $(BUILD_DIR)/assets/gfxbin -o $@
+
+$(BUILD_DIR)/assets/modelpayload/%.o: assets/modelpayload/%.yaml $(TOOLS_DIR)/modelpayload_pack.py $(TOOLS_DIR)/modelpayload_common.py $(TOOLS_DIR)/sno.py $(MODELPAYLOAD_SOURCES)
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN) model  $(NO_COL)]  $<\n"
+	$(V)$(MODELPAYLOAD_PACK) $< --out $(BUILD_DIR)/assets/modelpayload/$*.sno
+	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/modelpayload/$*.sno
 
 $(BUILD_DIR)/%.o: %.s
 	@mkdir -p $(shell dirname $@)

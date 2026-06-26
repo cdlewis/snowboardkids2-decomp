@@ -1963,9 +1963,11 @@ segments:
     start: 0x3505F0
 
   - name: SLASH_BOARD0_COMPRESSED_DATA
-    type: bin
+    type: modelpayload
     vram: 0
     start: 0x350C70
+    decompressed_size: 0x45A0
+    display_list: SLASH_BOARD0_DISPLAY_LIST
 
   - name: SLASH_BOARD1_COMPRESSED_DATA
     type: bin
@@ -2310,9 +2312,11 @@ segments:
     start: 0x3F6950
 
   - name: COSTUME_SLOT_00_COMPRESSED_DATA
-    type: bin
+    type: modelpayload
     vram: 0
     start: 0x3F6BB0
+    decompressed_size: 0x320
+    display_list: COSTUME_SLOT_00_DISPLAY_LIST
 
   - name: COSTUME_SLOT_01_COMPRESSED_DATA
     type: bin
@@ -3105,9 +3109,11 @@ segments:
     start: 0x4A2980
 
   - name: MROBO_COMPRESSED_DATA
-    type: bin
+    type: modelpayload
     vram: 0
     start: 0x4A2BC0
+    decompressed_size: 0x4070
+    display_list: MROBO_DISPLAY_LIST
 
   - name: HAMBURGER_COMPRESSED_DATA
     type: bin
@@ -3175,9 +3181,11 @@ segments:
     start: 0x4A7070
 
   - name: CHAIR_COMPRESSED_DATA
-    type: bin
+    type: modelpayload
     vram: 0
     start: 0x4A73F0
+    decompressed_size: 0x560
+    display_list: CHAIR_DISPLAY_LIST
 
   - name: UNUSED_COMPRESSED_DATA
     type: bin
