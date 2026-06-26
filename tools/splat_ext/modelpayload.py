@@ -17,7 +17,7 @@ from tools.modelpayload_common import (
     write_texture_png,
     write_vtx_s,
 )
-from tools.sno import decompress_sno
+from tools.sno import decompress_sno_with_consumed
 
 
 class N64SegModelpayload(CommonSegment):
@@ -63,13 +63,16 @@ class N64SegModelpayload(CommonSegment):
         path = options.opts.asset_path / "gfxbin" / f"{display_list}.s"
         return path if path.exists() else None
 
-    def _write_manifest(self, path: Path, parts: list[dict]) -> None:
+    def _write_manifest(self, path: Path, parts: list[dict], unused_sno_tail: bytes) -> None:
         lines = [
             f"name: {self.name}",
             f"compressed_size: 0x{self.size:X}",
             f"decompressed_size: 0x{self._yaml_int('decompressed_size'):X}",
             "compression: sno",
         ]
+
+        if unused_sno_tail and any(unused_sno_tail):
+            lines.append(f"unused_sno_tail: {unused_sno_tail.hex()}")
 
         display_list = self._yaml_str("display_list") or self._yaml_str("pair_segment")
         if display_list:
@@ -106,7 +109,8 @@ class N64SegModelpayload(CommonSegment):
         assert decompressed_size is not None
 
         compressed = rom_bytes[self.rom_start : self.rom_end]
-        decompressed = decompress_sno(compressed, decompressed_size)
+        decompressed, consumed_size = decompress_sno_with_consumed(compressed, decompressed_size)
+        unused_sno_tail = compressed[consumed_size:]
 
         manifest_path = self.out_path()
         root = manifest_path.parent / self.name
@@ -114,7 +118,6 @@ class N64SegModelpayload(CommonSegment):
         (root / "vtx").mkdir(exist_ok=True)
         (root / "palettes").mkdir(exist_ok=True)
         (root / "textures").mkdir(exist_ok=True)
-        (root / "raw").mkdir(exist_ok=True)
 
         words: list[tuple[int, int]] = []
         display_list_path = self._display_list_path()
@@ -199,22 +202,13 @@ class N64SegModelpayload(CommonSegment):
             )
             covered.append((item.start, item.end))
 
-        structured_ranges = covered[:]
-        for start, end in complement_ranges(decompressed_size, structured_ranges):
-            name = f"range_{start:04X}"
-            rel_path = f"{self.name}/raw/{name}.bin"
-            (manifest_path.parent / rel_path).write_bytes(decompressed[start:end])
-            parts.append(
-                {
-                    "name": name,
-                    "type": "raw",
-                    "offset": start,
-                    "size": end - start,
-                    "path": rel_path,
-                }
+        uncovered_ranges = complement_ranges(decompressed_size, covered)
+        if uncovered_ranges:
+            formatted_ranges = ", ".join(
+                f"0x{start:X}-0x{end:X}" for start, end in uncovered_ranges
             )
-            covered.append((start, end))
+            log.error(f"modelpayload segment {self.name} has unclassified ranges: {formatted_ranges}")
 
         parts.sort(key=lambda item: item["offset"])
-        self._write_manifest(manifest_path, parts)
+        self._write_manifest(manifest_path, parts, unused_sno_tail)
         self.log(f"Wrote {self.name} to {manifest_path}")

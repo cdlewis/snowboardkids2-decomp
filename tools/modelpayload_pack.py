@@ -26,12 +26,16 @@ def parse_int(value) -> int:
     return int(value, 0) if isinstance(value, str) else int(value)
 
 
+def parse_hex_bytes(value) -> bytes:
+    if value is None:
+        return b""
+    text = str(value).strip()
+    return bytes.fromhex(text)
+
+
 def build_part(manifest_dir: Path, manifest: dict, part: dict, palettes: dict[str, list[int]]) -> bytes:
     part_path = manifest_dir / part["path"]
     part_type = part["type"]
-
-    if part_type == "raw":
-        return part_path.read_bytes()
 
     if part_type == "vtx":
         return read_vtx_s(part_path)
@@ -101,9 +105,20 @@ def main() -> int:
 
     decompressed = build_decompressed(args.manifest, manifest)
     compressed = compress_sno(decompressed)
+    trailer = parse_hex_bytes(manifest.get("unused_sno_tail"))
+
+    expected_size = parse_int(manifest["compressed_size"])
+    if len(compressed) > expected_size:
+        raise ValueError(
+            f"{args.manifest} rebuilt compressed data to 0x{len(compressed):X} bytes, "
+            f"expected at most 0x{expected_size:X}"
+        )
+    compressed = bytearray(compressed + b"\x00" * (expected_size - len(compressed)))
+    if trailer:
+        compressed[-len(trailer) :] = trailer
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_bytes(compressed)
+    args.out.write_bytes(bytes(compressed))
     return 0
 
 

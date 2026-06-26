@@ -4,6 +4,7 @@ from __future__ import annotations
 import re
 import struct
 from dataclasses import dataclass
+from dataclasses import replace
 from pathlib import Path
 from typing import Iterable
 
@@ -155,7 +156,55 @@ def collect_texture_ranges(words: Iterable[tuple[int, int]], size: int) -> list[
                 )
             )
 
-    return ranges
+    return resolve_ci_texture_palettes(ranges)
+
+
+def resolve_ci_texture_palettes(ranges: Iterable[Range]) -> list[Range]:
+    items = list(ranges)
+    palettes = sorted((item for item in items if item.kind == "palette"), key=lambda item: item.start)
+    resolved: list[Range] = []
+
+    for item in items:
+        if item.kind != "texture" or not str(item.meta.get("format", "")).startswith("ci"):
+            resolved.append(item)
+            continue
+        if item.meta.get("palette"):
+            resolved.append(item)
+            continue
+
+        candidates = [palette for palette in palettes if palette.start >= item.end]
+        if not candidates:
+            resolved.append(item)
+            continue
+
+        palette = min(candidates, key=lambda candidate: candidate.start - item.end)
+        meta = dict(item.meta)
+        meta["palette"] = palette.name
+        resolved.append(replace(item, meta=meta))
+
+    deduped: dict[tuple, Range] = {}
+    order: list[tuple] = []
+    for item in resolved:
+        if item.kind == "texture":
+            key = (
+                item.kind,
+                item.start,
+                item.end,
+                item.meta.get("format"),
+                item.meta.get("width"),
+                item.meta.get("height"),
+            )
+        else:
+            key = (item.kind, item.start, item.end)
+
+        old = deduped.get(key)
+        if old is None:
+            deduped[key] = item
+            order.append(key)
+        elif not old.meta.get("palette") and item.meta.get("palette"):
+            deduped[key] = item
+
+    return [deduped[key] for key in order]
 
 
 def rgba16_to_rgba(value: int) -> tuple[int, int, int, int]:

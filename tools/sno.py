@@ -5,7 +5,7 @@ import argparse
 from pathlib import Path
 
 
-MAX_OFFSET = 0xFFF
+MAX_OFFSET = 0xFFE
 MAX_COUNT = 0xF
 ALIGNMENT = 0x10
 
@@ -14,7 +14,7 @@ def align(value: int, alignment: int = ALIGNMENT) -> int:
     return (value + alignment - 1) & ~(alignment - 1)
 
 
-def decompress_sno(data: bytes, output_size: int) -> bytes:
+def decompress_sno_with_consumed(data: bytes, output_size: int) -> tuple[bytes, int]:
     out = bytearray()
     src = 0
 
@@ -46,7 +46,12 @@ def decompress_sno(data: bytes, output_size: int) -> bytes:
             if len(out) >= output_size:
                 break
 
-    return bytes(out)
+    return bytes(out), src
+
+
+def decompress_sno(data: bytes, output_size: int) -> bytes:
+    out, _ = decompress_sno_with_consumed(data, output_size)
+    return out
 
 
 def _best_match(data: bytes, pos: int, positions_by_byte: list[list[int]]) -> tuple[int, int]:
