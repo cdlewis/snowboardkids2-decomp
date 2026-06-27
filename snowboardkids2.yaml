@@ -823,286 +823,343 @@ segments:
 
   - name: SLASH_BOARD0_DISPLAY_LIST
     type: gfxbundle
+    level_id: slash_board0
     vram: 0
     start: 0x16D920
 
   - name: SLASH_BOARD1_DISPLAY_LIST
     type: gfxbundle
+    level_id: slash_board1
     vram: 0
     start: 0x170780
 
   - name: SLASH_BOARD2_DISPLAY_LIST
     type: gfxbundle
+    level_id: slash_board2
     vram: 0
     start: 0x1734B0
 
   - name: SLASH_BOARD3_DISPLAY_LIST
     type: gfxbundle
+    level_id: slash_board3
     vram: 0
     start: 0x1768E0
 
   - name: NANCY_BOARD0_DISPLAY_LIST
     type: gfxbundle
+    level_id: nancy_board0
     vram: 0
     start: 0x1793A0
 
   - name: NANCY_BOARD1_DISPLAY_LIST
     type: gfxbundle
+    level_id: nancy_board1
     vram: 0
     start: 0x17BE20
 
   - name: NANCY_BOARD2_DISPLAY_LIST
     type: gfxbundle
+    level_id: nancy_board2
     vram: 0
     start: 0x17EA60
 
   - name: NANCY_BOARD3_DISPLAY_LIST
     type: gfxbundle
+    level_id: nancy_board3
     vram: 0
     start: 0x1817F0
 
   - name: JAM_BOARD0_DISPLAY_LIST
     type: gfxbundle
+    level_id: jam_board0
     vram: 0
     start: 0x184050
 
   - name: JAM_BOARD1_DISPLAY_LIST
     type: gfxbundle
+    level_id: jam_board1
     vram: 0
     start: 0x186B10
 
   - name: JAM_BOARD2_DISPLAY_LIST
     type: gfxbundle
+    level_id: jam_board2
     vram: 0
     start: 0x189C20
 
   - name: JAM_BOARD3_DISPLAY_LIST
     type: gfxbundle
+    level_id: jam_board3
     vram: 0
     start: 0x18C490
 
   - name: LINDA_BOARD0_DISPLAY_LIST
     type: gfxbundle
+    level_id: linda_board0
     vram: 0
     start: 0x18F2B0
 
   - name: LINDA_BOARD1_DISPLAY_LIST
     type: gfxbundle
+    level_id: linda_board1
     vram: 0
     start: 0x191EA0
 
   - name: LINDA_BOARD2_DISPLAY_LIST
     type: gfxbundle
+    level_id: linda_board2
     vram: 0
     start: 0x194840
 
   - name: LINDA_BOARD3_DISPLAY_LIST
     type: gfxbundle
+    level_id: linda_board3
     vram: 0
     start: 0x197300
 
   - name: TOMMY_BOARD0_DISPLAY_LIST
     type: gfxbundle
+    level_id: tommy_board0
     vram: 0
     start: 0x199A90
 
   - name: TOMMY_BOARD1_DISPLAY_LIST
     type: gfxbundle
+    level_id: tommy_board1
     vram: 0
     start: 0x19CCF0
 
   - name: TOMMY_BOARD2_DISPLAY_LIST
     type: gfxbundle
+    level_id: tommy_board2
     vram: 0
     start: 0x1A0190
 
   - name: TOMMY_BOARD3_DISPLAY_LIST
     type: gfxbundle
+    level_id: tommy_board3
     vram: 0
     start: 0x1A35C0
 
   - name: WENDY_BOARD0_DISPLAY_LIST
     type: gfxbundle
+    level_id: wendy_board0
     vram: 0
     start: 0x1A6B00
 
   - name: WENDY_BOARD1_DISPLAY_LIST
     type: gfxbundle
+    level_id: wendy_board1
     vram: 0
     start: 0x1A9B70
 
   - name: WENDY_BOARD2_DISPLAY_LIST
     type: gfxbundle
+    level_id: wendy_board2
     vram: 0
     start: 0x1ACCA0
 
   - name: WENDY_BOARD3_DISPLAY_LIST
     type: gfxbundle
+    level_id: wendy_board3
     vram: 0
     start: 0x1AFBA0
 
   - name: DAMIEN_BOARD0_DISPLAY_LIST
     type: gfxbundle
+    level_id: damien_board0
     vram: 0
     start: 0x1B26E0
 
   - name: DAMIEN_BOARD1_DISPLAY_LIST
     type: gfxbundle
+    level_id: damien_board1
     vram: 0
     start: 0x1B5A40
 
   - name: DAMIEN_BOARD2_DISPLAY_LIST
     type: gfxbundle
+    level_id: damien_board2
     vram: 0
     start: 0x1B8DE0
 
   - name: DAMIEN_BOARD3_DISPLAY_LIST
     type: gfxbundle
+    level_id: damien_board3
     vram: 0
     start: 0x1BC420
 
   - name: PEN_BOARD0_DISPLAY_LIST
     type: gfxbundle
+    level_id: pen_board0
     vram: 0
     start: 0x1BF7B0
 
   - name: PEN_BOARD1_DISPLAY_LIST
     type: gfxbundle
+    level_id: pen_board1
     vram: 0
     start: 0x1C1B20
 
   - name: PEN_BOARD2_DISPLAY_LIST
     type: gfxbundle
+    level_id: pen_board2
     vram: 0
     start: 0x1C4240
 
   - name: PEN_BOARD3_DISPLAY_LIST
     type: gfxbundle
+    level_id: pen_board3
     vram: 0
     start: 0x1C6520
 
   - name: DOG_BOARD0_DISPLAY_LIST
     type: gfxbundle
+    level_id: dog_board0
     vram: 0
     start: 0x1C87D0
 
   - name: DOG_BOARD1_DISPLAY_LIST
     type: gfxbundle
+    level_id: dog_board1
     vram: 0
     start: 0x1CB5C0
 
   - name: DOG_BOARD2_DISPLAY_LIST
     type: gfxbundle
+    level_id: dog_board2
     vram: 0
     start: 0x1CE250
 
   - name: DOG_BOARD3_DISPLAY_LIST
     type: gfxbundle
+    level_id: dog_board3
     vram: 0
     start: 0x1D0CC0
 
   - name: DINOS_BOARD_DISPLAY_LIST
     type: gfxbundle
+    level_id: dinos_board
     vram: 0
     start: 0x1D3FF0
 
   - name: SNOW4_DISPLAY_LIST
     type: gfxbundle
+    level_id: snow4
     vram: 0
     start: 0x1D54C0
 
   - name: ROBO_BOARD_DISPLAY_LIST
     type: gfxbundle
+    level_id: robo_board
     vram: 0
     start: 0x1D59D0
 
   - name: COSTUME_SLOT_00_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_00
     vram: 0
     start: 0x1D8E50
 
   - name: COSTUME_SLOT_01_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_01
     vram: 0
     start: 0x1D8FB0
 
   - name: COSTUME_SLOT_02_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_02
     vram: 0
     start: 0x1D9110
 
   - name: COSTUME_SLOT_03_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_03
     vram: 0
     start: 0x1D9270
 
   - name: COSTUME_SLOT_04_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_04
     vram: 0
     start: 0x1D93E0
 
   - name: COSTUME_SLOT_05_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_05
     vram: 0
     start: 0x1D9550
 
   - name: COSTUME_SLOT_06_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_06
     vram: 0
     start: 0x1D96C0
 
   - name: COSTUME_SLOT_07_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_07
     vram: 0
     start: 0x1D9810
 
   - name: COSTUME_SLOT_08_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_08
     vram: 0
     start: 0x1D9960
 
   - name: COSTUME_SLOT_09_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_09
     vram: 0
     start: 0x1D9AB0
 
   - name: COSTUME_SLOT_10_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_10
     vram: 0
     start: 0x1D9C20
 
   - name: COSTUME_SLOT_11_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_11
     vram: 0
     start: 0x1D9D60
 
   - name: COSTUME_SLOT_12_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_12
     vram: 0
     start: 0x1D9EB0
 
   - name: COSTUME_SLOT_13_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_13
     vram: 0
     start: 0x1D9FD0
 
   - name: COSTUME_SLOT_14_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_14
     vram: 0
     start: 0x1DA0E0
 
   - name: COSTUME_SLOT_15_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_15
     vram: 0
     start: 0x1DA1F0
 
   - name: COSTUME_SLOT_16_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_16
     vram: 0
     start: 0x1DA3A0
 
   - name: COSTUME_SLOT_17_DISPLAY_LIST
     type: gfxbundle
+    level_id: costume_slot_17
     vram: 0
     start: 0x1DA4F0
 
@@ -1188,126 +1245,151 @@ segments:
 
   - name: TABLE3_DISPLAY_LIST
     type: gfxbundle
+    level_id: table3
     vram: 0
     start: 0x1E8900
 
   - name: TABLE2_DISPLAY_LIST
     type: gfxbundle
+    level_id: table2
     vram: 0
     start: 0x1E8A90
 
   - name: LINDA_B_DISPLAY_LIST
     type: gfxbundle
+    level_id: linda_b
     vram: 0
     start: 0x1E8E60
 
   - name: TABLE1_DISPLAY_LIST
     type: gfxbundle
+    level_id: table1
     vram: 0
     start: 0x1E9300
 
   - name: TABLE0_DISPLAY_LIST
     type: gfxbundle
+    level_id: table0
     vram: 0
     start: 0x1E9490
 
   - name: LINDA_P_DISPLAY_LIST
     type: gfxbundle
+    level_id: linda_p
     vram: 0
     start: 0x1E9790
 
   - name: HAUNTED_HOUSE_DOOR_DISPLAY_LIST
     type: gfxbundle
+    level_id: haunted_house_door
     vram: 0
     start: 0x1E9C40
 
   - name: BOMB2_DISPLAY_LIST
     type: gfxbundle
+    level_id: bomb2
     vram: 0
     start: 0x1EA200
 
   - name: OTHER_HAUNTED_DISPLAY_LIST
     type: gfxbundle
+    level_id: other_haunted
     vram: 0
     start: 0x1EA480
 
   - name: HAUNTED_DISPLAY_LIST
     type: gfxbundle
+    level_id: haunted
     vram: 0
     start: 0x1EACD0
 
   - name: MROBO_DISPLAY_LIST
     type: gfxbundle
+    level_id: mrobo
     vram: 0
     start: 0x1EAEF0
 
   - name: HAMBURGER_DISPLAY_LIST
     type: gfxbundle
+    level_id: hamburger
     vram: 0
     start: 0x1EC940
 
   - name: HELICOPTER_DISPLAY_LIST
     type: gfxbundle
+    level_id: helicopter
     vram: 0
     start: 0x1ECAD0
 
   - name: BUNNY_DISPLAY_LIST
     type: gfxbundle
+    level_id: bunny
     vram: 0
     start: 0x1ED370
 
   - name: PRESENT_RED_DISPLAY_LIST
     type: gfxbundle
+    level_id: present_red
     vram: 0
     start: 0x1ED5F0
 
   - name: PRESENT_BLUE_DISPLAY_LIST
     type: gfxbundle
+    level_id: present_blue
     vram: 0
     start: 0x1ED740
 
   - name: ITEM_1_DISPLAY_LIST
     type: gfxbundle
+    level_id: item_1
     vram: 0
     start: 0x1ED890
 
   - name: ITEM_DEBRIS_DISPLAY_LIST
     type: gfxbundle
+    level_id: item_debris
     vram: 0
     start: 0x1ED9E0
 
   - name: DISH_DISPLAY_LIST
     type: gfxbundle
+    level_id: dish
     vram: 0
     start: 0x1EDB30
 
   - name: TUTUM_DISPLAY_LIST
     type: gfxbundle
+    level_id: tutum
     vram: 0
     start: 0x1EDCF0
 
   - name: TABLE_DISPLAY_LIST
     type: gfxbundle
+    level_id: table
     vram: 0
     start: 0x1EDEE0
 
   - name: RADIO_DISPLAY_LIST
     type: gfxbundle
+    level_id: radio
     vram: 0
     start: 0x1EE140
 
   - name: POT_DISPLAY_LIST
     type: gfxbundle
+    level_id: pot
     vram: 0
     start: 0x1EE410
 
   - name: CUP_DISPLAY_LIST
     type: gfxbundle
+    level_id: cup
     vram: 0
     start: 0x1EE7D0
 
   - name: CHAIR_DISPLAY_LIST
     type: gfxbundle
+    level_id: chair
     vram: 0
     start: 0x1EEC10
 
@@ -1318,16 +1400,19 @@ segments:
 
   - name: SNOW3_DISPLAY_LIST
     type: gfxbundle
+    level_id: snow3
     vram: 0
     start: 0x1EF1C0
 
   - name: SNOW2_DISPLAY_LIST
     type: gfxbundle
+    level_id: snow2
     vram: 0
     start: 0x1EF780
 
   - name: TOWN_DISPLAY_LIST
     type: gfxbundle
+    level_id: town
     vram: 0
     start: 0x1EFB50
 
@@ -1335,46 +1420,55 @@ segments:
 
   - name: JUNGLE_DISPLAY_LIST
     type: gfxbundle
+    level_id: jungle
     vram: 0
     start: 0x1F4730
 
   - name: JUNGLE2_DISPLAY_LIST
     type: gfxbundle
+    level_id: jungle2
     vram: 0
     start: 0x1F5270
 
   - name: SPACE_DISPLAY_LIST
     type: gfxbundle
+    level_id: space
     vram: 0
     start: 0x1F5FD0
 
   - name: YAMA_DISPLAY_LIST
     type: gfxbundle
+    level_id: yama
     vram: 0
     start: 0x1F6D00
 
   - name: YAMA_Y_DISPLAY_LIST
     type: gfxbundle
+    level_id: yama_y
     vram: 0
     start: 0x1F7DB0
 
   - name: UFO_DISPLAY_LIST
     type: gfxbundle
+    level_id: ufo
     vram: 0
     start: 0x1F8D10
 
   - name: WENDY_H_DISPLAY_LIST
     type: gfxbundle
+    level_id: wendy_h
     vram: 0
     start: 0x1F94F0
 
   - name: ISLAND_DISPLAY_LIST
     type: gfxbundle
+    level_id: island
     vram: 0
     start: 0x1FA080
 
   - name: BUS_DISPLAY_LIST
     type: gfxbundle
+    level_id: bus
     vram: 0
     start: 0x1FB040
 
@@ -1390,186 +1484,223 @@ segments:
 
   - name: NEWSPAPER_DISPLAY_LIST
     type: gfxbundle
+    level_id: newspaper
     vram: 0
     start: 0x1FBE00
 
   - name: POSTBOX_DISPLAY_LIST
     type: gfxbundle
+    level_id: postbox
     vram: 0
     start: 0x1FBF30
 
   - name: POSTBOX_WITH_NEWSPAPER_DISPLAY_LIST
     type: gfxbundle
+    level_id: postbox_with_newspaper
     vram: 0
     start: 0x1FC140
 
   - name: CAKE_DISPLAY_LIST
     type: gfxbundle
+    level_id: cake
     vram: 0
     start: 0x1FC370
 
   - name: CRAB_DISPLAY_LIST
     type: gfxbundle
+    level_id: crab
     vram: 0
     start: 0x1FC700
 
   - name: CAKEE_DISPLAY_LIST
     type: gfxbundle
+    level_id: cakee
     vram: 0
     start: 0x1FC9A0
 
   - name: CHEST_CLOSED_DISPLAY_LIST
     type: gfxbundle
+    level_id: chest_closed
     vram: 0
     start: 0x1FCBA0
 
   - name: CHEST_OPEN_DISPLAY_LIST
     type: gfxbundle
+    level_id: chest_open
     vram: 0
     start: 0x1FCE20
 
   - name: KEYO_DISPLAY_LIST
     type: gfxbundle
+    level_id: keyo
     vram: 0
     start: 0x1FD350
 
   - name: KEYL_DISPLAY_LIST
     type: gfxbundle
+    level_id: keyl
     vram: 0
     start: 0x1FD500
 
   - name: NEZU_DISPLAY_LIST
     type: gfxbundle
+    level_id: nezu
     vram: 0
     start: 0x1FD6B0
 
   - name: SLASH1_DISPLAY_LIST
     type: gfxbundle
+    level_id: slash1
     vram: 0
     start: 0x1FDA30
 
   - name: SLASH2_DISPLAY_LIST
     type: gfxbundle
+    level_id: slash2
     vram: 0
     start: 0x1FEEE0
 
   - name: SLASH3_DISPLAY_LIST
     type: gfxbundle
+    level_id: slash3
     vram: 0
     start: 0x200580
 
   - name: SLASH4_DISPLAY_LIST
     type: gfxbundle
+    level_id: slash4
     vram: 0
     start: 0x202550
 
   - name: NANCY1_DISPLAY_LIST
     type: gfxbundle
+    level_id: nancy1
     vram: 0
     start: 0x203C30
 
   - name: NANCY2_DISPLAY_LIST
     type: gfxbundle
+    level_id: nancy2
     vram: 0
     start: 0x204980
 
   - name: NANCY3_DISPLAY_LIST
     type: gfxbundle
+    level_id: nancy3
     vram: 0
     start: 0x205510
 
   - name: NANCY4_DISPLAY_LIST
     type: gfxbundle
+    level_id: nancy4
     vram: 0
     start: 0x206080
 
   - name: JAM1_DISPLAY_LIST
     type: gfxbundle
+    level_id: jam1
     vram: 0
     start: 0x206C10
 
   - name: JAM2_DISPLAY_LIST
     type: gfxbundle
+    level_id: jam2
     vram: 0
     start: 0x207A30
 
   - name: JAM3_DISPLAY_LIST
     type: gfxbundle
+    level_id: jam3
     vram: 0
     start: 0x208AC0
 
   - name: JAM4_DISPLAY_LIST
     type: gfxbundle
+    level_id: jam4
     vram: 0
     start: 0x209A40
 
   - name: LINDA_DISPLAY_LIST_0
     type: gfxbundle
+    level_id: linda_0
     vram: 0
     start: 0x20B0B0
 
   - name: LINDA_DISPLAY_LIST_1
     type: gfxbundle
+    level_id: linda_1
     vram: 0
     start: 0x20BB50
 
   - name: LINDA_DISPLAY_LIST_2
     type: gfxbundle
+    level_id: linda_2
     vram: 0
     start: 0x20C5F0
 
   - name: LINDA_DISPLAY_LIST_3
     type: gfxbundle
+    level_id: linda_3
     vram: 0
     start: 0x20D040
 
   - name: TOMMY_DISPLAY_LIST_0
     type: gfxbundle
+    level_id: tommy_0
     vram: 0
     start: 0x20DAE0
 
   - name: TOMMY_DISPLAY_LIST_1
     type: gfxbundle
+    level_id: tommy_1
     vram: 0
     start: 0x20E850
 
   - name: TOMMY_DISPLAY_LIST_2
     type: gfxbundle
+    level_id: tommy_2
     vram: 0
     start: 0x20F730
 
   - name: TOMMY_DISPLAY_LIST_3
     type: gfxbundle
+    level_id: tommy_3
     vram: 0
     start: 0x210390
 
   - name: WENDY_DISPLAY_LIST_0
     type: gfxbundle
+    level_id: wendy_0
     vram: 0
     start: 0x2110E0
 
   - name: WENDY_DISPLAY_LIST_1
     type: gfxbundle
+    level_id: wendy_1
     vram: 0
     start: 0x211920
 
   - name: WENDY_DISPLAY_LIST_2
     type: gfxbundle
+    level_id: wendy_2
     vram: 0
     start: 0x211F40
 
   - name: WENDY_DISPLAY_LIST_3
     type: gfxbundle
+    level_id: wendy_3
     vram: 0
     start: 0x2125A0
 
   - name: DAMIEN_DISPLAY_LIST
     type: gfxbundle
+    level_id: damien
     vram: 0
     start: 0x212CF0
 
   - name: PEN_DISPLAY_LIST
     type: gfxbundle
+    level_id: pen
     vram: 0
     start: 0x214B70
 
@@ -1585,6 +1716,7 @@ segments:
 
   - name: ITEM_0_DISPLAY_LIST
     type: gfxbundle
+    level_id: item_0
     vram: 0
     start: 0x214FC0
 
@@ -1600,36 +1732,43 @@ segments:
 
   - name: ITEM_3_DISPLAY_LIST
     type: gfxbundle
+    level_id: item_3
     vram: 0
     start: 0x215280
 
   - name: ITEM_17_DISPLAY_LIST
     type: gfxbundle
+    level_id: item_17
     vram: 0
     start: 0x215360
 
   - name: ITEM_4_DISPLAY_LIST
     type: gfxbundle
+    level_id: item_4
     vram: 0
     start: 0x215440
 
   - name: ITEM_7_DISPLAY_LIST
     type: gfxbundle
+    level_id: item_7
     vram: 0
     start: 0x215550
 
   - name: ITEM_9_DISPLAY_LIST
     type: gfxbundle
+    level_id: item_9
     vram: 0
     start: 0x215700
 
   - name: ITEM_10_DISPLAY_LIST
     type: gfxbundle
+    level_id: item_10
     vram: 0
     start: 0x2158B0
 
   - name: ITEM_18_DISPLAY_LIST
     type: gfxbundle
+    level_id: item_18
     vram: 0
     start: 0x215A60
 
@@ -2069,276 +2208,276 @@ segments:
 
   - name: SLASH_BOARD0_COMPRESSED_DATA
     type: modelpayload
+    level_id: slash_board0
     vram: 0
     start: 0x350C70
     decompressed_size: 0x45A0
-    display_list: SLASH_BOARD0_DISPLAY_LIST
 
   - name: SLASH_BOARD1_COMPRESSED_DATA
     type: modelpayload
+    level_id: slash_board1
     vram: 0
     start: 0x352A40
     decompressed_size: 0x4870
-    display_list: SLASH_BOARD1_DISPLAY_LIST
 
   - name: SLASH_BOARD2_COMPRESSED_DATA
     type: modelpayload
+    level_id: slash_board2
     vram: 0
     start: 0x354A80
     decompressed_size: 0x54D0
-    display_list: SLASH_BOARD2_DISPLAY_LIST
 
   - name: SLASH_BOARD3_COMPRESSED_DATA
     type: modelpayload
+    level_id: slash_board3
     vram: 0
     start: 0x356F50
     decompressed_size: 0x48E0
-    display_list: SLASH_BOARD3_DISPLAY_LIST
 
   - name: NANCY_BOARD0_COMPRESSED_DATA
     type: modelpayload
+    level_id: nancy_board0
     vram: 0
     start: 0x358E80
     decompressed_size: 0x42A0
-    display_list: NANCY_BOARD0_DISPLAY_LIST
 
   - name: NANCY_BOARD1_COMPRESSED_DATA
     type: modelpayload
+    level_id: nancy_board1
     vram: 0
     start: 0x35AC60
     decompressed_size: 0x43F0
-    display_list: NANCY_BOARD1_DISPLAY_LIST
 
   - name: NANCY_BOARD2_COMPRESSED_DATA
     type: modelpayload
+    level_id: nancy_board2
     vram: 0
     start: 0x35CA40
     decompressed_size: 0x43E0
-    display_list: NANCY_BOARD2_DISPLAY_LIST
 
   - name: NANCY_BOARD3_COMPRESSED_DATA
     type: modelpayload
+    level_id: nancy_board3
     vram: 0
     start: 0x35E810
     decompressed_size: 0x4120
-    display_list: NANCY_BOARD3_DISPLAY_LIST
 
   - name: JAM_BOARD0_COMPRESSED_DATA
     type: modelpayload
+    level_id: jam_board0
     vram: 0
     start: 0x360460
     decompressed_size: 0x4300
-    display_list: JAM_BOARD0_DISPLAY_LIST
 
   - name: JAM_BOARD1_COMPRESSED_DATA
     type: modelpayload
+    level_id: jam_board1
     vram: 0
     start: 0x3622B0
     decompressed_size: 0x4D10
-    display_list: JAM_BOARD1_DISPLAY_LIST
 
   - name: JAM_BOARD2_COMPRESSED_DATA
     type: modelpayload
+    level_id: jam_board2
     vram: 0
     start: 0x364550
     decompressed_size: 0x4640
-    display_list: JAM_BOARD2_DISPLAY_LIST
 
   - name: JAM_BOARD3_COMPRESSED_DATA
     type: modelpayload
+    level_id: jam_board3
     vram: 0
     start: 0x366550
     decompressed_size: 0x49C0
-    display_list: JAM_BOARD3_DISPLAY_LIST
 
   - name: LINDA_BOARD0_COMPRESSED_DATA
     type: modelpayload
+    level_id: linda_board0
     vram: 0
     start: 0x3686A0
     decompressed_size: 0x4360
-    display_list: LINDA_BOARD0_DISPLAY_LIST
 
   - name: LINDA_BOARD1_COMPRESSED_DATA
     type: modelpayload
+    level_id: linda_board1
     vram: 0
     start: 0x36A3E0
     decompressed_size: 0x4160
-    display_list: LINDA_BOARD1_DISPLAY_LIST
 
   - name: LINDA_BOARD2_COMPRESSED_DATA
     type: modelpayload
+    level_id: linda_board2
     vram: 0
     start: 0x36C090
     decompressed_size: 0x45F0
-    display_list: LINDA_BOARD2_DISPLAY_LIST
 
   - name: LINDA_BOARD3_COMPRESSED_DATA
     type: modelpayload
+    level_id: linda_board3
     vram: 0
     start: 0x36DE80
     decompressed_size: 0x3E40
-    display_list: LINDA_BOARD3_DISPLAY_LIST
 
   - name: TOMMY_BOARD0_COMPRESSED_DATA
     type: modelpayload
+    level_id: tommy_board0
     vram: 0
     start: 0x36F920
     decompressed_size: 0x5CB0
-    display_list: TOMMY_BOARD0_DISPLAY_LIST
 
   - name: TOMMY_BOARD1_COMPRESSED_DATA
     type: modelpayload
+    level_id: tommy_board1
     vram: 0
     start: 0x372800
     decompressed_size: 0x66D0
-    display_list: TOMMY_BOARD1_DISPLAY_LIST
 
   - name: TOMMY_BOARD2_COMPRESSED_DATA
     type: modelpayload
+    level_id: tommy_board2
     vram: 0
     start: 0x3757D0
     decompressed_size: 0x6850
-    display_list: TOMMY_BOARD2_DISPLAY_LIST
 
   - name: TOMMY_BOARD3_COMPRESSED_DATA
     type: modelpayload
+    level_id: tommy_board3
     vram: 0
     start: 0x378850
     decompressed_size: 0x5160
-    display_list: TOMMY_BOARD3_DISPLAY_LIST
 
   - name: WENDY_BOARD0_COMPRESSED_DATA
     type: modelpayload
+    level_id: wendy_board0
     vram: 0
     start: 0x37B1E0
     decompressed_size: 0x4710
-    display_list: WENDY_BOARD0_DISPLAY_LIST
 
   - name: WENDY_BOARD1_COMPRESSED_DATA
     type: modelpayload
+    level_id: wendy_board1
     vram: 0
     start: 0x37D270
     decompressed_size: 0x4F60
-    display_list: WENDY_BOARD1_DISPLAY_LIST
 
   - name: WENDY_BOARD2_COMPRESSED_DATA
     type: modelpayload
+    level_id: wendy_board2
     vram: 0
     start: 0x37F6D0
     decompressed_size: 0x5550
-    display_list: WENDY_BOARD2_DISPLAY_LIST
 
   - name: WENDY_BOARD3_COMPRESSED_DATA
     type: modelpayload
+    level_id: wendy_board3
     vram: 0
     start: 0x381CD0
     decompressed_size: 0x4C40
-    display_list: WENDY_BOARD3_DISPLAY_LIST
 
   - name: DAMIEN_BOARD0_COMPRESSED_DATA
     type: modelpayload
+    level_id: damien_board0
     vram: 0
     start: 0x383E00
     decompressed_size: 0x4EE0
-    display_list: DAMIEN_BOARD0_DISPLAY_LIST
 
   - name: DAMIEN_BOARD1_COMPRESSED_DATA
     type: modelpayload
+    level_id: damien_board1
     vram: 0
     start: 0x3860C0
     decompressed_size: 0x5070
-    display_list: DAMIEN_BOARD1_DISPLAY_LIST
 
   - name: DAMIEN_BOARD2_COMPRESSED_DATA
     type: modelpayload
+    level_id: damien_board2
     vram: 0
     start: 0x388430
     decompressed_size: 0x5670
-    display_list: DAMIEN_BOARD2_DISPLAY_LIST
 
   - name: DAMIEN_BOARD3_COMPRESSED_DATA
     type: modelpayload
+    level_id: damien_board3
     vram: 0
     start: 0x38AC10
     decompressed_size: 0x4F60
-    display_list: DAMIEN_BOARD3_DISPLAY_LIST
 
   - name: PEN_BOARD0_COMPRESSED_DATA
     type: modelpayload
+    level_id: pen_board0
     vram: 0
     start: 0x38CF10
     decompressed_size: 0x4450
-    display_list: PEN_BOARD0_DISPLAY_LIST
 
   - name: PEN_BOARD1_COMPRESSED_DATA
     type: modelpayload
+    level_id: pen_board1
     vram: 0
     start: 0x38EA50
     decompressed_size: 0x5350
-    display_list: PEN_BOARD1_DISPLAY_LIST
 
   - name: PEN_BOARD2_COMPRESSED_DATA
     type: modelpayload
+    level_id: pen_board2
     vram: 0
     start: 0x390C10
     decompressed_size: 0x4490
-    display_list: PEN_BOARD2_DISPLAY_LIST
 
   - name: PEN_BOARD3_COMPRESSED_DATA
     type: modelpayload
+    level_id: pen_board3
     vram: 0
     start: 0x392790
     decompressed_size: 0x4420
-    display_list: PEN_BOARD3_DISPLAY_LIST
 
   - name: DOG_BOARD0_COMPRESSED_DATA
     type: modelpayload
+    level_id: dog_board0
     vram: 0
     start: 0x3942D0
     decompressed_size: 0x4BE0
-    display_list: DOG_BOARD0_DISPLAY_LIST
 
   - name: DOG_BOARD1_COMPRESSED_DATA
     type: modelpayload
+    level_id: dog_board1
     vram: 0
     start: 0x3967C0
     decompressed_size: 0x47C0
-    display_list: DOG_BOARD1_DISPLAY_LIST
 
   - name: DOG_BOARD2_COMPRESSED_DATA
     type: modelpayload
+    level_id: dog_board2
     vram: 0
     start: 0x398960
     decompressed_size: 0x48A0
-    display_list: DOG_BOARD2_DISPLAY_LIST
 
   - name: DOG_BOARD3_COMPRESSED_DATA
     type: modelpayload
+    level_id: dog_board3
     vram: 0
     start: 0x39AC40
     decompressed_size: 0x4DD0
-    display_list: DOG_BOARD3_DISPLAY_LIST
 
   - name: DINOS_BOARD_COMPRESSED_DATA
     type: modelpayload
+    level_id: dinos_board
     vram: 0
     start: 0x39D100
     decompressed_size: 0x1D80
-    display_list: DINOS_BOARD_DISPLAY_LIST
 
   - name: SNOW4_COMPRESSED_DATA
     type: modelpayload
+    level_id: snow4
     vram: 0
     start: 0x39E030
     decompressed_size: 0xD50
-    display_list: SNOW4_DISPLAY_LIST
 
   - name: ROBO_BOARD_COMPRESSED_DATA
     type: modelpayload
+    level_id: robo_board
     vram: 0
     start: 0x39E710
     decompressed_size: 0x5280
-    display_list: ROBO_BOARD_DISPLAY_LIST
 
   - name: SLASH_RACE_ANIMATION_DATA
     type: bin
@@ -2494,129 +2633,129 @@ segments:
 
   - name: COSTUME_SLOT_00_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_00
     vram: 0
     start: 0x3F6BB0
     decompressed_size: 0x320
-    display_list: COSTUME_SLOT_00_DISPLAY_LIST
 
   - name: COSTUME_SLOT_01_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_01
     vram: 0
     start: 0x3F6D90
     decompressed_size: 0x300
-    display_list: COSTUME_SLOT_01_DISPLAY_LIST
 
   - name: COSTUME_SLOT_02_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_02
     vram: 0
     start: 0x3F6F90
     decompressed_size: 0x300
-    display_list: COSTUME_SLOT_02_DISPLAY_LIST
 
   - name: COSTUME_SLOT_03_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_03
     vram: 0
     start: 0x3F71B0
     decompressed_size: 0x360
-    display_list: COSTUME_SLOT_03_DISPLAY_LIST
 
   - name: COSTUME_SLOT_04_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_04
     vram: 0
     start: 0x3F73B0
     decompressed_size: 0x360
-    display_list: COSTUME_SLOT_04_DISPLAY_LIST
 
   - name: COSTUME_SLOT_05_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_05
     vram: 0
     start: 0x3F75B0
     decompressed_size: 0x360
-    display_list: COSTUME_SLOT_05_DISPLAY_LIST
 
   - name: COSTUME_SLOT_06_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_06
     vram: 0
     start: 0x3F77B0
     decompressed_size: 0x2E0
-    display_list: COSTUME_SLOT_06_DISPLAY_LIST
 
   - name: COSTUME_SLOT_07_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_07
     vram: 0
     start: 0x3F7980
     decompressed_size: 0x2E0
-    display_list: COSTUME_SLOT_07_DISPLAY_LIST
 
   - name: COSTUME_SLOT_08_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_08
     vram: 0
     start: 0x3F7B50
     decompressed_size: 0x2E0
-    display_list: COSTUME_SLOT_08_DISPLAY_LIST
 
   - name: COSTUME_SLOT_09_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_09
     vram: 0
     start: 0x3F7D20
     decompressed_size: 0xC00
-    display_list: COSTUME_SLOT_09_DISPLAY_LIST
 
   - name: COSTUME_SLOT_10_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_10
     vram: 0
     start: 0x3F80C0
     decompressed_size: 0xA00
-    display_list: COSTUME_SLOT_10_DISPLAY_LIST
 
   - name: COSTUME_SLOT_11_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_11
     vram: 0
     start: 0x3F86A0
     decompressed_size: 0xA90
-    display_list: COSTUME_SLOT_11_DISPLAY_LIST
 
   - name: COSTUME_SLOT_12_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_12
     vram: 0
     start: 0x3F8B90
     decompressed_size: 0x9C0
-    display_list: COSTUME_SLOT_12_DISPLAY_LIST
 
   - name: COSTUME_SLOT_13_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_13
     vram: 0
     start: 0x3F9110
     decompressed_size: 0xA20
-    display_list: COSTUME_SLOT_13_DISPLAY_LIST
 
   - name: COSTUME_SLOT_14_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_14
     vram: 0
     start: 0x3F9710
     decompressed_size: 0xA20
-    display_list: COSTUME_SLOT_14_DISPLAY_LIST
 
   - name: COSTUME_SLOT_15_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_15
     vram: 0
     start: 0x3F9B90
     decompressed_size: 0xD60
-    display_list: COSTUME_SLOT_15_DISPLAY_LIST
 
   - name: COSTUME_SLOT_16_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_16
     vram: 0
     start: 0x3FA1A0
     decompressed_size: 0xB00
-    display_list: COSTUME_SLOT_16_DISPLAY_LIST
 
   - name: COSTUME_SLOT_17_COMPRESSED_DATA
     type: modelpayload
+    level_id: costume_slot_17
     vram: 0
     start: 0x3FA830
     decompressed_size: 0xBA0
-    display_list: COSTUME_SLOT_17_DISPLAY_LIST
 
   - name: PALETTE_00
     type: bin
@@ -3275,178 +3414,178 @@ segments:
 
   - name: TABLE3_COMPRESSED_DATA
     type: modelpayload
+    level_id: table3
     vram: 0
     start: 0x49D710
     decompressed_size: 0x4A0
-    display_list: TABLE3_DISPLAY_LIST
 
   - name: TABLE2_COMPRESSED_DATA
     type: modelpayload
+    level_id: table2
     vram: 0
     start: 0x49D8F0
     decompressed_size: 0x1240
-    display_list: TABLE2_DISPLAY_LIST
 
   - name: LINDA_B_COMPRESSED_DATA
     type: modelpayload
+    level_id: linda_b
     vram: 0
     start: 0x49E2E0
     decompressed_size: 0x1680
-    display_list: LINDA_B_DISPLAY_LIST
 
   - name: TABLE1_COMPRESSED_DATA
     type: modelpayload
+    level_id: table1
     vram: 0
     start: 0x49F0D0
     decompressed_size: 0x4A0
-    display_list: TABLE1_DISPLAY_LIST
 
   - name: TABLE0_COMPRESSED_DATA
     type: modelpayload
+    level_id: table0
     vram: 0
     start: 0x49F270
     decompressed_size: 0xBC0
-    display_list: TABLE0_DISPLAY_LIST
 
   - name: LINDA_P_COMPRESSED_DATA
     type: modelpayload
+    level_id: linda_p
     vram: 0
     start: 0x49FA20
     decompressed_size: 0x14A0
-    display_list: LINDA_P_DISPLAY_LIST
 
   - name: HAUNTED_HOUSE_DOOR_COMPRESSED_DATA
     type: modelpayload
+    level_id: haunted_house_door
     vram: 0
     start: 0x4A0670
     decompressed_size: 0xF50
-    display_list: HAUNTED_HOUSE_DOOR_DISPLAY_LIST
 
   - name: BOMB2_COMPRESSED_DATA
     type: modelpayload
+    level_id: bomb2
     vram: 0
     start: 0x4A0E80
     decompressed_size: 0x7E0
-    display_list: BOMB2_DISPLAY_LIST
 
   - name: OTHER_HAUNTED_COMPRESSED_DATA
     type: modelpayload
+    level_id: other_haunted
     vram: 0
     start: 0x4A1160
     decompressed_size: 0x24B0
-    display_list: OTHER_HAUNTED_DISPLAY_LIST
 
   - name: HAUNTED_COMPRESSED_DATA
     type: modelpayload
+    level_id: haunted
     vram: 0
     start: 0x4A2980
     decompressed_size: 0x790
-    display_list: HAUNTED_DISPLAY_LIST
 
   - name: MROBO_COMPRESSED_DATA
     type: modelpayload
+    level_id: mrobo
     vram: 0
     start: 0x4A2BC0
     decompressed_size: 0x4070
-    display_list: MROBO_DISPLAY_LIST
 
   - name: HAMBURGER_COMPRESSED_DATA
     type: modelpayload
+    level_id: hamburger
     vram: 0
     start: 0x4A3E80
     decompressed_size: 0x620
-    display_list: HAMBURGER_DISPLAY_LIST
 
   - name: HELICOPTER_COMPRESSED_DATA
     type: modelpayload
+    level_id: helicopter
     vram: 0
     start: 0x4A4260
     decompressed_size: 0x1A80
-    display_list: HELICOPTER_DISPLAY_LIST
 
   - name: BUNNY_COMPRESSED_DATA
     type: modelpayload
+    level_id: bunny
     vram: 0
     start: 0x4A51C0
     decompressed_size: 0x5E0
-    display_list: BUNNY_DISPLAY_LIST
 
   - name: PRESENT_RED_COMPRESSED_DATA
     type: modelpayload
+    level_id: present_red
     vram: 0
     start: 0x4A5460
     decompressed_size: 0x370
-    display_list: PRESENT_RED_DISPLAY_LIST
 
   - name: PRESENT_BLUE_COMPRESSED_DATA
     type: modelpayload
+    level_id: present_blue
     vram: 0
     start: 0x4A5650
     decompressed_size: 0x370
-    display_list: PRESENT_BLUE_DISPLAY_LIST
 
   - name: ITEM_1_COMPRESSED_DATA
     type: modelpayload
+    level_id: item_1
     vram: 0
     start: 0x4A5840
     decompressed_size: 0x370
-    display_list: ITEM_1_DISPLAY_LIST
 
   - name: ITEM_DEBRIS_COMPRESSED_DATA
     type: modelpayload
+    level_id: item_debris
     vram: 0
     start: 0x4A5A30
     decompressed_size: 0x370
-    display_list: ITEM_DEBRIS_DISPLAY_LIST
 
   - name: DISH_COMPRESSED_DATA
     type: modelpayload
+    level_id: dish
     vram: 0
     start: 0x4A5C20
     decompressed_size: 0x320
-    display_list: DISH_DISPLAY_LIST
 
   - name: TUTUM_COMPRESSED_DATA
     type: modelpayload
+    level_id: tutum
     vram: 0
     start: 0x4A5E10
     decompressed_size: 0x930
-    display_list: TUTUM_DISPLAY_LIST
 
   - name: TABLE_COMPRESSED_DATA
     type: modelpayload
+    level_id: table
     vram: 0
     start: 0x4A6360
     decompressed_size: 0xC20
-    display_list: TABLE_DISPLAY_LIST
 
   - name: RADIO_COMPRESSED_DATA
     type: modelpayload
+    level_id: radio
     vram: 0
     start: 0x4A6920
     decompressed_size: 0x620
-    display_list: RADIO_DISPLAY_LIST
 
   - name: POT_COMPRESSED_DATA
     type: modelpayload
+    level_id: pot
     vram: 0
     start: 0x4A6B60
     decompressed_size: 0xA90
-    display_list: POT_DISPLAY_LIST
 
   - name: CUP_COMPRESSED_DATA
     type: modelpayload
+    level_id: cup
     vram: 0
     start: 0x4A7070
     decompressed_size: 0xA90
-    display_list: CUP_DISPLAY_LIST
 
   - name: CHAIR_COMPRESSED_DATA
     type: modelpayload
+    level_id: chair
     vram: 0
     start: 0x4A73F0
     decompressed_size: 0x560
-    display_list: CHAIR_DISPLAY_LIST
 
   - name: UNUSED_COMPRESSED_DATA
     type: bin
@@ -3455,68 +3594,68 @@ segments:
 
   - name: SNOW3_COMPRESSED_DATA
     type: modelpayload
+    level_id: snow3
     vram: 0
     start: 0x4A79C0
     decompressed_size: 0xEB0
-    display_list: SNOW3_DISPLAY_LIST
 
   - name: SNOW2_COMPRESSED_DATA
     type: modelpayload
+    level_id: snow2
     vram: 0
     start: 0x4A8180
     decompressed_size: 0xB20
-    display_list: SNOW2_DISPLAY_LIST
 
   - name: TOWN_COMPRESSED_DATA
     type: modelpayload
+    level_id: town
     vram: 0
     start: 0x4A8650
     decompressed_size: 0xE180
-    display_list: TOWN_DISPLAY_LIST
 
   - [0x4B04A0, bin]
 
   - name: JUNGLE_COMPRESSED_DATA
     type: modelpayload
+    level_id: jungle
     vram: 0
     start: 0x4B73C0
     decompressed_size: 0x21D0
-    display_list: JUNGLE_DISPLAY_LIST
 
   - name: JUNGLE2_COMPRESSED_DATA
     type: modelpayload
+    level_id: jungle2
     vram: 0
     start: 0x4B8D10
     decompressed_size: 0x2EC0
-    display_list: JUNGLE2_DISPLAY_LIST
 
   - name: SPACE_COMPRESSED_DATA
     type: modelpayload
+    level_id: space
     vram: 0
     start: 0x4BAF60
     decompressed_size: 0x36D0
-    display_list: SPACE_DISPLAY_LIST
 
   - name: YAMA_COMPRESSED_DATA
     type: modelpayload
+    level_id: yama
     vram: 0
     start: 0x4BCFB0
     decompressed_size: 0x3FE0
-    display_list: YAMA_DISPLAY_LIST
 
   - name: YAMA_Y_COMPRESSED_DATA
     type: modelpayload
+    level_id: yama_y
     vram: 0
     start: 0x4BF950
     decompressed_size: 0x3B30
-    display_list: YAMA_Y_DISPLAY_LIST
 
   - name: UFO_COMPRESSED_DATA
     type: modelpayload
+    level_id: ufo
     vram: 0
     start: 0x4C20A0
     decompressed_size: 0x25A0
-    display_list: UFO_DISPLAY_LIST
 
   - name: UFO_SOUND_SEQUENCE_DATA
     type: bin
@@ -3525,24 +3664,24 @@ segments:
 
   - name: WENDY_H_COMPRESSED_DATA
     type: modelpayload
+    level_id: wendy_h
     vram: 0
     start: 0x4C3A60
     decompressed_size: 0x4120
-    display_list: WENDY_H_DISPLAY_LIST
 
   - name: ISLAND_COMPRESSED_DATA
     type: modelpayload
+    level_id: island
     vram: 0
     start: 0x4C5840
     decompressed_size: 0x5AD0
-    display_list: ISLAND_DISPLAY_LIST
 
   - name: BUS_COMPRESSED_DATA
     type: modelpayload
+    level_id: bus
     vram: 0
     start: 0x4C9310
     decompressed_size: 0x1280
-    display_list: BUS_DISPLAY_LIST
 
   - name: fanEffectSegment2
     type: bin
@@ -3556,262 +3695,262 @@ segments:
 
   - name: NEWSPAPER_COMPRESSED_DATA
     type: modelpayload
+    level_id: newspaper
     vram: 0
     start: 0x4CAD30
     decompressed_size: 0x620
-    display_list: NEWSPAPER_DISPLAY_LIST
 
   - name: POSTBOX_COMPRESSED_DATA
     type: modelpayload
+    level_id: postbox
     vram: 0
     start: 0x4CB1E0
     decompressed_size: 0x7A0
-    display_list: POSTBOX_DISPLAY_LIST
 
   - name: POSTBOX_WITH_NEWSPAPER_COMPRESSED_DATA
     type: modelpayload
+    level_id: postbox_with_newspaper
     vram: 0
     start: 0x4CB700
     decompressed_size: 0x8E0
-    display_list: POSTBOX_WITH_NEWSPAPER_DISPLAY_LIST
 
   - name: CAKE_COMPRESSED_DATA
     type: modelpayload
+    level_id: cake
     vram: 0
     start: 0x4CBCF0
     decompressed_size: 0x1620
-    display_list: CAKE_DISPLAY_LIST
 
   - name: CRAB_COMPRESSED_DATA
     type: modelpayload
+    level_id: crab
     vram: 0
     start: 0x4CCA00
     decompressed_size: 0x770
-    display_list: CRAB_DISPLAY_LIST
 
   - name: CAKEE_COMPRESSED_DATA
     type: modelpayload
+    level_id: cakee
     vram: 0
     start: 0x4CCE20
     decompressed_size: 0xF80
-    display_list: CAKEE_DISPLAY_LIST
 
   - name: CHEST_CLOSED_COMPRESSED_DATA
     type: modelpayload
+    level_id: chest_closed
     vram: 0
     start: 0x4CD980
     decompressed_size: 0x710
-    display_list: CHEST_CLOSED_DISPLAY_LIST
 
   - name: CHEST_OPEN_COMPRESSED_DATA
     type: modelpayload
+    level_id: chest_open
     vram: 0
     start: 0x4CDCB0
     decompressed_size: 0xD10
-    display_list: CHEST_OPEN_DISPLAY_LIST
 
   - name: KEYO_COMPRESSED_DATA
     type: modelpayload
+    level_id: keyo
     vram: 0
     start: 0x4CE2A0
     decompressed_size: 0x4A0
-    display_list: KEYO_DISPLAY_LIST
 
   - name: KEYL_COMPRESSED_DATA
     type: modelpayload
+    level_id: keyl
     vram: 0
     start: 0x4CE500
     decompressed_size: 0x4A0
-    display_list: KEYL_DISPLAY_LIST
 
   - name: NEZU_COMPRESSED_DATA
     type: modelpayload
+    level_id: nezu
     vram: 0
     start: 0x4CE760
     decompressed_size: 0x1080
-    display_list: NEZU_DISPLAY_LIST
 
   - name: SLASH1_COMPRESSED_DATA
     type: modelpayload
+    level_id: slash1
     vram: 0
     start: 0x4CEFF0
     decompressed_size: 0x3DE0
-    display_list: SLASH1_DISPLAY_LIST
 
   - name: SLASH2_COMPRESSED_DATA
     type: modelpayload
+    level_id: slash2
     vram: 0
     start: 0x4D0470
     decompressed_size: 0x3AD0
-    display_list: SLASH2_DISPLAY_LIST
 
   - name: SLASH3_COMPRESSED_DATA
     type: modelpayload
+    level_id: slash3
     vram: 0
     start: 0x4D1870
     decompressed_size: 0x4D90
-    display_list: SLASH3_DISPLAY_LIST
 
   - name: SLASH4_COMPRESSED_DATA
     type: modelpayload
+    level_id: slash4
     vram: 0
     start: 0x4D2FD0
     decompressed_size: 0x3F60
-    display_list: SLASH4_DISPLAY_LIST
 
   - name: NANCY1_COMPRESSED_DATA
     type: modelpayload
+    level_id: nancy1
     vram: 0
     start: 0x4D45C0
     decompressed_size: 0x2F20
-    display_list: NANCY1_DISPLAY_LIST
 
   - name: NANCY2_COMPRESSED_DATA
     type: modelpayload
+    level_id: nancy2
     vram: 0
     start: 0x4D5270
     decompressed_size: 0x27F0
-    display_list: NANCY2_DISPLAY_LIST
 
   - name: NANCY3_COMPRESSED_DATA
     type: modelpayload
+    level_id: nancy3
     vram: 0
     start: 0x4D5D60
     decompressed_size: 0x2890
-    display_list: NANCY3_DISPLAY_LIST
 
   - name: NANCY4_COMPRESSED_DATA
     type: modelpayload
+    level_id: nancy4
     vram: 0
     start: 0x4D6880
     decompressed_size: 0x2C00
-    display_list: NANCY4_DISPLAY_LIST
 
   - name: JAM1_COMPRESSED_DATA
     type: modelpayload
+    level_id: jam1
     vram: 0
     start: 0x4D7470
     decompressed_size: 0x2B00
-    display_list: JAM1_DISPLAY_LIST
 
   - name: JAM2_COMPRESSED_DATA
     type: modelpayload
+    level_id: jam2
     vram: 0
     start: 0x4D84B0
     decompressed_size: 0x2FE0
-    display_list: JAM2_DISPLAY_LIST
 
   - name: JAM3_COMPRESSED_DATA
     type: modelpayload
+    level_id: jam3
     vram: 0
     start: 0x4D9560
     decompressed_size: 0x2B80
-    display_list: JAM3_DISPLAY_LIST
 
   - name: JAM4_COMPRESSED_DATA
     type: modelpayload
+    level_id: jam4
     vram: 0
     start: 0x4DA6E0
     decompressed_size: 0x4050
-    display_list: JAM4_DISPLAY_LIST
 
   - name: LINDA_COMPRESSED_DATA_0
     type: modelpayload
+    level_id: linda_0
     vram: 0
     start: 0x4DBC80
     decompressed_size: 0x27F0
-    display_list: LINDA_DISPLAY_LIST_0
 
   - name: LINDA_COMPRESSED_DATA_1
     type: modelpayload
+    level_id: linda_1
     vram: 0
     start: 0x4DC7A0
     decompressed_size: 0x27F0
-    display_list: LINDA_DISPLAY_LIST_1
 
   - name: LINDA_COMPRESSED_DATA_2
     type: modelpayload
+    level_id: linda_2
     vram: 0
     start: 0x4DD2C0
     decompressed_size: 0x2750
-    display_list: LINDA_DISPLAY_LIST_2
 
   - name: LINDA_COMPRESSED_DATA_3
     type: modelpayload
+    level_id: linda_3
     vram: 0
     start: 0x4DDD90
     decompressed_size: 0x25C0
-    display_list: LINDA_DISPLAY_LIST_3
 
   - name: TOMMY_COMPRESSED_DATA_0
     type: modelpayload
+    level_id: tommy_0
     vram: 0
     start: 0x4DE820
     decompressed_size: 0x4D00
-    display_list: TOMMY_DISPLAY_LIST_0
 
   - name: TOMMY_COMPRESSED_DATA_1
     type: modelpayload
+    level_id: tommy_1
     vram: 0
     start: 0x4DFAC0
     decompressed_size: 0x5020
-    display_list: TOMMY_DISPLAY_LIST_1
 
   - name: TOMMY_COMPRESSED_DATA_2
     type: modelpayload
+    level_id: tommy_2
     vram: 0
     start: 0x4E0ED0
     decompressed_size: 0x4E40
-    display_list: TOMMY_DISPLAY_LIST_2
 
   - name: TOMMY_COMPRESSED_DATA_3
     type: modelpayload
+    level_id: tommy_3
     vram: 0
     start: 0x4E21A0
     decompressed_size: 0x48D0
-    display_list: TOMMY_DISPLAY_LIST_3
 
   - name: WENDY_COMPRESSED_DATA_0
     type: modelpayload
+    level_id: wendy_0
     vram: 0
     start: 0x4E33D0
     decompressed_size: 0x27A0
-    display_list: WENDY_DISPLAY_LIST_0
 
   - name: WENDY_COMPRESSED_DATA_1
     type: modelpayload
+    level_id: wendy_1
     vram: 0
     start: 0x4E40A0
     decompressed_size: 0x1AC0
-    display_list: WENDY_DISPLAY_LIST_1
 
   - name: WENDY_COMPRESSED_DATA_2
     type: modelpayload
+    level_id: wendy_2
     vram: 0
     start: 0x4E4AA0
     decompressed_size: 0x1AE0
-    display_list: WENDY_DISPLAY_LIST_2
 
   - name: WENDY_COMPRESSED_DATA_3
     type: modelpayload
+    level_id: wendy_3
     vram: 0
     start: 0x4E54E0
     decompressed_size: 0x1D00
-    display_list: WENDY_DISPLAY_LIST_3
 
   - name: DAMIEN_COMPRESSED_DATA
     type: modelpayload
+    level_id: damien
     vram: 0
     start: 0x4E5FC0
     decompressed_size: 0x3DE0
-    display_list: DAMIEN_DISPLAY_LIST
 
   - name: PEN_COMPRESSED_DATA
     type: modelpayload
+    level_id: pen
     vram: 0
     start: 0x4E7640
     decompressed_size: 0x980
-    display_list: PEN_DISPLAY_LIST
 
   - name: SLASH1_ANIMATION_DATA
     type: bin
@@ -4388,10 +4527,10 @@ segments:
 
   - name: ITEM_0_COMPRESSED_DATA
     type: modelpayload
+    level_id: item_0
     vram: 0
     start: 0x663440
     decompressed_size: 0x520
-    display_list: ITEM_0_DISPLAY_LIST
 
   - name: scrollingTextureSegment2
     type: bin
@@ -4410,52 +4549,52 @@ segments:
 
   - name: ITEM_3_COMPRESSED_DATA
     type: modelpayload
+    level_id: item_3
     vram: 0
     start: 0x663C90
     decompressed_size: 0x1D0
-    display_list: ITEM_3_DISPLAY_LIST
 
   - name: ITEM_17_COMPRESSED_DATA
     type: modelpayload
+    level_id: item_17
     vram: 0
     start: 0x663DB0
     decompressed_size: 0x240
-    display_list: ITEM_17_DISPLAY_LIST
 
   - name: ITEM_4_COMPRESSED_DATA
     type: modelpayload
+    level_id: item_4
     vram: 0
     start: 0x663EE0
     decompressed_size: 0x3C0
-    display_list: ITEM_4_DISPLAY_LIST
 
   - name: ITEM_7_COMPRESSED_DATA
     type: modelpayload
+    level_id: item_7
     vram: 0
     start: 0x664140
     decompressed_size: 0x3B0
-    display_list: ITEM_7_DISPLAY_LIST
 
   - name: ITEM_9_COMPRESSED_DATA
     type: modelpayload
+    level_id: item_9
     vram: 0
     start: 0x664400
     decompressed_size: 0x4A0
-    display_list: ITEM_9_DISPLAY_LIST
 
   - name: ITEM_10_COMPRESSED_DATA
     type: modelpayload
+    level_id: item_10
     vram: 0
     start: 0x664660
     decompressed_size: 0x4A0
-    display_list: ITEM_10_DISPLAY_LIST
 
   - name: ITEM_18_COMPRESSED_DATA
     type: modelpayload
+    level_id: item_18
     vram: 0
     start: 0x6648C0
     decompressed_size: 0x810
-    display_list: ITEM_18_DISPLAY_LIST
 
   - name: CUTSCENE_SCROLLING_TILE_GROUP0_0
     type: bin

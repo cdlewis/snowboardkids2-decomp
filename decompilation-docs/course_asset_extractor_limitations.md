@@ -82,20 +82,13 @@ Limitations:
 
 ## Rebuild Constraints
 
-- The generated assets live under `assets/`, which is ignored by git in this
-  repository. They are regenerated with `python3 -m splat split snowboardkids2.yaml`.
-- The build uses the extracted assets when packing the ROM. A clean build runs
-  extraction first through the existing build flow.
-- Course display lists, model resources, track sector meshes, and texture tables
-  are associated by `level_id` in `snowboardkids2.yaml`. Non-course model
-  payloads still use explicit `display_list` fields.
+- Course display lists, model resources, track sector meshes, texture tables,
+  model payloads, and their display-list bundles are associated by `level_id`
+  in `snowboardkids2.yaml`.
 - SNO padding and unused tail bytes are preserved for byte-exact round trips.
   Edited data can recompress to a different size. If a rebuilt compressed asset
   grows beyond the original ROM allocation, the ROM layout can shift and checksum
   verification will fail.
-- The packers guarantee binary layout for valid manifests, but they are not a
-  course editor UI. The editing workflow is YAML, assembly source, PNG textures,
-  and raw binary blocks.
 
 ## Validation Expectations
 
