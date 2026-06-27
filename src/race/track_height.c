@@ -197,8 +197,6 @@ void loadCharacterBodyParts(Player *player) {
     s32 flags;
     s32 partIndex;
     u8 tableValue;
-    BoneResult *bodyPart;
-    BoneResult *bodyPart2;
     u8 *lookupTable;
 
     if (((GameState *)getCurrentAllocation())->raceType == RACE_TYPE_INTRO) {
@@ -206,23 +204,19 @@ void loadCharacterBodyParts(Player *player) {
         if (flags & 4) {
             player->animFlags = flags | 8;
             partIndex = 0;
-            bodyPart = (BoneResult *)player;
             do {
-                *(s32 *)((u8 *)bodyPart + 0x58) = (s32)&loadAssetByIndex_95380(
+                player->boneResults[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_95380(
                     player->characterId,
                     player->boardType
                 )[gBodyPartRemapTable[partIndex]];
                 partIndex++;
-                bodyPart++;
             } while (partIndex < 0x10);
         } else {
             player->animFlags = flags & ~8;
             partIndex = 0;
-            bodyPart = (BoneResult *)player;
             do {
-                *(s32 *)((u8 *)bodyPart + 0x58) =
-                    (s32)&loadAssetByIndex_95380(player->characterId, player->boardType)[partIndex];
-                bodyPart++;
+                player->boneResults[partIndex].displayLists =
+                    (DisplayLists *)&loadAssetByIndex_95380(player->characterId, player->boardType)[partIndex];
             } while (++partIndex < 0x10);
         }
     } else {
@@ -230,23 +224,19 @@ void loadCharacterBodyParts(Player *player) {
         if (flags & 4) {
             player->animFlags = flags | 8;
             partIndex = 0;
-            bodyPart2 = (BoneResult *)player;
             do {
-                *(s32 *)((u8 *)bodyPart2 + 0x58) = (s32)&loadAssetByIndex_953B0(
+                player->boneResults[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_953B0(
                     player->characterId,
                     player->boardType
                 )[gBodyPartRemapTable[partIndex]];
                 partIndex++;
-                bodyPart2++;
             } while (partIndex < 0x10);
         } else {
             player->animFlags = flags & ~8;
             partIndex = 0;
-            bodyPart2 = (BoneResult *)player;
             do {
-                *(s32 *)((u8 *)bodyPart2 + 0x58) =
-                    (s32)&loadAssetByIndex_953B0(player->characterId, player->boardType)[partIndex];
-                bodyPart2++;
+                player->boneResults[partIndex].displayLists =
+                    (DisplayLists *)&loadAssetByIndex_953B0(player->characterId, player->boardType)[partIndex];
             } while (++partIndex < 0x10);
         }
     }
@@ -259,14 +249,14 @@ void loadCharacterBodyParts(Player *player) {
     flags = (s32)player->unk20;
     if (flags == 0) {
     copy_basic:
-        player->boneResults[8].unk24 = (s32)player->unk4;
-        player->boneResults[8].unk28 = (s32)player->unk8;
+        player->boneResults[8].segment1 = player->unk4;
+        player->boneResults[8].segment2 = player->unk8;
         return;
     }
-    player->boneResults[8].unk24 = flags;
-    player->boneResults[8].unk28 = (s32)player->unk24;
-    player->boneResults[8].displayList =
-        (s32)getAssetDataDirect(player->characterId, player->boardType) + tableValue * 0x10 - 0x10;
+    player->boneResults[8].segment1 = (void *)flags;
+    player->boneResults[8].segment2 = player->unk24;
+    player->boneResults[8].displayLists =
+        (DisplayLists *)((s32)getAssetDataDirect(player->characterId, player->boardType) + tableValue * 0x10 - 0x10);
 }
 
 void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags) {

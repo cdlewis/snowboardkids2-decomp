@@ -39,23 +39,6 @@ typedef struct {
 } BossCheckpoint;
 
 typedef struct {
-    /* 0x00 */ Transform3D transform;
-    /* 0x20 */ void *displayList;
-    /* 0x24 */ s32 unk24;
-    /* 0x28 */ s32 unk28;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ s32 unk30;
-    /* 0x34 */ u8 primaryR;
-    /* 0x35 */ u8 primaryG;
-    /* 0x36 */ u8 primaryB;
-    /* 0x37 */ u8 pad37;
-    /* 0x38 */ u8 secondaryR;
-    /* 0x39 */ u8 secondaryG;
-    /* 0x3A */ u8 secondaryB;
-    /* 0x3B */ u8 pad3B;
-} BossBone;
-
-typedef struct {
     void *unk0;
     void *unk4;
     void *unk8;
@@ -69,7 +52,7 @@ typedef struct {
     void *unk28;
     void *unk2C;
     u8 pad30[0x38 - 0x30];
-    BossBone bones[17];
+    DisplayListObject bones[17];
     Vec3i unk434;
     s32 prevWorldPosX;
     s32 prevWorldPosY;
@@ -740,18 +723,18 @@ void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
 
     if (surfaceColorIndex == 0) {
         for (i = 0; i < 4; i++) {
-            enqueuePreLitMultiPartDisplayList(i, (DisplayListObject *)arg0->bones, arg0->boneCount);
+            enqueuePreLitMultiPartDisplayList(i, arg0->bones, arg0->boneCount);
         }
     } else {
-        arg0->bones[0].primaryR = gBossSurfaceColors[surfaceColorIndex].primaryR;
-        arg0->bones[0].primaryG = gBossSurfaceColors[surfaceColorIndex].primaryG;
-        arg0->bones[0].primaryB = gBossSurfaceColors[surfaceColorIndex].primaryB;
-        arg0->bones[0].secondaryR = gBossSurfaceColors[surfaceColorIndex].secondaryR;
-        arg0->bones[0].secondaryG = gBossSurfaceColors[surfaceColorIndex].secondaryG;
-        arg0->bones[0].secondaryB = gBossSurfaceColors[surfaceColorIndex].secondaryB;
+        arg0->bones[0].light1R = gBossSurfaceColors[surfaceColorIndex].primaryR;
+        arg0->bones[0].light1G = gBossSurfaceColors[surfaceColorIndex].primaryG;
+        arg0->bones[0].light1B = gBossSurfaceColors[surfaceColorIndex].primaryB;
+        arg0->bones[0].light2R = gBossSurfaceColors[surfaceColorIndex].secondaryR;
+        arg0->bones[0].light2G = gBossSurfaceColors[surfaceColorIndex].secondaryG;
+        arg0->bones[0].light2B = gBossSurfaceColors[surfaceColorIndex].secondaryB;
 
         for (i = 0; i < 4; i++) {
-            enqueueMultiPartDisplayList(i, (DisplayListObject *)arg0->bones, arg0->boneCount);
+            enqueueMultiPartDisplayList(i, arg0->bones, arg0->boneCount);
         }
     }
 }

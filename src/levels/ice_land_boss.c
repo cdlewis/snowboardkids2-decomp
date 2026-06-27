@@ -688,7 +688,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     applyClampedVelocityToPosition(arg0);
     updateIceLandBossLeanBoneTransforms(arg0);
 
-    transformVectorRelative(&gameState->players->worldPos.x, (s16 *)&arg0->boneResults[5].mtx, &sp40);
+    transformVectorRelative(&gameState->players->worldPos.x, (s16 *)&arg0->boneResults[5].transform, &sp40);
 
     angleDiff = atan2Fixed(-sp40.x, -sp40.z) & 0x1FFF;
 
@@ -1062,27 +1062,31 @@ void updateIceLandBossLeanBoneTransforms(Player *arg0) {
                 memcpy(&squashMatrix, &identityMatrix, sizeof(Transform3D));
                 squashMatrix.m[1][1] = arg0->squashStretchScale;
                 composeTransform3D(&arg0->unk488[hierarchy[i].boneIndex].transform.previous, &squashMatrix, &scratch);
-                composeTransform3D(&scratch, &arg0->modelTransform, &arg0->boneResults[hierarchy[i].boneIndex].mtx);
+                composeTransform3D(
+                    &scratch,
+                    &arg0->modelTransform,
+                    &arg0->boneResults[hierarchy[i].boneIndex].transform
+                );
             } else {
                 composeTransform3D(
                     &arg0->unk488[hierarchy[i].boneIndex].transform.previous,
                     &arg0->modelTransform,
-                    &arg0->boneResults[hierarchy[i].boneIndex].mtx
+                    &arg0->boneResults[hierarchy[i].boneIndex].transform
                 );
             }
         } else {
             composeTransform3D(
                 &arg0->unk488[hierarchy[i].boneIndex].transform.previous,
-                &arg0->boneResults[hierarchy[i].parentBone].mtx,
-                &arg0->boneResults[hierarchy[i].boneIndex].mtx
+                &arg0->boneResults[hierarchy[i].parentBone].transform,
+                &arg0->boneResults[hierarchy[i].boneIndex].transform
             );
         }
     }
 
     temp = &scratch;
-    memcpy(temp, &arg0->boneResults[5].mtx, sizeof(Transform3D));
+    memcpy(temp, &arg0->boneResults[5].transform, sizeof(Transform3D));
     createYRotationMatrix(&squashMatrix, (u16)arg0->unkA9E);
-    func_8006BDBC_6C9BC((&squashMatrix), &scratch, &arg0->boneResults[5].mtx);
+    func_8006BDBC_6C9BC((&squashMatrix), &scratch, &arg0->boneResults[5].transform);
 }
 
 void renderIceLandBossWithSurfaceColors(Player *arg0) {
@@ -1097,18 +1101,18 @@ void renderIceLandBossWithSurfaceColors(Player *arg0) {
 
     if (index == 0) {
         for (i = 0; i < 4; i++) {
-            enqueuePreLitMultiPartDisplayList(i, (DisplayListObject *)&arg0->boneResults, arg0->leanBoneCount);
+            enqueuePreLitMultiPartDisplayList(i, arg0->boneResults, arg0->leanBoneCount);
         }
     } else {
-        arg0->boneResults[0].primaryR = gBossSurfaceColors[index].primaryR;
-        arg0->boneResults[0].primaryG = gBossSurfaceColors[index].primaryG;
-        arg0->boneResults[0].primaryB = gBossSurfaceColors[index].primaryB;
-        arg0->boneResults[0].secondaryR = gBossSurfaceColors[index].secondaryR;
-        arg0->boneResults[0].secondaryG = gBossSurfaceColors[index].secondaryG;
-        arg0->boneResults[0].secondaryB = gBossSurfaceColors[index].secondaryB;
+        arg0->boneResults[0].light1R = gBossSurfaceColors[index].primaryR;
+        arg0->boneResults[0].light1G = gBossSurfaceColors[index].primaryG;
+        arg0->boneResults[0].light1B = gBossSurfaceColors[index].primaryB;
+        arg0->boneResults[0].light2R = gBossSurfaceColors[index].secondaryR;
+        arg0->boneResults[0].light2G = gBossSurfaceColors[index].secondaryG;
+        arg0->boneResults[0].light2B = gBossSurfaceColors[index].secondaryB;
 
         for (i = 0; i < 4; i++) {
-            enqueueMultiPartDisplayList(i, (DisplayListObject *)&arg0->boneResults, arg0->leanBoneCount);
+            enqueueMultiPartDisplayList(i, arg0->boneResults, arg0->leanBoneCount);
         }
     }
 }

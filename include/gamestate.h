@@ -74,23 +74,6 @@ typedef struct {
 } RaceAssetHeader;
 
 typedef struct {
-    /* 0x00 */ Transform3D mtx;
-    /* 0x20 */ s32 displayList;
-    /* 0x24 */ s32 unk24;
-    /* 0x28 */ s32 unk28;
-    /* 0x2C */ s32 unk2C;
-    /* 0x30 */ s32 unk30;
-    /* 0x34 */ u8 primaryR;
-    /* 0x35 */ u8 primaryG;
-    /* 0x36 */ u8 primaryB;
-    /* 0x37 */ u8 pad1;
-    /* 0x38 */ u8 secondaryR;
-    /* 0x39 */ u8 secondaryG;
-    /* 0x3A */ u8 secondaryB;
-    /* 0x3B */ u8 pad2;
-} BoneResult;
-
-typedef struct {
     s8 stickX;
     s8 stickY;
     u16 buttons;
@@ -111,7 +94,7 @@ typedef struct {
     InputRecord *unk2C;
     /* 0x30 */ Vtx *shadowVertices;
     /* 0x34 */ Mtx *shadowMatrix;
-    /* 0x38 */ BoneResult boneResults[16];
+    /* 0x38 */ DisplayListObject boneResults[16];
     /* 0x3F8 */ DisplayListObject playerModel;
     Vec3i worldPos;
     s32 prevWorldPosX;
