@@ -1864,14 +1864,12 @@ segments:
     start: 0x261530
     decompressed_size: 0x342A
 
-
   - name: JINGLE_TOWN_BOSS_COURSE_TEXTURE_TABLE
     type: course_texture_table
     course_id: jingle_town_boss
     vram: 0
     start: 0x264EC0
     decompressed_size: 0x2A58
-
 
   - name: WENDYS_HOUSE_COURSE_MODEL_RESOURCES
     type: course_model_resources
@@ -1887,14 +1885,12 @@ segments:
     start: 0x274E20
     decompressed_size: 0x4A9A
 
-
   - name: WENDYS_HOUSE_COURSE_TEXTURE_TABLE
     type: course_texture_table
     course_id: wendys_house
     vram: 0
     start: 0x27A020
     decompressed_size: 0x918
-
 
   - name: LINDAS_CASTLE_COURSE_MODEL_RESOURCES
     type: course_model_resources
@@ -1909,7 +1905,6 @@ segments:
     vram: 0
     start: 0x28BA90
     decompressed_size: 0x3F92
-
 
   - name: LINDAS_CASTLE_COURSE_TEXTURE_TABLE
     type: course_texture_table
@@ -1932,14 +1927,12 @@ segments:
     start: 0x29DF80
     decompressed_size: 0x2E50
 
-
   - name: CRAZY_JUNGLE_COURSE_TEXTURE_TABLE
     type: course_texture_table
     course_id: crazy_jungle
     vram: 0
     start: 0x2A1080
     decompressed_size: 0x1D68
-
 
   - name: CRAZY_JUNGLE_BOSS_COURSE_MODEL_RESOURCES
     type: course_model_resources
@@ -1955,14 +1948,12 @@ segments:
     start: 0x2B0500
     decompressed_size: 0x2E50
 
-
   - name: CRAZY_JUNGLE_BOSS_COURSE_TEXTURE_TABLE
     type: course_texture_table
     course_id: crazy_jungle_boss
     vram: 0
     start: 0x2B35E0
     decompressed_size: 0x1298
-
 
   - name: STARLIGHT_HIGHWAY_COURSE_MODEL_RESOURCES
     type: course_model_resources
@@ -1978,14 +1969,12 @@ segments:
     start: 0x2C8310
     decompressed_size: 0x4742
 
-
   - name: STARLIGHT_HIGHWAY_COURSE_TEXTURE_TABLE
     type: course_texture_table
     course_id: starlight_highway
     vram: 0
     start: 0x2CD0D0
     decompressed_size: 0xBC8
-
 
   - name: HAUNTED_HOUSE_COURSE_MODEL_RESOURCES
     type: course_model_resources
@@ -2001,14 +1990,12 @@ segments:
     start: 0x2DFA30
     decompressed_size: 0x59B6
 
-
   - name: HAUNTED_HOUSE_COURSE_TEXTURE_TABLE
     type: course_texture_table
     course_id: haunted_house
     vram: 0
     start: 0x2E59C0
     decompressed_size: 0x15E8
-
 
   - name: ICE_LAND_COURSE_MODEL_RESOURCES
     type: course_model_resources
@@ -2024,14 +2011,12 @@ segments:
     start: 0x2F6620
     decompressed_size: 0x3BE6
 
-
   - name: ICE_LAND_COURSE_TEXTURE_TABLE
     type: course_texture_table
     course_id: ice_land
     vram: 0
     start: 0x2FA740
     decompressed_size: 0x2C28
-
 
   - name: ICE_LAND_BOSS_COURSE_MODEL_RESOURCES
     type: course_model_resources
@@ -2047,14 +2032,12 @@ segments:
     start: 0x30B250
     decompressed_size: 0x3BE6
 
-
   - name: ICE_LAND_BOSS_COURSE_TEXTURE_TABLE
     type: course_texture_table
     course_id: ice_land_boss
     vram: 0
     start: 0x30F370
     decompressed_size: 0x938
-
 
   - name: SNOWBOARD_STREET_SPEED_CROSS_COURSE_MODEL_RESOURCES
     type: course_model_resources
@@ -2070,14 +2053,12 @@ segments:
     start: 0x322130
     decompressed_size: 0x2C9E
 
-
   - name: SNOWBOARD_STREET_SPEED_CROSS_COURSE_TEXTURE_TABLE
     type: course_texture_table
     course_id: snowboard_street_speed_cross
     vram: 0
     start: 0x325120
     decompressed_size: 0x438
-
 
   - name: SNOWBOARD_STREET_SHOT_CROSS_COURSE_MODEL_RESOURCES
     type: course_model_resources
@@ -2093,14 +2074,12 @@ segments:
     start: 0x3375E0
     decompressed_size: 0x2C9E
 
-
   - name: SNOWBOARD_STREET_SHOT_CROSS_COURSE_TEXTURE_TABLE
     type: course_texture_table
     course_id: snowboard_street_shot_cross
     vram: 0
     start: 0x33A5D0
     decompressed_size: 0x438
-
 
   - name: X_CROSS_COURSE_MODEL_RESOURCES
     type: course_model_resources
@@ -2845,164 +2824,196 @@ segments:
     start: 0x3FF010
 
   - name: SUNNY_MOUNTAIN_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x3FF910
+    decompressed_size: 0x200
 
   - name: SUNNY_MOUNTAIN_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x3FFC00
+    decompressed_size: 0x0C0
 
   - name: TURTLE_ISLAND_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x3FFD30
+    decompressed_size: 0x370
 
   - name: TURTLE_ISLAND_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x400240
+    decompressed_size: 0x0F0
 
   - name: JINGLE_TOWN_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x4003D0
+    decompressed_size: 0x370
 
   - name: JINGLE_TOWN_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x4008F0
+    decompressed_size: 0x0F0
 
   - name: JINGLE_TOWN_BOSS_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x400A80
+    decompressed_size: 0x370
 
   - name: JINGLE_TOWN_BOSS_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x400F90
+    decompressed_size: 0x0F0
 
   - name: WENDYS_HOUSE_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x401120
+    decompressed_size: 0x310
 
   - name: WENDYS_HOUSE_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x4015B0
+    decompressed_size: 0x110
 
   - name: LINDAS_CASTLE_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x401770
+    decompressed_size: 0x3A0
 
   - name: LINDAS_CASTLE_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x401CC0
+    decompressed_size: 0x100
 
   - name: CRAZY_JUNGLE_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x401E60
+    decompressed_size: 0x3A0
 
   - name: CRAZY_JUNGLE_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x4023D0
+    decompressed_size: 0x100
 
   - name: CRAZY_JUNGLE_BOSS_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x402570
+    decompressed_size: 0x380
 
   - name: CRAZY_JUNGLE_BOSS_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x402AA0
+    decompressed_size: 0x140
 
   - name: STARLIGHT_HIGHWAY_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x402CB0
+    decompressed_size: 0x3D0
 
   - name: STARLIGHT_HIGHWAY_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x403240
+    decompressed_size: 0x130
 
   - name: HAUNTED_HOUSE_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x403440
+    decompressed_size: 0x390
 
   - name: HAUNTED_HOUSE_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x403980
+    decompressed_size: 0x120
 
   - name: ICE_LAND_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x403B60
+    decompressed_size: 0x3E0
 
   - name: ICE_LAND_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x404110
+    decompressed_size: 0x130
 
   - name: ICE_LAND_BOSS_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x404310
+    decompressed_size: 0x3E0
 
   - name: ICE_LAND_BOSS_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x4048D0
+    decompressed_size: 0x170
 
   - name: SNOWBOARD_STREET_SPEED_CROSS_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x404B30
+    decompressed_size: 0x340
 
   - name: SNOWBOARD_STREET_SPEED_CROSS_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x404FF0
+    decompressed_size: 0x110
 
   - name: SNOWBOARD_STREET_SHOT_CROSS_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x4051B0
+    decompressed_size: 0x340
 
   - name: SNOWBOARD_STREET_SHOT_CROSS_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x405670
+    decompressed_size: 0x0E0
 
   - name: X_CROSS_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x4057E0
+    decompressed_size: 0x200
 
   - name: X_CROSS_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x405AB0
+    decompressed_size: 0x0C0
 
   - name: TRAINING_GOLD_COIN_DATA
-    type: bin
+    type: gold_coin_positions
     vram: 0
     start: 0x405BE0
+    decompressed_size: 0x280
 
   - name: TRAINING_ITEM_BOX_DATA
-    type: bin
+    type: item_box_positions
     vram: 0
     start: 0x405F60
+    decompressed_size: 0x0E0
 
   - name: targetPositionData
     type: bin

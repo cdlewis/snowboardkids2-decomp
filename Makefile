@@ -191,6 +191,8 @@ MODELPAYLOAD_SOURCES := $(shell find assets/modelpayload -type f 2>/dev/null)
 COURSE_MODEL_RESOURCES_PACK = $(PYTHON) $(TOOLS_DIR)/course_model_resources_pack.py
 COURSE_TEXTURE_TABLE_PACK = $(PYTHON) $(TOOLS_DIR)/course_texture_table_pack.py
 TRACK_SECTOR_MESH_PACK = $(PYTHON) $(TOOLS_DIR)/track_sector_mesh_pack.py
+GOLD_COIN_POSITIONS_PACK = $(PYTHON) $(TOOLS_DIR)/gold_coin_positions_pack.py
+ITEM_BOX_POSITIONS_PACK = $(PYTHON) $(TOOLS_DIR)/item_box_positions_pack.py
 COURSE_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/course_asset_sizes.py
 MODELPAYLOAD_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/modelpayload_asset_sizes.py
 
@@ -249,6 +251,18 @@ $(BUILD_DIR)/assets/courses/track_sector_meshes/%.o: assets/courses/track_sector
 	$(PRINTF) "[$(GREEN) course  $(NO_COL)]  $<\n"
 	$(V)$(TRACK_SECTOR_MESH_PACK) $< --out $(BUILD_DIR)/assets/courses/track_sector_meshes/$*.sno
 	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/courses/track_sector_meshes/$*.sno
+
+$(BUILD_DIR)/assets/course_positions/gold_coins/%.o: assets/course_positions/gold_coins/%.yaml $(TOOLS_DIR)/gold_coin_positions_pack.py $(TOOLS_DIR)/course_position_common.py $(TOOLS_DIR)/course_assets_common.py $(TOOLS_DIR)/sno.py
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN) course  $(NO_COL)]  $<\n"
+	$(V)$(GOLD_COIN_POSITIONS_PACK) $< --out $(BUILD_DIR)/assets/course_positions/gold_coins/$*.sno
+	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/course_positions/gold_coins/$*.sno
+
+$(BUILD_DIR)/assets/course_positions/item_boxes/%.o: assets/course_positions/item_boxes/%.yaml $(TOOLS_DIR)/item_box_positions_pack.py $(TOOLS_DIR)/course_position_common.py $(TOOLS_DIR)/course_assets_common.py $(TOOLS_DIR)/sno.py
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN) course  $(NO_COL)]  $<\n"
+	$(V)$(ITEM_BOX_POSITIONS_PACK) $< --out $(BUILD_DIR)/assets/course_positions/item_boxes/$*.sno
+	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/course_positions/item_boxes/$*.sno
 
 $(BUILD_DIR)/%.o: %.s
 	@mkdir -p $(shell dirname $@)
