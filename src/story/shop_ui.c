@@ -95,16 +95,6 @@ typedef struct {
 } StoryMapShopFairyState;
 
 typedef struct {
-    DisplayListObject displayList;
-    void *baseTransform;
-    u8 padding[0x10];
-    s32 translationX;
-    u8 padding3[0xC];
-    u8 slideFrameCounter;
-    s8 nextItemIndex;
-} SlidingItemCardState;
-
-typedef struct {
     SpriteDisplayState digits[7];
     SpriteRenderArg goldIcon;
     char goldAmountBuffer[8];
@@ -179,8 +169,8 @@ void updateStoryMapShopFairy(StoryMapShopFairyState *);
 void destroyStoryMapShopFairy(StoryMapShopFairyState *);
 void updateStoryMapShopItemCard(StoryMapShopItemCardState *);
 void transitionStoryMapShopItemCard(StoryMapShopItemCardState *);
-void reloadStoryMapShopItemCard(SlidingItemCardState *);
-void slideStoryMapShopItemCard(SlidingItemCardState *);
+void reloadStoryMapShopItemCard(StoryMapShopItemCardState *);
+void slideStoryMapShopItemCard(StoryMapShopItemCardState *);
 void awaitStoryMapShopItemCardIdle(DisplayListObject *);
 void destroyStoryMapShopItemCard(StoryMapShopItemCardState *);
 void prepareSlideInStoryMapShopItemCard(StoryMapShopItemCardState *);
@@ -345,7 +335,7 @@ void initStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     }
 
     itemData = state->unk5CA[card->itemIndex];
-    memcpy(card, cardTransform, sizeof(Transform3D));
+    memcpy(&card->displayList.transform, cardTransform, sizeof(Transform3D));
     do {
         itemId = itemData & 0x1F;
         itemData = itemId;
@@ -415,35 +405,35 @@ end:
     setCallback(&reloadStoryMapShopItemCard);
 }
 
-void reloadStoryMapShopItemCard(SlidingItemCardState *card) {
+void reloadStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     volatile u8 padding[0x20];
     GameState *state = (GameState *)getCurrentAllocation();
     s8 itemId;
     s8 itemIndex;
 
-    if (card->slideFrameCounter == 1) {
+    if (card->updateCounter == 1) {
         if (state->unk5C6 == 2) {
-            card->nextItemIndex = state->unk5C8 + 1;
-            if (card->nextItemIndex == state->unk5C9) {
-                card->nextItemIndex = 0;
+            card->itemIndex = state->unk5C8 + 1;
+            if (card->itemIndex == state->unk5C9) {
+                card->itemIndex = 0;
             }
         } else {
-            card->nextItemIndex = state->unk5C8 - 1;
-            if (card->nextItemIndex < 0) {
-                card->nextItemIndex = state->unk5C9 - 1;
+            card->itemIndex = state->unk5C8 - 1;
+            if (card->itemIndex < 0) {
+                card->itemIndex = state->unk5C9 - 1;
             }
         }
 
-        itemId = state->unk5CA[card->nextItemIndex] & 0x1F;
+        itemId = state->unk5CA[card->itemIndex] & 0x1F;
         itemIndex = itemId;
 
-        memcpy(card, &card->baseTransform, sizeof(Transform3D));
+        memcpy(&card->displayList.transform, &card->transform, sizeof(Transform3D));
 
         card->displayList.displayLists = loadAssetByIndex_95728(itemIndex);
         card->displayList.segment1 = loadAssetByIndex_95500(itemIndex);
         card->displayList.segment2 = loadAssetByIndex_95590(itemIndex);
         card->displayList.segment3 = loadAssetByIndex_95668(itemId / 3);
-        card->slideFrameCounter = 0;
+        card->updateCounter = 0;
     } else {
         enqueueDisplayListObject(0, (DisplayListObject *)card);
     }
@@ -451,7 +441,7 @@ void reloadStoryMapShopItemCard(SlidingItemCardState *card) {
     setCallback(&slideStoryMapShopItemCard);
 }
 
-void slideStoryMapShopItemCard(SlidingItemCardState *card) {
+void slideStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     volatile u8 padding[0x20];
     u32 scrollDirection;
     GameState *state = (GameState *)getCurrentAllocation();
@@ -464,13 +454,13 @@ void slideStoryMapShopItemCard(SlidingItemCardState *card) {
         translationStep = 0x00080000;
     }
 
-    card->translationX += translationStep;
+    card->transform.translation.x += translationStep;
 
-    memcpy(card, (void *)((s32)card + 0x3C), sizeof(Transform3D));
+    memcpy(&card->displayList.transform, &card->transform, sizeof(Transform3D));
 
-    card->slideFrameCounter++;
-    if (card->slideFrameCounter == 4) {
-        card->slideFrameCounter = 0;
+    card->updateCounter++;
+    if (card->updateCounter == 4) {
+        card->updateCounter = 0;
         state->unk5C7++;
         setCallback(awaitStoryMapShopItemCardIdle);
     }
@@ -542,7 +532,7 @@ void prepareSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
             }
         }
         itemData = state->unk5CA[card->itemIndex];
-        memcpy(card, &card->transform, sizeof(Transform3D));
+        memcpy(&card->displayList.transform, &card->transform, sizeof(Transform3D));
         itemData &= 0x1F;
         itemId = itemData;
         card->displayList.displayLists = loadAssetByIndex_95728(itemId);
@@ -562,7 +552,7 @@ void animateSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     card->transform.translation.x += card->translationStep;
-    memcpy(card, &card->transform, sizeof(Transform3D));
+    memcpy(&card->displayList.transform, &card->transform, sizeof(Transform3D));
 
     card->updateCounter++;
     if (card->updateCounter == 4) {
