@@ -688,7 +688,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     applyClampedVelocityToPosition(arg0);
     updateIceLandBossLeanBoneTransforms(arg0);
 
-    transformVectorRelative(&gameState->players->worldPos.x, (s16 *)&arg0->boneDisplayObjects[5].transform, &sp40);
+    transformVectorRelative(&gameState->players->worldPos, &arg0->boneDisplayObjects[5].transform, &sp40);
 
     angleDiff = atan2Fixed(-sp40.x, -sp40.z) & 0x1FFF;
 

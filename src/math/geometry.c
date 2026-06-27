@@ -798,11 +798,8 @@ void transformVector3(Vec3i *arg0, Transform3D *arg1, Vec3i *arg2) {
     arg2->z = int1 + (frac2 >> 13);
 }
 
-void transformVectorRelative(void *arg0, void *arg1, void *arg2) {
+void transformVectorRelative(Vec3i *input, Transform3D *transform, Vec3i *output) {
     Vec3i diff;
-    Vec3i *input = arg0;
-    Transform3D *transform = arg1;
-    Vec3i *output = arg2;
     s32 frac0;
     s32 int0a;
     s32 frac1a;

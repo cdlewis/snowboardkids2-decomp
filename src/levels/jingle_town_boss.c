@@ -394,7 +394,7 @@ s32 jingleTownBossChaseAttackMainPhase(Player *arg0) {
     switch (arg0->behaviorCounter) {
         case 0:
             updateJingleTownBossModelTransforms(arg0);
-            transformVectorRelative(&gameState->players->worldPos.x, &arg0->boneDisplayObjects[1].transform, &sp30);
+            transformVectorRelative(&gameState->players->worldPos, &arg0->boneDisplayObjects[1].transform, &sp30);
 
             angleDiff = atan2Fixed(-sp30.x, -sp30.z) & 0x1FFF;
 

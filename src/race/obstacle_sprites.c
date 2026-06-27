@@ -36,11 +36,11 @@ typedef struct {
     u8 padding1[0x74];
     s16 unk74;
     u8 padding1b[0xEE];
-    s16 unk164[6];
-    u8 padding_170_434[0x2C4];
-    s32 unk434[3];
+    Transform3D unk164;
+    u8 padding_184_434[0x2B0];
+    Vec3i unk434;
     u8 padding_440_44C[0xC];
-    s32 velocity[3];
+    Vec3i velocity;
     u8 padding_458_950[0x4F8];
     s16 modelTransform;
     u8 padding2[0x242];
@@ -1611,7 +1611,7 @@ void loadPlayerGuidedStarProjectile(Struct_52880 *arg0) {
     Unk10Element_52880 *players;
     void *position;
     s16 *playerIdxPtr;
-    void *velocity;
+    Vec3i *velocity;
     s32 pad[4];
 
     alloc = getCurrentAllocation();
@@ -1623,10 +1623,10 @@ void loadPlayerGuidedStarProjectile(Struct_52880 *arg0) {
     arg0->hitCount = 0;
     playerIdx = *playerIdxPtr;
     players = (Unk10Element_52880 *)&arg0->pos;
-    transformVector(gPlayerGuidedStarTransform, alloc->unk10[arg0->ownerPlayerIdx].unk164, position = players);
+    transformVector(gPlayerGuidedStarTransform, alloc->unk10[arg0->ownerPlayerIdx].unk164.m[0], position = players);
 
     playerIdx = arg0->ownerPlayerIdx;
-    transformVectorRelative(alloc->unk10[0].unk434, alloc->unk10[arg0->ownerPlayerIdx].unk164, velocity = &arg0->vel);
+    transformVectorRelative(&alloc->unk10[0].unk434, &alloc->unk10[arg0->ownerPlayerIdx].unk164, velocity = &arg0->vel);
 
     vel = arg0->vel.z;
     if (vel < 0) {
@@ -1644,14 +1644,14 @@ void loadPlayerGuidedStarProjectile(Struct_52880 *arg0) {
     gPlayerGuidedStarVelocityOffset[0] = gPlayerGuidedStarBaseVelocity.x - arg0->vel.z;
 
     playerIdx = *playerIdxPtr;
-    transformVector(&gPlayerGuidedStarTransform[6], alloc->unk10[arg0->ownerPlayerIdx].unk164, velocity);
+    transformVector(&gPlayerGuidedStarTransform[6], alloc->unk10[arg0->ownerPlayerIdx].unk164.m[0], velocity);
 
     arg0->vel.x = arg0->pos.x - arg0->vel.x;
     arg0->vel.y = arg0->pos.y - arg0->vel.y;
     arg0->vel.z = arg0->pos.z - arg0->vel.z;
     if ((!alloc->unk10[*playerIdxPtr].sectorIndex) && (!alloc->unk10[*playerIdxPtr].sectorIndex)) {}
     players = alloc->unk10;
-    memcpy(&arg0->unk30, players[*playerIdxPtr].velocity, sizeof(Vec3i));
+    memcpy(&arg0->unk30, &players[*playerIdxPtr].velocity, sizeof(Vec3i));
     queueSoundAtPosition(position, 0x23);
     setCallbackWithContinue(updatePlayerGuidedStarProjectile);
 }
@@ -1821,9 +1821,9 @@ void launchRandomEffectProjectile(Struct_52880 *arg0) {
     Vec3i *s1;
 
     alloc = getCurrentAllocation();
-    transformVector(gPlayerGuidedStarTransform, alloc->unk10[arg0->ownerPlayerIdx].unk164, s1 = &arg0->pos);
+    transformVector(gPlayerGuidedStarTransform, alloc->unk10[arg0->ownerPlayerIdx].unk164.m[0], s1 = &arg0->pos);
 
-    transformVector(&gPlayerGuidedStarTransform[12], alloc->unk10[arg0->ownerPlayerIdx].unk164, &arg0->vel);
+    transformVector(&gPlayerGuidedStarTransform[12], alloc->unk10[arg0->ownerPlayerIdx].unk164.m[0], &arg0->vel);
 
     temp_v0 = arg0->pos.x;
     temp_a1 = arg0->vel.x;

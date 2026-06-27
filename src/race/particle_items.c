@@ -1938,7 +1938,7 @@ void updatePushZone(PushZoneState *arg0) {
         player = &allocation->players[i];
         if (player->flyingAttackState != 0)
             continue;
-        transformVectorRelative(&player->worldPos, arg0, &localPos);
+        transformVectorRelative(&player->worldPos, &arg0->transform, &localPos);
         localPos.y -= gPushZoneData[arg0->zoneIndex].yOffset << 16;
         if (localPos.z < (gPushZoneData[arg0->zoneIndex].zMin << 16))
             continue;

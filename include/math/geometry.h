@@ -94,7 +94,7 @@ s32 approximate_sqrt(u32 input);
 
 void computeLookAtMatrix(Vec3i *from, Vec3i *to, Transform3D *out);
 
-void transformVectorRelative(void *arg0, void *arg1, void *arg2);
+void transformVectorRelative(Vec3i *input, Transform3D *transform, Vec3i *output);
 
 void transform3DToN64Mtx(Transform3D *transform, Mtx *mtx);
 
