@@ -7,6 +7,8 @@ from splat.segtypes.common.segment import CommonSegment
 from splat.util import log, options
 
 from tools.course_assets_common import (
+    course_display_list_ranges,
+    course_segment_name,
     parse_gfx_words_from_bytes,
     write_palette_part,
     write_parts_manifest,
@@ -54,27 +56,23 @@ class N64SegCourse_model_resources(CommonSegment):
         value = self.yaml[key]
         return int(value, 0) if isinstance(value, str) else int(value)
 
-    def _display_list_name(self) -> str:
-        if isinstance(self.yaml, dict) and self.yaml.get("display_list"):
-            return str(self.yaml["display_list"])
-        return self.name.replace("_COMPRESSED_DATA", "_UNCOMPRESSED_DATA")
+    def _level_id(self) -> str:
+        if not isinstance(self.yaml, dict) or "level_id" not in self.yaml:
+            log.error(f"course model resource segment {self.name} needs level_id")
+        assert isinstance(self.yaml, dict)
+        return str(self.yaml["level_id"])
 
-    def _display_list_bytes(self) -> bytes:
-        path = options.opts.asset_path / "courses" / "display_lists" / f"{self._display_list_name()}.s"
-        if not path.exists():
-            log.error(f"course model resource segment {self.name} needs display-list source {path}")
-        words = []
-        for line in path.read_text(encoding="utf-8").splitlines():
-            line = line.split("/*", 1)[0].strip()
-            if not line.startswith(".word"):
-                continue
-            left, right = line.split(None, 1)[1].split(",", 1)
-            words.append((int(left.strip(), 0), int(right.strip(), 0)))
-        out = bytearray()
-        for w0, w1 in words:
-            out.extend(w0.to_bytes(4, "big"))
-            out.extend(w1.to_bytes(4, "big"))
-        return bytes(out)
+    def _display_list_name(self) -> str:
+        return course_segment_name(options.opts.base_path / "snowboardkids2.yaml", "course_display_lists", self._level_id())
+
+    def _display_list_bytes(self, rom_bytes: bytes) -> bytes:
+        config_path = options.opts.base_path / "snowboardkids2.yaml"
+        display_list_name = self._display_list_name()
+        ranges = course_display_list_ranges(config_path)
+        if display_list_name not in ranges:
+            log.error(f"course model resource segment {self.name} references unknown display-list segment {display_list_name}")
+        start, end = ranges[display_list_name]
+        return rom_bytes[start:end]
 
     def split(self, rom_bytes: bytes):
         if self.rom_end is None:
@@ -90,7 +88,7 @@ class N64SegCourse_model_resources(CommonSegment):
         decompressed, consumed = decompress_sno_with_consumed(compressed, decompressed_size)
         unused_tail = compressed[consumed:]
 
-        words = parse_gfx_words_from_bytes(self._display_list_bytes())
+        words = parse_gfx_words_from_bytes(self._display_list_bytes(rom_bytes))
         vtx_ranges = collect_vtx_ranges(words, decompressed_size)
         texture_ranges = non_overlapping_ranges(collect_texture_ranges(words, decompressed_size))
         covered: list[tuple[int, int]] = []
@@ -155,7 +153,7 @@ class N64SegCourse_model_resources(CommonSegment):
             log.error(f"course model resource segment {self.name} has unclassified ranges: {ranges}")
 
         parts.sort(key=lambda item: int(str(item["offset"]), 0))
-        extra = {"format": "course_model_resources", "compression": "sno", "display_list": self._display_list_name()}
+        extra = {"format": "course_model_resources", "compression": "sno", "level_id": self._level_id()}
         if unused_tail:
             extra["unused_sno_tail"] = unused_tail.hex()
         write_parts_manifest(

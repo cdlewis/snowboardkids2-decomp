@@ -731,78 +731,93 @@ segments:
     vram: 0
     start: 0xB7E70
 
-  - name: SUNNY_MOUNTAIN_COURSE_UNCOMPRESSED_DATA
+  - name: SUNNY_MOUNTAIN_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: sunny_mountain
     vram: 0
     start: 0xB9C40
 
-  - name: TURTLE_ISLAND_COURSE_UNCOMPRESSED_DATA
+  - name: TURTLE_ISLAND_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: turtle_island
     vram: 0
     start: 0xC2E50
 
-  - name: JINGLE_TOWN_COURSE_UNCOMPRESSED_DATA
+  - name: JINGLE_TOWN_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: jingle_town
     vram: 0
     start: 0xCE7A0
 
-  - name: JINGLE_TOWN_BOSS_COURSE_UNCOMPRESSED_DATA
+  - name: JINGLE_TOWN_BOSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: jingle_town_boss
     vram: 0
     start: 0xDA9D0
 
-  - name: WENDYS_HOUSE_COURSE_UNCOMPRESSED_DATA
+  - name: WENDYS_HOUSE_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: wendys_house
     vram: 0
     start: 0xE6880
 
-  - name: LINDAS_CASTLE_COURSE_UNCOMPRESSED_DATA
+  - name: LINDAS_CASTLE_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: lindas_castle
     vram: 0
     start: 0xF2B50
 
-  - name: CRAZY_JUNGLE_COURSE_UNCOMPRESSED_DATA
+  - name: CRAZY_JUNGLE_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: crazy_jungle
     vram: 0
     start: 0x1004E0
 
-  - name: CRAZY_JUNGLE_BOSS_COURSE_UNCOMPRESSED_DATA
+  - name: CRAZY_JUNGLE_BOSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: crazy_jungle_boss
     vram: 0
     start: 0x10B010
 
-  - name: STARLIGHT_HIGHWAY_COURSE_UNCOMPRESSED_DATA
+  - name: STARLIGHT_HIGHWAY_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: starlight_highway
     vram: 0
     start: 0x116860
 
-  - name: HAUNTED_HOUSE_COURSE_UNCOMPRESSED_DATA
+  - name: HAUNTED_HOUSE_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: haunted_house
     vram: 0
     start: 0x124DD0
 
-  - name: ICE_LAND_COURSE_UNCOMPRESSED_DATA
+  - name: ICE_LAND_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: ice_land
     vram: 0
     start: 0x132BB0
 
-  - name: ICE_LAND_BOSS_COURSE_UNCOMPRESSED_DATA
+  - name: ICE_LAND_BOSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: ice_land_boss
     vram: 0
     start: 0x13D660
 
-  - name: SNOWBOARD_STREET_SPEED_CROSS_COURSE_UNCOMPRESSED_DATA
+  - name: SNOWBOARD_STREET_SPEED_CROSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: snowboard_street_speed_cross
     vram: 0
     start: 0x147B70
 
-  - name: SNOWBOARD_STREET_SHOT_CROSS_COURSE_UNCOMPRESSED_DATA
+  - name: SNOWBOARD_STREET_SHOT_CROSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: snowboard_street_shot_cross
     vram: 0
     start: 0x156C00
 
-  - name: X_CROSS_COURSE_UNCOMPRESSED_DATA
+  - name: X_CROSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
+    level_id: x_cross
     vram: 0
     start: 0x165720
 
@@ -1628,311 +1643,341 @@ segments:
     vram: 0
     start: 0x216290
 
-  - name: SUNNY_MOUNTAIN_COURSE_COMPRESSED_DATA
+  - name: SUNNY_MOUNTAIN_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: sunny_mountain
     vram: 0
     start: 0x218F00
     decompressed_size: 0x14CB0
-    display_list: SUNNY_MOUNTAIN_COURSE_UNCOMPRESSED_DATA
 
-  - name: SUNNY_MOUNTAIN_COURSE_DATA
+  - name: SUNNY_MOUNTAIN_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: sunny_mountain
     vram: 0
     start: 0x224420
     decompressed_size: 0x24A8
 
-  - name: SUNNY_MOUNTAIN_COURSE_SPRITES
+  - name: SUNNY_MOUNTAIN_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: sunny_mountain
     vram: 0
     start: 0x226BA0
     decompressed_size: 0x2208
 
-  - name: TURTLE_ISLAND_COURSE_COMPRESSED_DATA
+  - name: TURTLE_ISLAND_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: turtle_island
     vram: 0
     start: 0x228400
     decompressed_size: 0x1D560
-    display_list: TURTLE_ISLAND_COURSE_UNCOMPRESSED_DATA
 
-  - name: TURTLE_ISLAND_COURSE_DATA
+  - name: TURTLE_ISLAND_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: turtle_island
     vram: 0
     start: 0x23CB80
     decompressed_size: 0x3468
 
-  - name: TURTLE_ISLAND_COURSE_SPRITES
+  - name: TURTLE_ISLAND_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: turtle_island
     vram: 0
     start: 0x240520
     decompressed_size: 0x1BA8
 
 
-  - name: JINGLE_TOWN_COURSE_COMPRESSED_DATA
+  - name: JINGLE_TOWN_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: jingle_town
     vram: 0
     start: 0x2415B0
     decompressed_size: 0x182B0
-    display_list: JINGLE_TOWN_COURSE_UNCOMPRESSED_DATA
 
-  - name: JINGLE_TOWN_COURSE_DATA
+  - name: JINGLE_TOWN_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: jingle_town
     vram: 0
     start: 0x24D6C0
     decompressed_size: 0x342A
 
 
-  - name: JINGLE_TOWN_COURSE_SPRITES
+  - name: JINGLE_TOWN_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: jingle_town
     vram: 0
     start: 0x251060
     decompressed_size: 0x2A58
 
 
-  - name: JINGLE_TOWN_BOSS_COURSE_COMPRESSED_DATA
+  - name: JINGLE_TOWN_BOSS_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: jingle_town_boss
     vram: 0
     start: 0x252E80
     decompressed_size: 0x181D0
-    display_list: JINGLE_TOWN_BOSS_COURSE_UNCOMPRESSED_DATA
 
-  - name: JINGLE_TOWN_BOSS_COURSE_DATA
+  - name: JINGLE_TOWN_BOSS_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: jingle_town_boss
     vram: 0
     start: 0x261530
     decompressed_size: 0x342A
 
 
-  - name: JINGLE_TOWN_BOSS_COURSE_SPRITES
+  - name: JINGLE_TOWN_BOSS_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: jingle_town_boss
     vram: 0
     start: 0x264EC0
     decompressed_size: 0x2A58
 
 
-  - name: WENDYS_HOUSE_COURSE_COMPRESSED_DATA
+  - name: WENDYS_HOUSE_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: wendys_house
     vram: 0
     start: 0x266C50
     decompressed_size: 0x1C6C0
-    display_list: WENDYS_HOUSE_COURSE_UNCOMPRESSED_DATA
 
-  - name: WENDYS_HOUSE_COURSE_DATA
+  - name: WENDYS_HOUSE_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: wendys_house
     vram: 0
     start: 0x274E20
     decompressed_size: 0x4A9A
 
 
-  - name: WENDYS_HOUSE_COURSE_SPRITES
+  - name: WENDYS_HOUSE_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: wendys_house
     vram: 0
     start: 0x27A020
     decompressed_size: 0x918
 
 
-  - name: LINDAS_CASTLE_COURSE_COMPRESSED_DATA
+  - name: LINDAS_CASTLE_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: lindas_castle
     vram: 0
     start: 0x27A780
     decompressed_size: 0x21480
-    display_list: LINDAS_CASTLE_COURSE_UNCOMPRESSED_DATA
 
-  - name: LINDAS_CASTLE_COURSE_DATA
+  - name: LINDAS_CASTLE_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: lindas_castle
     vram: 0
     start: 0x28BA90
     decompressed_size: 0x3F92
 
 
-  - name: LINDAS_CASTLE_COURSE_SPRITES
+  - name: LINDAS_CASTLE_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: lindas_castle
     vram: 0
     start: 0x28FF50
     decompressed_size: 0x1528
 
-  - name: CRAZY_JUNGLE_COURSE_COMPRESSED_DATA
+  - name: CRAZY_JUNGLE_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: crazy_jungle
     vram: 0
     start: 0x290D70
     decompressed_size: 0x176D0
-    display_list: CRAZY_JUNGLE_COURSE_UNCOMPRESSED_DATA
 
-  - name: CRAZY_JUNGLE_COURSE_DATA
+  - name: CRAZY_JUNGLE_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: crazy_jungle
     vram: 0
     start: 0x29DF80
     decompressed_size: 0x2E50
 
 
-  - name: CRAZY_JUNGLE_COURSE_SPRITES
+  - name: CRAZY_JUNGLE_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: crazy_jungle
     vram: 0
     start: 0x2A1080
     decompressed_size: 0x1D68
 
 
-  - name: CRAZY_JUNGLE_BOSS_COURSE_COMPRESSED_DATA
+  - name: CRAZY_JUNGLE_BOSS_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: crazy_jungle_boss
     vram: 0
     start: 0x2A2810
     decompressed_size: 0x19040
-    display_list: CRAZY_JUNGLE_BOSS_COURSE_UNCOMPRESSED_DATA
 
-  - name: CRAZY_JUNGLE_BOSS_COURSE_DATA
+  - name: CRAZY_JUNGLE_BOSS_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: crazy_jungle_boss
     vram: 0
     start: 0x2B0500
     decompressed_size: 0x2E50
 
 
-  - name: CRAZY_JUNGLE_BOSS_COURSE_SPRITES
+  - name: CRAZY_JUNGLE_BOSS_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: crazy_jungle_boss
     vram: 0
     start: 0x2B35E0
     decompressed_size: 0x1298
 
 
-  - name: STARLIGHT_HIGHWAY_COURSE_COMPRESSED_DATA
+  - name: STARLIGHT_HIGHWAY_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: starlight_highway
     vram: 0
     start: 0x2B45F0
     decompressed_size: 0x27BE0
-    display_list: STARLIGHT_HIGHWAY_COURSE_UNCOMPRESSED_DATA
 
-  - name: STARLIGHT_HIGHWAY_COURSE_DATA
+  - name: STARLIGHT_HIGHWAY_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: starlight_highway
     vram: 0
     start: 0x2C8310
     decompressed_size: 0x4742
 
 
-  - name: STARLIGHT_HIGHWAY_COURSE_SPRITES
+  - name: STARLIGHT_HIGHWAY_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: starlight_highway
     vram: 0
     start: 0x2CD0D0
     decompressed_size: 0xBC8
 
 
-  - name: HAUNTED_HOUSE_COURSE_COMPRESSED_DATA
+  - name: HAUNTED_HOUSE_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: haunted_house
     vram: 0
     start: 0x2CD790
     decompressed_size: 0x25EA0
-    display_list: HAUNTED_HOUSE_COURSE_UNCOMPRESSED_DATA
 
-  - name: HAUNTED_HOUSE_COURSE_DATA
+  - name: HAUNTED_HOUSE_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: haunted_house
     vram: 0
     start: 0x2DFA30
     decompressed_size: 0x59B6
 
 
-  - name: HAUNTED_HOUSE_COURSE_SPRITES
+  - name: HAUNTED_HOUSE_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: haunted_house
     vram: 0
     start: 0x2E59C0
     decompressed_size: 0x15E8
 
 
-  - name: ICE_LAND_COURSE_COMPRESSED_DATA
+  - name: ICE_LAND_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: ice_land
     vram: 0
     start: 0x2E6CC0
     decompressed_size: 0x1C050
-    display_list: ICE_LAND_COURSE_UNCOMPRESSED_DATA
 
-  - name: ICE_LAND_COURSE_DATA
+  - name: ICE_LAND_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: ice_land
     vram: 0
     start: 0x2F6620
     decompressed_size: 0x3BE6
 
 
-  - name: ICE_LAND_COURSE_SPRITES
+  - name: ICE_LAND_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: ice_land
     vram: 0
     start: 0x2FA740
     decompressed_size: 0x2C28
 
 
-  - name: ICE_LAND_BOSS_COURSE_COMPRESSED_DATA
+  - name: ICE_LAND_BOSS_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: ice_land_boss
     vram: 0
     start: 0x2FC440
     decompressed_size: 0x1ACD0
-    display_list: ICE_LAND_BOSS_COURSE_UNCOMPRESSED_DATA
 
-  - name: ICE_LAND_BOSS_COURSE_DATA
+  - name: ICE_LAND_BOSS_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: ice_land_boss
     vram: 0
     start: 0x30B250
     decompressed_size: 0x3BE6
 
 
-  - name: ICE_LAND_BOSS_COURSE_SPRITES
+  - name: ICE_LAND_BOSS_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: ice_land_boss
     vram: 0
     start: 0x30F370
     decompressed_size: 0x938
 
 
-  - name: SNOWBOARD_STREET_SPEED_CROSS_COURSE_COMPRESSED_DATA
+  - name: SNOWBOARD_STREET_SPEED_CROSS_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: snowboard_street_speed_cross
     vram: 0
     start: 0x30F9D0
     decompressed_size: 0x20640
-    display_list: SNOWBOARD_STREET_SPEED_CROSS_COURSE_UNCOMPRESSED_DATA
 
-  - name: SNOWBOARD_STREET_SPEED_CROSS_COURSE_DATA
+  - name: SNOWBOARD_STREET_SPEED_CROSS_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: snowboard_street_speed_cross
     vram: 0
     start: 0x322130
     decompressed_size: 0x2C9E
 
 
-  - name: SNOWBOARD_STREET_SPEED_CROSS_COURSE_SPRITES
+  - name: SNOWBOARD_STREET_SPEED_CROSS_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: snowboard_street_speed_cross
     vram: 0
     start: 0x325120
     decompressed_size: 0x438
 
 
-  - name: SNOWBOARD_STREET_SHOT_CROSS_COURSE_COMPRESSED_DATA
+  - name: SNOWBOARD_STREET_SHOT_CROSS_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: snowboard_street_shot_cross
     vram: 0
     start: 0x325260
     decompressed_size: 0x20210
-    display_list: SNOWBOARD_STREET_SHOT_CROSS_COURSE_UNCOMPRESSED_DATA
 
-  - name: SNOWBOARD_STREET_SHOT_CROSS_COURSE_DATA
+  - name: SNOWBOARD_STREET_SHOT_CROSS_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: snowboard_street_shot_cross
     vram: 0
     start: 0x3375E0
     decompressed_size: 0x2C9E
 
 
-  - name: SNOWBOARD_STREET_SHOT_CROSS_COURSE_SPRITES
+  - name: SNOWBOARD_STREET_SHOT_CROSS_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: snowboard_street_shot_cross
     vram: 0
     start: 0x33A5D0
     decompressed_size: 0x438
 
 
-  - name: X_CROSS_COURSE_COMPRESSED_DATA
+  - name: X_CROSS_COURSE_MODEL_RESOURCES
     type: course_model_resources
+    level_id: x_cross
     vram: 0
     start: 0x33A710
     decompressed_size: 0x16160
-    display_list: X_CROSS_COURSE_UNCOMPRESSED_DATA
 
-  - name: X_CROSS_COURSE_DATA
+  - name: X_CROSS_COURSE_TRACK_SECTOR_MESH
     type: track_sector_mesh
+    level_id: x_cross
     vram: 0
     start: 0x3471A0
     decompressed_size: 0x2E2C
 
-  - name: X_CROSS_COURSE_SPRITES
+  - name: X_CROSS_COURSE_TEXTURE_TABLE
     type: course_texture_table
+    level_id: x_cross
     vram: 0
     start: 0x34A2C0
     decompressed_size: 0x438

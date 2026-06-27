@@ -30,6 +30,8 @@ BIN_DIRS  = assets
 TOOLS_DIR = tools
 SRC_DIRS  = src src/core src/system src/audio src/graphics src/text src/math src/animation src/effects src/race src/story src/ui src/credits src/triggers src/data src/cutscene src/levels
 BUILD_LOG = $(BUILD_DIR)/build.log
+COURSE_GENERATED_DIR = assets/courses/generated
+COURSE_ASSET_SIZE_HEADER = $(COURSE_GENERATED_DIR)/course_asset_sizes.h
 
 # Files
 
@@ -40,7 +42,7 @@ FORMAT_H_FILES = $(filter-out include/hasm.h include/common.h include/include_as
 BIN_FILES = $(foreach dir,$(BIN_DIRS),$(wildcard $(dir)/*.bin))
 LIBKMC_S_FILES = $(foreach dir,lib/libkmc,$(wildcard $(dir)/*.s))
 O_FILES := $(shell grep -E 'build\/(asm|assets|src|src\/entrypoint|bin|lib\/libkmc)\/.+\.o' snowboardkids2.ld -o | sort | uniq)
-COURSE_ASSET_SOURCES := $(shell find assets/courses -type f 2>/dev/null)
+COURSE_ASSET_SOURCES := $(filter-out $(COURSE_ASSET_SIZE_HEADER),$(shell find assets/courses -type f 2>/dev/null))
 
 # Tools
 
@@ -174,7 +176,7 @@ tidy:
 	clang-tidy --fix-errors --fix $(C_FILES) $(FORMAT_H_FILES) -- -Isrc $(IINC) $(MACROS)
 
 $(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
-	$(PRINTF) "[$(PINK) linker $(NO_COL)]  Linking $(TARGET).elf\n"
+	$(PRINTF) "[$(PINK) linker  $(NO_COL)]  Linking $(TARGET).elf\n"
 	$(V)$(LD) $(LD_FLAGS) $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) -o $@
 
 # Per-file optimization overrides
@@ -188,60 +190,59 @@ COURSE_MODEL_RESOURCES_PACK = $(PYTHON) $(TOOLS_DIR)/course_model_resources_pack
 COURSE_TEXTURE_TABLE_PACK = $(PYTHON) $(TOOLS_DIR)/course_texture_table_pack.py
 TRACK_SECTOR_MESH_PACK = $(PYTHON) $(TOOLS_DIR)/track_sector_mesh_pack.py
 COURSE_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/course_asset_sizes.py
-COURSE_ASSET_SIZE_HEADER = $(BUILD_DIR)/include/generated/course_asset_sizes.h
 
-$(COURSE_ASSET_SIZE_HEADER): $(COURSE_ASSET_SOURCES) $(TOOLS_DIR)/course_asset_sizes.py $(TOOLS_DIR)/course_assets_common.py
+$(COURSE_ASSET_SIZE_HEADER): $(COURSE_ASSET_SOURCES) snowboardkids2.yaml $(TOOLS_DIR)/course_asset_sizes.py $(TOOLS_DIR)/course_assets_common.py
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(GREEN) course$(NO_COL)]  $@\n"
+	$(PRINTF) "[$(GREEN) course  $(NO_COL)]  $@\n"
 	$(V)$(COURSE_ASSET_SIZES) --out $@
 
 $(BUILD_DIR)/src/data/course_data.o: $(COURSE_ASSET_SIZE_HEADER)
 
 $(BUILD_DIR)/src/%.o: src/%.c $(CHARMAP)
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(GREEN)   c    $(NO_COL)]  src/$*.c\n"
-	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
-	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
+	$(PRINTF) "[$(GREEN)    c    $(NO_COL)]  src/$*.c\n"
+	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I assets/courses -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
+	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I assets/courses -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
 
 $(BUILD_DIR)/assets/gfxbin/%.o: assets/gfxbin/%.s
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(GREEN)  gfx   $(NO_COL)]  $<\n"
+	$(PRINTF) "[$(GREEN)   gfx   $(NO_COL)]  $<\n"
 	$(V)$(CPP) $(CPPFLAGS) -I include -I $(BUILD_DIR)/assets/gfxbin $< | \
 		$(AS) $(ASFLAGS) -I assets/gfxbin -I $(BUILD_DIR)/assets/gfxbin -o $@
 
 $(BUILD_DIR)/assets/modelpayload/%.o: assets/modelpayload/%.yaml $(TOOLS_DIR)/modelpayload_pack.py $(TOOLS_DIR)/modelpayload_common.py $(TOOLS_DIR)/sno.py $(MODELPAYLOAD_SOURCES)
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(GREEN) model  $(NO_COL)]  $<\n"
+	$(PRINTF) "[$(GREEN)  model  $(NO_COL)]  $<\n"
 	$(V)$(MODELPAYLOAD_PACK) $< --out $(BUILD_DIR)/assets/modelpayload/$*.sno
 	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/modelpayload/$*.sno
 
-$(BUILD_DIR)/assets/courses/display_lists/%.o: assets/courses/display_lists/%.s
+$(BUILD_DIR)/assets/courses/display_lists/%.o: assets/courses/display_lists/%.c $(COURSE_ASSET_SIZE_HEADER)
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(GREEN)course $(NO_COL)]  $<\n"
-	$(V)$(CPP) $(CPPFLAGS) -I include -I $(BUILD_DIR)/assets/courses/display_lists $< | \
-		$(AS) $(ASFLAGS) -I assets/courses/display_lists -I $(BUILD_DIR)/assets/courses/display_lists -o $@
+	$(PRINTF) "[$(GREEN)    c    $(NO_COL)]  $<\n"
+	$(V)$(CC_CHECK) $(CC_CHECK_FLAGS) $(IINC) $(MACROS) -I src/ -I assets/courses -I $(BUILD_DIR)/include -o $@ -x c $< 2>&1 | tee -a $(BUILD_LOG)
+	$(V)$(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm $(IINC) $(MACROS) -I src/ -I assets/courses -I $(BUILD_DIR)/include -x c -c -o $@ $<
 
 $(BUILD_DIR)/assets/courses/model_resources/%.o: assets/courses/model_resources/%.yaml $(TOOLS_DIR)/course_model_resources_pack.py $(TOOLS_DIR)/course_assets_common.py $(TOOLS_DIR)/modelpayload_common.py $(TOOLS_DIR)/sno.py $(COURSE_ASSET_SOURCES)
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(GREEN)course $(NO_COL)]  $<\n"
+	$(PRINTF) "[$(GREEN) course  $(NO_COL)]  $<\n"
 	$(V)$(COURSE_MODEL_RESOURCES_PACK) $< --out $(BUILD_DIR)/assets/courses/model_resources/$*.sno
 	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/courses/model_resources/$*.sno
 
 $(BUILD_DIR)/assets/courses/texture_tables/%.o: assets/courses/texture_tables/%.yaml $(TOOLS_DIR)/course_texture_table_pack.py $(TOOLS_DIR)/course_assets_common.py $(TOOLS_DIR)/modelpayload_common.py $(TOOLS_DIR)/sno.py $(COURSE_ASSET_SOURCES)
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(GREEN)course $(NO_COL)]  $<\n"
+	$(PRINTF) "[$(GREEN) course  $(NO_COL)]  $<\n"
 	$(V)$(COURSE_TEXTURE_TABLE_PACK) $< --out $(BUILD_DIR)/assets/courses/texture_tables/$*.sno
 	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/courses/texture_tables/$*.sno
 
 $(BUILD_DIR)/assets/courses/track_sector_meshes/%.o: assets/courses/track_sector_meshes/%.yaml $(TOOLS_DIR)/track_sector_mesh_pack.py $(TOOLS_DIR)/course_assets_common.py $(TOOLS_DIR)/sno.py $(COURSE_ASSET_SOURCES)
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(GREEN)course $(NO_COL)]  $<\n"
+	$(PRINTF) "[$(GREEN) course  $(NO_COL)]  $<\n"
 	$(V)$(TRACK_SECTOR_MESH_PACK) $< --out $(BUILD_DIR)/assets/courses/track_sector_meshes/$*.sno
 	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/courses/track_sector_meshes/$*.sno
 
 $(BUILD_DIR)/%.o: %.s
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(GREEN)   as   $(NO_COL)]  $<\n"
+	$(PRINTF) "[$(GREEN)    as   $(NO_COL)]  $<\n"
 	$(V)$(CPP) $(CPPFLAGS) -I include -I $(BUILD_DIR)/$(dir $*) $< | \
 		$(AS) $(ASFLAGS) -I $(dir $*) -I $(BUILD_DIR)/$(dir $*) -o $@
 
@@ -263,11 +264,11 @@ $(LIBMUS):
 	$(LIBMUS_FLAGS) $(MAKE) -C lib/libmus
 
 $(BUILD_DIR)/%.o: %.bin
-	$(PRINTF) "[$(PINK) linker $(NO_COL)]  $<\n"
+	$(PRINTF) "[$(PINK) linker  $(NO_COL)]  $<\n"
 	$(V)$(LD) -r -b binary -o $(BUILD_DIR)/$(basename $<).o $<
 
 $(TARGET).bin: $(TARGET).elf
-	$(PRINTF) "[$(CYAN) objcpy $(NO_COL)]  $<\n"
+	$(PRINTF) "[$(CYAN) objcpy  $(NO_COL)]  $<\n"
 	$(V)$(OBJCOPY) $(OBJCOPYFLAGS) $< $@
 
 $(TARGET).z64: $(TARGET).bin
@@ -275,7 +276,7 @@ $(TARGET).z64: $(TARGET).bin
 
 $(BUILD_DIR)/src/%_annotated.s: src/%.c
 	@mkdir -p $(shell dirname $@)
-	$(PRINTF) "[$(CYAN) annot  $(NO_COL)]  Generating annotated assembly for $<\n"
+	$(PRINTF) "[$(CYAN)  annot  $(NO_COL)]  Generating annotated assembly for $<\n"
 	@# Compile with debug info to temporary object file
 	$(V)$(CC) $(CFLAGS) -g -fno-asm $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -c -o $(BUILD_DIR)/src/$*_temp.o $<
 	@# Generate disassembly with line numbers

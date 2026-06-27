@@ -26,6 +26,67 @@ def load_yaml(path: Path) -> dict:
         return yaml.safe_load(f)
 
 
+def course_display_list_ranges(config_path: Path) -> dict[str, tuple[int, int]]:
+    config = load_yaml(config_path)
+    segments = config["segments"]
+    ranges: dict[str, tuple[int, int]] = {}
+
+    for index, segment in enumerate(segments):
+        if not isinstance(segment, dict) or segment.get("type") != "course_display_lists":
+            continue
+        start = parse_int(segment["start"])
+        end = None
+        for next_segment in segments[index + 1 :]:
+            if isinstance(next_segment, list) and len(next_segment) == 1:
+                end = parse_int(next_segment[0])
+                break
+            if isinstance(next_segment, dict) and "start" in next_segment:
+                end = parse_int(next_segment["start"])
+                break
+            if isinstance(next_segment, list) and next_segment:
+                end = parse_int(next_segment[0])
+                break
+        if end is None:
+            raise ValueError(f"{config_path}: could not find end for course display-list segment {segment['name']}")
+        ranges[str(segment["name"])] = (start, end)
+
+    return ranges
+
+
+def course_segments_by_level_id(config_path: Path, segment_type: str) -> dict[str, str]:
+    config = load_yaml(config_path)
+    segments = config["segments"]
+    names: dict[str, str] = {}
+
+    for segment in segments:
+        if not isinstance(segment, dict) or segment.get("type") != segment_type:
+            continue
+        level_id = segment.get("level_id")
+        if level_id is None:
+            raise ValueError(f"{config_path}: course segment {segment['name']} is missing level_id")
+        level_id = str(level_id)
+        if level_id in names:
+            raise ValueError(f"{config_path}: duplicate {segment_type} level_id {level_id}")
+        names[level_id] = str(segment["name"])
+
+    return names
+
+
+def course_segment_name(config_path: Path, segment_type: str, level_id: str) -> str:
+    names = course_segments_by_level_id(config_path, segment_type)
+    if level_id not in names:
+        raise ValueError(f"{config_path}: no {segment_type} segment for level_id {level_id}")
+    return names[level_id]
+
+
+def read_course_display_list_bytes(config_path: Path, rom_path: Path, name: str) -> bytes:
+    ranges = course_display_list_ranges(config_path)
+    if name not in ranges:
+        raise ValueError(f"{config_path}: no course_display_lists segment named {name}")
+    start, end = ranges[name]
+    return rom_path.read_bytes()[start:end]
+
+
 def write_yaml(path: Path, data: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8", newline="\n")

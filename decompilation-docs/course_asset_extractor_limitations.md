@@ -13,10 +13,18 @@ These are F3DEX display-list command streams used as course segment 1.
 
 Limitations:
 
-- The extracted files are readable `.word` command streams with comments, not
-  symbolic GBI macro source.
-- Edits are still low-level. The comments identify command names and common
-  segment references, but they do not validate display-list control flow.
+- The only extracted display-list files are generated `Gfx[]` C source using
+  `gbi.h` macros. This is still low-level display-list data, not a high-level
+  model or scene editor.
+- Segment 1 display-list targets and segment 2 resource addresses are generated
+  as named segmented-address constants. They are rebuildable, but they are not C
+  pointers or linker-managed labels inside the decompressed course buffers.
+- Vertex address constants may point inside a larger editable vertex resource.
+  Editing the vertex `.vtx.s` file can move or resize the containing block only
+  if the corresponding manifest offsets and sizes are also kept consistent.
+- The extractor disassembles each packed command stream independently. It does
+  not validate display-list control flow, detect unreachable streams, or infer
+  which stream represents which course object.
 - The extractor assumes the original segment is already a valid sequence of
   8-byte display-list commands.
 
@@ -78,6 +86,9 @@ Limitations:
   repository. They are regenerated with `python3 -m splat split snowboardkids2.yaml`.
 - The build uses the extracted assets when packing the ROM. A clean build runs
   extraction first through the existing build flow.
+- Course display lists, model resources, track sector meshes, and texture tables
+  are associated by `level_id` in `snowboardkids2.yaml`. Non-course model
+  payloads still use explicit `display_list` fields.
 - SNO padding and unused tail bytes are preserved for byte-exact round trips.
   Edited data can recompress to a different size. If a rebuilt compressed asset
   grows beyond the original ROM allocation, the ROM layout can shift and checksum

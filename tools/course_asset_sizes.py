@@ -7,7 +7,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from tools.course_assets_common import iter_course_manifests, load_yaml, pack_track_sector_mesh, parse_int
+from tools.course_assets_common import (
+    course_display_list_ranges,
+    iter_course_manifests,
+    load_yaml,
+    pack_track_sector_mesh,
+    parse_int,
+)
 
 
 def macro_name(name: str) -> str:
@@ -20,9 +26,53 @@ def manifest_size(path: Path, manifest: dict) -> int:
     return parse_int(manifest["decompressed_size"])
 
 
+def part_address_macro(manifest_name: str, part: dict) -> str | None:
+    part_type = part["type"]
+    if part_type not in {"vtx", "texture", "palette"}:
+        return None
+    return f"{manifest_name}_{part_type}_{parse_int(part['offset']):04X}"
+
+
+def append_define(lines: list[str], seen: set[str], macro: str, value: int) -> None:
+    if macro in seen:
+        return
+    seen.add(macro)
+    lines.append(f"#define {macro} 0x{value:08X}")
+
+
+def write_vertex_range_macros(lines: list[str], seen: set[str], manifest_name: str, part: dict) -> None:
+    start = parse_int(part["offset"])
+    end = start + parse_int(part["size"])
+    for offset in range(start, end, 0x10):
+        append_define(lines, seen, f"{manifest_name}_vtx_{offset:04X}", 0x02000000 | offset)
+
+
+def write_course_address_macros(lines: list[str], assets_root: Path, config_path: Path) -> None:
+    seen: set[str] = set()
+    lines.extend(["", "/* Course model resource segmented addresses. */"])
+    for path in sorted((assets_root / "model_resources").glob("*.yaml")):
+        manifest = load_yaml(path)
+        name = str(manifest["name"])
+        for part in manifest["parts"]:
+            if part["type"] == "vtx":
+                write_vertex_range_macros(lines, seen, name, part)
+                continue
+            macro = part_address_macro(name, part)
+            if macro is None:
+                continue
+            offset = parse_int(part["offset"])
+            append_define(lines, seen, macro, 0x02000000 | offset)
+
+    lines.extend(["", "/* Course display-list segmented addresses. */"])
+    for name, (start, end) in sorted(course_display_list_ranges(config_path).items()):
+        for offset in range(0, end - start, 8):
+            lines.append(f"#define {name}_display_list_{offset:04X} 0x{0x01000000 | offset:08X}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate course asset decompressed size macros.")
     parser.add_argument("--assets-root", type=Path, default=Path("assets/courses"))
+    parser.add_argument("--config", type=Path, default=Path("snowboardkids2.yaml"))
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
 
@@ -36,6 +86,7 @@ def main() -> int:
         manifest = load_yaml(path)
         name = str(manifest["name"])
         lines.append(f"#define {macro_name(name)} 0x{manifest_size(path, manifest):X}")
+    write_course_address_macros(lines, args.assets_root, args.config)
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")

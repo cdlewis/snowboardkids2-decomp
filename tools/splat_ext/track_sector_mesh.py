@@ -42,6 +42,12 @@ class N64SegTrack_sector_mesh(CommonSegment):
         value = self.yaml[key]
         return int(value, 0) if isinstance(value, str) else int(value)
 
+    def _level_id(self) -> str:
+        if not isinstance(self.yaml, dict) or "level_id" not in self.yaml:
+            log.error(f"track sector mesh segment {self.name} needs level_id")
+        assert isinstance(self.yaml, dict)
+        return str(self.yaml["level_id"])
+
     def split(self, rom_bytes: bytes):
         if self.rom_end is None:
             log.error(f"segment {self.name} needs to know where it ends")
@@ -109,6 +115,7 @@ class N64SegTrack_sector_mesh(CommonSegment):
             "name": self.name,
             "format": "track_sector_mesh",
             "compression": "sno",
+            "level_id": self._level_id(),
             "vertices": vertices,
             "faces": faces,
             "final_value": final_value,
