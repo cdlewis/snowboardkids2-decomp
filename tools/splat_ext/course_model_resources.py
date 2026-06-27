@@ -56,14 +56,14 @@ class N64SegCourse_model_resources(CommonSegment):
         value = self.yaml[key]
         return int(value, 0) if isinstance(value, str) else int(value)
 
-    def _level_id(self) -> str:
-        if not isinstance(self.yaml, dict) or "level_id" not in self.yaml:
-            log.error(f"course model resource segment {self.name} needs level_id")
+    def _course_id(self) -> str:
+        if not isinstance(self.yaml, dict) or "course_id" not in self.yaml:
+            log.error(f"course model resource segment {self.name} needs course_id")
         assert isinstance(self.yaml, dict)
-        return str(self.yaml["level_id"])
+        return str(self.yaml["course_id"])
 
     def _display_list_name(self) -> str:
-        return course_segment_name(options.opts.base_path / "snowboardkids2.yaml", "course_display_lists", self._level_id())
+        return course_segment_name(options.opts.base_path / "snowboardkids2.yaml", "course_display_lists", self._course_id())
 
     def _display_list_bytes(self, rom_bytes: bytes) -> bytes:
         config_path = options.opts.base_path / "snowboardkids2.yaml"
@@ -153,7 +153,7 @@ class N64SegCourse_model_resources(CommonSegment):
             log.error(f"course model resource segment {self.name} has unclassified ranges: {ranges}")
 
         parts.sort(key=lambda item: int(str(item["offset"]), 0))
-        extra = {"format": "course_model_resources", "compression": "sno", "level_id": self._level_id()}
+        extra = {"format": "course_model_resources", "compression": "sno", "course_id": self._course_id()}
         if unused_tail:
             extra["unused_sno_tail"] = unused_tail.hex()
         write_parts_manifest(

@@ -42,11 +42,11 @@ class N64SegCourse_texture_table(CommonSegment):
         value = self.yaml[key]
         return int(value, 0) if isinstance(value, str) else int(value)
 
-    def _level_id(self) -> str:
-        if not isinstance(self.yaml, dict) or "level_id" not in self.yaml:
-            log.error(f"course texture table segment {self.name} needs level_id")
+    def _course_id(self) -> str:
+        if not isinstance(self.yaml, dict) or "course_id" not in self.yaml:
+            log.error(f"course texture table segment {self.name} needs course_id")
         assert isinstance(self.yaml, dict)
-        return str(self.yaml["level_id"])
+        return str(self.yaml["course_id"])
 
     def split(self, rom_bytes: bytes):
         if self.rom_end is None:
@@ -135,7 +135,7 @@ class N64SegCourse_texture_table(CommonSegment):
             "name": self.name,
             "format": "course_texture_table",
             "compression": "sno",
-            "level_id": self._level_id(),
+            "course_id": self._course_id(),
             "decompressed_size": f"0x{decompressed_size:X}",
             "palettes": palettes,
             "entries": entries,

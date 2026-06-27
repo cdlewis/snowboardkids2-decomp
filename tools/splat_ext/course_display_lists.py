@@ -62,13 +62,13 @@ class N64SegCourse_display_lists(CommonSegment):
         if self._cached_model_resource_name is not None:
             return self._cached_model_resource_name
 
-        if not isinstance(self.yaml, dict) or "level_id" not in self.yaml:
-            log.error(f"course display-list segment {self.name} needs level_id")
+        if not isinstance(self.yaml, dict) or "course_id" not in self.yaml:
+            log.error(f"course display-list segment {self.name} needs course_id")
         assert isinstance(self.yaml, dict)
         self._cached_model_resource_name = course_segment_name(
             options.opts.base_path / "snowboardkids2.yaml",
             "course_model_resources",
-            str(self.yaml["level_id"]),
+            str(self.yaml["course_id"]),
         )
         return self._cached_model_resource_name
 

@@ -23,7 +23,7 @@ from tools.sno import decompress_sno_with_consumed
 
 
 @lru_cache(maxsize=None)
-def _segment_names_by_level_id(config_path: Path, segment_type: str) -> dict[str, str]:
+def _segment_names_by_model_id(config_path: Path, segment_type: str) -> dict[str, str]:
     with config_path.open("r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
@@ -32,14 +32,14 @@ def _segment_names_by_level_id(config_path: Path, segment_type: str) -> dict[str
         if not isinstance(segment, dict) or segment.get("type") != segment_type:
             continue
 
-        level_id = segment.get("level_id")
-        if level_id is None:
+        model_id = segment.get("model_id")
+        if model_id is None:
             continue
 
-        level_id = str(level_id)
-        if level_id in names:
-            raise ValueError(f"{config_path}: duplicate {segment_type} level_id {level_id}")
-        names[level_id] = str(segment["name"])
+        model_id = str(model_id)
+        if model_id in names:
+            raise ValueError(f"{config_path}: duplicate {segment_type} model_id {model_id}")
+        names[model_id] = str(segment["name"])
 
     return names
 
@@ -92,14 +92,14 @@ class N64SegModelpayload(CommonSegment):
         if display_list:
             return display_list
 
-        level_id = self._yaml_str("level_id")
-        if not level_id:
+        model_id = self._yaml_str("model_id")
+        if not model_id:
             return None
 
-        names = _segment_names_by_level_id(options.opts.base_path / "snowboardkids2.yaml", "gfxbundle")
-        if level_id not in names:
-            log.error(f"modelpayload segment {self.name} has no gfxbundle segment with level_id {level_id}")
-        return names[level_id]
+        names = _segment_names_by_model_id(options.opts.base_path / "snowboardkids2.yaml", "gfxbundle")
+        if model_id not in names:
+            log.error(f"modelpayload segment {self.name} has no gfxbundle segment with model_id {model_id}")
+        return names[model_id]
 
     def _write_manifest(self, path: Path, parts: list[dict], unused_sno_tail: bytes) -> None:
         lines = [
@@ -112,9 +112,9 @@ class N64SegModelpayload(CommonSegment):
         if unused_sno_tail and any(unused_sno_tail):
             lines.append(f"unused_sno_tail: {unused_sno_tail.hex()}")
 
-        level_id = self._yaml_str("level_id")
-        if level_id:
-            lines.append(f"level_id: {level_id}")
+        model_id = self._yaml_str("model_id")
+        if model_id:
+            lines.append(f"model_id: {model_id}")
         else:
             display_list = self._yaml_str("display_list") or self._yaml_str("pair_segment")
             if display_list:

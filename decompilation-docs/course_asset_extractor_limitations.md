@@ -82,9 +82,9 @@ Limitations:
 
 ## Rebuild Constraints
 
-- Course display lists, model resources, track sector meshes, texture tables,
-  model payloads, and their display-list bundles are associated by `level_id`
-  in `snowboardkids2.yaml`.
+- Course display lists, model resources, track sector meshes, and texture tables
+  are associated by `course_id` in `snowboardkids2.yaml`. Model payloads and
+  their display-list bundles are associated by `model_id`.
 - SNO padding and unused tail bytes are preserved for byte-exact round trips.
   Edited data can recompress to a different size. If a rebuilt compressed asset
   grows beyond the original ROM allocation, the ROM layout can shift and checksum

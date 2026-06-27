@@ -53,7 +53,7 @@ def course_display_list_ranges(config_path: Path) -> dict[str, tuple[int, int]]:
     return ranges
 
 
-def course_segments_by_level_id(config_path: Path, segment_type: str) -> dict[str, str]:
+def course_segments_by_course_id(config_path: Path, segment_type: str) -> dict[str, str]:
     config = load_yaml(config_path)
     segments = config["segments"]
     names: dict[str, str] = {}
@@ -61,22 +61,22 @@ def course_segments_by_level_id(config_path: Path, segment_type: str) -> dict[st
     for segment in segments:
         if not isinstance(segment, dict) or segment.get("type") != segment_type:
             continue
-        level_id = segment.get("level_id")
-        if level_id is None:
-            raise ValueError(f"{config_path}: course segment {segment['name']} is missing level_id")
-        level_id = str(level_id)
-        if level_id in names:
-            raise ValueError(f"{config_path}: duplicate {segment_type} level_id {level_id}")
-        names[level_id] = str(segment["name"])
+        course_id = segment.get("course_id")
+        if course_id is None:
+            raise ValueError(f"{config_path}: course segment {segment['name']} is missing course_id")
+        course_id = str(course_id)
+        if course_id in names:
+            raise ValueError(f"{config_path}: duplicate {segment_type} course_id {course_id}")
+        names[course_id] = str(segment["name"])
 
     return names
 
 
-def course_segment_name(config_path: Path, segment_type: str, level_id: str) -> str:
-    names = course_segments_by_level_id(config_path, segment_type)
-    if level_id not in names:
-        raise ValueError(f"{config_path}: no {segment_type} segment for level_id {level_id}")
-    return names[level_id]
+def course_segment_name(config_path: Path, segment_type: str, course_id: str) -> str:
+    names = course_segments_by_course_id(config_path, segment_type)
+    if course_id not in names:
+        raise ValueError(f"{config_path}: no {segment_type} segment for course_id {course_id}")
+    return names[course_id]
 
 
 def read_course_display_list_bytes(config_path: Path, rom_path: Path, name: str) -> bytes:
