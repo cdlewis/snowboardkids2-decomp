@@ -205,7 +205,7 @@ void loadCharacterBodyParts(Player *player) {
             player->animFlags = flags | 8;
             partIndex = 0;
             do {
-                player->boneResults[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_95380(
+                player->boneDisplayObjects[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_95380(
                     player->characterId,
                     player->boardType
                 )[gBodyPartRemapTable[partIndex]];
@@ -215,7 +215,7 @@ void loadCharacterBodyParts(Player *player) {
             player->animFlags = flags & ~8;
             partIndex = 0;
             do {
-                player->boneResults[partIndex].displayLists =
+                player->boneDisplayObjects[partIndex].displayLists =
                     (DisplayLists *)&loadAssetByIndex_95380(player->characterId, player->boardType)[partIndex];
             } while (++partIndex < 0x10);
         }
@@ -225,7 +225,7 @@ void loadCharacterBodyParts(Player *player) {
             player->animFlags = flags | 8;
             partIndex = 0;
             do {
-                player->boneResults[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_953B0(
+                player->boneDisplayObjects[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_953B0(
                     player->characterId,
                     player->boardType
                 )[gBodyPartRemapTable[partIndex]];
@@ -235,7 +235,7 @@ void loadCharacterBodyParts(Player *player) {
             player->animFlags = flags & ~8;
             partIndex = 0;
             do {
-                player->boneResults[partIndex].displayLists =
+                player->boneDisplayObjects[partIndex].displayLists =
                     (DisplayLists *)&loadAssetByIndex_953B0(player->characterId, player->boardType)[partIndex];
             } while (++partIndex < 0x10);
         }
@@ -249,13 +249,13 @@ void loadCharacterBodyParts(Player *player) {
     flags = (s32)player->unk20;
     if (flags == 0) {
     copy_basic:
-        player->boneResults[8].segment1 = player->unk4;
-        player->boneResults[8].segment2 = player->unk8;
+        player->boneDisplayObjects[8].segment1 = player->unk4;
+        player->boneDisplayObjects[8].segment2 = player->unk8;
         return;
     }
-    player->boneResults[8].segment1 = (void *)flags;
-    player->boneResults[8].segment2 = player->unk24;
-    player->boneResults[8].displayLists =
+    player->boneDisplayObjects[8].segment1 = (void *)flags;
+    player->boneDisplayObjects[8].segment2 = player->unk24;
+    player->boneDisplayObjects[8].displayLists =
         (DisplayLists *)((s32)getAssetDataDirect(player->characterId, player->boardType) + tableValue * 0x10 - 0x10);
 }
 

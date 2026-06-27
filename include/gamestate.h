@@ -94,7 +94,7 @@ typedef struct {
     InputRecord *unk2C;
     /* 0x30 */ Vtx *shadowVertices;
     /* 0x34 */ Mtx *shadowMatrix;
-    /* 0x38 */ DisplayListObject boneResults[16];
+    /* 0x38 */ DisplayListObject boneDisplayObjects[16];
     /* 0x3F8 */ DisplayListObject playerModel;
     Vec3i worldPos;
     s32 prevWorldPosX;

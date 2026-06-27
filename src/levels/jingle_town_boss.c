@@ -218,12 +218,20 @@ void updateJingleTownBoss(Player *arg0) {
     addCollisionSectorNodeToList(&arg0->collisionListNode);
     updateJingleTownBossModelTransforms(arg0);
 
-    transformVector(gTrackLocalPosArray, (s16 *)&arg0->boneResults[0].transform, &arg0->extraCollisionOffsets[0]);
+    transformVector(
+        gTrackLocalPosArray,
+        (s16 *)&arg0->boneDisplayObjects[0].transform,
+        &arg0->extraCollisionOffsets[0]
+    );
     arg0->extraCollisionOffsets[0].x -= arg0->headingTransform.translation.x;
     arg0->extraCollisionOffsets[0].y -= arg0->headingTransform.translation.y;
     arg0->extraCollisionOffsets[0].z -= arg0->headingTransform.translation.z;
 
-    transformVector(gTrackLocalPosArray + 6, (s16 *)&arg0->boneResults[1].transform, &arg0->extraCollisionOffsets[1]);
+    transformVector(
+        gTrackLocalPosArray + 6,
+        (s16 *)&arg0->boneDisplayObjects[1].transform,
+        &arg0->extraCollisionOffsets[1]
+    );
     arg0->extraCollisionOffsets[1].x -= arg0->headingTransform.translation.x;
     arg0->extraCollisionOffsets[1].y -= arg0->headingTransform.translation.y;
     arg0->extraCollisionOffsets[1].z -= arg0->headingTransform.translation.z;
@@ -386,7 +394,7 @@ s32 jingleTownBossChaseAttackMainPhase(Player *arg0) {
     switch (arg0->behaviorCounter) {
         case 0:
             updateJingleTownBossModelTransforms(arg0);
-            transformVectorRelative(&gameState->players->worldPos.x, &arg0->boneResults[1].transform, &sp30);
+            transformVectorRelative(&gameState->players->worldPos.x, &arg0->boneDisplayObjects[1].transform, &sp30);
 
             angleDiff = atan2Fixed(-sp30.x, -sp30.z) & 0x1FFF;
 
@@ -651,7 +659,7 @@ s32 jingleTownBossHoverAttackExitPhase(Player *arg0) {
         arg0->behaviorPhase++;
         transformVector2(
             (s16 *)&gJingleTownBossHoverExitOffsets[0],
-            (s16 *)&arg0->boneResults[0].transform,
+            (s16 *)&arg0->boneDisplayObjects[0].transform,
             &posOffset
         );
         arg0->worldPos.x += posOffset.x;
@@ -659,15 +667,35 @@ s32 jingleTownBossHoverAttackExitPhase(Player *arg0) {
         arg0->worldPos.z += posOffset.z;
         memcpy((Vec3i *)&arg0->prevWorldPosX, &arg0->worldPos, sizeof(Vec3i));
         arg0->animFlags |= 0x200000;
-        transformVector((s16 *)&gJingleTownBossHoverExitOffsets[1], (s16 *)&arg0->boneResults[0].transform, &burstPos);
+        transformVector(
+            (s16 *)&gJingleTownBossHoverExitOffsets[1],
+            (s16 *)&arg0->boneDisplayObjects[0].transform,
+            &burstPos
+        );
         spawnBurstEffect(&burstPos);
-        transformVector((s16 *)&gJingleTownBossHoverExitOffsets[2], (s16 *)&arg0->boneResults[0].transform, &burstPos);
+        transformVector(
+            (s16 *)&gJingleTownBossHoverExitOffsets[2],
+            (s16 *)&arg0->boneDisplayObjects[0].transform,
+            &burstPos
+        );
         spawnBurstEffect(&burstPos);
-        transformVector((s16 *)&gJingleTownBossHoverExitOffsets[3], (s16 *)&arg0->boneResults[0].transform, &burstPos);
+        transformVector(
+            (s16 *)&gJingleTownBossHoverExitOffsets[3],
+            (s16 *)&arg0->boneDisplayObjects[0].transform,
+            &burstPos
+        );
         spawnBurstEffect(&burstPos);
-        transformVector((s16 *)&gJingleTownBossHoverExitOffsets[4], (s16 *)&arg0->boneResults[0].transform, &burstPos);
+        transformVector(
+            (s16 *)&gJingleTownBossHoverExitOffsets[4],
+            (s16 *)&arg0->boneDisplayObjects[0].transform,
+            &burstPos
+        );
         spawnBurstEffect(&burstPos);
-        transformVector((s16 *)&gJingleTownBossHoverExitOffsets[5], (s16 *)&arg0->boneResults[0].transform, &burstPos);
+        transformVector(
+            (s16 *)&gJingleTownBossHoverExitOffsets[5],
+            (s16 *)&arg0->boneDisplayObjects[0].transform,
+            &burstPos
+        );
         spawnBurstEffect(&burstPos);
         arg0->unk468 = 0x100;
     }
@@ -726,9 +754,9 @@ void updateJingleTownBossModelTransforms(Player *arg0) {
         // Apply vertical scale transformation during intro animation
         memcpy(&scaledMatrix, &identityMatrix, sizeof(Transform3D));
         scaledMatrix.m[1][1] = arg0->squashStretchScale;
-        composeTransform3D(&scaledMatrix, &arg0->modelTransform, &arg0->boneResults[0].transform);
+        composeTransform3D(&scaledMatrix, &arg0->modelTransform, &arg0->boneDisplayObjects[0].transform);
     } else {
-        memcpy(&arg0->boneResults[0].transform, &arg0->modelTransform, sizeof(Transform3D));
+        memcpy(&arg0->boneDisplayObjects[0].transform, &arg0->modelTransform, sizeof(Transform3D));
     }
 
     // Create pitch and yaw rotation matrix for the flying/floating transform
@@ -743,17 +771,18 @@ void updateJingleTownBossModelTransforms(Player *arg0) {
     }
 
     // Apply rotation/offset to ground transform to get flying transform
-    composeTransform3D(&pitchYawMatrix, &arg0->boneResults[0].transform, &arg0->boneResults[1].transform);
+    composeTransform3D(&pitchYawMatrix, &arg0->boneDisplayObjects[0].transform, &arg0->boneDisplayObjects[1].transform);
 
     // Add hover height offset to flying transform
-    arg0->boneResults[1].transform.translation.y = arg0->boneResults[1].transform.translation.y + arg0->unk474;
+    arg0->boneDisplayObjects[1].transform.translation.y =
+        arg0->boneDisplayObjects[1].transform.translation.y + arg0->unk474;
 
     // Create translation-only matrix for the third transform (unkB0).
     gScaleMatrix.translation.x = 0;
     gScaleMatrix.translation.y = 0x140000;
     gScaleMatrix.translation.z = 0;
 
-    composeTransform3D(&gScaleMatrix, &arg0->boneResults[1].transform, &arg0->boneResults[2].transform);
+    composeTransform3D(&gScaleMatrix, &arg0->boneDisplayObjects[1].transform, &arg0->boneDisplayObjects[2].transform);
 }
 
 void renderJingleTownBossWithEffects(Player *arg0) {
@@ -782,35 +811,35 @@ void renderJingleTownBossWithEffects(Player *arg0) {
     if (index == 0) {
         if (arg0->animFlags & 0x200000) {
             for (i = 0; i < 4; i++) {
-                enqueuePreLitMultiPartDisplayList(i, &arg0->boneResults[1], 2);
+                enqueuePreLitMultiPartDisplayList(i, &arg0->boneDisplayObjects[1], 2);
             }
         } else {
             for (i = 0; i < 4; i++) {
-                enqueuePreLitMultiPartDisplayList(i, &arg0->boneResults[0], 3);
+                enqueuePreLitMultiPartDisplayList(i, &arg0->boneDisplayObjects[0], 3);
             }
         }
     } else {
         if (arg0->animFlags & 0x200000) {
-            arg0->boneResults[1].light1R = gBossSurfaceColors[index].primaryR;
-            arg0->boneResults[1].light1G = gBossSurfaceColors[index].primaryG;
-            arg0->boneResults[1].light1B = gBossSurfaceColors[index].primaryB;
-            arg0->boneResults[1].light2R = gBossSurfaceColors[index].secondaryR;
-            arg0->boneResults[1].light2G = gBossSurfaceColors[index].secondaryG;
-            arg0->boneResults[1].light2B = gBossSurfaceColors[index].secondaryB;
+            arg0->boneDisplayObjects[1].light1R = gBossSurfaceColors[index].primaryR;
+            arg0->boneDisplayObjects[1].light1G = gBossSurfaceColors[index].primaryG;
+            arg0->boneDisplayObjects[1].light1B = gBossSurfaceColors[index].primaryB;
+            arg0->boneDisplayObjects[1].light2R = gBossSurfaceColors[index].secondaryR;
+            arg0->boneDisplayObjects[1].light2G = gBossSurfaceColors[index].secondaryG;
+            arg0->boneDisplayObjects[1].light2B = gBossSurfaceColors[index].secondaryB;
 
             for (i = 0; i < 4; i++) {
-                enqueueMultiPartDisplayList(i, &arg0->boneResults[1], 2);
+                enqueueMultiPartDisplayList(i, &arg0->boneDisplayObjects[1], 2);
             }
         } else {
-            arg0->boneResults[0].light1R = gBossSurfaceColors[index].primaryR;
-            arg0->boneResults[0].light1G = gBossSurfaceColors[index].primaryG;
-            arg0->boneResults[0].light1B = gBossSurfaceColors[index].primaryB;
-            arg0->boneResults[0].light2R = gBossSurfaceColors[index].secondaryR;
-            arg0->boneResults[0].light2G = gBossSurfaceColors[index].secondaryG;
-            arg0->boneResults[0].light2B = gBossSurfaceColors[index].secondaryB;
+            arg0->boneDisplayObjects[0].light1R = gBossSurfaceColors[index].primaryR;
+            arg0->boneDisplayObjects[0].light1G = gBossSurfaceColors[index].primaryG;
+            arg0->boneDisplayObjects[0].light1B = gBossSurfaceColors[index].primaryB;
+            arg0->boneDisplayObjects[0].light2R = gBossSurfaceColors[index].secondaryR;
+            arg0->boneDisplayObjects[0].light2G = gBossSurfaceColors[index].secondaryG;
+            arg0->boneDisplayObjects[0].light2B = gBossSurfaceColors[index].secondaryB;
 
             for (i = 0; i < 4; i++) {
-                enqueueMultiPartDisplayList(i, &arg0->boneResults[0], 3);
+                enqueueMultiPartDisplayList(i, &arg0->boneDisplayObjects[0], 3);
             }
         }
     }

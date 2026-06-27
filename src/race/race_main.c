@@ -5613,20 +5613,20 @@ void renderPlayerModel(Player *player) {
                 composeTransform3D(
                     tmpMtx1Ptr,
                     &player->modelTransform,
-                    &player->boneResults[animData[i].boneIndex].transform
+                    &player->boneDisplayObjects[animData[i].boneIndex].transform
                 );
             } else {
                 composeTransform3D(
                     &player->unk488[animData[i].boneIndex].transform.previous,
                     &player->modelTransform,
-                    &player->boneResults[animData[i].boneIndex].transform
+                    &player->boneDisplayObjects[animData[i].boneIndex].transform
                 );
             }
         } else {
             composeTransform3D(
                 &player->unk488[animData[i].boneIndex].transform.previous,
-                &player->boneResults[animData[i].parentBone].transform,
-                &player->boneResults[animData[i].boneIndex].transform
+                &player->boneDisplayObjects[animData[i].parentBone].transform,
+                &player->boneDisplayObjects[animData[i].boneIndex].transform
             );
         }
     }
@@ -5666,7 +5666,7 @@ void renderPlayerModel(Player *player) {
                 {
                     s32 k;
                     for (k = 0; k < 4; k++) {
-                        enqueuePreLitMultiPartDisplayList(k, player->boneResults, player->leanBoneCount);
+                        enqueuePreLitMultiPartDisplayList(k, player->boneDisplayObjects, player->leanBoneCount);
                     }
                 }
             }
@@ -5685,16 +5685,16 @@ void renderPlayerModel(Player *player) {
                     }
                 }
             } else {
-                player->boneResults[0].light1R = gBossSurfaceColors[surfaceType].primaryR;
-                player->boneResults[0].light1G = gBossSurfaceColors[surfaceType].primaryG;
-                player->boneResults[0].light1B = gBossSurfaceColors[surfaceType].primaryB;
-                player->boneResults[0].light2R = gBossSurfaceColors[surfaceType].secondaryR;
-                player->boneResults[0].light2G = gBossSurfaceColors[surfaceType].secondaryG;
-                player->boneResults[0].light2B = gBossSurfaceColors[surfaceType].secondaryB;
+                player->boneDisplayObjects[0].light1R = gBossSurfaceColors[surfaceType].primaryR;
+                player->boneDisplayObjects[0].light1G = gBossSurfaceColors[surfaceType].primaryG;
+                player->boneDisplayObjects[0].light1B = gBossSurfaceColors[surfaceType].primaryB;
+                player->boneDisplayObjects[0].light2R = gBossSurfaceColors[surfaceType].secondaryR;
+                player->boneDisplayObjects[0].light2G = gBossSurfaceColors[surfaceType].secondaryG;
+                player->boneDisplayObjects[0].light2B = gBossSurfaceColors[surfaceType].secondaryB;
                 {
                     s32 k;
                     for (k = 0; k < 4; k++) {
-                        enqueueMultiPartDisplayList(k, player->boneResults, (s32)player->leanBoneCount);
+                        enqueueMultiPartDisplayList(k, player->boneDisplayObjects, (s32)player->leanBoneCount);
                     }
                 }
             }
