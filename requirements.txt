@@ -5,6 +5,9 @@ sortedcontainers
 # tools/progress.py deps
 mapfile_parser>=2.12.1
 
+# modelpayload PNG texture tools
+Pillow
+
 # permuter
 toml
 pycparser==2.23.0
