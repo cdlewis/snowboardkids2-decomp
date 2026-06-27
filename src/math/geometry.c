@@ -47,16 +47,6 @@ typedef struct {
     s32 scale_frac;
 } N64MatrixParts;
 
-// Expected memory layout for arg1 of transformVectorRelative:
-// - 3x3 s16 matrix at offset 0 (18 bytes)
-// - 2 bytes padding at offset 18
-// - Vec3i position at offset 20 (0x14)
-typedef struct {
-    s16 m[3][3];
-    s16 _pad;
-    Vec3i position;
-} Matrix3x3AndPosition;
-
 typedef void (*CreateXRotS16)(s16 matrix[3][3], s16 angle);
 
 s32 approximateSin(s16 inputAngle) {
@@ -811,7 +801,7 @@ void transformVector3(Vec3i *arg0, Transform3D *arg1, Vec3i *arg2) {
 void transformVectorRelative(void *arg0, void *arg1, void *arg2) {
     Vec3i diff;
     Vec3i *input = arg0;
-    Matrix3x3AndPosition *transform = arg1;
+    Transform3D *transform = arg1;
     Vec3i *output = arg2;
     s32 frac0;
     s32 int0a;
@@ -830,9 +820,9 @@ void transformVectorRelative(void *arg0, void *arg1, void *arg2) {
     s32 frac2c;
     s32 int2c;
 
-    diff.x = input->x - transform->position.x;
-    diff.y = input->y - transform->position.y;
-    diff.z = input->z - transform->position.z;
+    diff.x = input->x - transform->translation.x;
+    diff.y = input->y - transform->translation.y;
+    diff.z = input->z - transform->translation.z;
 
     /* Section 1: use int0a as accumulator */
     frac0 = (diff.x & 0xFFFF) * transform->m[0][0];
