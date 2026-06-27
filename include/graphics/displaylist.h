@@ -94,21 +94,12 @@ typedef struct {
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1);
 void enqueueDisplayListObjectWithSegments(s32 arg0, DisplayListObject *arg1);
 
-typedef struct {
-    u8 padding[0x20];
-    s32 *unk20;
-    u8 padding3[0x9];
-    s32 unk30;
-    u8 padding2[0x3];
-    s8 numParts;
-} enqueueMultiPartDisplayList_arg1;
-
 void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects);
 void renderTexturedOpaqueSprite(DisplayListObject *arg0);
 void renderTexturedTransparentSprite(DisplayListObject *arg0);
 void renderTexturedOverlaySprite(DisplayListObject *arg0);
-void enqueuePreLitMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2);
-void enqueueMultiPartDisplayList(s32 arg0, enqueueMultiPartDisplayList_arg1 *arg1, s32 arg2);
+void enqueuePreLitMultiPartDisplayList(s32 arg0, DisplayListObject *arg1, s32 arg2);
+void enqueueMultiPartDisplayList(s32 arg0, DisplayListObject *arg1, s32 arg2);
 
 typedef struct {
     s16 linkedSegmentIdx;

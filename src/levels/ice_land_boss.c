@@ -1097,11 +1097,7 @@ void renderIceLandBossWithSurfaceColors(Player *arg0) {
 
     if (index == 0) {
         for (i = 0; i < 4; i++) {
-            enqueuePreLitMultiPartDisplayList(
-                i,
-                (enqueueMultiPartDisplayList_arg1 *)&arg0->boneResults,
-                arg0->leanBoneCount
-            );
+            enqueuePreLitMultiPartDisplayList(i, (DisplayListObject *)&arg0->boneResults, arg0->leanBoneCount);
         }
     } else {
         arg0->boneResults[0].primaryR = gBossSurfaceColors[index].primaryR;
@@ -1112,7 +1108,7 @@ void renderIceLandBossWithSurfaceColors(Player *arg0) {
         arg0->boneResults[0].secondaryB = gBossSurfaceColors[index].secondaryB;
 
         for (i = 0; i < 4; i++) {
-            enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->boneResults, arg0->leanBoneCount);
+            enqueueMultiPartDisplayList(i, (DisplayListObject *)&arg0->boneResults, arg0->leanBoneCount);
         }
     }
 }

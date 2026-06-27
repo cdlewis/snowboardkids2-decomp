@@ -5668,7 +5668,7 @@ void renderPlayerModel(Player *player) {
                     for (k = 0; k < 4; k++) {
                         enqueuePreLitMultiPartDisplayList(
                             k,
-                            (enqueueMultiPartDisplayList_arg1 *)&player->boneResults,
+                            (DisplayListObject *)&player->boneResults,
                             player->leanBoneCount
                         );
                     }
@@ -5700,7 +5700,7 @@ void renderPlayerModel(Player *player) {
                     for (k = 0; k < 4; k++) {
                         enqueueMultiPartDisplayList(
                             k,
-                            (enqueueMultiPartDisplayList_arg1 *)&player->boneResults,
+                            (DisplayListObject *)&player->boneResults,
                             (s32)player->leanBoneCount
                         );
                     }

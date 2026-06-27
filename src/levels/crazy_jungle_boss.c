@@ -740,7 +740,7 @@ void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
 
     if (surfaceColorIndex == 0) {
         for (i = 0; i < 4; i++) {
-            enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->bones, arg0->boneCount);
+            enqueuePreLitMultiPartDisplayList(i, (DisplayListObject *)arg0->bones, arg0->boneCount);
         }
     } else {
         arg0->bones[0].primaryR = gBossSurfaceColors[surfaceColorIndex].primaryR;
@@ -751,7 +751,7 @@ void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
         arg0->bones[0].secondaryB = gBossSurfaceColors[surfaceColorIndex].secondaryB;
 
         for (i = 0; i < 4; i++) {
-            enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)arg0->bones, arg0->boneCount);
+            enqueueMultiPartDisplayList(i, (DisplayListObject *)arg0->bones, arg0->boneCount);
         }
     }
 }

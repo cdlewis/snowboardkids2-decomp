@@ -778,11 +778,11 @@ void renderJingleTownBossWithEffects(Player *arg0) {
     if (index == 0) {
         if (arg0->animFlags & 0x200000) {
             for (i = 0; i < 4; i++) {
-                enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->boneResults[1].mtx, 2);
+                enqueuePreLitMultiPartDisplayList(i, (DisplayListObject *)&arg0->boneResults[1].mtx, 2);
             }
         } else {
             for (i = 0; i < 4; i++) {
-                enqueuePreLitMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->boneResults[0].mtx, 3);
+                enqueuePreLitMultiPartDisplayList(i, (DisplayListObject *)&arg0->boneResults[0].mtx, 3);
             }
         }
     } else {
@@ -795,7 +795,7 @@ void renderJingleTownBossWithEffects(Player *arg0) {
             arg0->boneResults[1].secondaryB = gBossSurfaceColors[index].secondaryB;
 
             for (i = 0; i < 4; i++) {
-                enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->boneResults[1].mtx, 2);
+                enqueueMultiPartDisplayList(i, (DisplayListObject *)&arg0->boneResults[1].mtx, 2);
             }
         } else {
             arg0->boneResults[0].primaryR = gBossSurfaceColors[index].primaryR;
@@ -806,7 +806,7 @@ void renderJingleTownBossWithEffects(Player *arg0) {
             arg0->boneResults[0].secondaryB = gBossSurfaceColors[index].secondaryB;
 
             for (i = 0; i < 4; i++) {
-                enqueueMultiPartDisplayList(i, (enqueueMultiPartDisplayList_arg1 *)&arg0->boneResults[0].mtx, 3);
+                enqueueMultiPartDisplayList(i, (DisplayListObject *)&arg0->boneResults[0].mtx, 3);
             }
         }
     }
