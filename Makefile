@@ -32,6 +32,8 @@ SRC_DIRS  = src src/core src/system src/audio src/graphics src/text src/math src
 BUILD_LOG = $(BUILD_DIR)/build.log
 COURSE_GENERATED_DIR = assets/courses/generated
 COURSE_ASSET_SIZE_HEADER = $(COURSE_GENERATED_DIR)/course_asset_sizes.h
+MODELPAYLOAD_GENERATED_DIR = assets/modelpayload/generated
+MODELPAYLOAD_ASSET_SIZE_HEADER = $(MODELPAYLOAD_GENERATED_DIR)/modelpayload_asset_sizes.h
 
 # Files
 
@@ -190,19 +192,27 @@ COURSE_MODEL_RESOURCES_PACK = $(PYTHON) $(TOOLS_DIR)/course_model_resources_pack
 COURSE_TEXTURE_TABLE_PACK = $(PYTHON) $(TOOLS_DIR)/course_texture_table_pack.py
 TRACK_SECTOR_MESH_PACK = $(PYTHON) $(TOOLS_DIR)/track_sector_mesh_pack.py
 COURSE_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/course_asset_sizes.py
+MODELPAYLOAD_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/modelpayload_asset_sizes.py
 
 $(COURSE_ASSET_SIZE_HEADER): $(COURSE_ASSET_SOURCES) snowboardkids2.yaml $(TOOLS_DIR)/course_asset_sizes.py $(TOOLS_DIR)/course_assets_common.py
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(GREEN) course  $(NO_COL)]  $@\n"
 	$(V)$(COURSE_ASSET_SIZES) --out $@
 
+$(MODELPAYLOAD_ASSET_SIZE_HEADER): $(MODELPAYLOAD_SOURCES) $(TOOLS_DIR)/modelpayload_asset_sizes.py $(TOOLS_DIR)/course_assets_common.py
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN)  model  $(NO_COL)]  $@\n"
+	$(V)$(MODELPAYLOAD_ASSET_SIZES) --out $@
+
 $(BUILD_DIR)/src/data/course_data.o: $(COURSE_ASSET_SIZE_HEADER)
+$(BUILD_DIR)/src/effects/fan_effect.o: $(MODELPAYLOAD_ASSET_SIZE_HEADER)
+$(BUILD_DIR)/src/effects/rocket_boost.o: $(MODELPAYLOAD_ASSET_SIZE_HEADER)
 
 $(BUILD_DIR)/src/%.o: src/%.c $(CHARMAP)
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(GREEN)    c    $(NO_COL)]  src/$*.c\n"
-	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I assets/courses -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
-	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I assets/courses -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
+	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I assets/courses -I assets/modelpayload -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
+	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I assets/courses -I assets/modelpayload -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
 
 $(BUILD_DIR)/assets/gfxbin/%.o: assets/gfxbin/%.s
 	@mkdir -p $(shell dirname $@)

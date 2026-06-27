@@ -2,6 +2,7 @@
 #include "audio/audio.h"
 #include "common.h"
 #include "cutscene/cutscene_manager.h"
+#include "generated/modelpayload_asset_sizes.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 #include "race/race_session.h"
@@ -116,9 +117,13 @@ static void initFanEffectTask(FanEffectTaskState *taskState) {
     StateEntry **uncompressedAssetPtr;
 
     taskState->unk20 = &D_80088650;
-    taskState->unk24 = loadUncompressedData(&fanEffectSegment1_ROM_START, &fanEffectSegment1_ROM_END);
+    taskState->unk24 = loadUncompressedData(&FAN_EFFECT_DISPLAY_LIST_ROM_START, &FAN_EFFECT_DISPLAY_LIST_ROM_END);
 
-    taskState->unk28 = loadCompressedData(&fanEffectSegment2_ROM_START, &fanEffectSegment2_ROM_END, 0xA10);
+    taskState->unk28 = loadCompressedData(
+        &FAN_EFFECT_COMPRESSED_DATA_ROM_START,
+        &FAN_EFFECT_COMPRESSED_DATA_ROM_END,
+        FAN_EFFECT_COMPRESSED_DATA_DECOMPRESSED_SIZE
+    );
     uncompressedAssetPtr = &taskState->unk24;
 
     taskState->unk5C = &D_80088660;

@@ -1472,13 +1472,15 @@ segments:
     vram: 0
     start: 0x1FB040
 
-  - name: fanEffectSegment1
-    type: bin
+  - name: FAN_EFFECT_DISPLAY_LIST
+    type: gfxbundle
+    model_id: fan_effect
     vram: 0
     start: 0x1FB4E0
 
-  - name: rocketEffectSegment1
-    type: bin
+  - name: ROCKET_EFFECT_DISPLAY_LIST
+    type: gfxbundle
+    model_id: rocket_effect
     vram: 0
     start: 0x1FB8B0
 
@@ -3683,15 +3685,19 @@ segments:
     start: 0x4C9310
     decompressed_size: 0x1280
 
-  - name: fanEffectSegment2
-    type: bin
+  - name: FAN_EFFECT_COMPRESSED_DATA
+    type: modelpayload
+    model_id: fan_effect
     vram: 0
     start: 0x4C9E70
+    decompressed_size: 0xA10
 
-  - name: rocketEffectSegment2
-    type: bin
+  - name: ROCKET_EFFECT_COMPRESSED_DATA
+    type: modelpayload
+    model_id: rocket_effect
     vram: 0
     start: 0x4CA440
+    decompressed_size: 0xE90
 
   - name: NEWSPAPER_COMPRESSED_DATA
     type: modelpayload

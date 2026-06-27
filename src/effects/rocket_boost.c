@@ -2,6 +2,7 @@
 #include "assets.h"
 #include "common.h"
 #include "gbi.h"
+#include "generated/modelpayload_asset_sizes.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
@@ -17,8 +18,13 @@ void cleanupRocketEffect(RocketEffectUpdateData *data);
 
 void initRocketEffect(RocketEffectUpdateData *data) {
     data->body.displayLists = &D_80088670_89270;
-    data->body.segment1 = loadUncompressedData(&rocketEffectSegment1_ROM_START, &rocketEffectSegment1_ROM_END);
-    data->body.segment2 = loadCompressedData(&rocketEffectSegment2_ROM_START, &rocketEffectSegment2_ROM_END, 0xE90);
+    data->body.segment1 =
+        loadUncompressedData(&ROCKET_EFFECT_DISPLAY_LIST_ROM_START, &ROCKET_EFFECT_DISPLAY_LIST_ROM_END);
+    data->body.segment2 = loadCompressedData(
+        &ROCKET_EFFECT_COMPRESSED_DATA_ROM_START,
+        &ROCKET_EFFECT_COMPRESSED_DATA_ROM_END,
+        ROCKET_EFFECT_COMPRESSED_DATA_DECOMPRESSED_SIZE
+    );
     data->body.segment3 = NULL;
     data->flame.segment3 = NULL;
     data->scale = 0x200;
