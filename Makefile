@@ -40,6 +40,7 @@ FORMAT_H_FILES = $(filter-out include/hasm.h include/common.h include/include_as
 BIN_FILES = $(foreach dir,$(BIN_DIRS),$(wildcard $(dir)/*.bin))
 LIBKMC_S_FILES = $(foreach dir,lib/libkmc,$(wildcard $(dir)/*.s))
 O_FILES := $(shell grep -E 'build\/(asm|assets|src|src\/entrypoint|bin|lib\/libkmc)\/.+\.o' snowboardkids2.ld -o | sort | uniq)
+COURSE_ASSET_SOURCES := $(shell find assets/courses -type f 2>/dev/null)
 
 # Tools
 
@@ -183,12 +184,24 @@ TEXTCONV = $(PYTHON) $(TOOLS_DIR)/textconv.py
 CHARMAP = $(TOOLS_DIR)/charmap.txt
 MODELPAYLOAD_PACK = $(PYTHON) $(TOOLS_DIR)/modelpayload_pack.py
 MODELPAYLOAD_SOURCES := $(shell find assets/modelpayload -type f 2>/dev/null)
+COURSE_MODEL_RESOURCES_PACK = $(PYTHON) $(TOOLS_DIR)/course_model_resources_pack.py
+COURSE_TEXTURE_TABLE_PACK = $(PYTHON) $(TOOLS_DIR)/course_texture_table_pack.py
+TRACK_SECTOR_MESH_PACK = $(PYTHON) $(TOOLS_DIR)/track_sector_mesh_pack.py
+COURSE_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/course_asset_sizes.py
+COURSE_ASSET_SIZE_HEADER = $(BUILD_DIR)/include/generated/course_asset_sizes.h
+
+$(COURSE_ASSET_SIZE_HEADER): $(COURSE_ASSET_SOURCES) $(TOOLS_DIR)/course_asset_sizes.py $(TOOLS_DIR)/course_assets_common.py
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN) course$(NO_COL)]  $@\n"
+	$(V)$(COURSE_ASSET_SIZES) --out $@
+
+$(BUILD_DIR)/src/data/course_data.o: $(COURSE_ASSET_SIZE_HEADER)
 
 $(BUILD_DIR)/src/%.o: src/%.c $(CHARMAP)
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(GREEN)   c    $(NO_COL)]  src/$*.c\n"
-	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
-	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
+	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
+	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
 
 $(BUILD_DIR)/assets/gfxbin/%.o: assets/gfxbin/%.s
 	@mkdir -p $(shell dirname $@)
@@ -201,6 +214,30 @@ $(BUILD_DIR)/assets/modelpayload/%.o: assets/modelpayload/%.yaml $(TOOLS_DIR)/mo
 	$(PRINTF) "[$(GREEN) model  $(NO_COL)]  $<\n"
 	$(V)$(MODELPAYLOAD_PACK) $< --out $(BUILD_DIR)/assets/modelpayload/$*.sno
 	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/modelpayload/$*.sno
+
+$(BUILD_DIR)/assets/courses/display_lists/%.o: assets/courses/display_lists/%.s
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN)course $(NO_COL)]  $<\n"
+	$(V)$(CPP) $(CPPFLAGS) -I include -I $(BUILD_DIR)/assets/courses/display_lists $< | \
+		$(AS) $(ASFLAGS) -I assets/courses/display_lists -I $(BUILD_DIR)/assets/courses/display_lists -o $@
+
+$(BUILD_DIR)/assets/courses/model_resources/%.o: assets/courses/model_resources/%.yaml $(TOOLS_DIR)/course_model_resources_pack.py $(TOOLS_DIR)/course_assets_common.py $(TOOLS_DIR)/modelpayload_common.py $(TOOLS_DIR)/sno.py $(COURSE_ASSET_SOURCES)
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN)course $(NO_COL)]  $<\n"
+	$(V)$(COURSE_MODEL_RESOURCES_PACK) $< --out $(BUILD_DIR)/assets/courses/model_resources/$*.sno
+	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/courses/model_resources/$*.sno
+
+$(BUILD_DIR)/assets/courses/texture_tables/%.o: assets/courses/texture_tables/%.yaml $(TOOLS_DIR)/course_texture_table_pack.py $(TOOLS_DIR)/course_assets_common.py $(TOOLS_DIR)/modelpayload_common.py $(TOOLS_DIR)/sno.py $(COURSE_ASSET_SOURCES)
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN)course $(NO_COL)]  $<\n"
+	$(V)$(COURSE_TEXTURE_TABLE_PACK) $< --out $(BUILD_DIR)/assets/courses/texture_tables/$*.sno
+	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/courses/texture_tables/$*.sno
+
+$(BUILD_DIR)/assets/courses/track_sector_meshes/%.o: assets/courses/track_sector_meshes/%.yaml $(TOOLS_DIR)/track_sector_mesh_pack.py $(TOOLS_DIR)/course_assets_common.py $(TOOLS_DIR)/sno.py $(COURSE_ASSET_SOURCES)
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN)course $(NO_COL)]  $<\n"
+	$(V)$(TRACK_SECTOR_MESH_PACK) $< --out $(BUILD_DIR)/assets/courses/track_sector_meshes/$*.sno
+	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/courses/track_sector_meshes/$*.sno
 
 $(BUILD_DIR)/%.o: %.s
 	@mkdir -p $(shell dirname $@)
