@@ -54,7 +54,7 @@ void updateStoryMapCharacter(StoryMapCharacterArg *arg0);
 void cleanupStoryMapCharacter(StoryMapCharacterArg *arg0);
 void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0);
 
-void func_80018800_19400(void **arg0) {
+void initStoryMapCharacterTask(void **arg0) {
     void *allocation = getCurrentAllocation();
 
     *arg0 = createSceneModel(gGameSessionContext->playerBoardIds[0] + 0x50, allocation);

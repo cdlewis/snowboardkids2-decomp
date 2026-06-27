@@ -12,7 +12,6 @@ s32 getSectorTrackHeight(TrackGeometryFaceData *geom, u16 groupIdx, Vec3i *pos, 
 void clampPlayerVelocityToMaxSpeed(Player *player);
 s32 advancePlayerLeanAnimationAuto(void *player, s16 animIndex);
 s32 advancePlayerLeanAnimation(void *player, s16 animIndex);
-void func_8005D48C_5E08C(Player *, s32, s32);
 void setPlayerLeanAnimation(Player *player, s32 animIndex, s32 progress);
 void loadCharacterBodyParts(Player *player);
 void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags);

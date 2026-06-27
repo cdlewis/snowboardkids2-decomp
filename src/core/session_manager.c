@@ -22,12 +22,12 @@ void returnToMainMenu(void);
 void loadSaveSlotScreen(void);
 void awaitSaveDataLoad(void);
 void awaitUnlockCutscene(void);
-void func_80014B1C_1571C(void);
+void awaitSaveSlotSelection(void);
 void loadSaveData(void);
 void awaitStoryMapSelection(void);
 void loadStoryMapScreen(void);
 void loadLevelSelectScreen(void);
-void func_80014C3C_1583C(void);
+void awaitStoryLevelSelect(void);
 void awaitPreRaceCutscene(void);
 void loadPreRaceCutscene(void);
 void loadRace(void);
@@ -55,10 +55,10 @@ void initStoryMode(void) {
 
 void loadSaveSlotScreen(void) {
     createTaskQueue(initSaveSlotScreen, 0x96);
-    setGameStateHandler(func_80014B1C_1571C);
+    setGameStateHandler(awaitSaveSlotSelection);
 }
 
-void func_80014B1C_1571C(void) {
+void awaitSaveSlotSelection(void) {
     s16 result = getSchedulerReturnValue();
 
     if (result != 0) {
@@ -92,10 +92,10 @@ void awaitStoryMapSelection(void) {
 
 void loadLevelSelectScreen(void) {
     createTaskQueue(initLevelSelectBasicState, 0x96);
-    setGameStateHandler(func_80014C3C_1583C);
+    setGameStateHandler(awaitStoryLevelSelect);
 }
 
-void func_80014C3C_1583C(void) {
+void awaitStoryLevelSelect(void) {
     s16 result = getSchedulerReturnValue();
 
     if (result != 0) {
@@ -246,7 +246,7 @@ void awaitUnlockCutscene(void) {
 }
 
 void loadCreditsSequence(void) {
-    createTaskQueue(func_80003EE0_4AE0, 0x64);
+    createTaskQueue(initCreditsController, 0x64);
     setGameStateHandler(awaitCreditsSequence);
 }
 
@@ -273,7 +273,7 @@ void awaitPostCreditsSaveScreen(void) {
 }
 
 void returnToMainMenu(void) {
-    createRootTaskScheduler(func_8001452C_1512C, 0xC8);
+    createRootTaskScheduler(resetSessionAndStartTitleScreen, 0xC8);
 }
 
 u8 getStoryMapCameraMode(void) {

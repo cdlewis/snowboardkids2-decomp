@@ -437,7 +437,6 @@ void updateWarpEffect(WarpEffectState *);
 void finishWarpEffect(WarpEffectState *);
 void descendWarpEffect(WarpEffectState *);
 void cleanupPlayerAuraEffect(Func432D8Arg *);
-void func_80044CA4_458A4(Func432D8Arg *);
 void updatePlayerAuraEffect(PlayerAuraEffectState *state);
 void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state);
 void cleanupPlayerFlashEffect(PlayerFlashEffectState *);

@@ -21,7 +21,6 @@ typedef struct {
 } FlyingEnemySpawnerState;
 
 void renderFlyingEnemy(FlyingEnemyTaskArg *arg0);
-void func_800BBA50(s32 arg0);
 void initCrazyJungleHazards(void);
 void initFlyingEnemySpawner(FlyingEnemySpawnerState *arg0);
 void updateFlyingEnemySpawner(FlyingEnemySpawnerState *arg0);

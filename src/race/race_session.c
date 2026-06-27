@@ -389,7 +389,6 @@ extern s8 gControllerPollingEnabled;
 extern SessionConfig *gGameSessionContext;
 
 void initRaceViewports(void);
-void func_80040420_41020(void);
 void onGameSessionTerminated(void);
 void parseRaceAssetData(void);
 void scheduleRaceTasks(void);

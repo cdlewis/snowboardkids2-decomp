@@ -140,7 +140,7 @@ void initSceneLighting(CreditsState *arg0) {
     setViewportLightColors(arg0->unk768.viewportId, 3, &arg0->unkE44[0], (ColorData *)&arg0->paddingE5C[0]);
 }
 
-void func_80003EE0_4AE0(void) {
+void initCreditsController(void) {
     s32 buffer[8];
     s32 i;
     CreditsState *taskMemory = (CreditsState *)allocateTaskMemory(0xE68);

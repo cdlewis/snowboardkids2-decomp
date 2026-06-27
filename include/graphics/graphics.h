@@ -276,8 +276,6 @@ void renderFrame(u32);
 
 void initDisplayBuffers(void);
 
-void func_8006FEF8_70AF8(ViewportNode *node, u16 viewportId);
-
 void setViewportId(ViewportNode *node, u16 viewportId);
 
 void setViewportTransformById(u16 viewportId, void *transformMatrix);
@@ -301,8 +299,6 @@ void disableViewportOverlay(ViewportNode *arg0);
 void enableViewportDisplayList(void *arg0);
 
 void disableViewportDisplayList(ViewportNode *arg0);
-
-void func_8006FEE8_70AE8(ViewportNode *arg0);
 
 void setViewportOverlayRgbAndEnable(ViewportNode *arg0, s8 r, s8 g, s8 b);
 

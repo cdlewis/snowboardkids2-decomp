@@ -205,7 +205,6 @@ void cleanupStoryMapShopSoldOutLabel(SpriteDisplayState *);
 void drawUnlockScreenItemIcons(void *);
 void cleanupUnlockScreenItemIcons(UnlockScreenItemIconsCleanupArg *);
 void *loadTextRenderAsset(s32);
-void func_8006FF90_70B90(s32, s32, void *, void *);
 void updateDebugCameraYState(cameraState *arg0);
 
 void initDebugCameraController(cameraState *arg0) {

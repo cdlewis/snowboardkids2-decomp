@@ -30,7 +30,7 @@ typedef struct {
 } PlayerFlashEffectState;
 
 void initGameSession(void);
-void func_8001452C_1512C(void);
+void resetSessionAndStartTitleScreen(void);
 void initRumblePakCheckTask(void);
 void initRace(void);
 void playSoundEffect(s32 soundId);
@@ -39,7 +39,7 @@ void initCharacterSelectScreen(void);
 void initStoryMapState(void);
 void storyMapLocationTextTask(func_80019CD0_1A8D0_arg *arg0);
 void initSaveSlotScreen(void);
-void func_80003EE0_4AE0(void);
+void initCreditsController(void);
 void initLevelSelectWithDetail(void);
 void initLevelSelectBasic(void);
 void enqueueTextLayout(
@@ -72,7 +72,6 @@ void loadOverlay_1BBA0(void);
 void spawnFloatingItemSprite(s32 x, s32 y, s32 itemType, s32 renderPriority, s32 halfSizeRender);
 void spawnSkiTrailTask(Player *player);
 void drawNumericString(char *text, s16 x, s16 y, s16 z, void *texture, s16 priority, s16 layer);
-void func_800585C8_591C8(s32 arg0);
 void setPlayerBouncedBackState(Player *player);
 s32 tryActivateBoost(Player *arg0);
 s32 tryActivateFinishBoost(Player *arg0);

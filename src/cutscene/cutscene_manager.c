@@ -41,10 +41,10 @@ extern char gTimelineSlotRowFormat[];
 extern CutsceneAssetTable gCutsceneAssetTable[];
 
 extern void initializeCutsceneCommand(void *, void *, s32, s32, s32);
-extern void func_800BB2F4(s32, s32, s32);
+extern void renderCutsceneSlotMenuItem(s32, s32, s32);
 
 AssetGroup *getAssetGroupOrDefault(s32 assetIndex);
-void func_800BB404(s32, s32, s32, char *, s32);
+void renderCutsceneEditorText(s32, s32, s32, char *, s32);
 void initAnimatedGhost(s32, s16, s16, void *);
 void *getCommandEntryMasked(s32 categoryIndex, s32 commandIndex);
 void cleanupCutsceneFadeTask(FadeTaskData *task);
@@ -930,9 +930,9 @@ void renderCutsceneSlotMenu(s32 arg0, s16 arg1) {
         yPos = 0x30000;
     loop:
         if (i == target) {
-            func_800BB2F4(arg0, yPos >> 16, 7);
+            renderCutsceneSlotMenuItem(arg0, yPos >> 16, 7);
         } else {
-            func_800BB2F4(arg0, yPos >> 16, 3);
+            renderCutsceneSlotMenuItem(arg0, yPos >> 16, 3);
         }
         yPos += 0x10000;
         i++;
@@ -979,7 +979,7 @@ void renderCutsceneTimelineView(s32 uiResourceId, s32 baseFrameArg) {
 
     baseFrame = baseFrameArg & 0xFFFF;
     sprintf(buffer, gTimelineRulerFormat, baseFrame, baseFrame + 1, baseFrame + 2, baseFrame + 3, baseFrame + 4);
-    func_800BB404(uiResourceId, 0, 2, buffer, 2);
+    renderCutsceneEditorText(uiResourceId, 0, 2, buffer, 2);
 
     slotIndex = 0;
     if (gCutsceneStateTable->slotCount != 0) {

@@ -544,9 +544,6 @@ void renderColorIndexedOverlayDisplayList(void *arg0) {
     renderOverlayDisplayList(arg0);
 }
 
-// This is probably wrong but stops the build failing.
-void func_800BBB90(s16 arg0) __attribute__((alias("spawnDebugDisplayListTask")));
-
 void spawnDebugDisplayListTask(s16 arg0) {
     DebugDisplayListPosition *task;
 

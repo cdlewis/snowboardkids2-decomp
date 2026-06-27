@@ -1804,7 +1804,7 @@ s32 getRunAnimationId(s16 arg0) {
     return 0x9B;
 }
 
-s32 func_800015EC_21EC(void) {
+s32 getDefaultCharacterCount(void) {
     return 6;
 }
 

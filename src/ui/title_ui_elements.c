@@ -28,7 +28,7 @@ void cleanupTitleLogoTask(TitleLogoTask *);
 void enqueueTitleLogoRender(TitleLogoTask *);
 void cleanupControllerSlotDisplay(void **);
 void updateControllerSlotHighlights(ControllerSlotDisplay *);
-void func_800167B0_173B0(Struct16728 *);
+void updatePressStartPrompt(Struct16728 *);
 void cleanupPressStartPrompt(void **);
 void renderTitleEffectModel(ModelEntityRenderState *arg0);
 void cleanupTitleEffectModel(EffectState *arg0);
@@ -155,7 +155,7 @@ void cleanupControllerSlotDisplay(void **arg0) {
     arg0[1] = freeNodeMemory(arg0[1]);
 }
 
-void func_80016728_17328(Struct16728 *arg0) {
+void initPressStartPrompt(Struct16728 *arg0) {
     void *dmaResult;
 
     dmaResult = loadCompressedData(&titleScreenSprites_ROM_START, &titleScreenSprites_ROM_END, 0x2238);
@@ -167,10 +167,10 @@ void func_80016728_17328(Struct16728 *arg0) {
     arg0->unkC = 0x1E;
     arg0->unkE = 0;
     arg0->unkD = 0;
-    setCallback(func_800167B0_173B0);
+    setCallback(updatePressStartPrompt);
 }
 
-void func_800167B0_173B0(Struct16728 *arg0) {
+void updatePressStartPrompt(Struct16728 *arg0) {
     if (arg0->unkC == 0) {
         arg0->unkD++;
         if ((arg0->unkD & 1) == 0) {

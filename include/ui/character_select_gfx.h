@@ -247,7 +247,6 @@ void cleanupCharSelectPreviewAssets(CharSelectPreviewModel *);
 void updateCharSelectPreviewLighting(CharSelectPreviewModel *, u8);
 void animateCharSelectP2NameReveal(P2NameAnimationState *);
 void animateCharSelectP2NameHide(P2NameHideState *);
-void func_800269C8_275C8(void *);
 void cleanupBoardSelectCharNames(SimpleSpriteEntry *);
 void initCharSelectIconHideSprites(CharSelectIconHideState *);
 void updateCharSelectIconsLockedState(CharSelectIconHideState *);

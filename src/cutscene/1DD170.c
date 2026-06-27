@@ -91,7 +91,7 @@ typedef struct {
     s16 requiresModel;
 } CommandCategory;
 
-void func_800BB47C(s32, s32, s32, s32, s32, s32);
+void setupCutsceneCommandLayout(s32, s32, s32, s32, s32, s32);
 
 // clang-format off
 struct {
@@ -410,7 +410,7 @@ s16 executeIsDoneCommand(CurrentCommand *currentCommand, CommandData *commandDat
 }
 
 void cutsceneCmdHelper(s32 commandIndex) {
-    func_800BB47C(commandIndex, 2, 0x14, 0x11, 8, 0x20);
+    setupCutsceneCommandLayout(commandIndex, 2, 0x14, 0x11, 8, 0x20);
 }
 
 s32 getCategorySkipValue(u8 categoryIndex) {

@@ -156,7 +156,7 @@ typedef struct {
     u8 padding[0x1C];
     s32 unk24;
     s32 unk28;
-} func_80050DB0_519B0_arg;
+} ImpactStarTask;
 
 typedef struct {
     loadAssetMetadata_arg particle;
@@ -191,9 +191,9 @@ void initCharacterTrailParticleTask(MemoryAllocatorNode **);
 void loadCharacterTrailParticleAsset(CharacterTrailParticleTask *);
 void updateCharacterTrailParticle(CharacterTrailParticleTask *);
 void cleanupCharacterTrailParticleTask(s32 **);
-void func_80050DB0_519B0(func_80050DB0_519B0_arg *);
-void func_80050E08_51A08(func_80050DB0_519B0_arg *);
-void func_80050EA0_51AA0(void **);
+void loadImpactStarAsset(ImpactStarTask *);
+void updateImpactStar(ImpactStarTask *);
+void cleanupImpactStar(void **);
 void updateFloatingItemSprite(FloatingItemSpriteTask *);
 void cleanupFloatingItemSpriteTask(FloatingItemSpriteTask *);
 void updateDualSnowSprayParticles_SingleSlot(DualSnowSprayUpdateTask *);
@@ -514,13 +514,13 @@ void spawnPlayerCharacterTrailParticle(Player *arg0, s32 arg1) {
     }
 }
 
-void func_80050D70_51970(MemoryAllocatorNode **node) {
+void initImpactStarTask(MemoryAllocatorNode **node) {
     *node = load_3ECE40();
-    setCleanupCallback(&func_80050EA0_51AA0);
-    setCallbackWithContinue(&func_80050DB0_519B0);
+    setCleanupCallback(&cleanupImpactStar);
+    setCallbackWithContinue(&loadImpactStarAsset);
 }
 
-void func_80050DB0_519B0(func_80050DB0_519B0_arg *arg0) {
+void loadImpactStarAsset(ImpactStarTask *arg0) {
     GameState *allocation;
     void *temp;
 
@@ -533,10 +533,10 @@ void func_80050DB0_519B0(func_80050DB0_519B0_arg *arg0) {
 
     loadAssetMetadata((loadAssetMetadata_arg *)&arg0->unk4, arg0->unk0, arg0->unk24);
 
-    setCallbackWithContinue(&func_80050E08_51A08);
+    setCallbackWithContinue(&updateImpactStar);
 }
 
-void func_80050E08_51A08(func_80050DB0_519B0_arg *arg0) {
+void updateImpactStar(ImpactStarTask *arg0) {
     GameState *alloc;
     s32 i;
 
@@ -556,14 +556,14 @@ void func_80050E08_51A08(func_80050DB0_519B0_arg *arg0) {
     }
 }
 
-void func_80050EA0_51AA0(void **arg0) {
+void cleanupImpactStar(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
 void spawnImpactStar(Vec3i *arg0) {
     Node *task;
 
-    task = scheduleTask(&func_80050D70_51970, 2, 0, 0xFA);
+    task = scheduleTask(&initImpactStarTask, 2, 0, 0xFA);
     if (task != NULL) {
         memcpy(&task->freeNext, arg0, sizeof(Vec3i));
     }

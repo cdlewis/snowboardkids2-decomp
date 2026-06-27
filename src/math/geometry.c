@@ -966,7 +966,7 @@ void func_8006BDBC_6C9BC(Transform3D *arg0, Transform3D *mat1, Transform3D *mat2
  * avoiding the need to explicitly transpose the right matrix first.
  * Used for coordinate system transformations in skeletal animation.
  */
-void func_mulMatrix3x3T(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2) {
+void matrixMultiplyTransposed(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2) {
     Transform3D *mat1 = arg1;
     Transform3D *mat2 = arg2;
     s32 row;

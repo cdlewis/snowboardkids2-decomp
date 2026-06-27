@@ -27,11 +27,11 @@ void loadPlayerCountSelect(void) {
     setGameStateHandler(awaitPlayerCountSelect);
 }
 
-void func_80021DE8_229E8(void);
-void func_80021EFC_22AFC(void);
+void loadVersusSaveSlotScreen(void);
+void loadVersusLevelSelect(void);
 void awaitVersusCharacterSelect(void);
 void exitVersusMode(void);
-void func_80021E18_22A18(void);
+void awaitVersusSaveSlotSelection(void);
 void loadVersusRace(void);
 
 void awaitPlayerCountSelect(void) {
@@ -41,20 +41,20 @@ void awaitPlayerCountSelect(void) {
     result = getSchedulerReturnValue();
 
     if (result == 1) {
-        setGameStateHandler(func_80021DE8_229E8);
+        setGameStateHandler(loadVersusSaveSlotScreen);
     } else if (result == 0xFF) {
         terminateSchedulerWithCallback(exitVersusMode);
     }
 }
 
-void func_80021DE8_229E8(void) {
+void loadVersusSaveSlotScreen(void) {
     createTaskQueue(initSaveSlotScreen, 100);
-    setGameStateHandler(func_80021E18_22A18);
+    setGameStateHandler(awaitVersusSaveSlotSelection);
 }
 
 void loadVersusSaveData(void);
 
-void func_80021E18_22A18(void) {
+void awaitVersusSaveSlotSelection(void) {
     s16 result;
 
     result = getSchedulerReturnValue();
@@ -84,14 +84,14 @@ void awaitVersusMapScreen(void) {
         setMusicFadeOut(0x14);
         terminateSchedulerWithCallback(exitVersusMode);
     } else if (result == 1) {
-        setGameStateHandler(func_80021EFC_22AFC);
+        setGameStateHandler(loadVersusLevelSelect);
     }
 }
 
 void awaitVersusLevelSelect(void);
 void loadVersusCharacterSelect(void);
 
-void func_80021EFC_22AFC(void) {
+void loadVersusLevelSelect(void) {
     createTaskQueue(initLevelSelectBasic, 100);
     setGameStateHandler(awaitVersusLevelSelect);
 }
@@ -124,13 +124,13 @@ void awaitVersusCharacterSelect(void) {
             setMusicFadeOut(0x10);
             setGameStateHandler(loadVersusRace);
         } else if (result == 0xFF) {
-            setGameStateHandler(func_80021EFC_22AFC);
+            setGameStateHandler(loadVersusLevelSelect);
         }
     }
 }
 
 void awaitVersusSaveDataLoad(void);
-void func_800220AC_22CAC(void);
+void awaitVersusRaceResult(void);
 
 void loadVersusSaveData(void) {
     createTaskQueue(initRumblePakCheckTask, 0x96);
@@ -145,10 +145,10 @@ void awaitVersusSaveDataLoad(void) {
 
 void loadVersusRace(void) {
     createTaskQueue(initRace, 100);
-    setGameStateHandler(func_800220AC_22CAC);
+    setGameStateHandler(awaitVersusRaceResult);
 }
 
-void func_800220AC_22CAC(void) {
+void awaitVersusRaceResult(void) {
     s16 result;
 
     result = getSchedulerReturnValue();
@@ -164,5 +164,5 @@ void func_800220AC_22CAC(void) {
 }
 
 void exitVersusMode(void) {
-    createRootTaskScheduler(func_8001452C_1512C, 0xC8);
+    createRootTaskScheduler(resetSessionAndStartTitleScreen, 0xC8);
 }

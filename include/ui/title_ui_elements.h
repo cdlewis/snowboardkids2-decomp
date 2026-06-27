@@ -72,6 +72,6 @@ typedef struct {
 
 void loadTitleLogoAsset(TitleLogoTask *arg0);
 void initControllerSlotDisplay(ControllerSlotState *);
-void func_80016728_17328(Struct16728 *arg0);
+void initPressStartPrompt(Struct16728 *arg0);
 void initTitleEffectModel(ModelEntity *arg0);
 void initTitleCharacterModel(TitleCharacterState *arg0);

@@ -498,3 +498,9 @@ This forced KMC GCC to keep the 64-bit product in `t6/t7` and emit the spill pat
 ## Prefer Explicit Overlay Layouts in race_hud.c
 
 While consolidating `race_hud.c` callback state structs, anonymous union/struct overlays were not a useful way to expose alternate field names for the same allocation: the syntax-check path did not expose members reliably, and the struct-offset formatter treated anonymous overlay fields like sequential storage. Use one explicit canonical layout instead, then access existing fields by their stable names or cast only at API boundaries that require a different view.
+
+## KMC Assembler Can Be Symbol-Name Sensitive
+
+Renaming functions in `geometry.c` can change the assembled bytes even when KMC GCC emits identical `.s` apart from the label text. For example, renaming `func_8006BDBC_6C9BC` to `multiplyMatrixRotation` made the assembler insert an extra `nop` between `rotateVectorY` and the renamed function, shifting the next symbol by four bytes. Similarly, `func_mulMatrix3x3T` assembled correctly as `matrixMultiplyTransposed`, but `multiplyMatrixByTranspose` shifted the helper by four bytes.
+
+When renaming tightly packed geometry helpers, test candidate names by compiling a temporary object and comparing both symbol offsets and disassembly, then run `./tools/build-and-verify.sh`. The `func_` prefix itself is not always required for a match; the accepted `matrixMultiplyTransposed` name keeps the original checksum.

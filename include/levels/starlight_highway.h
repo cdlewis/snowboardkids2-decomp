@@ -46,7 +46,6 @@ typedef struct {
     void *segment2;
 } DualSegmentCleanupState;
 
-s32 func_800BB504(Vec3i *arg0, s32 arg1);
 void spawnDebugDisplayListTask(s16 arg0);
 void spawnStarlightItems(void);
 void spawnStarlightBarriers(void);

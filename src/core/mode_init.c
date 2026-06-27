@@ -15,9 +15,9 @@ typedef struct {
 
 extern u8 gDebugUnlockEnabled;
 
-void func_800144DC_150DC(void);
-void func_80014660_15260(void);
-void func_80014690_15290(void);
+void resetSessionAndStartLogoScreen(void);
+void loadTitleScreen(void);
+void awaitTitleScreenSelection(void);
 void startLogoScreen(void);
 void waitForLogoScreen(void);
 void startDemoRace(void);
@@ -39,10 +39,10 @@ void initGameSession(void) {
     EepromSaveData = allocateMemoryNode(0, 0x5C, &allocation);
     gDebugUnlockEnabled = 0;
     initOptionsDefaults();
-    setGameStateHandlerWithContinue(func_800144DC_150DC);
+    setGameStateHandlerWithContinue(resetSessionAndStartLogoScreen);
 }
 
-void func_800144DC_150DC(void) {
+void resetSessionAndStartLogoScreen(void) {
     TaskData_1512C *data = allocateTaskMemory(4);
     setViewportFadeValue(NULL, 0, 0);
     data->unk0 = 0;
@@ -51,13 +51,13 @@ void func_800144DC_150DC(void) {
     setGameStateHandlerWithContinue(startLogoScreen);
 }
 
-void func_8001452C_1512C(void) {
+void resetSessionAndStartTitleScreen(void) {
     TaskData_1512C *data = allocateTaskMemory(4);
     setViewportFadeValue(NULL, 0, 0);
     data->unk0 = 0;
     data->unk2 = 0;
     resetGameSession();
-    setGameStateHandlerWithContinue(func_80014660_15260);
+    setGameStateHandlerWithContinue(loadTitleScreen);
 }
 
 void startLogoScreen(void) {
@@ -80,16 +80,16 @@ void startDemoRace(void) {
 void waitForDemoRace(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
         gGameSessionContext->gameMode = 0;
-        setGameStateHandler(func_80014660_15260);
+        setGameStateHandler(loadTitleScreen);
     }
 }
 
-void func_80014660_15260(void) {
+void loadTitleScreen(void) {
     createTaskQueue(initTitleScreen, 0x64);
-    setGameStateHandler(func_80014690_15290);
+    setGameStateHandler(awaitTitleScreenSelection);
 }
 
-void func_80014690_15290(void) {
+void awaitTitleScreenSelection(void) {
     s16 result = getSchedulerReturnValue();
 
     if (result == 0) {
@@ -125,7 +125,7 @@ void waitForAttractRace(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
         gGameSessionContext->unk5 = (gGameSessionContext->unk5 + 1) % 3;
         gGameSessionContext->unk5 |= 0xF0;
-        setGameStateHandler(func_80014660_15260);
+        setGameStateHandler(loadTitleScreen);
     }
 }
 
@@ -146,7 +146,7 @@ void waitForBattleRace(void) {
     if (result == 1) {
         setGameStateHandler(startBattleRace);
     } else {
-        setGameStateHandler(func_80014660_15260);
+        setGameStateHandler(loadTitleScreen);
     }
 }
 
@@ -157,7 +157,7 @@ void startOptionsMenu(void) {
 
 void waitForOptionsMenu(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
-        setGameStateHandler(func_80014660_15260);
+        setGameStateHandler(loadTitleScreen);
     }
 }
 

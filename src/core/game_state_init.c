@@ -15,7 +15,7 @@
 extern u16 storyMapLocationModelIds;
 extern u8 storyMapLocationIndex;
 extern void storyMapCameraTask;
-extern void func_80018800_19400;
+extern void initStoryMapCharacterTask;
 extern void initStoryMapMiniCamera;
 extern void initGenericDiscoveryTrigger;
 extern void initStoryMapRandomEvent;
@@ -47,7 +47,7 @@ void initializeGameState(void) {
         initMenuCameraNode(&temp_s0->node1, 0, 0xA, 0);
         initMenuCameraNode(&temp_s0->node2, 8, 0xF, 1);
         scheduleTask(&storyMapCameraTask, 0, 0, 0x5A);
-        scheduleTask(&func_80018800_19400, 0, 0, 0x5B);
+        scheduleTask(&initStoryMapCharacterTask, 0, 0, 0x5B);
         scheduleTask(&initStoryMapRandomEvent, 0, 0, 0x5B);
         var_s1++;
         var_s1--;
