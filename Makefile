@@ -190,6 +190,7 @@ MODELPAYLOAD_PACK = $(PYTHON) $(TOOLS_DIR)/modelpayload_pack.py
 MODELPAYLOAD_SOURCES := $(shell find assets/modelpayload -type f 2>/dev/null)
 COURSE_MODEL_RESOURCES_PACK = $(PYTHON) $(TOOLS_DIR)/course_model_resources_pack.py
 COURSE_TEXTURE_TABLE_PACK = $(PYTHON) $(TOOLS_DIR)/course_texture_table_pack.py
+TILED_BACKGROUND_PACK = $(PYTHON) $(TOOLS_DIR)/tiled_background_pack.py
 TRACK_SECTOR_MESH_PACK = $(PYTHON) $(TOOLS_DIR)/track_sector_mesh_pack.py
 GOLD_COIN_POSITIONS_PACK = $(PYTHON) $(TOOLS_DIR)/gold_coin_positions_pack.py
 ITEM_BOX_POSITIONS_PACK = $(PYTHON) $(TOOLS_DIR)/item_box_positions_pack.py
@@ -245,6 +246,12 @@ $(BUILD_DIR)/assets/courses/texture_tables/%.o: assets/courses/texture_tables/%.
 	$(PRINTF) "[$(GREEN) course  $(NO_COL)]  $<\n"
 	$(V)$(COURSE_TEXTURE_TABLE_PACK) $< --out $(BUILD_DIR)/assets/courses/texture_tables/$*.sno
 	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/courses/texture_tables/$*.sno
+
+$(BUILD_DIR)/assets/tiled_backgrounds/%.o: assets/tiled_backgrounds/%.yaml $(TOOLS_DIR)/tiled_background_pack.py $(TOOLS_DIR)/tiled_background_common.py $(TOOLS_DIR)/course_assets_common.py $(TOOLS_DIR)/modelpayload_common.py $(TOOLS_DIR)/sno.py
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN)  tiles  $(NO_COL)]  $<\n"
+	$(V)$(TILED_BACKGROUND_PACK) $< --out $(BUILD_DIR)/assets/tiled_backgrounds/$*.sno
+	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/tiled_backgrounds/$*.sno
 
 $(BUILD_DIR)/assets/courses/track_sector_meshes/%.o: assets/courses/track_sector_meshes/%.yaml $(TOOLS_DIR)/track_sector_mesh_pack.py $(TOOLS_DIR)/course_assets_common.py $(TOOLS_DIR)/sno.py $(COURSE_ASSET_SOURCES)
 	@mkdir -p $(shell dirname $@)

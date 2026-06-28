@@ -3251,9 +3251,10 @@ segments:
     start: 0x426EF0
 
   - name: shopBackgroundAsset
-    type: bin
+    type: tiled_background
     vram: 0
     start: 0x42F1D0
+    decompressed_size: 0x14410
 
   - name: levelSelectPortraits
     type: bin
@@ -3266,9 +3267,10 @@ segments:
     start: 0x43F050
 
   - name: previewBackgroundAsset
-    type: bin
+    type: tiled_background
     vram: 0
     start: 0x4488E0
+    decompressed_size: 0x14410
 
   - name: snowflakeSprite
     type: bin
@@ -4679,9 +4681,10 @@ segments:
     start: 0x67E860
 
   - name: galleryBackgroundAsset
-    type: bin
+    type: tiled_background
     vram: 0
     start: 0x67FB80
+    decompressed_size: 0xC010
 
   - name: galleryOverlayTexture
     type: bin
