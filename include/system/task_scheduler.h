@@ -2,6 +2,9 @@
 
 #include "common.h"
 
+// Bytes from &Node::payload through the end of a scheduler node's inline payload storage.
+#define TASK_NODE_INLINE_PAYLOAD_SIZE 0x100
+
 typedef struct Node {
     /* 0x00 */ struct Node *prev;
     /* 0x04 */ struct Node *next;
@@ -19,6 +22,34 @@ typedef struct Node {
     /* 0x24 */ void (*cleanupCallback)(void *);
     /* 0x28 */ void *payload;
 } Node;
+
+typedef struct SchedulerNodeWithPayload SchedulerNodeWithPayload;
+
+typedef struct TaskScheduler {
+    /* 0x00 */ struct TaskScheduler *prev;
+    /* 0x04 */ struct TaskScheduler *next;
+    /* 0x08 */ struct TaskScheduler *freeNext;
+    /* 0x0C */ struct TaskScheduler *parentScheduler;
+    /* 0x10 */ void (*gamestateHandler)(void);
+    /* 0x14 */ void (*schedulerCleanupCallback)(void);
+    /* 0x18 */ u8 schedulerState;
+    /* 0x19 */ u8 priority;
+    /* 0x1A */ u8 renderContext;
+    /* 0x1B */ u8 handlerContinueFlag;
+    /* 0x1C */ s32 cleanupFrameCounter;
+    /* 0x20 */ void *latestDmaSequenceNumber;
+    /* 0x24 */ void *latestDmaNode;
+    /* 0x28 */ void *allocatedState;
+    /* 0x2C */ SchedulerNodeWithPayload *nodes;
+    /* 0x30 */ Node *activeList;
+    /* 0x34 */ Node *freeList;
+    /* 0x38 */ s16 counters[8];
+    /* 0x48 */ s16 total;
+    /* 0x4A */ s16 returnValue;
+    /* 0x4C */ s16 childSchedulerCount;
+} TaskScheduler;
+
+extern TaskScheduler *gActiveScheduler;
 
 void setGameStateHandler(void *arg0);
 

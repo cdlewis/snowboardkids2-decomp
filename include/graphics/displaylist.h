@@ -94,6 +94,12 @@ typedef struct {
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1);
 void enqueueDisplayListObjectWithSegments(s32 arg0, DisplayListObject *arg1);
 
+void prepareDisplayListRenderState(DisplayListObject *obj);
+void setupDisplayListMatrix(DisplayListObject *obj);
+void setupBillboardDisplayListMatrix(DisplayListObject *obj);
+void initializeMultiPartDisplayListObjects(DisplayListObject *arg0);
+void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1);
+
 void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects);
 void renderTexturedOpaqueSprite(DisplayListObject *arg0);
 void renderTexturedTransparentSprite(DisplayListObject *arg0);

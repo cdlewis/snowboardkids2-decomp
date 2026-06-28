@@ -9,38 +9,14 @@
 #define SCHEDULER_STATE_DMA_PENDING 3
 #define SCHEDULER_STATE_CLEANUP 4
 
-typedef struct {
+struct SchedulerNodeWithPayload {
     /* 0x00 */ Node n;
     u8 padding[0xFC]; // probably the max possible payload
-} NodeWithPayload;
+};
 
-typedef struct gActiveScheduler_type {
-    /* 0x00 */ struct gActiveScheduler_type *prev;
-    /* 0x04 */ struct gActiveScheduler_type *next;
-    /* 0x08 */ struct gActiveScheduler_type *freeNext;
-    /* 0x0C */ struct gActiveScheduler_type *parentScheduler;
-    /* 0x10 */ void (*gamestateHandler)(void);
-    /* 0x14 */ void (*schedulerCleanupCallback)(void);
-    /* 0x18 */ u8 schedulerState;
-    /* 0x19 */ u8 priority;
-    /* 0x1A */ u8 renderContext;
-    /* 0x1B */ u8 handlerContinueFlag;
-    /* 0x1C */ s32 cleanupFrameCounter;
-    /* 0x20 */ void *latestDmaSequenceNumber;
-    /* 0x24 */ void *latestDmaNode;
-    /* 0x28 */ void *allocatedState;
-    /* 0x2C */ NodeWithPayload *nodes;
-    /* 0x30 */ Node *activeList;
-    /* 0x34 */ Node *freeList;
-    /* 0x38 */ s16 counters[8];
-    /* 0x48 */ s16 total;
-    /* 0x4A */ s16 returnValue;
-    /* 0x4C */ s16 childSchedulerCount;
-} gActiveScheduler_type;
-
-gActiveScheduler_type gSchedulerPool[16] BSS = { 0 };
-gActiveScheduler_type gSchedulerListSentinel BSS = { 0 };
-gActiveScheduler_type *gFreeSchedulerList BSS = NULL;
+TaskScheduler gSchedulerPool[16] BSS = { 0 };
+TaskScheduler gSchedulerListSentinel BSS = { 0 };
+TaskScheduler *gFreeSchedulerList BSS = NULL;
 
 // The original BSS labels split one scheduler-sized sentinel node:
 // gSchedulerListSentinel is prev at +0x00, gActiveSchedulerList is next at +0x04.
@@ -49,7 +25,7 @@ gActiveScheduler_type *gFreeSchedulerList BSS = NULL;
 extern s32 gFrameCounter;
 extern s32 gBufferedFrameCounter;
 
-gActiveScheduler_type *gActiveScheduler = NULL;
+TaskScheduler *gActiveScheduler = NULL;
 Node *gDMAOverlay = NULL;
 
 void initTaskScheduler(void) {
@@ -82,9 +58,9 @@ void initTaskScheduler(void) {
 }
 
 void createRootTaskScheduler(void (*gamestateHandler)(void), s32 priority) {
-    gActiveScheduler_type *newScheduler;
-    gActiveScheduler_type *current;
-    gActiveScheduler_type *insertPos;
+    TaskScheduler *newScheduler;
+    TaskScheduler *current;
+    TaskScheduler *insertPos;
 
     newScheduler = gFreeSchedulerList;
     insertPos = &gSchedulerListSentinel;
@@ -132,10 +108,10 @@ void createRootTaskScheduler(void (*gamestateHandler)(void), s32 priority) {
 }
 
 void createTaskQueue(void (*arg0)(void), s32 arg1) {
-    gActiveScheduler_type *temp_a2;
-    gActiveScheduler_type *var_a3;
-    gActiveScheduler_type *temp_v1;
-    gActiveScheduler_type *temp_v0;
+    TaskScheduler *temp_a2;
+    TaskScheduler *var_a3;
+    TaskScheduler *temp_v1;
+    TaskScheduler *temp_v0;
 
     temp_a2 = gFreeSchedulerList;
     var_a3 = &gSchedulerListSentinel;
@@ -181,9 +157,9 @@ void createTaskQueue(void (*arg0)(void), s32 arg1) {
 }
 
 void runTaskSchedulers(void) {
-    gActiveScheduler_type *temp_v0;
-    gActiveScheduler_type *temp_v0_2;
-    gActiveScheduler_type *temp_a0;
+    TaskScheduler *temp_v0;
+    TaskScheduler *temp_v0_2;
+    TaskScheduler *temp_a0;
 
     gActiveScheduler = gActiveSchedulerList;
     if (gActiveSchedulerList != NULL) {
@@ -228,7 +204,7 @@ void runTaskSchedulers(void) {
 
                         if (hasActiveTasks() == 0) {
                             gActiveScheduler->nodes =
-                                (NodeWithPayload *)decrementNodeRefCount((s32 *)gActiveScheduler->nodes);
+                                (SchedulerNodeWithPayload *)decrementNodeRefCount((s32 *)gActiveScheduler->nodes);
                             gActiveScheduler->allocatedState =
                                 decrementNodeRefCount((s32 *)gActiveScheduler->allocatedState);
                             gActiveScheduler->cleanupFrameCounter = gFrameCounter;
@@ -287,7 +263,7 @@ void terminateSchedulerWithCallback(void (*arg0)(void)) {
 }
 
 void returnToParentScheduler(s32 arg0) {
-    gActiveScheduler_type *temp_v0;
+    TaskScheduler *temp_v0;
 
     temp_v0 = gActiveScheduler->parentScheduler;
     if (temp_v0 != NULL) {
@@ -358,7 +334,8 @@ void setupTaskSchedulerNodes(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s
     gActiveScheduler->counters[6] = arg6;
     gActiveScheduler->counters[7] = arg7;
 
-    gActiveScheduler->nodes = allocateMemoryNode(0, gActiveScheduler->total * sizeof(NodeWithPayload), &nodeExists);
+    gActiveScheduler->nodes =
+        allocateMemoryNode(0, gActiveScheduler->total * sizeof(SchedulerNodeWithPayload), &nodeExists);
 
     gActiveScheduler->nodes = gActiveScheduler->nodes;
     gActiveScheduler->activeList = NULL;
@@ -374,7 +351,7 @@ void *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
     Node *newNode;
     Node *active;
     Node *freeNxt;
-    gActiveScheduler_type *g = gActiveScheduler;
+    TaskScheduler *g = gActiveScheduler;
     s16 *countPtr;
     Node *temp;
 

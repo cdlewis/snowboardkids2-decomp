@@ -167,9 +167,6 @@ void renderRotatedBillboardSprite(RotatedBillboardSprite *);
 void renderAlphaSprite(AlphaSpriteState *);
 void renderAlphaBillboardSprite(AlphaSpriteState *);
 void scheduleGameInitialization(void);
-void prepareDisplayListRenderState(DisplayListObject *);
-void setupDisplayListMatrix(DisplayListObject *);
-void setupBillboardDisplayListMatrix(DisplayListObject *);
 void initializeFontSystemAndTransitionToMainMenu(void);
 
 void parseGameDataLayout(GameDataLayout *gameData) {
