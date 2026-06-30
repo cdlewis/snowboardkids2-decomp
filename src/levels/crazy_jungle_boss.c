@@ -33,129 +33,6 @@ typedef struct {
 } BossSurfaceColor;
 
 typedef struct {
-    s32 posX;
-    s32 height;
-    s32 posZ;
-} BossCheckpoint;
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
-    void *unk10;
-    void *unk14;
-    void *unk18;
-    void *unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    u8 pad30[0x38 - 0x30];
-    DisplayListObject bones[17];
-    Vec3i unk434;
-    s32 prevWorldPosX;
-    s32 prevWorldPosY;
-    s32 prevWorldPosZ;
-    Vec3i velocity;
-    u8 pad458[0x10];
-    s32 unk468;
-    u8 pad46C[0x8];
-    s32 unk474;
-    u8 pad478[0x488 - 0x478];
-    BoneAnimationStateIndexed unk488[17];
-    u8 pad940[0x950 - 0x488 - sizeof(BoneAnimationStateIndexed) * 17];
-    Transform3D modelTransform;
-    u8 pad990[0x970 - 0x950 - sizeof(Transform3D)];
-    Transform3D unk970;
-    Transform3D unk990;
-    Transform3D unk9B0;
-    u8 pad9D0[0x9F0 - 0x9D0];
-    Transform3D scratch9F0;
-    BossCheckpoint checkpoints[9];
-    s32 aiTargetX;
-    u8 padA80[4];
-    s32 aiTargetZ;
-    u8 padA88[4];
-    u16 leanAnimIndex;
-    u16 unkA8E;
-    u16 unkA90;
-    u16 unkA92;
-    u16 unkA94;
-    u8 padA96[6];
-    u16 unkA9C;
-    u16 unkA9E;
-    s32 baseMaxSpeed;
-    s32 maxSpeedCap;
-    s32 unkAA8;
-    u8 padAAC[0xAC2 - 0xAAC];
-    s16 hitReactionState;
-    u8 padAC4[0xAD4 - 0xAC4];
-    Vec3i unkAD4;
-    s32 unkAE0;
-    s32 unkAE4;
-    s32 unkAE8;
-    s32 unkAEC;
-    s32 unkAF0;
-    s32 unkAF4;
-    s32 unkAF8;
-    s32 unkAFC;
-    s32 unkB00;
-    s32 unkB04;
-    s32 unkB08;
-    s32 unkB0C;
-    s32 unkB10;
-    s32 unkB14;
-    s32 unkB18;
-    s32 unkB1C;
-    s32 unkB20;
-    s32 unkB24;
-    s32 unkB28;
-    s32 unkB2C;
-    s32 unkB30;
-    s32 unkB34;
-    s32 unkB38;
-    s32 unkB3C;
-    s32 unkB40;
-    u8 padB44[0xB50 - 0xB44];
-    ListNode_5AA90 unkB50;
-    u8 padB69[0xB84 - 0xB6C];
-    s32 animFlags;
-    s32 behaviorFlags;
-    s32 unkB8C;
-    s32 unkB90;
-    u16 sectorIndex;
-    u8 padding[0x8];
-    u16 squashStretchScale;
-    u8 padB96[0xBB4 - 0xBA0];
-    u8 unkBB4;
-    u8 padBB5[0xBB7 - 0xBB5];
-    u8 boneCount;
-    u8 unkBB8;
-    u8 characterId;
-    u8 boardIndex;
-    u8 padBBB[0xBBD - 0xBBB];
-    u8 behaviorMode;
-    u8 behaviorPhase;
-    u8 behaviorStep;
-    u8 behaviorCounter;
-    u8 shadowMeshNeedsUpdate;
-    u8 padBC2[0x2];
-    u8 finishPosition;
-    u8 padBC5[0xBC7 - 0xBC5];
-    u8 unkBC7;
-    u8 padBC8[0xBC9 - 0xBC8];
-    u8 trackFaceType;
-    u8 trackFaceSubtype;
-    u8 padBCB[1];
-    u8 surfaceTypeIndex;
-    u8 padBCD[0x2];
-    u8 slowdownLevel;
-    u8 padBD0[0xBDB - 0xBD0];
-    u8 unkBDB;
-} Arg0Struct;
-
-typedef struct {
     s16 unk0;
     s16 unk2;
 } D_800BC468_ACC98_type;
@@ -168,15 +45,15 @@ extern s32 D_800BBA84_AC2B4[][3];
 
 extern s32 getIndexedAnimationDataPtr(void *, s16);
 
-s32 initCrazyJungleBoss(Arg0Struct *arg0);
-void dispatchCrazyJungleBossChasePhase(Arg0Struct *arg0);
-void dispatchCrazyJungleBossHoverPhase(Arg0Struct *arg0);
-s32 crazyJungleBossChaseIntroPhase(Arg0Struct *arg0);
-s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0);
-s32 crazyJungleBossChaseExitPhase(Arg0Struct *arg0);
-s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0);
-s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0);
-void updateCrazyJungleBossLeanBoneTransforms(Arg0Struct *arg0);
+s32 initCrazyJungleBoss(Player *arg0);
+void dispatchCrazyJungleBossChasePhase(Player *arg0);
+void dispatchCrazyJungleBossHoverPhase(Player *arg0);
+s32 crazyJungleBossChaseIntroPhase(Player *arg0);
+s32 crazyJungleBossChaseAttackPhase(Player *arg0);
+s32 crazyJungleBossChaseExitPhase(Player *arg0);
+s32 crazyJungleBossHoverAttackPhase(Player *arg0);
+s32 crazyJungleBossHoverJumpPhase(Player *arg0);
+void updateCrazyJungleBossLeanBoneTransforms(Player *arg0);
 
 StateFunc D_800BC440_ACC70[] = {
     (StateFunc)initCrazyJungleBoss,
@@ -221,12 +98,12 @@ Vec3i gCrazyJungleBossCheckpointOffsets[] = {
     { 0x00187000, 0x00000000, 0xFFE79000 },
 };
 
-void updateCrazyJungleBoss(Arg0Struct *arg0) {
+void updateCrazyJungleBoss(Player *arg0) {
     Transform3D sp10;
     Transform3D sp30;
     volatile u8 pad[8];
     GameState *alloc;
-    Arg0Struct *player;
+    Player *player;
     s32 dist;
     s32 diff;
     s32 i;
@@ -234,21 +111,21 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     s32 loopBound;
 
     alloc = getCurrentAllocation();
-    calculateAITargetPosition((Player *)arg0);
+    calculateAITargetPosition(arg0);
 
-    arg0->velocity.x = arg0->unk434.x - arg0->prevWorldPosX;
-    arg0->velocity.y = arg0->unk434.y - arg0->prevWorldPosY;
-    arg0->velocity.z = arg0->unk434.z - arg0->prevWorldPosZ;
-    memcpy(&arg0->prevWorldPosX, &arg0->unk434, sizeof(Vec3i));
+    arg0->velocity.x = arg0->worldPos.x - arg0->prevWorldPosX;
+    arg0->velocity.y = arg0->worldPos.y - arg0->prevWorldPosY;
+    arg0->velocity.z = arg0->worldPos.z - arg0->prevWorldPosZ;
+    memcpy(&arg0->prevWorldPosX, &arg0->worldPos, sizeof(Vec3i));
 
     if (arg0->sectorIndex < 0x16) {
         arg0->maxSpeedCap = 0x180000;
     } else {
-        player = (Arg0Struct *)alloc->players;
+        player = alloc->players;
         dist = distance_3d(
-            arg0->unk434.x - player->unk434.x,
-            arg0->unk434.y - player->unk434.y,
-            arg0->unk434.z - player->unk434.z
+            arg0->worldPos.x - player->worldPos.x,
+            arg0->worldPos.y - player->worldPos.y,
+            arg0->worldPos.z - player->worldPos.z
         );
 
         if (alloc->unk86 != 0) {
@@ -280,14 +157,14 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
         } while (i < loopBound);
     }
 
-    diff = arg0->maxSpeedCap - arg0->unkAA8;
+    diff = arg0->maxSpeedCap - arg0->smoothedSpeedCap;
     if (diff >= 0x101) {
         diff = 0x100;
     }
     if (diff < -0x80) {
         diff = -0x80;
     }
-    arg0->unkAA8 = arg0->unkAA8 + diff;
+    arg0->smoothedSpeedCap = arg0->smoothedSpeedCap + diff;
     arg0->animFlags &= 0xFFFBFFFF;
 
     if (arg0->behaviorMode != 3) {
@@ -312,54 +189,78 @@ void updateCrazyJungleBoss(Arg0Struct *arg0) {
     do {
     } while (D_800BC440_ACC70[arg0->behaviorMode](arg0) != 0);
 
-    createZRotationMatrix(&arg0->unk9B0, arg0->unkA92);
-    createCombinedRotationMatrix(&arg0->unk990, arg0->unkA8E, arg0->unkA90);
-    createYRotationMatrix(&arg0->unk970, arg0->unkA94);
+    createZRotationMatrix(&arg0->tiltTransform, arg0->rollAngle);
+    createCombinedRotationMatrix(&arg0->orientationTransform, arg0->pitchAngle, arg0->steeringAngle);
+    createYRotationMatrix(&arg0->headingTransform, arg0->rotY);
 
-    composeTransform3D(&arg0->unk9B0, &arg0->unk990, &sp10);
-    composeTransform3D(&sp10, &arg0->unk970, &sp30);
+    composeTransform3D(&arg0->tiltTransform, &arg0->orientationTransform, &sp10);
+    composeTransform3D(&sp10, &arg0->headingTransform, &sp30);
 
-    sp30.translation.x -= arg0->unk970.translation.x;
-    sp30.translation.y -= arg0->unk970.translation.y;
-    sp30.translation.z -= arg0->unk970.translation.z;
+    sp30.translation.x -= arg0->headingTransform.translation.x;
+    sp30.translation.y -= arg0->headingTransform.translation.y;
+    sp30.translation.z -= arg0->headingTransform.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0xF0), (s16 *)&sp30, &arg0->unkAD4);
-    memcpy(&arg0->unkB50.localPos, &arg0->unkAD4, sizeof(Vec3i));
-    addCollisionSectorNodeToList(&arg0->unkB50);
+    transformVector((s16 *)(alloc->unk48 + 0xF0), (s16 *)&sp30, &arg0->collisionOffset);
+    memcpy(&arg0->collisionListNode.localPos, &arg0->collisionOffset, sizeof(Vec3i));
+    addCollisionSectorNodeToList(&arg0->collisionListNode);
     updateCrazyJungleBossLeanBoneTransforms(arg0);
 
-    transformVector((s16 *)(alloc->unk48 + 0xFC), (s16 *)arg0->bones[0].transform.m, &arg0->unkAE4);
-    arg0->unkAE4 -= arg0->unk970.translation.x;
-    arg0->unkAE8 -= arg0->unk970.translation.y;
-    arg0->unkAEC -= arg0->unk970.translation.z;
+    transformVector(
+        (s16 *)(alloc->unk48 + 0xFC),
+        (s16 *)arg0->boneDisplayObjects[0].transform.m,
+        &arg0->extraCollisionOffsets[0]
+    );
+    arg0->extraCollisionOffsets[0].x -= arg0->headingTransform.translation.x;
+    arg0->extraCollisionOffsets[0].y -= arg0->headingTransform.translation.y;
+    arg0->extraCollisionOffsets[0].z -= arg0->headingTransform.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0x108), (s16 *)arg0->bones[13].transform.m, &arg0->unkAF0);
-    arg0->unkAF0 -= arg0->unk970.translation.x;
-    arg0->unkAF4 -= arg0->unk970.translation.y;
-    arg0->unkAF8 -= arg0->unk970.translation.z;
+    transformVector(
+        (s16 *)(alloc->unk48 + 0x108),
+        (s16 *)arg0->boneDisplayObjects[13].transform.m,
+        &arg0->extraCollisionOffsets[1]
+    );
+    arg0->extraCollisionOffsets[1].x -= arg0->headingTransform.translation.x;
+    arg0->extraCollisionOffsets[1].y -= arg0->headingTransform.translation.y;
+    arg0->extraCollisionOffsets[1].z -= arg0->headingTransform.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0x114), (s16 *)arg0->bones[14].transform.m, &arg0->unkAFC);
-    arg0->unkAFC -= arg0->unk970.translation.x;
-    arg0->unkB00 -= arg0->unk970.translation.y;
-    arg0->unkB04 -= arg0->unk970.translation.z;
+    transformVector(
+        (s16 *)(alloc->unk48 + 0x114),
+        (s16 *)arg0->boneDisplayObjects[14].transform.m,
+        &arg0->extraCollisionOffsets[2]
+    );
+    arg0->extraCollisionOffsets[2].x -= arg0->headingTransform.translation.x;
+    arg0->extraCollisionOffsets[2].y -= arg0->headingTransform.translation.y;
+    arg0->extraCollisionOffsets[2].z -= arg0->headingTransform.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0x120), (s16 *)arg0->bones[15].transform.m, &arg0->unkB08);
-    arg0->unkB08 -= arg0->unk970.translation.x;
-    arg0->unkB0C -= arg0->unk970.translation.y;
-    arg0->unkB10 -= arg0->unk970.translation.z;
+    transformVector(
+        (s16 *)(alloc->unk48 + 0x120),
+        (s16 *)arg0->boneDisplayObjects[15].transform.m,
+        &arg0->extraCollisionOffsets[3]
+    );
+    arg0->extraCollisionOffsets[3].x -= arg0->headingTransform.translation.x;
+    arg0->extraCollisionOffsets[3].y -= arg0->headingTransform.translation.y;
+    arg0->extraCollisionOffsets[3].z -= arg0->headingTransform.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0x12C), (s16 *)arg0->bones[3].transform.m, &arg0->unkB14);
-    arg0->unkB14 -= arg0->unk970.translation.x;
-    arg0->unkB18 -= arg0->unk970.translation.y;
-    arg0->unkB1C -= arg0->unk970.translation.z;
+    transformVector(
+        (s16 *)(alloc->unk48 + 0x12C),
+        (s16 *)arg0->boneDisplayObjects[3].transform.m,
+        &arg0->extraCollisionOffsets[4]
+    );
+    arg0->extraCollisionOffsets[4].x -= arg0->headingTransform.translation.x;
+    arg0->extraCollisionOffsets[4].y -= arg0->headingTransform.translation.y;
+    arg0->extraCollisionOffsets[4].z -= arg0->headingTransform.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0x138), (s16 *)arg0->bones[6].transform.m, &arg0->unkB20);
-    arg0->unkB20 -= arg0->unk970.translation.x;
-    arg0->unkB24 -= arg0->unk970.translation.y;
-    arg0->unkB28 -= arg0->unk970.translation.z;
+    transformVector(
+        (s16 *)(alloc->unk48 + 0x138),
+        (s16 *)arg0->boneDisplayObjects[6].transform.m,
+        &arg0->extraCollisionOffsets[5]
+    );
+    arg0->extraCollisionOffsets[5].x -= arg0->headingTransform.translation.x;
+    arg0->extraCollisionOffsets[5].y -= arg0->headingTransform.translation.y;
+    arg0->extraCollisionOffsets[5].z -= arg0->headingTransform.translation.z;
 }
 
-s32 initCrazyJungleBoss(Arg0Struct *arg0) {
+s32 initCrazyJungleBoss(Player *arg0) {
     Vec3i waypoint1;
     Vec3i waypoint2;
     GameState *gameState;
@@ -370,60 +271,55 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     gameState = getCurrentAllocation();
 
     // Initialize rotation matrices
-    memcpy(&arg0->unk970, &identityMatrix, sizeof(Transform3D));
-    createYRotationMatrix(&arg0->unk970, arg0->unkA94);
-    memcpy(&arg0->unk990, &identityMatrix, sizeof(Transform3D));
-    memcpy(&arg0->unk9B0, &identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->headingTransform, &identityMatrix, sizeof(Transform3D));
+    createYRotationMatrix(&arg0->headingTransform, arg0->rotY);
+    memcpy(&arg0->orientationTransform, &identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->tiltTransform, &identityMatrix, sizeof(Transform3D));
 
     // Set initial position based on boss index
-    arg0->unk434.x = D_800BC44C_ACC7C[arg0->unkBB8];
+    arg0->worldPos.x = D_800BC44C_ACC7C[arg0->playerIndex];
     getTrackSegmentWaypoints((TrackGeometryData *)&gameState->gameData, 0, &waypoint1, &waypoint2);
 
-    arg0->unk434.z = waypoint1.z + 0x200000;
+    arg0->worldPos.z = waypoint1.z + 0x200000;
 
     // Initialize track/sector info
-    trackIdx = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->unk434);
+    trackIdx = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->worldPos);
     arg0->sectorIndex = trackIdx;
-    arg0->unk434.y = getTrackHeightInSector(&gameState->gameData, trackIdx, &arg0->unk434, 0x100000);
+    arg0->worldPos.y = getTrackHeightInSector(&gameState->gameData, trackIdx, &arg0->worldPos, 0x100000);
 
-    memcpy(&arg0->prevWorldPosX, &arg0->unk434, sizeof(Vec3i));
+    memcpy(&arg0->prevWorldPosX, &arg0->worldPos, sizeof(Vec3i));
 
     // Zero out velocity
     arg0->velocity.x = 0;
     arg0->velocity.y = 0;
     arg0->velocity.z = 0;
 
-    arg0->unkA94 = 0x1000;
+    arg0->rotY = 0x1000;
 
     // Initialize body part elements (17 elements, each 0x3C bytes)
     // Each element contains Transform3D at offset 0x38, asset pointer at 0x58
     for (i = 0; i < 17; i++) {
         elem = (u8 *)arg0 + i * 0x3C;
         memcpy(elem + 0x38, &identityMatrix, sizeof(Transform3D));
-        *(s32 *)(elem + 0x5C) = *(s32 *)((u8 *)arg0 + 4);
-        *(s32 *)(elem + 0x60) = *(s32 *)((u8 *)arg0 + 8);
+        *(s32 *)(elem + 0x5C) = (s32)arg0->unk4;
+        *(s32 *)(elem + 0x60) = (s32)arg0->unk8;
         *(s32 *)(elem + 0x64) = 0;
-        *(void **)(elem + 0x58) = (void *)(&loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex)[i]);
+        *(void **)(elem + 0x58) = (void *)&loadAssetByIndex_953B0(arg0->characterId, arg0->boardType)[i];
     }
 
     arg0->leanAnimIndex = 0;
 
     // Get number of bones and reset animations
-    arg0->boneCount = getAnimationBoneCount(*(void **)((u8 *)arg0 + 0), 0);
+    arg0->leanBoneCount = getAnimationBoneCount(arg0->unk0, 0);
 
-    for (i = 0; i < arg0->boneCount; i++) {
-        resetBoneAnimation(
-            *(void **)((u8 *)arg0 + 0),
-            arg0->leanAnimIndex,
-            i,
-            (BoneAnimationStateIndexed *)((u8 *)arg0 + 0x488 + i * 0x48)
-        );
+    for (i = 0; i < arg0->leanBoneCount; i++) {
+        resetBoneAnimation(arg0->unk0, arg0->leanAnimIndex, i, &arg0->unk488[i]);
     }
 
     // Initialize behavior state
     arg0->behaviorMode = 1;
-    arg0->unkAE0 = 0xA0000;
-    arg0->unkB2C = 0x240000;
+    arg0->collisionRadius = 0xA0000;
+    arg0->extraCollisionRadii = 0x240000;
     arg0->unkBB4 = 6;
     arg0->behaviorPhase = 0;
     arg0->unkB30 = 0x174000;
@@ -431,48 +327,47 @@ s32 initCrazyJungleBoss(Arg0Struct *arg0) {
     arg0->unkB38 = 0xDC000;
     arg0->unkB3C = 0x148000;
     arg0->unkB40 = 0x148000;
-    arg0->unkB50.posPtr = (&arg0->unk434);
-    arg0->unkB50.radius = 0x15E000;
-    arg0->unkB50.id = arg0->unkBB8;
+    arg0->collisionListNode.posPtr = &arg0->worldPos;
+    arg0->collisionListNode.radius = 0x15E000;
+    arg0->collisionListNode.id = arg0->playerIndex;
 
     // Spawn chase camera if needed
-    if (arg0->unkBC7 == 0) {
-        spawnChaseCameraTask(arg0->unkBB8);
+    if (arg0->isBossRacer == 0) {
+        spawnChaseCameraTask(arg0->playerIndex);
     }
 
-    arg0->baseMaxSpeed = ((s32 *)gameState->players)[0xAA0 / 4] - 0x10000;
+    arg0->baseMaxSpeed = gameState->players->baseMaxSpeed - 0x10000;
 
-    if (*(void **)((u8 *)arg0 + 0x1C) != 0) {
-        *(s32 *)((u8 *)arg0 + 0x28) =
-            (s32)(*(void **)((u8 *)arg0 + 0x1C)) + ((s32 *)(*(void **)((u8 *)arg0 + 0x1C)))[arg0->unkBB8];
+    if (arg0->unk1C != NULL) {
+        arg0->aiPathData = (void *)((s32)arg0->unk1C + ((s32 *)arg0->unk1C)[arg0->playerIndex]);
     }
 
     return 1;
 }
 
-void dispatchCrazyJungleBossChasePhase(Arg0Struct *arg0) {
+void dispatchCrazyJungleBossChasePhase(Player *arg0) {
     gCrazyJungleBossChasePhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
-s32 crazyJungleBossChaseIntroPhase(Arg0Struct *arg0) {
+s32 crazyJungleBossChaseIntroPhase(Player *arg0) {
     s32 pad[3];
     GameState *gameState = getCurrentAllocation();
 
     if (gameState->raceIntroState == 0) {
-        setPlayerBehaviorPhase((Player *)arg0, 1);
+        setPlayerBehaviorPhase(arg0, 1);
         return 1;
     }
 
     arg0->velocity.x -= arg0->velocity.x / 8;
     arg0->velocity.z -= arg0->velocity.z / 8;
     arg0->velocity.y += -0x8000;
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
     advancePlayerLeanAnimationAuto(arg0, 0);
 
     return 0;
 }
 
-s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
+s32 crazyJungleBossChaseAttackPhase(Player *arg0) {
     Transform3D sp10;
     Vec3i sp30;
     GameState *gameState;
@@ -485,8 +380,8 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
 
     gameState = getCurrentAllocation();
 
-    if (arg0->padBC5[1] != 0) {
-        setPlayerBehaviorPhase((Player *)arg0, 2);
+    if (arg0->unkBC6 != 0) {
+        setPlayerBehaviorPhase(arg0, 2);
         return 1;
     }
 
@@ -503,8 +398,8 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
         arg0->behaviorStep++;
     }
 
-    clampedAngle = computeAngleToPosition(arg0->aiTargetX, arg0->aiTargetZ, arg0->unk434.x, arg0->unk434.z);
-    currentAngle = arg0->unkA94;
+    clampedAngle = computeAngleToPosition(arg0->aiTarget.x, arg0->aiTarget.z, arg0->worldPos.x, arg0->worldPos.z);
+    currentAngle = arg0->rotY;
     clampedAngle = (clampedAngle - currentAngle) & 0x1FFF;
     if (clampedAngle >= 0x1001) {
         clampedAngle = clampedAngle | 0xE000;
@@ -515,11 +410,11 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
     if (clampedAngle < -0x38) {
         clampedAngle = -0x38;
     }
-    arg0->unkA94 = currentAngle + clampedAngle;
+    arg0->rotY = currentAngle + clampedAngle;
 
     if (!(arg0->animFlags & 1)) {
-        createYRotationMatrix(&arg0->unk970, arg0->unkA94);
-        func_8006BDBC_6C9BC((&arg0->unk990), &arg0->unk970, &sp10);
+        createYRotationMatrix(&arg0->headingTransform, arg0->rotY);
+        func_8006BDBC_6C9BC((&arg0->orientationTransform), &arg0->headingTransform, &sp10);
         transformVector3(&arg0->velocity, &sp10, &sp30);
         sp30.x = 0;
         transformVector2(&sp30, &sp10, &arg0->velocity);
@@ -542,14 +437,14 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
     }
     arg0->velocity.y += -0x10000;
 
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
     if (advancePlayerLeanAnimationAuto(arg0, 1) != 0) {
         arg0->unkB90 = 0;
     }
 
     arg0->unkB90++;
     if (arg0->unkB90 == 4 || arg0->unkB90 == 0xC) {
-        queueSoundAtPosition(&arg0->unk434, 0x49);
+        queueSoundAtPosition(&arg0->worldPos, 0x49);
     }
 
     if (arg0->unkB8C == 0) {
@@ -566,24 +461,24 @@ s32 crazyJungleBossChaseAttackPhase(Arg0Struct *arg0) {
     return 0;
 }
 
-s32 crazyJungleBossChaseExitPhase(Arg0Struct *arg0) {
+s32 crazyJungleBossChaseExitPhase(Player *arg0) {
     s32 pad[3];
     getCurrentAllocation();
 
     arg0->velocity.x -= arg0->velocity.x / 8;
     arg0->velocity.z -= arg0->velocity.z / 8;
     arg0->velocity.y += -0x8000;
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
     advancePlayerLeanAnimationAuto(arg0, 0);
 
     return 0;
 }
 
-void dispatchCrazyJungleBossHoverPhase(Arg0Struct *arg0) {
+void dispatchCrazyJungleBossHoverPhase(Player *arg0) {
     gCrazyJungleBossHoverPhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
-s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0) {
+s32 crazyJungleBossHoverAttackPhase(Player *arg0) {
     if (arg0->behaviorStep == 0) {
         s32 temp = arg0->velocity.y;
         arg0->behaviorStep++;
@@ -591,7 +486,7 @@ s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0) {
         if (temp > 0) {
             arg0->velocity.y = 0;
         }
-        queueSoundAtPosition(&arg0->unk434, 0x21);
+        queueSoundAtPosition(&arg0->worldPos, 0x21);
     }
 
     arg0->unkB8C--;
@@ -605,7 +500,7 @@ s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0) {
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
     arg0->velocity.y += -0x8000;
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (arg0->unkB8C == -1) {
         arg0->behaviorFlags = 0;
@@ -618,19 +513,19 @@ s32 crazyJungleBossHoverAttackPhase(Arg0Struct *arg0) {
     return 0;
 }
 
-s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0) {
+s32 crazyJungleBossHoverJumpPhase(Player *arg0) {
     if (arg0->behaviorStep == 0) {
         arg0->leanAnimIndex = 0xFFFF;
         arg0->velocity.y = 0x80000;
         arg0->behaviorStep = arg0->behaviorStep + 1;
-        queueSoundAtPosition(&arg0->unk434, 0x21);
+        queueSoundAtPosition(&arg0->worldPos, 0x21);
     }
 
     arg0->behaviorFlags = 0x200;
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
     arg0->velocity.y = arg0->velocity.y + -0x8000;
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
     advancePlayerLeanAnimationAuto(arg0, 2);
 
     if (arg0->animFlags & 1) {
@@ -644,7 +539,7 @@ s32 crazyJungleBossHoverJumpPhase(Arg0Struct *arg0) {
     return 0;
 }
 
-void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
+void updateCrazyJungleBossPositionAndTrackCollision(Player *arg0) {
     s32 pad[8];
     Vec3i collisionOffset;
     s32 pad2[8];
@@ -653,65 +548,63 @@ void updateCrazyJungleBossPositionAndTrackCollision(Arg0Struct *arg0) {
     u16 newSectorIndex;
 
     gameState = getCurrentAllocation();
-    memcpy(&arg0->unk970.translation.x, &arg0->unk434, sizeof(Vec3i));
+    memcpy(&arg0->headingTransform.translation.x, &arg0->worldPos, sizeof(Vec3i));
     gameData = &gameState->gameData;
-    newSectorIndex = getOrUpdatePlayerSectorIndex(arg0, gameData, arg0->sectorIndex, &arg0->unk434);
+    newSectorIndex = getOrUpdatePlayerSectorIndex(arg0, gameData, arg0->sectorIndex, &arg0->worldPos);
     arg0->sectorIndex = newSectorIndex;
-    resolveTrackWallCollision(gameData, newSectorIndex, &arg0->unk434, 0x187000, &collisionOffset);
-    arg0->unk434.x = arg0->unk434.x + collisionOffset.x;
-    arg0->unk434.z = arg0->unk434.z + collisionOffset.z;
-    computePlayerTerrainAlignment((Player *)arg0);
+    resolveTrackWallCollision(gameData, newSectorIndex, &arg0->worldPos, 0x187000, &collisionOffset);
+    arg0->worldPos.x = arg0->worldPos.x + collisionOffset.x;
+    arg0->worldPos.z = arg0->worldPos.z + collisionOffset.z;
+    computePlayerTerrainAlignment(arg0);
 
     if (arg0->animFlags & 0x10000) {
         arg0->trackFaceType = 0;
     } else {
-        findTrackFaceInSector(
-            gameData,
-            arg0->sectorIndex,
-            &arg0->unk434,
-            &arg0->trackFaceType,
-            &arg0->surfaceTypeIndex
-        );
+        findTrackFaceInSector(gameData, arg0->sectorIndex, &arg0->worldPos, &arg0->trackFaceType, &arg0->surfaceInfo);
         arg0->trackFaceSubtype = arg0->trackFaceType >> 4;
         arg0->trackFaceType = arg0->trackFaceType & 0xF;
     }
 }
 
-void updateCrazyJungleBossLeanBoneTransforms(Arg0Struct *arg0) {
+void updateCrazyJungleBossLeanBoneTransforms(Player *arg0) {
     Transform3D scratch;
     Transform3D squashMatrix;
     BoneHierarchyEntry *hierarchy;
     s32 i;
 
     hierarchy = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
-    composeTransform3D(&arg0->unk990, &arg0->unk970, &arg0->scratch9F0);
-    composeTransform3D(&arg0->unk9B0, &arg0->scratch9F0, &arg0->modelTransform);
+    composeTransform3D(&arg0->orientationTransform, &arg0->headingTransform, &arg0->orientationHeadingTransform);
+    composeTransform3D(&arg0->tiltTransform, &arg0->orientationHeadingTransform, &arg0->modelTransform);
 
-    for (i = 0; i < arg0->boneCount; i++) {
+    for (i = 0; i < arg0->leanBoneCount; i++) {
         if (hierarchy[i].parentBone == 0xFF) {
             if (arg0->behaviorFlags & 0x10) {
                 memcpy(&squashMatrix, &identityMatrix, sizeof(Transform3D));
                 squashMatrix.m[1][1] = arg0->squashStretchScale;
                 composeTransform3D(&arg0->unk488[hierarchy[i].boneIndex].transform.previous, &squashMatrix, &scratch);
-                composeTransform3D(&scratch, &arg0->modelTransform, &arg0->bones[hierarchy[i].boneIndex].transform);
+                composeTransform3D(
+                    &scratch,
+                    &arg0->modelTransform,
+                    &arg0->boneDisplayObjects[hierarchy[i].boneIndex].transform
+                );
             } else {
                 composeTransform3D(
                     &arg0->unk488[hierarchy[i].boneIndex].transform.previous,
                     &arg0->modelTransform,
-                    &arg0->bones[hierarchy[i].boneIndex].transform
+                    &arg0->boneDisplayObjects[hierarchy[i].boneIndex].transform
                 );
             }
         } else {
             composeTransform3D(
                 &arg0->unk488[hierarchy[i].boneIndex].transform.previous,
-                &arg0->bones[hierarchy[i].parentBone].transform,
-                &arg0->bones[hierarchy[i].boneIndex].transform
+                &arg0->boneDisplayObjects[hierarchy[i].parentBone].transform,
+                &arg0->boneDisplayObjects[hierarchy[i].boneIndex].transform
             );
         }
     }
 }
 
-void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
+void renderCrazyJungleBossWithSurfaceColors(Player *arg0) {
     s32 i;
     s32 surfaceColorIndex;
     s32 pad[36];
@@ -719,27 +612,27 @@ void renderCrazyJungleBossWithSurfaceColors(Arg0Struct *arg0) {
     getCurrentAllocation();
     updateCrazyJungleBossLeanBoneTransforms(arg0);
 
-    surfaceColorIndex = arg0->surfaceTypeIndex >> 4;
+    surfaceColorIndex = arg0->surfaceInfo >> 4;
 
     if (surfaceColorIndex == 0) {
         for (i = 0; i < 4; i++) {
-            enqueuePreLitMultiPartDisplayList(i, arg0->bones, arg0->boneCount);
+            enqueuePreLitMultiPartDisplayList(i, arg0->boneDisplayObjects, arg0->leanBoneCount);
         }
     } else {
-        arg0->bones[0].light1R = gBossSurfaceColors[surfaceColorIndex].primaryR;
-        arg0->bones[0].light1G = gBossSurfaceColors[surfaceColorIndex].primaryG;
-        arg0->bones[0].light1B = gBossSurfaceColors[surfaceColorIndex].primaryB;
-        arg0->bones[0].light2R = gBossSurfaceColors[surfaceColorIndex].secondaryR;
-        arg0->bones[0].light2G = gBossSurfaceColors[surfaceColorIndex].secondaryG;
-        arg0->bones[0].light2B = gBossSurfaceColors[surfaceColorIndex].secondaryB;
+        arg0->boneDisplayObjects[0].light1R = gBossSurfaceColors[surfaceColorIndex].primaryR;
+        arg0->boneDisplayObjects[0].light1G = gBossSurfaceColors[surfaceColorIndex].primaryG;
+        arg0->boneDisplayObjects[0].light1B = gBossSurfaceColors[surfaceColorIndex].primaryB;
+        arg0->boneDisplayObjects[0].light2R = gBossSurfaceColors[surfaceColorIndex].secondaryR;
+        arg0->boneDisplayObjects[0].light2G = gBossSurfaceColors[surfaceColorIndex].secondaryG;
+        arg0->boneDisplayObjects[0].light2B = gBossSurfaceColors[surfaceColorIndex].secondaryB;
 
         for (i = 0; i < 4; i++) {
-            enqueueMultiPartDisplayList(i, arg0->bones, arg0->boneCount);
+            enqueueMultiPartDisplayList(i, arg0->boneDisplayObjects, arg0->leanBoneCount);
         }
     }
 }
 
-void updateBossProximityCheckpoints(Arg0Struct *arg0) {
+void updateBossProximityCheckpoints(Player *arg0) {
     s32 checkpointIndex;
     GameDataLayout *gameData;
     GameState *gameState;
@@ -752,13 +645,13 @@ void updateBossProximityCheckpoints(Arg0Struct *arg0) {
         s32 *checkpointPos;
         u16 sectorIndex;
 
-        arg0->checkpoints[checkpointIndex].posX =
-            arg0->unk970.translation.x + gCrazyJungleBossCheckpointOffsets[checkpointIndex].x;
-        arg0->checkpoints[checkpointIndex].posZ =
-            arg0->unk970.translation.z + gCrazyJungleBossCheckpointOffsets[checkpointIndex].z;
-        checkpointPos = &arg0->checkpoints[checkpointIndex].posX;
+        arg0->shadowSamplePositions[checkpointIndex].x =
+            arg0->headingTransform.translation.x + gCrazyJungleBossCheckpointOffsets[checkpointIndex].x;
+        arg0->shadowSamplePositions[checkpointIndex].z =
+            arg0->headingTransform.translation.z + gCrazyJungleBossCheckpointOffsets[checkpointIndex].z;
+        checkpointPos = &arg0->shadowSamplePositions[checkpointIndex].x;
         sectorIndex = getOrUpdatePlayerSectorIndex(arg0, (u8 *)gameData, arg0->sectorIndex, checkpointPos);
-        arg0->checkpoints[checkpointIndex].height =
+        arg0->shadowSamplePositions[checkpointIndex].y =
             getTrackHeightInSector((u8 *)gameData, sectorIndex, checkpointPos, 0x100000);
         checkpointIndex++;
     } while (checkpointIndex < 9);

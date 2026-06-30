@@ -91,7 +91,7 @@ extern void startRumbleEffect(Player *player, s32 effectType);
 extern s32 applyVelocityDeadzone(Player *, s32, s32, s32);
 extern BoneHierarchyEntry *getIndexedAnimationDataPtr(void *, s16);
 extern s32 projectPositionOntoTrackSegment(GameDataLayout *trackGeom, u16 sectorIdx, Vec3i *pos);
-extern void updateCrazyJungleBossPositionAndTrackCollision(void);
+extern void updateCrazyJungleBossPositionAndTrackCollision(Player *player);
 extern void renderCrazyJungleBossWithSurfaceColors(Player *player);
 extern void updateBossProximityCheckpoints(Player *player);
 extern void renderGhosts(void);
@@ -5143,7 +5143,7 @@ void updateAndRenderRaceCharacters(void) {
                 break;
             case 1:
                 if (gs->gamePaused == 0) {
-                    updateCrazyJungleBossPositionAndTrackCollision();
+                    updateCrazyJungleBossPositionAndTrackCollision(&gs->players[i]);
                 }
                 renderCrazyJungleBossWithSurfaceColors(&gs->players[i]);
                 updateBossProximityCheckpoints(&gs->players[i]);
