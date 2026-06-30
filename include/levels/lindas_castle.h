@@ -6,7 +6,7 @@
 typedef struct {
     /* 0x00 */ Transform3D matrix;
     /* 0x20 */ u8 _pad20[0x1C];
-    /* 0x3C */ s32 targetPosition[3];
+    /* 0x3C */ Vec3i targetPosition;
     /* 0x48 */ s32 velocityY;
     /* 0x4C */ s32 gravity;
     /* 0x50 */ s16 waypointIndex;

@@ -29,25 +29,6 @@ WaypointGroup g_FlyingEnemyWaypoints[5] = {
 };
 s32 D_800BBC24 = 0x000A0000;
 
-void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task);
-void pullPlayersInRange(FlyingEnemyTaskArg *arg0);
-void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task);
-
-typedef struct {
-    u8 pad[0x24];
-    void *displayList2;
-    void *displayList3;
-} FlyingEnemyCleanupArg;
-
-void cleanupFlyingEnemyTask(FlyingEnemyCleanupArg *arg0);
-
-typedef struct {
-    u8 pad0[0x30];
-    void *gameData;
-    u8 pad34[0x28];
-    u8 memoryPoolId;
-} GameState_AB304;
-
 typedef struct {
     u8 pad0[0x20];
     void *displayList1;
@@ -66,11 +47,17 @@ typedef struct {
     s16 surfaceType;
 } FlyingEnemyTask;
 
+void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task);
+void pullPlayersInRange(FlyingEnemyTaskArg *arg0);
+void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task);
+void cleanupFlyingEnemyTask(FlyingEnemyTask *arg0);
+void updateLindasCastleLapCounter(s16 *lapCounter);
+
 void renderFlyingEnemy(FlyingEnemyTaskArg *arg0) {
     s32 i;
 
     createYRotationMatrix(&arg0->matrix, arg0->rotationAngle);
-    memcpy(&arg0->matrix.translation.x, arg0->targetPosition, sizeof(Vec3i));
+    memcpy(&arg0->matrix.translation, &arg0->targetPosition, sizeof(Vec3i));
     arg0->matrix.translation.y += arg0->velocityY;
 
     for (i = 0; i < 4; i++) {
@@ -86,7 +73,7 @@ void pullPlayersInRange(FlyingEnemyTaskArg *arg0) {
     Player *player;
 
     gs = getCurrentAllocation();
-    memcpy(&pos, &arg0->targetPosition[0], sizeof(Vec3i));
+    memcpy(&pos, &arg0->targetPosition, sizeof(Vec3i));
     pos.y += 0x1C0000 + arg0->velocityY;
 
     for (i = 0; i < gs->numPlayers; i++) {
@@ -101,17 +88,16 @@ void pullPlayersInRange(FlyingEnemyTaskArg *arg0) {
 }
 
 void initFlyingEnemyTask(FlyingEnemyTask *task) {
-    GameState_AB304 *gamestate;
-    void *temp;
+    GameState *gamestate;
+    LevelDisplayLists *temp;
     s16 index;
     s32 initialVelocity;
     void (*updateCallback)(void);
 
-    gamestate = (GameState_AB304 *)getCurrentAllocation();
+    gamestate = (GameState *)getCurrentAllocation();
 
     temp = getSkyDisplayLists3ByIndex(gamestate->memoryPoolId);
-    task->displayList1 = (void *)((u32)temp + 0x90);
-
+    task->displayList1 = &temp->sceneryDisplayLists1;
     task->displayList2 = loadUncompressedAssetByIndex(gamestate->memoryPoolId);
     task->displayList3 = loadCompressedSegment2AssetByIndex(gamestate->memoryPoolId);
 
@@ -165,8 +151,8 @@ void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task) {
         angleDelta = computeAngleToPosition(
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x,
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z,
-            task->targetPosition[0],
-            task->targetPosition[2]
+            task->targetPosition.x,
+            task->targetPosition.z
         );
         angleDelta = (angleDelta - task->rotationAngle) & 0x1FFF;
         if (angleDelta >= 0x1001) {
@@ -178,26 +164,33 @@ void updateFlyingEnemyHighJump(FlyingEnemyTaskArg *task) {
         if (angleDelta < (-0x80)) {
             angleDelta = -0x80;
         }
+
         task->rotationAngle = task->rotationAngle + angleDelta;
+
         rotateVectorY(&g_FlyingEnemyWaypoints[4], task->rotationAngle, &rotatedVec);
-        task->targetPosition[0] += rotatedVec.x;
-        task->targetPosition[2] += rotatedVec.z;
-        task->surfaceType = findTrackSector(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
-        task->targetPosition[1] = getTrackHeightAtPosition(&gs->gameData, task->surfaceType, &task->targetPosition[0]);
+
+        task->targetPosition.x += rotatedVec.x;
+        task->targetPosition.z += rotatedVec.z;
+        task->surfaceType = findTrackSector(&gs->gameData, task->surfaceType, &task->targetPosition.x);
+        task->targetPosition.y = getTrackHeightAtPosition(&gs->gameData, task->surfaceType, &task->targetPosition.x);
         task->velocityY += task->gravity;
+
         task->gravity = task->gravity - 0x8000;
         if (task->velocityY == 0) {
             task->gravity = 0x40000;
         }
+
         rotatedVec.x = g_FlyingEnemyWaypoints[task->waypointIndex].unk4[angleDelta = task->targetWaypointIndex].x -
-                       task->targetPosition[0];
+                       task->targetPosition.x;
         rotatedVec.y =
-            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
+            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition.z;
         if ((((u32)(rotatedVec.x + 0xFFFFF)) <= 0x1FFFFEU) && (((u32)(rotatedVec.z + 0xFFFFF)) <= 0x1FFFFEU)) {
             terminateCurrentTask();
         }
+
         pullPlayersInRange(task);
     }
+
     renderFlyingEnemy(task);
 }
 
@@ -207,14 +200,17 @@ void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
     s16 angleDelta;
     GameDataLayout *gameData;
     gs = (GameState *)getCurrentAllocation();
+
     if (gs->gamePaused == 0) {
         angleDelta = computeAngleToPosition(
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x,
             g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z,
-            task->targetPosition[0],
-            task->targetPosition[2]
+            task->targetPosition.x,
+            task->targetPosition.z
         );
+
         angleDelta = (angleDelta - task->rotationAngle) & 0x1FFF;
+
         if (angleDelta >= 0x1001) {
             angleDelta = angleDelta | 0xE000;
         }
@@ -224,22 +220,29 @@ void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
         if (angleDelta < (-0x80)) {
             angleDelta = -0x80;
         }
+
         task->rotationAngle = task->rotationAngle + angleDelta;
+
         rotateVectorY(&g_FlyingEnemyWaypoints[4].unk4[1].x, task->rotationAngle, &rotatedVec);
+
         gameData = &gs->gameData;
-        task->targetPosition[0] += rotatedVec.x;
-        task->targetPosition[2] += rotatedVec.z;
-        angleDelta = (task->surfaceType = findTrackSector(gameData, task->surfaceType, &task->targetPosition[0]));
-        task->targetPosition[1] = getTrackHeightAtPosition(gameData, task->surfaceType, &task->targetPosition[0]);
+        task->targetPosition.x += rotatedVec.x;
+        task->targetPosition.z += rotatedVec.z;
+
+        angleDelta = (task->surfaceType = findTrackSector(gameData, task->surfaceType, &task->targetPosition.x));
+
+        task->targetPosition.y = getTrackHeightAtPosition(gameData, task->surfaceType, &task->targetPosition.x);
         task->velocityY += task->gravity;
         task->gravity = task->gravity - 0x8000;
         if (task->velocityY == 0) {
             task->gravity = 0x18000;
         }
+
         rotatedVec.x =
-            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x - task->targetPosition[0];
+            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].x - task->targetPosition.x;
         rotatedVec.y =
-            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition[2];
+            g_FlyingEnemyWaypoints[task->waypointIndex].unk4[task->targetWaypointIndex].z - task->targetPosition.z;
+
         if (((rotatedVec.x + 0xFFFFF) <= 0x1FFFFEU) && ((rotatedVec.z + 0xFFFFF) <= 0x1FFFFEU)) {
             terminateCurrentTask();
         }
@@ -248,15 +251,10 @@ void updateFlyingEnemyLowJump(FlyingEnemyTaskArg *task) {
     renderFlyingEnemy(task);
 }
 
-void cleanupFlyingEnemyTask(FlyingEnemyCleanupArg *arg0) {
+void cleanupFlyingEnemyTask(FlyingEnemyTask *arg0) {
     arg0->displayList2 = freeNodeMemory(arg0->displayList2);
     arg0->displayList3 = freeNodeMemory(arg0->displayList3);
 }
-
-typedef struct {
-    u8 pad[0x50];
-    u16 waypointIndex;
-} FlyingEnemyTaskArg_WaypointIndex;
 
 void initFlyingEnemySpawner(FlyingEnemySpawnerState *arg0) {
     arg0->waypointIndex = 0;
@@ -266,7 +264,7 @@ void initFlyingEnemySpawner(FlyingEnemySpawnerState *arg0) {
 
 void updateFlyingEnemySpawner(FlyingEnemySpawnerState *arg0) {
     GameState *gameState = getCurrentAllocation();
-    FlyingEnemyTaskArg_WaypointIndex *task;
+    FlyingEnemyTask *task;
     s16 counter;
     s16 newValue;
 
@@ -276,7 +274,7 @@ void updateFlyingEnemySpawner(FlyingEnemySpawnerState *arg0) {
 
     counter = arg0->spawnTimer;
     if (counter == 0) {
-        task = (FlyingEnemyTaskArg_WaypointIndex *)scheduleTask(initFlyingEnemyTask, 0, 0, 0x32);
+        task = (FlyingEnemyTask *)scheduleTask(initFlyingEnemyTask, 0, 0, 0x32);
         if (task != NULL) {
             task->waypointIndex = arg0->waypointIndex;
         }
@@ -290,9 +288,9 @@ void updateFlyingEnemySpawner(FlyingEnemySpawnerState *arg0) {
     } else {
         newValue = counter - 1;
     }
+
     arg0->spawnTimer = newValue;
 }
-void updateLindasCastleLapCounter(s16 *lapCounter);
 
 void initLindasCastleLapCounter(s16 *lapCounter) {
     *lapCounter = 0;
