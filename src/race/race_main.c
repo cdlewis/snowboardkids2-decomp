@@ -38,15 +38,14 @@ typedef void (*StunnedBehaviorPhaseHandler)(void *);
 typedef void (*PostTrickLandingStepHandler)(void *);
 typedef void (*KnockbackBehaviorPhaseHandler)(void *);
 typedef void (*KnockbackBehaviorStepHandler)(void *);
+typedef void (*SharpTurnBehaviorStepHandler)(void *);
+typedef void (*DefaultBehaviorPhaseHandler)(void *);
+typedef s32 (*BehaviorModeHandler)(Player *);
 
 typedef struct {
     /* 0x00 */ s16 timer;
     /* 0x02 */ u16 scale;
 } KnockbackHomingBounceEntry;
-typedef void (*SharpTurnBehaviorStepHandler)(void *);
-typedef void (*DefaultBehaviorPhaseHandler)(void *);
-
-typedef s32 (*BehaviorModeHandler)(Player *);
 
 /* Overlay at offset 0x38 of each 0x3C-stride body part slot in Player */
 typedef struct {
@@ -56,11 +55,6 @@ typedef struct {
     /* 0x28 */ s32 unk60;
     /* 0x2C */ s32 unk64;
 } BodyPartExtra;
-
-typedef struct {
-    /* 0x00 */ u8 _pad0[0x5C];
-    /* 0x5C */ u8 unk5C;
-} GameStatePartial5C;
 
 extern Gfx *gDisplayListAllocPtr;
 
@@ -2783,28 +2777,9 @@ s32 updateRaceFinishSlowingDownStep(Player *player) {
     return 0;
 }
 
-typedef struct {
-    /* 0x0000 */ u8 pad[0x176C];
-    /* 0x176C */ s32 unk176C;
-} GameStateUnk10;
-
-typedef struct {
-    /* 0x00 */ u8 pad[0x10];
-    /* 0x10 */ GameStateUnk10 *unk10;
-    /* 0x14 */ u8 pad2[0x44];
-    /* 0x58 */ u8 unk58;
-    /* 0x59 */ u8 unk59;
-    /* 0x5A */ u8 shootCrossTargetsHit;
-    /* 0x5B */ u8 pad3[0x1F];
-    /* 0x7A */ u8 raceType;
-    /* 0x7B */ u8 showResultHUD;
-    /* 0x7C */ u8 unk7C;
-    /* 0x7D */ u8 playerLost;
-} GameStateLocal;
-
 s32 updateRaceFinishWaitingStep(Player *player) {
     s32 playerWon = 0;
-    GameStateLocal *gameState;
+    GameState *gameState;
 
     gameState = getCurrentAllocation();
     player->velocity.x = 0;
@@ -2825,7 +2800,7 @@ s32 updateRaceFinishWaitingStep(Player *player) {
                 break;
             case RACE_TYPE_BOSS_JINGLE:
             case RACE_TYPE_BOSS_ICE:
-                if (gameState->unk10->unk176C & 0x100000) {
+                if (gameState->players[1].animFlags & 0x100000) {
                     playerWon = 1;
                 }
                 break;
@@ -2858,7 +2833,7 @@ s32 updateRaceFinishWaitingStep(Player *player) {
 s32 updateRaceFinishWinStep(Player *player) {
     player->velocity.x = 0;
     player->velocity.z = 0;
-    player->velocity.y = player->velocity.y - 0x6000;
+    player->velocity.y -= 0x6000;
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
 
@@ -3098,7 +3073,6 @@ void decayPlayerAirborneAngles(Player *player) {
     }
     player->pitchAngle = savedAngle + decayAmount;
 
-    // Decay unkA90
     normalizedAngle = player->steeringAngle & 0x1FFF;
     player->steeringAngle = normalizedAngle;
     if (!(normalizedAngle < 0x1001)) {
@@ -4552,7 +4526,7 @@ s32 fallTowardShortcutWarpStep(Player *player) {
                         }
                         break;
                     case 8:
-                        gameState->unk80++;
+                        gameState->fadeInPlayerCount++;
                         player->worldPos.x = targetPos.x;
                         player->worldPos.z = targetPos.z;
                         player->behaviorStep = 0xF;
@@ -4887,13 +4861,8 @@ s32 spinRampUpStep(Player *arg0) {
     return 0;
 }
 
-typedef struct {
-    /* 0x00 */ u8 _pad0[0x63];
-    /* 0x63 */ u8 shortcutGateState;
-} MaintainMaxSpinStep_alloc;
-
 s32 maintainMaxSpinStep(Player *arg0) {
-    MaintainMaxSpinStep_alloc *alloc = (MaintainMaxSpinStep_alloc *)getCurrentAllocation();
+    GameState *alloc = (GameState *)getCurrentAllocation();
     s32 timerRemaining;
 
     arg0->velocity.x = 0;
@@ -4923,13 +4892,8 @@ s32 maintainMaxSpinStep(Player *arg0) {
     return 0;
 }
 
-typedef struct {
-    /* 0x00 */ u8 _pad0[0x81];
-    /* 0x81 */ u8 shortcutWarpPlayerCount; // Number of players in shortcut warp sequence
-} SpinRampDownStep_alloc;
-
 s32 spinRampDownStep(Player *player) {
-    SpinRampDownStep_alloc *alloc = (SpinRampDownStep_alloc *)getCurrentAllocation();
+    GameState *alloc = (GameState *)getCurrentAllocation();
     u16 spinDecrementCounter;
     u16 spinIncrementCounter;
 
@@ -4959,13 +4923,8 @@ s32 spinRampDownStep(Player *player) {
     return 0;
 }
 
-typedef struct {
-    /* 0x00 */ u8 _pad0[0x80];
-    /* 0x80 */ u8 fadeInPlayerCount; // Number of players in fade-in wait phase
-} SpinFadeInWaitStep_alloc;
-
 s32 spinFadeInWaitStep(Player *player) {
-    SpinFadeInWaitStep_alloc *alloc = (SpinFadeInWaitStep_alloc *)getCurrentAllocation();
+    GameState *alloc = (GameState *)getCurrentAllocation();
     s32 timerRemaining;
 
     player->velocity.x = 0;
@@ -5040,7 +4999,7 @@ s32 warpToShortcutSpinUpStep(Player *player) {
 }
 
 s32 shortcutSpinDownStep(Player *player) {
-    SpinRampDownStep_alloc *alloc = (SpinRampDownStep_alloc *)getCurrentAllocation();
+    GameState *alloc = (GameState *)getCurrentAllocation();
     s32 newSpinRate;
 
     decayPlayerSteeringAngles(player);
@@ -5053,7 +5012,7 @@ s32 shortcutSpinDownStep(Player *player) {
     if (newSpinRate == 0) {
         player->unkB8C = 6;
         player->behaviorStep = player->behaviorStep + 1;
-        alloc->shortcutWarpPlayerCount = alloc->shortcutWarpPlayerCount - 1;
+        alloc->shortcutWarpPlayerCount--;
     }
 
     player->animFlags = player->animFlags | 0x10000;
@@ -5239,8 +5198,8 @@ void updateAndRenderRaceCharacters(void) {
                         showPlacementAnnouncement(player->playerIndex, 0);
                     }
                     player->animFlags |= 0x80000;
-                    player->unkBC6 = gs->PAD_6B[0];
-                    gs->PAD_6B[0]--;
+                    player->unkBC6 = gs->unk6B;
+                    gs->unk6B--;
                     break;
                 case RACE_TYPE_BOSS_JUNGLE:
                     if (player->finishPosition == 0) {
@@ -5253,8 +5212,8 @@ void updateAndRenderRaceCharacters(void) {
                         }
                     }
                     player->animFlags |= 0x80000;
-                    player->unkBC6 = gs->PAD_6B[0];
-                    gs->PAD_6B[0]--;
+                    player->unkBC6 = gs->unk6B;
+                    gs->unk6B--;
                     break;
                 case RACE_TYPE_BOSS_JINGLE:
                 case RACE_TYPE_BOSS_ICE:
@@ -5267,8 +5226,8 @@ void updateAndRenderRaceCharacters(void) {
                 case RACE_TYPE_BATTLE:
                     if (player->isBossRacer != 0) {
                         player->animFlags |= 0x80000;
-                        player->unkBC6 = gs->PAD_6B[0];
-                        gs->PAD_6B[0]--;
+                        player->unkBC6 = gs->unk6B;
+                        gs->unk6B--;
                         break;
                     }
                     if (player->finishPosition == 0) {
@@ -5287,14 +5246,14 @@ void updateAndRenderRaceCharacters(void) {
                     }
                     spawnTotalLapDisplayTask(player);
                     player->animFlags |= 0x80000;
-                    player->unkBC6 = gs->PAD_6B[0];
-                    gs->PAD_6B[0]--;
+                    player->unkBC6 = gs->unk6B;
+                    gs->unk6B--;
                     break;
                 case RACE_TYPE_TRAINING:
                     if (player->isBossRacer != 0) {
                         player->animFlags |= 0x80000;
-                        player->unkBC6 = gs->PAD_6B[0];
-                        gs->PAD_6B[0]--;
+                        player->unkBC6 = gs->unk6B;
+                        gs->unk6B--;
                         break;
                     }
                     if (player->finishPosition == 0) {
@@ -5308,16 +5267,16 @@ void updateAndRenderRaceCharacters(void) {
                         showPlacementAnnouncement(player->playerIndex, 2);
                     }
                     player->animFlags |= 0x80000;
-                    player->unkBC6 = gs->PAD_6B[0];
-                    gs->PAD_6B[0]--;
+                    player->unkBC6 = gs->unk6B;
+                    gs->unk6B--;
                     break;
                 case 4:
                 case 5:
                 case 6:
                     if (!(player->animFlags & 0x80000)) {
                         player->animFlags |= 0x80000;
-                        player->unkBC6 = gs->PAD_6B[0];
-                        gs->PAD_6B[0]--;
+                        player->unkBC6 = gs->unk6B;
+                        gs->unk6B--;
                         showPlacementAnnouncement(player->playerIndex, 0);
                     }
                     break;
@@ -6082,11 +6041,11 @@ void updateRacerShadowSamplePositions(Player *player) {
 
 void loadPlayerCharacterAssets(void *varg0) {
     Player *player = (Player *)varg0;
-    GameStatePartial5C *gameState;
+    GameState *gameState;
     u8 characterId;
     u8 boardType;
 
-    gameState = (GameStatePartial5C *)getCurrentAllocation();
+    gameState = (GameState *)getCurrentAllocation();
     player->unk4 = loadAssetByIndex_94F90(player->characterId, player->boardType);
     player->unk8 = loadAssetByIndex_95200(player->characterId, player->boardType);
     player->unk0 = loadAssetByIndex_953E0(player->characterId);
@@ -6110,7 +6069,7 @@ void loadPlayerCharacterAssets(void *varg0) {
     player->assetTable = load_3ECE40();
 
     if (player->isBossRacer != 0) {
-        player->unk1C = loadBossHudAssetByRaceType(gameState->unk5C);
+        player->unk1C = loadBossHudAssetByRaceType(gameState->memoryPoolId);
     }
 
     if (player->inputMode != 0) {
@@ -6118,8 +6077,7 @@ void loadPlayerCharacterAssets(void *varg0) {
     }
 }
 
-void freePlayerCharacterAssets(void *varg0) {
-    Player *player = (Player *)varg0;
+void freePlayerCharacterAssets(Player *player) {
     s32 pad[8];
 
     player->unk4 = freeNodeMemory(player->unk4);

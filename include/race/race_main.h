@@ -38,6 +38,6 @@ void initKnockbackBehavior(BehaviorState *arg0);
 void applyClampedVelocityToPosition(Player *player);
 void renderRacerProjectedShadow(Player *player);
 void loadPlayerCharacterAssets(void *arg0);
-void freePlayerCharacterAssets(void *arg0);
+void freePlayerCharacterAssets(Player *arg0);
 void renderPlayersByShortcutDistance(void);
 void updateAndRenderRaceCharacters(void);
