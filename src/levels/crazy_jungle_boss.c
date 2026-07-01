@@ -22,28 +22,9 @@ typedef void (*FuncPtr)(void *);
 typedef s32 (*StateFunc)(void *);
 
 typedef struct {
-    u8 primaryR;
-    u8 primaryG;
-    u8 primaryB;
-    u8 pad1;
-    u8 secondaryR;
-    u8 secondaryG;
-    u8 secondaryB;
-    u8 pad2;
-} BossSurfaceColor;
-
-typedef struct {
     s16 unk0;
     s16 unk2;
 } D_800BC468_ACC98_type;
-
-extern BossSurfaceColor gBossSurfaceColors[];
-extern D_800BC468_ACC98_type D_800BC468_ACC98[];
-extern Vec3i gCrazyJungleBossCheckpointOffsets[];
-extern s32 D_800BBA7C_AC2AC[][3];
-extern s32 D_800BBA84_AC2B4[][3];
-
-extern s32 getIndexedAnimationDataPtr(void *, s16);
 
 s32 initCrazyJungleBoss(Player *arg0);
 void dispatchCrazyJungleBossChasePhase(Player *arg0);

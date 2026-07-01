@@ -58,7 +58,6 @@ extern void initPulsingSpriteIndicator(void *arg0);
 extern void initOrbitalSpriteRing(void *arg0);
 extern void initModelTransitionEffect(void *arg0);
 extern void initModelScaleAnimation(void *arg0);
-extern s32 getIndexedAnimationDataPtr(void *, s16);
 extern void enqueueTranslucentSprite(u16, SceneModelShadowSprite *);
 extern void renderNonRaceShadow(void);
 

@@ -20,17 +20,6 @@
 extern s32 gJingleTownBossSpawnPos[];
 
 typedef struct {
-    u8 primaryR;
-    u8 primaryG;
-    u8 primaryB;
-    u8 pad1;
-    u8 secondaryR;
-    u8 secondaryG;
-    u8 secondaryB;
-    u8 pad2;
-} BossSurfaceColor;
-
-typedef struct {
     u8 padding38[0x38];
     Transform3D transform;
     void *assetPointer;

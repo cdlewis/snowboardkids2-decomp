@@ -48,17 +48,6 @@ typedef void (*DefaultBehaviorPhaseHandler)(void *);
 
 typedef s32 (*BehaviorModeHandler)(Player *);
 
-typedef struct {
-    /* 0x00 */ u8 primaryR;
-    /* 0x01 */ u8 primaryG;
-    /* 0x02 */ u8 primaryB;
-    /* 0x03 */ u8 pad1;
-    /* 0x04 */ u8 secondaryR;
-    /* 0x05 */ u8 secondaryG;
-    /* 0x06 */ u8 secondaryB;
-    /* 0x07 */ u8 pad2;
-} BossSurfaceColor;
-
 /* Overlay at offset 0x38 of each 0x3C-stride body part slot in Player */
 typedef struct {
     /* 0x00 */ Transform3D mtx;
@@ -89,7 +78,6 @@ extern void schedulePlayerAuraTask(Player *);
 extern s32 normalizeSurfaceType(s32);
 extern void startRumbleEffect(Player *player, s32 effectType);
 extern s32 applyVelocityDeadzone(Player *, s32, s32, s32);
-extern BoneHierarchyEntry *getIndexedAnimationDataPtr(void *, s16);
 extern s32 projectPositionOntoTrackSegment(GameDataLayout *trackGeom, u16 sectorIdx, Vec3i *pos);
 extern void updateCrazyJungleBossPositionAndTrackCollision(Player *player);
 extern void renderCrazyJungleBossWithSurfaceColors(Player *player);

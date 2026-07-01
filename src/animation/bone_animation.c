@@ -1211,17 +1211,7 @@ ret0:
     return 0;
 }
 
-typedef struct {
-    s32 baseOffset;
-    s32 offsetTable[0];
-} IndexedAnimationDataLayout;
-
-typedef struct {
-    u16 padding;
-    u16 index;
-} IndexedAnimationDataEntry;
-
-s32 getIndexedAnimationDataPtr(IndexedAnimationDataLayout *data, s16 index) {
+BoneHierarchyEntry *getIndexedAnimationDataPtr(IndexedAnimationDataLayout *data, s16 index) {
     s32 baseOffset;
     s32 targetOffset;
     IndexedAnimationDataEntry *target;
@@ -1233,7 +1223,7 @@ s32 getIndexedAnimationDataPtr(IndexedAnimationDataLayout *data, s16 index) {
     baseOffset = data->baseOffset;
     indexValue = target->index;
     baseData = (IndexedAnimationDataLayout *)(((s8 *)data) + baseOffset);
-    return (s32)(((s8 *)baseData) + (indexValue << 1));
+    return (BoneHierarchyEntry *)(((s8 *)baseData) + (indexValue << 1));
 }
 
 s32 getAnimationBoneCount(AnimationBoneCountTable *table, s32 index) {

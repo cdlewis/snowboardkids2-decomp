@@ -239,17 +239,6 @@ typedef struct {
 } IceLandBossArg;
 
 typedef struct {
-    u8 primaryR;
-    u8 primaryG;
-    u8 primaryB;
-    u8 pad1;
-    u8 secondaryR;
-    u8 secondaryG;
-    u8 secondaryB;
-    u8 pad2;
-} BossSurfaceColor;
-
-typedef struct {
     u8 pad[0x38];
     s16 groundJointOffsets[6];
     u8 pad44[0xB0 - 0x44];
@@ -1041,8 +1030,6 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
         boss->trackFaceType = boss->trackFaceType & 0xF;
     }
 }
-
-extern BoneHierarchyEntry *getIndexedAnimationDataPtr(void *, s16);
 
 void updateIceLandBossLeanBoneTransforms(Player *arg0) {
     Transform3D scratch;

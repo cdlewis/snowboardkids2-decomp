@@ -18,6 +18,19 @@ typedef struct {
     /* 0xBC0 */ u8 behaviorCounter;
 } BehaviorState;
 
+typedef struct {
+    /* 0x00 */ u8 primaryR;
+    /* 0x01 */ u8 primaryG;
+    /* 0x02 */ u8 primaryB;
+    /* 0x03 */ u8 pad1;
+    /* 0x04 */ u8 secondaryR;
+    /* 0x05 */ u8 secondaryG;
+    /* 0x06 */ u8 secondaryB;
+    /* 0x07 */ u8 pad2;
+} BossSurfaceColor;
+
+extern BossSurfaceColor gBossSurfaceColors[];
+
 void setPlayerBehaviorMode(Player *player, u8 mode);
 void setPlayerBehaviorPhase(Player *player, s32 phase);
 void resetPlayerBehaviorToDefault(Player *player);
