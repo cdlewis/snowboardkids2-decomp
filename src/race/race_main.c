@@ -733,11 +733,11 @@ void updateRacePlayer(Player *player) {
 
     gameState = getCurrentAllocation();
 
-    player->velocity.x = player->worldPos.x - player->prevWorldPosX;
-    player->velocity.y = player->worldPos.y - player->prevWorldPosY;
-    player->velocity.z = player->worldPos.z - player->prevWorldPosZ;
+    player->velocity.x = player->worldPos.x - player->prevWorldPos.x;
+    player->velocity.y = player->worldPos.y - player->prevWorldPos.y;
+    player->velocity.z = player->worldPos.z - player->prevWorldPos.z;
 
-    memcpy(&player->prevWorldPosX, &player->worldPos, sizeof(Vec3i));
+    memcpy(&player->prevWorldPos, &player->worldPos, sizeof(Vec3i));
 
     if (player->inputDisabled == 0) {
         player->prevInputStickX = player->inputStickX;
@@ -1053,7 +1053,7 @@ s32 initPlayerForRace(Player *player) {
     player->sectorIndex = getOrUpdatePlayerSectorIndex(player, &gameState->gameData, 0, &player->worldPos);
     player->worldPos.y = getTrackHeightInSector(&gameState->gameData, player->sectorIndex, &player->worldPos, 0x100000);
 
-    memcpy(&player->prevWorldPosX, &player->worldPos, sizeof(Vec3i));
+    memcpy(&player->prevWorldPos, &player->worldPos, sizeof(Vec3i));
 
     player->velocity.x = 0;
     player->velocity.y = 0;
@@ -3820,7 +3820,7 @@ s32 updateStunnedRecoveryRespawnPhase(Player *player) {
             player->animFlags &= ~2;
             player->worldPos.y =
                 getTrackHeightAtPosition(&gs->gameData, player->sectorIndex, &player->worldPos) + 0x600000;
-            memcpy(&player->prevWorldPosX, &player->worldPos, sizeof(Vec3i));
+            memcpy(&player->prevWorldPos, &player->worldPos, sizeof(Vec3i));
             player->rotY = 0x1000;
             player->rotY = pathAngle + player->rotY;
             player->finishAnimState = 1;
@@ -4639,7 +4639,7 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
         player->worldPos.y = levelData->spawnPos.y + sp10.y;
         player->worldPos.z = levelData->spawnPos.z + sp10.z;
 
-        memcpy(&player->prevWorldPosX, &player->worldPos, sizeof(Vec3i));
+        memcpy(&player->prevWorldPos, &player->worldPos, sizeof(Vec3i));
 
         player->finishAnimState = 1;
         player->unkB8C = 0x32;
@@ -4779,7 +4779,7 @@ s32 handleUfoStoredPositionStep(Player *player) {
         player->behaviorStep++;
         player->animFlags |= 0x200;
         player->currentLap++;
-        memcpy(&player->prevWorldPosX, &player->worldPos.x, sizeof(Vec3i));
+        memcpy(&player->prevWorldPos, &player->worldPos, sizeof(Vec3i));
         player->finishAnimState = 1;
         setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
         if (player->isBossRacer == 0 && player->currentLap == gameState->finalLapNumber) {
@@ -5008,7 +5008,7 @@ s32 warpToShortcutSpinUpStep(Player *player) {
         player->worldPos.y = shortcutConfig->spawnPos.y;
         player->worldPos.z = shortcutConfig->spawnPos.z;
 
-        memcpy(&player->prevWorldPosX, &player->worldPos.x, sizeof(Vec3i));
+        memcpy(&player->prevWorldPos, &player->worldPos, sizeof(Vec3i));
 
         player->finishAnimState = 2;
         setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);

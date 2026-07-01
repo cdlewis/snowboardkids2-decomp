@@ -130,10 +130,10 @@ void updateJingleTownBoss(Player *arg0) {
         arg0->inputButtonsPressed = arg0->inputButtons & ~arg0->prevInputButtons;
     }
 
-    arg0->velocity.x = arg0->worldPos.x - arg0->prevWorldPosX;
-    arg0->velocity.y = arg0->worldPos.y - arg0->prevWorldPosY;
-    arg0->velocity.z = arg0->worldPos.z - arg0->prevWorldPosZ;
-    memcpy((Vec3i *)&arg0->prevWorldPosX, &arg0->worldPos, sizeof(Vec3i));
+    arg0->velocity.x = arg0->worldPos.x - arg0->prevWorldPos.x;
+    arg0->velocity.y = arg0->worldPos.y - arg0->prevWorldPos.y;
+    arg0->velocity.z = arg0->worldPos.z - arg0->prevWorldPos.z;
+    memcpy(&arg0->prevWorldPos, &arg0->worldPos, sizeof(Vec3i));
 
     distanceToPlayer = distance_3d(
         arg0->worldPos.x - alloc->players->worldPos.x,
@@ -244,7 +244,7 @@ s32 initJingleTownBoss(Player *arg0) {
     arg0->worldPos.z = waypoint1.z + 0x200000;
     arg0->sectorIndex = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->worldPos);
     arg0->worldPos.y = getTrackHeightInSector(&gameState->gameData, arg0->sectorIndex, &arg0->worldPos, 0x100000);
-    memcpy((Vec3i *)&arg0->prevWorldPosX, &arg0->worldPos, sizeof(Vec3i));
+    memcpy(&arg0->prevWorldPos, &arg0->worldPos, sizeof(Vec3i));
 
     arg0->velocity.x = 0;
     arg0->velocity.y = 0;
@@ -654,7 +654,7 @@ s32 jingleTownBossHoverAttackExitPhase(Player *arg0) {
         arg0->worldPos.x += posOffset.x;
         arg0->worldPos.y += posOffset.y;
         arg0->worldPos.z += posOffset.z;
-        memcpy((Vec3i *)&arg0->prevWorldPosX, &arg0->worldPos, sizeof(Vec3i));
+        memcpy(&arg0->prevWorldPos, &arg0->worldPos, sizeof(Vec3i));
         arg0->animFlags |= 0x200000;
         transformVector(
             (s16 *)&gJingleTownBossHoverExitOffsets[1],

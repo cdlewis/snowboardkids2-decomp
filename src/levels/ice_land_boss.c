@@ -111,12 +111,8 @@ typedef struct {
 typedef struct {
     Unk0x3CElem unk0_3C[12];
     u8 padding3C[0x434 - (12 * 60)];
-    s32 unk434;
-    s32 unk438;
-    s32 unk43C;
-    s32 prevWorldPosX;
-    s32 prevWorldPosY;
-    s32 prevWorldPosZ;
+    Vec3i currentWorldPos;
+    Vec3i prevWorldPos;
     Vec3i velocity;
     s32 unk458;
     s32 unk45C;
@@ -489,13 +485,13 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     memcpy(&arg0->unk9B0, &identityMatrix, sizeof(Transform3D));
 
     // Set initial position based on boss index
-    arg0->unk434 = D_800BCA3C_B1F2C[arg0->unkBB8];
+    arg0->currentWorldPos.x = D_800BCA3C_B1F2C[arg0->unkBB8];
     getTrackSegmentWaypoints((TrackGeometryData *)&gameState->gameData, 0, &waypoint1, &waypoint2);
-    arg0->unk43C = waypoint1.z + 0x200000;
-    trackIdx = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, (Vec3i *)&arg0->unk434);
+    arg0->currentWorldPos.z = waypoint1.z + 0x200000;
+    trackIdx = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->currentWorldPos);
     arg0->sectorIndex = trackIdx;
-    arg0->unk438 = getTrackHeightInSector(&gameState->gameData, trackIdx, (Vec3i *)&arg0->unk434, 0x100000);
-    memcpy(&arg0->prevWorldPosX, &arg0->unk434, sizeof(Vec3i));
+    arg0->currentWorldPos.y = getTrackHeightInSector(&gameState->gameData, trackIdx, &arg0->currentWorldPos, 0x100000);
+    memcpy(&arg0->prevWorldPos, &arg0->currentWorldPos, sizeof(Vec3i));
 
     // Zero out velocity and set initial rotation
     arg0->velocity.x = 0;
@@ -525,7 +521,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     arg0->behaviorMode = 1;
     arg0->extraCollisionRadii = 0x240000;
     arg0->unkBB4 = 3;
-    arg0->unkB54 = (void *)&arg0->unk434;
+    arg0->unkB54 = (void *)&arg0->currentWorldPos;
     arg0->behaviorPhase = 0;
     arg0->unkB30 = 0x11C000;
     arg0->unkB34 = 0x11C000;

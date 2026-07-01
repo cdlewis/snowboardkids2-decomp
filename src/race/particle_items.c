@@ -1955,9 +1955,9 @@ void updatePushZone(PushZoneState *arg0) {
             player->worldPos.z += result.z;
             localPos.y = 0;
             transformVector2(&localPos, arg0, &result);
-            player->prevWorldPosX = player->prevWorldPosX + result.x;
-            player->prevWorldPosY = player->prevWorldPosY + result.y;
-            player->prevWorldPosZ = player->prevWorldPosZ + result.z;
+            player->prevWorldPos.x += result.x;
+            player->prevWorldPos.y += result.y;
+            player->prevWorldPos.z += result.z;
             player->animFlags = player->animFlags | 0x20000;
             player->unkBB0 = gPushZoneData[arg0->zoneIndex].pitch;
             player->unkBB2 = gPushZoneData[arg0->zoneIndex].yaw;

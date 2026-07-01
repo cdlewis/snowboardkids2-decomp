@@ -97,9 +97,7 @@ typedef struct {
     /* 0x38 */ DisplayListObject boneDisplayObjects[16];
     /* 0x3F8 */ DisplayListObject playerModel;
     Vec3i worldPos;
-    s32 prevWorldPosX;
-    s32 prevWorldPosY;
-    s32 prevWorldPosZ;
+    Vec3i prevWorldPos;
     /* 0x44C */ Vec3i velocity;
     s32 surfaceNormalX;
     s32 surfaceNormalY;

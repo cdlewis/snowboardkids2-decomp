@@ -94,10 +94,10 @@ void updateCrazyJungleBoss(Player *arg0) {
     alloc = getCurrentAllocation();
     calculateAITargetPosition(arg0);
 
-    arg0->velocity.x = arg0->worldPos.x - arg0->prevWorldPosX;
-    arg0->velocity.y = arg0->worldPos.y - arg0->prevWorldPosY;
-    arg0->velocity.z = arg0->worldPos.z - arg0->prevWorldPosZ;
-    memcpy(&arg0->prevWorldPosX, &arg0->worldPos, sizeof(Vec3i));
+    arg0->velocity.x = arg0->worldPos.x - arg0->prevWorldPos.x;
+    arg0->velocity.y = arg0->worldPos.y - arg0->prevWorldPos.y;
+    arg0->velocity.z = arg0->worldPos.z - arg0->prevWorldPos.z;
+    memcpy(&arg0->prevWorldPos, &arg0->worldPos, sizeof(Vec3i));
 
     if (arg0->sectorIndex < 0x16) {
         arg0->maxSpeedCap = 0x180000;
@@ -268,7 +268,7 @@ s32 initCrazyJungleBoss(Player *arg0) {
     arg0->sectorIndex = trackIdx;
     arg0->worldPos.y = getTrackHeightInSector(&gameState->gameData, trackIdx, &arg0->worldPos, 0x100000);
 
-    memcpy(&arg0->prevWorldPosX, &arg0->worldPos, sizeof(Vec3i));
+    memcpy(&arg0->prevWorldPos, &arg0->worldPos, sizeof(Vec3i));
 
     // Zero out velocity
     arg0->velocity.x = 0;
