@@ -100,6 +100,8 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj);
 void initializeMultiPartDisplayListObjects(DisplayListObject *arg0);
 void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1);
 
+void renderMultiPartOpaqueDisplayLists(DisplayListObject *displayObjects);
+void renderMultiPartTransparentDisplayLists(DisplayListObject *displayObjects);
 void renderMultiPartOverlayDisplayLists(DisplayListObject *displayObjects);
 void renderTexturedOpaqueSprite(DisplayListObject *arg0);
 void renderTexturedTransparentSprite(DisplayListObject *arg0);
