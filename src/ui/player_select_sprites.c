@@ -5,7 +5,7 @@
 #include "system/task_scheduler.h"
 #include "ui/player_select.h"
 
-u16 D_800B09A0_1DC080[] = { 0x0000, 0x0001, 0x0002, 0x0001 };
+u16 gPlayerCountSelectedOptionAnimFrameOffsets[] = { 0x0000, 0x0001, 0x0002, 0x0001 };
 s16 gPlayerCountOptionPositions[] = { 0xFFC0, 0x0020, 0x0000, 0x0020, 0xFF98, 0x0040, 0x0028, 0x0040 };
 s16 gPlayerCountIndicatorPositions[] = { 0xFFD7, 0x0024, 0xFFD7, 0x0024, 0xFFC8, 0x0026,
                                          0xFFD8, 0x0024, 0x0000, 0x0000, 0x0000, 0x0000 };
@@ -137,7 +137,7 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
                 s16 scaleConst = 0x400;
                 s16 alphaConst = 0xFF;
                 s32 divConst = 0x8000;
-                u16 *animTable = D_800B09A0_1DC080;
+                u16 *animTable = gPlayerCountSelectedOptionAnimFrameOffsets;
                 vsprite = (volatile PlayerSelectSprite *)state;
                 do {
                     s16 scale;
