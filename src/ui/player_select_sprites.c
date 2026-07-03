@@ -5,6 +5,21 @@
 #include "system/task_scheduler.h"
 #include "ui/player_select.h"
 
+#define PLAYER_SELECT_SELECTED_PORTRAIT_SCALE 0x400
+#define PLAYER_SELECT_UNSELECTED_PORTRAIT_SCALE 0x500
+#define PLAYER_SELECT_SELECTED_SHADE 0xFF
+#define PLAYER_SELECT_UNSELECTED_SHADE 0x80
+#define PLAYER_SELECT_PORTRAIT_LAYOUT_UNIT 0x8000
+#define PLAYER_SELECT_PORTRAIT_Y_OFFSET 0xC
+
+typedef enum {
+    PLAYER_SELECT_PHASE_ENTRANCE_SLIDE = 0,
+    PLAYER_SELECT_PHASE_WAIT_FOR_FADE = 1,
+    PLAYER_SELECT_PHASE_DELAY = 2,
+    PLAYER_SELECT_PHASE_ACTIVE = 3,
+    PLAYER_SELECT_PHASE_CONFIRM_BLINK = 4,
+} PlayerSelectPhase;
+
 u16 gPlayerCountSelectedOptionAnimFrameOffsets[] = { 0x0000, 0x0001, 0x0002, 0x0001 };
 s16 gPlayerCountOptionPositions[] = { 0xFFC0, 0x0020, 0x0000, 0x0020, 0xFF98, 0x0040, 0x0028, 0x0040 };
 s16 gPlayerCountIndicatorPositions[] = { 0xFFD7, 0x0024, 0xFFD7, 0x0024, 0xFFC8, 0x0026,
@@ -19,17 +34,17 @@ void initPlayerSelectSprites(PlayerSelectState *state) {
     s32 yPos;
     s16 scale;
     s16 alpha;
-    volatile PlayerSelectSprite *sprite;
+    volatile PlayerSelectPortraitSprite *sprite;
 
     allocation = getCurrentAllocation();
     spriteData = loadCompressedData(&playerCountSelectSprites_ROM_START, &playerCountSelectSprites_ROM_END, 0xEEE8);
     setCleanupCallback(cleanupPlayerSelectTask);
 
     i = 0;
-    scale = 0x400;
-    alpha = 0xFF;
+    scale = PLAYER_SELECT_SELECTED_PORTRAIT_SCALE;
+    alpha = PLAYER_SELECT_SELECTED_SHADE;
     yPos = -0x9C;
-    sprite = (volatile PlayerSelectSprite *)state;
+    sprite = (volatile PlayerSelectPortraitSprite *)state;
     do {
         s32 baseFrame;
         s16 x;
@@ -42,24 +57,24 @@ void initPlayerSelectSprites(PlayerSelectState *state) {
         slotIndex = state->slotIndex;
         baseFrame = i + 8;
         i++;
-        sprite->scaleX = scale;
-        sprite->scaleY = scale;
-        sprite->alpha = alpha;
+        sprite->renderWidth = scale;
+        sprite->renderHeight = scale;
+        sprite->shade = alpha;
         sprite->flags = 0;
-        sprite->unk13 = 0;
-        sprite->unk12 = 0;
+        sprite->overridePaletteCount = 0;
+        sprite->tileMode = 0;
         sprite->spriteData = spriteData;
         sprite->frameIndex = baseFrame + slotIndex * 6;
         sprite++;
     } while (i < 2);
 
-    state->unk2C = 0;
-    state->unk2D = 0;
+    state->phase = PLAYER_SELECT_PHASE_ENTRANCE_SLIDE;
+    state->phaseTimer = 0;
     {
         u16 playerIdx = allocation->playerCount.selectedPlayerIndex;
-        state->animState = 0;
-        state->animCounter = 0;
-        state->playerIndex = playerIdx;
+        state->selectedAnimFrame = 0;
+        state->selectedAnimFrameTimer = 0;
+        state->lastSelectedPlayerIndex = playerIdx;
     }
 
     setCallback(updatePlayerSelectAnim);
@@ -68,63 +83,63 @@ void initPlayerSelectSprites(PlayerSelectState *state) {
 void updatePlayerSelectAnim(PlayerSelectState *state) {
     PlayerCountSelectState *allocation;
     s32 i;
-    volatile PlayerSelectSprite *vsprite;
+    volatile PlayerSelectPortraitSprite *vsprite;
 
     allocation = getCurrentAllocation();
 
-    switch (state->unk2C) {
-        case 0:
+    switch (state->phase) {
+        case PLAYER_SELECT_PHASE_ENTRANCE_SLIDE:
             for (i = 0; i < 2; i++) {
                 state->sprites[i].y += 0x10;
             }
             if (state->sprites[0].y == -0x1C) {
-                state->unk2C = 1;
+                state->phase = PLAYER_SELECT_PHASE_WAIT_FOR_FADE;
             }
             break;
 
-        case 1:
+        case PLAYER_SELECT_PHASE_WAIT_FOR_FADE:
             if (getViewportFadeMode(&allocation->node) == 0) {
-                state->unk2C = 2;
+                state->phase = PLAYER_SELECT_PHASE_DELAY;
             }
             break;
 
-        case 2:
-            state->unk2D++;
-            if ((state->unk2D & 0xFF) == 3) {
-                state->unk2C = 3;
+        case PLAYER_SELECT_PHASE_DELAY:
+            state->phaseTimer++;
+            if ((state->phaseTimer & 0xFF) == 3) {
+                state->phase = PLAYER_SELECT_PHASE_ACTIVE;
             }
             break;
 
-        case 3:
-            if (allocation->playerCount.selectedPlayerIndex != state->playerIndex) {
-                state->playerIndex = allocation->playerCount.selectedPlayerIndex;
-                state->animState = 0;
-                state->animCounter = 0;
+        case PLAYER_SELECT_PHASE_ACTIVE:
+            if (allocation->playerCount.selectedPlayerIndex != state->lastSelectedPlayerIndex) {
+                state->lastSelectedPlayerIndex = allocation->playerCount.selectedPlayerIndex;
+                state->selectedAnimFrame = 0;
+                state->selectedAnimFrameTimer = 0;
             } else {
-                state->animCounter = (state->animCounter + 1) & 3;
-                if (state->animCounter == 0) {
-                    state->animState = (state->animState + 1) & 3;
+                state->selectedAnimFrameTimer = (state->selectedAnimFrameTimer + 1) & 3;
+                if (state->selectedAnimFrameTimer == 0) {
+                    state->selectedAnimFrame = (state->selectedAnimFrame + 1) & 3;
                 }
             }
 
             i = 0;
             if (allocation->playerCount.selectedPlayerIndex != state->slotIndex) {
-                s16 scaleConst = 0x500;
-                s16 alphaConst = 0x80;
-                s32 divConst = 0x8000;
-                vsprite = (volatile PlayerSelectSprite *)state;
+                s16 scaleConst = PLAYER_SELECT_UNSELECTED_PORTRAIT_SCALE;
+                s16 alphaConst = PLAYER_SELECT_UNSELECTED_SHADE;
+                s32 divConst = PLAYER_SELECT_PORTRAIT_LAYOUT_UNIT;
+                vsprite = (volatile PlayerSelectPortraitSprite *)state;
                 do {
                     s16 scale;
                     u8 slotIdx;
                     s16 frame;
                     s32 yPos;
 
-                    vsprite->scaleY = scaleConst;
-                    scale = divConst / (s32)(u16)vsprite->scaleY;
-                    vsprite->scaleX = scaleConst;
-                    vsprite->alpha = alphaConst;
+                    vsprite->renderHeight = scaleConst;
+                    scale = divConst / (s32)(u16)vsprite->renderHeight;
+                    vsprite->renderWidth = scaleConst;
+                    vsprite->shade = alphaConst;
                     yPos = i * scale;
-                    yPos -= 0xC;
+                    yPos -= PLAYER_SELECT_PORTRAIT_Y_OFFSET;
                     vsprite->y = yPos - scale / 2;
                     slotIdx = state->slotIndex;
                     frame = i + 8;
@@ -134,30 +149,30 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
                     vsprite++;
                 } while (i < 2);
             } else {
-                s16 scaleConst = 0x400;
-                s16 alphaConst = 0xFF;
-                s32 divConst = 0x8000;
+                s16 scaleConst = PLAYER_SELECT_SELECTED_PORTRAIT_SCALE;
+                s16 alphaConst = PLAYER_SELECT_SELECTED_SHADE;
+                s32 divConst = PLAYER_SELECT_PORTRAIT_LAYOUT_UNIT;
                 u16 *animTable = gPlayerCountSelectedOptionAnimFrameOffsets;
-                vsprite = (volatile PlayerSelectSprite *)state;
+                vsprite = (volatile PlayerSelectPortraitSprite *)state;
                 do {
                     s16 scale;
                     u8 slotIdx;
                     s32 frame;
                     s32 yPos;
 
-                    vsprite->scaleY = scaleConst;
-                    scale = divConst / (s32)(u16)vsprite->scaleY;
-                    vsprite->scaleX = scaleConst;
-                    vsprite->alpha = alphaConst;
+                    vsprite->renderHeight = scaleConst;
+                    scale = divConst / (s32)(u16)vsprite->renderHeight;
+                    vsprite->renderWidth = scaleConst;
+                    vsprite->shade = alphaConst;
                     yPos = i * scale;
-                    yPos -= 0xC;
+                    yPos -= PLAYER_SELECT_PORTRAIT_Y_OFFSET;
                     vsprite->y = yPos - scale / 2;
                     slotIdx = state->slotIndex;
                     frame = i + 8;
                     frame += slotIdx * 6;
                     vsprite->frameIndex = frame;
                     i++;
-                    vsprite->frameIndex = frame + animTable[state->animState] * 2;
+                    vsprite->frameIndex = frame + animTable[state->selectedAnimFrame] * 2;
                     vsprite++;
                 } while (i < 2);
             }
@@ -165,17 +180,17 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
             if (allocation->menuState == PLAYER_COUNT_MENU_CONFIRM_WAIT) {
                 s32 slot;
                 slot = state->slotIndex;
-                state->unk2C = 4;
+                state->phase = PLAYER_SELECT_PHASE_CONFIRM_BLINK;
                 if (slot == allocation->playerCount.bytes.selectedPlayerIndexLo) {
-                    PlayerSelectSprite *sprite;
+                    PlayerSelectPortraitSprite *sprite;
                     s32 frameBase;
                     s32 offset;
                     sprite = &state->sprites[i];
                     frameBase = i + 8;
                     offset = slot * 6;
                     sprite->frameIndex = frameBase + offset;
-                    state->animState = 0;
-                    state->animCounter = 0;
+                    state->selectedAnimFrame = 0;
+                    state->selectedAnimFrameTimer = 0;
                 }
             }
             break;
@@ -183,20 +198,20 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
         default:
             break;
 
-        case 4:
+        case PLAYER_SELECT_PHASE_CONFIRM_BLINK:
             if (state->slotIndex == allocation->playerCount.selectedPlayerIndex) {
                 i = 0;
                 do {
                     if (allocation->frameCounter & 1) {
-                        state->sprites[i].unk13 = 0xFF;
+                        state->sprites[i].overridePaletteCount = 0xFF;
                     } else {
-                        state->sprites[i].unk13 = 0;
+                        state->sprites[i].overridePaletteCount = 0;
                     }
                     i++;
                 } while (i < 2);
             }
             if (allocation->menuState == PLAYER_COUNT_MENU_SELECTING) {
-                state->unk2C = 3;
+                state->phase = PLAYER_SELECT_PHASE_ACTIVE;
             }
             break;
     }

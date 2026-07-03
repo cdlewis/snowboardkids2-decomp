@@ -1,28 +1,29 @@
 #pragma once
 
 #include "common.h"
+#include "graphics/sprite_rdp.h"
 
 typedef struct {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteData;
+    /* 0x04 */ SpriteSheetData *spriteData;
     /* 0x08 */ s16 frameIndex;
-    /* 0x0A */ s16 scaleX;
-    /* 0x0C */ s16 scaleY;
+    /* 0x0A */ u16 renderWidth;
+    /* 0x0C */ u16 renderHeight;
     /* 0x0E */ s16 flags;
-    /* 0x10 */ s16 alpha;
-    /* 0x12 */ u8 unk12;
-    /* 0x13 */ u8 unk13;
-} PlayerSelectSprite;
+    /* 0x10 */ s16 shade;
+    /* 0x12 */ u8 tileMode;
+    /* 0x13 */ u8 overridePaletteCount;
+} PlayerSelectPortraitSprite;
 
 typedef struct {
-    /* 0x00 */ PlayerSelectSprite sprites[2];
-    /* 0x28 */ u8 animState;
-    /* 0x29 */ u8 animCounter;
-    /* 0x2A */ u8 playerIndex;
+    /* 0x00 */ PlayerSelectPortraitSprite sprites[2];
+    /* 0x28 */ u8 selectedAnimFrame;
+    /* 0x29 */ u8 selectedAnimFrameTimer;
+    /* 0x2A */ u8 lastSelectedPlayerIndex;
     /* 0x2B */ u8 slotIndex;
-    /* 0x2C */ u8 unk2C;
-    /* 0x2D */ u8 unk2D;
+    /* 0x2C */ u8 phase;
+    /* 0x2D */ u8 phaseTimer;
 } PlayerSelectState;
 
 typedef struct {
