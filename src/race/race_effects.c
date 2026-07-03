@@ -2043,38 +2043,38 @@ void initCrossRaceBadgeTask(CrossRaceBadgeState *arg0) {
 
     switch (allocation->raceType) {
         case RACE_TYPE_SPEED_CROSS:
-            arg0->mainSpriteAsset = loadSpeedCrossSprites();
-            arg0->mainSpriteFrame = 0;
-            arg0->bgSpriteFrame = 1;
+            arg0->foreground.spriteData = loadSpeedCrossSprites();
+            arg0->foreground.frameIndex = 0;
+            arg0->background.frameIndex = 1;
             break;
         case RACE_TYPE_SHOOT_CROSS:
-            arg0->mainSpriteAsset = loadShootCrossSprites();
-            arg0->mainSpriteFrame = 4;
-            arg0->bgSpriteFrame = 5;
+            arg0->foreground.spriteData = loadShootCrossSprites();
+            arg0->foreground.frameIndex = 4;
+            arg0->background.frameIndex = 5;
             break;
         case RACE_TYPE_X_CROSS: // X_CROSS
-            arg0->mainSpriteAsset = loadTrickCrossSprites();
-            arg0->mainSpriteFrame = 0;
-            arg0->bgSpriteFrame = 1;
+            arg0->foreground.spriteData = loadTrickCrossSprites();
+            arg0->foreground.frameIndex = 0;
+            arg0->background.frameIndex = 1;
             break;
     }
-    arg0->bgSpriteAsset = arg0->mainSpriteAsset;
-    arg0->mainX = -0x88;
-    arg0->mainY = 0x40;
-    arg0->bgX = -0x88;
-    arg0->bgY = 0x40;
+    arg0->background.spriteData = arg0->foreground.spriteData;
+    arg0->foreground.x = -0x88;
+    arg0->foreground.y = 0x40;
+    arg0->background.x = -0x88;
+    arg0->background.y = 0x40;
     setCallbackWithContinue(updateCrossRaceBadgeDisplay);
     setCleanupCallback(cleanupCrossRaceBadgeTask);
 }
 
 void updateCrossRaceBadgeDisplay(CrossRaceBadgeState *arg0) {
-    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->bgX);
-    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->background);
+    enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &arg0->foreground);
 }
 
 void cleanupCrossRaceBadgeTask(void *arg0) {
     CrossRaceBadgeState *state = (CrossRaceBadgeState *)arg0;
-    state->mainSpriteAsset = freeNodeMemory(state->mainSpriteAsset);
+    state->foreground.spriteData = freeNodeMemory(state->foreground.spriteData);
 }
 
 const char D_8009E894_9F494[] = "\x02%dG";

@@ -393,15 +393,8 @@ typedef struct {
 } SecondaryItemDisplayState;
 
 typedef struct {
-    s16 mainX;
-    s16 mainY;
-    void *mainSpriteAsset;
-    s16 mainSpriteFrame;
-    u8 padA[0x2];
-    s16 bgX;
-    s16 bgY;
-    void *bgSpriteAsset;
-    s16 bgSpriteFrame;
+    SpriteRenderArg foreground;
+    SpriteRenderArg background;
 } CrossRaceBadgeState;
 
 typedef struct {
