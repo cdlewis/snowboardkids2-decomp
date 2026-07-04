@@ -34,6 +34,8 @@ COURSE_GENERATED_DIR = assets/courses/generated
 COURSE_ASSET_SIZE_HEADER = $(COURSE_GENERATED_DIR)/course_asset_sizes.h
 MODELPAYLOAD_GENERATED_DIR = assets/modelpayload/generated
 MODELPAYLOAD_ASSET_SIZE_HEADER = $(MODELPAYLOAD_GENERATED_DIR)/modelpayload_asset_sizes.h
+ANIMATIONDATA_GENERATED_DIR = assets/animationdata/generated
+ANIMATIONDATA_ASSET_SIZE_HEADER = $(ANIMATIONDATA_GENERATED_DIR)/animationdata_asset_sizes.h
 
 # Files
 
@@ -45,6 +47,7 @@ BIN_FILES = $(foreach dir,$(BIN_DIRS),$(wildcard $(dir)/*.bin))
 LIBKMC_S_FILES = $(foreach dir,lib/libkmc,$(wildcard $(dir)/*.s))
 O_FILES := $(shell grep -E 'build\/(asm|assets|src|src\/entrypoint|bin|lib\/libkmc)\/.+\.o' snowboardkids2.ld -o | sort | uniq)
 COURSE_ASSET_SOURCES := $(filter-out $(COURSE_ASSET_SIZE_HEADER),$(shell find assets/courses -type f 2>/dev/null))
+ANIMATIONDATA_SOURCES := $(filter-out $(ANIMATIONDATA_ASSET_SIZE_HEADER),$(shell find assets/animationdata -type f 2>/dev/null))
 
 # Tools
 
@@ -188,6 +191,7 @@ TEXTCONV = $(PYTHON) $(TOOLS_DIR)/textconv.py
 CHARMAP = $(TOOLS_DIR)/charmap.txt
 MODELPAYLOAD_PACK = $(PYTHON) $(TOOLS_DIR)/modelpayload_pack.py
 MODELPAYLOAD_SOURCES := $(shell find assets/modelpayload -type f 2>/dev/null)
+ANIMATIONDATA_PACK = $(PYTHON) $(TOOLS_DIR)/animationdata_pack.py
 COURSE_MODEL_RESOURCES_PACK = $(PYTHON) $(TOOLS_DIR)/course_model_resources_pack.py
 COURSE_TEXTURE_TABLE_PACK = $(PYTHON) $(TOOLS_DIR)/course_texture_table_pack.py
 TILED_BACKGROUND_PACK = $(PYTHON) $(TOOLS_DIR)/tiled_background_pack.py
@@ -196,6 +200,7 @@ GOLD_COIN_POSITIONS_PACK = $(PYTHON) $(TOOLS_DIR)/gold_coin_positions_pack.py
 ITEM_BOX_POSITIONS_PACK = $(PYTHON) $(TOOLS_DIR)/item_box_positions_pack.py
 COURSE_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/course_asset_sizes.py
 MODELPAYLOAD_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/modelpayload_asset_sizes.py
+ANIMATIONDATA_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/animationdata_asset_sizes.py
 
 $(COURSE_ASSET_SIZE_HEADER): $(COURSE_ASSET_SOURCES) snowboardkids2.yaml $(TOOLS_DIR)/course_asset_sizes.py $(TOOLS_DIR)/course_assets_common.py
 	@mkdir -p $(shell dirname $@)
@@ -206,6 +211,11 @@ $(MODELPAYLOAD_ASSET_SIZE_HEADER): $(MODELPAYLOAD_SOURCES) $(TOOLS_DIR)/modelpay
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(GREEN)  model  $(NO_COL)]  $@\n"
 	$(V)$(MODELPAYLOAD_ASSET_SIZES) --out $@
+
+$(ANIMATIONDATA_ASSET_SIZE_HEADER): $(ANIMATIONDATA_SOURCES) $(TOOLS_DIR)/animationdata_asset_sizes.py $(TOOLS_DIR)/course_assets_common.py
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN)  anim   $(NO_COL)]  $@\n"
+	$(V)$(ANIMATIONDATA_ASSET_SIZES) --out $@
 
 $(BUILD_DIR)/src/data/course_data.o: $(COURSE_ASSET_SIZE_HEADER)
 $(BUILD_DIR)/src/effects/fan_effect.o: $(MODELPAYLOAD_ASSET_SIZE_HEADER)
@@ -228,6 +238,12 @@ $(BUILD_DIR)/assets/modelpayload/%.o: assets/modelpayload/%.yaml $(TOOLS_DIR)/mo
 	$(PRINTF) "[$(GREEN)  model  $(NO_COL)]  $<\n"
 	$(V)$(MODELPAYLOAD_PACK) $< --out $(BUILD_DIR)/assets/modelpayload/$*.sno
 	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/modelpayload/$*.sno
+
+$(BUILD_DIR)/assets/animationdata/%.o: assets/animationdata/%.yaml $(TOOLS_DIR)/animationdata_pack.py $(TOOLS_DIR)/sno.py $(ANIMATIONDATA_SOURCES)
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN)  anim   $(NO_COL)]  $<\n"
+	$(V)$(ANIMATIONDATA_PACK) $< --out $(BUILD_DIR)/assets/animationdata/$*.sno
+	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/animationdata/$*.sno
 
 $(BUILD_DIR)/assets/courses/display_lists/%.o: assets/courses/display_lists/%.c $(COURSE_ASSET_SIZE_HEADER)
 	@mkdir -p $(shell dirname $@)

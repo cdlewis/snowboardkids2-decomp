@@ -2103,64 +2103,112 @@ segments:
     decompressed_size: 0x438
 
   - name: SUNNY_MOUNTAIN_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: sunny_mountain
     vram: 0
     start: 0x34A750
+    decompressed_size: 0x3A0
 
   - name: TURTLE_ISLAND_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: turtle_island
     vram: 0
     start: 0x34AB10
+    decompressed_size: 0x3B0
 
   - name: JINGLE_TOWN_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: jingle_town
     vram: 0
     start: 0x34AF20
+    decompressed_size: 0x510
 
   - name: JINGLE_TOWN_BOSS_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: jingle_town_boss
     vram: 0
     start: 0x34B450
+    decompressed_size: 0x3E0
 
   - name: WENDYS_HOUSE_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: wendys_house
     vram: 0
     start: 0x34B800
+    decompressed_size: 0xB0
 
   - name: LINDAS_CASTLE_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: lindas_castle
     vram: 0
     start: 0x34B8B0
+    decompressed_size: 0x270
 
   - name: CRAZY_JUNGLE_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: crazy_jungle
     vram: 0
     start: 0x34BB10
+    decompressed_size: 0x340
 
   - name: CRAZY_JUNGLE_BOSS_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: crazy_jungle_boss
     vram: 0
     start: 0x34BDE0
+    decompressed_size: 0x330
 
   - name: HAUNTED_HOUSE_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: haunted_house
     vram: 0
     start: 0x34C100
+    decompressed_size: 0x810
 
   - name: ICE_LAND_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: ice_land
     vram: 0
     start: 0x34C750
+    decompressed_size: 0x280
 
   - name: ICE_LAND_BOSS_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: ice_land_boss
     vram: 0
     start: 0x34CA30
+    decompressed_size: 0x90
 
   - name: X_CROSS_SCENE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: scene
+    group: scene
+    course_id: x_cross
     vram: 0
     start: 0x34CAB0
+    decompressed_size: 0xB0
 
   - name: hudSpriteAsset
     type: bin
@@ -2461,59 +2509,92 @@ segments:
     decompressed_size: 0x5280
 
   - name: SLASH_RACE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: race
     vram: 0
     start: 0x3A0F70
+    decompressed_size: 0xAAFA
 
   - name: NANCY_RACE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: race
     vram: 0
     start: 0x3A89C0
+    decompressed_size: 0xB03C
 
   - name: JAM_RACE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: race
     vram: 0
     start: 0x3B0D30
+    decompressed_size: 0xB078
 
   - name: LINDA_RACE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: race
     vram: 0
     start: 0x3B8900
+    decompressed_size: 0xB4B6
 
   - name: TOMMY_RACE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: race
     vram: 0
     start: 0x3C0470
+    decompressed_size: 0xC2D4
 
   - name: WENDY_RACE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: race
     vram: 0
     start: 0x3C8BC0
+    decompressed_size: 0xB79E
 
   - name: DAMIEN_RACE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: race
     vram: 0
     start: 0x3D0C20
+    decompressed_size: 0xCA78
 
   - name: PEN_RACE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: race
     vram: 0
     start: 0x3D9A90
+    decompressed_size: 0xB678
 
   - name: DOG_RACE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: race
     vram: 0
     start: 0x3E13F0
+    decompressed_size: 0xBE9A
 
   - name: DINOS_RACE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: race
     vram: 0
     start: 0x3E9B20
+    decompressed_size: 0x1DD0
 
   - name: ROBO_RACE_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: race
     vram: 0
     start: 0x3EADF0
+    decompressed_size: 0x3094
 
   - name: ITEM_SPRITE_METADATA
     type: bin
@@ -3298,94 +3379,148 @@ segments:
     start: 0x45A890
 
   - name: SLASHS_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x45B130
+    decompressed_size: 0x356E
 
   - name: NANCYS_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x45D620
+    decompressed_size: 0x32A4
 
   - name: JAMS_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x45F6D0
+    decompressed_size: 0x477C
 
   - name: LINDAS_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x462B50
+    decompressed_size: 0x3BEC
 
   - name: TOMMYS_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x464DD0
+    decompressed_size: 0x341E
 
   - name: WENDYS_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x4666C0
+    decompressed_size: 0x4E52
 
   - name: DAMIENS_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x46A0E0
+    decompressed_size: 0x58A4
 
   - name: PENS_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x46D570
+    decompressed_size: 0x35BC
 
   - name: DOGS_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x46F0C0
+    decompressed_size: 0xD8F2
 
   - name: SLASHN_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x476EB0
+    decompressed_size: 0x8274
 
   - name: NANCYN_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x47B2D0
+    decompressed_size: 0x6CA4
 
   - name: JAMN_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x47EFC0
+    decompressed_size: 0x6A3C
 
   - name: LINDAN_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x482E40
+    decompressed_size: 0x7D5A
 
   - name: TOMMYN_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x4875E0
+    decompressed_size: 0xD8B6
 
   - name: WENDYN_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x48E8F0
+    decompressed_size: 0x800E
 
   - name: DAMIENN_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x4937A0
+    decompressed_size: 0x8F0C
 
   - name: PENN_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x498680
+    decompressed_size: 0x252E
 
   - name: DOGN_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x4998E0
+    decompressed_size: 0x3668
 
   - name: spriteEffectTextureData
     type: bin
@@ -3972,154 +4107,254 @@ segments:
     decompressed_size: 0x980
 
   - name: SLASH1_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: slash1
     vram: 0
     start: 0x4E7AA0
+    decompressed_size: 0x9F02
 
   - name: SLASH2_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: slash2
     vram: 0
     start: 0x4ED9C0
+    decompressed_size: 0xC3F2
 
   - name: SLASH3_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: slash3
     vram: 0
     start: 0x4F45E0
+    decompressed_size: 0xF51A
 
   - name: SLASH4_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: slash4
     vram: 0
     start: 0x4FDE20
+    decompressed_size: 0xAFF4
 
   - name: SLASH5_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x504740
+    decompressed_size: 0xC5C0
 
   - name: SLASHO_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x50BFD0
+    decompressed_size: 0x737A
 
   - name: NANCY_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x510AD0
+    decompressed_size: 0xDE48
 
   - name: NANCY2_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: nancy2
     vram: 0
     start: 0x518BA0
+    decompressed_size: 0x6032
 
   - name: NANCY3_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: nancy3
     vram: 0
     start: 0x51BCF0
+    decompressed_size: 0xE65E
 
   - name: NANCYO_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x5242F0
+    decompressed_size: 0x6CEE
 
   - name: JAM_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x527EE0
+    decompressed_size: 0xC848
 
   - name: JAM2_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: jam2
     vram: 0
     start: 0x52FC30
+    decompressed_size: 0xB2DA
 
   - name: JAM3_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: jam3
     vram: 0
     start: 0x535E80
+    decompressed_size: 0xDB44
 
   - name: JAMO_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x53E160
+    decompressed_size: 0x66FC
 
   - name: LINDA_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x542AF0
+    decompressed_size: 0xE6AE
 
   - name: LINDA2_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x54B280
+    decompressed_size: 0x9814
 
   - name: LINDA3_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x550BC0
+    decompressed_size: 0xDAD4
 
   - name: LINDAO_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x5596D0
+    decompressed_size: 0x8938
 
   - name: TOMMY_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x55E550
+    decompressed_size: 0xB6D0
 
   - name: DOG2_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x564920
+    decompressed_size: 0x8094
 
   - name: TOMMY3_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x568A70
+    decompressed_size: 0x127A2
 
   - name: TOMMYO_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x573660
+    decompressed_size: 0x5498
 
   - name: PEN_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: pen
     vram: 0
     start: 0x576600
+    decompressed_size: 0xFE66
 
   - name: WENDY2_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x580AD0
+    decompressed_size: 0x6C2A
 
   - name: WENDY3_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x584650
+    decompressed_size: 0x12DD2
 
   - name: WENDYO_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x590790
+    decompressed_size: 0x5E66
 
   - name: DAMIEN_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: damien
     vram: 0
     start: 0x5944E0
+    decompressed_size: 0xC8A4
 
   - name: DAMIEN2_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x59C0A0
+    decompressed_size: 0x5A70
 
   - name: DAMIEN3_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x59EF90
+    decompressed_size: 0x11794
 
   - name: DAMIENO_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x5A9D70
+    decompressed_size: 0x53D6
 
   - name: UNUSED_ANIMATION_DATA
     type: bin
@@ -4127,54 +4362,87 @@ segments:
     start: 0x5AD1C0
 
   - name: PEN2_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x5AD910
+    decompressed_size: 0x40A2
 
   - name: DOGO_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x5B0030
+    decompressed_size: 0xB54
 
   - name: DINOS_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x5B05A0
+    decompressed_size: 0x5788
 
   - name: NEZU_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: nezu
     vram: 0
     start: 0x5B4130
+    decompressed_size: 0x1FE0
 
   - name: SNOW_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x5B4B50
+    decompressed_size: 0x1CDA
 
   - name: ROBO_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x5B5590
+    decompressed_size: 0x3CDA
 
   - name: MROBO_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: mrobo
     vram: 0
     start: 0x5B7D30
+    decompressed_size: 0x3F40
 
   - name: DOG_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x5B9AC0
+    decompressed_size: 0x8070
 
   - name: KEYL_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
+    model_id: keyl
     vram: 0
     start: 0x5BD9F0
+    decompressed_size: 0x108
 
   - name: CHARACTER_SELECT_ANIMATION_DATA
-    type: bin
+    type: animationdata
+    kind: model
+    group: model
     vram: 0
     start: 0x5BDB20
+    decompressed_size: 0x7E3A
 
   - name: CUTSCENE_SUNNY_MOUNTAIN_INTRO_FRAME_0
     type: bin
