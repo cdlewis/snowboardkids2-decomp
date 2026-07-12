@@ -33,7 +33,7 @@ void updateCameraRotationTask(CameraRotationTaskState *);
 void cleanupCameraRotationTask(void);
 void renderPalettedTexture(ModelTransitionEffectState *);
 
-s32 D_8008C200_8CE00[] = {
+s32 gModelTransitionEffectDisplayList[] = {
     0xD9D0F9FA, 0x00000000, 0xD9FFFFFF, 0x00210005, 0xD7000002, 0x80008000, 0x01018030,
     0x02000000, 0xE7000000, 0x00000000, 0xE3001201, 0x00002000, 0xE3000A01, 0x00100000,
     0xFC127FFF, 0xFFFFF238, 0xE200001C, 0xC8112078, 0x06000204, 0x0006080A, 0x060C0E10,
@@ -233,7 +233,7 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
 
     gSPMatrix(gDisplayListAllocPtr++, state->lookAtMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
 
-    gSPDisplayList(gDisplayListAllocPtr++, &D_8008C200_8CE00);
+    gSPDisplayList(gDisplayListAllocPtr++, &gModelTransitionEffectDisplayList);
 }
 
 void initModelTransitionEffect(ModelTransitionEffectState *state) {

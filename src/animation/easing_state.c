@@ -1,6 +1,7 @@
 #include "animation/easing_state.h"
 #include "assets.h"
 #include "common.h"
+#include "credits/credits_controller.h"
 #include "cutscene/sys_effect.h"
 #include "graphics/sprite_table.h"
 #include "math/geometry.h"
@@ -183,7 +184,6 @@ void initSpinFadeSpriteEffect(SpriteEffectTaskState *arg0);
 void initDropShrinkSpriteEffect(SpriteEffectTaskState *arg0);
 void initRiseStretchSpriteEffect(SpriteEffectTaskState *arg0);
 void initFloatBobbingSpriteEffect(SpriteEffectTaskState *arg0);
-
 void updateSimpleSpriteEffect(SimpleSpriteEffectState *);
 void cleanupSimpleSpriteEffect(SpriteEffectTaskState *);
 void updateScalingSpriteEffect(ScalingSpriteEffectState *);

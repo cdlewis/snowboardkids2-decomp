@@ -1,3 +1,5 @@
+#include "credits/credits_controller.h"
+
 #include "animation/easing_state.h"
 #include "assets.h"
 #include "audio/audio.h"
@@ -103,8 +105,12 @@ struct {
     u16 unk2;
 } D_8008C11C_8CD1C = { 0x11, 0 };
 
-s32 D_8008C120_8CD20[] = { 0x001428F5, 0x00099999, 0x00266666, 0xFFEBD70B, 0x00099999, 0x00266666,
-                           0x001428F5, 0x00099999, 0xFFE2E148, 0xFFEBD70B, 0x00099999, 0xFFE2E148 };
+Vec3i D_8008C120_8CD20[] = {
+    { 0x001428F5, 0x00099999, 0x00266666 },
+    { 0xFFEBD70B, 0x00099999, 0x00266666 },
+    { 0x001428F5, 0x00099999, 0xFFE2E148 },
+    { 0xFFEBD70B, 0x00099999, 0xFFE2E148 }
+};
 
 void updateCreditsSequence(void);
 void fadeOutCreditsSequence(void);

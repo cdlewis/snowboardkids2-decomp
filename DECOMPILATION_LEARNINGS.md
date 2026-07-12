@@ -504,3 +504,7 @@ While consolidating `race_hud.c` callback state structs, anonymous union/struct 
 Renaming functions in `geometry.c` can change the assembled bytes even when KMC GCC emits identical `.s` apart from the label text. For example, renaming `func_8006BDBC_6C9BC` to `multiplyMatrixRotation` made the assembler insert an extra `nop` between `rotateVectorY` and the renamed function, shifting the next symbol by four bytes. Similarly, `func_mulMatrix3x3T` assembled correctly as `matrixMultiplyTransposed`, but `multiplyMatrixByTranspose` shifted the helper by four bytes.
 
 When renaming tightly packed geometry helpers, test candidate names by compiling a temporary object and comparing both symbol offsets and disassembly, then run `./tools/build-and-verify.sh`. The `func_` prefix itself is not always required for a match; the accepted `matrixMultiplyTransposed` name keeps the original checksum.
+
+## Preserve Volatile Display List Pointer Declarations
+
+`gDisplayListAllocPtr` is intentionally declared as `Gfx *volatile` in `model_loader.c`. Moving it to a shared non-volatile declaration in `graphics.h` let KMC GCC optimize away intermediate stores in `buildAuxBufferDisplayList`, shortening the function by 0x54 bytes and shifting the whole main data segment by 0x50. Keep volatile-sensitive globals declared with the qualifier required by each translation unit, even if that means retaining a local extern.

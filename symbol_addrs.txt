@@ -1296,6 +1296,7 @@ cleanupOscillatingSpriteTask = 0x800084A8; // rom:0x90A8
 orbitalSpriteOffsetsZ = 0x8008C190; // rom:0x8CD90
 orbitalSpriteOffsetsX = 0x8008C194; // rom:0x8CD94
 maxActiveOrbitalSprites = 0x8008C1F0; // rom:0x8CDF0
+gModelTransitionEffectDisplayList = 0x8008C200; // rom:0x8CE00 size:0x70
 getEmptyModelDisplayOffset = 0x80002B8C; // rom:0x378C
 getModelDisplayDataOffset = 0x80002BD0; // rom:0x37D0
 loadAssetSlotTableEntry = 0x80002C14; // rom:0x3814

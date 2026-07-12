@@ -1,4 +1,5 @@
 #include "common.h"
+#include "credits/credits_controller.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
@@ -23,8 +24,6 @@ void updateQuadDisplayList(QuadDisplayListState *);
 void cleanupQuadDisplayList(QuadDisplayListElement *);
 void updateRotationController(RotationControllerState *);
 void cleanupRotationController(void);
-
-extern Vec3i D_8008C120_8CD20[];
 
 /* 0x89240 */ u32 D_80088640_89240[] = { 0x00000000, 0x00000000, 0x01000490, 0x00000000 };
 /* 0x89250 */ u32 D_80088650[] = { 0x00000000, 0x010002B0, 0x010002C0, 0x00000000 };
