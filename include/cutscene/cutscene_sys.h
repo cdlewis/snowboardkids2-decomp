@@ -53,7 +53,7 @@ typedef struct {
 
 typedef struct {
     u8 padding[0xFF8];
-    s32 wipeColorNode;
+    SceneRenderNode sceneRenderNode;
 } WipeColorNodeParams;
 void cutsceneSysWipeColor_exec(WipeColorParams *colorParams, WipeColorNodeParams *wipeParams);
 void cutsceneSysWait_init(void);

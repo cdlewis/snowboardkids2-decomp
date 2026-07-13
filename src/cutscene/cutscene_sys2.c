@@ -25,13 +25,13 @@ void cutsceneSys2Wipe_exec(cutsceneSys2Wipe_exec_arg0 *params, cutsceneSys2Wipe_
     world_pos.x += params->grid_x * 209715;
     world_pos.y += params->grid_y * 209715;
 
-    setAuxRenderEnabled(&state->matrix);
+    enableSceneRenderViewportEffect(&state->sceneRenderNode);
 
     temp_rotation = (s32)(params->rotation_y) << 0x10;
 
-    setNodeScaleTarget((Func8000C2CCArg *)&state->matrix, temp_rotation / 100, params->unk2);
-    setNodePositionTarget((NodePositionTargetArg *)&state->matrix, (s32 *)&world_pos, params->unk2);
-    setNodeRenderMode((NodeRenderModeArg *)&state->matrix, params->render_flags);
+    setNodeScaleTarget(&state->sceneRenderNode, temp_rotation / 100, params->unk2);
+    setNodePositionTarget(&state->sceneRenderNode, (s32 *)&world_pos, params->unk2);
+    setNodeRenderMode(&state->sceneRenderNode, params->render_flags);
 }
 
 s32 cutsceneSys2Wipe_isDone(void) {

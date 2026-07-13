@@ -343,7 +343,7 @@ s32 cutsceneSysWipeColor_validate(void) {
 }
 
 void cutsceneSysWipeColor_exec(WipeColorParams *colorParams, WipeColorNodeParams *wipeParams) {
-    setNodeWipeColor((NodeWipeColorArg *)&wipeParams->wipeColorNode, colorParams->r, colorParams->g, colorParams->b);
+    setNodeWipeColor(&wipeParams->sceneRenderNode, colorParams->r, colorParams->g, colorParams->b);
 }
 
 void skipCutsceneOnInputCallback(skipCutsceneCallback_arg **arg0) {

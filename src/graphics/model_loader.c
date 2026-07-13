@@ -1,7 +1,7 @@
+#include "graphics/model_loader.h"
 #include "assets.h"
 #include "common.h"
 #include "core/buffers.h"
-#include "cutscene/cutscene_manager.h"
 #include "gbi.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
@@ -26,155 +26,32 @@ typedef struct {
 } AssetDataBlock;
 
 typedef struct {
-    u8 pad0[0x1F0];
-    s32 velocityX;
-    s32 velocityY;
-    s32 velocityZ;
-    s16 posFramesX;
-    s16 posFramesY;
-    s16 posFramesZ;
-    s16 pad202;
-    s32 scale;
-    s32 scaleVelocity;
-    s16 scaleFrames;
-    u16 rotationAngle;
-} SceneRenderAnimationState;
+    /* 0x00 */ SceneRenderNode *node;
+    /* 0x04 */ DisplayListObject object1;
+    /* 0x40 */ DisplayListObject object2;
+} SceneRenderTask;
 
-typedef struct {
-    /* 0x00 */ SceneRenderAnimationState *animState;
-    /* 0x04 */ Transform3D transform1;
-    /* 0x24 */ void *displayList1;
-    /* 0x28 */ void *modelData1;
-    /* 0x2C */ void *textureData1;
-    /* 0x30 */ void *unk30;
-    /* 0x34 */ u8 pad34[0xC];
-    /* 0x40 */ Transform3D transform2;
-    /* 0x60 */ void *displayList2;
-    /* 0x64 */ void *modelData2;
-    /* 0x68 */ void *textureData2;
-    /* 0x6C */ void *unk6C;
-} SceneRenderTaskLoadContext;
-
-typedef struct {
-    u8 pad0[0x28];
-    void *modelData1;
-    void *textureData1;
-    void *spare1;
-    u8 pad34[0x30];
-    void *modelData2;
-    void *textureData2;
-    void *spare2;
-} SceneRenderTaskData;
-
-typedef struct {
-    u8 pad0[0x16];
-    u16 slot_index;
-    u8 pad18[0x108];
-    u8 baseTransform[0x20]; // 0x120
-    u8 pad140[0xA4];
-    s32 posX;          // 0x1E4
-    s32 posY;          // 0x1E8
-    s32 posZ;          // 0x1EC
-    s32 velocityX;     // 0x1F0
-    s32 velocityY;     // 0x1F4
-    s32 velocityZ;     // 0x1F8
-    s16 posFramesX;    // 0x1FC
-    s16 posFramesY;    // 0x1FE
-    s16 posFramesZ;    // 0x200
-    s16 pad202;        // 0x202
-    s32 scale;         // 0x204
-    s32 scaleVelocity; // 0x208
-    s16 scaleFrames;   // 0x20C
-    u16 rotationAngle; // 0x20E
-    s32 renderFlags;   // 0x210
-    u8 pad214[0x4];
-    s8 renderMode; // 0x218
-} SceneRenderNodeExt;
-
-typedef struct {
-    SceneRenderNodeExt *node;
-    Transform3D staticTransform;
-    u8 pad24[0x1C];
-    Transform3D rotatedTransform;
-} SceneRenderTaskCtx;
-
-typedef struct {
-    ViewportNode *node;
-} AuxBufferContext;
-
-typedef struct {
-    u8 pad[0x1E4];
-    s32 posX;
-    s32 posY;
-    s32 posZ;
-    s32 velocityX;
-    s32 velocityY;
-    s32 velocityZ;
-    s16 framesRemainingX;
-    s16 framesRemainingY;
-    s16 framesRemainingZ;
-} NodePositionTargetArg;
-
-typedef struct {
-    u8 pad[0x204];
-    s32 unk204;
-    s32 unk208;
-    s16 unk20C;
-} Func8000C2CCArg;
-
-typedef struct {
-    u8 pad[0x214];
-    u8 wipeR;
-    u8 wipeG;
-    u8 wipeB;
-} NodeWipeColorArg;
-
-typedef struct {
-    u8 pad[0x1E4];
-    s32 position[3];
-} NodePositionArg;
-
-typedef struct {
-    u8 pad[0x204];
-    s32 unk204;
-} Func8000C2ACArg;
-
-typedef struct {
-    u8 pad[0x218];
-    s8 renderMode;
-} NodeRenderModeArg;
-
-typedef struct {
-    ViewportNode base;
-    ColorData lightColor;
-    ColorData ambientColor;
-    u8 pad1E8[0x28];
-    s32 renderFlags;
-    u8 pad214[0x4];
-    u8 renderMode;
-} SceneRenderNode;
-
-void loadSceneRenderTaskData(SceneRenderTaskLoadContext *);
-void updateSceneRenderTask(SceneRenderTaskCtx *ctx);
-void cleanupSceneRenderTask(SceneRenderTaskData *task);
+void loadSceneRenderTaskData(SceneRenderTask *);
+void updateSceneRenderTask(SceneRenderTask *ctx);
+void cleanupSceneRenderTask(SceneRenderTask *task);
 
 extern Gfx *volatile gDisplayListAllocPtr;
 
-Gfx D_8008CCE0_8D8E0[] = {
+Gfx gCutsceneSceneRenderDisplayList1[] = {
     { .words = { 0x00000000, 0x010000A0 } },
     { .words = { 0x00000000, 0x00000000 } },
 };
 
-Gfx D_8008CCF0_8D8F0[] = {
+Gfx gCutsceneSceneRenderDisplayList2[] = {
     { .words = { 0x00000000, 0x01000088 } },
     { .words = { 0x00000000, 0x00000000 } },
 };
 
-u32 D_8008CD00_8D900[] = {
+u32 gViewportFillTexture[] = {
     0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
 };
 
-Gfx D_8008CD20_8D920[] = {
+Gfx gViewportFillSetupDisplayList[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),
     gsDPSetTexturePersp(G_TP_NONE),
@@ -182,7 +59,7 @@ Gfx D_8008CD20_8D920[] = {
     gsDPSetTextureLUT(G_TT_NONE),
     gsDPSetCombineMode(G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM),
     gsDPSetRenderMode(G_RM_AA_ZB_OPA_INTER, G_RM_AA_ZB_OPA_INTER2),
-    gsDPSetTextureImage(G_IM_FMT_I, G_IM_SIZ_8b, 8, D_8008CD00_8D900),
+    gsDPSetTextureImage(G_IM_FMT_I, G_IM_SIZ_8b, 8, gViewportFillTexture),
     gsDPSetTile(
         G_IM_FMT_I,
         G_IM_SIZ_8b,
@@ -205,28 +82,28 @@ Gfx D_8008CD20_8D920[] = {
     gsSPEndDisplayList(),
 };
 
-AssetDataBlock D_8008CD98_8D998 = {
+AssetDataBlock gCutsceneSceneRenderAssetData = {
     .vertStart1 = &CUTSCENE_SCENE_RENDER_VERTEX_DATA_1_ROM_START,
     .vertEnd1 = &CUTSCENE_SCENE_RENDER_VERTEX_DATA_1_ROM_END,
     .compStart1 = &CUTSCENE_SCENE_RENDER_TEXTURE_1_ROM_START,
     .compEnd1 = &CUTSCENE_SCENE_RENDER_TEXTURE_1_ROM_END,
     .compSize1 = 0x0180,
     .pad12 = 0x0001,
-    .dispList1 = D_8008CCE0_8D8E0,
+    .dispList1 = gCutsceneSceneRenderDisplayList1,
     .vertStart2 = &CUTSCENE_SCENE_RENDER_VERTEX_DATA_2_ROM_START,
     .vertEnd2 = &CUTSCENE_SCENE_RENDER_VERTEX_DATA_2_ROM_END,
     .compStart2 = &CUTSCENE_SCENE_RENDER_TEXTURE_2_ROM_START,
     .compEnd2 = &CUTSCENE_SCENE_RENDER_TEXTURE_2_ROM_END,
     .compSize2 = 0x0120,
     .pad2A = 0x0001,
-    .dispList2 = D_8008CCF0_8D8F0,
+    .dispList2 = gCutsceneSceneRenderDisplayList2,
 };
 
-void setColorImageToAuxBuffer(void *arg0) {
+void setColorImageToMainFramebuffer(void *arg0) {
     gDPSetColorImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, &gFrameBuffer);
 }
 
-void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
+void buildViewportAuxFramebufferFillDisplayList(SceneRenderTask *arg0) {
     ViewportNode *node;
     Gfx *gfx;
     int new_var2;
@@ -241,7 +118,7 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
     s32 ulx;
     s32 uly;
 
-    node = arg0->node;
+    node = &arg0->node->base;
     gfx = gDisplayListAllocPtr;
     frameIdx = gCurrentDisplayBufferIndex;
 
@@ -249,7 +126,7 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
     gfx->words.w1 = (u32)(&gAuxFrameBuffers[frameIdx]);
 
     gfx[1].words.w0 = 0xDE000000;
-    gfx[1].words.w1 = (u32)D_8008CD20_8D920;
+    gfx[1].words.w1 = (u32)gViewportFillSetupDisplayList;
 
     {
         s32 ulxf = (s32)(node->clipLeft * 4.0f);
@@ -309,71 +186,71 @@ void buildAuxBufferDisplayList(AuxBufferContext *arg0) {
     gfx[9].words.w1 = frameIdx;
 }
 
-void enqueueAuxBufferRender(AuxBufferContext *ctx) {
-    enqueueCallbackBySlotIndex(ctx->node->callbackSlotIndex, 7, buildAuxBufferDisplayList, ctx);
+void enqueueViewportAuxFramebufferFill(SceneRenderTask *ctx) {
+    enqueueCallbackBySlotIndex(ctx->node->base.callbackSlotIndex, 7, buildViewportAuxFramebufferFillDisplayList, ctx);
 }
 
-void enqueueAuxBufferSetup(AuxBufferContext *ctx) {
-    enqueueCallbackBySlotIndex(ctx->node->callbackSlotIndex, 0, setColorImageToAuxBuffer, ctx);
+void enqueueMainFramebufferTargetSetup(SceneRenderTask *ctx) {
+    enqueueCallbackBySlotIndex(ctx->node->base.callbackSlotIndex, 0, setColorImageToMainFramebuffer, ctx);
 }
 
-void setAuxRenderEnabled(Func8000C268Arg *arg0) {
-    arg0->renderFlags |= 1;
+void enableSceneRenderViewportEffect(SceneRenderNode *node) {
+    node->state.anim.renderFlags |= 1;
 }
 
-void clearAuxRenderEnabled(Func8000C268Arg *arg0) {
-    arg0->renderFlags &= ~1;
+void disableSceneRenderViewportEffect(SceneRenderNode *node) {
+    node->state.anim.renderFlags &= ~1;
 }
 
-void copyNodePosition(NodePositionArg *node, void *position) {
-    memcpy(node->position, position, sizeof(Vec3i));
+void copyNodePosition(SceneRenderNode *node, void *position) {
+    memcpy(&node->state.anim.posX, position, sizeof(Vec3i));
 }
 
-void setNodeScale(Func8000C2ACArg *arg0, s32 arg1) {
-    arg0->unk204 = arg1;
+void setNodeScale(SceneRenderNode *node, s32 scale) {
+    node->state.anim.scale = scale;
 }
 
-void setNodeRenderMode(NodeRenderModeArg *arg0, s32 arg1) {
-    arg0->renderMode = arg1;
+void setNodeRenderMode(SceneRenderNode *node, s32 renderMode) {
+    node->state.anim.renderMode = renderMode;
 }
 
-void setNodeWipeColor(NodeWipeColorArg *node, u8 r, u8 g, u8 b) {
-    node->wipeR = r;
-    node->wipeG = g;
-    node->wipeB = b;
+void setNodeWipeColor(SceneRenderNode *node, u8 r, u8 g, u8 b) {
+    node->state.anim.wipeR = r;
+    node->state.anim.wipeG = g;
+    node->state.anim.wipeB = b;
 }
 
-void setNodeScaleTarget(Func8000C2CCArg *arg0, s32 arg1, s16 arg2) {
-    if (arg2 == 0) {
-        arg0->unk20C = 0;
-        arg0->unk208 = 0;
-        arg0->unk204 = arg1;
+void setNodeScaleTarget(SceneRenderNode *node, s32 scale, s16 frames) {
+    if (frames == 0) {
+        node->state.anim.scaleFrames = 0;
+        node->state.anim.scaleVelocity = 0;
+        node->state.anim.scale = scale;
     } else {
-        arg0->unk20C = arg2;
-        arg0->unk208 = (arg1 - arg0->unk204) / arg2;
+        node->state.anim.scaleFrames = frames;
+        node->state.anim.scaleVelocity = (scale - node->state.anim.scale) / frames;
     }
 }
 
-void setNodePositionTarget(NodePositionTargetArg *node, s32 *targetPos, s16 frames) {
+void setNodePositionTarget(SceneRenderNode *node, s32 *targetPos, s16 frames) {
     s16 temp = frames;
 
     if (frames == 0) {
-        node->framesRemainingX = 0;
-        node->framesRemainingY = 0;
-        node->framesRemainingZ = 0;
-        node->velocityX = 0;
-        node->velocityY = 0;
-        node->velocityZ = 0;
-        node->posX = targetPos[0];
-        node->posY = targetPos[1];
-        node->posZ = targetPos[2];
+        node->state.anim.posFramesX = 0;
+        node->state.anim.posFramesY = 0;
+        node->state.anim.posFramesZ = 0;
+        node->state.anim.velocityX = 0;
+        node->state.anim.velocityY = 0;
+        node->state.anim.velocityZ = 0;
+        node->state.anim.posX = targetPos[0];
+        node->state.anim.posY = targetPos[1];
+        node->state.anim.posZ = targetPos[2];
     } else {
-        node->framesRemainingX = temp;
-        node->framesRemainingY = temp;
-        node->framesRemainingZ = temp;
-        node->velocityX = (targetPos[0] - node->posX) / frames;
-        node->velocityY = (targetPos[1] - node->posY) / frames;
-        node->velocityZ = (targetPos[2] - node->posZ) / frames;
+        node->state.anim.posFramesX = temp;
+        node->state.anim.posFramesY = temp;
+        node->state.anim.posFramesZ = temp;
+        node->state.anim.velocityX = (targetPos[0] - node->state.anim.posX) / frames;
+        node->state.anim.velocityY = (targetPos[1] - node->state.anim.posY) / frames;
+        node->state.anim.velocityZ = (targetPos[2] - node->state.anim.posZ) / frames;
     }
 }
 
@@ -395,20 +272,25 @@ void initSceneRenderNode(
     setModelCameraTransform(&node->base, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
     setViewportPerspective(&node->base, 40.0f, 1.3333334f, 10.0f, 10000.0f);
 
-    node->lightColor.r2 = 0;
-    node->lightColor.g2 = 0x7F;
-    node->lightColor.b2 = 0x7F;
-    node->lightColor.r = 0;
-    node->lightColor.g = 0;
-    node->lightColor.b = 0;
-    node->ambientColor.r = 0;
-    node->ambientColor.g = 0;
-    node->ambientColor.b = 0;
+    node->state.lighting.lightColor.r2 = 0;
+    node->state.lighting.lightColor.g2 = 0x7F;
+    node->state.lighting.lightColor.b2 = 0x7F;
+    node->state.lighting.lightColor.r = 0;
+    node->state.lighting.lightColor.g = 0;
+    node->state.lighting.lightColor.b = 0;
+    node->state.lighting.ambientColor.r = 0;
+    node->state.lighting.ambientColor.g = 0;
+    node->state.lighting.ambientColor.b = 0;
 
-    setViewportLightColors(node->base.viewportId, 1, &node->lightColor, &node->ambientColor);
+    setViewportLightColors(
+        node->base.viewportId,
+        1,
+        &node->state.lighting.lightColor,
+        &node->state.lighting.ambientColor
+    );
 
-    node->renderFlags = 0;
-    node->renderMode = renderMode;
+    node->state.anim.renderFlags = 0;
+    node->state.anim.renderMode = renderMode;
 
     task = scheduleTask(loadSceneRenderTaskData, taskArg1, taskArg2, 0);
     if (task != NULL) {
@@ -420,143 +302,145 @@ void unlinkViewportNode(ViewportNode *arg0) {
     unlinkNode(arg0);
 }
 
-void loadSceneRenderTaskData(SceneRenderTaskLoadContext *ctx) {
-    SceneRenderAnimationState *animState;
+void loadSceneRenderTaskData(SceneRenderTask *ctx) {
+    SceneRenderNode *node;
     int modelScale;
     AssetDataBlock *data;
     s16 scale;
-    ctx->unk30 = 0;
-    ctx->textureData1 = 0;
-    ctx->modelData1 = 0;
-    ctx->unk6C = 0;
-    ctx->textureData2 = 0;
-    ctx->modelData2 = 0;
-    ctx->animState->scale = 0x10000;
-    ctx->animState->scaleVelocity = 0;
-    ctx->animState->scaleFrames = 0;
-    ctx->animState->rotationAngle = 0;
-    memcpy(&ctx->transform1, &identityMatrix, sizeof(Transform3D));
-    memcpy(&ctx->transform2, &identityMatrix, sizeof(Transform3D));
-    animState = ctx->animState;
-    animState->posFramesZ = 0;
-    animState->posFramesY = 0;
-    animState->posFramesX = 0;
-    data = &D_8008CD98_8D998;
-    animState = ctx->animState;
+    ctx->object1.segment3 = 0;
+    ctx->object1.segment2 = 0;
+    ctx->object1.segment1 = 0;
+    ctx->object2.segment3 = 0;
+    ctx->object2.segment2 = 0;
+    ctx->object2.segment1 = 0;
+    ctx->node->state.anim.scale = 0x10000;
+    ctx->node->state.anim.scaleVelocity = 0;
+    ctx->node->state.anim.scaleFrames = 0;
+    ctx->node->state.anim.rotationAngle = 0;
+    memcpy(&ctx->object1.transform, &identityMatrix, sizeof(Transform3D));
+    memcpy(&ctx->object2.transform, &identityMatrix, sizeof(Transform3D));
+    node = ctx->node;
+    node->state.anim.posFramesZ = 0;
+    node->state.anim.posFramesY = 0;
+    node->state.anim.posFramesX = 0;
+    data = &gCutsceneSceneRenderAssetData;
+    node = ctx->node;
     modelScale = 0x2000;
-    animState->velocityZ = 0;
-    animState->velocityY = 0;
-    animState->velocityX = 0;
-    if (((!(&D_8008CD98_8D998)->vertStart2) && (!(&D_8008CD98_8D998)->vertStart2)) &&
-        (!(&D_8008CD98_8D998)->vertStart2)) {}
-    ctx->modelData1 = loadUncompressedData((&D_8008CD98_8D998)->vertStart1, (&D_8008CD98_8D998)->vertEnd1);
-    ctx->textureData1 = loadCompressedData(
-        (&D_8008CD98_8D998)->compStart1,
-        (&D_8008CD98_8D998)->compEnd1,
-        (&D_8008CD98_8D998)->compSize1
+    node->state.anim.velocityZ = 0;
+    node->state.anim.velocityY = 0;
+    node->state.anim.velocityX = 0;
+    if (((!(&gCutsceneSceneRenderAssetData)->vertStart2) && (!(&gCutsceneSceneRenderAssetData)->vertStart2)) &&
+        (!(&gCutsceneSceneRenderAssetData)->vertStart2)) {}
+    ctx->object1.segment1 =
+        loadUncompressedData((&gCutsceneSceneRenderAssetData)->vertStart1, (&gCutsceneSceneRenderAssetData)->vertEnd1);
+    ctx->object1.segment2 = loadCompressedData(
+        (&gCutsceneSceneRenderAssetData)->compStart1,
+        (&gCutsceneSceneRenderAssetData)->compEnd1,
+        (&gCutsceneSceneRenderAssetData)->compSize1
     );
-    ctx->unk30 = 0;
-    ctx->displayList1 = (&D_8008CD98_8D998)->dispList1;
-    scale = (s16)((((s64)(ctx->animState->scale >> 8)) * modelScale) >> 8);
-    scaleMatrix(&ctx->transform1, scale, scale, scale);
-    ctx->modelData2 = loadUncompressedData((&D_8008CD98_8D998)->vertStart2, (&D_8008CD98_8D998)->vertEnd2);
-    ctx->textureData2 = loadCompressedData(data->compStart2, data->compEnd2, data->compSize2);
-    ctx->unk6C = 0;
-    ctx->displayList2 = data->dispList2;
-    scale = (s16)((((s64)(ctx->animState->scale >> 8)) * 0x2000) >> 8);
-    scaleMatrix(&ctx->transform2, scale, scale, scale);
+    ctx->object1.segment3 = 0;
+    ctx->object1.displayLists = (&gCutsceneSceneRenderAssetData)->dispList1;
+    scale = (s16)((((s64)(ctx->node->state.anim.scale >> 8)) * modelScale) >> 8);
+    scaleMatrix(&ctx->object1.transform, scale, scale, scale);
+    ctx->object2.segment1 =
+        loadUncompressedData((&gCutsceneSceneRenderAssetData)->vertStart2, (&gCutsceneSceneRenderAssetData)->vertEnd2);
+    ctx->object2.segment2 = loadCompressedData(data->compStart2, data->compEnd2, data->compSize2);
+    ctx->object2.segment3 = 0;
+    ctx->object2.displayLists = data->dispList2;
+    scale = (s16)((((s64)(ctx->node->state.anim.scale >> 8)) * 0x2000) >> 8);
+    scaleMatrix(&ctx->object2.transform, scale, scale, scale);
     setCleanupCallback(cleanupSceneRenderTask);
     setCallback(updateSceneRenderTask);
 }
 
-void updateSceneRenderTask(SceneRenderTaskCtx *ctx) {
+void updateSceneRenderTask(SceneRenderTask *ctx) {
     Transform3D sp10;
     Transform3D sp30;
     Transform3D *rotMatrix;
     Transform3D *tempMatrix;
-    SceneRenderNodeExt *nodeA;
-    SceneRenderNodeExt *nodeB;
-    SceneRenderNodeExt *nodeC;
+    SceneRenderNode *nodeA;
+    SceneRenderNode *nodeB;
+    SceneRenderNode *nodeC;
     Transform3D *transform;
-    SceneRenderNodeExt *nodeD;
+    SceneRenderNode *nodeD;
     s16 scaleFactor;
 
     nodeB = ctx->node;
-    if (nodeB->renderFlags & 1) {
+    if (nodeB->state.anim.renderFlags & 1) {
         rotMatrix = &sp10;
         memcpy(rotMatrix, &identityMatrix, sizeof(Transform3D));
         tempMatrix = &sp30;
         memcpy(tempMatrix, &identityMatrix, sizeof(Transform3D));
         enableViewportDisplayList(ctx->node);
-        enqueueAuxBufferRender((AuxBufferContext *)ctx);
+        enqueueViewportAuxFramebufferFill(ctx);
         nodeB = ctx->node;
 
-        switch (nodeB->renderMode) {
+        switch (nodeB->state.anim.renderMode) {
             case 0:
-                nodeB->rotationAngle = 0;
+                nodeB->state.anim.rotationAngle = 0;
                 nodeD = ctx->node;
-                transform = &ctx->staticTransform;
-                memcpy(transform, nodeD->baseTransform, sizeof(Transform3D));
-                memcpy(&ctx->staticTransform.translation, &ctx->node->posX, sizeof(Vec3i));
+                transform = &ctx->object1.transform;
+                memcpy(transform, &nodeD->base.viewTransform, sizeof(Transform3D));
+                memcpy(&ctx->object1.transform.translation, &ctx->node->state.anim.posX, sizeof(Vec3i));
                 nodeA = ctx->node;
-                scaleFactor = (s16)((s64)(nodeA->scale >> 8) * 0x2000 >> 8);
+                scaleFactor = (s16)((s64)(nodeA->state.anim.scale >> 8) * 0x2000 >> 8);
                 scaleMatrix(transform, scaleFactor, scaleFactor, scaleFactor);
-                enqueueDisplayListObject(ctx->node->slot_index, (DisplayListObject *)transform);
+                enqueueDisplayListObject(ctx->node->base.callbackSlotIndex, &ctx->object1);
                 break;
             case 1:
-                createZRotationMatrix(rotMatrix, nodeB->rotationAngle);
-                memcpy(tempMatrix, ctx->node->baseTransform, sizeof(Transform3D));
-                composeTransform3D(rotMatrix, tempMatrix, &ctx->rotatedTransform);
-                memcpy(&ctx->rotatedTransform.translation, &ctx->node->posX, sizeof(Vec3i));
+                createZRotationMatrix(rotMatrix, nodeB->state.anim.rotationAngle);
+                memcpy(tempMatrix, &ctx->node->base.viewTransform, sizeof(Transform3D));
+                composeTransform3D(rotMatrix, tempMatrix, &ctx->object2.transform);
+                memcpy(&ctx->object2.transform.translation, &ctx->node->state.anim.posX, sizeof(Vec3i));
                 nodeA = ctx->node;
-                scaleFactor = (s16)((s64)(nodeA->scale >> 8) * 0x2000 >> 8);
-                scaleMatrix(&ctx->rotatedTransform, scaleFactor, scaleFactor, scaleFactor);
-                enqueueDisplayListObject(ctx->node->slot_index, (DisplayListObject *)&ctx->rotatedTransform);
+                scaleFactor = (s16)((s64)(nodeA->state.anim.scale >> 8) * 0x2000 >> 8);
+                scaleMatrix(&ctx->object2.transform, scaleFactor, scaleFactor, scaleFactor);
+                enqueueDisplayListObject(ctx->node->base.callbackSlotIndex, &ctx->object2);
                 nodeB = ctx->node;
-                if (nodeB->scaleFrames != 0) {
-                    nodeB->rotationAngle += 0xB6;
+                if (nodeB->state.anim.scaleFrames != 0) {
+                    nodeB->state.anim.rotationAngle += 0xB6;
                 }
                 break;
         }
 
-        enqueueAuxBufferSetup((AuxBufferContext *)ctx);
+        enqueueMainFramebufferTargetSetup(ctx);
         nodeC = ctx->node;
-        if (nodeC->scaleFrames > 0) {
-            nodeC->scale += nodeC->scaleVelocity;
+        if (nodeC->state.anim.scaleFrames > 0) {
+            nodeC->state.anim.scale += nodeC->state.anim.scaleVelocity;
             nodeB = ctx->node;
-            nodeB->scaleFrames--;
+            nodeB->state.anim.scaleFrames--;
             nodeC = ctx->node;
         }
-        if (nodeC->posFramesX > 0) {
-            nodeC->posX += nodeC->velocityX;
+        if (nodeC->state.anim.posFramesX > 0) {
+            nodeC->state.anim.posX += nodeC->state.anim.velocityX;
             nodeB = ctx->node;
-            nodeB->posFramesX--;
+            nodeB->state.anim.posFramesX--;
         }
         nodeC = ctx->node;
-        if (nodeC->posFramesY > 0) {
-            nodeC->posY += nodeC->velocityY;
+        if (nodeC->state.anim.posFramesY > 0) {
+            nodeC->state.anim.posY += nodeC->state.anim.velocityY;
             nodeB = ctx->node;
-            nodeB->posFramesY--;
+            nodeB->state.anim.posFramesY--;
         }
         nodeC = ctx->node;
-        if (nodeC->posFramesZ > 0) {
-            nodeC->posZ += nodeC->velocityZ;
+        if (nodeC->state.anim.posFramesZ > 0) {
+            nodeC->state.anim.posZ += nodeC->state.anim.velocityZ;
             nodeB = ctx->node;
-            nodeB->posFramesZ--;
+            nodeB->state.anim.posFramesZ--;
         }
     } else {
-        nodeB->scale = 0x10000;
-        ctx->node->scaleVelocity = 0;
-        ctx->node->scaleFrames = 0;
-        ctx->node->rotationAngle = 0;
+        nodeB->state.anim.scale = 0x10000;
+        ctx->node->state.anim.scaleVelocity = 0;
+        ctx->node->state.anim.scaleFrames = 0;
+        ctx->node->state.anim.rotationAngle = 0;
     }
 }
 
-void cleanupSceneRenderTask(SceneRenderTaskData *task) {
-    task->spare1 = freeNodeMemory(task->spare1);
-    task->textureData1 = freeNodeMemory(task->textureData1);
-    task->modelData1 = freeNodeMemory(task->modelData1);
-    task->spare2 = freeNodeMemory(task->spare2);
-    task->textureData2 = freeNodeMemory(task->textureData2);
-    task->modelData2 = freeNodeMemory(task->modelData2);
+void cleanupSceneRenderTask(SceneRenderTask *task) {
+    task->object1.segment3 = freeNodeMemory(task->object1.segment3);
+    task->object1.segment2 = freeNodeMemory(task->object1.segment2);
+    task->object1.segment1 = freeNodeMemory(task->object1.segment1);
+    task->object2.segment3 = freeNodeMemory(task->object2.segment3);
+    task->object2.segment2 = freeNodeMemory(task->object2.segment2);
+    task->object2.segment1 = freeNodeMemory(task->object2.segment1);
 }

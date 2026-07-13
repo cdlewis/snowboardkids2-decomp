@@ -3,6 +3,7 @@
 #include "common.h"
 #include "core/main.h"
 #include "graphics/graphics.h"
+#include "graphics/model_loader.h"
 #include "math/geometry.h"
 #include "ui/level_preview_3d.h"
 
@@ -176,11 +177,6 @@ typedef struct {
     u8 data[0x2C];
 } ScriptData;
 
-typedef struct {
-    u8 pad[0x210];
-    s32 renderFlags;
-} Func8000C268Arg;
-
 /*
  * Dual-purpose struct: used both as the table header (gCutsceneStateTable[0])
  * and as individual 0x40-byte event entries (gCutsceneStateTable[3+]).
@@ -345,8 +341,8 @@ typedef struct CutsceneManager {
     /* 0xFF5 */ s8 enableTransparency;
     /* 0xFF6 */ s8 unused_FF6;
     /* 0xFF7 */ s8 skipAnimation;
-    /* 0xFF8 */ Func8000C268Arg unkFF8;
-    u8 padding[0xC];
+    /* 0xFF8 */ SceneRenderNode sceneRenderNode;
+    u8 padding[0x4];
     /* 0x1218 */ void *shadowModel;
     /* 0x121C */ void *reflectionModel;
     /* 0x1220 */ s32 curtainPosition;

@@ -108,8 +108,8 @@ void initCutsceneManager(CutsceneManager *manager, ViewportNode *sceneNode, void
         setAnimationLoopMode(manager->sceneContext, 1);
     }
 
-    initSceneRenderNode(&manager->unkFF8, 2, 0xC, sceneNode->viewportId, 0, 2, 0);
-    clearAuxRenderEnabled(&manager->unkFF8);
+    initSceneRenderNode(&manager->sceneRenderNode, 2, 0xC, sceneNode->viewportId, 0, 2, 0);
+    disableSceneRenderViewportEffect(&manager->sceneRenderNode);
 
     manager->shadowModel = shadowModel;
     manager->reflectionModel = reflectionModel;
@@ -119,7 +119,7 @@ void initCutsceneManager(CutsceneManager *manager, ViewportNode *sceneNode, void
 void cleanupCutsceneManager(CutsceneManager *manager) {
     s32 i;
 
-    unlinkViewportNode((ViewportNode *)&manager->unkFF8);
+    unlinkViewportNode((ViewportNode *)&manager->sceneRenderNode);
 
     freeAnimationLoopState(manager->sceneContext);
 
@@ -231,7 +231,7 @@ void prepareCutsceneForPlayback(
     manager->skipAnimation = 0;
     showAllSlotModels((CutsceneSlot *)manager);
     resetAllSlotTransforms(manager);
-    clearAuxRenderEnabled(&manager->unkFF8);
+    disableSceneRenderViewportEffect(&manager->sceneRenderNode);
 }
 
 s32 processCutsceneFrame(CutsceneManager *cutsceneManager) {
