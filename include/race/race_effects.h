@@ -17,7 +17,7 @@ typedef struct {
 typedef struct {
     s32 unk0;
     u8 pad0[0xB80];
-    s32 animFlags;
+    s32 animationFlags;
 } PlayerInfo;
 
 typedef struct {

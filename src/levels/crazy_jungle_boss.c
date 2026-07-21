@@ -146,7 +146,7 @@ void updateCrazyJungleBoss(Player *arg0) {
         diff = -0x80;
     }
     arg0->smoothedSpeedCap = arg0->smoothedSpeedCap + diff;
-    arg0->animFlags &= 0xFFFBFFFF;
+    arg0->animationFlags &= 0xFFFBFFFF;
 
     if (arg0->behaviorMode != 3) {
         if (arg0->hitReactionState != 0) {
@@ -188,7 +188,7 @@ void updateCrazyJungleBoss(Player *arg0) {
 
     transformVector(
         (s16 *)(alloc->unk48 + 0xFC),
-        (s16 *)arg0->boneDisplayObjects[0].transform.m,
+        (s16 *)arg0->bodyPartDisplayObjects[0].transform.m,
         &arg0->extraCollisionOffsets[0]
     );
     arg0->extraCollisionOffsets[0].x -= arg0->headingTransform.translation.x;
@@ -197,7 +197,7 @@ void updateCrazyJungleBoss(Player *arg0) {
 
     transformVector(
         (s16 *)(alloc->unk48 + 0x108),
-        (s16 *)arg0->boneDisplayObjects[13].transform.m,
+        (s16 *)arg0->bodyPartDisplayObjects[13].transform.m,
         &arg0->extraCollisionOffsets[1]
     );
     arg0->extraCollisionOffsets[1].x -= arg0->headingTransform.translation.x;
@@ -206,7 +206,7 @@ void updateCrazyJungleBoss(Player *arg0) {
 
     transformVector(
         (s16 *)(alloc->unk48 + 0x114),
-        (s16 *)arg0->boneDisplayObjects[14].transform.m,
+        (s16 *)arg0->bodyPartDisplayObjects[14].transform.m,
         &arg0->extraCollisionOffsets[2]
     );
     arg0->extraCollisionOffsets[2].x -= arg0->headingTransform.translation.x;
@@ -215,7 +215,7 @@ void updateCrazyJungleBoss(Player *arg0) {
 
     transformVector(
         (s16 *)(alloc->unk48 + 0x120),
-        (s16 *)arg0->boneDisplayObjects[15].transform.m,
+        (s16 *)arg0->bodyPartDisplayObjects[15].transform.m,
         &arg0->extraCollisionOffsets[3]
     );
     arg0->extraCollisionOffsets[3].x -= arg0->headingTransform.translation.x;
@@ -224,7 +224,7 @@ void updateCrazyJungleBoss(Player *arg0) {
 
     transformVector(
         (s16 *)(alloc->unk48 + 0x12C),
-        (s16 *)arg0->boneDisplayObjects[3].transform.m,
+        (s16 *)arg0->bodyPartDisplayObjects[3].transform.m,
         &arg0->extraCollisionOffsets[4]
     );
     arg0->extraCollisionOffsets[4].x -= arg0->headingTransform.translation.x;
@@ -233,7 +233,7 @@ void updateCrazyJungleBoss(Player *arg0) {
 
     transformVector(
         (s16 *)(alloc->unk48 + 0x138),
-        (s16 *)arg0->boneDisplayObjects[6].transform.m,
+        (s16 *)arg0->bodyPartDisplayObjects[6].transform.m,
         &arg0->extraCollisionOffsets[5]
     );
     arg0->extraCollisionOffsets[5].x -= arg0->headingTransform.translation.x;
@@ -282,32 +282,32 @@ s32 initCrazyJungleBoss(Player *arg0) {
     for (i = 0; i < 17; i++) {
         elem = (u8 *)arg0 + i * 0x3C;
         memcpy(elem + 0x38, &identityMatrix, sizeof(Transform3D));
-        *(s32 *)(elem + 0x5C) = (s32)arg0->unk4;
-        *(s32 *)(elem + 0x60) = (s32)arg0->unk8;
+        *(s32 *)(elem + 0x5C) = (s32)arg0->bodyPartDisplayListAsset;
+        *(s32 *)(elem + 0x60) = (s32)arg0->bodyPartCompressedAsset;
         *(s32 *)(elem + 0x64) = 0;
         *(void **)(elem + 0x58) = (void *)&loadAssetByIndex_953B0(arg0->characterId, arg0->boardModelId)[i];
     }
 
-    arg0->leanAnimIndex = 0;
+    arg0->animationIndex = 0;
 
     // Get number of bones and reset animations
-    arg0->leanBoneCount = getAnimationBoneCount(arg0->unk0, 0);
+    arg0->animationBoneCount = getAnimationBoneCount(arg0->raceAnimationData, 0);
 
-    for (i = 0; i < arg0->leanBoneCount; i++) {
-        resetBoneAnimation(arg0->unk0, arg0->leanAnimIndex, i, &arg0->unk488[i]);
+    for (i = 0; i < arg0->animationBoneCount; i++) {
+        resetBoneAnimation(arg0->raceAnimationData, arg0->animationIndex, i, &arg0->boneAnimationStates[i]);
     }
 
     // Initialize behavior state
     arg0->behaviorMode = 1;
     arg0->collisionRadius = 0xA0000;
-    arg0->extraCollisionRadii = 0x240000;
-    arg0->unkBB4 = 6;
+    arg0->extraCollisionRadii[0] = 0x240000;
+    arg0->collisionSphereCount = 6;
     arg0->behaviorPhase = 0;
-    arg0->unkB30 = 0x174000;
-    arg0->unkB34 = 0xDC000;
-    arg0->unkB38 = 0xDC000;
-    arg0->unkB3C = 0x148000;
-    arg0->unkB40 = 0x148000;
+    arg0->extraCollisionRadii[1] = 0x174000;
+    arg0->extraCollisionRadii[2] = 0xDC000;
+    arg0->extraCollisionRadii[3] = 0xDC000;
+    arg0->extraCollisionRadii[4] = 0x148000;
+    arg0->extraCollisionRadii[5] = 0x148000;
     arg0->collisionListNode.posPtr = &arg0->worldPos;
     arg0->collisionListNode.radius = 0x15E000;
     arg0->collisionListNode.id = arg0->playerIndex;
@@ -319,8 +319,8 @@ s32 initCrazyJungleBoss(Player *arg0) {
 
     arg0->baseMaxSpeed = gameState->players->baseMaxSpeed - 0x10000;
 
-    if (arg0->unk1C != NULL) {
-        arg0->aiPathData = (void *)((s32)arg0->unk1C + ((s32 *)arg0->unk1C)[arg0->playerIndex]);
+    if (arg0->bossRaceData != NULL) {
+        arg0->aiPathData = (void *)((s32)arg0->bossRaceData + ((s32 *)arg0->bossRaceData)[arg0->playerIndex]);
     }
 
     return 1;
@@ -366,7 +366,7 @@ s32 crazyJungleBossChaseAttackPhase(Player *arg0) {
         return 1;
     }
 
-    arg0->animFlags |= 0x40000;
+    arg0->animationFlags |= 0x40000;
 
     if (arg0->behaviorStep == 0) {
         if (gameState->raceFrameCounter < 0x1EU) {
@@ -375,7 +375,7 @@ s32 crazyJungleBossChaseAttackPhase(Player *arg0) {
             arg0->unkB8C += (randA() & 0xFF) >> 1;
         }
         arg0->unkB90 = 0;
-        arg0->leanAnimIndex = 0xFFFF;
+        arg0->animationIndex = 0xFFFF;
         arg0->behaviorStep++;
     }
 
@@ -393,7 +393,7 @@ s32 crazyJungleBossChaseAttackPhase(Player *arg0) {
     }
     arg0->rotY = currentAngle + clampedAngle;
 
-    if (!(arg0->animFlags & 1)) {
+    if (!(arg0->animationFlags & 1)) {
         createYRotationMatrix(&arg0->headingTransform, arg0->rotY);
         func_8006BDBC_6C9BC((&arg0->orientationTransform), &arg0->headingTransform, &sp10);
         transformVector3(&arg0->velocity, &sp10, &sp30);
@@ -496,7 +496,7 @@ s32 crazyJungleBossHoverAttackPhase(Player *arg0) {
 
 s32 crazyJungleBossHoverJumpPhase(Player *arg0) {
     if (arg0->behaviorStep == 0) {
-        arg0->leanAnimIndex = 0xFFFF;
+        arg0->animationIndex = 0xFFFF;
         arg0->velocity.y = 0x80000;
         arg0->behaviorStep = arg0->behaviorStep + 1;
         queueSoundAtPosition(&arg0->worldPos, 0x21);
@@ -509,7 +509,7 @@ s32 crazyJungleBossHoverJumpPhase(Player *arg0) {
     applyClampedVelocityToPosition(arg0);
     advancePlayerLeanAnimationAuto(arg0, 2);
 
-    if (arg0->animFlags & 1) {
+    if (arg0->animationFlags & 1) {
     } else {
         arg0->behaviorFlags = 0;
         arg0->behaviorMode = 1;
@@ -538,7 +538,7 @@ void updateCrazyJungleBossPositionAndTrackCollision(Player *arg0) {
     arg0->worldPos.z = arg0->worldPos.z + collisionOffset.z;
     computePlayerTerrainAlignment(arg0);
 
-    if (arg0->animFlags & 0x10000) {
+    if (arg0->animationFlags & 0x10000) {
         arg0->trackFaceType = 0;
     } else {
         findTrackFaceInSector(gameData, arg0->sectorIndex, &arg0->worldPos, &arg0->trackFaceType, &arg0->surfaceInfo);
@@ -553,33 +553,37 @@ void updateCrazyJungleBossLeanBoneTransforms(Player *arg0) {
     BoneHierarchyEntry *hierarchy;
     s32 i;
 
-    hierarchy = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->unk0, (s16)arg0->leanAnimIndex);
+    hierarchy = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->raceAnimationData, (s16)arg0->animationIndex);
     composeTransform3D(&arg0->orientationTransform, &arg0->headingTransform, &arg0->orientationHeadingTransform);
     composeTransform3D(&arg0->tiltTransform, &arg0->orientationHeadingTransform, &arg0->modelTransform);
 
-    for (i = 0; i < arg0->leanBoneCount; i++) {
+    for (i = 0; i < arg0->animationBoneCount; i++) {
         if (hierarchy[i].parentBone == 0xFF) {
             if (arg0->behaviorFlags & 0x10) {
                 memcpy(&squashMatrix, &identityMatrix, sizeof(Transform3D));
                 squashMatrix.m[1][1] = arg0->squashStretchScale;
-                composeTransform3D(&arg0->unk488[hierarchy[i].boneIndex].transform.previous, &squashMatrix, &scratch);
+                composeTransform3D(
+                    &arg0->boneAnimationStates[hierarchy[i].boneIndex].transform.previous,
+                    &squashMatrix,
+                    &scratch
+                );
                 composeTransform3D(
                     &scratch,
                     &arg0->modelTransform,
-                    &arg0->boneDisplayObjects[hierarchy[i].boneIndex].transform
+                    &arg0->bodyPartDisplayObjects[hierarchy[i].boneIndex].transform
                 );
             } else {
                 composeTransform3D(
-                    &arg0->unk488[hierarchy[i].boneIndex].transform.previous,
+                    &arg0->boneAnimationStates[hierarchy[i].boneIndex].transform.previous,
                     &arg0->modelTransform,
-                    &arg0->boneDisplayObjects[hierarchy[i].boneIndex].transform
+                    &arg0->bodyPartDisplayObjects[hierarchy[i].boneIndex].transform
                 );
             }
         } else {
             composeTransform3D(
-                &arg0->unk488[hierarchy[i].boneIndex].transform.previous,
-                &arg0->boneDisplayObjects[hierarchy[i].parentBone].transform,
-                &arg0->boneDisplayObjects[hierarchy[i].boneIndex].transform
+                &arg0->boneAnimationStates[hierarchy[i].boneIndex].transform.previous,
+                &arg0->bodyPartDisplayObjects[hierarchy[i].parentBone].transform,
+                &arg0->bodyPartDisplayObjects[hierarchy[i].boneIndex].transform
             );
         }
     }
@@ -597,18 +601,18 @@ void renderCrazyJungleBossWithSurfaceColors(Player *arg0) {
 
     if (surfaceColorIndex == 0) {
         for (i = 0; i < 4; i++) {
-            enqueuePreLitMultiPartDisplayList(i, arg0->boneDisplayObjects, arg0->leanBoneCount);
+            enqueuePreLitMultiPartDisplayList(i, arg0->bodyPartDisplayObjects, arg0->animationBoneCount);
         }
     } else {
-        arg0->boneDisplayObjects[0].light1R = gBossSurfaceColors[surfaceColorIndex].primaryR;
-        arg0->boneDisplayObjects[0].light1G = gBossSurfaceColors[surfaceColorIndex].primaryG;
-        arg0->boneDisplayObjects[0].light1B = gBossSurfaceColors[surfaceColorIndex].primaryB;
-        arg0->boneDisplayObjects[0].light2R = gBossSurfaceColors[surfaceColorIndex].secondaryR;
-        arg0->boneDisplayObjects[0].light2G = gBossSurfaceColors[surfaceColorIndex].secondaryG;
-        arg0->boneDisplayObjects[0].light2B = gBossSurfaceColors[surfaceColorIndex].secondaryB;
+        arg0->bodyPartDisplayObjects[0].light1R = gBossSurfaceColors[surfaceColorIndex].primaryR;
+        arg0->bodyPartDisplayObjects[0].light1G = gBossSurfaceColors[surfaceColorIndex].primaryG;
+        arg0->bodyPartDisplayObjects[0].light1B = gBossSurfaceColors[surfaceColorIndex].primaryB;
+        arg0->bodyPartDisplayObjects[0].light2R = gBossSurfaceColors[surfaceColorIndex].secondaryR;
+        arg0->bodyPartDisplayObjects[0].light2G = gBossSurfaceColors[surfaceColorIndex].secondaryG;
+        arg0->bodyPartDisplayObjects[0].light2B = gBossSurfaceColors[surfaceColorIndex].secondaryB;
 
         for (i = 0; i < 4; i++) {
-            enqueueMultiPartDisplayList(i, arg0->boneDisplayObjects, arg0->leanBoneCount);
+            enqueueMultiPartDisplayList(i, arg0->bodyPartDisplayObjects, arg0->animationBoneCount);
         }
     }
 }

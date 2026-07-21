@@ -799,7 +799,7 @@ void updateCrashEffect(CrashEffectState *arg0) {
     Vec3i pos;
     s32 i;
 
-    composeTransform3D(&arg0->localTransform, &arg0->player->playerModel.transform, &arg0->transform);
+    composeTransform3D(&arg0->localTransform, &arg0->player->snowboardDisplayObject.transform, &arg0->transform);
 
     if ((arg0->player->behaviorFlags & 0x80) == 0) {
         pos.x = arg0->player->worldPos.x;
@@ -1083,7 +1083,7 @@ void descendWarpEffect(WarpEffectState *state) {
 
     gameState = getCurrentAllocation();
     if (gameState->gamePaused == 0) {
-        state->player->pathFlags |= 4;
+        state->player->aiPathFlags |= 4;
         state->velocity += 0xFFFE0000;
         state->height += state->velocity;
 
@@ -1361,7 +1361,7 @@ void updateSpeedFanBoostEffect(SpeedFanBoostEffectState *state) {
 
     gameState = (EffectTaskState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, state->yRotation);
-    composeTransform3D(&gIdentityMatrix32, &state->player->playerModel.transform, (Transform3D *)state);
+    composeTransform3D(&gIdentityMatrix32, &state->player->snowboardDisplayObject.transform, (Transform3D *)state);
     scaleMatrix((Transform3D *)state, state->scale, state->scale, state->scale);
 
     state->orbitAngle += 0x300;
@@ -1378,7 +1378,7 @@ void updateSpeedFanBoostEffect(SpeedFanBoostEffectState *state) {
         enqueueDisplayListWithFrustumCull(i, (&state->orbitObj));
     }
 
-    if (state->player->animFlags & 0x80000) {
+    if (state->player->animationFlags & 0x80000) {
         state->player->boostTimer = 0;
     }
 
@@ -1438,7 +1438,7 @@ void *spawnSpeedFanBoostEffect(Player *player) {
     if (task != NULL) {
         task->player = player;
         task->yRotation = 0;
-        if (player->animFlags & 2) {
+        if (player->animationFlags & 2) {
             task->yRotation = 0x1000;
         }
     }
@@ -1470,7 +1470,7 @@ void updateRocketBoostEffect(RocketBoostEffectState *state) {
 
     allocation = (GameState *)getCurrentAllocation();
     createYRotationMatrix(&gIdentityMatrix32, state->yRotation);
-    composeTransform3D(&gIdentityMatrix32, &state->player->playerModel.transform, &state->primary.transform);
+    composeTransform3D(&gIdentityMatrix32, &state->player->snowboardDisplayObject.transform, &state->primary.transform);
     scale = state->scale;
     scaleMatrix(&state->primary.transform, scale, scale, scale);
 
@@ -1503,7 +1503,7 @@ void updateRocketBoostEffect(RocketBoostEffectState *state) {
         player = state->player;
     }
 
-    if (player->animFlags & 0x80000) {
+    if (player->animationFlags & 0x80000) {
         player->boostTimer = 0;
     }
 
@@ -1561,7 +1561,7 @@ RocketBoostEffectState *spawnRocketBoostEffect(Player *player) {
     if (task != NULL) {
         task->player = player;
         task->yRotation = 0;
-        if (player->animFlags & 2) {
+        if (player->animationFlags & 2) {
             task->yRotation = 0x1000;
         }
     }
@@ -1842,7 +1842,7 @@ void updateWingsEffect(WingsEffectState *arg0) {
     } while (i < 4);
 
     player = arg0->player;
-    if (player->animFlags & 0x80000) {
+    if (player->animationFlags & 0x80000) {
         player->wingsTimer = 0;
     }
 
@@ -1897,7 +1897,7 @@ void *spawnWingsEffect(Player *arg0) {
     if (task != NULL) {
         task->player = arg0;
         task->rotation = 0;
-        if (arg0->animFlags & 2) {
+        if (arg0->animationFlags & 2) {
             task->rotation = 0x1000;
         }
     }
@@ -1958,7 +1958,7 @@ void updatePushZone(PushZoneState *arg0) {
             player->prevWorldPos.x += result.x;
             player->prevWorldPos.y += result.y;
             player->prevWorldPos.z += result.z;
-            player->animFlags = player->animFlags | 0x20000;
+            player->animationFlags = player->animationFlags | 0x20000;
             player->unkBB0 = gPushZoneData[arg0->zoneIndex].pitch;
             player->unkBB2 = gPushZoneData[arg0->zoneIndex].yaw;
         } else {
@@ -2359,12 +2359,12 @@ void processItemTriggers(ItemTriggerTaskState *arg0) {
                         if (gameState->raceType == three) {
                             player->primaryItemAmmo = nine;
                         }
-                        itemFlags = player->unkBD8 | 1;
+                        itemFlags = player->itemHudNotificationFlags | 1;
                     } else {
-                        itemFlags = player->unkBD8 | 2;
+                        itemFlags = player->itemHudNotificationFlags | 2;
                         player->secondaryItemId = (u8)entryForItem->itemId;
                     }
-                    player->unkBD8 = itemFlags;
+                    player->itemHudNotificationFlags = itemFlags;
                     ((ItemTriggerEntry *)(offset + (s32)arg0->items))->active = 0;
                     queueSoundAtPosition((Vec3i *)((s8 *)((s32)arg0->items + offset) + 4), 8);
                 }

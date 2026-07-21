@@ -229,11 +229,11 @@ void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state) {
     enqueueCallbackBySlotIndex((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
 
     player = state->player;
-    if ((player->unkBD8 & 1) != 0) {
+    if ((player->itemHudNotificationFlags & 1) != 0) {
         spawnFloatingItemSprite(state->primaryItemX - 8, state->primaryItemY - 8, 0, state->playerIndex + 8, 0);
         playerRef = state->player;
-        tempValue = playerRef->unkBD8;
-        playerRef->unkBD8 = tempValue & 0xFE;
+        tempValue = playerRef->itemHudNotificationFlags;
+        playerRef->itemHudNotificationFlags = tempValue & 0xFE;
     }
 
     tempValue = state->player->secondaryItemId;
@@ -241,11 +241,11 @@ void updatePlayerItemDisplaySinglePlayer(PlayerItemDisplayState *state) {
     enqueueCallbackBySlotIndex((state->playerIndex + 8) & 0xFFFF, 0, callback, &state->secondaryItemX);
 
     player = state->player;
-    if ((player->unkBD8 & 2) != 0) {
+    if ((player->itemHudNotificationFlags & 2) != 0) {
         spawnFloatingItemSprite(state->secondaryItemX - 8, state->secondaryItemY - 8, 1, state->playerIndex + 8, 0);
         playerRef = state->player;
-        tempValue = playerRef->unkBD8;
-        playerRef->unkBD8 = tempValue & 0xFD;
+        tempValue = playerRef->itemHudNotificationFlags;
+        playerRef->itemHudNotificationFlags = tempValue & 0xFD;
     }
 }
 
@@ -268,11 +268,11 @@ void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state) {
     enqueueCallbackBySlotIndex((state->playerIndex + 8) & 0xFFFF, 0, callback, state);
 
     player = state->player;
-    if ((player->unkBD8 & 1) != 0) {
+    if ((player->itemHudNotificationFlags & 1) != 0) {
         spawnFloatingItemSprite(state->primaryItemX - 4, state->primaryItemY - 4, 0, state->playerIndex + 8, 1);
         playerRef = state->player;
-        tempValue = playerRef->unkBD8;
-        playerRef->unkBD8 = tempValue & 0xFE;
+        tempValue = playerRef->itemHudNotificationFlags;
+        playerRef->itemHudNotificationFlags = tempValue & 0xFE;
     }
 
     tempValue = state->player->secondaryItemId;
@@ -280,11 +280,11 @@ void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state) {
     enqueueCallbackBySlotIndex((state->playerIndex + 8) & 0xFFFF, 0, callback, &state->secondaryItemX);
 
     player = state->player;
-    if ((player->unkBD8 & 2) != 0) {
+    if ((player->itemHudNotificationFlags & 2) != 0) {
         spawnFloatingItemSprite(state->secondaryItemX - 4, state->secondaryItemY - 4, 1, state->playerIndex + 8, 1);
         playerRef = state->player;
-        tempValue = playerRef->unkBD8;
-        playerRef->unkBD8 = tempValue & 0xFD;
+        tempValue = playerRef->itemHudNotificationFlags;
+        playerRef->itemHudNotificationFlags = tempValue & 0xFD;
     }
 }
 
@@ -434,7 +434,7 @@ common:
 }
 
 void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
-    s32 gold = state->player->raceCoins;
+    s32 gold = state->player->raceGold;
 
     if (gold < 100) {
         sprintf(state->goldTextBuffer, sGoldFormatShort, gold);
@@ -455,7 +455,7 @@ void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
 }
 
 void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
-    s32 gold = state->player->raceCoins;
+    s32 gold = state->player->raceGold;
 
     if (gold < 100) {
         state->digitCount = 1;
@@ -463,7 +463,7 @@ void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
         state->digitCount = 2;
     }
 
-    sprintf(state->goldTextBuffer, D_8009E880_9F480, state->player->raceCoins);
+    sprintf(state->goldTextBuffer, D_8009E880_9F480, state->player->raceGold);
 
     enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->textX);
 
@@ -560,7 +560,7 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
             playerIndex = allocation->playerIndices[i];
             playerData = (Player *)((u8 *)allocation->players + playerIndex * 0xBE8);
 
-            targetPosition = (0x2000 - playerData->raceProgress) * 0x8C;
+            targetPosition = (0x2000 - playerData->lapProgressRemaining) * 0x8C;
             elem = &state->elements[playerIndex];
 
             if (targetPosition < 0) {
@@ -907,7 +907,7 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
             }
             arg0->x = 0x10;
             arg0->y = -0x3C;
-            totalGold = arg0->goldAmount + gameState->players->raceCoins;
+            totalGold = arg0->goldAmount + gameState->players->raceGold;
             arg0->goldAmount = totalGold;
             if (totalGold > 0x1869F) {
                 arg0->goldAmount = 0x1869F;
@@ -1567,7 +1567,7 @@ void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0) {
 
     if (allocation->activeRaceEffectCount == 0 && allocation->raceUpdatePaused == 0) {
         PlayerInfo *player = allocation->timeRemaining;
-        if ((player->animFlags & 0x80000) == 0) {
+        if ((player->animationFlags & 0x80000) == 0) {
             if (arg0->timeRemaining != 0) {
                 arg0->timeRemaining--;
                 if (arg0->timeRemaining == 0) {
@@ -1741,7 +1741,7 @@ void updateRaceTimerDisplay(RaceTimerState *arg0) {
     if (alloc->raceUpdatePaused != 0) {
         goto check_time_flag;
     }
-    if (alloc->timeRemaining->animFlags & 0x80000) {
+    if (alloc->timeRemaining->animationFlags & 0x80000) {
         goto set_7E;
     }
     if (arg0->elapsedTicks == 0x433C8) {
@@ -1755,7 +1755,7 @@ void updateRaceTimerDisplay(RaceTimerState *arg0) {
     playSoundEffectWithPriorityDefaultVolume(0x46, 6);
 
 check_time_flag:
-    if (!(alloc->timeRemaining->animFlags & 0x80000)) {
+    if (!(alloc->timeRemaining->animationFlags & 0x80000)) {
         goto after_7E;
     }
 set_7E:
@@ -1815,9 +1815,9 @@ void updateSecondaryItemDisplay(SecondaryItemDisplayState *state) {
     state->itemIndex = state->player->secondaryItemId + 7;
     enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
 
-    if (state->player->unkBD8 & 2) {
+    if (state->player->itemHudNotificationFlags & 2) {
         spawnFloatingItemSprite(state->itemX - 8, state->itemY - 8, 1, state->playerIndex + 8, 0);
-        state->player->unkBD8 &= ~2;
+        state->player->itemHudNotificationFlags &= ~2;
     }
 }
 

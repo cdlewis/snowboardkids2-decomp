@@ -628,7 +628,7 @@ void initRace(void) {
         raceState->racers[i].characterId = D_80090280_90E80[raceState->currentLevel][i];
         raceState->racers[i].boardModelId = gCpuBoardModelIdsByCourse[raceState->currentLevel];
         raceState->racers[i].isBossRacer = 1;
-        raceState->racers[i].inputDisabled = 1;
+        raceState->racers[i].isCpuControlled = 1;
     }
 
     switch (gGameSessionContext->gameMode) {
@@ -661,8 +661,8 @@ void initRace(void) {
                     raceState->racers[0].boardModelId = 0;
                     raceState->racers[0].snowboardId = SNOWBOARD_BALANCE_LEVEL_1;
                     raceState->racers[0].colorSlot = 0;
-                    raceState->racers[0].inputMode = 1;
-                    raceState->racers[0].inputRecordSet = 0;
+                    raceState->racers[0].inputPlaybackMode = 1;
+                    raceState->racers[0].inputRecordSetId = 0;
                     break;
                 case 1:
                     for (i = 0; i < 2; i++) {
@@ -670,8 +670,8 @@ void initRace(void) {
                         raceState->racers[i].boardModelId = 1;
                         raceState->racers[i].snowboardId = SNOWBOARD_BALANCE_LEVEL_1;
                         raceState->racers[i].colorSlot = i;
-                        raceState->racers[i].inputMode = 1;
-                        raceState->racers[i].inputRecordSet = i + 1;
+                        raceState->racers[i].inputPlaybackMode = 1;
+                        raceState->racers[i].inputRecordSetId = i + 1;
                     }
                     break;
                 case 2:
@@ -680,8 +680,8 @@ void initRace(void) {
                         raceState->racers[i].boardModelId = 1;
                         raceState->racers[i].snowboardId = SNOWBOARD_BALANCE_LEVEL_1;
                         raceState->racers[i].colorSlot = i;
-                        raceState->racers[i].inputMode = 1;
-                        raceState->racers[i].inputRecordSet = i + 3;
+                        raceState->racers[i].inputPlaybackMode = 1;
+                        raceState->racers[i].inputRecordSetId = i + 3;
                     }
             }
             break;
@@ -695,11 +695,11 @@ void initRace(void) {
                 raceState->racers[i].boardModelId = 0;
                 raceState->racers[i].snowboardId = SNOWBOARD_BALANCE_LEVEL_1;
                 raceState->racers[i].colorSlot = i;
-                raceState->racers[i].inputRecordSet = i + 7;
+                raceState->racers[i].inputRecordSetId = i + 7;
                 if (raceState->demoMode == 3) {
-                    raceState->racers[i].inputMode = 2;
+                    raceState->racers[i].inputPlaybackMode = 2;
                 } else {
-                    raceState->racers[i].inputMode = 1;
+                    raceState->racers[i].inputPlaybackMode = 1;
                 }
             }
             break;
@@ -738,11 +738,11 @@ void initRace(void) {
                 gCpuCharacterSnowboardConfigs[raceState->currentLevel][raceState->racers[i].characterId].colorSlot;
 
             if (raceState->activePlayerCount == 1) {
-                raceState->racers[i].speedPenaltyIndex =
+                raceState->racers[i].aiDifficultyIndex =
                     gCpuCharacterSnowboardConfigs[raceState->currentLevel][raceState->racers[i].characterId]
                         .cpuDifficulty1P;
             } else {
-                raceState->racers[i].speedPenaltyIndex =
+                raceState->racers[i].aiDifficultyIndex =
                     gCpuCharacterSnowboardConfigs[raceState->currentLevel][raceState->racers[i].characterId]
                         .cpuDifficultyMP;
             }
@@ -756,25 +756,25 @@ void initRace(void) {
         } else {
             raceState->racers[i].snowboardId = SNOWBOARD_POVERTY;
             raceState->racers[i].colorSlot = 5;
-            raceState->racers[i].speedPenaltyIndex = 7;
+            raceState->racers[i].aiDifficultyIndex = 7;
 
             if (raceState->raceType == RACE_TYPE_BATTLE) {
-                raceState->racers[i].speedPenaltyIndex = 5;
+                raceState->racers[i].aiDifficultyIndex = 5;
             }
 
             if (raceState->racers[i].characterId != 6) {
                 raceState->racers[i].snowboardId = SNOWBOARD_STAR;
                 if (raceState->raceType == RACE_TYPE_BATTLE) {
-                    raceState->racers[i].speedPenaltyIndex = 5;
+                    raceState->racers[i].aiDifficultyIndex = 5;
                 } else {
-                    raceState->racers[i].speedPenaltyIndex = 0;
+                    raceState->racers[i].aiDifficultyIndex = 0;
                     raceState->racers[i].snowboardId = SNOWBOARD_BALANCE_LEVEL_2;
                 }
             }
         }
 
         if (raceState->isExpertMode != 0) {
-            raceState->racers[i].speedPenaltyIndex = 7;
+            raceState->racers[i].aiDifficultyIndex = 7;
         }
     }
 
@@ -1314,7 +1314,7 @@ void handleRaceStateUpdate(void) {
             case RACE_TYPE_STANDARD:
                 count = 0;
                 for (i = 0; i < gs->playerCount; i++) {
-                    playerFlags = gs->players[i].animFlags & 0x80000;
+                    playerFlags = gs->players[i].animationFlags & 0x80000;
                     count += playerFlags != 0;
                 }
                 if (gs->playerCount == count) {
@@ -1325,7 +1325,7 @@ void handleRaceStateUpdate(void) {
                 }
                 break;
             case RACE_TYPE_BOSS_JUNGLE:
-                if (gs->players->animFlags & 0x80000) {
+                if (gs->players->animationFlags & 0x80000) {
                     setMusicFadeOut(0x3C);
                     gs->stateDelayTimer = 0x1E;
                     handler = handleBossRaceResult;
@@ -1335,7 +1335,7 @@ void handleRaceStateUpdate(void) {
                 break;
             case RACE_TYPE_BOSS_JINGLE:
             case RACE_TYPE_BOSS_ICE:
-                if (gs->players->animFlags & 0x80000) {
+                if (gs->players->animationFlags & 0x80000) {
                     setMusicFadeOut(0x3C);
                     gs->stateDelayTimer = 0x1E;
                     handler = handleBossDefeatResult;
@@ -1346,7 +1346,7 @@ void handleRaceStateUpdate(void) {
             case RACE_TYPE_BATTLE:
                 count = 0;
                 for (i = 0; i < gs->playerCount; i++) {
-                    playerFlags = gs->players[i].animFlags & 0x80000;
+                    playerFlags = gs->players[i].animationFlags & 0x80000;
                     count += playerFlags != 0;
                 }
                 if (gs->playerCount == count) {
@@ -1360,7 +1360,7 @@ void handleRaceStateUpdate(void) {
             case RACE_TYPE_TRAINING:
                 count = 0;
                 for (i = 0; i < gs->playerCount; i++) {
-                    playerFlags = gs->players[i].animFlags & 0x80000;
+                    playerFlags = gs->players[i].animationFlags & 0x80000;
                     count += playerFlags != 0;
                 }
                 if (gs->playerCount == count) {
@@ -1372,7 +1372,7 @@ void handleRaceStateUpdate(void) {
                 }
                 break;
             case RACE_TYPE_SPEED_CROSS:
-                if (gs->players->animFlags & 0x80000) {
+                if (gs->players->animationFlags & 0x80000) {
                     if (gs->playerLost != 0) {
                         gs->showResultHUD = 1;
                     }
@@ -1384,7 +1384,7 @@ void handleRaceStateUpdate(void) {
                 }
                 break;
             case RACE_TYPE_SHOOT_CROSS:
-                if (gs->players->animFlags & 0x80000) {
+                if (gs->players->animationFlags & 0x80000) {
                     if (gs->playerLost != 0) {
                         gs->showResultHUD = 1;
                     }
@@ -1396,7 +1396,7 @@ void handleRaceStateUpdate(void) {
                 }
                 break;
             case RACE_TYPE_X_CROSS:
-                if (gs->players->animFlags & 0x80000) {
+                if (gs->players->animationFlags & 0x80000) {
                     if (gs->playerLost != 0) {
                         gs->showResultHUD = 1;
                     }
@@ -1527,7 +1527,7 @@ void handleBossDefeatResult(void) {
         return;
     }
 
-    if (state->players[1].animFlags & 0x100000) {
+    if (state->players[1].animationFlags & 0x100000) {
         gRaceResultCode = 3;
         playMusicTrack(8);
     } else {
@@ -1840,22 +1840,22 @@ void awaitSpeedCrossAwardGold(void) {
 
     switch (player->finishPosition) {
         case 0:
-            addPlayerGold(player->raceCoins);
+            addPlayerGold(player->raceGold);
             addPlayerGold(gFirstPlaceGoldReward[state->memoryPoolId]);
             break;
 
         case 1:
-            addPlayerGold(player->raceCoins);
+            addPlayerGold(player->raceGold);
             addPlayerGold(gSecondPlaceGoldReward[state->memoryPoolId]);
             break;
 
         case 2:
-            addPlayerGold(player->raceCoins);
+            addPlayerGold(player->raceGold);
             addPlayerGold(gThirdPlaceGoldReward[state->memoryPoolId]);
             break;
 
         case 3:
-            player->raceCoins = 0;
+            player->raceGold = 0;
             break;
 
         default:

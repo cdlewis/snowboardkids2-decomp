@@ -159,7 +159,7 @@ void setPlayerState100(Player *player) {
 s32 tryActivateRocketBoost(Player *arg0) {
     if (arg0->boostState == BOOST_STATE_NONE) {
         if (spawnRocketBoostEffect(arg0) != 0) {
-            if (arg0->animFlags & 2) {
+            if (arg0->animationFlags & 2) {
                 arg0->boostState = BOOST_STATE_ROCKET_START_REVERSE;
             } else {
                 arg0->boostState = BOOST_STATE_ROCKET_START_FORWARD;
@@ -185,7 +185,7 @@ s32 tryActivateWings(Player *player) {
 s32 tryActivateSpeedFanBoost(Player *arg0) {
     if (arg0->boostState == BOOST_STATE_NONE) {
         if (spawnSpeedFanBoostEffect(arg0) != NULL) {
-            if (arg0->animFlags & 2) {
+            if (arg0->animationFlags & 2) {
                 arg0->boostState = BOOST_STATE_SPEED_FAN_REVERSE;
             } else {
                 arg0->boostState = BOOST_STATE_SPEED_FAN_FORWARD;
@@ -330,7 +330,7 @@ void processPlayerItemUsage(Player *player) {
                 }
                 if (player->boostState == BOOST_STATE_NONE) {
                     if (spawnSpeedFanBoostEffect(player) != NULL) {
-                        if (player->animFlags & 2) {
+                        if (player->animationFlags & 2) {
                             player->boostState = BOOST_STATE_SPEED_FAN_REVERSE;
                         } else {
                             player->boostState = BOOST_STATE_SPEED_FAN_FORWARD;
@@ -423,7 +423,7 @@ void processPlayerItemUsage(Player *player) {
     if (player->trackFaceType == 3) {
         tryActivateRocketBoost(player);
     }
-    if (!(player->animFlags & 0x80000)) {
+    if (!(player->animationFlags & 0x80000)) {
         switch (player->snowboardId) {
             case SNOWBOARD_DRAGON:
                 tryActivateRocketBoost(player);
@@ -455,7 +455,7 @@ s32 findPrimaryItemTarget(Player *player) {
     bestTarget = NULL;
     targetingMode = 0;
     gs = getCurrentAllocation();
-    if (player->inputDisabled == 0) {
+    if (player->isCpuControlled == 0) {
         if (player->primaryItemAmmo != 0) {
             if (player->inputButtonsPressed & Z_TRIG) {
                 return (*(u16 *)&player->inputStickX) == 0xF9;
@@ -469,9 +469,9 @@ s32 findPrimaryItemTarget(Player *player) {
         return -1;
     }
 
-    if (player->aiPrimaryItemUseTimer > gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId].delay) {
-        player->aiPrimaryItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId].delay;
-        player->aiPrimaryItemUseTimer -= (randA() * gAIPlayerParams[player->speedPenaltyIndex][0].delay) / 255;
+    if (player->aiPrimaryItemUseTimer > gAIPlayerParams[player->aiDifficultyIndex][player->primaryItemId].delay) {
+        player->aiPrimaryItemUseTimer = gAIPlayerParams[player->aiDifficultyIndex][player->primaryItemId].delay;
+        player->aiPrimaryItemUseTimer -= (randA() * gAIPlayerParams[player->aiDifficultyIndex][0].delay) / 255;
     }
     maxRange = 0x05000000;
     if (player->aiPrimaryItemUseTimer <= 0) {
@@ -510,18 +510,18 @@ s32 findPrimaryItemTarget(Player *player) {
                 i++;
             } while (i < gs->numPlayers);
         }
-        player->aiPrimaryItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId].delay;
-        player->aiPrimaryItemUseTimer -= (randA() * (gAIPlayerParams[player->speedPenaltyIndex][0].delay)) / 255;
+        player->aiPrimaryItemUseTimer = gAIPlayerParams[player->aiDifficultyIndex][player->primaryItemId].delay;
+        player->aiPrimaryItemUseTimer -= (randA() * (gAIPlayerParams[player->aiDifficultyIndex][0].delay)) / 255;
         if (bestTarget == NULL) {
             return -1;
         }
-        if (randA() >= gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId].useChance) {
+        if (randA() >= gAIPlayerParams[player->aiDifficultyIndex][player->primaryItemId].useChance) {
             return -1;
         }
         if (bestTarget->isBossRacer == 0) {
             return targetingMode;
         }
-        if (randA() >= gAIPlayerParams[player->speedPenaltyIndex][player->primaryItemId].altChance) {
+        if (randA() >= gAIPlayerParams[player->aiDifficultyIndex][player->primaryItemId].altChance) {
             return -1;
         }
         i = player->finishPosition;
@@ -546,7 +546,7 @@ s32 shouldUseSecondaryItem(Player *player) {
 
     gs = (GameState *)getCurrentAllocation();
 
-    if (player->inputDisabled == 0) {
+    if (player->isCpuControlled == 0) {
         if (player->secondaryItemId == SECONDARY_ITEM_NONE) {
             return 0;
         }
@@ -556,38 +556,38 @@ s32 shouldUseSecondaryItem(Player *player) {
     } else {
         if (player->secondaryItemId != SECONDARY_ITEM_NONE) {
             if (player->aiItemUseTimer >
-                gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].delay) {
-                player->aiItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].delay;
+                gAIPlayerParams[player->aiDifficultyIndex][player->secondaryItemId + 6].delay) {
+                player->aiItemUseTimer = gAIPlayerParams[player->aiDifficultyIndex][player->secondaryItemId + 6].delay;
                 player->aiItemUseTimer -=
-                    (randA() & 0xFF) * gAIPlayerParams[player->speedPenaltyIndex][0].altChance / 255;
+                    (randA() & 0xFF) * gAIPlayerParams[player->aiDifficultyIndex][0].altChance / 255;
             }
 
             if (player->aiItemUseTimer <= 0) {
-                player->aiItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].delay;
+                player->aiItemUseTimer = gAIPlayerParams[player->aiDifficultyIndex][player->secondaryItemId + 6].delay;
                 player->aiItemUseTimer -=
-                    (randA() & 0xFF) * gAIPlayerParams[player->speedPenaltyIndex][0].altChance / 255;
+                    (randA() & 0xFF) * gAIPlayerParams[player->aiDifficultyIndex][0].altChance / 255;
 
                 switch (player->secondaryItemId) {
                     case SECONDARY_ITEM_PAN:
                     case SECONDARY_ITEM_GHOST:
                     case SECONDARY_ITEM_SUPER_GHOST:
-                        if ((gs->players[gs->rankOrder[0]].animFlags & 0x100)) {
+                        if ((gs->players[gs->rankOrder[0]].animationFlags & 0x100)) {
                             return 0;
                         }
                         if (randA() <
-                            gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].useChance) {
+                            gAIPlayerParams[player->aiDifficultyIndex][player->secondaryItemId + 6].useChance) {
                             return 1;
                         }
                         break;
                     case SECONDARY_ITEM_INVISIBLE:
-                        if (player->pathFlags != 0) {
+                        if (player->aiPathFlags != 0) {
                             if (randA() <
-                                gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].altChance) {
+                                gAIPlayerParams[player->aiDifficultyIndex][player->secondaryItemId + 6].altChance) {
                                 return 1;
                             }
                         } else {
                             if (randA() <
-                                gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].useChance) {
+                                gAIPlayerParams[player->aiDifficultyIndex][player->secondaryItemId + 6].useChance) {
                                 return 1;
                             }
                         }
@@ -597,7 +597,7 @@ s32 shouldUseSecondaryItem(Player *player) {
                             return 0;
                         }
                         if (randA() <
-                            gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].useChance) {
+                            gAIPlayerParams[player->aiDifficultyIndex][player->secondaryItemId + 6].useChance) {
                             return 1;
                         }
                         break;
@@ -607,7 +607,7 @@ s32 shouldUseSecondaryItem(Player *player) {
                     case SECONDARY_ITEM_SUPER_RAT_FACE:
                     case SECONDARY_ITEM_WING:
                         if (randA() <
-                            gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].useChance) {
+                            gAIPlayerParams[player->aiDifficultyIndex][player->secondaryItemId + 6].useChance) {
                             return 1;
                         }
                         break;
@@ -629,14 +629,14 @@ void addPlayerRaceGold(Player *player, s32 amount) {
         return;
     }
 
-    player->raceCoins += amount;
+    player->raceGold += amount;
 
-    if (player->raceCoins > 99999) {
-        player->raceCoins = 99999;
+    if (player->raceGold > 99999) {
+        player->raceGold = 99999;
     }
 
-    if (player->raceCoins < 0) {
-        player->raceCoins = 0;
+    if (player->raceGold < 0) {
+        player->raceGold = 0;
     }
 }
 
@@ -655,7 +655,7 @@ void addPlayerSkillPoints(Player *player, s32 amount) {
 
 s32 getPlayerRaceGold(Player *player) {
     if (!player->unkBC6) {
-        return player->raceCoins;
+        return player->raceGold;
     }
     return 0;
 }

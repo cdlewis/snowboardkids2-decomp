@@ -422,18 +422,18 @@ s8 determineAIPathChoice(Player *player) {
     }
 
     // Reset shortcut choice if no shortcut available
-    if (!(player->pathFlags & PATH_FLAG_SHORTCUT_AVAILABLE)) {
-        player->aiShortcutChosen = 0;
+    if (!(player->aiPathFlags & PATH_FLAG_SHORTCUT_AVAILABLE)) {
+        player->aiShortcutDecisionMade = 0;
     }
 
     // Special mode: unk86 is set (possibly time attack or special mode)
     if (gs->unk86 != 0) {
-        if (player->aiShortcutChosen == 0 && (player->pathFlags & PATH_FLAG_SHORTCUT_AVAILABLE)) {
+        if (player->aiShortcutDecisionMade == 0 && (player->aiPathFlags & PATH_FLAG_SHORTCUT_AVAILABLE)) {
             // 25% chance to skip shortcut
             if ((randA() & 0xFF) >= SHORTCUT_SKIP_CHANCE) {
                 return PATH_CHOICE_MAIN;
             }
-            player->aiShortcutChosen = 1;
+            player->aiShortcutDecisionMade = 1;
             return PATH_CHOICE_SHORTCUT;
         }
         return PATH_CHOICE_MAIN;
@@ -441,15 +441,15 @@ s8 determineAIPathChoice(Player *player) {
 
     // Normal race mode (not race type 9)
     if (gs->raceType != RACE_TYPE_TRAINING) {
-        if (player->aiShortcutChosen == 0 && (player->pathFlags & PATH_FLAG_SHORTCUT_AVAILABLE)) {
+        if (player->aiShortcutDecisionMade == 0 && (player->aiPathFlags & PATH_FLAG_SHORTCUT_AVAILABLE)) {
             // Check random shortcut chance based on memory pool
             if ((randA() & 0xFF) < gShortcutChanceByMemoryPool[gs->memoryPoolId]) {
-                player->aiShortcutChosen = 1;
+                player->aiShortcutDecisionMade = 1;
                 return PATH_CHOICE_SHORTCUT;
             }
             // Boss characters (ID >= 6) always take shortcuts
             if (player->characterId >= 6) {
-                player->aiShortcutChosen = 1;
+                player->aiShortcutDecisionMade = 1;
                 return PATH_CHOICE_SHORTCUT;
             }
         }

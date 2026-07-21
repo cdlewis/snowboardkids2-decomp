@@ -2374,7 +2374,7 @@ s32 rollSecondaryItemDrop(Player *arg0, u8 *arg1) {
     u8 index;
     SecondaryItemDropElement *element;
 
-    if (arg0->animFlags & 0x1000000) {
+    if (arg0->animationFlags & 0x1000000) {
         randVal = randB() & 0xFF;
         for (i = 0; i < 9; i++) {
             if (D_80090CE0_918E0[i] >= randVal) {
@@ -2437,7 +2437,7 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
                 if (player != NULL) {
                     itemBox->state = itemBox->state + 1;
                     spawnItemBoxBurstEffect(&itemBox->displayList, itemBox->isSecondaryItemBox);
-                    if ((player->raceCoins >= 100) || (player->inputDisabled != 0)) {
+                    if ((player->raceGold >= 100) || (player->isCpuControlled != 0)) {
                         addPlayerRaceGold(player, -100);
                         if (itemBox->isSecondaryItemBox != 0) {
                             if (player->secondaryItemId == SECONDARY_ITEM_ROCK) {
@@ -2454,11 +2454,11 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
                                 gameState->availableHomingProjectileSlots =
                                     gameState->availableHomingProjectileSlots - 1;
                             }
-                            player->unkBD8 |= 2;
+                            player->itemHudNotificationFlags |= 2;
                         } else {
                             player->primaryItemId = rollPrimaryItemDrop(player, (u8 *)controller);
                             player->primaryItemAmmo = 3;
-                            player->unkBD8 |= 1;
+                            player->itemHudNotificationFlags |= 1;
                         }
                         queueSoundAtPosition(&itemBox->displayList.transform.translation, 8);
                     } else {
@@ -3345,7 +3345,7 @@ void initPanelProjectileMovement(PanelProjectileState *arg0) {
     loadAssetMetadata((&arg0->metadata), arg0->assetTable, 0x3F);
     player = arg0->player;
     temp_s1 = &arg0->metadata.position;
-    memcpy(temp_s1, &player->boneDisplayObjects[12].transform.translation, sizeof(Vec3i));
+    memcpy(temp_s1, &player->bodyPartDisplayObjects[12].transform.translation, sizeof(Vec3i));
     arg0->sectorIndex = arg0->player->sectorIndex;
     arg0->playerIndex = (s16)arg0->player->playerIndex;
     memcpy(&arg0->vel, &arg0->player->velocity, sizeof(Vec3i));
@@ -3590,13 +3590,13 @@ void updateItemHomingProjectileImpact(ItemHomingProjectileState *arg0) {
     if (player != NULL) {
         if (arg0->targetVariant == 0) {
             u16 val = (u16)arg0->targetPlayerIndex;
-            u8 tmp = player->unkBD8 | 1;
+            u8 tmp = player->itemHudNotificationFlags | 1;
             player->primaryItemAmmo = 3;
             player->primaryItemId = (u8)val;
-            player->unkBD8 = tmp;
+            player->itemHudNotificationFlags = tmp;
         } else {
             player->secondaryItemId = (u8)arg0->targetPlayerIndex;
-            player->unkBD8 |= 2;
+            player->itemHudNotificationFlags |= 2;
         }
         queueSoundAtPosition(&arg0->pos, 8);
         terminateCurrentTask();

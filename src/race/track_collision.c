@@ -66,7 +66,7 @@ s16 slopeDetectionSamplePoints[12] = {
 
 s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSectorIndex, void *position) {
     Player *player = (Player *)entity;
-    if (!(player->animFlags & 0x100)) {
+    if (!(player->animationFlags & 0x100)) {
         return findTrackSector(gameData, currentSectorIndex, position);
     }
     return player->sectorIndex;
@@ -76,7 +76,7 @@ s32 getOrUpdatePlayerSectorIndex(void *entity, void *gameData, u16 currentSector
  * Checks track wall collision at 3 sample points around the player and pushes them out of walls.
  * Returns -1 if a collision occurred, 0 otherwise.
  *
- * When the player is in a stunned state (animFlags & 0x20), the collision threshold
+ * When the player is in a stunned state (animationFlags & 0x20), the collision threshold
  * increases over time to allow the player to pass through walls while recovering.
  */
 s32 handlePlayerTrackWallCollision(Player *player) {
@@ -108,7 +108,7 @@ s32 handlePlayerTrackWallCollision(Player *player) {
         sectorIdx =
             getOrUpdatePlayerSectorIndex(player, &gameState->gameData, player->sectorIndex, &samplePoints[i]) & 0xFFFF;
         if (i == 0) {
-            if (player->animFlags & 0x20) {
+            if (player->animationFlags & 0x20) {
                 stunCounter = player->stunCollisionCounter;
                 if (stunCounter < 10U) {
                     player->stunCollisionCounter = stunCounter + 1;
@@ -120,7 +120,7 @@ s32 handlePlayerTrackWallCollision(Player *player) {
                     (player->stunCollisionCounter + 6) << 16,
                     &pushOffset
                 );
-                player->animFlags &= ~0x20;
+                player->animationFlags &= ~0x20;
             } else {
                 player->stunCollisionCounter = 0;
                 collisionResult = resolveTrackWallCollision(
@@ -222,8 +222,8 @@ void alignPlayerToTrackSurface(Player *player) {
     composeTransform3D(&player->orientationTransform, &player->headingTransform, &spE0);
     composeTransform3D(&player->tiltTransform, &spE0, &spC0);
 
-    if (player->animFlags & 0x40) {
-        player->animFlags &= ~0x40;
+    if (player->animationFlags & 0x40) {
+        player->animationFlags &= ~0x40;
         for (i = 0; i < 2; i++) {
             transformVector(&slopeDetectionSamplePoints[i * 6], player->headingTransform.m[0], &points[i]);
         }
@@ -322,9 +322,9 @@ void alignPlayerToTrackSurface(Player *player) {
     }
 
     contactMask = 0;
-    player->surfaceNormalX = 0;
-    player->surfaceNormalY = 0;
-    player->surfaceNormalZ = 0;
+    player->surfaceNormal.x = 0;
+    player->surfaceNormal.y = 0;
+    player->surfaceNormal.z = 0;
     for (i = 0; i < 6; i++) {
         adjustedY = points[i].y;
         adjustedY -= heights[i];
@@ -335,29 +335,29 @@ void alignPlayerToTrackSurface(Player *player) {
         }
         adjustedY += lowBits >> 13;
         if (adjustedY < 0x24000) {
-            player->surfaceNormalX += normals[i].x;
-            player->surfaceNormalY += normals[i].y;
+            player->surfaceNormal.x += normals[i].x;
+            player->surfaceNormal.y += normals[i].y;
             contactMask |= 1 << i;
-            player->surfaceNormalZ += normals[i].z;
+            player->surfaceNormal.z += normals[i].z;
         }
     }
 
-    player->animFlags |= 1;
+    player->animationFlags |= 1;
     if ((contactMask & 3) && (contactMask & 0x3C) || (contactMask & 0x30) && (contactMask & 0xC)) {
-        player->animFlags &= ~1;
+        player->animationFlags &= ~1;
         if (pushUpOffset > 0) {
             player->worldPos.y += pushUpOffset;
         }
 
-        magnitude = isqrt64(MAGNITUDE_SQ_3D(player->surfaceNormalX, player->surfaceNormalY, player->surfaceNormalZ));
+        magnitude = isqrt64(MAGNITUDE_SQ_3D(player->surfaceNormal.x, player->surfaceNormal.y, player->surfaceNormal.z));
         sign = magnitude >> 31;
-        player->surfaceNormalX = (s64)player->surfaceNormalX * 0x2000 / (s64)magnitude;
-        player->surfaceNormalY = (s64)player->surfaceNormalY * 0x2000 / (s64)magnitude;
-        player->surfaceNormalZ = (s64)player->surfaceNormalZ * 0x2000 / (s64)magnitude;
+        player->surfaceNormal.x = (s64)player->surfaceNormal.x * 0x2000 / (s64)magnitude;
+        player->surfaceNormal.y = (s64)player->surfaceNormal.y * 0x2000 / (s64)magnitude;
+        player->surfaceNormal.z = (s64)player->surfaceNormal.z * 0x2000 / (s64)magnitude;
     } else {
-        player->surfaceNormalX = 0;
-        player->surfaceNormalY = 0x2000;
-        player->surfaceNormalZ = 0;
+        player->surfaceNormal.x = 0;
+        player->surfaceNormal.y = 0x2000;
+        player->surfaceNormal.z = 0;
     }
 }
 
@@ -435,7 +435,7 @@ s32 tryActivateShortcut(Player *player) {
 
     // Activate the shortcut
     gameState->shortcutGateState = 3;
-    player->shortcutLapCount = gameState->shortcutActivationCounter;
+    player->shortcutActivationSnapshot = gameState->shortcutActivationCounter;
     gameState->shortcutActivationCounter--;
 
     return 1;
@@ -537,12 +537,12 @@ void handlePlayerToPlayerCollision(Player *player) {
                 deltaPos.z = ((s64)deltaPos.z * combinedRadius / dist) - deltaPos.z;
 
                 /* Skip push if player has flag 0x80 */
-                if (player->animFlags & 0x80) {
+                if (player->animationFlags & 0x80) {
                     continue;
                 }
 
                 /* If target has flag 0x80, do full push */
-                if (targetPlayer->animFlags & 0x80) {
+                if (targetPlayer->animationFlags & 0x80) {
                     player->worldPos.x -= deltaPos.x;
                     player->worldPos.y -= deltaPos.y;
                     player->worldPos.z -= deltaPos.z;
@@ -560,7 +560,7 @@ void handlePlayerToPlayerCollision(Player *player) {
 /**
  * Checks collision between `player` and the boss player at slot 1.
  *
- * The boss has up to (s8)targetPlayer->unkBB4 collision boxes. Box 0 is the player's
+ * The boss has up to (s8)targetPlayer->collisionSphereCount collision boxes. Box 0 is the player's
  * own collisionOffset/collisionRadius; boxes 1+ live in the extraCollisionOffsets /
  * extraCollisionRadii arrays. The loop walks `boxBasePtr` along the offset array
  * by sizeof(Vec3i) each iteration so that boxBasePtr + 0xAE4 yields
@@ -600,7 +600,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
         return;
     }
 
-    if ((s8)targetPlayer->unkBB4 > 0) {
+    if ((s8)targetPlayer->collisionSphereCount > 0) {
         boxIndex = 0;
         boxBasePtr = targetPlayer;
         do {
@@ -615,7 +615,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
             deltaPos.y -= player->worldPos.y + player->collisionOffset.y;
             deltaPos.z -= player->worldPos.z + player->collisionOffset.z;
 
-            combinedRadius = (&targetPlayer->extraCollisionRadii)[boxIndex] + player->collisionRadius;
+            combinedRadius = targetPlayer->extraCollisionRadii[boxIndex] + player->collisionRadius;
             negRadius = -combinedRadius;
 
             if (negRadius < deltaPos.x && deltaPos.x < combinedRadius && negRadius < deltaPos.y &&
@@ -626,13 +626,13 @@ void handleCollisionWithTargetPlayer(Player *player) {
                 if (dist < combinedRadius) {
                     /* State 1: boxes 4-5 are an active hit zone. */
                     if (targetPlayer->flyingAttackState == 1) {
-                        if ((targetPlayer->animFlags & 0x40000) && (u32)(boxIndex - 4) < 2U) {
+                        if ((targetPlayer->animationFlags & 0x40000) && (u32)(boxIndex - 4) < 2U) {
                             setPlayerBouncedBackState(player);
                             goto next;
                         }
                     }
                     /* State 3: boxes 1-2 are an active hit zone. */
-                    if (targetPlayer->flyingAttackState == 3 && (targetPlayer->animFlags & 0x40000) &&
+                    if (targetPlayer->flyingAttackState == 3 && (targetPlayer->animationFlags & 0x40000) &&
                         (u32)(boxIndex - 1) < 2U) {
                         setPlayerBouncedBackState(player);
                         goto next;
@@ -671,7 +671,7 @@ void handleCollisionWithTargetPlayer(Player *player) {
         next:
             boxIndex++;
             boxBasePtr = (u8 *)boxBasePtr + sizeof(Vec3i);
-        } while (boxIndex < (s8)targetPlayer->unkBB4);
+        } while (boxIndex < (s8)targetPlayer->collisionSphereCount);
     }
 }
 
@@ -1018,7 +1018,7 @@ s32 checkPositionPlayerCollisionWithKnockback(Vec3i *pos, s32 extraRadius, s32 m
         deltaPos.z = ((s64)deltaZ * combinedRadius / dist) - deltaZ;
 
         /* Skip push if target has flag 0x80 */
-        if (targetPlayer->animFlags & 0x80) {
+        if (targetPlayer->animationFlags & 0x80) {
             continue;
         }
 
@@ -1116,7 +1116,7 @@ s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeig
             deltaPos.x = (((s64)deltaX * combinedRadius) / dist) - deltaX;
             deltaPos.z = (((s64)deltaZ * combinedRadius) / dist) - deltaZ;
 
-            if (targetPlayer->animFlags & 0x80) {
+            if (targetPlayer->animationFlags & 0x80) {
                 goto next;
             }
 
@@ -1141,7 +1141,7 @@ s32 checkPositionPlayerCollisionWithPull(void *pos, s32 extraRadius, s32 maxHeig
  * Finds a homing target for projectiles and returns the angle offset to turn toward them.
  *
  * Searches for vulnerable (non-invincible) players within a forward-facing cone,
- * marks them with targeting flags on pathFlags, and returns the angle adjustment
+ * marks them with targeting flags on aiPathFlags, and returns the angle adjustment
  * needed to aim at the closest target.
  *
  * @param pos Center position to search from
@@ -1193,9 +1193,9 @@ s16 getHomingAngleToTarget(
 
                     if (dist < searchRadius) {
                         if (dist <= 0x13FFFFF) {
-                            allocation->dataArray[node->id].pathFlags |= 2;
+                            allocation->dataArray[node->id].aiPathFlags |= 2;
                         } else {
-                            allocation->dataArray[node->id].pathFlags |= 1;
+                            allocation->dataArray[node->id].aiPathFlags |= 1;
                         }
 
                         if (dist < closestDist) {
@@ -1210,7 +1210,7 @@ s16 getHomingAngleToTarget(
     }
 
     if (closestPlayerId >= 0 && closestDist < closeRangeThreshold * 4 + closeRangeThreshold / 2) {
-        allocation->dataArray[closestPlayerId].pathFlags |= 8;
+        allocation->dataArray[closestPlayerId].aiPathFlags |= 8;
     }
 
     return closestAngle;
@@ -1426,7 +1426,7 @@ void computePlayerTerrainAlignment(Player *player) {
     s32 length;
     s16 pitchAngle, rollAngle;
 
-    player->animFlags |= 1;
+    player->animationFlags |= 1;
 
     gameState = (GameState *)getCurrentAllocation();
 
@@ -1434,7 +1434,7 @@ void computePlayerTerrainAlignment(Player *player) {
 
     if (!(groundHeight < player->worldPos.y)) {
         player->worldPos.y = groundHeight;
-        player->animFlags &= ~1;
+        player->animationFlags &= ~1;
     }
 
     memcpy(&player->headingTransform.translation, &player->worldPos, sizeof(Vec3i));
@@ -1539,7 +1539,7 @@ s16 getPlayerTargetTrackAngle(Player *player) {
                 player->worldPos.x,
                 player->worldPos.z
             );
-            if (player->animFlags & 2) {
+            if (player->animationFlags & 2) {
                 targetAngle += 0x1000;
             }
         }
@@ -1548,7 +1548,7 @@ s16 getPlayerTargetTrackAngle(Player *player) {
         Section1Element *waypoint1 = (Section1Element *)(sectorEntry->unk16 * 6 + (u32)waypointData);
         Section1Element *waypoint2 = (Section1Element *)(sectorEntry->unk1C * 6 + (u32)waypointData);
         targetAngle = computeAngleToPosition(waypoint1->unk0, waypoint1->unk4, waypoint2->unk0, waypoint2->unk4);
-        if (player->animFlags & 2) {
+        if (player->animationFlags & 2) {
             targetAngle += 0x1000;
         }
     }

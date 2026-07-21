@@ -27,7 +27,7 @@ typedef struct {
     u8 _pad2[0x1C6];
     u8 unkBB8;
     u8 _pad3[0x25];
-    u8 pathFlags;
+    u8 aiPathFlags;
 } PlayerIndicatorPlayer;
 
 typedef struct {
@@ -114,7 +114,7 @@ void awaitPlayerIndicatorReady(PlayerIndicatorSpriteTask *arg0) {
     PlayerIndicatorPlayer *player;
 
     player = arg0->unk24;
-    if (player->pathFlags != 0) {
+    if (player->aiPathFlags != 0) {
         arg0->unk38 = 6;
         setCallback(updateRacePlayerIndicatorSprite);
     }
@@ -126,7 +126,7 @@ void updateRacePlayerIndicatorSprite(PlayerIndicatorSpriteTask *arg0) {
     s32 temp_v0;
 
     temp = arg0->unk24;
-    if (temp->pathFlags == 0) {
+    if (temp->aiPathFlags == 0) {
         temp_v0 = arg0->unk38 - 1;
         arg0->unk38 = temp_v0;
         if (temp_v0 == 0) {
@@ -138,7 +138,7 @@ void updateRacePlayerIndicatorSprite(PlayerIndicatorSpriteTask *arg0) {
     }
     transformVector((s16 *)&gIndicatorSpriteOffset, &arg0->unk24->orientationHeadingTransform, &arg0->unk4.unk4);
     temp_s0 = &arg0->unk4;
-    if (arg0->unk24->pathFlags >= 2 && (gFrameCounter & 1)) {
+    if (arg0->unk24->aiPathFlags >= 2 && (gFrameCounter & 1)) {
         loadAssetMetadataByIndex(temp_s0, arg0->unk0, 0x60, 0x14);
     } else {
         temp_s0++;

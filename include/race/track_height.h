@@ -14,7 +14,7 @@ s32 advancePlayerLeanAnimationAuto(void *player, s16 animIndex);
 s32 advancePlayerLeanAnimation(void *player, s16 animIndex);
 void setPlayerLeanAnimation(Player *player, s32 animIndex, s32 progress);
 void loadCharacterBodyParts(Player *player);
-void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags);
+void setPlayerBodyPartAnimState(Player *player, u8 stateIndex, u8 stateTimer);
 s16 onTrickCompletedHook(Player *player);
 s16 getTrickType(Player *player);
 s32 getTrickRecoveryTimerReduction(Player *player);

@@ -262,12 +262,12 @@ void updateChaseCamera(ChaseCameraState *camera) {
         return;
     }
 
-    if (gs->players[camera->playerIdx].finishAnimState != 0) {
+    if (gs->players[camera->playerIdx].finishAnimationState != 0) {
         behindOffset.y = 0;
         behindOffset.x = 0;
         behindOffset.z = 0xFFC00000;
 
-        if (gs->players[camera->playerIdx].finishAnimState == 2) {
+        if (gs->players[camera->playerIdx].finishAnimationState == 2) {
             createYRotationMatrix(&rotationMatrix, 0x1000);
         } else {
             createYRotationMatrix(&rotationMatrix, gs->players[camera->playerIdx].rotY);
@@ -277,7 +277,7 @@ void updateChaseCamera(ChaseCameraState *camera) {
         camera->x = gs->players[camera->playerIdx].worldPos.x + worldOffset.x;
         camera->y = gs->players[camera->playerIdx].worldPos.y + worldOffset.y;
         camera->z = gs->players[camera->playerIdx].worldPos.z + worldOffset.z;
-        gs->players[camera->playerIdx].finishAnimState = 0;
+        gs->players[camera->playerIdx].finishAnimationState = 0;
     }
 
     diffY = gs->players[camera->playerIdx].worldPos.y - camera->y;
@@ -308,7 +308,7 @@ void updateChaseCamera(ChaseCameraState *camera) {
     } else {
         camera->distance += (0x600000 - camera->distance) / 0x20;
 
-        if (gs->players[camera->playerIdx].animFlags & 0x1000) {
+        if (gs->players[camera->playerIdx].animationFlags & 0x1000) {
             heightDiff = 0x1A0000 - camera->targetY;
             if (heightDiff >= 0x6001) {
                 heightDiff = 0x6000;
@@ -384,7 +384,7 @@ void updateChaseCamera(ChaseCameraState *camera) {
     camera->lookAtMatrix.translation.y = camera->lookAtMatrix.translation.y + diffY;
     camera->lookAtMatrix.translation.z = diffZ + camera->lookAtMatrix.translation.z;
 
-    if (!(gs->players[camera->playerIdx].animFlags & 0x200)) {
+    if (!(gs->players[camera->playerIdx].animationFlags & 0x200)) {
         trackHeight = getOrUpdatePlayerSectorIndex(
             &gs->players[camera->playerIdx],
             &gs->gameData,
@@ -408,7 +408,8 @@ void updateChaseCamera(ChaseCameraState *camera) {
         }
     }
 
-    if ((gs->players[camera->playerIdx].inputButtons & 0x10) && !(gs->players[camera->playerIdx].animFlags & 0x100)) {
+    if ((gs->players[camera->playerIdx].inputButtonsHeld & 0x10) &&
+        !(gs->players[camera->playerIdx].animationFlags & 0x100)) {
         camera->lookAtMatrix.m[0][0] = -camera->lookAtMatrix.m[0][0];
         camera->lookAtMatrix.m[0][1] = -camera->lookAtMatrix.m[0][1];
         camera->lookAtMatrix.m[0][2] = -camera->lookAtMatrix.m[0][2];

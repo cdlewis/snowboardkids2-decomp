@@ -73,36 +73,50 @@ s32 advancePlayerLeanAnimationAuto(void *arg0_, s16 arg1) {
     s32 i;
     s16 animIndex;
 
-    flags = arg0->animFlags;
+    flags = arg0->animationFlags;
     result = 0;
     animIndex = arg1;
 
     if (flags & 2) {
         if (!(flags & 4)) {
-            arg0->leanAnimIndex = 0xFFFF;
-            arg0->animFlags = arg0->animFlags | 4;
+            arg0->animationIndex = 0xFFFF;
+            arg0->animationFlags = arg0->animationFlags | 4;
         }
     } else if (flags & 4) {
-        arg0->leanAnimIndex = 0xFFFF;
-        arg0->animFlags = arg0->animFlags & ~4;
+        arg0->animationIndex = 0xFFFF;
+        arg0->animationFlags = arg0->animationFlags & ~4;
     }
 
-    if (arg0->leanAnimIndex != animIndex) {
-        arg0->leanAnimIndex = animIndex;
-        arg0->leanBoneCount = getAnimationBoneCount(arg0->unk0, animIndex);
-        for (i = 0; i < arg0->leanBoneCount; i++) {
-            resetBoneAnimation(arg0->unk0, (s16)arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
+    if (arg0->animationIndex != animIndex) {
+        arg0->animationIndex = animIndex;
+        arg0->animationBoneCount = getAnimationBoneCount(arg0->raceAnimationData, animIndex);
+        for (i = 0; i < arg0->animationBoneCount; i++) {
+            resetBoneAnimation(
+                arg0->raceAnimationData,
+                (s16)arg0->animationIndex,
+                (s16)i,
+                &arg0->boneAnimationStates[i]
+            );
         }
     }
 
-    if (arg0->animFlags & 4) {
-        for (i = 0; i < arg0->leanBoneCount; i++) {
-            result |=
-                advanceIndexedBoneAnimationAutoMirrored(arg0->unk0, (s16)arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
+    if (arg0->animationFlags & 4) {
+        for (i = 0; i < arg0->animationBoneCount; i++) {
+            result |= advanceIndexedBoneAnimationAutoMirrored(
+                arg0->raceAnimationData,
+                (s16)arg0->animationIndex,
+                (s16)i,
+                &arg0->boneAnimationStates[i]
+            );
         }
     } else {
-        for (i = 0; i < arg0->leanBoneCount; i++) {
-            result |= advanceIndexedBoneAnimationAuto(arg0->unk0, (s16)arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
+        for (i = 0; i < arg0->animationBoneCount; i++) {
+            result |= advanceIndexedBoneAnimationAuto(
+                arg0->raceAnimationData,
+                (s16)arg0->animationIndex,
+                (s16)i,
+                &arg0->boneAnimationStates[i]
+            );
         }
     }
 
@@ -115,33 +129,43 @@ s32 advancePlayerLeanAnimation(void *arg0_, s16 arg1) {
     s32 flags;
     s32 i;
 
-    flags = arg0->animFlags;
+    flags = arg0->animationFlags;
 
     if (flags & 2) {
         if (!(flags & 4)) {
-            arg0->leanAnimIndex = 0xFFFF;
-            arg0->animFlags = arg0->animFlags | 4;
+            arg0->animationIndex = 0xFFFF;
+            arg0->animationFlags = arg0->animationFlags | 4;
         }
     } else if (flags & 4) {
-        arg0->leanAnimIndex = 0xFFFF;
-        arg0->animFlags = arg0->animFlags & ~4;
+        arg0->animationIndex = 0xFFFF;
+        arg0->animationFlags = arg0->animationFlags & ~4;
     }
 
-    if (arg0->leanAnimIndex != arg1) {
-        arg0->leanAnimIndex = arg1;
-        arg0->leanBoneCount = getAnimationBoneCount(arg0->unk0, arg1);
-        for (i = 0; i < arg0->leanBoneCount; i++) {
-            resetBoneAnimation(arg0->unk0, arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
+    if (arg0->animationIndex != arg1) {
+        arg0->animationIndex = arg1;
+        arg0->animationBoneCount = getAnimationBoneCount(arg0->raceAnimationData, arg1);
+        for (i = 0; i < arg0->animationBoneCount; i++) {
+            resetBoneAnimation(arg0->raceAnimationData, arg0->animationIndex, (s16)i, &arg0->boneAnimationStates[i]);
         }
     }
 
-    if (arg0->animFlags & 4) {
-        for (i = 0; i < arg0->leanBoneCount; i++) {
-            result = advanceIndexedBoneAnimationMirrored(arg0->unk0, arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
+    if (arg0->animationFlags & 4) {
+        for (i = 0; i < arg0->animationBoneCount; i++) {
+            result = advanceIndexedBoneAnimationMirrored(
+                arg0->raceAnimationData,
+                arg0->animationIndex,
+                (s16)i,
+                &arg0->boneAnimationStates[i]
+            );
         }
     } else {
-        for (i = 0; i < arg0->leanBoneCount; i++) {
-            result = advanceIndexedBoneAnimation(arg0->unk0, arg0->leanAnimIndex, (s16)i, &arg0->unk488[i]);
+        for (i = 0; i < arg0->animationBoneCount; i++) {
+            result = advanceIndexedBoneAnimation(
+                arg0->raceAnimationData,
+                arg0->animationIndex,
+                (s16)i,
+                &arg0->boneAnimationStates[i]
+            );
         }
     }
 
@@ -151,42 +175,47 @@ s32 advancePlayerLeanAnimation(void *arg0_, s16 arg1) {
 void setPlayerLeanAnimation(Player *player, s32 animIndex, s32 progress) {
     s32 i;
 
-    if (player->animFlags & 2) {
-        if (!(player->animFlags & 4)) {
-            player->leanAnimIndex = 0xFFFF;
-            player->animFlags = player->animFlags | 4;
+    if (player->animationFlags & 2) {
+        if (!(player->animationFlags & 4)) {
+            player->animationIndex = 0xFFFF;
+            player->animationFlags = player->animationFlags | 4;
         }
-    } else if (player->animFlags & 4) {
-        player->leanAnimIndex = 0xFFFF;
-        player->animFlags = player->animFlags & ~4;
+    } else if (player->animationFlags & 4) {
+        player->animationIndex = 0xFFFF;
+        player->animationFlags = player->animationFlags & ~4;
     }
 
-    if (player->leanAnimIndex != (s16)animIndex) {
-        player->leanAnimIndex = animIndex;
+    if (player->animationIndex != (s16)animIndex) {
+        player->animationIndex = animIndex;
         i = (s16)animIndex;
-        player->leanBoneCount = getAnimationBoneCount(player->unk0, i);
-        for (i = 0; i < player->leanBoneCount; i++) {
-            resetBoneAnimation(player->unk0, (s16)player->leanAnimIndex, (s16)i, &player->unk488[i]);
+        player->animationBoneCount = getAnimationBoneCount(player->raceAnimationData, i);
+        for (i = 0; i < player->animationBoneCount; i++) {
+            resetBoneAnimation(
+                player->raceAnimationData,
+                (s16)player->animationIndex,
+                (s16)i,
+                &player->boneAnimationStates[i]
+            );
         }
     }
 
-    if (player->animFlags & 4) {
-        for (i = 0; i < player->leanBoneCount; i++) {
+    if (player->animationFlags & 4) {
+        for (i = 0; i < player->animationBoneCount; i++) {
             interpolateIndexedBoneAnimationMirrored(
-                player->unk0,
-                (s16)player->leanAnimIndex,
+                player->raceAnimationData,
+                (s16)player->animationIndex,
                 (s16)i,
-                &player->unk488[i],
+                &player->boneAnimationStates[i],
                 progress & 0xFFFF
             );
         }
     } else {
-        for (i = 0; i < player->leanBoneCount; i++) {
+        for (i = 0; i < player->animationBoneCount; i++) {
             interpolateIndexedBoneAnimation(
-                player->unk0,
-                (s16)player->leanAnimIndex,
+                player->raceAnimationData,
+                (s16)player->animationIndex,
                 (s16)i,
-                &player->unk488[i],
+                &player->boneAnimationStates[i],
                 (s16)progress
             );
         }
@@ -200,68 +229,68 @@ void loadCharacterBodyParts(Player *player) {
     u8 *lookupTable;
 
     if (((GameState *)getCurrentAllocation())->raceType == RACE_TYPE_INTRO) {
-        flags = player->animFlags;
+        flags = player->animationFlags;
         if (flags & 4) {
-            player->animFlags = flags | 8;
+            player->animationFlags = flags | 8;
             partIndex = 0;
             do {
-                player->boneDisplayObjects[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_95380(
+                player->bodyPartDisplayObjects[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_95380(
                     player->characterId,
                     player->boardModelId
                 )[gBodyPartRemapTable[partIndex]];
                 partIndex++;
             } while (partIndex < 0x10);
         } else {
-            player->animFlags = flags & ~8;
+            player->animationFlags = flags & ~8;
             partIndex = 0;
             do {
-                player->boneDisplayObjects[partIndex].displayLists =
+                player->bodyPartDisplayObjects[partIndex].displayLists =
                     (DisplayLists *)&loadAssetByIndex_95380(player->characterId, player->boardModelId)[partIndex];
             } while (++partIndex < 0x10);
         }
     } else {
-        flags = player->animFlags;
+        flags = player->animationFlags;
         if (flags & 4) {
-            player->animFlags = flags | 8;
+            player->animationFlags = flags | 8;
             partIndex = 0;
             do {
-                player->boneDisplayObjects[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_953B0(
+                player->bodyPartDisplayObjects[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_953B0(
                     player->characterId,
                     player->boardModelId
                 )[gBodyPartRemapTable[partIndex]];
                 partIndex++;
             } while (partIndex < 0x10);
         } else {
-            player->animFlags = flags & ~8;
+            player->animationFlags = flags & ~8;
             partIndex = 0;
             do {
-                player->boneDisplayObjects[partIndex].displayLists =
+                player->bodyPartDisplayObjects[partIndex].displayLists =
                     (DisplayLists *)&loadAssetByIndex_953B0(player->characterId, player->boardModelId)[partIndex];
             } while (++partIndex < 0x10);
         }
     }
 
     lookupTable = gCharacterBodyPartAnimTable + player->characterId * 5;
-    tableValue = lookupTable[player->bodyPartAnimIndex];
+    tableValue = lookupTable[player->bodyPartStateIndex];
     if (tableValue == 0) {
         goto copy_basic;
     }
-    flags = (s32)player->unk20;
+    flags = (s32)player->alternateBodyPartDisplayListAsset;
     if (flags == 0) {
     copy_basic:
-        player->boneDisplayObjects[8].segment1 = player->unk4;
-        player->boneDisplayObjects[8].segment2 = player->unk8;
+        player->bodyPartDisplayObjects[8].segment1 = player->bodyPartDisplayListAsset;
+        player->bodyPartDisplayObjects[8].segment2 = player->bodyPartCompressedAsset;
         return;
     }
-    player->boneDisplayObjects[8].segment1 = (void *)flags;
-    player->boneDisplayObjects[8].segment2 = player->unk24;
-    player->boneDisplayObjects[8].displayLists =
+    player->bodyPartDisplayObjects[8].segment1 = (void *)flags;
+    player->bodyPartDisplayObjects[8].segment2 = player->alternateBodyPartCompressedAsset;
+    player->bodyPartDisplayObjects[8].displayLists =
         (DisplayLists *)((s32)getAssetDataDirect(player->characterId, player->boardModelId) + tableValue * 0x10 - 0x10);
 }
 
-void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags) {
-    player->bodyPartAnimIndex = animIndex;
-    player->bodyPartAnimFlags = animFlags;
+void setPlayerBodyPartAnimState(Player *player, u8 stateIndex, u8 stateTimer) {
+    player->bodyPartStateIndex = stateIndex;
+    player->bodyPartStateTimer = stateTimer;
 }
 
 s16 onTrickCompletedHook(Player *player) {
@@ -277,8 +306,8 @@ s16 getTrickType(Player *player) {
     s8 trickCount;
 
     trickType = -1;
-    if (player->inputDisabled != 0) {
-        stickY = player->unkBDC & 7;
+    if (player->isCpuControlled != 0) {
+        stickY = player->cpuInputFlags & 7;
         if (stickY != 0) {
             tablePtr = gSpecialTrickTypeTable;
             trickCount = player->trickCount;
@@ -324,7 +353,7 @@ s32 getTrickRecoveryTimerReduction(Player *player) {
 
     count = 1;
 
-    if (player->inputDisabled != 0) {
+    if (player->isCpuControlled != 0) {
         temp = randA();
         temp = temp & 3;
         temp = temp < 1;

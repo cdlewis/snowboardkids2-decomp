@@ -733,18 +733,18 @@ void updateRacePlayer(Player *player) {
 
     memcpy(&player->prevWorldPos, &player->worldPos, sizeof(Vec3i));
 
-    if (player->inputDisabled == 0) {
+    if (player->isCpuControlled == 0) {
         player->prevInputStickX = player->inputStickX;
         player->prevInputStickY = player->inputStickY;
-        player->prevInputButtons = player->inputButtons;
+        player->prevInputButtonsHeld = player->inputButtonsHeld;
 
-        switch (player->inputMode) {
+        switch (player->inputPlaybackMode) {
             case 0:
                 player->inputStickX = gAnalogStickX[player->playerIndex] / 4;
                 player->inputStickY = gAnalogStickY[player->playerIndex] / 4;
-                player->inputButtons = gButtonsPressed[player->playerIndex];
-                if (player->animFlags & 0x80000) {
-                    player->inputButtons = 0;
+                player->inputButtonsHeld = gButtonsPressed[player->playerIndex];
+                if (player->animationFlags & 0x80000) {
+                    player->inputButtonsHeld = 0;
                     player->inputStickX = 0;
                     player->inputStickY = 0;
                 }
@@ -752,39 +752,39 @@ void updateRacePlayer(Player *player) {
 
             case 1:
                 if (gameState->raceIntroState == 0) {
-                    if (player->inputRecordIndex < D_800BAAAC_AA95C[player->inputRecordSet]) {
-                        player->inputStickX = player->unk2C[player->inputRecordIndex].stickX;
-                        player->inputStickY = player->unk2C[player->inputRecordIndex].stickY;
-                        player->inputButtons = player->unk2C[player->inputRecordIndex].buttons;
-                        player->inputRecordIndex++;
+                    if (player->inputRecordFrameIndex < D_800BAAAC_AA95C[player->inputRecordSetId]) {
+                        player->inputStickX = player->inputRecordData[player->inputRecordFrameIndex].stickX;
+                        player->inputStickY = player->inputRecordData[player->inputRecordFrameIndex].stickY;
+                        player->inputButtonsHeld = player->inputRecordData[player->inputRecordFrameIndex].buttons;
+                        player->inputRecordFrameIndex++;
                     } else {
                         player->inputStickX = 0;
                         player->inputStickY = 0;
-                        player->inputButtons = 0;
+                        player->inputButtonsHeld = 0;
                     }
                 }
                 break;
 
             case 2:
                 if (gameState->raceIntroState == 0) {
-                    if (player->inputRecordIndex < D_800BAAAC_AA95C[player->inputRecordSet]) {
-                        player->inputStickX = player->unk2C[player->inputRecordIndex].stickX =
+                    if (player->inputRecordFrameIndex < D_800BAAAC_AA95C[player->inputRecordSetId]) {
+                        player->inputStickX = player->inputRecordData[player->inputRecordFrameIndex].stickX =
                             gAnalogStickX[player->playerIndex] / 4;
-                        player->inputStickY = player->unk2C[player->inputRecordIndex].stickY =
+                        player->inputStickY = player->inputRecordData[player->inputRecordFrameIndex].stickY =
                             gAnalogStickY[player->playerIndex] / 4;
-                        player->inputButtons = player->unk2C[player->inputRecordIndex].buttons =
+                        player->inputButtonsHeld = player->inputRecordData[player->inputRecordFrameIndex].buttons =
                             gButtonsPressed[player->playerIndex];
-                        player->inputRecordIndex++;
+                        player->inputRecordFrameIndex++;
                     } else {
                         player->inputStickX = 0;
                         player->inputStickY = 0;
-                        player->inputButtons = 0;
+                        player->inputButtonsHeld = 0;
                     }
                 }
                 break;
         }
 
-        player->inputButtonsPressed = player->inputButtons & ~player->prevInputButtons;
+        player->inputButtonsPressed = player->inputButtonsHeld & ~player->prevInputButtonsHeld;
     }
 
     if (player->unkBC2 != 0) {
@@ -797,26 +797,26 @@ void updateRacePlayer(Player *player) {
     }
 
     player->maxSpeedCap = player->baseMaxSpeed;
-    if (player->inputDisabled != 0) {
-        player->maxSpeedCap -= gAIPlayerParams[player->speedPenaltyIndex][0].useChance * 0x202;
+    if (player->isCpuControlled != 0) {
+        player->maxSpeedCap -= gAIPlayerParams[player->aiDifficultyIndex][0].useChance * 0x202;
     }
 
-    diff = D_800BAA9C_AA94C[player->finishPosition] - player->speedHandicap;
+    diff = D_800BAA9C_AA94C[player->finishPosition] - player->catchUpSpeedAdjustment;
     refPlayerProgress = (gameState->finalLapNumber - gameState->players[gameState->rankOrder[0]].currentLap) * 8192 +
-                        gameState->players[gameState->rankOrder[0]].raceProgress;
-    myProgress = (gameState->finalLapNumber - player->currentLap) * 8192 + player->raceProgress;
+                        gameState->players[gameState->rankOrder[0]].lapProgressRemaining;
+    myProgress = (gameState->finalLapNumber - player->currentLap) * 8192 + player->lapProgressRemaining;
 
     if ((myProgress - refPlayerProgress) >= 0x3A9) {
         diff += 0x8000;
     }
 
-    player->animFlags &= 0xFEFFFFFF;
+    player->animationFlags &= 0xFEFFFFFF;
     if ((player->finishPosition == (gameState->numPlayers - 1)) && (player->finishPosition != 0)) {
         s32 idx = gameState->rankOrder[player->finishPosition - 1];
         refPlayerProgress = (gameState->finalLapNumber - gameState->players[idx].currentLap) * 8192 +
-                            gameState->players[idx].raceProgress;
+                            gameState->players[idx].lapProgressRemaining;
         if ((myProgress - refPlayerProgress) >= 0x751) {
-            player->animFlags |= 0x01000000;
+            player->animationFlags |= 0x01000000;
         }
     }
 
@@ -827,9 +827,9 @@ void updateRacePlayer(Player *player) {
         diff = -0x80;
     }
 
-    player->speedHandicap += diff;
-    player->maxSpeedCap = player->maxSpeedCap + player->speedHandicap;
-    if (player->animFlags & 0x10) {
+    player->catchUpSpeedAdjustment += diff;
+    player->maxSpeedCap = player->maxSpeedCap + player->catchUpSpeedAdjustment;
+    if (player->animationFlags & 0x10) {
         player->maxSpeedCap = player->maxSpeedCap / 2;
     }
 
@@ -962,7 +962,7 @@ void updateRacePlayer(Player *player) {
 
             player->behaviorStep = 0;
             player->behaviorCounter = 0;
-            player->animFlags &= 0xFFFF2FFF;
+            player->animationFlags &= 0xFFFF2FFF;
         }
     } else {
         player->boostTimer = 0;
@@ -988,13 +988,13 @@ void updateRacePlayer(Player *player) {
         }
     }
 
-    player->animFlags = player->animFlags & 0xFFFEF7FF;
-    if (player->animFlags & 1) {
-        player->animFlags |= 0x10000;
+    player->animationFlags = player->animationFlags & 0xFFFEF7FF;
+    if (player->animationFlags & 1) {
+        player->animationFlags |= 0x10000;
     }
 
-    if (player->bodyPartAnimFlags != 0) {
-        player->bodyPartAnimFlags--;
+    if (player->bodyPartStateTimer != 0) {
+        player->bodyPartStateTimer--;
     } else {
         if (player->slowdownLevel != 0) {
             setPlayerBodyPartAnimState(player, 2, 0);
@@ -1006,8 +1006,8 @@ void updateRacePlayer(Player *player) {
     do {
     } while (D_800BAA80_AA930[player->behaviorMode](player));
 
-    player->pathFlags = 0;
-    player->animFlags &= 0xFFFDFFFF;
+    player->aiPathFlags = 0;
+    player->animationFlags &= 0xFFFDFFFF;
 
     createZRotationMatrix(&player->tiltTransform, player->rollAngle);
     createCombinedRotationMatrix(&player->orientationTransform, player->pitchAngle, player->steeringAngle);
@@ -1053,7 +1053,7 @@ s32 initPlayerForRace(Player *player) {
     player->velocity.y = 0;
     player->velocity.z = 0;
     player->rotY = 0x1000;
-    player->animFlags |= 1;
+    player->animationFlags |= 1;
 
     applyCharacterSnowboardStats(player);
 
@@ -1061,22 +1061,22 @@ s32 initPlayerForRace(Player *player) {
         BodyPartExtra *extra = (BodyPartExtra *)((u8 *)player + i * 0x3C + 0x38);
         memcpy(&extra->mtx, &identityMatrix, sizeof(Transform3D));
         if (i != 16) {
-            extra->unk5C = (s32)player->unk4;
-            extra->unk60 = (s32)player->unk8;
+            extra->unk5C = (s32)player->bodyPartDisplayListAsset;
+            extra->unk60 = (s32)player->bodyPartCompressedAsset;
             extra->unk64 = 0;
             extra->assetPtr = (void *)(&loadAssetByIndex_953B0(player->characterId, player->boardModelId)[i]);
         } else {
-            player->playerModel.displayLists = (DisplayLists *)&D_8009A550_9B150[0];
-            player->playerModel.segment1 = player->unkC;
-            player->playerModel.segment2 = player->unk10;
-            player->playerModel.segment3 = player->unk14;
+            player->snowboardDisplayObject.displayLists = (DisplayLists *)&D_8009A550_9B150[0];
+            player->snowboardDisplayObject.segment1 = player->snowboardDisplayListAsset;
+            player->snowboardDisplayObject.segment2 = player->snowboardCompressedAsset;
+            player->snowboardDisplayObject.segment3 = player->snowboardPaletteAsset;
         }
     }
 
-    player->leanAnimIndex = 0;
-    player->leanBoneCount = getAnimationBoneCount(player->unk0, 0);
-    for (i = 0; i < player->leanBoneCount; i++) {
-        resetBoneAnimation(player->unk0, player->leanAnimIndex, i, &player->unk488[i]);
+    player->animationIndex = 0;
+    player->animationBoneCount = getAnimationBoneCount(player->raceAnimationData, 0);
+    for (i = 0; i < player->animationBoneCount; i++) {
+        resetBoneAnimation(player->raceAnimationData, player->animationIndex, i, &player->boneAnimationStates[i]);
     }
 
     player->behaviorMode = 1;
@@ -1099,8 +1099,9 @@ s32 initPlayerForRace(Player *player) {
         }
     } else {
     boss_racer_init:
-        if (player->unk1C != NULL) {
-            player->aiPathData = (void *)((s32)player->unk1C + ((s32 *)player->unk1C)[player->playerIndex]);
+        if (player->bossRaceData != NULL) {
+            player->aiPathData =
+                (void *)((s32)player->bossRaceData + ((s32 *)player->bossRaceData)[player->playerIndex]);
         }
     }
 
@@ -1164,7 +1165,7 @@ s32 initPlayerForRace(Player *player) {
         v0_temp = 0xBB8;
 
     set_race_gold:
-        player->raceCoins = v0_temp;
+        player->raceGold = v0_temp;
     }
 
     return 1;
@@ -1178,7 +1179,7 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
     GameState *gameState = getCurrentAllocation();
 
     if (gameState->raceIntroState == 0) {
-        arg0->speedHandicap = 0;
+        arg0->catchUpSpeedAdjustment = 0;
         if (arg0->behaviorStep != 0) {
             if (arg0->unkB8C < 9) {
                 tryActivateRocketBoost(arg0);
@@ -1210,7 +1211,7 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
 s32 updatePlayerSlidingConstrained(Player *player) {
     Vec3i rotatedVelocity;
 
-    if (!(player->animFlags & 0x20000)) {
+    if (!(player->animationFlags & 0x20000)) {
         resetPlayerBehaviorToDefault(player);
         return 1;
     }
@@ -1234,7 +1235,7 @@ s32 updatePlayerSlidingConstrained(Player *player) {
     player->rollAngle = 0;
     player->orientationTransform.translation.x = 0;
 
-    if (player->animFlags & 2) {
+    if (player->animationFlags & 2) {
         player->pitchAngle = player->unkBB0;
         player->rotY = player->unkBB2;
     } else {
@@ -1286,17 +1287,17 @@ s32 updatePlayerNormalDriving(Player *player) {
 
     gameState = getCurrentAllocation();
 
-    if (player->animFlags & 0x80000) {
+    if (player->animationFlags & 0x80000) {
         setPlayerBehaviorPhase(player, 7);
         return 1;
     }
 
-    if (player->animFlags & 0x20000) {
+    if (player->animationFlags & 0x20000) {
         setPlayerBehaviorPhase(player, 6);
         return 1;
     }
 
-    if (player->animFlags & 1) {
+    if (player->animationFlags & 1) {
         setPlayerBehaviorPhase(player, 1);
         return 1;
     }
@@ -1306,22 +1307,22 @@ s32 updatePlayerNormalDriving(Player *player) {
         (s64)player->velocity.z * player->velocity.z
     );
 
-    if (player->inputDisabled != 0) {
-        player->unkBDC = determineAIPathChoice(player);
-        if (player->unkBDC) {
+    if (player->isCpuControlled != 0) {
+        player->cpuInputFlags = determineAIPathChoice(player);
+        if (player->cpuInputFlags) {
             setPlayerBehaviorPhase(player, 4);
             return 1;
         }
         if ((speed <= 0x5FFFF && player->snowboardId < SNOWBOARD_HIGH_TECH) ||
             (gameState->memoryPoolId == 5 && player->sectorIndex == 0 && player->snowboardId == SNOWBOARD_DRAGON)) {
             if (isPlayerNearShortcut(player) == 0) {
-                player->unkBDC = 0;
+                player->cpuInputFlags = 0;
                 setPlayerBehaviorPhase(player, 4);
                 return 1;
             }
         }
     } else {
-        if (player->inputButtons & 0x8000) {
+        if (player->inputButtonsHeld & 0x8000) {
             setPlayerBehaviorPhase(player, 4);
             return 1;
         }
@@ -1332,7 +1333,7 @@ s32 updatePlayerNormalDriving(Player *player) {
         return 1;
     }
 
-    if (player->inputDisabled == 0) {
+    if (player->isCpuControlled == 0) {
         steerTarget = -player->inputStickX * 0x32;
         if (player->inputStickX == 7) {
             if (player->inputStickY < 0) {
@@ -1462,7 +1463,7 @@ s32 updatePlayerNormalDriving(Player *player) {
     approximateCos(player->steeringAngle);
     __asm__ volatile("mult $2,%0\n\tmflo $13\n\tsw $13,0x18($sp)" : : "r"(leanScale));
 
-    if (!(player->animFlags & 2)) {
+    if (!(player->animationFlags & 2)) {
         leanOffset.x = -leanOffset.x;
     }
     leanOffset.x -= player->orientationTransform.translation.x;
@@ -1483,7 +1484,7 @@ s32 updatePlayerNormalDriving(Player *player) {
     if (speed > 0x80000) {
         speed = 0x80000;
     }
-    if (player->animFlags & 2) {
+    if (player->animationFlags & 2) {
         speed = -speed;
     }
 
@@ -1543,13 +1544,13 @@ s32 updatePlayerGroundedSliding(Player *player) {
     s32 velocityZ;
     u8 groundTimer;
 
-    if (player->inputButtons & 0xF) {
+    if (player->inputButtonsHeld & 0xF) {
         setPlayerBehaviorPhase(player, 4);
         player->behaviorStep = 5;
         resetTrickScore(player);
         return 1;
     }
-    if (!(player->animFlags & 1)) {
+    if (!(player->animationFlags & 1)) {
         if (player->behaviorCounter >= 0xBU) {
             setPlayerBehaviorPhase(player, 3);
         } else {
@@ -1561,7 +1562,7 @@ s32 updatePlayerGroundedSliding(Player *player) {
     if (groundTimer < 0x64U) {
         player->behaviorCounter = groundTimer + 1;
     }
-    if (player->inputDisabled != 0) {
+    if (player->isCpuControlled != 0) {
         calculateAITargetPosition(player);
         angleDelta =
             (s16)computeAngleToPosition(player->aiTarget.x, player->aiTarget.z, player->worldPos.x, player->worldPos.z);
@@ -1607,22 +1608,22 @@ s32 updatePlayerGroundedSliding(Player *player) {
 }
 
 s32 shouldInitiateSharpTurn(Player *player, s32 steeringValue) {
-    if (player->inputDisabled != 0) {
+    if (player->isCpuControlled != 0) {
         goto end;
     }
-    if (player->raceProgress == 0) {
+    if (player->lapProgressRemaining == 0) {
         goto end;
     }
     if (player->unkBC2 != 0) {
         goto end;
     }
     if (0x8000 < steeringValue) {
-        if (player->animFlags & 2) {
+        if (player->animationFlags & 2) {
             return 1;
         }
     }
     if (steeringValue < -0x8000) {
-        if (player->animFlags & 2) {
+        if (player->animationFlags & 2) {
             goto end;
         }
         return 1;
@@ -1646,7 +1647,7 @@ s32 updateSharpTurnSlidingStep(Player *player) {
     s16 clampedAngle;
     s32 frameCounter;
 
-    if (player->animFlags & 0x20000) {
+    if (player->animationFlags & 0x20000) {
         setPlayerBehaviorPhase(player, 6);
         return 1;
     }
@@ -1656,7 +1657,7 @@ s32 updateSharpTurnSlidingStep(Player *player) {
         return 1;
     }
 
-    if (player->animFlags & 1) {
+    if (player->animationFlags & 1) {
         setPlayerBehaviorPhase(player, 1);
         return 1;
     }
@@ -1695,19 +1696,19 @@ s32 endSharpTurnSlidingStep(Player *player) {
     s32 flags;
 
     player->behaviorStep = player->behaviorStep + 1;
-    flags = player->animFlags;
+    flags = player->animationFlags;
 
     if (flags & 2) {
-        player->animFlags = flags & ~2;
+        player->animationFlags = flags & ~2;
     } else {
-        player->animFlags = flags | 2;
+        player->animationFlags = flags | 2;
     }
 
     return 1;
 }
 
 s32 recoverSharpTurnSlidingStep(Player *player) {
-    if (player->animFlags & 0x20000) {
+    if (player->animationFlags & 0x20000) {
         setPlayerBehaviorPhase(player, 6);
         return 1;
     }
@@ -1717,7 +1718,7 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
         return 1;
     }
 
-    if (player->animFlags & 1) {
+    if (player->animationFlags & 1) {
         setPlayerBehaviorPhase(player, 1);
         return 1;
     }
@@ -1739,7 +1740,7 @@ s32 recoverSharpTurnSlidingStep(Player *player) {
 s32 initPostTrickLandingStep(Player *player) {
     u8 behaviorStep;
 
-    if (player->animFlags & 0x20000) {
+    if (player->animationFlags & 0x20000) {
         setPlayerBehaviorPhase(player, 6);
         startRumbleEffect(player, 0);
         queueSoundAtPosition(&player->worldPos, 0x25);
@@ -1753,7 +1754,7 @@ s32 initPostTrickLandingStep(Player *player) {
         return 1;
     }
 
-    if (player->animFlags & 1) {
+    if (player->animationFlags & 1) {
         setPlayerBehaviorPhase(player, 1);
         startRumbleEffect(player, 0);
         queueSoundAtPosition(&player->worldPos, 0x25);
@@ -1799,14 +1800,14 @@ s32 beginPostTrickSlidingStep(Player *player) {
     player->steeringAngle = 0;
     onTrickCompletedHook(player);
     player->trickCount = 0;
-    player->unkBCD = -1;
+    player->queuedTrickType = -1;
     return 1;
 }
 
 s32 updatePostTrickSlidingStep(Player *player) {
     s32 steeringValue;
 
-    if (player->animFlags & 0x20000) {
+    if (player->animationFlags & 0x20000) {
         setPlayerBehaviorPhase(player, 6);
         return 1;
     }
@@ -1816,7 +1817,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
         return 1;
     }
 
-    if (player->animFlags & 1) {
+    if (player->animationFlags & 1) {
         setPlayerBehaviorPhase(player, 1);
         return 1;
     }
@@ -1826,7 +1827,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
     steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->lateralDeadzone);
     applyBoostVelocity(player);
 
-    if (!(player->inputButtons & 0x8000)) {
+    if (!(player->inputButtonsHeld & 0x8000)) {
         player->behaviorCounter = 1;
     }
 
@@ -1849,7 +1850,7 @@ s32 updatePostTrickSlidingStep(Player *player) {
 s32 updatePostTrickChargingStep(Player *player) {
     s32 steeringValue;
 
-    if (player->animFlags & 0x20000) {
+    if (player->animationFlags & 0x20000) {
         setPlayerBehaviorPhase(player, 6);
         return 1;
     }
@@ -1859,7 +1860,7 @@ s32 updatePostTrickChargingStep(Player *player) {
         return 1;
     }
 
-    if (player->animFlags & 1) {
+    if (player->animationFlags & 1) {
         setPlayerBehaviorPhase(player, 1);
         return 1;
     }
@@ -1869,13 +1870,13 @@ s32 updatePostTrickChargingStep(Player *player) {
     steeringValue = applyVelocityDeadzone(player, 0x200, 0x200, player->lateralDeadzone);
     applyBoostVelocity(player);
 
-    if (!(player->inputButtons & 0x8000)) {
-        if (player->inputDisabled != 0 && player->unkBDC != 0) {
+    if (!(player->inputButtonsHeld & 0x8000)) {
+        if (player->isCpuControlled != 0 && player->cpuInputFlags != 0) {
             player->unkB8C = 0x10000;
         }
         player->behaviorCounter = 1;
         if (player->unkB8C > 0xFFFF) {
-            player->unkBCD = getTrickType(player);
+            player->queuedTrickType = getTrickType(player);
         }
     } else {
         getTrickType(player);
@@ -1908,15 +1909,15 @@ s32 beginPostTrickLaunchStep(Player *player) {
     player->behaviorStep++;
     D_800BAB40_AA9F0 = player->unkB8C + player->baseAcceleration;
 
-    if (*(volatile s32 *)&player->animFlags & 2) {
+    if (*(volatile s32 *)&player->animationFlags & 2) {
         D_800BAB44_AA9F4 = 0xFFFE0000;
     } else {
         D_800BAB44_AA9F4 = 0x20000;
     }
 
-    if (player->inputDisabled != 0) {
-        if (player->unkBDC == 0) {
-            if (player->raceProgress != 0) {
+    if (player->isCpuControlled != 0) {
+        if (player->cpuInputFlags == 0) {
+            if (player->lapProgressRemaining != 0) {
                 launchMagnitudePtr = &D_800BAB44_AA9F4;
                 *launchMagnitudePtr = *launchMagnitudePtr * 2;
             }
@@ -1944,7 +1945,7 @@ void resetTrickScore(Player *player) {
     player->trickPoints = 0;
     player->tricksPerformedMask = 0;
     player->trickCount = 0;
-    player->unkBD5 = 0;
+    player->trickAnimationPhase = 0;
     player->spinsPerformedMask = 0;
 }
 
@@ -2021,15 +2022,15 @@ void addSpinTrickScore(Player *player, s32 spinDirection) {
 s32 updatePostTrickDescentStep(Player *player) {
     s32 pad[16];
 
-    if (player->animFlags & 1) {
+    if (player->animationFlags & 1) {
         if (player->behaviorCounter < 3) {
             resetTrickScore(player);
-            if (player->unkBCD < 0) {
+            if (player->queuedTrickType < 0) {
                 player->behaviorCounter = 0;
                 player->behaviorStep = player->behaviorStep + 1;
                 return 1;
             } else {
-                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorStep = player->queuedTrickType + 6;
                 player->behaviorCounter = 0;
                 playTrickLandingVoice(player);
                 return 1;
@@ -2058,9 +2059,9 @@ void updateTrickFacingAngle(Player *player) {
     s32 new_var;
     u16 currentAngle;
     s16 angleDelta;
-    playerFlags = player->animFlags;
+    playerFlags = player->animationFlags;
     if (!(playerFlags & 0x1000)) {
-        angleDelta = player->inputDisabled;
+        angleDelta = player->isCpuControlled;
         if (angleDelta != 0) {
             calculateAITargetPosition(player);
             angleDelta =
@@ -2097,7 +2098,7 @@ s32 tryFinalizeTrickLanding(Player *player) {
     s16 scoreValue;
 
     state = getCurrentAllocation();
-    playerFlags = player->animFlags;
+    playerFlags = player->animationFlags;
 
     if (playerFlags & 1) {
         return 0;
@@ -2207,12 +2208,12 @@ s32 updateBasicTrickAirborne(Player *player) {
 
 void beginSpinTrick(Player *player) {
     player->unkB8C = 0x200;
-    player->unkA96 = 0;
-    player->unkA98 = 0;
+    player->trickRotationX = 0;
+    player->trickRotationY = 0;
     player->unkA9A = 0;
-    player->unkBCD = -1;
+    player->queuedTrickType = -1;
     player->behaviorCounter++;
-    player->animFlags |= 0x4000;
+    player->animationFlags |= 0x4000;
     onTrickCompletedHook(player);
     queueSoundAtPosition(&player->worldPos, 0xB);
 }
@@ -2224,14 +2225,14 @@ void updateSpinTrickState(Player *player, s8 trickType) {
             addTrickScore(player, trickType);
             break;
         case 1:
-            if (player->inputDisabled != 0 || (player->inputButtons & 0x8000)) {
+            if (player->isCpuControlled != 0 || (player->inputButtonsHeld & 0x8000)) {
                 player->behaviorCounter = player->behaviorCounter + 1;
             }
             break;
         case 2:
-            if (player->inputDisabled != 0 || (!(player->inputButtons & 0x8000) && player->unkB8C == 0x200)) {
-                player->unkBCD = getTrickType(player);
-            } else if (player->inputButtons & 0x8000) {
+            if (player->isCpuControlled != 0 || (!(player->inputButtonsHeld & 0x8000) && player->unkB8C == 0x200)) {
+                player->queuedTrickType = getTrickType(player);
+            } else if (player->inputButtonsHeld & 0x8000) {
                 getTrickType(player);
             }
             break;
@@ -2247,20 +2248,20 @@ s32 updateRightSpinTrick(Player *player) {
     updateTrickAirborneVelocity(player);
 
     if (player->unkB8C != 0) {
-        if (player->unkA96 >= 0x1001) {
-            if (player->unkBCD == -1) {
+        if (player->trickRotationX >= 0x1001) {
+            if (player->queuedTrickType == -1) {
                 player->unkB8C = player->unkB8C - 0x22;
             }
         }
 
-        player->unkA96 = player->unkA96 + player->unkB8C;
+        player->trickRotationX = player->trickRotationX + player->unkB8C;
 
-        if (player->unkA96 >= 0x2000) {
+        if (player->trickRotationX >= 0x2000) {
             player->unkB8C = 0;
-            if (player->unkBCD < 0) {
-                player->animFlags = player->animFlags & ~0x4000;
+            if (player->queuedTrickType < 0) {
+                player->animationFlags = player->animationFlags & ~0x4000;
             } else {
-                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorStep = player->queuedTrickType + 6;
                 player->behaviorCounter = 0;
             }
         } else {
@@ -2282,20 +2283,20 @@ s32 updateLeftSpinTrick(Player *player) {
     updateTrickAirborneVelocity(player);
 
     if (player->unkB8C != 0) {
-        if (player->unkA96 < -0x1000) {
-            if (player->unkBCD == -1) {
+        if (player->trickRotationX < -0x1000) {
+            if (player->queuedTrickType == -1) {
                 player->unkB8C = player->unkB8C - 0x22;
             }
         }
 
-        player->unkA96 = player->unkA96 - player->unkB8C;
+        player->trickRotationX = player->trickRotationX - player->unkB8C;
 
-        if (player->unkA96 < -0x1FFF) {
+        if (player->trickRotationX < -0x1FFF) {
             player->unkB8C = 0;
-            if (player->unkBCD < 0) {
-                player->animFlags = player->animFlags & ~0x4000;
+            if (player->queuedTrickType < 0) {
+                player->animationFlags = player->animationFlags & ~0x4000;
             } else {
-                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorStep = player->queuedTrickType + 6;
                 player->behaviorCounter = 0;
             }
         } else {
@@ -2317,20 +2318,20 @@ s32 updateForwardFlipTrick(Player *player) {
     updateTrickAirborneVelocity(player);
 
     if (player->unkB8C != 0) {
-        if (player->unkA98 < -0x1000) {
-            if (player->unkBCD == -1) {
+        if (player->trickRotationY < -0x1000) {
+            if (player->queuedTrickType == -1) {
                 player->unkB8C = player->unkB8C - 0x22;
             }
         }
 
-        player->unkA98 = player->unkA98 - player->unkB8C;
+        player->trickRotationY = player->trickRotationY - player->unkB8C;
 
-        if (player->unkA98 < -0x1FFF) {
+        if (player->trickRotationY < -0x1FFF) {
             player->unkB8C = 0;
-            if (player->unkBCD < 0) {
-                player->animFlags = player->animFlags & ~0x4000;
+            if (player->queuedTrickType < 0) {
+                player->animationFlags = player->animationFlags & ~0x4000;
             } else {
-                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorStep = player->queuedTrickType + 6;
                 player->behaviorCounter = 0;
             }
         } else {
@@ -2352,20 +2353,20 @@ s32 updateBackwardFlipTrick(Player *player) {
     updateTrickAirborneVelocity(player);
 
     if (player->unkB8C != 0) {
-        if (player->unkA98 >= 0x1001) {
-            if (player->unkBCD == -1) {
+        if (player->trickRotationY >= 0x1001) {
+            if (player->queuedTrickType == -1) {
                 player->unkB8C = player->unkB8C - 0x22;
             }
         }
 
-        player->unkA98 = player->unkA98 + player->unkB8C;
+        player->trickRotationY = player->trickRotationY + player->unkB8C;
 
-        if (player->unkA98 >= 0x2000) {
+        if (player->trickRotationY >= 0x2000) {
             player->unkB8C = 0;
-            if (player->unkBCD < 0) {
-                player->animFlags = player->animFlags & ~0x4000;
+            if (player->queuedTrickType < 0) {
+                player->animationFlags = player->animationFlags & ~0x4000;
             } else {
-                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorStep = player->queuedTrickType + 6;
                 player->behaviorCounter = 0;
             }
         } else {
@@ -2387,21 +2388,21 @@ s32 updateRightForwardFlipTrick(Player *player) {
     updateTrickAirborneVelocity(player);
 
     if (player->unkB8C != 0) {
-        if (player->unkA96 >= 0x1001) {
-            if (player->unkBCD == -1) {
+        if (player->trickRotationX >= 0x1001) {
+            if (player->queuedTrickType == -1) {
                 player->unkB8C = player->unkB8C - 0x22;
             }
         }
 
-        player->unkA96 = player->unkA96 + player->unkB8C;
-        player->unkA98 = player->unkA98 - player->unkB8C;
+        player->trickRotationX = player->trickRotationX + player->unkB8C;
+        player->trickRotationY = player->trickRotationY - player->unkB8C;
 
-        if (player->unkA96 >= 0x2000) {
+        if (player->trickRotationX >= 0x2000) {
             player->unkB8C = 0;
-            if (player->unkBCD < 0) {
-                player->animFlags = player->animFlags & ~0x4000;
+            if (player->queuedTrickType < 0) {
+                player->animationFlags = player->animationFlags & ~0x4000;
             } else {
-                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorStep = player->queuedTrickType + 6;
                 player->behaviorCounter = 0;
             }
         } else {
@@ -2423,21 +2424,21 @@ s32 updateRightBackwardFlipTrick(Player *player) {
     updateTrickAirborneVelocity(player);
 
     if (player->unkB8C != 0) {
-        if (player->unkA96 >= 0x1001) {
-            if (player->unkBCD == -1) {
+        if (player->trickRotationX >= 0x1001) {
+            if (player->queuedTrickType == -1) {
                 player->unkB8C = player->unkB8C - 0x22;
             }
         }
 
-        player->unkA96 = player->unkA96 + player->unkB8C;
-        player->unkA98 = player->unkA98 + player->unkB8C;
+        player->trickRotationX = player->trickRotationX + player->unkB8C;
+        player->trickRotationY = player->trickRotationY + player->unkB8C;
 
-        if (player->unkA96 >= 0x2000) {
+        if (player->trickRotationX >= 0x2000) {
             player->unkB8C = 0;
-            if (player->unkBCD < 0) {
-                player->animFlags = player->animFlags & ~0x4000;
+            if (player->queuedTrickType < 0) {
+                player->animationFlags = player->animationFlags & ~0x4000;
             } else {
-                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorStep = player->queuedTrickType + 6;
                 player->behaviorCounter = 0;
             }
         } else {
@@ -2459,21 +2460,21 @@ s32 updateLeftForwardFlipTrick(Player *player) {
     updateTrickAirborneVelocity(player);
 
     if (player->unkB8C != 0) {
-        if (player->unkA96 < -0x1000) {
-            if (player->unkBCD == -1) {
+        if (player->trickRotationX < -0x1000) {
+            if (player->queuedTrickType == -1) {
                 player->unkB8C = player->unkB8C - 0x22;
             }
         }
 
-        player->unkA96 = player->unkA96 - player->unkB8C;
-        player->unkA98 = player->unkA98 - player->unkB8C;
+        player->trickRotationX = player->trickRotationX - player->unkB8C;
+        player->trickRotationY = player->trickRotationY - player->unkB8C;
 
-        if (player->unkA96 < -0x1FFF) {
+        if (player->trickRotationX < -0x1FFF) {
             player->unkB8C = 0;
-            if (player->unkBCD < 0) {
-                player->animFlags = player->animFlags & ~0x4000;
+            if (player->queuedTrickType < 0) {
+                player->animationFlags = player->animationFlags & ~0x4000;
             } else {
-                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorStep = player->queuedTrickType + 6;
                 player->behaviorCounter = 0;
             }
         } else {
@@ -2495,21 +2496,21 @@ s32 updateLeftBackwardFlipTrick(Player *player) {
     updateTrickAirborneVelocity(player);
 
     if (player->unkB8C != 0) {
-        if (player->unkA96 < -0x1000) {
-            if (player->unkBCD == -1) {
+        if (player->trickRotationX < -0x1000) {
+            if (player->queuedTrickType == -1) {
                 player->unkB8C = player->unkB8C - 0x22;
             }
         }
 
-        player->unkA96 = player->unkA96 - player->unkB8C;
-        player->unkA98 = player->unkA98 + player->unkB8C;
+        player->trickRotationX = player->trickRotationX - player->unkB8C;
+        player->trickRotationY = player->trickRotationY + player->unkB8C;
 
-        if (player->unkA96 < -0x1FFF) {
+        if (player->trickRotationX < -0x1FFF) {
             player->unkB8C = 0;
-            if (player->unkBCD < 0) {
-                player->animFlags = player->animFlags & ~0x4000;
+            if (player->queuedTrickType < 0) {
+                player->animationFlags = player->animationFlags & ~0x4000;
             } else {
-                player->behaviorStep = player->unkBCD + 6;
+                player->behaviorStep = player->queuedTrickType + 6;
                 player->behaviorCounter = 0;
             }
         } else {
@@ -2538,22 +2539,22 @@ s32 getInputSpinTrickAnimId(Player *player) {
 
     if (buttonsPressed & 0x1) {
         animId = 0x15;
-        if (player->animFlags & 0x2) {
+        if (player->animationFlags & 0x2) {
             animId = 0x13;
         }
     }
 
     if ((player->inputButtonsPressed & 0x2)) {
         animId = 0x13;
-        if (player->animFlags & 0x2) {
+        if (player->animationFlags & 0x2) {
             animId = 0x15;
         }
     }
 
-    if (player->inputDisabled != 0) {
-        u8 trickFlags = player->unkBDC;
+    if (player->isCpuControlled != 0) {
+        u8 trickFlags = player->cpuInputFlags;
         if (trickFlags & 0x8) {
-            player->unkBDC = trickFlags & 0xF7;
+            player->cpuInputFlags = trickFlags & 0xF7;
             animId = 0x15;
         }
     }
@@ -2565,79 +2566,79 @@ void updateFlipSpinTrickAnimation(Player *player) {
     s32 animId;
     u8 temp;
 
-    switch (player->unkBD5) {
+    switch (player->trickAnimationPhase) {
         default:
             break;
 
         case 0:
-            player->unkBD5++;
-            player->unkBD6 = 4;
+            player->trickAnimationPhase++;
+            player->currentTrickAnimation = 4;
         case 1:
             animId = getInputSpinTrickAnimId(player);
             if (animId != 0) {
-                player->unkBD6 = animId;
-                player->unkBD7 = 0;
-                player->unkBD5 = player->unkBD5 + 1;
-                player->animFlags |= 0x8000;
+                player->currentTrickAnimation = animId;
+                player->queuedTrickAnimation = 0;
+                player->trickAnimationPhase = player->trickAnimationPhase + 1;
+                player->animationFlags |= 0x8000;
             }
-            advancePlayerLeanAnimation(player, player->unkBD6);
+            advancePlayerLeanAnimation(player, player->currentTrickAnimation);
             break;
 
         case 2:
-            animId = advancePlayerLeanAnimation(player, player->unkBD6);
+            animId = advancePlayerLeanAnimation(player, player->currentTrickAnimation);
             if (animId != 0) {
-                if (player->unkBD6 == 0x17) {
+                if (player->currentTrickAnimation == 0x17) {
                     addSpinTrickScore(player, 0);
                 }
 
-                if (player->unkBD6 == 0x19) {
+                if (player->currentTrickAnimation == 0x19) {
                     addSpinTrickScore(player, 1);
                 }
 
-                if (player->unkBD6 == 0x15) {
+                if (player->currentTrickAnimation == 0x15) {
                     addSpinTrickScore(player, 2);
                 }
 
-                if (player->unkBD6 == 0x13) {
+                if (player->currentTrickAnimation == 0x13) {
                     addSpinTrickScore(player, 3);
                 }
 
-                player->unkBD5++;
-                player->unkBD6++;
+                player->trickAnimationPhase++;
+                player->currentTrickAnimation++;
             }
 
             animId = getInputSpinTrickAnimId(player);
             if (animId != 0) {
-                player->unkBD7 = animId;
+                player->queuedTrickAnimation = animId;
             }
 
             break;
 
         case 3:
-            animId = advancePlayerLeanAnimation(player, player->unkBD6);
+            animId = advancePlayerLeanAnimation(player, player->currentTrickAnimation);
             if (animId != 0) {
-                if (player->unkBD7 != 0) {
-                    player->unkBD5 = 2;
-                    player->unkBD6 = player->unkBD7;
-                    player->unkBD7 = 0;
+                if (player->queuedTrickAnimation != 0) {
+                    player->trickAnimationPhase = 2;
+                    player->currentTrickAnimation = player->queuedTrickAnimation;
+                    player->queuedTrickAnimation = 0;
                     break;
                 } else {
-                    player->animFlags &= 0xFFFF7FFF;
-                    player->unkBD5 = 1;
+                    player->animationFlags &= 0xFFFF7FFF;
+                    player->trickAnimationPhase = 1;
                 }
             }
 
             animId = getInputSpinTrickAnimId(player);
             if (animId != 0) {
-                player->unkBD7 = animId;
+                player->queuedTrickAnimation = animId;
             }
             break;
     }
 
-    if (player->animFlags & 0xC000) {
-        player->animFlags |= 0x1000;
+    if (player->animationFlags & 0xC000) {
+        player->animationFlags |= 0x1000;
     } else {
-        player->animFlags &= ~0x1000;
+        player->animationFlags &= ~0x1000;
     }
 }
 
@@ -2671,13 +2672,13 @@ s32 updateRaceFinishSlowingDownStep(Player *player) {
     speed = isqrt64((s64)player->velocity.x * player->velocity.x + (s64)player->velocity.z * player->velocity.z);
 
     if (speed <= 0x7FFF) {
-        if (!(player->animFlags & 1)) {
+        if (!(player->animationFlags & 1)) {
             player->behaviorStep += 1;
             return 1;
         }
     }
 
-    if (player->animFlags & 1) {
+    if (player->animationFlags & 1) {
         player->velocity.x -= (player->velocity.x >> 5);
         player->velocity.z -= (player->velocity.z >> 5);
         decayPlayerAirborneAngles(player);
@@ -2800,7 +2801,7 @@ s32 updateRaceFinishWaitingStep(Player *player) {
                 break;
             case RACE_TYPE_BOSS_JINGLE:
             case RACE_TYPE_BOSS_ICE:
-                if (gameState->players[1].animFlags & 0x100000) {
+                if (gameState->players[1].animationFlags & 0x100000) {
                     playerWon = 1;
                 }
                 break;
@@ -2887,7 +2888,7 @@ s32 updateRaceFinishLoseStep(Player *player) {
     u8 state;
     s32 collisionRadius;
 
-    flags = player->animFlags;
+    flags = player->animationFlags;
     velocityY = player->velocity.y;
 
     player->velocity.x = 0;
@@ -2896,7 +2897,7 @@ s32 updateRaceFinishLoseStep(Player *player) {
     flags |= 0x60;
     velocityY += -0x6000;
 
-    player->animFlags = flags;
+    player->animationFlags = flags;
     player->velocity.y = velocityY;
 
     decayPlayerSteeringAngles(player);
@@ -2971,15 +2972,15 @@ void updateTrickRotationTransform(Player *player) {
     gScaleMatrix.translation.y = 0xFFF00000;
     gScaleMatrix.translation.z = 0;
 
-    createRotationMatrixYX(&rotationMatrix, player->unkA98, player->unkA96);
+    createRotationMatrixYX(&rotationMatrix, player->trickRotationY, player->trickRotationX);
 
     rotationMatrix.translation.x = 0;
     rotationMatrix.translation.y = 0x100000;
     rotationMatrix.translation.z = 0;
 
-    composeTransform3D(temp, &rotationMatrix, &player->unk9D0);
+    composeTransform3D(temp, &rotationMatrix, &player->trickRotationTransform);
 
-    player->animFlags |= 0x800;
+    player->animationFlags |= 0x800;
 }
 
 void decayPlayerSteeringAngles(Player *player) {
@@ -3124,21 +3125,21 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     memcpy(&slopeMatrix, &identityMatrix, sizeof(Transform3D));
 
     sqrtResult = approximate_sqrt(
-        player->surfaceNormalX * player->surfaceNormalX + player->surfaceNormalZ * player->surfaceNormalZ
+        player->surfaceNormal.x * player->surfaceNormal.x + player->surfaceNormal.z * player->surfaceNormal.z
     );
     magnitude = sqrtResult & 0xFFFF;
 
     if (magnitude != 0) {
-        slopeMatrix.m[0][0] = (player->surfaceNormalZ << 13) / magnitude;
-        slopeMatrix.m[0][2] = (player->surfaceNormalX << 13) / magnitude;
-        slopeMatrix.m[2][0] = (-player->surfaceNormalX << 13) / magnitude;
-        slopeMatrix.m[2][2] = (player->surfaceNormalZ << 13) / magnitude;
+        slopeMatrix.m[0][0] = (player->surfaceNormal.z << 13) / magnitude;
+        slopeMatrix.m[0][2] = (player->surfaceNormal.x << 13) / magnitude;
+        slopeMatrix.m[2][0] = (-player->surfaceNormal.x << 13) / magnitude;
+        slopeMatrix.m[2][2] = (player->surfaceNormal.z << 13) / magnitude;
     }
 
-    pitchMatrix.m[1][1] = player->surfaceNormalY;
+    pitchMatrix.m[1][1] = player->surfaceNormal.y;
     pitchMatrix.m[1][2] = -magnitude;
     pitchMatrix.m[2][1] = magnitude;
-    pitchMatrix.m[2][2] = player->surfaceNormalY;
+    pitchMatrix.m[2][2] = player->surfaceNormal.y;
 
     func_8006BDBC_6C9BC((&slopeMatrix), &pitchMatrix, &combinedTransform);
     transformVector2(&player->velocity.x, &combinedTransform, &tempVec);
@@ -3212,7 +3213,7 @@ void initStunnedAirborneBehavior(Player *player) {
     player->boostTimer = 0;
     player->wingsTimer = 0;
     player->invincibilityTimer = 0;
-    player->animFlags = player->animFlags & 0xFFFF2FFF;
+    player->animationFlags = player->animationFlags & 0xFFFF2FFF;
     playStunnedVoice(player);
 }
 
@@ -3228,7 +3229,7 @@ s32 updateStunnedAirbornePhase(Player *player) {
     gameState = getCurrentAllocation();
 
     if (player->behaviorStep == 0) {
-        player->leanAnimIndex = 0xFFFF;
+        player->animationIndex = 0xFFFF;
         player->behaviorFlags = 0;
         player->velocity.x = player->knockbackVelocity.x;
         player->velocity.z = player->knockbackVelocity.z;
@@ -3281,7 +3282,7 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
     gameState = getCurrentAllocation();
 
     if (player->behaviorStep == 0) {
-        player->leanAnimIndex = 0xFFFF;
+        player->animationIndex = 0xFFFF;
         player->behaviorFlags = 0;
         player->velocity.x = player->knockbackVelocity.x;
         player->velocity.z = player->knockbackVelocity.z;
@@ -3324,7 +3325,7 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
 
 s32 updateStunnedFallingPhase(Player *player) {
     player->behaviorFlags = 1;
-    player->animFlags |= 0x20;
+    player->animationFlags |= 0x20;
     player->velocity.y -= 0x6000;
     player->velocity.x -= player->velocity.x >> 6;
     player->velocity.z -= player->velocity.z >> 6;
@@ -3332,12 +3333,12 @@ s32 updateStunnedFallingPhase(Player *player) {
     applyClampedVelocityToPosition(player);
 
     if (advancePlayerLeanAnimation(player, 9) != 0) {
-        if ((player->animFlags & 1) == 0) {
+        if ((player->animationFlags & 1) == 0) {
             setPlayerBehaviorPhase(player, 3);
         }
     }
 
-    player->animFlags |= 0x10000;
+    player->animationFlags |= 0x10000;
     setPlayerBodyPartAnimState(player, 3, 0);
     return 0;
 }
@@ -3351,12 +3352,12 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
         player->behaviorStep++;
     }
 
-    player->animFlags |= 0x60;
+    player->animationFlags |= 0x60;
     player->velocity.y -= 0x6000;
     player->behaviorFlags = 1;
 
-    if (player->animFlags & 1) {
-        player->leanAnimIndex = -1;
+    if (player->animationFlags & 1) {
+        player->animationIndex = -1;
         player->unkB8C = 0xA;
         player->behaviorCounter = 0;
         player->velocity.x -= (player->velocity.x >> 5);
@@ -3375,7 +3376,7 @@ s32 updateStunnedLandingBouncePhase(Player *player) {
     applyClampedVelocityToPosition(player);
 
     if (advancePlayerLeanAnimation(player, 0xA) != 0) {
-        if ((player->animFlags & 1) == 0) {
+        if ((player->animationFlags & 1) == 0) {
             if (player->unkB8C == 0) {
                 distSq = (s64)player->velocity.x * player->velocity.x + (s64)player->velocity.z * player->velocity.z;
                 dist = isqrt64(distSq);
@@ -3410,7 +3411,7 @@ s32 updateStunnedRecoveryFallingPhase(Player *player) {
 
     if (player->unkB8C != 0) {
         player->unkB8C--;
-        player->animFlags |= 0x40;
+        player->animationFlags |= 0x40;
     }
 
     targetAngle = getPlayerTargetTrackAngle(player);
@@ -3453,11 +3454,11 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
         player->behaviorStep++;
     }
 
-    player->animFlags |= 0x60;
+    player->animationFlags |= 0x60;
     player->velocity.y -= 0x6000;
     player->behaviorFlags = 3;
 
-    if (player->animFlags & 1) {
+    if (player->animationFlags & 1) {
         player->velocity.x -= player->velocity.x >> 5;
         player->velocity.z -= player->velocity.z >> 5;
     } else {
@@ -3467,7 +3468,7 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
 
     velocityMagnitude = distance_3d(player->velocity.x, player->velocity.y, player->velocity.z);
     if (velocityMagnitude <= 0xFFFF) {
-        if (player->animFlags & 2) {
+        if (player->animationFlags & 2) {
             rotateVectorY(recoverySlideBaseVelocity, player->rotY + 0x1000, &player->velocity);
         } else {
             rotateVectorY(recoverySlideBaseVelocity, player->rotY, &player->velocity);
@@ -3475,7 +3476,7 @@ s32 updateStunnedRecoveryGroundSlidePhase(Player *player) {
     }
 
     player->rotY = atan2Fixed(-player->velocity.x, -player->velocity.z);
-    if (player->animFlags & 2) {
+    if (player->animationFlags & 2) {
         player->rotY += 0x1000;
     }
 
@@ -3507,7 +3508,7 @@ s32 updateEdgeFallRecoveryGetUpPhase(Player *arg0) {
     }
 
     arg0->behaviorFlags = 7;
-    arg0->animFlags |= 0x60;
+    arg0->animationFlags |= 0x60;
 
     if (arg0->velocity.y > 0) {
         arg0->velocity.y = 0;
@@ -3515,7 +3516,7 @@ s32 updateEdgeFallRecoveryGetUpPhase(Player *arg0) {
 
     arg0->velocity.y -= 0x6000;
 
-    if (arg0->animFlags & 1) {
+    if (arg0->animationFlags & 1) {
         arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 5);
         arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 5);
     } else {
@@ -3526,7 +3527,7 @@ s32 updateEdgeFallRecoveryGetUpPhase(Player *arg0) {
     angle = atan2Fixed(-arg0->velocity.x, -arg0->velocity.z);
     arg0->rotY = angle;
 
-    if (arg0->animFlags & 2) {
+    if (arg0->animationFlags & 2) {
         arg0->rotY = angle + 0x1000;
     }
 
@@ -3535,7 +3536,7 @@ s32 updateEdgeFallRecoveryGetUpPhase(Player *arg0) {
     advancePlayerLeanAnimationAuto(arg0, 0xC);
 
     if (arg0->trackFaceType != 1) {
-        if (!(arg0->animFlags & 1)) {
+        if (!(arg0->animationFlags & 1)) {
             arg0->unkB8C++;
             if (arg0->unkB8C >= 0xB) {
                 setPlayerBehaviorPhase(arg0, 5);
@@ -3565,7 +3566,7 @@ s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
         arg0->rotY = angle;
         rotateVectorY(&arg0->knockbackVelocity, angle, &arg0->velocity);
 
-        if (arg0->animFlags & 2) {
+        if (arg0->animationFlags & 2) {
             arg0->rotY += 0x1000;
         }
 
@@ -3580,7 +3581,7 @@ s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
     }
 
     arg0->behaviorFlags = 1;
-    arg0->animFlags |= 0x20;
+    arg0->animationFlags |= 0x20;
     arg0->velocity.y -= 0x6000;
 
     vel1 = arg0->velocity.x;
@@ -3593,12 +3594,12 @@ s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
     applyClampedVelocityToPosition(arg0);
 
     if (advancePlayerLeanAnimation(arg0, 0xE) != 0) {
-        if ((arg0->animFlags & 1) == 0) {
+        if ((arg0->animationFlags & 1) == 0) {
             setPlayerBehaviorPhase(arg0, 8);
         }
     }
 
-    arg0->animFlags |= 0x10000;
+    arg0->animationFlags |= 0x10000;
     setPlayerBodyPartAnimState(arg0, 3, 0);
 
     return 0;
@@ -3611,12 +3612,12 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
         arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
-    arg0->animFlags = arg0->animFlags | 0x60;
+    arg0->animationFlags = arg0->animationFlags | 0x60;
     arg0->behaviorFlags = 1;
     arg0->velocity.y = arg0->velocity.y - 0x6000;
 
-    if (arg0->animFlags & 1) {
-        arg0->leanAnimIndex = 0xFFFF;
+    if (arg0->animationFlags & 1) {
+        arg0->animationIndex = 0xFFFF;
         arg0->unkB8C = 0xA;
         arg0->behaviorCounter = 0;
         arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 5);
@@ -3635,7 +3636,7 @@ s32 updateStunnedRecoveryBounceFallPhase(Player *arg0) {
     applyClampedVelocityToPosition(arg0);
 
     if (advancePlayerLeanAnimation(arg0, 0xF) != 0) {
-        if (!(arg0->animFlags & 1)) {
+        if (!(arg0->animationFlags & 1)) {
             if (arg0->unkB8C == 0) {
                 arg0->behaviorFlags = 0;
                 setPlayerBehaviorPhase(arg0, 0xD);
@@ -3656,7 +3657,7 @@ s32 updateStunnedRecoverySlidePhase(Player *arg0) {
     }
 
     arg0->behaviorFlags = 8;
-    arg0->animFlags = arg0->animFlags | 0x20;
+    arg0->animationFlags = arg0->animationFlags | 0x20;
 
     if (arg0->velocity.y > 0) {
         arg0->velocity.y = 0;
@@ -3683,14 +3684,14 @@ s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
         arg0->velocity.y = 0;
         arg0->unkB8C = 0x14;
         arg0->behaviorStep = arg0->behaviorStep + 1;
-        if ((arg0->animFlags & 1) == 0) {
+        if ((arg0->animationFlags & 1) == 0) {
             queueSoundAtPosition(&arg0->worldPos, 0x25);
             spawnCharacterAttackEffectByType(arg0, arg0->surfaceInfo & 0xF);
         }
     }
 
     arg0->behaviorFlags = 8;
-    arg0->animFlags = arg0->animFlags | 0x60;
+    arg0->animationFlags = arg0->animationFlags | 0x60;
 
     if (arg0->velocity.y > 0) {
         arg0->velocity.y = 0;
@@ -3705,7 +3706,7 @@ s32 updateStunnedRecoverySlideBouncePhase(Player *arg0) {
     applyClampedVelocityToPosition(arg0);
 
     if (advancePlayerLeanAnimation(arg0, 0xF) != 0) {
-        if ((arg0->animFlags & 1) == 0) {
+        if ((arg0->animationFlags & 1) == 0) {
             if (arg0->unkB8C == 0) {
                 setPlayerBehaviorPhase(arg0, 0xB);
             } else {
@@ -3735,7 +3736,7 @@ s32 updateStunnedRecoveryRespawnPhase(Player *player) {
     player->behaviorFlags = 8;
     player->velocity.x = 0;
     player->velocity.z = 0;
-    player->animFlags |= 0x60;
+    player->animationFlags |= 0x60;
     player->velocity.y -= 0x6000;
     decayPlayerSteeringAngles(player);
     applyClampedVelocityToPosition(player);
@@ -3791,13 +3792,13 @@ s32 updateStunnedRecoveryRespawnPhase(Player *player) {
             }
 
             player->behaviorFlags = 8;
-            player->animFlags &= ~2;
+            player->animationFlags &= ~2;
             player->worldPos.y =
                 getTrackHeightAtPosition(&gs->gameData, player->sectorIndex, &player->worldPos) + 0x600000;
             memcpy(&player->prevWorldPos, &player->worldPos, sizeof(Vec3i));
             player->rotY = 0x1000;
             player->rotY = pathAngle + player->rotY;
-            player->finishAnimState = 1;
+            player->finishAnimationState = 1;
             player->pitchAngle = 0;
             player->steeringAngle = 0;
             player->rollAngle = 0;
@@ -3838,12 +3839,12 @@ s32 updateStunnedRecoveryStandUpPhase(Player *arg0) {
         if (arg0->velocity.y > 0) {
             arg0->velocity.y = 0;
         }
-        arg0->leanAnimIndex = 0xFFFF;
+        arg0->animationIndex = 0xFFFF;
     }
 
     if (arg0->unkB8C != 0) {
         arg0->unkB8C--;
-        arg0->animFlags |= 0x40;
+        arg0->animationFlags |= 0x40;
     }
 
     angle = getPlayerTargetTrackAngle(arg0);
@@ -3880,13 +3881,13 @@ s32 updateKnockbackAirborneLaunchPhase(Player *player) {
     s32 prevFlags;
 
     if (!player->behaviorStep) {
-        prevFlags = player->animFlags;
+        prevFlags = player->animationFlags;
         player->behaviorStep++;
         player->velocity.y = 0xA0000;
         player->behaviorFlags = 0x20;
         player->unkB8C = 5;
-        player->leanAnimIndex = 0xFFFF;
-        player->animFlags = prevFlags | 0x20;
+        player->animationIndex = 0xFFFF;
+        player->animationFlags = prevFlags | 0x20;
     }
 
     if (player->velocity.y > 0) {
@@ -3922,7 +3923,7 @@ s32 updateKnockbackAirborneLaunchPhase(Player *player) {
         }
     }
 
-    if ((player->animFlags & 1) == 0) {
+    if ((player->animationFlags & 1) == 0) {
         setPlayerBehaviorPhase(player, 4);
     }
 
@@ -3944,8 +3945,8 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
         }
         arg0->behaviorFlags = 0x40;
         arg0->unkB8C = 0x1E;
-        arg0->leanAnimIndex = 0xFFFF;
-        arg0->animFlags |= 0x20;
+        arg0->animationIndex = 0xFFFF;
+        arg0->animationFlags |= 0x20;
         arg0->chairliftFlags &= 0xFE;
         advancePlayerLeanAnimation(arg0, 0xE);
     }
@@ -3977,7 +3978,7 @@ s32 updateStunnedPanelHitFallPhase(Player *arg0) {
 
 s32 updateStunnedBounceFallPhase(Player *arg0) {
     arg0->behaviorFlags = 1;
-    arg0->animFlags |= 0x20;
+    arg0->animationFlags |= 0x20;
     arg0->velocity.y -= 0x6000;
     arg0->velocity.x -= arg0->velocity.x >> 6;
     arg0->velocity.z -= arg0->velocity.z >> 6;
@@ -3985,7 +3986,7 @@ s32 updateStunnedBounceFallPhase(Player *arg0) {
     applyVelocityToPosition(arg0);
 
     if (advancePlayerLeanAnimation(arg0, 0xE) != 0) {
-        if ((arg0->animFlags & 1) == 0) {
+        if ((arg0->animationFlags & 1) == 0) {
             setPlayerBehaviorPhase(arg0, 8);
         }
     }
@@ -4010,7 +4011,7 @@ s32 updateStunnedBounceFallRecoverPhase(Player *arg0) {
     arg0->velocity.y = arg0->velocity.y - arg0->gravity;
     decayPlayerSteeringAngles(arg0);
 
-    if (arg0->animFlags & 1) {
+    if (arg0->animationFlags & 1) {
         arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 7);
         arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 7);
     } else {
@@ -4043,11 +4044,11 @@ s32 updateStunnedBounceLaunchPhase(Player *arg0) {
         arg0->behaviorStep = arg0->behaviorStep + 1;
     }
 
-    arg0->animFlags = arg0->animFlags | 0x60;
+    arg0->animationFlags = arg0->animationFlags | 0x60;
     arg0->behaviorFlags = 0x102;
     arg0->velocity.y = arg0->velocity.y - 0x6000;
 
-    if (arg0->animFlags & 1) {
+    if (arg0->animationFlags & 1) {
         arg0->velocity.x = arg0->velocity.x - (arg0->velocity.x >> 5);
         arg0->velocity.z = arg0->velocity.z - (arg0->velocity.z >> 5);
     } else {
@@ -4057,7 +4058,7 @@ s32 updateStunnedBounceLaunchPhase(Player *arg0) {
     angle = atan2Fixed(-arg0->velocity.x, -arg0->velocity.z);
     arg0->rotY = angle;
 
-    if (arg0->animFlags & 2) {
+    if (arg0->animationFlags & 2) {
         arg0->rotY = angle + 0x1000;
     }
 
@@ -4095,11 +4096,11 @@ s32 updateKnockbackAirbornePhase(Player *arg0) {
             arg0->velocity.z = (s64)arg0->velocity.z * 0x60000 / horizontalSpeed;
         }
         arg0->velocity.y = 0x90000;
-        arg0->leanAnimIndex = 0xFFFF;
+        arg0->animationIndex = 0xFFFF;
     }
 
     arg0->behaviorFlags = 0x200;
-    arg0->animFlags |= 0x20;
+    arg0->animationFlags |= 0x20;
     arg0->velocity.y += 0xFFFF7000;
     arg0->velocity.x -= arg0->velocity.x >> 6;
     arg0->velocity.z -= arg0->velocity.z >> 6;
@@ -4108,7 +4109,7 @@ s32 updateKnockbackAirbornePhase(Player *arg0) {
     applyVelocityToPosition(arg0);
 
     if (advancePlayerLeanAnimation(arg0, 9) != 0) {
-        if ((arg0->animFlags & 1) == 0) {
+        if ((arg0->animationFlags & 1) == 0) {
             setPlayerBehaviorPhase(arg0, 0x14);
         }
     }
@@ -4129,11 +4130,11 @@ s32 updateKnockbackBounceLaunchPhase(Player *player) {
         player->behaviorStep = player->behaviorStep + 1;
     }
 
-    player->animFlags = player->animFlags | 0x60;
+    player->animationFlags = player->animationFlags | 0x60;
     player->velocity.y = player->velocity.y - 0x6000;
     player->behaviorFlags = 0x202;
 
-    if (player->animFlags & 1) {
+    if (player->animationFlags & 1) {
         player->velocity.x = player->velocity.x - (player->velocity.x >> 5);
         player->velocity.z = player->velocity.z - (player->velocity.z >> 5);
     } else {
@@ -4143,7 +4144,7 @@ s32 updateKnockbackBounceLaunchPhase(Player *player) {
     angle = atan2Fixed(-player->velocity.x, -player->velocity.z);
     player->rotY = angle;
 
-    if (player->animFlags & 2) {
+    if (player->animationFlags & 2) {
         player->rotY = angle + 0x1000;
     }
 
@@ -4176,7 +4177,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
         step += 1;
         player->behaviorStep = step;
         player->unkB8C = 0x8000;
-        player->leanAnimIndex = 0xFFFF;
+        player->animationIndex = 0xFFFF;
         advancePlayerLeanAnimation(player, 0xE);
     }
     if ((player->behaviorStep == 1) && (createLiftEffect(player) != 0)) {
@@ -4185,7 +4186,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
     player->behaviorFlags = 0x400;
     player->velocity.x = 0;
     player->velocity.z = 0;
-    player->animFlags |= 0x20;
+    player->animationFlags |= 0x20;
     player->velocity.y = player->unkB8C;
     player->unkB8C = player->unkB8C + 0x8000;
     decayPlayerAirborneAngles(player);
@@ -4260,10 +4261,10 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
         arg0->behaviorStep = temp_v0 + 1;
         arg0->unkB8C = 0;
         arg0->velocity.y = 0;
-        arg0->leanAnimIndex = 0xFFFF;
+        arg0->animationIndex = 0xFFFF;
         advancePlayerLeanAnimation(arg0, 0xB);
         queueSoundAtPosition(&arg0->worldPos, 0x34);
-        if (!(arg0->animFlags & 1)) {
+        if (!(arg0->animationFlags & 1)) {
             spawnCharacterAttackEffectByType(arg0, arg0->surfaceInfo & 0xF);
         }
     }
@@ -4284,7 +4285,7 @@ s32 updateKnockbackHomingBouncePhase(Player *arg0) {
     arg0->behaviorFlags = 0x10;
     arg0->velocity.x = 0;
     arg0->velocity.z = 0;
-    arg0->animFlags |= 0x40;
+    arg0->animationFlags |= 0x40;
     arg0->velocity.y -= 0x6000;
     decayPlayerSteeringAngles(arg0);
     applyVelocityToPosition(arg0);
@@ -4316,11 +4317,11 @@ void dispatchKnockbackBehaviorStep(BehaviorState *arg0) {
 
 s32 beginKnockbackRecoveryStep(Player *player) {
     player->unkB8C = 10;
-    player->animFlags |= 0x180;
+    player->animationFlags |= 0x180;
 
-    if (player->animFlags & 2) {
+    if (player->animationFlags & 2) {
         player->behaviorCounter = 1;
-        player->animFlags &= ~2;
+        player->animationFlags &= ~2;
     }
 
     player->behaviorStep++;
@@ -4445,7 +4446,7 @@ s32 fallTowardShortcutWarpStep(Player *player) {
             return 0;
 
         case 1:
-            if (player->animFlags & 1) {
+            if (player->animationFlags & 1) {
                 advancePlayerLeanAnimation(player, 4);
             } else {
                 player->behaviorCounter++;
@@ -4556,7 +4557,7 @@ s32 slideDuringKnockbackRecoveryStep(Player *player) {
     }
 
     if (player->unkB8C < 0x12) {
-        player->animFlags = player->animFlags | 0x2000;
+        player->animationFlags = player->animationFlags | 0x2000;
         transformVector2(&g_KnockbackRecoveryForwardVelocity, &player->headingTransform, &player->velocity);
     }
 
@@ -4600,9 +4601,9 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
 
     if (player->behaviorCounter == 0) {
         player->rotY = 0x1000;
-        player->shortcutLapCount = 0;
+        player->shortcutActivationSnapshot = 0;
         player->sectorIndex = 0;
-        player->animFlags = player->animFlags | 0x200;
+        player->animationFlags = player->animationFlags | 0x200;
         player->behaviorCounter++;
         player->currentLap++;
 
@@ -4615,7 +4616,7 @@ s32 respawnAtFinishLineAndSlideStep(Player *player) {
 
         memcpy(&player->prevWorldPos, &player->worldPos, sizeof(Vec3i));
 
-        player->finishAnimState = 1;
+        player->finishAnimationState = 1;
         player->unkB8C = 0x32;
 
         setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
@@ -4653,7 +4654,7 @@ s32 slideForwardAndResetStep(Player *player) {
     if (player->unkB8C != 0) {
         player->unkB8C = player->unkB8C - 1;
     } else {
-        player->animFlags = player->animFlags & ~0x2380;
+        player->animationFlags = player->animationFlags & ~0x2380;
         resetPlayerBehaviorToDefault(player);
     }
 
@@ -4688,15 +4689,15 @@ s32 jumpUpwardStep(Player *player) {
     s32 updatedYOffset;
     s32 nextFrameCounter;
 
-    yOffsetDelta = player->storedPosY;
-    prevYOffset = player->unk474;
+    yOffsetDelta = player->storedPosition.y;
+    prevYOffset = player->unk470.y;
     yOffsetDelta = (yOffsetDelta - prevYOffset) * player->unkB8C;
     if (yOffsetDelta < 0) {
         yOffsetDelta += 0xF;
     }
-    player->unk474 = (yOffsetDelta >> 4) + prevYOffset;
+    player->unk470.y = (yOffsetDelta >> 4) + prevYOffset;
     player->unk480 = player->unk480 + player->unk468;
-    updatedYOffset = player->unk474;
+    updatedYOffset = player->unk470.y;
     nextFrameCounter = player->unkB8C + 1;
     player->unkB8C = nextFrameCounter;
     player->unk468 = player->unk468 - 0x6000;
@@ -4704,12 +4705,12 @@ s32 jumpUpwardStep(Player *player) {
     decayPlayerSteeringAngles(player);
     advancePlayerLeanAnimation(player, 4);
     if (player->unkB8C == 16) {
-        s32 flags = player->animFlags;
+        s32 flags = player->animationFlags;
         u8 step = player->behaviorStep;
         player->behaviorCounter = 0;
         step = step + 1;
         flags = flags | 0x2000;
-        player->animFlags = flags;
+        player->animationFlags = flags;
         player->behaviorStep = step;
         queueSoundAtPosition(&player->worldPos, 0x25);
     }
@@ -4717,9 +4718,9 @@ s32 jumpUpwardStep(Player *player) {
 }
 
 s32 restoreStoredPositionStep(Player *arg0) {
-    arg0->worldPos.x = arg0->storedPosX;
-    arg0->worldPos.y = arg0->storedPosY;
-    arg0->worldPos.z = arg0->storedPosZ;
+    arg0->worldPos.x = arg0->storedPosition.x;
+    arg0->worldPos.y = arg0->storedPosition.y;
+    arg0->worldPos.z = arg0->storedPosition.z;
     arg0->pitchAngle = arg0->storedRotY;
 
     if (advancePlayerLeanAnimation(arg0, 5) != 0) {
@@ -4735,9 +4736,9 @@ s32 handleUfoStoredPositionStep(Player *player) {
     u8 flags;
 
     gameState = getCurrentAllocation();
-    player->worldPos.x = player->storedPosX;
-    player->worldPos.y = player->storedPosY;
-    player->worldPos.z = player->storedPosZ;
+    player->worldPos.x = player->storedPosition.x;
+    player->worldPos.y = player->storedPosition.y;
+    player->worldPos.z = player->storedPosition.z;
     player->pitchAngle = player->storedRotY;
     flags = player->chairliftFlags;
 
@@ -4748,13 +4749,13 @@ s32 handleUfoStoredPositionStep(Player *player) {
 
     if (player->chairliftFlags & 2) {
         player->rotY = 0x1000;
-        player->shortcutLapCount = 0;
+        player->shortcutActivationSnapshot = 0;
         player->sectorIndex = 0;
         player->behaviorStep++;
-        player->animFlags |= 0x200;
+        player->animationFlags |= 0x200;
         player->currentLap++;
         memcpy(&player->prevWorldPos, &player->worldPos, sizeof(Vec3i));
-        player->finishAnimState = 1;
+        player->finishAnimationState = 1;
         setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
         if (player->isBossRacer == 0 && player->currentLap == gameState->finalLapNumber) {
             showGoalBanner(player->playerIndex);
@@ -4767,9 +4768,9 @@ s32 handleUfoStoredPositionStep(Player *player) {
 }
 
 s32 handleUfoAbductionRecoveryStep(Player *arg0) {
-    arg0->worldPos.x = arg0->storedPosX;
-    arg0->worldPos.y = arg0->storedPosY;
-    arg0->worldPos.z = arg0->storedPosZ;
+    arg0->worldPos.x = arg0->storedPosition.x;
+    arg0->worldPos.y = arg0->storedPosition.y;
+    arg0->worldPos.z = arg0->storedPosition.z;
     arg0->pitchAngle = arg0->storedRotY;
 
     advancePlayerLeanAnimation(arg0, 0);
@@ -4783,9 +4784,9 @@ s32 handleUfoAbductionRecoveryStep(Player *arg0) {
 }
 
 s32 waitAtStoredPositionStep(Player *arg0) {
-    arg0->worldPos.x = arg0->storedPosX;
-    arg0->worldPos.y = arg0->storedPosY;
-    arg0->worldPos.z = arg0->storedPosZ;
+    arg0->worldPos.x = arg0->storedPosition.x;
+    arg0->worldPos.y = arg0->storedPosition.y;
+    arg0->worldPos.z = arg0->storedPosition.z;
     arg0->pitchAngle = arg0->storedRotY;
 
     advancePlayerLeanAnimation(arg0, 3);
@@ -4815,7 +4816,7 @@ s32 handleFallFromUfoStep(Player *player) {
     if (player->unkB8C != 0) {
         player->unkB8C--;
     } else {
-        player->animFlags &= ~0x2380;
+        player->animationFlags &= ~0x2380;
         resetPlayerBehaviorToDefault(player);
     }
 
@@ -4877,14 +4878,14 @@ s32 maintainMaxSpinStep(Player *arg0) {
 
     if (timerRemaining == 0) {
         u8 nextStep = arg0->behaviorStep;
-        s32 flags = arg0->animFlags;
+        s32 flags = arg0->animationFlags;
         arg0->characterScaleXZ = 0x2000;
         arg0->characterScaleY = 0x2000;
         arg0->unkB8C = 10;
         nextStep = nextStep + 1;
         flags = flags | 0x800000;
         arg0->behaviorStep = nextStep;
-        arg0->animFlags = flags;
+        arg0->animationFlags = flags;
         alloc->shortcutGateState = alloc->shortcutGateState & 2;
         queueSoundAtPosition(&arg0->worldPos, 0x4E);
     }
@@ -4955,9 +4956,9 @@ s32 warpToShortcutSpinUpStep(Player *player) {
 
     if (player->behaviorCounter == 0) {
         player->rotY = 0xE00;
-        player->shortcutLapCount = 0;
+        player->shortcutActivationSnapshot = 0;
         player->sectorIndex = 0;
-        player->animFlags |= 0x200;
+        player->animationFlags |= 0x200;
         player->behaviorCounter++;
         player->currentLap++;
 
@@ -4969,7 +4970,7 @@ s32 warpToShortcutSpinUpStep(Player *player) {
 
         memcpy(&player->prevWorldPos, &player->worldPos, sizeof(Vec3i));
 
-        player->finishAnimState = 2;
+        player->finishAnimationState = 2;
         setViewportFadeValueBySlotIndex(player->playerIndex, 0, 0x10);
 
         if (player->isBossRacer == 0) {
@@ -4990,11 +4991,11 @@ s32 warpToShortcutSpinUpStep(Player *player) {
     player->characterScaleY = player->characterScaleY - 0x400;
 
     if (player->characterScaleXZ == 0x2000) {
-        player->animFlags &= 0xFF7FFFFF;
+        player->animationFlags &= 0xFF7FFFFF;
         player->behaviorStep++;
     }
 
-    player->animFlags |= 0x10000;
+    player->animationFlags |= 0x10000;
     return 0;
 }
 
@@ -5015,7 +5016,7 @@ s32 shortcutSpinDownStep(Player *player) {
         alloc->shortcutWarpPlayerCount--;
     }
 
-    player->animFlags = player->animFlags | 0x10000;
+    player->animationFlags = player->animationFlags | 0x10000;
     return 0;
 }
 
@@ -5029,7 +5030,7 @@ s32 shortcutPostSpinWaitStep(Player *player) {
         player->behaviorStep = player->behaviorStep + 1;
     }
 
-    player->animFlags = player->animFlags | 0x10000;
+    player->animationFlags = player->animationFlags | 0x10000;
     return 0;
 }
 
@@ -5041,7 +5042,7 @@ s32 shortcutLaunchStep(Player *player) {
         player->behaviorCounter = player->behaviorCounter + 1;
     }
 
-    player->animFlags = player->animFlags | 0x10000;
+    player->animationFlags = player->animationFlags | 0x10000;
     player->velocity.y = player->velocity.y - 0x6000;
     applyClampedVelocityToPosition(player);
     decayPlayerSteeringAngles(player);
@@ -5049,7 +5050,7 @@ s32 shortcutLaunchStep(Player *player) {
     if (player->unkB8C != 0) {
         player->unkB8C = player->unkB8C - 1;
     } else {
-        player->animFlags = player->animFlags & 0xFFFFDC7F;
+        player->animationFlags = player->animationFlags & 0xFFFFDC7F;
         resetPlayerBehaviorToDefault(player);
     }
 
@@ -5117,7 +5118,7 @@ void updateAndRenderRaceCharacters(void) {
             player = &gs->players[i];
             player->segmentProgress =
                 projectPositionOntoTrackSegment(&gs->gameData, player->sectorIndex, &player->worldPos);
-            player->raceProgress = getTrackSegmentFinishZoneFlag(&gs->gameData, player->sectorIndex);
+            player->lapProgressRemaining = getTrackSegmentFinishZoneFlag(&gs->gameData, player->sectorIndex);
         }
 
         {
@@ -5136,10 +5137,12 @@ void updateAndRenderRaceCharacters(void) {
                         ((gs->players[rankI].unkBC6 == gs->players[rankJ].unkBC6) &&
                          ((gs->players[rankI].currentLap < gs->players[rankJ].currentLap) ||
                           ((gs->players[rankI].currentLap == gs->players[rankJ].currentLap) &&
-                           ((gs->players[rankI].shortcutLapCount < gs->players[rankJ].shortcutLapCount) ||
-                            ((gs->players[rankI].shortcutLapCount == gs->players[rankJ].shortcutLapCount) &&
-                             ((gs->players[rankI].raceProgress > gs->players[rankJ].raceProgress) ||
-                              ((gs->players[rankI].raceProgress == gs->players[rankJ].raceProgress) &&
+                           ((gs->players[rankI].shortcutActivationSnapshot <
+                             gs->players[rankJ].shortcutActivationSnapshot) ||
+                            ((gs->players[rankI].shortcutActivationSnapshot ==
+                              gs->players[rankJ].shortcutActivationSnapshot) &&
+                             ((gs->players[rankI].lapProgressRemaining > gs->players[rankJ].lapProgressRemaining) ||
+                              ((gs->players[rankI].lapProgressRemaining == gs->players[rankJ].lapProgressRemaining) &&
                                (gs->players[rankI].segmentProgress < gs->players[rankJ].segmentProgress))))))))) {
                         rankIPtr[0x64] = rankJ;
                         rankJPtr[0x64] = rankI;
@@ -5151,21 +5154,21 @@ void updateAndRenderRaceCharacters(void) {
         switch (gs->raceType) {
             case RACE_TYPE_BOSS_JINGLE:
             case RACE_TYPE_BOSS_ICE:
-                flags = gs->players[1].animFlags;
+                flags = gs->players[1].animationFlags;
                 if (!(flags & 0x80000)) {
                     if (flags & 0x100000) {
                         showPlacementAnnouncement(0, 1);
                         spawnVictorySnowflakes(0, 0);
-                        gs->players[0].animFlags |= 0x80000;
-                        gs->players[1].animFlags |= 0x80000;
+                        gs->players[0].animationFlags |= 0x80000;
+                        gs->players[1].animationFlags |= 0x80000;
                     }
                 }
                 break;
             case RACE_TYPE_SPEED_CROSS:
                 if (gs->playerLost != 0) {
-                    flags = gs->players[0].animFlags;
+                    flags = gs->players[0].animationFlags;
                     if (!(flags & 0x80000)) {
-                        gs->players[0].animFlags = flags | 0x80000;
+                        gs->players[0].animationFlags = flags | 0x80000;
                         showPlacementAnnouncement(0, 3);
                     }
                 }
@@ -5173,9 +5176,9 @@ void updateAndRenderRaceCharacters(void) {
             case RACE_TYPE_SHOOT_CROSS:
             case RACE_TYPE_X_CROSS:
                 if (gs->playerLost != 0) {
-                    flags = gs->players[0].animFlags;
+                    flags = gs->players[0].animationFlags;
                     if (!(flags & 0x80000)) {
-                        gs->players[0].animFlags = flags | 0x80000;
+                        gs->players[0].animationFlags = flags | 0x80000;
                         showPlacementAnnouncement(0, 3);
                     }
                 }
@@ -5186,7 +5189,7 @@ void updateAndRenderRaceCharacters(void) {
             player = &gs->players[gs->rankOrder[i]];
             player->finishPosition = i;
 
-            if (player->currentLap != gs->finalLapNumber || player->raceProgress != 0 || player->unkBC6 != 0) {
+            if (player->currentLap != gs->finalLapNumber || player->lapProgressRemaining != 0 || player->unkBC6 != 0) {
                 continue;
             }
 
@@ -5197,7 +5200,7 @@ void updateAndRenderRaceCharacters(void) {
                     if (player->isBossRacer == 0) {
                         showPlacementAnnouncement(player->playerIndex, 0);
                     }
-                    player->animFlags |= 0x80000;
+                    player->animationFlags |= 0x80000;
                     player->unkBC6 = gs->unk6B;
                     gs->unk6B--;
                     break;
@@ -5208,24 +5211,24 @@ void updateAndRenderRaceCharacters(void) {
                             spawnVictorySnowflakes(0, 0);
                         } else {
                             showPlacementAnnouncement(0, 2);
-                            gs->players[0].animFlags |= 0x80000;
+                            gs->players[0].animationFlags |= 0x80000;
                         }
                     }
-                    player->animFlags |= 0x80000;
+                    player->animationFlags |= 0x80000;
                     player->unkBC6 = gs->unk6B;
                     gs->unk6B--;
                     break;
                 case RACE_TYPE_BOSS_JINGLE:
                 case RACE_TYPE_BOSS_ICE:
-                    if (!(player->animFlags & 0x80000) && player->isBossRacer != 0) {
+                    if (!(player->animationFlags & 0x80000) && player->isBossRacer != 0) {
                         showPlacementAnnouncement(0, 2);
-                        gs->players[0].animFlags |= 0x80000;
-                        player->animFlags |= 0x80000;
+                        gs->players[0].animationFlags |= 0x80000;
+                        player->animationFlags |= 0x80000;
                     }
                     break;
                 case RACE_TYPE_BATTLE:
                     if (player->isBossRacer != 0) {
-                        player->animFlags |= 0x80000;
+                        player->animationFlags |= 0x80000;
                         player->unkBC6 = gs->unk6B;
                         gs->unk6B--;
                         break;
@@ -5245,13 +5248,13 @@ void updateAndRenderRaceCharacters(void) {
                         showPlacementAnnouncement(player->playerIndex, 2);
                     }
                     spawnTotalLapDisplayTask(player);
-                    player->animFlags |= 0x80000;
+                    player->animationFlags |= 0x80000;
                     player->unkBC6 = gs->unk6B;
                     gs->unk6B--;
                     break;
                 case RACE_TYPE_TRAINING:
                     if (player->isBossRacer != 0) {
-                        player->animFlags |= 0x80000;
+                        player->animationFlags |= 0x80000;
                         player->unkBC6 = gs->unk6B;
                         gs->unk6B--;
                         break;
@@ -5266,15 +5269,15 @@ void updateAndRenderRaceCharacters(void) {
                     } else {
                         showPlacementAnnouncement(player->playerIndex, 2);
                     }
-                    player->animFlags |= 0x80000;
+                    player->animationFlags |= 0x80000;
                     player->unkBC6 = gs->unk6B;
                     gs->unk6B--;
                     break;
                 case 4:
                 case 5:
                 case 6:
-                    if (!(player->animFlags & 0x80000)) {
-                        player->animFlags |= 0x80000;
+                    if (!(player->animationFlags & 0x80000)) {
+                        player->animationFlags |= 0x80000;
                         player->unkBC6 = gs->unk6B;
                         gs->unk6B--;
                         showPlacementAnnouncement(player->playerIndex, 0);
@@ -5350,18 +5353,18 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
     temp2 = &savedPos;
     memcpy(&player->headingTransform.translation, &player->worldPos, sizeof(Vec3i));
 
-    if (!(player->animFlags & 0x100)) {
+    if (!(player->animationFlags & 0x100)) {
         memcpy(temp2, &player->worldPos, sizeof(Vec3i));
 
         if (handlePlayerTrackWallCollision(player) == -1 &&
             ((savedPos.x != player->worldPos.x) || (savedPos.z != player->worldPos.z))) {
-            player->animFlags |= 0x10;
+            player->animationFlags |= 0x10;
             savedPos.x = player->worldPos.x - savedPos.x;
             savedPos.z = player->worldPos.z - savedPos.z;
             sqrtDist = isqrt64((s64)savedPos.x * savedPos.x + (s64)savedPos.z * savedPos.z);
 
             if (sqrtDist > 0x8000) {
-                if (player->animFlags & 0x1000) {
+                if (player->animationFlags & 0x1000) {
                     setPlayerPullState(player, &savedPos);
                 } else {
                     createYRotationMatrix(&matrix, player->rotY + player->steeringAngle);
@@ -5369,7 +5372,7 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
                     hitDirection = 0;
                     angle = atan2Fixed(transformedVec.x, transformedVec.z);
                     isFacingCollision = (angle - 0x981) < 0x67FU;
-                    if (player->animFlags & 2) {
+                    if (player->animationFlags & 2) {
                         hitAngleInFront = (angle - 0x1000) < 0x680U;
                         hitDirection = hitAngleInFront;
                         isFacingCollision = (angle - 0x981) < 0x67FU;
@@ -5420,7 +5423,7 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
                 }
             }
         } else {
-            player->animFlags &= ~0x10;
+            player->animationFlags &= ~0x10;
         }
 
         updatePlayerSectorAndClampYToTrack(player);
@@ -5432,13 +5435,13 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
         }
     }
 
-    if (!(player->animFlags & 0x200)) {
+    if (!(player->animationFlags & 0x200)) {
         alignPlayerToTrackSurface(player);
         memcpy(&player->headingTransform.translation, &player->worldPos, sizeof(Vec3i));
     }
 
-    if (player->animFlags & 0x20000) {
-        player->animFlags &= ~1;
+    if (player->animationFlags & 0x20000) {
+        player->animationFlags &= ~1;
     }
 
     findTrackFaceInSector(
@@ -5452,9 +5455,9 @@ void handlePlayerPositionAndTrackCollision(Player *player) {
     player->trackFaceSubtype = player->trackFaceType >> 4;
     player->trackFaceType &= 0xF;
 
-    if (player->animFlags & 0x10000) {
+    if (player->animationFlags & 0x10000) {
         player->trackFaceType = 0;
-    } else if (player->animFlags & 0x20000) {
+    } else if (player->animationFlags & 0x20000) {
         player->trackFaceType = 0;
         player->surfaceInfo &= 0xF0;
     }
@@ -5499,9 +5502,9 @@ void renderPlayerModel(Player *player) {
 
     gameState = getCurrentAllocation();
     loadCharacterBodyParts(player);
-    animData = getIndexedAnimationDataPtr(player->unk0, player->leanAnimIndex);
+    animData = getIndexedAnimationDataPtr(player->raceAnimationData, player->animationIndex);
 
-    if (player->animFlags & 8) {
+    if (player->animationFlags & 8) {
         composeTransform3D(
             &player->orientationTransform,
             &player->headingTransform,
@@ -5509,18 +5512,18 @@ void renderPlayerModel(Player *player) {
         );
         composeTransform3D(&player->tiltTransform, &player->orientationHeadingTransform, &tmpMtx1);
         createYRotationMatrix(&gIdentityMatrix32, 0x1000);
-        if (player->animFlags & 0x800) {
+        if (player->animationFlags & 0x800) {
             composeTransform3D(&gIdentityMatrix32, &tmpMtx1, &tmpMtx2);
-            composeTransform3D(&player->unk9D0, &tmpMtx2, &player->modelTransform);
+            composeTransform3D(&player->trickRotationTransform, &tmpMtx2, &player->modelTransform);
         } else {
             composeTransform3D(&gIdentityMatrix32, &tmpMtx1, &player->modelTransform);
         }
     } else {
         mtxDst = &player->orientationHeadingTransform;
         composeTransform3D(&player->orientationTransform, &player->headingTransform, mtxDst);
-        if (player->animFlags & 0x800) {
+        if (player->animationFlags & 0x800) {
             composeTransform3D(&player->tiltTransform, mtxDst, &tmpMtx1);
-            composeTransform3D(&player->unk9D0, &tmpMtx1, &player->modelTransform);
+            composeTransform3D(&player->trickRotationTransform, &tmpMtx1, &player->modelTransform);
         } else {
             composeTransform3D(&player->tiltTransform, mtxDst, &player->modelTransform);
         }
@@ -5544,12 +5547,12 @@ void renderPlayerModel(Player *player) {
         player->modelTransform.m[1][2] = trackHeight >> 13;
     }
 
-    for (i = 0; i < player->leanBoneCount; i++) {
+    for (i = 0; i < player->animationBoneCount; i++) {
         tmpMtx1Ptr = &tmpMtx1;
         if (animData[i].parentBone == 0xFF) {
             if (animData[i].boneIndex == 0x10) {
-                memcpy(tmpMtx1Ptr, &player->unk928, sizeof(Transform3D));
-                if (player->animFlags & 0x800000) {
+                memcpy(tmpMtx1Ptr, &player->snowboardBoneTransform, sizeof(Transform3D));
+                if (player->animationFlags & 0x800000) {
                     scaleMatrix(
                         tmpMtx1Ptr,
                         player->characterScaleXZ,
@@ -5560,29 +5563,29 @@ void renderPlayerModel(Player *player) {
                 composeTransform3D(
                     tmpMtx1Ptr,
                     &player->modelTransform,
-                    &player->boneDisplayObjects[animData[i].boneIndex].transform
+                    &player->bodyPartDisplayObjects[animData[i].boneIndex].transform
                 );
             } else {
                 composeTransform3D(
-                    &player->unk488[animData[i].boneIndex].transform.previous,
+                    &player->boneAnimationStates[animData[i].boneIndex].transform.previous,
                     &player->modelTransform,
-                    &player->boneDisplayObjects[animData[i].boneIndex].transform
+                    &player->bodyPartDisplayObjects[animData[i].boneIndex].transform
                 );
             }
         } else {
             composeTransform3D(
-                &player->unk488[animData[i].boneIndex].transform.previous,
-                &player->boneDisplayObjects[animData[i].parentBone].transform,
-                &player->boneDisplayObjects[animData[i].boneIndex].transform
+                &player->boneAnimationStates[animData[i].boneIndex].transform.previous,
+                &player->bodyPartDisplayObjects[animData[i].parentBone].transform,
+                &player->bodyPartDisplayObjects[animData[i].boneIndex].transform
             );
         }
     }
 
-    if (player->animFlags & 8) {
+    if (player->animationFlags & 8) {
         __asm__("");
         tmpMtx1Ptr = &tmpMtx1;
-        memcpy(tmpMtx1Ptr, &player->playerModel.transform, sizeof(Transform3D));
-        composeTransform3D(&gIdentityMatrix32, tmpMtx1Ptr, &player->playerModel.transform);
+        memcpy(tmpMtx1Ptr, &player->snowboardDisplayObject.transform, sizeof(Transform3D));
+        composeTransform3D(&gIdentityMatrix32, tmpMtx1Ptr, &player->snowboardDisplayObject.transform);
     }
 
     invTimer = player->invincibilityTimer;
@@ -5599,49 +5602,54 @@ void renderPlayerModel(Player *player) {
         }
     }
 
-    if (!(player->animFlags & 0x800000) || ((player->characterScaleXZ != 0) && ((u16)player->characterScaleY != 0))) {
+    if (!(player->animationFlags & 0x800000) ||
+        ((player->characterScaleXZ != 0) && ((u16)player->characterScaleY != 0))) {
         surfaceType = player->surfaceInfo >> 4;
         if (surfaceType == 0) {
             if ((((u32)player->behaviorFlags >> 7) & 1) | (snowTrailMask << 16 != 0)) {
                 {
                     s32 k;
                     for (k = 0; k < 4; k++) {
-                        enqueueDisplayListObject(k, &player->playerModel);
+                        enqueueDisplayListObject(k, &player->snowboardDisplayObject);
                     }
                 }
             } else {
                 {
                     s32 k;
                     for (k = 0; k < 4; k++) {
-                        enqueuePreLitMultiPartDisplayList(k, player->boneDisplayObjects, player->leanBoneCount);
+                        enqueuePreLitMultiPartDisplayList(
+                            k,
+                            player->bodyPartDisplayObjects,
+                            player->animationBoneCount
+                        );
                     }
                 }
             }
         } else {
             if ((((u32)player->behaviorFlags >> 7) & 1) | (snowTrailMask << 16 != 0)) {
-                player->playerModel.light1R = gBossSurfaceColors[surfaceType].primaryR;
-                player->playerModel.light1G = gBossSurfaceColors[surfaceType].primaryG;
-                player->playerModel.light1B = gBossSurfaceColors[surfaceType].primaryB;
-                player->playerModel.light2R = gBossSurfaceColors[surfaceType].secondaryR;
-                player->playerModel.light2G = gBossSurfaceColors[surfaceType].secondaryG;
-                player->playerModel.light2B = gBossSurfaceColors[surfaceType].secondaryB;
+                player->snowboardDisplayObject.light1R = gBossSurfaceColors[surfaceType].primaryR;
+                player->snowboardDisplayObject.light1G = gBossSurfaceColors[surfaceType].primaryG;
+                player->snowboardDisplayObject.light1B = gBossSurfaceColors[surfaceType].primaryB;
+                player->snowboardDisplayObject.light2R = gBossSurfaceColors[surfaceType].secondaryR;
+                player->snowboardDisplayObject.light2G = gBossSurfaceColors[surfaceType].secondaryG;
+                player->snowboardDisplayObject.light2B = gBossSurfaceColors[surfaceType].secondaryB;
                 {
                     s32 k;
                     for (k = 0; k < 4; k++) {
-                        enqueueDisplayListObjectWithLights(k, &player->playerModel);
+                        enqueueDisplayListObjectWithLights(k, &player->snowboardDisplayObject);
                     }
                 }
             } else {
-                player->boneDisplayObjects[0].light1R = gBossSurfaceColors[surfaceType].primaryR;
-                player->boneDisplayObjects[0].light1G = gBossSurfaceColors[surfaceType].primaryG;
-                player->boneDisplayObjects[0].light1B = gBossSurfaceColors[surfaceType].primaryB;
-                player->boneDisplayObjects[0].light2R = gBossSurfaceColors[surfaceType].secondaryR;
-                player->boneDisplayObjects[0].light2G = gBossSurfaceColors[surfaceType].secondaryG;
-                player->boneDisplayObjects[0].light2B = gBossSurfaceColors[surfaceType].secondaryB;
+                player->bodyPartDisplayObjects[0].light1R = gBossSurfaceColors[surfaceType].primaryR;
+                player->bodyPartDisplayObjects[0].light1G = gBossSurfaceColors[surfaceType].primaryG;
+                player->bodyPartDisplayObjects[0].light1B = gBossSurfaceColors[surfaceType].primaryB;
+                player->bodyPartDisplayObjects[0].light2R = gBossSurfaceColors[surfaceType].secondaryR;
+                player->bodyPartDisplayObjects[0].light2G = gBossSurfaceColors[surfaceType].secondaryG;
+                player->bodyPartDisplayObjects[0].light2B = gBossSurfaceColors[surfaceType].secondaryB;
                 {
                     s32 k;
                     for (k = 0; k < 4; k++) {
-                        enqueueMultiPartDisplayList(k, player->boneDisplayObjects, (s32)player->leanBoneCount);
+                        enqueueMultiPartDisplayList(k, player->bodyPartDisplayObjects, (s32)player->animationBoneCount);
                     }
                 }
             }
@@ -5687,7 +5695,7 @@ void renderPlayerModel(Player *player) {
             }
         }
     } else {
-        if (!(player->animFlags & 0x10000) || ((player->surfaceInfo & 0xF) == 4)) {
+        if (!(player->animationFlags & 0x10000) || ((player->surfaceInfo & 0xF) == 4)) {
             if (player->behaviorFlags & 6) {
                 getRumbleDuration(player, 8);
                 queueSoundAtPositionWithVolumeAndFlags(&player->worldPos, 6, 0.0f, 2, (s32)player->playerIndex, 0x80);
@@ -5789,12 +5797,12 @@ void renderPlayerModel(Player *player) {
     }
 
     snowTrailMask = 0;
-    if (!(player->animFlags & 0x2000)) {
+    if (!(player->animationFlags & 0x2000)) {
 
         for (i = 0; i < 4; i++) {
             transformVector(
                 (s16 *)&sSnowTrailCornerOffsets[i],
-                (s16 *)&player->playerModel.transform,
+                (s16 *)&player->snowboardDisplayObject.transform,
                 &snowTrailCorners[i]
             );
             trackHeight = getTrackHeightInSector(
@@ -5955,7 +5963,7 @@ void renderRacerProjectedShadow(Player *player) {
         gSPMatrix(gDisplayListAllocPtr++, player->shadowMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
         gGraphicsMode = -1;
         gSPDisplayList(gDisplayListAllocPtr++, gPlayerShadowRenderSetupDl);
-        getTableEntryByU16Index(player->assetTable, 0, &shadowTexture);
+        getTableEntryByU16Index(player->itemSpriteAssetTable, 0, &shadowTexture);
 
         gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_I, G_IM_SIZ_16b, 1, shadowTexture.data_ptr);
         gDPSetTile(
@@ -6032,7 +6040,7 @@ void updateRacerShadowSamplePositions(Player *player) {
 
     player->shadowMeshNeedsUpdate = 1;
 
-    if (!(player->animFlags & 0x800000)) {
+    if (!(player->animationFlags & 0x800000)) {
         for (sampleIndex = 0; sampleIndex < 4; sampleIndex++) {
             enqueueCallbackBySlotIndex(sampleIndex, 1, renderRacerProjectedShadow, (void *)player);
         }
@@ -6046,49 +6054,49 @@ void loadPlayerCharacterAssets(void *varg0) {
     u8 snowboardId;
 
     gameState = (GameState *)getCurrentAllocation();
-    player->unk4 = loadAssetByIndex_94F90(player->characterId, player->boardModelId);
-    player->unk8 = loadAssetByIndex_95200(player->characterId, player->boardModelId);
-    player->unk0 = loadAssetByIndex_953E0(player->characterId);
+    player->bodyPartDisplayListAsset = loadAssetByIndex_94F90(player->characterId, player->boardModelId);
+    player->bodyPartCompressedAsset = loadAssetByIndex_95200(player->characterId, player->boardModelId);
+    player->raceAnimationData = loadAssetByIndex_953E0(player->characterId);
 
     characterId = player->characterId;
     if (characterId < 6) {
-        player->unk20 = loadAssetDataDMA(player->characterId, player->boardModelId);
-        player->unk24 = loadAssetDataQueuedDMA(player->characterId, player->boardModelId);
+        player->alternateBodyPartDisplayListAsset = loadAssetDataDMA(player->characterId, player->boardModelId);
+        player->alternateBodyPartCompressedAsset = loadAssetDataQueuedDMA(player->characterId, player->boardModelId);
     }
 
-    player->unkC = loadAssetByIndex_95500(player->snowboardId);
-    player->unk10 = loadAssetByIndex_95590(player->snowboardId);
+    player->snowboardDisplayListAsset = loadAssetByIndex_95500(player->snowboardId);
+    player->snowboardCompressedAsset = loadAssetByIndex_95590(player->snowboardId);
 
     snowboardId = player->snowboardId;
     if (snowboardId < SNOWBOARD_STAR) {
-        player->unk14 = loadAssetByIndex_95668(player->colorSlot);
+        player->snowboardPaletteAsset = loadAssetByIndex_95668(player->colorSlot);
     } else {
-        player->unk14 = NULL;
+        player->snowboardPaletteAsset = NULL;
     }
 
-    player->assetTable = load_3ECE40();
+    player->itemSpriteAssetTable = load_3ECE40();
 
     if (player->isBossRacer != 0) {
-        player->unk1C = loadBossHudAssetByRaceType(gameState->memoryPoolId);
+        player->bossRaceData = loadBossHudAssetByRaceType(gameState->memoryPoolId);
     }
 
-    if (player->inputMode != 0) {
-        player->unk2C = loadAssetByIndex_5E990(player->inputRecordSet);
+    if (player->inputPlaybackMode != 0) {
+        player->inputRecordData = loadAssetByIndex_5E990(player->inputRecordSetId);
     }
 }
 
 void freePlayerCharacterAssets(Player *player) {
     s32 pad[8];
 
-    player->unk4 = freeNodeMemory(player->unk4);
-    player->unk8 = freeNodeMemory(player->unk8);
-    player->unk0 = freeNodeMemory(player->unk0);
-    player->unk20 = freeNodeMemory(player->unk20);
-    player->unk24 = freeNodeMemory(player->unk24);
-    player->unkC = freeNodeMemory(player->unkC);
-    player->unk10 = freeNodeMemory(player->unk10);
-    player->unk14 = freeNodeMemory(player->unk14);
-    player->assetTable = freeNodeMemory(player->assetTable);
-    player->unk1C = freeNodeMemory(player->unk1C);
-    player->unk2C = freeNodeMemory(player->unk2C);
+    player->bodyPartDisplayListAsset = freeNodeMemory(player->bodyPartDisplayListAsset);
+    player->bodyPartCompressedAsset = freeNodeMemory(player->bodyPartCompressedAsset);
+    player->raceAnimationData = freeNodeMemory(player->raceAnimationData);
+    player->alternateBodyPartDisplayListAsset = freeNodeMemory(player->alternateBodyPartDisplayListAsset);
+    player->alternateBodyPartCompressedAsset = freeNodeMemory(player->alternateBodyPartCompressedAsset);
+    player->snowboardDisplayListAsset = freeNodeMemory(player->snowboardDisplayListAsset);
+    player->snowboardCompressedAsset = freeNodeMemory(player->snowboardCompressedAsset);
+    player->snowboardPaletteAsset = freeNodeMemory(player->snowboardPaletteAsset);
+    player->itemSpriteAssetTable = freeNodeMemory(player->itemSpriteAssetTable);
+    player->bossRaceData = freeNodeMemory(player->bossRaceData);
+    player->inputRecordData = freeNodeMemory(player->inputRecordData);
 }
