@@ -142,9 +142,9 @@ void updateJingleTownBoss(Player *arg0) {
     );
 
     if ((arg0->finishPosition == 0) && (distanceToPlayer > 0x1000000)) {
-        arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 0) - 0x40000;
+        arg0->maxSpeedCap = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_BALANCE_LEVEL_1) - 0x40000;
     } else {
-        arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 0) + 0x180000;
+        arg0->maxSpeedCap = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_BALANCE_LEVEL_1) + 0x180000;
     }
 
     if (arg0->maxSpeedCap > 0x180000) {
@@ -257,7 +257,7 @@ s32 initJingleTownBoss(Player *arg0) {
         dispObj->param1 = (s32)arg0->unk4;
         dispObj->param2 = (s32)arg0->unk8;
         dispObj->param3 = 0;
-        dispObj->assetPointer = (void *)((s32)loadAssetByIndex_953B0(arg0->characterId, arg0->boardType) + i * 0x10);
+        dispObj->assetPointer = (void *)((s32)loadAssetByIndex_953B0(arg0->characterId, arg0->boardModelId) + i * 0x10);
     }
 
     arg0->behaviorMode = 1;

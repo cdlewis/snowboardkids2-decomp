@@ -81,9 +81,9 @@ typedef struct {
     u8 currentLevel;
     u8 numPlayers;
     u8 characterIDs[4];
-    u8 costumeIDs[4];
+    u8 snowboardIds[4];
     u8 colorSlots[4];
-    u8 boardTypes[4];
+    u8 boardModelIds[4];
     u8 lapCount;
     u8 pad1A[5];
     u8 battleTimeLimit;
@@ -137,11 +137,11 @@ typedef struct {
 } OverlayEntry;
 
 typedef struct {
-    u8 costumeID;
+    u8 snowboardId;
     u8 colorSlot;
     u8 cpuDifficulty1P;
     u8 cpuDifficultyMP;
-} CharacterCostumeConfig;
+} CharacterSnowboardConfig;
 
 typedef struct {
     u16 frame;
@@ -173,11 +173,11 @@ u8 D_80090280_90E80[16][4] = {
     { 0x00, 0x07, 0x02, 0x03 },
 };
 
-u8 D_800902C0_90EC0[16] = {
+u8 gCpuBoardModelIdsByCourse[16] = {
     0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-CharacterCostumeConfig D_800902D0_90ED0[16][6] = {
+CharacterSnowboardConfig gCpuCharacterSnowboardConfigs[16][6] = {
     { { 0, 7, 0, 0 }, { 0, 8, 0, 0 }, { 0, 9, 0, 0 }, { 0, 10, 0, 0 }, { 0, 11, 0, 0 }, { 6, 12, 0, 0 } },
     { { 0, 7, 1, 1 }, { 0, 8, 0, 0 }, { 0, 9, 0, 0 }, { 0, 10, 1, 1 }, { 0, 11, 0, 0 }, { 6, 12, 1, 1 } },
     { { 0, 7, 2, 2 }, { 0, 8, 1, 1 }, { 0, 9, 2, 2 }, { 0, 10, 1, 1 }, { 0, 11, 2, 1 }, { 6, 12, 1, 2 } },
@@ -196,7 +196,7 @@ CharacterCostumeConfig D_800902D0_90ED0[16][6] = {
     { { 1, 7, 7, 7 }, { 1, 8, 7, 7 }, { 1, 9, 7, 7 }, { 1, 10, 7, 7 }, { 4, 11, 7, 7 }, { 1, 12, 7, 7 } },
 };
 
-u8 D_80090450_91050[16] = {
+u8 gExpertCpuSnowboardIdsByCourse[16] = {
     0x0D, 0x0A, 0x02, 0x0B, 0x09, 0x0E, 0x02, 0x11, 0x0F, 0x0C, 0x02, 0x10, 0x02, 0x02, 0x02, 0x00,
 };
 
@@ -212,7 +212,7 @@ s32 gThirdPlaceGoldReward[16] = {
     1000, 2000, 2000, 0, 4000, 4000, 4000, 0, 6000, 6000, 8000, 0, 0, 0, 0, 0,
 };
 
-u8 D_80090520_91120[] = {
+u8 gSnowboardLevelTable[] = {
     0x00, 0x01, 0x02, 0x00, 0x01, 0x02, 0x00, 0x01, 0x02, 0x03,
     0x02, 0x00, 0x03, 0x03, 0x03, 0x03, 0x04, 0x05, 0x00, 0x00,
 };
@@ -618,15 +618,15 @@ void initRace(void) {
     if (raceState->raceType < RACE_TYPE_TRAINING) {
         for (i = 0; i < raceState->activePlayerCount; i++) {
             raceState->racers[i].characterId = gGameSessionContext->characterIDs[i];
-            raceState->racers[i].boardType = gGameSessionContext->boardTypes[i];
-            raceState->racers[i].costumeID = gGameSessionContext->costumeIDs[i];
+            raceState->racers[i].boardModelId = gGameSessionContext->boardModelIds[i];
+            raceState->racers[i].snowboardId = gGameSessionContext->snowboardIds[i];
             raceState->racers[i].colorSlot = gGameSessionContext->colorSlots[i];
         }
     }
 
     for (i = raceState->activePlayerCount; i < raceState->totalRacers; i++) {
         raceState->racers[i].characterId = D_80090280_90E80[raceState->currentLevel][i];
-        raceState->racers[i].boardType = D_800902C0_90EC0[raceState->currentLevel];
+        raceState->racers[i].boardModelId = gCpuBoardModelIdsByCourse[raceState->currentLevel];
         raceState->racers[i].isBossRacer = 1;
         raceState->racers[i].inputDisabled = 1;
     }
@@ -648,8 +648,8 @@ void initRace(void) {
                     break;
                 case TRAINING:
                     raceState->racers[0].characterId = 0;
-                    raceState->racers[0].boardType = 0;
-                    raceState->racers[0].costumeID = 0;
+                    raceState->racers[0].boardModelId = 0;
+                    raceState->racers[0].snowboardId = SNOWBOARD_BALANCE_LEVEL_1;
                     raceState->racers[0].colorSlot = 0;
                     break;
             }
@@ -658,8 +658,8 @@ void initRace(void) {
             switch (raceState->demoMode) {
                 case 0:
                     raceState->racers[0].characterId = 0;
-                    raceState->racers[0].boardType = 0;
-                    raceState->racers[0].costumeID = 0;
+                    raceState->racers[0].boardModelId = 0;
+                    raceState->racers[0].snowboardId = SNOWBOARD_BALANCE_LEVEL_1;
                     raceState->racers[0].colorSlot = 0;
                     raceState->racers[0].inputMode = 1;
                     raceState->racers[0].inputRecordSet = 0;
@@ -667,8 +667,8 @@ void initRace(void) {
                 case 1:
                     for (i = 0; i < 2; i++) {
                         raceState->racers[i].characterId = i;
-                        raceState->racers[i].boardType = 1;
-                        raceState->racers[i].costumeID = 0;
+                        raceState->racers[i].boardModelId = 1;
+                        raceState->racers[i].snowboardId = SNOWBOARD_BALANCE_LEVEL_1;
                         raceState->racers[i].colorSlot = i;
                         raceState->racers[i].inputMode = 1;
                         raceState->racers[i].inputRecordSet = i + 1;
@@ -677,8 +677,8 @@ void initRace(void) {
                 case 2:
                     for (i = 0; i < 4; i++) {
                         raceState->racers[i].characterId = i;
-                        raceState->racers[i].boardType = 1;
-                        raceState->racers[i].costumeID = 0;
+                        raceState->racers[i].boardModelId = 1;
+                        raceState->racers[i].snowboardId = SNOWBOARD_BALANCE_LEVEL_1;
                         raceState->racers[i].colorSlot = i;
                         raceState->racers[i].inputMode = 1;
                         raceState->racers[i].inputRecordSet = i + 3;
@@ -692,8 +692,8 @@ void initRace(void) {
             raceState->racers[3].characterId = 2;
 
             for (i = 0; i < 4; i++) {
-                raceState->racers[i].boardType = 0;
-                raceState->racers[i].costumeID = 0;
+                raceState->racers[i].boardModelId = 0;
+                raceState->racers[i].snowboardId = SNOWBOARD_BALANCE_LEVEL_1;
                 raceState->racers[i].colorSlot = i;
                 raceState->racers[i].inputRecordSet = i + 7;
                 if (raceState->demoMode == 3) {
@@ -732,27 +732,29 @@ void initRace(void) {
 
     for (i = raceState->activePlayerCount; i < raceState->totalRacers; i++) {
         if (raceState->racers[i].characterId < 6) {
-            raceState->racers[i].costumeID =
-                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterId].costumeID;
+            raceState->racers[i].snowboardId =
+                gCpuCharacterSnowboardConfigs[raceState->currentLevel][raceState->racers[i].characterId].snowboardId;
             raceState->racers[i].colorSlot =
-                D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterId].colorSlot;
+                gCpuCharacterSnowboardConfigs[raceState->currentLevel][raceState->racers[i].characterId].colorSlot;
 
             if (raceState->activePlayerCount == 1) {
                 raceState->racers[i].speedPenaltyIndex =
-                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterId].cpuDifficulty1P;
+                    gCpuCharacterSnowboardConfigs[raceState->currentLevel][raceState->racers[i].characterId]
+                        .cpuDifficulty1P;
             } else {
                 raceState->racers[i].speedPenaltyIndex =
-                    D_800902D0_90ED0[raceState->currentLevel][raceState->racers[i].characterId].cpuDifficultyMP;
+                    gCpuCharacterSnowboardConfigs[raceState->currentLevel][raceState->racers[i].characterId]
+                        .cpuDifficultyMP;
             }
 
             if (raceState->isExpertMode != 0) {
-                raceState->racers[i].costumeID = 2;
+                raceState->racers[i].snowboardId = SNOWBOARD_BALANCE_LEVEL_3;
                 if (i == 1) {
-                    raceState->racers[1].costumeID = D_80090450_91050[raceState->currentLevel];
+                    raceState->racers[1].snowboardId = gExpertCpuSnowboardIdsByCourse[raceState->currentLevel];
                 }
             }
         } else {
-            raceState->racers[i].costumeID = 13;
+            raceState->racers[i].snowboardId = SNOWBOARD_POVERTY;
             raceState->racers[i].colorSlot = 5;
             raceState->racers[i].speedPenaltyIndex = 7;
 
@@ -761,12 +763,12 @@ void initRace(void) {
             }
 
             if (raceState->racers[i].characterId != 6) {
-                raceState->racers[i].costumeID = 9;
+                raceState->racers[i].snowboardId = SNOWBOARD_STAR;
                 if (raceState->raceType == RACE_TYPE_BATTLE) {
                     raceState->racers[i].speedPenaltyIndex = 5;
                 } else {
                     raceState->racers[i].speedPenaltyIndex = 0;
-                    raceState->racers[i].costumeID = 1;
+                    raceState->racers[i].snowboardId = SNOWBOARD_BALANCE_LEVEL_2;
                 }
             }
         }
@@ -777,37 +779,37 @@ void initRace(void) {
     }
 
     if (raceState->raceType == RACE_TYPE_BATTLE) {
-        u8 maxCostumeLevel = 0;
+        u8 maxSnowboardLevel = 0;
         for (i = 0; i < raceState->activePlayerCount; i++) {
-            if (maxCostumeLevel < D_80090520_91120[raceState->racers[i].costumeID]) {
-                maxCostumeLevel = D_80090520_91120[raceState->racers[i].costumeID];
+            if (maxSnowboardLevel < gSnowboardLevelTable[raceState->racers[i].snowboardId]) {
+                maxSnowboardLevel = gSnowboardLevelTable[raceState->racers[i].snowboardId];
             }
         }
 
         for (i = raceState->activePlayerCount; i < raceState->totalRacers; i++) {
-            if (raceState->racers[i].costumeID >= 9) {
-                if (maxCostumeLevel == 4) {
-                    raceState->racers[i].costumeID = 16;
+            if (raceState->racers[i].snowboardId >= SNOWBOARD_STAR) {
+                if (maxSnowboardLevel == 4) {
+                    raceState->racers[i].snowboardId = SNOWBOARD_HIGH_TECH;
                 }
-                if (maxCostumeLevel == 5) {
-                    raceState->racers[i].costumeID = 17;
+                if (maxSnowboardLevel == 5) {
+                    raceState->racers[i].snowboardId = SNOWBOARD_DRAGON;
                 }
                 continue;
             }
 
-            if (maxCostumeLevel <= 2) {
-                raceState->racers[i].costumeID = maxCostumeLevel + (raceState->racers[i].costumeID / 3) * 3;
+            if (maxSnowboardLevel <= 2) {
+                raceState->racers[i].snowboardId = maxSnowboardLevel + (raceState->racers[i].snowboardId / 3) * 3;
                 continue;
             }
 
-            if (maxCostumeLevel == 3) {
-                raceState->racers[i].costumeID = 9;
+            if (maxSnowboardLevel == 3) {
+                raceState->racers[i].snowboardId = SNOWBOARD_STAR;
             }
-            if (maxCostumeLevel == 4) {
-                raceState->racers[i].costumeID = 16;
+            if (maxSnowboardLevel == 4) {
+                raceState->racers[i].snowboardId = SNOWBOARD_HIGH_TECH;
             }
-            if (maxCostumeLevel == 5) {
-                raceState->racers[i].costumeID = 17;
+            if (maxSnowboardLevel == 5) {
+                raceState->racers[i].snowboardId = SNOWBOARD_DRAGON;
             }
         }
     }

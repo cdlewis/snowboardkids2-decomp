@@ -140,7 +140,7 @@ typedef struct {
     /* 0x40 */ s32 velocityY;
     /* 0x44 */ s16 rotation;
     /* 0x46 */ s16 scale;
-} GhostEffectState;
+} WingsEffectState;
 
 typedef struct {
     /* 0x00 */ Transform3D transform;
@@ -328,7 +328,7 @@ typedef struct {
     /* 0x80 */ u16 yRotation;
     /* 0x82 */ u16 orbitAngle;
     /* 0x84 */ s16 scale;
-} PlayerAuraEffectState;
+} SpeedFanBoostEffectState;
 
 typedef struct {
     /* 0x00 */ s32 dataOffset;
@@ -410,9 +410,9 @@ void moveChairliftAway(ChairliftEffectState *);
 void holdChairlift(ChairliftEffectState *);
 void fadeOutChairlift(ChairliftEffectState *);
 void cleanupChairliftEffect(void *);
-void cleanupGhostEffect(GhostEffectState *);
-void updateGhostEffect(GhostEffectState *);
-void fadeOutGhostEffect(GhostEffectState *);
+void cleanupWingsEffect(WingsEffectState *);
+void updateWingsEffect(WingsEffectState *);
+void fadeOutWingsEffect(WingsEffectState *);
 void contractStarEffect(StarEffectState *);
 void updateStarEffect(StarEffectState *);
 void expandStarEffect(ExpandStarEffectState *);
@@ -436,12 +436,12 @@ void cleanupWarpEffect(WarpEffectCleanupArg *);
 void updateWarpEffect(WarpEffectState *);
 void finishWarpEffect(WarpEffectState *);
 void descendWarpEffect(WarpEffectState *);
-void cleanupPlayerAuraEffect(Func432D8Arg *);
-void updatePlayerAuraEffect(PlayerAuraEffectState *state);
-void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state);
-void cleanupPlayerFlashEffect(PlayerFlashEffectState *);
-void updatePlayerFlashEffect(PlayerFlashEffectState *);
-void fadeOutPlayerFlashEffect(PlayerFlashEffectState *);
+void cleanupSpeedFanBoostEffect(Func432D8Arg *);
+void updateSpeedFanBoostEffect(SpeedFanBoostEffectState *state);
+void fadeOutSpeedFanBoostEffect(SpeedFanBoostEffectState *state);
+void cleanupRocketBoostEffect(RocketBoostEffectState *);
+void updateRocketBoostEffect(RocketBoostEffectState *);
+void fadeOutRocketBoostEffect(RocketBoostEffectState *);
 void cleanupGoldStealEffect(void **);
 void animateGoldStealApproach(GoldStealEffectState *);
 void prepareGoldStealEffect(GoldStealEffectState *);
@@ -1339,7 +1339,7 @@ StarEffectTask *spawnStarEffectImmediate(void *arg0) {
     return task;
 }
 
-void initPlayerAuraEffect(PlayerAuraEffectState *state) {
+void initSpeedFanBoostEffect(SpeedFanBoostEffectState *state) {
     getCurrentAllocation();
     state->unk20 = &D_8009A710_9B310;
     state->unk24 = loadAsset_B7E70();
@@ -1350,11 +1350,11 @@ void initPlayerAuraEffect(PlayerAuraEffectState *state) {
     state->scale = 0x200;
     state->orbitObj.segment1 = state->unk24;
     state->orbitObj.segment2 = state->unk28;
-    setCleanupCallback(cleanupPlayerAuraEffect);
-    setCallbackWithContinue(updatePlayerAuraEffect);
+    setCleanupCallback(cleanupSpeedFanBoostEffect);
+    setCallbackWithContinue(updateSpeedFanBoostEffect);
 }
 
-void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
+void updateSpeedFanBoostEffect(SpeedFanBoostEffectState *state) {
     EffectTaskState *gameState;
     s32 i;
     Transform3D matrix;
@@ -1386,7 +1386,7 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
         if (gameState->paused == 0) {
             state->player->boostTimer--;
             if (state->player->boostTimer == 0) {
-                if (state->player->costumeID == 0x10) {
+                if (state->player->snowboardId == SNOWBOARD_HIGH_TECH) {
                     state->player->boostTimer++;
                 }
             }
@@ -1395,13 +1395,13 @@ void updatePlayerAuraEffect(PlayerAuraEffectState *state) {
             }
         }
     } else {
-        state->player->boostState = 0;
+        state->player->boostState = BOOST_STATE_NONE;
         state->fallVelocity = 0x40000;
-        setCallback(fadeOutPlayerAuraEffect);
+        setCallback(fadeOutSpeedFanBoostEffect);
     }
 }
 
-void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state) {
+void fadeOutSpeedFanBoostEffect(SpeedFanBoostEffectState *state) {
     EffectTaskState *gameState;
     s32 i;
     Transform3D matrix;
@@ -1426,15 +1426,15 @@ void fadeOutPlayerAuraEffect(PlayerAuraEffectState *state) {
     }
 }
 
-void cleanupPlayerAuraEffect(Func432D8Arg *arg0) {
+void cleanupSpeedFanBoostEffect(Func432D8Arg *arg0) {
     arg0->unk24 = freeNodeMemory(arg0->unk24);
     arg0->unk28 = freeNodeMemory(arg0->unk28);
 }
 
-void *spawnPlayerAuraEffect(Player *player) {
-    PlayerAuraEffectState *task;
+void *spawnSpeedFanBoostEffect(Player *player) {
+    SpeedFanBoostEffectState *task;
 
-    task = (PlayerAuraEffectState *)scheduleTask(initPlayerAuraEffect, 0, 0, 0xC8);
+    task = (SpeedFanBoostEffectState *)scheduleTask(initSpeedFanBoostEffect, 0, 0, 0xC8);
     if (task != NULL) {
         task->player = player;
         task->yRotation = 0;
@@ -1445,7 +1445,7 @@ void *spawnPlayerAuraEffect(Player *player) {
     return task;
 }
 
-void initPlayerFlashEffect(PlayerFlashEffectState *state) {
+void initRocketBoostEffect(RocketBoostEffectState *state) {
     getCurrentAllocation();
     state->primary.displayLists = (DisplayLists *)&D_8009A730_9B330;
     state->primary.segment1 = loadAsset_B7E70();
@@ -1455,11 +1455,11 @@ void initPlayerFlashEffect(PlayerFlashEffectState *state) {
     state->scale = 0x200;
     state->secondary.segment1 = state->primary.segment1;
     state->secondary.segment2 = state->primary.segment2;
-    setCleanupCallback(cleanupPlayerFlashEffect);
-    setCallbackWithContinue(updatePlayerFlashEffect);
+    setCleanupCallback(cleanupRocketBoostEffect);
+    setCallbackWithContinue(updateRocketBoostEffect);
 }
 
-void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
+void updateRocketBoostEffect(RocketBoostEffectState *state) {
     s32 pad[8];
     GameState *allocation;
     s32 *ptr;
@@ -1513,7 +1513,7 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
             if (state->scale == 0x2000) {
                 player2->boostTimer--;
                 player = state->player;
-                if (player->boostTimer == 0 && player->costumeID == 0x11) {
+                if (player->boostTimer == 0 && player->snowboardId == SNOWBOARD_DRAGON) {
                     player->boostTimer++;
                 }
             } else {
@@ -1524,13 +1524,13 @@ void updatePlayerFlashEffect(PlayerFlashEffectState *state) {
             }
         }
     } else {
-        player2->boostState = 0;
+        player2->boostState = BOOST_STATE_NONE;
         state->fallVelocity = 0x40000;
-        setCallback(fadeOutPlayerFlashEffect);
+        setCallback(fadeOutRocketBoostEffect);
     }
 }
 
-void fadeOutPlayerFlashEffect(PlayerFlashEffectState *state) {
+void fadeOutRocketBoostEffect(RocketBoostEffectState *state) {
     GameState *gameState;
     s32 i;
     s32 pad[7];
@@ -1549,15 +1549,15 @@ void fadeOutPlayerFlashEffect(PlayerFlashEffectState *state) {
     }
 }
 
-void cleanupPlayerFlashEffect(PlayerFlashEffectState *state) {
+void cleanupRocketBoostEffect(RocketBoostEffectState *state) {
     state->primary.segment1 = freeNodeMemory(state->primary.segment1);
     state->primary.segment2 = freeNodeMemory(state->primary.segment2);
 }
 
-PlayerFlashEffectState *spawnPlayerFlashEffect(Player *player) {
-    PlayerFlashEffectState *task;
+RocketBoostEffectState *spawnRocketBoostEffect(Player *player) {
+    RocketBoostEffectState *task;
 
-    task = (PlayerFlashEffectState *)scheduleTask(initPlayerFlashEffect, 0, 0, 0xC8);
+    task = (RocketBoostEffectState *)scheduleTask(initRocketBoostEffect, 0, 0, 0xC8);
     if (task != NULL) {
         task->player = player;
         task->yRotation = 0;
@@ -1796,18 +1796,18 @@ void spawnGoldStealEffect(void *arg0, void *arg1, s16 arg2) {
     }
 }
 
-void initGhostEffect(GhostEffectState *arg0) {
+void initWingsEffect(WingsEffectState *arg0) {
     getCurrentAllocation();
     arg0->displayData = &D_8009A760_9B360;
     arg0->asset1 = loadAsset_B7E70();
     arg0->asset2 = loadAsset_216290();
     arg0->unk2C = 0;
     arg0->scale = 0x200;
-    setCleanupCallback(cleanupGhostEffect);
-    setCallbackWithContinue(updateGhostEffect);
+    setCleanupCallback(cleanupWingsEffect);
+    setCallbackWithContinue(updateWingsEffect);
 }
 
-void updateGhostEffect(GhostEffectState *arg0) {
+void updateWingsEffect(WingsEffectState *arg0) {
     EffectTaskState *allocation;
     Player *player;
     Player *temp_player;
@@ -1843,30 +1843,30 @@ void updateGhostEffect(GhostEffectState *arg0) {
 
     player = arg0->player;
     if (player->animFlags & 0x80000) {
-        player->featherItemTimer = 0;
+        player->wingsTimer = 0;
     }
 
     temp_player = arg0->player;
-    count = temp_player->featherItemTimer;
+    count = temp_player->wingsTimer;
     if (count != 0) {
         if (allocation->paused == 0) {
-            temp_player->featherItemTimer = count - 1;
+            temp_player->wingsTimer = count - 1;
             player = arg0->player;
-            new_count = player->featherItemTimer;
+            new_count = player->wingsTimer;
             if (new_count == 0) {
-                if (player->costumeID == 0x11) {
-                    player->featherItemTimer = new_count + 1;
+                if (player->snowboardId == SNOWBOARD_DRAGON) {
+                    player->wingsTimer = new_count + 1;
                 }
             }
         }
     } else {
-        temp_player->featherItemActive = 0;
+        temp_player->wingsActive = 0;
         arg0->velocityY = 0x40000;
-        setCallback(fadeOutGhostEffect);
+        setCallback(fadeOutWingsEffect);
     }
 }
 
-void fadeOutGhostEffect(GhostEffectState *arg0) {
+void fadeOutWingsEffect(WingsEffectState *arg0) {
     GameState *state;
     s32 i;
     s32 pad[8];
@@ -1885,15 +1885,15 @@ void fadeOutGhostEffect(GhostEffectState *arg0) {
     }
 }
 
-void cleanupGhostEffect(GhostEffectState *arg0) {
+void cleanupWingsEffect(WingsEffectState *arg0) {
     arg0->asset1 = freeNodeMemory(arg0->asset1);
     arg0->asset2 = freeNodeMemory(arg0->asset2);
 }
 
-void *spawnGhostEffect(Player *arg0) {
-    GhostEffectState *task;
+void *spawnWingsEffect(Player *arg0) {
+    WingsEffectState *task;
 
-    task = scheduleTask(initGhostEffect, 0, 0, 0xC8);
+    task = scheduleTask(initWingsEffect, 0, 0, 0xC8);
     if (task != NULL) {
         task->player = arg0;
         task->rotation = 0;

@@ -27,7 +27,7 @@ typedef struct {
     /* 0x7C */ s32 fallVelocity;
     /* 0x80 */ u16 yRotation;
     /* 0x82 */ s16 scale;
-} PlayerFlashEffectState;
+} RocketBoostEffectState;
 
 void initGameSession(void);
 void resetSessionAndStartTitleScreen(void);
@@ -73,13 +73,13 @@ void spawnFloatingItemSprite(s32 x, s32 y, s32 itemType, s32 renderPriority, s32
 void spawnSkiTrailTask(Player *player);
 void drawNumericString(char *text, s16 x, s16 y, s16 z, void *texture, s16 priority, s16 layer);
 void setPlayerBouncedBackState(Player *player);
-s32 tryActivateBoost(Player *arg0);
-s32 tryActivateFinishBoost(Player *arg0);
+s32 tryActivateSpeedFanBoost(Player *arg0);
+s32 tryActivateRocketBoost(Player *arg0);
 void eepromWriteAllAsync(void *buffer);
 void spawnPushZone(s16 zoneIndex);
 void spawnItemTriggerTask(s16 arg0);
 void spawnConfettiEffectForAllPlayers(void);
-PlayerFlashEffectState *spawnPlayerFlashEffect(Player *player);
+RocketBoostEffectState *spawnRocketBoostEffect(Player *player);
 void initTitleScreen(void);
 void initLogoSplash(void);
 void initVersusMode(void);
@@ -113,7 +113,7 @@ void setPlayerParachuteState(Player *player);
 void setPlayerShrinkState(Player *arg0);
 void setPlayerFrozenState(Player *player);
 void playAttackHitVoice(Player *player);
-void playFinishBoostVoice(Player *player);
+void playRocketBoostVoice(Player *player);
 void playStunnedVoice(Player *arg0);
 
 s16 getPlayerTargetTrackAngle(Player *player);

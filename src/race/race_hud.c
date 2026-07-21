@@ -2440,17 +2440,17 @@ void updateItemBox(ItemBox *itemBox, ItemBoxController *controller) {
                     if ((player->raceCoins >= 100) || (player->inputDisabled != 0)) {
                         addPlayerRaceGold(player, -100);
                         if (itemBox->isSecondaryItemBox != 0) {
-                            if (player->secondaryItemId == 7) {
+                            if (player->secondaryItemId == SECONDARY_ITEM_ROCK) {
                                 gameState->availableHomingProjectileSlots =
                                     gameState->availableHomingProjectileSlots + 1;
                             }
                             player->secondaryItemId = rollSecondaryItemDrop(player, (u8 *)controller);
                             if (gameState->availableHomingProjectileSlots < 6) {
-                                if ((player->secondaryItemId & 0xFF) == 7) {
-                                    player->secondaryItemId = 10;
+                                if ((player->secondaryItemId & 0xFF) == SECONDARY_ITEM_ROCK) {
+                                    player->secondaryItemId = SECONDARY_ITEM_WING;
                                 }
                             }
-                            if (player->secondaryItemId == 7) {
+                            if (player->secondaryItemId == SECONDARY_ITEM_ROCK) {
                                 gameState->availableHomingProjectileSlots =
                                     gameState->availableHomingProjectileSlots - 1;
                             }

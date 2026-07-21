@@ -65,7 +65,7 @@ extern s8 gAnalogStickY[];
 extern s32 gButtonsPressed[];
 
 extern void spawnPlayerIndicatorTask(Player *);
-extern void applyCharacterBoardStats(Player *);
+extern void applyCharacterSnowboardStats(Player *);
 extern void initFlyingSceneryTask(void);
 extern s32 spawnChairliftEffect(Player *);
 extern void schedulePlayerAuraTask(Player *);
@@ -567,8 +567,8 @@ void applyBoostVelocity(Player *player) {
     gameState = getCurrentAllocation();
 
     switch (player->boostState) {
-        case 1:
-        case 7:
+        case BOOST_STATE_SPEED_FAN_FORWARD:
+        case BOOST_STATE_ROCKET_SUSTAIN_FORWARD:
             if (player->trackFaceType == 3) {
                 transformVector2(gameState->unk48 + 0x1D4, player->orientationHeadingTransform.m[0], &result);
             } else {
@@ -578,8 +578,8 @@ void applyBoostVelocity(Player *player) {
             player->velocity.y += result.y;
             player->velocity.z += result.z;
             break;
-        case 2:
-        case 8:
+        case BOOST_STATE_SPEED_FAN_REVERSE:
+        case BOOST_STATE_ROCKET_SUSTAIN_REVERSE:
             if (player->trackFaceType == 3) {
                 transformVector2(gameState->unk48 + 0x1E0, player->orientationHeadingTransform.m[0], &result);
             } else {
@@ -589,7 +589,7 @@ void applyBoostVelocity(Player *player) {
             player->velocity.y += result.y;
             player->velocity.z += result.z;
             break;
-        case 5: {
+        case BOOST_STATE_ROCKET_IMPULSE_FORWARD: {
             s32 velZ;
             s32 resultZ;
             transformVector2(gameState->unk48 + 0xCC, player->orientationHeadingTransform.m[0], &result);
@@ -597,11 +597,11 @@ void applyBoostVelocity(Player *player) {
             player->velocity.y += result.y;
             velZ = player->velocity.z;
             resultZ = result.z;
-            player->boostState = 7;
+            player->boostState = BOOST_STATE_ROCKET_SUSTAIN_FORWARD;
             player->velocity.z = velZ + resultZ;
             break;
         }
-        case 6: {
+        case BOOST_STATE_ROCKET_IMPULSE_REVERSE: {
             s32 velZ;
             s32 resultZ;
             transformVector2(gameState->unk48 + 0xD8, player->orientationHeadingTransform.m[0], &result);
@@ -609,7 +609,7 @@ void applyBoostVelocity(Player *player) {
             player->velocity.y += result.y;
             velZ = player->velocity.z;
             resultZ = result.z;
-            player->boostState = 8;
+            player->boostState = BOOST_STATE_ROCKET_SUSTAIN_REVERSE;
             player->velocity.z = velZ + resultZ;
             break;
         }
@@ -792,7 +792,7 @@ void updateRacePlayer(Player *player) {
     }
 
     player->gravity = player->baseGravity;
-    if (player->featherItemActive != 0) {
+    if (player->wingsActive != 0) {
         player->gravity = 0x3000;
     }
 
@@ -833,16 +833,16 @@ void updateRacePlayer(Player *player) {
         player->maxSpeedCap = player->maxSpeedCap / 2;
     }
 
-    if (player->boostState != 0) {
+    if (player->boostState != BOOST_STATE_NONE) {
         switch (player->boostState) {
-            case 1:
-            case 2:
+            case BOOST_STATE_SPEED_FAN_FORWARD:
+            case BOOST_STATE_SPEED_FAN_REVERSE:
                 player->maxSpeedCap += 0x20000;
                 break;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
+            case BOOST_STATE_ROCKET_IMPULSE_FORWARD:
+            case BOOST_STATE_ROCKET_IMPULSE_REVERSE:
+            case BOOST_STATE_ROCKET_SUSTAIN_FORWARD:
+            case BOOST_STATE_ROCKET_SUSTAIN_REVERSE:
                 player->maxSpeedCap += 0x100000;
                 break;
         }
@@ -868,7 +868,7 @@ void updateRacePlayer(Player *player) {
     }
 
     player->smoothedSpeedCap += diff;
-    if (player->boostState >= 5 && player->smoothedSpeedCap < player->maxSpeedCap) {
+    if (player->boostState >= BOOST_STATE_ROCKET_IMPULSE_FORWARD && player->smoothedSpeedCap < player->maxSpeedCap) {
         player->smoothedSpeedCap = player->maxSpeedCap;
     }
 
@@ -876,7 +876,7 @@ void updateRacePlayer(Player *player) {
         if (player->hitReactionState != 0) {
             player->behaviorMode = 2;
             player->boostTimer = 0;
-            player->featherItemTimer = 0;
+            player->wingsTimer = 0;
             player->invincibilityTimer = 0;
 
             switch (player->hitReactionState) {
@@ -966,24 +966,24 @@ void updateRacePlayer(Player *player) {
         }
     } else {
         player->boostTimer = 0;
-        player->featherItemTimer = 0;
+        player->wingsTimer = 0;
     }
     {
         u16 invTimerLocal = player->invincibilityTimer;
         player->hitReactionState = 0;
         if (invTimerLocal != 0) {
             player->invincibilityTimer = invTimerLocal - 1;
-            if ((player->costumeID == 0xF) && ((u16)(invTimerLocal - 1) < 0xBU)) {
+            if ((player->snowboardId == SNOWBOARD_NINJA) && ((u16)(invTimerLocal - 1) < 0xBU)) {
                 player->invincibilityTimer = invTimerLocal;
             }
         }
     }
 
     if (gameState->raceIntroState == 0 && !(gGlobalFrameCounter & 3)) {
-        if (player->costumeID == 0xE) {
+        if (player->snowboardId == SNOWBOARD_RICH) {
             addPlayerRaceGold(player, 1);
         }
-        if (player->costumeID == 0xD) {
+        if (player->snowboardId == SNOWBOARD_POVERTY) {
             addPlayerRaceGold(player, -1);
         }
     }
@@ -1055,7 +1055,7 @@ s32 initPlayerForRace(Player *player) {
     player->rotY = 0x1000;
     player->animFlags |= 1;
 
-    applyCharacterBoardStats(player);
+    applyCharacterSnowboardStats(player);
 
     for (i = 0; i < 17; i++) {
         BodyPartExtra *extra = (BodyPartExtra *)((u8 *)player + i * 0x3C + 0x38);
@@ -1064,7 +1064,7 @@ s32 initPlayerForRace(Player *player) {
             extra->unk5C = (s32)player->unk4;
             extra->unk60 = (s32)player->unk8;
             extra->unk64 = 0;
-            extra->assetPtr = (void *)(&loadAssetByIndex_953B0(player->characterId, player->boardType)[i]);
+            extra->assetPtr = (void *)(&loadAssetByIndex_953B0(player->characterId, player->boardModelId)[i]);
         } else {
             player->playerModel.displayLists = (DisplayLists *)&D_8009A550_9B150[0];
             player->playerModel.segment1 = player->unkC;
@@ -1146,19 +1146,19 @@ s32 initPlayerForRace(Player *player) {
     case_0:
         player->primaryItemId = 2;
         player->primaryItemAmmo = 3;
-        player->secondaryItemId = 5;
+        player->secondaryItemId = SECONDARY_ITEM_ROCKET;
         goto set_race_gold_after_unkBD4;
 
     case_1_or_2:
         player->primaryItemId = 1;
         player->primaryItemAmmo = 3;
-        player->secondaryItemId = 1;
+        player->secondaryItemId = SECONDARY_ITEM_PAN;
         goto set_race_gold_after_unkBD4;
 
     case_3:
         player->primaryItemId = 3;
         player->primaryItemAmmo = 3;
-        player->secondaryItemId = 1;
+        player->secondaryItemId = SECONDARY_ITEM_PAN;
 
     set_race_gold_after_unkBD4:
         v0_temp = 0xBB8;
@@ -1181,7 +1181,7 @@ s32 updatePlayerFinishWaiting(Player *arg0) {
         arg0->speedHandicap = 0;
         if (arg0->behaviorStep != 0) {
             if (arg0->unkB8C < 9) {
-                tryActivateFinishBoost(arg0);
+                tryActivateRocketBoost(arg0);
             }
         }
         resetPlayerBehaviorToDefault(arg0);
@@ -1312,8 +1312,8 @@ s32 updatePlayerNormalDriving(Player *player) {
             setPlayerBehaviorPhase(player, 4);
             return 1;
         }
-        if ((speed <= 0x5FFFF && player->costumeID < 0x10U) ||
-            (gameState->memoryPoolId == 5 && player->sectorIndex == 0 && player->costumeID == 0x11)) {
+        if ((speed <= 0x5FFFF && player->snowboardId < SNOWBOARD_HIGH_TECH) ||
+            (gameState->memoryPoolId == 5 && player->sectorIndex == 0 && player->snowboardId == SNOWBOARD_DRAGON)) {
             if (isPlayerNearShortcut(player) == 0) {
                 player->unkBDC = 0;
                 setPlayerBehaviorPhase(player, 4);
@@ -3210,7 +3210,7 @@ void initStunnedAirborneBehavior(Player *player) {
     player->behaviorStep = 0;
     player->behaviorCounter = 0;
     player->boostTimer = 0;
-    player->featherItemTimer = 0;
+    player->wingsTimer = 0;
     player->invincibilityTimer = 0;
     player->animFlags = player->animFlags & 0xFFFF2FFF;
     playStunnedVoice(player);
@@ -4192,7 +4192,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
     player->rotY = (u16)player->rotY + 0x200;
     applyVelocityToPosition(player);
     if (player->unkB8C > 0x7FFFF) {
-        if (player->secondaryItemId != 0) {
+        if (player->secondaryItemId != SECONDARY_ITEM_NONE) {
             if (player->primaryItemId != 0) {
                 if (randA() & 1) {
                     if (spawnItemHomingProjectile(
@@ -4214,7 +4214,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
                         1,
                         player->secondaryItemId
                     ) != 0) {
-                    player->secondaryItemId = 0;
+                    player->secondaryItemId = SECONDARY_ITEM_NONE;
                 }
                 goto spawn_done;
             }
@@ -4233,7 +4233,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
             }
         } else {
         check_secondary_item:
-            if (player->secondaryItemId != 0) {
+            if (player->secondaryItemId != SECONDARY_ITEM_NONE) {
                 if (spawnItemHomingProjectile(
                         &player->worldPos.x,
                         player->sectorIndex,
@@ -4241,7 +4241,7 @@ s32 updateKnockbackLaunchWithHomingProjectilesPhase(Player *player) {
                         1,
                         player->secondaryItemId
                     ) != 0) {
-                    player->secondaryItemId = 0;
+                    player->secondaryItemId = SECONDARY_ITEM_NONE;
                 }
             }
         }
@@ -5654,9 +5654,9 @@ void renderPlayerModel(Player *player) {
     }
 
     boostState = player->boostState;
-    if (boostState != 0) {
+    if (boostState != BOOST_STATE_NONE) {
         if (boostState + 1 != 1) {
-            if (boostState < 3) {
+            if (boostState < BOOST_STATE_ROCKET_START_FORWARD) {
                 queueSoundAtPositionWithVolumeAndFlags(
                     &player->worldPos,
                     0x1B,
@@ -5668,8 +5668,8 @@ void renderPlayerModel(Player *player) {
                 if (player->boostTimer >= 0x78) {
                     getRumbleDuration(player, 9);
                 }
-            } else if (boostState < 9) {
-                if (boostState >= 5) {
+            } else if (boostState <= BOOST_STATE_ROCKET_SUSTAIN_REVERSE) {
+                if (boostState >= BOOST_STATE_ROCKET_IMPULSE_FORWARD) {
                     if (player->boostTimer != 0) {
                         queueSoundAtPositionWithVolumeAndFlags(
                             &player->worldPos,
@@ -6043,24 +6043,24 @@ void loadPlayerCharacterAssets(void *varg0) {
     Player *player = (Player *)varg0;
     GameState *gameState;
     u8 characterId;
-    u8 boardType;
+    u8 snowboardId;
 
     gameState = (GameState *)getCurrentAllocation();
-    player->unk4 = loadAssetByIndex_94F90(player->characterId, player->boardType);
-    player->unk8 = loadAssetByIndex_95200(player->characterId, player->boardType);
+    player->unk4 = loadAssetByIndex_94F90(player->characterId, player->boardModelId);
+    player->unk8 = loadAssetByIndex_95200(player->characterId, player->boardModelId);
     player->unk0 = loadAssetByIndex_953E0(player->characterId);
 
     characterId = player->characterId;
     if (characterId < 6) {
-        player->unk20 = loadAssetDataDMA(player->characterId, player->boardType);
-        player->unk24 = loadAssetDataQueuedDMA(player->characterId, player->boardType);
+        player->unk20 = loadAssetDataDMA(player->characterId, player->boardModelId);
+        player->unk24 = loadAssetDataQueuedDMA(player->characterId, player->boardModelId);
     }
 
-    player->unkC = loadAssetByIndex_95500(player->costumeID);
-    player->unk10 = loadAssetByIndex_95590(player->costumeID);
+    player->unkC = loadAssetByIndex_95500(player->snowboardId);
+    player->unk10 = loadAssetByIndex_95590(player->snowboardId);
 
-    boardType = player->costumeID;
-    if (boardType < 9) {
+    snowboardId = player->snowboardId;
+    if (snowboardId < SNOWBOARD_STAR) {
         player->unk14 = loadAssetByIndex_95668(player->colorSlot);
     } else {
         player->unk14 = NULL;

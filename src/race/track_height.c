@@ -207,7 +207,7 @@ void loadCharacterBodyParts(Player *player) {
             do {
                 player->boneDisplayObjects[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_95380(
                     player->characterId,
-                    player->boardType
+                    player->boardModelId
                 )[gBodyPartRemapTable[partIndex]];
                 partIndex++;
             } while (partIndex < 0x10);
@@ -216,7 +216,7 @@ void loadCharacterBodyParts(Player *player) {
             partIndex = 0;
             do {
                 player->boneDisplayObjects[partIndex].displayLists =
-                    (DisplayLists *)&loadAssetByIndex_95380(player->characterId, player->boardType)[partIndex];
+                    (DisplayLists *)&loadAssetByIndex_95380(player->characterId, player->boardModelId)[partIndex];
             } while (++partIndex < 0x10);
         }
     } else {
@@ -227,7 +227,7 @@ void loadCharacterBodyParts(Player *player) {
             do {
                 player->boneDisplayObjects[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_953B0(
                     player->characterId,
-                    player->boardType
+                    player->boardModelId
                 )[gBodyPartRemapTable[partIndex]];
                 partIndex++;
             } while (partIndex < 0x10);
@@ -236,7 +236,7 @@ void loadCharacterBodyParts(Player *player) {
             partIndex = 0;
             do {
                 player->boneDisplayObjects[partIndex].displayLists =
-                    (DisplayLists *)&loadAssetByIndex_953B0(player->characterId, player->boardType)[partIndex];
+                    (DisplayLists *)&loadAssetByIndex_953B0(player->characterId, player->boardModelId)[partIndex];
             } while (++partIndex < 0x10);
         }
     }
@@ -256,7 +256,7 @@ void loadCharacterBodyParts(Player *player) {
     player->boneDisplayObjects[8].segment1 = (void *)flags;
     player->boneDisplayObjects[8].segment2 = player->unk24;
     player->boneDisplayObjects[8].displayLists =
-        (DisplayLists *)((s32)getAssetDataDirect(player->characterId, player->boardType) + tableValue * 0x10 - 0x10);
+        (DisplayLists *)((s32)getAssetDataDirect(player->characterId, player->boardModelId) + tableValue * 0x10 - 0x10);
 }
 
 void setPlayerBodyPartAnimState(Player *player, u8 animIndex, u8 animFlags) {

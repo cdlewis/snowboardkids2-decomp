@@ -39,6 +39,40 @@ typedef enum {
     SECONDARY_ITEM_WING = 10,
 } SecondaryItemId;
 
+typedef enum {
+    SNOWBOARD_BALANCE_LEVEL_1 = 0,
+    SNOWBOARD_BALANCE_LEVEL_2 = 1,
+    SNOWBOARD_BALANCE_LEVEL_3 = 2,
+    SNOWBOARD_TRICK_LEVEL_1 = 3,
+    SNOWBOARD_TRICK_LEVEL_2 = 4,
+    SNOWBOARD_TRICK_LEVEL_3 = 5,
+    SNOWBOARD_SPEED_LEVEL_1 = 6,
+    SNOWBOARD_SPEED_LEVEL_2 = 7,
+    SNOWBOARD_SPEED_LEVEL_3 = 8,
+    SNOWBOARD_STAR = 9,
+    SNOWBOARD_FEATHER = 10,
+    SNOWBOARD_ICE = 11,
+    SNOWBOARD_CHARM = 12,
+    SNOWBOARD_POVERTY = 13,
+    SNOWBOARD_RICH = 14,
+    SNOWBOARD_NINJA = 15,
+    SNOWBOARD_HIGH_TECH = 16,
+    SNOWBOARD_DRAGON = 17,
+    SNOWBOARD_COUNT = 18,
+} SnowboardId;
+
+typedef enum {
+    BOOST_STATE_NONE = 0,
+    BOOST_STATE_SPEED_FAN_FORWARD = 1,
+    BOOST_STATE_SPEED_FAN_REVERSE = 2,
+    BOOST_STATE_ROCKET_START_FORWARD = 3,
+    BOOST_STATE_ROCKET_START_REVERSE = 4,
+    BOOST_STATE_ROCKET_IMPULSE_FORWARD = 5,
+    BOOST_STATE_ROCKET_IMPULSE_REVERSE = 6,
+    BOOST_STATE_ROCKET_SUSTAIN_FORWARD = 7,
+    BOOST_STATE_ROCKET_SUSTAIN_REVERSE = 8,
+} BoostState;
+
 typedef struct {
     /* 0x00 */ BoneAnimationTransformState transform;
     /* 0x40 */ u16 flags;
@@ -186,7 +220,7 @@ typedef struct {
     /* 0xBA0 */ u16 characterScaleXZ;
     /* 0xBA2 */ s16 characterScaleY;
     /* 0xBA4 */ u16 invincibilityTimer;
-    /* 0xBA6 */ s16 featherItemTimer;
+    /* 0xBA6 */ s16 wingsTimer;
     /* 0xBA8 */ u16 inputRecordIndex;
     /* 0xBAA */ s16 trickPoints;
     /* 0xBAC */ s16 trickScore;
@@ -199,8 +233,8 @@ typedef struct {
     /* 0xBB7 */ u8 leanBoneCount;
     /* 0xBB8 */ u8 playerIndex;
     /* 0xBB9 */ u8 characterId;
-    /* 0xBBA */ u8 boardType;
-    /* 0xBBB */ u8 costumeID;
+    /* 0xBBA */ u8 boardModelId;
+    /* 0xBBB */ u8 snowboardId;
     /* 0xBBC */ u8 colorSlot;
     /* 0xBBD */ u8 behaviorMode;
     /* 0xBBE */ u8 behaviorPhase;
@@ -222,7 +256,7 @@ typedef struct {
     /* 0xBCE */ u8 chairliftFlags;
     /* 0xBCF */ u8 slowdownLevel;
     /* 0xBD0 */ u8 boostState;
-    /* 0xBD1 */ u8 featherItemActive;
+    /* 0xBD1 */ u8 wingsActive;
     /* 0xBD2 */ u8 primaryItemId;
     /* 0xBD3 */ u8 primaryItemAmmo;
     /* 0xBD4 */ u8 secondaryItemId;

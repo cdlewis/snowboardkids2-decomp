@@ -111,15 +111,15 @@ void updateCrazyJungleBoss(Player *arg0) {
 
         if (alloc->unk86 != 0) {
             if ((arg0->finishPosition == 0) & (dist > 0xE00000)) {
-                arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 8) + 0x40000;
+                arg0->maxSpeedCap = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_SPEED_LEVEL_3) + 0x40000;
             } else {
                 arg0->maxSpeedCap = 0x180000;
             }
         } else {
             if ((arg0->finishPosition == 0) & (dist > 0xE00000)) {
-                arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 6) + -0x8000;
+                arg0->maxSpeedCap = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_SPEED_LEVEL_1) + -0x8000;
             } else {
-                arg0->maxSpeedCap = getCharacterBoardStatParam0(0, 6) + 0x18000;
+                arg0->maxSpeedCap = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_SPEED_LEVEL_1) + 0x18000;
             }
         }
     }
@@ -285,7 +285,7 @@ s32 initCrazyJungleBoss(Player *arg0) {
         *(s32 *)(elem + 0x5C) = (s32)arg0->unk4;
         *(s32 *)(elem + 0x60) = (s32)arg0->unk8;
         *(s32 *)(elem + 0x64) = 0;
-        *(void **)(elem + 0x58) = (void *)&loadAssetByIndex_953B0(arg0->characterId, arg0->boardType)[i];
+        *(void **)(elem + 0x58) = (void *)&loadAssetByIndex_953B0(arg0->characterId, arg0->boardModelId)[i];
     }
 
     arg0->leanAnimIndex = 0;

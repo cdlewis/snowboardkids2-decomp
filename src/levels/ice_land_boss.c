@@ -386,14 +386,14 @@ void updateIceLandBoss(IceBossArg *boss) {
 
     if ((boss->finishPosition == 0) & (distanceToPlayer > 0xE00000)) {
         if (boss->bossFlags & ICE_BOSS_FLAG_FLYING) {
-            boss->targetSpeed = getCharacterBoardStatParam0(0, 4) - 0x8000;
+            boss->targetSpeed = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_TRICK_LEVEL_2) - 0x8000;
         } else if (distanceToPlayer > 0x8C00000) {
             boss->targetSpeed = 0x70000;
         } else {
-            boss->targetSpeed = getCharacterBoardStatParam0(0, 0) - 0x8000;
+            boss->targetSpeed = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_BALANCE_LEVEL_1) - 0x8000;
         }
     } else {
-        boss->targetSpeed = getCharacterBoardStatParam0(0, 8) + 0x18000;
+        boss->targetSpeed = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_SPEED_LEVEL_3) + 0x18000;
     }
 
     if (boss->targetSpeed > 0x180000) {
@@ -555,7 +555,7 @@ void setIceBossFlyingMode(Player *arg0) {
 
     for (i = 0; i < 12; i++) {
         *(void **)((u8 *)elements + i * 0x3C + 0x58) =
-            (void *)((s32)loadAssetByIndex_953B0(arg0->characterId, arg0->boardType) + i * 16 + 0xC0);
+            (void *)((s32)loadAssetByIndex_953B0(arg0->characterId, arg0->boardModelId) + i * 16 + 0xC0);
     }
 
     arg0->collisionRadius = 0x100000;

@@ -8,16 +8,16 @@
 // Each entry contains 6 performance parameters that get scaled/transformed
 // into player physics values (speed, acceleration, handling, etc.)
 typedef struct {
-    /* 0x0 */ u8 param0; // -> baseMaxSpeed (scaled by complex formula)
-    /* 0x1 */ u8 param1; // -> handling (offset +0x19)
-    /* 0x2 */ u8 param2; // -> cornering (offset +1)
-    /* 0x3 */ u8 param3; // -> lateralDeadzone (scaled, can be overridden to 0xC000)
-    /* 0x4 */ u8 param4; // -> baseGravity (scaled)
-    /* 0x5 */ u8 param5; // -> baseAcceleration (scaled)
-} CharacterBoardStats;   // size = 0x6
+    /* 0x0 */ u8 maxSpeed;
+    /* 0x1 */ u8 handling;
+    /* 0x2 */ u8 cornering;
+    /* 0x3 */ u8 lateralDeadzone;
+    /* 0x4 */ u8 gravity;
+    /* 0x5 */ u8 acceleration;
+} CharacterSnowboardStats; // size = 0x6
 
 // Performance stats table: [18 snowboards][9 characters]
-CharacterBoardStats gBoardStatsTable[18][9] = {
+CharacterSnowboardStats gSnowboardStatsTable[SNOWBOARD_COUNT][9] = {
     /* Balance: Level 1 */
     {
      /* Slash  */ { 0x28, 0x32, 0x28, 0x2D, 0x4B, 0x37 },
@@ -182,7 +182,8 @@ CharacterBoardStats gBoardStatsTable[18][9] = {
      /* Linda  */ { 0x29, 0x28, 0x2D, 0x2D, 0x50, 0x2D },
      /* Tommy  */ { 0x2A, 0x28, 0x41, 0x2D, 0x5A, 0x23 },
      /* Wendy  */ { 0x26, 0x41, 0x26, 0x3C, 0x46, 0x50 },
-     /* Damien */ { 0x64, 0x46, 0x23, 0x50, 0x55, 0x1E },
+     // Easter egg: Damien gets a max speed of 100 (0x64), the highest in the game.
+        /* Damien */ { 0x64, 0x46, 0x23, 0x50, 0x55, 0x1E },
      /* Coach  */ { 0x29, 0x44, 0x23, 0x3C, 0x41, 0x50 },
      /* Mr Dog */ { 0x2B, 0x32, 0x55, 0x2D, 0x64, 0x0A },
      },
@@ -239,58 +240,58 @@ CharacterBoardStats gBoardStatsTable[18][9] = {
 // Default/fallback stats (used in special mode when gameState->raceType == 0xB)
 // 20 bytes total: 1 entry (6 bytes) + 14 bytes padding
 struct {
-    CharacterBoardStats entry;
+    CharacterSnowboardStats entry;
     u8 _pad[14];
 } D_80093F7C_94B7C = {
     .entry = { 0x56, 0x41, 0x28, 0x48, 0x4B, 0x50 },
 };
 
-void applyCharacterBoardStats(Player *player) {
+void applyCharacterSnowboardStats(Player *player) {
     GameState *gameState;
-    CharacterBoardStats *boardStats;
+    CharacterSnowboardStats *snowboardStats;
     u8 charId;
-    CharacterBoardStats *stats;
+    CharacterSnowboardStats *stats;
     u8 val;
 
     gameState = (GameState *)getCurrentAllocation();
     if (gameState->raceType == RACE_TYPE_INTRO) {
-        boardStats = &D_80093F7C_94B7C.entry;
+        snowboardStats = &D_80093F7C_94B7C.entry;
         charId = 0;
     } else {
-        boardStats = gBoardStatsTable[player->costumeID];
+        snowboardStats = gSnowboardStatsTable[player->snowboardId];
         charId = player->characterId;
     }
 
-    player->baseMaxSpeed = boardStats[charId].param0 * 353894 / 100 + 0xEB333;
-    player->handling = boardStats[charId].param1 + 0x19;
-    player->cornering = boardStats[charId].param2 + 1;
-    player->lateralDeadzone = (boardStats[charId].param3 << 15) / 100 + 0x1000;
+    player->baseMaxSpeed = snowboardStats[charId].maxSpeed * 353894 / 100 + 0xEB333;
+    player->handling = snowboardStats[charId].handling + 0x19;
+    player->cornering = snowboardStats[charId].cornering + 1;
+    player->lateralDeadzone = (snowboardStats[charId].lateralDeadzone << 15) / 100 + 0x1000;
 
     if (player->isBossRacer != 0) {
         player->lateralDeadzone = 0xC000;
     }
 
-    player->baseGravity = (boardStats[charId].param4 << 14) / 100 + 0x3000;
-    player->baseAcceleration = (boardStats[charId].param5 << 17) / 100 + 0x28000;
+    player->baseGravity = (snowboardStats[charId].gravity << 14) / 100 + 0x3000;
+    player->baseAcceleration = (snowboardStats[charId].acceleration << 17) / 100 + 0x28000;
 }
 
-s32 getCharacterBoardStatParam0(s32 characterId, s32 snowboardId) {
+s32 getCharacterSnowboardMaxSpeed(s32 characterId, s32 snowboardId) {
     GameState *allocation;
-    CharacterBoardStats *boardStats;
+    CharacterSnowboardStats *snowboardStats;
     s32 value;
 
     allocation = (GameState *)getCurrentAllocation();
 
     if (allocation->raceType == RACE_TYPE_INTRO) {
         // Special mode: use default stats
-        boardStats = &D_80093F7C_94B7C.entry;
+        snowboardStats = &D_80093F7C_94B7C.entry;
         characterId = 0;
     } else {
         // Normal mode
-        boardStats = gBoardStatsTable[snowboardId];
+        snowboardStats = gSnowboardStatsTable[snowboardId];
     }
 
-    value = boardStats[characterId].param0;
+    value = snowboardStats[characterId].maxSpeed;
 
-    return boardStats[characterId].param0 * 353894 / 100 + 0xEB333;
+    return snowboardStats[characterId].maxSpeed * 353894 / 100 + 0xEB333;
 }

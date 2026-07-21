@@ -24,7 +24,7 @@ u16 D_80093FA4_94BA4[] = { 0x0050, 0x0069, 0x007F, 0x0097, 0x00B0, 0x00C5, 0x010
 u16 D_80093FB8_94BB8[] = { 0x0051, 0x006A, 0x0080, 0x0098, 0x00B1, 0x00C6, 0x0101, 0x00F2, 0x00E0, 0x0000 };
 u16 D_80093FCC_94BCC[] = { 0x0052, 0x006B, 0x0081, 0x0099, 0x00B2, 0x00C7, 0x0102, 0x00F3, 0x00E1, 0x0000 };
 u16 D_80093FE0_94BE0[] = { 0x0053, 0x006C, 0x0082, 0x009A, 0x00B3, 0x00C8, 0x0103, 0x00F4, 0x00E2, 0x0000 };
-u16 gFinishBoostVoiceSounds[] = { 0x0054, 0x006D, 0x0083, 0x009B, 0x00B4, 0x00C9, 0x0104, 0x00F5, 0x00E3, 0x0000 };
+u16 gRocketBoostVoiceSounds[] = { 0x0054, 0x006D, 0x0083, 0x009B, 0x00B4, 0x00C9, 0x0104, 0x00F5, 0x00E3, 0x0000 };
 u16 D_80094008_94C08[] = { 0x0055, 0x006E, 0x0084, 0x009C, 0x00B5, 0x00CA, 0x0105, 0x00F6, 0x00E4, 0x0000 };
 u16 gStunnedVoiceSounds1[] = { 0x0056, 0x006F, 0x0085, 0x009D, 0x00B6, 0x00CB, 0x0106, 0x00F7, 0x00E5, 0x0000 };
 u16 gStunnedVoiceSounds2[] = { 0x0057, 0x0070, 0x0086, 0x009E, 0x00B7, 0x00CC, 0x0107, 0x00F8, 0x00E6, 0x0000 };
@@ -156,13 +156,13 @@ void setPlayerState100(Player *player) {
     }
 }
 
-s32 tryActivateFinishBoost(Player *arg0) {
-    if (arg0->boostState == 0) {
-        if (spawnPlayerFlashEffect(arg0) != 0) {
+s32 tryActivateRocketBoost(Player *arg0) {
+    if (arg0->boostState == BOOST_STATE_NONE) {
+        if (spawnRocketBoostEffect(arg0) != 0) {
             if (arg0->animFlags & 2) {
-                arg0->boostState = 4;
+                arg0->boostState = BOOST_STATE_ROCKET_START_REVERSE;
             } else {
-                arg0->boostState = 3;
+                arg0->boostState = BOOST_STATE_ROCKET_START_FORWARD;
             }
             arg0->boostTimer = 0x5A;
             return 1;
@@ -171,24 +171,24 @@ s32 tryActivateFinishBoost(Player *arg0) {
     return 0;
 }
 
-s32 tryActivateGhostEffect(Player *player) {
-    if (player->featherItemActive == 0) {
-        if (spawnGhostEffect(player) != NULL) {
-            player->featherItemActive = 1;
-            player->featherItemTimer = 300;
+s32 tryActivateWings(Player *player) {
+    if (player->wingsActive == 0) {
+        if (spawnWingsEffect(player) != NULL) {
+            player->wingsActive = 1;
+            player->wingsTimer = 300;
             return 1;
         }
     }
     return 0;
 }
 
-s32 tryActivateBoost(Player *arg0) {
-    if (arg0->boostState == 0) {
-        if (spawnPlayerAuraEffect(arg0) != NULL) {
+s32 tryActivateSpeedFanBoost(Player *arg0) {
+    if (arg0->boostState == BOOST_STATE_NONE) {
+        if (spawnSpeedFanBoostEffect(arg0) != NULL) {
             if (arg0->animFlags & 2) {
-                arg0->boostState = 2;
+                arg0->boostState = BOOST_STATE_SPEED_FAN_REVERSE;
             } else {
-                arg0->boostState = 1;
+                arg0->boostState = BOOST_STATE_SPEED_FAN_FORWARD;
             }
             arg0->boostTimer = 0xB4;
             return 1;
@@ -231,7 +231,7 @@ void processPlayerItemUsage(Player *player) {
 
     if (shouldUseSecondaryItem(player) != 0) {
         switch (player->secondaryItemId) {
-            case 1:
+            case SECONDARY_ITEM_PAN:
                 result = gs->numPlayers - 1;
                 if (result != 0) {
                     if (getFreeNodeCount(0) < result) {
@@ -249,11 +249,11 @@ void processPlayerItemUsage(Player *player) {
                         break;
                     }
                 }
-                player->secondaryItemId = 0;
+                player->secondaryItemId = SECONDARY_ITEM_NONE;
                 queueSoundAtPosition(&player->worldPos, 0x18);
                 break;
 
-            case 2:
+            case SECONDARY_ITEM_GHOST:
                 target = player;
                 if (randA() & 0xFF) {
                     for (result = 0; result < gs->numPlayers; result++) {
@@ -266,11 +266,11 @@ void processPlayerItemUsage(Player *player) {
                     }
                 }
                 if (spawnStarEffect(player, target, 0) != 0) {
-                    player->secondaryItemId = 0;
+                    player->secondaryItemId = SECONDARY_ITEM_NONE;
                 }
                 break;
 
-            case 3:
+            case SECONDARY_ITEM_SUPER_GHOST:
                 randA();
                 if (getFreeNodeCount(0) < 3) {
                     break;
@@ -280,7 +280,7 @@ void processPlayerItemUsage(Player *player) {
                         for (i = 0; i < 3; i++) {
                             spawnStarEffect(player, player, (s16)(i * 8));
                         }
-                        player->secondaryItemId = 0;
+                        player->secondaryItemId = SECONDARY_ITEM_NONE;
                         break;
                     case 2:
                         for (i = 0; i < gs->numPlayers; i++) {
@@ -291,7 +291,7 @@ void processPlayerItemUsage(Player *player) {
                                 break;
                             }
                         }
-                        player->secondaryItemId = 0;
+                        player->secondaryItemId = SECONDARY_ITEM_NONE;
                         break;
                     case 3:
                         i = 0;
@@ -306,7 +306,7 @@ void processPlayerItemUsage(Player *player) {
                         spawnStarEffect(player, &gs->players[targetIndices[0]], 0);
                         spawnStarEffect(player, &gs->players[targetIndices[0]], 8);
                         spawnStarEffect(player, &gs->players[targetIndices[1]], 16);
-                        player->secondaryItemId = 0;
+                        player->secondaryItemId = SECONDARY_ITEM_NONE;
                         break;
                     case 4:
                         delay = 0;
@@ -316,51 +316,51 @@ void processPlayerItemUsage(Player *player) {
                                 delay += 8;
                             }
                         }
-                        player->secondaryItemId = 0;
+                        player->secondaryItemId = SECONDARY_ITEM_NONE;
                         break;
                     default:
-                        player->secondaryItemId = 0;
+                        player->secondaryItemId = SECONDARY_ITEM_NONE;
                         break;
                 }
                 break;
 
-            case 4:
-                if (tryActivateBoost(player) != 0) {
-                    player->secondaryItemId = 0;
+            case SECONDARY_ITEM_SPEED_FAN:
+                if (tryActivateSpeedFanBoost(player) != 0) {
+                    player->secondaryItemId = SECONDARY_ITEM_NONE;
                 }
-                if (player->boostState == 0) {
-                    if (spawnPlayerAuraEffect(player) != NULL) {
+                if (player->boostState == BOOST_STATE_NONE) {
+                    if (spawnSpeedFanBoostEffect(player) != NULL) {
                         if (player->animFlags & 2) {
-                            player->boostState = 2;
+                            player->boostState = BOOST_STATE_SPEED_FAN_REVERSE;
                         } else {
-                            player->boostState = 1;
+                            player->boostState = BOOST_STATE_SPEED_FAN_FORWARD;
                         }
                         player->boostTimer = 0xB4;
-                        player->secondaryItemId = 0;
+                        player->secondaryItemId = SECONDARY_ITEM_NONE;
                     }
                 }
                 break;
 
-            case 5:
-                if (tryActivateFinishBoost(player) != 0) {
-                    player->secondaryItemId = 0;
-                    playFinishBoostVoice(player);
+            case SECONDARY_ITEM_ROCKET:
+                if (tryActivateRocketBoost(player) != 0) {
+                    player->secondaryItemId = SECONDARY_ITEM_NONE;
+                    playRocketBoostVoice(player);
                 }
                 break;
 
-            case 6:
+            case SECONDARY_ITEM_INVISIBLE:
                 if (grantInvincibilityWithSound(player) != 0) {
-                    player->secondaryItemId = 0;
+                    player->secondaryItemId = SECONDARY_ITEM_NONE;
                 }
                 break;
 
-            case 7:
+            case SECONDARY_ITEM_ROCK:
                 if (spawnPanelProjectile(player) != 0) {
-                    player->secondaryItemId = 0;
+                    player->secondaryItemId = SECONDARY_ITEM_NONE;
                 }
                 break;
 
-            case 8:
+            case SECONDARY_ITEM_RAT_FACE:
                 target = player;
                 result = randA() & 0xFF;
                 i = !result;
@@ -387,11 +387,11 @@ void processPlayerItemUsage(Player *player) {
                     delay++;
                 }
                 if (spawnGoldStealEffect(player, target, 0) != 0) {
-                    player->secondaryItemId = 0;
+                    player->secondaryItemId = SECONDARY_ITEM_NONE;
                 }
                 break;
 
-            case 9:
+            case SECONDARY_ITEM_SUPER_RAT_FACE:
                 result = gs->numPlayers - 1;
                 if (result != 0) {
                     if (getFreeNodeCount(0) < result) {
@@ -404,35 +404,35 @@ void processPlayerItemUsage(Player *player) {
                             delay += 16;
                         }
                     }
-                    player->secondaryItemId = 0;
+                    player->secondaryItemId = SECONDARY_ITEM_NONE;
                 } else {
                     if (spawnGoldStealEffect(player, player, 0) != 0) {
-                        player->secondaryItemId = 0;
+                        player->secondaryItemId = SECONDARY_ITEM_NONE;
                     }
                 }
                 break;
 
-            case 10:
-                if (tryActivateGhostEffect(player) != 0) {
-                    player->secondaryItemId = 0;
+            case SECONDARY_ITEM_WING:
+                if (tryActivateWings(player) != 0) {
+                    player->secondaryItemId = SECONDARY_ITEM_NONE;
                 }
                 break;
         }
     }
 
     if (player->trackFaceType == 3) {
-        tryActivateFinishBoost(player);
+        tryActivateRocketBoost(player);
     }
     if (!(player->animFlags & 0x80000)) {
-        switch (player->costumeID) {
-            case 17:
-                tryActivateFinishBoost(player);
-                tryActivateGhostEffect(player);
+        switch (player->snowboardId) {
+            case SNOWBOARD_DRAGON:
+                tryActivateRocketBoost(player);
+                tryActivateWings(player);
                 break;
-            case 16:
-                tryActivateBoost(player);
+            case SNOWBOARD_HIGH_TECH:
+                tryActivateSpeedFanBoost(player);
                 break;
-            case 15:
+            case SNOWBOARD_NINJA:
                 grantInvincibilityWithSound(player);
                 break;
         }
@@ -547,14 +547,14 @@ s32 shouldUseSecondaryItem(Player *player) {
     gs = (GameState *)getCurrentAllocation();
 
     if (player->inputDisabled == 0) {
-        if (player->secondaryItemId == 0) {
+        if (player->secondaryItemId == SECONDARY_ITEM_NONE) {
             return 0;
         }
         if (player->inputButtonsPressed & B_BUTTON) {
             return 1;
         }
     } else {
-        if (player->secondaryItemId != 0) {
+        if (player->secondaryItemId != SECONDARY_ITEM_NONE) {
             if (player->aiItemUseTimer >
                 gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].delay) {
                 player->aiItemUseTimer = gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].delay;
@@ -568,9 +568,9 @@ s32 shouldUseSecondaryItem(Player *player) {
                     (randA() & 0xFF) * gAIPlayerParams[player->speedPenaltyIndex][0].altChance / 255;
 
                 switch (player->secondaryItemId) {
-                    case 1:
-                    case 2:
-                    case 3:
+                    case SECONDARY_ITEM_PAN:
+                    case SECONDARY_ITEM_GHOST:
+                    case SECONDARY_ITEM_SUPER_GHOST:
                         if ((gs->players[gs->rankOrder[0]].animFlags & 0x100)) {
                             return 0;
                         }
@@ -579,7 +579,7 @@ s32 shouldUseSecondaryItem(Player *player) {
                             return 1;
                         }
                         break;
-                    case 6:
+                    case SECONDARY_ITEM_INVISIBLE:
                         if (player->pathFlags != 0) {
                             if (randA() <
                                 gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].altChance) {
@@ -592,7 +592,7 @@ s32 shouldUseSecondaryItem(Player *player) {
                             }
                         }
                         break;
-                    case 7:
+                    case SECONDARY_ITEM_ROCK:
                         if (player->finishPosition >= 3) {
                             return 0;
                         }
@@ -601,11 +601,11 @@ s32 shouldUseSecondaryItem(Player *player) {
                             return 1;
                         }
                         break;
-                    case 4:
-                    case 5:
-                    case 8:
-                    case 9:
-                    case 10:
+                    case SECONDARY_ITEM_SPEED_FAN:
+                    case SECONDARY_ITEM_ROCKET:
+                    case SECONDARY_ITEM_RAT_FACE:
+                    case SECONDARY_ITEM_SUPER_RAT_FACE:
+                    case SECONDARY_ITEM_WING:
                         if (randA() <
                             gAIPlayerParams[player->speedPenaltyIndex][player->secondaryItemId + 6].useChance) {
                             return 1;
@@ -710,13 +710,13 @@ void playAttackHitVoice(Player *player) {
     }
 }
 
-void playFinishBoostVoice(Player *player) {
+void playRocketBoostVoice(Player *player) {
     u8 index = player->characterId;
     if (index < 9) {
         if (player->behaviorFlags == 0) {
             queueSoundAtPositionWithPriority(
                 &player->worldPos,
-                gFinishBoostVoiceSounds[index],
+                gRocketBoostVoiceSounds[index],
                 5,
                 player->playerIndex + 4
             );

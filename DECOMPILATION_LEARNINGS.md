@@ -508,3 +508,9 @@ When renaming tightly packed geometry helpers, test candidate names by compiling
 ## Preserve Volatile Display List Pointer Declarations
 
 `gDisplayListAllocPtr` is intentionally declared as `Gfx *volatile` in `model_loader.c`. Moving it to a shared non-volatile declaration in `graphics.h` let KMC GCC optimize away intermediate stores in `buildAuxBufferDisplayList`, shortening the function by 0x54 bytes and shifting the whole main data segment by 0x50. Keep volatile-sensitive globals declared with the qualifier required by each translation unit, even if that means retaining a local extern.
+
+## Distinguish Snowboard Stats from Board Models
+
+The player fields at `0xBBA` and `0xBBB` describe different snowboard concepts. `boardModelId` at `0xBBA` selects the character-specific board model variant, while `snowboardId` at `0xBBB` selects one of the 18 performance/effect profiles. The latter was previously called `costumeID`, which obscured special-board checks and stat-table indexing.
+
+Secondary item 5 is the rocket boost and item 10 is wings. The Dragon snowboard continuously activates both effects. Wings use the player fields at `0xBA6` and `0xBD1` for their timer and active flag and reduce gravity while active; they are unrelated to the game's ghost attacks, Haunted House ghosts, and replay ghost data.

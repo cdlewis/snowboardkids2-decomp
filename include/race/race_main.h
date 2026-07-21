@@ -10,7 +10,7 @@ typedef struct {
     /* 0xB9A */ s16 boostTimer;
     /* 0xB9C */ u8 _padB9C[0x8];
     /* 0xBA4 */ s16 invincibilityTimer;
-    /* 0xBA6 */ s16 featherItemTimer;
+    /* 0xBA6 */ s16 wingsTimer;
     /* 0xBA8 */ u8 _padBA8[0x15];
     /* 0xBBD */ u8 behaviorMode;
     /* 0xBBE */ u8 behaviorPhase;
