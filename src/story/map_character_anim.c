@@ -1,11 +1,11 @@
 #include "story/map_character_anim.h"
 #include "common.h"
+#include "common_bss.h"
 #include "core/session_manager.h"
 #include "gamestate.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "os_cont.h"
-#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "triggers/town_collision.h"
 

@@ -2,6 +2,7 @@
 #include "assets.h"
 #include "audio/audio.h"
 #include "common.h"
+#include "common_bss.h"
 #include "data/course_data.h"
 #include "gamestate.h"
 #include "graphics/displaylist.h"

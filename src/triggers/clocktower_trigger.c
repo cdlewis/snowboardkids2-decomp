@@ -2,6 +2,7 @@
 #include "gamestate.h"
 #include "system/task_scheduler.h"
 #include "triggers/clocktrigger_tower.h"
+#include "triggers/event_trigger.h"
 
 char ClocktowerLabel[] = "CLOCKTOWER";
 s32 D_8008D7FC_8E3FC = 0;

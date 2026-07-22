@@ -1,4 +1,5 @@
 #include "common.h"
+#include "gbi.h"
 #include "graphics/displaylist.h"
 
 DisplayLists gPostboxDisplayLists = { 0x00000000, (Gfx *)0x010001F8, NULL, NULL };

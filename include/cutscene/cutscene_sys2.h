@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "cutscene/cutscene_manager.h"
+#include "graphics/model_loader.h"
 
 typedef struct {
     s16 rotation_y;

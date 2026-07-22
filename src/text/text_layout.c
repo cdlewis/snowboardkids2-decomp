@@ -4,7 +4,6 @@
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "gs2dex.h"
-#include "system/task_scheduler.h"
 
 typedef struct {
     s16 x;

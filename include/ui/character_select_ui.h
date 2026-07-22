@@ -1,8 +1,6 @@
 #pragma once
 
 #include "math/geometry.h"
-#include "ui/character_select_gfx.h"
-#include "ui/level_preview_3d.h"
 
 #define CHAR_SELECT_MENU_NAV 0
 #define CHAR_SELECT_MENU_ROTATING 1

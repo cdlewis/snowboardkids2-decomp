@@ -1,6 +1,7 @@
 #include "effects/cutscene_keyframes.h"
 #include "audio/audio.h"
 #include "common.h"
+#include "common_bss.h"
 #include "core/main.h"
 #include "cutscene/cutscene_manager.h"
 #include "effects/scrolling_texture.h"
@@ -9,7 +10,6 @@
 #include "os_cont.h"
 #include "os_vi.h"
 #include "race/race_session.h"
-#include "system/controller_io.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 

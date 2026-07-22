@@ -2,6 +2,8 @@
 #include "assets.h"
 #include "common.h"
 #include "gamestate.h"
+#include "gbi.h"
+#include "graphics/displaylist.h"
 #include "race/race_session.h"
 #include "system/memory_allocator.h"
 #include "system/task_scheduler.h"

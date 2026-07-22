@@ -1,3 +1,4 @@
+#include "ui/character_select_gfx.h"
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "assets.h"
@@ -10,6 +11,7 @@
 #include "graphics/sprite_rdp.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
+#include "text/font_assets.h"
 #include "text/font_render.h"
 #include "ui/character_select_ui.h"
 #include "ui/level_preview_3d.h"
@@ -2091,9 +2093,6 @@ void animateCharSelectP2NameHide(P2NameHideState *arg0) {
 void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
-
-void updateCharSelectStats(CharSelectStatsState *arg0);
-void cleanupCharSelectStats(SimpleSpriteEntry *arg0);
 
 void initCharSelectStats(CharSelectStatsState *arg0) {
     void *textAsset;

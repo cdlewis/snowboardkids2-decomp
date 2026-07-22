@@ -1,4 +1,6 @@
 #include "data/shared_model_part_display_lists.h"
+#include "gbi.h"
+#include "graphics/displaylist.h"
 
 s32 D_80088730[4] = { 0x00000000, 0x010001A0, 0x00000000, 0x00000000 };
 

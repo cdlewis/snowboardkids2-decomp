@@ -1,9 +1,9 @@
 #include "common.h"
+#include "common_bss.h"
 #include "graphics/graphics.h"
 #include "os_cont.h"
 #include "race/race_session.h"
 #include "story/map_events.h"
-#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 
 typedef struct {

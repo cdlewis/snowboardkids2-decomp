@@ -3,6 +3,7 @@
 #include "assets.h"
 #include "audio/audio.h"
 #include "common.h"
+#include "common_bss.h"
 #include "effects/cutscene_keyframes.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"

@@ -1,6 +1,7 @@
 #include "PR/libaudio.h"
 #include "PRinternal/osint.h"
 #include "common.h"
+#include "gbi.h"
 #include "math/geometry.h"
 #include "os_message.h"
 #include "os_pi.h"

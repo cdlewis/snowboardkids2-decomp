@@ -1,6 +1,5 @@
 #pragma once
 
-#include "animation/bone_animation.h"
 #include "common.h"
 #include "graphics/displaylist.h"
 #include "graphics/sprite_table.h"

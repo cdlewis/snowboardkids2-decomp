@@ -1,5 +1,6 @@
 #include "ui/level_preview_3d.h"
 
+#include "animation/bone_animation.h"
 #include "assets.h"
 #include "audio/audio.h"
 #include "data/asset_metadata.h"
@@ -2442,7 +2443,7 @@ void updateModelGeometry(SceneModel *arg0) {
         if (arg0->unk16 == -1) {
             return;
         }
-        animData = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->animationBoneData, arg0->unk16);
+        animData = getIndexedAnimationDataPtr(arg0->animationBoneData, arg0->unk16);
         boneCount = getAnimationBoneCount((AnimationBoneCountTable *)arg0->animationBoneData, (s32)arg0->unk16);
         if (boneCount >= SCENE_MODEL_BONE_SLOT_COUNT) {
             boneCount = SCENE_MODEL_MAX_ANIMATED_BONES;
@@ -2497,7 +2498,7 @@ void updateModelGeometry(SceneModel *arg0) {
                             arg0->specialAnimationDisplayObject->displayLists =
                                 (void *)((s32)arg0->animationDisplayLists + (animIdx * 0x10));
                             memcpy(arg0->specialAnimationDisplayObject, boneTransform, 0x20U);
-                            boneTransform = (DisplayListObject *)arg0->specialAnimationDisplayObject;
+                            boneTransform = arg0->specialAnimationDisplayObject;
                         }
                     }
                     if ((shouldDisplay != 0) && (arg0->partDisplayFlags & (one << i))) {

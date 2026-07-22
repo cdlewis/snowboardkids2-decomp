@@ -1,5 +1,6 @@
 #include "animation/slot_animation.h"
 #include "animation/animation_loop.h"
+#include "common_bss.h"
 #include "cutscene/cutscene_manager.h"
 #include "cutscene/cutscene_sys2.h"
 #include "effects/animated_sprite_effect.h"
@@ -7,7 +8,6 @@
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "os_cont.h"
-#include "system/controller_io.h"
 #include "ui/level_preview_3d.h"
 
 // Slot animation modes

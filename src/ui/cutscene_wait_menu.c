@@ -2,10 +2,10 @@
 #include "animation/easing_state.h"
 #include "audio/audio.h"
 #include "common.h"
+#include "common_bss.h"
 #include "data/course_data.h"
 #include "os_cont.h"
 #include "race/race_session.h"
-#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 

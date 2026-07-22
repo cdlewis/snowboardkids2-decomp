@@ -1,6 +1,7 @@
 #include "system/controller_io.h"
 
 #include "EepromSaveData_type.h"
+#include "common_bss.h"
 #include "os_cont.h"
 #include "os_eeprom.h"
 #include "os_message.h"

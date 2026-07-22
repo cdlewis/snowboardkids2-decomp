@@ -12,6 +12,7 @@
 #include "math/geometry.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
+#include "text/font_assets.h"
 #include "text/font_render.h"
 #include "text/text_layout.h"
 #include "ui/level_preview_3d.h"

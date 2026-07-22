@@ -15,6 +15,7 @@
 #include "race/race_session.h"
 #include "race/track_geometry.h"
 #include "system/task_scheduler.h"
+#include "text/font_assets.h"
 
 #define SECONDS_TO_TICKS(s) ((s) * 30)
 

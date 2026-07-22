@@ -234,10 +234,10 @@ void loadCharacterBodyParts(Player *player) {
             player->animationFlags = flags | 8;
             partIndex = 0;
             do {
-                player->bodyPartDisplayObjects[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_95380(
+                player->bodyPartDisplayObjects[partIndex].displayLists = (&loadAssetByIndex_95380(
                     player->characterId,
                     player->boardModelId
-                )[gBodyPartRemapTable[partIndex]];
+                )[gBodyPartRemapTable[partIndex]]);
                 partIndex++;
             } while (partIndex < 0x10);
         } else {
@@ -245,7 +245,7 @@ void loadCharacterBodyParts(Player *player) {
             partIndex = 0;
             do {
                 player->bodyPartDisplayObjects[partIndex].displayLists =
-                    (DisplayLists *)&loadAssetByIndex_95380(player->characterId, player->boardModelId)[partIndex];
+                    (&loadAssetByIndex_95380(player->characterId, player->boardModelId)[partIndex]);
             } while (++partIndex < 0x10);
         }
     } else {
@@ -254,10 +254,10 @@ void loadCharacterBodyParts(Player *player) {
             player->animationFlags = flags | 8;
             partIndex = 0;
             do {
-                player->bodyPartDisplayObjects[partIndex].displayLists = (DisplayLists *)&loadAssetByIndex_953B0(
+                player->bodyPartDisplayObjects[partIndex].displayLists = (&loadAssetByIndex_953B0(
                     player->characterId,
                     player->boardModelId
-                )[gBodyPartRemapTable[partIndex]];
+                )[gBodyPartRemapTable[partIndex]]);
                 partIndex++;
             } while (partIndex < 0x10);
         } else {
@@ -265,7 +265,7 @@ void loadCharacterBodyParts(Player *player) {
             partIndex = 0;
             do {
                 player->bodyPartDisplayObjects[partIndex].displayLists =
-                    (DisplayLists *)&loadAssetByIndex_953B0(player->characterId, player->boardModelId)[partIndex];
+                    (&loadAssetByIndex_953B0(player->characterId, player->boardModelId)[partIndex]);
             } while (++partIndex < 0x10);
         }
     }

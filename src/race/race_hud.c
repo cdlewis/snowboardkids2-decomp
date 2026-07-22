@@ -19,6 +19,7 @@
 #include "levels/wendys_house.h"
 #include "math/geometry.h"
 #include "math/rand.h"
+#include "mbi.h"
 #include "race/course.h"
 #include "race/hit_reactions.h"
 #include "race/position_markers.h"

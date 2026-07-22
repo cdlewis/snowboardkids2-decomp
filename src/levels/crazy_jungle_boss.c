@@ -553,7 +553,7 @@ void updateCrazyJungleBossLeanBoneTransforms(Player *arg0) {
     BoneHierarchyEntry *hierarchy;
     s32 i;
 
-    hierarchy = (BoneHierarchyEntry *)getIndexedAnimationDataPtr(arg0->raceAnimationData, (s16)arg0->animationIndex);
+    hierarchy = getIndexedAnimationDataPtr(arg0->raceAnimationData, (s16)arg0->animationIndex);
     composeTransform3D(&arg0->orientationTransform, &arg0->headingTransform, &arg0->orientationHeadingTransform);
     composeTransform3D(&arg0->tiltTransform, &arg0->orientationHeadingTransform, &arg0->modelTransform);
 

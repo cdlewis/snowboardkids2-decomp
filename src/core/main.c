@@ -3,7 +3,6 @@
 #include "assets.h"
 #include "common.h"
 #include "data/model_display_lists.h"
-#include "data/shared_model_part_display_lists.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_table.h"

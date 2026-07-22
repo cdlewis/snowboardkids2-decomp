@@ -2,6 +2,7 @@
 #include "EepromSaveData_type.h"
 #include "assets.h"
 #include "common.h"
+#include "common_bss.h"
 #include "core/session_manager.h"
 #include "graphics/graphics.h"
 #include "os_cont.h"

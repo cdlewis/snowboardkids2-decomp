@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common.h"
-#include "common_bss.h"
 
 typedef struct {
     s32 fileSize;

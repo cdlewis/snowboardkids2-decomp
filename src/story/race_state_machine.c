@@ -1,5 +1,5 @@
 #include "story/race_state_machine.h"
-#include "system/controller_io.h"
+#include "common_bss.h"
 
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"

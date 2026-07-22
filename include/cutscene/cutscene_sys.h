@@ -3,6 +3,7 @@
 #include "common.h"
 #include "cutscene/cutscene_manager.h"
 #include "graphics/graphics.h"
+#include "graphics/model_loader.h"
 
 typedef struct {
     u8 padding[0xFF5];
