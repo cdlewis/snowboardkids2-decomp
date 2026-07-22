@@ -273,7 +273,7 @@ s32 initJingleTownBoss(Player *arg0) {
         spawnChaseCameraTask(arg0->playerIndex);
     }
 
-    arg0->unkBDB = 0xA;
+    arg0->bossHealth = 0xA;
 
     if (arg0->bossRaceData != NULL) {
         arg0->aiPathData = (void *)((s32)arg0->bossRaceData + ((s32 *)arg0->bossRaceData)[arg0->playerIndex]);
@@ -549,8 +549,8 @@ s32 jingleTownBossHoverAttackIntroPhase(Player *arg0) {
             arg0->velocity.y = 0;
         }
         if (!(arg0->animationFlags & 0x80000)) {
-            if (arg0->unkBDB != 0) {
-                arg0->unkBDB--;
+            if (arg0->bossHealth != 0) {
+                arg0->bossHealth--;
             }
         }
     }
@@ -575,7 +575,7 @@ s32 jingleTownBossHoverAttackIntroPhase(Player *arg0) {
         arg0->behaviorStep = 0;
         arg0->behaviorCounter = 0;
         arg0->unk470.y = 0;
-        if (arg0->unkBDB == 0) {
+        if (arg0->bossHealth == 0) {
             arg0->animationFlags |= 0x100000;
         }
     }
@@ -590,8 +590,8 @@ s32 jingleTownBossHoverAttackMainPhase(Player *arg0) {
         arg0->unk468 = 0x80000;
         arg0->unkB8C = 4;
         if ((bossFlags & 0x80000) == 0) {
-            if (arg0->unkBDB != 0) {
-                arg0->unkBDB--;
+            if (arg0->bossHealth != 0) {
+                arg0->bossHealth--;
             }
         }
     }
@@ -627,7 +627,7 @@ s32 jingleTownBossHoverAttackMainPhase(Player *arg0) {
         arg0->behaviorCounter = 0;
         arg0->unk470.y = 0;
 
-        if (arg0->unkBDB == 0) {
+        if (arg0->bossHealth == 0) {
             arg0->animationFlags |= 0x100000;
         }
     }

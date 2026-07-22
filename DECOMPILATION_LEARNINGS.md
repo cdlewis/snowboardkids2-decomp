@@ -514,3 +514,11 @@ When renaming tightly packed geometry helpers, test candidate names by compiling
 The player fields at `0xBBA` and `0xBBB` describe different snowboard concepts. `boardModelId` at `0xBBA` selects the character-specific board model variant, while `snowboardId` at `0xBBB` selects one of the 18 performance/effect profiles. The latter was previously called `costumeID`, which obscured special-board checks and stat-table indexing.
 
 Secondary item 5 is the rocket boost and item 10 is wings. The Dragon snowboard continuously activates both effects. Wings use the player fields at `0xBA6` and `0xBD1` for their timer and active flag and reduce gravity while active; they are unrelated to the game's ghost attacks, Haunted House ghosts, and replay ghost data.
+
+## Reuse Canonical Types Across Allocation and Task Callbacks
+
+Partial `GameState` overlays that expose the player-array pointer at offset `0x10` should use `GameState` and `Player`, rather than declaring truncated duplicates for fields needed at high offsets. The former `PlayerInfo.animationFlags` field at `0xB84` exactly overlapped `Player.animationFlags`, and the former `InitPlayerData.spriteGroupIndex` at `0xBB9` was really `Player.characterId`. Reusing the canonical types prevents these parallel layouts and names from drifting apart.
+
+Scheduled task callbacks also receive different phases of the same allocation. Init, update, cleanup, and spawn helpers should share the complete task state when their fields occupy the same offsets; do not create a new padded view for each callback. When an element is exactly a `SpriteRenderArg`, use that existing type rather than duplicating its layout with alternate field names.
+
+KMC GCC can still be sensitive to the source shape of typed player indexing. In `initRaceProgressIndicatorTask`, replacing the byte-offset induction variable with `&gameState->players[i]` emitted the operands of one `addu` in the opposite order and broke the ROM checksum. Keeping the offset derived from `sizeof(Player)` preserves the canonical element size while matching the target instruction encoding.

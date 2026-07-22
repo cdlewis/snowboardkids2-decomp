@@ -34,24 +34,12 @@
     } while (0)
 
 typedef struct {
-    u8 pad0[0x18];
-    s32 score;
-    u8 pad1C[0xC];
-    s16 playerIndex;
-} TrickScoreDisplaySpawnState;
-
-typedef struct {
-    u8 pad0[0x17C3];
-    u8 itemCount;
-} ShotScoreData;
-
-typedef struct {
     u8 pad0[0xA];
-    s16 unkA;
-    u8 unkC;
-    u8 unkD;
-    u8 unkE;
-} HudElementState;
+    s16 paletteIndex;
+    u8 tileMode;
+    u8 overridePaletteCount;
+    u8 transparency;
+} HudSpriteRenderState;
 
 typedef struct {
     s16 playerIndex;
@@ -59,30 +47,9 @@ typedef struct {
 } VictorySnowflakeSpawnArgs;
 
 typedef struct {
-    u8 pad0[0xC];
-    s16 playerIndex;
-    s16 useSmallSprite;
-} VictorySnowflakeTaskState;
-
-typedef struct {
-    u8 pad0[0x10];
-    void *gameState;
-} ShotScoreDisplayAllocation;
-
-typedef struct {
-    u8 _pad[0xC];
-    s16 initDelay;
-} SuccessMessageSpawnState;
-
-typedef struct {
-    s16 alphaValue_hi;
-    s16 alpha_lo;
-} BonusGoldDisplayState_AlphaSplit;
-
-typedef struct {
-    u8 pad0[0x10];
-    void *players;
-} SecondaryItemAllocation;
+    s16 upper;
+    s16 lower;
+} BigEndianS32Halves;
 
 extern s32 gFirstPlaceGoldReward[];
 extern s32 gSecondPlaceGoldReward[];
@@ -107,7 +74,7 @@ u8 D_80090E60_91A60[] = {
     0x0E, 0x12, 0x13, 0x25, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-void initPlayerFinishPositionTask(FinishPositionDisplayState *arg0) {
+void initPlayerFinishPositionTask(PlayerSpriteDisplayState *arg0) {
     GameState *state;
     s32 index;
     s32 numPlayers;
@@ -141,18 +108,18 @@ void initPlayerFinishPositionTask(FinishPositionDisplayState *arg0) {
     arg0->y = 0x20;
 
 dma_and_callbacks:
-    arg0->asset = loadCompressedData(romStart, romEnd, size);
+    arg0->spriteAsset = loadCompressedData(romStart, romEnd, size);
     setCleanupCallback(cleanupPlayerFinishPositionTask);
     setCallback(updatePlayerFinishPositionDisplay);
 }
 
-void updatePlayerFinishPositionDisplay(FinishPositionDisplayState *state) {
+void updatePlayerFinishPositionDisplay(PlayerSpriteDisplayState *state) {
     state->spriteIndex = state->player->finishPosition;
     enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
 }
 
-void cleanupPlayerFinishPositionTask(FinishPositionDisplayState *state) {
-    state->asset = freeNodeMemory(state->asset);
+void cleanupPlayerFinishPositionTask(PlayerSpriteDisplayState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
 
 void initPlayerItemDisplayTask(PlayerItemDisplayState *state) {
@@ -195,7 +162,7 @@ else_branch:
     state->secondaryItemY = -0x30;
     state->secondaryItemAsset = state->primaryItemAsset =
         loadCompressedData(&playerItemIconMultiplayerAsset_ROM_START, &playerItemIconMultiplayerAsset_ROM_END, 0xB08);
-    state->unk28 = 0;
+    state->ammoTextPalette = 0;
     state->charDisplayPtr = &state->charDisplayValue;
     state->charDisplayX = state->primaryItemX + 8;
     state->charDisplayY = state->primaryItemY + 8;
@@ -289,20 +256,20 @@ void updatePlayerItemDisplayMultiplayer(PlayerItemDisplayState *state) {
     }
 }
 
-void cleanupPlayerItemDisplayTask(Struct_func_8004C6F0 *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk1C = freeNodeMemory(arg0->unk1C);
+void cleanupPlayerItemDisplayTask(PlayerItemDisplayState *state) {
+    state->primaryItemAsset = freeNodeMemory(state->primaryItemAsset);
+    state->digitAsset = freeNodeMemory(state->digitAsset);
 }
 
 void initPlayerLapCounterTask(LapCounterState *state) {
-    LapCounterAllocation *allocation;
+    GameState *gameState;
     char *textBuffer;
     s16 temp;
 
-    allocation = (LapCounterAllocation *)getCurrentAllocation();
-    state->player = (void *)(((u8 *)allocation->players) + (state->playerIndex * 0xBE8));
+    gameState = getCurrentAllocation();
+    state->player = &gameState->players[state->playerIndex];
 
-    if (allocation->numPlayers == 1) {
+    if (gameState->playerCount == 1) {
         state->x = -0x88;
         state->y = -0x60;
         state->lapIconAsset = loadCompressedData(&lapCounterIconAsset_ROM_START, &lapCounterIconAsset_ROM_END, 0x168);
@@ -312,19 +279,19 @@ void initPlayerLapCounterTask(LapCounterState *state) {
         state->digitsAsset =
             loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
         state->digitX2 = ((u16)state->digitX1) + 8;
-        state->unk16 = 1;
-        state->unk20 = 1;
+        state->currentLapPaletteIndex = 1;
+        state->separatorSpriteIndex = 1;
         state->digitY2 = state->y;
-        state->unk1C = state->lapIconAsset;
+        state->separatorAsset = state->lapIconAsset;
         temp = state->digitX2;
         state->digitY3 = state->y;
-        state->unk28 = state->digitsAsset;
+        state->totalLapDigitAsset = state->digitsAsset;
         state->digitX3 = ((u16)temp) + 8;
-        state->totalLaps = allocation->totalLaps + 1;
-        state->unk2E = 3;
+        state->totalLaps = gameState->finalLapNumber + 1;
+        state->totalLapPaletteIndex = 3;
     } else {
         state->y = -0x30;
-        if (allocation->numPlayers == 2) {
+        if (gameState->playerCount == 2) {
             state->x = -0x18;
             state->textX = 0;
             state->textY = state->y;
@@ -345,20 +312,20 @@ void initPlayerLapCounterTask(LapCounterState *state) {
         );
         state->spriteIndex = 0;
         state->digitsAsset = 0;
-        sprintf(textBuffer, D_8009E868_9F468, 1, allocation->totalLaps + 1);
-        state->unk34 = 1;
+        sprintf(textBuffer, D_8009E868_9F468, 1, gameState->finalLapNumber + 1);
+        state->textPaletteIndex = 1;
         state->lapText = textBuffer;
     }
 
     setCleanupCallback(cleanupPlayerLapCounterTask);
-    if (allocation->numPlayers == 1) {
+    if (gameState->playerCount == 1) {
         setCallbackWithContinue(updatePlayerLapCounterSinglePlayer);
     } else {
         setCallbackWithContinue(updatePlayerLapCounterMultiplayer);
     }
 }
 
-void updatePlayerLapCounterSinglePlayer(LapCounterSinglePlayerState *state) {
+void updatePlayerLapCounterSinglePlayer(LapCounterState *state) {
     enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
     state->currentLap = state->player->currentLap + 1;
     enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrameWithPalette, &state->digitX1);
@@ -366,15 +333,15 @@ void updatePlayerLapCounterSinglePlayer(LapCounterSinglePlayerState *state) {
     enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrameWithPalette, &state->digitX3);
 }
 
-void updatePlayerLapCounterMultiplayer(LapCounterMultiplayerState *state) {
+void updatePlayerLapCounterMultiplayer(LapCounterState *state) {
     enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
-    state->unk3C = state->player->currentLap + 0x31;
-    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->unk30);
+    state->lapTextBuffer[0] = state->player->currentLap + 0x31;
+    enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderTextPalette, &state->textX);
 }
 
-void cleanupPlayerLapCounterTask(Struct_func_8004DCC4 *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk10 = freeNodeMemory(arg0->unk10);
+void cleanupPlayerLapCounterTask(LapCounterState *state) {
+    state->lapIconAsset = freeNodeMemory(state->lapIconAsset);
+    state->digitsAsset = freeNodeMemory(state->digitsAsset);
 }
 
 void initPlayerGoldDisplayTask(GoldDisplayState *state) {
@@ -434,7 +401,7 @@ common:
     }
 }
 
-void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
+void updatePlayerGoldDisplaySinglePlayer(GoldDisplayState *state) {
     s32 gold = state->player->raceGold;
 
     if (gold < 100) {
@@ -455,7 +422,7 @@ void updatePlayerGoldDisplaySinglePlayer(PlayerGoldDisplayState *state) {
     enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, &state->iconX);
 }
 
-void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
+void updatePlayerGoldDisplayMultiplayer(GoldDisplayState *state) {
     s32 gold = state->player->raceGold;
 
     if (gold < 100) {
@@ -478,27 +445,27 @@ void updatePlayerGoldDisplayMultiplayer(MultiplayerGoldDisplayState *state) {
     enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderHalfSizeSpriteFrame, &state->iconX);
 }
 
-void cleanupPlayerGoldDisplayTask(PlayerGoldDisplayCleanupArg *arg0) {
-    arg0->goldIconAsset = freeNodeMemory(arg0->goldIconAsset);
-    arg0->digitSpriteAsset = freeNodeMemory(arg0->digitSpriteAsset);
+void cleanupPlayerGoldDisplayTask(GoldDisplayState *state) {
+    state->digitsTexture = freeNodeMemory(state->digitsTexture);
+    state->iconAsset = freeNodeMemory(state->iconAsset);
 }
 
 void initRaceProgressIndicatorTask(RaceProgressIndicatorInitEntry *arg0) {
-    InitAllocation *allocation;
+    GameState *gameState;
     s32 playerOffset;
     s32 i;
     RaceProgressIndicatorInitEntry *elem;
     RaceProgressIndicatorInitEntry *next;
     RaceProgressIndicatorInitEntry *temp;
-    InitPlayerData *playerData;
+    Player *player;
     s32 numPlayers;
     volatile s32 pad[2];
 
-    allocation = getCurrentAllocation();
-    *(void **)&arg0->baseAssetBytes = load_3ECE40();
-    arg0->initFlags = 1;
+    gameState = getCurrentAllocation();
+    *(void **)&arg0->spriteAssetBytes = load_3ECE40();
+    arg0->spriteFrame = 1;
 
-    if (allocation->raceType < RACE_TYPE_BOSS_ICE) {
+    if (gameState->playerCount < 3) {
         arg0->x = 0x78;
     } else {
         arg0->x = -4;
@@ -513,7 +480,7 @@ void initRaceProgressIndicatorTask(RaceProgressIndicatorInitEntry *arg0) {
         temp--;
     } while (i >= 0);
 
-    numPlayers = allocation->numPlayers;
+    numPlayers = gameState->numPlayers;
     i = 0;
     if (numPlayers <= 0)
         goto done;
@@ -521,18 +488,18 @@ void initRaceProgressIndicatorTask(RaceProgressIndicatorInitEntry *arg0) {
     elem = arg0;
     playerOffset = 0;
     do {
-        playerData = (InitPlayerData *)(playerOffset + (s32)allocation->players);
-        elem->playerIconAsset = loadAssetByIndex_95470(playerData->spriteGroupIndex);
+        player = (Player *)(playerOffset + (s32)gameState->players);
+        elem->playerIconAsset = loadAssetByIndex_95470(player->characterId);
         elem->positionOffset = arg0->x - 4;
         next = elem + 1;
-        next->baseAssetBytes[0] = 0;
-        next->baseAssetBytes[1] = 0;
-        next->baseAssetBytes[2] = 0;
-        next->initFlags = 0;
-        playerOffset += 0xBE8;
+        next->spriteAssetBytes[0] = 0;
+        next->spriteAssetBytes[1] = 0;
+        next->spriteAssetBytes[2] = 0;
+        next->spriteFrame = 0;
+        playerOffset += sizeof(Player);
         i++;
         elem++;
-    } while (i < allocation->numPlayers);
+    } while (i < gameState->numPlayers);
 
 done:
     setCleanupCallback(cleanupRaceProgressIndicatorTask);
@@ -540,7 +507,7 @@ done:
 }
 
 void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
-    RaceProgressIndicatorAllocation *allocation;
+    GameState *gameState;
     s32 i;
     u8 playerIndex;
     Player *playerData;
@@ -552,14 +519,14 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
     s32 playerCount;
     u8 pad[0x8];
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    playerCount = allocation->numPlayers;
+    playerCount = gameState->numPlayers;
     i = 0;
     if (playerCount > 0) {
         do {
-            playerIndex = allocation->playerIndices[i];
-            playerData = (Player *)((u8 *)allocation->players + playerIndex * 0xBE8);
+            playerIndex = gameState->rankOrder[i];
+            playerData = &gameState->players[playerIndex];
 
             targetPosition = (0x2000 - playerData->lapProgressRemaining) * 0x8C;
             elem = &state->elements[playerIndex];
@@ -608,14 +575,14 @@ void updatePlayerRaceProgressIndicator(RaceProgressIndicatorState *state) {
             elem->spriteFrame = (s8)elem->flashCounter;
 
             if (playerData->slowdownLevel != 0) {
-                elem->hasActiveEffect = 1;
+                elem->paletteIndex = 1;
             } else {
-                elem->hasActiveEffect = 0;
+                elem->paletteIndex = 0;
             }
 
             enqueueCallbackBySlotIndex(0xC, 0, renderSpriteFrameWithPalette, elem);
             i++;
-            playerCount = allocation->numPlayers;
+            playerCount = gameState->numPlayers;
         } while (i < playerCount);
     }
 
@@ -637,7 +604,7 @@ void initGoalBannerTask(GoalBannerState *state) {
     playSoundEffectWithPriorityDefaultVolume(0x11B, 6);
     state->holdFrames = 0x2D;
     state->animAngle = 0;
-    state->yOffset = -8;
+    state->yPos = -8;
     setCleanupCallback(cleanupGoalBannerTask);
     setCallback(updateGoalBannerSlideIn);
 }
@@ -830,7 +797,7 @@ void cleanupTrickScoreDisplayTask(TrickScoreDisplayState *state) {
 }
 
 void showTrickScoreDisplay(s32 playerIndex, s32 trickScore) {
-    TrickScoreDisplaySpawnState *task;
+    TrickScoreDisplayState *task;
 
     task = scheduleTask(initTrickScoreDisplayTask, 0, 0, 0xE6);
     if (task != NULL) {
@@ -839,31 +806,32 @@ void showTrickScoreDisplay(s32 playerIndex, s32 trickScore) {
     }
 }
 
-void initSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0) {
+void initSpeedCrossFinishPositionTask(PlayerSpriteDisplayState *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
     arg0->player = state->players;
-    arg0->asset = loadCompressedData(&playerFinishPositionAsset_ROM_START, &playerFinishPositionAsset_ROM_END, 0x888);
+    arg0->spriteAsset =
+        loadCompressedData(&playerFinishPositionAsset_ROM_START, &playerFinishPositionAsset_ROM_END, 0x888);
     arg0->x = -0x48;
     arg0->y = -0x38;
     setCleanupCallback(&cleanupSpeedCrossFinishPositionTask);
     setCallback(&updateSpeedCrossFinishPositionDisplay);
 }
 
-void updateSpeedCrossFinishPositionDisplay(FinishPositionDisplayState *arg0) {
+void updateSpeedCrossFinishPositionDisplay(PlayerSpriteDisplayState *arg0) {
     arg0->spriteIndex = arg0->player->finishPosition;
     enqueueCallbackBySlotIndex(8, 6, &renderSpriteFrame, arg0);
 }
 
-void cleanupSpeedCrossFinishPositionTask(FinishPositionDisplayState *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupSpeedCrossFinishPositionTask(PlayerSpriteDisplayState *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
-void initHudElementState(HudElementState *arg0) {
-    arg0->unkC = 0;
-    arg0->unkD = 0;
-    arg0->unkE = 0;
-    arg0->unkA = 0xFF;
+void initHudElementState(HudSpriteRenderState *state) {
+    state->tileMode = 0;
+    state->overridePaletteCount = 0;
+    state->transparency = 0;
+    state->paletteIndex = 0xFF;
 }
 
 void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
@@ -874,7 +842,7 @@ void initGoldAwardDisplayTask(GoldAwardDisplayState *arg0) {
 
     arg0->alpha = 0;
     arg0->spriteAsset = loadAsset_34CB50();
-    initHudElementState((HudElementState *)arg0);
+    initHudElementState((HudSpriteRenderState *)arg0);
     arg0->spriteIndex = 0x14;
     arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
 
@@ -950,7 +918,7 @@ void updateGoldAwardDisplay(GoldAwardDisplayState *arg0) {
         }
     }
 
-    arg0->padA[4] = (u8)arg0->alpha;
+    arg0->spriteAlpha = (u8)arg0->alpha;
     enqueueCallbackBySlotIndex(8, 6, renderTextSpriteWithTransparency, arg0);
 
     sprintf(buf, D_8009E894_9F494, arg0->goldAmount);
@@ -987,7 +955,7 @@ void initTotalGoldDisplayTask(TotalGoldDisplayState *arg0) {
 
     arg0->alpha = 0;
     arg0->spriteAsset = loadAsset_34CB50();
-    initHudElementState((HudElementState *)arg0);
+    initHudElementState((HudSpriteRenderState *)arg0);
     arg0->spriteIndex = 0x15;
     arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
 
@@ -1032,7 +1000,7 @@ void updateTotalGoldDisplay(TotalGoldDisplayState *arg0) {
         }
     }
 
-    arg0->unkE = (u8)arg0->alpha;
+    arg0->spriteAlpha = (u8)arg0->alpha;
     enqueueCallbackBySlotIndex(8, 6, renderTextSpriteWithTransparency, arg0);
 
     sprintf(buf, D_8009E894_9F494, getPlayerGold());
@@ -1059,9 +1027,9 @@ void updateTotalGoldDisplay(TotalGoldDisplayState *arg0) {
     );
 }
 
-void cleanupTotalGoldDisplayTask(Struct_func_8004DCC4 *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk10 = freeNodeMemory(arg0->unk10);
+void cleanupTotalGoldDisplayTask(TotalGoldDisplayState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
+    state->digitAsset = freeNodeMemory(state->digitAsset);
 }
 
 void initTotalLapDisplayTask(TotalLapDisplayState *state) {
@@ -1070,7 +1038,7 @@ void initTotalLapDisplayTask(TotalLapDisplayState *state) {
     getCurrentAllocation();
     state->alpha = 0;
     state->spriteAsset = loadAsset_34CB50();
-    initHudElementState((HudElementState *)state);
+    initHudElementState((HudSpriteRenderState *)state);
     global = gGameSessionContext;
     state->spriteIndex = 0x16;
     state->x = 0;
@@ -1109,7 +1077,7 @@ void updateTotalLapDisplay(TotalLapDisplayState *state) {
         sprintf(buffer, sTwoDigitHighlightFormat, lapCount);
     }
 
-    state->unkE = (u8)state->alpha;
+    state->spriteAlpha = (u8)state->alpha;
 
     enqueueCallbackBySlotIndex(state->player->playerIndex + 8, 6, renderTextSpriteWithTransparency, state);
 
@@ -1124,17 +1092,17 @@ void updateTotalLapDisplay(TotalLapDisplayState *state) {
     );
 }
 
-void cleanupTotalLapDisplayTask(Struct_func_8004DCC4 *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk10 = freeNodeMemory(arg0->unk10);
+void cleanupTotalLapDisplayTask(TotalLapDisplayState *state) {
+    state->spriteAsset = freeNodeMemory(state->spriteAsset);
+    state->digitAsset = freeNodeMemory(state->digitAsset);
 }
 
 void spawnTotalLapDisplayTask(Player *player) {
-    Node *task;
+    TotalLapDisplayState *task;
 
     task = scheduleTask(initTotalLapDisplayTask, 1, 0, 0xE6);
     if (task != NULL) {
-        task->unk18 = player;
+        task->player = player;
     }
 }
 
@@ -1296,7 +1264,7 @@ void cleanupVictorySnowflake(VictorySnowflakeState *state) {
 }
 
 void conditionalSpawnVictorySnowflake(VictorySnowflakeSpawnArgs *args) {
-    VictorySnowflakeTaskState *task;
+    VictorySnowflakeState *task;
 
     if (gGlobalFrameCounter & 1) {
         task = scheduleTask(initVictorySnowflake, 2, 0, 0xE6);
@@ -1324,7 +1292,7 @@ void initPauseMenuDisplayTask(PauseMenuDisplayState *state) {
 
     getCurrentAllocation();
     state->backgroundAsset = loadAsset_34F7E0();
-    state->elements[0].spriteAsset = loadAsset_34CB50();
+    state->elements[0].spriteData = loadAsset_34CB50();
 
     i = 0;
     xPos = -0x1C;
@@ -1332,14 +1300,14 @@ void initPauseMenuDisplayTask(PauseMenuDisplayState *state) {
     do {
         state->elements[i].x = xPos;
         state->elements[i].y = yPos;
-        state->elements[i].spriteAsset = state->elements[0].spriteAsset;
+        state->elements[i].spriteData = state->elements[0].spriteData;
         yPos += 8;
         i++;
     } while (i < 3);
 
-    state->elements[0].spriteIndex = 0x1B;
-    state->elements[1].spriteIndex = 0x1C;
-    state->elements[2].spriteIndex = 0x1D;
+    state->elements[0].frameIndex = 0x1B;
+    state->elements[1].frameIndex = 0x1C;
+    state->elements[2].frameIndex = 0x1D;
 
     setCleanupCallback(cleanupPauseMenuDisplayTask);
     setCallback(renderPauseMenuDisplay);
@@ -1354,9 +1322,9 @@ void renderPauseMenuDisplay(PauseMenuDisplayState *state) {
     if (gameState->gamePaused == 1) {
         do {
             if (gameState->pauseMenuSelection == i) {
-                state->elements[i].padA[0] = 0x12;
+                state->elements[i].paletteIndex = 0x12;
             } else {
-                state->elements[i].padA[0] = 0x11;
+                state->elements[i].paletteIndex = 0x11;
             }
             enqueueCallbackBySlotIndex(0xC, 6, renderSpriteFrameWithPalette, &state->elements[i]);
             i++;
@@ -1365,27 +1333,27 @@ void renderPauseMenuDisplay(PauseMenuDisplayState *state) {
     }
 }
 
-void cleanupPauseMenuDisplayTask(PauseMenuCleanupState *state) {
-    state->spriteAsset = freeNodeMemory(state->spriteAsset);
+void cleanupPauseMenuDisplayTask(PauseMenuDisplayState *state) {
+    state->elements[0].spriteData = freeNodeMemory(state->elements[0].spriteData);
     state->backgroundAsset = freeNodeMemory(state->backgroundAsset);
 }
 
 void initShotScoreDisplayTask(ShotScoreDisplayState *arg0) {
-    ShotScoreDisplayAllocation *allocation = (ShotScoreDisplayAllocation *)getCurrentAllocation();
+    GameState *gameState = getCurrentAllocation();
     s32 i;
     u8 val;
     void *p;
 
-    val = ((ShotScoreData *)allocation->gameState)->itemCount;
+    val = gameState->players[1].bossHealth;
     arg0->animDelayCounter = 0;
     arg0->displayedCount = val;
-    arg0->elements[0].spriteAsset = loadAssetByIndex_95470(arg0->spriteGroupIndex);
+    arg0->elements[0].spriteData = loadAssetByIndex_95470(arg0->spriteGroupIndex);
 
     for (i = 0; i < 10; i++) {
-        p = arg0->elements[0].spriteAsset;
-        arg0->elements[i].spriteFrame = 0;
+        p = arg0->elements[0].spriteData;
+        arg0->elements[i].frameIndex = 0;
         arg0->elements[i].y = 0x58;
-        arg0->elements[i].spriteAsset = p;
+        arg0->elements[i].spriteData = p;
     }
 
     setCleanupCallback(cleanupShotScoreDisplayTask);
@@ -1393,14 +1361,14 @@ void initShotScoreDisplayTask(ShotScoreDisplayState *arg0) {
 }
 
 void updateShotScoreDisplay(ShotScoreDisplayState *arg0) {
-    ShotScoreDisplayAllocation *allocation;
+    GameState *gameState;
     s32 i;
     s16 xPos;
     s16 currentVal;
 
-    allocation = (ShotScoreDisplayAllocation *)getCurrentAllocation();
+    gameState = getCurrentAllocation();
     currentVal = arg0->displayedCount;
-    i = ((ShotScoreData *)allocation->gameState)->itemCount - currentVal;
+    i = gameState->players[1].bossHealth - currentVal;
 
     if (i != 0) {
         xPos = 0x40;
@@ -1422,9 +1390,9 @@ void updateShotScoreDisplay(ShotScoreDisplayState *arg0) {
 
     for (i = 0; i < 10; i++) {
         if (i >= arg0->displayedCount) {
-            arg0->elements[i].spriteFrame = 2;
+            arg0->elements[i].frameIndex = 2;
         } else {
-            arg0->elements[i].spriteFrame = 0;
+            arg0->elements[i].frameIndex = 0;
         }
 
         arg0->elements[i].x = xPos;
@@ -1435,7 +1403,7 @@ void updateShotScoreDisplay(ShotScoreDisplayState *arg0) {
 }
 
 void cleanupShotScoreDisplayTask(ShotScoreDisplayState *arg0) {
-    arg0->elements[0].spriteAsset = freeNodeMemory(arg0->elements[0].spriteAsset);
+    arg0->elements[0].spriteData = freeNodeMemory(arg0->elements[0].spriteData);
 }
 
 void initShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
@@ -1467,12 +1435,12 @@ void cleanupShotCrossScoreDisplayTask(ShotCrossScoreDisplayState *arg0) {
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-void spawnShotCrossScoreDisplayTask(void *arg0) {
+void spawnShotCrossScoreDisplayTask(Player *player) {
     ShotCrossScoreDisplayState *task;
 
     task = scheduleTask(initShotCrossScoreDisplayTask, 0, 1, 0xE6);
     if (task != NULL) {
-        task->player = arg0;
+        task->player = player;
     }
 }
 
@@ -1538,13 +1506,13 @@ void spawnShotCrossItemCountDisplayTask(s16 arg0) {
     }
 }
 
-void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
+void initShotCrossCountdownTimerTask(TimerDisplayState *arg0) {
     GameState *allocation = (GameState *)getCurrentAllocation();
 
     if (allocation->raceType == RACE_TYPE_X_CROSS) {
-        arg0->timeRemaining = 0xA8C;
+        arg0->timerValue = 0xA8C;
     } else {
-        arg0->timeRemaining = 0x1194;
+        arg0->timerValue = 0x1194;
     }
     arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     arg0->spriteAsset = loadAsset_34CB50();
@@ -1555,37 +1523,37 @@ void initShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
     setCallback(updateShotCrossCountdownTimer);
 }
 
-void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0) {
+void updateShotCrossCountdownTimer(TimerDisplayState *arg0) {
     char buffer[16];
-    Allocation *allocation;
+    GameState *gameState;
     s32 timeValue;
     s32 minutes;
     s32 seconds;
     s32 remainingTicks;
     s32 temp;
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    if (allocation->activeRaceEffectCount == 0 && allocation->raceUpdatePaused == 0) {
-        PlayerInfo *player = allocation->timeRemaining;
+    if (gameState->raceIntroState == 0 && gameState->gamePaused == 0) {
+        Player *player = gameState->players;
         if ((player->animationFlags & 0x80000) == 0) {
-            if (arg0->timeRemaining != 0) {
-                arg0->timeRemaining--;
-                if (arg0->timeRemaining == 0) {
-                    allocation->timerExpired = 1;
+            if (arg0->timerValue != 0) {
+                arg0->timerValue--;
+                if (arg0->timerValue == 0) {
+                    gameState->playerLost = 1;
                 }
             }
         }
     }
 
     // Maths assumes 30 Hz timer
-    minutes = arg0->timeRemaining / 1800;
-    temp = arg0->timeRemaining - minutes * 1800;
+    minutes = arg0->timerValue / 1800;
+    temp = arg0->timerValue - minutes * 1800;
     seconds = temp / 30;
     temp = temp - seconds * 30;
     remainingTicks = temp * 100 / 30;
 
-    if (arg0->timeRemaining < SECONDS_TO_TICKS(30)) {
+    if (arg0->timerValue < SECONDS_TO_TICKS(30)) {
         sprintf(buffer, sTimerFormatLow, minutes, seconds, remainingTicks);
     } else {
         sprintf(buffer, sTimerFormatNormal, minutes, seconds, remainingTicks);
@@ -1596,46 +1564,45 @@ void updateShotCrossCountdownTimer(ShotCrossCountdownTimerUpdateState *arg0) {
     drawNumericString(buffer, 0x48, 0x50, 0xFF, arg0->digitAsset, 8, 0);
 }
 
-void cleanupShotCrossCountdownTimerTask(ShotCrossCountdownTimerState *arg0) {
+void cleanupShotCrossCountdownTimerTask(TimerDisplayState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
 void initSuccessMessageDisplayTask(SuccessMessageDisplayState *state) {
-    if (state->flashState == 0) {
+    if (state->animationDelay == 0) {
         state->spriteAsset = loadAsset_34CB50();
         state->spriteFrame = 0x1E;
         state->x = -0x48;
         state->y = -0x10;
-        state->flashState = 1;
+        state->animationDelay = 1;
         setCleanupCallback(cleanupSuccessMessageDisplayTask);
         setCallback(updateSuccessMessageDisplay);
     } else {
-        state->flashState = state->flashState - 1;
+        state->animationDelay = state->animationDelay - 1;
     }
 }
 
 void updateSuccessMessageDisplay(SuccessMessageDisplayState *state) {
-    if (state->flashState == 0) {
-        state->flashState = 1;
+    if (state->animationDelay == 0) {
+        state->animationDelay = 1;
         if ((u16)state->spriteFrame != 0x22) {
             state->spriteFrame = state->spriteFrame + 1;
         }
     } else {
-        state->flashState = state->flashState - 1;
+        state->animationDelay = state->animationDelay - 1;
     }
     enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, state);
 }
 
-void cleanupSuccessMessageDisplayTask(ShotCrossCountdownTimerState *arg0) {
+void cleanupSuccessMessageDisplayTask(SuccessMessageDisplayState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }
 
 void spawnSuccessMessageDisplayTask(s16 delayFrames) {
-    SuccessMessageSpawnState *task =
-        (SuccessMessageSpawnState *)scheduleTask(&initSuccessMessageDisplayTask, 1, 1, 0xE6);
+    SuccessMessageDisplayState *task = scheduleTask(&initSuccessMessageDisplayTask, 1, 1, 0xE6);
     if (task != NULL) {
-        task->initDelay = delayFrames;
+        task->animationDelay = delayFrames;
     }
 }
 
@@ -1644,7 +1611,7 @@ void initBonusGoldDisplayTask(BonusGoldDisplayState *arg0) {
 
     arg0->alphaValue = 0;
     arg0->spriteAsset = loadAsset_34CB50();
-    initHudElementState((HudElementState *)arg0);
+    initHudElementState((HudSpriteRenderState *)arg0);
     arg0->spriteFrame = 0x24;
     arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     if (allocation->raceType == RACE_TYPE_SPEED_CROSS) {
@@ -1677,7 +1644,7 @@ void updateBonusGoldDisplay(BonusGoldDisplayState *arg0) {
         }
     }
 
-    arg0->alpha = (u8)arg0->alphaValue;
+    arg0->spriteAlpha = (u8)arg0->alphaValue;
     enqueueCallbackBySlotIndex(8, 6, renderTextSpriteWithTransparency, arg0);
 
     var = 0;
@@ -1707,7 +1674,7 @@ void updateBonusGoldDisplay(BonusGoldDisplayState *arg0) {
 
     y = arg0->y;
     x = arg0->x;
-    alpha_lo = ((BonusGoldDisplayState_AlphaSplit *)&arg0->alphaValue)->alpha_lo;
+    alpha_lo = ((BigEndianS32Halves *)&arg0->alphaValue)->lower;
     drawNumericString(buf, (s16)(x + (0x50 - var * 8) / 2), (s16)(y + 0x14), alpha_lo, arg0->digitAsset, 8, 6);
 }
 
@@ -1730,19 +1697,19 @@ void initRaceTimerDisplay(RaceTimerState *arg0) {
 
 void updateRaceTimerDisplay(RaceTimerState *arg0) {
     char sp20[0x10];
-    Allocation *alloc;
+    GameState *gameState;
     s32 minutes;
     s32 seconds;
 
-    alloc = (Allocation *)getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    if (alloc->activeRaceEffectCount != 0) {
+    if (gameState->raceIntroState != 0) {
         goto check_time_flag;
     }
-    if (alloc->raceUpdatePaused != 0) {
+    if (gameState->gamePaused != 0) {
         goto check_time_flag;
     }
-    if (alloc->timeRemaining->animationFlags & 0x80000) {
+    if (gameState->players->animationFlags & 0x80000) {
         goto set_7E;
     }
     if (arg0->elapsedTicks == 0x433C8) {
@@ -1752,21 +1719,21 @@ void updateRaceTimerDisplay(RaceTimerState *arg0) {
     if (arg0->elapsedTicks != 0x433C8) {
         goto check_time_flag;
     }
-    alloc->timerExpired = 1;
+    gameState->playerLost = 1;
     playSoundEffectWithPriorityDefaultVolume(0x46, 6);
 
 check_time_flag:
-    if (!(alloc->timeRemaining->animationFlags & 0x80000)) {
+    if (!(gameState->players->animationFlags & 0x80000)) {
         goto after_7E;
     }
 set_7E:
     if (arg0->elapsedTicks > 0x4309E) {
         goto after_7E;
     }
-    alloc->raceTimerHoldFlag = 1;
+    gameState->bestBoardBonus = 1;
 
 after_7E:
-    alloc->raceTimerElapsedTicks = arg0->elapsedTicks;
+    gameState->raceTimerElapsedTicks = arg0->elapsedTicks;
 
     minutes = arg0->elapsedTicks / 32400;
     seconds = (arg0->elapsedTicks % 32400) / 540;
@@ -1794,52 +1761,52 @@ after_7E:
     drawNumericString(sp20, 0x68, 0x50, 0xFF, arg0->digitAsset, 8, 0);
 }
 
-void cleanupRaceTimerDisplay(ShotCrossCountdownTimerState *arg0) {
+void cleanupRaceTimerDisplay(RaceTimerState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
 
-void initSecondaryItemDisplayTask(SecondaryItemDisplayState *arg0) {
-    SecondaryItemAllocation *alloc = getCurrentAllocation();
+void initSecondaryItemDisplayTask(PlayerSpriteDisplayState *arg0) {
+    GameState *gameState = getCurrentAllocation();
     s32 index = arg0->playerIndex;
-    void *base = alloc->players;
+    Player *players = gameState->players;
 
-    arg0->itemX = -0x10;
-    arg0->itemY = -0x60;
-    arg0->player = (Player *)((u8 *)base + index * 3048);
+    arg0->x = -0x10;
+    arg0->y = -0x60;
+    arg0->player = players + index;
     arg0->spriteAsset = loadCompressedData(&playerItemIconAsset_ROM_START, &playerItemIconAsset_ROM_END, 0x2608);
     setCallbackWithContinue(updateSecondaryItemDisplay);
     setCleanupCallback(cleanupSecondaryItemDisplayTask);
 }
 
-void updateSecondaryItemDisplay(SecondaryItemDisplayState *state) {
-    state->itemIndex = state->player->secondaryItemId + 7;
+void updateSecondaryItemDisplay(PlayerSpriteDisplayState *state) {
+    state->spriteIndex = state->player->secondaryItemId + 7;
     enqueueCallbackBySlotIndex((u16)(state->playerIndex + 8), 0, renderSpriteFrame, state);
 
     if (state->player->itemHudNotificationFlags & 2) {
-        spawnFloatingItemSprite(state->itemX - 8, state->itemY - 8, 1, state->playerIndex + 8, 0);
+        spawnFloatingItemSprite(state->x - 8, state->y - 8, 1, state->playerIndex + 8, 0);
         state->player->itemHudNotificationFlags &= ~2;
     }
 }
 
-void cleanupSecondaryItemDisplayTask(SecondaryItemDisplayState *state) {
+void cleanupSecondaryItemDisplayTask(PlayerSpriteDisplayState *state) {
     state->spriteAsset = freeNodeMemory(state->spriteAsset);
 }
 
-void initSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
+void initSkillGameResultTimerDisplay(TimerDisplayState *arg0) {
     arg0->digitAsset = loadCompressedData(&digit_sprite_ROM_START, &COSTUME_SLOT_00_COMPRESSED_DATA_ROM_START, 0x508);
     arg0->spriteAsset = loadAsset_34CB50();
     arg0->spriteIndex = 0x23;
     arg0->x = -0x4C;
     arg0->y = -0x30;
-    arg0->timeRemaining = 0;
+    arg0->timerValue = 0;
     setCleanupCallback(cleanupSkillGameResultTimerDisplay);
     setCallback(updateSkillGameResultTimerDisplay);
 }
 
-void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
+void updateSkillGameResultTimerDisplay(TimerDisplayState *arg0) {
     char timeString[16];
-    SkillGameTimerAllocation *allocation;
+    GameState *gameState;
     s32 time;
     s32 minutes;
     s32 seconds;
@@ -1847,19 +1814,19 @@ void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     s16 blinkCounter;
     const char *timeFormat;
 
-    allocation = (SkillGameTimerAllocation *)getCurrentAllocation();
-    time = allocation->elapsedTicks;
+    gameState = getCurrentAllocation();
+    time = gameState->raceTimerElapsedTicks;
     minutes = time / 32400;
     seconds = (time % 32400) / 540;
     frames = ((time % 32400) % 540) / 9;
 
-    blinkCounter = (u16)arg0->timeRemaining + 1;
-    arg0->timeRemaining = blinkCounter;
+    blinkCounter = (u16)arg0->timerValue + 1;
+    arg0->timerValue = blinkCounter;
     if (blinkCounter == 0x28) {
-        arg0->timeRemaining = 0;
+        arg0->timerValue = 0;
     }
 
-    if (arg0->timeRemaining < 0x14) {
+    if (arg0->timerValue < 0x14) {
         timeFormat = sSkillGameResultTimerColonFormat;
         sprintf(timeString, timeFormat, minutes, seconds, frames);
     } else {
@@ -1871,7 +1838,7 @@ void updateSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
     drawNumericString(timeString, -0x54, -0x28, 0xFF, arg0->digitAsset, 8, 0);
 }
 
-void cleanupSkillGameResultTimerDisplay(ShotCrossCountdownTimerState *arg0) {
+void cleanupSkillGameResultTimerDisplay(TimerDisplayState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
     arg0->digitAsset = freeNodeMemory(arg0->digitAsset);
 }
@@ -1900,8 +1867,8 @@ void renderTrickPointsDisplay(TrickPointsDisplayState *state) {
         } while (state->scoreText[var_s0] != 0);
     }
     temp_s0 = (var_s0 * 4) + 0x10;
-    state->padding = temp_s0 + (s16)((u16)state->x - 0x28);
-    temp_s0 = state->x - temp_s0;
+    state->spriteX = temp_s0 + (s16)((u16)state->animationX - 0x28);
+    temp_s0 = state->animationX - temp_s0;
     enqueueCallbackBySlotIndex(8, 6, renderSpriteFrame, state);
     drawNumericString(state->scoreText, temp_s0, state->y, 0xFF, state->digitAsset, 8, 6);
 }
@@ -1913,7 +1880,7 @@ void updateTrickPointsSlideIn(TrickPointsDisplayState *state) {
     angle = state->animAngle + 0x80;
     state->animAngle = angle;
     sinVal = approximateSin(angle);
-    state->x = (0x2000 - sinVal) / 20;
+    state->animationX = (0x2000 - sinVal) / 20;
     if (state->animAngle == 0x800) {
         setCallback(updateTrickPointsHold);
     }
@@ -1935,14 +1902,14 @@ void updateTrickPointsSlideOut(TrickPointsDisplayState *state) {
     angle = state->animAngle + 0x80;
     state->animAngle = angle;
     sinVal = approximateSin(angle);
-    state->x = -((0x2000 - sinVal) / 20);
+    state->animationX = -((0x2000 - sinVal) / 20);
     if (state->animAngle == 0x1000) {
         terminateCurrentTask();
     }
     renderTrickPointsDisplay(state);
 }
 
-void cleanupTrickPointsDisplayTask(ShotCrossCountdownTimerState *state) {
+void cleanupTrickPointsDisplayTask(TrickPointsDisplayState *state) {
     state->spriteAsset = freeNodeMemory(state->spriteAsset);
     state->digitAsset = freeNodeMemory(state->digitAsset);
 }
@@ -2107,21 +2074,21 @@ const char sTrickPointsFormat[] = "\x04%d";
 const char sTrickPointsHighlightFormat[] = "\x02%d";
 
 void initRaceHudTasks(void) {
-    RaceHudInitState *hudState;
+    GameState *gameState;
     s32 i;
     s32 pad[2];
     s32 humanPlayerCount;
 
-    hudState = (RaceHudInitState *)getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    humanPlayerCount = hudState->humanPlayerCount;
+    humanPlayerCount = gameState->playerCount;
     if (humanPlayerCount <= 0) {
         return;
     }
 
     i = 0;
     do {
-        switch (hudState->raceType) {
+        switch (gameState->raceType) {
             case RACE_TYPE_STANDARD:
             case RACE_TYPE_BATTLE:
             case RACE_TYPE_TRAINING:
@@ -2161,7 +2128,7 @@ void initRaceHudTasks(void) {
                 break;
 
             case RACE_TYPE_SHOOT_CROSS:
-                spawnShotCrossScoreDisplayTask(hudState->players);
+                spawnShotCrossScoreDisplayTask(gameState->players);
                 spawnShotCrossItemCountDisplayTask(0);
                 scheduleTask(initShotCrossCountdownTimerTask, 0, 1, 0xF0);
                 scheduleTask(initCrossRaceBadgeTask, 0, 1, 0xF0);
@@ -2175,5 +2142,5 @@ void initRaceHudTasks(void) {
         }
 
         i++;
-    } while (i < hudState->humanPlayerCount);
+    } while (i < gameState->playerCount);
 }

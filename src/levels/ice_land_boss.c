@@ -81,7 +81,7 @@ typedef struct {
     u8 _padBCB[1];
     u8 surfaceInfo;
     u8 _padBCD[0xBDB - 0xBCD];
-    u8 unkBDB;
+    u8 bossHealth;
 } IceLandBossAttackArg;
 
 typedef struct {
@@ -231,7 +231,7 @@ typedef struct {
     u8 unkBC6;
     u8 unkBC7;
     u8 paddingBC8[0xBDB - 0xBC8];
-    u8 unkBDB;
+    u8 bossHealth;
 } IceLandBossArg;
 
 typedef struct {
@@ -539,7 +539,7 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
         arg0->unk0_3C[0].unk28 = arg0->unk0_3C[0].unk1C + ((s32 *)arg0->unk0_3C[0].unk1C)[arg0->unkBB8];
     }
 
-    arg0->unkBDB = 0xA;
+    arg0->bossHealth = 0xA;
 
     return 1;
 }
@@ -841,11 +841,11 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
         boss->behaviorStep += 1;
 
         if (!(boss->animationFlags & 0x80000)) {
-            if (boss->unkBDB == 0) {
+            if (boss->bossHealth == 0) {
                 queueSoundAtPosition(&boss->worldPos, 0x4C);
             } else {
-                boss->unkBDB -= 1;
-                if (boss->unkBDB == 0) {
+                boss->bossHealth -= 1;
+                if (boss->bossHealth == 0) {
                     queueSoundAtPosition(&boss->worldPos, 0x4C);
                 }
             }
@@ -916,7 +916,7 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
         boss->behaviorStep = 0;
         boss->behaviorCounter = 0;
 
-        if (boss->unkBDB == 0) {
+        if (boss->bossHealth == 0) {
             for (i = 0; i < 0x1E; i++) {
                 spawnBossHomingProjectileVariant1Task(boss);
             }
@@ -924,7 +924,7 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
             tempVec.y += 0x300000;
             spawnSparkleEffectWithPlayer(&tempVec, boss->playerIndex);
             setIceBossFlyingMode(boss);
-            boss->unkBDB = 3;
+            boss->bossHealth = 3;
             advancePlayerLeanAnimationAuto(boss, 2);
         }
     }
@@ -941,8 +941,8 @@ s32 iceLandBossHoverAttackPhase(Player *arg0) {
         arg0->behaviorStep = savedStep + 1;
         arg0->velocity.y = 0x80000;
         if (!(arg0->animationFlags & 0x80000)) {
-            if (arg0->unkBDB != 0) {
-                arg0->unkBDB = arg0->unkBDB - 1;
+            if (arg0->bossHealth != 0) {
+                arg0->bossHealth = arg0->bossHealth - 1;
             }
         }
     }
@@ -961,7 +961,7 @@ s32 iceLandBossHoverAttackPhase(Player *arg0) {
 
     if (arg0->velocity.y < 0) {
         if (!(arg0->animationFlags & 0x1)) {
-            hoverCount = arg0->unkBDB;
+            hoverCount = arg0->bossHealth;
             arg0->behaviorFlags = 0;
             arg0->behaviorMode = 1;
             arg0->behaviorPhase = 1;

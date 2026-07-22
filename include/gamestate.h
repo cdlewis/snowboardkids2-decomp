@@ -255,7 +255,7 @@ typedef struct {
     /* 0xBD8 */ u8 itemHudNotificationFlags;
     /* 0xBD9 */ u8 flyingAttackState; /* 0=normal, 1-3=flying attack modes */
     /* 0xBDA */ u8 isCpuControlled;
-    /* 0xBDB */ u8 unkBDB;
+    /* 0xBDB */ u8 bossHealth;
     /* 0xBDC */ u8 cpuInputFlags;
     /* 0xBDD */ u8 aiDifficultyIndex;
     /* 0xBDE */ u8 aiPathFlags; /* Bit 3: shortcut available */
@@ -288,10 +288,7 @@ typedef struct {
     /* 0x48 */ u8 *unk48;
     /* 0x4C */ s32 stateDelayTimer;
     /* 0x50 */ u32 raceFrameCounter;
-    /* 0x54 */ u8 unk54;
-    /* 0x55 */ u8 unk55;
-    /* 0x56 */ u8 unk56;
-    /* 0x57 */ u8 unk57;
+    /* 0x54 */ s32 raceTimerElapsedTicks;
     /* 0x58 */ u16 shortcutActivationCounter;
     /* 0x5A */ u8 shootCrossTargetsHit;
     /* 0x5B */ u8 availableHomingProjectileSlots;
