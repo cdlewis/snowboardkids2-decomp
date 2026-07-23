@@ -1,5 +1,6 @@
 #include "story/map_events.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "data/global_frame_counter.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "math/rand.h"
@@ -53,8 +54,6 @@ u8 gStoryMapRegularEventTypes[30][8] = {
 };
 
 u8 gStoryMapRegularEventTypesPad[4] = { 0x04, 0x05, 0x08, 0x07 };
-
-extern u16 gGlobalFrameCounter;
 
 void nullRandomEventCallback(void);
 

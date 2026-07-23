@@ -2,6 +2,7 @@
 #include "common.h"
 #include "data/asset_metadata.h"
 #include "data/data_table.h"
+#include "data/global_frame_counter.h"
 #include "gamestate.h"
 #include "gbi.h"
 #include "graphics/displaylist.h"
@@ -177,8 +178,6 @@ typedef struct {
     u8 padding[0x76];
     u8 raceUpdatePaused;
 } Alloc_CharacterAttackEffect;
-
-extern u16 gGlobalFrameCounter;
 
 void loadFirstSprayParticle(SprayEffectTask *);
 void cleanupSprayEffect(void **);

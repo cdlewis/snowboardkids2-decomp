@@ -5,6 +5,7 @@
 #include "common.h"
 #include "data/course_data.h"
 #include "data/data_table.h"
+#include "data/global_frame_counter.h"
 #include "font_encoding.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
@@ -198,8 +199,6 @@ typedef struct {
 } D_800AFE8C_type_202A0;
 
 extern D_800AFE8C_type_202A0 *gGameSessionContext;
-extern u16 gGlobalFrameCounter;
-
 extern void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *);
 
 void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {

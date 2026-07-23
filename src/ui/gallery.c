@@ -4,6 +4,7 @@
 #include "common.h"
 #include "common_bss.h"
 #include "cutscene/sys_effect.h"
+#include "data/global_frame_counter.h"
 #include "effects/cutscene_keyframes.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
@@ -253,8 +254,6 @@ extern const char D_8009DF28_9EB28[];
 extern const char D_8009DF2C_9EB2C[];
 extern const char D_8009DF30_9EB30[];
 extern const char D_8009DF34_9EB34[];
-extern u16 gGlobalFrameCounter;
-
 void setupGalleryMenuState(void);
 void updateGalleryMenu(void);
 extern void initGalleryViewer(FD98_struct *);

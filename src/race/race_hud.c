@@ -5,6 +5,7 @@
 #include "data/asset_metadata.h"
 #include "data/course_data.h"
 #include "data/data_table.h"
+#include "data/global_frame_counter.h"
 #include "gamestate.h"
 #include "gbi.h"
 #include "graphics/displaylist.h"
@@ -535,7 +536,6 @@ extern void *D_80095860_96460;
 extern void *D_80095930_96530;
 extern Gfx D_8009A780_9B380[];
 extern s32 gLookAtPtr;
-extern u16 gGlobalFrameCounter;
 extern Gfx *gDisplayListAllocPtr;
 extern void *D_80094DD0_959D0;
 extern DisplayLists D_8009A670_9B270;

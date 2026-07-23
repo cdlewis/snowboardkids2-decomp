@@ -2,6 +2,7 @@
 #include "assets.h"
 #include "common.h"
 #include "data/course_data.h"
+#include "data/global_frame_counter.h"
 #include "font_encoding.h"
 #include "graphics/clip_text_render.h"
 #include "graphics/graphics.h"
@@ -391,8 +392,6 @@ void cleanupSaveSlotPromptText(SaveSlotCleanupArg *arg0);
 void cleanupSaveSlotNameEntryGrid(SaveSlotCleanupArg *arg0);
 void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0);
 void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0);
-
-extern u16 gGlobalFrameCounter;
 
 void initSaveSlotStatSprites(SaveSlotStatSpritesState *state) {
     void *spriteSheet;

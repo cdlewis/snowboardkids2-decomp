@@ -3,6 +3,7 @@
 #include "common.h"
 #include "common_bss.h"
 #include "data/asset_metadata.h"
+#include "data/global_frame_counter.h"
 #include "gamestate.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
@@ -123,8 +124,6 @@ Vec3i gIceLandBossShadowSampleOffsets[] = {
     { 0x00000000, 0x00000000, 0xFFF40000 },
     { 0x000C0000, 0x00000000, 0xFFF40000 },
 };
-
-extern u16 gGlobalFrameCounter;
 
 void updateIceLandBoss(Player *boss) {
     Transform3D rotationMatrix;

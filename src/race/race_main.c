@@ -6,6 +6,7 @@
 #include "data/asset_metadata.h"
 #include "data/course_data.h"
 #include "data/data_table.h"
+#include "data/global_frame_counter.h"
 #include "gamestate.h"
 #include "gbi.h"
 #include "graphics/displaylist.h"
@@ -59,7 +60,6 @@ typedef struct {
 extern Gfx *gDisplayListAllocPtr;
 
 extern AssetMeta D_8009A550_9B150[];
-extern u16 gGlobalFrameCounter;
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
 extern s32 gButtonsPressed[];

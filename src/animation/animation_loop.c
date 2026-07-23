@@ -2,6 +2,7 @@
 #include "audio/audio.h"
 #include "common.h"
 #include "common_bss.h"
+#include "data/global_frame_counter.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "os_cont.h"
@@ -58,7 +59,6 @@ extern s32 gButtonsPressed[];
 extern s8 gDebugCameraBaseStep;
 extern s8 gAnalogStickY;
 extern u8 gAnalogStickX;
-extern u16 gGlobalFrameCounter;
 
 void initAnimationLoopState(CutsceneCameraState *, u16);
 

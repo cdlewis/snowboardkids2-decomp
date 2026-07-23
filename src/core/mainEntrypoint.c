@@ -1,6 +1,7 @@
 #include "core/mainEntrypoint.h"
 #include "audio/audio.h"
 #include "common.h"
+#include "data/global_frame_counter.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "os_message.h"
@@ -15,7 +16,6 @@
 ViConfig mainViConfig __attribute__((section(".bss")));
 OSMesg mainMessageQueueBuffer[32] __attribute__((section(".bss")));
 
-extern u16 gGlobalFrameCounter;
 extern u8 gControllerPollingEnabled;
 
 void mainThreadEntrypoint(void *arg) {

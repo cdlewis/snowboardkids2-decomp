@@ -3,6 +3,7 @@
 #include "animation/easing_state.h"
 #include "audio/audio.h"
 #include "common.h"
+#include "data/global_frame_counter.h"
 #include "gamestate.h"
 #include "math/geometry.h"
 #include "math/rand.h"
@@ -18,8 +19,6 @@ void updateStoryMapRareEventSledding(Func2E024Arg *);
 void updateStoryMapRareEventSkating(Func2E024Arg *);
 void updateStoryMapRareEventSnowman(Func2E024Arg *);
 void updateStoryMapRareEventCheering(Func2E024Arg *);
-
-extern u16 gGlobalFrameCounter;
 
 u16 gNpcCollisionRadii[] = {
     0x000F, 0x000F, 0x0013, 0x0013, 0x0013, 0x000F, 0x000F, 0x000F, 0x0013, 0x0000, 0x0002, 0x0304, 0x0506, 0x0907,

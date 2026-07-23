@@ -6,6 +6,7 @@
 #include "data/asset_metadata.h"
 #include "data/course_data.h"
 #include "data/data_table.h"
+#include "data/global_frame_counter.h"
 #include "gamestate.h"
 #include "graphics/clip_text_render.h"
 #include "graphics/graphics.h"
@@ -54,7 +55,6 @@ typedef struct {
 extern s32 gFirstPlaceGoldReward[];
 extern s32 gSecondPlaceGoldReward[];
 extern s32 gThirdPlaceGoldReward[];
-extern u16 gGlobalFrameCounter;
 
 // const char definitions appear later to keep the rodata gods happy
 const char D_8009E868_9F468[];
