@@ -522,3 +522,10 @@ Partial `GameState` overlays that expose the player-array pointer at offset `0x1
 Scheduled task callbacks also receive different phases of the same allocation. Init, update, cleanup, and spawn helpers should share the complete task state when their fields occupy the same offsets; do not create a new padded view for each callback. When an element is exactly a `SpriteRenderArg`, use that existing type rather than duplicating its layout with alternate field names.
 
 KMC GCC can still be sensitive to the source shape of typed player indexing. In `initRaceProgressIndicatorTask`, replacing the byte-offset induction variable with `&gameState->players[i]` emitted the operands of one `addu` in the opposite order and broke the ROM checksum. Keeping the offset derived from `sizeof(Player)` preserves the canonical element size while matching the target instruction encoding.
+
+The Ice Land boss model initializer has a related overlapping-layout constraint. `Player` stores asset pointers in
+the first `0x38` bytes, followed by `DisplayListObject` elements of size `0x3C`. KMC only reproduced the target loop
+when a `0x3C` stride view advanced from the `Player` base and a second typed view exposed the display object at
+offset `0x38`; iterating `Player.bodyPartDisplayObjects` directly added two instructions. A small documented adapter
+view can preserve this induction shape while the function signatures and all actual field accesses continue using
+the canonical `Player` and `DisplayListObject` types.

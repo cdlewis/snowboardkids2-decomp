@@ -188,7 +188,14 @@ DAMIEN_ASSETS_212CF0 = 0x800899AC; // rom:0x8A5AC
 PEN_ASSETS = 0x80089A0C; // rom:0x8A60C
 microcodeGroups = 0x8009AFD8; // size:0x10
 gRootViewport = 0x800A3370; // size:0xC
-D_800BCA64 = 0x800BCA64; // segment:levels/ice_land_boss rom:0xB1F54
+gIceLandBossGroundCollisionLocalOffsets = 0x800BC9F0; // segment:levels/ice_land_boss rom:0xB1EE0
+gIceLandBossBehaviorModeHandlers = 0x800BCA14; // segment:levels/ice_land_boss rom:0xB1F04
+gIceLandBossGroundCollisionOffset = 0x800BCA24; // segment:levels/ice_land_boss rom:0xB1F14
+gIceLandBossFlyingCollisionOffset = 0x800BCA30; // segment:levels/ice_land_boss rom:0xB1F20
+gIceLandBossSpawnXPositions = 0x800BCA3C; // segment:levels/ice_land_boss rom:0xB1F2C
+gIceLandBossChasePhaseHandlers = 0x800BCA44; // segment:levels/ice_land_boss rom:0xB1F34
+gIceLandBossForwardAcceleration = 0x800BCA50; // segment:levels/ice_land_boss rom:0xB1F40
+gIceLandBossShadowSampleOffsets = 0x800BCA64; // segment:levels/ice_land_boss rom:0xB1F54
 gFrameBuffer = 0x8016A000; // segment:buffers size:0x25800
 
 gAIPlayerParams = 0x800BADE0; // segment:race rom:0xAAC90 size:0x220

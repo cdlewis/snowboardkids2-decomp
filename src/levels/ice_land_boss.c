@@ -31,303 +31,68 @@
 
 typedef void (*FuncPtr)(void *);
 
+/**
+ * Player's asset pointers occupy the 0x38 bytes before bodyPartDisplayObjects.
+ * Iterating this 0x3C-byte view preserves the original overlapping model-init loop.
+ */
 typedef struct {
-    /* 0x0 */ void *ptr;
-    u8 _pad[0x38];
-} Element0x3C; // Size: 0x3C
+    u8 padding[0x3C];
+} IceLandBossDisplayObjectStride;
 
 typedef struct {
-    u8 _pad0[0x38];
-    u8 unk38[0x6C - 0x38];
-    u8 unk6C;
-    u8 unk6D;
-    u8 unk6E;
-    u8 _pad6F[1];
-    u8 unk70;
-    u8 unk71;
-    u8 unk72;
-    u8 _pad73[0x328 - 0x73];
-    // Element0x3C elements[12] overlaps at offset 0x58
-    u8 _pad328[0x434 - 0x328];
-    Vec3i unk434;
-    u8 _pad440[0x44C - 0x440];
-    Vec3i velocity;
-    u8 _pad458[0x984 - 0x458];
-    u8 unk984[0xC];
-    u8 _pad990[0xAE0 - 0x990];
-    s32 unkAE0;
-    u8 _padAE4[0xB2C - 0xAE4];
-    s32 unkB2C;
-    u8 _padB30[0xB84 - 0xB30];
-    s32 bossFlags;
-    s32 behaviorFlags;
-    u8 _padB8C[0xB94 - 0xB8C];
-    u16 sectorIndex;
-    u8 _padB96[0xBB4 - 0xB96];
-    u8 collisionSphereCount;
-    u8 _padBB5[0xBB7 - 0xBB5];
-    u8 animationBoneCount;
-    u8 _padBB8[0xBB9 - 0xBB8];
-    u8 characterId;
-    u8 boardIndex;
-    u8 _padBBB[0xBBD - 0xBBB];
-    u8 behaviorMode;
-    u8 behaviorPhase;
-    u8 behaviorStep;
-    u8 behaviorCounter;
-    u8 _padBC1[0xBC9 - 0xBC1];
-    u8 trackFaceType;
-    u8 trackFaceSubtype;
-    u8 _padBCB[1];
-    u8 surfaceInfo;
-    u8 _padBCD[0xBDB - 0xBCD];
-    u8 bossHealth;
-} IceLandBossAttackArg;
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
-    void *unk10;
-    void *unk14;
-    void *unk18;
-    void *unk1C;
-    void *unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    u8 padding[12];
-} Unk0x3CElem;
-
-typedef struct {
-    Transform3D unk38;
-    void *unk58;
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
-} Unk0x3CElemExtra;
-
-typedef struct {
-    Unk0x3CElem unk0_3C[12];
-    u8 padding3C[0x434 - (12 * 60)];
-    Vec3i currentWorldPos;
-    Vec3i prevWorldPos;
-    Vec3i velocity;
-    s32 unk458;
-    s32 unk45C;
-    s32 unk460;
-    u8 padding464[0x4];
-    s32 unk468;
-    s32 unk46C;
-    void *unk470;
-    s32 unk474;
-    s32 unk478;
-    s32 unk47C;
-    s32 unk480;
-    u8 padding484[0x4];
-    BoneAnimationStateIndexed boneAnimationStates[12];
-    u8 padding888[0x4EC - 0x4 - 0x48 * 12];
-    Transform3D unk970;
-    Transform3D unk990;
-    Transform3D unk9B0;
-    u8 paddingA88[0xA8C - 0x9D0];
-    u16 animationIndex;
-    s16 unkA8E;
-    s16 unkA90;
-    s16 unkA92;
-    s16 rotY;
-    s16 trickRotationX;
-    s16 trickRotationY;
-    s16 unkA9A;
-    u8 padding9E[0x2];
-    s16 bossYawAngle;
-    s32 baseMaxSpeed;
-    s32 maxSpeedCap;
-    s32 unkAA8;
-    s32 unkAAC;
-    s32 unkAB0;
-    s32 unkAB4;
-    s32 unkAB8;
-    s32 baseAcceleration;
-    u8 unkAC0;
-    u8 unkAC1;
-    s16 unkAC2;
-    s16 unkAC4;
-    u8 paddingAC6[0x2];
-    s32 unkAC8;
-    s32 unkACC;
-    s32 unkAD0;
-    s32 unkAD4[3];
-    s32 unkAE0;
-    Vec3i extraCollisionOffsets[6];
-    s32 extraCollisionRadii;
-    s32 unkB30;
-    s32 unkB34;
-    s32 unkB38;
-    s32 unkB3C;
-    s32 unkB40;
-    s32 unkB44;
-    s32 unkB48;
-    s32 unkB4C;
-    s32 unkB50;
-    void *unkB54;
-    s32 unkB58;
-    s32 unkB5C;
-    s32 unkB60;
-    s32 unkB64;
-    u8 unkB68;
-    u8 paddingB69[0x3];
-    s32 unkB6C;
-    s32 unkB70;
-    u16 unkB74;
-    u8 paddingB76[0x2];
-    s16 aiItemUseTimer;
-    s8 inputStickX;
-    s8 inputStickY;
-    s16 inputButtonsHeld;
-    u16 inputButtonsPressed;
-    s8 prevInputStickX;
-    s8 prevInputStickY;
-    u8 paddingB82[0x2];
-    s32 animationFlags;
-    s32 unkB88;
-    s32 unkB8C;
-    s32 unkB90;
-    u16 sectorIndex;
-    u8 paddingB96[0x2];
-    s16 lapProgressRemaining;
-    s16 boostTimer;
-    s16 unkB9C;
-    u16 squashStretchScale;
-    u16 characterScaleXZ;
-    s16 characterScaleY;
-    u16 unkBA4;
-    s16 unkBA6;
-    u8 paddingBA8[0x2];
-    s16 trickPoints;
-    s16 trickScore;
-    s16 tricksPerformedMask;
-    u16 unkBB0;
-    u16 unkBB2;
-    u8 collisionSphereCount;
-    s8 trickCount;
-    u8 spinsPerformedMask;
-    u8 boneCount;
-    u8 unkBB8;
-    u8 characterId;
-    u8 boardIndex;
-    u8 unkBBB;
-    u8 unkBBC;
-    u8 behaviorMode;
-    u8 behaviorPhase;
-    u8 behaviorStep;
-    u8 behaviorCounter;
-    u8 shadowMeshNeedsUpdate;
-    u8 unkBC2;
-    u8 unkBC3;
-    u8 finishPosition;
-    u8 unkBC5;
-    u8 unkBC6;
-    u8 unkBC7;
-    u8 paddingBC8[0xBDB - 0xBC8];
-    u8 bossHealth;
-} IceLandBossArg;
-
-typedef struct {
-    u8 pad[0x38];
-    s16 groundJointOffsets[6];
-    u8 pad44[0xB0 - 0x44];
-    s16 groundJointOffsets2[6];
-    u8 padBC[0x128 - 0xBC];
-    s16 groundJointOffsets3[6];
-    u8 pad134[0x434 - 0x134];
-    Vec3i position;
-    Vec3i prevPosition;
-    Vec3i velocity;
-    u8 pad458[0x970 - 0x458];
-    Transform3D yRotationMatrix;
-    Transform3D combinedRotationMatrix;
-    Transform3D zRotationMatrix;
-    u8 pad9D0[0xA8E - 0x9D0];
-    u16 unkA8E;
-    u16 unkA90;
-    u16 unkA92;
-    u16 rotY;
-    u8 padA96[0xAA4 - 0xA96];
-    s32 targetSpeed;
-    s32 currentSpeed;
-    u8 padAAC[0xAC2 - 0xAAC];
-    s16 behaviorTrigger;
-    u8 padAC4[0xAD4 - 0xAC4];
-    Vec3i transformedPos;
-    u8 padAE0[0x4];
-    Vec3i unkAE4;
-    Vec3i unkAF0;
-    Vec3i unkAFC;
-    u8 padB08[0xB50 - 0xB08];
-    ListNode_5AA90 sectorListNode;
-    u8 padB6C[0xB84 - 0xB6C];
-    s32 bossFlags;
-    u8 padB88[0xBBD - 0xB88];
-    u8 behaviorMode;
-    u8 behaviorPhase;
-    u8 behaviorStep;
-    u8 behaviorCounter;
-    u8 padBC1[3];
-    u8 finishPosition;
-} IceBossArg;
-
-void updateIceLandBossLeanBoneTransforms(Player *);
+    u8 padding[0x38];
+    DisplayListObject displayObject;
+} IceLandBossDisplayObjectView;
 
 typedef s32 (*StateFunc)(void *);
 
 // Forward declarations for function pointer arrays
-s32 initIceLandBoss(IceLandBossArg *);
-void dispatchIceLandBossChasePhase(IceLandBossAttackArg *);
-void dispatchIceLandBossAttackPhase(IceLandBossAttackArg *);
-s32 iceLandBossDefeatedBehavior(IceLandBossAttackArg *);
-s32 iceLandBossChaseIntroPhase(IceLandBossAttackArg *);
+void updateIceLandBossLeanBoneTransforms(Player *);
+s32 initIceLandBoss(Player *);
+void dispatchIceLandBossChasePhase(Player *);
+void dispatchIceLandBossAttackPhase(Player *);
+s32 iceLandBossDefeatedBehavior(Player *);
+s32 iceLandBossChaseIntroPhase(Player *);
 s32 iceLandBossChaseAttackPhase(Player *);
-s32 iceLandBossChaseExitPhase(IceLandBossAttackArg *);
+s32 iceLandBossChaseExitPhase(Player *);
 s32 iceLandBossGroundProjectileAttackPhase(Player *);
 s32 iceLandBossHoverAttackPhase(Player *);
 
-s32 D_800BC9F0_B1EE0[] = {
+s32 gIceLandBossGroundCollisionLocalOffsets[] = {
     0x00000000, 0x00068000, 0x0003F000, 0x00000000, 0xFFF04000, 0x00018000, 0x00000000, 0xFFF04000, 0x00018000,
 };
 
-StateFunc D_800BCA14_B1F04[] = {
+StateFunc gIceLandBossBehaviorModeHandlers[] = {
     (StateFunc)initIceLandBoss,
     (StateFunc)dispatchIceLandBossChasePhase,
     (StateFunc)dispatchIceLandBossAttackPhase,
     (StateFunc)iceLandBossDefeatedBehavior,
 };
 
-s32 D_800BCA24_B1F14[] = {
+s32 gIceLandBossGroundCollisionOffset[] = {
     0x00000000,
     0x00117000,
     0x00000000,
 };
 
-s32 D_800BCA30_B1F20[] = {
+s32 gIceLandBossFlyingCollisionOffset[] = {
     0x00000000,
     0x00100000,
     0x00000000,
 };
 
-s32 D_800BCA3C_B1F2C[] = {
+s32 gIceLandBossSpawnXPositions[] = {
     0xFFF00000,
     0x00300000,
 };
 
-FuncPtr D_800BCA44_B1F34[] = {
+FuncPtr gIceLandBossChasePhaseHandlers[] = {
     (FuncPtr)iceLandBossChaseIntroPhase,
     (FuncPtr)iceLandBossChaseAttackPhase,
     (FuncPtr)iceLandBossChaseExitPhase,
 };
 
-s32 D_800BCA50_B1F40[] = {
+s32 gIceLandBossForwardAcceleration[] = {
     0x00000000,
     0x00000000,
     0x00006000,
@@ -338,7 +103,7 @@ FuncPtr gIceLandBossAttackPhaseHandlers[] = {
     (FuncPtr)iceLandBossHoverAttackPhase,
 };
 
-Vec3i D_800BCA64[] = {
+Vec3i gIceLandBossShadowSampleOffsets[] = {
     { 0xFFE79000, 0x00000000, 0x00187000 },
     { 0x00000000, 0x00000000, 0x00187000 },
     { 0x00187000, 0x00000000, 0x00187000 },
@@ -361,7 +126,7 @@ Vec3i D_800BCA64[] = {
 
 extern u16 gGlobalFrameCounter;
 
-void updateIceLandBoss(IceBossArg *boss) {
+void updateIceLandBoss(Player *boss) {
     Transform3D rotationMatrix;
     Transform3D fullTransform;
     GameState *gameState;
@@ -371,35 +136,35 @@ void updateIceLandBoss(IceBossArg *boss) {
 
     gameState = getCurrentAllocation();
 
-    boss->velocity.x = boss->position.x - boss->prevPosition.x;
-    boss->velocity.y = boss->position.y - boss->prevPosition.y;
-    boss->velocity.z = boss->position.z - boss->prevPosition.z;
-    memcpy(&boss->prevPosition, &boss->position, sizeof(Vec3i));
+    boss->velocity.x = boss->worldPos.x - boss->prevWorldPos.x;
+    boss->velocity.y = boss->worldPos.y - boss->prevWorldPos.y;
+    boss->velocity.z = boss->worldPos.z - boss->prevWorldPos.z;
+    memcpy(&boss->prevWorldPos, &boss->worldPos, sizeof(Vec3i));
 
     player = gameState->players;
     distanceToPlayer = distance_3d(
-        boss->position.x - player->worldPos.x,
-        boss->position.y - player->worldPos.y,
-        boss->position.z - player->worldPos.z
+        boss->worldPos.x - player->worldPos.x,
+        boss->worldPos.y - player->worldPos.y,
+        boss->worldPos.z - player->worldPos.z
     );
 
     if ((boss->finishPosition == 0) & (distanceToPlayer > 0xE00000)) {
-        if (boss->bossFlags & ICE_BOSS_FLAG_FLYING) {
-            boss->targetSpeed = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_TRICK_LEVEL_2) - 0x8000;
+        if (boss->animationFlags & ICE_BOSS_FLAG_FLYING) {
+            boss->maxSpeedCap = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_TRICK_LEVEL_2) - 0x8000;
         } else if (distanceToPlayer > 0x8C00000) {
-            boss->targetSpeed = 0x70000;
+            boss->maxSpeedCap = 0x70000;
         } else {
-            boss->targetSpeed = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_BALANCE_LEVEL_1) - 0x8000;
+            boss->maxSpeedCap = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_BALANCE_LEVEL_1) - 0x8000;
         }
     } else {
-        boss->targetSpeed = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_SPEED_LEVEL_3) + 0x18000;
+        boss->maxSpeedCap = getCharacterSnowboardMaxSpeed(0, SNOWBOARD_SPEED_LEVEL_3) + 0x18000;
     }
 
-    if (boss->targetSpeed > 0x180000) {
-        boss->targetSpeed = 0x180000;
+    if (boss->maxSpeedCap > 0x180000) {
+        boss->maxSpeedCap = 0x180000;
     }
 
-    speedDelta = boss->targetSpeed - boss->currentSpeed;
+    speedDelta = boss->maxSpeedCap - boss->smoothedSpeedCap;
     if (speedDelta >= 0x1001) {
         speedDelta = 0x1000;
     }
@@ -407,68 +172,84 @@ void updateIceLandBoss(IceBossArg *boss) {
         speedDelta = -0x80;
     }
 
-    boss->currentSpeed = boss->currentSpeed + speedDelta;
-    boss->bossFlags &= ~ICE_BOSS_FLAG_TURBO;
+    boss->smoothedSpeedCap = boss->smoothedSpeedCap + speedDelta;
+    boss->animationFlags &= ~ICE_BOSS_FLAG_TURBO;
 
     if (boss->behaviorMode != ICE_BOSS_MODE_DEFEATED) {
-        if (boss->behaviorTrigger != 0) {
-            if (boss->behaviorTrigger == ICE_BOSS_TRIGGER_ATTACK) {
+        if (boss->hitReactionState != 0) {
+            if (boss->hitReactionState == ICE_BOSS_TRIGGER_ATTACK) {
                 boss->behaviorMode = ICE_BOSS_MODE_ATTACK;
                 boss->behaviorPhase = 0;
                 boss->behaviorStep = 0;
                 boss->behaviorCounter = 0;
-                if (boss->bossFlags & ICE_BOSS_FLAG_FLYING) {
+                if (boss->animationFlags & ICE_BOSS_FLAG_FLYING) {
                     boss->behaviorPhase = 1;
                 }
             }
         }
     }
-    boss->behaviorTrigger = 0;
+    boss->hitReactionState = 0;
 
     do {
-    } while (D_800BCA14_B1F04[boss->behaviorMode](boss) != 0);
+    } while (gIceLandBossBehaviorModeHandlers[boss->behaviorMode](boss) != 0);
 
-    createZRotationMatrix(&boss->zRotationMatrix, boss->unkA92);
-    createCombinedRotationMatrix(&boss->combinedRotationMatrix, boss->unkA8E, boss->unkA90);
-    createYRotationMatrix(&boss->yRotationMatrix, boss->rotY);
+    createZRotationMatrix(&boss->tiltTransform, boss->rollAngle);
+    createCombinedRotationMatrix(&boss->orientationTransform, boss->pitchAngle, boss->steeringAngle);
+    createYRotationMatrix(&boss->headingTransform, boss->rotY);
 
-    composeTransform3D(&boss->zRotationMatrix, &boss->combinedRotationMatrix, &rotationMatrix);
-    composeTransform3D(&rotationMatrix, &boss->yRotationMatrix, &fullTransform);
+    composeTransform3D(&boss->tiltTransform, &boss->orientationTransform, &rotationMatrix);
+    composeTransform3D(&rotationMatrix, &boss->headingTransform, &fullTransform);
 
-    fullTransform.translation.x -= boss->yRotationMatrix.translation.x;
-    fullTransform.translation.y -= boss->yRotationMatrix.translation.y;
-    fullTransform.translation.z -= boss->yRotationMatrix.translation.z;
+    fullTransform.translation.x -= boss->headingTransform.translation.x;
+    fullTransform.translation.y -= boss->headingTransform.translation.y;
+    fullTransform.translation.z -= boss->headingTransform.translation.z;
 
-    if (boss->bossFlags & ICE_BOSS_FLAG_FLYING) {
-        transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&fullTransform, &boss->transformedPos);
+    if (boss->animationFlags & ICE_BOSS_FLAG_FLYING) {
+        transformVector((s16 *)gIceLandBossFlyingCollisionOffset, (s16 *)&fullTransform, &boss->collisionOffset);
     } else {
-        transformVector((s16 *)D_800BCA24_B1F14, (s16 *)&fullTransform, &boss->transformedPos);
+        transformVector((s16 *)gIceLandBossGroundCollisionOffset, (s16 *)&fullTransform, &boss->collisionOffset);
     }
-    memcpy(&boss->sectorListNode.localPos, &boss->transformedPos, sizeof(Vec3i));
-    addCollisionSectorNodeToList(&boss->sectorListNode);
-    updateIceLandBossLeanBoneTransforms((Player *)boss);
+    memcpy(&boss->collisionListNode.localPos, &boss->collisionOffset, sizeof(Vec3i));
+    addCollisionSectorNodeToList(&boss->collisionListNode);
+    updateIceLandBossLeanBoneTransforms(boss);
 
-    if (boss->bossFlags & ICE_BOSS_FLAG_FLYING) {
-        transformVector((s16 *)D_800BCA30_B1F20, (s16 *)&fullTransform, &boss->unkAE4);
+    if (boss->animationFlags & ICE_BOSS_FLAG_FLYING) {
+        transformVector(
+            (s16 *)gIceLandBossFlyingCollisionOffset,
+            (s16 *)&fullTransform,
+            &boss->extraCollisionOffsets[0]
+        );
     } else {
-        transformVector((s16 *)D_800BC9F0_B1EE0, boss->groundJointOffsets, &boss->unkAE4);
-        boss->unkAE4.x -= boss->yRotationMatrix.translation.x;
-        boss->unkAE4.y -= boss->yRotationMatrix.translation.y;
-        boss->unkAE4.z -= boss->yRotationMatrix.translation.z;
+        transformVector(
+            (s16 *)gIceLandBossGroundCollisionLocalOffsets,
+            (s16 *)&boss->bodyPartDisplayObjects[0].transform,
+            &boss->extraCollisionOffsets[0]
+        );
+        boss->extraCollisionOffsets[0].x -= boss->headingTransform.translation.x;
+        boss->extraCollisionOffsets[0].y -= boss->headingTransform.translation.y;
+        boss->extraCollisionOffsets[0].z -= boss->headingTransform.translation.z;
 
-        transformVector((s16 *)D_800BC9F0_B1EE0 + 6, boss->groundJointOffsets2, &boss->unkAF0);
-        boss->unkAF0.x -= boss->yRotationMatrix.translation.x;
-        boss->unkAF0.y -= boss->yRotationMatrix.translation.y;
-        boss->unkAF0.z -= boss->yRotationMatrix.translation.z;
+        transformVector(
+            (s16 *)gIceLandBossGroundCollisionLocalOffsets + 6,
+            (s16 *)&boss->bodyPartDisplayObjects[2].transform,
+            &boss->extraCollisionOffsets[1]
+        );
+        boss->extraCollisionOffsets[1].x -= boss->headingTransform.translation.x;
+        boss->extraCollisionOffsets[1].y -= boss->headingTransform.translation.y;
+        boss->extraCollisionOffsets[1].z -= boss->headingTransform.translation.z;
 
-        transformVector((s16 *)D_800BC9F0_B1EE0 + 12, boss->groundJointOffsets3, &boss->unkAFC);
-        boss->unkAFC.x -= boss->yRotationMatrix.translation.x;
-        boss->unkAFC.y -= boss->yRotationMatrix.translation.y;
-        boss->unkAFC.z -= boss->yRotationMatrix.translation.z;
+        transformVector(
+            (s16 *)gIceLandBossGroundCollisionLocalOffsets + 12,
+            (s16 *)&boss->bodyPartDisplayObjects[4].transform,
+            &boss->extraCollisionOffsets[2]
+        );
+        boss->extraCollisionOffsets[2].x -= boss->headingTransform.translation.x;
+        boss->extraCollisionOffsets[2].y -= boss->headingTransform.translation.y;
+        boss->extraCollisionOffsets[2].z -= boss->headingTransform.translation.z;
     }
 }
 
-s32 initIceLandBoss(IceLandBossArg *arg0) {
+s32 initIceLandBoss(Player *arg0) {
     Vec3i waypoint1;
     Vec3i waypoint2;
     GameState *gameState;
@@ -478,19 +259,19 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     gameState = getCurrentAllocation();
 
     // Initialize rotation matrices for bone transformations
-    memcpy(&arg0->unk970, &identityMatrix, sizeof(Transform3D));
-    createYRotationMatrix(&arg0->unk970, arg0->rotY);
-    memcpy(&arg0->unk990, &identityMatrix, sizeof(Transform3D));
-    memcpy(&arg0->unk9B0, &identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->headingTransform, &identityMatrix, sizeof(Transform3D));
+    createYRotationMatrix(&arg0->headingTransform, arg0->rotY);
+    memcpy(&arg0->orientationTransform, &identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->tiltTransform, &identityMatrix, sizeof(Transform3D));
 
     // Set initial position based on boss index
-    arg0->currentWorldPos.x = D_800BCA3C_B1F2C[arg0->unkBB8];
+    arg0->worldPos.x = gIceLandBossSpawnXPositions[arg0->playerIndex];
     getTrackSegmentWaypoints((TrackGeometryData *)&gameState->gameData, 0, &waypoint1, &waypoint2);
-    arg0->currentWorldPos.z = waypoint1.z + 0x200000;
-    trackIdx = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->currentWorldPos);
+    arg0->worldPos.z = waypoint1.z + 0x200000;
+    trackIdx = getOrUpdatePlayerSectorIndex(arg0, &gameState->gameData, 0, &arg0->worldPos);
     arg0->sectorIndex = trackIdx;
-    arg0->currentWorldPos.y = getTrackHeightInSector(&gameState->gameData, trackIdx, &arg0->currentWorldPos, 0x100000);
-    memcpy(&arg0->prevWorldPos, &arg0->currentWorldPos, sizeof(Vec3i));
+    arg0->worldPos.y = getTrackHeightInSector(&gameState->gameData, trackIdx, &arg0->worldPos, 0x100000);
+    memcpy(&arg0->prevWorldPos, &arg0->worldPos, sizeof(Vec3i));
 
     // Zero out velocity and set initial rotation
     arg0->velocity.x = 0;
@@ -499,44 +280,46 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     arg0->rotY = 0x1000;
 
     // Initialize body part transforms (12 body parts, each 0x3C bytes apart)
-    // Each has Transform3D at offset 0x38, asset pointer at 0x58
     for (i = 0; i < 12; i++) {
-        Unk0x3CElemExtra *extra = (Unk0x3CElemExtra *)((u8 *)&arg0->unk0_3C[i] + 0x38);
-        memcpy(&extra->unk38, &identityMatrix, sizeof(Transform3D));
-        extra->unk5C = (s32)arg0->unk0_3C[0].unk4;
-        extra->unk60 = (s32)arg0->unk0_3C[0].unk8;
-        extra->unk64 = 0;
-        extra->unk58 = (void *)(&loadAssetByIndex_953B0(arg0->characterId, arg0->boardIndex)[i]);
+        IceLandBossDisplayObjectStride *strides = (IceLandBossDisplayObjectStride *)arg0;
+        IceLandBossDisplayObjectView *view = (IceLandBossDisplayObjectView *)&strides[i];
+        DisplayListObject *displayObject = &view->displayObject;
+
+        memcpy(&displayObject->transform, &identityMatrix, sizeof(Transform3D));
+        displayObject->segment1 = arg0->bodyPartDisplayListAsset;
+        displayObject->segment2 = arg0->bodyPartCompressedAsset;
+        displayObject->segment3 = NULL;
+        displayObject->displayLists = &loadAssetByIndex_953B0(arg0->characterId, arg0->boardModelId)[i];
     }
 
     // Initialize bone animation state
     arg0->animationIndex = 0;
-    arg0->boneCount = getAnimationBoneCount(arg0->unk0_3C[0].unk0, 0);
-    for (i = 0; i < arg0->boneCount; i++) {
-        resetBoneAnimation(arg0->unk0_3C[0].unk0, arg0->animationIndex, i, &arg0->boneAnimationStates[i]);
+    arg0->animationBoneCount = getAnimationBoneCount(arg0->raceAnimationData, 0);
+    for (i = 0; i < arg0->animationBoneCount; i++) {
+        resetBoneAnimation(arg0->raceAnimationData, arg0->animationIndex, i, &arg0->boneAnimationStates[i]);
     }
 
     // Initialize behavior state
     arg0->behaviorMode = 1;
-    arg0->extraCollisionRadii = 0x240000;
+    arg0->extraCollisionRadii[0] = 0x240000;
     arg0->collisionSphereCount = 3;
-    arg0->unkB54 = (void *)&arg0->currentWorldPos;
+    arg0->collisionListNode.posPtr = &arg0->worldPos;
     arg0->behaviorPhase = 0;
-    arg0->unkB30 = 0x11C000;
-    arg0->unkB34 = 0x11C000;
-    arg0->unkB64 = 0x150000;
-    arg0->unkB68 = arg0->unkBB8;
+    arg0->extraCollisionRadii[1] = 0x11C000;
+    arg0->extraCollisionRadii[2] = 0x11C000;
+    arg0->collisionListNode.radius = 0x150000;
+    arg0->collisionListNode.id = arg0->playerIndex;
 
     // Spawn chase camera if needed
-    if (arg0->unkBC7 == 0) {
-        spawnChaseCameraTask(arg0->unkBB8);
+    if (arg0->isBossRacer == 0) {
+        spawnChaseCameraTask(arg0->playerIndex);
     }
 
     arg0->baseMaxSpeed = gameState->players[0].baseMaxSpeed - 0x10000;
 
     // Initialize asset offset table
-    if (arg0->unk0_3C[0].unk1C != 0) {
-        arg0->unk0_3C[0].unk28 = arg0->unk0_3C[0].unk1C + ((s32 *)arg0->unk0_3C[0].unk1C)[arg0->unkBB8];
+    if (arg0->bossRaceData != NULL) {
+        arg0->aiPathData = arg0->bossRaceData + ((s32 *)arg0->bossRaceData)[arg0->playerIndex];
     }
 
     arg0->bossHealth = 0xA;
@@ -544,17 +327,16 @@ s32 initIceLandBoss(IceLandBossArg *arg0) {
     return 1;
 }
 
-void dispatchIceLandBossChasePhase(IceLandBossAttackArg *arg0) {
-    D_800BCA44_B1F34[arg0->behaviorPhase](arg0);
+void dispatchIceLandBossChasePhase(Player *arg0) {
+    gIceLandBossChasePhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
 void setIceBossFlyingMode(Player *arg0) {
     s32 i;
-    Element0x3C *elements = (Element0x3C *)arg0;
 
     for (i = 0; i < 12; i++) {
-        *(void **)((u8 *)elements + i * 0x3C + 0x58) =
-            (void *)((s32)loadAssetByIndex_953B0(arg0->characterId, arg0->boardModelId) + i * 16 + 0xC0);
+        arg0->bodyPartDisplayObjects[i].displayLists =
+            loadAssetByIndex_953B0(arg0->characterId, arg0->boardModelId) + i + 12;
     }
 
     arg0->collisionRadius = 0x100000;
@@ -563,21 +345,21 @@ void setIceBossFlyingMode(Player *arg0) {
     arg0->animationFlags = arg0->animationFlags | 0x400000;
 }
 
-s32 iceLandBossChaseIntroPhase(IceLandBossAttackArg *arg0) {
+s32 iceLandBossChaseIntroPhase(Player *arg0) {
     s32 pad[3];
     GameState *gameState = getCurrentAllocation();
 
     if (gameState->raceIntroState == 0) {
-        setPlayerBehaviorPhase((Player *)arg0, 1);
+        setPlayerBehaviorPhase(arg0, 1);
         return 1;
     }
 
     arg0->velocity.x -= arg0->velocity.x / 8;
     arg0->velocity.z -= arg0->velocity.z / 8;
     arg0->velocity.y += -0x8000;
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
 
-    if (arg0->bossFlags & 0x400000) {
+    if (arg0->animationFlags & 0x400000) {
         advancePlayerLeanAnimationAuto(arg0, 2);
     } else {
         advancePlayerLeanAnimationAuto(arg0, 0);
@@ -650,7 +432,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
         transformVector3(&arg0->velocity, &sp10, &sp30);
         sp30.x = 0;
         transformVector2(&sp30, &sp10, &arg0->velocity);
-        transformVector2(&D_800BCA50_B1F40, &sp10, &sp30);
+        transformVector2(&gIceLandBossForwardAcceleration, &sp10, &sp30);
 
         if (sp30.y > 0) {
             sp30.y = 0;
@@ -803,7 +585,7 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
     return 0;
 }
 
-s32 iceLandBossChaseExitPhase(IceLandBossAttackArg *arg0) {
+s32 iceLandBossChaseExitPhase(Player *arg0) {
     s32 pad[3];
 
     getCurrentAllocation();
@@ -811,9 +593,9 @@ s32 iceLandBossChaseExitPhase(IceLandBossAttackArg *arg0) {
     arg0->velocity.x -= arg0->velocity.x / 8;
     arg0->velocity.z -= arg0->velocity.z / 8;
     arg0->velocity.y += -0x8000;
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
 
-    if (arg0->bossFlags & 0x400000) {
+    if (arg0->animationFlags & 0x400000) {
         advancePlayerLeanAnimationAuto(arg0, 2);
     } else {
         advancePlayerLeanAnimationAuto(arg0, 0);
@@ -822,7 +604,7 @@ s32 iceLandBossChaseExitPhase(IceLandBossAttackArg *arg0) {
     return 0;
 }
 
-void dispatchIceLandBossAttackPhase(IceLandBossAttackArg *arg0) {
+void dispatchIceLandBossAttackPhase(Player *arg0) {
     gIceLandBossAttackPhaseHandlers[arg0->behaviorPhase](arg0);
 }
 
@@ -888,7 +670,7 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
         transformVector3(&boss->velocity, &rotMatrix, &tempVec);
         tempVec.x = 0;
         transformVector2(&tempVec, &rotMatrix, &boss->velocity);
-        transformVector2(&D_800BCA50_B1F40, &rotMatrix, &tempVec);
+        transformVector2(&gIceLandBossForwardAcceleration, &rotMatrix, &tempVec);
 
         if (tempVec.y > 0) {
             tempVec.y = 0;
@@ -979,13 +761,13 @@ s32 iceLandBossHoverAttackPhase(Player *arg0) {
     return 0;
 }
 
-s32 iceLandBossDefeatedBehavior(IceLandBossAttackArg *arg0) {
+s32 iceLandBossDefeatedBehavior(Player *arg0) {
     s32 pad[3];
 
     getCurrentAllocation();
 
     arg0->velocity.y += -0x8000;
-    applyClampedVelocityToPosition((Player *)arg0);
+    applyClampedVelocityToPosition(arg0);
 
     if (arg0->behaviorStep == 0) {
         if (advancePlayerLeanAnimation(arg0, 6) != 0) {
@@ -999,7 +781,7 @@ s32 iceLandBossDefeatedBehavior(IceLandBossAttackArg *arg0) {
     return 0;
 }
 
-void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
+void updateIceLandBossPositionAndTrackCollision(Player *boss) {
     s32 pad[8];
     Vec3i collisionOffset;
     s32 pad2[8];
@@ -1008,19 +790,19 @@ void updateIceLandBossPositionAndTrackCollision(IceLandBossAttackArg *boss) {
     u16 newSectorIndex;
 
     gameState = getCurrentAllocation();
-    memcpy(boss->unk984, &boss->unk434, sizeof(Vec3i));
+    memcpy(&boss->headingTransform.translation, &boss->worldPos, sizeof(Vec3i));
     gameData = &gameState->gameData;
-    newSectorIndex = getOrUpdatePlayerSectorIndex(boss, gameData, boss->sectorIndex, &boss->unk434);
+    newSectorIndex = getOrUpdatePlayerSectorIndex(boss, gameData, boss->sectorIndex, &boss->worldPos);
     boss->sectorIndex = newSectorIndex;
-    resolveTrackWallCollision(gameData, newSectorIndex, &boss->unk434, 0x187000, &collisionOffset);
-    boss->unk434.x = boss->unk434.x + collisionOffset.x;
-    boss->unk434.z = boss->unk434.z + collisionOffset.z;
-    computePlayerTerrainAlignment((Player *)boss);
+    resolveTrackWallCollision(gameData, newSectorIndex, &boss->worldPos, 0x187000, &collisionOffset);
+    boss->worldPos.x += collisionOffset.x;
+    boss->worldPos.z += collisionOffset.z;
+    computePlayerTerrainAlignment(boss);
 
-    if (boss->bossFlags & 0x10000) {
+    if (boss->animationFlags & 0x10000) {
         boss->trackFaceType = 0;
     } else {
-        findTrackFaceInSector(gameData, boss->sectorIndex, &boss->unk434, &boss->trackFaceType, &boss->surfaceInfo);
+        findTrackFaceInSector(gameData, boss->sectorIndex, &boss->worldPos, &boss->trackFaceType, &boss->surfaceInfo);
         boss->trackFaceSubtype = boss->trackFaceType >> 4;
         boss->trackFaceType = boss->trackFaceType & 0xF;
     }
@@ -1127,12 +909,14 @@ void updateIceLandBossJointPositions(Player *boss) {
     for (jointIndex = 0; jointIndex < 9; jointIndex++) {
         if (boss->animationFlags & flyingFlag) {
             boss->shadowSamplePositions[jointIndex].x =
-                boss->headingTransform.translation.x + D_800BCA64[jointIndex + 9].x;
+                boss->headingTransform.translation.x + gIceLandBossShadowSampleOffsets[jointIndex + 9].x;
             boss->shadowSamplePositions[jointIndex].z =
-                boss->headingTransform.translation.z + D_800BCA64[jointIndex + 9].z;
+                boss->headingTransform.translation.z + gIceLandBossShadowSampleOffsets[jointIndex + 9].z;
         } else {
-            boss->shadowSamplePositions[jointIndex].x = boss->headingTransform.translation.x + D_800BCA64[jointIndex].x;
-            boss->shadowSamplePositions[jointIndex].z = boss->headingTransform.translation.z + D_800BCA64[jointIndex].z;
+            boss->shadowSamplePositions[jointIndex].x =
+                boss->headingTransform.translation.x + gIceLandBossShadowSampleOffsets[jointIndex].x;
+            boss->shadowSamplePositions[jointIndex].z =
+                boss->headingTransform.translation.z + gIceLandBossShadowSampleOffsets[jointIndex].z;
         }
 
         jointPos = &boss->shadowSamplePositions[jointIndex];
