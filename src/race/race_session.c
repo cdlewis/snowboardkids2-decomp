@@ -423,6 +423,7 @@ void awaitBattleContinuePress(void);
 void awaitExpertRaceContinuePress(void);
 void cleanupGameSession(void);
 void loadRaceGameData(void);
+
 extern void spawnScriptedCameraTask(s16);
 
 void initRace(void) {

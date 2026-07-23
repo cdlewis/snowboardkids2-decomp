@@ -40,7 +40,6 @@ extern s8 gAnalogStickY[];
 extern s8 gAnalogStickX[];
 extern s32 gButtonsPressed[];
 void updateJingleTownBossModelTransforms(Player *);
-
 s32 initJingleTownBoss(Player *);
 void dispatchChaseAttackPhase(Player *);
 void dispatchHoverAttackPhase(Player *);

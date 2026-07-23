@@ -72,18 +72,6 @@ extern void schedulePlayerAuraTask(Player *);
 extern s32 normalizeSurfaceType(s32);
 extern void startRumbleEffect(Player *player, s32 effectType);
 extern s32 applyVelocityDeadzone(Player *, s32, s32, s32);
-extern s32 projectPositionOntoTrackSegment(GameDataLayout *trackGeom, u16 sectorIdx, Vec3i *pos);
-extern void updateCrazyJungleBossPositionAndTrackCollision(Player *player);
-extern void renderCrazyJungleBossWithSurfaceColors(Player *player);
-extern void updateBossProximityCheckpoints(Player *player);
-extern void renderGhosts(void);
-extern void renderJingleTownBossWithEffects(Player *player);
-extern void updateJingleTownBossJointPositions(Player *player);
-extern void updateIceLandBossPositionAndTrackCollision(void);
-extern void renderIceLandBossWithSurfaceColors(Player *player);
-extern void updateIceLandBossJointPositions(Player *player);
-
-/* Forward declarations for function pointer tables */
 s32 initPlayerForRace(Player *);
 void dispatchDefaultBehaviorPhase(BehaviorState *);
 void dispatchStunnedBehaviorPhase(BehaviorState *);
@@ -180,6 +168,19 @@ void decayPlayerSteeringAngles(Player *);
 void resetTrickScore(Player *);
 void initStunnedAirborneBehavior(Player *);
 void updateRacePlayer(Player *);
+
+extern s32 projectPositionOntoTrackSegment(GameDataLayout *trackGeom, u16 sectorIdx, Vec3i *pos);
+extern void updateCrazyJungleBossPositionAndTrackCollision(Player *player);
+extern void renderCrazyJungleBossWithSurfaceColors(Player *player);
+extern void updateBossProximityCheckpoints(Player *player);
+extern void renderGhosts(void);
+extern void renderJingleTownBossWithEffects(Player *player);
+extern void updateJingleTownBossJointPositions(Player *player);
+extern void updateIceLandBossPositionAndTrackCollision(void);
+extern void renderIceLandBossWithSurfaceColors(Player *player);
+extern void updateIceLandBossJointPositions(Player *player);
+
+/* Forward declarations for function pointer tables */
 void renderFlyingEnemy(Player *);
 
 Gfx gPlayerShadowRenderSetupDl[] = {

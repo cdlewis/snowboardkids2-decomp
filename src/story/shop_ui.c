@@ -194,9 +194,9 @@ void updateStoryMapShopSoldOutLabel(void *);
 void cleanupStoryMapShopSoldOutLabel(SpriteDisplayState *);
 void drawUnlockScreenItemIcons(void *);
 void cleanupUnlockScreenItemIcons(UnlockScreenItemIconsCleanupArg *);
-void *loadTextRenderAsset(s32);
 void updateDebugCameraYState(cameraState *arg0);
 
+void *loadTextRenderAsset(s32);
 void initDebugCameraController(cameraState *arg0) {
     arg0->cameraY = 0;
     arg0->cameraRotation = 0;

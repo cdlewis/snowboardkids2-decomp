@@ -155,10 +155,10 @@ void initTownExitMarker(StoryMapSpecialLocationMarkerState *);
 void checkTownExitTrigger(void *);
 void cleanupTownExitMarker(void *);
 void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *);
-
 void computeEncodedTextCenterPos(s16 *outX, s16 *outY, u16 *encodedText);
 void updateStoryMapDialogueTurn(void *arg0);
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *);
+
 void updateStoryMapCameraFreeRoam(void *);
 
 // Global variables and externs

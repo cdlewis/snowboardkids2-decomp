@@ -54,6 +54,7 @@ void finalizeStoryMapCameraTravel(void);
 void storyMapCameraTravelComplete(void);
 void finalizeStoryMapExit(void);
 void storyMapExitComplete(void);
+
 s32 checkStoryMapLocationSelection(void *);
 void updateStoryMapDialogueTurn(void *);
 

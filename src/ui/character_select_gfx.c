@@ -1185,6 +1185,7 @@ void initCharSelectMenu(SelectionMenuState *arg0) {
 }
 
 void updateCharSelectMenuConfirm(SelectionMenuState *);
+void updateBoardSelectCharNames(CharacterNameSprite *sprites);
 
 void updateCharSelectMenu(SelectionMenuState *menu) {
     GameState *state;
@@ -1586,8 +1587,6 @@ void updateBoardSelectArrows(SelectionArrowsState *state) {
 void cleanupBoardSelectArrows(SimpleSpriteEntry *arg0) {
     arg0->asset = freeNodeMemory(arg0->asset);
 }
-
-void updateBoardSelectCharNames(CharacterNameSprite *sprites);
 
 void initBoardSelectCharNames(CharacterNameSprite *sprites) {
     BoardSelectGameState *gameState;

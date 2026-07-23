@@ -199,8 +199,13 @@ void updateStarlightFireworkSimple(StarlightFireworkTaskState *);
 void updateStarlightFireworkComplex(StarlightFireworkTaskState *);
 void updateStarlightFirework(StarlightFireworkTaskState *);
 void cleanupStarlightFireworkTask(StarlightFireworkCleanupState *);
-
 void updateStarlightBarrier(StarlightBarrierTask *arg0);
+void renderColorIndexedOpaqueDisplayList(void *);
+void renderColorIndexedTransparentDisplayList(void *);
+void renderColorIndexedOverlayDisplayList(void *);
+void renderDebugDisplayLists(DebugDisplayListRenderState *arg0);
+void updateDebugDisplayListSustain(DebugDisplayListRenderState *arg0);
+void updateDebugDisplayListDecay(DebugDisplayListRenderState *arg0);
 
 void initStarlightHighwayBuildingTask(StarlightBuildingTaskState *task) {
     task->segment1 = loadUncompressedAssetByIndex(8);
@@ -278,13 +283,6 @@ void initDebugDisplayListTask(DebugDisplayListTaskState *arg0) {
     setCleanupCallback(&cleanupDebugDisplayListTask);
     setCallback(&updateDebugDisplayListGrowth);
 }
-
-void renderColorIndexedOpaqueDisplayList(void *);
-void renderColorIndexedTransparentDisplayList(void *);
-void renderColorIndexedOverlayDisplayList(void *);
-void renderDebugDisplayLists(DebugDisplayListRenderState *arg0);
-void updateDebugDisplayListSustain(DebugDisplayListRenderState *arg0);
-void updateDebugDisplayListDecay(DebugDisplayListRenderState *arg0);
 
 void renderDebugDisplayLists(DebugDisplayListRenderState *arg0) {
     s32 i;

@@ -23,6 +23,7 @@ typedef struct {
 extern u8 dialogueNpcFacesPlayer[];
 void updateRareEventNpcDialogueSequence(Func2E024Arg *arg0);
 extern void updateStoryMapNpcTurnToTarget(StoryMapDialogueState *);
+
 extern void spawnSpriteEffectEx(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
 
 extern void initStoryMapRareEventIdle(void *);

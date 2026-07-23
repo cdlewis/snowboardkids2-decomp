@@ -177,10 +177,12 @@ s8 *s_trainingPanelMessageTables[] = {
 };
 
 void shrinkTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0);
-
 void cleanupTrainingInstructionTask(TrainingInstructionState *arg0);
-
 void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0);
+void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0);
+void expandTrainingInstructionPanelHeight(TrainingInstructionRuntimeState *arg0);
+void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *arg0);
+void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionRuntimeState *arg0);
 
 void initTrainingInstructionTask(TrainingInstructionState *arg0) {
     getCurrentAllocation();
@@ -191,8 +193,6 @@ void initTrainingInstructionTask(TrainingInstructionState *arg0) {
     setCleanupCallback(cleanupTrainingInstructionTask);
     setCallback(checkTrainingInstructionCheckpoint);
 }
-
-void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0);
 
 void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0) {
     GameState *state = getCurrentAllocation();
@@ -280,10 +280,6 @@ void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0) {
         }
     }
 }
-
-void expandTrainingInstructionPanelHeight(TrainingInstructionRuntimeState *arg0);
-void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *arg0);
-void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionRuntimeState *arg0);
 
 void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) {
     s16 width;

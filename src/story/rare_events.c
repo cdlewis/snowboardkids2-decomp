@@ -259,6 +259,7 @@ s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle);
 s32 moveStoryMapItemAlongWaypoints(WaypointMoveState *, u8);
 s32 updateStoryMapNpcBehavior(Func8002A390Arg *);
 s16 stepAngleTowardsTarget(s16 targetAngle, s16 currentAngle);
+void initStoryMapNpcSpecialDialogue(Func8002A390Arg *);
 
 s32 tryStoryMapNpcInteraction(Func8002A390Arg *arg0) {
     GameState *state;
@@ -649,8 +650,6 @@ typedef struct {
     /* 0x5F */ u8 pad5F[0x2];
     /* 0x61 */ u8 prevState;
 } RareEventNpc;
-
-void initStoryMapNpcSpecialDialogue(Func8002A390Arg *);
 
 void updateStoryMapNpcDialogueTurn(RareEventNpc *npc) {
     GameState *alloc;

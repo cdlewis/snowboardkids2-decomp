@@ -11,6 +11,19 @@ typedef struct {
 } TaskData_22920;
 
 void loadPlayerCountSelect(void);
+void awaitPlayerCountSelect(void);
+void loadVersusSaveSlotScreen(void);
+void loadVersusLevelSelect(void);
+void awaitVersusCharacterSelect(void);
+void exitVersusMode(void);
+void awaitVersusSaveSlotSelection(void);
+void loadVersusRace(void);
+void awaitVersusSaveDataLoad(void);
+void awaitVersusRaceResult(void);
+void awaitVersusLevelSelect(void);
+void loadVersusCharacterSelect(void);
+void awaitVersusMapScreen(void);
+void loadVersusSaveData(void);
 
 void initVersusMode(void) {
     TaskData_22920 *data = allocateTaskMemory(4);
@@ -19,20 +32,11 @@ void initVersusMode(void) {
     setGameStateHandlerWithContinue(loadPlayerCountSelect);
 }
 
-void awaitPlayerCountSelect(void);
-
 void loadPlayerCountSelect(void) {
     playMusicTrack(2);
     createTaskQueue(initPlayerCountSelectState, 100);
     setGameStateHandler(awaitPlayerCountSelect);
 }
-
-void loadVersusSaveSlotScreen(void);
-void loadVersusLevelSelect(void);
-void awaitVersusCharacterSelect(void);
-void exitVersusMode(void);
-void awaitVersusSaveSlotSelection(void);
-void loadVersusRace(void);
 
 void awaitPlayerCountSelect(void) {
     s16 result;
@@ -52,8 +56,6 @@ void loadVersusSaveSlotScreen(void) {
     setGameStateHandler(awaitVersusSaveSlotSelection);
 }
 
-void loadVersusSaveData(void);
-
 void awaitVersusSaveSlotSelection(void) {
     s16 result;
 
@@ -67,8 +69,6 @@ void awaitVersusSaveSlotSelection(void) {
         }
     }
 }
-
-void awaitVersusMapScreen(void);
 
 void loadVersusMapScreen(void) {
     createTaskQueue(loadOverlay_1BBA0, 100);
@@ -87,9 +87,6 @@ void awaitVersusMapScreen(void) {
         setGameStateHandler(loadVersusLevelSelect);
     }
 }
-
-void awaitVersusLevelSelect(void);
-void loadVersusCharacterSelect(void);
 
 void loadVersusLevelSelect(void) {
     createTaskQueue(initLevelSelectBasic, 100);
@@ -128,9 +125,6 @@ void awaitVersusCharacterSelect(void) {
         }
     }
 }
-
-void awaitVersusSaveDataLoad(void);
-void awaitVersusRaceResult(void);
 
 void loadVersusSaveData(void) {
     createTaskQueue(initRumblePakCheckTask, 0x96);

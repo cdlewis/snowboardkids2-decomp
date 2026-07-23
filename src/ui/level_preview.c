@@ -7,6 +7,7 @@
 #include "data/data_table.h"
 #include "data/global_frame_counter.h"
 #include "font_encoding.h"
+#include "graphics/clip_text_render.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
@@ -22,9 +23,9 @@
 void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state);
 void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state);
 void holdLevelPreviewCamera(LevelPreviewCharacterState *state);
-extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
+
 struct LevelPreviewPortraitState_202A0_s;
-extern void animatePortraitRotation(struct LevelPreviewPortraitState_202A0_s *arg0);
+void animatePortraitRotation(struct LevelPreviewPortraitState_202A0_s *arg0);
 
 u16 sLevelPreviewDurations[] = { 0x0618, 0x0672, 0x03DE, 0x03DE, 0x0708, 0x01E0, 0x0708, 0x0708,
                                  0x0546, 0x04CE, 0x04B0, 0x04B0, 0x04B0, 0x04B0, 0x0564, 0x0564 };
