@@ -1,4 +1,11 @@
 #include "ui/level_preview_3d.h"
+#include "animation/model_scale.h"
+#include "animation/model_transition.h"
+#include "animation/pulsing_indicator.h"
+#include "animation/stepped_matrix.h"
+#include "effects/nonrace_shadow.h"
+#include "effects/orbital_sprite.h"
+#include "graphics/quad_displaylist.h"
 
 #include "animation/bone_animation.h"
 #include "assets.h"
@@ -52,15 +59,6 @@ extern DisplayLists gPostboxWithNewspaperDisplayLists;
 extern s32 D_800886D0;
 extern s32 D_800886F0;
 extern DisplayLists gChestOpenDisplayLists;
-extern void initDriftingParticle(void *arg0);
-extern void initTrailingParticle(void *arg0);
-extern void initSteppedMatrixController(void *arg0);
-extern void initPulsingSpriteIndicator(void *arg0);
-extern void initOrbitalSpriteRing(void *arg0);
-extern void initModelTransitionEffect(void *arg0);
-extern void initModelScaleAnimation(void *arg0);
-extern void enqueueTranslucentSprite(u16, SceneModelShadowSprite *);
-extern void renderNonRaceShadow(void);
 
 s32 D_80089530[4] = { 0x00000000, 0x010000D0, 0x00000000, 0x00000000 };
 
@@ -2560,7 +2558,7 @@ void updateModelGeometry(SceneModel *arg0) {
                     shadowSizeZ += 0x1FFF;
                 }
                 arg0->shadowSprite.shadowSizeZ = shadowSizeZ >> 0xD;
-                enqueueTranslucentSprite(arg0->unk10->unk16, &arg0->shadowSprite);
+                enqueueTranslucentSprite(arg0->unk10->unk16, (Node *)&arg0->shadowSprite);
                 return;
             }
             enqueueCallbackBySlotIndex(arg0->unk10->unk16, 1U, &renderNonRaceShadow, arg0);

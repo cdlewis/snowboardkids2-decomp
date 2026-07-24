@@ -7,6 +7,15 @@
 #include "math/geometry.h"
 #include "ui/level_preview_3d.h"
 
+typedef union {
+    s32 value;
+    struct {
+        u8 unused;
+        u8 alpha;
+        u8 fractional[2];
+    } bytes;
+} CutsceneAlphaFixed;
+
 typedef struct {
     u8 r;
     u8 g;
@@ -41,7 +50,7 @@ typedef struct {
         struct {
             s16 remainingFrames;
             u8 padding[0xE];
-            s32 currentAlphaFixed;
+            CutsceneAlphaFixed currentAlphaFixed;
             s32 easingParam0;
             s32 easingParam1;
             s32 easingParam2;
@@ -300,7 +309,7 @@ typedef struct {
         struct {
             s16 remainingFrames;
             u8 padding[0xE];
-            s32 currentAlphaFixed;
+            CutsceneAlphaFixed currentAlphaFixed;
             s32 easingParam0;
             s32 easingParam1;
             s32 easingParam2;

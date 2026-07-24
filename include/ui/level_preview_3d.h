@@ -288,3 +288,5 @@ typedef struct {
 } BobbingModelTaskState;
 
 void initBobbingModelTask(BobbingModelTaskState *);
+
+s32 isModelVisible(func_80002B50_3750_arg *model);

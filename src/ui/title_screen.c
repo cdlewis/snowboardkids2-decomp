@@ -11,10 +11,14 @@
 #include "race/position_markers.h"
 #include "race/race_session.h"
 #include "story/map_events.h"
+#include "story/map_extra_intro.h"
+#include "story/race_state_machine.h"
 #include "system/controller_io.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
+#include "ui/gallery.h"
 #include "ui/title_ui_elements.h"
+#include "ui/unlock_screen.h"
 
 typedef struct {
     s16 x;
@@ -40,12 +44,6 @@ typedef struct {
 extern s32 gButtonsPressed;
 extern u8 gDebugUnlockEnabled;
 extern s8 gTitleInitialized;
-
-extern void initBoardShopDisplay(void);
-extern void initGalleryMenu(void);
-extern void initStoryMapLocationIntro(void);
-extern void initUnlockScreen(void);
-extern void initStoryMapExtraIntro(void);
 
 void resetSaveDataToDefaults(void);
 void waitForTitleAssetsReady(void);

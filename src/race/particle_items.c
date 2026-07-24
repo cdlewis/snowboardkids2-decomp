@@ -223,7 +223,7 @@ typedef struct {
     /* 0x42 */ s16 frameTimer;
 } Func43CA4Arg;
 
-typedef struct {
+struct GoldStealEffectState {
     /* 0x00 */ s32 unk0;
     /* 0x04 */ void *unk4;
     /* 0x08 */ Vec3i position;
@@ -242,7 +242,7 @@ typedef struct {
     /* 0x48 */ s16 swingAngle;
     /* 0x4A */ u8 _pad4A[0x2];
     /* 0x4C */ s32 unk4C;
-} GoldStealEffectState;
+};
 
 typedef struct {
     void *unk0;
@@ -281,12 +281,12 @@ typedef struct {
     /* 0xDD */ u8 unkDD;
 } BurstEffectState;
 
-typedef struct {
+typedef struct WarpEffectSource {
     /* 0x00 */ u8 pad0[0x434];
     /* 0x434 */ s32 sourcePosition[3];
 } WarpEffectSource;
 
-typedef struct {
+struct WarpEffectState {
     /* 0x00 */ Transform3D transform;
     /* 0x20 */ void *displayData;
     /* 0x24 */ void *asset1;
@@ -299,7 +299,7 @@ typedef struct {
     /* 0x48 */ s32 scale;
     /* 0x4C */ s32 height;
     /* 0x50 */ s32 velocity;
-} WarpEffectState;
+};
 
 typedef struct {
     u8 pad0[0x24];
@@ -1135,12 +1135,12 @@ void cleanupWarpEffect(WarpEffectCleanupArg *arg0) {
     arg0->asset2 = freeNodeMemory(arg0->asset2);
 }
 
-WarpEffectState *createWarpEffect(WarpEffectSource *source, Player *player, s16 delayFrames) {
+WarpEffectState *createWarpEffect(Player *source, Player *player, s16 delayFrames) {
     WarpEffectState *task;
 
     task = (WarpEffectState *)scheduleTask(initWarpEffect, 0, 0, 0xC8);
     if (task != NULL) {
-        task->source = source;
+        task->source = (WarpEffectSource *)source;
         task->player = player;
         task->delayFrames = delayFrames;
     }
@@ -1314,7 +1314,7 @@ void cleanupStarEffect(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void spawnStarEffect(void *arg0, void *arg1, s16 arg2) {
+StarEffectTask *spawnStarEffect(void *arg0, void *arg1, s16 arg2) {
     StarEffectTask *task;
 
     task = (StarEffectTask *)scheduleTask(initStarEffect, 0, 0, 0xDC);
@@ -1324,6 +1324,7 @@ void spawnStarEffect(void *arg0, void *arg1, s16 arg2) {
         task->startDelay = arg2;
         task->immediateMode = 0;
     }
+    return task;
 }
 
 StarEffectTask *spawnStarEffectImmediate(void *arg0) {
@@ -1785,7 +1786,7 @@ void cleanupGoldStealEffect(void **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void spawnGoldStealEffect(void *arg0, void *arg1, s16 arg2) {
+GoldStealEffectState *spawnGoldStealEffect(void *arg0, void *arg1, s16 arg2) {
     GoldStealEffectState *task;
 
     task = (GoldStealEffectState *)scheduleTask(initGoldStealEffect, 0, 0, 0xDC);
@@ -1794,6 +1795,7 @@ void spawnGoldStealEffect(void *arg0, void *arg1, s16 arg2) {
         task->victimPlayer = arg1;
         task->frameTimer = arg2;
     }
+    return task;
 }
 
 void initWingsEffect(WingsEffectState *arg0) {
@@ -2261,13 +2263,14 @@ void cleanupChairliftEffect(void *arg0) {
     cleanupArg->unk28 = freeNodeMemory(cleanupArg->unk28);
 }
 
-void spawnChairliftEffect(void *arg0) {
+void *spawnChairliftEffect(void *arg0) {
     ChairliftEffectTaskMem *task;
 
     task = (ChairliftEffectTaskMem *)scheduleTask(initChairliftEffect, 0, 0, 0x32);
     if (task != NULL) {
         task->target = arg0;
     }
+    return task;
 }
 
 void initItemTriggerTask(ItemTriggerTaskState *arg0) {

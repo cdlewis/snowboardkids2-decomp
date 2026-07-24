@@ -7,14 +7,10 @@
 #include "os_cont.h"
 #include "race/obstacle_sprites.h"
 #include "race/particle_items.h"
+#include "race/race_hud.h"
 #include "race/race_session.h"
 #include "race/track_height.h"
 #include "system/task_scheduler.h"
-
-extern s32 createWarpEffect(void *, void *, s16);
-extern s32 spawnStarEffect(void *, void *, s16);
-extern s32 spawnGoldStealEffect(void *, void *, s16);
-extern s32 spawnPanelProjectile(void *);
 
 s32 findPrimaryItemTarget(Player *);
 s32 shouldUseSecondaryItem(Player *);

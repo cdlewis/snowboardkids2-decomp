@@ -7,11 +7,13 @@
 #include "font_encoding.h"
 #include "graphics/camera_transform.h"
 #include "graphics/graphics.h"
+#include "graphics/sprite_rdp.h"
 #include "math/geometry.h"
 #include "os_cont.h"
 #include "story/rare_events.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
+#include "text/text_layout.h"
 
 // Struct definitions
 typedef struct {
@@ -160,11 +162,6 @@ void updateStoryMapDialogueTurn(void *arg0);
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *);
 
 void updateStoryMapCameraFreeRoam(void *);
-
-// Global variables and externs
-extern s32 renderTextSprite;
-extern void renderScaledShadedSpriteFrame(void *);
-extern void renderTextLayout(void *);
 
 // Data definitions
 D_8008F810_90410_item D_8008F810_90410[0xC] = {

@@ -1,3 +1,4 @@
+#include "animation/pulsing_indicator.h"
 #include "common.h"
 #include "graphics/sprite_table.h"
 #include "math/geometry.h"
@@ -23,13 +24,13 @@ typedef struct {
     s8 unk88;
 } PulsingIndicatorOwner;
 
-typedef struct {
+struct PulsingSpriteState {
     PulsingIndicatorOwner *owner;
     SpriteAssetState spriteState;
     u8 padding[4];
     s32 scale;
     s32 scaleVelocity;
-} PulsingSpriteState;
+};
 
 void updatePulsingSpriteIndicator(PulsingSpriteState *);
 void cleanupPulsingSpriteIndicator(PulsingSpriteState *);

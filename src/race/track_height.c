@@ -293,9 +293,16 @@ void setPlayerBodyPartAnimState(Player *player, u8 stateIndex, u8 stateTimer) {
     player->bodyPartStateTimer = stateTimer;
 }
 
+#ifdef CC_CHECK
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreturn-type"
+#endif
 s16 onTrickCompletedHook(Player *player) {
     (void)player;
 }
+#ifdef CC_CHECK
+#pragma clang diagnostic pop
+#endif
 
 s16 getTrickType(Player *player) {
     s16 trickType;

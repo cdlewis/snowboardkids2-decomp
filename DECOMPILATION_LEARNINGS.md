@@ -529,3 +529,16 @@ when a `0x3C` stride view advanced from the `Player` base and a second typed vie
 offset `0x38`; iterating `Player.bodyPartDisplayObjects` directly added two instructions. A small documented adapter
 view can preserve this induction shape while the function signatures and all actual field accesses continue using
 the canonical `Player` and `DisplayListObject` types.
+
+## Preserve Historical ABIs When Centralizing Prototypes
+
+Moving local extern declarations into shared headers can change KMC GCC output even when a caller ignores the
+return value. `onTrickCompletedHook` has an empty body and behaves like a `void` hook, but its original `s16`
+prototype affects instruction scheduling in `beginPostTrickSlidingStep`. Changing the declaration to `void`
+reordered three stores and broke 12 ROM bytes. Keep the historical non-void ABI and narrowly suppress the
+checker warning on the empty implementation.
+
+Argument signedness is similarly codegen-sensitive at call sites. For example, the final render-flags argument
+to `setupAndEnqueueSprite` and the cutscene frame index must retain their signed types so callers emit the target
+sign-extension sequence. When factoring headers, derive prototypes from both the definition and caller
+assembly rather than widening small integer arguments to a convenient unsigned type.

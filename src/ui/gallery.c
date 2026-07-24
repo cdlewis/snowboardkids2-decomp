@@ -1,3 +1,4 @@
+#include "ui/gallery.h"
 #include "animation/easing_state.h"
 #include "assets.h"
 #include "audio/audio.h"
@@ -160,7 +161,7 @@ typedef struct {
     u8 _padA[2];
 } GallerySmallSlot;
 
-typedef struct {
+struct GalleryMenuState {
     /* 0x000 */ s8 menuState;
     /* 0x001 */ s8 selectedOption;
     /* 0x002 */ s8 menuType;
@@ -204,9 +205,9 @@ typedef struct {
     /* 0xC9E */ u8 padC9E[2];
     /* 0xCA0 */ void *unkCA0;
     /* 0xCA4 */ u8 unkCA4[4];
-} GalleryMenuState;
+};
 
-typedef struct FD98_struct {
+struct FD98_struct {
     s8 viewerState;
     s8 navigationMode;
     s8 cursorIndex;
@@ -217,7 +218,7 @@ typedef struct FD98_struct {
     s32 unkC;
     s32 unk10;
     s32 unk14;
-} FD98_struct;
+};
 
 extern const u8 D_8009DF6C_9EB6C[];
 extern const char D_8009DEB0_9EAB0[];
@@ -256,10 +257,6 @@ extern const char D_8009DF30_9EB30[];
 extern const char D_8009DF34_9EB34[];
 void setupGalleryMenuState(void);
 void updateGalleryMenu(void);
-extern void initGalleryViewer(FD98_struct *);
-extern void onGalleryMenuExit(void);
-extern void onGalleryViewerCleanup(void);
-extern void updateGalleryViewer(GalleryMenuState *);
 
 /* Data section definitions */
 

@@ -1,13 +1,9 @@
 #include "credits/credits_subtitles.h"
 #include "animation/easing_state.h"
 #include "common.h"
+#include "credits/offset_table.h"
 #include "graphics/graphics.h"
 #include "race/race_session.h"
-
-extern s32 getOffsetTableEntryCount(s32);
-extern s16 getOffsetTableEntryValue0(s32, s32);
-extern u8 *getOffsetTableEntryData(s32, s16);
-extern s16 getOffsetTableEntryValue2(s32, s16);
 
 typedef union {
     s16 halfword;
@@ -59,7 +55,7 @@ typedef struct {
     ViewportNode unk3B8;
     ViewportNode unk590;
     u8 _pad768[0x1F4];
-    s32 unk95C;
+    OffsetTable *unk95C;
     void *unk960;
     Table_B934 *unk964;
     u8 _pad968[0x4];
@@ -87,7 +83,7 @@ typedef struct {
     s16 unk9A0;
     u8 _pad9A2[0x2];
     s16 unk9A4;
-    u16 unk9A6;
+    s16 unk9A6;
     u16 unk9A8;
     u8 _pad9AA[0x2];
     s16 unk9AC;

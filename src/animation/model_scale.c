@@ -1,17 +1,18 @@
+#include "animation/model_scale.h"
 #include "common.h"
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-typedef struct {
+struct ModelScaleAnimationState {
     func_80002B50_3750_arg *model;
     Transform3D transformMatrix;
     s32 velocity;
     s16 rotationAngle;
     s16 delayTimer;
     s16 bounceCount;
-} ModelScaleAnimationState;
+};
 
 void cleanupModelScaleAnimation(void);
 void updateModelScaleAnimation(ModelScaleAnimationState *state);

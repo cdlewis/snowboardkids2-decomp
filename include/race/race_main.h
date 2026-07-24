@@ -41,3 +41,6 @@ void loadPlayerCharacterAssets(void *arg0);
 void freePlayerCharacterAssets(Player *arg0);
 void renderPlayersByShortcutDistance(void);
 void updateAndRenderRaceCharacters(void);
+
+s32 applyVelocityDeadzone(Player *, s32, s32, s32);
+void startRumbleEffect(Player *player, s32 effectType);

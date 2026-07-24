@@ -1,0 +1,27 @@
+#pragma once
+
+#include "common.h"
+
+typedef struct SaveSlotConfirmationIndicatorState SaveSlotConfirmationIndicatorState;
+typedef struct SaveSlotDeleteArrowState SaveSlotDeleteArrowState;
+typedef struct SaveSlotDeleteTextState SaveSlotDeleteTextState;
+typedef struct SaveSlotGoldDisplayState SaveSlotGoldDisplayState;
+typedef struct SaveSlotGridState SaveSlotGridState;
+typedef struct SaveSlotItemIconsState SaveSlotItemIconsState;
+typedef struct SaveSlotNameTextState SaveSlotNameTextState;
+typedef struct SaveSlotNumberLabelsState SaveSlotNumberLabelsState;
+typedef struct SaveSlotPromptTextState SaveSlotPromptTextState;
+typedef struct SaveSlotSelectionParticlesState SaveSlotSelectionParticlesState;
+typedef struct SaveSlotStatSpritesState SaveSlotStatSpritesState;
+
+void initSaveSlotConfirmationIndicator(SaveSlotConfirmationIndicatorState *state);
+void initSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state);
+void initSaveSlotDeleteText(SaveSlotDeleteTextState *state);
+void initSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state);
+void initSaveSlotItemIcons(SaveSlotItemIconsState *state);
+void initSaveSlotItemLabels(SaveSlotNumberLabelsState *state);
+void initSaveSlotNameEntryGrid(SaveSlotGridState *state);
+void initSaveSlotNameText(SaveSlotNameTextState *state);
+void initSaveSlotPromptText(SaveSlotPromptTextState *state);
+void initSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state);
+void initSaveSlotStatSprites(SaveSlotStatSpritesState *state);

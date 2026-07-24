@@ -19,21 +19,21 @@
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
 
-typedef struct {
+struct StoryMapShopBackgroundState {
     u8 padding[0x2C];
     void *backgroundAsset;
-} StoryMapShopBackgroundState;
+};
 
-typedef struct {
+struct StoryMapShopItemCardState {
     DisplayListObject displayList;
     Transform3D transform;
     s32 translationStep;
     u8 updateCounter;
     s8 itemIndex;
     s8 slotPosition;
-} StoryMapShopItemCardState;
+};
 
-typedef struct {
+struct StoryMapShopItemIconState {
     s16 x;
     s16 y;
     void *asset;
@@ -41,7 +41,7 @@ typedef struct {
     s16 alpha;
     s8 unkC;
     u8 unkD;
-} StoryMapShopItemIconState;
+};
 
 typedef struct {
     u8 padding[0x5C0];
@@ -87,18 +87,18 @@ typedef struct {
     char priceBuffer[8];
 } StoryMapShopItemPriceDisplayState;
 
-typedef struct {
+struct StoryMapShopFairyState {
     SceneModel *model;
     Transform3D transform;
     s16 animationFrame;
     s8 animationType;
-} StoryMapShopFairyState;
+};
 
-typedef struct {
+struct StoryMapShopGoldDisplayState {
     SpriteDisplayState digits[7];
     SpriteRenderArg goldIcon;
     char goldAmountBuffer[8];
-} StoryMapShopGoldDisplayState;
+};
 
 typedef struct {
     u8 _pad[0x4];

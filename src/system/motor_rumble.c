@@ -1,12 +1,11 @@
 #include "D_800AFE8C_A71FC_type.h"
 #include "common.h"
+#include "system/controller_io.h"
 #include "system/task_scheduler.h"
 
 extern u8 gControllerPollingEnabled;
 extern u8 gRumblePakReadyMask;
 
-extern void requestRumblePakInit(s32);
-extern s32 pollRumblePakInit(void);
 void updateRumblePakCheckTask(void);
 void finishRumblePakCheckTask(void);
 

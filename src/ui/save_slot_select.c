@@ -11,6 +11,7 @@
 #include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
+#include "ui/save_slot_gfx.h"
 
 typedef struct {
     u8 pad[0xD0];
@@ -65,21 +66,6 @@ typedef struct {
 } SaveSlotScreenState;
 
 u8 eeprom_save_magic[16] = "SNOW2EEP";
-
-extern void initSaveSlotStatSprites(void *);
-extern void initSaveSlotItemIcons(void *);
-extern void initSaveSlotItemLabels(void *);
-extern void initSaveSlotNameText(void *);
-extern void initSaveSlotPromptText(void *);
-extern void initSaveSlotSelectionParticles(void *);
-extern void initSaveSlotNameEntryGrid(void *);
-extern void initSaveSlotDeleteArrow(void *);
-extern void initSaveSlotGoldDisplay(void *);
-extern void initSaveSlotConfirmationIndicator(void *);
-extern void initSaveSlotDeleteText(void *);
-
-extern void eepromWriteAsync(s32 slotIndex);
-extern s32 pollEepromWriteAsync(void);
 
 void updateSaveSlotSelectionScreen(void);
 void initSaveSlotSelection(void);

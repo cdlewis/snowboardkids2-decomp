@@ -20,3 +20,11 @@ void initStoryMapRareEventWave(Func2E024Arg *);
 void prepareStoryMapNpcDialogue(void *);
 s32 getPlayerGold(void);
 void addPlayerGold(s32 amount);
+
+void initStoryMapRareEventCheering(Func2E024Arg *state);
+void initStoryMapRareEventIdle(Func2E024Arg *state);
+void initStoryMapRareEventJuggling(Func2E024Arg *state);
+void initStoryMapRareEventMagicShow(Func2E024Arg *state);
+void initStoryMapRareEventSkating(Func2E024Arg *state);
+void initStoryMapRareEventSledding(Func2E024Arg *state);
+void initStoryMapRareEventSnowman(Func2E024Arg *state);

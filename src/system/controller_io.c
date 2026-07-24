@@ -930,15 +930,15 @@ void requestRumblePakInit(s32 channel) {
     D_8008FE8F_90A8F = 1;
 }
 
-void *pollRumblePakInit(void) {
+s32 pollRumblePakInit(void) {
     void *result;
-    void *status;
+    s32 status;
 
     result = NULL;
-    status = (void *)-1;
+    status = -1;
     if (osRecvMesg(&gRumbleInitResultQueue, &result, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
-        status = result;
+        status = (s32)result;
     }
     return status;
 }
@@ -1028,15 +1028,15 @@ void eepromWriteAsync(s32 slotIndex) {
     }
 }
 
-void *pollEepromWriteAsync(void) {
+s32 pollEepromWriteAsync(void) {
     void *result;
-    void *status;
+    s32 status;
 
     result = NULL;
-    status = (void *)-1;
+    status = -1;
     if (osRecvMesg(&gControllerIoResultQueue, &result, OS_MESG_NOBLOCK) == 0) {
         D_8008FE8F_90A8F = 0;
-        status = result;
+        status = (s32)result;
     }
     return status;
 }

@@ -57,8 +57,6 @@ typedef struct {
     u8 previewModelPlayerIndex;
 } CharSelectTaskNode;
 
-extern void initBoardSelectArrows(void);
-extern void initBoardSelectCharNames(void);
 void awaitCharacterSelectLoad(void);
 void scheduleCharacterSelectTasks(void);
 void updateCharacterSelect(void);

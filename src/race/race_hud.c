@@ -253,11 +253,11 @@ typedef struct {
     /* 0x79 */ u8 activeRaceEffectCount;
 } Allocation_47D1C;
 
-typedef struct {
+struct FlyingSceneryState {
     /* 0x00 */ DisplayListObject displayListObject;
     /* 0x3C */ s32 frameCounter;
     /* 0x40 */ s32 rotationAngle;
-} FlyingSceneryState;
+};
 
 typedef struct {
     /* 0x00 */ u8 unk0[0x14];
@@ -3476,14 +3476,15 @@ void cleanupPanelProjectileTask(s32 **arg0) {
     *arg0 = freeNodeMemory(*arg0);
 }
 
-void spawnPanelProjectile(s32 arg0) {
+void *spawnPanelProjectile(void *arg0) {
     NodeWithPayload *temp_v0;
 
     getCurrentAllocation();
     temp_v0 = (NodeWithPayload *)scheduleTask(&initPanelProjectileTask, 3, 0, 0xEFU);
     if (temp_v0 != NULL) {
-        temp_v0->unk30 = arg0;
+        temp_v0->unk30 = (s32)arg0;
     }
+    return temp_v0;
 }
 
 void initItemHomingProjectileTask(void **arg0) {

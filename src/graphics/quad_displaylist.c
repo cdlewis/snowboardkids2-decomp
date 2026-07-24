@@ -1,3 +1,4 @@
+#include "graphics/quad_displaylist.h"
 #include "common.h"
 #include "graphics/sprite_table.h"
 #include "math/rand.h"
@@ -24,7 +25,7 @@ typedef struct {
     s8 unk88;
 } func_80006940_inner;
 
-typedef struct {
+struct ParticleState {
     func_80006940_inner *owner;
     SpriteAssetState spriteState;
     s32 unk50;
@@ -46,9 +47,7 @@ typedef struct {
     s16 unk88;
     s16 unk8A;
     s8 unk8C;
-} ParticleState;
-
-extern void setupAndEnqueueSprite(void *, u16, s32, s32, s32, s32, s32, s32, s32, s32, s16);
+};
 
 void cleanupTrailingParticle(ParticleState *);
 void updateTrailingParticle(ParticleState *);
@@ -107,7 +106,7 @@ void updateFallingParticle(ParticleState *arg0) {
     if (particleOwner->unk88 != 0) {
         if (particleOwner->displayEnabled != 0) {
             setupAndEnqueueSprite(
-                sprite,
+                (SpriteState *)sprite,
                 particleOwner->unk10->unk16,
                 arg0->unk50 + arg0->unk5C,
                 arg0->unk54 + arg0->unk60,
@@ -246,7 +245,7 @@ void updateDriftingParticle(ParticleState *arg0) {
 
     if (arg0->owner->unk88 != 0 && arg0->owner->displayEnabled != 0) {
         setupAndEnqueueSprite(
-            &arg0->spriteState,
+            (SpriteState *)&arg0->spriteState,
             arg0->owner->unk10->unk16,
             posX,
             posY,

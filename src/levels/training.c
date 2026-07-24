@@ -5,12 +5,11 @@
 #include "data/course_data.h"
 #include "font_encoding.h"
 #include "gamestate.h"
+#include "graphics/clip_text_render.h"
 #include "os_cont.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
-
-extern void renderTiledSprite3x3(void *, s16, s16, s16, s16, u8, u8, u8, u8, u8);
 
 /* Data segment - forward declarations */
 u8 trainingStartAndJumpPromptText[176];

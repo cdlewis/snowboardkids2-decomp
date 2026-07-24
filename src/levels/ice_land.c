@@ -4,10 +4,9 @@
 #include "gamestate.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
+#include "race/hit_reactions.h"
 #include "race/track_collision.h"
 #include "system/task_scheduler.h"
-
-extern void setPlayerBouncedBackState(Player *player);
 
 typedef struct {
     u8 isLastWaypoint;

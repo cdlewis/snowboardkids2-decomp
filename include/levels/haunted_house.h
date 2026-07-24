@@ -1,6 +1,8 @@
 #pragma once
 
 #include "common.h"
+
+typedef struct GhostRenderState GhostRenderState;
 #include "math/geometry.h"
 
 typedef struct {
@@ -44,3 +46,5 @@ void initFloatingBillboardSpawner(s16 *spawnTimer);
 void initGhostManager(GhostManager *ghostManager);
 
 void initLapCounterTask(s16 *lapCounter);
+
+void renderGhosts(GhostRenderState *state);

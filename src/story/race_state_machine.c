@@ -1,5 +1,6 @@
 #include "story/race_state_machine.h"
 #include "common_bss.h"
+#include "graphics/preview_render.h"
 
 #include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
@@ -97,20 +98,6 @@ void loadStoryModeRace(void);
 void onStoryMapLocationIntroComplete(void);
 void startBoardShopFadeOut(void);
 
-extern void initBoardShopShopkeeper(void);
-extern void initBoardShopCharacterPreview(void);
-extern void loadBoardShopBackground(void);
-extern void initBoardShopExitOverlay(void);
-extern void initBoardShopComparisonIcons(void);
-extern void initBoardShopRowSelectorArrow(void);
-extern void initBoardShopColumnSelectorArrow(void);
-extern void initBoardShopTitleText(void);
-extern void initBoardShopTitleCorners(void);
-extern void initBoardShopCharacterTransition(void);
-extern void initBoardShopBoardIcons(void);
-extern void initBoardShopSnowflakeSlideIn(void);
-extern void initBoardShopPreviewWipe(void);
-extern void initBoardShopSnowParticles(void);
 void storyMapDecorModelTask(StoryMapDecorModelState *arg0) {
     arg0->model = createSceneModel(0x13, getCurrentAllocation());
     setCleanupCallback(&cleanupStoryMapDecorModel);

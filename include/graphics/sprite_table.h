@@ -3,6 +3,8 @@
 #include "common.h"
 #include "data/data_table.h"
 
+struct Node;
+
 typedef struct {
     void *romStart;
     void *romEnd;
@@ -125,3 +127,18 @@ void renderSprite(
 s32 getTableEntryValue(TableLookupContext *ctx);
 void initOscillatingModelTask(void);
 void initOscillatingSpriteTask(void *state);
+
+void enqueueTranslucentSprite(u16 slot, struct Node *node);
+void setupAndEnqueueSprite(
+    SpriteState *state,
+    s32 slot,
+    s32 posX,
+    s32 posY,
+    s32 posZ,
+    s32 scaleX,
+    s32 scaleY,
+    s16 renderMode,
+    u8 flipH,
+    u8 alpha,
+    s16 renderFlags
+);

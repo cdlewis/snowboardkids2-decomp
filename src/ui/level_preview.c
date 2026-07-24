@@ -188,9 +188,9 @@ typedef struct {
     u8 unkB33[12];
 } Allocation_F7C8;
 
-typedef struct {
+struct LevelPreviewPortraitEntry {
     u8 _pad[0xC];
-} LevelPreviewPortraitEntry;
+};
 
 typedef struct {
     u8 _pad0[0x4];
@@ -200,7 +200,6 @@ typedef struct {
 } D_800AFE8C_type_202A0;
 
 extern D_800AFE8C_type_202A0 *gGameSessionContext;
-extern void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *);
 
 void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     Allocation_80020418 *allocation;

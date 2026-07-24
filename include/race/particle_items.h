@@ -29,6 +29,9 @@ typedef struct {
     /* 0x43 */ u8 immediateMode;
 } StarEffectTask;
 
+typedef struct WarpEffectState WarpEffectState;
+typedef struct GoldStealEffectState GoldStealEffectState;
+
 SparkleEffectState *spawnSparkleEffect(void *arg0);
 SparkleEffectState *spawnSparkleEffectWithPlayer(void *arg0, s32 arg1);
 StarEffectTask *spawnStarEffectImmediate(void *arg0);
@@ -39,3 +42,8 @@ void *spawnSpeedFanBoostEffect(Player *arg0);
 void *spawnWingsEffect(Player *arg0);
 void *createLiftEffect(Player *player);
 void spawnBurstEffect(Vec3i *position);
+
+WarpEffectState *createWarpEffect(Player *source, Player *player, s16 delayFrames);
+void *spawnChairliftEffect(void *target);
+GoldStealEffectState *spawnGoldStealEffect(void *recipientPlayer, void *victimPlayer, s16 frameTimer);
+StarEffectTask *spawnStarEffect(void *owner, void *player, s16 startDelay);

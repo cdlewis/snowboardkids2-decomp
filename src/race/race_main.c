@@ -11,13 +11,19 @@
 #include "gbi.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
+#include "levels/crazy_jungle_boss.h"
+#include "levels/haunted_house.h"
+#include "levels/ice_land_boss.h"
+#include "levels/jingle_town_boss.h"
 #include "levels/starlight_highway.h"
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "mbi.h"
 #include "race/ai_pathfinding.h"
+#include "race/character_stats.h"
 #include "race/hit_reactions.h"
 #include "race/particle_items.h"
+#include "race/position_markers.h"
 #include "race/race_effects.h"
 #include "race/race_hud.h"
 #include "race/race_session.h"
@@ -64,14 +70,6 @@ extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
 extern s32 gButtonsPressed[];
 
-extern void spawnPlayerIndicatorTask(Player *);
-extern void applyCharacterSnowboardStats(Player *);
-extern void initFlyingSceneryTask(void);
-extern s32 spawnChairliftEffect(Player *);
-extern void schedulePlayerAuraTask(Player *);
-extern s32 normalizeSurfaceType(s32);
-extern void startRumbleEffect(Player *player, s32 effectType);
-extern s32 applyVelocityDeadzone(Player *, s32, s32, s32);
 s32 initPlayerForRace(Player *);
 void dispatchDefaultBehaviorPhase(BehaviorState *);
 void dispatchStunnedBehaviorPhase(BehaviorState *);
@@ -168,17 +166,6 @@ void decayPlayerSteeringAngles(Player *);
 void resetTrickScore(Player *);
 void initStunnedAirborneBehavior(Player *);
 void updateRacePlayer(Player *);
-
-extern s32 projectPositionOntoTrackSegment(GameDataLayout *trackGeom, u16 sectorIdx, Vec3i *pos);
-extern void updateCrazyJungleBossPositionAndTrackCollision(Player *player);
-extern void renderCrazyJungleBossWithSurfaceColors(Player *player);
-extern void updateBossProximityCheckpoints(Player *player);
-extern void renderGhosts(void);
-extern void renderJingleTownBossWithEffects(Player *player);
-extern void updateJingleTownBossJointPositions(Player *player);
-extern void updateIceLandBossPositionAndTrackCollision(void);
-extern void renderIceLandBossWithSurfaceColors(Player *player);
-extern void updateIceLandBossJointPositions(Player *player);
 
 /* Forward declarations for function pointer tables */
 void renderFlyingEnemy(Player *);
@@ -5099,7 +5086,7 @@ void updateAndRenderRaceCharacters(void) {
                 break;
             case 2:
                 if (gs->gamePaused == 0) {
-                    renderGhosts();
+                    ((void (*)(void))renderGhosts)();
                 }
                 renderJingleTownBossWithEffects(&gs->players[i]);
                 updateJingleTownBossJointPositions(&gs->players[i]);
@@ -5117,8 +5104,11 @@ void updateAndRenderRaceCharacters(void) {
     if (gs->gamePaused == 0) {
         for (i = 0; i < gs->numPlayers; i++) {
             player = &gs->players[i];
-            player->segmentProgress =
-                projectPositionOntoTrackSegment(&gs->gameData, player->sectorIndex, &player->worldPos);
+            player->segmentProgress = projectPositionOntoTrackSegment(
+                (TrackGeometryData *)&gs->gameData,
+                player->sectorIndex,
+                (PositionXZ *)&player->worldPos
+            );
             player->lapProgressRemaining = getTrackSegmentFinishZoneFlag(&gs->gameData, player->sectorIndex);
         }
 

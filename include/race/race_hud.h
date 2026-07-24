@@ -41,3 +41,9 @@ void spawnBossHomingProjectileVariant2Task(Player *);
 void *spawnItemHomingProjectile(void *, u32, void *, s16, s32);
 
 void scheduleSkyRenderTask(s32 skyType);
+
+typedef struct FlyingSceneryState FlyingSceneryState;
+
+void initFlyingSceneryTask(FlyingSceneryState *state);
+void schedulePlayerAuraTask(void *player);
+void *spawnPanelProjectile(void *player);

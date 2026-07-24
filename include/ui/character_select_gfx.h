@@ -298,3 +298,6 @@ void initCharSelectStats(CharSelectStatsState *arg0);
 void updateCharSelectStats(CharSelectStatsState *arg0);
 void cleanupCharSelectStats(SimpleSpriteEntry *arg0);
 void initCharSelectScaledSprite(ScaledSpriteEntry *arg0);
+
+void initBoardSelectArrows(SelectionArrowsState *state);
+void initBoardSelectCharNames(CharacterNameSprite *sprites);

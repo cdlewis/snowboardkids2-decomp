@@ -552,7 +552,7 @@ void cutsceneChrAlpha_exec(cutsceneChrAlpha_exec_arg *arg0, CutsceneManager *arg
 
         currentAlpha = getModelAlpha(currentSlot->model);
 
-        slot->unk0.ChrPayload.currentAlphaFixed = currentAlpha << 16;
+        slot->unk0.ChrPayload.currentAlphaFixed.value = currentAlpha << 16;
         slot->unk0.ChrPayload.alphaIncrement =
             (slot->unk0.ChrPayload.targetAlphaFixed - (currentAlpha << 16)) / slot->unk0.ChrPayload.remainingFrames;
 
@@ -569,10 +569,10 @@ void cutsceneChrAlpha_update(CutsceneManager *arg0, s8 arg1) {
     managerSlot = &arg0->slots[arg1];
 
     if (slot->unk0.ChrPayload.remainingFrames > 0) {
-        setModelAlpha(managerSlot->model, slot->unk0.ChrPayload.padding[0xF]);
+        setModelAlpha(managerSlot->model, slot->unk0.ChrPayload.currentAlphaFixed.bytes.alpha);
         slot->unk0.ChrPayload.remainingFrames--;
-        newValue = slot->unk0.ChrPayload.currentAlphaFixed + slot->unk0.ChrPayload.alphaIncrement;
-        slot->unk0.ChrPayload.currentAlphaFixed = newValue;
+        newValue = slot->unk0.ChrPayload.currentAlphaFixed.value + slot->unk0.ChrPayload.alphaIncrement;
+        slot->unk0.ChrPayload.currentAlphaFixed.value = newValue;
 
         if (slot->unk0.ChrPayload.alphaIncrement > 0) {
             if (slot->unk0.ChrPayload.targetAlphaFixed < newValue) {

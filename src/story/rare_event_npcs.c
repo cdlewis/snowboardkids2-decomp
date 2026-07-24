@@ -1,4 +1,6 @@
+#include "story/rare_event_npcs.h"
 #include "D_800AFE8C_A71FC_type.h"
+#include "animation/easing_state.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
@@ -9,30 +11,8 @@
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-typedef struct {
-    /* 0x00 */ void *model;
-    /* 0x04 */ Transform3D matrix;
-    /* 0x24 */ u8 pad24[0xC];
-    /* 0x30 */ u16 targetRotation;
-    /* 0x32 */ u8 pad32[0x96];
-    /* 0xC8 */ void *returnCallback;
-    /* 0xCC */ u8 padCC[0x7];
-    /* 0xD3 */ u8 dialogueState;
-} StoryMapDialogueState;
-
 extern u8 dialogueNpcFacesPlayer[];
 void updateRareEventNpcDialogueSequence(Func2E024Arg *arg0);
-extern void updateStoryMapNpcTurnToTarget(StoryMapDialogueState *);
-
-extern void spawnSpriteEffectEx(s32, s32, s32, s32, void *, s32, s32, s32, s32, s32);
-
-extern void initStoryMapRareEventIdle(void *);
-extern void initStoryMapRareEventMagicShow(void *);
-extern void initStoryMapRareEventJuggling(void *);
-extern void initStoryMapRareEventSledding(void *);
-extern void initStoryMapRareEventSnowman(void *);
-extern void initStoryMapRareEventCheering(void *);
-extern void initStoryMapRareEventSkating(void *);
 
 typedef struct {
     /* 0x00 */ SceneModel *model;
@@ -46,12 +26,12 @@ typedef struct {
     /* 0x5D */ u8 pad5D[0x7];
 } StoryMapRareEventNpc; // size 0x64
 
-typedef struct {
+struct StoryMapRareEventState {
     /* 0x00 */ StoryMapRareEventNpc npcs[2];
     /* 0xC8 */ u8 padC8[0xC];
     /* 0xD4 */ u8 eventTypeIndex;
     /* 0xD5 */ u8 npcCount;
-} StoryMapRareEventState;
+};
 
 u8 rareEventNpcTable[] = {
     0x02, 0x00, 0x02, 0x02, 0x02, 0x05, 0x02, 0x01, 0x04, 0x02, 0x03, 0x00, 0x02, 0x03, 0x05, 0x02,
@@ -646,7 +626,14 @@ void updateStoryMapNpcTurnToTarget(StoryMapDialogueState *state) {
                     npcs[i].unk32 = 3;
                 }
                 if (npcs[i].unk36 != 0) {
+#ifdef CC_CHECK
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshift-count-overflow"
+#endif
                     turnSpeed = -(turnSpeed >> 0x1200);
+#ifdef CC_CHECK
+#pragma clang diagnostic pop
+#endif
                 }
                 npcs[i].turnAngle = npcs[i].turnAngle + turnSpeed;
                 if (npcs[i].animState == 1) {
@@ -692,7 +679,7 @@ void configureRareEventSpriteEffect(StoryMapRareEventState *rareEvent, s32 npcIn
             npc->spriteEffectParams = D_8008ED00_8F900;
             rareEvent->npcs[0].spriteEffectPosY = 0x300000;
             spawnSpriteEffectEx(
-                (s32)npc->model,
+                npc->model,
                 0,
                 0x1F,
                 rareEventEffectDurations[rareEvent->eventTypeIndex * 2 + npcIndex] - 4,

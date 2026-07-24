@@ -1,3 +1,4 @@
+#include "animation/stepped_matrix.h"
 #include "common.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
@@ -10,13 +11,13 @@ typedef struct {
     u8 transformMatrix[0x20];
 } SteppedMatrixOwner;
 
-typedef struct {
+struct SteppedMatrixState {
     SteppedMatrixOwner *owner;
     Transform3D matrix;
     s16 frameDelay;
     u8 padding[0x2];
     s16 stepIndex;
-} SteppedMatrixState;
+};
 
 s32 gSteppedMatrixTranslations = 0x00033333;
 

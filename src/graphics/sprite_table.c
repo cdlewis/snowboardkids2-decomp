@@ -46,7 +46,7 @@ void setupAndEnqueueSprite(
     s16 arg7,
     u8 flipH,
     u8 alpha,
-    u16 arg10
+    s16 arg10
 );
 
 s16 gSpriteAssetTable[][10] = {
@@ -825,7 +825,7 @@ void setupAndEnqueueSprite(
     s16 renderMode,
     u8 flipH,
     u8 alpha,
-    u16 renderFlags
+    s16 renderFlags
 ) {
     OutputStruct_19E80 sp10;
     SpriteEntry *entry;

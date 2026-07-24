@@ -4,3 +4,5 @@
 
 void spawnOrbitCameraTask(void);
 void spawnChaseCameraTask(u8 playerIdx);
+
+void spawnScriptedCameraTask(s16);

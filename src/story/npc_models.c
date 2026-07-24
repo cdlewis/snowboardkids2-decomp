@@ -4,6 +4,7 @@
 #include "gamestate.h"
 #include "math/geometry.h"
 #include "math/rand.h"
+#include "story/npc_dialogue.h"
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
@@ -44,24 +45,6 @@ typedef struct {
     u8 unk42D;
     u8 unk42E;
 } AllocationData29200;
-
-extern void initStoryMapNpcJump(void);
-extern void initStoryMapNpcWave(void);
-extern void initStoryMapNpcFloatEffect(void);
-extern void initStoryMapNpcLookAround(void);
-extern void initStoryMapNpcThinkEffect(void);
-extern void initStoryMapNpcIdle(void);
-extern void initStoryMapNpcIdleNoAnim(void);
-extern void initStoryMapNpcIdleNoAnim2(void);
-extern void initStoryMapNpcIdleWithEffect(void);
-extern void initStoryMapNpcIdleWithEffect2(void);
-extern void initStoryMapNpcNod(void);
-extern void initStoryMapNpcIdleRandomDelay(void);
-extern void initStoryMapNpcIdleRandomDelayNoAnim(void);
-extern void initStoryMapNpcIdleRandomDelayNoAnim2(void);
-extern void initStoryMapNpcIdleRandomDelayNoAnim3(void);
-extern void initStoryMapNpcTalk(void);
-extern void initStoryMapNpcStretch(void);
 
 void initStoryMapItemMovement(StoryMapItemTask *);
 void awaitStoryMapItemReady(void);

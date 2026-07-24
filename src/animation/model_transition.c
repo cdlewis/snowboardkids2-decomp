@@ -1,3 +1,4 @@
+#include "animation/model_transition.h"
 #include "assets.h"
 #include "common.h"
 #include "data/data_table.h"
@@ -12,7 +13,7 @@ typedef struct {
     u8 padding[0x17C];
 } TransitionEffectFrame;
 
-typedef struct {
+struct ModelTransitionEffectState {
     /* 0x00 */ SceneModel *model;
     /* 0x04 */ void *animationTable;
     /* 0x08 */ OutputStruct_19E80 tableEntry;
@@ -22,7 +23,7 @@ typedef struct {
     /* 0x3C */ s32 currentFrame;
     /* 0x40 */ s32 effectVariant;
     /* 0x44 */ TransitionEffectFrame *frameBuffer;
-} ModelTransitionEffectState;
+};
 
 extern Gfx *gDisplayListAllocPtr;
 

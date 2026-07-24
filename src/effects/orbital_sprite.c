@@ -1,3 +1,4 @@
+#include "effects/orbital_sprite.h"
 #include "common.h"
 #include "graphics/sprite_table.h"
 #include "math/geometry.h"
@@ -50,10 +51,10 @@ typedef struct {
     OrbitalSpriteOwner *owner;
 } OrbitalSpriteRingControllerState;
 
-typedef struct {
+struct OrbitalSpriteRingInitArg {
     s32 owner;
     SpriteAssetState spriteState;
-} OrbitalSpriteRingInitArg;
+};
 
 void initOrbitalSprite(OrbitalSpriteState *);
 void updateOrbitalSprite(OrbitalSpriteState *);

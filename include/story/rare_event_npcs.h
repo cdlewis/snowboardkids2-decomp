@@ -14,6 +14,10 @@ typedef struct {
     /* 0xD3 */ u8 dialogueState;
 } StoryMapDialogueState;
 
-void initStoryMapRareEvent(void *);
+typedef struct StoryMapRareEventState StoryMapRareEventState;
+
+void initStoryMapRareEvent(StoryMapRareEventState *state);
 
 void updateStoryMapNpcDialogue(StoryMapDialogueState *dialogue);
+
+void updateStoryMapNpcTurnToTarget(StoryMapDialogueState *);

@@ -40,7 +40,6 @@ extern char gTimelineRulerFormat[];
 extern char gTimelineSlotRowFormat[];
 extern CutsceneAssetTable gCutsceneAssetTable[];
 
-extern void initializeCutsceneCommand(void *, void *, s32, s32, s32);
 extern void renderCutsceneSlotMenuItem(s32, s32, s32);
 
 AssetGroup *getAssetGroupOrDefault(s32 assetIndex);
@@ -673,7 +672,7 @@ void initializeCutsceneSystem(void *romAssetAddr) {
             allocEntry = (StateEntry *)(tableBase + entryByteOffset);
             allocEntry[3].next_index = invalidIdx;
             allocEntry[3].prev_index = invalidIdx;
-            initializeCutsceneCommand(tableBase + cmdOffset, romAssetAddr, 0, 0, slotIdxByte);
+            initializeCutsceneCommand((CurrentCommand *)(tableBase + cmdOffset), romAssetAddr, 0, 0, slotIdxByte);
         }
     } while (slotIdx < 0x10);
 

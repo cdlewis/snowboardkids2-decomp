@@ -35,3 +35,5 @@ typedef struct {
 
 void spawnPushStartPrompt(s32, s16, u8, u8, s16, s16);
 void initStartGate(StartGate *gate);
+
+void spawnPlayerIndicatorTask(void *cleanupArg);

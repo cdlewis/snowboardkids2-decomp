@@ -1,3 +1,4 @@
+#include "ui/save_slot_gfx.h"
 #include "animation/easing_state.h"
 #include "assets.h"
 #include "common.h"
@@ -14,12 +15,12 @@
 #include "text/font_render.h"
 #include "text/text_layout.h"
 
-typedef struct {
+struct SaveSlotDeleteTextState {
     /* 0x00 */ void *spriteAsset;
     /* 0x04 */ void *textAsset;
     /* 0x08 */ s16 offsetX;
     /* 0x0A */ s16 offsetY;
-} SaveSlotDeleteTextState;
+};
 
 typedef struct {
     /* 0x00 */ void *unk0;
@@ -27,14 +28,14 @@ typedef struct {
     /* 0x08 */ void *unk8;
 } SaveSlotCleanupArg;
 
-typedef struct {
+struct SaveSlotConfirmationIndicatorState {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
     /* 0x04 */ void *spriteAsset;
     /* 0x08 */ s16 frameIndex;
-} SaveSlotConfirmationIndicatorState;
+};
 
-typedef struct {
+struct SaveSlotDeleteArrowState {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
     /* 0x04 */ void *spriteAsset;
@@ -45,7 +46,7 @@ typedef struct {
     /* 0x0E */ u8 padE[2];
     /* 0x10 */ u8 animIndex;
     /* 0x11 */ u8 animDelay;
-} SaveSlotDeleteArrowState;
+};
 
 typedef struct {
     /* 0x00 */ s16 x;
@@ -58,10 +59,10 @@ typedef struct {
     /* 0x0E */ u8 padE[2];
 } SaveSlotSpriteEntry; // size 0x10
 
-typedef struct {
+struct SaveSlotStatSpritesState {
     /* 0x00 */ SaveSlotSpriteEntry entries[13];
     /* 0xD0 */ u8 slotIndex;
-} SaveSlotStatSpritesState;
+};
 
 typedef struct {
     /* 0x00 */ u8 pad0[0x8];
@@ -72,7 +73,7 @@ typedef struct {
     /* 0x1C */ u8 unk1C;
 } SaveSlotNameTextArg;
 
-typedef struct {
+struct SaveSlotPromptTextState {
     /* 0x00 */ s16 mainTextX;
     /* 0x02 */ s16 mainTextY;
     /* 0x04 */ void *mainText;
@@ -88,7 +89,7 @@ typedef struct {
     /* 0x20 */ s16 hintTextAlpha;
     /* 0x22 */ s16 hintTextAlpha2;
     /* 0x24 */ u8 hintTextFlag;
-} SaveSlotPromptTextState;
+};
 
 typedef struct {
     /* 0x000 */ u8 pad0[0xABC];
@@ -120,17 +121,17 @@ typedef struct {
     /* 0x0B */ u8 padB;
 } SaveSlotSelectionParticle;
 
-typedef struct {
+struct SaveSlotSelectionParticlesState {
     /* 0x00 */ SaveSlotSelectionParticle entries[4];
     /* 0x30 */ u8 pad30[0x18];
     /* 0x48 */ u8 isRightSide;
     /* 0x49 */ u8 animToggle;
-} SaveSlotSelectionParticlesState;
+};
 
-typedef struct {
+struct SaveSlotGridState {
     /* 0x00 */ SaveSlotSpriteEntry *entries;
     /* 0x04 */ SpriteRenderArg cursorSprite;
-} SaveSlotGridState;
+};
 
 typedef struct {
     /* 0x00 */ s32 gold;
@@ -169,12 +170,12 @@ typedef struct {
     /* 0x08 */ void *textBuffer;
 } SaveSlotGoldText;
 
-typedef struct {
+struct SaveSlotGoldDisplayState {
     /* 0x00 */ SaveSlotGoldIcon icons[4];
     /* 0x50 */ SaveSlotGoldText text[4];
     /* 0x80 */ u8 textBuffers[4][10];
     /* 0xA8 */ u8 animFrames[4];
-} SaveSlotGoldDisplayState;
+};
 
 typedef struct {
     /* 0x00 */ s16 x;
@@ -184,12 +185,12 @@ typedef struct {
     /* 0x08 */ char *text;
 } SaveSlotNumberLabelText;
 
-typedef struct {
+struct SaveSlotNumberLabelsState {
     /* 0x00 */ SaveSlotSpriteEntry sprites[6];
     /* 0x60 */ SaveSlotNumberLabelText texts[9];
     /* 0xCC */ char textBuffers[9][4];
     /* 0xF0 */ u8 slotIndex;
-} SaveSlotNumberLabelsState;
+};
 
 typedef struct {
     /* 0x00 */ u8 itemFlags[15];
@@ -205,16 +206,16 @@ typedef struct {
     /* 0xAC8 */ u8 unkAC8;
 } NumberLabelsAllocation;
 
-typedef struct {
+struct SaveSlotItemIconsState {
     /* 0x00 */ void *spriteSheet;
     /* 0x04 */ SaveSlotSpriteEntry *icons;
     /* 0x08 */ u8 pad8[0x14];
     /* 0x1C */ u8 slotIndex;
     /* 0x1D */ u8 animFrame;
     /* 0x1E */ u8 unk1E;
-} SaveSlotItemIconsState;
+};
 
-typedef struct {
+struct SaveSlotNameTextState {
     /* 0x00 */ void *textAsset;
     /* 0x04 */ u8 pad4[0x4];
     /* 0x08 */ s16 x;
@@ -228,7 +229,7 @@ typedef struct {
     /* 0x1C */ u8 slotIndex;
     /* 0x1D */ u8 unk1D;
     /* 0x1E */ u8 slotFlags;
-} SaveSlotNameTextState;
+};
 
 typedef struct {
     /* 0x000 */ u8 pad0[0x948];

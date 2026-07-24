@@ -28,3 +28,8 @@ void motorUpdate(void);
 void *pollEepromWriteAllAsync(void);
 void eepromProbeAsync(void);
 void *pollEepromProbeAsync(void);
+
+void eepromWriteAsync(s32 slotIndex);
+s32 pollEepromWriteAsync(void);
+s32 pollRumblePakInit(void);
+void requestRumblePakInit(s32);

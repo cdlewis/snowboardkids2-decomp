@@ -9,3 +9,6 @@ typedef struct {
 
 void storyMapDecorModelTask(StoryMapDecorModelState *arg0);
 void initStoryModeRace(void);
+
+void initBoardShopDisplay(void);
+void initStoryMapLocationIntro(void);

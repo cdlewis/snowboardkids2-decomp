@@ -45,16 +45,6 @@ typedef struct {
 
 extern s32 storyMapLocationNames[];
 
-extern void initStoryMapShopFairyModel(void *);
-extern void initStoryMapShopItemCard(void *);
-extern void initSlideInStoryMapShopItemCard(void *);
-extern void loadStoryMapShopBackground(void *);
-extern void initStoryMapShopGoldDisplay(void *);
-extern void initStoryMapShopItemIcon(void *);
-extern void initStoryMapShopItemStatLabel(void *);
-extern void initStoryMapShopExitOverlay(void *);
-extern s32 getLockedShopItemIndices(u8 *);
-
 void unlockScreenScheduleDisplayTasks(void);
 void updateUnlockScreen(void);
 void onUnlockScreenExit(void);

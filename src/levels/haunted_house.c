@@ -76,11 +76,11 @@ typedef struct {
     s8 assetIndex;
 } AnimationData;
 
-typedef struct {
+struct GhostRenderState {
     void *matrixData;
     void *textureTable;
     u8 textureIndices[8];
-} GhostRenderState;
+};
 
 typedef struct {
     /* 0x00 */ u8 _pad[0x24];

@@ -196,3 +196,7 @@ void initLevelSelectTransition(void);
 void cleanupLevelPreviewCharacter(LevelPreviewCharacterState *state);
 void cleanupCharacterSelectionIcons(CharacterSelectionIconState *state);
 void renderCharacterSelectDisplay(CharacterSelectDisplayState *state);
+
+typedef struct LevelPreviewPortraitEntry LevelPreviewPortraitEntry;
+
+void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *entries);

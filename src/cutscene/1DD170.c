@@ -63,16 +63,16 @@
 #define COMMAND_SYS2_WIPE 50
 #define COMMAND_SYS2_WAIT 51
 
-typedef struct {
+struct CurrentCommand {
     u8 scriptState[0x3E];
     u8 commandCategory;
     u8 commandIndex;
-} CurrentCommand;
+};
 
-typedef struct {
+struct CommandData {
     u8 padding[0xF0];
     s32 isActive;
-} CommandData;
+};
 
 typedef struct {
     /* 0x00 */ s8 identifier[0x7];
@@ -272,7 +272,7 @@ void initializeCutsceneCommand(
     CommandData *commandData,
     u8 commandCategory,
     u8 commandIndex,
-    u8 frameIndex
+    s8 frameIndex
 ) {
     s32 shouldRun;
     void (*handler)(CurrentCommand *, CommandData *, s8);

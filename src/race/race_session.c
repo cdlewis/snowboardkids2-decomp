@@ -424,8 +424,6 @@ void awaitExpertRaceContinuePress(void);
 void cleanupGameSession(void);
 void loadRaceGameData(void);
 
-extern void spawnScriptedCameraTask(s16);
-
 void initRace(void) {
     RaceState *raceState;
     s32 i;

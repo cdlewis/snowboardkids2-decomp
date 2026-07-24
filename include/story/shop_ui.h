@@ -57,6 +57,12 @@ typedef struct {
     s8 animationCounter;
 } UnlockScreenScrollArrowsState;
 
+typedef struct StoryMapShopBackgroundState StoryMapShopBackgroundState;
+typedef struct StoryMapShopFairyState StoryMapShopFairyState;
+typedef struct StoryMapShopGoldDisplayState StoryMapShopGoldDisplayState;
+typedef struct StoryMapShopItemCardState StoryMapShopItemCardState;
+typedef struct StoryMapShopItemIconState StoryMapShopItemIconState;
+
 extern const char gIntegerFormatString[];
 
 extern const char gGoldFormatString7d[];
@@ -67,3 +73,13 @@ void initStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
 void cleanupStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
 void initStoryMapShopSoldOutLabel(SpriteDisplayState *arg0);
 void initUnlockScreenItemIcons(UnlockScreenItemIconsState *arg0);
+
+s32 getLockedShopItemIndices(u8 *);
+void initSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card);
+void initStoryMapShopExitOverlay(SpriteDisplayState *state);
+void initStoryMapShopFairyModel(StoryMapShopFairyState *state);
+void initStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *state);
+void initStoryMapShopItemCard(StoryMapShopItemCardState *card);
+void initStoryMapShopItemIcon(StoryMapShopItemIconState *state);
+void initStoryMapShopItemStatLabel(ScrollArrowSprite *state);
+void loadStoryMapShopBackground(StoryMapShopBackgroundState *state);

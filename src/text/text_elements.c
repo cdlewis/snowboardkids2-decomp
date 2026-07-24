@@ -424,7 +424,14 @@ void updateChaseCamera(ChaseCameraState *camera) {
 
     temp = &rotationMatrix.translation;
     setViewportTransformById(camera->viewportIdx + 0x64, &camera->lookAtMatrix);
+#ifdef CC_CHECK
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
+#endif
     if (gs->players == gs->players) {}
+#ifdef CC_CHECK
+#pragma clang diagnostic pop
+#endif
     memcpy(temp, (void *)(camera->playerIdx * (s32)sizeof(Player) + (s32)gs->players + 0x434), sizeof(Vec3i));
 
     if (gs->players[camera->viewportIdx].trackFaceSubtype == 0) {

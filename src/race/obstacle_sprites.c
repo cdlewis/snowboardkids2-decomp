@@ -1644,7 +1644,14 @@ void loadPlayerGuidedStarProjectile(Struct_52880 *arg0) {
     gPlayerGuidedStarVelocityOffset[0] = gPlayerGuidedStarBaseVelocity.x - arg0->vel.z;
 
     playerIdx = *playerIdxPtr;
+#ifdef CC_CHECK
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warray-bounds"
+#endif
     transformVector(&gPlayerGuidedStarTransform[6], alloc->unk10[arg0->ownerPlayerIdx].unk164.m[0], velocity);
+#ifdef CC_CHECK
+#pragma clang diagnostic pop
+#endif
 
     arg0->vel.x = arg0->pos.x - arg0->vel.x;
     arg0->vel.y = arg0->pos.y - arg0->vel.y;
@@ -1823,7 +1830,14 @@ void launchRandomEffectProjectile(Struct_52880 *arg0) {
     alloc = getCurrentAllocation();
     transformVector(gPlayerGuidedStarTransform, alloc->unk10[arg0->ownerPlayerIdx].unk164.m[0], s1 = &arg0->pos);
 
+#ifdef CC_CHECK
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warray-bounds"
+#endif
     transformVector(&gPlayerGuidedStarTransform[12], alloc->unk10[arg0->ownerPlayerIdx].unk164.m[0], &arg0->vel);
+#ifdef CC_CHECK
+#pragma clang diagnostic pop
+#endif
 
     temp_v0 = arg0->pos.x;
     temp_a1 = arg0->vel.x;
