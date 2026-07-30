@@ -8,11 +8,6 @@
 #include "system/task_scheduler.h"
 #include "ui/save_data.h"
 
-typedef struct {
-    s16 unk0;
-    u8 unk2;
-} TaskData_15690;
-
 extern u8 D_800AB1C8_A2538;
 extern u8 gStoryCompleted;
 extern u8 gDebugUnlockEnabled;
@@ -43,9 +38,9 @@ void loadPostCreditsSaveScreen(void);
 void awaitPostCreditsSaveScreen(void);
 
 void initStoryMode(void) {
-    TaskData_15690 *data = allocateTaskMemory(4);
-    data->unk2 = 0;
-    data->unk0 = 0;
+    GameModeTaskState *state = allocateTaskMemory(sizeof(GameModeTaskState));
+    state->substate = 0;
+    state->state = 0;
     D_800AB1C8_A2538 = 0;
     gGameSessionContext->numPlayers = 1;
     gGameSessionContext->playerBoardIds[0] = 0;

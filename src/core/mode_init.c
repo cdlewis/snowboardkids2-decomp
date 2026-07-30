@@ -7,11 +7,6 @@
 #include "race/race_session.h"
 #include "system/memory_allocator.h"
 #include "system/task_scheduler.h"
-typedef struct {
-    s16 unk0;
-    u8 unk2;
-    u8 pad;
-} TaskData_1512C;
 
 extern u8 gDebugUnlockEnabled;
 
@@ -43,19 +38,19 @@ void initGameSession(void) {
 }
 
 void resetSessionAndStartLogoScreen(void) {
-    TaskData_1512C *data = allocateTaskMemory(4);
+    GameModeTaskState *state = allocateTaskMemory(sizeof(GameModeTaskState));
     setViewportFadeValue(NULL, 0, 0);
-    data->unk0 = 0;
-    data->unk2 = 0;
+    state->state = 0;
+    state->substate = 0;
     resetGameSession();
     setGameStateHandlerWithContinue(startLogoScreen);
 }
 
 void resetSessionAndStartTitleScreen(void) {
-    TaskData_1512C *data = allocateTaskMemory(4);
+    GameModeTaskState *state = allocateTaskMemory(sizeof(GameModeTaskState));
     setViewportFadeValue(NULL, 0, 0);
-    data->unk0 = 0;
-    data->unk2 = 0;
+    state->state = 0;
+    state->substate = 0;
     resetGameSession();
     setGameStateHandlerWithContinue(loadTitleScreen);
 }

@@ -703,3 +703,16 @@ animation fields directly. Its sprite and text entries are also the canonical `T
 `ScaledSpriteArg`, `ColoredTextRenderArg`, and `TextLayoutArg` types. When KMC originally stores a packed
 padding-and-shade pair with `sh`, keep the shared byte-oriented renderer type but write the pair through its
 halfword address; assigning only the named shade byte changes code generation and can lengthen the function.
+
+## Consolidate Root Game-Mode Task State Across Dispatchers
+
+The story, versus, and main mode dispatchers each allocate the same four-byte task state: a signed halfword
+state at offset `0x0`, a byte substate at offset `0x2`, and alignment padding at offset `0x3`. These are one
+shared `GameModeTaskState`, not address-specific local types. Defining the complete layout in the session
+manager header and allocating it with `sizeof(GameModeTaskState)` preserves the original four-byte allocation
+and store ordering in KMC GCC 2.7.2.
+
+When identical small scheduler allocations appear in multiple mode initializers, compare their field widths,
+offsets, allocation sizes, and initialization order before keeping local copies. If no narrower behavior is
+observed, conservative `state` and `substate` names communicate their role without inventing unsupported
+semantics.

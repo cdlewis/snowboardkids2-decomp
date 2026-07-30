@@ -1,14 +1,10 @@
 #include "audio/audio.h"
 #include "common.h"
+#include "core/session_manager.h"
 #include "graphics/graphics.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "ui/player_select.h"
-
-typedef struct {
-    s16 unk0;
-    u8 unk2;
-} TaskData_22920;
 
 void loadPlayerCountSelect(void);
 void awaitPlayerCountSelect(void);
@@ -26,9 +22,9 @@ void awaitVersusMapScreen(void);
 void loadVersusSaveData(void);
 
 void initVersusMode(void) {
-    TaskData_22920 *data = allocateTaskMemory(4);
-    data->unk0 = 0;
-    data->unk2 = 0;
+    GameModeTaskState *state = allocateTaskMemory(sizeof(GameModeTaskState));
+    state->state = 0;
+    state->substate = 0;
     setGameStateHandlerWithContinue(loadPlayerCountSelect);
 }
 
