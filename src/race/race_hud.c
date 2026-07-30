@@ -396,11 +396,6 @@ typedef struct {
 } NodeWithPayload;
 
 typedef struct {
-    /* 0x00 */ u8 _pad[0x14];
-    /* 0x14 */ s16 courseId;
-} ItemBoxSystemTaskParams;
-
-typedef struct {
     /* 0x00 */ Transform3D matrix;
     /* 0x20 */ DisplayLists *matrixDisplayLists;
     /* 0x24 */ void *matrixSegment1;
@@ -2650,7 +2645,7 @@ void cleanupItemBoxSystem(ItemBoxSystemState *state) {
 }
 
 void scheduleItemBoxSystemTask(s32 courseId) {
-    ItemBoxSystemTaskParams *task = (ItemBoxSystemTaskParams *)scheduleTask(&initItemBoxSystem, 0, 0, 0xEA);
+    CourseTaskParams *task = (CourseTaskParams *)scheduleTask(&initItemBoxSystem, 0, 0, 0xEA);
     if (task != NULL) {
         task->courseId = courseId;
     }

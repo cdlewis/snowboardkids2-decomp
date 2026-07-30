@@ -14,47 +14,6 @@
 
 #define Y_OFFSET 0xFFE80000
 
-typedef struct {
-    s8 textureIndex;
-    u8 pad1[3];
-    s32 x;
-    s32 y;
-    s32 z;
-} ShootCrossTargetEntry;
-
-typedef struct {
-    void *transformMatrices; // Transform3D array
-    void *vertexData;        // Vtx[4] for rendering quad
-    ShootCrossTargetEntry *targets;
-    void *spriteAsset;       // Texture data for targets
-    s32 *targetPositionData; // Compressed position data
-    u8 _pad14[0x2];
-    s16 targetCount;
-} ShootCrossTargets;
-
-typedef struct {
-    u8 _pad[0x24];
-    ShootCrossTargets *shootCrossTargets;
-} ShootCrossAllocationStruct;
-
-typedef struct {
-    void *unk0;
-    void *unk4;
-    void *unk8;
-    void *unkC;
-    Player *unk10;
-    void *unk14;
-    u8 pad18[0xC];
-    ShootCrossTargets *shootCrossTargets;
-    u8 pad28[0x32];
-    u8 hitCount;
-} ProjectileAllocation;
-
-typedef struct {
-    u8 _pad[0x14];
-    s16 courseId;
-} ShootCrossTask;
-
 void renderShootCrossTargets(ShootCrossTargets *arg0);
 void updateRotatingSky(SnowboardStreetRotatingSky *rotatingSky);
 void cleanupRotatingSky(SnowboardStreetRotatingSky *rotatingSky);
@@ -74,8 +33,8 @@ Vtx D_800BBBB0_AD630[4] = {
 };
 
 void initShootCrossTargets(ShootCrossTargets *arg0) {
-    arg0->spriteAsset = loadShootCrossSprites();
-    arg0->targetPositionData = loadCompressedData(&targetPositionData_ROM_START, &targetPositionData_ROM_END, 0x160);
+    arg0->spriteTable = loadShootCrossSprites();
+    arg0->positionData = loadCompressedData(&targetPositionData_ROM_START, &targetPositionData_ROM_END, 0x160);
     arg0->transformMatrices = NULL;
     setCleanupCallback(cleanupShootCrossTargets);
     setCallback(initShootCrossTargetsCallback);
@@ -84,23 +43,23 @@ void initShootCrossTargets(ShootCrossTargets *arg0) {
 void initShootCrossTargetsCallback(ShootCrossTargets *arg0) {
     s32 i;
     s32 *ptr;
-    ShootCrossTargetEntry *targets;
+    ShootCrossTarget *targets;
     s32 pad[2];
     s32 offset;
-    ShootCrossAllocationStruct *allocation;
-    ShootCrossTargetEntry *temp;
+    GameState *gameState;
+    ShootCrossTarget *temp;
 
-    allocation = (ShootCrossAllocationStruct *)getCurrentAllocation();
-    arg0->vertexData = &D_800BBBB0_AD630;
-    arg0->targets = (ShootCrossTargetEntry *)((s8 *)arg0->targetPositionData + *arg0->targetPositionData);
-    targets = *(ShootCrossTargetEntry *volatile *)&arg0->targets;
+    gameState = (GameState *)getCurrentAllocation();
+    arg0->quadVertices = D_800BBBB0_AD630;
+    arg0->targets = (ShootCrossTarget *)((s8 *)arg0->positionData + *arg0->positionData);
+    targets = *(ShootCrossTarget *volatile *)&arg0->targets;
     arg0->targetCount = 0;
 
-    if (targets->textureIndex >= 0) {
+    if (targets->state >= 0) {
         temp = targets;
         do {
             arg0->targetCount++;
-        } while (temp[arg0->targetCount].textureIndex >= 0);
+        } while (temp[arg0->targetCount].state >= 0);
     }
 
     i = 0;
@@ -117,7 +76,7 @@ void initShootCrossTargetsCallback(ShootCrossTargets *arg0) {
         } while (i < arg0->targetCount);
     }
 
-    allocation->shootCrossTargets = arg0;
+    gameState->shootCrossTargets = arg0;
     setCallback(activateShootCrossTargets);
 }
 
@@ -125,7 +84,7 @@ void activateShootCrossTargets(ShootCrossTargets *arg0) {
     s32 i;
 
     for (i = 0; i < arg0->targetCount; i++) {
-        checkPositionPlayerCollisionWithPull(&arg0->targets[i].x, 0x180000, 0x300000);
+        checkPositionPlayerCollisionWithPull(&arg0->targets[i].position, 0x180000, 0x300000);
     }
 
     for (i = 0; i < 4; i++) {
@@ -134,17 +93,17 @@ void activateShootCrossTargets(ShootCrossTargets *arg0) {
 }
 
 void cleanupShootCrossTargets(ShootCrossTargets *arg0) {
-    ShootCrossAllocationStruct *allocation = (ShootCrossAllocationStruct *)getCurrentAllocation();
-    allocation->shootCrossTargets = NULL;
+    GameState *gameState = (GameState *)getCurrentAllocation();
+    gameState->shootCrossTargets = NULL;
     arg0->transformMatrices = freeNodeMemory(arg0->transformMatrices);
-    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
-    arg0->targetPositionData = freeNodeMemory(arg0->targetPositionData);
+    arg0->spriteTable = freeNodeMemory(arg0->spriteTable);
+    arg0->positionData = freeNodeMemory(arg0->positionData);
 }
 
 s32 checkProjectileTargetHit(Vec3i *projectilePos, s32 hitRange) {
     s32 pos[3];
     s32 unused[2];
-    ProjectileAllocation *allocation;
+    GameState *gameState;
     ShootCrossTargets *targets;
     s32 range;
     s32 negRange;
@@ -154,8 +113,8 @@ s32 checkProjectileTargetHit(Vec3i *projectilePos, s32 hitRange) {
     s32 yOffset;
     s32 idx;
 
-    allocation = (ProjectileAllocation *)getCurrentAllocation();
-    targets = allocation->shootCrossTargets;
+    gameState = (GameState *)getCurrentAllocation();
+    targets = gameState->shootCrossTargets;
 
     if (targets) {
         goto check_count;
@@ -165,8 +124,8 @@ s32 checkProjectileTargetHit(Vec3i *projectilePos, s32 hitRange) {
 
 found:
     *entry = 1;
-    allocation->hitCount = allocation->hitCount + 1;
-    playTrickSuccessVoice(allocation->unk10);
+    gameState->shootCrossTargetsHit = gameState->shootCrossTargetsHit + 1;
+    playTrickSuccessVoice(gameState->players);
     return 1;
 
 check_count:
@@ -182,11 +141,11 @@ check_count:
     do {
         memcpy(pos, projectilePos, sizeof(Vec3i));
         idx = i << 4;
-        x = pos[0] - targets->targets[i].x;
+        x = pos[0] - targets->targets[i].position.x;
         pos[0] = x;
-        y = (pos[1] + yOffset) - targets->targets[i].y;
+        y = (pos[1] + yOffset) - targets->targets[i].position.y;
         pos[1] = y;
-        z = pos[2] - targets->targets[i].z;
+        z = pos[2] - targets->targets[i].position.z;
         pos[2] = z;
 
         if (negRange < x) {
@@ -228,12 +187,12 @@ void renderShootCrossTargets(ShootCrossTargets *arg0) {
     for (i = 0; i < arg0->targetCount; i++) {
         offset = i << 4;
 
-        if (isObjectCulled((Vec3i *)((u8 *)arg0->targets + offset + 4)) == 0) {
-            s8 textureIndex = *(s8 *)(offset + (s32)arg0->targets);
+        if (isObjectCulled(&arg0->targets[i].position) == 0) {
+            s8 textureIndex = arg0->targets[i].state;
 
             if (prevTextureIndex != textureIndex) {
                 prevTextureIndex = textureIndex;
-                getTableEntryByU16Index(arg0->spriteAsset, (u16)prevTextureIndex, &tableEntry);
+                getTableEntryByU16Index(arg0->spriteTable, (u16)prevTextureIndex, &tableEntry);
 
                 gDPLoadMultiBlock_4b(
                     gDisplayListAllocPtr++,
@@ -255,15 +214,11 @@ void renderShootCrossTargets(ShootCrossTargets *arg0) {
                 gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tableEntry.index_ptr);
             }
 
-            gSPMatrix(
-                gDisplayListAllocPtr++,
-                (u8 *)arg0->transformMatrices + (i << 6),
-                G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
-            );
+            gSPMatrix(gDisplayListAllocPtr++, &arg0->transformMatrices[i], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPMatrix(gDisplayListAllocPtr++, gLookAtPtr, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-            gSPVertex(gDisplayListAllocPtr++, arg0->vertexData, 4, 0);
+            gSPVertex(gDisplayListAllocPtr++, arg0->quadVertices, 4, 0);
 
             gSP2Triangles(gDisplayListAllocPtr++, 0, 3, 2, 0, 2, 1, 0, 0);
         }
@@ -271,9 +226,9 @@ void renderShootCrossTargets(ShootCrossTargets *arg0) {
 }
 
 void scheduleShootCrossTargetsTask(s32 courseId) {
-    ShootCrossTask *task;
+    CourseTaskParams *task;
 
-    task = (ShootCrossTask *)scheduleTask(initShootCrossTargets, 0, 0, 0x32);
+    task = (CourseTaskParams *)scheduleTask(initShootCrossTargets, 0, 0, 0x32);
     if (task != NULL) {
         task->courseId = courseId;
     }

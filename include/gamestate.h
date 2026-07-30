@@ -7,6 +7,8 @@
 #include "libaudio.h"
 #include "math/geometry.h"
 
+struct ShootCrossTargets;
+
 typedef struct ListNode_5AA90 {
     /* 0x00 */ struct ListNode_5AA90 *next;
     /* 0x04 */ Vec3i *posPtr;
@@ -294,7 +296,7 @@ typedef struct {
     /* 0x18 */ void *unk18;
     /* 0x1C */ void *unk1C;
     /* 0x20 */ void *unk20;
-    /* 0x24 */ u8 PAD_2[0x4];
+    /* 0x24 */ struct ShootCrossTargets *shootCrossTargets;
     /* 0x28 */ RaceAssetHeader *unk28;
     /* 0x2C */ u8 PAD_3[0x4];
     /* 0x30 */ GameDataLayout gameData;

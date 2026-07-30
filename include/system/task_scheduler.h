@@ -25,6 +25,11 @@ typedef struct Node {
 
 typedef struct SchedulerNodeWithPayload SchedulerNodeWithPayload;
 
+typedef struct {
+    /* 0x00 */ u8 padding[0x14];
+    /* 0x14 */ s16 courseId;
+} CourseTaskParams;
+
 typedef struct TaskScheduler {
     /* 0x00 */ struct TaskScheduler *prev;
     /* 0x04 */ struct TaskScheduler *next;

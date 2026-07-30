@@ -631,3 +631,11 @@ An embedded prefix at offset zero preserves KMC GCC 2.7.2 code generation when p
 functions or accessing nested transform translations. Also inspect asset-table layouts before retaining byte
 offset arithmetic: the rotating sky's `base + 0x90` display-list pointer is the named
 `LevelDisplayLists.sceneryDisplayLists1` field.
+
+## Compare Allocation Overlays With the Shared Game State
+
+Task code that calls `getCurrentAllocation()` may define a padded local allocation struct even when the active
+allocation is the race `GameState`. Compare every exposed offset with `GameState` before retaining the overlay.
+The Shoot Cross target pointer at offset `0x24`, player array at `0x10`, and hit counter at `0x5A` all belong to
+one `GameState`; adding the missing target pointer to the shared definition removed two partial copies and
+revealed that the apparent projectile hit counter was the race-wide Shoot Cross score.
