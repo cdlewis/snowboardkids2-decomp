@@ -657,3 +657,10 @@ and showed that the train's former `unk56` is its current track sector. Its clea
 `DisplayListObject` prefix of the train task: offsets `0x24` and `0x28` are the standard `segment1` and
 `segment2` asset pointers. Check both the active allocation and embedded renderer prefixes before retaining a
 padded one-function struct.
+
+Haunted House's allocation overlay demonstrated that matching offsets matters more than a local field's guessed
+name: the byte it called `memoryPoolId` was at `0x5E`, which is actually `GameState.numPlayers`, not the real
+pool ID at `0x5C`. Its sprite tasks also contain `loadAssetMetadata_arg` beginning at offset `0x04`; embedding
+that shared sprite state gives the position, texture pointers, and alpha their canonical layout while preserving
+code generation. When a render callback receives the original task payload, extend that task's shared type with
+the callback-owned trailing fields instead of defining a second render-state view of the same bytes.

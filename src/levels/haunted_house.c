@@ -17,111 +17,14 @@
 #include "system/task_scheduler.h"
 
 typedef struct {
-    s16 unk0;
-    s16 unk2;
-} func_800BB74C_AF43C_arg;
-
-typedef struct {
-    /* 0x00 */ void *assetData;
-    /* 0x04 */ void *assetMetadata;
-    /* 0x08 */ s8 renderPositionBuffer[0x16];
-    /* 0x1E */ u8 alpha;
-    /* 0x1F */ s8 pad1F[0x5];
-    /* 0x24 */ s32 posX;
-    /* 0x28 */ s32 posY;
-    /* 0x2C */ s32 posZ;
-    /* 0x30 */ Vec3i velocity;
-    /* 0x3C */ s16 entityType;
-    /* 0x3E */ s16 collisionHeight;
-    /* 0x40 */ s16 animTimer;
-    /* 0x42 */ s16 lifetime;
-    /* 0x44 */ s16 animFrameIndex;
-    /* 0x46 */ u8 fadeDirection;
-} AnimatedGhostEntity;
-
-typedef struct {
-    u8 pad[0x30];
-    void *unk30;
-} AllocationUnk30;
-
-typedef struct {
-    u8 pad[0x10];
-    Player *players;
-    u8 pad14[0x1C];
-    void *gameData;
-    u8 pad34[0x2A];
-    u8 memoryPoolId;
-    u8 pad5F[0x17];
-    u8 gamePaused;
-} Allocation;
-
-typedef struct {
-    u8 pad[0x24];
-    s32 unk24;
-} Task;
-
-typedef struct {
-    /* 0x00 */ void *spriteAsset;
-    /* 0x04 */ void *spriteMetadata;
-    /* 0x08 */ Vec3i position;
-    /* 0x14 */ u8 pad14[0xA];
-    /* 0x1E */ u8 alpha;
-    /* 0x1F */ s8 pad1F[0x5];
-    /* 0x24 */ s32 yOffset;
-    /* 0x28 */ s16 lifetime;
-} FloatingBillboard;
-
-typedef struct {
     s8 frameDuration;
     s8 assetIndex;
 } AnimationData;
-
-struct GhostRenderState {
-    void *matrixData;
-    void *textureTable;
-    u8 textureIndices[8];
-};
-
-typedef struct {
-    /* 0x00 */ u8 _pad[0x24];
-    /* 0x24 */ s16 variantIndex;
-} FloatingSpriteTask;
-
-typedef struct {
-    void *spriteAsset;
-    void *spriteMetadata;
-    s32 posX;
-    s32 posY;
-    s32 posZ;
-    u8 pad14[0x10];
-    s16 variantIndex;
-    s16 animPhase;
-} FloatingSpriteEntity;
 
 typedef struct {
     s32 x;
     s32 z;
 } GhostSpawnPos;
-
-typedef struct {
-    void *unk00;
-    void *unk04;
-    s8 unk08[0x16];
-    u8 unk1E;
-    s8 unk1F[0x5];
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
-    s16 unk3C;
-    s16 unk3E;
-    s16 unk40;
-    s16 unk42;
-    s16 unk44;
-    u8 unk46;
-} initAnimatedGhost_arg;
 
 u32 g_GhostDefaultAssetMetadata[] = {
     0xFFED0013, 0x00000000, 0xFFF0FFF0, 0xFFFFFFFF, 0x00130013, 0x00000000, 0x07F0FFF0, 0xFFFFFFFF,
@@ -227,7 +130,7 @@ void cleanupAnimatedGhost(void **);
 void fadeInGhost(AnimatedGhostEntity *);
 void oscillateGhostFade(AnimatedGhostEntity *);
 void fadeOutGhost(AnimatedGhostEntity *);
-void updateGhostSpawner(func_800BB74C_AF43C_arg *);
+void updateGhostSpawner(GhostSpawnerTask *);
 void updateSwingingPendulumTrap(SwingingPendulumTrap *);
 void initFloatingBillboard(FloatingBillboard *);
 void updateFloatingBillboardSpawner(s16 *);
@@ -236,37 +139,33 @@ void updateFloatingBillboard(FloatingBillboard *);
 void initFloatingSpriteEntity(FloatingSpriteEntity *);
 void updateFloatingSpriteEntity(FloatingSpriteEntity *);
 void initGhostTransformations(GhostManager *);
-void updateGhostSlotStates(u8 *ghostSlots);
+void updateGhostSlotStates(GhostManager *ghostManager);
 void cleanupGhostManager(GhostManager *);
 void updateLapCounter(s16 *);
 void updateGhostAnimation(AnimatedGhostEntity *);
-void renderGhosts(GhostRenderState *);
+void renderGhosts(GhostManager *);
 void cleanupFloatingSpriteEntity(void **);
 
 void updateGhostAnimation(AnimatedGhostEntity *ghost) {
     s32 viewport;
 
-    ghost->animTimer--;
+    ghost->animationTimer--;
 
-    if (ghost->animTimer == 0) {
-        loadAssetMetadata(
-            (loadAssetMetadata_arg *)&ghost->assetMetadata,
-            ghost->assetData,
-            D_800BC830_B0520[ghost->animFrameIndex].assetIndex
-        );
+    if (ghost->animationTimer == 0) {
+        loadAssetMetadata(&ghost->sprite, ghost->spriteAsset, D_800BC830_B0520[ghost->animationFrameIndex].assetIndex);
 
-        ghost->animTimer = D_800BC830_B0520[ghost->animFrameIndex].frameDuration;
-        ghost->animFrameIndex++;
+        ghost->animationTimer = D_800BC830_B0520[ghost->animationFrameIndex].frameDuration;
+        ghost->animationFrameIndex++;
 
-        if (D_800BC830_B0520[ghost->animFrameIndex].frameDuration == 0) {
-            ghost->animFrameIndex = 0;
+        if (D_800BC830_B0520[ghost->animationFrameIndex].frameDuration == 0) {
+            ghost->animationFrameIndex = 0;
         }
     }
 
-    memcpy(&ghost->renderPositionBuffer, &ghost->posX, sizeof(Vec3i));
+    memcpy(&ghost->sprite.position, &ghost->worldPosition, sizeof(Vec3i));
 
     for (viewport = 0; viewport < 4; viewport++) {
-        enqueueAlphaBillboardSprite(viewport, (loadAssetMetadata_arg *)&ghost->assetMetadata);
+        enqueueAlphaBillboardSprite(viewport, &ghost->sprite);
     }
 }
 
@@ -281,9 +180,9 @@ void initAnimatedGhost(AnimatedGhostEntity *ghost) {
 
     getCurrentAllocation();
 
-    ghost->assetData = load_3ECE40();
-    ghost->assetMetadata = &g_GhostDefaultAssetMetadata;
-    ghost->alpha = 0;
+    ghost->spriteAsset = load_3ECE40();
+    ghost->sprite.assetTemplate = (loadAssetMetadata_arg *)&g_GhostDefaultAssetMetadata;
+    ghost->sprite.alpha = 0;
 
     randomSpeed = randA() & 0xFF;
     randomSpeed = randomSpeed << 10;
@@ -294,14 +193,14 @@ void initAnimatedGhost(AnimatedGhostEntity *ghost) {
 
     rotateVectorY(directionPtr, rotationAngle, &ghost->velocity);
 
-    if (ghost->entityType == 0) {
-        ghost->collisionHeight = 0x1A;
+    if (ghost->ghostType == 0) {
+        ghost->trackSector = 0x1A;
     } else {
-        ghost->collisionHeight = 0x58;
+        ghost->trackSector = 0x58;
     }
 
-    ghost->animTimer = 1;
-    ghost->animFrameIndex = 0;
+    ghost->animationTimer = 1;
+    ghost->animationFrameIndex = 0;
     ghost->lifetime = 0x3C;
 
     setCleanupCallback(cleanupAnimatedGhost);
@@ -314,36 +213,36 @@ void cleanupAnimatedGhost(void **ghostEntity) {
 
 s32 updateGhostPositionAndCheckEnd(AnimatedGhostEntity *ghost) {
     Vec3i surfaceNormal;
-    Allocation *allocation;
+    GameState *gameState;
     void *collisionContext;
     s32 *posPtr;
     s32 shouldEnd;
     u16 newHeight;
 
     shouldEnd = 0;
-    allocation = (Allocation *)getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    if (allocation->gamePaused == 0) {
-        collisionContext = &allocation->gameData;
+    if (gameState->gamePaused == 0) {
+        collisionContext = &gameState->gameData;
 
-        ghost->posX = ghost->posX + ghost->velocity.x;
-        ghost->posZ = ghost->posZ + ghost->velocity.z;
+        ghost->worldPosition.x = ghost->worldPosition.x + ghost->velocity.x;
+        ghost->worldPosition.z = ghost->worldPosition.z + ghost->velocity.z;
 
-        posPtr = &ghost->posX;
+        posPtr = &ghost->worldPosition.x;
 
-        newHeight = findTrackSector(collisionContext, ghost->collisionHeight, posPtr);
-        ghost->collisionHeight = newHeight;
+        newHeight = findTrackSector(collisionContext, ghost->trackSector, posPtr);
+        ghost->trackSector = newHeight;
 
         resolveTrackWallCollision(collisionContext, newHeight, posPtr, 0x80000, &surfaceNormal);
 
-        ghost->posY =
-            getTrackHeightInSector(collisionContext, (u16)ghost->collisionHeight, posPtr, 0x100000) + 0x180000;
+        ghost->worldPosition.y =
+            getTrackHeightInSector(collisionContext, (u16)ghost->trackSector, posPtr, 0x100000) + 0x180000;
 
-        if (ghost->entityType == 0) {
-            shouldEnd = (ghost->collisionHeight != 0x1A);
+        if (ghost->ghostType == 0) {
+            shouldEnd = (ghost->trackSector != 0x1A);
         } else {
-            u16 height = ghost->collisionHeight;
-            if ((u16)(height - 0x58) >= 2) {
+            u16 sector = ghost->trackSector;
+            if ((u16)(sector - 0x58) >= 2) {
                 shouldEnd = 1;
             }
         }
@@ -365,9 +264,9 @@ s32 updateGhostPositionAndCheckEnd(AnimatedGhostEntity *ghost) {
 }
 
 void fadeInGhost(AnimatedGhostEntity *ghost) {
-    ghost->alpha += 0x10;
+    ghost->sprite.alpha += 0x10;
 
-    if (ghost->alpha == 0xE0) {
+    if (ghost->sprite.alpha == 0xE0) {
         ghost->fadeDirection = 1;
         setCallback(oscillateGhostFade);
     }
@@ -383,13 +282,13 @@ void oscillateGhostFade(AnimatedGhostEntity *ghost) {
     Player *nearbyPlayer;
 
     if (ghost->fadeDirection != 0) {
-        ghost->alpha -= 0x10;
-        if (ghost->alpha < 0x41) {
+        ghost->sprite.alpha -= 0x10;
+        if (ghost->sprite.alpha < 0x41) {
             ghost->fadeDirection = 0;
         }
     } else {
-        ghost->alpha += 0x10;
-        if (ghost->alpha >= 0xE0) {
+        ghost->sprite.alpha += 0x10;
+        if (ghost->sprite.alpha >= 0xE0) {
             ghost->fadeDirection = 1;
         }
     }
@@ -398,7 +297,7 @@ void oscillateGhostFade(AnimatedGhostEntity *ghost) {
         setCallback(fadeOutGhost);
     }
 
-    nearbyPlayer = findVulnerablePlayerNearPosition(&ghost->posX, -1, 0x100000);
+    nearbyPlayer = findVulnerablePlayerNearPosition(&ghost->worldPosition.x, -1, 0x100000);
 
     if (nearbyPlayer != NULL) {
         if (nearbyPlayer->slowdownLevel < 3) {
@@ -412,9 +311,9 @@ void oscillateGhostFade(AnimatedGhostEntity *ghost) {
 }
 
 void fadeOutGhost(AnimatedGhostEntity *ghost) {
-    ghost->alpha -= 0x10;
+    ghost->sprite.alpha -= 0x10;
 
-    if (ghost->alpha == 0) {
+    if (ghost->sprite.alpha == 0) {
         terminateCurrentTask();
     } else {
         updateGhostPositionAndCheckEnd(ghost);
@@ -428,56 +327,56 @@ void initGhostSpawnerTask(GhostSpawnerTask *spawner) {
     setCallback(updateGhostSpawner);
 }
 
-void updateGhostSpawner(func_800BB74C_AF43C_arg *arg0) {
-    Allocation *allocation;
+void updateGhostSpawner(GhostSpawnerTask *spawner) {
+    GameState *gameState;
     int new_var;
-    initAnimatedGhost_arg *task;
+    AnimatedGhostEntity *ghost;
     s32 count;
     s32 inRange;
     s32 randIdx;
     s16 countdown;
-    allocation = (Allocation *)getCurrentAllocation();
-    if (allocation->gamePaused != 0) {
+    gameState = getCurrentAllocation();
+    if (gameState->gamePaused != 0) {
         return;
     }
-    countdown = arg0->unk2;
+    countdown = spawner->spawnTimer;
     if (countdown == 0) {
-        for (count = 0; count < allocation->memoryPoolId; count++) {
-            if (arg0->unk0 == 0) {
-                inRange = (allocation->players[count].sectorIndex - 0x18) < 6U;
+        for (count = 0; count < gameState->numPlayers; count++) {
+            if (spawner->ghostType == 0) {
+                inRange = (gameState->players[count].sectorIndex - 0x18) < 6U;
             } else {
-                inRange = (allocation->players[count].sectorIndex - 0x53) < 8U;
+                inRange = (gameState->players[count].sectorIndex - 0x53) < 8U;
             }
             if (inRange != 0) {
                 break;
             }
         }
 
-        if (count < allocation->memoryPoolId) {
-            task = (initAnimatedGhost_arg *)scheduleTask(initAnimatedGhost, 0, 0, 0xDC);
-            if (task != 0) {
-                if (arg0->unk0 == 0) {
-                    task->unk3C = 0;
+        if (count < gameState->numPlayers) {
+            ghost = (AnimatedGhostEntity *)scheduleTask(initAnimatedGhost, 0, 0, 0xDC);
+            if (ghost != 0) {
+                if (spawner->ghostType == 0) {
+                    ghost->ghostType = 0;
                     randIdx = randA();
                     randIdx &= 7;
                     count = randIdx;
-                    task->unk24 = D_800BC844_B0534[count].x;
-                    task->unk2C = D_800BC844_B0534[randIdx].z;
+                    ghost->worldPosition.x = D_800BC844_B0534[count].x;
+                    ghost->worldPosition.z = D_800BC844_B0534[randIdx].z;
                 } else {
-                    task->unk3C = 1;
+                    ghost->ghostType = 1;
                     randIdx = randA();
                     randIdx &= 7;
                     count = randIdx;
-                    task->unk24 = D_800BC884_B0574[count].x;
-                    task->unk2C = D_800BC884_B0574[count].z;
+                    ghost->worldPosition.x = D_800BC884_B0574[count].x;
+                    ghost->worldPosition.z = D_800BC884_B0574[count].z;
                 }
             }
         }
-        arg0->unk2 = 4;
-        arg0->unk0 = (arg0->unk0 + 1) & 1;
+        spawner->spawnTimer = 4;
+        spawner->ghostType = (spawner->ghostType + 1) & 1;
     } else {
         new_var = 1;
-        arg0->unk2 = countdown - new_var;
+        spawner->spawnTimer = countdown - new_var;
     }
 }
 
@@ -485,12 +384,12 @@ void initSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
     LevelDisplayLists *temp_v0_3;
     u16 temp_a1;
 
-    arg0->uncompressedAsset = loadUncompressedAssetByIndex(9);
-    arg0->compressedAsset = loadCompressedSegment2AssetByIndex(9);
-    arg0->animationFrame = 0;
+    arg0->renderObject.segment1 = loadUncompressedAssetByIndex(9);
+    arg0->renderObject.segment2 = loadCompressedSegment2AssetByIndex(9);
+    arg0->renderObject.segment3 = NULL;
 
     temp_v0_3 = getSkyDisplayLists3ByIndex(9);
-    arg0->displayListState = &temp_v0_3->sceneryDisplayLists1;
+    arg0->renderObject.displayLists = &temp_v0_3->sceneryDisplayLists1;
 
     arg0->phaseTimer = 0xF;
     arg0->pivotX = 0xFD71ABE1;
@@ -502,20 +401,20 @@ void initSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
     arg0->fireProjectileCooldown = 0x1E;
 
     temp_a1 = arg0->swingAngle + 0x2A0;
-    createYRotationMatrix((Transform3D *)arg0, temp_a1 & 0xFFFF);
+    createYRotationMatrix(&arg0->renderObject.transform, temp_a1 & 0xFFFF);
     setCleanupCallback(cleanupSwingingPendulumTrap);
     setCallback(updateSwingingPendulumTrap);
 }
 
 void updateSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
-    Allocation *allocation;
+    GameState *gameState;
     s32 i;
     Vec3i *pos;
     Player *player;
 
-    allocation = (Allocation *)getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    if (allocation->gamePaused == 0) {
+    if (gameState->gamePaused == 0) {
         switch (arg0->swingPhase) {
             case 0:
                 arg0->phaseTimer--;
@@ -554,56 +453,57 @@ void updateSwingingPendulumTrap(SwingingPendulumTrap *arg0) {
         arg0->bobPhase += 0x40;
 
         i = 0;
-        if (allocation->memoryPoolId > i) {
+        if (gameState->numPlayers > i) {
             do {
-                isPlayerInRangeAndPull(&arg0->position, 0x200000, allocation->players + i);
+                isPlayerInRangeAndPull(&arg0->renderObject.transform.translation, 0x200000, gameState->players + i);
                 i += 1;
-            } while (i < allocation->memoryPoolId);
+            } while (i < gameState->numPlayers);
         }
 
-        createYRotationMatrix((Transform3D *)arg0, (arg0->swingAngle + 0x2A0) & 0xFFFF);
+        createYRotationMatrix(&arg0->renderObject.transform, (arg0->swingAngle + 0x2A0) & 0xFFFF);
 
         if (arg0->fireProjectileCooldown == 0) {
             arg0->fireProjectileCooldown = (randA() & 0xF) + 0xF;
 
-            for (i = 0; i < allocation->memoryPoolId; i++) {
-                player = allocation->players + i;
+            for (i = 0; i < gameState->numPlayers; i++) {
+                player = gameState->players + i;
                 if ((u16)(player->sectorIndex - 0x38) < 5) {
                     break;
                 }
             }
 
-            if (i < allocation->memoryPoolId) {
-                pos = &arg0->position;
+            if (i < gameState->numPlayers) {
+                pos = &arg0->renderObject.transform.translation;
                 spawnShrinkProjectileTask(0, (s16)(arg0->swingAngle + 0x2A0), pos);
                 spawnShrinkProjectileTask(1, (s16)(arg0->swingAngle + 0x2A0), pos);
             }
         }
     }
 
-    memcpy(&arg0->position, &arg0->pivotX, sizeof(Vec3i));
-    arg0->position.y = arg0->position.y + approximateSin(arg0->bobPhase) * 0x1C0;
+    memcpy(&arg0->renderObject.transform.translation, &arg0->pivotX, sizeof(Vec3i));
+    arg0->renderObject.transform.translation.y =
+        arg0->renderObject.transform.translation.y + approximateSin(arg0->bobPhase) * 0x1C0;
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, &arg0->renderObject);
     }
 }
 
 void cleanupSwingingPendulumTrap(SwingingPendulumTrap *trap) {
-    trap->uncompressedAsset = freeNodeMemory(trap->uncompressedAsset);
-    trap->compressedAsset = freeNodeMemory(trap->compressedAsset);
+    trap->renderObject.segment1 = freeNodeMemory(trap->renderObject.segment1);
+    trap->renderObject.segment2 = freeNodeMemory(trap->renderObject.segment2);
 }
 
 void initFloatingBillboard(FloatingBillboard *billboard) {
     s32 initialY;
 
     billboard->spriteAsset = loadSpriteAssetByIndex(9);
-    billboard->spriteMetadata = &g_FloatingBillboardSpriteMetadata;
-    billboard->alpha = 0xFF;
-    memcpy(&billboard->position, &g_FloatingBillboardInitialPos, sizeof(Vec3i));
-    initialY = billboard->position.y + billboard->yOffset;
+    billboard->sprite.assetTemplate = (loadAssetMetadata_arg *)&g_FloatingBillboardSpriteMetadata;
+    billboard->sprite.alpha = 0xFF;
+    memcpy(&billboard->sprite.position, &g_FloatingBillboardInitialPos, sizeof(Vec3i));
+    initialY = billboard->sprite.position.y + billboard->targetYOffset;
     billboard->lifetime = 0xB4;
-    billboard->position.y = initialY;
+    billboard->sprite.position.y = initialY;
     setCleanupCallback(freeFloatingBillboard);
     setCallbackWithContinue(updateFloatingBillboard);
 }
@@ -613,15 +513,15 @@ void freeFloatingBillboard(void **billboard) {
 }
 
 void updateFloatingBillboard(FloatingBillboard *arg0) {
-    Allocation *allocation;
+    GameState *gameState;
     s32 i;
     s32 *ptr8;
     s32 *ptrC;
     s32 *ptr10;
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    if (allocation->gamePaused == 0) {
+    if (gameState->gamePaused == 0) {
         arg0->lifetime -= 1;
 
         if (arg0->lifetime == 0) {
@@ -629,20 +529,20 @@ void updateFloatingBillboard(FloatingBillboard *arg0) {
             return;
         }
 
-        ptr8 = &arg0->position.x;
+        ptr8 = &arg0->sprite.position.x;
         *ptr8 += (g_FloatingBillboardTarget.x - *ptr8) / arg0->lifetime;
 
-        ptrC = &arg0->position.y;
-        *ptrC += (g_FloatingBillboardTarget.y - (*ptrC + arg0->yOffset)) / arg0->lifetime;
+        ptrC = &arg0->sprite.position.y;
+        *ptrC += (g_FloatingBillboardTarget.y - (*ptrC + arg0->targetYOffset)) / arg0->lifetime;
 
-        ptr10 = &arg0->position.z;
+        ptr10 = &arg0->sprite.position.z;
         *ptr10 += (g_FloatingBillboardTarget.z - *ptr10) / arg0->lifetime;
     }
 
-    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->spriteMetadata, arg0->spriteAsset, 5);
+    loadAssetMetadata(&arg0->sprite, arg0->spriteAsset, 5);
 
     for (i = 0; i < 4; i++) {
-        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->spriteMetadata);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->sprite);
     }
 }
 
@@ -652,13 +552,13 @@ void initFloatingBillboardSpawner(s16 *spawnTimer) {
 }
 
 void updateFloatingBillboardSpawner(s16 *spawnTimer) {
-    Allocation *allocation;
-    Task *task;
+    GameState *gameState;
+    FloatingBillboard *billboard;
     u8 randYOffset;
     s32 yOffset;
 
-    allocation = (Allocation *)getCurrentAllocation();
-    if (allocation->gamePaused != 0) {
+    gameState = getCurrentAllocation();
+    if (gameState->gamePaused != 0) {
         return;
     }
 
@@ -667,11 +567,11 @@ void updateFloatingBillboardSpawner(s16 *spawnTimer) {
         return;
     }
 
-    task = (Task *)scheduleTask(initFloatingBillboard, 0, 0, 0xC8);
-    if (task != NULL) {
+    billboard = (FloatingBillboard *)scheduleTask(initFloatingBillboard, 0, 0, 0xC8);
+    if (billboard != NULL) {
         randYOffset = randA() & 0xFF;
         yOffset = (randYOffset * 5) << 13;
-        task->unk24 = yOffset;
+        billboard->targetYOffset = yOffset;
     }
 
     randYOffset = randA() & 0x1F;
@@ -682,11 +582,11 @@ void initFloatingSpriteEntity(FloatingSpriteEntity *arg0) {
     s16 index;
 
     arg0->spriteAsset = loadSpriteAssetByIndex(9);
-    arg0->spriteMetadata = &D_800BC920_B0610;
+    arg0->sprite.assetTemplate = (loadAssetMetadata_arg *)&D_800BC920_B0610;
 
     index = arg0->variantIndex;
     if (D_800BC9DC_B06CC[index] == 7) {
-        arg0->spriteMetadata = &D_800BC960_B0650;
+        arg0->sprite.assetTemplate = (loadAssetMetadata_arg *)&D_800BC960_B0650;
     }
 
     setCleanupCallback(cleanupFloatingSpriteEntity);
@@ -694,37 +594,37 @@ void initFloatingSpriteEntity(FloatingSpriteEntity *arg0) {
 }
 
 void updateFloatingSpriteEntity(FloatingSpriteEntity *arg0) {
-    Allocation *allocation;
+    GameState *gameState;
     s32 i;
     s16 index;
     s32 sinResult;
     s16 multiplier;
     s32 *src;
 
-    allocation = (Allocation *)getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
-    if (allocation->gamePaused == 0) {
+    if (gameState->gamePaused == 0) {
         index = arg0->variantIndex;
-        arg0->animPhase += D_800BC9F4_B06E4[index];
+        arg0->animationPhase += D_800BC9F4_B06E4[index];
     }
 
     index = arg0->variantIndex;
     src = D_800BC9A0_B0690;
-    memcpy(&arg0->posX, &src[index * 3], sizeof(Vec3i));
+    memcpy(&arg0->sprite.position, &src[index * 3], sizeof(Vec3i));
 
-    sinResult = approximateSin(arg0->animPhase);
+    sinResult = approximateSin(arg0->animationPhase);
 
     index = arg0->variantIndex;
     multiplier = D_800BC9E8_B06D8[index];
-    arg0->posY += sinResult * multiplier;
+    arg0->sprite.position.y += sinResult * multiplier;
 
     index = arg0->variantIndex;
-    loadAssetMetadata((loadAssetMetadata_arg *)&arg0->spriteMetadata, arg0->spriteAsset, D_800BC9DC_B06CC[index]);
+    loadAssetMetadata(&arg0->sprite, arg0->spriteAsset, D_800BC9DC_B06CC[index]);
 
-    checkPositionPlayerCollisionWithPull(&arg0->posX, 0x140000, 0x300000);
+    checkPositionPlayerCollisionWithPull(&arg0->sprite.position.x, 0x140000, 0x300000);
 
     for (i = 0; i < 4; i++) {
-        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->spriteMetadata);
+        enqueueTexturedBillboardSprite(i, (TexturedBillboardSprite *)&arg0->sprite);
     }
 }
 
@@ -733,15 +633,15 @@ void cleanupFloatingSpriteEntity(void **entity) {
 }
 
 void scheduleFloatingSpriteEntity(s16 variantIndex) {
-    FloatingSpriteTask *task = (FloatingSpriteTask *)scheduleTask(initFloatingSpriteEntity, 0, 0, 0xC8);
-    if (task != NULL) {
-        task->variantIndex = variantIndex;
+    FloatingSpriteEntity *entity = (FloatingSpriteEntity *)scheduleTask(initFloatingSpriteEntity, 0, 0, 0xC8);
+    if (entity != NULL) {
+        entity->variantIndex = variantIndex;
     }
 }
 
 void initGhostManager(GhostManager *ghostManager) {
     ghostManager->ghostSpriteAsset = loadSpriteAssetByIndex(9);
-    ghostManager->ghostSlotData = 0;
+    ghostManager->ghostMatrices = NULL;
     setCleanupCallback(cleanupGhostManager);
     setCallback(initGhostTransformations);
 }
@@ -751,7 +651,7 @@ void initGhostTransformations(GhostManager *ghostManager) {
     s32 *transformSrc;
     Vec3i *spawnPos;
 
-    ghostManager->ghostSlotData = allocateNodeMemory(0x200);
+    ghostManager->ghostMatrices = allocateNodeMemory(0x200);
 
     slotIndex = 0;
     transformSrc = (s32 *)&gScaleMatrix.translation;
@@ -759,7 +659,7 @@ void initGhostTransformations(GhostManager *ghostManager) {
 
     while (slotIndex < 8) {
         memcpy(transformSrc, spawnPos, sizeof(Vec3i));
-        transform3DToMtx(transformSrc - 5, (void *)((u8 *)ghostManager->ghostSlotData + (slotIndex << 6)));
+        transform3DToMtx(transformSrc - 5, (void *)((u8 *)ghostManager->ghostMatrices + (slotIndex << 6)));
         spawnPos++;
         slotIndex++;
     }
@@ -767,7 +667,7 @@ void initGhostTransformations(GhostManager *ghostManager) {
     setCallback(updateGhostSlotStates);
 }
 
-void updateGhostSlotStates(u8 *ghostSlots) {
+void updateGhostSlotStates(GhostManager *ghostManager) {
     GameState *gameState;
     s32 i;
     s32 maxRaceState;
@@ -815,28 +715,28 @@ void updateGhostSlotStates(u8 *ghostSlots) {
     i = 0;
     if (activeGhostCount != 0) {
         do {
-            (ghostSlots + i)[8] = 8;
+            ghostManager->textureIndices[i] = 8;
             i++;
         } while (i < activeGhostCount);
     }
 
     i = activeGhostCount;
     while (i < 8) {
-        (ghostSlots + i)[8] = 9;
+        ghostManager->textureIndices[i] = 9;
         i++;
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueCallbackBySlotIndex((u16)i, 4, renderGhosts, ghostSlots);
+        enqueueCallbackBySlotIndex((u16)i, 4, renderGhosts, ghostManager);
     }
 }
 
 void cleanupGhostManager(GhostManager *ghostManager) {
-    ghostManager->ghostSlotData = freeNodeMemory(ghostManager->ghostSlotData);
+    ghostManager->ghostMatrices = freeNodeMemory(ghostManager->ghostMatrices);
     ghostManager->ghostSpriteAsset = freeNodeMemory(ghostManager->ghostSpriteAsset);
 }
 
-void renderGhosts(GhostRenderState *state) {
+void renderGhosts(GhostManager *ghostManager) {
     OutputStruct_19E80 textureTableEntry;
     s32 currentTextureIndex;
     s32 i;
@@ -847,11 +747,11 @@ void renderGhosts(GhostRenderState *state) {
 
     for (i = 0; i < 8; i++) {
         if (isObjectCulled(&g_GhostSpawnPositions[i]) == 0) {
-            u8 textureIdx = state->textureIndices[i];
+            u8 textureIdx = ghostManager->textureIndices[i];
 
             if (textureIdx != currentTextureIndex) {
                 currentTextureIndex = textureIdx;
-                getTableEntryByU16Index(state->textureTable, (u16)currentTextureIndex, &textureTableEntry);
+                getTableEntryByU16Index(ghostManager->ghostSpriteAsset, (u16)currentTextureIndex, &textureTableEntry);
 
                 gDPLoadMultiBlock_4b(
                     gDisplayListAllocPtr++,
@@ -875,7 +775,7 @@ void renderGhosts(GhostRenderState *state) {
 
             gSPMatrix(
                 gDisplayListAllocPtr++,
-                (u8 *)state->matrixData + (i << 6),
+                (u8 *)ghostManager->ghostMatrices + (i << 6),
                 G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW
             );
 
