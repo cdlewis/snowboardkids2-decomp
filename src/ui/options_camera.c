@@ -11,38 +11,27 @@
 #include "text/font_render.h"
 #include "ui/options_menu.h"
 
-typedef struct {
-    /* 0x000 */ u8 pad0[0x1D8];
-    /* 0x1D8 */ void *assetData;
-    /* 0x1DC */ void *graphicsData;
-    /* 0x1E0 */ u16 frameCounter;
-    /* 0x1E2 */ u16 menuState;
-    /* 0x1E4 */ u8 itemTimers[4];
-    /* 0x1E8 */ u8 itemValues[4];
-    /* 0x1EC */ u8 selectedIndex;
-} MenuAllocation;
-
 void updateOptionsMenu(void);
 void onOptionsMenuFadeInComplete(void);
 void onOptionsMenuFadeOutComplete(void);
 void onOptionsMenuExit(void);
 
 void initOptionsMenu(void) {
-    MenuAllocation *allocation;
+    OptionsMenuState *allocation;
     s32 i;
 
     allocation = allocateTaskMemory(0x1F0);
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
-    initMenuCameraNode((ViewportNode *)allocation, 8, 0xF, 1);
+    initMenuCameraNode(&allocation->viewport, 8, 0xF, 1);
     setViewportFadeValue(0, 0xFF, 0);
     setViewportFadeValue(0, 0, 0x10);
-    allocation->assetData = loadCompressedData(&optionsMenuSprites_ROM_START, &optionsMenuSprites_ROM_END, 0xBB8);
-    allocation->graphicsData = loadTextRenderAsset(1);
-    allocation->frameCounter = 0;
-    allocation->menuState = 0;
-    allocation->selectedIndex = 0;
+    allocation->menuSpriteAsset = loadCompressedData(&optionsMenuSprites_ROM_START, &optionsMenuSprites_ROM_END, 0xBB8);
+    allocation->textRenderAsset = loadTextRenderAsset(1);
+    allocation->exitBlinkTimer = 0;
+    allocation->phase = OPTIONS_MENU_SELECTING;
+    allocation->selectedOption = 0;
     for (i = 0; i < 4; i++) {
-        allocation->itemTimers[i] = 0;
+        allocation->highlightTimers[i] = 0;
     }
     scheduleTask(initOptionsMenuTitle, 0, 0, 0x5A);
     scheduleTask(initOptionsMenuToggles, 0, 0, 0x5A);
@@ -59,33 +48,33 @@ void onOptionsMenuFadeInComplete(void) {
 }
 
 void updateOptionsMenu(void) {
-    MenuAllocation *state;
+    OptionsMenuState *state;
     u8 shouldExit;
     u8 prevIndex;
     u16 prevCompare;
     u8 curIndex;
     s32 i;
 
-    state = (MenuAllocation *)getCurrentAllocation();
+    state = (OptionsMenuState *)getCurrentAllocation();
     shouldExit = 0;
 
-    switch (state->menuState) {
-        case 0:
-            prevIndex = state->selectedIndex;
+    switch (state->phase) {
+        case OPTIONS_MENU_SELECTING:
+            prevIndex = state->selectedOption;
             prevCompare = prevIndex;
             if (gControllerInputs[0] & (STICK_UP | U_JPAD)) {
-                if (state->selectedIndex != 0) {
-                    state->selectedIndex--;
+                if (state->selectedOption != 0) {
+                    state->selectedOption--;
                 }
             } else if (gControllerInputs[0] & (STICK_DOWN | D_JPAD)) {
-                if (state->selectedIndex != 3) {
-                    state->selectedIndex++;
+                if (state->selectedOption != 3) {
+                    state->selectedOption++;
                 }
             }
 
-            curIndex = state->selectedIndex;
+            curIndex = state->selectedOption;
             if (prevCompare != curIndex) {
-                state->itemTimers[curIndex] = 0;
+                state->highlightTimers[curIndex] = 0;
                 playSoundEffect(0x2B);
                 break;
             }
@@ -93,13 +82,13 @@ void updateOptionsMenu(void) {
             if (gControllerInputs[0] & (A_BUTTON | START_BUTTON)) {
                 if (curIndex == 3) {
                     playSoundEffect(0x2C);
-                    state->menuState = 1;
+                    state->phase = OPTIONS_MENU_EXIT_DELAY;
                     goto update_items;
                 }
             }
 
             if (gControllerInputs[0] & (STICK_LEFT | STICK_RIGHT | L_JPAD | R_JPAD | A_BUTTON)) {
-                curIndex = state->selectedIndex;
+                curIndex = state->selectedOption;
                 if (curIndex == 3) {
 
                 } else {
@@ -121,29 +110,29 @@ void updateOptionsMenu(void) {
                 shouldExit = 1;
             }
 
-        /* Pulse highlight animation: ramp itemValues up then down over 0x20 frames */
+        /* Pulse the selected option's highlight alpha up and down over 0x20 frames. */
         update_items:
             for (i = 0; i < 4; i++) {
-                if (i == state->selectedIndex) {
-                    state->itemTimers[i] = state->itemTimers[i] + 1;
-                    if (state->itemTimers[state->selectedIndex] < 0x11) {
-                        state->itemValues[i] = state->itemValues[i] + 0xE;
+                if (i == state->selectedOption) {
+                    state->highlightTimers[i] = state->highlightTimers[i] + 1;
+                    if (state->highlightTimers[state->selectedOption] < 0x11) {
+                        state->highlightAlphas[i] = state->highlightAlphas[i] + 0xE;
                     } else {
-                        state->itemValues[i] = state->itemValues[i] - 0xE;
+                        state->highlightAlphas[i] = state->highlightAlphas[i] - 0xE;
                     }
-                    if (state->itemTimers[state->selectedIndex] != 0x20) {
+                    if (state->highlightTimers[state->selectedOption] != 0x20) {
                         continue;
                     }
                 }
-                state->itemTimers[i] = 0;
-                state->itemValues[i] = 0;
+                state->highlightTimers[i] = 0;
+                state->highlightAlphas[i] = 0;
             }
             break;
 
-        case 1:
-            state->frameCounter++;
-            if (state->frameCounter == 0x11) {
-                state->frameCounter = 0;
+        case OPTIONS_MENU_EXIT_DELAY:
+            state->exitBlinkTimer++;
+            if (state->exitBlinkTimer == 0x11) {
+                state->exitBlinkTimer = 0;
                 shouldExit = 1;
             }
             break;
@@ -157,15 +146,15 @@ void updateOptionsMenu(void) {
 }
 
 void onOptionsMenuFadeOutComplete(void) {
-    MenuAllocation *allocation = (MenuAllocation *)getCurrentAllocation();
+    OptionsMenuState *allocation = (OptionsMenuState *)getCurrentAllocation();
 
     if (getViewportFadeMode(NULL) != 0) {
         return;
     }
 
-    unlinkNode((ViewportNode *)allocation);
-    allocation->assetData = freeNodeMemory(allocation->assetData);
-    allocation->graphicsData = freeNodeMemory(allocation->graphicsData);
+    unlinkNode(&allocation->viewport);
+    allocation->menuSpriteAsset = freeNodeMemory(allocation->menuSpriteAsset);
+    allocation->textRenderAsset = freeNodeMemory(allocation->textRenderAsset);
     terminateSchedulerWithCallback(onOptionsMenuExit);
 }
 

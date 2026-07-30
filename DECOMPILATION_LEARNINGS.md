@@ -2,6 +2,21 @@
 
 Decompilation Learnings is a record maintained by Claude of insights from matching functions in this project. These document compiler behavior, codegen quirks, and patterns specific to KMC GCC 2.7.2 with `-O2 -mips3`.
 
+## Reusing UI Render Argument Types
+
+Menu task records passed to `renderTextSprite`, `renderAlphaBlendedTextSprite`, or `renderTextLayout` are often
+complete `TextRenderArg` or `TextLayoutArg` values, even when a local struct gives their fields menu-specific names.
+Reusing the renderer types identifies byte 0x0C of `TextRenderArg` as `tileMode`, byte 0x0D as
+`overridePaletteCount`, and its 16-bit color union as the palette/alpha pair. On big-endian N64, assigning a pulse
+value to `color.paletteAndAlpha` places that value in the low alpha byte.
+
+`ViewportNode` is 0x1D8 bytes and can be embedded at the start of menu allocation state structs. This replaces
+0x1D8-byte padding arrays while keeping subsequent task fields at their original offsets.
+
+When iterating adjacent named renderer fields from the first field's typed address, KMC may fold the field offset
+into the base pointer and shorten the function. Keeping the containing struct pointer live with an empty inline-asm
+input can retain the target's base-plus-field-offset address calculation without reverting to raw byte offsets.
+
 ## Reusing `DisplayListObject` in Task Layouts
 
 Level task states often embed one or more complete `DisplayListObject` values even when a function only accesses

@@ -5,57 +5,9 @@
 #include "font_encoding.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
-#include "race/race_session.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 #include "text/text_layout.h"
-
-#define ARG0 ((OptionsMenuToggleState *)arg0)
-
-typedef struct {
-    s16 x;
-    s16 y;
-    void *spriteAsset;
-    s16 frameIndex;
-    s16 highlightValue;
-    u8 unkC;
-    u8 displayFlags;
-    u8 unkE;
-    u8 unkF;
-} OptionsMenuToggleIconEntry;
-
-typedef union {
-    s16 asShort;
-    u8 asBytes[2];
-} ToggleLabelUnion;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    void *textData;
-    void *textAsset;
-    ToggleLabelUnion highlight;
-    s16 alpha;
-    u8 textStyle;
-    u8 unk11;
-    u8 unk12;
-    u8 unk13;
-} OptionsMenuToggleLabelEntry;
-
-typedef struct {
-    OptionsMenuToggleIconEntry iconEntries[6];
-    OptionsMenuToggleLabelEntry labelEntries[6];
-    void *textRenderAsset;
-} OptionsMenuToggleState;
-
-typedef struct {
-    u8 pad[0x1E0];
-    u16 frameCounter;
-    u16 menuState;
-    u8 pad2[0x4];
-    u8 itemValues[4];
-    u8 selectedIndex;
-} OptionsMenuAllocation;
 
 u8 optionsMenuTitleTextData[] = { _("   You can change the\nrules for battle mode."), PAD2 };
 
@@ -81,13 +33,13 @@ void *optionsMenuLabelTextData[] = {
 };
 
 void cleanupOptionsMenuTitle(OptionsMenuTitleState *arg0);
-void updateOptionsMenuTitle(u8 *arg0);
+void updateOptionsMenuTitle(OptionsMenuTitleState *arg0);
 void cleanupOptionsMenuToggles(OptionsMenuToggleState *arg0);
 void updateOptionsMenuToggles(OptionsMenuToggleState *arg0);
 void cleanupOptionsMenuLabels(OptionsMenuLabelsState *arg0);
 void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0);
-void cleanupOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0);
-void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0);
+void cleanupOptionsMenuCursors(TextRenderArg *arg0);
+void updateOptionsMenuCursors(TextRenderArg *arg0);
 
 void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
     void *textAsset;
@@ -97,49 +49,51 @@ void initOptionsMenuTitle(OptionsMenuTitleState *arg0) {
     spriteAsset = loadCompressedData(&optionsMenuSprites_ROM_START, &optionsMenuSprites_ROM_END, 0xBB8);
     setCleanupCallback(cleanupOptionsMenuTitle);
 
-    arg0->titleText.x = -0x50;
-    arg0->titleText.y = -0x58;
-    arg0->titleText.textData = optionsMenuTitleTextData;
-    arg0->titleText.textAsset = textAsset;
-    arg0->titleText.primaryColor = 0xFF;
-    arg0->titleText.secondaryColor = 0xFF;
-    arg0->titleText.textStyle = 0;
+    arg0->titleText.startX = -0x50;
+    arg0->titleText.startY = -0x58;
+    arg0->titleText.textData = (u16 *)optionsMenuTitleTextData;
+    arg0->titleText.fontAsset = textAsset;
+    arg0->titleText.shade.value = 0xFF;
+    arg0->titleText.textAlpha.value = 0xFF;
+    arg0->titleText.paletteIndex = 0;
 
     arg0->leftIcon.x = -0x90;
     arg0->leftIcon.y = -0x60;
-    arg0->leftIcon.spriteAsset = spriteAsset;
+    arg0->leftIcon.spriteData = spriteAsset;
     arg0->leftIcon.frameIndex = 2;
-    arg0->leftIcon.alpha = 0xFF;
-    arg0->leftIcon.blinkState = 1;
-    arg0->leftIcon.unkD = 0;
+    arg0->leftIcon.color.paletteAndAlpha = 0xFF;
+    arg0->leftIcon.tileMode = 1;
+    arg0->leftIcon.overridePaletteCount = 0;
 
     arg0->rightIcon.x = 0x58;
     arg0->rightIcon.y = -0x60;
-    arg0->rightIcon.spriteAsset = spriteAsset;
+    arg0->rightIcon.spriteData = spriteAsset;
     arg0->rightIcon.frameIndex = 2;
-    arg0->rightIcon.alpha = 0xFF;
-    arg0->rightIcon.blinkState = 0;
-    arg0->rightIcon.unkD = 0;
+    arg0->rightIcon.color.paletteAndAlpha = 0xFF;
+    arg0->rightIcon.tileMode = 0;
+    arg0->rightIcon.overridePaletteCount = 0;
 
     setCallback(updateOptionsMenuTitle);
 }
 
-void updateOptionsMenuTitle(u8 *arg0) {
+void updateOptionsMenuTitle(OptionsMenuTitleState *arg0) {
     s32 i;
 
     enqueueCallbackBySlotIndex(8, 0, renderTextLayout, arg0);
 
     for (i = 0; i < 2; i++) {
-        enqueueCallbackBySlotIndex(8, 0, renderTextSprite, arg0 + 0x14 + i * 0x10);
+        enqueueCallbackBySlotIndex(8, 0, renderTextSprite, &(&arg0->leftIcon)[i]);
+        /* Keep the containing state live so KMC preserves the target base-plus-field-offset addressing. */
+        __asm__ volatile("" : : "r"(arg0));
     }
 }
 
 void cleanupOptionsMenuTitle(OptionsMenuTitleState *arg0) {
-    arg0->titleText.textAsset = freeNodeMemory(arg0->titleText.textAsset);
-    arg0->leftIcon.spriteAsset = freeNodeMemory(arg0->leftIcon.spriteAsset);
+    arg0->titleText.fontAsset = freeNodeMemory(arg0->titleText.fontAsset);
+    arg0->leftIcon.spriteData = freeNodeMemory(arg0->leftIcon.spriteData);
 }
 
-void initOptionsMenuToggles(void *arg0) {
+void initOptionsMenuToggles(OptionsMenuToggleState *arg0) {
     void *spriteAsset;
     s32 i;
     s32 column;
@@ -147,17 +101,17 @@ void initOptionsMenuToggles(void *arg0) {
 
     getCurrentAllocation();
     spriteAsset = loadCompressedData(&optionsMenuSprites_ROM_START, &uiCornerSprites_ROM_START, 0xBB8);
-    ARG0->textRenderAsset = loadTextRenderAsset(1);
+    arg0->textRenderAsset = loadTextRenderAsset(1);
     setCleanupCallback(cleanupOptionsMenuToggles);
 
     for (i = 0; i < 6; i++) {
         column = i & 1;
-        ARG0->iconEntries[i].x = (column * 0x38) + 0x18;
-        ARG0->iconEntries[i].y = ((i / 2) << 5) - 0x20;
-        ARG0->iconEntries[i].spriteAsset = spriteAsset;
-        ARG0->iconEntries[i].frameIndex = 1;
-        ARG0->iconEntries[i].highlightValue = 0;
-        ARG0->iconEntries[i].unkC = 0;
+        arg0->toggleIcons[i].x = (column * 0x38) + 0x18;
+        arg0->toggleIcons[i].y = ((i / 2) << 5) - 0x20;
+        arg0->toggleIcons[i].spriteData = spriteAsset;
+        arg0->toggleIcons[i].frameIndex = 1;
+        arg0->toggleIcons[i].color.paletteAndAlpha = 0;
+        arg0->toggleIcons[i].tileMode = 0;
 
         if (i < 2) {
             optionValue = gGameSessionContext->optionToggle1;
@@ -167,26 +121,26 @@ void initOptionsMenuToggles(void *arg0) {
             optionValue = (gGameSessionContext->customLapEnabled + 1) & 1;
         }
         column = i & 1;
-        ARG0->iconEntries[i].displayFlags = ((optionValue + column) & 1) | 2;
+        arg0->toggleIcons[i].overridePaletteCount = ((optionValue + column) & 1) | 2;
 
-        ARG0->labelEntries[i].x = (column * 0x3A) + 0x16;
-        ARG0->labelEntries[i].y = ARG0->iconEntries[i].y + 2;
-        ARG0->labelEntries[i].textAsset = ARG0->textRenderAsset;
-        ARG0->labelEntries[i].highlight.asShort = 0;
-        ARG0->labelEntries[i].alpha = 0xFF;
-        ARG0->labelEntries[i].textStyle = 5;
+        arg0->toggleLabels[i].startX = (column * 0x3A) + 0x16;
+        arg0->toggleLabels[i].startY = arg0->toggleIcons[i].y + 2;
+        arg0->toggleLabels[i].fontAsset = arg0->textRenderAsset;
+        arg0->toggleLabels[i].shade.value = 0;
+        arg0->toggleLabels[i].textAlpha.value = 0xFF;
+        arg0->toggleLabels[i].paletteIndex = 5;
 
         if (i < 4) {
             if (column != 0) {
-                ARG0->labelEntries[i].textData = &coinsToggleNoText;
+                arg0->toggleLabels[i].textData = (u16 *)&coinsToggleNoText;
             } else {
-                ARG0->labelEntries[i].textData = &coinsToggleYesText;
+                arg0->toggleLabels[i].textData = (u16 *)&coinsToggleYesText;
             }
         } else {
             if (column != 0) {
-                ARG0->labelEntries[i].textData = &lapsToggleNoText;
+                arg0->toggleLabels[i].textData = (u16 *)&lapsToggleNoText;
             } else {
-                ARG0->labelEntries[i].textData = &lapsToggleYesText;
+                arg0->toggleLabels[i].textData = (u16 *)&lapsToggleYesText;
             }
         }
     }
@@ -195,7 +149,7 @@ void initOptionsMenuToggles(void *arg0) {
 }
 
 void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
-    OptionsMenuAllocation *alloc;
+    OptionsMenuState *alloc;
     s32 i;
     u8 optionValue;
 
@@ -210,34 +164,34 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
             optionValue = (gGameSessionContext->customLapEnabled + 1) & 1;
         }
 
-        arg0->iconEntries[i].displayFlags = ((optionValue + (i & 1)) & 1) | 2;
+        arg0->toggleIcons[i].overridePaletteCount = ((optionValue + (i & 1)) & 1) | 2;
 
-        if (alloc->menuState == 0) {
+        if (alloc->phase == OPTIONS_MENU_SELECTING) {
             u8 idx;
             s32 value;
-            idx = alloc->selectedIndex;
+            idx = alloc->selectedOption;
             value = optionValue + (idx << 1);
             if (value == i) {
-                arg0->iconEntries[i].highlightValue = alloc->itemValues[idx];
-                arg0->labelEntries[i].highlight.asShort = alloc->itemValues[alloc->selectedIndex];
+                arg0->toggleIcons[i].color.paletteAndAlpha = alloc->highlightAlphas[idx];
+                arg0->toggleLabels[i].shade.value = alloc->highlightAlphas[alloc->selectedOption];
             } else {
-                arg0->iconEntries[i].highlightValue = 0;
-                arg0->labelEntries[i].highlight.asShort = 0;
+                arg0->toggleIcons[i].color.paletteAndAlpha = 0;
+                arg0->toggleLabels[i].shade.value = 0;
             }
         } else {
-            arg0->iconEntries[i].highlightValue = 0;
-            arg0->labelEntries[i].highlight.asShort = 0;
+            arg0->toggleIcons[i].color.paletteAndAlpha = 0;
+            arg0->toggleLabels[i].shade.value = 0;
         }
 
-        enqueueCallbackBySlotIndex(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
+        enqueueCallbackBySlotIndex(8, 0, renderAlphaBlendedTextSprite, &arg0->toggleIcons[i]);
 
         enqueueTextLayoutAlphaBlended(
             arg0->textRenderAsset,
-            arg0->labelEntries[i].textData,
-            arg0->labelEntries[i].x,
-            arg0->labelEntries[i].y,
-            arg0->labelEntries[i].highlight.asBytes[1],
-            arg0->labelEntries[i].textStyle,
+            arg0->toggleLabels[i].textData,
+            arg0->toggleLabels[i].startX,
+            arg0->toggleLabels[i].startY,
+            arg0->toggleLabels[i].shade.bytes.low,
+            arg0->toggleLabels[i].paletteIndex,
             8,
             1
         );
@@ -246,7 +200,7 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
 
 void cleanupOptionsMenuToggles(OptionsMenuToggleState *arg0) {
     arg0->textRenderAsset = freeNodeMemory(arg0->textRenderAsset);
-    arg0->iconEntries[0].spriteAsset = freeNodeMemory(arg0->iconEntries[0].spriteAsset);
+    arg0->toggleIcons[0].spriteData = freeNodeMemory(arg0->toggleIcons[0].spriteData);
 }
 
 void initOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
@@ -255,10 +209,10 @@ void initOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
     s32 minusE0;
     s16 temp;
     s16 iconX;
-    s16 initialAlpha;
+    s16 initialPaletteOverride;
     s16 textX;
     s16 textAlpha;
-    u8 textStyle;
+    u8 paletteIndex;
 
     getCurrentAllocation();
     spriteAsset = loadCompressedData(&optionsMenuSprites_ROM_START, &optionsMenuSprites_ROM_END, 0xBB8);
@@ -267,70 +221,71 @@ void initOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
 
     i = 0;
     iconX = -0x80;
-    initialAlpha = 1;
+    initialPaletteOverride = 1;
     textX = -0x7C;
     textAlpha = 0xFF;
-    textStyle = 5;
+    paletteIndex = 5;
     for (i = 0; i < 4; i++) {
-        arg0->iconEntries[i].x = iconX;
-        arg0->iconEntries[i].y = -0x20 + 0x20 * i;
-        arg0->iconEntries[i].spriteAsset = spriteAsset;
-        arg0->iconEntries[i].frameIndex = 0;
-        arg0->iconEntries[i].highlightValue = 0;
-        arg0->iconEntries[i].unkC = 0;
-        arg0->iconEntries[i].alpha = initialAlpha;
+        arg0->optionIcons[i].x = iconX;
+        arg0->optionIcons[i].y = -0x20 + 0x20 * i;
+        arg0->optionIcons[i].spriteData = spriteAsset;
+        arg0->optionIcons[i].frameIndex = 0;
+        arg0->optionIcons[i].color.paletteAndAlpha = 0;
+        arg0->optionIcons[i].tileMode = 0;
+        arg0->optionIcons[i].overridePaletteCount = initialPaletteOverride;
 
-        arg0->textEntries[i].x = textX;
-        arg0->textEntries[i].y = arg0->iconEntries[i].y;
-        arg0->textEntries[i].textData = optionsMenuLabelTextData[i];
-        arg0->textEntries[i].textAsset = arg0->textRenderAsset;
-        arg0->textEntries[i].highlight = 0;
-        arg0->textEntries[i].alpha = textAlpha;
-        arg0->textEntries[i].textStyle = textStyle;
+        arg0->optionLabels[i].startX = textX;
+        arg0->optionLabels[i].startY = arg0->optionIcons[i].y;
+        arg0->optionLabels[i].textData = optionsMenuLabelTextData[i];
+        arg0->optionLabels[i].fontAsset = arg0->textRenderAsset;
+        arg0->optionLabels[i].shade.value = 0;
+        arg0->optionLabels[i].textAlpha.value = textAlpha;
+        arg0->optionLabels[i].paletteIndex = paletteIndex;
     }
 
-    arg0->iconEntries[3].x = -0x44;
-    arg0->iconEntries[3].y = 0x48;
-    arg0->textEntries[3].x = -0x40;
-    arg0->textEntries[3].y = arg0->iconEntries[3].y + 2;
+    arg0->optionIcons[3].x = -0x44;
+    arg0->optionIcons[3].y = 0x48;
+    arg0->optionLabels[3].startX = -0x40;
+    arg0->optionLabels[3].startY = arg0->optionIcons[3].y + 2;
 
     setCallback(updateOptionsMenuLabels);
 }
 
 void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
-    OptionsMenuAllocation *alloc;
+    OptionsMenuState *alloc;
     s32 i;
     do {
-        alloc = (OptionsMenuAllocation *)getCurrentAllocation();
+        alloc = (OptionsMenuState *)getCurrentAllocation();
 
         for (i = 0; i < 4; i++) {
-            if (alloc->menuState == 0) {
-                if (alloc->selectedIndex == i) {
-                    arg0->iconEntries[i].highlightValue = alloc->itemValues[i];
-                    arg0->textEntries[i].highlight = alloc->itemValues[i];
+            if (alloc->phase == OPTIONS_MENU_SELECTING) {
+                if (alloc->selectedOption == i) {
+                    arg0->optionIcons[i].color.paletteAndAlpha = alloc->highlightAlphas[i];
+                    arg0->optionLabels[i].shade.value = alloc->highlightAlphas[i];
                 } else {
-                    arg0->iconEntries[i].highlightValue = 0;
-                    arg0->textEntries[i].highlight = 0;
+                    arg0->optionIcons[i].color.paletteAndAlpha = 0;
+                    arg0->optionLabels[i].shade.value = 0;
                 }
             } else {
-                if (alloc->menuState == 1 && alloc->selectedIndex == i && (alloc->frameCounter & 1)) {
-                    arg0->iconEntries[i].alpha = 0xFF;
+                if (alloc->phase == OPTIONS_MENU_EXIT_DELAY && alloc->selectedOption == i &&
+                    (alloc->exitBlinkTimer & 1)) {
+                    arg0->optionIcons[i].overridePaletteCount = 0xFF;
                 } else {
-                    arg0->iconEntries[i].alpha = 1;
+                    arg0->optionIcons[i].overridePaletteCount = 1;
                 }
-                arg0->iconEntries[i].highlightValue = 0;
-                arg0->textEntries[i].highlight = 0;
+                arg0->optionIcons[i].color.paletteAndAlpha = 0;
+                arg0->optionLabels[i].shade.value = 0;
             }
 
-            enqueueCallbackBySlotIndex(8, 0, renderAlphaBlendedTextSprite, &arg0->iconEntries[i]);
+            enqueueCallbackBySlotIndex(8, 0, renderAlphaBlendedTextSprite, &arg0->optionIcons[i]);
 
             enqueueTextLayoutAlphaBlended(
                 arg0->textRenderAsset,
-                arg0->textEntries[i].textData,
-                arg0->textEntries[i].x,
-                arg0->textEntries[i].y,
-                (u8)arg0->textEntries[i].highlight,
-                arg0->textEntries[i].textStyle,
+                arg0->optionLabels[i].textData,
+                arg0->optionLabels[i].startX,
+                arg0->optionLabels[i].startY,
+                (u8)arg0->optionLabels[i].shade.value,
+                arg0->optionLabels[i].paletteIndex,
                 8,
                 1
             );
@@ -339,11 +294,11 @@ void updateOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
 }
 
 void cleanupOptionsMenuLabels(OptionsMenuLabelsState *arg0) {
-    arg0->textEntries[0].textAsset = freeNodeMemory(arg0->textEntries[0].textAsset);
-    arg0->iconEntries[0].spriteAsset = freeNodeMemory(arg0->iconEntries[0].spriteAsset);
+    arg0->optionLabels[0].fontAsset = freeNodeMemory(arg0->optionLabels[0].fontAsset);
+    arg0->optionIcons[0].spriteData = freeNodeMemory(arg0->optionIcons[0].spriteData);
 }
 
-void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
+void initOptionsMenuCursors(TextRenderArg *arg0) {
     void *cursorSpriteAsset;
     s32 i;
     s32 initialY;
@@ -359,11 +314,11 @@ void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
     do {
         arg0[i].x = xPos;
         arg0[i].y = initialY;
-        arg0[i].spriteAsset = cursorSpriteAsset;
+        arg0[i].spriteData = cursorSpriteAsset;
         arg0[i].frameIndex = i;
-        arg0[i].highlightValue = 0;
-        arg0[i].alpha = 0;
-        arg0[i].unkC = 0;
+        arg0[i].color.paletteAndAlpha = 0;
+        arg0[i].overridePaletteCount = 0;
+        arg0[i].tileMode = 0;
         i++;
         xPos += 0x78;
     } while (i < 2);
@@ -371,23 +326,23 @@ void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
     setCallback(updateOptionsMenuCursors);
 }
 
-void updateOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
-    OptionsMenuAllocation *alloc = getCurrentAllocation();
+void updateOptionsMenuCursors(TextRenderArg *arg0) {
+    OptionsMenuState *alloc = getCurrentAllocation();
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        if (alloc->menuState != 0) {
+        if (alloc->phase != OPTIONS_MENU_SELECTING) {
             continue;
         }
-        if (alloc->selectedIndex >= 3) {
+        if (alloc->selectedOption >= 3) {
             continue;
         }
-        arg0[i].y = (alloc->selectedIndex * 32) - 32;
-        arg0[i].highlightValue = alloc->itemValues[alloc->selectedIndex];
+        arg0[i].y = (alloc->selectedOption * 32) - 32;
+        arg0[i].color.paletteAndAlpha = alloc->highlightAlphas[alloc->selectedOption];
         enqueueCallbackBySlotIndex(8, 0, renderAlphaBlendedTextSprite, &arg0[i]);
     }
 }
 
-void cleanupOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0) {
-    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
+void cleanupOptionsMenuCursors(TextRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }

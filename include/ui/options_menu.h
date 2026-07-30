@@ -1,63 +1,45 @@
 #pragma once
 
 #include "common.h"
+#include "graphics/graphics.h"
+#include "graphics/sprite_rdp.h"
+#include "text/text_layout.h"
 
 typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *textData;
-    /* 0x08 */ void *textAsset;
-    /* 0x0C */ s16 primaryColor;
-    /* 0x0E */ s16 secondaryColor;
-    /* 0x10 */ u8 textStyle;
-    /* 0x11 */ u8 pad11[3];
-} OptionsMenuTitleTextEntry;
-
-typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteAsset;
-    /* 0x08 */ s16 frameIndex;
-    /* 0x0A */ s16 alpha;
-    /* 0x0C */ u8 blinkState;
-    /* 0x0D */ u8 unkD;
-    /* 0x0E */ u8 padE[2];
-} OptionsMenuTitleIconEntry;
-
-typedef struct {
-    /* 0x00 */ OptionsMenuTitleTextEntry titleText;
-    /* 0x14 */ OptionsMenuTitleIconEntry leftIcon;
-    /* 0x24 */ OptionsMenuTitleIconEntry rightIcon;
+    /* 0x00 */ TextLayoutArg titleText;
+    /* 0x14 */ TextRenderArg leftIcon;
+    /* 0x24 */ TextRenderArg rightIcon;
 } OptionsMenuTitleState;
 
 typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteAsset;
-    /* 0x08 */ s16 frameIndex;
-    /* 0x0A */ s16 highlightValue;
-    /* 0x0C */ u8 unkC;
-    /* 0x0D */ u8 alpha;
-    /* 0x0E */ u8 padE[2];
-} OptionsMenuLabelIconEntry;
-
-typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *textData;
-    /* 0x08 */ void *textAsset;
-    /* 0x0C */ s16 highlight;
-    /* 0x0E */ s16 alpha;
-    /* 0x10 */ u8 textStyle;
-    /* 0x11 */ u8 pad11[3];
-} OptionsMenuLabelTextEntry;
-
-typedef struct {
-    /* 0x00 */ OptionsMenuLabelIconEntry iconEntries[4];
-    /* 0x40 */ OptionsMenuLabelTextEntry textEntries[4];
+    /* 0x00 */ TextRenderArg optionIcons[4];
+    /* 0x40 */ TextLayoutArg optionLabels[4];
     /* 0x90 */ void *textRenderAsset;
 } OptionsMenuLabelsState;
 
+typedef struct {
+    /* 0x00 */ TextRenderArg toggleIcons[6];
+    /* 0x60 */ TextLayoutArg toggleLabels[6];
+    /* 0xD8 */ void *textRenderAsset;
+} OptionsMenuToggleState;
+
+enum OptionsMenuPhase {
+    OPTIONS_MENU_SELECTING,
+    OPTIONS_MENU_EXIT_DELAY,
+};
+
+typedef struct {
+    /* 0x000 */ ViewportNode viewport;
+    /* 0x1D8 */ void *menuSpriteAsset;
+    /* 0x1DC */ void *textRenderAsset;
+    /* 0x1E0 */ u16 exitBlinkTimer;
+    /* 0x1E2 */ u16 phase;
+    /* 0x1E4 */ u8 highlightTimers[4];
+    /* 0x1E8 */ u8 highlightAlphas[4];
+    /* 0x1EC */ u8 selectedOption;
+} OptionsMenuState;
+
 void initOptionsMenuTitle(OptionsMenuTitleState *arg0);
-void initOptionsMenuToggles(void *);
+void initOptionsMenuToggles(OptionsMenuToggleState *arg0);
 void initOptionsMenuLabels(OptionsMenuLabelsState *arg0);
+void initOptionsMenuCursors(TextRenderArg *arg0);

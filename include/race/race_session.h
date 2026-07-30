@@ -6,7 +6,6 @@
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "system/memory_allocator.h"
-#include "ui/options_menu.h"
 
 typedef struct {
     u8 padding[0x14];
@@ -60,7 +59,6 @@ s32 tryStoryMapNpcInteraction(void *arg0);
 
 void stopSoundEffectChannel(s32 channelIndex, s32 stoppingSpeed);
 void playFanSoundEffect(s16 fanIndex, s16 volume, s16 pan, s16 channel);
-void initOptionsMenuCursors(OptionsMenuLabelIconEntry *arg0);
 void spawnConfettiEffect(ViewportNode *cameraNode);
 s32 isSaveSlotUnlocked(u8 slotIndex);
 u8 isBoardUnlocked(u8 boardIndex);
