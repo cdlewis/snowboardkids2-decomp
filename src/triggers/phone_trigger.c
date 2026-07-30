@@ -19,29 +19,28 @@ void initPhoneDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
 }
 
 void checkPhoneLocationDiscovery(LocationDiscoveryTrigger *trigger) {
-    s16 playerYaw;
-    s16 normalizedYaw;
-    s16 minAngle;
-    s16 maxAngle;
+    s16 cameraOrbitAngle;
+    s16 normalizedOrbitAngle;
+    s16 maxDiscoveryAngle;
+    s16 minDiscoveryAngle;
     u8 locationId;
     GameState *gameState;
 
     gameState = getCurrentAllocation();
-    // Only check if player is above certain Y threshold
+    // Only check when the camera is far enough from the center of the story map.
     if (gameState->storyMapCameraOrbitRadius > 0x760000) {
-        playerYaw = gameState->storyMapCameraOrbitAngle;
-        // Normalize angle to range -0x1000 to 0x1000
-        normalizedYaw = playerYaw;
-        if (playerYaw >= 0x1001) {
-            normalizedYaw -= 0x2000;
+        cameraOrbitAngle = gameState->storyMapCameraOrbitAngle;
+        // Normalize the camera angle to the signed -0x1000 to 0x1000 range.
+        normalizedOrbitAngle = cameraOrbitAngle;
+        if (cameraOrbitAngle >= 0x1001) {
+            normalizedOrbitAngle -= 0x2000;
         }
-        // Get angle bounds for this location from the angle bounds table
         locationId = trigger->locationId;
-        minAngle = storyMapAngleBounds[locationId * 2];
-        if (normalizedYaw < minAngle) {
-            maxAngle = storyMapAngleBounds[(locationId * 2) + 1];
-            if (normalizedYaw > maxAngle) {
-                // Check if player's X position is within discovery range
+        maxDiscoveryAngle = storyMapAngleBounds[locationId * 2];
+        if (normalizedOrbitAngle < maxDiscoveryAngle) {
+            minDiscoveryAngle = storyMapAngleBounds[(locationId * 2) + 1];
+            if (normalizedOrbitAngle > minDiscoveryAngle) {
+                // The phone also requires the story-map view to face the town side.
                 if ((u16)(gameState->storyMapCameraViewAngle - 0xC01) < 0x7FF) {
                     gameState->locationDiscovered = 1;
                     gameState->discoveredLocationId = trigger->locationId;
