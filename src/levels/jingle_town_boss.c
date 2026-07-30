@@ -19,20 +19,6 @@
 
 extern s32 gJingleTownBossSpawnPos[];
 
-typedef struct {
-    u8 padding38[0x38];
-    Transform3D transform;
-    void *assetPointer;
-    s32 param1;
-    s32 param2;
-    s32 param3;
-} DisplayObjectElement;
-
-typedef struct {
-    s16 frames;
-    s16 anim;
-} HoverIntroAnimFrame;
-
 typedef void (*FuncPtr)(void *);
 typedef s32 (*StateFunc)(void *);
 
@@ -77,7 +63,7 @@ FuncPtr gHoverAttackPhaseHandlers[] = {
     (FuncPtr)jingleTownBossHoverAttackMainPhase,
 };
 
-HoverIntroAnimFrame gHoverIntroAnimFrames[] = {
+BossSquashAnimationFrame gHoverIntroAnimFrames[] = {
     { 0x0019, 0x0200 },
     { 0x0001, 0x0400 },
     { 0x0001, 0x0800 },
@@ -250,12 +236,13 @@ s32 initJingleTownBoss(Player *arg0) {
     arg0->rotY = 0x1000;
 
     for (i = 0; i < 3; i++) {
-        DisplayObjectElement *dispObj = (DisplayObjectElement *)((u8 *)arg0 + i * sizeof(DisplayListObject));
-        memcpy(&dispObj->transform, &identityMatrix, sizeof(Transform3D));
-        dispObj->param1 = (s32)arg0->bodyPartDisplayListAsset;
-        dispObj->param2 = (s32)arg0->bodyPartCompressedAsset;
-        dispObj->param3 = 0;
-        dispObj->assetPointer = (void *)((s32)loadAssetByIndex_953B0(arg0->characterId, arg0->boardModelId) + i * 0x10);
+        PlayerDisplayObjectView *displayObject = (PlayerDisplayObjectView *)&((PlayerDisplayObjectStride *)arg0)[i];
+        memcpy(&displayObject->displayObject.transform, &identityMatrix, sizeof(Transform3D));
+        displayObject->displayObject.segment1 = arg0->bodyPartDisplayListAsset;
+        displayObject->displayObject.segment2 = arg0->bodyPartCompressedAsset;
+        displayObject->displayObject.segment3 = NULL;
+        displayObject->displayObject.displayLists =
+            (DisplayLists *)((s32)loadAssetByIndex_953B0(arg0->characterId, arg0->boardModelId) + i * 0x10);
     }
 
     arg0->behaviorMode = 1;
@@ -556,8 +543,8 @@ s32 jingleTownBossHoverAttackIntroPhase(Player *arg0) {
 
     arg0->unkB8C--;
     if (arg0->unkB8C == 0) {
-        arg0->unkB8C = gHoverIntroAnimFrames[arg0->behaviorCounter].frames;
-        arg0->squashStretchScale = gHoverIntroAnimFrames[arg0->behaviorCounter].anim;
+        arg0->unkB8C = gHoverIntroAnimFrames[arg0->behaviorCounter].duration;
+        arg0->squashStretchScale = gHoverIntroAnimFrames[arg0->behaviorCounter].scale;
         arg0->behaviorCounter++;
     }
 

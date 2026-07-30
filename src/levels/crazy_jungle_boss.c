@@ -21,11 +21,6 @@
 typedef void (*FuncPtr)(void *);
 typedef s32 (*StateFunc)(void *);
 
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-} D_800BC468_ACC98_type;
-
 s32 initCrazyJungleBoss(Player *arg0);
 void dispatchCrazyJungleBossChasePhase(Player *arg0);
 void dispatchCrazyJungleBossHoverPhase(Player *arg0);
@@ -55,7 +50,7 @@ FuncPtr gCrazyJungleBossHoverPhaseHandlers[] = {
     (FuncPtr)crazyJungleBossHoverJumpPhase,
 };
 
-D_800BC468_ACC98_type D_800BC468_ACC98[] = {
+BossSquashAnimationFrame gCrazyJungleBossSquashAnimation[] = {
     { 0x003C, 0x0200 },
     { 0x0001, 0x0400 },
     { 0x0001, 0x0800 },
@@ -245,9 +240,9 @@ s32 initCrazyJungleBoss(Player *arg0) {
     Vec3i waypoint1;
     Vec3i waypoint2;
     GameState *gameState;
+    PlayerDisplayObjectView *displayObject;
     s32 i;
     u16 trackIdx;
-    u8 *elem;
 
     gameState = getCurrentAllocation();
 
@@ -277,15 +272,14 @@ s32 initCrazyJungleBoss(Player *arg0) {
 
     arg0->rotY = 0x1000;
 
-    // Initialize body part elements (17 elements, each 0x3C bytes)
-    // Each element contains Transform3D at offset 0x38, asset pointer at 0x58
+    // Initialize all 17 model display objects.
     for (i = 0; i < 17; i++) {
-        elem = (u8 *)arg0 + i * 0x3C;
-        memcpy(elem + 0x38, &identityMatrix, sizeof(Transform3D));
-        *(s32 *)(elem + 0x5C) = (s32)arg0->bodyPartDisplayListAsset;
-        *(s32 *)(elem + 0x60) = (s32)arg0->bodyPartCompressedAsset;
-        *(s32 *)(elem + 0x64) = 0;
-        *(void **)(elem + 0x58) = (void *)&loadAssetByIndex_953B0(arg0->characterId, arg0->boardModelId)[i];
+        displayObject = (PlayerDisplayObjectView *)&((PlayerDisplayObjectStride *)arg0)[i];
+        memcpy(&displayObject->displayObject.transform, &identityMatrix, sizeof(Transform3D));
+        displayObject->displayObject.segment1 = arg0->bodyPartDisplayListAsset;
+        displayObject->displayObject.segment2 = arg0->bodyPartCompressedAsset;
+        displayObject->displayObject.segment3 = NULL;
+        displayObject->displayObject.displayLists = &loadAssetByIndex_953B0(arg0->characterId, arg0->boardModelId)[i];
     }
 
     arg0->animationIndex = 0;
@@ -472,8 +466,8 @@ s32 crazyJungleBossHoverAttackPhase(Player *arg0) {
 
     arg0->unkB8C--;
     if (arg0->unkB8C == 0) {
-        arg0->unkB8C = D_800BC468_ACC98[arg0->behaviorCounter].unk0;
-        arg0->squashStretchScale = D_800BC468_ACC98[arg0->behaviorCounter].unk2;
+        arg0->unkB8C = gCrazyJungleBossSquashAnimation[arg0->behaviorCounter].duration;
+        arg0->squashStretchScale = gCrazyJungleBossSquashAnimation[arg0->behaviorCounter].scale;
         arg0->behaviorCounter++;
     }
 

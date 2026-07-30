@@ -29,6 +29,11 @@ typedef struct {
     /* 0x07 */ u8 pad2;
 } BossSurfaceColor;
 
+typedef struct {
+    /* 0x00 */ s16 duration;
+    /* 0x02 */ s16 scale;
+} BossSquashAnimationFrame;
+
 extern BossSurfaceColor gBossSurfaceColors[];
 
 void setPlayerBehaviorMode(Player *player, u8 mode);

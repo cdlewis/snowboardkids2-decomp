@@ -32,19 +32,6 @@
 
 typedef void (*FuncPtr)(void *);
 
-/**
- * Player's asset pointers occupy the 0x38 bytes before bodyPartDisplayObjects.
- * Iterating this 0x3C-byte view preserves the original overlapping model-init loop.
- */
-typedef struct {
-    u8 padding[0x3C];
-} IceLandBossDisplayObjectStride;
-
-typedef struct {
-    u8 padding[0x38];
-    DisplayListObject displayObject;
-} IceLandBossDisplayObjectView;
-
 typedef s32 (*StateFunc)(void *);
 
 // Forward declarations for function pointer arrays
@@ -280,8 +267,8 @@ s32 initIceLandBoss(Player *arg0) {
 
     // Initialize body part transforms (12 body parts, each 0x3C bytes apart)
     for (i = 0; i < 12; i++) {
-        IceLandBossDisplayObjectStride *strides = (IceLandBossDisplayObjectStride *)arg0;
-        IceLandBossDisplayObjectView *view = (IceLandBossDisplayObjectView *)&strides[i];
+        PlayerDisplayObjectStride *strides = (PlayerDisplayObjectStride *)arg0;
+        PlayerDisplayObjectView *view = (PlayerDisplayObjectView *)&strides[i];
         DisplayListObject *displayObject = &view->displayObject;
 
         memcpy(&displayObject->transform, &identityMatrix, sizeof(Transform3D));

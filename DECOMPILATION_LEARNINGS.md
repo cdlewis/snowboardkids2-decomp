@@ -536,7 +536,9 @@ the first `0x38` bytes, followed by `DisplayListObject` elements of size `0x3C`.
 when a `0x3C` stride view advanced from the `Player` base and a second typed view exposed the display object at
 offset `0x38`; iterating `Player.bodyPartDisplayObjects` directly added two instructions. A small documented adapter
 view can preserve this induction shape while the function signatures and all actual field accesses continue using
-the canonical `Player` and `DisplayListObject` types.
+the canonical `Player` and `DisplayListObject` types. The same two views match the Crazy Jungle and Jingle Town boss
+initializers, so keep them shared in `gamestate.h` instead of recreating boss-local padding structs or using byte
+offset casts.
 
 ## Preserve Historical ABIs When Centralizing Prototypes
 

@@ -114,6 +114,20 @@ typedef struct {
 } InputRecord;
 
 typedef struct {
+    u8 bytes[sizeof(DisplayListObject)];
+} PlayerDisplayObjectStride;
+
+/**
+ * Shared view of a Player display-object slot. Player's asset pointers precede
+ * the contiguous model objects by 0x38 bytes, while each slot begins 0x3C bytes
+ * after the previous one.
+ */
+typedef struct {
+    /* 0x00 */ u8 assetPointers[0x38];
+    /* 0x38 */ DisplayListObject displayObject;
+} PlayerDisplayObjectView;
+
+typedef struct {
     /* 0x000 */ void *raceAnimationData;
     /* 0x004 */ void *bodyPartDisplayListAsset;
     /* 0x008 */ void *bodyPartCompressedAsset;
