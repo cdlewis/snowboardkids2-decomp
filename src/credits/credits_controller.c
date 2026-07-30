@@ -7,6 +7,7 @@
 #include "credits/credits_decorations.h"
 #include "credits/credits_subtitles.h"
 #include "credits/credits_text.h"
+#include "data/asset_metadata.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "system/rom_loader.h"
@@ -16,33 +17,7 @@
 
 USE_OVERLAY(credits)
 
-typedef struct {
-    void *start;
-    void *end;
-    s32 size;
-} asset;
-
-typedef struct {
-    s16 modelId;
-    s16 animationIndex;
-    u8 unk4;
-    s8 actionMode;
-    u16 rotation;
-    u16 unk8;
-    s16 scale;
-    s32 depthOffset;
-} CreditsCharacterConfig; // size 0x10
-
-typedef struct {
-    SceneModel *model;
-    s16 animState;
-    s16 configIndex;
-    u8 unk8;
-    s8 direction;
-    s16 isCleanedUp;
-} CreditsCharacter;
-
-static asset D_8008BFA0_8CBA0[6] = {
+static CompressedAssetMeta D_8008BFA0_8CBA0[6] = {
     { &CREDITS_TEXT_PALETTE_DATA_00_ROM_START, &CREDITS_TEXT_PALETTE_DATA_00_ROM_END, 0x9578 },
     { &CREDITS_TEXT_PALETTE_DATA_01_ROM_START, &CREDITS_TEXT_PALETTE_DATA_01_ROM_END, 0x9578 },
     { &CREDITS_TEXT_PALETTE_DATA_02_ROM_START, &CREDITS_TEXT_PALETTE_DATA_02_ROM_END, 0x9578 },
@@ -61,13 +36,7 @@ s32 creditsCameraX = 0x0;
 
 s32 creditsCameraY = 0x600333;
 
-struct {
-    s32 depth;
-    s16 unk4;
-    s16 pitch;
-    s16 unk8;
-    s16 yaw;
-} creditsCameraConfig = {
+CreditsCameraConfig creditsCameraConfig = {
     0x1400000,
     0,
     0,
@@ -94,10 +63,7 @@ CreditsCharacterConfig creditsCharacterConfigs[] = {
     { 0x72, 0xE,  0, 0, 0xF800, 0, 0x2000, 0x00199999 }
 };
 
-struct {
-    u16 unk0;
-    u16 unk2;
-} D_8008C11C_8CD1C = { 0x11, 0 };
+CreditsCharacterConfigHeader D_8008C11C_8CD1C = { 0x11, 0 };
 
 Vec3i D_8008C120_8CD20[] = {
     { 0x001428F5, 0x00099999, 0x00266666 },
@@ -173,8 +139,11 @@ void initCreditsController(void) {
         loadCompressedData(&CREDITS_SUBTITLE_DATA_ROM_START, &CREDITS_SUBTITLE_DATA_ROM_END, 0x2B0);
 
     for (i = 0; i < 6; i++) {
-        taskMemory->paletteDataTables[i] =
-            loadCompressedData(D_8008BFA0_8CBA0[i].start, D_8008BFA0_8CBA0[i].end, D_8008BFA0_8CBA0[i].size);
+        taskMemory->paletteDataTables[i] = loadCompressedData(
+            D_8008BFA0_8CBA0[i].start,
+            D_8008BFA0_8CBA0[i].end,
+            D_8008BFA0_8CBA0[i].uncompressedSize
+        );
     }
 
     initViewportNode(&taskMemory->backgroundViewport, 0, 0, 0xB, 0);
@@ -288,7 +257,7 @@ void spawnCreditsCharacter(CreditsState *arg0) {
         return;
     }
     if ((s16)temp_a0 == arg0->nextCharacterSpawnFrame) {
-        if (arg0->nextCharacterConfigIndex >= (s16)D_8008C11C_8CD1C.unk0) {
+        if (arg0->nextCharacterConfigIndex >= (s16)D_8008C11C_8CD1C.configCount) {
             temp_a0_2 = arg0->characterLaneIndex;
             arg0->nextCharacterConfigIndex = 0;
             temp_v1 = temp_a0_2 + 1;
@@ -301,7 +270,7 @@ void spawnCreditsCharacter(CreditsState *arg0) {
         temp_v0 = scheduleTask(initCreditsCharacter, 0, 0, 0);
         if (temp_v0 != NULL) {
             temp_v0->configIndex = arg0->nextCharacterConfigIndex;
-            *(s16 *)&temp_v0->unk8 = arg0->characterLaneIndex;
+            temp_v0->assetPair.selection = arg0->characterLaneIndex;
         }
         arg0->nextCharacterConfigIndex = arg0->nextCharacterConfigIndex + 1;
         arg0->nextCharacterSpawnFrame = arg0->frameCounter + 0x3D;
@@ -316,8 +285,8 @@ void initCreditsCharacter(CreditsCharacter *character) {
 
     creditsState = getCurrentAllocation();
     config = &creditsCharacterConfigs[character->configIndex];
-    character->isCleanedUp = 0;
-    character->animState = 0;
+    character->modelCleanedUp = 0;
+    character->animationPhase = 0;
 
     character->model = allocateNodeMemory(0x160);
 
@@ -325,21 +294,21 @@ void initCreditsCharacter(CreditsCharacter *character) {
         character->model,
         config->modelId,
         &creditsState->characterViewport,
-        character->direction,
+        character->assetPair.parts.index,
         -1,
         -1,
         -1
     );
 
-    memcpy((void *)((u8 *)character->model + 0x18), &identityMatrix, sizeof(Transform3D));
+    memcpy(&character->model->matrix18, &identityMatrix, sizeof(Transform3D));
 
-    createYRotationMatrix((Transform3D *)((u8 *)character->model + 0x18), config->rotation);
+    createYRotationMatrix(&character->model->matrix18, config->initialYaw);
 
     scale = config->scale;
-    scaleMatrix((Transform3D *)((u8 *)character->model + 0x18), scale, scale, scale);
+    scaleMatrix(&character->model->matrix18, scale, scale, scale);
 
     character->model->matrix18.translation.x = creditsCharacterStartDepth;
-    character->model->matrix18.translation.y += config->depthOffset;
+    character->model->matrix18.translation.y += config->verticalOffset;
 
     setModelActionMode(character->model, config->actionMode);
 
@@ -371,15 +340,15 @@ void updateCreditsCharacter(CreditsCharacter *character) {
 
     config = &creditsCharacterConfigs[character->configIndex];
 
-    switch (character->animState) {
+    switch (character->animationPhase) {
         case 0:
             setModelAnimation(character->model, config->animationIndex);
-            character->animState = 1;
+            character->animationPhase = 1;
             break;
         case 1:
             if (config->modelId == 0x73) {
                 setModelActionMode(character->model, 3);
-                character->animState = 2;
+                character->animationPhase = 2;
             }
             clearModelRotation(character->model);
             break;
@@ -397,7 +366,7 @@ void updateCreditsCharacter(CreditsCharacter *character) {
 
     if (character->model->matrix18.translation.x < -creditsCharacterStartDepth) {
         cleanupSceneModel(character->model);
-        character->isCleanedUp = 1;
+        character->modelCleanedUp = 1;
         terminateCurrentTask();
     } else {
         updateModelGeometry(character->model);
@@ -406,7 +375,7 @@ void updateCreditsCharacter(CreditsCharacter *character) {
 
 void cleanupCreditsCharacter(CreditsCharacter *character) {
     getCurrentAllocation();
-    if (character->isCleanedUp == 0) {
+    if (character->modelCleanedUp == 0) {
         cleanupSceneModel(character->model);
     }
     character->model = freeNodeMemory(character->model);

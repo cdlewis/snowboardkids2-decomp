@@ -561,3 +561,7 @@ The remaining credits render records are also canonical shared types: the record
 `TextLayoutArg`, while the arrays at `0x9D0` and `0xB80` contain `FrameSpriteEntry` elements. Keep the combined
 halfword views needed by credits on those shared graphics types rather than maintaining credits-only copies;
 this preserves the original `sh` instructions while giving every consumer the renderer's semantic field names.
+
+The credits palette ROM table uses the shared `CompressedAssetMeta` layout. The credits character task's
+halfword at `0x08` is a packed asset-pair selector: credits writes it with `sh`, while model initialization reads
+the low byte as the asset-pair index. A named union preserves both access widths without casts or manual offsets.
