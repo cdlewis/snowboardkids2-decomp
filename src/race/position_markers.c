@@ -464,12 +464,12 @@ void spawnConfettiEffectForAllPlayers(void) {
     s32 i;
 
     gameState = (GameState *)getCurrentAllocation();
-    for (i = 0; i < gameState->unk5D; i++) {
+    for (i = 0; i < gameState->humanPlayerCount; i++) {
         task = (ConfettiEffectTask *)scheduleTask(&initConfettiEffect, 0, 0, 0xF0);
         if (task != NULL) {
             task->frameCounter = i;
             task->cameraNode = &gameState->playerCameraViewports[(s16)i];
-            switch (gameState->unk5D) {
+            switch (gameState->humanPlayerCount) {
                 case 1:
                     task->particleCount = 0x64;
                     break;

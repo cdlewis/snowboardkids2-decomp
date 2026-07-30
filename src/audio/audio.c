@@ -1,6 +1,7 @@
 #include "audio/audio.h"
 #include "assets.h"
 #include "common.h"
+#include "data/asset_metadata.h"
 #include "math/geometry.h"
 #include "os_message.h"
 #include "os_pi.h"
@@ -16,65 +17,9 @@
 #define AUDIO_REG(reg) __asm__(reg)
 #endif
 
-typedef struct {
-    void *musicBankBuffer;
-    void *ptrBank;
-    void *waveBank;
-    s32 soundId;
-    s32 soundSequence;
-    s32 volume;
-    s32 pan;
-    void *audioChannel;
-    s32 stoppingSpeed;
-    f32 position;
-    s32 voiceIndex;
-    s32 unk2C;
-} AudioCommand;
-
-typedef struct {
-    s16 soundId;
-    s16 duration;
-    s16 priority;
-    s16 hasVolume;
-    f32 volume;
-    Vec3i position;
-    s16 flags;
-    u8 padding[2];
-} RenderQueueItem;
-
-typedef struct {
-    /* 0x00 */ void *ptrBank;
-    /* 0x04 */ void *musicDataBuffer;
-    /* 0x08 */ void *musicBankBuffer;
-    /* 0x0C */ void *currentAudioChannel;
-    /* 0x10 */ s16 pendingMusicId;
-    /* 0x12 */ u16 currentMusicId;
-    /* 0x14 */ s16 musicFadeOutDuration;
-    /* 0x16 */ s16 currentMusicVolume;
-    /* 0x18 */ s16 targetMusicVolume;
-    /* 0x1A */ s16 fadeCounter;
-    /* 0x1C */ s8 musicVoiceIndex;
-    /* 0x1D */ u8 musicFadeState;
-    /* 0x1E */ u8 isFadingOut;
-    /* 0x1F */ u8 unk1F;
-    /* 0x20 */ s32 soundSequence;
-    /* 0x24 */ void *soundEffectChannels[0x10];
-    /* 0x64 */ s16 soundEffectIds[0x10];
-    /* 0x84 */ s32 renderQueueCount;
-    /* 0x88 */ RenderQueueItem renderQueue[32];
-    /* 0x408 */ s32 bufferCount;
-    /* 0x40C */ Transform3D bufferData[8];
-    /* 0x50C */ s8 bufferIds[0x8];
-    /* 0x514 */ s32 bufferFlags[8];
-    /* 0x534 */ s32 audioInnerDistance;
-    /* 0x538 */ s32 audioOuterDistance;
-} SoundManager;
-
-typedef struct {
-    void *start;
-    void *end;
-    s32 size;
-} AudioDataSegment;
+// Direct array indexing strength-reduces the listener loops and changes KMC's
+// instruction order, so keep the target expression while deriving its layout.
+#define AUDIO_MEMBER_OFFSET(type, member) ((s32) & ((type *)0)->member)
 
 SoundManager *gSoundManager BSS;
 OSThread audioCommandThread BSS;
@@ -532,7 +477,7 @@ u32 D_80093308_93F08[302] = {
 };
 u32 D_800937C0_943C0[10] = { 0x00000064, 0x00000064, 0x00000064, 0x00000064, 0x00000064,
                              0x00000064, 0x00000064, 0x00000064, 0x00000064, 0x00000064 };
-AudioDataSegment D_800937E8_943E8[33] = {
+CompressedAssetMeta D_800937E8_943E8[33] = {
     { &MUSIC_BANK_COURSE_SUNNY_MOUNTAIN_ROM_START,    &MUSIC_BANK_COURSE_SUNNY_MOUNTAIN_ROM_END,    0x00004006 },
     { &MUSIC_BANK_UNUSED_01_ROM_START,                &MUSIC_BANK_UNUSED_01_ROM_END,                0x00004DDA },
     { &MUSIC_BANK_CHARACTER_SELECT_ROM_START,         &MUSIC_BANK_CHARACTER_SELECT_ROM_END,         0x00000940 },
@@ -567,7 +512,7 @@ AudioDataSegment D_800937E8_943E8[33] = {
     { &MUSIC_BANK_COURSE_BOSS_ROM_START,              &MUSIC_BANK_COURSE_BOSS_ROM_END,              0x00001BD0 },
     { &MUSIC_BANK_RACE_DEMO_ROM_START,                &MUSIC_BANK_RACE_DEMO_ROM_END,                0x0000284E }
 };
-AudioDataSegment D_80093974_94574[33] = {
+CompressedAssetMeta D_80093974_94574[33] = {
     { &MUSIC_SONG_DATA_A_ROM_START, &MUSIC_SONG_DATA_A_ROM_END, 0x000035BC },
     { &MUSIC_SONG_DATA_A_ROM_START, &MUSIC_SONG_DATA_A_ROM_END, 0x000035BC },
     { &MUSIC_SONG_DATA_A_ROM_START, &MUSIC_SONG_DATA_A_ROM_END, 0x000035BC },
@@ -682,8 +627,8 @@ void initializeMusicSystem(void) {
     }
 
     gSoundManager->audioInnerDistance = 0x20;
-    gSoundManager->renderQueueCount = 0;
-    gSoundManager->bufferCount = 0;
+    gSoundManager->spatialSoundCount = 0;
+    gSoundManager->listenerCount = 0;
     gSoundManager->audioOuterDistance = 0xC80;
     initializeAudioCommandThread();
     setGameStateHandlerWithContinue(&processSpatialAudio);
@@ -713,11 +658,11 @@ void processSpatialAudio(void) {
         }
     }
 
-    if (gSoundManager->bufferCount == 1) {
-        for (i = 0; i < gSoundManager->renderQueueCount; i++) {
-            delta.x = gSoundManager->renderQueue[i].position.x - gSoundManager->bufferData[0].translation.x;
-            delta.y = gSoundManager->renderQueue[i].position.y - gSoundManager->bufferData[0].translation.y;
-            delta.z = gSoundManager->renderQueue[i].position.z - gSoundManager->bufferData[0].translation.z;
+    if (gSoundManager->listenerCount == 1) {
+        for (i = 0; i < gSoundManager->spatialSoundCount; i++) {
+            delta.x = gSoundManager->spatialSounds[i].position.x - gSoundManager->listenerTransforms[0].translation.x;
+            delta.y = gSoundManager->spatialSounds[i].position.y - gSoundManager->listenerTransforms[0].translation.y;
+            delta.z = gSoundManager->spatialSounds[i].position.z - gSoundManager->listenerTransforms[0].translation.z;
             distance = 0x0C800000;
             if ((((((delta.x < distance) && (delta.x > (-distance))) && (delta.y < distance)) &&
                   (delta.y > (-distance))) &&
@@ -732,7 +677,7 @@ void processSpatialAudio(void) {
                 innerDistance = gSoundManager->audioInnerDistance;
                 if (distance < innerDistance) {
                     __asm__("");
-                    transformVector3(&delta, &gSoundManager->bufferData[0], &transformed);
+                    transformVector3(&delta, &gSoundManager->listenerTransforms[0], &transformed);
                     j = -atan2Fixed(transformed.x, transformed.z);
                     j = (j + 0x800) & 0x1FFF;
                     if (j >= 0x1001) {
@@ -743,32 +688,32 @@ void processSpatialAudio(void) {
                     pan -= 0x80;
                     pan = (pan * distance) / gSoundManager->audioInnerDistance;
                     pan -= 0x80;
-                    if (gSoundManager->renderQueue[i].duration < 0) {
+                    if (gSoundManager->spatialSounds[i].channelIndex < 0) {
                         playSoundEffectWithPriorityPanAndVoice(
-                            gSoundManager->renderQueue[i].soundId,
-                            gSoundManager->renderQueue[i].flags,
+                            gSoundManager->spatialSounds[i].soundId,
+                            gSoundManager->spatialSounds[i].baseVolume,
                             pan,
-                            gSoundManager->renderQueue[i].priority,
-                            gSoundManager->bufferFlags[0]
+                            gSoundManager->spatialSounds[i].priority,
+                            gSoundManager->listenerVoiceIndices[0]
                         );
-                    } else if (gSoundManager->renderQueue[i].hasVolume) {
+                    } else if (gSoundManager->spatialSounds[i].hasFrequencyOffset) {
                         playSoundEffectAtPositionWithPriority(
-                            gSoundManager->renderQueue[i].soundId,
-                            gSoundManager->renderQueue[i].flags,
+                            gSoundManager->spatialSounds[i].soundId,
+                            gSoundManager->spatialSounds[i].baseVolume,
                             pan,
-                            gSoundManager->renderQueue[i].volume,
-                            gSoundManager->renderQueue[i].priority,
-                            gSoundManager->renderQueue[i].duration,
-                            gSoundManager->bufferFlags[0]
+                            gSoundManager->spatialSounds[i].frequencyOffset,
+                            gSoundManager->spatialSounds[i].priority,
+                            gSoundManager->spatialSounds[i].channelIndex,
+                            gSoundManager->listenerVoiceIndices[0]
                         );
                     } else {
                         playSoundEffectOnChannelWithVoice(
-                            gSoundManager->renderQueue[i].soundId,
-                            gSoundManager->renderQueue[i].flags,
+                            gSoundManager->spatialSounds[i].soundId,
+                            gSoundManager->spatialSounds[i].baseVolume,
                             pan,
-                            gSoundManager->renderQueue[i].priority,
-                            gSoundManager->renderQueue[i].duration,
-                            gSoundManager->bufferFlags[0]
+                            gSoundManager->spatialSounds[i].priority,
+                            gSoundManager->spatialSounds[i].channelIndex,
+                            gSoundManager->listenerVoiceIndices[0]
                         );
                     }
                 } else {
@@ -779,12 +724,12 @@ void processSpatialAudio(void) {
                         register s32 flags AUDIO_REG("$3");
                         register s32 denominator AUDIO_REG("$2");
 
-                        flags = gSoundManager->renderQueue[i].flags;
+                        flags = gSoundManager->spatialSounds[i].baseVolume;
                         distance = outerDistance - distance;
                         denominator = outerDistance - innerDistance;
                         volume = (flags * distance) / denominator;
                         if (volume != 0) {
-                            transformVector3(&delta, &gSoundManager->bufferData[0], &transformed);
+                            transformVector3(&delta, &gSoundManager->listenerTransforms[0], &transformed);
                             j = -atan2Fixed(transformed.x, transformed.z);
                             j = (j + 0x800) & 0x1FFF;
                             if (j >= 0x1001) {
@@ -792,36 +737,36 @@ void processSpatialAudio(void) {
                             }
 
                             pan = j >> 4;
-                            if (gSoundManager->renderQueue[i].duration < 0) {
+                            if (gSoundManager->spatialSounds[i].channelIndex < 0) {
                                 playSoundEffectWithPriorityPanAndVoice(
-                                    gSoundManager->renderQueue[i].soundId,
+                                    gSoundManager->spatialSounds[i].soundId,
                                     volume,
                                     pan,
-                                    gSoundManager->renderQueue[i].priority,
-                                    gSoundManager->bufferFlags[0]
+                                    gSoundManager->spatialSounds[i].priority,
+                                    gSoundManager->listenerVoiceIndices[0]
                                 );
-                            } else if (gSoundManager->renderQueue[i].hasVolume != 0) {
+                            } else if (gSoundManager->spatialSounds[i].hasFrequencyOffset != 0) {
                                 playSoundEffectAtPositionWithPriority(
-                                    gSoundManager->renderQueue[i].soundId,
+                                    gSoundManager->spatialSounds[i].soundId,
                                     volume,
                                     pan,
-                                    gSoundManager->renderQueue[i].volume,
-                                    gSoundManager->renderQueue[i].priority,
-                                    gSoundManager->renderQueue[i].duration,
-                                    gSoundManager->bufferFlags[0]
+                                    gSoundManager->spatialSounds[i].frequencyOffset,
+                                    gSoundManager->spatialSounds[i].priority,
+                                    gSoundManager->spatialSounds[i].channelIndex,
+                                    gSoundManager->listenerVoiceIndices[0]
                                 );
                             } else {
                                 playSoundEffectOnChannelWithVoice(
-                                    gSoundManager->renderQueue[i].soundId,
+                                    gSoundManager->spatialSounds[i].soundId,
                                     volume,
                                     pan,
-                                    gSoundManager->renderQueue[i].priority,
-                                    gSoundManager->renderQueue[i].duration,
-                                    gSoundManager->bufferFlags[0]
+                                    gSoundManager->spatialSounds[i].priority,
+                                    gSoundManager->spatialSounds[i].channelIndex,
+                                    gSoundManager->listenerVoiceIndices[0]
                                 );
                             }
-                        } else if (gSoundManager->renderQueue[i].hasVolume) {
-                            stopSoundEffectChannel(gSoundManager->renderQueue[i].duration, 0);
+                        } else if (gSoundManager->spatialSounds[i].hasFrequencyOffset) {
+                            stopSoundEffectChannel(gSoundManager->spatialSounds[i].channelIndex, 0);
                         }
                     }
                 }
@@ -829,14 +774,17 @@ void processSpatialAudio(void) {
         }
     }
 
-    if (gSoundManager->bufferCount >= 2) {
-        for (i = 0; i < gSoundManager->renderQueueCount; i++) {
+    if (gSoundManager->listenerCount >= 2) {
+        for (i = 0; i < gSoundManager->spatialSoundCount; i++) {
             distance = 0x0C800000;
             voiceIndex = 0;
-            for (j = 0; j < gSoundManager->bufferCount; j++) {
-                delta.x = gSoundManager->renderQueue[i].position.x - gSoundManager->bufferData[j].translation.x;
-                delta.y = gSoundManager->renderQueue[i].position.y - gSoundManager->bufferData[j].translation.y;
-                delta.z = gSoundManager->renderQueue[i].position.z - gSoundManager->bufferData[j].translation.z;
+            for (j = 0; j < gSoundManager->listenerCount; j++) {
+                delta.x =
+                    gSoundManager->spatialSounds[i].position.x - gSoundManager->listenerTransforms[j].translation.x;
+                delta.y =
+                    gSoundManager->spatialSounds[i].position.y - gSoundManager->listenerTransforms[j].translation.y;
+                delta.z =
+                    gSoundManager->spatialSounds[i].position.z - gSoundManager->listenerTransforms[j].translation.z;
                 if ((((((delta.x < distance) && ((-distance) < delta.x)) && (delta.y < distance)) &&
                       ((-distance) < delta.y)) &&
                      (delta.z < distance)) &&
@@ -844,36 +792,36 @@ void processSpatialAudio(void) {
                     d = isqrt64(MAGNITUDE_SQ_3D(delta.x, delta.y, delta.z));
                     if (d < distance) {
                         distance = d;
-                        voiceIndex = gSoundManager->bufferFlags[j];
+                        voiceIndex = gSoundManager->listenerVoiceIndices[j];
                     }
                 }
             }
 
             distance >>= 0x10;
             if (distance < gSoundManager->audioInnerDistance) {
-                if (gSoundManager->renderQueue[i].duration < 0) {
+                if (gSoundManager->spatialSounds[i].channelIndex < 0) {
                     playSoundEffectWithPriorityAndVoice(
-                        gSoundManager->renderQueue[i].soundId,
-                        gSoundManager->renderQueue[i].flags,
-                        gSoundManager->renderQueue[i].priority,
+                        gSoundManager->spatialSounds[i].soundId,
+                        gSoundManager->spatialSounds[i].baseVolume,
+                        gSoundManager->spatialSounds[i].priority,
                         voiceIndex
                     );
-                } else if (gSoundManager->renderQueue[i].hasVolume) {
+                } else if (gSoundManager->spatialSounds[i].hasFrequencyOffset) {
                     playSoundEffectAtPositionWithPriority(
-                        gSoundManager->renderQueue[i].soundId,
-                        gSoundManager->renderQueue[i].flags,
+                        gSoundManager->spatialSounds[i].soundId,
+                        gSoundManager->spatialSounds[i].baseVolume,
                         0x80,
-                        gSoundManager->renderQueue[i].volume,
-                        gSoundManager->renderQueue[i].priority,
-                        gSoundManager->renderQueue[i].duration,
+                        gSoundManager->spatialSounds[i].frequencyOffset,
+                        gSoundManager->spatialSounds[i].priority,
+                        gSoundManager->spatialSounds[i].channelIndex,
                         voiceIndex
                     );
                 } else {
                     playOrStopSoundEffectOnChannelWithVoice(
-                        gSoundManager->renderQueue[i].soundId,
-                        gSoundManager->renderQueue[i].flags,
-                        gSoundManager->renderQueue[i].priority,
-                        gSoundManager->renderQueue[i].duration,
+                        gSoundManager->spatialSounds[i].soundId,
+                        gSoundManager->spatialSounds[i].baseVolume,
+                        gSoundManager->spatialSounds[i].priority,
+                        gSoundManager->spatialSounds[i].channelIndex,
                         voiceIndex
                     );
                 }
@@ -885,33 +833,33 @@ void processSpatialAudio(void) {
                     register s32 flags AUDIO_REG("$3");
                     register s32 denominator AUDIO_REG("$2");
 
-                    flags = gSoundManager->renderQueue[i].flags;
+                    flags = gSoundManager->spatialSounds[i].baseVolume;
                     distance = outerDistance - distance;
                     denominator = outerDistance - gSoundManager->audioInnerDistance;
                     volume = (flags * distance) / denominator;
-                    if (gSoundManager->renderQueue[i].duration < 0) {
+                    if (gSoundManager->spatialSounds[i].channelIndex < 0) {
                         playSoundEffectWithPriorityAndVoice(
-                            gSoundManager->renderQueue[i].soundId,
+                            gSoundManager->spatialSounds[i].soundId,
                             volume,
-                            gSoundManager->renderQueue[i].priority,
+                            gSoundManager->spatialSounds[i].priority,
                             voiceIndex
                         );
-                    } else if (gSoundManager->renderQueue[i].hasVolume != 0) {
+                    } else if (gSoundManager->spatialSounds[i].hasFrequencyOffset != 0) {
                         playSoundEffectAtPositionWithPriority(
-                            gSoundManager->renderQueue[i].soundId,
+                            gSoundManager->spatialSounds[i].soundId,
                             volume,
                             0x80,
-                            gSoundManager->renderQueue[i].volume,
-                            gSoundManager->renderQueue[i].priority,
-                            gSoundManager->renderQueue[i].duration,
+                            gSoundManager->spatialSounds[i].frequencyOffset,
+                            gSoundManager->spatialSounds[i].priority,
+                            gSoundManager->spatialSounds[i].channelIndex,
                             voiceIndex
                         );
                     } else {
                         playOrStopSoundEffectOnChannelWithVoice(
-                            gSoundManager->renderQueue[i].soundId,
+                            gSoundManager->spatialSounds[i].soundId,
                             volume,
-                            gSoundManager->renderQueue[i].priority,
-                            gSoundManager->renderQueue[i].duration,
+                            gSoundManager->spatialSounds[i].priority,
+                            gSoundManager->spatialSounds[i].channelIndex,
                             voiceIndex
                         );
                     }
@@ -920,23 +868,23 @@ void processSpatialAudio(void) {
         }
     }
 
-    gSoundManager->renderQueueCount = 0;
-    gSoundManager->bufferCount = 0;
+    gSoundManager->spatialSoundCount = 0;
+    gSoundManager->listenerCount = 0;
 }
 
-void queueAnonymousBufferData(void *source) {
-    if (gSoundManager->bufferCount < 8) {
+void queueAnonymousBufferData(Transform3D *source) {
+    if (gSoundManager->listenerCount < 8) {
         Transform3D *dest;
 
-        gSoundManager->bufferIds[gSoundManager->bufferCount] = -1;
-        dest = &gSoundManager->bufferData[gSoundManager->bufferCount];
+        gSoundManager->listenerIds[gSoundManager->listenerCount] = -1;
+        dest = &gSoundManager->listenerTransforms[gSoundManager->listenerCount];
         dest++;
         dest--;
 
         memcpy(dest, source, sizeof(Transform3D));
 
-        gSoundManager->bufferFlags[gSoundManager->bufferCount] = 0;
-        gSoundManager->bufferCount++;
+        gSoundManager->listenerVoiceIndices[gSoundManager->listenerCount] = 0;
+        gSoundManager->listenerCount++;
     }
 }
 
@@ -945,135 +893,134 @@ void setAudioDistanceLimits(s32 innerDistance, s32 outerDistance) {
     gSoundManager->audioInnerDistance = innerDistance;
 }
 
-void queueBufferDataNoFlags(u8 *source, s8 bufferId) {
+void queueBufferDataNoFlags(Transform3D *source, s8 listenerId) {
     s32 i;
     void *dest;
 
-    for (i = 0; i < gSoundManager->bufferCount; i++) {
-        if (gSoundManager->bufferIds[i] == bufferId) {
-            dest = (void *)((i << 5) + (s32)gSoundManager + 0x40C);
+    for (i = 0; i < gSoundManager->listenerCount; i++) {
+        if (gSoundManager->listenerIds[i] == listenerId) {
+            dest = (void *)(i * (s32)sizeof(Transform3D) + (s32)gSoundManager +
+                            AUDIO_MEMBER_OFFSET(SoundManager, listenerTransforms));
             memcpy(dest, source, sizeof(Transform3D));
             return;
         }
     }
 
-    if (gSoundManager->bufferCount < 8) {
-        gSoundManager->bufferIds[gSoundManager->bufferCount] = bufferId;
-        dest = (void *)((gSoundManager->bufferCount << 5) + (s32)gSoundManager + 0x40C);
+    if (gSoundManager->listenerCount < 8) {
+        gSoundManager->listenerIds[gSoundManager->listenerCount] = listenerId;
+        dest = (void *)(gSoundManager->listenerCount * (s32)sizeof(Transform3D) + (s32)gSoundManager +
+                        AUDIO_MEMBER_OFFSET(SoundManager, listenerTransforms));
         memcpy(dest, source, sizeof(Transform3D));
-        gSoundManager->bufferFlags[gSoundManager->bufferCount] = 0;
-        gSoundManager->bufferCount++;
+        gSoundManager->listenerVoiceIndices[gSoundManager->listenerCount] = 0;
+        gSoundManager->listenerCount++;
     }
 }
 
-void setBufferData(void *source, u8 arg1, s32 arg2) {
+void setBufferData(Transform3D *source, u8 voiceIndex, s32 listenerId) {
     s32 i;
     s8 id;
-    void *bufferPtr;
+    void *listenerTransform;
 
-    // Search for existing buffer
-    id = arg2;
-    for (i = 0; i < gSoundManager->bufferCount; i++) {
-        if (gSoundManager->bufferIds[i] == id) {
-            bufferPtr = (void *)((i << 5) + (s32)gSoundManager + 0x40C);
-            memcpy(bufferPtr, source, sizeof(Transform3D));
+    id = listenerId;
+    for (i = 0; i < gSoundManager->listenerCount; i++) {
+        if (gSoundManager->listenerIds[i] == id) {
+            listenerTransform = (void *)(i * (s32)sizeof(Transform3D) + (s32)gSoundManager +
+                                         AUDIO_MEMBER_OFFSET(SoundManager, listenerTransforms));
+            memcpy(listenerTransform, source, sizeof(Transform3D));
             return;
         }
     }
 
-    // Add new buffer if space available
-    if (gSoundManager->bufferCount < 8) {
-        gSoundManager->bufferIds[gSoundManager->bufferCount] = id;
-
-        bufferPtr = (void *)(((gSoundManager->bufferCount) << 5) + (s32)gSoundManager + 0x40C);
-
-        memcpy(bufferPtr, source, sizeof(Transform3D));
-
-        gSoundManager->bufferFlags[gSoundManager->bufferCount] = arg1;
-        gSoundManager->bufferCount++;
+    if (gSoundManager->listenerCount < 8) {
+        gSoundManager->listenerIds[gSoundManager->listenerCount] = id;
+        listenerTransform = (void *)(gSoundManager->listenerCount * (s32)sizeof(Transform3D) + (s32)gSoundManager +
+                                     AUDIO_MEMBER_OFFSET(SoundManager, listenerTransforms));
+        memcpy(listenerTransform, source, sizeof(Transform3D));
+        gSoundManager->listenerVoiceIndices[gSoundManager->listenerCount] = voiceIndex;
+        gSoundManager->listenerCount++;
     }
 }
 
 void queueSoundAtPosition(Vec3i *position, s16 soundId) {
-    s32 index = gSoundManager->renderQueueCount;
+    s32 index = gSoundManager->spatialSoundCount;
     if (index < 0x20) {
-        RenderQueueItem *renderQueue = gSoundManager->renderQueue;
-        memcpy(&renderQueue[index].position, position, sizeof(Vec3i));
+        SpatialSoundRequest *spatialSounds = gSoundManager->spatialSounds;
+        memcpy(&spatialSounds[index].position, position, sizeof(Vec3i));
         index = soundId;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].soundId = index;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].duration = -1;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].priority = 4;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].hasVolume = 0;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].flags = 0x80;
-        gSoundManager->renderQueueCount++;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].soundId = index;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].channelIndex = -1;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].priority = 4;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].hasFrequencyOffset = 0;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].baseVolume = 0x80;
+        gSoundManager->spatialSoundCount++;
     }
 }
 
-void queueSoundAtPositionWithDuration(Vec3i *position, u32 soundId, s16 duration) {
-    if (gSoundManager->renderQueueCount < 0x20) {
-        RenderQueueItem *renderQueue = gSoundManager->renderQueue;
+void queueSoundAtPositionWithDuration(Vec3i *position, u32 soundId, s16 channelIndex) {
+    if (gSoundManager->spatialSoundCount < 0x20) {
+        SpatialSoundRequest *spatialSounds = gSoundManager->spatialSounds;
 
-        memcpy(&renderQueue[gSoundManager->renderQueueCount].position, position, sizeof(Vec3i));
+        memcpy(&spatialSounds[gSoundManager->spatialSoundCount].position, position, sizeof(Vec3i));
 
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].soundId = soundId;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].duration = duration;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].priority = 4;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].hasVolume = 0;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].flags = 0x80;
-        gSoundManager->renderQueueCount++;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].soundId = soundId;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].channelIndex = channelIndex;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].priority = 4;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].hasFrequencyOffset = 0;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].baseVolume = 0x80;
+        gSoundManager->spatialSoundCount++;
     }
 }
 
-void queueSoundAtPositionWithPriority(Vec3i *position, s32 soundId, s16 priority, s16 duration) {
-    RenderQueueItem *renderQueue;
-    s32 index = gSoundManager->renderQueueCount;
+void queueSoundAtPositionWithPriority(Vec3i *position, s32 soundId, s16 priority, s16 channelIndex) {
+    SpatialSoundRequest *spatialSounds;
+    s32 index = gSoundManager->spatialSoundCount;
     if (index < 0x20) {
-        renderQueue = gSoundManager->renderQueue;
-        memcpy(&renderQueue[index].position, position, sizeof(Vec3i));
+        spatialSounds = gSoundManager->spatialSounds;
+        memcpy(&spatialSounds[index].position, position, sizeof(Vec3i));
         index = soundId;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].soundId = index;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].duration = duration;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].priority = priority;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].hasVolume = 0;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].flags = 0x80;
-        gSoundManager->renderQueueCount += 1;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].soundId = index;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].channelIndex = channelIndex;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].priority = priority;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].hasFrequencyOffset = 0;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].baseVolume = 0x80;
+        gSoundManager->spatialSoundCount += 1;
     }
 }
 
-void queueSoundAtPositionWithVolume(Vec3i *position, s32 soundId, f32 volume, s16 priority, s32 duration) {
-    RenderQueueItem(*dest)[32];
-    if (gSoundManager->renderQueueCount < 0x20) {
-        dest = &gSoundManager->renderQueue;
-        memcpy(&(*dest)[gSoundManager->renderQueueCount].position, position, sizeof(Vec3i));
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].soundId = soundId;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].duration = (s16)duration;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].priority = priority;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].hasVolume = 1;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].volume = volume;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].flags = 0x80;
-        gSoundManager->renderQueueCount++;
+void queueSoundAtPositionWithVolume(Vec3i *position, s32 soundId, f32 frequencyOffset, s16 priority, s32 channelIndex) {
+    SpatialSoundRequest(*dest)[32];
+    if (gSoundManager->spatialSoundCount < 0x20) {
+        dest = &gSoundManager->spatialSounds;
+        memcpy(&(*dest)[gSoundManager->spatialSoundCount].position, position, sizeof(Vec3i));
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].soundId = soundId;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].channelIndex = (s16)channelIndex;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].priority = priority;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].hasFrequencyOffset = 1;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].frequencyOffset = frequencyOffset;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].baseVolume = 0x80;
+        gSoundManager->spatialSoundCount++;
     }
 }
 
 void queueSoundAtPositionWithVolumeAndFlags(
     Vec3i *position,
     s32 soundId,
-    f32 volume,
+    f32 frequencyOffset,
     s16 priority,
-    s32 duration,
-    s32 flags
+    s32 channelIndex,
+    s32 baseVolume
 ) {
-    s32 index = gSoundManager->renderQueueCount;
+    s32 index = gSoundManager->spatialSoundCount;
     if (index < 0x20) {
-        RenderQueueItem *renderQueue = gSoundManager->renderQueue;
-        memcpy(&renderQueue[index].position, position, sizeof(Vec3i));
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].soundId = soundId;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].duration = (s16)duration;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].priority = priority;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].hasVolume = 1;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].volume = volume;
-        gSoundManager->renderQueue[gSoundManager->renderQueueCount].flags = (s16)flags;
-        gSoundManager->renderQueueCount++;
+        SpatialSoundRequest *spatialSounds = gSoundManager->spatialSounds;
+        memcpy(&spatialSounds[index].position, position, sizeof(Vec3i));
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].soundId = soundId;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].channelIndex = (s16)channelIndex;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].priority = priority;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].hasFrequencyOffset = 1;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].frequencyOffset = frequencyOffset;
+        gSoundManager->spatialSounds[gSoundManager->spatialSoundCount].baseVolume = (s16)baseVolume;
+        gSoundManager->spatialSoundCount++;
     }
 }
 
@@ -1094,14 +1041,14 @@ void loadMusicTrackData(void) {
     loadDataSegment(
         D_800937E8_943E8[gSoundManager->currentMusicId].start,
         D_800937E8_943E8[gSoundManager->currentMusicId].end,
-        D_800937E8_943E8[gSoundManager->currentMusicId].size,
+        D_800937E8_943E8[gSoundManager->currentMusicId].uncompressedSize,
         gSoundManager->musicBankBuffer
     );
 
     loadDataSegment(
         D_80093974_94574[gSoundManager->currentMusicId].start,
         D_80093974_94574[gSoundManager->currentMusicId].end,
-        D_80093974_94574[gSoundManager->currentMusicId].size,
+        D_80093974_94574[gSoundManager->currentMusicId].uncompressedSize,
         gSoundManager->musicDataBuffer
     );
 
@@ -1301,7 +1248,7 @@ void audioCommandThreadFunc(void *arg0) {
                         0,
                         gAudioCommand.soundSequence
                     );
-                    setFrequencyOffsetByHandle(result, gAudioCommand.position);
+                    setFrequencyOffsetByHandle(result, gAudioCommand.frequencyOffset);
                     if (gAudioCommand.voiceIndex != 0) {
                         setReverbScaleByHandle(result, gAudioCommand.voiceIndex);
                     }
@@ -1309,7 +1256,7 @@ void audioCommandThreadFunc(void *arg0) {
                 case 5:
                     setVolumeScaleByHandle(gAudioCommand.audioChannel, gAudioCommand.volume);
                     setPanScaleByHandle(gAudioCommand.audioChannel, gAudioCommand.pan);
-                    setFrequencyOffsetByHandle(gAudioCommand.audioChannel, gAudioCommand.position);
+                    setFrequencyOffsetByHandle(gAudioCommand.audioChannel, gAudioCommand.frequencyOffset);
                     if (gAudioCommand.voiceIndex != 0) {
                         setReverbScaleByHandle(gAudioCommand.audioChannel, gAudioCommand.voiceIndex);
                     }
@@ -1438,8 +1385,8 @@ void stopAllSoundEffectsAndClearQueues(s32 stoppingSpeed) {
     gAudioCommand.stoppingSpeed = stoppingSpeed;
     osSendMesg(&audioCommandQueue, (OSMesg *)6, OS_MESG_BLOCK);
     osRecvMesg(&audioResultQueue, &message, OS_MESG_BLOCK);
-    gSoundManager->renderQueueCount = 0;
-    gSoundManager->bufferCount = 0;
+    gSoundManager->spatialSoundCount = 0;
+    gSoundManager->listenerCount = 0;
 }
 
 void playSoundEffectAtPositionWithPriority(
@@ -1457,7 +1404,7 @@ void playSoundEffectAtPositionWithPriority(
     if (volume > 0) {
         gAudioCommand.pan = pan;
         gAudioCommand.volume = volume;
-        gAudioCommand.position = position;
+        gAudioCommand.frequencyOffset = position;
         gAudioCommand.voiceIndex = voiceIndex;
 
         if (gSoundManager->soundEffectChannels[channelIndex] == 0 ||

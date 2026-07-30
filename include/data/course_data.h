@@ -1,20 +1,10 @@
 #pragma once
 
 #include "common.h"
+#include "data/asset_metadata.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
-
-typedef struct {
-    void *start;
-    void *end;
-    s32 size;
-} Asset_56910;
-
-typedef struct {
-    void *start;
-    void *end;
-} AssetWithoutSize;
 
 typedef struct {
     /* 0x0 */ s32 shortcutPosX;

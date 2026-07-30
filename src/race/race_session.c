@@ -63,18 +63,6 @@ USE_OVERLAY(levels_snowboard_street_speed_cross);
 USE_OVERLAY(levels_training)
 
 typedef struct {
-    ViewportNode *audioViewport;
-    ViewportNode *playerOverlayViewports;
-    ViewportNode *playerCameraViewports;
-    ViewportNode *playerRootViewports;
-    u8 padding[0x5C - 0x10];
-    u8 memoryPoolId;
-    u8 numPlayers;
-    u8 padding2[0x7A - 0x5E];
-    u8 raceType;
-} GameState_temp;
-
-typedef struct {
     u8 unk0[4];
     u8 gameMode;
     u8 demoIndex;
@@ -838,7 +826,7 @@ void initRace(void) {
 }
 
 void initRaceViewports(void) {
-    GameState_temp *gs;
+    GameState *gs;
     LevelConfig *levelConfig;
     s32 i;
     f32 new_var;
@@ -849,13 +837,13 @@ void initRaceViewports(void) {
     f32 near;
     f32 far;
 
-    gs = (GameState_temp *)getCurrentAllocation();
+    gs = (GameState *)getCurrentAllocation();
     levelConfig = getLevelConfig(gs->memoryPoolId);
     setAudioDistanceLimits(0x60, 0x1400);
     initViewportNode(gs->audioViewport, 0, 0xC, 0x1E, 0);
     setModelCameraTransform(gs->audioViewport, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
 
-    for (i = 0; i < gs->numPlayers; i++) {
+    for (i = 0; i < gs->humanPlayerCount; i++) {
         initViewportNode(&gs->playerRootViewports[i], 0, (u16)(i + 4), 5, 1);
         initViewportNode(&gs->playerCameraViewports[i], &gs->playerRootViewports[i], (u16)i, 0xA, 1);
         initViewportNode(&gs->playerOverlayViewports[i], &gs->playerCameraViewports[i], (u16)(i + 8), 0x14, 0);
@@ -889,7 +877,7 @@ void initRaceViewports(void) {
         }
     }
 
-    switch (gs->numPlayers) {
+    switch (gs->humanPlayerCount) {
         case 1:
             setModelCameraTransform(gs->playerRootViewports, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
             setModelCameraTransform(gs->playerCameraViewports, 0, 0, -0xA0, -0x78, 0xA0, 0x78);
@@ -1946,15 +1934,15 @@ void cleanupGameSession(void) {
     setViewportOverlayRgbAndEnable(NULL, 0, 0, 0);
     terminateAllTasks();
 
-    for (i = 0; i < gameState->unk5D; i++) {
+    for (i = 0; i < gameState->humanPlayerCount; i++) {
         unlinkNode(gameState->playerOverlayViewports + i);
     }
 
-    for (i = 0; i < gameState->unk5D; i++) {
+    for (i = 0; i < gameState->humanPlayerCount; i++) {
         unlinkNode(gameState->playerCameraViewports + i);
     }
 
-    for (i = 0; i < gameState->unk5D; i++) {
+    for (i = 0; i < gameState->humanPlayerCount; i++) {
         unlinkNode(gameState->playerRootViewports + i);
     }
 

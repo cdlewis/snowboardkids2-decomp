@@ -3,23 +3,77 @@
 #include "common.h"
 #include "math/geometry.h"
 
+typedef struct {
+    void *musicBankBuffer;
+    void *ptrBank;
+    void *waveBank;
+    s32 soundId;
+    s32 soundSequence;
+    s32 volume;
+    s32 pan;
+    void *audioChannel;
+    s32 stoppingSpeed;
+    f32 frequencyOffset;
+    s32 voiceIndex;
+    s32 padding2C;
+} AudioCommand;
+
+typedef struct {
+    s16 soundId;
+    s16 channelIndex;
+    s16 priority;
+    s16 hasFrequencyOffset;
+    f32 frequencyOffset;
+    Vec3i position;
+    s16 baseVolume;
+    u8 padding[2];
+} SpatialSoundRequest;
+
+typedef struct {
+    /* 0x00 */ void *ptrBank;
+    /* 0x04 */ void *musicDataBuffer;
+    /* 0x08 */ void *musicBankBuffer;
+    /* 0x0C */ void *currentAudioChannel;
+    /* 0x10 */ s16 pendingMusicId;
+    /* 0x12 */ u16 currentMusicId;
+    /* 0x14 */ s16 musicFadeOutDuration;
+    /* 0x16 */ s16 currentMusicVolume;
+    /* 0x18 */ s16 targetMusicVolume;
+    /* 0x1A */ s16 fadeCounter;
+    /* 0x1C */ s8 musicVoiceIndex;
+    /* 0x1D */ u8 musicFadeState;
+    /* 0x1E */ u8 isFadingOut;
+    /* 0x1F */ u8 padding1F;
+    /* 0x20 */ s32 soundSequence;
+    /* 0x24 */ void *soundEffectChannels[16];
+    /* 0x64 */ s16 soundEffectIds[16];
+    /* 0x84 */ s32 spatialSoundCount;
+    /* 0x88 */ SpatialSoundRequest spatialSounds[32];
+    /* 0x408 */ s32 listenerCount;
+    /* 0x40C */ Transform3D listenerTransforms[8];
+    /* 0x50C */ s8 listenerIds[8];
+    /* 0x514 */ s32 listenerVoiceIndices[8];
+    /* 0x534 */ s32 audioInnerDistance;
+    /* 0x538 */ s32 audioOuterDistance;
+} SoundManager;
+
 void allocateAudioResources(void);
 void initializeMusicSystem(void);
-void queueAnonymousBufferData(void *source);
+void queueAnonymousBufferData(Transform3D *source);
 void setAudioDistanceLimits(s32 innerDistance, s32 outerDistance);
-void queueBufferDataNoFlags(u8 *source, s8 bufferId);
-void setBufferData(void *source, u8 arg1, s32 arg2);
+void queueBufferDataNoFlags(Transform3D *source, s8 listenerId);
+void setBufferData(Transform3D *source, u8 voiceIndex, s32 listenerId);
 void queueSoundAtPosition(Vec3i *position, s16 soundId);
-void queueSoundAtPositionWithDuration(Vec3i *position, u32 soundId, s16 duration);
-void queueSoundAtPositionWithPriority(Vec3i *position, s32 soundId, s16 priority, s16 duration);
-void queueSoundAtPositionWithVolume(Vec3i *position, s32 soundId, f32 volume, s16 priority, s32 duration);
+void queueSoundAtPositionWithDuration(Vec3i *position, u32 soundId, s16 channelIndex);
+void queueSoundAtPositionWithPriority(Vec3i *position, s32 soundId, s16 priority, s16 channelIndex);
+void queueSoundAtPositionWithVolume(Vec3i *position, s32 soundId, f32 frequencyOffset, s16 priority, s32 channelIndex);
 void queueSoundAtPositionWithVolumeAndFlags(
     Vec3i *position,
     s32 soundId,
-    f32 volume,
+    f32 frequencyOffset,
     s16 priority,
-    s32 duration,
-    s32 flags
+    s32 channelIndex,
+    s32 baseVolume
 );
 void incrementSoundSequence(void);
 void checkMusicLoadRequest(void *arg);

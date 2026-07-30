@@ -293,7 +293,7 @@ typedef struct {
     /* 0x5A */ u8 shootCrossTargetsHit;
     /* 0x5B */ u8 availableHomingProjectileSlots;
     /* 0x5C */ u8 memoryPoolId;
-    /* 0x5D */ u8 unk5D;
+    /* 0x5D */ u8 humanPlayerCount;
     /* 0x5E */ u8 numPlayers;
     /* 0x5F */ u8 playerCount;
     /* 0x60 */ u8 pendingPlayerRenderTasks;

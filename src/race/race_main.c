@@ -5230,7 +5230,7 @@ void updateAndRenderRaceCharacters(void) {
                             gGameSessionContext->playerBoardIds[0x11 + player->playerIndex] = 99;
                         }
                         showPlacementAnnouncement(player->playerIndex, 1);
-                        if ((s32)gs->unk5D == 1) {
+                        if ((s32)gs->humanPlayerCount == 1) {
                             spawnVictorySnowflakes(player->playerIndex, 0);
                         } else {
                             spawnVictorySnowflakes(player->playerIndex, 1);
@@ -5252,7 +5252,7 @@ void updateAndRenderRaceCharacters(void) {
                     }
                     if (player->finishPosition == 0) {
                         showPlacementAnnouncement(player->playerIndex, 1);
-                        if (gs->unk5D == 1) {
+                        if (gs->humanPlayerCount == 1) {
                             spawnVictorySnowflakes(player->playerIndex, 0);
                         } else {
                             spawnVictorySnowflakes(player->playerIndex, 1);

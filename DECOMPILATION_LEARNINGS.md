@@ -523,6 +523,12 @@ Scheduled task callbacks also receive different phases of the same allocation. I
 
 KMC GCC can still be sensitive to the source shape of typed player indexing. In `initRaceProgressIndicatorTask`, replacing the byte-offset induction variable with `&gameState->players[i]` emitted the operands of one `addu` in the opposite order and broke the ROM checksum. Keeping the offset derived from `sizeof(Player)` preserves the canonical element size while matching the target instruction encoding.
 
+High-offset fields in a partial `GameState` overlay can also be later elements of the canonical player array. The offsets formerly named `unk101C` and `unk1C04` are `players[1].worldPos` and `players[2].worldPos`: each advances by exactly `sizeof(Player)` from `players[0].worldPos`. Check such offsets against the canonical array stride before extending a local overlay.
+
+Preserve local allocation size when introducing a smaller canonical type. `updateScriptedCamera` only treats its temporary camera data as a `Transform3D`, but its target stack frame reserves `0x30` bytes rather than `sizeof(Transform3D)`. A union containing the typed transform and a byte array of the original size exposes the canonical fields without changing the stack frame.
+
+Typed array indexing may also change KMC's loop strength reduction. The audio listener-copy loops no longer matched when their destination was written directly as `&soundManager->listenerTransforms[i]`. Deriving the original address expression from `sizeof(Transform3D)` and the `listenerTransforms` member offset retains type-backed layout information while preserving the target operand and instruction order.
+
 The Ice Land boss model initializer has a related overlapping-layout constraint. `Player` stores asset pointers in
 the first `0x38` bytes, followed by `DisplayListObject` elements of size `0x3C`. KMC only reproduced the target loop
 when a `0x3C` stride view advanced from the `Player` base and a second typed view exposed the display object at

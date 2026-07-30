@@ -52,31 +52,6 @@ typedef struct {
 } ChaseCameraState;
 
 typedef struct {
-    ViewportNode *sceneNode;
-    u8 pad4[0xC];
-    u8 *playerData;
-    u8 pad14[0x65];
-    u8 unk79;
-} OrbitCameraAllocation;
-
-// Custom allocation struct for use in updateScriptedCamera
-typedef struct {
-    u8 pad0[0x434];
-    Vec3i worldPos; /* 0x434 */
-    u8 pad1[0xBCA - 0x440];
-    u8 trackFaceSubtype; /* 0xBCA */
-    u8 pad2[0x101C - 0xBCB];
-    Vec3i unk101C; /* 0x101C */
-    u8 pad3[0x1C04 - 0x1028];
-    Vec3i unk1C04; /* 0x1C04 */
-} PlayerDataExt;
-
-typedef struct {
-    u8 pad0[0x10];
-    PlayerDataExt *players;
-} ScriptedCameraAllocation;
-
-typedef struct {
     s16 posMode;             /* 0x00 */
     s16 tgtMode;             /* 0x02 */
     CameraKeyframe *posData; /* 0x04 */
@@ -435,7 +410,7 @@ void updateChaseCamera(ChaseCameraState *camera) {
     memcpy(temp, (void *)(camera->playerIdx * (s32)sizeof(Player) + (s32)gs->players + 0x434), sizeof(Vec3i));
 
     if (gs->players[camera->viewportIdx].trackFaceSubtype == 0) {
-        queueBufferDataNoFlags((u8 *)&camera->lookAtMatrix, (s8)camera->viewportIdx);
+        queueBufferDataNoFlags(&camera->lookAtMatrix, (s8)camera->viewportIdx);
     } else {
         setBufferData(&camera->lookAtMatrix, 0x30, (s32)(s8)camera->viewportIdx);
     }
@@ -456,7 +431,7 @@ void initOrbitCamera(OrbitCameraState *camera) {
 }
 
 void updateOrbitCamera(OrbitCameraState *camera) {
-    OrbitCameraAllocation *allocation;
+    GameState *gameState;
     Transform3D cameraMatrix;
     Transform3D rotationMatrix;
     Transform3D tempMatrix;
@@ -465,7 +440,7 @@ void updateOrbitCamera(OrbitCameraState *camera) {
     s16 currentAngle;
     Transform3D *cameraMatrixPtr;
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
     cameraMatrixPtr = &cameraMatrix;
     memcpy(cameraMatrixPtr, &identityMatrix, sizeof(Transform3D));
     cameraMatrix.translation.y = 0x1E0000;
@@ -473,21 +448,21 @@ void updateOrbitCamera(OrbitCameraState *camera) {
     newAngle = camera->rotationAngle + 0x58;
     camera->rotationAngle = newAngle;
     if (newAngle == 0x12E8) {
-        setViewportEnvColor(allocation->sceneNode, 0xFF, 0xFF, 0xFF);
-        setViewportFadeValue(allocation->sceneNode, 0xFF, 0x20);
+        setViewportEnvColor(gameState->audioViewport, 0xFF, 0xFF, 0xFF);
+        setViewportFadeValue(gameState->audioViewport, 0xFF, 0x20);
     }
     currentAngle = camera->rotationAngle;
     if (currentAngle == 0x1EF0) {
-        allocation->unk79 = allocation->unk79 - 1;
+        gameState->raceIntroState--;
         terminateCurrentTask();
-        setViewportFadeValue(allocation->sceneNode, 0, 0x10);
+        setViewportFadeValue(gameState->audioViewport, 0, 0x10);
         return;
     }
     createYRotationMatrix(&rotationMatrix, (currentAngle + 0x1000) & 0xFFFF);
     memcpy(&rotationMatrix.translation, &identityMatrix.translation, sizeof(Vec3i));
     composeTransform3D(cameraMatrixPtr, &rotationMatrix, &tempMatrix);
-    composeTransform3D(&tempMatrix, (Transform3D *)(allocation->playerData + 0x950), cameraMatrixPtr);
-    transformVector2(&D_8008FEB0_90AB0, allocation->playerData + 0x950, &translationOffset);
+    composeTransform3D(&tempMatrix, &gameState->players[0].modelTransform, cameraMatrixPtr);
+    transformVector2(&D_8008FEB0_90AB0, &gameState->players[0].modelTransform, &translationOffset);
     cameraMatrix.translation.x = cameraMatrix.translation.x + translationOffset.x;
     cameraMatrix.translation.y = cameraMatrix.translation.y + translationOffset.y;
     cameraMatrix.translation.z = cameraMatrix.translation.z + translationOffset.z;
@@ -535,10 +510,13 @@ void initScriptedCamera(ScriptedCameraState *camera) {
 }
 
 void updateScriptedCamera(ScriptedCameraState *camera) {
-    ScriptedCameraAllocation *allocation;
-    u8 cameraMatrix[0x30];
+    GameState *gameState;
+    union {
+        Transform3D transform;
+        u8 bytes[0x30];
+    } cameraMatrix;
 
-    allocation = getCurrentAllocation();
+    gameState = getCurrentAllocation();
 
     if (camera->posMode == 0) {
         camera->posX += ((camera->posKeyframes->x - camera->posX) / camera->posFramesLeft);
@@ -553,7 +531,7 @@ void updateScriptedCamera(ScriptedCameraState *camera) {
 
     switch (camera->tgtMode) {
         case 0:
-            memcpy(&camera->targetX, &allocation->players->worldPos, sizeof(Vec3i));
+            memcpy(&camera->targetX, &gameState->players[0].worldPos, sizeof(Vec3i));
             camera->targetY += 0x200000;
             break;
         case 1:
@@ -567,22 +545,22 @@ void updateScriptedCamera(ScriptedCameraState *camera) {
             }
             break;
         case 2:
-            memcpy(&camera->targetX, &allocation->players->unk1C04, sizeof(Vec3i));
+            memcpy(&camera->targetX, &gameState->players[2].worldPos, sizeof(Vec3i));
             camera->targetY += 0x200000;
             break;
         case 3:
-            memcpy(&camera->targetX, &allocation->players->unk101C, sizeof(Vec3i));
+            memcpy(&camera->targetX, &gameState->players[1].worldPos, sizeof(Vec3i));
             camera->targetY += 0x200000;
             break;
     }
 
-    computeLookAtMatrix((Vec3i *)camera, (Vec3i *)&camera->targetX, (Transform3D *)cameraMatrix);
-    setViewportTransformById(0x64, cameraMatrix);
+    computeLookAtMatrix((Vec3i *)camera, (Vec3i *)&camera->targetX, &cameraMatrix.transform);
+    setViewportTransformById(0x64, &cameraMatrix.transform);
 
-    if (allocation->players->trackFaceSubtype == 0) {
-        queueBufferDataNoFlags(cameraMatrix, 0);
+    if (gameState->players[0].trackFaceSubtype == 0) {
+        queueBufferDataNoFlags(&cameraMatrix.transform, 0);
     } else {
-        setBufferData(cameraMatrix, 0x30, 0);
+        setBufferData(&cameraMatrix.transform, 0x30, 0);
     }
 }
 

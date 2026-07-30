@@ -156,7 +156,7 @@ LevelConfig gLevelConfigs[] = {
      .padding2 = { 0 } },
 };
 
-Asset_56910 gCourseDataAssets[] = {
+CompressedAssetMeta gCourseDataAssets[] = {
     { (void *)&SUNNY_MOUNTAIN_COURSE_TRACK_SECTOR_MESH_ROM_START,
      (void *)&SUNNY_MOUNTAIN_COURSE_TRACK_SECTOR_MESH_ROM_END,
      SUNNY_MOUNTAIN_COURSE_TRACK_SECTOR_MESH_DECOMPRESSED_SIZE               },
@@ -207,7 +207,7 @@ Asset_56910 gCourseDataAssets[] = {
      X_CROSS_COURSE_TRACK_SECTOR_MESH_DECOMPRESSED_SIZE                      },
 };
 
-Asset_56910 gSpriteAssets[] = {
+CompressedAssetMeta gSpriteAssets[] = {
     { (void *)&SUNNY_MOUNTAIN_COURSE_TEXTURE_TABLE_ROM_START,
      (void *)&SUNNY_MOUNTAIN_COURSE_TEXTURE_TABLE_ROM_END,
      SUNNY_MOUNTAIN_COURSE_TEXTURE_TABLE_DECOMPRESSED_SIZE               },
@@ -258,7 +258,7 @@ Asset_56910 gSpriteAssets[] = {
      X_CROSS_COURSE_TEXTURE_TABLE_DECOMPRESSED_SIZE                      },
 };
 
-AssetWithoutSize gUncompressedAssets[] = {
+AssetMeta gUncompressedAssets[] = {
     { &SUNNY_MOUNTAIN_COURSE_DISPLAY_LISTS_ROM_START,               &SUNNY_MOUNTAIN_COURSE_DISPLAY_LISTS_ROM_END    },
     { &TURTLE_ISLAND_COURSE_DISPLAY_LISTS_ROM_START,                &TURTLE_ISLAND_COURSE_DISPLAY_LISTS_ROM_END     },
     { &JINGLE_TOWN_COURSE_DISPLAY_LISTS_ROM_START,                  &JINGLE_TOWN_COURSE_DISPLAY_LISTS_ROM_END       },
@@ -279,7 +279,7 @@ AssetWithoutSize gUncompressedAssets[] = {
     { &X_CROSS_COURSE_DISPLAY_LISTS_ROM_START,                      &X_CROSS_COURSE_DISPLAY_LISTS_ROM_END           },
 };
 
-Asset_56910 gCompressedSegment2Assets[] = {
+CompressedAssetMeta gCompressedSegment2Assets[] = {
     { &SUNNY_MOUNTAIN_COURSE_MODEL_RESOURCES_ROM_START,
      &SUNNY_MOUNTAIN_COURSE_MODEL_RESOURCES_ROM_END,
      SUNNY_MOUNTAIN_COURSE_MODEL_RESOURCES_DECOMPRESSED_SIZE               },
@@ -361,12 +361,16 @@ void *loadCourseDataByIndex(s32 index) {
     return loadCompressedData(
         gCourseDataAssets[index].start,
         gCourseDataAssets[index].end,
-        gCourseDataAssets[index].size
+        gCourseDataAssets[index].uncompressedSize
     );
 }
 
 void *loadSpriteAssetByIndex(s32 index) {
-    return loadCompressedData(gSpriteAssets[index].start, gSpriteAssets[index].end, gSpriteAssets[index].size);
+    return loadCompressedData(
+        gSpriteAssets[index].start,
+        gSpriteAssets[index].end,
+        gSpriteAssets[index].uncompressedSize
+    );
 }
 
 void *loadUncompressedAssetByIndex(s32 index) {
@@ -377,7 +381,7 @@ void *loadCompressedSegment2AssetByIndex(s32 index) {
     return loadCompressedData(
         gCompressedSegment2Assets[index].start,
         gCompressedSegment2Assets[index].end,
-        gCompressedSegment2Assets[index].size
+        gCompressedSegment2Assets[index].uncompressedSize
     );
 }
 
