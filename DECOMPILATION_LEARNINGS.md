@@ -2,6 +2,16 @@
 
 Decompilation Learnings is a record maintained by Claude of insights from matching functions in this project. These document compiler behavior, codegen quirks, and patterns specific to KMC GCC 2.7.2 with `-O2 -mips3`.
 
+## Reusing `DisplayListObject` in Task Layouts
+
+Level task states often embed one or more complete `DisplayListObject` values even when a function only accesses
+the transform, display-list pointer, or asset segments. Prefer embedding the shared type over creating separate
+partial views for initialization, rendering, and cleanup. Since `DisplayListObject` is 0x3C bytes, adjacent objects
+commonly begin at offsets 0x00 and 0x3C; using the shared type preserves the original field offsets and codegen.
+
+When a 16-bit task timer is also read as an 8-bit alpha value on big-endian N64, a union provides both semantic
+views without a local offset-based alias struct. The low byte of the `s16` is at the second byte of the union.
+
 ## Nested If/Else Block Layout
 
 GCC 2.7.2 lays out nested if/else blocks in a predictable order:

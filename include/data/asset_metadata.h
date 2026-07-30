@@ -41,6 +41,7 @@ extern s32 D_800953B0_95FB0[36];
 extern s32 D_80095490_96090[4];
 extern s32 D_800954A0_960A0[4];
 extern s32 D_800954B0_960B0[64];
+extern DisplayLists gDebugDisplayConfig;
 extern s32 D_800955F0_961F0[4];
 extern s32 D_80095600_96200[4];
 extern s32 D_80095610_96210[40];
