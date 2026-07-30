@@ -5,13 +5,7 @@
 #include "graphics/sprite_rdp.h"
 #include "text/text_layout.h"
 
-typedef struct {
-    u16 frame;
-    s8 command;
-    u8 param;
-} CreditsCommand;
-
-CreditsCommand creditsCommands[] = {
+CreditsTextCommand creditsCommands[] = {
     { 0x0000, 0x02, 0x00 },
     { 0x001E, 0x03, 0x00 },
     { 0x00F0, 0x04, 0x00 },
@@ -126,7 +120,7 @@ void updateCreditsScrollingTextEffects(CreditsState *s) {
     s32 showPalette;
     s32 i;
     s32 scaledAlpha;
-    CreditsCommand *cmd;
+    CreditsTextCommand *cmd;
     s32 yAccum;
     s32 alphaSum;
     s16 initialFrame;
@@ -138,26 +132,26 @@ void updateCreditsScrollingTextEffects(CreditsState *s) {
             break;
         }
         cmd = &creditsCommands[s->commandIndex];
-        switch (cmd->command) {
-            case 0:
-                s->currentPaletteIndex = (s8)cmd->param;
+        switch (cmd->commandType) {
+            case CREDITS_TEXT_COMMAND_SELECT_PALETTE:
+                s->currentPaletteIndex = (s8)cmd->parameter;
                 s->paletteChangePending = 1;
                 s->paletteFadeSpeed = paletteFadeSpeeds[0];
                 break;
-            case 1:
-                s->overlayAlphaSpeed = overlayFadeSpeeds[(s8)cmd->param];
+            case CREDITS_TEXT_COMMAND_SET_OVERLAY_FADE:
+                s->overlayAlphaSpeed = overlayFadeSpeeds[(s8)cmd->parameter];
                 break;
-            case 2:
-                s->paletteFadeSpeed = paletteFadeSpeeds[(s8)cmd->param];
+            case CREDITS_TEXT_COMMAND_SET_PALETTE_FADE:
+                s->paletteFadeSpeed = paletteFadeSpeeds[(s8)cmd->parameter];
                 s->paletteChangePending = 0;
                 break;
-            case 3:
-                s->textRowIndex = (s8)cmd->param;
+            case CREDITS_TEXT_COMMAND_SELECT_TEXT_ROW:
+                s->textRowIndex = (s8)cmd->parameter;
                 s->textFadeSpeed = textFadeSpeeds[0];
                 s->textChangePending = 1;
                 break;
-            case 4:
-                s->textFadeSpeed = textFadeSpeeds[(s8)cmd->param];
+            case CREDITS_TEXT_COMMAND_SET_TEXT_FADE:
+                s->textFadeSpeed = textFadeSpeeds[(s8)cmd->parameter];
                 break;
         }
 
@@ -167,7 +161,7 @@ void updateCreditsScrollingTextEffects(CreditsState *s) {
         }
 
         cmd = &creditsCommands[s->commandIndex];
-        s->nextCommandFrame = cmd->frame;
+        s->nextCommandFrame = cmd->triggerFrame;
     }
 
     do {
