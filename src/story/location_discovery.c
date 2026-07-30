@@ -36,9 +36,9 @@ void checkGenericLocationDiscovery(LocationDiscoveryTrigger *trigger) {
         }
         // Get angle bounds for this location from the angle bounds table
         locationId = trigger->locationId;
-        minAngle = ((s16 *)storyMapAngleBounds)[locationId * 2];
+        minAngle = storyMapAngleBounds[locationId * 2];
         if (normalizedYaw < minAngle) {
-            maxAngle = ((s16 *)storyMapAngleBounds)[(locationId * 2) + 1];
+            maxAngle = storyMapAngleBounds[(locationId * 2) + 1];
             if (normalizedYaw > maxAngle) {
                 // Additional secondary-angle gate unique to the generic trigger
                 if ((u16)(gameState->storyMapCameraViewAngle - 0xC01) < 0x7FF) {

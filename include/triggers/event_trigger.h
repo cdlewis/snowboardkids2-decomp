@@ -8,11 +8,11 @@
 #define TRICK_EVENT_ID 9
 
 typedef struct {
-    s16 minAngle;
     s16 maxAngle;
+    s16 minAngle;
 } TriggerAngleBounds;
 
-extern u8 storyMapAngleBounds[];
+extern s16 storyMapAngleBounds[];
 #define TriggerAngleBoundsTable ((TriggerAngleBounds *)storyMapAngleBounds)
 
 typedef struct {
