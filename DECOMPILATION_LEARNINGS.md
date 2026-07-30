@@ -521,6 +521,8 @@ Partial `GameState` overlays that expose the player-array pointer at offset `0x1
 
 Scheduled task callbacks also receive different phases of the same allocation. Init, update, cleanup, and spawn helpers should share the complete task state when their fields occupy the same offsets; do not create a new padded view for each callback. When an element is exactly a `SpriteRenderArg`, use that existing type rather than duplicating its layout with alternate field names.
 
+A task prefix containing a `Transform3D` at `0x00`, a display-list pointer at `0x20`, segment pointers at `0x24` through `0x2C`, and render state through `0x3B` is a complete `DisplayListObject`. Linda's Castle's flying-enemy init and update callbacks formerly described this same prefix as unrelated padded fields; embedding `DisplayListObject` unified the callback layouts and preserved the matching code.
+
 KMC GCC can still be sensitive to the source shape of typed player indexing. In `initRaceProgressIndicatorTask`, replacing the byte-offset induction variable with `&gameState->players[i]` emitted the operands of one `addu` in the opposite order and broke the ROM checksum. Keeping the offset derived from `sizeof(Player)` preserves the canonical element size while matching the target instruction encoding.
 
 High-offset fields in a partial `GameState` overlay can also be later elements of the canonical player array. The offsets formerly named `unk101C` and `unk1C04` are `players[1].worldPos` and `players[2].worldPos`: each advances by exactly `sizeof(Player)` from `players[0].worldPos`. Check such offsets against the canonical array stride before extending a local overlay.
