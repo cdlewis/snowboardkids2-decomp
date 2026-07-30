@@ -11,26 +11,15 @@
 #include "system/task_scheduler.h"
 
 typedef struct {
-    u8 padding[0x24];
-    void *segment1;
-    void *segment2;
-} DisplayListObjectSegments;
-
-typedef struct {
-    Transform3D matrix;
-    DisplayLists *displayLists;
-    void *segment1;
-    void *segment2;
-    s32 unk2C;
-    u8 PAD[0xC];
-    s16 timer;
-    s16 state;
+    /* 0x00 */ DisplayListObject launcherObject;
+    /* 0x3C */ s16 stateTimer;
+    /* 0x3E */ s16 launchState;
 } StarLauncherTask;
 
 typedef struct {
     u16 rotX;
     u16 rotY;
-    s32 position[3];
+    Vec3i position;
 } RockPositionEntry;
 
 RockPositionEntry crazyJungleRockPositions[] = {
@@ -47,34 +36,22 @@ RockPositionEntry crazyJungleRockPositions[] = {
 };
 
 typedef struct {
-    /* 0x00 */ DisplayListObject node1;
-    /* 0x3C */ DisplayListObject node2;
-    /* 0x78 */ Transform3D rotationMatrix;
-    /* 0x98 */ Vec3i renderOffset;
+    /* 0x00 */ DisplayListObject baseObject;
+    /* 0x3C */ DisplayListObject fallingObject;
+    /* 0x78 */ Transform3D spawnTransform;
+    /* 0x98 */ Vec3i fallOffset;
     /* 0xA4 */ s16 xRotation;
     /* 0xA6 */ s16 positionIndex;
     /* 0xA8 */ s16 respawnTimer;
 } FallingRockHazard;
 
-typedef struct {
-    Node n;
-    u8 padding[0x7A];
-    s16 positionIndex;
-} NodeWithPayload;
-
-typedef struct {
-    /* 0x0 */ DisplayListObject node;
-    u16 timer;
-    s16 state;
-} StarLauncherTaskUpdate;
-
 void renderFallingRockHazard(FallingRockHazard *rock);
 void updateFallingRockHazard(FallingRockHazard *rock);
 void fallingRockImpactCallback(FallingRockHazard *rock);
 void fallingRockRespawnCallback(FallingRockHazard *rock);
-void cleanupStarLauncherTask(DisplayListObjectSegments *arg0);
-void freeDisplayListSegments(DisplayListObjectSegments *);
-void updateStarLauncherTask(StarLauncherTaskUpdate *arg0);
+void cleanupStarLauncherTask(StarLauncherTask *task);
+void freeDisplayListSegments(DisplayListObject *displayObject);
+void updateStarLauncherTask(StarLauncherTask *task);
 
 void initFallingRockHazard(FallingRockHazard *rock) {
     GameState *gameState;
@@ -86,21 +63,21 @@ void initFallingRockHazard(FallingRockHazard *rock) {
 
     rock->positionIndex += (randVal & 1);
     result = getSkyDisplayLists3ByIndex(gameState->memoryPoolId);
-    rock->node1.displayLists = &result->sceneryDisplayLists1;
+    rock->baseObject.displayLists = &result->sceneryDisplayLists1;
     result = getSkyDisplayLists3ByIndex(gameState->memoryPoolId);
-    rock->node2.displayLists = &result->sceneryDisplayLists2;
-    rock->node1.segment1 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
-    rock->node1.segment2 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
-    rock->node1.segment3 = 0;
-    rock->renderOffset.x = 0;
-    rock->renderOffset.y = 0;
-    rock->renderOffset.z = 0;
-    rock->node2.segment1 = rock->node1.segment1;
-    rock->node2.segment2 = rock->node1.segment2;
-    rock->node2.segment3 = rock->node1.segment3;
-    memcpy(&rock->rotationMatrix.translation, &crazyJungleRockPositions[rock->positionIndex].position, sizeof(Vec3i));
+    rock->fallingObject.displayLists = &result->sceneryDisplayLists2;
+    rock->baseObject.segment1 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
+    rock->baseObject.segment2 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
+    rock->baseObject.segment3 = 0;
+    rock->fallOffset.x = 0;
+    rock->fallOffset.y = 0;
+    rock->fallOffset.z = 0;
+    rock->fallingObject.segment1 = rock->baseObject.segment1;
+    rock->fallingObject.segment2 = rock->baseObject.segment2;
+    rock->fallingObject.segment3 = rock->baseObject.segment3;
+    memcpy(&rock->spawnTransform.translation, &crazyJungleRockPositions[rock->positionIndex].position, sizeof(Vec3i));
     createCombinedRotationMatrix(
-        &rock->rotationMatrix,
+        &rock->spawnTransform,
         crazyJungleRockPositions[rock->positionIndex].rotX,
         crazyJungleRockPositions[rock->positionIndex].rotY
     );
@@ -114,19 +91,19 @@ void renderFallingRockHazard(FallingRockHazard *rock) {
     Transform3D matrix;
     s32 i;
 
-    memcpy(&gScaleMatrix.translation, &rock->renderOffset, sizeof(Vec3i));
-    composeTransform3D(&gScaleMatrix, &rock->rotationMatrix, &rock->node1.transform);
+    memcpy(&gScaleMatrix.translation, &rock->fallOffset, sizeof(Vec3i));
+    composeTransform3D(&gScaleMatrix, &rock->spawnTransform, &rock->baseObject.transform);
     createXRotationMatrix(matrix.m, rock->xRotation);
 
     matrix.translation.y = 0x3b333;
     matrix.translation.x = 0;
     matrix.translation.z = 0x170000;
 
-    composeTransform3D(&matrix, &rock->node1.transform, &rock->node2.transform);
+    composeTransform3D(&matrix, &rock->baseObject.transform, &rock->fallingObject.transform);
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, &rock->node1);
-        enqueueDisplayListWithFrustumCull(i, &rock->node2);
+        enqueueDisplayListWithFrustumCull(i, &rock->baseObject);
+        enqueueDisplayListWithFrustumCull(i, &rock->fallingObject);
     }
 }
 
@@ -141,8 +118,8 @@ void updateFallingRockHazard(FallingRockHazard *rock) {
     playerInRange = 0;
 
     for (i = 0; i < gs->numPlayers; i++) {
-        xDiff = gs->players[i].worldPos.x - rock->rotationMatrix.translation.x;
-        zDiff = gs->players[i].worldPos.z - rock->rotationMatrix.translation.z;
+        xDiff = gs->players[i].worldPos.x - rock->spawnTransform.translation.x;
+        zDiff = gs->players[i].worldPos.z - rock->spawnTransform.translation.z;
         if (((0x27FFFFE >= ((u32)xDiff) + 0x13FFFFF) & (0x13FFFFF >= zDiff)) == 0) {
             continue;
         }
@@ -155,8 +132,8 @@ void updateFallingRockHazard(FallingRockHazard *rock) {
 
     if (playerInRange) {
         if (gs->gamePaused == 0) {
-            if (rock->renderOffset.y != 0x60000) {
-                rock->renderOffset.y += 0x20000;
+            if (rock->fallOffset.y != 0x60000) {
+                rock->fallOffset.y += 0x20000;
             }
 
             if (rock->xRotation != (-0x600)) {
@@ -168,10 +145,12 @@ void updateFallingRockHazard(FallingRockHazard *rock) {
 
         if (gs->gamePaused == 0) {
             for (i = 0; i < gs->numPlayers; i++) {
-                if (isPlayerInRangeAndPull(&rock->node2.transform.translation, 0x12A000, &gs->players[i]) != 0) {
-                    if (isPlayerInRangeAndPull(&rock->node2.transform.translation, 0x1E3000, &gs->players[i]) != 0) {
+                if (isPlayerInRangeAndPull(&rock->fallingObject.transform.translation, 0x12A000, &gs->players[i]) !=
+                    0) {
+                    if (isPlayerInRangeAndPull(&rock->fallingObject.transform.translation, 0x1E3000, &gs->players[i]) !=
+                        0) {
                         setPlayerState50(&gs->players[i]);
-                        queueSoundAtPosition(&rock->node2.transform.translation, 0x2A);
+                        queueSoundAtPosition(&rock->fallingObject.transform.translation, 0x2A);
                         setCallback(fallingRockImpactCallback);
                     }
                 }
@@ -179,12 +158,12 @@ void updateFallingRockHazard(FallingRockHazard *rock) {
         }
     } else {
         if (!gs->gamePaused) {
-            if (rock->renderOffset.y > 0) {
-                rock->renderOffset.y += 0xFFFE0000;
+            if (rock->fallOffset.y > 0) {
+                rock->fallOffset.y += 0xFFFE0000;
             }
 
-            if (rock->renderOffset.y < 0) {
-                rock->renderOffset.y += 0x20000;
+            if (rock->fallOffset.y < 0) {
+                rock->fallOffset.y += 0x20000;
             }
 
             if (rock->xRotation != 0) {
@@ -201,9 +180,9 @@ void fallingRockImpactCallback(FallingRockHazard *rock) {
     s32 i;
 
     gs = (GameState *)getCurrentAllocation();
-    if (rock->renderOffset.y != 0xFFF00000) {
+    if (rock->fallOffset.y != 0xFFF00000) {
         if (gs->gamePaused == FALSE) {
-            rock->renderOffset.y = rock->renderOffset.y - 0x8000;
+            rock->fallOffset.y = rock->fallOffset.y - 0x8000;
         }
     } else {
         rock->respawnTimer = 0x12C;
@@ -213,7 +192,7 @@ void fallingRockImpactCallback(FallingRockHazard *rock) {
     renderFallingRockHazard(rock);
 
     for (i = 0; i < gs->numPlayers; i++) {
-        isPlayerInRangeAndPull(&rock->node2.transform.translation, 0x12A000, &gs->players[i]);
+        isPlayerInRangeAndPull(&rock->fallingObject.transform.translation, 0x12A000, &gs->players[i]);
     }
 }
 
@@ -228,12 +207,12 @@ void fallingRockRespawnCallback(FallingRockHazard *rock) {
         positionOffset = randA() & 1;
         rock->positionIndex = positionOffset + (rock->positionIndex & 0xFE);
         memcpy(
-            &rock->rotationMatrix.translation,
+            &rock->spawnTransform.translation,
             &crazyJungleRockPositions[rock->positionIndex].position,
             sizeof(Vec3i)
         );
         createCombinedRotationMatrix(
-            &rock->rotationMatrix,
+            &rock->spawnTransform,
             crazyJungleRockPositions[rock->positionIndex].rotX,
             crazyJungleRockPositions[rock->positionIndex].rotY
         );
@@ -241,28 +220,28 @@ void fallingRockRespawnCallback(FallingRockHazard *rock) {
     }
 }
 
-void freeDisplayListSegments(DisplayListObjectSegments *arg0) {
-    arg0->segment1 = freeNodeMemory(arg0->segment1);
-    arg0->segment2 = freeNodeMemory(arg0->segment2);
+void freeDisplayListSegments(DisplayListObject *displayObject) {
+    displayObject->segment1 = freeNodeMemory(displayObject->segment1);
+    displayObject->segment2 = freeNodeMemory(displayObject->segment2);
 }
 
-void initStarLauncherTask(StarLauncherTask *arg0) {
+void initStarLauncherTask(StarLauncherTask *task) {
     GameState *gs = (GameState *)getCurrentAllocation();
-    arg0->segment1 = loadUncompressedAssetByIndex(gs->memoryPoolId);
-    arg0->segment2 = loadCompressedSegment2AssetByIndex(gs->memoryPoolId);
-    arg0->unk2C = 0;
-    createYRotationMatrix(&arg0->matrix, 0x6C0);
-    arg0->matrix.translation.x = 0xDD196FEA;
-    arg0->matrix.translation.y = 0x0ABD4CA3;
-    arg0->matrix.translation.z = 0xE270649E;
-    arg0->timer = 0x12C;
-    arg0->state = 0;
-    arg0->displayLists = &getSkyDisplayLists3ByIndex(gs->memoryPoolId)->sceneryDisplayLists3;
+    task->launcherObject.segment1 = loadUncompressedAssetByIndex(gs->memoryPoolId);
+    task->launcherObject.segment2 = loadCompressedSegment2AssetByIndex(gs->memoryPoolId);
+    task->launcherObject.segment3 = 0;
+    createYRotationMatrix(&task->launcherObject.transform, 0x6C0);
+    task->launcherObject.transform.translation.x = 0xDD196FEA;
+    task->launcherObject.transform.translation.y = 0x0ABD4CA3;
+    task->launcherObject.transform.translation.z = 0xE270649E;
+    task->stateTimer = 0x12C;
+    task->launchState = 0;
+    task->launcherObject.displayLists = &getSkyDisplayLists3ByIndex(gs->memoryPoolId)->sceneryDisplayLists3;
     setCleanupCallback(&cleanupStarLauncherTask);
     setCallback(&updateStarLauncherTask);
 }
 
-void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
+void updateStarLauncherTask(StarLauncherTask *task) {
     GameState *gameState;
     s16 state;
     s32 i;
@@ -270,14 +249,14 @@ void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
     s32 randVal;
 
     gameState = getCurrentAllocation();
-    state = arg0->state;
+    state = task->launchState;
 
     switch (state) {
         case 0:
             if (!gameState->gamePaused) {
-                arg0->timer--;
-                if ((arg0->timer << 16) == 0) {
-                    arg0->state++;
+                task->stateTimer--;
+                if ((task->stateTimer << 16) == 0) {
+                    task->launchState++;
                 }
             }
             break;
@@ -287,7 +266,7 @@ void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
 
                 for (i = 0; i < numPlayers; i++) {
                     if ((u32)gameState->players[i].sectorIndex - 0x60 < 6) {
-                        arg0->node.displayLists =
+                        task->launcherObject.displayLists =
                             &getSkyDisplayLists3ByIndex(gameState->memoryPoolId)->sceneryDisplayLists4;
                         randVal = randA();
                         randVal = randVal - 0x60;
@@ -295,9 +274,9 @@ void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
                         i = i + randVal;
                         i = i + 0x6C0;
                         spawnFallingStarProjectile(i, ((randA()) << 12) | 0x100000);
-                        queueSoundAtPosition(&arg0->node.transform.translation, 0x23);
-                        arg0->timer = 0x18;
-                        arg0->state++;
+                        queueSoundAtPosition(&task->launcherObject.transform.translation, 0x23);
+                        task->stateTimer = 0x18;
+                        task->launchState++;
                         break;
                     }
                 }
@@ -305,53 +284,53 @@ void updateStarLauncherTask(StarLauncherTaskUpdate *arg0) {
             break;
         case 2:
             if (gameState->gamePaused == 0) {
-                arg0->timer--;
-                if ((arg0->timer << 16) == 0) {
-                    arg0->state = 0;
-                    arg0->node.displayLists =
+                task->stateTimer--;
+                if ((task->stateTimer << 16) == 0) {
+                    task->launchState = 0;
+                    task->launcherObject.displayLists =
                         &getSkyDisplayLists3ByIndex(gameState->memoryPoolId)->sceneryDisplayLists3;
-                    arg0->timer = 0x14;
+                    task->stateTimer = 0x14;
                 }
             }
             break;
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, &arg0->node);
+        enqueueDisplayListWithFrustumCull(i, &task->launcherObject);
     }
 }
 
-void cleanupStarLauncherTask(DisplayListObjectSegments *arg0) {
-    arg0->segment1 = freeNodeMemory(arg0->segment1);
-    arg0->segment2 = freeNodeMemory(arg0->segment2);
+void cleanupStarLauncherTask(StarLauncherTask *task) {
+    task->launcherObject.segment1 = freeNodeMemory(task->launcherObject.segment1);
+    task->launcherObject.segment2 = freeNodeMemory(task->launcherObject.segment2);
 }
 
 void initCrazyJungleHazards(void) {
-    NodeWithPayload *taskNode;
+    FallingRockHazard *rock;
 
-    taskNode = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
-    if (taskNode != NULL) {
-        taskNode->positionIndex = 0;
+    rock = (FallingRockHazard *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
+    if (rock != NULL) {
+        rock->positionIndex = 0;
     }
 
-    taskNode = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
-    if (taskNode != NULL) {
-        taskNode->positionIndex = 2;
+    rock = (FallingRockHazard *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
+    if (rock != NULL) {
+        rock->positionIndex = 2;
     }
 
-    taskNode = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
-    if (taskNode != NULL) {
-        taskNode->positionIndex = 4;
+    rock = (FallingRockHazard *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
+    if (rock != NULL) {
+        rock->positionIndex = 4;
     }
 
-    taskNode = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
-    if (taskNode != NULL) {
-        taskNode->positionIndex = 6;
+    rock = (FallingRockHazard *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
+    if (rock != NULL) {
+        rock->positionIndex = 6;
     }
 
-    taskNode = (NodeWithPayload *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
-    if (taskNode != NULL) {
-        taskNode->positionIndex = 8;
+    rock = (FallingRockHazard *)scheduleTask(&initFallingRockHazard, 0, 0, 0x32);
+    if (rock != NULL) {
+        rock->positionIndex = 8;
     }
 
     scheduleTask(&initStarLauncherTask, 0, 0, 0xC8);

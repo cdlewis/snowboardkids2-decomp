@@ -624,6 +624,11 @@ When a call requires a cast between unrelated task structs, compare the accessed
 complete layout before preserving the partial type. Moving the complete type to its subsystem header can remove
 the duplicate, the padding, and the cast without affecting code generation.
 
+`scheduleTask()` returns the address of the new node's inline payload, which is also the pointer passed to the
+task's callbacks. When a scheduler only initializes a trailing callback-state field, type the return value as
+the callback's complete state instead of recreating `Node` plus padding to reach that field. Crazy Jungle's rock
+spawner can therefore set `FallingRockHazard.positionIndex` directly without a scheduler-node overlay.
+
 ## Recognize DisplayListObject Prefixes in Render Tasks
 
 Level render-task structs that begin with a `Transform3D`, followed by display-list and segment pointers at
