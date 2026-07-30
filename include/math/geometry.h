@@ -16,6 +16,11 @@ typedef struct {
 } Vec3s;
 
 typedef struct {
+    s16 x;
+    s16 z;
+} Vec2sXZ;
+
+typedef struct {
     s16 m[9];
 } Mat3x3;
 

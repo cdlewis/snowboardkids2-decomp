@@ -20,27 +20,6 @@
 #include "ui/title_ui_elements.h"
 #include "ui/unlock_screen.h"
 
-typedef struct {
-    s16 x;
-    s16 z;
-} CoordPair;
-
-typedef struct {
-    ViewportNode node1;
-    ViewportNode node2;
-    void *titleLogoData;
-    void *menuGraphicsData;
-    u16 frameCounter;
-    u8 unk3BA;
-    u8 menuSelection;
-    u8 menuOptionCount;
-    u8 menuMode;
-    u8 unk3BE;
-    u8 partialUnlockCheatProgress;
-    u8 unlockAllCheatProgress;
-    u8 initialSoundDelay;
-} TitleState;
-
 extern s32 gButtonsPressed;
 extern u8 gDebugUnlockEnabled;
 extern s8 gTitleInitialized;
@@ -152,7 +131,7 @@ s16 storyMapLocationModelIds[10] = {
 };
 
 // storyMapAngleBounds: 20 shorts (40 bytes)
-// storyMapLocationCoords follows immediately: 10 CoordPairs (40 bytes)
+// storyMapLocationCoords follows immediately: 10 Vec2sXZ values (40 bytes)
 // Total: 80 bytes = 0x50 as shown in symbol_addrs.txt
 s16 storyMapAngleBounds[20] = {
     0xF93E, 0xF83E, 0xFC84, 0xFB84, 0xFF26, 0xFE26, 0x01CC, 0x00CC, 0x047E, 0x037E,
@@ -160,7 +139,7 @@ s16 storyMapAngleBounds[20] = {
 };
 
 // storyMapLocationCoords must immediately follow storyMapAngleBounds
-CoordPair storyMapLocationCoords[10] = {
+Vec2sXZ storyMapLocationCoords[10] = {
     { 0x009D, 0xFFEF },
     { 0x008E, 0xFF82 },
     { 0x002B, 0xFF66 },
@@ -199,7 +178,7 @@ void exitTitleToNextMode(void) {
 }
 
 void cleanupTitleAndTransition(void) {
-    TitleState *state;
+    TitleScreenState *state;
     u8 menuSelection;
     u8 menuMode;
 
@@ -229,14 +208,14 @@ void cleanupTitleAndTransition(void) {
         }
     }
 
-    if (state->frameCounter == 0x384) {
+    if (state->idleFrameCounter == 0x384) {
         gGameSessionContext->gameMode = 0;
         gGameSessionContext->saveSlotIndex = 0;
         gTitleExitMode = 4;
     }
 
-    unlinkNode((ViewportNode *)state);
-    unlinkNode((&state->node2));
+    unlinkNode(&state->mainViewport);
+    unlinkNode(&state->menuViewport);
 
     state->titleLogoData = freeNodeMemory(state->titleLogoData);
     state->menuGraphicsData = freeNodeMemory(state->menuGraphicsData);
@@ -269,7 +248,7 @@ void writeSaveDataToEeprom(void) {
 }
 
 void handleTitleMenuInput(void) {
-    TitleState *state;
+    TitleScreenState *state;
     s32 input;
     u8 soundDelay;
     u8 menuMode;
@@ -279,10 +258,10 @@ void handleTitleMenuInput(void) {
 
     state = getCurrentAllocation();
 
-    soundDelay = state->initialSoundDelay;
+    soundDelay = state->initialMusicDelay;
     if (soundDelay != 0) {
         soundDelay--;
-        state->initialSoundDelay = soundDelay;
+        state->initialMusicDelay = soundDelay;
         if (soundDelay == 0) {
             playMusicTrack(0x1C);
         }
@@ -323,14 +302,14 @@ case_0:
         }
     }
 
-    frameCounter = state->frameCounter + 1;
-    state->frameCounter = frameCounter;
+    frameCounter = state->idleFrameCounter + 1;
+    state->idleFrameCounter = frameCounter;
 
     if (menuSelection != state->menuSelection) {
         playSoundEffectOnChannelNoPriority(0x2B, 1);
-        frameCounter = state->frameCounter;
+        frameCounter = state->idleFrameCounter;
         if (frameCounter >= 0x2D1) {
-            state->frameCounter = 0x2D0;
+            state->idleFrameCounter = 0x2D0;
         }
     }
 
@@ -346,7 +325,7 @@ case_0:
         goto end;
     }
 
-    if (state->frameCounter == 0x384) {
+    if (state->idleFrameCounter == 0x384) {
         setMusicFadeOut(0x20);
         setViewportFadeValue(0, 0xFF, 0x10);
         setGameStateHandlerWithContinue(cleanupTitleAndTransition);
@@ -418,14 +397,14 @@ void onTitleFadeInComplete(void) {
 }
 
 void waitForTitleAssetsReady(void) {
-    TitleState *state = (TitleState *)getCurrentAllocation();
+    TitleScreenState *state = (TitleScreenState *)getCurrentAllocation();
 
-    state->frameCounter++;
+    state->idleFrameCounter++;
 
-    if (state->frameCounter >= 3) {
-        state->frameCounter = 2;
+    if (state->idleFrameCounter >= 3) {
+        state->idleFrameCounter = 2;
         if (getPendingDmaCount() == 0) {
-            state->frameCounter = 0;
+            state->idleFrameCounter = 0;
             setViewportFadeValue(NULL, 0, 0x10);
             setGameStateHandler(onTitleFadeInComplete);
         }
@@ -433,33 +412,33 @@ void waitForTitleAssetsReady(void) {
 }
 
 void initTitleScreen(void) {
-    TitleState *state;
-    ViewportNode *node2;
+    TitleScreenState *state;
+    ViewportNode *menuViewport;
     void *dmaResult;
     s32 i;
     void *checkResult;
 
-    state = (TitleState *)allocateTaskMemory(0x3C8);
+    state = (TitleScreenState *)allocateTaskMemory(0x3C8);
     setViewportFadeValue(NULL, 0xFF, 0);
-    node2 = &state->node2;
+    menuViewport = &state->menuViewport;
     initDefaultFontPalette();
     setupTaskSchedulerNodes(0x14, 0, 0, 0, 0, 0, 0, 0);
-    initViewportNode(&state->node1, NULL, 8, 10, 0);
-    setModelCameraTransform(&state->node1, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    initMenuCameraNode(node2, 0, 8, 0);
-    setViewportPerspective(node2, 40.0f, 1.3333334f, 10.0f, 10000.0f);
-    setViewportTransformById(node2->viewportId, &gTitleCameraSettings);
+    initViewportNode(&state->mainViewport, NULL, 8, 10, 0);
+    setModelCameraTransform(&state->mainViewport, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    initMenuCameraNode(menuViewport, 0, 8, 0);
+    setViewportPerspective(menuViewport, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+    setViewportTransformById(menuViewport->viewportId, &gTitleCameraSettings);
     state->titleLogoData = loadCompressedData(&titleLogo_ROM_START, &titleLogo_ROM_END, 0x7B50);
     dmaResult = loadCompressedData(&titleScreenSprites_ROM_START, &titleScreenSprites_ROM_END, 0x2238);
     state->menuSelection = 0;
     state->menuOptionCount = 0;
     state->menuMode = 0;
-    state->unk3BE = 0;
-    state->initialSoundDelay = 0x3C;
+    state->reserved3BE = 0;
+    state->initialMusicDelay = 0x3C;
     state->partialUnlockCheatProgress = 0;
     state->unlockAllCheatProgress = 0;
     state->menuGraphicsData = dmaResult;
-    state->frameCounter = 0;
+    state->idleFrameCounter = 0;
 
     if (gGameSessionContext->gameMode == 0xFE) {
         state->menuSelection = 2;
@@ -499,7 +478,7 @@ void initTitleScreen(void) {
 }
 
 void checkPartialUnlockCheatCode(void) {
-    TitleState *state = getCurrentAllocation();
+    TitleScreenState *state = getCurrentAllocation();
     s32 buttons;
 
     switch (state->partialUnlockCheatProgress) {
@@ -559,7 +538,7 @@ void checkPartialUnlockCheatCode(void) {
 }
 
 void checkUnlockAllCheatCode(void) {
-    TitleState *state;
+    TitleScreenState *state;
     u8 cheatState;
     s32 buttons;
     s32 temp_v1;

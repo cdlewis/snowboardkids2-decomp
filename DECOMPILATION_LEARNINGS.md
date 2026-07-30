@@ -722,3 +722,18 @@ When identical small scheduler allocations appear in multiple mode initializers,
 offsets, allocation sizes, and initialization order before keeping local copies. If no narrower behavior is
 observed, conservative `state` and `substate` names communicate their role without inventing unsupported
 semantics.
+
+## Distinguish Mode-Specific Allocation Overlays From GameState
+
+`getCurrentAllocation()` is not always a race or story `GameState`. The title screen allocates two complete
+`ViewportNode` values at offsets `0x000` and `0x1D8`, where `GameState` instead exposes race pointers and audio
+state. Title render tasks that cast this allocation to `GameState` only happened to reach the right offsets.
+Give a mode-specific allocation one shared subsystem type and use it in every task that consumes that mode,
+rather than retaining a file-local copy or borrowing unrelated `GameState` field names.
+
+The title tasks also showed that partial UI structs often contain canonical renderer state. Their controller
+slots are `TextRenderArg` values, their player-count prompts are adjacent `SpriteRenderArg` values, and the
+title logo starts with `TileMapScrollRenderState`. Embedding those common types preserves their offsets and KMC
+code generation while replacing duplicated `asset`, sprite-index, alpha, and tile fields with renderer-owned
+names. Conversely, bytes `0x3B0` through `0x3CF` in the story `GameState` form one complete `Transform3D`;
+representing that range as the transform removes title-only aliases from the common game-state layout.
