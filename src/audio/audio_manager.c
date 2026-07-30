@@ -13,77 +13,27 @@
 #include "ucode.h"
 
 typedef struct {
-    /* 0x00 */ void *outputBuffer;
-    /* 0x04 */ s16 frameSizeInSamples;
-    s16 _pad6;
-    /* 0x08 */ s32 taskType;
-    /* 0x0C */ s32 taskFlags;
-    /* 0x10 */ void *bootCode;
-    /* 0x14 */ s32 bootCodeSize;
-    /* 0x18 */ void *taskCode;
-    /* 0x1C */ s32 taskCodeSize;
-    /* 0x20 */ void *dataMemory;
-    /* 0x24 */ s32 dataMemorySize;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    /* 0x38 */ Acmd *commandBuffer;
-    /* 0x3C */ s32 commandBufferSize;
-    s32 unk40;
-    s32 unk44;
-    void *unk48;
-    void *unk4C;
-    /* 0x50 */ s16 unk50;
-    s16 _pad52;
-    /* 0x54 */ void *unk54;
-    u8 _pad58[0x18];
-} AudioStruct;
+    ALLink link;
+    s32 startAddress;
+    s32 lastFrameUsed;
+    void *buffer;
+} AudioDmaBuffer;
 
-typedef struct AudioNode_s {
-    ALLink l;
-    s32 data;
-    s32 timestamp;
-    void *dest_ptr;
-} AudioNode;
-
-typedef struct {
-    u16 type;
-    u16 pad;
-    void *data;
-} Msg;
-
-typedef struct {
-    s16 type;
-    AudioStruct *info;
-} AudioMsg;
-
-typedef struct {
-    AudioStruct *audioInfo[4];
-    OSThread thread;
-    OSMesgQueue audioReplyMsgQ;
-    OSMesg audioReplyMsgBuf[8];
-    OSMesgQueue audioFrameMsgQ;
-    OSMesg audioFrameMsgBuf[8];
-} AMAudioMgr;
-
-extern AMAudioMgr gAudioManager;
-extern Acmd *gAudioCmdBuffers[];
 extern ALGlobals __libmus_alglobals;
 extern s32 __muscontrol_flag;
 
 // bss
 char gAudioManagerStack[0x2000] __attribute__((section(".bss")));
 u8 gDriveRomInitialized __attribute__((section(".bss")));
-AudioNode *gActiveListHead __attribute__((section(".bss")));
-AudioNode *D_800A6468_A7048 __attribute__((section(".bss")));
+AudioDmaBuffer *gActiveListHead __attribute__((section(".bss")));
+AudioDmaBuffer *D_800A6468_A7048 __attribute__((section(".bss")));
 u32 gMinAudioFrameSize __attribute__((section(".bss")));
 s32 gAudioBufferSize __attribute__((section(".bss")));
 s32 D_800A6474_A7054 __attribute__((section(".bss")));
 s32 gAudioRspCmdCount __attribute__((section(".bss")));
 static s32 D_800A647C_A705C __attribute__((section(".bss")));
 OSMesgQueue gAudioMsgQueue __attribute__((section(".bss")));
-AudioNode *gAudioNodePool __attribute__((section(".bss")));
+AudioDmaBuffer *gAudioNodePool __attribute__((section(".bss")));
 OSIoMesg *gAudioDmaMessages __attribute__((section(".bss")));
 void **gAudioMsgBuffer __attribute__((section(".bss")));
 u32 gMaxVoices __attribute__((section(".bss")));
@@ -97,7 +47,7 @@ u32 gCurrentFrame = 0;
 u32 D_8009B034_9BC34 = 0;
 s32 gAudioCmdBufferToggle = 0;
 s32 gAudioThreadCreated = 0;
-AudioStruct *gPendingMessages = NULL;
+AudioInfo *gPendingMessages = NULL;
 s32 gAudioUnderrunFlag = 1;
 
 extern void CustomInit(void *, ALSynConfig *);
@@ -105,7 +55,7 @@ extern void CustomInit(void *, ALSynConfig *);
 s32 loadAudioDataWithCache(s32, s32);
 void handleAudioUnderrun(void *);
 void processAudioNodeList(void);
-s32 audioCreateAndScheduleTask(AudioStruct *, AudioStruct *);
+s32 audioCreateAndScheduleTask(AudioInfo *, AudioInfo *);
 void *initAudioDriveAndGetLoader(void *arg0);
 void audioManagerThread(void *);
 
@@ -128,7 +78,7 @@ void initAudioManager(
     gCartRomHandle = osCartRomInit();
     tempDriveRomHandle = osDriveRomInit();
     gDriveRomInitialized = FALSE;
-    new_var = &audioParams->syn_output_rate;
+    new_var = &audioParams->outputRate;
     outputRate = *new_var;
     gDriveRomHandle = tempDriveRomHandle;
 
@@ -141,13 +91,13 @@ void initAudioManager(
     }
 
     config->dmaproc = &initAudioDriveAndGetLoader;
-    config->outputRate = osAiSetFrequency(audioParams->syn_output_rate);
-    gAudioNodePool = (AudioNode *)alHeapDBAlloc(0, 0, config->heap, 1, sizeof(AudioNode) * maxChannels);
+    config->outputRate = osAiSetFrequency(audioParams->outputRate);
+    gAudioNodePool = (AudioDmaBuffer *)alHeapDBAlloc(0, 0, config->heap, 1, sizeof(AudioDmaBuffer) * maxChannels);
     gAudioDmaMessages = (OSIoMesg *)alHeapDBAlloc(0, 0, config->heap, 1, sizeof(OSIoMesg) / 2 * maxChannels * 4);
     gAudioMsgBuffer = (void **)alHeapDBAlloc(0, 0, config->heap, 1, sizeof(void *) * maxChannels * 2);
 
-    tempDouble = (f64)audioParams->sample_rate;
-    if (audioParams->sample_rate < 0) {
+    tempDouble = (f64)audioParams->frameRateScale;
+    if (audioParams->frameRateScale < 0) {
         tempDouble += 4294967296;
     }
     tempFloat = (f32)tempDouble;
@@ -172,31 +122,32 @@ void initAudioManager(
 
     CustomInit(&__libmus_alglobals, config);
 
-    gAudioNodePool->l.prev = NULL;
-    gAudioNodePool->l.next = NULL;
+    gAudioNodePool->link.prev = NULL;
+    gAudioNodePool->link.next = NULL;
     for (i = 0; i < (maxChannels - 1); i++) {
         alLink((ALLink *)(&gAudioNodePool[i + 1]), (ALLink *)(&gAudioNodePool[i]));
-        gAudioNodePool[i].dest_ptr = alHeapDBAlloc(0, 0, config->heap, 1, maxVoices);
+        gAudioNodePool[i].buffer = alHeapDBAlloc(0, 0, config->heap, 1, maxVoices);
     }
 
-    gAudioNodePool[i].dest_ptr = alHeapDBAlloc(0, 0, config->heap, 1, maxVoices);
+    gAudioNodePool[i].buffer = alHeapDBAlloc(0, 0, config->heap, 1, maxVoices);
 
     for (i = 0; i < 2; i++) {
-        gAudioCmdBuffers[i] = (Acmd *)alHeapDBAlloc(0, 0, config->heap, 1, audioParams->syn_rsp_cmds * 8);
+        gAudioManager.commandLists[i] =
+            (Acmd *)alHeapDBAlloc(0, 0, config->heap, 1, audioParams->commandListCapacity * 8);
     }
 
-    gAudioRspCmdCount = audioParams->syn_rsp_cmds;
+    gAudioRspCmdCount = audioParams->commandListCapacity;
 
     for (i = 0; i < 4; i++) {
-        gAudioManager.audioInfo[i] = (AudioStruct *)alHeapDBAlloc(0, 0, config->heap, 1, sizeof(AudioStruct));
-        gAudioManager.audioInfo[i]->unk50 = 9;
-        gAudioManager.audioInfo[i]->unk54 = gAudioManager.audioInfo[i];
+        gAudioManager.audioInfo[i] = (AudioInfo *)alHeapDBAlloc(0, 0, config->heap, 1, sizeof(AudioInfo));
+        gAudioManager.audioInfo[i]->doneMessage.type = 9;
+        gAudioManager.audioInfo[i]->doneMessage.info = gAudioManager.audioInfo[i];
         gAudioManager.audioInfo[i]->outputBuffer =
             (s16 *)alHeapDBAlloc(0, 0, config->heap, 1, sizeof(s32) * D_800A6474_A7054);
     }
 
-    osCreateMesgQueue(&gAudioManager.audioFrameMsgQ, (OSMesg *)&gAudioManager.audioFrameMsgBuf, 8);
-    osCreateMesgQueue(&gAudioManager.audioReplyMsgQ, (OSMesg *)&gAudioManager.audioReplyMsgBuf, 8);
+    osCreateMesgQueue(&gAudioManager.taskDoneQueue, (OSMesg *)&gAudioManager.taskDoneMessages, 8);
+    osCreateMesgQueue(&gAudioManager.retraceQueue, (OSMesg *)&gAudioManager.retraceMessages, 8);
     osCreateMesgQueue(&gAudioMsgQueue, (OSMesg *)gAudioMsgBuffer, maxChannels * 2);
 
     if (!gAudioThreadCreated) {
@@ -217,21 +168,21 @@ void initAudioManager(
 
 void audioManagerThread(void *arg) {
     ViConfig cfg;
-    Msg *frameMsg;
-    AudioMsg *taskCompleteMsg;
-    OSMesgQueue *q = &gAudioManager.audioReplyMsgQ;
+    ViMessage frameMessage;
+    AudioTaskDoneMessage *taskCompleteMsg;
+    OSMesgQueue *q = &gAudioManager.retraceQueue;
     s32 stop = FALSE;
 
-    addViConfig(&cfg, &gAudioManager.audioReplyMsgQ, 1);
+    addViConfig(&cfg, &gAudioManager.retraceQueue, 1);
 
     while (!stop) {
-        osRecvMesg(&gAudioManager.audioReplyMsgQ, (OSMesg)&frameMsg, OS_MESG_BLOCK);
-        osRecvMesg(&gAudioManager.audioReplyMsgQ, NULL, OS_MESG_NOBLOCK);
+        osRecvMesg(&gAudioManager.retraceQueue, &frameMessage.raw, OS_MESG_BLOCK);
+        osRecvMesg(&gAudioManager.retraceQueue, NULL, OS_MESG_NOBLOCK);
 
-        if (((Msg *)(&frameMsg))->type == 5) {
-            AudioStruct *currentAudioInfo = gAudioManager.audioInfo[gCurrentFrame % 4];
+        if (frameMessage.retrace.type == 5) {
+            AudioInfo *currentAudioInfo = gAudioManager.audioInfo[gCurrentFrame % 4];
             if (audioCreateAndScheduleTask(currentAudioInfo, gPendingMessages)) {
-                osRecvMesg(&gAudioManager.audioFrameMsgQ, (OSMesg)&taskCompleteMsg, OS_MESG_BLOCK);
+                osRecvMesg(&gAudioManager.taskDoneQueue, (OSMesg)&taskCompleteMsg, OS_MESG_BLOCK);
                 handleAudioUnderrun(taskCompleteMsg->info);
                 gPendingMessages = taskCompleteMsg->info;
             }
@@ -241,7 +192,7 @@ void audioManagerThread(void *arg) {
     alClose(&__libmus_alglobals);
 }
 
-s32 audioCreateAndScheduleTask(AudioStruct *audioTaskDesc, AudioStruct *prevBuffer) {
+s32 audioCreateAndScheduleTask(AudioInfo *audioTaskDesc, AudioInfo *prevBuffer) {
     s32 commandLength;
     s16 *outputBuffer;
     s32 commandBufferSize;
@@ -254,47 +205,46 @@ s32 audioCreateAndScheduleTask(AudioStruct *audioTaskDesc, AudioStruct *prevBuff
     processAudioNodeList();
     outputBuffer = (s16 *)osVirtualToPhysical(audioTaskDesc->outputBuffer);
     if (prevBuffer != 0) {
-        osAiSetNextBuffer(prevBuffer->outputBuffer, prevBuffer->frameSizeInSamples * 4);
+        osAiSetNextBuffer(prevBuffer->outputBuffer, prevBuffer->frameSamples * 4);
     }
 
     currentSamplesInBuffer = osAiGetLength() / 4;
     samplesToProcess = (((gAudioBufferSize - currentSamplesInBuffer) + gAudioBufferPadding) + 16) & 0xFFF0;
 
-    audioTaskDesc->frameSizeInSamples = samplesToProcess;
+    audioTaskDesc->frameSamples = samplesToProcess;
     if ((s16)samplesToProcess < gMinAudioFrameSize) {
-        audioTaskDesc->frameSizeInSamples = gMinAudioFrameSize;
+        audioTaskDesc->frameSamples = gMinAudioFrameSize;
     }
 
-    commandBuffer = gAudioCmdBuffers[gAudioCmdBufferToggle];
-    commandBufferEnd =
-        alAudioFrame(commandBuffer, &commandLength, (void *)outputBuffer, audioTaskDesc->frameSizeInSamples);
+    commandBuffer = gAudioManager.commandLists[gAudioCmdBufferToggle];
+    commandBufferEnd = alAudioFrame(commandBuffer, &commandLength, (void *)outputBuffer, audioTaskDesc->frameSamples);
     if (commandLength == 0) {
         return 0;
     }
 
-    audioTaskDesc->unk48 = &gAudioCmdBuffers[0x80];
-    audioTaskDesc->unk4C = &audioTaskDesc->unk50;
-    audioTaskDesc->commandBuffer = gAudioCmdBuffers[gAudioCmdBufferToggle];
-    commandBufferStart = gAudioCmdBuffers[gAudioCmdBufferToggle];
+    audioTaskDesc->messageQueue = &gAudioManager.taskDoneQueue;
+    audioTaskDesc->message = &audioTaskDesc->doneMessage;
+    audioTaskDesc->task.t.data_ptr = (u64 *)gAudioManager.commandLists[gAudioCmdBufferToggle];
+    commandBufferStart = gAudioManager.commandLists[gAudioCmdBufferToggle];
     commandBufferSize = commandBufferEnd - commandBufferStart;
     commandBufferSize = commandBufferSize * 8;
 
-    audioTaskDesc->taskType = M_AUDTASK;
-    audioTaskDesc->bootCode = rspbootTextStart;
-    audioTaskDesc->bootCodeSize = (u32)rspbootTextEnd - (u32)rspbootTextStart;
-    audioTaskDesc->taskCode = aspMainTextStart;
-    audioTaskDesc->taskFlags = 0;
-    audioTaskDesc->dataMemory = &aspMainDataStart;
-    audioTaskDesc->dataMemorySize = 0x800;
-    audioTaskDesc->unk28 = 0;
-    audioTaskDesc->unk2C = 0;
-    audioTaskDesc->unk30 = 0;
-    audioTaskDesc->unk34 = 0;
-    audioTaskDesc->unk40 = 0;
-    audioTaskDesc->unk44 = 0;
-    audioTaskDesc->commandBufferSize = commandBufferSize;
+    audioTaskDesc->task.t.type = M_AUDTASK;
+    audioTaskDesc->task.t.ucode_boot = (u64 *)rspbootTextStart;
+    audioTaskDesc->task.t.ucode_boot_size = (u32)rspbootTextEnd - (u32)rspbootTextStart;
+    audioTaskDesc->task.t.ucode = (u64 *)aspMainTextStart;
+    audioTaskDesc->task.t.flags = 0;
+    audioTaskDesc->task.t.ucode_data = (u64 *)&aspMainDataStart;
+    audioTaskDesc->task.t.ucode_data_size = 0x800;
+    audioTaskDesc->task.t.dram_stack = NULL;
+    audioTaskDesc->task.t.dram_stack_size = 0;
+    audioTaskDesc->task.t.output_buff = NULL;
+    audioTaskDesc->task.t.output_buff_size = NULL;
+    audioTaskDesc->task.t.yield_data_ptr = NULL;
+    audioTaskDesc->task.t.yield_data_size = 0;
+    audioTaskDesc->task.t.data_size = commandBufferSize;
 
-    submitAudioTask(((OSMesg)&audioTaskDesc->taskType));
+    submitAudioTask((OSMesg)&audioTaskDesc->task);
 
     gAudioCmdBufferToggle ^= 1;
 
@@ -308,16 +258,16 @@ void handleAudioUnderrun(void *arg0) {
 }
 
 s32 loadAudioDataWithCache(s32 romAddr, s32 requestSize) {
-    AudioNode *previousNode;
+    AudioDmaBuffer *previousNode;
     s16 alignmentOffset;
-    AudioNode *currentNode;
+    AudioDmaBuffer *currentNode;
     s32 alignedAddress;
     OSPiHandle *piHandle;
     s32 tempValue;
     s32 v1;
     s32 tempAddress;
     OSIoMesg *dmaMsg;
-    AudioNode *tempPtr;
+    AudioDmaBuffer *tempPtr;
 
     alignedAddress = romAddr;
     v1 = 0xFF000000;
@@ -335,8 +285,8 @@ s32 loadAudioDataWithCache(s32 romAddr, s32 requestSize) {
 
     previousNode = NULL;
     requestSize = (alignedAddress + requestSize) & 0xFFFFFFFFFFFFFFFFu;
-    for (currentNode = gActiveListHead; currentNode != NULL; currentNode = (AudioNode *)currentNode->l.next) {
-        tempValue = currentNode->data;
+    for (currentNode = gActiveListHead; currentNode != NULL; currentNode = (AudioDmaBuffer *)currentNode->link.next) {
+        tempValue = currentNode->startAddress;
         v1 = tempValue + gMaxVoices;
         tempValue = ((u32)alignedAddress) < tempValue;
         if (tempValue != 0) {
@@ -345,23 +295,23 @@ s32 loadAudioDataWithCache(s32 romAddr, s32 requestSize) {
 
         tempValue = v1 < requestSize;
         if (tempValue == 0) {
-            tempValue = currentNode->data;
+            tempValue = currentNode->startAddress;
             v1 = gCurrentFrame;
-            currentNode->timestamp = v1;
+            currentNode->lastFrameUsed = v1;
 
-            return osVirtualToPhysical((void *)(s32)currentNode->dest_ptr + alignedAddress - tempValue);
+            return osVirtualToPhysical((void *)(s32)currentNode->buffer + alignedAddress - tempValue);
         }
 
         previousNode = currentNode;
     }
 
-    currentNode = *((AudioNode **)(s32)(&D_800A6468_A7048));
+    currentNode = *((AudioDmaBuffer **)(s32)(&D_800A6468_A7048));
     if (currentNode == NULL) {
         return osVirtualToPhysical((void *)gActiveListHead);
     }
 
-    tempValue = (s32)currentNode->l.next;
-    *((AudioNode **)(s32)(&D_800A6468_A7048)) = (AudioNode *)tempValue;
+    tempValue = (s32)currentNode->link.next;
+    *((AudioDmaBuffer **)(s32)(&D_800A6468_A7048)) = (AudioDmaBuffer *)tempValue;
     alUnlink((ALLink *)currentNode);
 
     if (previousNode != NULL) {
@@ -371,25 +321,25 @@ s32 loadAudioDataWithCache(s32 romAddr, s32 requestSize) {
         if (tempPtr != NULL) {
             previousNode = tempPtr;
             gActiveListHead = currentNode;
-            currentNode->l.next = (ALLink *)previousNode;
-            currentNode->l.prev = NULL;
-            previousNode->l.prev = (ALLink *)currentNode;
+            currentNode->link.next = (ALLink *)previousNode;
+            currentNode->link.prev = NULL;
+            previousNode->link.prev = (ALLink *)currentNode;
         } else {
             gActiveListHead = currentNode;
-            currentNode->l.next = NULL;
-            currentNode->l.prev = NULL;
+            currentNode->link.next = NULL;
+            currentNode->link.prev = NULL;
         }
     }
 
     tempValue = gCurrentFrame;
     v1 = D_8009B034_9BC34;
     dmaMsg = gAudioDmaMessages;
-    previousNode = (AudioNode *)(alignedAddress & 1);
+    previousNode = (AudioDmaBuffer *)(alignedAddress & 1);
     alignmentOffset = (s32)previousNode;
     alignedAddress = alignedAddress - alignmentOffset;
-    currentNode->data = alignedAddress;
-    currentNode->timestamp = gCurrentFrame;
-    currentNode = (AudioNode *)currentNode->dest_ptr;
+    currentNode->startAddress = alignedAddress;
+    currentNode->lastFrameUsed = gCurrentFrame;
+    currentNode = (AudioDmaBuffer *)currentNode->buffer;
     tempValue = v1 + 1;
     D_8009B034_9BC34 = v1 + 1;
     tempValue = v1 << 1;
@@ -410,8 +360,8 @@ s32 loadAudioDataWithCache(s32 romAddr, s32 requestSize) {
 void *initAudioDriveAndGetLoader(void *arg0) {
     u8 *handle = &gDriveRomInitialized;
     if (handle[0] == 0) {
-        AudioNode *value = gAudioNodePool;
-        gActiveListHead = (AudioNode *)0;
+        AudioDmaBuffer *value = gAudioNodePool;
+        gActiveListHead = (AudioDmaBuffer *)0;
         handle[0] = TRUE;
         D_800A6468_A7048 = value;
     }
@@ -422,25 +372,25 @@ void *initAudioDriveAndGetLoader(void *arg0) {
 void processAudioNodeList(void) {
     void *message;
     u32 i;
-    AudioNode *new_var;
-    AudioNode *nextNode;
-    AudioNode *node;
-    AudioNode *headPtr;
+    AudioDmaBuffer *new_var;
+    AudioDmaBuffer *nextNode;
+    AudioDmaBuffer *node;
+    AudioDmaBuffer *headPtr;
 
     for (i = 0; i < D_8009B034_9BC34; i++) {
         osRecvMesg(&gAudioMsgQueue, &message, OS_MESG_NOBLOCK);
     }
 
-    headPtr = (AudioNode *)&gActiveListHead;
-    node = (AudioNode *)headPtr->l.next;
+    headPtr = (AudioDmaBuffer *)&gActiveListHead;
+    node = (AudioDmaBuffer *)headPtr->link.next;
     while (node != NULL) {
-        nextNode = (AudioNode *)node->l.next;
+        nextNode = (AudioDmaBuffer *)node->link.next;
         new_var = headPtr;
-        if ((node->timestamp + 1) >= gCurrentFrame) {
+        if ((node->lastFrameUsed + 1) >= gCurrentFrame) {
             node = nextNode;
         } else {
-            if (new_var->l.next == ((ALLink *)node)) {
-                new_var->l.next = (ALLink *)nextNode;
+            if (new_var->link.next == ((ALLink *)node)) {
+                new_var->link.next = (ALLink *)nextNode;
             }
 
             alUnlink((ALLink *)node);
@@ -449,12 +399,12 @@ void processAudioNodeList(void) {
             do {
             } while (0);
 
-            if (new_var->l.prev != NULL) {
-                alLink((ALLink *)node, new_var->l.prev);
+            if (new_var->link.prev != NULL) {
+                alLink((ALLink *)node, new_var->link.prev);
             } else {
-                new_var->l.prev = (ALLink *)node;
-                node->l.next = 0;
-                node->l.prev = 0;
+                new_var->link.prev = (ALLink *)node;
+                node->link.next = 0;
+                node->link.prev = 0;
             }
             node = nextNode;
         }

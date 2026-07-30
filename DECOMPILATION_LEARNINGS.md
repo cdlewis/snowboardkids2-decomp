@@ -576,3 +576,20 @@ The offset-based table consumed by `credits_subtitles.c` is specifically a subti
 entry contains a subtitle start frame, a command count, and a relative offset to its command bytes. Typing and
 naming that format around its sole consumer makes the schedule semantics explicit without introducing a second
 partial view of the credits task allocation.
+
+## Check Adjacent BSS Symbols for One Aggregate
+
+The audio command-list array at `0x800A8D90` and the former partial audio-manager object at `0x800A8D98` are one
+`AudioManager` workspace. The two command-list pointers are the first fields, followed by the audio-info ring,
+thread, retrace queue, and task-completion queue. Treating the latter fields as a separate object obscured why
+the completion queue was addressed as element `0x80` of the command-list symbol.
+
+When a field expression appears to index far beyond a small BSS array, inspect the immediately adjacent symbols
+before preserving the apparent alias. A shared aggregate can reveal the real field and remove manual-looking
+addressing. Preserve the aggregate's original start alignment and total byte size; here, one aligned `0x238`-byte
+definition generated the same BSS layout and restored the original KMC instruction that derives the completion
+queue from the already-loaded manager base.
+
+The audio task embedded at offset `0x08` of each `AudioInfo` is the SDK's canonical `OSTask`, not a game-specific
+copy of its sixteen fields. Embedding `OSTask` retains the exact offsets and code generation while giving its
+microcode, data, stack, output, and yield fields their standard names.

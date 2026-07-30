@@ -765,9 +765,9 @@ s32 MusInitialize(musConfig *config) {
     audioConfig.dmaproc = 0;
     audioConfig.outputRate = 0;
     audioConfig.heap = &audio_heap;
-    audioParams.syn_output_rate = config->syn_rsp_cmds;
-    audioParams.sample_rate = config->syn_num_dma_bufs;
-    audioParams.syn_rsp_cmds = config->syn_retraceCount;
+    audioParams.outputRate = config->syn_rsp_cmds;
+    audioParams.frameRateScale = config->syn_num_dma_bufs;
+    audioParams.commandListCapacity = config->syn_retraceCount;
 
     mus_last_fxtype = AL_FX_BIGROOM;
     initAudioManager(

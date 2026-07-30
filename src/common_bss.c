@@ -1,5 +1,6 @@
 #include "PR/libaudio.h"
 #include "PRinternal/osint.h"
+#include "audio/audio_manager.h"
 #include "common.h"
 #include "gbi.h"
 #include "math/geometry.h"
@@ -37,8 +38,7 @@ u8 __osContPifRam[0x40] __attribute__((aligned(16), section(".bss"))) = { 0 };
 OSMesg gSerialEventQueueMsg BSS = 0;
 void *EepromSaveData BSS = 0;
 OSPiHandle __Dom2SpeedParam __attribute__((section(".bss"), aligned(8))) = { 0 };
-OSMesg gAudioCmdBuffers[2] __attribute__((section(".bss"), aligned(8))) = { 0 };
-u8 gAudioManager[0x230] BSS = { 0 };
+AudioManager gAudioManager __attribute__((section(".bss"), aligned(8))) = { 0 };
 ALGlobals __libmus_alglobals BSS = { 0 };
 static u8 sCommonBssPad_800A9014[4] BSS_ALIGN(1) = { 0 };
 BootStack gConnectedControllerMask BSS_ALIGN(1) = { 0 };
