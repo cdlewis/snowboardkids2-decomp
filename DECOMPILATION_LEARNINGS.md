@@ -542,3 +542,17 @@ Argument signedness is similarly codegen-sensitive at call sites. For example, t
 to `setupAndEnqueueSprite` and the cutscene frame index must retain their signed types so callers emit the target
 sign-extension sequence. When factoring headers, derive prototypes from both the definition and caller
 assembly rather than widening small integer arguments to a convenient unsigned type.
+
+## Preserve Combined Halfword Views When Consolidating Byte Fields
+
+The credits task allocation uses several adjacent byte fields through both byte and halfword operations. The
+corner `TextRenderArg` color bytes at `0x0A` are initialized and faded with `sh`, while the renderer reads the
+alpha byte at `0x0B`. Likewise, subtitle style and alpha pairs at `0x978`, `0x97A`, `0x98C`, and `0x98E` are
+initialized with halfword stores but later consumed as individual bytes. Model these pairs with named unions
+that expose both the `s16` value and its high/low bytes; splitting them into standalone `u8` fields changes KMC
+stores and register allocation.
+
+Do not merge adjacent pointers merely because two partial allocation views gave them similar names. In
+`CreditsState`, `0x964` is the subtitle text table and `0x968` is the scrolling-credits text table. Keeping both
+typed and separately named made it possible to replace three padded state copies with one canonical layout
+without losing the distinction between their consumers.

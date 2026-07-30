@@ -966,7 +966,7 @@ void renderTextSprite(TextRenderArg *sprite) {
         (gfx + 2)->words.w0 = 0xFA000000;
 
         {
-            u8 alpha = sprite->alpha;
+            u8 alpha = sprite->color.components.alpha;
             u32 color = (alpha << 24) | (alpha << 16) | (alpha << 8) | 0xFF;
             (gfx + 2)->words.w1 = color;
         }
@@ -1125,7 +1125,7 @@ void renderTextSpriteWithTransparency(TextRenderArg *sprite) {
         (gfx + 3)->words.w0 = 0xFA000000;
 
         {
-            u8 alpha = sprite->alpha;
+            u8 alpha = sprite->color.components.alpha;
             u32 color = (alpha << 24) | (alpha << 16) | (alpha << 8) | sprite->transparency;
             (gfx + 3)->words.w1 = color;
         }
@@ -1439,7 +1439,7 @@ void renderAlphaBlendedTextSprite(TextRenderArg *sprite) {
         gDPPipeSync(gDisplayListAllocPtr++);
         gDPSetRenderMode(gDisplayListAllocPtr++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, 0xFF, 0xFF, 0xFF, sprite->alpha);
+        gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, 0xFF, 0xFF, 0xFF, sprite->color.components.alpha);
 
         gCachedPaletteAddr = (SpriteFrameEntry *)gDefaultFontPalette;
         if (format == 0) {

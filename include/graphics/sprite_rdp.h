@@ -31,8 +31,13 @@ typedef struct {
     /* 0x02 */ s16 y;
     /* 0x04 */ SpriteSheetData *spriteData;
     /* 0x08 */ u16 frameIndex;
-    /* 0x0A */ u8 paletteIndex;
-    /* 0x0B */ u8 alpha;
+    /* 0x0A */ union {
+        struct {
+            u8 paletteIndex;
+            u8 alpha;
+        } components;
+        u16 paletteAndAlpha;
+    } color;
     /* 0x0C */ u8 tileMode;
     /* 0x0D */ u8 overridePaletteCount;
     /* 0x0E */ u8 transparency;

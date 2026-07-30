@@ -42,12 +42,6 @@ typedef struct {
     s16 isCleanedUp;
 } CreditsCharacter;
 
-typedef struct {
-    u8 padding[0x2C];
-    s32 zPosition;
-    s32 zOffset;
-} CreditsModelPosition;
-
 static asset D_8008BFA0_8CBA0[6] = {
     { &CREDITS_TEXT_PALETTE_DATA_00_ROM_START, &CREDITS_TEXT_PALETTE_DATA_00_ROM_END, 0x9578 },
     { &CREDITS_TEXT_PALETTE_DATA_01_ROM_START, &CREDITS_TEXT_PALETTE_DATA_01_ROM_END, 0x9578 },
@@ -121,29 +115,34 @@ void spawnCreditsCharacter(CreditsState *);
 void initCreditsCharacter(CreditsCharacter *character);
 
 void initSceneLighting(CreditsState *arg0) {
-    arg0->unkE44[0].r2 = 0;
-    arg0->unkE44[0].g2 = 0x7F;
-    arg0->unkE44[0].r = 0xE0;
-    arg0->unkE44[0].b = 0xA0;
-    arg0->unkE44[0].g = 0xE0;
-    arg0->unkE44[1].r = 0x32;
-    arg0->unkE44[1].g = 0x32;
-    arg0->unkE44[1].b = 0x32;
-    arg0->unkE44[2].r2 = -0x7F;
-    arg0->unkE44[2].r = 0x65;
-    arg0->unkE44[2].g = 0x65;
-    arg0->unkE44[2].b = 0x65;
-    ((ColorData *)&arg0->paddingE5C[0])->r = 0x80;
-    ((ColorData *)&arg0->paddingE5C[0])->b = 0xA0;
-    arg0->unkE44[0].b2 = 0x7F;
-    arg0->unkE44[1].r2 = 0x7F;
-    arg0->unkE44[1].g2 = 0x7F;
-    arg0->unkE44[1].b2 = 0;
-    arg0->unkE44[2].g2 = 0x7F;
-    arg0->unkE44[2].b2 = 0;
-    ((ColorData *)&arg0->paddingE5C[0])->g = 0x90;
+    arg0->sceneLights[0].r2 = 0;
+    arg0->sceneLights[0].g2 = 0x7F;
+    arg0->sceneLights[0].r = 0xE0;
+    arg0->sceneLights[0].b = 0xA0;
+    arg0->sceneLights[0].g = 0xE0;
+    arg0->sceneLights[1].r = 0x32;
+    arg0->sceneLights[1].g = 0x32;
+    arg0->sceneLights[1].b = 0x32;
+    arg0->sceneLights[2].r2 = -0x7F;
+    arg0->sceneLights[2].r = 0x65;
+    arg0->sceneLights[2].g = 0x65;
+    arg0->sceneLights[2].b = 0x65;
+    arg0->ambientLightR = 0x80;
+    arg0->ambientLightB = 0xA0;
+    arg0->sceneLights[0].b2 = 0x7F;
+    arg0->sceneLights[1].r2 = 0x7F;
+    arg0->sceneLights[1].g2 = 0x7F;
+    arg0->sceneLights[1].b2 = 0;
+    arg0->sceneLights[2].g2 = 0x7F;
+    arg0->sceneLights[2].b2 = 0;
+    arg0->ambientLightG = 0x90;
 
-    setViewportLightColors(arg0->unk768.viewportId, 3, &arg0->unkE44[0], (ColorData *)&arg0->paddingE5C[0]);
+    setViewportLightColors(
+        arg0->characterViewport.viewportId,
+        3,
+        &arg0->sceneLights[0],
+        (ColorData *)&arg0->ambientLightR
+    );
 }
 
 void initCreditsController(void) {
@@ -155,57 +154,58 @@ void initCreditsController(void) {
 
     setupTaskSchedulerNodes(0x40, 0, 0, 0, 0, 0, 0, 0);
 
-    taskMemory->unk940 = -0x90;
-    taskMemory->unk942 = 0x68;
-    taskMemory->unkE40 = 0;
-    taskMemory->unkE42 = 0;
-    taskMemory->unk0 = 0;
+    taskMemory->sceneOriginX = -0x90;
+    taskMemory->sceneOriginY = 0x68;
+    taskMemory->nextCharacterConfigIndex = 0;
+    taskMemory->characterLaneIndex = 0;
+    taskMemory->initialized = 0;
     taskMemory->frameCounter = 0;
-    taskMemory->unk944 = 0;
-    taskMemory->unk948 = &taskMemory->unk94C;
-    taskMemory->unk94C = 0;
-    taskMemory->unk960 = loadTextRenderAsset(1);
-    taskMemory->unk964 = loadDmaAsset(1);
+    taskMemory->reserved944 = 0;
+    taskMemory->scratchBuffer = &taskMemory->scratchBufferStorage;
+    taskMemory->scratchBufferStorage = 0;
+    taskMemory->textRenderAsset = loadTextRenderAsset(1);
+    taskMemory->subtitleTextTable = loadDmaAsset(1);
 
-    taskMemory->unk968 = loadDmaAsset(3);
+    taskMemory->creditsTextTable = loadDmaAsset(3);
     taskMemory->cornerDecorationAsset =
         loadCompressedData(&cornerDecorationAsset_ROM_START, &cornerDecorationAsset_ROM_END, 0x2448);
-    taskMemory->unk95C = loadCompressedData(&CREDITS_SUBTITLE_DATA_ROM_START, &CREDITS_SUBTITLE_DATA_ROM_END, 0x2B0);
+    taskMemory->subtitleSchedule =
+        loadCompressedData(&CREDITS_SUBTITLE_DATA_ROM_START, &CREDITS_SUBTITLE_DATA_ROM_END, 0x2B0);
 
     for (i = 0; i < 6; i++) {
-        taskMemory->unk9B8[i] =
+        taskMemory->paletteDataTables[i] =
             loadCompressedData(D_8008BFA0_8CBA0[i].start, D_8008BFA0_8CBA0[i].end, D_8008BFA0_8CBA0[i].size);
     }
 
-    initViewportNode(&taskMemory->unk8, 0, 0, 0xB, 0);
-    setViewportScale(&taskMemory->unk8, 1.0f, 1.0f);
-    setModelCameraTransform(&taskMemory->unk8, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    setViewportId(&taskMemory->unk8, 1);
-    initViewportNode(&taskMemory->unk1E0, 0, 1, 0xC, 0);
-    setViewportScale(&taskMemory->unk1E0, 1.0f, 1.0f);
-    setViewportId(&taskMemory->unk1E0, 1);
-    setModelCameraTransform(&taskMemory->unk1E0, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    initViewportNode(&taskMemory->unk3B8, 0, 2, 0xB, 0);
-    setViewportScale(&taskMemory->unk3B8, 1.0f, 1.0f);
-    setViewportId(&taskMemory->unk3B8, 1);
-    setModelCameraTransform(&taskMemory->unk3B8, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    initViewportNode(&taskMemory->unk590, 0, 3, 0xB, 0);
-    setViewportScale(&taskMemory->unk590, 1.0f, 1.0f);
-    setModelCameraTransform(&taskMemory->unk590, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    setViewportId(&taskMemory->unk590, 1);
-    initViewportNode(&taskMemory->unk768, 0, 4, 0xD, 1);
-    setViewportScale(&taskMemory->unk768, 1.0f, 1.0f);
-    setModelCameraTransform(&taskMemory->unk768, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    setViewportId(&taskMemory->unk768, 1);
-    setViewportPerspective(&taskMemory->unk768, 40.0f, 1.3333334f, 10.0f, 10000.0f);
+    initViewportNode(&taskMemory->backgroundViewport, 0, 0, 0xB, 0);
+    setViewportScale(&taskMemory->backgroundViewport, 1.0f, 1.0f);
+    setModelCameraTransform(&taskMemory->backgroundViewport, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    setViewportId(&taskMemory->backgroundViewport, 1);
+    initViewportNode(&taskMemory->textViewport, 0, 1, 0xC, 0);
+    setViewportScale(&taskMemory->textViewport, 1.0f, 1.0f);
+    setViewportId(&taskMemory->textViewport, 1);
+    setModelCameraTransform(&taskMemory->textViewport, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    initViewportNode(&taskMemory->subtitleShadowViewport, 0, 2, 0xB, 0);
+    setViewportScale(&taskMemory->subtitleShadowViewport, 1.0f, 1.0f);
+    setViewportId(&taskMemory->subtitleShadowViewport, 1);
+    setModelCameraTransform(&taskMemory->subtitleShadowViewport, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    initViewportNode(&taskMemory->subtitleViewport, 0, 3, 0xB, 0);
+    setViewportScale(&taskMemory->subtitleViewport, 1.0f, 1.0f);
+    setModelCameraTransform(&taskMemory->subtitleViewport, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    setViewportId(&taskMemory->subtitleViewport, 1);
+    initViewportNode(&taskMemory->characterViewport, 0, 4, 0xD, 1);
+    setViewportScale(&taskMemory->characterViewport, 1.0f, 1.0f);
+    setModelCameraTransform(&taskMemory->characterViewport, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
+    setViewportId(&taskMemory->characterViewport, 1);
+    setViewportPerspective(&taskMemory->characterViewport, 40.0f, 1.3333334f, 10.0f, 10000.0f);
     createViewportTransform(buffer, 0, 0, 0x01400000, 0, 0, 0);
-    setViewportTransformById(taskMemory->unk768.viewportId, buffer);
-    setViewportEnvColor(&taskMemory->unk8, 0, 0, 0);
-    setViewportFadeValue(&taskMemory->unk8, 0, 0);
-    setViewportFadeValue(&taskMemory->unk1E0, 0, 0);
-    setViewportFadeValue(&taskMemory->unk3B8, 0, 0);
-    setViewportFadeValue(&taskMemory->unk590, 0, 0);
-    setViewportFadeValue(&taskMemory->unk768, 0, 0);
+    setViewportTransformById(taskMemory->characterViewport.viewportId, buffer);
+    setViewportEnvColor(&taskMemory->backgroundViewport, 0, 0, 0);
+    setViewportFadeValue(&taskMemory->backgroundViewport, 0, 0);
+    setViewportFadeValue(&taskMemory->textViewport, 0, 0);
+    setViewportFadeValue(&taskMemory->subtitleShadowViewport, 0, 0);
+    setViewportFadeValue(&taskMemory->subtitleViewport, 0, 0);
+    setViewportFadeValue(&taskMemory->characterViewport, 0, 0);
     playMusicTrackWithFadeIn(0xB, 0x80, 0);
     initSceneLighting(taskMemory);
     setGameStateHandler(&updateCreditsSequence);
@@ -219,22 +219,22 @@ void updateCreditsSequence(void) {
     if (state->frameCounter == 0x1C98) {
         state->frameCounter = 0x1C98;
         setMusicFadeOut(4);
-        setViewportFadeValue(&state->unk8, 0xFF, 0x1E);
-        setViewportFadeValue(&state->unk1E0, 0xFF, 0x1E);
-        setViewportFadeValue(&state->unk3B8, 0xFF, 0x1E);
-        setViewportFadeValue(&state->unk590, 0xFF, 0x1E);
-        setViewportFadeValue(&state->unk768, 0xFF, 0x1E);
+        setViewportFadeValue(&state->backgroundViewport, 0xFF, 0x1E);
+        setViewportFadeValue(&state->textViewport, 0xFF, 0x1E);
+        setViewportFadeValue(&state->subtitleShadowViewport, 0xFF, 0x1E);
+        setViewportFadeValue(&state->subtitleViewport, 0xFF, 0x1E);
+        setViewportFadeValue(&state->characterViewport, 0xFF, 0x1E);
         setGameStateHandler(fadeOutCreditsSequence);
     }
 
-    if (state->unk0 == 0) {
+    if (state->initialized == 0) {
         initCreditsSubtitles(state);
         initCreditsScrollingTextEffects(state);
         initCreditsCornerDecorationSprites(state);
-        state->unk0 = 1;
+        state->initialized = 1;
     }
 
-    updateCreditsScrollingTextEffects((CreditsScrollerState *)state);
+    updateCreditsScrollingTextEffects(state);
     updateCreditsCornerDecorationSprites(state);
     spawnCreditsCharacter(state);
 
@@ -248,22 +248,22 @@ void fadeOutCreditsSequence(void) {
     state = (CreditsState *)getCurrentAllocation();
 
     if (state->frameCounter == 0x1CB8) {
-        unlinkNode(&state->unk768);
-        unlinkNode(&state->unk590);
-        unlinkNode(&state->unk3B8);
-        unlinkNode(&state->unk1E0);
-        unlinkNode(&state->unk8);
-        state->unk95C = freeNodeMemory(state->unk95C);
-        state->unk968 = freeNodeMemory(state->unk968);
-        state->unk964 = freeNodeMemory(state->unk964);
-        state->unk960 = freeNodeMemory(state->unk960);
+        unlinkNode(&state->characterViewport);
+        unlinkNode(&state->subtitleViewport);
+        unlinkNode(&state->subtitleShadowViewport);
+        unlinkNode(&state->textViewport);
+        unlinkNode(&state->backgroundViewport);
+        state->subtitleSchedule = freeNodeMemory(state->subtitleSchedule);
+        state->creditsTextTable = freeNodeMemory(state->creditsTextTable);
+        state->subtitleTextTable = freeNodeMemory(state->subtitleTextTable);
+        state->textRenderAsset = freeNodeMemory(state->textRenderAsset);
         state->cornerDecorationAsset = freeNodeMemory(state->cornerDecorationAsset);
         for (i = 0; i < 6; i++) {
-            state->unk9B8[i] = freeNodeMemory(state->unk9B8[i]);
+            state->paletteDataTables[i] = freeNodeMemory(state->paletteDataTables[i]);
         }
         terminateSchedulerWithCallback(onCreditsComplete);
     } else {
-        updateCreditsScrollingTextEffects((CreditsScrollerState *)state);
+        updateCreditsScrollingTextEffects(state);
         updateCreditsCornerDecorationSprites(state);
         spawnCreditsCharacter(state);
         state->frameCounter = (u16)state->frameCounter + 1;
@@ -284,27 +284,27 @@ void spawnCreditsCharacter(CreditsState *arg0) {
 
     temp_a0 = arg0->frameCounter;
     if ((u32)(temp_a0 - 0x12C) >= 0x1717U) {
-        arg0->unkE60 = 0x12C;
+        arg0->nextCharacterSpawnFrame = 0x12C;
         return;
     }
-    if ((s16)temp_a0 == arg0->unkE60) {
-        if (arg0->unkE40 >= (s16)D_8008C11C_8CD1C.unk0) {
-            temp_a0_2 = arg0->unkE42;
-            arg0->unkE40 = 0;
+    if ((s16)temp_a0 == arg0->nextCharacterSpawnFrame) {
+        if (arg0->nextCharacterConfigIndex >= (s16)D_8008C11C_8CD1C.unk0) {
+            temp_a0_2 = arg0->characterLaneIndex;
+            arg0->nextCharacterConfigIndex = 0;
             temp_v1 = temp_a0_2 + 1;
             var_v0 = temp_v1;
             if (temp_v1 < 0) {
                 var_v0 = temp_a0_2 + 4;
             }
-            arg0->unkE42 = temp_v1 - ((var_v0 >> 2) * 4);
+            arg0->characterLaneIndex = temp_v1 - ((var_v0 >> 2) * 4);
         }
         temp_v0 = scheduleTask(initCreditsCharacter, 0, 0, 0);
         if (temp_v0 != NULL) {
-            temp_v0->configIndex = arg0->unkE40;
-            *(s16 *)&temp_v0->unk8 = arg0->unkE42;
+            temp_v0->configIndex = arg0->nextCharacterConfigIndex;
+            *(s16 *)&temp_v0->unk8 = arg0->characterLaneIndex;
         }
-        arg0->unkE40 = arg0->unkE40 + 1;
-        arg0->unkE60 = arg0->frameCounter + 0x3D;
+        arg0->nextCharacterConfigIndex = arg0->nextCharacterConfigIndex + 1;
+        arg0->nextCharacterSpawnFrame = arg0->frameCounter + 0x3D;
     }
 }
 
@@ -321,7 +321,15 @@ void initCreditsCharacter(CreditsCharacter *character) {
 
     character->model = allocateNodeMemory(0x160);
 
-    initializeGameEntity(character->model, config->modelId, &creditsState->unk768, character->direction, -1, -1, -1);
+    initializeGameEntity(
+        character->model,
+        config->modelId,
+        &creditsState->characterViewport,
+        character->direction,
+        -1,
+        -1,
+        -1
+    );
 
     memcpy((void *)((u8 *)character->model + 0x18), &identityMatrix, sizeof(Transform3D));
 
@@ -330,8 +338,8 @@ void initCreditsCharacter(CreditsCharacter *character) {
     scale = config->scale;
     scaleMatrix((Transform3D *)((u8 *)character->model + 0x18), scale, scale, scale);
 
-    ((CreditsModelPosition *)character->model)->zPosition = creditsCharacterStartDepth;
-    ((CreditsModelPosition *)character->model)->zOffset += config->depthOffset;
+    character->model->matrix18.translation.x = creditsCharacterStartDepth;
+    character->model->matrix18.translation.y += config->depthOffset;
 
     setModelActionMode(character->model, config->actionMode);
 
@@ -350,7 +358,7 @@ void initCreditsCharacter(CreditsCharacter *character) {
         );
     }
 
-    setViewportTransformById(creditsState->unk768.viewportId, cameraTransform);
+    setViewportTransformById(creditsState->characterViewport.viewportId, cameraTransform);
 
     setCleanupCallback(cleanupCreditsCharacter);
     setCallback(updateCreditsCharacter);
@@ -385,9 +393,9 @@ void updateCreditsCharacter(CreditsCharacter *character) {
             break;
     }
 
-    ((CreditsModelPosition *)character->model)->zPosition -= creditsCharacterScrollSpeed;
+    character->model->matrix18.translation.x -= creditsCharacterScrollSpeed;
 
-    if (((CreditsModelPosition *)character->model)->zPosition < -creditsCharacterStartDepth) {
+    if (character->model->matrix18.translation.x < -creditsCharacterStartDepth) {
         cleanupSceneModel(character->model);
         character->isCleanedUp = 1;
         terminateCurrentTask();

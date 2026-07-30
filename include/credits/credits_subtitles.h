@@ -1,5 +1,6 @@
 #pragma once
 
-#include "common.h"
+#include "credits/credits_state.h"
 
-void initCreditsSubtitles(void *arg0);
+void initCreditsSubtitles(CreditsState *state);
+void updateCreditsSubtitles(CreditsState *state);

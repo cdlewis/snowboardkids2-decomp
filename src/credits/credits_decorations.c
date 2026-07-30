@@ -21,40 +21,40 @@ void initCreditsCornerDecorationSprites(CreditsState *arg0) {
     alpha = 0xFF;
 
     do {
-        state->leftBottomCornerSprite.spriteIndex = 1;
-        state->rightTopCornerSprite.spriteIndex = 2;
+        state->leftBottomCornerSprite.frameIndex = 1;
+        state->rightTopCornerSprite.frameIndex = 2;
         state->leftCornerAlpha = 0;
         state->leftCornerFadeSpeed = 0;
         state->rightCornerAlpha = 0;
         state->rightCornerFadeSpeed = 0;
         state->leftTopCornerSprite.x = spriteX;
         state->leftTopCornerSprite.y = topSpriteY;
-        state->leftTopCornerSprite.spriteIndex = 0;
-        state->leftTopCornerSprite.alpha = alpha;
-        state->leftTopCornerSprite.unkC = 0;
-        state->leftTopCornerSprite.unkD = 0;
+        state->leftTopCornerSprite.frameIndex = 0;
+        state->leftTopCornerSprite.color.paletteAndAlpha = alpha;
+        state->leftTopCornerSprite.tileMode = 0;
+        state->leftTopCornerSprite.overridePaletteCount = 0;
         state->leftBottomCornerSprite.x = spriteX;
         state->leftBottomCornerSprite.y = 0;
-        state->leftBottomCornerSprite.alpha = alpha;
-        state->leftBottomCornerSprite.unkC = 0;
-        state->leftBottomCornerSprite.unkD = 0;
+        state->leftBottomCornerSprite.color.paletteAndAlpha = alpha;
+        state->leftBottomCornerSprite.tileMode = 0;
+        state->leftBottomCornerSprite.overridePaletteCount = 0;
         state->rightTopCornerSprite.x = spriteX;
         state->rightTopCornerSprite.y = topSpriteY;
-        state->rightTopCornerSprite.alpha = alpha;
-        state->rightTopCornerSprite.unkC = 0;
-        state->rightTopCornerSprite.unkD = 0;
+        state->rightTopCornerSprite.color.paletteAndAlpha = alpha;
+        state->rightTopCornerSprite.tileMode = 0;
+        state->rightTopCornerSprite.overridePaletteCount = 0;
         state->rightBottomCornerSprite.x = spriteX;
         state->rightBottomCornerSprite.y = 0;
-        state->rightBottomCornerSprite.spriteIndex = 3;
-        state->leftTopCornerSprite.asset = asset0;
-        state->leftBottomCornerSprite.asset = asset1;
-        state->rightTopCornerSprite.asset = asset2;
+        state->rightBottomCornerSprite.frameIndex = 3;
+        state->leftTopCornerSprite.spriteData = asset0;
+        state->leftBottomCornerSprite.spriteData = asset1;
+        state->rightTopCornerSprite.spriteData = asset2;
     } while (0);
 
-    state->rightBottomCornerSprite.asset = asset3;
-    state->rightBottomCornerSprite.alpha = alpha;
-    state->rightBottomCornerSprite.unkC = 0;
-    state->rightBottomCornerSprite.unkD = 0;
+    state->rightBottomCornerSprite.spriteData = asset3;
+    state->rightBottomCornerSprite.color.paletteAndAlpha = alpha;
+    state->rightBottomCornerSprite.tileMode = 0;
+    state->rightBottomCornerSprite.overridePaletteCount = 0;
 }
 
 void updateCreditsCornerDecorationSprites(CreditsState *state) {
@@ -104,8 +104,8 @@ void updateCreditsCornerDecorationSprites(CreditsState *state) {
     if (temp_v0 != 0) {
         s16 shortVal = temp_v0 >> 16;
         void *callback = renderTextSprite;
-        state->leftBottomCornerSprite.alpha = shortVal;
-        state->leftTopCornerSprite.alpha = shortVal;
+        state->leftBottomCornerSprite.color.paletteAndAlpha = shortVal;
+        state->leftTopCornerSprite.color.paletteAndAlpha = shortVal;
         enqueueCallbackBySlotIndex(1, 4, callback, &state->leftTopCornerSprite);
         enqueueCallbackBySlotIndex(1, 4, callback, &state->leftBottomCornerSprite);
     }
@@ -114,8 +114,8 @@ void updateCreditsCornerDecorationSprites(CreditsState *state) {
     if (temp_v0 != 0) {
         s16 shortVal = temp_v0 >> 16;
         void *callback = renderTextSprite;
-        state->rightBottomCornerSprite.alpha = shortVal;
-        state->rightTopCornerSprite.alpha = shortVal;
+        state->rightBottomCornerSprite.color.paletteAndAlpha = shortVal;
+        state->rightTopCornerSprite.color.paletteAndAlpha = shortVal;
         enqueueCallbackBySlotIndex(1, 4, callback, &state->rightTopCornerSprite);
         enqueueCallbackBySlotIndex(1, 4, callback, &state->rightBottomCornerSprite);
     }

@@ -65,45 +65,44 @@ s32 overlayFadeSpeeds[] = { 0xFFFA4FA5, 0x0005B05B };
 
 s32 textFadeSpeeds[] = { 0xFFEEEEEF, 0x00111111, 0x00000000, 0x00000000 };
 
-void initCreditsScrollingTextEffects(void *state) {
-    CreditsScrollerState *s = (CreditsScrollerState *)state;
+void initCreditsScrollingTextEffects(CreditsState *s) {
     s32 i;
-    void *textData;
+    void *creditsText;
     s16 yOffset;
 
-    s->currentDataIndex = 0;
-    s->commandIndex = 0;
     s->currentPaletteIndex = 0;
+    s->commandIndex = 0;
+    s->currentPaletteAlpha = 0;
     s->nextCommandFrame = 0;
     s->paletteChangePending = 0;
 
     for (i = 0; i < 0x12; i++) {
-        s->textEntriesA[i].unk0 = 0;
+        s->textEntriesA[i].x = 0;
         s->textEntriesA[i].y = -0x60 + i * 8;
-        s->textEntriesA[i].dataTable = s->paletteDataTable[s->currentDataIndex];
+        s->textEntriesA[i].dataTable = s->paletteDataTables[s->currentPaletteIndex];
         s->textEntriesA[i].index = i;
         s->textEntriesA[i].height = 0x400;
         s->textEntriesA[i].width = 0x400;
-        s->textEntriesA[i].unkE = 0;
+        s->textEntriesA[i].rotation = 0;
         s->textEntriesA[i].alpha = 0xFF;
-        s->textEntriesA[i].unk12 = 0;
+        s->textEntriesA[i].shade = 0;
         s->textEntriesA[i].flags = 0;
         s->textEntriesA[i].opacity = 0;
-        s->textEntriesB[i].unk0 = 0;
+        s->textEntriesB[i].x = 0;
         s->textEntriesB[i].y = -0x60 + i * 8;
-        s->textEntriesB[i].dataTable = s->paletteDataTable[s->currentDataIndex];
+        s->textEntriesB[i].dataTable = s->paletteDataTables[s->currentPaletteIndex];
         s->textEntriesB[i].index = i;
         s->textEntriesB[i].height = 0x400;
         s->textEntriesB[i].width = 0x400;
-        s->textEntriesB[i].unkE = 0;
+        s->textEntriesB[i].rotation = 0;
         s->textEntriesB[i].alpha = 0x64;
-        s->textEntriesB[i].unk12 = 0;
+        s->textEntriesB[i].shade = 0;
         s->textEntriesB[i].flags = 0x11;
         s->textEntriesB[i].opacity = 0;
     }
 
     for (i = 0; i < 6; i++) {
-        initPaletteContext(&s->paletteContexts[i], s->paletteDataTable[i]);
+        initPaletteContext(&s->paletteContexts[i], s->paletteDataTables[i]);
         applyPaletteShift(&s->paletteContexts[i], 0xF00000, 0xB80000, 0x800000, 0x640000);
     }
 
@@ -115,15 +114,15 @@ void initCreditsScrollingTextEffects(void *state) {
     s->textChangePending = 0;
 
     for (i = 0; i < 8; i++) {
-        textData = getTable2DEntry(s->textTable, s->textRowIndex, 0);
-        s->textData[i] = textData;
-        s->textXOffset[i] = -(getMaxLinePixelWidth(textData) / 2);
-        s->textYOffset[i] = -0x18;
-        s->textScrollOffset[i] = 0;
+        creditsText = getTable2DEntry(s->creditsTextTable, s->textRowIndex, 0);
+        s->creditsText[i] = creditsText;
+        s->textXOffsets[i] = -(getMaxLinePixelWidth(creditsText) / 2);
+        s->textYOffsets[i] = -0x18;
+        s->textScrollOffsets[i] = 0;
     }
 }
 
-void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
+void updateCreditsScrollingTextEffects(CreditsState *s) {
     s32 showPalette;
     s32 i;
     s32 scaledAlpha;
@@ -141,7 +140,7 @@ void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
         cmd = &creditsCommands[s->commandIndex];
         switch (cmd->command) {
             case 0:
-                s->currentDataIndex = (s8)cmd->param;
+                s->currentPaletteIndex = (s8)cmd->param;
                 s->paletteChangePending = 1;
                 s->paletteFadeSpeed = paletteFadeSpeeds[0];
                 break;
@@ -172,16 +171,16 @@ void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
     }
 
     do {
-        s32 alphaSum = s->currentPaletteIndex + s->paletteFadeSpeed;
-        s->currentPaletteIndex = alphaSum;
+        s32 alphaSum = s->currentPaletteAlpha + s->paletteFadeSpeed;
+        s->currentPaletteAlpha = alphaSum;
         if (alphaSum > 0xFF0000) {
-            s->currentPaletteIndex = 0xFF0000;
+            s->currentPaletteAlpha = 0xFF0000;
         } else if (alphaSum < 0) {
-            s->currentPaletteIndex = 0;
+            s->currentPaletteAlpha = 0;
             if (s->paletteChangePending != 0) {
                 for (i = 0; i < 0x12; i++) {
-                    s->textEntriesA[i].dataTable = s->paletteDataTable[s->currentDataIndex];
-                    s->textEntriesB[i].dataTable = s->paletteDataTable[s->currentDataIndex];
+                    s->textEntriesA[i].dataTable = s->paletteDataTables[s->currentPaletteIndex];
+                    s->textEntriesB[i].dataTable = s->paletteDataTables[s->currentPaletteIndex];
                 }
                 s->paletteFadeSpeed = paletteFadeSpeeds[1];
                 s->paletteChangePending = 0;
@@ -191,7 +190,7 @@ void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
         }
     } while (0);
 
-    if (s->currentPaletteIndex >> 16) {
+    if (s->currentPaletteAlpha >> 16) {
         s->overlayAlpha += s->overlayAlphaSpeed;
         if (s->overlayAlpha > 0xFF0000) {
             s->overlayAlpha = 0xFF0000;
@@ -201,7 +200,7 @@ void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
         }
 
         if (s->overlayAlpha != 0) {
-            scaledAlpha = (((s->currentPaletteIndex >> 16) * (s->overlayAlpha >> 8)) / 255) << 8;
+            scaledAlpha = (((s->currentPaletteAlpha >> 16) * (s->overlayAlpha >> 8)) / 255) << 8;
             if (scaledAlpha > 0xFF0000) {
                 scaledAlpha = 0xFF0000;
             }
@@ -219,7 +218,7 @@ void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
                 }
             }
             if (showPalette != 0) {
-                s->textEntriesA[i].opacity = s->currentPaletteIndex >> 16;
+                s->textEntriesA[i].opacity = s->currentPaletteAlpha >> 16;
                 enqueueCallbackBySlotIndex(0, 2, renderScaledAlphaSpriteFrame, &s->textEntriesA[i]);
             }
         }
@@ -234,13 +233,13 @@ void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
             s->textAlpha = 0;
             if (s->textChangePending != 0) {
                 for (i = 0, yAccum = -0x18; i < 8; i++) {
-                    s->textData[i] = getTable2DEntry(s->textTable, s->textRowIndex, i);
-                    if (!s->textData[i]) {
+                    s->creditsText[i] = getTable2DEntry(s->creditsTextTable, s->textRowIndex, i);
+                    if (!s->creditsText[i]) {
                         break;
                     }
-                    s->textXOffset[i] = -(getMaxLinePixelWidth(s->textData[i]) / 2);
-                    height = getTable2DRowCount(s->textTable, s->textRowIndex, i) * 8 + 8;
-                    s->textYOffset[i] = (yAccum + (i * 0x10)) - height;
+                    s->textXOffsets[i] = -(getMaxLinePixelWidth(s->creditsText[i]) / 2);
+                    height = getTable2DRowCount(s->creditsTextTable, s->textRowIndex, i) * 8 + 8;
+                    s->textYOffsets[i] = (yAccum + (i * 0x10)) - height;
                     s->textFadeSpeed = paletteFadeSpeeds[1];
                 }
                 s->textChangePending = 0;
@@ -250,14 +249,14 @@ void updateCreditsScrollingTextEffects(CreditsScrollerState *s) {
 
     if (s->textAlpha >> 16) {
         for (i = 0; i < 8; i++) {
-            if (s->textData[i] == NULL) {
+            if (s->creditsText[i] == NULL) {
                 break;
             }
             enqueueTextLayout(
-                s->textAsset,
-                s->textData[i],
-                s->textXOffset[i],
-                s->textYOffset[i],
+                s->textRenderAsset,
+                s->creditsText[i],
+                s->textXOffsets[i],
+                s->textYOffsets[i],
                 0xFF,
                 s->textAlpha >> 16,
                 0,
