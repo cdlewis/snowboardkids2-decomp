@@ -650,3 +650,10 @@ allocation is the race `GameState`. Compare every exposed offset with `GameState
 The Shoot Cross target pointer at offset `0x24`, player array at `0x10`, and hit counter at `0x5A` all belong to
 one `GameState`; adding the missing target pointer to the shared definition removed two partial copies and
 revealed that the apparent projectile hit counter was the race-wide Shoot Cross score.
+
+Jingle Town's train allocation view likewise mapped directly to `GameState.gameData` at `0x30`,
+`memoryPoolId` at `0x5C`, and `gamePaused` at `0x76`. Using the complete game state preserved code generation
+and showed that the train's former `unk56` is its current track sector. Its cleanup view was also just the
+`DisplayListObject` prefix of the train task: offsets `0x24` and `0x28` are the standard `segment1` and
+`segment2` asset pointers. Check both the active allocation and embedded renderer prefixes before retaining a
+padded one-function struct.
