@@ -581,6 +581,12 @@ entry contains a subtitle start frame, a command count, and a relative offset to
 naming that format around its sole consumer makes the schedule semantics explicit without introducing a second
 partial view of the credits task allocation.
 
+The training instruction panel has the same mixed-width pattern at offsets `0x14` and `0x16`: each color
+component is animated with signed halfword operations, while rendering reads its low byte on the big-endian
+target. A signed-halfword/byte union preserves both access widths and reveals that the old `scale` byte was
+actually the high byte of the panel's green component. This also allowed the initialization and runtime
+partial structs to collapse into one canonical task state without changing code generation.
+
 ## Check Adjacent BSS Symbols for One Aggregate
 
 The audio command-list array at `0x800A8D90` and the former partial audio-manager object at `0x800A8D98` are one

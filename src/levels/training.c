@@ -1,3 +1,4 @@
+#include "levels/training.h"
 #include "assets.h"
 #include "audio/audio.h"
 #include "common.h"
@@ -46,28 +47,6 @@ s8 D_800BCB84_B7464[];
 s8 D_800BCB88_B7468[];
 s8 D_800BCB8C_B746C[];
 s8 D_800BCB90_B7470[];
-
-typedef struct {
-    void *uiAsset;
-    void *textRenderContext;
-    void *messageData;
-    s16 panelIndex;
-} TrainingInstructionState;
-
-typedef struct {
-    void *uiAsset;
-    void *textRenderContext;
-    s32 *messageData;
-    s16 panelIndex;
-    s16 messageIndex;
-    s16 panelWidth;
-    s16 panelHeight;
-    s16 alphaColor;
-    u8 scale;
-    u8 colorIndex;
-} TrainingInstructionRuntimeState;
-
-#define GET_ALPHA_COLOR_HIGH_BYTE(arg0) (((u8 *)&(arg0)->alphaColor)[1])
 
 /* Data segment - pointer table */
 u8 *trainingInstructionPromptTexts[] = {
@@ -175,29 +154,29 @@ s8 *s_trainingPanelMessageTables[] = {
     NULL,
 };
 
-void shrinkTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0);
-void cleanupTrainingInstructionTask(TrainingInstructionState *arg0);
-void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0);
-void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0);
-void expandTrainingInstructionPanelHeight(TrainingInstructionRuntimeState *arg0);
-void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *arg0);
-void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionRuntimeState *arg0);
+void shrinkTrainingInstructionPanelWidth(TrainingInstructionTask *arg0);
+void cleanupTrainingInstructionTask(TrainingInstructionTask *arg0);
+void checkTrainingInstructionCheckpoint(TrainingInstructionTask *arg0);
+void expandTrainingInstructionPanelWidth(TrainingInstructionTask *arg0);
+void expandTrainingInstructionPanelHeight(TrainingInstructionTask *arg0);
+void displayTrainingInstructionAndWaitForInput(TrainingInstructionTask *arg0);
+void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionTask *arg0);
 
-void initTrainingInstructionTask(TrainingInstructionState *arg0) {
+void initTrainingInstructionTask(TrainingInstructionTask *arg0) {
     getCurrentAllocation();
-    arg0->textRenderContext = loadTextRenderAsset(1);
-    arg0->uiAsset = loadAsset_34F7E0();
+    arg0->textRenderAsset = loadTextRenderAsset(1);
+    arg0->panelSpriteAsset = loadAsset_34F7E0();
     arg0->messageData = loadCompressedData(&trainingMessageData_ROM_START, &trainingMessageData_ROM_END, 0x1130);
-    arg0->panelIndex = 0;
+    arg0->instructionIndex = 0;
     setCleanupCallback(cleanupTrainingInstructionTask);
     setCallback(checkTrainingInstructionCheckpoint);
 }
 
-void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0) {
+void checkTrainingInstructionCheckpoint(TrainingInstructionTask *arg0) {
     GameState *state = getCurrentAllocation();
 
     if (state->gamePaused == 0) {
-        switch (arg0->panelIndex) {
+        switch (arg0->instructionIndex) {
             case 0:
                 if (state->raceIntroState != 0) {
                     break;
@@ -271,23 +250,23 @@ void checkTrainingInstructionCheckpoint(TrainingInstructionRuntimeState *arg0) {
                 playSoundEffect(0x2C);
                 arg0->panelWidth = 1;
                 arg0->panelHeight = 1;
-                arg0->alphaColor = 0xF0;
+                arg0->panelRed.value = 0xF0;
                 arg0->messageIndex = 0;
-                *(s16 *)&arg0->scale = 0xC0;
+                arg0->panelGreen.value = 0xC0;
                 setCallback(expandTrainingInstructionPanelWidth);
                 break;
         }
     }
 }
 
-void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) {
+void expandTrainingInstructionPanelWidth(TrainingInstructionTask *arg0) {
     s16 width;
     s16 height;
 
     arg0->panelWidth += 2;
 
-    if (arg0->alphaColor != 0x40) {
-        arg0->alphaColor -= 0x10;
+    if (arg0->panelRed.value != 0x40) {
+        arg0->panelRed.value -= 0x10;
     }
 
     if (arg0->panelWidth == 0xD) {
@@ -298,25 +277,25 @@ void expandTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) 
     height = arg0->panelHeight;
 
     renderTiledSprite3x3(
-        arg0->uiAsset,
+        arg0->panelSpriteAsset,
         ((-width) << 19) >> 16,
         ((-height) << 19) >> 16,
         width,
         height,
         0,
-        GET_ALPHA_COLOR_HIGH_BYTE(arg0),
-        arg0->colorIndex,
+        arg0->panelRed.bytes.low,
+        arg0->panelGreen.bytes.low,
         0xC,
         0x6
     );
 }
 
-void shrinkTrainingInstructionPanelForNextMessage(TrainingInstructionRuntimeState *arg0) {
+void shrinkTrainingInstructionPanelForNextMessage(TrainingInstructionTask *arg0) {
     s16 width;
     s16 height;
 
     arg0->panelHeight--;
-    arg0->alphaColor += 0x10;
+    arg0->panelRed.value += 0x10;
 
     if (arg0->panelHeight == 1) {
         setCallback(expandTrainingInstructionPanelHeight);
@@ -326,27 +305,27 @@ void shrinkTrainingInstructionPanelForNextMessage(TrainingInstructionRuntimeStat
     height = arg0->panelHeight;
 
     renderTiledSprite3x3(
-        arg0->uiAsset,
+        arg0->panelSpriteAsset,
         ((-width) << 19) >> 16,
         ((-height) << 19) >> 16,
         width,
         height,
         0,
-        (u8)arg0->alphaColor,
-        arg0->colorIndex,
+        arg0->panelRed.bytes.low,
+        arg0->panelGreen.bytes.low,
         0xC,
         0x6
     );
 }
 
-void expandTrainingInstructionPanelHeight(TrainingInstructionRuntimeState *arg0) {
+void expandTrainingInstructionPanelHeight(TrainingInstructionTask *arg0) {
     s16 width;
     s16 height;
 
     arg0->panelHeight++;
 
-    if (arg0->alphaColor != 0x40) {
-        arg0->alphaColor -= 0x10;
+    if (arg0->panelRed.value != 0x40) {
+        arg0->panelRed.value -= 0x10;
     }
 
     if (arg0->panelHeight == 6) {
@@ -357,20 +336,20 @@ void expandTrainingInstructionPanelHeight(TrainingInstructionRuntimeState *arg0)
     height = arg0->panelHeight;
 
     renderTiledSprite3x3(
-        arg0->uiAsset,
+        arg0->panelSpriteAsset,
         ((-width) << 19) >> 16,
         ((-height) << 19) >> 16,
         width,
         height,
         0,
-        GET_ALPHA_COLOR_HIGH_BYTE(arg0),
-        arg0->colorIndex,
+        arg0->panelRed.bytes.low,
+        arg0->panelGreen.bytes.low,
         0xC,
         0x6
     );
 }
 
-void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *arg0) {
+void displayTrainingInstructionAndWaitForInput(TrainingInstructionTask *arg0) {
     s8 *table_ptr;
     s32 temp_v1_2;
     s16 temp_v0;
@@ -378,10 +357,10 @@ void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *
     s32 s0_var = 6;
     s32 s1_var = 0xC;
 
-    table_ptr = s_trainingPanelMessageTables[arg0->panelIndex];
+    table_ptr = s_trainingPanelMessageTables[arg0->instructionIndex];
     temp_v1_2 = arg0->messageData[table_ptr[arg0->messageIndex]];
     enqueueTextLayout(
-        arg0->textRenderContext,
+        arg0->textRenderAsset,
         (void *)arg0->messageData + temp_v1_2,
         -0x68,
         -0x30,
@@ -393,14 +372,14 @@ void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *
     );
 
     renderTiledSprite3x3(
-        arg0->uiAsset,
+        arg0->panelSpriteAsset,
         -0x68,
         -0x30,
         0xD,
         s0_var,
         1,
-        GET_ALPHA_COLOR_HIGH_BYTE(arg0),
-        arg0->colorIndex,
+        arg0->panelRed.bytes.low,
+        arg0->panelGreen.bytes.low,
         s1_var,
         s0_var
     );
@@ -408,11 +387,11 @@ void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *
     if (gControllerInputs[0] & A_BUTTON) {
         temp_v0 = arg0->messageIndex + 1;
         arg0->messageIndex = temp_v0;
-        table_ptr = s_trainingPanelMessageTables[arg0->panelIndex];
+        table_ptr = s_trainingPanelMessageTables[arg0->instructionIndex];
         temp_v1_3 = table_ptr[temp_v0];
         if (temp_v1_3 == -1) {
             playSoundEffect(0x2D);
-            arg0->panelIndex = arg0->panelIndex + 1;
+            arg0->instructionIndex = arg0->instructionIndex + 1;
             setCallback(shrinkTrainingInstructionPanelForNextInstruction);
         } else {
             playSoundEffect(0x2B);
@@ -421,19 +400,16 @@ void displayTrainingInstructionAndWaitForInput(TrainingInstructionRuntimeState *
     }
 }
 
-#define GET_SCALE_AS_S16(arg0) (*(s16 *)&(arg0)->scale)
-#define SET_SCALE_AS_S16(arg0, val) (*(s16 *)&(arg0)->scale = (val))
-
-void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionRuntimeState *arg0) {
-    s16 scale;
+void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionTask *arg0) {
+    s16 green;
     s16 width;
     s16 height;
 
     arg0->panelHeight--;
 
-    scale = GET_SCALE_AS_S16(arg0);
-    if (scale != 0) {
-        SET_SCALE_AS_S16(arg0, scale - 0x10);
+    green = arg0->panelGreen.value;
+    if (green != 0) {
+        arg0->panelGreen.value = green - 0x10;
     }
 
     if (arg0->panelHeight == 1) {
@@ -444,21 +420,21 @@ void shrinkTrainingInstructionPanelForNextInstruction(TrainingInstructionRuntime
     height = arg0->panelHeight;
 
     renderTiledSprite3x3(
-        arg0->uiAsset,
+        arg0->panelSpriteAsset,
         ((-width) << 19) >> 16,
         ((-height) << 19) >> 16,
         width,
         height,
         0,
-        (u8)arg0->alphaColor,
-        arg0->colorIndex,
+        arg0->panelRed.bytes.low,
+        arg0->panelGreen.bytes.low,
         0xC,
         0x6
     );
 }
 
-void shrinkTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) {
-    s16 scale;
+void shrinkTrainingInstructionPanelWidth(TrainingInstructionTask *arg0) {
+    s16 green;
     s16 width;
     s16 height;
     GameState *state;
@@ -466,9 +442,9 @@ void shrinkTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) 
     state = getCurrentAllocation();
     arg0->panelWidth--;
 
-    scale = GET_SCALE_AS_S16(arg0);
-    if (scale != 0) {
-        SET_SCALE_AS_S16(arg0, scale - 0x10);
+    green = arg0->panelGreen.value;
+    if (green != 0) {
+        arg0->panelGreen.value = green - 0x10;
     }
 
     if (arg0->panelWidth == 1) {
@@ -480,21 +456,21 @@ void shrinkTrainingInstructionPanelWidth(TrainingInstructionRuntimeState *arg0) 
     height = arg0->panelHeight;
 
     renderTiledSprite3x3(
-        arg0->uiAsset,
+        arg0->panelSpriteAsset,
         ((-width) << 19) >> 16,
         ((-height) << 19) >> 16,
         width,
         height,
         0,
-        GET_ALPHA_COLOR_HIGH_BYTE(arg0),
-        arg0->colorIndex,
+        arg0->panelRed.bytes.low,
+        arg0->panelGreen.bytes.low,
         0xC,
         0x6
     );
 }
 
-void cleanupTrainingInstructionTask(TrainingInstructionState *arg0) {
-    arg0->uiAsset = freeNodeMemory(arg0->uiAsset);
-    arg0->textRenderContext = freeNodeMemory(arg0->textRenderContext);
+void cleanupTrainingInstructionTask(TrainingInstructionTask *arg0) {
+    arg0->panelSpriteAsset = freeNodeMemory(arg0->panelSpriteAsset);
+    arg0->textRenderAsset = freeNodeMemory(arg0->textRenderAsset);
     arg0->messageData = freeNodeMemory(arg0->messageData);
 }
