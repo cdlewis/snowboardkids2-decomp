@@ -826,7 +826,15 @@ void renderScaledAlphaSpriteFrame(FrameSpriteEntry *sprite) {
 
         gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
-        gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, sprite->shade, sprite->shade, sprite->shade, sprite->alpha);
+        gDPSetPrimColor(
+            gDisplayListAllocPtr++,
+            0,
+            0,
+            sprite->shade.bytes.intensity,
+            sprite->shade.bytes.intensity,
+            sprite->shade.bytes.intensity,
+            sprite->alpha
+        );
 
         if ((s32)sprite->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)sprite->spriteData + frameEntry->textureOffset;

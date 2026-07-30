@@ -2,13 +2,21 @@
 
 #include "common.h"
 
+typedef union {
+    u16 value;
+    struct {
+        u8 high;
+        u8 low;
+    } bytes;
+} TextLayoutColorValue;
+
 typedef struct {
     /* 0x00 */ s16 startX;
     /* 0x02 */ s16 startY;
     /* 0x04 */ u16 *textData;
     /* 0x08 */ void *fontAsset;
-    /* 0x0C */ u16 shade;
-    /* 0x0E */ u16 textAlpha;
+    /* 0x0C */ TextLayoutColorValue shade;
+    /* 0x0E */ TextLayoutColorValue textAlpha;
     /* 0x10 */ u8 paletteIndex;
 } TextLayoutArg;
 
@@ -17,8 +25,8 @@ typedef struct {
     /* 0x02 */ s16 startY;
     /* 0x04 */ u16 *textData;
     /* 0x08 */ void *fontAsset;
-    /* 0x0C */ u16 shade;
-    /* 0x0E */ u16 textAlpha;
+    /* 0x0C */ TextLayoutColorValue shade;
+    /* 0x0E */ TextLayoutColorValue textAlpha;
     /* 0x10 */ u8 paletteIndex;
     /* 0x11 */ u8 maxIterations;
 } TextLayoutCappedArg;

@@ -10,23 +10,23 @@ void initCreditsSubtitles(CreditsState *state) {
 
     state->subtitleIndex = -1;
     temp = state->textRenderAsset;
-    state->subtitleShadowX = 0;
-    state->subtitleShadowY = 0;
-    state->subtitleShadowStyle.value = 0xFF;
-    state->subtitleShadowAlpha.value = 0xFF;
-    state->subtitleShadowTileMode = 0;
-    state->subtitleX = 0;
-    state->subtitleY = 0;
-    state->subtitleShadowAsset = temp;
-    state->subtitleRenderAsset = state->textRenderAsset;
-    state->subtitleText = getTable2DEntry(state->subtitleTextTable, state->subtitleIndex, 0);
-    state->subtitleStyle.value = 0xFF;
-    state->subtitleAlpha.value = 0xFF;
-    state->subtitleTileMode = 2;
+    state->subtitleShadowLayout.startX = 0;
+    state->subtitleShadowLayout.startY = 0;
+    state->subtitleShadowLayout.shade.value = 0xFF;
+    state->subtitleShadowLayout.textAlpha.value = 0xFF;
+    state->subtitleShadowLayout.paletteIndex = 0;
+    state->subtitleLayout.startX = 0;
+    state->subtitleLayout.startY = 0;
+    state->subtitleShadowLayout.fontAsset = temp;
+    state->subtitleLayout.fontAsset = state->textRenderAsset;
+    state->subtitleLayout.textData = getTable2DEntry(state->subtitleTextTable, state->subtitleIndex, 0);
+    state->subtitleLayout.shade.value = 0xFF;
+    state->subtitleLayout.textAlpha.value = 0xFF;
+    state->subtitleLayout.paletteIndex = 2;
     state->subtitleFrameCounter = 0;
     state->subtitleScheduleIndex = 0;
     state->nextSubtitleFrame = 0;
-    state->subtitleScrollPosition.value = 0;
+    state->subtitleScrollPosition.fixedPoint = 0;
     state->subtitleScrollStep = 0;
     state->subtitleCommandIndex = 0;
     state->subtitleLineIndex = 0;
@@ -44,7 +44,7 @@ void updateCreditsSubtitles(CreditsState *state) {
         state->subtitleCommandIndex = 0;
         state->subtitleLineIndex = 0;
         state->subtitleFrameCounter = 0;
-        state->subtitleScrollPosition.value = 0;
+        state->subtitleScrollPosition.fixedPoint = 0;
         state->subtitleScrollStep = 0;
         state->subtitleDelay = 0;
         state->subtitleInitialDelay = 0;
@@ -81,7 +81,7 @@ void updateCreditsSubtitles(CreditsState *state) {
             }
             if (state->subtitleLineIndex != 0) {
                 if (state->subtitleScrollStep != -1) {
-                    state->subtitleScrollPosition.value += state->subtitleScrollStep;
+                    state->subtitleScrollPosition.fixedPoint += state->subtitleScrollStep;
                 }
             }
             state->subtitleDelay--;
@@ -97,7 +97,7 @@ void updateCreditsSubtitles(CreditsState *state) {
 
                 ptr = getOffsetTableEntryData(state->subtitleSchedule, state->subtitleScheduleIndex);
                 state->subtitleDelay = ptr[state->subtitleCommandIndex];
-                state->subtitleScrollPosition.value = state->subtitleLineIndex << 20;
+                state->subtitleScrollPosition.fixedPoint = state->subtitleLineIndex << 20;
 
                 if (state->subtitleDelay & 0x80) {
                     state->subtitleDelay &= 0x7F;
@@ -121,12 +121,12 @@ void updateCreditsSubtitles(CreditsState *state) {
         }
 
         if (state->subtitleFrameCounter == 0) {
-            state->subtitleShadowText = getTable2DEntry(state->subtitleTextTable, state->subtitleIndex, 0);
-            state->subtitleText = getTable2DEntry(state->subtitleTextTable, state->subtitleIndex, 0);
-            state->subtitleTextWidth = getMaxLinePixelWidth(state->subtitleShadowText);
+            state->subtitleShadowLayout.textData = getTable2DEntry(state->subtitleTextTable, state->subtitleIndex, 0);
+            state->subtitleLayout.textData = getTable2DEntry(state->subtitleTextTable, state->subtitleIndex, 0);
+            state->subtitleTextWidth = getMaxLinePixelWidth(state->subtitleShadowLayout.textData);
         }
 
-        var_s3 = state->subtitleScrollPosition.halves.high;
+        var_s3 = state->subtitleScrollPosition.parts.pixels;
         temp_a8 = state->subtitleTextWidth;
         temp_s0 = -(temp_a8 / 2);
         if (temp_a8 < var_s3) {
@@ -140,28 +140,28 @@ void updateCreditsSubtitles(CreditsState *state) {
         setModelCameraTransform(&state->subtitleShadowViewport, temp_s0, 0x58, 0, 0, state->subtitleTextWidth, 0x10);
         setModelCameraTransform(&state->subtitleViewport, temp_s0, 0x58, 0, 0, var_s3, 0x10);
 
-        state->subtitleShadowAlpha.value = state->subtitleAlphaFixed >> 16;
-        state->subtitleAlpha.value = state->subtitleAlphaFixed >> 16;
+        state->subtitleShadowLayout.textAlpha.value = state->subtitleAlphaFixed >> 16;
+        state->subtitleLayout.textAlpha.value = state->subtitleAlphaFixed >> 16;
 
         enqueueTextLayout(
-            state->subtitleShadowAsset,
-            state->subtitleShadowText,
-            state->subtitleShadowX,
-            state->subtitleShadowY,
-            state->subtitleShadowStyle.bytes.low,
-            state->subtitleShadowAlpha.bytes.low,
-            state->subtitleShadowTileMode,
+            state->subtitleShadowLayout.fontAsset,
+            state->subtitleShadowLayout.textData,
+            state->subtitleShadowLayout.startX,
+            state->subtitleShadowLayout.startY,
+            state->subtitleShadowLayout.shade.bytes.low,
+            state->subtitleShadowLayout.textAlpha.bytes.low,
+            state->subtitleShadowLayout.paletteIndex,
             2,
             0
         );
         enqueueTextLayout(
-            state->subtitleRenderAsset,
-            state->subtitleText,
-            state->subtitleX,
-            state->subtitleY,
-            state->subtitleStyle.bytes.low,
-            state->subtitleAlpha.bytes.low,
-            state->subtitleTileMode,
+            state->subtitleLayout.fontAsset,
+            state->subtitleLayout.textData,
+            state->subtitleLayout.startX,
+            state->subtitleLayout.startY,
+            state->subtitleLayout.shade.bytes.low,
+            state->subtitleLayout.textAlpha.bytes.low,
+            state->subtitleLayout.paletteIndex,
             3,
             1
         );

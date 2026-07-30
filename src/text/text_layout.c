@@ -124,8 +124,8 @@ void renderTextLayout(TextLayoutArg *arg0) {
                     x,
                     y,
                     *ptr & 0xFFF,
-                    arg0->shade,
-                    arg0->textAlpha,
+                    arg0->shade.value,
+                    arg0->textAlpha.value,
                     paletteOverride,
                     arg0->fontAsset
                 );
@@ -186,8 +186,8 @@ void renderTextLayoutCapped(TextLayoutCappedArg *arg0) {
                         x,
                         y,
                         cmd & 0xFFF,
-                        arg0->shade,
-                        arg0->textAlpha,
+                        arg0->shade.value,
+                        arg0->textAlpha.value,
                         paletteOverride,
                         arg0->fontAsset
                     );

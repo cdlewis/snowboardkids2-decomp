@@ -77,28 +77,28 @@ void initCreditsScrollingTextEffects(CreditsState *s) {
     s->paletteChangePending = 0;
 
     for (i = 0; i < 0x12; i++) {
-        s->textEntriesA[i].x = 0;
-        s->textEntriesA[i].y = -0x60 + i * 8;
-        s->textEntriesA[i].dataTable = s->paletteDataTables[s->currentPaletteIndex];
-        s->textEntriesA[i].index = i;
-        s->textEntriesA[i].height = 0x400;
-        s->textEntriesA[i].width = 0x400;
-        s->textEntriesA[i].rotation = 0;
-        s->textEntriesA[i].alpha = 0xFF;
-        s->textEntriesA[i].shade = 0;
-        s->textEntriesA[i].flags = 0;
-        s->textEntriesA[i].opacity = 0;
-        s->textEntriesB[i].x = 0;
-        s->textEntriesB[i].y = -0x60 + i * 8;
-        s->textEntriesB[i].dataTable = s->paletteDataTables[s->currentPaletteIndex];
-        s->textEntriesB[i].index = i;
-        s->textEntriesB[i].height = 0x400;
-        s->textEntriesB[i].width = 0x400;
-        s->textEntriesB[i].rotation = 0;
-        s->textEntriesB[i].alpha = 0x64;
-        s->textEntriesB[i].shade = 0;
-        s->textEntriesB[i].flags = 0x11;
-        s->textEntriesB[i].opacity = 0;
+        s->paletteSprites[i].x = 0;
+        s->paletteSprites[i].y = -0x60 + i * 8;
+        s->paletteSprites[i].spriteData = (SpriteSheetData *)s->paletteDataTables[s->currentPaletteIndex];
+        s->paletteSprites[i].frameIndex = i;
+        s->paletteSprites[i].scaleY = 0x400;
+        s->paletteSprites[i].scaleX = 0x400;
+        s->paletteSprites[i].rotation = 0;
+        s->paletteSprites[i].shade.shadeWithPadding = 0xFF;
+        s->paletteSprites[i].tileMode = 0;
+        s->paletteSprites[i].overridePaletteCount = 0;
+        s->paletteSprites[i].alpha = 0;
+        s->paletteOverlaySprites[i].x = 0;
+        s->paletteOverlaySprites[i].y = -0x60 + i * 8;
+        s->paletteOverlaySprites[i].spriteData = (SpriteSheetData *)s->paletteDataTables[s->currentPaletteIndex];
+        s->paletteOverlaySprites[i].frameIndex = i;
+        s->paletteOverlaySprites[i].scaleY = 0x400;
+        s->paletteOverlaySprites[i].scaleX = 0x400;
+        s->paletteOverlaySprites[i].rotation = 0;
+        s->paletteOverlaySprites[i].shade.shadeWithPadding = 0x64;
+        s->paletteOverlaySprites[i].tileMode = 0;
+        s->paletteOverlaySprites[i].overridePaletteCount = 0x11;
+        s->paletteOverlaySprites[i].alpha = 0;
     }
 
     for (i = 0; i < 6; i++) {
@@ -179,8 +179,9 @@ void updateCreditsScrollingTextEffects(CreditsState *s) {
             s->currentPaletteAlpha = 0;
             if (s->paletteChangePending != 0) {
                 for (i = 0; i < 0x12; i++) {
-                    s->textEntriesA[i].dataTable = s->paletteDataTables[s->currentPaletteIndex];
-                    s->textEntriesB[i].dataTable = s->paletteDataTables[s->currentPaletteIndex];
+                    s->paletteSprites[i].spriteData = (SpriteSheetData *)s->paletteDataTables[s->currentPaletteIndex];
+                    s->paletteOverlaySprites[i].spriteData =
+                        (SpriteSheetData *)s->paletteDataTables[s->currentPaletteIndex];
                 }
                 s->paletteFadeSpeed = paletteFadeSpeeds[1];
                 s->paletteChangePending = 0;
@@ -209,8 +210,8 @@ void updateCreditsScrollingTextEffects(CreditsState *s) {
 
         for (i = 0; i < 0x12; i++) {
             if (scaledAlpha != 0) {
-                s->textEntriesB[i].opacity = scaledAlpha >> 16;
-                enqueueCallbackBySlotIndex(0, 2, renderScaledAlphaSpriteFrame, &s->textEntriesB[i]);
+                s->paletteOverlaySprites[i].alpha = scaledAlpha >> 16;
+                enqueueCallbackBySlotIndex(0, 2, renderScaledAlphaSpriteFrame, &s->paletteOverlaySprites[i]);
             }
             if (s->paletteFadeSpeed < 0) {
                 if (s->overlayAlpha == 0xFF0000) {
@@ -218,8 +219,8 @@ void updateCreditsScrollingTextEffects(CreditsState *s) {
                 }
             }
             if (showPalette != 0) {
-                s->textEntriesA[i].opacity = s->currentPaletteAlpha >> 16;
-                enqueueCallbackBySlotIndex(0, 2, renderScaledAlphaSpriteFrame, &s->textEntriesA[i]);
+                s->paletteSprites[i].alpha = s->currentPaletteAlpha >> 16;
+                enqueueCallbackBySlotIndex(0, 2, renderScaledAlphaSpriteFrame, &s->paletteSprites[i]);
             }
         }
     }

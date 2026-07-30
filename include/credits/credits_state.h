@@ -6,37 +6,15 @@
 #include "graphics/graphics.h"
 #include "graphics/palette.h"
 #include "graphics/sprite_rdp.h"
+#include "text/text_layout.h"
 
 typedef union {
-    s16 value;
+    s32 fixedPoint;
     struct {
-        u8 high;
-        u8 low;
-    } bytes;
-} CreditsHalfword;
-
-typedef union {
-    s32 value;
-    struct {
-        s16 high;
-        s16 low;
-    } halves;
-} CreditsWord;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    void *dataTable;
-    s16 index;
-    s16 width;
-    s16 height;
-    s16 rotation;
-    s16 alpha;
-    u8 shade;
-    u8 flags;
-    u8 opacity;
-    u8 pad15[3];
-} CreditsTextEntry;
+        s16 pixels;
+        u16 fraction;
+    } parts;
+} CreditsScrollPosition;
 
 typedef struct CreditsState {
     /* 0x000 */ s8 initialized;
@@ -59,25 +37,11 @@ typedef struct CreditsState {
     /* 0x960 */ void *textRenderAsset;
     /* 0x964 */ Table_B934 *subtitleTextTable;
     /* 0x968 */ Table_B934 *creditsTextTable;
-    /* 0x96C */ s16 subtitleShadowX;
-    /* 0x96E */ s16 subtitleShadowY;
-    /* 0x970 */ u16 *subtitleShadowText;
-    /* 0x974 */ void *subtitleShadowAsset;
-    /* 0x978 */ CreditsHalfword subtitleShadowStyle;
-    /* 0x97A */ CreditsHalfword subtitleShadowAlpha;
-    /* 0x97C */ u8 subtitleShadowTileMode;
-    /* 0x97D */ u8 pad97D[3];
-    /* 0x980 */ s16 subtitleX;
-    /* 0x982 */ s16 subtitleY;
-    /* 0x984 */ u16 *subtitleText;
-    /* 0x988 */ void *subtitleRenderAsset;
-    /* 0x98C */ CreditsHalfword subtitleStyle;
-    /* 0x98E */ CreditsHalfword subtitleAlpha;
-    /* 0x990 */ u8 subtitleTileMode;
-    /* 0x991 */ u8 pad991[3];
+    /* 0x96C */ TextLayoutArg subtitleShadowLayout;
+    /* 0x980 */ TextLayoutArg subtitleLayout;
     /* 0x994 */ s32 subtitleAlphaFixed;
     /* 0x998 */ s32 subtitleScrollStep;
-    /* 0x99C */ CreditsWord subtitleScrollPosition;
+    /* 0x99C */ CreditsScrollPosition subtitleScrollPosition;
     /* 0x9A0 */ s16 subtitleIndex;
     /* 0x9A2 */ u8 pad9A2[2];
     /* 0x9A4 */ s16 subtitleFrameCounter;
@@ -91,8 +55,8 @@ typedef struct CreditsState {
     /* 0x9B4 */ s16 subtitleInitialDelay;
     /* 0x9B6 */ u8 pad9B6[2];
     /* 0x9B8 */ DataTable_19E80 *paletteDataTables[6];
-    /* 0x9D0 */ CreditsTextEntry textEntriesA[18];
-    /* 0xB80 */ CreditsTextEntry textEntriesB[18];
+    /* 0x9D0 */ FrameSpriteEntry paletteSprites[18];
+    /* 0xB80 */ FrameSpriteEntry paletteOverlaySprites[18];
     /* 0xD30 */ s32 currentPaletteAlpha;
     /* 0xD34 */ s32 paletteFadeSpeed;
     /* 0xD38 */ s16 nextCommandFrame;

@@ -556,3 +556,8 @@ Do not merge adjacent pointers merely because two partial allocation views gave 
 `CreditsState`, `0x964` is the subtitle text table and `0x968` is the scrolling-credits text table. Keeping both
 typed and separately named made it possible to replace three padded state copies with one canonical layout
 without losing the distinction between their consumers.
+
+The remaining credits render records are also canonical shared types: the records at `0x96C` and `0x980` are
+`TextLayoutArg`, while the arrays at `0x9D0` and `0xB80` contain `FrameSpriteEntry` elements. Keep the combined
+halfword views needed by credits on those shared graphics types rather than maintaining credits-only copies;
+this preserves the original `sh` instructions while giving every consumer the renderer's semantic field names.
