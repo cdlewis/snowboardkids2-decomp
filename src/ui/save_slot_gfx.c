@@ -15,232 +15,6 @@
 #include "text/font_render.h"
 #include "text/text_layout.h"
 
-struct SaveSlotDeleteTextState {
-    /* 0x00 */ void *spriteAsset;
-    /* 0x04 */ void *textAsset;
-    /* 0x08 */ s16 offsetX;
-    /* 0x0A */ s16 offsetY;
-};
-
-typedef struct {
-    /* 0x00 */ void *unk0;
-    /* 0x04 */ void *unk4;
-    /* 0x08 */ void *unk8;
-} SaveSlotCleanupArg;
-
-struct SaveSlotConfirmationIndicatorState {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteAsset;
-    /* 0x08 */ s16 frameIndex;
-};
-
-struct SaveSlotDeleteArrowState {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteAsset;
-    /* 0x08 */ s16 frameIndex;
-    /* 0x0A */ s16 alpha;
-    /* 0x0C */ u8 unkC;
-    /* 0x0D */ u8 blinkAlpha;
-    /* 0x0E */ u8 padE[2];
-    /* 0x10 */ u8 animIndex;
-    /* 0x11 */ u8 animDelay;
-};
-
-typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteSheet;
-    /* 0x08 */ s16 spriteIndex;
-    /* 0x0A */ s16 alpha;
-    /* 0x0C */ u8 tileMode;
-    /* 0x0D */ u8 paletteOverride;
-    /* 0x0E */ u8 padE[2];
-} SaveSlotSpriteEntry; // size 0x10
-
-struct SaveSlotStatSpritesState {
-    /* 0x00 */ SaveSlotSpriteEntry entries[13];
-    /* 0xD0 */ u8 slotIndex;
-};
-
-typedef struct {
-    /* 0x00 */ u8 pad0[0x8];
-    /* 0x08 */ void *unk8;
-    /* 0x0C */ u8 padC[0x8];
-    /* 0x14 */ s16 unk14;
-    /* 0x16 */ u8 pad16[0x6];
-    /* 0x1C */ u8 unk1C;
-} SaveSlotNameTextArg;
-
-struct SaveSlotPromptTextState {
-    /* 0x00 */ s16 mainTextX;
-    /* 0x02 */ s16 mainTextY;
-    /* 0x04 */ void *mainText;
-    /* 0x08 */ void *mainTextAsset;
-    /* 0x0C */ s16 mainTextAlpha;
-    /* 0x0E */ s16 mainTextAlpha2;
-    /* 0x10 */ u8 mainTextFlag;
-    /* 0x11 */ u8 pad11[0x3];
-    /* 0x14 */ s16 hintTextX;
-    /* 0x16 */ s16 hintTextY;
-    /* 0x18 */ void *hintText;
-    /* 0x1C */ void *hintTextAsset;
-    /* 0x20 */ s16 hintTextAlpha;
-    /* 0x22 */ s16 hintTextAlpha2;
-    /* 0x24 */ u8 hintTextFlag;
-};
-
-typedef struct {
-    /* 0x000 */ u8 pad0[0xABC];
-    /* 0xABC */ s16 unkABC;
-    /* 0xABE */ u16 unkABE;
-    /* 0xAC0 */ u16 unkAC0;
-    /* 0xAC2 */ u16 unkAC2;
-    /* 0xAC4 */ u16 unkAC4;
-    /* 0xAC6 */ u16 unkAC6;
-    /* 0xAC8 */ u8 unkAC8;
-    /* 0xAC9 */ u8 unkAC9;
-    /* 0xACA */ u8 unkACA;
-    /* 0xACB */ u8 unkACB;
-    /* 0xACC */ u8 unkACC;
-    /* 0xACD */ u8 unkACD;
-    /* 0xACE */ u8 padACE[0x5];
-    /* 0xAD3 */ u8 unkAD3;
-    /* 0xAD4 */ u8 unkAD4;
-    /* 0xAD5 */ u8 unkAD5;
-    /* 0xAD6 */ u8 unkAD6;
-} SaveSlotAllocation;
-
-typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteAsset;
-    /* 0x08 */ u16 frameIndex;
-    /* 0x0A */ u8 frameDelay;
-    /* 0x0B */ u8 padB;
-} SaveSlotSelectionParticle;
-
-struct SaveSlotSelectionParticlesState {
-    /* 0x00 */ SaveSlotSelectionParticle entries[4];
-    /* 0x30 */ u8 pad30[0x18];
-    /* 0x48 */ u8 isRightSide;
-    /* 0x49 */ u8 animToggle;
-};
-
-struct SaveSlotGridState {
-    /* 0x00 */ SaveSlotSpriteEntry *entries;
-    /* 0x04 */ SpriteRenderArg cursorSprite;
-};
-
-typedef struct {
-    /* 0x00 */ s32 gold;
-    /* 0x04 */ u8 pad4[0x58];
-} GoldDisplaySlotData;
-
-typedef struct {
-    /* 0x000 */ u8 pad0[0x944];
-    /* 0x944 */ GoldDisplaySlotData slots[4];
-    /* 0xAB4 */ u8 padAB4[0x10];
-    /* 0xAC4 */ u16 unkAC4;
-    /* 0xAC6 */ u16 unkAC6;
-    /* 0xAC8 */ u8 unkAC8;
-    /* 0xAC9 */ u8 padAC9[5];
-    /* 0xACE */ u8 slotActive[4];
-} GoldDisplayAllocation;
-
-typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ void *spriteSheet;
-    /* 0x08 */ s16 spriteIndex;
-    /* 0x0A */ s16 unkA;
-    /* 0x0C */ s16 unkC;
-    /* 0x0E */ s16 unkE;
-    /* 0x10 */ s16 alpha;
-    /* 0x12 */ u8 unk12;
-    /* 0x13 */ u8 unk13;
-} SaveSlotGoldIcon;
-
-typedef struct {
-    /* 0x00 */ s16 width;
-    /* 0x02 */ s16 height;
-    /* 0x04 */ s16 highlightTint;
-    /* 0x06 */ s16 alpha;
-    /* 0x08 */ void *textBuffer;
-} SaveSlotGoldText;
-
-struct SaveSlotGoldDisplayState {
-    /* 0x00 */ SaveSlotGoldIcon icons[4];
-    /* 0x50 */ SaveSlotGoldText text[4];
-    /* 0x80 */ u8 textBuffers[4][10];
-    /* 0xA8 */ u8 animFrames[4];
-};
-
-typedef struct {
-    /* 0x00 */ s16 x;
-    /* 0x02 */ s16 y;
-    /* 0x04 */ s16 highlightTint;
-    /* 0x06 */ s16 alpha;
-    /* 0x08 */ char *text;
-} SaveSlotNumberLabelText;
-
-struct SaveSlotNumberLabelsState {
-    /* 0x00 */ SaveSlotSpriteEntry sprites[6];
-    /* 0x60 */ SaveSlotNumberLabelText texts[9];
-    /* 0xCC */ char textBuffers[9][4];
-    /* 0xF0 */ u8 slotIndex;
-};
-
-typedef struct {
-    /* 0x00 */ u8 itemFlags[15];
-    /* 0x0F */ u8 pad0F[0x4D];
-} SaveSlotSaveData;
-
-typedef struct {
-    /* 0x000 */ u8 pad0[0x948];
-    /* 0x948 */ SaveSlotSaveData slots[4];
-    /* 0xAB8 */ u8 padAB8[0xC];
-    /* 0xAC4 */ u16 unkAC4;
-    /* 0xAC6 */ u16 unkAC6;
-    /* 0xAC8 */ u8 unkAC8;
-} NumberLabelsAllocation;
-
-struct SaveSlotItemIconsState {
-    /* 0x00 */ void *spriteSheet;
-    /* 0x04 */ SaveSlotSpriteEntry *icons;
-    /* 0x08 */ u8 pad8[0x14];
-    /* 0x1C */ u8 slotIndex;
-    /* 0x1D */ u8 animFrame;
-    /* 0x1E */ u8 unk1E;
-};
-
-struct SaveSlotNameTextState {
-    /* 0x00 */ void *textAsset;
-    /* 0x04 */ u8 pad4[0x4];
-    /* 0x08 */ s16 x;
-    /* 0x0A */ s16 y;
-    /* 0x0C */ s32 unkC;
-    /* 0x10 */ void *unk10;
-    /* 0x14 */ s16 alpha;
-    /* 0x16 */ s16 alpha2;
-    /* 0x18 */ u8 unk18;
-    /* 0x19 */ u8 pad19[0x3];
-    /* 0x1C */ u8 slotIndex;
-    /* 0x1D */ u8 unk1D;
-    /* 0x1E */ u8 slotFlags;
-};
-
-typedef struct {
-    /* 0x000 */ u8 pad0[0x948];
-    /* 0x948 */ SaveSlotSaveData slots[3];
-    /* 0xA5C */ u8 globalItemFlags[15];
-    /* 0xA6B */ u8 padA6B[0x59];
-    /* 0xAC4 */ u16 unkAC4;
-    /* 0xAC6 */ u16 unkAC6;
-    /* 0xAC8 */ u8 unkAC8;
-} ItemIconsAllocation;
-
 u16 gSaveSlotStatSpriteTable[] = {
     0x0000, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0002, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0000, 0x0000,
 };
@@ -372,25 +146,25 @@ void *gSaveSlotDialogPromptTexts[] = {
 };
 
 void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0);
-void cleanupSaveSlotNumberLabels(SaveSlotCleanupArg *);
+void cleanupSaveSlotNumberLabels(SaveSlotNumberLabelsState *);
 void updateSaveSlotDeleteText(SaveSlotDeleteTextState *);
-void updateSaveSlotNameText(SaveSlotNameTextArg *arg0);
-void cleanupSaveSlotNameText(SaveSlotCleanupArg *arg0);
-void cleanupSaveSlotGoldDisplay(SaveSlotCleanupArg *arg0);
+void updateSaveSlotNameText(SaveSlotNameTextState *arg0);
+void cleanupSaveSlotNameText(SaveSlotNameTextState *arg0);
+void cleanupSaveSlotGoldDisplay(SaveSlotGoldDisplayState *arg0);
 void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *);
 void updateSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *arg0);
-void cleanupSaveSlotSelectionParticles(SaveSlotCleanupArg *arg0);
+void cleanupSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *arg0);
 void updateSaveSlotStatSprites(SaveSlotStatSpritesState *arg0);
-void cleanupSaveSlotStatSprites(SaveSlotCleanupArg *arg0);
+void cleanupSaveSlotStatSprites(SaveSlotStatSpritesState *arg0);
 void updateSaveSlotItemIcons(SaveSlotItemIconsState *);
 void cleanupSaveSlotDeleteText(SaveSlotDeleteTextState *arg0);
-void cleanupSaveSlotItemIcons(SaveSlotCleanupArg *arg0);
+void cleanupSaveSlotItemIcons(SaveSlotItemIconsState *arg0);
 void renderSaveSlotConfirmationIndicator(void *arg0);
-void cleanupSaveSlotConfirmationIndicator(SaveSlotCleanupArg *arg0);
+void cleanupSaveSlotConfirmationIndicator(SaveSlotConfirmationIndicatorState *arg0);
 void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state);
-void cleanupSaveSlotDeleteArrow(SaveSlotCleanupArg *arg0);
-void cleanupSaveSlotPromptText(SaveSlotCleanupArg *arg0);
-void cleanupSaveSlotNameEntryGrid(SaveSlotCleanupArg *arg0);
+void cleanupSaveSlotDeleteArrow(SaveSlotDeleteArrowState *arg0);
+void cleanupSaveSlotPromptText(SaveSlotPromptTextState *arg0);
+void cleanupSaveSlotNameEntryGrid(SaveSlotGridState *arg0);
 void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0);
 void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0);
 
@@ -403,14 +177,14 @@ void initSaveSlotStatSprites(SaveSlotStatSpritesState *state) {
     setCleanupCallback(cleanupSaveSlotStatSprites);
 
     for (i = 12; i >= 0; i--) {
-        state->entries[i].spriteSheet = spriteSheet;
+        state->entries[i].spriteData = spriteSheet;
     }
 
     setCallback(updateSaveSlotStatSprites);
 }
 
 void updateSaveSlotStatSprites(SaveSlotStatSpritesState *arg0) {
-    SaveSlotAllocation *allocation;
+    SaveSlotScreenState *allocation;
     s16 x;
     s16 alpha;
     s32 step;
@@ -425,8 +199,8 @@ void updateSaveSlotStatSprites(SaveSlotStatSpritesState *arg0) {
     allocation = getCurrentAllocation();
     step = 0xF;
 
-    if (allocation->unkAC6 < 0x32) {
-        if (allocation->unkAC8 == arg0->slotIndex || arg0->slotIndex == 3) {
+    if (allocation->saveSlotMenuState < 0x32) {
+        if (allocation->selectedSaveSlot == arg0->slotIndex || arg0->slotIndex == 3) {
             step = 0x10;
             gap = 0x48;
             x = -0x90;
@@ -442,7 +216,7 @@ void updateSaveSlotStatSprites(SaveSlotStatSpritesState *arg0) {
     }
 
     i = 0;
-    if (allocation->unkAC6 == 0) {
+    if (allocation->saveSlotMenuState == 0) {
         step = 0x10;
         gap = 0x48;
         x = -0x90;
@@ -463,30 +237,31 @@ void updateSaveSlotStatSprites(SaveSlotStatSpritesState *arg0) {
         isSpecial = 0;
         if (i == 6) {
             x -= halfStep;
-            arg0->entries[6].spriteIndex = baseTable[6] + arg0->slotIndex;
+            arg0->entries[6].frameIndex = baseTable[6] + arg0->slotIndex;
             if (arg0->slotIndex == three) {
-                arg0->entries[6].spriteIndex = baseTable[6] + allocation->unkAC8;
+                arg0->entries[6].frameIndex = baseTable[6] + allocation->selectedSaveSlot;
             }
             isSpecial = 1;
         } else {
-            arg0->entries[i].spriteIndex = baseTable[i];
+            arg0->entries[i].frameIndex = baseTable[i];
         }
 
         arg0->entries[i].x = x;
         arg0->entries[i].y = -0x18;
-        arg0->entries[i].paletteOverride = arg0->slotIndex + 1;
+        arg0->entries[i].overridePaletteCount = arg0->slotIndex + 1;
         if (arg0->slotIndex == three) {
-            arg0->entries[i].paletteOverride = allocation->unkAC8 + 1;
+            arg0->entries[i].overridePaletteCount = allocation->selectedSaveSlot + 1;
         }
-        arg0->entries[i].alpha = alpha;
+        arg0->entries[i].color.paletteAndAlpha = alpha;
         if (i >= 7) {
             arg0->entries[i].tileMode = 1;
         } else {
             arg0->entries[i].tileMode = 0;
         }
 
-        if (arg0->slotIndex == allocation->unkAC8 && allocation->unkAC6 == 2 && (allocation->unkAC4 & 1)) {
-            arg0->entries[i].paletteOverride = 0xFF;
+        if (arg0->slotIndex == allocation->selectedSaveSlot && allocation->saveSlotMenuState == 2 &&
+            (allocation->selectionAnimState & 1)) {
+            arg0->entries[i].overridePaletteCount = 0xFF;
         }
         callbackEntry = &arg0->entries[i];
 
@@ -495,12 +270,12 @@ void updateSaveSlotStatSprites(SaveSlotStatSpritesState *arg0) {
     } while (i < 13);
 }
 
-void cleanupSaveSlotStatSprites(SaveSlotCleanupArg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupSaveSlotStatSprites(SaveSlotStatSpritesState *arg0) {
+    arg0->entries[0].spriteData = freeNodeMemory(arg0->entries[0].spriteData);
 }
 
 void initSaveSlotNameEntryGrid(SaveSlotGridState *state) {
-    SaveSlotAllocation *allocation;
+    SaveSlotScreenState *allocation;
     void *spriteSheet;
     s32 i;
     s32 entryIndex;
@@ -514,30 +289,30 @@ void initSaveSlotNameEntryGrid(SaveSlotGridState *state) {
     state->entries = allocateNodeMemory(0x370);
 
     for (i = 0; i < 0x37; i++) {
-        state->entries[i].spriteSheet = spriteSheet;
-        state->entries[i].alpha = 0xFF;
-        state->entries[i].paletteOverride = 0;
+        state->entries[i].spriteData = spriteSheet;
+        state->entries[i].color.paletteAndAlpha = 0xFF;
+        state->entries[i].overridePaletteCount = 0;
     }
 
     entryIndex = 0;
     for (k = 0; gSaveSlotNameEntryGridTable[k] != 0xFFFF; k += 3) {
         spriteIndex = gSaveSlotNameEntryGridTable[k];
         for (j = 0; j < gSaveSlotNameEntryGridTable[k + 1]; j++) {
-            state->entries[(u16)entryIndex].spriteIndex = spriteIndex;
+            state->entries[(u16)entryIndex].frameIndex = spriteIndex;
             state->entries[(u16)entryIndex].tileMode = gSaveSlotNameEntryGridTable[k + 2];
             entryIndex++;
         }
     }
 
-    state->cursorSprite.x = allocation->unkABE + 0x98;
-    state->cursorSprite.y = allocation->unkAC0 + 0x38;
+    state->cursorSprite.x = allocation->nameEntryGridX + 0x98;
+    state->cursorSprite.y = allocation->nameEntryCursorY + 0x38;
     state->cursorSprite.spriteData = spriteSheet;
     state->cursorSprite.frameIndex = 0x13;
     setCallback(updateSaveSlotNameEntryGrid);
 }
 
 void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
-    SaveSlotAllocation *allocation;
+    SaveSlotScreenState *allocation;
     s32 row;
     s32 rowIndex;
     s32 baseIndex;
@@ -557,8 +332,8 @@ void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
     do {
         for (col = 0, colIndex = 0, rowStartIndex = baseIndex; colIndex < 0xB; colIndex++, col += 0x10) {
             entryIndex = rowStartIndex + colIndex;
-            arg0->entries[entryIndex].x = allocation->unkABE + col;
-            arg0->entries[entryIndex].y = allocation->unkAC0 + row;
+            arg0->entries[entryIndex].x = allocation->nameEntryGridX + col;
+            arg0->entries[entryIndex].y = allocation->nameEntryCursorY + row;
             enqueueCallbackBySlotIndex(8U, 0U, renderTextSprite, &arg0->entries[entryIndex]);
         }
 
@@ -567,11 +342,11 @@ void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
         baseIndex += 0xB;
     } while (rowIndex < 5);
 
-    screenState = allocation->unkAC6;
+    screenState = allocation->saveSlotMenuState;
     if ((screenState == 8) | (screenState == 0xB)) {
-        arg0->cursorSprite.y = allocation->unkAC2 + 0x38;
+        arg0->cursorSprite.y = allocation->nameEntryCursorBaseY + 0x38;
     } else {
-        arg0->cursorSprite.y = allocation->unkAC0 + 0x38;
+        arg0->cursorSprite.y = allocation->nameEntryCursorY + 0x38;
     }
 
     if (!(gGlobalFrameCounter & 7)) {
@@ -585,31 +360,30 @@ void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
     enqueueCallbackBySlotIndex(8U, 1U, renderSpriteFrame, &arg0->cursorSprite);
 }
 
-void cleanupSaveSlotNameEntryGrid(SaveSlotCleanupArg *arg0) {
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+void cleanupSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
+    arg0->cursorSprite.spriteData = freeNodeMemory(arg0->cursorSprite.spriteData);
+    arg0->entries = freeNodeMemory(arg0->entries);
 }
 
 void initSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
-    u8 *allocation;
+    SaveSlotScreenState *allocation;
     s32 i;
     s16 yPos;
-    u8 *new_var;
 
-    allocation = (u8 *)getCurrentAllocation();
-    arg0->icons = (SaveSlotSpriteEntry *)allocateNodeMemory(0xF0);
+    allocation = getCurrentAllocation();
+    arg0->icons = (TextRenderArg *)allocateNodeMemory(0xF0);
     arg0->spriteSheet = loadCompressedData(&uiFontSpriteSheet_ROM_START, &uiFontSpriteSheet_ROM_END, 0x2278);
-    arg0->unk1E = *(allocation + arg0->slotIndex + 0xACE);
+    arg0->slotHasData = allocation->slotStatus.displaySlotActive[arg0->slotIndex];
     setCleanupCallback(cleanupSaveSlotItemIcons);
 
     for (i = 0; i < 15; i++) {
-        yPos = ((-((*((new_var = (allocation + (arg0->slotIndex * 0x5C)) + i) + 0x948)) != 0)) & (-8)) | 0xFF70;
+        yPos = ((-(allocation->slotData[arg0->slotIndex].save_slot_status[i] != 0)) & (-8)) | 0xFF70;
         arg0->icons[i].x = -0x78 + i * 0x10;
         arg0->icons[i].y = yPos;
-        arg0->icons[i].spriteSheet = arg0->spriteSheet;
-        arg0->icons[i].spriteIndex = 5;
-        arg0->icons[i].alpha = 0xFF;
-        arg0->icons[i].paletteOverride = 0;
+        arg0->icons[i].spriteData = arg0->spriteSheet;
+        arg0->icons[i].frameIndex = 5;
+        arg0->icons[i].color.paletteAndAlpha = 0xFF;
+        arg0->icons[i].overridePaletteCount = 0;
         arg0->icons[i].tileMode = 0;
     }
 
@@ -618,7 +392,7 @@ void initSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
 }
 
 void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
-    ItemIconsAllocation *allocation;
+    SaveSlotScreenState *allocation;
     u16 alpha;
     s32 alphaCheck;
     s32 i;
@@ -627,7 +401,7 @@ void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
     u8 animFrame;
 
     allocation = getCurrentAllocation();
-    screenState = allocation->unkAC6;
+    screenState = allocation->saveSlotMenuState;
 
     if (screenState >= 0x32) {
         arg0->animFrame = 0;
@@ -635,7 +409,7 @@ void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
     } else if (screenState == 0) {
         alpha = 0xFF;
     } else {
-        if (allocation->unkAC8 == arg0->slotIndex) {
+        if (allocation->selectedSaveSlot == arg0->slotIndex) {
             if (screenState < 2) {
                 alpha = 0xFE;
             } else {
@@ -655,36 +429,36 @@ void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
         if (alphaCheck == 0xFE) {
             slotIndex = arg0->slotIndex;
             if (slotIndex != 3) {
-                if (allocation->slots[slotIndex].itemFlags[i] == 1) {
+                if (allocation->slotData[slotIndex].save_slot_status[i] == 1) {
                     animFrame = arg0->animFrame;
                     if (animFrame < 0x10) {
-                        arg0->icons[i].alpha = alphaCheck - ((animFrame + 1) * 8);
+                        arg0->icons[i].color.paletteAndAlpha = alphaCheck - ((animFrame + 1) * 8);
                     } else if (animFrame != 0x1F) {
-                        arg0->icons[i].alpha = (animFrame * 8) | 6;
+                        arg0->icons[i].color.paletteAndAlpha = (animFrame * 8) | 6;
                     } else {
-                        arg0->icons[i].alpha = alphaCheck;
+                        arg0->icons[i].color.paletteAndAlpha = alphaCheck;
                     }
                 } else {
-                    arg0->icons[i].alpha = 0x60;
+                    arg0->icons[i].color.paletteAndAlpha = 0x60;
                 }
             } else {
-                if (allocation->globalItemFlags[i] == 1) {
-                    arg0->icons[i].alpha = alphaCheck;
+                if (allocation->slotData[3].save_slot_status[i] == 1) {
+                    arg0->icons[i].color.paletteAndAlpha = alphaCheck;
                 } else {
-                    arg0->icons[i].alpha = 0x60;
+                    arg0->icons[i].color.paletteAndAlpha = 0x60;
                 }
             }
         } else {
-            arg0->icons[i].alpha = alpha;
-            if (alphaCheck == 0xFF && allocation->unkAC6 != 2) {
-                if (allocation->slots[arg0->slotIndex].itemFlags[i] == 1) {
-                    arg0->icons[i].alpha = 0xFE;
+            arg0->icons[i].color.paletteAndAlpha = alpha;
+            if (alphaCheck == 0xFF && allocation->saveSlotMenuState != 2) {
+                if (allocation->slotData[arg0->slotIndex].save_slot_status[i] == 1) {
+                    arg0->icons[i].color.paletteAndAlpha = 0xFE;
                 } else {
-                    arg0->icons[i].alpha = 0x60;
+                    arg0->icons[i].color.paletteAndAlpha = 0x60;
                 }
             } else if (alphaCheck == 0x60) {
-                if (allocation->slots[arg0->slotIndex].itemFlags[i] != 1) {
-                    arg0->icons[i].alpha = 0x30;
+                if (allocation->slotData[arg0->slotIndex].save_slot_status[i] != 1) {
+                    arg0->icons[i].color.paletteAndAlpha = 0x30;
                 }
             }
         }
@@ -695,10 +469,11 @@ void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
             arg0->icons[i].x = (i * 15) - 0x72;
         }
 
-        arg0->icons[i].paletteOverride = 0;
+        arg0->icons[i].overridePaletteCount = 0;
 
-        if (allocation->unkAC6 == 2 && arg0->slotIndex == allocation->unkAC8 && (allocation->unkAC4 & 1)) {
-            arg0->icons[i].paletteOverride = 0xFF;
+        if (allocation->saveSlotMenuState == 2 && arg0->slotIndex == allocation->selectedSaveSlot &&
+            (allocation->selectionAnimState & 1)) {
+            arg0->icons[i].overridePaletteCount = 0xFF;
         }
 
         enqueueCallbackBySlotIndex(arg0->slotIndex + 9, 0, renderTextSprite, &arg0->icons[i]);
@@ -712,96 +487,96 @@ void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
     }
 }
 
-void cleanupSaveSlotItemIcons(SaveSlotCleanupArg *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
+    arg0->spriteSheet = freeNodeMemory(arg0->spriteSheet);
+    arg0->icons = freeNodeMemory(arg0->icons);
 }
 
 void initSaveSlotNameText(SaveSlotNameTextState *arg0) {
-    u8 *allocation;
+    SaveSlotScreenState *allocation;
     s32 temp_c;
     void *temp_10;
 
-    allocation = (u8 *)getCurrentAllocation();
+    allocation = getCurrentAllocation();
     arg0->textAsset = loadTextRenderAsset(1);
-    arg0->slotFlags = *(allocation + arg0->slotIndex + 0xACE);
+    arg0->slotHasData = allocation->slotStatus.displaySlotActive[arg0->slotIndex];
     setCleanupCallback(cleanupSaveSlotNameText);
 
-    *(volatile s16 *)&arg0->x = -0x26;
-    *(volatile s16 *)&arg0->y = -4;
+    *(volatile s16 *)&arg0->label.startX = -0x26;
+    *(volatile s16 *)&arg0->label.startY = -4;
 
     temp_c = gSaveSlotNoDataNameTextPtr;
     temp_10 = arg0->textAsset;
 
-    arg0->alpha = 0xFF;
-    arg0->unk18 = 0;
-    arg0->alpha2 = 0xFF;
-    arg0->unk1D = 0;
+    arg0->label.shade.value = 0xFF;
+    arg0->label.paletteIndex = 0;
+    arg0->label.textAlpha.value = 0xFF;
+    arg0->isAnimating = 0;
 
-    arg0->unkC = temp_c;
-    arg0->unk10 = temp_10;
+    arg0->label.textData = (u16 *)temp_c;
+    arg0->label.fontAsset = temp_10;
 
     setCallback(updateSaveSlotNameText);
 }
 
-void updateSaveSlotNameText(SaveSlotNameTextArg *arg0) {
-    SaveSlotAllocation *allocation;
+void updateSaveSlotNameText(SaveSlotNameTextState *arg0) {
+    SaveSlotScreenState *allocation;
     u16 temp;
 
     allocation = getCurrentAllocation();
 
-    if (arg0->unk1C == allocation->unkAC8) {
+    if (arg0->slotIndex == allocation->selectedSaveSlot) {
         goto check_ac6;
     }
-    if (arg0->unk1C != 3) {
-        arg0->unk14 = 0x60;
+    if (arg0->slotIndex != 3) {
+        arg0->label.shade.value = 0x60;
         goto end;
     }
 check_ac6:
-    temp = allocation->unkAC6;
+    temp = allocation->saveSlotMenuState;
     if (temp < 0x32) {
-        arg0->unk14 = 0xFF;
+        arg0->label.shade.value = 0xFF;
         goto end;
     }
-    arg0->unk14 = 0x60;
+    arg0->label.shade.value = 0x60;
 
 end:
-    enqueueCallbackBySlotIndex(arg0->unk1C + 9, 0, renderTextLayout, &arg0->unk8);
+    enqueueCallbackBySlotIndex(arg0->slotIndex + 9, 0, renderTextLayout, &arg0->label);
 }
 
-void cleanupSaveSlotNameText(SaveSlotCleanupArg *arg0) {
-    arg0->unk0 = freeNodeMemory(arg0->unk0);
+void cleanupSaveSlotNameText(SaveSlotNameTextState *arg0) {
+    arg0->textAsset = freeNodeMemory(arg0->textAsset);
 }
 
 void initSaveSlotItemLabels(SaveSlotNumberLabelsState *arg0) {
-    NumberLabelsAllocation *saveData;
+    SaveSlotScreenState *saveData;
     s16 itemY;
     void *spriteSheet;
     s32 i;
     char *numberBuffer;
 
-    saveData = (NumberLabelsAllocation *)getCurrentAllocation();
+    saveData = getCurrentAllocation();
     spriteSheet = loadCompressedData(&uiFontSpriteSheet_ROM_START, &uiFontSpriteSheet_ROM_END, 0x2278);
     setCleanupCallback(cleanupSaveSlotNumberLabels);
 
     for (i = 0; i < 15; i++) {
-        itemY = (saveData->slots[arg0->slotIndex].itemFlags[i] == 0) ? -0x90 : 0;
+        itemY = (saveData->slotData[arg0->slotIndex].save_slot_status[i] == 0) ? -0x90 : 0;
         numberBuffer = arg0->textBuffers[i];
 
         if (i < 9) {
             sprintf(numberBuffer, gIntegerFormatString, i + 1);
             arg0->texts[i].x = -0x70 + i * 0x10;
             arg0->texts[i].y = itemY;
-            arg0->texts[i].text = numberBuffer;
-            arg0->texts[i].highlightTint = 0;
-            arg0->texts[i].alpha = 0xFF;
+            arg0->texts[i].string = (u8 *)numberBuffer;
+            arg0->texts[i].palette = 0;
+            *(s16 *)&arg0->texts[i].pad = 0xFF;
         } else {
             arg0->sprites[i - 9].x = -0x78 + i * 0x10;
             arg0->sprites[i - 9].y = itemY;
-            arg0->sprites[i - 9].spriteSheet = spriteSheet;
-            arg0->sprites[i - 9].spriteIndex = i + 4;
-            arg0->sprites[i - 9].alpha = 0xFF;
-            arg0->sprites[i - 9].paletteOverride = 0;
+            arg0->sprites[i - 9].spriteData = spriteSheet;
+            arg0->sprites[i - 9].frameIndex = i + 4;
+            arg0->sprites[i - 9].color.paletteAndAlpha = 0xFF;
+            arg0->sprites[i - 9].overridePaletteCount = 0;
             arg0->sprites[i - 9].tileMode = 0;
         }
     }
@@ -810,20 +585,20 @@ void initSaveSlotItemLabels(SaveSlotNumberLabelsState *arg0) {
 }
 
 void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
-    NumberLabelsAllocation *allocation;
+    SaveSlotScreenState *allocation;
     u16 alpha;
     u16 alphaCheck;
     s32 i;
     u16 screenState;
 
     allocation = getCurrentAllocation();
-    screenState = allocation->unkAC6;
+    screenState = allocation->saveSlotMenuState;
 
     alpha = 0x60;
     if (screenState < 0x32) {
         alpha = 0xFF;
         if (screenState != 0) {
-            if (allocation->unkAC8 == arg0->slotIndex) {
+            if (allocation->selectedSaveSlot == arg0->slotIndex) {
                 do {
                     alpha = ((-((screenState < 2) ^ 1)) & 0xFF) | 0xFE;
                 } while (0);
@@ -837,29 +612,29 @@ void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
     alphaCheck = alpha;
     do {
         if (i < 9) {
-            arg0->texts[i].alpha = alpha;
+            *(s16 *)&arg0->texts[i].pad = alpha;
         } else {
-            arg0->sprites[i - 9].alpha = alpha;
+            arg0->sprites[i - 9].color.paletteAndAlpha = alpha;
         }
 
-        if ((alphaCheck == 0xFF) && (allocation->unkAC6 != 2)) {
-            if (allocation->slots[arg0->slotIndex].itemFlags[i] == 1) {
+        if ((alphaCheck == 0xFF) && (allocation->saveSlotMenuState != 2)) {
+            if (allocation->slotData[arg0->slotIndex].save_slot_status[i] == 1) {
                 if (i < 9) {
-                    arg0->texts[i].alpha = 0xFE;
+                    *(s16 *)&arg0->texts[i].pad = 0xFE;
                 } else {
-                    arg0->sprites[i - 9].alpha = 0xFE;
+                    arg0->sprites[i - 9].color.paletteAndAlpha = 0xFE;
                 }
             } else if (i < 9) {
-                arg0->texts[i].alpha = 0x60;
+                *(s16 *)&arg0->texts[i].pad = 0x60;
             } else {
-                arg0->sprites[i - 9].alpha = 0x60;
+                arg0->sprites[i - 9].color.paletteAndAlpha = 0x60;
             }
         } else if (alphaCheck == 0x60) {
-            if (allocation->slots[arg0->slotIndex].itemFlags[i] != 1) {
+            if (allocation->slotData[arg0->slotIndex].save_slot_status[i] != 1) {
                 if (i < 9) {
-                    arg0->texts[i].alpha = 0x30;
+                    *(s16 *)&arg0->texts[i].pad = 0x30;
                 } else {
-                    arg0->sprites[i - 9].alpha = 0x30;
+                    arg0->sprites[i - 9].color.paletteAndAlpha = 0x30;
                 }
             }
         }
@@ -877,16 +652,17 @@ void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
         }
 
         if (i < 9) {
-            arg0->texts[i].highlightTint = 0;
+            arg0->texts[i].palette = 0;
         } else {
-            arg0->sprites[i - 9].paletteOverride = 0;
+            arg0->sprites[i - 9].overridePaletteCount = 0;
         }
 
-        if (((allocation->unkAC6 == 2) && (arg0->slotIndex == allocation->unkAC8)) && (allocation->unkAC4 & 1)) {
+        if (((allocation->saveSlotMenuState == 2) && (arg0->slotIndex == allocation->selectedSaveSlot)) &&
+            (allocation->selectionAnimState & 1)) {
             if (i < 9) {
-                arg0->texts[i].highlightTint = 0xFF;
+                arg0->texts[i].palette = 0xFF;
             } else {
-                arg0->sprites[i - 9].paletteOverride = 0xFF;
+                arg0->sprites[i - 9].overridePaletteCount = 0xFF;
             }
         }
 
@@ -900,12 +676,12 @@ void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
     } while (i < 15);
 }
 
-void cleanupSaveSlotNumberLabels(SaveSlotCleanupArg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
+    arg0->sprites[0].spriteData = freeNodeMemory(arg0->sprites[0].spriteData);
 }
 
 void initSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
-    SaveSlotAllocation *allocation;
+    SaveSlotScreenState *allocation;
     void *textAsset;
     s16 hintX;
     s16 hintY;
@@ -914,26 +690,26 @@ void initSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
     textAsset = loadTextRenderAsset(1);
     setCleanupCallback(cleanupSaveSlotPromptText);
 
-    arg0->mainTextX = -0x78;
-    arg0->mainTextY = -0x60;
-    arg0->mainTextAsset = textAsset;
-    arg0->mainTextAlpha = 0xFF;
-    arg0->mainTextFlag = 0;
-    arg0->mainTextAlpha2 = 0xFF;
-    hintX = allocation->unkABE + 0xA;
-    arg0->hintTextX = hintX;
-    hintY = allocation->unkAC0 + 0xA;
-    arg0->hintTextAsset = textAsset;
-    arg0->hintTextAlpha = 0xFF;
-    arg0->hintTextFlag = 4;
-    arg0->hintTextAlpha2 = 0xFF;
-    arg0->hintTextY = hintY;
+    arg0->mainText.startX = -0x78;
+    arg0->mainText.startY = -0x60;
+    arg0->mainText.fontAsset = textAsset;
+    arg0->mainText.shade.value = 0xFF;
+    arg0->mainText.paletteIndex = 0;
+    arg0->mainText.textAlpha.value = 0xFF;
+    hintX = allocation->nameEntryGridX + 0xA;
+    arg0->hintText.startX = hintX;
+    hintY = allocation->nameEntryCursorY + 0xA;
+    arg0->hintText.fontAsset = textAsset;
+    arg0->hintText.shade.value = 0xFF;
+    arg0->hintText.paletteIndex = 4;
+    arg0->hintText.textAlpha.value = 0xFF;
+    arg0->hintText.startY = hintY;
 
     setCallback(updateSaveSlotPromptText);
 }
 
 void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
-    SaveSlotAllocation *alloc;
+    SaveSlotScreenState *alloc;
     void *promptText;
     s16 centeredX;
     u16 screenState;
@@ -942,57 +718,57 @@ void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
 
     alloc = getCurrentAllocation();
 
-    if ((alloc->unkAC6 < 0x3D) || (alloc->unkAC9 != 0)) {
-        promptText = gSaveSlotMainPromptTexts[alloc->unkACB];
-        arg0->mainText = promptText;
+    if ((alloc->saveSlotMenuState < 0x3D) || (alloc->hasCurrentSaveData != 0)) {
+        promptText = gSaveSlotMainPromptTexts[alloc->mainPromptIndex];
+        arg0->mainText.textData = promptText;
         centeredX = ((0x120 - getMaxLinePixelWidth(promptText)) / 2) - 0x90;
-        arg0->mainTextX = centeredX;
+        arg0->mainText.startX = centeredX;
         enqueueTextLayout(
-            arg0->mainTextAsset,
-            arg0->mainText,
+            arg0->mainText.fontAsset,
+            arg0->mainText.textData,
             centeredX,
-            arg0->mainTextY,
-            arg0->mainTextAlpha,
-            arg0->mainTextAlpha2,
-            arg0->mainTextFlag,
+            arg0->mainText.startY,
+            arg0->mainText.shade.value,
+            arg0->mainText.textAlpha.value,
+            arg0->mainText.paletteIndex,
             8,
             0
         );
 
-        screenState = alloc->unkAC6;
+        screenState = alloc->saveSlotMenuState;
         if (screenState >= 6) {
             if (screenState >= 0xA) {
-                arg0->hintText = gRumblePakRemovalWarningTextPtr;
+                arg0->hintText.textData = gRumblePakRemovalWarningTextPtr;
             } else {
-                arg0->hintText = gRumblePakAttachPromptTextPtr;
+                arg0->hintText.textData = gRumblePakAttachPromptTextPtr;
             }
 
-            screenState2 = alloc->unkAC6;
+            screenState2 = alloc->saveSlotMenuState;
             if (screenState2 == 8 || screenState2 == 0xB) {
-                hintY = alloc->unkAC2 + 0xA;
+                hintY = alloc->nameEntryCursorBaseY + 0xA;
             } else {
-                hintY = alloc->unkAC0 + 0xA;
+                hintY = alloc->nameEntryCursorY + 0xA;
             }
-            arg0->hintTextY = hintY;
+            arg0->hintText.startY = hintY;
 
-            if ((u32)(alloc->unkAC6 - 9) < 2U) {
-                if (alloc->unkAC4 & 1) {
-                    arg0->hintTextFlag = 0xFF;
+            if ((u32)(alloc->saveSlotMenuState - 9) < 2U) {
+                if (alloc->selectionAnimState & 1) {
+                    arg0->hintText.paletteIndex = 0xFF;
                 } else {
-                    arg0->hintTextFlag = 4;
+                    arg0->hintText.paletteIndex = 4;
                 }
             } else {
-                arg0->hintTextFlag = 4;
+                arg0->hintText.paletteIndex = 4;
             }
 
             enqueueTextLayout(
-                arg0->hintTextAsset,
-                arg0->hintText,
-                arg0->hintTextX,
-                arg0->hintTextY,
-                arg0->hintTextAlpha,
-                arg0->hintTextAlpha2,
-                arg0->hintTextFlag,
+                arg0->hintText.fontAsset,
+                arg0->hintText.textData,
+                arg0->hintText.startX,
+                arg0->hintText.startY,
+                arg0->hintText.shade.value,
+                arg0->hintText.textAlpha.value,
+                arg0->hintText.paletteIndex,
                 8,
                 0
             );
@@ -1000,8 +776,8 @@ void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
     }
 }
 
-void cleanupSaveSlotPromptText(SaveSlotCleanupArg *arg0) {
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
+void cleanupSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
+    arg0->mainText.fontAsset = freeNodeMemory(arg0->mainText.fontAsset);
 }
 
 void initSaveSlotGoldDisplay(SaveSlotGoldDisplayState *arg0) {
@@ -1012,22 +788,22 @@ void initSaveSlotGoldDisplay(SaveSlotGoldDisplayState *arg0) {
     setCleanupCallback(cleanupSaveSlotGoldDisplay);
 
     for (i = 0; i < 4; i++) {
-        arg0->text[i].width = 0x18;
-        arg0->text[i].height = 0xC;
-        arg0->text[i].highlightTint = 0;
-        arg0->text[i].alpha = 0xFF;
-        arg0->text[i].textBuffer = &arg0->textBuffers[i];
+        arg0->text[i].x = 0x18;
+        arg0->text[i].y = 0xC;
+        arg0->text[i].palette = 0;
+        *(s16 *)&arg0->text[i].pad = 0xFF;
+        arg0->text[i].string = arg0->textBuffers[i];
 
         arg0->icons[i].x = 0x5C;
         arg0->icons[i].y = 0x10;
-        arg0->icons[i].spriteSheet = goldIconAsset;
-        arg0->icons[i].spriteIndex = 0;
-        arg0->icons[i].unkA = 0x555;
-        arg0->icons[i].unkC = 0x555;
-        arg0->icons[i].unkE = 0;
-        arg0->icons[i].alpha = 0xFF;
-        arg0->icons[i].unk13 = 0;
-        arg0->icons[i].unk12 = 0;
+        arg0->icons[i].spriteData = goldIconAsset;
+        arg0->icons[i].frameIndex = 0;
+        arg0->icons[i].renderWidth = 0x555;
+        arg0->icons[i].renderHeight = 0x555;
+        *(s16 *)&arg0->icons[i].pad0E = 0;
+        *(s16 *)&arg0->icons[i].pad0E[2] = 0xFF;
+        arg0->icons[i].overridePaletteCount = 0;
+        arg0->icons[i].tileMode = 0;
 
         arg0->animFrames[i] = 0;
     }
@@ -1036,70 +812,70 @@ void initSaveSlotGoldDisplay(SaveSlotGoldDisplayState *arg0) {
 }
 
 void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state) {
-    GoldDisplayAllocation *allocation;
+    SaveSlotScreenState *allocation;
     s32 i;
 
-    allocation = (GoldDisplayAllocation *)getCurrentAllocation();
+    allocation = getCurrentAllocation();
 
     for (i = 0; i < 4; i++) {
-        if (allocation->slotActive[i] == 0) {
+        if (allocation->slotStatus.displaySlotActive[i] == 0) {
             continue;
         }
 
-        if (allocation->unkAC6 >= 0x32) {
-            state->text[i].width = 0x1D;
-            state->text[i].alpha = 0x60;
-            state->icons[i].spriteIndex = 0;
-            state->icons[i].alpha = 0x60;
-        } else if (i == allocation->unkAC8) {
-            state->text[i].width = 0x18;
-            state->text[i].alpha = 0xFF;
-            state->icons[i].alpha = 0xFF;
+        if (allocation->saveSlotMenuState >= 0x32) {
+            state->text[i].x = 0x1D;
+            *(s16 *)&state->text[i].pad = 0x60;
+            state->icons[i].frameIndex = 0;
+            *(s16 *)&state->icons[i].pad0E[2] = 0x60;
+        } else if (i == allocation->selectedSaveSlot) {
+            state->text[i].x = 0x18;
+            *(s16 *)&state->text[i].pad = 0xFF;
+            *(s16 *)&state->icons[i].pad0E[2] = 0xFF;
 
-            if (allocation->unkAC6 < 2) {
+            if (allocation->saveSlotMenuState < 2) {
                 state->animFrames[i]++;
                 if (state->animFrames[i] == 2) {
                     state->animFrames[i] = 0;
-                    state->icons[i].spriteIndex++;
-                    if ((u16)state->icons[i].spriteIndex >= 6) {
-                        state->icons[i].spriteIndex = 0;
+                    state->icons[i].frameIndex++;
+                    if ((u16)state->icons[i].frameIndex >= 6) {
+                        state->icons[i].frameIndex = 0;
                     }
                 }
             } else {
-                state->icons[i].spriteIndex = 0;
-                state->icons[i].unk13 = 0;
-                state->text[i].highlightTint = 0;
-                if (allocation->unkAC6 == 2 && (allocation->unkAC4 & 1)) {
-                    state->icons[i].unk13 = 0xFF;
-                    state->text[i].highlightTint = 0xFF;
+                state->icons[i].frameIndex = 0;
+                state->icons[i].overridePaletteCount = 0;
+                state->text[i].palette = 0;
+                if (allocation->saveSlotMenuState == 2 && (allocation->selectionAnimState & 1)) {
+                    state->icons[i].overridePaletteCount = 0xFF;
+                    state->text[i].palette = 0xFF;
                 }
             }
         } else {
             if (i < 3) {
-                state->text[i].width = 0x1D;
-                state->text[i].alpha = 0x60;
-                state->icons[i].spriteIndex = 0;
-                state->icons[i].alpha = 0x60;
+                state->text[i].x = 0x1D;
+                *(s16 *)&state->text[i].pad = 0x60;
+                state->icons[i].frameIndex = 0;
+                *(s16 *)&state->icons[i].pad0E[2] = 0x60;
             } else {
-                state->text[i].width = 0x17;
-                state->text[i].alpha = 0xFF;
-                state->icons[i].spriteIndex = 0;
-                state->icons[i].alpha = 0xFF;
+                state->text[i].x = 0x17;
+                *(s16 *)&state->text[i].pad = 0xFF;
+                state->icons[i].frameIndex = 0;
+                *(s16 *)&state->icons[i].pad0E[2] = 0xFF;
             }
             state->animFrames[i] = 0;
         }
 
-        sprintf((char *)&state->textBuffers[i], gGoldFormatString7d, allocation->slots[i].gold);
+        sprintf((char *)&state->textBuffers[i], gGoldFormatString7d, allocation->slotData[i].slotGold);
 
-        if (allocation->unkAC6 != 0x18 || allocation->unkAC8 != i) {
+        if (allocation->saveSlotMenuState != 0x18 || allocation->selectedSaveSlot != i) {
             enqueueCallbackBySlotIndex(i + 9, 7, renderTextColored, &state->text[i]);
         }
         enqueueCallbackBySlotIndex(i + 9, 0, renderScaledShadedSpriteFrame, &state->icons[i]);
     }
 }
 
-void cleanupSaveSlotGoldDisplay(SaveSlotCleanupArg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupSaveSlotGoldDisplay(SaveSlotGoldDisplayState *arg0) {
+    arg0->icons[0].spriteData = freeNodeMemory(arg0->icons[0].spriteData);
 }
 
 void initSaveSlotConfirmationIndicator(SaveSlotConfirmationIndicatorState *state) {
@@ -1110,29 +886,29 @@ void initSaveSlotConfirmationIndicator(SaveSlotConfirmationIndicatorState *state
     state->x = -0x2C;
     state->y = -0x14;
     state->frameIndex = 0xD;
-    state->spriteAsset = asset;
+    state->spriteData = asset;
 
     setCallback(&renderSaveSlotConfirmationIndicator);
 }
 
 void renderSaveSlotConfirmationIndicator(void *arg0) {
-    SaveSlotAllocation *allocation;
+    SaveSlotScreenState *allocation;
     u16 val;
 
     allocation = getCurrentAllocation();
-    val = allocation->unkAC6;
+    val = allocation->saveSlotMenuState;
 
     if (val == 3 || val == 0x3C || val == 0x17) {
         enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, arg0);
     }
 }
 
-void cleanupSaveSlotConfirmationIndicator(SaveSlotCleanupArg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupSaveSlotConfirmationIndicator(SaveSlotConfirmationIndicatorState *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void initSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
-    SaveSlotAllocation *allocation;
+    SaveSlotScreenState *allocation;
     void *snowflakeAsset;
     s32 i;
     s16 baseX;
@@ -1145,9 +921,9 @@ void initSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
 
     state->animToggle = 0;
 
-    baseX = allocation->unkABC - 6;
+    baseX = allocation->slideOffset - 6;
     xOffset = baseX;
-    yOffset = (allocation->unkAC8 * 0x38) - 0x3C;
+    yOffset = (allocation->selectedSaveSlot * 0x38) - 0x3C;
 
     if (state->isRightSide == 0) {
         xOffset = -(s16)((baseX << 16) >> 16);
@@ -1157,23 +933,23 @@ void initSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
         state->entries[i].x = xOffset + gSaveSlotSelectionParticleXOffsets[i];
         state->entries[i].y = yOffset + gSaveSlotSelectionParticleYOffsets[i];
         state->entries[i].frameIndex = (i % 8) + 0x10;
-        state->entries[i].frameDelay = 0x12;
-        state->entries[i].spriteAsset = snowflakeAsset;
+        state->entries[i].paletteIndex = 0x12;
+        state->entries[i].spriteData = snowflakeAsset;
     }
 
     setCallback(updateSaveSlotSelectionParticles);
 }
 
 void updateSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
-    SaveSlotAllocation *allocation;
+    SaveSlotScreenState *allocation;
     unsigned int new_var;
     s16 baseX;
     s32 i;
 
-    allocation = (SaveSlotAllocation *)getCurrentAllocation();
+    allocation = getCurrentAllocation();
 
-    if (allocation->unkABC != 0) {
-        baseX = allocation->unkABC;
+    if (allocation->slideOffset != 0) {
+        baseX = allocation->slideOffset;
         if (state->isRightSide == 0) {
             new_var = baseX;
             baseX = -new_var;
@@ -1198,8 +974,8 @@ void updateSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state) {
     }
 }
 
-void cleanupSaveSlotSelectionParticles(SaveSlotCleanupArg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *arg0) {
+    arg0->entries[0].spriteData = freeNodeMemory(arg0->entries[0].spriteData);
 }
 
 void initSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
@@ -1216,7 +992,7 @@ void initSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
 }
 
 void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
-    SaveSlotAllocation *allocation;
+    SaveSlotScreenState *allocation;
     s16 offsetX;
     s16 offsetY;
     s32 loopCount;
@@ -1225,27 +1001,27 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
     s32 flagArg;
     s32 temp;
 
-    allocation = (SaveSlotAllocation *)getCurrentAllocation();
+    allocation = getCurrentAllocation();
 
-    if (allocation->unkAC6 < 0x32) {
+    if (allocation->saveSlotMenuState < 0x32) {
         return;
     }
 
-    if (allocation->unkAD5 == 0xA) {
-        state->offsetX = -(allocation->unkAD4 * 24);
+    if (allocation->saveSlotDialogType == 0xA) {
+        state->offsetX = -(allocation->menuChoiceIndex * 24);
     } else {
-        state->offsetX = -(allocation->unkAD4 * 16);
+        state->offsetX = -(allocation->menuChoiceIndex * 16);
     }
 
-    offsetY = -(allocation->unkAD4 * 8);
+    offsetY = -(allocation->menuChoiceIndex * 8);
     state->offsetY = offsetY;
 
     renderTiledSprite3x3(
         state->spriteAsset,
         state->offsetX,
         offsetY,
-        allocation->unkAD3,
-        allocation->unkAD4,
+        allocation->menuAnimOffsetX,
+        allocation->menuChoiceIndex,
         0,
         0x60,
         0xB0,
@@ -1253,14 +1029,14 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
         0
     );
 
-    if ((u32)(allocation->unkAC6 - 0x33) >= 4) {
+    if ((u32)(allocation->saveSlotMenuState - 0x33) >= 4) {
         return;
     }
 
-    if (allocation->unkAD5 < 8) {
+    if (allocation->saveSlotDialogType < 8) {
         enqueueTextLayout(state->textAsset, &gSaveSlotMenuHeaderText, -0x24, -0x30, 0xFF, 0xFF, 5, 8, 7);
 
-        loopCount = (-(allocation->unkAD5 != 2) & 3) | 2;
+        loopCount = (-(allocation->saveSlotDialogType != 2) & 3) | 2;
         if (loopCount == 0) {
             return;
         }
@@ -1268,10 +1044,10 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
         temp = 0xFFF00000;
         for (i = 0; i < loopCount; i++) {
             flagArg = 5;
-            if (allocation->unkAD6 == i) {
+            if (allocation->saveSlotDialogSelection == i) {
                 alphaArg = 0xFF;
-                if (allocation->unkAC6 == 0x34) {
-                    flagArg = (-(allocation->unkAC4 & 1) & 0xFF) | 5;
+                if (allocation->saveSlotMenuState == 0x34) {
+                    flagArg = (-(allocation->selectionAnimState & 1) & 0xFF) | 5;
                 }
             } else {
                 alphaArg = 0x60;
@@ -1279,7 +1055,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
 
             enqueueTextLayout(
                 state->textAsset,
-                gSaveSlotMenuOptionTexts[(allocation->unkAD5 * 3) + i],
+                gSaveSlotMenuOptionTexts[(allocation->saveSlotDialogType * 3) + i],
                 -0x40,
                 (s16)((temp + i * 0x180000) >> 16),
                 alphaArg,
@@ -1289,13 +1065,13 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
                 7
             );
         }
-    } else if (allocation->unkAD5 == 0xA) {
+    } else if (allocation->saveSlotDialogType == 0xA) {
         for (i = 0; i < 2; i++) {
             flagArg = 5;
-            if (allocation->unkAD6 == i) {
+            if (allocation->saveSlotDialogSelection == i) {
                 alphaArg = 0xFF;
-                if (allocation->unkAC6 == 0x34) {
-                    flagArg = (-(allocation->unkAC4 & 1) & 0xFF) | 5;
+                if (allocation->saveSlotMenuState == 0x34) {
+                    flagArg = (-(allocation->selectionAnimState & 1) & 0xFF) | 5;
                 }
             } else {
                 alphaArg = 0x60;
@@ -1315,7 +1091,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
         }
     } else {
         s16 xOffset;
-        if (allocation->unkACD != 0x62) {
+        if (allocation->eepromErrorStatus != 0x62) {
             xOffset = -0x58 | -0x60;
         } else {
             xOffset = -0x60;
@@ -1323,7 +1099,7 @@ void updateSaveSlotDeleteText(SaveSlotDeleteTextState *state) {
 
         enqueueTextLayout(
             state->textAsset,
-            gSaveSlotMenuOptionTexts[allocation->unkAD5],
+            gSaveSlotMenuOptionTexts[allocation->saveSlotDialogType],
             xOffset,
             -0x20,
             0xFF,
@@ -1354,23 +1130,23 @@ void initSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state) {
     state->spriteAsset = spriteAsset;
     state->alpha = 0xFF;
     state->blinkAlpha = 0;
-    state->unkC = 0;
+    state->tileMode = 0;
 
     setCallback(updateSaveSlotDeleteArrow);
 }
 
 void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state) {
-    SaveSlotAllocation *allocation;
+    SaveSlotScreenState *allocation;
     u32 temp;
 
     allocation = getCurrentAllocation();
 
-    temp = allocation->unkAC6;
+    temp = allocation->saveSlotMenuState;
     if ((u32)(temp - 0x33) < 2U) {
-        state->y = (allocation->unkAD6 * 3 * 8) - 0x14;
+        state->y = (allocation->saveSlotDialogSelection * 3 * 8) - 0x14;
 
-        if (allocation->unkAC6 == 0x34) {
-            if (allocation->unkAC4 & 1) {
+        if (allocation->saveSlotMenuState == 0x34) {
+            if (allocation->selectionAnimState & 1) {
                 state->blinkAlpha = 0xFF;
             } else {
                 state->blinkAlpha = 0;
@@ -1381,7 +1157,7 @@ void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state) {
 
         enqueueCallbackBySlotIndex(8, 1, renderTextSprite, state);
 
-        if (allocation->unkAC6 == 0x33) {
+        if (allocation->saveSlotMenuState == 0x33) {
             state->animDelay++;
             state->animDelay &= 3;
             if (state->animDelay == 0) {
@@ -1401,6 +1177,6 @@ void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state) {
     }
 }
 
-void cleanupSaveSlotDeleteArrow(SaveSlotCleanupArg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupSaveSlotDeleteArrow(SaveSlotDeleteArrowState *arg0) {
+    arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
 }

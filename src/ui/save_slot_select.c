@@ -13,58 +13,6 @@
 #include "text/font_render.h"
 #include "ui/save_slot_gfx.h"
 
-typedef struct {
-    u8 pad[0xD0];
-    u8 slotIndex;
-} SaveSlotStatSpritesReturnType;
-
-typedef struct {
-    u8 pad[0x1C];
-    u8 slotIndex;
-} SaveSlotNameTextReturnType;
-
-typedef struct {
-    u8 pad[0xF0];
-    u8 slotIndex;
-} SaveSlotItemLabelsReturnType;
-
-typedef struct {
-    u8 pad[0x48];
-    u8 particleIndex;
-} SaveSlotParticlesReturnType;
-
-typedef struct {
-    ViewportNode unk0;
-    ViewportNode slotModels[4];
-    EepromSaveData_type slotData[4];
-    void *unkAA8;
-    void *unkAAC;
-    void *unkAB0;
-    void *unkAB4;
-    void *unkAB8;
-    s16 slideOffset;
-    s16 unkABE;
-    s16 nameEntryCursorY;
-    u16 nameEntryCursorBaseY;
-    u16 selectionAnimState;
-    u16 saveSlotMenuState;
-    u8 selectedSaveSlot;
-    u8 hasCurrentSaveData;
-    u8 eepromOperationStatus;
-    u8 mainPromptIndex;
-    u8 numValidSlots;
-    u8 eepromErrorStatus;
-    u8 slotHasData[3];
-    u8 originalSlotDataFlag;
-    u8 writeSlotIndexPlusOne;
-    u8 menuAnimOffsetX;
-    u8 menuChoiceIndex;
-    u8 saveSlotDialogType;
-    u8 saveSlotDialogSelection;
-    u8 savedSlotIndex;
-    u8 animDelayCounter;
-} SaveSlotScreenState;
-
 u8 eeprom_save_magic[16] = "SNOW2EEP";
 
 void updateSaveSlotSelectionScreen(void);
@@ -83,8 +31,8 @@ void initSaveSlotScreen(void) {
     s32 i;
     s32 xOffset;
     s32 xPos;
-    SaveSlotStatSpritesReturnType *statTask;
-    SaveSlotNameTextReturnType *nameTask;
+    SaveSlotStatSpritesState *statTask;
+    SaveSlotNameTextState *nameTask;
     void (*handler)(void);
     s32 probeResult;
 
@@ -95,7 +43,7 @@ void initSaveSlotScreen(void) {
     state->saveSlotMenuState = 0x28;
     state->selectedSaveSlot = 3;
     state->slideOffset = -0x140;
-    state->unkABE = -0x58;
+    state->nameEntryGridX = -0x58;
     state->selectionAnimState = 0;
     state->numValidSlots = 0;
     state->nameEntryCursorY = -0xE0;
@@ -105,11 +53,12 @@ void initSaveSlotScreen(void) {
     state->saveSlotDialogType = 0;
     state->saveSlotDialogSelection = 0;
 
-    state->unkAA8 = loadCompressedData(&uiFontSpriteSheet_ROM_START, &font_main_ROM_START, 0x2278);
-    state->unkAB4 = loadTextRenderAsset(1);
-    state->unkAB8 = loadCompressedData(&goldIconSprite_ROM_START, &digit_sprite_ROM_START, 0x388);
-    state->unkAAC = loadCompressedData(&okPromptSprites_ROM_START, &characterSelectBoardTexture_ROM_START, 0x1B48);
-    state->unkAB0 = loadCompressedData(&snowflakeSprite_ROM_START, &tiledSnowmanAsset_ROM_START, 0x9488);
+    state->uiFontSpriteSheet = loadCompressedData(&uiFontSpriteSheet_ROM_START, &font_main_ROM_START, 0x2278);
+    state->textRenderAsset = loadTextRenderAsset(1);
+    state->goldIconSpriteSheet = loadCompressedData(&goldIconSprite_ROM_START, &digit_sprite_ROM_START, 0x388);
+    state->confirmationSpriteSheet =
+        loadCompressedData(&okPromptSprites_ROM_START, &characterSelectBoardTexture_ROM_START, 0x1B48);
+    state->snowflakeSpriteSheet = loadCompressedData(&snowflakeSprite_ROM_START, &tiledSnowmanAsset_ROM_START, 0x9488);
 
     initMenuCameraNode((ViewportNode *)state, 8, 0xA, 1);
 
@@ -130,7 +79,7 @@ void initSaveSlotScreen(void) {
         setViewportFadeValue(NULL, 0, 0);
 
         xOffset += 0x380000;
-        state->slotHasData[i] = 0;
+        state->slotStatus.selection.slotHasData[i] = 0;
         i++;
     } while (i < 3);
 
@@ -159,10 +108,10 @@ void initSaveSlotScreen(void) {
 
 eeprom_done:
     for (i = 0; i < 3; i++) {
-        statTask = (SaveSlotStatSpritesReturnType *)scheduleTask(initSaveSlotStatSprites, 0, 0, 0x5A);
+        statTask = (SaveSlotStatSpritesState *)scheduleTask(initSaveSlotStatSprites, 0, 0, 0x5A);
         statTask->slotIndex = i;
         if (state->eepromErrorStatus != 0) {
-            nameTask = (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotNameText, 0, 0, 0x5B);
+            nameTask = (SaveSlotNameTextState *)scheduleTask(initSaveSlotNameText, 0, 0, 0x5B);
             nameTask->slotIndex = i;
         }
     }
@@ -194,9 +143,9 @@ after_loop:
     scheduleTask(initSaveSlotDeleteText, 0, 0, 0x5B);
 
     if (state->hasCurrentSaveData == 1) {
-        statTask = (SaveSlotStatSpritesReturnType *)scheduleTask(initSaveSlotStatSprites, 0, 0, 0x5A);
+        statTask = (SaveSlotStatSpritesState *)scheduleTask(initSaveSlotStatSprites, 0, 0, 0x5A);
         statTask->slotIndex = 3;
-        state->originalSlotDataFlag = 0;
+        state->slotStatus.selection.originalSlotDataFlag = 0;
         initViewportNode(&state->slotModels[3], NULL, 0xC, 6, 0);
         setViewportId(&state->slotModels[3], 0xD);
         setModelCameraTransform(&state->slotModels[3], -0x140, -0x30, -0xA0, -0x18, 0xA0, 0x18);
@@ -221,9 +170,12 @@ void updateSaveSlotSelectionScreen(void) {
     SaveSlotScreenState *state;
     u8 slotIdx;
     s32 i;
-    SaveSlotNameTextReturnType *nameTask;
-    SaveSlotItemLabelsReturnType *labelsTask;
-    SaveSlotParticlesReturnType *particleTask;
+    union {
+        SaveSlotNameTextState *name;
+        SaveSlotItemIconsState *icons;
+    } slotVisualTask;
+    SaveSlotNumberLabelsState *labelsTask;
+    SaveSlotSelectionParticlesState *particleTask;
     void *taskResult;
 
     state = (SaveSlotScreenState *)getCurrentAllocation();
@@ -245,17 +197,17 @@ void updateSaveSlotSelectionScreen(void) {
                 u16 counter;
                 counter = state->selectionAnimState;
                 labelsTask = NULL;
-                if (state->slotHasData[counter] != 0) {
-                    nameTask =
-                        (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotItemIcons, 2, counter & 0xFF, 0x5B);
-                    labelsTask = (SaveSlotItemLabelsReturnType *)
+                if (state->slotStatus.selection.slotHasData[counter] != 0) {
+                    slotVisualTask.icons =
+                        (SaveSlotItemIconsState *)scheduleTask(initSaveSlotItemIcons, 2, counter & 0xFF, 0x5B);
+                    labelsTask = (SaveSlotNumberLabelsState *)
                         scheduleTask(initSaveSlotItemLabels, 2, (u8)state->selectionAnimState, 0x5B);
                 } else {
-                    nameTask =
-                        (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotNameText, 2, counter & 0xFF, 0x5B);
+                    slotVisualTask.name =
+                        (SaveSlotNameTextState *)scheduleTask(initSaveSlotNameText, 2, counter & 0xFF, 0x5B);
                 }
-                if (nameTask != NULL) {
-                    nameTask->slotIndex = (u8)state->selectionAnimState;
+                if (slotVisualTask.name != NULL) {
+                    slotVisualTask.name->slotIndex = (u8)state->selectionAnimState;
                 }
                 if (labelsTask != NULL) {
                     labelsTask->slotIndex = (u8)state->selectionAnimState;
@@ -357,7 +309,7 @@ void updateSaveSlotSelectionScreen(void) {
                 if (state->hasCurrentSaveData != 0) {
                     goto case1_confirm;
                 }
-                if (state->slotHasData[state->selectedSaveSlot] != 1) {
+                if (state->slotStatus.selection.slotHasData[state->selectedSaveSlot] != 1) {
                     state->saveSlotDialogSelection = 0x63;
                     state->mainPromptIndex = 2;
                     state->saveSlotMenuState = 0x3C;
@@ -423,7 +375,8 @@ void updateSaveSlotSelectionScreen(void) {
                     gGameSessionContext->previousSaveSlot = state->selectedSaveSlot;
                     state->saveSlotMenuState = 0x18;
                     state->animDelayCounter = 3;
-                    state->originalSlotDataFlag = state->slotHasData[state->selectedSaveSlot];
+                    state->slotStatus.selection.originalSlotDataFlag =
+                        state->slotStatus.selection.slotHasData[state->selectedSaveSlot];
                     memcpy(
                         (u8 *)state + 0xA4C,
                         (void *)(state->selectedSaveSlot * 0x5C + (s32)(u8 *)state + 0x938),
@@ -431,24 +384,25 @@ void updateSaveSlotSelectionScreen(void) {
                     );
                     memcpy((void *)(state->selectedSaveSlot * 0x5C + (s32)(u8 *)state + 0x938), EepromSaveData, 0x5C);
                     state->writeSlotIndexPlusOne = state->selectedSaveSlot + 1;
-                    if (state->slotHasData[state->selectedSaveSlot] == 0) {
-                        state->slotHasData[state->selectedSaveSlot] = 1;
+                    if (state->slotStatus.selection.slotHasData[state->selectedSaveSlot] == 0) {
+                        state->slotStatus.selection.slotHasData[state->selectedSaveSlot] = 1;
                         state->numValidSlots = state->numValidSlots + 1;
                     } else {
-                        state->originalSlotDataFlag = 1;
+                        state->slotStatus.selection.originalSlotDataFlag = 1;
                     }
                     labelsTask = NULL;
                     eepromWriteAsync(state->selectedSaveSlot);
                     state->eepromErrorStatus = 0;
                     state->eepromOperationStatus = 0;
-                    if (state->originalSlotDataFlag != 0) {
-                        nameTask = (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotItemIcons, 1, 0, 0x5A);
-                        labelsTask = (SaveSlotItemLabelsReturnType *)scheduleTask(initSaveSlotItemLabels, 1, 0, 0x5A);
+                    if (state->slotStatus.selection.originalSlotDataFlag != 0) {
+                        slotVisualTask.icons =
+                            (SaveSlotItemIconsState *)scheduleTask(initSaveSlotItemIcons, 1, 0, 0x5A);
+                        labelsTask = (SaveSlotNumberLabelsState *)scheduleTask(initSaveSlotItemLabels, 1, 0, 0x5A);
                     } else {
-                        nameTask = (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotNameText, 1, 0, 0x5A);
+                        slotVisualTask.name = (SaveSlotNameTextState *)scheduleTask(initSaveSlotNameText, 1, 0, 0x5A);
                     }
-                    if (nameTask != NULL) {
-                        nameTask->slotIndex = 3;
+                    if (slotVisualTask.name != NULL) {
+                        slotVisualTask.name->slotIndex = 3;
                     }
                     if (labelsTask != NULL) {
                         labelsTask->slotIndex = 3;
@@ -457,9 +411,9 @@ void updateSaveSlotSelectionScreen(void) {
                     do {
                         getFreeNodeCount(0);
                         particleTask =
-                            (SaveSlotParticlesReturnType *)scheduleTask(initSaveSlotSelectionParticles, 1, 0, 0x59);
+                            (SaveSlotSelectionParticlesState *)scheduleTask(initSaveSlotSelectionParticles, 1, 0, 0x59);
                         if (particleTask != NULL) {
-                            particleTask->particleIndex = i;
+                            particleTask->isRightSide = i;
                         }
                         i += 1;
                     } while (i < 2);
@@ -570,12 +524,12 @@ void updateSaveSlotSelectionScreen(void) {
                 playSoundEffect(0xB);
                 state->saveSlotMenuState = 0x15;
                 terminateTasksByTypeAndID(2, (s32)state->selectedSaveSlot);
-                nameTask =
-                    (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotItemIcons, 2, state->selectedSaveSlot, 0x5B);
-                labelsTask = (SaveSlotItemLabelsReturnType *)
-                    scheduleTask(initSaveSlotItemLabels, 2, state->selectedSaveSlot, 0x5B);
-                if (nameTask != NULL) {
-                    nameTask->slotIndex = state->selectedSaveSlot;
+                slotVisualTask.icons =
+                    (SaveSlotItemIconsState *)scheduleTask(initSaveSlotItemIcons, 2, state->selectedSaveSlot, 0x5B);
+                labelsTask =
+                    (SaveSlotNumberLabelsState *)scheduleTask(initSaveSlotItemLabels, 2, state->selectedSaveSlot, 0x5B);
+                if (slotVisualTask.name != NULL) {
+                    slotVisualTask.name->slotIndex = state->selectedSaveSlot;
                 }
                 if (labelsTask != NULL) {
                     labelsTask->slotIndex = state->selectedSaveSlot;
@@ -606,7 +560,8 @@ void updateSaveSlotSelectionScreen(void) {
                         state->mainPromptIndex = 8;
                     } else {
                         state->mainPromptIndex = 0xE;
-                        state->slotHasData[state->selectedSaveSlot] = state->originalSlotDataFlag;
+                        state->slotStatus.selection.slotHasData[state->selectedSaveSlot] =
+                            state->slotStatus.selection.originalSlotDataFlag;
                         memcpy(
                             (void *)(state->selectedSaveSlot * 0x5C + (s32)(u8 *)state + 0x938),
                             (u8 *)state + 0xA4C,
@@ -615,17 +570,17 @@ void updateSaveSlotSelectionScreen(void) {
                         terminateTasksByTypeAndID(2, (s32)state->selectedSaveSlot);
                         slotIdx = state->selectedSaveSlot;
                         labelsTask = NULL;
-                        if (state->slotHasData[slotIdx] != 0) {
-                            nameTask =
-                                (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotItemIcons, 2, slotIdx, 0x5B);
-                            labelsTask = (SaveSlotItemLabelsReturnType *)
+                        if (state->slotStatus.selection.slotHasData[slotIdx] != 0) {
+                            slotVisualTask.icons =
+                                (SaveSlotItemIconsState *)scheduleTask(initSaveSlotItemIcons, 2, slotIdx, 0x5B);
+                            labelsTask = (SaveSlotNumberLabelsState *)
                                 scheduleTask(initSaveSlotItemLabels, 2, state->selectedSaveSlot, 0x5B);
                         } else {
-                            nameTask =
-                                (SaveSlotNameTextReturnType *)scheduleTask(initSaveSlotNameText, 2, slotIdx, 0x5B);
+                            slotVisualTask.name =
+                                (SaveSlotNameTextState *)scheduleTask(initSaveSlotNameText, 2, slotIdx, 0x5B);
                         }
-                        if (nameTask != NULL) {
-                            nameTask->slotIndex = state->selectedSaveSlot;
+                        if (slotVisualTask.name != NULL) {
+                            slotVisualTask.name->slotIndex = state->selectedSaveSlot;
                         }
                         if (labelsTask != NULL) {
                             labelsTask->slotIndex = state->selectedSaveSlot;
@@ -848,13 +803,13 @@ void cleanupSaveSlotSelectionAndExit(void) {
         return;
     }
 
-    unlinkNode(&allocation->unk0);
+    unlinkNode(&allocation->mainViewport);
 
-    allocation->unkAA8 = freeNodeMemory(allocation->unkAA8);
-    allocation->unkAAC = freeNodeMemory(allocation->unkAAC);
-    allocation->unkAB0 = freeNodeMemory(allocation->unkAB0);
-    allocation->unkAB4 = freeNodeMemory(allocation->unkAB4);
-    allocation->unkAB8 = freeNodeMemory(allocation->unkAB8);
+    allocation->uiFontSpriteSheet = freeNodeMemory(allocation->uiFontSpriteSheet);
+    allocation->confirmationSpriteSheet = freeNodeMemory(allocation->confirmationSpriteSheet);
+    allocation->snowflakeSpriteSheet = freeNodeMemory(allocation->snowflakeSpriteSheet);
+    allocation->textRenderAsset = freeNodeMemory(allocation->textRenderAsset);
+    allocation->goldIconSpriteSheet = freeNodeMemory(allocation->goldIconSpriteSheet);
 
     if (allocation->hasCurrentSaveData == 0) {
         for (i = 0; i < 3; i++) {
@@ -958,13 +913,13 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
                 allocation->eepromErrorStatus = 0;
                 if (!(funcResult & 0xFF)) {
                     allocation->numValidSlots++;
-                    allocation->slotHasData[slotIndex] = 1;
+                    allocation->slotStatus.selection.slotHasData[slotIndex] = 1;
 
                     if (allocation->selectedSaveSlot >= 3) {
                         allocation->selectedSaveSlot = arg0;
                     }
                 } else {
-                    allocation->slotHasData[slotIndex] = 0;
+                    allocation->slotStatus.selection.slotHasData[slotIndex] = 0;
                 }
             }
         }
@@ -979,7 +934,7 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
             return;
         }
         allocation->eepromErrorStatus = 0;
-        allocation->slotHasData[arg0 & 0xFFFF] = 0;
+        allocation->slotStatus.selection.slotHasData[arg0 & 0xFFFF] = 0;
     }
 }
 

@@ -695,3 +695,11 @@ stores two `Vec3i` endpoints before a complete `DisplayListObject` at offset `0x
 starts with the object at offset zero. In both cases, embedding the shared type exposes the transform and segment
 pointers without changing their offsets. The race-data pointer used for chair positions is also
 `GameState.raceTransformData` at offset `0x48`, not a level-specific allocation field.
+
+The save-slot screen demonstrated both patterns at once. Its graphics file had four padded views of the same
+`SaveSlotScreenState`, while its controller recreated trailing fields from four scheduled graphics-task states.
+Sharing the complete screen and task definitions exposed the EEPROM slot records, menu state, selected slot, and
+animation fields directly. Its sprite and text entries are also the canonical `TextRenderArg`, `SpriteRenderArg`,
+`ScaledSpriteArg`, `ColoredTextRenderArg`, and `TextLayoutArg` types. When KMC originally stores a packed
+padding-and-shade pair with `sh`, keep the shared byte-oriented renderer type but write the pair through its
+halfword address; assigning only the named shade byte changes code generation and can lengthen the function.
