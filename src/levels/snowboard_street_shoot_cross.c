@@ -51,24 +51,13 @@ typedef struct {
 } ProjectileAllocation;
 
 typedef struct {
-    u8 _pad[0x5C];
-    u8 skyDisplayListIndex;
-} RotatingSkyAllocation;
-
-typedef struct {
     u8 _pad[0x14];
     s16 courseId;
 } ShootCrossTask;
 
-typedef struct {
-    /* 0x00 */ Transform3D matrix;
-    /* 0x20 */ u8 _pad20[0x1C];
-    /* 0x3C */ u16 rotationAngle;
-} RotatingSkyRenderArg;
-
 void renderShootCrossTargets(ShootCrossTargets *arg0);
-void updateRotatingSky(RotatingSkyRenderArg *arg0);
-void cleanupRotatingSky(RotatingSkyArg *rotatingSky);
+void updateRotatingSky(SnowboardStreetRotatingSky *rotatingSky);
+void cleanupRotatingSky(SnowboardStreetRotatingSky *rotatingSky);
 void cleanupShootCrossTargets(ShootCrossTargets *arg0);
 void initShootCrossTargetsCallback(ShootCrossTargets *arg0);
 void activateShootCrossTargets(ShootCrossTargets *arg0);
@@ -290,35 +279,37 @@ void scheduleShootCrossTargetsTask(s32 courseId) {
     }
 }
 
-void initRotatingSky(RotatingSkyArg *rotatingSky) {
-    RotatingSkyAllocation *allocation;
-    LevelDisplayLists *result;
+void initRotatingSky(SnowboardStreetRotatingSky *rotatingSky) {
+    GameState *gameState;
+    DisplayListObject *displayObject;
 
-    allocation = (RotatingSkyAllocation *)getCurrentAllocation();
-    result = getSkyDisplayLists3ByIndex(allocation->skyDisplayListIndex);
-    rotatingSky->displayLists = (void *)((u32)result + 0x90);
-    rotatingSky->uncompressedAsset = loadUncompressedAssetByIndex(0xD);
-    rotatingSky->compressedAsset = loadCompressedSegment2AssetByIndex(0xD);
-    rotatingSky->posX = 0x25990000;
-    rotatingSky->posY = 0x1A2B0000;
-    rotatingSky->unk2C = 0;
-    rotatingSky->posZ = 0xF7A30000;
+    gameState = (GameState *)getCurrentAllocation();
+    displayObject = &rotatingSky->displayObject;
+    displayObject->displayLists = &getSkyDisplayLists3ByIndex(gameState->memoryPoolId)->sceneryDisplayLists1;
+    displayObject->segment1 = loadUncompressedAssetByIndex(0xD);
+    displayObject->segment2 = loadCompressedSegment2AssetByIndex(0xD);
+    displayObject->transform.translation.x = 0x25990000;
+    displayObject->transform.translation.y = 0x1A2B0000;
+    displayObject->segment3 = NULL;
+    displayObject->transform.translation.z = 0xF7A30000;
     setCleanupCallback(cleanupRotatingSky);
     setCallback(updateRotatingSky);
 }
 
-void updateRotatingSky(RotatingSkyRenderArg *arg0) {
+void updateRotatingSky(SnowboardStreetRotatingSky *rotatingSky) {
     s32 i;
 
-    arg0->rotationAngle -= 0x20;
-    createYRotationMatrix(&arg0->matrix, arg0->rotationAngle);
+    rotatingSky->rotationAngle -= 0x20;
+    createYRotationMatrix(&rotatingSky->displayObject.transform, rotatingSky->rotationAngle);
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, &rotatingSky->displayObject);
     }
 }
 
-void cleanupRotatingSky(RotatingSkyArg *rotatingSky) {
-    rotatingSky->uncompressedAsset = freeNodeMemory(rotatingSky->uncompressedAsset);
-    rotatingSky->compressedAsset = freeNodeMemory(rotatingSky->compressedAsset);
+void cleanupRotatingSky(SnowboardStreetRotatingSky *rotatingSky) {
+    DisplayListObject *displayObject = &rotatingSky->displayObject;
+
+    displayObject->segment1 = freeNodeMemory(displayObject->segment1);
+    displayObject->segment2 = freeNodeMemory(displayObject->segment2);
 }

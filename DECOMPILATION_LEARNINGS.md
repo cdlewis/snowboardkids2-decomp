@@ -617,3 +617,17 @@ recomputes after moving the camera away from an NPC.
 When a call requires a cast between unrelated task structs, compare the accessed offsets with the caller's
 complete layout before preserving the partial type. Moving the complete type to its subsystem header can remove
 the duplicate, the padding, and the cast without affecting code generation.
+
+## Recognize DisplayListObject Prefixes in Render Tasks
+
+Level render-task structs that begin with a `Transform3D`, followed by display-list and segment pointers at
+offsets `0x20` through `0x2C`, contain the canonical `DisplayListObject` as their prefix. The Snowboard Street
+rotating-sky tasks were split into separate initialization and rendering views: one exposed translation and
+asset fields, while the other exposed the transform and a trailing rotation angle. Embedding
+`DisplayListObject` in one shared task type removes both partial copies and gives the fields their renderer
+semantics without casts or manual offsets.
+
+An embedded prefix at offset zero preserves KMC GCC 2.7.2 code generation when passing its address to renderer
+functions or accessing nested transform translations. Also inspect asset-table layouts before retaining byte
+offset arithmetic: the rotating sky's `base + 0x90` display-list pointer is the named
+`LevelDisplayLists.sceneryDisplayLists1` field.
