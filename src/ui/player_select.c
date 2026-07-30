@@ -6,7 +6,6 @@
 #include "common_bss.h"
 #include "graphics/graphics.h"
 #include "os_cont.h"
-#include "race/race_main.h"
 #include "story/map_events.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
@@ -59,14 +58,14 @@ void initPlayerCountSelectState(void) {
         state->playerCount.selectedPlayerIndex = numControllers - 1;
     }
 
-    initMenuCameraNode(&state->node, 8, 0xA, 1);
+    initMenuCameraNode(&state->viewport, 8, 0xA, 1);
 
-    setViewportFadeValue(&state->node, 0xFF, 0);
-    setViewportFadeValue(&state->node, 0, 0x10);
+    setViewportFadeValue(&state->viewport, 0xFF, 0);
+    setViewportFadeValue(&state->viewport, 0, 0x10);
 
-    state->assetData1 =
+    state->portraitSpriteData =
         loadCompressedData(&playerCountSelectSprites_ROM_START, &playerCountSelectSprites_ROM_END, 0xEEE8);
-    state->assetData2 = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
+    state->promptSpriteData = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
 
     scheduleTask(&initPlayerCountSelectSprites, 0, 0, 0x5A);
     scheduleTask(&initCharacterReadyIndicator, 0, 0, 0x5A);
@@ -77,11 +76,11 @@ void initPlayerCountSelectState(void) {
 void awaitPlayerCountSelectFadeIn(void) {
     PlayerCountSelectState *state;
     s32 result;
-    u8 *task;
+    PlayerSelectState *playerSelectTask;
     u16 temp;
 
     state = (PlayerCountSelectState *)getCurrentAllocation();
-    result = getViewportFadeMode(&state->node);
+    result = getViewportFadeMode(&state->viewport);
 
     if (result == 0) {
         state->frameCounter = 0;
@@ -92,8 +91,8 @@ void awaitPlayerCountSelectFadeIn(void) {
         temp = state->frameCounter;
         if (temp < 4) {
             if (result == (0xC - (temp * 2))) {
-                task = (u8 *)scheduleTask(&setPlayerBehaviorMode, 0, 0, 0x5A);
-                task[0x2B] = (u8)state->frameCounter;
+                playerSelectTask = scheduleTask(&initPlayerSelectSprites, 0, 0, 0x5A);
+                playerSelectTask->slotIndex = state->frameCounter;
                 state->frameCounter = state->frameCounter + 1;
             }
         }
@@ -168,9 +167,9 @@ void handlePlayerCountSelectInput(void) {
         setMusicFadeOut(0xA);
 
         if (state->menuResult == PLAYER_COUNT_RESULT_CANCEL) {
-            setViewportFadeValue(&state->node, 0xFF, 8);
+            setViewportFadeValue(&state->viewport, 0xFF, 8);
         } else {
-            setViewportFadeValue(&state->node, 0xFF, 0x10);
+            setViewportFadeValue(&state->viewport, 0xFF, 0x10);
         }
 
         setGameStateHandler(&exitPlayerCountSelect);
@@ -182,13 +181,13 @@ void exitPlayerCountSelect(void) {
     s32 i;
 
     state = (PlayerCountSelectState *)getCurrentAllocation();
-    if (getViewportFadeMode(&state->node) == 0) {
+    if (getViewportFadeMode(&state->viewport) == 0) {
         terminateAllTasks();
 
-        unlinkNode(&state->node);
+        unlinkNode(&state->viewport);
 
-        state->assetData1 = freeNodeMemory(state->assetData1);
-        state->assetData2 = freeNodeMemory(state->assetData2);
+        state->portraitSpriteData = freeNodeMemory(state->portraitSpriteData);
+        state->promptSpriteData = freeNodeMemory(state->promptSpriteData);
 
         if (state->menuResult == PLAYER_COUNT_RESULT_PROCEED) {
             terminateSchedulerWithCallback(onPlayerCountProceed);

@@ -68,8 +68,14 @@ typedef struct {
     /* 0x08 */ u16 frameIndex;
     /* 0x0A */ u16 renderWidth;
     /* 0x0C */ u16 renderHeight;
-    /* 0x0E */ u8 pad0E[3];
-    /* 0x11 */ u8 shade;
+    /* 0x0E */ u16 padding0E;
+    /* 0x10 */ union {
+        u16 shadeWithPadding;
+        struct {
+            u8 padding;
+            u8 intensity;
+        } bytes;
+    } shade;
     /* 0x12 */ u8 tileMode;
     /* 0x13 */ u8 overridePaletteCount;
 } ScaledSpriteArg;

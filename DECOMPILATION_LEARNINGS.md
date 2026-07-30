@@ -737,3 +737,17 @@ title logo starts with `TileMapScrollRenderState`. Embedding those common types 
 code generation while replacing duplicated `asset`, sprite-index, alpha, and tile fields with renderer-owned
 names. Conversely, bytes `0x3B0` through `0x3CF` in the story `GameState` form one complete `Transform3D`;
 representing that range as the transform removes title-only aliases from the common game-state layout.
+
+## Resolve Overlay Function Aliases by Payload Layout and Behavior
+
+Player count select scheduled `setPlayerBehaviorMode` through an address shared with the race overlay, then
+wrote byte `0x2B` of the returned task payload. In the player-select overlay that address is actually
+`initPlayerSelectSprites`, and `0x2B` is the named `PlayerSelectState.slotIndex` field. When an overlay callback
+appears to consume an impossible common type such as a full race `Player`, compare the active overlay, callback
+behavior, task allocation size, and payload offsets before preserving the borrowed symbol.
+
+Player-select task payloads also duplicate complete renderer arguments. Its portrait entries are
+`ScaledSpriteArg`, its four player-count options are `TextRenderArg`, and its header and indicator tasks are
+`SpriteRenderArg`. Packed halfword stores spanning renderer padding and shade bytes can be represented by a
+named union in the common renderer type; this removes manual byte addressing while retaining KMC's original
+`sh` code generation for every consumer.

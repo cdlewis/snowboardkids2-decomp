@@ -647,7 +647,7 @@ void renderScaledShadedSpriteFrame(ScaledSpriteArg *sprite) {
             (gfx + 2)->words.w0 = 0xFA000000;
 
             {
-                u8 shade = sprite->shade;
+                u8 shade = sprite->shade.bytes.intensity;
                 (gfx + 2)->words.w1 = (shade << 24) | (shade << 16) | (shade << 8) | 0xFF;
             }
 

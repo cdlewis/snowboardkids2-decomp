@@ -800,8 +800,8 @@ void initSaveSlotGoldDisplay(SaveSlotGoldDisplayState *arg0) {
         arg0->icons[i].frameIndex = 0;
         arg0->icons[i].renderWidth = 0x555;
         arg0->icons[i].renderHeight = 0x555;
-        *(s16 *)&arg0->icons[i].pad0E = 0;
-        *(s16 *)&arg0->icons[i].pad0E[2] = 0xFF;
+        arg0->icons[i].padding0E = 0;
+        arg0->icons[i].shade.shadeWithPadding = 0xFF;
         arg0->icons[i].overridePaletteCount = 0;
         arg0->icons[i].tileMode = 0;
 
@@ -826,11 +826,11 @@ void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state) {
             state->text[i].x = 0x1D;
             *(s16 *)&state->text[i].pad = 0x60;
             state->icons[i].frameIndex = 0;
-            *(s16 *)&state->icons[i].pad0E[2] = 0x60;
+            state->icons[i].shade.shadeWithPadding = 0x60;
         } else if (i == allocation->selectedSaveSlot) {
             state->text[i].x = 0x18;
             *(s16 *)&state->text[i].pad = 0xFF;
-            *(s16 *)&state->icons[i].pad0E[2] = 0xFF;
+            state->icons[i].shade.shadeWithPadding = 0xFF;
 
             if (allocation->saveSlotMenuState < 2) {
                 state->animFrames[i]++;
@@ -855,12 +855,12 @@ void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state) {
                 state->text[i].x = 0x1D;
                 *(s16 *)&state->text[i].pad = 0x60;
                 state->icons[i].frameIndex = 0;
-                *(s16 *)&state->icons[i].pad0E[2] = 0x60;
+                state->icons[i].shade.shadeWithPadding = 0x60;
             } else {
                 state->text[i].x = 0x17;
                 *(s16 *)&state->text[i].pad = 0xFF;
                 state->icons[i].frameIndex = 0;
-                *(s16 *)&state->icons[i].pad0E[2] = 0xFF;
+                state->icons[i].shade.shadeWithPadding = 0xFF;
             }
             state->animFrames[i] = 0;
         }

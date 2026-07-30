@@ -17,9 +17,9 @@ typedef enum {
 } PlayerCountMenuResult;
 
 typedef struct {
-    ViewportNode node;
-    void *assetData1;
-    void *assetData2;
+    ViewportNode viewport;
+    void *portraitSpriteData;
+    void *promptSpriteData;
     s16 frameCounter;
     union {
         u16 selectedPlayerIndex;
