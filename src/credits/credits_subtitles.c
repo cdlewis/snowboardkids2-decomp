@@ -50,14 +50,14 @@ void updateCreditsSubtitles(CreditsState *state) {
         state->subtitleInitialDelay = 0;
         state->subtitleScheduleIndex++;
 
-        if (getOffsetTableEntryData(state->subtitleSchedule, state->subtitleScheduleIndex) != 0) {
+        if (getSubtitleScheduleEntryCommands(state->subtitleSchedule, state->subtitleScheduleIndex) != 0) {
             state->subtitleIndex = state->subtitleIndex + 1;
         }
 
         temp_s0 = state->subtitleScheduleIndex;
-        if (temp_s0 < (getOffsetTableEntryCount(state->subtitleSchedule) - 1)) {
+        if (temp_s0 < (getSubtitleScheduleEntryCount(state->subtitleSchedule) - 1)) {
             state->nextSubtitleFrame =
-                getOffsetTableEntryValue0(state->subtitleSchedule, (s16)state->subtitleScheduleIndex + 1);
+                getSubtitleScheduleEntryStartFrame(state->subtitleSchedule, (s16)state->subtitleScheduleIndex + 1);
         } else {
             state->nextSubtitleFrame = 0x7530;
         }
@@ -73,7 +73,7 @@ void updateCreditsSubtitles(CreditsState *state) {
         }
     }
 
-    if (getOffsetTableEntryData(state->subtitleSchedule, state->subtitleScheduleIndex) != 0) {
+    if (getSubtitleScheduleEntryCommands(state->subtitleSchedule, state->subtitleScheduleIndex) != 0) {
         temp_v1 = state->subtitleInitialDelay;
         if (temp_v1 == 0) {
             if (state->subtitleDelay == 0) {
@@ -92,11 +92,11 @@ void updateCreditsSubtitles(CreditsState *state) {
         if (state->subtitleDelay == 0) {
         loop_start:
             while (state->subtitleCommandIndex <
-                   getOffsetTableEntryValue2(state->subtitleSchedule, state->subtitleScheduleIndex)) {
-                u8 *ptr;
+                   getSubtitleScheduleEntryCommandCount(state->subtitleSchedule, state->subtitleScheduleIndex)) {
+                u8 *commands;
 
-                ptr = getOffsetTableEntryData(state->subtitleSchedule, state->subtitleScheduleIndex);
-                state->subtitleDelay = ptr[state->subtitleCommandIndex];
+                commands = getSubtitleScheduleEntryCommands(state->subtitleSchedule, state->subtitleScheduleIndex);
+                state->subtitleDelay = commands[state->subtitleCommandIndex];
                 state->subtitleScrollPosition.fixedPoint = state->subtitleLineIndex << 20;
 
                 if (state->subtitleDelay & 0x80) {

@@ -3,17 +3,17 @@
 #include "common.h"
 
 typedef struct {
-    /* 0x0 */ s16 value0;
-    /* 0x2 */ s16 value2;
-    /* 0x4 */ s32 dataOffset;
-} OffsetTableEntry;
+    /* 0x0 */ s16 startFrame;
+    /* 0x2 */ s16 commandCount;
+    /* 0x4 */ s32 commandsOffset;
+} SubtitleScheduleEntry;
 
 typedef struct {
     /* 0x0 */ s32 entriesOffset;
-    /* 0x4 */ s32 countOffset;
-} OffsetTable;
+    /* 0x4 */ s32 entryCountOffset;
+} SubtitleSchedule;
 
-s32 getOffsetTableEntryCount(OffsetTable *table);
-s16 getOffsetTableEntryValue0(OffsetTable *table, s32 index);
-void *getOffsetTableEntryData(OffsetTable *table, s32 index);
-s16 getOffsetTableEntryValue2(OffsetTable *table, s32 index);
+s32 getSubtitleScheduleEntryCount(SubtitleSchedule *schedule);
+s16 getSubtitleScheduleEntryStartFrame(SubtitleSchedule *schedule, s32 index);
+u8 *getSubtitleScheduleEntryCommands(SubtitleSchedule *schedule, s32 index);
+s16 getSubtitleScheduleEntryCommandCount(SubtitleSchedule *schedule, s32 index);

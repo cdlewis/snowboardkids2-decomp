@@ -565,3 +565,8 @@ this preserves the original `sh` instructions while giving every consumer the re
 The credits palette ROM table uses the shared `CompressedAssetMeta` layout. The credits character task's
 halfword at `0x08` is a packed asset-pair selector: credits writes it with `sh`, while model initialization reads
 the low byte as the asset-pair index. A named union preserves both access widths without casts or manual offsets.
+
+The offset-based table consumed by `credits_subtitles.c` is specifically a subtitle schedule. Each eight-byte
+entry contains a subtitle start frame, a command count, and a relative offset to its command bytes. Typing and
+naming that format around its sole consumer makes the schedule semantics explicit without introducing a second
+partial view of the credits task allocation.

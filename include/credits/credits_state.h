@@ -33,7 +33,7 @@ typedef struct CreditsState {
     /* 0x948 */ void *scratchBuffer;
     /* 0x94C */ s8 scratchBufferStorage;
     /* 0x94D */ u8 pad94D[0xF];
-    /* 0x95C */ OffsetTable *subtitleSchedule;
+    /* 0x95C */ SubtitleSchedule *subtitleSchedule;
     /* 0x960 */ void *textRenderAsset;
     /* 0x964 */ Table_B934 *subtitleTextTable;
     /* 0x968 */ Table_B934 *creditsTextTable;
