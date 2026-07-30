@@ -1,0 +1,4 @@
+candidate_source: find src -type f -name '*.c' ! -name 'temp.c' ! -name 'ctx.c'
+prompt: "Examine $INPUT, look for instances of duplicate structs and structs that are just local copies of common game structs such as GameState and Player. Consolidate them to use common struct definitions where appropriate. Also take this opportunity to provide useful, descriptive field names rather than just unk0."
+accept_best_effort: true
+claude_command: codex
