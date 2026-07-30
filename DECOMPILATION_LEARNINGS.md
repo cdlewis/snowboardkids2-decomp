@@ -593,3 +593,12 @@ queue from the already-loaded manager base.
 The audio task embedded at offset `0x08` of each `AudioInfo` is the SDK's canonical `OSTask`, not a game-specific
 copy of its sixteen fields. Embedding `OSTask` retains the exact offsets and code generation while giving its
 microcode, data, stack, output, and yield fields their standard names.
+
+## Preserve Raw Table Indexing When Struct Indexing Changes Address Formation
+
+Giving a packed table a shared entry type does not guarantee that indexing it through that type will preserve
+KMC GCC's address calculation. In `checkClocktowerLocationDiscovery`, changing the original `s16` indexing of
+`storyMapAngleBounds` to `TriggerAngleBoundsTable[locationId].minAngle` and `.maxAngle` shortened the function
+and changed register allocation, despite producing the same offsets. Keep the shared entry definition for
+layout documentation, but retain the original scalar indexing expression in matching functions when the typed
+form changes code generation.

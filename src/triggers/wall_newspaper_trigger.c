@@ -3,17 +3,17 @@
 #include "system/task_scheduler.h"
 #include "triggers/event_trigger.h"
 
-u8 WallNewspaperLabel[] = "WALL NEWSPAPER";
+char WallNewspaperLabel[] = "WALL NEWSPAPER";
 
 void checkNewspaperLocationDiscovery(LocationDiscoveryTrigger *);
 
 void initNewspaperDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
     trigger->locationId = WALL_NEWSPAPER_EVENT_ID;
-    trigger->unk6 = -0x68;
-    trigger->unk1 = 0;
-    trigger->unk4 = 0;
-    trigger->unk8 = 0;
-    trigger->locationLabel = &WallNewspaperLabel;
+    trigger->labelOffsetY = -0x68;
+    trigger->discoveryState = 0;
+    trigger->labelOffsetX = 0;
+    trigger->labelOffsetZ = 0;
+    trigger->locationLabel = WallNewspaperLabel;
 
     setCallback(&checkNewspaperLocationDiscovery);
 }
@@ -28,8 +28,8 @@ void checkNewspaperLocationDiscovery(LocationDiscoveryTrigger *trigger) {
 
     gameState = getCurrentAllocation();
     // Only check if player is above certain Y threshold
-    if (gameState->unk3F8 > 0x760000) {
-        playerYaw = gameState->unk3F4;
+    if (gameState->storyMapCameraOrbitRadius > 0x760000) {
+        playerYaw = gameState->storyMapCameraOrbitAngle;
         // Normalize angle to range -0x1000 to 0x1000
         normalizedYaw = playerYaw;
         if (playerYaw >= 0x1001) {

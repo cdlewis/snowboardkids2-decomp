@@ -11,10 +11,10 @@ void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *);
 
 void initClocktowerDiscoveryTrigger(LocationDiscoveryTrigger *trigger) {
     trigger->locationId = CLOCKTOWER_EVENT_ID;
-    trigger->unk6 = -0x68;
-    trigger->unk1 = 0;
-    trigger->unk4 = 0;
-    trigger->unk8 = 0;
+    trigger->labelOffsetY = -0x68;
+    trigger->discoveryState = 0;
+    trigger->labelOffsetX = 0;
+    trigger->labelOffsetZ = 0;
     trigger->locationLabel = ClocktowerLabel;
     setCallback(&checkClocktowerLocationDiscovery);
 }
@@ -29,8 +29,8 @@ void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *trigger) {
 
     gameState = getCurrentAllocation();
     // Only check if player is within the clocktower Y range
-    if ((u32)(gameState->unk3F8 - 0x4C0001) < 0xBFFFF) {
-        playerYaw = gameState->unk3F4;
+    if ((u32)(gameState->storyMapCameraOrbitRadius - 0x4C0001) < 0xBFFFF) {
+        playerYaw = gameState->storyMapCameraOrbitAngle;
         // Normalize angle to range -0x1000 to 0x1000
         normalizedYaw = playerYaw;
         if (playerYaw >= 0x1001) {
@@ -43,7 +43,7 @@ void checkClocktowerLocationDiscovery(LocationDiscoveryTrigger *trigger) {
             maxAngle = ((s16 *)storyMapAngleBounds)[(locationId * 2) + 1];
             if (normalizedYaw > maxAngle) {
                 // Check if player's X position is within discovery range
-                if ((u16)(gameState->unk3FC - 0xC01) < 0x7FF) {
+                if ((u16)(gameState->storyMapCameraViewAngle - 0xC01) < 0x7FF) {
                     gameState->locationDiscovered = 1;
                     gameState->discoveredLocationId = trigger->locationId;
                 }

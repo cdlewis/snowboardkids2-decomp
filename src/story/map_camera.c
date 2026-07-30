@@ -145,7 +145,7 @@ void initStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
     arg0->pitchAngle = 0;
     arg0->rollAngle = 0;
 
-    temp = allocation->unk3F4;
+    temp = allocation->storyMapCameraOrbitAngle;
     arg0->yawAngle = temp;
     if (temp >= 0x1001) {
         arg0->yawAngle = temp - 0x2000;
@@ -180,7 +180,7 @@ void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0) {
 
     allocation = (GameState *)getCurrentAllocation();
 
-    temp = allocation->unk3F4;
+    temp = allocation->storyMapCameraOrbitAngle;
     if (temp >= 0x1001) {
         temp -= 0x2000;
     }

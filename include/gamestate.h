@@ -349,11 +349,11 @@ typedef struct {
     void *unk3E4;
     s16 unk3E8;
     u8 PAD_D[0x2];
-    s32 unk3EC;
-    s32 unk3F0;
-    s16 unk3F4;
-    s32 unk3F8;
-    u16 unk3FC;
+    /* 0x3EC */ s32 storyMapCameraX;
+    /* 0x3F0 */ s32 storyMapCameraZ;
+    /* 0x3F4 */ s16 storyMapCameraOrbitAngle;
+    /* 0x3F8 */ s32 storyMapCameraOrbitRadius;
+    /* 0x3FC */ u16 storyMapCameraViewAngle;
     s16 unk3FE;
     u8 animState;
     u8 PAD_E[0x2];
@@ -376,7 +376,8 @@ typedef struct {
     u8 unk429;
     u8 dialogueTurnState;
     u8 unk42B;
-    u8 PAD_11[2];
+    /* 0x42C */ u8 dialogueLineIndex;
+    /* 0x42D */ u8 storyMapItemType;
     s8 unk42E;
     u8 PAD_12[0x158];
     s32 *unk588;

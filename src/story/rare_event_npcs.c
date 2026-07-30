@@ -403,8 +403,8 @@ void updateRareEventNpcDialogueSequence(Func2E024Arg *arg0) {
             case 1:
                 rotation = (arg0->elements[i].turnAngle = arg0->elements[i].rotation);
                 targetAngle = computeAngleToPosition(
-                    gs->unk3EC,
-                    gs->unk3F0,
+                    gs->storyMapCameraX,
+                    gs->storyMapCameraZ,
                     arg0->elements[i].matrix.translation.x,
                     arg0->elements[i].matrix.translation.z
                 );

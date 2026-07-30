@@ -16,11 +16,12 @@ extern u8 storyMapAngleBounds[];
 #define TriggerAngleBoundsTable ((TriggerAngleBounds *)storyMapAngleBounds)
 
 typedef struct {
-    s8 locationId;
-    s8 unk1;
-    char padding[2];
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    void *locationLabel;
+    /* 0x00 */ s8 locationId;
+    /* 0x01 */ s8 discoveryState;
+    /* 0x02 */ u8 padding[2];
+    /* 0x04 */ s16 labelOffsetX;
+    /* 0x06 */ s16 labelOffsetY;
+    /* 0x08 */ s16 labelOffsetZ;
+    /* 0x0A */ u8 padding2[2];
+    /* 0x0C */ char *locationLabel;
 } LocationDiscoveryTrigger;

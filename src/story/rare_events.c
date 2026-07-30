@@ -453,7 +453,7 @@ s32 updateStoryMapNpcBehavior(Func8002A390Arg *s0) {
             if (distance_2d(sp10.x - gStoryMapNpcHomeX, sp10.z - gStoryMapNpcHomeZ) > 0x100000) {
                 s0->prevState = s0->state;
                 s0->state = 2;
-                s0->currentAngle = computeAngleToPosition(s3->unk3EC, s3->unk3F0, sp10.x, s1->z);
+                s0->currentAngle = computeAngleToPosition(s3->storyMapCameraX, s3->storyMapCameraZ, sp10.x, s1->z);
             }
             break;
 
@@ -553,10 +553,10 @@ s32 isNpcFacingPlayer(s32 npcX, s32 npcZ, s16 npcFacingAngle) {
     s16 angleToNpc;
 
     state = getCurrentAllocation();
-    angleToNpc = computeAngleToPosition(state->unk3EC, state->unk3F0, npcX, npcZ);
+    angleToNpc = computeAngleToPosition(state->storyMapCameraX, state->storyMapCameraZ, npcX, npcZ);
 
     if (npcFacingAngle - 0x238 < angleToNpc && angleToNpc < npcFacingAngle + 0x238) {
-        if (distance_2d(state->unk3EC - npcX, state->unk3F0 - npcZ) <= 0x280000) {
+        if (distance_2d(state->storyMapCameraX - npcX, state->storyMapCameraZ - npcZ) <= 0x280000) {
             return 1;
         }
     }
@@ -666,8 +666,8 @@ void updateStoryMapNpcDialogueTurn(RareEventNpc *npc) {
         case 1:
             savedAngle = (npc->turnAngle = npc->targetAngle);
             npc->dialogueTargetAngle = computeAngleToPosition(
-                alloc->unk3EC,
-                alloc->unk3F0,
+                alloc->storyMapCameraX,
+                alloc->storyMapCameraZ,
                 npc->matrix.translation.x,
                 npc->matrix.translation.z
             );

@@ -5,6 +5,7 @@
 #include "common.h"
 #include "common_bss.h"
 #include "font_encoding.h"
+#include "gamestate.h"
 #include "graphics/camera_transform.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
@@ -127,21 +128,6 @@ typedef struct {
     /* 0x42C */ u8 dialogueLineIndex;
     /* 0x42D */ u8 unk42D;
 } StoryMapAllocation;
-
-typedef struct {
-    u8 padding[1012];
-    s16 unk3F4;
-    s32 unk3F8;
-    u8 padding2[7];
-    u8 dialogueResult;
-    u8 padding3[28];
-    u8 activeNpcIndex;
-    u8 padding5[3];
-    u8 locationDiscovered;
-    u8 discoveredLocationId;
-    u8 padding4[7];
-    u8 unk42D;
-} func_800698BC_6A4BC_return;
 
 typedef struct {
     s32 unk0;
@@ -330,11 +316,11 @@ void initDiscoveryDisplaySystem(s8 *arg0) {
 }
 
 void updateDiscoveryMarkerDisplay(void *arg0) {
-    func_800698BC_6A4BC_return *temp_v0;
+    GameState *temp_v0;
     StoryMapAllocation *temp_v0_2;
     StoryMapAllocation *temp_v0_3;
 
-    temp_v0 = (func_800698BC_6A4BC_return *)getCurrentAllocation();
+    temp_v0 = getCurrentAllocation();
     if (temp_v0->locationDiscovered != 0) {
         if (*((u8 *)arg0) == 0) {
             if (temp_v0->discoveredLocationId < 0xAU) {
@@ -543,7 +529,7 @@ void updateStoryMapSpecialLocationMarker(SpecialLocationMarkerUpdateState *arg0)
     s32 sp24;
     s32 temp_sp20;
     s32 temp_sp24;
-    func_800698BC_6A4BC_return *temp_v0;
+    GameState *temp_v0;
     s32 temp_val;
 
     temp_v0 = getCurrentAllocation();
@@ -588,10 +574,10 @@ void initTownExitTrigger(void *arg0) {
 void checkTownExitTrigger(void *arg0) {
     s16 temp_v0_2;
     s16 var_v1;
-    func_800698BC_6A4BC_return *temp_v0 = (func_800698BC_6A4BC_return *)getCurrentAllocation();
+    GameState *temp_v0 = getCurrentAllocation();
 
-    if (temp_v0->unk3F8 > 0x400000) {
-        temp_v0_2 = temp_v0->unk3F4;
+    if (temp_v0->storyMapCameraOrbitRadius > 0x400000) {
+        temp_v0_2 = temp_v0->storyMapCameraOrbitAngle;
         var_v1 = temp_v0_2;
         if (temp_v0_2 >= 0x1001) {
             var_v1 -= 0x2000;
@@ -872,9 +858,9 @@ void updateStoryMapDialogueTurn(void *arg0) {
 }
 
 void setupStoryMapCharacterDialogue(StoryMapDialogueState *state) {
-    func_800698BC_6A4BC_return *allocation = (func_800698BC_6A4BC_return *)getCurrentAllocation();
+    GameState *allocation = getCurrentAllocation();
 
-    if (allocation->activeNpcIndex == 3 && allocation->unk42D == 8) {
+    if (allocation->activeNpcIndex == 3 && allocation->storyMapItemType == 8) {
         state->dialogueScript = D_8008FAC0_906C0;
         playSoundEffectOnChannelNoPriority(D_8008FD10_90910[gGameSessionContext->playerBoardIds[0]], 0);
         allocation->dialogueResult = D_8008FD1C_9091C[gGameSessionContext->playerBoardIds[0]];

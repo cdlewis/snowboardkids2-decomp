@@ -199,8 +199,8 @@ s32 checkTownPlayerCollision(s32 posX, s32 posZ, u8 characterIndex) {
     s32 threshold;
 
     state = (GameState *)getCurrentAllocation();
-    dx = posX - state->unk3EC;
-    dz = posZ - state->unk3F0;
+    dx = posX - state->storyMapCameraX;
+    dz = posZ - state->storyMapCameraZ;
     dist = distance_2d(dx, dz);
     threshold = state->unk3FE + state->npcCollisionRadius[characterIndex];
     return dist < (threshold << 16);
