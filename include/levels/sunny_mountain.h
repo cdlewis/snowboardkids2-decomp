@@ -1,27 +1,28 @@
 #pragma once
 
 #include "common.h"
-#include "gbi.h"
+#include "graphics/displaylist.h"
 #include "math/geometry.h"
 
 typedef struct {
-    /* 0x00 */ Transform3D transform;       /* Transformation matrix */
-    /* 0x20 */ void *displayLists;          /* Display lists pointer (offset +0xB0 from asset data) */
-    /* 0x24 */ void *uncompressedAssetData; /* Uncompressed asset data */
-    /* 0x28 */ void *compressedAssetData;   /* Compressed segment2 asset data */
-    /* 0x2C */ s32 segment3Ptr;             /* Always set to 0 */
-    /* 0x30 */ void *segment2;              /* Display list segment 2 pointer */
-    /* 0x34 */ Mtx *transformMatrix;        /* Transform matrix pointer */
-    /* 0x38 */ u8 light1R;
-    /* 0x39 */ u8 light1G;
-    /* 0x3A */ u8 light1B;
-    /* 0x3B */ u8 numParts;
-    /* 0x3C */ s32 yVelocity;     /* Y velocity (downward speed) */
-    /* 0x40 */ s32 xVelocity;     /* X velocity */
-    /* 0x44 */ s32 zVelocity;     /* Z velocity */
-    /* 0x48 */ s32 distance;      /* Distance for atan2 calculation */
-    /* 0x4C */ s16 delayTimer;    /* Delay timer before starting next flight */
-    /* 0x4E */ u16 rotationAngle; /* Y-axis rotation angle */
+    /* 0x00 */ Vec3i startPosition;
+    /* 0x0C */ Vec3i endPosition;
+    /* 0x18 */ DisplayListObject liftDisplayObject;
+    /* 0x54 */ DisplayListObject *chairDisplayObjects;
+    /* 0x58 */ Transform3D chairTransforms[4];
+    /* 0xD8 */ s16 waypointIndex;
+    /* 0xDA */ u16 chairRotationAngle;
+} SunnyMountainChairLiftTask;
+
+typedef struct {
+    /* 0x00 */ DisplayListObject displayObject;
+    /* 0x3C */ s32 yVelocity;
+    /* 0x40 */ s32 xVelocity;
+    /* 0x44 */ s32 zVelocity;
+    /* 0x48 */ s32 horizontalSpeed;
+    /* 0x4C */ s16 delayTimer;
+    /* 0x4E */ u16 flightAngle;
 } SunnyMountainFlyingBirdTask;
 
+void initSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *taskState);
 void initSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0);

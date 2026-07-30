@@ -1129,31 +1129,31 @@ void loadPlayerSparkleData(PlayerSparkleTask *task) {
 
     switch (state->memoryPoolId) {
         case 0:
-            memcpy(&task->metadata.position, state->unk48 + 0x24, sizeof(Vec3i));
+            memcpy(&task->metadata.position, state->raceTransformData + 0x24, sizeof(Vec3i));
             setCallback(updatePlayerSparkleWithStateCheck);
             break;
         case 6:
-            memcpy(&task->metadata.position, state->unk48 + 0x1C8, sizeof(Vec3i));
+            memcpy(&task->metadata.position, state->raceTransformData + 0x1C8, sizeof(Vec3i));
             setCallback(updatePlayerSparkle);
             break;
         case 1:
-            memcpy(&task->metadata.position, state->unk48 + 0x1EC, sizeof(Vec3i));
+            memcpy(&task->metadata.position, state->raceTransformData + 0x1EC, sizeof(Vec3i));
             setCallback(updatePlayerSparkle);
             break;
         case 2:
-            memcpy(&task->metadata.position, state->unk48 + 0x1F8, sizeof(Vec3i));
+            memcpy(&task->metadata.position, state->raceTransformData + 0x1F8, sizeof(Vec3i));
             setCallback(updatePlayerSparkle);
             break;
         case 5:
-            memcpy(&task->metadata.position, state->unk48 + 0x204, sizeof(Vec3i));
+            memcpy(&task->metadata.position, state->raceTransformData + 0x204, sizeof(Vec3i));
             setCallback(updatePlayerSparkle);
             break;
         case 8:
-            memcpy(&task->metadata.position, state->unk48 + 0x234, sizeof(Vec3i));
+            memcpy(&task->metadata.position, state->raceTransformData + 0x234, sizeof(Vec3i));
             setCallback(updatePlayerSparkle);
             break;
         case 9:
-            memcpy(&task->metadata.position, state->unk48 + 0x240, sizeof(Vec3i));
+            memcpy(&task->metadata.position, state->raceTransformData + 0x240, sizeof(Vec3i));
             setCallback(updatePlayerSparkle);
             break;
     }

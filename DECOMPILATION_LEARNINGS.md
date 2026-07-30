@@ -664,3 +664,9 @@ pool ID at `0x5C`. Its sprite tasks also contain `loadAssetMetadata_arg` beginni
 that shared sprite state gives the position, texture pointers, and alpha their canonical layout while preserving
 code generation. When a render callback receives the original task payload, extend that task's shared type with
 the callback-owned trailing fields instead of defining a second render-state view of the same bytes.
+
+Sunny Mountain shows that the same renderer prefix can appear after task-specific data. Its chair-lift task
+stores two `Vec3i` endpoints before a complete `DisplayListObject` at offset `0x18`, while the flying-bird task
+starts with the object at offset zero. In both cases, embedding the shared type exposes the transform and segment
+pointers without changing their offsets. The race-data pointer used for chair positions is also
+`GameState.raceTransformData` at offset `0x48`, not a level-specific allocation field.

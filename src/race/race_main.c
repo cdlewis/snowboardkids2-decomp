@@ -558,9 +558,17 @@ void applyBoostVelocity(Player *player) {
         case BOOST_STATE_SPEED_FAN_FORWARD:
         case BOOST_STATE_ROCKET_SUSTAIN_FORWARD:
             if (player->trackFaceType == 3) {
-                transformVector2(gameState->unk48 + 0x1D4, player->orientationHeadingTransform.m[0], &result);
+                transformVector2(
+                    gameState->raceTransformData + 0x1D4,
+                    player->orientationHeadingTransform.m[0],
+                    &result
+                );
             } else {
-                transformVector2(gameState->unk48 + 0xB4, player->orientationHeadingTransform.m[0], &result);
+                transformVector2(
+                    gameState->raceTransformData + 0xB4,
+                    player->orientationHeadingTransform.m[0],
+                    &result
+                );
             }
             player->velocity.x += result.x;
             player->velocity.y += result.y;
@@ -569,9 +577,17 @@ void applyBoostVelocity(Player *player) {
         case BOOST_STATE_SPEED_FAN_REVERSE:
         case BOOST_STATE_ROCKET_SUSTAIN_REVERSE:
             if (player->trackFaceType == 3) {
-                transformVector2(gameState->unk48 + 0x1E0, player->orientationHeadingTransform.m[0], &result);
+                transformVector2(
+                    gameState->raceTransformData + 0x1E0,
+                    player->orientationHeadingTransform.m[0],
+                    &result
+                );
             } else {
-                transformVector2(gameState->unk48 + 0xC0, player->orientationHeadingTransform.m[0], &result);
+                transformVector2(
+                    gameState->raceTransformData + 0xC0,
+                    player->orientationHeadingTransform.m[0],
+                    &result
+                );
             }
             player->velocity.x += result.x;
             player->velocity.y += result.y;
@@ -580,7 +596,7 @@ void applyBoostVelocity(Player *player) {
         case BOOST_STATE_ROCKET_IMPULSE_FORWARD: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->unk48 + 0xCC, player->orientationHeadingTransform.m[0], &result);
+            transformVector2(gameState->raceTransformData + 0xCC, player->orientationHeadingTransform.m[0], &result);
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
@@ -592,7 +608,7 @@ void applyBoostVelocity(Player *player) {
         case BOOST_STATE_ROCKET_IMPULSE_REVERSE: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->unk48 + 0xD8, player->orientationHeadingTransform.m[0], &result);
+            transformVector2(gameState->raceTransformData + 0xD8, player->orientationHeadingTransform.m[0], &result);
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
@@ -885,7 +901,7 @@ void updateRacePlayer(Player *player) {
                     break;
                 case 0x31:
                     rotateVectorY(
-                        gameState->unk48 + 0xE4,
+                        gameState->raceTransformData + 0xE4,
                         atan2Fixed(player->knockbackVelocity.x, player->knockbackVelocity.z),
                         &impactStarPos
                     );
@@ -3223,7 +3239,7 @@ s32 updateStunnedAirbornePhase(Player *player) {
         player->velocity.z = player->knockbackVelocity.z;
         player->behaviorStep++;
         knockbackAngle = atan2Fixed(-player->knockbackVelocity.x, -player->knockbackVelocity.z);
-        rotateVectorY(gameState->unk48 + 0xE4, knockbackAngle, &effectPos);
+        rotateVectorY(gameState->raceTransformData + 0xE4, knockbackAngle, &effectPos);
         effectPos.x += player->worldPos.x;
         effectPos.z += player->worldPos.z;
         effectPos.y = player->worldPos.y + 0x100000;
@@ -3276,7 +3292,7 @@ s32 updateStunnedAirbornePhaseBoss(Player *player) {
         player->velocity.z = player->knockbackVelocity.z;
         player->behaviorStep++;
         knockbackAngle = atan2Fixed(-player->knockbackVelocity.x, -player->knockbackVelocity.z);
-        rotateVectorY(gameState->unk48 + 0xE4, knockbackAngle, &effectPos);
+        rotateVectorY(gameState->raceTransformData + 0xE4, knockbackAngle, &effectPos);
         effectPos.x += player->worldPos.x;
         effectPos.z += player->worldPos.z;
         effectPos.y = player->worldPos.y + 0x100000;
@@ -3558,7 +3574,7 @@ s32 updateStunnedRecoveryBouncePhase(Player *arg0) {
             arg0->rotY += 0x1000;
         }
 
-        rotateVectorY(allocation->unk48 + 0xE4, arg0->rotY, &stackVec);
+        rotateVectorY(allocation->raceTransformData + 0xE4, arg0->rotY, &stackVec);
 
         stackVec.x += arg0->worldPos.x;
         stackVec.z += arg0->worldPos.z;

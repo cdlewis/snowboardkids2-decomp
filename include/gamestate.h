@@ -301,7 +301,7 @@ typedef struct {
     /* 0x2C */ u8 PAD_3[0x4];
     /* 0x30 */ GameDataLayout gameData;
     /* 0x44 */ GameStateUnk44 *unk44;
-    /* 0x48 */ u8 *unk48;
+    /* 0x48 */ u8 *raceTransformData;
     /* 0x4C */ s32 stateDelayTimer;
     /* 0x50 */ u32 raceFrameCounter;
     /* 0x54 */ s32 raceTimerElapsedTicks;

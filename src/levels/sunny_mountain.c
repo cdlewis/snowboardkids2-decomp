@@ -8,32 +8,6 @@
 #include "system/task_scheduler.h"
 
 typedef struct {
-    u8 _pad[0x48];
-    u8 *positionData; /* 0x48: Source position data for display objects */
-    u8 _pad2[0x10];
-    u8 memoryPoolId; /* 0x5C: ID for memory pool and display list lookup */
-} SunnyMountainAllocation;
-
-typedef struct {
-    /* 0x00 */ s32 posX;
-    /* 0x04 */ s32 posY;
-    /* 0x08 */ s32 posZ;
-    /* 0x0C */ s32 targetX;
-    /* 0x10 */ s32 targetY;
-    /* 0x14 */ s32 targetZ;
-    /* 0x18 */ Transform3D mainMatrix;
-    /* 0x38 */ DisplayLists *displayList;
-    /* 0x3C */ void *assetData;
-    /* 0x40 */ void *compressedAssetData;
-    /* 0x44 */ s32 unk44;
-    /* 0x48 */ u8 _pad48[0xC];
-    /* 0x54 */ u8 *displayObjects;
-    /* 0x58 */ Transform3D chairMatrices[4];
-    /* 0xD8 */ s16 waypointIndex;
-    /* 0xDA */ u16 rotationAngle;
-} SunnyMountainChairLiftTask;
-
-typedef struct {
     s32 x;
     s32 z;
 } ChairLiftWaypoint;
@@ -61,7 +35,7 @@ u16 D_800BBBA8_B54A8[] = {
 };
 
 void cleanupSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *arg0);
-void startSunnyMountainChairLift(s32 *arg0);
+void startSunnyMountainChairLift(SunnyMountainChairLiftTask *taskState);
 void updateSunnyMountainChairLiftMovement(SunnyMountainChairLiftTask *taskState);
 void cleanupSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0);
 void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0);
@@ -77,42 +51,43 @@ void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0);
 void initSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *taskState) {
     s32 i;
     s32 srcPositionOffset;
-    SunnyMountainChairLiftTask *chairMatrix;
-    u8 *chairTranslationAddr;
+    SunnyMountainChairLiftTask *chairTransformCursor;
+    u8 *chairTranslation;
     s32 displayObjectOffset;
     LevelDisplayLists *displayLists;
-    SunnyMountainAllocation *allocation;
+    GameState *gameState;
 
-    allocation = (SunnyMountainAllocation *)getCurrentAllocation();
+    gameState = (GameState *)getCurrentAllocation();
 
     i = 0;
-    displayLists = getSkyDisplayLists3ByIndex(allocation->memoryPoolId);
-    taskState->displayList = &displayLists->sceneryDisplayLists1;
+    displayLists = getSkyDisplayLists3ByIndex(gameState->memoryPoolId);
+    taskState->liftDisplayObject.displayLists = &displayLists->sceneryDisplayLists1;
 
     srcPositionOffset = 0;
-    taskState->assetData = loadUncompressedAssetByIndex(allocation->memoryPoolId);
+    taskState->liftDisplayObject.segment1 = loadUncompressedAssetByIndex(gameState->memoryPoolId);
 
-    chairMatrix = taskState;
+    chairTransformCursor = taskState;
     displayObjectOffset = 0;
-    taskState->compressedAssetData = loadCompressedSegment2AssetByIndex(allocation->memoryPoolId);
+    taskState->liftDisplayObject.segment2 = loadCompressedSegment2AssetByIndex(gameState->memoryPoolId);
 
-    taskState->unk44 = 0;
+    taskState->liftDisplayObject.segment3 = NULL;
     taskState->waypointIndex = 0;
-    taskState->displayObjects = allocateNodeMemory(4 * sizeof(DisplayListObject));
+    taskState->chairDisplayObjects = allocateNodeMemory(4 * sizeof(DisplayListObject));
 
     do {
         i++;
-        displayLists = getSkyDisplayLists3ByIndex(allocation->memoryPoolId);
-        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->displayObjects))->displayLists =
+        displayLists = getSkyDisplayLists3ByIndex(gameState->memoryPoolId);
+        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->chairDisplayObjects))->displayLists =
             &displayLists->sceneryDisplayLists2;
-        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->displayObjects))->segment1 = taskState->assetData;
-        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->displayObjects))->segment2 =
-            taskState->compressedAssetData;
-        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->displayObjects))->segment3 = NULL;
-        chairTranslationAddr = (u8 *)chairMatrix;
-        chairTranslationAddr = chairTranslationAddr + 0x6C;
-        memcpy(chairTranslationAddr, (u8 *)(srcPositionOffset + (s32)allocation->positionData) + 0x30, sizeof(Vec3i));
-        chairMatrix = (SunnyMountainChairLiftTask *)((u8 *)chairMatrix + 0x20);
+        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->chairDisplayObjects))->segment1 =
+            taskState->liftDisplayObject.segment1;
+        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->chairDisplayObjects))->segment2 =
+            taskState->liftDisplayObject.segment2;
+        ((DisplayListObject *)(displayObjectOffset + (s32)taskState->chairDisplayObjects))->segment3 = NULL;
+        chairTranslation = (u8 *)chairTransformCursor;
+        chairTranslation += (u32) & (((SunnyMountainChairLiftTask *)0)->chairTransforms[0].translation);
+        memcpy(chairTranslation, (u8 *)(srcPositionOffset + (s32)gameState->raceTransformData) + 0x30, sizeof(Vec3i));
+        chairTransformCursor = (SunnyMountainChairLiftTask *)((u8 *)chairTransformCursor + sizeof(Transform3D));
         displayObjectOffset += 0x3C;
         srcPositionOffset += 0xC;
     } while (i < 4);
@@ -121,18 +96,18 @@ void initSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *taskState) {
     setCallback(startSunnyMountainChairLift);
 }
 
-void startSunnyMountainChairLift(s32 *arg0) {
+void startSunnyMountainChairLift(SunnyMountainChairLiftTask *taskState) {
     GameState *state = (GameState *)getCurrentAllocation();
     s32 i;
 
     for (i = 0; i < state->playerCount; i++) {
         if (state->players[i].sectorIndex >= 0x3D) {
-            arg0[0] = 0x1C84A5B9;
-            arg0[1] = 0x0B1F0000;
-            arg0[2] = 0x02C792C4;
-            arg0[3] = 0x1CE44F4D;
-            arg0[4] = 0x0B1F0000;
-            arg0[5] = 0x02E17D96;
+            taskState->startPosition.x = 0x1C84A5B9;
+            taskState->startPosition.y = 0x0B1F0000;
+            taskState->startPosition.z = 0x02C792C4;
+            taskState->endPosition.x = 0x1CE44F4D;
+            taskState->endPosition.y = 0x0B1F0000;
+            taskState->endPosition.z = 0x02E17D96;
             setCallbackWithContinue(updateSunnyMountainChairLiftMovement);
             return;
         }
@@ -146,15 +121,15 @@ void updateSunnyMountainChairLiftMovement(SunnyMountainChairLiftTask *taskState)
     s32 j;
     s32 displayObjectOffset;
 
-    i = gChairLiftWaypoints[taskState->waypointIndex].x - taskState->posX;
-    dz = gChairLiftWaypoints[taskState->waypointIndex].z - taskState->posZ;
+    i = gChairLiftWaypoints[taskState->waypointIndex].x - taskState->startPosition.x;
+    dz = gChairLiftWaypoints[taskState->waypointIndex].z - taskState->startPosition.z;
 
     distance = isqrt64((s64)i * (s64)i + (s64)dz * (s64)dz);
 
     if (distance > 0x10000) {
         i = (s64)i * 0x10000 / distance;
         dz = (s64)dz * 0x10000 / distance;
-        taskState->rotationAngle = taskState->rotationAngle + 0x40;
+        taskState->chairRotationAngle = taskState->chairRotationAngle + 0x40;
     } else if (taskState->waypointIndex != 2) {
         taskState->waypointIndex = taskState->waypointIndex + 1;
     } else {
@@ -162,48 +137,60 @@ void updateSunnyMountainChairLiftMovement(SunnyMountainChairLiftTask *taskState)
         dz -= dz >> 3;
     }
 
-    taskState->posX += i;
-    taskState->posZ += dz;
-    i = taskState->targetX - taskState->posX;
-    dz = taskState->targetZ - taskState->posZ;
+    taskState->startPosition.x += i;
+    taskState->startPosition.z += dz;
+    i = taskState->endPosition.x - taskState->startPosition.x;
+    dz = taskState->endPosition.z - taskState->startPosition.z;
 
     distance = isqrt64((s64)i * (s64)i + (s64)dz * (s64)dz);
 
     i = (s64)i * 0x200000 / distance;
     dz = (s64)dz * 0x200000 / distance;
 
-    taskState->targetX = i + taskState->posX;
-    taskState->targetZ = dz + taskState->posZ;
+    taskState->endPosition.x = i + taskState->startPosition.x;
+    taskState->endPosition.z = dz + taskState->startPosition.z;
 
     createYRotationMatrix(
-        &taskState->mainMatrix,
-        computeAngleToPosition(taskState->posX, taskState->posZ, taskState->targetX, taskState->targetZ) & 0xFFFF
+        &taskState->liftDisplayObject.transform,
+        computeAngleToPosition(
+            taskState->startPosition.x,
+            taskState->startPosition.z,
+            taskState->endPosition.x,
+            taskState->endPosition.z
+        ) & 0xFFFF
     );
 
-    taskState->mainMatrix.translation.x = (taskState->targetX - taskState->posX) / 2 + taskState->posX;
-    taskState->mainMatrix.translation.y = (taskState->targetY - taskState->posY) / 2 + taskState->posY;
-    taskState->mainMatrix.translation.z = (taskState->targetZ - taskState->posZ) / 2 + taskState->posZ;
+    taskState->liftDisplayObject.transform.translation.x =
+        (taskState->endPosition.x - taskState->startPosition.x) / 2 + taskState->startPosition.x;
+    taskState->liftDisplayObject.transform.translation.y =
+        (taskState->endPosition.y - taskState->startPosition.y) / 2 + taskState->startPosition.y;
+    taskState->liftDisplayObject.transform.translation.z =
+        (taskState->endPosition.z - taskState->startPosition.z) / 2 + taskState->startPosition.z;
 
     i = 0;
     do {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)&taskState->mainMatrix);
+        enqueueDisplayListWithFrustumCull(i, &taskState->liftDisplayObject);
 
         j = 0;
         displayObjectOffset = 0;
         do {
             if (j < 2) {
-                createXRotationMatrix(taskState->chairMatrices[j].m, taskState->rotationAngle);
+                createXRotationMatrix(taskState->chairTransforms[j].m, taskState->chairRotationAngle);
             } else {
-                createCombinedRotationMatrix(&taskState->chairMatrices[j], -taskState->rotationAngle & 0xFFFF, 0x1000);
+                createCombinedRotationMatrix(
+                    &taskState->chairTransforms[j],
+                    -taskState->chairRotationAngle & 0xFFFF,
+                    0x1000
+                );
             }
             composeTransform3D(
-                &taskState->chairMatrices[j],
-                &taskState->mainMatrix,
-                (Transform3D *)(taskState->displayObjects + displayObjectOffset)
+                &taskState->chairTransforms[j],
+                &taskState->liftDisplayObject.transform,
+                (Transform3D *)((u8 *)taskState->chairDisplayObjects + displayObjectOffset)
             );
             enqueueDisplayListWithFrustumCull(
                 i,
-                (DisplayListObject *)(taskState->displayObjects + displayObjectOffset)
+                (DisplayListObject *)((u8 *)taskState->chairDisplayObjects + displayObjectOffset)
             );
             j++;
             displayObjectOffset = j * 0x3C;
@@ -214,18 +201,18 @@ void updateSunnyMountainChairLiftMovement(SunnyMountainChairLiftTask *taskState)
 }
 
 void cleanupSunnyMountainChairLiftTask(SunnyMountainChairLiftTask *arg0) {
-    arg0->assetData = freeNodeMemory(arg0->assetData);
-    arg0->compressedAssetData = freeNodeMemory(arg0->compressedAssetData);
-    arg0->displayObjects = freeNodeMemory(arg0->displayObjects);
+    arg0->liftDisplayObject.segment1 = freeNodeMemory(arg0->liftDisplayObject.segment1);
+    arg0->liftDisplayObject.segment2 = freeNodeMemory(arg0->liftDisplayObject.segment2);
+    arg0->chairDisplayObjects = freeNodeMemory(arg0->chairDisplayObjects);
 }
 
 void initSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
 
-    arg0->displayLists = (void *)((u32)getSkyDisplayLists3ByIndex(state->memoryPoolId) + 0xB0);
-    arg0->uncompressedAssetData = loadUncompressedAssetByIndex(state->memoryPoolId);
-    arg0->compressedAssetData = loadCompressedSegment2AssetByIndex(state->memoryPoolId);
-    arg0->segment3Ptr = 0;
+    arg0->displayObject.displayLists = &getSkyDisplayLists3ByIndex(state->memoryPoolId)->sceneryDisplayLists3;
+    arg0->displayObject.segment1 = loadUncompressedAssetByIndex(state->memoryPoolId);
+    arg0->displayObject.segment2 = loadCompressedSegment2AssetByIndex(state->memoryPoolId);
+    arg0->displayObject.segment3 = NULL;
     arg0->delayTimer = 0x3C;
     setCleanupCallback(cleanupSunnyMountainFlyingBirdTask);
     setCallback(resetSunnyMountainFlyingBirdPath);
@@ -246,7 +233,7 @@ void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0) {
         return;
     }
 
-    memcpy(arg0, &identityMatrix, sizeof(Transform3D));
+    memcpy(&arg0->displayObject.transform, &identityMatrix, sizeof(Transform3D));
 
     offset = (randA() & 3) * 8;
 
@@ -258,7 +245,7 @@ void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0) {
     startZ = *(s32 *)(D_800BBB6C_B546C + offset);
     arg0->zVelocity = (endZ - startZ) / 60;
 
-    arg0->rotationAngle = computeAngleToPosition(
+    arg0->flightAngle = computeAngleToPosition(
         *(s32 *)(D_800BBB88_B5488 + offset),
         *(s32 *)(D_800BBB8C_B548C + offset),
         *(s32 *)(D_800BBB68_B5468 + offset),
@@ -269,11 +256,11 @@ void resetSunnyMountainFlyingBirdPath(SunnyMountainFlyingBirdTask *arg0) {
     dy = arg0->zVelocity;
 
     temp = *(s32 *)(D_800BBB68_B5468 + offset);
-    arg0->transform.translation.y = 0x243D1AC3;
-    arg0->transform.translation.x = temp;
-    arg0->transform.translation.z = *(s32 *)(D_800BBB6C_B546C + offset);
+    arg0->displayObject.transform.translation.y = 0x243D1AC3;
+    arg0->displayObject.transform.translation.x = temp;
+    arg0->displayObject.transform.translation.z = *(s32 *)(D_800BBB6C_B546C + offset);
 
-    arg0->distance = isqrt64((s64)dx * (s64)dx + (s64)dy * (s64)dy);
+    arg0->horizontalSpeed = isqrt64((s64)dx * (s64)dx + (s64)dy * (s64)dy);
     arg0->yVelocity = 0x300000;
     setCallbackWithContinue(updateSunnyMountainFlyingBird);
 }
@@ -289,19 +276,19 @@ void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0) {
     s32 temp_a1;
     s32 temp_v0;
 
-    angle = atan2Fixed(arg0->yVelocity, -arg0->distance);
+    angle = atan2Fixed(arg0->yVelocity, -arg0->horizontalSpeed);
 
-    createCombinedRotationMatrix(arg0, angle, arg0->rotationAngle);
+    createCombinedRotationMatrix(&arg0->displayObject.transform, angle, arg0->flightAngle);
 
-    temp_v0 = arg0->transform.translation.x;
+    temp_v0 = arg0->displayObject.transform.translation.x;
     temp_a2 = arg0->xVelocity;
-    temp_a0 = arg0->transform.translation.z;
+    temp_a0 = arg0->displayObject.transform.translation.z;
     temp_a3 = arg0->zVelocity;
-    temp_a1 = arg0->transform.translation.y;
+    temp_a1 = arg0->displayObject.transform.translation.y;
 
-    arg0->transform.translation.x = temp_v0 + temp_a2;
-    arg0->transform.translation.z = temp_a0 + temp_a3;
-    arg0->transform.translation.y = temp_a1 + arg0->yVelocity;
+    arg0->displayObject.transform.translation.x = temp_v0 + temp_a2;
+    arg0->displayObject.transform.translation.z = temp_a0 + temp_a3;
+    arg0->displayObject.transform.translation.y = temp_a1 + arg0->yVelocity;
 
     if ((arg0->yVelocity = arg0->yVelocity + 0xFFFE6667) < ((s32)0xFFD00000)) {
         new_var = randA() & 7;
@@ -310,11 +297,11 @@ void updateSunnyMountainFlyingBird(SunnyMountainFlyingBirdTask *arg0) {
     }
 
     for (i = 0; i < 4; i++) {
-        enqueueDisplayListWithFrustumCull(i, (DisplayListObject *)arg0);
+        enqueueDisplayListWithFrustumCull(i, &arg0->displayObject);
     }
 }
 
 void cleanupSunnyMountainFlyingBirdTask(SunnyMountainFlyingBirdTask *arg0) {
-    arg0->uncompressedAssetData = freeNodeMemory(arg0->uncompressedAssetData);
-    arg0->compressedAssetData = freeNodeMemory(arg0->compressedAssetData);
+    arg0->displayObject.segment1 = freeNodeMemory(arg0->displayObject.segment1);
+    arg0->displayObject.segment2 = freeNodeMemory(arg0->displayObject.segment2);
 }

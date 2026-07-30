@@ -997,7 +997,7 @@ void parseRaceAssetData(void) {
     parseGameDataLayout(&gs->gameData);
 
     gs->unk44 = (GameStateUnk44 *)((u8 *)gs->unk28 + gs->unk28->assetTableOffset);
-    gs->unk48 = (u8 *)gs->unk28 + gs->unk28->transformDataOffset;
+    gs->raceTransformData = (u8 *)gs->unk28 + gs->unk28->transformDataOffset;
 
     setGameStateHandlerWithContinue(&loadPlayerAssets);
 }

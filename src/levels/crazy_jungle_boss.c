@@ -176,13 +176,13 @@ void updateCrazyJungleBoss(Player *arg0) {
     sp30.translation.y -= arg0->headingTransform.translation.y;
     sp30.translation.z -= arg0->headingTransform.translation.z;
 
-    transformVector((s16 *)(alloc->unk48 + 0xF0), (s16 *)&sp30, &arg0->collisionOffset);
+    transformVector((s16 *)(alloc->raceTransformData + 0xF0), (s16 *)&sp30, &arg0->collisionOffset);
     memcpy(&arg0->collisionListNode.localPos, &arg0->collisionOffset, sizeof(Vec3i));
     addCollisionSectorNodeToList(&arg0->collisionListNode);
     updateCrazyJungleBossLeanBoneTransforms(arg0);
 
     transformVector(
-        (s16 *)(alloc->unk48 + 0xFC),
+        (s16 *)(alloc->raceTransformData + 0xFC),
         (s16 *)arg0->bodyPartDisplayObjects[0].transform.m,
         &arg0->extraCollisionOffsets[0]
     );
@@ -191,7 +191,7 @@ void updateCrazyJungleBoss(Player *arg0) {
     arg0->extraCollisionOffsets[0].z -= arg0->headingTransform.translation.z;
 
     transformVector(
-        (s16 *)(alloc->unk48 + 0x108),
+        (s16 *)(alloc->raceTransformData + 0x108),
         (s16 *)arg0->bodyPartDisplayObjects[13].transform.m,
         &arg0->extraCollisionOffsets[1]
     );
@@ -200,7 +200,7 @@ void updateCrazyJungleBoss(Player *arg0) {
     arg0->extraCollisionOffsets[1].z -= arg0->headingTransform.translation.z;
 
     transformVector(
-        (s16 *)(alloc->unk48 + 0x114),
+        (s16 *)(alloc->raceTransformData + 0x114),
         (s16 *)arg0->bodyPartDisplayObjects[14].transform.m,
         &arg0->extraCollisionOffsets[2]
     );
@@ -209,7 +209,7 @@ void updateCrazyJungleBoss(Player *arg0) {
     arg0->extraCollisionOffsets[2].z -= arg0->headingTransform.translation.z;
 
     transformVector(
-        (s16 *)(alloc->unk48 + 0x120),
+        (s16 *)(alloc->raceTransformData + 0x120),
         (s16 *)arg0->bodyPartDisplayObjects[15].transform.m,
         &arg0->extraCollisionOffsets[3]
     );
@@ -218,7 +218,7 @@ void updateCrazyJungleBoss(Player *arg0) {
     arg0->extraCollisionOffsets[3].z -= arg0->headingTransform.translation.z;
 
     transformVector(
-        (s16 *)(alloc->unk48 + 0x12C),
+        (s16 *)(alloc->raceTransformData + 0x12C),
         (s16 *)arg0->bodyPartDisplayObjects[3].transform.m,
         &arg0->extraCollisionOffsets[4]
     );
@@ -227,7 +227,7 @@ void updateCrazyJungleBoss(Player *arg0) {
     arg0->extraCollisionOffsets[4].z -= arg0->headingTransform.translation.z;
 
     transformVector(
-        (s16 *)(alloc->unk48 + 0x138),
+        (s16 *)(alloc->raceTransformData + 0x138),
         (s16 *)arg0->bodyPartDisplayObjects[6].transform.m,
         &arg0->extraCollisionOffsets[5]
     );
@@ -393,7 +393,7 @@ s32 crazyJungleBossChaseAttackPhase(Player *arg0) {
         transformVector3(&arg0->velocity, &sp10, &sp30);
         sp30.x = 0;
         transformVector2(&sp30, &sp10, &arg0->velocity);
-        transformVector2((s32 *)(gameState->unk48 + 0x144), &sp10, &sp30);
+        transformVector2((s32 *)(gameState->raceTransformData + 0x144), &sp10, &sp30);
         if (sp30.y > 0) {
             sp30.y = 0;
         }
