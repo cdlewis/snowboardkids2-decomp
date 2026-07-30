@@ -354,7 +354,7 @@ typedef struct {
     /* 0x3F4 */ s16 storyMapCameraOrbitAngle;
     /* 0x3F8 */ s32 storyMapCameraOrbitRadius;
     /* 0x3FC */ u16 storyMapCameraViewAngle;
-    s16 unk3FE;
+    /* 0x3FE */ s16 storyMapPlayerCollisionRadius;
     u8 animState;
     u8 PAD_E[0x2];
     u8 dialogueResult;

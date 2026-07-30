@@ -14,30 +14,6 @@ typedef struct {
     s16 z;
 } CoordPair;
 
-typedef struct {
-    s16 viewMatrix[9];
-    u8 pad12[0x2];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s16 orientMatrix[9];
-    u8 pad32[0x2];
-    s32 cameraX;
-    s32 cameraY;
-    s32 cameraZ;
-    u8 pad40[0x4];
-    s16 viewAngle;
-    s16 targetAngle;
-    s16 orbitAngle;
-    u8 pad4A[0x2];
-    s32 orbitRadius;
-    s16 unk50;
-    s32 travelDistance;
-    u8 pad58[0x2];
-    s8 speedH;
-    s8 speedV;
-} StoryMapCameraState;
-
 extern u8 storyMapLocationIndex;
 extern CoordPair storyMapLocationCoords[];
 extern s8 gAnalogStickX[];
@@ -134,8 +110,8 @@ void initStoryMapCamera(StoryMapCameraState *camera) {
     state->storyMapCameraViewAngle = camera->viewAngle & 0x1FFF;
 
     camera->unk50 = 0;
-    camera->speedV = 8;
-    camera->speedH = 8;
+    camera->verticalSpeed = 8;
+    camera->horizontalSpeed = 8;
 
     createYRotationMatrix((Transform3D *)&camera->viewMatrix, camera->viewAngle);
     createYRotationMatrix((Transform3D *)&camera->orientMatrix, camera->orbitAngle);
@@ -176,7 +152,7 @@ void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera) {
 
     if ((ABS(stickX)) < 0x12 && (ABS(stickY)) < 0x12) {
         maxSpeed = 0xF;
-        if (maxSpeed >= camera->speedH && maxSpeed >= camera->speedV) {
+        if (maxSpeed >= camera->horizontalSpeed && maxSpeed >= camera->verticalSpeed) {
             walkSpeed = 2;
         } else {
             walkSpeed = 4;
@@ -209,21 +185,21 @@ void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera) {
             vDir = (moveZ > 0 ? 1 : -1);
         }
 
-        moveX = (camera->speedH * hDir) / 8 + hDir;
-        moveZ = (camera->speedV * vDir) / 8 + vDir;
+        moveX = (camera->horizontalSpeed * hDir) / 8 + hDir;
+        moveZ = (camera->verticalSpeed * vDir) / 8 + vDir;
 
-        if (camera->speedH < maxSpeed) {
-            camera->speedH += __abs(hDir);
+        if (camera->horizontalSpeed < maxSpeed) {
+            camera->horizontalSpeed += __abs(hDir);
         }
-        if (camera->speedV < maxSpeed) {
-            camera->speedV += __abs(vDir);
+        if (camera->verticalSpeed < maxSpeed) {
+            camera->verticalSpeed += __abs(vDir);
         }
 
-        if (camera->speedH >= maxSpeed) {
-            camera->speedH -= ABS(hDir);
+        if (camera->horizontalSpeed >= maxSpeed) {
+            camera->horizontalSpeed -= ABS(hDir);
         }
-        if (camera->speedV >= maxSpeed) {
-            camera->speedV -= ABS(vDir);
+        if (camera->verticalSpeed >= maxSpeed) {
+            camera->verticalSpeed -= ABS(vDir);
         }
 
         absMoveX = __abs(moveX);
@@ -245,14 +221,14 @@ void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera) {
              (moveZ * (savedPos.z >> 8)) / (camera->orbitRadius >> 8));
         pos.z += (temp_v1 << 16);
 
-        collisionResult = checkTownLamppostCollision(pos.x, pos.z, state->unk3FE);
+        collisionResult = checkTownLamppostCollision(pos.x, pos.z, state->storyMapPlayerCollisionRadius);
         if (collisionResult != 0) {
-            resolveTownLamppostCollision(&pos, state->unk3FE, collisionResult);
+            resolveTownLamppostCollision(&pos, state->storyMapPlayerCollisionRadius, collisionResult);
             camera->orbitRadius = distance_2d(pos.x, pos.z);
         }
     } else {
-        camera->speedH = 8;
-        camera->speedV = 8;
+        camera->horizontalSpeed = 8;
+        camera->verticalSpeed = 8;
         state->animState = 0;
     }
 
@@ -287,10 +263,10 @@ void updateStoryMapCameraFreeRoam(StoryMapCameraState *camera) {
     for (i = 0; i < state->unk41C; i++) {
         collisionResult = checkTownNPCCollision(pos.x, pos.z, i);
         if (collisionResult) {
-            resolveTownNPCCollision((TownController *)camera, &pos, collisionResult);
-            collisionResult = checkTownLamppostCollision(pos.x, pos.z, state->unk3FE);
+            resolveTownNPCCollision(camera, &pos, collisionResult);
+            collisionResult = checkTownLamppostCollision(pos.x, pos.z, state->storyMapPlayerCollisionRadius);
             if (collisionResult) {
-                resolveTownLamppostCollision(&pos, state->unk3FE, collisionResult);
+                resolveTownLamppostCollision(&pos, state->storyMapPlayerCollisionRadius, collisionResult);
                 camera->orbitRadius = distance_2d(pos.x, pos.z);
             }
         }
@@ -519,8 +495,8 @@ void initStoryMapCameraAtLocation(StoryMapCameraState *camera) {
     state->storyMapCameraViewAngle = camera->viewAngle & 0x1FFF;
 
     camera->unk50 = 0;
-    camera->speedV = 8;
-    camera->speedH = 8;
+    camera->verticalSpeed = 8;
+    camera->horizontalSpeed = 8;
 
     createYRotationMatrix((Transform3D *)&camera->orientMatrix, camera->orbitAngle);
     createYRotationMatrix((Transform3D *)camera, camera->viewAngle);

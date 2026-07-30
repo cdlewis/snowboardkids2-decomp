@@ -602,3 +602,14 @@ KMC GCC's address calculation. In `checkClocktowerLocationDiscovery`, changing t
 and changed register allocation, despite producing the same offsets. Keep the shared entry definition for
 layout documentation, but retain the original scalar indexing expression in matching functions when the typed
 form changes code generation.
+
+## Trace Partial Task Structs Through Their Callers
+
+A small padded struct used by one function may be a partial view of the caller's task state rather than a
+distinct object. `TownController` exposed only a word at offset `0x4C`, but its sole caller cast a
+`StoryMapCameraState *` to that type. The field is the camera's `orbitRadius`, which the collision resolver
+recomputes after moving the camera away from an NPC.
+
+When a call requires a cast between unrelated task structs, compare the accessed offsets with the caller's
+complete layout before preserving the partial type. Moving the complete type to its subsystem header can remove
+the duplicate, the padding, and the cast without affecting code generation.

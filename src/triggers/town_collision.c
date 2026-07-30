@@ -4,29 +4,28 @@
 #include "system/task_scheduler.h"
 
 // Defines circular collision zones for town objects (lampposts/stations)
-// Note: y corresponds to the depth axis (z in 3D space)
 typedef struct {
     s16 x;
-    s16 y;      // depth/forward-backward position
+    s16 z;
     s16 radius; // collision boundary radius
 } TownLamppost;
 
 // Two lamppost/station bases in the town.
-// Positioned between the player and the back wall (y = -83 is forward depth).
+// Positioned between the player and the back wall (z = -83 is forward depth).
 // Left station (-56) is a level entry point; right station (56) is decorative/functional.
 TownLamppost g_TownLampposts[] = {
-    { .x = -56, .y = -83, .radius = 4 },
-    { .x = 56,  .y = -83, .radius = 4 },
+    { .x = -56, .z = -83, .radius = 4 },
+    { .x = 56,  .z = -83, .radius = 4 },
 };
 
 // Checks if the player is colliding with any lamppost/station in the town.
 // Returns 1-based lamppost index (1 or 2) if colliding, 0 if no collision.
-// posX, posY: player position in 16.16 fixed point
+// posX, posZ: player position in 16.16 fixed point
 // collisionRadius: player's collision radius
-s32 checkTownLamppostCollision(s32 posX, s32 posY, s16 collisionRadius) {
+s32 checkTownLamppostCollision(s32 posX, s32 posZ, s16 collisionRadius) {
     s32 index;
     s16 *lamppostX;
-    s16 *lamppostY;
+    s16 *lamppostZ;
     s16 *lamppostRadius;
     s32 extraRadius;
     s32 dx;
@@ -41,19 +40,19 @@ s32 checkTownLamppostCollision(s32 posX, s32 posY, s16 collisionRadius) {
     extraRadius = collisionRadius;
     base = (s16 *)g_TownLampposts;
     lamppostRadius = base + 2;
-    lamppostY = base + 1;
+    lamppostZ = base + 1;
     lamppostX = base;
 
     do {
         dx = posX - (*lamppostX << 16);
-        dy = posY - (*lamppostY << 16);
+        dy = posZ - (*lamppostZ << 16);
         dist = isqrt64((s64)dx * dx + (s64)dy * dy);
         threshold = (*lamppostRadius + extraRadius) << 16;
         if (dist < threshold) {
             return index + 1;
         }
         lamppostRadius += 3;
-        lamppostY += 3;
+        lamppostZ += 3;
         index += 1;
         lamppostX += 3;
     } while (index < 2);
@@ -66,16 +65,16 @@ s32 checkTownLamppostCollision(s32 posX, s32 posY, s16 collisionRadius) {
 // collisionRadius: player's collision radius
 // lamppostIndex: 1-based index of lamppost being collided with
 void resolveTownLamppostCollision(Vec3i *position, s16 collisionRadius, s32 lamppostIndex) {
-    s16 *lamppostY;
+    s16 *lamppostZ;
     TownLamppost *lamppost;
     s16 *base;
     s16 angle;
     s32 offset;
-    s16 *baseY;
+    s16 *baseZ;
     Vec3i *pos;
     s16 *radiusPtr;
     s32 combinedRadius;
-    s32 yOffset;
+    s32 zOffset;
     s32 zValue;
     s32 pushScale;
     s32 sinComponent;
@@ -87,13 +86,13 @@ void resolveTownLamppostCollision(Vec3i *position, s16 collisionRadius, s32 lamp
     base = (s16 *)g_TownLampposts;
     lamppost = (TownLamppost *)(base + (lamppostIndex * 3));
     offset = lamppostIndex * 3;
-    baseY = base;
-    yOffset = 1;
-    lamppostY = offset + (baseY + yOffset);
+    baseZ = base;
+    zOffset = 1;
+    lamppostZ = offset + (baseZ + zOffset);
     pos = position;
     sinComponent = pos->x;
     base = &lamppost->x;
-    angle = computeAngleToPosition(*base << 16, *lamppostY << 16, sinComponent, position->z);
+    angle = computeAngleToPosition(*base << 16, *lamppostZ << 16, sinComponent, position->z);
     radiusPtr = &(g_TownLampposts + lamppostIndex)->radius;
     combinedRadius = *radiusPtr + collisionRadius;
     combinedRadius <<= 16;
@@ -112,16 +111,16 @@ void resolveTownLamppostCollision(Vec3i *position, s16 collisionRadius, s32 lamp
         cosComponent += 0x1FFF;
     }
     sinComponent += lamppost->x << 16;
-    zValue = ((cosComponent >> 13) << 8) + (*lamppostY << 16);
+    zValue = ((cosComponent >> 13) << 8) + (*lamppostZ << 16);
     position->x = sinComponent;
     position->z = zValue;
 }
 
 // Checks if the player is colliding with an NPC in the town.
 // Returns 1-based character index if colliding, 0 if no collision.
-// posX, posY: player position in 16.16 fixed point
+// posX, posZ: player position in 16.16 fixed point
 // characterIndex: which NPC to check against
-s32 checkTownNPCCollision(s32 posX, s32 posY, s32 characterIndex) {
+s32 checkTownNPCCollision(s32 posX, s32 posZ, s32 characterIndex) {
     GameState *state;
     s32 dx;
     s32 dy;
@@ -130,9 +129,9 @@ s32 checkTownNPCCollision(s32 posX, s32 posY, s32 characterIndex) {
 
     state = (GameState *)getCurrentAllocation();
     dx = posX - state->npcPosX[characterIndex];
-    dy = posY - state->npcPosZ[characterIndex];
+    dy = posZ - state->npcPosZ[characterIndex];
     dist = distance_2d(dx, dy);
-    threshold = state->unk3FE + state->npcCollisionRadius[characterIndex];
+    threshold = state->storyMapPlayerCollisionRadius + state->npcCollisionRadius[characterIndex];
     if (dist < (threshold << 16)) {
         return characterIndex + 1;
     }
@@ -141,10 +140,10 @@ s32 checkTownNPCCollision(s32 posX, s32 posY, s32 characterIndex) {
 
 // Resolves collision between player and an NPC in the town.
 // Pushes the player to the edge of the NPC's collision boundary.
-// controller: town controller state (distanceFromOrigin will be updated)
+// camera: story map camera state (orbitRadius will be updated)
 // position: player position (will be modified)
 // characterIndex: 1-based index of NPC being collided with
-void resolveTownNPCCollision(TownController *controller, Vec3i *position, s32 characterIndex) {
+void resolveTownNPCCollision(StoryMapCameraState *camera, Vec3i *position, s32 characterIndex) {
     GameState *state;
     s16 angle;
     s32 combinedRadius;
@@ -164,7 +163,7 @@ void resolveTownNPCCollision(TownController *controller, Vec3i *position, s32 ch
         position->x,
         position->z
     );
-    combinedRadius = state->npcCollisionRadius[characterIndex] + state->unk3FE;
+    combinedRadius = state->npcCollisionRadius[characterIndex] + state->storyMapPlayerCollisionRadius;
     combinedRadius <<= 16;
     sinComponent = approximateSin(angle);
     pushScale = -(combinedRadius >> 8);
@@ -184,7 +183,7 @@ void resolveTownNPCCollision(TownController *controller, Vec3i *position, s32 ch
     position->x = offsetX;
     offsetZ = ((cosComponent >> 13) << 8) + characterZ;
     position->z = offsetZ;
-    controller->distanceFromOrigin = distance_2d(position->x, offsetZ);
+    camera->orbitRadius = distance_2d(position->x, offsetZ);
 }
 
 // Checks if an NPC is colliding with the player in the town.
@@ -202,6 +201,6 @@ s32 checkTownPlayerCollision(s32 posX, s32 posZ, u8 characterIndex) {
     dx = posX - state->storyMapCameraX;
     dz = posZ - state->storyMapCameraZ;
     dist = distance_2d(dx, dz);
-    threshold = state->unk3FE + state->npcCollisionRadius[characterIndex];
+    threshold = state->storyMapPlayerCollisionRadius + state->npcCollisionRadius[characterIndex];
     return dist < (threshold << 16);
 }

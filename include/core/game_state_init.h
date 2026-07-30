@@ -15,7 +15,7 @@ typedef struct {
     /* 0x3C4 */ void *unk3E4;
     /* 0x3C8 */ s16 unk3E8;
     /* 0x3CA */ u8 padding3[0x14];
-    /* 0x3DE */ s16 unk3FE;
+    /* 0x3DE */ s16 storyMapPlayerCollisionRadius;
     /* 0x3E0 */ u8 padding4[0x3];
     /* 0x3E3 */ u8 unk403;
     /* 0x3E4 */ u8 padding5[0x20];

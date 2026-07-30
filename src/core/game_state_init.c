@@ -40,7 +40,7 @@ void initializeGameState(void) {
     temp_s0->unk42A = 0;
     var_s1 = 0;
     do {
-        temp_s0->unk3FE =
+        temp_s0->storyMapPlayerCollisionRadius =
             (s16)(storyMapLocationModelIds - (((s32)((((short)storyMapLocationModelIds) / 10) << 0x10)) >> 0xF));
         temp_s0->unk403 = 0xFF;
         setupTaskSchedulerNodes(0x30, 0xA, 0x14, 0, 0, 0, 0, 0);
