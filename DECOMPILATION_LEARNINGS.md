@@ -696,6 +696,12 @@ starts with the object at offset zero. In both cases, embedding the shared type 
 pointers without changing their offsets. The race-data pointer used for chair positions is also
 `GameState.raceTransformData` at offset `0x48`, not a level-specific allocation field.
 
+Character select demonstrates that a mode-specific allocation should have one canonical state type rather than
+partial `GameState` views in each renderer. KMC is sensitive to the operand order used to address its
+`Transform3D` array: ordinary typed array indexing reverses the otherwise equivalent `addu` operands. A shared
+accessor whose offset comes from the canonical field, with the element stride written before the allocation base,
+keeps the layout type-derived while preserving the original instruction order.
+
 The save-slot screen demonstrated both patterns at once. Its graphics file had four padded views of the same
 `SaveSlotScreenState`, while its controller recreated trailing fields from four scheduled graphics-task states.
 Sharing the complete screen and task definitions exposed the EEPROM slot records, menu state, selected slot, and

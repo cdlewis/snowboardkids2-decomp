@@ -7,14 +7,6 @@
 #include "ui/level_preview_3d.h"
 
 typedef struct {
-    u8 pad0[0x1898];
-    u16 charSelectMenuStates[4];
-    u16 charSelectFrameCounters[4];
-    u8 charSelectCharRow[8];
-    u8 charSelectCharCol[8];
-} BoardSelectGameState;
-
-typedef struct {
     u8 padding[0x24];
     void *unk24;
     void *unk28;
@@ -274,7 +266,7 @@ void updateCharSelectPlayerNumbers(u8 *);
 void cleanupCharSelectPlayerNumbers(SimpleSpriteEntry *);
 void updateCharSelectPlayer1NameSprite(SimpleSpriteEntry *);
 void cleanupCharSelectPlayer1NameSprite(SimpleSpriteEntry *);
-void initCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0);
+void initCharSelectPlayer2NameSprites(P2NameAnimationState *);
 void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0);
 void waitForCharSelectP2NameReveal(P2NameRevealState *arg0);
 void setupCharSelectP2NamePositions(volatile P2NameSpriteEntry *arg0);

@@ -13,50 +13,6 @@
 #include "system/task_scheduler.h"
 #include "ui/character_select_gfx.h"
 
-typedef struct {
-    ViewportNode playerViewports[4];
-    ViewportNode modelViewports[4];
-    ViewportNode iconViewports[4];
-    ViewportNode cameraNode;
-    Transform3D characterRotations[4];
-    void *mainAssets;
-    void *iconAssets;
-    u16 carouselAngles[4];
-    s16 previewSpinAngles[4];
-    u8 unused1890[8];
-    u16 menuStates[4];
-    u16 frameCounters[4];
-    u8 charRow[4];
-    u8 savedCharRow[4];
-    u8 charCol[4];
-    u8 savedCharCol[4];
-    u8 boardId[4];
-    u8 savedBoardId[4];
-    u8 scrollDirection[4];
-    u8 slideState[4];
-    u8 iconDisplayState[4];
-    u8 maxMenuOption;
-    u8 hasSecretCharacters;
-    s8 unlockedSlotIndex[4];
-    u8 cursorIndices[4];
-    u8 prevCursorIndex[4];
-} CharacterSelectState;
-
-typedef struct {
-    u8 pad0[0x24];
-    u8 iconHidePlayerIndex;
-    u8 pad25[3];
-    u8 boardModelPlayerIndex;
-    u8 pad29[0xB];
-    u8 menuPlayerIndex;
-    u8 pad35[0x1D];
-    u8 iconsPlayerIndex;
-    u8 pad53[0x22];
-    u8 statsPlayerIndex;
-    u8 pad76[0x2B];
-    u8 previewModelPlayerIndex;
-} CharSelectTaskNode;
-
 void awaitCharacterSelectLoad(void);
 void scheduleCharacterSelectTasks(void);
 void updateCharacterSelect(void);
@@ -258,7 +214,7 @@ void initCharacterSelectScreen(void) {
     s32 i;
     s32 numOptions;
     u8 boardId;
-    CharSelectTaskNode *task;
+    void *task;
 
     state = (CharacterSelectState *)allocateTaskMemory(0x18E0);
     setupTaskSchedulerNodes(0x30, 8, 4, 8, 0, 0, 0, 0);
@@ -271,12 +227,12 @@ void initCharacterSelectScreen(void) {
 
     for (i = 0; i < 4; i++) {
         state->menuStates[i] = CHAR_SELECT_MENU_NAV;
-        state->unlockedSlotIndex[i] = 0;
+        state->unlockedSlotIndices[i] = 0;
         state->frameCounters[i] = 0;
         state->previewSpinAngles[i] = 0x800;
-        state->iconDisplayState[i] = 0;
-        memcpy((void *)((s32)state + i * 0x20 + 0x17F8), &identityMatrix, sizeof(Transform3D));
-        *(s32 *)((s32)state + i * 0x20 + 0x1814) = (s32)0xFFEA0000;
+        state->iconDisplayStates[i] = 0;
+        memcpy(CHARACTER_SELECT_ROTATION_AT(state, i), &identityMatrix, sizeof(Transform3D));
+        CHARACTER_SELECT_ROTATION_AT(state, i)->translation.z = (s32)0xFFEA0000;
         state->carouselAngles[i] = 0;
         state->cursorIndices[i] = (s8)(state->maxMenuOption - 2);
     }
@@ -318,8 +274,8 @@ void initCharacterSelectScreen(void) {
         setViewportTransformById(state->playerViewports[i].viewportId, &transform);
     }
 
-    state->mainAssets = loadCompressedData(&menuUiSprites_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
-    state->iconAssets = loadCompressedData(&tiledSnowmanAsset_ROM_START, &uiFontSpriteSheet_ROM_START, 0xAE0);
+    state->menuSpriteAsset = loadCompressedData(&menuUiSprites_ROM_START, &playerCountSelectSprites_ROM_START, 0x8A08);
+    state->iconSpriteAsset = loadCompressedData(&tiledSnowmanAsset_ROM_START, &uiFontSpriteSheet_ROM_START, 0xAE0);
 
     state->hasSecretCharacters = 0;
     if (countUnlockedSlotsInCategory(3) != 0) {
@@ -328,29 +284,29 @@ void initCharacterSelectScreen(void) {
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         if (gGameSessionContext->playerBoardIds[4 + i] < 9) {
-            state->charRow[i] = gGameSessionContext->playerBoardIds[4 + i] / 3;
-            state->charCol[i] = gGameSessionContext->playerBoardIds[4 + i] % 3;
+            state->characterCategories[i] = gGameSessionContext->playerBoardIds[4 + i] / 3;
+            state->characterVariants[i] = gGameSessionContext->playerBoardIds[4 + i] % 3;
         } else {
-            state->charRow[i] = 3;
-            state->charCol[i] = gGameSessionContext->playerBoardIds[4 + i] - 9;
+            state->characterCategories[i] = 3;
+            state->characterVariants[i] = gGameSessionContext->playerBoardIds[4 + i] - 9;
         }
-        state->savedCharRow[i] = state->charRow[i];
-        state->savedCharCol[i] = state->charCol[i];
+        state->previousCharacterCategories[i] = state->characterCategories[i];
+        state->previousCharacterVariants[i] = state->characterVariants[i];
         boardId = gGameSessionContext->playerBoardIds[12 + i];
-        state->boardId[i] = boardId;
-        state->savedBoardId[i] = boardId;
-        task = (CharSelectTaskNode *)scheduleTask(initCharSelectBoardModel, 0, 0, 0x5A);
-        task->boardModelPlayerIndex = i;
-        task = (CharSelectTaskNode *)scheduleTask(initCharSelectPreviewModel, 0, 0, 0x5A);
-        task->previewModelPlayerIndex = i;
-        task = (CharSelectTaskNode *)scheduleTask(initCharSelectMenu, 0, 0, 0x5A);
-        task->menuPlayerIndex = i;
-        task = (CharSelectTaskNode *)scheduleTask(initCharSelectIconHideSprites, 0, 0, 0x5A);
-        task->iconHidePlayerIndex = i;
-        task = (CharSelectTaskNode *)scheduleTask(initCharSelectStats, 0, 0, 0x5A);
-        task->statsPlayerIndex = i;
-        task = (CharSelectTaskNode *)scheduleTask(initCharSelectPlayer2NameSprites, 0, 0, 0x5A);
-        task->iconHidePlayerIndex = i;
+        state->boardIds[i] = boardId;
+        state->previousBoardIds[i] = boardId;
+        task = scheduleTask(initCharSelectBoardModel, 0, 0, 0x5A);
+        ((CharSelectBoardPreview *)task)->playerIndex = i;
+        task = scheduleTask(initCharSelectPreviewModel, 0, 0, 0x5A);
+        ((CharSelectPreviewModel *)task)->playerIndex = i;
+        task = scheduleTask(initCharSelectMenu, 0, 0, 0x5A);
+        ((SelectionMenuState *)task)->playerIndex = i;
+        task = scheduleTask(initCharSelectIconHideSprites, 0, 0, 0x5A);
+        ((CharSelectIconHideState *)task)->playerIndex = i;
+        task = scheduleTask(initCharSelectStats, 0, 0, 0x5A);
+        ((CharSelectStatsState *)task)->playerIndex = i;
+        task = scheduleTask(initCharSelectPlayer2NameSprites, 0, 0, 0x5A);
+        ((P2NameAnimationState *)task)->playerIndex = i;
     }
 
     scheduleTask(initCharSelectPlayerLabels, 0, 0, 0x5A);
@@ -381,16 +337,16 @@ void awaitCharacterSelectLoad(void) {
 
 void scheduleCharacterSelectTasks(void) {
     s32 i;
-    CharSelectTaskNode *task;
+    void *task;
 
     if (getViewportFadeMode(0) != 0) {
         return;
     }
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
-        task = (CharSelectTaskNode *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
+        task = scheduleTask(initCharSelectIcons, 1, i, 0x5A);
         if (task != NULL) {
-            task->iconsPlayerIndex = i;
+            ((CharSelectIconsState *)task)->playerIndex = i;
         }
     }
 
@@ -414,9 +370,9 @@ void updateCharacterSelect(void) {
     s32 confirmedCount;
     u8 unlockedSlots[10];
     u32 charIdx;
-    CharSelectTaskNode *task;
-    CharSelectTaskNode *secTask;
-    CharSelectTaskNode *boardTask;
+    void *task;
+    void *secondaryTask;
+    void *boardTask;
     s32 *temp3;
     void *eepromResult;
     state = (CharacterSelectState *)getCurrentAllocation();
@@ -438,7 +394,7 @@ void updateCharacterSelect(void) {
                 }
                 if (prevCursorIdx != state->cursorIndices[i]) {
                     state->menuStates[i] = CHAR_SELECT_MENU_ROTATING;
-                    state->prevCursorIndex[i] = prevCursorIdx;
+                    state->previousCursorIndices[i] = prevCursorIdx;
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                 } else if (gControllerInputs[i] & CONT_A) {
                     state->menuStates[i] = CHAR_SELECT_MENU_CONFIRMING;
@@ -460,7 +416,7 @@ void updateCharacterSelect(void) {
                 } else if (state->cursorIndices[i] == (state->maxMenuOption - 3)) {
                     rotDir = 0x200;
                 } else {
-                    rotDir = (state->prevCursorIndex[i] == (state->maxMenuOption - 1)) ? 0x200 : -0x200;
+                    rotDir = (state->previousCursorIndices[i] == (state->maxMenuOption - 1)) ? 0x200 : -0x200;
                 }
 
                 state->carouselAngles[i] = (state->carouselAngles[i] + rotDir) & 0x1FFF;
@@ -489,7 +445,7 @@ void updateCharacterSelect(void) {
                     terminateTasksByTypeAndID(1, i & 0xFF);
                 } else if (state->cursorIndices[i] == (state->maxMenuOption - 3)) {
                     state->menuStates[i] = CHAR_SELECT_BOARD_BROWSE;
-                    state->iconDisplayState[i] = 1;
+                    state->iconDisplayStates[i] = 1;
                 } else if (state->cursorIndices[i] == (state->maxMenuOption - 2)) {
                     state->menuStates[i] = CHAR_SELECT_READY_CONFIRM;
                 }
@@ -499,9 +455,9 @@ void updateCharacterSelect(void) {
                 if (gControllerInputs[i] & CONT_B) {
                     playSoundEffectOnChannelNoPriority(0x2E, i);
                     state->menuStates[i] = CHAR_SELECT_MENU_NAV;
-                    task = (CharSelectTaskNode *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
+                    task = scheduleTask(initCharSelectIcons, 1, i, 0x5A);
                     if (task != 0) {
-                        task->iconsPlayerIndex = i;
+                        ((CharSelectIconsState *)task)->playerIndex = i;
                     }
                     state->cursorIndices[i] = state->maxMenuOption - 2;
                     state->carouselAngles[i] = 0;
@@ -513,68 +469,68 @@ void updateCharacterSelect(void) {
                         (ColorData *)(&charSelectNormalAmbient)
                     );
                     if (gGameSessionContext->playerBoardIds[4 + i] < 9) {
-                        state->charRow[i] = gGameSessionContext->playerBoardIds[4 + i] / 3;
-                        state->charCol[i] = gGameSessionContext->playerBoardIds[4 + i] % 3;
+                        state->characterCategories[i] = gGameSessionContext->playerBoardIds[4 + i] / 3;
+                        state->characterVariants[i] = gGameSessionContext->playerBoardIds[4 + i] % 3;
                     } else {
-                        state->charRow[i] = 3;
-                        state->charCol[i] = gGameSessionContext->playerBoardIds[4 + i] - 9;
+                        state->characterCategories[i] = 3;
+                        state->characterVariants[i] = gGameSessionContext->playerBoardIds[4 + i] - 9;
                     }
                     break;
                 }
 
-                prevCharRow = state->charRow[i];
+                prevCharRow = state->characterCategories[i];
                 if (gControllerInputs[i] & (STICK_RIGHT | CONT_RIGHT)) {
-                    state->charRow[i]++;
-                    if ((state->hasSecretCharacters + 2) < (state->charRow[i] & 0xFF)) {
-                        state->charRow[i] = 0;
+                    state->characterCategories[i]++;
+                    if ((state->hasSecretCharacters + 2) < (state->characterCategories[i] & 0xFF)) {
+                        state->characterCategories[i] = 0;
                     }
-                    state->scrollDirection[i] = 0;
+                    state->scrollDirections[i] = 0;
                 } else if (gControllerInputs[i] & (STICK_LEFT | CONT_LEFT)) {
-                    state->charRow[i]--;
-                    if ((state->hasSecretCharacters + 2) < (state->charRow[i] & 0xFF)) {
-                        state->charRow[i] = state->hasSecretCharacters + 2;
+                    state->characterCategories[i]--;
+                    if ((state->hasSecretCharacters + 2) < (state->characterCategories[i] & 0xFF)) {
+                        state->characterCategories[i] = state->hasSecretCharacters + 2;
                     }
-                    state->scrollDirection[i] = 1;
+                    state->scrollDirections[i] = 1;
                 }
 
-                if (prevCharRow != state->charRow[i]) {
+                if (prevCharRow != state->characterCategories[i]) {
                     state->menuStates[i] = CHAR_SELECT_CHAR_ROW_SLIDE;
-                    state->slideState[i] = 0;
-                    state->savedCharRow[i] = prevCharRow;
-                    state->savedCharCol[i] = state->charCol[i];
-                    if (state->charRow[i] == 3) {
+                    state->completedSlides[i] = 0;
+                    state->previousCharacterCategories[i] = prevCharRow;
+                    state->previousCharacterVariants[i] = state->characterVariants[i];
+                    if (state->characterCategories[i] == 3) {
                         for (k = 0; k < 9; k++) {
                             if (EepromSaveData->character_or_settings[9 + k] != 0) {
-                                state->charCol[i] = k;
+                                state->characterVariants[i] = k;
                                 break;
                             }
                         }
                     } else {
-                        state->charCol[i] = 0;
+                        state->characterVariants[i] = 0;
                     }
 
-                    secTask = (CharSelectTaskNode *)scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
-                    if (secTask != 0) {
-                        secTask->previewModelPlayerIndex = i;
+                    secondaryTask = scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
+                    if (secondaryTask != 0) {
+                        ((CharSelectSecondarySlot *)secondaryTask)->playerIndex = i;
                     }
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                 } else if (gControllerInputs[i] & CONT_A) {
                     state->frameCounters[i] = 0;
-                    state->unlockedSlotIndex[i] = 0;
+                    state->unlockedSlotIndices[i] = 0;
                     state->menuStates[i] = CHAR_SELECT_CHAR_ROW_FLASH;
                     playSoundEffectOnChannelNoPriority(0x2C, i);
-                    playSoundEffect(charRowConfirmSoundIds[state->charRow[i]]);
+                    playSoundEffect(charRowConfirmSoundIds[state->characterCategories[i]]);
                 }
                 break;
 
             case CHAR_SELECT_CHAR_ROW_SLIDE:
 
             case CHAR_SELECT_CHAR_VARIANT_SLIDE:
-                if (state->slideState[i] != 2) {
+                if (state->completedSlides[i] != 2) {
                     break;
                 }
 
-                state->slideState[i] = 0;
+                state->completedSlides[i] = 0;
                 if (state->menuStates[i] == CHAR_SELECT_CHAR_ROW_SLIDE) {
                     state->menuStates[i] = CHAR_SELECT_CHAR_ROW_BROWSE;
                 } else {
@@ -588,9 +544,9 @@ void updateCharacterSelect(void) {
                 state->frameCounters[i]++;
                 if (state->menuStates[i] == CHAR_SELECT_CHAR_CONFIRMED) {
                     if (state->frameCounters[i] & 1) {
-                        state->iconDisplayState[i] = 2;
+                        state->iconDisplayStates[i] = 2;
                     } else {
-                        state->iconDisplayState[i] = 0;
+                        state->iconDisplayStates[i] = 0;
                     }
                 }
 
@@ -599,40 +555,40 @@ void updateCharacterSelect(void) {
                 }
 
                 state->frameCounters[i] = 0;
-                state->iconDisplayState[i] = 0;
+                state->iconDisplayStates[i] = 0;
                 if (state->menuStates[i] == CHAR_SELECT_CHAR_ROW_FLASH) {
                     state->menuStates[i] = CHAR_SELECT_CHAR_VARIANT_BROWSE;
-                    if (state->charRow[i] == 3) {
+                    if (state->characterCategories[i] == 3) {
                         limit = 9;
                     } else {
                         limit = 3;
                     }
                     numUnlocked = 0;
                     for (j = 0; j < limit; j++) {
-                        charIdx = (state->charRow[i] * 3) + j;
+                        charIdx = (state->characterCategories[i] * 3) + j;
                         if (EepromSaveData->character_or_settings[charIdx] != 0) {
                             unlockedSlots[numUnlocked] = charIdx;
                             numUnlocked++;
                         }
                     }
 
-                    j = countUnlockedSlotsInCategory(state->charRow[i]);
+                    j = countUnlockedSlotsInCategory(state->characterCategories[i]);
                     for (limit = 0; limit < j; limit++) {
                         prevSlotIdx = unlockedSlots[limit];
-                        if (state->charRow[i] == 3) {
+                        if (state->characterCategories[i] == 3) {
                             prevSlotIdx -= 9;
                         } else {
                             prevSlotIdx %= 3;
                         }
 
-                        if (prevSlotIdx == state->charCol[i]) {
-                            state->unlockedSlotIndex[i] = limit;
+                        if (prevSlotIdx == state->characterVariants[i]) {
+                            state->unlockedSlotIndices[i] = limit;
                         }
                     }
 
-                    task = (CharSelectTaskNode *)scheduleTask(initCharSelectIcons, 1, i, 0x5A);
+                    task = scheduleTask(initCharSelectIcons, 1, i, 0x5A);
                     if (task != 0) {
-                        task->iconsPlayerIndex = i;
+                        ((CharSelectIconsState *)task)->playerIndex = i;
                         break;
                     }
                 } else {
@@ -656,8 +612,8 @@ void updateCharacterSelect(void) {
                     terminateTasksByTypeAndID(1, i & 0xFF);
                     break;
                 }
-                prevSlotIdx = state->unlockedSlotIndex[i];
-                if (state->charRow[i] == 3) {
+                prevSlotIdx = state->unlockedSlotIndices[i];
+                if (state->characterCategories[i] == 3) {
                     limit = 9;
                 } else {
                     limit = 3;
@@ -665,49 +621,49 @@ void updateCharacterSelect(void) {
 
                 numUnlocked = 0;
                 for (j = 0; j < limit; j++) {
-                    charIdx = (state->charRow[i] * 3) + j;
+                    charIdx = (state->characterCategories[i] * 3) + j;
                     if (EepromSaveData->character_or_settings[charIdx] != 0) {
                         unlockedSlots[numUnlocked] = charIdx;
                         numUnlocked++;
                     }
                 }
 
-                j = countUnlockedSlotsInCategory(state->charRow[i]);
+                j = countUnlockedSlotsInCategory(state->characterCategories[i]);
                 if (gControllerInputs[i] & (STICK_RIGHT | CONT_RIGHT)) {
-                    state->unlockedSlotIndex[i]++;
-                    if (j - 1 < state->unlockedSlotIndex[i]) {
-                        state->unlockedSlotIndex[i] = 0;
+                    state->unlockedSlotIndices[i]++;
+                    if (j - 1 < state->unlockedSlotIndices[i]) {
+                        state->unlockedSlotIndices[i] = 0;
                     }
-                    state->scrollDirection[i] = 0;
+                    state->scrollDirections[i] = 0;
                 } else if (gControllerInputs[i] & (STICK_LEFT | CONT_LEFT)) {
-                    state->unlockedSlotIndex[i]--;
-                    if (state->unlockedSlotIndex[i] < 0) {
-                        state->unlockedSlotIndex[i] = j - 1;
+                    state->unlockedSlotIndices[i]--;
+                    if (state->unlockedSlotIndices[i] < 0) {
+                        state->unlockedSlotIndices[i] = j - 1;
                     }
-                    state->scrollDirection[i] = 1;
+                    state->scrollDirections[i] = 1;
                 }
 
-                state->charCol[i] = unlockedSlots[state->unlockedSlotIndex[i]];
-                if (state->charRow[i] == 3) {
-                    state->charCol[i] -= 9;
+                state->characterVariants[i] = unlockedSlots[state->unlockedSlotIndices[i]];
+                if (state->characterCategories[i] == 3) {
+                    state->characterVariants[i] -= 9;
                 } else {
-                    state->charCol[i] %= 3;
+                    state->characterVariants[i] %= 3;
                 }
 
-                if (prevSlotIdx != state->unlockedSlotIndex[i]) {
+                if (prevSlotIdx != state->unlockedSlotIndices[i]) {
                     state->menuStates[i] = CHAR_SELECT_CHAR_VARIANT_SLIDE;
-                    state->slideState[i] = 0;
+                    state->completedSlides[i] = 0;
                     playSoundEffectOnChannelNoPriority(0x2B, i);
-                    state->savedCharRow[i] = state->charRow[i];
-                    state->savedCharCol[i] = unlockedSlots[prevSlotIdx];
-                    if (state->charRow[i] == 3) {
-                        state->savedCharCol[i] -= 9;
+                    state->previousCharacterCategories[i] = state->characterCategories[i];
+                    state->previousCharacterVariants[i] = unlockedSlots[prevSlotIdx];
+                    if (state->characterCategories[i] == 3) {
+                        state->previousCharacterVariants[i] -= 9;
                     } else {
-                        state->savedCharCol[i] %= 3;
+                        state->previousCharacterVariants[i] %= 3;
                     }
-                    secTask = (CharSelectTaskNode *)scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
-                    if (secTask != 0) {
-                        secTask->previewModelPlayerIndex = i;
+                    secondaryTask = scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
+                    if (secondaryTask != 0) {
+                        ((CharSelectSecondarySlot *)secondaryTask)->playerIndex = i;
                         break;
                     }
                 } else {
@@ -715,7 +671,7 @@ void updateCharacterSelect(void) {
                         state->frameCounters[i] = 0;
                         state->menuStates[i] = CHAR_SELECT_CHAR_CONFIRMED;
                         playSoundEffectOnChannelNoPriority(0x2C, i);
-                        gGameSessionContext->playerBoardIds[4 + i] = unlockedSlots[state->unlockedSlotIndex[i]];
+                        gGameSessionContext->playerBoardIds[4 + i] = unlockedSlots[state->unlockedSlotIndices[i]];
                         gGameSessionContext->playerBoardIds[8 + i] =
                             EepromSaveData->character_or_settings[gGameSessionContext->playerBoardIds[4 + i]] - 1;
                     }
@@ -730,43 +686,43 @@ void updateCharacterSelect(void) {
                     state->cursorIndices[i] = state->maxMenuOption - 2;
                     state->carouselAngles[i] = 0;
                     createYRotationMatrix(&state->characterRotations[i], 0);
-                    state->boardId[i] = gGameSessionContext->playerBoardIds[12 + i];
-                    state->iconDisplayState[i] = 0;
+                    state->boardIds[i] = gGameSessionContext->playerBoardIds[12 + i];
+                    state->iconDisplayStates[i] = 0;
                     break;
                 }
-                prevBoardId = state->boardId[i];
+                prevBoardId = state->boardIds[i];
                 if (gControllerInputs[i] & (STICK_RIGHT | CONT_RIGHT)) {
-                    state->boardId[i]++;
-                    state->scrollDirection[i] = 0;
+                    state->boardIds[i]++;
+                    state->scrollDirections[i] = 0;
                 } else if (gControllerInputs[i] & (STICK_LEFT | CONT_LEFT)) {
-                    state->boardId[i]--;
-                    state->scrollDirection[i] = 1;
+                    state->boardIds[i]--;
+                    state->scrollDirections[i] = 1;
                 }
-                state->boardId[i] = state->boardId[i] & 3;
-                if (prevBoardId != state->boardId[i]) {
+                state->boardIds[i] = state->boardIds[i] & 3;
+                if (prevBoardId != state->boardIds[i]) {
                     state->menuStates[i] = CHAR_SELECT_BOARD_SLIDE;
-                    state->slideState[i] = 0;
-                    state->savedBoardId[i] = prevBoardId;
+                    state->completedSlides[i] = 0;
+                    state->previousBoardIds[i] = prevBoardId;
                     playSoundEffectOnChannelNoPriority(0x2B, i);
-                    boardTask = (CharSelectTaskNode *)scheduleTask(&initCharSelectBoardModelForSlideOut, 3, i, 0x59);
+                    boardTask = scheduleTask(&initCharSelectBoardModelForSlideOut, 3, i, 0x59);
                     if (boardTask != 0) {
-                        boardTask->boardModelPlayerIndex = i;
+                        ((CharSelectBoardPreview *)boardTask)->playerIndex = i;
                         break;
                     }
                 } else if (gControllerInputs[i] & CONT_A) {
                     state->menuStates[i] = CHAR_SELECT_BOARD_FLASH;
-                    gGameSessionContext->playerBoardIds[12 + i] = state->boardId[i];
+                    gGameSessionContext->playerBoardIds[12 + i] = state->boardIds[i];
                     state->frameCounters[i] = 0;
                     playSoundEffectOnChannelNoPriority(0x2C, i);
-                    playSoundEffect(boardConfirmSoundIds[state->boardId[i]]);
+                    playSoundEffect(boardConfirmSoundIds[state->boardIds[i]]);
                 }
                 break;
 
             case CHAR_SELECT_BOARD_SLIDE:
-                if (state->slideState[i] != 2) {
+                if (state->completedSlides[i] != 2) {
                     break;
                 }
-                state->slideState[i] = 0;
+                state->completedSlides[i] = 0;
                 state->menuStates[i] = CHAR_SELECT_BOARD_BROWSE;
                 break;
 
@@ -791,7 +747,7 @@ void updateCharacterSelect(void) {
                     state->frameCounters[i] = 0;
                     state->menuStates[i] = CHAR_SELECT_MENU_NAV;
                     state->cursorIndices[i] = state->maxMenuOption - 2;
-                    state->iconDisplayState[i] = 0;
+                    state->iconDisplayStates[i] = 0;
                     state->carouselAngles[i] = 0;
                     createYRotationMatrix(&state->characterRotations[i], 0);
                 }
@@ -867,8 +823,8 @@ void cleanupCharacterSelect(void) {
         unlinkNode(&state->iconViewports[i]);
     }
 
-    state->mainAssets = freeNodeMemory(state->mainAssets);
-    state->iconAssets = freeNodeMemory(state->iconAssets);
+    state->menuSpriteAsset = freeNodeMemory(state->menuSpriteAsset);
+    state->iconSpriteAsset = freeNodeMemory(state->iconSpriteAsset);
 
     if (state->frameCounters[0] == 0x63) {
         terminateSchedulerWithCallback(onCharacterSelectCancel);
