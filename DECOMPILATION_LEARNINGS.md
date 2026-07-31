@@ -731,12 +731,17 @@ state. Title render tasks that cast this allocation to `GameState` only happened
 Give a mode-specific allocation one shared subsystem type and use it in every task that consumes that mode,
 rather than retaining a file-local copy or borrowing unrelated `GameState` field names.
 
-The title tasks also showed that partial UI structs often contain canonical renderer state. Their controller
-slots are `TextRenderArg` values, their player-count prompts are adjacent `SpriteRenderArg` values, and the
+The title tasks also showed that partial UI structs often contain canonical renderer state. Their menu options
+are `TextRenderArg` values, their legal notices are adjacent `SpriteRenderArg` values, and the
 title logo starts with `TileMapScrollRenderState`. Embedding those common types preserves their offsets and KMC
 code generation while replacing duplicated `asset`, sprite-index, alpha, and tile fields with renderer-owned
 names. Conversely, bytes `0x3B0` through `0x3CF` in the story `GameState` form one complete `Transform3D`;
 representing that range as the transform removes title-only aliases from the common game-state layout.
+
+When naming sprite fields, inspect the decompressed sprite frames rather than inferring their purpose solely
+from screen position or neighboring menu state. In the title sprite sheet, frames 5 and 6 are the copyright and
+Nintendo license notices; treating them as player-count prompts produced plausible layouts but incorrect
+semantic names.
 
 ## Resolve Overlay Function Aliases by Payload Layout and Behavior
 

@@ -9,19 +9,19 @@
 #include "ui/level_preview_3d.h"
 
 typedef struct {
-    SpriteRenderArg primary;
-    SpriteRenderArg nested;
-} ControllerPromptSprites;
+    SpriteRenderArg copyrightNotice;
+    SpriteRenderArg licenseNotice;
+} TitleLegalNoticeSprites;
 
 typedef struct {
-    TextRenderArg controllerSlots[6];
-    ControllerPromptSprites playerCountPrompts;
-} ControllerSlotState;
+    TextRenderArg menuOptions[6];
+    TitleLegalNoticeSprites legalNotices;
+} TitleMenuOptionsState;
 
 typedef struct {
     TileMapScrollRenderState tileMap;
     u8 padding[0xC];
-    void *assetData;
+    TileMapTextureAsset *tileMapAsset;
 } TitleLogoTask;
 
 typedef struct {
@@ -35,8 +35,8 @@ typedef struct {
 typedef struct {
     /* 0x000 */ ViewportNode mainViewport;
     /* 0x1D8 */ ViewportNode menuViewport;
-    /* 0x3B0 */ void *titleLogoData;
-    /* 0x3B4 */ void *menuGraphicsData;
+    /* 0x3B0 */ TileMapTextureAsset *titleLogoData;
+    /* 0x3B4 */ SpriteSheetData *menuGraphicsData;
     /* 0x3B8 */ u16 idleFrameCounter;
     /* 0x3BA */ u8 reserved3BA;
     /* 0x3BB */ u8 menuSelection;
@@ -56,13 +56,13 @@ typedef struct {
     u16 currentAnim;
     u8 animSequenceIndex;
     u8 characterIndex;
-    u8 _pad30;
+    u8 padding30;
     u8 animTimer;
     u8 flyAwayState;
 } TitleCharacterState;
 
 void loadTitleLogoAsset(TitleLogoTask *arg0);
-void initControllerSlotDisplay(ControllerSlotState *);
+void initControllerSlotDisplay(TitleMenuOptionsState *);
 void initPressStartPrompt(TitlePressStartPromptState *arg0);
 void initTitleEffectModel(ModelEntity *arg0);
 void initTitleCharacterModel(TitleCharacterState *arg0);

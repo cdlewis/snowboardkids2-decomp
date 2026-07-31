@@ -15,10 +15,10 @@ extern u16 *gTitleCharacterAnimSequences[2];
 
 void cleanupTitleLogoTask(TitleLogoTask *);
 void enqueueTitleLogoRender(TitleLogoTask *);
-void cleanupControllerSlotDisplay(void **);
-void updateControllerSlotHighlights(ControllerSlotState *);
+void cleanupControllerSlotDisplay(TitleMenuOptionsState *);
+void updateControllerSlotHighlights(TitleMenuOptionsState *);
 void updatePressStartPrompt(TitlePressStartPromptState *);
-void cleanupPressStartPrompt(void **);
+void cleanupPressStartPrompt(TitlePressStartPromptState *);
 void renderTitleEffectModel(ModelEntityRenderState *arg0);
 void cleanupTitleEffectModel(EffectState *arg0);
 void setupTitleCharacterTransform(TitleCharacterState *arg0);
@@ -30,7 +30,7 @@ void updatePartialUnlockAnim(TitleCharacterState *arg0);
 void cleanupTitleCharacterModel(TitleCharacterState *arg0);
 
 void cleanupTitleLogoTask(TitleLogoTask *arg0) {
-    arg0->assetData = freeNodeMemory(arg0->assetData);
+    arg0->tileMapAsset = freeNodeMemory(arg0->tileMapAsset);
 }
 
 void enqueueTitleLogoRender(TitleLogoTask *arg0) {
@@ -38,67 +38,67 @@ void enqueueTitleLogoRender(TitleLogoTask *arg0) {
 }
 
 void initTitleLogoRenderState(TitleLogoTask *arg0) {
-    initScrollingTileMapState(&arg0->tileMap, (TileMapTextureAsset *)arg0->assetData);
+    initScrollingTileMapState(&arg0->tileMap, arg0->tileMapAsset);
     arg0->tileMap.y = 0x10;
     setCallback(enqueueTitleLogoRender);
 }
 
 void loadTitleLogoAsset(TitleLogoTask *arg0) {
-    arg0->assetData = loadCompressedData(&titleLogo_ROM_START, &titleLogo_ROM_END, 0x7B50);
+    arg0->tileMapAsset = loadCompressedData(&titleLogo_ROM_START, &titleLogo_ROM_END, 0x7B50);
     setCleanupCallback(cleanupTitleLogoTask);
     setCallback(initTitleLogoRenderState);
 }
 
-void initControllerSlotDisplay(ControllerSlotState *state) {
+void initControllerSlotDisplay(TitleMenuOptionsState *state) {
     TitleScreenState *titleState;
     s32 i;
-    void *spriteAsset;
+    SpriteSheetData *spriteAsset;
 
     titleState = (TitleScreenState *)getCurrentAllocation();
     spriteAsset = loadCompressedData(&titleScreenSprites_ROM_START, &titleScreenSprites_ROM_END, 0x2238);
     setCleanupCallback(cleanupControllerSlotDisplay);
 
     for (i = 0; i < titleState->menuOptionCount; i++) {
-        state->controllerSlots[i].x = -0x38;
-        state->controllerSlots[i].y = 0x26 + (i * 0x10);
-        state->controllerSlots[i].overridePaletteCount = 0;
-        state->controllerSlots[i].spriteData = spriteAsset;
-        state->controllerSlots[i].frameIndex = i;
-        state->controllerSlots[i].color.paletteAndAlpha = 0x80;
-        state->controllerSlots[i].transparency = 0xF0;
-        state->controllerSlots[i].tileMode = 0;
+        state->menuOptions[i].x = -0x38;
+        state->menuOptions[i].y = 0x26 + (i * 0x10);
+        state->menuOptions[i].overridePaletteCount = 0;
+        state->menuOptions[i].spriteData = spriteAsset;
+        state->menuOptions[i].frameIndex = i;
+        state->menuOptions[i].color.paletteAndAlpha = 0x80;
+        state->menuOptions[i].transparency = 0xF0;
+        state->menuOptions[i].tileMode = 0;
     }
 
     for (i = 0; i < 2; i++) {
-        state->controllerSlots[i + 4].x = -0x38;
-        state->controllerSlots[i + 4].y = 0x2E + i * 0x12;
-        state->controllerSlots[i + 4].overridePaletteCount = 0;
-        state->controllerSlots[i + 4].spriteData = spriteAsset;
-        state->controllerSlots[i + 4].frameIndex = 3;
-        state->controllerSlots[i + 4].frameIndex += i;
-        state->controllerSlots[i + 4].color.paletteAndAlpha = 0x80;
-        state->controllerSlots[i + 4].transparency = 0xF0;
-        state->controllerSlots[i + 4].tileMode = 0;
+        state->menuOptions[i + 4].x = -0x38;
+        state->menuOptions[i + 4].y = 0x2E + i * 0x12;
+        state->menuOptions[i + 4].overridePaletteCount = 0;
+        state->menuOptions[i + 4].spriteData = spriteAsset;
+        state->menuOptions[i + 4].frameIndex = 3;
+        state->menuOptions[i + 4].frameIndex += i;
+        state->menuOptions[i + 4].color.paletteAndAlpha = 0x80;
+        state->menuOptions[i + 4].transparency = 0xF0;
+        state->menuOptions[i + 4].tileMode = 0;
     }
 
-    state->playerCountPrompts.primary.y = 0x55;
-    state->playerCountPrompts.primary.x = -0x48;
-    state->playerCountPrompts.primary.frameIndex = 5;
-    state->playerCountPrompts.primary.spriteData = spriteAsset;
-    state->playerCountPrompts.nested.x = -0x48;
-    state->playerCountPrompts.nested.spriteData = spriteAsset;
-    state->playerCountPrompts.nested.frameIndex = 6;
-    state->playerCountPrompts.nested.y = state->playerCountPrompts.primary.y + 0xE;
+    state->legalNotices.copyrightNotice.y = 0x55;
+    state->legalNotices.copyrightNotice.x = -0x48;
+    state->legalNotices.copyrightNotice.frameIndex = 5;
+    state->legalNotices.copyrightNotice.spriteData = spriteAsset;
+    state->legalNotices.licenseNotice.x = -0x48;
+    state->legalNotices.licenseNotice.spriteData = spriteAsset;
+    state->legalNotices.licenseNotice.frameIndex = 6;
+    state->legalNotices.licenseNotice.y = state->legalNotices.copyrightNotice.y + 0xE;
     setCallback(updateControllerSlotHighlights);
 }
 
-void updateControllerSlotHighlights(ControllerSlotState *arg0) {
+void updateControllerSlotHighlights(TitleMenuOptionsState *arg0) {
     TitleScreenState *state;
     s32 i;
-    s32 numControllers;
-    s32 selectedSlot;
+    s32 numOptions;
+    s32 selectedOption;
     s32 unused[2];
-    TextRenderArg *slot;
+    TextRenderArg *option;
     s32 selectedAlpha;
     s32 unselectedAlpha;
 
@@ -106,42 +106,42 @@ void updateControllerSlotHighlights(ControllerSlotState *arg0) {
 
     if (gConnectedControllerMask != 0) {
         if (state->menuMode != 0) {
-            numControllers = 2;
+            numOptions = 2;
         } else {
-            numControllers = state->menuOptionCount;
+            numOptions = state->menuOptionCount;
         }
 
-        if (numControllers != 0) {
+        if (numOptions != 0) {
             i = 0;
             selectedAlpha = 0xFF;
             unselectedAlpha = 0x80;
             do {
-                selectedSlot = state->menuSelection;
-                if (i == selectedSlot) {
-                    slot = &arg0->controllerSlots[i + (state->menuMode << 2)];
-                    slot->color.paletteAndAlpha = selectedAlpha;
+                selectedOption = state->menuSelection;
+                if (i == selectedOption) {
+                    option = &arg0->menuOptions[i + (state->menuMode << 2)];
+                    option->color.paletteAndAlpha = selectedAlpha;
                 } else {
-                    slot = &arg0->controllerSlots[i + (state->menuMode << 2)];
-                    slot->color.paletteAndAlpha = unselectedAlpha;
+                    option = &arg0->menuOptions[i + (state->menuMode << 2)];
+                    option->color.paletteAndAlpha = unselectedAlpha;
                 }
 
                 enqueueCallbackBySlotIndex(
                     8,
                     1,
                     renderTextSpriteWithTransparency,
-                    &arg0->controllerSlots[i + (state->menuMode << 2)]
+                    &arg0->menuOptions[i + (state->menuMode << 2)]
                 );
                 i++;
-            } while (i < numControllers);
+            } while (i < numOptions);
         }
     }
 
-    enqueueCallbackBySlotIndex(8, 1, renderSpriteFrame, &arg0->playerCountPrompts.primary);
-    enqueueCallbackBySlotIndex(8, 1, renderSpriteFrame, &arg0->playerCountPrompts.nested);
+    enqueueCallbackBySlotIndex(8, 1, renderSpriteFrame, &arg0->legalNotices.copyrightNotice);
+    enqueueCallbackBySlotIndex(8, 1, renderSpriteFrame, &arg0->legalNotices.licenseNotice);
 }
 
-void cleanupControllerSlotDisplay(void **arg0) {
-    arg0[1] = freeNodeMemory(arg0[1]);
+void cleanupControllerSlotDisplay(TitleMenuOptionsState *state) {
+    state->menuOptions[0].spriteData = freeNodeMemory(state->menuOptions[0].spriteData);
 }
 
 void initPressStartPrompt(TitlePressStartPromptState *arg0) {
@@ -176,8 +176,8 @@ void updatePressStartPrompt(TitlePressStartPromptState *arg0) {
     enqueueCallbackBySlotIndex(8, 1, renderSpriteFrame, &arg0->sprite);
 }
 
-void cleanupPressStartPrompt(void **arg0) {
-    arg0[1] = freeNodeMemory(arg0[1]);
+void cleanupPressStartPrompt(TitlePressStartPromptState *state) {
+    state->sprite.spriteData = freeNodeMemory(state->sprite.spriteData);
 }
 
 void initTitleEffectModel(ModelEntity *arg0) {
