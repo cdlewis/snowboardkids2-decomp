@@ -1,4 +1,5 @@
 #include "ui/level_preview.h"
+#include "D_800AFE8C_A71FC_type.h"
 #include "EepromSaveData_type.h"
 #include "animation/easing_state.h"
 #include "assets.h"
@@ -18,14 +19,10 @@
 #include "text/font_render.h"
 #include "text/text_layout.h"
 #include "ui/level_preview_3d.h"
-#include "ui/save_data.h"
 
 void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state);
 void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state);
 void holdLevelPreviewCamera(LevelPreviewCharacterState *state);
-
-struct LevelPreviewPortraitState_202A0_s;
-void animatePortraitRotation(struct LevelPreviewPortraitState_202A0_s *arg0);
 
 u16 sLevelPreviewDurations[] = { 0x0618, 0x0672, 0x03DE, 0x03DE, 0x0708, 0x01E0, 0x0708, 0x0708,
                                  0x0546, 0x04CE, 0x04B0, 0x04B0, 0x04B0, 0x04B0, 0x0564, 0x0564 };
@@ -75,144 +72,20 @@ struct {
              0xFFFFFF00, 0x00505000, 0xFFFFFF00, 0x00000000, 0x00000000, 0x00000000 },
 };
 
-typedef struct {
-    u8 _pad0[0xB2C];
-    s8 unkB2C;
-    u8 _padB2D[2];
-    u8 menuState;
-    u8 _padB30[3];
-    u8 unkB33[12];
-    u8 _padB3F[6];
-    u8 unkB45;
-    u8 unkB46;
-    u8 unkB47;
-} Allocation_202A0;
-
-typedef struct {
-    u8 _pad0[0x48A];
-    u16 unk48A;
-} Allocation_8001FEB4;
-
-typedef struct {
-    u8 _pad0[0x3B0];  // 0x000-0x3AF
-    u8 unk3B0[0x77C]; // 0x3B0-0xB2B
-    s8 unkB2C;        // 0xB2C
-    u8 _padB2D[0x6];  // 0xB2D-0xB32
-    u8 unkB33[12];    // 0xB33
-} Allocation_80020418;
-
-typedef struct {
-    s32 unk0;        // 0x00
-    u8 _pad4[0x4];   // 0x04
-    s32 unk8;        // 0x08
-    u8 _padC[0xC];   // 0x0C
-    u8 unk18[0x3A];  // 0x18
-    u16 unk52;       // 0x52
-    u8 _pad54[0x2];  // 0x54
-    u16 unk56;       // 0x56
-    u8 _pad58[0x2];  // 0x58
-    u16 unk5A;       // 0x5A
-    u8 _pad5C[0x16]; // 0x5C
-    u16 unk72;       // 0x72
-    u16 unk74;       // 0x74
-    u8 unk76;        // 0x76
-} Func80020418Arg;
-
-void resumeLevelPreviewAfterHold(Func80020418Arg *arg0);
-
-typedef struct {
-    u8 data[0x1C];
-    volatile s32 unk1C;
-} Mat2WithTemp;
-
-typedef struct {
-    u8 _pad0[0xB30];
-    u8 toLevelId;
-} AllocationState;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    void *spriteAsset;
-    s16 frameIndex;
-} PortraitSubEntry;
-
-typedef struct {
-    u8 _pad00[0x4];
-    s16 matrix[9];
-    u8 _pad16[0x2];
-    u8 *textureData;
-    Transform3D transform;
-    u8 *data_ptr;
-    TableEntry_19E80 *index_ptr;
-    u8 field1;
-    u8 field2;
-    u8 alpha;
-} MatrixData;
-
-typedef struct {
-    PortraitSubEntry entries[2];
-    MatrixData matrices[4];
-    s16 frameIndices[4];
-    s16 rotations[4];
-    DataTable_19E80 *portraitAsset;
-} PortraitState;
-
-typedef struct {
-    u8 _pad0[0x8];
-    s16 frameIndex; // Sprite frame index to display
-    u8 _padA[2];
-} LevelPreviewPortraitEntry_202A0;
-
-typedef struct LevelPreviewPortraitState_202A0_s {
-    LevelPreviewPortraitEntry_202A0 entries[2]; // 0x00 - portrait entries with frame indices
-    MatrixEntry_202A0 matrices[4];              // 0x18 - matrix data for 4 portrait quads (front/back of 2 cards)
-    u8 _padE8[8];                               // 0xF8 - padding
-    u16 rotations[4];                           // 0x100 - current X rotation angle for each quad (0-0x1FFF)
-} LevelPreviewPortraitState_202A0;
-
-typedef struct {
-    u8 _pad0[0xB2F];
-    u8 rotationComplete; // 0xB2F - set to 0 when portrait rotation animation is done
-    u8 toLevelId;        // 0xB30 - level being scrolled to
-    u8 fromLevelId;      // 0xB31 - level being scrolled from
-    u8 scrollDirection;  // 0xB32 - direction of scroll (0 = backward, 1 = forward)
-} Allocation_func_80020A00;
-
-typedef struct {
-    u8 _pad0[0x48A];
-    u16 unk48A;
-    u8 _pad48C[0x6A0];
-    s8 unkB2C;
-    u8 _padB2D[0x6];
-    u8 unkB33[12];
-} Allocation_F7C8;
-
-struct LevelPreviewPortraitEntry {
-    u8 _pad[0xC];
-};
-
-typedef struct {
-    u8 _pad0[0x4];
-    u8 gameMode;
-    u8 _pad5[0x2];
-    u8 unk7;
-} D_800AFE8C_type_202A0;
-
-extern D_800AFE8C_type_202A0 *gGameSessionContext;
+void resumeLevelPreviewAfterHold(LevelPreviewCharacterState *state);
 
 void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
-    Allocation_80020418 *allocation;
+    LevelSelectState *levelSelect;
     s8 temp;
     u8 charIndex;
     u8 value;
     u8 value2;
 
-    allocation = (Allocation_80020418 *)getCurrentAllocation();
+    levelSelect = getCurrentAllocation();
 
-    // Read character index from allocation
-    temp = allocation->unkB2C;
-    charIndex = allocation->unkB33[temp];
+    // Read character index from levelSelect
+    temp = levelSelect->selectedIndex;
+    charIndex = levelSelect->levelIdList[temp];
     value = characterStartWaypoints[charIndex];
 
     // Initialize arg0 structure
@@ -222,11 +95,11 @@ void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     arg0->currentRotation = 0;
     arg0->startWaypoint = value;
 
-    arg0->sceneModel = createSceneModel(6, allocation->unk3B0);
+    arg0->sceneModel = createSceneModel(6, &levelSelect->previewNode);
 
     // Read character index again
-    temp = allocation->unkB2C;
-    charIndex = allocation->unkB33[temp];
+    temp = levelSelect->selectedIndex;
+    charIndex = levelSelect->levelIdList[temp];
     value2 = characterStartWaypoints[charIndex];
 
     arg0->cameraHorzOffset = 0x2E000;
@@ -241,8 +114,8 @@ void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     arg0->currentWaypoint = value2;
 
     // Read character index again for conditional
-    temp = allocation->unkB2C;
-    charIndex = allocation->unkB33[temp];
+    temp = levelSelect->selectedIndex;
+    charIndex = levelSelect->levelIdList[temp];
 
     if (charIndex == 9) {
         arg0->heightOffset += 0xFFB00000;
@@ -254,17 +127,17 @@ void initLevelPreviewCharacter(LevelPreviewCharacterState *arg0) {
     arg0->frameTimer = 0;
 
     // Read character index one more time
-    temp = allocation->unkB2C;
-    charIndex = allocation->unkB33[temp];
+    temp = levelSelect->selectedIndex;
+    charIndex = levelSelect->levelIdList[temp];
 
-    *(void **)arg0->gameData = loadCourseDataByIndex(charIndex);
+    arg0->gameData.dataStart = loadCourseDataByIndex(charIndex);
 
     setCleanupCallback(&cleanupLevelPreviewCharacter);
     setCallback(&setupLevelPreviewCamera);
 }
 
 void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
-    Allocation_F7C8 *allocation;
+    LevelSelectState *levelSelect;
     Transform3D cameraTransform;
     Transform3D offsetTransform;
     Transform3D lookAtTransform;
@@ -273,17 +146,17 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     s32 scaled;
     u16 angle;
 
-    allocation = (Allocation_F7C8 *)getCurrentAllocation();
-    parseGameDataLayout((GameDataLayout *)state->gameData);
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
+    parseGameDataLayout(&state->gameData);
 
-    getTrackSegmentWaypoints((TrackGeometryData *)state->gameData, state->startWaypoint, waypointStart, waypointEnd);
+    getTrackSegmentWaypoints((TrackGeometryData *)&state->gameData, state->startWaypoint, waypointStart, waypointEnd);
 
     memcpy(&state->transform, &identityMatrix, sizeof(Transform3D));
     memcpy(state, waypointEnd, sizeof(Vec3i));
 
-    state->posY = getTrackHeightAtPosition(state->gameData, state->startWaypoint, state);
+    state->posY = getTrackHeightAtPosition(&state->gameData, state->startWaypoint, state);
 
-    if (allocation->unkB33[allocation->unkB2C] == 5) {
+    if (levelSelect->levelIdList[levelSelect->selectedIndex] == 5) {
         state->posY = state->posY + state->altHeightOffset;
     } else {
         state->posY = state->posY + state->heightOffset;
@@ -316,10 +189,10 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     state->targetX = state->targetX + state->posX;
     state->targetZ = state->targetZ + state->posZ;
 
-    angle = findTrackSector(state->gameData, state->currentWaypoint, &state->targetX);
+    angle = findTrackSector(&state->gameData, state->currentWaypoint, &state->targetX);
     state->currentWaypoint = angle;
 
-    state->targetY = getTrackHeightAtPosition(state->gameData, angle, &state->targetX);
+    state->targetY = getTrackHeightAtPosition(&state->gameData, angle, &state->targetX);
     state->targetY = state->targetY + state->heightOffset;
 
     computeLookAtMatrix((Vec3i *)&state->targetX, (Vec3i *)state, &lookAtTransform);
@@ -328,12 +201,12 @@ void setupLevelPreviewCamera(LevelPreviewCharacterState *state) {
     offsetTransform.translation.z = state->cameraDistance;
 
     composeTransform3D(&offsetTransform, &lookAtTransform, &cameraTransform);
-    setViewportTransformById(allocation->unk48A, &cameraTransform);
+    setViewportTransformById(levelSelect->previewNode.viewportId, &cameraTransform);
     setCallback(updateLevelPreviewCharacterAndCamera);
 }
 
 void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
-    Allocation_F7C8 *allocation;
+    LevelSelectState *levelSelect;
     Transform3D cameraTransform;
     Transform3D offsetTransform;
     Transform3D lookAtTransform;
@@ -347,7 +220,7 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
     u16 *timerLimit;
     u16 timer;
 
-    allocation = (Allocation_F7C8 *)getCurrentAllocation();
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
 
     memcpy(&cameraTransform, &identityMatrix, sizeof(Transform3D));
 
@@ -399,12 +272,12 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
     {
         u16 waypoint;
         u16 newWaypoint;
-        waypoint = findTrackSector(state->gameData, state->startWaypoint, state);
+        waypoint = findTrackSector(&state->gameData, state->startWaypoint, state);
         newWaypoint = waypoint & 0xFFFF;
         if (newWaypoint != state->startWaypoint) {
             u16 angle;
             state->startWaypoint = waypoint;
-            getTrackSegmentWaypoints((TrackGeometryData *)state->gameData, newWaypoint, waypointStart, waypointEnd);
+            getTrackSegmentWaypoints((TrackGeometryData *)&state->gameData, newWaypoint, waypointStart, waypointEnd);
             angle = (computeAngleToPosition(waypointStart[0], waypointStart[2], state->posX, state->posZ) - 0x1000) &
                     0x1FFF;
             state->targetRotation = angle;
@@ -415,20 +288,20 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
             }
         }
     }
-    if (allocation->unkB33[allocation->unkB2C] == 5) {
+    if (levelSelect->levelIdList[levelSelect->selectedIndex] == 5) {
         heightTarget = (state->posY - state->altHeightOffset) + ((s32)0xFFFDB340);
     } else {
         heightTarget = (state->posY - state->heightOffset) + ((s32)0xFFFDB340);
     }
     {
         s32 trackHeight;
-        trackHeight = getTrackHeightAtPosition(state->gameData, state->startWaypoint, state);
+        trackHeight = getTrackHeightAtPosition(&state->gameData, state->startWaypoint, state);
         state->posY = heightTarget;
         if (heightTarget < trackHeight) {
             state->posY = trackHeight;
         }
     }
-    if (allocation->unkB33[allocation->unkB2C] == 5) {
+    if (levelSelect->levelIdList[levelSelect->selectedIndex] == 5) {
         state->posY = state->posY + state->altHeightOffset;
     } else {
         state->posY = state->posY + state->heightOffset;
@@ -445,7 +318,7 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
     if (scaled < 0) {
         scaled += 0x1FFF;
     }
-    gameData = state->gameData;
+    gameData = &state->gameData;
     targetPtr = &state->targetX;
     state->targetZ = (scaled >> 13) << 8;
     state->targetX = state->targetX + state->posX;
@@ -462,15 +335,15 @@ void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state) {
     memcpy(&offsetTransform, &identityMatrix, sizeof(Transform3D));
     offsetTransform.translation.z = state->cameraDistance;
     composeTransform3D(&offsetTransform, &lookAtTransform, &cameraTransform);
-    setViewportTransformById(allocation->unk48A, &cameraTransform);
-    timerLimit = &sLevelPreviewDurations[allocation->unkB33[allocation->unkB2C]];
+    setViewportTransformById(levelSelect->previewNode.viewportId, &cameraTransform);
+    timerLimit = &sLevelPreviewDurations[levelSelect->levelIdList[levelSelect->selectedIndex]];
     timer = state->frameTimer;
     if (timer < (*timerLimit)) {
         timer = (state->frameTimer = timer + 1);
         state->frameTimer = timer;
         if ((timer & 0xFFFF) == (*timerLimit)) {
             state->frameTimer = 0;
-            if (allocation->unkB33[allocation->unkB2C] == 5) {
+            if (levelSelect->levelIdList[levelSelect->selectedIndex] == 5) {
                 state->extraRotation = 0x10E;
             }
             setCallback(holdLevelPreviewCamera);
@@ -489,9 +362,9 @@ void holdLevelPreviewCamera(LevelPreviewCharacterState *state) {
 }
 
 void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
-    Allocation_8001FEB4 *allocation;
+    LevelSelectState *levelSelect;
     u8 cameraTransform[0x20];
-    Mat2WithTemp offsetTransform;
+    Transform3D offsetTransform;
     u8 lookAtTransform[0x20];
     s32 waypointStart[4];
     s32 waypointEnd[4];
@@ -499,10 +372,10 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
     u16 rotation;
     void *gameData;
 
-    allocation = (Allocation_8001FEB4 *)getCurrentAllocation();
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
     memcpy(cameraTransform, &identityMatrix, sizeof(Transform3D));
 
-    gameData = state->gameData;
+    gameData = &state->gameData;
     waypoint = findTrackSector(gameData, state->startWaypoint, state);
     state->startWaypoint = waypoint;
 
@@ -524,17 +397,17 @@ void updateLevelPreviewCamera(LevelPreviewCharacterState *state) {
 
     memcpy(&offsetTransform, &identityMatrix, sizeof(Transform3D));
 
-    offsetTransform.unk1C = state->cameraDistance;
+    offsetTransform.translation.z = state->cameraDistance;
 
     composeTransform3D((Transform3D *)&offsetTransform, (Transform3D *)lookAtTransform, (Transform3D *)cameraTransform);
 
-    setViewportTransformById(allocation->unk48A, cameraTransform);
+    setViewportTransformById(levelSelect->previewNode.viewportId, cameraTransform);
 
     setCallback(&moveCharacterToStartWaypoint);
 }
 
 void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
-    Allocation_F7C8 *allocation;
+    LevelSelectState *levelSelect;
     Transform3D cameraTransform;
     Transform3D offsetTransform;
     Transform3D lookAtTransform;
@@ -546,7 +419,7 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
     s32 scaled;
     u16 cameraWaypoint;
 
-    allocation = (Allocation_F7C8 *)getCurrentAllocation();
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
 
     memcpy(&cameraTransform, &identityMatrix, sizeof(Transform3D));
 
@@ -597,12 +470,12 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
     {
         u16 waypoint;
         u16 newWaypoint;
-        waypoint = findTrackSector(state->gameData, state->startWaypoint, state);
+        waypoint = findTrackSector(&state->gameData, state->startWaypoint, state);
         newWaypoint = waypoint & 0xFFFF;
         if (newWaypoint != state->startWaypoint) {
             u16 angle;
             state->startWaypoint = waypoint;
-            getTrackSegmentWaypoints((TrackGeometryData *)state->gameData, newWaypoint, waypointStart, waypointEnd);
+            getTrackSegmentWaypoints((TrackGeometryData *)&state->gameData, newWaypoint, waypointStart, waypointEnd);
             angle =
                 (computeAngleToPosition(waypointEnd[0], waypointEnd[2], state->posX, state->posZ) - 0x1000) & 0x1FFF;
             state->targetRotation = angle;
@@ -613,20 +486,20 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
             }
         }
     }
-    if (allocation->unkB33[allocation->unkB2C] == 5) {
+    if (levelSelect->levelIdList[levelSelect->selectedIndex] == 5) {
         heightTarget = (state->posY - state->altHeightOffset) + ((s32)0xFFFDB340);
     } else {
         heightTarget = (state->posY - state->heightOffset) + ((s32)0xFFFDB340);
     }
     {
         s32 trackHeight;
-        trackHeight = getTrackHeightAtPosition(state->gameData, state->startWaypoint, state);
+        trackHeight = getTrackHeightAtPosition(&state->gameData, state->startWaypoint, state);
         state->posY = heightTarget;
         if (heightTarget < trackHeight) {
             state->posY = trackHeight;
         }
     }
-    if (allocation->unkB33[allocation->unkB2C] == 5) {
+    if (levelSelect->levelIdList[levelSelect->selectedIndex] == 5) {
         state->posY = state->posY + state->altHeightOffset;
     } else {
         state->posY = state->posY + state->heightOffset;
@@ -647,7 +520,7 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
             scaled += 0x1FFF;
         }
     }
-    gameData = state->gameData;
+    gameData = &state->gameData;
     targetPtr = &state->targetX;
     state->targetZ = (scaled >> 13) << 8;
     state->targetX = state->targetX + state->posX;
@@ -664,58 +537,58 @@ void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state) {
     memcpy(&offsetTransform, &identityMatrix, sizeof(Transform3D));
     offsetTransform.translation.z = state->cameraDistance;
     composeTransform3D(&offsetTransform, &lookAtTransform, &cameraTransform);
-    setViewportTransformById(allocation->unk48A, &cameraTransform);
-    if (state->currentWaypoint == characterStartWaypoints[allocation->unkB33[allocation->unkB2C]] - 1) {
+    setViewportTransformById(levelSelect->previewNode.viewportId, &cameraTransform);
+    if (state->currentWaypoint == characterStartWaypoints[levelSelect->levelIdList[levelSelect->selectedIndex]] - 1) {
         state->frameTimer = 0;
         setCallback(resumeLevelPreviewAfterHold);
     }
 }
 
-void resumeLevelPreviewAfterHold(Func80020418Arg *arg0) {
-    Allocation_80020418 *allocation;
+void resumeLevelPreviewAfterHold(LevelPreviewCharacterState *state) {
+    LevelSelectState *levelSelect;
     u8 mat1[0x20];
     s32 pos1[4];
     s32 pos2[4];
     u16 temp;
-    void *unk18;
+    void *gameData;
 
-    allocation = (Allocation_80020418 *)getCurrentAllocation();
-    arg0->unk72++;
+    levelSelect = getCurrentAllocation();
+    state->frameTimer++;
 
-    if (arg0->unk72 == 0x5A) {
-        arg0->unk72 = 0;
+    if (state->frameTimer == 0x5A) {
+        state->frameTimer = 0;
         memcpy(mat1, &identityMatrix, sizeof(Transform3D));
 
-        unk18 = &arg0->unk18;
-        temp = findTrackSector(unk18, arg0->unk52, arg0);
-        arg0->unk52 = temp;
+        gameData = &state->gameData;
+        temp = findTrackSector(gameData, state->startWaypoint, state);
+        state->startWaypoint = temp;
 
-        getTrackSegmentWaypoints(unk18, temp, pos1, pos2);
+        getTrackSegmentWaypoints(gameData, temp, pos1, pos2);
 
-        arg0->unk5A = (computeAngleToPosition(pos1[0], pos1[2], arg0->unk0, arg0->unk8) - 0x1000) & 0x1FFF;
+        state->targetRotation = (computeAngleToPosition(pos1[0], pos1[2], state->posX, state->posZ) - 0x1000) & 0x1FFF;
 
-        arg0->unk56 = (arg0->unk56 + 0x1000) & 0x1FFF;
+        state->currentRotation = (state->currentRotation + 0x1000) & 0x1FFF;
 
-        arg0->unk76 = 0;
-        if (((arg0->unk5A - arg0->unk56) & 0x1FFF) >= 0x1001) {
-            arg0->unk76 = 1;
+        state->turnDirection = 0;
+        if (((state->targetRotation - state->currentRotation) & 0x1FFF) >= 0x1001) {
+            state->turnDirection = 1;
         }
 
         setCallback(&updateLevelPreviewCharacterAndCamera);
 
-        if (allocation->unkB33[allocation->unkB2C] == 5) {
-            arg0->unk74 = 0x1E0;
+        if (levelSelect->levelIdList[levelSelect->selectedIndex] == 5) {
+            state->extraRotation = 0x1E0;
         }
     }
 }
 
 void cleanupLevelPreviewCharacter(LevelPreviewCharacterState *state) {
-    *(void **)state->gameData = freeNodeMemory(*(void **)state->gameData);
+    state->gameData.dataStart = freeNodeMemory(state->gameData.dataStart);
     destroySceneModel(state->sceneModel);
 }
 
 s32 sampleMaxSurroundingTerrainHeight(LevelPreviewCharacterState *state) {
-    Allocation_80020418 *allocation;
+    LevelSelectState *levelSelect;
     s32 samplePos[4];
     s32 i;
     void *gameData;
@@ -725,17 +598,17 @@ s32 sampleMaxSurroundingTerrainHeight(LevelPreviewCharacterState *state) {
     s32 scaled;
     s32 terrainHeight;
 
-    allocation = (Allocation_80020418 *)getCurrentAllocation();
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
     maxHeight = state->targetY;
     sampleAngle = (u16)((state->animationPhase - 0x400) & 0x1FFF);
     sampleRadius = 0x500;
 
-    if (allocation->unkB33[allocation->unkB2C] == 9) {
+    if (levelSelect->levelIdList[levelSelect->selectedIndex] == 9) {
         sampleRadius = 0x5000;
     }
 
     i = 0;
-    gameData = state->gameData;
+    gameData = &state->gameData;
 
     do {
         sampleAngle = (sampleAngle + 0x800) & 0x1FFF;
@@ -776,65 +649,63 @@ void initLevelPreviewPortraits(LevelPreviewPortraitState *state) {
     setCallback(&initLevelPreviewPortraitDisplay);
 }
 
-void initLevelPreviewPortraitDisplay(void *arg0) {
-    PortraitState *portraitState = (PortraitState *)arg0;
+void initLevelPreviewPortraitDisplay(LevelPreviewPortraitState *portraitState) {
     volatile s32 pad[8];
-    AllocationState *allocation;
+    LevelSelectState *levelSelect;
     OutputStruct_19E80 sp30;
     s32 i;
     s32 j;
 
-    allocation = (AllocationState *)getCurrentAllocation();
+    levelSelect = getCurrentAllocation();
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 2; j++) {
             s32 index = (i * 2) + j;
             u8 *base = (u8 *)portraitState;
-            MatrixData *element = (MatrixData *)(base + (index * 52));
+            LevelPreviewPortraitMatrixInitView *element =
+                (LevelPreviewPortraitMatrixInitView *)(base + (index * sizeof(MatrixEntry_202A0)));
 
             memcpy(&element->transform, &identityMatrix, sizeof(Transform3D));
-            *(s16 *)(base + (index * 2) + 0xF0) = i << 0xC;
+            portraitState->rotations[index] = i << 0xC;
             element->transform.translation.x = 0;
             element->transform.translation.y = 0x3A0000;
             element->transform.translation.z = 0xFF700000;
-            element->textureData = portraitTextureData + (j << 6);
+            element->vertices = (s32)(portraitTextureData + (j << 6));
 
             {
-                s16 frameIndex = levelPortraitFrameBases[allocation->toLevelId] + j;
-                *(s16 *)(base + (index * 2) + 0xE8) = frameIndex;
-                getTableEntryByU16Index(*(DataTable_19E80 **)(base + 0xF8), frameIndex, &sp30);
+                s16 frameIndex = levelPortraitFrameBases[levelSelect->selectedLevelId] + j;
+                portraitState->frameIndices[index] = frameIndex;
+                getTableEntryByU16Index(portraitState->portraitAsset, frameIndex, &sp30);
             }
 
-            element->data_ptr = sp30.data_ptr;
-            element->index_ptr = sp30.index_ptr;
-            element->field1 = sp30.width;
-            element->field2 = sp30.height;
+            element->textureData = sp30.data_ptr;
+            element->paletteData = sp30.index_ptr;
+            element->textureWidth = sp30.width;
+            element->textureHeight = sp30.height;
             element->alpha = 0xFF;
         }
 
         {
-            u8 *base = (u8 *)portraitState;
-            s32 offset = i * 12;
-            PortraitSubEntry *entry = (PortraitSubEntry *)(base + offset);
+            SpriteRenderArg *entry = &portraitState->portraitEntries[i];
 
             entry->x = -0x68;
             entry->y = (-0x46) + (i * 0x10);
-            entry->frameIndex = levelPortraitFrameBases[allocation->toLevelId] + i;
-            entry->spriteAsset = *(DataTable_19E80 **)(base + 0xF8);
+            entry->frameIndex = levelPortraitFrameBases[levelSelect->selectedLevelId] + i;
+            entry->spriteData = (SpriteSheetData *)portraitState->portraitAsset;
         }
     }
 
     setCallback(renderLevelPreviewPortraits);
 }
 
-void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *portraitEntries) {
-    Allocation_202A0 *allocation;
+void renderLevelPreviewPortraits(SpriteRenderArg *portraitEntries) {
+    LevelSelectState *levelSelect;
     s32 i;
 
-    allocation = (Allocation_202A0 *)getCurrentAllocation();
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
     i = 0;
 
-    if (allocation->menuState == 1) {
+    if (levelSelect->menuState == MENU_STATE_SCROLL) {
         setCallbackWithContinue(&initPortraitRotationFrames);
     } else {
         for (i = 0; i < 2; i++) {
@@ -845,14 +716,14 @@ void renderLevelPreviewPortraits(LevelPreviewPortraitEntry *portraitEntries) {
 
 void initPortraitRotationFrames(LevelPreviewPortraitState *arg0) {
     OutputStruct_19E80 sp10;
-    Allocation_func_80020A00 *allocation;
+    LevelSelectState *levelSelect;
     s32 i;
     u16 toLevelFrameBase;
     u16 fromLevelFrameBase;
 
-    allocation = (Allocation_func_80020A00 *)getCurrentAllocation();
-    toLevelFrameBase = levelPortraitFrameBases[allocation->toLevelId];
-    fromLevelFrameBase = levelPortraitFrameBases[allocation->fromLevelId];
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
+    toLevelFrameBase = levelPortraitFrameBases[levelSelect->selectedLevelId];
+    fromLevelFrameBase = levelPortraitFrameBases[levelSelect->previousLevelId];
 
     for (i = 0; i < 4; i++) {
         if (arg0->rotations[i] == 0) {
@@ -866,15 +737,15 @@ void initPortraitRotationFrames(LevelPreviewPortraitState *arg0) {
     setCallbackWithContinue(animatePortraitRotation);
 }
 
-void animatePortraitRotation(LevelPreviewPortraitState_202A0 *portraitState) {
-    Allocation_func_80020A00 *allocation;
+void animatePortraitRotation(LevelPreviewPortraitState *portraitState) {
+    LevelSelectState *levelSelect;
     s32 quadIndex;
     s32 rotationAngle;
     s16 angleDelta;
     u16 primaryQuadRotation;
 
-    allocation = (Allocation_func_80020A00 *)getCurrentAllocation();
-    angleDelta = (allocation->scrollDirection != 0) ? 0x200 : -0x200;
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
+    angleDelta = (levelSelect->scrollDirection != 0) ? 0x200 : -0x200;
 
     // Animate all 4 portrait quads (front and back of 2 portrait cards)
     // The cards rotate around the X-axis to create a 3D flipping effect
@@ -888,10 +759,11 @@ void animatePortraitRotation(LevelPreviewPortraitState_202A0 *portraitState) {
     // Check if rotation animation is complete (portrait facing forward)
     primaryQuadRotation = portraitState->rotations[0];
     if (primaryQuadRotation == 0 || primaryQuadRotation == 0x1000) {
-        allocation->rotationComplete = 0;
+        levelSelect->menuState = MENU_STATE_NAVIGATE;
         // Update frame indices to show the destination level's portraits
         for (quadIndex = 0; quadIndex < 2; quadIndex++) {
-            portraitState->entries[quadIndex].frameIndex = levelPortraitFrameBases[allocation->toLevelId] + quadIndex;
+            portraitState->portraitEntries[quadIndex].frameIndex =
+                levelPortraitFrameBases[levelSelect->selectedLevelId] + quadIndex;
         }
         setCallback(renderLevelPreviewPortraits);
     }
@@ -948,7 +820,7 @@ void initCharacterSelectDisplay(CharacterSelectDisplayState *state) {
         state->textEntries[i].y = row * 0x2C - 0x58;
         state->textEntries[i].spriteData = portraitAsset;
         state->textEntries[i].frameIndex = row + 0xA;
-        state->textEntries[i].paletteAlpha = 0xFF;
+        state->textEntries[i].color.paletteAndAlpha = 0xFF;
         state->textEntries[i].tileMode = 0;
         state->textEntries[i].overridePaletteCount = 0;
     }
@@ -959,34 +831,34 @@ void initCharacterSelectDisplay(CharacterSelectDisplayState *state) {
 }
 
 void renderCharacterSelectDisplay(CharacterSelectDisplayState *state) {
-    Allocation_202A0 *allocation;
+    LevelSelectState *levelSelect;
     s32 i;
     void (*callback)(void *);
     u8 characterIndex;
     s32 selectedChar;
     u32 temp_a0;
 
-    allocation = (Allocation_202A0 *)getCurrentAllocation();
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
 
     for (i = 0; i < 10; i++) {
         enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &state->iconEntries[i]);
     }
 
     if (gGameSessionContext->gameMode == 0) {
-        selectedChar = allocation->unkB33[allocation->unkB2C];
+        selectedChar = levelSelect->levelIdList[levelSelect->selectedIndex];
         temp_a0 = selectedChar & 0xFF;
         if (temp_a0 == 3 || temp_a0 == 7 || temp_a0 == 11) {
             enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &state->sprite78);
-        } else if ((u32)(selectedChar - 12) < 3 && allocation->menuState < 6) {
+        } else if ((u32)(selectedChar - 12) < 3 && levelSelect->menuState < MENU_STATE_DETAIL_OPEN) {
             enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, &state->sprite84);
         }
     }
 
-    characterIndex = allocation->unkB33[allocation->unkB2C];
+    characterIndex = levelSelect->levelIdList[levelSelect->selectedIndex];
     if (EepromSaveData->save_slot_status[characterIndex] == 1) {
         callback = (void (*)(void *))renderSpriteFrame;
         enqueueCallbackBySlotIndex(8, 6, callback, &state->sprite90);
-        characterIndex = allocation->unkB33[allocation->unkB2C];
+        characterIndex = levelSelect->levelIdList[levelSelect->selectedIndex];
         if (characterIndex < 9) {
             sprintf(state->numBuffer, "%d", characterIndex + 1);
             enqueueCallbackBySlotIndex(8, 7, renderTextPalette, &state->textPaletteData);
@@ -996,10 +868,10 @@ void renderCharacterSelectDisplay(CharacterSelectDisplayState *state) {
         }
     }
 
-    if (allocation->unkB45 == 0) {
+    if (levelSelect->showDetailView == 0) {
         if (gGameSessionContext->gameMode == 1 ||
             (gGameSessionContext->gameMode == 0 && EepromSaveData->save_slot_status[0] != 5)) {
-            if (allocation->menuState == 0) {
+            if (levelSelect->menuState == MENU_STATE_NAVIGATE) {
                 state->animTimer++;
                 if (state->animTimer < 0x11) {
                     state->textAlpha -= 8;
@@ -1015,19 +887,19 @@ void renderCharacterSelectDisplay(CharacterSelectDisplayState *state) {
                 state->textAlpha = 0xFF;
             }
             for (i = 0; i < 4; i++) {
-                state->textEntries[i].paletteAlpha = state->textAlpha;
+                state->textEntries[i].color.paletteAndAlpha = state->textAlpha;
                 enqueueCallbackBySlotIndex(8, 7, renderTextSprite, &state->textEntries[i]);
             }
         }
     }
 }
 
-void cleanupCharacterSelectionIcons(CharacterSelectionIconState *state) {
-    state->portraitAsset = freeNodeMemory(state->portraitAsset);
-    state->spriteSheetAsset = freeNodeMemory(state->spriteSheetAsset);
+void cleanupCharacterSelectionIcons(CharacterSelectDisplayState *state) {
+    state->iconEntries[0].spriteData = freeNodeMemory(state->iconEntries[0].spriteData);
+    state->sprite9C.spriteData = freeNodeMemory(state->sprite9C.spriteData);
 }
 
-void initConfirmationIndicator(ConfirmationIndicatorState *state) {
+void initConfirmationIndicator(SpriteRenderArg *state) {
     void *asset = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
 
     setCleanupCallback(&cleanupConfirmationIndicator);
@@ -1035,21 +907,21 @@ void initConfirmationIndicator(ConfirmationIndicatorState *state) {
     state->x = -0x2C;
     state->y = 4;
     state->frameIndex = 0xD;
-    state->spriteAsset = asset;
+    state->spriteData = asset;
 
     setCallback(&renderConfirmationIndicator);
 }
 
 void renderConfirmationIndicator(void *arg0) {
-    Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
+    LevelSelectState *levelSelect = (LevelSelectState *)getCurrentAllocation();
 
-    if (allocation->menuState == 2) {
+    if (levelSelect->menuState == MENU_STATE_CONFIRM) {
         enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, arg0);
     }
 }
 
-void cleanupConfirmationIndicator(ConfirmationIndicatorState *state) {
-    state->spriteAsset = freeNodeMemory(state->spriteAsset);
+void cleanupConfirmationIndicator(SpriteRenderArg *state) {
+    state->spriteData = freeNodeMemory(state->spriteData);
 }
 
 void initUnlockNotification(UnlockNotificationState *state) {
@@ -1068,14 +940,14 @@ void initUnlockNotification(UnlockNotificationState *state) {
 }
 
 void initUnlockNotificationSprite(UnlockNotificationState *state) {
-    initScrollingTileMapState(state, (s32)state->imageAsset);
+    initScrollingTileMapState(&state->tileMap, (TileMapTextureAsset *)state->imageAsset);
     setCallback(&renderUnlockNotification);
 }
 
 void renderUnlockNotification(UnlockNotificationState *state) {
     u16 nextFrame;
 
-    enqueueCallbackBySlotIndex(0xA, 0, renderTiledTextureMap, state);
+    enqueueCallbackBySlotIndex(0xA, 0, renderTiledTextureMap, &state->tileMap);
 
     if (gGameSessionContext->gameMode == 0) {
         if (EepromSaveData->save_slot_status[0] == 5) {
@@ -1099,38 +971,38 @@ void cleanupUnlockNotification(UnlockNotificationState *state) {
 }
 
 void initMenuCharacterModel(MenuCharacterModelState *state) {
-    Allocation_202A0 *allocation;
+    LevelSelectState *levelSelect;
     u16 modelIndex;
     u16 assetPairIndex;
     u16 animIndex;
 
-    allocation = (Allocation_202A0 *)getCurrentAllocation();
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
 
-    if (allocation->unkB45 != 0) {
-        s32 idx = gGameSessionContext->unk7 * 2;
-        animIndex = characterIdleAnimationIndices[gGameSessionContext->unk7];
-        modelIndex = characterModelIndices[gGameSessionContext->unk7];
-        assetPairIndex = characterAssetPairIndices[gGameSessionContext->unk7];
+    if (levelSelect->showDetailView != 0) {
+        s32 idx = gGameSessionContext->saveSlotIndex * 2;
+        animIndex = characterIdleAnimationIndices[gGameSessionContext->saveSlotIndex];
+        modelIndex = characterModelIndices[gGameSessionContext->saveSlotIndex];
+        assetPairIndex = characterAssetPairIndices[gGameSessionContext->saveSlotIndex];
         state->animationIndex = animIndex;
     } else {
         modelIndex = 0x3A;
         state->animationIndex = 0xD;
     }
 
-    if (allocation->unkB45 == 0) {
-        state->model = createSceneModel(modelIndex, allocation);
+    if (levelSelect->showDetailView == 0) {
+        state->model = createSceneModel(modelIndex, levelSelect);
     } else {
-        state->model = createSceneModelEx(modelIndex, allocation, (s8)assetPairIndex, -1, -1, -1);
+        state->model = createSceneModelEx(modelIndex, levelSelect, (s8)assetPairIndex, -1, -1, -1);
     }
 
     memcpy((u8 *)&state->transform, &identityMatrix, sizeof(Transform3D));
 
-    if ((allocation->unkB45 != 0) && (modelIndex != 0x3A)) {
+    if ((levelSelect->showDetailView != 0) && (modelIndex != 0x3A)) {
         createYRotationMatrix((&state->transform), 0x1E00);
         state->transform.translation.x = 0x280000;
     } else {
         createYRotationMatrix((&state->transform), 0x200);
-        if (allocation->unkB45 == 0) {
+        if (levelSelect->showDetailView == 0) {
             state->transform.translation.x = 0xFFD80000;
         } else {
             state->transform.translation.x = 0xFFD00000;
@@ -1145,10 +1017,10 @@ void initMenuCharacterModel(MenuCharacterModelState *state) {
 }
 
 void setupMenuCharacterModel(MenuCharacterModelState *state) {
-    Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
+    LevelSelectState *levelSelect = (LevelSelectState *)getCurrentAllocation();
 
-    if (allocation->unkB45 != 0) {
-        if (gGameSessionContext->unk7 == 0xC) {
+    if (levelSelect->showDetailView != 0) {
+        if (gGameSessionContext->saveSlotIndex == 0xC) {
             scaleMatrix((&state->transform), 0x1000, 0x1000, 0x1000);
         }
     }
@@ -1160,20 +1032,20 @@ void setupMenuCharacterModel(MenuCharacterModelState *state) {
 }
 
 void updateMenuCharacterModel(MenuCharacterModelState *state) {
-    Allocation_202A0 *allocation;
+    LevelSelectState *levelSelect;
     s32 animationFinished;
     u16 currentAnimation;
 
-    allocation = (Allocation_202A0 *)getCurrentAllocation();
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
     applyTransformToModel(state->model, &state->transform);
     animationFinished = clearModelRotation(state->model);
-    enableViewportDisplayList(allocation);
+    enableViewportDisplayList(levelSelect);
     updateModelGeometry(state->model);
 
-    if (allocation->unkB45 != 0) {
-        if (allocation->unkB47 != 0) {
-            setMenuCharacterAnimation(allocation->unkB47, state);
-        } else if (animationFinished != 0 && allocation->menuState == 8) {
+    if (levelSelect->showDetailView != 0) {
+        if (levelSelect->pendingDetailAnimation != 0) {
+            setMenuCharacterAnimation(levelSelect->pendingDetailAnimation, state);
+        } else if (animationFinished != 0 && levelSelect->menuState == MENU_STATE_DETAIL) {
             handleMenuCharacterAnimationEnd(state);
         }
     } else if (animationFinished != 0) {
@@ -1190,14 +1062,14 @@ void cleanupMenuCharacterModel(MenuCharacterModelState *state) {
 }
 
 void setMenuCharacterAnimation(u8 animationType, MenuCharacterModelState *state) {
-    Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
+    LevelSelectState *levelSelect = (LevelSelectState *)getCurrentAllocation();
 
-    allocation->unkB47 = 0;
+    levelSelect->pendingDetailAnimation = 0;
 
     if (animationType == 2) {
-        state->animationIndex = characterIdleAnimationIndices[gGameSessionContext->unk7];
+        state->animationIndex = characterIdleAnimationIndices[gGameSessionContext->saveSlotIndex];
     } else {
-        state->animationIndex = characterActionAnimationIndices[gGameSessionContext->unk7];
+        state->animationIndex = characterActionAnimationIndices[gGameSessionContext->saveSlotIndex];
     }
 
     setModelAnimation(state->model, state->animationIndex);
@@ -1208,13 +1080,13 @@ void handleMenuCharacterAnimationEnd(MenuCharacterModelState *state) {
 
     getCurrentAllocation();
 
-    if (gGameSessionContext->unk7 == 0xD) {
+    if (gGameSessionContext->saveSlotIndex == 0xD) {
         currentAnimation = state->animationIndex;
         if (currentAnimation == 0xD) {
             state->animationIndex = currentAnimation + 1;
             setModelAnimation(state->model, (s16)(currentAnimation + 1));
         }
-    } else if (gGameSessionContext->unk7 == 0xE) {
+    } else if (gGameSessionContext->saveSlotIndex == 0xE) {
         currentAnimation = state->animationIndex;
         if (currentAnimation == 1) {
             state->animationIndex = 2;
@@ -1230,19 +1102,19 @@ void initMenuBackgroundEffect(MenuTiledBackgroundState *state) {
 }
 
 void setupMenuBackgroundEffect(MenuTiledBackgroundState *state) {
-    initScrollingTileMapState(state, (s32)state->tiledBackgroundAsset);
+    initScrollingTileMapState(&state->tileMap, (TileMapTextureAsset *)state->tiledBackgroundAsset);
     setCallback(&updateMenuBackgroundEffect);
 }
 
 void updateMenuBackgroundEffect(MenuTiledBackgroundState *state) {
-    Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
+    LevelSelectState *levelSelect = (LevelSelectState *)getCurrentAllocation();
 
-    if (allocation->menuState == 8) {
-        state->scrollX++;
-        state->scrollY++;
-        state->scrollX &= 0x3FF;
-        state->scrollY &= 0x3FF;
-        enqueueCallbackBySlotIndex(0xB, 0, renderTiledTextureMap, state);
+    if (levelSelect->menuState == MENU_STATE_DETAIL) {
+        state->tileMap.x++;
+        state->tileMap.y++;
+        state->tileMap.x &= 0x3FF;
+        state->tileMap.y &= 0x3FF;
+        enqueueCallbackBySlotIndex(0xB, 0, renderTiledTextureMap, &state->tileMap);
     }
 }
 
@@ -1252,7 +1124,7 @@ void cleanupMenuBackgroundEffect(MenuTiledBackgroundState *state) {
 
 void initMinigameDescText(MinigameDescTextState *state) {
     void *textRenderAsset;
-    D_800AFE8C_type_202A0 *globalState;
+    GameSessionContext *globalState;
     s32 idx;
 
     textRenderAsset = loadTextRenderAsset(1);
@@ -1265,16 +1137,16 @@ void initMinigameDescText(MinigameDescTextState *state) {
     state->color1.asS16 = 0xFF;
     state->color2.asS16 = 0xFF;
     state->textRenderAsset = textRenderAsset;
-    idx = globalState->unk7 - 0xC;
+    idx = globalState->saveSlotIndex - 0xC;
     state->textString = minigameDescTexts[idx];
 
     setCallback(&renderMinigameDescText);
 }
 
 void renderMinigameDescText(MinigameDescTextState *state) {
-    Allocation_202A0 *allocation = (Allocation_202A0 *)getCurrentAllocation();
+    LevelSelectState *levelSelect = (LevelSelectState *)getCurrentAllocation();
 
-    if (allocation->menuState == 8) {
+    if (levelSelect->menuState == MENU_STATE_DETAIL) {
         enqueueTextLayout(
             state->textRenderAsset,
             state->textString,
@@ -1294,7 +1166,7 @@ void cleanupMinigameDescText(MinigameDescTextState *state) {
 }
 
 void initPrizeDisplay(PrizeDisplayState *arg0) {
-    Allocation_202A0 *allocation;
+    LevelSelectState *levelSelect;
     void *textRenderAsset;
     void *spriteAsset;
     u16 *titleText;
@@ -1302,13 +1174,13 @@ void initPrizeDisplay(PrizeDisplayState *arg0) {
     s16 titleWidth;
     s32 i;
     s32 xPos;
-    PrizeSpriteEntry *entry;
+    TextRenderArg *entry;
     s32 yPos;
     s32 alpha;
     u8 prizeCountValue;
     s16 spriteY;
 
-    allocation = (Allocation_202A0 *)getCurrentAllocation();
+    levelSelect = (LevelSelectState *)getCurrentAllocation();
     textRenderAsset = loadTextRenderAsset(1);
     arg0->backgroundAsset = loadAsset_34F7E0();
     spriteAsset = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
@@ -1332,18 +1204,18 @@ void initPrizeDisplay(PrizeDisplayState *arg0) {
 L1:
     entry->x = xPos;
     entry->y = yPos;
-    entry->spriteAsset = spriteAsset;
+    entry->spriteData = spriteAsset;
     entry->frameIndex = i;
-    entry->alpha = alpha;
-    entry->unkD = 0;
-    entry->unkC = 0;
+    entry->color.paletteAndAlpha = alpha;
+    entry->overridePaletteCount = 0;
+    entry->tileMode = 0;
     entry++;
     i++;
     xPos += 0x40;
     if (i < 2)
         goto L1;
 
-    prizeCountValue = allocation->unkB46;
+    prizeCountValue = levelSelect->selectedLapCount;
     spriteY = arg0->spriteEntries[0].y;
     arg0->previousCount = 0xFFFF;
     arg0->counterX = -6;
@@ -1359,34 +1231,34 @@ L1:
 }
 
 void updatePrizeDisplay(PrizeDisplayState *state) {
-    Allocation_202A0 *allocation;
+    LevelSelectState *levelSelect;
     s32 i;
-    PrizeSpriteEntry *spriteEntry;
+    TextRenderArg *spriteEntry;
 
-    allocation = getCurrentAllocation();
+    levelSelect = getCurrentAllocation();
 
-    if (allocation->menuState == 3) {
+    if (levelSelect->menuState == 3) {
         state->animationTimer++;
         if (state->animationTimer < 0x11) {
-            state->spriteEntries[0].alpha -= 8;
-            state->spriteEntries[1].alpha -= 8;
+            state->spriteEntries[0].color.paletteAndAlpha -= 8;
+            state->spriteEntries[1].color.paletteAndAlpha -= 8;
         } else {
-            state->spriteEntries[0].alpha += 8;
-            state->spriteEntries[1].alpha += 8;
+            state->spriteEntries[0].color.paletteAndAlpha += 8;
+            state->spriteEntries[1].color.paletteAndAlpha += 8;
         }
 
         if (state->animationTimer == 0x20) {
             state->animationTimer = 0;
-            state->spriteEntries[0].alpha = 0xFF;
-            state->spriteEntries[1].alpha = 0xFF;
+            state->spriteEntries[0].color.paletteAndAlpha = 0xFF;
+            state->spriteEntries[1].color.paletteAndAlpha = 0xFF;
         }
     } else {
         state->animationTimer = 0;
-        state->spriteEntries[0].alpha = 0xFF;
-        state->spriteEntries[1].alpha = 0xFF;
+        state->spriteEntries[0].color.paletteAndAlpha = 0xFF;
+        state->spriteEntries[1].color.paletteAndAlpha = 0xFF;
     }
 
-    if ((u32)(allocation->menuState - 2) < 2) {
+    if ((u32)(levelSelect->menuState - 2) < 2) {
         renderTiledSprite3x3(state->backgroundAsset, -0x40, -0x8, 8, 4, 0, 0x60, 0xC0, 8, 0);
         enqueueCallbackBySlotIndex(8, 1, renderTextLayout, &state->titleX);
 
@@ -1395,7 +1267,7 @@ void updatePrizeDisplay(PrizeDisplayState *state) {
             enqueueCallbackBySlotIndex(8, 1, renderTextSprite, &spriteEntry[i]);
         }
 
-        state->prizeCount = allocation->unkB46;
+        state->prizeCount = levelSelect->selectedLapCount;
         enqueueCallbackBySlotIndex(8, 1, renderTextLayout, &state->counterX);
     }
 }
@@ -1403,5 +1275,5 @@ void updatePrizeDisplay(PrizeDisplayState *state) {
 void cleanupPrizeDisplay(PrizeDisplayState *state) {
     state->textRenderAsset = freeNodeMemory(state->textRenderAsset);
     state->backgroundAsset = freeNodeMemory(state->backgroundAsset);
-    state->spriteEntries[0].spriteAsset = freeNodeMemory(state->spriteEntries[0].spriteAsset);
+    state->spriteEntries[0].spriteData = freeNodeMemory(state->spriteEntries[0].spriteData);
 }

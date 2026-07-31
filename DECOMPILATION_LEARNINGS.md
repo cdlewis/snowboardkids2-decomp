@@ -824,3 +824,16 @@ Character-select sprite records likewise map directly to `SpriteRenderArg`, `Tex
 local `s16 alpha` at `0x10` of the scaled-sprite record is actually
 `FrameSpriteEntry.shade.shadeWithPadding`; its true alpha byte is at `0x14`. Preserve the packed halfword
 assignments when adopting the shared types so KMC retains its original stores.
+
+## Preserve Overlapping Initialization Views for Renderer State
+
+The level-preview portrait task initializes four `MatrixEntry_202A0` values through `Transform3D` windows that
+begin four bytes into each matrix entry, while its two `SpriteRenderArg` values occupy the preceding `0x18`
+bytes. The first initialization window therefore begins at state offset `0x1C`, and successive windows overlap
+when measured from their `0x34`-byte slot origins. Keep one canonical render-time state and a documented,
+subsystem-owned initialization view for this layout instead of several partial local structs.
+
+KMC GCC 2.7.2 and the modern syntax checker disagree about the size of a union combining this matrix storage
+with `Transform3D`; KMC moved the trailing render-matrix pointer from offset `0x30` to `0x10` even though the
+modern checker accepted the expected layout. Avoid that union and use the explicit initialization view when
+the original code relies on overlapping storage.

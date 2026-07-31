@@ -18,51 +18,6 @@
 
 #define ASPECT_RATIO (4.0f / 3.0f)
 
-typedef struct {
-    /* 0x000 */ ViewportNode cameraNode;
-    /* 0x1D8 */ ViewportNode secondaryCameraNode;
-    /* 0x3B0 */ ViewportNode previewNode;
-    /* 0x588 */ ViewportNode viewportParentNode;
-    /* 0x760 */ ViewportNode detailNode;
-    /* 0x938 */ ViewportNode tertiaryCameraNode;
-    /* 0xB10 */ void *portraitAsset;
-    /* 0xB14 */ void *imageAsset;
-    /* 0xB18 */ void *tiledBackgroundAsset;
-    /* 0xB1C */ void *textRenderAsset;
-    /* 0xB20 */ void *uiAsset;
-    /* 0xB24 */ s32 loadStartFrame;
-    /* 0xB28 */ u16 transitionCounter;
-    /* 0xB2A */ u16 padB2A;
-    /* 0xB2C */ s8 selectedIndex;
-    /* 0xB2D */ u8 exitMode;
-    /* 0xB2E */ u8 previewLoadCounter;
-    /* 0xB2F */ u8 menuState;
-    /* 0xB30 */ u8 selectedLevelId;
-    /* 0xB31 */ u8 newLevelId;
-    /* 0xB32 */ u8 oldLevelId;
-    /* 0xB33 */ u8 levelIdList[12];
-    /* 0xB3F */ u8 menuItemCount;
-    /* 0xB40 */ u8 padB40[0x3];
-    /* 0xB43 */ u8 maxLevelCount;
-    /* 0xB44 */ u8 isLoadingPreview;
-    /* 0xB45 */ u8 showDetailView;
-    /* 0xB46 */ u8 selectedNumber;
-    /* 0xB47 */ u8 detailViewMode;
-} LevelSelectState;
-
-typedef enum {
-    MENU_STATE_NAVIGATE = 0,      // Main selection, up/down navigation
-    MENU_STATE_SCROLL = 1,        // Not in switch - probably animation transition
-    MENU_STATE_CONFIRM = 2,       // Confirm selection, B backs out
-    MENU_STATE_NUMBER_SELECT = 3, // Adjust numeric value 1-9
-    MENU_STATE_UKNOWN = 4,
-    MENU_STATE_PROMPT = 5,       // Awaiting input before detail view
-    MENU_STATE_DETAIL_OPEN = 6,  // Opening detail view animation
-    MENU_STATE_DETAIL_WAIT = 7,  // Waiting for open animation to finish
-    MENU_STATE_DETAIL = 8,       // In detail view, can confirm or back out
-    MENU_STATE_DETAIL_CLOSE = 9, // Closing detail view animation
-} MenuState;
-
 u8 gLevelWorldTable[] = {
     0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
@@ -108,11 +63,11 @@ void initLevelSelectState(void) {
     state->exitMode = 0;
     state->selectedIndex = 0;
     state->previewLoadCounter = 0;
-    state->oldLevelId = 0;
-    state->padB2A = 0;
+    state->scrollDirection = 0;
+    state->_padB2A = 0;
 
     state->menuState = 0;
-    state->newLevelId = 0;
+    state->previousLevelId = 0;
     state->selectedLevelId = 0;
     state->isLoadingPreview = 0;
     state->loadStartFrame = 0;
@@ -171,12 +126,12 @@ void initLevelSelectState(void) {
 
     saveSlot = gGameSessionContext->saveSlotIndex;
     state->selectedLevelId = saveSlot;
-    state->newLevelId = saveSlot;
+    state->previousLevelId = saveSlot;
 
-    state->selectedNumber = gGameSessionContext->playerBoardIds[0x10];
+    state->selectedLapCount = gGameSessionContext->playerBoardIds[0x10];
 
     if (state->showDetailView != 0) {
-        state->detailViewMode = 0;
+        state->pendingDetailAnimation = 0;
         state->menuState = 5;
         saveSlot = gGameSessionContext->saveSlotIndex;
         state->selectedIndex = saveSlot;
@@ -229,13 +184,13 @@ void handleLevelSelectInput(void) {
                 if (oldB46 == (allocation->selectedIndex)) {
                     if (gControllerInputs[i] & (STICK_UP | U_JPAD)) {
                         allocation->selectedIndex = allocation->selectedIndex - 1;
-                        allocation->oldLevelId = 0;
+                        allocation->scrollDirection = 0;
                         if (allocation->selectedIndex < 0) {
                             allocation->selectedIndex = allocation->maxLevelCount - 1;
                         }
                     } else if (gControllerInputs[i] & (STICK_DOWN | D_JPAD)) {
                         allocation->selectedIndex = allocation->selectedIndex + 1;
-                        allocation->oldLevelId = 1;
+                        allocation->scrollDirection = 1;
                         if (allocation->selectedIndex > (s32)(allocation->maxLevelCount - 1)) {
                             allocation->selectedIndex = 0;
                         }
@@ -247,7 +202,7 @@ void handleLevelSelectInput(void) {
                 playSoundEffect(0x2B);
                 allocation->menuState = MENU_STATE_SCROLL;
                 allocation->transitionCounter = 0;
-                allocation->newLevelId = allocation->levelIdList[oldB46];
+                allocation->previousLevelId = allocation->levelIdList[oldB46];
                 allocation->selectedLevelId = allocation->levelIdList[allocation->selectedIndex];
                 if (allocation->previewLoadCounter >= 3) {
                     allocation->previewLoadCounter = 0;
@@ -268,7 +223,7 @@ void handleLevelSelectInput(void) {
                             if (tempA0->customLapEnabled != 0) {
                                 if (tempA0->gameMode == 1) {
                                     allocation->menuState = 3;
-                                    allocation->selectedNumber = gGameSessionContext->playerBoardIds[0x10];
+                                    allocation->selectedLapCount = gGameSessionContext->playerBoardIds[0x10];
                                 } else {
                                     allocation->menuState = 2;
                                 }
@@ -337,7 +292,7 @@ void handleLevelSelectInput(void) {
         case MENU_STATE_DETAIL_WAIT:
             if (getViewportFadeMode(&allocation->detailNode) == 0) {
                 allocation->menuState = 8;
-                allocation->detailViewMode = 1;
+                allocation->pendingDetailAnimation = 1;
             }
             break;
 
@@ -346,7 +301,7 @@ void handleLevelSelectInput(void) {
             if (getViewportFadeMode(node760) == 0) {
                 unlinkNode(node760);
                 allocation->menuState = 5;
-                allocation->detailViewMode = 2;
+                allocation->pendingDetailAnimation = 2;
             }
         } break;
 
@@ -365,23 +320,23 @@ void handleLevelSelectInput(void) {
 
         case MENU_STATE_NUMBER_SELECT:
             loadLevelPreview();
-            oldB46 = allocation->selectedNumber;
+            oldB46 = allocation->selectedLapCount;
             for (i = 0; i < gGameSessionContext->numPlayers; i++) {
-                if ((oldB46 & 0xFF) == allocation->selectedNumber) {
+                if ((oldB46 & 0xFF) == allocation->selectedLapCount) {
                     if (gControllerInputs[i] & (STICK_RIGHT | R_JPAD)) {
-                        allocation->selectedNumber = allocation->selectedNumber + 1;
-                        if ((allocation->selectedNumber & 0xFF) >= 10) {
-                            allocation->selectedNumber = 1;
+                        allocation->selectedLapCount = allocation->selectedLapCount + 1;
+                        if ((allocation->selectedLapCount & 0xFF) >= 10) {
+                            allocation->selectedLapCount = 1;
                         }
                     } else if (gControllerInputs[i] & (STICK_LEFT | L_JPAD)) {
-                        allocation->selectedNumber = allocation->selectedNumber - 1;
-                        if ((allocation->selectedNumber & 0xFF) == 0) {
-                            allocation->selectedNumber = 9;
+                        allocation->selectedLapCount = allocation->selectedLapCount - 1;
+                        if ((allocation->selectedLapCount & 0xFF) == 0) {
+                            allocation->selectedLapCount = 9;
                         }
                     }
                 }
             }
-            if (oldB46 != allocation->selectedNumber) {
+            if (oldB46 != allocation->selectedLapCount) {
                 playSoundEffect(0x2B);
             } else {
                 for (i = 0; i < gGameSessionContext->numPlayers; i++) {
@@ -475,8 +430,8 @@ void applyLevelSelection(void) {
             gGameSessionContext->numPlayers = 1;
         }
     } else {
-        ptr->playerBoardIds[0x10] = allocation->selectedNumber;
-        gGameSessionContext->customLapCount = allocation->selectedNumber;
+        ptr->playerBoardIds[0x10] = allocation->selectedLapCount;
+        gGameSessionContext->customLapCount = allocation->selectedLapCount;
     }
 }
 

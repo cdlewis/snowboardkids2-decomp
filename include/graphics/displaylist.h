@@ -250,7 +250,7 @@ s16 getTrackSegmentFinishZoneFlag(GameDataLayout *gameData, u16 index);
 s32 resolveTrackSegmentIndex(TrackSegmentEntry **arg0, u16 index);
 
 typedef struct {
-    u8 _pad0[0x4];
+    s32 vertices;
     s16 matrix[3][3];
     u8 _pad16[0xE];
     u8 *textureData;
@@ -259,7 +259,7 @@ typedef struct {
     u8 textureHeight;
     u8 alpha;
     u8 _pad2F;
-    s32 renderState;
+    Mtx *renderMatrix;
 } MatrixEntry_202A0;
 void enqueueRotatedBillboardSprite(s32 arg0, MatrixEntry_202A0 *arg1);
 void renderRotatedBillboardSpriteCI(MatrixEntry_202A0 *arg1);
