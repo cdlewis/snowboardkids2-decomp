@@ -7,6 +7,7 @@
 #include "race/race_session.h"
 #include "system/memory_allocator.h"
 #include "system/task_scheduler.h"
+#include "ui/logo_splash.h"
 
 extern u8 gDebugUnlockEnabled;
 

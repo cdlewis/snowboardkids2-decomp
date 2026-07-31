@@ -79,7 +79,6 @@ void spawnItemTriggerTask(s16 arg0);
 void spawnConfettiEffectForAllPlayers(void);
 RocketBoostEffectState *spawnRocketBoostEffect(Player *player);
 void initTitleScreen(void);
-void initLogoSplash(void);
 void initVersusMode(void);
 void initOptionsMenu(void);
 void eepromReadAsync(s32 slotIndex, void *buffer);

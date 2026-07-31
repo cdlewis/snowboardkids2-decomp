@@ -797,3 +797,15 @@ Replacing that word with separate `s8`, `u8`, and `u16` fields preserved the str
 alignment of the following globals, growing the ROM data segment. Keep the original word in the containing
 structure and define a shared union view with named byte fields for code that needs those semantics. This removes
 file-local padded views without changing the declared storage that controls global-data placement.
+
+## Use Renderer Types in Standalone Splash Allocations
+
+The logo splash's `0x2F0` scheduler allocation is a standalone UI state, not a partial `GameState`. Its two
+`0x2C` padded tile-map views are complete `TileMapScrollRenderState` values, and each `0x18` footprint entry is
+a complete `FrameSpriteEntry`. Embedding those canonical types and typing the loaded assets as
+`TileMapTextureAsset` and `SpriteSheetData` removes local copies while preserving the allocation size and all
+field offsets.
+
+When replacing a local sprite copy whose shade was declared as a single `s16`, assign
+`FrameSpriteEntry.shade.shadeWithPadding` rather than only its named intensity byte. This retains KMC's original
+halfword store while still using the common renderer definition.
