@@ -7,13 +7,14 @@ typedef struct {
     /* 0x00 */ ScaledSpriteArg portraits[2];
     /* 0x28 */ u8 selectedAnimFrame;
     /* 0x29 */ u8 selectedAnimFrameTimer;
-    /* 0x2A */ u8 lastSelectedPlayerIndex;
-    /* 0x2B */ u8 slotIndex;
+    /* 0x2A */ u8 lastSelectedOptionIndex;
+    /* 0x2B */ u8 playerCountOptionIndex;
     /* 0x2C */ u8 phase;
-    /* 0x2D */ u8 phaseTimer;
+    /* 0x2D */ u8 activationDelayTimer;
 } PlayerSelectState;
 
 void initPlayerSelectSprites(PlayerSelectState *state);
+void cleanupPlayerSelectTask(PlayerSelectState *state);
 void enqueuePlayerSelectSpritesRender(TextRenderArg *sprites);
 void cleanupPlayerCountSelectSprites(TextRenderArg *sprites);
 void initPlayerCountHeaderSprite(SpriteRenderArg *sprite);

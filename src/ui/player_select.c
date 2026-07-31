@@ -48,14 +48,14 @@ void initPlayerCountSelectState(void) {
 
     temp = gGameSessionContext->numPlayers;
     if (temp != 0) {
-        state->playerCount.selectedPlayerIndex = temp - 1;
+        state->playerCount.selectedOptionIndex = temp - 1;
     } else {
-        state->playerCount.selectedPlayerIndex = 0;
+        state->playerCount.selectedOptionIndex = 0;
     }
 
     numControllers = state->connectedControllerCount;
-    if (numControllers < state->playerCount.selectedPlayerIndex + 1) {
-        state->playerCount.selectedPlayerIndex = numControllers - 1;
+    if (numControllers < state->playerCount.selectedOptionIndex + 1) {
+        state->playerCount.selectedOptionIndex = numControllers - 1;
     }
 
     initMenuCameraNode(&state->viewport, 8, 0xA, 1);
@@ -92,7 +92,7 @@ void awaitPlayerCountSelectFadeIn(void) {
         if (temp < 4) {
             if (result == (0xC - (temp * 2))) {
                 playerSelectTask = scheduleTask(&initPlayerSelectSprites, 0, 0, 0x5A);
-                playerSelectTask->slotIndex = state->frameCounter;
+                playerSelectTask->playerCountOptionIndex = state->frameCounter;
                 state->frameCounter = state->frameCounter + 1;
             }
         }
@@ -113,16 +113,16 @@ void handlePlayerCountSelectInput(void) {
                 state->menuState = PLAYER_COUNT_MENU_CANCEL_OK;
             } else {
                 if (inputs & (STICK_RIGHT | R_JPAD)) {
-                    if (state->playerCount.selectedPlayerIndex < (state->connectedControllerCount - 1)) {
-                        state->playerCount.selectedPlayerIndex = state->playerCount.selectedPlayerIndex + 1;
+                    if (state->playerCount.selectedOptionIndex < (state->connectedControllerCount - 1)) {
+                        state->playerCount.selectedOptionIndex = state->playerCount.selectedOptionIndex + 1;
                         playSoundEffectOnChannelNoPriority(0x2B, 0);
                         break;
                     }
                 }
 
                 if (gControllerInputs[0] & (STICK_LEFT | CONT_LEFT)) {
-                    if (state->playerCount.selectedPlayerIndex != 0) {
-                        state->playerCount.selectedPlayerIndex = state->playerCount.selectedPlayerIndex - 1;
+                    if (state->playerCount.selectedOptionIndex != 0) {
+                        state->playerCount.selectedOptionIndex = state->playerCount.selectedOptionIndex - 1;
                         playSoundEffectOnChannelNoPriority(0x2B, 0);
                         break;
                     }
@@ -191,7 +191,7 @@ void exitPlayerCountSelect(void) {
 
         if (state->menuResult == PLAYER_COUNT_RESULT_PROCEED) {
             terminateSchedulerWithCallback(onPlayerCountProceed);
-            gGameSessionContext->numPlayers = state->playerCount.bytes.selectedPlayerIndexLo + 1;
+            gGameSessionContext->numPlayers = state->playerCount.bytes.selectedOptionIndex + 1;
             for (i = 0; i < gGameSessionContext->numPlayers; i++) {
                 gGameSessionContext->playerBoardIds[i] = gPlayerSlotDefaults[i];
             }

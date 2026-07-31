@@ -25,8 +25,6 @@ s16 gPlayerCountOptionPositions[] = { 0xFFC0, 0x0020, 0x0000, 0x0020, 0xFF98, 0x
 s16 gPlayerCountIndicatorPositions[] = { 0xFFD7, 0x0024, 0xFFD7, 0x0024, 0xFFC8, 0x0026,
                                          0xFFD8, 0x0024, 0x0000, 0x0000, 0x0000, 0x0000 };
 
-void cleanupPlayerSelectTask(PlayerSelectState *);
-
 void initPlayerSelectSprites(PlayerSelectState *state) {
     PlayerCountSelectState *allocation;
     void *spriteData;
@@ -44,17 +42,17 @@ void initPlayerSelectSprites(PlayerSelectState *state) {
     scale = PLAYER_SELECT_SELECTED_PORTRAIT_SCALE;
     alpha = PLAYER_SELECT_SELECTED_SHADE;
     yPos = -0x9C;
-    sprite = (volatile ScaledSpriteArg *)state;
+    sprite = state->portraits;
     do {
         s32 baseFrame;
         s16 x;
         s32 slotIndex;
 
-        x = (state->slotIndex << 6) - 0x60;
+        x = (state->playerCountOptionIndex << 6) - 0x60;
         sprite->y = yPos;
         yPos += 0x20;
         sprite->x = x;
-        slotIndex = state->slotIndex;
+        slotIndex = state->playerCountOptionIndex;
         baseFrame = i + 8;
         i++;
         sprite->renderWidth = scale;
@@ -69,12 +67,12 @@ void initPlayerSelectSprites(PlayerSelectState *state) {
     } while (i < 2);
 
     state->phase = PLAYER_SELECT_PHASE_ENTRANCE_SLIDE;
-    state->phaseTimer = 0;
+    state->activationDelayTimer = 0;
     {
-        u16 playerIdx = allocation->playerCount.selectedPlayerIndex;
+        u16 selectedOptionIndex = allocation->playerCount.selectedOptionIndex;
         state->selectedAnimFrame = 0;
         state->selectedAnimFrameTimer = 0;
-        state->lastSelectedPlayerIndex = playerIdx;
+        state->lastSelectedOptionIndex = selectedOptionIndex;
     }
 
     setCallback(updatePlayerSelectAnim);
@@ -104,15 +102,15 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
             break;
 
         case PLAYER_SELECT_PHASE_DELAY:
-            state->phaseTimer++;
-            if ((state->phaseTimer & 0xFF) == 3) {
+            state->activationDelayTimer++;
+            if ((state->activationDelayTimer & 0xFF) == 3) {
                 state->phase = PLAYER_SELECT_PHASE_ACTIVE;
             }
             break;
 
         case PLAYER_SELECT_PHASE_ACTIVE:
-            if (allocation->playerCount.selectedPlayerIndex != state->lastSelectedPlayerIndex) {
-                state->lastSelectedPlayerIndex = allocation->playerCount.selectedPlayerIndex;
+            if (allocation->playerCount.selectedOptionIndex != state->lastSelectedOptionIndex) {
+                state->lastSelectedOptionIndex = allocation->playerCount.selectedOptionIndex;
                 state->selectedAnimFrame = 0;
                 state->selectedAnimFrameTimer = 0;
             } else {
@@ -123,11 +121,11 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
             }
 
             i = 0;
-            if (allocation->playerCount.selectedPlayerIndex != state->slotIndex) {
+            if (allocation->playerCount.selectedOptionIndex != state->playerCountOptionIndex) {
                 s16 scaleConst = PLAYER_SELECT_UNSELECTED_PORTRAIT_SCALE;
                 s16 alphaConst = PLAYER_SELECT_UNSELECTED_SHADE;
                 s32 divConst = PLAYER_SELECT_PORTRAIT_LAYOUT_UNIT;
-                portrait = (volatile ScaledSpriteArg *)state;
+                portrait = state->portraits;
                 do {
                     s16 scale;
                     u8 slotIdx;
@@ -141,7 +139,7 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
                     yPos = i * scale;
                     yPos -= PLAYER_SELECT_PORTRAIT_Y_OFFSET;
                     portrait->y = yPos - scale / 2;
-                    slotIdx = state->slotIndex;
+                    slotIdx = state->playerCountOptionIndex;
                     frame = i + 8;
                     i++;
                     frame += slotIdx * 6;
@@ -153,7 +151,7 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
                 s16 alphaConst = PLAYER_SELECT_SELECTED_SHADE;
                 s32 divConst = PLAYER_SELECT_PORTRAIT_LAYOUT_UNIT;
                 u16 *animTable = gPlayerCountSelectedOptionAnimFrameOffsets;
-                portrait = (volatile ScaledSpriteArg *)state;
+                portrait = state->portraits;
                 do {
                     s16 scale;
                     u8 slotIdx;
@@ -167,7 +165,7 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
                     yPos = i * scale;
                     yPos -= PLAYER_SELECT_PORTRAIT_Y_OFFSET;
                     portrait->y = yPos - scale / 2;
-                    slotIdx = state->slotIndex;
+                    slotIdx = state->playerCountOptionIndex;
                     frame = i + 8;
                     frame += slotIdx * 6;
                     portrait->frameIndex = frame;
@@ -179,9 +177,9 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
 
             if (allocation->menuState == PLAYER_COUNT_MENU_CONFIRM_WAIT) {
                 s32 slot;
-                slot = state->slotIndex;
+                slot = state->playerCountOptionIndex;
                 state->phase = PLAYER_SELECT_PHASE_CONFIRM_BLINK;
-                if (slot == allocation->playerCount.bytes.selectedPlayerIndexLo) {
+                if (slot == allocation->playerCount.bytes.selectedOptionIndex) {
                     ScaledSpriteArg *portrait;
                     s32 frameBase;
                     s32 offset;
@@ -199,7 +197,7 @@ void updatePlayerSelectAnim(PlayerSelectState *state) {
             break;
 
         case PLAYER_SELECT_PHASE_CONFIRM_BLINK:
-            if (state->slotIndex == allocation->playerCount.selectedPlayerIndex) {
+            if (state->playerCountOptionIndex == allocation->playerCount.selectedOptionIndex) {
                 i = 0;
                 do {
                     if (allocation->frameCounter & 1) {
@@ -306,9 +304,9 @@ void initPlayerIndicatorSprite(SpriteRenderArg *sprite) {
 void updatePlayerIndicatorSprite(SpriteRenderArg *sprite) {
     PlayerCountSelectState *allocation = getCurrentAllocation();
 
-    sprite->x = gPlayerCountIndicatorPositions[allocation->playerCount.selectedPlayerIndex * 2];
-    sprite->y = gPlayerCountIndicatorPositions[allocation->playerCount.selectedPlayerIndex * 2 + 1];
-    sprite->frameIndex = allocation->playerCount.selectedPlayerIndex + 2;
+    sprite->x = gPlayerCountIndicatorPositions[allocation->playerCount.selectedOptionIndex * 2];
+    sprite->y = gPlayerCountIndicatorPositions[allocation->playerCount.selectedOptionIndex * 2 + 1];
+    sprite->frameIndex = allocation->playerCount.selectedOptionIndex + 2;
 
     enqueueCallbackBySlotIndex(8, 7, renderSpriteFrame, sprite);
 }

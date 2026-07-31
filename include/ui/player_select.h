@@ -17,20 +17,20 @@ typedef enum {
 } PlayerCountMenuResult;
 
 typedef struct {
-    ViewportNode viewport;
-    void *portraitSpriteData;
-    void *promptSpriteData;
-    s16 frameCounter;
+    /* 0x00 */ ViewportNode viewport;
+    /* 0x30 */ void *portraitSpriteData;
+    /* 0x34 */ void *promptSpriteData;
+    /* 0x38 */ s16 frameCounter;
     union {
-        u16 selectedPlayerIndex;
+        u16 selectedOptionIndex;
         struct {
-            u8 selectedPlayerIndexHi;
-            u8 selectedPlayerIndexLo;
+            u8 padding;
+            u8 selectedOptionIndex;
         } bytes;
     } playerCount;
-    u8 connectedControllerCount;
-    u8 menuResult;
-    u8 menuState;
+    /* 0x3C */ u8 connectedControllerCount;
+    /* 0x3D */ u8 menuResult;
+    /* 0x3E */ u8 menuState;
 } PlayerCountSelectState;
 
 void initPlayerCountSelectState(void);
