@@ -105,5 +105,10 @@ typedef struct {
     s16 namePositions[17];
 } CharSelectAnimData;
 
+extern Vec2s charSelectNamePositions[];
+extern Vec2s charSelectNameSpritePositions[];
+extern CharSelectModelPositions charSelectModelPositions;
+extern CharSelectAnimData charSelectAnimDataTable;
+
 s32 countUnlockedSlotsInCategory(u8 category);
 void initCharacterSelectScreen(void);

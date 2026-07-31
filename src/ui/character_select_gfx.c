@@ -14,28 +14,14 @@
 #include "text/font_render.h"
 #include "ui/character_select_ui.h"
 #include "ui/level_preview_3d.h"
-#include "ui/save_data.h"
-
-typedef struct CharSelectNamePosition {
-    s16 x;
-    s16 y;
-} CharSelectNamePosition;
-
-extern CharSelectNamePosition charSelectNamePositions[];
 
 extern Vec2_u16 playerNumberPositions[];
 extern PositionConfig_DDE6 D_8008DDE6_8E9E6[];
 extern u8 charSelectArrowDataTable[];
 extern u8 charSelectBoardDataTable[];
-extern struct {
-    u16 x;
-    u16 y;
-} charSelectNameSpritePositions[];
-extern CharSelectModelPositions charSelectModelPositions;
 extern Vec3s charSelectIconPositions[];
-extern CharSelectAnimData charSelectAnimDataTable;
 
-void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
+void initCharSelectPreviewModel(CharSelectPreviewTaskState *arg0) {
     Transform3D sp10;
     Transform3D sp30;
     Transform3D *sp10Ptr;
@@ -45,7 +31,6 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     Transform3D *rotMatPtr;
     Transform3D *posMatPtr;
     CharacterSelectState *state;
-    u8 *globalPtr;
 
     state = getCurrentAllocation();
     posMatPtr = &arg0->positionMatrix;
@@ -73,31 +58,30 @@ void initCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
     memcpy(&sp10.translation, &arg0->positionMatrix.translation.x, sizeof(Vec3i));
 
     composeTransform3D(rotMatPtr, posMatPtr, sp10Ptr);
-    composeTransform3D(sp10Ptr, &state->characterRotations[arg0->playerIndex], (Transform3D *)arg0);
+    composeTransform3D(sp10Ptr, &state->characterRotations[arg0->playerIndex], &arg0->displayObject.transform);
 
-    globalPtr = (u8 *)gGameSessionContext;
-    charIndex = *(globalPtr + arg0->playerIndex + 0xD);
+    charIndex = gGameSessionContext->playerBoardIds[4 + arg0->playerIndex];
     arg0->charPaletteIndex = charIndex;
     paletteIndex = EepromSaveData->character_or_settings[charIndex] - 1;
 
-    arg0->modelAsset = loadAssetByIndex_95728(charIndex);
-    arg0->animationAsset = loadAssetByIndex_95500(charIndex);
-    arg0->skeletonAsset = loadAssetByIndex_95590(charIndex);
-    arg0->paletteAsset = loadAssetByIndex_95668(paletteIndex & 0xFF);
+    arg0->displayObject.displayLists = loadAssetByIndex_95728(charIndex);
+    arg0->displayObject.segment1 = loadAssetByIndex_95500(charIndex);
+    arg0->displayObject.segment2 = loadAssetByIndex_95590(charIndex);
+    arg0->displayObject.segment3 = loadAssetByIndex_95668(paletteIndex & 0xFF);
 
-    arg0->lightR = 0xFF;
-    arg0->lightG = 0xFF;
-    arg0->lightB = 0xFF;
-    arg0->ambientR = 0x80;
-    arg0->ambientG = 0x80;
-    arg0->ambientB = 0x80;
+    arg0->displayObject.light1R = 0xFF;
+    arg0->displayObject.light1G = 0xFF;
+    arg0->displayObject.light1B = 0xFF;
+    arg0->displayObject.light2R = 0x80;
+    arg0->displayObject.light2G = 0x80;
+    arg0->displayObject.light2B = 0x80;
     arg0->selectionState = state->iconDisplayStates[arg0->playerIndex];
 
     setCleanupCallback(cleanupCharSelectPreviewAssets);
     setCallback(updateCharSelectPreviewModel);
 }
 
-void updateCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
+void updateCharSelectPreviewModel(CharSelectPreviewTaskState *arg0) {
     Transform3D sp10;
     CharacterSelectState *state;
     u8 prevSelState;
@@ -139,41 +123,41 @@ void updateCharSelectPreviewModel(CharSelectPreviewModel *arg0) {
 
 after_rotation:
     composeTransform3D(&arg0->rotationMatrix, &arg0->positionMatrix, &sp10);
-    composeTransform3D(&sp10, &state->characterRotations[arg0->playerIndex], (Transform3D *)arg0);
+    composeTransform3D(&sp10, &state->characterRotations[arg0->playerIndex], &arg0->displayObject.transform);
 
     val = state->menuStates[arg0->playerIndex];
     if (val == CHAR_SELECT_CHAR_ROW_SLIDE || val == CHAR_SELECT_CHAR_VARIANT_SLIDE) {
-        arg0->animationAsset = freeNodeMemory(arg0->animationAsset);
-        arg0->skeletonAsset = freeNodeMemory(arg0->skeletonAsset);
-        arg0->paletteAsset = freeNodeMemory(arg0->paletteAsset);
+        arg0->displayObject.segment1 = freeNodeMemory(arg0->displayObject.segment1);
+        arg0->displayObject.segment2 = freeNodeMemory(arg0->displayObject.segment2);
+        arg0->displayObject.segment3 = freeNodeMemory(arg0->displayObject.segment3);
         setCallback(initCharSelectSlidePosition);
     } else {
         if (assetIndex != arg0->charPaletteIndex) {
             arg0->charPaletteIndex = assetIndex;
-            arg0->animationAsset = freeNodeMemory(arg0->animationAsset);
-            arg0->skeletonAsset = freeNodeMemory(arg0->skeletonAsset);
-            arg0->paletteAsset = freeNodeMemory(arg0->paletteAsset);
+            arg0->displayObject.segment1 = freeNodeMemory(arg0->displayObject.segment1);
+            arg0->displayObject.segment2 = freeNodeMemory(arg0->displayObject.segment2);
+            arg0->displayObject.segment3 = freeNodeMemory(arg0->displayObject.segment3);
             setCallback(reloadCharSelectPreviewAssets);
         } else {
-            enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
+            enqueueDisplayListObjectWithLights(arg0->playerIndex, &arg0->displayObject);
         }
     }
 }
 
-void reloadCharSelectPreviewAssets(CharSelectPreviewModel *preview) {
+void reloadCharSelectPreviewAssets(CharSelectPreviewTaskState *preview) {
     u8 paletteIndex;
 
     paletteIndex = EepromSaveData->character_or_settings[preview->charPaletteIndex] - 1;
 
-    preview->modelAsset = loadAssetByIndex_95728(preview->charPaletteIndex);
-    preview->animationAsset = loadAssetByIndex_95500(preview->charPaletteIndex);
-    preview->skeletonAsset = loadAssetByIndex_95590(preview->charPaletteIndex);
-    preview->paletteAsset = loadAssetByIndex_95668(paletteIndex);
+    preview->displayObject.displayLists = loadAssetByIndex_95728(preview->charPaletteIndex);
+    preview->displayObject.segment1 = loadAssetByIndex_95500(preview->charPaletteIndex);
+    preview->displayObject.segment2 = loadAssetByIndex_95590(preview->charPaletteIndex);
+    preview->displayObject.segment3 = loadAssetByIndex_95668(paletteIndex);
 
     setCallback(updateCharSelectPreviewModel);
 }
 
-void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
+void initCharSelectSlidePosition(CharSelectPreviewTaskState *arg0) {
     Transform3D sp10;
     Transform3D *localPtr;
     CharacterSelectState *state;
@@ -200,10 +184,10 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
 
     paletteIndex = EepromSaveData->character_or_settings[assetIndex] - 1;
 
-    arg0->modelAsset = loadAssetByIndex_95728(assetIndex);
-    arg0->animationAsset = loadAssetByIndex_95500(assetIndex);
-    arg0->skeletonAsset = loadAssetByIndex_95590(assetIndex);
-    arg0->paletteAsset = loadAssetByIndex_95668((u8)paletteIndex);
+    arg0->displayObject.displayLists = loadAssetByIndex_95728(assetIndex);
+    arg0->displayObject.segment1 = loadAssetByIndex_95500(assetIndex);
+    arg0->displayObject.segment2 = loadAssetByIndex_95590(assetIndex);
+    arg0->displayObject.segment3 = loadAssetByIndex_95668((u8)paletteIndex);
 
     localPtr = &sp10;
     memcpy(localPtr, &identityMatrix, sizeof(Transform3D));
@@ -213,12 +197,12 @@ void initCharSelectSlidePosition(CharSelectPreviewModel *arg0) {
     createYRotationMatrix(&arg0->positionMatrix, rotation);
 
     composeTransform3D(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
-    composeTransform3D(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
+    composeTransform3D(localPtr, &arg0->worldMatrix, &arg0->displayObject.transform);
 
     setCallback(updateCharSelectSlide);
 }
 
-void updateCharSelectSlide(CharSelectSlideState *arg0) {
+void updateCharSelectSlide(CharSelectPreviewTaskState *arg0) {
     Transform3D sp10;
     CharacterSelectState *state;
     Transform3D *localPtr;
@@ -240,9 +224,9 @@ void updateCharSelectSlide(CharSelectSlideState *arg0) {
     createYRotationMatrix(&arg0->positionMatrix, rotation);
 
     composeTransform3D(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
-    composeTransform3D(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
+    composeTransform3D(localPtr, &arg0->worldMatrix, &arg0->displayObject.transform);
 
-    enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
+    enqueueDisplayListObjectWithLights(arg0->playerIndex, &arg0->displayObject);
 
     if (arg0->worldMatrix.translation.x == 0) {
         state->completedSlides[arg0->playerIndex]++;
@@ -250,7 +234,7 @@ void updateCharSelectSlide(CharSelectSlideState *arg0) {
     }
 }
 
-void updateCharSelectPostSlide(CharSelectSlideState *arg0) {
+void updateCharSelectPostSlide(CharSelectPreviewTaskState *arg0) {
     Transform3D localMatrix;
     Transform3D *localPtr;
     CharacterSelectState *base;
@@ -267,9 +251,9 @@ void updateCharSelectPostSlide(CharSelectSlideState *arg0) {
     createYRotationMatrix(&arg0->positionMatrix, rotation);
 
     composeTransform3D(&arg0->rotationMatrix, &arg0->positionMatrix, localPtr);
-    composeTransform3D(localPtr, &arg0->worldMatrix, (Transform3D *)arg0);
+    composeTransform3D(localPtr, &arg0->worldMatrix, &arg0->displayObject.transform);
 
-    enqueueDisplayListObjectWithLights(arg0->playerIndex, (DisplayListObject *)arg0);
+    enqueueDisplayListObjectWithLights(arg0->playerIndex, &arg0->displayObject);
 
     val = base->menuStates[arg0->playerIndex];
     if (val != CHAR_SELECT_CHAR_ROW_SLIDE && val != CHAR_SELECT_CHAR_VARIANT_SLIDE) {
@@ -277,13 +261,13 @@ void updateCharSelectPostSlide(CharSelectSlideState *arg0) {
     }
 }
 
-void cleanupCharSelectPreviewAssets(CharSelectPreviewModel *arg0) {
-    arg0->animationAsset = freeNodeMemory(arg0->animationAsset);
-    arg0->skeletonAsset = freeNodeMemory(arg0->skeletonAsset);
-    arg0->paletteAsset = freeNodeMemory(arg0->paletteAsset);
+void cleanupCharSelectPreviewAssets(CharSelectPreviewTaskState *arg0) {
+    arg0->displayObject.segment1 = freeNodeMemory(arg0->displayObject.segment1);
+    arg0->displayObject.segment2 = freeNodeMemory(arg0->displayObject.segment2);
+    arg0->displayObject.segment3 = freeNodeMemory(arg0->displayObject.segment3);
 }
 
-void initCharSelectSecondarySlot(CharSelectSecondarySlot *arg0) {
+void initCharSelectSecondarySlot(CharSelectPreviewTaskState *arg0) {
     Transform3D localMatrix1;
     Transform3D localMatrix2;
     Transform3D localMatrix3;
@@ -322,17 +306,17 @@ void initCharSelectSecondarySlot(CharSelectSecondarySlot *arg0) {
 
     createYRotationMatrix(posMatrixPtr, state->previewSpinAngles[arg0->playerIndex]);
     composeTransform3D(rotMatrixPtr, posMatrixPtr, localMatrix3Ptr);
-    composeTransform3D(localMatrix3Ptr, worldMatrixPtr, (Transform3D *)arg0);
+    composeTransform3D(localMatrix3Ptr, worldMatrixPtr, &arg0->displayObject.transform);
 
     charIndex = state->previousCharacterCategories[arg0->playerIndex];
     assetIndex = state->previousCharacterVariants[arg0->playerIndex];
     assetIndex = assetIndex + charIndex * 3;
     paletteIndex = EepromSaveData->character_or_settings[assetIndex] - 1;
 
-    arg0->modelAsset = loadAssetByIndex_95728(assetIndex);
-    arg0->animationAsset = loadAssetByIndex_95500(assetIndex);
-    arg0->skeletonAsset = loadAssetByIndex_95590(assetIndex);
-    arg0->paletteAsset = loadAssetByIndex_95668(paletteIndex);
+    arg0->displayObject.displayLists = loadAssetByIndex_95728(assetIndex);
+    arg0->displayObject.segment1 = loadAssetByIndex_95500(assetIndex);
+    arg0->displayObject.segment2 = loadAssetByIndex_95590(assetIndex);
+    arg0->displayObject.segment3 = loadAssetByIndex_95668(paletteIndex);
 
     setCleanupCallback(cleanupCharSelectSecondaryAssets);
     setCallbackWithContinue(updateCharSelectSecondarySlide);
@@ -340,7 +324,7 @@ void initCharSelectSecondarySlot(CharSelectSecondarySlot *arg0) {
 
 // Updates the secondary character slot slide animation during character select
 // This slides the secondary character model to a target X position
-void updateCharSelectSecondarySlide(CharSelectSecondarySlot *slot) {
+void updateCharSelectSecondarySlide(CharSelectPreviewTaskState *slot) {
     Transform3D localMatrix;
     Transform3D *localMatrixPtr;
     Transform3D *posMatrixPtr;
@@ -365,20 +349,20 @@ void updateCharSelectSecondarySlide(CharSelectSecondarySlot *slot) {
     createYRotationMatrix(posMatrixPtr, state->previewSpinAngles[slot->playerIndex]);
 
     composeTransform3D(&slot->rotationMatrix, posMatrixPtr, localMatrixPtr);
-    composeTransform3D(localMatrixPtr, &slot->worldMatrix, (Transform3D *)slot);
+    composeTransform3D(localMatrixPtr, &slot->worldMatrix, &slot->displayObject.transform);
 
     if (slot->worldMatrix.translation.x == targetX) {
         state->completedSlides[slot->playerIndex]++;
         terminateCurrentTask();
     } else {
-        enqueueDisplayListObject(slot->playerIndex, (DisplayListObject *)slot);
+        enqueueDisplayListObject(slot->playerIndex, &slot->displayObject);
     }
 }
 
-void cleanupCharSelectSecondaryAssets(func_8002494C_arg *arg0) {
-    arg0->unk24 = freeNodeMemory(arg0->unk24);
-    arg0->unk28 = freeNodeMemory(arg0->unk28);
-    arg0->unk2C = freeNodeMemory(arg0->unk2C);
+void cleanupCharSelectSecondaryAssets(CharSelectPreviewTaskState *arg0) {
+    arg0->displayObject.segment1 = freeNodeMemory(arg0->displayObject.segment1);
+    arg0->displayObject.segment2 = freeNodeMemory(arg0->displayObject.segment2);
+    arg0->displayObject.segment3 = freeNodeMemory(arg0->displayObject.segment3);
 }
 
 void initCharSelectBoardModel(CharSelectBoardPreview *arg0) {
@@ -395,10 +379,10 @@ void initCharSelectBoardModel(CharSelectBoardPreview *arg0) {
     // Normal board preview model: current board id/model bank.
     if (boardType == 7) {
         arg0->model =
-            createSceneModelEx(0x39, (void *)state + (playerIdx * 0x1D8), state->boardIds[playerIdx], -1, -1, -1);
+            createSceneModelEx(0x39, &state->playerViewports[playerIdx], state->boardIds[playerIdx], -1, -1, -1);
     } else {
         arg0->model =
-            createSceneModelEx(boardType, (void *)state + (playerIdx * 0x1D8), state->boardIds[playerIdx], -1, -1, -1);
+            createSceneModelEx(boardType, &state->playerViewports[playerIdx], state->boardIds[playerIdx], -1, -1, -1);
     }
 
     memcpy(&arg0->transform, &identityMatrix, sizeof(Transform3D));
@@ -571,7 +555,7 @@ void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
     preview->transform.translation.z = 0;
     preview->transform.translation.y = 0xFFF00000;
     // Incoming board slide model starts offscreen and moves back to center.
-    preview->unk20_u.slideTargetX = preview->transform.translation.x;
+    preview->slideTargetX = preview->transform.translation.x;
 
     applyTransformToModel(preview->model, &preview->transform);
 
@@ -592,7 +576,7 @@ void updateCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
 
     state = (CharacterSelectState *)getCurrentAllocation();
 
-    targetX = preview->unk20_u.slideTargetX;
+    targetX = preview->slideTargetX;
 
     slideStep = (-(0 < targetX) & 0xFFF00000) | 0x100000;
 
@@ -629,11 +613,11 @@ void cleanupCharSelectBoardModel(CharSelectBoardPreview *preview) {
 }
 
 void initCharSelectBoardModelForSlideOut(CharSelectBoardPreview *arg0) {
-    u8 *alloc;
+    CharacterSelectState *state;
     u8 playerIndex;
     u32 boardType;
 
-    alloc = (u8 *)getCurrentAllocation();
+    state = getCurrentAllocation();
     playerIndex = arg0->playerIndex;
     boardType = gGameSessionContext->playerBoardIds[playerIndex];
 
@@ -641,8 +625,8 @@ void initCharSelectBoardModelForSlideOut(CharSelectBoardPreview *arg0) {
     if (boardType != 7) {
         arg0->model = createSceneModelEx(
             boardType,
-            alloc + (playerIndex * 0x1D8),
-            ((CharacterSelectState *)alloc)->previousBoardIds[playerIndex],
+            &state->playerViewports[playerIndex],
+            state->previousBoardIds[playerIndex],
             -1,
             -1,
             -1
@@ -650,8 +634,8 @@ void initCharSelectBoardModelForSlideOut(CharSelectBoardPreview *arg0) {
     } else {
         arg0->model = createSceneModelEx(
             0x39,
-            alloc + (playerIndex * 0x1D8),
-            ((CharacterSelectState *)alloc)->previousBoardIds[playerIndex],
+            &state->playerViewports[playerIndex],
+            state->previousBoardIds[playerIndex],
             -1,
             -1,
             -1
@@ -665,14 +649,11 @@ void initCharSelectBoardModelForSlideOut(CharSelectBoardPreview *arg0) {
     setCallback(initCharSelectBoardSlideOut);
 }
 void initCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
-    u8 *base;
-
     getCurrentAllocation();
 
     applyTransformToModel(preview->model, &preview->transform);
 
-    base = (u8 *)gGameSessionContext;
-    if (*(base + preview->playerIndex + 9) == 7) {
+    if (gGameSessionContext->playerBoardIds[preview->playerIndex] == 7) {
         setModelAnimation(preview->model, 4);
     } else {
         setModelAnimation(preview->model, 0x90);
@@ -874,8 +855,8 @@ void updateCharSelectIconTargets(CharSelectIconTargetState *arg0) {
     } while (i < 3);
 }
 
-void cleanupCharSelectIcons(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupCharSelectIcons(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 // Initialize character select item icon sprites for display/hide animation
@@ -888,7 +869,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
     u16 x;
     u16 y;
     s32 yIncrement;
-    volatile P2NameSpriteEntry *entry;
+    volatile SpriteRenderArg *entry;
     u8 *itemIconTable;
     s32 pad[4];
 
@@ -910,7 +891,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
     yIncrement = *(s16 *)((u8 *)&charSelectIconPositions[numPlayers] + sizeof(Vec3s));
     itemIconTable = charSelectItemData;
     y = charSelectIconPositions[numPlayers].z;
-    entry = (volatile P2NameSpriteEntry *)state->entries;
+    entry = (volatile SpriteRenderArg *)state->entries;
 
     do {
         GameSessionContext *session;
@@ -926,7 +907,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
         tableOffset = charIndex * 3 + i;
         tableValue = *(u8 *)(tableOffset + (s32)itemIconTable);
 
-        entry->spriteIndex = iconBaseIndex + (tableValue - 1) / 2;
+        entry->frameIndex = iconBaseIndex + (tableValue - 1) / 2;
 
         session = gGameSessionContext;
         charIndex = session->playerBoardIds[4 + state->playerIndex];
@@ -935,7 +916,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
 
         y += yIncrement;
         i += 1;
-        entry->asset = spriteAsset;
+        entry->spriteData = spriteAsset;
         entry->paletteIndex = (u8)(((tableValue - 1) / 2 + 7) & 0xFF) % 11;
         entry++;
     } while (i < 3);
@@ -946,7 +927,7 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
 // Render the 3 item icons for character selection
 // If character selection is confirmed (state 3), switch to locked state icons
 void hideCharSelectIcons(CharSelectIconHideState *arg0) {
-    P2NameSpriteEntry *entry;
+    SpriteRenderArg *entry;
     CharacterSelectState *state;
     s32 i;
     s16 iconIndex;
@@ -971,7 +952,7 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
         i = 0;
         constant = 8;
         do {
-            arg0->entries[i].spriteIndex = iconIndex;
+            arg0->entries[i].frameIndex = iconIndex;
             arg0->entries[i].paletteIndex = constant;
             i++;
         } while (i < 3);
@@ -983,7 +964,7 @@ void hideCharSelectIcons(CharSelectIconHideState *arg0) {
 void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
     CharacterSelectState *state;
     s32 i;
-    P2NameSpriteEntry *entry;
+    SpriteRenderArg *entry;
     u16 charSelectState;
     s32 iconBaseIndex;
     u8 charIndex;
@@ -1031,7 +1012,7 @@ void updateCharSelectIconsLockedState(CharSelectIconHideState *arg0) {
         // Update each of the 3 item icons based on the selected character+board combo
         do {
             itemIconPtr = (u8 *)((itemTableOffset + i) + (u32)itemIconTable);
-            arg0->entries[i].spriteIndex = iconBaseIndex + (*itemIconPtr - 1) / 2;
+            arg0->entries[i].frameIndex = iconBaseIndex + (*itemIconPtr - 1) / 2;
             arg0->entries[i].paletteIndex = (u8)(((*itemIconPtr - 1) / 2 + 7) & 0xFF) % 11;
             i++;
         } while (i < 3);
@@ -1047,7 +1028,7 @@ void showCharSelectIcons(CharSelectIconHideState *arg0) {
     s32 i;
     s32 iconBaseIndex;
     s32 tableOffset;
-    P2NameSpriteEntry *entry;
+    SpriteRenderArg *entry;
     u8 charIndex;
     u8 paletteIndex;
     u8 *tableBase;
@@ -1069,7 +1050,7 @@ void showCharSelectIcons(CharSelectIconHideState *arg0) {
 
 loop:
     tablePtr = (u8 *)((tableOffset + i) + (u32)tableBase);
-    entry->spriteIndex = iconBaseIndex + (*tablePtr - 1) / 2;
+    entry->frameIndex = iconBaseIndex + (*tablePtr - 1) / 2;
     i++;
     entry->paletteIndex = (u8)(((*tablePtr - 1) / 2 + 7) & 0xFF) % 11;
     enqueueCallbackBySlotIndex(arg0->playerIndex + 8, 0, renderSpriteFrameWithPalette, entry);
@@ -1085,7 +1066,7 @@ loop:
 
         i = 0;
         do {
-            arg0->entries[i].spriteIndex = iconBaseIndex;
+            arg0->entries[i].frameIndex = iconBaseIndex;
             arg0->entries[i].paletteIndex = 8;
             i++;
         } while (i < 3);
@@ -1094,8 +1075,8 @@ loop:
     }
 }
 
-void cleanupCharSelectIconHideAsset(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupCharSelectIconHideAsset(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void initCharSelectMenu(SelectionMenuState *arg0) {
@@ -1141,11 +1122,11 @@ void initCharSelectMenu(SelectionMenuState *arg0) {
         do {
             arg0->entries[i].x = x;
             arg0->entries[i].y = y;
-            arg0->entries[i].spriteIndex = spriteIndexBase + i;
-            arg0->entries[i].blinkState = 0;
-            arg0->entries[i].unkC = 0;
-            arg0->entries[i].alpha = 0xFF;
-            arg0->entries[i].asset = dmaResult;
+            arg0->entries[i].frameIndex = spriteIndexBase + i;
+            arg0->entries[i].overridePaletteCount = 0;
+            arg0->entries[i].tileMode = 0;
+            arg0->entries[i].color.paletteAndAlpha = 0xFF;
+            arg0->entries[i].spriteData = dmaResult;
             arg0->blinkTimers[i] = 0;
             i++;
             x += incrementSigned;
@@ -1156,12 +1137,12 @@ void initCharSelectMenu(SelectionMenuState *arg0) {
 }
 
 void updateCharSelectMenuConfirm(SelectionMenuState *);
-void updateBoardSelectCharNames(CharacterNameSprite *sprites);
+void updateBoardSelectCharNames(TextRenderArg *sprites);
 
 void updateCharSelectMenu(SelectionMenuState *menu) {
     CharacterSelectState *state;
     s32 entryIndex;
-    SelectionEntry *entries;
+    TextRenderArg *entries;
     u8 blinkCounter;
     u32 blinkPhase;
     s16 fullAlpha;
@@ -1183,17 +1164,17 @@ void updateCharSelectMenu(SelectionMenuState *menu) {
                     blinkPhase = blinkCounter & 0xFF;
                     menu->blinkTimers[entryIndex] = blinkCounter;
                     if (blinkPhase < 0x11) {
-                        entries[entryIndex].alpha = fullAlpha - (blinkPhase * 8);
+                        entries[entryIndex].color.paletteAndAlpha = fullAlpha - (blinkPhase * 8);
                     } else {
-                        entries[entryIndex].alpha = (blinkPhase * 8) - 1;
+                        entries[entryIndex].color.paletteAndAlpha = (blinkPhase * 8) - 1;
                     }
                     menu->blinkTimers[entryIndex] = menu->blinkTimers[entryIndex] & 0x1F;
                 } else {
                     menu->blinkTimers[entryIndex] = 0;
-                    entries[entryIndex].alpha = fullAlpha;
+                    entries[entryIndex].color.paletteAndAlpha = fullAlpha;
                 }
             } else {
-                entries[entryIndex].alpha = 0x50;
+                entries[entryIndex].color.paletteAndAlpha = 0x50;
                 menu->blinkTimers[entryIndex] = 0;
             }
             enqueueCallbackBySlotIndex(menu->playerIndex + 0xC, 0, renderTextSprite, &entries[entryIndex]);
@@ -1210,7 +1191,7 @@ void updateCharSelectMenuConfirm(SelectionMenuState *menu) {
     CharacterSelectState *state;
     s32 entryIndex;
     s32 selectedIndex;
-    SelectionEntry *entries;
+    TextRenderArg *entries;
     s32 pad[2];
     s32 numEntries;
 
@@ -1224,15 +1205,15 @@ void updateCharSelectMenuConfirm(SelectionMenuState *menu) {
         do {
             menu->blinkTimers[entryIndex] = 0;
             if (state->cursorIndices[menu->playerIndex] == entryIndex) {
-                entries[entryIndex].alpha = 0xFF;
+                entries[entryIndex].color.paletteAndAlpha = 0xFF;
                 selectedIndex = entryIndex;
                 if (state->frameCounters[menu->playerIndex] & 1) {
-                    entries[entryIndex].blinkState = 0xFF;
+                    entries[entryIndex].overridePaletteCount = 0xFF;
                 } else {
-                    entries[entryIndex].blinkState = 0;
+                    entries[entryIndex].overridePaletteCount = 0;
                 }
             } else {
-                entries[entryIndex].alpha = 0x50;
+                entries[entryIndex].color.paletteAndAlpha = 0x50;
             }
             enqueueCallbackBySlotIndex(menu->playerIndex + 0xC, 0, renderTextSprite, &entries[entryIndex]);
             entryIndex++;
@@ -1240,16 +1221,16 @@ void updateCharSelectMenuConfirm(SelectionMenuState *menu) {
     }
 
     if (state->menuStates[menu->playerIndex] != CHAR_SELECT_MENU_CONFIRMING) {
-        menu->entries[selectedIndex].blinkState = 0;
+        menu->entries[selectedIndex].overridePaletteCount = 0;
         setCallbackWithContinue(updateCharSelectMenu);
     }
 }
 
-void cleanupCharSelectMenu(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupCharSelectMenu(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void initCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
+void initCharSelectPlayerLabels(SpriteRenderArg *arg0) {
     void *dmaResult;
     s32 i;
     s32 index;
@@ -1270,8 +1251,8 @@ void initCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
         arg0[i].y = y;
         y += increment;
         arg0[i].x = x;
-        arg0[i].spriteIndex = i + 2;
-        arg0[i].asset = dmaResult;
+        arg0[i].frameIndex = i + 2;
+        arg0[i].spriteData = dmaResult;
         i++;
     } while (i < 3);
 
@@ -1282,7 +1263,7 @@ void updateCharSelectPlayerLabels(PlayerLabelSpritesState *arg0) {
     s32 i;
     s32 j;
     u16 index;
-    func_80027348_entry *ptr;
+    SpriteRenderArg *ptr;
 
     i = 0;
     if (i < (gGameSessionContext)->numPlayers) {
@@ -1301,8 +1282,8 @@ void updateCharSelectPlayerLabels(PlayerLabelSpritesState *arg0) {
     }
 }
 
-void cleanupCharSelectPlayerLabels(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupCharSelectPlayerLabels(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 // Initialize left/right selection arrows for each player in character select
@@ -1317,7 +1298,7 @@ void initCharSelectArrows(SelectionArrowsState *state) {
     u16 y;
     u16 xInc;
     s32 xIncrement;
-    SelectionEntry *arrow;
+    TextRenderArg *arrow;
     u16 x;
     s32 playerEntryOffset;
     s32 pad[2];
@@ -1344,14 +1325,14 @@ void initCharSelectArrows(SelectionArrowsState *state) {
             do {
                 arrow = &state->entries[playerEntryOffset + arrowIdx];
                 // Volatile ensures these writes happen in order (required for correct sprite rendering)
-                ((volatile SelectionEntry *)arrow)->x = x;
-                ((volatile SelectionEntry *)arrow)->spriteIndex = arrowIdx;
+                ((volatile TextRenderArg *)arrow)->x = x;
+                ((volatile TextRenderArg *)arrow)->frameIndex = arrowIdx;
                 arrowIdx++;
                 arrow->y = y;
-                arrow->asset = arrowAsset;
-                arrow->alpha = 0xFF;
-                arrow->blinkState = 0;
-                arrow->unkC = 0;
+                arrow->spriteData = arrowAsset;
+                arrow->color.paletteAndAlpha = 0xFF;
+                arrow->overridePaletteCount = 0;
+                arrow->tileMode = 0;
                 x += xIncrement;
             } while (arrowIdx < 2);
             state->blinkTimers[playerIdx] = 0;
@@ -1402,18 +1383,18 @@ void updateCharSelectArrows(SelectionArrowsState *state) {
                 }
                 blinkTimer = state->blinkTimers[playerIdx];
                 if (blinkTimer < 0x11) {
-                    state->entries[entryStartIdx + arrowIdx].alpha -= 8;
+                    state->entries[entryStartIdx + arrowIdx].color.paletteAndAlpha -= 8;
                 } else {
-                    state->entries[entryStartIdx + arrowIdx].alpha += 8;
+                    state->entries[entryStartIdx + arrowIdx].color.paletteAndAlpha += 8;
                 }
                 blinkTimer = state->blinkTimers[playerIdx];
                 if (blinkTimer == 0x20) {
-                    state->entries[entryStartIdx + arrowIdx].alpha = 0xFF;
+                    state->entries[entryStartIdx + arrowIdx].color.paletteAndAlpha = 0xFF;
                 }
                 goto enqueue;
             hide_arrow:
                 state->blinkTimers[playerIdx] = 0;
-                state->entries[entryStartIdx + arrowIdx].alpha = 0xFF;
+                state->entries[entryStartIdx + arrowIdx].color.paletteAndAlpha = 0xFF;
             enqueue:
                 enqueueCallbackBySlotIndex(
                     playerIdx + 0xC,
@@ -1424,15 +1405,15 @@ void updateCharSelectArrows(SelectionArrowsState *state) {
             }
         } else {
             state->blinkTimers[playerIdx] = 0;
-            state->entries[playerIdx * 2].alpha = 0xFF;
-            state->entries[(playerIdx * blinkTimer) + 1].alpha = 0xFF;
+            state->entries[playerIdx * 2].color.paletteAndAlpha = 0xFF;
+            state->entries[(playerIdx * blinkTimer) + 1].color.paletteAndAlpha = 0xFF;
         }
         state->blinkTimers[playerIdx] &= 0x1F;
     }
 }
 
-void cleanupCharSelectArrows(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupCharSelectArrows(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void initBoardSelectArrows(SelectionArrowsState *state) {
@@ -1445,7 +1426,7 @@ void initBoardSelectArrows(SelectionArrowsState *state) {
     u16 y;
     u16 xSpacing;
     s32 xOffset;
-    SelectionEntry *arrow;
+    TextRenderArg *arrow;
     u16 x;
     s32 entryOffset;
     s32 pad[2];
@@ -1472,14 +1453,14 @@ void initBoardSelectArrows(SelectionArrowsState *state) {
             x = xBase;
             do {
                 arrow = &state->entries[entryOffset + arrowIdx];
-                ((volatile SelectionEntry *)arrow)->x = x;
-                ((volatile SelectionEntry *)arrow)->spriteIndex = arrowIdx;
+                ((volatile TextRenderArg *)arrow)->x = x;
+                ((volatile TextRenderArg *)arrow)->frameIndex = arrowIdx;
                 arrowIdx++;
                 arrow->y = y;
-                arrow->asset = arrowAsset;
-                arrow->alpha = 0xFF;
-                arrow->blinkState = 0;
-                arrow->unkC = 0;
+                arrow->spriteData = arrowAsset;
+                arrow->color.paletteAndAlpha = 0xFF;
+                arrow->overridePaletteCount = 0;
+                arrow->tileMode = 0;
                 x += xOffset;
             } while (arrowIdx < 2);
             playerIdx++;
@@ -1519,22 +1500,22 @@ void updateBoardSelectArrows(SelectionArrowsState *state) {
 
                 if (timerValue < 0x11) {
                     // Fade in
-                    state->entries[entryStartIdx + arrowIdx].alpha -= 8;
+                    state->entries[entryStartIdx + arrowIdx].color.paletteAndAlpha -= 8;
                 } else {
                     // Fade out
-                    state->entries[entryStartIdx + arrowIdx].alpha += 8;
+                    state->entries[entryStartIdx + arrowIdx].color.paletteAndAlpha += 8;
                 }
 
                 timerValue = state->blinkTimers[playerIdx]; // Reload timer for second check
                 if (timerValue == 0x20) {
                     // Timer reached 0x20 - just set alpha
-                    state->entries[entryStartIdx + arrowIdx].alpha = 0xFF;
+                    state->entries[entryStartIdx + arrowIdx].color.paletteAndAlpha = 0xFF;
                 }
                 goto enqueue;
 
             hide_arrow:
                 state->blinkTimers[playerIdx] = 0;
-                state->entries[entryStartIdx + arrowIdx].alpha = 0xFF;
+                state->entries[entryStartIdx + arrowIdx].color.paletteAndAlpha = 0xFF;
 
             enqueue:
                 enqueueCallbackBySlotIndex(
@@ -1547,19 +1528,19 @@ void updateBoardSelectArrows(SelectionArrowsState *state) {
         } else {
             // Hide arrows
             state->blinkTimers[playerIdx] = 0;
-            state->entries[playerIdx * 2].alpha = 0xFF;
-            state->entries[playerIdx * 2 + 1].alpha = 0xFF;
+            state->entries[playerIdx * 2].color.paletteAndAlpha = 0xFF;
+            state->entries[playerIdx * 2 + 1].color.paletteAndAlpha = 0xFF;
         }
 
         state->blinkTimers[playerIdx] &= 0x1F;
     }
 }
 
-void cleanupBoardSelectArrows(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupBoardSelectArrows(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void initBoardSelectCharNames(CharacterNameSprite *sprites) {
+void initBoardSelectCharNames(TextRenderArg *sprites) {
     CharacterSelectState *gameState;
     void *spriteAsset;
     s32 i;
@@ -1591,26 +1572,26 @@ void initBoardSelectCharNames(CharacterNameSprite *sprites) {
                 xPos = *((u16 *)&charSelectNameSpritePositions + numPlayers * 2) -
                        ((u16 *)&charSelectBoardDataTable[22])[charIndex];
             }
-            sprites[i].spriteIndex = spriteIdx;
+            sprites[i].frameIndex = spriteIdx;
         } else {
             spriteIdx = 0x1D;
             if (gGameSessionContext->numPlayers == 1) {
                 spriteIdx = 0x36;
             }
-            sprites[i].spriteIndex = selectionState + spriteIdx;
+            sprites[i].frameIndex = selectionState + spriteIdx;
         }
-        sprites[i].blinkState = 0;
-        sprites[i].layerDepth = 0;
+        sprites[i].overridePaletteCount = 0;
+        sprites[i].tileMode = 0;
         sprites[i].x = xPos;
         sprites[i].y = yPos;
-        sprites[i].alpha = 0xFF;
-        sprites[i].asset = spriteAsset;
+        sprites[i].color.paletteAndAlpha = 0xFF;
+        sprites[i].spriteData = spriteAsset;
     }
 
     setCallback(updateBoardSelectCharNames);
 }
 
-void updateBoardSelectCharNames(CharacterNameSprite *sprites) {
+void updateBoardSelectCharNames(TextRenderArg *sprites) {
     CharacterSelectState *gameState;
     s32 i;
     u16 selectionState;
@@ -1640,36 +1621,36 @@ void updateBoardSelectCharNames(CharacterNameSprite *sprites) {
                         xPos = charSelectNameSpritePositions[numPlayers].x -
                                ((u16 *)charSelectBoardDataTable)[11 + ((u8)boardId)];
                     }
-                    sprites[i].spriteIndex = spriteIdx;
+                    sprites[i].frameIndex = spriteIdx;
                 } else {
                     spriteIdx = 0x1D;
                     if (numPlayers == 1) {
                         spriteIdx = 0x36;
                     }
-                    sprites[i].spriteIndex = spriteIdx + gameState->characterCategories[i];
+                    sprites[i].frameIndex = spriteIdx + gameState->characterCategories[i];
                 }
             } else {
                 numPlayers = gGameSessionContext->numPlayers;
                 xPos = ((s16 *)charSelectBoardDataTable)[numPlayers * 2];
                 yPos = ((s16 *)charSelectBoardDataTable)[(numPlayers * 2) + 1];
-                sprites[i].spriteIndex = gameState->characterCategories[i] + 0x1D;
+                sprites[i].frameIndex = gameState->characterCategories[i] + 0x1D;
             }
             sprites[i].x = xPos;
             sprites[i].y = yPos;
             if ((((u32)(gameState->menuStates[i] - CHAR_SELECT_CHAR_ROW_FLASH)) <
                  (CHAR_SELECT_CHAR_CONFIRMED - CHAR_SELECT_CHAR_ROW_FLASH + 1)) &&
                 (gameState->frameCounters[i] & 1)) {
-                sprites[i].blinkState = 0xFF;
+                sprites[i].overridePaletteCount = 0xFF;
             } else {
-                sprites[i].blinkState = 0;
+                sprites[i].overridePaletteCount = 0;
             }
             enqueueCallbackBySlotIndex((u16)(i + 0xC), 0, renderTextSprite, &sprites[i]);
         }
     }
 }
 
-void cleanupBoardSelectCharNames(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupBoardSelectCharNames(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
@@ -1683,7 +1664,7 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
     s32 spriteIndex;
     s32 const_1;
     s32 const_ff;
-    volatile SelectionEntry *entry;
+    volatile TextRenderArg *entry;
     s32 pad[4];
 
     (void)pad;
@@ -1701,7 +1682,7 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
     if (numPlayers != 0) {
         const_1 = 1;
         const_ff = 0xFF;
-        entry = (volatile SelectionEntry *)state;
+        entry = (volatile TextRenderArg *)state;
         do {
             if (gameConfig->playerBoardIds[i + 4] >= 9) {
                 spriteIndex = 0x35;
@@ -1712,26 +1693,26 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
                 }
                 spriteIndex = spriteIndex + (gameState + i)[0x18B0];
             }
-            entry->blinkState = 0;
-            entry->unkC = 0;
+            entry->overridePaletteCount = 0;
+            entry->tileMode = 0;
             gameConfig = gGameSessionContext;
             entry->x = xPos;
             entry->y = yPos;
-            entry->alpha = const_ff;
-            entry->spriteIndex = spriteIndex;
-            entry->asset = spriteAsset;
+            entry->color.paletteAndAlpha = const_ff;
+            entry->frameIndex = spriteIndex;
+            entry->spriteData = spriteAsset;
             i++;
             entry++;
         } while (i < gameConfig->numPlayers);
     }
 
     if (gGameSessionContext->numPlayers == 1) {
-        state->singlePlayerX = 0x38;
-        state->singlePlayerY = -0x58;
-        state->singlePlayerAsset = spriteAsset;
-        state->singlePlayerSpriteIndex = 0x42;
+        state->singlePlayerSprite.x = 0x38;
+        state->singlePlayerSprite.y = -0x58;
+        state->singlePlayerSprite.spriteData = spriteAsset;
+        state->singlePlayerSprite.frameIndex = 0x42;
         if (gGameSessionContext->playerBoardIds[4] >= 9) {
-            state->singlePlayerX = 0x50;
+            state->singlePlayerSprite.x = 0x50;
         }
     }
 
@@ -1787,20 +1768,20 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
             }
             arg0->entries[i].x = xPos;
             arg0->entries[i].y = yPos;
-            arg0->entries[i].spriteIndex = spriteIdx;
+            arg0->entries[i].frameIndex = spriteIdx;
             if (gameState->menuStates[i] == CHAR_SELECT_CHAR_CONFIRMED && (gameState->frameCounters[i] & 1)) {
-                arg0->entries[i].blinkState = 0xFF;
+                arg0->entries[i].overridePaletteCount = 0xFF;
             } else {
-                arg0->entries[i].blinkState = 0;
+                arg0->entries[i].overridePaletteCount = 0;
             }
             if (yPos == -0x58) {
                 if (gGameSessionContext->playerBoardIds[i + 4] < 9) {
                     enqueueCallbackBySlotIndex(i + 0xC, 0, renderTextSprite, &arg0->entries[i]);
-                    arg0->singlePlayerX = 0x38;
-                    enqueueCallbackBySlotIndex(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerX);
+                    arg0->singlePlayerSprite.x = 0x38;
+                    enqueueCallbackBySlotIndex(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerSprite);
                 } else {
-                    arg0->singlePlayerX = 0x50;
-                    enqueueCallbackBySlotIndex(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerX);
+                    arg0->singlePlayerSprite.x = 0x50;
+                    enqueueCallbackBySlotIndex(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerSprite);
                 }
             } else {
                 enqueueCallbackBySlotIndex(i + 0xC, 0, renderTextSprite, &arg0->entries[i]);
@@ -1809,11 +1790,11 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
     }
 }
 
-void cleanupCharSelectNameSprites(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupCharSelectNameSprites(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void initCharSelectPlayerNumbers(SimpleSpriteEntry *arg0) {
+void initCharSelectPlayerNumbers(SpriteRenderArg *arg0) {
     void *dmaResult;
     GameSessionContext *global;
     u8 count;
@@ -1821,7 +1802,7 @@ void initCharSelectPlayerNumbers(SimpleSpriteEntry *arg0) {
     s32 spriteOffset;
     u16 x;
     u16 y;
-    volatile SimpleSpriteEntry *ptr;
+    volatile SpriteRenderArg *ptr;
     s32 pad[4];
 
     dmaResult = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
@@ -1839,8 +1820,8 @@ void initCharSelectPlayerNumbers(SimpleSpriteEntry *arg0) {
         do {
             ptr->x = x;
             ptr->y = y;
-            ptr->spriteIndex = spriteOffset + i;
-            ptr->asset = dmaResult;
+            ptr->frameIndex = spriteOffset + i;
+            ptr->spriteData = dmaResult;
             ptr++;
             i++;
         } while (i < global->numPlayers);
@@ -1867,11 +1848,11 @@ void updateCharSelectPlayerNumbers(u8 *arg0) {
     }
 }
 
-void cleanupCharSelectPlayerNumbers(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupCharSelectPlayerNumbers(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void initCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
+void initCharSelectPlayer1NameSprite(SpriteRenderArg *arg0) {
     CharacterSelectState *state;
     void *dmaResult;
 
@@ -1881,23 +1862,23 @@ void initCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
 
     arg0->x = -0x20;
     arg0->y = 8;
-    arg0->spriteIndex = state->characterCategories[0] + 0x16;
-    arg0->asset = dmaResult;
+    arg0->frameIndex = state->characterCategories[0] + 0x16;
+    arg0->spriteData = dmaResult;
 
     setCallback(updateCharSelectPlayer1NameSprite);
 }
 
-void updateCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
+void updateCharSelectPlayer1NameSprite(SpriteRenderArg *arg0) {
     CharacterSelectState *state = getCurrentAllocation();
 
     if (state->menuStates[0] == CHAR_SELECT_CHAR_ROW_BROWSE) {
-        arg0->spriteIndex = state->characterCategories[0] + 0x16;
+        arg0->frameIndex = state->characterCategories[0] + 0x16;
         enqueueCallbackBySlotIndex(0xC, 0, renderSpriteFrame, arg0);
     }
 }
 
-void cleanupCharSelectPlayer1NameSprite(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupCharSelectPlayer1NameSprite(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void initCharSelectPlayer2NameSprites(P2NameAnimationState *state) {
@@ -1910,7 +1891,7 @@ void initCharSelectPlayer2NameSprites(P2NameAnimationState *state) {
     loopCount = (gGameSessionContext->numPlayers == 2) ? 3 : 2;
 
     for (i = 0; i < loopCount; i++) {
-        state->entries[i].asset = dmaResult;
+        state->entries[i].spriteData = dmaResult;
     }
 
     setCleanupCallback(cleanupCharSelectPlayer2NameSprites);
@@ -1925,7 +1906,7 @@ void waitForCharSelectP2NameReveal(P2NameRevealState *arg0) {
     }
 }
 
-void setupCharSelectP2NamePositions(volatile P2NameSpriteEntry *arg0) {
+void setupCharSelectP2NamePositions(volatile SpriteRenderArg *arg0) {
     s32 xBase;
     s32 yBase;
     s32 xIncrement;
@@ -1972,7 +1953,7 @@ void setupCharSelectP2NamePositions(volatile P2NameSpriteEntry *arg0) {
             arg0->y = (s16)y;
             y = y + yInc2;
             arg0->x = (s16)x;
-            arg0->spriteIndex = (s16)(spriteIndexBase + i);
+            arg0->frameIndex = (s16)(spriteIndexBase + i);
             arg0->paletteIndex = (u8)priority;
             arg0++;
             i++;
@@ -1988,7 +1969,7 @@ void animateCharSelectP2NameReveal(P2NameAnimationState *arg0) {
     s32 yIncrement;
     s32 loopCount;
     s32 i;
-    volatile P2NameSpriteEntry *ptr;
+    volatile SpriteRenderArg *ptr;
     CharacterSelectState *state;
     int new_var;
     u16 val;
@@ -2008,7 +1989,7 @@ void animateCharSelectP2NameReveal(P2NameAnimationState *arg0) {
     i = 0;
     if (((s32)(loopCount & 0xFF)) > 0) {
         new_var = loopCount & 0xFF;
-        ptr = (volatile P2NameSpriteEntry *)arg0;
+        ptr = (volatile SpriteRenderArg *)arg0;
         do {
             i += 1;
             ptr->y = ptr->y + yIncrement;
@@ -2059,8 +2040,8 @@ void animateCharSelectP2NameHide(P2NameHideState *arg0) {
     }
 }
 
-void cleanupCharSelectPlayer2NameSprites(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupCharSelectPlayer2NameSprites(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void initCharSelectStats(CharSelectStatsState *arg0) {
@@ -2142,50 +2123,50 @@ void updateCharSelectStats(CharSelectStatsState *arg0) {
     }
 }
 
-void cleanupCharSelectStats(SimpleSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupCharSelectStats(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void initCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state) {
-    state->tiledBackgroundAsset = loadCompressedData(&tiledSnowmanAsset_ROM_START, &tiledSnowmanAsset_ROM_END, 0xAE0);
+    state->tileMapAsset = loadCompressedData(&tiledSnowmanAsset_ROM_START, &tiledSnowmanAsset_ROM_END, 0xAE0);
     setCleanupCallback(cleanupCharSelectBackgroundEffect);
     setCallback(setupCharSelectBackgroundEffect);
 }
 
 void setupCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state) {
-    initScrollingTileMapState(state, (s32)state->tiledBackgroundAsset);
+    initScrollingTileMapState(&state->renderState, state->tileMapAsset);
     setCallback(updateCharSelectBackgroundEffect);
 }
 
 void updateCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state) {
-    state->scrollX++;
-    state->scrollY++;
-    state->scrollX &= 0x3FF;
-    state->scrollY &= 0x3FF;
-    enqueueCallbackBySlotIndex(7, 0, renderTiledTextureMap, state);
+    state->renderState.x++;
+    state->renderState.y++;
+    state->renderState.x &= 0x3FF;
+    state->renderState.y &= 0x3FF;
+    enqueueCallbackBySlotIndex(7, 0, renderTiledTextureMap, &state->renderState);
 }
 
 void cleanupCharSelectBackgroundEffect(CharSelectTiledBackgroundState *state) {
-    state->tiledBackgroundAsset = freeNodeMemory(state->tiledBackgroundAsset);
+    state->tileMapAsset = freeNodeMemory(state->tileMapAsset);
 }
 
-void initCharSelectScaledSprite(ScaledSpriteEntry *arg0) {
+void initCharSelectScaledSprite(FrameSpriteEntry *arg0) {
     void *dmaResult;
 
     dmaResult = loadCompressedData(&menuUiSprites_ROM_START, &menuUiSprites_ROM_END, 0x8A08);
     setCleanupCallback(cleanupCharSelectScaledSprite);
 
-    arg0->spriteIndex = 6;
+    arg0->frameIndex = 6;
     arg0->scaleX = 0x300;
     arg0->scaleY = 0x300;
-    arg0->alpha = 0xFF;
+    arg0->shade.shadeWithPadding = 0xFF;
     arg0->x = 0;
     arg0->y = 0;
     arg0->rotation = 0;
-    arg0->unk13 = 0;
-    arg0->unk12 = 0;
-    arg0->unk14 = 0x80;
-    arg0->asset = dmaResult;
+    arg0->overridePaletteCount = 0;
+    arg0->tileMode = 0;
+    arg0->alpha = 0x80;
+    arg0->spriteData = dmaResult;
 
     setCallback(renderCharSelectScaledSprite);
 }
@@ -2194,11 +2175,11 @@ void renderCharSelectScaledSprite(void *arg0) {
     enqueueCallbackBySlotIndex(0xC, 7, renderScaledAlphaSpriteFrame, arg0);
 }
 
-void cleanupCharSelectScaledSprite(ScaledSpriteEntry *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupCharSelectScaledSprite(FrameSpriteEntry *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void updateCharSelectPreviewLighting(CharSelectPreviewModel *arg0, u8 arg1) {
+void updateCharSelectPreviewLighting(CharSelectPreviewTaskState *arg0, u8 arg1) {
     u8 *allocation;
     u8 byte;
     u8 val;
@@ -2208,25 +2189,25 @@ void updateCharSelectPreviewLighting(CharSelectPreviewModel *arg0, u8 arg1) {
 
     if (byte == 1) {
         val = 0x50;
-        arg0->lightR = val;
-        arg0->lightG = val;
-        arg0->lightB = val;
+        arg0->displayObject.light1R = val;
+        arg0->displayObject.light1G = val;
+        arg0->displayObject.light1B = val;
     } else if (byte == 0) {
         val = 0xFF;
-        arg0->lightR = val;
-        arg0->lightG = val;
-        arg0->lightB = val;
+        arg0->displayObject.light1R = val;
+        arg0->displayObject.light1G = val;
+        arg0->displayObject.light1B = val;
         val = 0x80;
     } else {
         val = 0xFF;
-        arg0->lightR = val;
-        arg0->lightG = val;
-        arg0->lightB = val;
+        arg0->displayObject.light1R = val;
+        arg0->displayObject.light1G = val;
+        arg0->displayObject.light1B = val;
     }
 
-    arg0->ambientR = val;
-    arg0->ambientG = val;
-    arg0->ambientB = val;
+    arg0->displayObject.light2R = val;
+    arg0->displayObject.light2G = val;
+    arg0->displayObject.light2B = val;
 }
 
 u8 getItemStat1(u8 itemIndex) {

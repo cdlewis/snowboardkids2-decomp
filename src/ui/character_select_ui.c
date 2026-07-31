@@ -144,8 +144,11 @@ CharSelectArrowData charSelectArrowDataTable = {
      },
 };
 
-s16 charSelectNamePositions[] = {
-    0x0000, 0x0030, (s16)0xFFE8, (s16)0xFFA8, 0x0030, (s16)0xFFD4, (s16)0xFFF0, (s16)0xFFD4,
+Vec2s charSelectNamePositions[] = {
+    { 0x0000,      0x0030      },
+    { (s16)0xFFE8, (s16)0xFFA8 },
+    { 0x0030,      (s16)0xFFD4 },
+    { (s16)0xFFF0, (s16)0xFFD4 },
 };
 
 CharSelectBoardData charSelectBoardDataTable = {
@@ -173,8 +176,11 @@ CharSelectBoardData charSelectBoardDataTable = {
      0x003B, },
 };
 
-s16 charSelectNameSpritePositions[] = {
-    0x0032, 0x0000, 0x0068, (s16)0xFFA8, 0x0070, (s16)0xFFD4, 0x0030, (s16)0xFFD4,
+Vec2s charSelectNameSpritePositions[] = {
+    { 0x0032, 0x0000      },
+    { 0x0068, (s16)0xFFA8 },
+    { 0x0070, (s16)0xFFD4 },
+    { 0x0030, (s16)0xFFD4 },
 };
 
 CharSelectAnimData charSelectAnimDataTable = {
@@ -298,7 +304,7 @@ void initCharacterSelectScreen(void) {
         task = scheduleTask(initCharSelectBoardModel, 0, 0, 0x5A);
         ((CharSelectBoardPreview *)task)->playerIndex = i;
         task = scheduleTask(initCharSelectPreviewModel, 0, 0, 0x5A);
-        ((CharSelectPreviewModel *)task)->playerIndex = i;
+        ((CharSelectPreviewTaskState *)task)->playerIndex = i;
         task = scheduleTask(initCharSelectMenu, 0, 0, 0x5A);
         ((SelectionMenuState *)task)->playerIndex = i;
         task = scheduleTask(initCharSelectIconHideSprites, 0, 0, 0x5A);
@@ -511,7 +517,7 @@ void updateCharacterSelect(void) {
 
                     secondaryTask = scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
                     if (secondaryTask != 0) {
-                        ((CharSelectSecondarySlot *)secondaryTask)->playerIndex = i;
+                        ((CharSelectPreviewTaskState *)secondaryTask)->playerIndex = i;
                     }
                     playSoundEffectOnChannelNoPriority(0x2B, i);
                 } else if (gControllerInputs[i] & CONT_A) {
@@ -663,7 +669,7 @@ void updateCharacterSelect(void) {
                     }
                     secondaryTask = scheduleTask(&initCharSelectSecondarySlot, 2, i, 0x59);
                     if (secondaryTask != 0) {
-                        ((CharSelectSecondarySlot *)secondaryTask)->playerIndex = i;
+                        ((CharSelectPreviewTaskState *)secondaryTask)->playerIndex = i;
                         break;
                     }
                 } else {

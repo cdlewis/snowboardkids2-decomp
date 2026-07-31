@@ -809,3 +809,18 @@ field offsets.
 When replacing a local sprite copy whose shade was declared as a single `s16`, assign
 `FrameSpriteEntry.shade.shadeWithPadding` rather than only its named intensity byte. This retains KMC's original
 halfword store while still using the common renderer definition.
+
+## Consolidate Character-Select Task Views Around Their Renderer Prefix
+
+The character-select primary preview, outgoing slide, and secondary preview task records all share the same
+layout: a complete `DisplayListObject`, three trailing `Transform3D` values, a slide target, and task-state
+bytes. One `CharSelectPreviewTaskState` can represent every callback in that lifecycle. In particular, the
+four asset pointers at offsets `0x20` through `0x2C` are the display-list pointer and three segment pointers,
+while the bytes at `0x34` through `0x3A` are the renderer's two light colors. Using those canonical fields
+eliminates padded cleanup-only views without changing the generated code.
+
+Character-select sprite records likewise map directly to `SpriteRenderArg`, `TextRenderArg`, and
+`FrameSpriteEntry`. A local `s16 alpha` at `0x0A` is the packed `TextRenderArg.color.paletteAndAlpha`, and a
+local `s16 alpha` at `0x10` of the scaled-sprite record is actually
+`FrameSpriteEntry.shade.shadeWithPadding`; its true alpha byte is at `0x14`. Preserve the packed halfword
+assignments when adopting the shared types so KMC retains its original stores.
