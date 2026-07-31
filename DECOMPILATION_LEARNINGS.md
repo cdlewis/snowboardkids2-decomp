@@ -837,3 +837,16 @@ KMC GCC 2.7.2 and the modern syntax checker disagree about the size of a union c
 with `Transform3D`; KMC moved the trailing render-matrix pointer from offset `0x30` to `0x10` even though the
 modern checker accepted the expected layout. Avoid that union and use the explicit initialization view when
 the original code relies on overlapping storage.
+
+## Reuse Renderer Arguments in Unlock-Screen Tasks
+
+Unlock-screen task payloads contain the canonical renderer arguments directly. The digit, prompt, and sold-out
+sprites are `SpriteRenderArg`; the scrolling arrows and selected-item overlays are `TextRenderArg`; stat labels
+are `TextData`; and the title block is a complete `TextLayoutArg`. A local `s16 alpha` at offset `0x0A` must map
+to `TextRenderArg.color.paletteAndAlpha`, not just its alpha byte, because the original code uses halfword loads,
+stores, and arithmetic. Similarly, byte `0x0D` is `overridePaletteCount`, which the unlock screen toggles to
+flash selected item graphics.
+
+Cleanup-only structs that expose pointers at offsets `0x04` or `0x38` can often be removed once the complete
+task state embeds these renderer types. Accessing `spriteData` or `fontAsset` through the owning task state
+preserves the same offsets while documenting which resource is released.

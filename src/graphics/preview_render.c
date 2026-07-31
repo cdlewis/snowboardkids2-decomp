@@ -340,14 +340,14 @@ void initBoardShopBackgroundRenderState(BoardShopBackgroundState *arg0);
 void cleanupBoardShopBackground(BoardShopBackgroundState *arg0);
 void cleanupBoardShopColumnSelectorArrow(void *);
 void updateBoardShopExitOverlay(void *arg0);
-void cleanupBoardShopExitOverlay(SpriteDisplayState *arg0);
+void cleanupBoardShopExitOverlay(SpriteRenderArg *arg0);
 void updateBoardShopTitleCorners(BoardShopTitleCornerState *arg0);
 void cleanupBoardShopTitleCorners(BoardShopTitleCornerState *arg0);
 void updateBoardShopTitleText(BoardShopTitleTextUpdateArg *arg0);
 void cleanupBoardShopTitleText(BoardShopTitleTextCleanupArg *arg0);
 void animateBoardShopSnowflakeSlideIn(BoardShopSnowflakeAnimState *arg0);
 void queueBoardShopSnowflakeRender(void *);
-void cleanupBoardShopSnowflakeSprite(SpriteDisplayState *);
+void cleanupBoardShopSnowflakeSprite(SpriteRenderArg *);
 void cleanupBoardShopBoardIcons(BoardShopBoardIconsState *arg0);
 void freeBoardShopCharacterTransitionAssets(func_800319C8_325C8_arg *arg0);
 void animateBoardShopCharacterTransition(func_80031944_32544_arg *arg0);
@@ -1156,13 +1156,13 @@ void cleanupBoardShopColumnSelectorArrow(void *arg0) {
     temp->asset = freeNodeMemory(temp->asset);
 }
 
-void initBoardShopExitOverlay(SpriteDisplayState *arg0) {
+void initBoardShopExitOverlay(SpriteRenderArg *arg0) {
     void *overlayAsset = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
     setCleanupCallback(&cleanupBoardShopExitOverlay);
     arg0->x = -0x2C;
     arg0->y = -0x14;
-    arg0->spriteIndex = 0xD;
-    arg0->asset = overlayAsset;
+    arg0->frameIndex = 0xD;
+    arg0->spriteData = overlayAsset;
     setCallback(&updateBoardShopExitOverlay);
 }
 
@@ -1175,8 +1175,8 @@ void updateBoardShopExitOverlay(void *arg0) {
     }
 }
 
-void cleanupBoardShopExitOverlay(SpriteDisplayState *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupBoardShopExitOverlay(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void initBoardShopGoldDisplay(BoardShopGoldDisplayState *arg0) {
@@ -1556,8 +1556,8 @@ void animateBoardShopSnowflakeSlideIn(BoardShopSnowflakeAnimState *arg0) {
     }
 }
 
-void cleanupBoardShopSnowflakeSprite(SpriteDisplayState *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupBoardShopSnowflakeSprite(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void initBoardShopTitleText(BoardShopTitleTextState *arg0) {

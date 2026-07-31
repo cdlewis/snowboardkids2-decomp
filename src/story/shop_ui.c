@@ -24,16 +24,6 @@ struct StoryMapShopBackgroundState {
     void *backgroundAsset;
 };
 
-struct StoryMapShopItemIconState {
-    s16 x;
-    s16 y;
-    void *asset;
-    s16 spriteIndex;
-    s16 alpha;
-    s8 unkC;
-    u8 unkD;
-};
-
 typedef struct {
     s16 unk0;
     s16 unk2;
@@ -61,7 +51,7 @@ typedef struct {
 } S0;
 
 typedef struct {
-    SpriteDisplayState digits[6];
+    SpriteRenderArg digits[6];
     u8 unk48[0x18];
     char priceBuffer[8];
 } StoryMapShopItemPriceDisplayState;
@@ -74,27 +64,10 @@ struct StoryMapShopFairyState {
 };
 
 struct StoryMapShopGoldDisplayState {
-    SpriteDisplayState digits[7];
+    SpriteRenderArg digits[7];
     SpriteRenderArg goldIcon;
     char goldAmountBuffer[8];
 };
-
-typedef struct {
-    u8 _pad[0x4];
-    void *unk4;
-} func_8002FF28_30B28_arg;
-
-typedef struct {
-    u8 _pad[0x4];
-    void *unk4;
-    u8 _pad2[0x30];
-    void *unk38;
-} UnlockScreenItemIconsCleanupArg;
-
-typedef struct {
-    u8 _pad[0x4];
-    void *unk4;
-} func_80030668_31268_arg;
 
 typedef struct {
     s16 itemOffsets[2];
@@ -137,7 +110,7 @@ u8 boardShopChooseBoardPromptText[64] = { _("Which board do you want@") };
 void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *);
 void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0);
 void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0);
-void cleanupStoryMapShopItemPriceDisplay(func_80030668_31268_arg *);
+void cleanupStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *);
 void updateStoryMapShopFairyInitial(StoryMapShopFairyState *);
 void updateStoryMapShopFairy(StoryMapShopFairyState *);
 void destroyStoryMapShopFairy(StoryMapShopFairyState *);
@@ -156,18 +129,18 @@ void initStoryMapShopBackgroundRenderState(StoryMapShopBackgroundState *);
 void enqueueStoryMapShopBackgroundRender(void *);
 void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *);
 void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *);
-void cleanupUnlockScreenScrollArrows(func_8002FF28_30B28_arg *arg0);
-void updateStoryMapShopItemIcon(StoryMapShopItemIconState *);
-void cleanupStoryMapShopItemIcon(StoryMapShopItemIconState *);
-void updateStoryMapShopItemStatLabel(ScrollArrowSprite *);
-void cleanupStoryMapShopItemStatLabel(func_8002FF28_30B28_arg *);
+void cleanupUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *state);
+void updateStoryMapShopItemIcon(TextRenderArg *);
+void cleanupStoryMapShopItemIcon(TextRenderArg *);
+void updateStoryMapShopItemStatLabel(TextRenderArg *);
+void cleanupStoryMapShopItemStatLabel(TextRenderArg *);
 void updateStoryMapShopExitOverlay(void *arg0);
-void cleanupStoryMapShopExitOverlay(func_8002FF28_30B28_arg *arg0);
-void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0);
+void cleanupStoryMapShopExitOverlay(SpriteRenderArg *arg0);
+void updateStoryMapShopItemStatsDisplay(UnlockScreenItemStatsDisplay *arg0);
 void updateStoryMapShopSoldOutLabel(void *);
-void cleanupStoryMapShopSoldOutLabel(SpriteDisplayState *);
+void cleanupStoryMapShopSoldOutLabel(SpriteRenderArg *);
 void drawUnlockScreenItemIcons(void *);
-void cleanupUnlockScreenItemIcons(UnlockScreenItemIconsCleanupArg *);
+void cleanupUnlockScreenItemIcons(UnlockScreenItemIconsState *);
 void updateDebugCameraYState(cameraState *arg0);
 
 void *loadTextRenderAsset(s32);
@@ -582,11 +555,11 @@ void initUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *state) {
     for (i = 0; i < 2; i++) {
         state->arrows[i].x = -0x40 + i * 0x60;
         state->arrows[i].y = -0x18;
-        state->arrows[i].spriteIndex = i;
-        state->arrows[i].asset = asset;
-        state->arrows[i].alpha = 0xFF;
-        state->arrows[i].unkD = 0;
-        state->arrows[i].unkC = 0;
+        state->arrows[i].frameIndex = i;
+        state->arrows[i].spriteData = asset;
+        state->arrows[i].color.paletteAndAlpha = 0xFF;
+        state->arrows[i].overridePaletteCount = 0;
+        state->arrows[i].tileMode = 0;
     }
 
     state->animationCounter = 0;
@@ -603,39 +576,39 @@ void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arrowState) {
             arrowState->animationCounter++;
             if (state->modeData.unlockScreen.unlockedItemCount >= 3) {
                 if ((u8)(arrowState->animationCounter) < 0x11) {
-                    arrowState->arrows[0].alpha -= 8;
-                    arrowState->arrows[1].alpha -= 8;
+                    arrowState->arrows[0].color.paletteAndAlpha -= 8;
+                    arrowState->arrows[1].color.paletteAndAlpha -= 8;
                 } else {
-                    arrowState->arrows[0].alpha += 8;
-                    arrowState->arrows[1].alpha += 8;
+                    arrowState->arrows[0].color.paletteAndAlpha += 8;
+                    arrowState->arrows[1].color.paletteAndAlpha += 8;
                 }
             } else if (state->modeData.unlockScreen.unlockedItemCount == 2) {
                 if ((u8)(arrowState->animationCounter) < 0x11) {
                     if (state->modeData.unlockScreen.selectedItemIndex == 1) {
-                        arrowState->arrows[1].alpha = 0xFF;
-                        arrowState->arrows[0].alpha -= 8;
+                        arrowState->arrows[1].color.paletteAndAlpha = 0xFF;
+                        arrowState->arrows[0].color.paletteAndAlpha -= 8;
                     } else {
-                        arrowState->arrows[0].alpha = 0xFF;
-                        arrowState->arrows[1].alpha -= 8;
+                        arrowState->arrows[0].color.paletteAndAlpha = 0xFF;
+                        arrowState->arrows[1].color.paletteAndAlpha -= 8;
                     }
                 } else {
                     if (state->modeData.unlockScreen.selectedItemIndex == 1) {
-                        arrowState->arrows[1].alpha = 0xFF;
-                        arrowState->arrows[0].alpha += 8;
+                        arrowState->arrows[1].color.paletteAndAlpha = 0xFF;
+                        arrowState->arrows[0].color.paletteAndAlpha += 8;
                     } else {
-                        arrowState->arrows[0].alpha = 0xFF;
-                        arrowState->arrows[1].alpha += 8;
+                        arrowState->arrows[0].color.paletteAndAlpha = 0xFF;
+                        arrowState->arrows[1].color.paletteAndAlpha += 8;
                     }
                 }
             } else {
                 arrowState->animationCounter = 0;
-                arrowState->arrows[0].alpha = 0xFF;
-                arrowState->arrows[1].alpha = 0xFF;
+                arrowState->arrows[0].color.paletteAndAlpha = 0xFF;
+                arrowState->arrows[1].color.paletteAndAlpha = 0xFF;
             }
         } else {
             arrowState->animationCounter = 0;
-            arrowState->arrows[0].alpha = 0xFF;
-            arrowState->arrows[1].alpha = 0xFF;
+            arrowState->arrows[0].color.paletteAndAlpha = 0xFF;
+            arrowState->arrows[1].color.paletteAndAlpha = 0xFF;
         }
 
         arrowState->animationCounter &= 0x1F;
@@ -646,11 +619,11 @@ void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arrowState) {
     }
 }
 
-void cleanupUnlockScreenScrollArrows(func_8002FF28_30B28_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *state) {
+    state->arrows[0].spriteData = freeNodeMemory(state->arrows[0].spriteData);
 }
 
-void initStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
+void initStoryMapShopItemIcon(TextRenderArg *iconState) {
     void *dmaResult;
     GameState *state;
     u8 itemValue;
@@ -667,24 +640,24 @@ void initStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
         u8 tempValue;
         iconState->x = -0x30;
         tempValue = state->modeData.unlockScreen.itemIds[state->modeData.unlockScreen.selectedItemIndex];
-        iconState->spriteIndex = (tempValue / 3) + 0x1D;
+        iconState->frameIndex = (tempValue / 3) + 0x1D;
     } else {
         s16 tableVal = D_8008F0B0_8FCB0.D_8008F0C6_8FCC6_field[itemValue - 9] + 0x18;
         s16 tableVal2 = D_8008F0C6_8FCC6[itemValue];
 
-        iconState->spriteIndex = itemValue + 0x23;
+        iconState->frameIndex = itemValue + 0x23;
         iconState->x = ((0x120 - tableVal) / 2) - tableVal2 - 0x96;
     }
 
-    iconState->alpha = 0xFF;
-    iconState->unkC = 0;
-    iconState->unkD = 0;
-    iconState->asset = dmaResult;
+    iconState->color.paletteAndAlpha = 0xFF;
+    iconState->tileMode = 0;
+    iconState->overridePaletteCount = 0;
+    iconState->spriteData = dmaResult;
 
     setCallback(updateStoryMapShopItemIcon);
 }
 
-void updateStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
+void updateStoryMapShopItemIcon(TextRenderArg *iconState) {
     GameState *state;
     s32 pad;
     u8 itemValue;
@@ -696,18 +669,18 @@ void updateStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
             itemValue = masked;
             if (itemValue < 9) {
                 iconState->x = -0x30;
-                iconState->spriteIndex = (masked / 3) + 0x1D;
+                iconState->frameIndex = (masked / 3) + 0x1D;
             } else {
                 s16 tableVal = D_8008F0B0_8FCB0.D_8008F0C6_8FCC6_field[masked - 9];
                 s16 tableVal2 = D_8008F0C6_8FCC6[masked];
-                iconState->spriteIndex = masked + 0x23;
+                iconState->frameIndex = masked + 0x23;
                 iconState->x = (((0x120 - ((s16)(tableVal + 0x18))) / 2) - tableVal2) - 0x96;
             }
             if (state->modeData.unlockScreen.screenPhase == 3) {
                 if (state->modeData.unlockScreen.frameCounter & 1) {
-                    iconState->unkD = 0xFF;
+                    iconState->overridePaletteCount = 0xFF;
                 } else {
-                    iconState->unkD = 0;
+                    iconState->overridePaletteCount = 0;
                 }
             }
             itemValue = 0;
@@ -716,11 +689,11 @@ void updateStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
     }
 }
 
-void cleanupStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
-    iconState->asset = freeNodeMemory(iconState->asset);
+void cleanupStoryMapShopItemIcon(TextRenderArg *iconState) {
+    iconState->spriteData = freeNodeMemory(iconState->spriteData);
 }
 
-void initStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
+void initStoryMapShopItemStatLabel(TextRenderArg *arg0) {
     GameState *state;
     void *dmaResult;
     u8 itemValue;
@@ -735,22 +708,22 @@ void initStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
 
     if (itemValue < 9) {
         arg0->x = 0x12;
-        arg0->spriteIndex = ((itemValue % 3) & 0xFF) + 0x24;
+        arg0->frameIndex = ((itemValue % 3) & 0xFF) + 0x24;
     } else {
         s16 tableVal = D_8008F0B0_8FCB0.D_8008F0C6_8FCC6_field[itemValue - 9];
-        arg0->spriteIndex = 0x35;
+        arg0->frameIndex = 0x35;
         arg0->x = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
     }
 
-    arg0->alpha = 0xFF;
-    arg0->unkC = 0;
-    arg0->unkD = 0;
-    arg0->asset = dmaResult;
+    arg0->color.paletteAndAlpha = 0xFF;
+    arg0->tileMode = 0;
+    arg0->overridePaletteCount = 0;
+    arg0->spriteData = dmaResult;
 
     setCallback(updateStoryMapShopItemStatLabel);
 }
 
-void updateStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
+void updateStoryMapShopItemStatLabel(TextRenderArg *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
     u8 itemValue;
 
@@ -763,18 +736,18 @@ void updateStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
     if (state->modeData.unlockScreen.screenPhase != 0 && state->modeData.unlockScreen.screenPhase != 2) {
         if (itemValue < 9) {
             arg0->x = 0x12;
-            arg0->spriteIndex = ((itemValue & 0x1F) % 3) + 0x24;
+            arg0->frameIndex = ((itemValue & 0x1F) % 3) + 0x24;
         } else {
             s16 tableVal = D_8008F0B0_8FCB0.D_8008F0C6_8FCC6_field[itemValue - 9];
-            arg0->spriteIndex = 0x35;
+            arg0->frameIndex = 0x35;
             arg0->x = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
         }
 
         if (state->modeData.unlockScreen.screenPhase == 3) {
             if (state->modeData.unlockScreen.frameCounter & 1) {
-                arg0->unkD = 0xFF;
+                arg0->overridePaletteCount = 0xFF;
             } else {
-                arg0->unkD = 0;
+                arg0->overridePaletteCount = 0;
             }
         }
 
@@ -782,19 +755,19 @@ void updateStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
     }
 }
 
-void cleanupStoryMapShopItemStatLabel(func_8002FF28_30B28_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupStoryMapShopItemStatLabel(TextRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void initStoryMapShopExitOverlay(SpriteDisplayState *arg0) {
+void initStoryMapShopExitOverlay(SpriteRenderArg *arg0) {
     void *overlayAsset = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
 
     setCleanupCallback(&cleanupStoryMapShopExitOverlay);
 
     arg0->x = -0x2C;
     arg0->y = -0x14;
-    arg0->spriteIndex = 0xD;
-    arg0->asset = overlayAsset;
+    arg0->frameIndex = 0xD;
+    arg0->spriteData = overlayAsset;
 
     setCallback(&updateStoryMapShopExitOverlay);
 }
@@ -807,8 +780,8 @@ void updateStoryMapShopExitOverlay(void *arg0) {
     }
 }
 
-void cleanupStoryMapShopExitOverlay(func_8002FF28_30B28_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupStoryMapShopExitOverlay(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void initStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
@@ -823,7 +796,7 @@ void initStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     for (i = 0; i < 7; i++) {
         arg0->digits[i].x = 0x48 + (i * 8);
         arg0->digits[i].y = 0x58;
-        arg0->digits[i].asset = digitSpriteAsset;
+        arg0->digits[i].spriteData = digitSpriteAsset;
     }
 
     arg0->goldIcon.x = 0x38;
@@ -836,7 +809,7 @@ void initStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
 
 void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     s32 i;
-    SpriteDisplayState *digit;
+    SpriteRenderArg *digit;
     s8 paletteIndex;
     s32 space;
 
@@ -862,7 +835,7 @@ void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     do {
         char c = arg0->goldAmountBuffer[i];
         if (c != space) {
-            digit->spriteIndex = c - '0';
+            digit->frameIndex = c - '0';
             enqueueCallbackBySlotIndex(8, 0, &renderSpriteFrameWithPalette, digit);
         }
         digit++;
@@ -872,11 +845,11 @@ void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
 }
 
 void cleanupStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
-    arg0->digits[0].asset = freeNodeMemory(arg0->digits[0].asset);
+    arg0->digits[0].spriteData = freeNodeMemory(arg0->digits[0].spriteData);
     arg0->goldIcon.spriteData = freeNodeMemory(arg0->goldIcon.spriteData);
 }
 
-void initStoryMapShopItemPriceDisplay(SpriteDisplayState *arg0) {
+void initStoryMapShopItemPriceDisplay(SpriteRenderArg *arg0) {
     void *digitSpriteAsset;
     s32 i;
     s32 y;
@@ -892,7 +865,7 @@ void initStoryMapShopItemPriceDisplay(SpriteDisplayState *arg0) {
     do {
         arg0[i].x = x;
         arg0[i].y = y;
-        arg0[i].asset = digitSpriteAsset;
+        arg0[i].spriteData = digitSpriteAsset;
         i++;
         x += 8;
     } while (i < 6);
@@ -905,7 +878,7 @@ void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0)
     s32 i;
     u8 itemValue;
     s32 price;
-    SpriteDisplayState *digit;
+    SpriteRenderArg *digit;
     s8 paletteIndex;
     s32 space;
 
@@ -943,18 +916,18 @@ void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0)
     do {
         char c = arg0->priceBuffer[i];
         if (c != space) {
-            digit->spriteIndex = c - '0';
+            digit->frameIndex = c - '0';
             enqueueCallbackBySlotIndex(8, 0, &renderSpriteFrameWithPalette, digit);
         }
         digit++;
     } while (++i < 6);
 }
 
-void cleanupStoryMapShopItemPriceDisplay(func_80030668_31268_arg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
+void cleanupStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *state) {
+    state->digits[0].spriteData = freeNodeMemory(state->digits[0].spriteData);
 }
 
-void initStoryMapShopItemStatsDisplay(ItemStatsDisplay *display) {
+void initStoryMapShopItemStatsDisplay(UnlockScreenItemStatsDisplay *display) {
     void *spriteAsset;
     s32 i;
 
@@ -973,14 +946,14 @@ void initStoryMapShopItemStatsDisplay(ItemStatsDisplay *display) {
     for (i = 0; i < 3; i++) {
         display->statLabels[i].y = 0x1C + (i * 8);
         display->statLabels[i].x = 0xC;
-        display->statLabels[i].text = display->statBuffers[i];
+        display->statLabels[i].string = (u8 *)display->statBuffers[i];
         display->statLabels[i].palette = 0;
     }
 
     setCallback(updateStoryMapShopItemStatsDisplay);
 }
 
-void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
+void updateStoryMapShopItemStatsDisplay(UnlockScreenItemStatsDisplay *arg0) {
     GameState *state;
     s16 progressBarY;
     s32 currentItem;
@@ -1028,20 +1001,20 @@ void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
     }
 }
 
-void cleanupStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
+void cleanupStoryMapShopItemStatsDisplay(UnlockScreenItemStatsDisplay *arg0) {
     arg0->progressBarAsset = freeNodeMemory(arg0->progressBarAsset);
     arg0->priceLabelSprite.spriteData = freeNodeMemory(arg0->priceLabelSprite.spriteData);
 }
 
-void initStoryMapShopSoldOutLabel(SpriteDisplayState *arg0) {
+void initStoryMapShopSoldOutLabel(SpriteRenderArg *arg0) {
     void *temp_s1 = loadCompressedData(&uiCornerSprites_ROM_START, &uiCornerSprites_ROM_END, 0x1548);
 
     setCleanupCallback(&cleanupStoryMapShopSoldOutLabel);
 
     arg0->x = -0x2C;
     arg0->y = -0x18;
-    arg0->asset = temp_s1;
-    arg0->spriteIndex = 5;
+    arg0->spriteData = temp_s1;
+    arg0->frameIndex = 5;
 
     setCallback(&updateStoryMapShopSoldOutLabel);
 }
@@ -1055,8 +1028,8 @@ void updateStoryMapShopSoldOutLabel(void *arg0) {
     }
 }
 
-void cleanupStoryMapShopSoldOutLabel(SpriteDisplayState *arg0) {
-    arg0->asset = freeNodeMemory(arg0->asset);
+void cleanupStoryMapShopSoldOutLabel(SpriteRenderArg *arg0) {
+    arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
 void initUnlockScreenItemIcons(UnlockScreenItemIconsState *arg0) {
@@ -1071,17 +1044,17 @@ void initUnlockScreenItemIcons(UnlockScreenItemIconsState *arg0) {
     for (i = 0; i < 4; i++) {
         arg0->items[i].x = (i & 1) * 0x80 - 0x80;
         arg0->items[i].y = (i / 2) * 0x10 - 0x66;
-        arg0->items[i].asset = iconAsset;
-        arg0->items[i].spriteIndex = i;
+        arg0->items[i].spriteData = iconAsset;
+        arg0->items[i].frameIndex = i;
     }
 
-    arg0->titleX = -0x68;
-    arg0->titleY = -0x60;
-    arg0->titleData = boardShopChooseBoardPromptText;
-    arg0->titleAsset = titleAsset;
-    arg0->titleAlpha1 = 0xFF;
-    arg0->titleAlpha2 = 0xFF;
-    arg0->titlePalette = 5;
+    arg0->title.startX = -0x68;
+    arg0->title.startY = -0x60;
+    arg0->title.textData = (u16 *)boardShopChooseBoardPromptText;
+    arg0->title.fontAsset = titleAsset;
+    arg0->title.shade.value = 0xFF;
+    arg0->title.textAlpha.value = 0xFF;
+    arg0->title.paletteIndex = 5;
 
     setCallback(&drawUnlockScreenItemIcons);
 }
@@ -1096,14 +1069,14 @@ void drawUnlockScreenItemIcons(void *untypedArg0) {
     if (alloc->modeData.unlockScreen.showItemIcons != 0) {
         for (i = 0; i < 4; i++) {
             enqueueCallbackBySlotIndex(8, 0, &renderSpriteFrame, &arg0->items[i]);
-            enqueueCallbackBySlotIndex(8, 1, &renderTextLayout, &arg0->titleX);
+            enqueueCallbackBySlotIndex(8, 1, &renderTextLayout, &arg0->title);
         }
     }
 }
 
-void cleanupUnlockScreenItemIcons(UnlockScreenItemIconsCleanupArg *arg0) {
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk38 = freeNodeMemory(arg0->unk38);
+void cleanupUnlockScreenItemIcons(UnlockScreenItemIconsState *arg0) {
+    arg0->items[0].spriteData = freeNodeMemory(arg0->items[0].spriteData);
+    arg0->title.fontAsset = freeNodeMemory(arg0->title.fontAsset);
 }
 
 s32 getLockedShopItemIndices(u8 *buffer) {
