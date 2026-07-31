@@ -867,3 +867,11 @@ origin. Embedding the complete renderer state removes padding arrays and keeps t
 KMC can also change an object's trailing text padding after a raw byte access is replaced with a typed field
 access, even when the function's instructions match. If subsequent objects shift, compare the end of the
 affected object's `.text` section and preserve its original section alignment explicitly.
+
+## Reuse Shared Frame Blobs Across Related Item-Box Effects
+
+The present-box model transition's decompressed frame buffer uses the same `0x180`-byte element layout as
+`GameStateUnk44.itemBoxBurstFrames`. Use the shared `ItemBoxBurstFrameData` type for both effects instead of a
+file-local struct containing one unknown word and `0x17C` bytes of padding. The typed frame pointer can be passed
+directly as segment 2 data; taking the address of a synthetic first field is unnecessary and generates the same
+code.

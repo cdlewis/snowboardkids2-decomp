@@ -8,23 +8,6 @@
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-typedef struct {
-    s32 unk0;
-    u8 padding[0x17C];
-} TransitionEffectFrame;
-
-struct ModelTransitionEffectState {
-    /* 0x00 */ SceneModel *model;
-    /* 0x04 */ void *animationTable;
-    /* 0x08 */ OutputStruct_19E80 tableEntry;
-    /* 0x14 */ Transform3D transformMatrix;
-    /* 0x34 */ Mtx *lookAtMatrix;
-    /* 0x38 */ void *segmentData;
-    /* 0x3C */ s32 currentFrame;
-    /* 0x40 */ s32 effectVariant;
-    /* 0x44 */ TransitionEffectFrame *frameBuffer;
-};
-
 extern Gfx *gDisplayListAllocPtr;
 
 void setupModelTransitionVariant(ModelTransitionEffectState *);
@@ -46,9 +29,9 @@ void initCameraRotationTask(CameraRotationTaskState *state) {
     state->rotationZ = 0;
     state->rotationY = 0;
     state->rotationX = 0;
-    state->unkE = 0;
-    state->unkC = 0;
-    state->unkA = 0;
+    state->angularAccelerationZ = 0;
+    state->angularAccelerationY = 0;
+    state->angularAccelerationX = 0;
     state->angularVelocityZ = 0;
     state->angularVelocityY = 0;
     state->angularVelocityX = 0;
@@ -57,7 +40,6 @@ void initCameraRotationTask(CameraRotationTaskState *state) {
 
 void updateCameraRotationTask(CameraRotationTaskState *state) {
     Transform3D cameraTransform;
-    s32 *positionPtr;
 
     if (state->model->isDestroyed == 1) {
         terminateCurrentTask();
@@ -70,9 +52,9 @@ void updateCameraRotationTask(CameraRotationTaskState *state) {
             state->rotationZ = 0;
             state->rotationY = 0;
             state->rotationX = 0;
-            state->unkE = 0;
-            state->unkC = 0;
-            state->unkA = 0;
+            state->angularAccelerationZ = 0;
+            state->angularAccelerationY = 0;
+            state->angularAccelerationX = 0;
             state->angularVelocityZ = 0;
             state->angularVelocityY = 0;
             state->angularVelocityX = 0;
@@ -105,7 +87,6 @@ void updateCameraRotationTask(CameraRotationTaskState *state) {
     gScaleMatrix.translation.x = 0;
     gScaleMatrix.translation.y = -0x4CCCC;
     gScaleMatrix.translation.z = 0;
-    positionPtr = (s32 *)&gScaleMatrix.translation;
 
     createRotationMatrixXYZ((s16 *)&cameraTransform, state->rotationX, state->rotationY, state->rotationZ);
 
@@ -113,7 +94,7 @@ void updateCameraRotationTask(CameraRotationTaskState *state) {
     cameraTransform.translation.y = 0x4CCCC;
     cameraTransform.translation.z = 0;
 
-    composeTransform3D((Transform3D *)(positionPtr - 5), &cameraTransform, &state->model->baseTransform);
+    composeTransform3D(&gScaleMatrix, &cameraTransform, &state->model->baseTransform);
 }
 
 void cleanupCameraRotationTask(void) {
@@ -134,7 +115,7 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
 
     gDPSetTextureLUT(gDisplayListAllocPtr++, G_TT_RGBA16);
 
-    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, state->tableEntry.data_ptr);
+    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_16b, 1, state->texture.data_ptr);
 
     gDPSetTile(
         gDisplayListAllocPtr++,
@@ -157,12 +138,12 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
     loadBlockCmd = gDisplayListAllocPtr++;
     loadBlockCmd->words.w0 = 0xF3000000;
     gGraphicsMode = -1;
-    widthDiv16 = state->tableEntry.width >> 4;
+    widthDiv16 = state->texture.width >> 4;
     dxtBase = 0x800;
     if (widthDiv16 != 0) {
         dxtBase = widthDiv16 + 0x7FF;
     }
-    lrs = (((s32)((state->tableEntry.width * state->tableEntry.height) + 3)) >> 2) - 1;
+    lrs = (((s32)((state->texture.width * state->texture.height) + 3)) >> 2) - 1;
     if (lrs < 0x800) {
     } else {
         lrs = 0x7FF;
@@ -179,7 +160,7 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
 
     gDPPipeSync(gDisplayListAllocPtr++);
 
-    line = (((state->tableEntry.width >> 1) + 7) >> 3) & 0x1FF;
+    line = (((state->texture.width >> 1) + 7) >> 3) & 0x1FF;
     new_var = G_TX_NOMIRROR;
     gDPSetTile(gDisplayListAllocPtr++, G_IM_FMT_CI, G_IM_SIZ_4b, line, 0, G_TX_RENDERTILE, 0, 0, 0, 0, 0, 0, 0);
 
@@ -188,11 +169,11 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
         G_TX_RENDERTILE,
         0,
         0,
-        (state->tableEntry.width - 1) << 2,
-        (state->tableEntry.height - 1) << 2
+        (state->texture.width - 1) << 2,
+        (state->texture.height - 1) << 2
     );
 
-    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, state->tableEntry.index_ptr);
+    gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, state->texture.index_ptr);
 
     gDPTileSync(gDisplayListAllocPtr++);
 
@@ -218,42 +199,42 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
 
     gDPPipeSync(gDisplayListAllocPtr++);
 
-    if (state->lookAtMatrix == 0) {
-        state->lookAtMatrix = arenaAlloc16(0x40);
-        if (state->lookAtMatrix == 0) {
+    if (state->n64Transform == 0) {
+        state->n64Transform = arenaAlloc16(0x40);
+        if (state->n64Transform == 0) {
             return;
         }
-        transform3DToN64Mtx(&state->transformMatrix, state->lookAtMatrix);
+        transform3DToN64Mtx(&state->transform, state->n64Transform);
     }
 
     gDPPipeSync(gDisplayListAllocPtr++);
 
     gDPSetTexturePersp(gDisplayListAllocPtr++, G_TP_PERSP);
 
-    gSPSegment(gDisplayListAllocPtr++, 0x02, state->segmentData);
+    gSPSegment(gDisplayListAllocPtr++, 0x02, state->frameData);
 
-    gSPMatrix(gDisplayListAllocPtr++, state->lookAtMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
+    gSPMatrix(gDisplayListAllocPtr++, state->n64Transform, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
 
     gSPDisplayList(gDisplayListAllocPtr++, &gModelTransitionEffectDisplayList);
 }
 
 void initModelTransitionEffect(ModelTransitionEffectState *state) {
     setCleanupCallback(&cleanupModelTransitionEffect);
-    state->animationTable =
+    state->textureTable =
         loadCompressedData(&modelTransitionAnimationTable_ROM_START, &modelTransitionAnimationTable_ROM_END, 0xE8);
-    state->frameBuffer =
+    state->frames =
         loadCompressedData(&modelTransitionFrameBuffer_ROM_START, &modelTransitionFrameBuffer_ROM_END, 0xC00);
     if (state->model->index == 0x3E) {
-        state->effectVariant = 0;
+        state->textureIndex = 0;
     } else {
-        state->effectVariant = 1;
+        state->textureIndex = 1;
     }
     setCallback(&setupModelTransitionVariant);
 }
 
 void setupModelTransitionVariant(ModelTransitionEffectState *state) {
-    getTableEntryByU16Index(state->animationTable, state->effectVariant != 0, &state->tableEntry);
-    state->currentFrame = 0;
+    getTableEntryByU16Index(state->textureTable, state->textureIndex != 0, &state->texture);
+    state->frameIndex = 0;
     setCallback(&updateModelTransitionEffect);
 }
 
@@ -272,31 +253,31 @@ void updateModelTransitionEffect(ModelTransitionEffectState *state) {
 
     actionMode = state->model->actionMode;
     if (state->model->actionMode == 0) {
-        state->currentFrame = 0;
+        state->frameIndex = 0;
     } else if (actionMode < 0 || state->model->actionMode >= 3) {
-        state->currentFrame = 0;
+        state->frameIndex = 0;
     } else {
         do {
-            if (state->currentFrame == 0) {
-                memcpy(&state->transformMatrix, &state->model->transform, sizeof(Transform3D));
-                scaleMatrix(&state->transformMatrix, 0x1000, 0x1000, 0x1000);
+            if (state->frameIndex == 0) {
+                memcpy(&state->transform, &state->model->transform, sizeof(Transform3D));
+                scaleMatrix(&state->transform, 0x1000, 0x1000, 0x1000);
             }
         } while (0);
         setModelDisplayEnabled(state->model, 0);
     }
 
     if (state->model->actionMode == 1) {
-        frameBeforeIncrement = state->currentFrame;
-        if (state->currentFrame < 7) {
-            state->lookAtMatrix = NULL;
-            state->segmentData = &state->frameBuffer[frameBeforeIncrement].unk0;
+        frameBeforeIncrement = state->frameIndex;
+        if (state->frameIndex < 7) {
+            state->n64Transform = NULL;
+            state->frameData = &state->frames[frameBeforeIncrement];
             enqueueCallbackBySlotIndex(0, 1, &renderPalettedTexture, state);
-            state->currentFrame++;
+            state->frameIndex++;
         }
     }
 }
 
 void cleanupModelTransitionEffect(ModelTransitionEffectState *state) {
-    state->animationTable = freeNodeMemory(state->animationTable);
-    state->frameBuffer = freeNodeMemory(state->frameBuffer);
+    state->textureTable = freeNodeMemory(state->textureTable);
+    state->frames = freeNodeMemory(state->frames);
 }
