@@ -287,6 +287,62 @@ typedef struct {
 } Player;
 
 typedef struct {
+    /* 0x00 */ void *portraitAsset;
+    /* 0x04 */ void *imageAsset;
+    /* 0x08 */ u16 stateTimer;
+    /* 0x0A */ u16 locationIds[4];
+    /* 0x12 */ u8 selectionState[4];
+    /* 0x16 */ u8 playerArrived[4];
+    /* 0x1A */ u8 playerCountAtLocation[4];
+    /* 0x1E */ u8 characterIds[4];
+    /* 0x22 */ s8 locationBlocked[9];
+    /* 0x2B */ u8 isStoryMapInitializing;
+    /* 0x2C */ u8 animationTimers[4];
+    /* 0x30 */ u8 locationHasPlayers[9];
+    /* 0x39 */ u8 playerAtLocation[4];
+    /* 0x3D */ u8 padding5C5[0x14];
+    /* 0x51 */ u8 padding5D9[3];
+} StoryMapGameState;
+
+typedef struct {
+    /* 0x00 */ u8 padding588[0xA];
+    /* 0x0A */ u16 selectedCharacterIds[8];
+    /* 0x1A */ u8 characterRanks[8];
+    /* 0x22 */ u8 padding5AA[0x17];
+    /* 0x39 */ u8 playerBlinkTimers[8];
+    /* 0x41 */ u8 padding5C9[0x13];
+} CharacterSelectGameState;
+
+typedef struct {
+    /* 0x00 */ void *arrowSpriteAsset;
+    /* 0x04 */ void *backgroundAsset;
+    /* 0x08 */ void *itemIconAsset;
+    /* 0x0C */ void *digitSpriteAsset;
+    /* 0x10 */ void *goldIconAsset;
+    /* 0x14 */ void *itemLabelAsset;
+    /* 0x18 */ Transform3D itemRotation;
+    /* 0x38 */ u16 frameCounter;
+    /* 0x3A */ u16 itemRotationAngle;
+    /* 0x3C */ u8 padding5C4;
+    /* 0x3D */ u8 screenPhase;
+    /* 0x3E */ u8 scrollDirection;
+    /* 0x3F */ u8 completedScrollSteps;
+    /* 0x40 */ s8 selectedItemIndex;
+    /* 0x41 */ u8 unlockedItemCount;
+    /* 0x42 */ u8 itemIds[12];
+    /* 0x4E */ u8 pendingFairyAnimation;
+    /* 0x4F */ u8 delayCounter;
+    /* 0x50 */ u8 showItemIcons;
+    /* 0x51 */ u8 padding5D9[3];
+} UnlockScreenGameState;
+
+typedef union {
+    StoryMapGameState storyMap;
+    CharacterSelectGameState characterSelect;
+    UnlockScreenGameState unlockScreen;
+} GameStateModeData;
+
+typedef struct {
     /* 0x0 */ ViewportNode *audioViewport;
     /* 0x4 */ ViewportNode *playerOverlayViewports;
     /* 0x8 */ ViewportNode *playerCameraViewports;
@@ -385,32 +441,8 @@ typedef struct {
     /* 0x42D */ u8 storyMapItemType;
     s8 unk42E;
     u8 PAD_12[0x158];
-    s32 *unk588;
-    s32 *unk58C;
-    u16 unk590;
-    u8 PAD_13[0x8];
-    u8 playerSlotState[8];
-    u8 PAD_13B[0xB];
-    s8 unk5AD;
-    s8 unk5AE;
-    u8 unk5AF;
-    u8 unk5B0;
-    u8 unk5B1;
-    s8 unk5B2;
-    u8 isStoryMapInitializing;
-    u8 PAD_14[0x4];
-    u8 unk5B8[8];
-    u16 unk5C0;
-    u8 PAD_14B[0x3];
-    u8 unk5C5;
-    u8 unk5C6;
-    u8 unk5C7;
-    s8 unk5C8;
-    u8 unk5C9;
-    u8 unk5CA[0xD];
-    u8 unk5D7;
-    u8 unk5D8;
-    u8 PAD_15B[0x1A3];
+    /* 0x588 */ GameStateModeData modeData;
+    u8 PAD_15B[0x1A0];
     s16 unk77C;
     u8 PAD_16[0x6];
     u8 unk784[4];

@@ -33,27 +33,6 @@ typedef struct {
     char formattedText[16];
 } CoordinateDisplayTaskState;
 
-typedef struct {
-    u8 padding[0x592];
-    u16 selectedCharacter;
-    u8 padding2[0xE];
-    u8 characterRank;
-} LocalGameState_Player;
-
-typedef struct {
-    LocalGameState_Player *players[4];
-    u8 pad[0x582];
-    u16 selectedCharacter[8];
-    u8 characterRank[8];
-} LocalGameState;
-
-typedef struct {
-    u8 _pad0[0x59A];
-    u8 playerSlotState[8];
-    u8 _pad5A2[0x1F];
-    u8 unk5C1[8];
-} func_800B0A54_allocation;
-
 extern void *renderTextPalette;
 extern s32 gButtonsPressed;
 
@@ -103,20 +82,21 @@ void updateCoordinateDisplayTask(CoordinateDisplayTaskState *);
 void sortPlayersByCharacterRank(void) {
     u8 matchingPlayers[8];
     s32 numMatching;
-    LocalGameState *allocation;
+    GameState *allocation;
     u8 numPlayers;
     s32 playerIndex;
     s32 i;
     s32 j;
     u8 swapTemp;
 
-    allocation = (LocalGameState *)getCurrentAllocation();
+    allocation = getCurrentAllocation();
     numPlayers = gGameSessionContext->numPlayers;
 
     for (playerIndex = 0; playerIndex < numPlayers; playerIndex++) {
         i = 0;
         for (j = 0; j < numPlayers; j++) {
-            if (allocation->selectedCharacter[playerIndex] == allocation->selectedCharacter[j]) {
+            if (allocation->modeData.characterSelect.selectedCharacterIds[playerIndex] ==
+                allocation->modeData.characterSelect.selectedCharacterIds[j]) {
                 matchingPlayers[i] = j;
                 i++;
             } else {
@@ -127,7 +107,8 @@ void sortPlayersByCharacterRank(void) {
 
         for (j = 0; j < (u8)numMatching - 1; j++) {
             for (i = j + 1; i < (u8)numMatching; i++) {
-                if (allocation->characterRank[matchingPlayers[j]] > allocation->characterRank[matchingPlayers[i]]) {
+                if (allocation->modeData.characterSelect.characterRanks[matchingPlayers[j]] >
+                    allocation->modeData.characterSelect.characterRanks[matchingPlayers[i]]) {
                     swapTemp = matchingPlayers[i];
                     matchingPlayers[i] = matchingPlayers[j];
                     matchingPlayers[j] = swapTemp;
@@ -136,45 +117,46 @@ void sortPlayersByCharacterRank(void) {
         }
 
         for (j = 0; j < (u8)numMatching; j++) {
-            allocation->characterRank[matchingPlayers[j]] = j + 1;
+            allocation->modeData.characterSelect.characterRanks[matchingPlayers[j]] = j + 1;
         }
     }
 }
 
 void positionCharacterSelectSprite(CharacterSelectSprite *arg0, u8 arg1) {
-    LocalGameState *allocation;
+    GameState *allocation;
     u8 playerState;
     u8 count;
     s32 i;
     volatile u8 padding[8];
 
-    allocation = (LocalGameState *)getCurrentAllocation();
+    allocation = getCurrentAllocation();
 
-    arg0->x = D_800B11A0_1DB740[allocation->selectedCharacter[arg1]].x;
-    arg0->y = D_800B11A0_1DB740[allocation->selectedCharacter[arg1]].y;
+    arg0->x = D_800B11A0_1DB740[allocation->modeData.characterSelect.selectedCharacterIds[arg1]].x;
+    arg0->y = D_800B11A0_1DB740[allocation->modeData.characterSelect.selectedCharacterIds[arg1]].y;
 
-    if (allocation->characterRank[arg1] >= 3) {
+    if (allocation->modeData.characterSelect.characterRanks[arg1] >= 3) {
         arg0->x += 0x10;
     }
 
-    if (!(allocation->characterRank[arg1] & 1)) {
+    if (!(allocation->modeData.characterSelect.characterRanks[arg1] & 1)) {
         arg0->y += 0x10;
     }
 
     count = 0;
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
-        if (allocation->selectedCharacter[arg1] == allocation->selectedCharacter[i]) {
+        if (allocation->modeData.characterSelect.selectedCharacterIds[arg1] ==
+            allocation->modeData.characterSelect.selectedCharacterIds[i]) {
             count++;
         }
     }
 
-    playerState = allocation->characterRank[arg1];
+    playerState = allocation->modeData.characterSelect.characterRanks[arg1];
     if ((playerState == 3) && (count == 3)) {
         arg0->y += 0x10;
     }
 
     count--;
-    arg0->frameIndex = D_800B11C2_1DB762[count * 4 + allocation->characterRank[arg1]] + arg1;
+    arg0->frameIndex = D_800B11C2_1DB762[count * 4 + allocation->modeData.characterSelect.characterRanks[arg1]] + arg1;
 }
 
 void initCharacterPreview(CharacterPreviewState *arg0) {
@@ -187,20 +169,20 @@ void initCharacterPreview(CharacterPreviewState *arg0) {
     arg0->displayMode = 0;
 
     if (arg0->characterIndex == 6) {
-        if (allocation->unk5B2 == -1) {
+        if (allocation->modeData.storyMap.locationBlocked[8] == -1) {
             arg0->displayMode = 2;
         }
     }
 
     if (arg0->characterIndex == 7) {
-        if (allocation->unk5AE == -1) {
+        if (allocation->modeData.storyMap.locationBlocked[4] == -1) {
             arg0->displayMode = 1;
             modelIndex = 0xF;
         }
     }
 
     if (arg0->characterIndex == 8) {
-        if (allocation->unk5AD == -1) {
+        if (allocation->modeData.storyMap.locationBlocked[3] == -1) {
             arg0->displayMode = 1;
             modelIndex = 0xF;
         }
@@ -261,7 +243,7 @@ void awaitCharacterPreviewReady(CharacterPreviewState *arg0) {
     GameState *allocation = getCurrentAllocation();
 
     if (arg0->characterIndex == 6) {
-        allocation->isStoryMapInitializing = 0;
+        allocation->modeData.storyMap.isStoryMapInitializing = 0;
     }
     setCallback(updateCharacterPreviewAnimation);
 }
@@ -297,7 +279,7 @@ void checkCharacterPreviewState(CharacterPreviewState *arg0) {
             i = 0;
             do {
                 if (ptr->playerBoardIds[i] == arg0->characterIndex) {
-                    u8 state = allocation->playerSlotState[i];
+                    u8 state = allocation->modeData.storyMap.selectionState[i];
                     if (state == 1 || state == 3) {
                         arg0->timer = 0;
                         setCallback(animateCharacterPreview);
@@ -312,7 +294,7 @@ void checkCharacterPreviewState(CharacterPreviewState *arg0) {
 }
 
 void animateCharacterPreview(CharacterPreviewState *arg0) {
-    func_800B0A54_allocation *allocation;
+    GameState *allocation;
     GameSessionContext *ptr;
     s32 i;
     s32 count;
@@ -321,7 +303,7 @@ void animateCharacterPreview(CharacterPreviewState *arg0) {
     u16 index;
     s32 pad[2];
 
-    allocation = (func_800B0A54_allocation *)getCurrentAllocation();
+    allocation = getCurrentAllocation();
     clearResult = clearModelRotation(arg0->model);
 
     counter = arg0->timer;
@@ -358,7 +340,7 @@ void animateCharacterPreview(CharacterPreviewState *arg0) {
             if (localPtr->playerBoardIds[i] != localIndex) {
                 i++;
             } else {
-                u8 state = allocation->playerSlotState[i];
+                u8 state = allocation->modeData.storyMap.selectionState[i];
                 if (state == 1 || state == 3) {
                     break;
                 }
@@ -421,21 +403,21 @@ void initCharacterSelectSprites(CharacterSelectSprites *arg0) {
 }
 
 void updateCharacterSelectSprites(CharacterSelectSprites *arg0) {
-    func_800B0A54_allocation *allocation;
+    GameState *allocation;
     s32 i;
     u8 state;
 
-    allocation = (func_800B0A54_allocation *)getCurrentAllocation();
+    allocation = getCurrentAllocation();
     sortPlayersByCharacterRank();
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
         positionCharacterSelectSprite(&arg0->sprites[i], i);
-        state = allocation->playerSlotState[i];
+        state = allocation->modeData.storyMap.selectionState[i];
 
         if (state == 10) {
             arg0->sprites[i].scale = 0xFF;
             arg0->animTimers[i] = 0;
-            if (allocation->unk5C1[i] & 1) {
+            if (allocation->modeData.characterSelect.playerBlinkTimers[i] & 1) {
                 arg0->sprites[i].alpha = 0xFF;
             } else {
                 arg0->sprites[i].alpha = 0;
@@ -453,8 +435,8 @@ void updateCharacterSelectSprites(CharacterSelectSprites *arg0) {
             arg0->sprites[i].scale = 0xFF;
         }
 
-        if (allocation->playerSlotState[i] == 2) {
-            allocation->unk5C1[i] = 0;
+        if (allocation->modeData.storyMap.selectionState[i] == 2) {
+            allocation->modeData.characterSelect.playerBlinkTimers[i] = 0;
             arg0->sprites[i].alpha = 0;
             arg0->animTimers[i] = 0;
             arg0->sprites[i].scale = 0xFF;
@@ -542,7 +524,7 @@ void initPlayer3CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
 
 void updatePlayer3CharacterSelectIndicator(void *arg0) {
     GameState *state = getCurrentAllocation();
-    if (state->playerSlotState[0] == 3) {
+    if (state->modeData.storyMap.selectionState[0] == 3) {
         enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
     } else {
         terminateCurrentTask();
@@ -567,7 +549,7 @@ void initPlayer2CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
 
 void updatePlayer2CharacterSelectIndicator(void *arg0) {
     GameState *state = getCurrentAllocation();
-    if (state->playerSlotState[0] == 2) {
+    if (state->modeData.storyMap.selectionState[0] == 2) {
         enqueueCallbackBySlotIndex(8, 0, renderSpriteFrame, arg0);
     } else {
         terminateCurrentTask();

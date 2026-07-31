@@ -24,15 +24,6 @@ struct StoryMapShopBackgroundState {
     void *backgroundAsset;
 };
 
-struct StoryMapShopItemCardState {
-    DisplayListObject displayList;
-    Transform3D transform;
-    s32 translationStep;
-    u8 updateCounter;
-    s8 itemIndex;
-    s8 slotPosition;
-};
-
 struct StoryMapShopItemIconState {
     s16 x;
     s16 y;
@@ -42,18 +33,6 @@ struct StoryMapShopItemIconState {
     s8 unkC;
     u8 unkD;
 };
-
-typedef struct {
-    u8 padding[0x5C0];
-    u16 unk5C0;
-    u8 padding2[0x3];
-    u8 unk5C5;
-    u8 unk5C6;
-    u8 unk5C7;
-    s8 unk5C8;
-    u8 unk5C9;
-    u8 unk5CA[0];
-} GameStateSub;
 
 typedef struct {
     s16 unk0;
@@ -124,11 +103,6 @@ typedef struct {
         u16 duration;
     } fairyAnim[5];
 } ShopItemData;
-
-typedef struct {
-    u8 padding[0x5D6];
-    u8 pendingFairyAnimation;
-} ShopFairyGameState;
 
 extern s32 gButtonsPressed[];
 extern s32 *gGameSessionContext;
@@ -243,7 +217,7 @@ void updateDebugCameraYState(cameraState *arg0) {
     arg0->cameraYRotationString = cameraYRotation;
 
     enqueueCallbackBySlotIndex(8, 7, &renderTextPalette, arg0);
-    enqueueCallbackBySlotIndex(8, 7, &renderTextPalette, ((void *)((s32)arg0)) + 0xC);
+    enqueueCallbackBySlotIndex(8, 7, &renderTextPalette, &arg0->unkC);
 }
 
 void initStoryMapShopFairyModel(StoryMapShopFairyState *arg0) {
@@ -269,13 +243,13 @@ void updateStoryMapShopFairyInitial(StoryMapShopFairyState *arg0) {
 }
 
 void updateStoryMapShopFairy(StoryMapShopFairyState *fairy) {
-    ShopFairyGameState *state;
+    GameState *state;
     u8 animIndex;
     u16 frameCounter;
     s32 idx;
     volatile u8 pad[8];
 
-    state = (ShopFairyGameState *)getCurrentAllocation();
+    state = (GameState *)getCurrentAllocation();
     applyTransformToModel(fairy->model, &fairy->transform);
     do {
         if (clearModelRotation(fairy->model) != 0) {
@@ -294,14 +268,14 @@ void updateStoryMapShopFairy(StoryMapShopFairyState *fairy) {
         }
     } while (0);
     updateModelGeometry(fairy->model);
-    animIndex = state->pendingFairyAnimation;
+    animIndex = state->modeData.unlockScreen.pendingFairyAnimation;
     if (animIndex != 0) {
         u16 start;
         fairy->animationType = animIndex;
-        start = D_8008F0B0_8FCB0.fairyAnim[state->pendingFairyAnimation].start;
+        start = D_8008F0B0_8FCB0.fairyAnim[state->modeData.unlockScreen.pendingFairyAnimation].start;
         fairy->animationFrame = start;
         setModelAnimation(fairy->model, (s16)start);
-        state->pendingFairyAnimation = 0;
+        state->modeData.unlockScreen.pendingFairyAnimation = 0;
     }
 }
 
@@ -330,11 +304,11 @@ void initStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     createZRotationMatrix(rotationZPtr, 0x1F00);
     composeTransform3D(rotationYXPtr, rotationZPtr, cardTransform);
 
-    if (state->unk5C9 != 1) {
+    if (state->modeData.unlockScreen.unlockedItemCount != 1) {
         card->transform.translation.x = 0x200000 - ((2 - card->slotPosition) << 21);
     }
 
-    itemData = state->unk5CA[card->itemIndex];
+    itemData = state->modeData.unlockScreen.itemIds[card->itemIndex];
     memcpy(&card->displayList.transform, cardTransform, sizeof(Transform3D));
     do {
         itemId = itemData & 0x1F;
@@ -357,8 +331,8 @@ void updateStoryMapShopItemCard(StoryMapShopItemCardState *card) {
 
     state = (GameState *)getCurrentAllocation();
 
-    if (state->unk5C5 == 2) {
-        if (state->unk5C6 == 2) {
+    if (state->modeData.unlockScreen.screenPhase == 2) {
+        if (state->modeData.unlockScreen.scrollDirection == 2) {
             if (card->slotPosition == 0) {
                 card->slotPosition = 2;
                 card->transform.translation.x = 0x400000;
@@ -366,7 +340,7 @@ void updateStoryMapShopItemCard(StoryMapShopItemCardState *card) {
                 goto end;
             }
         }
-        if (state->unk5C6 == 1) {
+        if (state->modeData.unlockScreen.scrollDirection == 1) {
             if (card->slotPosition == 2) {
                 card->transform.translation.x = 0xFFC00000;
                 card->slotPosition = 0;
@@ -374,7 +348,7 @@ void updateStoryMapShopItemCard(StoryMapShopItemCardState *card) {
                 goto end;
             }
         }
-        if (state->unk5C6 == 2) {
+        if (state->modeData.unlockScreen.scrollDirection == 2) {
             card->slotPosition = card->slotPosition - 1;
         } else {
             card->slotPosition = card->slotPosition + 1;
@@ -412,19 +386,19 @@ void reloadStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     s8 itemIndex;
 
     if (card->updateCounter == 1) {
-        if (state->unk5C6 == 2) {
-            card->itemIndex = state->unk5C8 + 1;
-            if (card->itemIndex == state->unk5C9) {
+        if (state->modeData.unlockScreen.scrollDirection == 2) {
+            card->itemIndex = state->modeData.unlockScreen.selectedItemIndex + 1;
+            if (card->itemIndex == state->modeData.unlockScreen.unlockedItemCount) {
                 card->itemIndex = 0;
             }
         } else {
-            card->itemIndex = state->unk5C8 - 1;
+            card->itemIndex = state->modeData.unlockScreen.selectedItemIndex - 1;
             if (card->itemIndex < 0) {
-                card->itemIndex = state->unk5C9 - 1;
+                card->itemIndex = state->modeData.unlockScreen.unlockedItemCount - 1;
             }
         }
 
-        itemId = state->unk5CA[card->itemIndex] & 0x1F;
+        itemId = state->modeData.unlockScreen.itemIds[card->itemIndex] & 0x1F;
         itemIndex = itemId;
 
         memcpy(&card->displayList.transform, &card->transform, sizeof(Transform3D));
@@ -446,7 +420,7 @@ void slideStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     u32 scrollDirection;
     GameState *state = (GameState *)getCurrentAllocation();
     u32 translationStep;
-    scrollDirection = state->unk5C6;
+    scrollDirection = state->modeData.unlockScreen.scrollDirection;
 
     if (scrollDirection == 2) {
         translationStep = 0xFFF80000;
@@ -461,7 +435,7 @@ void slideStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     card->updateCounter++;
     if (card->updateCounter == 4) {
         card->updateCounter = 0;
-        state->unk5C7++;
+        state->modeData.unlockScreen.completedScrollSteps++;
         setCallback(awaitStoryMapShopItemCardIdle);
     }
 
@@ -470,7 +444,7 @@ void slideStoryMapShopItemCard(StoryMapShopItemCardState *card) {
 
 void awaitStoryMapShopItemCardIdle(DisplayListObject *displayList) {
     volatile u8 pad[0x20];
-    if (((GameState *)getCurrentAllocation())->unk5C5 == 1) {
+    if (((GameState *)getCurrentAllocation())->modeData.unlockScreen.screenPhase == 1) {
         setCallback(&updateStoryMapShopItemCard);
     }
     enqueueDisplayListObject(0, displayList);
@@ -513,25 +487,25 @@ void prepareSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
     s16 itemId;
 
     state = (GameState *)getCurrentAllocation();
-    if (state->unk5C5 == 2) {
-        if (state->unk5C6 == 1) {
+    if (state->modeData.unlockScreen.screenPhase == 2) {
+        if (state->modeData.unlockScreen.scrollDirection == 1) {
             card->transform.translation.x = 0x200000;
             card->translationStep = 0x80000;
-            wrappedItemIndex = state->unk5C8 + 2;
+            wrappedItemIndex = state->modeData.unlockScreen.selectedItemIndex + 2;
             card->itemIndex = wrappedItemIndex;
-            if (wrappedItemIndex >= (s32)state->unk5C9) {
-                card->itemIndex = wrappedItemIndex - state->unk5C9;
+            if (wrappedItemIndex >= (s32)state->modeData.unlockScreen.unlockedItemCount) {
+                card->itemIndex = wrappedItemIndex - state->modeData.unlockScreen.unlockedItemCount;
             }
         } else {
             card->transform.translation.x = 0xFFE00000;
             card->translationStep = 0xFFF80000;
-            wrappedItemIndex = state->unk5C8 - 2;
+            wrappedItemIndex = state->modeData.unlockScreen.selectedItemIndex - 2;
             card->itemIndex = wrappedItemIndex;
             if (wrappedItemIndex < 0) {
-                card->itemIndex = state->unk5C9 + wrappedItemIndex;
+                card->itemIndex = state->modeData.unlockScreen.unlockedItemCount + wrappedItemIndex;
             }
         }
-        itemData = state->unk5CA[card->itemIndex];
+        itemData = state->modeData.unlockScreen.itemIds[card->itemIndex];
         memcpy(&card->displayList.transform, &card->transform, sizeof(Transform3D));
         itemData &= 0x1F;
         itemId = itemData;
@@ -556,7 +530,7 @@ void animateSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
 
     card->updateCounter++;
     if (card->updateCounter == 4) {
-        state->unk5C7++;
+        state->modeData.unlockScreen.completedScrollSteps++;
         card->updateCounter = 0;
         card->displayList.segment1 = freeNodeMemory(card->displayList.segment1);
         card->displayList.segment2 = freeNodeMemory(card->displayList.segment2);
@@ -569,7 +543,7 @@ void animateSlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
 
 void awaitSlideInStoryMapShopItemCardIdle(void) {
     GameState *state = (GameState *)getCurrentAllocation();
-    if (state->unk5C5 != 2) {
+    if (state->modeData.unlockScreen.screenPhase != 2) {
         setCallbackWithContinue(prepareSlideInStoryMapShopItemCard);
     }
 }
@@ -624,10 +598,10 @@ void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arrowState) {
     GameState *state = getCurrentAllocation();
     s32 i;
 
-    if (state->unk5C5 > 0 && state->unk5C5 < 4) {
-        if (state->unk5C5 == 1) {
+    if (state->modeData.unlockScreen.screenPhase > 0 && state->modeData.unlockScreen.screenPhase < 4) {
+        if (state->modeData.unlockScreen.screenPhase == 1) {
             arrowState->animationCounter++;
-            if (state->unk5C9 >= 3) {
+            if (state->modeData.unlockScreen.unlockedItemCount >= 3) {
                 if ((u8)(arrowState->animationCounter) < 0x11) {
                     arrowState->arrows[0].alpha -= 8;
                     arrowState->arrows[1].alpha -= 8;
@@ -635,9 +609,9 @@ void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arrowState) {
                     arrowState->arrows[0].alpha += 8;
                     arrowState->arrows[1].alpha += 8;
                 }
-            } else if (state->unk5C9 == 2) {
+            } else if (state->modeData.unlockScreen.unlockedItemCount == 2) {
                 if ((u8)(arrowState->animationCounter) < 0x11) {
-                    if (state->unk5C8 == 1) {
+                    if (state->modeData.unlockScreen.selectedItemIndex == 1) {
                         arrowState->arrows[1].alpha = 0xFF;
                         arrowState->arrows[0].alpha -= 8;
                     } else {
@@ -645,7 +619,7 @@ void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *arrowState) {
                         arrowState->arrows[1].alpha -= 8;
                     }
                 } else {
-                    if (state->unk5C8 == 1) {
+                    if (state->modeData.unlockScreen.selectedItemIndex == 1) {
                         arrowState->arrows[1].alpha = 0xFF;
                         arrowState->arrows[0].alpha += 8;
                     } else {
@@ -678,7 +652,7 @@ void cleanupUnlockScreenScrollArrows(func_8002FF28_30B28_arg *arg0) {
 
 void initStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
     void *dmaResult;
-    GameStateSub *state;
+    GameState *state;
     u8 itemValue;
 
     state = getCurrentAllocation();
@@ -687,12 +661,12 @@ void initStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
 
     iconState->y = -0x18;
 
-    itemValue = state->unk5CA[state->unk5C8];
+    itemValue = state->modeData.unlockScreen.itemIds[state->modeData.unlockScreen.selectedItemIndex];
 
     if (itemValue < 9) {
         u8 tempValue;
         iconState->x = -0x30;
-        tempValue = state->unk5CA[state->unk5C8];
+        tempValue = state->modeData.unlockScreen.itemIds[state->modeData.unlockScreen.selectedItemIndex];
         iconState->spriteIndex = (tempValue / 3) + 0x1D;
     } else {
         s16 tableVal = D_8008F0B0_8FCB0.D_8008F0C6_8FCC6_field[itemValue - 9] + 0x18;
@@ -711,13 +685,13 @@ void initStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
 }
 
 void updateStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
-    GameStateSub *state;
+    GameState *state;
     s32 pad;
     u8 itemValue;
-    state = (GameStateSub *)getCurrentAllocation();
-    itemValue = state->unk5CA[state->unk5C8];
+    state = (GameState *)getCurrentAllocation();
+    itemValue = state->modeData.unlockScreen.itemIds[state->modeData.unlockScreen.selectedItemIndex];
     if (itemValue < 0x80) {
-        if ((state->unk5C5 != 0) && (state->unk5C5 != 2)) {
+        if ((state->modeData.unlockScreen.screenPhase != 0) && (state->modeData.unlockScreen.screenPhase != 2)) {
             u8 masked = itemValue & 0x1F;
             itemValue = masked;
             if (itemValue < 9) {
@@ -729,8 +703,8 @@ void updateStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
                 iconState->spriteIndex = masked + 0x23;
                 iconState->x = (((0x120 - ((s16)(tableVal + 0x18))) / 2) - tableVal2) - 0x96;
             }
-            if (state->unk5C5 == 3) {
-                if (state->unk5C0 & 1) {
+            if (state->modeData.unlockScreen.screenPhase == 3) {
+                if (state->modeData.unlockScreen.frameCounter & 1) {
                     iconState->unkD = 0xFF;
                 } else {
                     iconState->unkD = 0;
@@ -748,7 +722,6 @@ void cleanupStoryMapShopItemIcon(StoryMapShopItemIconState *iconState) {
 
 void initStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
     GameState *state;
-    GameState *temp_s0;
     void *dmaResult;
     u8 itemValue;
 
@@ -758,8 +731,7 @@ void initStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
 
     arg0->y = -0x18;
 
-    temp_s0 = (GameState *)((u8 *)state + state->unk5C8);
-    itemValue = temp_s0->unk5CA[0];
+    itemValue = state->modeData.unlockScreen.itemIds[state->modeData.unlockScreen.selectedItemIndex];
 
     if (itemValue < 9) {
         arg0->x = 0x12;
@@ -782,13 +754,13 @@ void updateStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
     u8 itemValue;
 
-    itemValue = state->unk5CA[state->unk5C8];
+    itemValue = state->modeData.unlockScreen.itemIds[state->modeData.unlockScreen.selectedItemIndex];
 
     if (itemValue >= 0x80) {
         return;
     }
 
-    if (state->unk5C5 != 0 && state->unk5C5 != 2) {
+    if (state->modeData.unlockScreen.screenPhase != 0 && state->modeData.unlockScreen.screenPhase != 2) {
         if (itemValue < 9) {
             arg0->x = 0x12;
             arg0->spriteIndex = ((itemValue & 0x1F) % 3) + 0x24;
@@ -798,8 +770,8 @@ void updateStoryMapShopItemStatLabel(ScrollArrowSprite *arg0) {
             arg0->x = tableVal + ((0x120 - (s16)(tableVal + 0x18)) / 2) - 0x96;
         }
 
-        if (state->unk5C5 == 3) {
-            if (state->unk5C0 & 1) {
+        if (state->modeData.unlockScreen.screenPhase == 3) {
+            if (state->modeData.unlockScreen.frameCounter & 1) {
                 arg0->unkD = 0xFF;
             } else {
                 arg0->unkD = 0;
@@ -830,7 +802,7 @@ void initStoryMapShopExitOverlay(SpriteDisplayState *arg0) {
 void updateStoryMapShopExitOverlay(void *arg0) {
     GameState *state = getCurrentAllocation();
 
-    if (state->unk5C5 == 4) {
+    if (state->modeData.unlockScreen.screenPhase == 4) {
         enqueueCallbackBySlotIndex(8, 7, &renderSpriteFrame, arg0);
     }
 }
@@ -937,11 +909,11 @@ void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0)
     s8 paletteIndex;
     s32 space;
 
-    if (state->unk5C5 == 0x14) {
+    if (state->modeData.unlockScreen.screenPhase == 0x14) {
         return;
     }
 
-    itemValue = state->unk5CA[state->unk5C8];
+    itemValue = state->modeData.unlockScreen.itemIds[state->modeData.unlockScreen.selectedItemIndex];
 
     if (itemValue >= 0x80) {
         return;
@@ -1014,18 +986,17 @@ void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
     s32 currentItem;
     s32 isValidItem;
     s32 labelIndex;
-    s32 labelOffset;
     char *formatStr;
 
     state = (GameState *)getCurrentAllocation();
-    progressBarY = 0x30 - (state->unk5D7 * 8);
+    progressBarY = 0x30 - (state->modeData.unlockScreen.delayCounter * 8);
     arg0->progressBarY = progressBarY;
     renderTiledSprite3x3(
         arg0->progressBarAsset,
         arg0->progressBarX,
         progressBarY,
         4,
-        state->unk5D7,
+        state->modeData.unlockScreen.delayCounter,
         0,
         0x20,
         0xB0,
@@ -1033,13 +1004,13 @@ void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
         0
     );
 
-    if (state->unk5C5 != 0x14) {
-        currentItem = state->unk5CA[state->unk5C8];
+    if (state->modeData.unlockScreen.screenPhase != 0x14) {
+        currentItem = state->modeData.unlockScreen.itemIds[state->modeData.unlockScreen.selectedItemIndex];
         isValidItem = (u32)currentItem < 0x80U;
         if (isValidItem != 0) {
             enqueueCallbackBySlotIndex(8U, 1U, &renderSpriteFrame, &arg0->priceLabelSprite);
         }
-        if (state->unk5C5 != 2) {
+        if (state->modeData.unlockScreen.screenPhase != 2) {
             if (isValidItem != 0) {
                 isValidItem = currentItem & 0xFF;
                 formatStr = "%2d";
@@ -1048,11 +1019,9 @@ void updateStoryMapShopItemStatsDisplay(ItemStatsDisplay *arg0) {
                 sprintf(arg0->statBuffers[2], formatStr, getItemStat3(isValidItem) & 0xFF);
 
                 labelIndex = 0;
-                labelOffset = 0x10;
                 do {
-                    enqueueCallbackBySlotIndex(8U, 1U, &renderTextPalette, (char *)arg0 + labelOffset);
+                    enqueueCallbackBySlotIndex(8U, 1U, &renderTextPalette, &arg0->statLabels[labelIndex]);
                     labelIndex += 1;
-                    labelOffset += 0xC;
                 } while (labelIndex < 3);
             }
         }
@@ -1079,9 +1048,9 @@ void initStoryMapShopSoldOutLabel(SpriteDisplayState *arg0) {
 
 void updateStoryMapShopSoldOutLabel(void *arg0) {
     GameState *state = (GameState *)getCurrentAllocation();
-    s8 index = state->unk5C8;
+    s8 index = state->modeData.unlockScreen.selectedItemIndex;
 
-    if (state->unk5CA[index] >= 0x80 || state->unk5C9 == 0) {
+    if (state->modeData.unlockScreen.itemIds[index] >= 0x80 || state->modeData.unlockScreen.unlockedItemCount == 0) {
         enqueueCallbackBySlotIndex(8, 1, renderSpriteFrame, arg0);
     }
 }
@@ -1124,7 +1093,7 @@ void drawUnlockScreenItemIcons(void *untypedArg0) {
 
     alloc = (GameState *)getCurrentAllocation();
 
-    if (alloc->unk5D8 != 0) {
+    if (alloc->modeData.unlockScreen.showItemIcons != 0) {
         for (i = 0; i < 4; i++) {
             enqueueCallbackBySlotIndex(8, 0, &renderSpriteFrame, &arg0->items[i]);
             enqueueCallbackBySlotIndex(8, 1, &renderTextLayout, &arg0->titleX);

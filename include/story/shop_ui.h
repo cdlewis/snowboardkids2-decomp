@@ -1,7 +1,9 @@
 #pragma once
 
 #include "common.h"
+#include "graphics/displaylist.h"
 #include "graphics/sprite_rdp.h"
+#include "math/geometry.h"
 
 typedef struct {
     s16 x;
@@ -60,7 +62,14 @@ typedef struct {
 typedef struct StoryMapShopBackgroundState StoryMapShopBackgroundState;
 typedef struct StoryMapShopFairyState StoryMapShopFairyState;
 typedef struct StoryMapShopGoldDisplayState StoryMapShopGoldDisplayState;
-typedef struct StoryMapShopItemCardState StoryMapShopItemCardState;
+typedef struct StoryMapShopItemCardState {
+    DisplayListObject displayList;
+    Transform3D transform;
+    s32 translationStep;
+    u8 updateCounter;
+    s8 itemIndex;
+    s8 slotPosition;
+} StoryMapShopItemCardState;
 typedef struct StoryMapShopItemIconState StoryMapShopItemIconState;
 
 extern const char gIntegerFormatString[];
