@@ -10,6 +10,7 @@
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
+#include "graphics/tiled_sprite_grid.h"
 #include "math/geometry.h"
 #include "os_cont.h"
 #include "race/race_session.h"
@@ -18,11 +19,6 @@
 #include "text/text_layout.h"
 #include "ui/level_preview_3d.h"
 #include "ui/save_data.h"
-
-struct StoryMapShopBackgroundState {
-    u8 padding[0x2C];
-    void *backgroundAsset;
-};
 
 typedef struct {
     s16 unk0;
@@ -78,10 +74,7 @@ typedef struct {
 } ShopItemData;
 
 extern s32 gButtonsPressed[];
-extern s32 *gGameSessionContext;
 extern s16 D_8008F0C6_8FCC6[];
-// Cast to u8* to access EEPROM save data as raw bytes for offset-based access
-extern u8 *EepromSaveData;
 
 s32 D_8008F070_8FC70[16] = {
     0x00000000, 0x0000C350, 0x000186A0, 0x00000000, 0x0000AFC8, 0x00015F90, 0x00000000, 0x0000EA60,
@@ -126,7 +119,7 @@ void animateSlideInStoryMapShopItemCard(StoryMapShopItemCardState *arg0);
 void awaitSlideInStoryMapShopItemCardIdle(void);
 void destroySlideInStoryMapShopItemCard(StoryMapShopItemCardState *);
 void initStoryMapShopBackgroundRenderState(StoryMapShopBackgroundState *);
-void enqueueStoryMapShopBackgroundRender(void *);
+void enqueueStoryMapShopBackgroundRender(StoryMapShopBackgroundState *state);
 void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *);
 void updateUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *);
 void cleanupUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *state);
@@ -528,22 +521,22 @@ void destroySlideInStoryMapShopItemCard(StoryMapShopItemCardState *card) {
 }
 
 void loadStoryMapShopBackground(StoryMapShopBackgroundState *state) {
-    state->backgroundAsset = loadCompressedData(&shopBackgroundAsset_ROM_START, &shopBackgroundAsset_ROM_END, 0x14410);
+    state->asset = loadCompressedData(&shopBackgroundAsset_ROM_START, &shopBackgroundAsset_ROM_END, 0x14410);
     setCleanupCallback(&cleanupStoryMapShopBackground);
     setCallback(&initStoryMapShopBackgroundRenderState);
 }
 
 void initStoryMapShopBackgroundRenderState(StoryMapShopBackgroundState *state) {
-    initScrollingTileMapState(state, (s32)state->backgroundAsset);
+    initScrollingTileMapState(&state->renderState, state->asset);
     setCallback(&enqueueStoryMapShopBackgroundRender);
 }
 
-void enqueueStoryMapShopBackgroundRender(void *state) {
-    enqueueCallbackBySlotIndex(1, 0, renderTiledTextureMap, state);
+void enqueueStoryMapShopBackgroundRender(StoryMapShopBackgroundState *state) {
+    enqueueCallbackBySlotIndex(1, 0, renderTiledTextureMap, &state->renderState);
 }
 
 void cleanupStoryMapShopBackground(StoryMapShopBackgroundState *state) {
-    state->backgroundAsset = freeNodeMemory(state->backgroundAsset);
+    state->asset = freeNodeMemory(state->asset);
 }
 
 void initUnlockScreenScrollArrows(UnlockScreenScrollArrowsState *state) {
@@ -813,7 +806,7 @@ void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
     s8 paletteIndex;
     s32 space;
 
-    if (*gGameSessionContext < 100) {
+    if (gGameSessionContext->gold < 100) {
         paletteIndex = 1;
         i = 6;
         do {
@@ -827,7 +820,7 @@ void updateStoryMapShopGoldDisplay(StoryMapShopGoldDisplayState *arg0) {
         } while (--i >= 0);
     }
 
-    sprintf(arg0->goldAmountBuffer, "%7d", *gGameSessionContext);
+    sprintf(arg0->goldAmountBuffer, "%7d", gGameSessionContext->gold);
 
     i = 0;
     space = ' ';
@@ -895,7 +888,7 @@ void updateStoryMapShopItemPriceDisplay(StoryMapShopItemPriceDisplayState *arg0)
     price = D_8008F070_8FC70[itemValue & 0x1F];
 
     paletteIndex = 1;
-    if (*gGameSessionContext < price) {
+    if (gGameSessionContext->gold < price) {
         i = 5;
         do {
             arg0->digits[i].paletteIndex = paletteIndex;
@@ -1089,10 +1082,10 @@ s32 getLockedShopItemIndices(u8 *buffer) {
         buffer[i] = 0;
     }
 
-    // Check character_or_settings 3x3 grid for first locked item per row
+    // Check characterPaletteIds 3x3 grid for first locked item per row
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
-            if (EepromSaveData[i * 3 + (u64)j + 0x30] == 0) {
+            if (EepromSaveData->characterPaletteIds[i * 3 + (u64)j] == 0) {
                 buffer[count] = i * 3 + j;
                 count++;
                 break;
@@ -1100,11 +1093,11 @@ s32 getLockedShopItemIndices(u8 *buffer) {
         }
     }
 
-    // Check setting_42 referenced items for any that are still locked
+    // Check unlocked cutscene items for any that are still locked
     for (i = 0; i < 9; i++) {
-        u8 itemIndex = EepromSaveData[(u64)i + 0x42];
+        u8 itemIndex = EepromSaveData->unlockedCutsceneIds[i];
         if (itemIndex != 0) {
-            if (EepromSaveData[(u64)itemIndex + 0x30] == 0) {
+            if (EepromSaveData->characterPaletteIds[itemIndex] == 0) {
                 buffer[count] = itemIndex;
                 count++;
             }
@@ -1121,3 +1114,5 @@ const char D_8009E480_9F080[] = "%5dG";
 const char gIntegerFormatString[] = "%d";
 
 const char gGoldFormatString7d[] = "%7d";
+
+__asm__(".text\n.align 4");

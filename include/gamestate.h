@@ -76,6 +76,34 @@ typedef enum {
 } BoostState;
 
 typedef struct {
+    /* 0x00 */ s32 gold;
+    /* 0x04 */ u8 gameMode;
+    /* 0x05 */ u8 demoIndex;
+    /* 0x06 */ u8 padding6;
+    /* 0x07 */ u8 currentLevel;
+    /* 0x08 */ u8 numPlayers;
+    /* 0x09 */ u8 characterIds[4];
+    /* 0x0D */ u8 snowboardIds[4];
+    /* 0x11 */ u8 colorSlots[4];
+    /* 0x15 */ u8 boardModelIds[4];
+    /* 0x19 */ u8 lapCount;
+    /* 0x1A */ u8 battleScores[4];
+    /* 0x1E */ u8 saveSlotIndex;
+    /* 0x1F */ u8 battleTimeLimit;
+    /* 0x20 */ u8 battleScoreLimit;
+    /* 0x21 */ u8 customLapEnabled;
+    /* 0x22 */ u8 customLapCount;
+    /* 0x23 */ u8 pendingUnlockCutscene;
+    union {
+        /* 0x24 */ u8 isStoryMode;
+        /* 0x24 */ u8 isExpertMode;
+    } modeState;
+    /* 0x25 */ u8 creditsCompleted;
+} GameSessionContext;
+
+extern GameSessionContext *gGameSessionContext;
+
+typedef struct {
     /* 0x00 */ BoneAnimationTransformState transform;
     /* 0x40 */ u16 flags;
     /* 0x42 */ u16 counter;

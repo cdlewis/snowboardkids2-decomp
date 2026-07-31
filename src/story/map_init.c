@@ -1,5 +1,3 @@
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "common_bss.h"
@@ -12,6 +10,7 @@
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "ui/character_select_sprites.h"
+#include "ui/save_data.h"
 
 USE_OVERLAY(CHARACTER_SELECT_SPRITES_OVERLAY)
 USE_OVERLAY(characterSelectBoardTexture)
@@ -73,7 +72,7 @@ void initStoryMap(void) {
         state->modeData.storyMap.playerArrived[i] = 0;
         state->modeData.storyMap.selectionState[i] = 0;
         state->modeData.storyMap.playerAtLocation[i] = 0;
-        state->modeData.storyMap.locationIds[i] = storyMapLocationOrder2[gGameSessionContext->playerBoardIds[i]];
+        state->modeData.storyMap.locationIds[i] = storyMapLocationOrder2[gGameSessionContext->characterIds[i]];
         state->modeData.storyMap.playerCountAtLocation[i] = 0;
         for (j = 0; j < i + 1; j++) {
             if (state->modeData.storyMap.locationIds[i] == state->modeData.storyMap.locationIds[j]) {
@@ -97,13 +96,13 @@ void initStoryMap(void) {
         state->modeData.storyMap.locationBlocked[4] = -1;
         state->modeData.storyMap.locationBlocked[3] = -1;
     } else {
-        if (EepromSaveData->setting_4E == 0) {
+        if (EepromSaveData->specialBoardUnlocked[0] == 0) {
             state->modeData.storyMap.locationBlocked[8] = -1;
         }
-        if (EepromSaveData->setting_4F == 0) {
+        if (EepromSaveData->specialBoardUnlocked[1] == 0) {
             state->modeData.storyMap.locationBlocked[4] = -1;
         }
-        if (EepromSaveData->setting_50 == 0) {
+        if (EepromSaveData->specialBoardUnlocked[2] == 0) {
             state->modeData.storyMap.locationBlocked[3] = -1;
         }
     }
@@ -127,7 +126,7 @@ void initStoryMap(void) {
     scheduleTask(initCharacterSelectTextureDataLoad, 1, 0, 0x5A);
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
-        state->modeData.storyMap.characterIds[i] = gGameSessionContext->playerBoardIds[i];
+        state->modeData.storyMap.characterIds[i] = gGameSessionContext->characterIds[i];
     }
 
     setGameStateHandler(storyMapInitFadeIn);
@@ -242,7 +241,7 @@ void storyMapHandlePlayerInput(void) {
                 }
 
                 if (gControllerInputs[i] & CONT_A) {
-                    gGameSessionContext->playerBoardIds[i] =
+                    gGameSessionContext->characterIds[i] =
                         storyMapLocationOrder1[state->modeData.storyMap.locationIds[i]];
                     state->modeData.storyMap.selectionState[i] = 10;
                     state->modeData.storyMap.playerAtLocation[i] = 0;
@@ -252,7 +251,7 @@ void storyMapHandlePlayerInput(void) {
                     s32 k;
                     playSoundEffect(0x2E);
                     for (k = 0; k < gGameSessionContext->numPlayers; k++) {
-                        gGameSessionContext->playerBoardIds[k] = state->modeData.storyMap.characterIds[k];
+                        gGameSessionContext->characterIds[k] = state->modeData.storyMap.characterIds[k];
                         if (gTitleInitialized != 0) {
                             state->modeData.storyMap.selectionState[i] = 4;
                         } else {
@@ -374,8 +373,8 @@ void storyMapHandlePlayerInput(void) {
         } else {
             fadeSpeed = 0xE;
             for (i = 0; i < gGameSessionContext->numPlayers; i++) {
-                if (state->modeData.storyMap.characterIds[i] != gGameSessionContext->playerBoardIds[i]) {
-                    gGameSessionContext->playerBoardIds[0xC + i] = 0;
+                if (state->modeData.storyMap.characterIds[i] != gGameSessionContext->characterIds[i]) {
+                    gGameSessionContext->boardModelIds[i] = 0;
                 }
             }
         }
@@ -415,7 +414,7 @@ void onStoryMapNormalExit(void) {
     s32 exitCode;
 
     exitCode = 1;
-    if ((gGameSessionContext->gameMode == 0) && (EepromSaveData->save_slot_status[0] == 5)) {
+    if ((gGameSessionContext->gameMode == 0) && (EepromSaveData->levelUnlockStatus[0] == 5)) {
         exitCode = 0x44;
     }
     returnToParentScheduler(exitCode);

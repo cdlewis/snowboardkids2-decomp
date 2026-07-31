@@ -1,10 +1,9 @@
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "assets.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "common_bss.h"
 #include "data/course_data.h"
+#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "os_cont.h"
@@ -15,6 +14,7 @@
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 #include "ui/level_preview.h"
+#include "ui/save_data.h"
 
 #define ASPECT_RATIO (4.0f / 3.0f)
 
@@ -118,24 +118,24 @@ void initLevelSelectState(void) {
     state->maxLevelCount = unlockedLevelCount;
 
     for (i = 0; i < unlockedLevelCount; i++) {
-        if (gGameSessionContext->saveSlotIndex == state->levelIdList[i]) {
+        if (gGameSessionContext->currentLevel == state->levelIdList[i]) {
             break;
             do { } while (0); }
     }
     state->selectedIndex = i;
 
-    saveSlot = gGameSessionContext->saveSlotIndex;
+    saveSlot = gGameSessionContext->currentLevel;
     state->selectedLevelId = saveSlot;
     state->previousLevelId = saveSlot;
 
-    state->selectedLapCount = gGameSessionContext->playerBoardIds[0x10];
+    state->selectedLapCount = gGameSessionContext->lapCount;
 
     if (state->showDetailView != 0) {
         state->pendingDetailAnimation = 0;
         state->menuState = 5;
-        saveSlot = gGameSessionContext->saveSlotIndex;
+        saveSlot = gGameSessionContext->currentLevel;
         state->selectedIndex = saveSlot;
-        state->levelIdList[saveSlot] = gGameSessionContext->saveSlotIndex;
+        state->levelIdList[saveSlot] = gGameSessionContext->currentLevel;
         scheduleTask(initMenuBackgroundEffect, 1, 0, 0x64);
         scheduleTask(initMinigameDescText, 1, 0, 0x64);
     }
@@ -223,7 +223,7 @@ void handleLevelSelectInput(void) {
                             if (tempA0->customLapEnabled != 0) {
                                 if (tempA0->gameMode == 1) {
                                     allocation->menuState = 3;
-                                    allocation->selectedLapCount = gGameSessionContext->playerBoardIds[0x10];
+                                    allocation->selectedLapCount = gGameSessionContext->lapCount;
                                 } else {
                                     allocation->menuState = 2;
                                 }
@@ -248,10 +248,9 @@ void handleLevelSelectInput(void) {
                         allocation->menuState = 0;
                     } else if (gControllerInputs[i] & (A_BUTTON | START_BUTTON)) {
                         allocation->exitMode = 1;
-                        gGameSessionContext->saveSlotIndex = allocation->levelIdList[allocation->selectedIndex];
+                        gGameSessionContext->currentLevel = allocation->levelIdList[allocation->selectedIndex];
                         if (gGameSessionContext->gameMode == 0) {
-                            gGameSessionContext->playerBoardIds[0xC] =
-                                gLevelWorldTable[gGameSessionContext->saveSlotIndex];
+                            gGameSessionContext->boardModelIds[0] = gLevelWorldTable[gGameSessionContext->currentLevel];
                         }
                         applyLevelSelection();
                         playSoundEffectOnChannelNoPriority(0x2D, 0);
@@ -313,7 +312,7 @@ void handleLevelSelectInput(void) {
                 allocation->previewLoadCounter = 0;
             } else if (gControllerInputs[0] & (A_BUTTON | START_BUTTON)) {
                 allocation->exitMode = 1;
-                gGameSessionContext->playerBoardIds[0xC] = gLevelWorldTable[gGameSessionContext->saveSlotIndex];
+                gGameSessionContext->boardModelIds[0] = gLevelWorldTable[gGameSessionContext->currentLevel];
                 playSoundEffect(0x2D);
             }
             break;
@@ -419,18 +418,18 @@ void applyLevelSelection(void) {
     allocation = getCurrentAllocation();
     ptr = gGameSessionContext;
     unk4 = ptr->gameMode;
-    saveSlotIndex = ptr->saveSlotIndex;
+    saveSlotIndex = ptr->currentLevel;
 
     if (unk4 == 0) {
         if (saveSlotIndex == 3 || saveSlotIndex == 7 || saveSlotIndex == 11 || saveSlotIndex >= 12) {
-            ptr->playerBoardIds[0x10] = 1;
+            ptr->lapCount = 1;
             gGameSessionContext->numPlayers = 1;
         } else {
-            ptr->playerBoardIds[0x10] = 3;
+            ptr->lapCount = 3;
             gGameSessionContext->numPlayers = 1;
         }
     } else {
-        ptr->playerBoardIds[0x10] = allocation->selectedLapCount;
+        ptr->lapCount = allocation->selectedLapCount;
         gGameSessionContext->customLapCount = allocation->selectedLapCount;
     }
 }
@@ -496,13 +495,13 @@ s32 buildUnlockedLevelList(u8 *levelIdList) {
     for (i = 0; i < maxSlots; i++) {
         if (gGameSessionContext->gameMode == 0) {
             do {
-                if (EepromSaveData->save_slot_status[i] != 0) {
+                if (EepromSaveData->levelUnlockStatus[i] != 0) {
                     levelIdList[(u8)(count++)] = i;
                 } else {
                     levelIdList[i] = 0;
                 }
             } while (0);
-        } else if (EepromSaveData->save_slot_data[i] != 0) {
+        } else if (EepromSaveData->versusLevelAvailability[i] != 0) {
             levelIdList[(u8)(count++)] = i;
         } else {
             levelIdList[i] = 0;

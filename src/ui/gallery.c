@@ -10,6 +10,7 @@
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "graphics/sprite_table.h"
+#include "graphics/tiled_sprite_grid.h"
 #include "math/geometry.h"
 #include "os_cont.h"
 #include "race/race_session.h"

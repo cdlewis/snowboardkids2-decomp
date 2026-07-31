@@ -1,6 +1,6 @@
 #include "story/map_events.h"
-#include "D_800AFE8C_A71FC_type.h"
 #include "data/global_frame_counter.h"
+#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "math/rand.h"
@@ -202,14 +202,14 @@ void initStoryMapRandomEvent(u8 *eventTypeOut) {
 
     if ((randA() & 7) == 7) {
         randomIndex = randB();
-        *eventTypeOut = gStoryMapRareEventTypes[gGameSessionContext->playerBoardIds[0]][randomIndex % 10] - 1;
+        *eventTypeOut = gStoryMapRareEventTypes[gGameSessionContext->characterIds[0]][randomIndex % 10] - 1;
         rareTask = scheduleTask(initStoryMapRareEvent, 0, 0, 0x5B);
         rareTask->eventTypeIndex = *eventTypeOut;
         state->rareEventType = *eventTypeOut;
         goto check_event;
     }
 
-    eventTypeIndex = gStoryMapRegularEventTypes[gGameSessionContext->playerBoardIds[0]][gGlobalFrameCounter & 7];
+    eventTypeIndex = gStoryMapRegularEventTypes[gGameSessionContext->characterIds[0]][gGlobalFrameCounter & 7];
     if (eventTypeIndex != 0) {
         regularTask = scheduleTask(initStoryMapItem, 0, 0, 0x5B);
         regularTask->eventTypeIndex = eventTypeIndex - 1;

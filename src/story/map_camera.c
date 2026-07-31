@@ -1,4 +1,3 @@
-#include "D_800AFE8C_A71FC_type.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "gamestate.h"
@@ -57,7 +56,7 @@ void updateStoryMapMiniCamera(StoryMapMiniCameraState *arg0);
 void initStoryMapCharacterTask(void **arg0) {
     void *allocation = getCurrentAllocation();
 
-    *arg0 = createSceneModel(gGameSessionContext->playerBoardIds[0] + 0x50, allocation);
+    *arg0 = createSceneModel(gGameSessionContext->characterIds[0] + 0x50, allocation);
     setCleanupCallback(&cleanupStoryMapCharacter);
     setCallback(&awaitStoryMapCharacterReady);
 }

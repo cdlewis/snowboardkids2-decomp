@@ -5,6 +5,7 @@
 #include "gamestate.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
+#include "graphics/tiled_sprite_grid.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"

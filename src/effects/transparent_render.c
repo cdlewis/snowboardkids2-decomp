@@ -1,3 +1,4 @@
+#include "effects/transparent_render.h"
 #include "animation/animation_loop.h"
 #include "assets.h"
 #include "common.h"
@@ -5,7 +6,6 @@
 #include "cutscene/cutscene_manager.h"
 #include "graphics/graphics.h"
 #include "system/task_scheduler.h"
-#include "ui/save_data.h"
 
 typedef struct {
     CutsceneManager *cutsceneManager;
@@ -27,8 +27,9 @@ typedef struct {
 } AssetGroupTableEntry;
 
 void renderModelIfTransparent(TransparentRenderTaskData *taskData);
-void loadAssetGroupResources(TiledTextureTaskData *taskData);
-void freeAssetGroupResources(TiledTextureTaskData *taskData);
+void loadAssetGroupResources(ScrollingTileGroupTaskData *taskData);
+void freeAssetGroupResources(ScrollingTileGroupTaskData *taskData);
+void updateTiledTextureAssetDisplay(ScrollingTileGroupTaskData *taskData);
 
 u8 D_8008BE90[] = { 0x00, 0x01, 0x00, 0x00 };
 
@@ -99,38 +100,38 @@ void renderModelIfTransparent(TransparentRenderTaskData *taskData) {
 }
 
 void scheduleDualAssetGroupLoad(void *context, u8 groupIndex1, s32 param1, u8 groupIndex2, s32 param2) {
-    TiledTextureTaskData *task;
+    ScrollingTileGroupTaskData *task;
 
     task = scheduleTask(loadAssetGroupResources, 3, 0, 0);
     if (task != NULL) {
         task->cutsceneManager = context;
-        task->groupIndex = groupIndex2;
-        task->scrollSpeedParam = param2;
+        task->assetGroupIndex = groupIndex2;
+        task->parallaxScale = param2;
         task->initialized = 0;
     }
 
     task = scheduleTask(loadAssetGroupResources, 3, 0, 0);
     if (task != NULL) {
         task->cutsceneManager = context;
-        task->groupIndex = groupIndex1;
-        task->scrollSpeedParam = param1;
+        task->assetGroupIndex = groupIndex1;
+        task->parallaxScale = param1;
         task->initialized = 0;
     }
 }
 
-void loadAssetGroupResources(TiledTextureTaskData *taskData) {
+void loadAssetGroupResources(ScrollingTileGroupTaskData *taskData) {
     AssetGroupTableEntry *entry;
     AssetEntry *assetList;
     s32 i;
 
-    entry = &assetGroupTable[taskData->groupIndex];
+    entry = &assetGroupTable[taskData->assetGroupIndex];
     assetList = entry->assetList;
 
     setCleanupCallback(freeAssetGroupResources);
     i = 0;
 
-    taskData->yPos = 0;
-    taskData->scrollOffset = 0;
+    taskData->screenY = 0;
+    taskData->horizontalScroll = 0;
 
     taskData->loadedAssets = allocateNodeMemory(entry->assetCount * 4);
 
@@ -141,27 +142,27 @@ void loadAssetGroupResources(TiledTextureTaskData *taskData) {
     setCallback(updateTiledTextureAssetDisplay);
 }
 
-void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
+void updateTiledTextureAssetDisplay(ScrollingTileGroupTaskData *taskData) {
     AssetGroupTableEntry *entry;
     s32 i;
     s32 scrollOffset;
 
-    entry = &assetGroupTable[taskData->groupIndex];
+    entry = &assetGroupTable[taskData->assetGroupIndex];
     if (taskData->initialized == 0) {
         for (i = 0; i < 4; i++) {
-            initScrollingTileMapState(&taskData->elements[i], (s32)taskData->loadedAssets[i % entry->assetCount]);
-            taskData->elements[i].width = 0x81;
-            taskData->elements[i].height = 0x81;
+            initScrollingTileMapState(&taskData->tileMaps[i], taskData->loadedAssets[i % entry->assetCount]);
+            taskData->tileMaps[i].clipWidth = 0x81;
+            taskData->tileMaps[i].clipHeight = 0x81;
         }
         taskData->initialized = 1;
         return;
     }
 
     scrollOffset = ((CutsceneCameraState *)taskData->cutsceneManager->sceneContext)->posXCurrent;
-    scrollOffset = (scrollOffset >> 8) * (taskData->scrollSpeedParam >> 8);
+    scrollOffset = (scrollOffset >> 8) * (taskData->parallaxScale >> 8);
     scrollOffset >>= 16;
-    taskData->yPos = 0x44;
-    taskData->scrollOffset = scrollOffset;
+    taskData->screenY = 0x44;
+    taskData->horizontalScroll = scrollOffset;
 
     for (i = 0; i < 4; i++) {
         u32 tableIndex;
@@ -169,34 +170,34 @@ void updateTiledTextureAssetDisplay(TiledTextureTaskData *taskData) {
         s32 assetIndex;
         s32 xPos;
 
-        tableIndex = ((u32)taskData->scrollOffset + (i << 7)) >> 7;
+        tableIndex = ((u32)taskData->horizontalScroll + (i << 7)) >> 7;
         tileIndex = tableIndex % entry->tableSize;
         tileIndex = entry->tileIndexMap[tileIndex];
         assetIndex = tileIndex % entry->assetCount;
-        initScrollingTileMapState(&taskData->elements[i], (s32)taskData->loadedAssets[assetIndex]);
-        taskData->elements[i].width = 0x81;
-        taskData->elements[i].height = 0x81;
-        xPos = ~taskData->scrollOffset;
+        initScrollingTileMapState(&taskData->tileMaps[i], taskData->loadedAssets[assetIndex]);
+        taskData->tileMaps[i].clipWidth = 0x81;
+        taskData->tileMaps[i].clipHeight = 0x81;
+        xPos = ~taskData->horizontalScroll;
         xPos &= 0x7F;
         xPos += -0x80;
         xPos += i << 7;
-        taskData->elements[i].xPos = xPos;
-        taskData->elements[i].yPos = taskData->yPos;
+        taskData->tileMaps[i].clipX = xPos;
+        taskData->tileMaps[i].clipY = taskData->screenY;
 
         if (taskData->cutsceneManager->enableTransparency != 0) {
             if (taskData->cutsceneManager->unk10.renderModeArg.unk87 != 0) {
-                enqueueCallbackBySlotIndex(3, 2, renderTiledTextureMap, &taskData->elements[i]);
+                enqueueCallbackBySlotIndex(3, 2, renderTiledTextureMap, &taskData->tileMaps[i]);
             }
         }
     }
 }
 
-void freeAssetGroupResources(TiledTextureTaskData *taskData) {
+void freeAssetGroupResources(ScrollingTileGroupTaskData *taskData) {
     AssetGroupTableEntry *entry;
     s32 i;
     u8 index;
 
-    index = taskData->groupIndex;
+    index = taskData->assetGroupIndex;
     entry = &assetGroupTable[index];
 
     for (i = 0; i < entry->assetCount; i++) {

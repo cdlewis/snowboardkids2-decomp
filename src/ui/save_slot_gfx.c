@@ -377,7 +377,7 @@ void initSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
     setCleanupCallback(cleanupSaveSlotItemIcons);
 
     for (i = 0; i < 15; i++) {
-        yPos = ((-(allocation->slotData[arg0->slotIndex].save_slot_status[i] != 0)) & (-8)) | 0xFF70;
+        yPos = ((-(allocation->slotData[arg0->slotIndex].levelUnlockStatus[i] != 0)) & (-8)) | 0xFF70;
         arg0->icons[i].x = -0x78 + i * 0x10;
         arg0->icons[i].y = yPos;
         arg0->icons[i].spriteData = arg0->spriteSheet;
@@ -429,7 +429,7 @@ void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
         if (alphaCheck == 0xFE) {
             slotIndex = arg0->slotIndex;
             if (slotIndex != 3) {
-                if (allocation->slotData[slotIndex].save_slot_status[i] == 1) {
+                if (allocation->slotData[slotIndex].levelUnlockStatus[i] == 1) {
                     animFrame = arg0->animFrame;
                     if (animFrame < 0x10) {
                         arg0->icons[i].color.paletteAndAlpha = alphaCheck - ((animFrame + 1) * 8);
@@ -442,7 +442,7 @@ void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
                     arg0->icons[i].color.paletteAndAlpha = 0x60;
                 }
             } else {
-                if (allocation->slotData[3].save_slot_status[i] == 1) {
+                if (allocation->slotData[3].levelUnlockStatus[i] == 1) {
                     arg0->icons[i].color.paletteAndAlpha = alphaCheck;
                 } else {
                     arg0->icons[i].color.paletteAndAlpha = 0x60;
@@ -451,13 +451,13 @@ void updateSaveSlotItemIcons(SaveSlotItemIconsState *arg0) {
         } else {
             arg0->icons[i].color.paletteAndAlpha = alpha;
             if (alphaCheck == 0xFF && allocation->saveSlotMenuState != 2) {
-                if (allocation->slotData[arg0->slotIndex].save_slot_status[i] == 1) {
+                if (allocation->slotData[arg0->slotIndex].levelUnlockStatus[i] == 1) {
                     arg0->icons[i].color.paletteAndAlpha = 0xFE;
                 } else {
                     arg0->icons[i].color.paletteAndAlpha = 0x60;
                 }
             } else if (alphaCheck == 0x60) {
-                if (allocation->slotData[arg0->slotIndex].save_slot_status[i] != 1) {
+                if (allocation->slotData[arg0->slotIndex].levelUnlockStatus[i] != 1) {
                     arg0->icons[i].color.paletteAndAlpha = 0x30;
                 }
             }
@@ -560,7 +560,7 @@ void initSaveSlotItemLabels(SaveSlotNumberLabelsState *arg0) {
     setCleanupCallback(cleanupSaveSlotNumberLabels);
 
     for (i = 0; i < 15; i++) {
-        itemY = (saveData->slotData[arg0->slotIndex].save_slot_status[i] == 0) ? -0x90 : 0;
+        itemY = (saveData->slotData[arg0->slotIndex].levelUnlockStatus[i] == 0) ? -0x90 : 0;
         numberBuffer = arg0->textBuffers[i];
 
         if (i < 9) {
@@ -618,7 +618,7 @@ void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
         }
 
         if ((alphaCheck == 0xFF) && (allocation->saveSlotMenuState != 2)) {
-            if (allocation->slotData[arg0->slotIndex].save_slot_status[i] == 1) {
+            if (allocation->slotData[arg0->slotIndex].levelUnlockStatus[i] == 1) {
                 if (i < 9) {
                     arg0->texts[i].shade.value = 0xFE;
                 } else {
@@ -630,7 +630,7 @@ void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
                 arg0->sprites[i - 9].color.paletteAndAlpha = 0x60;
             }
         } else if (alphaCheck == 0x60) {
-            if (allocation->slotData[arg0->slotIndex].save_slot_status[i] != 1) {
+            if (allocation->slotData[arg0->slotIndex].levelUnlockStatus[i] != 1) {
                 if (i < 9) {
                     arg0->texts[i].shade.value = 0x30;
                 } else {
@@ -865,7 +865,7 @@ void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state) {
             state->animFrames[i] = 0;
         }
 
-        sprintf((char *)&state->textBuffers[i], gGoldFormatString7d, allocation->slotData[i].slotGold);
+        sprintf((char *)&state->textBuffers[i], gGoldFormatString7d, allocation->slotData[i].gold);
 
         if (allocation->saveSlotMenuState != 0x18 || allocation->selectedSaveSlot != i) {
             enqueueCallbackBySlotIndex(i + 9, 7, renderTextColored, &state->text[i]);

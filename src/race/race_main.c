@@ -1,5 +1,4 @@
 #include "race/race_main.h"
-#include "D_800AFE8C_A71FC_type.h"
 #include "animation/bone_animation.h"
 #include "audio/audio.h"
 #include "common.h"
@@ -5241,9 +5240,9 @@ void updateAndRenderRaceCharacters(void) {
                         break;
                     }
                     if (player->finishPosition == 0) {
-                        gGameSessionContext->playerBoardIds[0x11 + player->playerIndex]++;
-                        if (gGameSessionContext->playerBoardIds[0x11 + player->playerIndex] >= 100) {
-                            gGameSessionContext->playerBoardIds[0x11 + player->playerIndex] = 99;
+                        gGameSessionContext->battleScores[player->playerIndex]++;
+                        if (gGameSessionContext->battleScores[player->playerIndex] >= 100) {
+                            gGameSessionContext->battleScores[player->playerIndex] = 99;
                         }
                         showPlacementAnnouncement(player->playerIndex, 1);
                         if ((s32)gs->humanPlayerCount == 1) {

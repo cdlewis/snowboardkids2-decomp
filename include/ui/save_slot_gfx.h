@@ -1,16 +1,16 @@
 #pragma once
 
-#include "EepromSaveData_type.h"
 #include "common.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "text/font_assets.h"
 #include "text/text_layout.h"
+#include "ui/save_data.h"
 
 typedef struct {
     /* 0x000 */ ViewportNode mainViewport;
     /* 0x1D8 */ ViewportNode slotModels[4];
-    /* 0x938 */ EepromSaveData_type slotData[4];
+    /* 0x938 */ EepromSaveDataBlock slotData[4];
     /* 0xAA8 */ void *uiFontSpriteSheet;
     /* 0xAAC */ void *confirmationSpriteSheet;
     /* 0xAB0 */ void *snowflakeSpriteSheet;

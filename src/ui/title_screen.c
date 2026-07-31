@@ -1,10 +1,9 @@
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "assets.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "common_bss.h"
 #include "effects/cutscene_keyframes.h"
+#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "os_cont.h"
@@ -17,6 +16,7 @@
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "ui/gallery.h"
+#include "ui/save_data.h"
 #include "ui/title_ui_elements.h"
 #include "ui/unlock_screen.h"
 
@@ -199,7 +199,7 @@ void cleanupTitleAndTransition(void) {
         menuMode = state->menuMode;
         if (menuMode == 1) {
             gGameSessionContext->gameMode = menuSelection;
-            gGameSessionContext->saveSlotIndex = 0;
+            gGameSessionContext->currentLevel = 0;
         } else if (menuSelection == 1) {
             gTitleExitMode = 2;
         } else {
@@ -210,7 +210,7 @@ void cleanupTitleAndTransition(void) {
 
     if (state->idleFrameCounter == 0x384) {
         gGameSessionContext->gameMode = 0;
-        gGameSessionContext->saveSlotIndex = 0;
+        gGameSessionContext->currentLevel = 0;
         gTitleExitMode = 4;
     }
 
@@ -442,14 +442,14 @@ void initTitleScreen(void) {
 
     if (gGameSessionContext->gameMode == 0xFE) {
         state->menuSelection = 2;
-    } else if (gGameSessionContext->saveSlotIndex == 0xF) {
+    } else if (gGameSessionContext->currentLevel == 0xF) {
         state->menuSelection = 1;
     }
 
     resetSaveDataToDefaults();
 
     for (i = 0; i < 4; i++) {
-        gGameSessionContext->playerBoardIds[0x11 + i] = 0;
+        gGameSessionContext->battleScores[i] = 0;
     }
 
     gTitleInitialized = 0;
@@ -670,103 +670,103 @@ void checkUnlockAllCheatCode(void) {
 void unlockAllContent(void) {
     s32 i;
 
-    // First loop: initialize save_slot_status and save_slot_data
+    // First loop: initialize levelUnlockStatus and versusLevelAvailability
     for (i = 0; i < 16; i++) {
-        EepromSaveData->save_slot_status[i] = 1;
-        EepromSaveData->save_slot_data[i] = 1;
+        EepromSaveData->levelUnlockStatus[i] = 1;
+        EepromSaveData->versusLevelAvailability[i] = 1;
     }
 
-    // Second loop: initialize character_or_settings and related arrays
+    // Second loop: initialize characterPaletteIds and related arrays
     for (i = 0; i < 9; i++) {
-        EepromSaveData->character_or_settings[i] = i + 1;
-        EepromSaveData->character_or_settings[i + 9] = i + 0x11;
-        EepromSaveData->u.setting_42[i] = i + 9;
+        EepromSaveData->characterPaletteIds[i] = i + 1;
+        EepromSaveData->characterPaletteIds[i + 9] = i + 0x11;
+        EepromSaveData->unlockedCutsceneIds[i] = i + 9;
     }
 
     // Set individual bytes
-    EepromSaveData->setting_4B[0] = 0xD;
-    EepromSaveData->setting_4B[1] = 0xE;
-    EepromSaveData->setting_4B[2] = 0xF;
-    EepromSaveData->setting_4E = 1;
-    EepromSaveData->setting_4F = 1;
-    EepromSaveData->setting_50 = 1;
+    EepromSaveData->unlockedBoardIds[0] = 0xD;
+    EepromSaveData->unlockedBoardIds[1] = 0xE;
+    EepromSaveData->unlockedBoardIds[2] = 0xF;
+    EepromSaveData->specialBoardUnlocked[0] = 1;
+    EepromSaveData->specialBoardUnlocked[1] = 1;
+    EepromSaveData->specialBoardUnlocked[2] = 1;
 }
 
 void unlockPartialContent(void) {
     s32 i;
 
     for (i = 0; i < 16; i++) {
-        EepromSaveData->save_slot_status[i] = 1;
-        EepromSaveData->save_slot_data[i] = 1;
+        EepromSaveData->levelUnlockStatus[i] = 1;
+        EepromSaveData->versusLevelAvailability[i] = 1;
     }
 
-    EepromSaveData->setting_4E = 1;
-    EepromSaveData->setting_4F = 1;
-    EepromSaveData->setting_50 = 0;
+    EepromSaveData->specialBoardUnlocked[0] = 1;
+    EepromSaveData->specialBoardUnlocked[1] = 1;
+    EepromSaveData->specialBoardUnlocked[2] = 0;
 
     for (i = 0; i < 9; i++) {
-        EepromSaveData->character_or_settings[i] = i + 1;
+        EepromSaveData->characterPaletteIds[i] = i + 1;
     }
 
-    EepromSaveData->setting_4B[0] = 0xD;
-    EepromSaveData->setting_4B[1] = 0xF;
+    EepromSaveData->unlockedBoardIds[0] = 0xD;
+    EepromSaveData->unlockedBoardIds[1] = 0xF;
 }
 
 void resetSaveDataToDefaults(void) {
     s32 i;
 
-    // Zero header_data (8 bytes)
+    // Zero magic (8 bytes)
     for (i = 0; i < 8; i++) {
-        EepromSaveData->header_data[i] = 0;
+        EepromSaveData->magic[i] = 0;
     }
 
-    // Zero checksum and slotGold
+    // Zero checksum and gold
     EepromSaveData->checksum = 0;
-    EepromSaveData->slotGold = 0;
+    EepromSaveData->gold = 0;
 
-    // Zero save_slot_status and save_slot_data (16 bytes each)
+    // Zero levelUnlockStatus and versusLevelAvailability (16 bytes each)
     for (i = 0; i < 16; i++) {
-        EepromSaveData->save_slot_status[i] = 0;
-        EepromSaveData->save_slot_data[i] = 0;
+        EepromSaveData->levelUnlockStatus[i] = 0;
+        EepromSaveData->versusLevelAvailability[i] = 0;
     }
 
-    // Set first save_slot_status to 5
-    EepromSaveData->save_slot_status[0] = 5;
+    // Set first levelUnlockStatus to 5
+    EepromSaveData->levelUnlockStatus[0] = 5;
 
-    // Set first 3 pairs of save_slot_data to 5
+    // Set first 3 pairs of versusLevelAvailability to 5
     for (i = 0; i < 3; i++) {
-        EepromSaveData->save_slot_data[i] = 5;
-        EepromSaveData->save_slot_data[i + 4] = 5;
+        EepromSaveData->versusLevelAvailability[i] = 5;
+        EepromSaveData->versusLevelAvailability[i + 4] = 5;
     }
 
-    // Zero character_or_settings (18 bytes)
+    // Zero characterPaletteIds (18 bytes)
     for (i = 0; i < 18; i++) {
-        EepromSaveData->character_or_settings[i] = 0;
+        EepromSaveData->characterPaletteIds[i] = 0;
     }
 
-    // Set specific character_or_settings values
-    EepromSaveData->character_or_settings[0] = 1;
-    EepromSaveData->character_or_settings[3] = 2;
-    EepromSaveData->character_or_settings[6] = 3;
+    // Set specific characterPaletteIds values
+    EepromSaveData->characterPaletteIds[0] = 1;
+    EepromSaveData->characterPaletteIds[3] = 2;
+    EepromSaveData->characterPaletteIds[6] = 3;
 
-    // Zero setting_42 (9 bytes)
+    // Zero unlocked cutscene IDs
     for (i = 0; i < 9; i++) {
-        EepromSaveData->u.setting_42[i] = 0;
+        EepromSaveData->unlockedCutsceneIds[i] = 0;
     }
 
-    // Zero setting_4B (3 bytes)
+    // Zero unlockedBoardIds (3 bytes)
     for (i = 0; i < 3; i++) {
-        EepromSaveData->setting_4B[i] = 0;
+        EepromSaveData->unlockedBoardIds[i] = 0;
     }
 
     // Zero individual settings
-    EepromSaveData->setting_4E = 0;
-    EepromSaveData->setting_4F = 0;
-    EepromSaveData->setting_50 = 0;
-    EepromSaveData->unk51 = 0;
+    EepromSaveData->specialBoardUnlocked[0] = 0;
+    EepromSaveData->specialBoardUnlocked[1] = 0;
+    EepromSaveData->specialBoardUnlocked[2] = 0;
+    EepromSaveData->postCreditsCutscenePending = 0;
 
     // Zero padding
     for (i = 0; i < 8; i++) {
-        EepromSaveData->padding_52[i] = 0;
+        EepromSaveData->reserved[i] = 0;
     }
 }

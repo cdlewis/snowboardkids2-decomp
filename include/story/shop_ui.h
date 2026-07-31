@@ -3,10 +3,11 @@
 #include "common.h"
 #include "graphics/displaylist.h"
 #include "graphics/sprite_rdp.h"
+#include "graphics/tiled_sprite_grid.h"
 #include "math/geometry.h"
 #include "ui/unlock_screen.h"
 
-typedef struct StoryMapShopBackgroundState StoryMapShopBackgroundState;
+typedef TileMapRenderTaskState StoryMapShopBackgroundState;
 typedef struct StoryMapShopFairyState StoryMapShopFairyState;
 typedef struct StoryMapShopGoldDisplayState StoryMapShopGoldDisplayState;
 typedef struct StoryMapShopItemCardState {

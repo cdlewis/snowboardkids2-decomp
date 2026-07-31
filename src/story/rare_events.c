@@ -1,5 +1,4 @@
 #include "story/rare_events.h"
-#include "D_800AFE8C_A71FC_type.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "common_bss.h"
@@ -745,15 +744,14 @@ void updateStoryMapNpcDialogueTurn(RareEventNpc *npc) {
             if (savedAngle == 0x30 && npc->animFrameComplete != 0) {
                 u16 dialogueIndex;
                 npc->animSequencePtr =
-                    (u16 *)
-                        sStoryMapNpcDialogueTable.dialogueTable[npc->npcIndex][gGameSessionContext->playerBoardIds[0]];
+                    (u16 *)sStoryMapNpcDialogueTable.dialogueTable[npc->npcIndex][gGameSessionContext->characterIds[0]];
                 dialogueIndex = npc->animSequencePtr[0];
                 npc->animFrameComplete = 0;
                 npc->animFrame = dialogueIndex;
                 npc->animSequencePtr += 1;
                 state = 4;
                 playSoundEffectOnChannelNoPriority(
-                    sNpcInteractionSoundIds[npc->npcIndex][gGameSessionContext->playerBoardIds[0]],
+                    sNpcInteractionSoundIds[npc->npcIndex][gGameSessionContext->characterIds[0]],
                     1
                 );
                 initStoryMapNpcSpecialDialogue((Func8002A390Arg *)npc);

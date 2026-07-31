@@ -1,5 +1,3 @@
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "assets.h"
 #include "common.h"
 #include "data/asset_metadata.h"
@@ -8,6 +6,7 @@
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
+#include "graphics/tiled_sprite_grid.h"
 #include "math/geometry.h"
 #include "math/rand.h"
 #include "race/race_session.h"
@@ -300,10 +299,7 @@ typedef struct {
     s16 animationComplete;
 } BoardShopSlideOutAllocation;
 
-typedef struct {
-    u8 padding[0x2C];
-    void *backgroundAsset;
-} BoardShopBackgroundState;
+typedef TileMapRenderTaskState BoardShopBackgroundState;
 
 typedef struct {
     u8 padding[0x77C];
@@ -351,7 +347,7 @@ void cleanupBoardShopSnowflakeSprite(SpriteRenderArg *);
 void cleanupBoardShopBoardIcons(BoardShopBoardIconsState *arg0);
 void freeBoardShopCharacterTransitionAssets(func_800319C8_325C8_arg *arg0);
 void animateBoardShopCharacterTransition(func_80031944_32544_arg *arg0);
-void enqueueBoardShopBackgroundRender(void *arg0);
+void enqueueBoardShopBackgroundRender(BoardShopBackgroundState *state);
 void cleanupBoardShopSnowParticles(SnowParticleState *arg0);
 void waitBoardShopSnowParticles(SnowParticleState *arg0);
 void animateBoardShopCharacterPortraitsSlideIn(BoardShopCharacterPortraitState *arg0);
@@ -405,7 +401,7 @@ void initBoardShopPreviewWipe(BoardShopCharacterPreviewState *arg0) {
 
     arg0->unk5C = 0xFFF80000;
     charIndex = state->unk7A2 + (state->unk7A1 * 3);
-    paletteId = EepromSaveData->character_or_settings[charIndex & 0xFF];
+    paletteId = EepromSaveData->characterPaletteIds[charIndex & 0xFF];
 
     memcpy(&arg0->unk4, transformMatrix, sizeof(Transform3D));
 
@@ -563,7 +559,7 @@ void initBoardShopCharacterPreview(BoardShopCharacterPreviewState *arg0) {
     composeTransform3D(pRotationYX, pRotationZ, (Transform3D *)transformMatrix);
     arg0->unk50 = 0x600000;
     arg0->unk58 = 0xFFF80000;
-    paletteIndex = EepromSaveData->character_or_settings[0];
+    paletteIndex = EepromSaveData->characterPaletteIds[0];
     memcpy(arg0, transformMatrix, sizeof(Transform3D));
     arg0->unk20 = loadAssetByIndex_95728(0);
     arg0->unk24 = loadAssetByIndex_95500(0);
@@ -637,7 +633,7 @@ void loadBoardShopCharacterAssets(BoardShopCharacterPreviewState *arg0) {
         arg0->unk50 = 0x600000;
     }
 
-    paletteIndex = EepromSaveData->character_or_settings[allocation->unk79E];
+    paletteIndex = EepromSaveData->characterPaletteIds[allocation->unk79E];
 
     memcpy(arg0, &arg0->unk3C, sizeof(Transform3D));
 
@@ -751,7 +747,7 @@ void initBoardShopCharacterTransition(BoardShopCharacterPreviewState *arg0) {
     memcpy(arg0, &arg0->unk3C, 0x20U);
 
     characterIndex = state->unk79F;
-    paletteIndex = EepromSaveData->character_or_settings[characterIndex];
+    paletteIndex = EepromSaveData->characterPaletteIds[characterIndex];
 
     arg0->unk20 = loadAssetByIndex_95728(characterIndex);
     arg0->unk24 = loadAssetByIndex_95500(characterIndex);
@@ -887,23 +883,22 @@ void cleanupBoardShopShopkeeper(BoardShopShopkeeperState *arg0) {
 }
 
 void loadBoardShopBackground(BoardShopBackgroundState *state) {
-    state->backgroundAsset =
-        loadCompressedData(&previewBackgroundAsset_ROM_START, &previewBackgroundAsset_ROM_END, 0x14410);
+    state->asset = loadCompressedData(&previewBackgroundAsset_ROM_START, &previewBackgroundAsset_ROM_END, 0x14410);
     setCleanupCallback(&cleanupBoardShopBackground);
     setCallback(&initBoardShopBackgroundRenderState);
 }
 
 void initBoardShopBackgroundRenderState(BoardShopBackgroundState *state) {
-    initScrollingTileMapState(state, (s32)state->backgroundAsset);
+    initScrollingTileMapState(&state->renderState, state->asset);
     setCallback(&enqueueBoardShopBackgroundRender);
 }
 
-void enqueueBoardShopBackgroundRender(void *state) {
-    enqueueCallbackBySlotIndex(9, 0, &renderTiledTextureMap, state);
+void enqueueBoardShopBackgroundRender(BoardShopBackgroundState *state) {
+    enqueueCallbackBySlotIndex(9, 0, &renderTiledTextureMap, &state->renderState);
 }
 
 void cleanupBoardShopBackground(BoardShopBackgroundState *state) {
-    state->backgroundAsset = freeNodeMemory(state->backgroundAsset);
+    state->asset = freeNodeMemory(state->asset);
 }
 
 typedef struct {

@@ -1,8 +1,8 @@
-#include "D_800AFE8C_A71FC_type.h"
 #include "assets.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "common_bss.h"
+#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "os_cont.h"
 #include "race/race_session.h"
@@ -93,14 +93,14 @@ void updateOptionsMenu(void) {
 
                 } else {
                     if (curIndex == 0) {
-                        gGameSessionContext->optionToggle1 = (gGameSessionContext->optionToggle1 + 1) & 1;
+                        gGameSessionContext->battleTimeLimit = (gGameSessionContext->battleTimeLimit + 1) & 1;
                     } else if (curIndex == 1) {
-                        gGameSessionContext->optionToggle2 = (gGameSessionContext->optionToggle2 + 1) & 1;
+                        gGameSessionContext->battleScoreLimit = (gGameSessionContext->battleScoreLimit + 1) & 1;
                     } else if (curIndex == 2) {
                         gGameSessionContext->customLapEnabled = (gGameSessionContext->customLapEnabled + 1) & 1;
                         if (gGameSessionContext->customLapEnabled == 0) {
                             gGameSessionContext->customLapCount = 3;
-                            gGameSessionContext->playerBoardIds[0x10] = 3;
+                            gGameSessionContext->lapCount = 3;
                         }
                     }
                     playSoundEffect(0x2B);

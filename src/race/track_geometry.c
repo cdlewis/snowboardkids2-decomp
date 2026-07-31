@@ -1,5 +1,4 @@
 #include "race/track_geometry.h"
-#include "D_800AFE8C_A71FC_type.h"
 #include "animation/easing_state.h"
 #include "audio/audio.h"
 #include "common.h"
@@ -1256,12 +1255,12 @@ void prepareStoryMapNpcDialogue(void *ptr) {
         state->elements[i].unk56 = state->elements[i].animState;
         state->elements[i].unk5F = getAnimationIndex(state->elements[i].model);
 
-        if (((state->rareEventType == 1) & (i == 0)) && gGameSessionContext->playerBoardIds[0] == 3) {
+        if (((state->rareEventType == 1) & (i == 0)) && gGameSessionContext->characterIds[0] == 3) {
             setAnimationIndex(state->elements[i].model, -1);
             state->elements[i].unk48 = 0;
             state->elements[i].unk40 = 0;
             state->elements[i].unk44 = 0x240000;
-        } else if (((state->rareEventType == 6) & (i == 1)) && gGameSessionContext->playerBoardIds[0] == 3) {
+        } else if (((state->rareEventType == 6) & (i == 1)) && gGameSessionContext->characterIds[0] == 3) {
             setAnimationIndex(state->elements[i].model, -1);
         } else {
             setAnimationIndex(state->elements[i].model, dialogueNpcAnimations[state->rareEventType * 2 + i]);

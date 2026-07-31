@@ -2,8 +2,6 @@
 #include "common_bss.h"
 #include "graphics/preview_render.h"
 
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "core/session_manager.h"
@@ -20,6 +18,7 @@
 #include "text/font_assets.h"
 #include "text/font_render.h"
 #include "ui/level_preview_3d.h"
+#include "ui/save_data.h"
 
 typedef struct {
     /* 0x000 */ ViewportNode mainViewport;
@@ -191,7 +190,7 @@ void awaitStoryModeCharacterSelect(void) {
 
 void awaitFadeLoadPreRaceCutscene(void) {
     if (getViewportFadeMode(0) == 0) {
-        setCutsceneSelection(gGameSessionContext->saveSlotIndex, 0);
+        setCutsceneSelection(gGameSessionContext->currentLevel, 0);
         createTaskQueue(&loadCutsceneOverlay, 150);
         setGameStateHandler(&awaitStoryModePreRaceCutscene);
     }
@@ -221,16 +220,16 @@ void awaitStoryModeRaceResult(void) {
 
     if (raceResult >= 3) {
         if (raceResult == 5 || raceResult >= 7) {
-            saveSlotIndex = gGameSessionContext->saveSlotIndex;
+            saveSlotIndex = gGameSessionContext->currentLevel;
             do {
-                EepromSaveData->save_slot_status[saveSlotIndex] = 1;
+                EepromSaveData->levelUnlockStatus[saveSlotIndex] = 1;
             } while (0);
             processRaceUnlocks(raceResult);
         } else {
             gameState = gGameSessionContext;
-            saveSlotIndex = gameState->saveSlotIndex;
-            if (EepromSaveData->save_slot_status[saveSlotIndex] != 1) {
-                EepromSaveData->save_slot_status[saveSlotIndex] = 4;
+            saveSlotIndex = gameState->currentLevel;
+            if (EepromSaveData->levelUnlockStatus[saveSlotIndex] != 1) {
+                EepromSaveData->levelUnlockStatus[saveSlotIndex] = 4;
             }
         }
     }
@@ -311,9 +310,9 @@ void initBoardShopDisplay(void) {
         state->boardIndexMap[i] = i;
     }
     for (i = 0; i < 3; i++) {
-        if (EepromSaveData->setting_4B[i] != 0) {
+        if (EepromSaveData->unlockedBoardIds[i] != 0) {
             state->totalBoardCount++;
-            state->unlockedBoardsInCategory[i] = EepromSaveData->setting_4B[i];
+            state->unlockedBoardsInCategory[i] = EepromSaveData->unlockedBoardIds[i];
         }
     }
     scheduleTask(&initBoardShopShopkeeper, 0, 0, 0x63);
@@ -596,7 +595,7 @@ void updateBoardShop(void) {
                 boardIdx = state->boardDisplayIndices[state->selectedSlot];
                 boardIdx = state->boardIndexMap[boardIdx];
                 EepromSaveData
-                    ->character_or_settings[(state->selectedCategoryIndex * 3) + (s8)state->selectedBoardIndex] =
+                    ->characterPaletteIds[(state->selectedCategoryIndex * 3) + (s8)state->selectedBoardIndex] =
                     boardIdx + 1;
             }
             break;
@@ -679,7 +678,7 @@ u8 countOwnedBoardsInCategory(void) {
     state = getCurrentAllocation();
     count = 0;
     for (i = 0; i < 3; i++) {
-        if (EepromSaveData->character_or_settings[state->selectedCategoryIndex * 3 + i] != 0) {
+        if (EepromSaveData->characterPaletteIds[state->selectedCategoryIndex * 3 + i] != 0) {
             count++;
         }
     }

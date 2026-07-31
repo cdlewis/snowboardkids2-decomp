@@ -1,5 +1,4 @@
 #include "race/race_effects.h"
-#include "D_800AFE8C_A71FC_type.h"
 #include "assets.h"
 #include "audio/audio.h"
 #include "common.h"
@@ -1043,7 +1042,7 @@ void initTotalLapDisplayTask(TotalLapDisplayState *state) {
     state->spriteIndex = 0x16;
     state->x = 0;
 
-    if (global->playerBoardIds[state->player->playerIndex + 0x11] < 10) {
+    if (global->battleScores[state->player->playerIndex] < 10) {
         state->x = -4;
     }
 
@@ -1070,10 +1069,10 @@ void updateTotalLapDisplay(TotalLapDisplayState *state) {
 
     player = state->player;
     if (player->finishPosition == 0 && (gFrameCounter & 1)) {
-        lapCount = gGameSessionContext->playerBoardIds[player->playerIndex + 0x11];
+        lapCount = gGameSessionContext->battleScores[player->playerIndex];
         sprintf(buffer, sTwoDigitFormat, lapCount);
     } else {
-        lapCount = gGameSessionContext->playerBoardIds[state->player->playerIndex + 0x11];
+        lapCount = gGameSessionContext->battleScores[state->player->playerIndex];
         sprintf(buffer, sTwoDigitHighlightFormat, lapCount);
     }
 

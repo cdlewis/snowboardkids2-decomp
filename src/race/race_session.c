@@ -63,25 +63,6 @@ USE_OVERLAY(levels_snowboard_street_speed_cross);
 USE_OVERLAY(levels_training)
 
 typedef struct {
-    u8 unk0[4];
-    u8 gameMode;
-    u8 demoIndex;
-    u8 unk6;
-    u8 currentLevel;
-    u8 numPlayers;
-    u8 characterIDs[4];
-    u8 snowboardIds[4];
-    u8 colorSlots[4];
-    u8 boardModelIds[4];
-    u8 lapCount;
-    u8 pad1A[5];
-    u8 battleTimeLimit;
-    u8 battleScoreLimit;
-    u8 pad21[3];
-    u8 isExpertMode;
-} SessionConfig;
-
-typedef struct {
     void *unk0;
     void *playerOverlayViewports;
     void *playerCameraViewports;
@@ -375,7 +356,6 @@ IntroFrameData2 sIntroCameraEvents[] = {
 static u8 gRaceResultCode;
 
 extern s8 gControllerPollingEnabled;
-extern SessionConfig *gGameSessionContext;
 
 void initRaceViewports(void);
 void onGameSessionTerminated(void);
@@ -442,7 +422,7 @@ void initRace(void) {
         case GAME_MODE_STORY:
             raceState->currentLevel = gGameSessionContext->currentLevel;
             raceState->lapCount = gGameSessionContext->lapCount - 1;
-            raceState->isExpertMode = gGameSessionContext->isExpertMode;
+            raceState->isExpertMode = gGameSessionContext->modeState.isExpertMode;
 
             switch (raceState->currentLevel) {
                 case LINDAS_CASTLE:
@@ -605,7 +585,7 @@ void initRace(void) {
 
     if (raceState->raceType < RACE_TYPE_TRAINING) {
         for (i = 0; i < raceState->activePlayerCount; i++) {
-            raceState->racers[i].characterId = gGameSessionContext->characterIDs[i];
+            raceState->racers[i].characterId = gGameSessionContext->characterIds[i];
             raceState->racers[i].boardModelId = gGameSessionContext->boardModelIds[i];
             raceState->racers[i].snowboardId = gGameSessionContext->snowboardIds[i];
             raceState->racers[i].colorSlot = gGameSessionContext->colorSlots[i];

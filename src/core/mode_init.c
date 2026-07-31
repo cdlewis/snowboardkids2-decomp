@@ -1,13 +1,13 @@
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "common.h"
 #include "core/session_manager.h"
 #include "effects/cutscene_keyframes.h"
+#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "race/race_session.h"
 #include "system/memory_allocator.h"
 #include "system/task_scheduler.h"
 #include "ui/logo_splash.h"
+#include "ui/save_data.h"
 
 extern u8 gDebugUnlockEnabled;
 
@@ -94,10 +94,10 @@ void awaitTitleScreenSelection(void) {
 
     if (result == 4) {
         GameSessionContext *ptr = gGameSessionContext;
-        u8 val = ptr->unk5;
+        u8 val = ptr->demoIndex;
 
         if (val >= 3) {
-            ptr->unk5 = val & 0xF;
+            ptr->demoIndex = val & 0xF;
             setGameStateHandler(startDemoRace);
         } else {
             setGameStateHandler(startAttractRace);
@@ -119,15 +119,15 @@ void startAttractRace(void) {
 
 void waitForAttractRace(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
-        gGameSessionContext->unk5 = (gGameSessionContext->unk5 + 1) % 3;
-        gGameSessionContext->unk5 |= 0xF0;
+        gGameSessionContext->demoIndex = (gGameSessionContext->demoIndex + 1) % 3;
+        gGameSessionContext->demoIndex |= 0xF0;
         setGameStateHandler(loadTitleScreen);
     }
 }
 
 void startBattleRace(void) {
     gGameSessionContext->gameMode = 0;
-    gGameSessionContext->saveSlotIndex = 0xF;
+    gGameSessionContext->currentLevel = 0xF;
     createTaskQueue(initRace, 100);
     setGameStateHandler(waitForBattleRace);
 }
@@ -170,8 +170,8 @@ void startSelectedGameMode(void) {
 }
 
 void initOptionsDefaults(void) {
-    gGameSessionContext->optionToggle1 = 0;
-    gGameSessionContext->optionToggle2 = 0;
+    gGameSessionContext->battleTimeLimit = 0;
+    gGameSessionContext->battleScoreLimit = 0;
     gGameSessionContext->customLapEnabled = 0;
     gGameSessionContext->customLapCount = 3;
 }
@@ -180,28 +180,28 @@ void resetGameSession(void) {
     s32 i;
 
     gGameSessionContext->gameMode = 0;
-    gGameSessionContext->saveSlotIndex = 0;
+    gGameSessionContext->currentLevel = 0;
 
     if (gGameSessionContext->customLapEnabled == 1) {
-        gGameSessionContext->playerBoardIds[0x10] = gGameSessionContext->customLapCount;
+        gGameSessionContext->lapCount = gGameSessionContext->customLapCount;
     } else {
-        gGameSessionContext->playerBoardIds[0x10] = 3;
+        gGameSessionContext->lapCount = 3;
     }
 
     gGameSessionContext->numPlayers = 0;
     gGameSessionContext->gold = 0;
 
     for (i = 0; i < 4; i++) {
-        gGameSessionContext->playerBoardIds[i] = 0;
-        gGameSessionContext->playerBoardIds[i + 4] = 0;
-        gGameSessionContext->playerBoardIds[i + 0xC] = 0;
-        gGameSessionContext->playerBoardIds[i + 8] = 0;
-        gGameSessionContext->playerBoardIds[i + 0x11] = 0;
+        gGameSessionContext->characterIds[i] = 0;
+        gGameSessionContext->snowboardIds[i] = 0;
+        gGameSessionContext->boardModelIds[i] = 0;
+        gGameSessionContext->colorSlots[i] = 0;
+        gGameSessionContext->battleScores[i] = 0;
     }
 
-    gGameSessionContext->previousSaveSlot = 0;
-    gGameSessionContext->unk5 = 0;
+    gGameSessionContext->saveSlotIndex = 0;
+    gGameSessionContext->demoIndex = 0;
     gGameSessionContext->pendingUnlockCutscene = 0;
-    gGameSessionContext->isStoryMode = 0;
+    gGameSessionContext->modeState.isStoryMode = 0;
     gGameSessionContext->creditsCompleted = 0;
 }

@@ -1,6 +1,4 @@
 #include "ui/level_preview.h"
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "animation/easing_state.h"
 #include "assets.h"
 #include "common.h"
@@ -8,10 +6,12 @@
 #include "data/data_table.h"
 #include "data/global_frame_counter.h"
 #include "font_encoding.h"
+#include "gamestate.h"
 #include "graphics/clip_text_render.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
+#include "graphics/tiled_sprite_grid.h"
 #include "math/geometry.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
@@ -19,6 +19,7 @@
 #include "text/font_render.h"
 #include "text/text_layout.h"
 #include "ui/level_preview_3d.h"
+#include "ui/save_data.h"
 
 void moveCharacterToStartWaypoint(LevelPreviewCharacterState *state);
 void updateLevelPreviewCharacterAndCamera(LevelPreviewCharacterState *state);
@@ -855,7 +856,7 @@ void renderCharacterSelectDisplay(CharacterSelectDisplayState *state) {
     }
 
     characterIndex = levelSelect->levelIdList[levelSelect->selectedIndex];
-    if (EepromSaveData->save_slot_status[characterIndex] == 1) {
+    if (EepromSaveData->levelUnlockStatus[characterIndex] == 1) {
         callback = (void (*)(void *))renderSpriteFrame;
         enqueueCallbackBySlotIndex(8, 6, callback, &state->sprite90);
         characterIndex = levelSelect->levelIdList[levelSelect->selectedIndex];
@@ -870,7 +871,7 @@ void renderCharacterSelectDisplay(CharacterSelectDisplayState *state) {
 
     if (levelSelect->showDetailView == 0) {
         if (gGameSessionContext->gameMode == 1 ||
-            (gGameSessionContext->gameMode == 0 && EepromSaveData->save_slot_status[0] != 5)) {
+            (gGameSessionContext->gameMode == 0 && EepromSaveData->levelUnlockStatus[0] != 5)) {
             if (levelSelect->menuState == MENU_STATE_NAVIGATE) {
                 state->animTimer++;
                 if (state->animTimer < 0x11) {
@@ -950,7 +951,7 @@ void renderUnlockNotification(UnlockNotificationState *state) {
     enqueueCallbackBySlotIndex(0xA, 0, renderTiledTextureMap, &state->tileMap);
 
     if (gGameSessionContext->gameMode == 0) {
-        if (EepromSaveData->save_slot_status[0] == 5) {
+        if (EepromSaveData->levelUnlockStatus[0] == 5) {
             if ((gGlobalFrameCounter & 7) == 0) {
                 nextFrame = state->frameIndex + 1;
                 state->frameIndex = nextFrame;
@@ -979,10 +980,10 @@ void initMenuCharacterModel(MenuCharacterModelState *state) {
     levelSelect = (LevelSelectState *)getCurrentAllocation();
 
     if (levelSelect->showDetailView != 0) {
-        s32 idx = gGameSessionContext->saveSlotIndex * 2;
-        animIndex = characterIdleAnimationIndices[gGameSessionContext->saveSlotIndex];
-        modelIndex = characterModelIndices[gGameSessionContext->saveSlotIndex];
-        assetPairIndex = characterAssetPairIndices[gGameSessionContext->saveSlotIndex];
+        s32 idx = gGameSessionContext->currentLevel * 2;
+        animIndex = characterIdleAnimationIndices[gGameSessionContext->currentLevel];
+        modelIndex = characterModelIndices[gGameSessionContext->currentLevel];
+        assetPairIndex = characterAssetPairIndices[gGameSessionContext->currentLevel];
         state->animationIndex = animIndex;
     } else {
         modelIndex = 0x3A;
@@ -1020,7 +1021,7 @@ void setupMenuCharacterModel(MenuCharacterModelState *state) {
     LevelSelectState *levelSelect = (LevelSelectState *)getCurrentAllocation();
 
     if (levelSelect->showDetailView != 0) {
-        if (gGameSessionContext->saveSlotIndex == 0xC) {
+        if (gGameSessionContext->currentLevel == 0xC) {
             scaleMatrix((&state->transform), 0x1000, 0x1000, 0x1000);
         }
     }
@@ -1067,9 +1068,9 @@ void setMenuCharacterAnimation(u8 animationType, MenuCharacterModelState *state)
     levelSelect->pendingDetailAnimation = 0;
 
     if (animationType == 2) {
-        state->animationIndex = characterIdleAnimationIndices[gGameSessionContext->saveSlotIndex];
+        state->animationIndex = characterIdleAnimationIndices[gGameSessionContext->currentLevel];
     } else {
-        state->animationIndex = characterActionAnimationIndices[gGameSessionContext->saveSlotIndex];
+        state->animationIndex = characterActionAnimationIndices[gGameSessionContext->currentLevel];
     }
 
     setModelAnimation(state->model, state->animationIndex);
@@ -1080,13 +1081,13 @@ void handleMenuCharacterAnimationEnd(MenuCharacterModelState *state) {
 
     getCurrentAllocation();
 
-    if (gGameSessionContext->saveSlotIndex == 0xD) {
+    if (gGameSessionContext->currentLevel == 0xD) {
         currentAnimation = state->animationIndex;
         if (currentAnimation == 0xD) {
             state->animationIndex = currentAnimation + 1;
             setModelAnimation(state->model, (s16)(currentAnimation + 1));
         }
-    } else if (gGameSessionContext->saveSlotIndex == 0xE) {
+    } else if (gGameSessionContext->currentLevel == 0xE) {
         currentAnimation = state->animationIndex;
         if (currentAnimation == 1) {
             state->animationIndex = 2;
@@ -1137,7 +1138,7 @@ void initMinigameDescText(MinigameDescTextState *state) {
     state->color1.asS16 = 0xFF;
     state->color2.asS16 = 0xFF;
     state->textRenderAsset = textRenderAsset;
-    idx = globalState->saveSlotIndex - 0xC;
+    idx = globalState->currentLevel - 0xC;
     state->textString = minigameDescTexts[idx];
 
     setCallback(&renderMinigameDescText);

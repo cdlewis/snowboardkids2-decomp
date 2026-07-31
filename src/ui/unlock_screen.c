@@ -1,7 +1,5 @@
 #include "ui/unlock_screen.h"
 
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "assets.h"
 #include "audio/audio.h"
 #include "common_bss.h"
@@ -14,6 +12,7 @@
 #include "story/shop_ui.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
+#include "ui/save_data.h"
 
 extern s32 storyMapLocationNames[];
 
@@ -315,9 +314,9 @@ void updateUnlockScreen(void) {
             itemId = state->modeData.unlockScreen.itemIds[state->modeData.unlockScreen.selectedItemIndex];
             state->modeData.unlockScreen.itemIds[state->modeData.unlockScreen.selectedItemIndex] = itemId + 0x80;
             if ((itemId & 0xFF) < 9) {
-                EepromSaveData->character_or_settings[itemId & 0xFF] = (itemId & 0xFF) / 3 + 1;
+                EepromSaveData->characterPaletteIds[itemId & 0xFF] = (itemId & 0xFF) / 3 + 1;
             } else {
-                EepromSaveData->character_or_settings[itemId & 0xFF] = itemId + 7;
+                EepromSaveData->characterPaletteIds[itemId & 0xFF] = itemId + 7;
             }
             addPlayerGold(
                 -storyMapLocationNames

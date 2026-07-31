@@ -1,8 +1,8 @@
 #include "ui/options_menu.h"
-#include "D_800AFE8C_A71FC_type.h"
 #include "assets.h"
 #include "common.h"
 #include "font_encoding.h"
+#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
 #include "system/task_scheduler.h"
@@ -114,9 +114,9 @@ void initOptionsMenuToggles(OptionsMenuToggleState *arg0) {
         arg0->toggleIcons[i].tileMode = 0;
 
         if (i < 2) {
-            optionValue = gGameSessionContext->optionToggle1;
+            optionValue = gGameSessionContext->battleTimeLimit;
         } else if (i < 4) {
-            optionValue = gGameSessionContext->optionToggle2;
+            optionValue = gGameSessionContext->battleScoreLimit;
         } else {
             optionValue = (gGameSessionContext->customLapEnabled + 1) & 1;
         }
@@ -157,9 +157,9 @@ void updateOptionsMenuToggles(OptionsMenuToggleState *arg0) {
 
     for (i = 0; i < 6; i++) {
         if (i < 2) {
-            optionValue = gGameSessionContext->optionToggle1;
+            optionValue = gGameSessionContext->battleTimeLimit;
         } else if (i < 4) {
-            optionValue = gGameSessionContext->optionToggle2;
+            optionValue = gGameSessionContext->battleScoreLimit;
         } else {
             optionValue = (gGameSessionContext->customLapEnabled + 1) & 1;
         }

@@ -1,6 +1,5 @@
 #include "system/controller_io.h"
 
-#include "EepromSaveData_type.h"
 #include "common_bss.h"
 #include "os_cont.h"
 #include "os_eeprom.h"
@@ -8,6 +7,7 @@
 #include "os_motor.h"
 #include "os_pfs.h"
 #include "os_thread.h"
+#include "ui/save_data.h"
 
 typedef struct {
     s16 command;
@@ -1049,7 +1049,7 @@ void eepromWrite(s32 slotIndex) {
     s32 byteValue;
     s32 i;
     s32 result;
-    dataPtr = EepromSaveData->header_data;
+    dataPtr = EepromSaveData->magic;
     shiftAmount = 4;
     dataSize = 0x58;
     checksum = 0;

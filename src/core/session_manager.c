@@ -1,8 +1,7 @@
 #include "core/session_manager.h"
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "common.h"
 #include "effects/cutscene_keyframes.h"
+#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
@@ -43,7 +42,7 @@ void initStoryMode(void) {
     state->state = 0;
     D_800AB1C8_A2538 = 0;
     gGameSessionContext->numPlayers = 1;
-    gGameSessionContext->playerBoardIds[0] = 0;
+    gGameSessionContext->characterIds[0] = 0;
     setStoryMapCameraMode(0);
     setGameStateHandlerWithContinue(loadSaveSlotScreen);
 }
@@ -114,7 +113,7 @@ void awaitSaveDataLoad(void) {
 }
 
 void loadPreRaceCutscene(void) {
-    setCutsceneSelection(gGameSessionContext->saveSlotIndex, 0);
+    setCutsceneSelection(gGameSessionContext->currentLevel, 0);
     createTaskQueue(loadCutsceneOverlay, 0x96);
     setGameStateHandler(awaitPreRaceCutscene);
 }
@@ -145,15 +144,15 @@ void awaitRaceResult(void) {
 
         if (result >= 3) {
             eepromBase = (u8 *)EepromSaveData;
-            if (EepromSaveData->save_slot_status[0] == 5) {
+            if (EepromSaveData->levelUnlockStatus[0] == 5) {
                 gStoryCompleted = 1;
             }
 
             if ((result == 3) | (result == 5)) {
-                *(eepromBase + gGameSessionContext->saveSlotIndex + 0x10) = 1;
+                *(eepromBase + gGameSessionContext->currentLevel + 0x10) = 1;
                 processRaceUnlocks(result);
             } else {
-                temp = eepromBase + gGameSessionContext->saveSlotIndex;
+                temp = eepromBase + gGameSessionContext->currentLevel;
                 if (*(temp + 0x10) != 1) {
                     *(temp + 0x10) = 4;
                 }
@@ -166,15 +165,15 @@ void awaitRaceResult(void) {
         if (result == 1) {
             handler = loadRace;
         } else {
-            if (EepromSaveData->save_slot_status[0] == 5) {
+            if (EepromSaveData->levelUnlockStatus[0] == 5) {
                 setStoryMapCameraMode(0);
                 goto set_handler_b70;
             }
             if ((result == 3) || (gDebugUnlockEnabled != 0)) {
-                saveSlotIndex = gGameSessionContext->saveSlotIndex;
+                saveSlotIndex = gGameSessionContext->currentLevel;
                 slotIndexInt = saveSlotIndex;
                 if (((slotIndexInt == 2) | (slotIndexInt == 6)) || (slotIndexInt == 10)) {
-                    gGameSessionContext->saveSlotIndex = saveSlotIndex + 1;
+                    gGameSessionContext->currentLevel = saveSlotIndex + 1;
                     handler = loadPreRaceCutscene;
                 } else {
                     handler = loadPostRaceCutscene;
@@ -192,7 +191,7 @@ void awaitRaceResult(void) {
 }
 
 void loadPostRaceCutscene(void) {
-    setCutsceneSelection(gGameSessionContext->saveSlotIndex, 1);
+    setCutsceneSelection(gGameSessionContext->currentLevel, 1);
     createTaskQueue(loadCutsceneOverlay, 0x64);
     setGameStateHandler(awaitPostRaceCutscene);
 }
@@ -203,7 +202,7 @@ void awaitPostRaceCutscene(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
         if (gStoryCompleted != 0) {
             handler = loadStoryCompleteCutscene;
-        } else if (gGameSessionContext->saveSlotIndex == 0xB) {
+        } else if (gGameSessionContext->currentLevel == 0xB) {
             handler = loadCreditsSequence;
         } else {
             handler = loadStoryMapScreen;
@@ -249,7 +248,7 @@ void awaitCreditsSequence(void) {
     if ((getSchedulerReturnValue() << 16) != 0) {
         if (gGameSessionContext->pendingUnlockCutscene == 8) {
             gGameSessionContext->pendingUnlockCutscene = 0;
-            EepromSaveData->unk51 = 1;
+            EepromSaveData->postCreditsCutscenePending = 1;
         }
         setGameStateHandler(loadPostCreditsSaveScreen);
     }
@@ -286,7 +285,7 @@ void updateStorySlotUnlockStatus(void) {
     u8 slotIndex;
 
     for (slotIter = 0; slotIter < 12; slotIter++) {
-        if (EepromSaveData->save_slot_status[slotIter] == 0) {
+        if (EepromSaveData->levelUnlockStatus[slotIter] == 0) {
             firstEmptySlot = slotIter;
             break;
         }
@@ -300,41 +299,41 @@ void updateStorySlotUnlockStatus(void) {
 
     if (slotIndex == 10) {
         for (checkIter = 0; checkIter < slotIndex; checkIter++) {
-            if (EepromSaveData->save_slot_status[checkIter] != 1) {
+            if (EepromSaveData->levelUnlockStatus[checkIter] != 1) {
                 break;
             }
         }
         if (checkIter == (u8)firstEmptySlot) {
             for (checkIter = 12; checkIter < 15; checkIter++) {
-                if (EepromSaveData->save_slot_status[checkIter] != 1) {
+                if (EepromSaveData->levelUnlockStatus[checkIter] != 1) {
                     break;
                 }
             }
             if (checkIter == 15) {
-                EepromSaveData->save_slot_status[(u8)firstEmptySlot] = 5;
+                EepromSaveData->levelUnlockStatus[(u8)firstEmptySlot] = 5;
             }
             goto mark_slot_data;
         }
     } else if ((slotIndex == 4) || (slotIndex == 8)) {
         for (checkIter = 0; checkIter < slotIndex; checkIter++) {
-            if (EepromSaveData->save_slot_status[checkIter] != 1) {
+            if (EepromSaveData->levelUnlockStatus[checkIter] != 1) {
                 break;
             }
         }
         if (checkIter == (u8)firstEmptySlot) {
-            EepromSaveData->save_slot_status[checkIter] = 5;
+            EepromSaveData->levelUnlockStatus[checkIter] = 5;
             goto mark_slot_data;
         }
     } else if ((slotIndex == 3) || (slotIndex == 7) || (slotIndex == 11)) {
-        if (EepromSaveData->save_slot_status[slotIndex - 1] == 1) {
-            EepromSaveData->save_slot_status[slotIndex] = 5;
+        if (EepromSaveData->levelUnlockStatus[slotIndex - 1] == 1) {
+            EepromSaveData->levelUnlockStatus[slotIndex] = 5;
         }
     } else if (((u8)(firstEmptySlot - 1) < 2u) || (slotIndex == 5) || (slotIndex == 6) || (slotIndex == 9)) {
-        if (EepromSaveData->save_slot_status[slotIndex - 1] != 5) {
-            EepromSaveData->save_slot_status[slotIndex] = 5;
+        if (EepromSaveData->levelUnlockStatus[slotIndex - 1] != 5) {
+            EepromSaveData->levelUnlockStatus[slotIndex] = 5;
             if (slotIndex == 1) {
                 for (checkIter = 12; checkIter < 15; checkIter++) {
-                    EepromSaveData->save_slot_status[checkIter] = 5;
+                    EepromSaveData->levelUnlockStatus[checkIter] = 5;
                 }
                 goto mark_slot_data;
             }
@@ -345,8 +344,8 @@ void updateStorySlotUnlockStatus(void) {
 
 mark_slot_data:
     for (slotIter = 0; slotIter < 15; slotIter++) {
-        if (EepromSaveData->save_slot_status[slotIter] != 0) {
-            EepromSaveData->save_slot_data[slotIter] = 1;
+        if (EepromSaveData->levelUnlockStatus[slotIter] != 0) {
+            EepromSaveData->versusLevelAvailability[slotIter] = 1;
         }
     }
 }

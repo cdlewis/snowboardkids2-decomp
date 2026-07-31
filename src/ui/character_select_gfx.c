@@ -1,19 +1,20 @@
 #include "ui/character_select_gfx.h"
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "assets.h"
 #include "common.h"
 #include "data/asset_metadata.h"
 #include "data/data_table.h"
+#include "gamestate.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
+#include "graphics/tiled_sprite_grid.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
 #include "text/font_assets.h"
 #include "text/font_render.h"
 #include "ui/character_select_ui.h"
 #include "ui/level_preview_3d.h"
+#include "ui/save_data.h"
 
 extern Vec2_u16 playerNumberPositions[];
 extern PositionConfig_DDE6 D_8008DDE6_8E9E6[];
@@ -60,9 +61,9 @@ void initCharSelectPreviewModel(CharSelectPreviewTaskState *arg0) {
     composeTransform3D(rotMatPtr, posMatPtr, sp10Ptr);
     composeTransform3D(sp10Ptr, &state->characterRotations[arg0->playerIndex], &arg0->displayObject.transform);
 
-    charIndex = gGameSessionContext->playerBoardIds[4 + arg0->playerIndex];
+    charIndex = gGameSessionContext->snowboardIds[arg0->playerIndex];
     arg0->charPaletteIndex = charIndex;
-    paletteIndex = EepromSaveData->character_or_settings[charIndex] - 1;
+    paletteIndex = EepromSaveData->characterPaletteIds[charIndex] - 1;
 
     arg0->displayObject.displayLists = loadAssetByIndex_95728(charIndex);
     arg0->displayObject.segment1 = loadAssetByIndex_95500(charIndex);
@@ -147,7 +148,7 @@ after_rotation:
 void reloadCharSelectPreviewAssets(CharSelectPreviewTaskState *preview) {
     u8 paletteIndex;
 
-    paletteIndex = EepromSaveData->character_or_settings[preview->charPaletteIndex] - 1;
+    paletteIndex = EepromSaveData->characterPaletteIds[preview->charPaletteIndex] - 1;
 
     preview->displayObject.displayLists = loadAssetByIndex_95728(preview->charPaletteIndex);
     preview->displayObject.segment1 = loadAssetByIndex_95500(preview->charPaletteIndex);
@@ -182,7 +183,7 @@ void initCharSelectSlidePosition(CharSelectPreviewTaskState *arg0) {
     assetIndex += charIndex * 3;
     arg0->charPaletteIndex = assetIndex;
 
-    paletteIndex = EepromSaveData->character_or_settings[assetIndex] - 1;
+    paletteIndex = EepromSaveData->characterPaletteIds[assetIndex] - 1;
 
     arg0->displayObject.displayLists = loadAssetByIndex_95728(assetIndex);
     arg0->displayObject.segment1 = loadAssetByIndex_95500(assetIndex);
@@ -311,7 +312,7 @@ void initCharSelectSecondarySlot(CharSelectPreviewTaskState *arg0) {
     charIndex = state->previousCharacterCategories[arg0->playerIndex];
     assetIndex = state->previousCharacterVariants[arg0->playerIndex];
     assetIndex = assetIndex + charIndex * 3;
-    paletteIndex = EepromSaveData->character_or_settings[assetIndex] - 1;
+    paletteIndex = EepromSaveData->characterPaletteIds[assetIndex] - 1;
 
     arg0->displayObject.displayLists = loadAssetByIndex_95728(assetIndex);
     arg0->displayObject.segment1 = loadAssetByIndex_95500(assetIndex);
@@ -375,7 +376,7 @@ void initCharSelectBoardModel(CharSelectBoardPreview *arg0) {
     state = (CharacterSelectState *)getCurrentAllocation();
     playerIdx = arg0->playerIndex;
 
-    boardType = gGameSessionContext->playerBoardIds[playerIdx];
+    boardType = gGameSessionContext->characterIds[playerIdx];
     // Normal board preview model: current board id/model bank.
     if (boardType == 7) {
         arg0->model =
@@ -424,7 +425,7 @@ void initCharSelectBoardPreview(CharSelectBoardPreview *arg0) {
 
     applyTransformToModel(arg0->model, localPtr);
 
-    if (gGameSessionContext->playerBoardIds[arg0->playerIndex] == 7) {
+    if (gGameSessionContext->characterIds[arg0->playerIndex] == 7) {
         setModelAnimation(arg0->model, 4);
     } else {
         setModelAnimation(arg0->model, 0x90);
@@ -518,7 +519,7 @@ void recreateCharSelectBoardModelForSlideIn(CharSelectBoardPreview *arg0) {
     u32 boardType;
 
     state = (CharacterSelectState *)getCurrentAllocation();
-    boardType = gGameSessionContext->playerBoardIds[arg0->playerIndex];
+    boardType = gGameSessionContext->characterIds[arg0->playerIndex];
     if (boardType == 7) {
         arg0->model = createSceneModelEx(
             0x39,
@@ -559,7 +560,7 @@ void initCharSelectBoardSlideIn(CharSelectBoardPreview *preview) {
 
     applyTransformToModel(preview->model, &preview->transform);
 
-    if (gGameSessionContext->playerBoardIds[preview->playerIndex] == 7) {
+    if (gGameSessionContext->characterIds[preview->playerIndex] == 7) {
         setModelAnimation(preview->model, 4);
     } else {
         setModelAnimation(preview->model, 0x90);
@@ -619,7 +620,7 @@ void initCharSelectBoardModelForSlideOut(CharSelectBoardPreview *arg0) {
 
     state = getCurrentAllocation();
     playerIndex = arg0->playerIndex;
-    boardType = gGameSessionContext->playerBoardIds[playerIndex];
+    boardType = gGameSessionContext->characterIds[playerIndex];
 
     // Outgoing board slide model keeps the previous board/model bank alive.
     if (boardType != 7) {
@@ -653,7 +654,7 @@ void initCharSelectBoardSlideOut(CharSelectBoardPreview *preview) {
 
     applyTransformToModel(preview->model, &preview->transform);
 
-    if (gGameSessionContext->playerBoardIds[preview->playerIndex] == 7) {
+    if (gGameSessionContext->characterIds[preview->playerIndex] == 7) {
         setModelAnimation(preview->model, 4);
     } else {
         setModelAnimation(preview->model, 0x90);
@@ -903,14 +904,14 @@ void initCharSelectIconHideSprites(CharSelectIconHideState *state) {
         entry->x = x;
         entry->y = y;
 
-        charIndex = session->playerBoardIds[4 + state->playerIndex];
+        charIndex = session->snowboardIds[state->playerIndex];
         tableOffset = charIndex * 3 + i;
         tableValue = *(u8 *)(tableOffset + (s32)itemIconTable);
 
         entry->frameIndex = iconBaseIndex + (tableValue - 1) / 2;
 
         session = gGameSessionContext;
-        charIndex = session->playerBoardIds[4 + state->playerIndex];
+        charIndex = session->snowboardIds[state->playerIndex];
         tableOffset = charIndex * 3 + i;
         tableValue = *(u8 *)(tableOffset + (s32)itemIconTable);
 
@@ -1565,9 +1566,9 @@ void initBoardSelectCharNames(TextRenderArg *sprites) {
             numPlayers = gGameSessionContext->numPlayers;
             if (numPlayers == 1) {
                 xPos += 0x18;
-                spriteIdx = gGameSessionContext->playerBoardIds[i + 4] + 0x30;
+                spriteIdx = gGameSessionContext->snowboardIds[i] + 0x30;
             } else {
-                charIndex = gGameSessionContext->playerBoardIds[i + 4];
+                charIndex = gGameSessionContext->snowboardIds[i];
                 spriteIdx = charIndex + 0x23;
                 xPos = *((u16 *)&charSelectNameSpritePositions + numPlayers * 2) -
                        ((u16 *)&charSelectBoardDataTable[22])[charIndex];
@@ -1610,7 +1611,7 @@ void updateBoardSelectCharNames(TextRenderArg *sprites) {
             if (((u32)yPos) >= 8) {
                 numPlayers = gGameSessionContext->numPlayers;
                 xPos = ((s16 *)charSelectNamePositions)[numPlayers * 2];
-                boardId = gGameSessionContext->playerBoardIds[i + 4];
+                boardId = gGameSessionContext->snowboardIds[i];
                 yPos = ((s16 *)charSelectNamePositions)[(numPlayers * 2) + 1];
                 if (((u8)boardId) >= 9) {
                     if (numPlayers == 1) {
@@ -1684,7 +1685,7 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
         const_ff = 0xFF;
         entry = (volatile TextRenderArg *)state;
         do {
-            if (gameConfig->playerBoardIds[i + 4] >= 9) {
+            if (gameConfig->snowboardIds[i] >= 9) {
                 spriteIndex = 0x35;
             } else {
                 spriteIndex = 0x24;
@@ -1711,7 +1712,7 @@ void initCharSelectNameSprites(CharSelectNameSpritesState *state) {
         state->singlePlayerSprite.y = -0x58;
         state->singlePlayerSprite.spriteData = spriteAsset;
         state->singlePlayerSprite.frameIndex = 0x42;
-        if (gGameSessionContext->playerBoardIds[4] >= 9) {
+        if (gGameSessionContext->snowboardIds[0] >= 9) {
             state->singlePlayerSprite.x = 0x50;
         }
     }
@@ -1747,7 +1748,7 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
                     xPos = tempPos2;
                     spriteIdx = gameState->characterVariants[i] + 0x43;
                 } else {
-                    if (gGameSessionContext->playerBoardIds[i + 4] < 9) {
+                    if (gGameSessionContext->snowboardIds[i] < 9) {
                         xPos = tempPos2;
                         spriteIdx = gameState->characterVariants[i] + 0x24;
                     } else {
@@ -1775,7 +1776,7 @@ void updateCharSelectNameSprites(CharSelectNameSpritesState *arg0) {
                 arg0->entries[i].overridePaletteCount = 0;
             }
             if (yPos == -0x58) {
-                if (gGameSessionContext->playerBoardIds[i + 4] < 9) {
+                if (gGameSessionContext->snowboardIds[i] < 9) {
                     enqueueCallbackBySlotIndex(i + 0xC, 0, renderTextSprite, &arg0->entries[i]);
                     arg0->singlePlayerSprite.x = 0x38;
                     enqueueCallbackBySlotIndex(i + 0xC, 0, renderSpriteFrame, &arg0->singlePlayerSprite);

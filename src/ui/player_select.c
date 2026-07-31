@@ -1,9 +1,9 @@
 #include "ui/player_select.h"
-#include "D_800AFE8C_A71FC_type.h"
 #include "assets.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "common_bss.h"
+#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "os_cont.h"
 #include "story/map_events.h"
@@ -193,7 +193,7 @@ void exitPlayerCountSelect(void) {
             terminateSchedulerWithCallback(onPlayerCountProceed);
             gGameSessionContext->numPlayers = state->playerCount.bytes.selectedOptionIndex + 1;
             for (i = 0; i < gGameSessionContext->numPlayers; i++) {
-                gGameSessionContext->playerBoardIds[i] = gPlayerSlotDefaults[i];
+                gGameSessionContext->characterIds[i] = gPlayerSlotDefaults[i];
             }
         } else {
             terminateSchedulerWithCallback(onPlayerCountCancel);

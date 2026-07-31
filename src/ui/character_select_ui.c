@@ -1,9 +1,8 @@
 #include "ui/character_select_ui.h"
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "common_bss.h"
+#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "os_cont.h"
@@ -12,6 +11,7 @@
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 #include "ui/character_select_gfx.h"
+#include "ui/save_data.h"
 
 void awaitCharacterSelectLoad(void);
 void scheduleCharacterSelectTasks(void);
@@ -289,16 +289,16 @@ void initCharacterSelectScreen(void) {
     }
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
-        if (gGameSessionContext->playerBoardIds[4 + i] < 9) {
-            state->characterCategories[i] = gGameSessionContext->playerBoardIds[4 + i] / 3;
-            state->characterVariants[i] = gGameSessionContext->playerBoardIds[4 + i] % 3;
+        if (gGameSessionContext->snowboardIds[i] < 9) {
+            state->characterCategories[i] = gGameSessionContext->snowboardIds[i] / 3;
+            state->characterVariants[i] = gGameSessionContext->snowboardIds[i] % 3;
         } else {
             state->characterCategories[i] = 3;
-            state->characterVariants[i] = gGameSessionContext->playerBoardIds[4 + i] - 9;
+            state->characterVariants[i] = gGameSessionContext->snowboardIds[i] - 9;
         }
         state->previousCharacterCategories[i] = state->characterCategories[i];
         state->previousCharacterVariants[i] = state->characterVariants[i];
-        boardId = gGameSessionContext->playerBoardIds[12 + i];
+        boardId = gGameSessionContext->boardModelIds[i];
         state->boardIds[i] = boardId;
         state->previousBoardIds[i] = boardId;
         task = scheduleTask(initCharSelectBoardModel, 0, 0, 0x5A);
@@ -474,12 +474,12 @@ void updateCharacterSelect(void) {
                         &charSelectNormalLight,
                         (ColorData *)(&charSelectNormalAmbient)
                     );
-                    if (gGameSessionContext->playerBoardIds[4 + i] < 9) {
-                        state->characterCategories[i] = gGameSessionContext->playerBoardIds[4 + i] / 3;
-                        state->characterVariants[i] = gGameSessionContext->playerBoardIds[4 + i] % 3;
+                    if (gGameSessionContext->snowboardIds[i] < 9) {
+                        state->characterCategories[i] = gGameSessionContext->snowboardIds[i] / 3;
+                        state->characterVariants[i] = gGameSessionContext->snowboardIds[i] % 3;
                     } else {
                         state->characterCategories[i] = 3;
-                        state->characterVariants[i] = gGameSessionContext->playerBoardIds[4 + i] - 9;
+                        state->characterVariants[i] = gGameSessionContext->snowboardIds[i] - 9;
                     }
                     break;
                 }
@@ -506,7 +506,7 @@ void updateCharacterSelect(void) {
                     state->previousCharacterVariants[i] = state->characterVariants[i];
                     if (state->characterCategories[i] == 3) {
                         for (k = 0; k < 9; k++) {
-                            if (EepromSaveData->character_or_settings[9 + k] != 0) {
+                            if (EepromSaveData->characterPaletteIds[9 + k] != 0) {
                                 state->characterVariants[i] = k;
                                 break;
                             }
@@ -572,7 +572,7 @@ void updateCharacterSelect(void) {
                     numUnlocked = 0;
                     for (j = 0; j < limit; j++) {
                         charIdx = (state->characterCategories[i] * 3) + j;
-                        if (EepromSaveData->character_or_settings[charIdx] != 0) {
+                        if (EepromSaveData->characterPaletteIds[charIdx] != 0) {
                             unlockedSlots[numUnlocked] = charIdx;
                             numUnlocked++;
                         }
@@ -628,7 +628,7 @@ void updateCharacterSelect(void) {
                 numUnlocked = 0;
                 for (j = 0; j < limit; j++) {
                     charIdx = (state->characterCategories[i] * 3) + j;
-                    if (EepromSaveData->character_or_settings[charIdx] != 0) {
+                    if (EepromSaveData->characterPaletteIds[charIdx] != 0) {
                         unlockedSlots[numUnlocked] = charIdx;
                         numUnlocked++;
                     }
@@ -677,9 +677,9 @@ void updateCharacterSelect(void) {
                         state->frameCounters[i] = 0;
                         state->menuStates[i] = CHAR_SELECT_CHAR_CONFIRMED;
                         playSoundEffectOnChannelNoPriority(0x2C, i);
-                        gGameSessionContext->playerBoardIds[4 + i] = unlockedSlots[state->unlockedSlotIndices[i]];
-                        gGameSessionContext->playerBoardIds[8 + i] =
-                            EepromSaveData->character_or_settings[gGameSessionContext->playerBoardIds[4 + i]] - 1;
+                        gGameSessionContext->snowboardIds[i] = unlockedSlots[state->unlockedSlotIndices[i]];
+                        gGameSessionContext->colorSlots[i] =
+                            EepromSaveData->characterPaletteIds[gGameSessionContext->snowboardIds[i]] - 1;
                     }
                     break;
                 }
@@ -692,7 +692,7 @@ void updateCharacterSelect(void) {
                     state->cursorIndices[i] = state->maxMenuOption - 2;
                     state->carouselAngles[i] = 0;
                     createYRotationMatrix(&state->characterRotations[i], 0);
-                    state->boardIds[i] = gGameSessionContext->playerBoardIds[12 + i];
+                    state->boardIds[i] = gGameSessionContext->boardModelIds[i];
                     state->iconDisplayStates[i] = 0;
                     break;
                 }
@@ -717,7 +717,7 @@ void updateCharacterSelect(void) {
                     }
                 } else if (gControllerInputs[i] & CONT_A) {
                     state->menuStates[i] = CHAR_SELECT_BOARD_FLASH;
-                    gGameSessionContext->playerBoardIds[12 + i] = state->boardIds[i];
+                    gGameSessionContext->boardModelIds[i] = state->boardIds[i];
                     state->frameCounters[i] = 0;
                     playSoundEffectOnChannelNoPriority(0x2C, i);
                     playSoundEffect(boardConfirmSoundIds[state->boardIds[i]]);
@@ -804,8 +804,8 @@ void updateCharacterSelect(void) {
         setMusicFadeOut(0xA);
         state->frameCounters[0] = 0;
         for (i = 0; i < gGameSessionContext->numPlayers; i++) {
-            gGameSessionContext->playerBoardIds[8 + i] =
-                EepromSaveData->character_or_settings[gGameSessionContext->playerBoardIds[4 + i]] - 1;
+            gGameSessionContext->colorSlots[i] =
+                EepromSaveData->characterPaletteIds[gGameSessionContext->snowboardIds[i]] - 1;
         }
 
         setGameStateHandler(cleanupCharacterSelect);
@@ -859,7 +859,7 @@ s32 countUnlockedSlotsInCategory(u8 category) {
     }
 
     for (i = 0; i < limit; i++) {
-        if (EepromSaveData->character_or_settings[category * 3 + i] != 0) {
+        if (EepromSaveData->characterPaletteIds[category * 3 + i] != 0) {
             count++;
         }
     }

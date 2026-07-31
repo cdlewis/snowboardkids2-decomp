@@ -850,3 +850,20 @@ flash selected item graphics.
 Cleanup-only structs that expose pointers at offsets `0x04` or `0x38` can often be removed once the complete
 task state embeds these renderer types. Accessing `spriteData` or `fontAsset` through the owning task state
 preserves the same offsets while documenting which resource is released.
+
+## Merge Mode-Specific Views with Offset-Preserving Unions
+
+Separate UI and race files may describe the same global session allocation with different partial structs.
+Compare every view by offset before choosing names: the race configuration showed that story mode and expert
+mode are alternate meanings of the byte at offset `0x24`, while credits completion is a distinct byte at
+`0x25`. Representing the mode-dependent byte as a union preserves both semantics without inventing separate
+storage or retaining file-local copies.
+
+When replacing a truncated renderer view, map fields by offset rather than by the old local names. The
+scrolling-background task's fields at element offsets `0x10` through `0x16` are the canonical
+`TileMapScrollRenderState` clip rectangle (`clipX`, `clipY`, `clipWidth`, and `clipHeight`), not the texture
+origin. Embedding the complete renderer state removes padding arrays and keeps the generated accesses exact.
+
+KMC can also change an object's trailing text padding after a raw byte access is replaced with a typed field
+access, even when the function's instructions match. If subsequent objects shift, compare the end of the
+affected object's `.text` section and preserve its original section alignment explicitly.

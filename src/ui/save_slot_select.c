@@ -1,9 +1,8 @@
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "assets.h"
 #include "common.h"
 #include "common_bss.h"
 #include "core/session_manager.h"
+#include "gamestate.h"
 #include "graphics/graphics.h"
 #include "os_cont.h"
 #include "race/race_session.h"
@@ -11,6 +10,7 @@
 #include "system/controller_io.h"
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
+#include "ui/save_data.h"
 #include "ui/save_slot_gfx.h"
 
 u8 eeprom_save_magic[16] = "SNOW2EEP";
@@ -24,7 +24,7 @@ void updateNameEntryCursorWiggle(void);
 void onSaveSlotReadComplete(u16, s32);
 void verifySaveSlotChecksum(void);
 void updateSlotSelectionSlide(void);
-s32 sanitizeSaveSlotData(EepromSaveData_type *saveData);
+s32 sanitizeSaveSlotData(EepromSaveDataBlock *saveData);
 
 void initSaveSlotScreen(void) {
     SaveSlotScreenState *state;
@@ -149,7 +149,7 @@ after_loop:
         initViewportNode(&state->slotModels[3], NULL, 0xC, 6, 0);
         setViewportId(&state->slotModels[3], 0xD);
         setModelCameraTransform(&state->slotModels[3], -0x140, -0x30, -0xA0, -0x18, 0xA0, 0x18);
-        EepromSaveData->slotGold = gGameSessionContext->gold;
+        EepromSaveData->gold = gGameSessionContext->gold;
         handler = initSaveSlotSelection;
     } else {
         handler = updateSaveSlotSelectionScreen;
@@ -161,7 +161,7 @@ after_loop:
 
 void initSaveSlotSelection(void) {
     SaveSlotScreenState *allocation = (SaveSlotScreenState *)getCurrentAllocation();
-    u8 saveSlot = gGameSessionContext->previousSaveSlot;
+    u8 saveSlot = gGameSessionContext->saveSlotIndex;
     allocation->selectedSaveSlot = saveSlot;
     setGameStateHandler(updateSaveSlotSelectionScreen);
 }
@@ -343,7 +343,7 @@ void updateSaveSlotSelectionScreen(void) {
             state->selectionAnimState += 1;
             if ((state->selectionAnimState & 0xFFFF) == 0x11) {
                 state->selectionAnimState = 0;
-                if (state->slotData[state->selectedSaveSlot].save_slot_status[0xB] == 1) {
+                if (state->slotData[state->selectedSaveSlot].levelUnlockStatus[0xB] == 1) {
                     if (state->hasCurrentSaveData != 0) {
                         state->saveSlotMenuState = 3;
                         break;
@@ -366,13 +366,13 @@ void updateSaveSlotSelectionScreen(void) {
             if (gControllerInputs[0] & CONT_A) {
                 playSoundEffect(0x2C);
                 if (state->hasCurrentSaveData == 0) {
-                    gGameSessionContext->previousSaveSlot = state->selectedSaveSlot;
+                    gGameSessionContext->saveSlotIndex = state->selectedSaveSlot;
                     state->mainPromptIndex = 1;
                     state->saveSlotMenuState = 5;
                     memcpy(EepromSaveData, (void *)(state->selectedSaveSlot * 0x5C + (s32)(u8 *)state + 0x938), 0x5C);
-                    gGameSessionContext->gold = state->slotData[state->selectedSaveSlot].slotGold;
+                    gGameSessionContext->gold = state->slotData[state->selectedSaveSlot].gold;
                 } else {
-                    gGameSessionContext->previousSaveSlot = state->selectedSaveSlot;
+                    gGameSessionContext->saveSlotIndex = state->selectedSaveSlot;
                     state->saveSlotMenuState = 0x18;
                     state->animDelayCounter = 3;
                     state->slotStatus.selection.originalSlotDataFlag =
@@ -435,7 +435,7 @@ void updateSaveSlotSelectionScreen(void) {
             } else if (gControllerInputs[0] & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->saveSlotDialogType == 0xA) {
-                    gGameSessionContext->isStoryMode = 0;
+                    gGameSessionContext->modeState.isStoryMode = 0;
                     state->saveSlotMenuState = 0x32;
                     state->mainPromptIndex = 0xB;
                 } else {
@@ -718,10 +718,10 @@ void updateSaveSlotSelectionScreen(void) {
                 if (state->saveSlotDialogType == 0xA) {
                     state->saveSlotMenuState = 3;
                     if (state->saveSlotDialogSelection == 0) {
-                        gGameSessionContext->isStoryMode = 1;
+                        gGameSessionContext->modeState.isStoryMode = 1;
                         state->mainPromptIndex = 0xC;
                     } else {
-                        gGameSessionContext->isStoryMode = 0;
+                        gGameSessionContext->modeState.isStoryMode = 0;
                         state->mainPromptIndex = 0xD;
                     }
                 } else {
@@ -817,7 +817,7 @@ void cleanupSaveSlotSelectionAndExit(void) {
         }
 
         for (i = 0; i < 8; i++) {
-            EepromSaveData->header_data[i] = eeprom_save_magic[i];
+            EepromSaveData->magic[i] = eeprom_save_magic[i];
         }
     } else {
         for (i = 0; i < 4; i++) {
@@ -881,7 +881,7 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
         slotIndex = arg0 & 0xFFFF;
 
         while (i < 8) {
-            if (allocation->slotData[slotIndex].header_data[i] != eeprom_save_magic[i]) {
+            if (allocation->slotData[slotIndex].magic[i] != eeprom_save_magic[i]) {
                 allocation->eepromErrorStatus++;
                 break;
             }
@@ -891,7 +891,7 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
         if (i == 8) {
             limit = 0x58;
             slotIndex = arg0 & 0xFFFF;
-            dataPtr = allocation->slotData[slotIndex].header_data;
+            dataPtr = allocation->slotData[slotIndex].magic;
             savedChecksum = allocation->slotData[slotIndex].checksum;
             sum = 0;
             i = 0;
@@ -938,115 +938,115 @@ void onSaveSlotReadComplete(u16 arg0, s32 arg1) {
     }
 }
 
-s32 sanitizeSaveSlotData(EepromSaveData_type *saveData) {
+s32 sanitizeSaveSlotData(EepromSaveDataBlock *saveData) {
     s32 coinValue;
     s32 wasModified;
     s32 i;
     u8 value;
 
-    coinValue = saveData->slotGold;
+    coinValue = saveData->gold;
     wasModified = 0;
     if (coinValue > 0x98967F) {
-        saveData->slotGold = 0x98967F;
+        saveData->gold = 0x98967F;
         wasModified = 1;
         i = 0;
     } else {
         i = 0;
         if (coinValue < 0) {
-            saveData->slotGold = 0;
+            saveData->gold = 0;
             wasModified = 1;
             i = 0;
         }
     }
 
     for (i = 0; i < 0x10; i++) {
-        value = saveData->save_slot_status[i];
+        value = saveData->levelUnlockStatus[i];
         if (value >= 6) {
-            saveData->save_slot_status[i] = 0;
+            saveData->levelUnlockStatus[i] = 0;
             wasModified = 1;
         }
-        value = saveData->save_slot_data[i];
+        value = saveData->versusLevelAvailability[i];
         if (value >= 6) {
-            saveData->save_slot_data[i] = 0;
+            saveData->versusLevelAvailability[i] = 0;
             wasModified = 1;
         }
     }
 
-    if (saveData->save_slot_status[0] == 0) {
-        saveData->save_slot_status[0] = 5;
+    if (saveData->levelUnlockStatus[0] == 0) {
+        saveData->levelUnlockStatus[0] = 5;
         wasModified = 1;
     }
 
     for (i = 0; i < 3; i++) {
-        value = saveData->save_slot_data[i];
+        value = saveData->versusLevelAvailability[i];
         if (value == 0) {
-            saveData->save_slot_data[i] = 5;
+            saveData->versusLevelAvailability[i] = 5;
             wasModified = 1;
         }
-        value = saveData->save_slot_data[i + 4];
+        value = saveData->versusLevelAvailability[i + 4];
         if (value == 0) {
-            saveData->save_slot_data[i + 4] = 5;
+            saveData->versusLevelAvailability[i + 4] = 5;
             wasModified = 1;
         }
     }
 
     for (i = 0; i < 0x12; i++) {
-        value = saveData->character_or_settings[i];
+        value = saveData->characterPaletteIds[i];
         if (value >= 0x1A) {
-            saveData->character_or_settings[i] = 0;
+            saveData->characterPaletteIds[i] = 0;
             wasModified = 1;
         }
     }
 
     for (i = 0; i < 3; i++) {
-        value = saveData->character_or_settings[i * 3];
+        value = saveData->characterPaletteIds[i * 3];
         if (value == 0) {
-            saveData->character_or_settings[i * 3] = i + 1;
+            saveData->characterPaletteIds[i * 3] = i + 1;
             wasModified = 1;
         }
     }
 
     for (i = 0; i < 0x12; i++) {
-        value = saveData->character_or_settings[i];
+        value = saveData->characterPaletteIds[i];
         if (value >= 0x1A) {
-            saveData->character_or_settings[i] = 1;
+            saveData->characterPaletteIds[i] = 1;
             wasModified = 1;
         }
     }
 
     for (i = 0; i < 9; i++) {
-        value = saveData->u.setting_42[i];
+        value = saveData->unlockedCutsceneIds[i];
         if (value >= 0x12) {
-            saveData->u.setting_42[i] = 0x11;
+            saveData->unlockedCutsceneIds[i] = 0x11;
             wasModified = 1;
         }
     }
 
     for (i = 0; i < 3; i++) {
-        value = saveData->setting_4B[i];
+        value = saveData->unlockedBoardIds[i];
         if (value >= 0x10) {
-            saveData->setting_4B[i] = 0xF;
+            saveData->unlockedBoardIds[i] = 0xF;
             wasModified = 1;
         }
     }
 
-    if (saveData->setting_4E >= 2) {
-        saveData->setting_4E = 0;
+    if (saveData->specialBoardUnlocked[0] >= 2) {
+        saveData->specialBoardUnlocked[0] = 0;
         wasModified = 1;
     }
 
-    if (saveData->setting_4F >= 2) {
-        saveData->setting_4F = 0;
+    if (saveData->specialBoardUnlocked[1] >= 2) {
+        saveData->specialBoardUnlocked[1] = 0;
         wasModified = 1;
     }
 
-    if (saveData->setting_50 >= 2) {
-        saveData->setting_50 = 0;
+    if (saveData->specialBoardUnlocked[2] >= 2) {
+        saveData->specialBoardUnlocked[2] = 0;
         wasModified = 1;
     }
 
-    if (saveData->unk51 >= 2) {
-        saveData->unk51 = 0;
+    if (saveData->postCreditsCutscenePending >= 2) {
+        saveData->postCreditsCutscenePending = 0;
         wasModified = 1;
     }
 

@@ -1,6 +1,5 @@
 #include "ui/character_select_sprites.h"
 
-#include "D_800AFE8C_A71FC_type.h"
 #include "assets.h"
 #include "common.h"
 #include "gamestate.h"
@@ -265,7 +264,7 @@ void checkCharacterPreviewState(CharacterPreviewState *arg0) {
         if (count > 0) {
             i = 0;
             do {
-                if (ptr->playerBoardIds[i] == arg0->characterIndex) {
+                if (ptr->characterIds[i] == arg0->characterIndex) {
                     u8 state = allocation->modeData.storyMap.selectionState[i];
                     if (state == 1 || state == 3) {
                         arg0->timer = 0;
@@ -324,7 +323,7 @@ void animateCharacterPreview(CharacterPreviewState *arg0) {
         u16 localIndex = arg0->characterIndex;
         u8 localCount = count;
         do {
-            if (localPtr->playerBoardIds[i] != localIndex) {
+            if (localPtr->characterIds[i] != localIndex) {
                 i++;
             } else {
                 u8 state = allocation->modeData.storyMap.selectionState[i];

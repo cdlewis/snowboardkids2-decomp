@@ -1,14 +1,14 @@
 #include "story/map_state.h"
-#include "D_800AFE8C_A71FC_type.h"
-#include "EepromSaveData_type.h"
 #include "audio/audio.h"
 #include "common.h"
 #include "core/game_state_init.h"
 #include "core/session_manager.h"
 #include "effects/cutscene_keyframes.h"
+#include "gamestate.h"
 #include "story/location_init.h"
 #include "story/race_state_machine.h"
 #include "system/task_scheduler.h"
+#include "ui/save_data.h"
 
 extern u8 gTitleInitialized;
 extern u8 storyMapLocationIndex;
@@ -62,14 +62,14 @@ void handleGameStateComplete(void) {
 
     locationIndex = storyMapLocationIndex;
     if (locationIndex == 3 || locationIndex == 9 || locationIndex == 6) {
-        state->previousSaveSlot = gGameSessionContext->saveSlotIndex;
+        state->previousSaveSlot = gGameSessionContext->currentLevel;
 
         if (storyMapLocationIndex == 3) {
-            gGameSessionContext->saveSlotIndex = 0xD;
+            gGameSessionContext->currentLevel = 0xD;
         } else if (storyMapLocationIndex == 9) {
-            gGameSessionContext->saveSlotIndex = 0xC;
+            gGameSessionContext->currentLevel = 0xC;
         } else {
-            gGameSessionContext->saveSlotIndex = 0xE;
+            gGameSessionContext->currentLevel = 0xE;
         }
 
         createTaskQueue(initStoryModeRace, 100);
@@ -95,7 +95,7 @@ void handleStoryMapLocationComplete(void) {
         if (result == 0x44) {
             terminateSchedulerWithCallback(onStoryMapExitToLevelSelect);
         } else if (result == 1) {
-            if (EepromSaveData->unk51 != 0) {
+            if (EepromSaveData->postCreditsCutscenePending != 0) {
                 setCutsceneSelection(8, 2);
                 createTaskQueue(loadCutsceneOverlay, 0x64);
                 setGameStateHandler(awaitIntroCutsceneComplete);
@@ -110,8 +110,8 @@ void handleStoryMapLocationComplete(void) {
         } else if (result == 0xFF && state->fromGameState == 0) {
             terminateSchedulerWithCallback(onStoryMapExitBack);
         } else {
-            if (gGameSessionContext->saveSlotIndex >= 0xC) {
-                gGameSessionContext->saveSlotIndex = state->previousSaveSlot;
+            if (gGameSessionContext->currentLevel >= 0xC) {
+                gGameSessionContext->currentLevel = state->previousSaveSlot;
             }
             createTaskQueue(initializeGameState, 0x64);
             setGameStateHandler(handleGameStateComplete);
@@ -123,7 +123,7 @@ void awaitIntroCutsceneComplete(void) {
     StoryMapStateData *state = (StoryMapStateData *)getCurrentAllocation();
 
     if (getSchedulerReturnValue() != 0) {
-        EepromSaveData->unk51 = 0;
+        EepromSaveData->postCreditsCutscenePending = 0;
         state->fromGameState = 1;
         gTitleInitialized = 1;
         createTaskQueue(initializeGameState, 100);
