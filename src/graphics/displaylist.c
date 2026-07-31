@@ -2261,7 +2261,7 @@ void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
 }
 
 void enqueueRotatedBillboardSprite(s32 arg0, MatrixEntry_202A0 *arg1) {
-    arg1->unk30 = 0;
+    arg1->renderState = 0;
     enqueueCallbackBySlotIndex(arg0 & 0xFFFF, 4, &renderRotatedBillboardSprite, arg1);
 }
 

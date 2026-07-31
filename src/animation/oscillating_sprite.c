@@ -14,7 +14,7 @@ typedef struct {
 } RotationControllerState;
 
 typedef struct {
-    /* 0x00 */ func_80002B50_3750_arg *model;
+    /* 0x00 */ SceneModel *model;
     /* 0x04 */ QuadDisplayListElement elements[4];
     /* 0xF4 */ u16 rotationAngle;
     /* 0xF6 */ u16 rotationSpeed;
@@ -45,7 +45,7 @@ void initializeQuadDisplayList(QuadDisplayListElement *elements) {
 
 void updateQuadDisplayList(QuadDisplayListState *state) {
     Transform3D rotationMatrix;
-    func_80002B50_3750_arg *model;
+    SceneModel *model;
     QuadDisplayListElement *element;
     s32 i;
 
@@ -88,7 +88,7 @@ void updateQuadDisplayList(QuadDisplayListState *state) {
     applyRotation:
         memcpy(&rotationMatrix.translation, &D_8008C120_8CD20[i], sizeof(Vec3i));
         element = &state->elements[i];
-        composeTransform3D(&rotationMatrix, &state->model->matrix18, (Transform3D *)element);
+        composeTransform3D(&rotationMatrix, &state->model->transform, (Transform3D *)element);
         enqueueModelDisplayList(state->model, (DisplayListObject *)element);
     }
 }
@@ -183,7 +183,7 @@ void updateRotationController(RotationControllerState *state) {
     rotationMatrix.translation.y = 0x100000;
     rotationMatrix.translation.z = 0;
 
-    composeTransform3D(&gScaleMatrix, &rotationMatrix, &state->model->unkF0);
+    composeTransform3D(&gScaleMatrix, &rotationMatrix, &state->model->baseTransform);
 }
 
 void cleanupRotationController(void) {

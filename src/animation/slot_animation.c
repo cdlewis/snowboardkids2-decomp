@@ -932,7 +932,7 @@ s32 spawnCutsceneMovementEffects(CutsceneSlotData *arg0, SceneModel *arg1) {
     var_s7 = 0;
     if ((arg1->index == 0x12) && (arg1->actionMode == 1)) {
         for (i = 0; i < 4; i++) {
-            transformVector(&gCharacterEffectSpawnPointsBoard[i * 6], (s16 *)&arg1->matrix18, &transformedVecs[i]);
+            transformVector(&gCharacterEffectSpawnPointsBoard[i * 6], (s16 *)&arg1->transform, &transformedVecs[i]);
         }
     } else {
         if (hasModelGraphicsData(arg1) == 0) {
@@ -944,7 +944,7 @@ s32 spawnCutsceneMovementEffects(CutsceneSlotData *arg0, SceneModel *arg1) {
                 var_s6 = var_s6 & -temp;
             }
 
-            memcpy(&localMatrix, &arg1->matrix18, sizeof(Transform3D));
+            memcpy(&localMatrix, &arg1->transform, sizeof(Transform3D));
             for (i = 0; i < 4; i++) {
                 transformVector(&gCharacterEffectSpawnPoints[i * 6], (s16 *)&localMatrix, &transformedVecs[i]);
             }
@@ -978,7 +978,7 @@ s32 spawnCutsceneMovementEffects(CutsceneSlotData *arg0, SceneModel *arg1) {
                 goto block_31;
             }
         } else {
-            if (arg1->unk16 == 0x78) {
+            if (arg1->currentAnimationIndex == 0x78) {
                 randVal = randA() & 0xFF;
                 point1.x =
                     transformedVecs[1].x + (s32)(((s64)(transformedVecs[0].x - transformedVecs[1].x) * randVal) / 0xFF);
@@ -993,7 +993,7 @@ s32 spawnCutsceneMovementEffects(CutsceneSlotData *arg0, SceneModel *arg1) {
                     transformedVecs[1].y + (s32)(((s64)(transformedVecs[0].y - transformedVecs[1].y) * randVal) / 0xFF);
                 point2.z =
                     transformedVecs[1].z + (s32)(((s64)(transformedVecs[0].z - transformedVecs[1].z) * randVal) / 0xFF);
-            } else if (arg1->unk16 == 0x77) {
+            } else if (arg1->currentAnimationIndex == 0x77) {
                 randVal = randA() & 0xFF;
                 point1.x =
                     transformedVecs[3].x + (s32)(((s64)(transformedVecs[2].x - transformedVecs[3].x) * randVal) / 0xFF);
@@ -1071,8 +1071,8 @@ s16 updateSlotLinearMove(CutsceneSlotData *slot, SceneModel *model) {
         slot->rotYVel = 0;
         slot->rotY = slot->rotYTarget;
 
-        if ((model->unk38 != -1) && (model->unk3E <= 0)) {
-            setModelAnimation(model, model->unk38);
+        if ((model->queuedAnimationIndex != -1) && (model->animationLoopCount <= 0)) {
+            setModelAnimation(model, model->queuedAnimationIndex);
         }
         slot->unk0.animMode = 0;
     }
@@ -1247,10 +1247,22 @@ s16 updateSlotWalk(CutsceneSlotData *arg0, SceneModel *arg1) {
                 temp_v0_9 = arg0->unk8A;
                 if (temp_v0_9 < 0) {
                     var_a1 = 0x77;
-                    setModelAnimationQueued(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+                    setModelAnimationQueued(
+                        arg1,
+                        var_a1,
+                        arg1->queuedAnimationIndex,
+                        arg1->animationLoopCount,
+                        arg1->transitionAnimationIndex
+                    );
                 } else if (temp_v0_9 > 0) {
                     var_a1 = 0x78;
-                    setModelAnimationQueued(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+                    setModelAnimationQueued(
+                        arg1,
+                        var_a1,
+                        arg1->queuedAnimationIndex,
+                        arg1->animationLoopCount,
+                        arg1->transitionAnimationIndex
+                    );
                 }
             }
         } else {
@@ -1259,13 +1271,25 @@ s16 updateSlotWalk(CutsceneSlotData *arg0, SceneModel *arg1) {
     } else if (arg0->rotYVel != 0) {
         if (arg0->unk0.bytes[2] != 0) {
             var_a1 = 0x71;
-            setModelAnimationQueued(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+            setModelAnimationQueued(
+                arg1,
+                var_a1,
+                arg1->queuedAnimationIndex,
+                arg1->animationLoopCount,
+                arg1->transitionAnimationIndex
+            );
         }
     } else {
     block_51:
-        if ((arg1->unk16 != 0x71) || (arg1->unk95 != 0)) {
+        if ((arg1->currentAnimationIndex != 0x71) || (arg1->completedLoopCount != 0)) {
             var_a1 = arg0->walkAnimIndex;
-            setModelAnimationQueued(arg1, var_a1, arg1->unk38, arg1->unk3E, arg1->unk3A);
+            setModelAnimationQueued(
+                arg1,
+                var_a1,
+                arg1->queuedAnimationIndex,
+                arg1->animationLoopCount,
+                arg1->transitionAnimationIndex
+            );
         }
     }
 
@@ -1312,8 +1336,8 @@ s32 updateSlotDecelMove(CutsceneSlotData *slot, SceneModel *model) {
         goto update_position;
     }
 
-    animIndex = model->unk38;
-    if (animIndex != -1 && model->unk3E <= 0) {
+    animIndex = model->queuedAnimationIndex;
+    if (animIndex != -1 && model->animationLoopCount <= 0) {
         setModelAnimation(model, animIndex);
     }
 
@@ -1388,7 +1412,7 @@ s32 updateSlotOrbit(CutsceneSlotData *slot, SceneModel *model) {
             slot->rotY = slot->rotYTarget;
         }
     } else {
-        animIndex = model->unk38;
+        animIndex = model->queuedAnimationIndex;
         if (animIndex != -1) {
             setModelAnimation(model, animIndex);
         }
@@ -1529,7 +1553,7 @@ s32 syncModelFromSlot(CutsceneSlotData *slot, SceneModel *model) {
             }
             if (slot->angle == 0) {
                 if (model != NULL) {
-                    setModelAnimationLooped(model, 0x79, model->unk38, 1);
+                    setModelAnimationLooped(model, 0x79, model->queuedAnimationIndex, 1);
                     slot->unk0.animMode = 0;
                 }
             }

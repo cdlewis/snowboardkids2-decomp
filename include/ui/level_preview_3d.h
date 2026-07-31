@@ -12,6 +12,8 @@
 #define SCENE_MODEL_BONE_SLOT_COUNT 32
 #define SCENE_MODEL_MAX_ANIMATED_BONES 31
 
+struct ViewportNode;
+
 typedef struct {
     void *displayListStart;
     void *displayListEnd;
@@ -28,8 +30,17 @@ typedef struct {
     void *compressedDataStart;
     void *compressedDataEnd;
     s32 decompressedSize;
-    void *unk14;
+    DisplayLists *displayLists;
 } ItemAssetEntry;
+
+typedef union {
+    s32 packed;
+    struct {
+        s8 assetIndex;
+        u8 shadowScale;
+        u16 padding;
+    } fields;
+} AssetGroupAnimationInfo;
 
 typedef struct {
     /* 0x00 */ char name[8];
@@ -38,21 +49,19 @@ typedef struct {
     /* 0x10 */ void *compressedDataStart;
     /* 0x14 */ void *compressedDataEnd;
     /* 0x18 */ s32 decompressedSize;
-    /* 0x1C */ struct {
-        u8 padding[0x10];
-    } *unk1C;
+    /* 0x1C */ DisplayLists *displayLists;
     /* 0x20 */ s8 numAssets;
     /* 0x21 */ s8 assetGroupIndex;
-    /* 0x22 */ s16 padding;
+    /* 0x22 */ s16 animationCount;
     /* 0x24 */ void *animationDataStart;
     /* 0x28 */ void *animationDataEnd;
     /* 0x2C */ u32 animationDataSize;
-    /* 0x30 */ s32 anotherAssetIndex;
+    /* 0x30 */ s32 packedAnimationInfo;
     /* 0x34 */ void *soundSequenceDataStart;
     /* 0x38 */ void *soundSequenceDataEnd;
     /* 0x3C */ s32 soundSequenceDataSize;
     /* 0x40 */ void *initCallback;
-    /* 0x44 */ Asset *Assets;
+    /* 0x44 */ Asset *assets;
     /* 0x48 */ s8 count;
     /* 0x49 */ u8 countPadding[3];
 } AssetGroup;
@@ -61,37 +70,6 @@ typedef struct {
     u8 padding[0x13];
     s8 animationCount;
 } ModelAnimationData;
-
-typedef struct {
-    u8 padding[0x89];
-    s8 unk89;
-    s16 animFrameCount;
-    u8 padding3[0x8];
-    s8 animationIndex;
-    u8 padding2[0x4];
-    ModelAnimationData *unk9C;
-} func_80001688_2288_arg;
-
-typedef struct {
-    s32 unk0;
-    u8 padding[0x9];
-    s16 unkE;
-    struct {
-        u8 padding[0x16];
-        u16 unk16;
-    } *unk10;
-    u8 unk14[0x4];
-    /* 0x18 */ Transform3D matrix18;
-    u8 padding2[0x3C - 0x38];
-    s8 isDestroyed;
-    s8 actionMode;
-    s8 unk3E;
-    s8 displayEnabled;
-    u8 padding3[0x88 - 0x40];
-    s8 unk88;
-    u8 padding4[0xF0 - 0x89];
-    Transform3D unkF0;
-} func_80002B50_3750_arg;
 
 typedef struct {
     void *unk0;
@@ -116,58 +94,53 @@ typedef struct {
     void *animationBoneData;
     /* 0xC */ s16 index;
     s16 assetCount;
-    struct {
-        u8 padding[0x16];
-        u16 unk16;
-    } *unk10;
-    s16 unk14;
-    s16 unk16;
-    Transform3D matrix18;
-    s16 unk38;
-    s16 unk3A;
+    struct ViewportNode *viewport;
+    s16 previousAnimationIndex;
+    s16 currentAnimationIndex;
+    Transform3D transform;
+    s16 queuedAnimationIndex;
+    s16 transitionAnimationIndex;
     s8 isDestroyed;
     s8 actionMode;
-    s8 unk3E;
+    s8 animationLoopCount;
     s8 displayEnabled;
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    s16 unk4C;
-    s8 unk4E;
-    s8 unk4F;
+    Vec3i effectOffset;
+    s16 itemAssetIndex;
+    s8 itemDisplayEnabled;
+    s8 shadowScale;
     u8 padding2[0x38];
-    s8 unk88;
-    s8 unk89;
+    s8 visibilityEnabled;
+    s8 flags;
     s16 animFrameCount;
-    s16 unk8C;
-    s16 unk8E;
-    s32 unk90;
+    s16 currentAnimationFrame;
+    s16 targetAnimationIndex;
+    s32 completedBoneMask;
     s8 animationIndex;
-    s8 unk95;
+    s8 completedLoopCount;
     u8 alpha;
     s8 shadowEnabled;
     DisplayListObject *specialAnimationDisplayObject;
     ModelAnimationData *animationDataTable;
     void *animationDisplayLists;
-    SpriteAssetState unkA4;
-    Transform3D unkF0;
+    SpriteAssetState spriteAsset;
+    Transform3D baseTransform;
     s32 partDisplayFlags;
-    void *unk114;
-    void *unk118;
+    void *spriteEffectModelData;
+    void *spriteEffectTextureData;
     void *soundData;
-    void *unk120;
+    void *shadowTextureData;
     SceneModelShadowSprite shadowSprite;
     s32 height;
     s8 renderEnabled;
 } SceneModel;
 
-void *
+SceneModel *
 createSceneModelEx(s32 assetGroupIndex, void *allocation, s8 assetPairIndex, s8 param4, s8 param5, s16 assetIndex);
 void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode);
 void *loadAssetGroupSoundData(SceneModel *);
 void *loadAssetGroupDisplayList(SceneModel *);
 void *loadAssetGroupCompressedData(SceneModel *);
-void *createSceneModel(s32 assetGroupIndex, void *allocation);
+SceneModel *createSceneModel(s32 assetGroupIndex, void *allocation);
 
 void setModelAnimation(SceneModel *model, s16 animationIndex);
 
@@ -191,7 +164,7 @@ typedef struct {
 
 void applyTransformToModel(SceneModel *arg0, Transform3D *arg1);
 
-void initializeGameEntity(void *, s32, void *, s8, s8, s8, s16);
+void initializeGameEntity(SceneModel *, s32, struct ViewportNode *, s8, s8, s8, s16);
 
 SceneModel *destroySceneModel(SceneModel *arg0);
 void *cleanupSceneModel(SceneModel *arg0);
@@ -220,6 +193,8 @@ void setModelAnimationQueued(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, s16 
 void setModelAnimationEx(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short arg4, s8 arg5);
 
 void setModelActionMode(SceneModel *model, s8 actionMode);
+s8 getModelActionMode(SceneModel *model);
+void markEntityDestroyed(SceneModel *model);
 
 void setModelPartDisplayFlag(SceneModel *model, s32 partIndex);
 
@@ -233,7 +208,7 @@ u8 getModelAlpha(SceneModel *arg0);
 
 void setModelAlpha(SceneModel *arg0, u8 arg1);
 
-void enqueueModelDisplayList(func_80002B50_3750_arg *arg0, DisplayListObject *arg1);
+void enqueueModelDisplayList(SceneModel *arg0, DisplayListObject *arg1);
 
 s32 isAssetGroupEmpty(s16);
 
@@ -289,4 +264,4 @@ typedef struct {
 
 void initBobbingModelTask(BobbingModelTaskState *);
 
-s32 isModelVisible(func_80002B50_3750_arg *model);
+s32 isModelVisible(SceneModel *model);

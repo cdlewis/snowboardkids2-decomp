@@ -113,7 +113,7 @@ void updateCameraRotationTask(CameraRotationTaskState *state) {
     cameraTransform.translation.y = 0x4CCCC;
     cameraTransform.translation.z = 0;
 
-    composeTransform3D((Transform3D *)(positionPtr - 5), &cameraTransform, &state->model->unkF0);
+    composeTransform3D((Transform3D *)(positionPtr - 5), &cameraTransform, &state->model->baseTransform);
 }
 
 void cleanupCameraRotationTask(void) {
@@ -278,7 +278,7 @@ void updateModelTransitionEffect(ModelTransitionEffectState *state) {
     } else {
         do {
             if (state->currentFrame == 0) {
-                memcpy(&state->transformMatrix, &state->model->matrix18, sizeof(Transform3D));
+                memcpy(&state->transformMatrix, &state->model->transform, sizeof(Transform3D));
                 scaleMatrix(&state->transformMatrix, 0x1000, 0x1000, 0x1000);
             }
         } while (0);

@@ -253,10 +253,13 @@ typedef struct {
     u8 _pad0[0x4];
     s16 matrix[3][3];
     u8 _pad16[0xE];
-    u8 *data_ptr;
-    void *index_ptr;
-    u8 _pad2C[0x4];
-    s32 unk30;
+    u8 *textureData;
+    void *paletteData;
+    u8 textureWidth;
+    u8 textureHeight;
+    u8 alpha;
+    u8 _pad2F;
+    s32 renderState;
 } MatrixEntry_202A0;
 void enqueueRotatedBillboardSprite(s32 arg0, MatrixEntry_202A0 *arg1);
 void renderRotatedBillboardSpriteCI(MatrixEntry_202A0 *arg1);

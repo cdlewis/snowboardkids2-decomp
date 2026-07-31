@@ -783,3 +783,11 @@ exact offset before assigning semantics. In particular, the gallery's byte at of
 is `TextRenderArg.overridePaletteCount`, not transparency (which is at `0x0E`). A plausible local field name can
 therefore be wrong even when its surrounding struct size matches. Packed padding-and-shade halfwords should be
 represented by a union in the shared renderer type so KMC can retain the original `sh` store.
+
+## Preserve Packed Global Fields When Naming Their Byte Semantics
+
+`AssetGroup` stores an animation-asset index and shadow scale as the high two bytes of one packed `s32`.
+Replacing that word with separate `s8`, `u8`, and `u16` fields preserved the structure offsets but changed KMC's
+alignment of the following globals, growing the ROM data segment. Keep the original word in the containing
+structure and define a shared union view with named byte fields for code that needs those semantics. This removes
+file-local padded views without changing the declared storage that controls global-data placement.

@@ -860,8 +860,8 @@ void initPortraitRotationFrames(LevelPreviewPortraitState *arg0) {
         } else {
             getTableEntryByU16Index(arg0->portraitAsset, (toLevelFrameBase + (i & 1)) & 0xFFFF, &sp10);
         }
-        arg0->matrices[i].data_ptr = sp10.data_ptr;
-        arg0->matrices[i].index_ptr = (void *)sp10.index_ptr;
+        arg0->matrices[i].textureData = sp10.data_ptr;
+        arg0->matrices[i].paletteData = (void *)sp10.index_ptr;
     }
     setCallbackWithContinue(animatePortraitRotation);
 }

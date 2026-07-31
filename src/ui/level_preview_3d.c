@@ -15,7 +15,6 @@
 #include "data/model_display_lists.h"
 #include "data/shared_model_part_display_lists.h"
 #include "effects/animated_sprite_effect.h"
-#include "gamestate.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_table.h"
@@ -24,30 +23,6 @@
 #include "os_thread.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
-
-typedef struct {
-    u8 padding[0x24];
-    /* 0x24 */ u8 *data_ptr;
-    /* 0x28 */ TableEntry_19E80 *index_ptr;
-    s8 tableField1;
-    s8 tableField2;
-} DisplayAssetTableData;
-
-typedef struct {
-    u8 padding[0x3C];
-    s8 isDestroyed;
-} MarkDestroyedArg;
-
-typedef struct {
-    u8 padding[0x3D];
-    s8 actionMode;
-} getModelActionMode_arg;
-
-typedef struct {
-    u8 _pad[0x30];
-    s8 anotherAssetIndex;
-    u8 unk31;
-} AssetGroupByteView;
 
 extern s32 D_80089500;
 extern DisplayLists gNewspaperDisplayLists;
@@ -362,133 +337,133 @@ AssetGroup gameAssets[] = {
     {
      .name = " SLASH ",
      .numAssets = (s8)0x10,
-     .padding = 0x00E7,
+     .animationCount = 0x00E7,
      .animationDataStart = (void *)&SLASH1_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&SLASH1_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x9F02,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)SLASH_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)SLASH_ASSETS,
      .count = 4,
      },
     {
      .name = " NANCY ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x01,
-     .padding = 0x0175,
+     .animationCount = 0x0175,
      .animationDataStart = (void *)&NANCY_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&NANCY_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xDE48,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)NANCY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)NANCY_ASSETS,
      .count = 4,
      },
     {
      .name = " JAM   ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x02,
-     .padding = 0x012F,
+     .animationCount = 0x012F,
      .animationDataStart = (void *)&JAM_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&JAM_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xC848,
-     .anotherAssetIndex = 0xff060000,
-     .Assets = (void *)JAM_ASSETS,
+     .packedAnimationInfo = 0xff060000,
+     .assets = (void *)JAM_ASSETS,
      .count = 4,
      },
     {
      .name = " LINDA ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x03,
-     .padding = 0x011C,
+     .animationCount = 0x011C,
      .animationDataStart = (void *)&LINDA_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&LINDA_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xE6AE,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)LINDA_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)LINDA_ASSETS,
      .count = 4,
      },
     {
      .name = " TOMMY ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x04,
-     .padding = 0x0178,
+     .animationCount = 0x0178,
      .animationDataStart = (void *)&TOMMY_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&TOMMY_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xB6D0,
-     .anotherAssetIndex = 0xff070000,
-     .Assets = (void *)TOMMY_ASSETS,
+     .packedAnimationInfo = 0xff070000,
+     .assets = (void *)TOMMY_ASSETS,
      .count = 4,
      },
     {
      .name = " WENDY ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x05,
-     .padding = 0x0174,
+     .animationCount = 0x0174,
      .animationDataStart = (void *)&PEN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&PEN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xFE66,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)WENDY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {
      .name = " BLACK ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x06,
-     .padding = 0x0157,
+     .animationCount = 0x0157,
      .animationDataStart = (void *)&DAMIEN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DAMIEN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xC8A4,
-     .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)DAMIEN_ASSETS,
+     .packedAnimationInfo = 0xff040000,
+     .assets = (void *)DAMIEN_ASSETS,
      .count = 4,
      },
     {
      .name = " PEN   ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x07,
-     .padding = 0x0174,
+     .animationCount = 0x0174,
      .animationDataStart = (void *)&PEN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&PEN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xFE66,
-     .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)PEN_ASSETS,
+     .packedAnimationInfo = 0xff040000,
+     .assets = (void *)PEN_ASSETS,
      .count = 4,
      },
     {
      .name = " DOG   ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x08,
-     .padding = 0x009F,
+     .animationCount = 0x009F,
      .animationDataStart = (void *)&DOG_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DOG_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x8070,
-     .anotherAssetIndex = 0xff080000,
+     .packedAnimationInfo = 0xff080000,
      },
     {
      .name = " DINOS ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x09,
-     .padding = 0x015D,
+     .animationCount = 0x015D,
      .animationDataStart = (void *)&DINOS_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DINOS_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x5788,
-     .anotherAssetIndex = 0xff190000,
+     .packedAnimationInfo = 0xff190000,
      },
     {
      .name = " SNOW  ",
      .numAssets = (s8)0x03,
      .assetGroupIndex = (s8)0x0A,
-     .anotherAssetIndex = 0xff110000,
+     .packedAnimationInfo = 0xff110000,
      },
     {
      .name = " ROBO  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x0B,
-     .padding = 0x009D,
+     .animationCount = 0x009D,
      .animationDataStart = (void *)&ROBO_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&ROBO_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x3CDA,
-     .anotherAssetIndex = 0xff170000,
+     .packedAnimationInfo = 0xff170000,
      },
     {
      .name = " CHAIR ",
@@ -497,10 +472,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CHAIR_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CHAIR_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x560,
-     .unk1C = (void *)&gChairPartDisplayLists,
+     .displayLists = (void *)&gChairPartDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff020000,
+     .packedAnimationInfo = 0xff020000,
      },
     {
      .name = " CUP   ",
@@ -509,10 +484,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CUP_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CUP_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xA90,
-     .unk1C = (void *)&gCupDisplayLists,
+     .displayLists = (void *)&gCupDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      },
     {
      .name = " POT   ",
@@ -521,10 +496,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&POT_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&POT_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xA90,
-     .unk1C = (void *)&gPotDisplayLists,
+     .displayLists = (void *)&gPotDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      },
     {
      .name = " SNOW2 ",
@@ -533,19 +508,19 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&SNOW2_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&SNOW2_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xB20,
-     .unk1C = (void *)&gSnow2PartDisplayLists,
+     .displayLists = (void *)&gSnow2PartDisplayLists,
      .numAssets = (s8)0x02,
      .assetGroupIndex = (s8)-0x01,
-     .padding = 0x0136,
+     .animationCount = 0x0136,
      .animationDataStart = (void *)&SNOW_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&SNOW_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x1CDA,
-     .anotherAssetIndex = 0xff110000,
+     .packedAnimationInfo = 0xff110000,
      },
     {
      .name = " BOMB  ",
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      .soundSequenceDataStart = (void *)&BOMB_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&BOMB_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x358,
@@ -554,7 +529,7 @@ AssetGroup gameAssets[] = {
     {
      .name = " BUTTE ",
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      .initCallback = initDriftingParticle,
      },
     {
@@ -564,10 +539,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&BUS_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&BUS_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x1280,
-     .unk1C = (void *)&D_80088630,
+     .displayLists = (void *)&D_80088630,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      .initCallback = initializeQuadDisplayList,
      },
     {
@@ -577,10 +552,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&UFO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&UFO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x25A0,
-     .unk1C = (void *)&gUfoDisplayLists,
+     .displayLists = (void *)&gUfoDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff140000,
+     .packedAnimationInfo = 0xff140000,
      .soundSequenceDataStart = (void *)&UFO_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&UFO_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x838,
@@ -589,107 +564,107 @@ AssetGroup gameAssets[] = {
     {
      .name = " SLASH2",
      .numAssets = (s8)0x10,
-     .padding = 0x007A,
+     .animationCount = 0x007A,
      .animationDataStart = (void *)&SLASH2_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&SLASH2_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xC3F2,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)SLASH_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)SLASH_ASSETS,
      .count = 4,
      },
     {
      .name = " NANCY2",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x01,
-     .padding = 0x007A,
+     .animationCount = 0x007A,
      .animationDataStart = (void *)&NANCY2_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&NANCY2_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x6032,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)NANCY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)NANCY_ASSETS,
      .count = 4,
      },
     {
      .name = " JAM2  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x02,
-     .padding = 0x007A,
+     .animationCount = 0x007A,
      .animationDataStart = (void *)&JAM2_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&JAM2_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xB2DA,
-     .anotherAssetIndex = 0xff060000,
-     .Assets = (void *)JAM_ASSETS,
+     .packedAnimationInfo = 0xff060000,
+     .assets = (void *)JAM_ASSETS,
      .count = 4,
      },
     {
      .name = " LINDA2",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x03,
-     .padding = 0x007A,
+     .animationCount = 0x007A,
      .animationDataStart = (void *)&LINDA2_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&LINDA2_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x9814,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)LINDA_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)LINDA_ASSETS,
      .count = 4,
      },
     {
      .name = " TOMMY2",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x04,
-     .padding = 0x007A,
+     .animationCount = 0x007A,
      .animationDataStart = (void *)&DOG2_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DOG2_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x8094,
-     .anotherAssetIndex = 0xff070000,
-     .Assets = (void *)TOMMY_ASSETS,
+     .packedAnimationInfo = 0xff070000,
+     .assets = (void *)TOMMY_ASSETS,
      .count = 4,
      },
     {
      .name = " WENDY2",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x05,
-     .padding = 0x007A,
+     .animationCount = 0x007A,
      .animationDataStart = (void *)&WENDY2_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&WENDY2_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x6C2A,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)WENDY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {
      .name = " BLACK2",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x06,
-     .padding = 0x007A,
+     .animationCount = 0x007A,
      .animationDataStart = (void *)&DAMIEN2_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DAMIEN2_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x5A70,
-     .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)DAMIEN_ASSETS,
+     .packedAnimationInfo = 0xff040000,
+     .assets = (void *)DAMIEN_ASSETS,
      .count = 4,
      },
     {
      .name = " PEN2  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x07,
-     .padding = 0x00A0,
+     .animationCount = 0x00A0,
      .animationDataStart = (void *)&PEN2_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&PEN2_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x40A2,
-     .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)PEN_ASSETS,
+     .packedAnimationInfo = 0xff040000,
+     .assets = (void *)PEN_ASSETS,
      .count = 4,
      },
     {
      .name = " DOG2  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x08,
-     .padding = 0x007A,
+     .animationCount = 0x007A,
      .animationDataStart = (void *)&DOG2_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DOG2_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x8094,
-     .anotherAssetIndex = 0xff080000,
+     .packedAnimationInfo = 0xff080000,
      },
     {
      .name = " ABOXO ",
@@ -698,10 +673,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CHEST_OPEN_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CHEST_OPEN_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xD10,
-     .unk1C = (void *)&gChestOpenDisplayLists,
+     .displayLists = (void *)&gChestOpenDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      .initCallback = initStretchingModelTask,
      },
     {
@@ -711,14 +686,14 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&KEYO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&KEYO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4A0,
-     .unk1C = (void *)&D_80088730,
+     .displayLists = (void *)&D_80088730,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .padding = 0x0003,
+     .animationCount = 0x0003,
      .animationDataStart = (void *)&KEYL_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&KEYL_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x108,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      },
     {
      .name = " KEY L ",
@@ -727,14 +702,14 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&KEYL_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&KEYL_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4A0,
-     .unk1C = (void *)&D_80088740,
+     .displayLists = (void *)&D_80088740,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .padding = 0x0003,
+     .animationCount = 0x0003,
      .animationDataStart = (void *)&KEYL_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&KEYL_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x108,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      },
     {
      .name = " ABOXL ",
@@ -743,10 +718,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CHEST_CLOSED_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CHEST_CLOSED_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x710,
-     .unk1C = (void *)&gChestClosedDisplayLists,
+     .displayLists = (void *)&gChestClosedDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      },
     {
      .name = " KANI  ",
@@ -755,10 +730,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CRAB_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CRAB_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x770,
-     .unk1C = (void *)&gCrabDisplayLists,
+     .displayLists = (void *)&gCrabDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff040000,
+     .packedAnimationInfo = 0xff040000,
      .initCallback = &initCameraRotationTask,
      },
     {
@@ -768,14 +743,14 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&NEZU_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&NEZU_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x1080,
-     .unk1C = (void *)&D_80088750,
+     .displayLists = (void *)&D_80088750,
      .numAssets = (s8)0x02,
      .assetGroupIndex = (s8)-0x01,
-     .padding = 0x017C,
+     .animationCount = 0x017C,
      .animationDataStart = (void *)&NEZU_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&NEZU_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x1FE0,
-     .anotherAssetIndex = 0xff050000,
+     .packedAnimationInfo = 0xff050000,
      },
     {
      .name = " CAKEE ",
@@ -784,10 +759,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CAKEE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CAKEE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xF80,
-     .unk1C = (void *)&D_800886F0,
+     .displayLists = (void *)&D_800886F0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      },
     {
      .name = " CAKE  ",
@@ -796,10 +771,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CAKE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CAKE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x1620,
-     .unk1C = (void *)&D_800886D0,
+     .displayLists = (void *)&D_800886D0,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      .soundSequenceDataStart = (void *)&CAKE_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&CAKE_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x468,
@@ -812,10 +787,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&POSTBOX_WITH_NEWSPAPER_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&POSTBOX_WITH_NEWSPAPER_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x8E0,
-     .unk1C = (void *)&gPostboxWithNewspaperDisplayLists,
+     .displayLists = (void *)&gPostboxWithNewspaperDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff030000,
+     .packedAnimationInfo = 0xff030000,
      },
     {
      .name = " POST  ",
@@ -824,10 +799,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&POSTBOX_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&POSTBOX_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x7A0,
-     .unk1C = (void *)&gPostboxDisplayLists,
+     .displayLists = (void *)&gPostboxDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff030000,
+     .packedAnimationInfo = 0xff030000,
      },
     {
      .name = " NEWS  ",
@@ -836,92 +811,92 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&NEWSPAPER_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&NEWSPAPER_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x620,
-     .unk1C = (void *)&gNewspaperDisplayLists,
+     .displayLists = (void *)&gNewspaperDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      },
     {
      .name = " SLASH3",
      .numAssets = (s8)0x10,
-     .padding = 0x016C,
+     .animationCount = 0x016C,
      .animationDataStart = (void *)&SLASH3_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&SLASH3_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xF51A,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)SLASH_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)SLASH_ASSETS,
      .count = 4,
      },
     {
      .name = " NANCY3",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x01,
-     .padding = 0x015A,
+     .animationCount = 0x015A,
      .animationDataStart = (void *)&NANCY3_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&NANCY3_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xE65E,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)NANCY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)NANCY_ASSETS,
      .count = 4,
      },
     {
      .name = " JAM3  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x02,
-     .padding = 0x0127,
+     .animationCount = 0x0127,
      .animationDataStart = (void *)&JAM3_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&JAM3_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xDB44,
-     .anotherAssetIndex = 0xff060000,
-     .Assets = (void *)JAM_ASSETS,
+     .packedAnimationInfo = 0xff060000,
+     .assets = (void *)JAM_ASSETS,
      .count = 4,
      },
     {
      .name = " LINDA3",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x03,
-     .padding = 0x0137,
+     .animationCount = 0x0137,
      .animationDataStart = (void *)&LINDA3_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&LINDA3_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xDAD4,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)LINDA_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)LINDA_ASSETS,
      .count = 4,
      },
     {
      .name = " TOMMY3",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x04,
-     .padding = 0x0177,
+     .animationCount = 0x0177,
      .animationDataStart = (void *)&TOMMY3_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&TOMMY3_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x127A2,
-     .anotherAssetIndex = 0xff070000,
-     .Assets = (void *)TOMMY_ASSETS,
+     .packedAnimationInfo = 0xff070000,
+     .assets = (void *)TOMMY_ASSETS,
      .count = 4,
      },
     {
      .name = " WENDY3",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x05,
-     .padding = 0x0176,
+     .animationCount = 0x0176,
      .animationDataStart = (void *)&WENDY3_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&WENDY3_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x12DD2,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)WENDY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {
      .name = " BLACK3",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x06,
-     .padding = 0x0132,
+     .animationCount = 0x0132,
      .animationDataStart = (void *)&DAMIEN3_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DAMIEN3_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x11794,
-     .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)DAMIEN_ASSETS,
+     .packedAnimationInfo = 0xff040000,
+     .assets = (void *)DAMIEN_ASSETS,
      .count = 4,
      },
     {
@@ -931,10 +906,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&RADIO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&RADIO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x620,
-     .unk1C = (void *)&gRadioDisplayLists,
+     .displayLists = (void *)&gRadioDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff050000,
+     .packedAnimationInfo = 0xff050000,
      .initCallback = initSteppedMatrixController,
      },
     {
@@ -944,10 +919,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&TABLE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TABLE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xC20,
-     .unk1C = (void *)&gTableDisplayLists,
+     .displayLists = (void *)&gTableDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff080000,
+     .packedAnimationInfo = 0xff080000,
      },
     {
      .name = " TUTUM ",
@@ -956,115 +931,115 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&TUTUM_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TUTUM_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x930,
-     .unk1C = (void *)&gTutumDisplayLists,
+     .displayLists = (void *)&gTutumDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      },
     {
      .name = " SLASHS",
      .numAssets = (s8)0x10,
-     .padding = 0x0008,
+     .animationCount = 0x0008,
      .animationDataStart = (void *)&SLASHS_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&SLASHS_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x356E,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)SLASH_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)SLASH_ASSETS,
      .count = 4,
      },
     {
      .name = " NANCYS",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x01,
-     .padding = 0x0008,
+     .animationCount = 0x0008,
      .animationDataStart = (void *)&NANCYS_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&NANCYS_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x32A4,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)NANCY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)NANCY_ASSETS,
      .count = 4,
      },
     {
      .name = " JAMS  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x02,
-     .padding = 0x0008,
+     .animationCount = 0x0008,
      .animationDataStart = (void *)&JAMS_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&JAMS_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x477C,
-     .anotherAssetIndex = 0xff060000,
-     .Assets = (void *)JAM_ASSETS,
+     .packedAnimationInfo = 0xff060000,
+     .assets = (void *)JAM_ASSETS,
      .count = 4,
      },
     {
      .name = " LINDAS",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x03,
-     .padding = 0x0008,
+     .animationCount = 0x0008,
      .animationDataStart = (void *)&LINDAS_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&LINDAS_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x3BEC,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)LINDA_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)LINDA_ASSETS,
      .count = 4,
      },
     {
      .name = " TOMMYS",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x04,
-     .padding = 0x0008,
+     .animationCount = 0x0008,
      .animationDataStart = (void *)&TOMMYS_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&TOMMYS_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x341E,
-     .anotherAssetIndex = 0xff070000,
-     .Assets = (void *)TOMMY_ASSETS,
+     .packedAnimationInfo = 0xff070000,
+     .assets = (void *)TOMMY_ASSETS,
      .count = 4,
      },
     {
      .name = " WENDYS",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x05,
-     .padding = 0x000A,
+     .animationCount = 0x000A,
      .animationDataStart = (void *)&WENDYS_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&WENDYS_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x4E52,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)WENDY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {
      .name = " BLACKS",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x06,
-     .padding = 0x000A,
+     .animationCount = 0x000A,
      .animationDataStart = (void *)&DAMIENS_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DAMIENS_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x58A4,
-     .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)DAMIEN_ASSETS,
+     .packedAnimationInfo = 0xff040000,
+     .assets = (void *)DAMIEN_ASSETS,
      .count = 4,
      },
     {
      .name = " PENS  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x07,
-     .padding = 0x0005,
+     .animationCount = 0x0005,
      .animationDataStart = (void *)&PENS_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&PENS_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x35BC,
-     .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)PEN_ASSETS,
+     .packedAnimationInfo = 0xff040000,
+     .assets = (void *)PEN_ASSETS,
      .count = 4,
      },
     {
      .name = " DOGS  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x08,
-     .padding = 0x0018,
+     .animationCount = 0x0018,
      .animationDataStart = (void *)&DOGS_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DOGS_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xD8F2,
-     .anotherAssetIndex = 0xff080000,
+     .packedAnimationInfo = 0xff080000,
      },
     {
      .name = " DISH  ",
@@ -1073,10 +1048,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&DISH_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&DISH_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x320,
-     .unk1C = (void *)&gDishDisplayLists,
+     .displayLists = (void *)&gDishDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      .initCallback = initOscillatingModelTask,
      },
     {
@@ -1086,19 +1061,19 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&SNOW3_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&SNOW3_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xEB0,
-     .unk1C = (void *)&gSnow3PartDisplayLists,
+     .displayLists = (void *)&gSnow3PartDisplayLists,
      .numAssets = (s8)0x03,
      .assetGroupIndex = (s8)-0x01,
-     .padding = 0x0136,
+     .animationCount = 0x0136,
      .animationDataStart = (void *)&SNOW_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&SNOW_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x1CDA,
-     .anotherAssetIndex = 0xff110000,
+     .packedAnimationInfo = 0xff110000,
      .soundSequenceDataStart = (void *)0x00000000,
      .soundSequenceDataEnd = (void *)0x00000000,
      .soundSequenceDataSize = 0x0,
      .initCallback = (void *)0x00000000,
-     .Assets = (void *)0x00000000,
+     .assets = (void *)0x00000000,
      .count = 0,
      .countPadding = { 0x01, 0x00, 0x00 },
      },
@@ -1106,11 +1081,11 @@ AssetGroup gameAssets[] = {
      .name = " SNOW4 ",
      .numAssets = (s8)0x03,
      .assetGroupIndex = (s8)0x0A,
-     .padding = 0x0136,
+     .animationCount = 0x0136,
      .animationDataStart = (void *)&SNOW_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&SNOW_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x1CDA,
-     .anotherAssetIndex = 0xff110000,
+     .packedAnimationInfo = 0xff110000,
      .count = 0,
      },
     {
@@ -1120,10 +1095,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&PRESENT_RED_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&PRESENT_RED_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x370,
-     .unk1C = (void *)&gPresentRedDisplayLists,
+     .displayLists = (void *)&gPresentRedDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff020000,
+     .packedAnimationInfo = 0xff020000,
      .initCallback = initModelTransitionEffect,
      },
     {
@@ -1133,10 +1108,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&PRESENT_BLUE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&PRESENT_BLUE_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x370,
-     .unk1C = (void *)&gPresentBlueDisplayLists,
+     .displayLists = (void *)&gPresentBlueDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff020000,
+     .packedAnimationInfo = 0xff020000,
      .initCallback = initModelTransitionEffect,
      },
     {
@@ -1146,32 +1121,32 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&BUNNY_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&BUNNY_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x5E0,
-     .unk1C = (void *)&gBunnyDisplayLists,
+     .displayLists = (void *)&gBunnyDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff040000,
+     .packedAnimationInfo = 0xff040000,
      .initCallback = initModelScaleAnimation,
      },
     {
      .name = " SLASH4",
      .numAssets = (s8)0x10,
-     .padding = 0x015D,
+     .animationCount = 0x015D,
      .animationDataStart = (void *)&SLASH4_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&SLASH4_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xAFF4,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)SLASH_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)SLASH_ASSETS,
      .count = 4,
      },
     {
      .name = " SLASH5",
      .numAssets = (s8)0x10,
-     .padding = 0x0138,
+     .animationCount = 0x0138,
      .animationDataStart = (void *)&SLASH5_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&SLASH5_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xC5C0,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)SLASH_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)SLASH_ASSETS,
      .count = 4,
      },
     {
@@ -1181,10 +1156,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&HELICOPTER_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&HELICOPTER_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x1A80,
-     .unk1C = (void *)&gHelicopterDisplayLists,
+     .displayLists = (void *)&gHelicopterDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff160000,
+     .packedAnimationInfo = 0xff160000,
      .initCallback = initBobbingModelTask,
      },
     {
@@ -1194,10 +1169,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&HAMBURGER_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&HAMBURGER_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x620,
-     .unk1C = (void *)&gHamburgerDisplayLists,
+     .displayLists = (void *)&gHamburgerDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff010000,
+     .packedAnimationInfo = 0xff010000,
      },
     {
      .name = " MROBO ",
@@ -1206,119 +1181,119 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&MROBO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&MROBO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4070,
-     .unk1C = (void *)&gMroboPartDisplayLists,
+     .displayLists = (void *)&gMroboPartDisplayLists,
      .numAssets = (s8)0x0A,
      .assetGroupIndex = (s8)-0x01,
-     .padding = 0x00A0,
+     .animationCount = 0x00A0,
      .animationDataStart = (void *)&MROBO_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&MROBO_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x3F40,
-     .anotherAssetIndex = 0xff040000,
+     .packedAnimationInfo = 0xff040000,
      },
     {
      .name = " SLASHO",
      .numAssets = (s8)0x10,
-     .padding = 0x00A0,
+     .animationCount = 0x00A0,
      .animationDataStart = (void *)&SLASHO_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&SLASHO_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x737A,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)SLASH_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)SLASH_ASSETS,
      .count = 4,
      },
     {
      .name = " NANCYO",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x01,
-     .padding = 0x00A0,
+     .animationCount = 0x00A0,
      .animationDataStart = (void *)&NANCYO_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&NANCYO_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x6CEE,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)NANCY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)NANCY_ASSETS,
      .count = 4,
      },
     {
      .name = " JAMO  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x02,
-     .padding = 0x00A0,
+     .animationCount = 0x00A0,
      .animationDataStart = (void *)&JAMO_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&JAMO_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x66FC,
-     .anotherAssetIndex = 0xff060000,
-     .Assets = (void *)JAM_ASSETS,
+     .packedAnimationInfo = 0xff060000,
+     .assets = (void *)JAM_ASSETS,
      .count = 4,
      },
     {
      .name = " LINDAO",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x03,
-     .padding = 0x00A0,
+     .animationCount = 0x00A0,
      .animationDataStart = (void *)&LINDAO_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&LINDAO_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x8938,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)LINDA_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)LINDA_ASSETS,
      .count = 4,
      },
     {
      .name = " TOMMYO",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x04,
-     .padding = 0x00A0,
+     .animationCount = 0x00A0,
      .animationDataStart = (void *)&TOMMYO_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&TOMMYO_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x5498,
-     .anotherAssetIndex = 0xff070000,
-     .Assets = (void *)TOMMY_ASSETS,
+     .packedAnimationInfo = 0xff070000,
+     .assets = (void *)TOMMY_ASSETS,
      .count = 4,
      },
     {
      .name = " WENDYO",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x05,
-     .padding = 0x00C8,
+     .animationCount = 0x00C8,
      .animationDataStart = (void *)&WENDYO_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&WENDYO_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x5E66,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)WENDY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {
      .name = " BLACKO",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x06,
-     .padding = 0x00A0,
+     .animationCount = 0x00A0,
      .animationDataStart = (void *)&DAMIENO_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DAMIENO_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x53D6,
-     .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)DAMIEN_ASSETS,
+     .packedAnimationInfo = 0xff040000,
+     .assets = (void *)DAMIEN_ASSETS,
      .count = 4,
      },
     {
      .name = " PENO  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x07,
-     .padding = 0x0174,
+     .animationCount = 0x0174,
      .animationDataStart = (void *)&PEN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&PEN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xFE66,
-     .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)PEN_ASSETS,
+     .packedAnimationInfo = 0xff040000,
+     .assets = (void *)PEN_ASSETS,
      .count = 4,
      },
     {
      .name = " DOGO  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x08,
-     .padding = 0x0020,
+     .animationCount = 0x0020,
      .animationDataStart = (void *)&DOGO_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DOGO_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xB54,
-     .anotherAssetIndex = 0xff080000,
+     .packedAnimationInfo = 0xff080000,
      },
     {
      .name = " BOMB2 ",
@@ -1327,10 +1302,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&BOMB2_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&BOMB2_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x7E0,
-     .unk1C = (void *)&gBomb2DisplayLists,
+     .displayLists = (void *)&gBomb2DisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff020000,
+     .packedAnimationInfo = 0xff020000,
      .soundSequenceDataStart = (void *)&BOMB2_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&BOMB2_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x358,
@@ -1339,107 +1314,107 @@ AssetGroup gameAssets[] = {
     {
      .name = " SLASHN",
      .numAssets = (s8)0x10,
-     .padding = 0x0020,
+     .animationCount = 0x0020,
      .animationDataStart = (void *)&SLASHN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&SLASHN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x8274,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)SLASH_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)SLASH_ASSETS,
      .count = 4,
      },
     {
      .name = " NANCYN",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x01,
-     .padding = 0x001A,
+     .animationCount = 0x001A,
      .animationDataStart = (void *)&NANCYN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&NANCYN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x6CA4,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)NANCY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)NANCY_ASSETS,
      .count = 4,
      },
     {
      .name = " JAMN  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x02,
-     .padding = 0x001B,
+     .animationCount = 0x001B,
      .animationDataStart = (void *)&JAMN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&JAMN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x6A3C,
-     .anotherAssetIndex = 0xff060000,
-     .Assets = (void *)JAM_ASSETS,
+     .packedAnimationInfo = 0xff060000,
+     .assets = (void *)JAM_ASSETS,
      .count = 4,
      },
     {
      .name = " LINDAN",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x03,
-     .padding = 0x0017,
+     .animationCount = 0x0017,
      .animationDataStart = (void *)&LINDAN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&LINDAN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7D5A,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)LINDA_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)LINDA_ASSETS,
      .count = 4,
      },
     {
      .name = " TOMMYN",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x04,
-     .padding = 0x0024,
+     .animationCount = 0x0024,
      .animationDataStart = (void *)&TOMMYN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&TOMMYN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0xD8B6,
-     .anotherAssetIndex = 0xff070000,
-     .Assets = (void *)TOMMY_ASSETS,
+     .packedAnimationInfo = 0xff070000,
+     .assets = (void *)TOMMY_ASSETS,
      .count = 4,
      },
     {
      .name = " WENDYN",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x05,
-     .padding = 0x0019,
+     .animationCount = 0x0019,
      .animationDataStart = (void *)&WENDYN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&WENDYN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x800E,
-     .anotherAssetIndex = 0xff050000,
-     .Assets = (void *)WENDY_ASSETS,
+     .packedAnimationInfo = 0xff050000,
+     .assets = (void *)WENDY_ASSETS,
      .count = 4,
      },
     {
      .name = " BLACKN",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x06,
-     .padding = 0x0017,
+     .animationCount = 0x0017,
      .animationDataStart = (void *)&DAMIENN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DAMIENN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x8F0C,
-     .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)DAMIEN_ASSETS,
+     .packedAnimationInfo = 0xff040000,
+     .assets = (void *)DAMIEN_ASSETS,
      .count = 4,
      },
     {
      .name = " PENN  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x07,
-     .padding = 0x000D,
+     .animationCount = 0x000D,
      .animationDataStart = (void *)&PENN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&PENN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x252E,
-     .anotherAssetIndex = 0xff040000,
-     .Assets = (void *)PEN_ASSETS,
+     .packedAnimationInfo = 0xff040000,
+     .assets = (void *)PEN_ASSETS,
      .count = 4,
      },
     {
      .name = " DOGN  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x08,
-     .padding = 0x000D,
+     .animationCount = 0x000D,
      .animationDataStart = (void *)&DOGN_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&DOGN_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x3668,
-     .anotherAssetIndex = 0xff080000,
+     .packedAnimationInfo = 0xff080000,
      },
     {
      .name = " DOOR  ",
@@ -1448,10 +1423,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&HAUNTED_HOUSE_DOOR_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&HAUNTED_HOUSE_DOOR_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xF50,
-     .unk1C = (void *)&gHauntedHouseDoorDisplayLists,
+     .displayLists = (void *)&gHauntedHouseDoorDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      },
     {
      .name = " LTBL0 ",
@@ -1460,10 +1435,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&TABLE0_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TABLE0_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0xBC0,
-     .unk1C = (void *)&gTable0DisplayLists,
+     .displayLists = (void *)&gTable0DisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff090000,
+     .packedAnimationInfo = 0xff090000,
      },
     {
      .name = " LTBL1 ",
@@ -1472,15 +1447,15 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&TABLE1_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TABLE1_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4A0,
-     .unk1C = (void *)&gTable1DisplayLists,
+     .displayLists = (void *)&gTable1DisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff090000,
+     .packedAnimationInfo = 0xff090000,
      },
     {
      .name = " GHOST ",
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      .soundSequenceDataStart = (void *)&GHOST_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&GHOST_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0xA78,
@@ -1489,7 +1464,7 @@ AssetGroup gameAssets[] = {
     {
      .name = " POST2 ",
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff030000,
+     .packedAnimationInfo = 0xff030000,
      .soundSequenceDataStart = (void *)&POST2_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&POST2_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x848,
@@ -1502,10 +1477,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&TABLE2_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TABLE2_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x1240,
-     .unk1C = (void *)&gTable2DisplayLists,
+     .displayLists = (void *)&gTable2DisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff090000,
+     .packedAnimationInfo = 0xff090000,
      },
     {
      .name = " LTBL3 ",
@@ -1514,149 +1489,149 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&TABLE3_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TABLE3_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4A0,
-     .unk1C = (void *)&gTable3DisplayLists,
+     .displayLists = (void *)&gTable3DisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff090000,
+     .packedAnimationInfo = 0xff090000,
      },
     {
      .name = " XXXXX ",
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff040000,
+     .packedAnimationInfo = 0xff040000,
      },
     {
      .name = " XXXXX ",
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff040000,
+     .packedAnimationInfo = 0xff040000,
      },
     {
      .name = " XXXXX ",
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff080000,
+     .packedAnimationInfo = 0xff080000,
      },
     {
      .name = " XXXXX ",
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      },
     {
      .name = " SLASH ",
      .numAssets = (s8)0x10,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff050000,
+     .packedAnimationInfo = 0xff050000,
      },
     {
      .name = " NANCY ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x01,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff050000,
+     .packedAnimationInfo = 0xff050000,
      },
     {
      .name = " JAM   ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x02,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff060000,
+     .packedAnimationInfo = 0xff060000,
      },
     {
      .name = " LINDA ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x03,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff050000,
+     .packedAnimationInfo = 0xff050000,
      },
     {
      .name = " TOMMY ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x04,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff070000,
+     .packedAnimationInfo = 0xff070000,
      },
     {
      .name = " WENDY ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x05,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff050000,
+     .packedAnimationInfo = 0xff050000,
      },
     {
      .name = " BLACK ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x06,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff040000,
+     .packedAnimationInfo = 0xff040000,
      },
     {
      .name = " PEN   ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x07,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff040000,
+     .packedAnimationInfo = 0xff040000,
      },
     {
      .name = " DOG   ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x08,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff080000,
+     .packedAnimationInfo = 0xff080000,
      },
     {
      .name = " DINOS ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x09,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff190000,
+     .packedAnimationInfo = 0xff190000,
      },
     {
      .name = " SNOW  ",
      .numAssets = (s8)0x03,
      .assetGroupIndex = (s8)0x0A,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff110000,
+     .packedAnimationInfo = 0xff110000,
      },
     {
      .name = " ROBO  ",
      .numAssets = (s8)0x10,
      .assetGroupIndex = (s8)0x0B,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff170000,
+     .packedAnimationInfo = 0xff170000,
      },
     {
      .name = " MROBO ",
@@ -1665,14 +1640,14 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&MROBO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&MROBO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x4070,
-     .unk1C = (void *)&gMroboPartDisplayLists,
+     .displayLists = (void *)&gMroboPartDisplayLists,
      .numAssets = (s8)0x0A,
      .assetGroupIndex = (s8)-0x01,
-     .padding = 0x0011,
+     .animationCount = 0x0011,
      .animationDataStart = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_START,
      .animationDataEnd = (void *)&CHARACTER_SELECT_ANIMATION_DATA_ROM_END,
      .animationDataSize = 0x7E3A,
-     .anotherAssetIndex = 0xff040000,
+     .packedAnimationInfo = 0xff040000,
      },
     {
      .name = " USAGI ",
@@ -1681,16 +1656,16 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&BUNNY_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&BUNNY_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x5E0,
-     .unk1C = (void *)&gBunnyDisplayLists,
+     .displayLists = (void *)&gBunnyDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff040000,
+     .packedAnimationInfo = 0xff040000,
      .initCallback = initModelScaleAnimation,
      },
     {
      .name = " BUTTE ",
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff000000,
+     .packedAnimationInfo = 0xff000000,
      .initCallback = initDriftingParticle,
      },
     {
@@ -1700,10 +1675,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&UFO_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&UFO_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x25A0,
-     .unk1C = (void *)&gUfoDisplayLists,
+     .displayLists = (void *)&gUfoDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff140000,
+     .packedAnimationInfo = 0xff140000,
      .soundSequenceDataStart = (void *)&UFO_SOUND_SEQUENCE_DATA_ROM_START,
      .soundSequenceDataEnd = (void *)&UFO_SOUND_SEQUENCE_DATA_ROM_END,
      .soundSequenceDataSize = 0x838,
@@ -1716,10 +1691,10 @@ AssetGroup gameAssets[] = {
      .compressedDataStart = (void *)&CRAB_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&CRAB_COMPRESSED_DATA_ROM_END,
      .decompressedSize = 0x770,
-     .unk1C = (void *)&gCrabDisplayLists,
+     .displayLists = (void *)&gCrabDisplayLists,
      .numAssets = (s8)0x01,
      .assetGroupIndex = (s8)-0x01,
-     .anotherAssetIndex = 0xff040000,
+     .packedAnimationInfo = 0xff040000,
      .initCallback = &initCameraRotationTask,
      },
 };
@@ -1732,7 +1707,7 @@ u32 gDefaultEntityData8C938[18] = { 0xFFE00008, 0x0,        0x7F0FFF0,  0xFFFFFF
                                     0x7F007F0,  0xFFFFFFFF, 0x20FFF8,   0x0,        0xFFF007F0, 0xFFFFFFFF,
                                     0xFFE0FFF8, 0x0,        0xFFF0FFF0, 0xFFFFFFFF, 0x0,        0x0 };
 
-void markEntityDestroyed(MarkDestroyedArg *arg0) {
+void markEntityDestroyed(SceneModel *arg0) {
     arg0->isDestroyed = 1;
 }
 
@@ -1766,7 +1741,7 @@ u8 getModelAlpha(SceneModel *arg0) {
 
 void applyTransformToModel(SceneModel *arg0, Transform3D *arg1) {
     if (arg0 != NULL) {
-        memcpy(&arg0->matrix18, arg1, sizeof(Transform3D));
+        memcpy(&arg0->transform, arg1, sizeof(Transform3D));
     }
 }
 
@@ -1779,7 +1754,7 @@ s32 getModelTransformPtr(s32 model) {
 }
 
 s16 getAnimationCount(s16 arg0) {
-    return gameAssets[arg0].padding;
+    return gameAssets[arg0].animationCount;
 }
 
 s8 getAssetCount(s16 arg0) {
@@ -1790,7 +1765,7 @@ void setModelActionMode(SceneModel *model, s8 actionMode) {
     model->actionMode = actionMode;
 }
 
-s8 getModelActionMode(getModelActionMode_arg *arg0) {
+s8 getModelActionMode(SceneModel *arg0) {
     return arg0->actionMode;
 }
 
@@ -1811,7 +1786,7 @@ s32 getPlayerCount(void) {
 }
 
 void setModelVisibility(SceneModel *arg0, s8 arg1) {
-    arg0->unk88 = arg1;
+    arg0->visibilityEnabled = arg1;
 }
 
 void setModelDisplayEnabled(SceneModel *arg0, s8 arg1) {
@@ -1819,8 +1794,8 @@ void setModelDisplayEnabled(SceneModel *arg0, s8 arg1) {
 }
 
 void setItemDisplayEnabled(SceneModel *arg0, s8 arg1) {
-    if (arg0->unk4C != -1) {
-        arg0->unk4E = arg1;
+    if (arg0->itemAssetIndex != -1) {
+        arg0->itemDisplayEnabled = arg1;
     }
 }
 
@@ -1829,7 +1804,7 @@ s32 getItemAssetCount(void) {
 }
 
 void setItemFlags(SceneModel *arg0, s8 arg1) {
-    arg0->unk4F = arg1;
+    arg0->shadowScale = arg1;
 }
 
 s16 getAnimationFrameCount(SceneModel *model) {
@@ -1837,11 +1812,11 @@ s16 getAnimationFrameCount(SceneModel *model) {
 }
 
 void setModelPendingDestroy(SceneModel *arg0) {
-    arg0->unk89 |= 1;
+    arg0->flags |= 1;
 }
 
 void clearModelPendingDestroy(SceneModel *arg0) {
-    arg0->unk89 &= 0xFE;
+    arg0->flags &= 0xFE;
 }
 
 s8 getAnimationIndex(SceneModel *arg0) {
@@ -1877,7 +1852,7 @@ void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode) {
     Asset *entity;
 
     group = &gameAssets[groupIndex];
-    if (group->Assets == NULL) {
+    if (group->assets == NULL) {
         return NULL;
     }
 
@@ -1885,7 +1860,7 @@ void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode) {
         return NULL;
     }
 
-    entity = &group->Assets[entityIndex];
+    entity = &group->assets[entityIndex];
     if (entity == NULL) {
         return NULL;
     }
@@ -1905,12 +1880,12 @@ void *loadAssetDataByMode(s16 groupIndex, s16 entityIndex, s16 mode) {
     }
 }
 
-s32 isModelVisible(func_80002B50_3750_arg *model) {
+s32 isModelVisible(SceneModel *model) {
     s32 new_var;
     int new_var2 = 0;
     s32 isVisible = 0;
 
-    if ((model != 0) && ((new_var = model->unk88) != new_var2)) {
+    if ((model != 0) && ((new_var = model->visibilityEnabled) != new_var2)) {
         isVisible = model->displayEnabled != 0;
     }
 
@@ -1961,33 +1936,30 @@ AssetGroup *getAssetGroupOrDefault(s32 assetIndex) {
 }
 
 void clearModelAnimationState(SceneModel *model) {
-    model->unk14 = -1;
-    model->unk16 = -1;
-    model->unk3A = -1;
-    model->unk38 = -1;
-    model->unk8E = -1;
+    model->previousAnimationIndex = -1;
+    model->currentAnimationIndex = -1;
+    model->transitionAnimationIndex = -1;
+    model->queuedAnimationIndex = -1;
+    model->targetAnimationIndex = -1;
 }
 
-void *createSceneModel(s32 assetGroupIndex, void *allocation) {
+SceneModel *createSceneModel(s32 assetGroupIndex, void *allocation) {
     return createSceneModelEx(assetGroupIndex, allocation, 0, -1, -1, -1);
 }
 
-void *
+SceneModel *
 createSceneModelEx(s32 assetGroupIndex, void *allocation, s8 assetPairIndex, s8 param4, s8 param5, s16 assetIndex) {
-    GameState *obj = allocateNodeMemory(0x160);
+    SceneModel *obj = allocateNodeMemory(sizeof(SceneModel));
     if (obj != NULL) {
         initializeGameEntity(obj, assetGroupIndex, allocation, assetPairIndex, param4, param5, assetIndex);
     }
     return obj;
 }
 
-#define ent ((SceneModel *)entity)
-#define assetBytes ((AssetGroupByteView *)assetEntry)
-
 void initializeGameEntity(
-    void *entity,
+    SceneModel *entity,
     s32 assetGroupIndex,
-    void *param3,
+    ViewportNode *viewport,
     s8 assetPairIndex,
     s8 param5,
     s8 param6,
@@ -2003,30 +1975,30 @@ void initializeGameEntity(
 
     assetEntry = &gameAssets[assetGroupIndex];
 
-    ent->boneDisplayObjects = allocateNodeMemory(0x780);
-    ent->index = assetGroupIndex;
-    ent->unk14 = -1;
-    ent->unk16 = -1;
-    ent->assetCount = assetEntry->numAssets;
-    ent->unk3A = -1;
-    ent->unk38 = -1;
-    ent->unk8E = -1;
-    ent->unk89 = 0;
-    ent->unk40 = 0;
-    ent->unk44 = 0;
-    ent->unk48 = 0;
-    ent->unk95 = 0;
+    entity->boneDisplayObjects = allocateNodeMemory(0x780);
+    entity->index = assetGroupIndex;
+    entity->previousAnimationIndex = -1;
+    entity->currentAnimationIndex = -1;
+    entity->assetCount = assetEntry->numAssets;
+    entity->transitionAnimationIndex = -1;
+    entity->queuedAnimationIndex = -1;
+    entity->targetAnimationIndex = -1;
+    entity->flags = 0;
+    entity->effectOffset.x = 0;
+    entity->effectOffset.y = 0;
+    entity->effectOffset.z = 0;
+    entity->completedLoopCount = 0;
 
-    memcpy(&ent->unkF0, &identityMatrix, sizeof(Transform3D));
+    memcpy(&entity->baseTransform, &identityMatrix, sizeof(Transform3D));
 
-    ent->partDisplayFlags = -1;
-    ent->alpha = 0xFF;
-    ent->unk4C = yetAnotherAssetIndex;
-    ent->shadowEnabled = 0;
+    entity->partDisplayFlags = -1;
+    entity->alpha = 0xFF;
+    entity->itemAssetIndex = yetAnotherAssetIndex;
+    entity->shadowEnabled = 0;
 
     for (i = 0; i < SCENE_MODEL_BONE_SLOT_COUNT; i++) {
-        ent->boneDisplayObjects[i].displayLists = ent->boneDisplayObjects[i].segment1 =
-            ent->boneDisplayObjects[i].segment2 = ent->boneDisplayObjects[i].segment3 = NULL;
+        entity->boneDisplayObjects[i].displayLists = entity->boneDisplayObjects[i].segment1 =
+            entity->boneDisplayObjects[i].segment2 = entity->boneDisplayObjects[i].segment3 = NULL;
     }
 
     if (assetEntry->displayListStart != NULL) {
@@ -2038,11 +2010,11 @@ void initializeGameEntity(
         );
 
         for (i = 0; i < assetEntry->numAssets; i++) {
-            i[ent->boneDisplayObjects].displayLists = (DisplayLists *)&assetEntry->unk1C[i];
-            i[ent->boneDisplayObjects].segment1 = asset1;
-            i[ent->boneDisplayObjects].segment2 = asset2;
+            i[entity->boneDisplayObjects].displayLists = (DisplayLists *)&assetEntry->displayLists[i];
+            i[entity->boneDisplayObjects].segment1 = asset1;
+            i[entity->boneDisplayObjects].segment2 = asset2;
             memcpy(
-                (void *)(i * (s32)sizeof(DisplayListObject) + (s32)ent->boneDisplayObjects),
+                (void *)(i * (s32)sizeof(DisplayListObject) + (s32)entity->boneDisplayObjects),
                 &identityMatrix,
                 sizeof(Transform3D)
             );
@@ -2052,122 +2024,122 @@ void initializeGameEntity(
         asset2 = loadAssetByIndex_95200(assetEntry->assetGroupIndex, assetPairIndex);
 
         for (i = 0; i < assetEntry->numAssets; i++) {
-            i[ent->boneDisplayObjects].displayLists =
+            i[entity->boneDisplayObjects].displayLists =
                 &loadAssetByIndex_95380(assetEntry->assetGroupIndex, assetPairIndex)[i];
-            i[ent->boneDisplayObjects].segment1 = asset1;
-            i[ent->boneDisplayObjects].segment2 = asset2;
+            i[entity->boneDisplayObjects].segment1 = asset1;
+            i[entity->boneDisplayObjects].segment2 = asset2;
             memcpy(
-                (void *)(i * (s32)sizeof(DisplayListObject) + (s32)ent->boneDisplayObjects),
+                (void *)(i * (s32)sizeof(DisplayListObject) + (s32)entity->boneDisplayObjects),
                 &identityMatrix,
                 sizeof(Transform3D)
             );
         }
     }
 
-    if (assetEntry->padding) {
-        if (assetBytes->anotherAssetIndex == -1) {
-            ent->animationBoneData = loadCompressedData(
+    if (assetEntry->animationCount) {
+        if (((AssetGroupAnimationInfo *)&assetEntry->packedAnimationInfo)->fields.assetIndex == -1) {
+            entity->animationBoneData = loadCompressedData(
                 assetEntry->animationDataStart,
                 assetEntry->animationDataEnd,
                 assetEntry->animationDataSize
             );
-            ent->boneAnimationStates = allocateNodeMemory(0x980);
+            entity->boneAnimationStates = allocateNodeMemory(0x980);
         } else {
             playSoundEffect(0);
         }
     } else {
-        if (assetBytes->anotherAssetIndex != -1) {
-            ent->animationBoneData = loadAssetByIndex_953E0(assetBytes->anotherAssetIndex);
-            ent->boneAnimationStates = allocateNodeMemory(0x980);
+        if (((AssetGroupAnimationInfo *)&assetEntry->packedAnimationInfo)->fields.assetIndex != -1) {
+            entity->animationBoneData = loadAssetByIndex_953E0(
+                ((AssetGroupAnimationInfo *)&assetEntry->packedAnimationInfo)->fields.assetIndex
+            );
+            entity->boneAnimationStates = allocateNodeMemory(0x980);
         } else {
-            ent->animationBoneData = NULL;
-            ent->boneAnimationStates = NULL;
+            entity->animationBoneData = NULL;
+            entity->boneAnimationStates = NULL;
         }
     }
 
     if (param5 != -1) {
-        ent->boneDisplayObjects[16].displayLists = loadAssetByIndex_95728(param5);
-        ent->boneDisplayObjects[16].segment1 = loadAssetByIndex_95500(param5);
-        ent->boneDisplayObjects[16].segment2 = loadAssetByIndex_95590(param5);
-        ent->boneDisplayObjects[16].segment3 = loadAssetByIndex_95668(param6);
+        entity->boneDisplayObjects[16].displayLists = loadAssetByIndex_95728(param5);
+        entity->boneDisplayObjects[16].segment1 = loadAssetByIndex_95500(param5);
+        entity->boneDisplayObjects[16].segment2 = loadAssetByIndex_95590(param5);
+        entity->boneDisplayObjects[16].segment3 = loadAssetByIndex_95668(param6);
 
-        memcpy(&ent->boneDisplayObjects[16].transform, &identityMatrix, sizeof(Transform3D));
+        memcpy(&entity->boneDisplayObjects[16].transform, &identityMatrix, sizeof(Transform3D));
     }
 
     if (yetAnotherAssetIndex != -1 && yetAnotherAssetIndex < itemAssetCount) {
         itemEntry = &itemAssetTable[yetAnotherAssetIndex];
 
-        ent->boneDisplayObjects[17].displayLists = itemEntry->unk14;
-        ent->boneDisplayObjects[17].segment1 =
+        entity->boneDisplayObjects[17].displayLists = itemEntry->displayLists;
+        entity->boneDisplayObjects[17].segment1 =
             loadUncompressedData(itemEntry->displayListStart, itemEntry->displayListEnd);
-        ent->boneDisplayObjects[17].segment2 = loadCompressedData(
+        entity->boneDisplayObjects[17].segment2 = loadCompressedData(
             itemEntry->compressedDataStart,
             itemEntry->compressedDataEnd,
             itemEntry->decompressedSize
         );
-        ent->boneDisplayObjects[17].segment3 = NULL;
+        entity->boneDisplayObjects[17].segment3 = NULL;
 
-        memcpy(&ent->boneDisplayObjects[17].transform, &identityMatrix, sizeof(Transform3D));
+        memcpy(&entity->boneDisplayObjects[17].transform, &identityMatrix, sizeof(Transform3D));
     }
 
     if (assetEntry->initCallback != NULL) {
         task = scheduleTask(assetEntry->initCallback, 0, 0, 0);
         if (task != NULL) {
-            task->prev = (Node *)ent;
+            task->prev = (Node *)entity;
         }
     }
 
-    ent->specialAnimationDisplayObject = allocateNodeMemory(0x3C);
-    slot = ent->specialAnimationDisplayObject;
+    entity->specialAnimationDisplayObject = allocateNodeMemory(0x3C);
+    slot = entity->specialAnimationDisplayObject;
 
-    ent->animationDisplayLists = NULL;
+    entity->animationDisplayLists = NULL;
 
     slot->segment3 = NULL;
     slot->segment2 = NULL;
     slot->segment1 = NULL;
 
-    ent->animationIndex = -1;
-    ent->animationDataTable = NULL;
+    entity->animationIndex = -1;
+    entity->animationDataTable = NULL;
 
-    if (assetEntry->Assets != NULL && assetPairIndex < assetEntry->count) {
-        ent->animationDataTable = (ModelAnimationData *)&assetEntry->Assets[assetPairIndex];
+    if (assetEntry->assets != NULL && assetPairIndex < assetEntry->count) {
+        entity->animationDataTable = (ModelAnimationData *)&assetEntry->assets[assetPairIndex];
     }
 
-    ent->specialAnimationDisplayObject->segment1 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 0);
-    ent->specialAnimationDisplayObject->segment2 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 1);
-    ent->animationDisplayLists = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
-    ent->specialAnimationDisplayObject->displayLists = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
+    entity->specialAnimationDisplayObject->segment1 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 0);
+    entity->specialAnimationDisplayObject->segment2 = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 1);
+    entity->animationDisplayLists = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
+    entity->specialAnimationDisplayObject->displayLists = loadAssetDataByMode(assetGroupIndex, assetPairIndex, 2);
 
-    ent->unk10 = param3;
+    entity->viewport = viewport;
 
-    memcpy(&ent->matrix18, &identityMatrix, sizeof(Transform3D));
+    memcpy(&entity->transform, &identityMatrix, sizeof(Transform3D));
 
-    ent->isDestroyed = 0;
-    ent->displayEnabled = 1;
-    ent->unk88 = 1;
-    ent->unk4E = 0;
-    ent->unk4F = assetBytes->unk31;
-    ent->actionMode = 0;
+    entity->isDestroyed = 0;
+    entity->displayEnabled = 1;
+    entity->visibilityEnabled = 1;
+    entity->itemDisplayEnabled = 0;
+    entity->shadowScale = ((AssetGroupAnimationInfo *)&assetEntry->packedAnimationInfo)->fields.shadowScale;
+    entity->actionMode = 0;
 
-    loadSpriteAsset(&ent->unkA4, 0);
-    ent->unk114 = loadSpriteEffectModelData();
-    ent->unk118 = loadSpriteEffectTextureData();
-    ent->soundData = loadAssetGroupSoundData((SceneModel *)ent);
-    ent->renderEnabled = 0;
-    ent->height = 0;
+    loadSpriteAsset(&entity->spriteAsset, 0);
+    entity->spriteEffectModelData = loadSpriteEffectModelData();
+    entity->spriteEffectTextureData = loadSpriteEffectTextureData();
+    entity->soundData = loadAssetGroupSoundData(entity);
+    entity->renderEnabled = 0;
+    entity->height = 0;
 
-    ent->unk120 = loadCompressedData(&GHOST_SOUND_SEQUENCE_DATA_ROM_END, &GHOST_COMPRESSED_DATA_ROM_START, 0x238);
-    ent->shadowSprite.unk0 = gDefaultEntityData8C938;
-    ent->shadowSprite.unk16 = 0x50;
-    ent->shadowSprite.unk30 = 0;
-    ent->shadowSprite.unk32 = 0;
-    ent->shadowSprite.unk14 = 0;
-    ent->shadowSprite.unk17 = 0;
-    ent->shadowSprite.unk10 = ent->unk120;
+    entity->shadowTextureData =
+        loadCompressedData(&GHOST_SOUND_SEQUENCE_DATA_ROM_END, &GHOST_COMPRESSED_DATA_ROM_START, 0x238);
+    entity->shadowSprite.unk0 = gDefaultEntityData8C938;
+    entity->shadowSprite.unk16 = 0x50;
+    entity->shadowSprite.unk30 = 0;
+    entity->shadowSprite.unk32 = 0;
+    entity->shadowSprite.unk14 = 0;
+    entity->shadowSprite.unk17 = 0;
+    entity->shadowSprite.unk10 = entity->shadowTextureData;
 }
-
-#undef ent
-#undef assetBytes
 
 SceneModel *destroySceneModel(SceneModel *arg0) {
     cleanupSceneModel(arg0);
@@ -2185,11 +2157,11 @@ void *cleanupSceneModel(SceneModel *model) {
     }
 
     model->isDestroyed = 1;
-    model->unk120 = freeNodeMemory(model->unk120);
+    model->shadowTextureData = freeNodeMemory(model->shadowTextureData);
     model->soundData = freeNodeMemory(model->soundData);
-    model->unk118 = freeSpriteEffectTextureData(model->unk118);
-    model->unk114 = freeSpriteEffectModelData(model->unk114);
-    releaseNodeMemoryRef((void **)&model->unkA4);
+    model->spriteEffectTextureData = freeSpriteEffectTextureData(model->spriteEffectTextureData);
+    model->spriteEffectModelData = freeSpriteEffectModelData(model->spriteEffectModelData);
+    releaseNodeMemoryRef((void **)&model->spriteAsset);
 
     slotData = model->specialAnimationDisplayObject;
     slotData->segment1 = freeNodeMemory(slotData->segment1);
@@ -2215,9 +2187,9 @@ void *cleanupSceneModel(SceneModel *model) {
     return model;
 }
 
-void enqueueModelDisplayListByIndex(func_80002B50_3750_arg *model, s16 index) {
-    if (index < model->unkE) {
-        enqueueDisplayListObject(model->unk10->unk16, &((DisplayListObject *)model->unk0)[index]);
+void enqueueModelDisplayListByIndex(SceneModel *model, s16 index) {
+    if (index < model->assetCount) {
+        enqueueDisplayListObject(model->viewport->callbackSlotIndex, &model->boneDisplayObjects[index]);
     }
 }
 
@@ -2245,59 +2217,59 @@ void setModelAnimationEx(SceneModel *arg0, s16 arg1, s16 arg2, s8 arg3, short ar
 
     entity = &gameAssets[arg0->index];
 
-    arg0->unk89 &= 0xFD;
+    arg0->flags &= 0xFD;
     if (arg5) {
-        arg0->unk89 |= 2;
+        arg0->flags |= 2;
     }
 
     if (arg0->animationBoneData) {
-        s16 temp_v0 = (local_arg1 < entity->padding) ? -1 : 0;
+        s16 temp_v0 = (local_arg1 < entity->animationCount) ? -1 : 0;
         var_t0 = local_arg1 & temp_v0;
         temp_v0 = var_t0;
 
-        if (local_arg2 >= entity->padding) {
+        if (local_arg2 >= entity->animationCount) {
             local_arg2 = -1;
         }
 
-        if ((local_arg4) >= entity->padding) {
+        if ((local_arg4) >= entity->animationCount) {
             local_arg4 = -1;
         }
 
         new_var = -1;
-        if (arg0->unk3A != new_var) {
+        if (arg0->transitionAnimationIndex != new_var) {
             local_arg1 = local_arg4;
         }
 
-        if ((arg0->unk16 != local_arg1) | ((~(local_arg4)) != 0)) {
-            arg0->unk95 = 0;
-            arg0->unk8C = 0;
-            temp_v0 = arg0->unk16;
-            arg0->unk16 = var_t0;
-            arg0->unk14 = temp_v0;
+        if ((arg0->currentAnimationIndex != local_arg1) | ((~(local_arg4)) != 0)) {
+            arg0->completedLoopCount = 0;
+            arg0->currentAnimationFrame = 0;
+            temp_v0 = arg0->currentAnimationIndex;
+            arg0->currentAnimationIndex = var_t0;
+            arg0->previousAnimationIndex = temp_v0;
 
             if (arg3 == new_var) {
                 if (var_t0 != local_arg2) {
-                    arg0->unk38 = local_arg2;
-                    arg0->unk8E = local_arg2;
+                    arg0->queuedAnimationIndex = local_arg2;
+                    arg0->targetAnimationIndex = local_arg2;
                 } else {
-                    arg0->unk38 = -1;
-                    arg0->unk8E = new_var;
+                    arg0->queuedAnimationIndex = -1;
+                    arg0->targetAnimationIndex = new_var;
                 }
             } else {
-                arg0->unk38 = local_arg2;
-                arg0->unk8E = local_arg2;
+                arg0->queuedAnimationIndex = local_arg2;
+                arg0->targetAnimationIndex = local_arg2;
             }
 
-            arg0->unk3A = local_arg4;
-            arg0->unk3E = arg3;
-            arg0->unk90 = 0;
+            arg0->transitionAnimationIndex = local_arg4;
+            arg0->animationLoopCount = arg3;
+            arg0->completedBoneMask = 0;
 
-            if (arg0->unk3A == -1) {
+            if (arg0->transitionAnimationIndex == -1) {
                 var_a1 = var_t0;
             } else {
                 var_a1 = local_arg4;
-                if (arg0->unk3E != -1) {
-                    arg0->unk3E++;
+                if (arg0->animationLoopCount != -1) {
+                    arg0->animationLoopCount++;
                 }
             }
 
@@ -2334,7 +2306,7 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
     s4 = 0;
     s6 = 0;
 
-    temp = arg0->unk16;
+    temp = arg0->currentAnimationIndex;
 
     if (arg0->animationBoneData == 0) {
         return 0;
@@ -2344,9 +2316,9 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
         return 0;
     }
 
-    arg0->unk8C++;
-    if (arg0->unk3E != 0) {
-        temp = (arg0->unk3A != -1) ? arg0->unk3A : arg0->unk16;
+    arg0->currentAnimationFrame++;
+    if (arg0->animationLoopCount != 0) {
+        temp = (arg0->transitionAnimationIndex != -1) ? arg0->transitionAnimationIndex : arg0->currentAnimationIndex;
         s3 = getAnimationBoneCount(arg0->animationBoneData, temp);
         if (s3 >= SCENE_MODEL_BONE_SLOT_COUNT) {
             s3 = SCENE_MODEL_MAX_ANIMATED_BONES;
@@ -2356,55 +2328,60 @@ s32 setModelRotation(SceneModel *arg0, s16 arg1) {
             for (i = 0; i < s3; i++) {
                 s4 |= advanceBoneAnimation(arg0->animationBoneData, temp, (s16)i, &arg0->boneAnimationStates[i]);
                 s6 |= 1 << i;
-                arg0->unk90 |= s4 << i;
+                arg0->completedBoneMask |= s4 << i;
             }
         } else {
             for (i = 0; i < s3; i++) {
                 interpolateBoneAnimation(&arg0->boneAnimationStates[i], arg1 & 0xFFFF);
             }
         }
-    } else if (arg0->unk38 != -1) {
-        arg0->unk14 = arg0->unk16;
-        arg0->unk16 = arg0->unk38;
-        arg0->unk3E = -1;
-        arg0->unk38 = -1;
+    } else if (arg0->queuedAnimationIndex != -1) {
+        arg0->previousAnimationIndex = arg0->currentAnimationIndex;
+        arg0->currentAnimationIndex = arg0->queuedAnimationIndex;
+        arg0->animationLoopCount = -1;
+        arg0->queuedAnimationIndex = -1;
 
-        s3 = getAnimationBoneCount(arg0->animationBoneData, arg0->unk16);
+        s3 = getAnimationBoneCount(arg0->animationBoneData, arg0->currentAnimationIndex);
         for (i = 0; i < s3; i++) {
-            initBoneAnimationState(arg0->animationBoneData, arg0->unk16, (s16)i, &arg0->boneAnimationStates[i]);
+            initBoneAnimationState(
+                arg0->animationBoneData,
+                arg0->currentAnimationIndex,
+                (s16)i,
+                &arg0->boneAnimationStates[i]
+            );
         }
     }
 
-    if ((arg0->unk90 & s6) == s6) {
+    if ((arg0->completedBoneMask & s6) == s6) {
         s7 = 1;
-        arg0->unk90 = 0;
+        arg0->completedBoneMask = 0;
     }
 
     if (s7 != 0) {
-        arg0->unk95++;
-        s7 = arg0->unk95;
-        if (arg0->unk3E > 0) {
-            arg0->unk3E--;
+        arg0->completedLoopCount++;
+        s7 = arg0->completedLoopCount;
+        if (arg0->animationLoopCount > 0) {
+            arg0->animationLoopCount--;
         }
 
-        arg0->unk3A = -1;
-        if (arg0->unk16 != arg0->unk8E) {
-            if (arg0->unk16 != arg0->unk14) {
-                arg0->animFrameCount = arg0->unk8C;
+        arg0->transitionAnimationIndex = -1;
+        if (arg0->currentAnimationIndex != arg0->targetAnimationIndex) {
+            if (arg0->currentAnimationIndex != arg0->previousAnimationIndex) {
+                arg0->animFrameCount = arg0->currentAnimationFrame;
             }
-            if (arg0->unk16 != arg0->unk8E) {
-                arg0->unk8C = 0;
+            if (arg0->currentAnimationIndex != arg0->targetAnimationIndex) {
+                arg0->currentAnimationFrame = 0;
                 return s7;
             }
         }
 
-        if (arg0->unk16 == arg0->unk14) {
-            if (arg0->animFrameCount != arg0->unk8C) {
-                arg0->animFrameCount = arg0->unk8C;
+        if (arg0->currentAnimationIndex == arg0->previousAnimationIndex) {
+            if (arg0->animFrameCount != arg0->currentAnimationFrame) {
+                arg0->animFrameCount = arg0->currentAnimationFrame;
             }
         }
 
-        arg0->unk8C = 0;
+        arg0->currentAnimationFrame = 0;
     }
 
     return s7;
@@ -2435,14 +2412,15 @@ void updateModelGeometry(SceneModel *arg0) {
     s32 shadowSizeZ;
 
     assetGroup = &gameAssets[arg0->index];
-    composeTransform3D(&arg0->unkF0, &arg0->matrix18, &worldMatrix);
+    composeTransform3D(&arg0->baseTransform, &arg0->transform, &worldMatrix);
 
     if (arg0->animationBoneData != NULL) {
-        if (arg0->unk16 == -1) {
+        if (arg0->currentAnimationIndex == -1) {
             return;
         }
-        animData = getIndexedAnimationDataPtr(arg0->animationBoneData, arg0->unk16);
-        boneCount = getAnimationBoneCount((AnimationBoneCountTable *)arg0->animationBoneData, (s32)arg0->unk16);
+        animData = getIndexedAnimationDataPtr(arg0->animationBoneData, arg0->currentAnimationIndex);
+        boneCount =
+            getAnimationBoneCount((AnimationBoneCountTable *)arg0->animationBoneData, (s32)arg0->currentAnimationIndex);
         if (boneCount >= SCENE_MODEL_BONE_SLOT_COUNT) {
             boneCount = SCENE_MODEL_MAX_ANIMATED_BONES;
         }
@@ -2470,13 +2448,14 @@ void updateModelGeometry(SceneModel *arg0) {
         boneOffset = 0;
         do {
             memcpy((void *)(boneOffset + (s32)arg0->boneDisplayObjects), &worldMatrix, sizeof(Transform3D));
-            ((DisplayListObject *)(boneOffset + (s32)arg0->boneDisplayObjects))->transform.translation.y += arg0->unk44;
+            ((DisplayListObject *)(boneOffset + (s32)arg0->boneDisplayObjects))->transform.translation.y +=
+                arg0->effectOffset.y;
             i++;
             boneOffset += sizeof(DisplayListObject);
         } while (i < boneCount);
     }
 
-    if ((arg0->unk88 != 0) && (arg0->displayEnabled != 0)) {
+    if ((arg0->visibilityEnabled != 0) && (arg0->displayEnabled != 0)) {
         s32 byteOffset;
         i = 0;
         if (boneCount > 0) {
@@ -2488,7 +2467,7 @@ void updateModelGeometry(SceneModel *arg0) {
                 if (boneTransform->displayLists != NULL) {
                     if (i != 8) {
                         if (i == 0x11) {
-                            shouldDisplay = arg0->unk4E != 0;
+                            shouldDisplay = arg0->itemDisplayEnabled != 0;
                         }
                     } else {
                         s8 animIdx = arg0->animationIndex;
@@ -2502,12 +2481,12 @@ void updateModelGeometry(SceneModel *arg0) {
                     if ((shouldDisplay != 0) && (arg0->partDisplayFlags & (one << i))) {
                         s8 countVal = (s8)assetGroup->countPadding[0];
                         if (countVal == 0) {
-                            enqueueDisplayListObject((s32)arg0->unk10->unk16, boneTransform);
+                            enqueueDisplayListObject((s32)arg0->viewport->callbackSlotIndex, boneTransform);
                         } else if (countVal != one) {
-                            enqueueDisplayListObject((s32)arg0->unk10->unk16, boneTransform);
+                            enqueueDisplayListObject((s32)arg0->viewport->callbackSlotIndex, boneTransform);
                         } else {
                             boneTransform->envColorAlpha = arg0->alpha;
-                            enqueueDisplayListObjectWithSegments((s32)arg0->unk10->unk16, boneTransform);
+                            enqueueDisplayListObjectWithSegments((s32)arg0->viewport->callbackSlotIndex, boneTransform);
                         }
                     }
                 }
@@ -2517,7 +2496,7 @@ void updateModelGeometry(SceneModel *arg0) {
         }
         if (arg0->shadowEnabled == 0) {
             if (arg0->renderEnabled != 0) {
-                shadowScale = (arg0->unk4F << 0xD) / 5;
+                shadowScale = (arg0->shadowScale << 0xD) / 5;
                 if (arg0->boneDisplayObjects != NULL && hasModelGraphicsData(arg0) == 0) {
                     memcpy(
                         &arg0->shadowSprite.shadowPosition,
@@ -2535,16 +2514,16 @@ void updateModelGeometry(SceneModel *arg0) {
                         (s32)arg0->boneDisplayObjects[0].transform.m[2][2]
                     );
                 } else {
-                    memcpy(&arg0->shadowSprite.shadowPosition, &arg0->matrix18.translation, sizeof(Vec3i));
+                    memcpy(&arg0->shadowSprite.shadowPosition, &arg0->transform.translation, sizeof(Vec3i));
                     scaleX = distance_3d(
-                        (s32)arg0->matrix18.m[0][0],
-                        (s32)arg0->matrix18.m[1][0],
-                        (s32)arg0->matrix18.m[2][0]
+                        (s32)arg0->transform.m[0][0],
+                        (s32)arg0->transform.m[1][0],
+                        (s32)arg0->transform.m[2][0]
                     );
                     scaleZ = distance_3d(
-                        (s32)arg0->matrix18.m[0][2],
-                        (s32)arg0->matrix18.m[1][2],
-                        (s32)arg0->matrix18.m[2][2]
+                        (s32)arg0->transform.m[0][2],
+                        (s32)arg0->transform.m[1][2],
+                        (s32)arg0->transform.m[2][2]
                     );
                 }
                 shadowSizeX = scaleX * shadowScale;
@@ -2558,17 +2537,17 @@ void updateModelGeometry(SceneModel *arg0) {
                     shadowSizeZ += 0x1FFF;
                 }
                 arg0->shadowSprite.shadowSizeZ = shadowSizeZ >> 0xD;
-                enqueueTranslucentSprite(arg0->unk10->unk16, (Node *)&arg0->shadowSprite);
+                enqueueTranslucentSprite(arg0->viewport->callbackSlotIndex, (Node *)&arg0->shadowSprite);
                 return;
             }
-            enqueueCallbackBySlotIndex(arg0->unk10->unk16, 1U, &renderNonRaceShadow, arg0);
+            enqueueCallbackBySlotIndex(arg0->viewport->callbackSlotIndex, 1U, &renderNonRaceShadow, arg0);
         }
     }
 }
 
-void enqueueModelDisplayList(func_80002B50_3750_arg *arg0, DisplayListObject *arg1) {
-    if ((arg0 != NULL) && (arg0->unk88 != 0) && (arg0->displayEnabled != 0)) {
-        enqueueDisplayListObject(arg0->unk10->unk16, arg1);
+void enqueueModelDisplayList(SceneModel *arg0, DisplayListObject *arg1) {
+    if ((arg0 != NULL) && (arg0->visibilityEnabled != 0) && (arg0->displayEnabled != 0)) {
+        enqueueDisplayListObject(arg0->viewport->callbackSlotIndex, arg1);
     }
 }
 
@@ -2599,12 +2578,12 @@ s32 getModelDisplayDataOffset(SceneModel *model) {
     return 0x90;
 }
 
-void loadAssetSlotTableEntry(DisplayAssetTableData *slot, DataTable_19E80 *table, s32 entryIndex) {
+void loadAssetSlotTableEntry(MatrixEntry_202A0 *slot, DataTable_19E80 *table, s32 entryIndex) {
     OutputStruct_19E80 result;
 
     getTableEntryByU16Index(table, (s16)entryIndex, &result);
-    slot->data_ptr = result.data_ptr;
-    slot->index_ptr = result.index_ptr;
-    slot->tableField1 = result.width;
-    slot->tableField2 = result.height;
+    slot->textureData = result.data_ptr;
+    slot->paletteData = result.index_ptr;
+    slot->textureWidth = result.width;
+    slot->textureHeight = result.height;
 }

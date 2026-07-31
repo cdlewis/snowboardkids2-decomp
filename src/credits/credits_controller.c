@@ -300,15 +300,15 @@ void initCreditsCharacter(CreditsCharacter *character) {
         -1
     );
 
-    memcpy(&character->model->matrix18, &identityMatrix, sizeof(Transform3D));
+    memcpy(&character->model->transform, &identityMatrix, sizeof(Transform3D));
 
-    createYRotationMatrix(&character->model->matrix18, config->initialYaw);
+    createYRotationMatrix(&character->model->transform, config->initialYaw);
 
     scale = config->scale;
-    scaleMatrix(&character->model->matrix18, scale, scale, scale);
+    scaleMatrix(&character->model->transform, scale, scale, scale);
 
-    character->model->matrix18.translation.x = creditsCharacterStartDepth;
-    character->model->matrix18.translation.y += config->verticalOffset;
+    character->model->transform.translation.x = creditsCharacterStartDepth;
+    character->model->transform.translation.y += config->verticalOffset;
 
     setModelActionMode(character->model, config->actionMode);
 
@@ -362,9 +362,9 @@ void updateCreditsCharacter(CreditsCharacter *character) {
             break;
     }
 
-    character->model->matrix18.translation.x -= creditsCharacterScrollSpeed;
+    character->model->transform.translation.x -= creditsCharacterScrollSpeed;
 
-    if (character->model->matrix18.translation.x < -creditsCharacterStartDepth) {
+    if (character->model->transform.translation.x < -creditsCharacterStartDepth) {
         cleanupSceneModel(character->model);
         character->modelCleanedUp = 1;
         terminateCurrentTask();

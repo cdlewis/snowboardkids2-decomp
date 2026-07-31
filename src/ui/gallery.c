@@ -450,7 +450,7 @@ void waitForMenuFadeIn(GalleryMenuState *arg0) {
     s16 temp = arg0->fadeTimer;
 
     if (temp == 0) {
-        if (arg0->menuModel->unk16 == 0x15B) {
+        if (arg0->menuModel->currentAnimationIndex == 0x15B) {
             setMenuAnimation(arg0, 0x15C, 0x90, 1, -1);
         }
         arg0->menuState = 2;
@@ -1104,7 +1104,7 @@ void waitForViewerFadeIn(GalleryViewerState *arg0) {
 
     temp = alloc->fadeTimer;
     if (temp == 0) {
-        if (alloc->menuModel->unk16 == 0x15B) {
+        if (alloc->menuModel->currentAnimationIndex == 0x15B) {
             setMenuAnimation(alloc, 0x15C, 0x90, 1, -1);
         }
         arg0->state = 2;
@@ -1285,7 +1285,7 @@ void handleViewerGridNavigation_ThreeRow(GalleryViewerState *arg0) {
     if (gControllerInputs[0] & CONT_A) {
         if (isGalleryItemUnlocked(arg0->cursorIndex)) {
             playBgmTrack(alloc, entry->numExtra);
-            if (alloc->menuModel->unk16 != 0x92) {
+            if (alloc->menuModel->currentAnimationIndex != 0x92) {
                 spawnSpriteEffectInternal(
                     alloc->menuModel,
                     0,

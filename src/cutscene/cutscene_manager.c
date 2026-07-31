@@ -212,8 +212,8 @@ void prepareCutsceneForPlayback(
         manager->slots[i].padding3[0] = 0;
         manager->slots[i].unk40 = modelId;
         if (model != NULL) {
-            model->unk14 = -1;
-            manager->slots[i].model->unk16 = -1;
+            model->previousAnimationIndex = -1;
+            manager->slots[i].model->currentAnimationIndex = -1;
             setModelDisplayEnabled(manager->slots[i].model, 1);
             setItemDisplayEnabled(manager->slots[i].model, 0);
             setAnimationIndex(manager->slots[i].model, -1);

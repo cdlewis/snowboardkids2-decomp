@@ -7,7 +7,7 @@
 #include "ui/level_preview_3d.h"
 
 typedef struct {
-    func_80002B50_3750_arg *model;
+    SceneModel *model;
     DisplayListObject displayObject;
     u16 rotationAngle;
     s16 tiltAngle;
@@ -235,10 +235,10 @@ void updateBobbingModelTask(BobbingModelState *state) {
         state->verticalOffset = temp >> 4;
     }
 
-    createXRotationMatrix(state->model->unkF0.m, state->tiltAngle);
-    state->model->unkF0.translation.x = 0;
-    state->model->unkF0.translation.y = state->verticalOffset;
-    state->model->unkF0.translation.z = 0;
+    createXRotationMatrix(state->model->baseTransform.m, state->tiltAngle);
+    state->model->baseTransform.translation.x = 0;
+    state->model->baseTransform.translation.y = state->verticalOffset;
+    state->model->baseTransform.translation.z = 0;
 
     state->rotationAngle += 0x2AA;
     createYRotationMatrix(&rotationMatrix, state->rotationAngle);
@@ -247,8 +247,8 @@ void updateBobbingModelTask(BobbingModelState *state) {
     rotationMatrix.translation.y = 0x499999;
     rotationMatrix.translation.z = 0;
 
-    composeTransform3D(&rotationMatrix, &state->model->unkF0, &combinedMatrix);
-    composeTransform3D(&combinedMatrix, &state->model->matrix18, &state->displayObject.transform);
+    composeTransform3D(&rotationMatrix, &state->model->baseTransform, &combinedMatrix);
+    composeTransform3D(&combinedMatrix, &state->model->transform, &state->displayObject.transform);
     enqueueModelDisplayList(state->model, &state->displayObject);
 }
 
@@ -268,14 +268,14 @@ void updateTiltingModelTask(BobbingModelTaskState *state) {
         return;
     }
 
-    memcpy(&state->model->unkF0, &identityMatrix, sizeof(Transform3D));
+    memcpy(&state->model->baseTransform, &identityMatrix, sizeof(Transform3D));
 
     if (state->model->actionMode == 0) {
         return;
     }
     if (state->model->actionMode == 1) {
-        createXRotationMatrix(state->model->unkF0.m, 0xFCE4);
-        state->model->unkF0.translation.z += 0x66666;
+        createXRotationMatrix(state->model->baseTransform.m, 0xFCE4);
+        state->model->baseTransform.translation.z += 0x66666;
     }
 }
 

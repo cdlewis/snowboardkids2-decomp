@@ -6,7 +6,7 @@
 #include "ui/level_preview_3d.h"
 
 struct ModelScaleAnimationState {
-    func_80002B50_3750_arg *model;
+    SceneModel *model;
     Transform3D transformMatrix;
     s32 velocity;
     s16 rotationAngle;
@@ -27,7 +27,7 @@ void initModelScaleAnimation(ModelScaleAnimationState *state) {
 }
 
 void updateModelScaleAnimation(ModelScaleAnimationState *state) {
-    func_80002B50_3750_arg *model;
+    SceneModel *model;
     s32 scale;
     s32 newScale;
     s32 velocity;
@@ -141,7 +141,7 @@ void updateModelScaleAnimation(ModelScaleAnimationState *state) {
             break;
     }
 
-    memcpy(&state->model->unkF0, &state->transformMatrix, sizeof(Transform3D));
+    memcpy(&state->model->baseTransform, &state->transformMatrix, sizeof(Transform3D));
 }
 
 void cleanupModelScaleAnimation(void) {

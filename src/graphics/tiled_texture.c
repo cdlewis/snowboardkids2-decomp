@@ -400,7 +400,7 @@ void updateRotatingLogoState(RotatingLogoState *state) {
         state->oscillationOffset = (s32)(((s32)(approximateSin(state->oscillationAngle) * 4) >> 8) << 11);
     }
 
-    state->model->unk44 = state->oscillationOffset;
+    state->model->effectOffset.y = state->oscillationOffset;
 
     switch (state->overlayAnimState) {
         case 1:
@@ -429,14 +429,14 @@ void updateRotatingLogoState(RotatingLogoState *state) {
     }
 
     createYRotationMatrix(&rotationMatrix, 0x400);
-    composeTransform3D(&rotationMatrix, &state->model->matrix18, &state->opaqueMatrix);
-    memcpy(&state->opaqueMatrix.translation, &state->model->matrix18.translation, sizeof(Vec3i));
+    composeTransform3D(&rotationMatrix, &state->model->transform, &state->opaqueMatrix);
+    memcpy(&state->opaqueMatrix.translation, &state->model->transform.translation, sizeof(Vec3i));
 
     state->opaqueMatrix.translation.y += state->oscillationOffset;
     scaleMatrix(&state->opaqueMatrix, 0x2000, state->scale.halves[1], 0x2000);
 
     if (state->scale.val != 0) {
-        enqueueModelDisplayList((func_80002B50_3750_arg *)state->model, (DisplayListObject *)&state->opaqueMatrix);
+        enqueueModelDisplayList((SceneModel *)state->model, (DisplayListObject *)&state->opaqueMatrix);
     }
 
     if (state->transparentEnabled == 0) {
@@ -445,15 +445,15 @@ void updateRotatingLogoState(RotatingLogoState *state) {
         state->rotationY -= 0xF;
         tempAngle = state->rotationY;
         createYRotationMatrix(&transparentMatrix, tempAngle);
-        composeTransform3D(&transparentMatrix, &state->model->matrix18, &state->transparentMatrix);
+        composeTransform3D(&transparentMatrix, &state->model->transform, &state->transparentMatrix);
 
         state->transparentMatrix.translation.y += 0x166666;
         state->transparentMatrix.translation.y += state->oscillationOffset;
-        enqueueModelDisplayList((func_80002B50_3750_arg *)state->model, (DisplayListObject *)&state->transparentMatrix);
+        enqueueModelDisplayList((SceneModel *)state->model, (DisplayListObject *)&state->transparentMatrix);
     }
 
-    if (state->overlayAnimState != 0 && isModelVisible((func_80002B50_3750_arg *)state->model) != 0) {
-        memcpy(&state->overlayMatrix, &state->model->matrix18, sizeof(Transform3D));
+    if (state->overlayAnimState != 0 && isModelVisible((SceneModel *)state->model) != 0) {
+        memcpy(&state->overlayMatrix, &state->model->transform, sizeof(Transform3D));
 
         state->overlayMatrix.translation.y += state->oscillationOffset;
         scaleMatrix(
@@ -467,7 +467,10 @@ void updateRotatingLogoState(RotatingLogoState *state) {
         state->scrollV += state->scrollSpeedV;
         *(s16 *)((u8 *)state + 0xD8) = *(u8 *)((u8 *)state + 0xD9);
         *(s16 *)((u8 *)state + 0xDA) = *(u8 *)((u8 *)state + 0xDB);
-        enqueueScrollingTextureRender(state->model->unk10->unk16, (DisplayListObject *)&state->overlayMatrix);
+        enqueueScrollingTextureRender(
+            state->model->viewport->callbackSlotIndex,
+            (DisplayListObject *)&state->overlayMatrix
+        );
     }
 }
 
