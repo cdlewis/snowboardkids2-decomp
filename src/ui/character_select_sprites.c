@@ -7,38 +7,25 @@
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "graphics/sprite_rdp.h"
+#include "graphics/tiled_sprite_grid.h"
 #include "math/geometry.h"
 #include "os_cont.h"
 #include "system/task_scheduler.h"
+#include "text/font_assets.h"
 #include "ui/level_preview_3d.h"
-#include "ui/save_data.h"
 
 typedef struct {
-    s16 x, y;
-} Vec2s;
-
-typedef struct {
-    s16 coordX;
-    s16 coordY;
-    s16 textDisplayX;
-    s16 textDisplayY;
-    s16 timer;
-    u8 _padA[2];
-    char *textBuffer;
-    s16 secondDisplayX;
-    s16 secondDisplayY;
-    s16 counter;
-    u8 _pad16[2];
-    char *formatString;
-    char formattedText[16];
+    /* 0x00 */ Vec2s selectedCoordinate;
+    /* 0x04 */ TextData coordinateLabel;
+    /* 0x10 */ TextData selectionMarker;
+    /* 0x1C */ u8 formattedText[16];
 } CoordinateDisplayTaskState;
 
-extern void *renderTextPalette;
 extern s32 gButtonsPressed;
 
 u32 D_800B1140_1DB6E0[] = { 0x00000000, 0x01000000, 0x00000000, 0x00000000 };
 u8 D_800B1150_1DB6F0[] = { 0x0A, 0x0A, 0x01, 0x0A, 0x0A, 0x0D, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00 };
-char D_800B115C_1DB6FC[4] = "+";
+u8 D_800B115C_1DB6FC[4] = "+";
 s16 D_800B1160_1DB700[] = { -6, -128, 20,  -112, 14, -128, -20, -112, -35, -128, 0,   -112, 44, -112, -40, -112,
                             40, -128, -12, -128, 12, -128, -36, -128, 36,  -128, -60, -128, 60, -128, -84, -128 };
 #define D_800B1162_1DB702 (D_800B1160_1DB700 + 1)
@@ -60,7 +47,7 @@ u8 D_800B11C2_1DB762_data[] = { 0x00, 0x56, 0x00, 0x46, 0x00, 0x00, 0x00, 0x00, 
 char gCoordDisplayFormatString[16] = "X=%d Y=%d  ";
 
 void sortPlayersByCharacterRank(void);
-void positionCharacterSelectSprite(CharacterSelectSprite *, u8);
+void positionCharacterSelectSprite(TextRenderArg *, u8);
 void enqueueCharacterSelectTextureRender(void *);
 void awaitCharacterPreviewReady(CharacterPreviewState *);
 void updateCharacterPreviewAnimation(CharacterPreviewState *);
@@ -71,12 +58,12 @@ void awaitCharacterPreviewRotationReset(CharacterPreviewState *);
 void updateCharacterSelectSprites(CharacterSelectSprites *);
 void cleanupCharacterSelectSprites(CharacterSelectSprites *);
 void updatePlayer3CharacterSelectIndicator(void *);
-void cleanupCharacterSelectIndicator(CharacterSelectIndicatorTask *);
+void cleanupCharacterSelectIndicator(SpriteRenderArg *);
 void updatePlayer2CharacterSelectIndicator(void *);
-void cleanupCharacterSelectIndicatorData(CharacterSelectIndicatorTask *);
-void initCharacterSelectTextureRenderState(TextureDataTaskState *);
+void cleanupCharacterSelectIndicatorData(SpriteRenderArg *);
+void initCharacterSelectTextureRenderState(CharacterSelectBackgroundState *);
 void renderCharacterSelectBoard(void *);
-void cleanupCharacterSelectBoardTask(CharacterSelectBoardTask *);
+void cleanupCharacterSelectBoardTask(DisplayListObject *);
 void updateCoordinateDisplayTask(CoordinateDisplayTaskState *);
 
 void sortPlayersByCharacterRank(void) {
@@ -122,7 +109,7 @@ void sortPlayersByCharacterRank(void) {
     }
 }
 
-void positionCharacterSelectSprite(CharacterSelectSprite *arg0, u8 arg1) {
+void positionCharacterSelectSprite(TextRenderArg *arg0, u8 arg1) {
     GameState *allocation;
     u8 playerState;
     u8 count;
@@ -390,12 +377,12 @@ void initCharacterSelectSprites(CharacterSelectSprites *arg0) {
     allocation = loadCompressedData(&okPromptSprites_ROM_START, &characterSelectBoardTexture_ROM_START, 0x1B48);
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
-        arg0->sprites[i].spriteData = allocation;
-        arg0->sprites[i].scale = 0xFF;
-        arg0->sprites[i].alpha = 0;
-        arg0->sprites[i].flags = 0;
-        arg0->animTimers[i] = 0;
-        positionCharacterSelectSprite(&arg0->sprites[i], i);
+        arg0->playerMarkers[i].spriteData = allocation;
+        arg0->playerMarkers[i].color.paletteAndAlpha = 0xFF;
+        arg0->playerMarkers[i].overridePaletteCount = 0;
+        arg0->playerMarkers[i].tileMode = 0;
+        arg0->pulseTimers[i] = 0;
+        positionCharacterSelectSprite(&arg0->playerMarkers[i], i);
     }
 
     setCleanupCallback(cleanupCharacterSelectSprites);
@@ -411,56 +398,56 @@ void updateCharacterSelectSprites(CharacterSelectSprites *arg0) {
     sortPlayersByCharacterRank();
 
     for (i = 0; i < gGameSessionContext->numPlayers; i++) {
-        positionCharacterSelectSprite(&arg0->sprites[i], i);
+        positionCharacterSelectSprite(&arg0->playerMarkers[i], i);
         state = allocation->modeData.storyMap.selectionState[i];
 
         if (state == 10) {
-            arg0->sprites[i].scale = 0xFF;
-            arg0->animTimers[i] = 0;
+            arg0->playerMarkers[i].color.paletteAndAlpha = 0xFF;
+            arg0->pulseTimers[i] = 0;
             if (allocation->modeData.characterSelect.playerBlinkTimers[i] & 1) {
-                arg0->sprites[i].alpha = 0xFF;
+                arg0->playerMarkers[i].overridePaletteCount = 0xFF;
             } else {
-                arg0->sprites[i].alpha = 0;
+                arg0->playerMarkers[i].overridePaletteCount = 0;
             }
         } else if (state == 0) {
-            arg0->animTimers[i] = arg0->animTimers[i] % 30;
-            if (arg0->animTimers[i] < 15) {
-                arg0->sprites[i].scale = arg0->sprites[i].scale - 8;
+            arg0->pulseTimers[i] = arg0->pulseTimers[i] % 30;
+            if (arg0->pulseTimers[i] < 15) {
+                arg0->playerMarkers[i].color.paletteAndAlpha = arg0->playerMarkers[i].color.paletteAndAlpha - 8;
             } else {
-                arg0->sprites[i].scale = arg0->sprites[i].scale + 8;
+                arg0->playerMarkers[i].color.paletteAndAlpha = arg0->playerMarkers[i].color.paletteAndAlpha + 8;
             }
-            arg0->animTimers[i] = arg0->animTimers[i] + 1;
+            arg0->pulseTimers[i] = arg0->pulseTimers[i] + 1;
         } else {
-            arg0->animTimers[i] = 0;
-            arg0->sprites[i].scale = 0xFF;
+            arg0->pulseTimers[i] = 0;
+            arg0->playerMarkers[i].color.paletteAndAlpha = 0xFF;
         }
 
         if (allocation->modeData.storyMap.selectionState[i] == 2) {
             allocation->modeData.characterSelect.playerBlinkTimers[i] = 0;
-            arg0->sprites[i].alpha = 0;
-            arg0->animTimers[i] = 0;
-            arg0->sprites[i].scale = 0xFF;
+            arg0->playerMarkers[i].overridePaletteCount = 0;
+            arg0->pulseTimers[i] = 0;
+            arg0->playerMarkers[i].color.paletteAndAlpha = 0xFF;
         }
 
-        enqueueCallbackBySlotIndex(8, 0, renderTextSprite, &arg0->sprites[i]);
+        enqueueCallbackBySlotIndex(8, 0, renderTextSprite, &arg0->playerMarkers[i]);
     }
 }
 
 void cleanupCharacterSelectSprites(CharacterSelectSprites *arg0) {
-    arg0->sprites[0].spriteData = freeNodeMemory(arg0->sprites[0].spriteData);
+    arg0->playerMarkers[0].spriteData = freeNodeMemory(arg0->playerMarkers[0].spriteData);
 }
 
 void initCoordinateDisplayTask(CoordinateDisplayTaskState *arg0) {
-    arg0->coordX = -7;
-    arg0->coordY = -7;
-    arg0->textDisplayX = -120;
-    arg0->textDisplayY = -104;
-    arg0->textBuffer = arg0->formattedText;
-    arg0->timer = 0;
-    arg0->counter = 0;
-    arg0->formatString = D_800B115C_1DB6FC;
-    arg0->secondDisplayX = arg0->coordX;
-    arg0->secondDisplayY = arg0->coordY;
+    arg0->selectedCoordinate.x = -7;
+    arg0->selectedCoordinate.y = -7;
+    arg0->coordinateLabel.x = -120;
+    arg0->coordinateLabel.y = -104;
+    arg0->coordinateLabel.string = arg0->formattedText;
+    arg0->coordinateLabel.palette = 0;
+    arg0->selectionMarker.palette = 0;
+    arg0->selectionMarker.string = D_800B115C_1DB6FC;
+    arg0->selectionMarker.x = arg0->selectedCoordinate.x;
+    arg0->selectionMarker.y = arg0->selectedCoordinate.y;
     setCallback(updateCoordinateDisplayTask);
 }
 
@@ -468,54 +455,61 @@ void updateCoordinateDisplayTask(CoordinateDisplayTaskState *arg0) {
     s32 *buttons = &gButtonsPressed;
 
     if (*buttons & U_JPAD) {
-        arg0->coordY--;
+        arg0->selectedCoordinate.y--;
     }
     if (*buttons & D_JPAD) {
-        arg0->coordY++;
+        arg0->selectedCoordinate.y++;
     }
     if (*buttons & R_JPAD) {
-        arg0->coordX++;
+        arg0->selectedCoordinate.x++;
     }
     if (*buttons & L_JPAD) {
-        arg0->coordX--;
+        arg0->selectedCoordinate.x--;
     }
 
-    sprintf(arg0->formattedText, gCoordDisplayFormatString, arg0->coordX + 7, arg0->coordY + 7);
+    sprintf(
+        (char *)arg0->formattedText,
+        gCoordDisplayFormatString,
+        arg0->selectedCoordinate.x + 7,
+        arg0->selectedCoordinate.y + 7
+    );
 
-    enqueueCallbackBySlotIndex(0, 7, &renderTextPalette, &arg0->textDisplayX);
+    enqueueCallbackBySlotIndex(0, 7, &renderTextPalette, &arg0->coordinateLabel);
 
-    arg0->secondDisplayX = arg0->coordX;
-    arg0->secondDisplayY = arg0->coordY;
+    arg0->selectionMarker.x = arg0->selectedCoordinate.x;
+    arg0->selectionMarker.y = arg0->selectedCoordinate.y;
 
-    enqueueCallbackBySlotIndex(0, 7, &renderTextPalette, &arg0->secondDisplayX);
+    enqueueCallbackBySlotIndex(0, 7, &renderTextPalette, &arg0->selectionMarker);
 }
 
-void cleanupCharacterSelectTextureData(TextureDataTaskState *arg0) {
-    arg0->textureData = freeNodeMemory(arg0->textureData);
+void cleanupCharacterSelectTextureData(CharacterSelectBackgroundState *arg0) {
+    arg0->textureAsset = freeNodeMemory(arg0->textureAsset);
 }
 
-void initCharacterSelectTextureDataLoad(TextureDataTaskState *arg0) {
-    arg0->textureData =
+void initCharacterSelectTextureDataLoad(CharacterSelectBackgroundState *arg0) {
+    arg0->textureAsset =
         loadCompressedData(&characterSelectBoardTexture_ROM_START, &characterSelectBoardTexture_ROM_END, 0x13FF0);
     setCleanupCallback(cleanupCharacterSelectTextureData);
     setCallback(initCharacterSelectTextureRenderState);
 }
 
-void initCharacterSelectTextureRenderState(TextureDataTaskState *arg0) {
-    initScrollingTileMapState(arg0, (s32)arg0->textureData);
+void initCharacterSelectTextureRenderState(CharacterSelectBackgroundState *arg0) {
+    initScrollingTileMapState(&arg0->renderState, arg0->textureAsset);
     setCallback(&enqueueCharacterSelectTextureRender);
 }
 
 void enqueueCharacterSelectTextureRender(void *arg0) {
-    enqueueCallbackBySlotIndex(9, 0, renderTiledTextureMap, arg0);
+    CharacterSelectBackgroundState *state = arg0;
+
+    enqueueCallbackBySlotIndex(9, 0, renderTiledTextureMap, &state->renderState);
 }
 
-void initPlayer3CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
+void initPlayer3CharacterSelectIndicator(SpriteRenderArg *arg0) {
     void *temp;
     getCurrentAllocation();
     temp = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
-    arg0->xOffset = -44;
-    arg0->yOffset = -20;
+    arg0->x = -44;
+    arg0->y = -20;
     arg0->frameIndex = 13;
     arg0->spriteData = temp;
     setCleanupCallback(cleanupCharacterSelectIndicator);
@@ -531,16 +525,16 @@ void updatePlayer3CharacterSelectIndicator(void *arg0) {
     }
 }
 
-void cleanupCharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
+void cleanupCharacterSelectIndicator(SpriteRenderArg *arg0) {
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void initPlayer2CharacterSelectIndicator(CharacterSelectIndicatorTask *arg0) {
+void initPlayer2CharacterSelectIndicator(SpriteRenderArg *arg0) {
     void *temp;
     getCurrentAllocation();
     temp = loadCompressedData(&okPromptSprites_ROM_START, &okPromptSprites_ROM_END, 0x1B48);
-    arg0->xOffset = -76;
-    arg0->yOffset = -8;
+    arg0->x = -76;
+    arg0->y = -8;
     arg0->frameIndex = 12;
     arg0->spriteData = temp;
     setCleanupCallback(cleanupCharacterSelectIndicatorData);
@@ -556,11 +550,11 @@ void updatePlayer2CharacterSelectIndicator(void *arg0) {
     }
 }
 
-void cleanupCharacterSelectIndicatorData(CharacterSelectIndicatorTask *arg0) {
+void cleanupCharacterSelectIndicatorData(SpriteRenderArg *arg0) {
     arg0->spriteData = freeNodeMemory(arg0->spriteData);
 }
 
-void initCharacterSelectBoardTask(CharacterSelectBoardTask *arg0) {
+void initCharacterSelectBoardTask(DisplayListObject *arg0) {
     void *texture1;
     void *texture2;
 
@@ -570,15 +564,15 @@ void initCharacterSelectBoardTask(CharacterSelectBoardTask *arg0) {
     setCleanupCallback(cleanupCharacterSelectBoardTask);
 
     memcpy(arg0, &identityMatrix, sizeof(Transform3D));
-    arg0->displayList = &D_800B1140_1DB6E0;
-    arg0->translateX = 0x2C0000;
-    arg0->translateZ = (s32)0xFF9F0000;
-    arg0->textureData1 = texture1;
-    arg0->textureData2 = texture2;
-    arg0->animState = 0;
-    arg0->translateY = (s32)0xFFF40000;
+    arg0->displayLists = (DisplayLists *)&D_800B1140_1DB6E0;
+    arg0->transform.translation.x = 0x2C0000;
+    arg0->transform.translation.z = (s32)0xFF9F0000;
+    arg0->segment1 = texture1;
+    arg0->segment2 = texture2;
+    arg0->segment3 = NULL;
+    arg0->transform.translation.y = (s32)0xFFF40000;
 
-    createZRotationMatrix((Transform3D *)arg0, 0x1F50);
+    createZRotationMatrix(&arg0->transform, 0x1F50);
     setCallback(renderCharacterSelectBoard);
 }
 
@@ -587,7 +581,7 @@ void renderCharacterSelectBoard(void *arg0) {
     enqueueDisplayListObjectWithFullRenderState(0, arg0);
 }
 
-void cleanupCharacterSelectBoardTask(CharacterSelectBoardTask *arg0) {
-    arg0->textureData1 = freeNodeMemory(arg0->textureData1);
-    arg0->textureData2 = freeNodeMemory(arg0->textureData2);
+void cleanupCharacterSelectBoardTask(DisplayListObject *arg0) {
+    arg0->segment1 = freeNodeMemory(arg0->segment1);
+    arg0->segment2 = freeNodeMemory(arg0->segment2);
 }

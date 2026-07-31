@@ -10,6 +10,12 @@ Reusing the renderer types identifies byte 0x0C of `TextRenderArg` as `tileMode`
 `overridePaletteCount`, and its 16-bit color union as the palette/alpha pair. On big-endian N64, assigning a pulse
 value to `color.paletteAndAlpha` places that value in the low alpha byte.
 
+Task records can also contain adjacent canonical render arguments even when their local fields appear unrelated.
+The character-select coordinate debugger stores two complete `TextData` values after its selected coordinate:
+one renders the formatted coordinate label and the other renders the movable marker. Likewise, a loaded tile-map
+asset kept immediately after a `TileMapScrollRenderState` is task-owned data, not padding in a new tile-map type;
+represent it as a small containing task state with the common renderer state as its first member.
+
 `ViewportNode` is 0x1D8 bytes and can be embedded at the start of menu allocation state structs. This replaces
 0x1D8-byte padding arrays while keeping subsequent task fields at their original offsets.
 
