@@ -77,11 +77,6 @@ typedef struct {
 } CutsceneCmdList;
 
 typedef struct {
-    u8 padding[0xFF7];
-    /* 0xFF7 */ s8 skipAnimation;
-} enableCutsceneSkip_arg;
-
-typedef struct {
     void *romStart;
     void *romEnd;
     s32 decompressedSize;

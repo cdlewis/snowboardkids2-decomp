@@ -10,169 +10,169 @@
 #include "system/task_scheduler.h"
 #include "text/font_render.h"
 
-void updateCutsceneWaitMenu(DC90TaskStruct *arg0);
-void cleanupCutsceneWaitMenu(DC90TaskStruct *arg0);
+void updateCutsceneWaitMenu(CutsceneWaitMenuState *state);
+void cleanupCutsceneWaitMenu(CutsceneWaitMenuState *state);
 
-void initMenuFadeIn(DC90TaskStruct *arg0) {
-    void *temp = arg0->baseSpriteData;
+void initMenuFadeIn(CutsceneWaitMenuState *state) {
+    void *temp = state->textRenderAsset;
 
-    arg0->unk20.asS16 = 0xFF;
-    arg0->unk22.asS16 = 0xFF;
-    arg0->renderPosX = 0;
-    arg0->renderPosY = 0;
-    arg0->unk24 = 0;
-    arg0->state = 1;
-    arg0->currentSprite = temp;
+    state->textAlpha.value = 0xFF;
+    state->textTransparency.value = 0xFF;
+    state->textX = 0;
+    state->textY = 0;
+    state->textPaletteIndex = 0;
+    state->state = 1;
+    state->activeTextRenderAsset = temp;
 }
 
-void animateMenuExpandHorizontal(DC90TaskStruct *arg0) {
-    arg0->animFrameX++;
-    if (arg0->animFrameX >= 13) {
-        arg0->state = 2;
+void animateMenuExpandHorizontal(CutsceneWaitMenuState *state) {
+    state->panelWidth++;
+    if (state->panelWidth >= 13) {
+        state->state = 2;
     }
-    if (arg0->unk3C < 65) {
-        arg0->unk3C = 64;
+    if (state->panelRed < 65) {
+        state->panelRed = 64;
     } else {
-        arg0->unk3C -= 16;
+        state->panelRed -= 16;
     }
 }
 
-void animateMenuExpandVertical(DC90TaskStruct *arg0) {
+void animateMenuExpandVertical(CutsceneWaitMenuState *state) {
     s16 temp;
     s16 temp2;
 
-    if (++arg0->animFrameY >= 6) {
-        arg0->state = 3;
+    if (++state->panelHeight >= 6) {
+        state->state = 3;
     }
 
-    temp2 = temp = arg0->unk3C;
-    arg0->unk3C = (temp < 0x41) ? 0x40 : temp2 - 0x10;
+    temp2 = temp = state->panelRed;
+    state->panelRed = (temp < 0x41) ? 0x40 : temp2 - 0x10;
 }
 
-void *handleMenuSelection(DC90TaskStruct *arg0) {
-    void *temp_v0 = getTable2DEntry((Table_B934 *)arg0->unk8, arg0->unkE, arg0->unk10);
+void *handleMenuSelection(CutsceneWaitMenuState *state) {
+    void *temp_v0 = getTable2DEntry(state->textTable, state->waitFrameCount, state->textColumn);
     unsigned long new_var;
 
     new_var = temp_v0 == 0;
     if (new_var) {
-        arg0->state = 6;
-        arg0->unk18 = temp_v0;
+        state->state = 6;
+        state->textData = temp_v0;
     } else {
-        arg0->unk18 = temp_v0;
+        state->textData = temp_v0;
     }
     if (gControllerInputs[0] & A_BUTTON) {
         playSoundEffect(45);
-        arg0->state = 4;
+        state->state = 4;
     }
     return temp_v0;
 }
 
-void animateMenuContractVertical(DC90TaskStruct *arg0) {
-    arg0->animFrameY--;
-    if (arg0->animFrameY < 2) {
-        arg0->state = 5;
+void animateMenuContractVertical(CutsceneWaitMenuState *state) {
+    state->panelHeight--;
+    if (state->panelHeight < 2) {
+        state->state = 5;
     }
-    if (arg0->unk3E > 0) {
-        arg0->unk3E -= 16;
+    if (state->panelGreen > 0) {
+        state->panelGreen -= 16;
     } else {
-        arg0->unk3E = 0;
+        state->panelGreen = 0;
     }
 }
 
-void animateMenuContractHorizontal(DC90TaskStruct *arg0) {
-    arg0->animFrameX--;
-    if (arg0->animFrameX < 2) {
-        arg0->state = 6;
+void animateMenuContractHorizontal(CutsceneWaitMenuState *state) {
+    state->panelWidth--;
+    if (state->panelWidth < 2) {
+        state->state = 6;
     }
-    if (arg0->unk3E > 0) {
-        arg0->unk3E -= 16;
+    if (state->panelGreen > 0) {
+        state->panelGreen -= 16;
     } else {
-        arg0->unk3E = 0;
+        state->panelGreen = 0;
     }
 }
 
-void initCutsceneWaitMenu(DC90TaskStruct *arg0) {
-    arg0->state = 0;
-    arg0->unk10 = 0;
-    arg0->unk4 = loadAsset_34F7E0();
-    arg0->baseSpriteData = loadTextRenderAsset(1);
-    arg0->unk8 = loadDmaAsset(2);
-    arg0->animFrameX = 1;
-    arg0->animFrameY = 1;
-    arg0->unk3C = 0xFF;
-    arg0->unk3E = 0xC0;
+void initCutsceneWaitMenu(CutsceneWaitMenuState *state) {
+    state->state = 0;
+    state->textColumn = 0;
+    state->panelSpriteAsset = loadAsset_34F7E0();
+    state->textRenderAsset = loadTextRenderAsset(1);
+    state->textTable = loadDmaAsset(2);
+    state->panelWidth = 1;
+    state->panelHeight = 1;
+    state->panelRed = 0xFF;
+    state->panelGreen = 0xC0;
     playSoundEffect(0x2C);
     setCleanupCallback(&cleanupCutsceneWaitMenu);
     setCallback(&updateCutsceneWaitMenu);
 }
 
-void updateCutsceneWaitMenu(DC90TaskStruct *arg0) {
+void updateCutsceneWaitMenu(CutsceneWaitMenuState *state) {
     void *result = 0;
     s32 flag = 0;
 
-    switch (arg0->state) {
+    switch (state->state) {
         case 0:
-            initMenuFadeIn(arg0);
+            initMenuFadeIn(state);
             break;
         case 1:
-            animateMenuExpandHorizontal(arg0);
+            animateMenuExpandHorizontal(state);
             break;
         case 2:
-            animateMenuExpandVertical(arg0);
+            animateMenuExpandVertical(state);
             break;
         case 3:
-            result = handleMenuSelection(arg0);
+            result = handleMenuSelection(state);
             flag = 1;
             break;
         case 4:
-            animateMenuContractVertical(arg0);
+            animateMenuContractVertical(state);
             break;
         case 5:
-            animateMenuContractHorizontal(arg0);
+            animateMenuContractHorizontal(state);
             break;
         case 6:
-            arg0->unk0[0xFF7] = 0;
+            state->cutsceneManager->skipAnimation = 0;
             terminateCurrentTask();
             return;
     }
 
-    arg0->unk2C = -(arg0->animFrameX << 3);
-    arg0->unk30 = -(arg0->animFrameY << 3);
+    state->panelX = -(state->panelWidth << 3);
+    state->panelY = -(state->panelHeight << 3);
 
     if (result != 0) {
         s16 temp16;
-        arg0->renderPosX = arg0->unk2C;
-        temp16 = arg0->unk30;
-        arg0->renderPosY = temp16;
+        state->textX = state->panelX;
+        temp16 = state->panelY;
+        state->textY = temp16;
         enqueueTextLayout(
-            arg0->currentSprite,
-            arg0->unk18,
-            arg0->renderPosX,
+            state->activeTextRenderAsset,
+            state->textData,
+            state->textX,
             temp16,
-            arg0->unk20.asBytes.low,
-            arg0->unk22.asBytes.low,
-            arg0->unk24,
+            state->textAlpha.bytes.low,
+            state->textTransparency.bytes.low,
+            state->textPaletteIndex,
             1,
             0
         );
     }
 
     renderTiledSprite3x3(
-        arg0->unk4,
-        (s16)(arg0->unk2C),
-        (s16)(arg0->unk30),
-        (s16)(arg0->animFrameX),
-        (s16)(arg0->animFrameY),
+        state->panelSpriteAsset,
+        (s16)(state->panelX),
+        (s16)(state->panelY),
+        (s16)(state->panelWidth),
+        (s16)(state->panelHeight),
         flag,
-        (u8)arg0->unk3C,
-        (u8)arg0->unk3E,
+        (u8)state->panelRed,
+        (u8)state->panelGreen,
         1,
         0
     );
 }
 
-void cleanupCutsceneWaitMenu(DC90TaskStruct *arg0) {
-    arg0->baseSpriteData = freeNodeMemory(arg0->baseSpriteData);
-    arg0->unk4 = freeNodeMemory(arg0->unk4);
-    arg0->unk8 = freeNodeMemory(arg0->unk8);
+void cleanupCutsceneWaitMenu(CutsceneWaitMenuState *state) {
+    state->textRenderAsset = freeNodeMemory(state->textRenderAsset);
+    state->panelSpriteAsset = freeNodeMemory(state->panelSpriteAsset);
+    state->textTable = freeNodeMemory(state->textTable);
 }

@@ -756,3 +756,16 @@ Player-select task payloads also duplicate complete renderer arguments. Its port
 `SpriteRenderArg`. Packed halfword stores spanning renderer padding and shade bytes can be represented by a
 named union in the common renderer type; this removes manual byte addressing while retaining KMC's original
 `sh` code generation for every consumer.
+
+## Replace Offset-Only Cutscene Manager Views With the Canonical Type
+
+Cutscene callbacks frequently receive the complete `CutsceneManager` even when a local struct exposes only one
+field near the end of it. The cutscene wait path had separate padding-based views for `enableTransparency` at
+`0xFF5`, `skipAnimation` at `0xFF7`, and `sceneRenderNode` at `0xFF8`. Using `CutsceneManager` directly removes
+those copies and preserves KMC GCC 2.7.2 code generation, including when the manager is stored as the first
+field of a scheduled task or passed indirectly through a callback payload.
+
+Scheduled-task producers should also use the complete task state declared by the task's owning subsystem. The
+cutscene system's two-field wait-task view was the prefix of `CutsceneWaitMenuState`, while the menu's local
+16-bit byte union was already represented by `TextLayoutColorValue`. Consolidating both types exposes the
+manager, table, text-render resources, panel dimensions, and color channels without padded local overlays.

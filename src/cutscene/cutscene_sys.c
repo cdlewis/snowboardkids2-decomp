@@ -10,17 +10,6 @@
 
 extern s32 gButtonsPressed[];
 
-typedef struct {
-    CutsceneManager *cutsceneManager;
-    u8 padding[0xA];
-    s16 waitFrameCount;
-} cutsceneSysWait_exec_task;
-
-typedef struct {
-    u8 padding[0xFF7];
-    /* 0xFF7 */ s8 skipAnimation;
-} skipCutsceneCallback_arg;
-
 u8 gCutsceneFadeBrightnessTable[16] = {
     0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
@@ -226,8 +215,8 @@ s32 cutsceneSysDisp_validate(void) {
     return 0;
 }
 
-void cutsceneSysDisp_exec(u8 *enableTransparencyValue, cutsceneSysDisp_exec_arg *displayArgs) {
-    displayArgs->enableTransparency = *enableTransparencyValue;
+void cutsceneSysDisp_exec(u8 *enableTransparencyValue, CutsceneManager *cutsceneManager) {
+    cutsceneManager->enableTransparency = *enableTransparencyValue;
 }
 
 void cutsceneSysFadeIn_init(void) {
@@ -342,14 +331,14 @@ s32 cutsceneSysWipeColor_validate(void) {
     return 0;
 }
 
-void cutsceneSysWipeColor_exec(WipeColorParams *colorParams, WipeColorNodeParams *wipeParams) {
-    setNodeWipeColor(&wipeParams->sceneRenderNode, colorParams->r, colorParams->g, colorParams->b);
+void cutsceneSysWipeColor_exec(WipeColorParams *colorParams, CutsceneManager *cutsceneManager) {
+    setNodeWipeColor(&cutsceneManager->sceneRenderNode, colorParams->r, colorParams->g, colorParams->b);
 }
 
-void skipCutsceneOnInputCallback(skipCutsceneCallback_arg **arg0) {
-    skipCutsceneCallback_arg *taskPayload = *arg0;
-    if ((taskPayload->skipAnimation != 0) && (gButtonsPressed[0] & A_BUTTON)) {
-        taskPayload->skipAnimation = 0;
+void skipCutsceneOnInputCallback(CutsceneManager **managerPtr) {
+    CutsceneManager *manager = *managerPtr;
+    if ((manager->skipAnimation != 0) && (gButtonsPressed[0] & A_BUTTON)) {
+        manager->skipAnimation = 0;
         terminateCurrentTask();
     }
 }
@@ -362,7 +351,7 @@ s32 cutsceneSysWait_validate(void) {
 }
 
 void cutsceneSysWait_exec(u16 *waitFrames, CutsceneManager *cutsceneManager) {
-    cutsceneSysWait_exec_task *task = scheduleTask(&initCutsceneWaitMenu, 1, 0, 0x64);
+    CutsceneWaitMenuState *task = scheduleTask(&initCutsceneWaitMenu, 1, 0, 0x64);
     if (task != NULL) {
         enableCutsceneSkip(cutsceneManager);
         task->cutsceneManager = cutsceneManager;

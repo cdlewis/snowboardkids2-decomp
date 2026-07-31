@@ -6,11 +6,6 @@
 #include "graphics/model_loader.h"
 
 typedef struct {
-    u8 padding[0xFF5];
-    /* 0xFF5 */ u8 enableTransparency;
-} cutsceneSysDisp_exec_arg;
-
-typedef struct {
     s8 unused;
     s8 fadeMode;
     s8 brightnessIndex;
@@ -24,7 +19,7 @@ typedef struct {
 
 void cutsceneSysDisp_init(void);
 s32 cutsceneSysDisp_validate(void);
-void cutsceneSysDisp_exec(u8 *enableTransparencyValue, cutsceneSysDisp_exec_arg *displayArgs);
+void cutsceneSysDisp_exec(u8 *enableTransparencyValue, CutsceneManager *cutsceneManager);
 void cutsceneSysFadeIn_init(void);
 s32 cutsceneSysFadeIn_validate(void);
 void cutsceneSysFadeIn_exec(cutsceneSysFadeIn_exec_arg *fadeParams, ViewportNode *viewport);
@@ -52,11 +47,7 @@ typedef struct {
     u8 b;
 } WipeColorParams;
 
-typedef struct {
-    u8 padding[0xFF8];
-    SceneRenderNode sceneRenderNode;
-} WipeColorNodeParams;
-void cutsceneSysWipeColor_exec(WipeColorParams *colorParams, WipeColorNodeParams *wipeParams);
+void cutsceneSysWipeColor_exec(WipeColorParams *colorParams, CutsceneManager *cutsceneManager);
 void cutsceneSysWait_init(void);
 s32 cutsceneSysWait_validate(void);
 void cutsceneSysWait_exec(u16 *waitFrames, CutsceneManager *cutsceneManager);
