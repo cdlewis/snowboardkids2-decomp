@@ -569,7 +569,7 @@ void initSaveSlotItemLabels(SaveSlotNumberLabelsState *arg0) {
             arg0->texts[i].y = itemY;
             arg0->texts[i].string = (u8 *)numberBuffer;
             arg0->texts[i].palette = 0;
-            *(s16 *)&arg0->texts[i].pad = 0xFF;
+            arg0->texts[i].shade.value = 0xFF;
         } else {
             arg0->sprites[i - 9].x = -0x78 + i * 0x10;
             arg0->sprites[i - 9].y = itemY;
@@ -612,7 +612,7 @@ void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
     alphaCheck = alpha;
     do {
         if (i < 9) {
-            *(s16 *)&arg0->texts[i].pad = alpha;
+            arg0->texts[i].shade.value = alpha;
         } else {
             arg0->sprites[i - 9].color.paletteAndAlpha = alpha;
         }
@@ -620,19 +620,19 @@ void updateSaveSlotNumberLabels(SaveSlotNumberLabelsState *arg0) {
         if ((alphaCheck == 0xFF) && (allocation->saveSlotMenuState != 2)) {
             if (allocation->slotData[arg0->slotIndex].save_slot_status[i] == 1) {
                 if (i < 9) {
-                    *(s16 *)&arg0->texts[i].pad = 0xFE;
+                    arg0->texts[i].shade.value = 0xFE;
                 } else {
                     arg0->sprites[i - 9].color.paletteAndAlpha = 0xFE;
                 }
             } else if (i < 9) {
-                *(s16 *)&arg0->texts[i].pad = 0x60;
+                arg0->texts[i].shade.value = 0x60;
             } else {
                 arg0->sprites[i - 9].color.paletteAndAlpha = 0x60;
             }
         } else if (alphaCheck == 0x60) {
             if (allocation->slotData[arg0->slotIndex].save_slot_status[i] != 1) {
                 if (i < 9) {
-                    *(s16 *)&arg0->texts[i].pad = 0x30;
+                    arg0->texts[i].shade.value = 0x30;
                 } else {
                     arg0->sprites[i - 9].color.paletteAndAlpha = 0x30;
                 }
@@ -791,7 +791,7 @@ void initSaveSlotGoldDisplay(SaveSlotGoldDisplayState *arg0) {
         arg0->text[i].x = 0x18;
         arg0->text[i].y = 0xC;
         arg0->text[i].palette = 0;
-        *(s16 *)&arg0->text[i].pad = 0xFF;
+        arg0->text[i].shade.value = 0xFF;
         arg0->text[i].string = arg0->textBuffers[i];
 
         arg0->icons[i].x = 0x5C;
@@ -824,12 +824,12 @@ void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state) {
 
         if (allocation->saveSlotMenuState >= 0x32) {
             state->text[i].x = 0x1D;
-            *(s16 *)&state->text[i].pad = 0x60;
+            state->text[i].shade.value = 0x60;
             state->icons[i].frameIndex = 0;
             state->icons[i].shade.shadeWithPadding = 0x60;
         } else if (i == allocation->selectedSaveSlot) {
             state->text[i].x = 0x18;
-            *(s16 *)&state->text[i].pad = 0xFF;
+            state->text[i].shade.value = 0xFF;
             state->icons[i].shade.shadeWithPadding = 0xFF;
 
             if (allocation->saveSlotMenuState < 2) {
@@ -853,12 +853,12 @@ void updateSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state) {
         } else {
             if (i < 3) {
                 state->text[i].x = 0x1D;
-                *(s16 *)&state->text[i].pad = 0x60;
+                state->text[i].shade.value = 0x60;
                 state->icons[i].frameIndex = 0;
                 state->icons[i].shade.shadeWithPadding = 0x60;
             } else {
                 state->text[i].x = 0x17;
-                *(s16 *)&state->text[i].pad = 0xFF;
+                state->text[i].shade.value = 0xFF;
                 state->icons[i].frameIndex = 0;
                 state->icons[i].shade.shadeWithPadding = 0xFF;
             }

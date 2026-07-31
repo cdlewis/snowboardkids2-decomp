@@ -261,7 +261,15 @@ void renderTextColored(ColoredTextRenderArg *arg0) {
 
     gDPPipeSync(gDisplayListAllocPtr++);
     gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
-    gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, arg0->shade, arg0->shade, arg0->shade, 0xFF);
+    gDPSetPrimColor(
+        gDisplayListAllocPtr++,
+        0,
+        0,
+        arg0->shade.components.shade,
+        arg0->shade.components.shade,
+        arg0->shade.components.shade,
+        0xFF
+    );
 
     if (gCurrentPaletteId != arg0->palette) {
         gCurrentPaletteId = arg0->palette;

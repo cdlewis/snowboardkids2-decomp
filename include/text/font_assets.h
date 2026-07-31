@@ -18,8 +18,13 @@ typedef struct {
     /* 0x00 */ u16 x;
     /* 0x02 */ u16 y;
     /* 0x04 */ u16 palette;
-    /* 0x06 */ u8 pad;
-    /* 0x07 */ u8 shade;
+    /* 0x06 */ union {
+        u16 value;
+        struct {
+            u8 padding;
+            u8 shade;
+        } components;
+    } shade;
     /* 0x08 */ u8 *string;
 } ColoredTextRenderArg;
 

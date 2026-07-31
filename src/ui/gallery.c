@@ -17,208 +17,41 @@
 #include "text/font_assets.h"
 #include "text/font_render.h"
 #include "ui/level_preview_3d.h"
-#include "ui/save_data.h"
 
 typedef struct {
-    s32 *layout;
+    u16 x;
+    u16 y;
+    u8 padding4;
+    u8 overridePaletteCount;
+    s8 textRow;
+    u8 labelIndex;
+} MenuLayoutEntry;
+
+typedef struct {
+    MenuLayoutEntry *layout;
     s32 count;
 } MenuOptionConfig;
 
 typedef struct {
+    s8 row;
+    s8 column;
+} GalleryTextTableCoordinate;
+
+typedef struct {
     u8 x;
     u8 y;
-    s8 pad[2];
+    GalleryTextTableCoordinate textTable;
     u8 spriteFrame;
     s8 labelIndex;
     s8 numExtra;
     s8 unlockSlotIndex;
-    u8 pad2[4];
+    u8 padding8[4];
 } GalleryItemEntry;
 
 typedef struct {
     GalleryItemEntry *items;
     s32 count;
 } GalleryCategoryData;
-
-typedef struct {
-    s8 menuState;
-    s8 selectedOption;
-    s8 menuType;
-    s8 viewerComplete;
-    u8 pad4[0x4];
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-} ViewerState;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    s16 config;
-    s16 alpha;
-    s32 label;
-} LabelRenderEntry;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    u8 pad4[4];
-    s16 frameIndex;
-    s16 shade;
-    u8 padC[1];
-    u8 transparency;
-    u8 padE[2];
-} SpriteSlot;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    u8 pad4[6];
-    s16 alpha;
-    u8 padC[4];
-} ExtraSpriteSlot;
-
-typedef struct {
-    s8 menuState;
-    s8 selectedOption;
-    s8 menuType;
-    s8 viewerComplete;
-    u8 pad4[0x4];
-    void *unk8;
-    void *unkC;
-    u8 pad10[0x5E8];
-    u8 unk5F8[0x174];
-    SpriteSlot spriteSlots[27];
-    ExtraSpriteSlot extraSpriteSlots[27];
-    u8 unkACC[0x50];
-    s16 unkB1C;
-    s16 unkB1E;
-    u8 padB20[0x4];
-    s16 unkB24;
-    s16 unkB26;
-    u8 padB28[0x4];
-    u8 unkB2C[0xA];
-    s16 unkB36;
-    u8 padB38[0x4];
-    u8 unkB3C[0xC];
-    u8 unkB48[0x8];
-    s16 unkB50;
-    u8 padB52[0x2];
-    LabelRenderEntry labelEntries[27];
-    u8 unkC98[0xC];
-    u8 unkCA4[0x40];
-} GalleryAlloc;
-
-typedef struct {
-    u16 x;
-    u16 y;
-    u8 pad4;
-    u8 texFlags;
-    s8 textRow;
-    u8 labelIndex;
-} MenuLayoutEntry;
-
-typedef struct {
-    u16 posX;
-    u16 posY;
-    s32 spriteData;
-    s16 frameIndex;
-    s16 shadeA;
-    s16 shadeB;
-    s16 zValue;
-    s16 alpha;
-    s8 pad12;
-    s8 texFlags;
-    u8 alphaByte;
-    u8 _pad15[3];
-} GalleryRenderSlot;
-
-typedef struct {
-    s16 m[3][3];
-    u8 _pad12[2];
-    s32 tx;
-    s32 ty;
-    s32 tz;
-} Transform3D_local;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    s16 unkA;
-    s8 unkC;
-    s8 unkD;
-    u8 _padE[2];
-} GalleryLabelSlot;
-
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    void *unk4;
-    s16 unk8;
-    u8 _padA[2];
-} GallerySmallSlot;
-
-struct GalleryMenuState {
-    /* 0x000 */ s8 menuState;
-    /* 0x001 */ s8 selectedOption;
-    /* 0x002 */ s8 menuType;
-    /* 0x003 */ s8 viewerComplete;
-    /* 0x004 */ u8 pad4[4];
-    /* 0x008 */ void *textRenderer;
-    /* 0x00C */ void *textTable;
-    /* 0x010 */ s16 bgmFadeTimer;
-    /* 0x012 */ s16 fadeTimer;
-    /* 0x014 */ s16 animTimer;
-    /* 0x016 */ u8 isExiting;
-    /* 0x017 */ u8 pad17;
-    /* 0x018 */ void *spriteAsset;
-    /* 0x01C */ u8 pad1C[4];
-    /* 0x020 */ ViewportNode overlayViewport;
-    /* 0x1F8 */ ViewportNode fadeNode;
-    /* 0x3D0 */ ViewportNode menuViewport;
-    /* 0x5A8 */ ColorData lightColors[3];
-    /* 0x5C0 */ u8 ambientColor[4];
-    /* 0x5C4 */ void *tiledTextureData1;
-    /* 0x5C8 */ u8 pad5C8[0x2C];
-    /* 0x5F4 */ void *tiledTextureData2;
-    /* 0x5F8 */ u8 pad5F8[0x2C];
-    /* 0x624 */ SceneModel *menuModel;
-    /* 0x628 */ GalleryRenderSlot iconSlots[6];
-    /* 0x6B8 */ GalleryRenderSlot labelSlots[6];
-    /* 0x748 */ s32 alphaValues[6];
-    /* 0x760 */ u8 animFrames[6];
-    /* 0x766 */ s8 animTimers[6];
-    /* 0x76C */ GalleryLabelSlot categoryLabels[27];
-    /* 0x91C */ GalleryLabelSlot categoryLabels2[27];
-    /* 0xACC */ GalleryLabelSlot pageLabels[5];
-    /* 0xB1C */ GalleryLabelSlot fixedSlotA;
-    /* 0xB2C */ GalleryLabelSlot fixedSlotB;
-    /* 0xB3C */ GallerySmallSlot fixedSlotC;
-    /* 0xB48 */ GallerySmallSlot fixedSlotD;
-    /* 0xB54 */ u8 padB54[0x144];
-    /* 0xC98 */ s16 unkC98;
-    /* 0xC9A */ s16 unkC9A;
-    /* 0xC9C */ s16 unkC9C;
-    /* 0xC9E */ u8 padC9E[2];
-    /* 0xCA0 */ void *unkCA0;
-    /* 0xCA4 */ u8 unkCA4[4];
-};
-
-struct FD98_struct {
-    s8 viewerState;
-    s8 navigationMode;
-    s8 cursorIndex;
-    u8 pageUpCursorDest;
-    u8 pageDownCursorDest;
-    u8 pad5[0x3];
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-};
 
 extern const u8 D_8009DF6C_9EB6C[];
 extern const char D_8009DEB0_9EAB0[];
@@ -269,8 +102,8 @@ s32 gMenuOptionLayout_Type1[] = { 0xFFD0FFE8, 0x00010103, 0x0000FFE8, 0x01020204
                                   0xFFD00010, 0x03030405, 0x00000010, 0x04050507, 0x00300010, 0x00060608 };
 
 MenuOptionConfig gMenuOptionConfig[] = {
-    { gMenuOptionLayout_Type0, 5 },
-    { gMenuOptionLayout_Type1, 6 },
+    { (MenuLayoutEntry *)gMenuOptionLayout_Type0, 5 },
+    { (MenuLayoutEntry *)gMenuOptionLayout_Type1, 6 },
 };
 
 u8 gNavigationCycleIndices[] = { 0x00, 0x01, 0x02, 0x01 };
@@ -414,12 +247,12 @@ void playBgmTrack(GalleryMenuState *arg0, s16 bgmId) {
 }
 
 void beginMenuFadeOut(GalleryMenuState *arg0) {
-    setViewportFadeValue(&arg0->fadeNode, 0xFF, 10);
+    setViewportFadeValue(&arg0->fadeViewport, 0xFF, 10);
     arg0->fadeTimer = 10;
 }
 
 void beginMenuFadeIn(GalleryMenuState *arg0) {
-    setViewportFadeValue(&arg0->fadeNode, 0, 10);
+    setViewportFadeValue(&arg0->fadeViewport, 0, 10);
     arg0->fadeTimer = 10;
 }
 
@@ -432,14 +265,14 @@ s32 getMenuOptionCount(GalleryMenuState *arg0) {
     return 0;
 }
 
-void *getMenuOptionEntry(GalleryMenuState *arg0, s32 index) {
-    void *result = NULL;
+MenuLayoutEntry *getMenuOptionEntry(GalleryMenuState *arg0, s32 index) {
+    MenuLayoutEntry *result = NULL;
     s8 menuType = arg0->menuType;
 
     if (menuType < 2) {
         MenuOptionConfig *config = &gMenuOptionConfig[menuType];
         if (index < config->count) {
-            result = (u8 *)config->layout + index * 8;
+            result = &config->layout[index];
         }
     }
     return result;
@@ -451,8 +284,8 @@ void setMenuAnimation(GalleryMenuState *arg0, s16 animIndex, s16 transitionAnimI
 }
 
 void renderGalleryMenu(GalleryMenuState *arg0) {
-    Transform3D_local viewportTransform;
-    Transform3D_local menuTransform;
+    Transform3D viewportTransform;
+    Transform3D menuTransform;
     int new_var;
     s32 i;
     u16 *textEntry;
@@ -475,20 +308,25 @@ void renderGalleryMenu(GalleryMenuState *arg0) {
     createViewportTransform(&viewportTransform, 0, 0, *gViewerInitPosition, 0, 0, 0);
     setViewportTransformById(arg0->menuViewport.viewportId, &viewportTransform);
     createYRotationMatrix(
-        (Transform3D *)&menuTransform,
-        (computeAngleToPosition(gViewerDefaultPosX, gViewerDefaultPosZ, viewportTransform.tx, viewportTransform.tz) +
+        &menuTransform,
+        (computeAngleToPosition(
+             gViewerDefaultPosX,
+             gViewerDefaultPosZ,
+             viewportTransform.translation.x,
+             viewportTransform.translation.z
+         ) +
          0x1000) &
             0xFFFF
     );
-    menuTransform.tx = gViewerDefaultPosX;
-    menuTransform.ty = gViewerDefaultPosY;
-    menuTransform.tz = gViewerDefaultPosZ;
-    applyTransformToModel(arg0->menuModel, (Transform3D *)&menuTransform);
+    menuTransform.translation.x = gViewerDefaultPosX;
+    menuTransform.translation.y = gViewerDefaultPosY;
+    menuTransform.translation.z = gViewerDefaultPosZ;
+    applyTransformToModel(arg0->menuModel, &menuTransform);
     enableEntityRendering(arg0->menuModel);
-    setModelHeight(arg0->menuModel, menuTransform.ty);
+    setModelHeight(arg0->menuModel, menuTransform.translation.y);
     clearModelRotation(arg0->menuModel);
     updateModelGeometry(arg0->menuModel);
-    enqueueCallbackBySlotIndex(1, 4, renderTiledTextureMap, arg0->pad5C8);
+    enqueueCallbackBySlotIndex(1, 4, renderTiledTextureMap, &arg0->backgroundTileMap);
     menuState = arg0->menuState;
     if (menuState <= 0) {
         goto menu_end;
@@ -508,58 +346,79 @@ menu_body: {
 }
     halfWidth = getMaxLinePixelWidth(textEntry) / 2;
     halfWidth = -halfWidth;
-    enqueueTextLayout(arg0->textRenderer, textEntry, halfWidth, -0x48, 0xFF, arg0->pad4[1], 5, 2, 0);
+    enqueueTextLayout(
+        arg0->textRenderer,
+        textEntry,
+        halfWidth,
+        -0x48,
+        0xFF,
+        arg0->menuTextColor.components.alpha,
+        5,
+        2,
+        0
+    );
     entry = getMenuOptionEntry(arg0, arg0->selectedOption);
     textEntry = getTable2DEntry(arg0->textTable, entry->textRow, 0);
     halfWidth = (new_var = getMaxLinePixelWidth(textEntry) / 2);
     halfWidth = -halfWidth;
-    enqueueTextLayout(arg0->textRenderer, textEntry, halfWidth, 0x30, 0xFF, arg0->pad4[1], 5, 2, 0);
+    enqueueTextLayout(
+        arg0->textRenderer,
+        textEntry,
+        halfWidth,
+        0x30,
+        0xFF,
+        arg0->menuTextColor.components.alpha,
+        5,
+        2,
+        0
+    );
     for (i = 0; i < getMenuOptionCount(arg0); i++) {
         entry = getMenuOptionEntry(arg0, i);
-        if (arg0->animTimers[i] == 0) {
-            arg0->animTimers[i] = 4;
+        if (arg0->menuOptionAnimTimers[i] == 0) {
+            arg0->menuOptionAnimTimers[i] = 4;
             if (i == arg0->selectedOption) {
-                arg0->animFrames[i] = arg0->animFrames[i] + 1;
-            } else if (((s8)arg0->animFrames[i]) != 0) {
-                arg0->animFrames[i] = (u8)(((s8)arg0->animFrames[i]) + 1);
+                arg0->menuOptionAnimFrames[i] = arg0->menuOptionAnimFrames[i] + 1;
+            } else if (((s8)arg0->menuOptionAnimFrames[i]) != 0) {
+                arg0->menuOptionAnimFrames[i] = (u8)(((s8)arg0->menuOptionAnimFrames[i]) + 1);
             }
-            if (((s8)arg0->animFrames[i]) >= gDefaultMenuOptionCount) {
-                arg0->animFrames[i] = 0;
+            if (((s8)arg0->menuOptionAnimFrames[i]) >= gDefaultMenuOptionCount) {
+                arg0->menuOptionAnimFrames[i] = 0;
             }
-            arg0->iconSlots[i].frameIndex = (s16)((s8)gNavigationCycleIndices[(s8)arg0->animFrames[i]]);
+            arg0->menuOptionSprites[i].frameIndex =
+                (s16)((s8)gNavigationCycleIndices[(s8)arg0->menuOptionAnimFrames[i]]);
         } else {
-            arg0->animTimers[i] = arg0->animTimers[i] - 1;
+            arg0->menuOptionAnimTimers[i] = arg0->menuOptionAnimTimers[i] - 1;
         }
         if (i == arg0->selectedOption) {
-            arg0->iconSlots[i].shadeB = 0x370;
-            arg0->iconSlots[i].shadeA = 0x370;
-            arg0->alphaValues[i] += 0xF0000;
-            if (arg0->alphaValues[i] > 0xFF0000) {
-                arg0->alphaValues[i] = 0xFF0000;
+            arg0->menuOptionSprites[i].scaleY = 0x370;
+            arg0->menuOptionSprites[i].scaleX = 0x370;
+            arg0->menuOptionAlpha[i] += 0xF0000;
+            if (arg0->menuOptionAlpha[i] > 0xFF0000) {
+                arg0->menuOptionAlpha[i] = 0xFF0000;
             }
         } else {
-            arg0->iconSlots[i].shadeB = 0x400;
-            arg0->iconSlots[i].shadeA = 0x400;
-            arg0->alphaValues[i] += (s32)0xFFF10000;
-            if (arg0->alphaValues[i] <= ((s32)0x95FFFF)) {
-                arg0->alphaValues[i] = 0x960000;
+            arg0->menuOptionSprites[i].scaleY = 0x400;
+            arg0->menuOptionSprites[i].scaleX = 0x400;
+            arg0->menuOptionAlpha[i] += (s32)0xFFF10000;
+            if (arg0->menuOptionAlpha[i] <= ((s32)0x95FFFF)) {
+                arg0->menuOptionAlpha[i] = 0x960000;
             }
         }
-        arg0->iconSlots[i].posX = entry->x;
-        arg0->iconSlots[i].posY = entry->y;
-        arg0->iconSlots[i].texFlags = entry->texFlags;
-        alpha = (s16)(arg0->alphaValues[i] >> 16);
-        arg0->iconSlots[i].alphaByte = (s8)alpha;
-        arg0->iconSlots[i].alpha = alpha & 0xFF;
-        enqueueCallbackBySlotIndex(2, 4, renderScaledAlphaSpriteFrame, &arg0->iconSlots[i]);
-        arg0->labelSlots[i].posX = entry->x;
-        arg0->labelSlots[i].posY = entry->y;
-        arg0->labelSlots[i].texFlags = 0;
-        alpha = (s16)(arg0->alphaValues[i] >> 16);
-        arg0->labelSlots[i].alphaByte = (s8)alpha;
-        arg0->labelSlots[i].alpha = alpha & 0xFF;
-        arg0->labelSlots[i].frameIndex = (s16)((s8)entry->labelIndex);
-        enqueueCallbackBySlotIndex(2, 5, renderScaledAlphaSpriteFrame, &arg0->labelSlots[i]);
+        arg0->menuOptionSprites[i].x = entry->x;
+        arg0->menuOptionSprites[i].y = entry->y;
+        arg0->menuOptionSprites[i].overridePaletteCount = entry->overridePaletteCount;
+        alpha = (s16)(arg0->menuOptionAlpha[i] >> 16);
+        arg0->menuOptionSprites[i].alpha = (s8)alpha;
+        arg0->menuOptionSprites[i].shade.shadeWithPadding = alpha & 0xFF;
+        enqueueCallbackBySlotIndex(2, 4, renderScaledAlphaSpriteFrame, &arg0->menuOptionSprites[i]);
+        arg0->menuOptionLabels[i].x = entry->x;
+        arg0->menuOptionLabels[i].y = entry->y;
+        arg0->menuOptionLabels[i].overridePaletteCount = 0;
+        alpha = (s16)(arg0->menuOptionAlpha[i] >> 16);
+        arg0->menuOptionLabels[i].alpha = (s8)alpha;
+        arg0->menuOptionLabels[i].shade.shadeWithPadding = alpha & 0xFF;
+        arg0->menuOptionLabels[i].frameIndex = (s16)((s8)entry->labelIndex);
+        enqueueCallbackBySlotIndex(2, 5, renderScaledAlphaSpriteFrame, &arg0->menuOptionLabels[i]);
     }
 menu_end:;
     ;
@@ -571,16 +430,16 @@ void cleanupGalleryMenu(GalleryMenuState *arg0) {
     arg0->spriteAsset = freeNodeMemory(arg0->spriteAsset);
     arg0->textTable = freeNodeMemory(arg0->textTable);
     arg0->textRenderer = freeNodeMemory(arg0->textRenderer);
-    arg0->tiledTextureData1 = freeNodeMemory(arg0->tiledTextureData1);
-    arg0->tiledTextureData2 = freeNodeMemory(arg0->tiledTextureData2);
+    arg0->backgroundTileMapAsset = freeNodeMemory(arg0->backgroundTileMapAsset);
+    arg0->overlayTileMapAsset = freeNodeMemory(arg0->overlayTileMapAsset);
     unlinkNode(&arg0->menuViewport);
     unlinkNode(&arg0->overlayViewport);
-    unlinkNode(&arg0->fadeNode);
+    unlinkNode(&arg0->fadeViewport);
 }
 
 void activateGalleryMenu(GalleryMenuState *arg0) {
-    initScrollingTileMapState(&arg0->pad5C8, (s32)arg0->tiledTextureData1);
-    initScrollingTileMapState(&arg0->pad5F8, (s32)arg0->tiledTextureData2);
+    initScrollingTileMapState(&arg0->backgroundTileMap, arg0->backgroundTileMapAsset);
+    initScrollingTileMapState(&arg0->overlayTileMap, arg0->overlayTileMapAsset);
     setViewportFadeValue(NULL, 0, 10);
     setMenuAnimation(arg0, 0x90, 0x90, -1, 0);
     arg0->fadeTimer = 10;
@@ -800,44 +659,44 @@ void setupGalleryMenuState(void) {
     alloc->menuState = 0;
     alloc->selectedOption = 0;
     alloc->menuType = isCreditsUnlocked();
-    *(s32 *)alloc->pad4 = 0xFF0000;
+    alloc->menuTextColor.value = 0xFF0000;
     alloc->fadeTimer = 0;
     alloc->viewerComplete = 0;
     alloc->animTimer = -1;
     alloc->isExiting = 0;
-    alloc->tiledTextureData1 =
+    alloc->backgroundTileMapAsset =
         loadCompressedData(&galleryBackgroundAsset_ROM_START, &galleryBackgroundAsset_ROM_END, 0xC010);
     alloc->textRenderer = loadTextRenderAsset(1);
     alloc->textTable = loadDmaAsset(4);
     alloc->spriteAsset = loadSpriteAssetData(8);
-    alloc->tiledTextureData2 =
+    alloc->overlayTileMapAsset =
         loadCompressedData(&galleryOverlayTexture_ROM_START, &MUSIC_BANK_UNUSED_01_ROM_START, 0xD00);
     for (i = 0; i < 6; i++) {
-        alloc->iconSlots[i].posX = 0;
-        alloc->iconSlots[i].posY = 0;
-        alloc->iconSlots[i].spriteData = (s32)alloc->spriteAsset;
-        alloc->iconSlots[i].frameIndex = 0;
-        alloc->iconSlots[i].shadeA = 0x400;
-        alloc->iconSlots[i].shadeB = 0x400;
-        alloc->iconSlots[i].zValue = 0;
-        alloc->iconSlots[i].alpha = 0xFF;
-        alloc->iconSlots[i].pad12 = 0;
-        alloc->iconSlots[i].texFlags = 0;
-        alloc->iconSlots[i].alphaByte = 0x96;
-        alloc->labelSlots[i].posX = 0;
-        alloc->labelSlots[i].posY = 0;
-        alloc->labelSlots[i].spriteData = (s32)alloc->spriteAsset;
-        alloc->labelSlots[i].frameIndex = 0;
-        alloc->labelSlots[i].shadeA = 0x400;
-        alloc->labelSlots[i].shadeB = 0x400;
-        alloc->labelSlots[i].zValue = 0;
-        alloc->labelSlots[i].alpha = 0xFF;
-        alloc->labelSlots[i].pad12 = 0;
-        alloc->labelSlots[i].texFlags = 0;
-        alloc->labelSlots[i].alphaByte = 0x96;
-        alloc->alphaValues[i] = 0x960000;
-        alloc->animFrames[i] = 0;
-        alloc->animTimers[i] = 4;
+        alloc->menuOptionSprites[i].x = 0;
+        alloc->menuOptionSprites[i].y = 0;
+        alloc->menuOptionSprites[i].spriteData = alloc->spriteAsset;
+        alloc->menuOptionSprites[i].frameIndex = 0;
+        alloc->menuOptionSprites[i].scaleX = 0x400;
+        alloc->menuOptionSprites[i].scaleY = 0x400;
+        alloc->menuOptionSprites[i].rotation = 0;
+        alloc->menuOptionSprites[i].shade.shadeWithPadding = 0xFF;
+        alloc->menuOptionSprites[i].tileMode = 0;
+        alloc->menuOptionSprites[i].overridePaletteCount = 0;
+        alloc->menuOptionSprites[i].alpha = 0x96;
+        alloc->menuOptionLabels[i].x = 0;
+        alloc->menuOptionLabels[i].y = 0;
+        alloc->menuOptionLabels[i].spriteData = alloc->spriteAsset;
+        alloc->menuOptionLabels[i].frameIndex = 0;
+        alloc->menuOptionLabels[i].scaleX = 0x400;
+        alloc->menuOptionLabels[i].scaleY = 0x400;
+        alloc->menuOptionLabels[i].rotation = 0;
+        alloc->menuOptionLabels[i].shade.shadeWithPadding = 0xFF;
+        alloc->menuOptionLabels[i].tileMode = 0;
+        alloc->menuOptionLabels[i].overridePaletteCount = 0;
+        alloc->menuOptionLabels[i].alpha = 0x96;
+        alloc->menuOptionAlpha[i] = 0x960000;
+        alloc->menuOptionAnimFrames[i] = 0;
+        alloc->menuOptionAnimTimers[i] = 4;
     }
 
     alloc->menuModel = createSceneModel(0x2D, &alloc->menuViewport);
@@ -846,58 +705,58 @@ void setupGalleryMenuState(void) {
     gScaleMatrix.translation.z = 0;
     applyTransformToModel(alloc->menuModel, &gScaleMatrix);
     for (i = 0; i < 27; i++) {
-        alloc->categoryLabels[i].unk0 = 0;
-        alloc->categoryLabels[i].unk2 = 0;
-        alloc->categoryLabels[i].unk4 = alloc->spriteAsset;
-        alloc->categoryLabels[i].unk8 = 0;
-        alloc->categoryLabels[i].unkA = 0xFF;
-        alloc->categoryLabels[i].unkC = 0;
-        alloc->categoryLabels[i].unkD = 0;
-        alloc->categoryLabels2[i].unk0 = 0;
-        alloc->categoryLabels2[i].unk2 = 0;
-        alloc->categoryLabels2[i].unk4 = alloc->spriteAsset;
-        alloc->categoryLabels2[i].unk8 = 0x1A;
-        alloc->categoryLabels2[i].unkA = 0xFF;
-        alloc->categoryLabels2[i].unkC = 0;
-        alloc->categoryLabels2[i].unkD = 0;
+        alloc->itemSprites[i].x = 0;
+        alloc->itemSprites[i].y = 0;
+        alloc->itemSprites[i].spriteData = alloc->spriteAsset;
+        alloc->itemSprites[i].frameIndex = 0;
+        alloc->itemSprites[i].color.paletteAndAlpha = 0xFF;
+        alloc->itemSprites[i].tileMode = 0;
+        alloc->itemSprites[i].overridePaletteCount = 0;
+        alloc->boardOverlaySprites[i].x = 0;
+        alloc->boardOverlaySprites[i].y = 0;
+        alloc->boardOverlaySprites[i].spriteData = alloc->spriteAsset;
+        alloc->boardOverlaySprites[i].frameIndex = 0x1A;
+        alloc->boardOverlaySprites[i].color.paletteAndAlpha = 0xFF;
+        alloc->boardOverlaySprites[i].tileMode = 0;
+        alloc->boardOverlaySprites[i].overridePaletteCount = 0;
     }
 
     for (i = 0; i < 5; i++) {
-        alloc->pageLabels[i].unk0 = -8 + i * 0x10;
-        alloc->pageLabels[i].unk2 = 0x2C;
-        alloc->pageLabels[i].unk4 = alloc->spriteAsset;
-        alloc->pageLabels[i].unk8 = 0x2F;
-        alloc->pageLabels[i].unkA = 0xFF;
-        alloc->pageLabels[i].unkC = 0;
-        alloc->pageLabels[i].unkD = 0;
+        alloc->extraItemSprites[i].x = -8 + i * 0x10;
+        alloc->extraItemSprites[i].y = 0x2C;
+        alloc->extraItemSprites[i].spriteData = alloc->spriteAsset;
+        alloc->extraItemSprites[i].frameIndex = 0x2F;
+        alloc->extraItemSprites[i].color.paletteAndAlpha = 0xFF;
+        alloc->extraItemSprites[i].tileMode = 0;
+        alloc->extraItemSprites[i].overridePaletteCount = 0;
     }
 
-    alloc->fixedSlotA.unk0 = 0;
-    alloc->fixedSlotA.unk2 = 0;
-    alloc->fixedSlotA.unkC = 0;
-    alloc->fixedSlotA.unkD = 0;
-    alloc->fixedSlotB.unkC = 0;
-    alloc->fixedSlotB.unkD = 0;
-    alloc->fixedSlotA.unk4 = alloc->spriteAsset;
-    alloc->fixedSlotB.unk4 = alloc->spriteAsset;
-    alloc->fixedSlotC.unk4 = alloc->spriteAsset;
-    alloc->fixedSlotD.unk4 = alloc->spriteAsset;
-    alloc->fixedSlotA.unk8 = 0x0A;
-    alloc->fixedSlotA.unkA = 0xFF;
-    alloc->fixedSlotB.unk0 = -0x24;
-    alloc->fixedSlotB.unk2 = -0x10;
-    alloc->fixedSlotB.unk8 = 9;
-    alloc->fixedSlotB.unkA = 0xFF;
-    alloc->fixedSlotC.unk0 = 0x18;
-    alloc->fixedSlotC.unk2 = 0x28;
-    alloc->fixedSlotC.unk8 = 0x25;
-    alloc->fixedSlotD.unk0 = 0x48;
-    alloc->fixedSlotD.unk8 = 0x30;
-    alloc->unkC98 = -0x68;
-    alloc->unkC9A = 0x20;
-    alloc->unkC9C = 1;
-    alloc->unkCA0 = &alloc->unkCA4;
-    alloc->fixedSlotD.unk2 = 0x28;
+    alloc->selectionCursor.x = 0;
+    alloc->selectionCursor.y = 0;
+    alloc->selectionCursor.tileMode = 0;
+    alloc->selectionCursor.overridePaletteCount = 0;
+    alloc->pageIndicator.tileMode = 0;
+    alloc->pageIndicator.overridePaletteCount = 0;
+    alloc->selectionCursor.spriteData = alloc->spriteAsset;
+    alloc->pageIndicator.spriteData = alloc->spriteAsset;
+    alloc->prizeIcon.spriteData = alloc->spriteAsset;
+    alloc->flashingPrizeIcon.spriteData = alloc->spriteAsset;
+    alloc->selectionCursor.frameIndex = 0x0A;
+    alloc->selectionCursor.color.paletteAndAlpha = 0xFF;
+    alloc->pageIndicator.x = -0x24;
+    alloc->pageIndicator.y = -0x10;
+    alloc->pageIndicator.frameIndex = 9;
+    alloc->pageIndicator.color.paletteAndAlpha = 0xFF;
+    alloc->prizeIcon.x = 0x18;
+    alloc->prizeIcon.y = 0x28;
+    alloc->prizeIcon.frameIndex = 0x25;
+    alloc->flashingPrizeIcon.x = 0x48;
+    alloc->flashingPrizeIcon.frameIndex = 0x30;
+    alloc->itemStatsText.x = -0x68;
+    alloc->itemStatsText.y = 0x20;
+    alloc->itemStatsText.palette = 1;
+    alloc->itemStatsText.string = alloc->itemStatsBuffer;
+    alloc->flashingPrizeIcon.y = 0x28;
     initViewportNode(&alloc->menuViewport, 0, 0, 0xE, 1);
     setViewportScale(&alloc->menuViewport, 1.0f, 1.0f);
     setViewportId(&alloc->menuViewport, 1);
@@ -909,17 +768,17 @@ void setupGalleryMenuState(void) {
     setViewportScale(&alloc->overlayViewport, 1.0f, 1.0f);
     setViewportId(&alloc->overlayViewport, 1);
     setModelCameraTransform(&alloc->overlayViewport, 0, 0, -0xA0, -0x78, 0x9F, 0x77);
-    initViewportNode(&alloc->fadeNode, 0, 2, 0xC, 0);
-    setViewportScale(&alloc->fadeNode, 1.0f, 1.0f);
-    setViewportId(&alloc->fadeNode, 1);
-    setModelCameraTransform(&alloc->fadeNode, 0, 0, -0x6F, -0x56, 0x6E, 0x46);
+    initViewportNode(&alloc->fadeViewport, 0, 2, 0xC, 0);
+    setViewportScale(&alloc->fadeViewport, 1.0f, 1.0f);
+    setViewportId(&alloc->fadeViewport, 1);
+    setModelCameraTransform(&alloc->fadeViewport, 0, 0, -0x6F, -0x56, 0x6E, 0x46);
     setViewportFadeValue(0, 0xFF, 0);
     setViewportEnvColor(&alloc->menuViewport, 0, 0, 0);
     setViewportFadeValue(&alloc->menuViewport, 0, 0);
     setViewportEnvColor(&alloc->overlayViewport, 0, 0, 0);
     setViewportFadeValue(&alloc->overlayViewport, 0, 0);
-    setViewportEnvColor(&alloc->fadeNode, 0, 0x70, 0x80);
-    setViewportFadeValue(&alloc->fadeNode, 0, 0);
+    setViewportEnvColor(&alloc->fadeViewport, 0, 0x70, 0x80);
+    setViewportFadeValue(&alloc->fadeViewport, 0, 0);
     alloc->lightColors[0].r2 = 0;
     alloc->lightColors[0].g2 = 0x7F;
     alloc->lightColors[0].b2 = 0x7F;
@@ -1059,9 +918,9 @@ u8 isGalleryItemUnlocked(u8 itemIndex) {
     return 1;
 }
 
-void renderGalleryViewerContent(ViewerState *arg0) {
+void renderGalleryViewerContent(GalleryViewerState *arg0) {
     s32 *new_var2;
-    GalleryAlloc *alloc;
+    GalleryMenuState *alloc;
     GalleryItemEntry *item;
     s8 new_var;
     s32 i;
@@ -1077,28 +936,28 @@ void renderGalleryViewerContent(ViewerState *arg0) {
     void *tableEntry;
     alloc = getCurrentAllocation();
     category = &gGalleryCategories[alloc->selectedOption];
-    if (arg0->menuState < 5) {
-        if (arg0->menuState > 0) {
-            arg0->unk10 += arg0->unk14;
-            if (0xFF0000 < arg0->unk10) {
-                arg0->unk10 = 0xFF0000;
-                arg0->unk14 = (s32)0xFFF10000;
-            } else if (arg0->unk10 <= 0x77FFFF) {
-                arg0->unk10 = 0x780000;
-                arg0->unk14 = 0xF0000;
+    if (arg0->state < 5) {
+        if (arg0->state > 0) {
+            arg0->pageIndicatorAlpha += arg0->pageIndicatorAlphaVelocity;
+            if (0xFF0000 < arg0->pageIndicatorAlpha) {
+                arg0->pageIndicatorAlpha = 0xFF0000;
+                arg0->pageIndicatorAlphaVelocity = (s32)0xFFF10000;
+            } else if (arg0->pageIndicatorAlpha <= 0x77FFFF) {
+                arg0->pageIndicatorAlpha = 0x780000;
+                arg0->pageIndicatorAlphaVelocity = 0xF0000;
             }
-            arg0->unk8 += arg0->unkC;
-            if (0xFF0000 < arg0->unk8) {
-                arg0->unk8 = 0xFF0000;
-                arg0->unkC = (s32)0xFFF10000;
-            } else if (arg0->unk8 <= 0x77FFFF) {
-                arg0->unk8 = 0x780000;
-                arg0->unkC = 0xF0000;
+            arg0->cursorAlpha += arg0->cursorAlphaVelocity;
+            if (0xFF0000 < arg0->cursorAlpha) {
+                arg0->cursorAlpha = 0xFF0000;
+                arg0->cursorAlphaVelocity = (s32)0xFFF10000;
+            } else if (arg0->cursorAlpha <= 0x77FFFF) {
+                arg0->cursorAlpha = 0x780000;
+                arg0->cursorAlphaVelocity = 0xF0000;
             }
-            if (arg0->selectedOption == 0) {
-                arg0->unk14 = (s32)0xFFF10000;
+            if (arg0->navigationState == 0) {
+                arg0->pageIndicatorAlphaVelocity = (s32)0xFFF10000;
             } else {
-                arg0->unkC = (s32)0xFFF10000;
+                arg0->cursorAlphaVelocity = (s32)0xFFF10000;
             }
             if (alloc->selectedOption == 3) {
                 sp34 = 7;
@@ -1112,31 +971,31 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                 if (item->labelIndex != (-1)) {
                     new_var2 = gViewerStateConfig;
                     configVal = *new_var2;
-                    alloc->labelEntries[i].x = ((s8)item->x) + sp34;
+                    alloc->itemLabels[i].x = ((s8)item->x) + sp34;
                     new_var = (s8)item->y;
-                    alloc->labelEntries[i].config = configVal;
-                    alloc->labelEntries[i].y = new_var + sp3C;
-                    alloc->labelEntries[i].label = (s32)gGalleryLabelPtrs[item->labelIndex];
+                    alloc->itemLabels[i].palette = configVal;
+                    alloc->itemLabels[i].y = new_var + sp3C;
+                    alloc->itemLabels[i].string = (u8 *)gGalleryLabelPtrs[item->labelIndex];
                     if (isGalleryItemUnlocked(i)) {
-                        alloc->labelEntries[i].alpha = 0xFF;
+                        alloc->itemLabels[i].shade.value = 0xFF;
                     } else {
-                        alloc->labelEntries[i].alpha = 0x64;
+                        alloc->itemLabels[i].shade.value = 0x64;
                     }
-                    enqueueCallbackBySlotIndex(2, 4, renderTextColored, &alloc->labelEntries[i]);
+                    enqueueCallbackBySlotIndex(2, 4, renderTextColored, &alloc->itemLabels[i]);
                 }
             }
 
-            item = &category->items[arg0->menuType];
-            alloc->unkB26 = arg0->unk8 >> 16;
-            alloc->unkB1C = (s8)item->x;
-            alloc->unkB1E = (s8)item->y;
+            item = &category->items[arg0->cursorIndex];
+            alloc->selectionCursor.color.paletteAndAlpha = arg0->cursorAlpha >> 16;
+            alloc->selectionCursor.x = (s8)item->x;
+            alloc->selectionCursor.y = (s8)item->y;
             if (alloc->selectedOption == 3) {
-                alloc->unkB24 = 0xB;
+                alloc->selectionCursor.frameIndex = 0xB;
             } else {
-                alloc->unkB24 = 0xA;
+                alloc->selectionCursor.frameIndex = 0xA;
             }
-            if (arg0->selectedOption == 0) {
-                enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->unkB1C);
+            if (arg0->navigationState == 0) {
+                enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->selectionCursor);
             }
             if (alloc->selectedOption == 2) {
                 sp3C = 4;
@@ -1147,78 +1006,78 @@ void renderGalleryViewerContent(ViewerState *arg0) {
             }
             for (i = 0; i < category->count; i++) {
                 item = &category->items[i];
-                alloc->spriteSlots[i].x = ((s8)item->x) + sp34;
-                alloc->spriteSlots[i].y = ((s8)item->y) + sp3C;
-                alloc->spriteSlots[i].frameIndex = (s8)item->spriteFrame;
+                alloc->itemSprites[i].x = ((s8)item->x) + sp34;
+                alloc->itemSprites[i].y = ((s8)item->y) + sp3C;
+                alloc->itemSprites[i].frameIndex = (s8)item->spriteFrame;
                 if (isGalleryItemUnlocked(i & 0xFF) & 0xFF) {
-                    alloc->spriteSlots[i].shade = 0xFF;
-                    alloc->spriteSlots[i].transparency = 0;
+                    alloc->itemSprites[i].color.paletteAndAlpha = 0xFF;
+                    alloc->itemSprites[i].overridePaletteCount = 0;
                 } else if (alloc->selectedOption == 2) {
-                    alloc->spriteSlots[i].transparency = 0x14;
-                    alloc->spriteSlots[i].shade = 0x96;
+                    alloc->itemSprites[i].overridePaletteCount = 0x14;
+                    alloc->itemSprites[i].color.paletteAndAlpha = 0x96;
                 } else {
-                    alloc->spriteSlots[i].transparency = 0;
-                    alloc->spriteSlots[i].shade = 0x64;
+                    alloc->itemSprites[i].overridePaletteCount = 0;
+                    alloc->itemSprites[i].color.paletteAndAlpha = 0x64;
                 }
-                enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->spriteSlots[i]);
+                enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->itemSprites[i]);
                 if (alloc->selectedOption == 2) {
-                    alloc->extraSpriteSlots[i].x = (s8)item->x;
-                    alloc->extraSpriteSlots[i].y = (s8)item->y;
+                    alloc->boardOverlaySprites[i].x = (s8)item->x;
+                    alloc->boardOverlaySprites[i].y = (s8)item->y;
                     if (isGalleryItemUnlocked(i & 0xFF) & 0xFF) {
-                        alloc->extraSpriteSlots[i].alpha = 0xFF;
+                        alloc->boardOverlaySprites[i].color.paletteAndAlpha = 0xFF;
                     } else {
-                        alloc->extraSpriteSlots[i].alpha = 0x96;
+                        alloc->boardOverlaySprites[i].color.paletteAndAlpha = 0x96;
                     }
-                    enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->extraSpriteSlots[i]);
+                    enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->boardOverlaySprites[i]);
                 }
             }
 
-            alloc->unkB36 = (s16)(arg0->unk10 >> 16);
-            enqueueCallbackBySlotIndex(2, 4, renderTextSprite, alloc->unkB2C);
-            item = &category->items[arg0->menuType];
-            if (arg0->selectedOption == 0) {
-                if (isGalleryItemUnlocked(arg0->menuType & 0xFF) & 0xFF) {
+            alloc->pageIndicator.color.paletteAndAlpha = (s16)(arg0->pageIndicatorAlpha >> 16);
+            enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->pageIndicator);
+            item = &category->items[arg0->cursorIndex];
+            if (arg0->navigationState == 0) {
+                if (isGalleryItemUnlocked(arg0->cursorIndex & 0xFF) & 0xFF) {
                     switch (alloc->selectedOption) {
                         case 0:
                             for (i = 0; i < item->numExtra; i++) {
-                                enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->unkACC[i * 0x10]);
+                                enqueueCallbackBySlotIndex(2, 4, renderTextSprite, &alloc->extraItemSprites[i]);
                             }
 
                             break;
 
                         case 1:
-                            stat1 = getItemStat1((u8)arg0->menuType);
-                            stat2 = getItemStat2((u8)arg0->menuType);
+                            stat1 = getItemStat1((u8)arg0->cursorIndex);
+                            stat2 = getItemStat2((u8)arg0->cursorIndex);
                             sprintf(
-                                (char *)alloc->unkCA4,
+                                (char *)alloc->itemStatsBuffer,
                                 "SPEED=%2d TURN=%2d JUMP=%2d",
                                 stat1 & 0xFF,
                                 stat2,
-                                getItemStat3((s32)((u8)arg0->menuType)) & 0xFF
+                                getItemStat3((s32)((u8)arg0->cursorIndex)) & 0xFF
                             );
-                            enqueueCallbackBySlotIndex(2, 4, renderTextPalette, alloc->unkC98);
+                            enqueueCallbackBySlotIndex(2, 4, renderTextPalette, &alloc->itemStatsText);
                             break;
 
                         case 3:
                             if (gGlobalFrameCounter & 8) {
-                                alloc->unkB50 = 0x30;
+                                alloc->flashingPrizeIcon.frameIndex = 0x30;
                             } else {
-                                alloc->unkB50 = 0x31;
+                                alloc->flashingPrizeIcon.frameIndex = 0x31;
                             }
-                            enqueueCallbackBySlotIndex(2, 4, renderSpriteFrame, alloc->unkB48);
-                            enqueueCallbackBySlotIndex(2, 4, renderSpriteFrame, alloc->unkB3C);
+                            enqueueCallbackBySlotIndex(2, 4, renderSpriteFrame, &alloc->flashingPrizeIcon);
+                            enqueueCallbackBySlotIndex(2, 4, renderSpriteFrame, &alloc->prizeIcon);
                             break;
                     }
 
-                    tableArg1 = item->pad[0];
-                    tableArg2 = item->pad[1];
+                    tableArg1 = item->textTable.row;
+                    tableArg2 = item->textTable.column;
                 } else {
                     tableArg1 = 0xC;
                     tableArg2 = 0;
                 }
                 enqueueTextLayout(
-                    alloc->unk8,
-                    getTable2DEntry(alloc->unkC, tableArg1, tableArg2),
+                    alloc->textRenderer,
+                    getTable2DEntry(alloc->textTable, tableArg1, tableArg2),
                     -0x68,
                     0xC,
                     0xFF,
@@ -1228,18 +1087,18 @@ void renderGalleryViewerContent(ViewerState *arg0) {
                     3
                 );
             }
-            enqueueCallbackBySlotIndex(2, 3, renderTiledTextureMap, alloc->unk5F8);
+            enqueueCallbackBySlotIndex(2, 3, renderTiledTextureMap, &alloc->overlayTileMap);
         }
     }
 }
 
-void startViewerFadeIn(GalleryMenuState *arg0) {
-    void *alloc = getCurrentAllocation();
-    arg0->menuState = 1;
+void startViewerFadeIn(GalleryViewerState *arg0) {
+    GalleryMenuState *alloc = getCurrentAllocation();
+    arg0->state = 1;
     beginMenuFadeIn(alloc);
 }
 
-void waitForViewerFadeIn(GalleryMenuState *arg0) {
+void waitForViewerFadeIn(GalleryViewerState *arg0) {
     GalleryMenuState *alloc = getCurrentAllocation();
     s16 temp;
 
@@ -1248,13 +1107,13 @@ void waitForViewerFadeIn(GalleryMenuState *arg0) {
         if (alloc->menuModel->unk16 == 0x15B) {
             setMenuAnimation(alloc, 0x15C, 0x90, 1, -1);
         }
-        arg0->menuState = 2;
+        arg0->state = 2;
     } else {
         alloc->fadeTimer = temp - 1;
     }
 }
 
-void handleViewerGridNavigation_TwoPage(FD98_struct *arg0) {
+void handleViewerGridNavigation_TwoPage(GalleryViewerState *arg0) {
     s32 inputs;
     s8 temp;
     u8 val;
@@ -1287,13 +1146,13 @@ void handleViewerGridNavigation_TwoPage(FD98_struct *arg0) {
             arg0->cursorIndex = val - 7;
         } else {
             if (val == 0) {
-                arg0->pageUpCursorDest = val + 8;
-                arg0->pageDownCursorDest = arg0->cursorIndex;
+                arg0->pageUpCursorDestination = val + 8;
+                arg0->pageDownCursorDestination = arg0->cursorIndex;
             } else {
-                arg0->pageUpCursorDest = val + 7;
-                arg0->pageDownCursorDest = arg0->cursorIndex;
+                arg0->pageUpCursorDestination = val + 7;
+                arg0->pageDownCursorDestination = arg0->cursorIndex;
             }
-            arg0->navigationMode = 1;
+            arg0->navigationState = 1;
         }
         playSoundEffect(0x2B);
         return;
@@ -1306,15 +1165,15 @@ void handleViewerGridNavigation_TwoPage(FD98_struct *arg0) {
         } else if ((u8)(temp - 1) < 7u) {
             arg0->cursorIndex = temp + 7;
         } else {
-            arg0->pageUpCursorDest = temp;
-            arg0->navigationMode = 1;
-            arg0->pageDownCursorDest = arg0->cursorIndex - 7;
+            arg0->pageUpCursorDestination = temp;
+            arg0->navigationState = 1;
+            arg0->pageDownCursorDestination = arg0->cursorIndex - 7;
         }
         playSoundEffect(0x2B);
     }
 }
 
-void handleViewerGridNavigation_TwoColumn(FD98_struct *arg0) {
+void handleViewerGridNavigation_TwoColumn(GalleryViewerState *arg0) {
     s32 inputs;
     s8 temp2;
     s8 newVal;
@@ -1354,9 +1213,9 @@ void handleViewerGridNavigation_TwoColumn(FD98_struct *arg0) {
         if ((u8)temp2 < 9u) {
             arg0->cursorIndex = temp2;
         } else {
-            arg0->pageUpCursorDest = val + 9;
-            arg0->navigationMode = 1;
-            arg0->pageDownCursorDest = arg0->cursorIndex;
+            arg0->pageUpCursorDestination = val + 9;
+            arg0->navigationState = 1;
+            arg0->pageDownCursorDestination = arg0->cursorIndex;
         }
         playSoundEffect(0x2B);
         return;
@@ -1367,15 +1226,15 @@ void handleViewerGridNavigation_TwoColumn(FD98_struct *arg0) {
         if (val < 9u) {
             arg0->cursorIndex = val + 9;
         } else {
-            arg0->pageUpCursorDest = val;
-            arg0->navigationMode = 1;
-            arg0->pageDownCursorDest = arg0->cursorIndex - 9;
+            arg0->pageUpCursorDestination = val;
+            arg0->navigationState = 1;
+            arg0->pageDownCursorDestination = arg0->cursorIndex - 9;
         }
         playSoundEffect(0x2B);
     }
 }
 
-void handleViewerGridNavigation_SingleRow(FD98_struct *arg0) {
+void handleViewerGridNavigation_SingleRow(GalleryViewerState *arg0) {
     s32 inputs;
 
     inputs = gControllerInputs[0];
@@ -1405,14 +1264,14 @@ void handleViewerGridNavigation_SingleRow(FD98_struct *arg0) {
     }
     if (inputs & 0x20400) {
     set_values:
-        arg0->pageUpCursorDest = arg0->cursorIndex;
-        arg0->pageDownCursorDest = arg0->cursorIndex;
-        arg0->navigationMode = 1;
+        arg0->pageUpCursorDestination = arg0->cursorIndex;
+        arg0->pageDownCursorDestination = arg0->cursorIndex;
+        arg0->navigationState = 1;
         playSoundEffect(0x2B);
     }
 }
 
-void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
+void handleViewerGridNavigation_ThreeRow(GalleryViewerState *arg0) {
     u8 sp30[0xC];
     GalleryMenuState *alloc;
     GalleryItemEntry *entry;
@@ -1477,9 +1336,9 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         if ((u8)temp < 0x12u) {
             arg0->cursorIndex = temp;
         } else {
-            arg0->pageUpCursorDest = val + 0x12;
-            arg0->navigationMode = 1;
-            arg0->pageDownCursorDest = arg0->cursorIndex;
+            arg0->pageUpCursorDestination = val + 0x12;
+            arg0->navigationState = 1;
+            arg0->pageDownCursorDestination = arg0->cursorIndex;
         }
         playSoundEffect(0x2B);
         return;
@@ -1490,15 +1349,15 @@ void handleViewerGridNavigation_ThreeRow(FD98_struct *arg0) {
         if (val < 0x12u) {
             arg0->cursorIndex = val + 9;
         } else {
-            arg0->pageUpCursorDest = val;
-            arg0->navigationMode = 1;
-            arg0->pageDownCursorDest = arg0->cursorIndex - 0x12;
+            arg0->pageUpCursorDestination = val;
+            arg0->navigationState = 1;
+            arg0->pageDownCursorDestination = arg0->cursorIndex - 0x12;
         }
         playSoundEffect(0x2B);
     }
 }
 
-void handleViewerGridNavigation_Prize(FD98_struct *arg0) {
+void handleViewerGridNavigation_Prize(GalleryViewerState *arg0) {
     s32 inputs;
     s8 temp;
     u8 val;
@@ -1531,13 +1390,13 @@ void handleViewerGridNavigation_Prize(FD98_struct *arg0) {
             arg0->cursorIndex = val - 7;
         } else {
             if (val == 0) {
-                arg0->pageUpCursorDest = val + 8;
-                arg0->pageDownCursorDest = arg0->cursorIndex;
+                arg0->pageUpCursorDestination = val + 8;
+                arg0->pageDownCursorDestination = arg0->cursorIndex;
             } else {
-                arg0->pageUpCursorDest = val + 7;
-                arg0->pageDownCursorDest = arg0->cursorIndex;
+                arg0->pageUpCursorDestination = val + 7;
+                arg0->pageDownCursorDestination = arg0->cursorIndex;
             }
-            arg0->navigationMode = 1;
+            arg0->navigationState = 1;
         }
         playSoundEffect(0x2B);
         return;
@@ -1550,9 +1409,9 @@ void handleViewerGridNavigation_Prize(FD98_struct *arg0) {
         } else if ((u8)(temp - 1) < 7u) {
             arg0->cursorIndex = temp + 7;
         } else {
-            arg0->pageUpCursorDest = temp;
-            arg0->navigationMode = 1;
-            arg0->pageDownCursorDest = arg0->cursorIndex - 7;
+            arg0->pageUpCursorDestination = temp;
+            arg0->navigationState = 1;
+            arg0->pageDownCursorDestination = arg0->cursorIndex - 7;
         }
         playSoundEffect(0x2B);
     }
@@ -1566,8 +1425,8 @@ const u8 D_8009DF6C_9EB6C[] = {
 };
 // clang-format on
 
-void handleViewerInput(FD98_struct *arg0) {
-    FD98_struct *alloc;
+void handleViewerInput(GalleryViewerState *arg0) {
+    GalleryMenuState *alloc;
     s32 inputs;
     s8 temp;
     u8 newVal;
@@ -1577,13 +1436,13 @@ void handleViewerInput(FD98_struct *arg0) {
     inputs = gControllerInputs[0];
 
     if (inputs & B_BUTTON) {
-        setMenuAnimation((GalleryMenuState *)alloc, 0x90, 0x90, -1, -1);
+        setMenuAnimation(alloc, 0x90, 0x90, -1, -1);
         sound = 0x2E;
-        arg0->viewerState = 3;
+        arg0->state = 3;
         goto play_sound;
     }
 
-    temp = arg0->navigationMode;
+    temp = arg0->navigationState;
     if (temp == 0) {
         goto do_switch;
     }
@@ -1593,7 +1452,7 @@ void handleViewerInput(FD98_struct *arg0) {
     return;
 
 do_switch:
-    switch (alloc->navigationMode) {
+    switch (alloc->selectedOption) {
         case 0:
             handleViewerGridNavigation_TwoPage(arg0);
             break;
@@ -1614,33 +1473,33 @@ do_switch:
 
 button_check:
     if (inputs & A_BUTTON) {
-        arg0->viewerState = 3;
-        setMenuAnimation((GalleryMenuState *)alloc, 0x90, 0x90, -1, -1);
+        arg0->state = 3;
+        setMenuAnimation(alloc, 0x90, 0x90, -1, -1);
         sound = 0x2E;
         goto play_sound;
     }
     if (inputs & 0x10800) {
-        newVal = arg0->pageUpCursorDest;
+        newVal = arg0->pageUpCursorDestination;
         goto set_2b;
     }
     if (inputs & 0x20400) {
-        newVal = arg0->pageDownCursorDest;
+        newVal = arg0->pageDownCursorDestination;
     set_2b:
         sound = 0x2B;
-        arg0->navigationMode = 0;
+        arg0->navigationState = 0;
         arg0->cursorIndex = newVal;
     play_sound:
         playSoundEffect(sound);
     }
 }
 
-void startViewerFadeOut(GalleryMenuState *arg0) {
-    void *alloc = getCurrentAllocation();
+void startViewerFadeOut(GalleryViewerState *arg0) {
+    GalleryMenuState *alloc = getCurrentAllocation();
     beginMenuFadeOut(alloc);
-    arg0->menuState = 4;
+    arg0->state = 4;
 }
 
-s32 updateViewerFadeOut(GalleryMenuState *arg0) {
+s32 updateViewerFadeOut(GalleryViewerState *arg0) {
     GalleryMenuState *alloc = getCurrentAllocation();
     s16 temp = alloc->fadeTimer;
 
@@ -1652,22 +1511,22 @@ s32 updateViewerFadeOut(GalleryMenuState *arg0) {
     return 0;
 }
 
-void initGalleryViewer(FD98_struct *arg0) {
+void initGalleryViewer(GalleryViewerState *arg0) {
     getCurrentAllocation();
     setCleanupCallback(onGalleryViewerCleanup);
-    arg0->unk10 = 0x780000;
-    arg0->unk14 = 0x0F0000;
-    arg0->unk8 = 0xFF0000;
-    arg0->viewerState = 0;
-    arg0->navigationMode = 0;
+    arg0->pageIndicatorAlpha = 0x780000;
+    arg0->pageIndicatorAlphaVelocity = 0x0F0000;
+    arg0->cursorAlpha = 0xFF0000;
+    arg0->state = 0;
+    arg0->navigationState = 0;
     arg0->cursorIndex = 0;
-    arg0->unkC = 0xFFF10000;
+    arg0->cursorAlphaVelocity = 0xFFF10000;
     setCallback(updateGalleryViewer);
 }
 
-void updateGalleryViewer(GalleryMenuState *arg0) {
+void updateGalleryViewer(GalleryViewerState *arg0) {
     getCurrentAllocation();
-    switch (arg0->menuState) {
+    switch (arg0->state) {
         case 0:
             startViewerFadeIn(arg0);
             break;
@@ -1675,7 +1534,7 @@ void updateGalleryViewer(GalleryMenuState *arg0) {
             waitForViewerFadeIn(arg0);
             break;
         case 2:
-            handleViewerInput((FD98_struct *)arg0);
+            handleViewerInput(arg0);
             break;
         case 3:
             startViewerFadeOut(arg0);
@@ -1686,7 +1545,7 @@ void updateGalleryViewer(GalleryMenuState *arg0) {
             }
             break;
     }
-    renderGalleryViewerContent((ViewerState *)arg0);
+    renderGalleryViewerContent(arg0);
 }
 
 void onGalleryViewerCleanup(void) {

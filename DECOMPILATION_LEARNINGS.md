@@ -769,3 +769,17 @@ Scheduled-task producers should also use the complete task state declared by the
 cutscene system's two-field wait-task view was the prefix of `CutsceneWaitMenuState`, while the menu's local
 16-bit byte union was already represented by `TextLayoutColorValue`. Consolidating both types exposes the
 manager, table, text-render resources, panel dimensions, and color channels without padded local overlays.
+
+## Consolidate UI Allocation Views Around Renderer-Owned Types
+
+The gallery used separate menu, viewer-render, and allocation structs for the same `0xCC0` mode allocation,
+plus two identical viewer-task prefixes. One `GalleryMenuState` and one `GalleryViewerState` expose which
+fields belong to the persistent screen and which belong to the scheduled viewer task. This also prevents a
+prefix-compatible cast from disguising the gallery's selected category as the viewer task's navigation state.
+
+Most of the gallery allocation is shared renderer state: `TileMapScrollRenderState`, `FrameSpriteEntry`,
+`TextRenderArg`, `SpriteRenderArg`, `ColoredTextRenderArg`, `TextData`, and `Transform3D`. Match local fields by
+exact offset before assigning semantics. In particular, the gallery's byte at offset `0x0D` of each item sprite
+is `TextRenderArg.overridePaletteCount`, not transparency (which is at `0x0E`). A plausible local field name can
+therefore be wrong even when its surrounding struct size matches. Packed padding-and-shade halfwords should be
+represented by a union in the shared renderer type so KMC can retain the original `sh` store.
