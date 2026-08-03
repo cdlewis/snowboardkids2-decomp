@@ -48,6 +48,7 @@ LIBKMC_S_FILES = $(foreach dir,lib/libkmc,$(wildcard $(dir)/*.s))
 O_FILES := $(shell grep -E 'build\/(asm|assets|src|src\/entrypoint|bin|lib\/libkmc)\/.+\.o' snowboardkids2.ld -o | sort | uniq)
 COURSE_ASSET_SOURCES := $(filter-out $(COURSE_ASSET_SIZE_HEADER),$(shell find assets/courses -type f 2>/dev/null))
 ANIMATIONDATA_SOURCES := $(filter-out $(ANIMATIONDATA_ASSET_SIZE_HEADER),$(shell find assets/animationdata -type f 2>/dev/null))
+SPRITE_SHEET_SOURCES := $(shell find assets/sprite_sheets -type f 2>/dev/null)
 
 # Tools
 
@@ -198,6 +199,7 @@ TILED_BACKGROUND_PACK = $(PYTHON) $(TOOLS_DIR)/tiled_background_pack.py
 TRACK_SECTOR_MESH_PACK = $(PYTHON) $(TOOLS_DIR)/track_sector_mesh_pack.py
 GOLD_COIN_POSITIONS_PACK = $(PYTHON) $(TOOLS_DIR)/gold_coin_positions_pack.py
 ITEM_BOX_POSITIONS_PACK = $(PYTHON) $(TOOLS_DIR)/item_box_positions_pack.py
+SPRITE_SHEET_PACK = $(PYTHON) $(TOOLS_DIR)/sprite_sheet_pack.py
 COURSE_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/course_asset_sizes.py
 MODELPAYLOAD_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/modelpayload_asset_sizes.py
 ANIMATIONDATA_ASSET_SIZES = $(PYTHON) $(TOOLS_DIR)/animationdata_asset_sizes.py
@@ -286,6 +288,12 @@ $(BUILD_DIR)/assets/course_positions/item_boxes/%.o: assets/course_positions/ite
 	$(PRINTF) "[$(GREEN) course  $(NO_COL)]  $<\n"
 	$(V)$(ITEM_BOX_POSITIONS_PACK) $< --out $(BUILD_DIR)/assets/course_positions/item_boxes/$*.sno
 	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/course_positions/item_boxes/$*.sno
+
+$(BUILD_DIR)/assets/sprite_sheets/%.o: assets/sprite_sheets/%.yaml $(TOOLS_DIR)/sprite_sheet_pack.py $(TOOLS_DIR)/sprite_sheet_common.py $(TOOLS_DIR)/course_assets_common.py $(TOOLS_DIR)/modelpayload_common.py $(TOOLS_DIR)/sno.py $(SPRITE_SHEET_SOURCES)
+	@mkdir -p $(shell dirname $@)
+	$(PRINTF) "[$(GREEN) sprites $(NO_COL)]  $<\n"
+	$(V)$(SPRITE_SHEET_PACK) $< --out $(BUILD_DIR)/assets/sprite_sheets/$*.sno
+	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/sprite_sheets/$*.sno
 
 $(BUILD_DIR)/%.o: %.s
 	@mkdir -p $(shell dirname $@)

@@ -3322,9 +3322,21 @@ segments:
     start: 0x422C60
 
   - name: menuUiSprites
-    type: bin
+    type: sprite_sheet
     vram: 0
     start: 0x4237C0
+    decompressed_size: 0x8A08
+    frame_names:
+      0x0C: board_rating_star_very_sad_16x16
+      0x0D: board_rating_star_sad_16x16
+      0x0E: board_rating_star_neutral_16x16
+      0x0F: board_rating_star_happy_16x16
+      0x10: board_rating_star_very_happy_16x16
+      0x11: board_rating_star_very_sad_24x24
+      0x12: board_rating_star_sad_24x24
+      0x13: board_rating_star_neutral_24x24
+      0x14: board_rating_star_happy_24x24
+      0x15: board_rating_star_very_happy_24x24
 
   - name: playerCountSelectSprites
     type: bin
