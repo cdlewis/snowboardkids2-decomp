@@ -23,24 +23,24 @@ extern ALGlobals __libmus_alglobals;
 extern s32 __muscontrol_flag;
 
 // bss
-char gAudioManagerStack[0x2000] __attribute__((section(".bss")));
-u8 gDriveRomInitialized __attribute__((section(".bss")));
-AudioDmaBuffer *gActiveListHead __attribute__((section(".bss")));
-AudioDmaBuffer *D_800A6468_A7048 __attribute__((section(".bss")));
-u32 gMinAudioFrameSize __attribute__((section(".bss")));
-s32 gAudioBufferSize __attribute__((section(".bss")));
-s32 D_800A6474_A7054 __attribute__((section(".bss")));
-s32 gAudioRspCmdCount __attribute__((section(".bss")));
-static s32 D_800A647C_A705C __attribute__((section(".bss")));
-OSMesgQueue gAudioMsgQueue __attribute__((section(".bss")));
-AudioDmaBuffer *gAudioNodePool __attribute__((section(".bss")));
-OSIoMesg *gAudioDmaMessages __attribute__((section(".bss")));
-void **gAudioMsgBuffer __attribute__((section(".bss")));
-u32 gMaxVoices __attribute__((section(".bss")));
-s32 gAudioBufferPadding __attribute__((section(".bss")));
-OSPiHandle *gCartRomHandle __attribute__((section(".bss")));
-OSPiHandle *gDriveRomHandle __attribute__((section(".bss")));
-static u8 D_800A64B4_A7094[0xC] __attribute__((section(".bss")));
+char gAudioManagerStack[0x2000] __attribute__((section(".bss"))) = { 0 };
+u8 gDriveRomInitialized __attribute__((section(".bss"))) = 0;
+AudioDmaBuffer *gActiveListHead __attribute__((section(".bss"))) = 0;
+AudioDmaBuffer *D_800A6468_A7048 __attribute__((section(".bss"))) = 0;
+u32 gMinAudioFrameSize __attribute__((section(".bss"))) = 0;
+s32 gAudioBufferSize __attribute__((section(".bss"))) = 0;
+s32 D_800A6474_A7054 __attribute__((section(".bss"))) = 0;
+s32 gAudioRspCmdCount __attribute__((section(".bss"))) = 0;
+static s32 D_800A647C_A705C __attribute__((section(".bss"))) = 0;
+OSMesgQueue gAudioMsgQueue __attribute__((section(".bss"))) = { 0 };
+AudioDmaBuffer *gAudioNodePool __attribute__((section(".bss"))) = 0;
+OSIoMesg *gAudioDmaMessages __attribute__((section(".bss"))) = 0;
+void **gAudioMsgBuffer __attribute__((section(".bss"))) = 0;
+u32 gMaxVoices __attribute__((section(".bss"))) = 0;
+s32 gAudioBufferPadding __attribute__((section(".bss"))) = 0;
+OSPiHandle *gCartRomHandle __attribute__((section(".bss"))) = 0;
+OSPiHandle *gDriveRomHandle __attribute__((section(".bss"))) = 0;
+static u8 D_800A64B4_A7094[0xC] __attribute__((section(".bss"))) = { 0 };
 
 // data
 u32 gCurrentFrame = 0;
@@ -54,8 +54,6 @@ extern void CustomInit(void *, ALSynConfig *);
 
 s32 loadAudioDataWithCache(s32, s32);
 void handleAudioUnderrun(void *);
-void processAudioNodeList(void);
-s32 audioCreateAndScheduleTask(AudioInfo *, AudioInfo *);
 void *initAudioDriveAndGetLoader(void *arg0);
 void audioManagerThread(void *);
 

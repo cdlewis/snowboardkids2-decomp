@@ -28,7 +28,7 @@ struct AudioInfo {
     /* 0x08 */ OSTask task;
     /* 0x48 */ OSMesgQueue *messageQueue;
     /* 0x4C */ OSMesg message;
-    /* 0x50 */ AudioTaskDoneMessage doneMessage;
+    /* 0x50 */ AudioTaskDoneMessage doneMessage; // initAudioManager sets info to this AudioInfo.
     /* 0x58 */ u8 _pad58[0x18];
 };
 
@@ -43,6 +43,13 @@ typedef struct {
 } AudioManager;
 
 extern AudioManager gAudioManager;
+extern s32 gAudioCmdBufferToggle;
+extern s32 gAudioBufferSize;
+extern s32 gAudioBufferPadding;
+extern u32 gMinAudioFrameSize;
+
+s32 audioCreateAndScheduleTask(AudioInfo *audioTaskDesc, AudioInfo *prevBuffer);
+void processAudioNodeList(void);
 
 void initAudioManager(
     ALSynConfig *config,
