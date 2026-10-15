@@ -347,7 +347,7 @@ void setupTaskSchedulerNodes(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s
     }
 }
 
-void *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) {
+void *scheduleTask(void *callback, u8 taskType, u8 taskId, u8 priority) {
     Node *newNode;
     Node *active;
     Node *freeNxt;
@@ -356,8 +356,8 @@ void *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
     Node *temp;
 
     if (gActiveScheduler) {
-        if (g->counters[nodeType]) {
-            g->counters[nodeType]--;
+        if (g->counters[taskType]) {
+            g->counters[taskType]--;
 
             newNode = gActiveScheduler->freeList;
             active = gActiveScheduler->activeList;
@@ -391,12 +391,12 @@ void *scheduleTask(void *callback, u8 nodeType, u8 identifierFlag, u8 priority) 
                 }
             }
 
-            newNode->unkC = nodeType;
-            newNode->field_D = identifierFlag;
+            newNode->taskType = taskType;
+            newNode->taskId = taskId;
             newNode->priority = priority;
             newNode->callback = callback;
             newNode->cleanupCallback = NULL;
-            newNode->unkE = 1;
+            newNode->state = TASK_STATE_ACTIVE;
             newNode->hasAllocatedMemory = FALSE;
             newNode->unk18 = 0;
 
@@ -416,21 +416,21 @@ s32 getFreeNodeCount(s32 arg0) {
 
 void processActiveTasks(void) {
     for (gDMAOverlay = gActiveScheduler->activeList; gDMAOverlay != 0; gDMAOverlay = gDMAOverlay->next) {
-        switch (gDMAOverlay->unkE) {
+        switch (gDMAOverlay->state) {
             case 0:
                 break;
-            case 1:
+            case TASK_STATE_ACTIVE:
                 while (TRUE) {
                     gDMAOverlay->continueFlag = 0;
                     gDMAOverlay->callback(&gDMAOverlay->payload);
-                    if ((gDMAOverlay->continueFlag != 0) && (gDMAOverlay->unkE == 1)) {
+                    if ((gDMAOverlay->continueFlag != 0) && (gDMAOverlay->state == TASK_STATE_ACTIVE)) {
                         continue;
                     }
                     break;
                 }
                 break;
 
-            case 2:
+            case TASK_STATE_PENDING_CLEANUP:
                 if (gDMAOverlay->cleanupCallback != NULL) {
                     gDMAOverlay->cleanupCallback(&gDMAOverlay->payload);
                 }
@@ -446,18 +446,18 @@ void processActiveTasks(void) {
                 }
                 gDMAOverlay->freeNext = gActiveScheduler->freeList;
                 gActiveScheduler->freeList = gDMAOverlay;
-                gActiveScheduler->counters[gDMAOverlay->unkC]++;
+                gActiveScheduler->counters[gDMAOverlay->taskType]++;
                 break;
 
-            case 3:
+            case TASK_STATE_WAITING_FOR_DMA:
                 if (getNodeOwner(gDMAOverlay->unk1C) == 0) {
-                    gDMAOverlay->unkE = 1;
+                    gDMAOverlay->state = TASK_STATE_ACTIVE;
                 }
                 break;
 
-            case 4:
+            case TASK_STATE_WAITING_FOR_DMA_CLEANUP:
                 if (getNodeOwner(gDMAOverlay->unk1C) == 0) {
-                    gDMAOverlay->unkE = 2;
+                    gDMAOverlay->state = TASK_STATE_PENDING_CLEANUP;
                 }
                 break;
         }
@@ -478,11 +478,11 @@ void setCleanupCallback(void *callback) {
 }
 
 void terminateCurrentTask(void) {
-    u8 temp = gDMAOverlay->unkE - 3;
+    u8 temp = gDMAOverlay->state - TASK_STATE_WAITING_FOR_DMA;
     if (temp < 2) {
-        gDMAOverlay->unkE = 4;
+        gDMAOverlay->state = TASK_STATE_WAITING_FOR_DMA_CLEANUP;
     } else {
-        gDMAOverlay->unkE = 2;
+        gDMAOverlay->state = TASK_STATE_PENDING_CLEANUP;
     }
 }
 
@@ -494,10 +494,10 @@ void terminateAllTasks(void) {
     Node *i;
 
     for (i = gActiveScheduler->activeList; i != NULL; i = i->next) {
-        if ((u32)(i->unkE - 3) < 2) {
-            i->unkE = 4;
+        if ((u32)(i->state - TASK_STATE_WAITING_FOR_DMA) < 2) {
+            i->state = TASK_STATE_WAITING_FOR_DMA_CLEANUP;
         } else {
-            i->unkE = 2;
+            i->state = TASK_STATE_PENDING_CLEANUP;
         }
     }
 }
@@ -506,11 +506,11 @@ void terminateTasksByType(s32 taskType) {
     Node *i;
 
     for (i = gActiveScheduler->activeList; i != NULL; i = i->next) {
-        if (i->unkC == (u8)taskType) {
-            if ((u32)(i->unkE - 3) < 2) {
-                i->unkE = 4;
+        if (i->taskType == (u8)taskType) {
+            if ((u32)(i->state - TASK_STATE_WAITING_FOR_DMA) < 2) {
+                i->state = TASK_STATE_WAITING_FOR_DMA_CLEANUP;
             } else {
-                i->unkE = 2;
+                i->state = TASK_STATE_PENDING_CLEANUP;
             }
         }
     }
@@ -520,11 +520,11 @@ void terminateTasksByTypeAndID(s32 taskType, s32 taskID) {
     Node *i;
 
     for (i = gActiveScheduler->activeList; i != NULL; i = i->next) {
-        if (i->unkC == (u8)taskType && i->field_D == (u8)taskID) {
-            if ((u32)(i->unkE - 3) < 2) {
-                i->unkE = 4;
+        if (i->taskType == (u8)taskType && i->taskId == (u8)taskID) {
+            if ((u32)(i->state - TASK_STATE_WAITING_FOR_DMA) < 2) {
+                i->state = TASK_STATE_WAITING_FOR_DMA_CLEANUP;
             } else {
-                i->unkE = 2;
+                i->state = TASK_STATE_PENDING_CLEANUP;
             }
         }
     }
@@ -548,10 +548,10 @@ void *loadUncompressedData(void *start, void *end) {
     } else {
         allocatedSpaceStart = queueUncompressedDmaTransfer(start, end);
         if (getNodeOwner(allocatedSpaceStart) != 0) {
-            if (((u8)(gDMAOverlay->unkE - 3)) >= 2) {
+            if (((u8)(gDMAOverlay->state - TASK_STATE_WAITING_FOR_DMA)) >= 2) {
                 gDMAOverlay->unk18 = getNodeSequenceNumber(allocatedSpaceStart);
                 gDMAOverlay->unk1C = allocatedSpaceStart;
-                gDMAOverlay->unkE = 3;
+                gDMAOverlay->state = TASK_STATE_WAITING_FOR_DMA;
             } else {
                 if (gDMAOverlay->unk18 < getNodeSequenceNumber(allocatedSpaceStart)) {
                     gDMAOverlay->unk18 = getNodeSequenceNumber(allocatedSpaceStart);
@@ -585,10 +585,10 @@ void *loadCompressedData(void *romStart, void *romEnd, s32 size) {
     } else {
         allocatedSpaceStart = queueCompressedDmaTransfer(romStart, romEnd, size);
         if (getNodeOwner(allocatedSpaceStart) != NULL) {
-            if (gDMAOverlay->unkE < 3 || gDMAOverlay->unkE >= 5) {
+            if (gDMAOverlay->state < TASK_STATE_WAITING_FOR_DMA || gDMAOverlay->state >= 5) {
                 gDMAOverlay->unk18 = getNodeSequenceNumber(allocatedSpaceStart);
                 gDMAOverlay->unk1C = allocatedSpaceStart;
-                gDMAOverlay->unkE = 3;
+                gDMAOverlay->state = TASK_STATE_WAITING_FOR_DMA;
             } else {
                 if (gDMAOverlay->unk18 < getNodeSequenceNumber(allocatedSpaceStart)) {
                     gDMAOverlay->unk18 = getNodeSequenceNumber(allocatedSpaceStart);
@@ -608,10 +608,10 @@ void *loadDataSegment(void *start, void *end, s32 size, void *dramAddr) {
     if (gDMAOverlay != NULL) {
         var_s0 = queueDirectDmaTransfer(start, end, size, dramAddr);
         if (getNodeOwner(var_s0) != 0) {
-            if ((u32)(gDMAOverlay->unkE - 3) >= 2U) {
+            if ((u32)(gDMAOverlay->state - TASK_STATE_WAITING_FOR_DMA) >= 2U) {
                 gDMAOverlay->unk18 = getNodeSequenceNumber(var_s0);
                 gDMAOverlay->unk1C = var_s0;
-                gDMAOverlay->unkE = 3;
+                gDMAOverlay->state = TASK_STATE_WAITING_FOR_DMA;
             } else if ((u32)gDMAOverlay->unk18 < (u32)getNodeSequenceNumber(var_s0)) {
                 gDMAOverlay->unk18 = getNodeSequenceNumber(var_s0);
                 gDMAOverlay->unk1C = var_s0;

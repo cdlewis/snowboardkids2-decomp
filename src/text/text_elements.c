@@ -411,8 +411,8 @@ void updateChaseCamera(ChaseCameraState *camera) {
 void spawnChaseCameraTask(u8 playerIdx) {
     Node *node = scheduleTask(initChaseCameraPosition, 1, 0, 0xD2);
     if (node != NULL) {
-        node->unkC = playerIdx;
-        node->field_D = playerIdx;
+        node->taskType = playerIdx;
+        node->taskId = playerIdx;
     }
 }
 

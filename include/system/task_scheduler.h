@@ -5,13 +5,23 @@
 // Bytes from &Node::payload through the end of a scheduler node's inline payload storage.
 #define TASK_NODE_INLINE_PAYLOAD_SIZE 0x100
 
+/* Stored in Node.state as a u8. State 0 is left unnamed: the dispatcher
+ * ignores it, but no assignment establishes its lifecycle role.
+ * Termination during either DMA wait must retain the wait (state 4), so
+ * cleanup and node reuse happen only after the DMA owner releases the buffer.
+ */
+#define TASK_STATE_ACTIVE 1
+#define TASK_STATE_PENDING_CLEANUP 2
+#define TASK_STATE_WAITING_FOR_DMA 3
+#define TASK_STATE_WAITING_FOR_DMA_CLEANUP 4
+
 typedef struct Node {
     /* 0x00 */ struct Node *prev;
     /* 0x04 */ struct Node *next;
     /* 0x08 */ struct Node *freeNext;
-    /* 0x0C */ u8 unkC;
-    /* 0x0D */ u8 field_D;
-    /* 0x0E */ u8 unkE;
+    /* 0x0C */ u8 taskType;
+    /* 0x0D */ u8 taskId;
+    /* 0x0E */ u8 state;
     /* 0x0F */ u8 priority;
     /* 0x10 */ u8 continueFlag;
     /* 0x11 */ u8 hasAllocatedMemory;
