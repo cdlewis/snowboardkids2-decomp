@@ -59,7 +59,7 @@ void renderTiledTextureMap(TileMapScrollRenderState *state) {
     clipLeft = state->clipX;
     xStart = state->x;
 
-    if ((displayList = arenaAlloc16(0x1B30))) {
+    if ((displayList = graphicsAlloc(0x1B30))) {
         displayListHead = displayList;
 
         if (clipLeft < gTextClipAndOffsetData.clipLeft) {

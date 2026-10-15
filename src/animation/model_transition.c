@@ -200,7 +200,7 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
     gDPPipeSync(gDisplayListAllocPtr++);
 
     if (state->n64Transform == 0) {
-        state->n64Transform = arenaAlloc16(0x40);
+        state->n64Transform = graphicsAlloc(0x40);
         if (state->n64Transform == 0) {
             return;
         }

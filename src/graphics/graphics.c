@@ -157,7 +157,7 @@ void restoreViewportOffsets(void);
 void initGraphicsSystem(void);
 void initGraphicsArenas(void);
 void initLinearAllocator(void);
-void initLinearArenaRegions(void);
+void initDisplayListBuffers(void);
 
 void initDisplayBuffers(void) {
     DisplayBufferTask *msg;
@@ -165,7 +165,7 @@ void initDisplayBuffers(void) {
     s32 i;
     Gfx *gfx;
 
-    initLinearArenaRegions();
+    initDisplayListBuffers();
     initLinearAllocator();
     initGraphicsArenas();
 
@@ -322,7 +322,7 @@ void renderFrame(u32 viScanline) {
 
     // Main rendering path setup
     selectGraphicsArena(gCurrentDoubleBufferIndex);
-    linearAllocSelectRegion(gCurrentDoubleBufferIndex);
+    selectDisplayListBuffer(gCurrentDoubleBufferIndex);
     gFrameSkipCounter = __additional_scanline_0;
     gFrameBufferCounters[gCurrentDoubleBufferIndex] = gFrameCounter;
     updateViewportBounds();
@@ -352,7 +352,7 @@ void renderFrame(u32 viScanline) {
                 node = node->renderNext;
             }
 
-            node->graphicsTask = arenaAlloc16(0x50);
+            node->graphicsTask = graphicsAlloc(0x50);
             displayListStart = gDisplayListAllocPtr;
 
             gSPSegment(gDisplayListAllocPtr++, 0, 0);
@@ -412,7 +412,7 @@ void renderFrame(u32 viScanline) {
         for (node = rootNode; node != NULL; node = node->renderNext) {
             gActiveViewport = node;
 
-            if (!isRegionAllocSpaceLow() && node->clipLeft < node->clipRight && node->clipTop < node->clipBottom) {
+            if (!isDisplayListSpaceLow() && node->clipLeft < node->clipRight && node->clipTop < node->clipBottom) {
 
                 if (needsDisplayListSetup) {
                     displayListStart = gDisplayListAllocPtr;
@@ -527,7 +527,7 @@ void renderFrame(u32 viScanline) {
                             continue;
                         }
 
-                        if (isRegionAllocSpaceLow()) {
+                        if (isDisplayListSpaceLow()) {
                             break;
                         }
 
@@ -563,13 +563,13 @@ void renderFrame(u32 viScanline) {
                     }
                 } else {
                     // Allocate Vp (16 bytes), projection matrix (64 bytes), and LookAt matrices (192 bytes)
-                    viewportAlloc = arenaAlloc16(sizeof(node->viewport));
-                    projectionAlloc = arenaAlloc16(sizeof(node->projectionMatrix));
-                    lookAtAlloc = arenaAlloc16(48 * sizeof(s32));
+                    viewportAlloc = graphicsAlloc(sizeof(node->viewport));
+                    projectionAlloc = graphicsAlloc(sizeof(node->projectionMatrix));
+                    lookAtAlloc = graphicsAlloc(48 * sizeof(s32));
 
                     if (node->numLights > 0) {
                         // Allocate light array: numLights + 1 (the +1 is for ambient light)
-                        lightArray = arenaAlloc16((node->numLights + 1) * sizeof(Light));
+                        lightArray = graphicsAlloc((node->numLights + 1) * sizeof(Light));
                         if (lightArray != NULL) {
                             // Keep the Light-sized index separate so IDO adds the typed lights member offset last.
                             // Copy each directional light to the frame arena.
@@ -696,7 +696,7 @@ void renderFrame(u32 viScanline) {
                             continue;
                         }
 
-                        if (isRegionAllocSpaceLow() != 0) {
+                        if (isDisplayListSpaceLow() != 0) {
                             break;
                         }
 
@@ -810,7 +810,7 @@ void selectGraphicsArena(s32 arg0) {
     gGraphicsArenaEnd = (s32)temp_v0 + 0x18000;
 }
 
-void *arenaAlloc16(s32 size) {
+void *graphicsAlloc(s32 size) {
     void *result;
     u32 alignedSize = (size + 0xF) & ~0xF;
     u32 *cur = (u32 *)gGraphicsArenaCurr;
@@ -856,12 +856,12 @@ void *linearAlloc(size_t size) {
     return base;
 }
 
-void *advanceLinearAlloc(s32 arg0) {
-    // ensure next allocation will be aligned (0x8 boundary)
+void *linearAlloc8(s32 arg0) {
+    // Round the allocation size up to eight bytes.
     return linearAlloc((arg0 + 7) & ~7);
 }
 
-void initLinearArenaRegions(void) {
+void initDisplayListBuffers(void) {
     s32 temp;
     void *result;
     u8 nodeExists;
@@ -873,7 +873,7 @@ void initLinearArenaRegions(void) {
     gLinearArenaBuffer = result;
 }
 
-void linearAllocSelectRegion(s32 region) {
+void selectDisplayListBuffer(s32 region) {
     s32 temp_v0;
 
     temp_v0 = gLinearArenaRegionsArray[region];
@@ -882,7 +882,7 @@ void linearAllocSelectRegion(s32 region) {
     gRegionAllocEnd = temp_v0 + BUFFER_SIZE;
 }
 
-s32 isRegionAllocSpaceLow(void) {
+s32 isDisplayListSpaceLow(void) {
     return (u32)(gRegionAllocEnd - (u32)gDisplayListAllocPtr) < 0x1AE1U;
 }
 

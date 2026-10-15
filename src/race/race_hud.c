@@ -2706,7 +2706,7 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
     gDPPipeSync(gDisplayListAllocPtr++);
 
     if (state->transformMatrix == NULL) {
-        state->transformMatrix = arenaAlloc16(0x40);
+        state->transformMatrix = graphicsAlloc(0x40);
         if (state->transformMatrix == NULL) {
             return;
         }

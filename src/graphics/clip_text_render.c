@@ -125,7 +125,7 @@ void renderTintedSpriteGrid(
     tileY = savedY - 8;
 
     if (showIndicator != 0) {
-        SpriteRenderArg *cursor = (SpriteRenderArg *)advanceLinearAlloc(sizeof(SpriteRenderArg));
+        SpriteRenderArg *cursor = (SpriteRenderArg *)linearAlloc8(sizeof(SpriteRenderArg));
         if (cursor != NULL) {
             tileSize = 0x10;
             cursor->x = savedX + (cols * tileSize - tileSize);
@@ -142,7 +142,7 @@ void renderTintedSpriteGrid(
 
     for (row = 0; row <= rows; row++) {
         for (col = 0; col <= cols; col++) {
-            TintedSpriteArg *tile = (TintedSpriteArg *)advanceLinearAlloc(sizeof(TintedSpriteArg));
+            TintedSpriteArg *tile = (TintedSpriteArg *)linearAlloc8(sizeof(TintedSpriteArg));
             if (tile != NULL) {
                 tile->tileMode = 0;
                 tile->overridePaletteCount = 0;

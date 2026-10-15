@@ -194,11 +194,11 @@ extern UcodeEntry microcodeGroups[];
 
 void selectGraphicsArena(s32 index);
 
-void linearAllocSelectRegion(s32 index);
+void selectDisplayListBuffer(s32 index);
 
 void initViewportCallbackPool(ViewportNode *node);
 
-s32 isRegionAllocSpaceLow(void);
+s32 isDisplayListSpaceLow(void);
 
 void resetLinearAllocator(void);
 
@@ -211,9 +211,10 @@ void setViewportFadeValueBySlotIndex(u16 slotIndex, u8 fadeValue, u8 fadeMode);
 /* Pushes onto a layer head; callbacks within a layer therefore execute LIFO. */
 void pushViewportCallbackBySlot(u16 viewportSlot, u8 callbackLayer, void *callback, void *callbackData);
 
-void *arenaAlloc16(s32 size);
+/* Allocates from the selected graphics arena, rounding size up to 16 bytes. */
+void *graphicsAlloc(s32 size);
 
-void *advanceLinearAlloc(s32 size);
+void *linearAlloc8(s32 size);
 
 void tryProcessDisplayFrameUpdate(void);
 

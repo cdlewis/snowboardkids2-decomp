@@ -82,7 +82,7 @@ void renderNonRaceShadow(SceneModel *model) {
         return;
     }
 
-    vtx = arenaAlloc16(0x40);
+    vtx = graphicsAlloc(0x40);
 
     heightOffset = model->transform.translation.y;
     heightOffset = MAX(heightOffset, 0);
@@ -126,7 +126,7 @@ void renderNonRaceShadow(SceneModel *model) {
         model->shadowVertices[3].v.tc[1] = -0x20;
     }
 
-    model->shadowMatrix = arenaAlloc16(0x40);
+    model->shadowMatrix = graphicsAlloc(0x40);
     if (model->shadowMatrix != NULL) {
         scaleX = distance_3d(model->transform.m[0][0], model->transform.m[1][0], model->transform.m[2][0]);
         scaleY = distance_3d(model->transform.m[0][1], model->transform.m[1][1], model->transform.m[2][1]);

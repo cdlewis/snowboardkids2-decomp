@@ -56,7 +56,7 @@ void enqueueTextLayout(
                 width = 12;
             }
 
-            elem = advanceLinearAlloc(sizeof(PaletteSpriteArg));
+            elem = linearAlloc8(sizeof(PaletteSpriteArg));
             if (elem != NULL) {
                 initHudElementState(elem);
                 elem->primitiveAlpha = transparency;
@@ -241,7 +241,7 @@ void enqueueTextLayoutCapped(
             if (width == 0) {
                 width = 0xC;
             }
-            elem = advanceLinearAlloc(sizeof(PaletteSpriteArg));
+            elem = linearAlloc8(sizeof(PaletteSpriteArg));
             if (elem != NULL) {
                 initHudElementState(elem);
                 elem->primitiveAlpha = transparency;
@@ -491,7 +491,7 @@ void enqueueTextLayoutAlphaBlended(
                 width = 12;
             }
 
-            elem = advanceLinearAlloc(sizeof(PaletteSpriteArg));
+            elem = linearAlloc8(sizeof(PaletteSpriteArg));
             if (elem != NULL) {
                 initHudElementState(elem);
                 elem->paletteEffect.value = alpha;

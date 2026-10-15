@@ -5900,7 +5900,7 @@ void renderRacerProjectedShadow(Player *player) {
     s32 sampleIndex;
 
     if (player->shadowMeshNeedsUpdate != 0) {
-        player->shadowVertices = arenaAlloc16(0x90);
+        player->shadowVertices = graphicsAlloc(0x90);
         if (player->shadowVertices != NULL) {
             sampleIndex = 0;
             shadowAlpha = 0x50;
@@ -5945,7 +5945,7 @@ void renderRacerProjectedShadow(Player *player) {
             player->shadowVertices[8].v.tc[1] = 0x7E0;
         }
 
-        player->shadowMatrix = arenaAlloc16(0x40);
+        player->shadowMatrix = graphicsAlloc(0x40);
         if (player->shadowMatrix != NULL) {
             memcpy(&gScaleMatrix.translation, &player->shadowSamplePositions[0], sizeof(Vec3i));
             transform3DToN64Mtx(&gScaleMatrix, player->shadowMatrix);

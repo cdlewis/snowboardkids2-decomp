@@ -200,7 +200,7 @@ void enqueueTextRender(s16 x, s16 y, s16 palette, u8 *target_string, s32 arg4, s
 
     length++;
     required_size = length;
-    string_block = advanceLinearAlloc(required_size);
+    string_block = linearAlloc8(required_size);
     if (string_block != NULL) {
         // copy string from target_string to newly allocated block
         u8 *i = string_block;
@@ -211,7 +211,7 @@ void enqueueTextRender(s16 x, s16 y, s16 palette, u8 *target_string, s32 arg4, s
             } while ((s32)i < length + (s32)string_block);
         }
 
-        string_meta_block = (TextData *)advanceLinearAlloc(sizeof(TextData));
+        string_meta_block = (TextData *)linearAlloc8(sizeof(TextData));
         if (string_meta_block != NULL) {
             string_meta_block->x = x;
             string_meta_block->y = y;
