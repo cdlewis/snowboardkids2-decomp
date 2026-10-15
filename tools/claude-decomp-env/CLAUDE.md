@@ -40,6 +40,12 @@ After base.c builds successfully, repeat the following steps:
 
 ## Coding Guidelines
 
+### C and Graphics Macros
+
+- Never use inline assembly, empty assembly barriers, assembly constraints, or explicit register bindings to force a match.
+- Use proper F3DEX2 or S2DEX macros and named constants for display-list commands, including aggregate macros where appropriate. Do not write raw command words or manually encode opcodes.
+- A matching result that violates these requirements is not complete.
+
 ### Types and Structs
 - Look to existing code in `src/` and `include/` for guidance on types. Types in the function you're matching could be wrong or misleading.
 - Before adding a new type definition, search the codebase first and reuse existing structs whenever possible.

@@ -277,16 +277,7 @@ void renderShadedTextSprite(
     SpriteFrameEntry *paletteBase;
     SpriteFrameEntry *paletteAddr;
     SpriteFrameEntry *frameEntry;
-    Gfx *gfx;
-    u32 renderModeCmd;
-    u32 renderModeArg;
-    u32 combineCmd;
-    u32 combineArg;
-#ifdef CC_CHECK
-    u32 pipeSyncCmd;
-#else
-    register u32 pipeSyncCmd __asm__("$10");
-#endif
+    Gfx *setupStart;
 
     frameEntry = spriteData->frames;
     left = (u16)gTextClipAndOffsetData.offsetX + x;
@@ -306,35 +297,14 @@ void renderShadedTextSprite(
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
 
-        renderModeCmd = 0xE200001C;
-        renderModeArg = 0x504240;
-        combineCmd = 0xFC119623;
-        gfx = gDisplayListAllocPtr;
-        combineArg = 0xFF2FFFFF;
-        pipeSyncCmd = 0xE7000000;
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 8);
-        __asm__ volatile("" ::: "memory");
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x10);
-        __asm__ volatile("" ::: "memory");
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x18);
-        (gfx + 2)->words.w0 = 0x0B000000;
-        (gfx + 2)->words.w1 = 0x0E;
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x20);
-        __asm__ volatile("" ::: "memory");
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x28);
-        (gfx + 1)->words.w1 = renderModeArg;
-
-        {
-            u8 shadeByte = shade;
-            (gfx + 4)->words.w0 = 0xFA000000;
-            (gfx + 1)->words.w0 = renderModeCmd;
-            (gfx + 4)->words.w1 = (shadeByte << 24) | (shadeByte << 16) | (shadeByte << 8) | (alpha & 0xFF);
-        }
-
-        gfx->words.w0 = pipeSyncCmd;
-        gfx->words.w1 = 0;
-        (gfx + 3)->words.w0 = combineCmd;
-        (gfx + 3)->words.w1 = combineArg;
+        /* The coordinates are consumed; keep the pipe-sync word live through the palette load. */
+        x = _SHIFTL(G_RDPPIPESYNC, 24, 8);
+        setupStart = gDisplayListAllocPtr;
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetRenderMode(gDisplayListAllocPtr++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+        gSPObjRenderMode(gDisplayListAllocPtr++, G_OBJRM_BILERP | G_OBJRM_XLU | G_OBJRM_ANTIALIAS);
+        gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, shade, shade, shade, alpha);
 
         {
             u16 paletteIndex = paletteOverride & 0xFFFF;
@@ -350,84 +320,37 @@ void renderShadedTextSprite(
                 }
             }
 
-            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x30);
-            (gfx + 5)->words.w0 = 0xFD100000;
-            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x38);
-            (gfx + 6)->words.w0 = 0xE8000000;
-            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x40);
-            (gfx + 7)->words.w1 = 0x07000000;
-            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x48);
-            (gfx + 8)->words.w0 = 0xE6000000;
-            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x50);
-            (gfx + 9)->words.w0 = 0xF0000000;
             gCachedPaletteAddr = paletteAddr;
-            (gfx + 5)->words.w1 = (s32)paletteAddr;
-            (gfx + 6)->words.w1 = 0;
-            (gfx + 7)->words.w0 = 0xF5000100;
-            (gfx + 8)->words.w1 = 0;
-            (gfx + 9)->words.w1 = 0x0703C000;
-            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x58);
-            (gfx + 10)->words.w0 = pipeSyncCmd;
-            (gfx + 10)->words.w1 = 0;
+            /* Resume after the five setup commands across the palette-cache branch. */
+            gDisplayListAllocPtr = setupStart + 5;
+            gDPSetTextureImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, paletteAddr);
+            gDPTileSync(gDisplayListAllocPtr++);
+            gDPSetTile(gDisplayListAllocPtr++, 0, 0, 0, 256, G_TX_LOADTILE, 0, 0, 0, 0, 0, 0, 0);
+            gDPLoadSync(gDisplayListAllocPtr++);
+            gDPLoadTLUTCmd(gDisplayListAllocPtr++, G_TX_LOADTILE, 15);
+            gDPNoParam(gDisplayListAllocPtr++, x >> 24);
         }
     skipPalette:
 
         if ((s32)spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)spriteData + frameEntry->textureOffset;
-            gDPSetTextureImage(
+            gDPLoadTextureTile_4b(
                 gDisplayListAllocPtr++,
+                (s32)spriteData + frameEntry->textureOffset,
                 G_IM_FMT_CI,
-                G_IM_SIZ_8b,
-                frameEntry->width >> 1,
-                (s32)spriteData + frameEntry->textureOffset
-            );
-            gDPSetTile(
-                gDisplayListAllocPtr++,
-                G_IM_FMT_CI,
-                G_IM_SIZ_8b,
-                ((frameEntry->width >> 1) + 7) >> 3,
+                frameEntry->width,
+                frameEntry->height,
                 0,
-                G_TX_LOADTILE,
+                0,
+                frameEntry->width - 1,
+                frameEntry->height - 1,
                 0,
                 G_TX_CLAMP,
-                0,
-                0,
                 G_TX_CLAMP,
-                0,
-                0
-            );
-            gDPLoadSync(gDisplayListAllocPtr++);
-            gDPLoadTile(
-                gDisplayListAllocPtr++,
-                G_TX_LOADTILE,
-                0,
-                0,
-                (frameEntry->width - 1) << 1,
-                (frameEntry->height - 1) << G_TEXTURE_IMAGE_FRAC
-            );
-            gDPPipeSync(gDisplayListAllocPtr++);
-            gDPSetTile(
-                gDisplayListAllocPtr++,
-                G_IM_FMT_CI,
-                G_IM_SIZ_4b,
-                ((frameEntry->width >> 1) + 7) >> 3,
-                0,
-                G_TX_RENDERTILE,
-                0,
-                G_TX_CLAMP,
-                0,
-                0,
-                G_TX_CLAMP,
-                0,
-                0
-            );
-            gDPSetTileSize(
-                gDisplayListAllocPtr++,
-                G_TX_RENDERTILE,
-                0,
-                0,
-                (frameEntry->width - 1) << G_TEXTURE_IMAGE_FRAC,
-                (frameEntry->height - 1) << G_TEXTURE_IMAGE_FRAC
+                G_TX_NOMASK,
+                G_TX_NOMASK,
+                G_TX_NOLOD,
+                G_TX_NOLOD
             );
         }
 

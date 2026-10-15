@@ -89,6 +89,13 @@ Before declaring any changes to C code complete (including decompiling functions
 
 ## Code Quality Standards
 
+### Use C and Proper Graphics Macros
+
+- Do not use inline assembly, including empty assembly barriers, assembly constraints, or explicit register bindings, to force a match.
+- Construct display lists with the appropriate F3DEX2 or S2DEX macros and named constants. Do not substitute raw command words or manually encoded opcodes for those macros.
+- Look for aggregate macros such as `gDPLoadTLUT_pal16` and `gDPLoadTextureTile_4b` before expanding command sequences individually.
+- A matching checksum does not make an implementation complete if it violates these requirements. Resolve differences through C types, control flow, and the appropriate graphics macros.
+
 ### Avoid Pointer Arithmetic
 
 When you see pointer arithmetic patterns like `*(type*)((u8*)ptr + offset)`:
