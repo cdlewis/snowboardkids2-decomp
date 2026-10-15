@@ -754,8 +754,8 @@ void animatePortraitRotation(LevelPreviewPortraitState *portraitState) {
     levelSelect = (LevelSelectState *)getCurrentAllocation();
     angleDelta = (levelSelect->scrollDirection != 0) ? 0x200 : -0x200;
 
-    // Animate all 4 portrait quads (front and back of 2 portrait cards)
-    // The cards rotate around the X-axis to create a 3D flipping effect
+    // Flip the level-select label: front and back quads for each of its two strips.
+    // At rest, renderLevelPreviewPortraits draws the strips as sprite rectangles.
     for (quadIndex = 0; quadIndex < 4; quadIndex++) {
         rotationAngle = (portraitState->rotations[quadIndex] + angleDelta) & 0x1FFF;
         portraitState->rotations[quadIndex] = rotationAngle;
@@ -763,11 +763,11 @@ void animatePortraitRotation(LevelPreviewPortraitState *portraitState) {
         enqueueRotatedBillboardSprite(9, &portraitState->billboardSprites[quadIndex]);
     }
 
-    // Check if rotation animation is complete (portrait facing forward)
+    // Check if the label flip is complete (one side facing forward)
     primaryQuadRotation = portraitState->rotations[0];
     if (primaryQuadRotation == 0 || primaryQuadRotation == 0x1000) {
         levelSelect->menuState = MENU_STATE_NAVIGATE;
-        // Update frame indices to show the destination level's portraits
+        // Update both strips to show the destination level's label
         for (quadIndex = 0; quadIndex < 2; quadIndex++) {
             portraitState->portraitEntries[quadIndex].frameIndex =
                 levelPortraitFrameBases[levelSelect->selectedLevelId] + quadIndex;

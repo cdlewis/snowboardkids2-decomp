@@ -45,7 +45,7 @@ typedef struct {
 /**
  * Initialization view over a portrait matrix slot. The transform begins at
  * offset 0x1C from each 0x34-byte slot origin, so successive views overlap.
- * Once initialized, LevelPreviewPortraitState::matrices provides the normal
+ * Once initialized, LevelPreviewPortraitState::billboardSprites provides the normal
  * render-time view beginning 0x18 bytes into the state.
  */
 typedef struct {
@@ -61,6 +61,10 @@ typedef struct {
     u8 alpha;
 } LevelPreviewPortraitMatrixInitView;
 
+/* Level-select title/label: two sprite strips drawn as rectangles at rest,
+ * with front/back quads for each strip during the X-axis flip on level changes.
+ * The initialization view above overlaps these render-time slots.
+ */
 typedef struct {
     /* 0x00 */ SpriteRenderArg portraitEntries[2];
     /* 0x18 */ RotatedBillboardSprite billboardSprites[4];
