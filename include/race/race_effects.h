@@ -334,6 +334,8 @@ typedef struct {
     s16 animationDelay;
 } SuccessMessageDisplayState;
 
+// Lap counter text, including the original embedded font-control bytes.
+extern const char sLapCounterFormat[];
 extern const char sTwoDigitFormat[];
 extern const char sTwoDigitHighlightFormat[];
 extern const char sIntegerFormat[];

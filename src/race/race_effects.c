@@ -56,12 +56,11 @@ extern s32 gSecondPlaceGoldReward[];
 extern s32 gThirdPlaceGoldReward[];
 
 // const char definitions appear later to keep the rodata gods happy
-const char D_8009E868_9F468[];
 const char sGoldFormatShort[];
 const char sGoldFormatLong[];
 const char D_8009E894_9F494[];
 
-const char D_8009E868_9F468[] = "%d\a/\x04%d";
+const char sLapCounterFormat[] = "%d\a/\x04%d";
 
 const char sGoldFormatShort[] = "\x01%5d";
 
@@ -370,7 +369,7 @@ void initPlayerLapCounterTask(LapCounterState *state) {
         );
         state->spriteIndex = 0;
         state->digitsAsset = 0;
-        sprintf(textBuffer, D_8009E868_9F468, 1, gameState->finalLapNumber + 1);
+        sprintf(textBuffer, sLapCounterFormat, 1, gameState->finalLapNumber + 1);
         state->textPaletteIndex = 1;
         state->lapText = textBuffer;
     }

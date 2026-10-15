@@ -4396,3 +4396,5 @@ gSaveSlotStatSpriteTable = 0x8008F210; // rom:0x8FE10
 gSaveSlotSelectionParticleXOffsets = 0x8008F2AC; // rom:0x8FEAC
 gSaveSlotSelectionParticleYOffsets = 0x8008F2B8; // rom:0x8FEB8
 gSaveSlotDeleteArrowAnimFrames = 0x8008F2C4; // rom:0x8FEC4
+
+sLapCounterFormat = 0x8009E868; // rom:0x9F468
