@@ -352,7 +352,7 @@ void renderFrame(u32 viScanline) {
                 node = node->renderNext;
             }
 
-            node->graphicsTask = graphicsAlloc(0x50);
+            node->graphicsTask = graphicsAlloc(sizeof(GraphicsTask));
             displayListStart = gDisplayListAllocPtr;
 
             gSPSegment(gDisplayListAllocPtr++, 0, 0);
@@ -1312,7 +1312,7 @@ void pushViewportCallback(ViewportNode *viewport, u8 callbackLayer, void *callba
     CallbackEntry *newEntry;
     CallbackEntry *oldHead;
 
-    newEntry = (CallbackEntry *)linearAlloc(0x10);
+    newEntry = (CallbackEntry *)linearAlloc(sizeof(CallbackEntry));
     if (newEntry != NULL) {
         oldHead = viewport->callbackLayers[callbackLayer].next;
         newEntry->callback = callback;

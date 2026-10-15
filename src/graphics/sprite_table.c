@@ -296,16 +296,16 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
     memcpy(&gCachedSpriteTextureEntry, &textureEntry, sizeof(Vec3i));
 
     if (sprite->translationMtx == NULL) {
-        sprite->translationMtx = graphicsAlloc(0x40);
+        sprite->translationMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->scaleMtx == NULL) {
-        sprite->scaleMtx = graphicsAlloc(0x40);
+        sprite->scaleMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->yRotationMtx == NULL) {
-        sprite->yRotationMtx = graphicsAlloc(0x40);
+        sprite->yRotationMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->zRotationMtx == NULL) {
-        sprite->zRotationMtx = graphicsAlloc(0x40);
+        sprite->zRotationMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {
@@ -452,16 +452,16 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
     gDPSetEnvColor(gDisplayListAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);
 
     if (sprite->translationMtx == NULL) {
-        sprite->translationMtx = graphicsAlloc(0x40);
+        sprite->translationMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->scaleMtx == NULL) {
-        sprite->scaleMtx = graphicsAlloc(0x40);
+        sprite->scaleMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->yRotationMtx == NULL) {
-        sprite->yRotationMtx = graphicsAlloc(0x40);
+        sprite->yRotationMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->zRotationMtx == NULL) {
-        sprite->zRotationMtx = graphicsAlloc(0x40);
+        sprite->zRotationMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {
@@ -608,16 +608,16 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
     gDPSetEnvColor(gDisplayListAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);
 
     if (sprite->translationMtx == NULL) {
-        sprite->translationMtx = graphicsAlloc(0x40);
+        sprite->translationMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->scaleMtx == NULL) {
-        sprite->scaleMtx = graphicsAlloc(0x40);
+        sprite->scaleMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->yRotationMtx == NULL) {
-        sprite->yRotationMtx = graphicsAlloc(0x40);
+        sprite->yRotationMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->zRotationMtx == NULL) {
-        sprite->zRotationMtx = graphicsAlloc(0x40);
+        sprite->zRotationMtx = graphicsAlloc(sizeof(Mtx));
     }
     if (sprite->translationMtx != NULL && sprite->scaleMtx != NULL && sprite->yRotationMtx != NULL &&
         sprite->zRotationMtx != NULL) {

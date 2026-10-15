@@ -919,7 +919,7 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
     LookAt *lookAt;
 
     if (obj->transformMatrix == NULL) {
-        obj->transformMatrix = graphicsAlloc(0x40);
+        obj->transformMatrix = graphicsAlloc(sizeof(Mtx));
         if (obj->transformMatrix == NULL) {
             return;
         }
@@ -927,7 +927,7 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
     }
 
     if (obj->displayLists->flags & 1) {
-        lookAt = (LookAt *)graphicsAlloc(0x20);
+        lookAt = (LookAt *)graphicsAlloc(sizeof(LookAt));
         if (lookAt == NULL) {
             return;
         }
@@ -1026,7 +1026,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
     LookAt *temp_v0;
 
     if (arg0->transformMatrix == NULL) {
-        arg0->transformMatrix = graphicsAlloc(0x40);
+        arg0->transformMatrix = graphicsAlloc(sizeof(Mtx));
         if (arg0->transformMatrix == NULL) {
             return;
         }
@@ -1034,7 +1034,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
     }
 
     if (arg0->displayLists->flags & 1) {
-        temp_v0 = (LookAt *)graphicsAlloc(0x20);
+        temp_v0 = (LookAt *)graphicsAlloc(sizeof(LookAt));
         if (temp_v0 == NULL) {
             return;
         }
@@ -1276,7 +1276,7 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
     LookAt *lookAt;
 
     if (obj->transformMatrix == NULL) {
-        obj->transformMatrix = graphicsAlloc(0x80);
+        obj->transformMatrix = graphicsAlloc(2 * sizeof(Mtx));
         if (obj->transformMatrix == NULL) {
             return;
         }
@@ -1325,7 +1325,7 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
     }
 
     if (obj->displayLists->flags & 1) {
-        lookAt = graphicsAlloc(0x20);
+        lookAt = graphicsAlloc(sizeof(LookAt));
         if (lookAt == NULL) {
             return;
         }
@@ -1438,7 +1438,7 @@ void initializeMultiPartDisplayListObjects(DisplayListObject *arg0) {
     volatile u8 padding[0x44];
 
     if (arg0->transformMatrix == NULL) {
-        arg0->transformMatrix = graphicsAlloc(arg0->numParts << 6);
+        arg0->transformMatrix = graphicsAlloc(arg0->numParts * sizeof(Mtx));
         if (arg0->transformMatrix == NULL) {
             return;
         }
@@ -1506,7 +1506,7 @@ void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
     obj = (DisplayListObject *)(arg1 * sizeof(DisplayListObject) + (s32)arg0);
 
     if (obj->displayLists->flags & 1) {
-        lookat = graphicsAlloc(0x20);
+        lookat = graphicsAlloc(sizeof(LookAt));
         if (lookat == NULL) {
             return;
         }
@@ -1679,7 +1679,7 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *obj) {
     LookAt *lookat;
 
     if (obj->transformMatrix == NULL) {
-        obj->transformMatrix = graphicsAlloc(0x40);
+        obj->transformMatrix = graphicsAlloc(sizeof(Mtx));
         if (obj->transformMatrix == NULL) {
             return;
         }
@@ -1687,7 +1687,7 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *obj) {
     }
 
     if (obj->displayLists->flags & 1) {
-        lookat = graphicsAlloc(0x20);
+        lookat = graphicsAlloc(sizeof(LookAt));
         if (lookat == NULL) {
             return;
         }
@@ -2033,7 +2033,7 @@ void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
     f32 upZ;
     LookAt *lookAt;
 
-    displayListObj->transformMatrix = graphicsAlloc(0x40);
+    displayListObj->transformMatrix = graphicsAlloc(sizeof(Mtx));
     if (displayListObj->transformMatrix == NULL) {
         return;
     }
@@ -2042,7 +2042,7 @@ void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
     transform3DToMtx(&gScaleMatrix, displayListObj->transformMatrix);
 
     if (displayListObj->displayLists->flags & 1) {
-        lookAt = graphicsAlloc(0x20);
+        lookAt = graphicsAlloc(sizeof(LookAt));
         if (lookAt == NULL) {
             return;
         }
@@ -2120,7 +2120,7 @@ void renderTexturedBillboardSprite(BillboardSprite *state) {
     CULL_SPRITE(state);
 
     if (state->matrix == NULL) {
-        state->matrix = graphicsAlloc(0x40);
+        state->matrix = graphicsAlloc(sizeof(Mtx));
         if (state->matrix == NULL) {
             return;
         }
@@ -2205,7 +2205,7 @@ void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
     }
 
     if (state->matrix == NULL) {
-        state->matrix = graphicsAlloc(0x40);
+        state->matrix = graphicsAlloc(sizeof(Mtx));
         if (state->matrix == NULL) {
             return;
         }
@@ -2278,7 +2278,7 @@ void renderTexturedBillboardSpriteTile(BillboardSprite *state) {
     CULL_SPRITE(state);
 
     if (state->matrix == NULL) {
-        state->matrix = graphicsAlloc(0x40);
+        state->matrix = graphicsAlloc(sizeof(Mtx));
         if (state->matrix == NULL) {
             return;
         }
@@ -2365,7 +2365,7 @@ void renderAlphaBillboardSprite(BillboardSprite *state) {
     CULL_SPRITE(state);
 
     if (state->matrix == NULL) {
-        state->matrix = graphicsAlloc(0x40);
+        state->matrix = graphicsAlloc(sizeof(Mtx));
         if (state->matrix == NULL) {
             return;
         }
@@ -2448,7 +2448,7 @@ void renderAlphaSprite(BillboardSprite *state) {
     CULL_SPRITE(state);
 
     if (state->matrix == NULL) {
-        state->matrix = graphicsAlloc(0x40);
+        state->matrix = graphicsAlloc(sizeof(Mtx));
         if (state->matrix == NULL) {
             return;
         }
