@@ -5,6 +5,16 @@
 #include "gbi.h"
 #include "math/geometry.h"
 
+/* Callback pass mask, computed from the display lists present across parts. */
+#define DISPLAY_LIST_PASS_OPAQUE 1
+#define DISPLAY_LIST_PASS_TRANSPARENT 2
+#define DISPLAY_LIST_PASS_OVERLAY 4
+
+/* DisplayLists.flags: constructs and emits reflection LookAt lighting vectors.
+ * This is a separate flag domain from the callback pass mask above.
+ */
+#define DISPLAY_LIST_FLAG_REFLECTION_LOOK_AT 1
+
 typedef struct {
     /* 0x0 */ u32 flags;
     /* 0x4 */ Gfx *opaqueDisplayList;
@@ -199,7 +209,7 @@ s32 resolveTrackSegmentIndex(TrackSector **arg0, u16 index);
 
 void enqueueRotatedBillboardSprite(s32 arg0, RotatedBillboardSprite *arg1);
 
-void renderRotatedBillboardSpriteCI(RotatedBillboardSprite *arg1);
+void renderRotatedBillboardSprite(RotatedBillboardSprite *arg1);
 
 s32 normalizeSurfaceType(s32);
 

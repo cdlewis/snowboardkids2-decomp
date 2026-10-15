@@ -121,9 +121,6 @@ Vec3i g_GhostBaseDirection = { 0, 0, 0 };
 s32 g_GhostBaseDirection_pad = 0;
 
 extern Gfx D_8009A780_9B380[];
-extern s32 gLookAtPtr;
-
-extern Gfx *gDisplayListAllocPtr;
 
 void initAnimatedGhost(AnimatedGhostEntity *);
 void cleanupAnimatedGhost(void **);

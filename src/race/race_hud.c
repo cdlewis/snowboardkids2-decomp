@@ -498,8 +498,6 @@ typedef struct {
 } CompressedAsset;
 
 extern Gfx D_8009A780_9B380[];
-extern s32 gLookAtPtr;
-extern Gfx *gDisplayListAllocPtr;
 extern DisplayLists D_8009A670_9B270;
 extern DisplayLists D_8009A680_9B280;
 extern DisplayLists D_8009A690_9B290;

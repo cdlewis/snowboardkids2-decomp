@@ -16,6 +16,7 @@
 #define BUFFER_SIZE 0x10000
 
 #define VIEWPORT_CALLBACK_LAYER_COUNT 8
+#define VIEWPORT_CALLBACK_SLOT_COUNT 16
 
 /* Cached rendering setup; INVALID forces the next draw to restore its state. */
 typedef enum {
@@ -164,6 +165,19 @@ typedef struct ViewportNode {
     /* 0x1CF */ u8 fogA;
     /* 0x1D0 */ f32 scaleY;
 } ViewportNode;
+
+extern Gfx *gDisplayListAllocPtr;
+extern void *gDramStack;
+extern void *gOutputBuffer;
+extern void *gYieldBuffer;
+extern void *gDisplayBufferMsgs;
+extern ViewportNode *gViewportCallbackPools[VIEWPORT_CALLBACK_SLOT_COUNT];
+
+/* Camera rotation transposed into a translation-free modelview matrix for
+ * billboards. renderFrame builds it as the third matrix in lookAtAlloc;
+ * this is an Mtx, not the LookAt structure used for reflection lighting.
+ */
+extern Mtx *gLookAtPtr;
 
 extern ViewportNode gRootViewport;
 extern s32 gCurrentDoubleBufferIndex;

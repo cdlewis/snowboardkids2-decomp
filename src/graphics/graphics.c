@@ -127,9 +127,7 @@ u8 gNeedsDisplayListInit = 1;
 
 extern s16 gViewportOriginY;
 extern s16 gViewportOriginX;
-extern Gfx *gDisplayListAllocPtr;
 extern s16 gTextureEnabled;
-extern void *gLookAtPtr;
 
 void *gDramStack BSS = 0;
 void *gOutputBuffer BSS = 0;
@@ -150,7 +148,7 @@ void *gLinearAllocPtr BSS = 0;
 void *gLinearAllocEnd BSS = 0;
 void **gLinearArenaRegions BSS = 0;
 void *gLinearArenaBuffer BSS = 0;
-ViewportNode *gViewportCallbackPools[0x10] BSS = { 0 };
+ViewportNode *gViewportCallbackPools[VIEWPORT_CALLBACK_SLOT_COUNT] BSS = { 0 };
 s32 D_800A35C8_A0058[2] BSS = { 0 };
 
 void restoreViewportOffsets(void);
@@ -665,7 +663,7 @@ void renderFrame(u32 viScanline) {
                         lookAtAlloc[46] = 0;
                         lookAtAlloc[47] = 0;
 
-                        gLookAtPtr = (void *)&lookAtAlloc[32];
+                        gLookAtPtr = (Mtx *)&lookAtAlloc[32];
 
                         gSPViewport(gDisplayListAllocPtr++, viewportAlloc);
                         gSPPerspNormalize(gDisplayListAllocPtr++, node->perspNorm);

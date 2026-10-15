@@ -10,7 +10,6 @@ static s32 gFontPaletteBase;
 static s8 gCurrentPaletteId;
 
 extern u16 gDefaultFontPalette[];
-extern Gfx *gDisplayListAllocPtr;
 extern s16 gTextureEnabled[];
 
 Gfx gFontDisplayListSetup[] = {

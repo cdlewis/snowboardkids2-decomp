@@ -14,8 +14,6 @@
 #include "race/track_collision.h"
 #include "system/task_scheduler.h"
 
-extern Gfx *gDisplayListAllocPtr;
-
 typedef struct {
     s16 rotation[3][3];
     u8 pad2[0xE];

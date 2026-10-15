@@ -92,8 +92,6 @@ static u32 gCachedSpriteTextureData;
 static u32 gCachedSpritePaletteData;
 static u8 gCachedSpriteAlpha;
 
-extern s32 gLookAtPtr;
-extern Gfx *gDisplayListAllocPtr;
 extern Gfx D_8009A780_9B380[];
 
 Gfx gAlphaSpriteSetupDL[] = {
@@ -114,7 +112,6 @@ Gfx gAlphaSpriteSetupDL[] = {
 void renderCameraRelativeDisplayList(DisplayListObject *arg0);
 void renderTexturedBillboardSprite(BillboardSprite *);
 void renderTexturedBillboardSpriteTile(BillboardSprite *);
-void renderRotatedBillboardSprite(RotatedBillboardSprite *);
 void renderAlphaSprite(BillboardSprite *);
 void renderAlphaBillboardSprite(BillboardSprite *);
 void scheduleGameInitialization(void);
@@ -926,7 +923,7 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
         transform3DToMtx(obj, obj->transformMatrix);
     }
 
-    if (obj->displayLists->flags & 1) {
+    if (obj->displayLists->flags & DISPLAY_LIST_FLAG_REFLECTION_LOOK_AT) {
         lookAt = (LookAt *)graphicsAlloc(sizeof(LookAt));
         if (lookAt == NULL) {
             return;
@@ -1033,7 +1030,7 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
         transform3DToN64Mtx((Transform3D *)arg0, arg0->transformMatrix);
     }
 
-    if (arg0->displayLists->flags & 1) {
+    if (arg0->displayLists->flags & DISPLAY_LIST_FLAG_REFLECTION_LOOK_AT) {
         temp_v0 = (LookAt *)graphicsAlloc(sizeof(LookAt));
         if (temp_v0 == NULL) {
             return;
@@ -1324,7 +1321,7 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
         obj->transformMatrix[1].m[3][3] = 0;
     }
 
-    if (obj->displayLists->flags & 1) {
+    if (obj->displayLists->flags & DISPLAY_LIST_FLAG_REFLECTION_LOOK_AT) {
         lookAt = graphicsAlloc(sizeof(LookAt));
         if (lookAt == NULL) {
             return;
@@ -1505,7 +1502,7 @@ void setupMultiPartObjectRenderState(DisplayListObject *arg0, s32 arg1) {
 
     obj = (DisplayListObject *)(arg1 * sizeof(DisplayListObject) + (s32)arg0);
 
-    if (obj->displayLists->flags & 1) {
+    if (obj->displayLists->flags & DISPLAY_LIST_FLAG_REFLECTION_LOOK_AT) {
         lookat = graphicsAlloc(sizeof(LookAt));
         if (lookat == NULL) {
             return;
@@ -1638,24 +1635,24 @@ void enqueuePreLitMultiPartDisplayList(s32 arg0, DisplayListObject *arg1, s32 ar
             dlPtrs = currentPart->displayLists;
             (new_var = currentPart)->transformMatrix = 0;
             if (dlPtrs->opaqueDisplayList != 0) {
-                renderFlags |= 1;
+                renderFlags |= DISPLAY_LIST_PASS_OPAQUE;
             }
             if (dlPtrs->transparentDisplayList != 0) {
-                renderFlags |= 2;
+                renderFlags |= DISPLAY_LIST_PASS_TRANSPARENT;
             }
             if (dlPtrs->overlayDisplayList != 0) {
-                renderFlags |= 4;
+                renderFlags |= DISPLAY_LIST_PASS_OVERLAY;
             }
             i += 1;
             currentPart++;
         } while (i < arg2);
     }
 
-    if (renderFlags & 1) {
+    if (renderFlags & DISPLAY_LIST_PASS_OPAQUE) {
         pushViewportCallbackBySlot(arg0, VIEWPORT_CALLBACK_LAYER_OPAQUE, &renderMultiPartOpaqueDisplayLists, arg1);
     }
     new_var = arg1;
-    if (renderFlags & 2) {
+    if (renderFlags & DISPLAY_LIST_PASS_TRANSPARENT) {
         pushViewportCallbackBySlot(
             arg0,
             VIEWPORT_CALLBACK_LAYER_TRANSLUCENT,
@@ -1663,7 +1660,7 @@ void enqueuePreLitMultiPartDisplayList(s32 arg0, DisplayListObject *arg1, s32 ar
             new_var
         );
     }
-    if (renderFlags & 4) {
+    if (renderFlags & DISPLAY_LIST_PASS_OVERLAY) {
         pushViewportCallbackBySlot(arg0, VIEWPORT_CALLBACK_LAYER_OVERLAY, &renderMultiPartOverlayDisplayLists, arg1);
     }
 }
@@ -1686,7 +1683,7 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *obj) {
         transform3DToN64Mtx((Transform3D *)obj, obj->transformMatrix);
     }
 
-    if (obj->displayLists->flags & 1) {
+    if (obj->displayLists->flags & DISPLAY_LIST_FLAG_REFLECTION_LOOK_AT) {
         lookat = graphicsAlloc(sizeof(LookAt));
         if (lookat == NULL) {
             return;
@@ -1983,20 +1980,20 @@ void enqueueMultiPartDisplayList(s32 arg0, DisplayListObject *arg1, s32 arg2) {
             dlPtrs = currentPart->displayLists;
             (new_var = currentPart)->transformMatrix = 0;
             if (dlPtrs->opaqueDisplayList != 0) {
-                renderFlags |= 1;
+                renderFlags |= DISPLAY_LIST_PASS_OPAQUE;
             }
             if (dlPtrs->transparentDisplayList != 0) {
-                renderFlags |= 2;
+                renderFlags |= DISPLAY_LIST_PASS_TRANSPARENT;
             }
             if (dlPtrs->overlayDisplayList != 0) {
-                renderFlags |= 4;
+                renderFlags |= DISPLAY_LIST_PASS_OVERLAY;
             }
             i += 1;
             currentPart++;
         } while (i < arg2);
     }
 
-    if (renderFlags & 1) {
+    if (renderFlags & DISPLAY_LIST_PASS_OPAQUE) {
         pushViewportCallbackBySlot(
             arg0,
             VIEWPORT_CALLBACK_LAYER_OPAQUE,
@@ -2005,7 +2002,7 @@ void enqueueMultiPartDisplayList(s32 arg0, DisplayListObject *arg1, s32 arg2) {
         );
     }
     new_var = arg1;
-    if (renderFlags & 2) {
+    if (renderFlags & DISPLAY_LIST_PASS_TRANSPARENT) {
         pushViewportCallbackBySlot(
             arg0,
             VIEWPORT_CALLBACK_LAYER_TRANSLUCENT,
@@ -2013,7 +2010,7 @@ void enqueueMultiPartDisplayList(s32 arg0, DisplayListObject *arg1, s32 arg2) {
             new_var
         );
     }
-    if (renderFlags & 4) {
+    if (renderFlags & DISPLAY_LIST_PASS_OVERLAY) {
         pushViewportCallbackBySlot(
             arg0,
             VIEWPORT_CALLBACK_LAYER_OVERLAY,
@@ -2041,7 +2038,7 @@ void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
     memcpy(&gScaleMatrix.translation, &gActiveViewport->viewTransform.translation.x, sizeof(Vec3i));
     transform3DToMtx(&gScaleMatrix, displayListObj->transformMatrix);
 
-    if (displayListObj->displayLists->flags & 1) {
+    if (displayListObj->displayLists->flags & DISPLAY_LIST_FLAG_REFLECTION_LOOK_AT) {
         lookAt = graphicsAlloc(sizeof(LookAt));
         if (lookAt == NULL) {
             return;

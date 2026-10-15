@@ -22,9 +22,7 @@ void initShootCrossTargetsCallback(ShootCrossTargets *arg0);
 void activateShootCrossTargets(ShootCrossTargets *arg0);
 
 extern Gfx D_8009A780_9B380[];
-extern Gfx *gDisplayListAllocPtr;
 
-extern s32 gLookAtPtr;
 Vtx D_800BBBB0_AD630[4] = {
     { { { -24, 48, 0 }, 0, { -16, -16 }, { 255, 255, 255, 255 } } },
     { { { 24, 48, 0 }, 0, { 2032, -16 }, { 255, 255, 255, 255 } } },

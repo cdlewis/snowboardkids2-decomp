@@ -57,8 +57,6 @@ extern SpriteAnimationSet D_8008C8F0_8D4F0;
 extern SpriteAnimationSet D_8008C910_8D510;
 
 extern s32 D_8008C920_8D520[];
-extern s32 gLookAtPtr;
-extern Gfx *gDisplayListAllocPtr;
 
 static OutputStruct_19E80 gCachedSpriteTextureEntry;
 

@@ -8,8 +8,6 @@
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-extern Gfx *gDisplayListAllocPtr;
-
 void setupModelTransitionVariant(ModelTransitionEffectState *);
 void updateModelTransitionEffect(ModelTransitionEffectState *);
 void cleanupModelTransitionEffect(ModelTransitionEffectState *);

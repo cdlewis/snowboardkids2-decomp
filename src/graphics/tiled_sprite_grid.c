@@ -4,7 +4,6 @@
 #include "gbi.h"
 #include "graphics/graphics.h"
 
-extern Gfx *gDisplayListAllocPtr;
 extern Gfx gSpriteRDPSetupDL[];
 extern s16 gTileTextureFlipTable[];
 

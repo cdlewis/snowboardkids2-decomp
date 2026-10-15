@@ -62,8 +62,6 @@ typedef struct {
     /* 0x2C */ s32 unk64;
 } BodyPartExtra;
 
-extern Gfx *gDisplayListAllocPtr;
-
 extern AssetMeta D_8009A550_9B150[];
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];

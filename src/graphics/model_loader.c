@@ -31,12 +31,6 @@ typedef struct {
     /* 0x40 */ DisplayListObject object2;
 } SceneRenderTask;
 
-void loadSceneRenderTaskData(SceneRenderTask *);
-void updateSceneRenderTask(SceneRenderTask *ctx);
-void cleanupSceneRenderTask(SceneRenderTask *task);
-
-extern Gfx *volatile gDisplayListAllocPtr;
-
 Gfx gCutsceneSceneRenderDisplayList1[] = {
     { .words = { 0x00000000, 0x010000A0 } },
     { .words = { 0x00000000, 0x00000000 } },
@@ -99,91 +93,49 @@ AssetDataBlock gCutsceneSceneRenderAssetData = {
     .dispList2 = gCutsceneSceneRenderDisplayList2,
 };
 
+void loadSceneRenderTaskData(SceneRenderTask *);
+void updateSceneRenderTask(SceneRenderTask *ctx);
+void cleanupSceneRenderTask(SceneRenderTask *task);
+
 void setColorImageToMainFramebuffer(void *arg0) {
     gDPSetColorImage(gDisplayListAllocPtr++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, &gFrameBuffer);
 }
 
 void buildViewportAuxFramebufferFillDisplayList(SceneRenderTask *arg0) {
     ViewportNode *node;
-    Gfx *gfx;
-    int new_var2;
-    s32 frameIdx;
-    s32 otherMode;
-    s32 texCoord;
-    f32 lrxf;
-    f32 lryf;
-    s32 lrx;
-    s32 lry;
-    int new_var;
-    s32 ulx;
-    s32 uly;
-
     node = &arg0->node->base;
-    gfx = gDisplayListAllocPtr;
-    frameIdx = gCurrentDisplayBufferIndex;
-
-    gfx->words.w0 = 0xFF10013F;
-    gfx->words.w1 = (u32)(&gAuxFrameBuffers[frameIdx]);
-
-    gfx[1].words.w0 = 0xDE000000;
-    gfx[1].words.w1 = (u32)gViewportFillSetupDisplayList;
-
-    {
-        s32 ulxf = (s32)(node->clipLeft * 4.0f);
-        s32 ulyf;
-        otherMode = 0xE2001D00;
-        gfx[2].words.w0 =
-            ((unsigned long long)((ulxf & 0xFFF) << 12)) | ((((s32)(node->clipTop * 4.0f)) & 0xFFF) | 0xED000000);
-    }
-
-    lrxf = node->clipRight;
-    lryf = node->clipBottom;
-    texCoord = 0x04000400;
-
-    gfx[3].words.w0 = 0xFA000000;
-    new_var2 = 0xFF;
-    gfx[3].words.w1 = new_var2;
-    lrxf = lrxf * 4.0f;
-
-    gfx[4].words.w0 = 0xEE000000;
-    gfx[4].words.w1 = 0xFFFC0000;
-    lryf = lryf * 4.0f;
-
-    gfx[5].words.w0 = otherMode;
-    gfx[5].words.w1 = 4;
-
-    gfx[2].words.w1 = (((s32)lrxf & 0xFFF) << 12) | ((s32)lryf & 0xFFF);
-
-    lrx = node->clipRight;
-    lry = node->clipBottom;
-    gfx[6].words.w0 = (((lrx << 2) & 0xFFF) << 12) | (((node->clipBottom << 2) & 0xFFF) | (new_var = 0xE4000000));
-
-    ulx = node->clipLeft;
-    uly = 1;
-    gDisplayListAllocPtr = gfx + uly;
-    gDisplayListAllocPtr = gfx + 2;
-    gDisplayListAllocPtr = gfx + 3;
-    gDisplayListAllocPtr = gfx + 4;
-    gDisplayListAllocPtr = gfx + 5;
-    gDisplayListAllocPtr = gfx + 6;
-    gDisplayListAllocPtr = gfx + 7;
-    gDisplayListAllocPtr = gfx + 8;
-
-    uly = node->clipTop;
-    gfx[6].words.w1 = (((ulx << 2) & 0xFFF) << 12) | ((uly << 2) & 0xFFF);
-
-    gfx[7].words.w0 = 0xE1000000;
-    gDisplayListAllocPtr = gfx + 9;
-
-    gfx[8].words.w0 = 0xF1000000;
-    gfx[7].words.w1 = 0;
-    gfx[8].words.w1 = texCoord;
-
-    gDisplayListAllocPtr = gfx + 10;
-
-    frameIdx = 0;
-    gfx[9].words.w0 = otherMode;
-    gfx[9].words.w1 = frameIdx;
+    gDPSetColorImage(
+        gDisplayListAllocPtr++,
+        G_IM_FMT_RGBA,
+        G_IM_SIZ_16b,
+        320,
+        &gAuxFrameBuffers[gCurrentDisplayBufferIndex]
+    );
+    gSPDisplayList(gDisplayListAllocPtr++, gViewportFillSetupDisplayList);
+    gDPSetScissor(
+        gDisplayListAllocPtr++,
+        G_SC_NON_INTERLACE,
+        node->clipLeft,
+        node->clipTop,
+        node->clipRight,
+        node->clipBottom
+    );
+    gDPSetPrimColor(gDisplayListAllocPtr++, 0, 0, 0, 0, 0, 255);
+    gDPSetPrimDepth(gDisplayListAllocPtr++, 0xFFFC, 0);
+    gDPSetDepthSource(gDisplayListAllocPtr++, G_ZS_PRIM);
+    gSPTextureRectangle(
+        gDisplayListAllocPtr++,
+        node->clipLeft << 2,
+        node->clipTop << 2,
+        node->clipRight << 2,
+        node->clipBottom << 2,
+        G_TX_RENDERTILE,
+        0,
+        0,
+        0x400,
+        0x400
+    );
+    gDPSetDepthSource(gDisplayListAllocPtr++, G_ZS_PIXEL);
 }
 
 void enqueueViewportAuxFramebufferFill(SceneRenderTask *ctx) {

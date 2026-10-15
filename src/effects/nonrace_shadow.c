@@ -7,8 +7,6 @@
 #include "mbi.h"
 #include "ui/level_preview_3d.h"
 
-extern Gfx *gDisplayListAllocPtr;
-
 u32 g_NonRaceShadowTex[];
 
 Gfx g_NonRaceShadowDL[] = { gsSPClearGeometryMode(

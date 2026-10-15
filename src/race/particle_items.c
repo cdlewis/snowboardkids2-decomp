@@ -454,9 +454,6 @@ extern BillboardSprite D_800908A0_914A0;
 extern Vec3i D_800908E0_914E0[];
 extern PushZoneDataEntry gPushZoneData[];
 extern CompressedAssetEntry D_80090AB8_916B8[];
-extern s32 gLookAtPtr;
-
-extern Gfx *gDisplayListAllocPtr;
 
 void initFallingEffect(FallingEffectState *arg0) {
     getCurrentAllocation();
