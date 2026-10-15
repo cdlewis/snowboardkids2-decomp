@@ -299,8 +299,8 @@ void renderShadedTextSprite(
     if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
         (top < bottom)) {
 
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);

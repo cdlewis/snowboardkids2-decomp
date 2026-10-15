@@ -54,8 +54,8 @@ void renderTextPalette(TextData *arg0) {
         return;
     }
 
-    if (gGraphicsMode != 1) {
-        gGraphicsMode = 1;
+    if (gGraphicsMode != GRAPHICS_MODE_FONT) {
+        gGraphicsMode = GRAPHICS_MODE_FONT;
         gCurrentPaletteId = -1;
 
         gSPDisplayList(gDisplayListAllocPtr++, gFontDisplayListSetup);
@@ -239,8 +239,8 @@ void renderTextColored(ColoredTextRenderArg *arg0) {
         return;
     }
 
-    if (gGraphicsMode != 1) {
-        gGraphicsMode = 1;
+    if (gGraphicsMode != GRAPHICS_MODE_FONT) {
+        gGraphicsMode = GRAPHICS_MODE_FONT;
         gCurrentPaletteId = -1;
         gSPDisplayList(gDisplayListAllocPtr++, gFontDisplayListSetup);
         gDPLoadTextureBlock_4b(

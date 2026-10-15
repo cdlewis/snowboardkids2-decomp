@@ -137,7 +137,7 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
 
     loadBlockCmd = gDisplayListAllocPtr++;
     loadBlockCmd->words.w0 = 0xF3000000;
-    gGraphicsMode = -1;
+    gGraphicsMode = GRAPHICS_MODE_INVALID;
     widthDiv16 = state->texture.width >> 4;
     dxtBase = 0x800;
     if (widthDiv16 != 0) {

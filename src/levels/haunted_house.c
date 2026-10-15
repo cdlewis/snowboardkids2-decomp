@@ -742,7 +742,7 @@ void renderGhosts(GhostManager *ghostManager) {
     s32 i;
 
     currentTextureIndex = -1;
-    gGraphicsMode = -1;
+    gGraphicsMode = GRAPHICS_MODE_INVALID;
     gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
 
     for (i = 0; i < 8; i++) {

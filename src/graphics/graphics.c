@@ -516,7 +516,7 @@ void renderFrame(u32 viScanline) {
                 gTextClipAndOffsetData.offsetY = node->offsetY;
 
                 gTextureEnabled = node->uses3DRendering;
-                gGraphicsMode = -1;
+                gGraphicsMode = GRAPHICS_MODE_INVALID;
 
                 if (node->uses3DRendering == 0) {
                     gDPSetColorDither(gDisplayListAllocPtr++, G_CD_DISABLE);

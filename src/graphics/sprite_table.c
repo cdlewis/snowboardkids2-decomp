@@ -213,7 +213,7 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
     tlutAddr = (s32)textureEntry.index_ptr + (sprite->paletteIndex << 5);
     texWidthShift = 0;
 
-    if (gGraphicsMode != 0x202) {
+    if (gGraphicsMode != GRAPHICS_MODE_OPAQUE_SPRITE) {
         dim = textureEntry.width;
     loop_3:
         if (!(dim & 1)) {
@@ -292,7 +292,7 @@ void renderOpaqueSpriteCallback(SpriteRenderState *sprite) {
         gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     }
 
-    gGraphicsMode = 0x202;
+    gGraphicsMode = GRAPHICS_MODE_OPAQUE_SPRITE;
     memcpy(&gCachedSpriteTextureEntry, &textureEntry, sizeof(Vec3i));
 
     if (sprite->translationMtx == NULL) {
@@ -367,7 +367,7 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
     tlutAddr = (s32)textureEntry.index_ptr + (sprite->paletteIndex << 5);
     texWidthShift = 0;
 
-    if (gGraphicsMode != 0x203) {
+    if (gGraphicsMode != GRAPHICS_MODE_TRANSLUCENT_SPRITE) {
         dim = textureEntry.width;
     loop_3:
         if (!(dim & 1)) {
@@ -446,7 +446,7 @@ void renderTranslucentSpriteCallback(SpriteRenderState *sprite) {
         gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     }
 
-    gGraphicsMode = 0x203;
+    gGraphicsMode = GRAPHICS_MODE_TRANSLUCENT_SPRITE;
     memcpy(&gCachedSpriteTextureEntry, &textureEntry, sizeof(Vec3i));
 
     gDPSetEnvColor(gDisplayListAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);
@@ -523,7 +523,7 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
     tlutAddr = (s32)textureEntry.index_ptr + (sprite->paletteIndex << 5);
     texWidthShift = 0;
 
-    if (gGraphicsMode != 0x203) {
+    if (gGraphicsMode != GRAPHICS_MODE_TRANSLUCENT_SPRITE) {
         dim = textureEntry.width;
     loop_3:
         if (!(dim & 1)) {
@@ -602,7 +602,7 @@ void renderTransformedSpriteCallback(SpriteRenderState *sprite) {
         gDPLoadTLUT_pal16(gDisplayListAllocPtr++, 0, tlutAddr);
     }
 
-    gGraphicsMode = 0x203;
+    gGraphicsMode = GRAPHICS_MODE_TRANSLUCENT_SPRITE;
     memcpy(&gCachedSpriteTextureEntry, &textureEntry, sizeof(Vec3i));
 
     gDPSetEnvColor(gDisplayListAllocPtr++, 0xFF, 0xFF, 0xFF, sprite->alpha);

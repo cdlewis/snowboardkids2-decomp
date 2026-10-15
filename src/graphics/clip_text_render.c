@@ -70,8 +70,8 @@ void drawColorRect(ColorRect *rect) {
 
     gDPPipeSync(gDisplayListAllocPtr++);
 
-    if (gGraphicsMode != 0) {
-        gGraphicsMode = 0;
+    if (gGraphicsMode != GRAPHICS_MODE_COLOR_RECT) {
+        gGraphicsMode = GRAPHICS_MODE_COLOR_RECT;
         gDPPipeSync(gDisplayListAllocPtr++);
         gDPSetCycleType(gDisplayListAllocPtr++, G_CYC_1CYCLE);
         gDPSetEnvColor(gDisplayListAllocPtr++, rect->red, rect->green, rect->blue, 0xFF);
@@ -241,11 +241,11 @@ void drawColorRectFill(ColorRect *rect) {
 
     gDPPipeSync(gDisplayListAllocPtr++);
 
-    if (gGraphicsMode != 0) {
+    if (gGraphicsMode != GRAPHICS_MODE_COLOR_RECT) {
         tempGfx = gDisplayListAllocPtr;
         gDisplayListAllocPtr = tempGfx + 1;
         tempGfx[0].words.w1 = G_CYC_FILL;
-        gGraphicsMode = 0;
+        gGraphicsMode = GRAPHICS_MODE_COLOR_RECT;
         tempGfx[0].words.w0 = 0xE3000A01;
         gDisplayListAllocPtr = tempGfx + 2;
         tempGfx[1].words.w0 = 0xE200001C;

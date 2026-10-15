@@ -946,11 +946,11 @@ void prepareDisplayListRenderState(DisplayListObject *obj) {
         gSPLookAt(gDisplayListAllocPtr++, lookAt);
     }
 
-    if (gGraphicsMode != 3) {
+    if (gGraphicsMode != GRAPHICS_MODE_DISPLAY_LIST) {
         gDPPipeSync(gDisplayListAllocPtr++);
         gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
 
-        gGraphicsMode = 3;
+        gGraphicsMode = GRAPHICS_MODE_DISPLAY_LIST;
 
         if (obj->segment1 != 0) {
             gSPSegment(gDisplayListAllocPtr++, 1, obj->segment1);
@@ -1053,11 +1053,11 @@ void setupDisplayListMatrix(DisplayListObject *arg0) {
         gSPLookAt(gDisplayListAllocPtr++, temp_v0);
     }
 
-    if (gGraphicsMode != 3) {
+    if (gGraphicsMode != GRAPHICS_MODE_DISPLAY_LIST) {
         gDPPipeSync(gDisplayListAllocPtr++);
         gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
 
-        gGraphicsMode = 3;
+        gGraphicsMode = GRAPHICS_MODE_DISPLAY_LIST;
 
         if (arg0->segment1 != 0) {
             gSPSegment(gDisplayListAllocPtr++, 1, arg0->segment1);
@@ -1335,11 +1335,11 @@ void setupBillboardDisplayListMatrix(DisplayListObject *obj) {
         gSPLookAt(gDisplayListAllocPtr++, lookAt);
     }
 
-    if (gGraphicsMode != 3) {
+    if (gGraphicsMode != GRAPHICS_MODE_DISPLAY_LIST) {
         gDPPipeSync(gDisplayListAllocPtr++);
         gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
 
-        gGraphicsMode = 3;
+        gGraphicsMode = GRAPHICS_MODE_DISPLAY_LIST;
 
         if (obj->segment1 != NULL) {
             gSPSegment(gDisplayListAllocPtr++, 1, obj->segment1);
@@ -1455,14 +1455,14 @@ void initializeMultiPartDisplayListObjects(DisplayListObject *arg0) {
         }
     }
 
-    if (gGraphicsMode == 3) {
+    if (gGraphicsMode == GRAPHICS_MODE_DISPLAY_LIST) {
         return;
     }
 
     gDPPipeSync(gDisplayListAllocPtr++);
     gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
     segment1 = arg0->segment1;
-    gGraphicsMode = 3;
+    gGraphicsMode = GRAPHICS_MODE_DISPLAY_LIST;
 
     if (segment1 != NULL) {
         gSPSegment(gDisplayListAllocPtr++, 1, arg0->segment1);
@@ -1697,11 +1697,11 @@ void prepareDisplayListRenderStateWithLights(DisplayListObject *obj) {
         gSPLookAt(gDisplayListAllocPtr++, lookat);
     }
 
-    if (gGraphicsMode != 3) {
+    if (gGraphicsMode != GRAPHICS_MODE_DISPLAY_LIST) {
         gDPPipeSync(gDisplayListAllocPtr++);
         gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
 
-        gGraphicsMode = 3;
+        gGraphicsMode = GRAPHICS_MODE_DISPLAY_LIST;
 
         if (obj->segment1 != 0) {
             gSPSegment(gDisplayListAllocPtr++, 1, obj->segment1);
@@ -2061,11 +2061,11 @@ void renderCameraRelativeDisplayList(DisplayListObject *displayListObj) {
         gSPLookAt(gDisplayListAllocPtr++, lookAt);
     }
 
-    if (gGraphicsMode != 3) {
+    if (gGraphicsMode != GRAPHICS_MODE_DISPLAY_LIST) {
         gDPPipeSync(gDisplayListAllocPtr++);
         gDPSetTexturePersp(gDisplayListAllocPtr++, 0x80000);
 
-        gGraphicsMode = 3;
+        gGraphicsMode = GRAPHICS_MODE_DISPLAY_LIST;
 
         if (displayListObj->segment1 != 0) {
             gSPSegment(gDisplayListAllocPtr++, 1, displayListObj->segment1);
@@ -2128,8 +2128,8 @@ void renderTexturedBillboardSprite(BillboardSprite *state) {
         transform3DToMtx(&gScaleMatrix, state->matrix);
     }
 
-    if (gGraphicsMode != 6) {
-        gGraphicsMode = 6;
+    if (gGraphicsMode != GRAPHICS_MODE_TEXTURED_BILLBOARD) {
+        gGraphicsMode = GRAPHICS_MODE_TEXTURED_BILLBOARD;
 
         gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
 
@@ -2212,8 +2212,8 @@ void renderRotatedBillboardSprite(RotatedBillboardSprite *state) {
         transform3DToMtx(&state->transform, state->matrix);
     }
 
-    if (gGraphicsMode != 6) {
-        gGraphicsMode = 6;
+    if (gGraphicsMode != GRAPHICS_MODE_TEXTURED_BILLBOARD) {
+        gGraphicsMode = GRAPHICS_MODE_TEXTURED_BILLBOARD;
 
         gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
 
@@ -2286,8 +2286,8 @@ void renderTexturedBillboardSpriteTile(BillboardSprite *state) {
         transform3DToMtx(&gScaleMatrix, state->matrix);
     }
 
-    if (gGraphicsMode != 6) {
-        gGraphicsMode = 6;
+    if (gGraphicsMode != GRAPHICS_MODE_TEXTURED_BILLBOARD) {
+        gGraphicsMode = GRAPHICS_MODE_TEXTURED_BILLBOARD;
 
         gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
 
@@ -2373,8 +2373,8 @@ void renderAlphaBillboardSprite(BillboardSprite *state) {
         transform3DToMtx(&gScaleMatrix, state->matrix);
     }
 
-    if (gGraphicsMode != 7) {
-        gGraphicsMode = 7;
+    if (gGraphicsMode != GRAPHICS_MODE_ALPHA_BILLBOARD) {
+        gGraphicsMode = GRAPHICS_MODE_ALPHA_BILLBOARD;
 
         gSPDisplayList(gDisplayListAllocPtr++, gAlphaSpriteSetupDL);
 
@@ -2456,9 +2456,8 @@ void renderAlphaSprite(BillboardSprite *state) {
         transform3DToN64Mtx(&gScaleMatrix, state->matrix);
     }
 
-    // Graphics mode 7 = alpha-blended textured sprites
-    if (gGraphicsMode != 7) {
-        gGraphicsMode = 7;
+    if (gGraphicsMode != GRAPHICS_MODE_ALPHA_BILLBOARD) {
+        gGraphicsMode = GRAPHICS_MODE_ALPHA_BILLBOARD;
 
         gSPDisplayList(gDisplayListAllocPtr++, gAlphaSpriteSetupDL);
 

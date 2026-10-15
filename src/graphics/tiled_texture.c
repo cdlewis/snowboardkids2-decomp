@@ -33,7 +33,7 @@ void loadScrollingTexture(ScrollingTextureState *state) {
 
     gDPPipeSync(gDisplayListAllocPtr++);
     gDPSetTextureLUT(gDisplayListAllocPtr++, G_TT_RGBA16);
-    gGraphicsMode = -1;
+    gGraphicsMode = GRAPHICS_MODE_INVALID;
 
     getTableEntryByU16Index(state->textureTable, state->textureIndex, &tableEntry);
 
@@ -177,7 +177,7 @@ void loadScrollingTiledTexture(ScrollingTextureState *arg0) {
 
     gDPPipeSync(gDisplayListAllocPtr++);
     gDPSetTextureLUT(gDisplayListAllocPtr++, G_TT_RGBA16);
-    gGraphicsMode = -1;
+    gGraphicsMode = GRAPHICS_MODE_INVALID;
 
     getTableEntryByU16Index(arg0->textureTable, arg0->textureIndex, &tableEntry);
 

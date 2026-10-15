@@ -70,8 +70,8 @@ void renderSpriteFrame(SpriteRenderArg *sprite) {
     if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
         (top < bottom)) {
 
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
@@ -157,8 +157,8 @@ void renderSpriteFrameWithPalette(SpriteRenderArg *sprite) {
     if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
         (top < bottom)) {
 
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
@@ -244,8 +244,8 @@ void renderHalfSizeSpriteFrame(SpriteRenderArg *sprite) {
     if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
         (top < bottom)) {
 
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
@@ -331,8 +331,8 @@ void renderHalfSizeSpriteWithCustomPalette(SpriteRenderArg *sprite) {
     if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
         (top < bottom)) {
 
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
@@ -469,8 +469,8 @@ void renderCharSelectIconSprite(ScaledSpriteArg *sprite) {
         (((gTextClipAndOffsetData.clipBottom * 4 >= top)) && (left < right)) && (top < bottom)) {
 
         dsdx = 0;
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedPaletteAddr = 0;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
@@ -622,8 +622,8 @@ void renderScaledShadedSpriteFrame(ScaledSpriteArg *sprite) {
     if ((gTextClipAndOffsetData.clipRight * 4 >= left) && (!(gTextClipAndOffsetData.clipBottom * 4 < top)) &&
         (left < right) && (top < bottom)) {
 
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
@@ -809,8 +809,8 @@ void renderScaledAlphaSpriteFrame(TransformedSpriteArg *sprite) {
     }
 
     if (!(gTextClipAndOffsetData.clipBottom * 4 < top) && (left < right) && (top < bottom)) {
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
@@ -952,8 +952,8 @@ void renderTextSprite(PaletteSpriteArg *sprite) {
     if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
         (top < bottom)) {
 
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedTextureAddr = 0;
             gCachedPaletteAddr = NULL;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
@@ -1100,8 +1100,8 @@ void renderTextSpriteWithTransparency(PaletteSpriteArg *sprite) {
     if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
         (top < bottom)) {
 
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedTextureAddr = 0;
             gCachedPaletteAddr = NULL;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
@@ -1252,8 +1252,8 @@ void renderTintedSprite(TintedSpriteArg *sprite) {
     if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
         (top < bottom)) {
 
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedTextureAddr = 0;
             gCachedPaletteAddr = NULL;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
@@ -1394,8 +1394,8 @@ void renderAlphaBlendedTextSprite(PaletteSpriteArg *sprite) {
     if ((gTextClipAndOffsetData.clipRight >= left) && (!(gTextClipAndOffsetData.clipBottom < top)) && (left < right) &&
         (top < bottom)) {
 
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedTextureAddr = 0;
             gCachedPaletteAddr = NULL;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
@@ -1579,8 +1579,8 @@ void renderFlippedScaledSpriteFrame(TransformedSpriteArg *sprite) {
     if (gTextClipAndOffsetData.clipRight * 4 >= left && (gTextClipAndOffsetData.clipBottom * 4 >= top) &&
         (left < right) && (top < bottom)) {
 
-        if (gGraphicsMode != 0x100) {
-            gGraphicsMode = 0x100;
+        if (gGraphicsMode != GRAPHICS_MODE_SPRITE_RDP) {
+            gGraphicsMode = GRAPHICS_MODE_SPRITE_RDP;
             gCachedPaletteAddr = NULL;
             gCachedTextureAddr = 0;
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);

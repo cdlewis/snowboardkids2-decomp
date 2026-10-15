@@ -2362,7 +2362,7 @@ void renderItemTriggers(ItemTriggerTaskState *arg0) {
 
     prevTextureIndex = -1;
     gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
-    gGraphicsMode = -1;
+    gGraphicsMode = GRAPHICS_MODE_INVALID;
 
     for (i = 0; i < arg0->numItems; i++) {
         offset = i << 4;

@@ -5955,7 +5955,7 @@ void renderRacerProjectedShadow(Player *player) {
 
     if (player->shadowVertices != NULL && player->shadowMatrix != NULL) {
         gSPMatrix(gDisplayListAllocPtr++, player->shadowMatrix, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
-        gGraphicsMode = -1;
+        gGraphicsMode = GRAPHICS_MODE_INVALID;
         gSPDisplayList(gDisplayListAllocPtr++, gPlayerShadowRenderSetupDl);
         getTableEntryByU16Index(player->itemSpriteAssetTable, 0, &shadowTexture);
 

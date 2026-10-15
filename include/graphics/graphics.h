@@ -17,6 +17,20 @@
 
 #define VIEWPORT_CALLBACK_LAYER_COUNT 8
 
+/* Cached rendering setup; INVALID forces the next draw to restore its state. */
+typedef enum {
+    GRAPHICS_MODE_INVALID = -1,
+    GRAPHICS_MODE_COLOR_RECT = 0,
+    GRAPHICS_MODE_FONT = 1,
+    GRAPHICS_MODE_DISPLAY_LIST = 3,
+    GRAPHICS_MODE_TEXTURED_BILLBOARD = 6,
+    GRAPHICS_MODE_ALPHA_BILLBOARD = 7,
+    GRAPHICS_MODE_SPRITE_RDP = 0x100,
+    GRAPHICS_MODE_NONRACE_SHADOW = 0x200,
+    GRAPHICS_MODE_OPAQUE_SPRITE = 0x202,
+    GRAPHICS_MODE_TRANSLUCENT_SPRITE = 0x203,
+} GraphicsMode;
+
 /*
  * Layers execute in ascending order, and entries within one layer execute
  * LIFO. These names describe conventional use; callbacks configure their own

@@ -154,8 +154,8 @@ void renderNonRaceShadow(SceneModel *model) {
 
     gSPMatrix(gDisplayListAllocPtr++, model->shadowMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    if (gGraphicsMode != 0x200) {
-        gGraphicsMode = 0x200;
+    if (gGraphicsMode != GRAPHICS_MODE_NONRACE_SHADOW) {
+        gGraphicsMode = GRAPHICS_MODE_NONRACE_SHADOW;
         gSPDisplayList(gDisplayListAllocPtr++, &g_NonRaceShadowDL);
     }
 

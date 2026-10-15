@@ -937,7 +937,7 @@ void renderSceneAnimationTask(SceneAnimationTaskNew *arg0) {
 
     prevTextureIndex = -1;
     gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
-    gGraphicsMode = -1;
+    gGraphicsMode = GRAPHICS_MODE_INVALID;
 
     for (i = 0; i < arg0->entryCount; i++) {
         if (isObjectCulled(&arg0->entries[i].position) == 0) {
@@ -1186,7 +1186,7 @@ void loadScrollingSceneryTexture(ScrollingSceneryTextureState *state) {
 
     gDPPipeSync(gDisplayListAllocPtr++);
     gDPSetTextureLUT(gDisplayListAllocPtr++, G_TT_RGBA16);
-    gGraphicsMode = -1;
+    gGraphicsMode = GRAPHICS_MODE_INVALID;
 
     getTableEntryByU16Index(state->textureTable, state->textureIndex, &tableEntry);
 
@@ -1735,7 +1735,7 @@ void renderGoldCoins(GoldCoinRenderState *state) {
     u32 tileLine;
 
     gSPDisplayList(gDisplayListAllocPtr++, D_8009A780_9B380);
-    gGraphicsMode = -1;
+    gGraphicsMode = GRAPHICS_MODE_INVALID;
 
     getTableEntryByU16Index(state->textureTable, state->animationFrame, &tableEntry);
 
@@ -2643,7 +2643,7 @@ void renderItemBoxBurstEffect(ItemBoxBurstEffectState *state) {
 
     loadBlockCmd = gDisplayListAllocPtr++;
     loadBlockCmd->words.w0 = 0xF3000000;
-    gGraphicsMode = -1;
+    gGraphicsMode = GRAPHICS_MODE_INVALID;
     widthDiv16 = state->textureEntry.width >> 4;
     dxtBase = 0x800;
     if (widthDiv16 != 0) {

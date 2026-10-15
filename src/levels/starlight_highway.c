@@ -279,7 +279,7 @@ void loadColorIndexedTexture(void *arg) {
 
     gDPPipeSync(gDisplayListAllocPtr++);
     gDPSetTextureLUT(gDisplayListAllocPtr++, G_TT_RGBA16);
-    gGraphicsMode = -1;
+    gGraphicsMode = GRAPHICS_MODE_INVALID;
 
     getTableEntryByU16Index(state->textureTable, state->textureIndex, &tableEntry);
 
