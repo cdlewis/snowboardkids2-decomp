@@ -2,6 +2,7 @@
 #include "assets.h"
 #include "common.h"
 #include "data/data_table.h"
+#include "generated/modelpayload_asset_sizes.h"
 #include "graphics/displaylist.h"
 #include "graphics/tiled_texture.h"
 #include "math/geometry.h"
@@ -183,22 +184,32 @@ void initScrollingTextureEffectTask(ScrollingTextureState *arg0) {
     if (arg0->unk58 == 0) {
         arg0->base.segment1 =
             loadUncompressedData(&scrollingTextureSegment1_ROM_START, &scrollingTextureSegment1_ROM_END);
-        arg0->base.segment2 =
-            loadCompressedData(&scrollingTextureSegment2_ROM_START, &scrollingTextureSegment2_ROM_END, 0x200);
+        arg0->base.segment2 = loadCompressedData(
+            &scrollingTextureSegment2_ROM_START,
+            &scrollingTextureSegment2_ROM_END,
+            scrollingTextureSegment2_DECOMPRESSED_SIZE
+        );
         arg0->base.segment3 = 0;
         arg0->base.displayLists = &D_80089510_8A110;
         arg0->paletteIndex = 0;
     } else if (arg0->unk58 != 1) {
         arg0->base.segment1 =
             loadUncompressedData(&scrollingTextureSegment1_ROM_START, &scrollingTextureSegment1_ROM_END);
-        arg0->base.segment2 =
-            loadCompressedData(&scrollingTextureSegment2_ROM_START, &scrollingTextureSegment2_ROM_END, 0x200);
+        arg0->base.segment2 = loadCompressedData(
+            &scrollingTextureSegment2_ROM_START,
+            &scrollingTextureSegment2_ROM_END,
+            scrollingTextureSegment2_DECOMPRESSED_SIZE
+        );
         arg0->base.segment3 = 0;
         arg0->base.displayLists = &D_80089510_8A110;
         arg0->paletteIndex = 0;
     } else {
         arg0->base.segment1 = loadUncompressedData(&tiledTextureSegment1_ROM_START, &tiledTextureSegment1_ROM_END);
-        arg0->base.segment2 = loadCompressedData(&tiledTextureSegment2_ROM_START, &tiledTextureSegment2_ROM_END, 0x200);
+        arg0->base.segment2 = loadCompressedData(
+            &tiledTextureSegment2_ROM_START,
+            &tiledTextureSegment2_ROM_END,
+            tiledTextureSegment2_DECOMPRESSED_SIZE
+        );
         arg0->base.displayLists = &D_80089520;
         arg0->base.segment3 = 0;
         arg0->paletteIndex = 1;

@@ -253,13 +253,13 @@ $(BUILD_DIR)/src/%.o: src/%.c $(CHARMAP)
 	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I assets/courses -I assets/modelpayload -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
 	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I assets/courses -I assets/modelpayload -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
 
-MODEL_GFX_SOURCES := $(wildcard assets/gfxbin/*.c) $(wildcard assets/modelpayload/*.yaml)
+MODEL_GFX_SOURCES := $(wildcard assets/gfxbin/*.c assets/modelpayload/*.yaml assets/courses/display_lists/*.c assets/courses/model_resources/*.yaml)
 MODEL_GFX_HEADER = $(BUILD_DIR)/include/generated/model_gfx.h
 
 $(MODEL_GFX_HEADER) $(BUILD_DIR)/model_gfx.ld &: $(MODEL_GFX_SOURCES) $(TOOLS_DIR)/model_gfx_symbols.py snowboardkids2.yaml
 	$(V)$(PYTHON) $(TOOLS_DIR)/model_gfx_symbols.py
 
-$(COURSE_DEFINITION_C_OBJECTS): $(MODEL_GFX_HEADER)
+$(COURSE_DEFINITION_C_OBJECTS): $(MODEL_GFX_HEADER) $(MODELPAYLOAD_ASSET_SIZE_HEADER)
 
 $(BUILD_DIR)/assets/gfxbin/%.o: assets/gfxbin/%.c $(MODEL_GFX_HEADER)
 	@mkdir -p $(shell dirname $@)
@@ -279,7 +279,7 @@ $(BUILD_DIR)/assets/animationdata/%.o: assets/animationdata/%.yaml $(TOOLS_DIR)/
 	$(V)$(ANIMATIONDATA_PACK) $< --out $(BUILD_DIR)/assets/animationdata/$*.sno
 	$(V)$(LD) -r -b binary -o $@ $(BUILD_DIR)/assets/animationdata/$*.sno
 
-$(BUILD_DIR)/assets/courses/display_lists/%.o: assets/courses/display_lists/%.c $(COURSE_ASSET_SIZE_HEADER)
+$(BUILD_DIR)/assets/courses/display_lists/%.o: assets/courses/display_lists/%.c $(MODEL_GFX_HEADER)
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(GREEN)    c    $(NO_COL)]  $<\n"
 	$(V)$(CC_CHECK) $(CC_CHECK_FLAGS) $(IINC) $(MACROS) -I src/ -I assets/courses -I $(BUILD_DIR)/include -o $@ -x c $< 2>&1 | tee -a $(BUILD_LOG)

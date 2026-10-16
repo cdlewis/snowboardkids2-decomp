@@ -116,7 +116,7 @@ gYamaPrimaryDisplayLists = 0x80088580;
 gYamaSecondaryDisplayLists = 0x80088590;
 gYamaYPrimaryDisplayLists = 0x800885A0;
 gYamaYSecondaryDisplayLists = 0x800885B0;
-D_80088600 = 0x80088600;
+gWendyHousePrimaryDisplayLists = 0x80088600; // rom:0x89200
 D_80088620 = 0x80088620;
 gTable3DisplayLists = 0x80088130;
 gTable2DisplayLists = 0x80088140;
@@ -4398,3 +4398,17 @@ gSaveSlotSelectionParticleYOffsets = 0x8008F2B8; // rom:0x8FEB8
 gSaveSlotDeleteArrowAnimFrames = 0x8008F2C4; // rom:0x8FEC4
 
 sLapCounterFormat = 0x8009E868; // rom:0x9F468
+
+gCostumeSlotDisplayLists = 0x8009A550; // rom:0x9B150
+gCrazyJunglePushZoneDisplayLists = 0x80095340; // rom:0x95F40
+gCrazyJungleBossPushZoneDisplayLists = 0x80095440; // rom:0x96040
+gHauntedHousePushZoneDisplayLists = 0x800956B0; // rom:0x962B0
+gIceLandPushZoneDisplayLists = 0x80095770; // rom:0x96370
+gIceLandBossPushZoneDisplayLists = 0x80095830; // rom:0x96430
+gChestOpenStretchDisplayLists = 0x80088720; // rom:0x89320
+gBusQuadDisplayLists = 0x80088640; // rom:0x89240
+gFanBodyDisplayLists = 0x80088650; // rom:0x89250
+gFanOverlayDisplayLists = 0x80088660; // rom:0x89260
+gUfoLogoPrimaryDisplayLists = 0x800885D0; // rom:0x891D0
+gUfoLogoSecondaryDisplayLists = 0x800885E0; // rom:0x891E0
+gUfoLogoOverlayDisplayLists = 0x800885F0; // rom:0x891F0

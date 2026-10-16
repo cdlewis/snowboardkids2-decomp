@@ -20,7 +20,7 @@ typedef struct {
     void *compressedDataStart;
     void *compressedDataEnd;
     u16 decompressedSize;
-    u16 padding;
+    u16 displayListCount;
     void *directDataPtr;
 } Asset;
 
@@ -88,7 +88,7 @@ typedef struct {
     s16 unk32;
 } SceneModelShadowSprite;
 
-typedef struct {
+typedef struct SceneModel {
     DisplayListObject *boneDisplayObjects;
     BoneAnimationState *boneAnimationStates;
     void *animationBoneData;
@@ -221,7 +221,7 @@ typedef struct {
     u8 transformMatrix[0x18];
     s32 unk1C;
     u8 padding[0x4];
-    void *unk24;
+    DisplayLists *unk24;
     MemoryAllocatorNode *displayList;
     MemoryAllocatorNode *vertexData;
     s32 unk30;

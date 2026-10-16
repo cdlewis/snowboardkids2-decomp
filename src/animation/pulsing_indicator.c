@@ -1,14 +1,19 @@
 #include "animation/pulsing_indicator.h"
 #include "common.h"
+#include "data/model_display_lists.h"
+#include "generated/model_gfx.h"
 #include "graphics/sprite_table.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
+DisplayLists gChestOpenStretchDisplayLists = { 0,
+                                               CHEST_OPEN_DISPLAY_LIST_part_0508,
+                                               CHEST_OPEN_DISPLAY_LIST_part_0518,
+                                               NULL };
+
 void updatePulsingSpriteIndicator(PulsingSpriteState *);
 void cleanupPulsingSpriteIndicator(PulsingSpriteState *);
-
-s32 D_80088720_89320[] = { 0, 0x01000508, 0x01000518, 0 };
 
 void initPulsingSpriteIndicator(PulsingSpriteState *arg0) {
     SpriteAssetState *temp_s0;
@@ -108,7 +113,7 @@ void initStretchingModelTask(StretchingModelTaskState *arg0) {
     arg0->displayList = loadAssetGroupDisplayList(arg0->owner);
     arg0->vertexData = loadAssetGroupCompressedData(arg0->owner);
     arg0->unk30 = 0;
-    arg0->unk24 = &D_80088720_89320;
+    arg0->unk24 = &gChestOpenStretchDisplayLists;
     arg0->rotationAngle = 0;
     arg0->stretchAngle = 0;
     setCleanupCallback(&cleanupStretchingModelTask);

@@ -3,6 +3,7 @@
 #include "common.h"
 #include "data/asset_metadata.h"
 #include "generated/course_asset_sizes.h"
+#include "generated/modelpayload_asset_sizes.h"
 #include "system/rom_loader.h"
 #include "system/task_scheduler.h"
 
@@ -96,7 +97,7 @@ void *loadAsset_216290(void) {
     return loadCompressedData(
         &PARTICLE_EFFECT_COMPRESSED_GRAPHICS_ROM_START,
         &PARTICLE_EFFECT_COMPRESSED_GRAPHICS_ROM_END,
-        0x5740
+        PARTICLE_EFFECT_COMPRESSED_GRAPHICS_DECOMPRESSED_SIZE
     );
 }
 

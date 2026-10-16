@@ -1,5 +1,6 @@
 #include "assets.h"
 #include "common.h"
+#include "generated/modelpayload_asset_sizes.h"
 #include "graphics/tiled_texture.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
@@ -26,7 +27,11 @@ void spawnTrickBurstEffect(u16 renderLayer, void *transformMatrix, s16 colorInde
 void initTrickBurstEffect(TrickBurstEffectTask *task) {
     setCleanupCallback(cleanupTrickBurstEffect);
     task->base.segment1 = loadUncompressedData(&tiledTextureSegment1_ROM_START, &tiledTextureSegment1_ROM_END);
-    task->base.segment2 = loadCompressedData(&tiledTextureSegment2_ROM_START, &tiledTextureSegment2_ROM_END, 0x200);
+    task->base.segment2 = loadCompressedData(
+        &tiledTextureSegment2_ROM_START,
+        &tiledTextureSegment2_ROM_END,
+        tiledTextureSegment2_DECOMPRESSED_SIZE
+    );
     task->base.displayLists = &D_80089520;
     task->unk50 = 1;
     task->alpha = 0x800000;

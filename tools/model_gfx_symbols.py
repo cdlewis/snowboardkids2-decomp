@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Bind decoded model graphics to the layout of their editable payloads.
+"""Bind model and course graphics to their editable payload layouts.
 
-Display-list symbols are defined by the C arrays themselves at segment-1 VRAM.
-Compressed payloads have no CPU linker section; their segmented symbols follow
-part offsets in the packing manifests, which are the authority for that layout.
+Display-list symbols are defined by C arrays at segment-1 VRAM. Compressed
+payloads have no CPU linker section; their RSP symbols follow the part offsets
+in the packing manifests. Shared namespaces describe runtime-selected payloads
+that must have identical layouts.
 """
 import argparse
 import re
@@ -12,76 +13,147 @@ from pathlib import Path
 import yaml
 
 
+PART_TYPES = {"vtx": ("Vtx", 16), "palette": ("u16", 2), "texture": ("u8", 1)}
+SEGMENT_SIZE = 1 << 24
+IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z_0-9]*\Z")
+
+
+def parse_int(value) -> int:
+    return int(value, 0) if isinstance(value, str) else int(value)
+
+
+def normalized_manifest(manifest: dict) -> dict:
+    """Validate the layout used for both packing and symbolic RSP addresses."""
+    manifest = dict(manifest)
+    name = manifest["name"]
+    namespace = manifest.get("symbol_namespace", name)
+    for identifier in (name, namespace):
+        if not IDENTIFIER.fullmatch(identifier):
+            raise ValueError(f"{name}: invalid symbol namespace {identifier!r}")
+    segment = parse_int(manifest.get("rsp_segment", 2))
+    if not 0 <= segment < 16:
+        raise ValueError(f"{name}: RSP segment must be between 0 and 15")
+    manifest["rsp_segment"] = segment
+    size = parse_int(manifest.get("decompressed_size", SEGMENT_SIZE))
+    if not 0 < size <= SEGMENT_SIZE:
+        raise ValueError(f"{name}: payload size exceeds the segmented address range")
+    if "decompressed_size" in manifest:
+        manifest["decompressed_size"] = size
+    names = set()
+    parts = []
+    for original in manifest["parts"]:
+        part = dict(original, offset=parse_int(original["offset"]), size=parse_int(original["size"]))
+        part_name = part["name"]
+        if not IDENTIFIER.fullmatch(part_name) or part_name in names:
+            raise ValueError(f"{name}: invalid or duplicate part name {part_name!r}")
+        names.add(part_name)
+        if part["type"] not in PART_TYPES:
+            raise ValueError(f"{name}: unsupported part type {part['type']!r}")
+        _, stride = PART_TYPES[part["type"]]
+        start, length = part["offset"], part["size"]
+        if start < 0 or length <= 0 or start + length > size:
+            raise ValueError(f"{name}: {part_name} lies outside the payload")
+        if start % stride or length % stride:
+            raise ValueError(f"{name}: {part_name} has an unaligned {part['type']} range")
+        parts.append(part)
+    previous_end = 0
+    for part in sorted(parts, key=lambda item: item["offset"]):
+        if part["offset"] < previous_end:
+            raise ValueError(f"{name}: {part['name']} overlaps an earlier payload part")
+        previous_end = part["offset"] + part["size"]
+    manifest["parts"] = parts
+    return manifest
+
+
 def resolve_payload_references(source: str, bundle: str, manifest: dict) -> str:
-    """Replace extraction-time addresses with references to named payload parts."""
+    """Turn extraction-time offsets into stable part names and array indexes."""
+    manifest = normalized_manifest(manifest)
+    namespace = manifest.get("symbol_namespace", manifest["name"])
+
     def replace(match):
         kind, hex_offset = match.groups()
         offset = int(hex_offset, 16)
-        part = next((p for p in manifest['parts'] if p['offset'] <= offset < p['offset'] + p['size']), None)
+        part = next((p for p in manifest["parts"] if p["offset"] <= offset < p["offset"] + p["size"]), None)
         if part is None:
-            raise ValueError(f'{bundle}: {kind} reference {offset:#x} outside payload parts')
-        if kind == 'vtx' and part['type'] != 'vtx':
-            raise ValueError(f'{bundle}: vertex reference into {part["type"]}')
-        stride = {'vtx': 16, 'palette': 2, 'texture': 1}[part['type']]
-        delta = offset - part['offset']
+            raise ValueError(f"{bundle}: {kind} reference {offset:#x} outside payload parts")
+        if kind == "vtx" and part["type"] != "vtx":
+            raise ValueError(f"{bundle}: vertex reference into {part['type']}")
+        _, stride = PART_TYPES[part["type"]]
+        delta = offset - part["offset"]
         if delta % stride:
-            raise ValueError(f'{bundle}: unaligned {kind} reference {offset:#x}')
-        symbol = f"{manifest['name']}_{part['name']}"
-        return f'&{symbol}[{delta // stride}]'
-    return re.sub(rf'\b{bundle}_payload_(\w+)_([0-9A-F]+)\b', replace, source)
+            raise ValueError(f"{bundle}: unaligned {kind} reference {offset:#x}")
+        return f"&{namespace}_{part['name']}[{delta // stride}]"
+
+    return re.sub(rf"\b{re.escape(bundle)}_payload_(\w+)_([0-9A-F]+)\b", replace, source)
+
+
+def shared_layout(manifest: dict) -> tuple:
+    # Part order and PNG paths do not affect the runtime interface; texture
+    # formats, dimensions, palette relationships, and allocation sizes do.
+    fields = ("name", "type", "offset", "size", "format", "width", "height", "colors", "palette")
+    parts = tuple(tuple(part.get(field) for field in fields)
+                  for part in sorted(manifest["parts"], key=lambda item: item["name"]))
+    return manifest["rsp_segment"], manifest.get("decompressed_size"), parts
 
 
 def generate(assets: Path, header: Path, linker: Path):
-    manifests = []
-    for path in sorted((assets / 'modelpayload').glob('*.yaml')):
-        manifest = yaml.safe_load(path.read_text())
-        manifests.append(manifest)
-    lines = ['#pragma once', '', '/* Generated by tools/model_gfx_symbols.py; do not edit. */',
-             '#include "gbi.h"', '']
-    ld = ['/* Segmented addresses follow the model payload packing manifests. */']
-    for path in sorted((assets / 'gfxbin').glob('*.c')):
+    manifests = [normalized_manifest(yaml.safe_load(path.read_text())) for path in sorted([
+        *(assets / "modelpayload").glob("*.yaml"),
+        *(assets / "courses/model_resources").glob("*.yaml"),
+    ])]
+    lines = ["#pragma once", "", "/* Generated by tools/model_gfx_symbols.py; do not edit. */",
+             '#include "gbi.h"', ""]
+    ld = ["/* Segmented addresses follow the model and course payload packing manifests. */"]
+    declared = set()
+    for path in sorted([*(assets / "gfxbin").glob("*.c"), *(assets / "courses/display_lists").glob("*.c")]):
         source = path.read_text()
-        for kind, symbol in re.findall(r'^(Gfx|Vtx) (\w+)\[\]', source, re.M):
-            lines.append(f'extern {kind} {symbol}[];')
-        if '_payload_' in source:
-            raise ValueError(f'{path.stem}: unresolved extraction-time payload references')
-        lines.append('')
+        for kind, symbol in re.findall(r"^(Gfx|Vtx) (\w+)\[[^\]]*\]", source, re.M):
+            if symbol in declared:
+                raise ValueError(f"{path}: duplicate graphics symbol {symbol}")
+            declared.add(symbol)
+            lines.append(f"extern {kind} {symbol}[];")
+        if "_payload_" in source:
+            raise ValueError(f"{path.stem}: unresolved extraction-time payload references")
+        lines.append("")
     addresses = {}
     layouts = {}
     for manifest in manifests:
-        namespace = manifest.get('symbol_namespace', manifest['name'])
-        segment = manifest.get('rsp_segment', 2)
-        layout = [(p['name'], p['type'], p['offset'], p['size']) for p in manifest['parts']]
+        namespace = manifest.get("symbol_namespace", manifest["name"])
+        segment = manifest["rsp_segment"]
+        layout = shared_layout(manifest)
         if namespace in layouts and layouts[namespace] != layout:
-            raise ValueError(f'{namespace}: runtime-selected payload layouts disagree')
+            raise ValueError(f"{namespace}: runtime-selected payload layouts disagree")
         layouts[namespace] = layout
-        for part in manifest['parts']:
+        for part in manifest["parts"]:
             symbol = f"{namespace}_{part['name']}"
-            address = (segment << 24) + part['offset']
+            address = (segment << 24) + part["offset"]
+            ctype, _ = PART_TYPES[part["type"]]
+            definition = namespace, address, ctype
             if symbol in addresses:
-                if addresses[symbol] != address:
-                    raise ValueError(f'{symbol}: conflicting segmented addresses')
-                continue
-            addresses[symbol] = address
-            ctype = {'vtx': 'Vtx', 'palette': 'u16', 'texture': 'u8'}[part['type']]
-            lines.append(f'extern {ctype} {symbol}[];')
+                if addresses[symbol] != definition:
+                    raise ValueError(f"{symbol}: conflicting payload symbol definitions")
+                continue  # A validated runtime-selected namespace shares symbols.
+            if symbol in declared:
+                raise ValueError(f"{symbol}: payload symbol conflicts with a display-list definition")
+            addresses[symbol] = definition
+            lines.append(f"extern {ctype} {symbol}[];")
             ld.append(f"{symbol} = 0x{segment:02X}000000 + 0x{part['offset']:X};")
-        lines.append('')
+        lines.append("")
     for path, content in ((header, lines), (linker, ld)):
         path.parent.mkdir(parents=True, exist_ok=True)
-        text = '\n'.join(content) + '\n'
+        text = "\n".join(content) + "\n"
         if not path.exists() or path.read_text() != text:
             path.write_text(text)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--assets', type=Path, default=Path('assets'))
-    parser.add_argument('--header', type=Path, default=Path('build/include/generated/model_gfx.h'))
-    parser.add_argument('--linker', type=Path, default=Path('build/model_gfx.ld'))
+    parser.add_argument("--assets", type=Path, default=Path("assets"))
+    parser.add_argument("--header", type=Path, default=Path("build/include/generated/model_gfx.h"))
+    parser.add_argument("--linker", type=Path, default=Path("build/model_gfx.ld"))
     args = parser.parse_args()
     generate(args.assets, args.header, args.linker)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

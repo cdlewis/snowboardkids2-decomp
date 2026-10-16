@@ -1,17 +1,22 @@
 #include "graphics/tiled_texture.h"
 #include "common.h"
 #include "data/data_table.h"
+#include "data/model_display_lists.h"
 #include "gbi.h"
+#include "generated/model_gfx.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-u32 D_800885D0_891D0[] = { 0x00000000, 0x00000000, 0x010005F0, 0x00000000 };
-u32 D_800885E0_891E0[] = { 0x00000000, 0x00000000, 0x01000718, 0x00000000 };
-u32 D_800885F0_891F0[] = { 0x00000000, 0x00000000, 0x00000000, 0x010007C8 };
-u32 D_80088600[] = { 0x00000000, 0x01000B68, 0x01000B78, 0x00000000 };
+DisplayLists gUfoLogoPrimaryDisplayLists = { 0, NULL, UFO_DISPLAY_LIST_part_05F0, NULL };
+DisplayLists gUfoLogoSecondaryDisplayLists = { 0, NULL, UFO_DISPLAY_LIST_part_0718, NULL };
+DisplayLists gUfoLogoOverlayDisplayLists = { 0, NULL, NULL, UFO_DISPLAY_LIST_part_07C8 };
+DisplayLists gWendyHousePrimaryDisplayLists = { 0,
+                                                WENDY_H_DISPLAY_LIST_part_0B68,
+                                                WENDY_H_DISPLAY_LIST_part_0B78,
+                                                NULL };
 
 void loadScrollingTexture(ScrollingTextureState *);
 void loadScrollingTiledTexture(ScrollingTextureState *);
@@ -299,16 +304,16 @@ void initializeRotatingLogo(RotatingLogoState *state) {
     state->opaqueDisplayList = loadAssetGroupDisplayList(state->model);
     state->opaqueVertexData = loadAssetGroupCompressedData(state->model);
     state->opaqueFlag = 0;
-    state->opaqueSettings = &D_800885D0_891D0;
+    state->opaqueSettings = &gUfoLogoPrimaryDisplayLists;
     memcpy(&state->transparentMatrix, &identityMatrix, sizeof(Transform3D));
     state->transparentDisplayList = loadAssetGroupDisplayList(state->model);
     state->transparentVertexData = loadAssetGroupCompressedData(state->model);
     state->transparentFlag = 0;
-    state->transparentSettings = &D_800885E0_891E0;
+    state->transparentSettings = &gUfoLogoSecondaryDisplayLists;
     memcpy(&state->overlayMatrix, &identityMatrix, sizeof(Transform3D));
     state->overlayDisplayList = loadAssetGroupDisplayList(state->model);
     state->overlayVertexData = loadAssetGroupCompressedData(state->model);
-    state->overlaySettings = &D_800885F0_891F0;
+    state->overlaySettings = &gUfoLogoOverlayDisplayLists;
     state->overlayFlag = 0;
     state->scale.val = 0x2000;
     state->rotationY = 0;

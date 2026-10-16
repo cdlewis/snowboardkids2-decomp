@@ -33,6 +33,13 @@ class N64SegGfxbundle(CommonSegment):
     def _address(self, addr: int, kind: str) -> str:
         segment, offset = addr >> 24, addr & 0xFFFFFF
         if segment == 1:
+            if kind == "vtx":
+                for start, end in self._vertex_blocks:
+                    if start <= offset < end and (offset - start) % 16 == 0:
+                        name = f"{self.name}_vertices_{start:04X}"
+                        index = (offset - start) // 16
+                        return f"&{name}[{index}]"
+                raise ValueError(f"{self.name}: vertex reference outside embedded vertex data")
             if offset not in self._entries:
                 raise ValueError(f"{self.name}: reference to missing entry 0x{offset:X}")
             return self._entries[offset]
@@ -52,23 +59,50 @@ class N64SegGfxbundle(CommonSegment):
             log.error(f"{self.name}: invalid F3DEX2 bundle size")
         words = [(int.from_bytes(data[i:i+4], "big"), int.from_bytes(data[i+4:i+8], "big"))
                  for i in range(0, len(data), 8)]
-        boundaries = {0, len(data)}
-        vertices = set()
+        # Discover embedded vertices before looking for command boundaries.
+        # Vertex coordinates/colors can have the same bytes as G_ENDDL or G_DL.
+        loads = []
         for i, (w0, w1) in enumerate(words):
+            if w0 >> 24 == 1 and w1 >> 24 == 1:
+                start = w1 & 0xFFFFFF
+                count = (w0 >> 12) & 0xFF
+                loads.append((i * 8, start, start + count * 16))
+        possible_blocks = [(start, end) for _, start, end in loads
+                           if start < end <= len(data) and start % 8 == 0]
+        loads = [(pos, start, end) for pos, start, end in loads
+                 if not any(a <= pos < b for a, b in possible_blocks)]
+        self._vertex_blocks = []
+        for _, start, end in sorted(loads, key=lambda item: item[1]):
+            if not start < end <= len(data) or start % 8:
+                raise ValueError(f"{self.name}: invalid embedded vertex range {start:#x}-{end:#x}")
+            if self._vertex_blocks and start < self._vertex_blocks[-1][1]:
+                a, b = self._vertex_blocks[-1]
+                if (start - a) % 16:
+                    raise ValueError(f"{self.name}: misaligned overlapping embedded vertices")
+                self._vertex_blocks[-1] = (a, max(b, end))
+            else:
+                self._vertex_blocks.append((start, end))
+        boundaries = {0, len(data)}
+        for start, end in self._vertex_blocks:
+            boundaries.update((start, end))
+        for i, (w0, w1) in enumerate(words):
+            if any(start <= i * 8 < end for start, end in self._vertex_blocks):
+                continue
             opcode = w0 >> 24
             if opcode == 0xDF:
                 boundaries.add((i + 1) * 8)
-            if opcode in (0x01, 0xDE, 0xE1) and w1 >> 24 == 1:
+            if opcode in (0xDE, 0xE1) and w1 >> 24 == 1:
                 offset = w1 & 0xFFFFFF
+                if offset >= len(data) or offset % 8:
+                    raise ValueError(f"{self.name}: invalid display-list target {offset:#x}")
+                if any(start <= offset < end for start, end in self._vertex_blocks):
+                    raise ValueError(f"{self.name}: display-list target points into vertex data")
                 boundaries.add(offset)
-                if opcode == 1:
-                    count = (w0 >> 12) & 0xFF
-                    vertices.add((offset, count))
-                    boundaries.add(offset + count * 16)
         self._entries = {off: f"{self.name}_part_{off:04X}" for off in boundaries if off < len(data)}
-        for off, _ in vertices:
-            self._entries[off] = f"{self.name}_vertices_{off:04X}"
-        vertex_counts = dict(vertices)
+        vertex_counts = {}
+        for start, end in self._vertex_blocks:
+            self._entries[start] = f"{self.name}_vertices_{start:04X}"
+            vertex_counts[start] = (end - start) // 16
         lines = [f"/* Extracted from ROM range 0x{self.rom_start:X}-0x{self.rom_end:X}. */",
                  '#include "common.h"', '#include "gbi.h"',
                  '#include "generated/model_gfx.h"', '']

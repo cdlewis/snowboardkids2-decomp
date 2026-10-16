@@ -7,6 +7,7 @@
 #include "data/data_table.h"
 #include "gamestate.h"
 #include "gbi.h"
+#include "generated/model_gfx.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
@@ -65,15 +66,8 @@ typedef struct {
 } FallingEffectTask;
 
 typedef struct {
-    s32 unk0;
-    s32 displayList1;
-    s32 displayList2;
-    s32 displayList3;
-} ShieldEffectDisplayConfig;
-
-typedef struct {
     Transform3D matrix;
-    ShieldEffectDisplayConfig *displayConfig;
+    DisplayLists *displayConfig;
     void *displayAsset1;
     void *displayAsset2;
     s32 unk2C;
@@ -420,19 +414,25 @@ void processItemTriggers(ItemTriggerTaskState *);
 void cleanupItemTriggerTask(Func45010Arg *);
 void renderItemTriggers(ItemTriggerTaskState *);
 
-s32 D_8009A6B0_9B2B0[4] = { 0x00000000, 0x010005D8, 0x01000780, 0x00000000 };
-s32 D_8009A6C0_9B2C0[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01000878 };
-s32 D_8009A6D0_9B2D0[4] = { 0x00000000, 0x01000A20, 0x00000000, 0x00000000 };
-s32 D_8009A6E0_9B2E0[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01000D28 };
-s32 D_8009A6F0_9B2F0[4] = { 0x00000000, 0x00000000, 0x01000F58, 0x00000000 };
-s32 D_8009A700_9B300[4] = { 0x00000000, 0x010010F8, 0x00000000, 0x00000000 };
-s32 D_8009A710_9B310[4] = { 0x00000000, 0x01001328, 0x010014E0, 0x00000000 };
-s32 D_8009A720_9B320[4] = { 0x00000000, 0x00000000, 0x010015D8, 0x00000000 };
-s32 D_8009A730_9B330[4] = { 0x00000000, 0x010016C0, 0x00000000, 0x00000000 };
-s32 D_8009A740_9B340[4] = { 0x00000000, 0x00000000, 0x010018A8, 0x00000000 };
-s32 D_8009A750_9B350[4] = { 0x00000000, 0x00000000, 0x00000000, 0x01001A40 };
-s32 D_8009A760_9B360[4] = { 0x00000000, 0x00000000, 0x01001BE0, 0x00000000 };
-s32 D_8009A770_9B370[4] = { 0x00000000, 0x00000000, 0x01001CD8, 0x00000000 };
+DisplayLists D_8009A6B0_9B2B0 = { 0,
+                                  PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_05D8,
+                                  PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_0780,
+                                  NULL };
+DisplayLists D_8009A6C0_9B2C0 = { 0, NULL, NULL, PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_0878 };
+DisplayLists D_8009A6D0_9B2D0 = { 0, PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_0A20, NULL, NULL };
+DisplayLists D_8009A6E0_9B2E0 = { 0, NULL, NULL, PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_0D28 };
+DisplayLists D_8009A6F0_9B2F0 = { 0, NULL, PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_0F58, NULL };
+DisplayLists D_8009A700_9B300 = { 0, PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_10F8, NULL, NULL };
+DisplayLists D_8009A710_9B310 = { 0,
+                                  PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_1328,
+                                  PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_14E0,
+                                  NULL };
+DisplayLists D_8009A720_9B320 = { 0, NULL, PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_15D8, NULL };
+DisplayLists D_8009A730_9B330 = { 0, PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_16C0, NULL, NULL };
+DisplayLists D_8009A740_9B340 = { 0, NULL, PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_18A8, NULL };
+DisplayLists D_8009A750_9B350 = { 0, NULL, NULL, PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_1A40 };
+DisplayLists D_8009A760_9B360 = { 0, NULL, PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_1BE0, NULL };
+DisplayLists D_8009A770_9B370 = { 0, NULL, PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS_part_1CD8, NULL };
 Gfx D_8009A780_9B380[] = {
     { .words = { 0xD9D0F9FA, 0x00000000 } }, { .words = { 0xD9FFFFFF, 0x00210405 } },
     { .words = { 0xD7000002, 0x80008000 } }, { .words = { 0xE7000000, 0x00000000 } },
@@ -527,7 +527,7 @@ void *createFallingEffect(void *arg0) {
 
 void initShieldEffect(ShieldEffectState *arg0) {
     getCurrentAllocation();
-    arg0->displayConfig = (ShieldEffectDisplayConfig *)&D_8009A6C0_9B2C0;
+    arg0->displayConfig = &D_8009A6C0_9B2C0;
     arg0->displayAsset1 = loadAsset_B7E70();
     arg0->displayAsset2 = loadAsset_216290();
     arg0->unk2C = 0;
@@ -571,13 +571,13 @@ void updateShieldEffect(ShieldEffectState *arg0) {
     arg0->unk30 = 0;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->displayConfig->displayList1 != 0) {
+        if (arg0->displayConfig->opaqueDisplayList != 0) {
             pushViewportCallbackBySlot((u16)i, VIEWPORT_CALLBACK_LAYER_OPAQUE, renderShieldLayer1, arg0);
         }
-        if (arg0->displayConfig->displayList2 != 0) {
+        if (arg0->displayConfig->transparentDisplayList != 0) {
             pushViewportCallbackBySlot((u16)i, VIEWPORT_CALLBACK_LAYER_TRANSLUCENT, renderShieldLayer2, arg0);
         }
-        if (arg0->displayConfig->displayList3 != 0) {
+        if (arg0->displayConfig->overlayDisplayList != 0) {
             pushViewportCallbackBySlot((u16)i, VIEWPORT_CALLBACK_LAYER_OVERLAY, renderShieldLayer3, arg0);
         }
     }
@@ -1302,7 +1302,7 @@ void initSpeedFanBoostEffect(SpeedFanBoostEffectState *state) {
     state->unk20 = &D_8009A710_9B310;
     state->unk24 = loadAsset_B7E70();
     state->unk28 = loadAsset_216290();
-    state->orbitObj.displayLists = (DisplayLists *)&D_8009A720_9B320;
+    state->orbitObj.displayLists = &D_8009A720_9B320;
     state->unk2C = 0;
     state->orbitObj.segment3 = 0;
     state->scale = 0x200;
@@ -1405,7 +1405,7 @@ void *spawnSpeedFanBoostEffect(Player *player) {
 
 void initRocketBoostEffect(RocketBoostEffectState *state) {
     getCurrentAllocation();
-    state->primary.displayLists = (DisplayLists *)&D_8009A730_9B330;
+    state->primary.displayLists = &D_8009A730_9B330;
     state->primary.segment1 = loadAsset_B7E70();
     state->primary.segment2 = loadAsset_216290();
     state->primary.segment3 = NULL;
@@ -1439,9 +1439,9 @@ void updateRocketBoostEffect(RocketBoostEffectState *state) {
     composeTransform3D((Transform3D *)(ptr - 5), &state->primary.transform, &state->secondary.transform);
 
     if (gFrameCounter & 1) {
-        state->secondary.displayLists = (DisplayLists *)&D_8009A740_9B340;
+        state->secondary.displayLists = &D_8009A740_9B340;
     } else {
-        state->secondary.displayLists = (DisplayLists *)&D_8009A750_9B350;
+        state->secondary.displayLists = &D_8009A750_9B350;
     }
 
     for (i = 0; i < 4; i++) {
@@ -1869,7 +1869,7 @@ void initPushZone(PushZoneState *arg0) {
         gPushZoneData[arg0->zoneIndex].yaw
     );
     memcpy(&arg0->transform.translation, &gPushZoneData[arg0->zoneIndex].position, sizeof(Vec3i));
-    arg0->displayData = gPushZoneData[arg0->zoneIndex].data + gPushZoneData[arg0->zoneIndex].dataCount;
+    arg0->displayData = &gPushZoneData[arg0->zoneIndex].displayLists[gPushZoneData[arg0->zoneIndex].displayListIndex];
     arg0->asset1 = loadUncompressedAssetByIndex(allocation->unk5C);
     arg0->asset2 = loadCompressedSegment2AssetByIndex(allocation->unk5C);
     arg0->unk2C = 0;

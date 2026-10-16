@@ -22,6 +22,7 @@ from tools.modelpayload_common import (
     non_overlapping_ranges,
     read_palette_s,
 )
+from tools.model_gfx_symbols import resolve_payload_references
 from tools.sno import decompress_sno_with_consumed
 
 
@@ -163,4 +164,8 @@ class N64SegCourse_model_resources(CommonSegment):
             parts,
             extra,
         )
+        bundle = self._display_list_name()
+        gfx_path = options.opts.asset_path / "courses" / "display_lists" / f"{bundle}.c"
+        manifest = {"name": self.name, "parts": parts}
+        gfx_path.write_text(resolve_payload_references(gfx_path.read_text(), bundle, manifest))
         self.log(f"Wrote {self.name} to {self.out_path()}")

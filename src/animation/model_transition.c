@@ -8,19 +8,34 @@
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
+/* Segment 2 is rebound to state->frameData by renderPalettedTexture. */
+#define MODEL_TRANSITION_FRAME_SEGMENT 2
+
+Gfx gModelTransitionEffectDisplayList[] = {
+    gsSPClearGeometryMode(
+        G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_SHADING_SMOOTH
+    ),
+    gsSPSetGeometryMode(G_ZBUFFER | G_SHADE | G_FOG | G_SHADING_SMOOTH),
+    gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
+    gsSPVertex((Vtx *)(MODEL_TRANSITION_FRAME_SEGMENT << 24), 24, 0),
+    gsDPPipeSync(),
+    gsDPSetTextureFilter(G_TF_BILERP),
+    gsDPSetCycleType(G_CYC_2CYCLE),
+    gsDPSetCombineMode(G_CC_MODULATEIDECALA, G_CC_PASS2),
+    gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
+    gsSP2Triangles(0, 1, 2, 0, 3, 4, 5, 0),
+    gsSP2Triangles(6, 7, 8, 0, 9, 10, 11, 0),
+    gsSP2Triangles(12, 13, 14, 0, 15, 16, 17, 0),
+    gsSP2Triangles(18, 19, 20, 0, 21, 22, 23, 0),
+    gsSPEndDisplayList(),
+};
+
 void setupModelTransitionVariant(ModelTransitionEffectState *);
 void updateModelTransitionEffect(ModelTransitionEffectState *);
 void cleanupModelTransitionEffect(ModelTransitionEffectState *);
 void updateCameraRotationTask(CameraRotationTaskState *);
 void cleanupCameraRotationTask(void);
 void renderPalettedTexture(ModelTransitionEffectState *);
-
-s32 gModelTransitionEffectDisplayList[] = {
-    0xD9D0F9FA, 0x00000000, 0xD9FFFFFF, 0x00210005, 0xD7000002, 0x80008000, 0x01018030,
-    0x02000000, 0xE7000000, 0x00000000, 0xE3001201, 0x00002000, 0xE3000A01, 0x00100000,
-    0xFC127FFF, 0xFFFFF238, 0xE200001C, 0xC8112078, 0x06000204, 0x0006080A, 0x060C0E10,
-    0x00121416, 0x06181A1C, 0x001E2022, 0x06242628, 0x002A2C2E, 0xDF000000, 0x00000000,
-};
 
 void initCameraRotationTask(CameraRotationTaskState *state) {
     setCleanupCallback(&cleanupCameraRotationTask);
@@ -209,11 +224,11 @@ void renderPalettedTexture(ModelTransitionEffectState *state) {
 
     gDPSetTexturePersp(gDisplayListAllocPtr++, G_TP_PERSP);
 
-    gSPSegment(gDisplayListAllocPtr++, 0x02, state->frameData);
+    gSPSegment(gDisplayListAllocPtr++, MODEL_TRANSITION_FRAME_SEGMENT, state->frameData);
 
     gSPMatrix(gDisplayListAllocPtr++, state->n64Transform, (G_MTX_NOPUSH | G_MTX_LOAD) | G_MTX_MODELVIEW);
 
-    gSPDisplayList(gDisplayListAllocPtr++, &gModelTransitionEffectDisplayList);
+    gSPDisplayList(gDisplayListAllocPtr++, gModelTransitionEffectDisplayList);
 }
 
 void initModelTransitionEffect(ModelTransitionEffectState *state) {

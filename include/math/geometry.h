@@ -109,10 +109,13 @@ void transformVectorRelative(Vec3i *input, Transform3D *transform, Vec3i *output
 
 void transform3DToN64Mtx(Transform3D *transform, Mtx *mtx);
 
+struct DisplayLists;
+struct SceneModel;
+
 typedef struct QuadDisplayListElement {
-    /* 0x00 */ void *model; // SceneModel *model
+    /* 0x00 */ struct SceneModel *model;
     /* 0x04 */ u8 transformMatrix[0x20];
-    /* 0x24 */ void *renderSettings;
+    /* 0x24 */ struct DisplayLists *renderSettings;
     /* 0x28 */ void *displayList;
     /* 0x2C */ void *vertexData;
     /* 0x30 */ s32 renderFlag;

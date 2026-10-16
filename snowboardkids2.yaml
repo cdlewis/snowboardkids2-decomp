@@ -727,98 +727,99 @@ segments:
       - [0xB7DD0, .data, levels/crazy_jungle]
 
   - name: PARTICLE_EFFECT_UNCOMPRESSED_GRAPHICS
-    type: bin
-    vram: 0
+    type: gfxbundle
+    model_id: particle_effect
+    vram: 0x01000000
     start: 0xB7E70
 
   - name: SUNNY_MOUNTAIN_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: sunny_mountain
-    vram: 0
+    vram: 0x01000000
     start: 0xB9C40
 
   - name: TURTLE_ISLAND_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: turtle_island
-    vram: 0
+    vram: 0x01000000
     start: 0xC2E50
 
   - name: JINGLE_TOWN_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: jingle_town
-    vram: 0
+    vram: 0x01000000
     start: 0xCE7A0
 
   - name: JINGLE_TOWN_BOSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: jingle_town_boss
-    vram: 0
+    vram: 0x01000000
     start: 0xDA9D0
 
   - name: WENDYS_HOUSE_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: wendys_house
-    vram: 0
+    vram: 0x01000000
     start: 0xE6880
 
   - name: LINDAS_CASTLE_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: lindas_castle
-    vram: 0
+    vram: 0x01000000
     start: 0xF2B50
 
   - name: CRAZY_JUNGLE_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: crazy_jungle
-    vram: 0
+    vram: 0x01000000
     start: 0x1004E0
 
   - name: CRAZY_JUNGLE_BOSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: crazy_jungle_boss
-    vram: 0
+    vram: 0x01000000
     start: 0x10B010
 
   - name: STARLIGHT_HIGHWAY_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: starlight_highway
-    vram: 0
+    vram: 0x01000000
     start: 0x116860
 
   - name: HAUNTED_HOUSE_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: haunted_house
-    vram: 0
+    vram: 0x01000000
     start: 0x124DD0
 
   - name: ICE_LAND_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: ice_land
-    vram: 0
+    vram: 0x01000000
     start: 0x132BB0
 
   - name: ICE_LAND_BOSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: ice_land_boss
-    vram: 0
+    vram: 0x01000000
     start: 0x13D660
 
   - name: SNOWBOARD_STREET_SPEED_CROSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: snowboard_street_speed_cross
-    vram: 0
+    vram: 0x01000000
     start: 0x147B70
 
   - name: SNOWBOARD_STREET_SHOT_CROSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: snowboard_street_shot_cross
-    vram: 0
+    vram: 0x01000000
     start: 0x156C00
 
   - name: X_CROSS_COURSE_DISPLAY_LISTS
     type: course_display_lists
     course_id: x_cross
-    vram: 0
+    vram: 0x01000000
     start: 0x165720
 
   - name: SLASH_BOARD0_DISPLAY_LIST
@@ -1716,13 +1717,15 @@ segments:
     start: 0x214B70
 
   - name: CUTSCENE_SCENE_RENDER_VERTEX_DATA_1
-    type: bin
-    vram: 0
+    type: gfxbundle
+    model_id: cutscene_scene_render_1
+    vram: 0x01000000
     start: 0x214E70
 
   - name: CUTSCENE_SCENE_RENDER_VERTEX_DATA_2
-    type: bin
-    vram: 0
+    type: gfxbundle
+    model_id: cutscene_scene_render_2
+    vram: 0x01000000
     start: 0x214F20
 
   - name: ITEM_0_DISPLAY_LIST
@@ -1732,13 +1735,15 @@ segments:
     start: 0x214FC0
 
   - name: scrollingTextureSegment1
-    type: bin
-    vram: 0
+    type: gfxbundle
+    model_id: scrolling_texture
+    vram: 0x01000000
     start: 0x215120
 
   - name: tiledTextureSegment1
-    type: bin
-    vram: 0
+    type: gfxbundle
+    model_id: tiled_texture
+    vram: 0x01000000
     start: 0x2151D0
 
   - name: ITEM_3_DISPLAY_LIST
@@ -1790,9 +1795,11 @@ segments:
     decompressed_size: 0x918
 
   - name: PARTICLE_EFFECT_COMPRESSED_GRAPHICS
-    type: bin
+    type: modelpayload
+    model_id: particle_effect
     vram: 0
     start: 0x216290
+    decompressed_size: 0x5740
 
   - name: SUNNY_MOUNTAIN_COURSE_MODEL_RESOURCES
     type: course_model_resources
@@ -4919,14 +4926,18 @@ segments:
     start: 0x663010
 
   - name: CUTSCENE_SCENE_RENDER_TEXTURE_1
-    type: bin
+    type: modelpayload
+    model_id: cutscene_scene_render_1
     vram: 0
     start: 0x663330
+    decompressed_size: 0x180
 
   - name: CUTSCENE_SCENE_RENDER_TEXTURE_2
-    type: bin
+    type: modelpayload
+    model_id: cutscene_scene_render_2
     vram: 0
     start: 0x6633B0
+    decompressed_size: 0x120
 
   - name: ITEM_0_COMPRESSED_DATA
     type: modelpayload
@@ -4936,9 +4947,11 @@ segments:
     decompressed_size: 0x520
 
   - name: scrollingTextureSegment2
-    type: bin
+    type: modelpayload
+    model_id: scrolling_texture
     vram: 0
     start: 0x6636F0
+    decompressed_size: 0x200
 
   - name: tiledTextureTable
     type: bin
@@ -4946,9 +4959,11 @@ segments:
     start: 0x6637B0
 
   - name: tiledTextureSegment2
-    type: bin
+    type: modelpayload
+    model_id: tiled_texture
     vram: 0
     start: 0x663BE0
+    decompressed_size: 0x200
 
   - name: ITEM_3_COMPRESSED_DATA
     type: modelpayload

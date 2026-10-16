@@ -1,5 +1,6 @@
 #include "assets.h"
 #include "common.h"
+#include "data/asset_metadata.h"
 #include "race/particle_items.h"
 
 typedef struct {
@@ -37,21 +38,63 @@ u32 D_80090964_91564[] = { 0x025C025D, 0x025C025D, 0x045E055F, 0x00000000 };
 
 u32 D_80090974_91574[] = { 0x024D024E, 0x024F0250, 0x02510000 };
 
-extern u8 D_80095340_95F40[][0x10];
-extern u8 D_80095440_96040[][0x10];
-extern u8 D_800956B0_962B0[][0x10];
-extern u8 D_80095770_96370[][0x10];
-extern u8 D_80095830_96430[][0x10];
-
 PushZoneDataEntry gPushZoneData[] = {
-    { D_80095340_95F40, 0, { 0x1013507C, 0x13E86349, (s32)0xF1905137 }, 0xFFC7, 0x0712, -8, 8, -3, 2, -424, 392 },
-    { D_80095340_95F40, 1, { 0x0A2084E6, 0x1352462B, (s32)0xEE384AE5 }, 0xFFA7, 0x03DF, -8, 8, -3, 2, -480, 480 },
-    { D_80095440_96040, 0, { 0x1013507C, 0x13E86349, (s32)0xF1905137 }, 0xFFC7, 0x0712, -8, 8, -3, 2, -424, 392 },
-    { D_80095440_96040, 1, { 0x0A2084E6, 0x1352462B, (s32)0xEE384AE5 }, 0xFFA7, 0x03DF, -8, 8, -3, 2, -480, 480 },
-    { D_80095770_96370, 0, { (s32)0xFF83AC8D, 0x19290E26, 0x19D8FFFA }, 0xFEB9, 0xFA37, -8, 8, -3, 2, -565, 565 },
-    { D_80095830_96430, 0, { (s32)0xFF83AC8D, 0x19290E26, 0x19D8FFFA }, 0xFEB9, 0xFA37, -8, 8, -3, 2, -565, 565 },
-    { D_800956B0_962B0, 0, { 0x0D4039B0, 0x2B2BB65E, 0x1EF0660B },      0xFF44, 0xFD45, -8, 8, -3, 2, -237, 240 },
-    { D_800956B0_962B0, 0, { 0x0F3EF9B0, 0x2A8B365E, 0x1B1E660B },      0xFF3E, 0xFD45, -8, 8, -3, 2, -237, 240 },
+    { gCrazyJunglePushZoneDisplayLists,
+     0, { 0x1013507C, 0x13E86349, (s32)0xF1905137 },
+     0xFFC7, 0x0712,
+     -8,
+     8, -3,
+     2, -424,
+     392 },
+    { gCrazyJunglePushZoneDisplayLists,
+     1, { 0x0A2084E6, 0x1352462B, (s32)0xEE384AE5 },
+     0xFFA7, 0x03DF,
+     -8,
+     8, -3,
+     2, -480,
+     480 },
+    { gCrazyJungleBossPushZoneDisplayLists,
+     0, { 0x1013507C, 0x13E86349, (s32)0xF1905137 },
+     0xFFC7, 0x0712,
+     -8,
+     8, -3,
+     2, -424,
+     392 },
+    { gCrazyJungleBossPushZoneDisplayLists,
+     1, { 0x0A2084E6, 0x1352462B, (s32)0xEE384AE5 },
+     0xFFA7, 0x03DF,
+     -8,
+     8, -3,
+     2, -480,
+     480 },
+    { gIceLandPushZoneDisplayLists,
+     0, { (s32)0xFF83AC8D, 0x19290E26, 0x19D8FFFA },
+     0xFEB9, 0xFA37,
+     -8,
+     8, -3,
+     2, -565,
+     565 },
+    { gIceLandBossPushZoneDisplayLists,
+     0, { (s32)0xFF83AC8D, 0x19290E26, 0x19D8FFFA },
+     0xFEB9, 0xFA37,
+     -8,
+     8, -3,
+     2, -565,
+     565 },
+    { gHauntedHousePushZoneDisplayLists,
+     0, { 0x0D4039B0, 0x2B2BB65E, 0x1EF0660B },
+     0xFF44, 0xFD45,
+     -8,
+     8, -3,
+     2, -237,
+     240 },
+    { gHauntedHousePushZoneDisplayLists,
+     0, { 0x0F3EF9B0, 0x2A8B365E, 0x1B1E660B },
+     0xFF3E, 0xFD45,
+     -8,
+     8, -3,
+     2, -237,
+     240 },
 };
 
 u32 D_80090AA0_916A0[] = { 0x009A8000, 0x000D8000, 0xFF880000 };

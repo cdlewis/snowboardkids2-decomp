@@ -61,13 +61,13 @@ void enqueueTiledTextureRender(s32 arg0, TrickBurstEffectTask *arg1);
 typedef struct {
     /* 0x00 */ SceneModel *model;
     /* 0x04 */ Transform3D opaqueMatrix;
-    /* 0x24 */ void *opaqueSettings;
+    /* 0x24 */ DisplayLists *opaqueSettings;
     /* 0x28 */ void *opaqueDisplayList;
     /* 0x2C */ void *opaqueVertexData;
     /* 0x30 */ s32 opaqueFlag;
     /* 0x34 */ u8 pad34[0xC];
     /* 0x40 */ Transform3D transparentMatrix;
-    /* 0x60 */ void *transparentSettings;
+    /* 0x60 */ DisplayLists *transparentSettings;
     /* 0x64 */ void *transparentDisplayList;
     /* 0x68 */ void *transparentVertexData;
     /* 0x6C */ s32 transparentFlag;
@@ -92,7 +92,7 @@ typedef struct {
     /* 0x92 */ s8 oscillationEnabled;
     /* 0x93 */ s8 scaleAnimState;
     /* 0x94 */ Transform3D overlayMatrix;
-    /* 0xB4 */ void *overlaySettings;
+    /* 0xB4 */ DisplayLists *overlaySettings;
     /* 0xB8 */ void *overlayDisplayList;
     /* 0xBC */ void *overlayVertexData;
     /* 0xC0 */ s32 overlayFlag;

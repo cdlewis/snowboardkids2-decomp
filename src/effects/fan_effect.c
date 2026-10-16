@@ -1,24 +1,25 @@
 #include "assets.h"
 #include "audio/audio.h"
 #include "common.h"
-#include "cutscene/cutscene_manager.h"
+#include "data/model_display_lists.h"
 #include "generated/modelpayload_asset_sizes.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
+#include "ui/level_preview_3d.h"
 
 /* Struct definitions */
 typedef struct {
     u8 _pad0[0x20];
-    StateEntry *unk20;
-    StateEntry *unk24;
-    StateEntry *unk28;
+    DisplayLists *unk20;
+    Gfx *unk24;
+    void *unk28;
     u32 unk2C;
     u8 _pad30[0x2C];
-    StateEntry *unk5C;
-    StateEntry *unk60;
-    StateEntry *unk64;
+    DisplayLists *unk5C;
+    Gfx *unk60;
+    void *unk64;
     u32 unk68;
     u8 _pad6C[0x18];
     s16 unk84;
@@ -44,8 +45,6 @@ static void cleanupFanEffectTask(FanEffectTaskState *taskState);
 static void updateFanEffectFade(FanEffectState *fadeState);
 
 /* Global variables */
-extern StateEntry D_80088650;
-extern StateEntry D_80088660;
 extern s16 gFanSoundCount;
 extern s16 gFanSoundIds[];
 
@@ -114,9 +113,9 @@ void stopFanSoundOnChannel0(void) {
 
 /* Internal fan effect task functions */
 static void initFanEffectTask(FanEffectTaskState *taskState) {
-    StateEntry **uncompressedAssetPtr;
+    Gfx **uncompressedAssetPtr;
 
-    taskState->unk20 = &D_80088650;
+    taskState->unk20 = &gFanBodyDisplayLists;
     taskState->unk24 = loadUncompressedData(&FAN_EFFECT_DISPLAY_LIST_ROM_START, &FAN_EFFECT_DISPLAY_LIST_ROM_END);
 
     taskState->unk28 = loadCompressedData(
@@ -126,7 +125,7 @@ static void initFanEffectTask(FanEffectTaskState *taskState) {
     );
     uncompressedAssetPtr = &taskState->unk24;
 
-    taskState->unk5C = &D_80088660;
+    taskState->unk5C = &gFanOverlayDisplayLists;
     taskState->unk2C = 0;
     taskState->unk68 = 0;
     taskState->unk84 = 0x200;

@@ -1,5 +1,6 @@
 #include "core/main.h"
 #include "generated/model_gfx.h"
+#include "generated/modelpayload_asset_sizes.h"
 
 #include "assets.h"
 #include "common.h"
@@ -223,7 +224,6 @@ void initAnimatedModelTask(AnimatedModelTaskState *arg0);
 void initSpriteSpawnerTask(SpriteEntityTaskState *state);
 void initStaticModelTask(StaticModelTaskArg *arg0);
 
-extern s32 D_80088600;
 extern DisplayLists D_80088620[1];
 extern DisplayLists D_80088610_89210[1];
 
@@ -301,7 +301,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&TOWN_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x0000E180,
+     .decompressedSize = TOWN_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &gTownPrimaryDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = &gTownSecondaryPartDisplayLists,
@@ -322,7 +322,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&TOWN_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x0000E180,
+     .decompressedSize = TOWN_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &gTownPrimaryDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = &gTownSecondaryPartDisplayLists,
@@ -343,7 +343,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&YAMA_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&YAMA_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&YAMA_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x00003FE0,
+     .decompressedSize = YAMA_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &gYamaPrimaryDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = &gYamaSecondaryDisplayLists,
@@ -364,7 +364,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&YAMA_Y_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&YAMA_Y_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&YAMA_Y_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x00003B30,
+     .decompressedSize = YAMA_Y_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &gYamaYPrimaryDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = &gYamaYSecondaryDisplayLists,
@@ -385,7 +385,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&LINDA_P_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&LINDA_P_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&LINDA_P_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x000014A0,
+     .decompressedSize = LINDA_P_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &gLindaPDisplayLists,
      .unk20 = 0x00010000,
      .taskConfigs = NULL,
@@ -403,7 +403,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&LINDA_B_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&LINDA_B_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&LINDA_B_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x00001680,
+     .decompressedSize = LINDA_B_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &gLindaBDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = 0,
@@ -424,8 +424,8 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&WENDY_H_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&WENDY_H_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&WENDY_H_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x00004120,
-     .unk1C = &D_80088600,
+     .decompressedSize = WENDY_H_COMPRESSED_DATA_DECOMPRESSED_SIZE,
+     .unk1C = &gWendyHousePrimaryDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = 0,
      .unk28 = 0,
@@ -445,7 +445,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&TOWN_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&TOWN_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&TOWN_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x0000E180,
+     .decompressedSize = TOWN_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &gTownPrimaryDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = &gTownSecondaryPartDisplayLists,
@@ -466,7 +466,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&JUNGLE_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&JUNGLE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&JUNGLE_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x000021D0,
+     .decompressedSize = JUNGLE_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &gJunglePrimaryDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = &gJungleSecondaryDisplayLists,
@@ -487,7 +487,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&SPACE_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&SPACE_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&SPACE_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x000036D0,
+     .decompressedSize = SPACE_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &gSpacePrimaryDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = &gSpaceSecondaryDisplayLists,
@@ -508,7 +508,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&ISLAND_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&ISLAND_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&ISLAND_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x00005AD0,
+     .decompressedSize = ISLAND_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &D_80088610_89210,
      .unk20 = 0x00010000,
      .unk24 = &D_80088620,
@@ -528,7 +528,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&OTHER_HAUNTED_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&OTHER_HAUNTED_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&OTHER_HAUNTED_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x000024B0,
+     .decompressedSize = OTHER_HAUNTED_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &gOtherHauntedPrimaryDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = &gOtherHauntedSecondaryPartDisplayLists,
@@ -549,7 +549,7 @@ ModelEntityConfig modelEntityConfigs[14] = {
      .displayListEnd = (void *)&JUNGLE2_DISPLAY_LIST_ROM_END,
      .compressedDataStart = (void *)&JUNGLE2_COMPRESSED_DATA_ROM_START,
      .compressedDataEnd = (void *)&JUNGLE2_COMPRESSED_DATA_ROM_END,
-     .decompressedSize = 0x00002EC0,
+     .decompressedSize = JUNGLE2_COMPRESSED_DATA_DECOMPRESSED_SIZE,
      .unk1C = &gJungle2PrimaryDisplayLists,
      .unk20 = 0x00010000,
      .unk24 = &gJungle2SecondaryDisplayLists,

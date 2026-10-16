@@ -62,7 +62,6 @@ typedef struct {
     /* 0x2C */ s32 unk64;
 } BodyPartExtra;
 
-extern AssetMeta D_8009A550_9B150[];
 extern s8 gAnalogStickX[];
 extern s8 gAnalogStickY[];
 extern s32 gButtonsPressed[];
@@ -1067,7 +1066,7 @@ s32 initPlayerForRace(Player *player) {
             extra->unk64 = 0;
             extra->assetPtr = (void *)(&loadAssetByIndex_953B0(player->characterId, player->boardModelId)[i]);
         } else {
-            player->snowboardDisplayObject.displayLists = (DisplayLists *)&D_8009A550_9B150[0];
+            player->snowboardDisplayObject.displayLists = &gCostumeSlotDisplayLists[0];
             player->snowboardDisplayObject.segment1 = player->snowboardDisplayListAsset;
             player->snowboardDisplayObject.segment2 = player->snowboardCompressedAsset;
             player->snowboardDisplayObject.segment3 = player->snowboardPaletteAsset;

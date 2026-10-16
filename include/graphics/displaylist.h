@@ -15,7 +15,7 @@
  */
 #define DISPLAY_LIST_FLAG_REFLECTION_LOOK_AT 1
 
-typedef struct {
+typedef struct DisplayLists {
     /* 0x0 */ u32 flags;
     /* 0x4 */ Gfx *opaqueDisplayList;
     /* 0x8 */ Gfx *transparentDisplayList;

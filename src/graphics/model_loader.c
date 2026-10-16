@@ -3,6 +3,8 @@
 #include "common.h"
 #include "core/buffers.h"
 #include "gbi.h"
+#include "generated/model_gfx.h"
+#include "generated/modelpayload_asset_sizes.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
 #include "math/geometry.h"
@@ -15,14 +17,14 @@ typedef struct {
     /* 0x0C */ void *compEnd1;
     /* 0x10 */ u16 compSize1;
     /* 0x12 */ u16 pad12;
-    /* 0x14 */ void *dispList1;
+    /* 0x14 */ DisplayLists *dispList1;
     /* 0x18 */ void *vertStart2;
     /* 0x1C */ void *vertEnd2;
     /* 0x20 */ void *compStart2;
     /* 0x24 */ void *compEnd2;
     /* 0x28 */ u16 compSize2;
     /* 0x2A */ u16 pad2A;
-    /* 0x2C */ void *dispList2;
+    /* 0x2C */ DisplayLists *dispList2;
 } AssetDataBlock;
 
 typedef struct {
@@ -31,15 +33,9 @@ typedef struct {
     /* 0x40 */ DisplayListObject object2;
 } SceneRenderTask;
 
-Gfx gCutsceneSceneRenderDisplayList1[] = {
-    { .words = { 0x00000000, 0x010000A0 } },
-    { .words = { 0x00000000, 0x00000000 } },
-};
+DisplayLists gCutsceneSceneRenderDisplayList1 = { 0, CUTSCENE_SCENE_RENDER_VERTEX_DATA_1_part_00A0, NULL, NULL };
 
-Gfx gCutsceneSceneRenderDisplayList2[] = {
-    { .words = { 0x00000000, 0x01000088 } },
-    { .words = { 0x00000000, 0x00000000 } },
-};
+DisplayLists gCutsceneSceneRenderDisplayList2 = { 0, CUTSCENE_SCENE_RENDER_VERTEX_DATA_2_part_0088, NULL, NULL };
 
 u32 gViewportFillTexture[] = {
     0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
@@ -69,10 +65,10 @@ Gfx gViewportFillSetupDisplayList[] = {
         G_TX_NOLOD
     ),
     gsDPLoadSync(),
-    { .words = { 0xF4000000, 0x07020010 } },
+    gsDPLoadTile(G_TX_LOADTILE, 0, 0, 8 << G_TEXTURE_IMAGE_FRAC, 4 << G_TEXTURE_IMAGE_FRAC),
     gsDPPipeSync(),
-    { .words = { 0xF5800200, 0x00008040 } },
-    { .words = { 0xF2000000, 0x00040010 } },
+    gsDPSetTile(G_IM_FMT_I, G_IM_SIZ_4b, 1, 0, G_TX_RENDERTILE, 0, G_TX_WRAP, 2, G_TX_NOLOD, G_TX_WRAP, 4, G_TX_NOLOD),
+    gsDPSetTileSize(G_TX_RENDERTILE, 0, 0, 16 << G_TEXTURE_IMAGE_FRAC, 4 << G_TEXTURE_IMAGE_FRAC),
     gsSPEndDisplayList(),
 };
 
@@ -81,16 +77,16 @@ AssetDataBlock gCutsceneSceneRenderAssetData = {
     .vertEnd1 = &CUTSCENE_SCENE_RENDER_VERTEX_DATA_1_ROM_END,
     .compStart1 = &CUTSCENE_SCENE_RENDER_TEXTURE_1_ROM_START,
     .compEnd1 = &CUTSCENE_SCENE_RENDER_TEXTURE_1_ROM_END,
-    .compSize1 = 0x0180,
+    .compSize1 = CUTSCENE_SCENE_RENDER_TEXTURE_1_DECOMPRESSED_SIZE,
     .pad12 = 0x0001,
-    .dispList1 = gCutsceneSceneRenderDisplayList1,
+    .dispList1 = &gCutsceneSceneRenderDisplayList1,
     .vertStart2 = &CUTSCENE_SCENE_RENDER_VERTEX_DATA_2_ROM_START,
     .vertEnd2 = &CUTSCENE_SCENE_RENDER_VERTEX_DATA_2_ROM_END,
     .compStart2 = &CUTSCENE_SCENE_RENDER_TEXTURE_2_ROM_START,
     .compEnd2 = &CUTSCENE_SCENE_RENDER_TEXTURE_2_ROM_END,
-    .compSize2 = 0x0120,
+    .compSize2 = CUTSCENE_SCENE_RENDER_TEXTURE_2_DECOMPRESSED_SIZE,
     .pad2A = 0x0001,
-    .dispList2 = gCutsceneSceneRenderDisplayList2,
+    .dispList2 = &gCutsceneSceneRenderDisplayList2,
 };
 
 void loadSceneRenderTaskData(SceneRenderTask *);

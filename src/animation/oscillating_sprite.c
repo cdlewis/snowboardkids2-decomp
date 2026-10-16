@@ -1,5 +1,7 @@
 #include "common.h"
 #include "credits/credits_controller.h"
+#include "data/model_display_lists.h"
+#include "generated/model_gfx.h"
 #include "graphics/displaylist.h"
 #include "math/geometry.h"
 #include "system/task_scheduler.h"
@@ -20,14 +22,14 @@ typedef struct {
     /* 0xF6 */ u16 rotationSpeed;
 } QuadDisplayListState;
 
+DisplayLists gBusQuadDisplayLists = { 0, NULL, BUS_DISPLAY_LIST_part_0490, NULL };
+DisplayLists gFanBodyDisplayLists = { 0, FAN_EFFECT_DISPLAY_LIST_part_02B0, FAN_EFFECT_DISPLAY_LIST_part_02C0, NULL };
+DisplayLists gFanOverlayDisplayLists = { 0, NULL, FAN_EFFECT_DISPLAY_LIST_part_03B8, NULL };
+
 void updateQuadDisplayList(QuadDisplayListState *);
 void cleanupQuadDisplayList(QuadDisplayListElement *);
 void updateRotationController(RotationControllerState *);
 void cleanupRotationController(void);
-
-/* 0x89240 */ u32 D_80088640_89240[] = { 0x00000000, 0x00000000, 0x01000490, 0x00000000 };
-/* 0x89250 */ u32 D_80088650[] = { 0x00000000, 0x010002B0, 0x010002C0, 0x00000000 };
-/* 0x89260 */ u32 D_80088660[] = { 0x00000000, 0x00000000, 0x010003B8, 0x00000000 };
 
 void initializeQuadDisplayList(QuadDisplayListElement *elements) {
     s32 i;
@@ -37,7 +39,7 @@ void initializeQuadDisplayList(QuadDisplayListElement *elements) {
         elements[i].displayList = loadAssetGroupDisplayList(elements->model);
         elements[i].vertexData = loadAssetGroupCompressedData(elements->model);
         elements[i].renderFlag = 0;
-        elements[i].renderSettings = D_80088640_89240;
+        elements[i].renderSettings = &gBusQuadDisplayLists;
     }
     setCleanupCallback(cleanupQuadDisplayList);
     setCallback(updateQuadDisplayList);

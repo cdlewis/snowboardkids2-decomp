@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "gamestate.h"
+#include "graphics/displaylist.h"
 #include "math/geometry.h"
 
 typedef struct {
@@ -33,8 +34,8 @@ typedef struct WarpEffectState WarpEffectState;
 typedef struct GoldStealEffectState GoldStealEffectState;
 
 typedef struct {
-    /* 0x00 */ u8 (*data)[0x10];
-    /* 0x04 */ s32 dataCount;
+    /* 0x00 */ DisplayLists *displayLists;
+    /* 0x04 */ s32 displayListIndex;
     /* 0x08 */ Vec3i position;
     /* 0x14 */ u16 pitch;
     /* 0x16 */ u16 yaw;
