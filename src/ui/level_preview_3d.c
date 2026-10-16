@@ -1,4 +1,5 @@
 #include "ui/level_preview_3d.h"
+#include "animation/helicopter_animation.h"
 #include "animation/model_scale.h"
 #include "animation/model_transition.h"
 #include "animation/pulsing_indicator.h"

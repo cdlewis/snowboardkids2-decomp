@@ -68,7 +68,7 @@ RENAMES = {
     "76B0": "animation/stepped_matrix",
     "7F80": "animation/model_transition",
     "8700": "animation/model_scale",
-    "8A40": "animation/bobbing_model",
+    "8A40": "animation/helicopter_animation",
     "8DC0": "animation/oscillating_sprite_model",
     "69B0": "animation/oscillating_sprite",
     "7850": "animation/pulsing_indicator",

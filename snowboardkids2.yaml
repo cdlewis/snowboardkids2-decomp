@@ -73,7 +73,7 @@ segments:
       - [0x7C70, c, effects/orbital_sprite]
       - [0x7F80, c, animation/model_transition]
       - [0x8700, c, animation/model_scale]
-      - [0x8A40, c, animation/bobbing_model]
+      - [0x8A40, c, animation/helicopter_animation]
       - [0x8DC0, c, animation/oscillating_sprite_model]
       - [0x90D0, c, core/stubs]
       - [0x90F0, c, graphics/sprite_table]
@@ -314,7 +314,7 @@ segments:
       - { start: 0x852C0, type: textbin, use_src_path: True, name: rsp/aspMain }
       - { start: 0x860E0, type: textbin, use_src_path: True, name: rsp/s2dex }
       - { start: 0x879A0, type: textbin, use_src_path: True, name: rsp/f3dex2 }
-      - [0x88D30, .data, animation/bobbing_model]
+      - [0x88D30, .data, data/model_display_lists]
       - [0x891D0, .data, graphics/tiled_texture]
       - [0x89210, .data, data/segment_ranges]
       - [0x89240, .data, animation/oscillating_sprite]
@@ -436,7 +436,7 @@ segments:
       - [0x9E910, .rodata, graphics/tiled_texture]
       - [0x9E938, .rodata, animation/oscillating_sprite]
       - [0x9E950, .rodata, animation/model_scale]
-      - [0x9E970, .rodata, animation/bobbing_model]
+      - [0x9E970, .rodata, animation/helicopter_animation]
       - [0x9E988, .rodata, animation/easing_state]
       - [0x9E9C0, .rodata, ui/cutscene_wait_menu]
       - [0x9E9E0, .rodata, ui/logo_splash]

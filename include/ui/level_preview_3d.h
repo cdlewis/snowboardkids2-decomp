@@ -234,20 +234,4 @@ void cleanupStretchingModelTask(StretchingModelTaskState *);
 void initStretchingModelTask(StretchingModelTaskState *);
 void updateStretchingModelTask(StretchingModelTaskState *);
 
-typedef struct {
-    SceneModel *model;
-    u8 transformMatrix[0x20];
-    DisplayLists *displayLists;
-    void *displayList;
-    void *vertexData;
-    s32 renderFlags;
-    u8 _pad34[0x10];
-    u8 bobbingEnabled;
-    u8 _pad45[3];
-    s32 verticalOffset;
-    s32 verticalVelocity;
-} BobbingModelTaskState;
-
-void initBobbingModelTask(BobbingModelTaskState *);
-
 s32 isModelVisible(SceneModel *model);
