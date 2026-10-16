@@ -54,10 +54,10 @@ def merge_ranges(ranges: Iterable[tuple[int, int]]) -> list[tuple[int, int]]:
     return merged
 
 
-def collect_vtx_ranges(words: Iterable[tuple[int, int]], size: int) -> list[tuple[int, int]]:
+def collect_vtx_ranges(words: Iterable[tuple[int, int]], size: int, segment: int = 2) -> list[tuple[int, int]]:
     ranges: list[tuple[int, int]] = []
     for w0, w1 in words:
-        if (w0 >> 24) != 0x01 or (w1 >> 24) != 0x02:
+        if (w0 >> 24) != 0x01 or (w1 >> 24) != segment:
             continue
         count = (w0 >> 12) & 0xFF
         start = w1 & 0x00FFFFFF
@@ -75,7 +75,7 @@ def _siz_name(siz: int) -> str:
     return {SIZ_4B: "4", SIZ_8B: "8", SIZ_16B: "16"}.get(siz, str(siz))
 
 
-def collect_texture_ranges(words: Iterable[tuple[int, int]], size: int) -> list[Range]:
+def collect_texture_ranges(words: Iterable[tuple[int, int]], size: int, segment: int = 2) -> list[Range]:
     ranges: list[Range] = []
     last_timg: dict | None = None
     last_palette: dict | None = None
@@ -85,7 +85,7 @@ def collect_texture_ranges(words: Iterable[tuple[int, int]], size: int) -> list[
     for w0, w1 in words:
         opcode = w0 >> 24
 
-        if opcode == 0xFD and (w1 >> 24) == 0x02:
+        if opcode == 0xFD and (w1 >> 24) == segment:
             last_timg = {
                 "offset": w1 & 0x00FFFFFF,
                 "fmt": (w0 >> 21) & 0x7,

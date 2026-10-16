@@ -1,30 +1,8 @@
 from pathlib import Path
 from typing import Optional
 
-from pygfxd import (
-    GfxdEndian,
-    gfxd_buffer_to_string,
-    gfxd_cimg_callback,
-    gfxd_dl_callback,
-    gfxd_endian,
-    gfxd_execute,
-    gfxd_f3dex2,
-    gfxd_input_buffer,
-    gfxd_light_callback,
-    gfxd_lookat_callback,
-    gfxd_macro_dflt,
-    gfxd_macro_fn,
-    gfxd_mtx_callback,
-    gfxd_output_buffer,
-    gfxd_printf,
-    gfxd_puts,
-    gfxd_target,
-    gfxd_timg_callback,
-    gfxd_tlut_callback,
-    gfxd_vp_callback,
-    gfxd_vtx_callback,
-    gfxd_zimg_callback,
-)
+from tools.f3dex2_decode import F3dex2Decoder
+
 from splat.segtypes.common.segment import CommonSegment
 from splat.util import log, options
 
@@ -81,62 +59,8 @@ class N64SegCourse_display_lists(CommonSegment):
             return f"{self._model_resource_name()}_{kind}_{offset:04X}"
         return f"0x{addr:08X}"
 
-    def _macro_fn(self):
-        gfxd_puts("    ")
-        gfxd_macro_dflt()
-        gfxd_puts(",\n")
-        return 0
-
-    def _print_addr(self, addr: int, kind: str) -> int:
-        gfxd_printf(self._segmented_symbol(addr, kind))
-        return 1
-
-    def _tlut_handler(self, addr, idx, count):
-        return self._print_addr(addr, "palette")
-
-    def _timg_handler(self, addr, fmt, size, width, height, pal):
-        kind = "palette" if fmt == 0 and size == 2 else "texture"
-        return self._print_addr(addr, kind)
-
-    def _dl_handler(self, addr):
-        return self._print_addr(addr, "display_list")
-
-    def _mtx_handler(self, addr):
-        return self._print_addr(addr, "matrix")
-
-    def _lookat_handler(self, addr, count):
-        return self._print_addr(addr, "lookat")
-
-    def _light_handler(self, addr, count):
-        return self._print_addr(addr, "light")
-
-    def _vtx_handler(self, addr, count):
-        return self._print_addr(addr, "vtx")
-
-    def _vp_handler(self, addr):
-        return self._print_addr(addr, "viewport")
-
     def _disassemble_chunk(self, data: bytes) -> str:
-        gfxd_input_buffer(data)
-        outb = bytes([0] * len(data) * 120)
-        outbuf = gfxd_output_buffer(outb, len(outb))
-
-        gfxd_target(gfxd_f3dex2)
-        gfxd_endian(GfxdEndian.big, 4)
-        gfxd_macro_fn(self._macro_fn)
-
-        gfxd_tlut_callback(self._tlut_handler)
-        gfxd_timg_callback(self._timg_handler)
-        gfxd_cimg_callback(lambda addr, fmt, size, width: self._print_addr(addr, "color_image"))
-        gfxd_zimg_callback(lambda addr: self._print_addr(addr, "depth_image"))
-        gfxd_dl_callback(self._dl_handler)
-        gfxd_mtx_callback(self._mtx_handler)
-        gfxd_lookat_callback(self._lookat_handler)
-        gfxd_light_callback(self._light_handler)
-        gfxd_vtx_callback(self._vtx_handler)
-        gfxd_vp_callback(self._vp_handler)
-        gfxd_execute()
-        return gfxd_buffer_to_string(outbuf)
+        return F3dex2Decoder(self._segmented_symbol).decode(data)
 
     def _disassemble(self, data: bytes) -> str:
         lines: list[str] = []

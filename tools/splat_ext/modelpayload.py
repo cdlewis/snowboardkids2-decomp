@@ -8,17 +8,18 @@ import yaml
 from splat.segtypes.common.segment import CommonSegment
 from splat.util import log, options
 
+from tools.course_assets_common import parse_gfx_words_from_bytes
 from tools.modelpayload_common import (
     collect_texture_ranges,
     collect_vtx_ranges,
     complement_ranges,
     non_overlapping_ranges,
-    parse_gfx_words,
     read_palette_s,
     write_palette_s,
     write_texture_png,
     write_vtx_s,
 )
+from tools.model_gfx_symbols import resolve_payload_references
 from tools.sno import decompress_sno_with_consumed
 
 
@@ -42,6 +43,19 @@ def _segment_names_by_model_id(config_path: Path, segment_type: str) -> dict[str
         names[model_id] = str(segment["name"])
 
     return names
+
+
+@lru_cache(maxsize=None)
+def _display_list_ranges(config_path: Path) -> dict[str, tuple[int, int]]:
+    segments = yaml.safe_load(config_path.read_text())["segments"]
+    ranges = {}
+    for i, segment in enumerate(segments):
+        if not isinstance(segment, dict) or segment.get("type") != "gfxbundle":
+            continue
+        following = segments[i + 1]
+        end = following["start"] if isinstance(following, dict) else following[0]
+        ranges[segment["name"]] = (int(segment["start"]), int(end))
+    return ranges
 
 
 class N64SegModelpayload(CommonSegment):
@@ -80,13 +94,6 @@ class N64SegModelpayload(CommonSegment):
             return None
         return str(self.yaml[key])
 
-    def _display_list_path(self) -> Optional[Path]:
-        display_list = self._display_list_name()
-        if not display_list:
-            return None
-        path = options.opts.asset_path / "gfxbin" / f"{display_list}.s"
-        return path if path.exists() else None
-
     def _display_list_name(self) -> Optional[str]:
         display_list = self._yaml_str("display_list") or self._yaml_str("pair_segment")
         if display_list:
@@ -120,6 +127,9 @@ class N64SegModelpayload(CommonSegment):
             if display_list:
                 lines.append(f"display_list: {display_list}")
 
+        for key in ("rsp_segment", "symbol_namespace"):
+            if isinstance(self.yaml, dict) and key in self.yaml:
+                lines.append(f"{key}: {self.yaml[key]}")
         lines.append("parts:")
         for part in parts:
             lines.append(f"  - name: {part['name']}")
@@ -133,6 +143,12 @@ class N64SegModelpayload(CommonSegment):
                     lines.append(f"    {key}: {value}")
 
         path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+        bundle = self._display_list_name()
+        if bundle and (self._yaml_int("rsp_segment") or 2) == 2:
+            gfx_path = options.opts.asset_path / "gfxbin" / f"{bundle}.c"
+            manifest = {"name": self.name, "parts": parts}
+            gfx_path.write_text(resolve_payload_references(gfx_path.read_text(), bundle, manifest))
+
 
     def split(self, rom_bytes: bytes):
         if self.rom_end is None:
@@ -161,13 +177,20 @@ class N64SegModelpayload(CommonSegment):
         (root / "palettes").mkdir(exist_ok=True)
         (root / "textures").mkdir(exist_ok=True)
 
+        # Read the paired ROM range directly: gfxbundle now emits graphics
+        # macros, and extraction must not depend on parsing generated source.
         words: list[tuple[int, int]] = []
-        display_list_path = self._display_list_path()
-        if display_list_path is not None:
-            words = parse_gfx_words(display_list_path)
+        display_list = self._display_list_name()
+        if display_list:
+            ranges = _display_list_ranges(options.opts.base_path / "snowboardkids2.yaml")
+            if display_list not in ranges:
+                raise ValueError(f"missing display-list segment {display_list}")
+            start, end = ranges[display_list]
+            words = parse_gfx_words_from_bytes(rom_bytes[start:end])
 
-        vtx_ranges = collect_vtx_ranges(words, decompressed_size)
-        texture_ranges = non_overlapping_ranges(collect_texture_ranges(words, decompressed_size))
+        rsp_segment = self._yaml_int("rsp_segment") or 2
+        vtx_ranges = collect_vtx_ranges(words, decompressed_size, rsp_segment)
+        texture_ranges = non_overlapping_ranges(collect_texture_ranges(words, decompressed_size, rsp_segment))
 
         parts: list[dict] = []
         covered: list[tuple[int, int]] = []

@@ -3,9 +3,9 @@
 #include "common.h"
 #include "graphics/displaylist.h"
 
-extern s32 D_80088730[4];
-extern s32 D_80088740[4];
-extern s32 D_80088750[8];
+extern DisplayLists D_80088730[1];
+extern DisplayLists D_80088740[1];
+extern DisplayLists D_80088750[2];
 
 extern DisplayLists gSlashSharedModel0PartDisplayLists[6];
 extern DisplayLists gSlashSharedModel1PartDisplayLists[6];

@@ -5,6 +5,7 @@
 #include "animation/stepped_matrix.h"
 #include "effects/nonrace_shadow.h"
 #include "effects/orbital_sprite.h"
+#include "generated/model_gfx.h"
 #include "graphics/quad_displaylist.h"
 
 #include "animation/bone_animation.h"
@@ -24,30 +25,44 @@
 #include "race/race_session.h"
 #include "system/task_scheduler.h"
 
-extern s32 D_80089500;
+extern DisplayLists D_80089500[1];
 extern DisplayLists gNewspaperDisplayLists;
 extern DisplayLists gCrabDisplayLists;
 extern DisplayLists gChestClosedDisplayLists;
-extern s32 D_80088630;
+extern DisplayLists D_80088630[1];
 extern DisplayLists gPostboxDisplayLists;
 extern DisplayLists gPostboxWithNewspaperDisplayLists;
-extern s32 D_800886D0;
-extern s32 D_800886F0;
+extern DisplayLists D_800886D0[1];
+extern DisplayLists D_800886F0[1];
 extern DisplayLists gChestOpenDisplayLists;
 
-s32 D_80089530[4] = { 0x00000000, 0x010000D0, 0x00000000, 0x00000000 };
+DisplayLists D_80089530[1] = {
+    { 0x00000000, ITEM_3_DISPLAY_LIST_part_00D0, NULL, NULL }
+};
 
-u32 itemMatrix_17[4] = { 0x0, 0x10000D0, 0x0, 0x0 };
+DisplayLists itemMatrix_17[1] = {
+    { 0x0, ITEM_17_DISPLAY_LIST_part_00D0, NULL, NULL }
+};
 
-u32 itemMatrix_4[4] = { 0x0, 0x10000F8, 0x0, 0x0 };
+DisplayLists itemMatrix_4[1] = {
+    { 0x0, ITEM_4_DISPLAY_LIST_part_00F8, NULL, NULL }
+};
 
-u32 itemMatrix_7[4] = { 0x0, 0x1000198, 0x0, 0x0 };
+DisplayLists itemMatrix_7[1] = {
+    { 0x0, ITEM_7_DISPLAY_LIST_part_0198, NULL, NULL }
+};
 
-u32 itemMatrix_9[4] = { 0x0, 0x10001A0, 0x0, 0x0 };
+DisplayLists itemMatrix_9[1] = {
+    { 0x0, ITEM_9_DISPLAY_LIST_part_01A0, NULL, NULL }
+};
 
-u32 itemMatrix_10[4] = { 0x0, 0x10001A0, 0x0, 0x0 };
+DisplayLists itemMatrix_10[1] = {
+    { 0x0, ITEM_10_DISPLAY_LIST_part_01A0, NULL, NULL }
+};
 
-u32 itemMatrix_18[4] = { 0x0, 0x10002F8, 0x0, 0x0 };
+DisplayLists itemMatrix_18[1] = {
+    { 0x0, ITEM_18_DISPLAY_LIST_part_02F8, NULL, NULL }
+};
 
 ItemAssetEntry itemAssetTable[] = {
     { &ITEM_0_DISPLAY_LIST_ROM_START,

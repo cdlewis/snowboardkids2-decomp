@@ -1,7 +1,15 @@
 #include "common.h"
+#include "generated/model_gfx.h"
+#include "graphics/displaylist.h"
 
-u32 D_80088610_89210[] = { 0x00000000, 0x01000D58, 0x01000D78, 0x00000000 };
+DisplayLists D_80088610_89210[1] = {
+    { 0x00000000, ISLAND_DISPLAY_LIST_part_0D58, ISLAND_DISPLAY_LIST_part_0D78, NULL }
+};
 
-u32 D_80088620[] = { 0x00000000, 0x01000FB0, 0x00000000, 0x00000000 };
+DisplayLists D_80088620[1] = {
+    { 0x00000000, ISLAND_DISPLAY_LIST_part_0FB0, NULL, NULL }
+};
 
-u32 D_80088630[] = { 0x00000000, 0x010003A0, 0x00000000, 0x00000000 };
+DisplayLists D_80088630[1] = {
+    { 0x00000000, BUS_DISPLAY_LIST_part_03A0, NULL, NULL }
+};

@@ -113,3 +113,28 @@ The decomp community has some amazing platforms and tools. I am grateful to the 
 
 
 I would 
+
+## Model graphics
+
+`make extract` decodes model display lists into `assets/gfxbin/*.c` using F3DEX2
+macros, including texture-load aggregates. Each entry point is a separate `Gfx`
+array. Descriptors and display-list calls refer to those arrays by symbol; the
+linker places each bundle in RSP segment 1. Suffixes such as `_part_0180` identify
+an entry's original ROM offset, not a fixed address. Adding commands before that
+entry moves its references automatically.
+
+Textures, palettes, and vertices are described by `assets/modelpayload/*.yaml`.
+Their packing offsets also generate the segment-2 symbols in
+`build/model_gfx.ld` and declarations in `build/include/generated/model_gfx.h`.
+Display lists refer to named parts and vertex array elements. To move a payload
+part, keep its name and update its manifest offset, size, and containing payload
+size as needed. The runtime-selected costume textures share segment-3 symbols;
+the build checks that all selectable texture manifests have the same layout.
+
+`make` builds the current extracted sources. `make extract` regenerates them from
+the ROM, and `make clean` removes them. Preserve asset edits before either command.
+The extraction and symbol-generation tools, rather than the generated assets,
+are maintained in this repository.
+
+Run `python3 -m unittest tools.tests.test_model_gfx` to check that moving both a
+display-list entry point and a payload part updates the linked references.

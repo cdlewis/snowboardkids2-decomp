@@ -2,6 +2,7 @@
 #include "assets.h"
 #include "common.h"
 #include "gbi.h"
+#include "generated/model_gfx.h"
 #include "generated/modelpayload_asset_sizes.h"
 #include "graphics/displaylist.h"
 #include "graphics/graphics.h"
@@ -9,10 +10,10 @@
 #include "system/task_scheduler.h"
 #include "ui/level_preview_3d.h"
 
-DisplayLists D_80088670_89270 = { 0, (Gfx *)0x010001E8, NULL, NULL };
-DisplayLists D_80088680_89280 = { 0, NULL, (Gfx *)0x01000390, NULL };
-DisplayLists D_80088690_89290 = { 0, NULL, NULL, (Gfx *)0x01000540 };
-DisplayLists gNewspaperDisplayLists = { 0, (Gfx *)0x01000118, NULL, NULL };
+DisplayLists D_80088670_89270 = { 0, ROCKET_EFFECT_DISPLAY_LIST_part_01E8, NULL, NULL };
+DisplayLists D_80088680_89280 = { 0, NULL, ROCKET_EFFECT_DISPLAY_LIST_part_0390, NULL };
+DisplayLists D_80088690_89290 = { 0, NULL, NULL, ROCKET_EFFECT_DISPLAY_LIST_part_0540 };
+DisplayLists gNewspaperDisplayLists = { 0, NEWSPAPER_DISPLAY_LIST_part_0118, NULL, NULL };
 
 void cleanupRocketEffect(RocketEffectUpdateData *data);
 

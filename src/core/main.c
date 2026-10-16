@@ -1,4 +1,5 @@
 #include "core/main.h"
+#include "generated/model_gfx.h"
 
 #include "assets.h"
 #include "common.h"
@@ -223,8 +224,8 @@ void initSpriteSpawnerTask(SpriteEntityTaskState *state);
 void initStaticModelTask(StaticModelTaskArg *arg0);
 
 extern s32 D_80088600;
-extern s32 D_80088620;
-extern u32 D_80088610_89210;
+extern DisplayLists D_80088620[1];
+extern DisplayLists D_80088610_89210[1];
 
 ModelEntityTaskConfig D_80088F20_89B20[] = {
     { initRotatingModelTask, &gTownRotatingModel0DisplayLists, { 0xFF8A0000, 0x00390000, 0xFF8A0000 }, -1, -64 },
@@ -577,7 +578,9 @@ ModelEntityConfig modelEntityConfigs[14] = {
 
 s32 spawnedSpriteScales[4] = { 0x00010000, 0x00011999, 0x0000E666, 0x00013333 };
 
-s32 D_80089500[4] = { 0x00000000, 0x01000148, 0x00000000, 0x00000000 };
+DisplayLists D_80089500[1] = {
+    { 0x00000000, ITEM_0_DISPLAY_LIST_part_0148, NULL, NULL }
+};
 
 void setModelEntityVisibility(ModelEntity *entity, s8 isVisible) {
     entity->isVisible = isVisible;

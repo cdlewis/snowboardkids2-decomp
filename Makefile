@@ -126,7 +126,7 @@ LIBMUS = lib/libmus/build/libmus.a
 # go away.
 UNDEFINED_SYMS := osPfsIsPlug
 LD_SCRIPT = $(BASENAME).ld
-LINKER_SCRIPTS := linker_scripts/hardware_regs.ld linker_scripts/libultra_syms.ld linker_scripts/data_field_syms.ld linker_scripts/memory_layout_assertions.ld
+LINKER_SCRIPTS := linker_scripts/hardware_regs.ld linker_scripts/libultra_syms.ld linker_scripts/data_field_syms.ld linker_scripts/memory_layout_assertions.ld $(BUILD_DIR)/model_gfx.ld
 LD_FLAGS := -T $(LD_SCRIPT) -Map snowboardkids2.map --no-check-sections -u osPfsIsPlug -Lbuild/lib -lmus -lgultra_rom
 
 ifeq ($(NON_MATCHING),1)
@@ -196,7 +196,7 @@ format:
 tidy:
 	clang-tidy --fix-errors --fix $(C_FILES) $(FORMAT_H_FILES) -- -Isrc $(IINC) $(MACROS)
 
-$(TARGET).elf: $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
+$(TARGET).elf: $(BUILD_DIR)/model_gfx.ld $(BASENAME).ld $(BUILD_DIR)/lib/libgultra_rom.a $(BUILD_DIR)/lib/libmus.a $(O_FILES)
 	$(PRINTF) "[$(PINK) linker  $(NO_COL)]  Linking $(TARGET).elf\n"
 	$(V)$(LD) $(LD_FLAGS) $(foreach ld, $(LINKER_SCRIPTS), -T $(ld)) -o $@
 
@@ -253,11 +253,19 @@ $(BUILD_DIR)/src/%.o: src/%.c $(CHARMAP)
 	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC_CHECK) $(CC_CHECK_FLAGS) -iquote src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I assets/courses -I assets/modelpayload -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -o $@ -x c - 2>&1 | tee -a $(BUILD_LOG)
 	$(V)$(TEXTCONV) $(CHARMAP) $< - | $(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm -I src/$(dir $*) $(IINC) $(MACROS) -I $(dir $*) -I src/ -I assets/courses -I assets/modelpayload -I $(BUILD_DIR)/include -I $(BUILD_DIR)/$(dir $*) -x c -c -o $@ -
 
-$(BUILD_DIR)/assets/gfxbin/%.o: assets/gfxbin/%.s
+MODEL_GFX_SOURCES := $(wildcard assets/gfxbin/*.c) $(wildcard assets/modelpayload/*.yaml)
+MODEL_GFX_HEADER = $(BUILD_DIR)/include/generated/model_gfx.h
+
+$(MODEL_GFX_HEADER) $(BUILD_DIR)/model_gfx.ld &: $(MODEL_GFX_SOURCES) $(TOOLS_DIR)/model_gfx_symbols.py snowboardkids2.yaml
+	$(V)$(PYTHON) $(TOOLS_DIR)/model_gfx_symbols.py
+
+$(COURSE_DEFINITION_C_OBJECTS): $(MODEL_GFX_HEADER)
+
+$(BUILD_DIR)/assets/gfxbin/%.o: assets/gfxbin/%.c $(MODEL_GFX_HEADER)
 	@mkdir -p $(shell dirname $@)
 	$(PRINTF) "[$(GREEN)   gfx   $(NO_COL)]  $<\n"
-	$(V)$(CPP) $(CPPFLAGS) -I include -I $(BUILD_DIR)/assets/gfxbin $< | \
-		$(AS) $(ASFLAGS) -I assets/gfxbin -I $(BUILD_DIR)/assets/gfxbin -o $@
+	$(V)$(CC_CHECK) $(CC_CHECK_FLAGS) $(IINC) $(MACROS) -I $(BUILD_DIR)/include -o $@ -x c $< 2>&1 | tee -a $(BUILD_LOG)
+	$(V)$(CC) $(CFLAGS_BASE) $(OPT_FLAGS) -fno-asm $(IINC) $(MACROS) -I $(BUILD_DIR)/include -x c -c -o $@ $<
 
 $(BUILD_DIR)/assets/modelpayload/%.o: assets/modelpayload/%.yaml $(TOOLS_DIR)/modelpayload_pack.py $(TOOLS_DIR)/modelpayload_common.py $(TOOLS_DIR)/sno.py $(MODELPAYLOAD_SOURCES)
 	@mkdir -p $(shell dirname $@)
