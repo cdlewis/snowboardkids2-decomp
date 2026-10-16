@@ -85,12 +85,12 @@ typedef struct {
     DataTable_19E80 *fontDataTable;
 } FontSystemInitData;
 
-static void *gCachedDisplayListSegment1;
-static void *gCachedDisplayListSegment2;
-static void *gCachedDisplayListSegment3;
-static u32 gCachedSpriteTextureData;
-static u32 gCachedSpritePaletteData;
-static u8 gCachedSpriteAlpha;
+static void *gCachedDisplayListSegment1 __attribute__((section(".bss"))) = NULL;
+static void *gCachedDisplayListSegment2 __attribute__((section(".bss"))) = NULL;
+static void *gCachedDisplayListSegment3 __attribute__((section(".bss"))) = NULL;
+u32 gCachedSpriteTextureData __attribute__((section(".bss"))) = 0;
+u32 gCachedSpritePaletteData __attribute__((section(".bss"))) = 0;
+static u8 gCachedSpriteAlpha __attribute__((section(".bss"))) = 0;
 
 extern Gfx D_8009A780_9B380[];
 

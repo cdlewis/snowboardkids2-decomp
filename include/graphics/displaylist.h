@@ -97,6 +97,9 @@ typedef struct {
     /* 0x1C */ Mtx *matrix;
 } BillboardSprite;
 
+extern u32 gCachedSpriteTextureData;
+extern u32 gCachedSpritePaletteData;
+
 void loadAssetMetadataByIndex(BillboardSprite *arg0, DataTable_19E80 *table, s32 entry_index, s32 sub_index);
 
 void enqueueDisplayListObject(s32 arg0, DisplayListObject *arg1);
