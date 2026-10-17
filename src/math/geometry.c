@@ -724,69 +724,63 @@ void transformVector2(void *input, void *matrix, Vec3i *output) {
 }
 
 void transformVector3(Vec3i *arg0, Transform3D *arg1, Vec3i *arg2) {
-    s32 *mat;
-    s16 *vec;
     s32 frac0;
-    s32 int0;
+    s32 int0X, int0Y, int0Z;
     s32 frac1;
     s32 int1;
     s32 frac2;
     s32 int2;
-    mat = (s32 *)arg0;
-    vec = (s16 *)arg1;
-    __asm__("" : "=r"(mat) : "0"(mat));
-    __asm__("" : "=r"(vec) : "0"(vec));
-    frac0 = (mat[0] & 0xFFFF) * vec[0];
-    int0 = (mat[0] >> 16) * (vec[0] << 3);
+    frac0 = (arg0->x & 0xFFFF) * arg1->m[0][0];
+    int0X = (arg0->x >> 16) * (arg1->m[0][0] << 3);
     if (frac0 < 0) {
         frac0 += 0x1FFF;
     }
-    frac1 = (mat[1] & 0xFFFF) * vec[1];
-    int1 = (mat[1] >> 16) * (vec[1] << 3);
-    frac0 = (int0 + (frac0 >> 13)) + int1;
+    frac1 = (arg0->y & 0xFFFF) * arg1->m[0][1];
+    int1 = (arg0->y >> 16) * (arg1->m[0][1] << 3);
+    frac0 = (int0X + (frac0 >> 13)) + int1;
     if (frac1 < 0) {
         frac1 += 0x1FFF;
     }
-    frac2 = (mat[2] & 0xFFFF) * vec[2];
-    int2 = (mat[2] >> 16) * (vec[2] << 3);
+    frac2 = (arg0->z & 0xFFFF) * arg1->m[0][2];
+    int2 = (arg0->z >> 16) * (arg1->m[0][2] << 3);
     int1 = (frac0 + (frac1 >> 13)) + int2;
     if (frac2 < 0) {
         frac2 += 0x1FFF;
     }
     arg2->x = int1 + (frac2 >> 13);
 
-    frac0 = (mat[0] & 0xFFFF) * vec[3];
-    int0 = (mat[0] >> 16) * (vec[3] << 3);
+    frac0 = (arg0->x & 0xFFFF) * arg1->m[1][0];
+    int0Y = (arg0->x >> 16) * (arg1->m[1][0] << 3);
     if (frac0 < 0) {
         frac0 += 0x1FFF;
     }
-    frac1 = (mat[1] & 0xFFFF) * vec[4];
-    int1 = (mat[1] >> 16) * (vec[4] << 3);
-    frac0 = (int0 + (frac0 >> 13)) + int1;
+    frac1 = (arg0->y & 0xFFFF) * arg1->m[1][1];
+    int1 = (arg0->y >> 16) * (arg1->m[1][1] << 3);
+    frac0 = (int0Y + (frac0 >> 13)) + int1;
     if (frac1 < 0) {
         frac1 += 0x1FFF;
     }
-    frac2 = (mat[2] & 0xFFFF) * vec[5];
-    int2 = (mat[2] >> 16) * (vec[5] << 3);
+    frac2 = (arg0->z & 0xFFFF) * arg1->m[1][2];
+    int2 = (arg0->z >> 16) * (arg1->m[1][2] << 3);
     int1 = (frac0 + (frac1 >> 13)) + int2;
     if (frac2 < 0) {
         frac2 += 0x1FFF;
     }
     arg2->y = int1 + (frac2 >> 13);
 
-    frac0 = (mat[0] & 0xFFFF) * vec[6];
-    int0 = (mat[0] >> 16) * (vec[6] << 3);
+    frac0 = (arg0->x & 0xFFFF) * arg1->m[2][0];
+    int0Z = (arg0->x >> 16) * (arg1->m[2][0] << 3);
     if (frac0 < 0) {
         frac0 += 0x1FFF;
     }
-    frac1 = (mat[1] & 0xFFFF) * vec[7];
-    int1 = (mat[1] >> 16) * (vec[7] << 3);
-    frac0 = (int0 + (frac0 >> 13)) + int1;
+    frac1 = (arg0->y & 0xFFFF) * arg1->m[2][1];
+    int1 = (arg0->y >> 16) * (arg1->m[2][1] << 3);
+    frac0 = (int0Z + (frac0 >> 13)) + int1;
     if (frac1 < 0) {
         frac1 += 0x1FFF;
     }
-    frac2 = (mat[2] & 0xFFFF) * vec[8];
-    int2 = (mat[2] >> 16) * (vec[8] << 3);
+    frac2 = (arg0->z & 0xFFFF) * arg1->m[2][2];
+    int2 = (arg0->z >> 16) * (arg1->m[2][2] << 3);
     int1 = (frac0 + (frac1 >> 13)) + int2;
     if (frac2 < 0) {
         frac2 += 0x1FFF;
