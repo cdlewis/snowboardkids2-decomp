@@ -723,69 +723,16 @@ void transformVector2(void *input, void *matrix, Vec3i *output) {
     output->z = int1 + (frac2 >> 13);
 }
 
-void transformVector3(Vec3i *arg0, Transform3D *arg1, Vec3i *arg2) {
-    s32 frac0;
-    s32 int0X, int0Y, int0Z;
-    s32 frac1;
-    s32 int1;
-    s32 frac2;
-    s32 int2;
-    frac0 = (arg0->x & 0xFFFF) * arg1->m[0][0];
-    int0X = (arg0->x >> 16) * (arg1->m[0][0] << 3);
-    if (frac0 < 0) {
-        frac0 += 0x1FFF;
-    }
-    frac1 = (arg0->y & 0xFFFF) * arg1->m[0][1];
-    int1 = (arg0->y >> 16) * (arg1->m[0][1] << 3);
-    frac0 = (int0X + (frac0 >> 13)) + int1;
-    if (frac1 < 0) {
-        frac1 += 0x1FFF;
-    }
-    frac2 = (arg0->z & 0xFFFF) * arg1->m[0][2];
-    int2 = (arg0->z >> 16) * (arg1->m[0][2] << 3);
-    int1 = (frac0 + (frac1 >> 13)) + int2;
-    if (frac2 < 0) {
-        frac2 += 0x1FFF;
-    }
-    arg2->x = int1 + (frac2 >> 13);
-
-    frac0 = (arg0->x & 0xFFFF) * arg1->m[1][0];
-    int0Y = (arg0->x >> 16) * (arg1->m[1][0] << 3);
-    if (frac0 < 0) {
-        frac0 += 0x1FFF;
-    }
-    frac1 = (arg0->y & 0xFFFF) * arg1->m[1][1];
-    int1 = (arg0->y >> 16) * (arg1->m[1][1] << 3);
-    frac0 = (int0Y + (frac0 >> 13)) + int1;
-    if (frac1 < 0) {
-        frac1 += 0x1FFF;
-    }
-    frac2 = (arg0->z & 0xFFFF) * arg1->m[1][2];
-    int2 = (arg0->z >> 16) * (arg1->m[1][2] << 3);
-    int1 = (frac0 + (frac1 >> 13)) + int2;
-    if (frac2 < 0) {
-        frac2 += 0x1FFF;
-    }
-    arg2->y = int1 + (frac2 >> 13);
-
-    frac0 = (arg0->x & 0xFFFF) * arg1->m[2][0];
-    int0Z = (arg0->x >> 16) * (arg1->m[2][0] << 3);
-    if (frac0 < 0) {
-        frac0 += 0x1FFF;
-    }
-    frac1 = (arg0->y & 0xFFFF) * arg1->m[2][1];
-    int1 = (arg0->y >> 16) * (arg1->m[2][1] << 3);
-    frac0 = (int0Z + (frac0 >> 13)) + int1;
-    if (frac1 < 0) {
-        frac1 += 0x1FFF;
-    }
-    frac2 = (arg0->z & 0xFFFF) * arg1->m[2][2];
-    int2 = (arg0->z >> 16) * (arg1->m[2][2] << 3);
-    int1 = (frac0 + (frac1 >> 13)) + int2;
-    if (frac2 < 0) {
-        frac2 += 0x1FFF;
-    }
-    arg2->z = int1 + (frac2 >> 13);
+void transformVector3(Vec3i *input, Transform3D *matrix, Vec3i *output) {
+    output->x = (input->x >> 16) * (matrix->m[0][0] << 3) + ((input->x & 0xFFFF) * matrix->m[0][0]) / 0x2000 +
+                (input->y >> 16) * (matrix->m[0][1] << 3) + ((input->y & 0xFFFF) * matrix->m[0][1]) / 0x2000 +
+                (input->z >> 16) * (matrix->m[0][2] << 3) + ((input->z & 0xFFFF) * matrix->m[0][2]) / 0x2000;
+    output->y = (input->x >> 16) * (matrix->m[1][0] << 3) + ((input->x & 0xFFFF) * matrix->m[1][0]) / 0x2000 +
+                (input->y >> 16) * (matrix->m[1][1] << 3) + ((input->y & 0xFFFF) * matrix->m[1][1]) / 0x2000 +
+                (input->z >> 16) * (matrix->m[1][2] << 3) + ((input->z & 0xFFFF) * matrix->m[1][2]) / 0x2000;
+    output->z = (input->x >> 16) * (matrix->m[2][0] << 3) + ((input->x & 0xFFFF) * matrix->m[2][0]) / 0x2000 +
+                (input->y >> 16) * (matrix->m[2][1] << 3) + ((input->y & 0xFFFF) * matrix->m[2][1]) / 0x2000 +
+                (input->z >> 16) * (matrix->m[2][2] << 3) + ((input->z & 0xFFFF) * matrix->m[2][2]) / 0x2000;
 }
 
 void transformVectorRelative(Vec3i *input, Transform3D *transform, Vec3i *output) {
