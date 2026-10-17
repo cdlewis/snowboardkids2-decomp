@@ -568,8 +568,9 @@ void controllerPackWriteFile(u16 channel, ControllerPackFileRequest *request) {
             reqPages = pages;
         }
 
-        gControllerPackAllocationSize = (reqPages & 0xFFFF) << 8;
-        __asm__("");
+        do {
+            gControllerPackAllocationSize = (reqPages & 0xFFFF) << 8;
+        } while (0);
         gControllerPackFileNote.gameCode = request->gameCode;
         gControllerPackFileNote.companyCode = request->companyCode;
 
