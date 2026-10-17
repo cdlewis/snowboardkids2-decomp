@@ -574,28 +574,24 @@ void composeTransform3D(Transform3D *arg0, Transform3D *arg1, Transform3D *arg2)
     arg2->translation.z = int1 + (frac2 >> 13) + arg1->translation.z;
 }
 
-void transformVector(s16 *inputVec, s16 *transformPtr, void *outputPtr) {
+void transformVector(s16 *inputVec, s16 *transformPtr, Vec3i *output) {
     Vec3i *input = (Vec3i *)inputVec;
     Transform3D *transform = (Transform3D *)transformPtr;
-    Vec3i *output = (Vec3i *)outputPtr;
     s32 frac0;
-    s32 int0;
+    s32 int0X, int0Y, int0Z;
     s32 frac1;
     s32 int1;
     s32 frac2;
     s32 int2;
 
-    __asm__("" : "=r"(input) : "0"(input));
-    __asm__("" : "=r"(transform) : "0"(transform));
-
     frac0 = (input->x & 0xFFFF) * transform->m[0][0];
-    int0 = (input->x >> 16) * (transform->m[0][0] << 3);
+    int0X = (input->x >> 16) * (transform->m[0][0] << 3);
     if (frac0 < 0) {
         frac0 += 0x1FFF;
     }
     frac1 = (input->y & 0xFFFF) * transform->m[1][0];
     int1 = (input->y >> 16) * (transform->m[1][0] << 3);
-    frac0 = (int0 + (frac0 >> 13)) + int1;
+    frac0 = (int0X + (frac0 >> 13)) + int1;
     if (frac1 < 0) {
         frac1 += 0x1FFF;
     }
@@ -608,13 +604,13 @@ void transformVector(s16 *inputVec, s16 *transformPtr, void *outputPtr) {
     output->x = int1 + (frac2 >> 13) + transform->translation.x;
 
     frac0 = (input->x & 0xFFFF) * transform->m[0][1];
-    int0 = (input->x >> 16) * (transform->m[0][1] << 3);
+    int0Y = (input->x >> 16) * (transform->m[0][1] << 3);
     if (frac0 < 0) {
         frac0 += 0x1FFF;
     }
     frac1 = (input->y & 0xFFFF) * transform->m[1][1];
     int1 = (input->y >> 16) * (transform->m[1][1] << 3);
-    frac0 = (int0 + (frac0 >> 13)) + int1;
+    frac0 = (int0Y + (frac0 >> 13)) + int1;
     if (frac1 < 0) {
         frac1 += 0x1FFF;
     }
@@ -627,13 +623,13 @@ void transformVector(s16 *inputVec, s16 *transformPtr, void *outputPtr) {
     output->y = int1 + (frac2 >> 13) + transform->translation.y;
 
     frac0 = (input->x & 0xFFFF) * transform->m[0][2];
-    int0 = (input->x >> 16) * (transform->m[0][2] << 3);
+    int0Z = (input->x >> 16) * (transform->m[0][2] << 3);
     if (frac0 < 0) {
         frac0 += 0x1FFF;
     }
     frac1 = (input->y & 0xFFFF) * transform->m[1][2];
     int1 = (input->y >> 16) * (transform->m[1][2] << 3);
-    frac0 = (int0 + (frac0 >> 13)) + int1;
+    frac0 = (int0Z + (frac0 >> 13)) + int1;
     if (frac1 < 0) {
         frac1 += 0x1FFF;
     }
