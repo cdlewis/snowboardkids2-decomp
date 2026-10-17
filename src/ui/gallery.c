@@ -341,10 +341,8 @@ void renderGalleryMenu(GalleryMenuState *arg0) {
     if (menuState < 5) {
         goto menu_end;
     }
-menu_body: {
-    __asm__("");
+menu_body:
     textEntry = getTable2DEntry(arg0->textTable, 0, 0);
-}
     halfWidth = getMaxLinePixelWidth(textEntry) / 2;
     halfWidth = -halfWidth;
     enqueueTextLayout(
