@@ -72,3 +72,12 @@ jobs:
         with:
           name: us_report
           path: main/report.json
+
+      - name: Trigger symbol regeneration
+        env:
+          GH_TOKEN: ${{ secrets.SYMBOLS_DISPATCH_TOKEN }}
+          DECOMP_SHA: ${{ github.sha }}
+        run: |
+          gh api --method POST repos/cdlewis/snowboardkids2-recomp-syms/dispatches \
+            -f event_type=decomp-updated \
+            -f "client_payload[sha]=$DECOMP_SHA"
