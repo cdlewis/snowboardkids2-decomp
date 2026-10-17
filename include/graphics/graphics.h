@@ -126,7 +126,9 @@ typedef struct ViewportNode {
     /* 0x15 */ u8 uses3DRendering;
     /* 0x16 */ u16 callbackSlotIndex;
     /* 0x18 */ CallbackEntry callbackLayers[VIEWPORT_CALLBACK_LAYER_COUNT];
+    // First pipe-sync in the group wrapper; replaced by a display-list call only if the group emits commands.
     /* 0x98 */ void *displayListPtr;
+    // Task on the last node of each contiguous microcode group; non-NULL can still be an empty wrapper.
     /* 0x9C */ GraphicsTask *graphicsTask;
     /* 0xA0 */ s16 originX;
     /* 0xA2 */ s16 originY;

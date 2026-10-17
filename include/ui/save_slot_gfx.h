@@ -17,9 +17,10 @@ typedef struct {
     /* 0xAB4 */ void *textRenderAsset;
     /* 0xAB8 */ void *goldIconSpriteSheet;
     /* 0xABC */ s16 slideOffset;
-    /* 0xABE */ s16 nameEntryGridX;
-    /* 0xAC0 */ s16 nameEntryCursorY;
-    /* 0xAC2 */ u16 nameEntryCursorBaseY;
+    /* 0xABE */ s16 rumblePakDialogPanelX;
+    /* 0xAC0 */ s16 rumblePakDialogPanelY;
+    /* 0xAC2 */ u16 rumblePakDialogPanelBaseY;
+    // Shared slot/animation counter; on exit, 1 selects the confirm callback, otherwise cancel.
     /* 0xAC4 */ u16 selectionAnimState;
     /* 0xAC6 */ u16 saveSlotMenuState;
     /* 0xAC8 */ u8 selectedSaveSlot;
@@ -73,10 +74,11 @@ typedef struct SaveSlotGoldDisplayState {
     /* 0xA8 */ u8 animFrames[4];
 } SaveSlotGoldDisplayState;
 
-typedef struct SaveSlotGridState {
+// Rumble Pak warning panel: 11 columns by 5 rows, plus a confirmation indicator.
+typedef struct SaveSlotRumblePakDialogState {
     /* 0x00 */ PaletteSpriteArg *entries;
-    /* 0x04 */ SpriteRenderArg cursorSprite;
-} SaveSlotGridState;
+    /* 0x04 */ SpriteRenderArg confirmationIndicator;
+} SaveSlotRumblePakDialogState;
 
 typedef struct SaveSlotItemIconsState {
     /* 0x00 */ void *spriteSheet;
@@ -126,7 +128,7 @@ void initSaveSlotDeleteText(SaveSlotDeleteTextState *state);
 void initSaveSlotGoldDisplay(SaveSlotGoldDisplayState *state);
 void initSaveSlotItemIcons(SaveSlotItemIconsState *state);
 void initSaveSlotItemLabels(SaveSlotNumberLabelsState *state);
-void initSaveSlotNameEntryGrid(SaveSlotGridState *state);
+void initSaveSlotRumblePakDialog(SaveSlotRumblePakDialogState *state);
 void initSaveSlotNameText(SaveSlotNameTextState *state);
 void initSaveSlotPromptText(SaveSlotPromptTextState *state);
 void initSaveSlotSelectionParticles(SaveSlotSelectionParticlesState *state);

@@ -14,14 +14,14 @@ void renderTiledTextureMap(TileMapScrollRenderState *state) {
     s16 clipTop;
     s16 clipRight;
     s16 clipBottom;
-    u16 rowOffset;
     u16 colOffset;
-    s16 numRows;
+    u16 rowOffset;
     s16 numCols;
-    s16 row;
+    s16 numRows;
     s16 col;
-    u16 rowStart;
+    s16 row;
     u16 colStart;
+    u16 rowStart;
     s16 screenLeft;
     s16 screenTop;
     s16 screenRight;
@@ -31,8 +31,8 @@ void renderTiledTextureMap(TileMapScrollRenderState *state) {
     s16 textureIndex;
     s16 tileGridIndex;
     s16 lastTile;
-    s16 rowRem;
     s16 colRem;
+    s16 rowRem;
     s32 paletteIndex;
     u16 *tileIndexData;
     u8 *textureData;
@@ -94,37 +94,37 @@ void renderTiledTextureMap(TileMapScrollRenderState *state) {
             tileShift = 5;
         }
 
-        rowOffset = clipLeft - (xStart & tileMask);
-        colOffset = clipTop - (yStart & tileMask);
+        colOffset = clipLeft - (xStart & tileMask);
+        rowOffset = clipTop - (yStart & tileMask);
 
-        numRows = (clipRight - clipLeft + (tileMask - 1)) >> tileShift;
-        numCols = (clipBottom - clipTop + (tileMask - 1)) >> tileShift;
+        numCols = (clipRight - clipLeft + (tileMask - 1)) >> tileShift;
+        numRows = (clipBottom - clipTop + (tileMask - 1)) >> tileShift;
 
         if (xStart & tileMask) {
-            ++numRows;
-        }
-
-        if (yStart & tileMask) {
             ++numCols;
         }
 
-        colStart = colOffset;
-        colRem = (yStart >> tileShift) % state->tileGridHeight;
-        if (colRem < 0) {
-            colRem = colRem + state->tileGridHeight;
+        if (yStart & tileMask) {
+            ++numRows;
+        }
+
+        rowStart = rowOffset;
+        rowRem = (yStart >> tileShift) % state->tileGridHeight;
+        if (rowRem < 0) {
+            rowRem = rowRem + state->tileGridHeight;
         }
 
         gSPDisplayList(gDisplayListAllocPtr++, (u32)gSpriteRDPSetupDL);
 
-        for (col = 0; col < numCols; ++col) {
-            rowStart = rowOffset;
-            rowRem = (xStart >> tileShift) % state->tileGridWidth;
-            if (rowRem < 0) {
-                rowRem = rowRem + state->tileGridWidth;
+        for (row = 0; row < numRows; ++row) {
+            colStart = colOffset;
+            colRem = (xStart >> tileShift) % state->tileGridWidth;
+            if (colRem < 0) {
+                colRem = colRem + state->tileGridWidth;
             }
 
-            for (row = 0; row < numRows; ++row) {
-                textureIndex = rowRem + colRem * state->tilesPerRow;
+            for (col = 0; col < numCols; ++col) {
+                textureIndex = colRem + rowRem * state->tilesPerRow;
                 tileGridIndex = tileIndexData[textureIndex];
                 paletteIndex = tileEntries[tileGridIndex].paletteIndex;
                 textureIndex = tileEntries[tileGridIndex].textureIndex;
@@ -134,10 +134,10 @@ void renderTiledTextureMap(TileMapScrollRenderState *state) {
                     flipX = gTileTextureFlipTable[tileEntries[tileGridIndex].flipMode * 2];
                     flipY = gTileTextureFlipTable[tileEntries[tileGridIndex].flipMode * 2 + 1];
 
-                    screenLeft = rowStart;
-                    screenTop = colStart;
-                    screenRight = rowStart + state->tileWidth;
-                    screenBottom = colStart + state->tileHeight;
+                    screenLeft = colStart;
+                    screenTop = rowStart;
+                    screenRight = colStart + state->tileWidth;
+                    screenBottom = rowStart + state->tileHeight;
                     texU = 0;
                     texV = 0;
 
@@ -252,12 +252,12 @@ void renderTiledTextureMap(TileMapScrollRenderState *state) {
                     }
                 }
 
-                rowStart = rowStart + state->tileWidth;
-                rowRem = (rowRem + 1) % state->tileGridWidth;
+                colStart = colStart + state->tileWidth;
+                colRem = (colRem + 1) % state->tileGridWidth;
             }
 
-            colStart = colStart + state->tileHeight;
-            colRem = (colRem + 1) % state->tileGridHeight;
+            rowStart = rowStart + state->tileHeight;
+            rowRem = (rowRem + 1) % state->tileGridHeight;
         }
 
         gSPEndDisplayList(displayList++);

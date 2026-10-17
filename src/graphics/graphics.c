@@ -271,7 +271,7 @@ void tryProcessDisplayFrameUpdate(void) {
  * This function orchestrates the entire frame rendering pipeline:
  *   Phase 0: Update fade animations on all viewports
  *   Early return: Skip rendering if framebuffer is busy or delay counter active
- *   Phase 1: Build RSP tasks for each viewport priority group
+ *   Phase 1: Build RSP task wrappers for each contiguous microcode group
  *   Phase 2: Construct RDP display lists for each visible viewport
  *
  * viScanline: current VI scanline position, used for task scheduling
@@ -332,6 +332,8 @@ void renderFrame(u32 viScanline) {
         rootNode = &gRootViewport;
     }
 
+    // Phase 1 allocates a task even for a group that emits no rendering commands.
+    // Its wrapper is segment / pipe-sync / pipe-sync / full-sync / end.
     node = rootNode;
     needsDisplayListSetup = TRUE;
     if (node != NULL) {
@@ -404,6 +406,8 @@ void renderFrame(u32 viScanline) {
         } while (node != NULL);
     }
 
+    // Phase 2 fills group display lists. Empty groups retain the Phase 1 wrapper,
+    // including both pipe-syncs, and their non-NULL tasks are still submitted.
     node = rootNode;
     needsDisplayListSetup = TRUE;
     if (node != NULL) {
@@ -769,6 +773,7 @@ void renderFrame(u32 viScanline) {
                     }
 
                     gSPEndDisplayList(gDisplayListAllocPtr++);
+                    // Populate the wrapper by replacing its first pipe-sync with this call.
                     gSPDisplayList(node->displayListPtr, displayListStart);
                 }
                 needsDisplayListSetup = TRUE;

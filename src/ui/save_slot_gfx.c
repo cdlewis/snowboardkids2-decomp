@@ -19,7 +19,7 @@ u16 gSaveSlotStatSpriteTable[] = {
     0x0000, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0002, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0000, 0x0000,
 };
 
-u16 gSaveSlotNameEntryGridTable[] = {
+u16 gSaveSlotRumblePakDialogPanelTable[] = {
     0x0006, 0x0001, 0x0000, 0x0007, 0x0009, 0x0000, 0x0006, 0x0001, 0x0001, 0x0008, 0x0001, 0x0000, 0x0009,
     0x0009, 0x0000, 0x0008, 0x0001, 0x0001, 0x0008, 0x0001, 0x0000, 0x0009, 0x0009, 0x0000, 0x0008, 0x0001,
     0x0001, 0x0008, 0x0001, 0x0000, 0x0009, 0x0009, 0x0000, 0x0008, 0x0001, 0x0001, 0x0006, 0x0001, 0x0002,
@@ -164,8 +164,8 @@ void cleanupSaveSlotConfirmationIndicator(SaveSlotConfirmationIndicatorState *ar
 void updateSaveSlotDeleteArrow(SaveSlotDeleteArrowState *state);
 void cleanupSaveSlotDeleteArrow(SaveSlotDeleteArrowState *arg0);
 void cleanupSaveSlotPromptText(SaveSlotPromptTextState *arg0);
-void cleanupSaveSlotNameEntryGrid(SaveSlotGridState *arg0);
-void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0);
+void cleanupSaveSlotRumblePakDialog(SaveSlotRumblePakDialogState *arg0);
+void updateSaveSlotRumblePakDialog(SaveSlotRumblePakDialogState *arg0);
 void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0);
 
 void initSaveSlotStatSprites(SaveSlotStatSpritesState *state) {
@@ -274,7 +274,7 @@ void cleanupSaveSlotStatSprites(SaveSlotStatSpritesState *arg0) {
     arg0->entries[0].spriteData = freeNodeMemory(arg0->entries[0].spriteData);
 }
 
-void initSaveSlotNameEntryGrid(SaveSlotGridState *state) {
+void initSaveSlotRumblePakDialog(SaveSlotRumblePakDialogState *state) {
     SaveSlotScreenState *allocation;
     void *spriteSheet;
     s32 i;
@@ -285,7 +285,7 @@ void initSaveSlotNameEntryGrid(SaveSlotGridState *state) {
 
     allocation = getCurrentAllocation();
     spriteSheet = loadCompressedData(&uiFontSpriteSheet_ROM_START, &font_main_ROM_START, 0x2278);
-    setCleanupCallback(cleanupSaveSlotNameEntryGrid);
+    setCleanupCallback(cleanupSaveSlotRumblePakDialog);
     state->entries = allocateNodeMemory(0x370);
 
     for (i = 0; i < 0x37; i++) {
@@ -295,23 +295,23 @@ void initSaveSlotNameEntryGrid(SaveSlotGridState *state) {
     }
 
     entryIndex = 0;
-    for (k = 0; gSaveSlotNameEntryGridTable[k] != 0xFFFF; k += 3) {
-        spriteIndex = gSaveSlotNameEntryGridTable[k];
-        for (j = 0; j < gSaveSlotNameEntryGridTable[k + 1]; j++) {
+    for (k = 0; gSaveSlotRumblePakDialogPanelTable[k] != 0xFFFF; k += 3) {
+        spriteIndex = gSaveSlotRumblePakDialogPanelTable[k];
+        for (j = 0; j < gSaveSlotRumblePakDialogPanelTable[k + 1]; j++) {
             state->entries[(u16)entryIndex].frameIndex = spriteIndex;
-            state->entries[(u16)entryIndex].tileMode = gSaveSlotNameEntryGridTable[k + 2];
+            state->entries[(u16)entryIndex].tileMode = gSaveSlotRumblePakDialogPanelTable[k + 2];
             entryIndex++;
         }
     }
 
-    state->cursorSprite.x = allocation->nameEntryGridX + 0x98;
-    state->cursorSprite.y = allocation->nameEntryCursorY + 0x38;
-    state->cursorSprite.spriteData = spriteSheet;
-    state->cursorSprite.frameIndex = 0x13;
-    setCallback(updateSaveSlotNameEntryGrid);
+    state->confirmationIndicator.x = allocation->rumblePakDialogPanelX + 0x98;
+    state->confirmationIndicator.y = allocation->rumblePakDialogPanelY + 0x38;
+    state->confirmationIndicator.spriteData = spriteSheet;
+    state->confirmationIndicator.frameIndex = 0x13;
+    setCallback(updateSaveSlotRumblePakDialog);
 }
 
-void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
+void updateSaveSlotRumblePakDialog(SaveSlotRumblePakDialogState *arg0) {
     SaveSlotScreenState *allocation;
     s32 row;
     s32 rowIndex;
@@ -332,8 +332,8 @@ void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
     do {
         for (col = 0, colIndex = 0, rowStartIndex = baseIndex; colIndex < 0xB; colIndex++, col += 0x10) {
             entryIndex = rowStartIndex + colIndex;
-            arg0->entries[entryIndex].x = allocation->nameEntryGridX + col;
-            arg0->entries[entryIndex].y = allocation->nameEntryCursorY + row;
+            arg0->entries[entryIndex].x = allocation->rumblePakDialogPanelX + col;
+            arg0->entries[entryIndex].y = allocation->rumblePakDialogPanelY + row;
             pushViewportCallbackBySlot(
                 8U,
                 VIEWPORT_CALLBACK_LAYER_INITIAL,
@@ -349,24 +349,24 @@ void updateSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
 
     screenState = allocation->saveSlotMenuState;
     if ((screenState == 8) | (screenState == 0xB)) {
-        arg0->cursorSprite.y = allocation->nameEntryCursorBaseY + 0x38;
+        arg0->confirmationIndicator.y = allocation->rumblePakDialogPanelBaseY + 0x38;
     } else {
-        arg0->cursorSprite.y = allocation->nameEntryCursorY + 0x38;
+        arg0->confirmationIndicator.y = allocation->rumblePakDialogPanelY + 0x38;
     }
 
     if (!(gGlobalFrameCounter & 7)) {
-        animFrame = arg0->cursorSprite.frameIndex + 1;
-        arg0->cursorSprite.frameIndex = animFrame;
+        animFrame = arg0->confirmationIndicator.frameIndex + 1;
+        arg0->confirmationIndicator.frameIndex = animFrame;
         if ((u32)(animFrame & 0xFFFF) >= 0x15U) {
-            arg0->cursorSprite.frameIndex = 0x13U;
+            arg0->confirmationIndicator.frameIndex = 0x13U;
         }
     }
 
-    pushViewportCallbackBySlot(8U, VIEWPORT_CALLBACK_LAYER_OPAQUE, renderSpriteFrame, &arg0->cursorSprite);
+    pushViewportCallbackBySlot(8U, VIEWPORT_CALLBACK_LAYER_OPAQUE, renderSpriteFrame, &arg0->confirmationIndicator);
 }
 
-void cleanupSaveSlotNameEntryGrid(SaveSlotGridState *arg0) {
-    arg0->cursorSprite.spriteData = freeNodeMemory(arg0->cursorSprite.spriteData);
+void cleanupSaveSlotRumblePakDialog(SaveSlotRumblePakDialogState *arg0) {
+    arg0->confirmationIndicator.spriteData = freeNodeMemory(arg0->confirmationIndicator.spriteData);
     arg0->entries = freeNodeMemory(arg0->entries);
 }
 
@@ -716,9 +716,9 @@ void initSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
     arg0->mainText.shade.value = 0xFF;
     arg0->mainText.paletteIndex = 0;
     arg0->mainText.textAlpha.value = 0xFF;
-    hintX = allocation->nameEntryGridX + 0xA;
+    hintX = allocation->rumblePakDialogPanelX + 0xA;
     arg0->hintText.startX = hintX;
-    hintY = allocation->nameEntryCursorY + 0xA;
+    hintY = allocation->rumblePakDialogPanelY + 0xA;
     arg0->hintText.fontAsset = textAsset;
     arg0->hintText.shade.value = 0xFF;
     arg0->hintText.paletteIndex = 4;
@@ -765,9 +765,9 @@ void updateSaveSlotPromptText(SaveSlotPromptTextState *arg0) {
 
             screenState2 = alloc->saveSlotMenuState;
             if (screenState2 == 8 || screenState2 == 0xB) {
-                hintY = alloc->nameEntryCursorBaseY + 0xA;
+                hintY = alloc->rumblePakDialogPanelBaseY + 0xA;
             } else {
-                hintY = alloc->nameEntryCursorY + 0xA;
+                hintY = alloc->rumblePakDialogPanelY + 0xA;
             }
             arg0->hintText.startY = hintY;
 

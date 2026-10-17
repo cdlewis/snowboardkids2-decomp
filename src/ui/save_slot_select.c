@@ -20,7 +20,7 @@ void initSaveSlotSelection(void);
 void onSaveSlotSelectionConfirm(void);
 void onSaveSlotSelectionCancel(void);
 void cleanupSaveSlotSelectionAndExit(void);
-void updateNameEntryCursorWiggle(void);
+void updateSaveSlotRumblePakDialogWiggle(void);
 void onSaveSlotReadComplete(u16, s32);
 void verifySaveSlotChecksum(void);
 void updateSlotSelectionSlide(void);
@@ -43,10 +43,10 @@ void initSaveSlotScreen(void) {
     state->saveSlotMenuState = 0x28;
     state->selectedSaveSlot = 3;
     state->slideOffset = -0x140;
-    state->nameEntryGridX = -0x58;
+    state->rumblePakDialogPanelX = -0x58;
     state->selectionAnimState = 0;
     state->numValidSlots = 0;
-    state->nameEntryCursorY = -0xE0;
+    state->rumblePakDialogPanelY = -0xE0;
     state->writeSlotIndexPlusOne = 0;
     state->menuChoiceIndex = 0;
     state->menuAnimOffsetX = 0;
@@ -443,17 +443,18 @@ void updateSaveSlotSelectionScreen(void) {
                 }
             }
             break;
+        // Rumble Pak dialog: create the panel, slide it in, then settle before the attach prompt.
         case 5:
-            scheduleTask(initSaveSlotNameEntryGrid, 0, 0, 0x5A);
+            scheduleTask(initSaveSlotRumblePakDialog, 0, 0, 0x5A);
             state->saveSlotMenuState = 6;
             break;
         case 6: {
             u16 counter;
-            counter = state->nameEntryCursorY + 0x1E;
-            state->nameEntryCursorY = counter;
+            counter = state->rumblePakDialogPanelY + 0x1E;
+            state->rumblePakDialogPanelY = counter;
             if ((s16)counter >= -0x28) {
-                state->nameEntryCursorY = -0x28;
-                state->nameEntryCursorBaseY = state->nameEntryCursorY;
+                state->rumblePakDialogPanelY = -0x28;
+                state->rumblePakDialogPanelBaseY = state->rumblePakDialogPanelY;
                 state->saveSlotMenuState = 7;
                 state->selectionAnimState = 0;
             }
@@ -465,15 +466,18 @@ void updateSaveSlotSelectionScreen(void) {
                 state->saveSlotMenuState = 8;
             }
             break;
+        // Confirm the attach prompt; wiggle the panel while its text and indicator stay fixed.
         case 8:
-            updateNameEntryCursorWiggle();
+            updateSaveSlotRumblePakDialogWiggle();
             if (gControllerInputs[0] & CONT_A) {
                 playSoundEffect(0x2C);
                 state->saveSlotMenuState = 9;
                 state->selectionAnimState = 0;
-                state->nameEntryCursorY = state->nameEntryCursorBaseY;
+                state->rumblePakDialogPanelY = state->rumblePakDialogPanelBaseY;
             }
             break;
+        // Blink after confirmation: 9 advances to the removal warning, 10 finishes with result 1.
+        // State 12 starts the exit fade after the switch below.
         case 9:
         case 0xA:
             state->selectionAnimState += 1;
@@ -487,11 +491,12 @@ void updateSaveSlotSelectionScreen(void) {
                 }
             }
             break;
+        // Confirm the warning against removing the Rumble Pak during gameplay.
         case 0xB:
-            updateNameEntryCursorWiggle();
+            updateSaveSlotRumblePakDialogWiggle();
             if (gControllerInputs[0] & CONT_A) {
                 state->selectionAnimState = 0;
-                state->nameEntryCursorY = state->nameEntryCursorBaseY;
+                state->rumblePakDialogPanelY = state->rumblePakDialogPanelBaseY;
                 playSoundEffect(0x2D);
                 state->saveSlotMenuState = 0xA;
             }
@@ -840,16 +845,16 @@ void onSaveSlotSelectionCancel(void) {
     returnToParentScheduler(0xFE);
 }
 
-void updateNameEntryCursorWiggle(void) {
+void updateSaveSlotRumblePakDialogWiggle(void) {
     SaveSlotScreenState *allocation = (SaveSlotScreenState *)getCurrentAllocation();
     u16 counter = allocation->selectionAnimState;
     u16 temp;
 
     if (counter < 15) {
         if (counter & 1) {
-            allocation->nameEntryCursorY = allocation->nameEntryCursorBaseY - 2;
+            allocation->rumblePakDialogPanelY = allocation->rumblePakDialogPanelBaseY - 2;
         } else {
-            allocation->nameEntryCursorY = allocation->nameEntryCursorBaseY + 2;
+            allocation->rumblePakDialogPanelY = allocation->rumblePakDialogPanelBaseY + 2;
         }
         counter = allocation->selectionAnimState;
     }
@@ -859,7 +864,7 @@ void updateNameEntryCursorWiggle(void) {
     temp &= 0xFFFF;
 
     if (temp == 15) {
-        allocation->nameEntryCursorY = allocation->nameEntryCursorBaseY;
+        allocation->rumblePakDialogPanelY = allocation->rumblePakDialogPanelBaseY;
     }
 }
 
