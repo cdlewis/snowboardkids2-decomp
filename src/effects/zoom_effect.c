@@ -237,7 +237,6 @@ void updateCutsceneWaitSystem(cutsceneSys2Wait_exec_asset *arg0) {
     s32 delta;
     s32 diff;
     s32 temp;
-    s16 var_v0;
 
     renderSlots = 0;
     cmdEntry = NULL;
@@ -336,13 +335,10 @@ state_done:
     if (cmdEntry != NULL) {
         if (arg0->commandOffset == 0x64) {
             if (arg0->unkB0 & 0x10) {
-                var_v0 = 0x68;
+                arg0->unkAC = 0x68;
             } else {
-                __asm__("");
-                var_v0 = 0x69;
+                arg0->unkAC = 0x69;
             }
-            arg0->unkAC = var_v0;
-            __asm__("");
             pushViewportCallbackBySlot(1, VIEWPORT_CALLBACK_LAYER_INITIAL, &renderSpriteFrame, &arg0->unkA4);
             arg0->unkB0 = (u16)(arg0->unkB0 + 1);
         } else {
