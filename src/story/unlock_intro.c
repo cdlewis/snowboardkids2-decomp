@@ -26,14 +26,13 @@ void initPostUnlockLocationIntro(void) {
 void postUnlockLocationWaitForDismiss(void) {
     PostUnlockLocationIntroAllocation *allocation = (PostUnlockLocationIntroAllocation *)getCurrentAllocation();
 
-    allocation->waitCounter = allocation->waitCounter + 1;
-    __asm__ volatile("" ::: "memory");
+    allocation->waitCounter = (u16)(allocation->waitCounter + 1);
 
     if (gControllerInputs[0] & A_BUTTON) {
         allocation->waitCounter = 60;
     }
 
-    if (!(allocation->waitCounter < 60)) {
+    if ((u16)allocation->waitCounter >= 60) {
         unlinkNode(&allocation->unk0);
         terminateSchedulerWithCallback(&onPostUnlockLocationIntroComplete);
     }
