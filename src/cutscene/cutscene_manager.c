@@ -951,25 +951,18 @@ void renderCutsceneTimelineView(TextGrid *grid, s32 baseFrameArg) {
     s32 windowEndFrame;
     s32 rowEndFrame;
     s32 frameDelta;
+    s32 frameNumber;
     s32 eventColumn;
+    s32 columnOffset;
     StateEntry *entry;
+    StateEntryItem *slotItem;
     StateEntry *next;
     void *commandEntry;
-#ifdef CC_CHECK
     s32 commandCategory;
     s32 commandType;
     s32 baseFrame;
     s16 rowIndex;
-    s32 slotItemOffset;
     s32 baseFrameCopy;
-#else
-    register s32 commandCategory __asm__("a0");
-    register s32 commandType __asm__("a1");
-    register s32 baseFrame __asm__("s0");
-    register s16 rowIndex __asm__("s3");
-    register s32 slotItemOffset __asm__("s5");
-    register s32 baseFrameCopy __asm__("s6");
-#endif
     s32 slotIndex;
     s32 invalidIndex;
 
@@ -982,8 +975,8 @@ void renderCutsceneTimelineView(TextGrid *grid, s32 baseFrameArg) {
         baseFrameCopy = baseFrame;
         windowEndFrame = baseFrameCopy + 6;
         invalidIndex = 0xFFFF;
+        columnOffset = 4;
         rowIndex = 3;
-        slotItemOffset = 0x20;
 
         do {
             sprintf(
@@ -994,50 +987,38 @@ void renderCutsceneTimelineView(TextGrid *grid, s32 baseFrameArg) {
             );
             writeTextGridText(grid, 0, rowIndex, buffer);
 
-            /* The slot item head points at the first event in this slot's sorted linked list. */
-            entry = getStateEntry(*(u16 *)((u8 *)gCutsceneStateTable + slotItemOffset));
-            if (windowEndFrame >= (s32)entry->frameNumber) {
+            slotItem = &((StateTable *)gCutsceneStateTable)->items[slotIndex];
+            entry = getStateEntry((u16)slotItem->headIndex);
+            frameNumber = entry->frameNumber;
+            if (windowEndFrame >= frameNumber) {
                 rowEndFrame = baseFrameCopy + 6;
-                frameDelta = (s32)entry->frameNumber - baseFrameCopy;
-                while (1) {
-                    if (frameDelta >= 0) {
-                        commandCategory = entry->commandCategory;
-                        commandType = entry->commandType;
-                        eventColumn = (frameDelta * 6) + 6;
-                        /*
-                         * Keep the command arguments in a0/a1 and force eventColumn to be
-                         * materialized before the call. Without this empty tied asm, KMC
-                         * schedules part of the column calculation into the
-                         * getCommandEntryMasked delay slot instead of the final +4.
-                         */
-                        __asm__ volatile(""
-                                         : "=r"(eventColumn), "=r"(commandCategory), "=r"(commandType)
-                                         : "0"(eventColumn), "1"(commandCategory), "2"(commandType));
-                        commandEntry = getCommandEntryMasked(commandCategory, commandType);
-                        eventColumn += 4;
-                        writeTextGridText(grid, (s16)eventColumn, rowIndex, commandEntry);
-                    }
-                    if (entry->next_index == invalidIndex) {
-                        break;
-                    }
-                    next = getStateEntry(entry->next_index);
-                    /*
-                     * Reload after getStateEntry. The original checks the link again after
-                     * the call, so this redundant-looking test preserves that control flow.
-                     */
-                    if (entry->next_index == invalidIndex) {
-                        break;
-                    }
-                    entry = next;
-                    if (rowEndFrame < (s32)entry->frameNumber) {
-                        break;
-                    }
-                    frameDelta = (s32)entry->frameNumber - baseFrameCopy;
+            nextEvent:
+                frameDelta = frameNumber - baseFrameCopy;
+                if (frameDelta >= 0) {
+                    commandCategory = entry->commandCategory;
+                    commandType = entry->commandType;
+                    eventColumn = (frameDelta * 6) + 6;
+                    commandEntry = getCommandEntryMasked(commandCategory, commandType);
+                    eventColumn += columnOffset;
+                    writeTextGridText(grid, (s16)eventColumn, rowIndex, commandEntry);
                 }
+                if (entry->next_index == invalidIndex) {
+                    goto nextSlot;
+                }
+                next = getStateEntry(entry->next_index);
+                if (entry->next_index == invalidIndex) {
+                    goto nextSlot;
+                }
+                entry = next;
+                frameNumber = entry->frameNumber;
+                if (rowEndFrame < frameNumber) {
+                    goto nextSlot;
+                }
+                goto nextEvent;
             }
+        nextSlot:
             rowIndex += 1;
             slotIndex += 1;
-            slotItemOffset += sizeof(StateEntryItem);
         } while (slotIndex < (s32)gCutsceneStateTable->slotCount);
     }
 }
