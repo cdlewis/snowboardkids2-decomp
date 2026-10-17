@@ -1,3 +1,4 @@
+#include "ui/save_slot_select.h"
 #include "assets.h"
 #include "common.h"
 #include "common_bss.h"
@@ -19,11 +20,6 @@ void updateSaveSlotSelectionScreen(void);
 void initSaveSlotSelection(void);
 void onSaveSlotSelectionConfirm(void);
 void onSaveSlotSelectionCancel(void);
-void cleanupSaveSlotSelectionAndExit(void);
-void updateSaveSlotRumblePakDialogWiggle(void);
-void onSaveSlotReadComplete(u16, s32);
-void verifySaveSlotChecksum(void);
-void updateSlotSelectionSlide(void);
 s32 sanitizeSaveSlotData(EepromSaveDataBlock *saveData);
 
 void initSaveSlotScreen(void) {
