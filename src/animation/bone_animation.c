@@ -27,130 +27,45 @@ void initBoneAnimationState(void *animData, s32 tableIndex, s32 boneIndex, BoneA
     state->flags = *boneAnimEntry + 0x8000;
 }
 
-void createBoneRotMatrix(s16 arg0, s16 arg1, s16 arg2, s16 *arg3) {
-    s32 spVars[3];
-    s16 temp_s0;
-    s16 temp_s1;
-    s32 temp_a0;
-    s32 temp_a1;
-    s32 temp_a2;
-    s32 temp_a3;
-    s32 temp_s0_2;
-    s32 temp_s1_2;
-    s32 temp_s2;
-    s32 temp_s4;
-    s32 temp_s5;
-    s32 temp_t0;
-    s32 temp_t1;
-    s32 temp_t2;
-    s32 temp_v1;
-    s32 temp_v1_2;
-    s32 temp_v1_3;
-    s32 var_a0;
-    s32 var_v0;
-    s32 var_v1;
+void createBoneRotMatrix(s16 angleX, s16 angleY, s16 angleZ, s16 *matrix) {
+    s32 axis[3];
+    s32 sinX, sinY, cosX, cosY, sinZ, cosZ;
+    s32 xy, yz, zx;
+    s32 square, sine;
+    s32 oneMinusCos;
 
-    temp_s0 = arg1;
-    temp_s1 = -arg0;
-    temp_s5 = approximateSin(temp_s1);
-    temp_s0 = -temp_s0;
-    temp_s1_2 = approximateSin(temp_s0);
-    temp_s0_2 = approximateCos(temp_s1);
-    temp_s4 = approximateCos(temp_s0);
-    temp_s2 = approximateSin(arg2);
-    temp_a3 = approximateCos(arg2);
-    var_v1 = temp_s5 * temp_s1_2;
-    if (var_v1 < 0) {
-        var_v1 += 0x1FFF;
-    }
-    var_v0 = temp_s5 * temp_s4;
-    temp_a2 = var_v1 >> 0xD;
-    spVars[0] = temp_a2;
-    spVars[1] = temp_s0_2;
-    if (var_v0 < 0) {
-        var_v0 += 0x1FFF;
-    }
-    var_v1 = temp_a2 * temp_s0_2;
-    temp_a0 = var_v0 >> 0xD;
-    spVars[2] = temp_a0;
-    temp_a1 = 0x2000 - temp_a3;
-    if (var_v1 < 0) {
-        var_v1 += 0x1FFF;
-    }
-    var_v0 = (var_v1 >> 0xD) * temp_a1;
-    if (var_v0 < 0) {
-        var_v0 += 0x1FFF;
-    }
-    var_v1 = temp_s0_2 * temp_a0;
-    temp_t2 = var_v0 >> 0xD;
-    if (var_v1 < 0) {
-        var_v1 += 0x1FFF;
-    }
-    var_v0 = (var_v1 >> 0xD) * temp_a1;
-    if (var_v0 < 0) {
-        var_v0 += 0x1FFF;
-    }
-    var_v1 = temp_a0 * temp_a2;
-    temp_t0 = var_v0 >> 0xD;
-    if (var_v1 < 0) {
-        var_v1 += 0x1FFF;
-    }
-    var_v0 = (var_v1 >> 0xD) * temp_a1;
-    if (var_v0 < 0) {
-        var_v0 += 0x1FFF;
-    }
-    var_v1 = temp_a2 * temp_a2;
-    temp_t1 = var_v0 >> 0xD;
-    if (var_v1 < 0) {
-        var_v1 += 0x1FFF;
-    }
-    var_a0 = temp_a2 * temp_s2;
-    temp_a1 = var_v1 >> 0xD;
-    if (var_a0 < 0) {
-        var_a0 += 0x1FFF;
-    }
-    var_v0 = temp_a3 * (0x2000 - temp_a1);
-    temp_v1 = var_a0 >> 0xD;
-    if (var_v0 < 0) {
-        var_v0 += 0x1FFF;
-    }
-    arg3[0] = temp_a1 + (var_v0 >> 0xD);
-    arg3[7] = (s16)(temp_t0 - temp_v1);
-    arg3[5] = (s16)(temp_t0 + temp_v1);
-    var_v0 = spVars[1] * spVars[1];
-    if (var_v0 < 0) {
-        var_v0 += 0x1FFF;
-    }
-    var_v1 = spVars[1] * temp_s2;
-    temp_a1 = var_v0 >> 0xD;
-    if (var_v1 < 0) {
-        var_v1 += 0x1FFF;
-    }
-    var_v0 = temp_a3 * (0x2000 - temp_a1);
-    temp_v1_2 = var_v1 >> 0xD;
-    if (var_v0 < 0) {
-        var_v0 += 0x1FFF;
-    }
-    arg3[4] = (s16)(temp_a1 + (var_v0 >> 0xD));
-    arg3[6] = (s16)(temp_t1 + temp_v1_2);
-    arg3[2] = (s16)(temp_t1 - temp_v1_2);
-    var_v0 = spVars[2] * spVars[2];
-    if (var_v0 < 0) {
-        var_v0 += 0x1FFF;
-    }
-    var_v1 = spVars[2] * temp_s2;
-    temp_a1 = var_v0 >> 0xD;
-    if (var_v1 < 0) {
-        var_v1 += 0x1FFF;
-    }
-    var_v0 = temp_a3 * (0x2000 - temp_a1);
-    temp_v1_3 = var_v1 >> 0xD;
-    if (var_v0 < 0) {
-        var_v0 += 0x1FFF;
-    }
-    arg3[8] = (s16)(temp_a1 + (var_v0 >> 0xD));
-    arg3[3] = (s16)(temp_t2 - temp_v1_3);
-    arg3[1] = (s16)(temp_t2 + temp_v1_3);
+    sinX = approximateSin(-angleX);
+    sinY = approximateSin(-angleY);
+    cosX = approximateCos(-angleX);
+    cosY = approximateCos(-angleY);
+    sinZ = approximateSin(angleZ);
+    cosZ = approximateCos(angleZ);
+
+    axis[0] = sinX * sinY / 0x2000;
+    axis[1] = cosX;
+    axis[2] = sinX * cosY / 0x2000;
+    oneMinusCos = 0x2000 - cosZ;
+    xy = (axis[0] * axis[1] / 0x2000) * oneMinusCos / 0x2000;
+    yz = (axis[1] * axis[2] / 0x2000) * oneMinusCos / 0x2000;
+    zx = (axis[2] * axis[0] / 0x2000) * oneMinusCos / 0x2000;
+
+    square = axis[0] * axis[0] / 0x2000;
+    sine = axis[0] * sinZ / 0x2000;
+    matrix[0] = square + cosZ * (0x2000 - square) / 0x2000;
+    matrix[7] = yz - sine;
+    matrix[5] = yz + sine;
+
+    square = axis[1] * axis[1] / 0x2000;
+    sine = axis[1] * sinZ / 0x2000;
+    matrix[4] = square + cosZ * (0x2000 - square) / 0x2000;
+    matrix[6] = zx + sine;
+    matrix[2] = zx - sine;
+
+    square = axis[2] * axis[2] / 0x2000;
+    sine = axis[2] * sinZ / 0x2000;
+    matrix[8] = square + cosZ * (0x2000 - square) / 0x2000;
+    matrix[3] = xy - sine;
+    matrix[1] = xy + sine;
 }
 
 s32 updateBoneAnimation(BoneAnimationState *state) {
