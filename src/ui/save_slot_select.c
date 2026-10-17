@@ -36,7 +36,7 @@ void initSaveSlotScreen(void) {
     setupTaskSchedulerNodes(0x14, 0x14, 0x14, 0, 0, 0, 0, 0);
     clearMemory((s8 *)state, 0xAE0);
 
-    state->saveSlotMenuState = 0x28;
+    state->saveSlotMenuState = SAVE_SLOT_STATE_START_SLOT_READ;
     state->selectedSaveSlot = 3;
     state->slideOffset = -0x140;
     state->rumblePakDialogPanelX = -0x58;
@@ -113,7 +113,7 @@ eeprom_done:
     }
 
     if (state->eepromErrorStatus != 0) {
-        state->saveSlotMenuState = 0;
+        state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN;
     } else {
         scheduleTask(initSaveSlotDeleteArrow, 0, 0, 0x5B);
     }
@@ -177,13 +177,13 @@ void updateSaveSlotSelectionScreen(void) {
     state = (SaveSlotScreenState *)getCurrentAllocation();
 
     switch (state->saveSlotMenuState) {
-        case 0x28: {
+        case SAVE_SLOT_STATE_START_SLOT_READ: {
             u16 counter = state->selectionAnimState;
             eepromReadAsync(counter & 0xFF, (u8 *)&state->slotData[counter & 0xFFFF]);
         }
-            state->saveSlotMenuState = 0x29;
+            state->saveSlotMenuState = SAVE_SLOT_STATE_WAIT_SLOT_READ;
             break;
-        case 0x29:
+        case SAVE_SLOT_STATE_WAIT_SLOT_READ:
             taskResult = pollEepromReadAsync();
             if (taskResult == (void *)-1) {
                 break;
@@ -212,24 +212,24 @@ void updateSaveSlotSelectionScreen(void) {
             state->selectionAnimState += 1;
             if ((state->selectionAnimState & 0xFFFF) == 3) {
                 state->selectionAnimState = 0;
-                state->saveSlotMenuState = 0;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN;
             } else {
-                state->saveSlotMenuState = 0x28;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_START_SLOT_READ;
             }
             break;
-        case 0:
+        case SAVE_SLOT_STATE_SLIDE_IN:
             state->slideOffset += 0x20;
             i = 0;
             if ((state->slideOffset << 16) == 0) {
                 if ((state->eepromErrorStatus >= 0x62) && (state->hasCurrentSaveData == 0)) {
-                    state->saveSlotMenuState = 0x32;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_MENU;
                     if (state->eepromErrorStatus == 0x62) {
                         state->saveSlotDialogType = 9;
                     } else {
                         state->saveSlotDialogType = 8;
                     }
                 } else {
-                    state->saveSlotMenuState = 0x32;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_MENU;
                     if (state->hasCurrentSaveData == 0) {
                         state->mainPromptIndex = 0;
                         state->saveSlotDialogType = 0;
@@ -290,7 +290,7 @@ void updateSaveSlotSelectionScreen(void) {
                 } while (i < 3);
             }
             break;
-        case 1:
+        case SAVE_SLOT_STATE_SELECT_SLOT:
             slotIdx = state->selectedSaveSlot;
             if (gControllerInputs[0] & (STICK_UP | CONT_UP)) {
                 if (slotIdx != 0) {
@@ -308,16 +308,16 @@ void updateSaveSlotSelectionScreen(void) {
                 if (state->slotStatus.selection.slotHasData[state->selectedSaveSlot] != 1) {
                     state->saveSlotDialogSelection = 0x63;
                     state->mainPromptIndex = 2;
-                    state->saveSlotMenuState = 0x3C;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_CONFIRM_NEW_GAME;
                 } else {
                 case1_confirm:
-                    state->saveSlotMenuState = 2;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_BLINK_SELECTED_SLOT;
                     state->selectionAnimState = 0;
                 }
             } else if (gControllerInputs[0] & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->hasCurrentSaveData == 0) {
-                    state->saveSlotMenuState = 0x32;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_MENU;
                     state->saveSlotDialogType = 0;
                     state->saveSlotDialogSelection = 1;
                     state->mainPromptIndex = 0;
@@ -328,24 +328,24 @@ void updateSaveSlotSelectionScreen(void) {
                     } else {
                         state->saveSlotDialogType = 1;
                     }
-                    state->saveSlotMenuState = 0x32;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_MENU;
                 }
             }
             if (slotIdx != state->selectedSaveSlot) {
                 goto play_cursor_sound;
             }
             break;
-        case 2:
+        case SAVE_SLOT_STATE_BLINK_SELECTED_SLOT:
             state->selectionAnimState += 1;
             if ((state->selectionAnimState & 0xFFFF) == 0x11) {
                 state->selectionAnimState = 0;
                 if (state->slotData[state->selectedSaveSlot].levelUnlockStatus[0xB] == 1) {
                     if (state->hasCurrentSaveData != 0) {
-                        state->saveSlotMenuState = 3;
+                        state->saveSlotMenuState = SAVE_SLOT_STATE_CONFIRM_SLOT;
                         break;
                     }
                     if (gGameSessionContext->gameMode == 0) {
-                        state->saveSlotMenuState = 0x32;
+                        state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_MENU;
                         state->saveSlotDialogType = 0xA;
                         state->mainPromptIndex = 0xB;
                         state->saveSlotDialogSelection = 0;
@@ -355,21 +355,21 @@ void updateSaveSlotSelectionScreen(void) {
                 if (state->hasCurrentSaveData == 0) {
                     state->saveSlotDialogType = 0;
                 }
-                state->saveSlotMenuState = 3;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_CONFIRM_SLOT;
             }
             break;
-        case 3:
+        case SAVE_SLOT_STATE_CONFIRM_SLOT:
             if (gControllerInputs[0] & CONT_A) {
                 playSoundEffect(0x2C);
                 if (state->hasCurrentSaveData == 0) {
                     gGameSessionContext->saveSlotIndex = state->selectedSaveSlot;
                     state->mainPromptIndex = 1;
-                    state->saveSlotMenuState = 5;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_CREATE_RUMBLE_PAK_DIALOG;
                     memcpy(EepromSaveData, (void *)(state->selectedSaveSlot * 0x5C + (s32)(u8 *)state + 0x938), 0x5C);
                     gGameSessionContext->gold = state->slotData[state->selectedSaveSlot].gold;
                 } else {
                     gGameSessionContext->saveSlotIndex = state->selectedSaveSlot;
-                    state->saveSlotMenuState = 0x18;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_ANIMATE_SAVE_SLOT_UPDATE;
                     state->animDelayCounter = 3;
                     state->slotStatus.selection.originalSlotDataFlag =
                         state->slotStatus.selection.slotHasData[state->selectedSaveSlot];
@@ -432,98 +432,98 @@ void updateSaveSlotSelectionScreen(void) {
                 playSoundEffect(0x2E);
                 if (state->saveSlotDialogType == 0xA) {
                     gGameSessionContext->modeState.isStoryMode = 0;
-                    state->saveSlotMenuState = 0x32;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_MENU;
                     state->mainPromptIndex = 0xB;
                 } else {
-                    state->saveSlotMenuState = 1;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SELECT_SLOT;
                 }
             }
             break;
         // Rumble Pak dialog: create the panel, slide it in, then settle before the attach prompt.
-        case 5:
+        case SAVE_SLOT_STATE_CREATE_RUMBLE_PAK_DIALOG:
             scheduleTask(initSaveSlotRumblePakDialog, 0, 0, 0x5A);
-            state->saveSlotMenuState = 6;
+            state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_RUMBLE_PAK_DIALOG;
             break;
-        case 6: {
+        case SAVE_SLOT_STATE_SLIDE_IN_RUMBLE_PAK_DIALOG: {
             u16 counter;
             counter = state->rumblePakDialogPanelY + 0x1E;
             state->rumblePakDialogPanelY = counter;
             if ((s16)counter >= -0x28) {
                 state->rumblePakDialogPanelY = -0x28;
                 state->rumblePakDialogPanelBaseY = state->rumblePakDialogPanelY;
-                state->saveSlotMenuState = 7;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_SETTLE_RUMBLE_PAK_DIALOG;
                 state->selectionAnimState = 0;
             }
         } break;
-        case 7:
+        case SAVE_SLOT_STATE_SETTLE_RUMBLE_PAK_DIALOG:
             state->selectionAnimState += 1;
             if ((state->selectionAnimState & 0xFFFF) == 5) {
                 state->selectionAnimState = 0;
-                state->saveSlotMenuState = 8;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_CONFIRM_RUMBLE_PAK_ATTACH;
             }
             break;
         // Confirm the attach prompt; wiggle the panel while its text and indicator stay fixed.
-        case 8:
+        case SAVE_SLOT_STATE_CONFIRM_RUMBLE_PAK_ATTACH:
             updateSaveSlotRumblePakDialogWiggle();
             if (gControllerInputs[0] & CONT_A) {
                 playSoundEffect(0x2C);
-                state->saveSlotMenuState = 9;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_BLINK_RUMBLE_PAK_ATTACH;
                 state->selectionAnimState = 0;
                 state->rumblePakDialogPanelY = state->rumblePakDialogPanelBaseY;
             }
             break;
-        // Blink after confirmation: 9 advances to the removal warning, 10 finishes with result 1.
-        // State 12 starts the exit fade after the switch below.
-        case 9:
-        case 0xA:
+        // Blink after confirmation, then advance to the removal warning or finish with result 1.
+        // The exit state starts the fade after the switch below.
+        case SAVE_SLOT_STATE_BLINK_RUMBLE_PAK_ATTACH:
+        case SAVE_SLOT_STATE_BLINK_RUMBLE_PAK_REMOVAL_WARNING:
             state->selectionAnimState += 1;
             if ((state->selectionAnimState & 0xFFFF) == 0x10) {
                 state->selectionAnimState = 0;
-                if (state->saveSlotMenuState == 0xA) {
+                if (state->saveSlotMenuState == SAVE_SLOT_STATE_BLINK_RUMBLE_PAK_REMOVAL_WARNING) {
                     state->selectionAnimState = 1;
-                    state->saveSlotMenuState = 0xC;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_EXIT;
                 } else {
-                    state->saveSlotMenuState = 0xB;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_CONFIRM_RUMBLE_PAK_REMOVAL_WARNING;
                 }
             }
             break;
         // Confirm the warning against removing the Rumble Pak during gameplay.
-        case 0xB:
+        case SAVE_SLOT_STATE_CONFIRM_RUMBLE_PAK_REMOVAL_WARNING:
             updateSaveSlotRumblePakDialogWiggle();
             if (gControllerInputs[0] & CONT_A) {
                 state->selectionAnimState = 0;
                 state->rumblePakDialogPanelY = state->rumblePakDialogPanelBaseY;
                 playSoundEffect(0x2D);
-                state->saveSlotMenuState = 0xA;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_BLINK_RUMBLE_PAK_REMOVAL_WARNING;
             }
             break;
-        case 0x3C:
+        case SAVE_SLOT_STATE_CONFIRM_NEW_GAME:
             if (gControllerInputs[0] & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
-                state->saveSlotMenuState = 5;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_CREATE_RUMBLE_PAK_DIALOG;
                 state->selectedSaveSlot = 4;
             } else if (gControllerInputs[0] & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->saveSlotDialogSelection != 0x63) {
-                    state->saveSlotMenuState = 0x32;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_MENU;
                     state->mainPromptIndex = 0;
                     state->selectedSaveSlot = state->savedSlotIndex;
                 } else {
-                    state->saveSlotMenuState = 1;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SELECT_SLOT;
                     state->mainPromptIndex = 0xA;
                 }
             }
             break;
-        case 0x14:
+        case SAVE_SLOT_STATE_RETRY_SAVE_WRITE:
             eepromWriteAsync(state->selectedSaveSlot);
             updateSlotSelectionSlide();
-            state->saveSlotMenuState = 0x15;
+            state->saveSlotMenuState = SAVE_SLOT_STATE_WAIT_SAVE_WRITE;
             break;
-        case 0x18:
+        case SAVE_SLOT_STATE_ANIMATE_SAVE_SLOT_UPDATE:
             state->animDelayCounter -= 1;
             if (!(state->animDelayCounter & 0xFF)) {
                 playSoundEffect(0xB);
-                state->saveSlotMenuState = 0x15;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_WAIT_SAVE_WRITE;
                 terminateTasksByTypeAndID(2, (s32)state->selectedSaveSlot);
                 slotVisualTask.icons =
                     (SaveSlotItemIconsState *)scheduleTask(initSaveSlotItemIcons, 2, state->selectedSaveSlot, 0x5B);
@@ -538,13 +538,13 @@ void updateSaveSlotSelectionScreen(void) {
                 setViewportOverlayRgbAndEnable(&state->slotModels[3], 0, 0, 0);
             }
             break;
-        case 0x15:
+        case SAVE_SLOT_STATE_WAIT_SAVE_WRITE:
             if ((state->eepromOperationStatus == 0) && (pollEepromWriteAsync() != -1)) {
                 verifySaveSlotChecksum();
                 if (state->selectionAnimState != 0) {
                     state->eepromErrorStatus += 1;
                     if ((u32)(state->eepromErrorStatus & 0xFF) < 3) {
-                        state->saveSlotMenuState = 0x14;
+                        state->saveSlotMenuState = SAVE_SLOT_STATE_RETRY_SAVE_WRITE;
                     } else {
                         state->eepromErrorStatus = 0;
                         state->eepromOperationStatus = 2;
@@ -556,7 +556,7 @@ void updateSaveSlotSelectionScreen(void) {
             updateSlotSelectionSlide();
             if (state->slideOffset == 0) {
                 if (state->eepromOperationStatus != 0) {
-                    state->saveSlotMenuState = 0x32;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_MENU;
                     if (state->eepromOperationStatus == 1) {
                         state->mainPromptIndex = 8;
                     } else {
@@ -591,24 +591,24 @@ void updateSaveSlotSelectionScreen(void) {
                 }
             }
             break;
-        case 0x16:
+        case SAVE_SLOT_STATE_ACKNOWLEDGE_MESSAGE:
             if (gControllerInputs[0] & CONT_A) {
                 playSoundEffect(0x2C);
-                state->saveSlotMenuState = 0x17;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_CONFIRM_QUIT;
                 state->mainPromptIndex = 7;
             }
             break;
-        case 0x17:
+        case SAVE_SLOT_STATE_CONFIRM_QUIT:
             if (gControllerInputs[0] & CONT_A) {
                 playSoundEffect(0x2D);
-                state->saveSlotMenuState = 0xC;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_EXIT;
                 state->selectionAnimState = 0;
                 state->selectedSaveSlot = 0x63;
             } else if (gControllerInputs[0] & CONT_B) {
                 {
                     playSoundEffect(0x2E);
                     state->mainPromptIndex = 9;
-                    state->saveSlotMenuState = 0x32;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_MENU;
                     if (gGameSessionContext->creditsCompleted != 0) {
                         state->saveSlotDialogType = 2;
                     } else {
@@ -618,7 +618,7 @@ void updateSaveSlotSelectionScreen(void) {
                 state->selectedSaveSlot = state->savedSlotIndex;
             }
             break;
-        case 0x32: {
+        case SAVE_SLOT_STATE_SLIDE_IN_MENU: {
             s32 maxChoice;
             maxChoice = 6;
             if (state->saveSlotDialogType == 0xA) {
@@ -630,15 +630,15 @@ void updateSaveSlotSelectionScreen(void) {
             state->menuChoiceIndex += 1;
             if ((state->menuChoiceIndex & 0xFF) == maxChoice) {
                 if (state->eepromErrorStatus == 0) {
-                    state->saveSlotMenuState = 0x33;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SELECT_MENU_OPTION;
                 } else if (state->eepromErrorStatus == 0x63) {
-                    state->saveSlotMenuState = 0x36;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_EEPROM_ERROR_IDLE;
                 } else {
-                    state->saveSlotMenuState = 0x35;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_ACKNOWLEDGE_EEPROM_ERROR;
                 }
             }
         } break;
-        case 0x33: {
+        case SAVE_SLOT_STATE_SELECT_MENU_OPTION: {
             s32 maxChoice;
             slotIdx = state->saveSlotDialogSelection;
             maxChoice = 2;
@@ -659,12 +659,12 @@ void updateSaveSlotSelectionScreen(void) {
             }
             if (gControllerInputs[0] & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
-                state->saveSlotMenuState = 0x34;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_BLINK_MENU_OPTION;
                 state->selectionAnimState = 0;
             } else if (gControllerInputs[0] & CONT_B) {
                 playSoundEffect(0x2E);
                 if (state->saveSlotDialogType == 0xA) {
-                    state->saveSlotMenuState = 1;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_SELECT_SLOT;
                     state->mainPromptIndex = 0xA;
                     state->menuChoiceIndex = 0;
                     state->menuAnimOffsetX = 0;
@@ -672,14 +672,14 @@ void updateSaveSlotSelectionScreen(void) {
                     {
                         u8 oldSlot = state->selectedSaveSlot;
                         state->mainPromptIndex = 7;
-                        state->saveSlotMenuState = 0x17;
+                        state->saveSlotMenuState = SAVE_SLOT_STATE_CONFIRM_QUIT;
                         state->selectedSaveSlot = 0x63;
                         state->menuChoiceIndex = 0;
                         state->menuAnimOffsetX = 0;
                         state->savedSlotIndex = oldSlot;
                     }
                 } else {
-                    state->saveSlotMenuState = 0xC;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_EXIT;
                     state->selectedSaveSlot = 0x63;
                     if (state->hasCurrentSaveData == 0) {
                         state->selectionAnimState = 0;
@@ -689,14 +689,14 @@ void updateSaveSlotSelectionScreen(void) {
                 }
             }
         } break;
-        case 0x34:
+        case SAVE_SLOT_STATE_BLINK_MENU_OPTION:
             state->selectionAnimState += 1;
             if ((state->selectionAnimState & 0xFFFF) == 0x11) {
                 state->selectionAnimState = 0;
-                state->saveSlotMenuState = 0x37;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_OUT_MENU;
             }
             break;
-        case 0x37:
+        case SAVE_SLOT_STATE_SLIDE_OUT_MENU:
             if (state->saveSlotDialogType == 0xA) {
                 state->menuAnimOffsetX -= 3;
             } else {
@@ -705,19 +705,19 @@ void updateSaveSlotSelectionScreen(void) {
             state->menuChoiceIndex -= 1;
             if (!(state->menuChoiceIndex & 0xFF)) {
                 if (state->eepromErrorStatus == 0x62) {
-                    state->saveSlotMenuState = 5;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_CREATE_RUMBLE_PAK_DIALOG;
                     state->mainPromptIndex = 2;
                     state->selectedSaveSlot = 4;
                 } else {
-                    state->saveSlotMenuState = 0x38;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_APPLY_MENU_OPTION;
                 }
             }
             break;
-        case 0x38: {
+        case SAVE_SLOT_STATE_APPLY_MENU_OPTION: {
             u8 oldSlot;
             if (state->hasCurrentSaveData == 0) {
                 if (state->saveSlotDialogType == 0xA) {
-                    state->saveSlotMenuState = 3;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_CONFIRM_SLOT;
                     if (state->saveSlotDialogSelection == 0) {
                         gGameSessionContext->modeState.isStoryMode = 1;
                         state->mainPromptIndex = 0xC;
@@ -728,20 +728,20 @@ void updateSaveSlotSelectionScreen(void) {
                 } else {
                     if (state->saveSlotDialogSelection == 0) {
                         oldSlot = state->selectedSaveSlot;
-                        state->saveSlotMenuState = 0x3C;
+                        state->saveSlotMenuState = SAVE_SLOT_STATE_CONFIRM_NEW_GAME;
                         state->mainPromptIndex = 2;
                         goto set_slot_63_save_old;
                     }
                     if (state->saveSlotDialogSelection == 1) {
                         if (state->numValidSlots == 0) {
-                            state->saveSlotMenuState = 0x3C;
+                            state->saveSlotMenuState = SAVE_SLOT_STATE_CONFIRM_NEW_GAME;
                             state->mainPromptIndex = 2;
                         } else {
-                            state->saveSlotMenuState = 1;
+                            state->saveSlotMenuState = SAVE_SLOT_STATE_SELECT_SLOT;
                             state->mainPromptIndex = 0xA;
                         }
                     } else {
-                        state->saveSlotMenuState = 0xC;
+                        state->saveSlotMenuState = SAVE_SLOT_STATE_EXIT;
                         state->selectionAnimState = 0;
                         state->selectedSaveSlot = 0x63;
                     }
@@ -756,39 +756,39 @@ void updateSaveSlotSelectionScreen(void) {
                 if (state->saveSlotDialogSelection == 0) {
                     if (state->eepromErrorStatus == 0) {
                     set_state1_acb6:
-                        state->saveSlotMenuState = 1;
+                        state->saveSlotMenuState = SAVE_SLOT_STATE_SELECT_SLOT;
                         state->mainPromptIndex = 6;
                     } else {
-                        state->saveSlotMenuState = 0x32;
+                        state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_MENU;
                         state->saveSlotDialogType = 6;
                     }
                 } else if (state->saveSlotDialogSelection == 1) {
                     playSoundEffect(0x2D);
-                    state->saveSlotMenuState = 0xC;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_EXIT;
                     state->selectionAnimState = 1;
                     state->selectedSaveSlot = 0x63;
                 } else {
                 set_acb7_17:
                     oldSlot = state->selectedSaveSlot;
                     state->mainPromptIndex = 7;
-                    state->saveSlotMenuState = 0x17;
+                    state->saveSlotMenuState = SAVE_SLOT_STATE_CONFIRM_QUIT;
                 set_slot_63_save_old:
                     state->selectedSaveSlot = 0x63;
                     state->savedSlotIndex = oldSlot;
                 }
             }
         } break;
-        case 0x35:
+        case SAVE_SLOT_STATE_ACKNOWLEDGE_EEPROM_ERROR:
             if (gControllerInputs[0] & (CONT_A | CONT_START)) {
                 playSoundEffect(0x2C);
-                state->saveSlotMenuState = 0x37;
+                state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_OUT_MENU;
             }
             break;
-        case 0x36:
+        case SAVE_SLOT_STATE_EEPROM_ERROR_IDLE:
             break;
     }
 
-    if (state->saveSlotMenuState == 0xC) {
+    if (state->saveSlotMenuState == SAVE_SLOT_STATE_EXIT) {
         setViewportFadeValue(NULL, 0xFF, 0x10);
         setGameStateHandler(cleanupSaveSlotSelectionAndExit);
     }
