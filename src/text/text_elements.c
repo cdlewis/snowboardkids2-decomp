@@ -187,7 +187,7 @@ void initChaseCameraPosition(ChaseCameraState *camera) {
     playerIdx = camera->playerIdx;
     createYRotationMatrix(&rotationMatrix, gameState->players[playerIdx].rotY);
 
-    transformVector2(&behindOffset, &rotationMatrix, &worldOffset);
+    transformVector2(&behindOffset, rotationMatrix.m, &worldOffset);
 
     playerIdx = camera->playerIdx;
     camera->position.x = gameState->players[playerIdx].worldPos.x + worldOffset.x;
@@ -239,7 +239,7 @@ void updateChaseCamera(ChaseCameraState *camera) {
         } else {
             createYRotationMatrix(&rotationMatrix, gs->players[camera->playerIdx].rotY);
         }
-        transformVector2(&behindOffset, &rotationMatrix, &worldOffset);
+        transformVector2(&behindOffset, rotationMatrix.m, &worldOffset);
 
         camera->position.x = gs->players[camera->playerIdx].worldPos.x + worldOffset.x;
         camera->position.y = gs->players[camera->playerIdx].worldPos.y + worldOffset.y;
@@ -264,7 +264,7 @@ void updateChaseCamera(ChaseCameraState *camera) {
         camera->distance += (0x960000 - camera->distance) / 0x20;
         camera->height += (0x600000 - camera->height) / 0x20;
 
-        transformVector2(&camera->minDistance, &camera->lookAtMatrix, &behindOffset);
+        transformVector2((Vec3i *)&camera->minDistance, camera->lookAtMatrix.m, &behindOffset);
 
         camera->position.x += behindOffset.x;
         camera->position.z += behindOffset.z;
@@ -454,7 +454,7 @@ void updateOrbitCamera(OrbitCameraState *camera) {
     memcpy(&rotationMatrix.translation, &identityMatrix.translation, sizeof(Vec3i));
     composeTransform3D(cameraMatrixPtr, &rotationMatrix, &tempMatrix);
     composeTransform3D(&tempMatrix, &gameState->players[0].modelTransform, cameraMatrixPtr);
-    transformVector2(&D_8008FEB0_90AB0, &gameState->players[0].modelTransform, &translationOffset);
+    transformVector2(&D_8008FEB0_90AB0, gameState->players[0].modelTransform.m, &translationOffset);
     cameraMatrix.translation.x = cameraMatrix.translation.x + translationOffset.x;
     cameraMatrix.translation.y = cameraMatrix.translation.y + translationOffset.y;
     cameraMatrix.translation.z = cameraMatrix.translation.z + translationOffset.z;

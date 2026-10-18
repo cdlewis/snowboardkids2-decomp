@@ -417,8 +417,8 @@ s32 iceLandBossChaseAttackPhase(Player *arg0) {
         matrixMultiply((&arg0->orientationTransform), &arg0->headingTransform, &sp10);
         transformVector3(&arg0->velocity, &sp10, &sp30);
         sp30.x = 0;
-        transformVector2(&sp30, &sp10, &arg0->velocity);
-        transformVector2(&gIceLandBossForwardAcceleration, &sp10, &sp30);
+        transformVector2(&sp30, sp10.m, &arg0->velocity);
+        transformVector2((Vec3i *)&gIceLandBossForwardAcceleration, sp10.m, &sp30);
 
         if (sp30.y > 0) {
             sp30.y = 0;
@@ -655,8 +655,8 @@ s32 iceLandBossGroundProjectileAttackPhase(Player *boss) {
         matrixMultiply((&boss->orientationTransform), &boss->headingTransform, &rotMatrix);
         transformVector3(&boss->velocity, &rotMatrix, &tempVec);
         tempVec.x = 0;
-        transformVector2(&tempVec, &rotMatrix, &boss->velocity);
-        transformVector2(&gIceLandBossForwardAcceleration, &rotMatrix, &tempVec);
+        transformVector2(&tempVec, rotMatrix.m, &boss->velocity);
+        transformVector2((Vec3i *)&gIceLandBossForwardAcceleration, rotMatrix.m, &tempVec);
 
         if (tempVec.y > 0) {
             tempVec.y = 0;

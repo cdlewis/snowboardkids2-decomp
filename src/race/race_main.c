@@ -555,14 +555,14 @@ void applyBoostVelocity(Player *player) {
         case BOOST_STATE_ROCKET_SUSTAIN_FORWARD:
             if (player->trackFaceType == 3) {
                 transformVector2(
-                    gameState->raceTransformData + 0x1D4,
-                    player->orientationHeadingTransform.m[0],
+                    (Vec3i *)(gameState->raceTransformData + 0x1D4),
+                    player->orientationHeadingTransform.m,
                     &result
                 );
             } else {
                 transformVector2(
-                    gameState->raceTransformData + 0xB4,
-                    player->orientationHeadingTransform.m[0],
+                    (Vec3i *)(gameState->raceTransformData + 0xB4),
+                    player->orientationHeadingTransform.m,
                     &result
                 );
             }
@@ -574,14 +574,14 @@ void applyBoostVelocity(Player *player) {
         case BOOST_STATE_ROCKET_SUSTAIN_REVERSE:
             if (player->trackFaceType == 3) {
                 transformVector2(
-                    gameState->raceTransformData + 0x1E0,
-                    player->orientationHeadingTransform.m[0],
+                    (Vec3i *)(gameState->raceTransformData + 0x1E0),
+                    player->orientationHeadingTransform.m,
                     &result
                 );
             } else {
                 transformVector2(
-                    gameState->raceTransformData + 0xC0,
-                    player->orientationHeadingTransform.m[0],
+                    (Vec3i *)(gameState->raceTransformData + 0xC0),
+                    player->orientationHeadingTransform.m,
                     &result
                 );
             }
@@ -592,7 +592,11 @@ void applyBoostVelocity(Player *player) {
         case BOOST_STATE_ROCKET_IMPULSE_FORWARD: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->raceTransformData + 0xCC, player->orientationHeadingTransform.m[0], &result);
+            transformVector2(
+                (Vec3i *)(gameState->raceTransformData + 0xCC),
+                player->orientationHeadingTransform.m,
+                &result
+            );
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
@@ -604,7 +608,11 @@ void applyBoostVelocity(Player *player) {
         case BOOST_STATE_ROCKET_IMPULSE_REVERSE: {
             s32 velZ;
             s32 resultZ;
-            transformVector2(gameState->raceTransformData + 0xD8, player->orientationHeadingTransform.m[0], &result);
+            transformVector2(
+                (Vec3i *)(gameState->raceTransformData + 0xD8),
+                player->orientationHeadingTransform.m,
+                &result
+            );
             player->velocity.x += result.x;
             player->velocity.y += result.y;
             velZ = player->velocity.z;
@@ -1931,7 +1939,7 @@ s32 beginPostTrickLaunchStep(Player *player) {
 
     matrixMultiply((&player->orientationTransform), &player->headingTransform, &rotationTemp1);
     matrixMultiply((&player->tiltTransform), &rotationTemp1, &rotationTemp2);
-    transformVector2(&D_800BAB3C_AA9EC, &rotationTemp2, &launchVelocity);
+    transformVector2((Vec3i *)&D_800BAB3C_AA9EC, rotationTemp2.m, &launchVelocity);
 
     player->velocity.x += launchVelocity.x;
     player->velocity.y += launchVelocity.y + player->gravity;
@@ -3142,13 +3150,13 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
     pitchMatrix.m[2][2] = player->surfaceNormal.y;
 
     matrixMultiply((&slopeMatrix), &pitchMatrix, &combinedTransform);
-    transformVector2(&player->velocity.x, &combinedTransform, &tempVec);
+    transformVector2(&player->velocity, combinedTransform.m, &tempVec);
 
     if (tempVec.y < 0) {
         tempVec.y = 0;
     }
 
-    transformVector2(&forwardDir, &combinedTransform, &localVelocity);
+    transformVector2(&forwardDir, combinedTransform.m, &localVelocity);
     memcpy(&slopeMatrix, &identityMatrix, sizeof(Transform3D));
 
     sqrtResult = approximate_sqrt(localVelocity.x * localVelocity.x + localVelocity.z * localVelocity.z);
@@ -3161,7 +3169,7 @@ s32 applyVelocityDeadzone(Player *player, s32 forwardDeadzone, s32 backwardDeadz
         slopeMatrix.m[2][0] = (-localVelocity.x << 13) / magnitude;
     }
 
-    transformVector2(&tempVec, &slopeMatrix, &localVelocity);
+    transformVector2(&tempVec, slopeMatrix.m, &localVelocity);
 
     if (localVelocity.x > 0) {
         if (lateralDeadzone < localVelocity.x) {
@@ -4551,7 +4559,7 @@ s32 slideDuringKnockbackRecoveryStep(Player *player) {
 
     if (player->unkB8C < 0x12) {
         player->animationFlags = player->animationFlags | 0x2000;
-        transformVector2(&g_KnockbackRecoveryForwardVelocity, &player->headingTransform, &player->velocity);
+        transformVector2(&g_KnockbackRecoveryForwardVelocity, player->headingTransform.m, &player->velocity);
     }
 
     applyClampedVelocityToPosition(player);
@@ -4566,7 +4574,7 @@ s32 slideDiagonallyDuringKnockbackRecoveryStep(Player *player) {
 
     getLevelConfig(gameState->memoryPoolId);
     decayPlayerSteeringAngles(player);
-    transformVector2(&g_KnockbackDiagonalSlideVelocity, &player->headingTransform, &player->velocity);
+    transformVector2(&g_KnockbackDiagonalSlideVelocity, player->headingTransform.m, &player->velocity);
     applyClampedVelocityToPosition(player);
 
     if (player->unkB8C != 0) {
@@ -4601,7 +4609,7 @@ s32 resumeAtCourseStartAndSlideStep(Player *player) {
         player->currentLap++;
 
         createYRotationMatrix(&player->headingTransform, 0x1000);
-        transformVector2(&gCourseStartSlideOffset, &player->headingTransform, &sp10);
+        transformVector2(&gCourseStartSlideOffset, player->headingTransform.m, &sp10);
 
         player->worldPos.x = levelData->courseStartPos.x + sp10.x;
         player->worldPos.y = levelData->courseStartPos.y + sp10.y;
@@ -4622,7 +4630,7 @@ s32 resumeAtCourseStartAndSlideStep(Player *player) {
     }
 
     decayPlayerSteeringAngles(player);
-    transformVector2(&g_KnockbackDiagonalSlideVelocity, &player->headingTransform, &player->velocity);
+    transformVector2(&g_KnockbackDiagonalSlideVelocity, player->headingTransform.m, &player->velocity);
     applyClampedVelocityToPosition(player);
 
     if (player->unkB8C != 0) {
@@ -4640,7 +4648,7 @@ s32 slideForwardAndResetStep(Player *player) {
     GameState *gameState = getCurrentAllocation();
 
     getLevelConfig(gameState->memoryPoolId);
-    transformVector2(&g_KnockbackRecoveryForwardVelocity, &player->headingTransform, &player->velocity);
+    transformVector2(&g_KnockbackRecoveryForwardVelocity, player->headingTransform.m, &player->velocity);
     applyClampedVelocityToPosition(player);
     decayPlayerSteeringAngles(player);
 

@@ -107,7 +107,7 @@ void updateOrbitalSprite(OrbitalSpriteState *arg0) {
     localOffset.y = ORBITAL_SPRITE_Y_OFFSET;
     localOffset.z = orbitalSpriteOffsetsZ[arg0->spriteIndex * 2];
 
-    transformVector2(&localOffset, &arg0->model->transform, &worldOffset);
+    transformVector2(&localOffset, arg0->model->transform.m, &worldOffset);
 
     x = arg0->model->transform.translation.x + worldOffset.x;
     y = arg0->model->transform.translation.y + worldOffset.y;

@@ -642,85 +642,16 @@ void transformVector(s16 *inputVec, s16 *transformPtr, Vec3i *output) {
     output->z = int1 + (frac2 >> 13) + transform->translation.z;
 }
 
-// Transform a vector by a 3x3 matrix (without translation)
-// input: Vec3i input vector (passed as s32* for fixed-point access)
-// matrix: 3x3 s16 rotation matrix (9 elements)
-// output: Vec3i result vector
-void transformVector2(void *input, void *matrix, Vec3i *output) {
-    s32 *vec;
-    s16 *mat;
-    s32 frac0;
-    s32 int0;
-    s32 frac1;
-    s32 int1;
-    s32 frac2;
-    s32 int2;
-
-    vec = input;
-    mat = matrix;
-
-    __asm__("" : "=r"(vec) : "0"(vec));
-    __asm__("" : "=r"(mat) : "0"(mat));
-
-    // Transform X component
-    frac0 = (vec[0] & 0xFFFF) * mat[0];
-    int0 = (vec[0] >> 16) * (mat[0] << 3);
-    if (frac0 < 0) {
-        frac0 += 0x1FFF;
-    }
-    frac1 = (vec[1] & 0xFFFF) * mat[3];
-    int1 = (vec[1] >> 16) * (mat[3] << 3);
-    frac0 = (int0 + (frac0 >> 13)) + int1;
-    if (frac1 < 0) {
-        frac1 += 0x1FFF;
-    }
-    frac2 = (vec[2] & 0xFFFF) * mat[6];
-    int2 = (vec[2] >> 16) * (mat[6] << 3);
-    int1 = (frac0 + (frac1 >> 13)) + int2;
-    if (frac2 < 0) {
-        frac2 += 0x1FFF;
-    }
-    output->x = int1 + (frac2 >> 13);
-
-    // Transform Y component
-    frac0 = (vec[0] & 0xFFFF) * mat[1];
-    int0 = (vec[0] >> 16) * (mat[1] << 3);
-    if (frac0 < 0) {
-        frac0 += 0x1FFF;
-    }
-    frac1 = (vec[1] & 0xFFFF) * mat[4];
-    int1 = (vec[1] >> 16) * (mat[4] << 3);
-    frac0 = (int0 + (frac0 >> 13)) + int1;
-    if (frac1 < 0) {
-        frac1 += 0x1FFF;
-    }
-    frac2 = (vec[2] & 0xFFFF) * mat[7];
-    int2 = (vec[2] >> 16) * (mat[7] << 3);
-    int1 = (frac0 + (frac1 >> 13)) + int2;
-    if (frac2 < 0) {
-        frac2 += 0x1FFF;
-    }
-    output->y = int1 + (frac2 >> 13);
-
-    // Transform Z component
-    frac0 = (vec[0] & 0xFFFF) * mat[2];
-    int0 = (vec[0] >> 16) * (mat[2] << 3);
-    if (frac0 < 0) {
-        frac0 += 0x1FFF;
-    }
-    frac1 = (vec[1] & 0xFFFF) * mat[5];
-    int1 = (vec[1] >> 16) * (mat[5] << 3);
-    frac0 = (int0 + (frac0 >> 13)) + int1;
-    if (frac1 < 0) {
-        frac1 += 0x1FFF;
-    }
-    frac2 = (vec[2] & 0xFFFF) * mat[8];
-    int2 = (vec[2] >> 16) * (mat[8] << 3);
-    int1 = (frac0 + (frac1 >> 13)) + int2;
-    if (frac2 < 0) {
-        frac2 += 0x1FFF;
-    }
-    output->z = int1 + (frac2 >> 13);
+void transformVector2(Vec3i *input, s16 matrix[3][3], Vec3i *output) {
+    output->x = (input->x >> 16) * (matrix[0][0] << 3) + ((input->x & 0xFFFF) * matrix[0][0]) / 0x2000 +
+                (input->y >> 16) * (matrix[1][0] << 3) + ((input->y & 0xFFFF) * matrix[1][0]) / 0x2000 +
+                (input->z >> 16) * (matrix[2][0] << 3) + ((input->z & 0xFFFF) * matrix[2][0]) / 0x2000;
+    output->y = (input->x >> 16) * (matrix[0][1] << 3) + ((input->x & 0xFFFF) * matrix[0][1]) / 0x2000 +
+                (input->y >> 16) * (matrix[1][1] << 3) + ((input->y & 0xFFFF) * matrix[1][1]) / 0x2000 +
+                (input->z >> 16) * (matrix[2][1] << 3) + ((input->z & 0xFFFF) * matrix[2][1]) / 0x2000;
+    output->z = (input->x >> 16) * (matrix[0][2] << 3) + ((input->x & 0xFFFF) * matrix[0][2]) / 0x2000 +
+                (input->y >> 16) * (matrix[1][2] << 3) + ((input->y & 0xFFFF) * matrix[1][2]) / 0x2000 +
+                (input->z >> 16) * (matrix[2][2] << 3) + ((input->z & 0xFFFF) * matrix[2][2]) / 0x2000;
 }
 
 void transformVector3(Vec3i *input, Transform3D *matrix, Vec3i *output) {

@@ -178,7 +178,7 @@ void updateIceLandMovingPlatform(IceLandMovingPlatformTask *platform) {
         createCombinedRotationMatrix(platform, platform->rollAngle, platform->angleY);
         createCombinedRotationMatrix(matrix, platform->angleX, platform->angleY);
 
-        transformVector2(gIceLandPlatformForwardVec, matrix, &sp.movement);
+        transformVector2((Vec3i *)gIceLandPlatformForwardVec, (s16(*)[3])matrix, &sp.movement);
 
         platform->position.x += sp.movement.x;
         platform->position.y += sp.movement.y;

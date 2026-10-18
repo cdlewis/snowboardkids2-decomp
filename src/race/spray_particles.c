@@ -813,7 +813,7 @@ void updateCharacterAttackEffect(CharacterAttackEffectState *arg0) {
     for (j = 0; j < 6; j++) {
         createYRotationMatrix(rm, rotation & 0xFFFF);
         matrixMultiply(rm, &arg0->sourcePlayer->orientationHeadingTransform, tf);
-        transformVector2(&arg0->positionOffsets, tf, &result);
+        transformVector2(&arg0->positionOffsets, tf->m, &result);
         particle->position.x = result.x + arg0->sourcePlayer->worldPos.x;
         particle->position.y = result.y + arg0->sourcePlayer->worldPos.y + yOffset;
         particle->position.z = result.z + arg0->sourcePlayer->worldPos.z;

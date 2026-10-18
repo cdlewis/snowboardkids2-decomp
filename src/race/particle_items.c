@@ -1903,12 +1903,12 @@ void updatePushZone(PushZoneState *arg0) {
             localPos.x = -localPos.x;
             localPos.y = -localPos.y;
             localPos.z = 0;
-            transformVector2(&localPos, arg0, &result);
+            transformVector2(&localPos, arg0->transform.m, &result);
             player->worldPos.x += result.x;
             player->worldPos.y += result.y;
             player->worldPos.z += result.z;
             localPos.y = 0;
-            transformVector2(&localPos, arg0, &result);
+            transformVector2(&localPos, arg0->transform.m, &result);
             player->prevWorldPos.x += result.x;
             player->prevWorldPos.y += result.y;
             player->prevWorldPos.z += result.z;
@@ -1935,7 +1935,7 @@ void updatePushZone(PushZoneState *arg0) {
             localPos.y = 0;
             localPos.z = 0;
 
-            transformVector2(&localPos, arg0, &result);
+            transformVector2(&localPos, arg0->transform.m, &result);
 
             player->worldPos.x += result.x;
             player->worldPos.y += result.y;
@@ -2021,7 +2021,7 @@ void initChairliftEffect(ChairliftEffectState *arg0) {
     createYRotationMatrix(&arg0->transform, arg0->baseRotation);
 
     arg0->yRotation = 0;
-    transformVector2(&D_80090AA0_916A0, &arg0->transform, &transformOutput);
+    transformVector2((Vec3i *)&D_80090AA0_916A0, arg0->transform.m, &transformOutput);
 
     arg0->transform.translation.x = item->liftEntryPosX + transformOutput.x;
     arg0->transform.translation.z = item->liftEntryPosZ + transformOutput.z;
@@ -2039,7 +2039,7 @@ void moveChairliftIntoPosition(ChairliftEffectState *arg0) {
 
     gameState = getCurrentAllocation();
     if (gameState->paused == 0) {
-        transformVector2(&D_80090AAC_916AC, &arg0->transform, &output);
+        transformVector2((Vec3i *)&D_80090AAC_916AC, arg0->transform.m, &output);
         arg0->transform.translation.x += output.x;
         arg0->transform.translation.z += output.z;
         memcpy(&arg0->target->storedPos, &arg0->transform.translation, sizeof(Vec3i));
@@ -2072,7 +2072,7 @@ void lowerChairlift(ChairliftEffectState *arg0) {
     }
 
     createCombinedRotationMatrix(&arg0->transform, arg0->yRotation, arg0->baseRotation);
-    transformVector2(&D_80090AAC_916AC, &arg0->transform, &output);
+    transformVector2((Vec3i *)&D_80090AAC_916AC, arg0->transform.m, &output);
 
     arg0->transform.translation.x += output.x;
     arg0->transform.translation.y += output.y;
@@ -2129,7 +2129,7 @@ void setupChairliftDeparture(ChairliftEffectState *arg0) {
         i++;
         input.z += arg0->flyAwayDistance;
     } while (i < 0x5A);
-    transformVector2(&input, &arg0->transform, &output);
+    transformVector2(&input, arg0->transform.m, &output);
     arg0->transform.translation.x -= output.x;
     arg0->transform.translation.y -= output.y;
     arg0->transform.translation.z -= output.z;
@@ -2159,7 +2159,7 @@ void moveChairliftAway(ChairliftEffectState *arg0) {
     createCombinedRotationMatrix(&arg0->transform, arg0->yRotation, arg0->baseRotation);
 
 skip_rotation:
-    transformVector2(&arg0->movementOffset, &arg0->transform, &output);
+    transformVector2((Vec3i *)&arg0->movementOffset, arg0->transform.m, &output);
     arg0->transform.translation.x += output.x;
     arg0->transform.translation.y += output.y;
     arg0->transform.translation.z += output.z;

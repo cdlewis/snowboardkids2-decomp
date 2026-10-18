@@ -392,8 +392,8 @@ s32 crazyJungleBossChaseAttackPhase(Player *arg0) {
         matrixMultiply((&arg0->orientationTransform), &arg0->headingTransform, &sp10);
         transformVector3(&arg0->velocity, &sp10, &sp30);
         sp30.x = 0;
-        transformVector2(&sp30, &sp10, &arg0->velocity);
-        transformVector2((s32 *)(gameState->raceTransformData + 0x144), &sp10, &sp30);
+        transformVector2(&sp30, sp10.m, &arg0->velocity);
+        transformVector2((Vec3i *)(gameState->raceTransformData + 0x144), sp10.m, &sp30);
         if (sp30.y > 0) {
             sp30.y = 0;
         }

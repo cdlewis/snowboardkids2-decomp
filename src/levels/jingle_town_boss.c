@@ -343,8 +343,8 @@ s32 jingleTownBossChaseAttackMainPhase(Player *arg0) {
         temp_s1 = &arg0->velocity;
         transformVector3(temp_s1, &sp10, &sp30);
         sp30.x = 0;
-        transformVector2(&sp30, &sp10, temp_s1);
-        transformVector2(&gForwardDirection, &sp10, &sp30);
+        transformVector2(&sp30, sp10.m, temp_s1);
+        transformVector2(&gForwardDirection, sp10.m, &sp30);
 
         if (sp30.y > 0) {
             sp30.y = 0;
@@ -631,11 +631,7 @@ s32 jingleTownBossHoverAttackExitPhase(Player *arg0) {
     phase = arg0->behaviorPhase;
     if (phase == 0) {
         arg0->behaviorPhase++;
-        transformVector2(
-            (s16 *)&gJingleTownBossHoverExitOffsets[0],
-            (s16 *)&arg0->bodyPartDisplayObjects[0].transform,
-            &posOffset
-        );
+        transformVector2(&gJingleTownBossHoverExitOffsets[0], arg0->bodyPartDisplayObjects[0].transform.m, &posOffset);
         arg0->worldPos.x += posOffset.x;
         arg0->worldPos.y += posOffset.y;
         arg0->worldPos.z += posOffset.z;

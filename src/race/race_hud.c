@@ -1314,7 +1314,7 @@ void initCourseSceneryTask(CourseSceneryTaskState *arg0) {
     createYRotationMatrix((Transform3D *)arg0, (u16)(rotation + levelData->liftEntryYawOffset));
 
     arg0->unk18 = sp10.y;
-    transformVector2(&gCourseSceneryOffset, arg0, &sp10);
+    transformVector2(&gCourseSceneryOffset, (s16(*)[3])arg0->unk0, &sp10);
 
     arg0->unk14 = levelData->liftEntryPosX + sp10.x;
     arg0->unk1C = levelData->liftEntryPosZ + sp10.z;
@@ -1386,7 +1386,7 @@ void initFlyingSceneryTask(FlyingSceneryState *arg0) {
     createYRotationMatrix((Transform3D *)arg0, rotation + levelData->liftEntryYawOffset);
     arg0->displayListObject.transform.translation.y = position.y;
 
-    transformVector2(&gFlyingSceneryInitOffset, arg0, &position);
+    transformVector2(&gFlyingSceneryInitOffset, arg0->displayListObject.transform.m, &position);
 
     arg0->displayListObject.transform.translation.x = levelData->liftEntryPosX + position.x;
     arg0->displayListObject.transform.translation.z = levelData->liftEntryPosZ + position.z;
@@ -1404,7 +1404,7 @@ void updateFlyingSceneryHorizontalStep(FlyingSceneryState *state) {
     allocation = (Allocation_47D1C *)getCurrentAllocation();
 
     if (allocation->raceUpdatePaused == 0) {
-        transformVector2(&D_80090B98_91798, state, &movement);
+        transformVector2(&D_80090B98_91798, state->displayListObject.transform.m, &movement);
 
         state->displayListObject.transform.translation.x += movement.x;
         state->displayListObject.transform.translation.z += movement.z;
@@ -1430,7 +1430,7 @@ void updateFlyingSceneryVerticalStep(FlyingSceneryState *state) {
     allocation = (Allocation_47D1C *)getCurrentAllocation();
 
     if (allocation->raceUpdatePaused == 0) {
-        transformVector2(&D_80090BA4_917A4, state, &movement);
+        transformVector2(&D_80090BA4_917A4, state->displayListObject.transform.m, &movement);
 
         state->displayListObject.transform.translation.x += movement.x;
         state->displayListObject.transform.translation.y += movement.y;
@@ -1456,7 +1456,7 @@ void resetFlyingSceneryPosition(FlyingSceneryState *state) {
     alloc = (AllocationStruct *)getCurrentAllocation();
     createYRotationMatrix(&state->displayListObject.transform, 0x1000);
     matrix = getLevelConfig(alloc->unk5C);
-    transformVector2(&D_80090BC8_917C8, &state->displayListObject.transform, &vec);
+    transformVector2(&D_80090BC8_917C8, state->displayListObject.transform.m, &vec);
 
     state->displayListObject.transform.translation.x = matrix->courseStartPos.x + vec.x;
     state->displayListObject.transform.translation.y = matrix->courseStartPos.y + vec.y;
@@ -1472,7 +1472,7 @@ void updateFlyingSceneryAscendingStep(FlyingSceneryState *state) {
     Vec3i tempVec;
 
     if (allocation->raceUpdatePaused == 0) {
-        transformVector2(&D_80090BA4_917A4, &state->displayListObject.transform, &tempVec);
+        transformVector2(&D_80090BA4_917A4, state->displayListObject.transform.m, &tempVec);
         state->displayListObject.transform.translation.x += tempVec.x;
         state->displayListObject.transform.translation.y += tempVec.y;
         state->displayListObject.transform.translation.z += tempVec.z;
@@ -1499,7 +1499,7 @@ void updateFlyingSceneryGlidingStep(FlyingSceneryState *state) {
     i = 0;
 
     if (allocation->raceUpdatePaused == 0) {
-        transformVector2(&D_80090B98_91798, state, &vec);
+        transformVector2(&D_80090B98_91798, state->displayListObject.transform.m, &vec);
 
         state->displayListObject.transform.translation.x += vec.x;
         state->displayListObject.transform.translation.y += vec.y;
@@ -1534,7 +1534,7 @@ void updateFlyingSceneryTurningStep(FlyingSceneryState *state) {
         angle = rotation + 0x1080;
         state->rotationAngle = rotation + 0x80;
         createYRotationMatrix(&state->displayListObject.transform, angle);
-        transformVector2(&D_80090BB0_917B0, state, &vector);
+        transformVector2(&D_80090BB0_917B0, state->displayListObject.transform.m, &vector);
 
         state->displayListObject.transform.translation.x += vector.x;
         state->displayListObject.transform.translation.y += vector.y;
@@ -1560,7 +1560,7 @@ void updateFlyingSceneryReturnGlideStep(FlyingSceneryState *state) {
 
     if (allocation->raceUpdatePaused == 0) {
         createYRotationMatrix(&state->displayListObject.transform, 0);
-        transformVector2(&D_80090B98_91798, state, &vec);
+        transformVector2(&D_80090B98_91798, state->displayListObject.transform.m, &vec);
 
         state->displayListObject.transform.translation.x += vec.x;
         state->displayListObject.transform.translation.y += vec.y;
@@ -1587,7 +1587,7 @@ void updateFlyingSceneryDescendingStep(FlyingSceneryState *state) {
     alloc = (GameState *)getCurrentAllocation();
 
     if (alloc->gamePaused == 0) {
-        transformVector2(&D_80090BBC_917BC, state, &stackBuffer);
+        transformVector2(&D_80090BBC_917BC, state->displayListObject.transform.m, &stackBuffer);
 
         state->displayListObject.transform.translation.x += stackBuffer.x;
         state->displayListObject.transform.translation.y += stackBuffer.y;
