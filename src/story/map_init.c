@@ -157,6 +157,7 @@ void storyMapHandlePlayerInput(void) {
     GameState *state;
     s32 i;
     s32 j;
+    s32 k;
     s32 diagonal;
     s8 confirmed;
     u8 allConfirmed;
@@ -248,7 +249,6 @@ void storyMapHandlePlayerInput(void) {
                     state->modeData.storyMap.animationTimers[i] = 0;
                     playSoundEffectOnChannelNoPriority((u16)storyMapLocationSpriteIds[(s8)currentLoc], i + 8);
                 } else if (gControllerInputs[i] & CONT_B) {
-                    s32 k;
                     playSoundEffect(0x2E);
                     for (k = 0; k < gGameSessionContext->numPlayers; k++) {
                         gGameSessionContext->characterIds[k] = state->modeData.storyMap.characterIds[k];
@@ -299,11 +299,6 @@ void storyMapHandlePlayerInput(void) {
                     i = gGameSessionContext->numPlayers;
                     confirmed = 1;
                 } else if (gControllerInputs[i] & CONT_B) {
-#ifdef CC_CHECK
-                    s32 k;
-#else
-                    register s32 k __asm__("$4");
-#endif
                     playSoundEffect(0x2E);
                     for (k = 0; k < gGameSessionContext->numPlayers; k++) {
                         state->modeData.storyMap.selectionState[k] = 0;
@@ -329,11 +324,6 @@ void storyMapHandlePlayerInput(void) {
                     }
                 }
                 if (gControllerInputs[i] & CONT_B) {
-#ifdef CC_CHECK
-                    s32 k;
-#else
-                    register s32 k __asm__("$4");
-#endif
                     playSoundEffectOnChannelNoPriority(0x2E, i);
                     for (k = 0; k < gGameSessionContext->numPlayers; k++) {
                         if (i == k) {
