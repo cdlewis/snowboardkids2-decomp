@@ -128,7 +128,6 @@ void loadAssetGroupResources(ScrollingTileGroupTaskData *taskData) {
     assetList = entry->assetList;
 
     setCleanupCallback(freeAssetGroupResources);
-    i = 0;
 
     taskData->screenY = 0;
     taskData->horizontalScroll = 0;
