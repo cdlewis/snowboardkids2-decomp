@@ -402,13 +402,9 @@ void updateBoardShop(void) {
                     state->delayTimer = 0;
                     scheduleTask(&initBoardShopBoardIcons, 0, 0, 0x5A);
                     {
-#ifdef CC_CHECK
                         s32 j = 3;
                         s32 ptr = (s32)state + 3;
-#else
-                        register s32 j __asm__("$2") = 3;
-                        register s32 ptr __asm__("$3") = (s32)state + 3;
-#endif
+
                         do {
                             *(u8 *)(ptr + 0x784) = j;
                             j--;
