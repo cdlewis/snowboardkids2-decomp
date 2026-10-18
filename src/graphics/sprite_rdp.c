@@ -1460,12 +1460,11 @@ void renderFlippedScaledSpriteFrame(TransformedSpriteArg *sprite) {
     s32 isFlipped;
     s32 clipVal;
     s32 tile;
-#ifdef CC_CHECK
     s32 clipOffsetYBase;
+#ifdef CC_CHECK
     s32 clipOffsetYTemp;
     s32 negOne;
 #else
-    register s32 clipOffsetYBase __asm__("a0");
     register s32 clipOffsetYTemp __asm__("v0");
     register s32 negOne __asm__("a2");
 #endif
