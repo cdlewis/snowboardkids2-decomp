@@ -163,9 +163,6 @@ void resetTrickScore(Player *);
 void initStunnedAirborneBehavior(Player *);
 void updateRacePlayer(Player *);
 
-/* Forward declarations for function pointer tables */
-void renderFlyingEnemy(Player *);
-
 Gfx gPlayerShadowRenderSetupDl[] = {
     gsSPClearGeometryMode(
         G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_SHADING_SMOOTH
@@ -660,7 +657,7 @@ void updateAndRenderPlayersByLiftEntryDistance(void) {
         return;
     }
 
-    *(s32 *)gameState->PAD_3 = 0;
+    gameState->unk2C = 0;
     levelConfig = getLevelConfig(gameState->memoryPoolId);
 
     i = 0;
@@ -702,20 +699,20 @@ void updateAndRenderPlayersByLiftEntryDistance(void) {
     if (gameState->numPlayers > j) {
         do {
             i = (u8)order[j];
-            switch ((gameState->players + i)->flyingAttackState) {
+            switch (gameState->players[i].flyingAttackState) {
                 case 0:
-                    updateRacePlayer(gameState->players + i);
+                    updateRacePlayer(&gameState->players[i]);
                     break;
                 case 1:
-                    renderFlyingEnemy(gameState->players + i);
-                    __asm__ volatile("");
+                    updateCrazyJungleBoss(&gameState->players[i]);
+
                     break;
                 case 2:
-                    renderFlyingEnemy(gameState->players + i);
-                    __asm__ volatile("" ::: "memory");
+                    updateJingleTownBoss(&gameState->players[i]);
+
                     break;
                 case 3:
-                    renderFlyingEnemy(gameState->players + i);
+                    updateIceLandBoss(&gameState->players[i]);
                     break;
             }
             j++;

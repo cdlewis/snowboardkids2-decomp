@@ -400,7 +400,7 @@ typedef struct {
     /* 0x20 */ void *unk20;
     /* 0x24 */ struct ShootCrossTargets *shootCrossTargets;
     /* 0x28 */ RaceAssetHeader *unk28;
-    /* 0x2C */ u8 PAD_3[0x4];
+    /* 0x2C */ s32 unk2C;
     /* 0x30 */ TrackData gameData;
     /* 0x44 */ GameStateUnk44 *unk44;
     /* 0x48 */ u8 *raceTransformData;
