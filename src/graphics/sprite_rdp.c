@@ -906,9 +906,6 @@ void renderTextSprite(PaletteSpriteArg *sprite) {
     SpriteFrameEntry *frameEntry;
     s16 scaleS;
     s16 scaleT;
-    Gfx *gfx;
-    u32 setOtherModeCmd;
-    u32 pipeSyncCmd;
 
     frameEntry = sprite->spriteData->frames;
     paletteBase = &frameEntry[sprite->spriteData->numFrames];
@@ -961,25 +958,17 @@ void renderTextSprite(PaletteSpriteArg *sprite) {
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
 
-        gfx = gDisplayListAllocPtr;
-        setOtherModeCmd = 0xFC11FE23;
-        pipeSyncCmd = 0xE7000000;
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 8);
-        __asm__ volatile("" : : "r"(gDisplayListAllocPtr) : "memory");
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x10);
-        *(s32 *)((s32)gfx + 0xC) = -0xC07;
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x18);
-
-        gfx->words.w0 = pipeSyncCmd;
-        (gfx + 0)->words.w1 = 0;
-        (gfx + 1)->words.w0 = setOtherModeCmd;
-        (gfx + 2)->words.w0 = 0xFA000000;
-
-        {
-            u8 intensity = sprite->paletteEffect.components.effect.intensity;
-            u32 color = (intensity << 24) | (intensity << 16) | (intensity << 8) | 0xFF;
-            (gfx + 2)->words.w1 = color;
-        }
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
+        gDPSetPrimColor(
+            gDisplayListAllocPtr++,
+            0,
+            0,
+            sprite->paletteEffect.components.effect.intensity,
+            sprite->paletteEffect.components.effect.intensity,
+            sprite->paletteEffect.components.effect.intensity,
+            0xFF
+        );
 
         if ((s32)sprite->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)sprite->spriteData + frameEntry->textureOffset;
@@ -1051,12 +1040,6 @@ void renderTextSpriteWithTransparency(PaletteSpriteArg *sprite) {
     SpriteFrameEntry *frameEntry;
     s16 scaleS;
     s16 scaleT;
-    Gfx *gfx;
-    u32 renderModeCmd;
-    u32 renderModeArg;
-    u32 combineCmd;
-    u32 combineArg;
-    u32 pipeSyncCmd;
 
     frameEntry = sprite->spriteData->frames;
     paletteBase = &frameEntry[sprite->spriteData->numFrames];
@@ -1109,36 +1092,18 @@ void renderTextSpriteWithTransparency(PaletteSpriteArg *sprite) {
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
 
-        renderModeCmd = 0xE200001C;
-        renderModeArg = 0x504240;
-        combineCmd = 0xFC119623;
-        gfx = gDisplayListAllocPtr;
-        combineArg = 0xFF2FFFFF;
-        pipeSyncCmd = 0xE7000000;
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 8);
-        __asm__ volatile(""
-                         :
-                         : "r"(gDisplayListAllocPtr), "r"(renderModeCmd), "r"(renderModeArg), "r"(combineArg)
-                         : "memory");
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x10);
-        __asm__ volatile("" : : "r"(gDisplayListAllocPtr) : "memory");
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x18);
-        __asm__ volatile("" : : "r"(gDisplayListAllocPtr) : "memory");
-        gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x20);
-
-        gfx->words.w0 = pipeSyncCmd;
-        (gfx + 0)->words.w1 = 0;
-        (gfx + 1)->words.w0 = renderModeCmd;
-        (gfx + 1)->words.w1 = renderModeArg;
-        (gfx + 2)->words.w0 = combineCmd;
-        (gfx + 2)->words.w1 = combineArg;
-        (gfx + 3)->words.w0 = 0xFA000000;
-
-        {
-            u8 intensity = sprite->paletteEffect.components.effect.intensity;
-            u32 color = (intensity << 24) | (intensity << 16) | (intensity << 8) | sprite->primitiveAlpha;
-            (gfx + 3)->words.w1 = color;
-        }
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetRenderMode(gDisplayListAllocPtr++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+        gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        gDPSetPrimColor(
+            gDisplayListAllocPtr++,
+            0,
+            0,
+            sprite->paletteEffect.components.effect.intensity,
+            sprite->paletteEffect.components.effect.intensity,
+            sprite->paletteEffect.components.effect.intensity,
+            sprite->primitiveAlpha
+        );
 
         if ((s32)sprite->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
             gCachedTextureAddr = (s32)sprite->spriteData + frameEntry->textureOffset;
