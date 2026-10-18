@@ -628,33 +628,38 @@ void renderScaledShadedSpriteFrame(ScaledSpriteArg *sprite) {
             gSPDisplayList(gDisplayListAllocPtr++, gSpriteRDPSetupDL);
         }
 
-        {
-            u32 combineCmd = 0xFC11E223;
-            Gfx *gfx = gDisplayListAllocPtr;
-            u32 combineArg = 0xFFC7FFFF;
+        gDPPipeSync(gDisplayListAllocPtr++);
+        gDPSetCombineLERP(
+            gDisplayListAllocPtr++,
+            TEXEL0,
+            0,
+            PRIMITIVE,
+            0,
+            1,
+            0,
+            TEXEL0,
+            0,
+            TEXEL0,
+            0,
+            PRIMITIVE,
+            0,
+            1,
+            0,
+            TEXEL0,
+            0
+        );
+        gDPSetPrimColor(
+            gDisplayListAllocPtr++,
+            0,
+            0,
+            sprite->mode.shaded.shade.components.intensity,
+            sprite->mode.shaded.shade.components.intensity,
+            sprite->mode.shaded.shade.components.intensity,
+            0xFF
+        );
 
-            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 8);
-            __asm__ volatile("" : : "r"(gDisplayListAllocPtr) : "memory");
-            gfx->words.w0 = 0xE7000000;
-            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x10);
-            __asm__ volatile("" : : "r"(gDisplayListAllocPtr) : "memory");
-            gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x18);
-
-            gfx->words.w1 = 0;
-            (gfx + 1)->words.w0 = combineCmd;
-            (gfx + 1)->words.w1 = combineArg;
-            (gfx + 2)->words.w0 = 0xFA000000;
-
-            {
-                u8 shade = sprite->mode.shaded.shade.components.intensity;
-                (gfx + 2)->words.w1 = (shade << 24) | (shade << 16) | (shade << 8) | 0xFF;
-            }
-
-            if (sprite->scaleX != 0x400 || sprite->scaleY != sprite->scaleX) {
-                gDisplayListAllocPtr = (Gfx *)((s32)gfx + 0x20);
-                (gfx + 3)->words.w0 = 0xE200001C;
-                (gfx + 3)->words.w1 = 0x0F0A7008;
-            }
+        if (sprite->scaleX != 0x400 || sprite->scaleY != sprite->scaleX) {
+            gDPSetRenderMode(gDisplayListAllocPtr++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
         }
 
         if ((s32)sprite->spriteData + frameEntry->textureOffset != gCachedTextureAddr) {
@@ -709,9 +714,7 @@ void renderScaledShadedSpriteFrame(ScaledSpriteArg *sprite) {
         gDPSetCombineMode(gDisplayListAllocPtr++, G_CC_DECALRGBA, G_CC_DECALRGBA);
 
         if (sprite->scaleX != 0x400 || sprite->scaleY != sprite->scaleX) {
-            Gfx *_g2 = gDisplayListAllocPtr++;
-            _g2->words.w0 = 0xE200001C;
-            _g2->words.w1 = 0x503048;
+            gDPSetRenderMode(gDisplayListAllocPtr++, G_RM_AA_TEX_TERR, G_RM_AA_TEX_TERR2);
         }
     }
 }
