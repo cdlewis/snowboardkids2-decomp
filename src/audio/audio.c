@@ -721,13 +721,13 @@ void processSpatialAudio(void) {
 
                     outerDistance = gSoundManager->audioOuterDistance;
                     if (distance < outerDistance) {
-                        register s32 flags AUDIO_REG("$3");
+                        s32 baseVolume;
                         register s32 denominator AUDIO_REG("$2");
 
-                        flags = gSoundManager->spatialSounds[i].baseVolume;
+                        baseVolume = gSoundManager->spatialSounds[i].baseVolume;
                         distance = outerDistance - distance;
                         denominator = outerDistance - innerDistance;
-                        volume = (flags * distance) / denominator;
+                        volume = (baseVolume * distance) / denominator;
                         if (volume != 0) {
                             transformVector3(&delta, &gSoundManager->listenerTransforms[0], &transformed);
                             j = -atan2Fixed(transformed.x, transformed.z);
@@ -830,13 +830,13 @@ void processSpatialAudio(void) {
 
                 outerDistance = gSoundManager->audioOuterDistance;
                 if (distance < outerDistance) {
-                    register s32 flags AUDIO_REG("$3");
+                    s32 baseVolume;
                     register s32 denominator AUDIO_REG("$2");
 
-                    flags = gSoundManager->spatialSounds[i].baseVolume;
+                    baseVolume = gSoundManager->spatialSounds[i].baseVolume;
                     distance = outerDistance - distance;
                     denominator = outerDistance - gSoundManager->audioInnerDistance;
-                    volume = (flags * distance) / denominator;
+                    volume = (baseVolume * distance) / denominator;
                     if (gSoundManager->spatialSounds[i].channelIndex < 0) {
                         playSoundEffectWithPriorityAndVoice(
                             gSoundManager->spatialSounds[i].soundId,
