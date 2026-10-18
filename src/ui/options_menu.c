@@ -83,8 +83,6 @@ void updateOptionsMenuTitle(OptionsMenuTitleState *arg0) {
 
     for (i = 0; i < 2; i++) {
         pushViewportCallbackBySlot(8, VIEWPORT_CALLBACK_LAYER_INITIAL, renderTextSprite, &(&arg0->leftIcon)[i]);
-        /* Keep the containing state live so KMC preserves the target base-plus-field-offset addressing. */
-        __asm__ volatile("" : : "r"(arg0));
     }
 }
 
