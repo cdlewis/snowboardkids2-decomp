@@ -1314,7 +1314,6 @@ void initVictorySnowflake(VictorySnowflakeState *state) {
 void updateVictorySnowflakeDrift(VictorySnowflakeState *state) {
     if (state->wavePhase >= 0) {
         if (state->driftTimer != 0) {
-            __asm__ volatile("" ::: "memory");
             state->velocityX += 3;
             state->driftTimer--;
         } else {
@@ -1326,7 +1325,6 @@ void updateVictorySnowflakeDrift(VictorySnowflakeState *state) {
         }
     } else {
         if (state->driftTimer != 0) {
-            __asm__ volatile("" ::: "memory");
             state->velocityX -= 3;
             state->driftTimer--;
         } else {
