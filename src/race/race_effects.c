@@ -1301,8 +1301,9 @@ void initVictorySnowflake(VictorySnowflakeState *state) {
             state->wavePhase = (randA() & 1) - 1;
             state->velocityX = (-((randA() & 0xFF) << 3)) & 0xF;
             state->driftTimer = randA() & 0xF;
-            __asm__ volatile("" ::: "memory");
-            setCallback(updateVictorySnowflakeDrift);
+            do {
+                setCallback(updateVictorySnowflakeDrift);
+            } while (0);
             break;
     }
 
