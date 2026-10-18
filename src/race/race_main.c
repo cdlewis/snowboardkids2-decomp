@@ -5581,7 +5581,6 @@ void renderPlayerModel(Player *player) {
     }
 
     if (player->animationFlags & 8) {
-        __asm__("");
         tmpMtx1Ptr = &tmpMtx1;
         memcpy(tmpMtx1Ptr, &player->snowboardDisplayObject.transform, sizeof(Transform3D));
         composeTransform3D(&gIdentityMatrix32, tmpMtx1Ptr, &player->snowboardDisplayObject.transform);
@@ -5845,14 +5844,6 @@ void renderPlayerModel(Player *player) {
                         snowTrailCorners[3].y + ((s64)(snowTrailCorners[2].y - snowTrailCorners[3].y) * i / 0xFF);
                     sprayPosB.z =
                         snowTrailCorners[3].z + ((s64)(snowTrailCorners[2].z - snowTrailCorners[3].z) * i / 0xFF);
-                    __asm("");
-                    spawnDualSnowSprayEffect(
-                        &sprayPosA,
-                        &sprayPosB,
-                        &player->velocity,
-                        snowSpeed,
-                        player->surfaceInfo & 0xF
-                    );
                 } else {
                     i = randA() & 0xFF;
                     sprayPosA.x =
@@ -5868,14 +5859,6 @@ void renderPlayerModel(Player *player) {
                         snowTrailCorners[1].y + ((s64)(snowTrailCorners[0].y - snowTrailCorners[1].y) * i / 0xFF);
                     sprayPosB.z =
                         snowTrailCorners[1].z + ((s64)(snowTrailCorners[0].z - snowTrailCorners[1].z) * i / 0xFF);
-                    __asm("");
-                    spawnDualSnowSprayEffect(
-                        &sprayPosA,
-                        &sprayPosB,
-                        &player->velocity,
-                        snowSpeed,
-                        player->surfaceInfo & 0xF
-                    );
                 }
             } else if (snowTrailMask & 0xC) {
                 i = randA() & 0xFF;
@@ -5886,15 +5869,10 @@ void renderPlayerModel(Player *player) {
                 sprayPosB.x = snowTrailCorners[3].x + ((s64)(snowTrailCorners[2].x - snowTrailCorners[3].x) * i / 0xFF);
                 sprayPosB.y = snowTrailCorners[3].y + ((s64)(snowTrailCorners[2].y - snowTrailCorners[3].y) * i / 0xFF);
                 sprayPosB.z = snowTrailCorners[3].z + ((s64)(snowTrailCorners[2].z - snowTrailCorners[3].z) * i / 0xFF);
-                __asm("");
-                spawnDualSnowSprayEffect(
-                    &sprayPosA,
-                    &sprayPosB,
-                    &player->velocity,
-                    snowSpeed,
-                    player->surfaceInfo & 0xF
-                );
+            } else {
+                return;
             }
+            spawnDualSnowSprayEffect(&sprayPosA, &sprayPosB, &player->velocity, snowSpeed, player->surfaceInfo & 0xF);
         }
     }
 }
