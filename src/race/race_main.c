@@ -1273,6 +1273,7 @@ s32 updatePlayerSlidingConstrained(Player *player) {
 
 s32 updatePlayerNormalDriving(Player *player) {
     Vec3i leanOffset;
+    s64 leanProduct;
     volatile u8 padding[0xA0];
     s32 steeringValue;
     s32 speed;
@@ -1466,10 +1467,10 @@ s32 updatePlayerNormalDriving(Player *player) {
     }
 
     leanScale = 0x60;
-    approximateSin(player->steeringAngle);
-    __asm__ volatile("mult $2,%0\n\tmflo $12\n\tsw $12,0x10($sp)" : : "r"(leanScale));
-    approximateCos(player->steeringAngle);
-    __asm__ volatile("mult $2,%0\n\tmflo $13\n\tsw $13,0x18($sp)" : : "r"(leanScale));
+    leanProduct = (s64)approximateSin(player->steeringAngle) * leanScale;
+    leanOffset.x = leanProduct;
+    leanProduct = (s64)approximateCos(player->steeringAngle) * leanScale;
+    leanOffset.z = leanProduct;
 
     if (!(player->animationFlags & 2)) {
         leanOffset.x = -leanOffset.x;
