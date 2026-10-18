@@ -68,7 +68,7 @@ typedef struct {
     void *playerCameraViewports;
     void *playerRootViewports;
     Player *racers;
-    void *introAnimationData;
+    u8 *introAnimationData;
     u8 pad18[64];
     u16 unk58;
     u8 shootCrossTargetsHit;
@@ -974,11 +974,10 @@ void copyIntroPlayerAnimationData(void) {
     animSetIndex = sIntroFrameEvents[gs->introFrameEventIndex].animationSetIndex;
     {
         s32 stride = animDataSize * 4;
-        __asm__("" : "=r"(stride) : "0"(stride));
-        src = (u8 *)gs->introAnimationData + animSetIndex * stride;
+        src = &gs->introAnimationData[animSetIndex * stride];
     }
-    dst = (u8 *)gs->players + 0x434;
-    end = (u8 *)gs->players + 0xBE8;
+    dst = (u8 *)&gs->players[0].worldPos;
+    end = (u8 *)&gs->players[1];
 
     do {
         *dst++ = *src++;
@@ -986,11 +985,10 @@ void copyIntroPlayerAnimationData(void) {
 
     animSetIndex = sIntroFrameEvents[gs->introFrameEventIndex].animationSetIndex;
     {
-        u8 *s = (u8 *)gs->introAnimationData + animDataSize * (animSetIndex * 4 + 1);
-        u8 *d = (u8 *)gs->players + 0x101C;
+        u8 *s = &gs->introAnimationData[animDataSize * (animSetIndex * 4 + 1)];
+        u8 *d = (u8 *)&gs->players[1].worldPos;
         if (animDataSize != 0) {
             u8 *e;
-            __asm__("" : "=r"(s) : "0"(s));
             src = s;
             e = (u8 *)(animDataSize + (s32)d);
             do {
@@ -1001,11 +999,10 @@ void copyIntroPlayerAnimationData(void) {
 
     animSetIndex = sIntroFrameEvents[gs->introFrameEventIndex].animationSetIndex;
     {
-        u8 *s = (u8 *)gs->introAnimationData + animDataSize * (animSetIndex * 4 + 2);
-        u8 *d = (u8 *)gs->players + 0x1C04;
+        u8 *s = &gs->introAnimationData[animDataSize * (animSetIndex * 4 + 2)];
+        u8 *d = (u8 *)&gs->players[2].worldPos;
         if (animDataSize != 0) {
             u8 *e;
-            __asm__("" : "=r"(s) : "0"(s));
             src = s;
             e = (u8 *)(animDataSize + (s32)d);
             do {
@@ -1016,11 +1013,10 @@ void copyIntroPlayerAnimationData(void) {
 
     animSetIndex = sIntroFrameEvents[gs->introFrameEventIndex].animationSetIndex;
     {
-        u8 *s = (u8 *)gs->introAnimationData + animDataSize * (animSetIndex * 4 + 3);
-        u8 *d = (u8 *)gs->players + 0x27EC;
+        u8 *s = &gs->introAnimationData[animDataSize * (animSetIndex * 4 + 3)];
+        u8 *d = (u8 *)&gs->players[3].worldPos;
         if (animDataSize != 0) {
             u8 *e;
-            __asm__("" : "=r"(s) : "0"(s));
             src = s;
             e = (u8 *)(animDataSize + (s32)d);
             do {

@@ -394,7 +394,7 @@ typedef struct {
     /* 0x8 */ ViewportNode *playerCameraViewports;
     /* 0xC */ ViewportNode *playerRootViewports;
     /* 0x10 */ Player *players;
-    /* 0x14 */ void *introAnimationData;
+    /* 0x14 */ u8 *introAnimationData;
     /* 0x18 */ void *unk18;
     /* 0x1C */ void *unk1C;
     /* 0x20 */ void *unk20;
