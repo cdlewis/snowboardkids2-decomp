@@ -2440,17 +2440,10 @@ void updateModelGeometry(SceneModel *arg0) {
     Transform3D worldMatrix;
     volatile s32 pad[2];
     AssetGroup *assetGroup;
-#ifdef CC_CHECK
     BoneHierarchyEntry *animData;
     DisplayListObject *boneTransform;
     s32 boneCount;
     s32 i;
-#else
-    register BoneHierarchyEntry *animData __asm__("$17");
-    DisplayListObject *boneTransform;
-    register s32 boneCount __asm__("$19");
-    register s32 i __asm__("$18");
-#endif
     s32 boneOffset;
     s32 shouldDisplay;
     s32 shadowScale;
