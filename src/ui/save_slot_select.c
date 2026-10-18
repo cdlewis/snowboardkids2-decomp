@@ -219,7 +219,6 @@ void updateSaveSlotSelectionScreen(void) {
             break;
         case SAVE_SLOT_STATE_SLIDE_IN:
             state->slideOffset += 0x20;
-            i = 0;
             if ((state->slideOffset << 16) == 0) {
                 if ((state->eepromErrorStatus >= 0x62) && (state->hasCurrentSaveData == 0)) {
                     state->saveSlotMenuState = SAVE_SLOT_STATE_SLIDE_IN_MENU;
@@ -250,44 +249,26 @@ void updateSaveSlotSelectionScreen(void) {
                     }
                 }
                 scheduleTask(initSaveSlotPromptText, 0, 0, 0x59);
-                i = 0;
             }
             {
-#ifdef CC_CHECK
-                s32 constNeg18 = -0x18;
-                s32 constA0 = 0xA0;
-                s32 const18 = 0x18;
-                s32 yPos = (s32)0xFFD00000;
-                s32 slotOffset = 0x1D8;
-#else
-                register s32 constNeg18 __asm__("$22") = -0x18;
-                register s32 constA0 __asm__("$21") = 0xA0;
-                register s32 const18 __asm__("$20") = 0x18;
-                register s32 yPos __asm__("$19") = (s32)0xFFD00000;
-                register s32 slotOffset __asm__("$18") = 0x1D8;
-#endif
-                do {
+
+                for (i = 0; i < 3; i++) {
                     s32 xPos;
-                    s32 inc;
                     if (i & 1) {
                         xPos = -state->slideOffset;
                     } else {
                         xPos = (u16)state->slideOffset;
                     }
                     setModelCameraTransform(
-                        (ViewportNode *)((u8 *)state + slotOffset),
+                        &state->slotModels[i],
                         xPos,
-                        (s16)(yPos >> 16),
+                        (s16)(i * 0x38 - 0x30),
                         -0xA0,
-                        constNeg18,
-                        constA0,
-                        const18
+                        -0x18,
+                        0xA0,
+                        0x18
                     );
-                    __asm__("lui %0, 0x38" : "=r"(inc) : "r"(yPos));
-                    yPos += inc;
-                    i += 1;
-                    slotOffset += 0x1D8;
-                } while (i < 3);
+                }
             }
             break;
         case SAVE_SLOT_STATE_SELECT_SLOT:
