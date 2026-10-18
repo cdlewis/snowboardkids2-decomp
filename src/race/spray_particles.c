@@ -776,19 +776,10 @@ void updateCharacterAttackEffect(CharacterAttackEffectState *arg0) {
     Transform3D rotMatrix;
     Transform3D transformed;
     GameState *alloc;
-#ifdef CC_CHECK
     BillboardSprite *particle;
-    s32 rotation;
     Transform3D *rm;
     Transform3D *tf;
     s32 yOffset;
-#else
-    register BillboardSprite *particle __asm__("$16");
-    register s32 rotation __asm__("$17");
-    register Transform3D *rm __asm__("$21");
-    register Transform3D *tf __asm__("$20");
-    register s32 yOffset __asm__("$22");
-#endif
     s32 i;
     s32 j;
     u8 fc;
@@ -807,44 +798,29 @@ void updateCharacterAttackEffect(CharacterAttackEffectState *arg0) {
     yOffset = 0x80000;
     arg0->positionOffsets.z += gCharacterAttackEffectPositionOffsetsA.z;
 
-    particle = arg0->particles;
-    rotation = 0;
-
     for (j = 0; j < 6; j++) {
-        createYRotationMatrix(rm, rotation & 0xFFFF);
+        createYRotationMatrix(rm, (j * 0x555) & 0xFFFF);
         matrixMultiply(rm, &arg0->sourcePlayer->orientationHeadingTransform, tf);
         transformVector2(&arg0->positionOffsets, tf->m, &result);
-        particle->position.x = result.x + arg0->sourcePlayer->worldPos.x;
-        particle->position.y = result.y + arg0->sourcePlayer->worldPos.y + yOffset;
-        particle->position.z = result.z + arg0->sourcePlayer->worldPos.z;
+        arg0->particles[j].position.x = result.x + arg0->sourcePlayer->worldPos.x;
+        arg0->particles[j].position.y = result.y + arg0->sourcePlayer->worldPos.y + yOffset;
+        arg0->particles[j].position.z = result.z + arg0->sourcePlayer->worldPos.z;
 
         if (arg0->isVariant == 0) {
-            particle->alpha = particle->alpha - 9;
+            arg0->particles[j].alpha = arg0->particles[j].alpha - 9;
         } else {
-            particle->alpha = particle->alpha - 21;
+            arg0->particles[j].alpha = arg0->particles[j].alpha - 21;
         }
-
-        particle++;
-        rotation += 0x555;
     }
 
     fc = arg0->frameCounter;
     if (!(fc & 1)) {
         loadAssetMetadata(&arg0->particles[0], arg0->assetTable, arg0->baseAssetIndex + ((s32)(fc << 24) >> 26));
-        {
-#ifdef CC_CHECK
-            BillboardSprite *d;
-#else
-            register BillboardSprite *d __asm__("$3");
-#endif
-            d = &arg0->particles[1];
-            for (j = 1; j < 6; j++) {
-                d->textureData = arg0->particles[0].textureData;
-                d->paletteData = arg0->particles[0].paletteData;
-                d->textureWidth = arg0->particles[0].textureWidth;
-                d->textureHeight = arg0->particles[0].textureHeight;
-                d++;
-            }
+        for (j = 1; j < 6; j++) {
+            arg0->particles[j].textureData = arg0->particles[0].textureData;
+            arg0->particles[j].paletteData = arg0->particles[0].paletteData;
+            arg0->particles[j].textureWidth = arg0->particles[0].textureWidth;
+            arg0->particles[j].textureHeight = arg0->particles[0].textureHeight;
         }
     }
 
